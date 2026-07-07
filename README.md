@@ -216,3 +216,9 @@ tests/js/          node:vm-loaded tests against the real sources
 Engine and world are DOM-free at load time and print through an injected
 callback, so the whole game runs headless in tests — same convention as the
 Soi Sanuk trainer.
+
+The terminal is a disposable frontend: all rules live in `engine.js` as
+per-action functions (`_doGo`, `_doTalk`, …) that the text parser merely maps
+words onto, and all world content is declarative data in `world.js`. A future
+2D version would call the same actions directly and read the same data —
+see `CLAUDE.md` for the conventions that keep that possible.
