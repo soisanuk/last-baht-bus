@@ -131,6 +131,73 @@
   @media (min-width: 700px) {
     #shell { border-left: 1px solid #ff149330; border-right: 1px solid #ff149330; }
   }
+
+  /* ── The advert: a neon bar-sign for the trainer ──────────────────────── */
+  #ad {
+    display: none;
+    position: fixed;
+    right: 1.2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 172px;
+    padding: .9rem .8rem;
+    text-align: center;
+    text-decoration: none;
+    background: #0d0015;
+    border: 2px dashed #ff1493;
+    border-radius: 10px;
+    box-shadow: 0 0 22px #ff149335, inset 0 0 22px #ff149315;
+    animation: ad-flicker 7s infinite;
+  }
+  #ad .ad-hey {
+    color: var(--yellow);
+    font-weight: bold;
+    letter-spacing: .1em;
+    font-size: .82rem;
+    text-shadow: 0 0 12px #ffe60090;
+  }
+  #ad .ad-line {
+    color: var(--text);
+    font-size: .74rem;
+    margin: .5rem 0;
+    line-height: 1.5;
+  }
+  #ad .ad-cta {
+    display: inline-block;
+    color: var(--cyan);
+    border: 1px solid #00e5ff70;
+    border-radius: 12px;
+    padding: .2rem .7rem;
+    font-size: .78rem;
+    font-weight: bold;
+    text-shadow: 0 0 10px #00e5ff70;
+  }
+  #ad .ad-sub { color: var(--violet); font-size: .62rem; margin-top: .45rem; }
+  #ad:hover { box-shadow: 0 0 34px #ff149360, inset 0 0 26px #ff149325; }
+  @keyframes ad-flicker {
+    0%, 100% { opacity: 1; }
+    92% { opacity: 1; }
+    93% { opacity: .35; }
+    94% { opacity: 1; }
+    96% { opacity: .6; }
+    97% { opacity: 1; }
+  }
+  /* only where there's real gutter beside the 820px shell */
+  @media (min-width: 1220px) { #ad { display: block; } }
+
+  /* narrow screens: one cheeky line under the header instead */
+  #ad-mini {
+    display: block;
+    text-align: center;
+    font-size: .68rem;
+    color: var(--violet);
+    text-decoration: none;
+    padding: .25rem .5rem;
+    border-bottom: 1px solid #ff149320;
+    flex-shrink: 0;
+  }
+  #ad-mini b { color: var(--cyan); }
+  @media (min-width: 1220px) { #ad-mini { display: none; } }
 </style>
 </head>
 <body>
@@ -140,6 +207,9 @@
     <div class="title">THE LAST BAHT BUS</div>
     <div class="sub">a Pattaya misadventure · ❖ Soi Sanuk ❖</div>
   </header>
+  <a id="ad-mini" href="https://soisanuk.github.io/" target="_blank" rel="noopener">
+    😘 The girls speak two languages. You speak zero. <b>Learn Thai →</b>
+  </a>
   <div id="term-out"></div>
   <div id="chips">
     <button class="chip" data-cmd="look">look</button>
@@ -164,6 +234,13 @@
            autocorrect="off" spellcheck="false" placeholder="what do you do?">
   </div>
 </div>
+<a id="ad" href="https://soisanuk.github.io/" target="_blank" rel="noopener">
+  <div class="ad-hey">HEY HANDSOME 😘</div>
+  <div class="ad-line">The girls speak two languages.<br>You speak zero.<br>
+    Cindy notices these things.</div>
+  <span class="ad-cta">LEARN THAI →</span>
+  <div class="ad-sub">SOI SANUK trainer · free · no signup<br>❖ PATTAYA EDITION ❖</div>
+</a>
 <script src="js/thai.js"></script>
 <script src="js/world.js"></script>
 <script src="js/engine.js"></script>
