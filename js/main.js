@@ -26,6 +26,7 @@ function _dispatch(cmd) {
     return;
   }
   doCommand(cmd);
+  _audioForRoom(G.room, G.flags);
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -34,6 +35,12 @@ document.addEventListener("DOMContentLoaded", () => {
     th => _tts.speak(th)
   );
   _term.init(_dispatch);
+  const muteBtn = document.getElementById("mute-btn");
+  muteBtn.textContent = _audio.muted() ? "🔇" : "🔊";
+  muteBtn.addEventListener("click", () => {
+    muteBtn.textContent = _audio.toggleMute() ? "🔇" : "🔊";
+    if (!_audio.muted()) _audioForRoom(G.room, G.flags); // gesture: safe to start
+  });
   newGame();
   engineIntro();
 });
