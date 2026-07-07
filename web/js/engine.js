@@ -636,7 +636,7 @@ const _HELP = `Common commands:
   RIDE BUS TO <place> · MOTOSAI TO <place> · PAY <amount>
   BUY <thing> · SELL BOTTLES · READ <thing> · READ SIGN
   LIGHT ON / LIGHT OFF · CHARGE PHONE
-  SCORE · SAVE · LOAD · RESTART`;
+  SCORE · UNDO · RESTART   (the night autosaves itself)`;
 
 // ── Parser ─────────────────────────────────────────────────────────────────
 

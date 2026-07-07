@@ -32,8 +32,9 @@ Mobile gets tappable verb chips; desktop gets ↑/↓ command history.
 - **Two solutions**: burgle the safe behind the go-go, or earn the Mamasan's
   respect and be handed your wallet like a gentleman. Score reflects style.
 
-Type `HELP` in-game for the command list. `SAVE`/`LOAD` keep your night in
-localStorage.
+Type `HELP` in-game for the command list. The night autosaves after every
+command (localStorage); reopening the page offers to continue where you left
+off, and `UNDO` rewinds your last command.
 
 ## Test
 
