@@ -13,6 +13,10 @@ const LADY_DRINK = 150;  // canon
 const BEER_PRICE = 80;   // your own big Chang, bar price
 const BELL_PRICE = 300;  // ring it and the round is on you
 const CHARGER_PRICE = 59;
+const SAFE_CASH = 3000;  // the emergency stash in the hotel room safe
+const EXPAT_SAVINGS = 20000; // wired over when you make the move
+// Barfines (canon: go-gos and Soi 6 are the expensive end)
+const BF_BEER = 400, BF_GOGO = 1000, BF_SOI6 = 700;
 const SAFE_PIN = 719;    // ๗๑๙ — stage number 71 + lucky 9
 
 // ── Rooms ──────────────────────────────────────────────────────────────────

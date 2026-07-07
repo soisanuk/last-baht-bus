@@ -588,6 +588,146 @@ test("street kisses end badly — except for the katoey", () => {
   assert.match(lastOut(), /lipstick/i);
 });
 
+// ── The clock, the body, the week ──────────────────────────────────────────
+
+test("the night ends at 04:00 and a new day dawns at the hotel", () => {
+  state().flags.act1Done = true;
+  state().flags.hasWallet = true;
+  state().room = "beach_rd_c";
+  state().nightTurn = 99;
+  run("wait");
+  assert.equal(state().day, 3);
+  assert.equal(state().room, "hotel_room");
+  assert.equal(state().nightTurn, 0);
+  assert.match(lastOut(), /DAY 3/);
+});
+
+test("dehydration collapses the night; pre-act-1 you wake on the beach again", () => {
+  state().thirst = 99;
+  run("wait", "wait");
+  assert.equal(state().day, 3);
+  assert.equal(state().room, "jomtien_beach");
+  assert.match(lastOut(), /mai pen rai|Dehydration/i);
+});
+
+test("blackout: the ninth bottle ends the night expensively", () => {
+  state().flags.act1Done = true;
+  state().flags.hasWallet = true;
+  state().room = "cindy_bar";
+  state().money = 2000;
+  state().soc.drunk = 8;
+  run("buy beer");
+  assert.equal(state().day, 3);
+  assert.equal(state().money, 2000 - 80 - 300);
+  assert.match(lastOut(), /film simply stops/i);
+});
+
+test("street food and water manage the meters", () => {
+  state().room = "buakhao_market";
+  state().money = 100;
+  state().hunger = 80;
+  state().thirst = 80;
+  run("buy som tam", "buy water");
+  assert.ok(state().hunger <= 30, `hunger ${state().hunger}`);
+  assert.ok(state().thirst <= 50, `thirst ${state().thirst} (som tam is spicy)`);
+  assert.equal(state().money, 40);
+});
+
+test("eating the moo ping fills you but spends the dog insurance", () => {
+  state().itemLoc.moo_ping = "inventory";
+  state().hunger = 60;
+  run("eat moo ping");
+  assert.equal(state().itemLoc.moo_ping, null);
+  assert.ok(state().hunger <= 30);
+});
+
+// ── Barfine ────────────────────────────────────────────────────────────────
+
+test("barfine needs a room, then favor — then ends the night grandly", () => {
+  state().room = "jasmine_garden";
+  state().money = 2000;
+  run("barfine fon");
+  assert.match(lastOut(), /Sort your night out first/i);
+  state().flags.act1Done = true;
+  state().flags.hasWallet = true;
+  run("barfine fon");
+  assert.match(lastOut(), /not a vending machine/i);
+  state().soc.drinks.fon = 4;
+  const h = state().happy;
+  run("barfine fon");
+  assert.equal(state().day, 3, "night over");
+  assert.equal(state().room, "hotel_room");
+  assert.ok(state().happy >= h + 9, `happy ${state().happy}`);
+  assert.match(lastOut(), /nobody's business but the soi/i);
+});
+
+test("soi 6 barfine: upstairs, and the night carries on", () => {
+  state().flags.act1Done = true;
+  state().flags.hasWallet = true;
+  state().room = "pink_lotus";
+  state().money = 1000;
+  state().soc.drinks.joy = 2;
+  run("barfine joy");
+  assert.equal(state().room, "pink_lotus", "still on your stool");
+  assert.equal(state().day, 2, "night continues");
+  assert.equal(state().money, 300);
+  assert.match(lastOut(), /Upstairs/i);
+});
+
+test("no barfining the mamasan, and heat freezes negotiations", () => {
+  state().flags.act1Done = true;
+  state().flags.hasWallet = true;
+  state().money = 2000;
+  state().room = "cindy_bar";
+  run("barfine cindy");
+  assert.match(lastOut(), /She IS the bar/i);
+  state().room = "jasmine_garden";
+  state().soc.drinks.fon = 5;
+  state().soc.heat.jasmine_garden = 1;
+  run("barfine fon");
+  assert.match(lastOut(), /Not tonight, tilac/i);
+  assert.equal(state().day, 2);
+});
+
+// ── The week and the stages ────────────────────────────────────────────────
+
+test("sleep ends the night on your terms; day seven ends the vacation", () => {
+  state().flags.act1Done = true;
+  state().flags.hasWallet = true;
+  state().room = "hotel_room";
+  run("sleep");
+  assert.equal(state().day, 3);
+  state().day = 7;
+  state().room = "hotel_room";
+  state().happy = 60;
+  run("sleep");
+  assert.equal(state().pendingChoice, "vacation_end");
+  run("look"); // everything is gated on the answer
+  assert.match(lastOut(), /airline needs an answer/i);
+  run("new vacation");
+  assert.equal(state().vacation, 2);
+  assert.equal(state().day, 1);
+  assert.equal(state().happy, 0, "each trip chases its own happiness");
+  assert.equal(state().bestHappy, 60);
+  assert.equal(state().money, 3000);
+  assert.ok(state().flags.act1Done, "no lead-in adventure on later trips");
+});
+
+test("MOVE TO PATTAYA: expat mode, endless days, savings wired over", () => {
+  state().flags.act1Done = true;
+  state().flags.hasWallet = true;
+  state().day = 7;
+  state().room = "hotel_room";
+  state().money = 1000;
+  run("sleep", "move to pattaya");
+  assert.equal(state().stage, "expat");
+  assert.equal(state().money, 21000);
+  assert.match(lastOut(), /EXPAT MODE/);
+  run("sleep");
+  assert.equal(state().day, 9, "no seven-day wall anymore");
+  assert.equal(state().pendingChoice, null);
+});
+
 // ── Endings ────────────────────────────────────────────────────────────────
 
 test("no wallet, no room: the clerk holds the line", () => {
@@ -610,7 +750,7 @@ test("act one complete: scored, converted to happiness, night continues", () => 
   assert.ok(!state().over, "the sandbox never ends");
   assert.ok(state().happy > 0, "score became happiness");
   assert.match(lastOut(), /ACT ONE COMPLETE/);
-  assert.match(lastOut(), /THE NIGHT IS YOURS/);
+  assert.match(lastOut(), /THE VACATION IS YOURS/);
   run("out", "look");           // and you can just… keep playing
   assert.equal(state().room, "hotel_soi");
 });
@@ -663,7 +803,7 @@ test("scripted happy-ending playthrough", () => {
   assert.ok(s.flags.act1Done, "act one completed");
   assert.ok(s.flags.hasWallet, "wallet recovered");
   assert.match(lastOut(), /ACT ONE COMPLETE/);
-  assert.match(lastOut(), /THE NIGHT IS YOURS/);
+  assert.match(lastOut(), /THE VACATION IS YOURS/);
   assert.ok(s.battery > 0, `battery survived (${s.battery}%)`);
   assert.ok(s.money > 400, `money left ฿${s.money}`);
   assert.ok(s.score >= 80, `act-one score ${s.score}`);

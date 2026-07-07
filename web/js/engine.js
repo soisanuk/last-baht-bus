@@ -51,6 +51,15 @@ function newGame() {
     rng: 1 + Math.floor(Math.random() * 2147483645), // seeded per game
     score: 0,
     happy: 0,            // สนุก — the long game. 100 = สบายสบาย.
+    stage: "act1",       // act1 → vacation → expat
+    vacation: 1,         // which trip this is
+    day: 2,              // you lost day one to the beach
+    nightTurn: 0,        // 10 turns ≈ 1 hour; the night runs 18:00–04:00
+    hunger: 30,          // 0 fed … 100 collapse
+    thirst: 40,          // 0 quenched … 100 collapse (you woke up dry)
+    hurt: 0,             // 3 = a night in the clinic
+    bestHappy: 0,
+    pendingChoice: null, // "vacation_end" gates input at week's end
     over: false,         // legacy field; the sandbox never ends the night
   };
   return G;
@@ -67,6 +76,17 @@ function deserializeGame(s) {
       banned: {}, patronBusy: {}, patronMiffed: {}, drunk: 0 };
   }
   if (G.happy === undefined) G.happy = 0;
+  if (G.stage === undefined) {
+    G.stage = G.flags && G.flags.act1Done ? "vacation" : "act1";
+    G.vacation = 1;
+    G.day = 2;
+    G.nightTurn = Math.min(90, G.turns);
+    G.hunger = 30;
+    G.thirst = 40;
+    G.hurt = 0;
+    G.bestHappy = G.happy;
+    G.pendingChoice = null;
+  }
   G.over = false; // pre-sandbox saves could be "over"; the night reopens
   if (!G.encDone) G.encDone = {};
   if (G.lastEnc === undefined) G.lastEnc = 0;
@@ -204,6 +224,18 @@ function _describeRoom(full) {
 
 function _tick() {
   G.turns++;
+  G.nightTurn++;
+  // the body keeps its own books
+  if (G.nightTurn % 20 === 0 && G.soc.drunk > 0) G.soc.drunk--;
+  if (G.nightTurn % 3 === 0) G.hunger++;
+  if (G.nightTurn % 2 === 0) G.thirst++;
+  if (G.hunger === 70) _say("(Your stomach growls loudly enough to turn heads. Eat something.)", "alert");
+  if (G.thirst === 70) _say("(Your throat is sandpaper. Drink something — ideally water.)", "alert");
+  if (G.hunger === 90) _say("(You are running on fumes. Food. Now.)", "alert");
+  if (G.thirst === 90) _say("(Dizzy. The neon is doing things it shouldn't. WATER.)", "alert");
+  if ((G.hunger >= 80 || G.thirst >= 80) && G.nightTurn % 10 === 0) _addHappy(-1);
+  if (G.hunger >= 100 || G.thirst >= 100) { _endNight("collapse"); return; }
+  if (G.nightTurn >= NIGHT_TURNS) { _endNight("dawn"); return; }
   if (G.lightOn && G.battery > 0) {
     G.battery--;
     if (G.battery === 0) {
@@ -237,6 +269,8 @@ function _tick() {
           (bitten ? `฿${bitten} in dropped coins` : "what remains of your dignity") +
           ", and fetch up somewhere lit.", "alert");
         _addHappy(-2);
+        G.hurt++;
+        if (G.hurt >= 3) { _endNight("hurt"); return; }
         _describeRoom(true);
       }
     }
@@ -342,6 +376,8 @@ const _ENC = {
         ". A piwin looks back at you: “No fighting, boss. Bad for everybody.”" +
         (lost ? ` (฿${G.money} left.)` : ""), "alert");
       _addHappy(-2);
+      G.hurt++;
+      if (G.hurt >= 3) _endNight("hurt");
     } else {
       _say("You blink at him with perfect, bottomless neutrality. Somewhere behind " +
         "the sunburn the thread is lost. “…Wrong bloke. Sorry pal.” He apologises " +
@@ -892,7 +928,9 @@ function _doPatron() {
       "fire extinguisher and insists on buying you one back. You are, briefly, " +
       "his favourite person alive.");
     s.drunk++;
+    G.thirst = Math.max(0, G.thirst - 20);
     _addHappy(1);
+    _checkDrunk();
     return;
   }
   const d = s.drunk;
@@ -962,6 +1000,257 @@ function _addHappy(n) {
   }
 }
 
+// ── The clock, the body, the week ────────────────────────────────────────────
+// Ten turns to the hour, nights run 18:00–04:00. Hunger and thirst creep up,
+// drunk creeps down, and any of them redlining ends the night early. Days are
+// slept through; the game is the nights. A vacation is seven days; expats
+// don't count.
+
+const NIGHT_TURNS = 100;
+
+function _clockStr() {
+  const h = (18 + Math.floor(G.nightTurn / 10)) % 24;
+  return `${String(h).padStart(2, "0")}:00`;
+}
+
+function _checkDrunk() {
+  if (G.soc.drunk >= 9) _endNight("blackout");
+}
+
+function _endNight(reason) {
+  G.game = null;
+  G.pendingEnc = null;
+  G.pendingFare = null;
+  switch (reason) {
+    case "dawn":
+      _say("The sky over the gulf goes grey, then pink, and even Pattaya blinks. " +
+        "04:00. The last bars stack their stools; the baht buses carry home the " +
+        "wreckage; somewhere a rooster who fears nothing starts up. You drift " +
+        "back and let the day take you.", "room");
+      break;
+    case "collapse":
+      _say(G.thirst >= G.hunger ?
+        "The neon smears, the pavement tilts, and the last thing you register " +
+        "is a motorcycle taxi vest and the words “mai pen rai, boss, I got you.” " +
+        "Dehydration takes the rest of the night." :
+        "Your legs vote no-confidence. You fold up gently next to a som tam cart " +
+        "whose owner feeds you out of pure pity before calling you a ride. " +
+        "Hunger wins the night.", "alert");
+      _addHappy(-8);
+      break;
+    case "blackout": {
+      const lost = Math.min(300, G.money);
+      G.money -= lost;
+      _say("Somewhere after that last bottle the film simply stops. There are " +
+        "flashes — singing? a traffic cone? — and then nothing." +
+        (lost ? ` The morning audit finds ฿${lost} unaccounted for.` : ""), "alert");
+      _addHappy(-5);
+      break;
+    }
+    case "hurt": {
+      const bill = Math.min(500, G.money);
+      G.money -= bill;
+      _say("Enough. Tonight the city won on points. A quiet clinic off Third Road " +
+        "patches you up with the efficiency of long practice" +
+        (bill ? ` and relieves you of ฿${bill}` : "") +
+        ". The nurse's parting wai contains multitudes.", "alert");
+      _addHappy(-8);
+      break;
+    }
+    case "barfine":
+      _say("The rest is nobody's business but the soi's: a shared plate of khao " +
+        "man gai at 3 a.m., the beach road with nobody on it, laughing at " +
+        "nothing. What happens in Pattaya has already forgotten your name by " +
+        "morning, fondly.", "win");
+      _addHappy(10);
+      break;
+    case "sleep":
+      _say("You call it. The air-con rattles its lullaby, the neon leaks through " +
+        "the curtains, and Pattaya carries on politely without you.", "room");
+      break;
+  }
+  G.day++;
+  if (G.stage !== "expat" && G.day > 7) { _endVacation(); return; }
+  const hangover = G.soc.drunk;
+  G.soc.drunk = 0;
+  G.soc.bellAt = {};
+  G.soc.heat = {};
+  G.soc.banned = {};
+  G.soc.patronBusy = {};
+  G.soc.patronMiffed = {};
+  G.hurt = 0;
+  G.hunger = Math.min(85, 30 + hangover * 5);
+  G.thirst = Math.min(90, 40 + hangover * 6);
+  G.nightTurn = 0;
+  G.darkStreak = 0;
+  G.lightOn = false;
+  G.safeTries = 0;
+  if (_flag("act1Done")) { G.room = "hotel_room"; G.battery = 100; }
+  else { G.room = "jomtien_beach"; G.battery = Math.max(G.battery, 20); }
+  _say("");
+  _say(`── DAY ${G.day}${G.stage === "expat" ? " · PATTAYA, HOME" : " of 7"} — you ` +
+    "surface mid-afternoon, and by the time you're human again the sun is " +
+    "sliding into the gulf and the neon is waking up ──", "win");
+  if (hangover >= 4) _say("(The hangover is a physical presence with opinions. Water. Food. Mercy.)", "alert");
+  _describeRoom(true);
+}
+
+function _endVacation() {
+  G.pendingChoice = "vacation_end";
+  G.bestHappy = Math.max(G.bestHappy, G.happy);
+  _say("═══════════════════════════════════", "win");
+  _say("The week is up. The taxi to the airport leaves in an hour, and the city " +
+    "doesn't come to see you off — it just keeps roaring, the way it was " +
+    "roaring before you came, the way it will roar after. From the highway " +
+    "the neon shrinks to a smudge on the coast.", "win");
+  _say(`VACATION ${G.vacation}: happiness ${G.happy} — ${_happyLevel(G.happy)}` +
+    (G.bestHappy > G.happy ? ` (best trip so far: ${G.bestHappy})` : " (your best trip yet)"), "win");
+  _say("So. What now?", "room");
+  _say("NEW VACATION — fly back next month. (No lost wallet this time. Probably.)", "dim");
+  _say("MOVE TO PATTAYA — stop pretending you're going home. Make the move; live the sandbox.", "dim");
+}
+
+function _newVacation() {
+  G.stage = "vacation";
+  G.vacation++;
+  G.pendingChoice = null;
+  G.day = 1;
+  G.nightTurn = 0;
+  G.happy = 0;
+  delete G.flags.sabaiSabai;
+  _setFlag("act1Done");
+  _setFlag("hasWallet");
+  G.money = SAFE_CASH;
+  G.battery = 100;
+  G.hunger = 20;
+  G.thirst = 30;
+  G.hurt = 0;
+  G.soc = { drinks: {}, mamaTreat: {}, bellAt: {}, bells: {}, heat: {},
+    banned: {}, patronBusy: {}, patronMiffed: {}, drunk: 0 };
+  G.itemLoc.phone = "inventory";
+  G.itemLoc.charger = "inventory";
+  G.itemLoc.wallet = "inventory";
+  G.room = "hotel_room";
+  _say("");
+  _say("A month of grey sky and greyer meetings, and then the seatbelt sign " +
+    "pings off over the gulf. Same hotel. Same terrible, perfect bed. Room 412 " +
+    `keeps your secrets. ฿${SAFE_CASH} in the safe, seven nights on the clock.`, "win");
+  _say(`── VACATION ${G.vacation} · DAY 1 of 7 ──`, "win");
+  _describeRoom(true);
+}
+
+function _goExpat() {
+  G.stage = "expat";
+  G.pendingChoice = null;
+  _setFlag("act1Done");
+  _setFlag("hasWallet");
+  G.money += EXPAT_SAVINGS;
+  G.nightTurn = 0;
+  G.hunger = 20;
+  G.thirst = 30;
+  G.hurt = 0;
+  G.soc.drunk = 0;
+  G.battery = 100;
+  G.room = "hotel_room";
+  _say("");
+  _say("You don't board. It's remarkably little paperwork, in the end: a visa " +
+    "run, a long-stay rate on room 412 negotiated over exactly one bottle of " +
+    "Sang Som with the night clerk, and your savings wired over — " +
+    `฿${EXPAT_SAVINGS}, blinking on an ATM screen like a dare. The soi absorbs ` +
+    "the news without comment. Cindy just sets out your glass.", "win");
+  _say("★ EXPAT MODE — no flights, no clock on the week. The city is yours to " +
+    "figure out. (They say the smart ones end up owning a bar…) ★", "win");
+  _say(`── DAY ${G.day} · PATTAYA, HOME ──`, "win");
+  _describeRoom(true);
+}
+
+// ── Barfine ──────────────────────────────────────────────────────────────────
+// Canon: everywhere lets the ladies go with a customer for a fee; go-gos and
+// Soi 6 are the expensive end. Soi 6 has "upstairs" — the night continues.
+// Elsewhere, the barfine IS the rest of your night, and a very good one.
+
+function _doBarfine(arg) {
+  if (!_inBar()) { _say("Barfines are negotiated indoors, with the mamasan watching."); return; }
+  const here = _npcsHere().filter(id => NPC_ROLES[id]);
+  const id = arg ? _findNpc(arg) : (here.length === 1 ? here[0] : null);
+  if (!id || !NPC_ROLES[id]) { _say(arg ? "She's not working this bar." : "Barfine whom, exactly?"); return; }
+  const name = NPCS[id].name, role = NPC_ROLES[id];
+  if (role === "mamasan") { _say(`You cannot barfine ${name}. She IS the bar. She looks almost flattered. Almost.`); return; }
+  if (role === "cashier" && (G.soc.bells[G.room] || 0) < 2) {
+    _say(`${name} taps the till: somebody has to count the money. (Cashiers do go, ` +
+      "sometimes — for the right customer, on the right night. The bell defines both.)");
+    return;
+  }
+  if (!_flag("act1Done")) {
+    _say("And take her where? You have no room key, sand in your shoes, and a " +
+      "wallet situation. Sort your night out first, Casanova.");
+    return;
+  }
+  if ((G.soc.heat[G.room] || 0) > 0) {
+    _say("The mamasan intercepts the negotiation with one raised finger. After " +
+      "tonight's behaviour? “Not tonight, tilac.” The finger does not negotiate.");
+    return;
+  }
+  const bt = _room().barType;
+  const price = bt === "soi6" ? BF_SOI6 : bt === "gogo" ? BF_GOGO : BF_BEER;
+  if (_favor(id) < (bt === "soi6" ? 2 : 4)) {
+    _say(bt === "soi6" ?
+      `${name} laughs, not unkindly: “Lady drink first, na. One or three.” Even ` +
+      "Soi 6 has liturgy." :
+      `${name} pats your hand: “You sweet. But buy me drink, talk to me a little — ` +
+      "this is Pattaya, not a vending machine.”");
+    return;
+  }
+  if (G.money < price) {
+    _say(`The mamasan names it without looking up: ฿${price}. You have ฿${G.money}. ` +
+      "She returns to her book. The book is the whole answer.");
+    return;
+  }
+  G.money -= price;
+  if (bt === "soi6") {
+    _say(`฿${price} to the till and ${name} takes your hand with the confidence of ` +
+      "home advantage. “Upstairs” turns out to be exactly as advertised. Some " +
+      "time later you are back on your stool, thinking about nothing at all, " +
+      `while she fixes her hair in the till mirror. (฿${G.money} left.)`, "win");
+    _addHappy(6);
+    return;
+  }
+  _say(`฿${price} to the mamasan, who enters it in the ledger with ceremony and ` +
+    `gives ${name} a nod that means back by opening, mind. ${name} vanishes and ` +
+    "reappears out of uniform — jeans, clean shirt, ordinary and lovely — and " +
+    `takes your arm like you're the one being rented. (฿${G.money} left.)`, "win");
+  _endNight("barfine");
+}
+
+// ── Food and water ───────────────────────────────────────────────────────────
+
+const FOOD_STALLS = {
+  jomtien_7eleven: { name: "a toastie, pressed while you wait", price: 35, hunger: 40, thirst: 0 },
+  jomtien_beach_rd: { name: "a cold mango from Auntie Nok, salt and chilli on the side", price: 30, hunger: 25, thirst: 15 },
+  buakhao_market: { name: "som tam from the cart, extra everything", price: 50, hunger: 55, thirst: -10 },
+  naklua_rd: { name: "grilled chicken and sticky rice off a smoky cart", price: 60, hunger: 60, thirst: 0 },
+  ws_gate: { name: "a late-night kebab of negotiable provenance", price: 89, hunger: 45, thirst: 0 },
+};
+
+const _EDIBLE = { moo_ping: 35, som_tam: 50, noodles: 20 };
+
+function _doEat(arg) {
+  const inv = _inv().filter(i => _EDIBLE[i] !== undefined);
+  const id = arg ? inv.find(i => ITEMS[i].name.toLowerCase().includes(arg) ||
+    ITEMS[i].aliases.some(a => a.includes(arg))) : inv[0];
+  if (!id) { _say(arg ? "You're not carrying that, or it isn't food." : "Nothing edible on you. The street sells everything."); return; }
+  if (id === "som_tam" && _flag("somTamAccepted") && !_flag("somTamDelivered")) {
+    _say("It's Ploy's som tam. You eat Ploy's som tam. It is magnificent, and you " +
+      "are a terrible person.", "alert");
+  } else {
+    _say(`You eat the ${ITEMS[id].name}. ` + (id === "noodles" ? "Dry. Crunchy. A choice." : "Better than it has any right to be."));
+  }
+  G.itemLoc[id] = null;
+  G.hunger = Math.max(0, G.hunger - _EDIBLE[id]);
+  if (id === "noodles") G.thirst = Math.min(100, G.thirst + 10);
+  _addHappy(1);
+}
+
 // ── Act One: The Last Baht Bus ───────────────────────────────────────────────
 // Reaching Room 412 with the wallet completes the intro quest — scored, and
 // converted into a happiness head start. The night does NOT end.
@@ -1000,13 +1289,21 @@ function _checkAct1() {
   for (const l of lines) _say(l, "dim");
   _say(`ACT ONE SCORE: ${score}`, "win");
   _addHappy(Math.max(5, Math.round(score / 4)));
+  G.money += SAFE_CASH;
+  _say(`The room safe opens on the second try. Passport, return ticket — and the ` +
+    `emergency stash you very nearly forgot: ฿${SAFE_CASH}. (฿${G.money} in ` +
+    "pocket. The vacation is officially back on.)", "win");
+  _setFlag("act1Done"); // stage advances
+  G.stage = "vacation";
   _say("");
   _say("You could sleep. But the shower works, the wallet is fat enough, and " +
     "through the window the whole electric city is just getting started — and for " +
     "the first time tonight, nobody in it has anything of yours.", "room");
-  _say("★ THE NIGHT IS YOURS. New goal: สบายสบาย — get happy. ★", "win");
-  _say("(SCORE tracks your happiness. The bars, the games, the girls, the city — " +
-    "it all counts. RESTART any time for a fresh night.)", "dim");
+  _say(`★ THE VACATION IS YOURS — ${8 - G.day} night${8 - G.day === 1 ? "" : "s"} ` +
+    "left. Goal: สบายสบาย — get happy. ★", "win");
+  _say("(SCORE tracks happiness, the clock, and your body. Eat, drink water, " +
+    "don't get bitten. SLEEP here ends a night on your terms; the city ends it " +
+    "otherwise. RESTART any time for a fresh trip.)", "dim");
 }
 
 // ── Verb handlers ──────────────────────────────────────────────────────────
@@ -1130,7 +1427,8 @@ function _doDrop(arg) {
 
 function _doInventory() {
   const inv = _inv();
-  _say(`฿${G.money} · phone ${G.battery}%${G.lightOn ? " (flashlight ON)" : ""}`, "dim");
+  _say(`฿${G.money} · phone ${G.battery}%${G.lightOn ? " (flashlight ON)" : ""} · ` +
+    `${_clockStr()} day ${G.day} · hunger ${G.hunger} · thirst ${G.thirst}`, "dim");
   _say(inv.length ? "You are carrying: " + inv.map(id => ITEMS[id].name).join(", ") + "." :
     "You are carrying nothing but experience.");
 }
@@ -1291,6 +1589,27 @@ function _doBuy(arg) {
     _say(`One USB charger, ฿${CHARGER_PRICE}. The doorbell jingles in celebration. (฿${G.money} left.)`);
     return;
   }
+  if (/water|nam plao/.test(arg)) {
+    const canBuy = r.shop || _inBar() || FOOD_STALLS[G.room];
+    if (!canBuy) { _say("No water for sale here. 7-Elevens, bars, and the street carts all have it."); return; }
+    const price = _inBar() ? 20 : 10;
+    if (G.money < price) { _say(`฿${price} for a cold bottle, and you don't have it. Grim.`); return; }
+    G.money -= price;
+    G.thirst = Math.max(0, G.thirst - 45);
+    _say(`A cold bottle of water, gone in one go. Civilisation. (฿${G.money} left.)`);
+    return;
+  }
+  if (FOOD_STALLS[G.room] && /food|eat|toastie|mango|som tam|somtam|chicken|kebab|rice|snack/.test(arg)) {
+    const f = FOOD_STALLS[G.room];
+    if (G.money < f.price) { _say(`฿${f.price}, and you're short. The smell alone is worth half that, and free.`); return; }
+    G.money -= f.price;
+    G.hunger = Math.max(0, G.hunger - f.hunger);
+    if (f.thirst) G.thirst = Math.max(0, Math.min(100, G.thirst - f.thirst));
+    _say(`฿${f.price} buys ${f.name}. You eat it standing up like a local and feel ` +
+      `the night improve. (฿${G.money} left.)`);
+    _addHappy(1);
+    return;
+  }
   if (/beer|chang|leo|singha/.test(arg) && !arg.includes("drink")) {
     if (!_inBar()) { _say("The 7-Eleven fridge hums somewhere, but this calls for a bar stool."); return; }
     if (G.money < BEER_PRICE) { _say(`A big bottle is ฿${BEER_PRICE} here. You have ฿${G.money}. The cashier's calculator stays in the drawer.`); return; }
@@ -1309,12 +1628,14 @@ function _doBuy(arg) {
     }
     G.money -= BEER_PRICE;
     G.soc.drunk++;
+    G.thirst = Math.max(0, G.thirst - 20);
     const d = G.soc.drunk;
     _say(`One big Chang, cold enough to hurt. (฿${G.money} left.)` +
       (d >= 6 ? " The room has developed a gentle rotation." :
        d >= 4 ? " The neon is starting to smear pleasantly." :
        d >= 2 ? " The night improves by one bottle's worth." : ""));
     _addHappy(d <= 4 ? 1 : -1);
+    _checkDrunk();
     return;
   }
   if (arg.includes("lady drink") || arg.includes("ladydrink") || arg.includes("drink")) {
@@ -1337,8 +1658,10 @@ function _doBuy(arg) {
       _addHappy(2);
       if (_rand() < 0.5) {
         G.soc.drunk++;
+        G.thirst = Math.max(0, G.thirst - 20);
         _say("She flicks two fingers at the cashier and a cold one lands in front " +
           "of you. On the house.", "dim");
+        _checkDrunk();
       }
     }
     // drink-sniping a girl who had the regular's attention: bad form
@@ -1478,9 +1801,13 @@ function _doCharge() {
 
 function _doScore() {
   _say(`สนุก happiness: ${G.happy} — ${_happyLevel(G.happy)}`, "win");
-  _say(`Turns: ${G.turns} · ฿${G.money} · battery ${G.battery}%` +
-    (G.soc.drunk ? ` · ${G.soc.drunk} bottle${G.soc.drunk > 1 ? "s" : ""} deep` : ""), "dim");
-  if (_flag("act1Done")) _say(`✓ ACT ONE COMPLETE — scored ${G.score}`, "dim");
+  _say(`Day ${G.day}${G.stage === "expat" ? " · expat life" : " of 7"} · ${_clockStr()} · ` +
+    `฿${G.money} · battery ${G.battery}%`, "dim");
+  _say(`hunger ${G.hunger} · thirst ${G.thirst}` +
+    (G.soc.drunk ? ` · ${G.soc.drunk} bottle${G.soc.drunk > 1 ? "s" : ""} deep` : "") +
+    (G.hurt ? ` · banged up (${G.hurt}/3)` : ""), "dim");
+  if (_flag("act1Done")) _say(`✓ ACT ONE COMPLETE — scored ${G.score}` +
+    (G.vacation > 1 ? ` · vacation #${G.vacation}` : ""), "dim");
   const milestones = [
     ["knowWasHere", "Worked out where you were last night"],
     ["knowMot", "Learned who lifted the wallet"],
@@ -1502,7 +1829,8 @@ const _HELP = `Common commands:
   BUY <thing> · SELL BOTTLES · READ <thing> · READ SIGN
   PLAY CONNECT 4 · PLAY JACKPOT [bet] · PLAY POOL   (in the beer bars)
   FLIRT/KISS/SPANK/FONDLE <lady> · BUY DRINK FOR <lady> · BUY BEER
-  RING BELL (฿300, instant popularity) · TALK TO PATRON
+  RING BELL (฿300, instant popularity) · TALK TO PATRON · BARFINE <lady>
+  EAT <food> · BUY WATER / FOOD (street carts & 7-Elevens) · SLEEP (at the hotel)
   LIGHT ON / LIGHT OFF · CHARGE PHONE
   SCORE (happiness & progress) · UNDO · RESTART   (the night autosaves itself)`;
 
@@ -1522,6 +1850,15 @@ function doCommand(input) {
   const words = lower.split(" ");
   const [v, ...rest] = words;
   const arg = rest.filter(w => !["the", "a", "an", "to", "at", "up", "my"].includes(w)).join(" ");
+
+  // the week is over: the airline needs an answer before anything else
+  if (G.pendingChoice === "vacation_end") {
+    if (/^restart/.test(lower)) { newGame(); engineIntro(); return; }
+    if (/vacation|holiday|again|fly back|new/.test(lower)) { _newVacation(); return; }
+    if (/move|expat|stay|pattaya|remain/.test(lower)) { _goExpat(); return; }
+    _say("NEW VACATION or MOVE TO PATTAYA — the airline needs an answer.", "dim");
+    return;
+  }
 
   // a live bar game captures every command until it ends (QUIT concedes)
   if (G.game) {
@@ -1619,6 +1956,13 @@ function doCommand(input) {
     case "spank": _doSocial("spank", arg); break;
     case "fondle": case "grope": _doSocial("fondle", arg); break;
     case "ring": case "bell": _doBell(); break;
+    case "barfine": case "bf": _doBarfine(arg.replace(/^with /, "")); break;
+    case "eat": _doEat(arg); break;
+    case "sleep": case "bed": case "crash":
+      if (!_flag("act1Done")) _say("Sleep where? The beach already had you once tonight. Get the wallet, get the room.");
+      else if (G.room !== "hotel_room") _say("Your bed is in Naklua — room 412. It'll keep.");
+      else { _endNight("sleep"); return; }
+      break;
     case "wait": case "z": _say("You wait. Pattaya doesn't."); break;
     case "score": _doScore(); break;
     case "help": case "?": _say(_HELP, "dim"); break;
@@ -1640,8 +1984,9 @@ function engineIntro() {
   _say("THE LAST BAHT BUS", "win");
   _say("a Pattaya misadventure · Soi Sanuk universe", "dim");
   _say("═══════════════════════════════════", "dim");
-  _say("You wake face-down on Jomtien beach. The sun is bleeding into the sea and " +
-    "your head is pounding like a bass bin outside Neon Paradise A-Go-Go.");
+  _say("Day two of your week in Pattaya, and it starts like this: face-down on " +
+    "Jomtien beach, sunset bleeding into the sea, your head pounding like a bass " +
+    "bin outside Neon Paradise A-Go-Go. Day one went well, is the thing. Too well.");
   _say("Your wallet is GONE. Your phone reads 13% battery. Your hotel is in Naklua — " +
     "the whole town away. The baht bus is ฿15 a head.");
   _say("You have ฿0.");

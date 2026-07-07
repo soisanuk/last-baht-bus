@@ -7,11 +7,20 @@ You wake face-down on Jomtien beach at sunset. Wallet: gone. Phone: 13%.
 Your hotel is in Naklua, a long way north. The baht bus is ฿15 a head.
 You have ฿0.
 
-That's Act One. Solve it — the wallet, the gossip chain, the safe, the ride
-home — and the night doesn't end: it opens. The long game is the oldest goal
-on the soi: **get happy**. A สนุก meter climbs (and dips) with everything you
-do — bar games, bell rings, wai-ed mamasans, kissed hostesses, soi dogs,
-scams, ejections — from เหนื่อย (running on empty) all the way to สบายสบาย.
+That's day two of your week-long holiday (day one is how you ended up on the
+beach), and it's only **Act One**. Solve it — the wallet, the gossip chain,
+the safe, the ride home — and the room safe opens: ฿3,000 of emergency cash
+and the rest of the vacation to spend it in. The goal is the oldest one on
+the soi: **get happy**. A สนุก meter climbs (and dips) with everything you do
+— bar games, barfines, bell rings, wai-ed mamasans, soi dogs, scams,
+ejections — from เหนื่อย (running on empty) all the way to สบายสบาย.
+
+Nights run 18:00–04:00 and your body keeps its own books: hunger, thirst,
+drink, and injuries all pull at the meter, and red-lining any of them ends
+the night early. When the week is up, choose: **fly home and come back**
+(a fresh vacation, no lead-in adventure, chasing a new happiness high), or
+**make the move** — expat mode, the true endless sandbox. (They say the
+smart ones end up owning a bar. One day, so will you.)
 
 ## Play
 
@@ -40,6 +49,15 @@ Mobile gets tappable verb chips; desktop gets ↑/↓ command history.
   Act One is done, Pattaya stays open. Chase สบายสบาย (happiness 100): the
   meter moves with wins and losses across every system in the game, and
   hitting the top is a celebration, not a credits roll.
+- **Barfines** (PG-13, as ever): earn her favor first — this is Pattaya, not
+  a vending machine. Beer bars ฿400, go-gos ฿1,000, and the rest of that
+  night is nobody's business but the soi's (+10 สนุก). Soi 6 (฿700) has
+  "upstairs", and the night carries on. Mamasans are not barfineable;
+  cashiers only after the bell has rewritten the rules.
+- **Survival, lightly**: EAT and BUY WATER at street carts, 7-Elevens, and
+  Auntie Nok's; too hungry, too thirsty, too drunk, or too banged-up and the
+  night ends early — a burned vacation day and a sadder meter. SLEEP at the
+  hotel ends a night on your own terms; 04:00 ends it regardless.
 - **Bar life**: FLIRT, KISS, and worse — outcomes scale with how many lady
   drinks (฿150) you've bought her, from a slap through tolerance to genuine
   reciprocation. Roles matter: cashiers and mamasans allow light contact only.
@@ -223,7 +241,7 @@ flowchart TD
 node --test
 ```
 
-102 tests: Thai number composition, world/map integrity (every exit resolves,
+112 tests: Thai number composition, world/map integrity (every exit resolves,
 all 15 canon bars present, the gossip chain's flags all connect), parser,
 systems, street encounters, bar mini-games and social life, and a full
 scripted playthrough from the beach to the happy ending — run headless via
