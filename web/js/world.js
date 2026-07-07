@@ -10,6 +10,8 @@ const BUS_FARE   = 15;   // baht bus, any hop on a line
 const MOTOSAI_TOWN = 50; // motosai hop inside town
 const MOTOSAI_FAR  = 100;// motosai to/from the Darkside
 const LADY_DRINK = 150;  // canon
+const BEER_PRICE = 80;   // your own big Chang, bar price
+const BELL_PRICE = 300;  // ring it and the round is on you
 const CHARGER_PRICE = 59;
 const SAFE_PIN = 719;    // ๗๑๙ — stage number 71 + lucky 9
 
@@ -942,3 +944,16 @@ const CANON_HOSTESSES = [
   "lek", "noi", "ping", "aom", "joy", "fon", "gift", "kwan",
   "cindy", "nong", "pim", "oy",
 ];
+
+// ── Bar social roles ────────────────────────────────────────────────────────
+// A lady's role shapes what she tolerates: hostesses work the room, cashiers
+// keep the books not the customers, and you do NOT lay a hand on the mamasan.
+// (Ringing the bell a couple of times has been known to soften the rules.)
+
+const NPC_ROLES = {
+  lek: "hostess", noi: "hostess", ping: "hostess", aom: "hostess",
+  joy: "hostess", fon: "hostess", gift: "hostess", kwan: "hostess",
+  nong: "hostess", pim: "hostess",
+  ploy: "cashier",
+  cindy: "mamasan", oy: "mamasan", daeng: "mamasan",
+};

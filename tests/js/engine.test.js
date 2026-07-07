@@ -463,6 +463,131 @@ test("pool: table gating, stake, and the visit loop", () => {
   assert.ok([50, 150].includes(state().money), `lose or win — got ฿${state().money}`);
 });
 
+// ── Bar social life ────────────────────────────────────────────────────────
+
+test("flirting is always safe; kissing cold gets you slapped", () => {
+  state().room = "jasmine_garden";
+  run("flirt with fon");
+  assert.match(lastOut(), /professional warmth/i);
+  assert.ok(!state().soc.heat.jasmine_garden);
+  run("kiss fon");
+  assert.match(lastOut(), /slap/i);
+  assert.equal(state().soc.heat.jasmine_garden, 1);
+});
+
+test("lady drinks warm the outcome, tier by tier", () => {
+  state().room = "jasmine_garden";
+  state().money = 1000;
+  run("buy drink for fon", "buy drink for fon", "buy drink for fon");
+  assert.equal(state().soc.drinks.fon, 3);
+  run("kiss fon");
+  assert.match(lastOut(), /puppy|Sanuk/i, "tolerated at three drinks");
+  run("buy drink for fon", "buy drink for fon", "kiss fon");
+  assert.match(lastOut(), /takes her time/i, "leaned into at five");
+});
+
+test("cashiers cap physical contact until the bell has rung twice", () => {
+  state().room = "rainbow_girls";
+  state().money = 1000;
+  run("spank ploy");
+  assert.match(lastOut(), /books, not the customers/i);
+  assert.equal(state().soc.heat.rainbow_girls, 2);
+  run("ring bell", "ring bell"); // also clears the heat
+  assert.equal(state().soc.bells.rainbow_girls, 2);
+  state().soc.drinks.ploy = 4;
+  run("spank ploy"); // favor 4 + bell 2 − severity 4 = lean-in
+  assert.match(lastOut(), /returns fire/i);
+});
+
+test("hands off the mamasan; twice gets you walked out of all of LK Metro", () => {
+  state().room = "rainbow_girls";
+  run("fondle oy");
+  assert.match(lastOut(), /do NOT do that to the mamasan/i);
+  run("fondle oy");
+  assert.notEqual(state().room, "rainbow_girls", "ejected");
+  assert.ok(state().soc.banned.rainbow_girls !== undefined);
+  assert.ok(state().soc.banned.gold_rush !== undefined, "complex-wide ban");
+});
+
+test("a ban holds until the security shift changes", () => {
+  state().room = "buakhao_market";
+  state().soc.banned.cindy_bar = 0;
+  state().turns = 5;
+  run("enter cindy");
+  assert.equal(state().room, "buakhao_market");
+  assert.match(lastOut(), /Not tonight/i);
+  state().turns = 45;
+  run("enter cindy");
+  assert.equal(state().room, "cindy_bar");
+  assert.equal(state().soc.heat.cindy_bar, 1, "back in, but on notice");
+});
+
+test("a drink for the mamasan buys the whole bar's goodwill", () => {
+  state().room = "cindy_bar";
+  state().money = 500;
+  run("buy drink for cindy");
+  assert.equal(state().soc.drinks.cindy, 1);
+  assert.ok(state().soc.mamaTreat.cindy_bar);
+  assert.match(lastOut(), /royal assent|treat you like a regular/i);
+});
+
+test("ringing the bell costs ฿300, clears heat, and lifts every outcome", () => {
+  state().room = "jasmine_garden";
+  state().money = 400;
+  state().soc.heat.jasmine_garden = 2;
+  run("ring bell");
+  assert.equal(state().money, 100);
+  assert.equal(state().soc.heat.jasmine_garden, 0);
+  run("kiss fon"); // bell glow +2 − severity 3 = soft deflection, not a slap
+  assert.match(lastOut(), /cheek|deflection/i);
+});
+
+test("patron talk: sober tips, drunk rambling, bell-glow hero worship", () => {
+  state().room = "lucky_tiger";
+  run("talk to patron");
+  assert.match(lastOut(), /mamasan|cashiers/i);
+  state().soc.drunk = 4;
+  run("talk to patron");
+  assert.match(lastOut(), /stool away/i);
+  state().soc.bellAt.lucky_tiger = state().turns;
+  run("talk to patron");
+  assert.match(lastOut(), /THAT'S the fella/i);
+  assert.equal(state().soc.drunk, 5, "he bought you one back");
+});
+
+test("drink-sniping the regular's girl is bad form; a beer mends it", () => {
+  state().room = "lucky_tiger";
+  state().money = 500;
+  state().soc.patronBusy.lucky_tiger = true;
+  run("buy drink for lek");
+  assert.ok(state().soc.patronMiffed.lucky_tiger);
+  assert.equal(state().soc.heat.lucky_tiger, 1);
+  run("talk to patron");
+  assert.match(lastOut(), /bad form/i);
+  run("buy beer for patron");
+  assert.ok(!state().soc.patronMiffed.lucky_tiger);
+  assert.equal(state().soc.heat.lucky_tiger, 0);
+});
+
+test("buying your own beers raises the drunk counter", () => {
+  state().room = "cindy_bar";
+  state().money = 200;
+  run("buy beer");
+  assert.equal(state().soc.drunk, 1);
+  assert.equal(state().money, 120);
+});
+
+test("street kisses end badly — except for the katoey", () => {
+  run("e", "kiss nok");
+  assert.match(lastOut(), /THWACK|flip-flop/i);
+  state().room = "beach_rd_c";
+  state().money = 100;
+  _startEnc("katoey");
+  run("kiss her back");
+  assert.equal(state().money, 100, "nothing stolen");
+  assert.match(lastOut(), /lipstick/i);
+});
+
 // ── Endings ────────────────────────────────────────────────────────────────
 
 test("reaching the hotel without the wallet: going home alone", () => {

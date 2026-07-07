@@ -31,6 +31,16 @@ Mobile gets tappable verb chips; desktop gets ↑/↓ command history.
   A `wai` and a `sawatdee` open more doors than money.
 - **Two solutions**: burgle the safe behind the go-go, or earn the Mamasan's
   respect and be handed your wallet like a gentleman. Score reflects style.
+- **Bar life**: FLIRT, KISS, and worse — outcomes scale with how many lady
+  drinks (฿150) you've bought her, from a slap through tolerance to genuine
+  reciprocation. Roles matter: cashiers and mamasans allow light contact only.
+  A drink for the mamasan warms the whole bar (and the house may pour one
+  back); RING BELL (฿300) makes you everyone's favourite for a while — and has
+  been known to soften the rules. TALK TO the resident PATRON for beer-soaked
+  wisdom (mind whose girl you buy drinks for — bad form travels). Push your
+  luck too far and security walks you out; in LK Metro the whole complex
+  remembers. Try the same moves on the street at your own risk — though the
+  Beach Road ladyboy famously appreciates a man who flirts back.
 - **Bar games**: every beer bar keeps a Connect 4 frame (the hostess never
   loses), a Jackpot box (the Thai shut-the-box dice game — flip the dice or
   flip their sum, lowest score wins, shut all nine for JACKPOT), and the
@@ -204,11 +214,11 @@ flowchart TD
 node --test
 ```
 
-89 tests: Thai number composition, world/map integrity (every exit resolves,
+101 tests: Thai number composition, world/map integrity (every exit resolves,
 all 15 canon bars present, the gossip chain's flags all connect), parser,
-systems, street encounters, bar mini-games, and a full scripted playthrough
-from the beach to the happy ending — run headless via `node:vm` against the
-same files the browser loads.
+systems, street encounters, bar mini-games and social life, and a full
+scripted playthrough from the beach to the happy ending — run headless via
+`node:vm` against the same files the browser loads.
 
 ## Structure
 

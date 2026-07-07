@@ -143,6 +143,14 @@ test("encounters reference real, lit, street-side rooms", () => {
   assert.equal(ITEMS.hair_tonic.location, null);
 });
 
+test("bar-social roles reference real NPCs and cover the roster", () => {
+  for (const [id, role] of Object.entries(NPC_ROLES)) {
+    assert.ok(NPCS[id], `role assigned to missing NPC ${id}`);
+    assert.ok(["hostess", "cashier", "mamasan"].includes(role), `${id}: odd role ${role}`);
+  }
+  for (const h of CANON_HOSTESSES) assert.ok(NPC_ROLES[h], `${h} has no role`);
+});
+
 test("the safe PIN's clue flags both exist in dialogue", () => {
   assert.equal(SAFE_PIN, 719);
   const allSets = Object.values(NPCS).flatMap(n => n.dialogue.flatMap(d => d.sets || []));

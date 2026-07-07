@@ -23,6 +23,8 @@ Deploy is automatic: any push to `main` runs `.github/workflows/pages.yml` (test
 
 Zork-style text adventure in the Soi Sanuk / Pattaya universe. Same conventions as the trainer (`/Users/mario/thaicab`): **classic script tags sharing globals, no ES modules, no build step, works from `file://`**. The root `package.json` `"type": "module"` exists only so `node --test` treats test files as ESM. Load order in `index.html` matters (`thai → world → games → engine → …`); `main.js` loads last.
 
+Bar social life lives in `G.soc` (per-girl lady-drink counts, per-bar bell/heat/ban/patron state, own drunk counter). Actions (`_doSocial`: flirt/kiss/spank/fondle) resolve `_favor(id) − SEV[kind]` into five outcome tiers; `NPC_ROLES` (world.js) caps physical contact for cashiers/mamasans until `bells[room] ≥ 2`. Heat ≥ 3 → `_kickOut()` (LK Metro bans complex-wide; bans expire after `BAN_TURNS`). Street attempts are negative except the katoey encounter's flirt-back branch.
+
 Bar mini-games (Connect 4 / Jackpot / pool) run as a modal `G.game` state: while one is live, `doCommand` routes every input to `_gameInput` and QUIT concedes. Stakes are escrowed up front and paid back ×2 on a win (×3 on a Jackpot); broke players play "for sanuk" (stake 0). Tabletop games are gated on `barType === "beer" | "soi6"`, pool on `room.pool`.
 
 - `web/js/thai.js` — Thai numbers (สิบเอ็ด/ยี่สิบ irregulars), Thai digits ๐–๙, signs, phrase matching. Pure functions.
