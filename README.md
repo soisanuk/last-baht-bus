@@ -36,6 +36,157 @@ Type `HELP` in-game for the command list. The night autosaves after every
 command (localStorage); reopening the page offers to continue where you left
 off, and `UNDO` rewinds your last command.
 
+## World map
+
+<details>
+<summary>Open the map (mild spoilers — room layout and who's where)</summary>
+
+🌑 dark rooms · 🔌 charging outlets · 🚏 bus stops · 🏍️ motosai stands
+(any stand reaches any destination; the dotted edge is the only practical
+way across Sukhumvit). Solid = walking, dashed = baht bus.
+
+```mermaid
+flowchart TD
+  classDef dark fill:#1a1030,stroke:#666,color:#bbb
+  classDef bar fill:#2a0a3f,stroke:#ff1493,color:#ffcce8
+  classDef special fill:#3f2a0a,stroke:#ffe600,color:#ffe600
+
+  subgraph JOMTIEN
+    dongtan[🌑 Dongtan Beach]:::dark
+    beach([⭐ START: Jomtien Beach])
+    jbr[Jomtien Beach Rd<br>Auntie Nok 🥭]
+    rompho[Soi Rompho]
+    sev[7-Eleven 🔌]
+    jbus[🚏 Bus Stop 🏍️]
+    beach --- dongtan
+    beach --- jbr
+    dongtan --- jbr
+    jbr --- rompho
+    jbr --- sev
+    jbr --- jbus
+  end
+
+  subgraph PRATUMNAK["PRATUMNAK HILL (dark walk)"]
+    prat[🌑 Hill Road]:::dark
+    buddha[🌑 Buddha Hill]:::dark
+    prat --- buddha
+  end
+
+  subgraph BEACHRD["BEACH ROAD"]
+    brs[🚏 Beach Rd South 🏍️<br>Bank the piwin]
+    brc[🚏 Beach Rd Central]
+    brn[🚏 Beach Rd North]
+    prom[Promenade]
+    brs --- brc --- brn
+    brc --- prom
+  end
+
+  subgraph WS["WALKING STREET"]
+    gate[WS Gate]
+    wss[WS South]
+    wsn[WS North]
+    alley[🌑 Side-Alley]:::dark
+    np[🍹 Neon Paradise<br>Noi]:::bar
+    cm[🍹 Club Mirage<br>Aom]:::bar
+    cp[🍹 Crystal Palace<br>Gift]:::bar
+    pn[🍹 Paradise Nights<br>Ping]:::bar
+    ms[🍺 Midnight Sun]:::bar
+    gate --- wss --- wsn
+    wss --- alley
+    wss --- np
+    wss --- cm
+    wsn --- cp
+    wsn --- pn
+    wsn --- ms
+  end
+
+  subgraph BUAKHAO["SOI BUAKHAO"]
+    bkn[Buakhao North]
+    bkm[Buakhao Market]
+    bks[Buakhao South 🏍️]
+    cindy[🍺 Cindy Bar 🔌<br>Cindy 🌹 HUB]:::bar
+    lt[🍺 Lucky Tiger<br>Lek]:::bar
+    sr[🍺 Silk Rose]:::bar
+    jg[🍺 Jasmine Garden<br>Fon]:::bar
+    bkn --- bkm --- bks
+    bkn --- lt
+    bkm --- cindy
+    bkm --- sr
+    bks --- jg
+  end
+
+  subgraph LK["LK METRO (maze)"]
+    lke[LK Entrance]
+    m1[Inner Lane]
+    m2[Cross Lane]
+    m3[🌑 Back Lane]:::dark
+    m4[🌑 Deep Corner]:::dark
+    gr[🍺 Gold Rush<br>Nong]:::bar
+    sl[🍺 Starlight<br>Pim 💋]:::bar
+    rg[🍹 Rainbow Girls<br>Madam Oy 👑]:::bar
+    office[🔒 Oy's Office]:::special
+    lke --- m1
+    m1 --- m2
+    m1 --- m3
+    m1 --- gr
+    m2 --- m3
+    m2 --- m4
+    m2 --- sl
+    m3 --- m4
+    m4 --- rg
+    rg --- office
+  end
+
+  subgraph SOI6["SOI 6"]
+    s6[Soi 6 Street]
+    pl[🍺 Pink Lotus<br>Joy]:::bar
+    gd[🍺 Golden Dragon]:::bar
+    sd[🍺 Sunset Dreams<br>Kwan]:::bar
+    s6 --- pl
+    s6 --- gd
+    s6 --- sd
+  end
+
+  subgraph DARKSIDE["THE DARKSIDE (motosai only)"]
+    sk[Sukhumvit Crossing 🏍️]
+    kt[Soi Khao Talo]
+    ktb[🍺 Daeng's Place 🔌<br>Daeng 🌶️]:::bar
+    lake[Lake Mabprachan<br>Lake Gary 🎣]
+    sk --- kt
+    kt --- ktb
+    kt --- lake
+  end
+
+  subgraph NAKLUA
+    nak[🚏 Naklua Rd]
+    hsoi[🌑 Hotel Soi]:::dark
+    hotel([🏁 GOAL: Room 412])
+    nak --- hsoi --- hotel
+  end
+
+  %% region connectors (walking)
+  jbus --- prat
+  prat --- gate
+  gate --- brs
+  gate --- wss
+  brs --- bks
+  brc --- bkn
+  brn --- s6
+  brn --- nak
+  bks --- lke
+
+  %% baht bus lines (฿15)
+  jbus -. "bus ฿15" .- brs
+  brs -. "bus ฿15" .- brc
+  brc -. "bus ฿15" .- brn
+  brn -. "bus ฿15" .- nak
+
+  %% motosai
+  bks -. "motosai ฿100" .-> kt
+```
+
+</details>
+
 ## Test
 
 ```sh
