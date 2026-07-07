@@ -248,6 +248,132 @@ test("motosai: quoted, paid, discounted after helmet favour", () => {
   assert.equal(state().money, 80); // Bank's special price ฿20
 });
 
+// ── Street encounters ──────────────────────────────────────────────────────
+// _startEnc fires an encounter directly (deterministic); the roll machinery
+// (_maybeEncounter) is tested separately below.
+
+test("katoey pickpocket: guarding your pocket saves the baht", () => {
+  state().room = "beach_rd_c";
+  state().money = 100;
+  _startEnc("katoey");
+  assert.ok(state().pendingEnc, "awaiting a snap reaction");
+  run("hold onto my pockets");
+  assert.equal(state().money, 100);
+  assert.equal(state().pendingEnc, null);
+});
+
+test("katoey pickpocket: dithering costs ฿40", () => {
+  state().room = "beach_rd_c";
+  state().money = 100;
+  _startEnc("katoey");
+  run("um, hello?");
+  assert.equal(state().money, 60);
+});
+
+test("katoey pickpocket: the truly broke get the pity coin", () => {
+  state().room = "beach_rd_c";
+  _startEnc("katoey");
+  run("er");
+  assert.equal(state().money, 5);
+});
+
+test("drunk bargirl: instant charity, no reaction needed", () => {
+  state().room = "buakhao_market";
+  _startEnc("bargirl");
+  assert.equal(state().pendingEnc, null);
+  assert.equal(state().money, 20);
+  assert.equal(state().itemLoc.moo_ping, "inventory");
+});
+
+test("moo ping placates the soi dog like the noodles do", () => {
+  state().itemLoc.noodles = null;
+  state().itemLoc.moo_ping = "inventory";
+  run("n", "wait");
+  assert.equal(state().itemLoc.moo_ping, null);
+  assert.equal(state().room, "dongtan_beach", "skewer absorbed the bite");
+});
+
+test("drunk brit: an apology turns him generous", () => {
+  state().room = "ws_south";
+  state().money = 10;
+  _startEnc("brit");
+  run("sorry mate, my mistake");
+  assert.equal(state().money, 60);
+});
+
+test("drunk brit: squaring up gets expensive and piwin-adjacent", () => {
+  state().room = "ws_south";
+  state().money = 100;
+  _startEnc("brit");
+  run("swing at him");
+  assert.equal(state().money, 70);
+  assert.match(lastOut(), /piwin/i);
+});
+
+test("piwin power bank: +30% battery for saying yes", () => {
+  state().room = "beach_rd_s";
+  _startEnc("powerbank");
+  run("yes please, khop khun krub");
+  assert.equal(state().battery, 43); // 13 + 30
+});
+
+test("hair tonic scammer: ฿99 buys a bottle of regret (+2 at the ending)", () => {
+  state().room = "beach_rd_n";
+  state().money = 100;
+  _startEnc("tonic");
+  run("ok fine, buy it");
+  assert.equal(state().money, 1);
+  assert.equal(state().itemLoc.hair_tonic, "inventory");
+});
+
+test("hair tonic scammer: walking on costs nothing", () => {
+  state().room = "beach_rd_n";
+  state().money = 100;
+  _startEnc("tonic");
+  run("no thanks");
+  assert.equal(state().money, 100);
+  assert.equal(state().itemLoc.hair_tonic, null);
+});
+
+test("encounter roll: cooldown holds, and no encounter fires twice", () => {
+  state().room = "beach_rd_c";
+  state().turns = 100;
+  state().lastEnc = 95; // inside the cooldown window
+  for (let i = 0; i < 100; i++) _maybeEncounter();
+  assert.equal(state().pendingEnc, null, "cooldown holds");
+  state().lastEnc = 0;
+  for (let i = 0; i < 200 && !state().pendingEnc; i++) _maybeEncounter();
+  assert.ok(state().pendingEnc, "an encounter eventually fires");
+  const first = state().pendingEnc;
+  state().pendingEnc = null;
+  state().lastEnc = 0;
+  for (let i = 0; i < 200 && !state().pendingEnc; i++) _maybeEncounter();
+  assert.notEqual(state().pendingEnc, first, "once per game means once");
+});
+
+test("the RNG lives in the save: undo cannot reroll an encounter", () => {
+  state().room = "beach_rd_c";
+  state().turns = 50;
+  const snap = serializeGame();
+  for (let i = 0; i < 100 && !state().pendingEnc; i++) _maybeEncounter();
+  const first = state().pendingEnc;
+  assert.ok(first);
+  deserializeGame(snap);
+  for (let i = 0; i < 100 && !state().pendingEnc; i++) _maybeEncounter();
+  assert.equal(state().pendingEnc, first, "same seed, same fate");
+});
+
+test("old saves (pre-encounters) load with backfilled fields", () => {
+  const old = JSON.parse(serializeGame());
+  delete old.encDone; delete old.pendingEnc; delete old.rng; delete old.lastEnc;
+  delete old.itemLoc.moo_ping; delete old.itemLoc.hair_tonic;
+  deserializeGame(JSON.stringify(old));
+  assert.deepEqual(state().encDone, {});
+  assert.ok(state().rng > 0);
+  assert.equal(state().itemLoc.moo_ping, null);
+  assert.equal(state().itemLoc.hair_tonic, null);
+});
+
 // ── Endings ────────────────────────────────────────────────────────────────
 
 test("reaching the hotel without the wallet: going home alone", () => {
@@ -267,6 +393,8 @@ test("commands after game over prompt restart", () => {
 // ── The full playthrough ───────────────────────────────────────────────────
 
 test("scripted happy-ending playthrough", () => {
+  // keep the route deterministic — the street encounters are tested above
+  state().encDone = Object.fromEntries(Object.keys(ENCOUNTERS).map(k => [k, true]));
   run(
     // Act 1 — Jomtien: three bottles, one receipt, one bus
     "take bottle",

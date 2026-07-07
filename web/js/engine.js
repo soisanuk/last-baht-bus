@@ -33,6 +33,10 @@ function newGame() {
       Object.entries(ITEMS).map(([id, it]) => [id, it.location])),
     safeTries: 0,
     pendingFare: null,   // { kind:"bus"|"moto", price, dest } awaiting `pay`
+    pendingEnc: null,    // encounter id awaiting the player's snap reaction
+    encDone: {},         // encounters that already fired (once per game)
+    lastEnc: 0,          // turn number of the last encounter (cooldown)
+    rng: 1 + Math.floor(Math.random() * 2147483645), // seeded per game
     score: 0,
     over: false,
   };
@@ -40,7 +44,25 @@ function newGame() {
 }
 
 function serializeGame() { return JSON.stringify(G); }
-function deserializeGame(s) { G = JSON.parse(s); return G; }
+function deserializeGame(s) {
+  G = JSON.parse(s);
+  // older saves predate the encounter system — backfill its fields
+  if (G.pendingEnc === undefined) G.pendingEnc = null;
+  if (!G.encDone) G.encDone = {};
+  if (G.lastEnc === undefined) G.lastEnc = 0;
+  if (!G.rng) G.rng = 1 + Math.floor(Math.random() * 2147483645);
+  for (const id of Object.keys(ITEMS)) {
+    if (!(id in G.itemLoc)) G.itemLoc[id] = ITEMS[id].location;
+  }
+  return G;
+}
+
+// Deterministic per-game RNG (Lehmer LCG). Living in G, it serialises with
+// the save and rewinds with UNDO — no re-rolling an encounter by undoing.
+function _rand() {
+  G.rng = (G.rng * 48271) % 2147483647;
+  return G.rng / 2147483647;
+}
 
 // ── Helpers ────────────────────────────────────────────────────────────────
 
@@ -166,11 +188,12 @@ function _tick() {
       _say("Something shifts in the dark nearby. A low growl. You are likely to be " +
         "bitten by a soi dog.", "alert");
     } else if (G.darkStreak >= 2) {
-      if (_inv().includes("noodles")) {
-        G.itemLoc.noodles = null;
+      const food = ["noodles", "moo_ping"].find(id => _inv().includes(id));
+      if (food) {
+        G.itemLoc[food] = null;
         G.darkStreak = 0;
-        _say("A soi dog lunges out of the dark! You hurl the Mama noodles on pure " +
-          "instinct. It catches the packet mid-air with terrifying grace and trots " +
+        _say(`A soi dog lunges out of the dark! You hurl the ${ITEMS[food].name} on ` +
+          "pure instinct. It catches it mid-air with terrifying grace and trots " +
           "off. Goodbye, dinner.", "alert");
       } else {
         const bitten = Math.min(G.money, 30);
@@ -189,6 +212,133 @@ function _tick() {
     G.darkStreak = 0;
   }
 }
+
+// ── Random street encounters ───────────────────────────────────────────────
+// Rolled after arriving somewhere (walk, bus, motosai) in a lit street room.
+// Scene data lives in ENCOUNTERS (world.js); outcomes live here. Interactive
+// encounters set G.pendingEnc and the player's next command is their snap
+// reaction — doCommand routes it to the matching _ENC resolver.
+
+const ENC_COOLDOWN = 12; // min turns between encounters
+const ENC_CHANCE = 0.3;  // roll per eligible arrival
+
+function _maybeEncounter() {
+  if (!G || G.over || G.pendingFare || G.pendingEnc) return;
+  if (_isDarkHere() || _room().bar) return; // the dark belongs to the soi dogs
+  if (G.turns - G.lastEnc < ENC_COOLDOWN) return;
+  const eligible = Object.keys(ENCOUNTERS).filter(id =>
+    !G.encDone[id] && ENCOUNTERS[id].rooms.includes(G.room) &&
+    (id !== "powerbank" || G.battery <= 30));
+  if (!eligible.length || _rand() > ENC_CHANCE) return;
+  _startEnc(eligible[Math.floor(_rand() * eligible.length)]);
+}
+
+function _startEnc(id) {
+  const e = ENCOUNTERS[id];
+  G.encDone[id] = true;
+  G.lastEnc = G.turns;
+  _say(e.intro, "alert");
+  if (e.th) { _say(`“${e.th}” (${e.rom})`, "thai"); _engineSpeak(e.th); }
+  if (e.interactive) {
+    G.pendingEnc = id;
+    if (e.hint) _say(e.hint, "dim");
+  } else {
+    _ENC[id]("");
+  }
+}
+
+const _ENC = {
+  katoey(input) {
+    if (/pocket|wallet|push|shove|step|back|away|off|no|stop|hand|guard|hold|run/.test(input)) {
+      _say("You clamp a hand over your pocket and step out of reach. She rolls her " +
+        "eyes, entirely unembarrassed — “Cannot blame for trying, na~” — and struts " +
+        "off down the road in search of drunker prey. Your baht survive.");
+    } else if (G.money === 0) {
+      G.money += 5;
+      _say("Expert fingers sweep your pockets and find… lint. She steps back, looks " +
+        "you up and down, and something like genuine pity crosses the perfect face. " +
+        "A ฿5 coin is pressed into your palm. “For lucky, you poor thing.” She " +
+        "leaves. You are now ฿5 richer and considerably poorer in spirit.");
+    } else {
+      const lost = Math.min(G.money, 40);
+      G.money -= lost;
+      _say("By the time you finish formulating a reply she is gone — melted into " +
+        `the crowd, along with ฿${lost} from your pocket. The oldest two-handed ` +
+        "trick on Beach Road, performed by a true professional. " +
+        `(฿${G.money} left.)`, "alert");
+    }
+  },
+
+  bargirl() {
+    G.money += 20;
+    if (G.itemLoc.moo_ping === null) G.itemLoc.moo_ping = "inventory";
+    _say("Before you can say a word she presses a ฿20 note and a moo ping skewer " +
+      "into your hands, pats your cheek with tremendous sincerity, and says you " +
+      "look exactly like her little brother, who also has bad night ALL TIME. " +
+      "Her friends drag her back inside, waving apologies. " +
+      `(฿${G.money} — and dinner.)`);
+    _say("(You now have the moo ping skewer.)", "dim");
+  },
+
+  brit(input) {
+    if (/sorry|apolog|calm|mate|friend|wai|easy|misunderstand|mistake|my bad|buy you/.test(input)) {
+      G.money += 50;
+      _say("“…Nah. Nah, you’re alright, you’re alright.” The rage evaporates as " +
+        "fast as it arrived, replaced by the crushing sentimentality of the very " +
+        "drunk. “Sorry mate. Been a mad one.” He presses ฿50 into your hand — " +
+        "“get yourself a beer, yeah?” — hugs you briefly but completely, and " +
+        `lurches off toward the neon. (฿${G.money}.)`);
+    } else if (/fight|punch|hit|swing|shove|push|square|come on|idiot|wanker|muppet yourself/.test(input)) {
+      const lost = Math.min(G.money, 30);
+      G.money -= lost;
+      _say("A mistake. There is a brief, undignified tangle — and then two piwins " +
+        "materialise out of nowhere, peel him off you with practised ease, and " +
+        "walk him away like a wardrobe. In the shuffle you’ve shed " +
+        (lost ? `฿${lost} in coins` : "nothing but your composure") +
+        ". A piwin looks back at you: “No fighting, boss. Bad for everybody.”" +
+        (lost ? ` (฿${G.money} left.)` : ""), "alert");
+    } else {
+      _say("You blink at him with perfect, bottomless neutrality. Somewhere behind " +
+        "the sunburn the thread is lost. “…Wrong bloke. Sorry pal.” He apologises " +
+        "to you, then to a lamppost, and reels away into the night.");
+    }
+  },
+
+  powerbank(input) {
+    if (/yes|yeah|sure|ok|thank|khop|krub|krap|please|borrow|charge|why not/.test(input)) {
+      G.battery = Math.min(100, G.battery + 30);
+      _say("He plugs you in and you shoot the breeze — football, petrol prices, " +
+        "whose girlfriend works where — while the number climbs. Twenty minutes " +
+        `of Pattaya small talk later your phone reads ${G.battery}%. He waves ` +
+        "away your thanks: “Next time, you take motosai, na?”");
+    } else {
+      _say("He shrugs and pockets the power bank — your funeral, boss — and goes " +
+        "back to watching the street with professional calm.");
+    }
+  },
+
+  tonic(input) {
+    if (/yes|buy|ok|sure|deal|take it|fine/.test(input)) {
+      if (G.money < TONIC_PRICE) {
+        _say(`You turn out your pockets: ฿${G.money}. He closes the briefcase with ` +
+          "the quiet disappointment of a man who has badly misjudged his mark, " +
+          "and evaporates.");
+      } else {
+        G.money -= TONIC_PRICE;
+        G.itemLoc.hair_tonic = "inventory";
+        _say(`Somehow — you will replay this moment for years — you hand over ฿${TONIC_PRICE} ` +
+          "and receive one brown bottle. He shakes your hand with both of his, " +
+          "wishes your family long life, and is gone before the receipt (there is " +
+          `no receipt) hits the ground. (฿${G.money} left.)`);
+        _say("(You now have the bottle of hair tonic.)", "dim");
+      }
+    } else {
+      _say("You keep walking. He keeps pace for exactly eleven more compliments, " +
+        "then peels away toward a sunburnt couple with the smoothness of a man " +
+        "who has done this ten thousand times tonight.");
+    }
+  },
+};
 
 // ── Endings ────────────────────────────────────────────────────────────────
 
@@ -213,6 +363,7 @@ function _checkEnding() {
     if (_flag(f)) { score += 5; lines.push(`✓ ${label} (+5)`); }
   }
   if (_flag("pinPart71") && _flag("pinPart9")) { score += 5; lines.push("✓ Assembled the safe code from soi gossip (+5)"); }
+  if (G.itemLoc.hair_tonic === "inventory") { score += 2; lines.push("✓ Proud owner of one bottle of miracle hair tonic (+2, condolences)"); }
   G.score = score;
 
   _say("═══════════════════════════════════", "win");
@@ -261,6 +412,7 @@ function _doGo(dirWord) {
   }
   G.room = to;
   _describeRoom(true);
+  _maybeEncounter();
 }
 
 function _doEnter(arg) {
@@ -558,6 +710,7 @@ function _doMotosai(arg) {
     `That was the fastest ฿${price} of your life. (฿${G.money} left.)`, "thai");
   _engineSpeak(thaiBaht(price));
   _describeRoom(true);
+  _maybeEncounter();
 }
 
 function _doPay(arg) {
@@ -587,6 +740,7 @@ function _doPay(arg) {
   }
   G.darkStreak = 0;
   _describeRoom(true);
+  _maybeEncounter();
 }
 
 function _doLight(on) {
@@ -659,6 +813,16 @@ function doCommand(input) {
   const words = lower.split(" ");
   const [v, ...rest] = words;
   const arg = rest.filter(w => !["the", "a", "an", "to", "at", "up", "my"].includes(w)).join(" ");
+
+  // a live encounter demands a snap reaction: the next command IS the reaction
+  if (G.pendingEnc && v !== "restart") {
+    const enc = G.pendingEnc;
+    G.pendingEnc = null;
+    _ENC[enc](lower);
+    _tick();
+    _checkEnding();
+    return;
+  }
 
   // pending fare gates everything except paying, looking, help
   if (G.pendingFare && !["pay", "look", "l", "help", "i", "inventory", "say"].includes(v)) {

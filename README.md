@@ -31,6 +31,12 @@ Mobile gets tappable verb chips; desktop gets ↑/↓ command history.
   A `wai` and a `sawatdee` open more doors than money.
 - **Two solutions**: burgle the safe behind the go-go, or earn the Mamasan's
   respect and be handed your wallet like a gentleman. Score reflects style.
+- **Street encounters**: the sois have their own weather — a two-handed
+  pickpocket on Beach Road, a sentimental drunk bargirl, an angry Brit who's
+  sixty per cent sure it was you, a piwin with a power bank, and a man with a
+  briefcase full of hair tonic. Some want your baht; some hand you theirs;
+  most depend on what you say next. Each strikes at most once a night, and the
+  dice live in your save — UNDO won't reroll them.
 
 Type `HELP` in-game for the command list. The night autosaves after every
 command (localStorage); reopening the page offers to continue where you left
@@ -193,10 +199,11 @@ flowchart TD
 node --test
 ```
 
-51 tests: Thai number composition, world/map integrity (every exit resolves,
-all 15 canon bars present, the gossip chain's flags all connect), parser and
-systems, and a full scripted playthrough from the beach to the happy ending —
-run headless via `node:vm` against the same files the browser loads.
+65 tests: Thai number composition, world/map integrity (every exit resolves,
+all 15 canon bars present, the gossip chain's flags all connect), parser,
+systems and street encounters, and a full scripted playthrough from the beach
+to the happy ending — run headless via `node:vm` against the same files the
+browser loads.
 
 ## Structure
 

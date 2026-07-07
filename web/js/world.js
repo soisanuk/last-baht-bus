@@ -512,6 +512,18 @@ const ITEMS = {
     desc: "A takeaway box of som tam poo plara, spicy enough to be classed as a weapon. " +
       "Cindy's peace offering for Ploy, the cashier at Rainbow Girls.",
   },
+  moo_ping: {
+    name: "moo ping skewer", aliases: ["moo ping", "mooping", "skewer", "pork", "food"],
+    portable: true, location: null, // pressed on you by a sentimental bargirl
+    desc: "A grilled pork skewer, still warm, glistening with the good marinade. " +
+      "Technically dinner. A soi dog would trade its entire territory for this.",
+  },
+  hair_tonic: {
+    name: "bottle of hair tonic", aliases: ["tonic", "hair tonic", "bottle of tonic"],
+    portable: true, location: null, // sold to you, in the loosest sense of "sold"
+    desc: "HIMALAYAN HERBAL HAIR TONIC — 100% GROW BACK GUARANTEE. Smells of cooking " +
+      "oil and ambition. The ฿99 you paid for it is in another province by now.",
+  },
   poster: {
     name: "faded poster", aliases: ["poster", "photo", "picture"],
     portable: false, location: "gold_rush",
@@ -858,6 +870,62 @@ const MOTOSAI_DESTS = {
   "darkside":       { room: "khao_talo", price: MOTOSAI_FAR },
   "khao talo":      { room: "khao_talo", price: MOTOSAI_FAR },
   "lake":           { room: "lake_mabprachan", price: MOTOSAI_FAR },
+};
+
+// ── Random street encounters ───────────────────────────────────────────────
+// Data only — resolution logic lives in engine.js (_ENC). Each fires at most
+// once per game, only in lit street rooms, on a seeded per-game RNG.
+// `interactive: true` → the intro sets G.pendingEnc and the player's NEXT
+// command is their snap reaction; otherwise the encounter resolves instantly.
+
+const TONIC_PRICE = 99;
+
+const ENCOUNTERS = {
+  katoey: {
+    rooms: ["beach_rd_s", "beach_rd_c", "beach_rd_n", "promenade", "ws_south", "ws_north"],
+    interactive: true,
+    th: "หล่อจังเลย", rom: "lor jang loei",
+    intro: "Out of the neon, a tall and devastating vision in a sequinned dress is " +
+      "suddenly pressed against you — “Hellooo hansum man~” — one hand tracing your " +
+      "chest with terrific friendliness. Something else entirely is happening down " +
+      "near your pocket.",
+    hint: "(Quick — do something.)",
+  },
+  bargirl: {
+    rooms: ["buakhao_n", "buakhao_market", "buakhao_s", "lk_entrance", "soi6_street", "ws_south"],
+    interactive: false,
+    th: "โถ น่าสงสาร", rom: "thoh, naa songsaan",
+    intro: "A bargirl weaves out of the nearest doorway, somewhere past her fourth " +
+      "lady drink of the shift, and stops dead at the sight of you.",
+  },
+  brit: {
+    rooms: ["ws_gate", "ws_south", "ws_north", "soi6_street", "beach_rd_c"],
+    interactive: true,
+    intro: "A sunburnt mountain in a Chang vest is abruptly in your face, swaying " +
+      "like a condemned building. “YOU. You’re the muppet who spilled my pint in " +
+      "the Sailor’s Arms, aren’t ya?” He is enormous, very drunk, and about sixty " +
+      "per cent sure.",
+    hint: "(Choose your next words carefully.)",
+  },
+  powerbank: {
+    rooms: ["jomtien_bus_stop", "beach_rd_s", "buakhao_s", "sukhumvit_crossing"],
+    interactive: true,
+    th: "แบตหมดเหรอ", rom: "baet mot rer?",
+    intro: "The piwin at the stand nods at the phone clutched in your hand like a " +
+      "dying pet. He produces a scuffed power bank from under the seat of his bike " +
+      "and holds it up, eyebrows raised: want some?",
+    hint: "(YES would be the traditional answer.)",
+  },
+  tonic: {
+    rooms: ["jomtien_beach_rd", "beach_rd_c", "beach_rd_n", "promenade", "ws_gate"],
+    interactive: true,
+    intro: "A dapper man with a briefcase falls into step beside you. “My friend! " +
+      "You have very lucky face. But—” he winces, eyes flicking to your hairline " +
+      "“—I am seeing one problem.” The briefcase opens: rows of little brown " +
+      "bottles. “Himalayan herbal tonic. Hair grow back one hundred per cent, " +
+      "guarantee. For you, special: ninety-nine baht only.”",
+    hint: "(He is not going to stop walking beside you until you answer.)",
+  },
 };
 
 // ── Canon checklist (used by tests) ────────────────────────────────────────

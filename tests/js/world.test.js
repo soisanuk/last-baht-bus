@@ -128,6 +128,21 @@ test("bus lines and motosai destinations reference real rooms", () => {
   }
 });
 
+test("encounters reference real, lit, street-side rooms", () => {
+  for (const [id, e] of Object.entries(ENCOUNTERS)) {
+    assert.ok(e.intro, `${id} has no intro`);
+    assert.ok(e.rooms.length, `${id} has no rooms`);
+    for (const r of e.rooms) {
+      assert.ok(ROOMS[r], `${id} room ${r} missing`);
+      assert.ok(!ROOMS[r].bar, `${id} room ${r} is a bar — encounters are street-only`);
+      assert.ok(!ROOMS[r].dark, `${id} room ${r} is dark — the dark belongs to soi dogs`);
+    }
+  }
+  // the items encounters hand out exist and start off-map
+  assert.equal(ITEMS.moo_ping.location, null);
+  assert.equal(ITEMS.hair_tonic.location, null);
+});
+
 test("the safe PIN's clue flags both exist in dialogue", () => {
   assert.equal(SAFE_PIN, 719);
   const allSets = Object.values(NPCS).flatMap(n => n.dialogue.flatMap(d => d.sets || []));
