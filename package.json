@@ -1,0 +1,10 @@
+{
+  "name": "last-baht-bus",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "The Last Baht Bus — a Pattaya text adventure",
+  "scripts": {
+    "test": "node --test"
+  }
+}
