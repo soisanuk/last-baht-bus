@@ -274,9 +274,9 @@ const _ENC = {
     if (G.itemLoc.moo_ping === null) G.itemLoc.moo_ping = "inventory";
     _say("Before you can say a word she presses a ฿20 note and a moo ping skewer " +
       "into your hands, pats your cheek with tremendous sincerity, and says you " +
-      "look exactly like her little brother, who also has bad night ALL TIME. " +
-      "Her friends drag her back inside, waving apologies. " +
-      `(฿${G.money} — and dinner.)`);
+      "look EXACTLY like her mom's ex-boyfriend, who was a good man, jing jing, " +
+      "and also always have bad night. Her friends drag her back inside, waving " +
+      `apologies. (฿${G.money} — and dinner.)`);
     _say("(You now have the moo ping skewer.)", "dim");
   },
 
