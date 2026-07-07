@@ -42,6 +42,18 @@
     border-bottom: 1px solid #ff149340;
     text-align: center;
     flex-shrink: 0;
+    position: relative;
+  }
+  #mute-btn {
+    position: absolute;
+    right: .7rem;
+    top: .55rem;
+    background: none;
+    border: 1px solid #ff149340;
+    border-radius: 8px;
+    font-size: 1rem;
+    padding: .15rem .4rem;
+    cursor: pointer;
   }
   header .title {
     color: var(--yellow);
@@ -124,6 +136,7 @@
 <body>
 <div id="shell">
   <header>
+    <button id="mute-btn" title="Toggle music">🔊</button>
     <div class="title">THE LAST BAHT BUS</div>
     <div class="sub">a Pattaya misadventure · ❖ Soi Sanuk ❖</div>
   </header>
@@ -155,6 +168,7 @@
 <script src="js/world.js"></script>
 <script src="js/engine.js"></script>
 <script src="js/tts.js"></script>
+<script src="js/audio.js"></script>
 <script src="js/term.js"></script>
 <script src="js/main.js"></script>
 </body>
