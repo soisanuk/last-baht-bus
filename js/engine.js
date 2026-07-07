@@ -35,6 +35,17 @@ function newGame() {
     pendingFare: null,   // { kind:"bus"|"moto", price, dest } awaiting `pay`
     pendingEnc: null,    // encounter id awaiting the player's snap reaction
     game: null,          // live bar mini-game state (connect 4 / jackpot / pool)
+    soc: {               // bar social ledger
+      drinks: {},        //   npcId → lady drinks bought tonight
+      mamaTreat: {},     //   roomId → true (the mamasan drank on you here)
+      bellAt: {},        //   roomId → turn of the last bell ring (the glow)
+      bells: {},         //   roomId → total rings tonight (rules soften at 2)
+      heat: {},          //   roomId → how close you are to meeting security
+      banned: {},        //   roomId → turn you were thrown out
+      patronBusy: {},    //   roomId → the regular has a girl's attention
+      patronMiffed: {},  //   roomId → you drink-sniped his girl (bad form)
+      drunk: 0,          //   your own count tonight
+    },
     encDone: {},         // encounters that already fired (once per game)
     lastEnc: 0,          // turn number of the last encounter (cooldown)
     rng: 1 + Math.floor(Math.random() * 2147483645), // seeded per game
@@ -50,6 +61,10 @@ function deserializeGame(s) {
   // older saves predate the encounter/mini-game systems — backfill the fields
   if (G.pendingEnc === undefined) G.pendingEnc = null;
   if (G.game === undefined) G.game = null;
+  if (!G.soc) {
+    G.soc = { drinks: {}, mamaTreat: {}, bellAt: {}, bells: {}, heat: {},
+      banned: {}, patronBusy: {}, patronMiffed: {}, drunk: 0 };
+  }
   if (!G.encDone) G.encDone = {};
   if (G.lastEnc === undefined) G.lastEnc = 0;
   if (!G.rng) G.rng = 1 + Math.floor(Math.random() * 2147483645);
@@ -173,6 +188,13 @@ function _describeRoom(full) {
     _say("A Connect 4 frame and a Jackpot dice box sit within reach (PLAY …).", "dim");
   }
   if (r.pool) _say("A pool table waits under a low lamp (PLAY POOL).", "dim");
+  if (r.barType) {
+    const girl = _npcsHere().find(id => NPC_ROLES[id] === "hostess");
+    _say(G.soc.patronBusy[G.room] ?
+      "A sunburnt regular holds court at the far end" +
+      (girl ? `, with ${NPCS[girl].name}'s full attention` : "") + "." :
+      "A regular nurses a big Chang at the rail, radiating opinions.", "dim");
+  }
 }
 
 // ── Turn bookkeeping: battery, darkness, soi dogs ──────────────────────────
@@ -255,6 +277,14 @@ function _startEnc(id) {
 
 const _ENC = {
   katoey(input) {
+    if (/flirt|kiss|snog|fondle|grope|spank|charm|wink|lean in/.test(input)) {
+      _say("You lean into it and flirt right back — to her enormous, cackling " +
+        "delight. Both hands return instantly to visible airspace. “Oooooh, " +
+        "hansum man SANUK!” She plants a lipstick mark on your cheek, pronounces " +
+        "you number one, and strolls off having stolen nothing but the moment. " +
+        "Respect, it turns out, is also currency on Beach Road.");
+      return;
+    }
     if (/pocket|wallet|push|shove|step|back|away|off|no|stop|hand|guard|hold|run/.test(input)) {
       _say("You clamp a hand over your pocket and step out of reach. She rolls her " +
         "eyes, entirely unembarrassed — “Cannot blame for trying, na~” — and struts " +
@@ -606,6 +636,273 @@ function _gameInput(input) {
   }
 }
 
+// ── Bar social life ─────────────────────────────────────────────────────────
+// Lady drinks buy goodwill, one girl at a time. Actions (flirt < kiss < spank
+// < fondle) resolve against her favor: rebuffed → tolerated → leaned into →
+// reciprocated. Roles cap the physical stuff — cashiers and mamasans allow
+// light contact only, unless the bell has rung enough times tonight. Heat
+// accumulates on bad behaviour; three strikes and security walks you out
+// (in LK Metro, shared complex security bans you from every bar in the maze).
+
+const SEV = { flirt: 0, kiss: 3, spank: 4, fondle: 5 };
+const BELL_GLOW = 25;  // turns the whole bar loves you after a ring
+const BAN_TURNS = 40;  // security shift length
+
+function _inBar() { return !!_room().barType; }
+
+function _bellActive() {
+  const t = G.soc.bellAt[G.room];
+  return t !== undefined && G.turns - t < BELL_GLOW;
+}
+
+function _favor(id) {
+  let f = G.soc.drinks[id] || 0;
+  if (G.soc.mamaTreat[G.room]) f += 1;   // the mamasan's blessing travels
+  if (_bellActive()) f += 2;             // everybody loves the bell man
+  return f;
+}
+
+function _addHeat(n) {
+  const r = G.room;
+  G.soc.heat[r] = (G.soc.heat[r] || 0) + n;
+  if (G.soc.heat[r] >= 3) { _kickOut(); return; }
+  if (G.soc.heat[r] === 2) {
+    _say("(The mamasan is watching you now with the expression of a woman " +
+      "pricing a problem. One more and you're somebody else's story.)", "alert");
+  }
+}
+
+function _kickOut() {
+  const here = G.room, r = _room();
+  G.soc.banned[here] = G.turns;
+  G.soc.heat[here] = 0;
+  G.game = null; // any live game dies with your welcome
+  _say("The decision is made somewhere above your pay grade. Security appears at " +
+    "your elbow — polite, enormous, terribly final — and you are walked out and " +
+    "deposited on the soi with your dignity in a doggy bag.", "alert");
+  if (r.region === "LK Metro") {
+    for (const [id, rm] of Object.entries(ROOMS)) {
+      if (rm.region === "LK Metro" && rm.barType) G.soc.banned[id] = G.turns;
+    }
+    _say("(Complex security radios ahead. You are now famous in every bar in " +
+      "LK Metro, in the worst way.)", "alert");
+  }
+  G.room = r.exits.out || Object.values(r.exits)[0];
+  _describeRoom(true);
+}
+
+// Outcome text: [hard rebuff, soft rebuff, tolerate, lean in, reciprocate]
+const _SOCIAL_TEXT = {
+  flirt: [
+    null, null,
+    n => `${n} receives your best line with the professional warmth of a woman ` +
+      "who has heard nine thousand better ones tonight alone. “Ooo, so sweet, na.”",
+    n => `${n} laughs for real this time, touches your arm, and tells you ` +
+      "something genuinely rude about the man at the end of the bar. Progress.",
+    n => `${n} slides onto the stool beside you, steals a sip of your drink, and ` +
+      "starts flirting back with alarming professionalism. The other girls exchange looks.",
+  ],
+  kiss: [
+    n => `You lean in. ${n} leans back — the full matador. The kiss lands on ` +
+      "ambient air; a slap lands on you, precisely, like punctuation. The bar notices.",
+    n => `${n} presents a cheek at the last microsecond — professional deflection, ` +
+      "executed with the footwork of a woman who has dodged far better. “Buy drink first, tilac.”",
+    n => `A quick peck is permitted, the way one permits a puppy on a sofa. ` +
+      `${n} pats your cheek: “Okay, okay. Sanuk.”`,
+    n => `${n} allows it — and takes her time about it. The cashier rings the ` +
+      "till just to make a noise.",
+    n => `${n} kisses YOU, decisively, to a smattering of applause from the far ` +
+      "end of the bar. You are now, officially, sitting with her.",
+  ],
+  spank: [
+    n => `${n} catches your wrist mid-air with a speed that suggests long practice, ` +
+      "and the look she gives you drops the bar five degrees. Somewhere behind you, " +
+      "security uncrosses its arms.",
+    n => `${n} sidesteps neatly. “Uh-uh. You not buy enough drink for that, tilac.” ` +
+      "The mamasan's eyes flick your way like a till drawer closing.",
+    n => `A token swat is absorbed with an eye-roll and precisely zero sincerity. ` +
+      `“Hundred-fifty baht says you can try again, na.”`,
+    n => `${n} yelps theatrically, laughs, and returns fire twice as hard. ` +
+      "Yours was a swat; hers is a correction.",
+    n => `${n} struts past deliberately slowly — then spanks YOU on the way back, ` +
+      "to a roar from the entire bar. You have been out-Pattaya'd.",
+  ],
+  fondle: [
+    n => `Your hand sets off in a direction it has no visa for. ${n} removes it ` +
+      "like a bomb-disposal expert, and the smile she keeps on while doing it is " +
+      "the scariest thing you've seen tonight.",
+    n => `${n} intercepts your hand and returns it to your own knee, patting it ` +
+      "twice — stay. “Naughty hands drink more first, na.”",
+    n => `${n} tolerates approximately 1.5 seconds of wandering hand before ` +
+      "redirecting it to the Connect 4 box. “Play this instead.”",
+    n => `${n} settles in closer and lets the moment linger just past professional. ` +
+      "The mamasan develops an intense interest in the till.",
+    n => `${n} takes both your hands, inspects them like market produce, and puts ` +
+      "them where she wants them — around her waist, while she orders herself " +
+      "another lady drink on your tab. Checkmate, but you don't mind.",
+  ],
+};
+
+function _doSocial(kind, targetWord) {
+  const w = (targetWord || "").replace(/^with /, "").trim();
+  const here = _npcsHere();
+  const id = w ? _findNpc(w) : (here.length === 1 ? here[0] : null);
+  if (!id) {
+    _say(w ? "They're not here." :
+      `You ${kind} the ambience. The neon flickers back, noncommittally.`);
+    return;
+  }
+  const name = NPCS[id].name;
+  const role = NPC_ROLES[id];
+
+  // outside a bar this almost never goes well (the katoey encounter, handled
+  // by its own resolver, is the famous exception)
+  if (!_inBar()) {
+    if (kind === "flirt") {
+      _say(id === "nok" ?
+        "Auntie Nok cackles like a drain and offers you a discount mango. Rejected, fondly." :
+        `${name} receives the attempt the way one receives weather.`);
+      return;
+    }
+    if (id === "bank" || id === "security") {
+      const lost = Math.min(G.money, 20);
+      G.money -= lost;
+      _say(`You attempt it. ${name} removes your hand, folds it carefully back ` +
+        "into your own pocket, and explains — kindly, the way you'd explain to a " +
+        "child — what happens to farang who try that on the street. " +
+        (lost ? `Somewhere in the lesson, ฿${lost} becomes a tuition fee.` :
+          "The lesson is free, this once."), "alert");
+      return;
+    }
+    if (id === "gary") {
+      _say("Gary has been happily married for twenty-two years and radiates it " +
+        "like lake air. The attempt dissolves before contact.");
+      return;
+    }
+    _say(`THWACK. ${id === "nok" ? "The flat of Auntie Nok's flip-flop is faster " +
+      "than the human eye. The whole soi applauds her." :
+      `${name} makes it very clear, at street volume, that the bar rules do not ` +
+      "apply where there are no bars. Faces appear in doorways. None of them are on your side."}`, "alert");
+    return;
+  }
+
+  // bar staff who are not bar girls
+  if (!role) {
+    if (id === "security") {
+      if (SEV[kind] >= 4) {
+        _say(`You ${kind} security. There is a brief silence in which several ` +
+          "large men become one organism.", "alert");
+        G.soc.heat[G.room] = 3;
+        _kickOut();
+        return;
+      }
+      _say("Security accepts the compliment with a nod that suggests you should " +
+        "go and sit down now.");
+      return;
+    }
+    if (id === "dj_beer") {
+      _say("DJ Beer converts your affection into a fist-bump without breaking the " +
+        "crossfade. “Love you too, bro. Still no Wonderwall.”");
+      return;
+    }
+    _say(`${name} would rather you didn't.`);
+    return;
+  }
+
+  // role caps: cashiers and mamasans allow light contact only — until the
+  // bell has rung enough to rewrite the rules of the room
+  if (SEV[kind] >= 4 && role !== "hostess" && (G.soc.bells[G.room] || 0) < 2) {
+    _say(role === "mamasan" ?
+      `You do NOT do that to the mamasan. The room stops breathing. ${name} ` +
+      "studies you the way one studies a stain, and the security boys begin " +
+      "their slow, happy walk." :
+      `${name} looks up from the till with the face of an accountant reviewing ` +
+      "a crime. Cashiers keep the books, not the customers. (The bell has been " +
+      "known to change the mathematics.)", "alert");
+    _addHeat(2);
+    return;
+  }
+
+  const net = _favor(id) - SEV[kind];
+  const tier = net <= -3 ? 0 : net <= -1 ? 1 : net <= 1 ? 2 : net <= 3 ? 3 : 4;
+  const fn = _SOCIAL_TEXT[kind][tier];
+  _say(fn(name), tier === 0 ? "alert" : tier >= 3 ? "win" : "");
+  if (tier === 0) _addHeat(SEV[kind] >= 4 ? 2 : 1);
+  else if (tier === 1 && SEV[kind] >= 4) _addHeat(1);
+  if (kind === "fondle" && tier === 4 && G.money >= LADY_DRINK) {
+    G.money -= LADY_DRINK;
+    G.soc.drinks[id] = (G.soc.drinks[id] || 0) + 1;
+    _say(`(-฿${LADY_DRINK} for her drink. ฿${G.money} left, and worth it.)`, "dim");
+  }
+}
+
+// ─ The bell ─
+
+function _doBell() {
+  if (!_inBar()) { _say("No bell out here. The bell is a bar instrument, like the till."); return; }
+  if (G.money < BELL_PRICE) {
+    _say(`The bell rope dangles there, daring you. A ring is a round for the ` +
+      `house — ฿${BELL_PRICE} — and you have ฿${G.money}. Ringing a bell you ` +
+      "can't pay for is how farang end up in the khlong.");
+    return;
+  }
+  G.money -= BELL_PRICE;
+  const r = G.room;
+  G.soc.bellAt[r] = G.turns;
+  G.soc.bells[r] = (G.soc.bells[r] || 0) + 1;
+  G.soc.heat[r] = 0;
+  delete G.soc.patronMiffed[r];
+  _say("You reach up and RING THE BELL.", "win");
+  _say("The bar detonates. Cheering from the girls, a drum-roll on the counter " +
+    "from the cashier, the mamasan's first fully unguarded smile of the night. " +
+    "Drinks materialise down the length of the bar and every lady in the room " +
+    `now knows your name. (-฿${BELL_PRICE}, ฿${G.money} left — reign while it lasts.)`);
+  _engineSpeak("ชนแก้ว");
+}
+
+// ─ Patrons ─
+
+function _doPatron() {
+  const s = G.soc;
+  if (s.patronMiffed[G.room]) {
+    _say("The regular gives you the shoulder of a man whose evening you dented " +
+      "when you bought his girl that drink. Bad form, and he knows you know. " +
+      "(A beer for him might mend it.)");
+    return;
+  }
+  if (_bellActive()) {
+    _say("“THAT'S the fella!” The regular toasts you with a Chang the size of a " +
+      "fire extinguisher and insists on buying you one back. You are, briefly, " +
+      "his favourite person alive.");
+    s.drunk++;
+    return;
+  }
+  const d = s.drunk;
+  if (d === 0) {
+    _say(["The regular appraises you over his glass. “First night? Wai the " +
+      "mamasan, mate. Doors open.”",
+      "“Sober, are we,” says the regular, not unkindly. “The girls talk to the " +
+      "cashiers, and the cashiers hear everything. That's free, that is.”",
+    ][Math.floor(_rand() * 2)]);
+  } else if (d <= 3) {
+    _say(["The regular warms up over shared beers: bar gossip, fuel prices, which " +
+      "mamasans danced where, back when. “Buy the mama a drink,” he confides. " +
+      "“The girls treat you different after. House might even stand you one.”",
+      "You and the regular put the world to rights. “See that bell?” he says, " +
+      "pointing his bottle. “Ring it once and every girl in here loves you for " +
+      "an hour. Expensive way to be handsome, but it works.”",
+      "The regular tells you a long story about a night on Soi 6 in 2009 that " +
+      "ends with the phrase “and THAT is why I can't go back to Bristol.” " +
+      "Solid company, this man.",
+    ][Math.floor(_rand() * 3)]);
+  } else {
+    _say("You explain your theory about baht bus economics at what turns out to " +
+      "be considerable length and volume. The regular studies his beer. The " +
+      "regular moves one stool away.");
+    if (d >= 6) _addHeat(1);
+  }
+}
+
 // ── Endings ────────────────────────────────────────────────────────────────
 
 function _checkEnding() {
@@ -677,6 +974,19 @@ function _doGo(dirWord) {
       _deliver("security", _pickDialogue("security"));
       return;
     }
+  }
+  if (ROOMS[to].barType) {
+    const b = G.soc.banned[to];
+    if (b !== undefined) {
+      if (G.turns - b < BAN_TURNS) {
+        _say("The doorman's arm comes down like a toll gate, and the head-shake " +
+          "is slow and final. Not tonight — or at least not this shift.", "alert");
+        return;
+      }
+      delete G.soc.banned[to]; // shift change; you're merely on notice now
+      G.soc.heat[to] = 1;
+    }
+    if (G.soc.patronBusy[to] === undefined) G.soc.patronBusy[to] = _rand() < 0.4;
   }
   G.room = to;
   _describeRoom(true);
@@ -793,7 +1103,14 @@ function _doRead(arg) {
 
 function _doTalk(arg, topic) {
   const npc = _findNpc(arg);
-  if (!npc) { _say("Nobody by that name here."); return; }
+  if (!npc) {
+    if (_inBar() && /patron|regular|expat|customer|guy|bloke|farang/.test(arg)) {
+      _doPatron();
+      return;
+    }
+    _say("Nobody by that name here.");
+    return;
+  }
   const d = _pickDialogue(npc, topic || null);
   if (!d) {
     _say(topic ? `${NPCS[npc].name} doesn't have much to say about that.` :
@@ -902,14 +1219,61 @@ function _doBuy(arg) {
     _say(`One USB charger, ฿${CHARGER_PRICE}. The doorbell jingles in celebration. (฿${G.money} left.)`);
     return;
   }
+  if (/beer|chang|leo|singha/.test(arg) && !arg.includes("drink")) {
+    if (!_inBar()) { _say("The 7-Eleven fridge hums somewhere, but this calls for a bar stool."); return; }
+    if (G.money < BEER_PRICE) { _say(`A big bottle is ฿${BEER_PRICE} here. You have ฿${G.money}. The cashier's calculator stays in the drawer.`); return; }
+    if (/patron|regular|expat|him|guy|bloke/.test(arg)) {
+      G.money -= BEER_PRICE;
+      if (G.soc.patronMiffed[G.room]) {
+        delete G.soc.patronMiffed[G.room];
+        G.soc.heat[G.room] = Math.max(0, (G.soc.heat[G.room] || 0) - 1);
+        _say(`A cold one slides down the bar to the regular. He studies it, studies ` +
+          `you, and the shoulder unturns. “No harm done, lad.” Form restored. (฿${G.money} left.)`);
+      } else {
+        _say(`You stand the regular a Chang. He receives it like a sacrament and ` +
+          `immediately begins a story about Walking Street in 2004. (฿${G.money} left.)`);
+      }
+      return;
+    }
+    G.money -= BEER_PRICE;
+    G.soc.drunk++;
+    const d = G.soc.drunk;
+    _say(`One big Chang, cold enough to hurt. (฿${G.money} left.)` +
+      (d >= 6 ? " The room has developed a gentle rotation." :
+       d >= 4 ? " The neon is starting to smear pleasantly." :
+       d >= 2 ? " The night improves by one bottle's worth." : ""));
+    return;
+  }
   if (arg.includes("lady drink") || arg.includes("ladydrink") || arg.includes("drink")) {
-    if (!r.bar) { _say("Buy a drink where drinks are sold, tilac."); return; }
-    const npcs = _npcsHere().filter(id => CANON_HOSTESSES.includes(id));
-    if (!npcs.length) { _say("Nobody here to buy one for."); return; }
+    if (!_inBar()) { _say("Buy a drink where drinks are sold, tilac."); return; }
+    const nameW = arg.replace(/\blady\b|\bdrinks?\b|\bfor\b/g, " ").trim();
+    const girlsHere = _npcsHere().filter(id => NPC_ROLES[id]);
+    const id = nameW ? _findNpc(nameW) : girlsHere[0];
+    if (!id || !NPC_ROLES[id]) { _say(nameW ? "She's not working this bar." : "Nobody here to buy one for."); return; }
     if (G.money < LADY_DRINK) { _say(`Lady drinks are ฿${LADY_DRINK}. You have ฿${G.money}. The maths is not on your side.`); return; }
     G.money -= LADY_DRINK;
-    const id = npcs[0];
+    G.soc.drinks[id] = (G.soc.drinks[id] || 0) + 1;
     _say(`One lady drink for ${NPCS[id].name} — ฿${LADY_DRINK} on the tab that is your life. (฿${G.money} left.)`);
+    // the mamasan's blessing: her bar warms to you, and the house may pour one back
+    if (NPC_ROLES[id] === "mamasan" && NPCS[id].room === G.room && !G.soc.mamaTreat[G.room]) {
+      G.soc.mamaTreat[G.room] = true;
+      _say(`${NPCS[id].name} raises the glass a centimetre in your direction — the ` +
+        "royal assent. The temperature of the whole bar changes; from here on, " +
+        "the girls treat you like a regular.", "dim");
+      if (_rand() < 0.5) {
+        G.soc.drunk++;
+        _say("She flicks two fingers at the cashier and a cold one lands in front " +
+          "of you. On the house.", "dim");
+      }
+    }
+    // drink-sniping a girl who had the regular's attention: bad form
+    if (G.soc.patronBusy[G.room] && !G.soc.patronMiffed[G.room] && NPC_ROLES[id] === "hostess") {
+      G.soc.patronMiffed[G.room] = true;
+      _say("Down the bar, the regular who has been buying her drinks all evening " +
+        "goes very still over his Chang. Bad form, and every lady in the room " +
+        "clocked it.", "alert");
+      _addHeat(1);
+    }
     if (id === "cindy" && !_flag("knowMot")) {
       _setFlag("knowWasHere"); _setFlag("knowMot");
       _deliver("cindy", _pickDialogue("cindy"));
@@ -1058,6 +1422,8 @@ const _HELP = `Common commands:
   RIDE BUS TO <place> · MOTOSAI TO <place> · PAY <amount>
   BUY <thing> · SELL BOTTLES · READ <thing> · READ SIGN
   PLAY CONNECT 4 · PLAY JACKPOT [bet] · PLAY POOL   (in the beer bars)
+  FLIRT/KISS/SPANK/FONDLE <lady> · BUY DRINK FOR <lady> · BUY BEER
+  RING BELL (฿300, instant popularity) · TALK TO PATRON
   LIGHT ON / LIGHT OFF · CHARGE PHONE
   SCORE · UNDO · RESTART   (the night autosaves itself)`;
 
@@ -1174,6 +1540,11 @@ function doCommand(input) {
       break;
     case "press": case "type": case "code": _doEnter(arg); break;
     case "play": case "challenge": _doPlay(arg); break;
+    case "flirt": _doSocial("flirt", arg); break;
+    case "kiss": case "snog": case "smooch": _doSocial("kiss", arg); break;
+    case "spank": _doSocial("spank", arg); break;
+    case "fondle": case "grope": _doSocial("fondle", arg); break;
+    case "ring": case "bell": _doBell(); break;
     case "wait": case "z": _say("You wait. Pattaya doesn't."); break;
     case "score": _doScore(); break;
     case "help": case "?": _say(_HELP, "dim"); break;
