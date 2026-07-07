@@ -31,6 +31,11 @@ Mobile gets tappable verb chips; desktop gets ↑/↓ command history.
   A `wai` and a `sawatdee` open more doors than money.
 - **Two solutions**: burgle the safe behind the go-go, or earn the Mamasan's
   respect and be handed your wallet like a gentleman. Score reflects style.
+- **Bar games**: every beer bar keeps a Connect 4 frame (the hostess never
+  loses), a Jackpot box (the Thai shut-the-box dice game — flip the dice or
+  flip their sum, lowest score wins, shut all nine for JACKPOT), and the
+  Midnight Sun and Daeng's Place have pool tables. Stakes in baht; broke
+  players play for sanuk. `PLAY CONNECT 4 · PLAY JACKPOT [bet] · PLAY POOL`.
 - **Street encounters**: the sois have their own weather — a two-handed
   pickpocket on Beach Road, a sentimental drunk bargirl, an angry Brit who's
   sixty per cent sure it was you, a piwin with a power bank, and a man with a
@@ -199,11 +204,11 @@ flowchart TD
 node --test
 ```
 
-65 tests: Thai number composition, world/map integrity (every exit resolves,
+89 tests: Thai number composition, world/map integrity (every exit resolves,
 all 15 canon bars present, the gossip chain's flags all connect), parser,
-systems and street encounters, and a full scripted playthrough from the beach
-to the happy ending — run headless via `node:vm` against the same files the
-browser loads.
+systems, street encounters, bar mini-games, and a full scripted playthrough
+from the beach to the happy ending — run headless via `node:vm` against the
+same files the browser loads.
 
 ## Structure
 
@@ -213,6 +218,7 @@ web/
   js/              classic scripts sharing globals (no modules — file:// works)
     thai.js        Thai numbers/numerals, signs, phrase matching (pure)
     world.js       rooms, items, NPCs, dialogue, bus/motosai lines (pure data)
+    games.js       bar mini-games: Connect 4, Jackpot dice, pool (pure logic)
     engine.js      parser, verb handlers, systems, endings (DOM-free at load)
     tts.js         th-TH Web Speech (Capacitor-ready)
     term.js        terminal DOM: scrollback, history, verb chips

@@ -6,7 +6,7 @@ import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import vm from "node:vm";
 
-for (const f of ["thai.js", "world.js", "engine.js"]) {
+for (const f of ["thai.js", "world.js", "games.js", "engine.js"]) {
   const src = readFileSync(
     fileURLToPath(new URL(`../../web/js/${f}`, import.meta.url)), "utf8");
   vm.runInThisContext(src, { filename: f });
@@ -372,6 +372,95 @@ test("old saves (pre-encounters) load with backfilled fields", () => {
   assert.ok(state().rng > 0);
   assert.equal(state().itemLoc.moo_ping, null);
   assert.equal(state().itemLoc.hair_tonic, null);
+});
+
+// ── Bar mini-games ─────────────────────────────────────────────────────────
+
+test("mini-games only where the furniture exists", () => {
+  run("play connect 4");
+  assert.match(lastOut(), /No Connect 4 board here/i);
+  state().room = "cindy_bar";
+  run("play pool");
+  assert.match(lastOut(), /No pool table here/i);
+  assert.equal(state().game, null);
+});
+
+test("connect 4: stakes escrowed, quitting forfeits them", () => {
+  state().room = "cindy_bar";
+  state().money = 100;
+  run("play connect 4");
+  assert.ok(state().game && state().game.type === "c4");
+  assert.equal(state().money, 80, "฿20 escrowed");
+  assert.match(lastOut(), /●/);
+  run("quit");
+  assert.equal(state().game, null);
+  assert.equal(state().money, 80, "stake gone");
+});
+
+test("connect 4: broke players play for sanuk", () => {
+  state().room = "cindy_bar";
+  run("play connect 4");
+  assert.equal(state().game.stake, 0);
+  assert.match(lastOut(), /sanuk/i);
+  run("quit");
+  assert.equal(state().money, 0);
+});
+
+test("connect 4: a live game captures commands until it ends", () => {
+  state().room = "cindy_bar";
+  run("play connect 4", "n");
+  assert.equal(state().room, "cindy_bar", "no walking away mid-game");
+  run("quit");
+});
+
+test("connect 4: winning pays double and sets the legend flag", () => {
+  state().room = "cindy_bar";
+  state().money = 100;
+  run("play connect 4");
+  // stack the deck: three ● waiting on column 1, her pieces elsewhere
+  const b = state().game.board;
+  b[5][0] = b[4][0] = b[3][0] = 1;
+  b[5][6] = b[5][5] = 2;
+  run("drop 1");
+  assert.equal(state().game, null);
+  assert.equal(state().money, 120, "stake doubled back");
+  assert.ok(state().flags.beatBargirlC4);
+  assert.match(lastOut(), /legend/i);
+});
+
+test("jackpot: settles one way or another, money stays consistent", () => {
+  state().room = "lucky_tiger";
+  state().money = 100;
+  run("play jackpot 20");
+  // resolve any pending flip choices until the game settles
+  for (let i = 0; i < 20 && state().game; i++) {
+    const mv = state().game.pending;
+    run(mv ? "flip " + mv[mv.length - 1].join(" ") : "roll");
+  }
+  assert.equal(state().game, null, "game settled");
+  assert.ok([80, 100, 120, 140].includes(state().money),
+    `loss/push/win/jackpot only — got ฿${state().money}`);
+});
+
+test("jackpot: bet is clamped and capped by pocket money", () => {
+  state().room = "lucky_tiger";
+  state().money = 15;
+  run("play jackpot 500");
+  assert.equal(state().game.stake, 15, "can't stake more than you carry");
+  assert.equal(state().money, 0);
+  run("quit");
+});
+
+test("pool: table gating, stake, and the visit loop", () => {
+  state().room = "khao_talo_bar";
+  state().money = 100;
+  run("play pool");
+  assert.ok(state().game && state().game.type === "pool");
+  assert.equal(state().money, 50, "฿50 under the cushion");
+  assert.match(lastOut(), /Daeng/);
+  for (let i = 0; i < 60 && state().game; i++) run("shot");
+  assert.equal(state().game, null, "frame finished");
+  assert.ok([50, 150].includes(state().money), `lose or win — got ฿${state().money}`);
 });
 
 // ── Endings ────────────────────────────────────────────────────────────────

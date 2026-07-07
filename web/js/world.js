@@ -196,10 +196,10 @@ const ROOMS = {
   midnight_sun: {
     name: "Midnight Sun Bar",
     region: "Walking Street",
-    bar: "Midnight Sun Bar", barType: "beer",
+    bar: "Midnight Sun Bar", barType: "beer", pool: true,
     desc: "An open-front beer bar with actual conversation levels. Connect 4 boards and " +
-      "sticky Jenga blocks on every table. The yellow neon sun above the till has one " +
-      "ray that won't stop twitching.",
+      "sticky Jenga blocks on every table, and a pool table under a low lamp at the " +
+      "back. The yellow neon sun above the till has one ray that won't stop twitching.",
     exits: { out: "ws_north" },
   },
 
@@ -404,7 +404,7 @@ const ROOMS = {
   khao_talo_bar: {
     name: "Daeng's Place (Khao Talo)",
     region: "Darkside",
-    barType: "beer",
+    barType: "beer", pool: true,
     outlet: true,
     desc: "A beer bar with a ceiling fan, a shrine over the till, and photos of Walking " +
       "Street's glory days behind the bar — including one of a dancer mid-spin that " +

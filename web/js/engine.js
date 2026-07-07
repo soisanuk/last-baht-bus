@@ -34,6 +34,7 @@ function newGame() {
     safeTries: 0,
     pendingFare: null,   // { kind:"bus"|"moto", price, dest } awaiting `pay`
     pendingEnc: null,    // encounter id awaiting the player's snap reaction
+    game: null,          // live bar mini-game state (connect 4 / jackpot / pool)
     encDone: {},         // encounters that already fired (once per game)
     lastEnc: 0,          // turn number of the last encounter (cooldown)
     rng: 1 + Math.floor(Math.random() * 2147483645), // seeded per game
@@ -46,8 +47,9 @@ function newGame() {
 function serializeGame() { return JSON.stringify(G); }
 function deserializeGame(s) {
   G = JSON.parse(s);
-  // older saves predate the encounter system — backfill its fields
+  // older saves predate the encounter/mini-game systems — backfill the fields
   if (G.pendingEnc === undefined) G.pendingEnc = null;
+  if (G.game === undefined) G.game = null;
   if (!G.encDone) G.encDone = {};
   if (G.lastEnc === undefined) G.lastEnc = 0;
   if (!G.rng) G.rng = 1 + Math.floor(Math.random() * 2147483645);
@@ -167,6 +169,10 @@ function _describeRoom(full) {
   if (exits.length) _say("Exits: " + exits.join(", ") + ".", "dim");
   if (r.busStop) _say("A baht bus can be caught here (ride bus to …).", "dim");
   if (r.motosai) _say("A motosai stand is here (motosai to …).", "dim");
+  if (r.barType === "beer" || r.barType === "soi6") {
+    _say("A Connect 4 frame and a Jackpot dice box sit within reach (PLAY …).", "dim");
+  }
+  if (r.pool) _say("A pool table waits under a low lamp (PLAY POOL).", "dim");
 }
 
 // ── Turn bookkeeping: battery, darkness, soi dogs ──────────────────────────
@@ -340,6 +346,266 @@ const _ENC = {
   },
 };
 
+// ── Bar mini-games ──────────────────────────────────────────────────────────
+// Classic bar-table gambling: Connect 4 (the hostess never loses), Jackpot
+// (the Thai shut-the-box dice game), and pool. Pure game logic lives in
+// games.js; this section owns stakes, narration, and the modal G.game state —
+// while a game is live, doCommand routes every input to _gameInput.
+
+const C4_STAKE = 20, POOL_STAKE = 50, JP_MIN = 10, JP_MAX = 100, JP_DEFAULT = 20;
+
+function _barGamesHere() {
+  const bt = _room().barType;
+  return bt === "beer" || bt === "soi6";
+}
+
+function _gameHostess() {
+  const id = _npcsHere().find(n => CANON_HOSTESSES.includes(n));
+  return id ? NPCS[id].name : "the hostess on shift";
+}
+
+// Stake escrow: taken up front, paid back ×2 on a win (×3 on a Jackpot).
+// Broke players play "for sanuk" — no baht either way, pride still on the line.
+function _takeStake(want) {
+  const stake = Math.min(want, G.money);
+  G.money -= stake;
+  return stake;
+}
+
+function _doPlay(arg) {
+  if (G.game) { _say("One game at a time, champ."); return; }
+  const w = arg.toLowerCase();
+  if (w.includes("jackpot") || w.includes("dice")) return _startJackpot(w);
+  if (w.includes("pool") || w.includes("8") || w.includes("billiard")) return _startPool();
+  if (w.includes("connect") || w.includes("four") || w.includes("4")) return _startC4();
+  _say("Play what? CONNECT 4, JACKPOT [bet], or POOL.", "dim");
+}
+
+// ─ Connect 4 ─
+
+function _startC4() {
+  if (!_barGamesHere()) { _say("No Connect 4 board here — every beer bar keeps one within arm's reach."); return; }
+  const opp = _gameHostess();
+  const stake = _takeStake(C4_STAKE);
+  G.game = { type: "c4", board: c4New(), opp, stake };
+  _say(`${opp} has the Connect 4 frame up and loaded before you finish asking. ` +
+    "This is not her first game today. It is not her hundredth.");
+  _say(stake ? `฿${stake} on the table.` :
+    "You're broke, so this one's for sanuk — and her professional pride.");
+  _say(c4Render(G.game.board));
+  _say("(You're ●. DROP 1-7 · QUIT concedes.)", "dim");
+}
+
+function _c4Input(input) {
+  const g = G.game;
+  const m = input.match(/[1-7]/);
+  if (!m) { _say("Pick a column: 1-7. (QUIT concedes.)", "dim"); return; }
+  if (c4Drop(g.board, +m[0] - 1, 1) < 0) { _say("That column is full to the brim."); return; }
+  if (c4Win(g.board) === 1) {
+    _say(c4Render(g.board));
+    _endGame(true, g.stake * 2, `Four in a row. ${g.opp} stares at the board, then at you, ` +
+      "then calls the whole bar over to see it. Someone takes a photo. You will be " +
+      "legend here for up to forty-five minutes.");
+    _setFlag("beatBargirlC4");
+    return;
+  }
+  if (c4Full(g.board)) {
+    _endGame(null, g.stake, `A draw. ${g.opp} looks almost impressed. Stakes back.`);
+    return;
+  }
+  const ai = c4Ai(g.board, _rand);
+  c4Drop(g.board, ai, 2);
+  _say(c4Render(g.board));
+  if (c4Win(g.board) === 2) {
+    _endGame(false, 0, `${g.opp} drops column ${ai + 1} without breaking eye contact. ` +
+      "Four in a row. She was three moves ahead the whole time, and you both know it." +
+      (g.stake ? ` Your ฿${g.stake} joins the till.` : ""));
+    return;
+  }
+  if (c4Full(g.board)) {
+    _endGame(null, g.stake, `A draw. ${g.opp} looks almost impressed. Stakes back.`);
+    return;
+  }
+  _say(`(She plays column ${ai + 1}. Your drop.)`, "dim");
+}
+
+// ─ Jackpot ─
+
+function _startJackpot(w) {
+  if (!_barGamesHere()) { _say("No Jackpot box here — beer bars keep the dice cup by the till."); return; }
+  const betM = w.match(/\d+/);
+  const want = Math.max(JP_MIN, Math.min(JP_MAX, betM ? parseInt(betM[0], 10) : JP_DEFAULT));
+  const opp = _gameHostess();
+  const stake = _takeStake(want);
+  G.game = { type: "jp", tiles: jpNew(), opp, stake, pending: null };
+  _say(`${opp} slides over the battered Jackpot box — nine tiles up, two dice, ` +
+    "the felt worn smooth by ten thousand losing farang. Flip the dice, or flip " +
+    "their sum. Lowest score wins; shut the box and it's JACKPOT.");
+  _say(stake ? `฿${stake} rides on it.` : "No baht? Sanuk rules — loser drinks anyway.");
+  _jpTurn();
+}
+
+function _jpTurn() {
+  const g = G.game;
+  for (;;) {
+    const [d1, d2] = jpRoll(_rand);
+    const moves = jpMoves(g.tiles, d1, d2);
+    if (!moves.length) {
+      _say(`You roll ${d1}+${d2} — nothing to flip. Stuck.`, "alert");
+      _jpFinish();
+      return;
+    }
+    if (moves.length === 1) {
+      jpFlip(g.tiles, moves[0]);
+      _say(`You roll ${d1}+${d2} → flip ${moves[0].join(" & ")}.   [ ${jpRender(g.tiles)} ]`);
+      if (jpScore(g.tiles) === 0) { _jpFinish(); return; }
+      continue;
+    }
+    g.pending = moves;
+    _say(`You roll ${d1}+${d2}.   [ ${jpRender(g.tiles)} ]`);
+    _say(`FLIP ${moves[0].join(" ")} or FLIP ${moves[1].join(" ")}?`, "dim");
+    return;
+  }
+}
+
+function _jpInput(input) {
+  const g = G.game;
+  if (!g.pending) { _jpTurn(); return; } // shouldn't happen; reroll
+  const nums = (input.match(/\d/g) || []).map(Number).sort((a, b) => a - b);
+  let move = g.pending.find(mv => mv.length === nums.length && mv.every((n, i) => n === nums[i]));
+  if (!move && /sum/.test(input)) move = g.pending.find(mv => mv.length === 1);
+  if (!move && /both|dice/.test(input)) move = g.pending.find(mv => mv.length === 2);
+  if (!move) {
+    _say(`FLIP ${g.pending[0].join(" ")} or FLIP ${g.pending[1].join(" ")} — those are the choices.`, "dim");
+    return;
+  }
+  jpFlip(g.tiles, move);
+  g.pending = null;
+  _say(`You flip ${move.join(" & ")}.   [ ${jpRender(g.tiles)} ]`);
+  if (jpScore(g.tiles) === 0) { _jpFinish(); return; }
+  _jpTurn();
+}
+
+function _jpFinish() {
+  const g = G.game;
+  const you = jpScore(g.tiles);
+  if (you === 0) {
+    _setFlag("hitJackpot");
+    _endGame(true, g.stake * 3, "JACKPOT! Every tile down. The whole bar drinks and " +
+      `${g.opp} pays triple with the face of a woman updating her opinion of you in real time.`);
+    return;
+  }
+  _say(`Your score: ${you}. House rules — you drink for ${you} seconds while the bar counts.`);
+  _engineSpeak(thaiNum(you));
+  const her = jpAutoRound(_rand);
+  _say(`${g.opp} takes the cup. ${her.rolls.join(" · ")}.`, "dim");
+  if (her.score === 0) {
+    _endGame(false, 0, `Every tile down — JACKPOT, hers. The bar erupts. You drink again, ` +
+      `on principle${g.stake ? `, and your ฿${g.stake} stays with the till` : ""}.`);
+  } else if (her.score < you) {
+    _endGame(false, 0, `Her score: ${her.score}. Low wins — she wins.` +
+      (g.stake ? ` Your ฿${g.stake} vanishes into the bra of commerce.` : " Sanuk, they said."));
+  } else if (her.score > you) {
+    _endGame(true, g.stake * 2, `Her score: ${her.score}. Low wins — YOU win. ` +
+      `${g.opp} pays up with a wai and the sideways look reserved for lucky farang.`);
+  } else {
+    _endGame(null, g.stake, `Her score: ${her.score}. Dead even — stakes back, and she ` +
+      "pours two shots of something evil to settle it spiritually.");
+  }
+}
+
+// ─ Pool ─
+
+function _startPool() {
+  if (!_room().pool) { _say("No pool table here. The Midnight Sun has one; so does Daeng's place out on Khao Talo."); return; }
+  const daeng = G.room === "khao_talo_bar";
+  const opp = daeng ? "Daeng" : "a leathery expat off the rail who hasn't missed since 1997";
+  const stake = _takeStake(POOL_STAKE);
+  G.game = { type: "pool", you: 7, opp: 7, oppName: daeng ? "Daeng" : "the old boy",
+    oppSkill: daeng ? 0.65 : 0.6, oppNext: null, oppWon: false, stake };
+  _say(`You rack. ${opp} breaks — dry. Seven balls each, then the black.`);
+  _say(stake ? `฿${stake} under the corner cushion.` : "You're skint, so it's for the table — winner stays on.");
+  _say("(Each visit: SHOT, POWER, or SAFETY · QUIT concedes.)", "dim");
+}
+
+function _poolStatus(g) {
+  _say(`(You: ${g.you || "on the BLACK"} · ${g.oppName}: ${g.opp || "on the black"}.)`, "dim");
+}
+
+function _poolOppTurn(g) {
+  const potted = poolOppVisit(g, _rand);
+  if (g.oppWon) {
+    _endGame(false, 0, `${g.oppName} clears up like it's a chore and rolls the black in ` +
+      `dead-weight. Game over${g.stake ? ` — your ฿${g.stake} slides off the cushion` : ""}.`);
+    return;
+  }
+  _say(potted === 0 ? `${g.oppName} rattles the jaws and swears softly. Your table.` :
+    `${g.oppName} pots ${potted}, then runs out of angle. Your table.`);
+  _poolStatus(g);
+}
+
+function _poolInput(input) {
+  const g = G.game;
+  const kind = /power|smash|break/.test(input) ? "power" :
+    /safe|snook|tuck/.test(input) ? "safety" :
+    /shot|pot|cut|hit|play|roll/.test(input) ? "shot" : null;
+  if (!kind) { _say("SHOT (sensible), POWER (greedy), or SAFETY (sneaky).", "dim"); return; }
+  const ev = poolShot(g, kind, _rand);
+  switch (ev) {
+    case "pot8win":
+      _endGame(true, g.stake * 2, "The black glides in off the cushion like it was " +
+        "always going there. You straighten up slowly, because legends move slowly." +
+        (g.stake ? ` ฿${g.stake * 2} from under the cushion.` : ""));
+      return;
+    case "sink8lose":
+      _endGame(false, 0, "POWER. The pack scatters gloriously — and the black wanders " +
+        "across the table and drops. Silence. House rules are house rules" +
+        (g.stake ? `; the stake stays under the cushion, which is no longer your cushion` : "") + ".");
+      return;
+    case "pot":
+      _say(g.you === 0 ? "Clean pot — and that's your seven. On the BLACK." :
+        `Clean. The ball drops with a click. (${g.you} left.) Still your shot.`);
+      return;
+    case "pot2":
+      _say(g.you === 0 ? "Two thunder down off one brutal hit — that's your seven. On the BLACK." :
+        `Two balls thunder down off one hit. The bar notices. (${g.you} left.) Still your shot.`);
+      return;
+    case "safety":
+      _say("You tuck the cue ball behind traffic. Quietly vicious.");
+      _poolOppTurn(g);
+      return;
+    case "miss":
+      _say(g.you === 0 ? "The black wobbles in the jaws… and stays. Agony." : "Rattle. No drop.");
+      _poolOppTurn(g);
+      return;
+  }
+}
+
+// ─ Shared plumbing ─
+
+// won: true / false / null (push). payout is added to money (escrow already taken).
+function _endGame(won, payout, text) {
+  G.money += payout;
+  G.game = null;
+  _say(text, won === false ? "alert" : "win");
+  if (won === true && payout) _say(`(฿${G.money} in pocket.)`, "dim");
+}
+
+function _gameQuit() {
+  const g = G.game;
+  G.game = null;
+  _say(g.stake ? `You concede. The stake stays where stakes stay. (฿${G.money} left.)` :
+    "You concede with what dignity remains.");
+}
+
+function _gameInput(input) {
+  switch (G.game.type) {
+    case "c4": _c4Input(input); break;
+    case "jp": _jpInput(input); break;
+    case "pool": _poolInput(input); break;
+  }
+}
+
 // ── Endings ────────────────────────────────────────────────────────────────
 
 function _checkEnding() {
@@ -359,6 +625,8 @@ function _checkEnding() {
     ["somTamDelivered", "Fed Ploy the good som tam"],
     ["greetedFon", "Made Fon's evening with one word of Thai"],
     ["waiedOy", "Wai'd the Mamasan like you meant it"],
+    ["beatBargirlC4", "Beat a bargirl at Connect Four (unheard of)"],
+    ["hitJackpot", "Shut the box — JACKPOT"],
   ]) {
     if (_flag(f)) { score += 5; lines.push(`✓ ${label} (+5)`); }
   }
@@ -789,6 +1057,7 @@ const _HELP = `Common commands:
   WAI [person] · SAY <thai phrase>
   RIDE BUS TO <place> · MOTOSAI TO <place> · PAY <amount>
   BUY <thing> · SELL BOTTLES · READ <thing> · READ SIGN
+  PLAY CONNECT 4 · PLAY JACKPOT [bet] · PLAY POOL   (in the beer bars)
   LIGHT ON / LIGHT OFF · CHARGE PHONE
   SCORE · UNDO · RESTART   (the night autosaves itself)`;
 
@@ -813,6 +1082,14 @@ function doCommand(input) {
   const words = lower.split(" ");
   const [v, ...rest] = words;
   const arg = rest.filter(w => !["the", "a", "an", "to", "at", "up", "my"].includes(w)).join(" ");
+
+  // a live bar game captures every command until it ends (QUIT concedes)
+  if (G.game) {
+    if (/^(quit|resign|concede|forfeit|leave)/.test(lower)) { _gameQuit(); _tick(); return; }
+    _gameInput(lower);
+    _tick();
+    return;
+  }
 
   // a live encounter demands a snap reaction: the next command IS the reaction
   if (G.pendingEnc && v !== "restart") {
@@ -896,6 +1173,7 @@ function doCommand(input) {
       else _say("It doesn't open that way.");
       break;
     case "press": case "type": case "code": _doEnter(arg); break;
+    case "play": case "challenge": _doPlay(arg); break;
     case "wait": case "z": _say("You wait. Pattaya doesn't."); break;
     case "score": _doScore(); break;
     case "help": case "?": _say(_HELP, "dim"); break;
