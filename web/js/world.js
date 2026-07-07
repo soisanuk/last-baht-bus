@@ -443,8 +443,10 @@ const ROOMS = {
     name: "Your Hotel Room",
     region: "Naklua",
     desc: "Room 412. The air-con stutters awake. The bed is exactly as terrible as you " +
-      "remember and right now it looks like paradise.",
-    exits: {},
+      "remember. A hot shower, a change of shirt — and below the window, the city " +
+      "hums on, wide open.",
+    outlet: true, // your own room charges your own phone
+    exits: { out: "hotel_soi", s: "hotel_soi" },
   },
 };
 

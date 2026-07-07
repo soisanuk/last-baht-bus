@@ -1,13 +1,17 @@
 # The Last Baht Bus
 
-A Zork-style text adventure set in the neon streets of Pattaya — part of the
-[Soi Sanuk](https://soisanuk.github.io/) universe.
+A Zork-style adventure-turned-sandbox set in the neon streets of Pattaya —
+part of the [Soi Sanuk](https://soisanuk.github.io/) universe.
 
 You wake face-down on Jomtien beach at sunset. Wallet: gone. Phone: 13%.
 Your hotel is in Naklua, a long way north. The baht bus is ฿15 a head.
 You have ฿0.
 
-It's going to be one of those nights.
+That's Act One. Solve it — the wallet, the gossip chain, the safe, the ride
+home — and the night doesn't end: it opens. The long game is the oldest goal
+on the soi: **get happy**. A สนุก meter climbs (and dips) with everything you
+do — bar games, bell rings, wai-ed mamasans, kissed hostesses, soi dogs,
+scams, ejections — from เหนื่อย (running on empty) all the way to สบายสบาย.
 
 ## Play
 
@@ -30,7 +34,12 @@ Mobile gets tappable verb chips; desktop gets ↑/↓ command history.
   painted Thai arrows, and crack a safe whose keypad speaks only ๐–๙.
   A `wai` and a `sawatdee` open more doors than money.
 - **Two solutions**: burgle the safe behind the go-go, or earn the Mamasan's
-  respect and be handed your wallet like a gentleman. Score reflects style.
+  respect and be handed your wallet like a gentleman. The Act One score
+  reflects style — and converts into a happiness head start.
+- **The sandbox**: no key card, no Room 412 (it's in the wallet) — but once
+  Act One is done, Pattaya stays open. Chase สบายสบาย (happiness 100): the
+  meter moves with wins and losses across every system in the game, and
+  hitting the top is a celebration, not a credits roll.
 - **Bar life**: FLIRT, KISS, and worse — outcomes scale with how many lady
   drinks (฿150) you've bought her, from a slap through tolerance to genuine
   reciprocation. Roles matter: cashiers and mamasans allow light contact only.
@@ -214,7 +223,7 @@ flowchart TD
 node --test
 ```
 
-101 tests: Thai number composition, world/map integrity (every exit resolves,
+102 tests: Thai number composition, world/map integrity (every exit resolves,
 all 15 canon bars present, the gossip chain's flags all connect), parser,
 systems, street encounters, bar mini-games and social life, and a full
 scripted playthrough from the beach to the happy ending — run headless via

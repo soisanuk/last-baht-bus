@@ -50,7 +50,8 @@ function newGame() {
     lastEnc: 0,          // turn number of the last encounter (cooldown)
     rng: 1 + Math.floor(Math.random() * 2147483645), // seeded per game
     score: 0,
-    over: false,
+    happy: 0,            // สนุก — the long game. 100 = สบายสบาย.
+    over: false,         // legacy field; the sandbox never ends the night
   };
   return G;
 }
@@ -65,6 +66,8 @@ function deserializeGame(s) {
     G.soc = { drinks: {}, mamaTreat: {}, bellAt: {}, bells: {}, heat: {},
       banned: {}, patronBusy: {}, patronMiffed: {}, drunk: 0 };
   }
+  if (G.happy === undefined) G.happy = 0;
+  G.over = false; // pre-sandbox saves could be "over"; the night reopens
   if (!G.encDone) G.encDone = {};
   if (G.lastEnc === undefined) G.lastEnc = 0;
   if (!G.rng) G.rng = 1 + Math.floor(Math.random() * 2147483645);
@@ -233,6 +236,7 @@ function _tick() {
         _say("A soi dog bites you! You flee blindly, shedding " +
           (bitten ? `฿${bitten} in dropped coins` : "what remains of your dignity") +
           ", and fetch up somewhere lit.", "alert");
+        _addHappy(-2);
         _describeRoom(true);
       }
     }
@@ -283,6 +287,7 @@ const _ENC = {
         "hansum man SANUK!” She plants a lipstick mark on your cheek, pronounces " +
         "you number one, and strolls off having stolen nothing but the moment. " +
         "Respect, it turns out, is also currency on Beach Road.");
+      _addHappy(2);
       return;
     }
     if (/pocket|wallet|push|shove|step|back|away|off|no|stop|hand|guard|hold|run/.test(input)) {
@@ -302,6 +307,7 @@ const _ENC = {
         `the crowd, along with ฿${lost} from your pocket. The oldest two-handed ` +
         "trick on Beach Road, performed by a true professional. " +
         `(฿${G.money} left.)`, "alert");
+      _addHappy(-2);
     }
   },
 
@@ -314,6 +320,7 @@ const _ENC = {
       "and also always have bad night. Her friends drag her back inside, waving " +
       `apologies. (฿${G.money} — and dinner.)`);
     _say("(You now have the moo ping skewer.)", "dim");
+    _addHappy(2);
   },
 
   brit(input) {
@@ -324,6 +331,7 @@ const _ENC = {
         "drunk. “Sorry mate. Been a mad one.” He presses ฿50 into your hand — " +
         "“get yourself a beer, yeah?” — hugs you briefly but completely, and " +
         `lurches off toward the neon. (฿${G.money}.)`);
+      _addHappy(1);
     } else if (/fight|punch|hit|swing|shove|push|square|come on|idiot|wanker|muppet yourself/.test(input)) {
       const lost = Math.min(G.money, 30);
       G.money -= lost;
@@ -333,6 +341,7 @@ const _ENC = {
         (lost ? `฿${lost} in coins` : "nothing but your composure") +
         ". A piwin looks back at you: “No fighting, boss. Bad for everybody.”" +
         (lost ? ` (฿${G.money} left.)` : ""), "alert");
+      _addHappy(-2);
     } else {
       _say("You blink at him with perfect, bottomless neutrality. Somewhere behind " +
         "the sunburn the thread is lost. “…Wrong bloke. Sorry pal.” He apologises " +
@@ -347,6 +356,7 @@ const _ENC = {
         "whose girlfriend works where — while the number climbs. Twenty minutes " +
         `of Pattaya small talk later your phone reads ${G.battery}%. He waves ` +
         "away your thanks: “Next time, you take motosai, na?”");
+      _addHappy(1);
     } else {
       _say("He shrugs and pockets the power bank — your funeral, boss — and goes " +
         "back to watching the street with professional calm.");
@@ -367,6 +377,7 @@ const _ENC = {
           "wishes your family long life, and is gone before the receipt (there is " +
           `no receipt) hits the ground. (฿${G.money} left.)`);
         _say("(You now have the bottle of hair tonic.)", "dim");
+        _addHappy(-1);
       }
     } else {
       _say("You keep walking. He keeps pace for exactly eleven more compliments, " +
@@ -619,6 +630,8 @@ function _endGame(won, payout, text) {
   G.game = null;
   _say(text, won === false ? "alert" : "win");
   if (won === true && payout) _say(`(฿${G.money} in pocket.)`, "dim");
+  if (won === true) _addHappy(3);
+  else if (won === false) _addHappy(-1);
 }
 
 function _gameQuit() {
@@ -687,6 +700,7 @@ function _kickOut() {
     _say("(Complex security radios ahead. You are now famous in every bar in " +
       "LK Metro, in the worst way.)", "alert");
   }
+  _addHappy(-5);
   G.room = r.exits.out || Object.values(r.exits)[0];
   _describeRoom(true);
 }
@@ -827,8 +841,10 @@ function _doSocial(kind, targetWord) {
   const tier = net <= -3 ? 0 : net <= -1 ? 1 : net <= 1 ? 2 : net <= 3 ? 3 : 4;
   const fn = _SOCIAL_TEXT[kind][tier];
   _say(fn(name), tier === 0 ? "alert" : tier >= 3 ? "win" : "");
-  if (tier === 0) _addHeat(SEV[kind] >= 4 ? 2 : 1);
+  if (tier === 0) { _addHeat(SEV[kind] >= 4 ? 2 : 1); _addHappy(-1); }
   else if (tier === 1 && SEV[kind] >= 4) _addHeat(1);
+  else if (tier === 3) _addHappy(1);
+  else if (tier === 4) _addHappy(3);
   if (kind === "fondle" && tier === 4 && G.money >= LADY_DRINK) {
     G.money -= LADY_DRINK;
     G.soc.drinks[id] = (G.soc.drinks[id] || 0) + 1;
@@ -858,6 +874,7 @@ function _doBell() {
     "Drinks materialise down the length of the bar and every lady in the room " +
     `now knows your name. (-฿${BELL_PRICE}, ฿${G.money} left — reign while it lasts.)`);
   _engineSpeak("ชนแก้ว");
+  _addHappy(2);
 }
 
 // ─ Patrons ─
@@ -875,6 +892,7 @@ function _doPatron() {
       "fire extinguisher and insists on buying you one back. You are, briefly, " +
       "his favourite person alive.");
     s.drunk++;
+    _addHappy(1);
     return;
   }
   const d = s.drunk;
@@ -895,6 +913,8 @@ function _doPatron() {
       "ends with the phrase “and THAT is why I can't go back to Bristol.” " +
       "Solid company, this man.",
     ][Math.floor(_rand() * 3)]);
+    s.patronFriend = s.patronFriend || {};
+    if (!s.patronFriend[G.room]) { s.patronFriend[G.room] = true; _addHappy(1); }
   } else {
     _say("You explain your theory about baht bus economics at what turns out to " +
       "be considerable length and volume. The regular studies his beer. The " +
@@ -903,18 +923,57 @@ function _doPatron() {
   }
 }
 
-// ── Endings ────────────────────────────────────────────────────────────────
+// ── Happiness (สนุก) — the long game ─────────────────────────────────────────
+// The Last Baht Bus is Act One. After it, Pattaya is a sandbox and the goal
+// is the oldest one on the soi: get happy. Everything feeds the meter.
 
-function _checkEnding() {
-  if (G.room !== "hotel_room" || G.over) return;
-  G.over = true;
+const HAPPY_LEVELS = [
+  [100, "สบายสบาย — sabai sabai"],
+  [50, "สบาย — sabai"],
+  [25, "สนุก — sanuk"],
+  [10, "โอเค — finding your feet"],
+  [0, "เหนื่อย — running on empty"],
+];
+
+function _happyLevel(h) {
+  return HAPPY_LEVELS.find(([t]) => h >= t)[1];
+}
+
+function _addHappy(n) {
+  if (!n) return;
+  const before = _happyLevel(G.happy);
+  G.happy = Math.max(0, G.happy + n);
+  _say(`(${n > 0 ? "+" : ""}${n} สนุก)`, "dim");
+  const after = _happyLevel(G.happy);
+  if (n > 0 && after !== before) {
+    if (G.happy >= 100 && !_flag("sabaiSabai")) {
+      _setFlag("sabaiSabai");
+      _say("═══════════════════════════════════", "win");
+      _say("★ สบายสบาย ★", "win");
+      _say("Somewhere between the last laugh and this one, it happened: nowhere " +
+        "to be, nothing owed, cold bottle, warm night, a city full of people who " +
+        "know your name. You are, officially, happy. The DJ, unprompted, plays " +
+        "your song.", "win");
+      _engineSpeak("สบายสบาย");
+      _say("(The night keeps going. So can you.)", "dim");
+    } else {
+      _say(`✨ ${after}`, "win");
+    }
+  }
+}
+
+// ── Act One: The Last Baht Bus ───────────────────────────────────────────────
+// Reaching Room 412 with the wallet completes the intro quest — scored, and
+// converted into a happiness head start. The night does NOT end.
+
+function _checkAct1() {
+  if (G.room !== "hotel_room" || _flag("act1Done")) return;
+  _setFlag("act1Done");
   let score = 0;
   const lines = [];
-  if (_flag("hasWallet")) {
-    score += 50;
-    lines.push("✓ Wallet recovered (+50)");
-    if (_flag("oyGaveWallet")) { score += 15; lines.push("✓ ...earned back with manners, not burglary (+15)"); }
-  }
+  score += 50;
+  lines.push("✓ Wallet recovered (+50)");
+  if (_flag("oyGaveWallet")) { score += 15; lines.push("✓ ...earned back with manners, not burglary (+15)"); }
   if (G.battery > 0) { score += 10; lines.push(`✓ Phone survived at ${G.battery}% (+10)`); }
   if (G.money > 0) { score += Math.min(20, G.money); lines.push(`✓ ฿${G.money} still in pocket (+${Math.min(20, G.money)})`); }
   for (const [f, label] of [
@@ -932,23 +991,22 @@ function _checkEnding() {
   G.score = score;
 
   _say("═══════════════════════════════════", "win");
-  if (_flag("hasWallet")) {
-    _say("Room 412. You bolt the door, fall onto the terrible bed, and hold your " +
-      "wallet up to the ceiling light like a trophy. Outside, Pattaya keeps roaring " +
-      "without you — the bars, the buses, the whole neon machine. Somewhere out " +
-      "there Cindy is polishing a glass, Bank is leaning on his bike, and Madam Oy " +
-      "is counting money that is, for once, not yours.", "win");
-    _say("★ HAPPY ENDING ★", "win");
-  } else {
-    _say("Room 412. No wallet. The bed accepts you anyway, the way Pattaya accepts " +
-      "everyone eventually. Tomorrow there will be embassy phone calls, cancelled " +
-      "cards, and a very awkward chat with reception. Tonight there is at least a " +
-      "ceiling fan.", "win");
-    _say("☂ GOING HOME ALONE (wallet edition) ☂", "win");
-  }
+  _say("Room 412. You bolt the door, fall onto the terrible bed, and hold your " +
+    "wallet up to the ceiling light like a trophy. Outside, Pattaya keeps roaring " +
+    "without you — the bars, the buses, the whole neon machine. Somewhere out " +
+    "there Cindy is polishing a glass, Bank is leaning on his bike, and Madam Oy " +
+    "is counting money that is, for once, not yours.", "win");
+  _say("★ ACT ONE COMPLETE: THE LAST BAHT BUS ★", "win");
   for (const l of lines) _say(l, "dim");
-  _say(`FINAL SCORE: ${score}`, "win");
-  _say("(Type RESTART to play again.)", "dim");
+  _say(`ACT ONE SCORE: ${score}`, "win");
+  _addHappy(Math.max(5, Math.round(score / 4)));
+  _say("");
+  _say("You could sleep. But the shower works, the wallet is fat enough, and " +
+    "through the window the whole electric city is just getting started — and for " +
+    "the first time tonight, nobody in it has anything of yours.", "room");
+  _say("★ THE NIGHT IS YOURS. New goal: สบายสบาย — get happy. ★", "win");
+  _say("(SCORE tracks your happiness. The bars, the games, the girls, the city — " +
+    "it all counts. RESTART any time for a fresh night.)", "dim");
 }
 
 // ── Verb handlers ──────────────────────────────────────────────────────────
@@ -964,6 +1022,16 @@ function _doGo(dirWord) {
   const r = _room();
   if (!dir || !r.exits[dir]) { _say("You can't go that way."); return; }
   const to = r.exits[dir];
+  // room 412's key card is in the wallet: no wallet, no room
+  if (to === "hotel_room" && !_flag("hasWallet")) {
+    _say("The night clerk looks up, takes in the sand, the sunburn, the eyes. " +
+      "“Key card, sir?” The key card is in your wallet. The wallet is out there " +
+      "somewhere in the neon. He spreads his hands, genuinely sorry: no card, " +
+      "no room, hotel policy since forever.", "alert");
+    _say("(Get the wallet back. The trail is out there — the bar ladies know " +
+      "everything that happens in this town.)", "dim");
+    return;
+  }
   // office door: locked unless the DJ has security singing
   if (to === "oy_office" && !_flag("officeOpen")) {
     if (_flag("sabaiPlaying")) {
@@ -1029,6 +1097,7 @@ function _doSafe(num) {
       _say("A third wrong code. Somewhere a buzzer buzzes. Two security guys appear " +
         "with the calm of men who enjoy their work, walk you out through the bar, " +
         "and deposit you in the lane with impeccable politeness.", "alert");
+      _addHappy(-2);
       _describeRoom(true);
     } else {
       _say("The keypad blinks red. " + (G.safeTries === 2 ?
@@ -1137,14 +1206,17 @@ function _waiEffect(id) {
   if (id === "oy" && !_flag("waiedOy")) {
     _setFlag("waiedOy");
     _say("Madam Oy's eyebrow rises one millimetre. From her, that's a standing ovation.", "dim");
+    _addHappy(1);
   }
   if (id === "ploy" && !_flag("waiedPloy")) {
     _setFlag("waiedPloy");
     _say("Ploy's counting pauses for the first time tonight.", "dim");
+    _addHappy(1);
   }
   if (id === "fon" && !_flag("greetedFon")) {
     _setFlag("greetedFon");
     _say("Fon lights up like the neon just found a new colour.", "dim");
+    _addHappy(1);
   }
 }
 
@@ -1242,6 +1314,7 @@ function _doBuy(arg) {
       (d >= 6 ? " The room has developed a gentle rotation." :
        d >= 4 ? " The neon is starting to smear pleasantly." :
        d >= 2 ? " The night improves by one bottle's worth." : ""));
+    _addHappy(d <= 4 ? 1 : -1);
     return;
   }
   if (arg.includes("lady drink") || arg.includes("ladydrink") || arg.includes("drink")) {
@@ -1254,12 +1327,14 @@ function _doBuy(arg) {
     G.money -= LADY_DRINK;
     G.soc.drinks[id] = (G.soc.drinks[id] || 0) + 1;
     _say(`One lady drink for ${NPCS[id].name} — ฿${LADY_DRINK} on the tab that is your life. (฿${G.money} left.)`);
+    _addHappy(1);
     // the mamasan's blessing: her bar warms to you, and the house may pour one back
     if (NPC_ROLES[id] === "mamasan" && NPCS[id].room === G.room && !G.soc.mamaTreat[G.room]) {
       G.soc.mamaTreat[G.room] = true;
       _say(`${NPCS[id].name} raises the glass a centimetre in your direction — the ` +
         "royal assent. The temperature of the whole bar changes; from here on, " +
         "the girls treat you like a regular.", "dim");
+      _addHappy(2);
       if (_rand() < 0.5) {
         G.soc.drunk++;
         _say("She flicks two fingers at the cashier and a cold one lands in front " +
@@ -1398,10 +1473,14 @@ function _doCharge() {
   G.lightOn = false;
   _say("You plug in and watch the number climb the way ancient man watched sunrise. " +
     "100%. You are reborn.");
+  _addHappy(1);
 }
 
 function _doScore() {
-  _say(`Turns: ${G.turns} · ฿${G.money} · battery ${G.battery}%`, "dim");
+  _say(`สนุก happiness: ${G.happy} — ${_happyLevel(G.happy)}`, "win");
+  _say(`Turns: ${G.turns} · ฿${G.money} · battery ${G.battery}%` +
+    (G.soc.drunk ? ` · ${G.soc.drunk} bottle${G.soc.drunk > 1 ? "s" : ""} deep` : ""), "dim");
+  if (_flag("act1Done")) _say(`✓ ACT ONE COMPLETE — scored ${G.score}`, "dim");
   const milestones = [
     ["knowWasHere", "Worked out where you were last night"],
     ["knowMot", "Learned who lifted the wallet"],
@@ -1425,7 +1504,7 @@ const _HELP = `Common commands:
   FLIRT/KISS/SPANK/FONDLE <lady> · BUY DRINK FOR <lady> · BUY BEER
   RING BELL (฿300, instant popularity) · TALK TO PATRON
   LIGHT ON / LIGHT OFF · CHARGE PHONE
-  SCORE · UNDO · RESTART   (the night autosaves itself)`;
+  SCORE (happiness & progress) · UNDO · RESTART   (the night autosaves itself)`;
 
 // ── Parser ─────────────────────────────────────────────────────────────────
 
@@ -1437,11 +1516,6 @@ function _norm(s) {
 
 function doCommand(input) {
   if (!G) newGame();
-  if (G.over) {
-    if (/^restart/i.test(input)) { newGame(); engineIntro(); return; }
-    _say("The night is over. Type RESTART to play again.", "dim");
-    return;
-  }
   const raw = _norm(input);
   if (!raw) return;
   const lower = raw.toLowerCase();
@@ -1463,7 +1537,7 @@ function doCommand(input) {
     G.pendingEnc = null;
     _ENC[enc](lower);
     _tick();
-    _checkEnding();
+    _checkAct1();
     return;
   }
 
@@ -1474,7 +1548,7 @@ function doCommand(input) {
   }
 
   if (_DIRS[v] !== undefined && words.length === 1) {
-    _doGo(v); _tick(); _checkEnding(); return;
+    _doGo(v); _tick(); _checkAct1(); return;
   }
 
   switch (v) {
@@ -1556,7 +1630,7 @@ function doCommand(input) {
       return; // no tick for parse errors
   }
   _tick();
-  _checkEnding();
+  _checkAct1();
 }
 
 // ── Boot text ──────────────────────────────────────────────────────────────

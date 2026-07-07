@@ -590,18 +590,41 @@ test("street kisses end badly — except for the katoey", () => {
 
 // ── Endings ────────────────────────────────────────────────────────────────
 
-test("reaching the hotel without the wallet: going home alone", () => {
+test("no wallet, no room: the clerk holds the line", () => {
   state().room = "hotel_soi";
   state().battery = 50;
   run("light on", "n");
-  assert.ok(state().over);
-  assert.match(lastOut(), /GOING HOME ALONE/);
+  assert.equal(state().room, "hotel_soi", "bounced at reception");
+  assert.ok(!state().flags.act1Done);
+  assert.match(lastOut(), /no card, no room/i);
 });
 
-test("commands after game over prompt restart", () => {
+test("act one complete: scored, converted to happiness, night continues", () => {
   state().room = "hotel_soi";
-  run("light on", "n", "look");
-  assert.match(lastOut(), /RESTART/i);
+  state().battery = 50;
+  state().flags.hasWallet = true;
+  state().money = 300;
+  run("light on", "n");
+  assert.equal(state().room, "hotel_room");
+  assert.ok(state().flags.act1Done);
+  assert.ok(!state().over, "the sandbox never ends");
+  assert.ok(state().happy > 0, "score became happiness");
+  assert.match(lastOut(), /ACT ONE COMPLETE/);
+  assert.match(lastOut(), /THE NIGHT IS YOURS/);
+  run("out", "look");           // and you can just… keep playing
+  assert.equal(state().room, "hotel_soi");
+});
+
+test("hitting 100 สนุก is celebrated, not terminal", () => {
+  state().room = "cindy_bar";
+  state().money = 500;
+  state().happy = 99;
+  run("ring bell");
+  assert.ok(state().happy >= 100);
+  assert.ok(state().flags.sabaiSabai);
+  assert.match(lastOut(), /สบายสบาย/);
+  run("look");
+  assert.match(lastOut(), /Cindy Bar/);
 });
 
 // ── The full playthrough ───────────────────────────────────────────────────
@@ -636,12 +659,19 @@ test("scripted happy-ending playthrough", () => {
     "n", "light on", "n",
   );
   const s = state();
-  assert.ok(s.over, "game ended");
+  assert.ok(!s.over, "the night never ends now");
+  assert.ok(s.flags.act1Done, "act one completed");
   assert.ok(s.flags.hasWallet, "wallet recovered");
-  assert.match(lastOut(), /HAPPY ENDING/);
+  assert.match(lastOut(), /ACT ONE COMPLETE/);
+  assert.match(lastOut(), /THE NIGHT IS YOURS/);
   assert.ok(s.battery > 0, `battery survived (${s.battery}%)`);
   assert.ok(s.money > 400, `money left ฿${s.money}`);
-  assert.ok(s.score >= 80, `score ${s.score}`);
+  assert.ok(s.score >= 80, `act-one score ${s.score}`);
+  assert.ok(s.happy >= 20, `happiness head start (${s.happy})`);
+  // sandbox: still fully playable afterwards
+  doCommand("out");
+  doCommand("score");
+  assert.match(lastOut(), /สนุก happiness/);
 });
 
 // ── Save / load round-trip ─────────────────────────────────────────────────
