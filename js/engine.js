@@ -1378,6 +1378,86 @@ function _doSocial(kind, targetWord) {
   }
 }
 
+// ─ The ceiling game ─
+// Going commando is technically illegal in Thailand and cheerfully unenforced;
+// a braless dancer wears nipple covers, and the bar sport is to peel one and
+// fling it at the ceiling — how long it sticks, and who it lands on when it
+// drops, is the whole joke. She only hands you the ammunition if she's warmed
+// to you (favor ≥ 2; the bell, which lifts the whole room, counts). Landing on
+// the regular is bad form (miffs him) and on the mamasan is real heat.
+function _doThrowCover(targetWord) {
+  if (!_inBar()) {
+    _say("Out here there's no low ceiling and nobody wearing the ammunition. " +
+      "The game is a bar sport.");
+    return;
+  }
+  const here = _npcsHere();
+  const girls = here.filter(x => NPC_ROLES[x] === "hostess");
+  const w = (targetWord || "").trim();
+  let id = w ? _findNpc(w) : (girls.length === 1 ? girls[0] : null);
+  if (id && NPC_ROLES[id] !== "hostess") {
+    _say(`${NPCS[id].name} is not playing that game — and the look she gives you ` +
+      "says the covers stay exactly where they are.");
+    return;
+  }
+  if (!id) {
+    if (!girls.length) {
+      _say("Nobody here is wearing any. The ceiling game needs a braless dancer " +
+        "and a low ceiling, and this room is short one dancer.");
+      return;
+    }
+    _say("Whose? There's a floor full of candidates — THROW COVER AT <name>.");
+    return;
+  }
+  const name = NPCS[id].name;
+  if (_favor(id) < 2) {
+    _say(`You reach for ${name}'s nipple cover with the confidence of a man who ` +
+      "has badly misjudged the room. She clamps a hand over it and laughs you off: " +
+      "“Buy drink first, tilac, THEN maybe we play.” (No favor bought, no ammunition.)");
+    return;
+  }
+  _say(`${name} peels one pastie off with a grin, presses it into your palm — ` +
+    "“okay, farang, show me” — and half the bar tips its head back. You wind up " +
+    "and fling it at the ceiling. THWP.", "win");
+  const stick = 1 + Math.floor(_rand() * 6); // a 1–6 count of suspense
+  if (stick >= 6) {
+    _say("It STICKS. Dead centre, defying gravity and Thai law in one motion, and " +
+      "it does not come down. The bar erupts; a cheer goes up the length of the " +
+      "counter and someone starts a chant. Legend — for tonight, anyway.", "win");
+    _addHappy(2);
+    _engineSpeak("สุดยอด");
+    return;
+  }
+  _say(`It clings for a heroic count of ${stick}, the whole bar tracking it like ` +
+    "a penalty kick…");
+  const roll = _rand();
+  if (roll < 0.35) {
+    _say("…then peels off and lands squarely back on YOU — in your own beer. The " +
+      "bar loses it. You fish it out and wear it on your forehead like a medal. " +
+      "Sanuk.");
+    _addHappy(1);
+  } else if (roll < 0.6) {
+    const others = girls.filter(g => g !== id);
+    const onName = others.length ? NPCS[others[Math.floor(_rand() * others.length)]].name
+      : "the next dancer along";
+    _say(`…then drops on ${onName}, who shrieks, laughs, and rockets it straight ` +
+      "back at your head. Now it's a war, and the mamasan is pretending very hard " +
+      "not to enjoy it.");
+    _addHappy(1);
+  } else if (roll < 0.85) {
+    _say("…then parachutes down onto the bald spot of the regular at the end of the " +
+      "bar. He does not find it as funny as you do. (Bad form — a beer for him might " +
+      "cool it off.)", "alert");
+    G.soc.patronMiffed[G.room] = true;
+    _addHeat(1);
+  } else {
+    _say("…then lands, of all the shoulders in Pattaya, on the MAMASAN's. The room " +
+      "goes quiet. She lifts it off between two fingers like a dead moth and gives " +
+      "you the look that has closed better bars than this one.", "alert");
+    _addHeat(2);
+  }
+}
+
 // ─ The bell ─
 
 function _doBell() {
@@ -3460,6 +3540,7 @@ const _HELP = `Common commands:
   WEATHER · SCORES (real football) · LOTTERY (the real GLO draw)
   PLAY CONNECT 4 · PLAY JACKPOT [bet] · PLAY POOL   (in the beer bars)
   FLIRT/KISS/SPANK/FONDLE <lady> · BUY DRINK FOR <lady> · BUY BEER
+  THROW COVER [AT <lady>] (the ceiling game — warm her up first)
   RING BELL (฿300, instant popularity) · TALK TO PATRON · BARFINE <lady>
   EAT <food> · DRINK <thing> · BUY WATER / FOOD (street carts & 7-Elevens) · SLEEP (at the hotel)
   DIAGNOSE (how bad is it) · AGAIN or G (repeat last command)
@@ -3481,7 +3562,7 @@ const _COMPLETE_VERBS = [
   "look", "examine", "take", "drop", "inventory", "go", "enter", "talk to",
   "ask", "give", "buy", "sell bottles", "pay", "wai", "say", "ride bus to",
   "motosai to", "light", "charge phone", "read", "use", "open", "play",
-  "flirt", "kiss", "spank", "fondle", "ring bell", "barfine", "eat", "drink",
+  "flirt", "kiss", "spank", "fondle", "throw cover", "ring bell", "barfine", "eat", "drink",
   "sleep", "tv", "weather", "scores", "lottery", "map", "time", "tip", "wave",
   "photo", "call", "shower", "withdraw", "cheers", "dance", "sing", "swim",
   "smell", "listen", "diagnose", "apologize", "quests", "accept", "abandon", "contact",
@@ -3547,6 +3628,8 @@ function _completePool(verb, ctx) {
     case "light": case "turn": return ["on", "off"];
     case "watch": return ["tv"];
     case "check": return ["messages"];
+    case "throw": case "toss": case "chuck": case "fling":
+      return ctx.length >= 2 ? girls() : ["cover", "pastie", "nipple cover"];
     case "ring": return ["bell"];
     case "charge": return ["phone"];
     case "sell": return ["bottles"];
@@ -3756,7 +3839,14 @@ function doCommand(input) {
     case "swim": _doSwim(); break;
     case "dance": _doDance(); break;
     case "sing": _doSing(); break;
-    case "jump": case "climb": case "throw": case "push": case "pull":
+    case "throw": case "toss": case "chuck": case "fling":
+      // THROW COVER / THROW NIPPLE COVER / THROW PASTIE [AT <name>] — the ceiling
+      // game; anything else keeps the old flavor refusal.
+      if (/\b(cover|pastie|pasty|nipple|sticker)s?\b/.test(arg))
+        _doThrowCover(arg.replace(/\b(nipple|cover|pastie|pasty|sticker)s?\b/g, "").trim());
+      else _say(_MISC_VERBS["throw"]);
+      break;
+    case "jump": case "climb": case "push": case "pull":
     case "knock": case "shout": case "yell":
       _say(_MISC_VERBS[v === "yell" ? "shout" : v]); break;
     case "watch":
