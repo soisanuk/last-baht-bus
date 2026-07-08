@@ -1247,3 +1247,97 @@ test("dance and sing read the room", () => {
   assert.match(lastOut(), /floor show/);
   assert.match(lastOut(), /never once mattered/);
 });
+
+// ── QoL verbs: time, waiting, tipping, haggling, the bar-mat map ───────────
+
+test("time reads the clock and the night's pricing", () => {
+  run("time");
+  assert.match(lastOut(), /18:00/);
+  assert.match(lastOut(), /barfines run ×1\.5/);
+  state().nightTurn = 65;
+  out = [];
+  run("time");
+  assert.match(lastOut(), /quietly dropped the barfine/);
+});
+
+test("wait until midnight fast-forwards the clock", () => {
+  state().encDone = Object.fromEntries(Object.keys(ENCOUNTERS).map(k => [k, true]));
+  state().room = "buakhao_s";
+  state().hunger = 0;
+  state().thirst = 0;
+  run("wait until midnight");
+  assert.equal(state().nightTurn, 60, "60 turns in = midnight");
+  assert.match(lastOut(), /let the night idle past/);
+  out = [];
+  run("wait until 9pm");
+  assert.match(lastOut(), /Time only runs one way/);
+  run("wait until noon", "wait until 7am");
+  assert.match(lastOut(), /Daylight is for sleeping/);
+});
+
+test("tip: ฿100+ buys favor, small notes buy goodwill only", () => {
+  state().room = "candy_bar";
+  state().money = 500;
+  run("tip candy 100");
+  assert.equal(state().soc.drinks.candy, 1);
+  assert.equal(state().money, 400);
+  run("tip candy 20");
+  assert.equal(state().soc.drinks.candy, 1, "small tip: no favor bump");
+  assert.match(lastOut(), /runs on lady drinks/);
+  state().room = "buakhao_s"; // motosai stand
+  run("tip");
+  assert.match(lastOut(), /don't open accounts/);
+});
+
+test("haggling the peddler works exactly once", () => {
+  state().room = "stinky_bar";
+  state().money = 500;
+  state().pendingEnc = "peddler";
+  run("haggle");
+  assert.match(lastOut(), /For you, special/);
+  assert.equal(state().pendingEnc, "peddler", "still at your elbow");
+  run("haggle");
+  assert.match(lastOut(), /floor has been reached/);
+  run("buy watch");
+  assert.equal(state().money, 300, "haggled: ฿200, not ฿300");
+  assert.equal(state().itemLoc.fake_rolex, "inventory");
+  assert.ok(!state().flags.peddlerDeal, "deal doesn't linger for the next peddler");
+});
+
+test("wave hails the bus; map draws the town", () => {
+  state().encDone = Object.fromEntries(Object.keys(ENCOUNTERS).map(k => [k, true]));
+  run("e", "n"); // jomtien bus stop
+  assert.ok(ROOMS[state().room].busStop);
+  run("wave");
+  assert.match(lastOut(), /Stops from here/);
+  out = [];
+  run("map");
+  assert.match(lastOut(), /BUAKHAO/);
+  assert.match(lastOut(), /DARKSIDE/);
+});
+
+test("photo costs battery; call teaches you to text", () => {
+  state().room = "candy_bar";
+  const b = state().battery;
+  run("photo");
+  assert.equal(state().battery, b - 1);
+  assert.match(lastOut(), /peace signs at maximum deployment/);
+  run("call candy");
+  assert.match(lastOut(), /nobody in this town answers a phone/);
+});
+
+test("withdraw knows every stage of your financial decline", () => {
+  run("withdraw");
+  assert.match(lastOut(), /wallet is the whole problem/);
+  state().stage = "vacation";
+  state().flags.act1Done = true; // else _checkAct1 fires at the hotel and pays the safe stash too
+  state().room = "hotel_room";
+  state().atmDay = 0;
+  state().day = 2;
+  const m = state().money;
+  run("atm");
+  assert.equal(state().money, m + SAFE_CASH);
+  out = [];
+  run("withdraw");
+  assert.match(lastOut(), /seven days instead of seven years/);
+});
