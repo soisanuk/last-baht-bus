@@ -1378,6 +1378,43 @@ function _doPatron() {
     return;
   }
   const d = s.drunk;
+  // the football comes first; the football always comes first
+  if (_footy() && _rand() < 0.25) {
+    const f = _footy();
+    const team = _barTeam();
+    const done = f.games.filter(x => x.done);
+    const mine = done.filter(x => x.h === team || x.a === team);
+    const g = mine.length ? mine[mine.length - 1] : done[done.length - 1];
+    if (!g) {
+      const nx = f.games.find(x => !x.done);
+      _say(`“${nx.h} against ${nx.a},” the regular says, tapping the fixture ` +
+        `list like a racing form. “Kickoff's two in the morning, our time. ` +
+        `I'll be here. I'm always here.”`);
+      return;
+    }
+    const winner = g.hs > g.as ? g.h : g.as > g.hs ? g.a : null;
+    if (team && winner === team) {
+      // the one football→mechanics crossing: his team won, everybody drinks
+      _say(`The regular is INCANDESCENT with joy. “${_fmtGame(g)}! Did you SEE ` +
+        `it?” You did not see it. It does not matter. He flags the cashier and ` +
+        `buys the whole rail a round, you included, because tonight the world ` +
+        `is just and ${team} are proof.`);
+      s.drunk++;
+      G.thirst = Math.max(0, G.thirst - 20);
+      _addHappy(1);
+      _checkDrunk();
+    } else if (team && (g.h === team || g.a === team)) {
+      _say(`“${_fmtGame(g)},” the regular says, and then nothing else for a ` +
+        `while. Forty years he's given ${team}. The bar has learned to leave ` +
+        `the silence alone; you learn it now too.`);
+    } else {
+      _say(`The regular delivers a full studio panel's worth of analysis on ` +
+        `${_fmtGame(g)} — formations, refereeing, the state of the modern game — ` +
+        `unpaid, unprompted, and unfinished. The ${f.league} is a wound that ` +
+        `never closes.`);
+    }
+    return;
+  }
   // the moaning index: no expat conversation survives contact with the baht
   if (_fxRates() && _rand() < 0.2) {
     const [code, sym, name] = _FX_CURRENCIES[Math.floor(_rand() * _FX_CURRENCIES.length)];
@@ -1403,6 +1440,15 @@ function _doPatron() {
         `announces, as though personally wronged. “But it's not the heat, is it. ` +
         `It's the humidity.” The humidity, currently ${wx.humid}%, declines to comment.`);
     }
+    return;
+  }
+  // the end of the rail, where the laser eyes never dimmed
+  if (_btc() && _rand() < 0.1) {
+    const b = _btc();
+    _say(`From the end of the rail, the other regular — laser eyes still on ` +
+      `his profile picture — announces to nobody: “฿${b.thb.toLocaleString("en-US")} ` +
+      `a coin. I told everyone in 2019. Did they listen?” They didn't listen. ` +
+      `They are not listening now, either, which he takes as further proof.`);
     return;
   }
   // a man with a paper and opinions — when there are headlines to have them about
@@ -2013,6 +2059,73 @@ function _wxLine() {
     (wx.rain >= 40 ? `, ${wx.rain}% chance of rain` : "");
 }
 
+// ── The sports desk, the lottery, and the other pensions ─────────────────────
+// FOOTY / LOTTO / GOLD / BTC ride the same bake as the headlines. All flavor,
+// with ONE sanctioned mechanical crossing (the regular's team wins → he buys
+// a round), guarded rain-style: the data check precedes any dice.
+
+function _footy() { return typeof FOOTY === "undefined" ? null : FOOTY; }
+function _lotto() { return typeof LOTTO === "undefined" ? null : LOTTO; }
+function _gold() { return typeof GOLD === "undefined" ? null : GOLD; }
+function _btc() { return typeof BTC === "undefined" ? null : BTC; }
+
+// every bar's regular has a lifelong allegiance — hashed from the bar id over
+// the teams in the current bake, so it never wavers mid-deploy
+function _barTeam() {
+  const f = _footy();
+  if (!f) return null;
+  const teams = [...new Set(f.games.flatMap(g => [g.h, g.a]))].sort();
+  if (!teams.length) return null;
+  let h = 0;
+  for (const ch of G.room) h = (h * 31 + ch.charCodeAt(0)) % 100003;
+  return teams[h % teams.length];
+}
+
+function _fmtGame(g) {
+  return g.done ? `${g.h} ${g.hs}–${g.as} ${g.a}` : `${g.h} v ${g.a}`;
+}
+
+function _footyLine() {
+  const f = _footy();
+  if (!f) return null;
+  const done = f.games.filter(g => g.done);
+  const next = f.games.find(g => !g.done);
+  const bits = [];
+  if (done.length) bits.push(done.slice(-2).map(_fmtGame).join(" · "));
+  if (next) bits.push(`next up ${_fmtGame(next)}`);
+  return bits.length ? `${f.league}: ${bits.join(" — ")}` : null;
+}
+
+function _doScores() {
+  const f = _footy();
+  if (!f) {
+    _say("No signal on the sports front. The season, like everything else " +
+      "here, resumes when it resumes.");
+    return;
+  }
+  _say(`${f.league}:`);
+  for (const g of f.games.slice(-8)) {
+    _say("  " + (g.done ? _fmtGame(g) : `${g.d} — ${g.h} v ${g.a}`), "dim");
+  }
+  const team = _inBar() && _barTeam();
+  if (team) {
+    _say(`(The regular here supports ${team}. You didn't ask. You never have to.)`, "dim");
+  }
+}
+
+function _doLottery() {
+  const lt = _lotto();
+  if (!lt) {
+    _say("The GLO draw is the 1st and the 16th, and any hostess can recite the " +
+      "calendar from memory. No results to hand out here.");
+    return;
+  }
+  _say(`Last GLO draw (${lt.date}): first prize ${lt.first} · last two ${lt.last2}` +
+    (lt.back3 && lt.back3.length ? ` · back three ${lt.back3.join(" / ")}` : ""));
+  _say("You don't have a ticket. Every girl in every bar can fix that by " +
+    "tomorrow lunchtime.", "dim");
+}
+
 // ── Rainy season ─────────────────────────────────────────────────────────────
 // The one sanctioned crossing from the weather bake into mechanics: a stormy
 // WMO code ENABLES downpours, but every roll still goes through G.rng — same
@@ -2132,6 +2245,13 @@ function _doTv() {
     const wx = _wxLine();
     if (wx) _say(`Then the weather girl, beaming at a map of the Gulf: ${wx}. ` +
       "Nobody in the bar needed telling.", "dim");
+    const fb = _footyLine();
+    if (fb) _say(`Then sport — ${fb}. Kickoff, as ever, at an hour Pattaya ` +
+      "calls late and football calls prime time.", "dim");
+    const lt = _lotto();
+    if (lt) _say(`And the lottery numbers from the ${lt.date} draw crawl past — ` +
+      `first prize ${lt.first}, last two ${lt.last2}. A cashier checks her ` +
+      "ticket against them without hope, and is proven right.", "dim");
     _say("The bar absorbs the state of the world and orders another round at it.", "dim");
   } else {
     _say("Tonight it's muay thai highlights and the lottery draw. The bar approves " +
@@ -2161,9 +2281,18 @@ function _doPaper() {
   }
   const fx = _fxLine();
   if (fx) _say(`Corner of the business page, the numbers every expat reads first: ${fx}`, "thai");
+  const au = _gold();
+  if (au && au.baht) _say(`Below them, gold at ฿${au.baht.toLocaleString("en-US")} ` +
+    "the baht-weight — the number every mamasan reads first.", "dim");
   const wx = _wxLine();
   if (wx) _say(`The weather box promises ${wx} — printed on paper already ` +
     "gone soft agreeing with it.", "dim");
+  const fb = _footyLine();
+  if (fb) _say(`Back page — ${fb}.`, "dim");
+  const lt = _lotto();
+  if (lt) _say(`And the lottery results from ${lt.date} in their careful little ` +
+    `box: ${lt.first}, last two ${lt.last2}. Every bar in town knows somebody ` +
+    "who was one digit off.", "dim");
   _say("Somewhere in there, the fuel prices explain your bus fare.", "dim");
 }
 
@@ -3236,7 +3365,7 @@ const _HELP = `Common commands:
   RIDE BUS TO <place> · MOTOSAI TO <place> · PAY <amount>
   BUY <thing> · SELL BOTTLES · READ <thing> · READ SIGN
   WATCH TV (bars) · READ PAPER (bars & 7-Elevens) — the day's real headlines
-  WEATHER — Pattaya's actual conditions, per your phone
+  WEATHER · SCORES (real football) · LOTTERY (the real GLO draw)
   PLAY CONNECT 4 · PLAY JACKPOT [bet] · PLAY POOL   (in the beer bars)
   FLIRT/KISS/SPANK/FONDLE <lady> · BUY DRINK FOR <lady> · BUY BEER
   RING BELL (฿300, instant popularity) · TALK TO PATRON · BARFINE <lady>
@@ -3403,6 +3532,8 @@ function doCommand(input) {
       break;
     case "tv": _doTv(); break;
     case "weather": case "forecast": _doWeather(); break;
+    case "scores": case "football": case "footy": case "match": _doScores(); break;
+    case "lottery": case "lotto": _doLottery(); break;
     case "drink": case "sip": _doDrink(arg); break;
     case "diagnose": case "health": _doDiagnose(); break;
     case "kill": case "attack": case "hit": case "punch": case "fight": case "strangle":
