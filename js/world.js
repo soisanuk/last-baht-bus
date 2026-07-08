@@ -1211,6 +1211,34 @@ const QUESTS = {
   },
 };
 
+// ── Quiz night ──────────────────────────────────────────────────────────────
+// Thursday, 20:00–22:00, at three bars drawn fresh each week. Walk in during
+// the window and you're a contestant — the host does not take no.
+
+const QUIZ_BARS = [
+  "candy_bar", "candy_bar_2", "lucky_tiger", "silk_rose", "jasmine_garden",
+  "gold_rush", "starlight_bar", "midnight_sun", "stinky_bar", "khao_talo_bar",
+];
+
+// {q, opts (3), a: correct index} — Pattaya street knowledge and survival Thai.
+const QUIZ_POOL = [
+  { q: "The baht bus driver says “สิบห้าบาท”. He wants…", opts: ["฿15", "฿50", "฿55"], a: 0 },
+  { q: "'Sabai sabai' means…", opts: ["hurry up", "easy, relaxed", "very expensive"], a: 1 },
+  { q: "เปิด on a bar's door means the bar is…", opts: ["open", "closed", "cash only"], a: 0 },
+  { q: "A 'butterfly' is a man who…", opts: ["tips too much", "flits from girl to girl", "won't sing karaoke"], a: 1 },
+  { q: "Soi Khao Talo is…", opts: ["on the Darkside, east of Sukhumvit", "off Walking Street", "in Naklua"], a: 0 },
+  { q: "A lady drink runs…", opts: ["฿80", "฿150", "฿300"], a: 1 },
+  { q: "ห้ามเข้า on a door means…", opts: ["welcome", "no entry", "ring the bell"], a: 1 },
+  { q: "A piwin's vest is…", opts: ["orange", "grey", "hot pink"], a: 0 },
+  { q: "Thai for water is…", opts: ["nam", "chang", "sanuk"], a: 0 },
+  { q: "The oldest go-go in Pattaya is…", opts: ["Neon Paradise", "Tequila Queen", "Crystal Palace"], a: 1 },
+  { q: "ซ้าย, painted on a maze wall, points…", opts: ["left", "right", "straight on"], a: 0 },
+  { q: "'Songthaew' literally means…", opts: ["blue bus", "two rows", "fifteen baht"], a: 1 },
+  { q: "'Mai pen rai' means…", opts: ["never mind", "how much?", "one more bottle"], a: 0 },
+  { q: "Thailand's lucky number is…", opts: ["7", "9", "13"], a: 1 },
+  { q: "Ringing the bar bell means…", opts: ["last orders", "a round for the house, on you", "the quiz is starting"], a: 1 },
+];
+
 // ── Canon checklist (used by tests) ────────────────────────────────────────
 
 const CANON_BARS = [

@@ -65,6 +65,7 @@ function newGame() {
     lastPeddler: -99,    // turn of the last bar-stool peddler visit
     selfBfId: null,      // hostess offering to barfine herself
     quests: {},          // questId → "offered" | "active" | "done" | "abandoned"
+    quizPlayed: {},      // roomId → true (one quiz per bar per Thursday)
     phone: {             // the other half of your most important possession
       contacts: {},      //   npcId → true (you have her number)
       inbox: [],         //   [{from, text, turn, read, gives}]
@@ -105,6 +106,7 @@ function deserializeGame(s) {
     G.phone = { contacts: {}, inbox: [], lastText: 0, msgCd: {}, invite: null };
   }
   if (G.lastPeddler === undefined) G.lastPeddler = -99;
+  if (!G.quizPlayed) G.quizPlayed = {};
   G.over = false; // pre-sandbox saves could be "over"; the night reopens
   if (!G.encDone) G.encDone = {};
   if (G.lastEnc === undefined) G.lastEnc = 0;
@@ -233,6 +235,16 @@ function _describeRoom(full) {
       (_leagueTonight() ? " Tonight is LEAGUE NIGHT (PLAY KILLER, ฿100 in the ashtray)." : ""), "dim");
   }
   if (r.seven) _say("A 7-Eleven glows across the way (BUY TOASTIE / WATER / CHARGER).", "dim");
+  if (G.day % 7 === 4 && !r.barType) {
+    const near = Object.values(r.exits).filter(to => _quizBars().includes(to));
+    if (near.length && G.nightTurn < 40) {
+      _say(near.map(to => ROOMS[to].bar || ROOMS[to].name).join(" and ") +
+        (near.length > 1 ? " have" : " has") + " a chalkboard out: QUIZ NIGHT " +
+        "TONIGHT 8-10 — PRIZES. " +
+        (G.nightTurn >= 20 ? "It's on right now; walk in and you're playing." :
+          "Starts at 20:00; walk in during and you're playing."), "dim");
+    }
+  }
   if (r.barType) {
     const girl = _npcsHere().find(id => NPC_ROLES[id] === "hostess");
     _say(G.soc.patronBusy[G.room] ?
@@ -793,6 +805,108 @@ function _jpFinish() {
   }
 }
 
+// ─ Quiz night ─
+// Thursday (day 1 = Monday), 20:00–22:00, at three bars drawn per-week by a
+// pure hash — same three all night, whatever you save or undo. Walking into
+// one mid-window makes you a contestant; the host does not take no.
+
+const WEEKDAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+function _weekday() { return WEEKDAYS[G.day % 7]; }
+
+function _isQuizWindow() {
+  return G.day % 7 === 4 && G.nightTurn >= 20 && G.nightTurn < 40;
+}
+
+// Deterministic three bars for this particular Thursday (no _rand: reading
+// the schedule must never advance the dice).
+function _quizBars() {
+  let h = G.vacation * 7919 + G.day * 104729 + 12345;
+  const pool = [...QUIZ_BARS];
+  const picked = [];
+  for (let i = 0; i < 3; i++) {
+    h = (h * 48271) % 2147483647;
+    picked.push(pool.splice(h % pool.length, 1)[0]);
+  }
+  return picked;
+}
+
+function _quizHere() {
+  return _isQuizWindow() && _quizBars().includes(G.room) && !G.quizPlayed[G.room];
+}
+
+function _startQuiz() {
+  G.quizPlayed[G.room] = true;
+  // five questions, drawn without repeats
+  const pool = [...Array(QUIZ_POOL.length).keys()];
+  const qs = [];
+  for (let i = 0; i < 5; i++) qs.push(pool.splice(Math.floor(_rand() * pool.length), 1)[0]);
+  G.game = { type: "quiz", qs, at: 0, right: 0 };
+  _say("Too late — the microphone has already found you. “A NEW TEAM, ladies and " +
+    "gentlemen!” Quiz night: five questions, the bar as your audience, prizes on " +
+    "the board. A hostess hands you a pencil you will not need and a beer mat " +
+    "you will.", "win");
+  _say("(Answer 1, 2, or 3. QUIT slinks back out to the street.)", "dim");
+  _quizAsk();
+}
+
+function _quizAsk() {
+  const g = G.game;
+  const item = QUIZ_POOL[g.qs[g.at]];
+  _say(`Question ${g.at + 1} of 5: ${item.q}`, "room");
+  item.opts.forEach((o, i) => _say(`  ${i + 1}. ${o}`, "dim"));
+}
+
+function _quizInput(input) {
+  const g = G.game;
+  const item = QUIZ_POOL[g.qs[g.at]];
+  let pick = null;
+  const m = input.match(/[1-3]/);
+  if (m) pick = +m[0] - 1;
+  else {
+    const idx = item.opts.findIndex(o => o.toLowerCase().includes(input.trim()));
+    if (idx >= 0 && input.trim().length > 1) pick = idx;
+  }
+  if (pick === null) { _say("1, 2, or 3 — the microphone is patient, the bar less so.", "dim"); return; }
+  if (pick === item.a) {
+    g.right++;
+    _say(`“${item.opts[item.a]}” — CORRECT! The bar cheers like you cured something.`);
+  } else {
+    _say(`“${item.opts[pick]}”… the host winces on your behalf. It was ` +
+      `“${item.opts[item.a]}”. The table of teachers from Rayong smirks.`, "alert");
+  }
+  g.at++;
+  if (g.at < 5) { _quizAsk(); return; }
+  // scoring
+  const right = g.right;
+  G.game = null;
+  _say(`Final score: ${right} of 5.`, "room");
+  if (right === 5) {
+    G.money += 500;
+    _setFlag("quizChamp");
+    _say("A PERFECT ROUND. The host demands a bow; the bar demands a speech; the " +
+      `board demands your name in chalk. First prize: ฿500 off the till. ` +
+      `(฿${G.money} in pocket.)`, "win");
+    _addHappy(5);
+  } else if (right === 4) {
+    G.money += 200;
+    _say(`Second place overall — ฿200 and a round of applause you'll remember ` +
+      `longer than the money. (฿${G.money}.)`, "win");
+    _addHappy(3);
+  } else if (right === 3) {
+    G.soc.drunk++;
+    G.thirst = Math.max(0, G.thirst - 20);
+    _say("Respectable. The house stands you a consolation Chang, which is the " +
+      "true and ancient purpose of quiz night.", "win");
+    _addHappy(1);
+    _checkDrunk();
+  } else {
+    _say("The host reads your score with the gentle tone reserved for tourists " +
+      "and the recently concussed. “Next week, my friend. Study.” The teachers " +
+      "from Rayong collect the prize, as always.");
+  }
+}
+
 // ─ Killer pool (league night) ─
 
 const KP_ENTRY = 100;
@@ -949,6 +1063,14 @@ function _endGame(won, payout, text) {
 function _gameQuit() {
   const g = G.game;
   G.game = null;
+  if (g.type === "quiz") {
+    _say("You mumble something about the toilet and keep walking, past the toilet, " +
+      "out the door. Behind you the host announces your departure to the whole " +
+      "bar. Some tuition is social.", "alert");
+    G.room = _room().exits.out || Object.values(_room().exits)[0];
+    _describeRoom(true);
+    return;
+  }
   _say(g.stake ? `You concede. The stake stays where stakes stay. (฿${G.money} left.)` :
     "You concede with what dignity remains.");
 }
@@ -959,6 +1081,7 @@ function _gameInput(input) {
     case "jp": _jpInput(input); break;
     case "pool": _poolInput(input); break;
     case "kp": _kpInput(input); break;
+    case "quiz": _quizInput(input); break;
   }
 }
 
@@ -1367,6 +1490,7 @@ function _endNight(reason) {
   G.soc.selfBf = false;
   G.soc.butterflyTeased = false;
   G.selfBfId = null;
+  G.quizPlayed = {};
   G.phone.msgCd = {};
   G.phone.invite = null;
   delete G.encDone.freelancer; // Beach Road restocks nightly
@@ -1912,6 +2036,8 @@ function _doGo(dirWord) {
   }
   G.room = to;
   _describeRoom(true);
+  // quiz night: walk in during the window and the microphone finds you
+  if (_quizHere()) { _startQuiz(); return; }
   // a standing invitation, honoured: she said come, and you came
   const inv = G.phone.invite;
   if (inv && inv.day === G.day && NPCS[inv.id].room === G.room) {
@@ -2396,8 +2522,9 @@ function _doCharge() {
 
 function _doScore() {
   _say(`สนุก happiness: ${G.happy} — ${_happyLevel(G.happy)}`, "win");
-  _say(`Day ${G.day}${G.stage === "expat" ? " · expat life" : " of 7"} · ${_clockStr()} · ` +
-    `฿${G.money} · battery ${G.battery}%`, "dim");
+  _say(`${_weekday()}, day ${G.day}${G.stage === "expat" ? " · expat life" : " of 7"} · ${_clockStr()} · ` +
+    `฿${G.money} · battery ${G.battery}%` +
+    (G.day % 7 === 4 ? " · QUIZ NIGHT 20:00-22:00" : ""), "dim");
   _say(`hunger ${G.hunger} · thirst ${G.thirst}` +
     (G.soc.drunk ? ` · ${G.soc.drunk} bottle${G.soc.drunk > 1 ? "s" : ""} deep` : "") +
     (G.hurt ? ` · banged up (${G.hurt}/3)` : ""), "dim");
