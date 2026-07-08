@@ -2686,6 +2686,180 @@ function _doScore() {
   for (const [f, label] of milestones) if (_flag(f)) _say("✓ " + label, "dim");
 }
 
+// ── The Zork ledger ──────────────────────────────────────────────────────────
+// Verbs a text adventure must answer, even when the answer is no. Zork always
+// had something to say; "I didn't understand that" is a last resort, not a
+// personality. Flavor only — nothing here moves game state beyond the tick.
+
+function _doDrink(arg) {
+  if (/water|nam/.test(arg)) { _doBuy("water"); return; }
+  const w = arg.match(/^with (.+)$/);
+  if (w) { _doBuy("lady drink " + w[1]); return; }
+  if (!arg || /beer|chang|leo|singha|bottle|drink/.test(arg)) {
+    if (!_inBar()) {
+      _say("Nothing to drink out here but the humidity. Find a bar stool, or " +
+        "a 7-Eleven fridge (BUY WATER).");
+      return;
+    }
+    _doBuy("beer");
+    return;
+  }
+  _say("The bar does beer, lady drinks, and water — in descending order of enthusiasm.");
+}
+
+function _doDiagnose() {
+  const d = G.soc.drunk;
+  const parts = [
+    G.hunger >= 70 ? "hungry enough to envy the soi dogs" :
+      G.hunger >= 40 ? "peckish, and every cart on the street smells personal" : "fed",
+    G.thirst >= 70 ? "dry as a temple bell" :
+      G.thirst >= 40 ? "thirsty" : "watered",
+    d >= 6 ? `${d} bottles deep and navigating by neon` :
+      d >= 3 ? `${d} bottles deep, the world pleasantly loose at the hinges` :
+      d >= 1 ? `${d} bottle${d > 1 ? "s" : ""} in` : "stone sober, which is fixable",
+  ];
+  if (G.hurt) parts.push(`banged up (${G.hurt}/3 — a third strike ends the night)`);
+  _say(`Self-diagnosis, ${_clockStr()}: ${parts.join(" · ")}.`);
+  _say(`Phone ${G.battery}% · ฿${G.money} · สนุก ${G.happy} (${_happyLevel(G.happy)}). ` +
+    "You will live, which in this town is both a prognosis and a lifestyle.", "dim");
+}
+
+function _doViolence() {
+  if (_inBar()) {
+    _say("Security has already noticed you noticing them: large, patient men " +
+      "whose entire job is farangs having this exact idea. Beyond them, the " +
+      "motosai stand. There is no version of this where you win, and several " +
+      "where you swim home. The idea evaporates.");
+  } else {
+    _say("You know how this plays out: the motosai stand empties before your " +
+      "first swing lands, and it does not empty in your favour. In Pattaya " +
+      "the street polices itself. The urge passes, as urges here should.");
+  }
+}
+
+function _doMagic(v) {
+  if (v === "plugh") {
+    _say("A hollow voice says the magic went out of that one around the same " +
+      "time it went out of Walking Street.");
+  } else if (v === "pray") {
+    _say("The nearest spirit house glitters by a doorway, properly kept — " +
+      "marigolds, incense, a strawberry Fanta with a straw in it. You add a " +
+      "wai. It can't hurt, and everyone in this town has seen it help.");
+  } else {
+    _say("A hollow voice says “สบายสบาย.”");
+  }
+}
+
+function _doHello(arg) {
+  if (/sailor/.test(arg)) {
+    _say("Nothing happens. The Royal Thai Navy is forty minutes down the road " +
+      "in Sattahip, and it has heard them all.");
+  } else if (_inBar()) {
+    _say("“Herrooo, hansum man!” The nearest hostess returns your hello with " +
+      "roughly four hundred percent interest. It's the house rate.");
+  } else {
+    _say("“HELLO WELCOME!” answer two bars at once, on reflex, without looking up.");
+  }
+}
+
+const _SMELLS = {
+  "Jomtien": "Salt, yesterday's sunscreen, grilled squid from a cart you can't see. Underneath it all, the sea — patient.",
+  "Pratumnak": "Frangipani and cut grass. The hill smells like money sleeping.",
+  "Beach Road": "Sea salt over two-stroke exhaust, coconut oil, and a base note of last night that nobody has hosed away yet.",
+  "Second Road": "Traffic fumes, fried garlic, and the cold chemical exhale of mall air-con every time a door swings.",
+  "Soi Buakhao": "Fish sauce off the som tam carts, motorbike exhaust, beer-soaked chipboard. The honest middle of town.",
+  "LK Metro": "Perfume and spilled Chang in a closed loop — the complex recycles its own air like a space station.",
+  "Walking Street": "Dry ice, cigarettes, a hundred perfumes at war, and beneath it the Gulf, comprehensively ignored.",
+  "Soi 6": "Perfume applied with intent, cheap floor cleaner, and hotel soap from rooms rented by the hour.",
+  "Myth Night": "Fresh paint and fryer oil — a complex still deciding what it wants to smell like when it grows up.",
+  "Naklua": "Charcoal smoke, drying fish, temple incense. The town Pattaya used to be before Pattaya happened to it.",
+  "Darkside": "Rain on hot dust, lake water, someone burning garden waste three sois over. You could almost be in Thailand.",
+};
+
+const _SOUNDS = {
+  "Jomtien": "Waves, a beach dog arguing with a kite, the flat slap of sandals on the promenade.",
+  "Pratumnak": "Wind in the palms and, far below, the whole town clearing its throat for the evening.",
+  "Beach Road": "Baht bus diesel, wave-hiss, and a jet ski tout laughing at his own joke.",
+  "Second Road": "Traffic in both directions, and a mall breathing muzak through its automatic doors.",
+  "Soi Buakhao": "Motorbikes, Connect Four counters, and a dozen bars playing a dozen songs, every one of them Hotel California.",
+  "LK Metro": "Bass bleeding through shared walls. The whole complex has one heartbeat, and it runs at about 128 bpm.",
+  "Walking Street": "Doof-doof from six doorways, touts quoting prices, and a bell ringing somewhere — some hero is buying a bar a round.",
+  "Soi 6": "Short songs, shorter negotiations, and laughter with a working edge on it.",
+  "Myth Night": "A live band soundchecking the same four bars of a Scorpions song, apparently forever.",
+  "Naklua": "Temple dogs, a wet market winding down, long-tail engines out on the water.",
+  "Darkside": "Cicadas, karaoke drifting across the lake, and geckos calling the odds on it.",
+};
+
+function _doSmell() {
+  if (_inBar()) {
+    _say("Perfume, cold Chang, cigarette ghosts in the upholstery, and the " +
+      "bleach that fights a nightly holding action against all three. Every " +
+      "bar in town, one smell.");
+    return;
+  }
+  _say(_SMELLS[_room().region] || "Pattaya. It's not describable, but it is memorable.");
+}
+
+function _doListen() {
+  if (_inBar()) {
+    _say("Ice settling in buckets, Connect Four counters clacking, and the " +
+      "chorus of “HELLO WELCOME” as somebody richer walks past outside.");
+    return;
+  }
+  _say(_SOUNDS[_room().region] || "Pattaya, idling.");
+}
+
+function _doSwim() {
+  if (!["jomtien_beach", "dongtan_beach"].includes(G.room)) {
+    _say("The nearest swimmable water is a hotel pool you are not a guest of.");
+    return;
+  }
+  if (G.soc.drunk >= 4) {
+    _say("The Gulf at night, this many bottles in? The Pattaya Flying Club has " +
+      "a swimming division too, and the membership plaque is the same wall. " +
+      "You stay on the sand.");
+    return;
+  }
+  _say("You wade in to your knees. The Gulf is bathwater with ambitions. " +
+    "Somewhere off to your left a jet ski scam lies sleeping. It's actually " +
+    "rather lovely, which nobody tells you about this town.");
+}
+
+function _doDance() {
+  if (_room().barType === "gogo") {
+    _say("You dance. The professionals up on the chrome observe with the mild " +
+      "clinical interest of surgeons watching a man remove his own appendix. " +
+      "One of them, kindly, copies you.");
+  } else if (_inBar()) {
+    _say("You dance between the stools. A hostess joins you instantly and " +
+      "without inquiry — enthusiasm is the house style — and for eight bars " +
+      "of luk thung you are the floor show.");
+  } else {
+    _say("You dance alone on the pavement. A passing baht bus honks the beat, " +
+      "which is generous, because you weren't keeping one.");
+  }
+}
+
+function _doSing() {
+  if (_inBar()) {
+    _say("You give it a verse. Three hostesses join the chorus without asking " +
+      "what the song is. It has never once mattered.");
+  } else {
+    _say("You sing to the street. Somewhere down the soi a karaoke bar " +
+      "answers, worse. Honour is satisfied.");
+  }
+}
+
+const _MISC_VERBS = {
+  jump: "You jump. The pavement, a lifelong connoisseur of falling farangs, scores it a four.",
+  climb: "The only climb worth doing here is Pratumnak Hill, and there's a road to the top with a view waiting on it.",
+  throw: "You weigh it and mime the arc — and every piwin on the corner looks up at once, like meerkats. You put it down.",
+  push: "You push. Pattaya, vast and humid, declines to move.",
+  pull: "You pull. Pattaya holds. It has had stronger men than you, tilac.",
+  knock: "Nobody knocks in this town. Doors are either open or they were never for you.",
+  shout: "You shout at the night. “HELLO WELCOME!” answers a bar, instantly, out of pure muscle memory.",
+};
+
 const _HELP = `Common commands:
   LOOK · EXAMINE <thing> · TAKE <thing> · DROP <thing> · INVENTORY (I)
   N/S/E/W · IN/OUT · ENTER <place>
@@ -2698,7 +2872,8 @@ const _HELP = `Common commands:
   PLAY CONNECT 4 · PLAY JACKPOT [bet] · PLAY POOL   (in the beer bars)
   FLIRT/KISS/SPANK/FONDLE <lady> · BUY DRINK FOR <lady> · BUY BEER
   RING BELL (฿300, instant popularity) · TALK TO PATRON · BARFINE <lady>
-  EAT <food> · BUY WATER / FOOD (street carts & 7-Elevens) · SLEEP (at the hotel)
+  EAT <food> · DRINK <thing> · BUY WATER / FOOD (street carts & 7-Elevens) · SLEEP (at the hotel)
+  DIAGNOSE (how bad is it) · AGAIN or G (repeat last command)
   QUESTS · ACCEPT <quest> · ABANDON <quest>
   CONTACT <lady> (swap numbers) · MESSAGE <lady> · CHECK MESSAGES
   SEND <amount> TO <lady> (banking app)
@@ -2712,6 +2887,8 @@ function _norm(s) {
     .replace(/[“”"']/g, "")
     .replace(/^(please |can you |go )/i, m => m.toLowerCase() === "go " ? "go " : "");
 }
+
+let _lastCmd = ""; // for AGAIN/G — deliberately not serialized; repeats die with the session
 
 function doCommand(input) {
   if (!G) newGame();
@@ -2754,6 +2931,15 @@ function doCommand(input) {
     _say(`The driver is still waiting: “${thaiBaht(G.pendingFare.price)}”. (PAY <amount>)`, "thai");
     return;
   }
+
+  // AGAIN / G — repeat the last free-form command (Infocom house rule).
+  // Modal inputs above never land here, so a mid-game "g" stays a game move.
+  if ((v === "again" || v === "g") && !arg) {
+    if (!_lastCmd) { _say("Again what? You haven't done anything yet. Very Pattaya.", "dim"); return; }
+    doCommand(_lastCmd);
+    return;
+  }
+  _lastCmd = raw;
 
   if (_DIRS[v] !== undefined && words.length === 1) {
     _doGo(v); _tick(); _checkAct1(); return;
@@ -2847,6 +3033,20 @@ function doCommand(input) {
       break;
     case "tv": _doTv(); break;
     case "weather": case "forecast": _doWeather(); break;
+    case "drink": case "sip": _doDrink(arg); break;
+    case "diagnose": case "health": _doDiagnose(); break;
+    case "kill": case "attack": case "hit": case "punch": case "fight": case "strangle":
+      _doViolence(); break;
+    case "xyzzy": case "plugh": case "pray": _doMagic(v); break;
+    case "hello": case "hi": case "howdy": _doHello(arg); break;
+    case "smell": case "sniff": _doSmell(); break;
+    case "listen": case "hear": _doListen(); break;
+    case "swim": _doSwim(); break;
+    case "dance": _doDance(); break;
+    case "sing": _doSing(); break;
+    case "jump": case "climb": case "throw": case "push": case "pull":
+    case "knock": case "shout": case "yell":
+      _say(_MISC_VERBS[v === "yell" ? "shout" : v]); break;
     case "watch":
       if (!arg || /tv|news|television/.test(arg)) _doTv();
       else _say("You watch. It watches back. Pattaya.");
