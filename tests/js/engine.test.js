@@ -1147,3 +1147,103 @@ test("serialize/deserialize round-trips state", () => {
   assert.equal(state().room, "jomtien_beach_rd");
   assert.equal(state().itemLoc.bottle1, "inventory");
 });
+
+// ── The Zork ledger ────────────────────────────────────────────────────────
+// Verbs a text adventure must answer, even when the answer is no.
+
+test("drink: beer at the bar, water where it's sold, humidity elsewhere", () => {
+  state().encDone = Object.fromEntries(Object.keys(ENCOUNTERS).map(k => [k, true]));
+  state().room = "candy_bar";
+  state().money = 500;
+  run("drink beer");
+  assert.equal(state().soc.drunk, 1);
+  assert.equal(state().money, 500 - BEER_PRICE);
+  run("drink water");
+  assert.equal(state().money, 500 - BEER_PRICE - 20);
+  state().room = "jomtien_beach";
+  run("drink");
+  assert.match(lastOut(), /humidity/);
+});
+
+test("diagnose reports the damage in canon voice", () => {
+  state().soc.drunk = 4;
+  state().hunger = 75;
+  state().hurt = 1;
+  state().lastPolice = state().turns; // drunk on the sand shouldn't summon the boys in brown mid-test
+  run("diagnose");
+  assert.match(lastOut(), /4 bottles deep/);
+  assert.match(lastOut(), /banged up \(1\/3/);
+  assert.match(lastOut(), /envy the soi dogs/);
+  assert.match(lastOut(), /สนุก/);
+});
+
+test("again/g repeats the last command", () => {
+  run("wait");
+  assert.match(lastOut(), /Pattaya doesn't/);
+  out = [];
+  run("g");
+  assert.match(lastOut(), /Pattaya doesn't/);
+  out = [];
+  run("again");
+  assert.match(lastOut(), /Pattaya doesn't/);
+});
+
+test("violence is answered by the street, not the parser — and moves no state", () => {
+  state().room = "candy_bar";
+  run("hit security");
+  assert.match(lastOut(), /Security/);
+  assert.ok(!state().soc.heat.candy_bar, "flavor only — no heat");
+  state().room = "buakhao_s";
+  run("attack tout");
+  assert.match(lastOut(), /street polices itself/);
+});
+
+test("easter eggs: the hollow voice made it to Pattaya", () => {
+  run("xyzzy");
+  assert.match(lastOut(), /hollow voice/i);
+  assert.match(lastOut(), /สบายสบาย/);
+  run("hello sailor");
+  assert.match(lastOut(), /Sattahip/);
+  run("pray");
+  assert.match(lastOut(), /strawberry Fanta/);
+});
+
+test("smell and listen know what district they're in", () => {
+  state().encDone = Object.fromEntries(Object.keys(ENCOUNTERS).map(k => [k, true]));
+  run("smell"); // Jomtien beach
+  assert.match(lastOut(), /grilled squid/);
+  const ws = Object.keys(ROOMS).find(id =>
+    ROOMS[id].region === "Walking Street" && !ROOMS[id].barType);
+  state().room = ws;
+  run("listen");
+  assert.match(lastOut(), /some hero is buying a bar a round/);
+  state().room = "candy_bar";
+  run("smell", "listen");
+  assert.match(lastOut(), /Every bar in town, one smell/);
+  assert.match(lastOut(), /HELLO WELCOME/);
+});
+
+test("swimming: lovely sober, refused drunk — the Flying Club has a swimming division", () => {
+  state().encDone = Object.fromEntries(Object.keys(ENCOUNTERS).map(k => [k, true]));
+  run("swim"); // game starts on the sand
+  assert.match(lastOut(), /bathwater with ambitions/);
+  state().soc.drunk = 5;
+  state().lastPolice = state().turns;
+  out = [];
+  run("swim");
+  assert.match(lastOut(), /Flying Club/);
+  state().room = "buakhao_s";
+  run("swim");
+  assert.match(lastOut(), /hotel pool you are not a guest of/);
+});
+
+test("dance and sing read the room", () => {
+  state().encDone = Object.fromEntries(Object.keys(ENCOUNTERS).map(k => [k, true]));
+  state().room = "tequila_queen";
+  run("dance");
+  assert.match(lastOut(), /surgeons watching a man remove his own appendix/);
+  state().room = "candy_bar";
+  run("dance", "sing");
+  assert.match(lastOut(), /floor show/);
+  assert.match(lastOut(), /never once mattered/);
+});
