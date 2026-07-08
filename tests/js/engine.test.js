@@ -1079,6 +1079,41 @@ test("Japanese lady: read her right and it's a threesome; money is the wrong mov
   assert.ok(!state().flags.jpDeal, "deal flag cleared");
 });
 
+test("British lesbian: hands-on is a scene, good vibes make her a wingman", () => {
+  state().room = "ws_south";
+  state().happy = 10;
+  _startEnc("britles");
+  run("grope her");
+  assert.match(lastOut(), /do you mind|OI/i);
+  assert.ok(state().happy < 10, "confrontation stings");
+  assert.ok(state().wingmanUntil <= state().turns, "no wingman for that");
+  // played decent → wingman buff, which bumps favor
+  delete state().encDone.britles;
+  _startEnc("britles");
+  run("cheers, let me buy you a drink");
+  assert.ok(state().wingmanUntil > state().turns, "she's vouching for you now");
+  state().room = "neon_paradise"; // Noi, zero drinks bought
+  assert.equal(_favor("noi"), 2, "the wing-woman's word is worth +2 favor");
+});
+
+test("punter's wife: grope her and the husband educates you; be decent for a wingman", () => {
+  state().room = "ws_south";
+  state().money = 1000;
+  state().hurt = 0;
+  state().happy = 12;
+  _startEnc("punterwife");
+  run("grope the wife");
+  assert.match(lastOut(), /Not in my town|educational/i);
+  assert.equal(state().money, 700, "the lesson costs ฿300");
+  assert.ok(state().hurt >= 1, "and a rib");
+  assert.ok(state().happy < 12);
+  // decent → wingman
+  delete state().encDone.punterwife;
+  _startEnc("punterwife");
+  run("hello, nice to meet you");
+  assert.ok(state().wingmanUntil > state().turns);
+});
+
 test("peddler works the Beach Road bar stools; buying the watch is a choice", () => {
   state().room = "stinky_bar";
   state().money = 500;
