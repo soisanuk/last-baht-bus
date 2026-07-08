@@ -2757,7 +2757,7 @@ function _doRead(arg) {
   if (!id) { _say("You don't have that to read."); return; }
   const it = ITEMS[id];
   if (id === "receipt") {
-    _say(it.readTh, "thai");
+    _say(it.readTh, "receipt"); // mono, un-enlarged Thai so the columns align
     _say(it.readEn);
     if (!_flag("knowWasHere")) {
       _setFlag("knowWasHere");
@@ -2820,8 +2820,30 @@ function _waiEffect(id) {
   }
 }
 
-function _doSay(arg) {
+function _doSay(arg, targetWord) {
   const key = matchThaiPhrase(arg);
+  const target = (targetWord || "").trim();
+
+  // SAY <phrase> TO <person>: aim it at one person, get their reaction — the
+  // directed cousin of the room-wide SAY below, and distinct from TALK (which
+  // fires the NPC's own dialogue, not yours).
+  if (target) {
+    let id = _findNpc(target);
+    const patronHere = _inBar() && /patron|regular|expat|customer|guy|bloke|farang/.test(target);
+    if (!id && !patronHere) { _say("They're not here to hear it."); return; }
+    const name = id ? NPCS[id].name : "the regular";
+    if (!key) {
+      _say(`You try a phrase on ${name}, who receives it with the fond, baffled ` +
+        "smile of someone who did not catch a word but liked the effort.");
+      return;
+    }
+    const phrase = THAI_PHRASES.find(p => p.key === key);
+    _say(`You say to ${name}: “${phrase.th}” (${phrase.rom})`, "thai");
+    _engineSpeak(phrase.th);
+    _sayDirectedReact(key, id, name);
+    return;
+  }
+
   if (!key) { _say("You give it your best shot. A passing lady pats your arm kindly."); return; }
   const phrase = THAI_PHRASES.find(p => p.key === key);
   _say(`You say: “${phrase.th}” (${phrase.rom})`, "thai");
@@ -2839,6 +2861,44 @@ function _doSay(arg) {
   } else {
     _say("Laughter and approval. สนุก!");
   }
+}
+
+// One matched phrase, aimed at one person. `id` is null for the ambient bar
+// regular. Greetings run the per-NPC unlock (_waiEffect) so SAY สวัสดี TO FON
+// works like WAI FON; the rest are targeted flavor.
+function _sayDirectedReact(key, id, name) {
+  const role = id ? NPC_ROLES[id] : null;
+  if (key === "hello") {
+    if (id) _waiEffect(id); // fires greetedFon / waiedOy / waiedPloy once
+    _say(`${name} returns it — palms not quite together, but the warmth is real.`);
+    return;
+  }
+  if (key === "thanks") {
+    _say(`${name} wais back, pleased. Manners are the strongest currency on the soi.`);
+    return;
+  }
+  if (key === "how_much") {
+    if (role) {
+      _say(`${name} laughs. “For talk? Free, tilac.” She taps the lady-drink menu. ` +
+        `“Everything else start at ฿${LADY_DRINK}.”`, "thai");
+    } else if (id === "bank" || (id && NPCS[id].emoji === "🏍️")) {
+      _say(`${name} grins: “${thaiBaht(MOTOSAI_TOWN)} in town, ${thaiBaht(MOTOSAI_FAR)} to Darkside.”`, "thai");
+    } else {
+      _say(`${name} spreads their hands. “Depends what you buying, boss.”`);
+    }
+    return;
+  }
+  if (key === "no") {
+    _say(`${name} accepts the “mai ao” with theatrical, entirely insincere disappointment.`);
+    return;
+  }
+  if (key === "delicious") {
+    _say(`${name} beams. “Chai! Aroi mak.” Complimenting the food is never the wrong move.`);
+    return;
+  }
+  // fun
+  _say(`“Sanuk mak!” ${name} toasts the sentiment and the night nudges upward.`);
+  _addHappy(1);
 }
 
 function _doGive(itemWord, npcWord) {
@@ -3576,7 +3636,7 @@ const _HELP = `Common commands:
   LOOK · EXAMINE <thing> · TAKE <thing> · DROP <thing> · INVENTORY (I)
   N/S/E/W · IN/OUT · ENTER <place>
   TALK TO <person> · ASK <person> ABOUT <topic> · GIVE <thing> TO <person>
-  WAI [person] · SAY <thai phrase>
+  WAI [person] · SAY <thai phrase> [TO <person>]
   RIDE BUS TO <place> · MOTOSAI TO <place> · PAY <amount>
   BUY <thing> · SELL BOTTLES · READ <thing> · READ SIGN
   WATCH TV (bars) · READ PAPER (bars & 7-Elevens) — the day's real headlines
@@ -3674,6 +3734,10 @@ function _completePool(verb, ctx) {
     case "check": return ["messages"];
     case "throw": case "toss": case "chuck": case "fling":
       return ctx.length >= 2 ? girls() : ["cover", "pastie", "nipple cover"];
+    case "say": case "speak":
+      // a matched phrase already sitting there → offer who to aim it at
+      return ctx.slice(1).some(w => matchThaiPhrase(w))
+        ? _cNpcsHere() : ["sawatdee", "khop khun", "thao rai", "mai ao", "aroi", "sanuk", "sorry"];
     case "ring": return ["bell"];
     case "charge": return ["phone"];
     case "sell": return ["bottles"];
@@ -3823,10 +3887,17 @@ function doCommand(input) {
     case "buy": case "order": _doBuy(arg); break;
     case "pay": _doPay(arg); break;
     case "wai": _doWai(arg); break;
-    case "say": case "speak":
-      if (/^(sorry|khor ?thot|kho ?thot|ขอโทษ)/.test(arg)) _doApologize();
-      else _doSay(rest.join(" "));
+    case "say": case "speak": {
+      // SAY <phrase> [TO <person>] — "to" is stripped from `arg`, so split the
+      // raw rest to keep the target. Directed sorry still routes to the apology.
+      const said = rest.join(" ");
+      const m = said.match(/^(.*?)\s+to\s+(.+)$/);
+      const phraseText = (m ? m[1] : said).trim();
+      const targetW = m ? m[2].replace(/^(the|a|an)\s+/, "").trim() : "";
+      if (/^(sorry|khor ?thot|kho ?thot|ขอโทษ)/.test(phraseText)) _doApologize();
+      else _doSay(phraseText, targetW);
       break;
+    }
     case "apologize": case "apologise": case "apology": case "sorry":
       _doApologize(); break;
     case "ride": case "catch":
