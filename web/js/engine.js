@@ -2757,7 +2757,7 @@ function _doRead(arg) {
   if (!id) { _say("You don't have that to read."); return; }
   const it = ITEMS[id];
   if (id === "receipt") {
-    _say(it.readTh, "thai");
+    _say(it.readTh, "receipt"); // mono, un-enlarged Thai so the columns align
     _say(it.readEn);
     if (!_flag("knowWasHere")) {
       _setFlag("knowWasHere");

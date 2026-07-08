@@ -90,6 +90,11 @@
   .t-room  { color: var(--yellow); font-weight: bold;
              text-shadow: 0 0 12px #ffe60060; }
   .t-thai  { color: var(--cyan); text-shadow: 0 0 10px #00e5ff50; }
+  /* pre-formatted Thai blocks (the 7-Eleven receipt) whose dot-leader columns
+     assume even glyph widths: opt them OUT of the 133% "Thai XL" face so the
+     columns line up the way they did before the trainer-font bump. */
+  .t-receipt { color: var(--cyan); text-shadow: 0 0 10px #00e5ff50;
+               font-family: "SF Mono", "Cascadia Mono", Menlo, Consolas, "Noto Sans Thai", monospace; }
   .t-dim   { color: var(--violet); font-size: .88em; }
   .t-alert { color: var(--red); text-shadow: 0 0 10px #ff335550; }
   .t-win   { color: var(--yellow); font-weight: bold;
