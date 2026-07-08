@@ -1339,6 +1339,17 @@ function _doPatron() {
     return;
   }
   const d = s.drunk;
+  // the moaning index: no expat conversation survives contact with the baht
+  if (_fxRates() && _rand() < 0.2) {
+    const [code, sym, name] = _FX_CURRENCIES[Math.floor(_rand() * _FX_CURRENCIES.length)];
+    const rate = _fxRates()[code];
+    const golden = Math.round(rate * 1.25);
+    _say(`The regular taps his phone calculator like it owes him money. ` +
+      `“฿${rate}. That's what ${name} gets you now — ${sym}1, ฿${rate}. When I ` +
+      `moved out here it was ฿${golden}. THIS TOWN USED TO BE CHEAP.” The girls ` +
+      `mouth the speech along with him, word for word, nightly for nine years.`);
+    return;
+  }
   // a man with a paper and opinions — when there are headlines to have them about
   if (_newsFeed().length && _rand() < 0.25) {
     const h = _headline();
@@ -1915,6 +1926,19 @@ function _maybeIncomingText() {
 
 function _newsFeed() { return typeof NEWS_FEED === "undefined" ? [] : NEWS_FEED; }
 
+function _fxRates() { return typeof FX_RATES === "undefined" ? null : FX_RATES; }
+
+const _FX_CURRENCIES = [
+  ["USD", "$", "the dollar"], ["GBP", "£", "the pound"],
+  ["AUD", "A$", "the Aussie dollar"], ["EUR", "€", "the euro"],
+];
+
+function _fxLine() {
+  const fx = _fxRates();
+  if (!fx) return null;
+  return _FX_CURRENCIES.map(([c, sym]) => `${sym}1 = ฿${fx[c]}`).join(" · ");
+}
+
 function _headline() {
   const feed = _newsFeed();
   return feed.length ? feed[Math.floor(_rand() * feed.length)] : null;
@@ -1933,6 +1957,8 @@ function _doTv() {
     _sayHeadline(h);
     const h2 = _headline();
     if (h2 && h2.t !== h.t) _sayHeadline(h2);
+    const fx = _fxLine();
+    if (fx) _say(`The ticker crawls underneath: ${fx}`, "dim");
     _say("The bar absorbs the state of the world and orders another round at it.", "dim");
   } else {
     _say("Tonight it's muay thai highlights and the lottery draw. The bar approves " +
@@ -1960,6 +1986,8 @@ function _doPaper() {
     const h = _headline();
     if (h && !seen.has(h.t)) { seen.add(h.t); _sayHeadline(h); }
   }
+  const fx = _fxLine();
+  if (fx) _say(`Corner of the business page, the numbers every expat reads first: ${fx}`, "thai");
   _say("Somewhere in there, the fuel prices explain your bus fare.", "dim");
 }
 

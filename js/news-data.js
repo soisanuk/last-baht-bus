@@ -8,8 +8,8 @@ var NEWS_FEED = [
     "d": "06 Jul 2026"
   },
   {
-    "t": "Pattaya’s July weather brings cooler afternoons and refreshing seaside atmosphere",
-    "s": "Pattaya Mail",
+    "t": "Meliá Pattaya Hotel Launches Rooftop Sound Healing Experiences Overlooking the Gulf of Thailand",
+    "s": "Hotelier Buzz",
     "d": "07 Jul 2026"
   },
   {
@@ -18,29 +18,29 @@ var NEWS_FEED = [
     "d": "07 Jul 2026"
   },
   {
-    "t": "Chinese suspected surrogacy syndicate leaders arrested in Pattaya, face extradition",
-    "s": "Pattaya Mail",
+    "t": "Friend suspects gambling debt link after man found dead on Pattaya beach",
+    "s": "Thaiger",
     "d": "07 Jul 2026"
   },
   {
-    "t": "Pattaya says this time is a warning as businesses promise to keep signs inside",
-    "s": "Pattaya Mail",
-    "d": "07 Jul 2026"
-  },
-  {
-    "t": "Pattaya baht bus driver sanctioned over 300-baht fare, issues public apology",
-    "s": "Pattaya Mail",
+    "t": "Russian woman returns lost Pattaya wallet with 22,700 baht",
+    "s": "Thaiger",
     "d": "06 Jul 2026"
   },
   {
-    "t": "Diesel and gasoline prices fall in Thailand following latest adjustment",
-    "s": "Pattaya Mail",
-    "d": "07 Jul 2026"
+    "t": "Chinese tourist refuses alcohol test after Pattaya crash",
+    "s": "Thaiger",
+    "d": "06 Jul 2026"
   },
   {
-    "t": "Foreign visitors reminded to carry proof of funds when entering Thailand",
-    "s": "Pattaya Mail",
-    "d": "07 Jul 2026"
+    "t": "2 Chinese surrogacy suspects wanted by China arrested in Pattaya",
+    "s": "Thaiger",
+    "d": "06 Jul 2026"
+  },
+  {
+    "t": "Gas canister fire at Pattaya condo injures American man",
+    "s": "Thaiger",
+    "d": "06 Jul 2026"
   },
   {
     "t": "Thai PM warns may ‘shut down’ cannabis industry after global smuggling spike",
@@ -48,9 +48,14 @@ var NEWS_FEED = [
     "d": "06 Jul 2026"
   },
   {
-    "t": "‘They ate the shrimp, they even ate the crab’: Thai fishers count the cost of a voracious invader",
-    "s": "The Guardian",
-    "d": "05 Jul 2026"
+    "t": "Skeletal remains with 2,000-year-old gold rings found by archaeologists in Thailand",
+    "s": "CBS News",
+    "d": "07 Jul 2026"
+  },
+  {
+    "t": "Fitness YouTuber Connor Murphy Reportedly Found Dead in Thailand Lake",
+    "s": "Yahoo",
+    "d": "08 Jul 2026"
   },
   {
     "t": "Thailand Woos Heat-Weary Europeans With Travel and ACs",
@@ -58,18 +63,15 @@ var NEWS_FEED = [
     "d": "08 Jul 2026"
   },
   {
-    "t": "Skeletal remains with 2,000-year-old gold rings found by archaeologists in Thailand",
-    "s": "CBS News",
-    "d": "07 Jul 2026"
-  },
-  {
-    "t": "Woman quits Google after 8 years despite promotions and perks, says 'Thailand led me to a career I never expected' | Hindustan Times - Hindu",
-    "s": "Hindustan Times",
-    "d": "07 Jul 2026"
-  },
-  {
     "t": "Save $2,865 on a 5-Night Thailand Treehouse Vacation for Two",
     "s": "Fodors Travel Guide",
     "d": "06 Jul 2026"
+  },
+  {
+    "t": "Thailand to open new border crossing with Malaysia to boost trade, logistics, and tourism",
+    "s": "The Star",
+    "d": "07 Jul 2026"
   }
 ];
+// THB per 1 unit — the expat moaning index
+var FX_RATES = {"date":"2026-07-07","USD":33.26,"AUD":23.11,"GBP":44.52,"EUR":38.02};
