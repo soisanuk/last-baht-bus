@@ -805,6 +805,34 @@ const NPCS = {
     ],
   },
 
+  aek: {
+    name: "Aek", th: "เอก", emoji: "⚡",
+    room: "midnight_sun",
+    desc: "The cashier, planted behind the till like she grew there — cropped hair, " +
+      "oversized bar polo, a silver ring through one nostril and a biro tucked behind " +
+      "her ear. Tom through and through: she runs the money, calls the floor, and misses " +
+      "nothing across the whole open front of the bar.",
+    dialogue: [
+      { th: "ว่าไง", rom: "wa ngai",
+        text: "\"New face.\" She totals a tab without looking down, the nose ring catching " +
+          "the neon. \"Aek. I hold the money and the gossip — same drawer. Boards are free, " +
+          "pool's a hundred a rack, and if you upset one of my girls I hear about it before " +
+          "you finish the sentence.\" A flat, friendly warning.",
+        short: "\"Aek. I hold the money and the gossip — same drawer. Don't upset my girls.\"" },
+      { topic: "girls", text: "\"Best-run floor on Walking Street, and I keep it that way from " +
+        "right here.\" The biro taps the till. \"Noi, two doors down at Neon Paradise — that " +
+        "one's mine. Six months. And yes, a tom can be jealous, so mind your manners when you " +
+        "drink down there.\"" },
+      { topic: "noi", text: "\"Noi's my girlfriend. Neon Paradise — tall, does the knowing " +
+        "look.\" The hard face softens for exactly one baht's worth of time. \"She practise " +
+        "that look on me first, every night. Buy HER a lady drink, not me — I don't drink on " +
+        "the job, I count.\"" },
+      { topic: "oy", text: "\"Madam Oy? Respect. Only mamasan on this street ever bothered to " +
+        "learn a cashier's name.\" Aek shrugs. \"She trust toms with the drawer — say we don't " +
+        "fall for the customers and rob the till. She's not wrong.\"" },
+    ],
+  },
+
   aom: {
     name: "Aom", th: "อ้อม", emoji: "🌙",
     room: "club_mirage",
@@ -1287,7 +1315,7 @@ const NPC_ROLES = {
   lek: "hostess", noi: "hostess", ping: "hostess", aom: "hostess",
   joy: "hostess", fon: "hostess", gift: "hostess", kwan: "hostess",
   nong: "hostess", pim: "hostess", bee: "hostess",
-  ploy: "cashier",
+  ploy: "cashier", aek: "cashier",
   candy: "mamasan", oy: "mamasan", daeng: "mamasan", mem: "mamasan",
 };
 
