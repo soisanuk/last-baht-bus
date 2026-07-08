@@ -53,11 +53,25 @@ Mobile gets tappable verb chips; desktop gets ↑/↓ command history.
   a vending machine. Beer bars ฿400, go-gos ฿1,000, and the rest of that
   night is nobody's business but the soi's (+10 สนุก). Soi 6 (฿700) has
   "upstairs", and the night carries on. Mamasans are not barfineable;
-  cashiers only after the bell has rewritten the rules.
+  cashiers only after the bell has rewritten the rules. **The clock sets the
+  rate**: before 21:00 you pay for her whole lost shift (×1.5); after
+  midnight most beer bars quietly close the book — except for the popular
+  girls, who stay on it at any hour. And if you're a true regular, late
+  enough and liked enough, a girl may pay her **own** barfine. It's the
+  highest compliment the soi pays; don't say no.
+- **The daily damage**: on vacation, the lobby ATM surrenders ฿3,000 on your
+  way out each evening. Spend it well — or don't, and see which feels better.
+- **The boy in brown**: weave down a lit street five bottles deep and a
+  police officer may take up station in your path. Pay the "fine" (฿500), wai
+  and apologise in Thai (฿300), or argue (฿1,000, plus a friend). If a
+  mamasan you've treated well is in line of sight, she may cross the soi at
+  ramming speed and collect you like an aunt.
 - **Survival, lightly**: EAT and BUY WATER at street carts, 7-Elevens, and
-  Auntie Nok's; too hungry, too thirsty, too drunk, or too banged-up and the
-  night ends early — a burned vacation day and a sadder meter. SLEEP at the
-  hotel ends a night on your own terms; 04:00 ends it regardless.
+  Auntie Nok's — every district has a 7-Eleven pressing the iconic cheese
+  toastie (฿35, eaten molten on the kerb like every farang before you). Too
+  hungry, too thirsty, too drunk, or too banged-up and the night ends early —
+  a burned vacation day and a sadder meter. SLEEP at the hotel ends a night
+  on your own terms; 04:00 ends it regardless.
 - **Bar life**: FLIRT, KISS, and worse — outcomes scale with how many lady
   drinks (฿150) you've bought her, from a slap through tolerance to genuine
   reciprocation. Roles matter: cashiers and mamasans allow light contact only.
@@ -241,7 +255,7 @@ flowchart TD
 node --test
 ```
 
-112 tests: Thai number composition, world/map integrity (every exit resolves,
+120 tests: Thai number composition, world/map integrity (every exit resolves,
 all 15 canon bars present, the gossip chain's flags all connect), parser,
 systems, street encounters, bar mini-games and social life, and a full
 scripted playthrough from the beach to the happy ending — run headless via

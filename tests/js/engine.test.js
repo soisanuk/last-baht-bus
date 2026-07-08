@@ -666,6 +666,7 @@ test("soi 6 barfine: upstairs, and the night carries on", () => {
   state().flags.hasWallet = true;
   state().room = "pink_lotus";
   state().money = 1000;
+  state().nightTurn = 40; // 22:00 — base rate
   state().soc.drinks.joy = 2;
   run("barfine joy");
   assert.equal(state().room, "pink_lotus", "still on your stool");
@@ -687,6 +688,103 @@ test("no barfining the mamasan, and heat freezes negotiations", () => {
   run("barfine fon");
   assert.match(lastOut(), /Not tonight, tilac/i);
   assert.equal(state().day, 2);
+});
+
+test("barfine pricing follows the clock: peak early, waived after midnight", () => {
+  assert.equal(state().nightTurn, 0); // 18:00
+  assert.equal(_barfinePrice("beer", "lek"), 600);   // ×1.5 early
+  assert.equal(_barfinePrice("gogo", "gift"), 1500);
+  state().nightTurn = 40;                            // 22:00 — base
+  assert.equal(_barfinePrice("beer", "lek"), 400);
+  state().nightTurn = 65;                            // past midnight
+  assert.equal(_barfinePrice("beer", "lek"), 0, "book closed for the rank and file");
+  assert.equal(_barfinePrice("beer", "fon"), 300, "popular girls stay on the book");
+  assert.equal(_barfinePrice("gogo", "gift"), 750);
+});
+
+test("after midnight the beer-bar barfine is waived (favor still required)", () => {
+  state().flags.act1Done = true;
+  state().flags.hasWallet = true;
+  state().room = "lucky_tiger";
+  state().money = 100;
+  state().nightTurn = 65;
+  state().soc.drinks.lek = 4;
+  run("barfine lek");
+  assert.equal(state().money, 100, "no fee changed hands");
+  assert.equal(state().day, 3, "and the night still ends grandly");
+});
+
+test("a regular's girl may barfine herself — the YES path ends the night", () => {
+  state().flags.act1Done = true;
+  state().flags.hasWallet = true;
+  state().room = "jasmine_garden";
+  state().soc.selfBf = true; // as _maybeSelfBarfine would have set
+  state().selfBfId = "fon";
+  state().pendingEnc = "selfbf";
+  const h = state().happy;
+  run("yes");
+  assert.equal(state().day, 3);
+  assert.ok(state().happy >= h + 12, `happy ${state().happy}`);
+});
+
+test("the lobby ATM pays ฿3000 once per vacation day", () => {
+  state().flags.act1Done = true;
+  state().flags.hasWallet = true;
+  state().stage = "vacation";
+  state().room = "hotel_room";
+  state().money = 100;
+  run("out");
+  assert.equal(state().money, 3100);
+  assert.match(lastOut(), /daily damage/i);
+  run("n", "out"); // back in, back out — no double dip
+  assert.equal(state().money, 3100);
+});
+
+test("every district's 7-Eleven presses the iconic cheese toastie", () => {
+  state().room = "beach_rd_c";
+  state().money = 100;
+  state().hunger = 60;
+  run("buy toastie");
+  assert.equal(state().money, 65);
+  assert.ok(state().hunger <= 25);
+  assert.match(lastOut(), /cheese toastie/i);
+});
+
+// ── The boy in brown ───────────────────────────────────────────────────────
+
+test("public drunkenness summons the boy in brown; manners halve the damage", () => {
+  state().room = "beach_rd_n"; // no mama-treated bar adjacent
+  state().money = 1000;
+  state().pendingEnc = "police";
+  run("wai and apologise, khrap");
+  assert.equal(state().money, 700);
+  state().pendingEnc = "police";
+  run("pay the fine");
+  assert.equal(state().money, 200);
+  state().pendingEnc = "police";
+  run("absolutely not");
+  assert.equal(state().money, 0, "arguing doubles it");
+});
+
+test("a mamasan in line of sight can rescue you from the shakedown", () => {
+  state().room = "buakhao_market"; // Cindy Bar is adjacent
+  state().money = 1000;
+  state().soc.mamaTreat.cindy_bar = true;
+  state().rng = 3; // first _rand() < 0.7 → rescue fires
+  state().pendingEnc = "police";
+  run("um");
+  assert.equal(state().money, 1000, "not a baht");
+  assert.match(lastOut(), /walk STRAIGHT/i);
+});
+
+test("drunk street walking rolls the police encounter", () => {
+  state().room = "beach_rd_s";
+  state().soc.drunk = 6;
+  state().turns = 100;
+  state().lastPolice = 0;
+  state().encDone = Object.fromEntries(Object.keys(ENCOUNTERS).map(k => [k, true]));
+  for (let i = 0; i < 100 && state().pendingEnc !== "police"; i++) _maybeEncounter();
+  assert.equal(state().pendingEnc, "police", "the whistle eventually blows");
 });
 
 // ── The week and the stages ────────────────────────────────────────────────
