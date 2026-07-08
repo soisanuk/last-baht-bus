@@ -66,6 +66,7 @@ function newGame() {
     selfBfId: null,      // hostess offering to barfine herself
     rain: 0,             // downpour turns remaining (0 = dry)
     lastRain: -99,       // turn the last downpour began
+    lastDrizzle: -99,    // turn of the last light-rain vignette
     quests: {},          // questId → "offered" | "active" | "done" | "abandoned"
     quizPlayed: {},      // roomId → true (one quiz per bar per Thursday)
     phone: {             // the other half of your most important possession
@@ -104,6 +105,7 @@ function deserializeGame(s) {
   }
   if (G.atmDay === undefined) { G.atmDay = 0; G.lastPolice = -99; G.selfBfId = null; }
   if (G.rain === undefined) { G.rain = 0; G.lastRain = -99; }
+  if (G.lastDrizzle === undefined) G.lastDrizzle = -99;
   if (!G.quests) G.quests = {};
   if (!G.phone) {
     G.phone = { contacts: {}, inbox: [], lastText: 0, msgCd: {}, invite: null };
@@ -284,6 +286,9 @@ function _tick() {
     }
   } else if (_wxStormy() && G.turns - G.lastRain >= 30 && _rand() < 0.08) {
     _startRain(3 + Math.floor(_rand() * 6));
+  } else if (_wxRainy() && G.turns - G.lastDrizzle >= 15 && _rand() < 0.06) {
+    G.lastDrizzle = G.turns; // light rain: atmosphere only, never mechanics
+    _sayDrizzle();
   }
   // the peddlers work the Beach Road bars, stool to stool
   if (!G.game && !G.pendingEnc && _inBar() && _room().region === "Beach Road" &&
@@ -1387,9 +1392,17 @@ function _doPatron() {
   // the other liturgy: no expat has ever been the right temperature
   if (_wxNow() && _rand() < 0.15) {
     const wx = _wxNow();
-    _say(`The regular fans himself with a beer mat. “${wx.temp} degrees,” he ` +
-      `announces, as though personally wronged. “But it's not the heat, is it. ` +
-      `It's the humidity.” The humidity, currently ${wx.humid}%, declines to comment.`);
+    if (_wxRainy()) {
+      _say("The regular nods at the doorway, where the rain has just started " +
+        "ticking on the awning again and a hostess is already hauling the " +
+        "street stools in. “Rainy season, mate. The girls love it — barfine " +
+        "weather, they call it. Nobody goes home alone in the rain.” He says " +
+        "it like a man quoting scripture, which, locally, he is.");
+    } else {
+      _say(`The regular fans himself with a beer mat. “${wx.temp} degrees,” he ` +
+        `announces, as though personally wronged. “But it's not the heat, is it. ` +
+        `It's the humidity.” The humidity, currently ${wx.humid}%, declines to comment.`);
+    }
     return;
   }
   // a man with a paper and opinions — when there are headlines to have them about
@@ -2008,6 +2021,39 @@ function _wxLine() {
 function _wxStormy() {
   const wx = _wxNow();
   return !!wx && (wx.code >= 95 || [63, 65, 81, 82].includes(wx.code));
+}
+
+// any rain in the forecast at all — drizzle families, showers, thunder, or
+// just high odds. Enables the LIGHT-RAIN vignettes: pure atmosphere, no
+// mechanics, the town performing its wet-season drill.
+function _wxRainy() {
+  const wx = _wxNow();
+  return !!wx && ((wx.code >= 51 && wx.code <= 82) || wx.code >= 95 || wx.rain >= 50);
+}
+
+function _sayDrizzle() {
+  const alt = G.turns % 2 === 0; // variant by parity — no dice for flavor
+  if (_inBar()) {
+    _say(alt ?
+      "A few fat drops hit the awning, then a few more. Without a word, two of " +
+      "the girls slip out and bring the street-side barstools in, stacking them " +
+      "dry — a drill they could run asleep. The mamasan glances at the sky, " +
+      "unimpressed. The music doesn't miss a beat." :
+      "Light rain starts ticking on the roof. The hostess nearest the door " +
+      "leans out, palm up, and delivers the verdict — “nit noi.” Nothing. She " +
+      "goes back to her phone. The barstools come in anyway. The barstools " +
+      "always come in.", "dim");
+  } else {
+    _say(alt ?
+      "A soft rain drifts in off the Gulf. Up the road a baht bus pulls over " +
+      "mid-route and the driver hops out, unhurried, to roll the canvas rain " +
+      "guards down the sides — the passengers clip the last one themselves, a " +
+      "crew that has clearly done this before. It pulls away trailing spray." :
+      "Light rain, barely worth the name. The pavement goes glossy and the neon " +
+      "doubles itself in it. Umbrellas appear from nowhere — the vendors sell " +
+      "them mid-shower, naturally — and the town carries on at exactly the same " +
+      "speed, slightly shinier.", "dim");
+  }
 }
 
 function _sheltered(id) {
