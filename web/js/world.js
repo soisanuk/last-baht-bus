@@ -12,6 +12,7 @@ const MOTOSAI_FAR  = 100;// motosai to/from the Darkside
 const LADY_DRINK = 150;  // canon
 const BEER_PRICE = 80;   // your own big Chang, bar price
 const BELL_PRICE = 300;  // ring it and the round is on you
+const BRA_PRICE = 200;   // the mamasan's drawer novelty; makes fondling "interesting"
 const CHARGER_PRICE = 59;
 const SAFE_CASH = 3000;  // the emergency stash in the hotel room safe
 const EXPAT_SAVINGS = 20000; // wired over when you make the move

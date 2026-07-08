@@ -557,6 +557,25 @@ test("throw with no cover keeps the old flavor refusal; none-here is a no-op jok
   assert.match(lastOut(), /short one dancer|needs a braless dancer/i);
 });
 
+test("buying the bra bumps fondle one tier and is favor- and money-gated", () => {
+  state().room = "neon_paradise"; // Noi, hostess
+  state().money = 1000;
+  // cold: no wardrobe talk without a drink first
+  run("buy bra for noi");
+  assert.match(lastOut(), /DRINK first/i);
+  assert.ok(!(state().soc.bra && state().soc.bra.noi));
+  // warm her up, buy the bra, confirm the charge and the flag
+  state().soc.drinks.noi = 2;
+  run("buy bra for noi");
+  assert.equal(state().soc.bra.noi, true);
+  assert.equal(state().money, 800); // -฿200
+  // favor 2 − fondle 5 = -3 (tier-0 slap) without the bra; +2 bump lifts it off
+  // the hard rebuff.
+  out = [];
+  run("fondle noi");
+  assert.doesNotMatch(lastOut(), /drops the bar five degrees/i);
+});
+
 test("hands off the mamasan; twice gets you walked out of all of LK Metro", () => {
   state().room = "rainbow_girls";
   run("fondle oy");
