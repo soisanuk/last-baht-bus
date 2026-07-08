@@ -81,6 +81,47 @@ async function fetchRates() {
   return null;
 }
 
+// ── Weather: the other thing expats moan about ───────────────────────────────
+// Pattaya current conditions + today's rain odds from Open-Meteo (free, no
+// key). Same deal as FX: previous bake as fallback, absent is legal.
+
+async function fetchWeather() {
+  try {
+    const r = await fetch("https://api.open-meteo.com/v1/forecast" +
+      "?latitude=12.9236&longitude=100.8825" +
+      "&current=temperature_2m,relative_humidity_2m,weather_code" +
+      "&daily=precipitation_probability_max,temperature_2m_max" +
+      "&forecast_days=1&timezone=Asia%2FBangkok");
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    const j = await r.json();
+    return {
+      date: String(j.current.time || "").slice(0, 10),
+      temp: Math.round(j.current.temperature_2m),
+      humid: Math.round(j.current.relative_humidity_2m),
+      code: j.current.weather_code | 0,
+      hi: Math.round(j.daily.temperature_2m_max[0]),
+      rain: Math.round(j.daily.precipitation_probability_max[0] ?? 0),
+    };
+  } catch (e) {
+    console.error(`open-meteo: ${e.message} — salvaging previous weather`);
+  }
+  try {
+    const prev = readFileSync(OUT, "utf8");
+    const m = prev.match(/var WX_NOW = (\{[\s\S]*?\});/);
+    if (m) return JSON.parse(m[1]);
+  } catch {}
+  return null;
+}
+
+const wxSane = w => w && w.temp > 5 && w.temp < 50 &&
+  w.humid >= 0 && w.humid <= 100 && w.rain >= 0 && w.rain <= 100;
+
+const wx = await fetchWeather();
+if (wx) {
+  if (!wxSane(wx)) console.error("weather failed the sniff test — dropping it");
+  else console.log(`weather: ${wx.temp}° · ${wx.humid}% · rain ${wx.rain}%`);
+}
+
 const fx = await fetchRates();
 if (fx) {
   const bad = FX_SYMBOLS.some(c => !(fx[c] > 1 && fx[c] < 500)); // sanity fence
@@ -125,6 +166,10 @@ const body =
   (fx && FX_SYMBOLS.every(c => fx[c] > 1 && fx[c] < 500)
     ? "// THB per 1 unit — the expat moaning index\n" +
       "var FX_RATES = " + JSON.stringify(fx) + ";\n"
+    : "") +
+  (wxSane(wx)
+    ? "// Pattaya right now — the other moaning index\n" +
+      "var WX_NOW = " + JSON.stringify(wx) + ";\n"
     : "");
 
 if (body === previous) {

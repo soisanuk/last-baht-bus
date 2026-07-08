@@ -3,14 +3,14 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
-    "t": "Cannabis king found dead in Thai villa",
-    "s": "News.com.au",
-    "d": "06 Jul 2026"
+    "t": "EC certifies Chadchart’s Bangkok governor win, Pattaya mayor result",
+    "s": "Nation Thailand",
+    "d": "08 Jul 2026"
   },
   {
-    "t": "Meliá Pattaya Hotel Launches Rooftop Sound Healing Experiences Overlooking the Gulf of Thailand",
-    "s": "Hotelier Buzz",
-    "d": "07 Jul 2026"
+    "t": "Driver tries to beat barrier at Pattaya railway crossing, gets stuck",
+    "s": "Thaiger",
+    "d": "08 Jul 2026"
   },
   {
     "t": "Jomtien’s rubbish problem refuses to go away",
@@ -28,11 +28,6 @@ var NEWS_FEED = [
     "d": "06 Jul 2026"
   },
   {
-    "t": "Chinese tourist refuses alcohol test after Pattaya crash",
-    "s": "Thaiger",
-    "d": "06 Jul 2026"
-  },
-  {
     "t": "2 Chinese surrogacy suspects wanted by China arrested in Pattaya",
     "s": "Thaiger",
     "d": "06 Jul 2026"
@@ -43,18 +38,23 @@ var NEWS_FEED = [
     "d": "06 Jul 2026"
   },
   {
+    "t": "Chinese tourist refuses alcohol test after Pattaya crash",
+    "s": "Thaiger",
+    "d": "06 Jul 2026"
+  },
+  {
     "t": "Thai PM warns may ‘shut down’ cannabis industry after global smuggling spike",
     "s": "South China Morning Post",
     "d": "06 Jul 2026"
   },
   {
-    "t": "Skeletal remains with 2,000-year-old gold rings found by archaeologists in Thailand",
-    "s": "CBS News",
-    "d": "07 Jul 2026"
+    "t": "Forget Thailand, Visit This Tropical Paradise With Coral Reefs, River Cruises, And Cool Wildlife",
+    "s": "islands.com",
+    "d": "06 Jul 2026"
   },
   {
-    "t": "Fitness YouTuber Connor Murphy Reportedly Found Dead in Thailand Lake",
-    "s": "Yahoo",
+    "t": "handmade elephant-dung bricks make goya tower rise in southern thailand",
+    "s": "Designboom",
     "d": "08 Jul 2026"
   },
   {
@@ -63,15 +63,17 @@ var NEWS_FEED = [
     "d": "08 Jul 2026"
   },
   {
-    "t": "Save $2,865 on a 5-Night Thailand Treehouse Vacation for Two",
-    "s": "Fodors Travel Guide",
-    "d": "06 Jul 2026"
+    "t": "Skeletal remains with 2,000-year-old gold rings found by archaeologists in Thailand",
+    "s": "CBS News",
+    "d": "07 Jul 2026"
   },
   {
-    "t": "Thailand to open new border crossing with Malaysia to boost trade, logistics, and tourism",
-    "s": "The Star",
+    "t": "A Pair of 2,000-Year-Old Gold Rings, One Engraved With Indian Script, Was Discovered in an Iron Age Burial Ground in Thailand - Smithsonian ",
+    "s": "Smithsonian Magazine",
     "d": "07 Jul 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-07-07","USD":33.26,"AUD":23.11,"GBP":44.52,"EUR":38.02};
+// Pattaya right now — the other moaning index
+var WX_NOW = {"date":"2026-07-08","temp":31,"humid":60,"code":1,"hi":32,"rain":31};

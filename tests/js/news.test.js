@@ -32,6 +32,17 @@ test("FX_RATES, when baked, carry plausible baht rates for the big four", () => 
   }
 });
 
+test("WX_NOW, when baked, carries plausible Pattaya conditions", () => {
+  const ctx = vm.createContext({});
+  vm.runInContext(src("news-data.js"), ctx);
+  const wx = vm.runInContext("typeof WX_NOW === 'undefined' ? null : WX_NOW", ctx);
+  if (!wx) return; // a bake without weather is legal — the engine degrades
+  assert.ok(wx.temp > 5 && wx.temp < 50, `temp ${wx.temp}° — plausible`);
+  assert.ok(wx.humid >= 0 && wx.humid <= 100, `humidity ${wx.humid}%`);
+  assert.ok(wx.rain >= 0 && wx.rain <= 100, `rain chance ${wx.rain}%`);
+  assert.equal(typeof wx.code, "number", "WMO weather code present");
+});
+
 test("engine: TV and paper read the feed when present, degrade without it", () => {
   // context WITHOUT news-data.js — the vm-test environment and file:// both
   const ctx = vm.createContext({});
@@ -46,9 +57,11 @@ test("engine: TV and paper read the feed when present, degrade without it", () =
     G.room = "candy_bar";
     doCommand("watch tv");
     doCommand("read paper");
+    doCommand("weather");
   `, ctx);
   assert.match(out.join("\n"), /muay thai highlights/i, "TV fallback");
   assert.match(out.join("\n"), /crossword someone's already ruined/i, "paper fallback");
+  assert.match(out.join("\n"), /shows you yesterday/i, "weather app fallback");
 
   // same engine WITH a feed injected (as index.html's script order provides)
   const ctx2 = vm.createContext({});
@@ -65,6 +78,7 @@ test("engine: TV and paper read the feed when present, degrade without it", () =
     doCommand("watch tv");
     G.room = "beach_rd_c"; // seven: true
     doCommand("read news");
+    doCommand("weather");
   `, ctx2);
   const feed = vm.runInContext("NEWS_FEED", ctx2);
   assert.ok(feed.some(h => out2.join("\n").includes(h.t)), "a real headline aired");
@@ -73,5 +87,10 @@ test("engine: TV and paper read the feed when present, degrade without it", () =
   if (fx) {
     assert.match(out2.join("\n"), /฿/, "rates printed");
     assert.ok(out2.join("\n").includes(`฿${fx.USD}`), "the dollar rate airs");
+  }
+  const wx = vm.runInContext("typeof WX_NOW === 'undefined' ? null : WX_NOW", ctx2);
+  if (wx) {
+    assert.ok(out2.join("\n").includes(`${wx.temp}°`), "the real temperature airs");
+    assert.ok(out2.join("\n").includes(`${wx.humid}% humidity`), "humidity airs");
   }
 });
