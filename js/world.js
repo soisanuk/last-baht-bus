@@ -698,6 +698,10 @@ const ITEMS = {
 // are all set (and `notFlags` unset). `sets` flags fire on delivery.
 // topic: matches "ask X about <topic>"; entries without topic answer "talk to X".
 // th/rom: a spoken Thai line rendered before the English (TTS if available).
+// short: the terse gist. First time you hear an entry you get the full `text`;
+//   every time after, the engine swaps in `short` (and skips the Thai greeting)
+//   so re-talking gives the point, not the whole spiel again. Optional — an
+//   entry without one just repeats in full.
 
 const NPCS = {
 
@@ -707,9 +711,11 @@ const NPCS = {
     desc: "A drinks-cart vendor with a cooler of everything and opinions to match. " +
       "A hand-lettered sign on the cart offers ฿5 per returned bottle.",
     dialogue: [
-      { req: ["gotBusFare"], text: "\"Bus stop that way, na. Tell driver where you go, pay when you get off. FIFTEEN baht now — everything expensive since the war, jing jing.\"" },
+      { req: ["gotBusFare"], text: "\"Bus stop that way, na. Tell driver where you go, pay when you get off. FIFTEEN baht now — everything expensive since the war, jing jing.\"",
+        short: "\"Bus stop that way. Tell driver, pay when you get off. Fifteen baht.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
-        text: "\"Oh, you awake! You sleep on beach like soi dog, hahaha. You want water? No money? Aiyee.\" She taps the sign on her cart. \"Bring bottle, I give five baht. Beach full of bottle. Farang leave everything.\"" },
+        text: "\"Oh, you awake! You sleep on beach like soi dog, hahaha. You want water? No money? Aiyee.\" She taps the sign on her cart. \"Bring bottle, I give five baht. Beach full of bottle. Farang leave everything.\"",
+        short: "\"Bring bottle, I give five baht.\"" },
       { topic: "wallet", text: "\"Wallet gone? Beach at night, tilac. You lucky they leave your shoes. Go town, ask the bar ladies — nothing happen in Pattaya they don't know.\"" },
       { topic: "bus", text: "\"Baht bus fifteen baht now. Used to be ten! Iran war, petrol crazy. Everybody complain, everybody still ride.\"" },
     ],
@@ -722,11 +728,13 @@ const NPCS = {
       "street with professional calm. The other drivers at the stand defer to him.",
     dialogue: [
       { req: ["helmetDelivered"], th: "โอเคเลย", rom: "okay loei",
-        text: "\"My man! Pim say thank you. You need ride anywhere — special price. And listen: you have problem with anyone on this street, you stand next to Bank, okay?\"" },
+        text: "\"My man! Pim say thank you. You need ride anywhere — special price. And listen: you have problem with anyone on this street, you stand next to Bank, okay?\"",
+        short: "\"Need a ride, boss? Special price for you. Trouble on the street — stand by Bank.\"" },
       { req: ["knowMot"], notFlags: ["helmetDelivered", "hasHelmet"],
         text: "\"Mot? Little rat. He run, we watch. Hey — do me a favour, na? My girlfriend Pim, Starlight Bar, LK Metro. Take her my spare helmet, she forget again. I no can leave stand.\" He holds out a hot-pink helmet.", sets: ["hasHelmet"], gives: "helmet" },
       { th: "ไปไหนครับ", rom: "pai nai khrap",
-        text: "\"Where you go, boss? Motosai fifty baht in town, hundred to Darkside. Faster than bus, more fun than walking, safer than both — nobody touch you on Bank's bike.\"" },
+        text: "\"Where you go, boss? Motosai fifty baht in town, hundred to Darkside. Faster than bus, more fun than walking, safer than both — nobody touch you on Bank's bike.\"",
+        short: "\"Where you go, boss? Fifty baht in town, hundred to Darkside.\"" },
       { topic: "pim", text: "\"Pim my girlfriend. Starlight Bar. Smartest girl in LK Metro — five years there, know everybody's everything.\" He grins. \"Don't tell her I said 'girlfriend', she say we 'talking'.\"" },
       { topic: "darkside", text: "\"Darkside? Lake, family, old farang with fat dog. And Khao Talo — old-school soi. Hundred baht I take you. Bus charter more.\"" },
     ],
@@ -745,7 +753,8 @@ const NPCS = {
         text: "\"Of course I remember you! Three a.m., singing, buying Mama noodles next door. You leave with big group toward LK Metro — and Mot follow you out. Little pickpocket, work the drunk ones.\" She narrows her eyes. \"Ask Lek at Lucky Tiger. She see Mot this morning. OR—\" she smiles sweetly \"—buy me lady drink and I tell you everything faster.\"",
         sets: ["knowMot"] },
       { th: "สวัสดีค่ะที่รัก", rom: "sawatdee kha tilac",
-        text: "\"Welcome to Candy Bar! First time? No — wait.\" She studies you. \"You look like a man with a story and no wallet to put it in. Sit. Talk to Candy.\"" },
+        text: "\"Welcome to Candy Bar! First time? No — wait.\" She studies you. \"You look like a man with a story and no wallet to put it in. Sit. Talk to Candy.\"",
+        short: "\"Sit down, tilac. Talk to Candy — everybody's problems come to Candy.\"" },
       { topic: "wallet", req: ["knowOyHasIt"],
         text: "\"Oy has it? Then it's safe — safer than in your pocket, clearly. But Oy… ai, she make you work for it. Take her som tam from the market cart — extra spicy, tell them 'Candy's order'. Give it to Ploy her cashier, and doors open.\" She waves at the cart across the soi.", sets: ["somTamAccepted"], gives: "som_tam" },
       { topic: "wallet", notFlags: ["knowWasHere"],
@@ -765,7 +774,8 @@ const NPCS = {
         text: "\"Mot?! That little— okay okay. This morning he come here all big smile, buy whisky-cola, PAY CASH. Say he 'do business' with Madam Oy at Rainbow Girls. Business!\" She snorts. \"Your wallet in Oy's safe by lunchtime, guarantee.\"",
         sets: ["knowOyHasIt"] },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
-        text: "\"Hello handsome! You play pool? No? Good — you look like you lose enough already tonight.\" The earrings flash as she laughs." },
+        text: "\"Hello handsome! You play pool? No? Good — you look like you lose enough already tonight.\" The earrings flash as she laughs.",
+        short: "\"Hello handsome! You play pool, or you just hiding from your night?\"" },
       { topic: "oy", text: "\"Madam Oy? Big boss of LK Metro. Undefeated at Connect 4 since two thousand nine. Do NOT play her.\"" },
     ],
   },
@@ -777,7 +787,8 @@ const NPCS = {
       "you're here and finds it funny.",
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
-        text: "\"Welcome to Paradise.\" A beat. \"The bar, na — the other kind you find yourself.\" The knowing look intensifies." },
+        text: "\"Welcome to Paradise.\" A beat. \"The bar, na — the other kind you find yourself.\" The knowing look intensifies.",
+        short: "\"Real gossip is on Soi Buakhao, tilac. Here is only volume.\"" },
       { topic: "wallet", text: "\"Walking Street eats wallets, tilac. But real professionals work the beach and the bus stops. Town gossip flows through Soi Buakhao — the beer bars, not here. Here is only volume.\"" },
     ],
   },
@@ -789,7 +800,8 @@ const NPCS = {
       "even when shouting drink orders over the bass.",
     dialogue: [
       { th: "สนุกไหม", rom: "sanuk mai",
-        text: "\"Having fun?! This club so loud I answer questions nobody ask yet!\" She beams and slides you a glass of iced water on the house. \"You look like you need free one.\"" },
+        text: "\"Having fun?! This club so loud I answer questions nobody ask yet!\" She beams and slides you a glass of iced water on the house. \"You look like you need free one.\"",
+        short: "\"Too loud to talk! Here — free water. On the house.\"" },
     ],
   },
 
@@ -800,7 +812,8 @@ const NPCS = {
       "whatever caused it. She materialised beside you rather than walked.",
     dialogue: [
       { th: "หวัดดี", rom: "watdee",
-        text: "\"...You lost something.\" Not a question. The slow smile begins its journey. \"Everything lost in Pattaya is in somebody's pocket. The trick is learning whose.\"" },
+        text: "\"...You lost something.\" Not a question. The slow smile begins its journey. \"Everything lost in Pattaya is in somebody's pocket. The trick is learning whose.\"",
+        short: "\"Everything lost in Pattaya is in somebody's pocket. Learn whose.\"" },
       { topic: "mot", req: ["knowMot"], text: "\"Mot works the alley beside this bar when Walking Street is thick. Small hands, fast feet.\" The smile completes. \"Slow brain, though.\"" },
     ],
   },
@@ -812,7 +825,8 @@ const NPCS = {
       "undisputed morale champion of Pink Lotus Lounge.",
     dialogue: [
       { th: "มาแล้วเหรอ", rom: "maa laeo roe",
-        text: "\"You come back!! Wait— no, you new. Same same!\" She collapses in giggles. \"Sit down sit down! You buy me lady drink? Upstairs very nice—\" she catches your expression \"—okay okay, water for you, story for me, hahaha!\"" },
+        text: "\"You come back!! Wait— no, you new. Same same!\" She collapses in giggles. \"Sit down sit down! You buy me lady drink? Upstairs very nice—\" she catches your expression \"—okay okay, water for you, story for me, hahaha!\"",
+        short: "\"Sit sit! Water for you, story for me, hahaha!\"" },
       { topic: "wallet", text: "\"No wallet?!\" Gales of laughter. \"Tilac, on THIS soi that is a very serious medical condition. Go Soi Buakhao — the mamasans there fix everything. Especially Candy. Everybody's problems go to Candy.\"" },
     ],
   },
@@ -824,8 +838,10 @@ const NPCS = {
       "the instant anyone tries even one word of Thai.",
     dialogue: [
       { req: ["greetedFon"], th: "พูดไทยเก่ง", rom: "phuut thai keng",
-        text: "\"Your Thai so good!\" (It was one word.) She emerges from the ferns entirely. \"The jasmine is for the spirit house. You want to know anything about this soi, ask me — quietly.\"" },
-      { text: "She gives you a small wave from behind a monstera and goes back to pretending to check her phone. Perhaps a proper Thai greeting would help." },
+        text: "\"Your Thai so good!\" (It was one word.) She emerges from the ferns entirely. \"The jasmine is for the spirit house. You want to know anything about this soi, ask me — quietly.\"",
+        short: "\"Ask me anything about this soi — quietly.\"" },
+      { text: "She gives you a small wave from behind a monstera and goes back to pretending to check her phone. Perhaps a proper Thai greeting would help.",
+        short: "She waves from behind the monstera. (A Thai greeting might draw her out.)" },
       { topic: "oy", req: ["greetedFon"],
         text: "\"Madam Oy come to the market every morning, seven o'clock, buy marigolds for her shrine. Alone. No security.\" Fon blushes at her own boldness. \"She more soft than she look.\"" },
     ],
@@ -838,7 +854,8 @@ const NPCS = {
       "authority of a duty-free manager.",
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
-        text: "\"Crystal Palace, welcome. Drinks menu, no touching, and whatever you heard about the fishbowl, it's a myth.\" A wink calibrated to the milligram." },
+        text: "\"Crystal Palace, welcome. Drinks menu, no touching, and whatever you heard about the fishbowl, it's a myth.\" A wink calibrated to the milligram.",
+        short: "\"Drinks menu, no touching. What can I get you?\"" },
       { topic: "oy", text: "\"Madam Oy danced HERE, you know. Before my time — number seventy-something, they say she was the best on the street. Now she owns half of LK Metro and all of its secrets.\"" },
     ],
   },
@@ -849,7 +866,8 @@ const NPCS = {
     desc: "Gentle, soft-voiced, folding paper napkins into birds while the soi roars outside.",
     dialogue: [
       { th: "เหนื่อยไหม", rom: "nueai mai",
-        text: "\"You look tired,\" she says, and somehow it's the kindest thing anyone's said to you all night. She sets a paper crane by your hand. \"For luck. The soi makes everyone lucky once.\"" },
+        text: "\"You look tired,\" she says, and somehow it's the kindest thing anyone's said to you all night. She sets a paper crane by your hand. \"For luck. The soi makes everyone lucky once.\"",
+        short: "She sets another paper crane by your hand. \"For luck.\"" },
     ],
   },
 
@@ -863,7 +881,8 @@ const NPCS = {
         text: "\"Mamasan Oy? She— she scary. But fair! She pay for my mother's hospital, you know. Don't tell her I said.\" She glances at the faded poster on the wall. \"That her, when she dance. Number seventy-one. She keep the number for everything — locker, motorbike plate, everything.\"",
         sets: ["pinPart71"] },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
-        text: "\"W-welcome to Gold Rush! First week— I mean, MY first week. The gold is paint. I'm not supposed to say that. Please don't tell.\"" },
+        text: "\"W-welcome to Gold Rush! First week— I mean, MY first week. The gold is paint. I'm not supposed to say that. Please don't tell.\"",
+        short: "\"W-welcome to Gold Rush! Please — don't tell anyone about the paint.\"" },
     ],
   },
 
@@ -882,7 +901,8 @@ const NPCS = {
       { topic: "oy", notFlags: ["helmetDelivered"],
         text: "\"Madam Oy? Mmm. Information about the Mamasan is premium shelf, darling.\" She taps the lady-drink menu meaningfully: ฿150." },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
-        text: "\"Well well. You have the look of a man on a quest.\" She rests her chin on her hand. \"Starlight Bar: honest pours, dishonest company. What do you want to know and what's it worth?\"" },
+        text: "\"Well well. You have the look of a man on a quest.\" She rests her chin on her hand. \"Starlight Bar: honest pours, dishonest company. What do you want to know and what's it worth?\"",
+        short: "\"What do you want to know, darling — and what's it worth?\"" },
     ],
   },
 
@@ -943,7 +963,8 @@ const NPCS = {
       { req: ["knowOyHasIt"], topic: "wallet",
         text: "\"A wallet?\" The temperature drops two degrees. \"Many wallets in Pattaya, khun farang. Mine are in a safe.\" She turns away — but slowly, like a door left ajar. (Manners might open it. A proper wai.)" },
       { th: "เชิญค่ะ", rom: "choen kha",
-        text: "\"Welcome to Rainbow Girls.\" Four words, and somehow you feel both invited and inventoried. \"Drink, or business?\"" },
+        text: "\"Welcome to Rainbow Girls.\" Four words, and somehow you feel both invited and inventoried. \"Drink, or business?\"",
+        short: "\"Drink, or business?\"" },
       { topic: "isaan", req: ["waiedOy"],
         text: "Something crosses her face too quick to name. \"Roi Et province. Rice, buffalo, one road.\" A pause. \"Everyone on this soi is from somewhere like it. Remember that when you count your change, na.\"" },
     ],
@@ -960,7 +981,8 @@ const NPCS = {
         text: "\"Oy has your wallet? HA!\" She slaps the bar. \"I danced next to that woman for six years — she was 71, I was 72, Crystal Palace, best legs on the street, both of us.\" She leans in, delighted. \"Listen, jing jing: her number is everything to her. Seventy-one. And she put lucky nine on the end of every code she ever made since the farm. You didn't hear it from Daeng.\"",
         sets: ["pinPart71", "pinPart9"] },
       { th: "เข้ามาสิ", rom: "khao maa si",
-        text: "\"Come in, come in! Farang on Khao Talo — you lost, or you smart?\" She's already opening a Chang. \"Sit. Out here the beer is cold and the stories are old. Best combination.\"" },
+        text: "\"Come in, come in! Farang on Khao Talo — you lost, or you smart?\" She's already opening a Chang. \"Sit. Out here the beer is cold and the stories are old. Best combination.\"",
+        short: "\"Sit, farang. Cold beer, old stories. Best combination.\"" },
       { topic: "oy", text: "\"Oy and me come up together, Walking Street, when you still count the year in one-nine.\" She taps the photo behind her. \"She got the empire. I got the quiet life and the better knees. We both won.\"" },
       { topic: "darkside", text: "\"The Darkside good to us old girls. Rent cheap, customers loyal, nobody in a hurry. The lake is for the married ones — go see, it's like Pattaya with the volume off.\"" },
     ],
@@ -976,7 +998,8 @@ const NPCS = {
       { text: "\"Welcome to the Stinky, bud. Name's Bert. Table's true, beer's cold, " +
         "and the only rule is don't sit on the rail.\" He chalks a cue without " +
         "looking at it. \"You shoot? League night's every third night — killer " +
-        "pool, hundred baht in, winner takes the table money.\"" },
+        "pool, hundred baht in, winner takes the table money.\"",
+        short: "\"Table's true, beer's cold, don't sit on the rail. League night every third night — hundred baht in.\"" },
       { topic: "league", text: "\"Killer pool. Everybody's got three lives, pot or " +
         "you lose one, last man standing takes the pot. Every third night, right " +
         "here. Half the piwins in North Pattaya play. Bring your hundred baht and " +
@@ -1019,7 +1042,8 @@ const NPCS = {
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Welcome to Candy Bar TWO!\" — the number lands with enormous pride. " +
         "\"Auntie— ah, KHUN Candy teach me everything. You her customer? Then you " +
-        "MY customer. Sit sit sit.\"" },
+        "MY customer. Sit sit sit.\"",
+        short: "\"You Candy's customer? Then you MY customer. Sit sit sit!\"" },
       { topic: "candy", text: "\"Khun Candy start with one bar, twenty year on the " +
         "soi, save every baht, never barfine, never lazy. Now: TWO bar.\" Bee " +
         "holds up two fingers like a victory sign. \"I do same. Watch me.\"" },

@@ -29,6 +29,7 @@ function newGame() {
     turns: 0,
     darkStreak: 0,
     flags: {},
+    talked: {},          // npcId → [dialogue indices already delivered] (terse repeats)
     itemLoc: Object.fromEntries(
       Object.entries(ITEMS).map(([id, it]) => [id, it.location])),
     safeTries: 0,
@@ -112,6 +113,7 @@ function deserializeGame(s) {
   }
   if (G.lastPeddler === undefined) G.lastPeddler = -99;
   if (!G.quizPlayed) G.quizPlayed = {};
+  if (!G.talked) G.talked = {};
   G.over = false; // pre-sandbox saves could be "over"; the night reopens
   if (!G.encDone) G.encDone = {};
   if (G.lastEnc === undefined) G.lastEnc = 0;
@@ -199,8 +201,16 @@ function _pickDialogue(npcId, topic) {
 
 function _deliver(npcId, d) {
   const n = NPCS[npcId];
-  if (d.th) { _say(`${n.emoji} ${n.name}: “${d.th}” (${d.rom})`, "thai"); _engineSpeak(d.th); }
-  _say(d.text);
+  // Second time you hear a line, get the point, not the whole spiel. We track
+  // which entries an NPC has already delivered (by index) and, on a repeat,
+  // swap in the entry's `short` gist and skip the Thai greeting flourish. An
+  // entry without a `short` just repeats in full — no regression.
+  const idx = n.dialogue.indexOf(d);
+  const seen = G.talked[npcId] || (G.talked[npcId] = []);
+  const terse = seen.includes(idx) && !!d.short;
+  if (!seen.includes(idx)) seen.push(idx);
+  if (d.th && !terse) { _say(`${n.emoji} ${n.name}: “${d.th}” (${d.rom})`, "thai"); _engineSpeak(d.th); }
+  _say(terse ? d.short : d.text);
   for (const f of d.sets || []) _setFlag(f);
   if (d.gives && G.itemLoc[d.gives] === null) {
     G.itemLoc[d.gives] = "inventory";
