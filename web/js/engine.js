@@ -1813,6 +1813,20 @@ function _maybeSelfBarfine(id) {
 // mentioned it) → active (ACCEPT) → done (doneFlag detected, reward paid) or
 // abandoned (re-offerable). Dependencies gate the offer, not the talk.
 
+// Act One's trail, shared by SCORE and the QUESTS journal. The founding
+// adventure is NOT a QUESTS entry — it can't be accepted or abandoned, and
+// its completion is a stage transition (_checkAct1), not a reward payout —
+// but the journal observes its flags like any other part of the world.
+const _ACT1_MILESTONES = [
+  ["knowWasHere", "Worked out where you were last night"],
+  ["knowMot", "Learned who lifted the wallet"],
+  ["knowOyHasIt", "Traced the wallet to Madam Oy"],
+  ["knowDoorTrick", "Learned the office door trick"],
+  ["pinPart71", "Clue: the number 71"],
+  ["pinPart9", "Clue: the lucky 9"],
+  ["hasWallet", "WALLET RECOVERED"],
+];
+
 function _questAvailable(qid) {
   const q = QUESTS[qid];
   const st = G.quests[qid];
@@ -1858,6 +1872,12 @@ function _doAccept(arg) {
 }
 
 function _doAbandon(arg) {
+  if (G.stage === "act1" && (/wallet|baht bus|act/.test(arg) ||
+      (!arg && !Object.keys(QUESTS).some(q => G.quests[q] === "active")))) {
+    _say("Abandon your own wallet? It has your key card, your cash, and your " +
+      "way home in it. No. This one you finish.");
+    return;
+  }
   const qid = _findQuest(arg) ||
     Object.keys(QUESTS).find(q => G.quests[q] === "active");
   if (!qid || G.quests[qid] !== "active") { _say("You're not on that job."); return; }
@@ -1868,13 +1888,27 @@ function _doAbandon(arg) {
 }
 
 function _doQuests() {
+  let shown = 0;
+  if (G.stage === "act1") {
+    _say("▶ The Last Baht Bus — find your wallet, get back to room 412 in Naklua.", "win");
+    for (const [f, label] of _ACT1_MILESTONES) {
+      _say(`  ${_flag(f) ? "✓" : "·"} ${label}`, "dim");
+    }
+    shown++;
+  } else if (_flag("act1Done")) {
+    _say(`✓ The Last Baht Bus — Act One, scored ${G.score}`, "dim");
+    shown++;
+  }
   const rows = Object.entries(QUESTS).filter(([qid]) => G.quests[qid]);
-  if (!rows.length) { _say("No adventures on the books. The givers are out there — talk to people."); return; }
   for (const [qid, q] of rows) {
     const st = G.quests[qid];
-    if (st === "active") _say(`▶ ${q.name} — ${q.desc}`, "win");
-    else if (st === "offered") _say(`✦ On offer: ${q.name} (ACCEPT ${qid.toUpperCase()})`, "dim");
-    else if (st === "done") _say(`✓ ${q.name}`, "dim");
+    if (st === "active") { _say(`▶ ${q.name} — ${q.desc}`, "win"); shown++; }
+    else if (st === "offered") { _say(`✦ On offer: ${q.name} (ACCEPT ${qid.toUpperCase()})`, "dim"); shown++; }
+    else if (st === "done") { _say(`✓ ${q.name}`, "dim"); shown++; }
+  }
+  if (!shown) _say("No adventures on the books. The givers are out there — talk to people.");
+  else if (!rows.some(([qid]) => G.quests[qid] === "active") && G.stage !== "act1") {
+    _say("(The givers are out there — talk to people.)", "dim");
   }
 }
 
@@ -2985,16 +3019,7 @@ function _doScore() {
   if (_unreadCount()) _say(`📱 ${_unreadCount()} unread message${_unreadCount() > 1 ? "s" : ""} (CHECK MESSAGES)`, "win");
   const active = Object.entries(QUESTS).filter(([qid]) => G.quests[qid] === "active");
   for (const [, q] of active) _say(`▶ ${q.name}`, "dim");
-  const milestones = [
-    ["knowWasHere", "Worked out where you were last night"],
-    ["knowMot", "Learned who lifted the wallet"],
-    ["knowOyHasIt", "Traced the wallet to Madam Oy"],
-    ["knowDoorTrick", "Learned the office door trick"],
-    ["pinPart71", "Clue: the number 71"],
-    ["pinPart9", "Clue: the lucky 9"],
-    ["hasWallet", "WALLET RECOVERED"],
-  ];
-  for (const [f, label] of milestones) if (_flag(f)) _say("✓ " + label, "dim");
+  for (const [f, label] of _ACT1_MILESTONES) if (_flag(f)) _say("✓ " + label, "dim");
 }
 
 // ── The Zork ledger ──────────────────────────────────────────────────────────

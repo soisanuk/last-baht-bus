@@ -1529,3 +1529,30 @@ test("contacts lists the phonebook with bar and favor glow", () => {
   run("contact"); // bare CONTACT falls through to the phonebook too
   assert.match(lastOut(), /Candy — Candy Bar/);
 });
+
+// ── Act One in the journal ─────────────────────────────────────────────────
+
+test("the journal shows the founding adventure during act1, ticked as flags land", () => {
+  run("quests");
+  assert.match(lastOut(), /▶ The Last Baht Bus — find your wallet/);
+  assert.match(lastOut(), /· Worked out where you were last night/);
+  run("read receipt");
+  out = [];
+  run("quests");
+  assert.match(lastOut(), /✓ Worked out where you were last night/);
+  assert.match(lastOut(), /· WALLET RECOVERED/);
+});
+
+test("act one cannot be abandoned; finished, it shows as done", () => {
+  run("abandon");
+  assert.match(lastOut(), /This one you finish/);
+  run("abandon wallet");
+  assert.match(lastOut(), /This one you finish/);
+  state().stage = "vacation";
+  state().flags.act1Done = true;
+  state().score = 80;
+  out = [];
+  run("quests");
+  assert.match(lastOut(), /✓ The Last Baht Bus — Act One, scored 80/);
+  assert.match(lastOut(), /givers are out there/);
+});
