@@ -1204,7 +1204,8 @@ const ENCOUNTERS = {
       "bar, no mamasan, freelance and unhurried. “Going where, hansum? Tonight I " +
       "am also free.” A beat, then, nodding down the rail at a friend pretending " +
       "not to listen: “Ning also free. VERY boring night, na.”",
-    hint: "(Company is ฿1000. Ning makes it ฿1800. NO is also a word.)",
+    hint: "(Company is ฿700. Ning makes it ฿1400 — cheaper than a bar, but no " +
+      "mamasan means nobody to complain to if it goes wrong. YES / NO.)",
   },
   pingpong: {
     rooms: ["ws_gate", "ws_south", "ws_north"],

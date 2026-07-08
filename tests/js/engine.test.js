@@ -993,7 +993,7 @@ test("a texted invite pays off when you show up that night", () => {
 
 // ── Freelancers, peddlers, the ping pong show ──────────────────────────────
 
-test("freelancer: solo company ends the night; broke or roomless get laughed off", () => {
+test("freelancer: solo company (the safe kind) ends the night; broke get laughed off", () => {
   state().room = "promenade";
   _startEnc("freelancer");
   run("yes");
@@ -1002,25 +1002,42 @@ test("freelancer: solo company ends the night; broke or roomless get laughed off
   state().flags.act1Done = true;
   state().flags.hasWallet = true;
   state().money = 1200;
+  state().rng = 1; // tiny first roll → the safe kind, ฿700
   delete state().encDone.freelancer;
   _startEnc("freelancer");
   run("yes");
   assert.equal(state().day, 3, "night over, grandly");
-  assert.equal(state().money, 200);
+  assert.equal(state().money, 500); // cheaper than a bar now
 });
 
-test("freelancer: taking Ning too costs ฿1800 and pays extra happiness", () => {
+test("freelancer: taking Ning too costs ฿1400 and pays extra happiness", () => {
   state().flags.act1Done = true;
   state().flags.hasWallet = true;
   state().room = "promenade";
   state().money = 2000;
+  state().rng = 1; // the safe kind
   const h = state().happy;
   _startEnc("freelancer");
   run("both of you");
   assert.ok(state().flags.hadThreesome);
-  assert.equal(state().money, 200);
+  assert.equal(state().money, 600);
   assert.ok(state().happy >= h + 15, `threesome premium (${state().happy - h})`);
   assert.equal(state().day, 3);
+});
+
+test("freelancer: the risky kind robs you blind while you sleep", () => {
+  state().flags.act1Done = true;
+  state().flags.hasWallet = true;
+  state().room = "promenade";
+  state().money = 2000;
+  state().happy = 30;
+  state().rng = 40000; // big first roll → the robber
+  _startEnc("freelancer");
+  run("yes");
+  assert.equal(state().day, 3, "you still lost the night");
+  assert.ok(state().money <= 500, `robbed of the rest (฿${state().money} left)`);
+  assert.ok(state().happy < 30, "and it stings");
+  assert.match(lastOut(), /emptied|gone/i);
 });
 
 test("peddler works the Beach Road bar stools; buying the watch is a choice", () => {

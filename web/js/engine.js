@@ -563,27 +563,37 @@ const _ENC = {
         "Even Ning looks sympathetic.");
       return;
     }
-    const price = both ? 1800 : 1000;
+    // Freelance: cheaper than a barfine (no bar, no mamasan taking a cut), but
+    // no bar means no ledger and nobody to complain to. Most are fine — some
+    // vanish with your wallet while you sleep. Roll her kind now (a friend along
+    // makes it a touch safer; two of them are known to each other).
+    const price = both ? 1400 : 700;
     if (G.money < price) {
       _say(`The number is ฿${price}. Your pocket says ฿${G.money}. She pats your ` +
         "cheek — “ATM broken? Sad story” — and turns back to the rail.");
       return;
     }
     G.money -= price;
+    if (both) _setFlag("hadThreesome");
+    const safe = _rand() < (both ? 0.78 : 0.6);
+    if (!safe) { _endNight("robbed"); return; }
     if (both) {
-      _setFlag("hadThreesome");
       _say(`฿${price}, and Ning stops pretending not to listen. What follows — the ` +
         "motosai ride three-up (illegal, hilarious), the night bazaar snacks, the " +
         "hotel corridor shushing, and the rest of it — will be retold by you, " +
         "badly, for the rest of your life, to anyone who asks and several who " +
         "don't. (฿" + G.money + " left, every one of them irrelevant.)", "win");
       _addHappy(7);
-      _endNight("barfine");
     } else {
-      _say(`฿${price} settles it with no ledger and no mamasan — freelance means the ` +
-        "commission is all hers. She takes your arm; the promenade approves.", "win");
-      _endNight("barfine");
+      const flavor = _rand() < 0.5 ?
+        "Before you go she thumbs a message to a friend — “she know where I am, " +
+        "na” — freelance but not foolish. " :
+        "Turns out she cashiers at a 7-Eleven in Naklua by day and does this for " +
+        "the school fees; you get the whole life story on the walk over. ";
+      _say(`฿${price} settles it — no ledger, no mamasan, the commission all hers. ` +
+        flavor + "She takes your arm; the promenade approves.", "win");
     }
+    _endNight("barfine");
   },
 
   pingpong(input) {
@@ -1732,6 +1742,24 @@ function _endNight(reason) {
       _say("You call it. The air-con rattles its lullaby, the neon leaks through " +
         "the curtains, and Pattaya carries on politely without you.", "room");
       break;
+    case "robbed": {
+      const lost = Math.min(G.money, 800 + Math.floor(_rand() * 2200));
+      G.money -= lost;
+      let took = "";
+      for (const it of ["shades", "fake_rolex"]) {
+        if (G.itemLoc[it] === "inventory") { G.itemLoc[it] = null; took = ITEMS[it].name; break; }
+      }
+      _say("The night itself is fine — better than fine. It's the morning that " +
+        "isn't. You surface at some colourless hour to an empty pillow, the door " +
+        "on the latch, and the specific silence of a room that has been quietly, " +
+        "expertly emptied. " +
+        (lost ? `฿${lost} gone` : "Nothing left worth taking") +
+        (took ? `, and your ${took} with it` : "") + ". No bar, no mamasan, no one " +
+        "to complain to — freelance cut the other way. You didn't even hear her leave.",
+        "alert");
+      _addHappy(-6);
+      break;
+    }
   }
   G.day++;
   if (G.stage !== "expat" && G.day > 7) { _endVacation(); return; }
