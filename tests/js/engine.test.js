@@ -201,6 +201,23 @@ test("say sawatdee greets like a wai", () => {
   assert.ok(state().flags.greetedFon);
 });
 
+test("SAY <phrase> TO <person> aims the greeting at one target", () => {
+  // Rainbow Girls has Ploy, Oy, and others — a directed greeting fires only
+  // the named person's unlock, unlike the room-wide SAY.
+  state().room = "rainbow_girls";
+  run("say sawatdee to ploy");
+  assert.match(lastOut(), /Ploy/);
+  assert.ok(state().flags.waiedPloy, "aimed unlock fired");
+  assert.ok(!state().flags.waiedOy, "the room-wide unlock did NOT fire");
+  // thao rai to a bar girl gets the lady-drink quote, not a bus fare
+  run("say thao rai to ploy");
+  assert.match(lastOut(), new RegExp(String(150)));
+  // aiming at nobody present is a graceful miss
+  out = [];
+  run("say sawatdee to gary");
+  assert.match(lastOut(), /not here to hear it/i);
+});
+
 test("office door: blocked, then opened by the song", () => {
   state().room = "rainbow_girls";
   run("go office");
