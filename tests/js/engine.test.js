@@ -1341,3 +1341,72 @@ test("withdraw knows every stage of your financial decline", () => {
   run("withdraw");
   assert.match(lastOut(), /seven days instead of seven years/);
 });
+
+// ── Rainy season ───────────────────────────────────────────────────────────
+
+test("a downpour traps you: streets blocked, shelter allowed, transit refused", () => {
+  state().encDone = Object.fromEntries(Object.keys(ENCOUNTERS).map(k => [k, true]));
+  state().room = "buakhao_s";
+  state().rain = 20;
+  const exits = Object.entries(ROOMS.buakhao_s.exits);
+  const [streetDir] = exits.find(([, to]) => !_sheltered(to));
+  const [barDir, barId] = exits.find(([, to]) => ROOMS[to].barType);
+  run(streetDir);
+  assert.equal(state().room, "buakhao_s", "street move blocked");
+  assert.match(lastOut(), /awning above you is the entire habitable world/);
+  run(barDir);
+  assert.equal(state().room, barId, "diving into a bar is allowed");
+  assert.match(lastOut(), /shedding water like a soi dog/);
+  const [outDir] = Object.entries(ROOMS[barId].exits).find(([, to]) => !_sheltered(to));
+  run(outDir);
+  assert.equal(state().room, barId, "nobody leaves the bar in this");
+  assert.match(lastOut(), /that's what the rain is FOR/);
+  state().room = "beach_rd_s"; // busStop + motosai
+  run("ride bus to jomtien");
+  assert.match(lastOut(), /can't tell a fare from a lamppost/);
+  run("motosai to jomtien");
+  assert.match(lastOut(), /Not for any money, boss/);
+});
+
+test("soi dogs won't bite during the downpour", () => {
+  state().room = "ws_alley"; // dark
+  state().rain = 10;
+  run("z", "z", "z");
+  assert.equal(state().darkStreak, 0, "the dogs have gone to ground");
+  assert.equal(state().hurt, 0);
+  state().rain = 0;
+  run("z", "z");
+  // dry dark bites again — costing blood, or the noodles you hurled at the dog
+  assert.ok(state().darkStreak > 0 || state().hurt > 0 ||
+    state().itemLoc.noodles !== "inventory", "dry dark is dangerous again");
+});
+
+test("rain falls only out of a stormy bake, in 3–8 turn events", () => {
+  state().encDone = Object.fromEntries(Object.keys(ENCOUNTERS).map(k => [k, true]));
+  state().room = "second_rd_c";
+  for (let i = 0; i < 120; i++) {
+    state().hunger = 0; state().thirst = 0; state().nightTurn = 5;
+    _tick();
+  }
+  assert.equal(state().rain, 0, "no bake, no rain — ever");
+  globalThis.WX_NOW = { temp: 29, humid: 92, code: 95, hi: 30, rain: 90 };
+  try {
+    state().lastRain = -99;
+    let n = 0;
+    while (!state().rain && n++ < 1000) {
+      state().hunger = 0; state().thirst = 0; state().nightTurn = 5;
+      _tick();
+    }
+    assert.ok(state().rain >= 3 && state().rain <= 8, `event length ${state().rain} in 3–8`);
+  } finally {
+    delete globalThis.WX_NOW;
+  }
+});
+
+test("the rain stops like a tap and the town resumes", () => {
+  state().room = "candy_bar";
+  state().rain = 1;
+  run("z");
+  assert.equal(state().rain, 0);
+  assert.match(lastOut(), /like a tap/);
+});
