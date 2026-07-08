@@ -45,6 +45,16 @@ Bar mini-games (Connect 4 / Jackpot / pool / killer pool on league nights — `G
 - `web/js/audio.js` — chiptune step sequencer (tracks shared with the trainer; `soi` is a real Sabai Sabai MIDI transcription, `bus` is still an invented Pattaya Pattaya placeholder). `_audioForRoom(roomId, flags)` maps room region → track.
 - `web/js/tts.js` — th-TH Web Speech, Capacitor-ready, iOS gesture unlock.
 
+### Designed for a future online format
+
+An online version (hosted, accounts, cloud saves, possibly server-authoritative or shared-world) is a live possibility alongside the 2D one, and the same discipline serves both. `tests/js/online.test.js` **is the deployment model**: each player session = one `vm.createContext` holding the four core files, commands in via `doCommand`, output out via the injected print callback, persistence via `serializeGame()` blobs. If that test passes, a multi-player Node host needs zero engine changes. Rules that keep it true:
+
+1. **The game core (`thai.js`, `world.js`, `games.js`, `engine.js`) must stay free of browser and wall-clock APIs** — no `window`/`document`/`localStorage`/`Date`/timers/`fetch`. Time is `G.nightTurn`/`G.day`, never real time. (Currently clean; keep it that way.)
+2. **All nondeterminism goes through `G.rng`/`_rand()`** — the only `Math.random` allowed is the initial seed, which a server can inject. Same seed + same command script = identical transcript (tested), which is what makes server-side validation, replays, and anti-cheat possible.
+3. **The single global `G` is fine** — per-session isolation comes from vm contexts, not from refactoring to instance-passing. Don't "fix" the globals; they're the file:// constraint and the isolation model handles them.
+4. **Output stays in the print callback; persistence stays in `main.js`.** A websocket server replaces term.js/main.js the same way a 2D renderer would.
+5. Shared-world features (seeing other players, communal quiz/league nights, leaderboards) are a design layer on top — leaderboards fall out of save blobs (`happy`, `bestHappy`, `score`, flags) without engine changes; a shared world is the only thing that would force real-time and should be treated as a separate mode, not a retrofit.
+
 ### Designed for a future 2D conversion
 
 A 2D version of this game is a live possibility. The text terminal must stay a **disposable frontend**; everything below it must remain frontend-agnostic:

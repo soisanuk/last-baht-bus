@@ -304,7 +304,8 @@ flowchart TD
 node --test
 ```
 
-137 tests: Thai number composition, world/map integrity (every exit resolves,
+140 tests: Thai number composition, world/map integrity, online-readiness
+(session isolation, cloud-save round-trips, deterministic transcripts), (every exit resolves,
 all 15 canon bars present, the gossip chain's flags all connect), parser,
 systems, street encounters, bar mini-games and social life, and a full
 scripted playthrough from the beach to the happy ending — run headless via
@@ -333,5 +334,8 @@ Soi Sanuk trainer.
 The terminal is a disposable frontend: all rules live in `engine.js` as
 per-action functions (`_doGo`, `_doTalk`, …) that the text parser merely maps
 words onto, and all world content is declarative data in `world.js`. A future
-2D version would call the same actions directly and read the same data —
-see `CLAUDE.md` for the conventions that keep that possible.
+2D version would call the same actions directly and read the same data, and a
+future online version would run the same four core files server-side — one vm
+context per player session, save blobs as cloud saves, deterministic seeded
+transcripts for replay/validation (`tests/js/online.test.js` proves the model).
+See `CLAUDE.md` for the conventions that keep both possible.
