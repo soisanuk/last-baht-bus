@@ -523,6 +523,17 @@ test("cashiers cap physical contact until the bell has rung twice", () => {
   assert.match(lastOut(), /returns fire/i);
 });
 
+test("Aek the tom cashier holds the till at Midnight Sun and caps contact", () => {
+  state().room = "midnight_sun";
+  run("talk to aek");
+  assert.match(lastOut(), /money and the gossip/i);
+  run("ask aek about noi");
+  assert.match(lastOut(), /girlfriend/i); // dating a hostess, per canon
+  state().money = 1000;
+  run("spank aek");
+  assert.match(lastOut(), /books, not the customers/i); // cashier contact cap
+});
+
 test("hands off the mamasan; twice gets you walked out of all of LK Metro", () => {
   state().room = "rainbow_girls";
   run("fondle oy");
