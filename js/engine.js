@@ -1339,6 +1339,14 @@ function _doPatron() {
     return;
   }
   const d = s.drunk;
+  // a man with a paper and opinions — when there are headlines to have them about
+  if (_newsFeed().length && _rand() < 0.25) {
+    const h = _headline();
+    _say(`The regular raps yesterday's paper with the back of his hand. ` +
+      `“Seen this?” — “${h.t}”${h.s ? ` (${h.s})` : ""} — “Course, they don't ` +
+      "tell you the HALF of it,” he adds, telling you none of it.");
+    return;
+  }
   if (d === 0) {
     _say(["The regular appraises you over his glass. “First night? Wai the " +
       "mamasan, mate. Doors open.”",
@@ -1900,6 +1908,61 @@ function _maybeIncomingText() {
   _say("(📱 Your phone buzzes — CHECK MESSAGES.)", "dim");
 }
 
+// ── The news ─────────────────────────────────────────────────────────────────
+// Real headlines, baked into news-data.js at deploy time (scripts/fetch-news
+// + the news workflow). Presentation flavor ONLY — never gate logic on them;
+// the tests run without the feed and everything must still work.
+
+function _newsFeed() { return typeof NEWS_FEED === "undefined" ? [] : NEWS_FEED; }
+
+function _headline() {
+  const feed = _newsFeed();
+  return feed.length ? feed[Math.floor(_rand() * feed.length)] : null;
+}
+
+function _sayHeadline(h) {
+  _say(`“${h.t}”${h.s ? " — " + h.s : ""}`, "thai");
+}
+
+function _doTv() {
+  if (!_inBar()) { _say("No TV out here. The street is the channel."); return; }
+  _say("The TV over the bar plays the news — sound off, Thai subtitles racing, " +
+    "nobody's eyes on it but yours.");
+  const h = _headline();
+  if (h) {
+    _sayHeadline(h);
+    const h2 = _headline();
+    if (h2 && h2.t !== h.t) _sayHeadline(h2);
+    _say("The bar absorbs the state of the world and orders another round at it.", "dim");
+  } else {
+    _say("Tonight it's muay thai highlights and the lottery draw. The bar approves " +
+      "of both, loudly.", "dim");
+  }
+}
+
+function _doPaper() {
+  if (!_room().seven && !_inBar()) {
+    _say("No paper to hand. The 7-Elevens keep a rack; every bar has yesterday's " +
+      "copy going soft on the counter.");
+    return;
+  }
+  const feed = _newsFeed();
+  if (!feed.length) {
+    _say("The rack holds a crossword someone's already ruined and a property " +
+      "supplement nobody has ever read. The news, as ever, is the street.");
+    return;
+  }
+  _say(_room().seven ?
+    "You skim the rack by the till, cold air on your neck:" :
+    "Yesterday's paper, soft with humidity and beer rings, still mostly true:");
+  const seen = new Set();
+  for (let i = 0; i < 6 && seen.size < 3; i++) {
+    const h = _headline();
+    if (h && !seen.has(h.t)) { seen.add(h.t); _sayHeadline(h); }
+  }
+  _say("Somewhere in there, the fuel prices explain your bus fare.", "dim");
+}
+
 // ── Food and water ───────────────────────────────────────────────────────────
 
 const FOOD_STALLS = {
@@ -2142,6 +2205,7 @@ function _doExamine(arg) {
 }
 
 function _doRead(arg) {
+  if (/news|paper/.test(arg)) return _doPaper();
   if (arg.includes("sign")) {
     const s = _room().sign && SIGNS[_room().sign];
     if (!s) { _say("No signs worth reading here."); return; }
@@ -2556,6 +2620,7 @@ const _HELP = `Common commands:
   WAI [person] · SAY <thai phrase>
   RIDE BUS TO <place> · MOTOSAI TO <place> · PAY <amount>
   BUY <thing> · SELL BOTTLES · READ <thing> · READ SIGN
+  WATCH TV (bars) · READ PAPER (bars & 7-Elevens) — the day's real headlines
   PLAY CONNECT 4 · PLAY JACKPOT [bet] · PLAY POOL   (in the beer bars)
   FLIRT/KISS/SPANK/FONDLE <lady> · BUY DRINK FOR <lady> · BUY BEER
   RING BELL (฿300, instant popularity) · TALK TO PATRON · BARFINE <lady>
@@ -2705,6 +2770,11 @@ function doCommand(input) {
       if (!_flag("act1Done")) _say("Sleep where? The beach already had you once tonight. Get the wallet, get the room.");
       else if (G.room !== "hotel_room") _say("Your bed is in Naklua — room 412. It'll keep.");
       else { _endNight("sleep"); return; }
+      break;
+    case "tv": _doTv(); break;
+    case "watch":
+      if (!arg || /tv|news|television/.test(arg)) _doTv();
+      else _say("You watch. It watches back. Pattaya.");
       break;
     case "wait": case "z": _say("You wait. Pattaya doesn't."); break;
     case "score": _doScore(); break;
