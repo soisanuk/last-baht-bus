@@ -27,6 +27,7 @@ function newGame() {
     battery: 13,
     lightOn: false,
     turns: 0,
+    wingmanUntil: 0,     // G.turns before which a wing-woman is vouching for you
     darkStreak: 0,
     flags: {},
     talked: {},          // npcId → [dialogue indices already delivered] (terse repeats)
@@ -116,6 +117,7 @@ function deserializeGame(s) {
   if (!G.quizPlayed) G.quizPlayed = {};
   if (!G.talked) G.talked = {};
   if (G.soc && !G.soc.bra) G.soc.bra = {};
+  if (G.wingmanUntil === undefined) G.wingmanUntil = 0;
   G.over = false; // pre-sandbox saves could be "over"; the night reopens
   if (!G.encDone) G.encDone = {};
   if (G.lastEnc === undefined) G.lastEnc = 0;
@@ -669,6 +671,72 @@ const _ENC = {
     _say("You hesitate a half-second too long. “Too slow, cutie.” She glides off " +
       "toward the bar with the ease of a woman who has never once bought her own " +
       "drink or her own company.");
+  },
+
+  // British lesbian at the go-go rail: not for you and not for sale, but a great
+  // ally if you're decent. Hands-on gets a confrontation; good vibes = wingman.
+  britles(input) {
+    if (/grope|grab|touch|fondle|kiss|snog|cop a feel|hand on/.test(input)) {
+      _say("Your hand gets about halfway before her pint hand redirects it, hard, and " +
+        "her voice cuts across the music: “OI. Do you mind?” Two dancers and a mamasan " +
+        "are suddenly at her shoulder — she's more popular in here than you'll ever be " +
+        "— and you are stared at until you leave of your own accord.", "alert");
+      _addHappy(-2);
+      return;
+    }
+    if (/money|baht|barfine|how much|price|\bpay\b|short time|long time|come with|shag|hotel/.test(input)) {
+      _say("She laughs into her pint. “Mate. I'm not working, AND I'm not into blokes. " +
+        "That's two strikes and you've not even bought me a drink.” It's said kindly. " +
+        "It is also final.");
+      _addHappy(-1);
+      return;
+    }
+    if (/hi|hello|cheers|drink|buy|nice|respect|cool|wingman|help|which|recommend|good|game|sound/.test(input)) {
+      G.wingmanUntil = G.turns + WINGMAN_TURNS;
+      _say("“Tell you what — you seem alright.” She clinks her glass to nothing. “See " +
+        "one you fancy? I'll put a word in. These girls trust me a damn sight more than " +
+        "they'll ever trust you, no offence.” For a little while, you've got the best " +
+        "wingman on Walking Street.", "win");
+      _addHappy(2);
+      return;
+    }
+    _say("You nod, she nods, and you both go back to appreciating the view — hers " +
+      "professional, yours amateur. No harm, no foul.");
+  },
+
+  // The punter's Filipina wife: warm and connected, but she is a WIFE. Grope her
+  // and the husband (and the piwins) educate you; be decent and she wings for you.
+  punterwife(input) {
+    if (/grope|grab|touch|fondle|kiss|snog|cop a feel|hand on|spank/.test(input)) {
+      const lost = Math.min(G.money, 300);
+      G.money -= lost;
+      G.hurt = Math.min(3, G.hurt + 1);
+      _say("You put a hand where a hand should never go. Her husband is not slow and " +
+        "the piwins are slower only than him. It is brief, it is one-sided, and it is " +
+        "educational. You are on the pavement before the apology forms" +
+        (lost ? `, ฿${lost} lighter and a rib unhappier` : ", a rib unhappier") +
+        ". “Not in my town, sunshine.”", "alert");
+      _addHappy(-4);
+      return;
+    }
+    if (/money|baht|barfine|how much|price|\bpay\b|short time|long time|come with/.test(input)) {
+      _say("She blinks, then laughs — a real one. “Oh, honey. No. I'm the one wearing " +
+        "the ring.” She waggles it at you, more amused than offended. Her husband " +
+        "hasn't noticed; lucky you.");
+      _addHappy(-1);
+      return;
+    }
+    if (/hi|hello|nice|respect|cheers|congrat|married|wife|husband|talk|chat|cool|lovely|good/.test(input)) {
+      G.wingmanUntil = G.turns + WINGMAN_TURNS;
+      _say("“Aw, you're sweet.” She looks you over, decides you're harmless, and leans " +
+        "in conspiratorially. “Come — let me find you a good one. I know which of these " +
+        "girls is trouble and which is treasure. Twenty years I watch this soi.” For a " +
+        "while, you're under a wife's expert protection.", "win");
+      _addHappy(2);
+      return;
+    }
+    _say("You give her a polite nod and leave her to her people-watching. She dips her " +
+      "head, gracious, and goes back to enjoying everyone else's mistakes.");
   },
 
   pingpong(input) {
@@ -1244,10 +1312,15 @@ function _bellActive() {
   return t !== undefined && G.turns - t < BELL_GLOW;
 }
 
+// A friendly non-working woman (British lesbian, a punter's wife) who's taken a
+// shine to you will vouch — the girls trust her, so you ride her credit briefly.
+function _wingman() { return G.wingmanUntil > G.turns; }
+
 function _favor(id) {
   let f = G.soc.drinks[id] || 0;
   if (G.soc.mamaTreat[G.room]) f += 1;   // the mamasan's blessing travels
   if (_bellActive()) f += 2;             // everybody loves the bell man
+  if (_wingman()) f += 2;                // a wing-woman put in a good word
   return f;
 }
 

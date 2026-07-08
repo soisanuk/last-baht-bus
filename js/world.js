@@ -13,6 +13,7 @@ const LADY_DRINK = 150;  // canon
 const BEER_PRICE = 80;   // your own big Chang, bar price
 const BELL_PRICE = 300;  // ring it and the round is on you
 const BRA_PRICE = 200;   // the mamasan's drawer novelty; makes fondling "interesting"
+const WINGMAN_TURNS = 15;// how long a friendly wing-woman's good word lasts
 const CHARGER_PRICE = 59;
 const SAFE_CASH = 3000;  // the emergency stash in the hotel room safe
 const EXPAT_SAVINGS = 20000; // wired over when you make the move
@@ -1225,6 +1226,26 @@ const ENCOUNTERS = {
       "A cocktail, an amused mouth. She clocks you clocking her — and clocking what " +
       "she's looking at — and the smile says: game recognises game. “Konbanwa.”",
     hint: "(She isn't working, and she isn't shy. Read it right — money is the wrong move.)",
+  },
+  britles: {
+    rooms: ["ws_gate", "ws_south", "ws_north", "beach_rd_c"],
+    interactive: true, nightly: true,
+    intro: "At the go-go rail, pint in hand and entirely at home, a British woman is " +
+      "watching the dancers with more expertise than you will ever have. One of the " +
+      "girls blows her a kiss; she winks back like she owns the place. She catches " +
+      "your eye and grins. “Alright? Best seat in the house, this — and I don't even " +
+      "have to pretend, do I.”",
+    hint: "(Not on the menu — for you. Play it decent and she might be the best wingman you get all night.)",
+  },
+  punterwife: {
+    rooms: ["ws_south", "ws_north", "beach_rd_c", "second_rd_c", "buakhao_market"],
+    interactive: true, nightly: true,
+    intro: "A poised Filipina woman stands beside a farang who is unmistakably her " +
+      "husband — matching rings, the comfortable boredom of the long-married. He's " +
+      "deep in a football argument with a mate; she's people-watching, amused. The " +
+      "working girls nearby treat her with warm, unthreatened respect — she's not " +
+      "competition, and everybody knows it.",
+    hint: "(Somebody's wife. Hands to yourself. Friendly, though — and she knows everyone on this soi.)",
   },
   pingpong: {
     rooms: ["ws_gate", "ws_south", "ws_north"],
