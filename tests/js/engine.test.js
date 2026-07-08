@@ -147,11 +147,11 @@ test("charging needs charger and outlet", () => {
 
 // ── Gossip chain & puzzles ─────────────────────────────────────────────────
 
-test("cindy withholds until the receipt proves your night", () => {
-  state().room = "cindy_bar";
-  run("ask cindy about wallet");
+test("candy withholds until the receipt proves your night", () => {
+  state().room = "candy_bar";
+  run("ask candy about wallet");
   assert.match(lastOut(), /Show me you were even here/i);
-  run("read receipt", "talk to cindy");
+  run("read receipt", "talk to candy");
   assert.ok(state().flags.knowMot);
 });
 
@@ -379,14 +379,14 @@ test("old saves (pre-encounters) load with backfilled fields", () => {
 test("mini-games only where the furniture exists", () => {
   run("play connect 4");
   assert.match(lastOut(), /No Connect 4 board here/i);
-  state().room = "cindy_bar";
+  state().room = "candy_bar";
   run("play pool");
   assert.match(lastOut(), /No pool table here/i);
   assert.equal(state().game, null);
 });
 
 test("connect 4: stakes escrowed, quitting forfeits them", () => {
-  state().room = "cindy_bar";
+  state().room = "candy_bar";
   state().money = 100;
   run("play connect 4");
   assert.ok(state().game && state().game.type === "c4");
@@ -398,7 +398,7 @@ test("connect 4: stakes escrowed, quitting forfeits them", () => {
 });
 
 test("connect 4: broke players play for sanuk", () => {
-  state().room = "cindy_bar";
+  state().room = "candy_bar";
   run("play connect 4");
   assert.equal(state().game.stake, 0);
   assert.match(lastOut(), /sanuk/i);
@@ -407,14 +407,14 @@ test("connect 4: broke players play for sanuk", () => {
 });
 
 test("connect 4: a live game captures commands until it ends", () => {
-  state().room = "cindy_bar";
+  state().room = "candy_bar";
   run("play connect 4", "n");
-  assert.equal(state().room, "cindy_bar", "no walking away mid-game");
+  assert.equal(state().room, "candy_bar", "no walking away mid-game");
   run("quit");
 });
 
 test("connect 4: winning pays double and sets the legend flag", () => {
-  state().room = "cindy_bar";
+  state().room = "candy_bar";
   state().money = 100;
   run("play connect 4");
   // stack the deck: three ● waiting on column 1, her pieces elsewhere
@@ -511,23 +511,23 @@ test("hands off the mamasan; twice gets you walked out of all of LK Metro", () =
 
 test("a ban holds until the security shift changes", () => {
   state().room = "buakhao_market";
-  state().soc.banned.cindy_bar = 0;
+  state().soc.banned.candy_bar = 0;
   state().turns = 5;
-  run("enter cindy");
+  run("enter candy");
   assert.equal(state().room, "buakhao_market");
   assert.match(lastOut(), /Not tonight/i);
   state().turns = 45;
-  run("enter cindy");
-  assert.equal(state().room, "cindy_bar");
-  assert.equal(state().soc.heat.cindy_bar, 1, "back in, but on notice");
+  run("enter candy");
+  assert.equal(state().room, "candy_bar");
+  assert.equal(state().soc.heat.candy_bar, 1, "back in, but on notice");
 });
 
 test("a drink for the mamasan buys the whole bar's goodwill", () => {
-  state().room = "cindy_bar";
+  state().room = "candy_bar";
   state().money = 500;
-  run("buy drink for cindy");
-  assert.equal(state().soc.drinks.cindy, 1);
-  assert.ok(state().soc.mamaTreat.cindy_bar);
+  run("buy drink for candy");
+  assert.equal(state().soc.drinks.candy, 1);
+  assert.ok(state().soc.mamaTreat.candy_bar);
   assert.match(lastOut(), /royal assent|treat you like a regular/i);
 });
 
@@ -570,7 +570,7 @@ test("drink-sniping the regular's girl is bad form; a beer mends it", () => {
 });
 
 test("buying your own beers raises the drunk counter", () => {
-  state().room = "cindy_bar";
+  state().room = "candy_bar";
   state().money = 200;
   run("buy beer");
   assert.equal(state().soc.drunk, 1);
@@ -613,7 +613,7 @@ test("dehydration collapses the night; pre-act-1 you wake on the beach again", (
 test("blackout: the ninth bottle ends the night expensively", () => {
   state().flags.act1Done = true;
   state().flags.hasWallet = true;
-  state().room = "cindy_bar";
+  state().room = "candy_bar";
   state().money = 2000;
   state().soc.drunk = 8;
   run("buy beer");
@@ -679,8 +679,8 @@ test("no barfining the mamasan, and heat freezes negotiations", () => {
   state().flags.act1Done = true;
   state().flags.hasWallet = true;
   state().money = 2000;
-  state().room = "cindy_bar";
-  run("barfine cindy");
+  state().room = "candy_bar";
+  run("barfine candy");
   assert.match(lastOut(), /She IS the bar/i);
   state().room = "jasmine_garden";
   state().soc.drinks.fon = 5;
@@ -767,9 +767,9 @@ test("public drunkenness summons the boy in brown; manners halve the damage", ()
 });
 
 test("a mamasan in line of sight can rescue you from the shakedown", () => {
-  state().room = "buakhao_market"; // Cindy Bar is adjacent
+  state().room = "buakhao_market"; // Candy Bar is adjacent
   state().money = 1000;
-  state().soc.mamaTreat.cindy_bar = true;
+  state().soc.mamaTreat.candy_bar = true;
   state().rng = 3; // first _rand() < 0.7 → rescue fires
   state().pendingEnc = "police";
   run("um");
@@ -854,7 +854,7 @@ test("act one complete: scored, converted to happiness, night continues", () => 
 });
 
 test("hitting 100 สนุก is celebrated, not terminal", () => {
-  state().room = "cindy_bar";
+  state().room = "candy_bar";
   state().money = 500;
   state().happy = 99;
   run("ring bell");
@@ -862,7 +862,7 @@ test("hitting 100 สนุก is celebrated, not terminal", () => {
   assert.ok(state().flags.sabaiSabai);
   assert.match(lastOut(), /สบายสบาย/);
   run("look");
-  assert.match(lastOut(), /Cindy Bar/);
+  assert.match(lastOut(), /Candy Bar/);
 });
 
 // ── The full playthrough ───────────────────────────────────────────────────
@@ -877,13 +877,13 @@ test("scripted happy-ending playthrough", () => {
     "light on", "w", "n", "take bottle", "e", "light off",
     "sell bottles",
     "n", "ride bus to beach road", "pay 15",
-    // Act 2 — the gossip chain
-    "e", "n", "in", "talk to cindy",                 // Cindy: Mot did it
+    // Act 2 — the gossip chain (Second Road now sits between Beach Rd and Buakhao)
+    "e", "e", "n", "in", "talk to candy",            // Candy: Mot did it
     "out", "n", "in", "talk to lek",                 // Lek: Oy has it
-    "out", "s", "in", "ask cindy about wallet",      // Cindy: som tam errand
-    "out", "s", "w", "talk to bank",                 // Bank: helmet favour
+    "out", "s", "in", "ask candy about wallet",      // Candy: som tam errand
+    "out", "s", "w", "w", "talk to bank",            // Bank: helmet favour
     // LK Metro
-    "e", "e", "e", "e", "in",                        // Starlight Bar
+    "e", "e", "e", "e", "e", "in",                   // Starlight Bar
     "give helmet to pim", "ask pim about oy",        // pin part: lucky 9
     "out", "w", "in", "ask nong about oy",           // pin part: number 71
     "out", "e",

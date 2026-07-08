@@ -1237,7 +1237,7 @@ function _goExpat() {
     "run, a long-stay rate on room 412 negotiated over exactly one bottle of " +
     "Sang Som with the night clerk, and your savings wired over — " +
     `฿${EXPAT_SAVINGS}, blinking on an ATM screen like a dare. The soi absorbs ` +
-    "the news without comment. Cindy just sets out your glass.", "win");
+    "the news without comment. Candy just sets out your glass.", "win");
   _say("★ EXPAT MODE — no flights, no clock on the week. The city is yours to " +
     "figure out. (They say the smart ones end up owning a bar…) ★", "win");
   _say(`── DAY ${G.day} · PATTAYA, HOME ──`, "win");
@@ -1409,7 +1409,7 @@ function _checkAct1() {
   _say("Room 412. You bolt the door, fall onto the terrible bed, and hold your " +
     "wallet up to the ceiling light like a trophy. Outside, Pattaya keeps roaring " +
     "without you — the bars, the buses, the whole neon machine. Somewhere out " +
-    "there Cindy is polishing a glass, Bank is leaning on his bike, and Madam Oy " +
+    "there Candy is polishing a glass, Bank is leaning on his bike, and Madam Oy " +
     "is counting money that is, for once, not yours.", "win");
   _say("★ ACT ONE COMPLETE: THE LAST BAHT BUS ★", "win");
   for (const l of lines) _say(l, "dim");
@@ -1815,9 +1815,9 @@ function _doBuy(arg) {
         "clocked it.", "alert");
       _addHeat(1);
     }
-    if (id === "cindy" && !_flag("knowMot")) {
+    if (id === "candy" && !_flag("knowMot")) {
       _setFlag("knowWasHere"); _setFlag("knowMot");
-      _deliver("cindy", _pickDialogue("cindy"));
+      _deliver("candy", _pickDialogue("candy"));
     } else if (id === "pim" && !_flag("pinPart9")) {
       _setFlag("helmetDelivered"); // she'll talk now regardless
       _deliver("pim", _pickDialogue("pim", "oy"));
@@ -2058,7 +2058,7 @@ function doCommand(input) {
       break;
     }
     case "give": case "hand": case "deliver": {
-      const m = arg.match(/^(.+?) (?:to )?(nok|auntie|bank|cindy|lek|noi|ping|aom|joy|fon|gift|kwan|nong|pim|ploy|dj|oy|madam|daeng|gary|mot|security)( .*)?$/);
+      const m = arg.match(/^(.+?) (?:to )?(nok|auntie|bank|candy|lek|noi|ping|aom|joy|fon|gift|kwan|nong|pim|ploy|dj|oy|madam|daeng|gary|mot|security)( .*)?$/);
       if (m) _doGive(m[1].trim(), m[2]);
       else _say("Give what to whom? (GIVE <thing> TO <person>)");
       break;

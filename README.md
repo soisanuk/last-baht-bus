@@ -139,8 +139,30 @@ flowchart TD
     brc[🚏 Beach Rd Central]
     brn[🚏 Beach Rd North]
     prom[Promenade]
+    tq[🍹 Tequila Queen<br>Mem 👵 oldest go-go]:::bar
+    stinky[🍺 Stinky Bar 🎱<br>Bert]:::bar
+    mall[Central Mall 🔌]
+    cop[👮 Police Station]
     brs --- brc --- brn
     brc --- prom
+    brc --- tq
+    brc --- mall
+    brn --- stinky
+    mall --- cop --- brn
+  end
+
+  subgraph SECONDRD["SECOND ROAD"]
+    srs[Second Rd South]
+    src[Second Rd Central]
+    srn[Second Rd North]
+    klang[Pattaya Klang<br>Central Pattaya Rd]
+    srs --- src --- srn --- klang
+  end
+
+  subgraph MYTH["MYTH NIGHT"]
+    myth[Myth Night Market]
+    cb2[🍺 Candy Bar 2 🔌<br>Bee 🐝]:::bar
+    myth --- cb2
   end
 
   subgraph WS["WALKING STREET"]
@@ -166,13 +188,13 @@ flowchart TD
     bkn[Buakhao North]
     bkm[Buakhao Market]
     bks[Buakhao South 🏍️]
-    cindy[🍺 Cindy Bar 🔌<br>Cindy 🌹 HUB]:::bar
+    candy[🍺 Candy Bar 🔌<br>Candy 🌹 HUB]:::bar
     lt[🍺 Lucky Tiger<br>Lek]:::bar
     sr[🍺 Silk Rose]:::bar
     jg[🍺 Jasmine Garden<br>Fon]:::bar
     bkn --- bkm --- bks
     bkn --- lt
-    bkm --- cindy
+    bkm --- candy
     bkm --- sr
     bks --- jg
   end
@@ -229,10 +251,13 @@ flowchart TD
   %% region connectors (walking)
   jbus --- prat
   prat --- gate
+  prat --- srs
   gate --- brs
   gate --- wss
-  brs --- bks
-  brc --- bkn
+  brs --- srs --- bks
+  mall --- src --- myth --- bkn
+  klang --- brn
+  klang --- bkn
   brn --- s6
   brn --- nak
   bks --- lke
