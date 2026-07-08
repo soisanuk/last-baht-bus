@@ -169,6 +169,8 @@ const _audio = (() => {
 const _REGION_TRACKS = {
   "Jomtien": "bus",
   "Beach Road": "bus",
+  "Second Road": "bus",
+  "Myth Night": "soi",
   "Naklua": "bus",
   "Walking Street": "street",
   "Soi Buakhao": "soi",

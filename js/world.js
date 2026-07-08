@@ -85,7 +85,7 @@ const ROOMS = {
     desc: "The hill road between Jomtien and Pattaya proper — condos behind walls, " +
       "sleeping soi dogs, and long stretches where the streetlights have given up. " +
       "The Buddha Hill viewpoint is up a path to the west.",
-    exits: { s: "jomtien_bus_stop", n: "ws_gate", w: "buddha_hill" },
+    exits: { s: "jomtien_bus_stop", n: "ws_gate", w: "buddha_hill", e: "second_rd_s" },
   },
   buddha_hill: {
     name: "Buddha Hill Viewpoint",
@@ -106,16 +106,29 @@ const ROOMS = {
       "stand idles on the corner, drivers watching the street like sleepy hawks.",
     busStop: "beachrd",
     motosai: true,
-    exits: { s: "ws_gate", n: "beach_rd_c", e: "buakhao_s" },
+    exits: { s: "ws_gate", n: "beach_rd_c", e: "second_rd_s" },
   },
   beach_rd_c: {
     name: "Beach Road Central",
     region: "Beach Road",
     seven: true,
     desc: "Mid-Beach-Road: tour groups, tailor touts, and the sea breathing in the dark " +
-      "beyond the promenade. Soi Buakhao is a few blocks inland to the east.",
+      "beyond the promenade. The glass cliff of CENTRAL mall rises a block inland, and " +
+      "just south of it TEQUILA QUEEN's ancient neon señorita kicks her leg, as she " +
+      "has since before you were born.",
     busStop: "beachrd",
-    exits: { s: "beach_rd_s", n: "beach_rd_n", w: "promenade", e: "buakhao_n" },
+    exits: { s: "beach_rd_s", n: "beach_rd_n", w: "promenade", e: "central_mall", in: "tequila_queen" },
+  },
+  tequila_queen: {
+    name: "Tequila Queen A-Go-Go",
+    region: "Beach Road",
+    bar: "Tequila Queen A-Go-Go", barType: "gogo",
+    desc: "The oldest go-go in Pattaya, and proudly unrestored: red velvet gone bald in " +
+      "patches, a mirror ball missing a continent of tiles, and dancers with seniority " +
+      "no mamasan would dare question. What the ladies concede in years they repay in " +
+      "showmanship, and the regulars wouldn't trade one of them for the whole of " +
+      "Walking Street. Mem runs the floor like a national institution, because it is one.",
+    exits: { out: "beach_rd_c" },
   },
   promenade: {
     name: "Beach Promenade",
@@ -129,9 +142,98 @@ const ROOMS = {
     name: "Beach Road North",
     region: "Beach Road",
     desc: "The north end, near the Dolphin roundabout. Soi 6 runs inland to the east — " +
-      "short, loud, and lit like a runway. Naklua lies further north, past the roundabout.",
+      "short, loud, and lit like a runway. Naklua lies further north, past the roundabout. " +
+      "STINKY BAR's sign — a cartoon skunk hoisting a Chang — buzzes over an open " +
+      "front full of laughter and the crack of pool balls.",
     busStop: "beachrd",
-    exits: { s: "beach_rd_c", e: "soi6_street", n: "naklua_rd" },
+    exits: { s: "beach_rd_c", e: "soi6_street", n: "naklua_rd", in: "stinky_bar" },
+  },
+  stinky_bar: {
+    name: "Stinky Bar",
+    region: "Beach Road",
+    bar: "Stinky Bar", barType: "beer", pool: true,
+    desc: "An American-run beer bar that smells, in defiance of its name, of lime and " +
+      "cue chalk. League trophies crowd the back bar; the table is brushed like a " +
+      "putting green. Bert holds court from the owner's stool with a bottomless " +
+      "Budweiser and opinions on everyone's break.",
+    exits: { out: "beach_rd_n" },
+  },
+  central_mall: {
+    name: "Central Mall (Beach Road front)",
+    region: "Beach Road",
+    outlet: true,
+    desc: "The air-conditioned mothership: seven storeys of glass, brand names, and " +
+      "farang families who have no idea what this town does after dinner. Free " +
+      "outlets by the food court, arctic air, and security guards who wai. Beach " +
+      "Road glitters west; Second Road runs behind the mall to the east; the " +
+      "police station squats to the north like a paperweight.",
+    exits: { w: "beach_rd_c", e: "second_rd_c", n: "police_station" },
+  },
+  police_station: {
+    name: "Pattaya Central Police Station",
+    region: "Beach Road",
+    desc: "Brown uniforms, whiteboards of unpaid fines, and a desk sergeant with the " +
+      "unhurried patience of a man who has seen every possible farang. A wall of " +
+      "confiscated selfie sticks. Sitting between the mall and the Beach Road bars, " +
+      "it catches whatever the tide washes up. Best visited voluntarily.",
+    exits: { s: "central_mall", n: "beach_rd_n" },
+  },
+
+  // ─── Second Road ───
+  second_rd_s: {
+    name: "Second Road (South)",
+    region: "Second Road",
+    desc: "The working road running parallel between Beach Road and Soi Buakhao — less " +
+      "neon, more motorbikes, the town with its makeup half off. It climbs south " +
+      "onto the north shoulder of Pratumnak Hill, toward Jomtien beyond.",
+    exits: { w: "beach_rd_s", e: "buakhao_s", n: "second_rd_c", s: "pratumnak_rd" },
+  },
+  second_rd_c: {
+    name: "Second Road (Central)",
+    region: "Second Road",
+    desc: "Mid-Second-Road: baht buses in convoy, pharmacies, and the constant churn " +
+      "between the mall's back doors to the west and the fairy-lit mouth of MYTH " +
+      "NIGHT market to the east.",
+    exits: { s: "second_rd_s", n: "second_rd_n", w: "central_mall", e: "myth_night" },
+  },
+  second_rd_n: {
+    name: "Second Road (North)",
+    region: "Second Road",
+    desc: "The north stretch, where Second Road angles toward the Dolphin roundabout. " +
+      "Central Pattaya Road — Pattaya Klang — crosses just ahead, cutting the whole " +
+      "town into north and south.",
+    exits: { s: "second_rd_c", n: "pattaya_klang" },
+  },
+  pattaya_klang: {
+    name: "Central Pattaya Road (Pattaya Klang)",
+    region: "Second Road",
+    desc: "The big east-west artery, bisecting Beach Road, Second Road, and Soi Buakhao " +
+      "in one straight shot from the sea to Sukhumvit. Baht buses, banks, gold shops, " +
+      "and a river of traffic that never quite jams and never quite flows.",
+    exits: { w: "beach_rd_n", s: "second_rd_n", e: "buakhao_n" },
+  },
+
+  // ─── Myth Night ───
+  myth_night: {
+    name: "Myth Night Market",
+    region: "Myth Night",
+    desc: "The newest bar complex in town: shipping-container bars, festoon lights, and " +
+      "live-music stages wedged between Soi Buakhao and Second Road, directly across " +
+      "from Central's glow. Young crowd, shared security in grey polos, craft beer at " +
+      "double Chang prices. CANDY BAR 2's rose-pink sign is unmistakably the same " +
+      "pink as the original.",
+    exits: { w: "second_rd_c", e: "buakhao_n", in: "candy_bar_2" },
+  },
+  candy_bar_2: {
+    name: "Candy Bar 2",
+    region: "Myth Night",
+    bar: "Candy Bar 2", barType: "beer",
+    outlet: true,
+    desc: "Candy's second front: the same rose-pink, the same spotless glasses, the " +
+      "same bell over a newer till — the empire expands. Bee runs the floor with a " +
+      "trainee's energy and the boss's exact smile. A framed photo of the original " +
+      "bar hangs behind the bottles, signed 'สู้ๆ — Candy'.",
+    exits: { out: "myth_night" },
   },
 
   // ─── Walking Street ───
@@ -219,16 +321,16 @@ const ROOMS = {
     desc: "The expat artery: pharmacies, laundry, bars, repeat. Somewhere a coverband is " +
       "doing that to 'Hotel California'. The market sprawl is south; LUCKY TIGER BAR " +
       "roars quietly on the corner.",
-    exits: { w: "beach_rd_c", s: "buakhao_market", e: "lucky_tiger", in: "lucky_tiger" },
+    exits: { w: "myth_night", n: "pattaya_klang", s: "buakhao_market", e: "lucky_tiger", in: "lucky_tiger" },
   },
   buakhao_market: {
     name: "Buakhao Market",
     region: "Soi Buakhao",
     desc: "Tarps, fans, fruit pyramids, and a man forever restacking ice crates behind a " +
       "som tam cart. The smell of papaya salad could pull you here from two sois away. " +
-      "CINDY BAR's rose-pink sign glows just south; SILK ROSE and JASMINE GARDEN share " +
+      "CANDY BAR's rose-pink sign glows just south; SILK ROSE and JASMINE GARDEN share " +
       "the block east.",
-    exits: { n: "buakhao_n", s: "buakhao_s", w: "cindy_bar", e: "silk_rose", in: "cindy_bar" },
+    exits: { n: "buakhao_n", s: "buakhao_s", w: "candy_bar", e: "silk_rose", in: "candy_bar" },
   },
   buakhao_s: {
     name: "Soi Buakhao (South)",
@@ -237,15 +339,15 @@ const ROOMS = {
       "pavement. The LK Metro arch is east — a soi that eats tourists and spits out " +
       "poorer, happier ones. A motosai stand waits by the corner, engines ticking.",
     motosai: true,
-    exits: { n: "buakhao_market", w: "beach_rd_s", e: "lk_entrance", s: "jasmine_garden", in: "jasmine_garden" },
+    exits: { n: "buakhao_market", w: "second_rd_s", e: "lk_entrance", s: "jasmine_garden", in: "jasmine_garden" },
   },
-  cindy_bar: {
-    name: "Cindy Bar",
+  candy_bar: {
+    name: "Candy Bar",
     region: "Soi Buakhao",
-    bar: "Cindy Bar", barType: "beer",
+    bar: "Candy Bar", barType: "beer",
     outlet: true,
     desc: "A rose-pink corner bar, spotless, with a bell over the till and a wall of " +
-      "photos going back decades — same bar, same smile, different haircuts. Cindy runs " +
+      "photos going back decades — same bar, same smile, different haircuts. Candy runs " +
       "the room like a harbourmaster. There's a power outlet under the counter, " +
       "for customers she likes.",
     exits: { out: "buakhao_market" },
@@ -523,9 +625,9 @@ const ITEMS = {
   },
   som_tam: {
     name: "som tam (extra spicy)", aliases: ["som tam", "somtam", "papaya salad", "salad", "food"],
-    portable: true, location: null, // given by Cindy
+    portable: true, location: null, // given by Candy
     desc: "A takeaway box of som tam poo plara, spicy enough to be classed as a weapon. " +
-      "Cindy's peace offering for Ploy, the cashier at Rainbow Girls.",
+      "Candy's peace offering for Ploy, the cashier at Rainbow Girls.",
   },
   moo_ping: {
     name: "moo ping skewer", aliases: ["moo ping", "mooping", "skewer", "pork", "food"],
@@ -605,10 +707,10 @@ const NPCS = {
     ],
   },
 
-  cindy: {
-    name: "Cindy", th: "ซินดี้", emoji: "🌹",
-    room: "cindy_bar",
-    desc: "The mamasan of Cindy Bar — sharp as a razor, warm as a Chang on a hot night, " +
+  candy: {
+    name: "Candy", th: "ซินดี้", emoji: "🌹",
+    room: "candy_bar",
+    desc: "The mamasan of Candy Bar — sharp as a razor, warm as a Chang on a hot night, " +
       "and on the soi longer than most expats have had passports. She clocked you the " +
       "second you walked in.",
     dialogue: [
@@ -618,11 +720,11 @@ const NPCS = {
         text: "\"Of course I remember you! Three a.m., singing, buying Mama noodles next door. You leave with big group toward LK Metro — and Mot follow you out. Little pickpocket, work the drunk ones.\" She narrows her eyes. \"Ask Lek at Lucky Tiger. She see Mot this morning. OR—\" she smiles sweetly \"—buy me lady drink and I tell you everything faster.\"",
         sets: ["knowMot"] },
       { th: "สวัสดีค่ะที่รัก", rom: "sawatdee kha tilac",
-        text: "\"Welcome to Cindy Bar! First time? No — wait.\" She studies you. \"You look like a man with a story and no wallet to put it in. Sit. Talk to Cindy.\"" },
+        text: "\"Welcome to Candy Bar! First time? No — wait.\" She studies you. \"You look like a man with a story and no wallet to put it in. Sit. Talk to Candy.\"" },
       { topic: "wallet", req: ["knowOyHasIt"],
-        text: "\"Oy has it? Then it's safe — safer than in your pocket, clearly. But Oy… ai, she make you work for it. Take her som tam from the market cart — extra spicy, tell them 'Cindy's order'. Give it to Ploy her cashier, and doors open.\" She waves at the cart across the soi.", sets: ["somTamAccepted"], gives: "som_tam" },
+        text: "\"Oy has it? Then it's safe — safer than in your pocket, clearly. But Oy… ai, she make you work for it. Take her som tam from the market cart — extra spicy, tell them 'Candy's order'. Give it to Ploy her cashier, and doors open.\" She waves at the cart across the soi.", sets: ["somTamAccepted"], gives: "som_tam" },
       { topic: "wallet", notFlags: ["knowWasHere"],
-        text: "\"Lost wallet? Mmm. And what makes you think Cindy knows something?\" She polishes a glass, watching you. \"Show me you were even here last night and maybe my memory improve.\" (Perhaps something in your pockets proves it.)" },
+        text: "\"Lost wallet? Mmm. And what makes you think Candy knows something?\" She polishes a glass, watching you. \"Show me you were even here last night and maybe my memory improve.\" (Perhaps something in your pockets proves it.)" },
       { topic: "oy", text: "\"Madam Oy. We come up together — Crystal Palace, different lifetime. She hard like teak now but she was farm girl from Isaan same as me. Wai her properly and she remember she has a heart. Somewhere.\"" },
       { topic: "mot", req: ["knowMot"], text: "\"Mot sell everything he lift to one buyer — always the same. Ask around LK Metro who that is.\" She mimes zipping her lip and pointing at the till: lady drink territory." },
     ],
@@ -686,7 +788,7 @@ const NPCS = {
     dialogue: [
       { th: "มาแล้วเหรอ", rom: "maa laeo roe",
         text: "\"You come back!! Wait— no, you new. Same same!\" She collapses in giggles. \"Sit down sit down! You buy me lady drink? Upstairs very nice—\" she catches your expression \"—okay okay, water for you, story for me, hahaha!\"" },
-      { topic: "wallet", text: "\"No wallet?!\" Gales of laughter. \"Tilac, on THIS soi that is a very serious medical condition. Go Soi Buakhao — the mamasans there fix everything. Especially Cindy. Everybody's problems go to Cindy.\"" },
+      { topic: "wallet", text: "\"No wallet?!\" Gales of laughter. \"Tilac, on THIS soi that is a very serious medical condition. Go Soi Buakhao — the mamasans there fix everything. Especially Candy. Everybody's problems go to Candy.\"" },
     ],
   },
 
@@ -767,7 +869,7 @@ const NPCS = {
       "love her working here, so the cage suits everyone.",
     dialogue: [
       { req: ["somTamDelivered"], notFlags: ["officeOpen"], th: "เผ็ดกำลังดี", rom: "phet kamlang dii",
-        text: "\"Cindy's som tam! You SAINT.\" She inhales the box through the cage bars. \"Okay, listen. Office door locks itself when the music is loud — Mamasan's rule. When DJ Beer plays HER song, security walk the floor and the door... forgets to lock.\" She nods microscopically toward the DJ booth. \"Request 'Sabai Sabai'. Then be quick and be invisible.\"",
+        text: "\"Candy's som tam! You SAINT.\" She inhales the box through the cage bars. \"Okay, listen. Office door locks itself when the music is loud — Mamasan's rule. When DJ Beer plays HER song, security walk the floor and the door... forgets to lock.\" She nods microscopically toward the DJ booth. \"Request 'Sabai Sabai'. Then be quick and be invisible.\"",
         sets: ["knowDoorTrick"] },
       { req: ["waiedPloy"], notFlags: ["somTamDelivered"],
         text: "\"So polite! Farang who wai — Mamasan would like you.\" She glances at the ห้ามเข้า door. \"Whatever you're here for, sweetheart, I can't help from inside the cage. Unless...\" she sniffs the air theatrically \"...you happened to know somebody who owes me som tam.\"" },
@@ -836,6 +938,91 @@ const NPCS = {
         text: "\"Come in, come in! Farang on Khao Talo — you lost, or you smart?\" She's already opening a Chang. \"Sit. Out here the beer is cold and the stories are old. Best combination.\"" },
       { topic: "oy", text: "\"Oy and me come up together, Walking Street, when you still count the year in one-nine.\" She taps the photo behind her. \"She got the empire. I got the quiet life and the better knees. We both won.\"" },
       { topic: "darkside", text: "\"The Darkside good to us old girls. Rent cheap, customers loyal, nobody in a hurry. The lake is for the married ones — go see, it's like Pattaya with the volume off.\"" },
+    ],
+  },
+
+  bert: {
+    name: "Bert", th: "เบิร์ต", emoji: "🎱",
+    room: "stinky_bar",
+    desc: "The owner: American, sixty-something, forearms like dock rope, a Budweiser " +
+      "that never empties and never seems to get him drunk. Twenty-two years on " +
+      "Beach Road, most of them spent within nine feet of that pool table.",
+    dialogue: [
+      { text: "\"Welcome to the Stinky, bud. Name's Bert. Table's true, beer's cold, " +
+        "and the only rule is don't sit on the rail.\" He chalks a cue without " +
+        "looking at it. \"You shoot? League night's every third night — killer " +
+        "pool, hundred baht in, winner takes the table money.\"" },
+      { topic: "league", text: "\"Killer pool. Everybody's got three lives, pot or " +
+        "you lose one, last man standing takes the pot. Every third night, right " +
+        "here. Half the piwins in North Pattaya play. Bring your hundred baht and " +
+        "your humility.\"" },
+      { topic: "pool", text: "\"Table's a Brunswick, older than most of my customers. " +
+        "I re-cloth her every year, level her every month, and love her more than " +
+        "I loved either of my wives. She holds no grudges. Unlike either of my wives.\"" },
+      { topic: "flying club", text: "He goes quiet a beat. \"Pattaya Flying Club. " +
+        "That's the joke, bud — the guys who go off the condo balconies when the " +
+        "money or the girl or the visa runs out. Every high season there's a few. " +
+        "We laugh about it because the other option's worse.\" He taps the bar. " +
+        "\"Anybody ever seems that far gone, you buy 'em a beer and you SIT with " +
+        "'em, you hear?\"" },
+      { topic: "white knight", text: "\"See that kid last month — flew in, fell in " +
+        "love in forty minutes, tried to 'rescue' a girl from Tequila Queen who's " +
+        "got two houses in Buriram and a husband she likes fine. White knights, we " +
+        "call 'em. The machine eats 'em alive, bud. The ladies don't need saving — " +
+        "they need customers with manners.\"" },
+      { topic: "butterfly", text: "\"Butterfly? That's you, maybe — man who flits " +
+        "flower to flower, different bar, different girl, every night. Girls'll " +
+        "tease you for it, mamasans price you for it. Ain't a crime. Just don't " +
+        "butterfly inside ONE bar, that's how a man loses a drink to the back of " +
+        "the head.\"" },
+      { topic: "ryan powers", req: ["knowOyHasIt"],
+        text: "He lowers the Budweiser half an inch, which for Bert is a whisper. " +
+        "\"White Dish Group. Front company — owns most of the paper on Soi 6. The " +
+        "man behind it is a Brit named Ryan Powers, and no, you never met him, and " +
+        "neither did I. The bars run clean enough. The books don't. Leave that one " +
+        "alone, bud.\"" },
+    ],
+  },
+
+  bee: {
+    name: "Bee", th: "ผึ้ง", emoji: "🐝",
+    room: "candy_bar_2",
+    desc: "Candy Bar 2's floor boss — early twenties, quick everywhere at once, wearing " +
+      "the same rose-pink polo as the original bar. Candy's niece, though nobody " +
+      "says it and everybody knows it. The smile is the family franchise.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Welcome to Candy Bar TWO!\" — the number lands with enormous pride. " +
+        "\"Auntie— ah, KHUN Candy teach me everything. You her customer? Then you " +
+        "MY customer. Sit sit sit.\"" },
+      { topic: "candy", text: "\"Khun Candy start with one bar, twenty year on the " +
+        "soi, save every baht, never barfine, never lazy. Now: TWO bar.\" Bee " +
+        "holds up two fingers like a victory sign. \"I do same. Watch me.\"" },
+      { topic: "myth night", text: "\"Myth Night VERY new. Young people, craft beer " +
+        "— hundred-eighty baht, can you believe — live band Friday. Security all " +
+        "shared, grey shirt boys, very professional. Not like old day, Candy say.\"" },
+    ],
+  },
+
+  mem: {
+    name: "Mamasan Mem", th: "เม้ม", emoji: "👵",
+    room: "tequila_queen",
+    desc: "The Tequila Queen's mamasan — silver-streaked chignon, reading glasses on a " +
+      "gold chain, and a stage presence undimmed since she headlined this same room " +
+      "in another century. The dancers call her 'Khun Mae'. So do some customers.",
+    dialogue: [
+      { th: "หนูมาแล้วเหรอ", rom: "nuu maa laeo rer",
+        text: "\"New face! Sit, na. Tequila Queen is OLDEST go-go in Pattaya — " +
+        "before Walking Street have arch, before Central have escalator, we have " +
+        "this stage. My girls not young like Soi 6.\" A magnificent shrug. \"Wine " +
+        "also not young. Somehow everybody still order wine.\"" },
+      { topic: "girls", text: "\"My girls dance here ten, twenty year. They know " +
+        "every song, every trick, every kind of man who walk in that door — " +
+        "including your kind, tilac, whatever kind you think you are.\" She smiles " +
+        "to soften it. Mostly." },
+      { topic: "oy", text: "\"Oy? Rainbow Girls Oy? HA. She dance HERE first, one " +
+        "season, before Crystal Palace take her. Number 71. I give her that number " +
+        "myself. Tell her Mem say she still owe me one uniform.\"" },
     ],
   },
 
@@ -950,12 +1137,12 @@ const CANON_BARS = [
   "Golden Dragon Bar", "Sunset Dreams Lounge", "Starlight Bar",
   "Rainbow Girls Bar", "Paradise Nights Club", "Gold Rush Lounge",
   "Silk Rose Bar", "Club Mirage", "Jasmine Garden Bar",
-  "Crystal Palace A-Go-Go", "Midnight Sun Bar", "Cindy Bar",
+  "Crystal Palace A-Go-Go", "Midnight Sun Bar", "Candy Bar",
 ];
 
 const CANON_HOSTESSES = [
   "lek", "noi", "ping", "aom", "joy", "fon", "gift", "kwan",
-  "cindy", "nong", "pim", "oy",
+  "candy", "nong", "pim", "oy", "bee", "mem",
 ];
 
 // ── Bar social roles ────────────────────────────────────────────────────────
@@ -966,9 +1153,9 @@ const CANON_HOSTESSES = [
 const NPC_ROLES = {
   lek: "hostess", noi: "hostess", ping: "hostess", aom: "hostess",
   joy: "hostess", fon: "hostess", gift: "hostess", kwan: "hostess",
-  nong: "hostess", pim: "hostess",
+  nong: "hostess", pim: "hostess", bee: "hostess",
   ploy: "cashier",
-  cindy: "mamasan", oy: "mamasan", daeng: "mamasan",
+  candy: "mamasan", oy: "mamasan", daeng: "mamasan", mem: "mamasan",
 };
 
 // The girls every bar knows by name — their barfine never gets waived,
