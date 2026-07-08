@@ -629,6 +629,31 @@ const ITEMS = {
     desc: "A takeaway box of som tam poo plara, spicy enough to be classed as a weapon. " +
       "Candy's peace offering for Ploy, the cashier at Rainbow Girls.",
   },
+  sang_som: {
+    name: "bottle of Sang Som", aliases: ["sang som", "sangsom", "rum", "bottle of rum"],
+    portable: true, location: null, // Candy hands it over for the sister-bar run
+    desc: "A boxed bottle of Sang Som with a rose-pink ribbon and a card in Candy's " +
+      "handwriting: 'เปิดร้านใหม่ สู้ๆ นะ' — for the opening shelf at Candy Bar 2.",
+  },
+  fake_rolex: {
+    name: "genuine Rolex (allegedly)", aliases: ["rolex", "watch", "fake rolex"],
+    portable: true, location: null,
+    desc: "A 'Rolex' of tremendous confidence and negligible mass. The second hand " +
+      "moves in a way Rolex engineers would describe as 'jazz'. It has already " +
+      "started a conversation at every bar you've worn it to.",
+  },
+  shades: {
+    name: "designer sunglasses", aliases: ["sunglasses", "shades", "glasses"],
+    portable: true, location: null,
+    desc: "RayBens. The B is doing a lot of work. Worn at night, indoors, they say " +
+      "either 'international man of mystery' or 'hungover' — both true.",
+  },
+  vitamin_v: {
+    name: "packet of 'vitamins'", aliases: ["vitamins", "vitamin", "pills", "meds"],
+    portable: true, location: null,
+    desc: "A foil strip of blue diamonds from the peddler's deepest pocket, labelled " +
+      "in four languages, none convincingly. Sold with a wink you didn't ask for.",
+  },
   moo_ping: {
     name: "moo ping skewer", aliases: ["moo ping", "mooping", "skewer", "pork", "food"],
     portable: true, location: null, // pressed on you by a sentimental bargirl
@@ -708,7 +733,7 @@ const NPCS = {
   },
 
   candy: {
-    name: "Candy", th: "ซินดี้", emoji: "🌹",
+    name: "Candy", th: "แคนดี้", emoji: "🌹",
     room: "candy_bar",
     desc: "The mamasan of Candy Bar — sharp as a razor, warm as a Chang on a hot night, " +
       "and on the soi longer than most expats have had passports. She clocked you the " +
@@ -1118,6 +1143,25 @@ const ENCOUNTERS = {
       "and holds it up, eyebrows raised: want some?",
     hint: "(YES would be the traditional answer.)",
   },
+  freelancer: {
+    rooms: ["beach_rd_s", "beach_rd_c", "beach_rd_n", "promenade"],
+    interactive: true, nightly: true, // resets every night — Beach Road always restocks
+    th: "ไปไหนคะ", rom: "pai nai kha?",
+    intro: "She's leaning on the promenade rail where the lamplight is kindest — no " +
+      "bar, no mamasan, freelance and unhurried. “Going where, hansum? Tonight I " +
+      "am also free.” A beat, then, nodding down the rail at a friend pretending " +
+      "not to listen: “Ning also free. VERY boring night, na.”",
+    hint: "(Company is ฿1000. Ning makes it ฿1800. NO is also a word.)",
+  },
+  pingpong: {
+    rooms: ["ws_gate", "ws_south", "ws_north"],
+    interactive: true,
+    intro: "A wiry tout materialises at your elbow with a laminated card he holds " +
+      "like a royal decree. “PING PONG SHOW! Very famous! No cover charge, one " +
+      "drink only, up stair, best show Walking Street, my friend, BEST show.” " +
+      "The stairs behind him go up into a red glow and a smell of mop water.",
+    hint: "(Everyone knows the stories. ฿600 says they're exaggerated. YES / NO.)",
+  },
   tonic: {
     rooms: ["jomtien_beach_rd", "beach_rd_c", "beach_rd_n", "promenade", "ws_gate"],
     interactive: true,
@@ -1127,6 +1171,43 @@ const ENCOUNTERS = {
       "bottles. “Himalayan herbal tonic. Hair grow back one hundred per cent, " +
       "guarantee. For you, special: ninety-nine baht only.”",
     hint: "(He is not going to stop walking beside you until you answer.)",
+  },
+};
+
+// ── Quests (adventures) ─────────────────────────────────────────────────────
+// The engine's quest subsystem (engine.js) drives these: givers surface the
+// offer in conversation, ACCEPT starts it (handing over `item` if any),
+// setting `doneFlag` completes it next turn and pays `reward`. `deps` are
+// quest ids that must be done first.
+
+const QUESTS = {
+  sangsom: {
+    name: "The Sister-Bar Run",
+    giver: "candy",
+    desc: "Carry Candy's gift bottle of Sang Som to Bee at Candy Bar 2, in Myth " +
+      "Night (GIVE SANG SOM TO BEE).",
+    deps: [],
+    item: "sang_som",
+    doneFlag: "sangsomDelivered",
+    reward: { money: 200, happy: 3 },
+  },
+  league: {
+    name: "King of the Killer Table",
+    giver: "bert",
+    desc: "Win a killer pool league night — every third night, ฿100 entry, the " +
+      "Stinky Bar is the league's home felt (PLAY KILLER).",
+    deps: [],
+    doneFlag: "wonLeague",
+    reward: { money: 0, happy: 5 },
+  },
+  bee_number: {
+    name: "Bee's First Investor",
+    giver: "bee",
+    desc: "Bee wants her expansion fund taken seriously: get her number (CONTACT " +
+      "BEE) and wire ฿100 through the banking app (SEND 100 TO BEE).",
+    deps: ["sangsom"],
+    doneFlag: "beeBanked",
+    reward: { money: 0, happy: 4 },
   },
 };
 
