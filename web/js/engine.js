@@ -1164,6 +1164,42 @@ function _addHeat(n) {
   }
 }
 
+// APOLOGIZE / SAY SORRY: the wai-and-mean-it. Mollifies a miffed patron
+// outright (like standing him a beer does), and burns off one point of heat —
+// but only once per bar per night; after that the bar wants behavior, not words.
+function _doApologize() {
+  const r = G.room, s = G.soc;
+  if (_inBar()) {
+    if (s.patronMiffed[r]) {
+      delete s.patronMiffed[r];
+      s.heat[r] = Math.max(0, (s.heat[r] || 0) - 1);
+      _say("You wai the regular and say it straight — out of line, my fault, " +
+        "sorry. He studies you for a second, then waves it off with his bottle. " +
+        "“Forget it, mate. Heat of the moment.” Form restored.");
+      return;
+    }
+    if ((s.heat[r] || 0) > 0) {
+      s.apologized = s.apologized || {};
+      if (s.apologized[r]) {
+        _say("You've spent tonight's apology here. Words are ฿0 and priced " +
+          "accordingly — from here on the bar is watching what you do.");
+        return;
+      }
+      s.apologized[r] = true;
+      s.heat[r]--;
+      _say("You put your hands together and offer the wai of a man who knows " +
+        "exactly what he did. The mamasan holds your eye for a long moment — " +
+        "then nods, once. The temperature in the room comes down a degree.");
+      return;
+    }
+    _say("Nothing to apologize for. Tonight. The mamasan banks the credit " +
+      "against future behavior, of which she has seen plenty.");
+    return;
+  }
+  _say("You apologize to the street at large. A passing hostess pats your arm " +
+    "— “up to you, na.” Pattaya forgives by default; it just doesn't forget.");
+}
+
 function _kickOut() {
   const here = G.room, r = _room();
   G.soc.banned[here] = G.turns;
@@ -1611,6 +1647,7 @@ function _endNight(reason) {
   G.soc.banned = {};
   G.soc.patronBusy = {};
   G.soc.patronMiffed = {};
+  G.soc.apologized = {}; // a new shift will hear you out afresh
   G.soc.selfBf = false;
   G.soc.butterflyTeased = false;
   G.selfBfId = null;
@@ -3437,7 +3474,7 @@ const _COMPLETE_VERBS = [
   "flirt", "kiss", "spank", "fondle", "ring bell", "barfine", "eat", "drink",
   "sleep", "tv", "weather", "scores", "lottery", "map", "time", "tip", "wave",
   "photo", "call", "shower", "withdraw", "cheers", "dance", "sing", "swim",
-  "smell", "listen", "diagnose", "quests", "accept", "abandon", "contact",
+  "smell", "listen", "diagnose", "apologize", "quests", "accept", "abandon", "contact",
   "contacts", "message", "check messages", "send", "score", "wait", "again",
   "help", "save", "load", "undo", "restart",
 ];
@@ -3649,7 +3686,12 @@ function doCommand(input) {
     case "buy": case "order": _doBuy(arg); break;
     case "pay": _doPay(arg); break;
     case "wai": _doWai(arg); break;
-    case "say": case "speak": _doSay(rest.join(" ")); break;
+    case "say": case "speak":
+      if (/^(sorry|khor ?thot|kho ?thot|ขอโทษ)/.test(arg)) _doApologize();
+      else _doSay(rest.join(" "));
+      break;
+    case "apologize": case "apologise": case "apology": case "sorry":
+      _doApologize(); break;
     case "ride": case "catch":
       if (arg.startsWith("bus")) _doRideBus(arg.replace(/^bus\s*/, ""));
       else if (arg.startsWith("motosai") || arg.startsWith("moto") || arg.startsWith("bike"))

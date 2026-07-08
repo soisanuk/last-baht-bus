@@ -1591,3 +1591,28 @@ test("engineComplete: quests, contacts, and live ask topics", () => {
   const after = engineComplete("ask candy ");
   assert.ok(after.length >= before.length, "topics unlock with knowledge, never lock");
 });
+
+// ── Apologize ──────────────────────────────────────────────────────────────
+
+test("apologize: mollifies the patron, burns heat once per bar, then it's words", () => {
+  state().room = "candy_bar";
+  state().soc.patronMiffed.candy_bar = true;
+  state().soc.heat.candy_bar = 2;
+  run("apologize");
+  assert.ok(!state().soc.patronMiffed.candy_bar, "patron mollified");
+  assert.equal(state().soc.heat.candy_bar, 1);
+  run("say sorry");
+  assert.equal(state().soc.heat.candy_bar, 0, "one point of heat forgiven");
+  state().soc.heat.candy_bar = 2;
+  run("apologize");
+  assert.equal(state().soc.heat.candy_bar, 2, "tonight's apology is spent");
+  assert.match(lastOut(), /Words are ฿0/);
+  out = [];
+  state().soc.heat.candy_bar = 0;
+  state().soc.apologized = {};
+  run("apologize");
+  assert.match(lastOut(), /banks the credit/);
+  state().room = "buakhao_s";
+  run("sorry");
+  assert.match(lastOut(), /forgives by default/);
+});
