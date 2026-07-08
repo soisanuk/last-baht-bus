@@ -112,9 +112,13 @@ Mobile gets tappable verb chips; desktop gets ↑/↓ command history.
 - **Real news, in-world**: `WATCH TV` in any bar or `READ PAPER` at a
   7-Eleven and the headlines are real — scraped from Google News (Pattaya &
   Thailand searches) every six hours by a scheduled workflow and baked into
-  a static file at deploy. No runtime network, works from `file://` with the
-  last bake, and the regulars have opinions about all of it. Flavor only —
-  no game logic ever depends on a headline.
+  a static file at deploy. Real **exchange rates** too (ECB daily, THB per
+  USD/GBP/AUD/EUR): the ticker crawls under the TV news, the business page
+  carries the numbers every expat reads first, and the regulars tap their
+  phone calculators like the calculator owes them money — the rate was
+  always 25% better when they moved out here. No runtime network, works
+  from `file://` with the last bake. Flavor only — no game logic ever
+  depends on a headline or a rate.
 - **Street encounters**: the sois have their own weather — a two-handed
   pickpocket on Beach Road, a sentimental drunk bargirl, an angry Brit who's
   sixty per cent sure it was you, a piwin with a power bank, a man with a
@@ -310,7 +314,7 @@ flowchart TD
 node --test
 ```
 
-142 tests: Thai number composition, world/map integrity, online-readiness
+143 tests: Thai number composition, world/map integrity, online-readiness
 (session isolation, cloud-save round-trips, deterministic transcripts),
 the news-bake contract, (every exit resolves,
 all 15 canon bars present, the gossip chain's flags all connect), parser,

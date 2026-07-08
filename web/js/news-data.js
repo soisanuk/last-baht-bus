@@ -3,14 +3,14 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
-    "t": "Pattaya bakery's 'hairy' croissant stirs pubic reaction",
-    "s": "Bangkok Post",
-    "d": "06 Jul 2026"
-  },
-  {
     "t": "Cannabis king found dead in Thai villa",
     "s": "News.com.au",
     "d": "06 Jul 2026"
+  },
+  {
+    "t": "Meliá Pattaya Hotel Launches Rooftop Sound Healing Experiences Overlooking the Gulf of Thailand",
+    "s": "Hotelier Buzz",
+    "d": "07 Jul 2026"
   },
   {
     "t": "Jomtien’s rubbish problem refuses to go away",
@@ -23,7 +23,7 @@ var NEWS_FEED = [
     "d": "07 Jul 2026"
   },
   {
-    "t": "British tourist loses keycard, threatens Pattaya hotel staff",
+    "t": "Russian woman returns lost Pattaya wallet with 22,700 baht",
     "s": "Thaiger",
     "d": "06 Jul 2026"
   },
@@ -33,12 +33,12 @@ var NEWS_FEED = [
     "d": "06 Jul 2026"
   },
   {
-    "t": "Gas canister fire at Pattaya condo injures American man",
+    "t": "2 Chinese surrogacy suspects wanted by China arrested in Pattaya",
     "s": "Thaiger",
     "d": "06 Jul 2026"
   },
   {
-    "t": "Russian woman returns lost Pattaya wallet with 22,700 baht",
+    "t": "Gas canister fire at Pattaya condo injures American man",
     "s": "Thaiger",
     "d": "06 Jul 2026"
   },
@@ -53,6 +53,11 @@ var NEWS_FEED = [
     "d": "07 Jul 2026"
   },
   {
+    "t": "Fitness YouTuber Connor Murphy Reportedly Found Dead in Thailand Lake",
+    "s": "Yahoo",
+    "d": "08 Jul 2026"
+  },
+  {
     "t": "Thailand Woos Heat-Weary Europeans With Travel and ACs",
     "s": "Bloomberg.com",
     "d": "08 Jul 2026"
@@ -63,13 +68,10 @@ var NEWS_FEED = [
     "d": "06 Jul 2026"
   },
   {
-    "t": "Thailand’s sex worker legal limbo",
-    "s": "BBC",
-    "d": "07 Jul 2026"
-  },
-  {
     "t": "Thailand to open new border crossing with Malaysia to boost trade, logistics, and tourism",
     "s": "The Star",
     "d": "07 Jul 2026"
   }
 ];
+// THB per 1 unit — the expat moaning index
+var FX_RATES = {"date":"2026-07-07","USD":33.26,"AUD":23.11,"GBP":44.52,"EUR":38.02};

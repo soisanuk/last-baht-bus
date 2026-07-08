@@ -21,6 +21,17 @@ test("news-data.js is a valid classic script defining a sane NEWS_FEED", () => {
   }
 });
 
+test("FX_RATES, when baked, carry plausible baht rates for the big four", () => {
+  const ctx = vm.createContext({});
+  vm.runInContext(src("news-data.js"), ctx);
+  const fx = vm.runInContext("typeof FX_RATES === 'undefined' ? null : FX_RATES", ctx);
+  if (!fx) return; // a bake without rates is legal — the engine degrades
+  for (const c of ["USD", "AUD", "GBP", "EUR"]) {
+    assert.equal(typeof fx[c], "number", `${c} present`);
+    assert.ok(fx[c] > 1 && fx[c] < 500, `${c} = ${fx[c]} baht — plausible`);
+  }
+});
+
 test("engine: TV and paper read the feed when present, degrade without it", () => {
   // context WITHOUT news-data.js — the vm-test environment and file:// both
   const ctx = vm.createContext({});
@@ -58,4 +69,9 @@ test("engine: TV and paper read the feed when present, degrade without it", () =
   const feed = vm.runInContext("NEWS_FEED", ctx2);
   assert.ok(feed.some(h => out2.join("\n").includes(h.t)), "a real headline aired");
   assert.match(out2.join("\n"), /skim the rack/i, "7-Eleven rack variant");
+  const fx = vm.runInContext("typeof FX_RATES === 'undefined' ? null : FX_RATES", ctx2);
+  if (fx) {
+    assert.match(out2.join("\n"), /฿/, "rates printed");
+    assert.ok(out2.join("\n").includes(`฿${fx.USD}`), "the dollar rate airs");
+  }
 });
