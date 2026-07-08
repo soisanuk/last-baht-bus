@@ -1410,3 +1410,41 @@ test("the rain stops like a tap and the town resumes", () => {
   assert.equal(state().rain, 0);
   assert.match(lastOut(), /like a tap/);
 });
+
+test("light rain is atmosphere only: vignettes, dialogue, zero mechanics", () => {
+  state().encDone = Object.fromEntries(Object.keys(ENCOUNTERS).map(k => [k, true]));
+  globalThis.WX_NOW = { temp: 30, humid: 88, code: 61, hi: 31, rain: 70 }; // rainy, NOT stormy
+  try {
+    // street vignette: the baht-bus rain guards (even-turn variant)
+    state().room = "second_rd_c";
+    state().turns = 100; // even parity
+    _sayDrizzle();
+    assert.match(lastOut(), /roll the canvas rain guards/);
+    // bar vignette: the barstools come in (both variants mention them)
+    state().room = "candy_bar";
+    state().turns = 101;
+    _sayDrizzle();
+    assert.match(lastOut(), /barstools/i);
+    // it fires from ticks on a rainy bake, and never trips the downpour trap
+    out = [];
+    state().room = "buakhao_s";
+    state().lastDrizzle = -99;
+    let n = 0;
+    while (!/nit noi|rain guards|Umbrellas appear/.test(lastOut()) && n++ < 1000) {
+      state().hunger = 0; state().thirst = 0; state().nightTurn = 5;
+      _tick();
+    }
+    assert.ok(n < 1000, "a drizzle vignette aired");
+    assert.equal(state().rain, 0, "code 61 never starts a downpour");
+    run("n");
+    assert.notEqual(state().room, "buakhao_s", "movement untouched — no mechanics");
+    // the patron quotes the local scripture
+    state().room = "candy_bar";
+    out = [];
+    n = 0;
+    while (!/barfine weather/.test(lastOut()) && n++ < 200) run("talk to patron");
+    assert.match(lastOut(), /Nobody goes home alone in the rain/);
+  } finally {
+    delete globalThis.WX_NOW;
+  }
+});
