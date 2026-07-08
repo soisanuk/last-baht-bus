@@ -43,6 +43,33 @@ test("WX_NOW, when baked, carries plausible Pattaya conditions", () => {
   assert.equal(typeof wx.code, "number", "WMO weather code present");
 });
 
+test("FOOTY / LOTTO / GOLD / BTC, when baked, carry sane data", () => {
+  const ctx = vm.createContext({});
+  vm.runInContext(src("news-data.js"), ctx);
+  const get = n => vm.runInContext(`typeof ${n} === "undefined" ? null : ${n}`, ctx);
+  const f = get("FOOTY");
+  if (f) {
+    assert.ok(f.league.length > 2 && Array.isArray(f.games) && f.games.length, "league + games");
+    for (const g of f.games) {
+      assert.ok(g.h && g.a, "both teams named");
+      assert.ok(Number.isFinite(g.hs) && Number.isFinite(g.as), "numeric scores");
+      assert.ok(!/[<>`\\]/.test(g.h + g.a), "sanitized team names");
+    }
+  }
+  const l = get("LOTTO");
+  if (l) {
+    assert.match(l.first, /^\d{6}$/, "six-digit first prize");
+    assert.match(l.last2, /^\d{2}$/, "two-digit last2");
+  }
+  const au = get("GOLD");
+  if (au) {
+    assert.ok(au.usd > 500 && au.usd < 20000, `XAU $${au.usd} plausible`);
+    if (au.baht) assert.ok(au.baht > 10000 && au.baht < 500000, `฿${au.baht}/baht-weight plausible`);
+  }
+  const b = get("BTC");
+  if (b) assert.ok(b.usd > 1000 && b.thb > b.usd, "BTC prices plausible");
+});
+
 test("engine: TV and paper read the feed when present, degrade without it", () => {
   // context WITHOUT news-data.js — the vm-test environment and file:// both
   const ctx = vm.createContext({});
@@ -58,10 +85,14 @@ test("engine: TV and paper read the feed when present, degrade without it", () =
     doCommand("watch tv");
     doCommand("read paper");
     doCommand("weather");
+    doCommand("scores");
+    doCommand("lottery");
   `, ctx);
   assert.match(out.join("\n"), /muay thai highlights/i, "TV fallback");
   assert.match(out.join("\n"), /crossword someone's already ruined/i, "paper fallback");
   assert.match(out.join("\n"), /shows you yesterday/i, "weather app fallback");
+  assert.match(out.join("\n"), /resumes when it resumes/i, "scores fallback");
+  assert.match(out.join("\n"), /1st and the 16th/, "lottery fallback");
 
   // same engine WITH a feed injected (as index.html's script order provides)
   const ctx2 = vm.createContext({});
@@ -93,4 +124,9 @@ test("engine: TV and paper read the feed when present, degrade without it", () =
     assert.ok(out2.join("\n").includes(`${wx.temp}°`), "the real temperature airs");
     assert.ok(out2.join("\n").includes(`${wx.humid}% humidity`), "humidity airs");
   }
+  vm.runInContext(`G.room = "candy_bar"; doCommand("scores"); doCommand("lottery");`, ctx2);
+  const footy = vm.runInContext("typeof FOOTY === 'undefined' ? null : FOOTY", ctx2);
+  if (footy) assert.ok(out2.join("\n").includes(footy.league), "the real league airs");
+  const lotto = vm.runInContext("typeof LOTTO === 'undefined' ? null : LOTTO", ctx2);
+  if (lotto) assert.ok(out2.join("\n").includes(lotto.first), "the real first prize airs");
 });

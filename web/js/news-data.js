@@ -3,6 +3,11 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
+    "t": "Pattaya pickup truck taxi driver suspended over 300-baht fare",
+    "s": "Khaosod English",
+    "d": "06 Jul 2026"
+  },
+  {
     "t": "EC certifies Chadchart’s Bangkok governor win, Pattaya mayor result",
     "s": "Nation Thailand",
     "d": "08 Jul 2026"
@@ -38,9 +43,9 @@ var NEWS_FEED = [
     "d": "06 Jul 2026"
   },
   {
-    "t": "Chinese tourist refuses alcohol test after Pattaya crash",
-    "s": "Thaiger",
-    "d": "06 Jul 2026"
+    "t": "Looksmaxxing influencer Connor Murphy drowns in Thailand after fleeing police: reports",
+    "s": "The Independent",
+    "d": "08 Jul 2026"
   },
   {
     "t": "Thai PM warns may ‘shut down’ cannabis industry after global smuggling spike",
@@ -48,23 +53,18 @@ var NEWS_FEED = [
     "d": "06 Jul 2026"
   },
   {
-    "t": "Forget Thailand, Visit This Tropical Paradise With Coral Reefs, River Cruises, And Cool Wildlife",
-    "s": "islands.com",
-    "d": "06 Jul 2026"
-  },
-  {
-    "t": "Thailand Woos Heat-Weary Europeans With Travel and ACs",
-    "s": "Bloomberg.com",
+    "t": "Fitness YouTuber Connor Murphy Reportedly Found Dead in Thailand Lake",
+    "s": "Yahoo",
     "d": "08 Jul 2026"
-  },
-  {
-    "t": "Skeletal remains with 2,000-year-old gold rings found by archaeologists in Thailand",
-    "s": "CBS News",
-    "d": "07 Jul 2026"
   },
   {
     "t": "A Pair of 2,000-Year-Old Gold Rings, One Engraved With Indian Script, Was Discovered in an Iron Age Burial Ground in Thailand - Smithsonian ",
     "s": "Smithsonian Magazine",
+    "d": "07 Jul 2026"
+  },
+  {
+    "t": "Skeletal remains with 2,000-year-old gold rings found by archaeologists in Thailand",
+    "s": "CBS News",
     "d": "07 Jul 2026"
   },
   {
@@ -74,6 +74,14 @@ var NEWS_FEED = [
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-07-07","USD":33.26,"AUD":23.11,"GBP":44.52,"EUR":38.02};
+var FX_RATES = {"date":"2026-07-08","USD":33.44,"AUD":23.16,"GBP":44.64,"EUR":38.14};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-07-08","temp":31,"humid":62,"code":0,"hi":32,"rain":31};
+var WX_NOW = {"date":"2026-07-08","temp":30,"humid":68,"code":1,"hi":33,"rain":43};
+// the bar TV's one true channel
+var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-05","done":true,"h":"Brazil","hs":1,"a":"Norway","as":2},{"d":"2026-07-06","done":true,"h":"Mexico","hs":2,"a":"England","as":3},{"d":"2026-07-06","done":true,"h":"Portugal","hs":0,"a":"Spain","as":1},{"d":"2026-07-07","done":true,"h":"USA","hs":1,"a":"Belgium","as":4},{"d":"2026-07-07","done":true,"h":"Argentina","hs":3,"a":"Egypt","as":2},{"d":"2026-07-07","done":true,"h":"Switzerland","hs":0,"a":"Colombia","as":0},{"d":"2026-07-09","done":false,"h":"France","hs":0,"a":"Morocco","as":0},{"d":"2026-07-10","done":false,"h":"Spain","hs":0,"a":"Belgium","as":0},{"d":"2026-07-11","done":false,"h":"Norway","hs":0,"a":"England","as":0},{"d":"2026-07-12","done":false,"h":"Argentina","hs":0,"a":"Switzerland","as":0}]};
+// GLO draw — the girls' retirement plan
+var LOTTO = {"date":"2026-07-01","first":"751495","last2":"62","front3":["001","980"],"back3":["304","531"]};
+// XAU, plus Thai baht-weight gold (96.5%)
+var GOLD = {"usd":4062,"date":"2026-07-08","baht":64250};
+// the coin, for the laser-eyed regular
+var BTC = {"usd":61975,"thb":2074962};

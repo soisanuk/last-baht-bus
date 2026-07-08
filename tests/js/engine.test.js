@@ -1448,3 +1448,59 @@ test("light rain is atmosphere only: vignettes, dialogue, zero mechanics", () =>
     delete globalThis.WX_NOW;
   }
 });
+
+// ── The sports desk ────────────────────────────────────────────────────────
+
+test("the bar's regular has a fixed allegiance, and a win buys the rail a round", () => {
+  globalThis.FOOTY = { league: "World Cup", games: [
+    { d: "2026-07-07", done: true, h: "Alpha", hs: 2, as: 0, a: "Beta" },
+  ] };
+  try {
+    state().room = "lucky_tiger";
+    const team = _barTeam();
+    assert.ok(["Alpha", "Beta"].includes(team));
+    assert.equal(_barTeam(), team, "allegiance never wavers");
+    // arrange the fixture so the regular's team just won (same two teams,
+    // so the hash — and his heart — are unmoved)
+    globalThis.FOOTY.games[0] = team === "Alpha"
+      ? { d: "2026-07-07", done: true, h: "Alpha", hs: 2, as: 0, a: "Beta" }
+      : { d: "2026-07-07", done: true, h: "Beta", hs: 2, as: 0, a: "Alpha" };
+    assert.equal(_barTeam(), team);
+    const d0 = state().soc.drunk;
+    let n = 0;
+    while (!/INCANDESCENT/.test(lastOut()) && n++ < 400) run("talk to patron");
+    assert.match(lastOut(), /INCANDESCENT/);
+    assert.match(lastOut(), new RegExp(`${team} are proof`));
+    assert.ok(state().soc.drunk > d0, "his round reached your end of the rail");
+  } finally {
+    delete globalThis.FOOTY;
+  }
+});
+
+test("scores verb prints the table and outs the regular's team", () => {
+  globalThis.FOOTY = { league: "World Cup", games: [
+    { d: "2026-07-07", done: true, h: "Alpha", hs: 1, as: 3, a: "Beta" },
+    { d: "2026-07-10", done: false, h: "Gamma", hs: 0, as: 0, a: "Delta" },
+  ] };
+  try {
+    state().room = "candy_bar";
+    run("scores");
+    assert.match(lastOut(), /Alpha 1–3 Beta/);
+    assert.match(lastOut(), /Gamma v Delta/);
+    assert.match(lastOut(), /The regular here supports/);
+  } finally {
+    delete globalThis.FOOTY;
+  }
+});
+
+test("lottery verb recites the draw when baked", () => {
+  globalThis.LOTTO = { date: "2026-07-01", first: "751495", last2: "62", back3: ["304", "531"] };
+  try {
+    run("lottery");
+    assert.match(lastOut(), /751495/);
+    assert.match(lastOut(), /last two 62/);
+    assert.match(lastOut(), /can fix that by tomorrow lunchtime/);
+  } finally {
+    delete globalThis.LOTTO;
+  }
+});

@@ -81,6 +81,115 @@ async function fetchRates() {
   return null;
 }
 
+// Generic fallback: dig the previous bake's value for `name` out of OUT.
+function salvage(name) {
+  try {
+    const prev = readFileSync(OUT, "utf8");
+    const m = prev.match(new RegExp(`var ${name} = (\\{[\\s\\S]*?\\});`));
+    if (m) { console.error(`${name}: salvaged previous bake`); return JSON.parse(m[1]); }
+  } catch {}
+  return null;
+}
+
+// ── Football: the bar TV's one true channel ──────────────────────────────────
+// ESPN's public scoreboard JSON, no key. World Cup while it's on, Premier
+// League the rest of the year — first league with fixtures in the window wins.
+
+async function fetchFooty() {
+  const leagues = [["fifa.world", "World Cup"], ["eng.1", "Premier League"]];
+  const fmt = d => d.toISOString().slice(0, 10).replace(/-/g, "");
+  const now = Date.now();
+  const range = `${fmt(new Date(now - 3 * 864e5))}-${fmt(new Date(now + 4 * 864e5))}`;
+  for (const [slug, league] of leagues) {
+    try {
+      const r = await fetch(`https://site.api.espn.com/apis/site/v2/sports/soccer/${slug}/scoreboard?dates=${range}`);
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      const j = await r.json();
+      const games = (j.events || []).map(e => {
+        const c = (e.competitions || [])[0] || {};
+        const side = ha => (c.competitors || []).find(x => x.homeAway === ha) || {};
+        const h = side("home"), a = side("away");
+        return {
+          d: String(e.date || "").slice(0, 10),
+          done: !!(e.status && e.status.type && e.status.type.completed),
+          h: clean(h.team ? h.team.shortDisplayName : "").slice(0, 30),
+          hs: +h.score || 0,
+          a: clean(a.team ? a.team.shortDisplayName : "").slice(0, 30),
+          as: +a.score || 0,
+        };
+      }).filter(g => g.h && g.a).slice(0, 12);
+      if (games.length) {
+        console.log(`footy: ${league} — ${games.length} fixtures`);
+        return { league, games };
+      }
+    } catch (e) { console.error(`espn ${slug}: ${e.message}`); }
+  }
+  return salvage("FOOTY");
+}
+const footySane = f => f && f.league && Array.isArray(f.games) && f.games.length &&
+  f.games.every(g => g.h && g.a && Number.isFinite(g.hs) && Number.isFinite(g.as));
+
+// ── Thai lottery: the GLO draw, 1st and 16th of the month ────────────────────
+
+async function fetchLotto() {
+  try {
+    const r = await fetch("https://www.glo.or.th/api/lottery/getLatestLottery", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "User-Agent": "Mozilla/5.0 (soisanuk news baker)" },
+      body: "{}",
+    });
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    const j = (await r.json()).response;
+    const num = k => ((j.data[k] || {}).number || []).map(n => n.value);
+    const out = {
+      date: j.date,
+      first: num("first")[0],
+      last2: num("last2")[0],
+      front3: num("last3f"),
+      back3: num("last3b"),
+    };
+    console.log(`lotto: draw ${out.date} — first prize ${out.first}`);
+    return out;
+  } catch (e) { console.error(`glo: ${e.message}`); }
+  return salvage("LOTTO");
+}
+const lottoSane = l => l && /^\d{6}$/.test(l.first || "") && /^\d{2}$/.test(l.last2 || "");
+
+// ── Gold: XAU/oz, converted to Thai baht-weight (15.244 g of 96.5%) ──────────
+
+async function fetchGold(thbPerUsd) {
+  try {
+    const r = await fetch("https://api.gold-api.com/price/XAU");
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    const j = await r.json();
+    const usd = +j.price;
+    const out = { usd: Math.round(usd), date: String(j.updatedAt || "").slice(0, 10) };
+    if (thbPerUsd) {
+      out.baht = Math.round(usd * (15.244 / 31.1035) * 0.965 * thbPerUsd / 50) * 50;
+    }
+    console.log(`gold: $${out.usd}/oz` + (out.baht ? ` · ฿${out.baht}/baht-weight` : ""));
+    return out;
+  } catch (e) { console.error(`gold-api: ${e.message}`); }
+  return salvage("GOLD");
+}
+const goldSane = g => g && g.usd > 500 && g.usd < 20000 &&
+  (!g.baht || (g.baht > 10000 && g.baht < 500000));
+
+// ── Bitcoin: for the laser-eyed man at the end of the rail ───────────────────
+
+async function fetchBtc() {
+  try {
+    const r = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=thb,usd");
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    const j = await r.json();
+    const out = { usd: Math.round(j.bitcoin.usd), thb: Math.round(j.bitcoin.thb) };
+    console.log(`btc: $${out.usd} · ฿${out.thb}`);
+    return out;
+  } catch (e) { console.error(`coingecko: ${e.message}`); }
+  return salvage("BTC");
+}
+const btcSane = b => b && b.usd > 1000 && b.usd < 10000000 && b.thb > 30000;
+
 // ── Weather: the other thing expats moan about ───────────────────────────────
 // Pattaya current conditions + today's rain odds from Open-Meteo (free, no
 // key). Same deal as FX: previous bake as fallback, absent is legal.
@@ -129,6 +238,11 @@ if (fx) {
   else console.log("rates:", FX_SYMBOLS.map(c => `${c} ${fx[c]}`).join(" · "));
 }
 
+const footy = await fetchFooty();
+const lotto = await fetchLotto();
+const gold = await fetchGold(fx && fx.USD > 1 && fx.USD < 500 ? fx.USD : 0);
+const btc = await fetchBtc();
+
 const feed = [];
 const seen = new Set();
 for (const [tag, url, want] of FEEDS) {
@@ -170,6 +284,22 @@ const body =
   (wxSane(wx)
     ? "// Pattaya right now — the other moaning index\n" +
       "var WX_NOW = " + JSON.stringify(wx) + ";\n"
+    : "") +
+  (footySane(footy)
+    ? "// the bar TV's one true channel\n" +
+      "var FOOTY = " + JSON.stringify(footy) + ";\n"
+    : "") +
+  (lottoSane(lotto)
+    ? "// GLO draw — the girls' retirement plan\n" +
+      "var LOTTO = " + JSON.stringify(lotto) + ";\n"
+    : "") +
+  (goldSane(gold)
+    ? "// XAU, plus Thai baht-weight gold (96.5%)\n" +
+      "var GOLD = " + JSON.stringify(gold) + ";\n"
+    : "") +
+  (btcSane(btc)
+    ? "// the coin, for the laser-eyed regular\n" +
+      "var BTC = " + JSON.stringify(btc) + ";\n"
     : "");
 
 if (body === previous) {
