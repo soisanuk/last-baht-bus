@@ -174,6 +174,41 @@ function poolShot(g, kind, rnd) {
   return "miss";
 }
 
+// ── Killer pool ──────────────────────────────────────────────────────────────
+// League-night elimination: everyone antes up, everyone gets three lives.
+// One shot per turn — pot anything or lose a life. Last cue standing takes
+// the pot. players: [{name, skill, lives}]; index 0 is always you.
+
+function kpNew(names, skills) {
+  return {
+    players: names.map((name, i) => ({ name, skill: skills[i] || 0.55, lives: 3 })),
+    turn: 0,
+  };
+}
+
+function kpAlive(g) { return g.players.filter(p => p.lives > 0); }
+
+function kpOver(g) { return kpAlive(g).length <= 1; }
+
+// Resolve one shot for the player whose turn it is. `chance` overrides skill
+// (your shot style); AI passes undefined. Returns { player, potted, out } and
+// advances the turn past eliminated players.
+function kpShot(g, rnd, chance) {
+  const p = g.players[g.turn];
+  const potted = rnd() < (chance !== undefined ? chance : p.skill);
+  if (!potted) p.lives--;
+  const out = p.lives === 0;
+  do {
+    g.turn = (g.turn + 1) % g.players.length;
+  } while (g.players[g.turn].lives === 0 && !kpOver(g));
+  return { player: p, potted, out };
+}
+
+function kpRender(g) {
+  return g.players.map(p =>
+    `${p.name} ${p.lives > 0 ? "●".repeat(p.lives) : "✝"}`).join(" · ");
+}
+
 // The opponent's whole visit in one go. Returns balls potted this visit;
 // sets g.oppWon if they cleared up and dropped the black.
 function poolOppVisit(g, rnd) {

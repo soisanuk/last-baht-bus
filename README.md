@@ -29,9 +29,19 @@ Mobile gets tappable verb chips; desktop gets ↑/↓ command history.
 
 ## The game
 
-- **~45 rooms** across Jomtien, Pratumnak Hill, Beach Road, Walking Street,
-  Soi Buakhao, the LK Metro maze, Soi 6, the Darkside (Lake Mabprachan &
-  Soi Khao Talo), and Naklua. All 15 canon bars are enterable.
+- **~55 rooms** across Jomtien, Pratumnak Hill, Beach Road, Second Road,
+  Pattaya Klang, Central mall, Myth Night, Walking Street, Soi Buakhao, the
+  LK Metro maze, Soi 6, the Darkside (Lake Mabprachan & Soi Khao Talo), and
+  Naklua. All 15 canon bars are enterable — plus Candy Bar 2 (the empire
+  expands), the Stinky Bar (Bert's pool-league home felt), and Tequila Queen,
+  the oldest go-go in Pattaya, with the girls to match.
+- **Adventures**: a proper quest log — givers offer jobs in conversation,
+  `ACCEPT` / `ABANDON` / `QUESTS` manage them, rewards pay out in baht and
+  สนุก, and some quests unlock others.
+- **Your phone is a social organ**: `CONTACT` a girl in her bar to swap LINE
+  numbers, `MESSAGE` her sweet nothings, `CHECK MESSAGES` when it buzzes —
+  girls text first (invitations worth honouring, money stories worth judging),
+  and the banking app (`SEND <amt> TO <name>`) moves baht both ways.
 - **Money**: scrounge your first ฿15, then work the soi economy — bottle
   deposits, favours for the piwin, lady-drink diplomacy (฿150, as ever).
 - **Phone battery is your lamp**: 13% and falling. Dark sois have soi dogs.
@@ -85,14 +95,22 @@ Mobile gets tappable verb chips; desktop gets ↑/↓ command history.
 - **Bar games**: every beer bar keeps a Connect 4 frame (the hostess never
   loses), a Jackpot box (the Thai shut-the-box dice game — flip the dice or
   flip their sum, lowest score wins, shut all nine for JACKPOT), and the
-  Midnight Sun and Daeng's Place have pool tables. Stakes in baht; broke
-  players play for sanuk. `PLAY CONNECT 4 · PLAY JACKPOT [bet] · PLAY POOL`.
+  Midnight Sun, Daeng's Place, and the Stinky Bar have pool tables. Stakes in
+  baht; broke players play for sanuk. `PLAY CONNECT 4 · PLAY JACKPOT [bet] ·
+  PLAY POOL` — and every third night is **league night**: killer pool, ฿100
+  in the ashtray, three lives each, last cue standing takes the pot.
+- **Sitting and talking is a whole way to play**: barfines and grand exits
+  pay happiness, but so do league nights, patron friendships, quests, texted
+  invitations honoured, and toasties on the kerb. Some men just talk and play
+  pool all night, and the meter respects that.
 - **Street encounters**: the sois have their own weather — a two-handed
   pickpocket on Beach Road, a sentimental drunk bargirl, an angry Brit who's
-  sixty per cent sure it was you, a piwin with a power bank, and a man with a
-  briefcase full of hair tonic. Some want your baht; some hand you theirs;
-  most depend on what you say next. Each strikes at most once a night, and the
-  dice live in your save — UNDO won't reroll them.
+  sixty per cent sure it was you, a piwin with a power bank, a man with a
+  briefcase full of hair tonic, freelancers on the promenade (Ning is also
+  free, and saying yes to both is a story you'll tell badly forever), watch
+  peddlers working the Beach Road bar stools, and the ping pong show tout —
+  the famous scam of Walking Street, tuition paid exactly once. Most depend
+  on what you say next; the dice live in your save — UNDO won't reroll them.
 
 Type `HELP` in-game for the command list. The night autosaves after every
 command (localStorage); reopening the page offers to continue where you left
@@ -280,7 +298,7 @@ flowchart TD
 node --test
 ```
 
-120 tests: Thai number composition, world/map integrity (every exit resolves,
+133 tests: Thai number composition, world/map integrity (every exit resolves,
 all 15 canon bars present, the gossip chain's flags all connect), parser,
 systems, street encounters, bar mini-games and social life, and a full
 scripted playthrough from the beach to the happy ending — run headless via

@@ -29,7 +29,11 @@ Zork-style text adventure in the Soi Sanuk / Pattaya universe. Same conventions 
 
 Bar social life lives in `G.soc` (per-girl lady-drink counts, per-bar bell/heat/ban/patron state, own drunk counter). Actions (`_doSocial`: flirt/kiss/spank/fondle) resolve `_favor(id) − SEV[kind]` into five outcome tiers; `NPC_ROLES` (world.js) caps physical contact for cashiers/mamasans until `bells[room] ≥ 2`. Heat ≥ 3 → `_kickOut()` (LK Metro bans complex-wide; bans expire after `BAN_TURNS`). Street attempts are negative except the katoey encounter's flirt-back branch.
 
-Bar mini-games (Connect 4 / Jackpot / pool) run as a modal `G.game` state: while one is live, `doCommand` routes every input to `_gameInput` and QUIT concedes. Stakes are escrowed up front and paid back ×2 on a win (×3 on a Jackpot); broke players play "for sanuk" (stake 0). Tabletop games are gated on `barType === "beer" | "soi6"`, pool on `room.pool`.
+**Quests** live in `QUESTS` (world.js): giver dialogue surfaces offers (`_questOffer` after `_doTalk`), ACCEPT/ABANDON/QUESTS verbs manage `G.quests` states, and `_questTick` (every turn) completes any active quest whose `doneFlag` is set, paying `reward`. `deps` gate offers on other quests being done.
+
+**The phone** (`G.phone`): CONTACT in her bar at favor ≥2 swaps numbers; contacts text unprompted via `_maybeIncomingText` in `_tick` (invites reward showing up that night — checked in `_doGo`; messages can carry money, credited on CHECK MESSAGES); MESSAGE = once-per-night favor charm; SEND <amt> TO <name> is the banking app (favor bump scales with amount). Everything battery-gated.
+
+Bar mini-games (Connect 4 / Jackpot / pool / killer pool on league nights — `G.day % 3 === 0` at `room.pool` bars) run as a modal `G.game` state: while one is live, `doCommand` routes every input to `_gameInput` and QUIT concedes. Stakes are escrowed up front and paid back ×2 on a win (×3 on a Jackpot); broke players play "for sanuk" (stake 0). Tabletop games are gated on `barType === "beer" | "soi6"`, pool on `room.pool`.
 
 - `web/js/thai.js` — Thai numbers (สิบเอ็ด/ยี่สิบ irregulars), Thai digits ๐–๙, signs, phrase matching. Pure functions.
 - `web/js/world.js` — all rooms, items, NPCs, dialogue, bus/motosai lines. **Pure declarative data**, the source of truth. Dialogue entries are `{req, notFlags, topic, th, rom, text, sets, gives}`; first matching entry wins, `_pickDialogue` falls back to the topicless entry on unknown topics.

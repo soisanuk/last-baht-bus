@@ -116,6 +116,39 @@ test("jackpot: a full shut-out scores 0", () => {
   assert.equal(jpRender(t), "· · · · · · · · ·");
 });
 
+// ── Killer pool ──────────────────────────────────────────────────────────────
+
+test("killer: misses cost lives, eliminated players are skipped", () => {
+  const g = kpNew(["You", "A", "B"], [0, 0.5, 0.5]);
+  // You pot (chance 1), A misses, B misses ×3 → B out
+  kpShot(g, seq([0]), 1);
+  assert.equal(g.players[0].lives, 3);
+  kpShot(g, seq([0.9]));           // A misses
+  assert.equal(g.players[1].lives, 2);
+  kpShot(g, seq([0.9]));           // B misses
+  kpShot(g, seq([0]), 1);          // you pot
+  kpShot(g, seq([0.9]));           // A misses again
+  kpShot(g, seq([0.9]));           // B misses (1 left)
+  kpShot(g, seq([0]), 1);
+  kpShot(g, seq([0.9]));           // A out? A had 1 left → out
+  assert.equal(g.players[1].lives, 0);
+  // turn now skips A entirely
+  const before = g.turn;
+  assert.notEqual(g.players[before].lives, 0, "never lands on a dead player");
+});
+
+test("killer: last cue standing ends it", () => {
+  const g = kpNew(["You", "A"], [0, 0.5]);
+  for (let i = 0; i < 6 && !kpOver(g); i++) {
+    kpShot(g, seq([0]), g.turn === 0 ? 1 : undefined); // you always pot
+    if (!kpOver(g) && g.turn === 1) kpShot(g, seq([0.99])); // A always misses
+  }
+  assert.ok(kpOver(g));
+  assert.equal(kpAlive(g)[0].name, "You");
+  assert.match(kpRender(g), /You ●●●/);
+  assert.match(kpRender(g), /✝/);
+});
+
 // ── Pool ─────────────────────────────────────────────────────────────────────
 
 test("pool: a made shot decrements, a power shot can pot two", () => {

@@ -62,7 +62,16 @@ function newGame() {
     pendingChoice: null, // "vacation_end" gates input at week's end
     atmDay: 0,           // last day the lobby ATM paid out ฿3000
     lastPolice: -99,     // turn of the last boy-in-brown shakedown
+    lastPeddler: -99,    // turn of the last bar-stool peddler visit
     selfBfId: null,      // hostess offering to barfine herself
+    quests: {},          // questId → "offered" | "active" | "done" | "abandoned"
+    phone: {             // the other half of your most important possession
+      contacts: {},      //   npcId → true (you have her number)
+      inbox: [],         //   [{from, text, turn, read, gives}]
+      lastText: 0,       //   turn of the last incoming message
+      msgCd: {},         //   npcId → day you last sweet-talked her by text
+      invite: null,      //   {id, day} — she asked you to drop by tonight
+    },
     over: false,         // legacy field; the sandbox never ends the night
   };
   return G;
@@ -91,6 +100,11 @@ function deserializeGame(s) {
     G.pendingChoice = null;
   }
   if (G.atmDay === undefined) { G.atmDay = 0; G.lastPolice = -99; G.selfBfId = null; }
+  if (!G.quests) G.quests = {};
+  if (!G.phone) {
+    G.phone = { contacts: {}, inbox: [], lastText: 0, msgCd: {}, invite: null };
+  }
+  if (G.lastPeddler === undefined) G.lastPeddler = -99;
   G.over = false; // pre-sandbox saves could be "over"; the night reopens
   if (!G.encDone) G.encDone = {};
   if (G.lastEnc === undefined) G.lastEnc = 0;
@@ -214,7 +228,10 @@ function _describeRoom(full) {
   if (r.barType === "beer" || r.barType === "soi6") {
     _say("A Connect 4 frame and a Jackpot dice box sit within reach (PLAY …).", "dim");
   }
-  if (r.pool) _say("A pool table waits under a low lamp (PLAY POOL).", "dim");
+  if (r.pool) {
+    _say("A pool table waits under a low lamp (PLAY POOL)." +
+      (_leagueTonight() ? " Tonight is LEAGUE NIGHT (PLAY KILLER, ฿100 in the ashtray)." : ""), "dim");
+  }
   if (r.seven) _say("A 7-Eleven glows across the way (BUY TOASTIE / WATER / CHARGER).", "dim");
   if (r.barType) {
     const girl = _npcsHere().find(id => NPC_ROLES[id] === "hostess");
@@ -241,6 +258,17 @@ function _tick() {
   if ((G.hunger >= 80 || G.thirst >= 80) && G.nightTurn % 10 === 0) _addHappy(-1);
   if (G.hunger >= 100 || G.thirst >= 100) { _endNight("collapse"); return; }
   if (G.nightTurn >= NIGHT_TURNS) { _endNight("dawn"); return; }
+  // the peddlers work the Beach Road bars, stool to stool
+  if (!G.game && !G.pendingEnc && _inBar() && _room().region === "Beach Road" &&
+      G.turns - G.lastPeddler >= 20 && _rand() < 0.12) {
+    G.lastPeddler = G.turns;
+    G.pendingEnc = "peddler";
+    _say("A peddler drifts in off the street with a display board of watches, a fan " +
+      "of sunglasses, and — produced from an inner pocket with a meaningful eyebrow " +
+      "— certain 'vitamins'. He stations himself at your elbow, patient as weather.", "alert");
+    _say("(WATCH ฿300 · SUNGLASSES ฿150 · VITAMINS ฿200 · or NO.)", "dim");
+  }
+  _maybeIncomingText();
   if (G.lightOn && G.battery > 0) {
     G.battery--;
     if (G.battery === 0) {
@@ -476,6 +504,102 @@ const _ENC = {
     }
   },
 
+  freelancer(input) {
+    const both = /both|two|friend|ning|threesome|them/.test(input);
+    const yes = both || /yes|ok|sure|company|come|deal|her|why not/.test(input);
+    if (!yes) {
+      _say("You smile, wai lightly, and keep walking. “Mai pen rai~” — no offence " +
+        "taken, none given. Behind you, she and Ning resume their professional " +
+        "appraisal of the passing trade.");
+      return;
+    }
+    if (!_flag("act1Done")) {
+      _say("She reads the sand on your shirt and the ฿-nothing in your posture in " +
+        "one glance, and laughs — kindly, but thoroughly. “Maybe tomorrow, hansum.” " +
+        "Even Ning looks sympathetic.");
+      return;
+    }
+    const price = both ? 1800 : 1000;
+    if (G.money < price) {
+      _say(`The number is ฿${price}. Your pocket says ฿${G.money}. She pats your ` +
+        "cheek — “ATM broken? Sad story” — and turns back to the rail.");
+      return;
+    }
+    G.money -= price;
+    if (both) {
+      _setFlag("hadThreesome");
+      _say(`฿${price}, and Ning stops pretending not to listen. What follows — the ` +
+        "motosai ride three-up (illegal, hilarious), the night bazaar snacks, the " +
+        "hotel corridor shushing, and the rest of it — will be retold by you, " +
+        "badly, for the rest of your life, to anyone who asks and several who " +
+        "don't. (฿" + G.money + " left, every one of them irrelevant.)", "win");
+      _addHappy(7);
+      _endNight("barfine");
+    } else {
+      _say(`฿${price} settles it with no ledger and no mamasan — freelance means the ` +
+        "commission is all hers. She takes your arm; the promenade approves.", "win");
+      _endNight("barfine");
+    }
+  },
+
+  pingpong(input) {
+    if (!/yes|go|show|watch|see|up|why not|ok|sure/.test(input)) {
+      _say("You wave him off. He keeps pace for half a block, price falling with " +
+        "every step — six hundred, five hundred, FOUR hundred my friend — before " +
+        "peeling away toward a stag party in matching singlets. They're doomed.");
+      return;
+    }
+    if (G.money < 600) {
+      _say("He walks you two steps up the stairs before the doorman's practiced eye " +
+        "prices your pockets at under the minimum. You are returned to street level " +
+        "with impressive economy.");
+      return;
+    }
+    G.money -= 600;
+    _setFlag("sawPingPong");
+    _say("Up the stairs, ฿600 lighter before your eyes adjust. What follows is " +
+      "briefly astonishing, mostly dispiriting, and involves exactly the projectile " +
+      "sport advertised. Then the lights come up, your 'one drink' turns out to " +
+      "have been three at ฿250 each — the bill is a laminated ambush, the doormen " +
+      "are suddenly numerous, and you pay what it takes to leave.", "alert");
+    const gouge = Math.min(400, G.money);
+    G.money -= gouge;
+    _say(`(฿${600 + gouge} total for the famous scam of Walking Street. Every farang ` +
+      `pays the tuition exactly once. ฿${G.money} left.)`, "dim");
+    _addHappy(-3);
+  },
+
+  peddler(input) {
+    if (/watch|rolex/.test(input)) {
+      if (G.money < 300) { _say("฿300 for the 'Rolex'. He inspects your ฿" + G.money + " and moves along, unoffended."); return; }
+      G.money -= 300;
+      G.itemLoc.fake_rolex = "inventory";
+      _say("฿300, and the 'Rolex' is yours — fitted on your wrist with jeweller's " +
+        `ceremony and a squeeze of the forearm. (฿${G.money} left.)`);
+      _say("(You now have the genuine Rolex (allegedly).)", "dim");
+      _addHappy(1);
+    } else if (/glass|shade|sun/.test(input)) {
+      if (G.money < 150) { _say("฿150 for the RayBens, and you haven't got it. He tips an invisible hat."); return; }
+      G.money -= 150;
+      G.itemLoc.shades = "inventory";
+      _say(`฿150. The RayBens go on immediately, indoors, at night. Perfect. (฿${G.money} left.)`);
+      _say("(You now have the designer sunglasses.)", "dim");
+      _addHappy(1);
+    } else if (/vitamin|pill|med|blue/.test(input)) {
+      if (G.money < 200) { _say("฿200 for the 'vitamins'. Your pockets decline on your behalf."); return; }
+      G.money -= 200;
+      G.itemLoc.vitamin_v = "inventory";
+      _say("฿200 changes hands with the discretion of a state secret, which fools " +
+        `no one — the whole bar saw, and the whole bar is delighted. (฿${G.money} left.)`);
+      _say("(You now have the packet of 'vitamins'. The hostesses will NEVER let this go.)", "dim");
+      _addHappy(1);
+    } else {
+      _say("A slow head-shake. He re-shoulders the display board — watches swinging " +
+        "like wind chimes — and moves down the bar to a man who has already made " +
+        "eye contact, the fatal error.");
+    }
+  },
+
   tonic(input) {
     if (/yes|buy|ok|sure|deal|take it|fine/.test(input)) {
       if (G.money < TONIC_PRICE) {
@@ -530,9 +654,10 @@ function _doPlay(arg) {
   if (G.game) { _say("One game at a time, champ."); return; }
   const w = arg.toLowerCase();
   if (w.includes("jackpot") || w.includes("dice")) return _startJackpot(w);
+  if (w.includes("killer") || w.includes("league")) return _startKiller();
   if (w.includes("pool") || w.includes("8") || w.includes("billiard")) return _startPool();
   if (w.includes("connect") || w.includes("four") || w.includes("4")) return _startC4();
-  _say("Play what? CONNECT 4, JACKPOT [bet], or POOL.", "dim");
+  _say("Play what? CONNECT 4, JACKPOT [bet], POOL, or KILLER (league nights).", "dim");
 }
 
 // ─ Connect 4 ─
@@ -668,6 +793,80 @@ function _jpFinish() {
   }
 }
 
+// ─ Killer pool (league night) ─
+
+const KP_ENTRY = 100;
+const KP_FIELD = [
+  ["Bank's cousin Gop", 0.55], ["Big Kev", 0.6], ["a silent Finn", 0.65],
+  ["Daeng's nephew", 0.5], ["a piwin still in his vest", 0.6],
+];
+
+function _leagueTonight() { return G.day % 3 === 0; }
+
+function _startKiller() {
+  if (!_room().pool) { _say("Killer needs a real table. The Stinky Bar's is the league's home felt."); return; }
+  if (!_leagueTonight()) {
+    _say("No league tonight — killer runs every third night. " +
+      (G.day % 3 === 2 ? "Tomorrow." : "Check back in a couple of days.") +
+      " The table's free for a regular frame (PLAY POOL).", "dim");
+    return;
+  }
+  if (G.money < KP_ENTRY) { _say(`Entry's ฿${KP_ENTRY} in the ashtray. You have ฿${G.money}. Spectating is free.`); return; }
+  G.money -= KP_ENTRY;
+  const field = [];
+  const used = new Set();
+  while (field.length < 4) {
+    const i = Math.floor(_rand() * KP_FIELD.length);
+    if (!used.has(i)) { used.add(i); field.push(KP_FIELD[i]); }
+  }
+  const names = ["You", ...field.map(f => f[0])];
+  const skills = [0, ...field.map(f => f[1])];
+  G.game = { type: "kp", kp: kpNew(names, skills), stake: KP_ENTRY * names.length };
+  _say("League night. The ashtray fills with hundred-baht notes, the field chalks " +
+    `up, and somebody racks. Five players, three lives each, ฿${G.game.stake} in ` +
+    "the pot. Pot anything or lose a life; last cue standing takes the lot.");
+  _say(kpRender(G.game.kp), "dim");
+  _say("(Your shot each round: SHOT (safe, 60%) or POWER (flashy, 45% — glory or " +
+    "grief). QUIT forfeits your lives.)", "dim");
+}
+
+function _kpInput(input) {
+  const g = G.game;
+  const kind = /power|smash/.test(input) ? "power" :
+    /shot|pot|cut|hit|play|safe/.test(input) ? "shot" : null;
+  if (!kind) { _say("SHOT or POWER — the table is waiting.", "dim"); return; }
+  const you = kpShot(g.kp, _rand, kind === "power" ? 0.45 : 0.6);
+  if (you.potted) {
+    _say(kind === "power" ?
+      "You lean into it — the ball SLAMS home and the bar goes quiet for one " +
+      "beautiful second." : "Clean pot. The felt forgives you another round.");
+  } else {
+    _say(`Miss. ${you.player.lives > 0 ? `Life gone (${you.player.lives} left).` :
+      "That was your last life. You're out."}`, you.out ? "alert" : "");
+  }
+  // the table plays around to you
+  while (!kpOver(g.kp) && g.kp.turn !== 0) {
+    const r = kpShot(g.kp, _rand);
+    if (r.out) _say(`${r.player.name} misses and is OUT. A moment of silence; the moment ends.`, "dim");
+    else if (!r.potted) _say(`${r.player.name} rattles it — a life gone.`, "dim");
+  }
+  if (kpOver(g.kp)) {
+    const winner = kpAlive(g.kp)[0];
+    if (winner && winner.name === "You") {
+      _setFlag("wonLeague");
+      _endGame(true, g.stake, `Last cue standing. The pot — ฿${g.stake} — is pushed ` +
+        "across the felt with due ceremony, and the owner rings the bell himself. " +
+        "League night belongs to you.");
+    } else {
+      _endGame(false, 0, `${winner ? winner.name : "The table"} takes the pot. You take ` +
+        "a stool, and the bar takes your name for next league night. That's killer.");
+    }
+    return;
+  }
+  _say(kpRender(g.kp), "dim");
+  _say("(Your shot.)", "dim");
+}
+
 // ─ Pool ─
 
 function _startPool() {
@@ -759,6 +958,7 @@ function _gameInput(input) {
     case "c4": _c4Input(input); break;
     case "jp": _jpInput(input); break;
     case "pool": _poolInput(input); break;
+    case "kp": _kpInput(input); break;
   }
 }
 
@@ -1028,7 +1228,15 @@ function _doPatron() {
       "The regular tells you a long story about a night on Soi 6 in 2009 that " +
       "ends with the phrase “and THAT is why I can't go back to Bristol.” " +
       "Solid company, this man.",
-    ][Math.floor(_rand() * 3)]);
+      "The regular nods at a fresh-faced kid down the bar mooning over a hostess. " +
+      "“White knight. Gonna try and rescue her by Friday, skint by Sunday, Flying " +
+      "Club by high season if his mates don't fly him home first. Seen it a " +
+      "hundred times.” He drinks. “The girls do the arithmetic better than we do.”",
+      "The regular leans in, quieter: “You drink on Soi 6, you're drinking with " +
+      "the White Dish Group, whoever's name is over the door. Front company. " +
+      "Fella called Ryan Powers behind it — Brit, never here, always here. Bars " +
+      "run fine. Just don't go asking who owns what.”",
+    ][Math.floor(_rand() * 5)]);
     s.patronFriend = s.patronFriend || {};
     if (!s.patronFriend[G.room]) { s.patronFriend[G.room] = true; _addHappy(1); }
   } else {
@@ -1157,7 +1365,11 @@ function _endNight(reason) {
   G.soc.patronBusy = {};
   G.soc.patronMiffed = {};
   G.soc.selfBf = false;
+  G.soc.butterflyTeased = false;
   G.selfBfId = null;
+  G.phone.msgCd = {};
+  G.phone.invite = null;
+  delete G.encDone.freelancer; // Beach Road restocks nightly
   G.hurt = 0;
   G.hunger = Math.min(85, 30 + hangover * 5);
   G.thirst = Math.min(90, 40 + hangover * 6);
@@ -1348,6 +1560,218 @@ function _maybeSelfBarfine(id) {
   _say("(YES / NO — she is not going to ask twice.)", "dim");
 }
 
+// ── Quests (adventures) ──────────────────────────────────────────────────────
+// Data in QUESTS (world.js). States in G.quests: undefined → offered (giver
+// mentioned it) → active (ACCEPT) → done (doneFlag detected, reward paid) or
+// abandoned (re-offerable). Dependencies gate the offer, not the talk.
+
+function _questAvailable(qid) {
+  const q = QUESTS[qid];
+  const st = G.quests[qid];
+  if (st === "active" || st === "done") return false;
+  return q.deps.every(d => G.quests[d] === "done");
+}
+
+// Called after a giver's dialogue lands: surface any offer they have.
+function _questOffer(npcId) {
+  for (const [qid, q] of Object.entries(QUESTS)) {
+    if (q.giver !== npcId || !_questAvailable(qid)) continue;
+    G.quests[qid] = "offered";
+    _say(`✦ ${NPCS[npcId].name} has a job for you: “${q.name}” — ${q.desc}`, "win");
+    _say(`(ACCEPT ${qid.toUpperCase()} to take it on.)`, "dim");
+    return; // one offer at a time keeps the bar chatter sane
+  }
+}
+
+function _findQuest(word) {
+  const w = word.toLowerCase().trim();
+  if (!w) return null;
+  return Object.keys(QUESTS).find(qid =>
+    qid === w || QUESTS[qid].name.toLowerCase().includes(w)) || null;
+}
+
+function _doAccept(arg) {
+  const qid = _findQuest(arg) ||
+    Object.keys(QUESTS).find(q => G.quests[q] === "offered");
+  if (!qid) { _say("Accept what? (QUESTS lists what's on offer.)"); return; }
+  const q = QUESTS[qid];
+  if (G.quests[qid] === "active") { _say("Already on it."); return; }
+  if (G.quests[qid] === "done") { _say("That one's finished. Bask."); return; }
+  if (G.quests[qid] !== "offered" && !_questAvailable(qid)) {
+    _say("You've heard of it, but nobody's actually offered it to you yet."); return;
+  }
+  G.quests[qid] = "active";
+  _say(`✦ Quest accepted: ${q.name}`, "win");
+  _say(q.desc, "dim");
+  if (q.item && G.itemLoc[q.item] === null) {
+    G.itemLoc[q.item] = "inventory";
+    _say(`(You now have the ${ITEMS[q.item].name}.)`, "dim");
+  }
+}
+
+function _doAbandon(arg) {
+  const qid = _findQuest(arg) ||
+    Object.keys(QUESTS).find(q => G.quests[q] === "active");
+  if (!qid || G.quests[qid] !== "active") { _say("You're not on that job."); return; }
+  G.quests[qid] = "abandoned";
+  const q = QUESTS[qid];
+  if (q.item && G.itemLoc[q.item] === "inventory") G.itemLoc[q.item] = null;
+  _say(`✦ Abandoned: ${q.name}. The soi forgives; the giver may offer it again.`, "dim");
+}
+
+function _doQuests() {
+  const rows = Object.entries(QUESTS).filter(([qid]) => G.quests[qid]);
+  if (!rows.length) { _say("No adventures on the books. The givers are out there — talk to people."); return; }
+  for (const [qid, q] of rows) {
+    const st = G.quests[qid];
+    if (st === "active") _say(`▶ ${q.name} — ${q.desc}`, "win");
+    else if (st === "offered") _say(`✦ On offer: ${q.name} (ACCEPT ${qid.toUpperCase()})`, "dim");
+    else if (st === "done") _say(`✓ ${q.name}`, "dim");
+  }
+}
+
+// Reward sweep — runs every turn; any active quest whose doneFlag has been
+// set (by give/win/bank, wherever) completes here.
+function _questTick() {
+  for (const [qid, q] of Object.entries(QUESTS)) {
+    if (G.quests[qid] !== "active" || !_flag(q.doneFlag)) continue;
+    G.quests[qid] = "done";
+    _say(`✦ QUEST COMPLETE: ${q.name}`, "win");
+    if (q.reward.money) {
+      G.money += q.reward.money;
+      _say(`(+฿${q.reward.money} — ฿${G.money} in pocket.)`, "dim");
+    }
+    if (q.reward.happy) _addHappy(q.reward.happy);
+  }
+}
+
+// ── The phone: contacts, messages, the banking app ──────────────────────────
+// CONTACT a girl in her own bar (favor ≥ 2) to swap numbers. Contacts text
+// you unprompted — sweet nothings, bar invites, the occasional money story.
+// MESSAGE sends charm; SEND <amt> TO <name> is the banking app. Everything
+// needs a live battery.
+
+function _phoneDead() {
+  if (G.battery <= 0) { _say("Your phone is a black mirror. Charge it first."); return true; }
+  return false;
+}
+
+function _pushMsg(from, text, gives) {
+  G.phone.inbox.push({ from, text, turn: G.turns, read: false, gives: gives || 0 });
+  G.phone.lastText = G.turns;
+}
+
+function _unreadCount() { return G.phone.inbox.filter(m => !m.read).length; }
+
+function _doContact(arg) {
+  const id = _findNpc(arg);
+  if (!id) { _say("They're not here to ask."); return; }
+  if (!NPC_ROLES[id]) { _say(`${NPCS[id].name} keeps that number for family and better customers.`); return; }
+  if (G.phone.contacts[id]) { _say(`You already have ${NPCS[id].name}'s number. She knows you know.`); return; }
+  if (_phoneDead()) return;
+  if (NPCS[id].room !== G.room) { _say("Numbers get swapped in her bar, over a drink — not on the street."); return; }
+  if (_favor(id) < 2) {
+    _say(`${NPCS[id].name} waggles her phone with a smile that means not yet, big ` +
+      "spender. A drink or two usually changes the arithmetic.");
+    return;
+  }
+  G.phone.contacts[id] = true;
+  _say(`Phones come out, LINE QR codes are scanned, and ${NPCS[id].name} types your ` +
+    "name into her contacts with three emoji you don't get to see. You have her " +
+    "number now — and she, forever, has yours.", "win");
+  _addHappy(1);
+  if (id === "bee" && G.quests.bee_number === "active") {
+    _say("Bee taps her banking app pointedly. “Investor send money NOW, na. Hundred " +
+      "baht. For LUCK.” (SEND 100 TO BEE)", "dim");
+  }
+}
+
+function _doMessage(arg) {
+  if (_phoneDead()) return;
+  const w = arg.toLowerCase().replace(/^(to )/, "");
+  const id = Object.keys(G.phone.contacts).find(c =>
+    c === w || NPCS[c].name.toLowerCase().includes(w.split(" ")[0]));
+  if (!id) { _say(w ? "No such number in your phone. (CONTACT a girl in her bar first.)" : "Message whom?"); return; }
+  G.battery = Math.max(0, G.battery - 1);
+  if (G.phone.msgCd[id] === G.day) {
+    _say(`You've already charmed ${NPCS[id].name} by text tonight. Twice is a pattern; ` +
+      "three times is a case file.");
+    return;
+  }
+  G.phone.msgCd[id] = G.day;
+  G.soc.drinks[id] = (G.soc.drinks[id] || 0) + 1; // charm counts toward favor
+  _say(`You send ${NPCS[id].name} something short and sweet with one emoji too many.`);
+  _pushMsg(id, ["555+ you funny", "miss you na 🥺", "come see me tonight!!",
+    "work boring... you come make sanuk"][Math.floor(_rand() * 4)]);
+  _say("(📱 She replies almost instantly. CHECK MESSAGES.)", "dim");
+}
+
+function _doSendMoney(arg) {
+  if (_phoneDead()) return;
+  const m = arg.match(/(\d+)/);
+  const amt = m ? parseInt(m[1], 10) : null;
+  const nameW = arg.replace(/\d+|money|baht|to |฿/g, " ").trim();
+  const id = Object.keys(G.phone.contacts).find(c =>
+    c === nameW || NPCS[c].name.toLowerCase().includes(nameW.split(" ")[0] || "~"));
+  if (!id) { _say("Send to whom? The banking app only knows your contacts."); return; }
+  if (!amt || amt <= 0) { _say("How much? (SEND <amount> TO <name>)"); return; }
+  if (amt > G.money) { _say(`The app regrets to inform you: ฿${G.money} available, ฿${amt} dreamed of.`); return; }
+  G.money -= amt;
+  G.battery = Math.max(0, G.battery - 1);
+  const bump = amt >= 500 ? 3 : amt >= 100 ? 2 : 1;
+  G.soc.drinks[id] = (G.soc.drinks[id] || 0) + bump;
+  _say(`฿${amt} crosses town in one green blink. (฿${G.money} left.)`);
+  _pushMsg(id, amt >= 500 ? "🙏🙏🙏 you TOO good to me. tonight I take care YOU" :
+    amt >= 100 ? "khop khun kha!! 💕 you number one" : "55555 cheap Charlie... but sweet 💕");
+  _say("(📱 A reply lands before you've pocketed the phone.)", "dim");
+  if (id === "bee" && amt >= 100 && G.quests.bee_number === "active") {
+    _setFlag("beeBanked");
+  }
+}
+
+function _readMessages() {
+  if (_phoneDead()) return;
+  if (!G.phone.inbox.length) { _say("No messages. The phone judges you gently."); return; }
+  const unread = G.phone.inbox.filter(m => !m.read);
+  const show = unread.length ? unread : G.phone.inbox.slice(-3);
+  for (const msg of show) {
+    _say(`📱 ${NPCS[msg.from].name}: “${msg.text}”`, "thai");
+    if (!msg.read && msg.gives) {
+      G.money += msg.gives;
+      _say(`(She's transferred you ฿${msg.gives}. ฿${G.money} in pocket. This town.)`, "win");
+    }
+    msg.read = true;
+  }
+  if (!unread.length) _say("(Older messages, re-read for the warm glow.)", "dim");
+}
+
+// Contacts text first, sometimes. Sweet nothings, invitations with a reward
+// for showing up, and money stories — this IS Pattaya.
+function _maybeIncomingText() {
+  if (G.battery <= 0 || G.game || G.pendingEnc) return;
+  const contacts = Object.keys(G.phone.contacts);
+  if (!contacts.length) return;
+  if (G.turns - G.phone.lastText < 25) return;
+  if (_rand() >= 0.08) return;
+  const id = contacts[Math.floor(_rand() * contacts.length)];
+  const name = NPCS[id].name;
+  const roll = _rand();
+  if (roll < 0.4) {
+    G.phone.invite = { id, day: G.day };
+    _pushMsg(id, `bar quiet tonight 😴 you come see ${name}?? I keep you seat 💺💕`);
+  } else if (roll < 0.65) {
+    _pushMsg(id, ["mama of me sick, need buy medicine 300 baht 🥺 you help?",
+      "phone of me break!! need 500 for fix... you good heart na 🙏",
+      "buffalo of family very sick 😭😭 200 baht help little bit?"][Math.floor(_rand() * 3)]);
+  } else if (roll < 0.9) {
+    _pushMsg(id, ["thinking of you na 💭", "you eat already?? 🍚", "sabai dee mai 😊",
+      "last night SO funny 5555"][Math.floor(_rand() * 4)]);
+  } else {
+    _pushMsg(id, "lucky day!! I win lottery small small 🎉 send you luck money", 50);
+  }
+  _say("(📱 Your phone buzzes — CHECK MESSAGES.)", "dim");
+}
+
 // ── Food and water ───────────────────────────────────────────────────────────
 
 const FOOD_STALLS = {
@@ -1488,6 +1912,17 @@ function _doGo(dirWord) {
   }
   G.room = to;
   _describeRoom(true);
+  // a standing invitation, honoured: she said come, and you came
+  const inv = G.phone.invite;
+  if (inv && inv.day === G.day && NPCS[inv.id].room === G.room) {
+    G.phone.invite = null;
+    G.soc.drinks[inv.id] = (G.soc.drinks[inv.id] || 0) + 1;
+    _say(`${NPCS[inv.id].name} spots you from across the room and lights up like ` +
+      "payday — the kept seat is produced, a cold towel appears, and for one whole " +
+      "minute you are the only customer who has ever existed. Showing up counts " +
+      "double in this town.", "win");
+    _addHappy(2);
+  }
   _maybeEncounter();
 }
 
@@ -1618,6 +2053,7 @@ function _doTalk(arg, topic) {
     return;
   }
   _deliver(npc, d);
+  _questOffer(npc);
 }
 
 function _doWai(arg) {
@@ -1690,6 +2126,15 @@ function _doGive(itemWord, npcWord) {
     _setFlag("somTamDelivered");
     const d = _pickDialogue("ploy");
     _deliver("ploy", d);
+    return;
+  }
+  if (id === "sang_som" && npc === "bee") {
+    G.itemLoc.sang_som = null;
+    _setFlag("sangsomDelivered");
+    _say("Bee receives the boxed bottle with both hands, reads the card, and for " +
+      "two full seconds the franchise smile is just a person's. “Auntie send " +
+      "THIS?” She sets it on the opening shelf, dead centre, label out, then " +
+      "presses thank-you money into your hand over your objections. Family rules.", "win");
     return;
   }
   if (id.startsWith("bottle") && npc === "nok") return _doSellBottles();
@@ -1792,6 +2237,12 @@ function _doBuy(arg) {
     G.soc.drinks[id] = (G.soc.drinks[id] || 0) + 1;
     _say(`One lady drink for ${NPCS[id].name} — ฿${LADY_DRINK} on the tab that is your life. (฿${G.money} left.)`);
     _addHappy(1);
+    if (Object.keys(G.soc.drinks).length >= 4 && !G.soc.butterflyTeased) {
+      G.soc.butterflyTeased = true;
+      _say(`${NPCS[id].name} counts something on her fingers, eyes narrowing in ` +
+        "delight: “Ohhh, I hear about you. BUTTERFLY!” She makes the wing motion. " +
+        "The whole bar makes the wing motion. This is your reputation now.", "dim");
+    }
     // the mamasan's blessing: her bar warms to you, and the house may pour one back
     if (NPC_ROLES[id] === "mamasan" && NPCS[id].room === G.room && !G.soc.mamaTreat[G.room]) {
       G.soc.mamaTreat[G.room] = true;
@@ -1952,6 +2403,9 @@ function _doScore() {
     (G.hurt ? ` · banged up (${G.hurt}/3)` : ""), "dim");
   if (_flag("act1Done")) _say(`✓ ACT ONE COMPLETE — scored ${G.score}` +
     (G.vacation > 1 ? ` · vacation #${G.vacation}` : ""), "dim");
+  if (_unreadCount()) _say(`📱 ${_unreadCount()} unread message${_unreadCount() > 1 ? "s" : ""} (CHECK MESSAGES)`, "win");
+  const active = Object.entries(QUESTS).filter(([qid]) => G.quests[qid] === "active");
+  for (const [, q] of active) _say(`▶ ${q.name}`, "dim");
   const milestones = [
     ["knowWasHere", "Worked out where you were last night"],
     ["knowMot", "Learned who lifted the wallet"],
@@ -1975,6 +2429,9 @@ const _HELP = `Common commands:
   FLIRT/KISS/SPANK/FONDLE <lady> · BUY DRINK FOR <lady> · BUY BEER
   RING BELL (฿300, instant popularity) · TALK TO PATRON · BARFINE <lady>
   EAT <food> · BUY WATER / FOOD (street carts & 7-Elevens) · SLEEP (at the hotel)
+  QUESTS · ACCEPT <quest> · ABANDON <quest>
+  CONTACT <lady> (swap numbers) · MESSAGE <lady> · CHECK MESSAGES
+  SEND <amount> TO <lady> (banking app)
   LIGHT ON / LIGHT OFF · CHARGE PHONE
   SCORE (happiness & progress) · UNDO · RESTART   (the night autosaves itself)`;
 
@@ -2036,7 +2493,18 @@ function doCommand(input) {
     case "go": case "walk": case "head": _doGo(arg); break;
     case "enter": _doEnter(arg); break;
     case "look": case "l": _describeRoom(true); break;
-    case "examine": case "x": case "inspect": case "check": _doExamine(arg); break;
+    case "examine": case "x": case "inspect": _doExamine(arg); break;
+    case "check":
+      if (/message|phone|text|inbox/.test(arg)) _readMessages();
+      else _doExamine(arg);
+      break;
+    case "messages": case "msgs": case "inbox": _readMessages(); break;
+    case "message": case "text": case "msg": _doMessage(arg); break;
+    case "contact": case "number": _doContact(arg.replace(/^(with |for )/, "")); break;
+    case "send": case "transfer": case "wire": _doSendMoney(arg); break;
+    case "quests": case "quest": case "adventures": case "journal": _doQuests(); break;
+    case "accept": _doAccept(arg); break;
+    case "abandon": _doAbandon(arg); break;
     case "take": case "get": case "grab": case "pick":
       if (arg === "bus" || arg.startsWith("bus")) _doRideBus(arg.replace(/^bus\s*/, ""));
       else if (arg.startsWith("motosai") || arg.startsWith("bike")) _doMotosai(arg.replace(/^\S+\s*/, ""));
@@ -2058,7 +2526,7 @@ function doCommand(input) {
       break;
     }
     case "give": case "hand": case "deliver": {
-      const m = arg.match(/^(.+?) (?:to )?(nok|auntie|bank|candy|lek|noi|ping|aom|joy|fon|gift|kwan|nong|pim|ploy|dj|oy|madam|daeng|gary|mot|security)( .*)?$/);
+      const m = arg.match(/^(.+?) (?:to )?(nok|auntie|bank|candy|lek|noi|ping|aom|joy|fon|gift|kwan|nong|pim|ploy|dj|oy|madam|daeng|gary|mot|security|bee|bert|mem)( .*)?$/);
       if (m) _doGive(m[1].trim(), m[2]);
       else _say("Give what to whom? (GIVE <thing> TO <person>)");
       break;
@@ -2118,6 +2586,7 @@ function doCommand(input) {
       return; // no tick for parse errors
   }
   _tick();
+  _questTick();
   _checkAct1();
 }
 

@@ -445,6 +445,7 @@ test("jackpot: settles one way or another, money stays consistent", () => {
 test("jackpot: bet is clamped and capped by pocket money", () => {
   state().room = "lucky_tiger";
   state().money = 15;
+  state().rng = 1; // seed that leaves the game live at a pending choice
   run("play jackpot 500");
   assert.equal(state().game.stake, 15, "can't stake more than you carry");
   assert.equal(state().money, 0);
@@ -785,6 +786,167 @@ test("drunk street walking rolls the police encounter", () => {
   state().encDone = Object.fromEntries(Object.keys(ENCOUNTERS).map(k => [k, true]));
   for (let i = 0; i < 100 && state().pendingEnc !== "police"; i++) _maybeEncounter();
   assert.equal(state().pendingEnc, "police", "the whistle eventually blows");
+});
+
+// ── Killer pool league ─────────────────────────────────────────────────────
+
+test("killer pool: league nights only, every third day", () => {
+  state().room = "stinky_bar";
+  state().money = 500;
+  state().lastPeddler = 99999; // keep the watch salesman out of the frame
+  state().day = 4; // not a league night
+  run("play killer");
+  assert.equal(state().game, null);
+  assert.match(lastOut(), /every third night/i);
+  state().day = 6;
+  run("play killer");
+  assert.ok(state().game && state().game.type === "kp");
+  assert.equal(state().money, 400, "฿100 in the ashtray");
+  assert.equal(state().game.stake, 500, "five players' pot");
+  for (let i = 0; i < 40 && state().game; i++) run("shot");
+  assert.equal(state().game, null, "the frame settles");
+  assert.ok([400, 900].includes(state().money), `out or champion — ฿${state().money}`);
+});
+
+// ── Quests ─────────────────────────────────────────────────────────────────
+
+test("quest flow: offer via giver, accept, deliver, reward; dependency gates", () => {
+  state().room = "candy_bar";
+  run("talk to candy");
+  assert.equal(state().quests.sangsom, "offered");
+  assert.match(lastOut(), /Sister-Bar Run/);
+  run("accept sangsom");
+  assert.equal(state().quests.sangsom, "active");
+  assert.equal(state().itemLoc.sang_som, "inventory");
+  run("quests");
+  assert.match(lastOut(), /▶ The Sister-Bar Run/);
+  // dependency: bee won't offer her quest until sangsom is done
+  state().room = "candy_bar_2";
+  run("talk to bee");
+  assert.notEqual(state().quests.bee_number, "offered");
+  const cash = state().money;
+  run("give sang som to bee");
+  assert.ok(state().flags.sangsomDelivered);
+  run("wait"); // questTick sweeps
+  assert.equal(state().quests.sangsom, "done");
+  assert.equal(state().money, cash + 200, "reward paid");
+  run("talk to bee");
+  assert.equal(state().quests.bee_number, "offered", "dependency unlocked");
+});
+
+test("abandoning a quest returns it to the pool (and takes the prop back)", () => {
+  state().room = "candy_bar";
+  run("talk to candy", "accept sangsom", "abandon sangsom");
+  assert.equal(state().quests.sangsom, "abandoned");
+  assert.equal(state().itemLoc.sang_som, null);
+  run("talk to candy");
+  assert.equal(state().quests.sangsom, "offered", "re-offered");
+});
+
+// ── The phone ──────────────────────────────────────────────────────────────
+
+test("contact: needs her bar and favor; then messaging builds favor", () => {
+  state().room = "jasmine_garden";
+  run("contact fon");
+  assert.ok(!state().phone.contacts.fon);
+  assert.match(lastOut(), /not yet/i);
+  state().soc.drinks.fon = 2;
+  run("contact fon");
+  assert.ok(state().phone.contacts.fon);
+  run("message fon");
+  assert.equal(state().soc.drinks.fon, 3, "text charm counts");
+  assert.equal(state().phone.inbox.length, 1);
+  run("check messages");
+  assert.ok(state().phone.inbox[0].read);
+  run("message fon");
+  assert.match(lastOut(), /case file/i, "one charm text per night");
+});
+
+test("banking app: SEND transfers, bumps favor, and completes Bee's quest", () => {
+  state().flags.act1Done = true;
+  state().quests = { sangsom: "done", bee_number: "active" };
+  state().phone.contacts.bee = true;
+  state().money = 500;
+  run("send 100 to bee");
+  assert.equal(state().money, 400);
+  assert.ok(state().flags.beeBanked);
+  run("wait");
+  assert.equal(state().quests.bee_number, "done");
+});
+
+test("incoming texts arrive with a buzz; attached money credits on read", () => {
+  state().phone.contacts.fon = true;
+  state().phone.inbox.push({ from: "fon", text: "lucky day!!", turn: 1, read: false, gives: 50 });
+  const cash = state().money;
+  run("check messages");
+  assert.equal(state().money, cash + 50);
+});
+
+test("a texted invite pays off when you show up that night", () => {
+  state().phone.contacts.fon = true;
+  state().phone.invite = { id: "fon", day: state().day };
+  state().room = "buakhao_s";
+  const h = state().happy;
+  run("in"); // jasmine_garden, Fon's bar
+  assert.equal(state().room, "jasmine_garden");
+  assert.ok(state().happy >= h + 2);
+  assert.equal(state().phone.invite, null);
+  assert.equal(state().soc.drinks.fon, 1, "showing up counts");
+});
+
+// ── Freelancers, peddlers, the ping pong show ──────────────────────────────
+
+test("freelancer: solo company ends the night; broke or roomless get laughed off", () => {
+  state().room = "promenade";
+  _startEnc("freelancer");
+  run("yes");
+  assert.match(lastOut(), /Maybe tomorrow/i, "no room yet");
+  assert.equal(state().day, 2);
+  state().flags.act1Done = true;
+  state().flags.hasWallet = true;
+  state().money = 1200;
+  delete state().encDone.freelancer;
+  _startEnc("freelancer");
+  run("yes");
+  assert.equal(state().day, 3, "night over, grandly");
+  assert.equal(state().money, 200);
+});
+
+test("freelancer: taking Ning too costs ฿1800 and pays extra happiness", () => {
+  state().flags.act1Done = true;
+  state().flags.hasWallet = true;
+  state().room = "promenade";
+  state().money = 2000;
+  const h = state().happy;
+  _startEnc("freelancer");
+  run("both of you");
+  assert.ok(state().flags.hadThreesome);
+  assert.equal(state().money, 200);
+  assert.ok(state().happy >= h + 15, `threesome premium (${state().happy - h})`);
+  assert.equal(state().day, 3);
+});
+
+test("peddler works the Beach Road bar stools; buying the watch is a choice", () => {
+  state().room = "stinky_bar";
+  state().money = 500;
+  state().turns = 100;
+  state().lastPeddler = 0;
+  for (let i = 0; i < 200 && state().pendingEnc !== "peddler"; i++) run("wait");
+  assert.equal(state().pendingEnc, "peddler");
+  run("the watch");
+  assert.equal(state().itemLoc.fake_rolex, "inventory");
+  assert.equal(state().money, 200);
+});
+
+test("the ping pong show is exactly the scam everyone says it is", () => {
+  state().room = "ws_south";
+  state().money = 1500;
+  const h = state().happy;
+  _startEnc("pingpong");
+  run("yes, see the show");
+  assert.ok(state().flags.sawPingPong);
+  assert.equal(state().money, 500, "฿600 in, ฿400 gouged");
+  assert.ok(state().happy <= h, "nobody leaves happier");
 });
 
 // ── The week and the stages ────────────────────────────────────────────────
