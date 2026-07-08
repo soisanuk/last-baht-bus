@@ -1350,6 +1350,14 @@ function _doPatron() {
       `mouth the speech along with him, word for word, nightly for nine years.`);
     return;
   }
+  // the other liturgy: no expat has ever been the right temperature
+  if (_wxNow() && _rand() < 0.15) {
+    const wx = _wxNow();
+    _say(`The regular fans himself with a beer mat. “${wx.temp} degrees,” he ` +
+      `announces, as though personally wronged. “But it's not the heat, is it. ` +
+      `It's the humidity.” The humidity, currently ${wx.humid}%, declines to comment.`);
+    return;
+  }
   // a man with a paper and opinions — when there are headlines to have them about
   if (_newsFeed().length && _rand() < 0.25) {
     const h = _headline();
@@ -1939,6 +1947,37 @@ function _fxLine() {
   return _FX_CURRENCIES.map(([c, sym]) => `${sym}1 = ฿${fx[c]}`).join(" · ");
 }
 
+function _wxNow() { return typeof WX_NOW === "undefined" ? null : WX_NOW; }
+
+function _wxDesc(code) {
+  if (code >= 95) return "thunder somewhere over the Gulf";
+  if (code >= 80) return "showers queuing up offshore";
+  if (code >= 61) return "rain coming in off the sea";
+  if (code >= 51) return "a drizzle nobody dresses for";
+  if (code >= 45) return "haze sitting flat on the water";
+  if (code >= 2) return "cloud stacked over Koh Larn";
+  return "not a cloud with the nerve";
+}
+
+function _wxLine() {
+  const wx = _wxNow();
+  if (!wx) return null;
+  return `${wx.temp}°, ${wx.humid}% humidity, ${_wxDesc(wx.code)}` +
+    (wx.rain >= 40 ? `, ${wx.rain}% chance of rain` : "");
+}
+
+function _doWeather() {
+  const wx = _wxNow();
+  if (!wx) {
+    _say("Your phone's weather app spins, gives up, and shows you yesterday. " +
+      "Hot, it says. It was.");
+    return;
+  }
+  _say(`Your phone's weather app: ${wx.temp}° and feeling like more, ` +
+    `${wx.humid}% humidity, ${_wxDesc(wx.code)}. High of ${wx.hi}°, ` +
+    `${wx.rain}% chance of rain. Tomorrow's forecast is also Pattaya.`);
+}
+
 function _headline() {
   const feed = _newsFeed();
   return feed.length ? feed[Math.floor(_rand() * feed.length)] : null;
@@ -1959,6 +1998,9 @@ function _doTv() {
     if (h2 && h2.t !== h.t) _sayHeadline(h2);
     const fx = _fxLine();
     if (fx) _say(`The ticker crawls underneath: ${fx}`, "dim");
+    const wx = _wxLine();
+    if (wx) _say(`Then the weather girl, beaming at a map of the Gulf: ${wx}. ` +
+      "Nobody in the bar needed telling.", "dim");
     _say("The bar absorbs the state of the world and orders another round at it.", "dim");
   } else {
     _say("Tonight it's muay thai highlights and the lottery draw. The bar approves " +
@@ -1988,6 +2030,9 @@ function _doPaper() {
   }
   const fx = _fxLine();
   if (fx) _say(`Corner of the business page, the numbers every expat reads first: ${fx}`, "thai");
+  const wx = _wxLine();
+  if (wx) _say(`The weather box promises ${wx} — printed on paper already ` +
+    "gone soft agreeing with it.", "dim");
   _say("Somewhere in there, the fuel prices explain your bus fare.", "dim");
 }
 
@@ -2649,6 +2694,7 @@ const _HELP = `Common commands:
   RIDE BUS TO <place> · MOTOSAI TO <place> · PAY <amount>
   BUY <thing> · SELL BOTTLES · READ <thing> · READ SIGN
   WATCH TV (bars) · READ PAPER (bars & 7-Elevens) — the day's real headlines
+  WEATHER — Pattaya's actual conditions, per your phone
   PLAY CONNECT 4 · PLAY JACKPOT [bet] · PLAY POOL   (in the beer bars)
   FLIRT/KISS/SPANK/FONDLE <lady> · BUY DRINK FOR <lady> · BUY BEER
   RING BELL (฿300, instant popularity) · TALK TO PATRON · BARFINE <lady>
@@ -2800,6 +2846,7 @@ function doCommand(input) {
       else { _endNight("sleep"); return; }
       break;
     case "tv": _doTv(); break;
+    case "weather": case "forecast": _doWeather(); break;
     case "watch":
       if (!arg || /tv|news|television/.test(arg)) _doTv();
       else _say("You watch. It watches back. Pattaya.");
