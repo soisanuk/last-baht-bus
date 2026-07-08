@@ -33,6 +33,8 @@ Bar social life lives in `G.soc` (per-girl lady-drink counts, per-bar bell/heat/
 
 **The phone** (`G.phone`): CONTACT in her bar at favor ≥2 swaps numbers; contacts text unprompted via `_maybeIncomingText` in `_tick` (invites reward showing up that night — checked in `_doGo`; messages can carry money, credited on CHECK MESSAGES); MESSAGE = once-per-night favor charm; SEND <amt> TO <name> is the banking app (favor bump scales with amount). Everything battery-gated.
 
+**Quiz night**: Thursdays (`G.day % 7 === 4`; day 1 = Monday), nightTurn 20–39 (20:00–22:00), at three bars chosen by `_quizBars()` — a pure hash of (vacation, day), deliberately NOT `_rand()` so reading the schedule never advances the dice. Entering a quiz bar mid-window force-starts the quiz (`_quizHere` check in `_doGo`); questions from `QUIZ_POOL` (world.js); one per bar per night via `G.quizPlayed`; QUIT ejects to the street.
+
 Bar mini-games (Connect 4 / Jackpot / pool / killer pool on league nights — `G.day % 3 === 0` at `room.pool` bars) run as a modal `G.game` state: while one is live, `doCommand` routes every input to `_gameInput` and QUIT concedes. Stakes are escrowed up front and paid back ×2 on a win (×3 on a Jackpot); broke players play "for sanuk" (stake 0). Tabletop games are gated on `barType === "beer" | "soi6"`, pool on `room.pool`.
 
 - `web/js/thai.js` — Thai numbers (สิบเอ็ด/ยี่สิบ irregulars), Thai digits ๐–๙, signs, phrase matching. Pure functions.

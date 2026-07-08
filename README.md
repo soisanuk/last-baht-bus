@@ -99,6 +99,12 @@ Mobile gets tappable verb chips; desktop gets ↑/↓ command history.
   baht; broke players play for sanuk. `PLAY CONNECT 4 · PLAY JACKPOT [bet] ·
   PLAY POOL` — and every third night is **league night**: killer pool, ฿100
   in the ashtray, three lives each, last cue standing takes the pot.
+- **Quiz night**: Thursdays 20:00–22:00 at three bars drawn fresh each week
+  (chalkboards go out on the street). Walk into one mid-window and the
+  microphone finds you — five questions of Pattaya street knowledge and
+  survival Thai. Perfect round ฿500 and your name in chalk; four right ฿200;
+  three earns a consolation Chang; fewer, the teachers from Rayong win again.
+  QUIT slinks you back out to the street, socially.
 - **Sitting and talking is a whole way to play**: barfines and grand exits
   pay happiness, but so do league nights, patron friendships, quests, texted
   invitations honoured, and toasties on the kerb. Some men just talk and play
@@ -298,7 +304,7 @@ flowchart TD
 node --test
 ```
 
-133 tests: Thai number composition, world/map integrity (every exit resolves,
+137 tests: Thai number composition, world/map integrity (every exit resolves,
 all 15 canon bars present, the gossip chain's flags all connect), parser,
 systems, street encounters, bar mini-games and social life, and a full
 scripted playthrough from the beach to the happy ending — run headless via

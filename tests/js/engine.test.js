@@ -949,6 +949,69 @@ test("the ping pong show is exactly the scam everyone says it is", () => {
   assert.ok(state().happy <= h, "nobody leaves happier");
 });
 
+// ── Quiz night ─────────────────────────────────────────────────────────────
+
+test("quiz schedule: Thursdays only, three deterministic bars, 20:00-22:00", () => {
+  state().day = 4; // Thursday (day 1 = Monday)
+  const bars = _quizBars();
+  assert.equal(bars.length, 3);
+  assert.equal(new Set(bars).size, 3, "three distinct bars");
+  for (const b of bars) assert.ok(QUIZ_BARS.includes(b));
+  assert.deepEqual(_quizBars(), bars, "same three all night — pure hash, no dice");
+  state().nightTurn = 25;
+  assert.ok(_isQuizWindow());
+  state().nightTurn = 45; // 22:30 — over
+  assert.ok(!_isQuizWindow());
+  state().day = 5; // Friday
+  state().nightTurn = 25;
+  assert.ok(!_isQuizWindow());
+});
+
+test("walking into a quiz bar mid-window forces the quiz; answers score prizes", () => {
+  state().day = 4;
+  state().nightTurn = 25;
+  const bar = _quizBars()[0];
+  const outside = ROOMS[bar].exits.out;
+  state().room = outside;
+  const dir = Object.entries(ROOMS[outside].exits).find(([, to]) => to === bar)[0];
+  run(dir);
+  assert.ok(state().game && state().game.type === "quiz", "contestant, like it or not");
+  assert.match(lastOut(), /Question 1 of 5/);
+  const cash = state().money;
+  // answer all five correctly by reading the answer key
+  for (let i = 0; i < 5 && state().game; i++) {
+    run(String(QUIZ_POOL[state().game.qs[state().game.at]].a + 1));
+  }
+  assert.equal(state().game, null);
+  assert.equal(state().money, cash + 500, "perfect round pays ฿500");
+  assert.ok(state().flags.quizChamp);
+});
+
+test("quiz: QUIT slinks out to the street; one quiz per bar per night", () => {
+  state().day = 4;
+  state().nightTurn = 25;
+  const bar = _quizBars()[0];
+  const outside = ROOMS[bar].exits.out;
+  state().room = outside;
+  const dir = Object.entries(ROOMS[outside].exits).find(([, to]) => to === bar)[0];
+  run(dir, "quit");
+  assert.equal(state().room, outside, "walked yourself out");
+  run(dir);
+  assert.equal(state().game, null, "the host doesn't re-draft quitters");
+  assert.equal(state().room, bar, "but the bar still serves you");
+});
+
+test("off-window visits to quiz bars are just visits", () => {
+  state().day = 4;
+  state().nightTurn = 10; // 19:00, an hour early
+  const bar = _quizBars()[0];
+  const outside = ROOMS[bar].exits.out;
+  state().room = outside;
+  const dir = Object.entries(ROOMS[outside].exits).find(([, to]) => to === bar)[0];
+  run(dir);
+  assert.equal(state().game, null);
+});
+
 // ── The week and the stages ────────────────────────────────────────────────
 
 test("sleep ends the night on your terms; day seven ends the vacation", () => {
