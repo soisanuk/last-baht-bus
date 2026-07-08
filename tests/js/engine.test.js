@@ -1556,3 +1556,38 @@ test("act one cannot be abandoned; finished, it shows as done", () => {
   assert.match(lastOut(), /✓ The Last Baht Bus — Act One, scored 80/);
   assert.match(lastOut(), /givers are out there/);
 });
+
+// ── Autocomplete ───────────────────────────────────────────────────────────
+
+test("engineComplete: verbs first, context after, spoilers never", () => {
+  const verbs = engineComplete("ta");
+  assert.ok(verbs.includes("take") && verbs.includes("talk to"), "verb prefixes");
+  assert.ok(!engineComplete("xy").length, "easter eggs stay hidden");
+  assert.ok(!engineComplete("").length, "empty input suggests nothing");
+  // NPCs in the room
+  state().room = "candy_bar";
+  assert.deepEqual(engineComplete("talk to c"), ["candy"]);
+  assert.ok(engineComplete("flirt ").includes("candy"));
+  // exits of the current room
+  const exits = engineComplete("go ");
+  assert.ok(exits.length && exits.every(d => ROOMS.candy_bar.exits[d]));
+  // inventory for drop; room items for take
+  assert.ok(engineComplete("drop ").includes("noodles"));
+  state().room = "jomtien_beach";
+  assert.ok(engineComplete("take b").includes("bottle"));
+});
+
+test("engineComplete: quests, contacts, and live ask topics", () => {
+  state().quests.sangsom = "offered";
+  assert.ok(engineComplete("accept ").includes("sangsom"));
+  state().quests.sangsom = "active";
+  assert.ok(engineComplete("abandon ").includes("sangsom"));
+  state().phone.contacts.fon = true;
+  assert.deepEqual(engineComplete("message "), ["fon"]);
+  // ask topics respect req flags: candy's wallet talk needs no flag, deeper cuts do
+  state().room = "candy_bar";
+  const before = engineComplete("ask candy ");
+  state().flags.knowOyHasIt = true;
+  const after = engineComplete("ask candy ");
+  assert.ok(after.length >= before.length, "topics unlock with knowledge, never lock");
+});
