@@ -582,26 +582,45 @@ const _ENC = {
   },
 
   peddler(input) {
+    const deal = _flag("peddlerDeal");
+    const px = { watch: deal ? 200 : 300, shades: deal ? 100 : 150, vits: deal ? 120 : 200 };
+    if (/haggle|bargain|cheap|discount|too much|lower/.test(input)) {
+      G.pendingEnc = "peddler"; // still at your elbow — next command is still the reaction
+      if (deal) {
+        _say("He clutches his chest — the international sign for “you are killing " +
+          "me and my family”. The floor has been reached. " +
+          `(WATCH ฿${px.watch} · SUNGLASSES ฿${px.shades} · VITAMINS ฿${px.vits} · or NO.)`);
+        return;
+      }
+      G.flags.peddlerDeal = true;
+      _say("You name a lower number in the local fashion — pained, apologetic, as " +
+        "though the price wounded you both. A beat. Then the smile of a man " +
+        "meeting a worthy opponent: “Okayyy. For you, special.” " +
+        "(WATCH ฿200 · SUNGLASSES ฿100 · VITAMINS ฿120 · or NO.)");
+      _addHappy(1);
+      return;
+    }
+    delete G.flags.peddlerDeal;
     if (/watch|rolex/.test(input)) {
-      if (G.money < 300) { _say("฿300 for the 'Rolex'. He inspects your ฿" + G.money + " and moves along, unoffended."); return; }
-      G.money -= 300;
+      if (G.money < px.watch) { _say(`฿${px.watch} for the 'Rolex'. He inspects your ฿` + G.money + " and moves along, unoffended."); return; }
+      G.money -= px.watch;
       G.itemLoc.fake_rolex = "inventory";
-      _say("฿300, and the 'Rolex' is yours — fitted on your wrist with jeweller's " +
+      _say(`฿${px.watch}, and the 'Rolex' is yours — fitted on your wrist with jeweller's ` +
         `ceremony and a squeeze of the forearm. (฿${G.money} left.)`);
       _say("(You now have the genuine Rolex (allegedly).)", "dim");
       _addHappy(1);
     } else if (/glass|shade|sun/.test(input)) {
-      if (G.money < 150) { _say("฿150 for the RayBens, and you haven't got it. He tips an invisible hat."); return; }
-      G.money -= 150;
+      if (G.money < px.shades) { _say(`฿${px.shades} for the RayBens, and you haven't got it. He tips an invisible hat.`); return; }
+      G.money -= px.shades;
       G.itemLoc.shades = "inventory";
-      _say(`฿150. The RayBens go on immediately, indoors, at night. Perfect. (฿${G.money} left.)`);
+      _say(`฿${px.shades}. The RayBens go on immediately, indoors, at night. Perfect. (฿${G.money} left.)`);
       _say("(You now have the designer sunglasses.)", "dim");
       _addHappy(1);
     } else if (/vitamin|pill|med|blue/.test(input)) {
-      if (G.money < 200) { _say("฿200 for the 'vitamins'. Your pockets decline on your behalf."); return; }
-      G.money -= 200;
+      if (G.money < px.vits) { _say(`฿${px.vits} for the 'vitamins'. Your pockets decline on your behalf.`); return; }
+      G.money -= px.vits;
       G.itemLoc.vitamin_v = "inventory";
-      _say("฿200 changes hands with the discretion of a state secret, which fools " +
+      _say(`฿${px.vits} changes hands with the discretion of a state secret, which fools ` +
         `no one — the whole bar saw, and the whole bar is delighted. (฿${G.money} left.)`);
       _say("(You now have the packet of 'vitamins'. The hostesses will NEVER let this go.)", "dim");
       _addHappy(1);
@@ -2850,6 +2869,212 @@ function _doSing() {
   }
 }
 
+function _doTime() {
+  _say(`${_clockStr()}, ${_weekday()} — day ${G.day}` +
+    (G.stage === "expat" ? " of the rest of your life." : " of 7."));
+  const t = G.nightTurn;
+  if (_quizDay()) {
+    _say(t < 20 ? "(Quiz night tonight: 20:00–22:00, three bars, teachers in from Rayong.)" :
+      _isQuizWindow() ? "(Quiz night is ON somewhere right now.)" :
+      "(Quiz night has been and gone.)", "dim");
+  }
+  _say(t < 30 ? "(Early doors: barfines run ×1.5 until 21:00.)" :
+    t >= 60 ? "(Past midnight: most beer bars have quietly dropped the barfine.)" :
+    "(Prime time. Standard rates apply.)", "dim");
+}
+
+function _hourToTurn(h) { // 24h clock → nightTurn; the game lives 18:00–04:00
+  if (h >= 18 && h <= 23) return (h - 18) * 10;
+  if (h >= 0 && h <= 4) return (h + 6) * 10;
+  return null;
+}
+
+function _doWait(arg) {
+  if (!arg) { _say("You wait. Pattaya doesn't."); return; }
+  let target = null;
+  const until = arg.match(/^(?:until |till |for )?(?:(\d+)|midnight)\s*(am|pm)?$/);
+  if (/midnight/.test(arg)) target = _hourToTurn(0);
+  else if (until && until[1]) {
+    let h = parseInt(until[1], 10);
+    if (/^(?:until|till)/.test(arg)) {
+      if (until[2] === "pm" && h < 12) h += 12;
+      else if (!until[2] && h >= 5 && h <= 11) h += 12; // "until 9" means 21:00 here
+      if (h === 12 && until[2] !== "pm") h = 0;         // "until 12" means midnight
+      target = _hourToTurn(h % 24);
+      if (target === null) { _say("The night runs 18:00 to 04:00. Daylight is for sleeping."); return; }
+    } else {
+      target = G.nightTurn + Math.min(h, 60); // WAIT <n> turns
+    }
+  }
+  if (target === null) { _say("WAIT <turns>, or WAIT UNTIL <hour> (say, MIDNIGHT)."); return; }
+  if (target <= G.nightTurn) { _say(`It's already ${_clockStr()}. Time only runs one way, even here.`); return; }
+  const startDay = G.day, inbox0 = G.phone.inbox.length;
+  // leave one turn for the tick every command pays at the bottom of doCommand
+  while (G.nightTurn < target - 1) {
+    _tick();
+    if (G.day !== startDay) return; // the night ended out from under you
+    if (G.pendingEnc || G.game) { _say(`(${_clockStr()} — so much for waiting.)`, "dim"); return; }
+    if (G.phone.inbox.length > inbox0) { _say(`(${_clockStr()} — your phone interrupts.)`, "dim"); return; }
+  }
+  _say(`You let the night idle past — ice melting, songs turning over, the street ` +
+    `rearranging itself. ${_clockStr()}.`);
+}
+
+function _doTip(arg) {
+  const amtM = arg.match(/(\d+)/);
+  const amount = amtM ? parseInt(amtM[1], 10) : 20;
+  const nameW = arg.replace(/\d+|฿|baht/g, " ").trim();
+  if (!_inBar()) {
+    if (_room().motosai) {
+      _say("The piwins wave it away, grinning — you haven't ridden anywhere. Tips " +
+        "settle debts here; they don't open accounts.");
+    } else {
+      _say("Tip who? The street works for itself.");
+    }
+    return;
+  }
+  const girls = _npcsHere().filter(id => NPC_ROLES[id]);
+  const id = nameW ? _findNpc(nameW) : girls[0];
+  if (!id || !NPC_ROLES[id]) { _say("Tip who? Name one of the ladies."); return; }
+  if (G.money < amount) { _say(`Generosity of spirit, poverty of pocket: you have ฿${G.money}.`); return; }
+  G.money -= amount;
+  const name = NPCS[id].name;
+  if (amount >= 100) {
+    const bump = amount >= 300 ? 2 : 1;
+    G.soc.drinks[id] = (G.soc.drinks[id] || 0) + bump;
+    _say(`฿${amount}, folded small and passed with a wai. ${name} makes it vanish ` +
+      `with a conjurer's economy, and the news crosses the bar by whole-room ` +
+      `telepathy before your hand is back in your pocket. (฿${G.money} left.)`);
+    _addHappy(1);
+  } else {
+    _say(`฿${amount} into ${name}'s tip jar. A warm smile, a small wai — noted, ` +
+      `filed, appreciated. The big ledger, though, runs on lady drinks. (฿${G.money} left.)`);
+  }
+}
+
+function _doWave(arg) {
+  if (/bus/.test(arg) || (!arg && _room().busStop)) {
+    _say("You put an arm out at road height. A blue songthaew swerves in within " +
+      "four seconds — they can smell an undecided farang at three hundred metres.");
+    _doRideBus("");
+    return;
+  }
+  if (_inBar()) {
+    _say("You wave. Every hostess in the bar waves back at full wingspan, " +
+      "delighted, as though you had just invented it.");
+    return;
+  }
+  _say("You wave. Somewhere down the soi, somebody waves back. It's that kind of town.");
+}
+
+const _MAP = `            NAKLUA ─ your hotel
+               │
+             SOI 6
+               │
+  ~  BEACH RD N ─ Stinky Bar
+  ~       │
+  ~  BEACH RD C ─ CENTRAL ─ SECOND RD N
+  ~       │ (Tequila  MALL      │
+  ~       │   Queen)     PATTAYA KLANG ──► THE DARKSIDE
+  ~       │                     │        (lake · Khao Talo —
+  ~       │            SECOND RD C ─ MYTH NIGHT   motosai out)
+  ~       │                     │         │
+  ~  BEACH RD S ──────── SECOND RD S   BUAKHAO N
+  ~       │                     │  \\       ║ (LK METRO off the soi)
+  ~  WALKING ST                 │   ── BUAKHAO S
+  ~       │                     │
+  ~   (the gate)           PRATUMNAK ─ Buddha Hill
+  ~                             │
+  ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~  JOMTIEN ~ the beach where it all began`;
+
+function _doMap() {
+  _say("The bar-mat map of greater Pattaya, not to scale, like all bar maps:", "dim");
+  _say(_MAP, "dim");
+}
+
+function _doPhoto() {
+  if (G.battery <= 0) {
+    _say("Your phone is dead. The moment goes unrecorded, like the best ones always do.");
+    return;
+  }
+  G.battery--;
+  if (_inBar()) {
+    _say("The word “photo” assembles every hostess in the bar around you in " +
+      "under two seconds, peace signs at maximum deployment. Your phone now " +
+      "holds nine near-identical frames and one where everybody is beautiful. " +
+      "That one gets kept.");
+  } else if (["jomtien_beach", "dongtan_beach"].includes(G.room)) {
+    _say("You photograph the Gulf doing its end-of-day routine. The photo will " +
+      "not capture it. The photo has never once captured it. You take it anyway.");
+  } else {
+    _say("You take a photo you will never look at again. The neon doesn't " +
+      "photograph. It never has.");
+  }
+}
+
+function _doCall(arg) {
+  if (!arg) { _say("Call who?"); return; }
+  const id = _findNpc(arg);
+  if (!id) { _say("Call who? Nobody by that name in your phone or your eyeline."); return; }
+  if (G.battery <= 0) { _say("Dead phone. The town's most reliable excuse."); return; }
+  const name = NPCS[id].name;
+  _say(`You call ${name}. It rings out. Nine seconds later the phone buzzes in ` +
+    `your hand: “ทำไมโทรมา 555 why you CALL???” — nobody in this town answers a ` +
+    `phone. (MESSAGE ${name.toUpperCase()} instead.)`);
+}
+
+function _doShower() {
+  if (G.room !== "hotel_room") {
+    _say("Your shower is in room 412 in Naklua, enjoying the solitude.");
+    return;
+  }
+  if (G.soc.drunk >= 3 || G.hurt) {
+    _say("You stand under water of legendary pressure until the night stops " +
+      "ringing. You emerge, if not a new man, at least a rinsed draft of one.");
+  } else {
+    _say("Water pressure that could strip paint, towels folded into swans. " +
+      "Whatever else happens tonight, this part of Thailand kept its promises.");
+  }
+}
+
+function _doAtmVerb() {
+  if (G.stage === "act1") {
+    _say("Your card was in the wallet. The wallet is the whole problem. Solve " +
+      "that first and the money solves itself.");
+    return;
+  }
+  if (G.stage === "expat") {
+    _say("Expats don't do daily allowances — the savings came over with you. " +
+      `฿${G.money} in pocket. (The foreign-card fee is ฿220 and the machine can ` +
+      "smell your pension.)");
+    return;
+  }
+  if (G.atmDay === G.day) {
+    _say("Today's ฿3000 is already drawn and partly spent. The daily budget is " +
+      "the only thing keeping this vacation to seven days instead of seven years.");
+    return;
+  }
+  if (G.room === "hotel_room") {
+    G.atmDay = G.day;
+    G.money += SAFE_CASH;
+    _say(`You detour past the lobby ATM. It considers your card, sighs, and ` +
+      `surrenders the daily damage: ฿${SAFE_CASH}. (฿${G.money} in pocket.)`);
+    return;
+  }
+  _say("Your daily ฿3000 waits at the hotel lobby ATM — it pays out on your way " +
+    "into the evening.");
+}
+
+function _doCheers() {
+  if (!_inBar()) {
+    _say("You toast the night air. The night, in fairness, has earned it.");
+    return;
+  }
+  _say("“ชนแก้ว!” (chon gaew — glasses meet!) Every glass within reach angles " +
+    "toward yours: the girls', the regular's, possibly the mamasan's calculator. " +
+    "Nobody needs a reason. Not needing a reason is the entire custom.");
+}
+
 const _MISC_VERBS = {
   jump: "You jump. The pavement, a lifelong connoisseur of falling farangs, scores it a four.",
   climb: "The only climb worth doing here is Pratumnak Hill, and there's a road to the top with a view waiting on it.",
@@ -2874,6 +3099,7 @@ const _HELP = `Common commands:
   RING BELL (฿300, instant popularity) · TALK TO PATRON · BARFINE <lady>
   EAT <food> · DRINK <thing> · BUY WATER / FOOD (street carts & 7-Elevens) · SLEEP (at the hotel)
   DIAGNOSE (how bad is it) · AGAIN or G (repeat last command)
+  TIME · MAP · WAIT UNTIL <hour> · TIP <lady> <amount> · PHOTO · CHEERS
   QUESTS · ACCEPT <quest> · ABANDON <quest>
   CONTACT <lady> (swap numbers) · MESSAGE <lady> · CHECK MESSAGES
   SEND <amount> TO <lady> (banking app)
@@ -2949,7 +3175,7 @@ function doCommand(input) {
     case "go": case "walk": case "head": _doGo(arg); break;
     case "enter": _doEnter(arg); break;
     case "look": case "l": _describeRoom(true); break;
-    case "examine": case "x": case "inspect": _doExamine(arg); break;
+    case "examine": case "x": case "inspect": case "search": _doExamine(arg); break;
     case "check":
       if (/message|phone|text|inbox/.test(arg)) _readMessages();
       else _doExamine(arg);
@@ -2962,7 +3188,8 @@ function doCommand(input) {
     case "accept": _doAccept(arg); break;
     case "abandon": _doAbandon(arg); break;
     case "take": case "get": case "grab": case "pick":
-      if (arg === "bus" || arg.startsWith("bus")) _doRideBus(arg.replace(/^bus\s*/, ""));
+      if (/^(photo|selfie|picture|pic)\b/.test(arg)) _doPhoto();
+      else if (arg === "bus" || arg.startsWith("bus")) _doRideBus(arg.replace(/^bus\s*/, ""));
       else if (arg.startsWith("motosai") || arg.startsWith("bike")) _doMotosai(arg.replace(/^\S+\s*/, ""));
       else _doTake(arg.replace(/^up /, ""));
       break;
@@ -3051,7 +3278,20 @@ function doCommand(input) {
       if (!arg || /tv|news|television/.test(arg)) _doTv();
       else _say("You watch. It watches back. Pattaya.");
       break;
-    case "wait": case "z": _say("You wait. Pattaya doesn't."); break;
+    case "wait": case "z": _doWait(arg); break;
+    case "time": case "clock": _doTime(); break;
+    case "tip": _doTip(arg); break;
+    case "wave": _doWave(arg); break;
+    case "map": _doMap(); break;
+    case "photo": case "selfie": case "photograph": _doPhoto(); break;
+    case "call": case "dial": _doCall(arg); break;
+    case "shower": case "wash": _doShower(); break;
+    case "withdraw": case "atm": _doAtmVerb(); break;
+    case "cheers": case "toast": case "chon": _doCheers(); break;
+    case "haggle": case "bargain":
+      _say("Nobody's quoting you a price right now. Save it for the man with the " +
+        "display board of watches.");
+      break;
     case "score": _doScore(); break;
     case "help": case "?": _say(_HELP, "dim"); break;
     case "restart": newGame(); engineIntro(); return;

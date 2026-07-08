@@ -53,11 +53,6 @@ var NEWS_FEED = [
     "d": "06 Jul 2026"
   },
   {
-    "t": "handmade elephant-dung bricks make goya tower rise in southern thailand",
-    "s": "Designboom",
-    "d": "08 Jul 2026"
-  },
-  {
     "t": "Thailand Woos Heat-Weary Europeans With Travel and ACs",
     "s": "Bloomberg.com",
     "d": "08 Jul 2026"
@@ -71,9 +66,14 @@ var NEWS_FEED = [
     "t": "A Pair of 2,000-Year-Old Gold Rings, One Engraved With Indian Script, Was Discovered in an Iron Age Burial Ground in Thailand - Smithsonian ",
     "s": "Smithsonian Magazine",
     "d": "07 Jul 2026"
+  },
+  {
+    "t": "A 2,000-year-old gold ring found in Thailand has an ancient Indian connection",
+    "s": "The Indian Express",
+    "d": "07 Jul 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-07-07","USD":33.26,"AUD":23.11,"GBP":44.52,"EUR":38.02};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-07-08","temp":31,"humid":60,"code":1,"hi":32,"rain":31};
+var WX_NOW = {"date":"2026-07-08","temp":31,"humid":62,"code":0,"hi":32,"rain":31};
