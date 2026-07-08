@@ -109,6 +109,12 @@ Mobile gets tappable verb chips; desktop gets ↑/↓ command history.
   pay happiness, but so do league nights, patron friendships, quests, texted
   invitations honoured, and toasties on the kerb. Some men just talk and play
   pool all night, and the meter respects that.
+- **Real news, in-world**: `WATCH TV` in any bar or `READ PAPER` at a
+  7-Eleven and the headlines are real — scraped from Google News (Pattaya &
+  Thailand searches) every six hours by a scheduled workflow and baked into
+  a static file at deploy. No runtime network, works from `file://` with the
+  last bake, and the regulars have opinions about all of it. Flavor only —
+  no game logic ever depends on a headline.
 - **Street encounters**: the sois have their own weather — a two-handed
   pickpocket on Beach Road, a sentimental drunk bargirl, an angry Brit who's
   sixty per cent sure it was you, a piwin with a power bank, a man with a
@@ -304,8 +310,9 @@ flowchart TD
 node --test
 ```
 
-140 tests: Thai number composition, world/map integrity, online-readiness
-(session isolation, cloud-save round-trips, deterministic transcripts), (every exit resolves,
+142 tests: Thai number composition, world/map integrity, online-readiness
+(session isolation, cloud-save round-trips, deterministic transcripts),
+the news-bake contract, (every exit resolves,
 all 15 canon bars present, the gossip chain's flags all connect), parser,
 systems, street encounters, bar mini-games and social life, and a full
 scripted playthrough from the beach to the happy ending — run headless via
@@ -318,6 +325,7 @@ web/
   index.html       terminal shell + all CSS (Soi Sanuk neon palette)
   js/              classic scripts sharing globals (no modules — file:// works)
     thai.js        Thai numbers/numerals, signs, phrase matching (pure)
+    news-data.js   real headlines, auto-baked by scripts/fetch-news.mjs (cron)
     world.js       rooms, items, NPCs, dialogue, bus/motosai lines (pure data)
     games.js       bar mini-games: Connect 4, Jackpot dice, pool (pure logic)
     engine.js      parser, verb handlers, systems, endings (DOM-free at load)

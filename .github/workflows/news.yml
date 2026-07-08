@@ -1,0 +1,34 @@
+# Re-bake real headlines into web/js/news-data.js every six hours. The commit
+# lands on main, which runs the normal test-gated Pages deploy — so a bad bake
+# can never ship a broken site, and file:// players just get the last bake.
+name: Bake news
+
+on:
+  schedule:
+    - cron: "17 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  bake:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/fetch-news.mjs
+      - name: Commit fresh headlines, if any
+        run: |
+          if git diff --quiet web/js/news-data.js; then
+            echo "no news is good news"
+            exit 0
+          fi
+          node --test   # never commit a bake the suite dislikes
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add web/js/news-data.js
+          git commit -m "Bake fresh headlines"
+          git push
