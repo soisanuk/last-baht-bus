@@ -556,9 +556,13 @@ test("the ceiling game: aliases route to it, favor gates the ammunition", () => 
   // cold: she won't hand over a cover
   run("throw cover");
   assert.match(lastOut(), /Buy drink first|No favor bought/i);
-  // warm her up, then all three aliases reach the game
+  // warm her up, then all three aliases reach the game. Reset room+heat each
+  // time so a prior throw landing on the mamasan (heat → kickout, which moves
+  // you to the street) can't make a later alias look unrouted.
   state().soc.drinks.noi = 3;
   for (const cmd of ["throw cover", "throw nipple cover", "throw pastie"]) {
+    state().room = "neon_paradise";
+    state().soc.heat = {};
     out = [];
     run(cmd);
     assert.match(lastOut(), /fling it at the ceiling|It STICKS/i, cmd);
