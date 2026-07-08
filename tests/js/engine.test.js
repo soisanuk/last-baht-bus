@@ -1239,6 +1239,7 @@ test("swimming: lovely sober, refused drunk — the Flying Club has a swimming d
 
 test("dance and sing read the room", () => {
   state().encDone = Object.fromEntries(Object.keys(ENCOUNTERS).map(k => [k, true]));
+  state().lastPeddler = 99999; // Tequila Queen is a Beach Road bar — no salesmen mid-test
   state().room = "tequila_queen";
   run("dance");
   assert.match(lastOut(), /surgeons watching a man remove his own appendix/);
@@ -1290,6 +1291,7 @@ test("tip: ฿100+ buys favor, small notes buy goodwill only", () => {
 });
 
 test("haggling the peddler works exactly once", () => {
+  state().lastPeddler = 99999; // exactly one peddler: the one we summon
   state().room = "stinky_bar";
   state().money = 500;
   state().pendingEnc = "peddler";
