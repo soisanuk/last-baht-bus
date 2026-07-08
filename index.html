@@ -105,6 +105,28 @@
     cursor: pointer;
   }
   .chip:active { background: #1e0030; }
+  #term-suggest {
+    display: none;
+    gap: .4rem;
+    overflow-x: auto;
+    padding: .3rem .9rem;
+    background: var(--panel);
+    border-top: 1px solid #ff149320;
+    scrollbar-width: none;
+    flex-shrink: 0;
+  }
+  #term-suggest::-webkit-scrollbar { display: none; }
+  #term-suggest span {
+    color: #e8c0d8;
+    background: #1a0028;
+    border: 1px solid #ff149330;
+    border-radius: 4px;
+    padding: .1rem .5rem;
+    white-space: nowrap;
+    cursor: pointer;
+    font-size: .85em;
+  }
+  #term-suggest span:active { background: #2a0040; }
   #input-row {
     display: flex;
     align-items: center;
@@ -228,6 +250,7 @@
     <button class="chip" data-cmd="light on">light</button>
     <button class="chip" data-cmd="help">help</button>
   </div>
+  <div id="term-suggest"></div>
   <div id="input-row">
     <span class="prompt">❯</span>
     <input id="term-in" type="text" autocomplete="off" autocapitalize="off"

@@ -3423,6 +3423,113 @@ const _HELP = `Common commands:
   LIGHT ON / LIGHT OFF · CHARGE PHONE
   SCORE (happiness & progress) · UNDO · RESTART   (the night autosaves itself)`;
 
+// ── Autocomplete ─────────────────────────────────────────────────────────────
+// engineComplete(input) → candidates for the input's final word, drawn from
+// what makes sense right now (NPCs in the room, inventory, exits, contacts,
+// quests on offer). Pure and DOM-free so it vm-tests like everything else:
+// term.js renders and cycles, this decides — the terminal must not know
+// rules, not even vocabulary. Easter-egg verbs are deliberately absent.
+
+const _COMPLETE_VERBS = [
+  "look", "examine", "take", "drop", "inventory", "go", "enter", "talk to",
+  "ask", "give", "buy", "sell bottles", "pay", "wai", "say", "ride bus to",
+  "motosai to", "light", "charge phone", "read", "use", "open", "play",
+  "flirt", "kiss", "spank", "fondle", "ring bell", "barfine", "eat", "drink",
+  "sleep", "tv", "weather", "scores", "lottery", "map", "time", "tip", "wave",
+  "photo", "call", "shower", "withdraw", "cheers", "dance", "sing", "swim",
+  "smell", "listen", "diagnose", "quests", "accept", "abandon", "contact",
+  "contacts", "message", "check messages", "send", "score", "wait", "again",
+  "help", "save", "load", "undo", "restart",
+];
+
+function _cInv() {
+  return Object.keys(G.itemLoc).filter(id => G.itemLoc[id] === "inventory");
+}
+function _cItemWord(id) { return ITEMS[id].name.split(" ").pop().toLowerCase(); }
+function _cNpcsHere() { return _npcsHere().map(id => NPCS[id].name.toLowerCase()); }
+
+function _completePool(verb, ctx) {
+  const girls = () => _npcsHere().filter(id => NPC_ROLES[id])
+    .map(id => NPCS[id].name.toLowerCase());
+  const contacts = () => Object.keys(G.phone.contacts)
+    .filter(id => G.phone.contacts[id]).map(id => NPCS[id].name.toLowerCase());
+  switch (verb) {
+    case "talk": case "chat": case "wai": return _cNpcsHere();
+    case "flirt": case "kiss": case "spank": case "fondle": case "tip":
+    case "barfine": case "bf": return girls();
+    case "ask": {
+      if (ctx.length >= 2) { // ask <npc> [about] <topic> — her live topics
+        const id = _findNpc(ctx[1]);
+        if (id && NPCS[id].dialogue) {
+          return NPCS[id].dialogue.filter(d => d.topic &&
+            (!d.req || d.req.every(f => _flag(f))) &&
+            (!d.notFlags || d.notFlags.every(f => !_flag(f)))).map(d => d.topic);
+        }
+        return [];
+      }
+      return _cNpcsHere();
+    }
+    case "look": case "examine": case "x": case "inspect":
+      return [..._cNpcsHere(), ..._cInv().map(_cItemWord),
+        ...Object.keys(G.itemLoc).filter(id => G.itemLoc[id] === G.room).map(_cItemWord)];
+    case "take": case "get": case "grab":
+      return Object.keys(G.itemLoc).filter(id => G.itemLoc[id] === G.room).map(_cItemWord);
+    case "drop": case "read": case "use": return _cInv().map(_cItemWord);
+    case "give":
+      return ctx.length >= 2 ? _cNpcsHere() : _cInv().map(_cItemWord);
+    case "buy": case "order":
+      return ["beer", "water", "lady drink for", "charger", "toastie", "food"];
+    case "go": case "walk": case "head": case "enter":
+      return Object.keys(_room().exits);
+    case "ride": case "catch": case "bus": {
+      if (!_room().busStop) return [];
+      const lines = Object.entries(BUS_LINES).filter(([, st]) => st.includes(G.room));
+      return [...new Set(lines.flatMap(([, st]) => st))]
+        .filter(s => s !== G.room).map(s => ROOMS[s].name.toLowerCase());
+    }
+    case "motosai": case "moto": case "taxi": return Object.keys(MOTOSAI_DESTS);
+    case "accept":
+      return Object.keys(QUESTS).filter(q =>
+        G.quests[q] === "offered" || _questAvailable(q));
+    case "abandon":
+      return Object.keys(QUESTS).filter(q => G.quests[q] === "active");
+    case "message": case "text": case "msg": case "call": case "dial":
+    case "send": case "transfer": case "wire": return contacts();
+    case "contact": return girls();
+    case "play": case "challenge": return ["connect 4", "jackpot", "pool", "killer"];
+    case "light": case "turn": return ["on", "off"];
+    case "watch": return ["tv"];
+    case "check": return ["messages"];
+    case "ring": return ["bell"];
+    case "charge": return ["phone"];
+    case "sell": return ["bottles"];
+    case "wait": return ["until midnight", "until 9pm", "10"];
+    default: return [];
+  }
+}
+
+function engineComplete(input) {
+  if (!G) return [];
+  const raw = String(input || "").replace(/^\s+/, "").toLowerCase();
+  if (!raw) return [];
+  const endsSpace = /\s$/.test(raw);
+  const words = raw.split(/\s+/).filter(Boolean);
+  const last = endsSpace ? "" : words[words.length - 1];
+  const ctx = (endsSpace ? words : words.slice(0, -1))
+    .filter(w => !["the", "a", "an", "to", "at", "for", "with", "about", "my"].includes(w));
+  const pool = ctx.length ? _completePool(ctx[0], ctx) : _COMPLETE_VERBS;
+  const seen = new Set();
+  const out = [];
+  for (const c of pool) {
+    const k = String(c).toLowerCase();
+    if (!k || seen.has(k) || !k.startsWith(last) || k === last) continue;
+    seen.add(k);
+    out.push(k);
+    if (out.length >= 8) break;
+  }
+  return out;
+}
+
 // ── Parser ─────────────────────────────────────────────────────────────────
 
 function _norm(s) {
