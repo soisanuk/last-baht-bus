@@ -596,6 +596,81 @@ const _ENC = {
     _endNight("barfine");
   },
 
+  // Not everyone in a bar is for sale. Treat the Bangkok weekender like the
+  // trade and she's insulted; treat her like a person and you get a genuine,
+  // free moment (the "didn't pay" satisfaction the expats brag about).
+  bkktourist(input) {
+    if (/money|baht|barfine|how much|price|\bpay\b|upstairs|hotel|short time|long time|come with/.test(input)) {
+      _say("Her face closes like a shop shutter. “I am NOT working, khun.” She says " +
+        "something short and sharp in Thai to no one in particular, steps back, and " +
+        "pointedly returns to her phone. A working girl who watched the whole thing " +
+        "is laughing at you from a doorway.", "alert");
+      _addHappy(-1);
+      return;
+    }
+    if (/hi|hello|sawat|wai|chat|talk|nice|friend|wait|who|from|smile|drink|coffee/.test(input)) {
+      _say("You keep it light — a wai, a where-you-from, no agenda. She thaws: Bangkok, " +
+        "down for the weekend with a girlfriend who is, as ever, late. You trade the " +
+        "small nothings of two people not trying to sell each other anything. Then a " +
+        "voice shrieks her name — the friend, at last — and she's gone with a real " +
+        "smile and a “bye khaaa~”. You spent nothing and somehow feel richer.", "win");
+      _addHappy(2);
+      return;
+    }
+    _say("You give her a nod and let her be. Her friend arrives moments later in a " +
+      "cloud of perfume and apology, and the two fold into the crowd. Not everything " +
+      "on this street is a transaction; some of it is just Saturday.");
+  },
+
+  // The bi-curious Japanese traveller: read her right (no pitch, no wallet) and
+  // she proposes bringing a dancer along. Two-step — the offer re-arms pendingEnc.
+  jptourist(input) {
+    if (_flag("jpDeal")) {
+      G.flags.jpDeal = false;
+      if (!/yes|ok|sure|both|girl|dancer|her|deal|please|hai|why not|game|let/.test(input)) {
+        _say("“Mm. Another time, cutie.” She turns back to the rail, entirely " +
+          "unbothered, already recruiting a plan B with her eyes.");
+        return;
+      }
+      const fee = 1000; // she pays her own way; the dancer's barfine is on you
+      if (G.money < fee) {
+        _say(`She glances at your wallet. “I don't pay the bar for her — that part is ` +
+          `you, and that part is ฿${fee}.” Your pocket says ฿${G.money}. “Cash first, ` +
+          "romance second,” she shrugs, and the moment closes.");
+        return;
+      }
+      G.money -= fee;
+      _setFlag("hadThreesome");
+      _say("You settle the dancer's barfine; the Japanese lady settles everything " +
+        "else with a look. What follows is a blur of a taxi, a rooftop bar she " +
+        "somehow already knows, and a night that quietly rearranges your sense of " +
+        `your own luck. (-฿${fee}. ฿${G.money} left, and every baht irrelevant.)`, "win");
+      _addHappy(8);
+      _endNight("barfine");
+      return;
+    }
+    if (/money|baht|barfine|how much|price|\bpay\b/.test(input)) {
+      _say("She laughs, delighted and cold. “You think I am working? Kawaii. No — I " +
+        "choose, I don't pay, and neither do you… for me.” She's already looking past " +
+        "you at the dancers. You have been filed under 'amateur'.", "alert");
+      _addHappy(-1);
+      return;
+    }
+    if (/flirt|drink|buy|hi|hello|konnichiwa|konbanwa|cheers|join|both|girl|dancer|open|game|cool|yes|sure|nice/.test(input)) {
+      G.pendingEnc = "jptourist";
+      _setFlag("jpDeal");
+      _say("You match her wavelength — no pitch, just game — and she decides she " +
+        "likes you. She tilts her head at a dancer working the pole like it owes her " +
+        "money. “That one. I like her. You like her.” The smile widens. “Maybe… we " +
+        "like her together?”", "win");
+      _say("(YES — and you cover the dancer's barfine. NO — no hard feelings.)", "dim");
+      return;
+    }
+    _say("You hesitate a half-second too long. “Too slow, cutie.” She glides off " +
+      "toward the bar with the ease of a woman who has never once bought her own " +
+      "drink or her own company.");
+  },
+
   pingpong(input) {
     if (!/yes|go|show|watch|see|up|why not|ok|sure/.test(input)) {
       _say("You wave him off. He keeps pace for half a block, price falling with " +
@@ -1777,7 +1852,7 @@ function _endNight(reason) {
   G.quizPlayed = {};
   G.phone.msgCd = {};
   G.phone.invite = null;
-  delete G.encDone.freelancer; // Beach Road restocks nightly
+  for (const id in ENCOUNTERS) if (ENCOUNTERS[id].nightly) delete G.encDone[id]; // the street restocks
   G.hurt = 0;
   G.hunger = Math.min(85, 30 + hangover * 5);
   G.thirst = Math.min(90, 40 + hangover * 6);
