@@ -1512,3 +1512,18 @@ test("look at <thing> aliases to examine; bare look still describes the room", (
   run("look");
   assert.match(lastOut(), /Jomtien Beach Road/);
 });
+
+test("contacts lists the phonebook with bar and favor glow", () => {
+  run("contacts");
+  assert.match(lastOut(), /noodle shop in your home town/, "empty phonebook has a life");
+  state().phone.contacts.candy = true;
+  state().phone.contacts.fon = true;
+  state().soc.drinks.candy = 6;
+  out = [];
+  run("contacts");
+  assert.match(lastOut(), /Candy — Candy Bar ❤/);
+  assert.match(lastOut(), /Fon — Jasmine Garden Bar/);
+  out = [];
+  run("contact"); // bare CONTACT falls through to the phonebook too
+  assert.match(lastOut(), /Candy — Candy Bar/);
+});

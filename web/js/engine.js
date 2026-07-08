@@ -1911,6 +1911,26 @@ function _pushMsg(from, text, gives) {
 
 function _unreadCount() { return G.phone.inbox.filter(m => !m.read).length; }
 
+function _doContacts() {
+  if (_phoneDead()) return;
+  const ids = Object.keys(G.phone.contacts).filter(id => G.phone.contacts[id]);
+  if (!ids.length) {
+    _say("Your LINE contacts: your mother, your bank, and a noodle shop in your " +
+      "home town that closed in 2019. The local additions are earned — CONTACT " +
+      "a lady in her own bar once she likes you. A drink or two usually does it.");
+    return;
+  }
+  _say("Your phone, the local pages:");
+  for (const id of ids) {
+    const n = NPCS[id];
+    const bar = (ROOMS[n.room] && (ROOMS[n.room].bar || ROOMS[n.room].name)) || "around";
+    const drinks = G.soc.drinks[id] || 0;
+    const glow = drinks >= 6 ? " ❤" : drinks >= 3 ? " ✦" : "";
+    _say(`  ${n.emoji} ${n.name} — ${bar}${glow}`, "dim");
+  }
+  _say("(MESSAGE <name> to charm · SEND <amount> TO <name> — the banking app.)", "dim");
+}
+
 function _doContact(arg) {
   const id = _findNpc(arg);
   if (!id) { _say("They're not here to ask."); return; }
@@ -3373,7 +3393,7 @@ const _HELP = `Common commands:
   DIAGNOSE (how bad is it) · AGAIN or G (repeat last command)
   TIME · MAP · WAIT UNTIL <hour> · TIP <lady> <amount> · PHOTO · CHEERS
   QUESTS · ACCEPT <quest> · ABANDON <quest>
-  CONTACT <lady> (swap numbers) · MESSAGE <lady> · CHECK MESSAGES
+  CONTACT <lady> (swap numbers) · CONTACTS (your phonebook) · MESSAGE <lady> · CHECK MESSAGES
   SEND <amount> TO <lady> (banking app)
   LIGHT ON / LIGHT OFF · CHARGE PHONE
   SCORE (happiness & progress) · UNDO · RESTART   (the night autosaves itself)`;
@@ -3457,7 +3477,11 @@ function doCommand(input) {
       break;
     case "messages": case "msgs": case "inbox": _readMessages(); break;
     case "message": case "text": case "msg": _doMessage(arg); break;
-    case "contact": case "number": _doContact(arg.replace(/^(with |for )/, "")); break;
+    case "contacts": case "phonebook": _doContacts(); break;
+    case "contact": case "number":
+      if (!arg) _doContacts(); // bare CONTACT reads as "show my contacts"
+      else _doContact(arg.replace(/^(with |for )/, ""));
+      break;
     case "send": case "transfer": case "wire": _doSendMoney(arg); break;
     case "quests": case "quest": case "adventures": case "journal": _doQuests(); break;
     case "accept": _doAccept(arg); break;
