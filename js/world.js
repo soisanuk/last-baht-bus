@@ -111,6 +111,7 @@ const ROOMS = {
   beach_rd_c: {
     name: "Beach Road Central",
     region: "Beach Road",
+    seven: true,
     desc: "Mid-Beach-Road: tour groups, tailor touts, and the sea breathing in the dark " +
       "beyond the promenade. Soi Buakhao is a few blocks inland to the east.",
     busStop: "beachrd",
@@ -137,6 +138,7 @@ const ROOMS = {
   ws_gate: {
     name: "Walking Street Gate",
     region: "Walking Street",
+    seven: true,
     desc: "The famous arch, buzzing and flickering: WALKING STREET PATTAYA. Music from a " +
       "dozen doorways collides overhead. The strip runs south; Beach Road and the hill " +
       "road meet here.",
@@ -213,6 +215,7 @@ const ROOMS = {
   buakhao_n: {
     name: "Soi Buakhao (North)",
     region: "Soi Buakhao",
+    seven: true,
     desc: "The expat artery: pharmacies, laundry, bars, repeat. Somewhere a coverband is " +
       "doing that to 'Hotel California'. The market sprawl is south; LUCKY TIGER BAR " +
       "roars quietly on the corner.",
@@ -277,6 +280,7 @@ const ROOMS = {
   lk_entrance: {
     name: "LK Metro (Entrance Arch)",
     region: "LK Metro",
+    seven: true,
     desc: "The neon arch of LK METRO, gateway to a pocket maze of go-gos and beer bars. " +
       "Painted directions in Thai point into the tangle. Shared security lounges by the " +
       "arch on plastic stools — bounce out of one bar here and you've bounced out of all of them.",
@@ -358,6 +362,7 @@ const ROOMS = {
   soi6_street: {
     name: "Soi 6",
     region: "Soi 6",
+    seven: true,
     desc: "Short, bright, and absolutely certain what it's for. Girls call from every " +
       "doorway with the enthusiasm of a home crowd. PINK LOTUS LOUNGE, GOLDEN DRAGON " +
       "BAR, and SUNSET DREAMS LOUNGE compete for your attention at volume.",
@@ -401,6 +406,7 @@ const ROOMS = {
   khao_talo: {
     name: "Soi Khao Talo",
     region: "Darkside",
+    seven: true,
     desc: "A long, plain soi of beer bars with no neon budget and no need for one. The " +
       "ladies here are older, the customers older still, and every bar knows every " +
       "customer's pour. It's seedier than town and more honest about it. One bar's " +
@@ -430,6 +436,7 @@ const ROOMS = {
   naklua_rd: {
     name: "Naklua Road",
     region: "Naklua",
+    seven: true,
     desc: "North of the Dolphin roundabout the volume drops by half: seafood restaurants, " +
       "temples, long-stay hotels. Your hotel's soi is up ahead, dark as a power cut.",
     busStop: "beachrd",
@@ -963,3 +970,8 @@ const NPC_ROLES = {
   ploy: "cashier",
   cindy: "mamasan", oy: "mamasan", daeng: "mamasan",
 };
+
+// The girls every bar knows by name — their barfine never gets waived,
+// whatever the hour. Everyone else's quietly comes off the book after
+// midnight (the fee walks out with the girl soon anyway).
+const POPULAR_GIRLS = ["fon", "gift", "noi", "pim"];

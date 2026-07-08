@@ -60,6 +60,9 @@ function newGame() {
     hurt: 0,             // 3 = a night in the clinic
     bestHappy: 0,
     pendingChoice: null, // "vacation_end" gates input at week's end
+    atmDay: 0,           // last day the lobby ATM paid out ฿3000
+    lastPolice: -99,     // turn of the last boy-in-brown shakedown
+    selfBfId: null,      // hostess offering to barfine herself
     over: false,         // legacy field; the sandbox never ends the night
   };
   return G;
@@ -87,6 +90,7 @@ function deserializeGame(s) {
     G.bestHappy = G.happy;
     G.pendingChoice = null;
   }
+  if (G.atmDay === undefined) { G.atmDay = 0; G.lastPolice = -99; G.selfBfId = null; }
   G.over = false; // pre-sandbox saves could be "over"; the night reopens
   if (!G.encDone) G.encDone = {};
   if (G.lastEnc === undefined) G.lastEnc = 0;
@@ -211,6 +215,7 @@ function _describeRoom(full) {
     _say("A Connect 4 frame and a Jackpot dice box sit within reach (PLAY …).", "dim");
   }
   if (r.pool) _say("A pool table waits under a low lamp (PLAY POOL).", "dim");
+  if (r.seven) _say("A 7-Eleven glows across the way (BUY TOASTIE / WATER / CHARGER).", "dim");
   if (r.barType) {
     const girl = _npcsHere().find(id => NPC_ROLES[id] === "hostess");
     _say(G.soc.patronBusy[G.room] ?
@@ -291,6 +296,17 @@ const ENC_CHANCE = 0.3;  // roll per eligible arrival
 function _maybeEncounter() {
   if (!G || G.over || G.pendingFare || G.pendingEnc) return;
   if (_isDarkHere() || _room().bar) return; // the dark belongs to the soi dogs
+  // public drunkenness attracts the boys in brown (repeatable, unlike the rest)
+  if (G.soc.drunk >= 5 && G.turns - G.lastPolice >= 30 && _rand() < 0.2) {
+    G.lastPolice = G.turns;
+    G.pendingEnc = "police";
+    _say("A whistle, short and bored. A boy in brown detaches from the shade of a " +
+      "power pole and takes up station directly in your weaving path, thumbs in " +
+      "his belt. “You drink too much, my friend.” A statement, not a question. " +
+      "“Have fine. Five hundred baht.”", "alert");
+    _say("(He has all night. You, visibly, do not.)", "dim");
+    return;
+  }
   if (G.turns - G.lastEnc < ENC_COOLDOWN) return;
   const eligible = Object.keys(ENCOUNTERS).filter(id =>
     !G.encDone[id] && ENCOUNTERS[id].rooms.includes(G.room) &&
@@ -314,6 +330,67 @@ function _startEnc(id) {
 }
 
 const _ENC = {
+  selfbf(input) {
+    const name = NPCS[G.selfBfId] ? NPCS[G.selfBfId].name : "She";
+    G.selfBfId = null;
+    if (/yes|yeah|sure|ok|of course|why not|please/.test(input)) {
+      _say(`${name} settles her own fee with the till — a professional formality, ` +
+        "handled in three seconds — and steers you out under the neon by the arm. " +
+        "Being chosen, it turns out, is a different currency entirely.", "win");
+      _addHappy(3);
+      _endNight("barfine");
+    } else {
+      _say(`${name} takes it well — a small laugh, a smaller shrug — but something ` +
+        "in the room closes like a till drawer. The other girls look at you the " +
+        "way one looks at a man who returned a winning lottery ticket.");
+      _addHappy(-1);
+    }
+  },
+
+  police(input) {
+    const exits = Object.values(_room().exits);
+    const barRoom = exits.find(to => ROOMS[to].barType && G.soc.mamaTreat[to]);
+    if (barRoom && _rand() < 0.7) {
+      const mama = Object.entries(NPCS).find(([nid, n]) =>
+        NPC_ROLES[nid] === "mamasan" && n.room === barRoom);
+      _say(`A door bangs. ${mama ? NPCS[mama[0]].name : "The mamasan"} crosses the ` +
+        "soi at ramming speed, already talking — fast, low Thai, one hand on the " +
+        "officer's arm like an aunt collecting a nephew. Whatever is said ends " +
+        "with a laugh, a wai in your direction, and the boy in brown evaporating " +
+        "into the traffic. “You walk me back inside now,” she says, “and you " +
+        "walk STRAIGHT.”", "win");
+      _addHappy(2);
+      return;
+    }
+    if (/wai|sorry|khrap|krub|apolog|sawatdee/.test(input)) {
+      const f = Math.min(300, G.money);
+      G.money -= f;
+      _say("You wai first and apologise second, in Thai, both hands steady-ish. " +
+        "The officer's arithmetic visibly adjusts for manners. " +
+        (f ? `฿${f} changes hands inside a handshake old as the force itself. ` : "") +
+        `“Drink water, my friend. Go home slow.” (฿${G.money} left.)`, "alert");
+      _addHappy(-1);
+    } else if (/pay|fine|give|baht|ok|yes|here/.test(input)) {
+      const f = Math.min(500, G.money);
+      G.money -= f;
+      _say((f ? `฿${f} disappears into a shirt pocket with a receipt that will never ` +
+        "exist. " : "He turns out your pockets, finds lint, and looks personally " +
+        "offended. ") +
+        "“Fine paid. No problem now. Sawatdee khrap.” The brown uniform strolls on, " +
+        `scanning the crowd for the next swaying farang. (฿${G.money} left.)`, "alert");
+      _addHappy(-2);
+    } else {
+      const f = Math.min(1000, G.money);
+      G.money -= f;
+      _say("You argue. His smile does not move, but a second uniform materialises " +
+        "at your elbow, and the fine develops a friend. " +
+        (f ? `฿${f} lighter, ` : "Pockets already empty, you are ") +
+        "you are released into the night with a pat on the shoulder that means " +
+        `it could always be worse. (฿${G.money} left.)`, "alert");
+      _addHappy(-4);
+    }
+  },
+
   katoey(input) {
     if (/flirt|kiss|snog|fondle|grope|spank|charm|wink|lean in/.test(input)) {
       _say("You lean into it and flirt right back — to her enormous, cackling " +
@@ -881,6 +958,7 @@ function _doSocial(kind, targetWord) {
   else if (tier === 1 && SEV[kind] >= 4) _addHeat(1);
   else if (tier === 3) _addHappy(1);
   else if (tier === 4) _addHappy(3);
+  if (tier >= 3) _maybeSelfBarfine(id);
   if (kind === "fondle" && tier === 4 && G.money >= LADY_DRINK) {
     G.money -= LADY_DRINK;
     G.soc.drinks[id] = (G.soc.drinks[id] || 0) + 1;
@@ -1078,6 +1156,8 @@ function _endNight(reason) {
   G.soc.banned = {};
   G.soc.patronBusy = {};
   G.soc.patronMiffed = {};
+  G.soc.selfBf = false;
+  G.selfBfId = null;
   G.hurt = 0;
   G.hunger = Math.min(85, 30 + hangover * 5);
   G.thirst = Math.min(90, 40 + hangover * 6);
@@ -1169,6 +1249,19 @@ function _goExpat() {
 // Soi 6 are the expensive end. Soi 6 has "upstairs" — the night continues.
 // Elsewhere, the barfine IS the rest of your night, and a very good one.
 
+// The clock sets the rate: before 21:00 the mamasan charges for the whole
+// lost shift (×1.5); after midnight most beer bars quietly waive the fee —
+// except for the popular girls — and the flash joints just discount.
+function _barfinePrice(bt, id) {
+  const base = bt === "soi6" ? BF_SOI6 : bt === "gogo" ? BF_GOGO : BF_BEER;
+  if (G.nightTurn < 30) return Math.round(base * 1.5 / 50) * 50;
+  if (G.nightTurn >= 60) {
+    if (bt === "beer" && !POPULAR_GIRLS.includes(id)) return 0;
+    return Math.round(base * 0.75 / 50) * 50;
+  }
+  return base;
+}
+
 function _doBarfine(arg) {
   if (!_inBar()) { _say("Barfines are negotiated indoors, with the mamasan watching."); return; }
   const here = _npcsHere().filter(id => NPC_ROLES[id]);
@@ -1192,7 +1285,7 @@ function _doBarfine(arg) {
     return;
   }
   const bt = _room().barType;
-  const price = bt === "soi6" ? BF_SOI6 : bt === "gogo" ? BF_GOGO : BF_BEER;
+  const price = _barfinePrice(bt, id);
   if (_favor(id) < (bt === "soi6" ? 2 : 4)) {
     _say(bt === "soi6" ?
       `${name} laughs, not unkindly: “Lady drink first, na. One or three.” Even ` +
@@ -1202,11 +1295,20 @@ function _doBarfine(arg) {
     return;
   }
   if (G.money < price) {
-    _say(`The mamasan names it without looking up: ฿${price}. You have ฿${G.money}. ` +
-      "She returns to her book. The book is the whole answer.");
+    _say(`The mamasan names it without looking up: ฿${price}` +
+      (G.nightTurn < 30 ? " — early hours, peak rate; the whole shift walks out with her" : "") +
+      `. You have ฿${G.money}. She returns to her book. The book is the whole answer.`);
     return;
   }
   G.money -= price;
+  if (price === 0) {
+    _say(`The mamasan glances at the clock — past midnight — closes the ledger, and ` +
+      "waves the fee away with two fingers. The barfine walks out with the girl " +
+      "soon anyway; only the famous ones stay on the book all night.", "dim");
+  } else if (G.nightTurn >= 60 && POPULAR_GIRLS.includes(id)) {
+    _say(`Past midnight the book usually closes — but not for ${name}. The mamasan ` +
+      `taps the fee, unbudging: for HER, any hour is peak. ฿${price}.`, "dim");
+  }
   if (bt === "soi6") {
     _say(`฿${price} to the till and ${name} takes your hand with the confidence of ` +
       "home advantage. “Upstairs” turns out to be exactly as advertised. Some " +
@@ -1215,11 +1317,35 @@ function _doBarfine(arg) {
     _addHappy(6);
     return;
   }
-  _say(`฿${price} to the mamasan, who enters it in the ledger with ceremony and ` +
-    `gives ${name} a nod that means back by opening, mind. ${name} vanishes and ` +
-    "reappears out of uniform — jeans, clean shirt, ordinary and lovely — and " +
-    `takes your arm like you're the one being rented. (฿${G.money} left.)`, "win");
+  _say((price ?
+    `฿${price} to the mamasan, who enters it in the ledger with ceremony and ` +
+    `gives ${name} a nod that means back by opening, mind. ` :
+    `The mamasan gives ${name} a nod that means go on then, off the clock. `) +
+    `${name} vanishes and reappears out of uniform — jeans, clean shirt, ordinary ` +
+    `and lovely — and takes your arm like you're the one being rented.` +
+    (price ? ` (฿${G.money} left.)` : ""), "win");
   _endNight("barfine");
+}
+
+// A regular's reward: late enough, liked enough, and she may pay her own
+// barfine — an investment decision, and the highest compliment the soi pays.
+function _maybeSelfBarfine(id) {
+  if (!_flag("act1Done") || G.pendingEnc || G.game) return;
+  if (G.nightTurn < 60) return;                 // the thought arrives after midnight
+  if (NPC_ROLES[id] !== "hostess") return;
+  if ((G.soc.heat[G.room] || 0) > 0) return;
+  if (G.soc.selfBf) return;                     // one such offer per night, city-wide
+  if (_favor(id) < 6) return;
+  if (_rand() >= 0.3) return;
+  G.soc.selfBf = true;
+  G.selfBfId = id;
+  G.pendingEnc = "selfbf";
+  const name = NPCS[id].name;
+  _say(`${name} studies you for a long moment, does some private arithmetic, and ` +
+    `calls something to the mamasan in fast Thai. Then, to you: “I pay my own ` +
+    `barfine tonight. You don't tell anybody, na.” The other girls have gone ` +
+    "very quiet. This does not happen.", "win");
+  _say("(YES / NO — she is not going to ask twice.)", "dim");
 }
 
 // ── Food and water ───────────────────────────────────────────────────────────
@@ -1339,6 +1465,13 @@ function _doGo(dirWord) {
       _deliver("security", _pickDialogue("security"));
       return;
     }
+  }
+  // the lobby ATM: the daily damage, drawn on the way out
+  if (G.room === "hotel_room" && G.stage === "vacation" && G.atmDay !== G.day) {
+    G.atmDay = G.day;
+    G.money += SAFE_CASH;
+    _say(`You stop at the lobby ATM on the way out. It considers your card, sighs, ` +
+      `and surrenders the daily damage: ฿${SAFE_CASH}. (฿${G.money} in pocket.)`, "dim");
   }
   if (ROOMS[to].barType) {
     const b = G.soc.banned[to];
@@ -1581,7 +1714,7 @@ function _doSellBottles() {
 function _doBuy(arg) {
   const r = _room();
   if (arg.includes("charger")) {
-    if (!r.shop || !r.shop.charger) { _say("No chargers sold here. Try a 7-Eleven."); return; }
+    if (!(r.shop && r.shop.charger) && !r.seven) { _say("No chargers sold here. Try a 7-Eleven."); return; }
     if (G.itemLoc.charger === "inventory") { _say("You already own one heroic charger."); return; }
     if (G.money < CHARGER_PRICE) { _say(`The charger is ฿${CHARGER_PRICE}. You have ฿${G.money}. The cashier's sympathy is genuine but unhelpful.`); return; }
     G.money -= CHARGER_PRICE;
@@ -1590,13 +1723,23 @@ function _doBuy(arg) {
     return;
   }
   if (/water|nam plao/.test(arg)) {
-    const canBuy = r.shop || _inBar() || FOOD_STALLS[G.room];
+    const canBuy = r.shop || r.seven || _inBar() || FOOD_STALLS[G.room];
     if (!canBuy) { _say("No water for sale here. 7-Elevens, bars, and the street carts all have it."); return; }
     const price = _inBar() ? 20 : 10;
     if (G.money < price) { _say(`฿${price} for a cold bottle, and you don't have it. Grim.`); return; }
     G.money -= price;
     G.thirst = Math.max(0, G.thirst - 45);
     _say(`A cold bottle of water, gone in one go. Civilisation. (฿${G.money} left.)`);
+    return;
+  }
+  if (r.seven && /toastie|cheese|sandwich|food|snack/.test(arg) && !FOOD_STALLS[G.room]) {
+    if (G.money < 35) { _say(`The toastie is ฿35. You have ฿${G.money}. The doorbell jingles in sympathy.`); return; }
+    G.money -= 35;
+    G.hunger = Math.max(0, G.hunger - 40);
+    _say("The iconic 7-Eleven cheese toastie, pressed twice while you wait, eaten " +
+      "molten on the kerb like every farang before you back to the dawn of time. " +
+      `There are worse religions. (฿${G.money} left.)`);
+    _addHappy(1);
     return;
   }
   if (FOOD_STALLS[G.room] && /food|eat|toastie|mango|som tam|somtam|chicken|kebab|rice|snack/.test(arg)) {
@@ -1681,6 +1824,7 @@ function _doBuy(arg) {
     } else {
       _say(`${NPCS[id].name} toasts you and the conversation gets noticeably warmer.`);
     }
+    _maybeSelfBarfine(id);
     return;
   }
   _say("Not for sale here.");
