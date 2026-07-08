@@ -45,6 +45,7 @@ function newGame() {
       banned: {},        //   roomId → turn you were thrown out
       patronBusy: {},    //   roomId → the regular has a girl's attention
       patronMiffed: {},  //   roomId → you drink-sniped his girl (bad form)
+      bra: {},           //   npcId → you bought her the bra (fondle bumps a tier)
       drunk: 0,          //   your own count tonight
     },
     encDone: {},         // encounters that already fired (once per game)
@@ -90,7 +91,7 @@ function deserializeGame(s) {
   if (G.game === undefined) G.game = null;
   if (!G.soc) {
     G.soc = { drinks: {}, mamaTreat: {}, bellAt: {}, bells: {}, heat: {},
-      banned: {}, patronBusy: {}, patronMiffed: {}, drunk: 0 };
+      banned: {}, patronBusy: {}, patronMiffed: {}, bra: {}, drunk: 0 };
   }
   if (G.happy === undefined) G.happy = 0;
   if (G.stage === undefined) {
@@ -114,6 +115,7 @@ function deserializeGame(s) {
   if (G.lastPeddler === undefined) G.lastPeddler = -99;
   if (!G.quizPlayed) G.quizPlayed = {};
   if (!G.talked) G.talked = {};
+  if (G.soc && !G.soc.bra) G.soc.bra = {};
   G.over = false; // pre-sandbox saves could be "over"; the night reopens
   if (!G.encDone) G.encDone = {};
   if (G.lastEnc === undefined) G.lastEnc = 0;
@@ -1362,10 +1364,13 @@ function _doSocial(kind, targetWord) {
     return;
   }
 
-  const net = _favor(id) - SEV[kind];
+  // the bra you bought her makes fondling "more interesting" — one tier warmer
+  const braBump = (kind === "fondle" && G.soc.bra && G.soc.bra[id]) ? 2 : 0;
+  const net = _favor(id) - SEV[kind] + braBump;
   const tier = net <= -3 ? 0 : net <= -1 ? 1 : net <= 1 ? 2 : net <= 3 ? 3 : 4;
   const fn = _SOCIAL_TEXT[kind][tier];
   _say(fn(name), tier === 0 ? "alert" : tier >= 3 ? "win" : "");
+  if (braBump && tier >= 3) _say("(The bra you bought her is, as advertised, doing work.)", "dim");
   if (tier === 0) { _addHeat(SEV[kind] >= 4 ? 2 : 1); _addHappy(-1); }
   else if (tier === 1 && SEV[kind] >= 4) _addHeat(1);
   else if (tier === 3) _addHappy(1);
@@ -1793,7 +1798,7 @@ function _newVacation() {
   G.thirst = 30;
   G.hurt = 0;
   G.soc = { drinks: {}, mamaTreat: {}, bellAt: {}, bells: {}, heat: {},
-    banned: {}, patronBusy: {}, patronMiffed: {}, drunk: 0 };
+    banned: {}, patronBusy: {}, patronMiffed: {}, bra: {}, drunk: 0 };
   G.itemLoc.phone = "inventory";
   G.itemLoc.charger = "inventory";
   G.itemLoc.wallet = "inventory";
@@ -3006,6 +3011,44 @@ function _doBuy(arg) {
     _maybeSelfBarfine(id);
     return;
   }
+  if (/\bbra\b|\bbrassiere\b/.test(arg)) {
+    if (!_inBar()) { _say("The emergency bra is a bar-stool institution, not a street stall."); return; }
+    const nameW = arg.replace(/\bbra\b|\bbrassiere\b|\bfor\b/g, " ").trim();
+    const girlsHere = _npcsHere().filter(x => NPC_ROLES[x] === "hostess");
+    const id = nameW ? _findNpc(nameW) : (girlsHere.length === 1 ? girlsHere[0] : null);
+    if (!id || NPC_ROLES[id] !== "hostess") {
+      _say(nameW ? "She's not one of the dancers, and would like you to know it." :
+        girlsHere.length ? "Buy it for whom? BUY BRA FOR <name>." :
+        "Nobody here is in the market for one.");
+      return;
+    }
+    const name = NPCS[id].name;
+    if (_favor(id) < 2) {
+      _say(`You offer to buy ${name} a bra and she raises an eyebrow that could ` +
+        "cut glass. “Buy me DRINK first, then we talk about my wardrobe.” " +
+        "(Warm her up — a lady drink or two.)");
+      return;
+    }
+    G.soc.bra = G.soc.bra || {};
+    if (G.soc.bra[id]) {
+      _say(`${name} is already wearing the one you bought, and enjoying the novelty ` +
+        "of it roughly as much as you are.");
+      return;
+    }
+    if (G.money < BRA_PRICE) {
+      _say(`The mamasan's drawer bra runs ฿${BRA_PRICE}. You have ฿${G.money}. She ` +
+        "keeps a straight face; the drawer stays shut.");
+      return;
+    }
+    G.money -= BRA_PRICE;
+    G.soc.bra[id] = true;
+    _say(`The mamasan produces a lacy something from a drawer of legend, ${name} ` +
+      "vanishes for a theatrical thirty seconds and returns having made the " +
+      `evening's physics considerably more interesting. (-฿${BRA_PRICE}, ฿${G.money} left.)`, "win");
+    _addHappy(1);
+    _maybeSelfBarfine(id);
+    return;
+  }
   _say("Not for sale here.");
 }
 
@@ -3541,6 +3584,7 @@ const _HELP = `Common commands:
   PLAY CONNECT 4 · PLAY JACKPOT [bet] · PLAY POOL   (in the beer bars)
   FLIRT/KISS/SPANK/FONDLE <lady> · BUY DRINK FOR <lady> · BUY BEER
   THROW COVER [AT <lady>] (the ceiling game — warm her up first)
+  BUY BRA FOR <lady> (฿200 — makes FONDLE more interesting)
   RING BELL (฿300, instant popularity) · TALK TO PATRON · BARFINE <lady>
   EAT <food> · DRINK <thing> · BUY WATER / FOOD (street carts & 7-Elevens) · SLEEP (at the hotel)
   DIAGNOSE (how bad is it) · AGAIN or G (repeat last command)
@@ -3606,7 +3650,7 @@ function _completePool(verb, ctx) {
     case "give":
       return ctx.length >= 2 ? _cNpcsHere() : _cInv().map(_cItemWord);
     case "buy": case "order":
-      return ["beer", "water", "lady drink for", "charger", "toastie", "food"];
+      return ["beer", "water", "lady drink for", "bra for", "charger", "toastie", "food"];
     case "go": case "walk": case "head": case "enter":
       return Object.keys(_room().exits);
     case "ride": case "catch": case "bus": {
