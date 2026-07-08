@@ -53,8 +53,8 @@ var NEWS_FEED = [
     "d": "06 Jul 2026"
   },
   {
-    "t": "Fitness YouTuber Connor Murphy Reportedly Found Dead in Thailand Lake",
-    "s": "Yahoo",
+    "t": "Thailand Woos Heat-Weary Europeans With Travel and ACs",
+    "s": "Bloomberg.com",
     "d": "08 Jul 2026"
   },
   {
@@ -76,12 +76,12 @@ var NEWS_FEED = [
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-07-08","USD":33.44,"AUD":23.16,"GBP":44.64,"EUR":38.14};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-07-08","temp":30,"humid":68,"code":1,"hi":33,"rain":43};
+var WX_NOW = {"date":"2026-07-09","temp":29,"humid":69,"code":1,"hi":32,"rain":18};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-05","done":true,"h":"Brazil","hs":1,"a":"Norway","as":2},{"d":"2026-07-06","done":true,"h":"Mexico","hs":2,"a":"England","as":3},{"d":"2026-07-06","done":true,"h":"Portugal","hs":0,"a":"Spain","as":1},{"d":"2026-07-07","done":true,"h":"USA","hs":1,"a":"Belgium","as":4},{"d":"2026-07-07","done":true,"h":"Argentina","hs":3,"a":"Egypt","as":2},{"d":"2026-07-07","done":true,"h":"Switzerland","hs":0,"a":"Colombia","as":0},{"d":"2026-07-09","done":false,"h":"France","hs":0,"a":"Morocco","as":0},{"d":"2026-07-10","done":false,"h":"Spain","hs":0,"a":"Belgium","as":0},{"d":"2026-07-11","done":false,"h":"Norway","hs":0,"a":"England","as":0},{"d":"2026-07-12","done":false,"h":"Argentina","hs":0,"a":"Switzerland","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-07-01","first":"751495","last2":"62","front3":["001","980"],"back3":["304","531"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4062,"date":"2026-07-08","baht":64250};
+var GOLD = {"usd":4068,"date":"2026-07-08","baht":64350};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":61975,"thb":2074962};
+var BTC = {"usd":62034,"thb":2075399};
