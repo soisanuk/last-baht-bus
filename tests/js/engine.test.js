@@ -147,6 +147,29 @@ test("charging needs charger and outlet", () => {
 
 // ── Gossip chain & puzzles ─────────────────────────────────────────────────
 
+test("re-talking gives the terse gist, not the full spiel again", () => {
+  state().room = "jomtien_beach_rd";
+  run("talk to nok");
+  const first = lastOut();
+  assert.match(first, /Beach full of bottle/); // full first-meeting spiel
+  assert.match(first, /สวัสดี/);                // Thai greeting rendered
+  out = [];
+  run("talk to nok");
+  const again = lastOut();
+  assert.match(again, /Bring bottle, I give five baht/); // the point
+  assert.doesNotMatch(again, /Beach full of bottle/);    // spiel dropped
+  assert.doesNotMatch(again, /สวัสดี/);                   // greeting dropped on repeat
+  assert.ok(state().talked.nok.length); // the seen ledger persisted
+});
+
+test("an entry without a short still repeats in full", () => {
+  state().room = "rainbow_girls"; // Ploy's default counting line has no `short`
+  run("talk to ploy");
+  out = [];
+  run("talk to ploy");
+  assert.match(lastOut(), /Cage is for money and me/); // unchanged
+});
+
 test("candy withholds until the receipt proves your night", () => {
   state().room = "candy_bar";
   run("ask candy about wallet");
