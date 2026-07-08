@@ -64,6 +64,8 @@ function newGame() {
     lastPolice: -99,     // turn of the last boy-in-brown shakedown
     lastPeddler: -99,    // turn of the last bar-stool peddler visit
     selfBfId: null,      // hostess offering to barfine herself
+    rain: 0,             // downpour turns remaining (0 = dry)
+    lastRain: -99,       // turn the last downpour began
     quests: {},          // questId → "offered" | "active" | "done" | "abandoned"
     quizPlayed: {},      // roomId → true (one quiz per bar per Thursday)
     phone: {             // the other half of your most important possession
@@ -101,6 +103,7 @@ function deserializeGame(s) {
     G.pendingChoice = null;
   }
   if (G.atmDay === undefined) { G.atmDay = 0; G.lastPolice = -99; G.selfBfId = null; }
+  if (G.rain === undefined) { G.rain = 0; G.lastRain = -99; }
   if (!G.quests) G.quests = {};
   if (!G.phone) {
     G.phone = { contacts: {}, inbox: [], lastText: 0, msgCd: {}, invite: null };
@@ -270,6 +273,18 @@ function _tick() {
   if ((G.hunger >= 80 || G.thirst >= 80) && G.nightTurn % 10 === 0) _addHappy(-1);
   if (G.hunger >= 100 || G.thirst >= 100) { _endNight("collapse"); return; }
   if (G.nightTurn >= NIGHT_TURNS) { _endNight("dawn"); return; }
+  // rainy season: when the bake says storm, the sky sometimes proves it.
+  // The stormy check comes first so a bake-less game never touches the dice.
+  if (G.rain > 0) {
+    G.rain--;
+    if (G.rain === 0) {
+      _say("The rain stops the way it started — all at once, like a tap. The " +
+        "street steams, the music comes back up to volume, and the town picks " +
+        "up exactly where it left off.", "alert");
+    }
+  } else if (_wxStormy() && G.turns - G.lastRain >= 30 && _rand() < 0.08) {
+    _startRain(3 + Math.floor(_rand() * 6));
+  }
   // the peddlers work the Beach Road bars, stool to stool
   if (!G.game && !G.pendingEnc && _inBar() && _room().region === "Beach Road" &&
       G.turns - G.lastPeddler >= 20 && _rand() < 0.12) {
@@ -290,7 +305,7 @@ function _tick() {
       _say("(Phone battery: 5%. This is fine.)", "alert");
     }
   }
-  if (_isDarkHere()) {
+  if (_isDarkHere() && !G.rain) { // even the soi dogs go to ground in a downpour
     G.darkStreak++;
     if (G.darkStreak === 1) {
       _say("Something shifts in the dark nearby. A low growl. You are likely to be " +
@@ -1985,7 +2000,58 @@ function _wxLine() {
     (wx.rain >= 40 ? `, ${wx.rain}% chance of rain` : "");
 }
 
+// ── Rainy season ─────────────────────────────────────────────────────────────
+// The one sanctioned crossing from the weather bake into mechanics: a stormy
+// WMO code ENABLES downpours, but every roll still goes through G.rng — same
+// seed, same night. No bake, no rain: tests and file:// behave as ever.
+
+function _wxStormy() {
+  const wx = _wxNow();
+  return !!wx && (wx.code >= 95 || [63, 65, 81, 82].includes(wx.code));
+}
+
+function _sheltered(id) {
+  const r = ROOMS[id];
+  return !!(r.bar || r.barType || r.shop || r.outlet) ||
+    id === "police_station" || id === "oy_office";
+}
+
+function _startRain(len) {
+  G.rain = len;
+  G.lastRain = G.turns;
+  if (_inBar()) {
+    _say("The sky lets go all at once — rainy-season rain, hammering the roof " +
+      "like applause, sheeting off the awning in a solid curtain. The street " +
+      "empties in five seconds flat. Nobody is going anywhere for a while.", "alert");
+    _say("(Nowhere to be. Nothing to be done about it. สบาย.)", "dim");
+    _addHappy(1);
+  } else if (_sheltered(G.room)) {
+    _say("Rain arrives like a verdict — the world outside the glass goes " +
+      "grey-white and deafening. In here: dry, humming air-con, and the smug " +
+      "particular pleasure of watching weather happen to other people.", "alert");
+  } else if (_room().seven) {
+    _say("The sky lets go all at once. You make the 7-Eleven awning in three " +
+      "strides, joining a motorbike, two hostesses, and a monk — the full " +
+      "congregation of the stranded. The street becomes a river with " +
+      "headlights in it. Even the soi dogs have vanished.", "alert");
+    _say("(Pinned until it passes. There are worse chapels — the toasties are " +
+      "right there.)", "dim");
+  } else {
+    _say("The sky lets go all at once — a grey-white wall of rainy-season rain " +
+      "marching up the street. You make the nearest awning already soaked. " +
+      "The street becomes a river with motorbikes in it. Even the soi dogs " +
+      "have vanished; nothing with sense stays out in this.", "alert");
+    _say("(Pinned until it passes — though a doorway close enough to dive " +
+      "through would still take you. GO <somewhere inside>, or wait it out.)", "dim");
+  }
+}
+
 function _doWeather() {
+  if (G.rain > 0) {
+    _say("Current conditions: a wall of water, personally experienced. Your " +
+      "phone's weather app agrees, redundantly, from inside its dry pocket.");
+    return;
+  }
   const wx = _wxNow();
   if (!wx) {
     _say("Your phone's weather app spins, gives up, and shows you yesterday. " +
@@ -2152,6 +2218,26 @@ function _doGo(dirWord) {
   const r = _room();
   if (!dir || !r.exits[dir]) { _say("You can't go that way."); return; }
   const to = r.exits[dir];
+  // a downpour owns the street: nothing moves except into shelter
+  if (G.rain > 0) {
+    if (!_sheltered(to)) {
+      if (_sheltered(G.room)) {
+        _say("You get one step toward the door before the doorway itself talks " +
+          "you out of it — a solid moving wall of water where the street used " +
+          "to be. The mamasan doesn't even look up. Nobody leaves in this; " +
+          "that's what the rain is FOR.");
+      } else {
+        _say("Not in this. The street is a river, the rain is horizontal, and " +
+          "the awning above you is the entire habitable world. It can't last " +
+          "much longer. Probably.");
+      }
+      return;
+    }
+    if (!_sheltered(G.room)) {
+      _say("You pick your moment and dive through the doorway, shedding water " +
+        "like a soi dog.", "dim");
+    }
+  }
   // room 412's key card is in the wallet: no wallet, no room
   if (to === "hotel_room" && !_flag("hasWallet")) {
     _say("The night clerk looks up, takes in the sand, the sunburn, the eyes. " +
@@ -2569,6 +2655,11 @@ function _doBuy(arg) {
 
 function _doRideBus(arg) {
   const r = _room();
+  if (G.rain > 0) {
+    _say("Headlights crawl past behind the wall of water, but no songthaew is " +
+      "stopping — the drivers can't tell a fare from a lamppost in this.");
+    return;
+  }
   if (!r.busStop) { _say("No bus stop here. Look for one on the main roads."); return; }
   const lines = Object.entries(BUS_LINES).filter(([, stops]) => stops.includes(G.room));
   const reachable = [...new Set(lines.flatMap(([, stops]) => stops))].filter(s => s !== G.room);
@@ -2595,6 +2686,12 @@ function _doRideBus(arg) {
 
 function _doMotosai(arg) {
   const r = _room();
+  if (G.rain > 0) {
+    _say("The piwins are packed under the stand's awning, smoking, watching the " +
+      "water rise. One meets your eye and laughs, not unkindly. Not for any " +
+      "money, boss. Not in this.");
+    return;
+  }
   if (!r.motosai) { _say("No motosai stand here."); return; }
   const w = (arg || "").toLowerCase();
   const destKey = Object.keys(MOTOSAI_DESTS).find(k => w.includes(k) || k.includes(w));
