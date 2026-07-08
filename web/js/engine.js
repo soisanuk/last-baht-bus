@@ -235,7 +235,7 @@ function _describeRoom(full) {
       (_leagueTonight() ? " Tonight is LEAGUE NIGHT (PLAY KILLER, ฿100 in the ashtray)." : ""), "dim");
   }
   if (r.seven) _say("A 7-Eleven glows across the way (BUY TOASTIE / WATER / CHARGER).", "dim");
-  if (G.day % 7 === 4 && !r.barType) {
+  if (_quizDay() && !r.barType) {
     const near = Object.values(r.exits).filter(to => _quizBars().includes(to));
     if (near.length && G.nightTurn < 40) {
       _say(near.map(to => ROOMS[to].bar || ROOMS[to].name).join(" and ") +
@@ -814,8 +814,12 @@ const WEEKDAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Frida
 
 function _weekday() { return WEEKDAYS[G.day % 7]; }
 
+// All calendar checks go through these helpers — in a future shared world the
+// clock becomes the server's, and these are the only seams to re-plumb.
+function _quizDay() { return G.day % 7 === 4; }
+
 function _isQuizWindow() {
-  return G.day % 7 === 4 && G.nightTurn >= 20 && G.nightTurn < 40;
+  return _quizDay() && G.nightTurn >= 20 && G.nightTurn < 40;
 }
 
 // Deterministic three bars for this particular Thursday (no _rand: reading
@@ -2524,7 +2528,7 @@ function _doScore() {
   _say(`สนุก happiness: ${G.happy} — ${_happyLevel(G.happy)}`, "win");
   _say(`${_weekday()}, day ${G.day}${G.stage === "expat" ? " · expat life" : " of 7"} · ${_clockStr()} · ` +
     `฿${G.money} · battery ${G.battery}%` +
-    (G.day % 7 === 4 ? " · QUIZ NIGHT 20:00-22:00" : ""), "dim");
+    (_quizDay() ? " · QUIZ NIGHT 20:00-22:00" : ""), "dim");
   _say(`hunger ${G.hunger} · thirst ${G.thirst}` +
     (G.soc.drunk ? ` · ${G.soc.drunk} bottle${G.soc.drunk > 1 ? "s" : ""} deep` : "") +
     (G.hurt ? ` · banged up (${G.hurt}/3)` : ""), "dim");

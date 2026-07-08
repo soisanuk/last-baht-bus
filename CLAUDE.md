@@ -45,15 +45,18 @@ Bar mini-games (Connect 4 / Jackpot / pool / killer pool on league nights — `G
 - `web/js/audio.js` — chiptune step sequencer (tracks shared with the trainer; `soi` is a real Sabai Sabai MIDI transcription, `bus` is still an invented Pattaya Pattaya placeholder). `_audioForRoom(roomId, flags)` maps room region → track.
 - `web/js/tts.js` — th-TH Web Speech, Capacitor-ready, iOS gesture unlock.
 
-### Designed for a future online format
+### Designed for the online / shared-world future
 
-An online version (hosted, accounts, cloud saves, possibly server-authoritative or shared-world) is a live possibility alongside the 2D one, and the same discipline serves both. `tests/js/online.test.js` **is the deployment model**: each player session = one `vm.createContext` holding the four core files, commands in via `doCommand`, output out via the injected print callback, persistence via `serializeGame()` blobs. If that test passes, a multi-player Node host needs zero engine changes. Rules that keep it true:
+**A shared world is the probable long-term destination** (not soon). Structurally this game is already a MUD — rooms/exits/NPCs, text in, prose out, one session per player — so the path is: hosted single-player first (accounts, cloud saves, leaderboards), shared world later. `tests/js/online.test.js` **is the hosting model for the first step**: each player session = one `vm.createContext` holding the four core files, commands in via `doCommand`, output out via the injected print callback, persistence via `serializeGame()` blobs. Rules that keep the path open:
 
 1. **The game core (`thai.js`, `world.js`, `games.js`, `engine.js`) must stay free of browser and wall-clock APIs** — no `window`/`document`/`localStorage`/`Date`/timers/`fetch`. Time is `G.nightTurn`/`G.day`, never real time. (Currently clean; keep it that way.)
-2. **All nondeterminism goes through `G.rng`/`_rand()`** — the only `Math.random` allowed is the initial seed, which a server can inject. Same seed + same command script = identical transcript (tested), which is what makes server-side validation, replays, and anti-cheat possible.
-3. **The single global `G` is fine** — per-session isolation comes from vm contexts, not from refactoring to instance-passing. Don't "fix" the globals; they're the file:// constraint and the isolation model handles them.
+2. **All nondeterminism goes through `G.rng`/`_rand()`** — the only `Math.random` allowed is the initial seed, which a server can inject. Same seed + same command script = identical transcript (tested) — the basis for validation, replay, and anti-cheat.
+3. **The single global `G` is fine** — per-session isolation comes from vm contexts, not instance-passing refactors. Don't "fix" the globals.
 4. **Output stays in the print callback; persistence stays in `main.js`.** A websocket server replaces term.js/main.js the same way a 2D renderer would.
-5. Shared-world features (seeing other players, communal quiz/league nights, leaderboards) are a design layer on top — leaderboards fall out of save blobs (`happy`, `bestHappy`, `score`, flags) without engine changes; a shared world is the only thing that would force real-time and should be treated as a separate mode, not a retrofit.
+5. **Calendar checks go through helpers** (`_quizDay`, `_isQuizWindow`, `_leagueTonight`, `_clockStr`, `_weekday`) — in a shared world the clock becomes the server's, and these are the only seams to re-plumb. Never scatter raw `G.day % …` arithmetic.
+6. **Shared schedules use pure hashes, not player dice.** `_quizBars()` is the canonical pattern: venue selection derived from (vacation, day) by a stateless hash, so every player would already agree on tonight's quiz bars with zero coordination. Any future "the town decides" feature (events, promotions, which bar the police watch) should follow it.
+7. **When adding state, know which side of the wall it's on.** Player-local (most things: money, happy, flags-as-knowledge, favor, heat — heat is *your* reputation and stays per-player even in a shared world) vs world-shared (items lying in rooms, anything a second player could observe or contend for). No refactor needed now — just don't design features that secretly assume the player is alone in the world (e.g. "the only customer tonight" mechanics) without noting it. Contention over the same girls/barfines is a designed feature of the shared world, not a bug to avoid.
+8. **The event layer** (structured events instead of prose-only output) is the shared prerequisite for both 2D and multiplayer — still deferred until either actually starts, per the 2D rules below.
 
 ### Designed for a future 2D conversion
 
