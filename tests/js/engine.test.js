@@ -1504,3 +1504,11 @@ test("lottery verb recites the draw when baked", () => {
     delete globalThis.LOTTO;
   }
 });
+
+test("look at <thing> aliases to examine; bare look still describes the room", () => {
+  run("e", "look at nok");
+  assert.match(lastOut(), /vendor/i);
+  out = [];
+  run("look");
+  assert.match(lastOut(), /Jomtien Beach Road/);
+});

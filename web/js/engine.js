@@ -3446,7 +3446,10 @@ function doCommand(input) {
   switch (v) {
     case "go": case "walk": case "head": _doGo(arg); break;
     case "enter": _doEnter(arg); break;
-    case "look": case "l": _describeRoom(true); break;
+    case "look": case "l":
+      if (arg) _doExamine(arg); // "look at candy" = "examine candy"
+      else _describeRoom(true);
+      break;
     case "examine": case "x": case "inspect": case "search": _doExamine(arg); break;
     case "check":
       if (/message|phone|text|inbox/.test(arg)) _readMessages();
