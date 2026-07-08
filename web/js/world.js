@@ -1207,6 +1207,25 @@ const ENCOUNTERS = {
     hint: "(Company is ฿700. Ning makes it ฿1400 — cheaper than a bar, but no " +
       "mamasan means nobody to complain to if it goes wrong. YES / NO.)",
   },
+  bkktourist: {
+    rooms: ["ws_south", "ws_north", "beach_rd_c", "second_rd_c", "buakhao_market"],
+    interactive: true, nightly: true,
+    th: "รอเพื่อนอยู่ค่ะ", rom: "ror phuean yu kha",
+    intro: "A young woman in good sneakers and a Bangkok-boutique dress is checking " +
+      "her phone against the crowd, plainly waiting for someone. No bar behind her, " +
+      "no smile-for-hire — just a weekender killing five minutes. She catches you " +
+      "noticing and returns a small, neutral nod.",
+    hint: "(She's a tourist, not a trade. Manners — or a little Thai — go further than a wallet here.)",
+  },
+  jptourist: {
+    rooms: ["ws_gate", "ws_south", "ws_north", "beach_rd_c"],
+    interactive: true, nightly: true,
+    intro: "At the go-go rail a sharply-dressed Japanese woman is watching the dancers " +
+      "with the frank, appraising interest of someone shopping rather than spectating. " +
+      "A cocktail, an amused mouth. She clocks you clocking her — and clocking what " +
+      "she's looking at — and the smile says: game recognises game. “Konbanwa.”",
+    hint: "(She isn't working, and she isn't shy. Read it right — money is the wrong move.)",
+  },
   pingpong: {
     rooms: ["ws_gate", "ws_south", "ws_north"],
     interactive: true,

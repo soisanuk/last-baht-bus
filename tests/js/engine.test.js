@@ -1040,6 +1040,45 @@ test("freelancer: the risky kind robs you blind while you sleep", () => {
   assert.match(lastOut(), /emptied|gone/i);
 });
 
+test("Bangkok tourist: money insults her, manners are rewarded", () => {
+  state().room = "ws_south";
+  state().happy = 10; // above the floor so the −1 is visible
+  const h0 = state().happy;
+  _startEnc("bkktourist");
+  run("how much"); // treat her like the trade
+  assert.match(lastOut(), /NOT working/i);
+  assert.ok(state().happy < h0, "the transactional read stings");
+  // fresh encounter, played right
+  delete state().encDone.bkktourist;
+  const h1 = state().happy;
+  _startEnc("bkktourist");
+  run("hello, where you from");
+  assert.match(lastOut(), /feel richer|weekend/i);
+  assert.ok(state().happy > h1, "reading it right pays");
+});
+
+test("Japanese lady: read her right and it's a threesome; money is the wrong move", () => {
+  state().room = "ws_south";
+  _startEnc("jptourist");
+  run("how much for you"); // amateur move
+  assert.match(lastOut(), /filed under 'amateur'|You think I am working/i);
+  assert.ok(!state().flags.jpDeal);
+  // played smooth → she proposes, deal re-arms the encounter
+  delete state().encDone.jptourist;
+  state().flags.act1Done = true;
+  state().flags.hasWallet = true;
+  state().money = 2000;
+  _startEnc("jptourist");
+  run("buy her a drink and flirt");
+  assert.ok(state().flags.jpDeal, "she proposed");
+  assert.equal(state().pendingEnc, "jptourist", "next command is still the reaction");
+  run("yes");
+  assert.ok(state().flags.hadThreesome);
+  assert.equal(state().money, 1000, "you covered the dancer's ฿1000 barfine");
+  assert.equal(state().day, 3, "night ends grandly");
+  assert.ok(!state().flags.jpDeal, "deal flag cleared");
+});
+
 test("peddler works the Beach Road bar stools; buying the watch is a choice", () => {
   state().room = "stinky_bar";
   state().money = 500;
