@@ -3,14 +3,9 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
-    "t": "A Pattaya bakery goes viral for its “pubic hair croissant”(yes, really)",
-    "s": "Lifestyle Asia Hong Kong",
+    "t": "Pattaya bakery's 'hairy' croissant stirs pubic reaction",
+    "s": "Bangkok Post",
     "d": "06 Jul 2026"
-  },
-  {
-    "t": "EC certifies Chadchart’s Bangkok governor win, Pattaya mayor result",
-    "s": "Nation Thailand",
-    "d": "08 Jul 2026"
   },
   {
     "t": "Driver tries to beat barrier at Pattaya railway crossing, gets stuck",
@@ -20,6 +15,11 @@ var NEWS_FEED = [
   {
     "t": "Pattaya pickup truck taxi driver suspended over 300-baht fare",
     "s": "Khaosod English",
+    "d": "06 Jul 2026"
+  },
+  {
+    "t": "A Pattaya bakery goes viral for its “pubic hair croissant”(yes, really)",
+    "s": "Lifestyle Asia Hong Kong",
     "d": "06 Jul 2026"
   },
   {
@@ -33,7 +33,7 @@ var NEWS_FEED = [
     "d": "07 Jul 2026"
   },
   {
-    "t": "2 Chinese surrogacy suspects wanted by China arrested in Pattaya",
+    "t": "Chinese tourist refuses alcohol test after Pattaya crash",
     "s": "Thaiger",
     "d": "06 Jul 2026"
   },
@@ -43,29 +43,29 @@ var NEWS_FEED = [
     "d": "06 Jul 2026"
   },
   {
-    "t": "American fitness influencer drowns in Samut Prakan",
-    "s": "Bangkok Post",
-    "d": "08 Jul 2026"
-  },
-  {
     "t": "Skeletal remains with 2,000-year-old gold rings found by archaeologists in Thailand",
     "s": "CBS News",
     "d": "07 Jul 2026"
   },
   {
-    "t": "A 2,000-year-old gold ring found in Thailand has an ancient Indian connection",
-    "s": "The Indian Express",
+    "t": "Thailand reminds travelers to be ready to show proof of funds on arrival",
+    "s": "VisasNews",
     "d": "07 Jul 2026"
   },
   {
-    "t": "2,000-year-old Indian gold rings, with Brahmi inscription, found in Thailand | World News",
-    "s": "Hindustan Times",
-    "d": "06 Jul 2026"
+    "t": "42 arrests made in fake birth registration scandal",
+    "s": "Bangkok Post",
+    "d": "09 Jul 2026"
   },
   {
-    "t": "Thai PM warns may ‘shut down’ cannabis industry after global smuggling spike",
-    "s": "South China Morning Post",
-    "d": "06 Jul 2026"
+    "t": "DigiTech ASEAN Thailand & AI Connect 2026 Returns to Connect Technology Leaders, AI Innovators, and Business Decision-Makers across ASEAN - ",
+    "s": "Yahoo Finance Singapore",
+    "d": "09 Jul 2026"
+  },
+  {
+    "t": "US Fitness Influencer Connor Murphy, 32, Drowns In Thailand After Reported Erratic Behaviour",
+    "s": "NDTV",
+    "d": "09 Jul 2026"
   },
   {
     "t": "Thailand’s 50 Richest 2026: Stock Rally Drives Combined Wealth Up 10% To $187 Billion",
@@ -76,12 +76,12 @@ var NEWS_FEED = [
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-07-08","USD":33.44,"AUD":23.16,"GBP":44.64,"EUR":38.14};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-07-09","temp":29,"humid":76,"code":1,"hi":32,"rain":18};
+var WX_NOW = {"date":"2026-07-09","temp":31,"humid":66,"code":0,"hi":31,"rain":21};
 // the bar TV's one true channel
-var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-05","done":true,"h":"Brazil","hs":1,"a":"Norway","as":2},{"d":"2026-07-06","done":true,"h":"Mexico","hs":2,"a":"England","as":3},{"d":"2026-07-06","done":true,"h":"Portugal","hs":0,"a":"Spain","as":1},{"d":"2026-07-07","done":true,"h":"USA","hs":1,"a":"Belgium","as":4},{"d":"2026-07-07","done":true,"h":"Argentina","hs":3,"a":"Egypt","as":2},{"d":"2026-07-07","done":true,"h":"Switzerland","hs":0,"a":"Colombia","as":0},{"d":"2026-07-09","done":false,"h":"France","hs":0,"a":"Morocco","as":0},{"d":"2026-07-10","done":false,"h":"Spain","hs":0,"a":"Belgium","as":0},{"d":"2026-07-11","done":false,"h":"Norway","hs":0,"a":"England","as":0},{"d":"2026-07-12","done":false,"h":"Argentina","hs":0,"a":"Switzerland","as":0}]};
+var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-06","done":true,"h":"Portugal","hs":0,"a":"Spain","as":1},{"d":"2026-07-07","done":true,"h":"USA","hs":1,"a":"Belgium","as":4},{"d":"2026-07-07","done":true,"h":"Argentina","hs":3,"a":"Egypt","as":2},{"d":"2026-07-07","done":true,"h":"Switzerland","hs":0,"a":"Colombia","as":0},{"d":"2026-07-09","done":false,"h":"France","hs":0,"a":"Morocco","as":0},{"d":"2026-07-10","done":false,"h":"Spain","hs":0,"a":"Belgium","as":0},{"d":"2026-07-11","done":false,"h":"Norway","hs":0,"a":"England","as":0},{"d":"2026-07-12","done":false,"h":"Argentina","hs":0,"a":"Switzerland","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-07-01","first":"751495","last2":"62","front3":["001","980"],"back3":["304","531"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4078,"date":"2026-07-08","baht":64500};
+var GOLD = {"usd":4102,"date":"2026-07-09","baht":64850};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":62163,"thb":2079927};
+var BTC = {"usd":62640,"thb":2095790};
