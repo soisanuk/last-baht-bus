@@ -107,9 +107,9 @@ test("engine: TV and paper read the feed when present, degrade without it", () =
     engineInit(t => __out(t));
     newGame();
     G.room = "candy_bar";
-    doCommand("watch tv");
+    doCommand("watch tv");    G.pendingEnc = null; G.lastSaleng = 99999; G.lastPeddler = 99999;
     G.room = "beach_rd_c"; // seven: true
-    doCommand("read news");
+    doCommand("read news");   G.pendingEnc = null; G.lastSaleng = 99999; G.lastPeddler = 99999;
     doCommand("weather");
   `, ctx2);
   const feed = vm.runInContext("NEWS_FEED", ctx2);

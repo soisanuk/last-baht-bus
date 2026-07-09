@@ -109,7 +109,20 @@ const ROOMS = {
       "stand idles on the corner, drivers watching the street like sleepy hawks.",
     busStop: "beachrd",
     motosai: true,
-    exits: { s: "ws_gate", n: "beach_rd_c", e: "second_rd_s" },
+    exits: { s: "ws_gate", n: "beach_rd_c", e: "second_rd_s", w: "short_time_motel" },
+  },
+
+  short_time_motel: {
+    name: "Short-Time Motel",
+    region: "Beach Road",
+    desc: "A dark alley off Beach Road that smells of lemongrass floor cleaner and " +
+      "old air conditioning. The motel has no sign you could read from the street — " +
+      "its reputation travels by word of mouth and the direction of high heels. " +
+      "A small reception counter lit by one fluorescent tube. A ring of numbered " +
+      "keys on a nail. Two plastic stools. An older Thai man sits behind the " +
+      "counter, a thermos of coffee at his elbow, watching the alley with the " +
+      "patient stillness of someone who has long stopped being surprised by anything.",
+    exits: { out: "beach_rd_s" },
   },
   beach_rd_c: {
     name: "Beach Road Central",
@@ -904,6 +917,24 @@ const NPCS = {
         text: "\"Lost wallet? Mmm. And what makes you think Candy knows something?\" She polishes a glass, watching you. \"Show me you were even here last night and maybe my memory improve.\" (Perhaps something in your pockets proves it.)" },
       { topic: "oy", text: "\"Madam Oy. We come up together — Crystal Palace, different lifetime. She hard like teak now but she was farm girl from Isaan same as me. Wai her properly and she remember she has a heart. Somewhere.\"" },
       { topic: "mot", req: ["knowMot"], text: "\"Mot sell everything he lift to one buyer — always the same. Ask around LK Metro who that is.\" She mimes zipping her lip and pointing at the till: lady drink territory." },
+      { topic: "philosophy", text: "\"Phi-lo-so-phy.\" She says each syllable the way " +
+        "you'd say a price that is too high. \"I have a type, you know — the man who " +
+        "sit with my girl for one hour, buy her zero drinks, and try to have the " +
+        "therapy session. 'What is your childhood dream?' 'Do you feel trapped?'\" " +
+        "She sets a glass down firmly. \"My girl is not your therapist, tilac. She " +
+        "is here, she is present, and she would like a lady drink and a conversation " +
+        "about something that is happening right now.\" A beat. \"The five-year-plan " +
+        "man never tip anyway.\"" },
+      { topic: "crisis", text: "She sets the glass down and thinks about this seriously, " +
+        "which is not how she handles most questions. \"You know what is strange? When " +
+        "a girl has a good sponsor — money coming every month, no problem — she try to " +
+        "open a business and it always fail. Every time. Clothes stall, noodle cart, " +
+        "beauty shop — fail.\" She counts on one finger. \"But same girl, sponsor gone, " +
+        "nothing left — suddenly she can do anything. Clam from the beach. Sausage on " +
+        "a plastic table. FB Live at two in the morning.\" She opens her hands. \"I " +
+        "don't know why it work this way. But it only work when there is no net to " +
+        "fall in.\" A beat. \"That's how I open this bar. I had nothing. That's the " +
+        "only reason it work.\"" },
     ],
   },
 
@@ -1002,6 +1033,10 @@ const NPCS = {
         text: "\"You come back!! Wait— no, you new. Same same!\" She collapses in giggles. \"Sit down sit down! You buy me lady drink? Upstairs very nice—\" she catches your expression \"—okay okay, water for you, story for me, hahaha!\"",
         short: "\"Sit sit! Water for you, story for me, hahaha!\"" },
       { topic: "wallet", text: "\"No wallet?!\" Gales of laughter. \"Tilac, on THIS soi that is a very serious medical condition. Go Soi Buakhao — the mamasans there fix everything. Especially Candy. Everybody's problems go to Candy.\"" },
+      { topic: "money", text: "\"Money?\" She waves a hand like she's shooing a cat. \"Money come, money go. Same same. Last month I have — so much! I think wow, I am RICH.\" Two-second pause. \"Then iPhone. Then my cousin need school. Then Koh Chang with the girls. Then my mother — hahaha!\" She is laughing at herself entirely. \"Now I have four hundred baht and big smile. I earn more later. Up to me!\"" },
+      { topic: "save", text: "She looks at you like you've said something in a language she recognises but has stopped speaking. \"Save... for what?\" Genuine puzzlement. \"When the thing happen I will find the money. Always I find it. Always!\" She seems more certain of this than she is of anything else. \"You have five hundred? I need for rice.\"" },
+      { topic: "dream", text: "\"Dream?\" Full attention, very serious. \"Okay. Right now? My dream is—\" she points at the kitchen hatch \"—the spicy noodle. Tom yum. Because it is ten o'clock and I am hungry.\" She nods once, satisfied. \"That is my dream. What is YOUR dream?\" The follow-up is completely genuine." },
+      { topic: "future", text: "\"Five year?\" She waves it away cheerfully. \"Five year is VERY far. Tonight is already hard enough! Tonight I need: noodle, maybe one more drink, and—\" she tilts her head \"—maybe you stay a little longer? That is my five-year plan.\" Another collapse of giggles. \"Okay okay, three minutes plan. Same same.\"" },
     ],
   },
 
@@ -1031,6 +1066,26 @@ const NPCS = {
         text: "\"Crystal Palace, welcome. Drinks menu, no touching, and whatever you heard about the fishbowl, it's a myth.\" A wink calibrated to the milligram.",
         short: "\"Drinks menu, no touching. What can I get you?\"" },
       { topic: "oy", text: "\"Madam Oy danced HERE, you know. Before my time — number seventy-something, they say she was the best on the street. Now she owns half of LK Metro and all of its secrets.\"" },
+      { topic: "door", text: "She glances toward the entrance — the heavy door, currently " +
+        "shut, with nothing visible through it from the street. \"You know why that " +
+        "door is closed?\" She doesn't wait. \"Because the moment you can see inside " +
+        "for free, there's no reason to come in. The question has to stay open.\" She " +
+        "tilts her head toward the Soi 6 direction. \"Down the road they put everything " +
+        "on the street. All of it. For anyone walking past with a phone.\" A small " +
+        "measured pause. \"They wonder why nobody's buying.\"" },
+      { topic: "career", text: "She tilts her head very slightly. \"Career.\" The word " +
+        "lands like she's reading it off a slide deck. \"I had one. Bangkok, six days " +
+        "a week, mandatory overtime, seventeen thousand baht a month.\" She adjusts an " +
+        "invisible hair. \"I have a degree, you know. International business. My " +
+        "English is better than my boss's was. My Mandarin is better than his " +
+        "assistant's.\" The wink is exact, controlled. \"I did the math. Everyone " +
+        "does the math eventually. I just did it faster than most.\"" },
+      { topic: "education", text: "\"What did I study?\" She seems mildly amused. " +
+        "\"Economics. Which is exactly as useful here as everywhere else — you " +
+        "understand what things are actually worth, and you stop pretending they are " +
+        "worth what people say.\" She straightens a coaster. \"My father thinks I work " +
+        "for a very successful Japanese company in Si Racha. He brags about it. " +
+        "I let him.\"" },
     ],
   },
 
@@ -1044,6 +1099,12 @@ const NPCS = {
         short: "She sets another paper crane by your hand. \"For luck.\"" },
       { topic: "wallet",
         text: "She considers this, folding without looking down. \"Soi Buakhao,\" she says finally. \"The mamasans there know everything that moves through this town. Candy Bar — the mamasan there, she's the one.\" She adds the finished crane to the row." },
+      { topic: "pajama", text: "She does not look up from the crane she is folding. " +
+        "\"Every bar on this soi try to show more. More skin, more loud, more " +
+        "neon.\" A pause. \"Kwan think: show less.\" The crane joins the row. " +
+        "\"Last month Kwan make all the girls wear the pajama. Pink, with little " +
+        "cloud pattern.\" Another pause. \"The owner say no. The owner is wrong.\" " +
+        "She begins a new crane with complete serenity." },
     ],
   },
 
@@ -1060,6 +1121,15 @@ const NPCS = {
         text: "\"White Dish Group.\" He says it the way you say a diagnosis. \"Ryan Powers. Never here, always here — that's the joke. Before his lot got involved, this soi ran itself. Loud, chaotic, but honest chaos. Now?\" He gestures at the street through the window. \"QR codes. Branded menus. They've got six bars already. Word is they're after another one.\" He takes a long pull of Chang. \"Someone should do something about that.\"" },
       { topic: "powers",
         text: "\"Ryan Powers. British. Doesn't live here officially, doesn't leave either. Bars run clean on the surface — that's the thing. The books don't, but you'd need someone inside to prove it.\" He taps the bar once. \"Nice bloke, they say. The dangerous kind.\"" },
+      { topic: "tiktok", text: "He gestures at the soi through the window without " +
+        "looking. \"You see those lot? Ring light, selfie stick, little gimbal thing?\" " +
+        "He doesn't wait for an answer. \"Walk the whole soi, grab every girl's hand, " +
+        "tell 'em they're beautiful on camera, walk away without buying a drink. " +
+        "Thousands of views. Zero baht.\" He finishes his Chang. \"Bar owner down the " +
+        "road told me ninety-six percent of his foot traffic is that now. Content. " +
+        "Just content.\" He signals the barman again. \"The girls stand out front in " +
+        "nothing all night for some kid's YouTube channel. And they can't even say no " +
+        "because then they look bad on camera.\"" },
       { text: "He nods at the empty stool beside him and signals the barman. \"Sit down. Watch the soi a minute. Best show in Pattaya and you don't have to tip the girls.\"",
         short: "He signals the barman. \"Sit. Best show in Pattaya, no tipping required.\"" },
     ],
@@ -1233,6 +1303,61 @@ const NPCS = {
         short: "\"Sit, farang. Cold beer, old stories. Best combination.\"" },
       { topic: "oy", text: "\"Oy and me come up together, Walking Street, when you still count the year in one-nine.\" She taps the photo behind her. \"She got the empire. I got the quiet life and the better knees. We both won.\"" },
       { topic: "darkside", text: "\"The Darkside good to us old girls. Rent cheap, customers loyal, nobody in a hurry. The lake is for the married ones — go see, it's like Pattaya with the volume off.\"" },
+      { topic: "covid", text: "She doesn't go quiet the way you expect. She goes very practical instead. \"Six of us, one room — tiny. No work, no money, nothing.\" She counts on her fingers. \"Morning: we walk to the beach, fill a bucket with clam. Afternoon: sell the clam to local people. Take that money, buy rice, buy pork.\" She pauses. \"Next morning — we cook extra and give away free food. To people more poor than us. Then go back for more clam.\" A short laugh. \"On the way home: we pick herb, pick fruit from the tree by the road — nobody plant it, it's just there. And that night?\" She taps the bar. \"Feast. Real feast. Better than high season.\" She fills your glass. \"The farang sit and wait to be rescued. We just find the next thing.\"" },
+      { topic: "money", text: "She laughs, but it is a different kind of laugh from the ones aimed at customers — older, shorter. \"Money I understand. Not like the farang understand. Farang save the water in a big pot, very careful. Thai girl — the water goes through. I have it today, is good. Gone tomorrow — mai bpen rai, I find more water.\" She taps the bar. \"The pot people worry all the time. The river people never worry. Which one you think sleep better?\"" },
+    ],
+  },
+
+  somchith: {
+    name: "Somchith", th: "สมชิต", emoji: "🔑",
+    room: "short_time_motel",
+    desc: "Sixty-something, a weathered face that holds a permanent quiet warmth, the " +
+      "thermos of coffee always close. He keeps the keys, keeps the counter, keeps " +
+      "everything running on this shift without any fuss. The girls coming through " +
+      "treat him like a favourite uncle.",
+    dialogue: [
+      { th: "สบายดีไหมครับ", rom: "sabai dee mai khrap",
+        text: "He nods a greeting — the measured nod of a man who has made peace with " +
+        "the night and what it carries. \"You lost? Or you just curious?\" No " +
+        "judgment in it. He pours from the thermos like he would for anyone. " +
+        "\"Sit down if you want. Nobody hurry here.\"",
+        short: "He nods and pours coffee. \"Nobody hurry here.\"" },
+      { topic: "work", text: "\"My wife say I should retire. She is probably right.\" He " +
+        "almost smiles. \"But I don't mind this place. These girls —\" he tilts his " +
+        "head toward the stairs \"— they come down after, they take off the shoes, " +
+        "they sit here and just... rest. Talk a little. Sometimes nothing. They need " +
+        "somewhere that is quiet and not judging them.\" He refills his own cup. " +
+        "\"I can be that place.\"" },
+      { topic: "girls", text: "\"They call me Lung Somchith. Uncle Somchith. They bring me " +
+        "krating daeng, kanom — snacks, you know. They complain about the shoes.\" " +
+        "A small fond laugh. \"Same complaints every night. Too tight. Too high. " +
+        "But still they wear them. Because they have to look a certain way.\" He " +
+        "wraps both hands around his cup. \"I just make sure they can rest in " +
+        "between.\"" },
+      { topic: "trouble", text: "\"Big farang, last week. Very drunk, very loud. " +
+        "Upstairs.\" He doesn't elaborate on what happened upstairs. \"He say he " +
+        "will not pay. He say he will break the room.\" Somchith sips his coffee. " +
+        "\"I am not a young man. But I stand between him and the girl and I tell " +
+        "him: you pay what you agreed, then you leave.\" A pause. \"He paid. He " +
+        "left.\" Another pause. \"Nobody call the police in this place. Police make " +
+        "trouble for the girls. So we handle ourselves.\"" },
+      { topic: "daughter", text: "He is quiet long enough that you think he won't " +
+        "answer. Then: \"My daughter — she works Beach Road. She doesn't know I " +
+        "work here.\" He looks at the ring of keys on the nail. \"Sometimes she " +
+        "come through that door with a customer. Very beautiful. Eyes always so " +
+        "tired.\" He wraps his hands tighter around the cup. \"When I see her " +
+        "coming, I go in the back. The supply room. I wait there until the " +
+        "footsteps go upstairs.\" He does not cry. He has already cried this. " +
+        "\"I cannot stop her. I cannot pay for her life. But I can be here, in " +
+        "the dark, so that if anything goes wrong —\" he doesn't finish. " +
+        "He doesn't need to." },
+      { topic: "pattaya", text: "He thinks about this as if it is the first time " +
+        "anyone has asked, though it cannot be. \"In this city, no one is higher " +
+        "or lower. Everyone is just surviving their own story.\" He sets the cup " +
+        "down. \"The farang comes for escape from his life. The girl comes to " +
+        "feed her family. And me?\" A quiet exhale. \"I am just an old man with " +
+        "a ring of keys, hiding in a closet, to catch one look at my daughter " +
+        "and know she is still alive.\"" },
     ],
   },
 
@@ -1277,6 +1402,99 @@ const NPCS = {
         "man behind it is a Brit named Ryan Powers, and no, you never met him, and " +
         "neither did I. The bars run clean enough. The books don't. Leave that one " +
         "alone, bud.\"" },
+      { topic: "sponsor", text: "He refills without asking. \"See it every season. " +
+        "Good man, sends the money, thinks he's the only one, thinks she thinks " +
+        "about him every day. Maybe she does. Maybe Somchai next door does too.\" " +
+        "He sets the bottle down. \"I gave up doing the math twenty years ago. " +
+        "Not my business. Not yours either, bud — unless somebody asks you to " +
+        "make it yours.\"" },
+      { topic: "phil", req: ["toldPhilTruth"],
+        text: "He looks at you a long time before he speaks. \"You did a hard thing.\" " +
+        "The Budweiser goes up once, comes down. \"Man needed to know. Or he needed " +
+        "not to know, and you made that call for him. Either way —\" he taps the bar " +
+        "once \"— not your fault. Some things end.\"" },
+      { topic: "1998", text: "He sets the Budweiser down with the quiet authority of a " +
+        "man who has heard this speech many times, from many Nigels. \"The baht was " +
+        "fifty to the dollar in '98, bud. Tom Yum Goong crash — half the Thai economy " +
+        "went sideways overnight. Your British pensioner walking in with sterling felt " +
+        "like a king because he was, arithmetically.\" He refills without ceremony. " +
+        "\"That's point one. Point two: Nigel in 1998 was forty years old with a full " +
+        "head of hair and a functioning liver. He's sixty-eight now and his main topic " +
+        "is his prostate. The girls didn't change.\" He picks the Budweiser back up. " +
+        "\"Point three: before smartphones, this town ran on beautiful anonymity. You " +
+        "could reinvent yourself completely. No one Googled you. The girl couldn't " +
+        "see the Good Morning texts from the other three guys in Europe. Technology " +
+        "didn't kill the romance, bud. It killed the illusion.\" He drains it. " +
+        "\"The city never grew a conscience. Nigel just grew old.\"" },
+      { topic: "free drink", text: "He points the Budweiser at you. \"You know what I " +
+        "call it? The Oklahoma Trap. Guy walks in — plumber from Tulsa, first night " +
+        "in town — mamasan sends him a free shot. He thinks he beat the system.\" " +
+        "The Budweiser comes down. \"You ever go to Walmart back home and the promo " +
+        "girl gives you a sausage on a toothpick? Do you lose your mind? Do you go " +
+        "to the register and buy a thousand dollars of sausages for the cashier and " +
+        "the store manager just to prove what a great guy you are?\" He waits. \"No. " +
+        "But you put that same man under neon lights with loud music and a pretty girl " +
+        "telling him he's special — the receipt at two a.m. says thirty thousand baht " +
+        "and he can't tell you where it went.\" He drains the Budweiser. \"The free " +
+        "drink is a business investment, bud. The cheapest one they'll make all night.\"" },
+      { topic: "shame", text: "He stares at the pool table for a while. \"The ones " +
+        "who worry me aren't the ones who complain. Complain all day — fine, they're " +
+        "still talking. It's the ones who stopped bragging.\" The Budweiser goes " +
+        "down on the bar with no particular force. \"Man spends two years telling " +
+        "everybody he found himself a good woman, mocking the butterflies, the " +
+        "bar-hoppers — you think that man can pick up the phone when it all goes " +
+        "sideways and say he needs help?\" He doesn't look at you. \"The pride is " +
+        "the part that kills 'em, bud. Not the girl, not the visa, not the money. " +
+        "The pride.\" He picks the Budweiser back up. \"So you call anyway. You " +
+        "call and you let them hang up on you. And then you call again.\"" },
+    ],
+  },
+
+  phil: {
+    name: "Phil", th: "ฟิล", emoji: "📱",
+    room: "stinky_bar",
+    desc: "Mid-fifties, a fleece vest in the Pattaya heat, phone face-down on the bar " +
+      "in the specific way of a man waiting for a message he wants and dreads in equal " +
+      "measure. Bristol accent. He has the look of someone who has been coming here " +
+      "for long enough that 'holiday romance' stopped fitting years ago.",
+    dialogue: [
+      { req: ["toldPhilTruth"],
+        text: "Phil is still on the stool, but somewhere else entirely. The phone is " +
+        "in his pocket now, face-in. He lifts two fingers off the bar in acknowledgment " +
+        "— that's all there is tonight.",
+        short: "Phil lifts two fingers off the bar. That's all there is tonight." },
+      { text: "\"Phil.\" He shakes without getting off the stool. \"Twelve years " +
+        "coming here — every March, every October, no exceptions. I've got a girl up " +
+        "in Surin. Nit. Good girl. Used to work the bars, I got her sorted out of all " +
+        "that — she's got a little fabric shop now. I send the rent, the bills, bit " +
+        "extra every month.\" He says the amount the way men do when a number has " +
+        "become ordinary. \"Twelve years is not a holiday romance.\"",
+        short: "\"Twelve years coming here — I've got a girl in Surin. Good girl. Send money every month.\"" },
+      { topic: "nit", text: "His face does something complicated and fond. \"Beautiful " +
+        "girl. Same as when I met her — some women just don't change. Rings me every " +
+        "Sunday, never misses. Sends photos of the shop, her mum's birthday, the " +
+        "temple fair. Real life, yeah? Not just when she wants something.\" He " +
+        "straightens a beer mat. \"Real life.\"" },
+      { topic: "neighbor", text: "\"There's a neighbour of hers — Somchai. He's been " +
+        "a godsend, honestly. Fixes the scooter when it breaks, takes the mum to " +
+        "hospital appointments when I can't be there. Waters the plants when Nit " +
+        "visits her sister.\" He trails off and looks at his phone. \"Very helpful. " +
+        "Very.\" A long pause. \"Asks her about me sometimes. She says he's just — " +
+        "neighbourly.\"" },
+      { topic: "somchai", text: "He looks at his phone. Doesn't say anything." },
+      { topic: "phone",
+        text: "He unlocks it and slides it across the bar without meeting your eyes. " +
+        "A LINE chat — Nit's profile picture, the one she probably sent him herself. " +
+        "The thread is with someone named สมชาย: daily timestamps, heart stickers, " +
+        "a selfie you catch before he pulls it back. The Thai you can make out is " +
+        "enough. The rest you don't need to read — the timestamps say it.",
+        sets: ["readPhilPhone"] },
+      { topic: "truth", req: ["readPhilPhone"], notFlags: ["toldPhilTruth"],
+        text: "You tell him. Not cruelly — just straight. He doesn't say anything " +
+        "for a long time. The beer Bert has silently placed in front of him goes " +
+        "untouched. \"Right,\" he says finally. \"Right.\" Then: \"Twelve years.\" " +
+        "You don't have anything useful to add to that. Neither does he.",
+        sets: ["toldPhilTruth"] },
     ],
   },
 
@@ -1298,6 +1516,13 @@ const NPCS = {
       { topic: "myth night", text: "\"Myth Night VERY new. Young people, craft beer " +
         "— hundred-eighty baht, can you believe — live band Friday. Security all " +
         "shared, grey shirt boys, very professional. Not like old day, Candy say.\"" },
+      { topic: "job", text: "She checks something on her phone with the fluency of " +
+        "someone managing three things at once. \"Before here? Bangkok. Marketing " +
+        "agency. I work for them eight month, very serious, very professional. " +
+        "Twenty thousand baht.\" She shows you her phone screen — a spreadsheet, " +
+        "she's actually tracking something. \"Here: three month and I open a LINE " +
+        "shop selling skincare. Good margin. Khun Candy say I have business brain.\" " +
+        "She tilts the screen away. \"She is correct.\"" },
     ],
   },
 
@@ -1320,6 +1545,13 @@ const NPCS = {
       { topic: "oy", text: "\"Oy? Rainbow Girls Oy? HA. She dance HERE first, one " +
         "season, before Crystal Palace take her. Number 71. I give her that number " +
         "myself. Tell her Mem say she still owe me one uniform.\"" },
+      { topic: "free drink", text: "She considers you for a long moment. \"The first " +
+        "drink —\" she says it very carefully \"— is not a drink. It is an interview. " +
+        "I watch: how he receive it. Does he say thank you and sit quiet? Or does the " +
+        "chest go out?\" She demonstrates: a small mime of a man inflating with pride. " +
+        "\"The chest-out one — he already tell me everything. He think he is special. " +
+        "He think he is the one the bar been waiting for.\" She folds her hands. " +
+        "\"We call that one: good customer.\"" },
     ],
   },
 
@@ -1332,6 +1564,18 @@ const NPCS = {
       { th: "สบายดีไหม", rom: "sabai dii mai",
         text: "\"Evenin'. Twenty-two years here, eight in town, fourteen at the lake — town's for sprinting, lake's for living.\" The retriever confirms with a sigh. \"You look like you're mid-sprint, son. It gets better. Married her, didn't I — met her at the Midnight Sun in '04.\"" },
       { topic: "wallet", text: "\"Lost the wallet? Classic first act.\" He chuckles. \"The ladies of this town run the best information network east of Bangkok. Be polite, buy a few drinks, wai like you mean it — it'll find you before you find it.\"" },
+      { topic: "sabai", text: "\"Sabai.\" He says it like it's the answer to something " +
+        "you didn't quite ask. \"Took me four years in town to understand it. I kept " +
+        "wanting to talk about the future — five-year plans, feelings, meaning.\" " +
+        "The retriever yawns. \"You know what she said the night I finally stopped? " +
+        "She said, 'Good. Now you are here.'\" He looks at the lake. \"That was 2009. " +
+        "We moved out here in 2011. The lake was her idea.\"" },
+      { topic: "1998", text: "He watches the lake for a moment. \"I hear it from the " +
+        "town lads every time I come in. 'Wasn't like this in 1998.'\" The retriever " +
+        "shifts at his feet. \"They're right, it wasn't. It was louder, cheaper, " +
+        "and I was younger. Two of those things I miss.\" He doesn't say which two. " +
+        "\"The lake's better than 1998. Quieter. That's not nostalgia — that's " +
+        "just true.\"" },
     ],
   },
 
