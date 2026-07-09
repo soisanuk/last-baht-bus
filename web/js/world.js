@@ -160,9 +160,22 @@ const ROOMS = {
     desc: "The north end, near the Dolphin roundabout. Soi 6 runs inland to the east — " +
       "short, loud, and lit like a runway. Naklua lies further north, past the roundabout. " +
       "STINKY BAR's sign — a cartoon skunk hoisting a Chang — buzzes over an open " +
-      "front full of laughter and the crack of pool balls.",
+      "front full of laughter and the crack of pool balls. Across the traffic on the " +
+      "beach side (west), BLUE DOG's plastic chairs face the bay like theatre seats.",
     busStop: "beachrd",
-    exits: { s: "beach_rd_c", e: "soi6_street", n: "naklua_rd", in: "stinky_bar" },
+    exits: { s: "beach_rd_c", e: "soi6_street", n: "naklua_rd", in: "stinky_bar", w: "blue_dog" },
+  },
+  blue_dog: {
+    name: "Blue Dog",
+    region: "Beach Road",
+    bar: "Blue Dog", barType: "beer",
+    desc: "An open-air beer bar on the beach side of the road — no walls, no door, " +
+      "just a tin roof, a long rail, and an unobstructed view across the bay that " +
+      "the fancier places would kill for. The plastic chairs all face outward, " +
+      "toward the water and the road, because at the Blue Dog the view IS the " +
+      "entertainment: the sunset first, and then whatever Beach Road decides to " +
+      "do about it.",
+    exits: { out: "beach_rd_n" },
   },
   stinky_bar: {
     name: "Stinky Bar",
@@ -1863,6 +1876,7 @@ const CANON_BARS = [
   "Crystal Palace A-Go-Go", "Midnight Sun Bar", "Candy Bar",
   "Rock Factory",
   "KINKY Go-Go", "Slutty Go-Go", "Las Vegas Go-Go",
+  "Blue Dog",
 ];
 
 const CANON_HOSTESSES = [

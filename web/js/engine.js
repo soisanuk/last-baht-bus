@@ -27,6 +27,7 @@ function newGame() {
     battery: 13,
     lightOn: false,
     lightWarn: { room: null, n: 0, mark: false }, // go-go no-photo escalation
+    blueDogDay: 0,       // last day the Blue Dog show paid its happy point
     turns: 0,
     wingmanUntil: 0,     // G.turns before which a wing-woman is vouching for you
     darkStreak: 0,
@@ -94,6 +95,7 @@ function deserializeGame(s) {
   if (G.pendingEnc === undefined) G.pendingEnc = null;
   if (G.game === undefined) G.game = null;
   if (!G.lightWarn) G.lightWarn = { room: null, n: 0, mark: false };
+  if (G.blueDogDay === undefined) G.blueDogDay = 0;
   if (!G.soc) {
     G.soc = { drinks: {}, mamaTreat: {}, bellAt: {}, bells: {}, heat: {},
       banned: {}, patronBusy: {}, patronMiffed: {}, bra: {}, drunk: 0 };
@@ -281,6 +283,12 @@ function _describeRoom(full) {
       "A sunburnt regular holds court at the far end" +
       (girl ? `, with ${NPCS[girl].name}'s full attention` : "") + "." :
       "A regular nurses a big Chang at the rail, radiating opinions.", "dim");
+  }
+  if (G.room === "blue_dog" && _shakedownOn()) {
+    _say("Across the road, the evening checkpoint is in session: officers on both " +
+      "sides of Beach Road, waving over every farang on a motorbike with the bored " +
+      "precision of toll collectors. The whole rail is watching. (WATCH POLICE — " +
+      "or WATCH SUNSET, the bay is doing its thing too.)", "dim");
   }
 }
 
@@ -2768,6 +2776,60 @@ function _sayHeadline(h) {
   _say(`“${h.t}”${h.s ? " — " + h.s : ""}`, "thai");
 }
 
+// Blue Dog house speciality: the 18:00-19:00 police checkpoint across the road,
+// and a bay sunset in the same hour. Watching either is worth a happy point,
+// once a night — after that it's just spectating.
+function _shakedownOn() { return G.nightTurn < 10; } // 18:00-19:00, ten turns/hour
+
+const _SHAKEDOWN_SCENES = [
+  "An officer steps off the kerb with one raised glove and a big Australian on a " +
+    "rented PCX pulls over with the face of a man doing sums. Helmet: yes. " +
+    "License: the wallet comes out slowly... too slowly. He is escorted toward " +
+    "the station at a gentle, unhurried, absolutely non-negotiable pace. The " +
+    "Blue Dog rail scores it a 7.",
+  "A farang on a Click 125 spots the checkpoint from two hundred metres, executes " +
+    "a U-turn so sudden his flip-flop comes off, and disappears down a side soi. " +
+    "The rail erupts. One of the officers applauds, sincerely, without moving " +
+    "from his spot. The flip-flop stays where it fell, a small monument.",
+  "No helmet, no license, board shorts: the full house. He tries the confused-" +
+    "tourist opening; the officer counters with the laminated card in four " +
+    "languages. They walk to the station together like old friends, one of them " +
+    "฿2000 lighter in advance. At the rail, a man who clearly did the same walk " +
+    "last week raises his Chang in silent brotherhood.",
+  "Two officers on each side of the road, working the evening tide with the calm " +
+    "of men netting fish at the river mouth. Thais sail through unwaved. A " +
+    "gap-year kid gets pulled mid-wheelie, which even the rail agrees was earned.",
+];
+
+function _doWatchBlueDog(arg) {
+  const sunset = /sunset|bay|sea|view/.test(arg || "");
+  if (sunset || !_shakedownOn()) {
+    if (_shakedownOn()) {
+      _say("The bay does the whole production number: gold, then rose, then a " +
+        "violet that no camera has ever come home with. The islands go to " +
+        "silhouette. Behind you the beer signs buzz on one by one, taking over " +
+        "the shift. Nobody at the rail says anything, which is how you can tell " +
+        "it's good.");
+    } else if (sunset) {
+      _say("The sun is long gone; the bay is a dark sheet stitched with squid-boat " +
+        "lights. Still worth watching, in the way embers are.");
+      return;
+    } else {
+      _say("The checkpoint packed up at seven on the dot — the officers folded " +
+        "their operation like a market stall and rode off, mostly helmetless. " +
+        "The road is just a road again. The bay, however, is still open.");
+      return;
+    }
+  } else {
+    _say(_SHAKEDOWN_SCENES[Math.floor(_rand() * _SHAKEDOWN_SCENES.length)]);
+  }
+  if (G.blueDogDay !== G.day) {
+    G.blueDogDay = G.day;
+    _addHappy(1);
+    _say("(Best free show in Pattaya. +1 สนุก.)", "win");
+  }
+}
+
 function _doTv() {
   if (!_inBar()) { _say("No TV out here. The street is the channel."); return; }
   _say("The TV over the bar plays the news — sound off, Thai subtitles racing, " +
@@ -4334,7 +4396,8 @@ function _completePool(verb, ctx) {
     case "contact": return girls();
     case "play": case "challenge": return ["connect 4", "jackpot", "pool", "killer"];
     case "light": case "turn": return ["on", "off"];
-    case "watch": return ["tv"];
+    case "watch":
+      return G.room === "blue_dog" ? ["police", "sunset", "tv"] : ["tv"];
     case "check": return ["messages"];
     case "throw": case "toss": case "chuck": case "fling":
       return ctx.length >= 2 ? girls() : ["cover", "pastie", "nipple cover"];
@@ -4577,7 +4640,9 @@ function doCommand(input) {
     case "knock": case "shout": case "yell":
       _say(_MISC_VERBS[v === "yell" ? "shout" : v]); break;
     case "watch":
-      if (!arg || /tv|news|television/.test(arg)) _doTv();
+      if (G.room === "blue_dog" && (!arg || /police|road|show|shakedown|bike|checkpoint|sunset|bay|sea|view/.test(arg)))
+        _doWatchBlueDog(arg);
+      else if (!arg || /tv|news|television/.test(arg)) _doTv();
       else _say("You watch. It watches back. Pattaya.");
       break;
     case "wait": case "z": _doWait(arg); break;

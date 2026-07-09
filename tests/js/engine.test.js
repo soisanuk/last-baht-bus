@@ -2113,3 +2113,35 @@ test("go-go flashlight escalation: two warnings, then security walks you out", (
   assert.doesNotMatch(lastOut(), /walked out/, "no ejection after compliance");
   assert.equal(state().room, "tequila_queen");
 });
+
+test("Blue Dog: checkpoint show 18:00-19:00, sunset, one happy point a night", () => {
+  state().room = "beach_rd_n";
+  state().pendingEnc = null;
+  state().lastPeddler = 99999;
+  run("w"); // into Blue Dog at 18:00
+  assert.equal(state().room, "blue_dog");
+  assert.match(lastOut(), /evening checkpoint is in session/, "the show is on");
+
+  out = [];
+  _rand = () => 0; // pin the vignette
+  const happy0 = state().happy;
+  run("watch police");
+  assert.match(lastOut(), /escorted toward the station/, "a shakedown vignette");
+  assert.equal(state().happy, happy0 + 1, "first watch of the night pays");
+  out = [];
+  run("watch sunset");
+  assert.match(lastOut(), /gold, then rose/, "the bay does its thing");
+  assert.equal(state().happy, happy0 + 1, "the nightly point is spent");
+
+  // after 19:00 the checkpoint folds; the bay stays open
+  state().nightTurn = 30; // 21:00
+  out = [];
+  run("watch police");
+  assert.match(lastOut(), /packed up at seven/, "show's over");
+  out = [];
+  run("watch sunset");
+  assert.match(lastOut(), /squid-boat/, "post-sunset bay");
+  out = [];
+  run("look");
+  assert.doesNotMatch(lastOut(), /checkpoint is in session/, "no show in the room desc");
+});
