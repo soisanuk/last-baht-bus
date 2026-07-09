@@ -484,33 +484,57 @@ const ROOMS = {
     name: "Soi 6",
     region: "Soi 6",
     seven: true,
-    desc: "Short, bright, and absolutely certain what it's for. Girls call from every " +
-      "doorway with the enthusiasm of a home crowd. PINK LOTUS LOUNGE, GOLDEN DRAGON " +
-      "BAR, and SUNSET DREAMS LOUNGE compete for your attention at volume.",
-    exits: { w: "beach_rd_n", n: "pink_lotus", e: "golden_dragon", s: "sunset_dreams", in: "pink_lotus" },
+    desc: "The soi hits you before you round the corner — four bars at volume, each trying " +
+      "to drown the next, the whole street a wall of competing bass lines and shouted Thai " +
+      "pop. Open-air bars on both sides, hostesses spilling out front in sequins and very " +
+      "little else. \"HANDSOME MAN!\" \"Hey! WHERE YOU GO!\" You are grabbed by the wrist. " +
+      "You are grabbed by the other wrist. Someone significantly shorter than you attempts " +
+      "to climb onto your back. PINK LOTUS LOUNGE (north), GOLDEN DRAGON BAR (east), and " +
+      "SUNSET DREAMS LOUNGE (south) are the main combatants. The QUEEN VIC INN (pub) " +
+      "halfway down is the one place that isn't shouting.",
+    exits: { w: "beach_rd_n", n: "pink_lotus", e: "golden_dragon", s: "sunset_dreams",
+             in: "pink_lotus", pub: "queen_vic" },
   },
   pink_lotus: {
     name: "Pink Lotus Lounge",
     region: "Soi 6",
     bar: "Pink Lotus Lounge", barType: "soi6",
-    desc: "Pink everything, giggles on tap, and a staircase behind the bar that nobody " +
-      "pretends is for storage. You are greeted like a returning war hero.",
+    desc: "The front is open to the street; half the bar is technically the pavement. Neon " +
+      "tubes frame the sign in three colours simultaneously. Inside, the pink is structural " +
+      "— walls, barstools, the girls' outfits, arguably the air itself. Joy is already " +
+      "talking before you sit down. The staircase at the back leads somewhere the menu " +
+      "doesn't mention.",
     exits: { out: "soi6_street" },
   },
   golden_dragon: {
     name: "Golden Dragon Bar",
     region: "Soi 6",
     bar: "Golden Dragon Bar", barType: "soi6",
-    desc: "A gold dragon coils over the bar, scales made of bottle caps. The jukebox is " +
-      "stuck on 2009 and no one is complaining.",
+    desc: "Open-fronted, louder than you expected from outside, which is saying something. " +
+      "The gold dragon above the bar was hand-painted by someone's cousin and has been " +
+      "there longer than most of the staff. Vintage Thai pop on the speakers — not the " +
+      "jukebox, it died in 2019, but the playlist is a faithful tribute. Nobody has " +
+      "updated it and nobody has complained.",
     exits: { out: "soi6_street" },
   },
   sunset_dreams: {
     name: "Sunset Dreams Lounge",
     region: "Soi 6",
     bar: "Sunset Dreams Lounge", barType: "soi6",
-    desc: "Softer lighting, softer voices, a mural of a beach sunset better looking than " +
-      "the real one tonight. The gentlest landing on the soi.",
+    desc: "The only bar on the soi with actual walls and a door — the noise outside drops " +
+      "to a manageable roar the moment you're in. Darker than the others, slower. A ceiling " +
+      "fan that needs oiling. Kwan is at the end of the bar folding napkins into cranes, " +
+      "adding to a row of them lined up along the rail like a tiny origami militia.",
+    exits: { out: "soi6_street" },
+  },
+  queen_vic: {
+    name: "Queen Vic Inn",
+    region: "Soi 6",
+    desc: "Actual air conditioning. Actual wood panelling. A dartboard. The Queen Vic Inn " +
+      "sits halfway down Soi 6 with the righteous calm of a man who has seen it all and " +
+      "ordered another pint. Through the window, the soi performs. On the balcony above, " +
+      "Terry is in a recliner watching it with a beer, and has probably been there for " +
+      "some time.",
     exits: { out: "soi6_street" },
   },
 
@@ -709,6 +733,24 @@ const ITEMS = {
     desc: "Your wallet! Cards, hotel key card, and — miraculously — most of the cash. " +
       "Tucked inside: a note in careful English: 'Farang — you buy Mot's dinner tonight. " +
       "Be more careful. — Oy'.",
+  },
+  saleng_sandals: {
+    name: "saleng sandals", aliases: ["sandals", "shoes", "flats", "saleng sandals"],
+    portable: true, location: null,
+    desc: "Sequinned sandals from a saleng cart, carried in a thin plastic bag. " +
+      "Sized for a Thai woman's foot. They are not for you — but you know who they are for.",
+  },
+  saleng_heels: {
+    name: "saleng heels", aliases: ["heels", "platform heels", "shoes", "saleng heels"],
+    portable: true, location: null,
+    desc: "Platform heels from the saleng cart, still in the carry bag. " +
+      "Someone is going to look very good in these. You are not that someone.",
+  },
+  saleng_lingerie: {
+    name: "saleng lingerie", aliases: ["lingerie", "bra", "underwear", "lace", "slip", "saleng lingerie"],
+    portable: true, location: null,
+    desc: "A bag of lingerie from the saleng cart — lace, silk-adjacent, " +
+      "the kind of purchase that requires a recipient to make sense.",
   },
 };
 
@@ -915,6 +957,26 @@ const NPCS = {
       { th: "เหนื่อยไหม", rom: "nueai mai",
         text: "\"You look tired,\" she says, and somehow it's the kindest thing anyone's said to you all night. She sets a paper crane by your hand. \"For luck. The soi makes everyone lucky once.\"",
         short: "She sets another paper crane by your hand. \"For luck.\"" },
+      { topic: "wallet",
+        text: "She considers this, folding without looking down. \"Soi Buakhao,\" she says finally. \"The mamasans there know everything that moves through this town. Candy Bar — the mamasan there, she's the one.\" She adds the finished crane to the row." },
+    ],
+  },
+
+  terry: {
+    name: "Terry", emoji: "🍺",
+    room: "queen_vic",
+    desc: "Bald, red-faced, Chang vest, fifteen years of Pattaya compressed into a permanent " +
+      "corner-stool residency. He rents the same balcony room every high season. He was here " +
+      "before White Dish. He will tell you about it. He tells it well.",
+    dialogue: [
+      { topic: "wallet",
+        text: "\"Wallet gone? On Soi 6?\" He exhales through his nose. \"Right. Soi Buakhao — Candy Bar, ask for Candy herself. Sharp as they come. She'll know who moved it or she'll know who does.\" He returns to his beer with the authority of a man who has solved this problem before." },
+      { topic: "white dish",
+        text: "\"White Dish Group.\" He says it the way you say a diagnosis. \"Ryan Powers. Never here, always here — that's the joke. Before his lot got involved, this soi ran itself. Loud, chaotic, but honest chaos. Now?\" He gestures at the street through the window. \"QR codes. Branded menus. They've got six bars already. Word is they're after another one.\" He takes a long pull of Chang. \"Someone should do something about that.\"" },
+      { topic: "powers",
+        text: "\"Ryan Powers. British. Doesn't live here officially, doesn't leave either. Bars run clean on the surface — that's the thing. The books don't, but you'd need someone inside to prove it.\" He taps the bar once. \"Nice bloke, they say. The dangerous kind.\"" },
+      { text: "He nods at the empty stool beside him and signals the barman. \"Sit down. Watch the soi a minute. Best show in Pattaya and you don't have to tip the girls.\"",
+        short: "He signals the barman. \"Sit. Best show in Pattaya, no tipping required.\"" },
     ],
   },
 

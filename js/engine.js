@@ -934,24 +934,42 @@ const _ENC = {
     } else {
       if (hunger) G.hunger = Math.max(0, G.hunger - hunger);
       if (thirst) G.thirst = Math.max(0, G.thirst - thirst);
-      const SELF = {
-        "moo ping": `Three skewers of moo ping, ฿${price}, eaten at the bar. Charcoal does ` +
-          `something to pork that a kitchen can't quite manage. (฿${G.money} left.)`,
-        "noodles": `A bowl of ba mee from the window, ฿${price}. You eat it at the bar ` +
-          `because inside is better than the kerb. (฿${G.money} left.)`,
-        "sandals": `฿${price} for sandals designed for a Thai woman's foot. You wear them ` +
-          `anyway. This is visible. (฿${G.money} left.)`,
-        "heels": `฿${price}. You buy heels with the logic of a man several beers in, ` +
-          `which is to say: none. You could give them to someone. (฿${G.money} left.)`,
-        "lingerie": `฿${price} for lingerie. The whole bar watches this transaction with ` +
-          `collected wisdom about ideas that seem good at the time. (฿${G.money} left.)`,
-        "som tam": `฿${price} for a box of som tam — lime, dried shrimp, the good kind ` +
-          `of dangerous. (฿${G.money} left.)`,
-        "fruit": `฿${price} for a bag of cut fruit. You eat it at the bar feeling virtuous ` +
-          `relative to your surroundings. (฿${G.money} left.)`,
+      // shoes and lingerie go to inventory for gifting later
+      const INV_ITEMS = {
+        "sandals": "saleng_sandals", "heels": "saleng_heels", "lingerie": "saleng_lingerie",
       };
-      _say(SELF[item] || `฿${price} for the ${item}. (฿${G.money} left.)`);
-      _addHappy(1);
+      if (INV_ITEMS[item]) {
+        const iid = INV_ITEMS[item];
+        if (G.itemLoc[iid] === "inventory") {
+          G.money += price; // refund — already have one
+          _say(`You already have one. The driver shrugs and keeps the change for your ` +
+            `indecision. Just kidding — ฿${price} back.`);
+          return;
+        }
+        G.itemLoc[iid] = "inventory";
+        const INV_TEXT = {
+          "sandals": `฿${price} for the sandals, tucked under your arm. Not your size, ` +
+            `not your shoes. GIVE SANDALS TO <lady> when you've found the right person. (฿${G.money} left.)`,
+          "heels": `฿${price} for the heels, carried in the bag. You have absolutely no ` +
+            `use for these. GIVE HEELS TO <lady>. (฿${G.money} left.)`,
+          "lingerie": `฿${price}. The lingerie goes in the bag; the bag goes under your arm; ` +
+            `the whole bar approves of the logic. GIVE LINGERIE TO <lady>. (฿${G.money} left.)`,
+        };
+        _say(INV_TEXT[item]);
+      } else {
+        const SELF = {
+          "moo ping": `Three skewers of moo ping, ฿${price}, eaten at the bar. Charcoal does ` +
+            `something to pork that a kitchen can't quite manage. (฿${G.money} left.)`,
+          "noodles": `A bowl of ba mee from the window, ฿${price}. You eat it at the bar ` +
+            `because inside is better than the kerb. (฿${G.money} left.)`,
+          "som tam": `฿${price} for a box of som tam — lime, dried shrimp, the good kind ` +
+            `of dangerous. (฿${G.money} left.)`,
+          "fruit": `฿${price} for a bag of cut fruit. You eat it at the bar feeling virtuous ` +
+            `relative to your surroundings. (฿${G.money} left.)`,
+        };
+        _say(SELF[item] || `฿${price} for the ${item}. (฿${G.money} left.)`);
+        _addHappy(1);
+      }
     }
   },
 
@@ -3258,6 +3276,50 @@ function _doGive(itemWord, npcWord) {
     return;
   }
   if (id.startsWith("bottle") && npc === "nok") return _doSellBottles();
+  const SALENG_GIFTS = ["saleng_sandals", "saleng_heels", "saleng_lingerie"];
+  if (SALENG_GIFTS.includes(id) && NPC_ROLES[npc]) {
+    G.itemLoc[id] = null;
+    G.soc.drinks[npc] = (G.soc.drinks[npc] || 0) + 1;
+    const name = NPCS[npc].name;
+    const GIFT_TEXT = {
+      saleng_sandals: {
+        hostess: `${name} opens the bag, holds up one sandal, turns it sole-up, and grins. ` +
+          `She tries them on right here. They fit. She gives you a look that says she's ` +
+          `choosing to be impressed by this. "You buy from saleng?" Yes. "Good price?"` +
+          ` She decides yes. She keeps them on for the rest of the night.`,
+        mamasan: `${name} examines the sandals with professional eyes — heel height, ` +
+          `sequin quality, sole thickness — and nods approval. "My size also." ` +
+          `She puts them straight into her bag and pats your shoulder once. Understood.`,
+      },
+      saleng_heels: {
+        hostess: `${name} pulls a platform heel out and holds it up in the bar light, ` +
+          `tilting it. Then she looks at you with a very specific expression: genuine ` +
+          `but surprised. She steps out of her work flats and into the heels without ` +
+          `sitting down, which is more impressive than it should be. "Fit perfectly." ` +
+          `She beams. You feel like you did something right by accident.`,
+        mamasan: `${name} takes the heels, looks at the sole, flips them over, and ` +
+          `checks the stitching on the strap. Then she looks at you. "You know my size?" ` +
+          `You didn't. They fit anyway. She slides them under her stool and tops up your ` +
+          `drink without you asking.`,
+      },
+      saleng_lingerie: {
+        hostess: `${name} peeks into the bag, goes very still for one beat, and then ` +
+          `laughs — not embarrassed, just surprised. "You buy this for me?" She looks ` +
+          `at you again, differently. "From saleng, right?" She folds the bag carefully ` +
+          `and puts it in her work bag. She keeps smiling for the next ten minutes ` +
+          `without quite explaining why.`,
+        mamasan: `${name} opens the bag, closes it, and gives you a look you won't be ` +
+          `able to describe later but will remember. "Good quality for saleng." She ` +
+          `nods once, puts the bag in her drawer, and refills your drink herself. ` +
+          `This is a significant gesture. She also doesn't mention it again.`,
+      },
+    };
+    const role = NPC_ROLES[npc] === "mamasan" ? "mamasan" : "hostess";
+    _say(GIFT_TEXT[id][role], "win");
+    _addHappy(1);
+    _maybeSelfBarfine(npc);
+    return;
+  }
   _say(`${NPCS[npc].name} waves it away with a smile.`);
 }
 
