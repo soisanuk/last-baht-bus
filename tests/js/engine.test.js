@@ -21,7 +21,7 @@ function run(...cmds) {
 function lastOut() { return out.join("\n"); }
 function state() { return G; } // vm globals share this realm
 
-beforeEach(() => { out = []; newGame(); });
+beforeEach(() => { out = []; newGame(); state().lastSaleng = 99999; }); // suppress saleng by default
 
 // ── Parser & basics ────────────────────────────────────────────────────────
 
@@ -1597,6 +1597,62 @@ test("tip: ฿100+ buys favor, small notes buy goodwill only", () => {
   state().room = "buakhao_s"; // motosai stand
   run("tip");
   assert.match(lastOut(), /don't open accounts/);
+});
+
+test("saleng: food cart — buy for self and buy for lady", () => {
+  state().room = "candy_bar"; // Soi Buakhao region, hostess Candy is here
+  state().money = 300;
+  state().pendingEnc = "saleng";
+  state().salengCart = "food";
+  const h0 = state().happy;
+  run("buy moo ping");
+  assert.equal(state().money, 260, "moo ping ฿40");
+  assert.ok(state().happy >= h0 + 1, "+happy for eating");
+  assert.match(lastOut(), /moo ping|charcoal/);
+  // buy for lady
+  out = [];
+  state().pendingEnc = "saleng"; state().salengCart = "food";
+  state().money = 200;
+  const drinks0 = state().soc.drinks.candy || 0;
+  run("buy noodles for candy");
+  assert.equal(state().money, 160, "noodles ฿40");
+  assert.ok((state().soc.drinks.candy || 0) > drinks0, "favor bump");
+  assert.match(lastOut(), /Candy|bowl|mum/);
+});
+
+test("saleng: shoes — buy heels for lady", () => {
+  state().room = "jasmine_garden";
+  state().money = 500;
+  state().pendingEnc = "saleng";
+  state().salengCart = "shoes";
+  const drinks0 = state().soc.drinks.fon || 0;
+  run("buy heels for fon");
+  assert.equal(state().money, 250, "heels ฿250");
+  assert.ok((state().soc.drinks.fon || 0) > drinks0, "favor bump");
+  assert.match(lastOut(), /heel|Fon|bar/i);
+});
+
+test("saleng: lingerie — buy for lady", () => {
+  state().room = "candy_bar";
+  state().money = 300;
+  state().pendingEnc = "saleng";
+  state().salengCart = "lingerie";
+  const drinks0 = state().soc.drinks.candy || 0;
+  run("buy lingerie for candy");
+  assert.equal(state().money, 150, "lingerie ฿150");
+  assert.ok((state().soc.drinks.candy || 0) > drinks0, "favor bump");
+  assert.match(lastOut(), /lingerie|Victoria|Candy/i);
+});
+
+test("saleng: unknown item or NO dismisses the cart", () => {
+  state().room = "candy_bar";
+  state().pendingEnc = "saleng";
+  state().salengCart = "food";
+  const money0 = state().money;
+  run("no");
+  assert.equal(state().money, money0, "no charge");
+  assert.match(lastOut(), /putters off|nod/);
+  assert.ok(!state().pendingEnc, "enc cleared");
 });
 
 test("haggling the peddler works exactly once", () => {
