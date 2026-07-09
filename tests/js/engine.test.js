@@ -1292,7 +1292,7 @@ test("scripted happy-ending playthrough", () => {
     "n", "ride bus to beach road", "pay 15",
     // Act 2 — the gossip chain (Second Road now sits between Beach Rd and Buakhao)
     "e", "e", "n", "in", "talk to candy",            // Candy: Mot did it
-    "out", "n", "in", "talk to lek",                 // Lek: Oy has it
+    "out", "n", "e", "talk to lek",                  // Lek: Oy has it (in=Rock Factory now, e=Lucky Tiger)
     "out", "s", "in", "ask candy about wallet",      // Candy: som tam errand
     "out", "s", "w", "w", "talk to bank",            // Bank: helmet favour
     // LK Metro
@@ -1431,10 +1431,131 @@ test("dance and sing read the room", () => {
   state().room = "tequila_queen";
   run("dance");
   assert.match(lastOut(), /surgeons watching a man remove his own appendix/);
+  // day 2 = Tuesday: _isBandNight() is false, candy_bar uses normal paths
   state().room = "candy_bar";
   run("dance", "sing");
   assert.match(lastOut(), /floor show/);
   assert.match(lastOut(), /never once mattered/);
+});
+
+test("_isBandNight: Fri (day 5) and Sat (day 6) are band nights", () => {
+  state().day = 5;
+  assert.equal(state().day % 7, 5);
+  assert.ok(_isBandNight.call(null) === false || (() => { G.day = 5; return _isBandNight(); })());
+  // test via engine helper directly
+  G.day = 5; assert.ok(_isBandNight());
+  G.day = 6; assert.ok(_isBandNight());
+  G.day = 2; assert.ok(!_isBandNight()); // Tuesday
+  G.day = 4; assert.ok(!_isBandNight()); // Thursday (quiz night, not band night)
+  G.day = 5; // restore for subsequent tests in this block
+});
+
+test("Rock Factory has a band every night; lucky_tiger only on Fri/Sat", () => {
+  G.day = 2; // Tuesday
+  state().room = "rock_factory";
+  assert.ok(_bandHere(), "Rock Factory: band every night");
+  state().room = "lucky_tiger";
+  assert.ok(!_bandHere(), "Lucky Tiger: no band Tuesday");
+  G.day = 5; // Friday
+  state().room = "lucky_tiger";
+  assert.ok(_bandHere(), "Lucky Tiger: band on Friday");
+  G.day = 6; // Saturday
+  state().room = "lucky_tiger";
+  assert.ok(_bandHere(), "Lucky Tiger: band on Saturday");
+});
+
+test("LISTEN describes the band when one is playing", () => {
+  G.day = 6; // Saturday
+  state().room = "rock_factory";
+  run("listen");
+  assert.match(lastOut(), /band|guitarist|drummer|bassist|vocalist/);
+});
+
+test("DANCE and SING get +2 happy with live band in bar", () => {
+  G.day = 5; // Friday
+  state().room = "lucky_tiger";
+  state().encDone = Object.fromEntries(Object.keys(ENCOUNTERS).map(k => [k, true]));
+  const h0 = state().happy;
+  run("dance");
+  assert.match(lastOut(), /lock in harder|materialises/);
+  assert.ok(state().happy >= h0 + 2, "dance with band: +2 happy");
+  const h1 = state().happy;
+  run("sing");
+  assert.match(lastOut(), /commit completely|adjusts.*professionally|stops being yours/);
+  assert.ok(state().happy >= h1 + 2, "sing with band: +2 happy");
+});
+
+test("TIP BAND: ≥฿100 gives happy; smaller tip just costs money", () => {
+  G.day = 6; // Saturday
+  state().room = "lucky_tiger";
+  state().money = 500;
+  const h0 = state().happy;
+  run("tip band 100");
+  assert.match(lastOut(), /tip box/);
+  assert.equal(state().money, 400);
+  assert.ok(state().happy > h0, "big band tip: +happy");
+  run("tip band 50");
+  assert.equal(state().money, 350, "small tip: still costs money");
+});
+
+test("TIP BAND: fails if no band tonight", () => {
+  G.day = 2; // Tuesday
+  state().room = "lucky_tiger";
+  run("tip band 100");
+  assert.match(lastOut(), /No band playing/);
+});
+
+test("BUY ROUND FOR BAND: costs BAND_ROUND, applies bell effect", () => {
+  G.day = 5; // Friday — lucky_tiger has liveMusic
+  state().room = "lucky_tiger";
+  state().money = 1000;
+  const h0 = state().happy;
+  run("buy round for band");
+  assert.equal(state().money, 1000 - BAND_ROUND, "BAND_ROUND deducted");
+  assert.ok(state().soc.bellAt.lucky_tiger !== undefined, "bellAt set");
+  assert.equal(state().soc.bells.lucky_tiger, 1, "bell ledger incremented");
+  assert.equal(state().soc.heat.lucky_tiger, 0, "heat cleared");
+  assert.ok(state().happy >= h0 + 2, "+2 happy");
+  assert.match(lastOut(), /girls approve.*bell/i, "girls note the bell is still there");
+});
+
+test("BUY ROUND FOR BAND: fails on non-band night / not in bar", () => {
+  G.day = 2; // Tuesday
+  state().room = "lucky_tiger";
+  run("buy round for band");
+  assert.match(lastOut(), /No band playing/);
+  G.day = 5;
+  state().room = "buakhao_n"; // street, not a bar
+  run("buy round for band");
+  assert.match(lastOut(), /inside the bar/);
+});
+
+test("REQUEST routes to band on band night, not dj", () => {
+  G.day = 5; // Friday
+  state().room = "lucky_tiger";
+  run("request hotel california");
+  assert.match(lastOut(), /Hotel California/);
+  run("request wonderwall");
+  assert.match(lastOut(), /Wonderwall|Every night/);
+  // unknown song
+  run("request despacito 2");
+  assert.match(lastOut(), /not in the current set|Hotel California/);
+  // no band
+  G.day = 2;
+  state().room = "lucky_tiger";
+  run("request hotel california");
+  assert.match(lastOut(), /No DJ or band/);
+});
+
+test("TALK TO BAND works when band is playing", () => {
+  G.day = 5;
+  state().room = "lucky_tiger";
+  run("talk to band");
+  assert.match(lastOut(), /vocalist|guitarist|drummer|bassist/);
+  G.day = 2; // no band
+  state().room = "lucky_tiger";
+  run("talk to band");
+  assert.match(lastOut(), /Nobody by that name/);
 });
 
 // ── QoL verbs: time, waiting, tipping, haggling, the bar-mat map ───────────

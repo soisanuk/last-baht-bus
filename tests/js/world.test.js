@@ -1,4 +1,4 @@
-// World data integrity: every exit resolves, all 15 canon bars are enterable,
+// World data integrity: every exit resolves, all 16 canon bars are enterable,
 // the full hostess roster is placed, and the gossip chain's flags connect.
 import { test } from "node:test";
 import assert from "node:assert/strict";
@@ -49,9 +49,9 @@ test("every room is reachable from the start", () => {
   }
 });
 
-test("all 15 canon bars exist as enterable rooms", () => {
+test("all 16 canon bars exist as enterable rooms", () => {
   const barRooms = Object.values(ROOMS).filter(r => r.bar).map(r => r.bar);
-  assert.equal(CANON_BARS.length, 15);
+  assert.equal(CANON_BARS.length, 16);
   for (const bar of CANON_BARS) {
     assert.ok(barRooms.includes(bar), `${bar} missing from map`);
   }
