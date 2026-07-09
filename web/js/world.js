@@ -357,10 +357,10 @@ const ROOMS = {
     name: "Soi Buakhao (South)",
     region: "Soi Buakhao",
     desc: "The south end, where Tree Town's fairy-lit maze of mini-bars spills onto the " +
-      "pavement. The LK Metro arch is east — a soi that eats tourists and spits out " +
+      "pavement. The Tree Town arch is east — a complex that eats tourists and spits out " +
       "poorer, happier ones. A motosai stand waits by the corner, engines ticking.",
     motosai: true,
-    exits: { n: "buakhao_market", w: "second_rd_s", e: "lk_entrance", s: "jasmine_garden", in: "jasmine_garden" },
+    exits: { n: "buakhao_market", w: "second_rd_s", e: "tt_entrance", s: "jasmine_garden", in: "jasmine_garden" },
   },
   candy_bar: {
     name: "Candy Bar",
@@ -413,82 +413,84 @@ const ROOMS = {
     exits: { out: "buakhao_s" },
   },
 
-  // ─── LK Metro ───
-  lk_entrance: {
-    name: "LK Metro (Entrance Arch)",
-    region: "LK Metro",
+  // ─── Tree Town ───
+  tt_entrance: {
+    name: "Tree Town (Entrance Arch)",
+    region: "Tree Town",
     seven: true,
-    desc: "The neon arch of LK METRO, gateway to a pocket maze of go-gos and beer bars. " +
+    desc: "The neon arch of TREE TOWN, gateway to a pocket maze of go-gos and beer bars. " +
       "Painted directions in Thai point into the tangle. Shared security lounges by the " +
       "arch on plastic stools — bounce out of one bar here and you've bounced out of all of them.",
     sign: "maze_entrance",
-    exits: { w: "buakhao_s", in: "lk_maze_1", e: "lk_maze_1" },
+    exits: { w: "buakhao_s", in: "tt_lane_1", e: "tt_lane_1" },
   },
-  lk_maze_1: {
-    name: "LK Metro (Inner Lane)",
-    region: "LK Metro",
+  tt_lane_1: {
+    name: "Tree Town (Inner Lane)",
+    region: "Tree Town",
     desc: "Bars stacked shoulder to shoulder, neon bleeding into neon. GOLD RUSH LOUNGE " +
       "glitters to the north. Painted Thai arrows on the wall offer guidance to those " +
       "who can read them.",
     sign: "maze_1",
-    exits: { w: "lk_entrance", n: "gold_rush", e: "lk_maze_2", s: "lk_maze_3", in: "gold_rush" },
+    exits: { w: "tt_entrance", n: "gold_rush", e: "tt_lane_2", s: "tt_back", in: "gold_rush" },
   },
-  lk_maze_2: {
-    name: "LK Metro (Cross Lane)",
-    region: "LK Metro",
-    desc: "A crossing of lanes that all look identical. STARLIGHT BAR's blue sign fizzes " +
-      "on the corner. More Thai arrows, more decisions.",
+  tt_lane_2: {
+    name: "Tree Town (Cross Lane)",
+    region: "Tree Town",
+    desc: "A junction where the lanes cross and the signage starts to feel personal — like " +
+      "it was designed to confuse. STARLIGHT BAR's blue sign fizzes at the north corner. " +
+      "Thai arrows point in three directions, contradicting each other with quiet confidence.",
     sign: "maze_2",
-    exits: { w: "lk_maze_1", n: "starlight_bar", e: "lk_maze_4", s: "lk_maze_3", in: "starlight_bar" },
+    exits: { w: "tt_lane_1", n: "starlight_bar", e: "tt_deep", s: "tt_back", in: "starlight_bar" },
   },
-  lk_maze_3: {
-    name: "LK Metro (Back Lane)",
-    region: "LK Metro",
+  tt_back: {
+    name: "Tree Town (Back Lane)",
+    region: "Tree Town",
     dark: true,
     desc: "The maze's unlit armpit: kitchen doors, a mop graveyard, and rats with " +
       "routines. Without light, every exit feels like the same wrong one.",
     sign: "maze_3",
-    exits: { n: "lk_maze_1", w: "lk_maze_2", e: "lk_maze_4" },
+    exits: { n: "tt_lane_1", w: "tt_lane_2", e: "tt_deep" },
   },
-  lk_maze_4: {
-    name: "LK Metro (Deep Corner)",
-    region: "LK Metro",
+  tt_deep: {
+    name: "Tree Town (Deep Corner)",
+    region: "Tree Town",
     dark: true,
     desc: "The deepest corner of the maze, where the neon gives out entirely. One big " +
       "sign burns at the end of the lane: RAINBOW GIRLS BAR, every letter a different colour.",
     sign: "maze_4",
-    exits: { w: "lk_maze_2", n: "lk_maze_3", e: "rainbow_girls", in: "rainbow_girls" },
+    exits: { w: "tt_lane_2", n: "tt_back", e: "rainbow_girls", in: "rainbow_girls" },
   },
   gold_rush: {
     name: "Gold Rush Lounge",
-    region: "LK Metro",
+    region: "Tree Town",
     bar: "Gold Rush Lounge", barType: "beer",
     desc: "Gold tinsel, gold bar stools, gold-painted everything, none of it gold. A " +
       "nervous sweetness to the place, like it's trying hard on its first week too.",
-    exits: { out: "lk_maze_1" },
+    exits: { out: "tt_lane_1" },
   },
   starlight_bar: {
     name: "Starlight Bar",
-    region: "LK Metro",
+    region: "Tree Town",
     bar: "Starlight Bar", barType: "beer",
     desc: "Blue LEDs pricked into the ceiling like a planetarium with a drinks licence. " +
-      "The pours are honest and the banter is not.",
-    exits: { out: "lk_maze_2" },
+      "The pours are honest and the banter is not. Pim is behind the bar, looking at you " +
+      "the way she looks at everything — like she already knows the punchline.",
+    exits: { out: "tt_lane_2" },
   },
   rainbow_girls: {
     name: "Rainbow Girls Bar",
-    region: "LK Metro",
+    region: "Tree Town",
     bar: "Rainbow Girls Bar", barType: "gogo",
     desc: "Madam Oy's flagship: the best-run go-go in the maze. A DJ booth with actual " +
       "taste, a cashier's cage strung with fairy lights, and a door marked ห้ามเข้า " +
       "behind the bar — guarded by security who look extremely employed. " +
       "Somewhere behind that door is an office, and in that office is a safe.",
     sign: "office_door",
-    exits: { out: "lk_maze_4", office: "oy_office" },
+    exits: { out: "tt_deep", office: "oy_office" },
   },
   oy_office: {
     name: "Madam Oy's Office",
-    region: "LK Metro",
+    region: "Tree Town",
     desc: "Ledgers squared to the desk edge, a shrine shelf with fresh marigolds, framed " +
       "photos: a farm gate in Isaan, a young dancer with a number pinned to her hip, " +
       "three condo lobbies. Bolted to the floor: a steel safe with a Thai-numeral keypad.",
@@ -1242,7 +1244,7 @@ const MOTOSAI_DESTS = {
   "walking street": { room: "ws_gate", price: MOTOSAI_TOWN },
   "beach road":     { room: "beach_rd_c", price: MOTOSAI_TOWN },
   "soi buakhao":    { room: "buakhao_market", price: MOTOSAI_TOWN },
-  "lk metro":       { room: "buakhao_s", price: MOTOSAI_TOWN },
+  "tree town":      { room: "buakhao_s", price: MOTOSAI_TOWN },
   "soi 6":          { room: "soi6_street", price: MOTOSAI_TOWN },
   "jomtien":        { room: "jomtien_bus_stop", price: MOTOSAI_TOWN },
   "naklua":         { room: "naklua_rd", price: MOTOSAI_TOWN },
@@ -1271,7 +1273,7 @@ const ENCOUNTERS = {
     hint: "(Quick — do something.)",
   },
   bargirl: {
-    rooms: ["buakhao_n", "buakhao_market", "buakhao_s", "lk_entrance", "soi6_street", "ws_south"],
+    rooms: ["buakhao_n", "buakhao_market", "buakhao_s", "tt_entrance", "soi6_street", "ws_south"],
     interactive: false,
     th: "โถ น่าสงสาร", rom: "thoh, naa songsaan",
     intro: "A bargirl weaves out of the nearest doorway, somewhere past her fourth " +

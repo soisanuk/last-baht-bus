@@ -326,7 +326,7 @@ function _tick() {
   // salengs (ซาเล้ง) cruise the nightlife bars — modified three-wheelers
   // selling food, shoes, lingerie, snacks directly to girls and farangs
   const _SALENG_REGIONS = new Set([
-    "Beach Road", "Soi Buakhao", "LK Metro", "Walking Street", "Soi 6", "Myth Night",
+    "Beach Road", "Soi Buakhao", "Tree Town", "Walking Street", "Soi 6", "Myth Night",
   ]);
   if (!G.game && !G.pendingEnc && _inBar() && _SALENG_REGIONS.has(_room().region) &&
       G.turns - G.lastSaleng >= 15 && _rand() < 0.10) {
@@ -1547,12 +1547,12 @@ function _kickOut() {
   _say("The decision is made somewhere above your pay grade. Security appears at " +
     "your elbow — polite, enormous, terribly final — and you are walked out and " +
     "deposited on the soi with your dignity in a doggy bag.", "alert");
-  if (r.region === "LK Metro") {
+  if (r.region === "Tree Town") {
     for (const [id, rm] of Object.entries(ROOMS)) {
-      if (rm.region === "LK Metro" && rm.barType) G.soc.banned[id] = G.turns;
+      if (rm.region === "Tree Town" && rm.barType) G.soc.banned[id] = G.turns;
     }
     _say("(Complex security radios ahead. You are now famous in every bar in " +
-      "LK Metro, in the worst way.)", "alert");
+      "Tree Town, in the worst way.)", "alert");
   }
   _addHappy(-5);
   G.room = r.exits.out || Object.values(r.exits)[0];
@@ -3034,7 +3034,7 @@ function _doSafe(num) {
   } else {
     G.safeTries++;
     if (G.safeTries >= 3) {
-      G.room = "lk_maze_4";
+      G.room = "tt_deep";
       G.safeTries = 0;
       _say("A third wrong code. Somewhere a buzzer buzzes. Two security guys appear " +
         "with the calm of men who enjoy their work, walk you out through the bar, " +
@@ -3746,7 +3746,7 @@ const _SMELLS = {
   "Beach Road": "Sea salt over two-stroke exhaust, coconut oil, and a base note of last night that nobody has hosed away yet.",
   "Second Road": "Traffic fumes, fried garlic, and the cold chemical exhale of mall air-con every time a door swings.",
   "Soi Buakhao": "Fish sauce off the som tam carts, motorbike exhaust, beer-soaked chipboard. The honest middle of town.",
-  "LK Metro": "Perfume and spilled Chang in a closed loop — the complex recycles its own air like a space station.",
+  "Tree Town": "Perfume and spilled Chang in a closed loop — the complex recycles its own air like a space station.",
   "Walking Street": "Dry ice, cigarettes, a hundred perfumes at war, and beneath it the Gulf, comprehensively ignored.",
   "Soi 6": "Perfume applied with intent, cheap floor cleaner, and hotel soap from rooms rented by the hour.",
   "Myth Night": "Fresh paint and fryer oil — a complex still deciding what it wants to smell like when it grows up.",
@@ -3760,7 +3760,7 @@ const _SOUNDS = {
   "Beach Road": "Baht bus diesel, wave-hiss, and a jet ski tout laughing at his own joke.",
   "Second Road": "Traffic in both directions, and a mall breathing muzak through its automatic doors.",
   "Soi Buakhao": "Motorbikes, Connect Four counters, and a dozen bars playing a dozen songs, every one of them Hotel California.",
-  "LK Metro": "Bass bleeding through shared walls. The whole complex has one heartbeat, and it runs at about 128 bpm.",
+  "Tree Town": "Bass bleeding through shared walls. The whole complex has one heartbeat, and it runs at about 128 bpm.",
   "Walking Street": "Doof-doof from six doorways, touts quoting prices, and a bell ringing somewhere — some hero is buying a bar a round.",
   "Soi 6": "Short songs, shorter negotiations, and laughter with a working edge on it.",
   "Myth Night": "A live band soundchecking the same four bars of a Scorpions song, apparently forever.",

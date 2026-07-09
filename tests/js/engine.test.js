@@ -245,7 +245,7 @@ test("safe: wrong codes escalate, third try ejects you", () => {
   run("enter 111", "enter 222");
   assert.equal(state().room, "oy_office");
   run("enter 333");
-  assert.equal(state().room, "lk_maze_4");
+  assert.equal(state().room, "tt_deep");
 });
 
 test("safe opens on 719, Thai numerals accepted", () => {

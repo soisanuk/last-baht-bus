@@ -82,6 +82,7 @@ test("engine: TV and paper read the feed when present, degrade without it", () =
     engineInit(t => __out(t));
     newGame();
     G.room = "candy_bar";
+    G.lastSaleng = 99999;
     doCommand("watch tv");
     doCommand("read paper");
     doCommand("weather");
