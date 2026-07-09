@@ -26,6 +26,9 @@ function newGame() {
     money: 0,
     battery: 13,
     lightOn: false,
+    lightWarn: { room: null, n: 0, mark: false }, // go-go no-photo escalation
+    blueDogDay: 0,       // last day the Blue Dog show paid its happy point
+    patronTalk: { day: 0, talked: {} }, // patron dialogue book, reset daily
     turns: 0,
     wingmanUntil: 0,     // G.turns before which a wing-woman is vouching for you
     darkStreak: 0,
@@ -92,6 +95,9 @@ function deserializeGame(s) {
   // older saves predate the encounter/mini-game systems — backfill the fields
   if (G.pendingEnc === undefined) G.pendingEnc = null;
   if (G.game === undefined) G.game = null;
+  if (!G.lightWarn) G.lightWarn = { room: null, n: 0, mark: false };
+  if (G.blueDogDay === undefined) G.blueDogDay = 0;
+  if (!G.patronTalk) G.patronTalk = { day: 0, talked: {} };
   if (!G.soc) {
     G.soc = { drinks: {}, mamaTreat: {}, bellAt: {}, bells: {}, heat: {},
       banned: {}, patronBusy: {}, patronMiffed: {}, bra: {}, drunk: 0 };
@@ -155,6 +161,64 @@ function _isDarkHere() {
 
 function _npcsHere() {
   return Object.entries(NPCS).filter(([, n]) => n.room === G.room).map(([id]) => id);
+}
+
+// ── Named patrons ──────────────────────────────────────────────────────────
+// Hoppers drift to a hash-chosen bar each hour until 22:00, then settle at
+// their home bar; non-hoppers never leave home. Pure function of
+// (vacation, day, hour, id): same night, same hour, same stool — no state,
+// no drift between LOOKs, shared-world-safe like _quizBars.
+const _PATRON_HOP_ROOMS = Object.keys(ROOMS).filter(id => ROOMS[id].barType);
+
+function _patronHour() { return Math.floor(G.nightTurn / 10); } // 0 = 18:00
+
+function _patronRoom(id) {
+  const p = PATRONS[id];
+  if (p.days && !p.days.includes(G.day % 7)) return null; // not his night out
+  if (!p.hops || _patronHour() >= 4) return p.home; // by 22:00 everyone's home
+  let h = G.vacation * 7919 + G.day * 104729 + _patronHour() * 48271 + 1;
+  for (const c of id) h = (h * 31 + c.charCodeAt(0)) % 2147483647;
+  h = (h * 48271) % 2147483647;
+  return _PATRON_HOP_ROOMS[h % _PATRON_HOP_ROOMS.length];
+}
+
+function _patronsHere() {
+  return Object.keys(PATRONS).filter(id => _patronRoom(id) === G.room);
+}
+
+function _findPatron(word) {
+  const w = word.toLowerCase();
+  const here = _patronsHere();
+  for (const id of here) {
+    if (id === w || PATRONS[id].name.toLowerCase() === w) return id;
+  }
+  for (const id of here) {
+    if (PATRONS[id].name.toLowerCase().startsWith(w)) return id;
+  }
+  return null;
+}
+
+// Same delivery contract as _deliver, but the seen-index book resets daily —
+// a patron's stories are new again every night, which is very true to life.
+function _patronTalk(id, topic) {
+  if (G.patronTalk.day !== G.day) G.patronTalk = { day: G.day, talked: {} };
+  const p = PATRONS[id];
+  let d = null;
+  for (const e of p.dialogue) {
+    if (topic ? e.topic !== topic && !(e.topic && topic.includes(e.topic)) : e.topic) continue;
+    d = e;
+    break;
+  }
+  if (!d) {
+    if (topic) { _patronTalk(id, null); return; }
+    _say(`${p.name} has said his piece for now.`);
+    return;
+  }
+  const idx = p.dialogue.indexOf(d);
+  const seen = G.patronTalk.talked[id] || (G.patronTalk.talked[id] = []);
+  const terse = seen.includes(idx) && !!d.short;
+  if (!seen.includes(idx)) seen.push(idx);
+  _say(terse ? d.short : d.text);
 }
 
 // where: "room", "inventory", or undefined (both, room first — so TAKE grabs
@@ -245,6 +309,11 @@ function _describeRoom(full) {
   if (items.length) _say("You can see: " + items.map(id => ITEMS[id].name).join(", ") + ".");
   const npcs = _npcsHere();
   if (npcs.length) _say("Here: " + npcs.map(id => `${NPCS[id].emoji} ${NPCS[id].name}`).join(", ") + ".");
+  const pats = _patronsHere();
+  if (pats.length) {
+    _say("At the rail: " + pats.map(id =>
+      `${PATRONS[id].emoji} ${PATRONS[id].name} (${PATRONS[id].age}, ${PATRONS[id].nat})`).join(", ") + ".");
+  }
   const exits = Object.keys(r.exits);
   if (exits.length) _say("Exits: " + exits.join(", ") + ".", "dim");
   if (r.busStop) _say("A baht bus can be caught here (ride bus to …).", "dim");
@@ -280,6 +349,12 @@ function _describeRoom(full) {
       (girl ? `, with ${NPCS[girl].name}'s full attention` : "") + "." :
       "A regular nurses a big Chang at the rail, radiating opinions.", "dim");
   }
+  if (G.room === "blue_dog" && _shakedownOn()) {
+    _say("Across the road, the evening checkpoint is in session: officers on both " +
+      "sides of Beach Road, waving over every farang on a motorbike with the bored " +
+      "precision of toll collectors. The whole rail is watching. (WATCH POLICE — " +
+      "or WATCH SUNSET, the bay is doing its thing too.)", "dim");
+  }
 }
 
 // ── Turn bookkeeping: battery, darkness, soi dogs ──────────────────────────
@@ -287,6 +362,10 @@ function _describeRoom(full) {
 function _tick() {
   G.turns++;
   G.nightTurn++;
+  // a torch still burning in a go-go escalates; `mark` spends this command's
+  // entry/toggle warning so one command never counts twice
+  if (G.lightWarn.mark) G.lightWarn.mark = false;
+  else if (G.lightOn && G.battery > 0 && _room().barType === "gogo") _gogoLightWarn();
   // the body keeps its own books
   if (G.nightTurn % 20 === 0 && G.soc.drunk > 0) G.soc.drunk--;
   if (G.nightTurn % 3 === 0) G.hunger++;
@@ -328,7 +407,8 @@ function _tick() {
   const _SALENG_REGIONS = new Set([
     "Beach Road", "Soi Buakhao", "Tree Town", "LK Metro", "Walking Street", "Soi 6", "Myth Night",
   ]);
-  if (!G.game && !G.pendingEnc && _inBar() && _SALENG_REGIONS.has(_room().region) &&
+  if (!G.game && !G.pendingEnc && _inBar() && _room().barType !== "pub" &&
+      _SALENG_REGIONS.has(_room().region) &&
       G.turns - G.lastSaleng >= 15 && _rand() < 0.10) {
     G.lastSaleng = G.turns;
     const types = ["food", "shoes", "lingerie", "snacks"];
@@ -2762,6 +2842,60 @@ function _sayHeadline(h) {
   _say(`“${h.t}”${h.s ? " — " + h.s : ""}`, "thai");
 }
 
+// Blue Dog house speciality: the 18:00-19:00 police checkpoint across the road,
+// and a bay sunset in the same hour. Watching either is worth a happy point,
+// once a night — after that it's just spectating.
+function _shakedownOn() { return G.nightTurn < 10; } // 18:00-19:00, ten turns/hour
+
+const _SHAKEDOWN_SCENES = [
+  "An officer steps off the kerb with one raised glove and a big Australian on a " +
+    "rented PCX pulls over with the face of a man doing sums. Helmet: yes. " +
+    "License: the wallet comes out slowly... too slowly. He is escorted toward " +
+    "the station at a gentle, unhurried, absolutely non-negotiable pace. The " +
+    "Blue Dog rail scores it a 7.",
+  "A farang on a Click 125 spots the checkpoint from two hundred metres, executes " +
+    "a U-turn so sudden his flip-flop comes off, and disappears down a side soi. " +
+    "The rail erupts. One of the officers applauds, sincerely, without moving " +
+    "from his spot. The flip-flop stays where it fell, a small monument.",
+  "No helmet, no license, board shorts: the full house. He tries the confused-" +
+    "tourist opening; the officer counters with the laminated card in four " +
+    "languages. They walk to the station together like old friends, one of them " +
+    "฿2000 lighter in advance. At the rail, a man who clearly did the same walk " +
+    "last week raises his Chang in silent brotherhood.",
+  "Two officers on each side of the road, working the evening tide with the calm " +
+    "of men netting fish at the river mouth. Thais sail through unwaved. A " +
+    "gap-year kid gets pulled mid-wheelie, which even the rail agrees was earned.",
+];
+
+function _doWatchBlueDog(arg) {
+  const sunset = /sunset|bay|sea|view/.test(arg || "");
+  if (sunset || !_shakedownOn()) {
+    if (_shakedownOn()) {
+      _say("The bay does the whole production number: gold, then rose, then a " +
+        "violet that no camera has ever come home with. The islands go to " +
+        "silhouette. Behind you the beer signs buzz on one by one, taking over " +
+        "the shift. Nobody at the rail says anything, which is how you can tell " +
+        "it's good.");
+    } else if (sunset) {
+      _say("The sun is long gone; the bay is a dark sheet stitched with squid-boat " +
+        "lights. Still worth watching, in the way embers are.");
+      return;
+    } else {
+      _say("The checkpoint packed up at seven on the dot — the officers folded " +
+        "their operation like a market stall and rode off, mostly helmetless. " +
+        "The road is just a road again. The bay, however, is still open.");
+      return;
+    }
+  } else {
+    _say(_SHAKEDOWN_SCENES[Math.floor(_rand() * _SHAKEDOWN_SCENES.length)]);
+  }
+  if (G.blueDogDay !== G.day) {
+    G.blueDogDay = G.day;
+    _addHappy(1);
+    _say("(Best free show in Pattaya. +1 สนุก.)", "win");
+  }
+}
+
 function _doTv() {
   if (!_inBar()) { _say("No TV out here. The street is the channel."); return; }
   _say("The TV over the bar plays the news — sound off, Thai subtitles racing, " +
@@ -2987,6 +3121,7 @@ function _doGo(dirWord) {
   }
   G.room = to;
   _describeRoom(true);
+  _lightNotice(); // walking in with the torch burning gets you clocked
   // quiz night: walk in during the window and the microphone finds you
   if (_quizHere()) { _startQuiz(); return; }
   // a standing invitation, honoured: she said come, and you came
@@ -3082,6 +3217,8 @@ function _doExamine(arg) {
   if (!arg) return _describeRoom(true);
   const npc = _findNpc(arg);
   if (npc) { _say(NPCS[npc].desc); return; }
+  const pat = _findPatron(arg);
+  if (pat) { _say(PATRONS[pat].desc); return; }
   const id = _findItem(arg);
   if (id) { _say(ITEMS[id].desc); return; }
   if (arg === "sign") return _doRead("sign");
@@ -3117,6 +3254,8 @@ function _doRead(arg) {
 function _doTalk(arg, topic) {
   const npc = _findNpc(arg);
   if (!npc) {
+    const pat = _findPatron(arg);
+    if (pat) { _patronTalk(pat, topic); return; }
     if (_inBar() && /patron|regular|expat|customer|guy|bloke|farang/.test(arg)) {
       _doPatron();
       return;
@@ -3630,10 +3769,90 @@ function _doLight(on) {
     G.lightOn = true;
     _say(`Flashlight on. (Battery: ${G.battery}% — it drains while it burns.)`);
     if (_room().dark) _describeRoom(true);
+    else _lightNotice();
   } else {
     if (!G.lightOn) { _say("It's already off."); return; }
     G.lightOn = false;
+    if (G.lightWarn.n > 0 && _room().barType === "gogo") {
+      G.lightWarn.room = null; G.lightWarn.n = 0;
+      _say("Flashlight off. The security shirts refold into the corner. The " +
+        "mamasan's smile returns at its usual wattage, as if nothing happened — " +
+        "because now, officially, nothing did.");
+      return;
+    }
+    G.lightWarn.room = null; G.lightWarn.n = 0;
     _say("Flashlight off. Battery preserved; nerves, less so.");
+  }
+}
+
+// A lit flashlight in a social space gets noticed. On a dark soi it's sense;
+// under working neon it's either a fool or a camera — and in a go-go the house
+// always assumes the camera. No photos is the one rule nobody bends.
+function _lightNotice() {
+  if (!G.lightOn || G.battery === 0 || _room().dark) return;
+  const r = _room();
+  const npcs = _npcsHere();
+  if (!r.barType && !npcs.length) return;
+  if (r.barType === "gogo") {
+    G.lightWarn.mark = true; // this command's warning is spent; the tick skips
+    _gogoLightWarn();
+    return;
+  }
+  const girl = npcs.find(id => NPC_ROLES[id] === "hostess");
+  let lines;
+  if (girl) {
+    const name = NPCS[girl].name;
+    lines = [
+      `${name} shields her eyes theatrically. "Hansum, why you have the torch? ` +
+        `You look for your money? I save you time: it's gone."`,
+      `${name} steps into the beam and strikes a pose. "Ooh, spotlight! You pay ` +
+        `me like a star too, na?" The other girls are already laughing.`,
+      `${name} leans over and gently pushes your phone hand down. "Tilac. The ` +
+        `neon works fine. You look like you hunt ghosts."`,
+    ];
+  } else if (r.barType) {
+    lines = [
+      "The bartender squints into your beam and points, wordlessly, at the " +
+        "fully functional lights overhead.",
+      "\"Power cut is finish since 2015, boss,\" someone offers from the rail, " +
+        "to general amusement.",
+    ];
+  } else {
+    const name = NPCS[npcs[0]].name;
+    lines = [
+      `${name} tracks your flashlight beam with open amusement. On a street lit ` +
+        `like a runway, you are the only one carrying your own sun.`,
+      `${name} flicks a phone light back at you across the street — a little ` +
+        `lighthouse conversation. You may be the joke here.`,
+    ];
+  }
+  _say(lines[Math.floor(_rand() * lines.length)], "dim");
+}
+
+// Go-go escalation: two warnings about the light, then security ends the
+// conversation. The counter is per-bar and resets when the light goes off
+// or you leave; `mark` stops the entry notice and the same command's tick
+// from counting as two warnings.
+function _gogoLightWarn() {
+  const w = G.lightWarn;
+  if (w.room !== G.room) { w.room = G.room; w.n = 0; }
+  w.n++;
+  const npcs = _npcsHere();
+  const mama = npcs.find(id => NPC_ROLES[id] === "mamasan");
+  const who = mama ? NPCS[mama].name : "The mamasan";
+  if (w.n === 1) {
+    _say(`${who} is at your elbow before the beam settles, one flat hand over ` +
+      "your phone, smile fixed: \"No photo. No video. House rule, tilac — the " +
+      "girls dance, nobody films.\" Two security shirts have already unfolded " +
+      "from the corner. Best switch that off.", "alert");
+  } else if (w.n === 2) {
+    _say(`${who} is back, and the smile is gone. \"OFF. Now.\" Behind her the ` +
+      "two security shirts have stopped pretending to watch the stage. The DJ " +
+      "has turned the music down half a notch, which somehow makes it worse.", "alert");
+  } else {
+    w.room = null; w.n = 0;
+    _say("Nobody says anything this time. The music doesn't even pause.", "alert");
+    _kickOut();
   }
 }
 
@@ -4194,7 +4413,10 @@ function _cInv() {
   return Object.keys(G.itemLoc).filter(id => G.itemLoc[id] === "inventory");
 }
 function _cItemWord(id) { return ITEMS[id].name.split(" ").pop().toLowerCase(); }
-function _cNpcsHere() { return _npcsHere().map(id => NPCS[id].name.toLowerCase()); }
+function _cNpcsHere() {
+  return [..._npcsHere().map(id => NPCS[id].name.toLowerCase()),
+    ..._patronsHere().map(id => PATRONS[id].name.toLowerCase())];
+}
 
 function _completePool(verb, ctx) {
   const girls = () => _npcsHere().filter(id => NPC_ROLES[id])
@@ -4213,6 +4435,8 @@ function _completePool(verb, ctx) {
             (!d.req || d.req.every(f => _flag(f))) &&
             (!d.notFlags || d.notFlags.every(f => !_flag(f)))).map(d => d.topic);
         }
+        const pat = _findPatron(ctx[1]);
+        if (pat) return PATRONS[pat].dialogue.filter(d => d.topic).map(d => d.topic);
         return [];
       }
       return _cNpcsHere();
@@ -4247,7 +4471,8 @@ function _completePool(verb, ctx) {
     case "contact": return girls();
     case "play": case "challenge": return ["connect 4", "jackpot", "pool", "killer"];
     case "light": case "turn": return ["on", "off"];
-    case "watch": return ["tv"];
+    case "watch":
+      return G.room === "blue_dog" ? ["police", "sunset", "tv"] : ["tv"];
     case "check": return ["messages"];
     case "throw": case "toss": case "chuck": case "fling":
       return ctx.length >= 2 ? girls() : ["cover", "pastie", "nipple cover"];
@@ -4490,7 +4715,9 @@ function doCommand(input) {
     case "knock": case "shout": case "yell":
       _say(_MISC_VERBS[v === "yell" ? "shout" : v]); break;
     case "watch":
-      if (!arg || /tv|news|television/.test(arg)) _doTv();
+      if (G.room === "blue_dog" && (!arg || /police|road|show|shakedown|bike|checkpoint|sunset|bay|sea|view/.test(arg)))
+        _doWatchBlueDog(arg);
+      else if (!arg || /tv|news|television/.test(arg)) _doTv();
       else _say("You watch. It watches back. Pattaya.");
       break;
     case "wait": case "z": _doWait(arg); break;
