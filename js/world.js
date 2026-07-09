@@ -245,17 +245,21 @@ const ROOMS = {
     name: "Walking Street Gate",
     region: "Walking Street",
     seven: true,
-    desc: "The famous arch, buzzing and flickering: WALKING STREET PATTAYA. Music from a " +
-      "dozen doorways collides overhead. The strip runs south; Beach Road and the hill " +
-      "road meet here.",
+    desc: "The arch is still there — WALKING STREET PATTAYA, buzzing and flickering, famous " +
+      "enough that people photograph it before they've seen what's behind it. The strip runs " +
+      "south. It used to be louder. The gap between what this street was and what it is now " +
+      "is not visible from the gate, but you'll feel it by the time you reach the other end.",
     exits: { s: "ws_south", n: "beach_rd_s", w: "pratumnak_rd" },
   },
   ws_south: {
     name: "Walking Street (South)",
     region: "Walking Street",
-    desc: "Neon canyon. Touts with laminated menus of happiness. NEON PARADISE A-GO-GO " +
-      "strobes on the west side; CLUB MIRAGE shimmers opposite, appropriately hard to focus on. " +
-      "A dark side-alley slinks off between them.",
+    desc: "Neon canyon, but the neon mix has changed. Bollywood bass competes with Thai pop " +
+      "from somewhere inside Little India's encroachment from the east — restaurant signs in " +
+      "Hindi above what used to be go-go bars, the smell of curry drifting across the touts. " +
+      "NEON PARADISE A-GO-GO still strobes on the west side. CLUB MIRAGE shimmers opposite. " +
+      "The touts with the laminated menus are still here. A dark side-alley slinks off " +
+      "between them.",
     exits: { n: "ws_gate", s: "ws_north", w: "neon_paradise", e: "club_mirage", in: "neon_paradise", out: "ws_gate", alley: "ws_alley" },
   },
   ws_alley: {
@@ -269,26 +273,33 @@ const ROOMS = {
   ws_north: {
     name: "Walking Street (North End)",
     region: "Walking Street",
-    desc: "The strip's deep end. CRYSTAL PALACE A-GO-GO drips fake chandeliers over the " +
-      "door, PARADISE NIGHTS CLUB thumps beside it, and the MIDNIGHT SUN BAR glows a " +
-      "gentler yellow for the sit-and-talk crowd.",
+    desc: "The deep end of the strip, where the go-gos that survived COVID hold their ground " +
+      "through stubbornness and reputation. CRYSTAL PALACE A-GO-GO at the west, PARADISE " +
+      "NIGHTS CLUB beside it. MIDNIGHT SUN BAR glows a quieter yellow at the south end — " +
+      "beer bar, conversation levels, the kind of place you end up after you've stopped " +
+      "trying. Late enough, the whole strip fills with barfined ladies and their friends " +
+      "en route to the clubs.",
     exits: { n: "ws_south", w: "crystal_palace", e: "paradise_nights", s: "midnight_sun" },
   },
   neon_paradise: {
     name: "Neon Paradise A-Go-Go",
     region: "Walking Street",
     bar: "Neon Paradise A-Go-Go", barType: "gogo",
-    desc: "Chrome poles, mirror walls, and a sound system you feel in your fillings. " +
-      "Dancers rotate with the unhurried confidence of professionals. Security by the " +
-      "door: two large gentlemen who have never once been surprised.",
+    desc: "Chrome poles, mirror walls, a sound system you feel in your fillings. The dancers " +
+      "rotate with the unhurried confidence of professionals — fewer of them than there used " +
+      "to be, and the room notices, but the ones here are good. Security by the door: two " +
+      "large gentlemen who have never once been surprised and are not about to start.",
     exits: { out: "ws_south" },
   },
   club_mirage: {
     name: "Club Mirage",
     region: "Walking Street",
     bar: "Club Mirage", barType: "gogo",
-    desc: "Dry ice and violet lasers. Everything in here looks better than it is, " +
-      "which is the business model.",
+    desc: "Dry ice at ankle height, violet lasers cutting through it in thin lines. Everything " +
+      "in here looks better than it is — that was always the business model, and the model is " +
+      "holding. The crowd is a mix: tourists who found their way in, freelancers working the " +
+      "floor, bar girls two hours past their shift drinking on someone else's tab. Aom " +
+      "materialises beside your stool. You didn't see her cross the floor.",
     exits: { out: "ws_south" },
   },
   crystal_palace: {
@@ -296,15 +307,20 @@ const ROOMS = {
     region: "Walking Street",
     bar: "Crystal Palace A-Go-Go", barType: "gogo",
     desc: "Rhinestones on everything that holds still. The DJ booth rules a wall of subs; " +
-      "the cashier's cage glitters like a shrine.",
+      "the cashier's cage glitters like a shrine. On the back wall, a faded poster of " +
+      "numbered dancers from a different decade — No. 71 circled in red marker, much later, " +
+      "by someone who knew what they were looking at. Crystal Palace is older than most of " +
+      "the girls in it, and carries itself accordingly.",
     exits: { out: "ws_north" },
   },
   paradise_nights: {
     name: "Paradise Nights Club",
     region: "Walking Street",
     bar: "Paradise Nights Club", barType: "club",
-    desc: "A proper club: queue rope, wristbands, and drinks that cost like the airport. " +
-      "The dance floor heaves.",
+    desc: "Velvet rope, wristbands, drinks that cost like a departure lounge. The floor " +
+      "heaves — tourists, freelancers working the margins, bar girls two hours past their " +
+      "shift in trainers and someone else's jacket. Ping is everywhere at once. The bass " +
+      "physically shortens the room.",
     exits: { out: "ws_north" },
   },
   midnight_sun: {
@@ -863,6 +879,9 @@ const NPCS = {
       { th: "สนุกไหม", rom: "sanuk mai",
         text: "\"Having fun?! This club so loud I answer questions nobody ask yet!\" She beams and slides you a glass of iced water on the house. \"You look like you need free one.\"",
         short: "\"Too loud to talk! Here — free water. On the house.\"" },
+      { topic: "wallet",
+        text: "\"Wallet?!\" She processes this over the bass. \"Soi Buakhao! Beer bars! The mamasans there know everything — very powerful ladies!\" She is already shouting an order over your head. \"CANDY BAR!\" she adds, pointing vaguely north.",
+        short: "\"Soi Buakhao! Candy Bar! Very powerful ladies!\"" },
     ],
   },
 
