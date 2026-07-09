@@ -4373,6 +4373,7 @@ const _HELP = `Common commands:
   RIDE BUS TO <place> · MOTOSAI TO <place> · PAY <amount>
   BUY <thing> · SELL BOTTLES · READ <thing> · READ SIGN
   WATCH TV (bars) · READ PAPER (bars & 7-Elevens) — the day's real headlines
+  WATCH SUNSET · WATCH POLICE (Blue Dog, 6-7pm — best free show in town)
   WEATHER · SCORES (real football) · LOTTERY (the real GLO draw)
   PLAY CONNECT 4 · PLAY JACKPOT [bet] · PLAY POOL   (in the beer bars)
   FLIRT/KISS/SPANK/FONDLE <lady> · BUY DRINK FOR <lady> · BUY BEER

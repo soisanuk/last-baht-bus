@@ -29,12 +29,14 @@ Mobile gets tappable verb chips; desktop gets ↑/↓ command history.
 
 ## The game
 
-- **~55 rooms** across Jomtien, Pratumnak Hill, Beach Road, Second Road,
+- **68 rooms** across Jomtien, Pratumnak Hill, Beach Road, Second Road,
   Pattaya Klang, Central mall, Myth Night, Walking Street, Soi Buakhao, the
-  LK Metro maze, Soi 6, the Darkside (Lake Mabprachan & Soi Khao Talo), and
-  Naklua. All 15 canon bars are enterable — plus Candy Bar 2 (the empire
-  expands), the Stinky Bar (Bert's pool-league home felt), and Tequila Queen,
-  the oldest go-go in Pattaya, with the girls to match.
+  Tree Town maze, the LK Metro alley, Soi 6, the Darkside (Lake Mabprachan &
+  Soi Khao Talo), and Naklua. All 20 canon bars are enterable — plus Candy
+  Bar 2 (the empire expands), the Stinky Bar (Bert's pool-league home felt),
+  Tequila Queen (the oldest go-go in Pattaya, with the girls to match), the
+  Queen Vic (the air-conditioned expat refuge halfway down Soi 6), and
+  Daeng's Place out on the Darkside.
 - **Adventures**: a proper quest log — givers offer jobs in conversation,
   `ACCEPT` / `ABANDON` / `QUESTS` manage them, rewards pay out in baht and
   สนุก, and some quests unlock others.
@@ -49,7 +51,7 @@ Mobile gets tappable verb chips; desktop gets ↑/↓ command history.
 - **Transport**: baht buses (฿15, the driver quotes the fare in spoken Thai —
   pay attention and pay exactly), motosai (faster, pricier, and the piwin
   network remembers a favour), or your own feet in the dark.
-- **Thai as puzzle**: read เปิด/ปิด signs, navigate the LK Metro maze by its
+- **Thai as puzzle**: read เปิด/ปิด signs, navigate the Tree Town maze by its
   painted Thai arrows, and crack a safe whose keypad speaks only ๐–๙.
   A `wai` and a `sawatdee` open more doors than money.
 - **Two solutions**: burgle the safe behind the go-go, or earn the Mamasan's
@@ -89,9 +91,26 @@ Mobile gets tappable verb chips; desktop gets ↑/↓ command history.
   back); RING BELL (฿300) makes you everyone's favourite for a while — and has
   been known to soften the rules. TALK TO the resident PATRON for beer-soaked
   wisdom (mind whose girl you buy drinks for — bad form travels). Push your
-  luck too far and security walks you out; in LK Metro the whole complex
-  remembers. Try the same moves on the street at your own risk — though the
-  Beach Road ladyboy famously appreciates a man who flirts back.
+  luck too far and security walks you out; in Tree Town and LK Metro the
+  whole complex remembers. Try the same moves on the street at your own risk
+  — though the Beach Road ladyboy famously appreciates a man who flirts back.
+- **The regulars**: eleven named patrons with ages, passports, home bars, and
+  the backstories to match — Nigel and his curated 1998, Chuck and his
+  "free" drinks, Dave doing his welfare rounds, Helmut on the stool he
+  evaluated in 2013, Superman watching every sunset like it's a showing,
+  Angela on the calm side of the Queen Vic glass. Hoppers drift to a new bar
+  each hour until 22:00, then settle at their regular; some never leave
+  their stool, and David only exists on Mondays and Fridays (teacher's
+  budget). Their stories reset daily — TALK TO them, ASK them ABOUT their
+  lives, and mind Drew when he's drunk if you're Canadian.
+- **No photos in the go-gos**: walk in with your phone light burning and the
+  mamasan assumes a camera. Two warnings, then security ends the
+  conversation — complex-wide if you're in Tree Town or LK Metro. Elsewhere
+  the torch just gets you teased by whoever's nearest, as it should.
+- **The Blue Dog**: open-air on the beach side of the road, best sunset
+  seats in town — and from 18:00 to 19:00 the other show: the police
+  checkpoint working the evening tide of helmetless farang riders.
+  `WATCH SUNSET` or `WATCH POLICE`; the first one each night pays a สนุก.
 - **Bar games**: every beer bar keeps a Connect 4 frame (the hostess never
   loses), a Jackpot box (the Thai shut-the-box dice game — flip the dice or
   flip their sum, lowest score wins, shut all nine for JACKPOT), and the
@@ -173,15 +192,19 @@ flowchart TD
     brc[🚏 Beach Rd Central]
     brn[🚏 Beach Rd North]
     prom[Promenade]
-    tq[🍹 Tequila Queen<br>Mem 👵 oldest go-go]:::bar
-    stinky[🍺 Stinky Bar 🎱<br>Bert]:::bar
+    motel[🔑 Short-Time Motel<br>Somchith]
+    tq[🍹 Tequila Queen<br>Mem 👵 · Chuck 🤠]:::bar
+    stinky[🍺 Stinky Bar 🎱<br>Bert · Phil 📱 · Drew 🚬 · David 🇨🇦]:::bar
+    bdog[🍺 Blue Dog 🌇 sunsets<br>Somsak · Superman 🦸]:::bar
     mall[Central Mall 🔌]
     cop[👮 Police Station]
     brs --- brc --- brn
+    brs --- motel
     brc --- prom
     brc --- tq
     brc --- mall
     brn --- stinky
+    brn --- bdog
     mall --- cop --- brn
   end
 
@@ -204,7 +227,7 @@ flowchart TD
     wss[WS South]
     wsn[WS North]
     alley[🌑 Side-Alley]:::dark
-    np[🍹 Neon Paradise<br>Noi]:::bar
+    np[🍹 Neon Paradise<br>Noi · Mikkel 🎒]:::bar
     cm[🍹 Club Mirage<br>Aom]:::bar
     cp[🍹 Crystal Palace<br>Gift]:::bar
     pn[🍹 Paradise Nights<br>Ping]:::bar
@@ -220,21 +243,23 @@ flowchart TD
 
   subgraph BUAKHAO["SOI BUAKHAO"]
     bkn[Buakhao North]
-    bkm[Buakhao Market]
+    bkm[Buakhao Market<br>Nit 🧵]
     bks[Buakhao South 🏍️]
     candy[🍺 Candy Bar 🔌<br>Candy 🌹 HUB]:::bar
-    lt[🍺 Lucky Tiger<br>Lek]:::bar
-    sr[🍺 Silk Rose]:::bar
-    jg[🍺 Jasmine Garden<br>Fon]:::bar
+    rf[🍺 Rock Factory 🎸]:::bar
+    lt[🍺 Lucky Tiger<br>Lek · Nigel 🍻]:::bar
+    sr[🍺 Silk Rose<br>Helmut 🔧]:::bar
+    jg[🍺 Jasmine Garden<br>Fon · Randy 🐻]:::bar
     bkn --- bkm --- bks
     bkn --- lt
+    bkn --- rf
     bkm --- candy
     bkm --- sr
     bks --- jg
   end
 
-  subgraph LK["LK METRO (maze)"]
-    lke[LK Entrance]
+  subgraph TT["TREE TOWN (maze)"]
+    tte[Tree Town Entrance]
     m1[Inner Lane]
     m2[Cross Lane]
     m3[🌑 Back Lane]:::dark
@@ -243,7 +268,7 @@ flowchart TD
     sl[🍺 Starlight<br>Pim 💋]:::bar
     rg[🍹 Rainbow Girls<br>Madam Oy 👑]:::bar
     office[🔒 Oy's Office]:::special
-    lke --- m1
+    tte --- m1
     m1 --- m2
     m1 --- m3
     m1 --- gr
@@ -255,14 +280,29 @@ flowchart TD
     rg --- office
   end
 
+  subgraph LKM["LK METRO (alley)"]
+    lka[LK Entrance<br>behind the Metropole]
+    lkm[LK Main]
+    lkb[The Bend]
+    kk[🍹 KINKY<br>Malee ⚡]:::bar
+    sy[🍹 Slutty<br>Wan 💫]:::bar
+    lv[🍹 Las Vegas<br>Jane ⭐]:::bar
+    lka --- lkm --- lkb
+    lkm --- kk
+    lkm --- sy
+    lkb --- lv
+  end
+
   subgraph SOI6["SOI 6"]
     s6[Soi 6 Street]
     pl[🍺 Pink Lotus<br>Joy]:::bar
     gd[🍺 Golden Dragon]:::bar
     sd[🍺 Sunset Dreams<br>Kwan]:::bar
+    qv[🍺 Queen Vic pub<br>Terry 🍺 · Angela 🎧]:::bar
     s6 --- pl
     s6 --- gd
     s6 --- sd
+    s6 --- qv
   end
 
   subgraph DARKSIDE["THE DARKSIDE (motosai only)"]
@@ -294,7 +334,8 @@ flowchart TD
   klang --- bkn
   brn --- s6
   brn --- nak
-  bks --- lke
+  bks --- tte
+  bkn --- lka
 
   %% baht bus lines (฿15)
   jbus -. "bus ฿15" .- brs
@@ -314,13 +355,14 @@ flowchart TD
 node --test
 ```
 
-143 tests: Thai number composition, world/map integrity, online-readiness
-(session isolation, cloud-save round-trips, deterministic transcripts),
-the news-bake contract, (every exit resolves,
-all 15 canon bars present, the gossip chain's flags all connect), parser,
-systems, street encounters, bar mini-games and social life, and a full
-scripted playthrough from the beach to the happy ending — run headless via
-`node:vm` against the same files the browser loads.
+215 tests: Thai number composition, world/map integrity (every exit
+resolves, all 20 canon bars present, the gossip chain's flags all connect,
+the patron bench is placed and scheduled), online-readiness (session
+isolation, cloud-save round-trips, deterministic transcripts), the
+news-bake contract, parser, systems, street encounters, bar mini-games and
+social life, and a full scripted playthrough from the beach to the happy
+ending — run headless via `node:vm` against the same files the browser
+loads.
 
 ## Structure
 

@@ -2187,3 +2187,55 @@ test("patrons: hoppers drift by the hour, settle at home by 22:00, chat resets d
   run("x helmut");
   assert.match(lastOut(), /third stool from the left/);
 });
+
+test("David only drinks on his days off: Mondays and Fridays", () => {
+  state().nightTurn = 45;
+  state().pendingEnc = null; state().lastPeddler = 99999;
+  state().day = 1; // Monday
+  assert.equal(_patronRoom("david"), "stinky_bar", "Monday is a beer day");
+  state().day = 5; // Friday
+  assert.equal(_patronRoom("david"), "stinky_bar", "Friday is a beer day");
+  state().day = 2; // Tuesday — school night
+  assert.equal(_patronRoom("david"), null, "Tuesday he's marking homework");
+  state().room = "stinky_bar";
+  out = [];
+  run("talk to david");
+  assert.match(lastOut(), /Nobody by that name/, "and he isn't at the rail");
+});
+
+test("the Phil triangle: read the phone, then tell him or warn her — not both ways", () => {
+  state().pendingEnc = null; state().lastSaleng = 99999; state().lastPeddler = 99999;
+  // the confrontation is gated on having seen the screenshots
+  state().room = "buakhao_market";
+  run("ask nit about somchai");
+  assert.ok(!state().flags.warnedNit, "no warning before the phone");
+  state().room = "stinky_bar";
+  out = [];
+  run("ask phil about phone");
+  assert.ok(state().flags.readPhilPhone, "the screenshots land");
+  assert.match(lastOut(), /สมชาย/, "the thread is in Thai");
+  // branch: warn Nit first
+  state().room = "buakhao_market";
+  out = [];
+  run("ask nit about somchai");
+  assert.ok(state().flags.warnedNit, "she knows you know");
+  assert.match(lastOut(), /my husband/i, "no denial");
+  // telling Phil still possible afterwards; it lands once and stays landed
+  state().room = "stinky_bar";
+  out = [];
+  run("ask phil about truth");
+  assert.ok(state().flags.toldPhilTruth);
+  assert.match(lastOut(), /Twelve years/);
+  out = [];
+  run("talk to phil");
+  assert.match(lastOut(), /two fingers/, "post-truth Phil");
+  // and Bert acknowledges the hard thing
+  out = [];
+  run("ask bert about phil");
+  assert.match(lastOut(), /hard thing/);
+  // Nit's post-truth state line replaces the confrontation forever
+  state().room = "buakhao_market";
+  out = [];
+  run("talk to nit");
+  assert.match(lastOut(), /choosing cotton/, "she goes back to what she knows");
+});

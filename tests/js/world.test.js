@@ -173,3 +173,13 @@ test("patrons: real home bars, complete profiles, unconditional fallback", () =>
   assert.ok(hoppers > 0, "somebody barhops");
   assert.ok(homebodies > 0, "somebody never leaves their stool");
 });
+
+test("patron day schedules are valid weekday indices", () => {
+  for (const [id, p] of Object.entries(PATRONS)) {
+    if (!p.days) continue;
+    assert.ok(Array.isArray(p.days) && p.days.length > 0, `${id} days empty`);
+    for (const d of p.days) {
+      assert.ok(Number.isInteger(d) && d >= 0 && d <= 6, `${id} day ${d} out of range`);
+    }
+  }
+});
