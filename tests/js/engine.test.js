@@ -1655,6 +1655,68 @@ test("saleng: unknown item or NO dismisses the cart", () => {
   assert.ok(!state().pendingEnc, "enc cleared");
 });
 
+test("saleng: buying sandals for self adds to inventory", () => {
+  state().room = "candy_bar";
+  state().pendingEnc = "saleng";
+  state().salengCart = "shoes";
+  state().money = 500;
+  run("buy sandals");
+  assert.equal(state().itemLoc.saleng_sandals, "inventory", "sandals in inventory");
+  assert.match(lastOut(), /GIVE SANDALS/i);
+});
+
+test("saleng: buying sandals twice refunds second", () => {
+  state().room = "candy_bar";
+  state().money = 500;
+  state().itemLoc.saleng_sandals = "inventory";
+  state().pendingEnc = "saleng";
+  state().salengCart = "shoes";
+  const money0 = state().money;
+  run("buy sandals");
+  assert.equal(state().money, money0, "refunded");
+  assert.match(lastOut(), /already have/i);
+});
+
+test("saleng: buying lingerie for self adds to inventory", () => {
+  state().room = "candy_bar";
+  state().pendingEnc = "saleng";
+  state().salengCart = "lingerie";
+  state().money = 500;
+  run("buy lingerie");
+  assert.equal(state().itemLoc.saleng_lingerie, "inventory", "lingerie in inventory");
+  assert.match(lastOut(), /GIVE LINGERIE/i);
+});
+
+test("GIVE sandals to hostess: removes from inventory, adds favor, win prose", () => {
+  state().room = "lucky_tiger"; // lek is in lucky_tiger
+  state().itemLoc.saleng_sandals = "inventory";
+  const favorBefore = state().soc.drinks.lek || 0;
+  run("give sandals to lek");
+  assert.equal(state().itemLoc.saleng_sandals, null, "sandals removed from inventory");
+  assert.equal(state().soc.drinks.lek, favorBefore + 1, "favor increased");
+  assert.match(lastOut(), /sandal|shoe|fit/i);
+});
+
+test("GIVE heels to mamasan: removes from inventory, adds favor, mamasan prose", () => {
+  state().room = "candy_bar"; // candy (mamasan) is in candy_bar
+  state().itemLoc.saleng_heels = "inventory";
+  const favorBefore = state().soc.drinks.candy || 0;
+  run("give heels to candy");
+  assert.equal(state().itemLoc.saleng_heels, null, "heels removed from inventory");
+  assert.equal(state().soc.drinks.candy, favorBefore + 1, "favor increased");
+  assert.match(lastOut(), /heel|shoe|fit|approval|strap/i);
+});
+
+test("GIVE lingerie to hostess: removes from inventory, adds favor", () => {
+  state().room = "lucky_tiger"; // lek is in lucky_tiger
+  state().itemLoc.saleng_lingerie = "inventory";
+  const favorBefore = state().soc.drinks.lek || 0;
+  run("give lingerie to lek");
+  assert.equal(state().itemLoc.saleng_lingerie, null, "lingerie removed from inventory");
+  assert.equal(state().soc.drinks.lek, favorBefore + 1, "favor increased");
+  assert.match(lastOut(), /bag|lace|surprise/i);
+});
+
 test("haggling the peddler works exactly once", () => {
   state().lastPeddler = 99999; // exactly one peddler: the one we summon
   state().room = "stinky_bar";

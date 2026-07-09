@@ -710,6 +710,24 @@ const ITEMS = {
       "Tucked inside: a note in careful English: 'Farang — you buy Mot's dinner tonight. " +
       "Be more careful. — Oy'.",
   },
+  saleng_sandals: {
+    name: "saleng sandals", aliases: ["sandals", "shoes", "flats", "saleng sandals"],
+    portable: true, location: null,
+    desc: "Sequinned sandals from a saleng cart, carried in a thin plastic bag. " +
+      "Sized for a Thai woman's foot. They are not for you — but you know who they are for.",
+  },
+  saleng_heels: {
+    name: "saleng heels", aliases: ["heels", "platform heels", "shoes", "saleng heels"],
+    portable: true, location: null,
+    desc: "Platform heels from the saleng cart, still in the carry bag. " +
+      "Someone is going to look very good in these. You are not that someone.",
+  },
+  saleng_lingerie: {
+    name: "saleng lingerie", aliases: ["lingerie", "bra", "underwear", "lace", "slip", "saleng lingerie"],
+    portable: true, location: null,
+    desc: "A bag of lingerie from the saleng cart — lace, silk-adjacent, " +
+      "the kind of purchase that requires a recipient to make sense.",
+  },
 };
 
 // ── NPCs ───────────────────────────────────────────────────────────────────
