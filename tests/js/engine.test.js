@@ -2043,3 +2043,73 @@ test("apologize: mollifies the patron, burns heat once per bar, then it's words"
   run("sorry");
   assert.match(lastOut(), /forgives by default/);
 });
+
+test("flashlight in a go-go draws the no-photo warning; girls tease elsewhere", () => {
+  // walk into a go-go with the torch burning — the house assumes a camera
+  state().room = "lk_main";
+  state().battery = 50;
+  state().lightOn = true;
+  state().pendingEnc = null;
+  run("in"); // → KINKY
+  assert.equal(state().room, "kinky");
+  assert.match(lastOut(), /No photo. No video/i, "go-go photo warning");
+
+  // switching it on inside a go-go triggers the same house rule
+  run("light off"); // stands security down and resets the count
+  out = [];
+  run("light on");
+  assert.match(lastOut(), /No photo. No video/i, "toggle inside go-go");
+  run("light off");
+
+  // in a beer bar the hostess teases instead
+  out = [];
+  _rand = () => 0; // pin the tease variant
+  state().room = "buakhao_n";
+  state().lightOn = true;
+  run("e"); // → Lucky Tiger (Lek, hostess)
+  assert.match(lastOut(), /Lek/, "the hostess is the one who notices");
+  assert.doesNotMatch(lastOut(), /No photo/, "no camera panic in a beer bar");
+
+  // LOOK alone doesn't re-trigger the notice — only entering or toggling
+  out = [];
+  state().room = "lucky_tiger";
+  state().lightOn = true;
+  run("look");
+  assert.doesNotMatch(lastOut(), /beam|spotlight|torch/i, "LOOK alone stays quiet");
+});
+
+test("go-go flashlight escalation: two warnings, then security walks you out", () => {
+  state().room = "lk_main";
+  state().battery = 50;
+  state().lightOn = true;
+  state().pendingEnc = null;
+  run("in"); // → KINKY, warning 1 on entry
+  assert.equal(state().room, "kinky");
+  assert.match(lastOut(), /No photo. No video/, "warning 1");
+  out = [];
+  run("look"); // light still burning → warning 2 via the tick
+  assert.match(lastOut(), /OFF. Now/, "warning 2");
+  out = [];
+  run("look"); // still burning → ejected, complex-wide
+  assert.match(lastOut(), /walked out/, "security ends it");
+  assert.match(lastOut(), /famous in every bar in LK Metro/, "complex ban");
+  assert.notEqual(state().room, "kinky");
+  assert.ok(state().soc.banned.kinky !== undefined, "banned from the bar");
+
+  // compliance after the warning resets the count — no ejection
+  out = [];
+  state().room = "tequila_queen";
+  state().soc.banned = {};
+  state().lightWarn = { room: null, n: 0, mark: false };
+  state().lightOn = false;      // ejection leaves the torch burning
+  state().lastPeddler = 99999;  // Beach Road bar — keep the peddler out of the transcript
+  run("light on");
+  assert.match(lastOut(), /No photo/, "warned again in a fresh go-go");
+  run("light off");
+  assert.match(lastOut(), /refold into the corner/, "stand-down text");
+  assert.equal(state().lightWarn.n, 0);
+  out = [];
+  run("look", "look");
+  assert.doesNotMatch(lastOut(), /walked out/, "no ejection after compliance");
+  assert.equal(state().room, "tequila_queen");
+});

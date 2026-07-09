@@ -26,6 +26,7 @@ function newGame() {
     money: 0,
     battery: 13,
     lightOn: false,
+    lightWarn: { room: null, n: 0, mark: false }, // go-go no-photo escalation
     turns: 0,
     wingmanUntil: 0,     // G.turns before which a wing-woman is vouching for you
     darkStreak: 0,
@@ -92,6 +93,7 @@ function deserializeGame(s) {
   // older saves predate the encounter/mini-game systems — backfill the fields
   if (G.pendingEnc === undefined) G.pendingEnc = null;
   if (G.game === undefined) G.game = null;
+  if (!G.lightWarn) G.lightWarn = { room: null, n: 0, mark: false };
   if (!G.soc) {
     G.soc = { drinks: {}, mamaTreat: {}, bellAt: {}, bells: {}, heat: {},
       banned: {}, patronBusy: {}, patronMiffed: {}, bra: {}, drunk: 0 };
@@ -287,6 +289,10 @@ function _describeRoom(full) {
 function _tick() {
   G.turns++;
   G.nightTurn++;
+  // a torch still burning in a go-go escalates; `mark` spends this command's
+  // entry/toggle warning so one command never counts twice
+  if (G.lightWarn.mark) G.lightWarn.mark = false;
+  else if (G.lightOn && G.battery > 0 && _room().barType === "gogo") _gogoLightWarn();
   // the body keeps its own books
   if (G.nightTurn % 20 === 0 && G.soc.drunk > 0) G.soc.drunk--;
   if (G.nightTurn % 3 === 0) G.hunger++;
@@ -2987,6 +2993,7 @@ function _doGo(dirWord) {
   }
   G.room = to;
   _describeRoom(true);
+  _lightNotice(); // walking in with the torch burning gets you clocked
   // quiz night: walk in during the window and the microphone finds you
   if (_quizHere()) { _startQuiz(); return; }
   // a standing invitation, honoured: she said come, and you came
@@ -3630,10 +3637,90 @@ function _doLight(on) {
     G.lightOn = true;
     _say(`Flashlight on. (Battery: ${G.battery}% — it drains while it burns.)`);
     if (_room().dark) _describeRoom(true);
+    else _lightNotice();
   } else {
     if (!G.lightOn) { _say("It's already off."); return; }
     G.lightOn = false;
+    if (G.lightWarn.n > 0 && _room().barType === "gogo") {
+      G.lightWarn.room = null; G.lightWarn.n = 0;
+      _say("Flashlight off. The security shirts refold into the corner. The " +
+        "mamasan's smile returns at its usual wattage, as if nothing happened — " +
+        "because now, officially, nothing did.");
+      return;
+    }
+    G.lightWarn.room = null; G.lightWarn.n = 0;
     _say("Flashlight off. Battery preserved; nerves, less so.");
+  }
+}
+
+// A lit flashlight in a social space gets noticed. On a dark soi it's sense;
+// under working neon it's either a fool or a camera — and in a go-go the house
+// always assumes the camera. No photos is the one rule nobody bends.
+function _lightNotice() {
+  if (!G.lightOn || G.battery === 0 || _room().dark) return;
+  const r = _room();
+  const npcs = _npcsHere();
+  if (!r.barType && !npcs.length) return;
+  if (r.barType === "gogo") {
+    G.lightWarn.mark = true; // this command's warning is spent; the tick skips
+    _gogoLightWarn();
+    return;
+  }
+  const girl = npcs.find(id => NPC_ROLES[id] === "hostess");
+  let lines;
+  if (girl) {
+    const name = NPCS[girl].name;
+    lines = [
+      `${name} shields her eyes theatrically. "Hansum, why you have the torch? ` +
+        `You look for your money? I save you time: it's gone."`,
+      `${name} steps into the beam and strikes a pose. "Ooh, spotlight! You pay ` +
+        `me like a star too, na?" The other girls are already laughing.`,
+      `${name} leans over and gently pushes your phone hand down. "Tilac. The ` +
+        `neon works fine. You look like you hunt ghosts."`,
+    ];
+  } else if (r.barType) {
+    lines = [
+      "The bartender squints into your beam and points, wordlessly, at the " +
+        "fully functional lights overhead.",
+      "\"Power cut is finish since 2015, boss,\" someone offers from the rail, " +
+        "to general amusement.",
+    ];
+  } else {
+    const name = NPCS[npcs[0]].name;
+    lines = [
+      `${name} tracks your flashlight beam with open amusement. On a street lit ` +
+        `like a runway, you are the only one carrying your own sun.`,
+      `${name} flicks a phone light back at you across the street — a little ` +
+        `lighthouse conversation. You may be the joke here.`,
+    ];
+  }
+  _say(lines[Math.floor(_rand() * lines.length)], "dim");
+}
+
+// Go-go escalation: two warnings about the light, then security ends the
+// conversation. The counter is per-bar and resets when the light goes off
+// or you leave; `mark` stops the entry notice and the same command's tick
+// from counting as two warnings.
+function _gogoLightWarn() {
+  const w = G.lightWarn;
+  if (w.room !== G.room) { w.room = G.room; w.n = 0; }
+  w.n++;
+  const npcs = _npcsHere();
+  const mama = npcs.find(id => NPC_ROLES[id] === "mamasan");
+  const who = mama ? NPCS[mama].name : "The mamasan";
+  if (w.n === 1) {
+    _say(`${who} is at your elbow before the beam settles, one flat hand over ` +
+      "your phone, smile fixed: \"No photo. No video. House rule, tilac — the " +
+      "girls dance, nobody films.\" Two security shirts have already unfolded " +
+      "from the corner. Best switch that off.", "alert");
+  } else if (w.n === 2) {
+    _say(`${who} is back, and the smile is gone. \"OFF. Now.\" Behind her the ` +
+      "two security shirts have stopped pretending to watch the stage. The DJ " +
+      "has turned the music down half a notch, which somehow makes it worse.", "alert");
+  } else {
+    w.room = null; w.n = 0;
+    _say("Nobody says anything this time. The music doesn't even pause.", "alert");
+    _kickOut();
   }
 }
 
