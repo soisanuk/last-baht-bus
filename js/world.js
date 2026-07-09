@@ -1215,8 +1215,8 @@ const ENCOUNTERS = {
     hint: "(YES would be the traditional answer.)",
   },
   freelancer: {
-    rooms: ["beach_rd_s", "beach_rd_c", "beach_rd_n", "promenade"],
-    interactive: true, nightly: true, // resets every night — Beach Road always restocks
+    rooms: ["beach_rd_s", "beach_rd_c", "beach_rd_n", "promenade", "buakhao_n"],
+    interactive: true, nightly: true, // resets every night — Beach Road and band-night Buakhao restock
     th: "ไปไหนคะ", rom: "pai nai kha?",
     intro: "She's leaning on the promenade rail where the lamplight is kindest — no " +
       "bar, no mamasan, freelance and unhurried. “Going where, hansum? Tonight I " +

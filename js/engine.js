@@ -391,7 +391,8 @@ function _maybeEncounter() {
   const eligible = Object.keys(ENCOUNTERS).filter(id =>
     !G.encDone[id] && ENCOUNTERS[id].rooms.includes(G.room) &&
     (id !== "powerbank" || G.battery <= 30));
-  if (!eligible.length || _rand() > ENC_CHANCE) return;
+  const chance = ENC_CHANCE * (_bandNearby() ? 1.5 : 1);
+  if (!eligible.length || _rand() > chance) return;
   _startEnc(eligible[Math.floor(_rand() * eligible.length)]);
 }
 
@@ -1134,6 +1135,13 @@ function _isBandNight() { return G.day % 7 === 5 || G.day % 7 === 6; } // Fri or
 function _bandHere() {
   const r = _room();
   return !!(r.liveMusic && (r.musicEveryNight || _isBandNight()));
+}
+function _bandNearby() {
+  if (_bandHere()) return true;
+  return Object.values(_room().exits).some(to => {
+    const r = ROOMS[to];
+    return r && r.liveMusic && (r.musicEveryNight || _isBandNight());
+  });
 }
 
 function _startKiller() {
