@@ -13,6 +13,7 @@ const LADY_DRINK = 150;  // canon
 const BEER_PRICE = 80;   // your own big Chang, bar price
 const BELL_PRICE = 300;  // ring it and the round is on you
 const BRA_PRICE = 200;   // the mamasan's drawer novelty; makes fondling "interesting"
+const BAND_ROUND = 400;  // buying the band a round (≈ bell to the mama; girls prefer the real bell)
 const WINGMAN_TURNS = 15;// how long a friendly wing-woman's good word lasts
 const CHARGER_PRICE = 59;
 const SAFE_CASH = 3000;  // the emergency stash in the hotel room safe
@@ -153,7 +154,7 @@ const ROOMS = {
   stinky_bar: {
     name: "Stinky Bar",
     region: "Beach Road",
-    bar: "Stinky Bar", barType: "beer", pool: true,
+    bar: "Stinky Bar", barType: "beer", pool: true, liveMusic: true,
     desc: "An American-run beer bar that smells, in defiance of its name, of lime and " +
       "cue chalk. League trophies crowd the back bar; the table is brushed like a " +
       "putting green. Bert holds court from the owner's stool with a bottomless " +
@@ -219,6 +220,7 @@ const ROOMS = {
   myth_night: {
     name: "Myth Night Market",
     region: "Myth Night",
+    liveMusic: true,
     desc: "The newest bar complex in town: shipping-container bars, festoon lights, and " +
       "live-music stages wedged between Soi Buakhao and Second Road, directly across " +
       "from Central's glow. Young crowd, shared security in grey polos, craft beer at " +
@@ -230,7 +232,7 @@ const ROOMS = {
     name: "Candy Bar 2",
     region: "Myth Night",
     bar: "Candy Bar 2", barType: "beer",
-    outlet: true,
+    outlet: true, liveMusic: true,
     desc: "Candy's second front: the same rose-pink, the same spotless glasses, the " +
       "same bell over a newer till — the empire expands. Bee runs the floor with a " +
       "trainee's energy and the boss's exact smile. A framed photo of the original " +
@@ -320,10 +322,11 @@ const ROOMS = {
     name: "Soi Buakhao (North)",
     region: "Soi Buakhao",
     seven: true,
-    desc: "The expat artery: pharmacies, laundry, bars, repeat. Somewhere a coverband is " +
-      "doing that to 'Hotel California'. The market sprawl is south; LUCKY TIGER BAR " +
-      "roars quietly on the corner.",
-    exits: { w: "myth_night", n: "pattaya_klang", s: "buakhao_market", e: "lucky_tiger", in: "lucky_tiger" },
+    desc: "The expat artery: pharmacies, laundry, bars, repeat. ROCK FACTORY's two-storey " +
+      "stage looms on the corner — currently doing what every band in Thailand does to " +
+      "'Hotel California' and somehow getting away with it. LUCKY TIGER BAR is just east. " +
+      "The market sprawl is south.",
+    exits: { w: "myth_night", n: "pattaya_klang", s: "buakhao_market", e: "lucky_tiger", in: "rock_factory" },
   },
   buakhao_market: {
     name: "Buakhao Market",
@@ -357,10 +360,24 @@ const ROOMS = {
   lucky_tiger: {
     name: "Lucky Tiger Bar",
     region: "Soi Buakhao",
-    bar: "Lucky Tiger Bar", barType: "beer",
+    bar: "Lucky Tiger Bar", barType: "beer", liveMusic: true,
     desc: "Tiger stripes on the bar top, a golden waving cat with dead batteries, and a " +
       "pool table with a lean you could ski off. Loud, friendly, dangerous to wallets " +
       "in the normal, voluntary way.",
+    exits: { out: "buakhao_n" },
+  },
+  rock_factory: {
+    name: "Rock Factory",
+    region: "Soi Buakhao",
+    bar: "Rock Factory", barType: "beer",
+    liveMusic: true, musicEveryNight: true,
+    desc: "A two-storey live-music bar that earns its name: the sound hits you at the gate — " +
+      "guitar, bass, and drums in genuine conversation, not just backing-track volume. The " +
+      "stage is at the back, elevated two steps, a Filipino four-piece in matching black " +
+      "polos working through the classic-rock songbook with the conviction of people who " +
+      "have never once been wrong. A tip box balances on the monitor wedge. The crowd is " +
+      "looser than a go-go and livelier than an average beer bar — one or two faces here " +
+      "weren't waiting for a mamasan's nod before they showed up.",
     exits: { out: "buakhao_n" },
   },
   silk_rose: {
@@ -1312,6 +1329,7 @@ const QUESTS = {
 const QUIZ_BARS = [
   "candy_bar", "candy_bar_2", "lucky_tiger", "silk_rose", "jasmine_garden",
   "gold_rush", "starlight_bar", "midnight_sun", "stinky_bar", "khao_talo_bar",
+  "rock_factory",
 ];
 
 // {q, opts (3), a: correct index} — Pattaya street knowledge and survival Thai.
@@ -1341,6 +1359,7 @@ const CANON_BARS = [
   "Rainbow Girls Bar", "Paradise Nights Club", "Gold Rush Lounge",
   "Silk Rose Bar", "Club Mirage", "Jasmine Garden Bar",
   "Crystal Palace A-Go-Go", "Midnight Sun Bar", "Candy Bar",
+  "Rock Factory",
 ];
 
 const CANON_HOSTESSES = [

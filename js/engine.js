@@ -264,6 +264,12 @@ function _describeRoom(full) {
           "Starts at 20:00; walk in during and you're playing."), "dim");
     }
   }
+  if (_bandHere()) {
+    const isBar = !!r.barType;
+    _say("A live band is playing tonight." +
+      (isBar ? " (DANCE · SING · REQUEST [song] · TIP BAND · BUY ROUND FOR BAND)" :
+               " (DANCE · SING · REQUEST [song] · TIP BAND)"), "dim");
+  }
   if (r.barType) {
     const girl = _npcsHere().find(id => NPC_ROLES[id] === "hostess");
     _say(G.soc.patronBusy[G.room] ?
@@ -1124,6 +1130,11 @@ const KP_FIELD = [
 ];
 
 function _leagueTonight() { return G.day % 3 === 0; }
+function _isBandNight() { return G.day % 7 === 5 || G.day % 7 === 6; } // Fri or Sat
+function _bandHere() {
+  const r = _room();
+  return !!(r.liveMusic && (r.musicEveryNight || _isBandNight()));
+}
 
 function _startKiller() {
   if (!_room().pool) { _say("Killer needs a real table. The Stinky Bar's is the league's home felt."); return; }
@@ -3285,6 +3296,29 @@ function _doBuy(arg) {
     _maybeSelfBarfine(id);
     return;
   }
+  if (/\bband\b/.test(arg) && /\bround\b|\bdrink/.test(arg)) {
+    if (!_inBar()) { _say("You'd need to be inside the bar to put a round on the tab."); return; }
+    if (!_bandHere()) { _say("No band playing here tonight."); return; }
+    if (G.money < BAND_ROUND) {
+      _say(`A round for the band runs ฿${BAND_ROUND}. You have ฿${G.money}. The tip box ` +
+        "is cheaper — TIP BAND [amount].");
+      return;
+    }
+    const r = G.room;
+    G.money -= BAND_ROUND;
+    G.soc.bellAt[r] = G.turns;
+    G.soc.bells[r] = (G.soc.bells[r] || 0) + 1;
+    G.soc.heat[r] = 0;
+    delete G.soc.patronMiffed[r];
+    _say(`฿${BAND_ROUND} to the mama for the band. Four ice-cold Changs materialise on ` +
+      "the monitor wedge — the vocalist nods, the guitarist raises his bottle, the " +
+      "drummer doesn't stop playing but somehow conveys gratitude. The whole bar " +
+      `notes this. (฿${G.money} left.)`, "win");
+    _say("The girls approve of the gesture but point out, with their eyes, that the " +
+      "bell is still up there.", "dim");
+    _addHappy(2);
+    return;
+  }
   _say("Not for sale here.");
 }
 
@@ -3543,6 +3577,18 @@ function _doSmell() {
 }
 
 function _doListen() {
+  if (_bandHere()) {
+    const lines = [
+      "The band is mid-set: the guitarist squeezing a solo out of a song that has been " +
+        "squeezed a thousand times before and still surrendering something new.",
+      "Right now: a bass player who means it, a drummer keeping perfect time, and a " +
+        "vocalist whose English is accented and whose pitch is exact.",
+      "Four musicians doing the work of a jukebox and pulling it off by being visibly alive.",
+      "The drummer hits the downbeat like he's making a point to someone who isn't listening.",
+    ];
+    _say(lines[G.turns % lines.length]);
+    return;
+  }
   if (_inBar()) {
     _say("Ice settling in buckets, Connect Four counters clacking, and the " +
       "chorus of “HELLO WELCOME” as somebody richer walks past outside.");
@@ -3572,10 +3618,20 @@ function _doDance() {
     _say("You dance. The professionals up on the chrome observe with the mild " +
       "clinical interest of surgeons watching a man remove his own appendix. " +
       "One of them, kindly, copies you.");
+  } else if (_inBar() && _bandHere()) {
+    _say("You dance. The band — who have seen everything and played for all of it — " +
+      "lock in harder, the drummer hitting the groove where it helps. A hostess " +
+      "materialises at your elbow and either leads or follows, both equally convincing.");
+    _addHappy(2);
   } else if (_inBar()) {
     _say("You dance between the stools. A hostess joins you instantly and " +
       "without inquiry — enthusiasm is the house style — and for eight bars " +
       "of luk thung you are the floor show.");
+  } else if (_bandHere()) {
+    _say("You dance in front of the stage. The guitarist points his headstock at you " +
+      "approvingly. On the outside this looks ridiculous; on the inside you are having " +
+      "the most fun you've had since you stopped caring what it looked like.");
+    _addHappy(2);
   } else {
     _say("You dance alone on the pavement. A passing baht bus honks the beat, " +
       "which is generous, because you weren't keeping one.");
@@ -3583,13 +3639,76 @@ function _doDance() {
 }
 
 function _doSing() {
-  if (_inBar()) {
+  if (_inBar() && _bandHere()) {
+    _say("You add your voice. The band adjusts — subtly, professionally — and you're on " +
+      "pitch or something close enough that nobody here is grading. Three hostesses " +
+      "join the chorus and the song stops being yours, which is the best thing that " +
+      "can happen to it.");
+    _addHappy(2);
+  } else if (_inBar()) {
     _say("You give it a verse. Three hostesses join the chorus without asking " +
       "what the song is. It has never once mattered.");
+  } else if (_bandHere()) {
+    _say("You sing along from the crowd. The vocalist grins and points the microphone " +
+      "at you for a bar. The correct response is to commit completely, and you do.");
+    _addHappy(1);
   } else {
     _say("You sing to the street. Somewhere down the soi a karaoke bar " +
       "answers, worse. Honour is satisfied.");
   }
+}
+
+function _doBandRequest(song) {
+  const KNOWN_SONGS = [
+    ["hotel california", "Hotel California",
+      "The guitarist closes his eyes for a beat. 'We just played it.' A pause. " +
+      "'We'll play it again.' And they will."],
+    ["wonderwall", "Wonderwall",
+      "The bassist winces. 'Every night,' he says. 'Every. Night.' But the guitarist " +
+      "is already counting them in."],
+    ["sweet home alabama", "Sweet Home Alabama",
+      "The vocalist grins: 'Classic.' The drummer gets the snare crack on the " +
+      "downbeat exactly right."],
+    ["highway to hell", "Highway to Hell",
+      "The lead guitarist says nothing — just steps to the mic and plays the opening " +
+      "riff. The bar wakes up a little."],
+    ["brown eyed girl", "Brown Eyed Girl",
+      "A safe choice, diplomatically received. The hostesses know this one and they " +
+      "prove it, collectively and at volume."],
+    ["one more night", "One More Night",
+      "Phil Collins at eleven pm in Pattaya. The band plays it straight. You're not " +
+      "sure if that's brave or inevitable."],
+    ["smells like teen spirit", "Smells Like Teen Spirit",
+      "The drummer brightens visibly. It is the one song in the set where he is " +
+      "technically doing the most, and he knows it."],
+  ];
+  const sl = (song || "").toLowerCase().replace(/[^a-z ]/g, "").trim();
+  const match = KNOWN_SONGS.find(([k]) => sl.includes(k));
+  if (match) {
+    _say(`You request ${match[1]}. ${match[2]}`);
+    _addHappy(1);
+  } else if (sl.length > 1) {
+    _say(`The guitarist cups an ear. "${song}?" He shrugs — not in the current set. ` +
+      "He counterproposes Hotel California. There is always Hotel California.");
+  } else {
+    _say("REQUEST [song name] — the band will try to play it, if they know it. " +
+      "They almost certainly know Hotel California.", "dim");
+  }
+}
+
+function _doBandTalk() {
+  const lines = [
+    "The vocalist leans forward at the break: 'Pattaya — good crowd. You want a " +
+      "request? Put it in the box.' He means the tip box on the monitor wedge.",
+    "The guitarist, between songs: 'How long we been here? Four years. Go home? " +
+      "Home is expensive.' He hits a chord to end the conversation. It's a good chord.",
+    "The drummer doesn't take breaks — just adjusts his grip, sips from a water " +
+      "bottle, and checks his phone in the three minutes between sets. 'Request?' " +
+      "he says without looking up.",
+    "The bassist catches your eye. 'Don't ask us for Despacito,' she says. " +
+      "'We will play it and it will ruin both our nights.'",
+  ];
+  _say(lines[(G.turns + G.day) % lines.length]);
 }
 
 function _doTime() {
@@ -3647,6 +3766,21 @@ function _doTip(arg) {
   const amtM = arg.match(/(\d+)/);
   const amount = amtM ? parseInt(amtM[1], 10) : 20;
   const nameW = arg.replace(/\d+|฿|baht/g, " ").trim();
+  if (/\bband\b|\bmusicians?\b|tip.?box/.test(arg)) {
+    if (!_bandHere()) { _say("No band playing here tonight."); return; }
+    if (G.money < amount) { _say(`The tip box wants ฿${amount}; you have ฿${G.money}.`); return; }
+    G.money -= amount;
+    if (amount >= 100) {
+      _say(`฿${amount} into the tip box. The guitarist catches your eye mid-riff and ` +
+        "nods — you've been seen, which out here counts as a whole conversation. " +
+        `(฿${G.money} left.)`, "win");
+      _addHappy(1);
+    } else {
+      _say(`฿${amount} drops into the tip box on the monitor wedge. The band plays on, ` +
+        `professionally. (฿${G.money} left.)`);
+    }
+    return;
+  }
   if (!_inBar()) {
     if (_room().motosai) {
       _say("The piwins wave it away, grinning — you haven't ridden anywhere. Tips " +
@@ -3822,6 +3956,8 @@ const _HELP = `Common commands:
   THROW COVER [AT <lady>] (the ceiling game — warm her up first)
   BUY BRA FOR <lady> (฿200 — makes FONDLE more interesting)
   RING BELL (฿300, instant popularity) · TALK TO PATRON · BARFINE <lady>
+  Live music (Fri/Sat, Rock Factory every night):
+  DANCE · SING · REQUEST <song> · TIP BAND <amount> · BUY ROUND FOR BAND · TALK TO BAND
   EAT <food> · DRINK <thing> · BUY WATER / FOOD (street carts & 7-Elevens) · SLEEP (at the hotel)
   DIAGNOSE (how bad is it) · AGAIN or G (repeat last command)
   TIME · MAP · WAIT UNTIL <hour> · TIP <lady> <amount> · PHOTO · CHEERS
@@ -3847,7 +3983,7 @@ const _COMPLETE_VERBS = [
   "photo", "call", "shower", "withdraw", "cheers", "dance", "sing", "swim",
   "smell", "listen", "diagnose", "apologize", "quests", "accept", "abandon", "contact",
   "contacts", "message", "check messages", "send", "score", "wait", "again",
-  "help", "save", "load", "undo", "restart",
+  "request", "help", "save", "load", "undo", "restart",
 ];
 
 function _cInv() {
@@ -3886,7 +4022,8 @@ function _completePool(verb, ctx) {
     case "give":
       return ctx.length >= 2 ? _cNpcsHere() : _cInv().map(_cItemWord);
     case "buy": case "order":
-      return ["beer", "water", "lady drink for", "bra for", "charger", "toastie", "food"];
+      return ["beer", "water", "lady drink for", "bra for", "charger", "toastie", "food",
+        "round for band"];
     case "go": case "walk": case "head": case "enter":
       return Object.keys(_room().exits);
     case "ride": case "catch": case "bus": {
@@ -4041,16 +4178,24 @@ function doCommand(input) {
     case "drop": _doDrop(arg); break;
     case "i": case "inv": case "inventory": _doInventory(); break;
     case "read": _doRead(arg); break;
-    case "talk": case "chat": _doTalk(arg.replace(/^with /, ""), null); break;
+    case "talk": case "chat": {
+      if (/\bband\b|\bmusicians?\b|\bguitar|\bbass|\bdrummer|\bvocalist|\bsinger/.test(arg) && _bandHere()) {
+        _doBandTalk();
+      } else {
+        _doTalk(arg.replace(/^with /, ""), null);
+      }
+      break;
+    }
     case "ask": {
       const m = arg.match(/^(.+?) about (.+)$/);
       if (m) _doTalk(m[1], m[2]);
       else _doTalk(arg, null);
       break;
     }
-    case "request": { // song request = ask dj
+    case "request": { // song request = ask dj or live band
       if (_findNpc("dj")) _doTalk("dj", arg);
-      else _say("No DJ here to take requests.");
+      else if (_bandHere()) _doBandRequest(arg);
+      else _say("No DJ or band here to take requests.");
       break;
     }
     case "give": case "hand": case "deliver": {
