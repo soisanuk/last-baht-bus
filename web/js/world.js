@@ -1498,6 +1498,62 @@ const NPCS = {
     ],
   },
 
+  nit: {
+    name: "Nit", th: "นิด", emoji: "🧵",
+    room: "buakhao_market",
+    desc: "Mid-thirties, upcountry-neat, working the fabric stalls with the practised " +
+      "eye of a woman who buys to sell. Two checked laundry bags of folded cotton " +
+      "already at her feet. Something in the way she reads the market — which vendors " +
+      "she wais, which she doesn't — says she worked a soi like this once, and left " +
+      "it on her own terms.",
+    dialogue: [
+      { req: ["toldPhilTruth"],
+        text: "She is at the fabric stall, but the buying has stopped. The phone in " +
+        "her hand is dark. She looks at you for a long moment — word moves fast on " +
+        "this soi, and she has already done the arithmetic on who told him. " +
+        "\"Twelve years,\" she says, to nobody in particular. It is the exact thing " +
+        "Phil said. Then she picks up her bags and goes back to choosing cotton, " +
+        "because that is what she knows how to do.",
+        short: "She picks up her bags and goes back to choosing cotton." },
+      { req: ["warnedNit"],
+        text: "She catches your eye across the stall and gives you a small nod — the " +
+        "nod of a closed account. The Sunday call will happen on Sunday. It always " +
+        "has.",
+        short: "A small nod across the stall. The Sunday call will happen on Sunday." },
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "She wais politely — the reflex of a shopkeeper, not a bar girl. \"You " +
+        "are not buying fabric,\" she says, friendly and precise. \"I am. I have a " +
+        "shop in Surin — I come down two times a year for cotton. The market here is " +
+        "still the best price.\" She runs a thumb along a bolt of indigo without " +
+        "looking at it, the way other people check their phone.",
+        short: "\"Two times a year for cotton. Best price in the market.\"" },
+      { topic: "phil", text: "The name lands and something in her face adjusts — " +
+        "not closes, adjusts. \"You know Phil.\" It isn't a question. \"He is a good " +
+        "man. Twelve years.\" She folds a length of cotton in half, in half again. " +
+        "\"Every Sunday I call him. Every Sunday for twelve years, I never miss " +
+        "one.\" She says it the way you'd point at a wall you built with your own " +
+        "hands. Both things are true: it is an accounting, and she is proud of it." },
+      { topic: "shop", text: "\"Fabric shop, in the market road in Surin. Six years " +
+        "now.\" For the first time the warmth is entirely unguarded. \"I do school " +
+        "uniforms, monk robes, funeral cloth — the things people always need. Rich " +
+        "or poor, everyone's children go to school and everyone's mother dies.\" " +
+        "She pats the laundry bags. \"This cotton is for the uniforms. Term starts " +
+        "soon.\"" },
+      { topic: "somchai", req: ["readPhilPhone"], notFlags: ["toldPhilTruth", "warnedNit"],
+        text: "You say the name and her hands stop moving on the fabric. They stay " +
+        "exactly where they are. \"So.\" Not a denial. She looks at you the way a " +
+        "cashier looks at a large bill — checking the watermark. \"Somchai is my " +
+        "husband. Before Phil. During Phil. After Phil, if there is an after.\" She " +
+        "resumes folding, slower now. \"You think I steal from him. Tell me what he " +
+        "is missing. Twelve years — he is never sad one Sunday. Never lonely one " +
+        "visit. Everything he pays for, he receives.\" She ties the bundle off. " +
+        "\"So. You will tell him? Or you came to tell me you won't?\" She reads " +
+        "your face for the answer and accepts either one. \"Whatever you choose — " +
+        "he will hear it kindly on Sunday.\"",
+        sets: ["warnedNit"] },
+    ],
+  },
+
   bee: {
     name: "Bee", th: "ผึ้ง", emoji: "🐝",
     room: "candy_bar_2",
