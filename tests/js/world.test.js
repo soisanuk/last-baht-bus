@@ -49,9 +49,9 @@ test("every room is reachable from the start", () => {
   }
 });
 
-test("all 16 canon bars exist as enterable rooms", () => {
+test("all 19 canon bars exist as enterable rooms", () => {
   const barRooms = Object.values(ROOMS).filter(r => r.bar).map(r => r.bar);
-  assert.equal(CANON_BARS.length, 16);
+  assert.equal(CANON_BARS.length, 19);
   for (const bar of CANON_BARS) {
     assert.ok(barRooms.includes(bar), `${bar} missing from map`);
   }

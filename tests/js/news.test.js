@@ -81,12 +81,12 @@ test("engine: TV and paper read the feed when present, degrade without it", () =
   vm.runInContext(`
     engineInit(t => __out(t));
     newGame();
-    G.room = "candy_bar";
-    G.lastSaleng = 99999;
-    doCommand("watch tv");
-    doCommand("read paper");
-    doCommand("weather");
-    doCommand("scores");
+    G.room = "khao_talo_bar";
+    G.lastSaleng = 99999; G.lastPeddler = 99999;
+    doCommand("watch tv");    G.pendingEnc = null; G.lastSaleng = 99999; G.lastPeddler = 99999;
+    doCommand("read paper");  G.pendingEnc = null; G.lastSaleng = 99999; G.lastPeddler = 99999;
+    doCommand("weather");     G.pendingEnc = null; G.lastSaleng = 99999; G.lastPeddler = 99999;
+    doCommand("scores");      G.pendingEnc = null; G.lastSaleng = 99999; G.lastPeddler = 99999;
     doCommand("lottery");
   `, ctx);
   assert.match(out.join("\n"), /muay thai highlights/i, "TV fallback");

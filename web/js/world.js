@@ -341,8 +341,10 @@ const ROOMS = {
     desc: "The expat artery: pharmacies, laundry, bars, repeat. ROCK FACTORY's two-storey " +
       "stage looms on the corner — currently doing what every band in Thailand does to " +
       "'Hotel California' and somehow getting away with it. LUCKY TIGER BAR is just east. " +
-      "The market sprawl is south.",
-    exits: { w: "myth_night", n: "pattaya_klang", s: "buakhao_market", e: "lucky_tiger", in: "rock_factory" },
+      "The market sprawl is south. A small handwritten LK METRO arrow on a wall points " +
+      "down an alley — easy to miss, worth finding.",
+    exits: { w: "myth_night", n: "pattaya_klang", s: "buakhao_market", e: "lucky_tiger",
+             in: "rock_factory", alley: "lk_entrance" },
   },
   buakhao_market: {
     name: "Buakhao Market",
@@ -554,6 +556,68 @@ const ROOMS = {
       "Terry is in a recliner watching it with a beer, and has probably been there for " +
       "some time.",
     exits: { out: "soi6_street" },
+  },
+
+  // ─── LK Metro ───
+  lk_entrance: {
+    name: "LK Metro (Entrance)",
+    region: "LK Metro",
+    desc: "The alley mouth off Soi Buakhao — easy to walk past if you don't know it's there. " +
+      "A handwritten sign on the wall says LK METRO with an arrow, named for the hotel " +
+      "invisible from here. Ten metres in, the alley bends and opens up and suddenly you're " +
+      "somewhere. The no-entry sign for four-wheelers is doing its job: the only vehicles " +
+      "threading through are motorbikes, and the only people on them are very purposeful " +
+      "about where they're going.",
+    exits: { out: "buakhao_n", e: "lk_main" },
+  },
+  lk_main: {
+    name: "LK Metro (Main Alley)",
+    region: "LK Metro",
+    desc: "The first leg of the L: bars packed shoulder to shoulder, neon on both sides, " +
+      "sound bleeding from KINKY Go-Go to the north and SLUTTY Go-Go to the south until " +
+      "they're indistinguishable. Good energy — dense, close, the kind of loud that's a " +
+      "decision rather than an accident. A motorbike idles past carrying a girl in full " +
+      "sequins at a speed that's technically legal. The alley bends east at the far end.",
+    exits: { w: "lk_entrance", n: "kinky", s: "slutty", e: "lk_bend", in: "kinky" },
+  },
+  lk_bend: {
+    name: "LK Metro (Corner)",
+    region: "LK Metro",
+    desc: "The corner where the alley turns south. LAS VEGAS GO-GO burns at the end of " +
+      "the second leg — the signage outspends everything else in sight. The crowd thins " +
+      "slightly here: the regulars who know the place, the girls finishing a shift on the " +
+      "back of a motorbike, a few tourists who followed the sound far enough to find it. " +
+      "Less overwhelming than Walking Street; more like something you discovered.",
+    exits: { w: "lk_main", s: "las_vegas", in: "las_vegas" },
+  },
+  kinky: {
+    name: "KINKY Go-Go",
+    region: "LK Metro",
+    bar: "KINKY Go-Go", barType: "gogo",
+    desc: "KINKY in hot pink and black, chrome poles catching the light in a room that's " +
+      "working with what it's got. Good what-it's-got. The dancers are on their game and " +
+      "they know it; the crowd is almost entirely men who've been here before, which is its " +
+      "own kind of recommendation.",
+    exits: { out: "lk_main" },
+  },
+  slutty: {
+    name: "Slutty Go-Go",
+    region: "LK Metro",
+    bar: "Slutty Go-Go", barType: "gogo",
+    desc: "The name is the entire marketing budget and it works. SLUTTY is smaller than it " +
+      "looks from the door, warmer, fuller — a proper standing crowd most nights. The stage " +
+      "is close enough to the bar that the dividing line is mainly theoretical.",
+    exits: { out: "lk_main" },
+  },
+  las_vegas: {
+    name: "Las Vegas Go-Go",
+    region: "LK Metro",
+    bar: "Las Vegas Go-Go", barType: "gogo",
+    desc: "The signage budget of a casino, the floor plan of a go-go: LAS VEGAS in letters " +
+      "you can probably read from Soi Buakhao. Inside it earns it — the lights are right, " +
+      "the DJ is good, and the room has the particular buzz of a place that's been doing " +
+      "well since COVID redistributed the western traffic from Walking Street.",
+    exits: { out: "lk_bend" },
   },
 
   // ─── The Darkside ───
@@ -1001,6 +1065,60 @@ const NPCS = {
     ],
   },
 
+  malee: {
+    name: "Malee", th: "มาลี", emoji: "⚡",
+    room: "kinky",
+    desc: "The cashier — cropped hair, black polo, a lanyard with what looks like seventeen " +
+      "keys. She runs the KINKY till with the detached authority of someone who's counted " +
+      "more money than you've seen and found it unremarkable.",
+    dialogue: [
+      { topic: "wallet",
+        text: "\"Wallet gone?\" She doesn't look up from the till. \"Not here. We don't do " +
+          "that — bad for business.\" A pause, one eyebrow. \"Soi Buakhao side. Ask the " +
+          "mamasans at the beer bars. They keep track of everything that moves through this area.\"" },
+      { text: "\"Bar's open. Stage is running. If you want to sit, sit. If you want " +
+          "to stare at the door, outside is free.\" She says it with no particular malice.",
+        short: "\"Bar's open, stage is running. In or out.\"" },
+    ],
+  },
+
+  wan: {
+    name: "Wan", th: "วัน", emoji: "💫",
+    room: "slutty",
+    desc: "The mamasan of Slutty: compact, efficient, wearing a headset that may or may " +
+      "not be connected to anything. She's been on LK Metro since before it was worth " +
+      "being on, and carries that seniority in every glance.",
+    dialogue: [
+      { topic: "lk metro",
+        text: "\"Before COVID, nobody came here unless they knew.\" She surveys her bar with " +
+          "quiet satisfaction. \"Now the Walking Street boys find us and they don't go back. " +
+          "Same girls, better price, no tourists tripping over each other.\" She straightens " +
+          "a barstool. \"We did not get worse. WS got slower.\"" },
+      { text: "\"Welcome to Slutty.\" She says it the way you'd say 'good morning'. " +
+          "\"Drinks at the bar. Lady drinks when you're ready. Don't touch the stage.\"",
+        short: "\"Welcome. Drinks at the bar, lady drinks when ready, don't touch the stage.\"" },
+    ],
+  },
+
+  jane: {
+    name: "Jane", th: "เจน", emoji: "⭐",
+    room: "las_vegas",
+    desc: "A hostess at Las Vegas, sitting on the end of the bar with her legs crossed and " +
+      "a cocktail she's been nursing since before you arrived. She has the relaxed energy " +
+      "of someone who has already decided tonight will be fine.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Las Vegas!\" She gestures at the room like she's presenting it to you personally. " +
+          "\"Better than the real one, na — no sad carpet, and the ladies are much more " +
+          "beautiful than in Nevada.\" She tops up her cocktail without calling it a lady drink.",
+        short: "\"Better than the real Las Vegas. No sad carpet.\"" },
+      { topic: "wallet",
+        text: "\"Wallet? In LK Metro?\" She seems genuinely amused. \"Nobody steal here — " +
+          "bad energy for the regulars. You lose it somewhere else. Try Buakhao side, the " +
+          "mamasan at Candy Bar know everything about everybody.\"" },
+    ],
+  },
+
   nong: {
     name: "Nong", th: "น้อง", emoji: "🌸",
     room: "gold_rush",
@@ -1245,6 +1363,7 @@ const MOTOSAI_DESTS = {
   "beach road":     { room: "beach_rd_c", price: MOTOSAI_TOWN },
   "soi buakhao":    { room: "buakhao_market", price: MOTOSAI_TOWN },
   "tree town":      { room: "buakhao_s", price: MOTOSAI_TOWN },
+  "lk metro":       { room: "lk_entrance", price: MOTOSAI_TOWN },
   "soi 6":          { room: "soi6_street", price: MOTOSAI_TOWN },
   "jomtien":        { room: "jomtien_bus_stop", price: MOTOSAI_TOWN },
   "naklua":         { room: "naklua_rd", price: MOTOSAI_TOWN },
@@ -1273,7 +1392,7 @@ const ENCOUNTERS = {
     hint: "(Quick — do something.)",
   },
   bargirl: {
-    rooms: ["buakhao_n", "buakhao_market", "buakhao_s", "tt_entrance", "soi6_street", "ws_south"],
+    rooms: ["buakhao_n", "buakhao_market", "buakhao_s", "tt_entrance", "lk_entrance", "lk_main", "soi6_street", "ws_south"],
     interactive: false,
     th: "โถ น่าสงสาร", rom: "thoh, naa songsaan",
     intro: "A bargirl weaves out of the nearest doorway, somewhere past her fourth " +
@@ -1443,11 +1562,13 @@ const CANON_BARS = [
   "Silk Rose Bar", "Club Mirage", "Jasmine Garden Bar",
   "Crystal Palace A-Go-Go", "Midnight Sun Bar", "Candy Bar",
   "Rock Factory",
+  "KINKY Go-Go", "Slutty Go-Go", "Las Vegas Go-Go",
 ];
 
 const CANON_HOSTESSES = [
   "lek", "noi", "ping", "aom", "joy", "fon", "gift", "kwan",
   "candy", "nong", "pim", "oy", "bee", "mem",
+  "jane",
 ];
 
 // ── Bar social roles ────────────────────────────────────────────────────────
@@ -1458,9 +1579,9 @@ const CANON_HOSTESSES = [
 const NPC_ROLES = {
   lek: "hostess", noi: "hostess", ping: "hostess", aom: "hostess",
   joy: "hostess", fon: "hostess", gift: "hostess", kwan: "hostess",
-  nong: "hostess", pim: "hostess", bee: "hostess",
-  ploy: "cashier", aek: "cashier",
-  candy: "mamasan", oy: "mamasan", daeng: "mamasan", mem: "mamasan",
+  nong: "hostess", pim: "hostess", bee: "hostess", jane: "hostess",
+  ploy: "cashier", aek: "cashier", malee: "cashier",
+  candy: "mamasan", oy: "mamasan", daeng: "mamasan", mem: "mamasan", wan: "mamasan",
 };
 
 // The girls every bar knows by name — their barfine never gets waived,
