@@ -157,3 +157,19 @@ test("the safe PIN's clue flags both exist in dialogue", () => {
   assert.ok(allSets.includes("pinPart71"), "nothing sets pinPart71");
   assert.ok(allSets.includes("pinPart9"), "nothing sets pinPart9");
 });
+
+test("patrons: real home bars, complete profiles, unconditional fallback", () => {
+  assert.ok(Object.keys(PATRONS).length >= 4, "a respectable regulars' bench");
+  let hoppers = 0, homebodies = 0;
+  for (const [id, p] of Object.entries(PATRONS)) {
+    assert.ok(ROOMS[p.home], `${id} home ${p.home} missing`);
+    assert.ok(ROOMS[p.home].barType, `${id} home ${p.home} is not a bar`);
+    assert.ok(Number.isInteger(p.age) && p.age > 17 && p.age < 100, `${id} age`);
+    assert.ok(p.nat && p.name && p.desc && p.emoji, `${id} profile incomplete`);
+    assert.ok(p.dialogue.length > 0, `${id} has no dialogue`);
+    assert.ok(p.dialogue.some(d => !d.topic), `${id} has no fallback line`);
+    p.hops ? hoppers++ : homebodies++;
+  }
+  assert.ok(hoppers > 0, "somebody barhops");
+  assert.ok(homebodies > 0, "somebody never leaves their stool");
+});

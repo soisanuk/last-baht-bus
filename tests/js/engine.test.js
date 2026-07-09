@@ -2145,3 +2145,45 @@ test("Blue Dog: checkpoint show 18:00-19:00, sunset, one happy point a night", (
   run("look");
   assert.doesNotMatch(lastOut(), /checkpoint is in session/, "no show in the room desc");
 });
+
+test("patrons: hoppers drift by the hour, settle at home by 22:00, chat resets daily", () => {
+  // deterministic placement: same night + hour = same stool
+  state().nightTurn = 5; // 18:00 hour
+  const early = _patronRoom("nigel");
+  assert.equal(_patronRoom("nigel"), early, "no drift between looks");
+  assert.ok(ROOMS[early].barType, "hopper is in a bar");
+  // non-hopper never moves
+  assert.equal(_patronRoom("helmut"), "silk_rose");
+  assert.equal(_patronRoom("somsak"), "blue_dog");
+  // by 22:00 everyone is at their home bar
+  state().nightTurn = 45;
+  assert.equal(_patronRoom("nigel"), "lucky_tiger");
+  assert.equal(_patronRoom("chuck"), "tequila_queen");
+  assert.equal(_patronRoom("dave"), "stinky_bar");
+
+  // room description shows the rail; talk and topics work
+  state().room = "silk_rose";
+  state().pendingEnc = null; state().lastSaleng = 99999; state().lastPeddler = 99999;
+  out = [];
+  run("look");
+  assert.match(lastOut(), /Helmut \(61, German\)/, "patron on the rail");
+  out = [];
+  run("talk to helmut");
+  assert.match(lastOut(), /quality of life/i, "fallback line");
+  out = [];
+  run("ask helmut about stool");
+  assert.match(lastOut(), /evaluated all nine/, "topic line");
+  out = [];
+  run("ask helmut about stool");
+  assert.match(lastOut(), /No update required/, "terse on same-day repeat");
+  assert.doesNotMatch(lastOut(), /fan number two/, "the full spiel is not repeated");
+  // a new day resets the book — the stories are new again
+  state().day++;
+  out = [];
+  run("ask helmut about stool");
+  assert.match(lastOut(), /fan number two/, "full spiel again next day");
+  // examine works too
+  out = [];
+  run("x helmut");
+  assert.match(lastOut(), /third stool from the left/);
+});

@@ -28,6 +28,7 @@ function newGame() {
     lightOn: false,
     lightWarn: { room: null, n: 0, mark: false }, // go-go no-photo escalation
     blueDogDay: 0,       // last day the Blue Dog show paid its happy point
+    patronTalk: { day: 0, talked: {} }, // patron dialogue book, reset daily
     turns: 0,
     wingmanUntil: 0,     // G.turns before which a wing-woman is vouching for you
     darkStreak: 0,
@@ -96,6 +97,7 @@ function deserializeGame(s) {
   if (G.game === undefined) G.game = null;
   if (!G.lightWarn) G.lightWarn = { room: null, n: 0, mark: false };
   if (G.blueDogDay === undefined) G.blueDogDay = 0;
+  if (!G.patronTalk) G.patronTalk = { day: 0, talked: {} };
   if (!G.soc) {
     G.soc = { drinks: {}, mamaTreat: {}, bellAt: {}, bells: {}, heat: {},
       banned: {}, patronBusy: {}, patronMiffed: {}, bra: {}, drunk: 0 };
@@ -159,6 +161,64 @@ function _isDarkHere() {
 
 function _npcsHere() {
   return Object.entries(NPCS).filter(([, n]) => n.room === G.room).map(([id]) => id);
+}
+
+// ── Named patrons ──────────────────────────────────────────────────────────
+// Hoppers drift to a hash-chosen bar each hour until 22:00, then settle at
+// their home bar; non-hoppers never leave home. Pure function of
+// (vacation, day, hour, id): same night, same hour, same stool — no state,
+// no drift between LOOKs, shared-world-safe like _quizBars.
+const _PATRON_HOP_ROOMS = Object.keys(ROOMS).filter(id => ROOMS[id].barType);
+
+function _patronHour() { return Math.floor(G.nightTurn / 10); } // 0 = 18:00
+
+function _patronRoom(id) {
+  const p = PATRONS[id];
+  if (p.days && !p.days.includes(G.day % 7)) return null; // not his night out
+  if (!p.hops || _patronHour() >= 4) return p.home; // by 22:00 everyone's home
+  let h = G.vacation * 7919 + G.day * 104729 + _patronHour() * 48271 + 1;
+  for (const c of id) h = (h * 31 + c.charCodeAt(0)) % 2147483647;
+  h = (h * 48271) % 2147483647;
+  return _PATRON_HOP_ROOMS[h % _PATRON_HOP_ROOMS.length];
+}
+
+function _patronsHere() {
+  return Object.keys(PATRONS).filter(id => _patronRoom(id) === G.room);
+}
+
+function _findPatron(word) {
+  const w = word.toLowerCase();
+  const here = _patronsHere();
+  for (const id of here) {
+    if (id === w || PATRONS[id].name.toLowerCase() === w) return id;
+  }
+  for (const id of here) {
+    if (PATRONS[id].name.toLowerCase().startsWith(w)) return id;
+  }
+  return null;
+}
+
+// Same delivery contract as _deliver, but the seen-index book resets daily —
+// a patron's stories are new again every night, which is very true to life.
+function _patronTalk(id, topic) {
+  if (G.patronTalk.day !== G.day) G.patronTalk = { day: G.day, talked: {} };
+  const p = PATRONS[id];
+  let d = null;
+  for (const e of p.dialogue) {
+    if (topic ? e.topic !== topic && !(e.topic && topic.includes(e.topic)) : e.topic) continue;
+    d = e;
+    break;
+  }
+  if (!d) {
+    if (topic) { _patronTalk(id, null); return; }
+    _say(`${p.name} has said his piece for now.`);
+    return;
+  }
+  const idx = p.dialogue.indexOf(d);
+  const seen = G.patronTalk.talked[id] || (G.patronTalk.talked[id] = []);
+  const terse = seen.includes(idx) && !!d.short;
+  if (!seen.includes(idx)) seen.push(idx);
+  _say(terse ? d.short : d.text);
 }
 
 // where: "room", "inventory", or undefined (both, room first — so TAKE grabs
@@ -249,6 +309,11 @@ function _describeRoom(full) {
   if (items.length) _say("You can see: " + items.map(id => ITEMS[id].name).join(", ") + ".");
   const npcs = _npcsHere();
   if (npcs.length) _say("Here: " + npcs.map(id => `${NPCS[id].emoji} ${NPCS[id].name}`).join(", ") + ".");
+  const pats = _patronsHere();
+  if (pats.length) {
+    _say("At the rail: " + pats.map(id =>
+      `${PATRONS[id].emoji} ${PATRONS[id].name} (${PATRONS[id].age}, ${PATRONS[id].nat})`).join(", ") + ".");
+  }
   const exits = Object.keys(r.exits);
   if (exits.length) _say("Exits: " + exits.join(", ") + ".", "dim");
   if (r.busStop) _say("A baht bus can be caught here (ride bus to …).", "dim");
@@ -342,7 +407,8 @@ function _tick() {
   const _SALENG_REGIONS = new Set([
     "Beach Road", "Soi Buakhao", "Tree Town", "LK Metro", "Walking Street", "Soi 6", "Myth Night",
   ]);
-  if (!G.game && !G.pendingEnc && _inBar() && _SALENG_REGIONS.has(_room().region) &&
+  if (!G.game && !G.pendingEnc && _inBar() && _room().barType !== "pub" &&
+      _SALENG_REGIONS.has(_room().region) &&
       G.turns - G.lastSaleng >= 15 && _rand() < 0.10) {
     G.lastSaleng = G.turns;
     const types = ["food", "shoes", "lingerie", "snacks"];
@@ -3151,6 +3217,8 @@ function _doExamine(arg) {
   if (!arg) return _describeRoom(true);
   const npc = _findNpc(arg);
   if (npc) { _say(NPCS[npc].desc); return; }
+  const pat = _findPatron(arg);
+  if (pat) { _say(PATRONS[pat].desc); return; }
   const id = _findItem(arg);
   if (id) { _say(ITEMS[id].desc); return; }
   if (arg === "sign") return _doRead("sign");
@@ -3186,6 +3254,8 @@ function _doRead(arg) {
 function _doTalk(arg, topic) {
   const npc = _findNpc(arg);
   if (!npc) {
+    const pat = _findPatron(arg);
+    if (pat) { _patronTalk(pat, topic); return; }
     if (_inBar() && /patron|regular|expat|customer|guy|bloke|farang/.test(arg)) {
       _doPatron();
       return;
@@ -4343,7 +4413,10 @@ function _cInv() {
   return Object.keys(G.itemLoc).filter(id => G.itemLoc[id] === "inventory");
 }
 function _cItemWord(id) { return ITEMS[id].name.split(" ").pop().toLowerCase(); }
-function _cNpcsHere() { return _npcsHere().map(id => NPCS[id].name.toLowerCase()); }
+function _cNpcsHere() {
+  return [..._npcsHere().map(id => NPCS[id].name.toLowerCase()),
+    ..._patronsHere().map(id => PATRONS[id].name.toLowerCase())];
+}
 
 function _completePool(verb, ctx) {
   const girls = () => _npcsHere().filter(id => NPC_ROLES[id])
@@ -4362,6 +4435,8 @@ function _completePool(verb, ctx) {
             (!d.req || d.req.every(f => _flag(f))) &&
             (!d.notFlags || d.notFlags.every(f => !_flag(f)))).map(d => d.topic);
         }
+        const pat = _findPatron(ctx[1]);
+        if (pat) return PATRONS[pat].dialogue.filter(d => d.topic).map(d => d.topic);
         return [];
       }
       return _cNpcsHere();
