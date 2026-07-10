@@ -3,24 +3,14 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
-    "t": "Bangkok Walks in Lockstep with Pattaya, Ho Chi Minh City, Manila and Several Southeast Asian Hubs As Entertainment Tourism Explodes Into A H",
-    "s": "Travel And Tour World",
-    "d": "09 Jul 2026"
-  },
-  {
-    "t": "Driver tries to beat barrier at Pattaya railway crossing, gets stuck",
-    "s": "Thaiger",
-    "d": "08 Jul 2026"
-  },
-  {
     "t": "Jomtien’s rubbish problem refuses to go away",
     "s": "Thaiger",
     "d": "07 Jul 2026"
   },
   {
-    "t": "Friend suspects gambling debt link after man found dead on Pattaya beach",
+    "t": "Driver tries to beat barrier at Pattaya railway crossing, gets stuck",
     "s": "Thaiger",
-    "d": "07 Jul 2026"
+    "d": "08 Jul 2026"
   },
   {
     "t": "In Thailand’s sex tourism hub, bright lights flash, loud music blares – and underage girls are exploited",
@@ -43,23 +33,23 @@ var NEWS_FEED = [
     "d": "27 Jun 2026"
   },
   {
-    "t": "'Looksmaxxing' influencer Connor Murphy dead at age 32 after apparent lake drowning",
-    "s": "Fox News",
-    "d": "08 Jul 2026"
+    "t": "Australian arrested after teenage girl's body found in Thailand",
+    "s": "ABC News & Headlines – Australian Broadcasting Corporation",
+    "d": "27 Jun 2026"
+  },
+  {
+    "t": "Friend of Thai teen allegedly murdered by Australian man went to his condo after reporting her missing | Thailand",
+    "s": "The Guardian",
+    "d": "01 Jul 2026"
+  },
+  {
+    "t": "Looksmaxxing influencer dead in Thailand after running from cops: Reports",
+    "s": "NewsNation",
+    "d": "09 Jul 2026"
   },
   {
     "t": "Thailand lost a third of its Chinese tourists. It has not got them back.",
     "s": "Thaiger",
-    "d": "10 Jul 2026"
-  },
-  {
-    "t": "hololive production x Birdzilla store “SAWASDEE KAA THAILAND” Exclusive Collection and Pop-Up Store coming this July! | NEWS - hololive.holo",
-    "s": "hololive.hololivepro.com",
-    "d": "10 Jul 2026"
-  },
-  {
-    "t": "EVA Air hosts ‘Most Loved Airline 2026’ travel fair",
-    "s": "Bangkok Post",
     "d": "10 Jul 2026"
   },
   {
@@ -68,20 +58,30 @@ var NEWS_FEED = [
     "d": "09 Jul 2026"
   },
   {
+    "t": "hololive production x Birdzilla store “SAWASDEE KAA THAILAND” Exclusive Collection and Pop-Up Store coming this July! | NEWS",
+    "s": "ホロライブ公式サイト",
+    "d": "10 Jul 2026"
+  },
+  {
+    "t": "Russian man extradited from Thailand pleads not guilty in US cyber espionage case",
+    "s": "Bangkok Post",
+    "d": "10 Jul 2026"
+  },
+  {
     "t": "Thailand Approves $688 Million Investment by Nestle for Smart Factory, Distribution Center",
     "s": "Bloomberg.com",
     "d": "09 Jul 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-07-09","USD":33.44,"AUD":23.21,"GBP":44.8,"EUR":38.24};
+var FX_RATES = {"date":"2026-07-10","USD":33.31,"AUD":23.15,"GBP":44.72,"EUR":38.08};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-07-10","temp":32,"humid":65,"code":1,"hi":33,"rain":13};
+var WX_NOW = {"date":"2026-07-11","temp":29,"humid":76,"code":3,"hi":32,"rain":51};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-07","done":true,"h":"Argentina","hs":3,"a":"Egypt","as":2},{"d":"2026-07-07","done":true,"h":"Switzerland","hs":0,"a":"Colombia","as":0},{"d":"2026-07-09","done":true,"h":"France","hs":2,"a":"Morocco","as":0},{"d":"2026-07-10","done":false,"h":"Spain","hs":0,"a":"Belgium","as":0},{"d":"2026-07-11","done":false,"h":"Norway","hs":0,"a":"England","as":0},{"d":"2026-07-12","done":false,"h":"Argentina","hs":0,"a":"Switzerland","as":0},{"d":"2026-07-14","done":false,"h":"France","hs":0,"a":"QF W2","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-07-01","first":"751495","last2":"62","front3":["001","980"],"back3":["304","531"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4126,"date":"2026-07-09","baht":65250};
+var GOLD = {"usd":4104,"date":"2026-07-10","baht":64650};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":64347,"thb":2142119};
+var BTC = {"usd":63878,"thb":2126803};
