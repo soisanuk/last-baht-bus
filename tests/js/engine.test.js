@@ -2239,3 +2239,14 @@ test("the Phil triangle: read the phone, then tell him or warn her — not both 
   run("talk to nit");
   assert.match(lastOut(), /choosing cotton/, "she goes back to what she knows");
 });
+
+test("Danny never hops into the Stinky Bar — the ledger isn't square", () => {
+  for (let day = 1; day <= 21; day++) {
+    state().day = day;
+    for (let h = 0; h < 4; h++) {
+      state().nightTurn = h * 10;
+      assert.notEqual(_patronRoom("danny"), "stinky_bar",
+        `day ${day} hour ${h}: Danny walked into Bert's bar`);
+    }
+  }
+});

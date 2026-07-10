@@ -179,7 +179,12 @@ function _patronRoom(id) {
   let h = G.vacation * 7919 + G.day * 104729 + _patronHour() * 48271 + 1;
   for (const c of id) h = (h * 31 + c.charCodeAt(0)) % 2147483647;
   h = (h * 48271) % 2147483647;
-  return _PATRON_HOP_ROOMS[h % _PATRON_HOP_ROOMS.length];
+  // some patrons have bars they will not set foot in (creditors, history)
+  let i = h % _PATRON_HOP_ROOMS.length;
+  while (p.avoids && p.avoids.includes(_PATRON_HOP_ROOMS[i])) {
+    i = (i + 1) % _PATRON_HOP_ROOMS.length;
+  }
+  return _PATRON_HOP_ROOMS[i];
 }
 
 function _patronsHere() {

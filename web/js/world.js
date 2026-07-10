@@ -1451,6 +1451,15 @@ const NPCS = {
         "telling him he's special — the receipt at two a.m. says thirty thousand baht " +
         "and he can't tell you where it went.\" He drains the Budweiser. \"The free " +
         "drink is a business investment, bud. The cheapest one they'll make all night.\"" },
+      { topic: "danny", text: "The Budweiser stops an inch off the bar. \"Danny " +
+        "the Coin Guy.\" He sets it down with exaggerated care, the way you " +
+        "handle something instead of someone. \"Eighty thousand baht of mine in " +
+        "'PattayaChain,' bud. Whole pitch, whitepaper, the works — I've been " +
+        "hustled by professionals on three continents and this one got me with " +
+        "a PowerPoint.\" He shrugs, genuinely more amused than angry. \"Cost of " +
+        "tuition. But he knows the rule: he doesn't drink in my bar till the " +
+        "ledger's square. You'll notice he never does. Man keeps exactly one " +
+        "kind of promise.\"" },
       { topic: "shame", text: "He stares at the pool table for a while. \"The ones " +
         "who worry me aren't the ones who complain. Complain all day — fine, they're " +
         "still talking. It's the ones who stopped bragging.\" The Budweiser goes " +
@@ -2131,6 +2140,14 @@ const PATRONS = {
         "then they made the rest.\" He lights the successor Marlboro off the " +
         "first. \"A man needs a rule and a exception. That's mine.\"",
         short: "\"Canadians. Don't start. Except Davey — they made exactly one good one.\"" },
+      { topic: "danny", text: "The cigarette stops halfway. \"Do NOT.\" A long " +
+        "drag, a visible decision not to raise his voice. \"Hundred and twenty " +
+        "thousand baht. A CANADIAN — I broke my own rule for a Canadian because " +
+        "Davey vouched, and Davey vouches for weather.\" Smoke leaves him like " +
+        "pressure venting. \"'Illiquid.' You know what else is illiquid? My " +
+        "hands around his neck, pending. He sees me come in a bar, he remembers " +
+        "an appointment.\" He stubs the cigarette. \"The exception list stays " +
+        "at one, and it is not him.\"" },
       { topic: "angela", text: "\"Ang? Yeah.\" Smoke, consideration. \"Class behind " +
         "me at the schoolhouse. Sharp — better accent than mine and I'd been at " +
         "it longer, which I did not enjoy.\" He taps ash. \"Wasn't friends with " +
@@ -2198,6 +2215,14 @@ const PATRONS = {
         "\"Beer three's coming. Consider yourself warned, buddy. And beer four—\" " +
         "he winks enormously \"—beer four is a whole other show, eh?\"",
         short: "\"Three beers is dancing. That's just science. Beer four is a whole other show.\"" },
+      { topic: "danny", text: "\"Danny! Oh, Danny's okay, eh?\" This is clearly a " +
+        "minority position and he holds it with total serenity. \"I put in " +
+        "fifteen thousand — my emergency fund, took me two years to save it.\" " +
+        "A cheerful sip. \"Drew says I should be furious. But Danny showed me " +
+        "the chart, and buddy, the chart went UP before it went away. I saw it " +
+        "go up. That was pretty exciting for a Tuesday, eh?\" He shrugs " +
+        "enormously. \"He says I get paid back first when it relaunches. Drew " +
+        "says there's no relaunch. One of them's right, eh? Exciting either way.\"" },
       { topic: "prince albert", text: "\"Oh — buddy! Did Drew tell you?\" He is " +
         "glowing with civic pride and his hands are already at his belt buckle. " +
         "\"Vancouver, '96. Lost a bet, kept the winnings, eh?\" The bar's early-" +
@@ -2322,6 +2347,120 @@ const PATRONS = {
         "another look. \"I tried the soi once. Nice girls. Loud planet. I do " +
         "better with a pane of glass between me and 1999.\"",
         short: "\"Terry holds the corner seat. It's load-bearing. We've never discussed it.\"" },
+    ],
+  },
+
+  danny: {
+    name: "Danny", emoji: "💪", age: 50, nat: "Canadian",
+    home: "club_mirage", hops: true, avoids: ["stinky_bar"], // the ledger isn't square
+    desc: "Fifty, but built like a rendering of forty — tank top, veins, a full " +
+      "sleeve of tattoos that reads like a rap sheet of previous personalities. " +
+      "He is always mid-conversation with somebody about an opportunity, and " +
+      "always angled so he can see the door. Notably, he is never seen anywhere " +
+      "near the Stinky Bar of his own free will.",
+    dialogue: [
+      { text: "\"Hey — hey, big guy.\" You have been selected. The handshake " +
+        "arrives with a shoulder squeeze, warm as a heat lamp. \"Danny. Windsor, " +
+        "Ontario, originally — twenty years moving cars, top salesman three years " +
+        "running, and then I saw where the REAL market was going.\" He taps his " +
+        "temple. \"I don't sell cars anymore, bro. I sell the future.\" He is " +
+        "already reaching for his phone. \"You hold any crypto? Doesn't matter. " +
+        "Sit down. Two minutes.\"",
+        short: "\"Danny. I don't sell cars anymore, bro. I sell the future. Two minutes.\"" },
+      { topic: "crypto", text: "The phone is out and a chart is going up on it — " +
+        "cropped, you notice, at a flattering moment. \"Ground floor, bro: " +
+        "SOI-Coin. Tokenized nightlife. Every lady drink on the blockchain, " +
+        "loyalty points that MOON.\" The pitch has the polished cadence of the " +
+        "dealership, retooled. \"I've got a guy in Dubai, I've got a guy in " +
+        "Phnom Penh, and the smart-contract guy is basically almost out of " +
+        "prison. Pre-sale closes Friday.\" It has closed every Friday for a " +
+        "year. \"I like your face, so I'm telling you first.\"",
+        short: "\"SOI-Coin, bro. Tokenized nightlife. Pre-sale closes Friday.\" It always does." },
+      { topic: "debt", text: "The warmth drops one degree; the smile holds. " +
+        "\"Whoa — okay. I see Bert's been talking. Or the linguist.\" He " +
+        "recalibrates. \"Nobody LOST anything, bro. PattayaChain didn't fail, " +
+        "the exchange failed — totally different thing. The funds aren't gone, " +
+        "they're ILLIQUID.\" The word arrives polished from frequent use. \"Bert " +
+        "gets his eighty back with interest when we relaunch. Drew's hundred-" +
+        "twenty, same.\" A pause, the first unpolished thing about him: \"And " +
+        "Davey gets his fifteen back first. That one—\" he rolls a shoulder, " +
+        "uncomfortable inside his own tank top \"—that one I feel, bro. Guy " +
+        "drinks four beers a week. Don't tell him I said that.\"",
+        short: "\"Not lost, bro. ILLIQUID.\" But Davey gets his fifteen back first." },
+      { topic: "tattoos", text: "He rotates the sleeve like a dealer showing " +
+        "trims. \"Full history, bro. The maple leaf — obviously. The tiger's " +
+        "from the dealership days, 'Top Gun' underneath, that was my thing on " +
+        "the floor.\" Further down: a Bitcoin logo, done large and confident. " +
+        "Below it, something moon-shaped, extensively reworked into what is now " +
+        "maybe a wolf. \"That one's a wolf.\" It was not always a wolf. \"We " +
+        "don't talk about what it was, bro. Cost me more to fix than to get.\"",
+        short: "\"That one's a wolf now.\" It was not always a wolf." },
+      { topic: "steroids", text: "\"Bro, it's not — okay, it's TRT. Doctor " +
+        "supervised.\" The doctor is a pharmacy on Soi Buakhao with a laminated " +
+        "menu. \"Fifty years old. You see this?\" He performs a brief, " +
+        "unsolicited flex; two hostesses applaud out of professional courtesy. " +
+        "\"In Windsor I'd be some guy at the end of the bar. Here I'm — " +
+        "PRESENCE, bro. Presence is capital. The body is the brand.\" He " +
+        "resettles the tank top. \"Also the pharmacy doesn't ask questions, " +
+        "which I respect enormously as a business model.\"",
+        short: "\"It's TRT, bro. The body is the brand.\" The pharmacy has a laminated menu." },
+    ],
+  },
+
+  josey: {
+    name: "Josey", emoji: "🏋️", age: 32, nat: "Australian",
+    home: "rock_factory", hops: false,
+    desc: "Thirty-two, Australian, shoulders that still remember lane ropes, in " +
+      "gym wear that is clearly working clothes rather than costume. She has a " +
+      "regular table by the stage with sightlines on the drummer, a phone on a " +
+      "small tripod she mostly ignores, and the settled ease of someone who is " +
+      "exactly where she decided to be.",
+    dialogue: [
+      { text: "\"Josey.\" Firm handshake, the grip of someone who still trains " +
+        "like it's her job — because it partly is. \"Melbourne, originally. " +
+        "Pattaya going on four years.\" On stage the band lands a chorus and " +
+        "she glances over, entirely involuntarily, at the drummer, who does " +
+        "not drop a beat and grins anyway. \"Sit down if you like this table — " +
+        "best sound in the room. I measured. With an app. I'm not proud of it.\"",
+        short: "\"Josey. Best sound in the room — I measured. With an app.\"" },
+      { topic: "freedom", text: "\"Why Pattaya?\" She turns her glass, deciding " +
+        "how much of the interview version to give you. \"Back home I was a " +
+        "headline. Two years of being a Discussion — my face on panel shows " +
+        "with the sound off in gyms I used to train in.\" A shrug that has done " +
+        "a lot of work over the years and got efficient at it. \"Here? I'm " +
+        "Josey. I lift in the morning, I film the bands at night, the " +
+        "seven-eleven bloke calls me 'sister' and sells me a toastie.\" She " +
+        "taps the table once. \"Nobody here needs me to be a Conversation. " +
+        "That's the whole visa. Freedom's a quiet thing, turns out.\"",
+        short: "\"Back home I was a headline. Here I'm Josey. Freedom's a quiet thing.\"" },
+      { topic: "athlete", text: "\"Swimming. Two hundred fly, nationals — I was " +
+        "ranked, I'll leave it there.\" She says it the way you close a door " +
+        "gently. \"The medals live in a box at Mum's. The sport and I... " +
+        "finished with each other, and honestly the sport was always going to " +
+        "outlive me anyway. They all do.\" She flexes one hand, an old habit. " +
+        "\"What I kept was the four-fifty alarm and the belief that you get " +
+        "better on the days you don't feel like it. Turns out that transfers " +
+        "to absolutely everything.\"",
+        short: "\"Two hundred fly, nationals. I kept the 4:50 alarm. It transfers.\"" },
+      { topic: "content", text: "\"Fitness and the live music scene — that's " +
+        "the channel. Hotel gym reviews, band showcases, where to eat clean " +
+        "at two a.m.\" She nods at the tripod, currently pointed at nothing. " +
+        "\"The algorithm keeps begging me for Walking Street chaos and bar " +
+        "girl 'exposés'. Not my lane. I ask the band first, I never film the " +
+        "staff without a yes, and I pay for my own drinks on camera.\" A dry " +
+        "look. \"Eight hundred thousand followers on the strength of a " +
+        "Filipina vocalist nailing Zombie once a week. The algorithm copes.\"",
+        short: "\"Fitness and live music. I ask first. The algorithm copes.\"" },
+      { topic: "drummer", text: "The look she throws the stage answers before " +
+        "she does. \"Jun. Three years behind that kit, holds the whole band " +
+        "together and lets the guitarist take the credit — that tells you " +
+        "everything about him, honestly.\" The drummer, aware he is being " +
+        "discussed, plays a tiny unnecessary fill. She refuses to smile and " +
+        "fails. \"I came in to film the band. He watched me count the bars in " +
+        "before I hit record — drummers notice timing.\" She turns back. " +
+        "\"Two years now. His mum in Cebu knits me things for a climate she " +
+        "refuses to believe in. I'm keeping all of it. Him included.\"",
+        short: "\"Jun. Drummers notice timing. Two years. I'm keeping him.\"" },
     ],
   },
 
