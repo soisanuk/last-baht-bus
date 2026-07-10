@@ -2352,12 +2352,13 @@ const PATRONS = {
 
   danny: {
     name: "Danny", emoji: "💪", age: 50, nat: "Canadian",
-    home: "club_mirage", hops: true, avoids: ["stinky_bar"], // the ledger isn't square
+    home: "club_mirage", hops: true,
+    avoids: ["stinky_bar", "las_vegas"], // the map of his debts, drawn in bars
     desc: "Fifty, but built like a rendering of forty — tank top, veins, a full " +
       "sleeve of tattoos that reads like a rap sheet of previous personalities. " +
       "He is always mid-conversation with somebody about an opportunity, and " +
       "always angled so he can see the door. Notably, he is never seen anywhere " +
-      "near the Stinky Bar of his own free will.",
+      "near the Stinky Bar — or Las Vegas a-go-go — of his own free will.",
     dialogue: [
       { text: "\"Hey — hey, big guy.\" You have been selected. The handshake " +
         "arrives with a shoulder squeeze, warm as a heat lamp. \"Danny. Windsor, " +
@@ -2404,6 +2405,15 @@ const PATRONS = {
         "resettles the tank top. \"Also the pharmacy doesn't ask questions, " +
         "which I respect enormously as a business model.\"",
         short: "\"It's TRT, bro. The body is the brand.\" The pharmacy has a laminated menu." },
+      { topic: "reginald", text: "The pitch stops. Completely. It is the first " +
+        "time you have seen the machine idle. \"Reg? We're good. Me and Reg " +
+        "are all good.\" His eyes do one lap of the room. \"Why. Did he say " +
+        "something?\" A pause you could park a truck in. \"What did he say, " +
+        "exactly?\" He rallies, badly: \"Look — that situation is basically " +
+        "resolved, there's a structure in place, it's—\" he does not say " +
+        "illiquid. Even Danny knows not to say illiquid about Reg's money. " +
+        "\"Anyway. I gotta bounce, bro. Early gym.\"",
+        short: "\"Me and Reg are all good. What did he say, exactly?\" Early gym, apparently." },
     ],
   },
 
@@ -2461,6 +2471,66 @@ const PATRONS = {
         "\"Two years now. His mum in Cebu knits me things for a climate she " +
         "refuses to believe in. I'm keeping all of it. Him included.\"",
         short: "\"Jun. Drummers notice timing. Two years. I'm keeping him.\"" },
+    ],
+  },
+
+  reginald: {
+    name: "Reginald", emoji: "🥂", age: 60, nat: "British",
+    home: "las_vegas", hops: true,
+    desc: "Sixty and annoyingly aware that he doesn't look it: linen shirt with " +
+      "exactly the right number of buttons open, a tan that took discipline, " +
+      "silver hair with a part you could draw a property line down. He holds a " +
+      "glass like a man who used to be paid to make rooms enjoy themselves — " +
+      "because he was. Wherever he stands becomes, gradually, the centre.",
+    dialogue: [
+      { text: "\"Reginald.\" The handshake comes with the full beam, and you get " +
+        "the brief, disorienting sense of being the most interesting person he's " +
+        "met all year. \"Thirty years in the club trade — Soho, then Essex, then " +
+        "places we needn't itemize. I ran rooms, dear boy. Now I attend them.\" " +
+        "He surveys the bar with a professional eye. \"This one's running at " +
+        "about sixty percent. Watch — I'll have it at eighty by midnight without " +
+        "leaving this stool. It's a craft. Somebody has to keep standards up.\"",
+        short: "\"Reginald. I ran rooms, dear boy. Now I attend them.\" Sixty percent, rising." },
+      { topic: "party", text: "\"A party is a fire, dear boy — you don't light " +
+        "the whole thing, you light three corners and let it spread.\" He " +
+        "counts on manicured fingers: \"Buy the quietest table a round, not " +
+        "the loudest. Request a song for someone ELSE. And the bell—\" he " +
+        "wags a finger \"—the bell is a defibrillator, not a toy. You ring it " +
+        "when the room's heart stops, not when yours does.\" He sips. \"Thirty " +
+        "years of licensed premises, and the whole trade fits on a napkin. The " +
+        "rest is knowing when to leave — which is early, looking fabulous, " +
+        "while they're still sorry.\"",
+        short: "\"Light three corners and let it spread. The bell is a defibrillator, not a toy.\"" },
+      { topic: "ladyboys", text: "\"I'll assume you're asking as a gentleman.\" " +
+        "The beam recalibrates, one candle warmer. \"I've been flexible since " +
+        "before your country was, dear boy. And the ladyboys of this town — the " +
+        "polished ones, the cabaret girls, the ones who put the WORK in — are, " +
+        "pound for pound, the most glamorous women in Southeast Asia. Presence, " +
+        "wit, cheekbones you could sign contracts on.\" He raises the glass to " +
+        "no one in particular; somewhere on Beach Road, a tall silhouette " +
+        "probably feels it. \"Beauty is beauty. Only the dull need it filed.\"",
+        short: "\"Beauty is beauty, dear boy. Only the dull need it filed.\"" },
+      { topic: "clubs", text: "\"Soho in the eighties, Essex in the nineties — " +
+        "two rooms of my own by ninety-five.\" The polish stays; something " +
+        "underneath it goes still. \"You didn't run doors in that trade without " +
+        "meeting... colourful investors. Men who counted in favours.\" He " +
+        "straightens a cufflink that didn't need it. \"I sold up in '09. " +
+        "Quickly. The margin between 'sold up' and 'got out' is a matter for my " +
+        "memoirs, which will be published posthumously, for everyone's " +
+        "comfort.\" The beam returns to full. \"Anyway — Thailand. Better " +
+        "weather, better company, fewer shovels.\"",
+        short: "\"Sold up in '09. Quickly. The memoirs are posthumous, for everyone's comfort.\"" },
+      { topic: "danny", text: "The glass goes down without a sound, which is " +
+        "somehow louder than slamming it. \"Daniel. Yes. Two hundred thousand " +
+        "baht of mine is currently 'illiquid.'\" He smiles, and for exactly one " +
+        "second you see a much older kind of club owner — the back office, the " +
+        "door team, the ledger that always balanced eventually. \"I'll tell you " +
+        "this once, dear boy, because I like you: if I didn't love living in " +
+        "this country quite so much, Danny Boy would be found dead in a ditch " +
+        "one day. Face down. Tank top and all.\" The beam switches back on, " +
+        "instant and immaculate. \"But I DO love it here. So he gets to keep " +
+        "jogging. Isn't Thailand marvellous? Another drink?\"",
+        short: "\"If I didn't love it here quite so much... but I do. So he keeps jogging.\"" },
     ],
   },
 
