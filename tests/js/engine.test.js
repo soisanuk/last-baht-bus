@@ -2257,6 +2257,7 @@ test("CHECKOUT: swap hotels at the start of an evening; the old key stops workin
   state().stage = "vacation";
   state().room = "hotel_room";
   state().nightTurn = 3;
+  state().money = 20000; // fund the tour so rent never downgrades us mid-test
   state().pendingEnc = null; state().lastSaleng = 99999; state().lastPeddler = 99999;
 
   // act 1 gating: a fresh game can't check out
@@ -2310,4 +2311,91 @@ test("CHECKOUT: swap hotels at the start of an evening; the old key stops workin
   out = [];
   run("checkout");
   assert.match(lastOut(), /the wallet is the whole adventure/);
+});
+
+test("hotel economics: rent, the downgrade ladder, the book, and the grace note", () => {
+  state().flags.act1Done = true;
+  state().flags.hasWallet = true;
+  state().stage = "vacation";
+  state().pendingEnc = null; state().lastSaleng = 99999; state().lastPeddler = 99999;
+
+  // a funded Metropole guest pays ฿1300 at wake
+  state().hotel = "metropole";
+  state().room = "metropole_room";
+  state().money = 5000;
+  run("sleep");
+  assert.equal(state().money, 3700, "the folio slides under the door");
+  assert.equal(state().hotel, "metropole");
+
+  // ฿500 in pocket: can't make the Metropole, can make the Sabai — the ladder
+  state().money = 500;
+  state().room = "metropole_room";
+  run("sleep");
+  assert.equal(state().hotel, "sabai", "stepped down toward the Sabai Palms");
+  assert.equal(state().room, "hotel_room");
+  assert.equal(state().money, 100, "and paid the ฿400 there");
+
+  // flat broke at the Sabai: the book opens, capped, with a happiness pinch
+  state().money = 0;
+  state().happy = 10; // off the floor so the pinch is measurable
+  const h0 = state().happy;
+  run("sleep");
+  assert.equal(state().hotelDebt, 400, "on the book");
+  assert.equal(state().happy, h0 - 1, "the clerk's kindness weighs");
+  state().hotelDebt = 1900;
+  run("sleep");
+  assert.equal(state().hotelDebt, 2000, "the book caps — no spiral");
+
+  // the town catches you: Bert settles a heavy book, once
+  state().room = "beach_rd_n";
+  out = [];
+  run("in"); // → Stinky Bar
+  assert.match(lastOut(), /squared/i, "Bert handles it");
+  assert.equal(state().hotelDebt, 0);
+  assert.ok(state().flags.tabSettled);
+  state().hotelDebt = 900;
+  out = [];
+  run("out", "in");
+  assert.equal(state().hotelDebt, 900, "grace is once per game");
+
+  // flush again: the book settles itself at the desk
+  state().hotelDebt = 600;
+  state().money = 5000;
+  state().room = "hotel_room";
+  run("sleep");
+  assert.equal(state().hotelDebt, 0, "debt cleared on the way past the desk");
+  assert.equal(state().money, 5000 - 600 - 400);
+
+  // the Sabai quiet perk: hangover wakes one size smaller
+  state().day = 2; // rewind the calendar — the week must not end mid-test
+  state().money = 5000;
+  state().soc.drunk = 3;
+  state().room = "hotel_room";
+  run("sleep");
+  assert.equal(state().thirst, 40 + 2 * 6, "one size off the morning after");
+
+  // Queen Vic balcony: WATCH SOI pays once a night
+  state().hotel = "queenvic";
+  state().room = "qv_room";
+  state().blueDogDay = 0;
+  const h1 = state().happy;
+  out = [];
+  run("watch soi");
+  assert.match(lastOut(), /Terry raises his beer/);
+  assert.equal(state().happy, h1 + 1);
+  run("watch soi");
+  assert.equal(state().happy, h1 + 1, "the nightly point is spent");
+
+  // Metropole safe: the robbery stays cheap
+  state().day = 2;
+  state().hotel = "metropole";
+  state().room = "promenade";
+  state().money = 8000;
+  state().itemLoc.fake_rolex = "inventory";
+  state().rng = 40000; // the robber
+  delete state().encDone.freelancer;
+  _startEnc("freelancer");
+  run("yes");
+  assert.ok(state().money >= 8000 - 700 - 1000 - 1300, `pocket money only (฿${state().money})`);
+  assert.equal(state().itemLoc.fake_rolex, "inventory", "the safe held the Rolex");
 });

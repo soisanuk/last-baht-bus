@@ -29,6 +29,8 @@ function newGame() {
     lightWarn: { room: null, n: 0, mark: false }, // go-go no-photo escalation
     blueDogDay: 0,       // last day the Blue Dog show paid its happy point
     hotel: "sabai",      // where you're checked in: sabai | queenvic | metropole
+    hotelDebt: 0,        // what's on the night clerk's book
+    qvDay: 0,            // last day the Queen Vic balcony paid its happy point
     patronTalk: { day: 0, talked: {} }, // patron dialogue book, reset daily
     turns: 0,
     wingmanUntil: 0,     // G.turns before which a wing-woman is vouching for you
@@ -99,6 +101,8 @@ function deserializeGame(s) {
   if (!G.lightWarn) G.lightWarn = { room: null, n: 0, mark: false };
   if (G.blueDogDay === undefined) G.blueDogDay = 0;
   if (!G.hotel) G.hotel = "sabai";
+  if (G.hotelDebt === undefined) G.hotelDebt = 0;
+  if (G.qvDay === undefined) G.qvDay = 0;
   if (!G.patronTalk) G.patronTalk = { day: 0, talked: {} };
   if (!G.soc) {
     G.soc = { drinks: {}, mamaTreat: {}, bellAt: {}, bells: {}, heat: {},
@@ -169,10 +173,59 @@ function _npcsHere() {
 // After Act One, CHECKOUT at the start of an evening moves you. The hotel is
 // your spawn point, shower, outlet, and lobby ATM — location is the amenity.
 const _HOTELS = {
-  sabai:     { room: "hotel_room",     name: "Sabai Palms Hotel" },
-  queenvic:  { room: "qv_room",        name: "Queen Vic Inn" },
-  metropole: { room: "metropole_room", name: "LK Metropole" },
+  // rate = vacation nightly; expatRate = the negotiated long-stay daily
+  sabai:     { room: "hotel_room",     name: "Sabai Palms Hotel", rate: 400,  expatRate: 270 },
+  queenvic:  { room: "qv_room",        name: "Queen Vic Inn",     rate: 700,  expatRate: 400 },
+  metropole: { room: "metropole_room", name: "LK Metropole",      rate: 1300, expatRate: 730 },
 };
+const _HOTEL_DOWNGRADE = ["metropole", "queenvic", "sabai"];
+const _DEBT_CAP = 2000;
+
+function _hotelRate(k) {
+  return G.stage === "expat" ? _HOTELS[k].expatRate : _HOTELS[k].rate;
+}
+
+// The folio slides under the door each morning. Can't cover it? The desk
+// steps you down toward the Sabai Palms; broke even there, the night clerk
+// adds it to the book — capped, never a spiral. The town catches people.
+function _chargeRent() {
+  if (!_flag("act1Done") || G.stage === "act1") return;
+  if (G.hotelDebt && G.money >= G.hotelDebt + _hotelRate(G.hotel)) {
+    G.money -= G.hotelDebt;
+    _say(`(You settle the ฿${G.hotelDebt} on the book on your way past the desk. ` +
+      "The ledger closes with real warmth.)", "dim");
+    G.hotelDebt = 0;
+  }
+  if (G.money >= _hotelRate(G.hotel)) {
+    G.money -= _hotelRate(G.hotel);
+    _say(`(The folio slides under the door: ฿${_hotelRate(G.hotel)}` +
+      (G.stage === "expat" ? " — the long-stay rate" : "") +
+      `, the ${_HOTELS[G.hotel].name}. ฿${G.money} left.)`, "dim");
+    return;
+  }
+  // step down toward the Sabai Palms
+  let idx = _HOTEL_DOWNGRADE.indexOf(G.hotel);
+  while (idx < _HOTEL_DOWNGRADE.length - 1 && G.money < _hotelRate(_HOTEL_DOWNGRADE[idx])) idx++;
+  const to = _HOTEL_DOWNGRADE[idx];
+  if (to !== G.hotel) {
+    _say(`The ${_HOTELS[G.hotel].name} folio and your pockets have a short, frank ` +
+      `exchange, and by noon your bag has made its own way to the ` +
+      `${_HOTELS[to].name}. Nobody is unkind about it, which is somehow worse.`, "alert");
+    G.hotel = to;
+    G.room = _hotelRoomId();
+  }
+  const rate = _hotelRate(G.hotel);
+  if (G.money >= rate) {
+    G.money -= rate;
+    _say(`(฿${rate} for the night. ฿${G.money} left — thin, but paid.)`, "dim");
+  } else {
+    G.hotelDebt = Math.min(_DEBT_CAP, G.hotelDebt + rate);
+    _addHappy(-1);
+    _say(`The night clerk takes in the situation and adds ฿${rate} to the book ` +
+      `without a word — ฿${G.hotelDebt} on it now. His kindness is the heaviest ` +
+      "thing you'll carry today.", "alert");
+  }
+}
 
 function _hotelRoomId() { return _HOTELS[G.hotel].room; }
 
@@ -2151,6 +2204,11 @@ function _endNight(reason) {
         "man gai at 3 a.m., the beach road with nobody on it, laughing at " +
         "nothing. What happens in Pattaya has already forgotten your name by " +
         "morning, fondly.", "win");
+      if (_flag("act1Done") && G.stage !== "act1" && G.hotel === "sabai" && G.money >= 300) {
+        G.money -= 300;
+        _say("(Under the Sabai Palms' one working porch light, the night clerk " +
+          "produces the joiner ledger: ฿300, and a look with footnotes.)", "dim");
+      }
       _addHappy(10);
       break;
     case "sleep":
@@ -2158,11 +2216,15 @@ function _endNight(reason) {
         "the curtains, and Pattaya carries on politely without you.", "room");
       break;
     case "robbed": {
-      const lost = Math.min(G.money, 800 + Math.floor(_rand() * 2200));
+      const safeRoom = _flag("act1Done") && G.stage !== "act1" && G.hotel === "metropole";
+      const lost = Math.min(G.money,
+        safeRoom ? 1000 : 800 + Math.floor(_rand() * 2200));
       G.money -= lost;
       let took = "";
-      for (const it of ["shades", "fake_rolex"]) {
-        if (G.itemLoc[it] === "inventory") { G.itemLoc[it] = null; took = ITEMS[it].name; break; }
+      if (!safeRoom) {
+        for (const it of ["shades", "fake_rolex"]) {
+          if (G.itemLoc[it] === "inventory") { G.itemLoc[it] = null; took = ITEMS[it].name; break; }
+        }
       }
       _say("The night itself is fine — better than fine. It's the morning that " +
         "isn't. You surface at some colourless hour to an empty pillow, the door " +
@@ -2172,14 +2234,22 @@ function _endNight(reason) {
         (took ? `, and your ${took} with it` : "") + ". No bar, no mamasan, no one " +
         "to complain to — freelance cut the other way. You didn't even hear her leave.",
         "alert");
+      if (safeRoom) {
+        _say("(The Metropole room safe held everything that mattered. She got the " +
+          "pocket money and the lesson stayed cheap. The front desk has seen " +
+          "this face before and offers coffee.)", "dim");
+      }
       _addHappy(-6);
       break;
     }
   }
   G.day++;
   if (G.stage !== "expat" && G.day > 7) { _endVacation(); return; }
-  const hangover = G.soc.drunk;
+  let hangover = G.soc.drunk;
   G.soc.drunk = 0;
+  // the Sabai Palms perk: Naklua quiet takes one size off the morning after
+  const _quietHelped = _flag("act1Done") && G.hotel === "sabai" && hangover > 0;
+  if (_quietHelped) hangover--;
   G.soc.bellAt = {};
   G.soc.heat = {};
   G.soc.banned = {};
@@ -2203,6 +2273,8 @@ function _endNight(reason) {
   if (_flag("act1Done")) { G.room = _hotelRoomId(); G.battery = 100; }
   else { G.room = "jomtien_beach"; G.battery = Math.max(G.battery, 20); }
   _say("");
+  _chargeRent();
+  if (_quietHelped) _say("(Naklua quiet: the hangover wakes one size smaller.)", "dim");
   _say(`── DAY ${G.day}${G.stage === "expat" ? " · PATTAYA, HOME" : " of 7"} — you ` +
     "surface mid-afternoon, and by the time you're human again the sun is " +
     "sliding into the gulf and the neon is waking up ──", "win");
@@ -2916,6 +2988,22 @@ function _doWatchBlueDog(arg) {
   }
 }
 
+// The Queen Vic balcony: the whole of Soi 6 as theatre, nightly, included
+// in the rate. One happy point a night, same house rules as the Blue Dog.
+function _doWatchSoi() {
+  _say("You take the recliner. Below, Soi 6 performs: the barkers working the " +
+    "walkers, a hen party being gently herded out of Golden Dragon, two girls " +
+    "from Pink Lotus sharing one plate of som tam between customers, and the " +
+    "TikTok kid with the ring light filming it all for people who will never " +
+    "smell it. Two balconies over, Terry raises his beer without looking. " +
+    "You raise yours.");
+  if (G.blueDogDay !== G.day) {
+    G.blueDogDay = G.day;
+    _addHappy(1);
+    _say("(Best seat above the best free show. +1 สนุก.)", "win");
+  }
+}
+
 function _doTv() {
   if (!_inBar()) { _say("No TV out here. The street is the channel."); return; }
   _say("The TV over the bar plays the news — sound off, Thai subtitles racing, " +
@@ -3150,6 +3238,26 @@ function _doGo(dirWord) {
   G.room = to;
   _describeRoom(true);
   _lightNotice(); // walking in with the torch burning gets you clocked
+  // the anti-Simon machine: when the book gets heavy, the town catches you
+  if (G.hotelDebt >= 800 && !_flag("tabSettled") &&
+      (G.room === "stinky_bar" || G.room === "candy_bar")) {
+    _setFlag("tabSettled");
+    const owed = G.hotelDebt;
+    G.hotelDebt = 0;
+    if (G.room === "stinky_bar") {
+      _say("Bert refills without being asked. \"Night clerk at your hotel rang " +
+        "around about a farang on the book,\" he says, racking the balls. " +
+        `\"It's handled, bud. ฿${owed}, squared.\" He won't discuss it further ` +
+        "and won't take it back. \"You buy the next man's beer. That's the " +
+        "whole system.\"", "win");
+    } else {
+      _say("Candy sets your glass down and, with it, a folded receipt from your " +
+        `hotel — ฿${owed}, marked PAID in the clerk's careful hand. \"Everybody's ` +
+        "problems come to Candy,\" she says, already looking past you at the " +
+        "soi. \"Even the ones you don't bring. You get famous when you owe " +
+        "money, tilac. Be famous for something else.\"", "win");
+    }
+  }
   // quiz night: walk in during the window and the microphone finds you
   if (_quizHere()) { _startQuiz(); return; }
   // a standing invitation, honoured: she said come, and you came
@@ -4355,7 +4463,8 @@ function _doCheckout() {
   _say(`You set the key card on the desk at the ${_HOTELS[G.hotel].name}. The ` +
     "clerk produces the folio with the speed of a man who has seen farang " +
     "restlessness before, and gestures at the wide world:");
-  _say(others.map(k => `· ${_HOTELS[k].name.toUpperCase()}`).join("\n"), "dim");
+  _say(others.map(k =>
+    `· ${_HOTELS[k].name.toUpperCase()} — ฿${_hotelRate(k)}/night`).join("\n"), "dim");
   _say("(Name your new hotel — or STAY.)", "dim");
 }
 
@@ -4452,7 +4561,7 @@ const _HELP = `Common commands:
   Live music (Fri/Sat, Rock Factory every night):
   DANCE · SING · REQUEST <song> · TIP BAND <amount> · BUY ROUND FOR BAND · TALK TO BAND
   EAT <food> · DRINK <thing> · BUY WATER / FOOD (street carts & 7-Elevens) · SLEEP (at the hotel)
-  CHECKOUT (your room, before 19:00) — move hotels: Sabai Palms · Queen Vic · LK Metropole
+  CHECKOUT (your room, before 19:00) — move hotels: Sabai Palms ฿400 · Queen Vic ฿700 · Metropole ฿1300
   DIAGNOSE (how bad is it) · AGAIN or G (repeat last command)
   TIME · MAP · WAIT UNTIL <hour> · TIP <lady> <amount> · PHOTO · CHEERS
   QUESTS · ACCEPT <quest> · ABANDON <quest>
@@ -4814,7 +4923,9 @@ function doCommand(input) {
     case "knock": case "shout": case "yell":
       _say(_MISC_VERBS[v === "yell" ? "shout" : v]); break;
     case "watch":
-      if (G.room === "blue_dog" && (!arg || /police|road|show|shakedown|bike|checkpoint|sunset|bay|sea|view/.test(arg)))
+      if (G.room === "qv_room" && (!arg || /soi|street|balcony|show|chaos|girls/.test(arg)))
+        _doWatchSoi();
+      else if (G.room === "blue_dog" && (!arg || /police|road|show|shakedown|bike|checkpoint|sunset|bay|sea|view/.test(arg)))
         _doWatchBlueDog(arg);
       else if (!arg || /tv|news|television/.test(arg)) _doTv();
       else _say("You watch. It watches back. Pattaya.");

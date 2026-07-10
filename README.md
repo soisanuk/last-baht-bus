@@ -74,10 +74,17 @@ Mobile gets tappable verb chips; desktop gets ↑/↓ command history.
 - **The daily damage**: on vacation, the lobby ATM surrenders ฿3,000 on your
   way out each evening. Spend it well — or don't, and see which feels better.
 - **Pick your base**: after Act One, `CHECKOUT` at the start of an evening
-  moves you between the Sabai Palms (quiet Naklua), the Queen Vic's balcony
-  room (Soi 6 performing below), and the LK Metropole (a tower over the
-  alley, fire stairs into LK Metro — the bellboy winks). Your hotel is your
-  spawn point, shower, charger, and lobby ATM; location is the amenity.
+  moves you between three hotels, each a package — the Sabai Palms (฿400,
+  quiet Naklua: the hangover wakes one size smaller, but the night clerk
+  keeps a ฿300 joiner ledger and a look with footnotes), the Queen Vic's
+  balcony room (฿700, Soi 6 performing below — `WATCH SOI` pays a nightly
+  สนุก, Terry two balconies over), and the LK Metropole (฿1,300, a tower
+  over the alley: fire stairs straight into LK Metro, and a room safe that
+  keeps a bad freelancer night cheap). The folio slides under the door each
+  morning; expats get long-stay rates. Can't cover it? The desk steps you
+  down toward the Sabai Palms, and flat broke the clerk adds it to the book
+  — capped, never a spiral, and if the book gets heavy enough, someone on
+  this soi has been known to quietly settle it. The town catches people.
 - **The boy in brown**: weave down a lit street five bottles deep and a
   police officer may take up station in your path. Pay the "fine" (฿500), wai
   and apologise in Thai (฿300), or argue (฿1,000, plus a friend). If a
