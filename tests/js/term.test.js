@@ -8,7 +8,9 @@ import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import vm from "node:vm";
 
-for (const f of ["thai.js", "world.js", "games.js", "engine.js", "term.js"]) {
+for (const f of ["thai.js", "world.js", "games.js", "engine.js",
+  "data.js", "examples.js", "tokeniser.js", "thai-script.js", "wordcard.js",
+  "term.js"]) {
   const src = readFileSync(
     fileURLToPath(new URL(`../../web/js/${f}`, import.meta.url)), "utf8");
   vm.runInThisContext(src, { filename: f });
@@ -88,4 +90,31 @@ test("the wheel: items offer take here, read in the pocket", () => {
   assert.ok(acts.includes("read"));
   assert.ok(acts.includes("drop"));
   assert.ok(!acts.includes("take"), "already yours");
+});
+
+test("Thai in the transcript tokenizes into tappable vocab words", () => {
+  const d = _term.decorate("“สวัสดีค่ะที่รัก” (sawatdee kha tilac)");
+  assert.ok(d.includes(kw("สวัสดี", "thai")), d);
+  assert.ok(d.includes(kw("ค่ะ", "thai")));
+  assert.ok(d.includes(kw("ที่รัก", "thai")));
+});
+
+test("entity Thai stays whole: แคนดี้ is Candy, not vocab shrapnel", () => {
+  const d = _term.decorate("ป้ายเขียนว่า แคนดี้");
+  assert.ok(d.includes(kw("แคนดี้", "thai")), d);
+});
+
+test("tapping plain Thai goes straight to the word card; entity Thai gets the wheel", () => {
+  // plain vocab word: exactly one action, a function, so tap = instant modal
+  const plain = _term.kwActions("thai", "สวัสดี", false);
+  assert.equal(plain.length, 1);
+  assert.equal(typeof plain[0].fn, "function");
+  assert.match(plain[0].t, /translate/);
+  // Candy's Thai name while she's in the room: her game actions + translate
+  G.room = "candy_bar";
+  const ent = _term.kwActions("thai", "แคนดี้", false);
+  const labels = ent.map(a => a.t);
+  assert.ok(labels.includes("talk"), "the world gets first claim");
+  assert.ok(labels.some(t => /translate/.test(t)), "the dictionary rides along");
+  assert.ok(ent.length > 1, "a wheel, not an instant fire");
 });

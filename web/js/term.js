@@ -61,7 +61,31 @@ const _term = (() => {
     html = html.replace(/\(([^()]*)\)/g, (m, inner) =>
       "(" + inner.replace(/([A-Z]{2,}(?:[ -][A-Z0-9]{2,})*(?: &lt;[a-z… ]+&gt;)?)/g,
         c => _wrap("cmd", c)) + ")");
+    // Thai runs: tokenise against the vendored vocab (plus NPC Thai names,
+    // so แคนดี้ stays whole instead of shredding into vocab fragments).
+    // Known words tap open the word-card modal; unknown runs of 2+ chars
+    // still offer the decomposition-only card.
+    html = html.replace(/[\u0E00-\u0E7F]{2,}/g, run => {
+      const toks = _thaiTokens(run);
+      if (!toks) return run;
+      return toks.map(t =>
+        (t.word || t.text.length >= 2) ? _wrap("thai", t.text) : t.text).join("");
+    });
     return html;
+  }
+
+  // Lazy tokenizer over the vendored WORDS plus the world's Thai names.
+  let _thTok = null;
+  function _thaiTokens(run) {
+    try {
+      if (!_thTok) {
+        const m = {};
+        for (const w of WORDS) m[w[0]] = w;
+        for (const n of Object.values(NPCS)) if (n.th) m[n.th] = ["ent"];
+        _thTok = makeTokeniser(m);
+      }
+      return _thTok(run);
+    } catch (e) { return null; } // vendored stack absent: leave Thai plain
   }
 
   // ── The flyout wheel ──────────────────────────────────────────────────
@@ -74,6 +98,19 @@ const _term = (() => {
     const a = [];
     const lo = v.toLowerCase();
     try {
+      if (k === "thai") {
+        // the dictionary is one tap away — unless the word is alive in the
+        // world, in which case the world gets first claim and translate
+        // rides along on the wheel
+        const translate = { t: "🔍 translate " + v, fn: () => {
+          const w = (typeof _wcMap === "function" && _wcMap()[v]) || [v, "", ""];
+          openWordModal(w);
+        } };
+        let ent = null;
+        for (const [id, n] of Object.entries(NPCS)) if (n.th === v) ent = id;
+        if (ent) return [..._kwActions("npc", NPCS[ent].name, full), translate];
+        return [translate];
+      }
       if (k === "exit") return [{ t: "go " + v, c: "go " + v, go: true }];
       if (k === "cmd") {
         const open = /<|…|\[/.test(v);
@@ -143,6 +180,7 @@ const _term = (() => {
 
   function _runAct(act) {
     _closeFly();
+    if (act.fn) { act.fn(); return; }
     _input.value = act.c;
     if (act.go) { submit(_onCmd); }
     else { _input.focus(); _refreshSuggest(); }
@@ -152,7 +190,7 @@ const _term = (() => {
     _closeFly();
     const acts = _kwActions(kwEl.dataset.k, kwEl.dataset.v, full);
     if (!acts.length) return;
-    if (acts.length === 1 && acts[0].go && !full) { _runAct(acts[0]); return; }
+    if (acts.length === 1 && (acts[0].go || acts[0].fn) && !full) { _runAct(acts[0]); return; }
     _fly = document.createElement("div");
     _fly.id = "flyout";
     for (const act of acts) {
@@ -252,6 +290,10 @@ const _term = (() => {
         e.preventDefault();
       }
     });
+
+    // the send button: complete a wheel-prefilled command without the keyboard
+    const sendBtn = document.getElementById("term-send");
+    if (sendBtn) sendBtn.addEventListener("click", () => submit(onCommand));
 
     // real typing (not programmatic Tab fills) resets the cycle and re-suggests
     _input.addEventListener("input", () => {

@@ -107,6 +107,9 @@
   .kw:hover { text-decoration: underline dotted; }
   .t-dim .kw { color: #d9c2f2; }
   .t-alert .kw, .t-win .kw, .t-room .kw, .t-thai .kw { color: inherit; }
+  /* tappable Thai: dotted underline says "the dictionary is one tap away" */
+  .kw[data-k="thai"] { text-decoration: underline dotted; text-underline-offset: 4px;
+                       text-decoration-color: #00e5ff70; }
   /* the flyout wheel */
   #flyout {
     position: fixed; z-index: 50;
@@ -197,6 +200,20 @@
     font: inherit;
     caret-color: var(--pink);
   }
+  #term-send {
+    flex-shrink: 0;
+    background: #12001e;
+    color: var(--pink);
+    border: 1px solid #ff149360;
+    border-radius: 10px;
+    font: inherit;
+    font-size: 1rem;
+    min-width: 44px;
+    min-height: 38px;
+    cursor: pointer;
+    text-shadow: 0 0 8px #ff149380;
+  }
+  #term-send:active { background: #2a0040; }
   @media (min-width: 700px) {
     #shell { border-left: 1px solid #ff149330; border-right: 1px solid #ff149330; }
   }
@@ -267,6 +284,245 @@
   }
   #ad-mini b { color: var(--cyan); }
   @media (min-width: 1220px) { #ad-mini { display: none; } }
+
+  /* ── vendored word-card modal (source of truth: trainer index.html) ──── */
+  /* the trainer's palette names, same neon values */
+  :root {
+    --gold: #ff1493; --saffron: #ffe600; --deep-saffron: #bf5fff;
+    --royal-blue: #4169e1; --jade: #00cc66; --parchment: #e8c0d8;
+    --surface: #16032b; --border: #43155e; --dim: #a487b8;
+  }
+.divider-accent {
+  border: none;
+  border-top: 1px solid var(--royal-blue);
+  margin: 0.4rem 0;
+}
+.example-block {
+  background: linear-gradient(90deg, rgba(244,196,48,0.06) 0%, #1e1208 30%);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--saffron);
+  border-radius: 6px;
+  padding: 0.7rem 1rem;
+  margin: 0.5rem 0 0.3rem;
+}
+.example-thai {
+  font-family: 'Noto Sans Thai', 'Leelawadee UI', serif;
+  font-size: 1.45rem;
+  line-height: 1.9;
+  color: var(--text);
+  margin-bottom: 0.25rem;
+}
+.example-thai .highlight {
+  color: var(--gold);
+  font-weight: bold;
+  text-decoration: underline;
+  text-decoration-color: var(--deep-saffron);
+  text-underline-offset: 3px;
+}
+.example-rtgs {
+  font-size: 0.82rem;
+  color: var(--dim);
+  margin-bottom: 0.2rem;
+  font-style: italic;
+}
+.example-rtgs .highlight { color: var(--saffron); font-style: normal; }
+.example-en {
+  font-size: 0.85rem;
+  color: var(--parchment);
+}
+.example-speak {
+  float: right;
+  margin: -0.1rem -0.3rem 0 0.5rem;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--dim);
+  font-size: 1rem;
+  line-height: 1;
+  padding: 0.18rem 0.4rem;
+  cursor: pointer;
+  transition: color 0.12s, border-color 0.12s;
+}
+.example-speak:hover { color: var(--gold); border-color: var(--gold); }
+.example-speak.speaking { color: var(--saffron); border-color: var(--saffron); }
+
+/* ── Word hover tokens ───────────────────────────────────────────────────── */
+.w-token {
+  cursor: pointer;
+  border-radius: 2px;
+  transition: background 0.1s, color 0.1s;
+  padding: 0 1px;
+}
+.w-token:hover {
+  background: rgba(212, 175, 54, 0.18);
+  color: var(--saffron);
+}
+#wc-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  align-items: center;
+  justify-content: center;
+}
+#wc-overlay.open { display: flex; }
+/* Each stacked card sits in its own full-screen layer */
+.wc-layer {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.72);
+}
+.wc-layer:not(:last-child) { pointer-events: none; }
+.wc-card {
+  background: var(--surface);
+  border: 2px solid var(--gold);
+  border-radius: 8px;
+  padding: 1.8rem 2rem 1.4rem;
+  max-width: 480px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  pointer-events: all;
+}
+.wc-close {
+  position: absolute;
+  top: 0.6rem; right: 0.8rem;
+  background: none; border: none;
+  color: var(--dim); font-size: 1.3rem;
+  cursor: pointer; line-height: 1;
+}
+.wc-close:hover { color: var(--text); }
+.wc-back {
+  background: none; border: none;
+  color: var(--saffron); font-size: 0.88rem;
+  cursor: pointer; padding: 0;
+  margin-bottom: 0.8rem;
+  display: none;
+}
+.wc-back:hover { color: var(--gold); }
+.wc-thai {
+  font-family: 'Noto Sans Thai', serif;
+  font-size: 5rem;
+  color: var(--gold);
+  line-height: 1.3;
+  vertical-align: middle;
+}
+.wc-rtgs {
+  text-align: center;
+  color: var(--dim);
+  font-style: italic;
+  font-size: 1rem;
+  margin-bottom: 0.15rem;
+}
+.wc-en {
+  text-align: center;
+  font-size: 1.05rem;
+  color: var(--parchment);
+  margin-bottom: 0.6rem;
+}
+.wc-example { margin-top: 0.4rem; }
+
+/* ── Word decomposition ──────────────────────────────────────────────────── */
+.wc-decomp {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  margin: 0.6rem 0 0.2rem;
+  padding: 0.5rem 0.4rem;
+  background: rgba(0,0,0,0.25);
+  border-radius: 6px;
+}
+.decomp-cluster {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+}
+.decomp-char {
+  font-family: 'Noto Sans Thai', serif;
+  font-size: 1.8rem;
+  line-height: 1;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0.25rem 0.4rem;
+  cursor: default;
+  transition: border-color 0.1s, color 0.1s;
+  min-width: 2.4rem;
+  text-align: center;
+  pointer-events: all;
+}
+.decomp-char.is-cons  { border-color: var(--jade); }
+.decomp-char.is-vowel { border-color: var(--royal-blue); }
+.decomp-char.is-tone  { border-color: var(--saffron); }
+.decomp-char.is-other { border-color: var(--border); color: var(--dim); }
+.decomp-char:hover    { border-color: var(--gold) !important; color: var(--gold); }
+.decomp-label {
+  font-size: 0.62rem;
+  color: var(--dim);
+  text-align: center;
+  max-width: 3.5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#script-tooltip {
+  position: fixed;
+  z-index: 20000;
+  pointer-events: none;
+  background: #2a1c08;
+  border: 1px solid var(--saffron);
+  border-radius: 6px;
+  padding: 0.5rem 0.8rem;
+  max-width: 240px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.7);
+  display: none;
+  font-size: 0.82rem;
+  line-height: 1.6;
+}
+#script-tooltip .st-char {
+  font-family: 'Noto Sans Thai', serif;
+  font-size: 2rem;
+  color: var(--saffron);
+  font-weight: bold;
+  display: block;
+  text-align: center;
+  line-height: 1.2;
+}
+#script-tooltip .st-row { color: var(--parchment); }
+#script-tooltip .st-row span { color: var(--dim); font-style: italic; }
+
+/* ── Tooltip ─────────────────────────────────────────────────────────────── */
+#word-tooltip {
+  position: fixed;
+  z-index: 9999;
+  pointer-events: none;
+  background: #2a1c08;
+  border: 1px solid var(--gold);
+  border-radius: 5px;
+  padding: 0.4rem 0.7rem;
+  max-width: 220px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.6);
+  display: none;
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+#word-tooltip .tt-thai {
+  font-family: 'Noto Sans Thai', 'Leelawadee UI', serif;
+  font-size: 1.3rem;
+  color: var(--saffron);
+  font-weight: bold;
+}
+#word-tooltip .tt-rtgs { color: var(--dim); font-style: italic; }
+#word-tooltip .tt-en   { color: var(--parchment); }
+
+/* ── Tone Drill ──────────────────────────────────────────────────────────── */
 </style>
 </head>
 <body>
@@ -302,6 +558,7 @@
     <span class="prompt">❯</span>
     <input id="term-in" type="text" autocomplete="off" autocapitalize="off"
            autocorrect="off" spellcheck="false" placeholder="what do you do?">
+  <button id="term-send" title="Send" aria-label="Send command">➤</button>
   </div>
 </div>
 <a id="ad" href="https://soisanuk.github.io/" target="_blank" rel="noopener">
@@ -311,6 +568,15 @@
   <span class="ad-cta">LEARN THAI →</span>
   <div class="ad-sub">SOI SANUK trainer · free · no signup<br>❖ PATTAYA EDITION ❖</div>
 </a>
+<!-- vendored word-card modal mounts (see wordcard.js) -->
+<div id="wc-overlay"></div>
+<div id="script-tooltip"></div>
+<div id="word-tooltip">
+  <div class="tt-thai" id="tt-thai"></div>
+  <div class="tt-rtgs" id="tt-rtgs"></div>
+  <div class="tt-en"   id="tt-en"></div>
+</div>
+
 <script src="js/thai.js"></script>
 <script src="js/news-data.js"></script>
 <script src="js/world.js"></script>
@@ -318,6 +584,12 @@
 <script src="js/engine.js"></script>
 <script src="js/tts.js"></script>
 <script src="js/audio.js"></script>
+<!-- vendored from the trainer: the shared Thai word-card stack -->
+<script src="js/data.js"></script>
+<script src="js/examples.js"></script>
+<script src="js/tokeniser.js"></script>
+<script src="js/thai-script.js"></script>
+<script src="js/wordcard.js"></script>
 <script src="js/term.js"></script>
 <script src="js/main.js"></script>
 </body>
