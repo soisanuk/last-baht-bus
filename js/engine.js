@@ -28,6 +28,7 @@ function newGame() {
     lightOn: false,
     lightWarn: { room: null, n: 0, mark: false }, // go-go no-photo escalation
     blueDogDay: 0,       // last day the Blue Dog show paid its happy point
+    hotel: "sabai",      // where you're checked in: sabai | queenvic | metropole
     patronTalk: { day: 0, talked: {} }, // patron dialogue book, reset daily
     turns: 0,
     wingmanUntil: 0,     // G.turns before which a wing-woman is vouching for you
@@ -97,6 +98,7 @@ function deserializeGame(s) {
   if (G.game === undefined) G.game = null;
   if (!G.lightWarn) G.lightWarn = { room: null, n: 0, mark: false };
   if (G.blueDogDay === undefined) G.blueDogDay = 0;
+  if (!G.hotel) G.hotel = "sabai";
   if (!G.patronTalk) G.patronTalk = { day: 0, talked: {} };
   if (!G.soc) {
     G.soc = { drinks: {}, mamaTreat: {}, bellAt: {}, bells: {}, heat: {},
@@ -162,6 +164,17 @@ function _isDarkHere() {
 function _npcsHere() {
   return Object.entries(NPCS).filter(([, n]) => n.room === G.room).map(([id]) => id);
 }
+
+// ── Hotels: where the key card works ───────────────────────────────────────
+// After Act One, CHECKOUT at the start of an evening moves you. The hotel is
+// your spawn point, shower, outlet, and lobby ATM — location is the amenity.
+const _HOTELS = {
+  sabai:     { room: "hotel_room",     name: "Sabai Palms Hotel" },
+  queenvic:  { room: "qv_room",        name: "Queen Vic Inn" },
+  metropole: { room: "metropole_room", name: "LK Metropole" },
+};
+
+function _hotelRoomId() { return _HOTELS[G.hotel].room; }
 
 // ── Named patrons ──────────────────────────────────────────────────────────
 // Hoppers drift to a hash-chosen bar each hour until 22:00, then settle at
@@ -2187,7 +2200,7 @@ function _endNight(reason) {
   G.darkStreak = 0;
   G.lightOn = false;
   G.safeTries = 0;
-  if (_flag("act1Done")) { G.room = "hotel_room"; G.battery = 100; }
+  if (_flag("act1Done")) { G.room = _hotelRoomId(); G.battery = 100; }
   else { G.room = "jomtien_beach"; G.battery = Math.max(G.battery, 20); }
   _say("");
   _say(`── DAY ${G.day}${G.stage === "expat" ? " · PATTAYA, HOME" : " of 7"} — you ` +
@@ -2232,10 +2245,11 @@ function _newVacation() {
   G.itemLoc.phone = "inventory";
   G.itemLoc.charger = "inventory";
   G.itemLoc.wallet = "inventory";
+  G.hotel = "sabai"; // a fresh booking always starts where the story did
   G.room = "hotel_room";
   _say("");
   _say("A month of grey sky and greyer meetings, and then the seatbelt sign " +
-    "pings off over the gulf. Same hotel. Same terrible, perfect bed. Room 412 " +
+    "pings off over the gulf. Same Sabai Palms. Same terrible, perfect bed. Room 412 " +
     `keeps your secrets. ฿${SAFE_CASH} in the safe, seven nights on the clock.`, "win");
   _say(`── VACATION ${G.vacation} · DAY 1 of 7 ──`, "win");
   _describeRoom(true);
@@ -2253,6 +2267,7 @@ function _goExpat() {
   G.hurt = 0;
   G.soc.drunk = 0;
   G.battery = 100;
+  G.hotel = "sabai"; // the long-stay rate is a 412 negotiation
   G.room = "hotel_room";
   _say("");
   _say("You don't board. It's remarkably little paperwork, in the end: a visa " +
@@ -3083,6 +3098,14 @@ function _doGo(dirWord) {
         "like a soi dog.", "dim");
     }
   }
+  // hotel rooms open for their guests only
+  const _hotelOf = Object.keys(_HOTELS).find(k => _HOTELS[k].room === to);
+  if (_hotelOf && _hotelOf !== G.hotel && _flag("hasWallet")) {
+    _say(`The ${_HOTELS[_hotelOf].name} desk takes one practiced look at you: ` +
+      "\"Guest, sir?\" Your key card opens a different hotel tonight. The " +
+      "smile that follows is kind and absolutely final.");
+    return;
+  }
   // room 412's key card is in the wallet: no wallet, no room
   if (to === "hotel_room" && !_flag("hasWallet")) {
     _say("The night clerk looks up, takes in the sand, the sunburn, the eyes. " +
@@ -3105,7 +3128,7 @@ function _doGo(dirWord) {
     }
   }
   // the lobby ATM: the daily damage, drawn on the way out
-  if (G.room === "hotel_room" && G.stage === "vacation" && G.atmDay !== G.day) {
+  if (G.room === _hotelRoomId() && G.stage === "vacation" && G.atmDay !== G.day) {
     G.atmDay = G.day;
     G.money += SAFE_CASH;
     _say(`You stop at the lobby ATM on the way out. It considers your card, sighs, ` +
@@ -4252,7 +4275,7 @@ function _doWave(arg) {
   _say("You wave. Somewhere down the soi, somebody waves back. It's that kind of town.");
 }
 
-const _MAP = `            NAKLUA ─ your hotel
+const _MAP = `            NAKLUA ─ Sabai Palms Hotel
                │
              SOI 6
                │
@@ -4308,9 +4331,50 @@ function _doCall(arg) {
     `phone. (MESSAGE ${name.toUpperCase()} instead.)`);
 }
 
+// CHECKOUT — after Act One, at the start of an evening, from your own room.
+// The desk lists the other two hotels; the one you're leaving is understood.
+function _doCheckout() {
+  if (!_flag("act1Done")) {
+    _say("Check out? You haven't managed to check IN yet — the key card is in " +
+      "the wallet, and the wallet is the whole adventure.");
+    return;
+  }
+  if (G.room !== _hotelRoomId()) {
+    _say(`Checkout starts in your own room at the ${_HOTELS[G.hotel].name} — ` +
+      "pack the bag first.");
+    return;
+  }
+  if (G.nightTurn >= 10) {
+    _say("Reception runs checkout at the start of the evening, before 19:00, " +
+      "while the desk is still awake and the day sheet is still open. " +
+      "Tomorrow, na.");
+    return;
+  }
+  const others = Object.keys(_HOTELS).filter(k => k !== G.hotel);
+  G.pendingChoice = "checkout";
+  _say(`You set the key card on the desk at the ${_HOTELS[G.hotel].name}. The ` +
+    "clerk produces the folio with the speed of a man who has seen farang " +
+    "restlessness before, and gestures at the wide world:");
+  _say(others.map(k => `· ${_HOTELS[k].name.toUpperCase()}`).join("\n"), "dim");
+  _say("(Name your new hotel — or STAY.)", "dim");
+}
+
+const _HOTEL_ARRIVALS = {
+  sabai: "The baht bus north, the dark soi, the two palms — and 412, humming " +
+    "its terrible faithful hum. The Sabai Palms takes you back the way Naklua " +
+    "takes everyone back: without comment.",
+  queenvic: "Terry watches your bag come up the stairs with the deep " +
+    "satisfaction of a man whose lifestyle has just been endorsed. The balcony " +
+    "room at the Queen Vic: below, Soi 6 is already warming up its evening " +
+    "argument with itself.",
+  metropole: "The Metropole lift hums you up the tower. Blackout curtains, " +
+    "arctic aircon — and out the window, the LK Metro alley glowing below " +
+    "like a lit fuse. The bellboy mentions the fire stairs again. Wink.",
+};
+
 function _doShower() {
-  if (G.room !== "hotel_room") {
-    _say("Your shower is in room 412 in Naklua, enjoying the solitude.");
+  if (G.room !== _hotelRoomId()) {
+    _say(`Your shower is back at the ${_HOTELS[G.hotel].name}, enjoying the solitude.`);
     return;
   }
   if (G.soc.drunk >= 3 || G.hurt) {
@@ -4339,7 +4403,7 @@ function _doAtmVerb() {
       "the only thing keeping this vacation to seven days instead of seven years.");
     return;
   }
-  if (G.room === "hotel_room") {
+  if (G.room === _hotelRoomId()) {
     G.atmDay = G.day;
     G.money += SAFE_CASH;
     _say(`You detour past the lobby ATM. It considers your card, sighs, and ` +
@@ -4388,6 +4452,7 @@ const _HELP = `Common commands:
   Live music (Fri/Sat, Rock Factory every night):
   DANCE · SING · REQUEST <song> · TIP BAND <amount> · BUY ROUND FOR BAND · TALK TO BAND
   EAT <food> · DRINK <thing> · BUY WATER / FOOD (street carts & 7-Elevens) · SLEEP (at the hotel)
+  CHECKOUT (your room, before 19:00) — move hotels: Sabai Palms · Queen Vic · LK Metropole
   DIAGNOSE (how bad is it) · AGAIN or G (repeat last command)
   TIME · MAP · WAIT UNTIL <hour> · TIP <lady> <amount> · PHOTO · CHEERS
   QUESTS · ACCEPT <quest> · ABANDON <quest>
@@ -4544,6 +4609,32 @@ function doCommand(input) {
     return;
   }
 
+  // mid-checkout: the desk is waiting on a hotel name
+  if (G.pendingChoice === "checkout") {
+    if (/stay|cancel|no|keep|never ?mind/.test(lower)) {
+      G.pendingChoice = null;
+      _say("You re-pocket the key card. The clerk re-files the folio and the " +
+        "smile. Home is home.");
+      return;
+    }
+    const pick = /sabai|palm|naklua|412/.test(lower) ? "sabai" :
+      /queen|vic|balcony/.test(lower) ? "queenvic" :
+      /metro|lk/.test(lower) ? "metropole" : null;
+    if (!pick || pick === G.hotel) {
+      const others = Object.keys(_HOTELS).filter(k => k !== G.hotel);
+      _say("The clerk waits. " +
+        others.map(k => _HOTELS[k].name.toUpperCase()).join(" or ") +
+        " — or STAY.", "dim");
+      return;
+    }
+    G.pendingChoice = null;
+    G.hotel = pick;
+    G.room = _hotelRoomId();
+    _say(_HOTEL_ARRIVALS[pick], "win");
+    _describeRoom(true);
+    return;
+  }
+
   // a live bar game captures every command until it ends (QUIT concedes)
   if (G.game) {
     if (/^(quit|resign|concede|forfeit|leave)/.test(lower)) { _gameQuit(); _tick(); return; }
@@ -4590,7 +4681,8 @@ function doCommand(input) {
       break;
     case "examine": case "x": case "inspect": case "search": _doExamine(arg); break;
     case "check":
-      if (/message|phone|text|inbox/.test(arg)) _readMessages();
+      if (/^out/.test(arg)) _doCheckout();
+      else if (/message|phone|text|inbox/.test(arg)) _readMessages();
       else _doExamine(arg);
       break;
     case "messages": case "msgs": case "inbox": _readMessages(); break;
@@ -4690,9 +4782,10 @@ function doCommand(input) {
     case "ring": case "bell": _doBell(); break;
     case "barfine": case "bf": _doBarfine(arg.replace(/^with /, "")); break;
     case "eat": _doEat(arg); break;
+    case "checkout": case "check-out": _doCheckout(); break;
     case "sleep": case "bed": case "crash":
       if (!_flag("act1Done")) _say("Sleep where? The beach already had you once tonight. Get the wallet, get the room.");
-      else if (G.room !== "hotel_room") _say("Your bed is in Naklua — room 412. It'll keep.");
+      else if (G.room !== _hotelRoomId()) _say(`Your bed is at the ${_HOTELS[G.hotel].name}. It'll keep.`);
       else { _endNight("sleep"); return; }
       break;
     case "tv": _doTv(); break;
