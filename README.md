@@ -134,6 +134,19 @@ Mobile gets tappable verb chips; desktop gets ↑/↓ command history.
   What Is Love, Billie Jean, Axel F for the go-gos; Zombie, Livin' on a
   Prayer, The Final Countdown for the bands, with Sabai Sabai always
   coming back around. No Wonderwall. House rule.
+- **Tap the words**: actionable words glow in the transcript — names,
+  bars, items, exits, command hints. Tap for the quick, obvious action
+  (tap an exit and you walk); hold (or right-click) for the full wheel,
+  including an NPC's live ask-topics. Every tap echoes as a typed command,
+  so the transcript stays honest. A ➤ send button finishes prefilled
+  commands without summoning the keyboard.
+- **Tap the Thai to learn it**: every Thai word the game prints is
+  tokenized against the Thai Trainer's vocab (same modal, same data,
+  vendored from the trainer) — tap for syllable decomposition,
+  translation, and an example sentence; nested cards all the way down.
+  Thai that's also a character gets the action wheel with 🔍 translate
+  riding along. Thai numerals stay undecorated: the safe PIN is a
+  puzzle, and the dictionary doesn't do spoilers.
 - **Bar games**: every beer bar keeps a Connect 4 frame (the hostess never
   loses), a Jackpot box (the Thai shut-the-box dice game — flip the dice or
   flip their sum, lowest score wins, shut all nine for JACKPOT), and the
@@ -382,7 +395,9 @@ flowchart TD
 node --test
 ```
 
-222 tests: Thai number composition, world/map integrity (every exit
+236 tests: Thai number composition, full Thai vocab coverage (every
+word the game prints resolves in the shared dictionary), the terminal's
+decoration/flyout contract, world/map integrity (every exit
 resolves, all 20 canon bars present, the gossip chain's flags all connect,
 the patron bench is placed and scheduled), the soundtrack contract (music
 only where music plays), hotel economics (the folio, the ladder, the
@@ -404,7 +419,13 @@ web/
     games.js       bar mini-games: Connect 4, Jackpot dice, pool (pure logic)
     engine.js      parser, verb handlers, systems, endings (DOM-free at load)
     tts.js         th-TH Web Speech (Capacitor-ready)
-    term.js        terminal DOM: scrollback, history, verb chips
+    data.js        ┐
+    examples.js    │ VENDORED from the Thai Trainer (source of truth there):
+    tokeniser.js   │ the shared word-card stack — vocab, examples, tokenizer,
+    thai-script.js │ script analysis, and the decomposition/translation modal
+    wordcard.js    ┘
+    term.js        terminal DOM: scrollback, history, verb chips, kw
+                   decoration, the flyout wheel, tap-Thai word cards
     main.js        boot + save/load wiring (loaded last)
 tests/js/          node:vm-loaded tests against the real sources
 ```
