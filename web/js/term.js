@@ -9,11 +9,62 @@ const _term = (() => {
   let _histIdx = -1;
   let _tabBase = null, _tabIdx = -1; // Tab-cycling state; any real keystroke resets
 
+  // ── Actionable-word decoration ─────────────────────────────────────────
+  // The engine prints plain prose (frontend-agnostic, per CLAUDE.md); making
+  // actionable words obvious is presentation, so it lives here. Wrapped in
+  // <b class="kw">: character names (TALK/ASK), enterable bar names, items
+  // in the room or your pocket (TAKE/READ/EXAMINE), the exits line, and
+  // ALL-CAPS command hints inside parentheses. These spans are the future
+  // tap targets for the flyout wheel.
+  function _escapeHtml(s) {
+    return s.replace(/[&<>"]/g, c =>
+      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  }
+
+  function _kwNames() {
+    const names = [];
+    try {
+      for (const n of Object.values(NPCS)) names.push(n.name);
+      if (typeof PATRONS !== "undefined") {
+        for (const p of Object.values(PATRONS)) names.push(p.name);
+      }
+      for (const r of Object.values(ROOMS)) if (r.bar) names.push(r.bar);
+      if (typeof G !== "undefined" && G && G.itemLoc) {
+        for (const id of Object.keys(G.itemLoc)) {
+          const loc = G.itemLoc[id];
+          if (loc === "inventory" || loc === G.room) names.push(ITEMS[id].name);
+        }
+      }
+    } catch (e) { /* pre-boot print: decorate nothing */ }
+    return names;
+  }
+
+  function decorate(text) {
+    let html = _escapeHtml(text);
+    // exits line: every token is a direction you can type
+    if (/^Exits: /.test(text)) {
+      return "Exits: " + html.slice(7).replace(/([a-z]+)/g, '<b class="kw">$1</b>');
+    }
+    const names = _kwNames();
+    if (names.length) {
+      names.sort((a, b) => b.length - a.length); // "Candy Bar 2" before "Candy"
+      const pat = new RegExp("\\b(" +
+        names.map(n => n.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|") +
+        ")\\b", "g");
+      html = html.replace(pat, '<b class="kw">$1</b>');
+    }
+    // ALL-CAPS command hints inside parentheses: (WATCH POLICE · or NO)
+    html = html.replace(/\(([^()]*)\)/g, (m, inner) =>
+      "(" + inner.replace(/([A-Z]{2,}(?:[ -][A-Z0-9]{2,})*(?: &lt;[a-z… ]+&gt;)?)/g,
+        '<b class="kw">$1</b>') + ")");
+    return html;
+  }
+
   function print(text, cls) {
     if (!_out) return;
     const div = document.createElement("div");
     div.className = "t-line" + (cls ? " t-" + cls : "");
-    div.textContent = text;
+    div.innerHTML = decorate(text);
     _out.appendChild(div);
     _out.scrollTop = _out.scrollHeight;
   }
@@ -122,5 +173,5 @@ const _term = (() => {
     _input.focus();
   }
 
-  return { init, print };
+  return { init, print, decorate };
 })();

@@ -100,6 +100,11 @@
                font-family: "SF Mono", "Cascadia Mono", Menlo, Consolas, "Noto Sans Thai", monospace; }
   .t-dim   { color: var(--violet); font-size: .88em; }
   .t-alert { color: var(--red); text-shadow: 0 0 10px #ff335550; }
+  /* actionable words — names, items, exits, command hints. Bold and a shade
+     brighter than their line; future tap targets for the flyout wheel. */
+  .kw { font-weight: 700; color: var(--bright); }
+  .t-dim .kw { color: #d9c2f2; }
+  .t-alert .kw, .t-win .kw, .t-room .kw, .t-thai .kw { color: inherit; }
   .t-win   { color: var(--yellow); font-weight: bold;
              text-shadow: 0 0 16px #ffe60090, 0 0 40px #ffe60040; }
   #chips {
