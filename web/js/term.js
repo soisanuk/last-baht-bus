@@ -90,6 +90,49 @@ const _term = (() => {
     } catch (e) { return null; } // vendored stack absent: leave Thai plain
   }
 
+  // ── Portraits ──────────────────────────────────────────────────────────
+  // Pixel-art busts in web/portraits/<id>.png (regenerate with
+  // scripts/gen-portraits.py). Purely presentational: a missing file just
+  // removes the <img>, so the game never depends on a portrait existing.
+  let _portIdx = null;
+  function _portraitId(k, v) {
+    try {
+      if (!_portIdx) {
+        _portIdx = new Map();
+        for (const [id, n] of Object.entries(NPCS)) _portIdx.set("npc:" + n.name, id);
+        if (typeof PATRONS !== "undefined") {
+          for (const [id, p] of Object.entries(PATRONS)) _portIdx.set("patron:" + p.name, id);
+        }
+      }
+      return _portIdx.get(k + ":" + v) || null;
+    } catch (e) { return null; }
+  }
+
+  function _avatar(id, cls) {
+    const img = document.createElement("img");
+    img.className = cls;
+    img.src = "portraits/" + id + ".png";
+    img.alt = "";
+    img.addEventListener("error", () => img.remove());
+    return img;
+  }
+
+  // On the presence lines the engine's emoji becomes a portrait: the emoji
+  // is the last token of the text node before each name, so strip it there
+  // and drop the avatar in at the front of the name span.
+  function _addAvatars(div, text) {
+    if (!/^(Here: |At the rail: )/.test(text)) return;
+    for (const kw of div.querySelectorAll('.kw[data-k="npc"], .kw[data-k="patron"]')) {
+      const id = _portraitId(kw.dataset.k, kw.dataset.v);
+      if (!id) continue;
+      const prev = kw.previousSibling;
+      if (prev && prev.nodeType === 3) {
+        prev.nodeValue = prev.nodeValue.replace(/[^\s,]+\s*$/, "");
+      }
+      kw.insertBefore(_avatar(id, "kw-av"), kw.firstChild);
+    }
+  }
+
   // ── The flyout wheel ──────────────────────────────────────────────────
   // Tap a kw → the quick, contextually-right actions (or straight execution
   // when there's exactly one, e.g. exits). Long-press / right-click → the
@@ -195,6 +238,24 @@ const _term = (() => {
     if (acts.length === 1 && (acts[0].go || acts[0].fn) && !full) { _runAct(acts[0]); return; }
     _fly = document.createElement("div");
     _fly.id = "flyout";
+    // a character wheel gets a portrait header (Thai-name taps included)
+    let pid = null;
+    if (kwEl.dataset.k === "npc" || kwEl.dataset.k === "patron") {
+      pid = _portraitId(kwEl.dataset.k, kwEl.dataset.v);
+    } else if (kwEl.dataset.k === "thai") {
+      try {
+        for (const [id, n] of Object.entries(NPCS)) if (n.th === kwEl.dataset.v) pid = id;
+      } catch (e) { /* world not loaded */ }
+    }
+    if (pid) {
+      const head = document.createElement("div");
+      head.className = "fly-head";
+      head.appendChild(_avatar(pid, "fly-av"));
+      const nm = document.createElement("span");
+      nm.textContent = kwEl.dataset.k === "thai" ? NPCS[pid].name : kwEl.dataset.v;
+      head.appendChild(nm);
+      _fly.appendChild(head);
+    }
     for (const act of acts) {
       const b = document.createElement("button");
       b.textContent = act.t + (act.go ? "" : " …");
@@ -216,6 +277,7 @@ const _term = (() => {
     const div = document.createElement("div");
     div.className = "t-line" + (cls ? " t-" + cls : "");
     div.innerHTML = decorate(text);
+    _addAvatars(div, text);
     _out.appendChild(div);
     _out.scrollTop = _out.scrollHeight;
   }
