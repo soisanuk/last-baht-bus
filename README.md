@@ -126,6 +126,14 @@ Mobile gets tappable verb chips; desktop gets ↑/↓ command history.
   seats in town — and from 18:00 to 19:00 the other show: the police
   checkpoint working the evening tide of helmetless farang riders.
   `WATCH SUNSET` or `WATCH POLICE`; the first one each night pays a สนุก.
+- **The soundtrack knows where it is**: chiptune synthesized live (no
+  audio assets, works from `file://`) — synthwave on Walking Street, a
+  slinky groove through LK Metro and Soi 6, surf rolling on the beaches
+  and Beach Road, silence on the inland streets. Inside the bars, the
+  house sets spin an 80s/90s covers crate: Take On Me, Careless Whisper,
+  What Is Love, Billie Jean, Axel F for the go-gos; Zombie, Livin' on a
+  Prayer, The Final Countdown for the bands, with Sabai Sabai always
+  coming back around. No Wonderwall. House rule.
 - **Bar games**: every beer bar keeps a Connect 4 frame (the hostess never
   loses), a Jackpot box (the Thai shut-the-box dice game — flip the dice or
   flip their sum, lowest score wins, shut all nine for JACKPOT), and the
@@ -243,7 +251,7 @@ flowchart TD
     wsn[WS North]
     alley[🌑 Side-Alley]:::dark
     np[🍹 Neon Paradise<br>Noi · Mikkel 🎒]:::bar
-    cm[🍹 Club Mirage<br>Aom]:::bar
+    cm[🍹 Club Mirage<br>Aom · Danny 💪]:::bar
     cp[🍹 Crystal Palace<br>Gift]:::bar
     pn[🍹 Paradise Nights<br>Ping]:::bar
     ms[🍺 Midnight Sun]:::bar
@@ -261,13 +269,15 @@ flowchart TD
     bkm[Buakhao Market<br>Nit 🧵]
     bks[Buakhao South 🏍️]
     candy[🍺 Candy Bar 🔌<br>Candy 🌹 HUB]:::bar
-    rf[🍺 Rock Factory 🎸]:::bar
+    rf[🍺 Rock Factory 🎸<br>Josey 🏋️]:::bar
     lt[🍺 Lucky Tiger<br>Lek · Nigel 🍻]:::bar
     sr[🍺 Silk Rose<br>Helmut 🔧]:::bar
     jg[🍺 Jasmine Garden<br>Fon · Randy 🐻]:::bar
+    metro[🛏 LK Metropole ฿1300<br>fire stairs → LK Metro]
     bkn --- bkm --- bks
     bkn --- lt
     bkn --- rf
+    bkn --- metro
     bkm --- candy
     bkm --- sr
     bks --- jg
@@ -301,7 +311,7 @@ flowchart TD
     lkb[The Bend]
     kk[🍹 KINKY<br>Malee ⚡]:::bar
     sy[🍹 Slutty<br>Wan 💫]:::bar
-    lv[🍹 Las Vegas<br>Jane ⭐]:::bar
+    lv[🍹 Las Vegas<br>Jane ⭐ · Reginald 🥂]:::bar
     lka --- lkm --- lkb
     lkm --- kk
     lkm --- sy
@@ -314,10 +324,12 @@ flowchart TD
     gd[🍺 Golden Dragon]:::bar
     sd[🍺 Sunset Dreams<br>Kwan]:::bar
     qv[🍺 Queen Vic pub<br>Terry 🍺 · Angela 🎧]:::bar
+    qvr[🛏 Balcony Room ฿700]
     s6 --- pl
     s6 --- gd
     s6 --- sd
     s6 --- qv
+    qv --- qvr
   end
 
   subgraph DARKSIDE["THE DARKSIDE (motosai only)"]
@@ -333,7 +345,7 @@ flowchart TD
   subgraph NAKLUA
     nak[🚏 Naklua Rd]
     hsoi[🌑 Sabai Palms Soi]:::dark
-    hotel([🏁 GOAL: Room 412<br>Sabai Palms Hotel])
+    hotel([🏁 GOAL: Room 412<br>Sabai Palms Hotel ฿400])
     nak --- hsoi --- hotel
   end
 
@@ -370,14 +382,15 @@ flowchart TD
 node --test
 ```
 
-215 tests: Thai number composition, world/map integrity (every exit
+222 tests: Thai number composition, world/map integrity (every exit
 resolves, all 20 canon bars present, the gossip chain's flags all connect,
-the patron bench is placed and scheduled), online-readiness (session
-isolation, cloud-save round-trips, deterministic transcripts), the
-news-bake contract, parser, systems, street encounters, bar mini-games and
-social life, and a full scripted playthrough from the beach to the happy
-ending — run headless via `node:vm` against the same files the browser
-loads.
+the patron bench is placed and scheduled), the soundtrack contract (music
+only where music plays), hotel economics (the folio, the ladder, the
+book), online-readiness (session isolation, cloud-save round-trips,
+deterministic transcripts), the news-bake contract, parser, systems,
+street encounters, bar mini-games and social life, and a full scripted
+playthrough from the beach to the happy ending — run headless via
+`node:vm` against the same files the browser loads.
 
 ## Structure
 
