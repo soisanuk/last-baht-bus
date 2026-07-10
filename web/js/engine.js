@@ -4866,7 +4866,10 @@ function doCommand(input) {
     case "bus": _doRideBus(arg); break;
     case "motosai": case "moto": case "taxi": _doMotosai(arg); break;
     case "light": case "flashlight": case "torch":
-      _doLight(!/off/.test(arg)); break;
+      if (/off/.test(arg)) _doLight(false);
+      else if (/on/.test(arg)) _doLight(true);
+      else _doLight(!G.lightOn); // bare LIGHT toggles
+      break;
     case "turn":
       if (arg.includes("light") || arg.includes("torch") || arg.includes("flashlight"))
         _doLight(arg.includes("on"));

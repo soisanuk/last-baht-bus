@@ -111,6 +111,14 @@ test("pending fare gates other commands", () => {
 
 // ── Battery, darkness, soi dogs ────────────────────────────────────────────
 
+test("bare LIGHT toggles: on, then off (the chip sends it argless)", () => {
+  run("light");
+  assert.equal(state().lightOn, true);
+  run("light");
+  assert.equal(state().lightOn, false);
+  assert.match(lastOut(), /Flashlight off/);
+});
+
 test("flashlight drains battery and dies at zero", () => {
   state().battery = 2;
   run("light on", "wait");
