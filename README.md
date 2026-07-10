@@ -29,7 +29,7 @@ Mobile gets tappable verb chips; desktop gets ↑/↓ command history.
 
 ## The game
 
-- **68 rooms** across Jomtien, Pratumnak Hill, Beach Road, Second Road,
+- **70 rooms** across Jomtien, Pratumnak Hill, Beach Road, Second Road,
   Pattaya Klang, Central mall, Myth Night, Walking Street, Soi Buakhao, the
   Tree Town maze, the LK Metro alley, Soi 6, the Darkside (Lake Mabprachan &
   Soi Khao Talo), and Naklua. All 20 canon bars are enterable — plus Candy
@@ -73,6 +73,11 @@ Mobile gets tappable verb chips; desktop gets ↑/↓ command history.
   highest compliment the soi pays; don't say no.
 - **The daily damage**: on vacation, the lobby ATM surrenders ฿3,000 on your
   way out each evening. Spend it well — or don't, and see which feels better.
+- **Pick your base**: after Act One, `CHECKOUT` at the start of an evening
+  moves you between the Sabai Palms (quiet Naklua), the Queen Vic's balcony
+  room (Soi 6 performing below), and the LK Metropole (a tower over the
+  alley, fire stairs into LK Metro — the bellboy winks). Your hotel is your
+  spawn point, shower, charger, and lobby ATM; location is the amenity.
 - **The boy in brown**: weave down a lit street five bottles deep and a
   police officer may take up station in your path. Pay the "fine" (฿500), wai
   and apologise in Thai (฿300), or argue (฿1,000, plus a friend). If a
@@ -94,15 +99,18 @@ Mobile gets tappable verb chips; desktop gets ↑/↓ command history.
   luck too far and security walks you out; in Tree Town and LK Metro the
   whole complex remembers. Try the same moves on the street at your own risk
   — though the Beach Road ladyboy famously appreciates a man who flirts back.
-- **The regulars**: eleven named patrons with ages, passports, home bars, and
-  the backstories to match — Nigel and his curated 1998, Chuck and his
+- **The regulars**: fourteen named patrons with ages, passports, home bars,
+  and the backstories to match — Nigel and his curated 1998, Chuck and his
   "free" drinks, Dave doing his welfare rounds, Helmut on the stool he
   evaluated in 2013, Superman watching every sunset like it's a showing,
-  Angela on the calm side of the Queen Vic glass. Hoppers drift to a new bar
-  each hour until 22:00, then settle at their regular; some never leave
-  their stool, and David only exists on Mondays and Fridays (teacher's
-  budget). Their stories reset daily — TALK TO them, ASK them ABOUT their
-  lives, and mind Drew when he's drunk if you're Canadian.
+  Angela on the calm side of the Queen Vic glass, Danny whose debts are
+  drawn on the map as bars he won't enter, Josey filming the band from the
+  table she measured, and Reginald keeping the party — and an old ledger —
+  rolling. Hoppers drift to a new bar each hour until 22:00, then settle at
+  their regular; some never leave their stool, and David only exists on
+  Mondays and Fridays (teacher's budget). Their stories reset daily — TALK
+  TO them, ASK them ABOUT their lives, and mind Drew when he's drunk if
+  you're Canadian.
 - **No photos in the go-gos**: walk in with your phone light burning and the
   mamasan assumes a camera. Two warnings, then security ends the
   conversation — complex-wide if you're in Tree Town or LK Metro. Elsewhere
@@ -317,8 +325,8 @@ flowchart TD
 
   subgraph NAKLUA
     nak[🚏 Naklua Rd]
-    hsoi[🌑 Hotel Soi]:::dark
-    hotel([🏁 GOAL: Room 412])
+    hsoi[🌑 Sabai Palms Soi]:::dark
+    hotel([🏁 GOAL: Room 412<br>Sabai Palms Hotel])
     nak --- hsoi --- hotel
   end
 

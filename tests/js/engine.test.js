@@ -2250,3 +2250,64 @@ test("Danny never hops into the Stinky Bar — the ledger isn't square", () => {
     }
   }
 });
+
+test("CHECKOUT: swap hotels at the start of an evening; the old key stops working", () => {
+  state().flags.act1Done = true;
+  state().flags.hasWallet = true;
+  state().stage = "vacation";
+  state().room = "hotel_room";
+  state().nightTurn = 3;
+  state().pendingEnc = null; state().lastSaleng = 99999; state().lastPeddler = 99999;
+
+  // act 1 gating: a fresh game can't check out
+  const g = state();
+  out = [];
+  run("checkout");
+  assert.match(lastOut(), /SABAI|QUEEN VIC|METROPOLE/i, "the desk lists options");
+  assert.doesNotMatch(lastOut(), /· SABAI PALMS/, "the current hotel is not on the list");
+  assert.match(lastOut(), /QUEEN VIC/, "Queen Vic offered");
+  assert.match(lastOut(), /METROPOLE/, "Metropole offered");
+  run("queen vic");
+  assert.equal(state().hotel, "queenvic");
+  assert.equal(state().room, "qv_room", "moved straight into the balcony room");
+
+  // the old room refuses the ex-guest
+  state().room = "hotel_soi";
+  out = [];
+  run("n");
+  assert.notEqual(state().room, "hotel_room");
+  assert.match(lastOut(), /different hotel/, "412 is somebody else's now");
+
+  // sleep works at the new place and you wake there
+  state().room = "qv_room";
+  const day0 = state().day;
+  run("sleep");
+  assert.equal(state().day, day0 + 1);
+  assert.equal(state().room, "qv_room", "woke at the Queen Vic");
+
+  // from the Queen Vic, the list offers Sabai Palms and Metropole
+  state().nightTurn = 3;
+  out = [];
+  run("checkout");
+  assert.match(lastOut(), /SABAI PALMS/);
+  assert.match(lastOut(), /METROPOLE/);
+  run("metropole");
+  assert.equal(state().room, "metropole_room");
+
+  // late checkout is refused; STAY cancels cleanly
+  state().nightTurn = 30;
+  out = [];
+  run("checkout");
+  assert.match(lastOut(), /Tomorrow, na/);
+  state().nightTurn = 3;
+  run("checkout", "stay");
+  assert.equal(state().hotel, "metropole");
+  assert.equal(state().pendingChoice, null);
+
+  // act1 guard on a fresh game
+  newGame();
+  state().lastSaleng = 99999;
+  out = [];
+  run("checkout");
+  assert.match(lastOut(), /the wallet is the whole adventure/);
+});

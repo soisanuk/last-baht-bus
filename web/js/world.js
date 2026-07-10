@@ -370,7 +370,7 @@ const ROOMS = {
       "The market sprawl is south. A small handwritten LK METRO arrow on a wall points " +
       "down an alley — easy to miss, worth finding.",
     exits: { w: "myth_night", n: "pattaya_klang", s: "buakhao_market", e: "lucky_tiger",
-             in: "rock_factory", alley: "lk_entrance" },
+             in: "rock_factory", alley: "lk_entrance", hotel: "metropole_room" },
   },
   buakhao_market: {
     name: "Buakhao Market",
@@ -581,8 +581,30 @@ const ROOMS = {
       "sits halfway down Soi 6 with the righteous calm of a man who has seen it all and " +
       "ordered another pint. Through the window, the soi performs. On the balcony above, " +
       "Terry is in a recliner watching it with a beer, and has probably been there for " +
-      "some time.",
-    exits: { out: "soi6_street" },
+      "some time. A staircase behind the bar leads UP to the guest rooms.",
+    exits: { out: "soi6_street", up: "qv_room" },
+  },
+  metropole_room: {
+    name: "Your Room — LK Metropole",
+    region: "Soi Buakhao",
+    outlet: true,
+    desc: "A proper tower room at the LK Metropole: blackout curtains, aircon set " +
+      "to walk-in fridge, a shower with municipal water pressure. From the window, " +
+      "the LK Metro alley glows directly below like a lit fuse. The lift goes down " +
+      "to the lobby on Soi Buakhao — and the fire stairs, the bellboy mentions " +
+      "with a wink, come out in the alley itself.",
+    exits: { out: "buakhao_n", alley: "lk_entrance" },
+  },
+  qv_room: {
+    name: "Your Room — Queen Vic Inn",
+    region: "Soi 6",
+    outlet: true,
+    desc: "The balcony room over the Queen Vic: wood floors, a ceiling fan with " +
+      "strong opinions, and the balcony itself — a recliner, a small table, and " +
+      "the whole of Soi 6 performing below like a fish tank somebody dropped a " +
+      "radio into. Terry's recliner is two balconies over; he raises his beer " +
+      "without looking. Sleep happens here somehow. Nobody knows how.",
+    exits: { down: "queen_vic", out: "queen_vic" },
   },
 
   // ─── LK Metro ───
@@ -692,24 +714,28 @@ const ROOMS = {
     region: "Naklua",
     seven: true,
     desc: "North of the Dolphin roundabout the volume drops by half: seafood restaurants, " +
-      "temples, long-stay hotels. Your hotel's soi is up ahead, dark as a power cut.",
+      "temples, long-stay hotels. Up ahead, the SABAI PALMS HOTEL sign glows over its " +
+      "soi — half the letters out, so it reads 'SA AI PA MS', which the long-stay " +
+      "guests consider part of the charm. The soi itself is dark as a power cut.",
     busStop: "beachrd",
     exits: { s: "beach_rd_n", n: "hotel_soi" },
   },
   hotel_soi: {
-    name: "Hotel Soi (Naklua)",
+    name: "Sabai Palms Soi (Naklua)",
     region: "Naklua",
     dark: true,
-    desc: "Your soi. No streetlights — the municipality has been 'fixing' them since " +
-      "March. Somewhere down there is a bed with your name on it.",
+    desc: "The Sabai Palms' soi. No streetlights — the municipality has been 'fixing' " +
+      "them since March. Two actual palms flank the lobby entrance somewhere down " +
+      "there, and past them, a bed with your name on it.",
     exits: { s: "naklua_rd", n: "hotel_room" },
   },
   hotel_room: {
-    name: "Your Hotel Room",
+    name: "Your Room — Sabai Palms Hotel",
     region: "Naklua",
-    desc: "Room 412. The air-con stutters awake. The bed is exactly as terrible as you " +
-      "remember. A hot shower, a change of shirt — and below the window, the city " +
-      "hums on, wide open.",
+    desc: "Room 412 of the Sabai Palms Hotel (โรงแรมสบายปาล์ม) — a name the place has " +
+      "spent decades cheerfully failing to live up to. The air-con stutters awake. " +
+      "The bed is exactly as terrible as you remember. A hot shower, a change of " +
+      "shirt — and below the window, the city hums on, wide open.",
     outlet: true, // your own room charges your own phone
     exits: { out: "hotel_soi", s: "hotel_soi" },
   },
