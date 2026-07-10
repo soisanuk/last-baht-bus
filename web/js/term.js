@@ -66,10 +66,12 @@ const _term = (() => {
     // Known words tap open the word-card modal; unknown runs of 2+ chars
     // still offer the decomposition-only card.
     html = html.replace(/[\u0E00-\u0E7F]{2,}/g, run => {
+      if (/^[๐-๙]+$/.test(run)) return run; // Thai numerals are the puzzle, not vocab
       const toks = _thaiTokens(run);
       if (!toks) return run;
       return toks.map(t =>
-        (t.word || t.text.length >= 2) ? _wrap("thai", t.text) : t.text).join("");
+        (t.word || t.text.length >= 2) && !/^[๐-๙]+$/.test(t.text)
+          ? _wrap("thai", t.text) : t.text).join("");
     });
     return html;
   }

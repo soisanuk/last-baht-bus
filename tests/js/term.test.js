@@ -118,3 +118,32 @@ test("tapping plain Thai goes straight to the word card; entity Thai gets the wh
   assert.ok(labels.some(t => /translate/.test(t)), "the dictionary rides along");
   assert.ok(ent.length > 1, "a wheel, not an instant fire");
 });
+
+test("every Thai word the game prints resolves in the vendored vocab", () => {
+  // the coverage contract: game Thai is always tappable-and-translatable.
+  // New writing that introduces Thai must either use vocab words or add
+  // them to the trainer's data.js (source of truth) and re-vendor.
+  const map = {};
+  for (const w of WORDS) map[w[0]] = w;
+  for (const n of Object.values(NPCS)) if (n.th) map[n.th] = ["ent"];
+  const tok = makeTokeniser(map);
+  const srcs = ["world.js", "engine.js", "thai.js"].map(f => readFileSync(
+    fileURLToPath(new URL(`../../web/js/${f}`, import.meta.url)), "utf8")).join("\n");
+  let gen = [];
+  for (let n = 0; n <= 999; n++) gen.push(thaiNum(n)); // runtime-composed numbers
+  const all = srcs + "\n" + gen.join("\n");
+  const unknown = new Set();
+  for (const run of all.match(/[฀-๿]{2,}/g) || []) {
+    if (/^[๐-๙]+$/.test(run)) continue; // Thai numerals are the puzzle, not vocab
+    for (const t of tok(run)) {
+      if (!t.word && t.text.length >= 2 && !/^[๐-๙]+$/.test(t.text)) unknown.add(t.text);
+    }
+  }
+  assert.deepEqual([...unknown], [],
+    "unknown Thai in game text — add to the trainer's data.js and re-vendor");
+});
+
+test("Thai numerals stay undecorated — the safe PIN is a puzzle, not vocab", () => {
+  const d = _term.decorate("The keypad reads ๗๑๙ in fading paint.");
+  assert.equal(d, "The keypad reads ๗๑๙ in fading paint.");
+});
