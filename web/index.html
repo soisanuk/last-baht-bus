@@ -101,10 +101,33 @@
   .t-dim   { color: var(--violet); font-size: .88em; }
   .t-alert { color: var(--red); text-shadow: 0 0 10px #ff335550; }
   /* actionable words — names, items, exits, command hints. Bold and a shade
-     brighter than their line; future tap targets for the flyout wheel. */
-  .kw { font-weight: 700; color: var(--bright); }
+     brighter than their line; tap for quick actions, hold for the full list. */
+  .kw { font-weight: 700; color: var(--bright); cursor: pointer;
+        -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
+  .kw:hover { text-decoration: underline dotted; }
   .t-dim .kw { color: #d9c2f2; }
   .t-alert .kw, .t-win .kw, .t-room .kw, .t-thai .kw { color: inherit; }
+  /* the flyout wheel */
+  #flyout {
+    position: fixed; z-index: 50;
+    display: flex; flex-direction: column; gap: 2px;
+    background: var(--panel);
+    border: 1px solid var(--pink);
+    border-radius: 10px;
+    box-shadow: 0 0 18px #ff149360, 0 4px 24px #000c;
+    padding: .3rem;
+    max-width: min(78vw, 320px);
+  }
+  #flyout button {
+    background: none; border: none; text-align: left;
+    font: inherit; color: var(--bright);
+    padding: .45rem .7rem; min-height: 40px;
+    border-radius: 7px; cursor: pointer; white-space: nowrap;
+    overflow: hidden; text-overflow: ellipsis;
+  }
+  #flyout button:hover, #flyout button:active {
+    background: #ff149322; color: #fff;
+  }
   .t-win   { color: var(--yellow); font-weight: bold;
              text-shadow: 0 0 16px #ffe60090, 0 0 40px #ffe60040; }
   #chips {

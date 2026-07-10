@@ -21,43 +21,154 @@ const _term = (() => {
       ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   }
 
-  function _kwNames() {
-    const names = [];
+  function _kwIndex() {
+    const kind = new Map(); // display name → npc | patron | bar | item
     try {
-      for (const n of Object.values(NPCS)) names.push(n.name);
+      for (const n of Object.values(NPCS)) kind.set(n.name, "npc");
       if (typeof PATRONS !== "undefined") {
-        for (const p of Object.values(PATRONS)) names.push(p.name);
+        for (const p of Object.values(PATRONS)) kind.set(p.name, "patron");
       }
-      for (const r of Object.values(ROOMS)) if (r.bar) names.push(r.bar);
+      for (const r of Object.values(ROOMS)) if (r.bar) kind.set(r.bar, "bar");
       if (typeof G !== "undefined" && G && G.itemLoc) {
         for (const id of Object.keys(G.itemLoc)) {
           const loc = G.itemLoc[id];
-          if (loc === "inventory" || loc === G.room) names.push(ITEMS[id].name);
+          if (loc === "inventory" || loc === G.room) kind.set(ITEMS[id].name, "item");
         }
       }
     } catch (e) { /* pre-boot print: decorate nothing */ }
-    return names;
+    return kind;
+  }
+
+  function _wrap(k, v) {
+    return `<b class="kw" data-k="${k}" data-v="${v}">${v}</b>`;
   }
 
   function decorate(text) {
     let html = _escapeHtml(text);
-    // exits line: every token is a direction you can type
+    // exits line: every token is a direction you can walk
     if (/^Exits: /.test(text)) {
-      return "Exits: " + html.slice(7).replace(/([a-z]+)/g, '<b class="kw">$1</b>');
+      return "Exits: " + html.slice(7).replace(/([a-z]+)/g, _wrap("exit", "$1"));
     }
-    const names = _kwNames();
-    if (names.length) {
-      names.sort((a, b) => b.length - a.length); // "Candy Bar 2" before "Candy"
+    const kind = _kwIndex();
+    if (kind.size) {
+      const names = [...kind.keys()].sort((a, b) => b.length - a.length);
       const pat = new RegExp("\\b(" +
         names.map(n => n.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|") +
         ")\\b", "g");
-      html = html.replace(pat, '<b class="kw">$1</b>');
+      html = html.replace(pat, m => _wrap(kind.get(m), m));
     }
     // ALL-CAPS command hints inside parentheses: (WATCH POLICE · or NO)
     html = html.replace(/\(([^()]*)\)/g, (m, inner) =>
       "(" + inner.replace(/([A-Z]{2,}(?:[ -][A-Z0-9]{2,})*(?: &lt;[a-z… ]+&gt;)?)/g,
-        '<b class="kw">$1</b>') + ")");
+        c => _wrap("cmd", c)) + ")");
     return html;
+  }
+
+  // ── The flyout wheel ──────────────────────────────────────────────────
+  // Tap a kw → the quick, contextually-right actions (or straight execution
+  // when there's exactly one, e.g. exits). Long-press / right-click → the
+  // comprehensive list, including an NPC's live ask-topics. Every action
+  // goes through the normal submit path, so taps echo as typed commands
+  // and the engine never knows a wheel exists.
+  function _kwActions(k, v, full) {
+    const a = [];
+    const lo = v.toLowerCase();
+    try {
+      if (k === "exit") return [{ t: "go " + v, c: "go " + v, go: true }];
+      if (k === "cmd") {
+        const open = /<|…|\[/.test(v);
+        return [{ t: lo, c: lo.replace(/\s*[<…[].*$/, "") + (open ? " " : ""), go: !open }];
+      }
+      if (k === "bar") return [{ t: "enter " + v, c: "enter " + lo, go: true }];
+      if (k === "item") {
+        let id = null;
+        for (const [iid, it] of Object.entries(ITEMS)) if (it.name === v) id = iid;
+        const loc = id ? G.itemLoc[id] : null;
+        if (loc === G.room) a.push({ t: "take", c: "take " + lo, go: true });
+        a.push({ t: "examine", c: "x " + lo, go: true });
+        if (loc === "inventory") {
+          a.push({ t: "read", c: "read " + lo, go: true });
+          if (full) {
+            a.push({ t: "drop", c: "drop " + lo, go: true });
+            a.push({ t: "give to …", c: `give ${lo} to `, go: false });
+          }
+        }
+        return a;
+      }
+      // npc | patron
+      const npc = typeof _findNpc === "function" ? _findNpc(lo) : null;
+      const pat = !npc && typeof _findPatron === "function" ? _findPatron(lo) : null;
+      if (!npc && !pat) {
+        // not here: ask whoever is
+        const here = _npcsHere();
+        if (here.length) {
+          a.push({ t: `ask ${NPCS[here[0]].name} about ${lo}`,
+            c: `ask ${NPCS[here[0]].name.toLowerCase()} about ${lo}`, go: true });
+        }
+        a.push({ t: "ask … about " + lo, c: "ask ", go: false });
+        return a;
+      }
+      a.push({ t: "talk", c: "talk to " + lo, go: true });
+      const topics = npc
+        ? NPCS[npc].dialogue.filter(d => d.topic &&
+            (!d.req || d.req.every(f => G.flags[f])) &&
+            (!d.notFlags || d.notFlags.every(f => !G.flags[f]))).map(d => d.topic)
+        : PATRONS[pat].dialogue.filter(d => d.topic).map(d => d.topic);
+      if (full) {
+        for (const t of topics.slice(0, 6)) {
+          a.push({ t: "ask about " + t, c: `ask ${lo} about ${t}`, go: true });
+        }
+      } else if (topics.length) {
+        a.push({ t: "ask about …", c: `ask ${lo} about `, go: false });
+      }
+      a.push({ t: "examine", c: "x " + lo, go: true });
+      const role = npc && typeof NPC_ROLES !== "undefined" ? NPC_ROLES[npc] : null;
+      if (role) a.push({ t: "buy her a drink", c: "buy drink for " + lo, go: true });
+      if (full && role === "hostess") {
+        a.push({ t: "flirt", c: "flirt " + lo, go: true });
+        a.push({ t: "tip …", c: `tip ${lo} `, go: false });
+        a.push({ t: "contact", c: "contact " + lo, go: true });
+        a.push({ t: "barfine", c: "barfine " + lo, go: true });
+      }
+      if (full && !role && npc) a.push({ t: "wai", c: "wai " + lo, go: true });
+    } catch (e) { /* engine not booted: no actions */ }
+    return a;
+  }
+
+  let _fly = null, _onCmd = null, _pressTimer = null, _longFired = false;
+
+  function _closeFly() {
+    if (_fly) { _fly.remove(); _fly = null; }
+  }
+
+  function _runAct(act) {
+    _closeFly();
+    _input.value = act.c;
+    if (act.go) { submit(_onCmd); }
+    else { _input.focus(); _refreshSuggest(); }
+  }
+
+  function _openFly(kwEl, full) {
+    _closeFly();
+    const acts = _kwActions(kwEl.dataset.k, kwEl.dataset.v, full);
+    if (!acts.length) return;
+    if (acts.length === 1 && acts[0].go && !full) { _runAct(acts[0]); return; }
+    _fly = document.createElement("div");
+    _fly.id = "flyout";
+    for (const act of acts) {
+      const b = document.createElement("button");
+      b.textContent = act.t + (act.go ? "" : " …");
+      b.addEventListener("click", e => { e.stopPropagation(); _runAct(act); });
+      _fly.appendChild(b);
+    }
+    document.body.appendChild(_fly);
+    const r = kwEl.getBoundingClientRect();
+    const fw = _fly.offsetWidth, fh = _fly.offsetHeight;
+    let x = Math.min(r.left, window.innerWidth - fw - 8);
+    let y = r.bottom + 6;
+    if (y + fh > window.innerHeight - 8) y = Math.max(8, r.top - fh - 6);
+    _fly.style.left = Math.max(8, x) + "px";
+    _fly.style.top = y + "px";
   }
 
   function print(text, cls) {
@@ -149,9 +260,45 @@ const _term = (() => {
       _refreshSuggest();
     });
 
-    // tap anywhere in the output refocuses the input (but let text selection be)
-    _out.addEventListener("click", () => {
+    // the flyout wheel: tap a kw = quick actions; long-press / right-click =
+    // the comprehensive list. Pointer timers, not click, decide which.
+    _onCmd = onCommand;
+    let _pressX = 0, _pressY = 0;
+    _out.addEventListener("pointerdown", e => {
+      const kw = e.target.closest(".kw");
+      if (!kw) return;
+      _longFired = false;
+      _pressX = e.clientX; _pressY = e.clientY;
+      clearTimeout(_pressTimer);
+      _pressTimer = setTimeout(() => { _longFired = true; _openFly(kw, true); }, 500);
+    });
+    _out.addEventListener("pointermove", e => {
+      // a drag is a scroll, not a hold
+      if (Math.abs(e.clientX - _pressX) + Math.abs(e.clientY - _pressY) > 12) {
+        clearTimeout(_pressTimer);
+      }
+    });
+    _out.addEventListener("pointerup", () => clearTimeout(_pressTimer));
+    _out.addEventListener("pointercancel", () => clearTimeout(_pressTimer));
+    _out.addEventListener("contextmenu", e => {
+      const kw = e.target.closest(".kw");
+      if (kw) { e.preventDefault(); _openFly(kw, true); }
+    });
+
+    // tap: quick wheel on a kw; otherwise close any flyout and refocus input
+    _out.addEventListener("click", e => {
+      const kw = e.target.closest(".kw");
+      if (kw) {
+        if (_longFired) { _longFired = false; return; } // the long-press already opened
+        _openFly(kw, false);
+        return;
+      }
+      _closeFly();
       if (!window.getSelection().toString()) _input.focus();
+    });
+    // tapping anywhere else dismisses the wheel
+    document.addEventListener("click", e => {
+      if (_fly && !_fly.contains(e.target) && !e.target.closest(".kw")) _closeFly();
     });
 
     // verb chips: insert text; chips ending in a space wait for an object,
@@ -173,5 +320,5 @@ const _term = (() => {
     _input.focus();
   }
 
-  return { init, print, decorate };
+  return { init, print, decorate, kwActions: _kwActions };
 })();
