@@ -8,6 +8,10 @@ export default defineConfig({
   testDir: "./tests/e2e",
   fullyParallel: true,
   reporter: "list",
+  // Retry in CI (2 retries = up to 3 attempts) so a transient browser hiccup
+  // can't block a deploy now that e2e gates it; locally, fail fast so real
+  // flakiness surfaces instead of being papered over. GitHub Actions sets CI=1.
+  retries: process.env.CI ? 2 : 0,
   use: { ...devices["Desktop Chrome"] },
   // No webServer: the app is designed to run from file://, so the spec loads
   // web/index.html directly — that's the property we want to prove.
