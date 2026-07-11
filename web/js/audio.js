@@ -215,7 +215,8 @@ const _audio = (() => {
 
   function _schedule() {
     while (_nextT < _actx.currentTime + 0.18) {
-      const t = _track, spb = 30 / t.bpm;
+      // Every track plays at 75% of its written bpm — full speed felt rushed.
+      const t = _track, spb = 30 / (t.bpm * 0.75);
       const bar = Math.floor(_step / 8) % t.bass.length;
       const pos = _step % 8;
       const root = t.bass[bar];
