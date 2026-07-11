@@ -15,8 +15,8 @@ jobs:
           node-version: 22
       - run: node --test
 
-  # Browser smoke test — non-gating on purpose: deploy needs only `test`, so a
-  # flaky browser run never blocks a release. It runs in parallel for visibility.
+  # Browser smoke test — gates the deploy (deploy needs [test, e2e]), so a page
+  # that fails to boot in a real browser never ships. Runs in parallel with test.
   e2e:
     runs-on: ubuntu-latest
     steps:
@@ -29,7 +29,7 @@ jobs:
       - run: npm run test:e2e
 
   deploy:
-    needs: test
+    needs: [test, e2e]
     runs-on: ubuntu-latest
     permissions:
       contents: write

@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 No build step, no lint, no npm install for the app — plain HTML/CSS/JS served as-is. The only exception is the browser E2E below, which is dev-only tooling; the app itself never needs a build or install.
 
 ```sh
-# Run all tests (Node 18+) — the gating suite, install-free
+# Run all tests (Node 18+) — the fast vm suite, install-free (gates deploy alongside e2e)
 node --test
 
 # Run a single test file
@@ -93,7 +93,7 @@ A 2D version of this game is a live possibility. The text terminal must stay a *
 
 ### Browser E2E (tests/e2e/, Playwright)
 
-The node:vm suite never opens `index.html` in a browser — it drives the engine through the print callback. `tests/e2e/smoke.spec.mjs` covers that one gap: it loads `web/index.html` from `file://` in headless Chromium, asserts the boot intro renders, that all five `engine-*.js` parts loaded in order (checks `newGame` from core and `doCommand`/`engineComplete` from parser plus a populated `G`), and that a typed `look` round-trips through the real DOM with no page errors. Deliberately thin — a boot-and-a-command canary for load-order breakage, a missing `<script>` tag, or a boot exception; behavioural depth stays in the vm tests. It is **not** wired into the deploy pipeline (that stays install-free and fast); run it locally via `npm run test:e2e` after `npm install && npx playwright install chromium`. `node --test` ignores it (`.spec.mjs`, not `.test.js`), so the gating suite is unaffected. Since `G` is a lexical global (top-level `let`), the spec's `page.evaluate` reads it as a bare identifier, not `window.G` — the same gotcha as the vm tests.
+The node:vm suite never opens `index.html` in a browser — it drives the engine through the print callback. `tests/e2e/smoke.spec.mjs` covers that one gap: it loads `web/index.html` from `file://` in headless Chromium, asserts the boot intro renders, that all five `engine-*.js` parts loaded in order (checks `newGame` from core and `doCommand`/`engineComplete` from parser plus a populated `G`), and that a typed `look` round-trips through the real DOM with no page errors. Deliberately thin — a boot-and-a-command canary for load-order breakage, a missing `<script>` tag, or a boot exception; behavioural depth stays in the vm tests. It runs in CI as its own `e2e` job and **gates the deploy** (`deploy` needs `[test, e2e]`), so a page that fails to boot in a real browser never ships — the tradeoff is that the deploy pipeline now installs Playwright (~1 min) and a flaky browser run can block a release. Run it locally via `npm run test:e2e` after `npm install && npx playwright install chromium`. `node --test` ignores it (`.spec.mjs`, not `.test.js`), so the fast vm suite is unaffected. Since `G` is a lexical global (top-level `let`), the spec's `page.evaluate` reads it as a bare identifier, not `window.G` — the same gotcha as the vm tests.
 
 World-integrity tests enforce: every exit resolves to a real room, all 20 canon bars exist, the patron bench is placed/scheduled sanely, and every flag required by dialogue is settable somewhere (dialogue `sets` plus the engine-set list in `world.test.js` — extend that list when the engine gains new flag-setting actions).
 
