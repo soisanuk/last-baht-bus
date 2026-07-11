@@ -133,6 +133,18 @@ test("the wheel: bare PLAY fans out into this room's games", () => {
     [{ t: "play", c: "play", go: true }]);
 });
 
+test("the MAP art decorates without any command kws — no dead taps", () => {
+  assert.ok(!_term.decorate(_MAP).includes('data-k="cmd"'),
+    "parens in the map must never contain CAPS runs");
+});
+
+test("the 7-Eleven hint is three complete BUY taps", () => {
+  const d = _term.decorate("A 7-Eleven glows across the way (BUY TOASTIE · BUY WATER · BUY CHARGER).");
+  for (const c of ["BUY TOASTIE", "BUY WATER", "BUY CHARGER"]) {
+    assert.ok(d.includes(kw(c, "cmd")), c);
+  }
+});
+
 test("hint placeholders stay inside one kw — no orphan FOR/TO taps", () => {
   const d = _term.decorate("(BUY MOO PING ฿40 · BUY <item> FOR <lady> · NO.)");
   assert.ok(d.includes('data-v="BUY &lt;item&gt; FOR &lt;lady&gt;"'), d);

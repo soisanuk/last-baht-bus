@@ -157,6 +157,28 @@ test("jackpot: the FLIP hint is tappable and autocomplete offers the legal moves
   assert.ok(!state().game || !lastOut().includes("those are the choices"), "the tap is a legal move");
 });
 
+test("checkout: the hotel options are tappable and a tap moves you", () => {
+  state().flags.act1Done = true;
+  state().flags.hasWallet = true;
+  state().stage = "vacation";
+  state().room = _hotelRoomId();
+  run("checkout");
+  assert.equal(state().pendingChoice, "checkout");
+  assert.match(lastOut(), /\(QUEEN VIC INN — ฿\d+\/night\)/, "options sit in parens");
+  run("queen vic inn"); // what tapping the option submits
+  assert.equal(state().hotel, "queenvic");
+  assert.equal(state().pendingChoice, null);
+});
+
+test("vacation's end: both choices are tappable and route", () => {
+  _endVacation();
+  assert.equal(state().pendingChoice, "vacation_end");
+  assert.match(lastOut(), /\(NEW VACATION — /);
+  assert.match(lastOut(), /\(MOVE TO PATTAYA — /);
+  run("move to pattaya");
+  assert.equal(state().stage, "expat");
+});
+
 test("modal autocomplete: games and pending choices own the suggestions", () => {
   state().game = { type: "pool" };
   assert.deepEqual(engineComplete("s"), ["shot", "safety"]);

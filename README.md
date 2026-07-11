@@ -51,9 +51,11 @@ Mobile gets tappable verb chips; desktop gets ↑/↓ command history.
 - **Transport**: baht buses (฿15, the driver quotes the fare in spoken Thai —
   pay attention and pay exactly), motosai (faster, pricier, and the piwin
   network remembers a favour), or your own feet in the dark. Once you know a
-  place, `TRAVEL <bar>` (or just `GO <bar>`) walks you there on autopilot —
-  free, but at honest walking pace: the minimum turns the trip would take,
-  every one of them on the clock. Bare `TRAVEL` lists everywhere you know.
+  place, `TRAVEL <bar>` (or just `GO <bar>`, or tapping its name) walks you
+  there on autopilot — free, but at honest walking pace: the minimum turns
+  the trip would take, every one of them on the clock. Bare `TRAVEL` lists
+  everywhere you know; your hotel is on the list from turn one, because
+  knowing where you sleep is the premise.
 - **Thai as puzzle**: read เปิด/ปิด signs, navigate the Tree Town maze by its
   painted Thai arrows, and crack a safe whose keypad speaks only ๐–๙.
   A `wai` and a `sawatdee` open more doors than money.
@@ -143,9 +145,11 @@ Mobile gets tappable verb chips; desktop gets ↑/↓ command history.
   including an NPC's live ask-topics. You can only be offered gossip
   about people you've actually heard of — a name has to appear in your
   transcript before it shows up as an ask-topic or autocomplete
-  suggestion. Every tap echoes as a typed command, so the transcript
-  stays honest. A ➤ send button finishes prefilled commands without
-  summoning the keyboard.
+  suggestion. Open-ended hints fan out into real choices: `PLAY` offers
+  the games actually in the room, `DROP` the open Connect 4 columns,
+  `FLIP` the legal Jackpot moves. Every tap echoes as a typed command,
+  so the transcript stays honest. A ➤ send button finishes prefilled
+  commands without summoning the keyboard.
 - **Faces on the soi**: every character — all 31 NPCs and 14 bar
   patrons — has a pixel-art portrait, shown on presence lines and atop
   their action wheel. Generated from one parametric part library
