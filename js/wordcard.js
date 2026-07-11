@@ -1,3 +1,5 @@
+// VENDORED from the Soi Sanuk trainer (soisanuk.github.io web/js/wordcard.js) —
+// source of truth lives there; edit there and re-copy. Do not fork.
 // Word card: the shared Thai vocab modal — decomposition, translation,
 // example sentences, script/word tooltips. SOURCE OF TRUTH lives in the
 // Soi Sanuk trainer repo (soisanuk.github.io, web/js/wordcard.js); The Last
