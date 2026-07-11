@@ -186,6 +186,18 @@ test("Connect 4: the column numbers and Q tap while a c4 game is live", () => {
   assert.ok(!_term.decorate(c4Render(c4New())).includes('data-k="cmd"'));
 });
 
+test("saleng: the open BUY-for-lady hint fans out into the cart's items", () => {
+  G.pendingEnc = "saleng";
+  G.salengCart = "snacks";
+  assert.deepEqual(_term.kwActions("cmd", "BUY <item> FOR <lady>", false), [
+    { t: "buy som tam for …", c: "buy som tam for ", go: false },
+    { t: "buy fruit for …", c: "buy fruit for ", go: false },
+  ]);
+  G.pendingEnc = null; // no cart: just the ordinary open prefill
+  assert.deepEqual(_term.kwActions("cmd", "BUY <item> FOR <lady>", false),
+    [{ t: "buy <item> for <lady>", c: "buy ", go: false }]);
+});
+
 test("anonymous staff decorate only where they stand", () => {
   G.room = "myth_night";
   assert.equal(_term.decorate("Complex security watches the lane."),

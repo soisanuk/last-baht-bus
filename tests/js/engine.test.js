@@ -832,6 +832,19 @@ test("bell flavor: 'Three' isn't shouty (no dead tap), four-plus gets a generic 
   assert.match(lastOut(), /on top of three|making noise/i);
 });
 
+test("saleng buy: the cart's items surface in autocomplete (no more typing them out)", () => {
+  state().pendingEnc = "saleng";
+  state().salengCart = "food";
+  assert.deepEqual(_salengItems(), ["moo ping", "noodles"]);
+  const buy = engineComplete("buy ");
+  assert.ok(buy.includes("moo ping") && buy.includes("noodles"), "cart items listed for 'buy '");
+  state().room = "neon_paradise"; // Noi, a hostess, present
+  assert.ok(engineComplete("buy moo ping for ").includes("noi"), "a present lady is offered as the gift target");
+  state().pendingEnc = null; // no cart: buy falls back to the bar/shop list
+  assert.ok(engineComplete("buy ").includes("beer"));
+  assert.deepEqual(_salengItems(), []);
+});
+
 test("Aek the tom cashier holds the till at Midnight Sun and caps contact", () => {
   state().room = "midnight_sun";
   run("talk to aek");
