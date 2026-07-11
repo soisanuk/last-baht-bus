@@ -70,6 +70,15 @@ const _term = (() => {
     html = html.replace(/\(([^()]*)\)/g, (m, inner) =>
       "(" + inner.replace(/([A-Z]{2,}(?:[ -][A-Z0-9]{2,}|\s&lt;[a-z…0-9 |]+&gt;)*)/g,
         c => _wrap("cmd", c)) + ")");
+    // Quiz answer lines: while a quiz is live, the leading "1./2./3." is a
+    // tappable pick. A bare digit is never a cmd hint anywhere else, so gate
+    // on G.game — otherwise numbered prose would sprout dead taps.
+    try {
+      if (G && G.game && G.game.type === "quiz") {
+        html = html.replace(/^(\s*)([1-3])(\.\s)/, (m, sp, d, rest) =>
+          sp + _wrap("cmd", d) + rest);
+      }
+    } catch (e) { /* pre-boot: no game, nothing to decorate */ }
     // Thai runs: tokenise against the vendored vocab (plus NPC Thai names,
     // so แคนดี้ stays whole instead of shredding into vocab fragments).
     // Known words tap open the word-card modal; unknown runs of 2+ chars
