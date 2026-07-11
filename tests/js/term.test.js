@@ -117,6 +117,15 @@ test("entity Thai stays whole: แคนดี้ is Candy, not vocab shrapnel",
   assert.ok(d.includes(kw("แคนดี้", "thai")), d);
 });
 
+test("anonymous staff decorate only where they stand", () => {
+  G.room = "myth_night";
+  assert.equal(_term.decorate("Complex security watches the lane."),
+    "Complex security watches the lane.", "no dead-end tap in Myth Night");
+  G.room = "rainbow_girls";
+  assert.ok(_term.decorate("The security detail is load-bearing.")
+    .includes(kw("security", "npc")), "tappable where they stand");
+});
+
 test("entity Thai doesn't fire inside a longer word: หมด is not Mot (มด)", () => {
   const d = _term.decorate("แบตหมดเหรอ");
   assert.ok(d.includes(kw("หมด", "thai")), d);
