@@ -78,6 +78,7 @@ function newGame() {
     darkStreak: 0,
     flags: {},
     known: {},           // charId → true once their name has printed (ask-topic gate)
+    visited: { jomtien_beach: true }, // roomId → true once stood in (fast-travel gate)
     talked: {},          // npcId → [dialogue indices already delivered] (terse repeats)
     itemLoc: Object.fromEntries(
       Object.entries(ITEMS).map(([id, it]) => [id, it.location])),
@@ -142,6 +143,7 @@ function deserializeGame(s) {
   if (G.game === undefined) G.game = null;
   if (!G.lightWarn) G.lightWarn = { room: null, n: 0, mark: false };
   if (!G.known) G.known = {};
+  if (!G.visited) G.visited = { [G.room]: true };
   if (G.blueDogDay === undefined) G.blueDogDay = 0;
   if (!G.hotel) G.hotel = "sabai";
   if (G.hotelDebt === undefined) G.hotelDebt = 0;
@@ -411,6 +413,7 @@ function _deliver(npcId, d) {
 
 function _describeRoom(full) {
   const r = _room();
+  G.visited[G.room] = true; // standing in it is how places join the fast-travel list
   if (_isDarkHere()) {
     _say(`${r.name}`, "room");
     _say("It is pitch dark. If your phone has any battery left, its flashlight " +
@@ -3265,6 +3268,14 @@ function _doGo(dirWord) {
     _say(`You stop at the lobby ATM on the way out. It considers your card, sighs, ` +
       `and surrenders the daily damage: ฿${SAFE_CASH}. (฿${G.money} in pocket.)`, "dim");
   }
+  _arriveAt(to);
+}
+
+// Arrival side-effects shared by _doGo and _doTravel: door policy, the room
+// description, the light warning, the debt scene, quiz capture, standing
+// invitations, street encounters. Everything that happens because you're
+// suddenly *here*, however you got here.
+function _arriveAt(to) {
   if (ROOMS[to].barType) {
     const b = G.soc.banned[to];
     if (b !== undefined) {
@@ -3317,6 +3328,96 @@ function _doGo(dirWord) {
   _maybeEncounter();
 }
 
+// ── Fast travel ────────────────────────────────────────────────────────────
+// TRAVEL <bar|hotel>: autopilot to any bar (or your own hotel) you've stood
+// in before. Costs exactly what walking would — the BFS hop count in turns,
+// each paying full _tick — so it saves keystrokes, never time. Rain still
+// owns the street, and the night can end (or a bar encounter corner you)
+// mid-walk, same as walking by hand.
+
+function _hops(from, to) {
+  if (from === to) return 0;
+  const seen = { [from]: 0 };
+  const q = [from];
+  while (q.length) {
+    const cur = q.shift();
+    for (const nxt of Object.values(ROOMS[cur].exits || {})) {
+      if (seen[nxt] !== undefined) continue;
+      seen[nxt] = seen[cur] + 1;
+      if (nxt === to) return seen[nxt];
+      q.push(nxt);
+    }
+  }
+  return null;
+}
+
+function _travelDests() {
+  const out = Object.keys(G.visited).filter(id => ROOMS[id] && ROOMS[id].bar);
+  if (G.visited[_hotelRoomId()]) out.push(_hotelRoomId());
+  return out;
+}
+
+function _doTravel(arg) {
+  const w = (arg || "").toLowerCase().replace(/^to (the )?/, "").trim();
+  const dests = _travelDests();
+  if (!w) {
+    if (!dests.length) {
+      _say("You don't know the way anywhere yet. Places join the list once you've stood in them.");
+      return;
+    }
+    _say("You know the way to:", "dim");
+    for (const id of dests) {
+      const h = _hops(G.room, id);
+      _say(`  ${ROOMS[id].bar || ROOMS[id].name}` +
+        (h === 0 ? " — you're here" : ` — ${h} turn${h === 1 ? "" : "s"}`), "dim");
+    }
+    _say("(TRAVEL <place>. Walking pace — no shortcuts through the clock.)", "dim");
+    return;
+  }
+  let dest = null;
+  if (/^(hotel|my room|home|room)$/.test(w) ||
+      _HOTELS[G.hotel].name.toLowerCase().includes(w)) {
+    if (G.visited[_hotelRoomId()]) dest = _hotelRoomId();
+  }
+  if (!dest) {
+    for (const id of dests) {
+      const r = ROOMS[id];
+      if ((r.bar && r.bar.toLowerCase().includes(w)) ||
+          r.name.toLowerCase().includes(w)) { dest = id; break; }
+    }
+  }
+  if (!dest) {
+    _say("You only know the way to bars and hotels you've already found. (Bare TRAVEL lists them.)");
+    return;
+  }
+  if (dest === G.room) { _say("You're standing in it."); return; }
+  if (G.rain > 0) {
+    _say("Not in this. The whole town is under the awnings waiting it out, and " +
+      "so are you.");
+    return;
+  }
+  if (dest === "hotel_room" && !_flag("hasWallet")) {
+    _say("No key card, no room — the clerk was politely immovable about it. The wallet first.");
+    return;
+  }
+  const hops = _hops(G.room, dest);
+  if (hops === null) { _say("You can't get there from here."); return; }
+  _say(`You point yourself at ${ROOMS[dest].bar || ROOMS[dest].name} and let your ` +
+    `feet do the remembering — ${hops} turn${hops === 1 ? "" : "s"} of soi, neon, ` +
+    "and shortcuts.", "dim");
+  // walking pace: hops turns in total; doCommand pays the last at the bottom
+  const startDay = G.day;
+  for (let i = 0; i < hops - 1; i++) {
+    _tick();
+    if (G.day !== startDay || G.over) return; // the night ended mid-walk
+    if (G.pendingEnc || G.game) {
+      _say(`(${_clockStr()} — the street has other plans.)`, "dim");
+      return;
+    }
+  }
+  _arriveAt(dest);
+}
+
 function _doEnter(arg) {
   const r = _room();
   // digits → the safe
@@ -3331,7 +3432,7 @@ function _doEnter(arg) {
     if (target.bar && target.bar.toLowerCase().includes(w)) return _doGo(dir);
     if (target.name.toLowerCase().includes(w)) return _doGo(dir);
   }
-  _say("You can't get there from here.");
+  _doTravel(w); // not adjacent — maybe it's somewhere you know the way to
 }
 
 function _doSafe(num) {
@@ -4606,6 +4707,7 @@ const _HELP = `Common commands:
   EAT <food> · DRINK <thing> · BUY WATER / FOOD (street carts & 7-Elevens) · SLEEP (at the hotel)
   CHECKOUT (your room, before 19:00) — move hotels: Sabai Palms ฿400 · Queen Vic ฿700 · Metropole ฿1300
   DIAGNOSE (how bad is it) · AGAIN or G (repeat last command)
+  TRAVEL <bar|hotel> (fast travel anywhere you've been — walking pace, bare TRAVEL lists)
   TIME · MAP · WAIT UNTIL <hour> · TIP <lady> <amount> · PHOTO · CHEERS
   QUESTS · ACCEPT <quest> · ABANDON <quest>
   CONTACT <lady> (swap numbers) · CONTACTS (your phonebook) · MESSAGE <lady> · CHECK MESSAGES
@@ -4623,7 +4725,7 @@ const _HELP = `Common commands:
 const _COMPLETE_VERBS = [
   "look", "examine", "take", "drop", "inventory", "go", "enter", "talk to",
   "ask", "give", "buy", "sell bottles", "pay", "wai", "say", "ride bus to",
-  "motosai to", "light", "charge phone", "read", "use", "open", "play",
+  "motosai to", "travel", "light", "charge phone", "read", "use", "open", "play",
   "flirt", "kiss", "spank", "fondle", "throw cover", "ring bell", "barfine", "eat", "drink",
   "sleep", "tv", "weather", "scores", "lottery", "map", "time", "tip", "wave",
   "photo", "call", "shower", "withdraw", "cheers", "dance", "sing", "swim",
@@ -4680,7 +4782,10 @@ function _completePool(verb, ctx) {
       return ["beer", "water", "lady drink for", "bra for", "charger", "toastie", "food",
         "round for band"];
     case "go": case "walk": case "head": case "enter":
-      return Object.keys(_room().exits);
+      return [...Object.keys(_room().exits),
+        ..._travelDests().map(id => (ROOMS[id].bar || ROOMS[id].name).toLowerCase())];
+    case "travel": case "goto":
+      return _travelDests().map(id => (ROOMS[id].bar || ROOMS[id].name).toLowerCase());
     case "ride": case "catch": case "bus": {
       if (!_room().busStop) return [];
       const lines = Object.entries(BUS_LINES).filter(([, st]) => st.includes(G.room));
@@ -4829,7 +4934,13 @@ function doCommand(input) {
   }
 
   switch (v) {
-    case "go": case "walk": case "head": _doGo(arg); break;
+    case "go": case "walk": case "head": {
+      const gw = arg.replace(/^to (the )?/, "");
+      if (!gw || _DIRS[gw] !== undefined) _doGo(gw);
+      else _doTravel(gw); // "go candy bar" — a place, not a direction
+      break;
+    }
+    case "travel": case "goto": _doTravel(arg); break;
     case "enter": _doEnter(arg); break;
     case "look": case "l":
       if (arg) _doExamine(arg); // "look at candy" = "examine candy"
