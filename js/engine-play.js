@@ -544,7 +544,10 @@ function _renderGame() {
 // Lady drinks buy goodwill, one girl at a time. Actions (flirt < kiss < spank
 // < fondle) resolve against her favor: rebuffed → tolerated → leaned into →
 // reciprocated. Roles cap the physical stuff — cashiers and mamasans allow
-// light contact only, unless the bell has rung enough times tonight. Heat
+// light contact only, unless the bell has rung enough times tonight. Each bell
+// ring while the glow holds warms the whole room a notch (_bellLevel/_favor):
+// two bells and the girls are much friendlier; at three the room is yours —
+// every action reciprocates and heat can't land (_addHeat is amnestied). Heat
 // accumulates on bad behaviour; three strikes and security walks you out
 // (in LK Metro, shared complex security bans you from every bar in the maze).
 
@@ -563,15 +566,26 @@ function _bellActive() {
 // shine to you will vouch — the girls trust her, so you ride her credit briefly.
 function _wingman() { return G.wingmanUntil > G.turns; }
 
+// How many bells you've rung here while the glow still holds — the escalation
+// dial for the whole room. 0 once it cools. Each ring makes the girls wilder;
+// at 3 the room is yours (see _favor for warmth, _addHeat for the amnesty).
+function _bellLevel() {
+  return _bellActive() ? (G.soc.bells[G.room] || 0) : 0;
+}
+
 function _favor(id) {
   let f = G.soc.drinks[id] || 0;
   if (G.soc.mamaTreat[G.room]) f += 1;   // the mamasan's blessing travels
-  if (_bellActive()) f += 2;             // everybody loves the bell man
+  const bl = _bellLevel();               // more rings this visit, warmer room
+  if (bl >= 3) f += 10;                  // three bells: the room is yours, hands-on
+  else if (bl === 2) f += 4;             // two bells: much friendlier
+  else if (bl === 1) f += 2;             // one bell: everybody loves the bell man
   if (_wingman()) f += 2;                // a wing-woman put in a good word
   return f;
 }
 
 function _addHeat(n) {
+  if (_bellLevel() >= 3) return;         // three bells deep — the room forgives everything
   const r = G.room;
   G.soc.heat[r] = (G.soc.heat[r] || 0) + n;
   if (G.soc.heat[r] >= 3) { _kickOut(); return; }
@@ -889,6 +903,14 @@ function _doBell() {
     "from the cashier, the mamasan's first fully unguarded smile of the night. " +
     "Drinks materialise down the length of the bar and every lady in the room " +
     `now knows your name. (-฿${BELL_PRICE}, ฿${G.money} left — reign while it lasts.)`);
+  const rings = G.soc.bells[r];
+  if (rings === 2) {
+    _say("(That's two bells this visit. The girls are giddy now, the whole room " +
+      "tilting hard your way — hardly anything you try lands wrong.)", "dim");
+  } else if (rings >= 3) {
+    _say("(THREE bells. You own this bar tonight. The ladies are all over you, " +
+      "the mamasan's looking the other way, and nobody — nobody — is counting.)", "win");
+  }
   _engineSpeak("ชนแก้ว");
   _addHappy(2);
 }
