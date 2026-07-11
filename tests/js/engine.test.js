@@ -23,6 +23,29 @@ function state() { return G; } // vm globals share this realm
 
 beforeEach(() => { out = []; newGame(); state().lastSaleng = 99999; }); // suppress saleng by default
 
+// ── Resuming a live mini-game ───────────────────────────────────────────────
+
+test("a live mini-game survives save/restore and _renderGame redraws it", () => {
+  // Regression: serializeGame persists G.game, so a mid-Connect-4 save restores
+  // still live and keeps capturing input — but nothing redrew the board on
+  // continue, so it was invisible. Prove both halves: it restores, and
+  // _renderGame brings it back.
+  state().game = { type: "c4", board: c4New(), opp: "Candy", stake: 20 };
+  const save = serializeGame();
+  newGame();
+  assert.equal(state().game, null, "a fresh game has no live board");
+
+  deserializeGame(save);
+  assert.equal(state().game && state().game.type, "c4", "the live game restores from the save");
+
+  out = [];
+  _renderGame();
+  const shown = lastOut();
+  assert.match(shown, /in progress/, "announces the resumed game");
+  assert.match(shown, /1 2 3 4 5 6 7/, "redraws the Connect 4 board");
+  assert.match(shown, /DROP 1-7/, "shows how to play");
+});
+
 // ── Parser & basics ────────────────────────────────────────────────────────
 
 test("movement and look", () => {

@@ -502,6 +502,41 @@ function _gameInput(input) {
   }
 }
 
+// Re-render the live mini-game after a restore. serializeGame persists G.game,
+// but the restore paths (continue / undo, in main.js) only re-describe the room
+// — so a resumed game was invisible while still swallowing every command as a
+// move. This redraws the current board/state and the input hint for whatever's
+// live, non-mutating (quiz re-asks its question, jp just shows the tiles), so
+// the player can see the game is on and how to act. Called after deserializeGame.
+function _renderGame() {
+  const g = G.game;
+  if (!g) return;
+  _say("(A bar game is still in progress — here's where it stands:)", "dim");
+  switch (g.type) {
+    case "c4":
+      _say(c4Render(g.board));
+      _say("(You're ●. DROP 1-7 · QUIT concedes.)", "dim");
+      break;
+    case "jp":
+      _say(`[ ${jpRender(g.tiles)} ]`);
+      if (g.pending) _say(`(FLIP ${g.pending[0].join(" ")} · FLIP ${g.pending[1].join(" ")})`, "dim");
+      else _say("(Flip the dice — type anything to roll.)", "dim");
+      break;
+    case "quiz":
+      _quizAsk();
+      _say("(Answer 1, 2, or 3. QUIT slinks back out.)", "dim");
+      break;
+    case "kp":
+      _say(kpRender(g.kp), "dim");
+      _say("(Your shot: SHOT or POWER. QUIT forfeits your lives.)", "dim");
+      break;
+    case "pool":
+      _poolStatus(g);
+      _say("(Each visit: SHOT, POWER, or SAFETY · QUIT concedes.)", "dim");
+      break;
+  }
+}
+
 // ── Bar social life ─────────────────────────────────────────────────────────
 // Lady drinks buy goodwill, one girl at a time. Actions (flirt < kiss < spank
 // < fondle) resolve against her favor: rebuffed → tolerated → leaned into →
