@@ -164,6 +164,16 @@ test("the wheel: DROP fans out into open columns during Connect 4", () => {
     [{ t: "drop", c: "drop", go: true }]);
 });
 
+test("quiz answer lines: the leading digit taps while a quiz is live", () => {
+  G.game = { type: "quiz", qs: [], at: 0, right: 0 };
+  assert.equal(_term.decorate("  1. Bangkok"),
+    `  ${kw("1", "cmd")}. Bangkok`);
+  assert.deepEqual(_term.kwActions("cmd", "1", false),
+    [{ t: "1", c: "1", go: true }]);
+  G.game = null; // no quiz: a numbered line is ordinary prose again
+  assert.equal(_term.decorate("  1. Bangkok"), "  1. Bangkok");
+});
+
 test("anonymous staff decorate only where they stand", () => {
   G.room = "myth_night";
   assert.equal(_term.decorate("Complex security watches the lane."),
