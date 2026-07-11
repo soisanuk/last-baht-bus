@@ -24,6 +24,8 @@ npm run test:e2e                  # drives web/index.html in headless Chromium
 
 Deploy is automatic: any push to `main` runs `.github/workflows/pages.yml` (tests gate the deploy), which publishes `web/` to the `gh-pages` branch. Live at https://soisanuk.github.io/last-baht-bus/.
 
+**Testing cheats:** `CHEATS_ENABLED` (a `let` in engine-core.js — no build step, so the constant is the switch) gates hidden typed codes. **Currently `true`; the intended production default is `false`** — flip it before a real release. Codes are deliberately not surfaced (no autocomplete/decoration): `twoweekmillionaire` grants ฿2,000,000 for spending (handled early in `doCommand`, works in any state, costs no turn).
+
 ## Architecture
 
 Zork-style text adventure in the Soi Sanuk / Pattaya universe. Same conventions as the trainer (`/Users/mario/thaicab`): **classic script tags sharing globals, no ES modules, no build step, works from `file://`**. The root `package.json` `"type": "module"` exists only so `node --test` treats test files as ESM. Load order in `index.html` matters (`thai → world → games → engine-core → engine-encounters → engine-play → engine-systems → engine-parser → …`); `main.js` loads last.

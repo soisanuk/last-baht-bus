@@ -65,6 +65,21 @@ test("Q concedes a live mini-game (mobile-friendly quit)", () => {
   assert.equal(state().game, null, "q ends the game like quit");
 });
 
+test("hidden code twoweekmillionaire grants ฿2M when cheats are enabled", () => {
+  CHEATS_ENABLED = true;
+  const before = state().money;
+  run("twoweekmillionaire");
+  assert.equal(state().money, before + 2000000, "money jumps by 2,000,000");
+});
+
+test("the cheat is inert when CHEATS_ENABLED is off", () => {
+  CHEATS_ENABLED = false;
+  const before = state().money;
+  run("twoweekmillionaire");
+  assert.equal(state().money, before, "no grant when cheats are disabled");
+  CHEATS_ENABLED = true; // restore the session default for other tests
+});
+
 // ── Parser & basics ────────────────────────────────────────────────────────
 
 test("movement and look", () => {
