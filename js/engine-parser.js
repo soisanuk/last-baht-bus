@@ -1684,6 +1684,14 @@ function doCommand(input) {
   const [v, ...rest] = words;
   const arg = rest.filter(w => !["the", "a", "an", "to", "at", "up", "my"].includes(w)).join(" ");
 
+  // Hidden testing code (gated by CHEATS_ENABLED in engine-core.js). Works in
+  // any state, costs no turn, and is never surfaced — a typed secret only.
+  if (CHEATS_ENABLED && lower === "twoweekmillionaire") {
+    G.money += 2000000;
+    _say(`💰 Two-week millionaire: ฿2,000,000 for testing. (฿${G.money} in pocket.)`, "win");
+    return;
+  }
+
   // the week is over: the airline needs an answer before anything else
   if (G.pendingChoice === "vacation_end") {
     if (/^restart/.test(lower)) { newGame(); engineIntro(); return; }

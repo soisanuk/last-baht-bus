@@ -11,6 +11,14 @@
 // node:vm); output goes through an injected print callback — term.js supplies
 // the real renderer, tests a capture buffer.
 
+// ── Build config ────────────────────────────────────────────────────────────
+// There's no build step, so this constant IS the switch. CHEATS_ENABLED gates
+// the hidden testing codes; flip it to false to ship a clean production build
+// (that's the intended default). Currently ON for in-game testing.
+// Codes (typed, deliberately never surfaced in autocomplete/decoration):
+//   twoweekmillionaire — grants ฿2,000,000 for spending (handled in doCommand).
+let CHEATS_ENABLED = true;
+
 // ── Output plumbing ────────────────────────────────────────────────────────
 
 let _enginePrint = () => {};
