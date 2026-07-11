@@ -1,6 +1,6 @@
 // Terminal renderer: scrollback, prompt echo, command history, verb chips,
 // autocomplete. All DOM work lives here; the engine only knows the print
-// callback, and completion candidates come from engineComplete (engine.js) —
+// callback, and completion candidates come from engineComplete (engine-parser.js) —
 // the terminal renders them but never decides them.
 
 const _term = (() => {
