@@ -65,8 +65,10 @@ const _term = (() => {
       html = html.replace(pat, m => _wrap(kind.get(m), m));
     }
     // ALL-CAPS command hints inside parentheses: (WATCH POLICE · or NO)
+    // <placeholders> may sit mid-pattern (SEND <amount> TO <name>) — the whole
+    // phrase is one open kw, never orphan TO/FOR fragments
     html = html.replace(/\(([^()]*)\)/g, (m, inner) =>
-      "(" + inner.replace(/([A-Z]{2,}(?:[ -][A-Z0-9]{2,})*(?: &lt;[a-z… ]+&gt;)?)/g,
+      "(" + inner.replace(/([A-Z]{2,}(?:[ -][A-Z0-9]{2,}|\s&lt;[a-z…0-9 |]+&gt;)*)/g,
         c => _wrap("cmd", c)) + ")");
     // Thai runs: tokenise against the vendored vocab (plus NPC Thai names,
     // so แคนดี้ stays whole instead of shredding into vocab fragments).
