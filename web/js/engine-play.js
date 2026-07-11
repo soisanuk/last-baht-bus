@@ -91,7 +91,7 @@ function _startC4() {
 function _c4Input(input) {
   const g = G.game;
   const m = input.match(/[1-7]/);
-  if (!m) { _say("Pick a column: 1-7. (QUIT concedes.)", "dim"); return; }
+  if (!m) { _gameBoard(); _say("Not a move. Pick a column: 1-7. (QUIT concedes.)", "dim"); return; }
   if (c4Drop(g.board, +m[0] - 1, 1) < 0) { _say("That column is full to the brim."); return; }
   if (c4Win(g.board) === 1) {
     _say(c4Render(g.board));
@@ -168,6 +168,7 @@ function _jpInput(input) {
   if (!move && /sum/.test(input)) move = g.pending.find(mv => mv.length === 1);
   if (!move && /both|dice/.test(input)) move = g.pending.find(mv => mv.length === 2);
   if (!move) {
+    _gameBoard();
     _say(`(FLIP ${g.pending[0].join(" ")} · FLIP ${g.pending[1].join(" ")} — those are the choices.)`, "dim");
     return;
   }
@@ -272,7 +273,7 @@ function _quizInput(input) {
     const idx = item.opts.findIndex(o => o.toLowerCase().includes(input.trim()));
     if (idx >= 0 && input.trim().length > 1) pick = idx;
   }
-  if (pick === null) { _say("1, 2, or 3 — the microphone is patient, the bar less so.", "dim"); return; }
+  if (pick === null) { _gameBoard(); _say("1, 2, or 3 — the microphone is patient, the bar less so.", "dim"); return; }
   if (pick === item.a) {
     g.right++;
     _say(`“${item.opts[item.a]}” — CORRECT! The bar cheers like you cured something.`);
@@ -365,7 +366,7 @@ function _kpInput(input) {
   const g = G.game;
   const kind = /power|smash/.test(input) ? "power" :
     /shot|pot|cut|hit|play|safe/.test(input) ? "shot" : null;
-  if (!kind) { _say("SHOT or POWER — the table is waiting.", "dim"); return; }
+  if (!kind) { _gameBoard(); _say("SHOT or POWER — the table is waiting.", "dim"); return; }
   const you = kpShot(g.kp, _rand, kind === "power" ? 0.45 : 0.6);
   if (you.potted) {
     _say(kind === "power" ?
@@ -433,7 +434,7 @@ function _poolInput(input) {
   const kind = /power|smash|break/.test(input) ? "power" :
     /safe|snook|tuck/.test(input) ? "safety" :
     /shot|pot|cut|hit|play|roll/.test(input) ? "shot" : null;
-  if (!kind) { _say("(SHOT sensible · POWER greedy · SAFETY sneaky.)", "dim"); return; }
+  if (!kind) { _gameBoard(); _say("(SHOT sensible · POWER greedy · SAFETY sneaky.)", "dim"); return; }
   const ev = poolShot(g, kind, _rand);
   switch (ev) {
     case "pot8win":
@@ -502,38 +503,40 @@ function _gameInput(input) {
   }
 }
 
+// Draw just the live game's board/state — no hint. Non-mutating (quiz re-asks
+// its question, jp just shows the tiles). Shared by the resume redraw
+// (_renderGame) and each handler's "that wasn't a move" reprompt.
+function _gameBoard() {
+  const g = G.game;
+  if (!g) return;
+  switch (g.type) {
+    case "c4":   _say(c4Render(g.board)); break;
+    case "jp":   _say(`[ ${jpRender(g.tiles)} ]`); break;
+    case "kp":   _say(kpRender(g.kp), "dim"); break;
+    case "pool": _poolStatus(g); break;
+    case "quiz": _quizAsk(); break;
+  }
+}
+
 // Re-render the live mini-game after a restore. serializeGame persists G.game,
 // but the restore paths (continue / undo, in main.js) only re-describe the room
 // — so a resumed game was invisible while still swallowing every command as a
-// move. This redraws the current board/state and the input hint for whatever's
-// live, non-mutating (quiz re-asks its question, jp just shows the tiles), so
+// move. This redraws the board/state and the input hint for whatever's live, so
 // the player can see the game is on and how to act. Called after deserializeGame.
 function _renderGame() {
   const g = G.game;
   if (!g) return;
   _say("(A bar game is still in progress — here's where it stands:)", "dim");
+  _gameBoard();
   switch (g.type) {
-    case "c4":
-      _say(c4Render(g.board));
-      _say("(You're ●. DROP 1-7 · QUIT concedes.)", "dim");
-      break;
+    case "c4":   _say("(You're ●. DROP 1-7 · QUIT concedes.)", "dim"); break;
     case "jp":
-      _say(`[ ${jpRender(g.tiles)} ]`);
       if (g.pending) _say(`(FLIP ${g.pending[0].join(" ")} · FLIP ${g.pending[1].join(" ")})`, "dim");
       else _say("(Flip the dice — type anything to roll.)", "dim");
       break;
-    case "quiz":
-      _quizAsk();
-      _say("(Answer 1, 2, or 3. QUIT slinks back out.)", "dim");
-      break;
-    case "kp":
-      _say(kpRender(g.kp), "dim");
-      _say("(Your shot: SHOT or POWER. QUIT forfeits your lives.)", "dim");
-      break;
-    case "pool":
-      _poolStatus(g);
-      _say("(Each visit: SHOT, POWER, or SAFETY · QUIT concedes.)", "dim");
-      break;
+    case "kp":   _say("(Your shot: SHOT or POWER. QUIT forfeits your lives.)", "dim"); break;
+    case "pool": _say("(Each visit: SHOT, POWER, or SAFETY · QUIT concedes.)", "dim"); break;
+    case "quiz": _say("(Answer 1, 2, or 3. QUIT slinks back out.)", "dim"); break;
   }
 }
 

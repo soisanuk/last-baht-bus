@@ -46,6 +46,19 @@ test("a live mini-game survives save/restore and _renderGame redraws it", () => 
   assert.match(shown, /DROP 1-7/, "shows how to play");
 });
 
+test("a non-move during a live game redraws the board, not a bare rejection", () => {
+  // A stray world command (e.g. a flyout-wheel "ask …" tapped from scrollback)
+  // is captured by the live game. Instead of just "Pick a column", redraw the
+  // board so the player sees the game is still on and where it stands.
+  state().game = { type: "c4", board: c4New(), opp: "Candy", stake: 20 };
+  out = [];
+  _c4Input("ask bee about candy");
+  const shown = lastOut();
+  assert.match(shown, /1 2 3 4 5 6 7/, "the board is redrawn");
+  assert.match(shown, /1-7/, "with the how-to-play hint");
+  assert.ok(state().game, "no move was made — the game is still live");
+});
+
 // ── Parser & basics ────────────────────────────────────────────────────────
 
 test("movement and look", () => {
