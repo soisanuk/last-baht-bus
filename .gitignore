@@ -1,1 +1,8 @@
 .DS_Store
+
+# Playwright E2E (tests/e2e/) — dev-only tooling; the app itself needs no install
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/.last-run.json

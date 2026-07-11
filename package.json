@@ -5,6 +5,10 @@
   "type": "module",
   "description": "The Last Baht Bus — a Pattaya text adventure",
   "scripts": {
-    "test": "node --test"
+    "test": "node --test",
+    "test:e2e": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.61.1"
   }
 }

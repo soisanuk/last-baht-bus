@@ -4,10 +4,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Commands
 
-No build step, no lint, no npm install — plain HTML/CSS/JS served as-is.
+No build step, no lint, no npm install for the app — plain HTML/CSS/JS served as-is. The only exception is the browser E2E below, which is dev-only tooling; the app itself never needs a build or install.
 
 ```sh
-# Run all tests (Node 18+)
+# Run all tests (Node 18+) — the gating suite, install-free
 node --test
 
 # Run a single test file
@@ -15,13 +15,18 @@ node --test tests/js/engine.test.js
 
 # Run the game locally
 open web/index.html   # works from file://, no network requests
+
+# Browser E2E smoke test (one-time setup, then run)
+npm install                       # installs @playwright/test (dev only)
+npx playwright install chromium   # downloads the headless browser
+npm run test:e2e                  # drives web/index.html in headless Chromium
 ```
 
 Deploy is automatic: any push to `main` runs `.github/workflows/pages.yml` (tests gate the deploy), which publishes `web/` to the `gh-pages` branch. Live at https://soisanuk.github.io/last-baht-bus/.
 
 ## Architecture
 
-Zork-style text adventure in the Soi Sanuk / Pattaya universe. Same conventions as the trainer (`/Users/mario/thaicab`): **classic script tags sharing globals, no ES modules, no build step, works from `file://`**. The root `package.json` `"type": "module"` exists only so `node --test` treats test files as ESM. Load order in `index.html` matters (`thai → world → games → engine → …`); `main.js` loads last.
+Zork-style text adventure in the Soi Sanuk / Pattaya universe. Same conventions as the trainer (`/Users/mario/thaicab`): **classic script tags sharing globals, no ES modules, no build step, works from `file://`**. The root `package.json` `"type": "module"` exists only so `node --test` treats test files as ESM. Load order in `index.html` matters (`thai → world → games → engine-core → engine-encounters → engine-play → engine-systems → engine-parser → …`); `main.js` loads last.
 
 **Every player-facing option lives on three surfaces** — the typed parser (and its printed lists), the flyout wheel (`_kwActions`, term.js), and the input autocomplete (`engineComplete`/`_completePool`, engine.js). When adding, gating, or removing an option, change all three: put the rule in one engine-side helper (`_topicKnown`, `_travelDests`, `_playOptions`, `_c4Choices`, `_gameVerbs` are the pattern) and have every surface consume it, then check `_kwActions` and `_completePool` for the affected verb before calling it done.
 
@@ -85,6 +90,10 @@ A 2D version of this game is a live possibility. The text terminal must stay a *
 ### Tests load the real sources via node:vm
 
 `tests/js/*.test.js` read the corresponding `web/js/` file and evaluate it with `vm.runInThisContext` (same realm, so `deepEqual` works). `thai.js`, `world.js`, and the five `engine-*.js` parts are DOM-free at load time and fully testable, including a scripted full playthrough; load the engine parts in order (core → encounters → play → systems → parser) after world.js/games.js. Top-level `const`/`let` from vm-loaded scripts land in the global *lexical* scope — reference them as bare identifiers, not via `globalThis`.
+
+### Browser E2E (tests/e2e/, Playwright)
+
+The node:vm suite never opens `index.html` in a browser — it drives the engine through the print callback. `tests/e2e/smoke.spec.mjs` covers that one gap: it loads `web/index.html` from `file://` in headless Chromium, asserts the boot intro renders, that all five `engine-*.js` parts loaded in order (checks `newGame` from core and `doCommand`/`engineComplete` from parser plus a populated `G`), and that a typed `look` round-trips through the real DOM with no page errors. Deliberately thin — a boot-and-a-command canary for load-order breakage, a missing `<script>` tag, or a boot exception; behavioural depth stays in the vm tests. It is **not** wired into the deploy pipeline (that stays install-free and fast); run it locally via `npm run test:e2e` after `npm install && npx playwright install chromium`. `node --test` ignores it (`.spec.mjs`, not `.test.js`), so the gating suite is unaffected. Since `G` is a lexical global (top-level `let`), the spec's `page.evaluate` reads it as a bare identifier, not `window.G` — the same gotcha as the vm tests.
 
 World-integrity tests enforce: every exit resolves to a real room, all 20 canon bars exist, the patron bench is placed/scheduled sanely, and every flag required by dialogue is settable somewhere (dialogue `sets` plus the engine-set list in `world.test.js` — extend that list when the engine gains new flag-setting actions).
 
