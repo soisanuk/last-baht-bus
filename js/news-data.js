@@ -3,9 +3,9 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
-    "t": "Jomtien’s rubbish problem refuses to go away",
-    "s": "Thaiger",
-    "d": "07 Jul 2026"
+    "t": "“Pubic Hair” croissant from Pattaya, Thailand goes viral",
+    "s": "Lifestyle Asia Hong Kong",
+    "d": "10 Jul 2026"
   },
   {
     "t": "Driver tries to beat barrier at Pattaya railway crossing, gets stuck",
@@ -16,6 +16,11 @@ var NEWS_FEED = [
     "t": "In Thailand’s sex tourism hub, bright lights flash, loud music blares – and underage girls are exploited",
     "s": "The Guardian",
     "d": "03 Jul 2026"
+  },
+  {
+    "t": "Australian man charged with murder after dead girl found in suitcase in Thailand",
+    "s": "BBC",
+    "d": "28 Jun 2026"
   },
   {
     "t": "Thai teenager's father 'deeply saddened' as Australian charged with murder",
@@ -38,18 +43,23 @@ var NEWS_FEED = [
     "d": "27 Jun 2026"
   },
   {
-    "t": "Friend of Thai teen allegedly murdered by Australian man went to his condo after reporting her missing | Thailand",
-    "s": "The Guardian",
-    "d": "01 Jul 2026"
+    "t": "'Looksmaxxing' influencer Connor Murphy dead at age 32 after apparent lake drowning",
+    "s": "Fox News",
+    "d": "08 Jul 2026"
   },
   {
-    "t": "Looksmaxxing influencer dead in Thailand after running from cops: Reports",
-    "s": "NewsNation",
-    "d": "09 Jul 2026"
+    "t": "Thailand’s ‘ungrateful child’ law",
+    "s": "The Week",
+    "d": "08 Jul 2026"
   },
   {
-    "t": "Thailand lost a third of its Chinese tourists. It has not got them back.",
-    "s": "Thaiger",
+    "t": "New dinosaur species with neck as long as cricket pitch discovered in Thailand",
+    "s": "BBC",
+    "d": "10 Jul 2026"
+  },
+  {
+    "t": "hololive production x Birdzilla store “SAWASDEE KAA THAILAND” Exclusive Collection and Pop-Up Store coming this July! | NEWS - hololive.holo",
+    "s": "hololive.hololivepro.com",
     "d": "10 Jul 2026"
   },
   {
@@ -58,30 +68,20 @@ var NEWS_FEED = [
     "d": "09 Jul 2026"
   },
   {
-    "t": "hololive production x Birdzilla store “SAWASDEE KAA THAILAND” Exclusive Collection and Pop-Up Store coming this July! | NEWS",
-    "s": "ホロライブ公式サイト",
+    "t": "Hobart's Mona announces plans to set up art museum in Thailand",
+    "s": "ABC News & Headlines – Australian Broadcasting Corporation",
     "d": "10 Jul 2026"
-  },
-  {
-    "t": "Russian man extradited from Thailand pleads not guilty in US cyber espionage case",
-    "s": "Bangkok Post",
-    "d": "10 Jul 2026"
-  },
-  {
-    "t": "Thailand Approves $688 Million Investment by Nestle for Smart Factory, Distribution Center",
-    "s": "Bloomberg.com",
-    "d": "09 Jul 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-07-10","USD":33.31,"AUD":23.15,"GBP":44.72,"EUR":38.08};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-07-11","temp":29,"humid":76,"code":3,"hi":32,"rain":51};
+var WX_NOW = {"date":"2026-07-11","temp":29,"humid":77,"code":3,"hi":31,"rain":51};
 // the bar TV's one true channel
-var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-07","done":true,"h":"Argentina","hs":3,"a":"Egypt","as":2},{"d":"2026-07-07","done":true,"h":"Switzerland","hs":0,"a":"Colombia","as":0},{"d":"2026-07-09","done":true,"h":"France","hs":2,"a":"Morocco","as":0},{"d":"2026-07-10","done":false,"h":"Spain","hs":0,"a":"Belgium","as":0},{"d":"2026-07-11","done":false,"h":"Norway","hs":0,"a":"England","as":0},{"d":"2026-07-12","done":false,"h":"Argentina","hs":0,"a":"Switzerland","as":0},{"d":"2026-07-14","done":false,"h":"France","hs":0,"a":"QF W2","as":0}]};
+var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-07","done":true,"h":"Argentina","hs":3,"a":"Egypt","as":2},{"d":"2026-07-07","done":true,"h":"Switzerland","hs":0,"a":"Colombia","as":0},{"d":"2026-07-09","done":true,"h":"France","hs":2,"a":"Morocco","as":0},{"d":"2026-07-10","done":true,"h":"Spain","hs":2,"a":"Belgium","as":1},{"d":"2026-07-11","done":false,"h":"Norway","hs":0,"a":"England","as":0},{"d":"2026-07-12","done":false,"h":"Argentina","hs":0,"a":"Switzerland","as":0},{"d":"2026-07-14","done":false,"h":"France","hs":0,"a":"Spain","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-07-01","first":"751495","last2":"62","front3":["001","980"],"back3":["304","531"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4104,"date":"2026-07-10","baht":64650};
+var GOLD = {"usd":4121,"date":"2026-07-10","baht":64950};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":63878,"thb":2126803};
+var BTC = {"usd":63991,"thb":2130798};

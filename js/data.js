@@ -1,5 +1,3 @@
-// VENDORED from the Soi Sanuk trainer (soisanuk.github.io web/js/data.js) —
-// source of truth lives there; edit there and re-copy. Do not fork.
 // All Thai data — words, consonants, vowels, tones. This file is the source of truth.
 // (Originally generated from a Python app that has since been removed.)
 
@@ -999,6 +997,7 @@ const WORDS = [
   ["เอ็ด", "èt", "one (in 11, 21, 31…)", "number", "numbers"],
   ["ยี่", "yîi", "two (in 20s: ยี่สิบ)", "number", "numbers"],
   ["แบต", "bàet", "battery (colloquial)", "noun", "tech"],
+  ["หมด", "mòt", "all gone, used up, finished", "verb", "general"],
   ["รปภ", "ror-bpor-phor", "security guard (abbreviation)", "noun", "work"],
   ["สมชาย", "sǒm-chaai", "Somchai — common Thai male name", "name", "general"],
   ["ปาล์ม", "paam", "palm (loanword)", "noun", "nature"],

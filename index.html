@@ -110,6 +110,18 @@
   /* tappable Thai: dotted underline says "the dictionary is one tap away" */
   .kw[data-k="thai"] { text-decoration: underline dotted; text-underline-offset: 4px;
                        text-decoration-color: #00e5ff70; }
+  /* pixel-art portraits: inline avatars on the Here:/rail lines and a
+     header bust on a character's flyout wheel */
+  .kw-av { width: 20px; height: 20px; image-rendering: pixelated;
+           vertical-align: -4px; margin-right: 4px; border-radius: 4px;
+           border: 1px solid #ff149340; }
+  .fly-head { display: flex; align-items: center; gap: .6rem;
+              padding: .35rem .7rem .45rem;
+              border-bottom: 1px solid #ff149330; margin-bottom: 2px;
+              color: var(--yellow); font-weight: 700; }
+  .fly-av { width: 44px; height: 44px; image-rendering: pixelated;
+            border-radius: 6px; border: 1px solid #ff149360;
+            box-shadow: 0 0 10px #ff149330; }
   /* the flyout wheel */
   #flyout {
     position: fixed; z-index: 50;
@@ -550,7 +562,7 @@
     <button class="chip" data-cmd="ask ">ask…</button>
     <button class="chip" data-cmd="wai">wai</button>
     <button class="chip" data-cmd="read sign">sign</button>
-    <button class="chip" data-cmd="light on">light</button>
+    <button class="chip" data-cmd="light">light</button>
     <button class="chip" data-cmd="help">help</button>
   </div>
   <div id="term-suggest"></div>
