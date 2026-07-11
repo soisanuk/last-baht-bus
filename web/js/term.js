@@ -170,7 +170,15 @@ const _term = (() => {
       if (k === "exit") return [{ t: "go " + v, c: "go " + v, go: true }];
       if (k === "cmd") {
         const open = /<|…|\[/.test(v);
-        return [{ t: lo, c: lo.replace(/\s*[<…[].*$/, "") + (open ? " " : ""), go: !open }];
+        const cmd = lo.replace(/\s*[<…[].*$/, "");
+        // bare PLAY fans out into the games actually on offer here
+        if (cmd === "play") {
+          const games = _playOptions();
+          if (games.length) {
+            return games.map(g => ({ t: "play " + g, c: "play " + g, go: true }));
+          }
+        }
+        return [{ t: lo, c: cmd + (open ? " " : ""), go: !open }];
       }
       if (k === "bar") return [{ t: "enter " + v, c: "enter " + lo, go: true }];
       if (k === "item") {

@@ -1220,6 +1220,18 @@ function _takeStake(want) {
   return stake;
 }
 
+// What's actually playable where you stand — the one list every surface
+// (typed PLAY, the flyout wheel, autocomplete) draws from.
+function _playOptions() {
+  const out = [];
+  if (_barGamesHere()) out.push("connect 4", "jackpot");
+  if (_room().pool) {
+    out.push("pool");
+    if (_leagueTonight()) out.push("killer");
+  }
+  return out;
+}
+
 function _doPlay(arg) {
   if (G.game) { _say("One game at a time, champ."); return; }
   const w = arg.toLowerCase();
@@ -1227,7 +1239,9 @@ function _doPlay(arg) {
   if (w.includes("killer") || w.includes("league")) return _startKiller();
   if (w.includes("pool") || w.includes("8") || w.includes("billiard")) return _startPool();
   if (w.includes("connect") || w.includes("four") || w.includes("4")) return _startC4();
-  _say("Play what? CONNECT 4, JACKPOT [bet], POOL, or KILLER (league nights).", "dim");
+  const opts = _playOptions();
+  if (opts.length) _say("Play what? " + opts.map(o => "PLAY " + o.toUpperCase()).join(" · ") + ".", "dim");
+  else _say("Nothing to play here — the beer bars keep Connect 4 and Jackpot within reach.", "dim");
 }
 
 // ─ Connect 4 ─
@@ -4810,7 +4824,7 @@ function _completePool(verb, ctx) {
     case "message": case "text": case "msg": case "call": case "dial":
     case "send": case "transfer": case "wire": return contacts();
     case "contact": return girls();
-    case "play": case "challenge": return ["connect 4", "jackpot", "pool", "killer"];
+    case "play": case "challenge": return _playOptions();
     case "light": case "turn": return ["on", "off"];
     case "watch":
       return G.room === "blue_dog" ? ["police", "sunset", "tv"] : ["tv"];

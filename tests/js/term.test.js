@@ -122,6 +122,17 @@ test("entity Thai stays whole: แคนดี้ is Candy, not vocab shrapnel",
   assert.ok(d.includes(kw("แคนดี้", "thai")), d);
 });
 
+test("the wheel: bare PLAY fans out into this room's games", () => {
+  G.room = "stinky_bar";
+  G.day = 4; // no league tonight
+  const acts = _term.kwActions("cmd", "PLAY", false);
+  assert.deepEqual(acts.map(a => a.c), ["play connect 4", "play jackpot", "play pool"]);
+  assert.ok(acts.every(a => a.go), "each fires as a complete command");
+  G.room = "jomtien_beach"; // nothing to play: plain cmd behavior remains
+  assert.deepEqual(_term.kwActions("cmd", "PLAY", false),
+    [{ t: "play", c: "play", go: true }]);
+});
+
 test("anonymous staff decorate only where they stand", () => {
   G.room = "myth_night";
   assert.equal(_term.decorate("Complex security watches the lane."),

@@ -121,6 +121,24 @@ test("fast travel: ENTER and GO route through it; rain blocks; bare TRAVEL lists
   assert.match(lastOut(), /Candy Bar — \d+ turns/);
 });
 
+test("_playOptions: what's on offer here — typed PLAY and autocomplete agree", () => {
+  state().room = "jomtien_beach";
+  assert.deepEqual(_playOptions(), [], "no games on the sand");
+  run("play");
+  assert.match(lastOut(), /Nothing to play here/i);
+  state().room = "candy_bar"; // beer bar, no table
+  assert.deepEqual(_playOptions(), ["connect 4", "jackpot"]);
+  run("play");
+  assert.match(lastOut(), /PLAY CONNECT 4 · PLAY JACKPOT/);
+  assert.doesNotMatch(lastOut(), /POOL/);
+  state().room = "stinky_bar"; // beer bar with the league felt
+  state().day = 4; // not a league night (every third)
+  assert.deepEqual(_playOptions(), ["connect 4", "jackpot", "pool"]);
+  state().day = 3;
+  assert.deepEqual(_playOptions(), ["connect 4", "jackpot", "pool", "killer"]);
+  assert.deepEqual(engineComplete("play "), _playOptions(), "autocomplete = same list");
+});
+
 test("fast travel: your hotel needs no discovering, but the clerk still gates it", () => {
   run("travel");
   assert.match(lastOut(), /Sabai Palms Hotel — \d+ turns/, "listed from turn one");
