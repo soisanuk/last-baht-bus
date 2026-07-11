@@ -121,6 +121,17 @@ test("fast travel: ENTER and GO route through it; rain blocks; bare TRAVEL lists
   assert.match(lastOut(), /Candy Bar — \d+ turns/);
 });
 
+test("fast travel: where you stand is never offered", () => {
+  state().room = "candy_bar";
+  run("look");
+  run("travel");
+  assert.doesNotMatch(lastOut(), /Candy Bar —/, "not in the list while inside");
+  assert.ok(!engineComplete("travel ").includes("candy bar"), "not autocompleted");
+  run("travel candy bar");
+  assert.match(lastOut(), /standing in it/i);
+  assert.equal(state().room, "candy_bar");
+});
+
 test("G.known serializes with the save; older saves backfill empty", () => {
   state().known.pim = true;
   const snap = serializeGame();
