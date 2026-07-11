@@ -133,6 +133,16 @@ test("the wheel: bare PLAY fans out into this room's games", () => {
     [{ t: "play", c: "play", go: true }]);
 });
 
+test("the wheel: DROP fans out into open columns during Connect 4", () => {
+  G.game = { type: "c4", board: c4New() };
+  const acts = _term.kwActions("cmd", "DROP", false);
+  assert.equal(acts.length, 7);
+  assert.deepEqual(acts[0], { t: "drop 1", c: "drop 1", go: true });
+  G.game = null; // no game: DROP is the ordinary item verb again
+  assert.deepEqual(_term.kwActions("cmd", "DROP", false),
+    [{ t: "drop", c: "drop", go: true }]);
+});
+
 test("anonymous staff decorate only where they stand", () => {
   G.room = "myth_night";
   assert.equal(_term.decorate("Complex security watches the lane."),

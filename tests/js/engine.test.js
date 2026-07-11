@@ -139,6 +139,19 @@ test("_playOptions: what's on offer here — typed PLAY and autocomplete agree",
   assert.deepEqual(engineComplete("play "), _playOptions(), "autocomplete = same list");
 });
 
+test("_c4Choices: open columns mid-game feed autocomplete; pockets return after", () => {
+  state().room = "candy_bar";
+  run("play connect 4");
+  assert.equal(state().game.type, "c4");
+  assert.deepEqual(_c4Choices(), ["1", "2", "3", "4", "5", "6", "7"]);
+  assert.deepEqual(engineComplete("drop "), _c4Choices(), "columns, not pockets");
+  for (let i = 0; i < 6; i++) c4Drop(state().game.board, 3, 1); // brick up column 4
+  assert.ok(!_c4Choices().includes("4"), "full columns drop off the list");
+  state().game = null;
+  assert.deepEqual(_c4Choices(), []);
+  assert.ok(engineComplete("drop ").includes("noodles"), "pockets are back");
+});
+
 test("fast travel: your hotel needs no discovering, but the clerk still gates it", () => {
   run("travel");
   assert.match(lastOut(), /Sabai Palms Hotel — \d+ turns/, "listed from turn one");

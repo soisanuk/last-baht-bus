@@ -178,6 +178,13 @@ const _term = (() => {
             return games.map(g => ({ t: "play " + g, c: "play " + g, go: true }));
           }
         }
+        // mid-Connect-4, DROP fans out into the columns still open
+        if (cmd === "drop") {
+          const cols = _c4Choices();
+          if (cols.length) {
+            return cols.map(c => ({ t: "drop " + c, c: "drop " + c, go: true }));
+          }
+        }
         return [{ t: lo, c: cmd + (open ? " " : ""), go: !open }];
       }
       if (k === "bar") return [{ t: "enter " + v, c: "enter " + lo, go: true }];
