@@ -89,6 +89,38 @@ test("_topicKnown: patron names gate too; non-name topics always pass", () => {
   assert.equal(_topicKnown("free drink"), true);
 });
 
+test("fast travel: discovered places only, at exact walking pace", () => {
+  run("travel candy bar");
+  assert.match(lastOut(), /already found/i, "Candy Bar not discovered yet");
+  assert.equal(state().room, "jomtien_beach");
+  state().room = "candy_bar";
+  run("look"); // standing in it puts it on the list
+  assert.ok(state().visited.candy_bar);
+  state().room = "jomtien_beach";
+  const t0 = state().nightTurn;
+  const hops = _hops("jomtien_beach", "candy_bar");
+  assert.ok(hops > 1, "the trip is real");
+  run("travel candy bar");
+  assert.equal(state().room, "candy_bar");
+  assert.equal(state().nightTurn - t0, hops, "minimum walking turns, no discount");
+});
+
+test("fast travel: ENTER and GO route through it; rain blocks; bare TRAVEL lists", () => {
+  state().room = "candy_bar";
+  run("look");
+  state().room = "jomtien_beach";
+  run("enter candy bar");
+  assert.equal(state().room, "candy_bar", "ENTER falls back to fast travel");
+  state().room = "jomtien_beach";
+  state().rain = 3;
+  run("travel candy bar");
+  assert.equal(state().room, "jomtien_beach");
+  assert.match(lastOut(), /awning/i, "rain owns the street");
+  state().rain = 0;
+  run("travel");
+  assert.match(lastOut(), /Candy Bar — \d+ turns/);
+});
+
 test("G.known serializes with the save; older saves backfill empty", () => {
   state().known.pim = true;
   const snap = serializeGame();

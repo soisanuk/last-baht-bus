@@ -50,7 +50,10 @@ Mobile gets tappable verb chips; desktop gets ↑/↓ command history.
   ("You are likely to be bitten by a soi dog.")
 - **Transport**: baht buses (฿15, the driver quotes the fare in spoken Thai —
   pay attention and pay exactly), motosai (faster, pricier, and the piwin
-  network remembers a favour), or your own feet in the dark.
+  network remembers a favour), or your own feet in the dark. Once you know a
+  place, `TRAVEL <bar>` (or just `GO <bar>`) walks you there on autopilot —
+  free, but at honest walking pace: the minimum turns the trip would take,
+  every one of them on the clock. Bare `TRAVEL` lists everywhere you know.
 - **Thai as puzzle**: read เปิด/ปิด signs, navigate the Tree Town maze by its
   painted Thai arrows, and crack a safe whose keypad speaks only ๐–๙.
   A `wai` and a `sawatdee` open more doors than money.
