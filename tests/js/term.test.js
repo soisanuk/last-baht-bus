@@ -117,6 +117,12 @@ test("entity Thai stays whole: แคนดี้ is Candy, not vocab shrapnel",
   assert.ok(d.includes(kw("แคนดี้", "thai")), d);
 });
 
+test("entity Thai doesn't fire inside a longer word: หมด is not Mot (มด)", () => {
+  const d = _term.decorate("แบตหมดเหรอ");
+  assert.ok(d.includes(kw("หมด", "thai")), d);
+  assert.ok(!d.includes(kw("มด", "thai")), d);
+});
+
 test("tapping plain Thai goes straight to the word card; entity Thai gets the wheel", () => {
   // plain vocab word: exactly one action, a function, so tap = instant modal
   const plain = _term.kwActions("thai", "สวัสดี", false);
