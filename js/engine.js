@@ -1232,6 +1232,14 @@ function _playOptions() {
   return out;
 }
 
+// Legal Connect 4 drops right now — the wheel's and autocomplete's column
+// list during a live game; empty whenever c4 isn't the game in progress.
+function _c4Choices() {
+  if (!G || !G.game || G.game.type !== "c4") return [];
+  return ["1", "2", "3", "4", "5", "6", "7"]
+    .filter(c => G.game.board[0][+c - 1] === 0);
+}
+
 function _doPlay(arg) {
   if (G.game) { _say("One game at a time, champ."); return; }
   const w = arg.toLowerCase();
@@ -4798,7 +4806,9 @@ function _completePool(verb, ctx) {
         ...Object.keys(G.itemLoc).filter(id => G.itemLoc[id] === G.room).map(_cItemWord)];
     case "take": case "get": case "grab":
       return Object.keys(G.itemLoc).filter(id => G.itemLoc[id] === G.room).map(_cItemWord);
-    case "drop": case "read": case "use": return _cInv().map(_cItemWord);
+    case "drop": // mid-c4 the columns; otherwise your pockets
+      return _c4Choices().length ? _c4Choices() : _cInv().map(_cItemWord);
+    case "read": case "use": return _cInv().map(_cItemWord);
     case "give":
       return ctx.length >= 2 ? _cNpcsHere() : _cInv().map(_cItemWord);
     case "buy": case "order":
