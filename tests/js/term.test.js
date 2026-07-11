@@ -133,6 +133,15 @@ test("the wheel: bare PLAY fans out into this room's games", () => {
     [{ t: "play", c: "play", go: true }]);
 });
 
+test("hint placeholders stay inside one kw — no orphan FOR/TO taps", () => {
+  const d = _term.decorate("(BUY MOO PING ฿40 · BUY <item> FOR <lady> · NO.)");
+  assert.ok(d.includes('data-v="BUY &lt;item&gt; FOR &lt;lady&gt;"'), d);
+  assert.ok(!d.includes('data-v="FOR"'), "no orphan FOR");
+  const s = _term.decorate("(SEND <amount> TO <name> — the banking app)");
+  assert.ok(s.includes('data-v="SEND &lt;amount&gt; TO &lt;name&gt;"'), s);
+  assert.ok(!s.includes('data-v="TO"'), "no orphan TO");
+});
+
 test("the wheel: DROP fans out into open columns during Connect 4", () => {
   G.game = { type: "c4", board: c4New() };
   const acts = _term.kwActions("cmd", "DROP", false);

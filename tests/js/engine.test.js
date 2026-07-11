@@ -139,6 +139,45 @@ test("_playOptions: what's on offer here — typed PLAY and autocomplete agree",
   assert.deepEqual(engineComplete("play "), _playOptions(), "autocomplete = same list");
 });
 
+test("jackpot: the FLIP hint is tappable and autocomplete offers the legal moves", () => {
+  state().room = "candy_bar";
+  let started = false;
+  for (let seed = 1; seed <= 60 && !started; seed++) {
+    newGame(); state().lastSaleng = 99999;
+    state().room = "candy_bar"; state().rng = seed;
+    run("play jackpot");
+    started = !!(state().game && state().game.pending);
+  }
+  assert.ok(started, "found a seed that leaves a two-way flip choice");
+  assert.match(lastOut(), /\(FLIP \d[\d ]* · FLIP \d[\d ]*\)/, "hint sits in parens = tappable");
+  const moves = state().game.pending.map(mv => mv.join(" "));
+  assert.deepEqual(engineComplete("flip "), moves);
+  assert.deepEqual(_gameVerbs(), ["flip", "quit"]);
+  run("flip " + moves[0]);
+  assert.ok(!state().game || !lastOut().includes("those are the choices"), "the tap is a legal move");
+});
+
+test("modal autocomplete: games and pending choices own the suggestions", () => {
+  state().game = { type: "pool" };
+  assert.deepEqual(engineComplete("s"), ["shot", "safety"]);
+  state().game = { type: "quiz" };
+  assert.ok(engineComplete("q").includes("quit"));
+  state().game = null;
+  state().pendingChoice = "vacation_end";
+  assert.deepEqual(engineComplete("m"), ["move to pattaya"]);
+  state().pendingChoice = "checkout"; // G.hotel = sabai
+  const cands = engineComplete("s");
+  assert.ok(cands.includes("stay"));
+  assert.ok(!cands.join().includes("sabai"), "your own hotel isn't offered");
+  state().pendingChoice = null;
+});
+
+test("MIDNIGHT tapped from the help text waits until midnight", () => {
+  const t0 = state().nightTurn;
+  run("midnight");
+  assert.ok(state().nightTurn > t0 + 5, "the night moved");
+});
+
 test("_c4Choices: open columns mid-game feed autocomplete; pockets return after", () => {
   state().room = "candy_bar";
   run("play connect 4");

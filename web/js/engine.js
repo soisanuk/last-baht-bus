@@ -442,7 +442,7 @@ function _describeRoom(full) {
     _say("A pool table waits under a low lamp (PLAY POOL)." +
       (_leagueTonight() ? " Tonight is LEAGUE NIGHT (PLAY KILLER, ฿100 in the ashtray)." : ""), "dim");
   }
-  if (r.seven) _say("A 7-Eleven glows across the way (BUY TOASTIE / WATER / CHARGER).", "dim");
+  if (r.seven) _say("A 7-Eleven glows across the way (BUY TOASTIE · BUY WATER · BUY CHARGER).", "dim");
   if (_quizDay() && !r.barType) {
     const near = Object.values(r.exits).filter(to => _quizBars().includes(to));
     if (near.length && G.nightTurn < 40) {
@@ -456,8 +456,8 @@ function _describeRoom(full) {
   if (_bandHere()) {
     const isBar = !!r.barType;
     _say("A live band is playing tonight." +
-      (isBar ? " (DANCE · SING · REQUEST [song] · TIP BAND · BUY ROUND FOR BAND)" :
-               " (DANCE · SING · REQUEST [song] · TIP BAND)"), "dim");
+      (isBar ? " (DANCE · SING · REQUEST <song> · TIP BAND · BUY ROUND FOR BAND)" :
+               " (DANCE · SING · REQUEST <song> · TIP BAND)"), "dim");
   }
   if (r.barType) {
     const girl = _npcsHere().find(id => NPC_ROLES[id] === "hostess");
@@ -537,22 +537,22 @@ function _tick() {
       _say("A ซาเล้ง (saleng) putters to a stop outside — a converted three-wheeler with " +
         "a gas burner going and charcoal pork smoke drifting in ahead of it. " +
         '"Moo ping! Noodle!" ' + gName + " is already at the window.", "alert");
-      _say("(BUY MOO PING ฿40 · BUY NOODLES ฿40 · BUY [item] FOR [lady] · NO.)", "dim");
+      _say("(BUY MOO PING ฿40 · BUY NOODLES ฿40 · BUY <item> FOR <lady> · NO.)", "dim");
     } else if (G.salengCart === "shoes") {
       _say("A ซาเล้ง rolls up outside — its frame hung with ladies' footwear: sequinned " +
         "sandals, platform heels, one pair of flip-flops that are clearly lost. " +
         '"Shoes, shoes! Very cheap!" ' + gName + " is already trying on the gold ones.", "alert");
-      _say("(BUY SANDALS ฿150 · BUY HEELS ฿250 · BUY [item] FOR [lady] · NO.)", "dim");
+      _say("(BUY SANDALS ฿150 · BUY HEELS ฿250 · BUY <item> FOR <lady> · NO.)", "dim");
     } else if (G.salengCart === "lingerie") {
       _say("A ซาเล้ง idles outside with a washing-line of lingerie across its frame — " +
         "bras, slips, colours the sun doesn't see. " +
         '"For girlfriend! Beautiful!" Several girls are holding things up, rating each other.', "alert");
-      _say("(BUY LINGERIE ฿150 · BUY LINGERIE FOR [lady] · NO.)", "dim");
+      _say("(BUY LINGERIE ฿150 · BUY LINGERIE FOR <lady> · NO.)", "dim");
     } else {
       _say("A ซาเล้ง drifts to a stop — a som tam station and drinks cooler bolted to the " +
         "back. Lime, dried shrimp, and fish sauce arrive ahead of the pitch: " +
         '"Som tam! Very fresh!"', "alert");
-      _say("(BUY SOM TAM ฿50 · BUY FRUIT ฿30 · BUY [item] FOR [lady] · NO.)", "dim");
+      _say("(BUY SOM TAM ฿50 · BUY FRUIT ฿30 · BUY <item> FOR <lady> · NO.)", "dim");
     }
   }
   _maybeIncomingText();
@@ -1240,6 +1240,19 @@ function _c4Choices() {
     .filter(c => G.game.board[0][+c - 1] === 0);
 }
 
+// The words a live mini-game answers to — autocomplete's verb row while a
+// game has the floor (every other verb is dead air until it ends).
+function _gameVerbs() {
+  if (!G || !G.game) return [];
+  switch (G.game.type) {
+    case "c4": return ["drop", "quit"];
+    case "jp": return ["flip", "quit"];
+    case "pool": case "killer": return ["shot", "power", "safety", "quit"];
+    case "quiz": return ["1", "2", "3", "quit"];
+  }
+  return ["quit"];
+}
+
 function _doPlay(arg) {
   if (G.game) { _say("One game at a time, champ."); return; }
   const w = arg.toLowerCase();
@@ -1334,7 +1347,7 @@ function _jpTurn() {
     }
     g.pending = moves;
     _say(`You roll ${d1}+${d2}.   [ ${jpRender(g.tiles)} ]`);
-    _say(`FLIP ${moves[0].join(" ")} or FLIP ${moves[1].join(" ")}?`, "dim");
+    _say(`(FLIP ${moves[0].join(" ")} · FLIP ${moves[1].join(" ")})`, "dim");
     return;
   }
 }
@@ -1347,7 +1360,7 @@ function _jpInput(input) {
   if (!move && /sum/.test(input)) move = g.pending.find(mv => mv.length === 1);
   if (!move && /both|dice/.test(input)) move = g.pending.find(mv => mv.length === 2);
   if (!move) {
-    _say(`FLIP ${g.pending[0].join(" ")} or FLIP ${g.pending[1].join(" ")} — those are the choices.`, "dim");
+    _say(`(FLIP ${g.pending[0].join(" ")} · FLIP ${g.pending[1].join(" ")} — those are the choices.)`, "dim");
     return;
   }
   jpFlip(g.tiles, move);
@@ -1592,7 +1605,7 @@ function _startPool() {
 }
 
 function _poolStatus(g) {
-  _say(`(You: ${g.you || "on the BLACK"} · ${g.oppName}: ${g.opp || "on the black"}.)`, "dim");
+  _say(`(You: ${g.you || "on the black"} · ${g.oppName}: ${g.opp || "on the black"}.)`, "dim");
 }
 
 function _poolOppTurn(g) {
@@ -1612,7 +1625,7 @@ function _poolInput(input) {
   const kind = /power|smash|break/.test(input) ? "power" :
     /safe|snook|tuck/.test(input) ? "safety" :
     /shot|pot|cut|hit|play|roll/.test(input) ? "shot" : null;
-  if (!kind) { _say("SHOT (sensible), POWER (greedy), or SAFETY (sneaky).", "dim"); return; }
+  if (!kind) { _say("(SHOT sensible · POWER greedy · SAFETY sneaky.)", "dim"); return; }
   const ev = poolShot(g, kind, _rand);
   switch (ev) {
     case "pot8win":
@@ -2361,8 +2374,8 @@ function _endVacation() {
   _say(`VACATION ${G.vacation}: happiness ${G.happy} — ${_happyLevel(G.happy)}` +
     (G.bestHappy > G.happy ? ` (best trip so far: ${G.bestHappy})` : " (your best trip yet)"), "win");
   _say("So. What now?", "room");
-  _say("NEW VACATION — fly back next month. (No lost wallet this time. Probably.)", "dim");
-  _say("MOVE TO PATTAYA — stop pretending you're going home. Make the move; live the sandbox.", "dim");
+  _say("(NEW VACATION — fly back next month. No lost wallet this time. Probably.)", "dim");
+  _say("(MOVE TO PATTAYA — stop pretending you're going home. Make the move; live the sandbox.)", "dim");
 }
 
 function _newVacation() {
@@ -3518,7 +3531,7 @@ function _doDrop(arg) {
 
 function _doInventory() {
   const inv = _inv();
-  _say(`฿${G.money} · phone ${G.battery}%${G.lightOn ? " (flashlight ON)" : ""} · ` +
+  _say(`฿${G.money} · phone ${G.battery}%${G.lightOn ? " (flashlight on)" : ""} · ` +
     `${_clockStr()} day ${G.day} · hunger ${G.hunger} · thirst ${G.thirst}`, "dim");
   _say(inv.length ? "You are carrying: " + inv.map(id => ITEMS[id].name).join(", ") + "." :
     "You are carrying nothing but experience.");
@@ -4565,13 +4578,13 @@ const _MAP = `            NAKLUA ─ Sabai Palms Hotel
   ~  BEACH RD N ─ Stinky Bar
   ~       │
   ~  BEACH RD C ─ CENTRAL ─ SECOND RD N
-  ~       │ (Tequila  MALL      │
+  ~       │ (Tequila  Mall      │
   ~       │   Queen)     PATTAYA KLANG ──► THE DARKSIDE
-  ~       │                     │        (lake · Khao Talo —
-  ~       │            SECOND RD C ─ MYTH NIGHT   motosai out)
+  ~       │                     │        (lake · Khao Talo · motosai out)
+  ~       │            SECOND RD C ─ MYTH NIGHT
   ~       │                     │         │
   ~  BEACH RD S ──────── SECOND RD S   BUAKHAO N
-  ~       │                     │  \\       ║ (LK METRO off the soi)
+  ~       │                     │  \\       ║ ═ LK METRO off the soi
   ~  WALKING ST                 │   ── BUAKHAO S
   ~       │                     │
   ~   (the gate)           PRATUMNAK ─ Buddha Hill
@@ -4639,7 +4652,7 @@ function _doCheckout() {
     "clerk produces the folio with the speed of a man who has seen farang " +
     "restlessness before, and gestures at the wide world:");
   _say(others.map(k =>
-    `· ${_HOTELS[k].name.toUpperCase()} — ฿${_hotelRate(k)}/night`).join("\n"), "dim");
+    `· (${_HOTELS[k].name.toUpperCase()} — ฿${_hotelRate(k)}/night)`).join("\n"), "dim");
   _say("(Name your new hotel — or STAY.)", "dim");
 }
 
@@ -4808,6 +4821,9 @@ function _completePool(verb, ctx) {
       return Object.keys(G.itemLoc).filter(id => G.itemLoc[id] === G.room).map(_cItemWord);
     case "drop": // mid-c4 the columns; otherwise your pockets
       return _c4Choices().length ? _c4Choices() : _cInv().map(_cItemWord);
+    case "flip": // mid-jackpot the legal moves ("3 4" and "7")
+      return G.game && G.game.type === "jp" && G.game.pending
+        ? G.game.pending.map(mv => mv.join(" ")) : [];
     case "read": case "use": return _cInv().map(_cItemWord);
     case "give":
       return ctx.length >= 2 ? _cNpcsHere() : _cInv().map(_cItemWord);
@@ -4862,7 +4878,13 @@ function engineComplete(input) {
   const last = endsSpace ? "" : words[words.length - 1];
   const ctx = (endsSpace ? words : words.slice(0, -1))
     .filter(w => !["the", "a", "an", "to", "at", "for", "with", "about", "my"].includes(w));
-  const pool = ctx.length ? _completePool(ctx[0], ctx) : _COMPLETE_VERBS;
+  let pool;
+  if (G.pendingChoice === "vacation_end") pool = ["new vacation", "move to pattaya"];
+  else if (G.pendingChoice === "checkout") {
+    pool = [...Object.keys(_HOTELS).filter(k => k !== G.hotel)
+      .map(k => _HOTELS[k].name.toLowerCase()), "stay"];
+  } else if (G.game && !ctx.length) pool = _gameVerbs();
+  else pool = ctx.length ? _completePool(ctx[0], ctx) : _COMPLETE_VERBS;
   const seen = new Set();
   const out = [];
   for (const c of pool) {
@@ -4899,7 +4921,7 @@ function doCommand(input) {
     if (/^restart/.test(lower)) { newGame(); engineIntro(); return; }
     if (/vacation|holiday|again|fly back|new/.test(lower)) { _newVacation(); return; }
     if (/move|expat|stay|pattaya|remain/.test(lower)) { _goExpat(); return; }
-    _say("NEW VACATION or MOVE TO PATTAYA — the airline needs an answer.", "dim");
+    _say("(NEW VACATION · MOVE TO PATTAYA — the airline needs an answer.)", "dim");
     return;
   }
 
@@ -4916,9 +4938,9 @@ function doCommand(input) {
       /metro|lk/.test(lower) ? "metropole" : null;
     if (!pick || pick === G.hotel) {
       const others = Object.keys(_HOTELS).filter(k => k !== G.hotel);
-      _say("The clerk waits. " +
-        others.map(k => _HOTELS[k].name.toUpperCase()).join(" or ") +
-        " — or STAY.", "dim");
+      _say("The clerk waits. (" +
+        others.map(k => _HOTELS[k].name.toUpperCase()).join(" · ") +
+        " · or STAY.)", "dim");
       return;
     }
     G.pendingChoice = null;
@@ -4974,6 +4996,7 @@ function doCommand(input) {
       break;
     }
     case "travel": case "goto": _doTravel(arg); break;
+    case "midnight": _doWait("until midnight"); break; // the help hint, tapped
     case "enter": _doEnter(arg); break;
     case "look": case "l":
       if (arg) _doExamine(arg); // "look at candy" = "examine candy"
