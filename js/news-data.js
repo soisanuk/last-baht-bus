@@ -23,9 +23,9 @@ var NEWS_FEED = [
     "d": "28 Jun 2026"
   },
   {
-    "t": "Thai teenager's father 'deeply saddened' as Australian charged with murder",
+    "t": "Killed teen's father rejects idea of leniency payment from Australian",
     "s": "ABC News & Headlines – Australian Broadcasting Corporation",
-    "d": "28 Jun 2026"
+    "d": "04 Jul 2026"
   },
   {
     "t": "UK woman, 21, arrested in Thailand after allegedly stabbing boyfriend to death",
@@ -33,14 +33,14 @@ var NEWS_FEED = [
     "d": "04 Jul 2026"
   },
   {
-    "t": "Australian man charged with murder in Thailand after teenage girl’s body found in suitcase",
-    "s": "The Guardian",
+    "t": "Thai teenager's father 'deeply saddened' as Australian charged with murder",
+    "s": "ABC News & Headlines – Australian Broadcasting Corporation",
     "d": "28 Jun 2026"
   },
   {
-    "t": "Australian arrested after teenage girl's body found in Thailand",
-    "s": "ABC News & Headlines – Australian Broadcasting Corporation",
-    "d": "27 Jun 2026"
+    "t": "Australian man charged with murder in Thailand after teenage girl’s body found in suitcase",
+    "s": "The Guardian",
+    "d": "28 Jun 2026"
   },
   {
     "t": "Thailand lost a third of its Chinese tourists. It has not got them back.",
@@ -48,13 +48,18 @@ var NEWS_FEED = [
     "d": "10 Jul 2026"
   },
   {
-    "t": "Uragasaurus kalasinensis: New dinosaur discovered in Thailand",
-    "s": "BBC",
+    "t": "‘We said yes to every bad idea’: The Israeli couple’s wild Thailand trip",
+    "s": "Ynetnews",
     "d": "11 Jul 2026"
   },
   {
-    "t": "The largest dinosaur ever found in Southeast Asia was hiding in plain sight near a pond in northeastern Thailand — mistaken for ordinary roc",
-    "s": "Space Daily",
+    "t": "Blackchin tilapia spreads across Thailand, and shrimp farmers say they've eaten everything",
+    "s": "Yahoo",
+    "d": "11 Jul 2026"
+  },
+  {
+    "t": "New dinosaur species as long as cricket pitch discovered in Thailand",
+    "s": "BBC",
     "d": "11 Jul 2026"
   },
   {
@@ -63,20 +68,15 @@ var NEWS_FEED = [
     "d": "09 Jul 2026"
   },
   {
-    "t": "'Looksmaxxing' influencer Connor Murphy dead at age 32 after apparent lake drowning",
-    "s": "Fox News",
-    "d": "08 Jul 2026"
-  },
-  {
-    "t": "Looksmaxxing influencer dead in Thailand after running from cops: Reports",
-    "s": "NewsNation",
-    "d": "09 Jul 2026"
+    "t": "The largest dinosaur ever found in Southeast Asia was hiding in plain sight near a pond in northeastern Thailand — mistaken for ordinary roc",
+    "s": "Space Daily",
+    "d": "11 Jul 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-07-10","USD":33.31,"AUD":23.15,"GBP":44.72,"EUR":38.08};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-07-11","temp":28,"humid":84,"code":51,"hi":33,"rain":74};
+var WX_NOW = {"date":"2026-07-12","temp":28,"humid":80,"code":3,"hi":31,"rain":83};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-09","done":true,"h":"France","hs":2,"a":"Morocco","as":0},{"d":"2026-07-10","done":true,"h":"Spain","hs":2,"a":"Belgium","as":1},{"d":"2026-07-11","done":false,"h":"Norway","hs":0,"a":"England","as":0},{"d":"2026-07-12","done":false,"h":"Argentina","hs":0,"a":"Switzerland","as":0},{"d":"2026-07-14","done":false,"h":"France","hs":0,"a":"Spain","as":0},{"d":"2026-07-15","done":false,"h":"QF W3","hs":0,"a":"QF W4","as":0}]};
 // GLO draw — the girls' retirement plan
@@ -84,4 +84,4 @@ var LOTTO = {"date":"2026-07-01","first":"751495","last2":"62","front3":["001","
 // XAU, plus Thai baht-weight gold (96.5%)
 var GOLD = {"usd":4121,"date":"2026-07-11","baht":64950};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":64386,"thb":2143954};
+var BTC = {"usd":64361,"thb":2143139};

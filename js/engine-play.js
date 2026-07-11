@@ -53,7 +53,7 @@ function _c4Choices() {
 function _gameVerbs() {
   if (!G || !G.game) return [];
   switch (G.game.type) {
-    case "c4": return ["drop", "quit"];
+    case "c4": return ["drop", "1", "2", "3", "4", "5", "6", "7", "q", "quit"];
     case "jp": return ["flip", "quit"];
     case "pool": case "killer": return ["shot", "power", "safety", "quit"];
     case "quiz": return ["1", "2", "3", "quit"];
@@ -85,13 +85,13 @@ function _startC4() {
   _say(stake ? `฿${stake} on the table.` :
     "You're broke, so this one's for sanuk — and her professional pride.");
   _say(c4Render(G.game.board));
-  _say("(You're ●. DROP 1-7 · QUIT concedes.)", "dim");
+  _say("(You're ●. Tap a column 1-7 to drop · Q quits.)", "dim");
 }
 
 function _c4Input(input) {
   const g = G.game;
   const m = input.match(/[1-7]/);
-  if (!m) { _gameBoard(); _say("Not a move. Pick a column: 1-7. (QUIT concedes.)", "dim"); return; }
+  if (!m) { _gameBoard(); _say("Not a move — tap a column 1-7, or Q to quit.", "dim"); return; }
   if (c4Drop(g.board, +m[0] - 1, 1) < 0) { _say("That column is full to the brim."); return; }
   if (c4Win(g.board) === 1) {
     _say(c4Render(g.board));
@@ -529,7 +529,7 @@ function _renderGame() {
   _say("(A bar game is still in progress — here's where it stands:)", "dim");
   _gameBoard();
   switch (g.type) {
-    case "c4":   _say("(You're ●. DROP 1-7 · QUIT concedes.)", "dim"); break;
+    case "c4":   _say("(You're ●. Tap a column 1-7 to drop · Q quits.)", "dim"); break;
     case "jp":
       if (g.pending) _say(`(FLIP ${g.pending[0].join(" ")} · FLIP ${g.pending[1].join(" ")})`, "dim");
       else _say("(Flip the dice — type anything to roll.)", "dim");
