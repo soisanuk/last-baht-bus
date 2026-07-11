@@ -72,6 +72,15 @@ test("printed names become known; lowercase words and fragments do not", () => {
   assert.ok(state().known.nok, "being in the room prints the name");
 });
 
+test("autocomplete won't suggest ask-topics naming strangers", () => {
+  state().room = "beach_rd_s";
+  run("look"); // Bank hits the presence line; Pim is still nobody
+  assert.ok(!engineComplete("ask bank about ").includes("pim"), "who is Pim?");
+  assert.ok(engineComplete("ask bank about ").includes("darkside"));
+  _say("“My girlfriend Pim — Starlight Bar, LK Metro.”");
+  assert.ok(engineComplete("ask bank about ").includes("pim"));
+});
+
 // ── Act 1: bottles → fare ──────────────────────────────────────────────────
 
 test("reading the receipt sets the lead flag", () => {

@@ -140,22 +140,9 @@ const _term = (() => {
   // goes through the normal submit path, so taps echo as typed commands
   // and the engine never knows a wheel exists.
 
-  // A topic that is somebody's name stays hidden until that name has printed
-  // in the transcript (G.known, maintained by the engine) — no "ask Bank
-  // about pim" on first meeting when nothing has ever mentioned Pim. Typed
-  // ASK is not gated; this only stops the UI from leaking names.
-  function _topicKnown(t) {
-    try {
-      if (!G.known) return true; // save predates the gate: hide nothing
-      for (const roster of [NPCS, typeof PATRONS === "undefined" ? {} : PATRONS]) {
-        for (const [id, n] of Object.entries(roster)) {
-          if (n.name.split(" ").pop().toLowerCase() === t) return !!G.known[id];
-        }
-      }
-    } catch (e) { /* engine not booted */ }
-    return true;
-  }
-
+  // Ask-topics that are somebody's name stay hidden until that name has
+  // printed in the transcript — the engine's _topicKnown gates both this
+  // wheel and the input autocomplete. Typed ASK is not gated.
   function _kwActions(k, v, full) {
     const a = [];
     const lo = v.toLowerCase();

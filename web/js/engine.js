@@ -43,6 +43,20 @@ function _learnNames(text) {
   }
 }
 
+// The gate itself: a topic that is somebody's name is only *offered* — by
+// the flyout wheel and the input autocomplete — once that character is
+// known. Topics that aren't names always pass.
+function _topicKnown(t) {
+  if (!G || !G.known) return true; // save predates the gate: hide nothing
+  const rosters = [NPCS, typeof PATRONS === "undefined" ? {} : PATRONS];
+  for (const roster of rosters) {
+    for (const [id, n] of Object.entries(roster)) {
+      if (n.name.split(" ").pop().toLowerCase() === t) return !!G.known[id];
+    }
+  }
+  return true;
+}
+
 // ── Game state ─────────────────────────────────────────────────────────────
 
 let G = null;
@@ -4642,10 +4656,14 @@ function _completePool(verb, ctx) {
         if (id && NPCS[id].dialogue) {
           return NPCS[id].dialogue.filter(d => d.topic &&
             (!d.req || d.req.every(f => _flag(f))) &&
-            (!d.notFlags || d.notFlags.every(f => !_flag(f)))).map(d => d.topic);
+            (!d.notFlags || d.notFlags.every(f => !_flag(f))))
+            .map(d => d.topic).filter(_topicKnown);
         }
         const pat = _findPatron(ctx[1]);
-        if (pat) return PATRONS[pat].dialogue.filter(d => d.topic).map(d => d.topic);
+        if (pat) {
+          return PATRONS[pat].dialogue.filter(d => d.topic)
+            .map(d => d.topic).filter(_topicKnown);
+        }
         return [];
       }
       return _cNpcsHere();
