@@ -24,7 +24,14 @@ const _term = (() => {
   function _kwIndex() {
     const kind = new Map(); // display name → npc | patron | bar | item
     try {
-      for (const n of Object.values(NPCS)) kind.set(n.name, "npc");
+      for (const n of Object.values(NPCS)) {
+        // Anonymous staff (lowercase names, e.g. "security") only glow where
+        // they actually stand — prose mentions elsewhere would tap into a
+        // dead-end "ask … about security". Named characters decorate
+        // everywhere: gossip about the absent is the whole economy.
+        if (/^[a-z]/.test(n.name) && (!G || n.room !== G.room)) continue;
+        kind.set(n.name, "npc");
+      }
       if (typeof PATRONS !== "undefined") {
         for (const p of Object.values(PATRONS)) kind.set(p.name, "patron");
       }
