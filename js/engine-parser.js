@@ -1595,9 +1595,16 @@ function _completePool(verb, ctx) {
     case "read": case "use": return _cInv().map(_cItemWord);
     case "give":
       return ctx.length >= 2 ? _cNpcsHere() : _cInv().map(_cItemWord);
-    case "buy": case "order":
+    case "buy": case "order": {
+      const sItems = _salengItems();
+      if (sItems.length) {
+        // "buy " lists the cart; once an item is named, offer a lady to gift to
+        const named = sItems.find(i => ctx.slice(1).join(" ").includes(i.split(" ")[0]));
+        return named ? girls() : [...sItems, ...sItems.map(i => i + " for")];
+      }
       return ["beer", "water", "lady drink for", "bra for", "charger", "toastie", "food",
         "round for band"];
+    }
     case "go": case "walk": case "head": case "enter":
       return [...Object.keys(_room().exits),
         ..._travelDests().map(id => (ROOMS[id].bar || ROOMS[id].name).toLowerCase())];

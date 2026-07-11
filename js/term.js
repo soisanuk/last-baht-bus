@@ -205,6 +205,14 @@ const _term = (() => {
             return cols.map(c => ({ t: "drop " + c, c: "drop " + c, go: true }));
           }
         }
+        // at a saleng cart, the open "BUY <item> FOR <lady>" hint fans out into
+        // the cart's items so you don't have to type SOM TAM / FRUIT yourself
+        if (cmd === "buy" && typeof _salengItems === "function") {
+          const items = _salengItems();
+          if (items.length) {
+            return items.map(i => ({ t: "buy " + i + " for …", c: "buy " + i + " for ", go: false }));
+          }
+        }
         return [{ t: lo, c: cmd + (open ? " " : ""), go: !open }];
       }
       if (k === "bar") return [{ t: "enter " + v, c: "enter " + lo, go: true }];

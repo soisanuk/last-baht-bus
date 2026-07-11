@@ -10,6 +10,19 @@
 const ENC_COOLDOWN = 12; // min turns between encounters
 const ENC_CHANCE = 0.3;  // roll per eligible arrival
 
+// The buyable items on the saleng cart parked right now — the single list the
+// flyout wheel and autocomplete both read, so tapping "BUY <item> FOR <lady>"
+// and typing "buy " agree (three-surface rule). Empty when no cart is present.
+function _salengItems() {
+  if (!G || G.pendingEnc !== "saleng") return [];
+  switch (G.salengCart) {
+    case "food":     return ["moo ping", "noodles"];
+    case "shoes":    return ["sandals", "heels"];
+    case "lingerie": return ["lingerie"];
+    default:         return ["som tam", "fruit"]; // snacks
+  }
+}
+
 function _maybeEncounter() {
   if (!G || G.over || G.pendingFare || G.pendingEnc) return;
   if (_isDarkHere() || _room().bar) return; // the dark belongs to the soi dogs
