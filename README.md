@@ -137,9 +137,17 @@ Mobile gets tappable verb chips; desktop gets ↑/↓ command history.
 - **Tap the words**: actionable words glow in the transcript — names,
   bars, items, exits, command hints. Tap for the quick, obvious action
   (tap an exit and you walk); hold (or right-click) for the full wheel,
-  including an NPC's live ask-topics. Every tap echoes as a typed command,
-  so the transcript stays honest. A ➤ send button finishes prefilled
-  commands without summoning the keyboard.
+  including an NPC's live ask-topics. You can only be offered gossip
+  about people you've actually heard of — a name has to appear in your
+  transcript before it shows up as an ask-topic or autocomplete
+  suggestion. Every tap echoes as a typed command, so the transcript
+  stays honest. A ➤ send button finishes prefilled commands without
+  summoning the keyboard.
+- **Faces on the soi**: every character — all 31 NPCs and 14 bar
+  patrons — has a pixel-art portrait, shown on presence lines and atop
+  their action wheel. Generated from one parametric part library
+  (`scripts/gen-portraits.py`), so Terry's sunburn, Mem's reading
+  glasses, and Bank's orange vest are all canon-true and one style.
 - **Tap the Thai to learn it**: every Thai word the game prints is
   tokenized against the Thai Trainer's vocab (same modal, same data,
   vendored from the trainer) — tap for syllable decomposition,

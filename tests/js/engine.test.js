@@ -81,6 +81,26 @@ test("autocomplete won't suggest ask-topics naming strangers", () => {
   assert.ok(engineComplete("ask bank about ").includes("pim"));
 });
 
+test("_topicKnown: patron names gate too; non-name topics always pass", () => {
+  assert.equal(_topicKnown("danny"), false, "Danny the patron, unmet");
+  state().known.danny = true;
+  assert.equal(_topicKnown("danny"), true);
+  assert.equal(_topicKnown("sunset"), true, "not a name — never gated");
+  assert.equal(_topicKnown("free drink"), true);
+});
+
+test("G.known serializes with the save; older saves backfill empty", () => {
+  state().known.pim = true;
+  const snap = serializeGame();
+  newGame();
+  deserializeGame(snap);
+  assert.ok(state().known.pim, "knowledge survives the round-trip");
+  const old = JSON.parse(snap);
+  delete old.known;
+  deserializeGame(JSON.stringify(old));
+  assert.deepEqual(state().known, {}, "pre-gate save gets the field");
+});
+
 // ── Act 1: bottles → fare ──────────────────────────────────────────────────
 
 test("reading the receipt sets the lead flag", () => {
