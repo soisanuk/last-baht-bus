@@ -60,6 +60,18 @@ test("examine NPC and item", () => {
   assert.match(lastOut(), /Thai/);
 });
 
+test("printed names become known; lowercase words and fragments do not", () => {
+  assert.deepEqual(state().known, {}, "nobody named yet at the waterline");
+  _say("The bank keeps texting me about the pimento cheese.");
+  assert.ok(!state().known.bank, "lowercase 'bank' is an institution");
+  assert.ok(!state().known.pim, "'pimento' is not Pim");
+  _say("“My girlfriend Pim — Starlight Bar. Ask Madam Oy, she know.”");
+  assert.ok(state().known.pim);
+  assert.ok(state().known.oy, "matched on the last word of 'Madam Oy'");
+  run("e"); // Auntie Nok is on the presence line
+  assert.ok(state().known.nok, "being in the room prints the name");
+});
+
 // ── Act 1: bottles → fare ──────────────────────────────────────────────────
 
 test("reading the receipt sets the lead flag", () => {

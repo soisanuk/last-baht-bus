@@ -14,7 +14,34 @@ function engineInit(printFn, speakFn) {
 }
 
 // say(text, cls) — cls hints the renderer: "room", "thai", "dim", "alert", "win"
-function _say(text, cls) { _enginePrint(text, cls || ""); }
+function _say(text, cls) { _learnNames(text); _enginePrint(text, cls || ""); }
+
+// ── Known names ────────────────────────────────────────────────────────────
+// A character is "known" once their name has actually appeared in the
+// transcript — a presence line, a room description, someone's gossip. The
+// flyout wheel only offers ask-topics about known people, so a first
+// encounter with Bank can't dangle "ask about pim" before anything has ever
+// mentioned Pim. Typed ASK stays permissive; only the UI hint is gated.
+
+let _nameRx = null; // [id, /\bName\b/] pairs, built once from the rosters
+
+function _learnNames(text) {
+  if (!G || !G.known) return;
+  if (!_nameRx) {
+    _nameRx = [];
+    const rosters = [NPCS, typeof PATRONS === "undefined" ? {} : PATRONS];
+    for (const roster of rosters) {
+      for (const [id, n] of Object.entries(roster)) {
+        const last = n.name.split(" ").pop(); // "Madam Oy" → "Oy"
+        if (!/^[A-Z]/.test(last)) continue;   // "security" is nobody's name
+        _nameRx.push([id, new RegExp("\\b" + last + "\\b")]);
+      }
+    }
+  }
+  for (const [id, rx] of _nameRx) {
+    if (!G.known[id] && rx.test(text)) G.known[id] = true;
+  }
+}
 
 // ── Game state ─────────────────────────────────────────────────────────────
 
@@ -36,6 +63,7 @@ function newGame() {
     wingmanUntil: 0,     // G.turns before which a wing-woman is vouching for you
     darkStreak: 0,
     flags: {},
+    known: {},           // charId → true once their name has printed (ask-topic gate)
     talked: {},          // npcId → [dialogue indices already delivered] (terse repeats)
     itemLoc: Object.fromEntries(
       Object.entries(ITEMS).map(([id, it]) => [id, it.location])),
@@ -99,6 +127,7 @@ function deserializeGame(s) {
   if (G.pendingEnc === undefined) G.pendingEnc = null;
   if (G.game === undefined) G.game = null;
   if (!G.lightWarn) G.lightWarn = { room: null, n: 0, mark: false };
+  if (!G.known) G.known = {};
   if (G.blueDogDay === undefined) G.blueDogDay = 0;
   if (!G.hotel) G.hotel = "sabai";
   if (G.hotelDebt === undefined) G.hotelDebt = 0;

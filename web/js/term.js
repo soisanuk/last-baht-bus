@@ -139,6 +139,23 @@ const _term = (() => {
   // comprehensive list, including an NPC's live ask-topics. Every action
   // goes through the normal submit path, so taps echo as typed commands
   // and the engine never knows a wheel exists.
+
+  // A topic that is somebody's name stays hidden until that name has printed
+  // in the transcript (G.known, maintained by the engine) — no "ask Bank
+  // about pim" on first meeting when nothing has ever mentioned Pim. Typed
+  // ASK is not gated; this only stops the UI from leaking names.
+  function _topicKnown(t) {
+    try {
+      if (!G.known) return true; // save predates the gate: hide nothing
+      for (const roster of [NPCS, typeof PATRONS === "undefined" ? {} : PATRONS]) {
+        for (const [id, n] of Object.entries(roster)) {
+          if (n.name.split(" ").pop().toLowerCase() === t) return !!G.known[id];
+        }
+      }
+    } catch (e) { /* engine not booted */ }
+    return true;
+  }
+
   function _kwActions(k, v, full) {
     const a = [];
     const lo = v.toLowerCase();
@@ -191,11 +208,12 @@ const _term = (() => {
         return a;
       }
       a.push({ t: "talk", c: "talk to " + lo, go: true });
-      const topics = npc
+      const topics = (npc
         ? NPCS[npc].dialogue.filter(d => d.topic &&
             (!d.req || d.req.every(f => G.flags[f])) &&
             (!d.notFlags || d.notFlags.every(f => !G.flags[f]))).map(d => d.topic)
-        : PATRONS[pat].dialogue.filter(d => d.topic).map(d => d.topic);
+        : PATRONS[pat].dialogue.filter(d => d.topic).map(d => d.topic)
+      ).filter(_topicKnown);
       if (full) {
         for (const t of topics.slice(0, 6)) {
           a.push({ t: "ask about " + t, c: `ask ${lo} about ${t}`, go: true });

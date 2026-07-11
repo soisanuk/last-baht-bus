@@ -73,7 +73,20 @@ test("the wheel: quick vs comprehensive for a present hostess", () => {
   const fullLabels = full.map(a => a.t);
   assert.ok(fullLabels.includes("flirt"));
   assert.ok(fullLabels.includes("barfine"));
-  assert.ok(fullLabels.some(t => /^ask about oy$/.test(t)), "live topics surface on hold");
+  G.known.oy = true; // Oy's name has come up in gossip
+  const known = _term.kwActions("npc", "Lek", true).map(a => a.t);
+  assert.ok(known.some(t => /^ask about oy$/.test(t)), "live topics surface on hold");
+});
+
+test("the wheel: name-topics stay hidden until the name has printed", () => {
+  newGame();
+  G.room = "beach_rd_s"; // Bank's motosai stand; Pim never mentioned yet
+  let topics = _term.kwActions("npc", "Bank", true).map(a => a.t);
+  assert.ok(!topics.includes("ask about pim"), "who is Pim?");
+  assert.ok(topics.includes("ask about darkside"), "place topics are not gated");
+  _say("“My girlfriend Pim — Starlight Bar, LK Metro.”");
+  topics = _term.kwActions("npc", "Bank", true).map(a => a.t);
+  assert.ok(topics.includes("ask about pim"), "the transcript named her");
 });
 
 test("the wheel: an absent name routes through whoever is here", () => {
