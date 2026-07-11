@@ -820,6 +820,18 @@ test("three bells grant amnesty: heat can't accumulate", () => {
   assert.equal(state().soc.heat.neon_paradise, 2);
 });
 
+test("bell flavor: 'Three' isn't shouty (no dead tap), four-plus gets a generic line", () => {
+  state().room = "neon_paradise";
+  state().money = 5000;
+  run("ring bell", "ring bell", "ring bell"); // third ring: the peak line
+  assert.match(lastOut(), /Three bells|own this bar/);
+  assert.doesNotMatch(lastOut(), /THREE/, "all-caps would decorate into a dead tap target");
+  out = [];
+  run("ring bell"); // fourth: no longer claims 'three', a generic escalation line
+  assert.doesNotMatch(lastOut(), /three bells/i);
+  assert.match(lastOut(), /on top of three|making noise/i);
+});
+
 test("Aek the tom cashier holds the till at Midnight Sun and caps contact", () => {
   state().room = "midnight_sun";
   run("talk to aek");

@@ -12,7 +12,7 @@ const _audio = (() => {
   try { _muted = localStorage.getItem("lbb_muted") === "1"; } catch (e) {}
 
   const MUS_VOL = 0.14;
-  const SFX_VOL = 0.22;  // one-shots sit above the music bed so a clang lands
+  const SFX_VOL = 0.5;   // one-shots sit well above the music bed so a clang lands loud
 
   function _ctx() {
     if (_actx) {
@@ -41,10 +41,12 @@ const _audio = (() => {
   // ratios reads as struck brass rather than a chord; a short band-passed noise
   // burst is the striker hitting the shell. Fast attack, long ring-out.
   function _clang(t0) {
-    const base = 620;
+    // Low base = heft, long decays = a ring you actually hear. The low "hum"
+    // partial gives body; the higher inharmonic ones give the metallic bite.
+    const base = 440;
     const partials = [ // [ratio, peak, decay-seconds]
-      [1.00, 0.80, 1.7], [2.00, 0.62, 1.4], [2.76, 0.46, 1.15],
-      [3.76, 0.30, 0.9], [5.40, 0.20, 0.65], [8.10, 0.12, 0.45],
+      [0.50, 0.30, 2.6], [1.00, 0.46, 2.2], [1.19, 0.24, 1.7],
+      [2.00, 0.30, 1.5], [2.66, 0.17, 1.1], [3.60, 0.11, 0.8],
     ];
     for (const [ratio, vol, dur] of partials) {
       const o = _actx.createOscillator(), g = _actx.createGain();
@@ -59,12 +61,12 @@ const _audio = (() => {
     const s = _actx.createBufferSource();
     s.buffer = _noiseBuf;
     const f = _actx.createBiquadFilter();
-    f.type = "bandpass"; f.frequency.value = 3400; f.Q.value = 0.8;
+    f.type = "bandpass"; f.frequency.value = 3200; f.Q.value = 0.8;
     const ng = _actx.createGain();
-    ng.gain.setValueAtTime(0.5, t0);
-    ng.gain.exponentialRampToValueAtTime(0.001, t0 + 0.09);
+    ng.gain.setValueAtTime(0.35, t0);
+    ng.gain.exponentialRampToValueAtTime(0.001, t0 + 0.1);
     s.connect(f); f.connect(ng); ng.connect(_sfxBus);
-    s.start(t0); s.stop(t0 + 0.12);
+    s.start(t0); s.stop(t0 + 0.13);
   }
 
   function _note(freq, t0, dur, type, vol) {

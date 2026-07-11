@@ -905,11 +905,14 @@ function _doBell() {
     `now knows your name. (-฿${BELL_PRICE}, ฿${G.money} left — reign while it lasts.)`);
   const rings = G.soc.bells[r];
   if (rings === 2) {
-    _say("(That's two bells this visit. The girls are giddy now, the whole room " +
-      "tilting hard your way — hardly anything you try lands wrong.)", "dim");
-  } else if (rings >= 3) {
-    _say("(THREE bells. You own this bar tonight. The ladies are all over you, " +
-      "the mamasan's looking the other way, and nobody — nobody — is counting.)", "win");
+    _say("That's two bells this visit. The girls are giddy now, the whole room " +
+      "tilting hard your way — hardly anything you try lands wrong.", "win");
+  } else if (rings === 3) {
+    _say("Three bells. You own this bar tonight — the ladies are all over you, " +
+      "the mamasan's looking the other way, and nobody is counting.", "win");
+  } else if (rings > 3) {
+    _say("Another bell on top of three. The room has been yours since the third; " +
+      "now you are just making noise, and they love you for it.", "win");
   }
   _engineSfx("bell");
   _engineSpeak("ชนแก้ว");
