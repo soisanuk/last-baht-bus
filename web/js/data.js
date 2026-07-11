@@ -1,3 +1,5 @@
+// VENDORED from the Soi Sanuk trainer (soisanuk.github.io web/js/data.js) —
+// source of truth lives there; edit there and re-copy. Do not fork.
 // All Thai data — words, consonants, vowels, tones. This file is the source of truth.
 // (Originally generated from a Python app that has since been removed.)
 
