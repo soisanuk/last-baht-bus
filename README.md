@@ -432,7 +432,11 @@ web/
     news-data.js   real headlines, auto-baked by scripts/fetch-news.mjs (cron)
     world.js       rooms, items, NPCs, dialogue, bus/motosai lines (pure data)
     games.js       bar mini-games: Connect 4, Jackpot dice, pool (pure logic)
-    engine.js      parser, verb handlers, systems, endings (DOM-free at load)
+    engine-core.js        state (G), hotels, patrons, describe, turn loop ┐ one engine,
+    engine-encounters.js  random street encounters                        │ five classic
+    engine-play.js        bar games, social life, happiness, the clock     │ scripts loaded
+    engine-systems.js     barfine, quests, phone, news, rain, food, Act 1  │ in order;
+    engine-parser.js      verb handlers, fast travel, autocomplete, parser ┘ DOM-free at load
     tts.js         th-TH Web Speech (Capacitor-ready)
     data.js        ┐
     examples.js    │ VENDORED from the Thai Trainer (source of truth there):
@@ -449,7 +453,7 @@ Engine and world are DOM-free at load time and print through an injected
 callback, so the whole game runs headless in tests — same convention as the
 Soi Sanuk trainer.
 
-The terminal is a disposable frontend: all rules live in `engine.js` as
+The terminal is a disposable frontend: all rules live in the `engine-*.js` parts as
 per-action functions (`_doGo`, `_doTalk`, …) that the text parser merely maps
 words onto, and all world content is declarative data in `world.js`. A future
 2D version would call the same actions directly and read the same data, and a

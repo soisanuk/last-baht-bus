@@ -1,5 +1,5 @@
 // The Last Baht Bus — world data: rooms, items, NPCs, gossip chain.
-// Pure data, no DOM (unit-tested via node:vm). The engine (engine.js) walks
+// Pure data, no DOM (unit-tested via node:vm). The engine (engine-*.js) walks
 // these tables; puzzle-specific behaviour lives in the engine's handlers.
 //
 // Canon: Soi Sanuk / Pattaya nightlife universe. PG-13 wink throughout.
@@ -1722,7 +1722,7 @@ const MOTOSAI_DESTS = {
 };
 
 // ── Random street encounters ───────────────────────────────────────────────
-// Data only — resolution logic lives in engine.js (_ENC). Each fires at most
+// Data only — resolution logic lives in engine-encounters.js (_ENC). Each fires at most
 // once per game, only in lit street rooms, on a seeded per-game RNG.
 // `interactive: true` → the intro sets G.pendingEnc and the player's NEXT
 // command is their snap reaction; otherwise the encounter resolves instantly.
@@ -1837,7 +1837,7 @@ const ENCOUNTERS = {
 };
 
 // ── Quests (adventures) ─────────────────────────────────────────────────────
-// The engine's quest subsystem (engine.js) drives these: givers surface the
+// The engine's quest subsystem (engine-systems.js) drives these: givers surface the
 // offer in conversation, ACCEPT starts it (handing over `item` if any),
 // setting `doneFlag` completes it next turn and pays `reward`. `deps` are
 // quest ids that must be done first.

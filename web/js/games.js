@@ -1,7 +1,7 @@
 // Bar mini-games: Connect 4, Jackpot (Thai shut-the-box dice), and pool.
 // Pure game logic only — no DOM, no G, no output. Every random decision takes
 // an injected rnd() (the engine passes its save-seeded _rand), so games are
-// deterministic per save and fully testable. The engine (engine.js) owns the
+// deterministic per save and fully testable. The engine (engine-*.js) owns the
 // betting, narration, and the modal G.game state that drives these.
 
 // ── Connect 4 ────────────────────────────────────────────────────────────────

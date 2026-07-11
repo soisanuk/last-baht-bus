@@ -9,7 +9,7 @@ import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import vm from "node:vm";
 
-const SOURCES = ["thai.js", "world.js", "games.js", "engine.js"].map(f =>
+const SOURCES = ["thai.js", "world.js", "games.js", "engine-core.js", "engine-encounters.js", "engine-play.js", "engine-systems.js", "engine-parser.js"].map(f =>
   readFileSync(fileURLToPath(new URL(`../../web/js/${f}`, import.meta.url)), "utf8"));
 
 // One player session = one vm context with its own globals, its own G, and

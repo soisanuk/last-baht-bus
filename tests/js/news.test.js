@@ -73,7 +73,7 @@ test("FOOTY / LOTTO / GOLD / BTC, when baked, carry sane data", () => {
 test("engine: TV and paper read the feed when present, degrade without it", () => {
   // context WITHOUT news-data.js — the vm-test environment and file:// both
   const ctx = vm.createContext({});
-  for (const f of ["thai.js", "world.js", "games.js", "engine.js"]) {
+  for (const f of ["thai.js", "world.js", "games.js", "engine-core.js", "engine-encounters.js", "engine-play.js", "engine-systems.js", "engine-parser.js"]) {
     vm.runInContext(src(f), ctx);
   }
   const out = [];
@@ -98,7 +98,7 @@ test("engine: TV and paper read the feed when present, degrade without it", () =
   // same engine WITH a feed injected (as index.html's script order provides)
   const ctx2 = vm.createContext({});
   vm.runInContext(src("news-data.js"), ctx2);
-  for (const f of ["thai.js", "world.js", "games.js", "engine.js"]) {
+  for (const f of ["thai.js", "world.js", "games.js", "engine-core.js", "engine-encounters.js", "engine-play.js", "engine-systems.js", "engine-parser.js"]) {
     vm.runInContext(src(f), ctx2);
   }
   const out2 = [];

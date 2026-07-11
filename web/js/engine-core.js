@@ -1,0 +1,609 @@
+// The Last Baht Bus — game engine, part 1/5: output plumbing, known names,
+// game state (G, serialize/deserialize), hotels, patrons, look/describe, and
+// per-turn bookkeeping (battery, darkness, soi dogs).
+//
+// The engine is split across five classic scripts sharing globals, loaded in
+// order after world.js/games.js: engine-core → engine-encounters → engine-play
+// → engine-systems → engine-parser (see index.html and the vm-test load lists).
+// Core loads first because it declares G and the print/speak hooks the other
+// parts reference; nothing runs at load beyond const initializers, so functions
+// may live in any part. DOM-free at load and in every function (unit-tested via
+// node:vm); output goes through an injected print callback — term.js supplies
+// the real renderer, tests a capture buffer.
+
+// ── Output plumbing ────────────────────────────────────────────────────────
+
+let _enginePrint = () => {};
+let _engineSpeak = () => {}; // (thaiText) — TTS hook, no-op headless
+
+function engineInit(printFn, speakFn) {
+  _enginePrint = printFn || (() => {});
+  _engineSpeak = speakFn || (() => {});
+}
+
+// say(text, cls) — cls hints the renderer: "room", "thai", "dim", "alert", "win"
+function _say(text, cls) { _learnNames(text); _enginePrint(text, cls || ""); }
+
+// ── Known names ────────────────────────────────────────────────────────────
+// A character is "known" once their name has actually appeared in the
+// transcript — a presence line, a room description, someone's gossip. The
+// flyout wheel only offers ask-topics about known people, so a first
+// encounter with Bank can't dangle "ask about pim" before anything has ever
+// mentioned Pim. Typed ASK stays permissive; only the UI hint is gated.
+
+let _nameRx = null; // [id, /\bName\b/] pairs, built once from the rosters
+
+function _learnNames(text) {
+  if (!G || !G.known) return;
+  if (!_nameRx) {
+    _nameRx = [];
+    const rosters = [NPCS, typeof PATRONS === "undefined" ? {} : PATRONS];
+    for (const roster of rosters) {
+      for (const [id, n] of Object.entries(roster)) {
+        const last = n.name.split(" ").pop(); // "Madam Oy" → "Oy"
+        if (!/^[A-Z]/.test(last)) continue;   // "security" is nobody's name
+        _nameRx.push([id, new RegExp("\\b" + last + "\\b")]);
+      }
+    }
+  }
+  for (const [id, rx] of _nameRx) {
+    if (!G.known[id] && rx.test(text)) G.known[id] = true;
+  }
+}
+
+// The gate itself: a topic that is somebody's name is only *offered* — by
+// the flyout wheel and the input autocomplete — once that character is
+// known. Topics that aren't names always pass.
+function _topicKnown(t) {
+  if (!G || !G.known) return true; // save predates the gate: hide nothing
+  const rosters = [NPCS, typeof PATRONS === "undefined" ? {} : PATRONS];
+  for (const roster of rosters) {
+    for (const [id, n] of Object.entries(roster)) {
+      if (n.name.split(" ").pop().toLowerCase() === t) return !!G.known[id];
+    }
+  }
+  return true;
+}
+
+// ── Game state ─────────────────────────────────────────────────────────────
+
+let G = null;
+
+function newGame() {
+  G = {
+    room: "jomtien_beach",
+    money: 0,
+    battery: 13,
+    lightOn: false,
+    lightWarn: { room: null, n: 0, mark: false }, // go-go no-photo escalation
+    blueDogDay: 0,       // last day the Blue Dog show paid its happy point
+    hotel: "sabai",      // where you're checked in: sabai | queenvic | metropole
+    hotelDebt: 0,        // what's on the night clerk's book
+    qvDay: 0,            // last day the Queen Vic balcony paid its happy point
+    patronTalk: { day: 0, talked: {} }, // patron dialogue book, reset daily
+    turns: 0,
+    wingmanUntil: 0,     // G.turns before which a wing-woman is vouching for you
+    darkStreak: 0,
+    flags: {},
+    known: {},           // charId → true once their name has printed (ask-topic gate)
+    visited: { jomtien_beach: true }, // roomId → true once stood in (fast-travel gate)
+    talked: {},          // npcId → [dialogue indices already delivered] (terse repeats)
+    itemLoc: Object.fromEntries(
+      Object.entries(ITEMS).map(([id, it]) => [id, it.location])),
+    safeTries: 0,
+    pendingFare: null,   // { kind:"bus"|"moto", price, dest } awaiting `pay`
+    pendingEnc: null,    // encounter id awaiting the player's snap reaction
+    game: null,          // live bar mini-game state (connect 4 / jackpot / pool)
+    soc: {               // bar social ledger
+      drinks: {},        //   npcId → lady drinks bought tonight
+      mamaTreat: {},     //   roomId → true (the mamasan drank on you here)
+      bellAt: {},        //   roomId → turn of the last bell ring (the glow)
+      bells: {},         //   roomId → total rings tonight (rules soften at 2)
+      heat: {},          //   roomId → how close you are to meeting security
+      banned: {},        //   roomId → turn you were thrown out
+      patronBusy: {},    //   roomId → the regular has a girl's attention
+      patronMiffed: {},  //   roomId → you drink-sniped his girl (bad form)
+      bra: {},           //   npcId → you bought her the bra (fondle bumps a tier)
+      drunk: 0,          //   your own count tonight
+    },
+    encDone: {},         // encounters that already fired (once per game)
+    lastEnc: 0,          // turn number of the last encounter (cooldown)
+    rng: 1 + Math.floor(Math.random() * 2147483645), // seeded per game
+    score: 0,
+    happy: 0,            // สนุก — the long game. 100 = สบายสบาย.
+    stage: "act1",       // act1 → vacation → expat
+    vacation: 1,         // which trip this is
+    day: 2,              // you lost day one to the beach
+    nightTurn: 0,        // 10 turns ≈ 1 hour; the night runs 18:00–04:00
+    hunger: 30,          // 0 fed … 100 collapse
+    thirst: 40,          // 0 quenched … 100 collapse (you woke up dry)
+    hurt: 0,             // 3 = a night in the clinic
+    bestHappy: 0,
+    pendingChoice: null, // "vacation_end" gates input at week's end
+    atmDay: 0,           // last day the lobby ATM paid out ฿3000
+    lastPolice: -99,     // turn of the last boy-in-brown shakedown
+    lastPeddler: -99,    // turn of the last bar-stool peddler visit
+    lastSaleng: -99,     // turn of the last saleng (ซาเล้ง) mobile-cart visit
+    salengCart: null,    // current saleng cart type ("food"|"shoes"|"lingerie"|"snacks")
+    selfBfId: null,      // hostess offering to barfine herself
+    rain: 0,             // downpour turns remaining (0 = dry)
+    lastRain: -99,       // turn the last downpour began
+    lastDrizzle: -99,    // turn of the last light-rain vignette
+    quests: {},          // questId → "offered" | "active" | "done" | "abandoned"
+    quizPlayed: {},      // roomId → true (one quiz per bar per Thursday)
+    phone: {             // the other half of your most important possession
+      contacts: {},      //   npcId → true (you have her number)
+      inbox: [],         //   [{from, text, turn, read, gives}]
+      lastText: 0,       //   turn of the last incoming message
+      msgCd: {},         //   npcId → day you last sweet-talked her by text
+      invite: null,      //   {id, day} — she asked you to drop by tonight
+    },
+    over: false,         // legacy field; the sandbox never ends the night
+  };
+  return G;
+}
+
+function serializeGame() { return JSON.stringify(G); }
+function deserializeGame(s) {
+  G = JSON.parse(s);
+  // older saves predate the encounter/mini-game systems — backfill the fields
+  if (G.pendingEnc === undefined) G.pendingEnc = null;
+  if (G.game === undefined) G.game = null;
+  if (!G.lightWarn) G.lightWarn = { room: null, n: 0, mark: false };
+  if (!G.known) G.known = {};
+  if (!G.visited) G.visited = { [G.room]: true };
+  if (G.blueDogDay === undefined) G.blueDogDay = 0;
+  if (!G.hotel) G.hotel = "sabai";
+  if (G.hotelDebt === undefined) G.hotelDebt = 0;
+  if (G.qvDay === undefined) G.qvDay = 0;
+  if (!G.patronTalk) G.patronTalk = { day: 0, talked: {} };
+  if (!G.soc) {
+    G.soc = { drinks: {}, mamaTreat: {}, bellAt: {}, bells: {}, heat: {},
+      banned: {}, patronBusy: {}, patronMiffed: {}, bra: {}, drunk: 0 };
+  }
+  if (G.happy === undefined) G.happy = 0;
+  if (G.stage === undefined) {
+    G.stage = G.flags && G.flags.act1Done ? "vacation" : "act1";
+    G.vacation = 1;
+    G.day = 2;
+    G.nightTurn = Math.min(90, G.turns);
+    G.hunger = 30;
+    G.thirst = 40;
+    G.hurt = 0;
+    G.bestHappy = G.happy;
+    G.pendingChoice = null;
+  }
+  if (G.atmDay === undefined) { G.atmDay = 0; G.lastPolice = -99; G.selfBfId = null; }
+  if (G.rain === undefined) { G.rain = 0; G.lastRain = -99; }
+  if (G.lastDrizzle === undefined) G.lastDrizzle = -99;
+  if (!G.quests) G.quests = {};
+  if (!G.phone) {
+    G.phone = { contacts: {}, inbox: [], lastText: 0, msgCd: {}, invite: null };
+  }
+  if (G.lastPeddler === undefined) G.lastPeddler = -99;
+  if (G.lastSaleng === undefined) { G.lastSaleng = -99; G.salengCart = null; }
+  if (!G.quizPlayed) G.quizPlayed = {};
+  if (!G.talked) G.talked = {};
+  if (G.soc && !G.soc.bra) G.soc.bra = {};
+  if (G.wingmanUntil === undefined) G.wingmanUntil = 0;
+  G.over = false; // pre-sandbox saves could be "over"; the night reopens
+  if (!G.encDone) G.encDone = {};
+  if (G.lastEnc === undefined) G.lastEnc = 0;
+  if (!G.rng) G.rng = 1 + Math.floor(Math.random() * 2147483645);
+  for (const id of Object.keys(ITEMS)) {
+    if (!(id in G.itemLoc)) G.itemLoc[id] = ITEMS[id].location;
+  }
+  return G;
+}
+
+// Deterministic per-game RNG (Lehmer LCG). Living in G, it serialises with
+// the save and rewinds with UNDO — no re-rolling an encounter by undoing.
+function _rand() {
+  G.rng = (G.rng * 48271) % 2147483647;
+  return G.rng / 2147483647;
+}
+
+// ── Helpers ────────────────────────────────────────────────────────────────
+
+function _flag(f) { return !!G.flags[f]; }
+function _setFlag(f) { G.flags[f] = true; }
+
+function _inv() {
+  return Object.keys(G.itemLoc).filter(id => G.itemLoc[id] === "inventory");
+}
+function _here(id) { return G.itemLoc[id] === G.room; }
+function _room() { return ROOMS[G.room]; }
+
+function _isDarkHere() {
+  return !!_room().dark && !(G.lightOn && G.battery > 0);
+}
+
+function _npcsHere() {
+  return Object.entries(NPCS).filter(([, n]) => n.room === G.room).map(([id]) => id);
+}
+
+// ── Hotels: where the key card works ───────────────────────────────────────
+// After Act One, CHECKOUT at the start of an evening moves you. The hotel is
+// your spawn point, shower, outlet, and lobby ATM — location is the amenity.
+const _HOTELS = {
+  // rate = vacation nightly; expatRate = the negotiated long-stay daily
+  sabai:     { room: "hotel_room",     name: "Sabai Palms Hotel", rate: 400,  expatRate: 270 },
+  queenvic:  { room: "qv_room",        name: "Queen Vic Inn",     rate: 700,  expatRate: 400 },
+  metropole: { room: "metropole_room", name: "LK Metropole",      rate: 1300, expatRate: 730 },
+};
+const _HOTEL_DOWNGRADE = ["metropole", "queenvic", "sabai"];
+const _DEBT_CAP = 2000;
+
+function _hotelRate(k) {
+  return G.stage === "expat" ? _HOTELS[k].expatRate : _HOTELS[k].rate;
+}
+
+// The folio slides under the door each morning. Can't cover it? The desk
+// steps you down toward the Sabai Palms; broke even there, the night clerk
+// adds it to the book — capped, never a spiral. The town catches people.
+function _chargeRent() {
+  if (!_flag("act1Done") || G.stage === "act1") return;
+  if (G.hotelDebt && G.money >= G.hotelDebt + _hotelRate(G.hotel)) {
+    G.money -= G.hotelDebt;
+    _say(`(You settle the ฿${G.hotelDebt} on the book on your way past the desk. ` +
+      "The ledger closes with real warmth.)", "dim");
+    G.hotelDebt = 0;
+  }
+  if (G.money >= _hotelRate(G.hotel)) {
+    G.money -= _hotelRate(G.hotel);
+    _say(`(The folio slides under the door: ฿${_hotelRate(G.hotel)}` +
+      (G.stage === "expat" ? " — the long-stay rate" : "") +
+      `, the ${_HOTELS[G.hotel].name}. ฿${G.money} left.)`, "dim");
+    return;
+  }
+  // step down toward the Sabai Palms
+  let idx = _HOTEL_DOWNGRADE.indexOf(G.hotel);
+  while (idx < _HOTEL_DOWNGRADE.length - 1 && G.money < _hotelRate(_HOTEL_DOWNGRADE[idx])) idx++;
+  const to = _HOTEL_DOWNGRADE[idx];
+  if (to !== G.hotel) {
+    _say(`The ${_HOTELS[G.hotel].name} folio and your pockets have a short, frank ` +
+      `exchange, and by noon your bag has made its own way to the ` +
+      `${_HOTELS[to].name}. Nobody is unkind about it, which is somehow worse.`, "alert");
+    G.hotel = to;
+    G.room = _hotelRoomId();
+  }
+  const rate = _hotelRate(G.hotel);
+  if (G.money >= rate) {
+    G.money -= rate;
+    _say(`(฿${rate} for the night. ฿${G.money} left — thin, but paid.)`, "dim");
+  } else {
+    G.hotelDebt = Math.min(_DEBT_CAP, G.hotelDebt + rate);
+    _addHappy(-1);
+    _say(`The night clerk takes in the situation and adds ฿${rate} to the book ` +
+      `without a word — ฿${G.hotelDebt} on it now. His kindness is the heaviest ` +
+      "thing you'll carry today.", "alert");
+  }
+}
+
+function _hotelRoomId() { return _HOTELS[G.hotel].room; }
+
+// ── Named patrons ──────────────────────────────────────────────────────────
+// Hoppers drift to a hash-chosen bar each hour until 22:00, then settle at
+// their home bar; non-hoppers never leave home. Pure function of
+// (vacation, day, hour, id): same night, same hour, same stool — no state,
+// no drift between LOOKs, shared-world-safe like _quizBars.
+const _PATRON_HOP_ROOMS = Object.keys(ROOMS).filter(id => ROOMS[id].barType);
+
+function _patronHour() { return Math.floor(G.nightTurn / 10); } // 0 = 18:00
+
+function _patronRoom(id) {
+  const p = PATRONS[id];
+  if (p.days && !p.days.includes(G.day % 7)) return null; // not his night out
+  if (!p.hops || _patronHour() >= 4) return p.home; // by 22:00 everyone's home
+  let h = G.vacation * 7919 + G.day * 104729 + _patronHour() * 48271 + 1;
+  for (const c of id) h = (h * 31 + c.charCodeAt(0)) % 2147483647;
+  h = (h * 48271) % 2147483647;
+  // some patrons have bars they will not set foot in (creditors, history)
+  let i = h % _PATRON_HOP_ROOMS.length;
+  while (p.avoids && p.avoids.includes(_PATRON_HOP_ROOMS[i])) {
+    i = (i + 1) % _PATRON_HOP_ROOMS.length;
+  }
+  return _PATRON_HOP_ROOMS[i];
+}
+
+function _patronsHere() {
+  return Object.keys(PATRONS).filter(id => _patronRoom(id) === G.room);
+}
+
+function _findPatron(word) {
+  const w = word.toLowerCase();
+  const here = _patronsHere();
+  for (const id of here) {
+    if (id === w || PATRONS[id].name.toLowerCase() === w) return id;
+  }
+  for (const id of here) {
+    if (PATRONS[id].name.toLowerCase().startsWith(w)) return id;
+  }
+  return null;
+}
+
+// Same delivery contract as _deliver, but the seen-index book resets daily —
+// a patron's stories are new again every night, which is very true to life.
+function _patronTalk(id, topic) {
+  if (G.patronTalk.day !== G.day) G.patronTalk = { day: G.day, talked: {} };
+  const p = PATRONS[id];
+  let d = null;
+  for (const e of p.dialogue) {
+    if (topic ? e.topic !== topic && !(e.topic && topic.includes(e.topic)) : e.topic) continue;
+    d = e;
+    break;
+  }
+  if (!d) {
+    if (topic) { _patronTalk(id, null); return; }
+    _say(`${p.name} has said his piece for now.`);
+    return;
+  }
+  const idx = p.dialogue.indexOf(d);
+  const seen = G.patronTalk.talked[id] || (G.patronTalk.talked[id] = []);
+  const terse = seen.includes(idx) && !!d.short;
+  if (!seen.includes(idx)) seen.push(idx);
+  _say(terse ? d.short : d.text);
+}
+
+// where: "room", "inventory", or undefined (both, room first — so TAKE grabs
+// the bottle on the ground, not the one already in your pocket)
+function _findItem(word, where) {
+  const w = word.toLowerCase();
+  const inScope = id =>
+    where === "room" ? G.itemLoc[id] === G.room :
+    where === "inventory" ? G.itemLoc[id] === "inventory" :
+    (G.itemLoc[id] === G.room || G.itemLoc[id] === "inventory");
+  const matches = (id, it) => inScope(id) &&
+    (it.name.toLowerCase().includes(w) || it.aliases.some(a => a === w || a.includes(w)));
+  const pool = Object.entries(ITEMS).filter(([id, it]) => matches(id, it));
+  if (!where && pool.length > 1) {
+    const inRoom = pool.find(([id]) => G.itemLoc[id] === G.room);
+    if (inRoom) return inRoom[0];
+  }
+  return pool.length ? pool[0][0] : null;
+}
+
+function _findNpc(word) {
+  const w = word.toLowerCase();
+  const here = _npcsHere();
+  // exact id or exact name first (so "oy" is Madam Oy, not Pl-OY)
+  for (const id of here) {
+    if (id === w || NPCS[id].name.toLowerCase() === w) return id;
+  }
+  for (const id of here) {
+    const name = NPCS[id].name.toLowerCase();
+    if (name.startsWith(w) || name.split(" ").some(p => p.startsWith(w))) return id;
+  }
+  for (const id of here) {
+    if (NPCS[id].name.toLowerCase().includes(w)) return id;
+  }
+  return null;
+}
+
+// First dialogue entry whose req/notFlags fit; topic filters "ask about".
+// An unknown/locked topic falls back to the NPC's default (topicless) line —
+// classic adventure behaviour: they answer with whatever they always say.
+function _pickDialogue(npcId, topic) {
+  const n = NPCS[npcId];
+  for (const d of n.dialogue) {
+    if (topic ? d.topic !== topic && !(d.topic && topic.includes(d.topic)) : d.topic) continue;
+    if ((d.req || []).some(f => !_flag(f))) continue;
+    if ((d.notFlags || []).some(f => _flag(f))) continue;
+    return d;
+  }
+  return topic ? _pickDialogue(npcId, null) : null;
+}
+
+function _deliver(npcId, d) {
+  const n = NPCS[npcId];
+  // Second time you hear a line, get the point, not the whole spiel. We track
+  // which entries an NPC has already delivered (by index) and, on a repeat,
+  // swap in the entry's `short` gist and skip the Thai greeting flourish. An
+  // entry without a `short` just repeats in full — no regression.
+  const idx = n.dialogue.indexOf(d);
+  const seen = G.talked[npcId] || (G.talked[npcId] = []);
+  const terse = seen.includes(idx) && !!d.short;
+  if (!seen.includes(idx)) seen.push(idx);
+  if (d.th && !terse) { _say(`${n.emoji} ${n.name}: “${d.th}” (${d.rom})`, "thai"); _engineSpeak(d.th); }
+  _say(terse ? d.short : d.text);
+  for (const f of d.sets || []) _setFlag(f);
+  if (d.gives && G.itemLoc[d.gives] === null) {
+    G.itemLoc[d.gives] = "inventory";
+    _say(`(You now have the ${ITEMS[d.gives].name}.)`, "dim");
+    if (d.gives === "wallet") {
+      G.money += 500;
+      _say("(Most of the cash is still in it — ฿500 back in play.)", "dim");
+    }
+  }
+}
+
+// ── Look / describe ────────────────────────────────────────────────────────
+
+function _describeRoom(full) {
+  const r = _room();
+  G.visited[G.room] = true; // standing in it is how places join the fast-travel list
+  if (_isDarkHere()) {
+    _say(`${r.name}`, "room");
+    _say("It is pitch dark. If your phone has any battery left, its flashlight " +
+      "would help. Sois this dark tend to have soi dogs in them.", "alert");
+    return;
+  }
+  _say(r.name, "room");
+  if (full) _say(r.desc);
+  const items = Object.keys(G.itemLoc).filter(id => _here(id));
+  if (items.length) _say("You can see: " + items.map(id => ITEMS[id].name).join(", ") + ".");
+  const npcs = _npcsHere();
+  if (npcs.length) _say("Here: " + npcs.map(id => `${NPCS[id].emoji} ${NPCS[id].name}`).join(", ") + ".");
+  const pats = _patronsHere();
+  if (pats.length) {
+    _say("At the rail: " + pats.map(id =>
+      `${PATRONS[id].emoji} ${PATRONS[id].name} (${PATRONS[id].age}, ${PATRONS[id].nat})`).join(", ") + ".");
+  }
+  const exits = Object.keys(r.exits);
+  if (exits.length) _say("Exits: " + exits.join(", ") + ".", "dim");
+  if (r.busStop) _say("A baht bus can be caught here (ride bus to …).", "dim");
+  if (r.motosai) _say("A motosai stand is here (motosai to …).", "dim");
+  if (r.barType === "beer" || r.barType === "soi6") {
+    _say("A Connect 4 frame and a Jackpot dice box sit within reach (PLAY …).", "dim");
+  }
+  if (r.pool) {
+    _say("A pool table waits under a low lamp (PLAY POOL)." +
+      (_leagueTonight() ? " Tonight is LEAGUE NIGHT (PLAY KILLER, ฿100 in the ashtray)." : ""), "dim");
+  }
+  if (r.seven) _say("A 7-Eleven glows across the way (BUY TOASTIE · BUY WATER · BUY CHARGER).", "dim");
+  if (_quizDay() && !r.barType) {
+    const near = Object.values(r.exits).filter(to => _quizBars().includes(to));
+    if (near.length && G.nightTurn < 40) {
+      _say(near.map(to => ROOMS[to].bar || ROOMS[to].name).join(" and ") +
+        (near.length > 1 ? " have" : " has") + " a chalkboard out: QUIZ NIGHT " +
+        "TONIGHT 8-10 — PRIZES. " +
+        (G.nightTurn >= 20 ? "It's on right now; walk in and you're playing." :
+          "Starts at 20:00; walk in during and you're playing."), "dim");
+    }
+  }
+  if (_bandHere()) {
+    const isBar = !!r.barType;
+    _say("A live band is playing tonight." +
+      (isBar ? " (DANCE · SING · REQUEST <song> · TIP BAND · BUY ROUND FOR BAND)" :
+               " (DANCE · SING · REQUEST <song> · TIP BAND)"), "dim");
+  }
+  if (r.barType) {
+    const girl = _npcsHere().find(id => NPC_ROLES[id] === "hostess");
+    _say(G.soc.patronBusy[G.room] ?
+      "A sunburnt regular holds court at the far end" +
+      (girl ? `, with ${NPCS[girl].name}'s full attention` : "") + "." :
+      "A regular nurses a big Chang at the rail, radiating opinions.", "dim");
+  }
+  if (G.room === "blue_dog" && _shakedownOn()) {
+    _say("Across the road, the evening checkpoint is in session: officers on both " +
+      "sides of Beach Road, waving over every farang on a motorbike with the bored " +
+      "precision of toll collectors. The whole rail is watching. (WATCH POLICE — " +
+      "or WATCH SUNSET, the bay is doing its thing too.)", "dim");
+  }
+}
+
+// ── Turn bookkeeping: battery, darkness, soi dogs ──────────────────────────
+
+function _tick() {
+  G.turns++;
+  G.nightTurn++;
+  // a torch still burning in a go-go escalates; `mark` spends this command's
+  // entry/toggle warning so one command never counts twice
+  if (G.lightWarn.mark) G.lightWarn.mark = false;
+  else if (G.lightOn && G.battery > 0 && _room().barType === "gogo") _gogoLightWarn();
+  // the body keeps its own books
+  if (G.nightTurn % 20 === 0 && G.soc.drunk > 0) G.soc.drunk--;
+  if (G.nightTurn % 3 === 0) G.hunger++;
+  if (G.nightTurn % 2 === 0) G.thirst++;
+  if (G.hunger === 70) _say("(Your stomach growls loudly enough to turn heads. Eat something.)", "alert");
+  if (G.thirst === 70) _say("(Your throat is sandpaper. Drink something — ideally water.)", "alert");
+  if (G.hunger === 90) _say("(You are running on fumes. Food. Now.)", "alert");
+  if (G.thirst === 90) _say("(Dizzy. The neon is doing things it shouldn't. WATER.)", "alert");
+  if ((G.hunger >= 80 || G.thirst >= 80) && G.nightTurn % 10 === 0) _addHappy(-1);
+  if (G.hunger >= 100 || G.thirst >= 100) { _endNight("collapse"); return; }
+  if (G.nightTurn >= NIGHT_TURNS) { _endNight("dawn"); return; }
+  // rainy season: when the bake says storm, the sky sometimes proves it.
+  // The stormy check comes first so a bake-less game never touches the dice.
+  if (G.rain > 0) {
+    G.rain--;
+    if (G.rain === 0) {
+      _say("The rain stops the way it started — all at once, like a tap. The " +
+        "street steams, the music comes back up to volume, and the town picks " +
+        "up exactly where it left off.", "alert");
+    }
+  } else if (_wxStormy() && G.turns - G.lastRain >= 30 && _rand() < 0.08) {
+    _startRain(3 + Math.floor(_rand() * 6));
+  } else if (_wxRainy() && G.turns - G.lastDrizzle >= 15 && _rand() < 0.06) {
+    G.lastDrizzle = G.turns; // light rain: atmosphere only, never mechanics
+    _sayDrizzle();
+  }
+  // the peddlers work the Beach Road bars, stool to stool
+  if (!G.game && !G.pendingEnc && _inBar() && _room().region === "Beach Road" &&
+      G.turns - G.lastPeddler >= 20 && _rand() < 0.12) {
+    G.lastPeddler = G.turns;
+    G.pendingEnc = "peddler";
+    _say("A peddler drifts in off the street with a display board of watches, a fan " +
+      "of sunglasses, and — produced from an inner pocket with a meaningful eyebrow " +
+      "— certain 'vitamins'. He stations himself at your elbow, patient as weather.", "alert");
+    _say("(WATCH ฿300 · SUNGLASSES ฿150 · VITAMINS ฿200 · or NO.)", "dim");
+  }
+  // salengs (ซาเล้ง) cruise the nightlife bars — modified three-wheelers
+  // selling food, shoes, lingerie, snacks directly to girls and farangs
+  const _SALENG_REGIONS = new Set([
+    "Beach Road", "Soi Buakhao", "Tree Town", "LK Metro", "Walking Street", "Soi 6", "Myth Night",
+  ]);
+  if (!G.game && !G.pendingEnc && _inBar() && _room().barType !== "pub" &&
+      _SALENG_REGIONS.has(_room().region) &&
+      G.turns - G.lastSaleng >= 15 && _rand() < 0.10) {
+    G.lastSaleng = G.turns;
+    const types = ["food", "shoes", "lingerie", "snacks"];
+    G.salengCart = types[Math.floor(_rand() * types.length)];
+    G.pendingEnc = "saleng";
+    const girls = _npcsHere().filter(id => NPC_ROLES[id] === "hostess");
+    const gName = girls.length ? NPCS[girls[0]].name : "one of the girls";
+    if (G.salengCart === "food") {
+      _say("A ซาเล้ง (saleng) putters to a stop outside — a converted three-wheeler with " +
+        "a gas burner going and charcoal pork smoke drifting in ahead of it. " +
+        '"Moo ping! Noodle!" ' + gName + " is already at the window.", "alert");
+      _say("(BUY MOO PING ฿40 · BUY NOODLES ฿40 · BUY <item> FOR <lady> · NO.)", "dim");
+    } else if (G.salengCart === "shoes") {
+      _say("A ซาเล้ง rolls up outside — its frame hung with ladies' footwear: sequinned " +
+        "sandals, platform heels, one pair of flip-flops that are clearly lost. " +
+        '"Shoes, shoes! Very cheap!" ' + gName + " is already trying on the gold ones.", "alert");
+      _say("(BUY SANDALS ฿150 · BUY HEELS ฿250 · BUY <item> FOR <lady> · NO.)", "dim");
+    } else if (G.salengCart === "lingerie") {
+      _say("A ซาเล้ง idles outside with a washing-line of lingerie across its frame — " +
+        "bras, slips, colours the sun doesn't see. " +
+        '"For girlfriend! Beautiful!" Several girls are holding things up, rating each other.', "alert");
+      _say("(BUY LINGERIE ฿150 · BUY LINGERIE FOR <lady> · NO.)", "dim");
+    } else {
+      _say("A ซาเล้ง drifts to a stop — a som tam station and drinks cooler bolted to the " +
+        "back. Lime, dried shrimp, and fish sauce arrive ahead of the pitch: " +
+        '"Som tam! Very fresh!"', "alert");
+      _say("(BUY SOM TAM ฿50 · BUY FRUIT ฿30 · BUY <item> FOR <lady> · NO.)", "dim");
+    }
+  }
+  _maybeIncomingText();
+  if (G.lightOn && G.battery > 0) {
+    G.battery--;
+    if (G.battery === 0) {
+      G.lightOn = false;
+      _say("Your phone gives a final apologetic buzz and dies. The flashlight is gone.", "alert");
+    } else if (G.battery === 5) {
+      _say("(Phone battery: 5%. This is fine.)", "alert");
+    }
+  }
+  if (_isDarkHere() && !G.rain) { // even the soi dogs go to ground in a downpour
+    G.darkStreak++;
+    if (G.darkStreak === 1) {
+      _say("Something shifts in the dark nearby. A low growl. You are likely to be " +
+        "bitten by a soi dog.", "alert");
+    } else if (G.darkStreak >= 2) {
+      const food = ["noodles", "moo_ping"].find(id => _inv().includes(id));
+      if (food) {
+        G.itemLoc[food] = null;
+        G.darkStreak = 0;
+        _say(`A soi dog lunges out of the dark! You hurl the ${ITEMS[food].name} on ` +
+          "pure instinct. It catches it mid-air with terrifying grace and trots " +
+          "off. Goodbye, dinner.", "alert");
+      } else {
+        const bitten = Math.min(G.money, 30);
+        G.money -= bitten;
+        G.darkStreak = 0;
+        const exit = Object.values(_room().exits).find(to => !ROOMS[to].dark) ||
+          Object.values(_room().exits)[0];
+        G.room = exit;
+        _say("A soi dog bites you! You flee blindly, shedding " +
+          (bitten ? `฿${bitten} in dropped coins` : "what remains of your dignity") +
+          ", and fetch up somewhere lit.", "alert");
+        _addHappy(-2);
+        G.hurt++;
+        if (G.hurt >= 3) { _endNight("hurt"); return; }
+        _describeRoom(true);
+      }
+    }
+  } else {
+    G.darkStreak = 0;
+  }
+}
+

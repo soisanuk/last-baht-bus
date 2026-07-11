@@ -6,7 +6,7 @@ import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import vm from "node:vm";
 
-for (const f of ["thai.js", "world.js", "games.js", "engine.js"]) {
+for (const f of ["thai.js", "world.js", "games.js", "engine-core.js", "engine-encounters.js", "engine-play.js", "engine-systems.js", "engine-parser.js"]) {
   const src = readFileSync(
     fileURLToPath(new URL(`../../web/js/${f}`, import.meta.url)), "utf8");
   vm.runInThisContext(src, { filename: f });

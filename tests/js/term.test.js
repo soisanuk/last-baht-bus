@@ -8,7 +8,7 @@ import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import vm from "node:vm";
 
-for (const f of ["thai.js", "world.js", "games.js", "engine.js",
+for (const f of ["thai.js", "world.js", "games.js", "engine-core.js", "engine-encounters.js", "engine-play.js", "engine-systems.js", "engine-parser.js",
   "data.js", "examples.js", "tokeniser.js", "thai-script.js", "wordcard.js",
   "term.js"]) {
   const src = readFileSync(
@@ -212,7 +212,7 @@ test("every Thai word the game prints resolves in the vendored vocab", () => {
   for (const w of WORDS) map[w[0]] = w;
   for (const n of Object.values(NPCS)) if (n.th) map[n.th] = ["ent"];
   const tok = makeTokeniser(map);
-  const srcs = ["world.js", "engine.js", "thai.js"].map(f => readFileSync(
+  const srcs = ["world.js", "engine-core.js", "engine-encounters.js", "engine-play.js", "engine-systems.js", "engine-parser.js", "thai.js"].map(f => readFileSync(
     fileURLToPath(new URL(`../../web/js/${f}`, import.meta.url)), "utf8")).join("\n");
   let gen = [];
   for (let n = 0; n <= 999; n++) gen.push(thaiNum(n)); // runtime-composed numbers
