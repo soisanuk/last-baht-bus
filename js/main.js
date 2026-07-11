@@ -18,6 +18,7 @@ function _dispatch(cmd) {
       try { deserializeGame(localStorage.getItem(SAVE_KEY)); } catch (e) {}
       _term.print("Welcome back. Where were we…", "dim");
       _describeRoom(true);
+      if (G.game) _renderGame(); // a live bar game was saved — redraw it, don't leave it invisible
     } else if (["no", "n", "new", "restart"].includes(v)) {
       _awaitingContinue = false;
       newGame();
@@ -37,6 +38,7 @@ function _dispatch(cmd) {
       _prevSnap = null;
       _term.print("⌫ Rewound one command.", "dim");
       _describeRoom(true);
+      if (G.game) _renderGame(); // rewound into a live game — redraw the board
       _autosave();
     } else {
       _term.print("Nothing to rewind — UNDO reaches back one command only.", "dim");
