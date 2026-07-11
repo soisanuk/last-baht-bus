@@ -78,6 +78,15 @@ const _term = (() => {
         html = html.replace(/^(\s*)([1-3])(\.\s)/, (m, sp, d, rest) =>
           sp + _wrap("cmd", d) + rest);
       }
+      // Connect 4: while a c4 game is live, the board's column-number row taps
+      // to drop, and a standalone Q taps to quit — so mobile plays with no
+      // keyboard. The number row is the only all-digits line c4 prints; the
+      // full-row anchor keeps prose numbers (฿20, "1-7") from sprouting taps.
+      if (G && G.game && G.game.type === "c4") {
+        html = html.replace(/^[1-7](?: +[1-7]){6}$/m, row =>
+          row.replace(/[1-7]/g, d => _wrap("cmd", d)));
+        html = html.replace(/\bQ\b/g, _wrap("cmd", "Q"));
+      }
     } catch (e) { /* pre-boot: no game, nothing to decorate */ }
     // Thai runs: tokenise against the vendored vocab (plus NPC Thai names,
     // so แคนดี้ stays whole instead of shredding into vocab fragments).

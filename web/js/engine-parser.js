@@ -1721,7 +1721,7 @@ function doCommand(input) {
 
   // a live bar game captures every command until it ends (QUIT concedes)
   if (G.game) {
-    if (/^(quit|resign|concede|forfeit|leave)/.test(lower)) { _gameQuit(); _tick(); return; }
+    if (lower === "q" || /^(quit|resign|concede|forfeit|leave)/.test(lower)) { _gameQuit(); _tick(); return; }
     _gameInput(lower);
     _tick();
     return;

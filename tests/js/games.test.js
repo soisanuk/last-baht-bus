@@ -58,7 +58,7 @@ test("c4 render is a 6-line monospace grid plus column numbers", () => {
   const lines = c4Render(b).split("\n");
   assert.equal(lines.length, 7);
   assert.equal(lines[5][0], "●");
-  assert.equal(lines[6], "1 2 3 4 5 6 7");
+  assert.equal(lines[6], "1  2  3  4  5  6  7");
 });
 
 // ── Jackpot ──────────────────────────────────────────────────────────────────

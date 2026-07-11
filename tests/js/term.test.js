@@ -174,6 +174,18 @@ test("quiz answer lines: the leading digit taps while a quiz is live", () => {
   assert.equal(_term.decorate("  1. Bangkok"), "  1. Bangkok");
 });
 
+test("Connect 4: the column numbers and Q tap while a c4 game is live", () => {
+  G.game = { type: "c4", board: c4New() };
+  const board = _term.decorate(c4Render(c4New()));
+  for (const d of ["1", "2", "3", "4", "5", "6", "7"]) {
+    assert.ok(board.includes(kw(d, "cmd")), `column ${d} taps to drop`);
+  }
+  assert.deepEqual(_term.kwActions("cmd", "3", false), [{ t: "3", c: "3", go: true }]);
+  assert.ok(_term.decorate("(Tap a column 1-7 · Q quits.)").includes(kw("Q", "cmd")), "Q taps to quit");
+  G.game = null; // no game: the number row is plain, no dead taps
+  assert.ok(!_term.decorate(c4Render(c4New())).includes('data-k="cmd"'));
+});
+
 test("anonymous staff decorate only where they stand", () => {
   G.room = "myth_night";
   assert.equal(_term.decorate("Complex security watches the lane."),

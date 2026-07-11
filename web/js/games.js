@@ -79,8 +79,9 @@ function c4Ai(board, rnd) {
 
 // Text board for the terminal (monospace, pre-wrap). ● you, ○ her.
 function c4Render(board) {
-  const rows = board.map(r => r.map(v => v === 1 ? "●" : v === 2 ? "○" : "·").join(" "));
-  return rows.join("\n") + "\n1 2 3 4 5 6 7";
+  const sep = "  "; // wider columns: clearer to read, bigger tap gaps on mobile
+  const rows = board.map(r => r.map(v => v === 1 ? "●" : v === 2 ? "○" : "·").join(sep));
+  return rows.join("\n") + "\n" + ["1", "2", "3", "4", "5", "6", "7"].join(sep);
 }
 
 // ── Jackpot ──────────────────────────────────────────────────────────────────

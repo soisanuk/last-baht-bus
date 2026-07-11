@@ -42,8 +42,8 @@ test("a live mini-game survives save/restore and _renderGame redraws it", () => 
   _renderGame();
   const shown = lastOut();
   assert.match(shown, /in progress/, "announces the resumed game");
-  assert.match(shown, /1 2 3 4 5 6 7/, "redraws the Connect 4 board");
-  assert.match(shown, /DROP 1-7/, "shows how to play");
+  assert.match(shown, /1 +2 +3 +4 +5 +6 +7/, "redraws the Connect 4 board");
+  assert.match(shown, /1-7.*Q quits/, "shows how to play (tap a column, or Q to quit)");
 });
 
 test("a non-move during a live game redraws the board, not a bare rejection", () => {
@@ -54,9 +54,15 @@ test("a non-move during a live game redraws the board, not a bare rejection", ()
   out = [];
   _c4Input("ask bee about candy");
   const shown = lastOut();
-  assert.match(shown, /1 2 3 4 5 6 7/, "the board is redrawn");
+  assert.match(shown, /1 +2 +3 +4 +5 +6 +7/, "the board is redrawn");
   assert.match(shown, /1-7/, "with the how-to-play hint");
   assert.ok(state().game, "no move was made — the game is still live");
+});
+
+test("Q concedes a live mini-game (mobile-friendly quit)", () => {
+  state().game = { type: "c4", board: c4New(), opp: "Candy", stake: 20 };
+  run("q");
+  assert.equal(state().game, null, "q ends the game like quit");
 });
 
 // ── Parser & basics ────────────────────────────────────────────────────────
