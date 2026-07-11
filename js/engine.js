@@ -3352,8 +3352,11 @@ function _hops(from, to) {
 }
 
 function _travelDests() {
-  const out = Object.keys(G.visited).filter(id => ROOMS[id] && ROOMS[id].bar);
-  if (G.visited[_hotelRoomId()]) out.push(_hotelRoomId());
+  // never offers where you already stand — a zero-turn trip isn't a trip
+  const out = Object.keys(G.visited).filter(id =>
+    id !== G.room && ROOMS[id] && ROOMS[id].bar);
+  const home = _hotelRoomId();
+  if (G.visited[home] && home !== G.room) out.push(home);
   return out;
 }
 
@@ -3368,8 +3371,8 @@ function _doTravel(arg) {
     _say("You know the way to:", "dim");
     for (const id of dests) {
       const h = _hops(G.room, id);
-      _say(`  ${ROOMS[id].bar || ROOMS[id].name}` +
-        (h === 0 ? " — you're here" : ` — ${h} turn${h === 1 ? "" : "s"}`), "dim");
+      if (h === null) continue;
+      _say(`  ${ROOMS[id].bar || ROOMS[id].name} — ${h} turn${h === 1 ? "" : "s"}`, "dim");
     }
     _say("(TRAVEL <place>. Walking pace — no shortcuts through the clock.)", "dim");
     return;
@@ -3387,10 +3390,15 @@ function _doTravel(arg) {
     }
   }
   if (!dest) {
+    const here = _room();
+    if ((here.bar && here.bar.toLowerCase().includes(w)) ||
+        here.name.toLowerCase().includes(w)) {
+      _say("You're standing in it.");
+      return;
+    }
     _say("You only know the way to bars and hotels you've already found. (Bare TRAVEL lists them.)");
     return;
   }
-  if (dest === G.room) { _say("You're standing in it."); return; }
   if (G.rain > 0) {
     _say("Not in this. The whole town is under the awnings waiting it out, and " +
       "so are you.");
