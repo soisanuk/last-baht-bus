@@ -106,7 +106,7 @@ function newGame() {
       drinks: {},        //   npcId → lady drinks bought tonight
       mamaTreat: {},     //   roomId → true (the mamasan drank on you here)
       bellAt: {},        //   roomId → turn of the last bell ring (the glow)
-      bells: {},         //   roomId → total rings tonight (rules soften at 2)
+      bells: {},         //   roomId → rings tonight; while the glow holds, 2 softens the rules, 3 = the room is yours
       heat: {},          //   roomId → how close you are to meeting security
       banned: {},        //   roomId → turn you were thrown out
       patronBusy: {},    //   roomId → the regular has a girl's attention

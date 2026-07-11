@@ -787,11 +787,36 @@ test("cashiers cap physical contact until the bell has rung twice", () => {
   run("spank ploy");
   assert.match(lastOut(), /books, not the customers/i);
   assert.equal(state().soc.heat.rainbow_girls, 2);
-  run("ring bell", "ring bell"); // also clears the heat
+  run("ring bell", "ring bell"); // two bells lift the cap and clear the heat
   assert.equal(state().soc.bells.rainbow_girls, 2);
   state().soc.drinks.ploy = 4;
-  run("spank ploy"); // favor 4 + bell 2 − severity 4 = lean-in
-  assert.match(lastOut(), /returns fire/i);
+  out = [];
+  run("spank ploy"); // cap lifted; favor 4 + two-bell warmth lands hot
+  assert.doesNotMatch(lastOut(), /books, not the customers/i); // no longer capped
+  assert.match(lastOut(), /returns fire|out-Pattaya|spanks YOU/i); // a real reaction
+});
+
+test("three bell rings: the room is yours — hostess reciprocates cold", () => {
+  state().room = "neon_paradise"; // Noi, a hostess
+  state().money = 2000;
+  run("ring bell", "ring bell", "ring bell");
+  assert.equal(state().soc.bells.neon_paradise, 3);
+  out = [];
+  run("fondle noi"); // zero drinks bought — but three bells top-tiers it anyway
+  assert.match(lastOut(), /puts them where she wants|takes both your hands/i);
+});
+
+test("three bells grant amnesty: heat can't accumulate", () => {
+  state().room = "neon_paradise";
+  state().turns = 100;
+  state().soc.bellAt.neon_paradise = 100; // glow active
+  state().soc.bells.neon_paradise = 3;
+  state().soc.heat.neon_paradise = 0;
+  _addHeat(2);
+  assert.equal(state().soc.heat.neon_paradise || 0, 0, "no heat at three bells");
+  state().soc.bells.neon_paradise = 1; // one bell: heat lands normally again
+  _addHeat(2);
+  assert.equal(state().soc.heat.neon_paradise, 2);
 });
 
 test("Aek the tom cashier holds the till at Midnight Sun and caps contact", () => {
