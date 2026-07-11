@@ -13,7 +13,8 @@ for (const f of ["thai.js", "world.js", "games.js", "engine-core.js", "engine-en
 }
 
 let out = [];
-engineInit((text) => out.push(text));
+let sfx = [];
+engineInit((text) => out.push(text), null, (name) => sfx.push(name));
 
 function run(...cmds) {
   for (const c of cmds) doCommand(c);
@@ -21,7 +22,7 @@ function run(...cmds) {
 function lastOut() { return out.join("\n"); }
 function state() { return G; } // vm globals share this realm
 
-beforeEach(() => { out = []; newGame(); state().lastSaleng = 99999; }); // suppress saleng by default
+beforeEach(() => { out = []; sfx = []; newGame(); state().lastSaleng = 99999; }); // suppress saleng by default
 
 // ── Resuming a live mini-game ───────────────────────────────────────────────
 
@@ -915,6 +916,7 @@ test("ringing the bell costs ฿300, clears heat, and lifts every outcome", () =
   run("ring bell");
   assert.equal(state().money, 100);
   assert.equal(state().soc.heat.jasmine_garden, 0);
+  assert.ok(sfx.includes("bell"), "the bell clang fires through the sfx hook");
   run("kiss fon"); // bell glow +2 − severity 3 = soft deflection, not a slap
   assert.match(lastOut(), /cheek|deflection/i);
 });

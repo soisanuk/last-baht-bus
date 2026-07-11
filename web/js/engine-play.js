@@ -911,6 +911,7 @@ function _doBell() {
     _say("(THREE bells. You own this bar tonight. The ladies are all over you, " +
       "the mamasan's looking the other way, and nobody — nobody — is counting.)", "win");
   }
+  _engineSfx("bell");
   _engineSpeak("ชนแก้ว");
   _addHappy(2);
 }

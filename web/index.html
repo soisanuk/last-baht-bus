@@ -49,8 +49,36 @@
     height: 100dvh;
     display: flex;
     flex-direction: column;
+    position: relative;
     padding: env(safe-area-inset-top) env(safe-area-inset-right) 0 env(safe-area-inset-left);
   }
+  /* The bar bell: a persistent tap-to-ring glyph, shown only in bars (term.js
+     toggles .show via _inBar). Floats above the input row, thumb-reachable. */
+  #bell-fab {
+    position: absolute;
+    right: 14px;
+    bottom: calc(70px + env(safe-area-inset-bottom));
+    z-index: 40;
+    display: none;
+    width: 54px; height: 54px;
+    border-radius: 50%;
+    border: 1px solid #ff1493aa;
+    background: radial-gradient(circle at 50% 38%, #33004d, #12001e);
+    color: var(--pink);
+    font-size: 1.6rem;
+    line-height: 1;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    animation: bell-pulse 1.9s ease-out infinite;
+  }
+  #bell-fab.show { display: block; }
+  #bell-fab:active { background: #46006b; transform: scale(0.94); }
+  @keyframes bell-pulse {
+    0%   { box-shadow: 0 0 7px 1px #ff149377, 0 0 0 0 #ff149366; }
+    70%  { box-shadow: 0 0 11px 2px #ff149377, 0 0 0 13px #ff149300; }
+    100% { box-shadow: 0 0 7px 1px #ff149377, 0 0 0 0 #ff149300; }
+  }
+  @media (prefers-reduced-motion: reduce) { #bell-fab { animation: none; } }
   header {
     padding: .55rem 1rem .45rem;
     border-bottom: 1px solid #ff149340;
@@ -572,6 +600,7 @@
            autocorrect="off" spellcheck="false" placeholder="what do you do?">
   <button id="term-send" title="Send" aria-label="Send command">➤</button>
   </div>
+  <button id="bell-fab" title="Ring the bell" aria-label="Ring the bell">🔔</button>
 </div>
 <a id="ad" href="https://soisanuk.github.io/" target="_blank" rel="noopener">
   <div class="ad-hey">HEY HANDSOME 😘</div>
