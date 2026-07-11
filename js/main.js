@@ -61,7 +61,8 @@ function _dispatch(cmd) {
 document.addEventListener("DOMContentLoaded", () => {
   engineInit(
     (text, cls) => _term.print(text, cls),
-    th => _tts.speak(th)
+    th => _tts.speak(th),
+    name => _audio.sfx(name)
   );
   _term.init(_dispatch);
 

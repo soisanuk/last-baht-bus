@@ -7,11 +7,12 @@
 // policies. Volume is kept low so it never fights the TTS voice.
 
 const _audio = (() => {
-  let _actx = null, _musBus = null, _noiseBuf = null;
+  let _actx = null, _musBus = null, _sfxBus = null, _noiseBuf = null;
   let _muted = false;
   try { _muted = localStorage.getItem("lbb_muted") === "1"; } catch (e) {}
 
   const MUS_VOL = 0.14;
+  const SFX_VOL = 0.22;  // one-shots sit above the music bed so a clang lands
 
   function _ctx() {
     if (_actx) {
@@ -23,6 +24,8 @@ const _audio = (() => {
     _actx = new AC();
     _musBus = _actx.createGain();
     _musBus.connect(_actx.destination);
+    _sfxBus = _actx.createGain();
+    _sfxBus.connect(_actx.destination);
     _applyMute();
     return _actx;
   }
@@ -30,6 +33,38 @@ const _audio = (() => {
   function _applyMute() {
     if (!_actx) return;
     _musBus.gain.value = _muted ? 0 : MUS_VOL;
+    _sfxBus.gain.value = _muted ? 0 : SFX_VOL;
+  }
+
+  // A bar bell: a metallic CLANG. Bells sound un-pitched because their partials
+  // are inharmonic (non-integer ratios), so a stack of clean triangles at bell
+  // ratios reads as struck brass rather than a chord; a short band-passed noise
+  // burst is the striker hitting the shell. Fast attack, long ring-out.
+  function _clang(t0) {
+    const base = 620;
+    const partials = [ // [ratio, peak, decay-seconds]
+      [1.00, 0.80, 1.7], [2.00, 0.62, 1.4], [2.76, 0.46, 1.15],
+      [3.76, 0.30, 0.9], [5.40, 0.20, 0.65], [8.10, 0.12, 0.45],
+    ];
+    for (const [ratio, vol, dur] of partials) {
+      const o = _actx.createOscillator(), g = _actx.createGain();
+      o.type = "triangle";
+      o.frequency.setValueAtTime(base * ratio, t0);
+      g.gain.setValueAtTime(vol, t0);
+      g.gain.exponentialRampToValueAtTime(0.001, t0 + dur);
+      o.connect(g); g.connect(_sfxBus);
+      o.start(t0); o.stop(t0 + dur + 0.02);
+    }
+    _ensureNoiseBuf();
+    const s = _actx.createBufferSource();
+    s.buffer = _noiseBuf;
+    const f = _actx.createBiquadFilter();
+    f.type = "bandpass"; f.frequency.value = 3400; f.Q.value = 0.8;
+    const ng = _actx.createGain();
+    ng.gain.setValueAtTime(0.5, t0);
+    ng.gain.exponentialRampToValueAtTime(0.001, t0 + 0.09);
+    s.connect(f); f.connect(ng); ng.connect(_sfxBus);
+    s.start(t0); s.stop(t0 + 0.12);
   }
 
   function _note(freq, t0, dur, type, vol) {
@@ -330,6 +365,15 @@ const _audio = (() => {
     },
     tracks() { return Object.keys(TRACKS); },
     ambience: _ambience,
+    // One-shot effects. "bell" is the bar bell — two quick swings, a real clang.
+    sfx(name) {
+      if (!_ctx()) return;
+      if (name === "bell") {
+        const t = _actx.currentTime + 0.02;
+        _clang(t);
+        _clang(t + 0.17); // the second swing — clang-CLANG
+      }
+    },
     stop() { _musicStop(); _ambStop(); },
     muted() { return _muted; },
     toggleMute() {

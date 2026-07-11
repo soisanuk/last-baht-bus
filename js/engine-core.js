@@ -23,10 +23,12 @@ let CHEATS_ENABLED = true;
 
 let _enginePrint = () => {};
 let _engineSpeak = () => {}; // (thaiText) — TTS hook, no-op headless
+let _engineSfx = () => {};   // (name) — one-shot sound hook, no-op headless
 
-function engineInit(printFn, speakFn) {
+function engineInit(printFn, speakFn, sfxFn) {
   _enginePrint = printFn || (() => {});
   _engineSpeak = speakFn || (() => {});
+  _engineSfx = sfxFn || (() => {});
 }
 
 // say(text, cls) — cls hints the renderer: "room", "thai", "dim", "alert", "win"

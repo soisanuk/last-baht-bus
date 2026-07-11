@@ -364,6 +364,17 @@ const _term = (() => {
     _suggest.style.display = cands.length ? "flex" : "none";
   }
 
+  // The bar bell FAB: a persistent tap-to-ring glyph, shown only while you're
+  // in a bar/go-go. Reads engine state the way decorate does — no rules here;
+  // the tap just submits "ring bell" like any command.
+  function _updateBellVisibility() {
+    const btn = document.getElementById("bell-fab");
+    if (!btn) return;
+    let inBar = false;
+    try { inBar = typeof _inBar === "function" && !!_inBar(); } catch (e) {}
+    btn.classList.toggle("show", inBar);
+  }
+
   function submit(onCommand) {
     const cmd = _input.value.trim();
     if (!cmd) return;
@@ -375,6 +386,7 @@ const _term = (() => {
     _tabIdx = -1;
     _refreshSuggest();
     onCommand(cmd);
+    _updateBellVisibility(); // the room may have changed — show/hide the bell
     _out.scrollTop = _out.scrollHeight;
   }
 
@@ -407,6 +419,13 @@ const _term = (() => {
     // the send button: complete a wheel-prefilled command without the keyboard
     const sendBtn = document.getElementById("term-send");
     if (sendBtn) sendBtn.addEventListener("click", () => submit(onCommand));
+
+    // the bar bell: tap to ring, no keyboard needed
+    const bellFab = document.getElementById("bell-fab");
+    if (bellFab) bellFab.addEventListener("click", () => {
+      _input.value = "ring bell";
+      submit(onCommand);
+    });
 
     // real typing (not programmatic Tab fills) resets the cycle and re-suggests
     _input.addEventListener("input", () => {
@@ -473,6 +492,7 @@ const _term = (() => {
     });
 
     _input.focus();
+    _updateBellVisibility(); // in case we boot straight into a bar (restored save)
   }
 
   return { init, print, decorate, kwActions: _kwActions };
