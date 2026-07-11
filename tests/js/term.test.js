@@ -94,6 +94,11 @@ test("the wheel: an absent name routes through whoever is here", () => {
   const acts = _term.kwActions("npc", "Madam Oy", false);
   assert.match(acts[0].c, /^ask candy about madam oy$/);
   assert.equal(acts[0].go, true);
+  assert.ok(acts.every(x => x.go), "no dangling 'ask …' when someone is here");
+  G.room = "jomtien_beach"; // nobody around: the open prefill is all there is
+  const alone = _term.kwActions("npc", "Madam Oy", false);
+  assert.equal(alone.length, 1);
+  assert.equal(alone[0].go, false);
 });
 
 test("the wheel: items offer take here, read in the pocket", () => {

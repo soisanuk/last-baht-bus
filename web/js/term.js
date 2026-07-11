@@ -192,13 +192,15 @@ const _term = (() => {
       const npc = typeof _findNpc === "function" ? _findNpc(lo) : null;
       const pat = !npc && typeof _findPatron === "function" ? _findPatron(lo) : null;
       if (!npc && !pat) {
-        // not here: ask whoever is
+        // not here: route the question through everyone who is — a complete
+        // action per NPC beats a dangling "ask …" prefill that loses the
+        // topic (the blank is mid-command, so prefilling can't keep it)
         const here = _npcsHere();
-        if (here.length) {
-          a.push({ t: `ask ${NPCS[here[0]].name} about ${lo}`,
-            c: `ask ${NPCS[here[0]].name.toLowerCase()} about ${lo}`, go: true });
+        for (const id of here.slice(0, 3)) {
+          a.push({ t: `ask ${NPCS[id].name} about ${lo}`,
+            c: `ask ${NPCS[id].name.toLowerCase()} about ${lo}`, go: true });
         }
-        a.push({ t: "ask … about " + lo, c: "ask ", go: false });
+        if (!here.length) a.push({ t: "ask … about " + lo, c: "ask ", go: false });
         return a;
       }
       a.push({ t: "talk", c: "talk to " + lo, go: true });
