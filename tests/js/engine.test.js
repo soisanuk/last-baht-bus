@@ -121,6 +121,19 @@ test("fast travel: ENTER and GO route through it; rain blocks; bare TRAVEL lists
   assert.match(lastOut(), /Candy Bar — \d+ turns/);
 });
 
+test("fast travel: your hotel needs no discovering, but the clerk still gates it", () => {
+  run("travel");
+  assert.match(lastOut(), /Sabai Palms Hotel — \d+ turns/, "listed from turn one");
+  run("travel hotel");
+  assert.match(lastOut(), /key card/i, "act 1: no wallet, no room");
+  assert.equal(state().room, "jomtien_beach");
+  state().flags.hasWallet = true;
+  state().itemLoc.wallet = "inventory";
+  run("travel hotel");
+  assert.equal(state().room, "hotel_room");
+  assert.ok(state().flags.act1Done, "walking home with the wallet ends Act One");
+});
+
 test("fast travel: where you stand is never offered", () => {
   state().room = "candy_bar";
   run("look");
@@ -2087,9 +2100,14 @@ test("engineComplete: verbs first, context after, spoilers never", () => {
   state().room = "candy_bar";
   assert.deepEqual(engineComplete("talk to c"), ["candy"]);
   assert.ok(engineComplete("flirt ").includes("candy"));
-  // exits of the current room
-  const exits = engineComplete("go ");
-  assert.ok(exits.length && exits.every(d => ROOMS.candy_bar.exits[d]));
+  // exits of the current room, plus known fast-travel destinations
+  const goCands = engineComplete("go ");
+  const exits = Object.keys(ROOMS.candy_bar.exits);
+  assert.ok(exits.every(d => goCands.includes(d)), "every exit is offered");
+  assert.ok(goCands.every(c =>
+    ROOMS.candy_bar.exits[c] || _travelDests().some(id =>
+      (ROOMS[id].bar || ROOMS[id].name).toLowerCase() === c)),
+  "and nothing beyond exits + places you know the way to");
   // inventory for drop; room items for take
   assert.ok(engineComplete("drop ").includes("noodles"));
   state().room = "jomtien_beach";

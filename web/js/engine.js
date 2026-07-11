@@ -3355,8 +3355,9 @@ function _travelDests() {
   // never offers where you already stand — a zero-turn trip isn't a trip
   const out = Object.keys(G.visited).filter(id =>
     id !== G.room && ROOMS[id] && ROOMS[id].bar);
+  // your hotel needs no discovering — knowing where you sleep is the premise
   const home = _hotelRoomId();
-  if (G.visited[home] && home !== G.room) out.push(home);
+  if (home !== G.room) out.push(home);
   return out;
 }
 
@@ -3380,7 +3381,7 @@ function _doTravel(arg) {
   let dest = null;
   if (/^(hotel|my room|home|room)$/.test(w) ||
       _HOTELS[G.hotel].name.toLowerCase().includes(w)) {
-    if (G.visited[_hotelRoomId()]) dest = _hotelRoomId();
+    dest = _hotelRoomId();
   }
   if (!dest) {
     for (const id of dests) {
