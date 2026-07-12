@@ -240,13 +240,14 @@ test("Connect 4: the column numbers and Q tap while a c4 game is live", () => {
 });
 
 test("saleng: the open BUY-for-lady hint fans out into the cart's items", () => {
-  G.pendingEnc = "saleng";
-  G.salengCart = "snacks";
+  G.salengCart = "snacks"; // a cart parked in the player's current room
+  G.salengRoom = G.room;
+  G.salengUntil = G.turns + 5;
   assert.deepEqual(_term.kwActions("cmd", "BUY <item> FOR <lady>", false), [
     { t: "buy som tam for …", c: "buy som tam for ", go: false },
     { t: "buy fruit for …", c: "buy fruit for ", go: false },
   ]);
-  G.pendingEnc = null; // no cart: just the ordinary open prefill
+  G.salengCart = null; // no cart: just the ordinary open prefill
   assert.deepEqual(_term.kwActions("cmd", "BUY <item> FOR <lady>", false),
     [{ t: "buy <item> for <lady>", c: "buy ", go: false }]);
 });

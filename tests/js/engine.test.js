@@ -24,6 +24,14 @@ function state() { return G; } // vm globals share this realm
 
 beforeEach(() => { out = []; sfx = []; newGame(); state().lastSaleng = 99999; }); // suppress saleng by default
 
+// Park a saleng cart in the player's current room for the tests that buy from it
+// (the cart is a room fixture now, not a modal encounter). Set state().room first.
+function parkSaleng(cart, ticks = 6) {
+  state().salengCart = cart;
+  state().salengRoom = state().room;
+  state().salengUntil = state().turns + ticks;
+}
+
 // ── Resuming a live mini-game ───────────────────────────────────────────────
 
 test("a live mini-game survives save/restore and _renderGame redraws it", () => {
@@ -738,25 +746,15 @@ test("mid-encounter restore: the prompt is stashed and redraws (no blind exit li
   assert.deepEqual(JSON.parse(snap).encPrompt, state().encPrompt);
 });
 
-test("saleng restore: the cart pitch and BUY options redraw on load", () => {
-  state().room = "candy_bar"; // a Beach Road go-go: saleng-eligible
-  state().lastSaleng = 0;
-  state().turns = 100;
-  // roll the saleng in (its own trigger lives in the tick; find a seed that fires)
-  let fired = false;
-  for (let seed = 1; seed <= 400 && !fired; seed++) {
-    newGame();
-    state().room = "candy_bar"; state().lastSaleng = 0; state().turns = 100; state().rng = seed;
-    out = [];
-    run("look"); // a tick that can spawn the cart
-    fired = state().pendingEnc === "saleng";
-  }
-  assert.ok(fired, "found a seed that parks a saleng");
-  assert.ok(Array.isArray(state().encPrompt) && state().encPrompt.length);
+test("saleng restore: a parked cart re-announces itself on describeRoom (reload)", () => {
+  // The cart is a room fixture, not a modal — so a reload redraws it through the
+  // room description (like darkness/rain), not a pendingEnc prompt.
+  state().room = "candy_bar";
+  parkSaleng("lingerie");
   out = [];
-  _renderEncounter();
-  assert.match(lastOut(), /ซาเล้ง/, "the saleng pitch reappears");
-  assert.match(lastOut(), /BUY .*(NO\.)/s, "the BUY options reappear");
+  _describeRoom(true);
+  assert.match(lastOut(), /lingerie saleng idles outside/, "the parked cart is redrawn on load");
+  assert.match(lastOut(), /BUY LINGERIE/, "with its buy hint");
 });
 
 test("_renderEncounter is a no-op with no pending encounter", () => {
@@ -1071,14 +1069,13 @@ test("bell flavor: 'Three' isn't shouty (no dead tap), four-plus gets a generic 
 });
 
 test("saleng buy: the cart's items surface in autocomplete (no more typing them out)", () => {
-  state().pendingEnc = "saleng";
-  state().salengCart = "food";
+  state().room = "neon_paradise"; // Noi, a hostess, present; a saleng-eligible bar
+  parkSaleng("food");
   assert.deepEqual(_salengItems(), ["moo ping", "noodles"]);
   const buy = engineComplete("buy ");
   assert.ok(buy.includes("moo ping") && buy.includes("noodles"), "cart items listed for 'buy '");
-  state().room = "neon_paradise"; // Noi, a hostess, present
   assert.ok(engineComplete("buy moo ping for ").includes("noi"), "a present lady is offered as the gift target");
-  state().pendingEnc = null; // no cart: buy falls back to the bar/shop list
+  state().salengCart = null; // no cart: buy falls back to the bar/shop list
   assert.ok(engineComplete("buy ").includes("beer"));
   assert.deepEqual(_salengItems(), []);
 });
@@ -2160,19 +2157,18 @@ test("tip: ฿100+ buys favor, small notes buy goodwill only", () => {
   assert.match(lastOut(), /don't open accounts/);
 });
 
-test("saleng: food cart — buy for self and buy for lady", () => {
+test("saleng: food cart — buy for self and buy for lady, cart lingers", () => {
   state().room = "candy_bar"; // Soi Buakhao region, hostess Candy is here
   state().money = 300;
-  state().pendingEnc = "saleng";
-  state().salengCart = "food";
+  parkSaleng("food");
   const h0 = state().happy;
   run("buy moo ping");
   assert.equal(state().money, 260, "moo ping ฿40");
   assert.ok(state().happy >= h0 + 1, "+happy for eating");
   assert.match(lastOut(), /moo ping|charcoal/);
-  // buy for lady
+  assert.equal(state().salengCart, "food", "the cart is still parked after a buy");
+  // buy for lady — same parked cart, no re-setup
   out = [];
-  state().pendingEnc = "saleng"; state().salengCart = "food";
   state().money = 200;
   const drinks0 = state().soc.drinks.candy || 0;
   run("buy noodles for candy");
@@ -2184,8 +2180,7 @@ test("saleng: food cart — buy for self and buy for lady", () => {
 test("saleng: shoes — buy heels for lady", () => {
   state().room = "jasmine_garden";
   state().money = 500;
-  state().pendingEnc = "saleng";
-  state().salengCart = "shoes";
+  parkSaleng("shoes");
   const drinks0 = state().soc.drinks.fon || 0;
   run("buy heels for fon");
   assert.equal(state().money, 250, "heels ฿250");
@@ -2196,8 +2191,7 @@ test("saleng: shoes — buy heels for lady", () => {
 test("saleng: lingerie — buy for lady", () => {
   state().room = "candy_bar";
   state().money = 300;
-  state().pendingEnc = "saleng";
-  state().salengCart = "lingerie";
+  parkSaleng("lingerie");
   const drinks0 = state().soc.drinks.candy || 0;
   run("buy lingerie for candy");
   assert.equal(state().money, 150, "lingerie ฿150");
@@ -2205,21 +2199,9 @@ test("saleng: lingerie — buy for lady", () => {
   assert.match(lastOut(), /lingerie|Victoria|Candy/i);
 });
 
-test("saleng: unknown item or NO dismisses the cart", () => {
-  state().room = "candy_bar";
-  state().pendingEnc = "saleng";
-  state().salengCart = "food";
-  const money0 = state().money;
-  run("no");
-  assert.equal(state().money, money0, "no charge");
-  assert.match(lastOut(), /putters off|nod/);
-  assert.ok(!state().pendingEnc, "enc cleared");
-});
-
 test("saleng: buying sandals for self adds to inventory", () => {
   state().room = "candy_bar";
-  state().pendingEnc = "saleng";
-  state().salengCart = "shoes";
+  parkSaleng("shoes");
   state().money = 500;
   run("buy sandals");
   assert.equal(state().itemLoc.saleng_sandals, "inventory", "sandals in inventory");
@@ -2230,8 +2212,7 @@ test("saleng: buying sandals twice refunds second", () => {
   state().room = "candy_bar";
   state().money = 500;
   state().itemLoc.saleng_sandals = "inventory";
-  state().pendingEnc = "saleng";
-  state().salengCart = "shoes";
+  parkSaleng("shoes");
   const money0 = state().money;
   run("buy sandals");
   assert.equal(state().money, money0, "refunded");
@@ -2240,46 +2221,60 @@ test("saleng: buying sandals twice refunds second", () => {
 
 test("saleng: buying lingerie for self adds to inventory", () => {
   state().room = "candy_bar";
-  state().pendingEnc = "saleng";
-  state().salengCart = "lingerie";
+  parkSaleng("lingerie");
   state().money = 500;
   run("buy lingerie");
   assert.equal(state().itemLoc.saleng_lingerie, "inventory", "lingerie in inventory");
   assert.match(lastOut(), /GIVE LINGERIE/i);
 });
 
-test("saleng lingers: an unrelated bar action doesn't dismiss the cart", () => {
+test("saleng is for the girls: an unrelated bar action doesn't dismiss it", () => {
   state().room = "candy_bar";
   state().money = 500;
-  state().pendingEnc = "saleng";
-  state().salengCart = "food";
-  run("ring bell"); // a bar action, not aimed at the cart
-  assert.match(lastOut(), /idles at the kerb|BUY something/i, "the cart reminds you it's still waiting");
-  assert.equal(state().pendingEnc, "saleng", "and it stays parked, not puttered off");
+  parkSaleng("food");
+  run("ring bell"); // a bar action; the cart isn't a modal, so it's untouched
+  assert.equal(state().salengCart, "food", "the cart stays parked while you do other things");
   // and it can still be bought from afterwards
   const m0 = state().money;
   out = [];
   run("buy moo ping");
-  assert.equal(state().money, m0 - 40, "the cart that waited still sells");
-  assert.ok(!state().pendingEnc, "the purchase clears it");
+  assert.equal(state().money, m0 - 40, "the parked cart still sells");
+  assert.equal(state().salengCart, "food", "and it STILL lingers — buying doesn't send it off");
 });
 
-test("saleng putters off when you leave the bar it parked at", () => {
+test("saleng moves on only when its timer runs out", () => {
   state().room = "candy_bar";
-  state().pendingEnc = "saleng";
-  state().salengCart = "food";
-  run("out"); // candy_bar → buakhao_market
-  assert.ok(!state().pendingEnc, "the cart can't follow you out — it's cleared");
-  assert.equal(state().salengCart, null, "and the cart type is reset");
+  parkSaleng("food", 2); // parked for 2 more ticks
+  run("look"); // tick 1 — still here
+  assert.equal(state().salengCart, "food", "still parked");
+  out = [];
+  run("look"); // tick 2 — timer up, it departs
+  assert.equal(state().salengCart, null, "the cart has moved on");
+  assert.match(lastOut(), /putters on|moves on|packs up/i, "with a farewell line");
 });
 
-test("saleng cue: a decline still dismisses the cart on the spot", () => {
+test("saleng first-ever vs later: full pitch, then a low-key notice", () => {
   state().room = "candy_bar";
-  state().pendingEnc = "saleng";
-  state().salengCart = "food";
-  run("no");
-  assert.ok(!state().pendingEnc, "NO waves it on immediately");
-  assert.match(lastOut(), /putters off|nod/);
+  state().salengSeen = {};
+  out = [];
+  _salengAnnounce("food", true);
+  const first = lastOut();
+  assert.match(first, /ซาเล้ง/, "first-ever gets the full pitch");
+  assert.match(first, /let the girls enjoy it/, "and invites the player in");
+  out = [];
+  _salengAnnounce("food", false);
+  const later = lastOut();
+  assert.doesNotMatch(later, /let the girls enjoy it/, "later arrivals are terser");
+  assert.match(later, /BUY MOO PING/, "but still show how to buy");
+});
+
+test("saleng vignette: the girls play with the lingerie cart (customer-facing)", () => {
+  state().room = "candy_bar"; // Candy (mamasan) present
+  parkSaleng("lingerie");
+  out = [];
+  _salengVignette();
+  assert.ok(lastOut().length, "a scene prints when a girl is present");
+  assert.doesNotMatch(lastOut(), /\{g\}/, "no unfilled placeholder");
 });
 
 test("GIVE sandals to hostess: removes from inventory, adds favor, win prose", () => {
