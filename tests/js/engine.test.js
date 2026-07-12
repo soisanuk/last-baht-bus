@@ -633,6 +633,52 @@ test("hair tonic scammer: walking on costs nothing", () => {
   assert.equal(state().itemLoc.hair_tonic, null);
 });
 
+test("mid-encounter restore: the prompt is stashed and redraws (no blind exit line)", () => {
+  state().room = "beach_rd_s";
+  _startEnc("powerbank");
+  assert.equal(state().pendingEnc, "powerbank");
+  // the prompt lines are stashed so a restore can replay them
+  assert.ok(Array.isArray(state().encPrompt) && state().encPrompt.length,
+    "the encounter prompt is captured on G");
+  // simulate closing and reopening: a fresh transcript, then the redraw
+  const snap = serializeGame();
+  out = [];
+  deserializeGame(snap);
+  _renderEncounter();
+  assert.match(lastOut(), /power bank/i, "the encounter text is shown again on load");
+  // and it survives the JSON round-trip intact
+  assert.deepEqual(JSON.parse(snap).encPrompt, state().encPrompt);
+});
+
+test("saleng restore: the cart pitch and BUY options redraw on load", () => {
+  state().room = "candy_bar"; // a Beach Road go-go: saleng-eligible
+  state().lastSaleng = 0;
+  state().turns = 100;
+  // roll the saleng in (its own trigger lives in the tick; find a seed that fires)
+  let fired = false;
+  for (let seed = 1; seed <= 400 && !fired; seed++) {
+    newGame();
+    state().room = "candy_bar"; state().lastSaleng = 0; state().turns = 100; state().rng = seed;
+    out = [];
+    run("look"); // a tick that can spawn the cart
+    fired = state().pendingEnc === "saleng";
+  }
+  assert.ok(fired, "found a seed that parks a saleng");
+  assert.ok(Array.isArray(state().encPrompt) && state().encPrompt.length);
+  out = [];
+  _renderEncounter();
+  assert.match(lastOut(), /ซาเล้ง/, "the saleng pitch reappears");
+  assert.match(lastOut(), /BUY .*(NO\.)/s, "the BUY options reappear");
+});
+
+test("_renderEncounter is a no-op with no pending encounter", () => {
+  state().pendingEnc = null;
+  state().encPrompt = [["should not print", "alert"]];
+  out = [];
+  _renderEncounter();
+  assert.equal(out.length, 0);
+});
+
 test("encounter roll: cooldown holds, and no encounter fires twice", () => {
   state().room = "beach_rd_c";
   state().turns = 100;

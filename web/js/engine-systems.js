@@ -100,11 +100,12 @@ function _maybeSelfBarfine(id) {
   G.selfBfId = id;
   G.pendingEnc = "selfbf";
   const name = NPCS[id].name;
-  _say(`${name} studies you for a long moment, does some private arithmetic, and ` +
-    `calls something to the mamasan in fast Thai. Then, to you: “I pay my own ` +
-    `barfine tonight. You don't tell anybody, na.” The other girls have gone ` +
-    "very quiet. This does not happen.", "win");
-  _say("(YES / NO — she is not going to ask twice.)", "dim");
+  _encPrompt(
+    [`${name} studies you for a long moment, does some private arithmetic, and ` +
+      `calls something to the mamasan in fast Thai. Then, to you: “I pay my own ` +
+      `barfine tonight. You don't tell anybody, na.” The other girls have gone ` +
+      "very quiet. This does not happen.", "win"],
+    ["(YES / NO — she is not going to ask twice.)", "dim"]);
 }
 
 // ── Quests (adventures) ──────────────────────────────────────────────────────

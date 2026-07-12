@@ -17,8 +17,13 @@ test("bar bell FAB: hidden outside bars, taps to ring inside, clang fires", asyn
   const fab = page.locator("#bell-fab");
   await expect(fab).toBeHidden(); // Act One opens on the beach — no bar, no bell
 
-  // step into a bar; a command refreshes visibility
-  await page.evaluate(() => { G.room = "neon_paradise"; G.money = 2000; });
+  // step into a bar; a command refreshes visibility. Push the saleng/peddler
+  // cooldowns far out so a random encounter can't spawn on the LOOK/ring ticks
+  // and swallow "ring bell" as its snap reaction (the flake this guards).
+  await page.evaluate(() => {
+    G.room = "neon_paradise"; G.money = 2000;
+    G.lastSaleng = 9e9; G.lastPeddler = 9e9;
+  });
   await page.fill("#term-in", "look");
   await page.press("#term-in", "Enter");
   await expect(fab).toBeVisible();
