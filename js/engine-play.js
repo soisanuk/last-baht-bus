@@ -145,6 +145,14 @@ function _startJackpot(w) {
   _jpTurn();
 }
 
+// The FLIP prompt for a two-way roll: one tappable FLIP, the moves joined by
+// "or" (a two-tile move grouped with "&", the join this file uses everywhere).
+// One source of truth so the live turn, the illegal-move reprompt, and the
+// resume redraw can't drift into three different formats.
+function _jpHint(moves, tail) {
+  return `(FLIP ${moves.map(m => m.join(" & ")).join(" or ")}${tail || ""})`;
+}
+
 function _jpTurn() {
   const g = G.game;
   for (;;) {
@@ -163,9 +171,7 @@ function _jpTurn() {
     }
     g.pending = moves;
     _say(`You roll ${d1}+${d2}.   [ ${jpRender(g.tiles)} ]`);
-    // one FLIP, tappable (fans out to the moves) — two FLIP words read as two
-    // different verbs; "FLIP 2 & 6 or 8" is one choice between two flips
-    _say(`(FLIP ${moves.map(m => m.join(" & ")).join(" or ")})`, "dim");
+    _say(_jpHint(moves), "dim");
     return;
   }
 }
@@ -179,7 +185,7 @@ function _jpInput(input) {
   if (!move && /both|dice/.test(input)) move = g.pending.find(mv => mv.length === 2);
   if (!move) {
     _gameBoard();
-    _say(`(FLIP ${g.pending.map(m => m.join(" & ")).join(" or ")} — those are the choices.)`, "dim");
+    _say(_jpHint(g.pending, " — those are the choices."), "dim");
     return;
   }
   jpFlip(g.tiles, move);
@@ -541,7 +547,7 @@ function _renderGame() {
   switch (g.type) {
     case "c4":   _say("(You're ●. Tap a column 1-7 to drop · Q quits.)", "dim"); break;
     case "jp":
-      if (g.pending) _say(`(FLIP ${g.pending[0].join(" ")} · FLIP ${g.pending[1].join(" ")})`, "dim");
+      if (g.pending) _say(_jpHint(g.pending), "dim");
       else _say("(Flip the dice — type anything to roll.)", "dim");
       break;
     case "kp":   _say("(Your shot: SHOT or POWER. QUIT forfeits your lives.)", "dim"); break;

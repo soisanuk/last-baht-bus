@@ -1681,6 +1681,39 @@ function _norm(s) {
 
 let _lastCmd = ""; // for AGAIN/G — deliberately not serialized; repeats die with the session
 
+// ── Modal prompts + the resume redraw ──────────────────────────────────────
+// doCommand routes every input through a chain of modal states, each of which
+// silently swallows commands until answered: the airline choice, the hotel
+// checkout desk, a live bar game, a street encounter, an unpaid fare. Each has
+// a one-line prompt; these helpers are the single source of truth so the live
+// prompt, the "that wasn't a valid answer" reprompt, and the resume redraw all
+// read identically. See _renderResume.
+function _vacationEndPrompt() {
+  _say("(NEW VACATION · MOVE TO PATTAYA — the airline needs an answer.)", "dim");
+}
+function _checkoutPrompt() {
+  const others = Object.keys(_HOTELS).filter(k => k !== G.hotel);
+  _say("The clerk waits. (" +
+    others.map(k => _HOTELS[k].name.toUpperCase()).join(" · ") + " · or STAY.)", "dim");
+}
+function _farePrompt() {
+  _say(`The driver is still waiting: “${thaiBaht(G.pendingFare.price)}”. (PAY <amount>)`, "thai");
+}
+
+// After a restore (continue / undo, in main.js), redraw whatever modal prompt is
+// currently gating input — otherwise the load shows only the room text while the
+// hidden state eats the player's next command. ONE dispatcher over every gate in
+// doCommand, in the same priority order; add a new modal state to both or the
+// restore goes blind again (the class of bug that hit c4, jackpot, and saleng).
+function _renderResume() {
+  if (!G) return;
+  if (G.pendingChoice === "vacation_end") { _vacationEndPrompt(); return; }
+  if (G.pendingChoice === "checkout") { _checkoutPrompt(); return; }
+  if (G.game) { _renderGame(); return; }
+  if (G.pendingEnc) { _renderEncounter(); return; }
+  if (G.pendingFare) { _farePrompt(); return; }
+}
+
 function doCommand(input) {
   if (!G) newGame();
   const raw = _norm(input);
@@ -1703,7 +1736,7 @@ function doCommand(input) {
     if (/^restart/.test(lower)) { newGame(); engineIntro(); return; }
     if (/vacation|holiday|again|fly back|new/.test(lower)) { _newVacation(); return; }
     if (/move|expat|stay|pattaya|remain/.test(lower)) { _goExpat(); return; }
-    _say("(NEW VACATION · MOVE TO PATTAYA — the airline needs an answer.)", "dim");
+    _vacationEndPrompt();
     return;
   }
 
@@ -1719,10 +1752,7 @@ function doCommand(input) {
       /queen|vic|balcony/.test(lower) ? "queenvic" :
       /metro|lk/.test(lower) ? "metropole" : null;
     if (!pick || pick === G.hotel) {
-      const others = Object.keys(_HOTELS).filter(k => k !== G.hotel);
-      _say("The clerk waits. (" +
-        others.map(k => _HOTELS[k].name.toUpperCase()).join(" · ") +
-        " · or STAY.)", "dim");
+      _checkoutPrompt();
       return;
     }
     G.pendingChoice = null;
@@ -1753,7 +1783,7 @@ function doCommand(input) {
 
   // pending fare gates everything except paying, looking, help
   if (G.pendingFare && !["pay", "look", "l", "help", "i", "inventory", "say"].includes(v)) {
-    _say(`The driver is still waiting: “${thaiBaht(G.pendingFare.price)}”. (PAY <amount>)`, "thai");
+    _farePrompt();
     return;
   }
 
