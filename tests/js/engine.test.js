@@ -839,6 +839,21 @@ test("reload mid-rain: the room description re-announces the downpour", () => {
   assert.doesNotMatch(lastOut(), /downpour|hammers the roof/i);
 });
 
+// "Exits: w, e" never said a bar was behind those directions — the room now
+// names the bars you can walk into, with the direction and the ENTER verb.
+test("describeRoom names the bars you can step into", () => {
+  state().room = "buakhao_market";
+  out = []; _describeRoom(true);
+  assert.match(lastOut(), /Step inside:.*Candy Bar \(w\)/, "names the bar and its direction");
+  assert.match(lastOut(), /ENTER <name>/, "teaches the ENTER verb");
+  // the same cart reached by two exits (w and in) is listed once, by the compass dir
+  assert.doesNotMatch(lastOut(), /Candy Bar \(in\)/, "prefers a compass direction over 'in'");
+  // inside a bar (exits are just 'out' to the street) there's nothing to step into
+  state().room = "candy_bar";
+  out = []; _describeRoom(true);
+  assert.doesNotMatch(lastOut(), /Step inside/, "no step-inside list when no bar adjoins");
+});
+
 test("encounter roll: cooldown holds, and no encounter fires twice", () => {
   state().room = "beach_rd_c";
   state().turns = 100;
