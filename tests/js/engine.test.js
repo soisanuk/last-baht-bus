@@ -207,7 +207,10 @@ test("jackpot: the FLIP hint is tappable and autocomplete offers the legal moves
     started = !!(state().game && state().game.pending);
   }
   assert.ok(started, "found a seed that leaves a two-way flip choice");
-  assert.match(lastOut(), /\(FLIP \d[\d ]* · FLIP \d[\d ]*\)/, "hint sits in parens = tappable");
+  // one tappable FLIP with the moves joined by "or" — not two FLIP words, which
+  // read as two different verbs offering the same choices
+  assert.match(lastOut(), /\(FLIP [\d& ]+or[\d& ]+\)/, "single FLIP, choices in parens = tappable");
+  assert.doesNotMatch(lastOut(), /·\s*FLIP/, "not the old double-FLIP hint");
   const moves = state().game.pending.map(mv => mv.join(" "));
   assert.deepEqual(_jpChoices(), moves);
   assert.deepEqual(engineComplete("flip "), moves);

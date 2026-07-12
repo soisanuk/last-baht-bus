@@ -176,6 +176,15 @@ test("the wheel: FLIP fans out into the pending jackpot moves (carries a number)
     [{ t: "flip", c: "flip", go: true }]);
 });
 
+test("the single-FLIP jackpot hint wraps only FLIP as the tap target", () => {
+  // "(FLIP 1 & 2 or 3)" — the numbers are plain, one FLIP taps and fans out;
+  // the ampersand is escaped, not mistaken for another cmd word.
+  const d = _term.decorate("(FLIP 1 & 2 or 3)");
+  assert.ok(d.includes(kw("FLIP", "cmd")), d);
+  assert.equal((d.match(/data-k="cmd"/g) || []).length, 1, "exactly one tap target");
+  assert.ok(d.includes("&amp;"), "the & is HTML-escaped, not a second command");
+});
+
 test("quiz answer lines: the leading digit taps while a quiz is live", () => {
   G.game = { type: "quiz", qs: [], at: 0, right: 0 };
   assert.equal(_term.decorate("  1. Bangkok"),
