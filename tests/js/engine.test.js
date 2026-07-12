@@ -682,6 +682,54 @@ test("_renderEncounter is a no-op with no pending encounter", () => {
   assert.equal(out.length, 0);
 });
 
+// _renderResume is the single restore-redraw dispatcher: whatever modal state
+// gates input in doCommand must have its prompt redrawn on continue/undo, or the
+// load is blind (the c4/jackpot/saleng bug class). One case per gate.
+test("_renderResume redraws every modal state that gates input", () => {
+  const G = state();
+  const draw = () => { out = []; _renderResume(); return lastOut(); };
+
+  // 1. a live bar game
+  G.game = { type: "jp", tiles: jpNew(), pending: [[2, 3], [5]] };
+  assert.match(draw(), /still in progress[\s\S]*FLIP 2 & 3 or 5/, "jackpot board + hint");
+  G.game = null;
+
+  // 2. a street encounter (stashed prompt)
+  G.pendingEnc = "peddler";
+  G.encPrompt = [["a peddler at your elbow", "alert"], ["(WATCH ฿300 · or NO.)", "dim"]];
+  assert.match(draw(), /peddler at your elbow[\s\S]*WATCH ฿300/, "encounter prompt");
+  G.pendingEnc = null; G.encPrompt = null;
+
+  // 3. the checkout desk
+  G.pendingChoice = "checkout"; G.hotel = "sabai";
+  assert.match(draw(), /The clerk waits/, "checkout options");
+
+  // 4. the airline choice at week's end
+  G.pendingChoice = "vacation_end";
+  assert.match(draw(), /airline needs an answer/, "vacation-end options");
+  G.pendingChoice = null;
+
+  // 5. an unpaid fare
+  G.pendingFare = { kind: "bus", price: 15, dest: "naklua_rd" };
+  assert.match(draw(), /driver is still waiting/, "fare reminder");
+  G.pendingFare = null;
+
+  // nothing modal: silence, not a stray line
+  assert.equal(draw(), "");
+});
+
+// The redraw must mirror doCommand's own priority order — whichever gate fires
+// first there is the one actually eating input, so it's the one to show.
+test("_renderResume follows doCommand's gate priority (checkout before game)", () => {
+  const G = state();
+  G.pendingChoice = "checkout"; G.hotel = "sabai";
+  G.game = { type: "jp", tiles: jpNew(), pending: [[2, 3], [5]] };
+  out = []; _renderResume();
+  assert.match(lastOut(), /The clerk waits/);
+  assert.doesNotMatch(lastOut(), /still in progress/, "the higher-priority gate wins");
+  G.pendingChoice = null; G.game = null;
+});
+
 test("encounter roll: cooldown holds, and no encounter fires twice", () => {
   state().room = "beach_rd_c";
   state().turns = 100;

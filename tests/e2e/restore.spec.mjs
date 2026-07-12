@@ -55,3 +55,38 @@ test("restoring mid-saleng redraws the cart prompt before the next move", async 
 
   expect(pageErrors).toEqual([]);
 });
+
+test("restoring mid-jackpot redraws the box and the FLIP hint", async ({ page }) => {
+  const pageErrors = [];
+  page.on("pageerror", e => pageErrors.push(e.message));
+  await page.goto(INDEX_URL);
+  await page.waitForSelector("#term-in");
+
+  // Drive a real jackpot game to a two-way roll, then persist it.
+  const pending = await page.evaluate(() => {
+    for (let seed = 1; seed <= 300; seed++) {
+      newGame(); G.lastSaleng = 99999; G.room = "candy_bar"; G.rng = seed;
+      doCommand("play jackpot");
+      if (G.game && G.game.pending) break;
+    }
+    localStorage.setItem("lbb_save", serializeGame());
+    return G.game.pending.length;
+  });
+  expect(pending).toBeGreaterThan(0);
+
+  // Reload → continue → the box and a single FLIP hint come back with the room.
+  await page.reload();
+  await page.waitForSelector("#term-in");
+  await expect(page.locator("#term-out")).toContainText(/continue/i);
+  await page.fill("#term-in", "yes");
+  await page.press("#term-in", "Enter");
+  const out = page.locator("#term-out");
+  await expect(out).toContainText(/still in progress/);
+  await expect(out).toContainText(/\[ 1 2 3/);         // the tile box
+  await expect(out).toContainText(/\(FLIP .* or /);     // one FLIP, choices joined by "or"
+  // the redrawn FLIP is tappable (a cmd kw), so mobile can act with no keyboard
+  expect(await page.locator('#term-out .kw[data-k="cmd"]').count()).toBeGreaterThan(0);
+  expect(await page.evaluate(() => G.game && G.game.type)).toBe("jp");
+
+  expect(pageErrors).toEqual([]);
+});
