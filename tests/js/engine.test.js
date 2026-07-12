@@ -202,9 +202,11 @@ test("jackpot: the FLIP hint is tappable and autocomplete offers the legal moves
   let started = false;
   for (let seed = 1; seed <= 60 && !started; seed++) {
     newGame(); state().lastSaleng = 99999;
+    state().flags.jpLearned = true; // past the tutorial: only genuine two-way rolls stop
     state().room = "candy_bar"; state().rng = seed;
     run("play jackpot");
-    started = !!(state().game && state().game.pending);
+    // a real two-way choice (skip the tutorial-style single-move prompts)
+    started = !!(state().game && state().game.pending && state().game.pending.length === 2);
   }
   assert.ok(started, "found a seed that leaves a two-way flip choice");
   // one tappable FLIP with the moves joined by "or" — not two FLIP words, which
@@ -835,6 +837,33 @@ test("jackpot: settles one way or another, money stays consistent", () => {
   assert.equal(state().game, null, "game settled");
   assert.ok([80, 100, 120, 140].includes(state().money),
     `loss/push/win/jackpot only — got ฿${state().money}`);
+});
+
+test("jackpot tutorial: first game is hostess-led and manual, then auto-roll returns", () => {
+  const G = state();
+  G.room = "candy_bar_2"; G.money = 500; G.flags.act1Done = true; G.rng = 7;
+  assert.ok(!G.flags.jpLearned, "a new player hasn't learned Jackpot yet");
+  out = [];
+  run("play jackpot");
+  assert.equal(G.game.tutorial, true, "the first game runs the tutorial");
+  assert.match(lastOut(), /First time/, "the hostess offers to walk you through it");
+
+  // every roll stops for you while learning — no forced roll auto-resolves
+  let steps = 0;
+  while (G.game && G.game.pending && steps++ < 40) {
+    assert.doesNotMatch(lastOut(), /→ flip/, "nothing auto-plays during the tutorial");
+    run("flip " + G.game.pending[0].join(" "));
+  }
+  assert.ok(G.flags.jpLearned, "finishing one full round teaches the game for good");
+  assert.match(lastOut(), /Now you know Jackpot/, "she graduates you");
+
+  // a later game plays the forced single-option rolls itself again
+  out = [];
+  run("play jackpot");
+  assert.equal(G.game.tutorial, false, "the tutorial doesn't run twice");
+  let s2 = 0;
+  while (G.game && G.game.pending && s2++ < 40) run("flip " + G.game.pending[0].join(" "));
+  assert.match(lastOut(), /→ flip/, "forced rolls auto-resolve once you've learned");
 });
 
 test("jackpot: bet is clamped and capped by pocket money", () => {

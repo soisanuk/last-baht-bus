@@ -65,14 +65,15 @@ test("restoring mid-jackpot redraws the box and the FLIP hint", async ({ page })
   // Drive a real jackpot game to a two-way roll, then persist it.
   const pending = await page.evaluate(() => {
     for (let seed = 1; seed <= 300; seed++) {
-      newGame(); G.lastSaleng = 99999; G.room = "candy_bar"; G.rng = seed;
+      newGame(); G.lastSaleng = 99999; G.flags.jpLearned = true; // past the tutorial
+      G.room = "candy_bar"; G.rng = seed;
       doCommand("play jackpot");
-      if (G.game && G.game.pending) break;
+      if (G.game && G.game.pending && G.game.pending.length === 2) break; // a real two-way roll
     }
     localStorage.setItem("lbb_save", serializeGame());
     return G.game.pending.length;
   });
-  expect(pending).toBeGreaterThan(0);
+  expect(pending).toBe(2);
 
   // Reload → continue → the box and a single FLIP hint come back with the room.
   await page.reload();
