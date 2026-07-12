@@ -1590,8 +1590,7 @@ function _completePool(verb, ctx) {
     case "drop": // mid-c4 the columns; otherwise your pockets
       return _c4Choices().length ? _c4Choices() : _cInv().map(_cItemWord);
     case "flip": // mid-jackpot the legal moves ("3 4" and "7")
-      return G.game && G.game.type === "jp" && G.game.pending
-        ? G.game.pending.map(mv => mv.join(" ")) : [];
+      return _jpChoices();
     case "read": case "use": return _cInv().map(_cItemWord);
     case "give":
       return ctx.length >= 2 ? _cNpcsHere() : _cInv().map(_cItemWord);

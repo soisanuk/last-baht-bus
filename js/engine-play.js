@@ -48,13 +48,21 @@ function _c4Choices() {
     .filter(c => G.game.board[0][+c - 1] === 0);
 }
 
+// The two legal jackpot flips right now ("3 4" and "7") — the wheel's and
+// autocomplete's move list while a roll is waiting on a pick; empty whenever
+// jackpot isn't mid-roll (no pending choice).
+function _jpChoices() {
+  if (!G || !G.game || G.game.type !== "jp" || !G.game.pending) return [];
+  return G.game.pending.map(mv => mv.join(" "));
+}
+
 // The words a live mini-game answers to — autocomplete's verb row while a
 // game has the floor (every other verb is dead air until it ends).
 function _gameVerbs() {
   if (!G || !G.game) return [];
   switch (G.game.type) {
     case "c4": return ["drop", "1", "2", "3", "4", "5", "6", "7", "q", "quit"];
-    case "jp": return ["flip", "quit"];
+    case "jp": return ["flip", ..._jpChoices(), "quit"];
     case "pool": case "killer": return ["shot", "power", "safety", "quit"];
     case "quiz": return ["1", "2", "3", "quit"];
   }
