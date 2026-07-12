@@ -158,7 +158,7 @@ const _audio = (() => {
     // Take On Me (a-ha, 1985) — the synth riff; bpm doubled so 8th steps
     // read as the original's 16ths. F#m D A E under it.
     takeonme: {
-      bpm: 336, lead: "square", leadVol: 0.13, hat: true, bassEvery: 4,
+      bpm: 336, slow: 0.7, lead: "square", leadVol: 0.13, hat: true, bassEvery: 4,
       bass: [30, 26, 33, 28],
       melody: [
         78,78,74,71, null,71,null,76, null,76,null,76, 80,80,81,83,
@@ -178,7 +178,7 @@ const _audio = (() => {
     // What Is Love (Haddaway, 1993) — the synth stab hook, G minor,
     // eurodance tempo (8ths as 16ths again).
     whatislove: {
-      bpm: 248, lead: "square", leadVol: 0.12, hat: true, bassEvery: 2,
+      bpm: 248, slow: 0.7, lead: "square", leadVol: 0.12, hat: true, bassEvery: 2,
       bass: [31, 27, 34, 29],
       melody: [
         74,74,null,74, null,72,74,null, 77,77,null,77, null,74,77,null,
@@ -218,7 +218,7 @@ const _audio = (() => {
     // Axel F (Harold Faltermeyer, 1984) — the Beverly Hills Cop theme,
     // F minor. Born a synth instrumental; barely needs translating.
     axelf: {
-      bpm: 236, lead: "square", leadVol: 0.14, hat: true, bassEvery: 4,
+      bpm: 236, slow: 0.7, lead: "square", leadVol: 0.14, hat: true, bassEvery: 4,
       bass: [29, 32, 34, 29],
       melody: [
         65,null,null,68, 68,null,65,null, 65,70,null,65, null,63,null,null,
@@ -230,7 +230,7 @@ const _audio = (() => {
     // The Final Countdown (Europe, 1986) — the hook, A minor, pickup
     // 16ths on a doubled grid. Every Filipino band owns this one.
     countdown: {
-      bpm: 236, lead: "square", leadVol: 0.14, hat: true, bassEvery: 4,
+      bpm: 236, slow: 0.7, lead: "square", leadVol: 0.14, hat: true, bassEvery: 4,
       bass: [33, 29, 31, 28],
       melody: [
         null,null,null,null, 76,74,76,null, 69,null,null,null, null,null,null,null,
@@ -250,10 +250,16 @@ const _audio = (() => {
     return h;
   }
 
+  // Effective bpm: every track plays at 75% of its written bpm (full speed felt
+  // rushed), and the doubled/quadrupled-grid covers (takeonme/whatislove/axelf/
+  // countdown) carry an extra `slow` factor on top so their inflated bpm doesn't
+  // leave them racing while the ballads amble — a uniform *perceived* tempo. One
+  // source of truth, shared by the scheduler and the tempo() probe.
+  const _effBpm = t => t.bpm * 0.75 * (t.slow || 1);
+
   function _schedule() {
     while (_nextT < _actx.currentTime + 0.18) {
-      // Every track plays at 75% of its written bpm — full speed felt rushed.
-      const t = _track, spb = 30 / (t.bpm * 0.75);
+      const t = _track, spb = 30 / _effBpm(t);
       const bar = Math.floor(_step / 8) % t.bass.length;
       const pos = _step % 8;
       const root = t.bass[bar];
@@ -366,6 +372,7 @@ const _audio = (() => {
       _timer = setInterval(_schedule, 60);
     },
     tracks() { return Object.keys(TRACKS); },
+    tempo(name) { return TRACKS[name] ? _effBpm(TRACKS[name]) : 0; }, // effective bpm (post-slowdown)
     ambience: _ambience,
     // One-shot effects. "bell" is the bar bell — two quick swings, a real clang.
     sfx(name) {
