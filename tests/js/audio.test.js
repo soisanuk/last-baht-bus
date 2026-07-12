@@ -51,6 +51,21 @@ test("the set lists only contain songs the sequencer actually knows", () => {
   }
 });
 
+test("the doubled-grid covers are slowed to sit in the same tempo band as the rest", () => {
+  // takeonme/whatislove/axelf/countdown are authored at 2x-4x written bpm so an
+  // 8th-note step reads as a 16th; without an extra `slow` they'd race past the
+  // ballads even after the global 0.75. Assert every track's *effective* tempo
+  // lands in one band, so no track reads as "this one wasn't slowed".
+  const eff = _audio.tracks().map(n => _audio.tempo(n));
+  for (const t of eff) assert.ok(t > 0, "every track has an effective tempo");
+  const hi = Math.max(...eff), lo = Math.min(...eff);
+  assert.ok(hi / lo < 2.4, `perceived-tempo spread too wide: ${lo.toFixed(0)}-${hi.toFixed(0)}`);
+  // the four fast covers specifically must carry the extra slow-down
+  for (const n of ["takeonme", "whatislove", "axelf", "countdown"]) {
+    assert.ok(_audio.tempo(n) < 190, `${n} still racing at ${_audio.tempo(n).toFixed(0)}`);
+  }
+});
+
 test("when the DJ plays Sabai Sabai, the soundtrack is the song", () => {
   assert.equal(_trackForRoom("rainbow_girls"), _GOGO_SET); // a go-go, normally
   assert.equal(_trackForRoom("rainbow_girls", { sabaiPlaying: true }), "soi");
