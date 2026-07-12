@@ -163,7 +163,9 @@ function _jpTurn() {
     }
     g.pending = moves;
     _say(`You roll ${d1}+${d2}.   [ ${jpRender(g.tiles)} ]`);
-    _say(`(FLIP ${moves[0].join(" ")} · FLIP ${moves[1].join(" ")})`, "dim");
+    // one FLIP, tappable (fans out to the moves) — two FLIP words read as two
+    // different verbs; "FLIP 2 & 6 or 8" is one choice between two flips
+    _say(`(FLIP ${moves.map(m => m.join(" & ")).join(" or ")})`, "dim");
     return;
   }
 }
@@ -177,7 +179,7 @@ function _jpInput(input) {
   if (!move && /both|dice/.test(input)) move = g.pending.find(mv => mv.length === 2);
   if (!move) {
     _gameBoard();
-    _say(`(FLIP ${g.pending[0].join(" ")} · FLIP ${g.pending[1].join(" ")} — those are the choices.)`, "dim");
+    _say(`(FLIP ${g.pending.map(m => m.join(" & ")).join(" or ")} — those are the choices.)`, "dim");
     return;
   }
   jpFlip(g.tiles, move);
