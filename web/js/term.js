@@ -205,6 +205,14 @@ const _term = (() => {
             return cols.map(c => ({ t: "drop " + c, c: "drop " + c, go: true }));
           }
         }
+        // mid-jackpot, FLIP fans out into the two legal moves ("3 4" · "7") —
+        // the printed hint only tags the bare FLIP, so the numbers ride here
+        if (cmd === "flip" && typeof _jpChoices === "function") {
+          const moves = _jpChoices();
+          if (moves.length) {
+            return moves.map(m => ({ t: "flip " + m, c: "flip " + m, go: true }));
+          }
+        }
         // at a saleng cart, the open "BUY <item> FOR <lady>" hint fans out into
         // the cart's items so you don't have to type SOM TAM / FRUIT yourself
         if (cmd === "buy" && typeof _salengItems === "function") {

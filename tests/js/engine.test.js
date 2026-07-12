@@ -209,8 +209,11 @@ test("jackpot: the FLIP hint is tappable and autocomplete offers the legal moves
   assert.ok(started, "found a seed that leaves a two-way flip choice");
   assert.match(lastOut(), /\(FLIP \d[\d ]* · FLIP \d[\d ]*\)/, "hint sits in parens = tappable");
   const moves = state().game.pending.map(mv => mv.join(" "));
+  assert.deepEqual(_jpChoices(), moves);
   assert.deepEqual(engineComplete("flip "), moves);
-  assert.deepEqual(_gameVerbs(), ["flip", "quit"]);
+  // tapping the bare FLIP verb-row chip must carry a number, not nag: the legal
+  // moves ride between flip and quit in the modal verb list
+  assert.deepEqual(_gameVerbs(), ["flip", ...moves, "quit"]);
   run("flip " + moves[0]);
   assert.ok(!state().game || !lastOut().includes("those are the choices"), "the tap is a legal move");
 });

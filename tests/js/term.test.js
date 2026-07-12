@@ -164,6 +164,18 @@ test("the wheel: DROP fans out into open columns during Connect 4", () => {
     [{ t: "drop", c: "drop", go: true }]);
 });
 
+test("the wheel: FLIP fans out into the pending jackpot moves (carries a number)", () => {
+  G.game = { type: "jp", pending: [[3, 4], [7]] };
+  const acts = _term.kwActions("cmd", "FLIP", false);
+  assert.deepEqual(acts, [
+    { t: "flip 3 4", c: "flip 3 4", go: true },
+    { t: "flip 7", c: "flip 7", go: true },
+  ]);
+  G.game = null; // no roll pending: FLIP is the ordinary bare verb again
+  assert.deepEqual(_term.kwActions("cmd", "FLIP", false),
+    [{ t: "flip", c: "flip", go: true }]);
+});
+
 test("quiz answer lines: the leading digit taps while a quiz is live", () => {
   G.game = { type: "quiz", qs: [], at: 0, right: 0 };
   assert.equal(_term.decorate("  1. Bangkok"),
