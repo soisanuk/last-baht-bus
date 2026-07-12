@@ -1612,6 +1612,8 @@ function _completePool(verb, ctx) {
     }
     case "go": case "walk": case "head": case "enter":
       return [...Object.keys(_room().exits),
+        // adjacent bars by name, so "enter can…" completes even if never visited
+        ...Object.values(_room().exits).map(to => ROOMS[to].bar).filter(Boolean).map(b => b.toLowerCase()),
         ..._travelDests().map(id => (ROOMS[id].bar || ROOMS[id].name).toLowerCase())];
     case "travel": case "goto":
       return _travelDests().map(id => (ROOMS[id].bar || ROOMS[id].name).toLowerCase());

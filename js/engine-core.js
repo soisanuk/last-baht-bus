@@ -512,6 +512,19 @@ function _describeRoom(full) {
   }
   const exits = Object.keys(r.exits);
   if (exits.length) _say("Exits: " + exits.join(", ") + ".", "dim");
+  // Which of those exits are bars you can walk straight into. "Exits: w, e"
+  // alone never says a bar is behind them, and the prose doesn't always name
+  // it — so list them by name (tappable) with the direction and the ENTER verb.
+  const barDirs = new Map(); // bar name → a direction (prefer a compass one over "in")
+  for (const [dir, to] of Object.entries(r.exits)) {
+    const b = ROOMS[to].bar;
+    if (!b) continue;
+    if (!barDirs.has(b) || (barDirs.get(b) === "in" && dir !== "in")) barDirs.set(b, dir);
+  }
+  if (barDirs.size) {
+    _say("Step inside: " + [...barDirs].map(([b, d]) => `${b} (${d})`).join(", ") +
+      ". (ENTER <name>)", "dim");
+  }
   if (r.busStop) _say("A baht bus can be caught here (ride bus to …).", "dim");
   if (r.motosai) _say("A motosai stand is here (motosai to …).", "dim");
   if (r.barType === "beer" || r.barType === "soi6") {
