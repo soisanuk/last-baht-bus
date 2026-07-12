@@ -732,6 +732,32 @@ test("_renderResume follows doCommand's gate priority (checkout before game)", (
   G.pendingChoice = null; G.game = null;
 });
 
+test("_renderResume re-surfaces unread texts (the buzz nudge is lost on reload)", () => {
+  const G = state();
+  G.phone.inbox = [{ from: "noi", text: "where na", turn: 5, read: false }];
+  out = []; _renderResume();
+  assert.match(lastOut(), /1 unread message waiting/);
+  // read messages don't nag
+  G.phone.inbox[0].read = true;
+  out = []; _renderResume();
+  assert.equal(lastOut(), "");
+});
+
+// A downpour gates movement; a reload must re-announce it or the block reads as
+// a bug (the room describes as dry, then "the street is a river" on the next step).
+test("reload mid-rain: the room description re-announces the downpour", () => {
+  const G = state();
+  G.room = "beach_rd_c"; G.rain = 6; // outdoors, mid-downpour
+  out = []; _describeRoom(true);
+  assert.match(lastOut(), /rain|sheets|awning/i, "the street says it's pouring");
+  G.room = "candy_bar"; // sheltered
+  out = []; _describeRoom(true);
+  assert.match(lastOut(), /rain hammers the roof|downpour/i, "the bar says it's pouring outside");
+  G.rain = 0; // dry again: no weather line
+  out = []; _describeRoom(true);
+  assert.doesNotMatch(lastOut(), /downpour|hammers the roof/i);
+});
+
 test("encounter roll: cooldown holds, and no encounter fires twice", () => {
   state().room = "beach_rd_c";
   state().turns = 100;

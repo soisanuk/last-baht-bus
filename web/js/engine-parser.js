@@ -1707,6 +1707,11 @@ function _farePrompt() {
 // restore goes blind again (the class of bug that hit c4, jackpot, and saleng).
 function _renderResume() {
   if (!G) return;
+  // The "phone buzzed" nudge is a one-shot at arrival, so a reload with unread
+  // texts loses it — re-surface the count (it otherwise only shows under SCORE).
+  if (_unreadCount()) {
+    _say(`📱 ${_unreadCount()} unread message${_unreadCount() > 1 ? "s" : ""} waiting (CHECK MESSAGES).`, "win");
+  }
   if (G.pendingChoice === "vacation_end") { _vacationEndPrompt(); return; }
   if (G.pendingChoice === "checkout") { _checkoutPrompt(); return; }
   if (G.game) { _renderGame(); return; }
