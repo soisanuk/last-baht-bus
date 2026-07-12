@@ -103,6 +103,7 @@ function newGame() {
     safeTries: 0,
     pendingFare: null,   // { kind:"bus"|"moto", price, dest } awaiting `pay`
     pendingEnc: null,    // encounter id awaiting the player's snap reaction
+    encPrompt: null,     // [[text, cls], …] of the pending encounter's prompt, so a restore can redraw it
     game: null,          // live bar mini-game state (connect 4 / jackpot / pool)
     soc: {               // bar social ledger
       drinks: {},        //   npcId → lady drinks bought tonight
@@ -158,6 +159,7 @@ function deserializeGame(s) {
   G = JSON.parse(s);
   // older saves predate the encounter/mini-game systems — backfill the fields
   if (G.pendingEnc === undefined) G.pendingEnc = null;
+  if (G.encPrompt === undefined) G.encPrompt = null;
   if (G.game === undefined) G.game = null;
   if (!G.lightWarn) G.lightWarn = { room: null, n: 0, mark: false };
   if (!G.known) G.known = {};
@@ -532,10 +534,11 @@ function _tick() {
       G.turns - G.lastPeddler >= 20 && _rand() < 0.12) {
     G.lastPeddler = G.turns;
     G.pendingEnc = "peddler";
-    _say("A peddler drifts in off the street with a display board of watches, a fan " +
-      "of sunglasses, and — produced from an inner pocket with a meaningful eyebrow " +
-      "— certain 'vitamins'. He stations himself at your elbow, patient as weather.", "alert");
-    _say("(WATCH ฿300 · SUNGLASSES ฿150 · VITAMINS ฿200 · or NO.)", "dim");
+    _encPrompt(
+      ["A peddler drifts in off the street with a display board of watches, a fan " +
+        "of sunglasses, and — produced from an inner pocket with a meaningful eyebrow " +
+        "— certain 'vitamins'. He stations himself at your elbow, patient as weather.", "alert"],
+      ["(WATCH ฿300 · SUNGLASSES ฿150 · VITAMINS ฿200 · or NO.)", "dim"]);
   }
   // salengs (ซาเล้ง) cruise the nightlife bars — modified three-wheelers
   // selling food, shoes, lingerie, snacks directly to girls and farangs
@@ -552,25 +555,29 @@ function _tick() {
     const girls = _npcsHere().filter(id => NPC_ROLES[id] === "hostess");
     const gName = girls.length ? NPCS[girls[0]].name : "one of the girls";
     if (G.salengCart === "food") {
-      _say("A ซาเล้ง (saleng) putters to a stop outside — a converted three-wheeler with " +
-        "a gas burner going and charcoal pork smoke drifting in ahead of it. " +
-        '"Moo ping! Noodle!" ' + gName + " is already at the window.", "alert");
-      _say("(BUY MOO PING ฿40 · BUY NOODLES ฿40 · BUY <item> FOR <lady> · NO.)", "dim");
+      _encPrompt(
+        ["A ซาเล้ง (saleng) putters to a stop outside — a converted three-wheeler with " +
+          "a gas burner going and charcoal pork smoke drifting in ahead of it. " +
+          '"Moo ping! Noodle!" ' + gName + " is already at the window.", "alert"],
+        ["(BUY MOO PING ฿40 · BUY NOODLES ฿40 · BUY <item> FOR <lady> · NO.)", "dim"]);
     } else if (G.salengCart === "shoes") {
-      _say("A ซาเล้ง rolls up outside — its frame hung with ladies' footwear: sequinned " +
-        "sandals, platform heels, one pair of flip-flops that are clearly lost. " +
-        '"Shoes, shoes! Very cheap!" ' + gName + " is already trying on the gold ones.", "alert");
-      _say("(BUY SANDALS ฿150 · BUY HEELS ฿250 · BUY <item> FOR <lady> · NO.)", "dim");
+      _encPrompt(
+        ["A ซาเล้ง rolls up outside — its frame hung with ladies' footwear: sequinned " +
+          "sandals, platform heels, one pair of flip-flops that are clearly lost. " +
+          '"Shoes, shoes! Very cheap!" ' + gName + " is already trying on the gold ones.", "alert"],
+        ["(BUY SANDALS ฿150 · BUY HEELS ฿250 · BUY <item> FOR <lady> · NO.)", "dim"]);
     } else if (G.salengCart === "lingerie") {
-      _say("A ซาเล้ง idles outside with a washing-line of lingerie across its frame — " +
-        "bras, slips, colours the sun doesn't see. " +
-        '"For girlfriend! Beautiful!" Several girls are holding things up, rating each other.', "alert");
-      _say("(BUY LINGERIE ฿150 · BUY LINGERIE FOR <lady> · NO.)", "dim");
+      _encPrompt(
+        ["A ซาเล้ง idles outside with a washing-line of lingerie across its frame — " +
+          "bras, slips, colours the sun doesn't see. " +
+          '"For girlfriend! Beautiful!" Several girls are holding things up, rating each other.', "alert"],
+        ["(BUY LINGERIE ฿150 · BUY LINGERIE FOR <lady> · NO.)", "dim"]);
     } else {
-      _say("A ซาเล้ง drifts to a stop — a som tam station and drinks cooler bolted to the " +
-        "back. Lime, dried shrimp, and fish sauce arrive ahead of the pitch: " +
-        '"Som tam! Very fresh!"', "alert");
-      _say("(BUY SOM TAM ฿50 · BUY FRUIT ฿30 · BUY <item> FOR <lady> · NO.)", "dim");
+      _encPrompt(
+        ["A ซาเล้ง drifts to a stop — a som tam station and drinks cooler bolted to the " +
+          "back. Lime, dried shrimp, and fish sauce arrive ahead of the pitch: " +
+          '"Som tam! Very fresh!"', "alert"],
+        ["(BUY SOM TAM ฿50 · BUY FRUIT ฿30 · BUY <item> FOR <lady> · NO.)", "dim"]);
     }
   }
   _maybeIncomingText();

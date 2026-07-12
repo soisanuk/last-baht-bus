@@ -10,6 +10,24 @@
 const ENC_COOLDOWN = 12; // min turns between encounters
 const ENC_CHANCE = 0.3;  // roll per eligible arrival
 
+// Print an interactive encounter's prompt AND stash it on G, so restoring a
+// save (or UNDO) mid-encounter can redraw it. Without this the load shows only
+// the room text, and the encounter's exit line fires blind on the next move —
+// the saleng/battery-man/hair-oil-man exit text with no cart in sight. Every
+// prompt that leaves G.pendingEnc set routes through here; each arg is a
+// [text, cls] line. TTS (if any) is spoken by the caller, not replayed.
+function _encPrompt(...lines) {
+  if (G) G.encPrompt = lines;
+  for (const [t, cls] of lines) _say(t, cls);
+}
+
+// Redraw the pending encounter's prompt from the stashed lines — called after
+// _describeRoom on continue/undo, the encounter twin of _renderGame.
+function _renderEncounter() {
+  if (!G || !G.pendingEnc || !Array.isArray(G.encPrompt)) return;
+  for (const [t, cls] of G.encPrompt) _say(t, cls);
+}
+
 // The buyable items on the saleng cart parked right now — the single list the
 // flyout wheel and autocomplete both read, so tapping "BUY <item> FOR <lady>"
 // and typing "buy " agree (three-surface rule). Empty when no cart is present.
@@ -30,11 +48,12 @@ function _maybeEncounter() {
   if (G.soc.drunk >= 5 && G.turns - G.lastPolice >= 30 && _rand() < 0.2) {
     G.lastPolice = G.turns;
     G.pendingEnc = "police";
-    _say("A whistle, short and bored. A boy in brown detaches from the shade of a " +
-      "power pole and takes up station directly in your weaving path, thumbs in " +
-      "his belt. “You drink too much, my friend.” A statement, not a question. " +
-      "“Have fine. Five hundred baht.”", "alert");
-    _say("(He has all night. You, visibly, do not.)", "dim");
+    _encPrompt(
+      ["A whistle, short and bored. A boy in brown detaches from the shade of a " +
+        "power pole and takes up station directly in your weaving path, thumbs in " +
+        "his belt. “You drink too much, my friend.” A statement, not a question. " +
+        "“Have fine. Five hundred baht.”", "alert"],
+      ["(He has all night. You, visibly, do not.)", "dim"]);
     return;
   }
   if (G.turns - G.lastEnc < ENC_COOLDOWN) return;
@@ -50,12 +69,16 @@ function _startEnc(id) {
   const e = ENCOUNTERS[id];
   G.encDone[id] = true;
   G.lastEnc = G.turns;
-  _say(e.intro, "alert");
-  if (e.th) { _say(`“${e.th}” (${e.rom})`, "thai"); _engineSpeak(e.th); }
   if (e.interactive) {
     G.pendingEnc = id;
-    if (e.hint) _say(e.hint, "dim");
+    const lines = [[e.intro, "alert"]];
+    if (e.th) lines.push([`“${e.th}” (${e.rom})`, "thai"]);
+    if (e.hint) lines.push([e.hint, "dim"]);
+    _encPrompt(...lines);
+    if (e.th) _engineSpeak(e.th);
   } else {
+    _say(e.intro, "alert");
+    if (e.th) { _say(`“${e.th}” (${e.rom})`, "thai"); _engineSpeak(e.th); }
     _ENC[id]("");
   }
 }
@@ -318,11 +341,12 @@ const _ENC = {
     if (/flirt|drink|buy|hi|hello|konnichiwa|konbanwa|cheers|join|both|girl|dancer|open|game|cool|yes|sure|nice/.test(input)) {
       G.pendingEnc = "jptourist";
       _setFlag("jpDeal");
-      _say("You match her wavelength — no pitch, just game — and she decides she " +
-        "likes you. She tilts her head at a dancer working the pole like it owes her " +
-        "money. “That one. I like her. You like her.” The smile widens. “Maybe… we " +
-        "like her together?”", "win");
-      _say("(YES — and you cover the dancer's barfine. NO — no hard feelings.)", "dim");
+      _encPrompt(
+        ["You match her wavelength — no pitch, just game — and she decides she " +
+          "likes you. She tilts her head at a dancer working the pole like it owes her " +
+          "money. “That one. I like her. You like her.” The smile widens. “Maybe… we " +
+          "like her together?”", "win"],
+        ["(YES — and you cover the dancer's barfine. NO — no hard feelings.)", "dim"]);
       return;
     }
     _say("You hesitate a half-second too long. “Too slow, cutie.” She glides off " +
