@@ -62,7 +62,17 @@ const _term = (() => {
       const pat = new RegExp("\\b(" +
         names.map(n => n.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|") +
         ")\\b", "g");
-      html = html.replace(pat, m => _wrap(kind.get(m), m));
+      html = html.replace(pat, (m, _g, offset, str) => {
+        const k = kind.get(m);
+        // An item name after a third-person possessive is somebody else's — "her
+        // phone", "his wallet", "Candy's phone" — not your tappable inventory item,
+        // so leave it plain. "your phone" / "the phone" still tap through to it.
+        if (k === "item" &&
+            /(?:\b(?:her|his|their|its)|['’]s)\s+$/i.test(str.slice(0, offset))) {
+          return m;
+        }
+        return _wrap(k, m);
+      });
     }
     // ALL-CAPS command hints inside parentheses: (WATCH POLICE · or NO)
     // <placeholders> may sit mid-pattern (SEND <amount> TO <name>) — the whole

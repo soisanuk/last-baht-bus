@@ -34,6 +34,21 @@ test("items decorate only where they are present", () => {
   assert.ok(_term.decorate(`A ${name} pokes out.`).includes(kw(name, "item")));
 });
 
+test("an item name after a third-person possessive is someone else's, not tappable", () => {
+  G.itemLoc.phone = "inventory"; // you carry a phone
+  const dv = 'data-v="phone"';
+  // NPC dialogue about her own phone must not tap through to your inventory item
+  assert.ok(!_term.decorate("She checks her phone with practised ease.").includes(dv),
+    "her phone");
+  assert.ok(!_term.decorate("His phone lights up on the bar.").includes(dv), "his phone");
+  assert.ok(!_term.decorate("Candy’s phone is always on.").includes(dv), "Candy's phone");
+  // but your own phone — and generic/ambiguous mentions — still tap
+  assert.ok(_term.decorate("Your phone reads 13%.").includes(dv), "your phone");
+  assert.ok(_term.decorate("The phone buzzes.").includes(dv), "the phone");
+  assert.ok(_term.decorate("He grabs another phone.").includes(dv),
+    "the 'her' inside 'another' must not false-trigger");
+});
+
 test("the exits line lights every direction", () => {
   assert.equal(_term.decorate("Exits: n, e, out."),
     `Exits: ${kw("n", "exit")}, ${kw("e", "exit")}, ${kw("out", "exit")}.`);
