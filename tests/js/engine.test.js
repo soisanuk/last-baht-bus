@@ -434,12 +434,59 @@ test("re-talking gives the terse gist, not the full spiel again", () => {
   assert.ok(state().talked.nok.length); // the seen ledger persisted
 });
 
-test("an entry without a short still repeats in full", () => {
-  state().room = "rainbow_girls"; // Ploy's default counting line has no `short`
+test("a flavour entry with no short brushes off on repeat (terseness consistency)", () => {
+  state().room = "rainbow_girls"; // Ploy's counting line: no short, no gives/sets payload
   run("talk to ploy");
+  assert.match(lastOut(), /Cage is for money and me/); // full the first time
   out = [];
   run("talk to ploy");
-  assert.match(lastOut(), /Cage is for money and me/); // unchanged
+  assert.doesNotMatch(lastOut(), /Cage is for money and me/, "not the whole spiel again");
+  assert.match(lastOut(), /already|same-same|told you|forget so fast/i, "a generic brush-off");
+});
+
+test("ask the same gossip twice: full, then a brush-off (the Bee-about-Candy case)", () => {
+  state().room = "candy_bar_2"; // Bee is here; her 'candy' entry is pure flavour
+  run("ask bee about candy");
+  const first = lastOut();
+  assert.match(first, /Khun Candy start with one bar/); // the full spiel
+  out = [];
+  run("ask bee about candy");
+  assert.notEqual(lastOut(), first);
+  assert.match(lastOut(), /already|same-same|told you|forget so fast/i);
+});
+
+test("a clue/quest entry (gives or sets) still re-reads in full — nothing lost", () => {
+  // find a real payload entry the writer never gave a short
+  let npc, d;
+  for (const [id, n] of Object.entries(NPCS)) {
+    const e = (n.dialogue || []).find(x => (x.gives || (x.sets && x.sets.length)) && !x.short && x.text);
+    if (e) { npc = id; d = e; break; }
+  }
+  assert.ok(d, "found a payload entry with no short");
+  state().talked = {};
+  _deliver(npc, d);
+  out = [];
+  _deliver(npc, d); // repeat
+  assert.match(lastOut(), new RegExp(d.text.slice(0, 20).replace(/[.*+?^${}()|[\]\\]/g, "\\$&")),
+    "the instruction is re-readable in full");
+  assert.doesNotMatch(lastOut(), /same-same|farang memory/i, "not brushed off");
+});
+
+test("rail regulars brush off repeats too (their own grizzled voice)", () => {
+  const G = state();
+  // pick any patron with a no-short topic entry
+  let pid, topic;
+  for (const [id, p] of Object.entries(PATRONS)) {
+    const e = (p.dialogue || []).find(x => x.topic && !x.short && x.text);
+    if (e) { pid = id; topic = e.topic; break; }
+  }
+  assert.ok(pid, "found a patron with a no-short topic");
+  _patronTalk(pid, topic);
+  const first = lastOut();
+  out = [];
+  _patronTalk(pid, topic);
+  assert.notEqual(lastOut(), first);
+  assert.match(lastOut(), /told you|goldfish|same story/i, "a regular's brush-off");
 });
 
 test("candy withholds until the receipt proves your night", () => {

@@ -362,9 +362,23 @@ function _patronTalk(id, topic) {
   }
   const idx = p.dialogue.indexOf(d);
   const seen = G.patronTalk.talked[id] || (G.patronTalk.talked[id] = []);
-  const terse = seen.includes(idx) && !!d.short;
-  if (!seen.includes(idx)) seen.push(idx);
-  _say(terse ? d.short : d.text);
+  const repeat = seen.includes(idx);
+  if (!repeat) seen.push(idx);
+  // Same consistency as the NPCs: a repeat is the `short` gist, or — patron
+  // dialogue being pure flavour (no gives/sets anywhere) — a grizzled-regular
+  // brush-off, so you never get the whole war story twice.
+  _say(repeat ? (d.short || _patronAgain(id)) : d.text);
+}
+
+// The rail regular's version of "you asked me that" — a male-expat grumble to
+// the NPCs' fond soi brush-off (_askAgain).
+const _PATRON_AGAIN = [
+  n => `${n} gives you a flat look over the Chang. “Already told you that one, mate.”`,
+  n => `“You asked me that,” ${n} says. “Memory like a goldfish. Get a round in and I might go again.”`,
+  n => `${n} waves a hand. “Same story, same ending. Ask me something I haven't done to death.”`,
+];
+function _patronAgain(id) {
+  return _PATRON_AGAIN[Math.floor(_rand() * _PATRON_AGAIN.length)](PATRONS[id].name);
 }
 
 // where: "room", "inventory", or undefined (both, room first — so TAKE grabs
@@ -416,18 +430,35 @@ function _pickDialogue(npcId, topic) {
   return topic ? _pickDialogue(npcId, null) : null;
 }
 
+// Generic "you asked that already" brush-offs, voiced as the soi's fond
+// exasperation — the terse repeat for a pure-flavour line the writer never gave
+// a `short`. Gender-neutral (no she/he), so any NPC can deliver one.
+const _ASK_AGAIN = [
+  n => `“Aiyah, you ask me that already,” ${n} says, half a laugh. “Same answer, na. Farang memory.”`,
+  n => `${n} waves you off, fond. “You forget so fast? Buy a drink — maybe it come back.”`,
+  n => `“Same-same,” ${n} says. “You already ask me this. We talk something new, or you talk to the wall.”`,
+  n => `${n} gives you the look reserved for farang who repeat themselves. “Told you already, tilac.”`,
+];
+function _askAgain(npcId) {
+  return _ASK_AGAIN[Math.floor(_rand() * _ASK_AGAIN.length)](NPCS[npcId].name);
+}
+
 function _deliver(npcId, d) {
   const n = NPCS[npcId];
   // Second time you hear a line, get the point, not the whole spiel. We track
-  // which entries an NPC has already delivered (by index) and, on a repeat,
-  // swap in the entry's `short` gist and skip the Thai greeting flourish. An
-  // entry without a `short` just repeats in full — no regression.
+  // which entries an NPC has delivered (by index) and, on a repeat, swap in the
+  // entry's `short` gist and skip the Thai flourish. With no `short`, a pure
+  // flavour line (no gives/sets payload) gets a generic brush-off so EVERY
+  // repeat is terse — but a quest/clue entry that carries something re-readable
+  // still repeats in full, so a player who forgot an instruction can re-read it.
   const idx = n.dialogue.indexOf(d);
   const seen = G.talked[npcId] || (G.talked[npcId] = []);
-  const terse = seen.includes(idx) && !!d.short;
-  if (!seen.includes(idx)) seen.push(idx);
+  const repeat = seen.includes(idx);
+  const flavor = !d.gives && !(d.sets && d.sets.length);
+  const terse = repeat && (!!d.short || flavor);
+  if (!repeat) seen.push(idx);
   if (d.th && !terse) { _say(`${n.emoji} ${n.name}: “${d.th}” (${d.rom})`, "thai"); _engineSpeak(d.th); }
-  _say(terse ? d.short : d.text);
+  _say(terse ? (d.short || _askAgain(npcId)) : d.text);
   for (const f of d.sets || []) _setFlag(f);
   if (d.gives && G.itemLoc[d.gives] === null) {
     G.itemLoc[d.gives] = "inventory";
