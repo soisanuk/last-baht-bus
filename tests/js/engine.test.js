@@ -1684,6 +1684,23 @@ test("hitting 100 สนุก is celebrated, not terminal", () => {
   assert.match(lastOut(), /Candy Bar/);
 });
 
+test("the meter happy-penalty names its cause, so it can't read as a double-charge", () => {
+  const G = state();
+  G.happy = 20; G.hunger = 88; G.thirst = 40; G.nightTurn = 9; // next tick lands on 10
+  out = [];
+  _tick();
+  assert.match(lastOut(), /-1 สนุก — you're starving/, "hunger-driven dock is labelled");
+  // thirst-dominant gets the parched label instead
+  G.happy = 20; G.hunger = 40; G.thirst = 88; G.nightTurn = 9;
+  out = [];
+  _tick();
+  assert.match(lastOut(), /-1 สนุก — you're parched/);
+  // a plain dock (no reason) stays bare — the label is opt-in
+  out = [];
+  _addHappy(-1);
+  assert.match(lastOut(), /\(-1 สนุก\)/);
+});
+
 // ── The full playthrough ───────────────────────────────────────────────────
 
 test("scripted happy-ending playthrough", () => {
