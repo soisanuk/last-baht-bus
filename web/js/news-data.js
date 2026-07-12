@@ -3,14 +3,14 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
-    "t": "Doctor Pattaya Issues IV Drip Safety Guide for Pattaya Tourists and Travellers",
-    "s": "Shoreline Media Group",
+    "t": "“Pubic Hair” croissant from Pattaya, Thailand goes viral",
+    "s": "Lifestyle Asia Hong Kong",
     "d": "10 Jul 2026"
   },
   {
-    "t": "Tyson Fury is Fighting in Pattaya this July",
-    "s": "Time Out Worldwide",
-    "d": "11 Jul 2026"
+    "t": "Doctor Pattaya Issues IV Drip Safety Guide for Pattaya Tourists and Travellers",
+    "s": "Shoreline Media Group",
+    "d": "10 Jul 2026"
   },
   {
     "t": "In Thailand’s sex tourism hub, bright lights flash, loud music blares – and underage girls are exploited",
@@ -43,6 +43,11 @@ var NEWS_FEED = [
     "d": "29 Jun 2026"
   },
   {
+    "t": "Fire breaks out at a pub in Bangkok, killing at least 27 people, officials say",
+    "s": "CNN",
+    "d": "12 Jul 2026"
+  },
+  {
     "t": "Thailand Needs to Soak Its Own Rich, Not Just Wealthy Tourists",
     "s": "The Diplomat – Asia-Pacific",
     "d": "10 Jul 2026"
@@ -58,25 +63,20 @@ var NEWS_FEED = [
     "d": "11 Jul 2026"
   },
   {
-    "t": "hololive production x Birdzilla store “SAWASDEE KAA THAILAND” Exclusive Collection and Pop-Up Store coming this July! | NEWS",
-    "s": "ホロライブ公式サイト",
-    "d": "10 Jul 2026"
+    "t": "New Species of Long-Necked Dinosaur Identified in Thailand",
+    "s": "Sci.News",
+    "d": "09 Jul 2026"
   },
   {
-    "t": "‘We said yes to every bad idea’: The Israeli couple’s wild Thailand trip",
-    "s": "Ynetnews",
-    "d": "11 Jul 2026"
-  },
-  {
-    "t": "Cash deposits over B5m to face mandatory disclosure",
-    "s": "Bangkok Post",
-    "d": "11 Jul 2026"
+    "t": "A Single Bone Found in Thailand Has Just Revealed an Entirely New Species of Giant Dinosaur",
+    "s": "Yahoo",
+    "d": "09 Jul 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-07-10","USD":33.31,"AUD":23.15,"GBP":44.72,"EUR":38.08};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-07-12","temp":28,"humid":83,"code":51,"hi":31,"rain":98};
+var WX_NOW = {"date":"2026-07-13","temp":27,"humid":90,"code":3,"hi":30,"rain":73};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-09","done":true,"h":"France","hs":2,"a":"Morocco","as":0},{"d":"2026-07-10","done":true,"h":"Spain","hs":2,"a":"Belgium","as":1},{"d":"2026-07-11","done":true,"h":"Norway","hs":1,"a":"England","as":2},{"d":"2026-07-12","done":true,"h":"Argentina","hs":3,"a":"Switzerland","as":1},{"d":"2026-07-14","done":false,"h":"France","hs":0,"a":"Spain","as":0},{"d":"2026-07-15","done":false,"h":"England","hs":0,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
@@ -84,4 +84,4 @@ var LOTTO = {"date":"2026-07-01","first":"751495","last2":"62","front3":["001","
 // XAU, plus Thai baht-weight gold (96.5%)
 var GOLD = {"usd":4121,"date":"2026-07-12","baht":64950};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":64102,"thb":2134500};
+var BTC = {"usd":64148,"thb":2139708};
