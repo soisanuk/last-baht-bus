@@ -137,11 +137,20 @@ function _startJackpot(w) {
   const want = Math.max(JP_MIN, Math.min(JP_MAX, betM ? parseInt(betM[0], 10) : JP_DEFAULT));
   const opp = _gameHostess();
   const stake = _takeStake(want);
-  G.game = { type: "jp", tiles: jpNew(), opp, stake, pending: null };
+  // First game ever (flags.jpLearned unset): the hostess walks you through it —
+  // every roll is a manual flip, even a forced one, so you learn the moves. After
+  // that, forced single-option rolls auto-play and only real choices stop for you.
+  const tutorial = !_flag("jpLearned");
+  G.game = { type: "jp", tiles: jpNew(), opp, stake, pending: null, tutorial, taught: {} };
   _say(`${opp} slides over the battered Jackpot box — nine tiles up, two dice, ` +
     "the felt worn smooth by ten thousand losing farang. Flip the dice, or flip " +
     "their sum. Lowest score wins; shut the box and it's JACKPOT.");
   _say(stake ? `฿${stake} rides on it.` : "No baht? Sanuk rules — loser drinks anyway.");
+  if (tutorial) {
+    _say(`${opp} catches the look on your face and grins. "First time, na? Okay — ` +
+      `I show you. Slow-slow. You do every flip yourself tonight; you learn faster ` +
+      `that way." She rolls for you.`);
+  }
   _jpTurn();
 }
 
@@ -151,6 +160,22 @@ function _startJackpot(w) {
 // resume redraw can't drift into three different formats.
 function _jpHint(moves, tail) {
   return `(FLIP ${moves.map(m => m.join(" & ")).join(" or ")}${tail || ""})`;
+}
+
+// The hostess's first-game coaching — a beat the first time you meet each
+// situation, then she lets you get on with it. Silent once you've learned.
+function _jpTeach(g, moves) {
+  if (!g.tutorial) return;
+  if (moves.length === 2 && !g.taught.choice) {
+    g.taught.choice = true;
+    _say(`${g.opp} leans in. "Two ways here, na. Flip the two dice numbers — or ` +
+      `flip their sum, one tile. Never both. Whatever's still standing at the end ` +
+      `is your score, and low wins. You choose."`);
+  } else if (moves.length === 1 && !g.taught.single) {
+    g.taught.single = true;
+    _say(`${g.opp} taps the felt. "This roll, only one way to play it — so play it. ` +
+      `Type the flip. The box doesn't move itself… not until you know it does."`);
+  }
 }
 
 function _jpTurn() {
@@ -163,7 +188,9 @@ function _jpTurn() {
       _jpFinish();
       return;
     }
-    if (moves.length === 1) {
+    // Normally a forced single-option roll auto-resolves; in the tutorial it
+    // stops for you too, so you make every move and learn the game by playing it.
+    if (moves.length === 1 && !g.tutorial) {
       jpFlip(g.tiles, moves[0]);
       _say(`You roll ${d1}+${d2} → flip ${moves[0].join(" & ")}.   [ ${jpRender(g.tiles)} ]`);
       if (jpScore(g.tiles) === 0) { _jpFinish(); return; }
@@ -171,6 +198,7 @@ function _jpTurn() {
     }
     g.pending = moves;
     _say(`You roll ${d1}+${d2}.   [ ${jpRender(g.tiles)} ]`);
+    _jpTeach(g, moves);
     _say(_jpHint(moves), "dim");
     return;
   }
@@ -197,6 +225,14 @@ function _jpInput(input) {
 
 function _jpFinish() {
   const g = G.game;
+  // You graduate by finishing your first full round — quit early and the hostess
+  // patiently starts you over next time. From here the forced rolls auto-play.
+  if (g.tutorial) {
+    _setFlag("jpLearned");
+    _say(`${g.opp} sweeps up the dice. "There — one whole round. Now you know ` +
+      `Jackpot. Next time the forced rolls play themselves; only the real choices ` +
+      `stop for you. Faster, na."`);
+  }
   const you = jpScore(g.tiles);
   if (you === 0) {
     _setFlag("hitJackpot");
