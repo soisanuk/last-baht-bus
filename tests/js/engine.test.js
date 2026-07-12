@@ -2248,6 +2248,40 @@ test("saleng: buying lingerie for self adds to inventory", () => {
   assert.match(lastOut(), /GIVE LINGERIE/i);
 });
 
+test("saleng lingers: an unrelated bar action doesn't dismiss the cart", () => {
+  state().room = "candy_bar";
+  state().money = 500;
+  state().pendingEnc = "saleng";
+  state().salengCart = "food";
+  run("ring bell"); // a bar action, not aimed at the cart
+  assert.match(lastOut(), /idles at the kerb|BUY something/i, "the cart reminds you it's still waiting");
+  assert.equal(state().pendingEnc, "saleng", "and it stays parked, not puttered off");
+  // and it can still be bought from afterwards
+  const m0 = state().money;
+  out = [];
+  run("buy moo ping");
+  assert.equal(state().money, m0 - 40, "the cart that waited still sells");
+  assert.ok(!state().pendingEnc, "the purchase clears it");
+});
+
+test("saleng putters off when you leave the bar it parked at", () => {
+  state().room = "candy_bar";
+  state().pendingEnc = "saleng";
+  state().salengCart = "food";
+  run("out"); // candy_bar → buakhao_market
+  assert.ok(!state().pendingEnc, "the cart can't follow you out — it's cleared");
+  assert.equal(state().salengCart, null, "and the cart type is reset");
+});
+
+test("saleng cue: a decline still dismisses the cart on the spot", () => {
+  state().room = "candy_bar";
+  state().pendingEnc = "saleng";
+  state().salengCart = "food";
+  run("no");
+  assert.ok(!state().pendingEnc, "NO waves it on immediately");
+  assert.match(lastOut(), /putters off|nod/);
+});
+
 test("GIVE sandals to hostess: removes from inventory, adds favor, win prose", () => {
   state().room = "lucky_tiger"; // lek is in lucky_tiger
   state().itemLoc.saleng_sandals = "inventory";
