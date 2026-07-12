@@ -146,6 +146,9 @@ function newGame() {
     lastPeddler: -99,    // turn of the last bar-stool peddler visit
     lastSaleng: -99,     // turn of the last saleng (ซาเล้ง) mobile-cart visit
     salengCart: null,    // current saleng cart type ("food"|"shoes"|"lingerie"|"snacks")
+    salengRoom: null,    // room the cart is parked at (a bar fixture, not modal)
+    salengUntil: 0,      // turn the parked cart moves on
+    salengSeen: {},      // cart type → true once the player has met that cart
     selfBfId: null,      // hostess offering to barfine herself
     rain: 0,             // downpour turns remaining (0 = dry)
     lastRain: -99,       // turn the last downpour began
@@ -204,6 +207,7 @@ function deserializeGame(s) {
   }
   if (G.lastPeddler === undefined) G.lastPeddler = -99;
   if (G.lastSaleng === undefined) { G.lastSaleng = -99; G.salengCart = null; }
+  if (G.salengRoom === undefined) { G.salengRoom = null; G.salengUntil = 0; G.salengSeen = {}; }
   if (!G.quizPlayed) G.quizPlayed = {};
   if (!G.talked) G.talked = {};
   if (G.soc && !G.soc.bra) G.soc.bra = {};
@@ -534,6 +538,10 @@ function _describeRoom(full) {
       (isBar ? " (DANCE · SING · REQUEST <song> · TIP BAND · BUY ROUND FOR BAND)" :
                " (DANCE · SING · REQUEST <song> · TIP BAND)"), "dim");
   }
+  if (_salengHere()) { // a parked cart re-announces itself so a reload isn't blind to it
+    const c = _SALENG_CARTS[G.salengCart];
+    _say(c.here + " " + c.hint, "dim");
+  }
   if (r.barType) {
     const girl = _npcsHere().find(id => NPC_ROLES[id] === "hostess");
     _say(G.soc.patronBusy[G.room] ?
@@ -597,46 +605,10 @@ function _tick() {
         "— certain 'vitamins'. He stations himself at your elbow, patient as weather.", "alert"],
       ["(WATCH ฿300 · SUNGLASSES ฿150 · VITAMINS ฿200 · or NO.)", "dim"]);
   }
-  // salengs (ซาเล้ง) cruise the nightlife bars — modified three-wheelers
-  // selling food, shoes, lingerie, snacks directly to girls and farangs
-  const _SALENG_REGIONS = new Set([
-    "Beach Road", "Soi Buakhao", "Tree Town", "LK Metro", "Walking Street", "Soi 6", "Myth Night",
-  ]);
-  if (!G.game && !G.pendingEnc && _inBar() && _room().barType !== "pub" &&
-      _SALENG_REGIONS.has(_room().region) &&
-      G.turns - G.lastSaleng >= 15 && _rand() < 0.10) {
-    G.lastSaleng = G.turns;
-    const types = ["food", "shoes", "lingerie", "snacks"];
-    G.salengCart = types[Math.floor(_rand() * types.length)];
-    G.pendingEnc = "saleng";
-    const girls = _npcsHere().filter(id => NPC_ROLES[id] === "hostess");
-    const gName = girls.length ? NPCS[girls[0]].name : "one of the girls";
-    if (G.salengCart === "food") {
-      _encPrompt(
-        ["A ซาเล้ง (saleng) putters to a stop outside — a converted three-wheeler with " +
-          "a gas burner going and charcoal pork smoke drifting in ahead of it. " +
-          '"Moo ping! Noodle!" ' + gName + " is already at the window.", "alert"],
-        ["(BUY MOO PING ฿40 · BUY NOODLES ฿40 · BUY <item> FOR <lady> · NO.)", "dim"]);
-    } else if (G.salengCart === "shoes") {
-      _encPrompt(
-        ["A ซาเล้ง rolls up outside — its frame hung with ladies' footwear: sequinned " +
-          "sandals, platform heels, one pair of flip-flops that are clearly lost. " +
-          '"Shoes, shoes! Very cheap!" ' + gName + " is already trying on the gold ones.", "alert"],
-        ["(BUY SANDALS ฿150 · BUY HEELS ฿250 · BUY <item> FOR <lady> · NO.)", "dim"]);
-    } else if (G.salengCart === "lingerie") {
-      _encPrompt(
-        ["A ซาเล้ง idles outside with a washing-line of lingerie across its frame — " +
-          "bras, slips, colours the sun doesn't see. " +
-          '"For girlfriend! Beautiful!" Several girls are holding things up, rating each other.', "alert"],
-        ["(BUY LINGERIE ฿150 · BUY LINGERIE FOR <lady> · NO.)", "dim"]);
-    } else {
-      _encPrompt(
-        ["A ซาเล้ง drifts to a stop — a som tam station and drinks cooler bolted to the " +
-          "back. Lime, dried shrimp, and fish sauce arrive ahead of the pitch: " +
-          '"Som tam! Very fresh!"', "alert"],
-        ["(BUY SOM TAM ฿50 · BUY FRUIT ฿30 · BUY <item> FOR <lady> · NO.)", "dim"]);
-    }
-  }
+  // the ซาเล้ง (mobile bar cart) — a fixture for the girls, not a modal gate:
+  // it parks at the bar for a while, the girls swarm it, and the player may buy
+  // any time before it moves on. All of that lives in _salengTick (encounters).
+  _salengTick();
   _maybeIncomingText();
   if (G.lightOn && G.battery > 0) {
     G.battery--;

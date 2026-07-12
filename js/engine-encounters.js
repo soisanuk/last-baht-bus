@@ -28,26 +28,92 @@ function _renderEncounter() {
   for (const [t, cls] of G.encPrompt) _say(t, cls);
 }
 
-// The buyable items on the saleng cart parked right now — the single list the
-// flyout wheel and autocomplete both read, so tapping "BUY <item> FOR <lady>"
-// and typing "buy " agree (three-surface rule). Empty when no cart is present.
+// ── The ซาเล้ง (mobile bar cart) ───────────────────────────────────────────
+// A saleng is primarily FOR THE GIRLS: it parks at the bar and the hostesses
+// (and other punters) swarm it. It is NOT a modal encounter — the player is
+// free to ignore it, buy from it repeatedly, or come back to it before it moves
+// on. Presence is tracked on G (salengCart/salengRoom/salengUntil), never via
+// pendingEnc. The regions salengs work, and the per-cart copy, live in tables so
+// the pitch, the room re-announce, the buy hint, and the item list share a source.
+const _SALENG_REGIONS = new Set([
+  "Beach Road", "Soi Buakhao", "Tree Town", "LK Metro", "Walking Street", "Soi 6", "Myth Night",
+]);
+const _SALENG_CARTS = {
+  food: {
+    items: ["moo ping", "noodles"],
+    hint: "(BUY MOO PING ฿40 · BUY NOODLES ฿40 · BUY <item> FOR <lady>)",
+    intro: 'A ซาเล้ง (saleng) putters to a stop outside — a converted three-wheeler with ' +
+      'a gas burner going and charcoal pork smoke drifting in ahead of it. "Moo ping! Noodle!"',
+    notice: "A ซาเล้ง putters up outside, burner going and pork smoke ahead of it; the girls drift to the window.",
+    here: "The food saleng idles at the kerb outside, its burner ticking over.",
+  },
+  shoes: {
+    items: ["sandals", "heels"],
+    hint: "(BUY SANDALS ฿150 · BUY HEELS ฿250 · BUY <item> FOR <lady>)",
+    intro: "A ซาเล้ง rolls up outside — its frame hung with ladies' footwear: sequinned " +
+      'sandals, platform heels, one pair of flip-flops that are clearly lost. "Shoes, shoes! Very cheap!"',
+    notice: "A ซาเล้ง hung with sequinned sandals and platform heels rolls up outside; the girls are on it before it stops.",
+    here: "The shoe saleng waits outside, its frame a-glitter with sandals and heels.",
+  },
+  lingerie: {
+    items: ["lingerie"],
+    hint: "(BUY LINGERIE ฿150 · BUY LINGERIE FOR <lady>)",
+    intro: "A ซาเล้ง idles outside with a washing-line of lingerie across its frame — " +
+      'bras, slips, colours the sun doesn\'t see. "For girlfriend! Beautiful!"',
+    notice: "A ซาเล้ง strung with lingerie idles up outside, and every girl in the place turns her head at once.",
+    here: "The lingerie saleng idles outside, its washing-line of lace swaying in the fan-wash.",
+  },
+  snacks: {
+    items: ["som tam", "fruit"],
+    hint: "(BUY SOM TAM ฿50 · BUY FRUIT ฿30 · BUY <item> FOR <lady>)",
+    intro: "A ซาเล้ง drifts to a stop — a som tam station and drinks cooler bolted to the " +
+      'back. Lime, dried shrimp, and fish sauce arrive ahead of the pitch: "Som tam! Very fresh!"',
+    notice: "A som-tam ซาเล้ง drifts to a stop outside, pestle already going, and the girls call their orders over your head.",
+    here: "The som-tam saleng is parked outside, pestle thudding in its stone mortar.",
+  },
+};
+// Flavour of the girls playing with the cart ({g} = a hostess/mama present).
+const _SALENG_VIGNETTES = {
+  food: [
+    "{g} leans out the window and haggles the driver down two baht on principle, then buys skewers for half the rail.",
+    "{g} feeds a strip of moo ping to the girl beside her, who delivers the verdict — more chilli — with her mouth full.",
+    "The driver hands {g} a bag of noodles she didn't quite pay for; she promises to settle 'next time', and everyone knows what that means.",
+  ],
+  shoes: [
+    "{g} kicks off her heels right there and tries the gold platforms, walking a catwalk length of sticky floor to a chorus of opinions.",
+    "Two of the girls are arguing sizes over the sandals; {g} settles it by buying both pairs and sorting it out later.",
+    "{g} holds a pair of sequinned flats up to the neon, unconvinced, then buys them anyway.",
+  ],
+  snacks: [
+    "{g} orders her som tam 'phet phet phet' and dares the new girl to match her, the pestle thudding in agreement.",
+    "{g} passes a bag of cut mango down the bar, keeping the sweetest slice for herself as commission.",
+    "The whole rail is suddenly eating som tam out of one shared bag, and {g} is somehow in charge of it.",
+  ],
+  _default: ["{g} drifts over to the saleng, buys something small, and drifts back richer in gossip."],
+};
+// Lingerie is its own scene — the whole bar turns it into a show for the punters.
+const _SALENG_LINGERIE_SCENE = [
+  "The girls swarm the lingerie line in a giggling scrum, holding lace up against each other and turning to pose at the rail — the customers are the mirror they're using. One drapes a slip across your shoulder, delighted, before her friend snatches it back.",
+  "Two of them have turned the saleng into a fashion show, striking increasingly theatrical poses at the punters with each new slip. Nobody at the bar is pretending to watch the football any more.",
+  "A bra is held up, then held up against you for scale, to shrieks of laughter; the girls model the better pieces down the bar with the straight-faced confidence of women who know exactly what the room is worth.",
+];
+
+function _salengPick(arr) { return arr[Math.floor(_rand() * arr.length)]; }
+
+// Is a cart currently parked and un-expired? (alive anywhere) / here in this room?
+function _salengAlive() { return !!(G && G.salengCart && G.turns < G.salengUntil); }
+function _salengHere() { return _salengAlive() && G.salengRoom === G.room; }
+
+// The buyable items on the cart parked in THIS room — the single list the flyout
+// wheel and autocomplete both read (three-surface rule). Empty when none is here.
 function _salengItems() {
-  if (!G || G.pendingEnc !== "saleng") return [];
-  switch (G.salengCart) {
-    case "food":     return ["moo ping", "noodles"];
-    case "shoes":    return ["sandals", "heels"];
-    case "lingerie": return ["lingerie"];
-    default:         return ["som tam", "fruit"]; // snacks
-  }
+  return _salengHere() ? _SALENG_CARTS[G.salengCart].items.slice() : [];
 }
 
-// Does this input name something the parked cart actually sells? Returns the
-// {item, price, hunger, thirst} it maps to, or null. Single source of truth for
-// both _ENC.saleng (the purchase) and _salengCue (deciding whether a command is
-// even aimed at the cart), so the two can't drift.
+// Does this input name something the parked cart sells? Returns the
+// {item, price, hunger, thirst} it maps to, or null. Keyed on the cart type so
+// _doBuy's routing and the purchase itself can't drift.
 function _salengMatchItem(input) {
-  // keyed on the cart, not pendingEnc: _ENC.saleng calls this AFTER the parser
-  // has cleared pendingEnc, so guarding on the flag would blank every purchase.
   if (!G || !G.salengCart) return null;
   const s = String(input).toLowerCase();
   switch (G.salengCart) {
@@ -69,15 +135,57 @@ function _salengMatchItem(input) {
   }
 }
 
-// Is this command actually addressed to the parked saleng? A ซาเล้ง is a passing
-// bar vendor, not a confrontation: it waits patiently while you ring the bell,
-// buy a drink, or chat, and only takes its cue when you buy from it or wave it
-// off. A cue is a cart item (optionally "for <lady>") or an explicit dismissal.
-// Everything else runs as a normal command and leaves the cart idling.
-function _salengCue(input) {
-  if (!G || G.pendingEnc !== "saleng") return false;
-  if (_salengMatchItem(input)) return true;
-  return /\b(no|nope|not now|maybe later|ignore|leave|go away|wave|shoo|skip|pass)\b/i.test(String(input));
+// Called once per _tick: retire an expired cart, let the girls play with a live
+// one (~20%), or roll a new cart up to the bar the player is in.
+function _salengTick() {
+  if (!G) return;
+  if (G.salengCart && G.turns >= G.salengUntil) { // its time is up — it moves on
+    const here = G.salengRoom === G.room;
+    G.salengCart = null; G.salengRoom = null; G.salengUntil = 0;
+    if (here) _say("The saleng packs up its trestles and putters on down the soi, the girls waving after it.", "dim");
+    return; // never spawn a replacement the same tick it leaves
+  }
+  if (_salengHere()) { if (_rand() < 0.20) _salengVignette(); return; }
+  if (!G.game && !G.pendingEnc && !G.salengCart && _inBar() && _room().barType !== "pub" &&
+      _SALENG_REGIONS.has(_room().region) && G.turns - G.lastSaleng >= 15 && _rand() < 0.10) {
+    _salengSpawn();
+  }
+}
+
+function _salengSpawn() {
+  const types = Object.keys(_SALENG_CARTS);
+  const cart = types[Math.floor(_rand() * types.length)];
+  G.salengCart = cart;
+  G.salengRoom = G.room;
+  G.lastSaleng = G.turns;
+  G.salengUntil = G.turns + 6 + Math.floor(_rand() * 7); // lingers 6–12 turns
+  const firstEver = !G.salengSeen[cart];
+  G.salengSeen[cart] = true;
+  _salengAnnounce(cart, firstEver);
+}
+
+// First cart of a type gets the full pitch inviting the player to have a look;
+// every cart after that is just a low-key notice that it's there to buy from.
+function _salengAnnounce(cart, firstEver) {
+  const c = _SALENG_CARTS[cart];
+  if (firstEver) {
+    const girls = _npcsHere().filter(id => NPC_ROLES[id] === "hostess");
+    const gName = girls.length ? NPCS[girls[0]].name : "One of the girls";
+    _say(`${c.intro} ${gName} is already at the window.`, "alert");
+    _say(`${c.hint} — or just let the girls enjoy it.`, "dim");
+  } else {
+    _say(c.notice, "alert");
+    _say(c.hint, "dim");
+  }
+}
+
+function _salengVignette() {
+  const girls = _npcsHere().filter(id => NPC_ROLES[id] === "hostess" || NPC_ROLES[id] === "mamasan");
+  if (!girls.length) return; // nobody to play with it — stay quiet
+  if (G.salengCart === "lingerie") { _say(_salengPick(_SALENG_LINGERIE_SCENE), "dim"); return; }
+  const gName = NPCS[girls[Math.floor(_rand() * girls.length)]].name;
+  const pool = _SALENG_VIGNETTES[G.salengCart] || _SALENG_VIGNETTES._default;
+  _say(_salengPick(pool).replace(/\{g\}/g, gName), "dim");
 }
 
 function _maybeEncounter() {
@@ -120,6 +228,97 @@ function _startEnc(id) {
     if (e.th) { _say(`“${e.th}” (${e.rom})`, "thai"); _engineSpeak(e.th); }
     _ENC[id]("");
   }
+}
+
+// The purchase itself — buying from the parked cart (self or FOR <lady>).
+// The cart LINGERS after a buy (you can buy again); departure is purely on
+// its timer in _salengTick, so nothing here clears salengCart.
+function _salengBuy(input) {
+    // parse optional "for [name]" suffix
+    const forM = input.replace(/\bno\b|\bignore\b|\bleave\b|\bgo away\b/, "")
+      .match(/\bfor\s+(\w+)\s*$/i);
+    const forId = forM ? _findNpc(forM[1]) : null;
+    const forHer = forId && NPC_ROLES[forId];
+    // determine item, price, and nutrition (shared with _doBuy routing)
+    const m = _salengMatchItem(input);
+    const item = m ? m.item : null;
+    const price = m ? m.price : 0;
+    const hunger = m ? m.hunger : 0;
+    const thirst = m ? m.thirst : 0;
+    if (!item) return; // _doBuy only routes real cart items here
+    if (G.money < price) {
+      _say(`฿${price} for the ${item} — you have ฿${G.money}. The driver clocks it ` +
+        "without embarrassing you and putters on.");
+      return;
+    }
+    G.money -= price;
+    if (forHer) {
+      const name = NPCS[forId].name;
+      G.soc.drinks[forId] = (G.soc.drinks[forId] || 0) + 1;
+      const REACTIONS = {
+        "moo ping": `${name} takes the skewers with both hands and wais before she's even ` +
+          `bitten in. "Aoy, so sweet!" She eats standing up and immediately tries to feed you one.`,
+        "noodles": `${name} cradles the bowl like it solved something. ` +
+          `"Same same my mum cook." She means it. That lands.`,
+        "sandals": `${name} sits on the nearest stool and swaps shoes without ceremony — ` +
+          `old pair straight into her bag, new ones on. She walks a circle. The bar votes: better.`,
+        "heels": `${name} holds the heels against her outfit, against the neon, against ` +
+          `some internal standard only she knows. Then she puts them on. The bar applauds. ` +
+          `She accepts this as her due.`,
+        "lingerie": `${name} disappears for ninety seconds and returns having apparently ` +
+          `settled a question nobody asked. She pulls you by the wrist to show the other girls. ` +
+          `"Same same Victoria Secret, na?" You agree. You would agree with anything right now.`,
+        "som tam": `${name} attacks the som tam with an opinion. "Not enough chilli." She ` +
+          `adds chilli from a bottle produced from somewhere on her person and doesn't offer ` +
+          `to show you where.`,
+        "fruit": `${name} peels the mango with a knife from her bag — fast, professional — ` +
+          `and gives you the first slice. The bar gets the rest.`,
+      };
+      _say(`฿${price} for the ${item}. ` +
+        (REACTIONS[item] || `${name} takes it with a wai. "Khob khun kha~"`) +
+        ` (฿${G.money} left.)`, "win");
+      _addHappy(1);
+      _maybeSelfBarfine(forId);
+    } else {
+      if (hunger) G.hunger = Math.max(0, G.hunger - hunger);
+      if (thirst) G.thirst = Math.max(0, G.thirst - thirst);
+      // shoes and lingerie go to inventory for gifting later
+      const INV_ITEMS = {
+        "sandals": "saleng_sandals", "heels": "saleng_heels", "lingerie": "saleng_lingerie",
+      };
+      if (INV_ITEMS[item]) {
+        const iid = INV_ITEMS[item];
+        if (G.itemLoc[iid] === "inventory") {
+          G.money += price; // refund — already have one
+          _say(`You already have one. The driver shrugs and keeps the change for your ` +
+            `indecision. Just kidding — ฿${price} back.`);
+          return;
+        }
+        G.itemLoc[iid] = "inventory";
+        const INV_TEXT = {
+          "sandals": `฿${price} for the sandals, tucked under your arm. Not your size, ` +
+            `not your shoes. GIVE SANDALS TO <lady> when you've found the right person. (฿${G.money} left.)`,
+          "heels": `฿${price} for the heels, carried in the bag. You have absolutely no ` +
+            `use for these. GIVE HEELS TO <lady>. (฿${G.money} left.)`,
+          "lingerie": `฿${price}. The lingerie goes in the bag; the bag goes under your arm; ` +
+            `the whole bar approves of the logic. GIVE LINGERIE TO <lady>. (฿${G.money} left.)`,
+        };
+        _say(INV_TEXT[item]);
+      } else {
+        const SELF = {
+          "moo ping": `Three skewers of moo ping, ฿${price}, eaten at the bar. Charcoal does ` +
+            `something to pork that a kitchen can't quite manage. (฿${G.money} left.)`,
+          "noodles": `A bowl of ba mee from the window, ฿${price}. You eat it at the bar ` +
+            `because inside is better than the kerb. (฿${G.money} left.)`,
+          "som tam": `฿${price} for a box of som tam — lime, dried shrimp, the good kind ` +
+            `of dangerous. (฿${G.money} left.)`,
+          "fruit": `฿${price} for a bag of cut fruit. You eat it at the bar feeling virtuous ` +
+            `relative to your surroundings. (฿${G.money} left.)`,
+        };
+        _say(SELF[item] || `฿${price} for the ${item}. (฿${G.money} left.)`);
+        _addHappy(1);
+      }
+    }
 }
 
 const _ENC = {
@@ -533,98 +732,6 @@ const _ENC = {
       _say("A slow head-shake. He re-shoulders the display board — watches swinging " +
         "like wind chimes — and moves down the bar to a man who has already made " +
         "eye contact, the fatal error.");
-    }
-  },
-
-  saleng(input) {
-    // parse optional "for [name]" suffix
-    const forM = input.replace(/\bno\b|\bignore\b|\bleave\b|\bgo away\b/, "")
-      .match(/\bfor\s+(\w+)\s*$/i);
-    const forId = forM ? _findNpc(forM[1]) : null;
-    const forHer = forId && NPC_ROLES[forId];
-    // determine item, price, and nutrition (shared matcher, so _salengCue agrees)
-    const m = _salengMatchItem(input);
-    const item = m ? m.item : null;
-    const price = m ? m.price : 0;
-    const hunger = m ? m.hunger : 0;
-    const thirst = m ? m.thirst : 0;
-    if (!item) {
-      _say("The driver reads your body language, offers a polite nod, and putters off to " +
-        "the next bar down the soi.");
-      return;
-    }
-    if (G.money < price) {
-      _say(`฿${price} for the ${item} — you have ฿${G.money}. The driver clocks it ` +
-        "without embarrassing you and putters on.");
-      return;
-    }
-    G.money -= price;
-    if (forHer) {
-      const name = NPCS[forId].name;
-      G.soc.drinks[forId] = (G.soc.drinks[forId] || 0) + 1;
-      const REACTIONS = {
-        "moo ping": `${name} takes the skewers with both hands and wais before she's even ` +
-          `bitten in. "Aoy, so sweet!" She eats standing up and immediately tries to feed you one.`,
-        "noodles": `${name} cradles the bowl like it solved something. ` +
-          `"Same same my mum cook." She means it. That lands.`,
-        "sandals": `${name} sits on the nearest stool and swaps shoes without ceremony — ` +
-          `old pair straight into her bag, new ones on. She walks a circle. The bar votes: better.`,
-        "heels": `${name} holds the heels against her outfit, against the neon, against ` +
-          `some internal standard only she knows. Then she puts them on. The bar applauds. ` +
-          `She accepts this as her due.`,
-        "lingerie": `${name} disappears for ninety seconds and returns having apparently ` +
-          `settled a question nobody asked. She pulls you by the wrist to show the other girls. ` +
-          `"Same same Victoria Secret, na?" You agree. You would agree with anything right now.`,
-        "som tam": `${name} attacks the som tam with an opinion. "Not enough chilli." She ` +
-          `adds chilli from a bottle produced from somewhere on her person and doesn't offer ` +
-          `to show you where.`,
-        "fruit": `${name} peels the mango with a knife from her bag — fast, professional — ` +
-          `and gives you the first slice. The bar gets the rest.`,
-      };
-      _say(`฿${price} for the ${item}. ` +
-        (REACTIONS[item] || `${name} takes it with a wai. "Khob khun kha~"`) +
-        ` (฿${G.money} left.)`, "win");
-      _addHappy(1);
-      _maybeSelfBarfine(forId);
-    } else {
-      if (hunger) G.hunger = Math.max(0, G.hunger - hunger);
-      if (thirst) G.thirst = Math.max(0, G.thirst - thirst);
-      // shoes and lingerie go to inventory for gifting later
-      const INV_ITEMS = {
-        "sandals": "saleng_sandals", "heels": "saleng_heels", "lingerie": "saleng_lingerie",
-      };
-      if (INV_ITEMS[item]) {
-        const iid = INV_ITEMS[item];
-        if (G.itemLoc[iid] === "inventory") {
-          G.money += price; // refund — already have one
-          _say(`You already have one. The driver shrugs and keeps the change for your ` +
-            `indecision. Just kidding — ฿${price} back.`);
-          return;
-        }
-        G.itemLoc[iid] = "inventory";
-        const INV_TEXT = {
-          "sandals": `฿${price} for the sandals, tucked under your arm. Not your size, ` +
-            `not your shoes. GIVE SANDALS TO <lady> when you've found the right person. (฿${G.money} left.)`,
-          "heels": `฿${price} for the heels, carried in the bag. You have absolutely no ` +
-            `use for these. GIVE HEELS TO <lady>. (฿${G.money} left.)`,
-          "lingerie": `฿${price}. The lingerie goes in the bag; the bag goes under your arm; ` +
-            `the whole bar approves of the logic. GIVE LINGERIE TO <lady>. (฿${G.money} left.)`,
-        };
-        _say(INV_TEXT[item]);
-      } else {
-        const SELF = {
-          "moo ping": `Three skewers of moo ping, ฿${price}, eaten at the bar. Charcoal does ` +
-            `something to pork that a kitchen can't quite manage. (฿${G.money} left.)`,
-          "noodles": `A bowl of ba mee from the window, ฿${price}. You eat it at the bar ` +
-            `because inside is better than the kerb. (฿${G.money} left.)`,
-          "som tam": `฿${price} for a box of som tam — lime, dried shrimp, the good kind ` +
-            `of dangerous. (฿${G.money} left.)`,
-          "fruit": `฿${price} for a bag of cut fruit. You eat it at the bar feeling virtuous ` +
-            `relative to your surroundings. (฿${G.money} left.)`,
-        };
-        _say(SELF[item] || `฿${price} for the ${item}. (฿${G.money} left.)`);
-        _addHappy(1);
-      }
     }
   },
 
