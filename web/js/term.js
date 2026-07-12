@@ -56,6 +56,14 @@ const _term = (() => {
     if (/^Exits: /.test(text)) {
       return "Exits: " + html.slice(7).replace(/([a-z]+)/g, _wrap("exit", "$1"));
     }
+    // Plain spans: authored {{…}} suppresses ALL tap-decoration inside — the
+    // content writer's escape hatch for a word that would wrongly tap (an item
+    // someone else owns, a proper noun that isn't gossipable). Swap each to an
+    // inert null-delimited placeholder now — nothing below matches it — and
+    // restore the inner (already HTML-escaped, undecorated) at the very end.
+    const _plain = [];
+    html = html.replace(/\{\{([\s\S]*?)\}\}/g, (_m, inner) =>
+      `\u0000${_plain.push(inner) - 1}\u0000`);
     const kind = _kwIndex();
     if (kind.size) {
       const names = [...kind.keys()].sort((a, b) => b.length - a.length);
@@ -110,6 +118,8 @@ const _term = (() => {
         (t.word || t.text.length >= 2) && !/^[๐-๙]+$/.test(t.text)
           ? _wrap("thai", t.text) : t.text).join("");
     });
+    // restore the plain spans: their inner text prints exactly, decorated by nothing
+    if (_plain.length) html = html.replace(/\u0000(\d+)\u0000/g, (_m, i) => _plain[+i]);
     return html;
   }
 

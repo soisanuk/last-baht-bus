@@ -49,6 +49,23 @@ test("an item name after a third-person possessive is someone else's, not tappab
     "the 'her' inside 'another' must not false-trigger");
 });
 
+test("{{…}} plain spans suppress all decoration inside, leaking no markers", () => {
+  G.itemLoc.phone = "inventory";
+  const NUL = String.fromCharCode(0);
+  // the content writer's manual escape hatch for a residual case
+  const one = _term.decorate("He grabs another {{phone}} off the bar.");
+  assert.ok(!one.includes('data-v="phone"'), "the marked phone doesn't tap");
+  assert.ok(one.includes("another phone off"), "but its text prints verbatim");
+  assert.ok(!/[{][}]/.test(one) && !one.includes(NUL), "no markup/placeholder leaks");
+  // a whole phrase, and it suppresses names/Thai too — not just items
+  const phrase = _term.decorate("She waves {{her phone at Candy}} and grins.");
+  assert.ok(!phrase.includes('data-k='), "nothing inside the span decorates");
+  // live decoration still runs OUTSIDE the span
+  const mixed = _term.decorate("{{phone}} — but ask Candy about it.");
+  assert.ok(!mixed.includes('data-v="phone"'), "inside stays plain");
+  assert.ok(mixed.includes(kw("Candy", "npc")), "outside still decorates");
+});
+
 test("the exits line lights every direction", () => {
   assert.equal(_term.decorate("Exits: n, e, out."),
     `Exits: ${kw("n", "exit")}, ${kw("e", "exit")}, ${kw("out", "exit")}.`);

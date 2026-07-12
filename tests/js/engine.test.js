@@ -81,6 +81,15 @@ test("the cheat is inert when CHEATS_ENABLED is off", () => {
   CHEATS_ENABLED = true; // restore the session default for other tests
 });
 
+test("stripMarkup removes render-only {{…}} braces, keeping the inner text", () => {
+  assert.equal(stripMarkup("grabs another {{phone}} and {{waves}}"),
+    "grabs another phone and waves");
+  assert.equal(stripMarkup("no markup here"), "no markup here");
+  assert.equal(stripMarkup("{{a whole phrase, kept}} verbatim"),
+    "a whole phrase, kept verbatim");
+  assert.equal(stripMarkup(null), "", "nullish is safe");
+});
+
 // ── Parser & basics ────────────────────────────────────────────────────────
 
 test("movement and look", () => {
