@@ -434,13 +434,27 @@ function _deliver(npcId, d) {
 function _describeRoom(full) {
   const r = _room();
   G.visited[G.room] = true; // standing in it is how places join the fast-travel list
+  // A downpour re-announces itself every time the room is described (LOOK, an
+  // arrival, and crucially a restored save) — otherwise a reload mid-rain paints
+  // a dry, walkable street and the movement block that follows reads as a bug.
+  const raining = G.rain > 0;
   if (_isDarkHere()) {
     _say(`${r.name}`, "room");
-    _say("It is pitch dark. If your phone has any battery left, its flashlight " +
-      "would help. Sois this dark tend to have soi dogs in them.", "alert");
+    _say(raining
+      ? "Pitch dark, and rain sheeting down through it — at least the weather keeps " +
+        "the soi dogs kennelled. Your phone's flashlight would still help."
+      : "It is pitch dark. If your phone has any battery left, its flashlight " +
+        "would help. Sois this dark tend to have soi dogs in them.", "alert");
     return;
   }
   _say(r.name, "room");
+  if (raining) {
+    _say(_sheltered(G.room)
+      ? "Rain hammers the roof — a proper rainy-season downpour outside, and nobody's " +
+        "stepping into that until it eases."
+      : "Rain is coming down in sheets; the awning overhead is the whole habitable " +
+        "world until it passes.", "alert");
+  }
   if (full) _say(r.desc);
   const items = Object.keys(G.itemLoc).filter(id => _here(id));
   if (items.length) _say("You can see: " + items.map(id => ITEMS[id].name).join(", ") + ".");
