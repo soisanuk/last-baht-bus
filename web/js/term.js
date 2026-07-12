@@ -383,12 +383,22 @@ const _term = (() => {
   // The bar bell FAB: a persistent tap-to-ring glyph, shown only while you're
   // in a bar/go-go. Reads engine state the way decorate does — no rules here;
   // the tap just submits "ring bell" like any command.
-  function _updateBellVisibility() {
-    const btn = document.getElementById("bell-fab");
-    if (!btn) return;
-    let inBar = false;
-    try { inBar = typeof _inBar === "function" && !!_inBar(); } catch (e) {}
-    btn.classList.toggle("show", inBar);
+  // Refresh the floating action buttons against live game state: the bell shows
+  // in bars, the message glyph shows while any text is unread. Called after every
+  // command (the room or inbox may have changed) and at boot.
+  function _updateFabs() {
+    const bell = document.getElementById("bell-fab");
+    if (bell) {
+      let inBar = false;
+      try { inBar = typeof _inBar === "function" && !!_inBar(); } catch (e) {}
+      bell.classList.toggle("show", inBar);
+    }
+    const msg = document.getElementById("msg-fab");
+    if (msg) {
+      let unread = 0;
+      try { unread = typeof _unreadCount === "function" ? _unreadCount() : 0; } catch (e) {}
+      msg.classList.toggle("show", unread > 0);
+    }
   }
 
   function submit(onCommand) {
@@ -402,7 +412,7 @@ const _term = (() => {
     _tabIdx = -1;
     _refreshSuggest();
     onCommand(cmd);
-    _updateBellVisibility(); // the room may have changed — show/hide the bell
+    _updateFabs(); // the room/inbox may have changed — show/hide the bell & message glyphs
     _out.scrollTop = _out.scrollHeight;
   }
 
@@ -440,6 +450,14 @@ const _term = (() => {
     const bellFab = document.getElementById("bell-fab");
     if (bellFab) bellFab.addEventListener("click", () => {
       _input.value = "ring bell";
+      submit(onCommand);
+    });
+
+    // the message glyph: tap to read your unread texts (CHECK MESSAGES), which
+    // prints them and marks them read — so the glyph hides itself afterward
+    const msgFab = document.getElementById("msg-fab");
+    if (msgFab) msgFab.addEventListener("click", () => {
+      _input.value = "check messages";
       submit(onCommand);
     });
 
@@ -508,7 +526,7 @@ const _term = (() => {
     });
 
     _input.focus();
-    _updateBellVisibility(); // in case we boot straight into a bar (restored save)
+    _updateFabs(); // in case we boot straight into a bar / with unread texts (restored save)
   }
 
   return { init, print, decorate, kwActions: _kwActions };

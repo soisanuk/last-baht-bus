@@ -52,13 +52,23 @@
     position: relative;
     padding: env(safe-area-inset-top) env(safe-area-inset-right) 0 env(safe-area-inset-left);
   }
-  /* The bar bell: a persistent tap-to-ring glyph, shown only in bars (term.js
-     toggles .show via _inBar). Floats above the input row, thumb-reachable. */
-  #bell-fab {
+  /* Floating action buttons, top-right: the bar bell (tap-to-ring, shown in bars
+     via _inBar) and the message glyph (shown when texts are unread, via
+     _unreadCount). term.js toggles each button's .show independently. A flex
+     column so they stack with no gap and either can appear alone — a text on the
+     street shows the message glyph in the top slot, a bar shows the bell, and a
+     text at the bar shows both. */
+  #fab-stack {
     position: absolute;
     right: 14px;
     top: calc(env(safe-area-inset-top) + 5.6rem);
     z-index: 40;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-end;
+  }
+  #bell-fab, #msg-fab {
     display: none;
     width: 54px; height: 54px;
     border-radius: 50%;
@@ -69,16 +79,16 @@
     line-height: 1;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
-    animation: bell-pulse 1.9s ease-out infinite;
+    animation: fab-pulse 1.9s ease-out infinite;
   }
-  #bell-fab.show { display: block; }
-  #bell-fab:active { background: #46006b; transform: scale(0.94); }
-  @keyframes bell-pulse {
+  #bell-fab.show, #msg-fab.show { display: block; }
+  #bell-fab:active, #msg-fab:active { background: #46006b; transform: scale(0.94); }
+  @keyframes fab-pulse {
     0%   { box-shadow: 0 0 7px 1px #ff149377, 0 0 0 0 #ff149366; }
     70%  { box-shadow: 0 0 11px 2px #ff149377, 0 0 0 13px #ff149300; }
     100% { box-shadow: 0 0 7px 1px #ff149377, 0 0 0 0 #ff149300; }
   }
-  @media (prefers-reduced-motion: reduce) { #bell-fab { animation: none; } }
+  @media (prefers-reduced-motion: reduce) { #bell-fab, #msg-fab { animation: none; } }
   header {
     padding: .55rem 1rem .45rem;
     border-bottom: 1px solid #ff149340;
@@ -600,7 +610,10 @@
            autocorrect="off" spellcheck="false" placeholder="what do you do?">
   <button id="term-send" title="Send" aria-label="Send command">➤</button>
   </div>
-  <button id="bell-fab" title="Ring the bell" aria-label="Ring the bell">🔔</button>
+  <div id="fab-stack">
+    <button id="bell-fab" title="Ring the bell" aria-label="Ring the bell">🔔</button>
+    <button id="msg-fab" title="Read your messages" aria-label="Read your messages">💬</button>
+  </div>
 </div>
 <a id="ad" href="https://soisanuk.github.io/" target="_blank" rel="noopener">
   <div class="ad-hey">HEY HANDSOME 😘</div>
