@@ -79,6 +79,12 @@ function _doGo(dirWord) {
 // invitations, street encounters. Everything that happens because you're
 // suddenly *here*, however you got here.
 function _arriveAt(to) {
+  // a ซาเล้ง parked at the bar you're leaving can't follow you — it putters on
+  if (G.pendingEnc === "saleng" && to !== G.room) {
+    G.pendingEnc = null;
+    G.salengCart = null;
+    _say("The saleng takes the hint and putters on to the next bar down the soi.", "dim");
+  }
   if (ROOMS[to].barType) {
     const b = G.soc.banned[to];
     if (b !== undefined) {
@@ -1776,8 +1782,14 @@ function doCommand(input) {
     return;
   }
 
-  // a live encounter demands a snap reaction: the next command IS the reaction
-  if (G.pendingEnc && v !== "restart") {
+  // a live encounter demands a snap reaction: the next command IS the reaction.
+  // The saleng is the exception — a passing bar vendor, not a confrontation. It
+  // waits while you do unrelated bar business (ring the bell, buy a drink), and
+  // only takes its cue when a command is actually aimed at the cart (_salengCue).
+  // Anything else falls through to normal dispatch with the cart still idling;
+  // it putters on when you buy, wave it off, or leave the room (see _doGo).
+  if (G.pendingEnc && v !== "restart" &&
+      (G.pendingEnc !== "saleng" || _salengCue(lower))) {
     const enc = G.pendingEnc;
     G.pendingEnc = null;
     _ENC[enc](lower);
@@ -1987,6 +1999,10 @@ function doCommand(input) {
       _say("I didn't understand that. (HELP lists commands.)", "dim");
       return; // no tick for parse errors
   }
+  // a parked saleng waited through that unrelated action — keep it in view so
+  // the player knows the cart is still there to buy from (or wave on)
+  if (G.pendingEnc === "saleng")
+    _say("(The saleng idles at the kerb, engine ticking over — BUY something or wave it on.)", "dim");
   _tick();
   _questTick();
   _checkAct1();

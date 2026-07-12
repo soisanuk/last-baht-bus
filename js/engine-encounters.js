@@ -41,6 +41,45 @@ function _salengItems() {
   }
 }
 
+// Does this input name something the parked cart actually sells? Returns the
+// {item, price, hunger, thirst} it maps to, or null. Single source of truth for
+// both _ENC.saleng (the purchase) and _salengCue (deciding whether a command is
+// even aimed at the cart), so the two can't drift.
+function _salengMatchItem(input) {
+  // keyed on the cart, not pendingEnc: _ENC.saleng calls this AFTER the parser
+  // has cleared pendingEnc, so guarding on the flag would blank every purchase.
+  if (!G || !G.salengCart) return null;
+  const s = String(input).toLowerCase();
+  switch (G.salengCart) {
+    case "food":
+      if (/moo.?ping|pork|skewer|bbq|grilled/.test(s)) return { item: "moo ping", price: 40, hunger: 25, thirst: 0 };
+      if (/noodle|ba.?mee|bowl|ramen/.test(s))         return { item: "noodles", price: 40, hunger: 35, thirst: -8 };
+      return null;
+    case "shoes":
+      if (/sandal|flat/.test(s))        return { item: "sandals", price: 150, hunger: 0, thirst: 0 };
+      if (/heel|platform|high/.test(s)) return { item: "heels", price: 250, hunger: 0, thirst: 0 };
+      return null;
+    case "lingerie":
+      if (/lingerie|bra|underwear|lace|slip|undies/.test(s)) return { item: "lingerie", price: 150, hunger: 0, thirst: 0 };
+      return null;
+    default: // snacks
+      if (/som.?tam|papaya|salad/.test(s)) return { item: "som tam", price: 50, hunger: 20, thirst: 5 };
+      if (/fruit|mango|banana|fresh/.test(s)) return { item: "fruit", price: 30, hunger: 10, thirst: 0 };
+      return null;
+  }
+}
+
+// Is this command actually addressed to the parked saleng? A ซาเล้ง is a passing
+// bar vendor, not a confrontation: it waits patiently while you ring the bell,
+// buy a drink, or chat, and only takes its cue when you buy from it or wave it
+// off. A cue is a cart item (optionally "for <lady>") or an explicit dismissal.
+// Everything else runs as a normal command and leaves the cart idling.
+function _salengCue(input) {
+  if (!G || G.pendingEnc !== "saleng") return false;
+  if (_salengMatchItem(input)) return true;
+  return /\b(no|nope|not now|maybe later|ignore|leave|go away|wave|shoo|skip|pass)\b/i.test(String(input));
+}
+
 function _maybeEncounter() {
   if (!G || G.over || G.pendingFare || G.pendingEnc) return;
   if (_isDarkHere() || _room().bar) return; // the dark belongs to the soi dogs
@@ -498,37 +537,17 @@ const _ENC = {
   },
 
   saleng(input) {
-    const cart = G.salengCart;
     // parse optional "for [name]" suffix
     const forM = input.replace(/\bno\b|\bignore\b|\bleave\b|\bgo away\b/, "")
       .match(/\bfor\s+(\w+)\s*$/i);
     const forId = forM ? _findNpc(forM[1]) : null;
     const forHer = forId && NPC_ROLES[forId];
-    // determine item, price, and nutrition
-    let item = null, price = 0, hunger = 0, thirst = 0;
-    if (cart === "food") {
-      if (/moo.?ping|pork|skewer|bbq|grilled/.test(input)) {
-        item = "moo ping"; price = 40; hunger = 25;
-      } else if (/noodle|ba.?mee|bowl|ramen/.test(input)) {
-        item = "noodles"; price = 40; hunger = 35; thirst = -8;
-      }
-    } else if (cart === "shoes") {
-      if (/sandal|flat/.test(input)) {
-        item = "sandals"; price = 150;
-      } else if (/heel|platform|high/.test(input)) {
-        item = "heels"; price = 250;
-      }
-    } else if (cart === "lingerie") {
-      if (/lingerie|bra|underwear|lace|slip|undies/.test(input)) {
-        item = "lingerie"; price = 150;
-      }
-    } else {
-      if (/som.?tam|papaya|salad/.test(input)) {
-        item = "som tam"; price = 50; hunger = 20; thirst = 5;
-      } else if (/fruit|mango|banana|fresh/.test(input)) {
-        item = "fruit"; price = 30; hunger = 10;
-      }
-    }
+    // determine item, price, and nutrition (shared matcher, so _salengCue agrees)
+    const m = _salengMatchItem(input);
+    const item = m ? m.item : null;
+    const price = m ? m.price : 0;
+    const hunger = m ? m.hunger : 0;
+    const thirst = m ? m.thirst : 0;
     if (!item) {
       _say("The driver reads your body language, offers a polite nod, and putters off to " +
         "the next bar down the soi.");
