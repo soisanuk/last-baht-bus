@@ -455,21 +455,48 @@ test("ask the same gossip twice: full, then a brush-off (the Bee-about-Candy cas
   assert.match(lastOut(), /already|same-same|told you|forget so fast/i);
 });
 
-test("a clue/quest entry (gives or sets) still re-reads in full — nothing lost", () => {
-  // find a real payload entry the writer never gave a short
-  let npc, d;
+test("every payload entry (gives/sets) has a short, so its clue re-reads concisely", () => {
+  // No quest/clue entry should be left to the generic brush-off — each carries
+  // re-readable info, so each must have an authored `short` gist.
+  const naked = [];
   for (const [id, n] of Object.entries(NPCS)) {
-    const e = (n.dialogue || []).find(x => (x.gives || (x.sets && x.sets.length)) && !x.short && x.text);
-    if (e) { npc = id; d = e; break; }
+    for (const d of n.dialogue || []) {
+      if ((d.gives || (d.sets && d.sets.length)) && d.text && !d.short) naked.push(`${id}:${d.topic || "-"}`);
+    }
   }
-  assert.ok(d, "found a payload entry with no short");
+  assert.deepEqual(naked, [], "payload entries missing a short: " + naked.join(", "));
+});
+
+test("a clue entry repeats as its short (the actionable gist), not a brush-off", () => {
+  // Lek's clue sets a flag but gives no item, so a clean second delivery = the
+  // short alone (no re-give noise).
+  const lek = NPCS.lek.dialogue.find(d => d.sets && d.sets.includes("knowOyHasIt"));
+  assert.ok(lek && lek.short, "the clue entry has a short");
   state().talked = {};
-  _deliver(npc, d);
+  _deliver("lek", lek);       // first: full
   out = [];
-  _deliver(npc, d); // repeat
-  assert.match(lastOut(), new RegExp(d.text.slice(0, 20).replace(/[.*+?^${}()|[\]\\]/g, "\\$&")),
-    "the instruction is re-readable in full");
-  assert.doesNotMatch(lastOut(), /same-same|farang memory/i, "not brushed off");
+  _deliver("lek", lek);       // repeat
+  assert.equal(lastOut(), lek.short, "the repeat is the concise clue, verbatim");
+  assert.match(lastOut(), /Rainbow Girls|safe/, "and it still names the key step");
+  assert.doesNotMatch(lastOut(), /same-same|farang memory/i, "never a generic brush-off");
+});
+
+test("the brush-off is still gated to flavour — a payload entry with no short repeats full", () => {
+  // guards the fallback logic even though no such entry ships today: inject a
+  // synthetic clue-without-short onto a real NPC and confirm it re-reads in full
+  const n = NPCS.bee;
+  const synth = { topic: "__test_clue__", text: "The synthetic clue text, re-readable.", sets: ["__t"] };
+  n.dialogue.push(synth);
+  try {
+    state().talked = {};
+    _deliver("bee", synth);
+    out = [];
+    _deliver("bee", synth); // repeat
+    assert.match(lastOut(), /synthetic clue text/, "no short + payload → full repeat");
+    assert.doesNotMatch(lastOut(), /same-same|farang memory/i);
+  } finally {
+    n.dialogue.pop(); // don't leak the synthetic entry into other tests
+  }
 });
 
 test("rail regulars brush off repeats too (their own grizzled voice)", () => {
