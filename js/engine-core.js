@@ -34,6 +34,16 @@ function engineInit(printFn, speakFn, sfxFn) {
 // say(text, cls) — cls hints the renderer: "room", "thai", "dim", "alert", "win"
 function _say(text, cls) { _learnNames(text); _enginePrint(text, cls || ""); }
 
+// Render-only markup: authored content wraps a span in {{…}} to mark it literal
+// — the frontend must print it plainly and tap-decorate NOTHING inside (an item
+// someone else owns, "grabs another {{phone}}"; a proper noun that isn't
+// gossipable). The engine never emits it and never acts on it; term.js's
+// decorate() is suppress-aware, and this strips the braces for any consumer that
+// prints _say text WITHOUT decorate() (a plain log, a future served/2D frontend).
+function stripMarkup(text) {
+  return String(text == null ? "" : text).replace(/\{\{([\s\S]*?)\}\}/g, "$1");
+}
+
 // ── Known names ────────────────────────────────────────────────────────────
 // A character is "known" once their name has actually appeared in the
 // transcript — a presence line, a room description, someone's gossip. The
