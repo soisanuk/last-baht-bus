@@ -511,7 +511,9 @@ function _tick() {
   if (G.thirst === 70) _say("(Your throat is sandpaper. Drink something — ideally water.)", "alert");
   if (G.hunger === 90) _say("(You are running on fumes. Food. Now.)", "alert");
   if (G.thirst === 90) _say("(Dizzy. The neon is doing things it shouldn't. WATER.)", "alert");
-  if ((G.hunger >= 80 || G.thirst >= 80) && G.nightTurn % 10 === 0) _addHappy(-1);
+  if ((G.hunger >= 80 || G.thirst >= 80) && G.nightTurn % 10 === 0) {
+    _addHappy(-1, G.thirst >= G.hunger ? "you're parched" : "you're starving");
+  }
   if (G.hunger >= 100 || G.thirst >= 100) { _endNight("collapse"); return; }
   if (G.nightTurn >= NIGHT_TURNS) { _endNight("dawn"); return; }
   // rainy season: when the bake says storm, the sky sometimes proves it.

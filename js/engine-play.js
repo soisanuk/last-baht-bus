@@ -1088,11 +1088,14 @@ function _happyLevel(h) {
   return HAPPY_LEVELS.find(([t]) => h >= t)[1];
 }
 
-function _addHappy(n) {
+function _addHappy(n, why) {
   if (!n) return;
   const before = _happyLevel(G.happy);
   G.happy = Math.max(0, G.happy + n);
-  _say(`(${n > 0 ? "+" : ""}${n} สนุก)`, "dim");
+  // `why` names the cause when the change would otherwise be a bare, unexplained
+  // dock — e.g. the meter penalty firing on the same command as a game loss, so
+  // two identical "(-1 สนุก)" lines don't read as a double-charge.
+  _say(`(${n > 0 ? "+" : ""}${n} สนุก${why ? " — " + why : ""})`, "dim");
   const after = _happyLevel(G.happy);
   if (n > 0 && after !== before) {
     if (G.happy >= 100 && !_flag("sabaiSabai")) {
