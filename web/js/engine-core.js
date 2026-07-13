@@ -420,6 +420,36 @@ function _findNpc(word) {
   return null;
 }
 
+// A named character the player addressed who isn't in THIS room — used to turn a
+// flat "Nobody by that name here" (reads as a bug mid-conversation) into a placed
+// answer. Patrons hop bars every hour, so promising a location would go stale by
+// the time you got there — they get the generic "regulars drift about" line.
+// Named NPCs keep a day-stable bar (Candy at Candy Bar today; when NPCs gain
+// schedules — alternate-day bars, invited visits — NPCS[id].room still resolves
+// to tonight's room), so point the player there. Anonymous staff (lowercase
+// names) and not-yet-met characters stay a plain deny — no spoiling a place you
+// were never shown.
+function _elsewhereLine(word) {
+  const w = String(word).toLowerCase().trim();
+  if (!w) return null;
+  const pid = Object.keys(PATRONS).find(id =>
+    id === w || PATRONS[id].name.toLowerCase() === w);
+  if (pid) return `${PATRONS[pid].name} isn't at this bar right now — the regulars ` +
+    "drift between bars through the night, and not every one of them comes out every evening.";
+  const nid = Object.keys(NPCS).find(id => {
+    const nm = NPCS[id].name;
+    if (!/^[A-Z]/.test(nm) || !(G.known && G.known[id])) return false;
+    return id === w || nm.toLowerCase() === w || nm.toLowerCase().split(" ").pop() === w;
+  });
+  if (nid) {
+    const room = ROOMS[NPCS[nid].room];
+    const where = room && (room.bar || room.name);
+    return where ? `${NPCS[nid].name} isn't at this bar — try ${where}.`
+                 : `${NPCS[nid].name} isn't here right now.`;
+  }
+  return null;
+}
+
 // First dialogue entry whose req/notFlags fit; topic filters "ask about".
 // An unknown/locked topic falls back to the NPC's default (topicless) line —
 // classic adventure behaviour: they answer with whatever they always say.

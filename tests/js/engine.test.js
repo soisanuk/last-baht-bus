@@ -2813,6 +2813,25 @@ test("David only drinks on his days off: Mondays and Fridays", () => {
   assert.match(lastOut(), /David isn't at this bar right now/, "he's a known regular, just not out — say so, don't deny he exists");
 });
 
+// NPCs keep a fixed bar today, but will gain schedules (Candy alternating her two
+// bars, invited visits). The "elsewhere" answer already generalises: a KNOWN NPC
+// addressed from the wrong bar is placed, not denied — while an unmet NPC and the
+// anonymous staff stay a plain deny (no spoiling a location never shown).
+test("addressing a known NPC who works elsewhere points you to her bar", () => {
+  state().room = "silk_rose"; // Candy is not here (she runs Candy Bar)
+  out = [];
+  run("talk to candy");
+  assert.match(lastOut(), /Nobody by that name/, "unmet: a plain deny, no location leaked");
+  state().known.candy = true; // now you've met her
+  out = [];
+  run("talk to candy");
+  assert.match(lastOut(), /Candy isn't at this bar — try Candy Bar/, "met: placed at her bar");
+  // anonymous staff are nobody, not 'elsewhere'
+  out = [];
+  run("talk to security");
+  assert.match(lastOut(), /Nobody by that name/);
+});
+
 test("ask <who> <topic> works without the 'about' connective (the tapped shape)", () => {
   // The autocomplete/wheel builds "ask <target> <topic>" a word at a time, with
   // no "about" between — that must reach the same dialogue as the typed form.
