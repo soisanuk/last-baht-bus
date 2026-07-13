@@ -66,6 +66,31 @@ test("{{…}} plain spans suppress all decoration inside, leaking no markers", (
   assert.ok(mixed.includes(kw("Candy", "npc")), "outside still decorates");
 });
 
+test("no NPC/patron/room prose taps 'phone' through to your inventory item", () => {
+  // The player always carries a phone (it's the flashlight), so any bare "phone"
+  // in prose about someone ELSE's phone wrongly taps. Prose either avoids the
+  // word, keeps it behind a possessive the guard catches, or wraps it in {{…}}.
+  // This sweeps the whole cast + map so a new filler girl or NPC line can't
+  // quietly reintroduce the mis-tap. (ITEMS are exempt — the phone/charger
+  // descs legitimately mean YOUR phone.)
+  G.itemLoc.phone = "inventory";
+  const dv = 'data-v="phone"';
+  const bad = [];
+  const check = (label, text) => {
+    if (text && _term.decorate(text).includes(dv)) bad.push(label);
+  };
+  for (const [id, n] of Object.entries(NPCS)) {
+    check(`NPC ${id} desc`, n.desc);
+    (n.dialogue || []).forEach((d, i) => { check(`NPC ${id} #${i}`, d.text); check(`NPC ${id} short#${i}`, d.short); });
+  }
+  for (const [id, p] of Object.entries(PATRONS)) {
+    check(`PAT ${id} desc`, p.desc);
+    (p.dialogue || []).forEach((d, i) => { check(`PAT ${id} #${i}`, d.text); check(`PAT ${id} short#${i}`, d.short); });
+  }
+  for (const [id, r] of Object.entries(ROOMS)) check(`ROOM ${id}`, r.desc);
+  assert.deepEqual(bad, [], "wrap the offending 'phone' in {{…}} or a possessive");
+});
+
 test("the exits line lights every direction", () => {
   assert.equal(_term.decorate("Exits: n, e, out."),
     `Exits: ${kw("n", "exit")}, ${kw("e", "exit")}, ${kw("out", "exit")}.`);

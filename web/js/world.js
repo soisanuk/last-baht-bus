@@ -65,7 +65,7 @@ const ROOMS = {
     name: "7-Eleven (Jomtien)",
     region: "Jomtien",
     desc: "The cold blast of air-con and the doorbell jingle of civilisation. Shelves " +
-      "of toasties, Mama noodles, and phone accessories. There's a power outlet by the window.",
+      "of toasties, Mama noodles, and {{phone}} accessories. There's a power outlet by the window.",
     outlet: true,
     shop: { charger: CHARGER_PRICE },
     exits: { n: "jomtien_beach_rd" },
@@ -1119,7 +1119,7 @@ const NPCS = {
         "door is closed?\" She doesn't wait. \"Because the moment you can see inside " +
         "for free, there's no reason to come in. The question has to stay open.\" She " +
         "tilts her head toward the Soi 6 direction. \"Down the road they put everything " +
-        "on the street. All of it. For anyone walking past with a phone.\" A small " +
+        "on the street. All of it. For anyone walking past with a {{phone}}.\" A small " +
         "measured pause. \"They wonder why nobody's buying.\"" },
       { topic: "career", text: "She tilts her head very slightly. \"Career.\" The word " +
         "lands like she's reading it off a slide deck. \"I had one. Bangkok, six days " +
@@ -1506,7 +1506,7 @@ const NPCS = {
         "still talking. It's the ones who stopped bragging.\" The Budweiser goes " +
         "down on the bar with no particular force. \"Man spends two years telling " +
         "everybody he found himself a good woman, mocking the butterflies, the " +
-        "bar-hoppers — you think that man can pick up the phone when it all goes " +
+        "bar-hoppers — you think that man can pick up the {{phone}} when it all goes " +
         "sideways and say he needs help?\" He doesn't look at you. \"The pride is " +
         "the part that kills 'em, bud. Not the girl, not the visa, not the money. " +
         "The pride.\" He picks the Budweiser back up. \"So you call anyway. You " +
@@ -1517,13 +1517,13 @@ const NPCS = {
   phil: {
     name: "Phil", th: "ฟิล", emoji: "📱",
     room: "stinky_bar",
-    desc: "Mid-fifties, a fleece vest in the Pattaya heat, phone face-down on the bar " +
+    desc: "Mid-fifties, a fleece vest in the Pattaya heat, {{phone}} face-down on the bar " +
       "in the specific way of a man waiting for a message he wants and dreads in equal " +
       "measure. Bristol accent. He has the look of someone who has been coming here " +
       "for long enough that 'holiday romance' stopped fitting years ago.",
     dialogue: [
       { req: ["toldPhilTruth"],
-        text: "Phil is still on the stool, but somewhere else entirely. The phone is " +
+        text: "Phil is still on the stool, but somewhere else entirely. The {{phone}} is " +
         "in his pocket now, face-in. He lifts two fingers off the bar in acknowledgment " +
         "— that's all there is tonight.",
         short: "Phil lifts two fingers off the bar. That's all there is tonight." },
@@ -1574,7 +1574,7 @@ const NPCS = {
       "it on her own terms.",
     dialogue: [
       { req: ["toldPhilTruth"],
-        text: "She is at the fabric stall, but the buying has stopped. The phone in " +
+        text: "She is at the fabric stall, but the buying has stopped. The {{phone}} in " +
         "her hand is dark. She looks at you for a long moment — word moves fast on " +
         "this soi, and she has already done the arithmetic on who told him. " +
         "\"Twelve years,\" she says, to nobody in particular. It is the exact thing " +
@@ -2024,7 +2024,7 @@ const PATRONS = {
         short: "\"See a bloke looking proper wrong, you tell me or Bert. We keep an eye.\"" },
       { topic: "rounds", text: "\"I do a lap most nights — few bars, see who's " +
         "about, who's not.\" He says it like a man describing a hobby, but the " +
-        "phone list is right there. \"Who's NOT is the important bit. Fella drops " +
+        "{{phone}} list is right there. \"Who's NOT is the important bit. Fella drops " +
         "off the radar a week, that's when you knock on his door. Wish I'd " +
         "learned that earlier than I did.\"",
         short: "\"A lap most nights. Who's NOT about is the important bit.\"" },
@@ -2426,7 +2426,7 @@ const PATRONS = {
         "already reaching for his phone. \"You hold any crypto? Doesn't matter. " +
         "Sit down. Two minutes.\"",
         short: "\"Danny. I don't sell cars anymore, bro. I sell the future. Two minutes.\"" },
-      { topic: "crypto", text: "The phone is out and a chart is going up on it — " +
+      { topic: "crypto", text: "The {{phone}} is out and a chart is going up on it — " +
         "cropped, you notice, at a flattering moment. \"Ground floor, bro: " +
         "SOI-Coin. Tokenized nightlife. Every lady drink on the blockchain, " +
         "loyalty points that MOON.\" The pitch has the polished cadence of the " +
@@ -2480,7 +2480,7 @@ const PATRONS = {
     home: "rock_factory", hops: false,
     desc: "Thirty-two, Australian, shoulders that still remember lane ropes, in " +
       "gym wear that is clearly working clothes rather than costume. She has a " +
-      "regular table by the stage with sightlines on the drummer, a phone on a " +
+      "regular table by the stage with sightlines on the drummer, a {{phone}} on a " +
       "small tripod she mostly ignores, and the settled ease of someone who is " +
       "exactly where she decided to be.",
     dialogue: [
@@ -2679,7 +2679,7 @@ const _H_LOOK = [
   "Tiny and loud, all elbows and energy",
   "Sleepy-eyed and entirely unbothered",
   "New enough to still look a little nervous",
-  "Gold everywhere — earrings, chain, phone case",
+  "Gold everywhere — earrings, chain, {{phone}} case",
   "A crooked, disarming grin",
   "Bored until you try a word of Thai, then radiant",
   "Older than the go-go average, and unhurried about it",
@@ -2695,7 +2695,7 @@ const _H_FAMILY = [
   "My son in school; my mama too old for the rice field now",
   "Just me and my little brother — I put him in university, very expensive",
   "My daughter stay {from} with my mama; I see her Songkran only",
-  "My mama, my papa, two nephew — everybody eat from my phone",
+  "My mama, my papa, two nephew — everybody eat from my {{phone}}",
   "My mama house not finish — I send money every month for the roof",
   "I have one baby, no papa for him — so I am papa and mama both",
 ];
@@ -2713,7 +2713,7 @@ const _H_PLAN = [
 ];
 const _H_EMOJI = ["🌸", "🌺", "💐", "🌷", "🌼", "🌻", "💫", "✨", "🌙", "💕", "🦋", "🍒"];
 const _H_PHONE = [
-  "The phone never leaves her hand.",
+  "The {{phone}} never leaves her hand.",
   "Google Translate is open before you finish the sentence.",
   "She types more than she talks — and laughs at both.",
 ];
@@ -2748,12 +2748,12 @@ function _buildHostess(name, th, room) {
     '"English small small, heart big big."',
   ];
   const FAMILY = [
-    `"${family}. Every month I send money — school, rice, everything. This why I working, not for me." She turns the phone to you: a photo, everyone squinting in the sun.`,
+    `"${family}. Every month I send money — school, rice, everything. This why I working, not for me." She turns the {{phone}} to you: a photo, everyone squinting in the sun.`,
     `"You ask my family? Aiyo." She goes soft. "${family}. I not see them long time. Money go home, I stay here. Same same every girl."`,
     `"${family}." A proud, tired little smile, and a photo held up. "I work, they eat. Simple. Farang always think complicated — no complicated."`,
   ];
   const PLAN = [
-    `You ask her something bigger and she holds up one finger — "wait wait" — thumbs it into the phone and turns the screen to you: "I WOULD LIKE TO ${plan.toUpperCase()}." She beams. "Like that na. You understand?"`,
+    `You ask her something bigger and she holds up one finger — "wait wait" — thumbs it into the {{phone}} and turns the screen to you: "I WOULD LIKE TO ${plan.toUpperCase()}." She beams. "Like that na. You understand?"`,
     `"Plan?" She types into Google Translate and reads the robot voice out, carefully: "My dream is to ${plan}." A shrug, a grin. "Phone say it better than me."`,
     `"Big word! Wait wait." Tap tap tap. She shows you the translation: "SOMEDAY I ${plan.toUpperCase()}, IF BUDDHA HELP." She laughs. "Buddha and good customer — same job."`,
   ];
@@ -2842,7 +2842,7 @@ const _C_LOOK = [
   "In a cage of fairy lights, counting notes faster than the eye follows",
   "Black polo, a lanyard of too many keys, a calculator she never needs",
   "Neat bun, neat ledger, an engagement ring worn on a chain",
-  "Headset on one ear, phone in one hand, the till in perfect order",
+  "Headset on one ear, {{phone}} in one hand, the till in perfect order",
   "Quiet and quick, the still point the whole loud room pays into",
 ];
 
