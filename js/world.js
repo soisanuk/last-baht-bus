@@ -1745,7 +1745,10 @@ const MOTOSAI_DESTS = {
 // `interactive: true` → the intro sets G.pendingEnc and the player's NEXT
 // command is their snap reaction; otherwise the encounter resolves instantly.
 
-const TONIC_PRICE = 99;
+const TONIC_PRICE = 99;      // the friendly ฿99 street bottle — the hook, not the sting
+const TONIC_FLEECE = 6000;   // the side-soi shop's full high-pressure fleece
+const TONIC_SHAKEDOWN = 3000;// what it costs to bully your way back out of the shop
+const TONIC_POLICE_CUT = 0.35; // the police "negotiation fee" kept out of any recovery
 
 const ENCOUNTERS = {
   katoey: {
@@ -1845,14 +1848,23 @@ const ENCOUNTERS = {
   tonic: {
     // A Beach Road tout only — never inside a bar, and not up on Walking Street
     // or over in Jomtien. Same beachfront stretch the other roaming touts work.
+    // Canon: a Pakistani hair-tonic tout, relentlessly friendly, whose ฿99
+    // street bottle is only bait — the money is made by walking you into a
+    // side-soi shop full of his cousins where it turns into high-pressure
+    // sales and, if you resist, threats. Fleeced tourists file police reports
+    // that mostly go nowhere; when pushed, the police "settle" for a cut. The
+    // shop scene + police-report recovery live in _ENC.tonic / _doReport.
     rooms: ["beach_rd_s", "beach_rd_c", "beach_rd_n", "promenade"],
     interactive: true,
-    intro: "A dapper man with a briefcase falls into step beside you. “My friend! " +
-      "You have very lucky face. But—” he winces, eyes flicking to your hairline " +
-      "“—I am seeing one problem.” The briefcase opens: rows of little brown " +
-      "bottles. “Himalayan herbal tonic. Hair grow back one hundred per cent, " +
-      "guarantee. For you, special: ninety-nine baht only.”",
-    hint: "(He is not going to stop walking beside you until you answer.)",
+    intro: "A dapper man with a briefcase falls into step beside you, smiling like " +
+      "you're the friend he's been looking for all night. “My friend! Where you " +
+      "from? You have very lucky face — but—” he winces, eyes flicking to your " +
+      "hairline “—I am seeing one small problem.” The briefcase clicks open: rows " +
+      "of little brown bottles. “Himalayan herbal tonic. Hair grow back one " +
+      "hundred per cent, guarantee. For you, special, ninety-nine baht only. Or " +
+      "better — come my shop, just here in the soi, my cousin show you the full " +
+      "treatment, VIP price. Two minute, my friend, two minute!”",
+    hint: "(BUY the ฿99 bottle, follow him to the SHOP, or just tell him NO.)",
   },
 };
 
