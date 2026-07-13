@@ -2818,18 +2818,41 @@ test("David only drinks on his days off: Mondays and Fridays", () => {
 // addressed from the wrong bar is placed, not denied — while an unmet NPC and the
 // anonymous staff stay a plain deny (no spoiling a location never shown).
 test("addressing a known NPC who works elsewhere points you to her bar", () => {
-  state().room = "silk_rose"; // Candy is not here (she runs Candy Bar)
+  state().day = 2; // even night → Candy is at Candy Bar
+  state().room = "silk_rose"; // Candy is not here
   out = [];
   run("talk to candy");
   assert.match(lastOut(), /Nobody by that name/, "unmet: a plain deny, no location leaked");
   state().known.candy = true; // now you've met her
   out = [];
   run("talk to candy");
-  assert.match(lastOut(), /Candy isn't at this bar — try Candy Bar/, "met: placed at her bar");
+  assert.match(lastOut(), /Candy isn't at this bar tonight — try Candy Bar\b/, "met: placed at tonight's bar");
   // anonymous staff are nobody, not 'elsewhere'
   out = [];
   run("talk to security");
   assert.match(lastOut(), /Nobody by that name/);
+});
+
+test("Candy alternates nights between her two bars", () => {
+  state().known.candy = true;
+  // even nights at Candy Bar, odd nights at Candy Bar 2
+  state().day = 2; assert.equal(_npcRoom("candy"), "candy_bar");
+  state().day = 3; assert.equal(_npcRoom("candy"), "candy_bar_2");
+  state().day = 4; assert.equal(_npcRoom("candy"), "candy_bar");
+
+  // present only at tonight's bar; the other bar notes where she is
+  state().day = 3; // Candy Bar 2 night
+  state().room = "candy_bar";
+  assert.ok(!_npcsHere().includes("candy"), "not at the original bar tonight");
+  out = []; _describeRoom(true);
+  assert.match(lastOut(), /Candy is working Candy Bar 2 tonight/, "the empty bar says where she is");
+  out = []; run("talk to candy");
+  assert.match(lastOut(), /try Candy Bar 2/, "and asking points to tonight's bar");
+
+  state().room = "candy_bar_2";
+  assert.ok(_npcsHere().includes("candy"), "she IS at Candy Bar 2 tonight");
+  out = []; run("talk to candy");
+  assert.doesNotMatch(lastOut(), /isn't at this bar/, "so talking reaches her, not the elsewhere line");
 });
 
 test("ask <who> <topic> works without the 'about' connective (the tapped shape)", () => {

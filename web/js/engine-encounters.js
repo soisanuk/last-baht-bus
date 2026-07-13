@@ -343,9 +343,10 @@ const _ENC = {
     const exits = Object.values(_room().exits);
     const barRoom = exits.find(to => ROOMS[to].barType && G.soc.mamaTreat[to]);
     if (barRoom && _rand() < 0.7) {
-      const mama = Object.entries(NPCS).find(([nid, n]) =>
-        NPC_ROLES[nid] === "mamasan" && n.room === barRoom);
-      _say(`A door bangs. ${mama ? NPCS[mama[0]].name : "The mamasan"} crosses the ` +
+      const mama = Object.keys(NPCS).find(nid =>
+        NPC_ROLES[nid] === "mamasan" && _npcRoom(nid) === barRoom);
+      const mamaName = mama ? NPCS[mama].name : "The mamasan";
+      _say(`A door bangs. ${mamaName} crosses the ` +
         "soi at ramming speed, already talking — fast, low Thai, one hand on the " +
         "officer's arm like an aunt collecting a nephew. Whatever is said ends " +
         "with a laugh, a wai in your direction, and the boy in brown evaporating " +
