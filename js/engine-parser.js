@@ -95,9 +95,10 @@ function _arriveAt(to) {
   G.room = to;
   _describeRoom(true);
   _lightNotice(); // walking in with the torch burning gets you clocked
-  // the anti-Simon machine: when the book gets heavy, the town catches you
+  // the anti-Simon machine: when the book gets heavy, the town catches you.
+  // Candy settles it at whichever of her bars she's working tonight.
   if (G.hotelDebt >= 800 && !_flag("tabSettled") &&
-      (G.room === "stinky_bar" || G.room === "candy_bar")) {
+      (G.room === "stinky_bar" || G.room === _npcRoom("candy"))) {
     _setFlag("tabSettled");
     const owed = G.hotelDebt;
     G.hotelDebt = 0;
@@ -119,7 +120,7 @@ function _arriveAt(to) {
   if (_quizHere()) { _startQuiz(); return; }
   // a standing invitation, honoured: she said come, and you came
   const inv = G.phone.invite;
-  if (inv && inv.day === G.day && NPCS[inv.id].room === G.room) {
+  if (inv && inv.day === G.day && _npcRoom(inv.id) === G.room) {
     G.phone.invite = null;
     G.soc.drinks[inv.id] = (G.soc.drinks[inv.id] || 0) + 1;
     _say(`${NPCS[inv.id].name} spots you from across the room and lights up like ` +
@@ -662,7 +663,7 @@ function _doBuy(arg) {
         "The whole bar makes the wing motion. This is your reputation now.", "dim");
     }
     // the mamasan's blessing: her bar warms to you, and the house may pour one back
-    if (NPC_ROLES[id] === "mamasan" && NPCS[id].room === G.room && !G.soc.mamaTreat[G.room]) {
+    if (NPC_ROLES[id] === "mamasan" && _npcRoom(id) === G.room && !G.soc.mamaTreat[G.room]) {
       G.soc.mamaTreat[G.room] = true;
       _say(`${NPCS[id].name} raises the glass a centimetre in your direction — the ` +
         "royal assent. The temperature of the whole bar changes; from here on, " +

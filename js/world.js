@@ -396,9 +396,9 @@ const ROOMS = {
     bar: "Candy Bar", barType: "beer",
     outlet: true,
     desc: "A rose-pink corner bar, spotless, with a bell over the till and a wall of " +
-      "photos going back decades — same bar, same smile, different haircuts. Candy runs " +
-      "the room like a harbourmaster. There's a power outlet under the counter, " +
-      "for customers she likes.",
+      "photos going back decades — same bar, same smile, different haircuts. Run like a " +
+      "harbourmaster's deck, nothing out of place. There's a power outlet under the counter, " +
+      "for customers the boss likes.",
     exits: { out: "buakhao_market" },
   },
   lucky_tiger: {
@@ -940,6 +940,10 @@ const NPCS = {
   candy: {
     name: "Candy", th: "แคนดี้", emoji: "🌹",
     room: "candy_bar",
+    // She owns both Candy Bars and works them on alternate nights (even days at
+    // the original, odd days at Candy Bar 2). _npcRoom resolves tonight's room;
+    // `room` above stays as her home/default for anything that wants a fixed peg.
+    bars: ["candy_bar", "candy_bar_2"],
     desc: "The mamasan of Candy Bar — sharp as a razor, warm as a Chang on a hot night, " +
       "and on the soi longer than most expats have had passports. She clocked you the " +
       "second you walked in.",

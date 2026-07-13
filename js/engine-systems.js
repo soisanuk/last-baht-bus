@@ -271,7 +271,7 @@ function _doContact(arg) {
   if (!NPC_ROLES[id]) { _say(`${NPCS[id].name} keeps that number for family and better customers.`); return; }
   if (G.phone.contacts[id]) { _say(`You already have ${NPCS[id].name}'s number. She knows you know.`); return; }
   if (_phoneDead()) return;
-  if (NPCS[id].room !== G.room) { _say("Numbers get swapped in her bar, over a drink — not on the street."); return; }
+  if (_npcRoom(id) !== G.room) { _say("Numbers get swapped in her bar, over a drink — not on the street."); return; }
   if (_favor(id) < 2) {
     _say(`${NPCS[id].name} waggles her phone with a smile that means not yet, big ` +
       "spender. A drink or two usually changes the arithmetic.");

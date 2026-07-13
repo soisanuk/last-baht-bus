@@ -244,8 +244,19 @@ function _isDarkHere() {
   return !!_room().dark && !(G.lightOn && G.battery > 0);
 }
 
+// Where an NPC is tonight. Most keep a fixed `room`; an owner of several bars
+// carries a `bars` list and works them on alternate nights (pure function of the
+// day, day-stable — unlike the hourly patron hop — so the location a player is
+// pointed to stays true until dawn). This is the single source of NPC presence;
+// read it, never `NPCS[id].room`, anywhere presence matters.
+function _npcRoom(id) {
+  const n = NPCS[id];
+  if (n.bars && n.bars.length) return n.bars[G.day % n.bars.length];
+  return n.room;
+}
+
 function _npcsHere() {
-  return Object.entries(NPCS).filter(([, n]) => n.room === G.room).map(([id]) => id);
+  return Object.keys(NPCS).filter(id => _npcRoom(id) === G.room);
 }
 
 // ── Hotels: where the key card works ───────────────────────────────────────
@@ -442,10 +453,16 @@ function _elsewhereLine(word) {
     return id === w || nm.toLowerCase() === w || nm.toLowerCase().split(" ").pop() === w;
   });
   if (nid) {
-    const room = ROOMS[NPCS[nid].room];
-    const where = room && (room.bar || room.name);
-    return where ? `${NPCS[nid].name} isn't at this bar — try ${where}.`
-                 : `${NPCS[nid].name} isn't here right now.`;
+    const cur = _npcRoom(nid);
+    // Point the player to her only when she's at one of HER OWN bars (a
+    // multi-bar owner alternating nights). If she's somewhere else — an invited
+    // visit elsewhere, once that exists — don't reveal it; just say she's out.
+    const own = NPCS[nid].bars ? NPCS[nid].bars.includes(cur) : true;
+    const room = ROOMS[cur];
+    if (own && room && (room.bar || room.name)) {
+      return `${NPCS[nid].name} isn't at this bar tonight — try ${room.bar || room.name}.`;
+    }
+    return `${NPCS[nid].name} isn't here right now.`;
   }
   return null;
 }
@@ -535,6 +552,15 @@ function _describeRoom(full) {
   if (items.length) _say("You can see: " + items.map(id => ITEMS[id].name).join(", ") + ".");
   const npcs = _npcsHere();
   if (npcs.length) _say("Here: " + npcs.map(id => `${NPCS[id].emoji} ${NPCS[id].name}`).join(", ") + ".");
+  // A bar owner who alternates nights between her rooms: when this is one of her
+  // bars but she's working the other one tonight, say so — otherwise the room
+  // reads as hers with no sign of her.
+  for (const [id, n] of Object.entries(NPCS)) {
+    if (n.bars && n.bars.includes(G.room) && _npcRoom(id) !== G.room) {
+      const other = ROOMS[_npcRoom(id)];
+      _say(`${n.name} is working ${other.bar || other.name} tonight; the floor staff keep this one running.`, "dim");
+    }
+  }
   const pats = _patronsHere();
   if (pats.length) {
     _say("At the rail: " + pats.map(id =>
