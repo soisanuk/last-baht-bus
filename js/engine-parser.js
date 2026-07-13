@@ -352,17 +352,11 @@ function _doTalk(arg, topic) {
       _doPatron();
       return;
     }
-    // A regular who exists but has drifted to another bar — hoppers move each
-    // hour, so a name from a moment ago may already be gone. Say so plainly
-    // instead of a flat "nobody here", which reads as a bug mid-conversation.
-    const w = arg.toLowerCase();
-    const away = Object.keys(PATRONS).find(id =>
-      id === w || PATRONS[id].name.toLowerCase() === w);
-    if (away) {
-      _say(`${PATRONS[away].name} isn't at this bar right now — the regulars drift ` +
-        "between bars through the night, and not every one of them comes out every evening.");
-      return;
-    }
+    // A named character who exists but is elsewhere: a moved regular, or an NPC
+    // at another bar. Place them (or say the regulars move about) instead of a
+    // flat "nobody here", which reads as a bug mid-conversation. See _elsewhereLine.
+    const away = _elsewhereLine(arg);
+    if (away) { _say(away); return; }
     _say("Nobody by that name here.");
     return;
   }
