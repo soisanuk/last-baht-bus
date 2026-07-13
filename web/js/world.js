@@ -2647,6 +2647,161 @@ const NPC_ROLES = {
   candy: "mamasan", oy: "mamasan", daeng: "mamasan", mem: "mamasan", wan: "mamasan",
 };
 
+// ── Generic (filler) hostesses ──────────────────────────────────────────────
+// The rank and file. Canon: most girls on the soi are from Isan, in Pattaya to
+// feed a family back home, with broken English ("Tinglish") — and the phone /
+// Google Translate comes out the moment talk gets past small. Rather than hand-
+// write sixty near-identical entries, each is a compact [name, th, room] tuple
+// expanded by _buildHostess with flavour hash-picked from the id, so a bar reads
+// populated, each girl is stable (same id → same backstory), and the store stays
+// tiny. The named, story-bearing hostesses stay in NPCS above; these are added
+// to it below. Keep authored, plot-relevant dialogue OUT of here.
+const _H_FROM = ["Udon Thani", "Khon Kaen", "Roi Et", "Sisaket", "Buriram", "Ubon",
+  "Surin", "Nong Khai", "Kalasin", "Yasothon", "Mukdahan", "Nakhon Phanom",
+  "Chaiyaphum", "Loei", "Maha Sarakham", "Sakon Nakhon", "Amnat Charoen", "Nong Bua Lamphu"];
+const _H_LOOK = [
+  "Round-faced and quick to laugh",
+  "Tall and quiet, watching the door",
+  "Tiny and loud, all elbows and energy",
+  "Sleepy-eyed and entirely unbothered",
+  "New enough to still look a little nervous",
+  "Gold everywhere — earrings, chain, phone case",
+  "A crooked, disarming grin",
+  "Bored until you try a word of Thai, then radiant",
+  "Older than the go-go average, and unhurried about it",
+  "Baby-faced, chewing gum, thumbing her phone under the bar",
+  "Long hair, longer eyelashes, a practised pout",
+  "Small and sharp, and misses nothing",
+];
+const _H_FAMILY = [
+  "I have two baby, they stay with my mama, {from}",
+  "My papa sick — my mama look after him, so only me can send money",
+  "One boy, six year old, he stay with my grandmother in {from}",
+  "Three little sister, all still in school — I pay everything for them",
+  "My son in school; my mama too old for the rice field now",
+  "Just me and my little brother — I put him in university, very expensive",
+  "My daughter stay {from} with my mama; I see her Songkran only",
+  "My mama, my papa, two nephew — everybody eat from my phone",
+  "My mama house not finish — I send money every month for the roof",
+  "I have one baby, no papa for him — so I am papa and mama both",
+];
+const _H_PLAN = [
+  "open a small clothes shop",
+  "build a house for my mama",
+  "buy a pickup truck for the farm",
+  "send my brother to university",
+  "open a nail salon back home",
+  "have a som tam stall in my village",
+  "study to be a nurse",
+  "open a small coffee shop",
+  "buy some land for rice",
+  "learn hair and make-up and open a salon",
+];
+const _H_EMOJI = ["🌸", "🌺", "💐", "🌷", "🌼", "🌻", "💫", "✨", "🌙", "💕", "🦋", "🍒"];
+const _H_PHONE = [
+  "The phone never leaves her hand.",
+  "Google Translate is open before you finish the sentence.",
+  "She types more than she talks — and laughs at both.",
+];
+
+function _hh(s, salt) {
+  let h = salt >>> 0;
+  for (const c of s) h = (Math.imul(h, 31) + c.charCodeAt(0)) >>> 0;
+  return h;
+}
+
+function _buildHostess(name, th, room) {
+  const id = name.toLowerCase();
+  const bar = ROOMS[room] ? (ROOMS[room].bar || ROOMS[room].name) : "the bar";
+  const idx = (arr, salt) => arr[_hh(id, salt) % arr.length];
+  const from = idx(_H_FROM, 3);
+  const look = idx(_H_LOOK, 5);
+  const family = idx(_H_FAMILY, 7).replace(/\{from\}/g, from);
+  const plan = idx(_H_PLAN, 11);
+  const emoji = idx(_H_EMOJI, 13);
+  const phone = idx(_H_PHONE, 19);
+
+  const GREET = [
+    '"Hello hello! You sit na. I no speak English good — talk slow for me, okay?"',
+    '"Welcome ka! You handsome — I say to everybody, but you MORE." She laughs at her own line.',
+    '"Oh! Farang come my table. Lucky me na." She pats the stool. "You buy me cola? Only cola, promise... maybe."',
+    '"Sawatdee ka~ You want talk? I try. My English small small, my heart big big."',
+    '"You sit sit sit! No shy. I not dangerous — only my mama dangerous."',
+  ];
+  const GREET_SHORT = [
+    '"Sit sit! Talk slow for me na."',
+    '"You buy me cola? Only cola... maybe."',
+    '"English small small, heart big big."',
+  ];
+  const FAMILY = [
+    `"${family}. Every month I send money — school, rice, everything. This why I working, not for me." She turns the phone to you: a photo, everyone squinting in the sun.`,
+    `"You ask my family? Aiyo." She goes soft. "${family}. I not see them long time. Money go home, I stay here. Same same every girl."`,
+    `"${family}." A proud, tired little smile, and a photo held up. "I work, they eat. Simple. Farang always think complicated — no complicated."`,
+  ];
+  const PLAN = [
+    `You ask her something bigger and she holds up one finger — "wait wait" — thumbs it into the phone and turns the screen to you: "I WOULD LIKE TO ${plan.toUpperCase()}." She beams. "Like that na. You understand?"`,
+    `"Plan?" She types into Google Translate and reads the robot voice out, carefully: "My dream is to ${plan}." A shrug, a grin. "Phone say it better than me."`,
+    `"Big word! Wait wait." Tap tap tap. She shows you the translation: "SOMEDAY I ${plan.toUpperCase()}, IF BUDDHA HELP." She laughs. "Buddha and good customer — same job."`,
+  ];
+  const HOME = [
+    `"Home? ${from}. Isan! You know Isan? Very hot, very poor, very happy." She grins. "Rice, buffalo, my mama, som tam every day. I miss, but no money there. Pattaya have money, no buffalo."`,
+    `"I from ${from}, Isan side. Small village, everybody know everybody. Here nobody know me — sometime good, sometime lonely na." A little shrug.`,
+    `"${from}. Long bus, ten hour, aircon too cold." She mimes shivering. "I go home Songkran, Buddha day, when mama call. Rest of time — here, working."`,
+  ];
+  const WALLET = [
+    '"Wallet? Aiyo, not here — nobody steal here, bad luck for the bar. You go Buakhao, ask Candy. Candy know everything, everybody."',
+    '"You lose wallet?? Poor you." She pats your arm. "I no see. Go Candy Bar, talk to Candy — she the boss of boss. She fix."',
+    '"No no, not my bar. Try Candy, Soi Buakhao side. Everybody problem go to Candy, my mama say."',
+  ];
+
+  return {
+    name, th, emoji, room,
+    desc: `${look} — one of the ${bar} girls, from ${from}. ${phone}`,
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", text: idx(GREET, 23), short: idx(GREET_SHORT, 29) },
+      { topic: "family", text: idx(FAMILY, 31) },
+      { topic: "home", text: idx(HOME, 43) },
+      { topic: "plan", text: idx(PLAN, 37) },
+      { topic: "wallet", text: idx(WALLET, 41) },
+    ],
+  };
+}
+
+// [name, Thai nickname, room]. Distribution: go-gos busiest, beer/Soi 6/club
+// modest, expat & live-music bars light — Queen Vic is a pub, so none.
+const _FILLER_HOSTESSES = [
+  ["Dao","ดาว","tequila_queen"], ["Mook","มุก","tequila_queen"], ["Ice","ไอซ์","tequila_queen"], ["Praew","แพรว","tequila_queen"],
+  ["Mint","มิ้น","neon_paradise"], ["Fah","ฟ้า","neon_paradise"], ["View","วิว","neon_paradise"], ["Sara","ซาร่า","neon_paradise"],
+  ["Bow","โบว์","club_mirage"], ["Nam","น้ำ","club_mirage"], ["Yui","ยุ้ย","club_mirage"],
+  ["Som","ส้ม","crystal_palace"], ["Cherry","เชอรี่","crystal_palace"], ["Beam","บีม","crystal_palace"], ["Boom","บูม","crystal_palace"],
+  ["Toey","เตย","rainbow_girls"], ["Pang","แป้ง","rainbow_girls"], ["Ploen","เพลิน","rainbow_girls"], ["Sai","ทราย","rainbow_girls"],
+  ["Fang","แฟง","kinky"], ["Gib","กิ๊บ","kinky"], ["Nice","ไนซ์","kinky"],
+  ["Tukta","ตุ๊กตา","slutty"], ["Jum","จุ๋ม","slutty"], ["Pop","ป๊อป","slutty"],
+  ["Namwan","น้ำหวาน","las_vegas"], ["Orn","อร","las_vegas"], ["Gigi","กีกี้","las_vegas"],
+  ["Kaew","แก้ว","paradise_nights"], ["Meaw","เหมียว","paradise_nights"],
+  ["Nan","แนน","candy_bar"], ["Bua","บัว","candy_bar"],
+  ["Fern","เฟิร์น","candy_bar_2"], ["Mai","ใหม่","candy_bar_2"],
+  ["Ann","แอน","midnight_sun"], ["Nut","นัท","midnight_sun"],
+  ["Rung","รุ้ง","lucky_tiger"], ["Oat","โอ๊ต","lucky_tiger"],
+  ["Ton","ต้น","silk_rose"], ["Nid","นิด","silk_rose"], ["Wa","หว้า","silk_rose"],
+  ["Noon","นุ่น","jasmine_garden"], ["Prae","แพร","jasmine_garden"],
+  ["Tan","ตาล","gold_rush"], ["Tik","ติ๊ก","gold_rush"],
+  ["Pui","ปุ้ย","starlight_bar"], ["Mild","มายด์","starlight_bar"],
+  ["Namtan","น้ำตาล","khao_talo_bar"], ["Ying","หญิง","khao_talo_bar"],
+  ["Kai","ไก่","golden_dragon"], ["Nook","นุ้ก","golden_dragon"], ["Dew","ดิว","golden_dragon"],
+  ["Puu","ปู","pink_lotus"], ["Belle","เบล","pink_lotus"],
+  ["Kat","แคท","sunset_dreams"], ["May","เมย์","sunset_dreams"], ["Dear","เดียร์","sunset_dreams"],
+  ["Ing","อิง","blue_dog"],
+  ["Bam","บาม","rock_factory"],
+  ["Chompoo","ชมพู่","stinky_bar"],
+];
+
+for (const [name, th, room] of _FILLER_HOSTESSES) {
+  const id = name.toLowerCase();
+  NPCS[id] = _buildHostess(name, th, room);
+  NPC_ROLES[id] = "hostess";
+}
+
 // The girls every bar knows by name — their barfine never gets waived,
 // whatever the hour. Everyone else's quietly comes off the book after
 // midnight (the fee walks out with the girl soon anyway).

@@ -1107,15 +1107,15 @@ test("Aek the tom cashier holds the till at Midnight Sun and caps contact", () =
 });
 
 test("the ceiling game: aliases route to it, favor gates the ammunition", () => {
-  state().room = "neon_paradise"; // Noi, a hostess
+  state().room = "neon_paradise"; // Noi, plus filler girls — name the target
   // cold: she won't hand over a cover
-  run("throw cover");
+  run("throw cover at noi");
   assert.match(lastOut(), /Buy drink first|No favor bought/i);
   // warm her up, then all three aliases reach the game. Reset room+heat each
   // time so a prior throw landing on the mamasan (heat → kickout, which moves
   // you to the street) can't make a later alias look unrouted.
   state().soc.drinks.noi = 3;
-  for (const cmd of ["throw cover", "throw nipple cover", "throw pastie"]) {
+  for (const cmd of ["throw cover at noi", "throw nipple cover at noi", "throw pastie at noi"]) {
     state().room = "neon_paradise";
     state().soc.heat = {};
     out = [];
@@ -1128,7 +1128,7 @@ test("throw with no cover keeps the old flavor refusal; none-here is a no-op jok
   state().room = "neon_paradise";
   run("throw bottle");
   assert.doesNotMatch(lastOut(), /ceiling/i); // falls through to misc-verb flavor
-  state().room = "midnight_sun"; // only Aek the cashier, no braless dancer
+  state().room = "queen_vic"; // a pub — no hostesses, no braless dancer
   run("throw cover");
   assert.match(lastOut(), /short one dancer|needs a braless dancer/i);
 });
