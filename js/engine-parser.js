@@ -1973,7 +1973,7 @@ function doCommand(input) {
       // THROW COVER / THROW NIPPLE COVER / THROW PASTIE [AT <name>] — the ceiling
       // game; anything else keeps the old flavor refusal.
       if (/\b(cover|pastie|pasty|nipple|sticker)s?\b/.test(arg))
-        _doThrowCover(arg.replace(/\b(nipple|cover|pastie|pasty|sticker)s?\b/g, "").trim());
+        _doThrowCover(arg.replace(/\b(nipple|cover|pastie|pasty|sticker)s?\b/g, "").replace(/^\s*at\s+/, "").trim());
       else _say(_MISC_VERBS["throw"]);
       break;
     case "jump": case "climb": case "push": case "pull":
