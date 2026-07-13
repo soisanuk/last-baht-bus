@@ -367,7 +367,7 @@ CHARS = {
     "bow":      lady(skin=THAI, hair="ponytail", hc=GRBLK, shirt=C(0xd02040), bg=BG_GOGO, mouth="smile", acc=["earrings", "flower", "chain"], earc=YELN),
     "nam":      lady(skin=THAI, hair="sleek", hc=BLACK, shirt=C(0x40c060), bg=BG_GOGO, mouth="smile", acc=["earrings", "nosering", "chain"], earc=YELN),
     "yui":      lady(skin=THAI, hair="bob", hc=BLACK, shirt=C(0xd02040), bg=BG_GOGO, mouth="smile", acc=["earrings"], earc=CYAN, blush=True),
-    "som":      lady(skin=THAI, hair="sleek", hc=BLACK, shirt=C(0x2e7d6e), bg=BG_GOGO, mouth="smile", acc=["earrings"], earc=YELN, blush=True),
+    "aof":      lady(skin=THAI, hair="sleek", hc=BLACK, shirt=C(0x2e7d6e), bg=BG_GOGO, mouth="smile", acc=["earrings"], earc=YELN, blush=True),
     "cherry":   lady(skin=THAI, hair="bob", hc=DKBRN, shirt=C(0xb090e0), bg=BG_GOGO, mouth="smile", acc=["earrings"], earc=GOLD),
     "beam":     lady(skin=THAI, hair="long", hc=DKBRN, shirt=C(0x2e7d6e), bg=BG_GOGO, mouth="neutral", acc=["earrings", "bracelets"], earc=GOLD),
     "boom":     lady(skin=THAI, hair="pigtails", hc=GRBLK, shirt=C(0x5a6ad0), bg=BG_GOGO, mouth="smile", acc=["earrings", "chain"], earc=PINKN),

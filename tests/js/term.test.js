@@ -91,6 +91,34 @@ test("no NPC/patron/room prose taps 'phone' through to your inventory item", () 
   assert.deepEqual(bad, [], "wrap the offending 'phone' in {{…}} or a possessive");
 });
 
+test("no filler NPC's generated prose taps a character it doesn't mean to", () => {
+  // Name decoration is case-SENSITIVE and named characters glow everywhere, so a
+  // filler girl called Ice/Nice/Bua/… collides with the same letters used as an
+  // ordinary word or a place name: "Nice bloke", "Ice settling", "Sang Som",
+  // "from Nong Bua Lamphu". The generated filler cast (hostesses/mamas/cashiers,
+  // tagged `filler:true`) is background — its desc + dialogue never name another
+  // character EXCEPT the deliberate "ask Candy" wallet pointer. So any other
+  // character tap in filler prose is a coincidental collision that must be
+  // wrapped in {{…}} at the pool/dialogue source (or the name changed, as
+  // Som → Aof was, "Sang Som"/"som tam" being unavoidable). This catches the
+  // whole class — ordinary words, place names, and story-name overlaps — with
+  // no hand-maintained wordlist. `_H_FROM` provinces reach here via `${from}`.
+  const allow = new Set(["Candy"]);
+  const bad = [];
+  const scan = (label, text) => {
+    if (!text) return;
+    for (const m of _term.decorate(text).matchAll(/data-k="(?:npc|patron)" data-v="([^"]+)"/g)) {
+      if (!allow.has(m[1])) bad.push(`${label}: "${m[1]}"`);
+    }
+  };
+  for (const [id, n] of Object.entries(NPCS)) {
+    if (!n.filler) continue;
+    scan(`NPC ${id} desc`, n.desc);
+    (n.dialogue || []).forEach((d, i) => { scan(`NPC ${id} #${i}`, d.text); scan(`NPC ${id} short#${i}`, d.short); });
+  }
+  assert.deepEqual(bad, [], "a filler girl's prose tapped a character — wrap the coincidental word in {{…}}");
+});
+
 test("the exits line lights every direction", () => {
   assert.equal(_term.decorate("Exits: n, e, out."),
     `Exits: ${kw("n", "exit")}, ${kw("e", "exit")}, ${kw("out", "exit")}.`);
