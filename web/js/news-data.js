@@ -8,23 +8,18 @@ var NEWS_FEED = [
     "d": "10 Jul 2026"
   },
   {
-    "t": "Doctor Pattaya Issues IV Drip Safety Guide for Pattaya Tourists and Travellers",
-    "s": "Shoreline Media Group",
-    "d": "10 Jul 2026"
+    "t": "Thailand Tourism Crisis Hits Pattaya Hard as Visitor Markets From China, India, Russia and Many Other Countries Slow, Causing Falling Touris",
+    "s": "Travel And Tour World",
+    "d": "13 Jul 2026"
   },
   {
-    "t": "In Thailand’s sex tourism hub, bright lights flash, loud music blares – and underage girls are exploited",
-    "s": "The Guardian",
-    "d": "03 Jul 2026"
+    "t": "Why is Tyson Fury fighting in a 2,000-seat Muay Thai stadium in Pattaya?",
+    "s": "Thaiger",
+    "d": "13 Jul 2026"
   },
   {
     "t": "Australian man charged with murder after dead girl found in suitcase in Thailand",
     "s": "BBC",
-    "d": "28 Jun 2026"
-  },
-  {
-    "t": "Thai teenager's father 'deeply saddened' as Australian charged with murder",
-    "s": "ABC News & Headlines – Australian Broadcasting Corporation",
     "d": "28 Jun 2026"
   },
   {
@@ -33,29 +28,29 @@ var NEWS_FEED = [
     "d": "04 Jul 2026"
   },
   {
-    "t": "Australian arrested after teenage girl's body found in Thailand",
-    "s": "ABC News & Headlines – Australian Broadcasting Corporation",
-    "d": "27 Jun 2026"
-  },
-  {
     "t": "How a Thai teen's night at a Pattaya beach ended in death",
     "s": "Reuters",
     "d": "29 Jun 2026"
   },
   {
-    "t": "Fire breaks out at a pub in Bangkok, killing at least 27 people, officials say",
-    "s": "CNN",
-    "d": "12 Jul 2026"
+    "t": "Friend of Thai teen allegedly murdered by Australian man went to his condo after reporting her missing | Thailand",
+    "s": "The Guardian",
+    "d": "01 Jul 2026"
   },
   {
-    "t": "Thailand Needs to Soak Its Own Rich, Not Just Wealthy Tourists",
-    "s": "The Diplomat – Asia-Pacific",
+    "t": "Doctor Pattaya Issues IV Drip Safety Guide for Pattaya Tourists and Travellers",
+    "s": "Shoreline Media Group",
     "d": "10 Jul 2026"
   },
   {
-    "t": "Thailand lost a third of its Chinese tourists. It has not got them back.",
-    "s": "Thaiger",
-    "d": "10 Jul 2026"
+    "t": "Fire breaks out at a pub in Bangkok, killing at least 27 people",
+    "s": "AP News",
+    "d": "13 Jul 2026"
+  },
+  {
+    "t": "Inside Thailand’s animal rescue network saving strays – photo essay",
+    "s": "The Guardian",
+    "d": "13 Jul 2026"
   },
   {
     "t": "New dinosaur species as long as cricket pitch discovered in Thailand",
@@ -63,25 +58,30 @@ var NEWS_FEED = [
     "d": "11 Jul 2026"
   },
   {
-    "t": "New Species of Long-Necked Dinosaur Identified in Thailand",
-    "s": "Sci.News",
-    "d": "09 Jul 2026"
+    "t": "New plant-munching long-necked dinosaur from 130 million years ago uncovered in Thailand",
+    "s": "NBC News",
+    "d": "13 Jul 2026"
   },
   {
-    "t": "A Single Bone Found in Thailand Has Just Revealed an Entirely New Species of Giant Dinosaur",
-    "s": "Yahoo",
-    "d": "09 Jul 2026"
+    "t": "New Jurassic dinosaur species identified in Thailand from a single bone",
+    "s": "Phys.org",
+    "d": "10 Jul 2026"
+  },
+  {
+    "t": "'Without our money, people will struggle': Muangthai Capital's new CEO Parithad Petampai defends the role of microfinance in Thailand - Fort",
+    "s": "Fortune",
+    "d": "13 Jul 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-07-10","USD":33.31,"AUD":23.15,"GBP":44.72,"EUR":38.08};
+var FX_RATES = {"date":"13 Jul 2026","USD":33.34,"AUD":23.15,"GBP":44.66,"EUR":38.04};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-07-13","temp":27,"humid":90,"code":3,"hi":30,"rain":73};
+var WX_NOW = {"date":"2026-07-14","temp":27,"humid":86,"code":51,"hi":30,"rain":78};
 // the bar TV's one true channel
-var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-09","done":true,"h":"France","hs":2,"a":"Morocco","as":0},{"d":"2026-07-10","done":true,"h":"Spain","hs":2,"a":"Belgium","as":1},{"d":"2026-07-11","done":true,"h":"Norway","hs":1,"a":"England","as":2},{"d":"2026-07-12","done":true,"h":"Argentina","hs":3,"a":"Switzerland","as":1},{"d":"2026-07-14","done":false,"h":"France","hs":0,"a":"Spain","as":0},{"d":"2026-07-15","done":false,"h":"England","hs":0,"a":"Argentina","as":0}]};
+var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-10","done":true,"h":"Spain","hs":2,"a":"Belgium","as":1},{"d":"2026-07-11","done":true,"h":"Norway","hs":1,"a":"England","as":2},{"d":"2026-07-12","done":true,"h":"Argentina","hs":3,"a":"Switzerland","as":1},{"d":"2026-07-14","done":false,"h":"France","hs":0,"a":"Spain","as":0},{"d":"2026-07-15","done":false,"h":"England","hs":0,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-07-01","first":"751495","last2":"62","front3":["001","980"],"back3":["304","531"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4121,"date":"2026-07-12","baht":64950};
+var GOLD = {"usd":3990,"date":"2026-07-13","baht":62900};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":64148,"thb":2139708};
+var BTC = {"usd":61792,"thb":2069337};
