@@ -2791,15 +2791,164 @@ const _FILLER_HOSTESSES = [
   ["Kai","ไก่","golden_dragon"], ["Nook","นุ้ก","golden_dragon"], ["Dew","ดิว","golden_dragon"],
   ["Puu","ปู","pink_lotus"], ["Belle","เบล","pink_lotus"],
   ["Kat","แคท","sunset_dreams"], ["May","เมย์","sunset_dreams"], ["Dear","เดียร์","sunset_dreams"],
-  ["Ing","อิง","blue_dog"],
-  ["Bam","บาม","rock_factory"],
-  ["Chompoo","ชมพู่","stinky_bar"],
+  ["Ing","อิง","blue_dog"], ["Khing","ขิง","blue_dog"],
+  ["Bam","บาม","rock_factory"], ["Kwang","กวาง","rock_factory"],
+  ["Chompoo","ชมพู่","stinky_bar"], ["Manow","มะนาว","stinky_bar"],
 ];
 
 for (const [name, th, room] of _FILLER_HOSTESSES) {
   const id = name.toLowerCase();
   NPCS[id] = _buildHostess(name, th, room);
   NPC_ROLES[id] = "hostess";
+}
+
+// ── Generic (filler) mamasans and cashiers ──────────────────────────────────
+// Every hostess bar needs a mamasan who runs the floor and a cashier who runs
+// the till (a chain shares ONE mama — Candy covers both Candy Bars — but each
+// bar keeps its own cashier). Same hash-from-id builder trick as the hostesses,
+// but the ENGLISH register steps up: hostesses talk Tinglish, cashiers are
+// businesslike and mostly fluent, the mamasan is the most fluent of all — each
+// still drops a Thai particle or leans on the phone now and then. Canon-plain:
+// no plot flags, no gives. Named, story-bearing mamas/cashiers stay in NPCS above.
+const _M_LOOK = [
+  "Immaculate, unhurried, and missing nothing",
+  "A former headliner's posture and a gaze like a cash register",
+  "Gold at the wrist and throat, reading glasses pushed up into her hair",
+  "Warm to your face, ice at the till, and fluent in both",
+  "Sits like she owns the stool, because she does",
+  "Older, sharper, and entirely done being impressed by farang",
+];
+const _M_STORY = [
+  "danced this same street before you were her problem",
+  "came up from the rice fields and never once looked back",
+  "has run this floor longer than most of the girls have been alive",
+  "buried a husband, raised two kids, and built a concrete house on lady drinks",
+];
+const _C_LOOK = [
+  "In a cage of fairy lights, counting notes faster than the eye follows",
+  "Black polo, a lanyard of too many keys, a calculator she never needs",
+  "Neat bun, neat ledger, an engagement ring worn on a chain",
+  "Headset on one ear, phone in one hand, the till in perfect order",
+  "Quiet and quick, the still point the whole loud room pays into",
+];
+
+function _buildMama(name, th, room) {
+  const id = name.toLowerCase();
+  const bar = ROOMS[room] ? (ROOMS[room].bar || ROOMS[room].name) : "the bar";
+  const idx = (arr, salt) => arr[_hh(id, salt) % arr.length];
+  const from = idx(_H_FROM, 3);
+  const look = idx(_M_LOOK, 5);
+  const story = idx(_M_STORY, 7);
+  const GREET = [
+    '"Welcome, welcome. Sit anywhere — my bar, easy rules: be polite, buy a girl a drink when you like her company, don\'t touch the stage." A practised, unhurried smile.',
+    '"New face. Good." She looks you over the way a woman checks fruit at the market. "I am the mamasan. Anything you need — a drink, a girl, a problem — you come to me. To fix it, na, not to make it."',
+    '"Ah, farang, come in. Twenty year I stand at this bar. I danced here before; now I count the drinks and mind the girls." A wink. "Better job — my knees agree."',
+  ];
+  const GREET_SHORT = [
+    '"Sit anywhere. Be polite, buy a lady drink, mind the stage."',
+    '"The mamasan. Any problem, you come to me — to fix it."',
+    '"Twenty year at this bar. Anything you need, ask me."',
+  ];
+  const GIRLS = [
+    '"My girls are good girls — most from Isaan, like me a long time ago. They work hard, send the money home, and they won\'t cheat you if you don\'t cheat them." A level look. "Treat them nice, I treat you nice. Same-same."',
+    '"You like one of them? Tell me, I introduce you proper — better than the grab-grab, tilac. The girl who chooses you likes you more than the girl you corner. This I know, twenty year of it."',
+  ];
+  const FAMILY = [
+    `"Me? My children are grown now. One in a Bangkok office, one still study. I built my mama a house — concrete, real bathroom, not the old wood." Quiet pride. "This bar paid for all of it. People look down on the work; the house is still real."`,
+    `"Grandchildren now, can you believe it? I send money, I go home Songkran, I come back. Pattaya is my second home — longer than the first one, these days."`,
+  ];
+  const PLAN = [
+    `"A plan? I already did my plan, tilac — poor girl from the field, now I run the bar." She taps the till. "My plan now is the girls' plan: get out smarter than I did. Save it, don't drink it, don't marry the first farang who cries."`,
+    `"Big questions, ha." She thumbs her phone a moment, then just talks — she doesn't really need it. "I want to keep the bar honest and the girls safe. Not so romantic, but it is the plan that pays."`,
+  ];
+  const WALLET = [
+    '"You lost your wallet? Aiyo. Not in my bar — we don\'t do that here, bad for business, bad for luck." She considers. "Ask Candy, on Soi Buakhao. If it moved through this area, Candy heard about it."',
+    '"Not here, tilac. I would know — nothing moves in this bar without me." A tilt of the head toward the door. "Candy Bar, Buakhao side. Everybody\'s trouble ends up on Candy\'s desk."',
+  ];
+  return {
+    name, th, emoji: "👑", room,
+    desc: `${look} — the mamasan of ${bar}, from ${from}. She ${story}.`,
+    dialogue: [
+      { th: "เชิญค่ะ", rom: "chern kha", text: idx(GREET, 23), short: idx(GREET_SHORT, 29) },
+      { topic: "girls", text: idx(GIRLS, 31) },
+      { topic: "family", text: idx(FAMILY, 37) },
+      { topic: "plan", text: idx(PLAN, 41) },
+      { topic: "wallet", text: idx(WALLET, 43) },
+    ],
+  };
+}
+
+function _buildCashier(name, th, room) {
+  const id = name.toLowerCase();
+  const bar = ROOMS[room] ? (ROOMS[room].bar || ROOMS[room].name) : "the bar";
+  const idx = (arr, salt) => arr[_hh(id, salt) % arr.length];
+  const from = idx(_H_FROM, 3);
+  const look = idx(_C_LOOK, 5);
+  const GREET = [
+    '"Bar\'s open. Drinks at the bar, lady drinks on the tab, and the tab is with me." She barely looks up from the money. "Whatever you order, I count it. So — welcome."',
+    '"Hi, sit where you like." A quick, professional smile, gone as fast as it came. "You want a drink, I make the bill. You want change, I have change. Easy."',
+    '"Welcome ka." She\'s already sliding notes through her fingers, fast. "I keep the till — so if you pay, or you think the tab is wrong, you come to me. Not the girls. I\'m never wrong, but you can check, na."',
+  ];
+  const GREET_SHORT = [
+    '"Drinks at the bar, tab with me. Welcome."',
+    '"You pay, I count. Easy."',
+    '"The till is mine — any money question, ask me."',
+  ];
+  const MONEY = [
+    '"Everything goes through this book." She pats the ledger. "Your drink, her drink, the barfine — I write it, you pay it. Watch me write and there\'s no surprise. The farang who don\'t watch, they get the surprise. Not my problem, na."',
+    '"You want to know the price? Ask before, not after." A dry almost-smile. "I do the number honest, but I do it fast. Slow customers cost me the ones behind them."',
+  ];
+  const FAMILY = [
+    `"My family? Isaan, like everyone here. I send money every month — same as the girls, only I get to sit down to do it." A small dry smile. "Cashier is better than dance, for me. My boyfriend prefers it too."`,
+    `"One boy, he stays with my mother in ${from}. I do this job because I\'m good with numbers, and the number here is bigger than the number at home." A shrug. "Simple."`,
+  ];
+  const WALLET = [
+    '"Lost a wallet? Not here — I count everything, I\'d know." She tips her head toward the door. "Ask the mamasan, or ask Candy on Buakhao. They keep track of what walks through."',
+    '"Aiyo, no. My till is exact; a wallet is not a till problem." She\'s already back to the money. "Candy Bar, Soi Buakhao. Start there."',
+  ];
+  return {
+    name, th, emoji: "🧾", room,
+    desc: `${look} — the cashier at ${bar}, from ${from}.`,
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", text: idx(GREET, 23), short: idx(GREET_SHORT, 29) },
+      { topic: "money", text: idx(MONEY, 31) },
+      { topic: "tab", text: idx(MONEY, 31) },
+      { topic: "family", text: idx(FAMILY, 37) },
+      { topic: "wallet", text: idx(WALLET, 43) },
+    ],
+  };
+}
+
+// [name, Thai nickname, room]. One mamasan per bar (a chain shares hers, so the
+// Candy Bars are absent here) and one cashier per bar. Distribution mirrors the
+// hostesses': every hostess venue gets both; the Queen Vic pub gets neither.
+const _FILLER_MAMAS = [
+  ["Pen","เพ็ญ","blue_dog"], ["Muay","หมวย","rock_factory"], ["Lamai","ละมัย","stinky_bar"],
+  ["Jeab","เจี๊ยบ","neon_paradise"], ["Da","ดา","club_mirage"], ["Rin","ริน","crystal_palace"],
+  ["Kob","กบ","paradise_nights"], ["Koi","ก้อย","midnight_sun"], ["Ratana","รัตนา","lucky_tiger"],
+  ["Waew","แวว","silk_rose"], ["Ple","เปิ้ล","jasmine_garden"], ["Orm","อ้อม","gold_rush"],
+  ["Jom","จอม","starlight_bar"], ["Nee","หนี่","pink_lotus"], ["Peung","ผึ้ง","golden_dragon"],
+  ["Malai","มาลัย","sunset_dreams"], ["Somsri","สมศรี","kinky"], ["Ratree","ราตรี","las_vegas"],
+];
+const _FILLER_CASHIERS = [
+  ["Golf","กอล์ฟ","tequila_queen"], ["Air","แอร์","blue_dog"], ["Apple","แอปเปิ้ล","rock_factory"],
+  ["Cake","เค้ก","stinky_bar"], ["Care","แคร์","candy_bar_2"], ["Cartoon","การ์ตูน","neon_paradise"],
+  ["Earn","เอิร์น","club_mirage"], ["Eye","อาย","crystal_palace"], ["Fai","ฝ้าย","paradise_nights"],
+  ["Gam","แก้ม","candy_bar"], ["Ging","กิ่ง","lucky_tiger"], ["Grace","เกรซ","silk_rose"],
+  ["Hong","ห่อง","jasmine_garden"], ["Jah","จ๊ะ","gold_rush"], ["Jeed","จี๊ด","starlight_bar"],
+  ["Jenny","เจนนี่","pink_lotus"], ["Joon","จูน","golden_dragon"], ["Jun","จัน","sunset_dreams"],
+  ["Kaimook","ไข่มุก","slutty"], ["Kanom","ขนม","las_vegas"], ["Keng","เก่ง","khao_talo_bar"],
+];
+
+for (const [name, th, room] of _FILLER_MAMAS) {
+  const id = name.toLowerCase();
+  NPCS[id] = _buildMama(name, th, room);
+  NPC_ROLES[id] = "mamasan";
+}
+for (const [name, th, room] of _FILLER_CASHIERS) {
+  const id = name.toLowerCase();
+  NPCS[id] = _buildCashier(name, th, room);
+  NPC_ROLES[id] = "cashier";
 }
 
 // The girls every bar knows by name — their barfine never gets waived,
