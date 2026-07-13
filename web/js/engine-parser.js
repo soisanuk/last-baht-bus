@@ -352,6 +352,17 @@ function _doTalk(arg, topic) {
       _doPatron();
       return;
     }
+    // A regular who exists but has drifted to another bar — hoppers move each
+    // hour, so a name from a moment ago may already be gone. Say so plainly
+    // instead of a flat "nobody here", which reads as a bug mid-conversation.
+    const w = arg.toLowerCase();
+    const away = Object.keys(PATRONS).find(id =>
+      id === w || PATRONS[id].name.toLowerCase() === w);
+    if (away) {
+      _say(`${PATRONS[away].name} isn't at this bar right now — the regulars drift ` +
+        "between bars through the night, and not every one of them comes out every evening.");
+      return;
+    }
     _say("Nobody by that name here.");
     return;
   }
@@ -1865,7 +1876,14 @@ function doCommand(input) {
     }
     case "ask": {
       const m = arg.match(/^(.+?) about (.+)$/);
-      if (m) _doTalk(m[1], m[2]);
+      if (m) { _doTalk(m[1], m[2]); break; }
+      // "ask <who> <topic>" with no connective — the shape the autocomplete/wheel
+      // builds when you pick a target and THEN a topic (each tap appends a word,
+      // no "about" between). Split off the first word as the target when it names
+      // someone here; otherwise treat the whole thing as a name (talk / not-here).
+      const sp = arg.indexOf(" ");
+      const who = sp > 0 ? arg.slice(0, sp) : "";
+      if (who && (_findNpc(who) || _findPatron(who))) _doTalk(who, arg.slice(sp + 1));
       else _doTalk(arg, null);
       break;
     }

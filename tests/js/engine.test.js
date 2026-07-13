@@ -2810,7 +2810,26 @@ test("David only drinks on his days off: Mondays and Fridays", () => {
   state().room = "stinky_bar";
   out = [];
   run("talk to david");
-  assert.match(lastOut(), /Nobody by that name/, "and he isn't at the rail");
+  assert.match(lastOut(), /David isn't at this bar right now/, "he's a known regular, just not out — say so, don't deny he exists");
+});
+
+test("ask <who> <topic> works without the 'about' connective (the tapped shape)", () => {
+  // The autocomplete/wheel builds "ask <target> <topic>" a word at a time, with
+  // no "about" between — that must reach the same dialogue as the typed form.
+  state().nightTurn = 0; state().day = 1;
+  const room = Object.keys(ROOMS).find(r => {
+    state().room = r; return _patronsHere().includes("chuck");
+  });
+  assert.ok(room, "found a bar where Chuck is drinking");
+  state().room = room;
+  const say = cmd => { // fresh seen-state so repeat-terseness doesn't skew it
+    state().patronTalk = { day: state().day, talked: {} };
+    out = []; run(cmd); return lastOut();
+  };
+  const noAbout = say("ask chuck money");
+  const withAbout = say("ask chuck about money");
+  assert.equal(noAbout, withAbout, "with and without 'about' reach the same reply");
+  assert.doesNotMatch(noAbout, /Nobody by that name/, "not a dead end");
 });
 
 test("the Phil triangle: read the phone, then tell him or warn her — not both ways", () => {

@@ -127,10 +127,21 @@ test("the wheel: an absent name routes through whoever is here", () => {
   assert.match(acts[0].c, /^ask candy about madam oy$/);
   assert.equal(acts[0].go, true);
   assert.ok(acts.every(x => x.go), "no dangling 'ask …' when someone is here");
-  G.room = "jomtien_beach"; // nobody around: the open prefill is all there is
-  const alone = _term.kwActions("npc", "Madam Oy", false);
+  G.room = "jomtien_beach"; // nobody around to gossip with: a talk attempt, which
+  const alone = _term.kwActions("npc", "Madam Oy", false); // gives honest feedback
   assert.equal(alone.length, 1);
-  assert.equal(alone[0].go, false);
+  assert.match(alone[0].c, /^talk to madam oy$/);
+  assert.equal(alone[0].go, true);
+});
+
+test("the wheel: tapping a regular who has hopped away offers to talk (not gossip)", () => {
+  G.room = "silk_rose"; G.day = 2; // Helmut & Drew are the regulars here on day 2
+  // Chuck's home is Tequila Queen — tapping his (decorated-everywhere) name here
+  // shouldn't gossip-route; it should try to talk, which reports he's elsewhere.
+  const acts = _term.kwActions("patron", "Chuck", true);
+  assert.equal(acts.length, 1);
+  assert.match(acts[0].c, /^talk to chuck$/);
+  assert.equal(acts[0].go, true);
 });
 
 test("the wheel: items offer take here, read in the pocket", () => {

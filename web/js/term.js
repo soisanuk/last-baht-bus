@@ -263,15 +263,20 @@ const _term = (() => {
       const npc = typeof _findNpc === "function" ? _findNpc(lo) : null;
       const pat = !npc && typeof _findPatron === "function" ? _findPatron(lo) : null;
       if (!npc && !pat) {
-        // not here: route the question through everyone who is — a complete
-        // action per NPC beats a dangling "ask …" prefill that loses the
-        // topic (the blank is mid-command, so prefilling can't keep it)
+        // A regular who isn't here: patrons hop bars every hour, so the name you
+        // tapped from a moment ago may already have drifted off. Offer to talk —
+        // which reports plainly that they've moved on — rather than gossip about
+        // them (that's for story NPCs, below), which loses what you meant.
+        if (k === "patron") return [{ t: "talk to " + lo, c: "talk to " + lo, go: true }];
+        // A story NPC mentioned in passing: route the question through everyone
+        // who IS here — a complete action per NPC beats a dangling "ask …" that
+        // loses the topic. If nobody's here, a talk attempt gives honest feedback.
         const here = _npcsHere();
         for (const id of here.slice(0, 3)) {
           a.push({ t: `ask ${NPCS[id].name} about ${lo}`,
             c: `ask ${NPCS[id].name.toLowerCase()} about ${lo}`, go: true });
         }
-        if (!here.length) a.push({ t: "ask … about " + lo, c: "ask ", go: false });
+        if (!here.length) a.push({ t: "talk to " + lo, c: "talk to " + lo, go: true });
         return a;
       }
       a.push({ t: "talk", c: "talk to " + lo, go: true });
