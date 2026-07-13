@@ -691,6 +691,9 @@ const ROOMS = {
   },
   khao_talo_bar: {
     name: "Daeng's Place (Khao Talo)",
+    // Registered like every other bar so the name taps as a venue (and doesn't
+    // shed a stray "Daeng" tap onto the mamasan when the name appears in prose).
+    bar: "Daeng's Place",
     region: "Darkside",
     barType: "beer", pool: true,
     outlet: true,
@@ -1168,7 +1171,7 @@ const NPCS = {
       { topic: "white dish",
         text: "\"White Dish Group.\" He says it the way you say a diagnosis. \"Ryan Powers. Never here, always here — that's the joke. Before his lot got involved, this soi ran itself. Loud, chaotic, but honest chaos. Now?\" He gestures at the street through the window. \"QR codes. Branded menus. They've got six bars already. Word is they're after another one.\" He takes a long pull of Chang. \"Someone should do something about that.\"" },
       { topic: "powers",
-        text: "\"Ryan Powers. British. Doesn't live here officially, doesn't leave either. Bars run clean on the surface — that's the thing. The books don't, but you'd need someone inside to prove it.\" He taps the bar once. \"Nice bloke, they say. The dangerous kind.\"" },
+        text: "\"Ryan Powers. British. Doesn't live here officially, doesn't leave either. Bars run clean on the surface — that's the thing. The books don't, but you'd need someone inside to prove it.\" He taps the bar once. \"{{Nice}} bloke, they say. The dangerous kind.\"" },
       { topic: "tiktok", text: "He gestures at the soi through the window without " +
         "looking. \"You see those lot? Ring light, selfie stick, little gimbal thing?\" " +
         "He doesn't wait for an answer. \"Walk the whole soi, grab every girl's hand, " +
@@ -2402,7 +2405,7 @@ const PATRONS = {
         "nods at the room: dartboard, wood, air conditioning like a national " +
         "embassy of moderation. \"The bars over there want something from you. " +
         "This one just wants you to mind the dart line.\" The window gets " +
-        "another look. \"I tried the soi once. Nice girls. Loud planet. I do " +
+        "another look. \"I tried the soi once. {{Nice}} girls. Loud planet. I do " +
         "better with a pane of glass between me and 1999.\"",
         short: "\"Terry holds the corner seat. It's load-bearing. We've never discussed it.\"" },
     ],
@@ -2671,8 +2674,8 @@ const NPC_ROLES = {
 // tiny. The named, story-bearing hostesses stay in NPCS above; these are added
 // to it below. Keep authored, plot-relevant dialogue OUT of here.
 const _H_FROM = ["Udon Thani", "Khon Kaen", "Roi Et", "Sisaket", "Buriram", "Ubon",
-  "Surin", "Nong Khai", "Kalasin", "Yasothon", "Mukdahan", "Nakhon Phanom",
-  "Chaiyaphum", "Loei", "Maha Sarakham", "Sakon Nakhon", "Amnat Charoen", "Nong Bua Lamphu"];
+  "Surin", "{{Nong Khai}}", "Kalasin", "Yasothon", "Mukdahan", "Nakhon Phanom",
+  "Chaiyaphum", "Loei", "Maha Sarakham", "Sakon Nakhon", "Amnat Charoen", "{{Nong Bua Lamphu}}"];
 const _H_LOOK = [
   "Round-faced and quick to laugh",
   "Tall and quiet, watching the door",
@@ -2769,7 +2772,7 @@ function _buildHostess(name, th, room) {
   ];
 
   return {
-    name, th, emoji, room,
+    name, th, emoji, room, filler: true,
     desc: `${look} — one of the ${bar} girls, from ${from}. ${phone}`,
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", text: idx(GREET, 23), short: idx(GREET_SHORT, 29) },
@@ -2787,7 +2790,7 @@ const _FILLER_HOSTESSES = [
   ["Dao","ดาว","tequila_queen"], ["Mook","มุก","tequila_queen"], ["Ice","ไอซ์","tequila_queen"], ["Praew","แพรว","tequila_queen"],
   ["Mint","มิ้น","neon_paradise"], ["Fah","ฟ้า","neon_paradise"], ["View","วิว","neon_paradise"], ["Sara","ซาร่า","neon_paradise"],
   ["Bow","โบว์","club_mirage"], ["Nam","น้ำ","club_mirage"], ["Yui","ยุ้ย","club_mirage"],
-  ["Som","ส้ม","crystal_palace"], ["Cherry","เชอรี่","crystal_palace"], ["Beam","บีม","crystal_palace"], ["Boom","บูม","crystal_palace"],
+  ["Aof","อ๊อฟ","crystal_palace"], ["Cherry","เชอรี่","crystal_palace"], ["Beam","บีม","crystal_palace"], ["Boom","บูม","crystal_palace"],
   ["Toey","เตย","rainbow_girls"], ["Pang","แป้ง","rainbow_girls"], ["Ploen","เพลิน","rainbow_girls"], ["Sai","ทราย","rainbow_girls"],
   ["Fang","แฟง","kinky"], ["Gib","กิ๊บ","kinky"], ["Nice","ไนซ์","kinky"],
   ["Tukta","ตุ๊กตา","slutty"], ["Jum","จุ๋ม","slutty"], ["Pop","ป๊อป","slutty"],
@@ -2880,7 +2883,7 @@ function _buildMama(name, th, room) {
     '"Not here, tilac. I would know — nothing moves in this bar without me." A tilt of the head toward the door. "Candy Bar, Buakhao side. Everybody\'s trouble ends up on Candy\'s desk."',
   ];
   return {
-    name, th, emoji: "👑", room,
+    name, th, emoji: "👑", room, filler: true,
     desc: `${look} — the mamasan of ${bar}, from ${from}. She ${story}.`,
     dialogue: [
       { th: "เชิญค่ะ", rom: "chern kha", text: idx(GREET, 23), short: idx(GREET_SHORT, 29) },
@@ -2921,7 +2924,7 @@ function _buildCashier(name, th, room) {
     '"Aiyo, no. My till is exact; a wallet is not a till problem." She\'s already back to the money. "Candy Bar, Soi Buakhao. Start there."',
   ];
   return {
-    name, th, emoji: "🧾", room,
+    name, th, emoji: "🧾", room, filler: true,
     desc: `${look} — the cashier at ${bar}, from ${from}.`,
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", text: idx(GREET, 23), short: idx(GREET_SHORT, 29) },

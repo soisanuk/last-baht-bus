@@ -1115,7 +1115,7 @@ function _doListen() {
     return;
   }
   if (_inBar()) {
-    _say("Ice settling in buckets, Connect Four counters clacking, and the " +
+    _say("{{Ice}} settling in buckets, Connect Four counters clacking, and the " +
       "chorus of “HELLO WELCOME” as somebody richer walks past outside.");
     return;
   }
