@@ -1489,6 +1489,39 @@ function _doAtmVerb() {
     "into the evening.");
 }
 
+// Filing a police report — right now only the hair-tonic shop shakedown has a
+// claim worth filing. Canon: reports mostly go nowhere (brown envelopes), but
+// when PUSHED the police "settle" the dispute and you get most of your money
+// back minus a "negotiation fee" that stays in Beach Road. Must be done at the
+// station.
+function _doReport(arg) {
+  if (G.room !== "police_station") {
+    _say("You'd file that at the Pattaya Central Police Station — up at the north " +
+      "end of Beach Road, between the mall and the bars. (Go there, then REPORT it.)");
+    return;
+  }
+  if (!G.tonicOwed || G.tonicOwed <= 0) {
+    _say("The desk sergeant looks at you over his glasses with the unhurried " +
+      "patience of a man who has heard every farang complaint ever invented. " +
+      "“What you want to report?” Nothing you can prove, tonight.");
+    return;
+  }
+  const owed = G.tonicOwed;
+  const fee = Math.round(owed * TONIC_POLICE_CUT);
+  const back = owed - fee;
+  G.money += back;
+  G.tonicOwed = 0;
+  _say("You describe the shop, the soi, the three smiling cousins. The sergeant " +
+    "nods slowly, writes nothing, and explains — kindly — that these are " +
+    "“misunderstanding, my friend, is business.” You push. You keep pushing. " +
+    "Eventually a bored plainclothes officer is dispatched, has a quiet word in " +
+    "the soi, and returns with a fold of your notes — most of them.", "win");
+  _say(`Recovered ฿${back}, minus a ฿${fee} “negotiation fee” nobody offers you a ` +
+    `receipt for. (฿${G.money} in pocket.) You decline to speculate about brown ` +
+    "envelopes out loud.", "dim");
+  _addHappy(1);
+}
+
 function _doCheers() {
   if (!_inBar()) {
     _say("You toast the night air. The night, in fairness, has earned it.");
@@ -1672,7 +1705,11 @@ function engineComplete(input) {
     pool = [...Object.keys(_HOTELS).filter(k => k !== G.hotel)
       .map(k => _HOTELS[k].name.toLowerCase()), "stay"];
   } else if (G.game && !ctx.length) pool = _gameVerbs();
-  else pool = ctx.length ? _completePool(ctx[0], ctx) : _COMPLETE_VERBS;
+  else if (ctx.length) pool = _completePool(ctx[0], ctx);
+  // REPORT only makes sense at the station (surfaced there, first), or anywhere
+  // you're still owed money by the tonic shop.
+  else pool = (G.room === "police_station" || G.tonicOwed > 0)
+    ? ["report", ..._COMPLETE_VERBS] : _COMPLETE_VERBS;
   const seen = new Set();
   const out = [];
   for (const c of pool) {
@@ -1996,6 +2033,7 @@ function doCommand(input) {
     case "call": case "dial": _doCall(arg); break;
     case "shower": case "wash": _doShower(); break;
     case "withdraw": case "atm": _doAtmVerb(); break;
+    case "report": case "file": _doReport(arg); break;
     case "cheers": case "toast": case "chon": _doCheers(); break;
     case "haggle": case "bargain":
       _say("Nobody's quoting you a price right now. Save it for the man with the " +

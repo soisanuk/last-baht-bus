@@ -729,6 +729,81 @@ test("hair tonic scammer: walking on costs nothing", () => {
   assert.equal(state().itemLoc.hair_tonic, null);
 });
 
+test("tonic shop: following him in and paying is the full fleece, recoverable", () => {
+  state().room = "beach_rd_c";
+  state().money = 10000;
+  _startEnc("tonic");
+  run("follow him to the shop");
+  assert.ok(state().pendingEnc, "the shop re-arms for a second reaction");
+  assert.match(lastOut(), /bead curtain|between you and the door/i);
+  run("fine, pay");
+  assert.equal(state().money, 10000 - TONIC_FLEECE);
+  assert.equal(state().tonicOwed, TONIC_FLEECE, "the loss is banked for a report");
+  assert.equal(state().itemLoc.hair_tonic, "inventory");
+  assert.equal(state().pendingEnc, null);
+});
+
+test("tonic shop: nerve gets you out cheap, muscle fleeces you (and can be reported)", () => {
+  // nerve wins (_rand < 0.5): a token ฿500 to save face, nothing to report
+  state().room = "beach_rd_c"; state().money = 10000;
+  _startEnc("tonic"); run("shop"); state().rng = 1; run("no, let me leave");
+  assert.equal(state().money, 9500);
+  assert.equal(state().tonicOwed, 0, "a clean-ish escape leaves no claim");
+  // muscle wins (_rand >= 0.5): coerced payment, banked for a report
+  state().room = "beach_rd_c"; state().money = 10000; state().tonicOwed = 0;
+  _startEnc("tonic"); run("shop"); state().rng = 22245; run("no, get out of my way");
+  assert.equal(state().money, 10000 - TONIC_SHAKEDOWN);
+  assert.equal(state().tonicOwed, TONIC_SHAKEDOWN);
+});
+
+test("tonic shop: a stony-broke mark isn't worth robbing", () => {
+  state().room = "beach_rd_c"; state().money = 0;
+  _startEnc("tonic"); run("shop"); run("pay");
+  assert.equal(state().money, 0);
+  assert.equal(state().tonicOwed, 0);
+  assert.equal(state().itemLoc.hair_tonic, "inventory", "one free sample bottle");
+});
+
+test("REPORT: the police settle a tonic-shop claim for most of it, minus their cut", () => {
+  state().tonicOwed = 6000; state().money = 1000;
+  // away from the station it just points you there
+  state().room = "beach_rd_c";
+  run("report");
+  assert.match(lastOut(), /police station/i);
+  assert.equal(state().money, 1000, "no recovery until you actually file it");
+  // at the desk: recover owed minus the negotiation fee
+  state().room = "police_station";
+  run("report");
+  const fee = Math.round(6000 * TONIC_POLICE_CUT);
+  assert.equal(state().money, 1000 + (6000 - fee));
+  assert.equal(state().tonicOwed, 0, "claim cleared");
+  // nothing left to report
+  out = [];
+  run("report");
+  assert.match(lastOut(), /what you want to report|nothing/i);
+});
+
+test("REPORT surfaces in autocomplete only at the station or while still owed", () => {
+  state().room = "beach_rd_c"; state().tonicOwed = 0;
+  assert.ok(!engineComplete("rep").includes("report"), "not offered on a random street");
+  state().room = "police_station";
+  assert.ok(engineComplete("rep").includes("report"), "offered at the station");
+  state().room = "beach_rd_c"; state().tonicOwed = 2000;
+  assert.ok(engineComplete("rep").includes("report"), "offered while still owed");
+});
+
+test("tonicOwed survives save/restore and old saves backfill it", () => {
+  state().tonicOwed = 4200;
+  const save = serializeGame();
+  newGame();
+  deserializeGame(save);
+  assert.equal(state().tonicOwed, 4200);
+  // an old save with no field at all backfills to 0
+  const old = JSON.parse(save); delete old.tonicOwed;
+  deserializeGame(JSON.stringify(old));
+  assert.equal(state().tonicOwed, 0);
+});
+
 test("mid-encounter restore: the prompt is stashed and redraws (no blind exit line)", () => {
   state().room = "beach_rd_s";
   _startEnc("powerbank");

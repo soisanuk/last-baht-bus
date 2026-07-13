@@ -99,6 +99,7 @@ function newGame() {
     blueDogDay: 0,       // last day the Blue Dog show paid its happy point
     hotel: "sabai",      // where you're checked in: sabai | queenvic | metropole
     hotelDebt: 0,        // what's on the night clerk's book
+    tonicOwed: 0,        // baht the hair-tonic shop fleeced you for, recoverable via a police REPORT
     qvDay: 0,            // last day the Queen Vic balcony paid its happy point
     patronTalk: { day: 0, talked: {} }, // patron dialogue book, reset daily
     turns: 0,
@@ -180,6 +181,7 @@ function deserializeGame(s) {
   if (G.blueDogDay === undefined) G.blueDogDay = 0;
   if (!G.hotel) G.hotel = "sabai";
   if (G.hotelDebt === undefined) G.hotelDebt = 0;
+  if (G.tonicOwed === undefined) G.tonicOwed = 0;
   if (G.qvDay === undefined) G.qvDay = 0;
   if (!G.patronTalk) G.patronTalk = { day: 0, talked: {} };
   if (!G.soc) {
@@ -623,6 +625,10 @@ function _describeRoom(full) {
       "sides of Beach Road, waving over every farang on a motorbike with the bored " +
       "precision of toll collectors. The whole rail is watching. (WATCH POLICE — " +
       "or WATCH SUNSET, the bay is doing its thing too.)", "dim");
+  }
+  if (G.room === "police_station" && G.tonicOwed > 0) {
+    _say(`You are still out ฿${G.tonicOwed} to the hair-tonic shop. (REPORT it here — ` +
+      "for what that's worth.)", "dim");
   }
 }
 

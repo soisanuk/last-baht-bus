@@ -737,7 +737,28 @@ const _ENC = {
   },
 
   tonic(input) {
-    if (/yes|buy|ok|sure|deal|take it|fine/.test(input)) {
+    // Second step: you followed him off Beach Road into the shop (see the SHOP
+    // branch below re-arming pendingEnc). This input is your reaction in the
+    // back room.
+    if (_flag("tonicShop")) { G.flags.tonicShop = false; return _tonicShop(input); }
+    // Follow him to the shop — the friendly patter's whole purpose.
+    if (/shop|soi|follow|come|vip|treatment|cousin|see|show|look/.test(input) &&
+        !/\bno\b|walk|leave|away|off|thanks|thank you/.test(input)) {
+      G.pendingEnc = "tonic";
+      _setFlag("tonicShop");
+      _encPrompt(
+        ["“Two minute!” It is not two minutes. Thirty seconds down a side soi and " +
+          "you're inside a small, ferociously bright shop — shelves of the same brown " +
+          "bottles, a glass counter, and a bead curtain that sighs shut behind you. " +
+          "Two more men appear from the back, then a third, all smiles, all between " +
+          "you and the door. The friendly cousin is already opening a “VIP treatment " +
+          "course” box and writing a number on a pad. The number is not ninety-nine. " +
+          "The number has four figures, and it is climbing while he talks.", "alert"],
+        ["(PAY and be done with it, or refuse and try to LEAVE.)", "dim"]);
+      return;
+    }
+    // The ฿99 street bottle — the soft, "harmless" version that never needed a shop.
+    if (/yes|buy|ok|sure|deal|take it|fine|bottle|ninety|99|tonic/.test(input)) {
       if (G.money < TONIC_PRICE) {
         _say(`You turn out your pockets: ฿${G.money}. He closes the briefcase with ` +
           "the quiet disappointment of a man who has badly misjudged his mark, " +
@@ -759,4 +780,59 @@ const _ENC = {
     }
   },
 };
+
+// The side-soi shop: high-pressure sales backed by the quiet threat of the three
+// men between you and the door. PAY = the full fleece; LEAVE = a coin-flip on
+// whether your nerve or their muscle wins — either way you rarely walk clean.
+// Whatever they take is banked in G.tonicOwed so a police REPORT can claw most
+// of it back (minus the boys' cut). A stony-broke mark isn't worth the trouble.
+function _tonicShop(input) {
+  const _outHint = "(You can REPORT this at the police station, north end of Beach Road.)";
+  if (G.money <= 0) {
+    _say("They pat you down with their eyes, find a wallet as empty as their " +
+      "promises, and lose interest all at once. A shove, the bead curtain, and " +
+      "you're back on Beach Road clutching one free “sample” bottle — the only " +
+      "honest transaction of the night.");
+    G.itemLoc.hair_tonic = "inventory";
+    return;
+  }
+  const pay = /pay|buy|yes|ok|sure|fine|take|deal|course|vip|whatever|just/.test(input) &&
+    !/\bno\b|leave|out|refuse|go|push/.test(input);
+  if (pay) {
+    const took = Math.min(TONIC_FLEECE, G.money);
+    G.money -= took;
+    G.tonicOwed = (G.tonicOwed || 0) + took;
+    G.itemLoc.hair_tonic = "inventory";
+    _say(`You cave. Of course you cave — everyone caves, that is the entire ` +
+      `business model. ฿${took} changes hands for a carrier bag of “premium” bottles ` +
+      "you will never open, and the smiles switch off the instant the cash is " +
+      `counted. The bead curtain spits you back onto Beach Road. (฿${G.money} left.)`, "alert");
+    _say(_outHint, "dim");
+    _addHappy(-3);
+    return;
+  }
+  // You try to leave. Nerve vs muscle.
+  if (_rand() < 0.5) {
+    const took = Math.min(500, G.money);
+    G.money -= took;
+    G.itemLoc.hair_tonic = "inventory";
+    _say("You raise your voice, loudly, and step toward the curtain like you mean " +
+      "it — and a Thai security guard from the shop next door glances in. The " +
+      `temperature drops just enough. You buy ONE bottle to save everyone's face — ฿${took} — ` +
+      `and walk out on your own feet, pulse hammering. (฿${G.money} left.)`);
+    _addHappy(-1);
+  } else {
+    const took = Math.min(TONIC_SHAKEDOWN, G.money);
+    G.money -= took;
+    G.tonicOwed = (G.tonicOwed || 0) + took;
+    G.itemLoc.hair_tonic = "inventory";
+    _say("A shoulder settles against the doorframe. A hand lands on your arm, " +
+      "friendly as a handshake and just as impossible to leave. “One box, big " +
+      "discount, then you go, my friend. Then you go.” The three smiles do not " +
+      `reach anyone's eyes. You pay ฿${took} to become their friend again, and the ` +
+      `arm releases you into the soi. (฿${G.money} left.)`, "alert");
+    _say(_outHint, "dim");
+    _addHappy(-2);
+  }
+}
 
