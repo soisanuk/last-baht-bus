@@ -1843,7 +1843,9 @@ const ENCOUNTERS = {
     hint: "(Everyone knows the stories. ฿600 says they're exaggerated. YES / NO.)",
   },
   tonic: {
-    rooms: ["jomtien_beach_rd", "beach_rd_c", "beach_rd_n", "promenade", "ws_gate"],
+    // A Beach Road tout only — never inside a bar, and not up on Walking Street
+    // or over in Jomtien. Same beachfront stretch the other roaming touts work.
+    rooms: ["beach_rd_s", "beach_rd_c", "beach_rd_n", "promenade"],
     interactive: true,
     intro: "A dapper man with a briefcase falls into step beside you. “My friend! " +
       "You have very lucky face. But—” he winces, eyes flicking to your hairline " +
