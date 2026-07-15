@@ -3,19 +3,24 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
-    "t": "Thailand Tourism Crisis Hits Pattaya Hard as Visitor Markets From China, India, Russia and Many Other Countries Slow, Causing Falling Touris",
-    "s": "Travel And Tour World",
-    "d": "13 Jul 2026"
-  },
-  {
     "t": "Couple caught on camera having sex at Pattaya public park",
     "s": "Thaiger",
     "d": "14 Jul 2026"
   },
   {
+    "t": "Kuwaiti tourists allege extortion by Pattaya police",
+    "s": "Khaosod English",
+    "d": "15 Jul 2026"
+  },
+  {
+    "t": "Thailand Tourism Crisis Hits Pattaya Hard as Visitor Markets From China, India, Russia and Many Other Countries Slow, Causing Falling Touris",
+    "s": "Travel And Tour World",
+    "d": "13 Jul 2026"
+  },
+  {
     "t": "Pattaya orders venue safety checks after Bangkok nightclub fire",
     "s": "Thaiger",
-    "d": "14 Jul 2026"
+    "d": "15 Jul 2026"
   },
   {
     "t": "Why is Tyson Fury fighting in a 2,000-seat Muay Thai stadium in Pattaya?",
@@ -23,33 +28,23 @@ var NEWS_FEED = [
     "d": "13 Jul 2026"
   },
   {
+    "t": "Jomtien drug raid nets two suspected dealers, detains 81",
+    "s": "Thaiger",
+    "d": "15 Jul 2026"
+  },
+  {
+    "t": "Dodgy cash fines leave Kuwaiti tourists questioning Pattaya police",
+    "s": "Thaiger",
+    "d": "15 Jul 2026"
+  },
+  {
     "t": "In Thailand’s sex tourism hub, bright lights flash, loud music blares – and underage girls are exploited",
     "s": "The Guardian",
     "d": "03 Jul 2026"
   },
   {
-    "t": "Australian man charged with murder after dead girl found in suitcase in Thailand",
-    "s": "BBC",
-    "d": "28 Jun 2026"
-  },
-  {
-    "t": "Thai police arrest Australian over killing of teenager found in suitcase",
-    "s": "Al Jazeera",
-    "d": "27 Jun 2026"
-  },
-  {
-    "t": "UK woman, 21, arrested in Thailand after allegedly stabbing boyfriend to death",
-    "s": "The Guardian",
-    "d": "04 Jul 2026"
-  },
-  {
     "t": "Thailand probes possible negligence in deadly Bangkok bar fire",
     "s": "BBC",
-    "d": "14 Jul 2026"
-  },
-  {
-    "t": "New plant-munching long-necked dinosaur from 150 million years ago uncovered in Thailand",
-    "s": "NBC News",
     "d": "14 Jul 2026"
   },
   {
@@ -58,30 +53,35 @@ var NEWS_FEED = [
     "d": "14 Jul 2026"
   },
   {
-    "t": "Malaysia, Thailand seek technical solution to shrimp, sea bass trade dispute",
-    "s": "SeafoodSource",
+    "t": "Visa-free period halved, many countries dropped",
+    "s": "Bangkok Post",
+    "d": "14 Jul 2026"
+  },
+  {
+    "t": "Thailand revamps visa rules for 65 countries and territories",
+    "s": "The Star",
+    "d": "14 Jul 2026"
+  },
+  {
+    "t": "ASEAN envoy meets Myanmar opposition groups in Thailand",
+    "s": "Reuters",
     "d": "14 Jul 2026"
   },
   {
     "t": "Thailand: Don’t Forcibly Return Chinese Dissidents",
     "s": "Human Rights Watch",
     "d": "14 Jul 2026"
-  },
-  {
-    "t": "Exploring Spotify's audience in Australia, Singapore, and Thailand",
-    "s": "YouGov",
-    "d": "14 Jul 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-07-14","USD":33.52,"AUD":23.27,"GBP":44.86,"EUR":38.24};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-07-15","temp":28,"humid":81,"code":2,"hi":30,"rain":68};
+var WX_NOW = {"date":"2026-07-15","temp":30,"humid":70,"code":3,"hi":31,"rain":75};
 // the bar TV's one true channel
-var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-11","done":true,"h":"Norway","hs":1,"a":"England","as":2},{"d":"2026-07-12","done":true,"h":"Argentina","hs":3,"a":"Switzerland","as":1},{"d":"2026-07-14","done":true,"h":"France","hs":0,"a":"Spain","as":2},{"d":"2026-07-15","done":false,"h":"England","hs":0,"a":"Argentina","as":0},{"d":"2026-07-18","done":false,"h":"France","hs":0,"a":"SF L2","as":0}]};
+var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-14","done":true,"h":"France","hs":0,"a":"Spain","as":2},{"d":"2026-07-15","done":false,"h":"England","hs":0,"a":"Argentina","as":0},{"d":"2026-07-18","done":false,"h":"France","hs":0,"a":"SF L2","as":0},{"d":"2026-07-19","done":false,"h":"Spain","hs":0,"a":"SF W2","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-07-01","first":"751495","last2":"62","front3":["001","980"],"back3":["304","531"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4054,"date":"2026-07-14","baht":64250};
+var GOLD = {"usd":4026,"date":"2026-07-15","baht":63800};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":64630,"thb":2161780};
+var BTC = {"usd":64483,"thb":2167101};
