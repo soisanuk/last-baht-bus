@@ -8,8 +8,18 @@ var NEWS_FEED = [
     "d": "14 Jul 2026"
   },
   {
+    "t": "Pattaya police sidelined over ‘private’ fines of Kuwaiti bikers",
+    "s": "Bangkok Post",
+    "d": "15 Jul 2026"
+  },
+  {
     "t": "Kuwaiti tourists allege extortion by Pattaya police",
     "s": "Khaosod English",
+    "d": "15 Jul 2026"
+  },
+  {
+    "t": "Three Pattaya police reassigned over cash fines and unofficial receipts",
+    "s": "Nation Thailand",
     "d": "15 Jul 2026"
   },
   {
@@ -33,14 +43,9 @@ var NEWS_FEED = [
     "d": "15 Jul 2026"
   },
   {
-    "t": "Dodgy cash fines leave Kuwaiti tourists questioning Pattaya police",
-    "s": "Thaiger",
-    "d": "15 Jul 2026"
-  },
-  {
-    "t": "In Thailand’s sex tourism hub, bright lights flash, loud music blares – and underage girls are exploited",
-    "s": "The Guardian",
-    "d": "03 Jul 2026"
+    "t": "Thailand Scraps Plan to End Visa-Free Entry for Indian Tourists",
+    "s": "Bloomberg.com",
+    "d": "14 Jul 2026"
   },
   {
     "t": "Thailand probes possible negligence in deadly Bangkok bar fire",
@@ -48,18 +53,13 @@ var NEWS_FEED = [
     "d": "14 Jul 2026"
   },
   {
-    "t": "Thailand Scraps Plan to End Visa-Free Entry for Indian Tourists",
-    "s": "Bloomberg.com",
-    "d": "14 Jul 2026"
+    "t": "Thailand: At least 28 killed in Bangkok bar fire",
+    "s": "BBC",
+    "d": "13 Jul 2026"
   },
   {
-    "t": "Visa-free period halved, many countries dropped",
-    "s": "Bangkok Post",
-    "d": "14 Jul 2026"
-  },
-  {
-    "t": "Thailand revamps visa rules for 65 countries and territories",
-    "s": "The Star",
+    "t": "How flammable decor and lax rules turned Bangkok pub into a death trap",
+    "s": "Reuters",
     "d": "14 Jul 2026"
   },
   {
@@ -68,20 +68,20 @@ var NEWS_FEED = [
     "d": "14 Jul 2026"
   },
   {
-    "t": "Thailand: Don’t Forcibly Return Chinese Dissidents",
-    "s": "Human Rights Watch",
-    "d": "14 Jul 2026"
+    "t": "What It Costs To Stay At Thailand Wellness Retreat Where Mom-To-Be Samantha Is Staying",
+    "s": "NDTV",
+    "d": "15 Jul 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-07-14","USD":33.52,"AUD":23.27,"GBP":44.86,"EUR":38.24};
+var FX_RATES = {"date":"2026-07-15","USD":33.65,"AUD":23.49,"GBP":45.11,"EUR":38.37};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-07-15","temp":30,"humid":70,"code":3,"hi":31,"rain":75};
+var WX_NOW = {"date":"2026-07-15","temp":28,"humid":82,"code":3,"hi":31,"rain":86};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-14","done":true,"h":"France","hs":0,"a":"Spain","as":2},{"d":"2026-07-15","done":false,"h":"England","hs":0,"a":"Argentina","as":0},{"d":"2026-07-18","done":false,"h":"France","hs":0,"a":"SF L2","as":0},{"d":"2026-07-19","done":false,"h":"Spain","hs":0,"a":"SF W2","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-07-01","first":"751495","last2":"62","front3":["001","980"],"back3":["304","531"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4026,"date":"2026-07-15","baht":63800};
+var GOLD = {"usd":4038,"date":"2026-07-15","baht":64250};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":64483,"thb":2167101};
+var BTC = {"usd":64984,"thb":2181511};
