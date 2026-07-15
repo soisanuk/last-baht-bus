@@ -23,19 +23,9 @@ var NEWS_FEED = [
     "d": "15 Jul 2026"
   },
   {
-    "t": "Thailand Tourism Crisis Hits Pattaya Hard as Visitor Markets From China, India, Russia and Many Other Countries Slow, Causing Falling Touris",
-    "s": "Travel And Tour World",
-    "d": "13 Jul 2026"
-  },
-  {
     "t": "Pattaya orders venue safety checks after Bangkok nightclub fire",
     "s": "Thaiger",
     "d": "15 Jul 2026"
-  },
-  {
-    "t": "Why is Tyson Fury fighting in a 2,000-seat Muay Thai stadium in Pattaya?",
-    "s": "Thaiger",
-    "d": "13 Jul 2026"
   },
   {
     "t": "Jomtien drug raid nets two suspected dealers, detains 81",
@@ -43,13 +33,18 @@ var NEWS_FEED = [
     "d": "15 Jul 2026"
   },
   {
-    "t": "Thailand Scraps Plan to End Visa-Free Entry for Indian Tourists",
-    "s": "Bloomberg.com",
-    "d": "14 Jul 2026"
+    "t": "Three Pattaya officers transferred over Kuwaiti tourists’ complaint",
+    "s": "Thaiger",
+    "d": "15 Jul 2026"
   },
   {
-    "t": "Thailand probes possible negligence in deadly Bangkok bar fire",
+    "t": "Australian man charged with murder after dead girl found in suitcase in Thailand",
     "s": "BBC",
+    "d": "28 Jun 2026"
+  },
+  {
+    "t": "Thailand Scraps Plan to End Visa-Free Entry for Indian Tourists",
+    "s": "Bloomberg.com",
     "d": "14 Jul 2026"
   },
   {
@@ -58,9 +53,14 @@ var NEWS_FEED = [
     "d": "13 Jul 2026"
   },
   {
-    "t": "How flammable decor and lax rules turned Bangkok pub into a death trap",
-    "s": "Reuters",
+    "t": "Thailand probes possible negligence in deadly Bangkok bar fire",
+    "s": "BBC",
     "d": "14 Jul 2026"
+  },
+  {
+    "t": "The band playing when a Bangkok bar caught fire mourns its members among the 33 dead",
+    "s": "AP News",
+    "d": "15 Jul 2026"
   },
   {
     "t": "ASEAN envoy meets Myanmar opposition groups in Thailand",
@@ -68,20 +68,20 @@ var NEWS_FEED = [
     "d": "14 Jul 2026"
   },
   {
-    "t": "What It Costs To Stay At Thailand Wellness Retreat Where Mom-To-Be Samantha Is Staying",
-    "s": "NDTV",
-    "d": "15 Jul 2026"
+    "t": "Inside Thailand’s animal rescue network saving strays – photo essay",
+    "s": "The Guardian",
+    "d": "13 Jul 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-07-15","USD":33.65,"AUD":23.49,"GBP":45.11,"EUR":38.37};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-07-15","temp":28,"humid":82,"code":3,"hi":31,"rain":86};
+var WX_NOW = {"date":"2026-07-16","temp":28,"humid":79,"code":3,"hi":31,"rain":51};
 // the bar TV's one true channel
-var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-14","done":true,"h":"France","hs":0,"a":"Spain","as":2},{"d":"2026-07-15","done":false,"h":"England","hs":0,"a":"Argentina","as":0},{"d":"2026-07-18","done":false,"h":"France","hs":0,"a":"SF L2","as":0},{"d":"2026-07-19","done":false,"h":"Spain","hs":0,"a":"SF W2","as":0}]};
+var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-14","done":true,"h":"France","hs":0,"a":"Spain","as":2},{"d":"2026-07-15","done":true,"h":"England","hs":1,"a":"Argentina","as":2},{"d":"2026-07-18","done":false,"h":"France","hs":0,"a":"England","as":0},{"d":"2026-07-19","done":false,"h":"Spain","hs":0,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-07-01","first":"751495","last2":"62","front3":["001","980"],"back3":["304","531"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4038,"date":"2026-07-15","baht":64250};
+var GOLD = {"usd":4061,"date":"2026-07-15","baht":64650};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":64984,"thb":2181511};
+var BTC = {"usd":64787,"thb":2175748};
