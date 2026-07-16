@@ -1540,9 +1540,12 @@ test("barfine needs a room, then favor — then ends the night grandly", () => {
   state().flags.hasWallet = true;
   run("barfine fon");
   assert.match(lastOut(), /not a vending machine/i);
-  state().soc.drinks.fon = 4;
+  state().soc.drinks.fon = 6; // clears both the gate and the she's-not-sold refusal band
   const h = state().happy;
   run("barfine fon");
+  assert.ok(state().pendingBf, "the negotiation opens — the mamasan does the numbers");
+  assert.match(lastOut(), /SHORT TIME .* LONG TIME/);
+  run("long time");
   assert.equal(state().day, 3, "night over");
   assert.equal(state().room, "hotel_room");
   assert.ok(state().happy >= h + 9, `happy ${state().happy}`);
@@ -1555,8 +1558,11 @@ test("soi 6 barfine: upstairs, and the night carries on", () => {
   state().room = "pink_lotus";
   state().money = 1000;
   state().nightTurn = 40; // 22:00 — base rate
-  state().soc.drinks.joy = 2;
+  state().soc.drinks.joy = 4;
   run("barfine joy");
+  assert.ok(state().pendingBf);
+  assert.match(lastOut(), /upfront as a menu/i, "Soi 6 girls quote it themselves");
+  run("short time");
   assert.equal(state().room, "pink_lotus", "still on your stool");
   assert.equal(state().day, 2, "night continues");
   assert.equal(state().money, 300);
@@ -1596,10 +1602,257 @@ test("after midnight the beer-bar barfine is waived (favor still required)", () 
   state().room = "lucky_tiger";
   state().money = 100;
   state().nightTurn = 65;
-  state().soc.drinks.lek = 4;
+  state().soc.drinks.lek = 6;
   run("barfine lek");
+  assert.ok(state().pendingBf);
+  run("long time");
   assert.equal(state().money, 100, "no fee changed hands");
   assert.equal(state().day, 3, "and the night still ends grandly");
+});
+
+// ── Barfine: ST/LT negotiation, refusals, the games, and the recourse ──────
+
+test("barfine prices: LT costs more, Soi 6 early LT is prohibitive, midnight flattens", () => {
+  state().flags.act1Done = true;
+  state().nightTurn = 10; // early — peak
+  assert.deepEqual(_barfinePrices("beer", "lek"), { st: 600, lt: 1050 });
+  assert.deepEqual(_barfinePrices("gogo", "lek"), { st: 1500, lt: 2250 });
+  const s6 = _barfinePrices("soi6", "joy");
+  assert.equal(s6.st, 1050);
+  assert.ok(s6.lt > 2250, `Soi 6 early LT ฿${s6.lt} beats even a go-go fine`);
+  state().nightTurn = 40; // mid-evening: base ST, LT still dearer
+  assert.deepEqual(_barfinePrices("beer", "lek"), { st: 400, lt: 700 });
+  state().nightTurn = 65; // after midnight: same either way
+  const late = _barfinePrices("gogo", "lek");
+  assert.equal(late.st, late.lt, "the collapse flattens ST and LT");
+  assert.deepEqual(_barfinePrices("beer", "lek"), { st: 0, lt: 0 }, "beer waived, both ways");
+  assert.equal(_barfinePrices("beer", "fon").st, _barfinePrices("beer", "fon").lt, "popular girls: flat too");
+});
+
+test("the negotiation gates input: reprompt, cancel, restore redraw, completion", () => {
+  state().flags.act1Done = true; state().flags.hasWallet = true;
+  state().room = "jasmine_garden"; state().money = 3000;
+  state().soc.drinks.fon = 6;
+  run("barfine fon");
+  assert.ok(state().pendingBf);
+  assert.match(lastOut(), /says nothing at all about money/i, "the girl never quotes — the ledger does");
+  assert.deepEqual(engineComplete("s"), ["short time"], "the gate owns autocomplete");
+  out = [];
+  run("go north"); // eaten — reprompted
+  assert.equal(state().room, "jasmine_garden");
+  assert.match(lastOut(), /SHORT TIME .* LONG TIME/);
+  out = [];
+  _renderResume(); // a reload mid-negotiation redraws the same prompt
+  assert.match(lastOut(), /SHORT TIME .* LONG TIME/);
+  run("no thanks");
+  assert.equal(state().pendingBf, null);
+  assert.match(lastOut(), /complete sentence/i);
+});
+
+test("short time: one round, off she goes, the night carries on", () => {
+  state().flags.act1Done = true; state().flags.hasWallet = true;
+  state().room = "candy_bar"; state().money = 3000; state().nightTurn = 40;
+  state().soc.drinks.bua = 6;
+  run("barfine bua");
+  const turns = state().turns;
+  run("short time");
+  assert.equal(state().money, 3000 - 400);
+  assert.equal(state().day, 2, "the night carries on");
+  assert.match(lastOut(), /gone within the hour|back to her stool/i);
+  assert.ok(state().turns - turns >= 6, "the hour passed on the clock");
+  assert.equal(state().soc.bfBar.candy_bar, "bua", "the floor saw you leave with her");
+});
+
+test("the open contract: an operator inflates it, an honest girl writes it fair", () => {
+  state().flags.act1Done = true; state().flags.hasWallet = true;
+  state().room = "candy_bar"; state().money = 5000; state().nightTurn = 40;
+  // bua is a hash-picked operator; favor 4 marks you as exploitable
+  state().soc.drinks.bua = 4;
+  state().pendingBf = { id: "bua", st: 400, lt: 700, room: "candy_bar" };
+  state().rng = 13347; // scam roll says no game tonight — just the fat price
+  _bfResolve("open");
+  assert.match(lastOut(), /price moved while you weren't looking/i);
+  assert.equal(state().money, 5000 - 900, "LT ×1.3, rounded to 50s");
+  // honest girl (nan is no operator): open contract just becomes fair LT
+  deserializeGame(serializeGame()); // fresh night state is fine; reuse world
+  newGame(); state().flags.act1Done = true; state().flags.hasWallet = true;
+  state().lastSaleng = 99999;
+  state().room = "candy_bar"; state().money = 5000; state().nightTurn = 40;
+  state().soc.drinks.nan = 4;
+  state().pendingBf = { id: "nan", st: 400, lt: 700, room: "candy_bar" };
+  _bfResolve("open");
+  assert.match(lastOut(), /fair and square|most girls don't play/i);
+  assert.equal(state().money, 5000 - 700, "plain LT, no surcharge");
+});
+
+test("the LT games: runner, mao, leaveAfter — prose, incident, reduced สนุก", () => {
+  const kinds = [[2, "runner", /back on her stool|Beach Road/i],
+    [5, "mao", /mao mak mak/i], [8, "leaveAfter", /I go back bar/i]];
+  for (const [seed, kind, rx] of kinds) {
+    newGame(); state().lastSaleng = 99999;
+    state().flags.act1Done = true; state().flags.hasWallet = true;
+    state().room = "candy_bar"; state().money = 5000; state().nightTurn = 40;
+    state().soc.drinks.bua = 4;
+    state().pendingBf = { id: "bua", st: 400, lt: 700, room: "candy_bar" };
+    state().rng = seed;
+    out = [];
+    _bfResolve("lt");
+    assert.match(lastOut(), rx, kind);
+    assert.equal(state().bfIncident && state().bfIncident.kind, kind);
+    assert.equal(state().day, 3, kind + " still ends the night");
+    if (kind !== "leaveAfter") assert.match(lastOut(), /COMPLAIN at Candy Bar/i);
+  }
+});
+
+test("the period reveal comes AFTER the fine — and the mama is right there", () => {
+  newGame(); state().lastSaleng = 99999;
+  state().flags.act1Done = true; state().flags.hasWallet = true;
+  state().room = "candy_bar"; state().money = 5000; state().nightTurn = 40;
+  state().soc.drinks.bua = 4;
+  state().pendingBf = { id: "bua", st: 400, lt: 700, room: "candy_bar" };
+  state().rng = 1; // scam roll: period
+  _bfResolve("lt");
+  assert.match(lastOut(), /Lady time/i);
+  assert.equal(state().day, 2, "the night does NOT end — she's back in the rotation");
+  assert.equal(state().bfIncident.kind, "period");
+  assert.equal(state().money, 5000 - 700, "the fine is already in the ledger");
+  run("complain");
+  assert.equal(state().money, 5000, "refunded on the spot");
+  assert.equal(state().bfIncident, null);
+  assert.match(lastOut(), /Not morality, tilac. Business/i);
+});
+
+test("the bar-hop: NO buys back your night; YES-YES drains the wallet into her friends' tills", () => {
+  // refusing the detour → the night you paid for
+  newGame(); state().lastSaleng = 99999;
+  state().flags.act1Done = true; state().flags.hasWallet = true;
+  state().room = "candy_bar"; state().money = 5000;
+  state().bfSeq = { id: "bua", kind: "barhop", fine: 700, spent: 0, room: "candy_bar" };
+  state().pendingEnc = "bfhop";
+  run("no, the night we agreed on");
+  assert.equal(state().day, 3);
+  assert.equal(state().bfIncident, null, "no grievance — she folded");
+  // taking the tour, twice
+  newGame(); state().lastSaleng = 99999;
+  state().flags.act1Done = true; state().flags.hasWallet = true;
+  state().room = "candy_bar"; state().money = 5000;
+  state().bfSeq = { id: "bua", kind: "barhop", fine: 700, spent: 0, room: "candy_bar" };
+  state().pendingEnc = "bfhop";
+  run("yes, one drink");
+  assert.ok(state().pendingEnc === "bfhop", "the second bar is already proposed");
+  run("yes ok");
+  assert.ok(state().money < 5000 - 500, `two rounds of friend-rate drinks gone (฿${state().money})`);
+  assert.equal(state().bfIncident.kind, "barhop");
+  assert.equal(state().day, 3, "ends mao mak mak");
+});
+
+test("the Walking Street party: three girls, your bill, no deed done", () => {
+  newGame(); state().lastSaleng = 99999;
+  state().flags.act1Done = true; state().flags.hasWallet = true;
+  state().room = "candy_bar"; state().money = 5000;
+  state().bfSeq = { id: "bua", kind: "wsparty", fine: 700, spent: 0, room: "candy_bar" };
+  state().pendingEnc = "bfparty";
+  run("yes, meet the friends");
+  assert.ok(state().money <= 5000 - 600, "the bills arrive addressed to you");
+  assert.match(lastOut(), /mao maaaak mak|deed remains undone/i);
+  assert.equal(state().bfIncident.kind, "wsparty");
+  assert.equal(state().day, 3);
+});
+
+test("refusals: customer-stealing, the honest lady-time, temple, and the recoverable cheap-charlie", () => {
+  state().flags.act1Done = true; state().flags.hasWallet = true;
+  // stealing: a girl already left this bar with you tonight
+  state().room = "candy_bar"; state().money = 5000;
+  state().soc.drinks.nan = 6;
+  (state().soc.bfBar = {}).candy_bar = "bua";
+  run("barfine nan");
+  assert.equal(state().pendingBf, null, "no negotiation even opens");
+  assert.match(lastOut(), /don't steal customer/i);
+  assert.match(lastOut(), /ask EARLY/i, "the rail's advice rides along");
+  out = [];
+  run("barfine nan"); // held for the night
+  assert.match(lastOut(), /answer hasn't changed/i);
+  // the honest upfront lady-time (aom's life-hash, day 3) — BEFORE any money
+  newGame(); state().lastSaleng = 99999;
+  state().flags.act1Done = true; state().flags.hasWallet = true;
+  state().day = 3; state().room = "club_mirage"; state().money = 5000;
+  state().soc.drinks.aom = 6;
+  run("barfine aom");
+  assert.match(lastOut(), /Lady time, jing jing/i);
+  assert.match(lastOut(), /BEFORE the fine is paid/i);
+  assert.equal(state().money, 5000, "not a baht moved");
+  // temple in the morning (bee, day 2)
+  newGame(); state().lastSaleng = 99999;
+  state().flags.act1Done = true; state().flags.hasWallet = true;
+  state().day = 2; state().room = "candy_bar_2"; state().money = 5000;
+  state().soc.drinks.bee = 6;
+  run("barfine bee");
+  assert.match(lastOut(), /go temple in morning/i);
+  // cheap charlie is recoverable: warm her up and ask again
+  newGame(); state().lastSaleng = 99999;
+  state().flags.act1Done = true; state().flags.hasWallet = true;
+  state().room = "candy_bar"; state().money = 5000; state().nightTurn = 40;
+  state().soc.drinks.nan = 4; // in the not-sold band
+  state().rng = 1; // refusal roll fires (r < 0.2), kind roll picks cheap (r < 0.5)
+  run("barfine nan");
+  assert.match(lastOut(), /CHEAP CHARLIE|buy me drink first/i);
+  state().soc.drinks.nan = 6; // favor grew ≥2 — she reconsiders
+  run("barfine nan");
+  assert.ok(state().pendingBf, "the negotiation opens this time");
+  run("no");
+});
+
+test("COMPLAIN: refund + intro, the leaveAfter shrug, and the second-strike apology", () => {
+  state().flags.act1Done = true; state().flags.hasWallet = true;
+  state().money = 1000;
+  // noon (Jasmine Garden) ran a runner; Fon works there — the reliable intro
+  state().bfIncident = { id: "noon", room: "jasmine_garden", kind: "runner", fine: 700, day: 2 };
+  state().room = "candy_bar";
+  run("complain");
+  assert.match(lastOut(), /Take it back to Jasmine Garden/i);
+  state().room = "jasmine_garden";
+  run("complain");
+  assert.equal(state().money, 1700, "the fine comes back");
+  assert.match(lastOut(), /Business/i);
+  assert.match(lastOut(), /Fon/, "the mamasan vouches a reliable girl over");
+  assert.ok(state().soc.drinks.fon >= 2, "the intro carries real favor");
+  // leaveAfter: you got what you paid for
+  state().bfIncident = { id: "noon", room: "jasmine_garden", kind: "leaveAfter", fine: 700, day: 2 };
+  run("complain");
+  assert.equal(state().money, 1700, "no refund for that one");
+  assert.match(lastOut(), /Where is problem/i);
+  // second upheld strike: the apology scene, from her own purse
+  state().bfIncident = { id: "noon", room: "jasmine_garden", kind: "mao", fine: 700, day: 3 };
+  run("complain");
+  assert.equal(state().money, 2400);
+  assert.match(lastOut(), /OWN purse|stool is already empty/i);
+  assert.equal(state().bfStrikes.noon, 2);
+});
+
+test("the indirect ask: “I go with you, na” — once, at warming favor, numbers left to mama", () => {
+  state().flags.act1Done = true; state().flags.hasWallet = true;
+  state().room = "candy_bar";
+  state().soc.drinks.nan = 4;
+  state().rng = 1; // the 25% shyness roll passes
+  out = [];
+  _maybeGoWithYou("nan");
+  assert.match(lastOut(), /I go with you, na/);
+  assert.match(lastOut(), /BARFINE NAN/, "the tap hint rides the moment");
+  assert.ok(state().soc.goWith.nan);
+  out = [];
+  _maybeGoWithYou("nan"); // once per girl per night
+  assert.equal(out.length, 0);
+});
+
+test("the veterans warn about all of it at the rail", () => {
+  for (const id of ["nigel", "randy"]) {
+    const t = PATRONS[id].dialogue.find(d => d.topic === "barfine");
+    assert.ok(t, id + " has the barfine sermon");
+  }
+  assert.match(PATRONS.nigel.dialogue.find(d => d.topic === "barfine").text,
+    /BEFORE a single baht moves|ask EARLY/);
+  assert.match(PATRONS.randy.dialogue.find(d => d.topic === "barfine").text,
+    /mao mak mak|mama pays you back|every baht back/i);
 });
 
 test("a regular's girl may barfine herself — the YES path ends the night", () => {

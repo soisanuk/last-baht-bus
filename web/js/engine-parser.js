@@ -1709,12 +1709,17 @@ function engineComplete(input) {
   else if (G.pendingChoice === "checkout") {
     pool = [...Object.keys(_HOTELS).filter(k => k !== G.hotel)
       .map(k => _HOTELS[k].name.toLowerCase()), "stay"];
-  } else if (G.game && !ctx.length) pool = _gameVerbs();
+  } else if (G.pendingBf) pool = ["short time", "long time", "no"];
+  else if (G.game && !ctx.length) pool = _gameVerbs();
   else if (ctx.length) pool = _completePool(ctx[0], ctx);
   // REPORT only makes sense at the station (surfaced there, first), or anywhere
-  // you're still owed money by the tonic shop.
-  else pool = (G.room === "police_station" || G.tonicOwed > 0)
-    ? ["report", ..._COMPLETE_VERBS] : _COMPLETE_VERBS;
+  // you're still owed money by the tonic shop; COMPLAIN while a barfine
+  // grievance is on the books.
+  else {
+    pool = (G.room === "police_station" || G.tonicOwed > 0)
+      ? ["report", ..._COMPLETE_VERBS] : _COMPLETE_VERBS;
+    if (G.bfIncident) pool = ["complain", ...pool];
+  }
   const seen = new Set();
   const out = [];
   for (const c of pool) {
@@ -1787,6 +1792,7 @@ function _renderResume() {
   if (G.pendingChoice === "checkout") { _checkoutPrompt(); return; }
   if (G.game) { _renderGame(); return; }
   if (G.pendingEnc) { _renderEncounter(); return; }
+  if (G.pendingBf) { _bfPrompt(); return; }
   if (G.pendingFare) { _farePrompt(); return; }
 }
 
@@ -1856,6 +1862,27 @@ function doCommand(input) {
     _ENC[enc](lower);
     _tick();
     _checkAct1();
+    return;
+  }
+
+  // the barfine negotiation: the mamasan is waiting on terms. ST / LT / NO —
+  // and waving money through without terms (PAY/YES/OK) is the newbie's open
+  // contract, resolved by whoever's holding the ledger (see _bfResolve).
+  if (G.pendingBf && v !== "restart") {
+    if (/^(st\b|short)/.test(lower)) { _bfResolve("st"); _tick(); return; }
+    if (/^(lt\b|long|overnight|all night)/.test(lower)) { _bfResolve("lt"); _tick(); return; }
+    if (/^(no\b|cancel|never|forget|back out|walk)/.test(lower)) {
+      G.pendingBf = null;
+      _say("You ease back off the ledge. The mamasan closes the ledger without " +
+        "comment — no is a complete sentence here, and nobody holds it against " +
+        "you. The girl is already laughing at something else.");
+      _tick();
+      return;
+    }
+    if (/pay|yes|ok\b|okay|sure|fine|deal|whatever|up to you/.test(lower)) {
+      _bfResolve("open"); _tick(); return;
+    }
+    _bfPrompt(); // the negotiation eats everything else
     return;
   }
 
@@ -2057,6 +2084,7 @@ function doCommand(input) {
     case "shower": case "wash": _doShower(); break;
     case "withdraw": case "atm": _doAtmVerb(); break;
     case "report": case "file": _doReport(arg); break;
+    case "complain": _doComplain(); break;
     case "cheers": case "toast": case "chon": _doCheers(); break;
     case "haggle": case "bargain":
       _say("Nobody's quoting you a price right now. Save it for the man with the " +

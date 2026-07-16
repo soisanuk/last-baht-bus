@@ -93,11 +93,13 @@ async function run(pass, browser, ctxOpts) {
   async function settle() {
     for (let i = 0; i < 4; i++) {
       const st = await evalG(() => ({
+        bf: !!G.pendingBf,
         enc: G.pendingEnc, fare: G.pendingFare ? G.pendingFare.price : null,
         choice: G.pendingChoice, game: G.game && G.game.type,
         hurt: G.hurt, thirst: G.thirst, hunger: G.hunger, battery: G.battery,
         drunk: G.soc.drunk, over: G.over,
       }));
+      if (st.bf) { await cmd("long time"); continue; }
       if (st.enc) { await cmd("no thanks"); continue; }
       if (st.fare) { await cmd("pay " + st.fare); continue; }
       if (st.choice === "vacation_end") { log("  (week over mid-run → NEW VACATION, re-fund)"); await cmd("new vacation"); await cmd("twoweekmillionaire"); continue; }

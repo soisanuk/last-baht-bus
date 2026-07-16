@@ -1978,6 +1978,18 @@ const PATRONS = {
         "anyone.\" He leans in. \"The rest of them? Watered Chang and tourist " +
         "prices. I only drink in them to confirm it.\"",
         short: "\"Lucky Tiger by ten. The rest I drink in purely for evidence.\"" },
+      { topic: "barfine", text: "\"Barfines? Sit down, son.\" He turns on the stool " +
+        "like a lecturer finding his podium. \"Rule one: settle short time or long " +
+        "time BEFORE a single baht moves. Leave it open and an experienced girl " +
+        "will price it after, and the price only ever moves one way. Rule two: if " +
+        "the plan is taking someone home, ask EARLY — nothing worse than four " +
+        "lady drinks into building rapport and she's got temple in the morning. " +
+        "Rule three:\" — the glass comes down for emphasis — \"barfined her long " +
+        "time once, lovely girl, sudden emergency at half eleven, grandmother " +
+        "very sick. Found her back on her stool the same night. Or it might have " +
+        "been Beach Road. If it happens to you, go back and tell the mamasan — " +
+        "she'll make it right. Not out of kindness. Bad girls are bad business.\"",
+        short: "\"Settle ST or LT before money moves, ask early, and if she runs — tell the mamasan.\"" },
     ],
   },
 
@@ -2161,6 +2173,17 @@ const PATRONS = {
         "biggest thing in the room, and this is the first place it made anybody " +
         "SOFTER toward me. Don't that beat all.\"",
         short: "\"They call me Mee. Big bear, good heart, they say. Don't that beat all.\"" },
+      { topic: "barfine", text: "\"Learned this one the expensive way.\" He holds " +
+        "up fingers the size of moo ping. \"One: most of 'em are straight " +
+        "shooters — girl's got a quota to hit, mama takes her cut, everybody " +
+        "eats. But a sharp one'll read a new fella like a menu. Paid a long " +
+        "time once, and she matched me beer for beer all night till the room " +
+        "door shut — then 'mao mak mak, cannot boom boom,' out cold, gone by " +
+        "sunup, fresh as a daisy I bet, back on shift.\" He shrugs, geological. " +
+        "\"Went back next evening, told the mama. Got every baht back and an " +
+        "apology with it. These bars run on repeat customers, son. The mamas " +
+        "know it better than anybody.\"",
+        short: "\"Most girls are straight. The sharp ones read newbies like a menu — and the mama pays you back.\"" },
     ],
   },
 
