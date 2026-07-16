@@ -191,7 +191,7 @@ async function run(pass, browser, ctxOpts) {
   await goTo("buakhao_s");
   await cmd("motosai to darkside", { echo: 2 });
   await settle(); // pays the fare
-  for (const r of ["khao_talo_strip", "water_buffalo", "firefly_bar", "mama_yai", "khao_talo", "khao_talo_bar", "sukhumvit_crossing", "lake_mabprachan"]) {
+  for (const r of ["khao_talo_strip", "water_buffalo", "firefly_bar", "night_heron", "mama_yai", "khao_talo", "khao_talo_bar", "sukhumvit_crossing", "lake_mabprachan"]) {
     if (await goTo(r)) { visited.add(r); await cmd("look"); await settle(); }
   }
   await cmd("talk to daeng", { echo: 3 });

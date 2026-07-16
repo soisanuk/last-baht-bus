@@ -148,6 +148,7 @@ function _salengTick() {
   }
   if (_salengHere()) { if (_rand() < 0.20) _salengVignette(); return; }
   if (!G.game && !G.pendingEnc && !G.salengCart && _inBar() && _room().barType !== "pub" &&
+      !(G.soc.lockIn && G.soc.lockIn[G.room]) && // the cart can't get past the bolt
       _SALENG_REGIONS.has(_room().region) && G.turns - G.lastSaleng >= 15 && _rand() < 0.10) {
     _salengSpawn();
   }

@@ -37,7 +37,7 @@ function projInset({ lat, lon }) {
   return [x, y];
 }
 const DARKSIDE = new Set(["sukhumvit_crossing", "khao_talo_strip", "water_buffalo",
-  "firefly_bar", "mama_yai", "khao_talo", "khao_talo_bar", "lake_mabprachan"]);
+  "firefly_bar", "night_heron", "mama_yai", "khao_talo", "khao_talo_bar", "lake_mabprachan"]);
 const P = id => {
   const [lat, lon] = ROOM_GEO[id];
   return DARKSIDE.has(id) ? projInset({ lat, lon }) : proj({ lat, lon });

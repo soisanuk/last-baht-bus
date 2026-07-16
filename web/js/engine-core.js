@@ -608,6 +608,11 @@ function _describeRoom(full) {
       "precision of toll collectors. The whole rail is watching. (WATCH POLICE — " +
       "or WATCH SUNSET, the bay is doing its thing too.)", "dim");
   }
+  if (G.soc.lockIn && G.soc.lockIn[G.room]) {
+    _say("The front door is bolted and the windows were always black. Inside is " +
+      "the only place the night still exists, and it is making the most of the " +
+      "fact. (OUT gets you unbolted — one way.)", "dim");
+  }
   if (G.room === "police_station" && G.tonicOwed > 0) {
     _say(`You are still out ฿${G.tonicOwed} to the hair-tonic shop. (REPORT it here — ` +
       "for what that's worth.)", "dim");
@@ -673,6 +678,7 @@ function _tick() {
   // it parks at the bar for a while, the girls swarm it, and the player may buy
   // any time before it moves on. All of that lives in _salengTick (encounters).
   _salengTick();
+  _lockInTick(); // the Darkside midnight: bolt the door or bring the shutters down
   _maybeIncomingText();
   if (G.lightOn && G.battery > 0) {
     G.battery--;

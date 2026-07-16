@@ -1145,7 +1145,7 @@ test("connect 4 skill ladder: mamasans 8, floor girls 6, new girls 2", () => {
   assert.equal(_c4Depth("nan"), 6, "the rank and file one step down");
   assert.equal(_c4Depth("lek"), 6);
   assert.equal(_c4Depth("nong"), 2, "first week on the soi — beatable");
-  assert.equal(_c4Depth("namtan"), 2, "a filler girl whose desc says she's new");
+  assert.equal(_c4Depth("mai"), 2, "a filler girl whose desc says she's new");
   assert.equal(_c4Depth(null), 6, "'the hostess on shift' fallback");
   // every filler newbie desc carries the beatable tier, and only those
   for (const [id, n] of Object.entries(NPCS)) {
@@ -1608,6 +1608,70 @@ test("after midnight the beer-bar barfine is waived (favor still required)", () 
   run("long time");
   assert.equal(state().money, 100, "no fee changed hands");
   assert.equal(state().day, 3, "and the night still ends grandly");
+});
+
+// ── The Darkside lock-in ────────────────────────────────────────────────────
+
+test("lock-in: a spender at a lockIn bar gets the bolt, not the shutters", () => {
+  state().flags.act1Done = true; state().flags.hasWallet = true;
+  state().room = "night_heron"; state().money = 5000;
+  state().soc.drinks.dokmai = 3;      // freely spending on the ladies
+  state().nightTurn = 59;
+  const favBefore = _favor("dokmai");
+  run("wait 2");                       // midnight arrives with you inside
+  assert.ok(state().soc.lockIn && state().soc.lockIn.night_heron, "the door is bolted");
+  assert.match(lastOut(), /bolt goes across|painted black/i);
+  assert.match(lastOut(), /negotiable/i, "the party turns (PG-13 wink)");
+  assert.ok(_favor("dokmai") >= favBefore + 3, "the room runs hot");
+  // the describe re-announces it (restore-safe, like rain)
+  out = [];
+  run("look");
+  assert.match(lastOut(), /bolted and the windows were always black/i);
+  // leaving is one-way
+  out = [];
+  run("out");
+  assert.equal(state().room, "khao_talo_strip");
+  assert.match(lastOut(), /bolt goes back across behind you/i);
+  assert.ok(!state().soc.lockIn.night_heron, "the party goes on without you");
+  // and there is no getting back in
+  out = [];
+  run("go dark");
+  assert.equal(state().room, "khao_talo_strip");
+  assert.match(lastOut(), /Shutters down|definitely, legally, closed/i);
+});
+
+test("lock-in: window shoppers get the midnight shutters instead", () => {
+  state().flags.act1Done = true; state().flags.hasWallet = true;
+  state().room = "night_heron"; state().money = 5000; // no spending at all
+  state().nightTurn = 59;
+  run("wait 2");
+  assert.ok(!(state().soc.lockIn && state().soc.lockIn.night_heron));
+  assert.equal(state().room, "khao_talo_strip", "walked out with practiced fondness");
+  assert.match(lastOut(), /shutters start down/i);
+  // an open-front bar closes at midnight regardless of spend
+  newGame(); state().lastSaleng = 99999;
+  state().flags.act1Done = true; state().flags.hasWallet = true;
+  state().room = "firefly_bar"; state().money = 5000;
+  state().soc.drinks.duan = 5;
+  state().nightTurn = 59;
+  run("wait 2");
+  assert.equal(state().room, "khao_talo_strip", "no lockIn flag, no lock-in");
+});
+
+test("Darkside girls are veterans: no green tier past Sukhumvit", () => {
+  for (const [id, n] of Object.entries(NPCS)) {
+    if (!n.filler || NPC_ROLES[id] !== "hostess") continue;
+    const room = n.room;
+    if (ROOMS[room] && ROOMS[room].region === "Darkside") {
+      assert.notEqual(_c4Depth(id), 2, `${id} should be a veteran out here`);
+      assert.doesNotMatch(n.desc, /^(New enough|Baby-faced)/, `${id}'s desc reads older`);
+    }
+  }
+  // and the Night Heron is fully staffed per the rule
+  const staff = Object.keys(NPCS).filter(id => NPCS[id].room === "night_heron");
+  assert.ok(staff.some(id => NPC_ROLES[id] === "mamasan"));
+  assert.ok(staff.some(id => NPC_ROLES[id] === "cashier"));
+  assert.ok(staff.filter(id => NPC_ROLES[id] === "hostess").length >= 2);
 });
 
 // ── Barfine: ST/LT negotiation, refusals, the games, and the recourse ──────

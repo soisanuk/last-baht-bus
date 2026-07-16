@@ -700,7 +700,7 @@ const ROOMS = {
     // shed a stray "Daeng" tap onto the mamasan when the name appears in prose).
     bar: "Daeng's Place",
     region: "Darkside",
-    barType: "beer", pool: true,
+    barType: "beer", pool: true, lockIn: true,
     outlet: true,
     desc: "A beer bar with a ceiling fan, a shrine over the till, and photos of Walking " +
       "Street's glory days behind the bar — including one of a dancer mid-spin that " +
@@ -715,9 +715,12 @@ const ROOMS = {
       "town at a tenth of the wattage. Ladies call the odds from bamboo rails, a " +
       "pool table clacks somewhere, and every third stool holds an expat who has " +
       "been on it since the flood. THE WATER BUFFALO and FIREFLY BAR glow " +
-      "closest; the soi runs on east toward Daeng's end.",
+      "closest; the soi runs on east toward Daeng's end. At the dark end, a padded " +
+      "door with no sign worth reading — THE NIGHT HERON, if you know to ask — and " +
+      "beside it a dead Irish pub, THE SHAMROCK on its sun-bleached sign, shutters " +
+      "down for good.",
     exits: { w: "sukhumvit_crossing", e: "khao_talo", in: "water_buffalo",
-      n: "water_buffalo", s: "firefly_bar" },
+      n: "water_buffalo", s: "firefly_bar", dark: "night_heron" },
   },
   water_buffalo: {
     name: "The Water Buffalo",
@@ -740,6 +743,20 @@ const ROOMS = {
       "soi it pulses like its namesake. The ladies here commute from the " +
       "villages past the lake, and the whole place runs on the kind of easy, " +
       "shoes-off familiarity that town bars imitate and never quite land.",
+    exits: { out: "khao_talo_strip" },
+  },
+  night_heron: {
+    name: "The Night Heron",
+    bar: "The Night Heron",
+    region: "Darkside",
+    barType: "beer",
+    lockIn: true,
+    desc: "An enclosed, air-conditioned box at the dark end of the strip: painted-out " +
+      "windows, a padded door, a sign small enough to deny. Before midnight it pours " +
+      "like any beer bar, only colder and quieter — but the regulars keep checking " +
+      "the clock, which should tell you something, and the ladies watch your " +
+      "spending with the warm professional attention of women who know exactly " +
+      "what the bolt on that door is for.",
     exits: { out: "khao_talo_strip" },
   },
   mama_yai: {
@@ -2754,6 +2771,17 @@ const NPC_ROLES = {
 const _H_FROM = ["Udon Thani", "Khon Kaen", "Roi Et", "Sisaket", "Buriram", "Ubon",
   "Surin", "{{Nong Khai}}", "Kalasin", "Yasothon", "Mukdahan", "Nakhon Phanom",
   "Chaiyaphum", "Loei", "Maha Sarakham", "Sakon Nakhon", "Amnat Charoen", "{{Nong Bua Lamphu}}"];
+// The Darkside register: the ladies out here are older but better at this
+// than anyone in town, and they are here to make money. No nervous new girls
+// on this side of Sukhumvit.
+const _H_LOOK_DARK = [
+  "Twenty seasons of soi behind her eyes and a laugh that got louder every one",
+  "Older than the town girls and visibly better at this than any of them",
+  "A gold tooth, a sharper tongue, and drink arithmetic you can watch happening",
+  "Pouring out here since the lake road was dirt; minds her regulars like livestock",
+  "A veteran's easy patience — she will out-sit, out-drink, and out-earn the room",
+  "Somebody's mother, twice over, and nobody's fool ever",
+];
 const _H_LOOK = [
   "Round-faced and quick to laugh",
   "Tall and quiet, watching the door",
@@ -2832,7 +2860,8 @@ function _buildHostess(name, th, room) {
   const bar = _barName(room) || "the bar";
   const idx = (arr, salt) => arr[_hh(id, salt) % arr.length];
   const from = idx(_H_FROM, 3);
-  const look = idx(_H_LOOK, 5);
+  const darkside = ROOMS[room] && ROOMS[room].region === "Darkside";
+  const look = idx(darkside ? _H_LOOK_DARK : _H_LOOK, 5);
   const family = idx(_H_FAMILY, 7).replace(/\{from\}/g, from);
   const plan = idx(_H_PLAN, 11);
   const emoji = idx(_H_EMOJI, 13);
@@ -2915,6 +2944,7 @@ const _FILLER_HOSTESSES = [
   ["Lin","หลิน","water_buffalo"], ["Nim","นิ่ม","water_buffalo"],
   ["Duan","เดือน","firefly_bar"], ["Saifon","สายฝน","firefly_bar"],
   ["Wanpen","วันเพ็ญ","mama_yai"], ["Kratae","กระแต","mama_yai"],
+  ["Dokmai","ดอกไม้","night_heron"], ["Jampa","จำปา","night_heron"],
   ["Ing","อิง","blue_dog"], ["Khing","ขิง","blue_dog"],
   ["Bam","บาม","rock_factory"], ["Kwang","กวาง","rock_factory"],
   ["Chompoo","ชมพู่","stinky_bar"], ["Manow","มะนาว","stinky_bar"],
@@ -3054,6 +3084,7 @@ const _FILLER_MAMAS = [
   ["Jom","จอม","starlight_bar"], ["Nee","หนี่","pink_lotus"], ["Peung","ผึ้ง","golden_dragon"],
   ["Malai","มาลัย","sunset_dreams"], ["Somsri","สมศรี","kinky"], ["Ratree","ราตรี","las_vegas"],
   ["Wandee","วันดี","water_buffalo"], ["Somjai","สมใจ","firefly_bar"], ["Yai","ใหญ่","mama_yai"],
+  ["Tui","ตุ่ย","night_heron"],
 ];
 const _FILLER_CASHIERS = [
   ["Golf","กอล์ฟ","tequila_queen"], ["Air","แอร์","blue_dog"], ["Apple","แอปเปิ้ล","rock_factory"],
@@ -3064,6 +3095,7 @@ const _FILLER_CASHIERS = [
   ["Jenny","เจนนี่","pink_lotus"], ["Joon","จูน","golden_dragon"], ["Jun","จัน","sunset_dreams"],
   ["Kaimook","ไข่มุก","slutty"], ["Kanom","ขนม","las_vegas"], ["Keng","เก่ง","khao_talo_bar"],
   ["Best","เบสท์","water_buffalo"], ["Aim","เอม","firefly_bar"], ["Tangmo","แตงโม","mama_yai"],
+  ["Mon","มล","night_heron"],
 ];
 
 for (const [name, th, room] of _FILLER_MAMAS) {
@@ -3177,6 +3209,7 @@ const ROOM_GEO = {
   khao_talo_strip:  [12.9078, 100.9090],
   water_buffalo:    [12.9078, 100.9092],
   firefly_bar:      [12.9077, 100.9086],
+  night_heron:      [12.9079, 100.9098],
   mama_yai:         [12.9066, 100.9114],
   khao_talo:        [12.9073, 100.9113],
   khao_talo_bar:    [12.9071, 100.9118],

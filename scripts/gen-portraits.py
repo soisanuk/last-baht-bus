@@ -472,6 +472,10 @@ CHARS = {
     "saifon":   lady(skin=THAI, hair="pigtails", hc=BLACK, shirt=C(0x00e5ff), bg=BG_BAR, mouth="smile", acc=["earrings"], earc=CYAN, blush=True),
     "wanpen":   lady(skin=THAI2, hair="sleek", hc=GRBLK, shirt=C(0xd02040), bg=BG_BAR, mouth="smile", acc=["earrings", "chain"], earc=GOLD),
     "kratae":   lady(skin=THAI, hair="pigtails", hc=BLACK, shirt=C(0xf05a30), bg=BG_BAR, mouth="grin", acc=["earrings", "nosering"], earc=YELN),
+    "tui":      lady(skin=THAI2, hair="chignon", hc=SILVER, shirt=C(0x181820), bg=BG_BAR, mouth="stern", acc=["earrings", "chain"], earc=GOLD),
+    "mon":      lady(skin=THAI, hair="bun", hc=GRBLK, shirt=C(0x2a2a3a), collar=True, bg=BG_BAR, mouth="neutral", acc=["earrings", "ringchain"], earc=GOLD),
+    "dokmai":   lady(skin=THAI2, hair="bun", hc=GRBLK, shirt=C(0x8a1030), bg=BG_BAR, mouth="grin", acc=["earrings", "flower", "chain"], earc=GOLD),
+    "jampa":    lady(skin=THAI2, hair="chignon", hc=GREY, shirt=C(0x5a1a4a), bg=BG_BAR, mouth="smile", acc=["earrings", "chain"], earc=GOLD),
     # --- patrons ---
     "nigel":    dict(skin=RED, hair="balding", hc=GREY, shirt=C(0x556b55),
                      vest=C(0x3a4d3a), mouth="neutral", bg=BG_BAR),
