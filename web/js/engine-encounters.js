@@ -37,6 +37,7 @@ function _renderEncounter() {
 // the pitch, the room re-announce, the buy hint, and the item list share a source.
 const _SALENG_REGIONS = new Set([
   "Beach Road", "Soi Buakhao", "Tree Town", "LK Metro", "Walking Street", "Soi 6", "Myth Night",
+  "Darkside", // the carts work the lake road and the soi — canon as anything
 ]);
 const _SALENG_CARTS = {
   food: {

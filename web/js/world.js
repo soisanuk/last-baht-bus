@@ -681,7 +681,7 @@ const ROOMS = {
       "side, where expats go when they stop being tourists. On foot this is a coin flip " +
       "with a truck. The motosai drivers do it forty times a night.",
     motosai: true,
-    exits: { e: "khao_talo" },
+    exits: { e: "khao_talo_strip" },
   },
   khao_talo: {
     name: "Soi Khao Talo",
@@ -690,8 +690,9 @@ const ROOMS = {
     desc: "A long, plain soi of beer bars with no neon budget and no need for one. The " +
       "ladies here are older, the customers older still, and every bar knows every " +
       "customer's pour. It's seedier than town and more honest about it. One bar's " +
-      "doorway glows warmer than the rest.",
-    exits: { w: "sukhumvit_crossing", n: "lake_mabprachan", in: "khao_talo_bar", e: "khao_talo_bar" },
+      "doorway glows warmer than the rest, and from the south side MAMA YAI'S " +
+      "sends out charcoal smoke and the smell of som tam being argued about.",
+    exits: { w: "khao_talo_strip", n: "lake_mabprachan", in: "khao_talo_bar", e: "khao_talo_bar", s: "mama_yai" },
   },
   khao_talo_bar: {
     name: "Daeng's Place (Khao Talo)",
@@ -704,6 +705,54 @@ const ROOMS = {
     desc: "A beer bar with a ceiling fan, a shrine over the till, and photos of Walking " +
       "Street's glory days behind the bar — including one of a dancer mid-spin that " +
       "you'd swear is the woman now pouring your drink. There's an outlet by the cooler.",
+    exits: { out: "khao_talo" },
+  },
+  khao_talo_strip: {
+    name: "Soi Khao Talo (the strip)",
+    region: "Darkside",
+    desc: "The working stretch of the soi: a dozen open-front bars shoulder to " +
+      "shoulder under one long tin roof, fairy lights doing the job neon does in " +
+      "town at a tenth of the wattage. Ladies call the odds from bamboo rails, a " +
+      "pool table clacks somewhere, and every third stool holds an expat who has " +
+      "been on it since the flood. THE WATER BUFFALO and FIREFLY BAR glow " +
+      "closest; the soi runs on east toward Daeng's end.",
+    exits: { w: "sukhumvit_crossing", e: "khao_talo", in: "water_buffalo",
+      n: "water_buffalo", s: "firefly_bar" },
+  },
+  water_buffalo: {
+    name: "The Water Buffalo",
+    bar: "The Water Buffalo",
+    region: "Darkside",
+    barType: "beer", pool: true,
+    desc: "A Darkside sports bar built like its namesake: wide, unhurried, and " +
+      "impossible to move once settled. Three screens run three different " +
+      "football matches; the pool table is the soi's court of appeal. The beer " +
+      "is ten baht cheaper than town and the regulars will tell you that number " +
+      "before they tell you their names.",
+    exits: { out: "khao_talo_strip" },
+  },
+  firefly_bar: {
+    name: "Firefly Bar",
+    bar: "Firefly Bar",
+    region: "Darkside",
+    barType: "beer",
+    desc: "A small bar strung with more fairy lights than structure — from the " +
+      "soi it pulses like its namesake. The ladies here commute from the " +
+      "villages past the lake, and the whole place runs on the kind of easy, " +
+      "shoes-off familiarity that town bars imitate and never quite land.",
+    exits: { out: "khao_talo_strip" },
+  },
+  mama_yai: {
+    name: "Mama Yai's",
+    bar: "Mama Yai's",
+    region: "Darkside",
+    barType: "beer",
+    outlet: true,
+    desc: "Half bar, half kitchen, all Mama Yai: a Darkside institution where the " +
+      "som tam arrives unasked and correct, the beer arrives cold, and the " +
+      "arguing about both is complimentary. Expats who got tired of town rents " +
+      "eat here nightly; the wall of photos knows everyone's second wife. " +
+      "There's an outlet by the till, for customers who finish their plate.",
     exits: { out: "khao_talo" },
   },
   lake_mabprachan: {
@@ -2863,6 +2912,9 @@ const _FILLER_HOSTESSES = [
   ["Kai","ไก่","golden_dragon"], ["Nook","นุ้ก","golden_dragon"], ["Dew","ดิว","golden_dragon"],
   ["Puu","ปู","pink_lotus"], ["Belle","เบล","pink_lotus"],
   ["Kat","แคท","sunset_dreams"], ["May","เมย์","sunset_dreams"], ["Dear","เดียร์","sunset_dreams"],
+  ["Lin","หลิน","water_buffalo"], ["Nim","นิ่ม","water_buffalo"],
+  ["Duan","เดือน","firefly_bar"], ["Saifon","สายฝน","firefly_bar"],
+  ["Wanpen","วันเพ็ญ","mama_yai"], ["Kratae","กระแต","mama_yai"],
   ["Ing","อิง","blue_dog"], ["Khing","ขิง","blue_dog"],
   ["Bam","บาม","rock_factory"], ["Kwang","กวาง","rock_factory"],
   ["Chompoo","ชมพู่","stinky_bar"], ["Manow","มะนาว","stinky_bar"],
@@ -3001,6 +3053,7 @@ const _FILLER_MAMAS = [
   ["Waew","แวว","silk_rose"], ["Ple","เปิ้ล","jasmine_garden"], ["Orm","อ้อม","gold_rush"],
   ["Jom","จอม","starlight_bar"], ["Nee","หนี่","pink_lotus"], ["Peung","ผึ้ง","golden_dragon"],
   ["Malai","มาลัย","sunset_dreams"], ["Somsri","สมศรี","kinky"], ["Ratree","ราตรี","las_vegas"],
+  ["Wandee","วันดี","water_buffalo"], ["Somjai","สมใจ","firefly_bar"], ["Yai","ใหญ่","mama_yai"],
 ];
 const _FILLER_CASHIERS = [
   ["Golf","กอล์ฟ","tequila_queen"], ["Air","แอร์","blue_dog"], ["Apple","แอปเปิ้ล","rock_factory"],
@@ -3010,6 +3063,7 @@ const _FILLER_CASHIERS = [
   ["Hong","ห่อง","jasmine_garden"], ["Jah","จ๊ะ","gold_rush"], ["Jeed","จี๊ด","starlight_bar"],
   ["Jenny","เจนนี่","pink_lotus"], ["Joon","จูน","golden_dragon"], ["Jun","จัน","sunset_dreams"],
   ["Kaimook","ไข่มุก","slutty"], ["Kanom","ขนม","las_vegas"], ["Keng","เก่ง","khao_talo_bar"],
+  ["Best","เบสท์","water_buffalo"], ["Aim","เอม","firefly_bar"], ["Tangmo","แตงโม","mama_yai"],
 ];
 
 for (const [name, th, room] of _FILLER_MAMAS) {
@@ -3120,6 +3174,10 @@ const ROOM_GEO = {
   las_vegas:        [12.9298, 100.8860],
   // The Darkside
   sukhumvit_crossing: [12.9100, 100.8975],
+  khao_talo_strip:  [12.9078, 100.9090],
+  water_buffalo:    [12.9078, 100.9092],
+  firefly_bar:      [12.9077, 100.9086],
+  mama_yai:         [12.9066, 100.9114],
   khao_talo:        [12.9073, 100.9113],
   khao_talo_bar:    [12.9071, 100.9118],
   lake_mabprachan:  [12.9300, 100.9560],

@@ -36,7 +36,8 @@ function projInset({ lat, lon }) {
   const y = INSET.y + ((INSET.lat1 - lat) / (INSET.lat1 - INSET.lat0)) * INSET.h;
   return [x, y];
 }
-const DARKSIDE = new Set(["sukhumvit_crossing", "khao_talo", "khao_talo_bar", "lake_mabprachan"]);
+const DARKSIDE = new Set(["sukhumvit_crossing", "khao_talo_strip", "water_buffalo",
+  "firefly_bar", "mama_yai", "khao_talo", "khao_talo_bar", "lake_mabprachan"]);
 const P = id => {
   const [lat, lon] = ROOM_GEO[id];
   return DARKSIDE.has(id) ? projInset({ lat, lon }) : proj({ lat, lon });
@@ -149,14 +150,18 @@ for (const el of GEOM.elements) { // Khao Talo Rd inside the inset
   S.push(`<polyline points="${pts.join(" ")}" fill="none" stroke="#2c2050" stroke-width="3"/>`);
 }
 const INSET_LBL = { sukhumvit_crossing: [6, -8, "start", "Sukhumvit"],
-  khao_talo: [-6, 16, "end", "Khao Talo"], khao_talo_bar: [8, -8, "start", "Daeng's Place"],
+  khao_talo_strip: [-6, 16, "end", "the strip"],
+  khao_talo: [6, 16, "start", "Khao Talo"], khao_talo_bar: [8, -8, "start", "Daeng's Place"],
   lake_mabprachan: [-8, -8, "end", "Lake Mabprachan"] };
 for (const id of DARKSIDE) {
   const [x, y] = P(id);
   const r = ROOMS[id];
   S.push(`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r.bar ? 5 : 2.6}" fill="#a8e83c"/>`);
-  const [dx, dy, anchor, lbl] = INSET_LBL[id];
-  S.push(`<text x="${(x + dx).toFixed(1)}" y="${(y + dy).toFixed(1)}" font-size="13" fill="#a8e83c" text-anchor="${anchor}">${lbl}</text>`);
+  const nl = INSET_LBL[id];
+  if (nl) {
+    const [dx, dy, anchor, lbl] = nl;
+    S.push(`<text x="${(x + dx).toFixed(1)}" y="${(y + dy).toFixed(1)}" font-size="13" fill="#a8e83c" text-anchor="${anchor}">${lbl}</text>`);
+  }
 }
 
 // title + sea label + compass
