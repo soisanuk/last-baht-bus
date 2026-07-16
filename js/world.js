@@ -2727,9 +2727,18 @@ function _hh(s, salt) {
   return h;
 }
 
+// A room's display name as a venue — the marquee `bar` name, else the room
+// name; undefined for an unknown id (callers pick their own fallback). Lives
+// here (not engine-core) because world.js loads first, so both the builders
+// below and every engine file can use it.
+function _barName(id) {
+  const r = ROOMS[id];
+  return r && (r.bar || r.name);
+}
+
 function _buildHostess(name, th, room) {
   const id = name.toLowerCase();
-  const bar = ROOMS[room] ? (ROOMS[room].bar || ROOMS[room].name) : "the bar";
+  const bar = _barName(room) || "the bar";
   const idx = (arr, salt) => arr[_hh(id, salt) % arr.length];
   const from = idx(_H_FROM, 3);
   const look = idx(_H_LOOK, 5);
@@ -2851,7 +2860,7 @@ const _C_LOOK = [
 
 function _buildMama(name, th, room) {
   const id = name.toLowerCase();
-  const bar = ROOMS[room] ? (ROOMS[room].bar || ROOMS[room].name) : "the bar";
+  const bar = _barName(room) || "the bar";
   const idx = (arr, salt) => arr[_hh(id, salt) % arr.length];
   const from = idx(_H_FROM, 3);
   const look = idx(_M_LOOK, 5);
@@ -2897,7 +2906,7 @@ function _buildMama(name, th, room) {
 
 function _buildCashier(name, th, room) {
   const id = name.toLowerCase();
-  const bar = ROOMS[room] ? (ROOMS[room].bar || ROOMS[room].name) : "the bar";
+  const bar = _barName(room) || "the bar";
   const idx = (arr, salt) => arr[_hh(id, salt) % arr.length];
   const from = idx(_H_FROM, 3);
   const look = idx(_C_LOOK, 5);
