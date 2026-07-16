@@ -388,6 +388,30 @@ test("pending fare gates other commands", () => {
   assert.notEqual(out[out.length - 1], first, "the second nag reads differently");
 });
 
+test("every exit key walks: pub, up/down/u/d, hotel — GO accepts what Exits lists", () => {
+  // The Exits line decorates every key as a tap target, so every key must
+  // move — _DIRS aliases plus any literal exit key of the room (pub, hotel).
+  state().flags.hasWallet = true;
+  state().room = "soi6_street";
+  run("go pub");
+  assert.equal(state().room, "queen_vic", "the pub door works");
+  run("up"); // upstairs is for guests only
+  assert.match(lastOut(), /Guest, sir/);
+  assert.equal(state().room, "queen_vic");
+  state().hotel = "queenvic";
+  run("u");
+  assert.equal(state().room, "qv_room", "a guest walks up (U alias)");
+  run("d");
+  assert.equal(state().room, "queen_vic", "and back down (D alias)");
+  // the Metropole's street door on Buakhao North
+  state().room = "buakhao_n"; state().hotel = "sabai";
+  run("go hotel");
+  assert.match(lastOut(), /Guest, sir/);
+  state().hotel = "metropole";
+  run("hotel"); // bare exit key walks too
+  assert.equal(state().room, "metropole_room");
+});
+
 test("the bus stop and Nok's glass trade advertise themselves tappably", () => {
   // (RIDE BUS TO <place>) is a CAPS hint now — the last keyboard-only steps
   // of the opening funnel got tap paths.

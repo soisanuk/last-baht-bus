@@ -7,12 +7,15 @@
 const _DIRS = {
   n: "n", north: "n", s: "s", south: "s", e: "e", east: "e", w: "w", west: "w",
   in: "in", inside: "in", out: "out", outside: "out",
+  up: "up", u: "up", down: "down", d: "down",
   alley: "alley", office: "office",
 };
 
 function _doGo(dirWord) {
-  const dir = _DIRS[dirWord];
+  // aliases first; then ANY literal exit key of this room (pub, hotel, …) —
+  // the Exits line decorates every key as a tap target, so every key must walk
   const r = _room();
+  const dir = _DIRS[dirWord] || (r.exits && r.exits[dirWord] ? dirWord : null);
   if (!dir || !r.exits[dir]) { _say("You can't go that way."); return; }
   const to = r.exits[dir];
   // a downpour owns the street: nothing moves except into shelter
@@ -1871,14 +1874,17 @@ function doCommand(input) {
   }
   _lastCmd = raw;
 
-  if (_DIRS[v] !== undefined && words.length === 1) {
+  if ((_DIRS[v] !== undefined || (_room().exits && _room().exits[v])) &&
+      words.length === 1) {
+    // bare direction — including this room's own exit keys (pub, hotel, …)
     _doGo(v); _tick(); _checkAct1(); return;
   }
 
   switch (v) {
     case "go": case "walk": case "head": {
       const gw = arg.replace(/^to (the )?/, "");
-      if (!gw || _DIRS[gw] !== undefined) _doGo(gw);
+      // a direction alias OR one of this room's own exit keys (pub, hotel, …)
+      if (!gw || _DIRS[gw] !== undefined || (_room().exits && _room().exits[gw])) _doGo(gw);
       else _doTravel(gw); // "go candy bar" — a place, not a direction
       break;
     }
