@@ -349,7 +349,9 @@ const _term = (() => {
     }
     for (const act of acts) {
       const b = document.createElement("button");
-      b.textContent = act.t + (act.go ? "" : " …");
+      // open (prefill) actions get an ellipsis — unless the label already
+      // carries one ("ask about …", "tip …"), which doubled it up
+      b.textContent = act.t + (act.go || /…\s*$/.test(act.t) ? "" : " …");
       b.addEventListener("click", e => { e.stopPropagation(); _runAct(act); });
       _fly.appendChild(b);
     }
