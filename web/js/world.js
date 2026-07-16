@@ -1243,6 +1243,8 @@ const NPCS = {
   nong: {
     name: "Nong", th: "น้อง", emoji: "🌸",
     room: "gold_rush",
+    c4: 2, // first week on the soi — the one Connect 4 table a human can beat
+
     desc: "Sweet, visibly new — first week on the soi — checking her phone between " +
       "customers and startling whenever the door opens.",
     dialogue: [
@@ -2736,6 +2738,19 @@ function _barName(id) {
   return r && (r.bar || r.name);
 }
 
+// Connect 4 skill ladder — the c4Ai search depth for this opponent. Mamasans
+// have played every shift for twenty years: top tier. The rank and file sit
+// one step down. A girl fresh off the farm (an explicit `c4` on her entry,
+// like Nong's, or a filler whose hash-picked desc says she's new) is beatable
+// by a sharp human player.
+function _c4Depth(id) {
+  const n = id && NPCS[id];
+  if (!n) return 6;                          // "the hostess on shift"
+  if (n.c4) return n.c4;                     // hand-tuned (new girls: 2)
+  if (NPC_ROLES[id] === "mamasan") return 8; // the shark
+  return 6;                                  // everyone else on the floor
+}
+
 function _buildHostess(name, th, room) {
   const id = name.toLowerCase();
   const bar = _barName(room) || "the bar";
@@ -2780,8 +2795,12 @@ function _buildHostess(name, th, room) {
     '"No no, not my bar. Try Candy, Soi Buakhao side. Everybody problem go to Candy, my mama say."',
   ];
 
+  // a girl whose desc says she's new plays Connect 4 like she's new — the
+  // tier the player can actually beat, signalled by what they read of her
+  const green = look.startsWith("New enough") || look.startsWith("Baby-faced");
   return {
     name, th, emoji, room, filler: true,
+    ...(green ? { c4: 2 } : {}),
     desc: `${look} — one of the ${bar} girls, from ${from}. ${phone}`,
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", text: idx(GREET, 23), short: idx(GREET_SHORT, 29) },

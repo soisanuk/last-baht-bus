@@ -15,9 +15,14 @@ function _barGamesHere() {
   return bt === "beer" || bt === "soi6";
 }
 
+// Who takes the seat across the table: a canon girl if one's here, else any
+// of the bar's staff (the filler cast plays too). Returns { id, name } — id
+// null only in a staffless room; her Connect 4 depth comes from _c4Depth(id).
 function _gameHostess() {
-  const id = _npcsHere().find(n => CANON_HOSTESSES.includes(n));
-  return id ? NPCS[id].name : "the hostess on shift";
+  const here = _npcsHere();
+  const id = here.find(n => CANON_HOSTESSES.includes(n)) ||
+    here.find(n => NPC_ROLES[n]) || null;
+  return { id, name: id ? NPCS[id].name : "the hostess on shift" };
 }
 
 // Stake escrow: taken up front, paid back ×2 on a win (×3 on a Jackpot).
@@ -85,16 +90,59 @@ function _doPlay(arg) {
 
 function _startC4() {
   if (!_barGamesHere()) { _say("No Connect 4 board here — every beer bar keeps one within arm's reach."); return; }
-  const opp = _gameHostess();
+  const { id, name } = _gameHostess();
+  const depth = _c4Depth(id);
   const stake = _takeStake(C4_STAKE);
-  G.game = { type: "c4", board: c4New(), opp, stake };
-  _say(`${opp} has the Connect 4 frame up and loaded before you finish asking. ` +
-    "This is not her first game today. It is not her hundredth.");
+  G.game = { type: "c4", board: c4New(), opp: name, oppId: id, depth, stake };
+  // the intro telegraphs the tier — read your opponent before you bet
+  if (depth >= 8) {
+    _say(`${name} has the Connect 4 frame up and loaded before you finish asking. ` +
+      "This is not her first game today. It is not her hundredth.");
+  } else if (depth <= 2) {
+    _say(`${name} lights up, fetches the frame, and drops a counter on the way ` +
+      "over. She sorts the colours carefully and counts hers twice. Down the " +
+      "bar, one of the older girls watches with something between fondness and pity.");
+  } else {
+    _say(`${name} racks the frame with the easy speed of a woman who plays ` +
+      "every shift, and gives you first drop like it costs her nothing. It doesn't.");
+  }
   _say(stake ? `฿${stake} on the table.` :
     "You're broke, so this one's for sanuk — and her professional pride.");
   _say(c4Render(G.game.board));
   _say("(You're ●. Tap a column 1-7 to drop · Q quits.)", "dim");
 }
+
+// ─ Distractions at the board ─
+// A parked saleng or a downpour pulls a girl's eyes off the game: she plays a
+// tier down while it lasts — the shark like the floor, the floor like a new
+// girl, a new girl barely at all. Never the mamasan. Checked per move (carts
+// leave and rain stops mid-game); the transition prose keys off g.distKey,
+// which rides the save so a restore doesn't re-announce it.
+const _C4_DISTRACT = {
+  food: n => `${n} keeps glancing past your shoulder at the food cart, nostrils ` +
+    "working — she's counting moo ping skewers out there, not columns.",
+  snacks: n => `${n} eyes the som-tam cart over your shoulder with open hunger, ` +
+    "the pestle thudding out her heartbeat. Her drops come a beat late.",
+  shoes: n => `${n} keeps stealing looks at the heels glittering on the shoe ` +
+    "cart, playing you with one visible fraction of her attention.",
+  lingerie: n => `${n} is barely at the table — the lingerie rack outside has ` +
+    "her and two other girls in giggling conference between moves.",
+  rain: n => `${n} watches the rain come down in sheets past the doorway, ` +
+    "dropping her counters on autopilot.",
+};
+const _C4_REFOCUS = n => `${n}'s eyes come back to the board. The distraction ` +
+  "has moved on. The girl across from you, unfortunately, has not.";
+const _C4_IMMUNE = n => `${n} does not so much as glance at it. The board has ` +
+  "her complete attention. It always did.";
+
+function _c4Distraction() {
+  if (_salengHere()) return G.salengCart;   // food | shoes | lingerie | snacks
+  if (G.rain > 0) return "rain";
+  return null;
+}
+
+// one rung down the ladder (see _c4Depth): 8 → 6 → 2 → 1
+function _c4TierDown(d) { return d >= 8 ? 6 : d >= 6 ? 2 : 1; }
 
 function _c4Input(input) {
   const g = G.game;
@@ -113,7 +161,17 @@ function _c4Input(input) {
     _endGame(null, g.stake, `A draw. ${g.opp} looks almost impressed. Stakes back.`);
     return;
   }
-  const ai = c4Ai(g.board, _rand);
+  // distractions: a saleng or a downpour costs the girls a tier — never the mama
+  const cause = _c4Distraction();
+  const immune = !!(g.oppId && NPC_ROLES[g.oppId] === "mamasan");
+  let depth = g.depth || 8; // pre-tier saves: the shark
+  if (cause && !immune) depth = _c4TierDown(depth);
+  if ((cause || null) !== (g.distKey || null)) {
+    if (cause) _say((immune ? _C4_IMMUNE : _C4_DISTRACT[cause])(g.opp));
+    else if (!immune) _say(_C4_REFOCUS(g.opp));
+    g.distKey = cause || null;
+  }
+  const ai = c4Ai(g.board, _rand, depth);
   c4Drop(g.board, ai, 2);
   _say(c4Render(g.board));
   if (c4Win(g.board) === 2) {
@@ -135,7 +193,7 @@ function _startJackpot(w) {
   if (!_barGamesHere()) { _say("No Jackpot box here — beer bars keep the dice cup by the till."); return; }
   const betM = w.match(/\d+/);
   const want = Math.max(JP_MIN, Math.min(JP_MAX, betM ? parseInt(betM[0], 10) : JP_DEFAULT));
-  const opp = _gameHostess();
+  const opp = _gameHostess().name; // jackpot is dice — no skill tier to carry
   const stake = _takeStake(want);
   // First game ever (flags.jpLearned unset): the hostess walks you through it —
   // every roll is a manual flip, even a forced one, so you learn the moves. After

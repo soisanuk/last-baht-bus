@@ -1087,6 +1087,100 @@ test("connect 4: winning pays double and sets the legend flag", () => {
   assert.match(lastOut(), /legend/i);
 });
 
+test("connect 4 distractions: a saleng costs the girls a tier — never the mama", () => {
+  // Ton (floor girl, depth 6) hosts at the Silk Rose; park a lingerie cart
+  state().room = "silk_rose";
+  state().money = 100;
+  state().salengCart = "lingerie";
+  state().salengRoom = "silk_rose";
+  state().salengUntil = state().turns + 60;
+  run("play connect 4");
+  assert.equal(state().game.oppId, "ton");
+  run("drop 1");
+  assert.match(lastOut(), /lingerie|giggling conference/i, "the distraction is written");
+  assert.equal(state().game.distKey, "lingerie");
+  // announced once, not every move
+  out = [];
+  run("drop 2");
+  assert.doesNotMatch(lastOut(), /giggling conference/i);
+  // the cart moves on mid-game: she snaps back, tier restored
+  state().salengCart = null;
+  out = [];
+  run("drop 3");
+  assert.match(lastOut(), /eyes come back|has moved on/i);
+  assert.equal(state().game.distKey, null);
+  run("q");
+  // Daeng's table: the mamasan does not look
+  state().room = "khao_talo_bar";
+  state().salengCart = "food";
+  state().salengRoom = "khao_talo_bar";
+  state().salengUntil = state().turns + 60;
+  out = [];
+  run("play connect 4");
+  assert.equal(state().game.oppId, "daeng");
+  run("drop 1");
+  assert.match(lastOut(), /does not so much as glance/i);
+  assert.equal(state().game.distKey, "food", "noted, and not re-announced");
+  run("q");
+  state().salengCart = null;
+});
+
+test("connect 4 distractions: a downpour counts too, and the ladder steps 8→6→2→1", () => {
+  state().room = "silk_rose";
+  state().rain = 5;
+  run("play connect 4");
+  run("drop 1");
+  assert.match(lastOut(), /rain|autopilot/i);
+  assert.equal(state().game.distKey, "rain");
+  run("q");
+  state().rain = 0;
+  assert.equal(_c4TierDown(8), 6);
+  assert.equal(_c4TierDown(6), 2);
+  assert.equal(_c4TierDown(2), 1);
+});
+
+test("connect 4 skill ladder: mamasans 8, floor girls 6, new girls 2", () => {
+  assert.equal(_c4Depth("candy"), 8, "Candy is top tier");
+  assert.equal(_c4Depth("oy"), 8, "so is Madam Oy");
+  assert.equal(_c4Depth("nan"), 6, "the rank and file one step down");
+  assert.equal(_c4Depth("lek"), 6);
+  assert.equal(_c4Depth("nong"), 2, "first week on the soi — beatable");
+  assert.equal(_c4Depth("namtan"), 2, "a filler girl whose desc says she's new");
+  assert.equal(_c4Depth(null), 6, "'the hostess on shift' fallback");
+  // every filler newbie desc carries the beatable tier, and only those
+  for (const [id, n] of Object.entries(NPCS)) {
+    if (!n.filler || NPC_ROLES[id] !== "hostess") continue;
+    const green = /^(New enough|Baby-faced)/.test(n.desc);
+    assert.equal(_c4Depth(id) === 2, green, `${id}: desc and tier agree`);
+  }
+});
+
+test("connect 4: the intro telegraphs the opponent's tier, and depth rides the game", () => {
+  // Candy's table (day 2, her home bar): the shark intro
+  state().day = 2;
+  state().room = "candy_bar";
+  run("play connect 4");
+  assert.equal(state().game.depth, 8);
+  assert.match(lastOut(), /not her hundredth/i);
+  run("quit");
+  // Nong's table at the Gold Rush — no other canon girl there, she hosts
+  out = [];
+  state().room = "gold_rush";
+  const host = _gameHostess();
+  if (host.id === "nong") { // canon: Fon also works Jasmine Garden, Nong hosts Gold Rush
+    run("play connect 4");
+    assert.equal(state().game.depth, 2);
+    assert.match(lastOut(), /counts hers twice|fondness and pity/i);
+    run("quit");
+  }
+  // old saves mid-game carry no depth — the AI defaults to the shark
+  state().room = "candy_bar";
+  run("play connect 4");
+  delete state().game.depth;
+  run("drop 1"); // must not throw; she still answers
+  assert.ok(state().game === null || state().game.board.flat().filter(v => v === 2).length >= 1);
+});
+
 test("jackpot: settles one way or another, money stays consistent", () => {
   state().room = "lucky_tiger";
   state().money = 100;
