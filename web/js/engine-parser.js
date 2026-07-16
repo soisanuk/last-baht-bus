@@ -1582,7 +1582,7 @@ const _COMPLETE_VERBS = [
   "ask", "give", "buy", "sell bottles", "pay", "wai", "say", "ride bus to",
   "motosai to", "travel", "light", "charge phone", "read", "use", "open", "play",
   "flirt", "kiss", "spank", "fondle", "throw cover", "ring bell", "barfine", "eat", "drink",
-  "sleep", "tv", "weather", "scores", "lottery", "map", "time", "tip", "wave",
+  "sleep", "tv", "watch", "weather", "scores", "lottery", "map", "time", "tip", "wave",
   "photo", "call", "shower", "withdraw", "cheers", "dance", "sing", "swim",
   "smell", "listen", "diagnose", "apologize", "quests", "accept", "abandon", "contact",
   "contacts", "message", "check messages", "send", "score", "wait", "again",

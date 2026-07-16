@@ -1842,6 +1842,7 @@ test("sleep ends the night on your terms; day seven ends the vacation", () => {
   state().day = 7;
   state().room = "hotel_room";
   state().happy = 60;
+  state().tonicOwed = 4500; // fleeced this trip, never reported
   run("sleep");
   assert.equal(state().pendingChoice, "vacation_end");
   run("look"); // everything is gated on the answer
@@ -1853,6 +1854,7 @@ test("sleep ends the night on your terms; day seven ends the vacation", () => {
   assert.equal(state().bestHappy, 60);
   assert.equal(state().money, 3000);
   assert.ok(state().flags.act1Done, "no lead-in adventure on later trips");
+  assert.equal(state().tonicOwed, 0, "a month away forfeits the tonic-shop claim");
 });
 
 test("MOVE TO PATTAYA: expat mode, endless days, savings wired over", () => {
@@ -2628,11 +2630,18 @@ test("contacts lists the phonebook with bar and favor glow", () => {
   state().phone.contacts.candy = true;
   state().phone.contacts.fon = true;
   state().soc.drinks.candy = 6;
+  state().day = 2; // even: Candy works the original Candy Bar tonight
   out = [];
   run("contacts");
   assert.match(lastOut(), /Candy — Candy Bar ❤/);
   assert.match(lastOut(), /Fon — Jasmine Garden Bar/);
+  // the phonebook tracks her alternate-night schedule (_npcRoom, not NPCS.room)
+  state().day = 3;
   out = [];
+  run("contacts");
+  assert.match(lastOut(), /Candy — Candy Bar 2 ❤/, "odd night lists tonight's bar");
+  out = [];
+  state().day = 2;
   run("contact"); // bare CONTACT falls through to the phonebook too
   assert.match(lastOut(), /Candy — Candy Bar/);
 });
@@ -2702,6 +2711,8 @@ test("engineComplete: quests, contacts, and live ask topics", () => {
   state().flags.knowOyHasIt = true;
   const after = engineComplete("ask candy ");
   assert.ok(after.length >= before.length, "topics unlock with knowledge, never lock");
+  // WATCH is a real mechanic (Blue Dog show, TV), not just an alias — it completes
+  assert.ok(engineComplete("wat").includes("watch"));
 });
 
 // ── Apologize ──────────────────────────────────────────────────────────────

@@ -257,7 +257,10 @@ function _doContacts() {
   _say("Your phone, the local pages:");
   for (const id of ids) {
     const n = NPCS[id];
-    const bar = (ROOMS[n.room] && (ROOMS[n.room].bar || ROOMS[n.room].name)) || "around";
+    // _npcRoom, not n.room: an owner on her alternate-night bar (Candy) should
+    // list at TONIGHT's bar, or the number points you at an empty room.
+    const rm = ROOMS[_npcRoom(id)];
+    const bar = (rm && (rm.bar || rm.name)) || "around";
     const drinks = G.soc.drinks[id] || 0;
     const glow = drinks >= 6 ? " ❤" : drinks >= 3 ? " ✦" : "";
     _say(`  ${n.emoji} ${n.name} — ${bar}${glow}`, "dim");
