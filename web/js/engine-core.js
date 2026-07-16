@@ -559,8 +559,10 @@ function _describeRoom(full) {
     _say("Step inside: " + [...barDirs].map(([b, d]) => `${b} (${d})`).join(", ") +
       ". (ENTER <name>)", "dim");
   }
-  if (r.busStop) _say("A baht bus can be caught here (ride bus to …).", "dim");
-  if (r.motosai) _say("A motosai stand is here (motosai to …).", "dim");
+  // CAPS so the hints tap: the open kw prefills "ride bus to " and the
+  // destination list rides the suggest bar — the whole fare is keyboard-free.
+  if (r.busStop) _say("A baht bus can be caught here. (RIDE BUS TO <place>)", "dim");
+  if (r.motosai) _say("A motosai stand is here. (MOTOSAI TO <place>)", "dim");
   if (r.barType === "beer" || r.barType === "soi6") {
     _say("A Connect 4 frame and a Jackpot dice box sit within reach (PLAY …).", "dim");
   }
@@ -605,6 +607,13 @@ function _describeRoom(full) {
   if (G.room === "police_station" && G.tonicOwed > 0) {
     _say(`You are still out ฿${G.tonicOwed} to the hair-tonic shop. (REPORT it here — ` +
       "for what that's worth.)", "dim");
+  }
+  // Nok buys glass — say so, tappably, whenever you're holding some near her.
+  // Act 1's first earner had no on-screen tap path (HELP only).
+  if (_npcsHere().includes("nok") &&
+      Object.keys(G.itemLoc).some(id => id.startsWith("bottle") && G.itemLoc[id] === "inventory")) {
+    _say("Auntie Nok has clocked the glass you're carrying — she pays coin for " +
+      "empties. (SELL BOTTLES)", "dim");
   }
 }
 

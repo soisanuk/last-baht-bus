@@ -377,8 +377,28 @@ test("underpaying the driver is refused; overpaying costs you", () => {
 test("pending fare gates other commands", () => {
   state().money = 20;
   run("e", "n", "ride bus to beach road", "n");
-  assert.match(lastOut(), /still waiting/i);
+  // the nag line rotates; the contract is the price + the PAY tap hint
+  assert.match(lastOut(), /PAY <amount>/);
   assert.notEqual(state().room, "pratumnak_rd");
+  // consecutive nags vary (the driver's patience has flavors), contract held
+  const first = out[out.length - 1];
+  out = [];
+  run("s");
+  assert.match(lastOut(), /PAY <amount>/);
+  assert.notEqual(out[out.length - 1], first, "the second nag reads differently");
+});
+
+test("the bus stop and Nok's glass trade advertise themselves tappably", () => {
+  // (RIDE BUS TO <place>) is a CAPS hint now — the last keyboard-only steps
+  // of the opening funnel got tap paths.
+  run("e", "n"); // the Jomtien bus stop
+  assert.match(lastOut(), /\(RIDE BUS TO <place>\)/);
+  // holding a bottle near Auntie Nok surfaces (SELL BOTTLES)
+  out = [];
+  run("s"); // back to her stretch of beach road, Chang bottle still un-taken
+  assert.doesNotMatch(lastOut(), /SELL BOTTLES/, "no glass, no pitch");
+  run("w", "take bottle", "e");
+  assert.match(lastOut(), /\(SELL BOTTLES\)/);
 });
 
 // ── Battery, darkness, soi dogs ────────────────────────────────────────────
@@ -888,9 +908,9 @@ test("_renderResume redraws every modal state that gates input", () => {
   assert.match(draw(), /airline needs an answer/, "vacation-end options");
   G.pendingChoice = null;
 
-  // 5. an unpaid fare
+  // 5. an unpaid fare (the nag line rotates; price + PAY hint is the contract)
   G.pendingFare = { kind: "bus", price: 15, dest: "naklua_rd" };
-  assert.match(draw(), /driver is still waiting/, "fare reminder");
+  assert.match(draw(), /PAY <amount>/, "fare reminder");
   G.pendingFare = null;
 
   // nothing modal: silence, not a stray line
