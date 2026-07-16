@@ -33,29 +33,29 @@ var NEWS_FEED = [
     "d": "15 Jul 2026"
   },
   {
-    "t": "Dodgy cash fines leave Kuwaiti tourists questioning Pattaya police",
+    "t": "Jomtien drug raid nets two suspected dealers, detains 81",
     "s": "Thaiger",
     "d": "15 Jul 2026"
   },
   {
-    "t": "Pattaya orders venue safety checks after Bangkok nightclub fire",
-    "s": "Thaiger",
-    "d": "14 Jul 2026"
+    "t": "Australian man charged with murder after dead girl found in suitcase in Thailand",
+    "s": "BBC",
+    "d": "28 Jun 2026"
+  },
+  {
+    "t": "The band playing when a Bangkok bar caught fire mourns its members among the 33 dead",
+    "s": "AP News",
+    "d": "16 Jul 2026"
+  },
+  {
+    "t": "Thailand: At least 28 killed in Bangkok bar fire",
+    "s": "BBC",
+    "d": "13 Jul 2026"
   },
   {
     "t": "Deadly Bangkok bar fire exposes Thailand’s safety loopholes for nightlife venues",
     "s": "AP News",
     "d": "16 Jul 2026"
-  },
-  {
-    "t": "Thailand probes possible negligence in deadly Bangkok bar fire",
-    "s": "BBC",
-    "d": "14 Jul 2026"
-  },
-  {
-    "t": "At least 28 killed, 25 critically injured after fire engulfs Bangkok bar",
-    "s": "BBC",
-    "d": "12 Jul 2026"
   },
   {
     "t": "Thailand Scraps Plan to End Visa-Free Entry for Indian Tourists",
@@ -68,20 +68,20 @@ var NEWS_FEED = [
     "d": "16 Jul 2026"
   },
   {
-    "t": "Princess Anne channels her mother Queen Elizabeth II in pearls in Thailand",
-    "s": "Tatler",
-    "d": "16 Jul 2026"
+    "t": "Hyundai to export BEVs to Australia from Thailand",
+    "s": "Yahoo Finance",
+    "d": "15 Jul 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-07-16","USD":33.57,"AUD":23.52,"GBP":45.35,"EUR":38.49};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-07-16","temp":29,"humid":77,"code":3,"hi":31,"rain":73};
+var WX_NOW = {"date":"2026-07-17","temp":28,"humid":81,"code":3,"hi":30,"rain":52};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-14","done":true,"h":"France","hs":0,"a":"Spain","as":2},{"d":"2026-07-15","done":true,"h":"England","hs":1,"a":"Argentina","as":2},{"d":"2026-07-18","done":false,"h":"France","hs":0,"a":"England","as":0},{"d":"2026-07-19","done":false,"h":"Spain","hs":0,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-07-16","first":"639214","last2":"71","front3":["683","709"],"back3":["427","746"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":3995,"date":"2026-07-16","baht":63450};
+var GOLD = {"usd":3977,"date":"2026-07-16","baht":63150};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":64404,"thb":2163465};
+var BTC = {"usd":64147,"thb":2154069};
