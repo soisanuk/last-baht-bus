@@ -18,19 +18,9 @@ var NEWS_FEED = [
     "d": "15 Jul 2026"
   },
   {
-    "t": "Three Pattaya police reassigned over cash fines and unofficial receipts",
-    "s": "Nation Thailand",
-    "d": "15 Jul 2026"
-  },
-  {
-    "t": "Pattaya orders venue safety checks after Bangkok nightclub fire",
+    "t": "Thailand video news | Pattaya police accused of corruption, Child boxers abused by Norwegian gym owner",
     "s": "Thaiger",
-    "d": "15 Jul 2026"
-  },
-  {
-    "t": "Jomtien drug raid nets two suspected dealers, detains 81",
-    "s": "Thaiger",
-    "d": "15 Jul 2026"
+    "d": "16 Jul 2026"
   },
   {
     "t": "Three Pattaya officers transferred over Kuwaiti tourists’ complaint",
@@ -43,14 +33,24 @@ var NEWS_FEED = [
     "d": "28 Jun 2026"
   },
   {
+    "t": "Thai police arrest Australian over killing of teenager found in suitcase",
+    "s": "Al Jazeera",
+    "d": "27 Jun 2026"
+  },
+  {
+    "t": "How a Thai teen's night at a Pattaya beach ended in death",
+    "s": "Reuters",
+    "d": "29 Jun 2026"
+  },
+  {
     "t": "Thailand Scraps Plan to End Visa-Free Entry for Indian Tourists",
     "s": "Bloomberg.com",
     "d": "14 Jul 2026"
   },
   {
-    "t": "Thailand: At least 28 killed in Bangkok bar fire",
-    "s": "BBC",
-    "d": "13 Jul 2026"
+    "t": "The band playing when a Bangkok bar caught fire mourns its members among the 33 dead",
+    "s": "AP News",
+    "d": "16 Jul 2026"
   },
   {
     "t": "Thailand probes possible negligence in deadly Bangkok bar fire",
@@ -58,14 +58,14 @@ var NEWS_FEED = [
     "d": "14 Jul 2026"
   },
   {
-    "t": "The band playing when a Bangkok bar caught fire mourns its members among the 33 dead",
-    "s": "AP News",
+    "t": "‘Not surprising’: Why Thailand keeps reliving the same types of nightspot tragedies",
+    "s": "CNA",
     "d": "15 Jul 2026"
   },
   {
-    "t": "ASEAN envoy meets Myanmar opposition groups in Thailand",
+    "t": "Rights groups urge Thailand not to deport Chinese journalist to China",
     "s": "Reuters",
-    "d": "14 Jul 2026"
+    "d": "16 Jul 2026"
   },
   {
     "t": "Inside Thailand’s animal rescue network saving strays – photo essay",
@@ -76,12 +76,12 @@ var NEWS_FEED = [
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-07-15","USD":33.65,"AUD":23.49,"GBP":45.11,"EUR":38.37};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-07-16","temp":28,"humid":79,"code":3,"hi":31,"rain":51};
+var WX_NOW = {"date":"2026-07-16","temp":31,"humid":67,"code":3,"hi":31,"rain":73};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-14","done":true,"h":"France","hs":0,"a":"Spain","as":2},{"d":"2026-07-15","done":true,"h":"England","hs":1,"a":"Argentina","as":2},{"d":"2026-07-18","done":false,"h":"France","hs":0,"a":"England","as":0},{"d":"2026-07-19","done":false,"h":"Spain","hs":0,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-07-01","first":"751495","last2":"62","front3":["001","980"],"back3":["304","531"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4061,"date":"2026-07-15","baht":64650};
+var GOLD = {"usd":4031,"date":"2026-07-16","baht":64150};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":64787,"thb":2175748};
+var BTC = {"usd":64206,"thb":2153352};
