@@ -46,6 +46,23 @@ function _doGo(dirWord) {
       "smile that follows is kind and absolutely final.");
     return;
   }
+  // the Darkside closes at midnight — unless that door is already locked from
+  // the inside, in which case it doesn't open for you either way
+  if (ROOMS[to].barType && ROOMS[to].region === "Darkside" && G.nightTurn >= 60 &&
+      _flag("act1Done") && !(G.soc.lockIn && G.soc.lockIn[to])) {
+    _say("Shutters down, lights dead, chairs up. The Darkside keeps the law's " +
+      "hours — officially. Somewhere along the strip, one padded door thumps " +
+      "with bass from a bar that is definitely, legally, closed.");
+    return;
+  }
+  // leaving a lock-in is a one-way door
+  if (dir === "out" && G.soc.lockIn && G.soc.lockIn[G.room]) {
+    delete G.soc.lockIn[G.room];
+    _say("The mamasan walks you to the door herself, slides the bolt, and lets " +
+      "the night air in for exactly as long as you take to leave. “Goodnight, " +
+      "tilac.” The bolt goes back across behind you. Whatever the party becomes " +
+      "now, it becomes without you.", "dim");
+  }
   // room 412's key card is in the wallet: no wallet, no room
   if (to === "hotel_room" && !_flag("hasWallet")) {
     _say("The night clerk looks up, takes in the sand, the sunburn, the eyes. " +

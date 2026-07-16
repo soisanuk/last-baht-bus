@@ -112,6 +112,55 @@ function _startC4() {
   _say("(You're ●. Tap a column 1-7 to drop · Q quits.)", "dim");
 }
 
+// ─ The Darkside lock-in ─
+// Out past Sukhumvit the law says midnight. What actually happens depends on
+// the till: a customer or three spending freely — a bell rung, lady drinks
+// flowing, the mamasan treated — and a lockIn-flagged bar (enclosed, aircon,
+// windows painted out) bolts the front door instead of closing. Nobody in,
+// nobody out, and the night stops being PG. Everyone else gets the shutters.
+// State: G.soc.lockIn[room] (nightly, rides the soc reset). PG-13 wink per
+// canon — referenced, never depicted.
+function _lockedIn() { return !!(G.soc.lockIn && G.soc.lockIn[G.room]); }
+
+function _barSpendTonight(room) {
+  let drinks = 0;
+  for (const [id, n] of Object.entries(G.soc.drinks)) {
+    if (NPCS[id] && _npcRoom(id) === room) drinks += n;
+  }
+  return (G.soc.bells[room] || 0) >= 1 || G.soc.mamaTreat[room] || drinks >= 3;
+}
+
+function _lockInTick() {
+  if (!_flag("act1Done") || G.over) return;
+  const r = _room();
+  if (r.region !== "Darkside" || !r.barType || G.nightTurn < 60) return;
+  if (_lockedIn()) return;
+  if (r.lockIn && _barSpendTonight(G.room)) {
+    (G.soc.lockIn = G.soc.lockIn || {})[G.room] = true;
+    const mama = _npcsHere().find(n => NPC_ROLES[n] === "mamasan");
+    _say(`Midnight. ${mama ? NPCS[mama].name : "The mamasan"} looks at the till, ` +
+      "looks at you, and nods once to the cashier. The bolt goes across the " +
+      "front door with a sound like a decision. The windows, you realise, were " +
+      "always painted black.", "win");
+    _say("Somebody turns the music up instead of down. Somebody else turns the " +
+      "aircon colder. Clothing on the staff side of the bar becomes, by visible " +
+      "increments, negotiable — and what happens after that stays inside the " +
+      "paint. The Darkside closes at midnight. This is not closed. This is the " +
+      "other thing.", "win");
+    _say("(The party runs while the money does. OUT and she unbolts the door — " +
+      "but there's no coming back in tonight.)", "dim");
+    _addHappy(3);
+    return;
+  }
+  // no lock-in for window shoppers: the law is the law out here
+  _say("Midnight on the Darkside. The mamasan claps twice, the shutters start " +
+    "down, and the ladies walk the last customers out with practiced fondness. " +
+    "The bars that stay lively after this hour lock their doors first — and " +
+    "they lock them for the customers already spending.", "alert");
+  const out = r.exits && r.exits.out;
+  if (out) { G.room = out; _describeRoom(true); }
+}
+
 // ─ Distractions at the board ─
 // A parked saleng or a downpour pulls a girl's eyes off the game: she plays a
 // tier down while it lasts — the shark like the floor, the floor like a new
@@ -686,6 +735,7 @@ function _bellLevel() {
 function _favor(id) {
   let f = G.soc.drinks[id] || 0;
   if (G.soc.mamaTreat[G.room]) f += 1;   // the mamasan's blessing travels
+  if (G.soc.lockIn && G.soc.lockIn[G.room]) f += 3; // the lock-in: rules left with the last taxi
   const bl = _bellLevel();               // more rings this visit, warmer room
   if (bl >= 3) f += 10;                  // three bells: the room is yours, hands-on
   else if (bl === 2) f += 4;             // two bells: much friendlier
