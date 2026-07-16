@@ -1635,6 +1635,8 @@ function _completePool(verb, ctx) {
     case "flip": // mid-jackpot the legal moves ("3 4" and "7")
       return _jpChoices();
     case "read": case "use": return _cInv().map(_cItemWord);
+    case "pay": // the driver names his price — offer it, so the fare is one tap
+      return G.pendingFare ? [String(G.pendingFare.price)] : [];
     case "give":
       return ctx.length >= 2 ? _cNpcsHere() : _cInv().map(_cItemWord);
     case "buy": case "order": {

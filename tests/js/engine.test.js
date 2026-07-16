@@ -2734,6 +2734,11 @@ test("engineComplete: quests, contacts, and live ask topics", () => {
   assert.ok(after.length >= before.length, "topics unlock with knowledge, never lock");
   // WATCH is a real mechanic (Blue Dog show, TV), not just an alias — it completes
   assert.ok(engineComplete("wat").includes("watch"));
+  // a pending fare offers its own amount, so PAY is one tap on mobile
+  state().pendingFare = { kind: "bus", price: 15, dest: "beach_rd_s" };
+  assert.deepEqual(engineComplete("pay "), ["15"]);
+  state().pendingFare = null;
+  assert.deepEqual(engineComplete("pay "), [], "nothing owed, nothing offered");
 });
 
 // ── Apologize ──────────────────────────────────────────────────────────────

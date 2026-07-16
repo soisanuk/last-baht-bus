@@ -27,6 +27,20 @@ smart ones end up owning a bar. One day, so will you.)
 Open `web/index.html` in a browser — no build step, no dependencies, works from `file://`.
 Mobile gets tappable verb chips; desktop gets ↑/↓ command history.
 
+<p align="center">
+  <img src="shots/desktop-candy-bar.png" alt="Candy Bar on desktop — a saleng shoe cart rolls up mid-conversation" width="880">
+</p>
+
+On a phone the whole game plays by tapping: any glowing word opens a flyout
+wheel of actions (long-press for the full list, portraits included), exits and
+ALL-CAPS hints fire on tap, and a bell button floats over every bar.
+
+<p align="center">
+  <img src="shots/mobile-intro.png" alt="The opening: face-down on Jomtien beach, ฿0" width="260">
+  <img src="shots/mobile-wheel.png" alt="Tap a name — the flyout wheel" width="260">
+  <img src="shots/mobile-connect4.png" alt="Connect 4 against Candy, tappable columns" width="260">
+</p>
+
 ## The game
 
 - **70 rooms** across Jomtien, Pratumnak Hill, Beach Road, Second Road,
