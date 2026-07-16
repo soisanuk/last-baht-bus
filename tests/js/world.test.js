@@ -75,6 +75,20 @@ test("every NPC is in a real room and has dialogue", () => {
   }
 });
 
+test("every room has an OSM anchor, and every anchor a room", () => {
+  // ROOM_GEO drives tools/gen-map.mjs (the neon map + exits audit) and any
+  // future 2D frontend. Presentation-only, but coverage keeps it honest.
+  for (const id of Object.keys(ROOMS)) {
+    const g = ROOM_GEO[id];
+    assert.ok(g, `${id} has no ROOM_GEO entry`);
+    assert.ok(g[0] > 12.85 && g[0] < 12.99 && g[1] > 100.85 && g[1] < 101.0,
+      `${id} anchored outside greater Pattaya (${g})`);
+  }
+  for (const id of Object.keys(ROOM_GEO)) {
+    assert.ok(ROOMS[id], `ROOM_GEO orphan: ${id}`);
+  }
+});
+
 test("dialogue items that give an item reference real items", () => {
   for (const [id, npc] of Object.entries(NPCS)) {
     for (const d of npc.dialogue) {

@@ -41,6 +41,15 @@ ALL-CAPS hints fire on tap, and a bell button floats over every bar.
   <img src="shots/mobile-connect4.png" alt="Connect 4 against Candy, tappable columns" width="260">
 </p>
 
+The world is anchored to the real city — every room carries OpenStreetMap
+coordinates (`ROOM_GEO`), and `tools/gen-map.mjs` renders them over the actual
+street geometry (and audits every exit's compass direction against the real
+bearing):
+
+<p align="center">
+  <img src="shots/map.svg" alt="Greater Pattaya — the game's 70 rooms over real OSM street geometry" width="620">
+</p>
+
 ## The game
 
 - **70 rooms** across Jomtien, Pratumnak Hill, Beach Road, Second Road,

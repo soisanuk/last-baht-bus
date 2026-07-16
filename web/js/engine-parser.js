@@ -1352,25 +1352,29 @@ function _doWave(arg) {
   _say("You wave. Somewhere down the soi, somebody waves back. It's that kind of town.");
 }
 
-const _MAP = `            NAKLUA ─ Sabai Palms Hotel
-               │
-             SOI 6
-               │
-  ~  BEACH RD N ─ Stinky Bar
-  ~       │
-  ~  BEACH RD C ─ CENTRAL ─ SECOND RD N
-  ~       │ (Tequila  Mall      │
-  ~       │   Queen)     PATTAYA KLANG ──► THE DARKSIDE
-  ~       │                     │        (lake · Khao Talo · motosai out)
-  ~       │            SECOND RD C ─ MYTH NIGHT
-  ~       │                     │         │
-  ~  BEACH RD S ──────── SECOND RD S   BUAKHAO N
-  ~       │                     │  \\       ║ ═ LK METRO off the soi
-  ~  WALKING ST                 │   ── BUAKHAO S
-  ~       │                     │
-  ~   (the gate)           PRATUMNAK ─ Buddha Hill
-  ~                             │
-  ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~  JOMTIEN ~ the beach where it all began`;
+// The bar-mat map, OSM-checked (tools/gen-map.mjs --audit): the coast runs
+// NNE, so the north end leans right and the sea hugs the whole west edge;
+// Soi 6 hangs off Beach Rd North near the Dolphin roundabout with Naklua
+// beyond; Buakhao slants between Klang and Tai with LK Metro off its north
+// end; the Darkside is a motosai ride east, off any bar mat this size.
+const _MAP = `                    NAKLUA ─ Sabai Palms Hotel
+        ~              │
+        ~     BEACH RD N ─ SOI 6 (Queen Vic at the pub end)
+        ~      │ (Blue Dog · Stinky Bar)
+        ~      │      PATTAYA KLANG ────► THE DARKSIDE
+       ~       │       │      │   (Khao Talo · the lake · motosai out)
+       ~  BEACH RD C   │   MYTH NIGHT
+       ~    │ (Tequila Queen)  │
+       ~    │         SECOND  BUAKHAO N ═ LK METRO
+       ~ CENTRAL Mall  RD C   │  (Metropole up the alley)
+      ~     │ (police) │      │
+      ~     │          │   BUAKHAO MARKET
+      ~     │          │      │
+      ~  BEACH RD S ─ SECOND RD S ─ BUAKHAO S ─ TREE TOWN
+      ~     │              │        (the fairy-lit maze)
+     ~   WALKING ST     PRATUMNAK ─ Big Buddha
+     ~    (the gate, then the deep)
+    ~ ~ ~ ~ ~ ~ ~ ~ ~ ~  JOMTIEN ~ the beach where it all began`;
 
 function _doMap() {
   _say("The bar-mat map of greater Pattaya, not to scale, like all bar maps:", "dim");
