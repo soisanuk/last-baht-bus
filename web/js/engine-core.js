@@ -169,27 +169,23 @@ function newGame() {
 }
 
 function serializeGame() { return JSON.stringify(G); }
+// Restoring a save merges it over a fresh newGame() skeleton, so a field (or a
+// sub-key of soc/phone/itemLoc/…) added AFTER the save was written simply keeps
+// today's default — no hand-written "if (G.x === undefined)" backfill per
+// feature, which is the bug class this replaces. One level deep: a plain-object
+// field merges key-by-key (new items appear in itemLoc, soc gains bra, phone
+// gains msgCd), everything else the save wins wholesale. Below the merge, only
+// SEMANTIC migrations remain — repairs that need the save's own contents.
 function deserializeGame(s) {
-  G = JSON.parse(s);
-  // older saves predate the encounter/mini-game systems — backfill the fields
-  if (G.pendingEnc === undefined) G.pendingEnc = null;
-  if (G.encPrompt === undefined) G.encPrompt = null;
-  if (G.game === undefined) G.game = null;
-  if (!G.lightWarn) G.lightWarn = { room: null, n: 0, mark: false };
-  if (!G.known) G.known = {};
-  if (!G.visited) G.visited = { [G.room]: true };
-  if (G.blueDogDay === undefined) G.blueDogDay = 0;
-  if (!G.hotel) G.hotel = "sabai";
-  if (G.hotelDebt === undefined) G.hotelDebt = 0;
-  if (G.tonicOwed === undefined) G.tonicOwed = 0;
-  if (G.qvDay === undefined) G.qvDay = 0;
-  if (!G.patronTalk) G.patronTalk = { day: 0, talked: {} };
-  if (!G.soc) {
-    G.soc = { drinks: {}, mamaTreat: {}, bellAt: {}, bells: {}, heat: {},
-      banned: {}, patronBusy: {}, patronMiffed: {}, bra: {}, drunk: 0 };
+  const saved = JSON.parse(s);
+  newGame(); // the skeleton: every current field at its current default
+  const isObj = v => v && typeof v === "object" && !Array.isArray(v);
+  for (const [k, v] of Object.entries(saved)) {
+    G[k] = (isObj(v) && isObj(G[k])) ? { ...G[k], ...v } : v;
   }
-  if (G.happy === undefined) G.happy = 0;
-  if (G.stage === undefined) {
+  // pre-stage saves (before the vacation sandbox): infer the stage and give the
+  // body plausible mid-night meters — these depend on the save, not on defaults
+  if (saved.stage === undefined) {
     G.stage = G.flags && G.flags.act1Done ? "vacation" : "act1";
     G.vacation = 1;
     G.day = 2;
@@ -200,27 +196,9 @@ function deserializeGame(s) {
     G.bestHappy = G.happy;
     G.pendingChoice = null;
   }
-  if (G.atmDay === undefined) { G.atmDay = 0; G.lastPolice = -99; G.selfBfId = null; }
-  if (G.rain === undefined) { G.rain = 0; G.lastRain = -99; }
-  if (G.lastDrizzle === undefined) G.lastDrizzle = -99;
-  if (!G.quests) G.quests = {};
-  if (!G.phone) {
-    G.phone = { contacts: {}, inbox: [], lastText: 0, msgCd: {}, invite: null };
-  }
-  if (G.lastPeddler === undefined) G.lastPeddler = -99;
-  if (G.lastSaleng === undefined) { G.lastSaleng = -99; G.salengCart = null; }
-  if (G.salengRoom === undefined) { G.salengRoom = null; G.salengUntil = 0; G.salengSeen = {}; }
-  if (!G.quizPlayed) G.quizPlayed = {};
-  if (!G.talked) G.talked = {};
-  if (G.soc && !G.soc.bra) G.soc.bra = {};
-  if (G.wingmanUntil === undefined) G.wingmanUntil = 0;
-  G.over = false; // pre-sandbox saves could be "over"; the night reopens
-  if (!G.encDone) G.encDone = {};
-  if (G.lastEnc === undefined) G.lastEnc = 0;
-  if (!G.rng) G.rng = 1 + Math.floor(Math.random() * 2147483645);
-  for (const id of Object.keys(ITEMS)) {
-    if (!(id in G.itemLoc)) G.itemLoc[id] = ITEMS[id].location;
-  }
+  G.visited[G.room] = true;  // wherever the save stands, you've at least been HERE
+  G.over = false;            // pre-sandbox saves could be "over"; the night reopens
+  if (!G.rng) G.rng = 1 + Math.floor(Math.random() * 2147483645); // a 0 seed sticks the LCG at 0
   return G;
 }
 
@@ -460,9 +438,8 @@ function _elsewhereLine(word) {
     // multi-bar owner alternating nights). If she's somewhere else — an invited
     // visit elsewhere, once that exists — don't reveal it; just say she's out.
     const own = NPCS[nid].bars ? NPCS[nid].bars.includes(cur) : true;
-    const room = ROOMS[cur];
-    if (own && room && (room.bar || room.name)) {
-      return `${NPCS[nid].name} isn't at this bar tonight — try ${room.bar || room.name}.`;
+    if (own && _barName(cur)) {
+      return `${NPCS[nid].name} isn't at this bar tonight — try ${_barName(cur)}.`;
     }
     return `${NPCS[nid].name} isn't here right now.`;
   }
@@ -559,8 +536,7 @@ function _describeRoom(full) {
   // reads as hers with no sign of her.
   for (const [id, n] of Object.entries(NPCS)) {
     if (n.bars && n.bars.includes(G.room) && _npcRoom(id) !== G.room) {
-      const other = ROOMS[_npcRoom(id)];
-      _say(`${n.name} is working ${other.bar || other.name} tonight; the floor staff keep this one running.`, "dim");
+      _say(`${n.name} is working ${_barName(_npcRoom(id))} tonight; the floor staff keep this one running.`, "dim");
     }
   }
   const pats = _patronsHere();
@@ -596,7 +572,7 @@ function _describeRoom(full) {
   if (_quizDay() && !r.barType) {
     const near = Object.values(r.exits).filter(to => _quizBars().includes(to));
     if (near.length && G.nightTurn < 40) {
-      _say(near.map(to => ROOMS[to].bar || ROOMS[to].name).join(" and ") +
+      _say(near.map(_barName).join(" and ") +
         (near.length > 1 ? " have" : " has") + " a chalkboard out: QUIZ NIGHT " +
         "TONIGHT 8-10 — PRIZES. " +
         (G.nightTurn >= 20 ? "It's on right now; walk in and you're playing." :

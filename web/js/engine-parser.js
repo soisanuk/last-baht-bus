@@ -177,7 +177,7 @@ function _doTravel(arg) {
     for (const id of dests) {
       const h = _hops(G.room, id);
       if (h === null) continue;
-      _say(`  ${ROOMS[id].bar || ROOMS[id].name} — ${h} turn${h === 1 ? "" : "s"}`, "dim");
+      _say(`  ${_barName(id)} — ${h} turn${h === 1 ? "" : "s"}`, "dim");
     }
     _say("(TRAVEL <place>. Walking pace — no shortcuts through the clock.)", "dim");
     return;
@@ -215,7 +215,7 @@ function _doTravel(arg) {
   }
   const hops = _hops(G.room, dest);
   if (hops === null) { _say("You can't get there from here."); return; }
-  _say(`You point yourself at ${ROOMS[dest].bar || ROOMS[dest].name} and let your ` +
+  _say(`You point yourself at ${_barName(dest)} and let your ` +
     `feet do the remembering — ${hops} turn${hops === 1 ? "" : "s"} of soi, neon, ` +
     "and shortcuts.", "dim");
   // walking pace: hops turns in total; doCommand pays the last at the bottom
@@ -1653,9 +1653,9 @@ function _completePool(verb, ctx) {
       return [...Object.keys(_room().exits),
         // adjacent bars by name, so "enter can…" completes even if never visited
         ...Object.values(_room().exits).map(to => ROOMS[to].bar).filter(Boolean).map(b => b.toLowerCase()),
-        ..._travelDests().map(id => (ROOMS[id].bar || ROOMS[id].name).toLowerCase())];
+        ..._travelDests().map(id => _barName(id).toLowerCase())];
     case "travel": case "goto":
-      return _travelDests().map(id => (ROOMS[id].bar || ROOMS[id].name).toLowerCase());
+      return _travelDests().map(id => _barName(id).toLowerCase());
     case "ride": case "catch": case "bus": {
       if (!_room().busStop) return [];
       const lines = Object.entries(BUS_LINES).filter(([, st]) => st.includes(G.room));

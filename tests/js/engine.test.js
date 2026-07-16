@@ -804,6 +804,27 @@ test("tonicOwed survives save/restore and old saves backfill it", () => {
   assert.equal(state().tonicOwed, 0);
 });
 
+test("restore heals nested sub-keys added after the save was written", () => {
+  // deserializeGame merges the save over a fresh newGame() skeleton, one level
+  // deep — so a sub-key introduced later (soc.bra, phone.msgCd, a new item in
+  // itemLoc) gets today's default while the save's own values win. This is the
+  // property that replaced the per-field backfill chain; hold it.
+  state().soc.drinks.noi = 4;
+  state().money = 1234;
+  const old = JSON.parse(serializeGame());
+  delete old.soc.bra;          // sub-key that postdates ancient saves
+  delete old.phone.msgCd;      //   (previously only whole-object misses healed)
+  delete old.itemLoc.moo_ping; // an item added after the save
+  delete old.wingmanUntil;     // a plain field added after the save
+  deserializeGame(JSON.stringify(old));
+  assert.deepEqual(state().soc.bra, {}, "soc.bra healed");
+  assert.equal(state().soc.drinks.noi, 4, "saved soc values still win");
+  assert.deepEqual(state().phone.msgCd, {}, "phone.msgCd healed");
+  assert.equal(state().itemLoc.moo_ping, null, "new item at its default location");
+  assert.equal(state().wingmanUntil, 0, "plain field at its default");
+  assert.equal(state().money, 1234, "saved scalars win over the skeleton");
+});
+
 test("mid-encounter restore: the prompt is stashed and redraws (no blind exit line)", () => {
   state().room = "beach_rd_s";
   _startEnc("powerbank");
