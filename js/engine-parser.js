@@ -1749,8 +1749,23 @@ function _checkoutPrompt() {
   _say("The clerk waits. (" +
     others.map(k => _HOTELS[k].name.toUpperCase()).join(" · ") + " · or STAY.)", "dim");
 }
+// The driver's patience, in escalating flavors. A module-local counter (like
+// _lastCmd: presentation nicety, not game state) rotates them per nag; every
+// line carries the price and the (PAY <amount>) tap hint — that's the contract.
+let _fareNags = 0;
 function _farePrompt() {
-  _say(`The driver is still waiting: “${thaiBaht(G.pendingFare.price)}”. (PAY <amount>)`, "thai");
+  const baht = thaiBaht(G.pendingFare.price);
+  const lines = [
+    `The driver is still waiting: “${baht}”. (PAY <amount>)`,
+    `The driver taps the rail, twice. “${baht}, my friend.” The whole bench of ` +
+      "passengers has turned to watch how this goes. (PAY <amount>)",
+    `“${baht}.” He says it slower this time, the way you'd talk to the ` +
+      "heat-struck. (PAY <amount>)",
+    `The engine idles. The driver studies the horizon, then you, then the ` +
+      `horizon again. “${baht}.” Nobody has ever not paid. Nobody is starting ` +
+      "tonight. (PAY <amount>)",
+  ];
+  _say(lines[_fareNags++ % lines.length], "thai");
 }
 
 // After a restore (continue / undo, in main.js), redraw whatever modal prompt is
