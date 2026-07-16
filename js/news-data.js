@@ -3,19 +3,39 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
-    "t": "“Pubic Hair” croissant from Pattaya, Thailand goes viral",
-    "s": "Lifestyle Asia Hong Kong",
-    "d": "10 Jul 2026"
-  },
-  {
-    "t": "Thailand Tourism Crisis Hits Pattaya Hard as Visitor Markets From China, India, Russia and Many Other Countries Slow, Causing Falling Touris",
-    "s": "Travel And Tour World",
-    "d": "13 Jul 2026"
-  },
-  {
-    "t": "Why is Tyson Fury fighting in a 2,000-seat Muay Thai stadium in Pattaya?",
+    "t": "Couple caught on camera having sex at Pattaya public park",
     "s": "Thaiger",
-    "d": "13 Jul 2026"
+    "d": "14 Jul 2026"
+  },
+  {
+    "t": "Pattaya police sidelined over ‘private’ fines of Kuwaiti bikers",
+    "s": "Bangkok Post",
+    "d": "15 Jul 2026"
+  },
+  {
+    "t": "Kuwaiti tourists allege extortion by Pattaya police",
+    "s": "Khaosod English",
+    "d": "15 Jul 2026"
+  },
+  {
+    "t": "Three Pattaya police reassigned over cash fines and unofficial receipts",
+    "s": "Nation Thailand",
+    "d": "15 Jul 2026"
+  },
+  {
+    "t": "Pattaya orders venue safety checks after Bangkok nightclub fire",
+    "s": "Thaiger",
+    "d": "15 Jul 2026"
+  },
+  {
+    "t": "Jomtien drug raid nets two suspected dealers, detains 81",
+    "s": "Thaiger",
+    "d": "15 Jul 2026"
+  },
+  {
+    "t": "Three Pattaya officers transferred over Kuwaiti tourists’ complaint",
+    "s": "Thaiger",
+    "d": "15 Jul 2026"
   },
   {
     "t": "Australian man charged with murder after dead girl found in suitcase in Thailand",
@@ -23,65 +43,45 @@ var NEWS_FEED = [
     "d": "28 Jun 2026"
   },
   {
-    "t": "UK woman, 21, arrested in Thailand after allegedly stabbing boyfriend to death",
-    "s": "The Guardian",
-    "d": "04 Jul 2026"
+    "t": "Thailand Scraps Plan to End Visa-Free Entry for Indian Tourists",
+    "s": "Bloomberg.com",
+    "d": "14 Jul 2026"
   },
   {
-    "t": "How a Thai teen's night at a Pattaya beach ended in death",
-    "s": "Reuters",
-    "d": "29 Jun 2026"
-  },
-  {
-    "t": "Friend of Thai teen allegedly murdered by Australian man went to his condo after reporting her missing | Thailand",
-    "s": "The Guardian",
-    "d": "01 Jul 2026"
-  },
-  {
-    "t": "Doctor Pattaya Issues IV Drip Safety Guide for Pattaya Tourists and Travellers",
-    "s": "Shoreline Media Group",
-    "d": "10 Jul 2026"
-  },
-  {
-    "t": "Fire breaks out at a pub in Bangkok, killing at least 27 people",
-    "s": "AP News",
+    "t": "Thailand: At least 28 killed in Bangkok bar fire",
+    "s": "BBC",
     "d": "13 Jul 2026"
+  },
+  {
+    "t": "Thailand probes possible negligence in deadly Bangkok bar fire",
+    "s": "BBC",
+    "d": "14 Jul 2026"
+  },
+  {
+    "t": "The band playing when a Bangkok bar caught fire mourns its members among the 33 dead",
+    "s": "AP News",
+    "d": "15 Jul 2026"
+  },
+  {
+    "t": "ASEAN envoy meets Myanmar opposition groups in Thailand",
+    "s": "Reuters",
+    "d": "14 Jul 2026"
   },
   {
     "t": "Inside Thailand’s animal rescue network saving strays – photo essay",
     "s": "The Guardian",
     "d": "13 Jul 2026"
-  },
-  {
-    "t": "New dinosaur species as long as cricket pitch discovered in Thailand",
-    "s": "BBC",
-    "d": "11 Jul 2026"
-  },
-  {
-    "t": "New plant-munching long-necked dinosaur from 130 million years ago uncovered in Thailand",
-    "s": "NBC News",
-    "d": "13 Jul 2026"
-  },
-  {
-    "t": "New Jurassic dinosaur species identified in Thailand from a single bone",
-    "s": "Phys.org",
-    "d": "10 Jul 2026"
-  },
-  {
-    "t": "'Without our money, people will struggle': Muangthai Capital's new CEO Parithad Petampai defends the role of microfinance in Thailand - Fort",
-    "s": "Fortune",
-    "d": "13 Jul 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"13 Jul 2026","USD":33.34,"AUD":23.15,"GBP":44.66,"EUR":38.04};
+var FX_RATES = {"date":"2026-07-15","USD":33.65,"AUD":23.49,"GBP":45.11,"EUR":38.37};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-07-14","temp":27,"humid":86,"code":51,"hi":30,"rain":78};
+var WX_NOW = {"date":"2026-07-16","temp":28,"humid":79,"code":3,"hi":31,"rain":51};
 // the bar TV's one true channel
-var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-10","done":true,"h":"Spain","hs":2,"a":"Belgium","as":1},{"d":"2026-07-11","done":true,"h":"Norway","hs":1,"a":"England","as":2},{"d":"2026-07-12","done":true,"h":"Argentina","hs":3,"a":"Switzerland","as":1},{"d":"2026-07-14","done":false,"h":"France","hs":0,"a":"Spain","as":0},{"d":"2026-07-15","done":false,"h":"England","hs":0,"a":"Argentina","as":0}]};
+var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-14","done":true,"h":"France","hs":0,"a":"Spain","as":2},{"d":"2026-07-15","done":true,"h":"England","hs":1,"a":"Argentina","as":2},{"d":"2026-07-18","done":false,"h":"France","hs":0,"a":"England","as":0},{"d":"2026-07-19","done":false,"h":"Spain","hs":0,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-07-01","first":"751495","last2":"62","front3":["001","980"],"back3":["304","531"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":3990,"date":"2026-07-13","baht":62900};
+var GOLD = {"usd":4061,"date":"2026-07-15","baht":64650};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":61792,"thb":2069337};
+var BTC = {"usd":64787,"thb":2175748};

@@ -1320,6 +1320,7 @@ function _newVacation() {
   G.hunger = 20;
   G.thirst = 30;
   G.hurt = 0;
+  G.tonicOwed = 0; // a month away forfeits any pending tonic-shop claim
   G.soc = { drinks: {}, mamaTreat: {}, bellAt: {}, bells: {}, heat: {},
     banned: {}, patronBusy: {}, patronMiffed: {}, bra: {}, drunk: 0 };
   G.itemLoc.phone = "inventory";
