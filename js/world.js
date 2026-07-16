@@ -174,7 +174,9 @@ const ROOMS = {
       "the fancier places would kill for. The plastic chairs all face outward, " +
       "toward the water and the road, because at the Blue Dog the view IS the " +
       "entertainment: the sunset first, and then whatever Beach Road decides to " +
-      "do about it.",
+      "do about it. The bathroom is a sandy walk past three other bars' back " +
+      "doors — the whole beachside row shares the one, an arrangement older " +
+      "than anyone still willing to explain it.",
     exits: { out: "beach_rd_n" },
   },
   stinky_bar: {
@@ -184,7 +186,9 @@ const ROOMS = {
     desc: "An American-run beer bar that smells, in defiance of its name, of lime and " +
       "cue chalk. League trophies crowd the back bar; the table is brushed like a " +
       "putting green. Bert holds court from the owner's stool with a bottomless " +
-      "Budweiser and opinions on everyone's break.",
+      "Budweiser and opinions on everyone's break. Next door, the Blue Dog's rail " +
+      "roars at a sunset — close enough to share a bathroom with, which, in fact, " +
+      "the whole row does.",
     exits: { out: "beach_rd_n" },
   },
   central_mall: {
@@ -3023,3 +3027,100 @@ for (const [name, th, room] of _FILLER_CASHIERS) {
 // whatever the hour. Everyone else's quietly comes off the book after
 // midnight (the fee walks out with the girl soon anyway).
 const POPULAR_GIRLS = ["fon", "gift", "noi", "pim"];
+
+// ── Real-world anchors ───────────────────────────────────────────────────────
+// [lat, lon] for every room, anchored to the actual city via OpenStreetMap
+// (fetched 2026-07-17; spine geometry cached in tools/map/pattaya-geom.json).
+// PRESENTATION-ONLY data: the text engine never reads it — it drives
+// tools/gen-map.mjs (the neon city map + the exits-vs-reality audit) and any
+// future 2D frontend. Real venues sit at their real spots (LK Metropole, the
+// Buakhao market, Big Buddha); fictional venues sit where their canon puts
+// them. Two knowing deviations from the game graph, kept for the audit to
+// flag rather than silently smoothed: the REAL Tree Town is at the Buakhao/
+// Klang corner (north end — the game graph hangs it off Buakhao south), and
+// the real police station is on Soi 9 SOUTH of Central Festival (the graph
+// walks north from the mall).
+const ROOM_GEO = {
+  // Jomtien
+  jomtien_beach:    [12.8890, 100.8688],
+  dongtan_beach:    [12.8960, 100.8655],
+  jomtien_beach_rd: [12.8893, 100.8718],
+  soi_rompho:       [12.8901, 100.8742],
+  jomtien_7eleven:  [12.8880, 100.8724],
+  jomtien_bus_stop: [12.8940, 100.8710],
+  // Pratumnak
+  pratumnak_rd:     [12.9105, 100.8690],
+  buddha_hill:      [12.9142, 100.8618],
+  // Walking Street (the gate is the north end; "ws_north" is the DEEP end)
+  ws_gate:          [12.9268, 100.8703],
+  ws_south:         [12.9247, 100.8697],
+  ws_alley:         [12.9245, 100.8689],
+  ws_north:         [12.9226, 100.8692],
+  neon_paradise:    [12.9248, 100.8694],
+  club_mirage:      [12.9246, 100.8701],
+  crystal_palace:   [12.9227, 100.8689],
+  paradise_nights:  [12.9225, 100.8695],
+  midnight_sun:     [12.9220, 100.8693],
+  // Beach Road
+  beach_rd_s:       [12.9295, 100.8715],
+  short_time_motel: [12.9293, 100.8705],
+  beach_rd_c:       [12.9348, 100.8744],
+  tequila_queen:    [12.9338, 100.8740],
+  promenade:        [12.9357, 100.8737],
+  central_mall:     [12.9352, 100.8768],
+  police_station:   [12.9330, 100.8757],
+  beach_rd_n:       [12.9425, 100.8827],
+  blue_dog:         [12.9426, 100.8819],
+  stinky_bar:       [12.9428, 100.8821],
+  // Soi 6 (Soi Yodsak)
+  soi6_street:      [12.9448, 100.8858],
+  pink_lotus:       [12.9452, 100.8857],
+  golden_dragon:    [12.9447, 100.8866],
+  sunset_dreams:    [12.9445, 100.8860],
+  queen_vic:        [12.9449, 100.8872],
+  qv_room:          [12.9449, 100.8872],
+  // Naklua
+  naklua_rd:        [12.9530, 100.8885],
+  hotel_soi:        [12.9565, 100.8898],
+  hotel_room:       [12.9567, 100.8900],
+  // Second Road
+  second_rd_s:      [12.9268, 100.8768],
+  second_rd_c:      [12.9330, 100.8795],
+  second_rd_n:      [12.9345, 100.8805],
+  pattaya_klang:    [12.9362, 100.8815],
+  // Myth Night
+  myth_night:       [12.9322, 100.8822],
+  candy_bar_2:      [12.9324, 100.8824],
+  // Soi Buakhao
+  buakhao_n:        [12.9315, 100.8848],
+  metropole_room:   [12.9308, 100.8853],
+  rock_factory:     [12.9318, 100.8845],
+  lucky_tiger:      [12.9312, 100.8852],
+  buakhao_market:   [12.9262, 100.8820],
+  candy_bar:        [12.9264, 100.8814],
+  silk_rose:        [12.9260, 100.8826],
+  buakhao_s:        [12.9218, 100.8795],
+  jasmine_garden:   [12.9214, 100.8797],
+  // Tree Town (real: the Buakhao/Klang corner)
+  tt_entrance:      [12.9330, 100.8852],
+  tt_lane_1:        [12.9331, 100.8857],
+  tt_lane_2:        [12.9332, 100.8862],
+  tt_back:          [12.9330, 100.8865],
+  tt_deep:          [12.9327, 100.8867],
+  gold_rush:        [12.9333, 100.8857],
+  starlight_bar:    [12.9334, 100.8862],
+  rainbow_girls:    [12.9326, 100.8871],
+  oy_office:        [12.9325, 100.8873],
+  // LK Metro (the L-shaped soi off Buakhao)
+  lk_entrance:      [12.9297, 100.8845],
+  lk_main:          [12.9298, 100.8852],
+  kinky:            [12.9300, 100.8851],
+  slutty:           [12.9296, 100.8853],
+  lk_bend:          [12.9300, 100.8858],
+  las_vegas:        [12.9298, 100.8860],
+  // The Darkside
+  sukhumvit_crossing: [12.9100, 100.8975],
+  khao_talo:        [12.9073, 100.9113],
+  khao_talo_bar:    [12.9071, 100.9118],
+  lake_mabprachan:  [12.9300, 100.9560],
+};
