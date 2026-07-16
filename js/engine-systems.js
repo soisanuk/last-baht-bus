@@ -21,6 +21,33 @@ function _barfinePrice(bt, id) {
   return base;
 }
 
+// Short time vs long time. ST is the quoted rate — one round and off she goes,
+// the night carries on. LT (generally overnight) costs more: beer ×1.75, go-go
+// ×1.5, and Soi 6 — a volume business that hates losing a girl for a whole
+// night — quotes a prohibitive early LT, sometimes more than a go-go fine.
+// After midnight the collapse flattens everything: same fine either way.
+function _barfinePrices(bt, id) {
+  const st = _barfinePrice(bt, id);
+  if (G.nightTurn >= 60) return { st, lt: st };
+  const mult = bt === "soi6" ? (G.nightTurn < 30 ? 3 : 2) :
+    bt === "gogo" ? 1.5 : 1.75;
+  return { st, lt: Math.round(st * mult / 50) * 50 };
+}
+
+// Which girls run games on a mark? MOST don't — it's the experienced
+// operators, a stable hash-picked minority. The green girls are too new and
+// too nervous, and the popular girls have a reputation worth more than one
+// inflated fine. Liking you (favor ≥ 6) or a vouching wing-woman also keeps
+// everyone honest — they play a newbie they can get away with, nobody else.
+function _bfShark(id) {
+  if (POPULAR_GIRLS.includes(id)) return false;
+  if (NPCS[id].c4 === 2) return false; // the new girls play it straight
+  return _hh(id, 97) % 100 < 35;
+}
+function _bfExploitable(id) {
+  return _bfShark(id) && _favor(id) < 6 && !_wingman();
+}
+
 function _doBarfine(arg) {
   if (!_inBar()) { _say("Barfines are negotiated indoors, with the mamasan watching."); return; }
   const here = _npcsHere().filter(id => NPC_ROLES[id]);
@@ -44,7 +71,6 @@ function _doBarfine(arg) {
     return;
   }
   const bt = _room().barType;
-  const price = _barfinePrice(bt, id);
   if (_favor(id) < (bt === "soi6" ? 2 : 4)) {
     _say(bt === "soi6" ?
       `${name} laughs, not unkindly: “Lady drink first, na. One or three.” Even ` +
@@ -53,29 +79,219 @@ function _doBarfine(arg) {
       "this is Pattaya, not a vending machine.”");
     return;
   }
+  // She can say no — and the sting is that it lands after the drinks you
+  // invested in the rapport. Veterans ask early for exactly this reason.
+  const refusal = _bfRefusal(id, bt);
+  if (refusal) { _bfRefusalSay(id, refusal); return; }
+  // The negotiation. On Soi 6 the girl quotes upfront — volume business, no
+  // mystery. Everywhere else the girl won't name the number (she gets a cut):
+  // the mamasan or the cashier drifts over to do the arithmetic.
+  const { st, lt } = _barfinePrices(bt, id);
+  G.pendingBf = { id, st, lt, room: G.room };
+  if (bt === "soi6") {
+    _say(`${name} counts it out on her fingers, upfront as a menu — she quotes ` +
+      "upstairs the way a noodle cart quotes noodles, one eye still counting " +
+      `the room over your shoulder.` +
+      (G.nightTurn < 30 && lt > st ? " The long-time number lands with a small " +
+        "apologetic shrug: take a Soi 6 girl off the floor for a whole night " +
+        "this early and the mamasan prices her like a go-go headliner." : ""));
+  } else {
+    const stf = _npcsHere().find(n => NPC_ROLES[n] === "mamasan") ||
+      _npcsHere().find(n => NPC_ROLES[n] === "cashier");
+    const who = stf ? NPCS[stf].name : "the mamasan";
+    _say(`${name} brightens and says nothing at all about money — that is not ` +
+      `her department, and the cut she gets from it is nobody's business. ` +
+      `${who} materialises at your elbow with the pleasant, final air of ` +
+      "someone who does this arithmetic all night.");
+  }
+  _bfPrompt();
+}
+
+// Why a girl turns the ask down. Refusals stick for the night (she doesn't
+// flip-flop) EXCEPT the recoverable ones: "cheap" clears if her favor grows,
+// "mess" clears when you sober up. "stealing" is the bar's social physics:
+// one girl has already left this bar with you tonight (G.soc.bfBar), and no
+// colleague will be seen taking another girl's customer — even if she's off
+// shift or already gone. Life reasons (lady time, temple) are a stable hash
+// per girl per day: honest, upfront, and immovable.
+function _bfRefusal(id, bt) {
+  const held = G.soc.bfRefused && G.soc.bfRefused[id];
+  if (held) {
+    if (held.kind === "cheap" && _favor(id) >= held.favor + 2) { delete G.soc.bfRefused[id]; return null; }
+    if (held.kind === "mess" && G.soc.drunk < 4) { delete G.soc.bfRefused[id]; return null; }
+    return { ...held, again: true };
+  }
+  const keep = kind => {
+    (G.soc.bfRefused = G.soc.bfRefused || {})[id] = { kind, favor: _favor(id) };
+    return G.soc.bfRefused[id];
+  };
+  if (G.soc.bfBar && G.soc.bfBar[G.room] && G.soc.bfBar[G.room] !== id) return keep("stealing");
+  if (G.soc.drunk >= 6 && _rand() < 0.5) return keep("mess");
+  const gate = bt === "soi6" ? 2 : 4;
+  if (_favor(id) < gate + 2 && _rand() < 0.2) return keep(_rand() < 0.5 ? "cheap" : "dislike");
+  const life = _hh(id + ":" + G.vacation + ":" + G.day, 131) % 100;
+  if (life < 10) return keep(life < 5 ? "period" : "temple");
+  return null;
+}
+
+function _bfRefusalSay(id, r) {
+  const name = NPCS[id].name;
+  if (r.again) {
+    _say(`${name} just gives you the same small headshake as before. She told ` +
+      "you already; the answer hasn't changed since your last drink.");
+    return;
+  }
+  const lines = {
+    period: `${name} squeezes your hand and tells you straight, before a single ` +
+      "baht moves: “Cannot tonight, tilac. Lady time, jing jing.” The honest " +
+      "ones tell you BEFORE the fine is paid. Remember that.",
+    temple: `${name} makes an apologetic temple of her own hands: “Cannot, na. ` +
+      "I go temple in morning, make merit with my mama. Buddha first, boom " +
+      "boom later.” It has the ring of complete truth.",
+    dislike: `${name} looks at you kindly, which is worse: “You nice man. But ` +
+      "no, na.” She signals the mamasan off with one flick of the eyes, and " +
+      "the ledger never even opens. No is a complete sentence here.",
+    cheap: `${name} does a quick, visible arithmetic on your evening's tab — ` +
+      "the one lady drink, nursed — and pats your knee: “Maybe you buy me " +
+      "drink first, na? Talk more.” The words CHEAP CHARLIE hang politely " +
+      "unspoken. (Warm her up properly and ask again.)",
+    mess: `${name} leans back an honest inch. “Ooh. You smell like whole bar, ` +
+      "tilac. Maybe shower first, sleep little bit.” Hard to argue from " +
+      `${G.soc.drunk} bottles deep. (Sober up and try again.)`,
+    stealing: `${name} shakes her head before you finish asking, voice dropped ` +
+      "low: “Cannot, na. You go with girl from here already — everybody see. " +
+      "I don't steal customer.” It doesn't matter that the other girl is " +
+      "gone; the rules of the floor outlast the shift.",
+  };
+  _say(lines[r.kind] || lines.dislike, "alert");
+  if (["dislike", "stealing"].includes(r.kind)) {
+    _say("(The rail's advice, too late: if going home together is the plan, " +
+      "ask EARLY — before the night's invested in the wrong stool.)", "dim");
+  }
+}
+
+// The negotiation prompt — single source, so the live line, the invalid-answer
+// reprompt, and the restore redraw all read identically (see _renderResume).
+function _bfPrompt() {
+  const { st, lt } = G.pendingBf;
+  const p = n => n ? "฿" + n : "waived — past midnight";
+  _say(`(SHORT TIME ${p(st)} — one round, the night carries on · LONG TIME ` +
+    `${p(lt)} — overnight · NO backs out.)`, "dim");
+}
+
+// The player answered the negotiation. kind: "st" | "lt" | "open" — open is
+// the classic newbie mistake, money waved at an unnegotiated contract; an
+// operator prices it accordingly and has already read you as a mark.
+function _bfResolve(kind) {
+  const { id, st, lt } = G.pendingBf;
+  G.pendingBf = null;
+  const name = NPCS[id].name;
+  const bt = _room().barType;
+  let price = kind === "st" ? st : lt;
+  let marked = false; // she read you as a newbie who'll swallow it
+  if (kind === "open") {
+    if (_bfExploitable(id)) {
+      marked = true;
+      price = Math.round(lt * 1.3 / 50) * 50;
+      _say(`You put money on the bar without settling what it buys. ${name}'s ` +
+        "smile widens one professional notch, and by the time the arithmetic " +
+        "reaches you it has quietly become the long-time rate — plus a little " +
+        "for the inconvenience of being asked. The price moved while you " +
+        "weren't looking, and everyone at the till knows it.", "alert");
+    } else {
+      price = lt;
+      _say(`You wave the money without settling terms. ${name} glances at the ` +
+        "mamasan; the mamasan writes it up as long time, fair and square — " +
+        "most girls don't play the games the rail warns you about. Still: ask " +
+        "first, tilac. Short or long. It's how it's done.", "dim");
+    }
+    kind = "lt";
+  }
   if (G.money < price) {
-    _say(`The mamasan names it without looking up: ฿${price}` +
-      (G.nightTurn < 30 ? " — early hours, peak rate; the whole shift walks out with her" : "") +
-      `. You have ฿${G.money}. She returns to her book. The book is the whole answer.`);
+    _say(`The number is ฿${price}. Your pocket says ฿${G.money}. The ledger ` +
+      "closes with a soft, final flap, and the negotiation is over without " +
+      "anyone saying so.");
     return;
   }
   G.money -= price;
+  (G.soc.bfBar = G.soc.bfBar || {})[G.room] = id; // her colleagues saw you leave with her
   if (price === 0) {
-    _say(`The mamasan glances at the clock — past midnight — closes the ledger, and ` +
+    _say("The mamasan glances at the clock — past midnight — closes the ledger, and " +
       "waves the fee away with two fingers. The barfine walks out with the girl " +
       "soon anyway; only the famous ones stay on the book all night.", "dim");
   } else if (G.nightTurn >= 60 && POPULAR_GIRLS.includes(id)) {
     _say(`Past midnight the book usually closes — but not for ${name}. The mamasan ` +
       `taps the fee, unbudging: for HER, any hour is peak. ฿${price}.`, "dim");
   }
-  if (bt === "soi6") {
-    _say(`฿${price} to the till and ${name} takes your hand with the confidence of ` +
-      "home advantage. “Upstairs” turns out to be exactly as advertised. Some " +
-      "time later you are back on your stool, thinking about nothing at all, " +
-      `while she fixes her hair in the till mirror. (฿${G.money} left.)`, "win");
-    _addHappy(6);
+  // ── SHORT TIME: one round, off she goes, the night carries on ──
+  if (kind === "st") {
+    if (bt === "soi6") {
+      _say(`฿${price} to the till and ${name} takes your hand with the confidence of ` +
+        "home advantage. “Upstairs” turns out to be exactly as advertised. Some " +
+        "time later you are back on your stool, thinking about nothing at all, " +
+        `while she fixes her hair in the till mirror. (฿${G.money} left.)`, "win");
+      _addHappy(6);
+    } else {
+      _say((price ? `฿${price} to the ledger and a` : "A") +
+        ` short walk later the short-time hotel's ceiling fan is doing its slow ` +
+        `count over the proceedings. ${name} is businesslike, cheerful, and ` +
+        "gone within the hour — a kiss on the cheek at the door, back to her " +
+        `stool before the ice in your last drink has melted. (฿${G.money} left.)`, "win");
+      _addHappy(5);
+      for (let i = 0; i < 6; i++) { // the hour passes; the night carries on
+        if (G.over) return;
+        _tick();
+      }
+    }
     return;
   }
+  // ── LONG TIME: overnight — unless she's running a game on you ──
+  const scam = _bfScamRoll(id, marked);
+  if (scam === "period") {
+    // sprung before you even leave: the reveal comes AFTER the fine is paid
+    G.bfIncident = { id, room: G.room, kind: "period", fine: price, day: G.day };
+    _say(`The fine is barely in the ledger when ${name} leans close, all ` +
+      "apology: “Cannot boom boom tonight, na. Lady time.” She pats your arm " +
+      "and is somehow already back in the rotation of the room. At the till, " +
+      "the mamasan's pen has stopped moving — she heard it too, and she knows " +
+      "the shift roster better than anyone.", "alert");
+    _say("(COMPLAIN — the mamasan is right there, and this is bad for business.)", "dim");
+    return;
+  }
+  if (scam === "barhop" || scam === "wsparty") {
+    G.bfSeq = { id, kind: scam, fine: price, spent: 0, room: G.room };
+    G.pendingEnc = scam === "barhop" ? "bfhop" : "bfparty";
+    if (scam === "barhop") {
+      _encPrompt(
+        [`${name} reappears out of uniform, takes your arm — and steers, gently ` +
+          "but with intent, away from the taxis. “One drink first, na? My " +
+          "friend's bar, very close. She look after us.” The bar she means has " +
+          "her photo on the wall and a cashier who greets her by a different " +
+          "nickname.", "alert"],
+        ["(YES, one drink · NO — the night you actually paid for.)", "dim"]);
+    } else {
+      _encPrompt(
+        [`${name} scrolls her phone as you leave, lights up, and turns the ` +
+          "screen to you: “My friends on Walking Street! We say hello, one " +
+          "drink only, na? They love you already.” Two girls wave from the " +
+          "photo. Neither of them has ever had one drink only.", "alert"],
+        ["(YES, meet the friends · NO — the night you actually paid for.)", "dim"]);
+    }
+    return;
+  }
+  if (scam) { // runner | mao | leaveAfter — plays out across the night's end
+    G.bfIncident = { id, room: G.room, kind: scam, fine: price, day: G.day };
+    _say((price ?
+      `฿${price} to the mamasan, who enters it in the ledger with ceremony and ` +
+      `gives ${name} a nod that means back by opening, mind. ` :
+      `The mamasan gives ${name} a nod that means go on then, off the clock. `) +
+      `${name} vanishes and reappears out of uniform — jeans, clean shirt, ordinary ` +
+      "and lovely — and takes your arm like you're the one being rented." +
+      (price ? ` (฿${G.money} left.)` : ""), "win");
+    _endNight("bfscam");
+    return;
+  }
+  // the honest overnight — most girls, most nights
   _say((price ?
     `฿${price} to the mamasan, who enters it in the ledger with ceremony and ` +
     `gives ${name} a nod that means back by opening, mind. ` :
@@ -86,9 +302,111 @@ function _doBarfine(arg) {
   _endNight("barfine");
 }
 
+// COMPLAIN — the recourse that makes a bar girl worth more than a freelancer.
+// Back at the bar, the mamasan makes it right: refund, an introduction to a
+// reliable girl, and on a repeat offence the apology scene. Not a morality
+// play — "bad girls" talk costs her bar real money, and she knows it.
+function _doComplain() {
+  const inc = G.bfIncident;
+  if (!inc) {
+    _say("Nothing on the books to complain about. Give the city time.");
+    return;
+  }
+  if (G.room !== inc.room) {
+    _say(`Take it back to ${_barName(inc.room)} — the mamasan there will want ` +
+      "to hear it, and not for your sake.");
+    return;
+  }
+  const mama = _npcsHere().find(n => NPC_ROLES[n] === "mamasan");
+  if (!mama) {
+    _say("No mamasan holding court right now. This is a conversation for the " +
+      "boss, not the floor.");
+    return;
+  }
+  const mn = NPCS[mama].name, gn = NPCS[inc.id].name;
+  if (inc.kind === "leaveAfter") {
+    G.bfIncident = null;
+    _say(`${mn} hears you out, then spreads her hands, genuinely unmoved: ` +
+      `“Tilac. You barfine, you boom boom, she come home. Where is problem?” ` +
+      "Around the till, nobody disagrees. You got the main event; the fine " +
+      "bought what it bought.");
+    return;
+  }
+  G.bfStrikes = G.bfStrikes || {};
+  const strikes = (G.bfStrikes[inc.id] = (G.bfStrikes[inc.id] || 0) + 1);
+  G.money += inc.fine;
+  G.bfIncident = null;
+  const detail = inc.kind === "runner" ? "the emergency that put her back on a stool within the hour" :
+    inc.kind === "mao" ? "the mao mak mak performance" :
+    inc.kind === "barhop" ? "the guided tour of her friends' tills" :
+    inc.kind === "wsparty" ? "the three-girl Walking Street benefit night" :
+    "the lady-time reveal, timed to the second the fine hit the ledger";
+  if (strikes >= 2) {
+    _say(`You lay it out — ${detail}. ${mn}'s face does not change, which is how ` +
+      `you know it's serious. One syllable across the room and ${gn} is standing ` +
+      "in front of you, wai-ing low, counting your refund out of her OWN purse " +
+      `note by note while the whole bar studies its drinks. “Second time,” ${mn} ` +
+      "says to nobody in particular, in English, so it travels. The girls near " +
+      `the door make space around ${gn} the way people do around someone whose ` +
+      `stool is already empty. (฿${inc.fine} back — ฿${G.money}.)`, "win");
+  } else {
+    _say(`You lay it out — ${detail}. ${mn} listens with the stillness of a ` +
+      "woman doing damage arithmetic: one unhappy farang tells ten, and “bad " +
+      "girls” talk empties a bar faster than a raid. The refund appears from " +
+      `the till without ceremony. “Not morality, tilac. Business.” (฿${inc.fine} ` +
+      `back — ฿${G.money}.)`, "win");
+  }
+  const rel = _npcsHere().find(n => n !== inc.id && NPC_ROLES[n] === "hostess" &&
+    (POPULAR_GIRLS.includes(n) || NPCS[n].c4 === 2));
+  if (rel) {
+    G.soc.drinks[rel] = (G.soc.drinks[rel] || 0) + 2;
+    _say(`Then ${mn} turns, considers the floor, and beckons ${NPCS[rel].name} ` +
+      `over with two fingers. “This one,” she says, like a guarantee. ` +
+      `${NPCS[rel].name} sits beside you already half on your side.`, "dim");
+  }
+  _addHappy(1);
+}
+
+// Does she run a game tonight? Only an operator, only on a mark — the open
+// contract doubles her confidence. Returns a scam kind or null.
+function _bfScamRoll(id, marked) {
+  if (!_bfExploitable(id)) return null;
+  if (_rand() >= (marked ? 0.6 : 0.3)) return null;
+  const r = _rand();
+  if (r < 0.15) return "period";
+  if (r < 0.40) return "runner";
+  if (r < 0.60) return "mao";
+  if (r < 0.75) return "leaveAfter";
+  if (r < 0.90) return "barhop";
+  return "wsparty";
+}
+
+// The indirect ask. A girl warming to you (favor 4-5 — below self-barfine
+// territory) sometimes opens the subject herself, the way it's actually done:
+// "I go with you, na" — never a number, never the word barfine. The numbers
+// are the mamasan's department (she gets a cut, so she won't volunteer them),
+// and many bars run a quota — X fines and lady drinks a month for the bonus —
+// so the ask is business as much as affection. Once per girl per night.
+function _maybeGoWithYou(id) {
+  if (!_flag("act1Done") || G.pendingEnc || G.game || G.pendingBf) return;
+  if (NPC_ROLES[id] !== "hostess") return;
+  if ((G.soc.heat[G.room] || 0) > 0) return;
+  if (G.soc.goWith && G.soc.goWith[id]) return;
+  const f = _favor(id);
+  if (f < 4 || f >= 6) return;
+  if (_rand() >= 0.25) return;
+  (G.soc.goWith = G.soc.goWith || {})[id] = true;
+  _say(`${NPCS[id].name} leans in, suddenly and carefully casual: “I go with ` +
+    "you, na? I want to go with you.” Which is as direct as it ever gets. Her " +
+    "eyes flick to the till — the numbers are the mamasan's department, and " +
+    `mama counts the month's fines like a farmer counts rain. (BARFINE ` +
+    `${NPCS[id].name.toUpperCase()})`, "win");
+}
+
 // A regular's reward: late enough, liked enough, and she may pay her own
 // barfine — an investment decision, and the highest compliment the soi pays.
 function _maybeSelfBarfine(id) {
+  _maybeGoWithYou(id); // the softer nudge shares every call site; it gates itself
   if (!_flag("act1Done") || G.pendingEnc || G.game) return;
   if (G.nightTurn < 60) return;                 // the thought arrives after midnight
   if (NPC_ROLES[id] !== "hostess") return;

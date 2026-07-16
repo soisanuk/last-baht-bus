@@ -1277,6 +1277,47 @@ function _endNight(reason) {
       }
       _addHappy(10);
       break;
+    case "bfscam": {
+      // an operator ran her game on your long time — the veterans warned you.
+      // G.bfIncident.kind carries which one; COMPLAIN at her bar for recourse.
+      const inc = G.bfIncident || { kind: "runner", room: G.room, id: null };
+      const gn = inc.id ? NPCS[inc.id].name : "She";
+      if (inc.kind === "runner") {
+        _say("Dinner is lovely. She is lovely. Then, over the last of the khao " +
+          `man gai, her phone lights up and ${gn}'s whole face changes: “Mama! ` +
+          "Emergency! My friend—” The story arrives pre-assembled and she with " +
+          "it, already standing, already sorry, already gone. Much later you " +
+          "hear — the soi always tells you eventually — that she was back on " +
+          "her stool inside the hour. Or maybe it was Beach Road.", "alert");
+        _addHappy(2);
+      } else if (inc.kind === "mao") {
+        _say(`${gn} matches you drink for drink all night, glorious company, ` +
+          "right up until the room door closes and she becomes, instantly and " +
+          "completely, the drunkest woman in Thailand. “Mao mak mak, tilac. " +
+          "Cannot boom boom.” She is asleep in seconds, diagonal, snoring " +
+          "delicately. At dawn she is gone with the light, fresh as laundry.", "alert");
+        _addHappy(3);
+      } else { // leaveAfter
+        _say("The main event is everything advertised. Then, before the ceiling " +
+          `fan has finished its applause, ${gn} is up, dressed, and kissing ` +
+          "your cheek: “I go back bar, na? Mama need me.” Some men mind. " +
+          "Standing in the doorway watching her go, you decide — mostly — not " +
+          "to be one of them.", "dim");
+        _addHappy(6);
+      }
+      if (inc.room && inc.kind !== "leaveAfter") {
+        _say(`(The veterans at the rail called this one. COMPLAIN at ` +
+          `${_barName(inc.room)} — the mamasan will want to know. Bad girls ` +
+          "are bad business.)", "dim");
+      }
+      break;
+    }
+    case "bfscam2": // bfhop/bfparty told their own story; just point at recourse
+      if (G.bfIncident) {
+        _say(`(COMPLAIN at ${_barName(G.bfIncident.room)} — the mamasan will ` +
+          "want to know. Bad girls are bad business.)", "dim");
+      }
+      break;
     case "sleep":
       _say("You call it. The air-con rattles its lullaby, the neon leaks through " +
         "the curtains, and Pattaya carries on politely without you.", "room");

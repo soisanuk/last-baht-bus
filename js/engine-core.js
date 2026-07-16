@@ -113,6 +113,10 @@ function newGame() {
       Object.entries(ITEMS).map(([id, it]) => [id, it.location])),
     safeTries: 0,
     pendingFare: null,   // { kind:"bus"|"moto", price, dest } awaiting `pay`
+    pendingBf: null,     // { id, st, lt, room } — barfine negotiation awaiting ST/LT/NO
+    bfIncident: null,    // { id, room, kind, fine, day } — a girl ran a game; COMPLAIN for recourse
+    bfStrikes: {},       //   girlId → complaints upheld against her (2 = the apology scene)
+    bfSeq: null,         // { id, kind, fine, spent, room } — mid bar-hop/WS-party sequence
     pendingEnc: null,    // encounter id awaiting the player's snap reaction
     encPrompt: null,     // [[text, cls], …] of the pending encounter's prompt, so a restore can redraw it
     game: null,          // live bar mini-game state (connect 4 / jackpot / pool)

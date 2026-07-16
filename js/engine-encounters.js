@@ -736,6 +736,86 @@ const _ENC = {
     }
   },
 
+  // ── The barfine games (see _bfResolve) ────────────────────────────────────
+  // bfhop: after a long-time fine, she steers the night through her friends'
+  // bars — where she gets a kickback and you pay her lady-drink rates. Two
+  // stages; saying NO at any point buys back the night you actually paid for.
+  bfhop(input) {
+    const seq = G.bfSeq || { id: null, kind: "barhop", fine: 0, spent: 0, stage: 0 };
+    const gn = seq.id ? NPCS[seq.id].name : "She";
+    const yes = /yes|ok|sure|one drink|fine|why not|go on|drink/.test(input) &&
+      !/\bno\b|straight|hotel|home/.test(input);
+    if (!yes) {
+      G.bfSeq = null;
+      _say(`You steer back, gently, toward the night as negotiated. ${gn} pouts ` +
+        "for exactly three steps — a professional pout, quickly retired — and " +
+        "then the evening becomes what you paid for after all.", "win");
+      _endNight("barfine");
+      return;
+    }
+    const round = Math.min(G.money, 300 + Math.floor(_rand() * 3) * 50);
+    G.money -= round;
+    seq.spent += round;
+    seq.stage = (seq.stage || 0) + 1;
+    if (seq.stage === 1 && G.money > 0) {
+      G.bfSeq = seq;
+      G.pendingEnc = "bfhop";
+      _encPrompt(
+        [`Her friend's bar swallows an hour. The drinks arrive in pairs without ` +
+          `being ordered — hers at lady-drink rates, naturally — and ฿${round} ` +
+          `leaves quietly. (${gn} and the cashier share a look you're not ` +
+          "supposed to price.) Then, sweetly: “One more bar, na? My OTHER " +
+          `friend—” (฿${G.money} left.)`, "alert"],
+        ["(YES, one more · NO — enough detours.)", "dim"]);
+      return;
+    }
+    // second yes (or broke): the tour ends the way tours end
+    G.bfSeq = null;
+    G.bfIncident = { id: seq.id, room: seq.room || G.room, kind: "barhop", fine: seq.fine, day: G.day };
+    _say(`Another bar, another pair of unordered drinks, another ฿${round} — ` +
+      "and somewhere in the third round of hellos the evening's centre of " +
+      "gravity quietly stops being you. By the time you surface, " +
+      `${gn} is “mao mak mak, tilac — cannot boom boom,” and asleep before ` +
+      "the aircon spins up. The kickbacks, at least, were real.", "alert");
+    _addHappy(3);
+    _endNight("bfscam2"); // prose already told; just close the night
+    return;
+  },
+
+  // bfparty: “my friends on Walking Street!” — suddenly you are funding three
+  // girls' night out, and at the end of it she is too drunk for the deed.
+  bfparty(input) {
+    const seq = G.bfSeq || { id: null, kind: "wsparty", fine: 0 };
+    const gn = seq.id ? NPCS[seq.id].name : "She";
+    const yes = /yes|ok|sure|meet|friends|why not|party|hello/.test(input) &&
+      !/\bno\b|straight|hotel|home/.test(input);
+    G.bfSeq = null;
+    if (!yes) {
+      _say(`“Next time, na,” you say, and mean it as much as she did. ${gn} ` +
+        "files the friends away for a softer mark and takes your arm — the " +
+        "night proceeds as negotiated, and is very good.", "win");
+      _endNight("barfine");
+      return;
+    }
+    const bill = Math.min(G.money, 600 + Math.floor(_rand() * 4) * 50);
+    G.money -= bill;
+    G.bfIncident = { id: seq.id, room: seq.room || G.room, kind: "wsparty", fine: seq.fine, day: G.day };
+    _say("Walking Street receives the three of you — then four of you — like a " +
+      "tide taking back a beach. The friends are funny, ferocious, and " +
+      `magnificently thirsty; the bills arrive addressed to you by unspoken ` +
+      `treaty, ฿${bill} in tequila rounds and lady drinks for ladies who are ` +
+      "not, tonight, working for anyone but themselves. It is, in fairness, a " +
+      `great party. (฿${G.money} left.)`, "alert");
+    _addHappy(2);
+    _say(`It ends the way the rail could have told you it ends: ${gn}, glorious ` +
+      "and sideways, “mao maaaak mak, tilac,” asleep in the taxi with her " +
+      "shoes in her hand. The deed remains undone. The night files itself " +
+      "under education.", "alert");
+    _addHappy(2);
+    _endNight("bfscam2");
+    return;
+  },
+
   tonic(input) {
     // Second step: you followed him off Beach Road into the shop (see the SHOP
     // branch below re-arming pendingEnc). This input is your reaction in the
