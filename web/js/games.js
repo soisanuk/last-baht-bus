@@ -52,11 +52,90 @@ function c4Full(board) {
   return board[0].every(v => v !== 0);
 }
 
-// The hostess plays Connect 4 every shift of her life: take the win, block
-// yours, don't hand you one on top of her move, then fight for the middle.
-function c4Ai(board, rnd) {
-  const open = [];
-  for (let c = 0; c < C4_COLS; c++) if (board[0][c] === 0) open.push(c);
+// The hostess plays Connect 4 every shift of her life — the score sheet says
+// beating her is "unheard of", so she reads the board like one: a real
+// lookahead (negamax + alpha-beta), not a one-ply reflex. The old reflex AI
+// lost to any double-threat fork; this one sets them.
+
+// Positional value of a board from `who`'s side: every 4-window scored by its
+// counts (a live three is nearly a threat, a live two is a lean), centre
+// column weighted — the standard club heuristic.
+function _c4Eval(board, who) {
+  const opp = 3 - who;
+  let score = 0;
+  for (let r = 0; r < C4_ROWS; r++) {
+    if (board[r][3] === who) score += 6;
+    else if (board[r][3] === opp) score -= 6;
+  }
+  const dirs = [[0, 1], [1, 0], [1, 1], [1, -1]];
+  for (let r = 0; r < C4_ROWS; r++) {
+    for (let c = 0; c < C4_COLS; c++) {
+      for (const [dr, dc] of dirs) {
+        const r3 = r + dr * 3, c3 = c + dc * 3;
+        if (r3 < 0 || r3 >= C4_ROWS || c3 < 0 || c3 >= C4_COLS) continue;
+        let mine = 0, theirs = 0;
+        for (let k = 0; k < 4; k++) {
+          const v = board[r + dr * k][c + dc * k];
+          if (v === who) mine++; else if (v === opp) theirs++;
+        }
+        if (mine && theirs) continue; // dead window
+        if (mine === 3) score += 40; else if (mine === 2) score += 6;
+        else if (theirs === 3) score -= 45; else if (theirs === 2) score -= 6;
+      }
+    }
+  }
+  return score;
+}
+
+const _C4_ORDER = [3, 2, 4, 1, 5, 0, 6]; // centre-out: better moves first = better pruning
+
+// Did the stone just placed at (r,c) complete four? Only lines through that
+// square — the full-board c4Win scan is too slow inside the search.
+function _c4WinAt(board, r, c) {
+  const v = board[r][c];
+  for (const [dr, dc] of [[0, 1], [1, 0], [1, 1], [1, -1]]) {
+    let k = 1;
+    for (const s of [1, -1]) {
+      let rr = r + dr * s, cc = c + dc * s;
+      while (rr >= 0 && rr < C4_ROWS && cc >= 0 && cc < C4_COLS && board[rr][cc] === v) {
+        k++; rr += dr * s; cc += dc * s;
+      }
+    }
+    if (k >= 4) return true;
+  }
+  return false;
+}
+
+// Negamax with alpha-beta, from `who` to move. Any immediate win short-circuits
+// (so moves played in the main loop never complete four — children stay clean).
+// Wins score higher the sooner they land; a full board is a draw.
+function _c4Negamax(board, depth, alpha, beta, who) {
+  for (const c of _C4_ORDER) {
+    if (board[0][c] !== 0) continue;
+    const row = c4Drop(board, c, who);
+    const won = _c4WinAt(board, row, c);
+    c4Undrop(board, c);
+    if (won) return 100000 + depth;
+  }
+  if (depth === 0) return _c4Eval(board, who);
+  let best = -Infinity;
+  for (const c of _C4_ORDER) {
+    if (board[0][c] !== 0) continue;
+    c4Drop(board, c, who);
+    const v = -_c4Negamax(board, depth - 1, -beta, -alpha, 3 - who);
+    c4Undrop(board, c);
+    if (v > best) best = v;
+    if (best > alpha) alpha = best;
+    if (alpha >= beta) break;
+  }
+  return best === -Infinity ? 0 : best; // no legal moves: draw
+}
+
+// Depth 8 beat the old reflex AI 20-0 from the SECOND seat in testing (depth 6
+// dropped games, depth 7 is oddly worse — horizon parity); still theoretically
+// beatable, first player with perfect play wins Connect 4.
+function c4Ai(board, rnd, depth = 8) {
+  const open = _C4_ORDER.filter(c => board[0][c] === 0);
   const wins = (col, who) => {
     if (c4Drop(board, col, who) < 0) return false;
     const w = c4Win(board) === who;
@@ -65,16 +144,15 @@ function c4Ai(board, rnd) {
   };
   for (const c of open) if (wins(c, 2)) return c;             // win now
   for (const c of open) if (wins(c, 1)) return c;             // block you
-  const safe = open.filter(c => {                             // no gift on top
+  let best = [], bestV = -Infinity;
+  for (const c of open) {
     c4Drop(board, c, 2);
-    const gift = board[0][c] === 0 && wins(c, 1);
+    const v = -_c4Negamax(board, depth - 1, -Infinity, Infinity, 1);
     c4Undrop(board, c);
-    return !gift;
-  });
-  const pool = safe.length ? safe : open;
-  pool.sort((a, b) => Math.abs(a - 3) - Math.abs(b - 3));     // centre first
-  const best = pool.filter(c => Math.abs(c - 3) === Math.abs(pool[0] - 3));
-  return best[Math.floor(rnd() * best.length)];
+    if (v > bestV) { bestV = v; best = [c]; }
+    else if (v === bestV) best.push(c);
+  }
+  return best[Math.floor(rnd() * best.length)]; // rnd only tie-breaks equals
 }
 
 // Text board for the terminal (monospace, pre-wrap). ● you, ○ her.

@@ -52,6 +52,68 @@ test("c4 AI: blocks the player's three in a row", () => {
   assert.ok(pick === 0 || pick === 4, `blocked at ${pick}`);
 });
 
+test("c4 AI: sees the ground fork coming and denies it (lookahead, not reflex)", () => {
+  // Player holds ●● at bottom cols 2-3 with both flanks open. Any move except
+  // col 1 or col 4 lets the player build .●●●. next turn — two winning ends,
+  // unstoppable. The old one-ply AI played centre-on-top here and lost by
+  // force; a bar shark takes a flank.
+  const b = c4New();
+  c4Drop(b, 2, 1); c4Drop(b, 3, 1); // ● ● on the floor
+  c4Drop(b, 6, 2);                  // her counter parked on the edge
+  const pick = c4Ai(b, seq([0]));
+  assert.ok(pick === 1 || pick === 4, `denied the fork at ${pick}`);
+});
+
+test("c4 AI: same board + same seed = same move (rnd only breaks ties)", () => {
+  const mk = () => {
+    const b = c4New();
+    c4Drop(b, 3, 1); c4Drop(b, 3, 2); c4Drop(b, 2, 1);
+    return b;
+  };
+  assert.equal(c4Ai(mk(), seq([0.42])), c4Ai(mk(), seq([0.42])));
+});
+
+test("c4 AI: crushes the old one-ply reflex from the second seat", () => {
+  // The retired AI, verbatim: win now → block → don't gift → centre.
+  function oldAi(board, rnd) {
+    const open = [];
+    for (let c = 0; c < 7; c++) if (board[0][c] === 0) open.push(c);
+    const wins = (col, who) => {
+      if (c4Drop(board, col, who) < 0) return false;
+      const w = c4Win(board) === who;
+      c4Undrop(board, col);
+      return w;
+    };
+    for (const c of open) if (wins(c, 1)) return c;
+    for (const c of open) if (wins(c, 2)) return c;
+    const safe = open.filter(c => {
+      c4Drop(board, c, 1);
+      const gift = board[0][c] === 0 && wins(c, 2);
+      c4Undrop(board, c);
+      return !gift;
+    });
+    const pool = safe.length ? safe : open;
+    pool.sort((a, b) => Math.abs(a - 3) - Math.abs(b - 3));
+    const best = pool.filter(c => Math.abs(c - 3) === Math.abs(pool[0] - 3));
+    return best[Math.floor(rnd() * best.length)];
+  }
+  // old AI plays first (as 1), new AI second (as 2) — the harder seat.
+  let rs = 7;
+  const rnd = () => (rs = (rs * 48271) % 2147483647) / 2147483647;
+  let newWins = 0, games = 10;
+  for (let g = 0; g < games; g++) {
+    const b = c4New();
+    for (;;) {
+      c4Drop(b, oldAi(b, rnd), 1);
+      if (c4Win(b) || c4Full(b)) break;
+      c4Drop(b, c4Ai(b, rnd), 2);
+      if (c4Win(b) || c4Full(b)) break;
+    }
+    if (c4Win(b) === 2) newWins++;
+  }
+  assert.ok(newWins >= 8, `the shark won ${newWins}/${games} from the second seat`);
+});
+
 test("c4 render is a 6-line monospace grid plus column numbers", () => {
   const b = c4New();
   c4Drop(b, 0, 1);
