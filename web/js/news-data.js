@@ -8,11 +8,6 @@ var NEWS_FEED = [
     "d": "15 Jul 2026"
   },
   {
-    "t": "Pattaya police sidelined over ‘private’ fines of Kuwaiti bikers",
-    "s": "Bangkok Post",
-    "d": "15 Jul 2026"
-  },
-  {
     "t": "Kuwaiti tourists allege extortion by Pattaya police",
     "s": "Khaosod English",
     "d": "15 Jul 2026"
@@ -21,6 +16,11 @@ var NEWS_FEED = [
     "t": "Three Pattaya police reassigned over cash fines and unofficial receipts",
     "s": "Nation Thailand",
     "d": "15 Jul 2026"
+  },
+  {
+    "t": "Indian fortune teller arrested over illegal work in Pattaya",
+    "s": "Thaiger",
+    "d": "17 Jul 2026"
   },
   {
     "t": "Thailand video news | Pattaya police accused of corruption, Child boxers abused by Norwegian gym owner",
@@ -33,29 +33,14 @@ var NEWS_FEED = [
     "d": "15 Jul 2026"
   },
   {
-    "t": "Jomtien drug raid nets two suspected dealers, detains 81",
-    "s": "Thaiger",
-    "d": "15 Jul 2026"
-  },
-  {
     "t": "Australian man charged with murder after dead girl found in suitcase in Thailand",
     "s": "BBC",
     "d": "28 Jun 2026"
   },
   {
-    "t": "The band playing when a Bangkok bar caught fire mourns its members among the 33 dead",
-    "s": "AP News",
-    "d": "16 Jul 2026"
-  },
-  {
-    "t": "Thailand: At least 28 killed in Bangkok bar fire",
-    "s": "BBC",
-    "d": "13 Jul 2026"
-  },
-  {
-    "t": "Deadly Bangkok bar fire exposes Thailand’s safety loopholes for nightlife venues",
-    "s": "AP News",
-    "d": "16 Jul 2026"
+    "t": "Thai police arrest Australian over killing of teenager found in suitcase",
+    "s": "Al Jazeera",
+    "d": "27 Jun 2026"
   },
   {
     "t": "Thailand Scraps Plan to End Visa-Free Entry for Indian Tourists",
@@ -63,25 +48,40 @@ var NEWS_FEED = [
     "d": "14 Jul 2026"
   },
   {
-    "t": "China asks Thailand to deport Chinese journalist, rights groups warn of persecution",
-    "s": "Reuters",
+    "t": "Thailand: Don’t Forcibly Return Chinese Dissidents",
+    "s": "Human Rights Watch",
+    "d": "14 Jul 2026"
+  },
+  {
+    "t": "Deadly Bangkok bar fire exposes Thailand’s safety loopholes for nightlife venues",
+    "s": "ABC News - Breaking News, Latest News and Videos",
     "d": "16 Jul 2026"
   },
   {
     "t": "Hyundai to export BEVs to Australia from Thailand",
     "s": "Yahoo Finance",
     "d": "15 Jul 2026"
+  },
+  {
+    "t": "China asks Thailand to deport Chinese journalist, rights groups warn of persecution",
+    "s": "Reuters",
+    "d": "16 Jul 2026"
+  },
+  {
+    "t": "The band playing when a Bangkok bar caught fire mourns its members among the 33 dead",
+    "s": "AP News",
+    "d": "16 Jul 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-07-16","USD":33.57,"AUD":23.52,"GBP":45.35,"EUR":38.49};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-07-17","temp":28,"humid":81,"code":3,"hi":30,"rain":52};
+var WX_NOW = {"date":"2026-07-17","temp":30,"humid":71,"code":3,"hi":30,"rain":75};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-14","done":true,"h":"France","hs":0,"a":"Spain","as":2},{"d":"2026-07-15","done":true,"h":"England","hs":1,"a":"Argentina","as":2},{"d":"2026-07-18","done":false,"h":"France","hs":0,"a":"England","as":0},{"d":"2026-07-19","done":false,"h":"Spain","hs":0,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-07-16","first":"639214","last2":"71","front3":["683","709"],"back3":["427","746"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":3977,"date":"2026-07-16","baht":63150};
+var GOLD = {"usd":3998,"date":"2026-07-17","baht":63450};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":64147,"thb":2154069};
+var BTC = {"usd":62861,"thb":2110962};
