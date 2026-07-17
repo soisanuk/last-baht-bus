@@ -1,7 +1,9 @@
 # The Last Baht Bus
 
 A Zork-style adventure-turned-sandbox set in the neon streets of Pattaya —
-part of the [Soi Sanuk](https://soisanuk.github.io/) universe.
+part of the [Soi Sanuk](https://soisanuk.github.io/) universe — and wired to
+it: the Thai words the night shows you land in the trainer as a practice deck
+(🚌 Words from the bus).
 
 You wake face-down on Jomtien beach at sunset. Wallet: gone. Phone: 13%.
 Your hotel is in Naklua, a long way north. The baht bus is ฿15 a head.
