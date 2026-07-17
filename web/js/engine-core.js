@@ -32,7 +32,20 @@ function engineInit(printFn, speakFn, sfxFn) {
 }
 
 // say(text, cls) — cls hints the renderer: "room", "thai", "dim", "alert", "win"
-function _say(text, cls) { _learnNames(text); _enginePrint(text, cls || ""); }
+function _say(text, cls) {
+  _learnNames(text);
+  // collect the Thai the night shows you (capped, deduped) — the trainer
+  // (same origin) reads it out of lbb_save and offers "words from the bus"
+  if (G && G.thaiSeen) {
+    for (const run of text.match(/[\u0E00-\u0E7F]{2,}/g) || []) {
+      if (!G.thaiSeen.includes(run)) {
+        G.thaiSeen.push(run);
+        if (G.thaiSeen.length > 60) G.thaiSeen.shift();
+      }
+    }
+  }
+  _enginePrint(text, cls || "");
+}
 
 // Render-only markup: authored content wraps a span in {{…}} to mark it literal
 // — the frontend must print it plainly and tap-decorate NOTHING inside (an item
@@ -100,6 +113,7 @@ function newGame() {
     hotel: "sabai",      // where you're checked in: sabai | queenvic | metropole
     hotelDebt: 0,        // what's on the night clerk's book
     tonicOwed: 0,        // baht the hair-tonic shop fleeced you for, recoverable via a police REPORT
+    thaiSeen: [],        // Thai runs the transcript has shown (the trainer's cross-app deck)
     qvDay: 0,            // last day the Queen Vic balcony paid its happy point
     patronTalk: { day: 0, talked: {} }, // patron dialogue book, reset daily
     turns: 0,

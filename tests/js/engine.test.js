@@ -3640,3 +3640,14 @@ test("hotel economics: rent, the downgrade ladder, the book, and the grace note"
   assert.ok(state().money >= 8000 - 700 - 1000 - 1300, `pocket money only (฿${state().money})`);
   assert.equal(state().itemLoc.fake_rolex, "inventory", "the safe held the Rolex");
 });
+
+test("the transcript collects Thai runs for the trainer bridge, capped and deduped", () => {
+  run("look");
+  _say("ซาเล้ง rolls past. สวัสดี!");
+  _say("ซาเล้ง again");
+  assert.ok(state().thaiSeen.includes("ซาเล้ง"));
+  assert.ok(state().thaiSeen.includes("สวัสดี"));
+  assert.equal(state().thaiSeen.filter(t => t === "ซาเล้ง").length, 1, "deduped");
+  for (let i = 0; i < 70; i++) _say("คำ" + "ๆ".repeat(i % 3) + i);
+  assert.ok(state().thaiSeen.length <= 60, "capped");
+});
