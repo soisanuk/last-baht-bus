@@ -53,35 +53,35 @@ var NEWS_FEED = [
     "d": "14 Jul 2026"
   },
   {
+    "t": "The band playing when a Bangkok bar caught fire mourns its members among the 33 dead",
+    "s": "AP News",
+    "d": "16 Jul 2026"
+  },
+  {
     "t": "Deadly Bangkok bar fire exposes Thailand’s safety loopholes for nightlife venues",
     "s": "ABC News - Breaking News, Latest News and Videos",
     "d": "16 Jul 2026"
   },
   {
-    "t": "Hyundai to export BEVs to Australia from Thailand",
-    "s": "Yahoo Finance",
-    "d": "15 Jul 2026"
+    "t": "At least 28 killed, 25 critically injured after fire engulfs Bangkok bar",
+    "s": "BBC",
+    "d": "12 Jul 2026"
   },
   {
-    "t": "China asks Thailand to deport Chinese journalist, rights groups warn of persecution",
-    "s": "Reuters",
-    "d": "16 Jul 2026"
-  },
-  {
-    "t": "The band playing when a Bangkok bar caught fire mourns its members among the 33 dead",
-    "s": "AP News",
-    "d": "16 Jul 2026"
+    "t": "Princess Anne Meets Thailand’s Queen Suthida in Bangkok",
+    "s": "Town & Country Magazine",
+    "d": "17 Jul 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-07-16","USD":33.57,"AUD":23.52,"GBP":45.35,"EUR":38.49};
+var FX_RATES = {"date":"2026-07-17","USD":33.64,"AUD":23.46,"GBP":45.19,"EUR":38.46};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-07-17","temp":30,"humid":71,"code":3,"hi":30,"rain":75};
+var WX_NOW = {"date":"2026-07-17","temp":29,"humid":78,"code":3,"hi":31,"rain":88};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-14","done":true,"h":"France","hs":0,"a":"Spain","as":2},{"d":"2026-07-15","done":true,"h":"England","hs":1,"a":"Argentina","as":2},{"d":"2026-07-18","done":false,"h":"France","hs":0,"a":"England","as":0},{"d":"2026-07-19","done":false,"h":"Spain","hs":0,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-07-16","first":"639214","last2":"71","front3":["683","709"],"back3":["427","746"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":3998,"date":"2026-07-17","baht":63450};
+var GOLD = {"usd":4016,"date":"2026-07-17","baht":63900};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":62861,"thb":2110962};
+var BTC = {"usd":63414,"thb":2132603};
