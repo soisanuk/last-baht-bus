@@ -23,9 +23,19 @@ var NEWS_FEED = [
     "d": "17 Jul 2026"
   },
   {
+    "t": "Thailand video news | Pattaya police accused of corruption, Child boxers abused by Norwegian gym owner",
+    "s": "Thaiger",
+    "d": "16 Jul 2026"
+  },
+  {
     "t": "Three Pattaya officers transferred over Kuwaiti tourists’ complaint",
     "s": "Thaiger",
     "d": "15 Jul 2026"
+  },
+  {
+    "t": "In Thailand’s sex tourism hub, bright lights flash, loud music blares – and underage girls are exploited",
+    "s": "The Guardian",
+    "d": "03 Jul 2026"
   },
   {
     "t": "Australian man charged with murder after dead girl found in suitcase in Thailand",
@@ -33,24 +43,19 @@ var NEWS_FEED = [
     "d": "28 Jun 2026"
   },
   {
-    "t": "Thai police arrest Australian over killing of teenager found in suitcase",
-    "s": "Al Jazeera",
-    "d": "27 Jun 2026"
-  },
-  {
-    "t": "Australian faces death penalty after Pattaya teen killing confession",
-    "s": "MSN",
+    "t": "Princess Anne Meets Thailand’s Queen Suthida in Bangkok",
+    "s": "Town & Country Magazine",
     "d": "17 Jul 2026"
-  },
-  {
-    "t": "Thailand Scraps Plan to End Visa-Free Entry for Indian Tourists",
-    "s": "Bloomberg.com",
-    "d": "14 Jul 2026"
   },
   {
     "t": "Thailand: Don’t Forcibly Return Chinese Dissidents",
     "s": "Human Rights Watch",
     "d": "14 Jul 2026"
+  },
+  {
+    "t": "Chinese leader urges Thailand and Cambodia to settle long-running border dispute",
+    "s": "South China Morning Post",
+    "d": "18 Jul 2026"
   },
   {
     "t": "An Alleged Russian FSB Hacker Traveled To Thailand. Now He's Facing 10 Years In A US Prison.",
@@ -63,25 +68,20 @@ var NEWS_FEED = [
     "d": "17 Jul 2026"
   },
   {
-    "t": "Foodie Friday: Tradition, community at center of Taste of Thailand fest",
-    "s": "Yahoo",
-    "d": "17 Jul 2026"
-  },
-  {
-    "t": "Princess Anne channels her mother Queen Elizabeth II in pearls in Thailand",
-    "s": "Tatler",
-    "d": "16 Jul 2026"
+    "t": "Video. Pygmy hippo in Thailand predicts France vs Argentina World Cup final",
+    "s": "Euronews.com",
+    "d": "14 Jul 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-07-17","USD":33.64,"AUD":23.46,"GBP":45.19,"EUR":38.46};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-07-18","temp":28,"humid":80,"code":3,"hi":32,"rain":6};
+var WX_NOW = {"date":"2026-07-18","temp":32,"humid":60,"code":3,"hi":32,"rain":8};
 // the bar TV's one true channel
-var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-14","done":true,"h":"France","hs":0,"a":"Spain","as":2},{"d":"2026-07-15","done":true,"h":"England","hs":1,"a":"Argentina","as":2},{"d":"2026-07-18","done":false,"h":"France","hs":0,"a":"England","as":0},{"d":"2026-07-19","done":false,"h":"Spain","hs":0,"a":"Argentina","as":0}]};
+var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-15","done":true,"h":"England","hs":1,"a":"Argentina","as":2},{"d":"2026-07-18","done":false,"h":"France","hs":0,"a":"England","as":0},{"d":"2026-07-19","done":false,"h":"Spain","hs":0,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-07-16","first":"639214","last2":"71","front3":["683","709"],"back3":["427","746"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4019,"date":"2026-07-17","baht":63950};
+var GOLD = {"usd":4019,"date":"2026-07-18","baht":63950};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":64121,"thb":2155735};
+var BTC = {"usd":63952,"thb":2148569};
