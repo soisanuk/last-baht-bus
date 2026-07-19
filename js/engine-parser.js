@@ -46,15 +46,10 @@ function _doGo(dirWord) {
       "smile that follows is kind and absolutely final.");
     return;
   }
-  // the Darkside closes at midnight — unless that door is already locked from
-  // the inside, in which case it doesn't open for you either way
-  if (ROOMS[to].barType && ROOMS[to].region === "Darkside" && G.nightTurn >= 60 &&
-      _flag("act1Done") && !(G.soc.lockIn && G.soc.lockIn[to])) {
-    _say("Shutters down, lights dead, chairs up. The Darkside keeps the law's " +
-      "hours — officially. Somewhere along the strip, one padded door thumps " +
-      "with bass from a bar that is definitely, legally, closed.");
-    return;
-  }
+  // gentleman's clubs, most of Soi 6 and the Darkside keep the law's hours and
+  // shut at midnight (a Darkside lock-in is the exception — but a bolted door
+  // doesn't open for you either way)
+  if (_closedNow(to)) { _say(_closedMsg(to)); return; }
   // leaving a lock-in is a one-way door
   if (dir === "out" && G.soc.lockIn && G.soc.lockIn[G.room]) {
     delete G.soc.lockIn[G.room];
@@ -99,6 +94,8 @@ function _doGo(dirWord) {
 // invitations, street encounters. Everything that happens because you're
 // suddenly *here*, however you got here.
 function _arriveAt(to) {
+  // closed for the night? (also covers fast-travel, which skips the doGo gate)
+  if (_closedNow(to)) { _say(_closedMsg(to)); return; }
   if (ROOMS[to].barType) {
     const b = G.soc.banned[to];
     if (b !== undefined) {
@@ -115,6 +112,9 @@ function _arriveAt(to) {
   G.room = to;
   _describeRoom(true);
   _lightNotice(); // walking in with the torch burning gets you clocked
+  // walked in during the final half hour — the courtesy warning, and a barfine nudge
+  if (_flag("act1Done") && _closesMidnight(to) && G.nightTurn >= 55 && G.nightTurn < 60 &&
+      !(G.soc.lockIn && G.soc.lockIn[to])) _lastCall(to);
   // the anti-Simon machine: when the book gets heavy, the town catches you.
   // Candy settles it at whichever of her bars she's working tonight.
   if (G.hotelDebt >= 800 && !_flag("tabSettled") &&
