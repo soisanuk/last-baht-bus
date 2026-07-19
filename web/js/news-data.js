@@ -3,14 +3,14 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
+    "t": "Australian faces death penalty after Pattaya teen killing confession",
+    "s": "MSN",
+    "d": "19 Jul 2026"
+  },
+  {
     "t": "How a Thai teen's night at a Pattaya beach ended in death",
     "s": "Reuters",
     "d": "29 Jun 2026"
-  },
-  {
-    "t": "Australian faces death penalty after Pattaya teen killing confession",
-    "s": "MSN",
-    "d": "17 Jul 2026"
   },
   {
     "t": "How a Thai teen’s night at a Pattaya beach ended in death",
@@ -25,6 +25,11 @@ var NEWS_FEED = [
   {
     "t": "An Australian man has been charged with homicide in Thailand, after a Thai teenager’s body was found stuffed in a suitcase and abandoned in ",
     "s": "facebook.com",
+    "d": "30 Jun 2026"
+  },
+  {
+    "t": "Thailand’s suitcase murder raises safety fears as Pattaya mourns for teen victim",
+    "s": "South China Morning Post",
     "d": "01 Jul 2026"
   },
   {
@@ -33,24 +38,9 @@ var NEWS_FEED = [
     "d": "15 Jul 2026"
   },
   {
-    "t": "Thailand’s suitcase murder raises safety fears as Pattaya mourns for teen victim",
-    "s": "South China Morning Post",
-    "d": "01 Jul 2026"
-  },
-  {
-    "t": "Australian man charged with murder in death of a girl, 17, in Thailand’s Pattaya area",
-    "s": "Los Angeles Times",
-    "d": "30 Jun 2026"
-  },
-  {
-    "t": "Princess Anne Meets Thailand’s Queen Suthida in Bangkok",
-    "s": "Town & Country Magazine",
-    "d": "17 Jul 2026"
-  },
-  {
-    "t": "Teen, 17, Suffers Brain Hemorrhage in Thailand as Family Tries to Bring Her Home",
-    "s": "People.com",
-    "d": "18 Jul 2026"
+    "t": "‘$13 an hour’: Tourist’s sick sex confession",
+    "s": "News.com.au",
+    "d": "02 Jul 2026"
   },
   {
     "t": "An Alleged Russian FSB Hacker Traveled To Thailand. Now He's Facing 10 Years In A US Prison.",
@@ -68,15 +58,25 @@ var NEWS_FEED = [
     "d": "17 Jul 2026"
   },
   {
-    "t": "China, Thailand to build lab for AI-powered disaster prediction",
-    "s": "news.cgtn.com",
+    "t": "China asks Thailand to deport Chinese journalist, rights groups warn of persecution",
+    "s": "Reuters",
+    "d": "16 Jul 2026"
+  },
+  {
+    "t": "Teen, 17, Suffers Brain Hemorrhage in Thailand as Family Tries to Bring Her Home",
+    "s": "People.com",
     "d": "18 Jul 2026"
+  },
+  {
+    "t": "Princess Anne Meets Thailand’s Queen Suthida in Bangkok",
+    "s": "Town & Country Magazine",
+    "d": "17 Jul 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-07-17","USD":33.64,"AUD":23.46,"GBP":45.19,"EUR":38.46};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-07-19","temp":33,"humid":54,"code":0,"hi":33,"rain":20};
+var WX_NOW = {"date":"2026-07-19","temp":29,"humid":78,"code":0,"hi":33,"rain":20};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-18","done":true,"h":"France","hs":4,"a":"England","as":6},{"d":"2026-07-19","done":false,"h":"Spain","hs":0,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
@@ -84,4 +84,4 @@ var LOTTO = {"date":"2026-07-16","first":"639214","last2":"71","front3":["683","
 // XAU, plus Thai baht-weight gold (96.5%)
 var GOLD = {"usd":4019,"date":"2026-07-19","baht":63950};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":64672,"thb":2174284};
+var BTC = {"usd":64456,"thb":2165447};
