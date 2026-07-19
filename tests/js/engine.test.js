@@ -986,6 +986,28 @@ test("app booking is a late, hotel-room, nightly encounter", () => {
   assert.equal(ENCOUNTERS.booking.interactive, true);
 });
 
+test("the Nite Owl column dispenses canon: masthead, a reader reply, the signoff — day-stable", () => {
+  state().day = 3; state().vacation = 1;
+  out = []; run("column");
+  const a = lastOut();
+  assert.match(a, /THE NITE OWL/i, "the masthead");
+  assert.match(a, /\bOWL:/, "the columnist's reply to a reader");
+  assert.match(a, /DON'T GIVE A HOOT/, "the signoff");
+  out = []; run("column");
+  assert.equal(lastOut(), a, "same day → the same hoot (shared-world-stable)");
+  // it's readable anywhere and OWL is an alias
+  state().room = "jomtien_beach"; out = [];
+  run("owl");
+  assert.match(lastOut(), /THE NITE OWL/i);
+});
+
+test("Mort writes the column to stay sane, from his stool at the Queen Vic", () => {
+  assert.equal(PATRONS.mort.home, "queen_vic");
+  assert.ok(PATRONS.mort.dialogue.some(d => d.topic === "column"));
+  assert.ok(PATRONS.mort.dialogue.some(d => d.topic === "sane"));
+  assert.ok(PATRONS.mort.dialogue.some(d => !d.topic && !d.req), "an unconditional intro line");
+});
+
 test("REPORT surfaces in autocomplete only at the station or while still owed", () => {
   state().room = "beach_rd_c"; state().tonicOwed = 0;
   assert.ok(!engineComplete("rep").includes("report"), "not offered on a random street");

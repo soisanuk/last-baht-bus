@@ -1047,6 +1047,70 @@ function _doPaper() {
   _say("Somewhere in there, the fuel prices explain your bus fare.", "dim");
 }
 
+// ── The Nite Owl column ──────────────────────────────────────────────────────
+// The old back-page institution: Mort's weekly hoot (see PATRONS.mort — he
+// writes it "to stay sane"). It's the canon dispenser — the scene's own hard-won
+// wisdom rendered as a columnist's dry copy: a lead opinion, a bar listing, a
+// reader letter with his reply, a joke, and the signoff. Day+vacation-stable
+// (shared-world-safe like _quizBars), so it rotates daily and reads the same for
+// everyone that day. Pure flavor — gates nothing.
+const _OWL_LEADS = [
+  "A reader mourns that Pattaya 'lost its soul in 1998.' It didn't, squire. In 1998 the baht was fifty to the dollar and you had a full head of hair. The city is doing precisely what it always did — adapting faster than you can. The town never grew a conscience. You just grew old.",
+  "Newcomers keep asking why she wants money if she loves them. Wrong question. Liang du — to feed and care for — IS the love here, not a substitute for it. The man who says 'I love you' and won't pay the rent is, in the local accounting, useless. Learn the word before you learn her name.",
+  "A gentleman panics: his lady had ฿180,000 last month and ฿5,000 this week. She isn't robbing you, chief. Money here is a river, not a reservoir — it flows through and does its job. Ask where it went and you may as well ask where the wind went.",
+  "Every season a man swears his cashier — his mamasan — his single mum — is 'different, not like the others.' She is exactly like the others; she simply has a chair. There are no diamonds in the rough on this street. Only levels of the game. And if you think you aren't playing, sir, you have already lost.",
+  "The old boys grumble the pretty girls have vanished. They haven't, grandad — they've decamped to Bang Saen and Sri Racha, where the money is Thai and the exchange rate is nobody's problem. As one put it to me, sweetly: 'farang cannot afford us now.' Just need to earn more.",
+  "Another one went off a balcony this week. It is never the woman that does it — it's the isolation, and the shame of a man who bragged too loud to ask for help. If your mate's gone quiet, don't send flowers. Buy him a beer and SIT with him. That is the entire cure, and it costs a beer.",
+  "She forgives her jobless Thai boyfriend three days' cheating and screams at YOU for smelling of massage oil. You are not the villain, squire — you are the stable ATM, and one gets audited while the other gets forgiven. Do not audition for bad-boy on a sponsor's salary.",
+  "A first-timer reports a 'free' welcome drink and feels he's beaten the house. He has not. That drink was an interview, and he passed the part where he thinks he's clever. By closing time the tab will have four figures and one of them won't be him.",
+];
+const _OWL_LETTERS = [
+  ["A Thai wife writes: 'Met my farang on Beach Road in '89. Two children, a finance degree this year, maybe law school. Mixed marriage is hard and culture harder — but marriage is the START of the bumpy ride, not the happy ending.'",
+   "I am happy for you, madam. Alas, you are in the minority."],
+  ["'Relocating to Pattaya for work — what monthly income is normal living?'",
+   "Define normal. Bus or Bolt? Noodle stall or the German place? Room or condo? For some, ฿25,000 is plenty; for others ฿100,000 won't cover the lady drinks. Tell me your vices and I'll cost your month."],
+  ["'Booked a ten-out-of-ten off the app. She knocked at half one, three inches taller and ten years older than her photographs.'",
+   "The camera adds ten kilos and the filter removes twenty. On these apps 'on my way' is a tense unknown to grammar. Pay for what knocks on the door, never for what glows on the screen."],
+  ["'My wife's neighbour is ever so helpful with the repairs — devoted chap, really. Splendid fellow.'",
+   "I'm sure he is. Buy him a beer. Then ask her, casually, when exactly the two of them met."],
+  ["'Which is the honest soi?'",
+   "Soi 6 will rob you to your face; Walking Street prefers to do it behind your back. At least one of them looks you in the eye. Honesty, on this coast, is a matter of angle."],
+  ["'The pretty one at the bar bought ME the drink and waved my wallet away. Have I, at last, cracked it?'",
+   "You have cracked something. Report back at closing time, and bring the receipt."],
+];
+const _OWL_JOKES = [
+  "A constable pulls a weaving driver over. 'You drinking?' Driver: 'Depends — you buying?'",
+  "TIT, as the vendor said, flogging me the pirate Hannibal while swearing blind the pirate Thai film was illegal. This Is Thailand.",
+  "The rail, on ageing: 'Sixty's the worst — always need to pee and nothing comes.' The eighty-year-old: 'I pee at six sharp, like a racehorse.' 'Then what's wrong with eighty?' 'I don't wake till seven.'",
+  "A reader lists why an aeroplane beats a woman: it comes with an operating manual, it flies any time of the month, and it has no in-laws. He is, one senses, single.",
+  "Weather: a low pressure off China, which means rain by the weekend. Buy a bumbershoot before you're wading, not after. 'Nuff said.",
+  "Overheard, marketing seminar, a Sukhumvit hotel: 'Teamwork — a lot of people doing what I say.' They'll go far, that one.",
+];
+const _OWL_LISTINGS = [
+  "STINKY BAR (Beach Road North), the American's shop, runs killer pool every third night — ฿100 in the ashtray, last cue standing takes the pot. His felt, his rules, his Budweiser.",
+  "BLUE DOG (Beach Road North) keeps the best sunset seats on the strip and, six-to-seven nightly, the finest free show in town: the checkpoint across the road, farang and their paperwork, no cover charge.",
+  "MAMA YAI'S (the Darkside) — som tam that arrives unasked and correct, beer ten baht under town, and a wall of photographs that knows everyone's second wife. Eat first, cry after.",
+  "QUIZ NIGHT lands Thursday at three bars the chalkboards will name — walk in during and you're a contestant, no appeal. Five right buys ฿500 and your name in chalk. The teachers from Rayong will beat you regardless.",
+  "THE ORCHID CLUB (Naklua) is NOT holding an event, has never held one, and would thank the press not to notice it exists. Discretion, gentlemen. Mai pen rai.",
+  "CANDY BAR (Soi Buakhao), the mamasan's own — sharp as a razor, warm as a Chang on a hot night. She'll price your wallet before you sit and your story before you tell it. Buy her a drink; it's cheaper than the alternative.",
+  "QUEEN VIC (Soi 6): the one air-conditioned pub on the wildest soi in the world, where the residents watch the circus from across the street and mourn the days before the paper changed hands. Cold beer, warm company, no illusions.",
+];
+function _owlPick(arr, salt) {
+  let h = salt >>> 0;
+  for (const ch of String(G.day) + ":" + String(G.vacation)) h = (h * 31 + ch.charCodeAt(0)) % 100003;
+  return arr[h % arr.length];
+}
+function _doColumn() {
+  _say("── THE NITE OWL ── Mort's weekly hoot, still going, out of spite ──", "win");
+  _say(_owlPick(_OWL_LEADS, 1));
+  _say("• " + _owlPick(_OWL_LISTINGS, 7), "dim");
+  const [letter, reply] = _owlPick(_OWL_LETTERS, 13);
+  _say("• A reader writes: " + letter);
+  _say("  OWL: " + reply);
+  _say("• " + _owlPick(_OWL_JOKES, 29), "dim");
+  _say("BUT, I DON'T GIVE A HOOT!", "win");
+}
+
 // ── Food and water ───────────────────────────────────────────────────────────
 
 const FOOD_STALLS = {

@@ -2251,6 +2251,37 @@ const PATRONS = {
     ],
   },
 
+  mort: {
+    name: "Mort", emoji: "🦉", age: 74, nat: "American",
+    home: "queen_vic", hops: false,
+    desc: "Seventy-four, a Hawaiian shirt at war with itself, a spiral notebook and a " +
+      "biro he clicks while he watches the soi. He has been on this coast longer than " +
+      "most of the bars, and he is writing all of it down whether it likes it or not.",
+    dialogue: [
+      { text: "\"Mort.\" He finishes the line before he looks up. \"I write the Nite " +
+        "Owl — the back-page column, the one your granddad read on the toilet. Retired " +
+        "twice, un-retired twice; a man needs a deadline or the days run together and " +
+        "the mind goes to soup.\" He clicks the pen. \"So I watch, I write it down, and " +
+        "I don't give a hoot who minds. READ THE COLUMN if you like — it's mostly true.\"",
+        short: "\"I write the Nite Owl. READ THE COLUMN — mostly true. Keeps me sane.\"" },
+      { topic: "column", text: "\"Forty years of the same story, squire, and it never " +
+        "gets old because the punters keep arriving new. A reader letter, a bar listing, " +
+        "a joke, and whatever the street taught me that week. I don't moralise — I report " +
+        "the weather and the women and let a man draw his own conclusions.\" A dry look. " +
+        "\"He never does. READ THE COLUMN — you can pull it up anywhere now.\"" },
+      { topic: "sane", text: "\"Boredom's the killer out here — not the drink, not the " +
+        "girls, the BOREDOM. Fella retires on his pension, sits in the condo, and by March " +
+        "he's counting ceiling tiles and eyeing the balcony.\" He taps the notebook. \"This " +
+        "is my ceiling tiles. Five hundred words a week and a reason to leave the room. " +
+        "Cheaper than a psychiatrist, and funnier.\"" },
+      { topic: "nineties", text: "\"Everyone tells me it was better in '98. Everyone's " +
+        "wrong, and I was HERE, filing copy, so I would know. It wasn't better — the beer " +
+        "was cheaper and so were they, and so, crucially, were you.\" He almost smiles. " +
+        "\"The city never changed, chief. You did. Printed that once. Forty angry letters. " +
+        "Framed two.\"" },
+    ],
+  },
+
   nigel: {
     name: "Nigel", emoji: "🍻", age: 68, nat: "British",
     home: "lucky_tiger", hops: true,
