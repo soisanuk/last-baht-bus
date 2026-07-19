@@ -879,6 +879,20 @@ test("fortune-teller: refusing the ritual — nerve walks clean, pressure costs 
   assert.equal(state().curseOwed, FORTUNE_MERIT);
 });
 
+test("Darkside: Mama Yai's is hand-authored — a mama, a hostess with a story, a rail regular", () => {
+  assert.equal(NPC_ROLES.yai, "mamasan", "Mama Yai runs the floor");
+  assert.equal(NPCS.yai.room, "mama_yai");
+  assert.equal(NPC_ROLES.kratae, "hostess");
+  assert.equal(NPCS.kratae.room, "mama_yai");
+  assert.equal(PATRONS.ron.home, "mama_yai", "Ron drinks at Mama Yai's");
+  // hand-authored, not filler: Kratae's Night Heron tip is gated behind Mama Yai
+  // naming the photo wall (sets knowYaiWall)
+  const wall = NPCS.yai.dialogue.find(d => d.topic === "photos");
+  assert.ok(wall && (wall.sets || []).includes("knowYaiWall"));
+  const heron = NPCS.kratae.dialogue.find(d => d.topic === "heron");
+  assert.deepEqual(heron.req, ["knowYaiWall"], "the lock-in tip unlocks after the wall");
+});
+
 test("REPORT surfaces in autocomplete only at the station or while still owed", () => {
   state().room = "beach_rd_c"; state().tonicOwed = 0;
   assert.ok(!engineComplete("rep").includes("report"), "not offered on a random street");

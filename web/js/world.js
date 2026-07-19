@@ -1387,6 +1387,67 @@ const NPCS = {
     ],
   },
 
+  yai: {
+    name: "Mama Yai", th: "ใหญ่", emoji: "🍲",
+    room: "mama_yai",
+    desc: "The Yai in Mama Yai's — sixty-ish, an apron over a buffalo-print blouse, " +
+      "a ladle in one hand and the whole soi's memory in the other. She feeds you " +
+      "before she reads you, and by the time the som tam lands she has done both.",
+    dialogue: [
+      { th: "กินข้าวหรือยัง", rom: "gin khao rue yang",
+        text: "\"Sit, sit. You eat already? No — I can see no.\" A plate of som tam " +
+          "lands in front of you unasked, correct, and faintly threatening. \"Eat " +
+          "first, talk after. Everybody who cry on the Darkside cry with my spoon in " +
+          "their mouth. Cheaper than town — and the crying is free.\"",
+        short: "\"Eat first, talk after. The crying's free.\"" },
+      { topic: "darkside", text: "\"Why they come east? Rent.\" She laughs, big and " +
+          "unashamed. \"Town eat a man alive — barfine, lady drink, room by the hour. " +
+          "Out here: cheap beer, cheap room, and a wife who cook. Half these farang " +
+          "got tired, got old, got smart. Same three thing, na.\"" },
+      { topic: "photos", text: "\"That wall?\" She waves the ladle at forty years of " +
+          "curling snapshots. \"Every farang, every lady, every wedding on this soi. " +
+          "Some — same man, different wife. I never say which.\" A wink. \"Mama Yai " +
+          "know everything and forget on purpose. Good for business.\"", sets: ["knowYaiWall"],
+        short: "\"Every wedding on the soi's on that wall. I forget which on purpose.\"" },
+      { topic: "heron", text: "\"The Heron? At the dark end, padded door, no sign.\" " +
+          "She drops her voice a register and her eyes do the rest. \"Before midnight, " +
+          "a beer bar like any — colder. After, they lock the door and it is not my " +
+          "business and not yours until you knock. Older lady, older money, very " +
+          "discreet. You want that, ask Kratae. You want som tam, you stay with Mama.\"" },
+      { topic: "kratae", text: "\"Kratae my right hand. Dance in town ten year, come " +
+          "here, never look back. Sharp — she keep the young one honest and the old " +
+          "one paying. You be nice to her, or you answer to my spoon.\"" },
+    ],
+  },
+
+  kratae: {
+    name: "Kratae", th: "กระแต", emoji: "🐿️",
+    room: "mama_yai",
+    desc: "Late thirties and entirely unbothered by it — quick-eyed, a laugh like a " +
+      "dropped tray, a beer already sliding toward you. Mama Yai's right hand: she " +
+      "pours, she counts, she misses nothing, and she heard your story before you " +
+      "sat down.",
+    dialogue: [
+      { th: "มาแล้วเหรอ", rom: "maa laeo rer",
+        text: "\"You come all the way out here? Brave.\" She grins, sliding the beer " +
+          "the last inch. \"Town too expensive for you — or you just smart? Same " +
+          "answer, usually.\"",
+        short: "\"Town too expensive, or you just smart? Same answer.\"" },
+      { topic: "darkside", text: "\"I dance Walking Street ten year — Crystal Palace, " +
+          "good money, young.\" She shrugs, easy, no wound in it. \"Out here nobody " +
+          "pretend. No spotlight, no man think he my boyfriend after one drink. Older " +
+          "lady, older farang, honest beer. I make more and I lie less. Better deal, na.\"" },
+      { topic: "mama", text: "\"Mama Yai feed me when I have nothing — 2015, bad year, " +
+          "long story.\" A quick flick of the eyes at the kitchen. \"Now I run her " +
+          "floor. You eat her som tam yet? Eat it. Is not a question.\"" },
+      { topic: "heron", req: ["knowYaiWall"], text: "\"Mama send you to me? Ha.\" She " +
+          "wipes the bar, unhurried. \"The Heron is grown-up business — you knock " +
+          "after midnight, you don't film, you don't ask the ladies their age. Behave " +
+          "and it's the friendliest room on the Darkside. Don't, and Daeng's boys walk " +
+          "you back to Sukhumvit on foot.\"" },
+    ],
+  },
+
   pim: {
     name: "Pim", th: "พิม", emoji: "💋",
     room: "starlight_bar",
@@ -2097,6 +2158,37 @@ const QUIZ_POOL = [
 // dialogue trees reset daily. Schema matches NPC dialogue: fallback + topics,
 // `short` for terse repeats.
 const PATRONS = {
+
+  ron: {
+    name: "Ron", emoji: "🦘", age: 66, nat: "Australian",
+    home: "mama_yai", hops: false,
+    desc: "Sixty-six, Wollongong, a faded steel-town singlet and thongs that have " +
+      "worn a groove in this soi. He has the settled bulk of a man who stopped " +
+      "moving fifteen years ago and rates it his finest decision.",
+    dialogue: [
+      { text: "\"Ron.\" He tips a Chang toward the empty stool. \"Wollongong — " +
+        "steel town, back when the mill still made noise. Come for a fortnight in " +
+        "2011, never got on the plane.\" He nods at the kitchen, the photo wall, the " +
+        "lake somewhere out past it. \"Married a cashier off that very stool, paid " +
+        "off a room behind the water, haven't set foot on Walking Street in six " +
+        "years. You can KEEP it, mate.\"",
+        short: "\"Come for a fortnight in 2011, never got on the plane.\"" },
+      { topic: "walking street", text: "\"Town? Mate.\" He snorts into the Chang. " +
+        "\"Six hundred baht a barfine to be lied to by a professional. Out here the " +
+        "beer's ten baht cheaper, the wife's real, and Mama Yai feeds me for what a " +
+        "lady drink costs in town. Tourists reckon WE'RE the sad ones.\" He looks " +
+        "genuinely delighted. \"Let 'em.\"" },
+      { topic: "darkside", text: "\"Darkside's just Pattaya for blokes who did the " +
+        "sums,\" he says, comfortable as an old couch. \"Quieter, cheaper, older, " +
+        "honest. Gary out at the lake'll tell you the same — if he can be bothered " +
+        "talking, which he can't. That's the whole appeal, really.\"" },
+      { topic: "wollongong", text: "\"The Gong. Steel, rugby league, rain sideways " +
+        "off the sea.\" A shrug that forgives the place. \"Mill shed half its men " +
+        "the year I left. No grand tragedy — I just did the arithmetic and the " +
+        "arithmetic said Khao Talo. Same beer money, twice the sun, none of the " +
+        "committee meetings.\"" },
+    ],
+  },
 
   nigel: {
     name: "Nigel", emoji: "🍻", age: 68, nat: "British",
@@ -2833,7 +2925,8 @@ const CANON_HOSTESSES = [
 const NPC_ROLES = {
   lek: "hostess", noi: "hostess", ping: "hostess", aom: "hostess",
   joy: "hostess", fon: "hostess", gift: "hostess", kwan: "hostess",
-  nong: "hostess", pim: "hostess", bee: "hostess", jane: "hostess", mercedes: "hostess",
+  nong: "hostess", pim: "hostess", bee: "hostess", jane: "hostess", mercedes: "hostess", kratae: "hostess",
+  yai: "mamasan",
   ploy: "cashier", aek: "cashier", malee: "cashier",
   candy: "mamasan", oy: "mamasan", daeng: "mamasan", mem: "mamasan", wan: "mamasan",
 };
@@ -3022,7 +3115,7 @@ const _FILLER_HOSTESSES = [
   ["Kat","แคท","sunset_dreams"], ["May","เมย์","sunset_dreams"], ["Dear","เดียร์","sunset_dreams"],
   ["Lin","หลิน","water_buffalo"], ["Nim","นิ่ม","water_buffalo"],
   ["Duan","เดือน","firefly_bar"], ["Saifon","สายฝน","firefly_bar"],
-  ["Wanpen","วันเพ็ญ","mama_yai"], ["Kratae","กระแต","mama_yai"],
+  ["Wanpen","วันเพ็ญ","mama_yai"],
   ["Dokmai","ดอกไม้","night_heron"], ["Jampa","จำปา","night_heron"],
   ["Ing","อิง","blue_dog"], ["Khing","ขิง","blue_dog"],
   ["Bam","บาม","rock_factory"], ["Kwang","กวาง","rock_factory"],
@@ -3162,7 +3255,7 @@ const _FILLER_MAMAS = [
   ["Waew","แวว","silk_rose"], ["Ple","เปิ้ล","jasmine_garden"], ["Orm","อ้อม","gold_rush"],
   ["Jom","จอม","starlight_bar"], ["Nee","หนี่","pink_lotus"], ["Peung","ผึ้ง","golden_dragon"],
   ["Malai","มาลัย","sunset_dreams"], ["Somsri","สมศรี","kinky"], ["Ratree","ราตรี","las_vegas"],
-  ["Wandee","วันดี","water_buffalo"], ["Somjai","สมใจ","firefly_bar"], ["Yai","ใหญ่","mama_yai"],
+  ["Wandee","วันดี","water_buffalo"], ["Somjai","สมใจ","firefly_bar"],
   ["Tui","ตุ่ย","night_heron"],
 ];
 const _FILLER_CASHIERS = [

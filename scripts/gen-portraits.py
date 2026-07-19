@@ -481,6 +481,8 @@ CHARS = {
     # --- patrons ---
     "nigel":    dict(skin=RED, hair="balding", hc=GREY, shirt=C(0x556b55),
                      vest=C(0x3a4d3a), mouth="neutral", bg=BG_BAR),
+    "ron":      dict(skin=RED, hair="short", hc=SILVER, shirt=C(0x8a8a9a),
+                     mouth="grin", acc=["stubble"], bg=BG_BAR),
     "chuck":    dict(skin=RED, hair="combover", hc=BROWN, shirt=C(0x3a6ac0), collar=True,
                      mouth="grin", acc=["logo"], bg=BG_BAR),
     "dave":     dict(skin=PALE, hair="short", hc=C(0x8a7a60), shirt=C(0xc8b890),
