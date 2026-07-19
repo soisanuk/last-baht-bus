@@ -48,9 +48,9 @@ var NEWS_FEED = [
     "d": "17 Jul 2026"
   },
   {
-    "t": "IDF reservist detained in Thailand for 8 months finally freed, Netanyahu reveals",
-    "s": "The Times of Israel",
-    "d": "17 Jul 2026"
+    "t": "PM courts investors on China trip",
+    "s": "Bangkok Post",
+    "d": "18 Jul 2026"
   },
   {
     "t": "U.S., Canadian, Thai Navies Sharpen Maritime Capabilities During Exercise CARAT Thailand",
@@ -58,9 +58,9 @@ var NEWS_FEED = [
     "d": "17 Jul 2026"
   },
   {
-    "t": "China asks Thailand to deport Chinese journalist, rights groups warn of persecution",
-    "s": "Reuters",
-    "d": "16 Jul 2026"
+    "t": "IDF reservist detained in Thailand for 8 months finally freed, Netanyahu reveals",
+    "s": "The Times of Israel",
+    "d": "17 Jul 2026"
   },
   {
     "t": "Teen, 17, Suffers Brain Hemorrhage in Thailand as Family Tries to Bring Her Home",
@@ -68,15 +68,15 @@ var NEWS_FEED = [
     "d": "18 Jul 2026"
   },
   {
-    "t": "Princess Anne Meets Thailand’s Queen Suthida in Bangkok",
-    "s": "Town & Country Magazine",
-    "d": "17 Jul 2026"
+    "t": "Thailand updates criminal record check rules for foreign applicants",
+    "s": "Nation Thailand",
+    "d": "19 Jul 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-07-17","USD":33.64,"AUD":23.46,"GBP":45.19,"EUR":38.46};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-07-19","temp":29,"humid":78,"code":0,"hi":33,"rain":20};
+var WX_NOW = {"date":"2026-07-20","temp":29,"humid":72,"code":0,"hi":33,"rain":14};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-18","done":true,"h":"France","hs":4,"a":"England","as":6},{"d":"2026-07-19","done":false,"h":"Spain","hs":0,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
@@ -84,4 +84,4 @@ var LOTTO = {"date":"2026-07-16","first":"639214","last2":"71","front3":["683","
 // XAU, plus Thai baht-weight gold (96.5%)
 var GOLD = {"usd":4019,"date":"2026-07-19","baht":63950};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":64456,"thb":2165447};
+var BTC = {"usd":64458,"thb":2167400};
