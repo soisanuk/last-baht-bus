@@ -893,6 +893,38 @@ test("Darkside: Mama Yai's is hand-authored — a mama, a hostess with a story, 
   assert.deepEqual(heron.req, ["knowYaiWall"], "the lock-in tip unlocks after the wall");
 });
 
+test("Gentleman's Club: the Orchid Club exists, is a gents club, and Rose runs it", () => {
+  assert.equal(ROOMS.orchid_club.barType, "gents");
+  assert.equal(NPCS.rose.room, "orchid_club");
+  assert.equal(NPC_ROLES.rose, "mamasan");
+  assert.equal(ROOM_GEO.orchid_club.length, 2, "has an OSM anchor");
+});
+
+test("Gentleman's Club: buying a lady a drink makes the staff hands-on (favor bump)", () => {
+  state().room = "orchid_club";
+  const id = _npcsHere().find(n => NPC_ROLES[n] === "hostess");
+  state().soc.drinks[id] = 0;
+  const cold = _favor(id);
+  state().soc.drinks[id] = 1;
+  const warm = _favor(id);
+  assert.equal(warm - cold, 1 + 6, "one drink itself, plus the gents-club hands-on bonus");
+  // the same drink in an ordinary bar buys only itself
+  state().room = "mama_yai";
+  assert.equal(_favor(id), 1, "no hands-on bonus outside a gents club");
+});
+
+test("Gentleman's Club: short time is on-site (the curtained couch) and the night carries on", () => {
+  state().flags.act1Done = true; state().flags.hasWallet = true;
+  state().room = "orchid_club"; state().money = 5000; state().day = 3;
+  const id = _npcsHere().find(n => NPC_ROLES[n] === "hostess");
+  state().pendingBf = { id, st: 900, lt: 1350, room: "orchid_club" };
+  _bfResolve("st");
+  assert.equal(state().day, 3, "on-site — no take-out, the night doesn't end");
+  assert.equal(state().room, "orchid_club");
+  assert.equal(state().money, 5000 - 900);
+  assert.match(lastOut(), /curtain|couch/i);
+});
+
 test("REPORT surfaces in autocomplete only at the station or while still owed", () => {
   state().room = "beach_rd_c"; state().tonicOwed = 0;
   assert.ok(!engineComplete("rep").includes("report"), "not offered on a random street");

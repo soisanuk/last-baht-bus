@@ -736,6 +736,7 @@ function _favor(id) {
   let f = G.soc.drinks[id] || 0;
   if (G.soc.mamaTreat[G.room]) f += 1;   // the mamasan's blessing travels
   if (G.soc.lockIn && G.soc.lockIn[G.room]) f += 3; // the lock-in: rules left with the last taxi
+  if (_room().barType === "gents" && (G.soc.drinks[id] || 0) >= 1) f += 6; // gents club: buy her ONE drink and the staff get very hands-on (cold until you do)
   const bl = _bellLevel();               // more rings this visit, warmer room
   if (bl >= 3) f += 10;                  // three bells: the room is yours, hands-on
   else if (bl === 2) f += 4;             // two bells: much friendlier

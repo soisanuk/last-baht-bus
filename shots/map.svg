@@ -151,6 +151,7 @@
 <line x1="112.0" y1="205.2" x2="110.3" y2="205.7" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="112.0" y1="205.2" x2="115.4" y2="204.8" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="830.5" y1="171.4" x2="865.6" y2="102.7" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
+<line x1="830.5" y1="171.4" x2="806.2" y2="183.2" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="865.6" y1="102.7" x2="871.0" y2="98.8" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <circle cx="298.6" cy="1427.8" r="2.6" fill="#e8c46a" opacity="0.8"/>
 <text x="307.6" y="1421.8" font-size="15" fill="#e8c46a" text-anchor="start" opacity="0.95">Jomtien Beach</text>
@@ -259,6 +260,8 @@
 <circle cx="830.5" cy="171.4" r="2.6" fill="#3cd0a8" opacity="0.8"/>
 <text x="842.5" y="175.4" font-size="15" fill="#3cd0a8" text-anchor="start" opacity="0.95">Naklua</text>
 <circle cx="865.6" cy="102.7" r="2.6" fill="#3cd0a8" opacity="0.8"/>
+<circle cx="806.2" cy="183.2" r="5" fill="#3cd0a8" opacity="0.95"><title>The Orchid Club</title></circle>
+<circle cx="806.2" cy="183.2" r="9" fill="none" stroke="#3cd0a8" opacity="0.35"/>
 <circle cx="871.0" cy="98.8" r="2.6" fill="#3cd0a8" opacity="0.8"/>
 <text x="266.2" y="748.6" font-size="16" fill="#ff1493" opacity="0.9">Walking Street</text>
 <text x="633.4" y="744.7" font-size="16" fill="#ff6a9a" opacity="0.9">Soi Buakhao</text>

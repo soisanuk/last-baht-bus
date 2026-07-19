@@ -585,6 +585,10 @@ function _describeRoom(full) {
   if (r.barType === "beer" || r.barType === "soi6") {
     _say("A Connect 4 frame and a Jackpot dice box sit within reach (PLAY …).", "dim");
   }
+  if (r.barType === "gents") {
+    _say("The couches along the wall have their curtains half-drawn; you are careful " +
+      "where your eyes land. Buy a lady a drink and she'll settle in very close.", "dim");
+  }
   if (r.pool) {
     _say("A pool table waits under a low lamp (PLAY POOL)." +
       (_leagueTonight() ? " Tonight is LEAGUE NIGHT (PLAY KILLER, ฿100 in the ashtray)." : ""), "dim");

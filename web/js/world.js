@@ -19,7 +19,7 @@ const CHARGER_PRICE = 59;
 const SAFE_CASH = 3000;  // the emergency stash in the hotel room safe
 const EXPAT_SAVINGS = 20000; // wired over when you make the move
 // Barfines (canon: go-gos and Soi 6 are the expensive end)
-const BF_BEER = 400, BF_GOGO = 1000, BF_SOI6 = 700;
+const BF_BEER = 400, BF_GOGO = 1000, BF_SOI6 = 700, BF_GENTS = 900;
 const SAFE_PIN = 719;    // ๗๑๙ — stage number 71 + lucky 9
 
 // ── Rooms ──────────────────────────────────────────────────────────────────
@@ -791,7 +791,7 @@ const ROOMS = {
       "soi — half the letters out, so it reads 'SA AI PA MS', which the long-stay " +
       "guests consider part of the charm. The soi itself is dark as a power cut.",
     busStop: "beachrd",
-    exits: { s: "beach_rd_n", n: "hotel_soi" },
+    exits: { s: "beach_rd_n", n: "hotel_soi", w: "orchid_club" },
   },
   hotel_soi: {
     name: "Sabai Palms Soi (Naklua)",
@@ -801,6 +801,21 @@ const ROOMS = {
       "them since March. Two actual palms flank the lobby entrance somewhere down " +
       "there, and past them, a bed with your name on it.",
     exits: { s: "naklua_rd", n: "hotel_room" },
+  },
+
+  orchid_club: {
+    name: "The Orchid Club",
+    bar: "The Orchid Club",
+    region: "Naklua",
+    barType: "gents", outlet: true,
+    desc: "A repurposed villa behind a high wall and an unmarked door — no neon, no " +
+      "barker, just a brass bell and one orchid in the porch. Inside it is cold " +
+      "enough to hang meat, lit low and gold, with deep leather couches whose " +
+      "curtains draw around them, and ladies in not very much already crossing the " +
+      "floor toward you. It opens at noon, for the men who need somewhere to be " +
+      "that isn't home; by dark the same faces hold the same seats. Tourists never " +
+      "find it. That is the entire point.",
+    exits: { out: "naklua_rd" },
   },
   hotel_room: {
     name: "Your Room — Sabai Palms Hotel",
@@ -1445,6 +1460,36 @@ const NPCS = {
           "after midnight, you don't film, you don't ask the ladies their age. Behave " +
           "and it's the friendliest room on the Darkside. Don't, and Daeng's boys walk " +
           "you back to Sukhumvit on foot.\"" },
+    ],
+  },
+
+  rose: {
+    name: "Rose", th: "โรส", emoji: "🌷",
+    room: "orchid_club",
+    desc: "The madame of the Orchid Club — fifties, immaculate, a silk blouse and a " +
+      "voice you have to lean in to hear. She runs the quietest, coldest, most " +
+      "expensive room in Naklua, and she knows the name of every regular's wife.",
+    dialogue: [
+      { th: "เชิญค่ะ", rom: "choen kha",
+        text: "\"Welcome to the Orchid. Come in from the heat.\" The door sighs shut " +
+          "and the temperature drops ten degrees. \"You sit; the girls come to you " +
+          "— that is how we do it here. Buy one a drink and she will make you forget " +
+          "the traffic, the year, the wife. Discreet, always. My guests are " +
+          "gentlemen.\" A cool smile. \"Mostly.\"",
+        short: "\"Sit, buy a girl a drink, forget the year. We are discreet here.\"" },
+      { topic: "club", text: "\"Old house, good bones. I take the villa when the last " +
+          "farang owner… left in a hurry.\" A delicate pause. \"Aircon, curtain, no " +
+          "window, no tourist. My men come at noon — golf finish, wife shopping, they " +
+          "need somewhere to be. By dark, same chair, same men. Home away from home. " +
+          "The home they wanted, na.\"" },
+      { topic: "wife", text: "\"Every man here have a wife somewhere — Naklua, " +
+          "Jomtien, Manchester.\" She examines a nail. \"I know all the name. I never " +
+          "say them. That is the business, tilac — not the girls. The quiet. A man pay " +
+          "more for quiet than for anything a girl can do.\"" },
+      { topic: "girls", text: "\"My ladies are older, clever, and they do not chase — " +
+          "you buy a drink, they sit close, and after that it is between you and the " +
+          "curtain.\" She tilts her head. \"Behave like a gentleman and they are very " +
+          "warm. Forget your manners and Rose will remember for a long time.\"" },
     ],
   },
 
@@ -2926,7 +2971,7 @@ const NPC_ROLES = {
   lek: "hostess", noi: "hostess", ping: "hostess", aom: "hostess",
   joy: "hostess", fon: "hostess", gift: "hostess", kwan: "hostess",
   nong: "hostess", pim: "hostess", bee: "hostess", jane: "hostess", mercedes: "hostess", kratae: "hostess",
-  yai: "mamasan",
+  yai: "mamasan", rose: "mamasan",
   ploy: "cashier", aek: "cashier", malee: "cashier",
   candy: "mamasan", oy: "mamasan", daeng: "mamasan", mem: "mamasan", wan: "mamasan",
 };
@@ -3116,6 +3161,7 @@ const _FILLER_HOSTESSES = [
   ["Lin","หลิน","water_buffalo"], ["Nim","นิ่ม","water_buffalo"],
   ["Duan","เดือน","firefly_bar"], ["Saifon","สายฝน","firefly_bar"],
   ["Wanpen","วันเพ็ญ","mama_yai"],
+  ["Pear","แพร์","orchid_club"], ["Jinda","จินดา","orchid_club"],
   ["Dokmai","ดอกไม้","night_heron"], ["Jampa","จำปา","night_heron"],
   ["Ing","อิง","blue_dog"], ["Khing","ขิง","blue_dog"],
   ["Bam","บาม","rock_factory"], ["Kwang","กวาง","rock_factory"],
@@ -3267,6 +3313,7 @@ const _FILLER_CASHIERS = [
   ["Jenny","เจนนี่","pink_lotus"], ["Joon","จูน","golden_dragon"], ["Jun","จัน","sunset_dreams"],
   ["Kaimook","ไข่มุก","slutty"], ["Kanom","ขนม","las_vegas"], ["Keng","เก่ง","khao_talo_bar"],
   ["Best","เบสท์","water_buffalo"], ["Aim","เอม","firefly_bar"], ["Tangmo","แตงโม","mama_yai"],
+  ["Kanya","กัญญา","orchid_club"],
   ["Mon","มล","night_heron"],
 ];
 
@@ -3339,6 +3386,7 @@ const ROOM_GEO = {
   qv_room:          [12.9449, 100.8872],
   // Naklua
   naklua_rd:        [12.9530, 100.8885],
+  orchid_club:      [12.9524, 100.8876],
   hotel_soi:        [12.9565, 100.8898],
   hotel_room:       [12.9567, 100.8900],
   // Second Road
