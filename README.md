@@ -101,6 +101,13 @@ bearing):
   girls, who stay on it at any hour. And if you're a true regular, late
   enough and liked enough, a girl may pay her **own** barfine. It's the
   highest compliment the soi pays; don't say no.
+- **The clock closes the doors**: gentleman's clubs, most of Soi 6, and the
+  Darkside bars keep early hours and shut at **midnight** — you get a last call
+  half an hour out (barfine her now, or lose her to the shutters), while the
+  town's beer bars and go-gos run to dawn. **Gentleman's clubs** are the
+  enclosed, air-conditioned afternoon places off the beaten path (the Orchid
+  Club, Naklua): buy a lady a drink and the room turns very friendly. A
+  Darkside bar with a free-spending customer bolts its door instead of closing.
 - **The daily damage**: on vacation, the lobby ATM surrenders ฿3,000 on your
   way out each evening. Spend it well — or don't, and see which feels better.
 - **Pick your base**: after Act One, `CHECKOUT` at the start of an evening
@@ -214,12 +221,20 @@ bearing):
   always 25% better when they moved out here. No runtime network, works
   from `file://` with the last bake. Flavor only — no game logic ever
   depends on a headline or a rate.
+- **The Nite Owl column**: `READ COLUMN` (or `OWL`) anywhere for the back-page
+  hoot of Mort, the old columnist who still files copy to keep the boredom and
+  the balcony at bay — a lead opinion, a bar listing, a reader's letter with
+  his dry reply, a joke, and the sign-off *BUT, I DON'T GIVE A HOOT!* Four
+  decades of the same story, and every word of it true-ish. It rotates daily.
 - **Street encounters**: the sois have their own weather — a two-handed
   pickpocket on Beach Road, a sentimental drunk bargirl, an angry Brit who's
   sixty per cent sure it was you, a piwin with a power bank, a man with a
-  briefcase full of hair tonic, freelancers on the promenade (Ning is also
-  free, and saying yes to both is a story you'll tell badly forever), watch
-  peddlers working the Beach Road bar stools, and the ping pong show tout —
+  briefcase full of hair tonic, a monk-robed fortune-teller who finds a curse
+  on you (฿199 to read your palm, rather more to lift it), freelancers on the
+  promenade (Ning is also free, and saying yes to both is a story you'll tell
+  badly forever), a ten-out-of-ten booked off the apps who may or may not match
+  her photos when she knocks at 1 a.m., watch peddlers working the Beach Road
+  bar stools, and the ping pong show tout —
   the famous scam of Walking Street, tuition paid exactly once. Most depend
   on what you say next; the dice live in your save — UNDO won't reroll them.
 
@@ -342,7 +357,7 @@ flowchart TD
     m2[Cross Lane]
     m3[🌑 Back Lane]:::dark
     m4[🌑 Deep Corner]:::dark
-    gr[🍺 Gold Rush<br>Nong]:::bar
+    gr[🍺 Gold Rush<br>Nong · Mercedes ❄️]:::bar
     sl[🍺 Starlight<br>Pim 💋]:::bar
     rg[🍹 Rainbow Girls<br>Madam Oy 👑]:::bar
     office[🔒 Oy's Office]:::special
@@ -376,7 +391,7 @@ flowchart TD
     pl[🍺 Pink Lotus<br>Joy]:::bar
     gd[🍺 Golden Dragon]:::bar
     sd[🍺 Sunset Dreams<br>Kwan]:::bar
-    qv[🍺 Queen Vic pub<br>Terry 🍺 · Angela 🎧]:::bar
+    qv[🍺 Queen Vic pub<br>Terry 🍺 · Angela 🎧 · Mort 🦉]:::bar
     qvr[🛏 Balcony Room ฿700]
     s6 --- pl
     s6 --- gd
@@ -389,16 +404,20 @@ flowchart TD
     sk[Sukhumvit Crossing 🏍️]
     kt[Soi Khao Talo]
     ktb[🍺 Daeng's Place 🔌<br>Daeng 🌶️]:::bar
+    myai[🍲 Mama Yai's<br>Mama Yai · Kratae 🐿️ · Ron 🦘]:::bar
     lake[Lake Mabprachan<br>Lake Gary 🎣]
     sk --- kt
     kt --- ktb
+    kt --- myai
     kt --- lake
   end
 
   subgraph NAKLUA
     nak[🚏 Naklua Rd]
+    orchid[🌷 Orchid Club<br>gentleman's club · Rose]:::bar
     hsoi[🌑 Sabai Palms Soi]:::dark
     hotel([🏁 GOAL: Room 412<br>Sabai Palms Hotel ฿400])
+    nak --- orchid
     nak --- hsoi --- hotel
   end
 
