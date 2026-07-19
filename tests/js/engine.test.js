@@ -925,6 +925,67 @@ test("Gentleman's Club: short time is on-site (the curtained couch) and the nigh
   assert.match(lastOut(), /curtain|couch/i);
 });
 
+test("diminishing returns: each barfine buys less สนุก, cools a notch a day, resets per trip", () => {
+  state().jaded = 0; state().happy = 0;
+  _conquestHappy(10);            // first: full value
+  assert.equal(state().happy, 10);
+  assert.equal(state().jaded, 1);
+  _conquestHappy(10);            // second: −2
+  assert.equal(state().happy, 10 + 8);
+  _conquestHappy(10);            // third: −4
+  assert.equal(state().happy, 18 + 6);
+  // floor: a deep binge nets a real penalty, never below −4 per act
+  state().jaded = 20; state().happy = 50;
+  _conquestHappy(6);
+  assert.equal(state().happy, 46, "floored at −4");
+  // a mediocre app hit still feeds the treadmill (jaded climbs)
+  const j = state().jaded;
+  _conquestHappy(2);
+  assert.equal(state().jaded, j + 1);
+});
+
+test("diminishing returns: a night's sleep cools it, a new vacation clears it", () => {
+  state().flags.act1Done = true; state().flags.hasWallet = true;
+  state().room = "hotel_room"; state().jaded = 3;
+  run("sleep");                  // ends the night → day roll
+  assert.equal(state().jaded, 2, "one notch cooler after a day");
+  state().jaded = 5;
+  _newVacation();
+  assert.equal(state().jaded, 0, "a fresh trip resets the treadmill");
+});
+
+test("app booking: the catfish is the base rate; a hit is an on-site conquest", () => {
+  state().flags.act1Done = true; state().flags.hasWallet = true;
+  state().room = "hotel_room"; state().money = 6000; state().nightTurn = 60; state().jaded = 0;
+  // force the hit (rng seeded so _rand() < 0.45)
+  state().rng = 1;
+  _startEnc("booking");
+  run("yes book her");
+  assert.equal(state().money, 6000 - BOOK_PRICE, "paid the direct price");
+  assert.ok(state().happy > 0, "a real conquest");
+  assert.match(lastOut(), /exactly the photos|pays out/i);
+
+  // the catfish door (re-armed after a bad roll): SEND her off for a token…
+  newGame(); state().lastSaleng = 99999;
+  state().flags.act1Done = true; state().room = "hotel_room"; state().money = 6000;
+  state().pendingEnc = "booking"; state().flags.catfishArrived = true;
+  run("send her off");
+  assert.equal(state().money, 6000 - 300, "just the taxi token, no ฿2500");
+  assert.match(lastOut(), /taxi|not feel good/i);
+  // …or STAY — a mediocre conquest that still feeds the treadmill
+  state().room = "hotel_room"; state().money = 6000; state().jaded = 0;
+  state().pendingEnc = "booking"; state().flags.catfishArrived = true;
+  run("stay");
+  assert.equal(state().money, 6000 - BOOK_PRICE);
+  assert.equal(state().jaded, 1, "the treadmill still ticks over");
+});
+
+test("app booking is a late, hotel-room, nightly encounter", () => {
+  assert.ok(ENCOUNTERS.booking.rooms.includes("hotel_room"));
+  assert.equal(ENCOUNTERS.booking.nightly, true);
+  assert.equal(ENCOUNTERS.booking.interactive, true);
+});
+
 test("REPORT surfaces in autocomplete only at the station or while still owed", () => {
   state().room = "beach_rd_c"; state().tonicOwed = 0;
   assert.ok(!engineComplete("rep").includes("report"), "not offered on a random street");

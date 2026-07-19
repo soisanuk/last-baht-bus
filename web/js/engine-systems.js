@@ -230,21 +230,21 @@ function _bfResolve(kind) {
         "home advantage. “Upstairs” turns out to be exactly as advertised. Some " +
         "time later you are back on your stool, thinking about nothing at all, " +
         `while she fixes her hair in the till mirror. (฿${G.money} left.)`, "win");
-      _addHappy(6);
+      _conquestHappy(6);
     } else if (bt === "gents") {
       _say(`฿${price} to Rose, discreetly, and ${name} takes your hand and walks you ` +
         "to one of the deep couches along the wall. The curtain draws around it with " +
         "a soft brass rattle, the cold gold room carries on without you for a while, " +
         `and then you are back in your seat with a fresh drink you don't remember ` +
         `ordering. Nobody looked up. Nobody ever does. (฿${G.money} left.)`, "win");
-      _addHappy(6);
+      _conquestHappy(6);
     } else {
       _say((price ? `฿${price} to the ledger and a` : "A") +
         ` short walk later the short-time hotel's ceiling fan is doing its slow ` +
         `count over the proceedings. ${name} is businesslike, cheerful, and ` +
         "gone within the hour — a kiss on the cheek at the door, back to her " +
         `stool before the ice in your last drink has melted. (฿${G.money} left.)`, "win");
-      _addHappy(5);
+      _conquestHappy(5);
       for (let i = 0; i < 6; i++) { // the hour passes; the night carries on
         if (G.over) return;
         _tick();

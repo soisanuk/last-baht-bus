@@ -1991,6 +1991,7 @@ const TONIC_SHAKEDOWN = 3000;// what it costs to bully your way back out of the 
 const FORTUNE_READ = 199;    // the ฿199 palm reading — the hook, not the sting
 const FORTUNE_RITUAL = 1900; // the four-figure "curse-removal" cleansing upsell
 const FORTUNE_MERIT = 500;   // the "small merit" you pay to bully your way clear
+const BOOK_PRICE = 2500;     // a freelancer booked "direct" off the apps — no bar, no barfine
 const TONIC_POLICE_CUT = 0.35; // the police "negotiation fee" kept out of any recovery
 
 const ENCOUNTERS = {
@@ -2125,6 +2126,21 @@ const ENCOUNTERS = {
       "your hand, a red blessed string looped around his own wrist. “I read your " +
       "palm, write your lucky number — only one-nine-nine baht. Then we fix. Sit, sit.”",
     hint: "(Let him READ your palm for ฿199, or tell him NO and walk on.)",
+  },
+  booking: {
+    // The app-booked freelancer + the catfish (from a punter report). Fires late,
+    // near home, once you're settled (act1Done). YES and she takes her time (the
+    // apps run on the 'tomorrow' clock even at 1 a.m.); then a photos-vs-reality
+    // roll — sometimes a genuine payout, more often the catfish, worst in heels.
+    // The two-step catfish + the hit live in _ENC.booking / _catfishDoor.
+    rooms: ["hotel_room", "qv_room", "metropole_room", "naklua_rd"],
+    interactive: true, nightly: true,
+    intro: "Your phone buzzes — one of the girls you'd been messaging off the apps, " +
+      "the stunner from the photos who kept leaving you on read, is suddenly awake " +
+      "and suddenly free. “Hi baby, I finish work. I come you now? 2500, no bar, no " +
+      "barfine, only you.” It is gone 1 a.m. The photos are, it must be said, " +
+      "extraordinary.",
+    hint: "(YES, book her — she'll be a while — or NO and turn in.)",
   },
 };
 

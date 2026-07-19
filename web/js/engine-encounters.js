@@ -209,7 +209,8 @@ function _maybeEncounter() {
   if (G.turns - G.lastEnc < ENC_COOLDOWN) return;
   const eligible = Object.keys(ENCOUNTERS).filter(id =>
     !G.encDone[id] && ENCOUNTERS[id].rooms.includes(G.room) &&
-    (id !== "powerbank" || G.battery <= 30));
+    (id !== "powerbank" || G.battery <= 30) &&
+    (id !== "booking" || (_flag("act1Done") && G.nightTurn >= 40))); // late, settled: the apps come alive after 1 a.m.
   const chance = ENC_CHANCE * (_bandNearby() ? 1.5 : 1);
   if (!eligible.length || _rand() > chance) return;
   _startEnc(eligible[Math.floor(_rand() * eligible.length)]);
@@ -507,7 +508,7 @@ const _ENC = {
         "hotel corridor shushing, and the rest of it — will be retold by you, " +
         "badly, for the rest of your life, to anyone who asks and several who " +
         "don't. (฿" + G.money + " left, every one of them irrelevant.)", "win");
-      _addHappy(7);
+      _conquestHappy(7);
     } else {
       const flavor = _rand() < 0.5 ?
         "Before you go she thumbs a message to a friend — “she know where I am, " +
@@ -896,7 +897,66 @@ const _ENC = {
       "follow you now, friend, you see!” — then turns his grave face on the next " +
       "sunburnt couple drifting along the rail.");
   },
+
+  booking(input) {
+    if (_flag("catfishArrived")) { G.flags.catfishArrived = false; return _catfishDoor(input); }
+    const yes = /yes|ok|sure|book|come|deal|why not|send her|yeah/.test(input) &&
+      !/\bno\b|sleep|turn in|pass|not tonight/.test(input);
+    if (!yes) {
+      _say("You put the phone face-down. Tomorrow's problem, or nobody's. The " +
+        "ceiling fan turns; you're asleep before you've finished deciding.");
+      return;
+    }
+    if (G.money < BOOK_PRICE) {
+      _say(`You do the sums — ฿${BOOK_PRICE} you do not have — and type the saddest ` +
+        "three words in Pattaya: “maybe next time.” Read at once. Never answered.");
+      return;
+    }
+    // she runs on the apps' 'tomorrow' clock even at 1 a.m. — the wait is the tax
+    for (let i = 0; i < 4; i++) { if (G.over) return; _tick(); }
+    if (_rand() < 0.45) { // the honest 10/10 — the app pays out, sometimes
+      G.money -= BOOK_PRICE;
+      _say(`Forty minutes later she is at the door and — for once — she is exactly ` +
+        "the photos. Better, even: funny, unhurried, delighted by your terrible " +
+        `Thai. Some nights the app pays out, and it pays out like this. (฿${G.money} left.)`, "win");
+      _conquestHappy(8);
+      return;
+    }
+    // the catfish — the base rate, not the exception
+    G.pendingEnc = "booking";
+    _setFlag("catfishArrived");
+    _encPrompt(
+      ["Forty minutes become ninety. When she finally knocks, the woman in the " +
+        "corridor is a cousin of the photos: the same smile bolted onto someone " +
+        "heavier, older, the cute face filtered off somebody else — and in the " +
+        "heels a clear head taller than the profile ever admitted. She is already " +
+        "stepping past you into the room.", "alert"],
+      [`(STAY — go through with it, ฿${BOOK_PRICE} — or SEND her off with a token.)`, "dim"]);
+  },
 };
+
+// The catfish at the door: STAY (sunk-cost, a mediocre conquest that still feeds
+// the treadmill) or SEND her off with a face-saving "taxi" token. Broke players
+// can't stay.
+function _catfishDoor(input) {
+  const stay = /stay|yes|ok|fine|go|whatever|through|do it|keep/.test(input) &&
+    !/\bno\b|send|leave|out|off|cancel|away|door/.test(input);
+  if (stay && G.money >= BOOK_PRICE) {
+    G.money -= BOOK_PRICE;
+    _say(`You are a coward about doorway confrontations, so you don't have one. ` +
+      `฿${BOOK_PRICE}, the lights stay low, and you spend the whole time quietly ` +
+      "editing her back into the photograph in your head. It is fine. Fine is " +
+      `precisely the word. (฿${G.money} left.)`, "");
+    _conquestHappy(2);
+    return;
+  }
+  const tip = Math.min(300, G.money);
+  G.money -= tip;
+  _say(`You do the Pattaya-polite thing: ฿${tip} “for the taxi, sorry, I not feel ` +
+    "good tonight,” a wai, and the door. She takes it without a flicker — she has " +
+    `heard it before, from better liars — and is gone. (฿${G.money} left.)`, "dim");
+  _addHappy(-1);
+}
 
 // The curse-removal ritual: high-pressure "cleansing" backed by the quiet menace
 // of the three robed men. PAY = the four-figure fleece; LEAVE = a coin-flip on
