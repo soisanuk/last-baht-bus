@@ -838,6 +838,22 @@ function _doMotosai(arg) {
     price = 20;
   }
   if (G.money < price) {
+    // Broke and stranded. Most of town is a free walk home, but the Darkside is
+    // on the wrong side of the highway — a dawn-broke farang out here would be
+    // stuck. A piwin who's seen it a hundred times fronts the ride back to town
+    // (town-ward only; he won't run you deeper into the dark for free).
+    if (G.money === 0 && d.price === MOTOSAI_TOWN) {
+      G.room = d.room;
+      G.darkStreak = 0;
+      _say("The piwin takes in the empty pockets, the hour, and the state of you, " +
+        "and sighs the sigh of a man who has done this before. “Mai pen rai. Get " +
+        "on. Pay next time, boss.” He threads the highway one-handed and sets you " +
+        "back down among the living — no charge, no lecture, just a nod that says " +
+        "don't make a habit of it.", "thai");
+      _describeRoom(true);
+      _maybeEncounter();
+      return;
+    }
     _say(`“${thaiBaht(price)},” says the piwin. You have ฿${G.money}. He shrugs — ` +
       "no hard feelings, no free rides.", "thai");
     return;

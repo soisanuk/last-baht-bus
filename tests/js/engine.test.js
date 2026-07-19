@@ -1520,6 +1520,25 @@ test("the crash spot follows the region you passed out in", () => {
   assert.equal(state().room, "sukhumvit_crossing");
 });
 
+test("broke and stranded at the Darkside: a piwin fronts the ride to town, but not deeper", () => {
+  state().room = "sukhumvit_crossing";
+  state().money = 0;
+  state().rain = 0;
+  // town-ward: the pity ride gets you back across the highway, free
+  run("motosai to beach road");
+  assert.equal(state().room, "beach_rd_c", "broke, you still get out of the Darkside");
+  assert.equal(state().money, 0, "the ride was free");
+  assert.match(lastOut(), /Pay next time|Mai pen rai/i);
+
+  // but broke you can't cadge a free ride DEEPER into the dark
+  newGame(); state().lastSaleng = 99999;
+  state().room = "sukhumvit_crossing";
+  state().money = 0;
+  run("motosai to lake");
+  assert.equal(state().room, "sukhumvit_crossing", "no free ride further out");
+  assert.match(lastOut(), /no free rides/i);
+});
+
 test("dehydration collapses the night; pre-act-1 you wake rough on the beach, broke", () => {
   state().thirst = 99;
   state().money = 300;
