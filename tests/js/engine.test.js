@@ -1478,35 +1478,69 @@ test("street kisses end badly — except for the katoey", () => {
 
 // ── The clock, the body, the week ──────────────────────────────────────────
 
-test("the night ends at 04:00 and a new day dawns at the hotel", () => {
+test("a resident who runs the clock to dawn away from home wakes rough, broke, phone dying", () => {
   state().flags.act1Done = true;
   state().flags.hasWallet = true;
-  state().room = "beach_rd_c";
+  state().room = "beach_rd_c";      // Beach Road → the promenade crash spot
+  state().money = 900;
+  state().battery = 80;
   state().nightTurn = 99;
   run("wait");
   assert.equal(state().day, 3);
-  assert.equal(state().room, "hotel_room");
+  assert.equal(state().room, "beach_rd_c", "wakes where the night left him, not the hotel");
+  assert.equal(state().money, 0, "pockets turned out");
+  assert.ok(state().battery <= 15, "phone dying");
   assert.equal(state().nightTurn, 0);
   assert.match(lastOut(), /DAY 3/);
 });
 
-test("dehydration collapses the night; pre-act-1 you wake on the beach again", () => {
+test("a resident who SLEEPs at his hotel wakes home with his money and a full charge", () => {
+  state().flags.act1Done = true;
+  state().flags.hasWallet = true;
+  state().room = "hotel_room";
+  state().money = 900;
+  state().battery = 40;
+  run("sleep");
+  assert.equal(state().day, 3);
+  assert.equal(state().room, "hotel_room", "made it home");
+  assert.equal(state().battery, 100, "charged overnight");
+  assert.ok(state().money >= 500, "keeps his cash (less any rent)");
+});
+
+test("the crash spot follows the region you passed out in", () => {
+  state().room = "ws_north";         // Walking Street → the arch
+  state().nightTurn = 99;
+  run("wait");
+  assert.equal(state().room, "ws_gate");
+
+  newGame(); state().lastSaleng = 99999;
+  state().room = "water_buffalo";    // Darkside → stranded at the Sukhumvit crossing
+  state().nightTurn = 99;
+  run("wait");
+  assert.equal(state().room, "sukhumvit_crossing");
+});
+
+test("dehydration collapses the night; pre-act-1 you wake rough on the beach, broke", () => {
   state().thirst = 99;
+  state().money = 300;
   run("wait", "wait");
   assert.equal(state().day, 3);
   assert.equal(state().room, "jomtien_beach");
+  assert.equal(state().money, 0, "a collapse empties the pockets too");
   assert.match(lastOut(), /mai pen rai|Dehydration/i);
 });
 
-test("blackout: the ninth bottle ends the night expensively", () => {
+test("blackout: the ninth bottle ends the night rough and broke, near where you dropped", () => {
   state().flags.act1Done = true;
   state().flags.hasWallet = true;
-  state().room = "candy_bar";
+  state().room = "candy_bar";       // Soi Buakhao → the market forecourt crash spot
   state().money = 2000;
   state().soc.drunk = 8;
   run("buy beer");
   assert.equal(state().day, 3);
-  assert.equal(state().money, 2000 - 80 - 300);
+  assert.equal(state().money, 0, "the film stops and so does the wallet");
+  assert.equal(state().room, "buakhao_market");
+  assert.ok(state().battery <= 15, "phone dying");
   assert.match(lastOut(), /film simply stops/i);
 });
 

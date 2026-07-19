@@ -1275,6 +1275,101 @@ function _checkDrunk() {
   if (G.soc.drunk >= 9) _endNight("blackout");
 }
 
+// ── Waking up rough ──────────────────────────────────────────────────────────
+// Run the clock to dawn, drink into a blackout, or let hunger/thirst drop you,
+// and you don't teleport comfortably home — you come to wherever the night left
+// you, near where you passed out, phone dying and pockets turned out. Each spot
+// carries a few prose variations (the last one terse). The region you passed
+// out in picks the spot, so crashing deep in the Darkside strands you far from
+// town — a night that ends badly costs you geography as well as baht.
+const _CRASH_BATTERY = 15;             // "low battery" — barely enough for one call
+const _CRASH_SPOTS = {
+  beach: { room: "jomtien_beach", prose: [
+    "You come to face-down on Jomtien sand, the tide a polite metre from your " +
+      "shoes, a beach dog conducting a thorough and disappointed inspection. The " +
+      "sun is already an accusation. Somewhere a sunbed vendor is laughing.",
+    "Jomtien again. You surface under a leaning coconut palm with sand in " +
+      "places sand has no business being, a stranger's flip-flop near your head, " +
+      "and the specific headache the gulf breeze does nothing for.",
+    "The beach had you. You wake to the slap-slap of morning joggers and a " +
+      "massage lady folding her mat three feet away, who takes one look and " +
+      "decides today is not the day to offer.",
+    "Jomtien Beach. Sand, sun, regret.",
+  ] },
+  promenade: { room: "beach_rd_c", prose: [
+    "You surface on a Beach Road bench, the promenade already busy pretending " +
+      "not to see you, a baht bus idling at the kerb whose driver has clearly " +
+      "watched you sleep for some time and finds it restful.",
+    "The Beach Road palms and their fairy lights, off now in the daylight, stand " +
+      "over you like unimpressed relatives. A street sweeper works around your " +
+      "feet with the patience of a man who has done this many mornings.",
+    "You wake sitting up on the seawall, tie of drool to your collar, watching " +
+      "the same grey sea you were watching when the night closed. A 7-Eleven bag " +
+      "of somebody's breakfast sits untouched beside you, either a gift or a warning.",
+    "A Beach Road bench. The sea, unbothered.",
+  ] },
+  arch: { room: "ws_gate", prose: [
+    "You come to on the kerb under the Walking Street arch, its neon dead in the " +
+      "daylight, the great sign that promised everything now just scaffolding and " +
+      "pigeons. Delivery bikes thread past your outstretched legs without comment.",
+    "The arch. You wake propped against a shuttered go-go, the street hosed down " +
+      "and empty, last night's flyers pasted to the wet concrete like fallen " +
+      "leaves. Bali Hai pier glitters cruelly at the far end.",
+    "Someone has tucked your own arm under your head like a pillow, which is " +
+      "either kindness or theatre. Walking Street in the morning is a stage " +
+      "between shows: stools stacked, floors mopped, the whole circus asleep.",
+    "The Walking Street arch. Curtain down.",
+  ] },
+  buakhao: { room: "buakhao_market", prose: [
+    "You wake in the Buakhao market forecourt among the crates, a vendor stacking " +
+      "mangoes around you as though you were furniture that came with the stall, " +
+      "which by now you nearly are.",
+    "Soi Buakhao at dawn: the beer bars folded away, the market unfolding, and you " +
+      "in the seam between them on a plastic stool that has seen this before. Someone " +
+      "presses a bag of sliced pineapple into your hand and moves on before you can pay.",
+    "You surface to the smell of grilling pork and the clatter of the market " +
+      "setting up, a som tam lady eyeing you with the exact blend of pity and " +
+      "commerce that keeps this street alive.",
+    "The Buakhao market. Crates, mangoes, shame.",
+  ] },
+  naklua: { room: "naklua_rd", prose: [
+    "You come to on the quiet end of Naklua Road, further north than you remember " +
+      "going, the fishing boats clinking in the distance and not a farang in sight " +
+      "to share the indignity with.",
+    "Naklua. You wake against a temple wall, a monk sweeping past with a nod that " +
+      "forgives everything and expects nothing, the morning almsround stepping " +
+      "around you like weather.",
+    "The old-Pattaya calm of Naklua holds you where you fell — a shophouse " +
+      "awning, a cat, an auntie sluicing the pavement who redirects the water " +
+      "around your shoes without breaking rhythm.",
+    "Naklua Road. North, and alone.",
+  ] },
+  darkside: { room: "sukhumvit_crossing", prose: [
+    "You wake at the Sukhumvit crossing, the six-lane highway roaring six inches " +
+      "from your dreams, the Darkside behind you and the whole long ride back to " +
+      "town in front. However you got out here, the night isn't telling.",
+    "The Darkside kept you. You surface on the shoulder of Sukhumvit with truck " +
+      "wash blowing over you every thirty seconds, a very long way from anywhere " +
+      "you'd choose to be, calculating baht-bus fares you no longer have.",
+    "Somewhere past the crossing a dog is winning an argument with another dog. " +
+      "You're on the wrong side of the highway from the entire city, the sun " +
+      "climbing, and the first cruel arithmetic of the day is: how do I get back?",
+    "Sukhumvit crossing. Miles from home.",
+  ] },
+};
+const _REGION_CRASH = {
+  "Jomtien": "beach", "Pratumnak": "beach",
+  "Beach Road": "promenade", "Second Road": "promenade", "Soi 6": "promenade",
+  "Walking Street": "arch",
+  "Soi Buakhao": "buakhao", "LK Metro": "buakhao", "Tree Town": "buakhao", "Myth Night": "buakhao",
+  "Naklua": "naklua",
+  "Darkside": "darkside",
+};
+function _crashSpotFor(roomId) {
+  const reg = (ROOMS[roomId] && ROOMS[roomId].region) || "Jomtien";
+  return _CRASH_SPOTS[_REGION_CRASH[reg] || "beach"];
+}
+
 function _endNight(reason) {
   G.game = null;
   G.pendingEnc = null;
@@ -1296,15 +1391,12 @@ function _endNight(reason) {
         "Hunger wins the night.", "alert");
       _addHappy(-8);
       break;
-    case "blackout": {
-      const lost = Math.min(300, G.money);
-      G.money -= lost;
+    case "blackout":
       _say("Somewhere after that last bottle the film simply stops. There are " +
-        "flashes — singing? a traffic cone? — and then nothing." +
-        (lost ? ` The morning audit finds ฿${lost} unaccounted for.` : ""), "alert");
+        "flashes — singing? a traffic cone? — and then nothing. Whatever the " +
+        "night cost, the morning will hand you the invoice.", "alert");
       _addHappy(-5);
       break;
-    }
     case "hurt": {
       const bill = Math.min(500, G.money);
       G.money -= bill;
@@ -1427,10 +1519,30 @@ function _endNight(reason) {
   G.darkStreak = 0;
   G.lightOn = false;
   G.safeTries = 0;
-  if (_flag("act1Done")) { G.room = _hotelRoomId(); G.battery = 100; }
-  else { G.room = "jomtien_beach"; G.battery = Math.max(G.battery, 20); }
+  // Where you wake. Run the clock to dawn, black out, or collapse from
+  // hunger/thirst and you don't make it home: you come to rough, near where you
+  // passed out (unless you're a resident already standing in your own room),
+  // phone dying and pockets turned out. Every other ending — you slept at the
+  // hotel, went home with her, woke in the clinic — lands you in a bed as before.
+  const rough = (reason === "dawn" || reason === "collapse" || reason === "blackout")
+                && !(_flag("act1Done") && G.room === _hotelRoomId());
+  const crash = rough ? _crashSpotFor(G.room) : null;
+  if (crash) {
+    G.battery = _CRASH_BATTERY;
+    G.money = 0;                     // the town turns out the sleeping farang's pockets
+  } else if (_flag("act1Done")) {
+    G.room = _hotelRoomId(); G.battery = 100;
+  } else {
+    G.room = "jomtien_beach"; G.battery = Math.max(G.battery, 20);
+  }
   _say("");
-  _chargeRent();
+  if (crash) {
+    _say(crash.prose[Math.floor(_rand() * crash.prose.length)], "alert");
+    _say(`(Phone on ${_CRASH_BATTERY}%. ${_flag("hasWallet") ? "Wallet" : "Pockets"} ` +
+      "turned out, empty — the town works the farang who don't make it home.)", "dim");
+  }
+  _chargeRent();                     // the folio bills you even if you slept rough…
+  if (crash) G.room = crash.room;    // …but you wake where the night left you, not at the desk
   if (_quietHelped) _say("(Naklua quiet: the hangover wakes one size smaller.)", "dim");
   _say(`── DAY ${G.day}${G.stage === "expat" ? " · PATTAYA, HOME" : " of 7"} — you ` +
     "surface mid-afternoon, and by the time you're human again the sun is " +
