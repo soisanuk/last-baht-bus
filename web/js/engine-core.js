@@ -702,7 +702,7 @@ function _tick() {
   // it parks at the bar for a while, the girls swarm it, and the player may buy
   // any time before it moves on. All of that lives in _salengTick (encounters).
   _salengTick();
-  _lockInTick(); // the Darkside midnight: bolt the door or bring the shutters down
+  _closingTick(); // midnight: gents/Soi 6/Darkside give last call, then bolt or shutter
   _maybeIncomingText();
   if (G.lightOn && G.battery > 0) {
     G.battery--;

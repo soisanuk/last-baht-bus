@@ -1892,6 +1892,40 @@ test("lock-in: window shoppers get the midnight shutters instead", () => {
   assert.equal(state().room, "khao_talo_strip", "no lockIn flag, no lock-in");
 });
 
+test("midnight closing: gents clubs and Soi 6 shut, the town runs on", () => {
+  state().flags.act1Done = true; state().flags.hasWallet = true;
+  // gentleman's club: last-call warning at 23:30, then shuttered and walked out
+  state().room = "orchid_club"; state().money = 5000; state().nightTurn = 54;
+  out = []; run("wait");                 // → nightTurn 55, the 30-min warning
+  assert.match(lastOut(), /Last call|half an hour|BARFINE/i, "the courtesy warning fires");
+  out = []; run("wait", "wait", "wait", "wait", "wait", "wait"); // past midnight
+  assert.equal(state().room, "naklua_rd", "shuttered and walked out to the street");
+  assert.match(lastOut(), /gentleman's hours|draws its shutters/i);
+  // and you can't get back in
+  out = []; run("go w");
+  assert.equal(state().room, "naklua_rd");
+  assert.match(lastOut(), /dark and bolted|gentleman's hours/i);
+
+  // Soi 6 go-go closes; the Queen Vic pub does not
+  newGame(); state().lastSaleng = 99999;
+  state().flags.act1Done = true; state().flags.hasWallet = true;
+  state().room = "pink_lotus"; state().nightTurn = 62;
+  out = []; run("wait");
+  assert.equal(state().room, "soi6_street", "Soi 6 bar shuttered at midnight");
+  // the pub stays open past midnight
+  state().room = "queen_vic"; state().nightTurn = 65;
+  out = []; run("wait");
+  assert.equal(state().room, "queen_vic", "the Queen Vic pub keeps its own hours");
+});
+
+test("midnight closing: walking in during last call gets the warning + barfine nudge", () => {
+  state().flags.act1Done = true; state().flags.hasWallet = true;
+  state().room = "naklua_rd"; state().nightTurn = 57; // 23:42 — last half hour
+  out = []; run("go w");                 // into the Orchid Club
+  assert.equal(state().room, "orchid_club", "you get in — it's not midnight yet");
+  assert.match(lastOut(), /Last call|half an hour|BARFINE/i, "warned on arrival");
+});
+
 test("Darkside girls are veterans: no green tier past Sukhumvit", () => {
   for (const [id, n] of Object.entries(NPCS)) {
     if (!n.filler || NPC_ROLES[id] !== "hostess") continue;

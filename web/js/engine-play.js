@@ -130,12 +130,53 @@ function _barSpendTonight(room) {
   return (G.soc.bells[room] || 0) >= 1 || G.soc.mamaTreat[room] || drinks >= 3;
 }
 
-function _lockInTick() {
+// Bars that keep the law's hours: gentleman's clubs, most of Soi 6, and the
+// Darkside all shut at MIDNIGHT (nightTurn 60). The Queen Vic pub and the town's
+// beer bars and go-gos run to dawn. The exception is a Darkside lock-in — the
+// bolt goes across and the party runs on for those already inside and spending.
+function _closesMidnight(id) {
+  const r = ROOMS[id];
+  return !!(r && r.barType) &&
+    (r.barType === "gents" || r.barType === "soi6" || r.region === "Darkside");
+}
+function _closedNow(to) {
+  return _flag("act1Done") && _closesMidnight(to) && G.nightTurn >= 60 &&
+    !(G.soc.lockIn && G.soc.lockIn[to]);
+}
+function _closedMsg(to) {
+  const r = ROOMS[to];
+  if (r.region === "Darkside")
+    return "Shutters down, lights dead, chairs up. The Darkside keeps the law's " +
+      "hours — officially. Somewhere along the strip one padded door still thumps " +
+      "with bass from a bar that is definitely, legally, closed.";
+  if (r.barType === "gents")
+    return "The gentleman's club is dark and bolted. They keep gentleman's hours — " +
+      "the afternoon-and-early trade is long done by midnight, before the go-gos " +
+      "have hit their stride. Come back when the golf finishes tomorrow.";
+  return "Soi 6's shutters are down, the frontages black, the sound systems finally " +
+    "and mercifully off. Whatever you were after here shut at midnight — it's " +
+    "Walking Street or nowhere now.";
+}
+// 30-minute last call (nightTurn 55 ≈ 23:30), once per bar per night — a courtesy,
+// and a nudge to BARFINE before the door shuts.
+function _lastCall(id) {
+  G.soc.lastCall = G.soc.lastCall || {};
+  if (G.soc.lastCall[id]) return;
+  G.soc.lastCall[id] = true;
+  _say("Last call — the mamasan taps her watch: about half an hour to closing. " +
+    "This place shuts at midnight, so if you mean to take a lady home tonight, now " +
+    "is the moment to BARFINE. After the shutters come down it's the street.", "alert");
+}
+
+function _closingTick() {
   if (!_flag("act1Done") || G.over) return;
+  if (!_closesMidnight(G.room) || _lockedIn()) return;
   const r = _room();
-  if (r.region !== "Darkside" || !r.barType || G.nightTurn < 60) return;
-  if (_lockedIn()) return;
-  if (r.lockIn && _barSpendTonight(G.room)) {
+  // the last-call courtesy in the final half hour
+  if (G.nightTurn >= 55 && G.nightTurn < 60) { _lastCall(G.room); return; }
+  if (G.nightTurn < 60) return;
+  // midnight. A Darkside bar with a spender bolts the door instead of shutting it.
+  if (r.region === "Darkside" && r.lockIn && _barSpendTonight(G.room)) {
     (G.soc.lockIn = G.soc.lockIn || {})[G.room] = true;
     const mama = _npcsHere().find(n => NPC_ROLES[n] === "mamasan");
     _say(`Midnight. ${mama ? NPCS[mama].name : "The mamasan"} looks at the till, ` +
@@ -152,11 +193,19 @@ function _lockInTick() {
     _addHappy(3);
     return;
   }
-  // no lock-in for window shoppers: the law is the law out here
-  _say("Midnight on the Darkside. The mamasan claps twice, the shutters start " +
+  // everyone else: shutters down, walked out to the street
+  _say(r.region === "Darkside" ?
+    "Midnight on the Darkside. The mamasan claps twice, the shutters start " +
     "down, and the ladies walk the last customers out with practiced fondness. " +
     "The bars that stay lively after this hour lock their doors first — and " +
-    "they lock them for the customers already spending.", "alert");
+    "they lock them for the customers already spending." :
+    r.barType === "gents" ?
+    "Midnight, and the club draws its shutters — gentleman's hours. A lady walks " +
+    "you to the door with a kiss and a “come back tomorrow, na.” Whatever you " +
+    "didn't get to here, you didn't get to." :
+    "Midnight on Soi 6. The frontages roll down, the sound systems die mid-song, " +
+    "and the ladies shoo the last punters back toward Beach Road. The party, such " +
+    "as it was, is over.", "alert");
   const out = r.exits && r.exits.out;
   if (out) { G.room = out; _describeRoom(true); }
 }
@@ -1522,6 +1571,7 @@ function _endNight(reason) {
   G.soc.bellAt = {};
   G.soc.heat = {};
   G.soc.banned = {};
+  G.soc.lastCall = {}; // last-call warnings reset with the night
   G.soc.patronBusy = {};
   G.soc.patronMiffed = {};
   G.soc.apologized = {}; // a new shift will hear you out afresh
