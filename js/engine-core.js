@@ -159,6 +159,7 @@ function newGame() {
     hunger: 30,          // 0 fed … 100 collapse
     thirst: 40,          // 0 quenched … 100 collapse (you woke up dry)
     hurt: 0,             // 3 = a night in the clinic
+    jaded: 0,            // the hedonic treadmill: conquests this window; each barfine/ST buys less สนุก, cools 1/day
     bestHappy: 0,
     pendingChoice: null, // "vacation_end" gates input at week's end
     atmDay: 0,           // last day the lobby ATM paid out ฿3000

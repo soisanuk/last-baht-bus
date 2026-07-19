@@ -230,21 +230,21 @@ function _bfResolve(kind) {
         "home advantage. “Upstairs” turns out to be exactly as advertised. Some " +
         "time later you are back on your stool, thinking about nothing at all, " +
         `while she fixes her hair in the till mirror. (฿${G.money} left.)`, "win");
-      _addHappy(6);
+      _conquestHappy(6);
     } else if (bt === "gents") {
       _say(`฿${price} to Rose, discreetly, and ${name} takes your hand and walks you ` +
         "to one of the deep couches along the wall. The curtain draws around it with " +
         "a soft brass rattle, the cold gold room carries on without you for a while, " +
         `and then you are back in your seat with a fresh drink you don't remember ` +
         `ordering. Nobody looked up. Nobody ever does. (฿${G.money} left.)`, "win");
-      _addHappy(6);
+      _conquestHappy(6);
     } else {
       _say((price ? `฿${price} to the ledger and a` : "A") +
         ` short walk later the short-time hotel's ceiling fan is doing its slow ` +
         `count over the proceedings. ${name} is businesslike, cheerful, and ` +
         "gone within the hour — a kiss on the cheek at the door, back to her " +
         `stool before the ice in your last drink has melted. (฿${G.money} left.)`, "win");
-      _addHappy(5);
+      _conquestHappy(5);
       for (let i = 0; i < 6; i++) { // the hour passes; the night carries on
         if (G.over) return;
         _tick();
@@ -1045,6 +1045,99 @@ function _doPaper() {
     `box: ${lt.first}, last two ${lt.last2}. Every bar in town knows somebody ` +
     "who was one digit off.", "dim");
   _say("Somewhere in there, the fuel prices explain your bus fare.", "dim");
+}
+
+// ── The Nite Owl column ──────────────────────────────────────────────────────
+// The old back-page institution: Mort's weekly hoot (see PATRONS.mort — he
+// writes it "to stay sane"). It's the canon dispenser — the scene's own hard-won
+// wisdom rendered as a columnist's dry copy: a lead opinion, a bar listing, a
+// reader letter with his reply, a joke, and the signoff. Day+vacation-stable
+// (shared-world-safe like _quizBars), so it rotates daily and reads the same for
+// everyone that day. Pure flavor — gates nothing.
+const _OWL_LEADS = [
+  "A reader mourns that Pattaya 'lost its soul in 1998.' It didn't, squire. In 1998 the baht was fifty to the dollar and you had a full head of hair. The city is doing precisely what it always did — adapting faster than you can. The town never grew a conscience. You just grew old.",
+  "Newcomers keep asking why she wants money if she loves them. Wrong question. Liang du — to feed and care for — IS the love here, not a substitute for it. The man who says 'I love you' and won't pay the rent is, in the local accounting, useless. Learn the word before you learn her name.",
+  "A gentleman panics: his lady had ฿180,000 last month and ฿5,000 this week. She isn't robbing you, chief. Money here is a river, not a reservoir — it flows through and does its job. Ask where it went and you may as well ask where the wind went.",
+  "Every season a man swears his cashier — his mamasan — his single mum — is 'different, not like the others.' She is exactly like the others; she simply has a chair. There are no diamonds in the rough on this street. Only levels of the game. And if you think you aren't playing, sir, you have already lost.",
+  "The old boys grumble the pretty girls have vanished. They haven't, grandad — they've decamped to Bang Saen and Sri Racha, where the money is Thai and the exchange rate is nobody's problem. As one put it to me, sweetly: 'farang cannot afford us now.' Just need to earn more.",
+  "Another one went off a balcony this week. It is never the woman that does it — it's the isolation, and the shame of a man who bragged too loud to ask for help. If your mate's gone quiet, don't send flowers. Buy him a beer and SIT with him. That is the entire cure, and it costs a beer.",
+  "She forgives her jobless Thai boyfriend three days' cheating and screams at YOU for smelling of massage oil. You are not the villain, squire — you are the stable ATM, and one gets audited while the other gets forgiven. Do not audition for bad-boy on a sponsor's salary.",
+  "A first-timer reports a 'free' welcome drink and feels he's beaten the house. He has not. That drink was an interview, and he passed the part where he thinks he's clever. By closing time the tab will have four figures and one of them won't be him.",
+  "Every year a foreign paper 'discovers' the world's oldest profession in the Land of Smiles as though we invented it. I have watched it ply its trade in New York and London, Amsterdam and Hamburg, Rome and Tokyo — it is no more Thai than the moon is. Supply meets demand; it is here to stay; and the published figures should be taken with a barrel of salt and a slice of lime.",
+  "Rents rise, the tea money rises with every contract renewal, and so the price of your beer rises to meet them — that is the whole economics of this coast in one sentence. The bakshish never stops, no matter who sits in which chair. Only the ingenuous believe it can be halted, and the ingenuous don't last a season.",
+  "They set a closing time and call it reform. It reforms nothing — the market wants four a.m., or six, and the market finds a way: a bolted door on the Darkside, a painted-out window, a party that closes for no clock. Business hours belong to business, not the almanac.",
+  "Low season, and the town's a ghost of itself — a beach walk to yourself before noon, hotels checking in one guest a night. Which makes it, for the naughty boy, the finest season of all: bars crammed with ladies and empty of men, and the ladies keen. Not desperate, mind — they've the family money still — just keen to make more. There is no better time to be the only customer in the room.",
+  "Newcomers assume a man moves to Pattaya for the nightlife. He does not. He moves for the CONVENIENCE — beach, beer, dinner, market and mischief all inside a short and laid-back walk, and none of Bangkok's grind. You needn't be a player to have a fine time here. Half the contented ones gave up the bar stool years ago and never told their friends back home.",
+  "Walking Street, once eighty go-gos deep, is down to thirty — and the thirty that remain are giants, two French houses swallowing the little ma-and-pa bars whole. Shooting galleries flank the sois, Russian families photograph the rifles, and on a Friday it is not Sin City but downtown Mumbai. Neither better nor worse than the street I first walked. Just utterly, completely different.",
+  "The town has quietly sorted itself by passport. Walking Street belongs to the South Asian crowd and the giant Indian clubs; Buakhao and LK Metro to the balding Brit; North Pattaya to the Chinese coach parties; Pratumnak and Jomtien, more each year, to the Russians. One coast, four cities, sharing a beach and not much else. Draw your own map, squire, and tip accordingly.",
+  "A man asks me when Pattaya was at its best. Not the cheapest year, chief — the years it had CHARACTERS. The fellow on the spangled bicycle. The famous beauty on her stool at the top of the Street who broke a hundred hearts before anyone whispered she'd once been a he. The parrot man. The lady under the tarantulas. Bars run for FUN by lunatics who owned them, not branches of a chain with a spreadsheet. You never knew what you'd see next. That was the magic, and it's the thing that's gone.",
+  "A reminder, printed once a season and ignored twice: do NOT behave like an asshole here. Kick the wrong man on the wrong step and by week's end the internet has your life story, the Governor has your visa, and you're on a flight away from your wife, your dog and your whole life. The town forgives a great deal. It does not forgive a scene with a camera on it.",
+];
+const _OWL_LETTERS = [
+  ["A Thai wife writes: 'Met my farang on Beach Road in '89. Two children, a finance degree this year, maybe law school. Mixed marriage is hard and culture harder — but marriage is the START of the bumpy ride, not the happy ending.'",
+   "I am happy for you, madam. Alas, you are in the minority."],
+  ["'Relocating to Pattaya for work — what monthly income is normal living?'",
+   "Define normal. Bus or Bolt? Noodle stall or the German place? Room or condo? For some, ฿25,000 is plenty; for others ฿100,000 won't cover the lady drinks. Tell me your vices and I'll cost your month."],
+  ["'Booked a ten-out-of-ten off the app. She knocked at half one, three inches taller and ten years older than her photographs.'",
+   "The camera adds ten kilos and the filter removes twenty. On these apps 'on my way' is a tense unknown to grammar. Pay for what knocks on the door, never for what glows on the screen."],
+  ["'My wife's neighbour is ever so helpful with the repairs — devoted chap, really. Splendid fellow.'",
+   "I'm sure he is. Buy him a beer. Then ask her, casually, when exactly the two of them met."],
+  ["'Which is the honest soi?'",
+   "Soi 6 will rob you to your face; Walking Street prefers to do it behind your back. At least one of them looks you in the eye. Honesty, on this coast, is a matter of angle."],
+  ["'The pretty one at the bar bought ME the drink and waved my wallet away. Have I, at last, cracked it?'",
+   "You have cracked something. Report back at closing time, and bring the receipt."],
+  ["A visitor writes, shaken: 'Took a freelancer home, had the sense to check her ID — twenty, it said. An hour after she left she was back with two constables and a SECOND card putting her at seventeen. Statutory, they said. Five hundred thousand baht or the station. I bargained to forty and flew home the next morning, vowing never again.'",
+   "A vicious old trap, and an expensive lesson in reading the room instead of the card. One photo the size of a postage stamp fits a great many faces, and a girl with two ID cards has a friend, a plan, and a cut for the boys in brown. If she is coy about her age, squire, she is telling you her age."],
+  ["'Where does my barfine actually go?'",
+   "To the house, chief — every baht. The publican takes the fine; the lady keeps only what she makes from you after. Most beer-bar girls draw no salary at all — they work the quota, the lady drinks, and your generosity. Now you know where you stand: which is to say, paying twice."],
+  ["'I ran a smashing pub back home. Put me in touch with a bar owner who needs a manager?'",
+   "I used to make those introductions. Then I watched them, one after another, prove unable to grasp the first rule of a Thai bar, and watched the owners fire them before they went broke. Run your OWN if you must — with your OWN money — and we'll talk at closing time."],
+  ["A reader warns: 'A go-go where you sign a chit for every drink. Signed all night — fourteen hundred baht by my count. At the door they wanted TWENTY thousand. I disputed it; it turned physical, my glasses went flying, the police came. Both sides dug in. I paid the fourteen hundred and left, swearing to warn every soul I meet.'",
+   "The clip joint, alive and well. A signed chit in a dim room is a blank cheque, squire, and the muscle by the door is the collections department. Stick to the big-name houses where the bill is the bill; in the sign-here shops, the only winning move is not to sit down."],
+  ["A reader muses: 'My flight over was packed to the doors. Is it truly a terrible low season, or have things simply CHANGED — the aging HOBITS thinning out, and folk coming to holiday rather than throw a week's wages at a pretty face?'",
+   "Happy Old Boys In Thailand, for the uninitiated — a dwindling tribe. You may be right. The money that once crossed a bar now buys a beach chair and a seafood lunch. The girls noticed before you did; it's why half of them are in Bang Saen."],
+];
+const _OWL_JOKES = [
+  "A constable pulls a weaving driver over. 'You drinking?' Driver: 'Depends — you buying?'",
+  "TIT, as the vendor said, flogging me the pirate Hannibal while swearing blind the pirate Thai film was illegal. This Is Thailand.",
+  "The rail, on ageing: 'Sixty's the worst — always need to pee and nothing comes.' The eighty-year-old: 'I pee at six sharp, like a racehorse.' 'Then what's wrong with eighty?' 'I don't wake till seven.'",
+  "A reader lists why an aeroplane beats a woman: it comes with an operating manual, it flies any time of the month, and it has no in-laws. He is, one senses, single.",
+  "Weather: a low pressure off China, which means rain by the weekend. Buy a bumbershoot before you're wading, not after. 'Nuff said.",
+  "Overheard, marketing seminar, a Sukhumvit hotel: 'Teamwork — a lot of people doing what I say.' They'll go far, that one.",
+  "Public service warning: some of the sealed condom packets on sale are, on opening, entirely empty. In this town a man cannot trust even the packaging. Caveat emptor.",
+  "A beer-bar owner, mournful into his till: 'sorriest crop of tourists I've ever seen.' The new coach parties buy their beer at the market, drink it on the department-store steps, and eat where it's cheapest. The street will survive them; it always has.",
+  "A pack of local lads, puffed up and late-teens, jostling any farang with a Thai girl on his arm — 'you think you're better than us.' Nobody thinks anything, son. Go to bed. TAT, please note.",
+  "An oxymoron for the season, sent by a reader: fire water. 'Nuff said.",
+  "For the gentleman whose afternoons hang heavy: the town keeps a handful of go-go bars open in daylight — a pretty line-up, a cold room, hands to yourself. Want the hands-ON version? That's the gentleman's club's department, and it too opens when the golf finishes. Choose your afternoon accordingly.",
+  "Soi 6 lately: ten ladies to every man, frontages flung open, and every bar's sound system turned past distortion into open warfare with its neighbour's. A party zone now, not the sneak-away it was. My hearing and I reached the halfway point and turned back. Bring earplugs, or a younger man's ears.",
+  "A tip worth more than the nightlife: the six-table seafood shack out at Naklua — no reservations, no view, no service to speak of, and food from another planet at a price that shames the tourist traps. Nine dishes for three, two and a half thousand baht, and we over-ordered. Go hungry, go early.",
+  "The Beach Road stroll is an international bazaar now. The local ladies go for a thousand, most of them; the Russians ask fifteen hundred, a Turkish lady two, and the Uzbek — pick of the promenade — the same. The African ladies hold a fixed fifteen hundred by open collusion, and heaven help the sister who undercuts. Add five hundred for the fool who won't wrap up.",
+  "Half the small go-gos are zombies — dead on their feet, unable to cover the electric bill let alone the girls, shuffling on out of habit. They were zombies before Covid. Sooner or later they reform, repurpose into a live-music room, or lie down. The street is thinning itself, and not gently.",
+  "Two sights that tell you everything: the queue of ladies at the Buakhao wire-transfer window on the first of the month, collecting from a boyfriend in Farangland who believes he's the only one — and, cruising past them, a gentleman's club's promo van got up like a knocking shop on wheels, honking for trade. Supply, meet demand. Demand, meet the wire desk.",
+];
+const _OWL_LISTINGS = [
+  "STINKY BAR (Beach Road North), the American's shop, runs killer pool every third night — ฿100 in the ashtray, last cue standing takes the pot. His felt, his rules, his Budweiser.",
+  "BLUE DOG (Beach Road North) keeps the best sunset seats on the strip and, six-to-seven nightly, the finest free show in town: the checkpoint across the road, farang and their paperwork, no cover charge.",
+  "MAMA YAI'S (the Darkside) — som tam that arrives unasked and correct, beer ten baht under town, and a wall of photographs that knows everyone's second wife. Eat first, cry after.",
+  "QUIZ NIGHT lands Thursday at three bars the chalkboards will name — walk in during and you're a contestant, no appeal. Five right buys ฿500 and your name in chalk. The teachers from Rayong will beat you regardless.",
+  "THE ORCHID CLUB (Naklua) is NOT holding an event, has never held one, and would thank the press not to notice it exists. Discretion, gentlemen. Mai pen rai.",
+  "CANDY BAR (Soi Buakhao), the mamasan's own — sharp as a razor, warm as a Chang on a hot night. She'll price your wallet before you sit and your story before you tell it. Buy her a drink; it's cheaper than the alternative.",
+  "QUEEN VIC (Soi 6): the one air-conditioned pub on the wildest soi in the world, where the residents watch the circus from across the street and mourn the days before the paper changed hands. Cold beer, warm company, no illusions.",
+];
+function _owlPick(arr, salt) {
+  let h = salt >>> 0;
+  for (const ch of String(G.day) + ":" + String(G.vacation)) h = (h * 31 + ch.charCodeAt(0)) % 100003;
+  return arr[h % arr.length];
+}
+function _doColumn() {
+  _say("── THE NITE OWL ── Mort's weekly hoot, still going, out of spite ──", "win");
+  _say(_owlPick(_OWL_LEADS, 1));
+  _say("• " + _owlPick(_OWL_LISTINGS, 7), "dim");
+  const [letter, reply] = _owlPick(_OWL_LETTERS, 13);
+  _say("• A reader writes: " + letter);
+  _say("  OWL: " + reply);
+  _say("• " + _owlPick(_OWL_JOKES, 29), "dim");
+  _say("BUT, I DON'T GIVE A HOOT!", "win");
 }
 
 // ── Food and water ───────────────────────────────────────────────────────────

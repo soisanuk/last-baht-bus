@@ -1991,6 +1991,7 @@ const TONIC_SHAKEDOWN = 3000;// what it costs to bully your way back out of the 
 const FORTUNE_READ = 199;    // the ฿199 palm reading — the hook, not the sting
 const FORTUNE_RITUAL = 1900; // the four-figure "curse-removal" cleansing upsell
 const FORTUNE_MERIT = 500;   // the "small merit" you pay to bully your way clear
+const BOOK_PRICE = 2500;     // a freelancer booked "direct" off the apps — no bar, no barfine
 const TONIC_POLICE_CUT = 0.35; // the police "negotiation fee" kept out of any recovery
 
 const ENCOUNTERS = {
@@ -2126,6 +2127,21 @@ const ENCOUNTERS = {
       "palm, write your lucky number — only one-nine-nine baht. Then we fix. Sit, sit.”",
     hint: "(Let him READ your palm for ฿199, or tell him NO and walk on.)",
   },
+  booking: {
+    // The app-booked freelancer + the catfish (from a punter report). Fires late,
+    // near home, once you're settled (act1Done). YES and she takes her time (the
+    // apps run on the 'tomorrow' clock even at 1 a.m.); then a photos-vs-reality
+    // roll — sometimes a genuine payout, more often the catfish, worst in heels.
+    // The two-step catfish + the hit live in _ENC.booking / _catfishDoor.
+    rooms: ["hotel_room", "qv_room", "metropole_room", "naklua_rd"],
+    interactive: true, nightly: true,
+    intro: "Your phone buzzes — one of the girls you'd been messaging off the apps, " +
+      "the stunner from the photos who kept leaving you on read, is suddenly awake " +
+      "and suddenly free. “Hi baby, I finish work. I come you now? 2500, no bar, no " +
+      "barfine, only you.” It is gone 1 a.m. The photos are, it must be said, " +
+      "extraordinary.",
+    hint: "(YES, book her — she'll be a while — or NO and turn in.)",
+  },
 };
 
 // ── Quests (adventures) ─────────────────────────────────────────────────────
@@ -2232,6 +2248,37 @@ const PATRONS = {
         "the year I left. No grand tragedy — I just did the arithmetic and the " +
         "arithmetic said Khao Talo. Same beer money, twice the sun, none of the " +
         "committee meetings.\"" },
+    ],
+  },
+
+  mort: {
+    name: "Mort", emoji: "🦉", age: 74, nat: "American",
+    home: "queen_vic", hops: false,
+    desc: "Seventy-four, a Hawaiian shirt at war with itself, a spiral notebook and a " +
+      "biro he clicks while he watches the soi. He has been on this coast longer than " +
+      "most of the bars, and he is writing all of it down whether it likes it or not.",
+    dialogue: [
+      { text: "\"Mort.\" He finishes the line before he looks up. \"I write the Nite " +
+        "Owl — the back-page column, the one your granddad read on the toilet. Retired " +
+        "twice, un-retired twice; a man needs a deadline or the days run together and " +
+        "the mind goes to soup.\" He clicks the pen. \"So I watch, I write it down, and " +
+        "I don't give a hoot who minds. READ THE COLUMN if you like — it's mostly true.\"",
+        short: "\"I write the Nite Owl. READ THE COLUMN — mostly true. Keeps me sane.\"" },
+      { topic: "column", text: "\"Forty years of the same story, squire, and it never " +
+        "gets old because the punters keep arriving new. A reader letter, a bar listing, " +
+        "a joke, and whatever the street taught me that week. I don't moralise — I report " +
+        "the weather and the women and let a man draw his own conclusions.\" A dry look. " +
+        "\"He never does. READ THE COLUMN — you can pull it up anywhere now.\"" },
+      { topic: "sane", text: "\"Boredom's the killer out here — not the drink, not the " +
+        "girls, the BOREDOM. Fella retires on his pension, sits in the condo, and by March " +
+        "he's counting ceiling tiles and eyeing the balcony.\" He taps the notebook. \"This " +
+        "is my ceiling tiles. Five hundred words a week and a reason to leave the room. " +
+        "Cheaper than a psychiatrist, and funnier.\"" },
+      { topic: "nineties", text: "\"Everyone tells me it was better in '98. Everyone's " +
+        "wrong, and I was HERE, filing copy, so I would know. It wasn't better — the beer " +
+        "was cheaper and so were they, and so, crucially, were you.\" He almost smiles. " +
+        "\"The city never changed, chief. You did. Printed that once. Forty angry letters. " +
+        "Framed two.\"" },
     ],
   },
 

@@ -1233,6 +1233,24 @@ function _happyLevel(h) {
   return HAPPY_LEVELS.find(([t]) => h >= t)[1];
 }
 
+// Diminishing returns on raw conquest — the hedonic treadmill (see the
+// lonely-punter canon). Each barfine / short-time buys 2 สนุก less than the last
+// (G.jaded), floored at a real −4 penalty, so a binge night runs the ledger to
+// zero and past it. jaded cools one notch a day (_endNight) and resets each
+// vacation; presence, courtship, company and quests never touch it, so the
+// slow road stays fully rewarding.
+function _conquestHappy(base) {
+  const net = Math.max(base - 2 * G.jaded, -4);
+  _addHappy(net); // _addHappy no-ops on 0, so a wash prints nothing
+  if (net <= 0) {
+    _say("(The thrill just… doesn't arrive. Another one, and you barely felt it — " +
+      "you mostly want to be alone now. Too many, too fast.)", "alert");
+  } else if (net < base) {
+    _say("(Good. Not like the first, though — something's wearing thin at the edges.)", "dim");
+  }
+  G.jaded++;
+}
+
 function _addHappy(n, why) {
   if (!n) return;
   const before = _happyLevel(G.happy);
@@ -1418,7 +1436,7 @@ function _endNight(reason) {
         _say("(Under the Sabai Palms' one working porch light, the night clerk " +
           "produces the joiner ledger: ฿300, and a look with footnotes.)", "dim");
       }
-      _addHappy(10);
+      _conquestHappy(10);
       break;
     case "bfscam": {
       // an operator ran her game on your long time — the veterans warned you.
@@ -1494,6 +1512,7 @@ function _endNight(reason) {
     }
   }
   G.day++;
+  G.jaded = Math.max(0, G.jaded - 1); // a day cools the treadmill one notch
   if (G.stage !== "expat" && G.day > 7) { _endVacation(); return; }
   let hangover = G.soc.drunk;
   G.soc.drunk = 0;
@@ -1584,6 +1603,7 @@ function _newVacation() {
   G.hurt = 0;
   G.tonicOwed = 0; // a month away forfeits any pending tonic-shop claim
   G.curseOwed = 0; // …and any pending fortune-teller claim
+  G.jaded = 0;     // a fresh trip, fresh enthusiasm — the treadmill resets
   G.soc = { drinks: {}, mamaTreat: {}, bellAt: {}, bells: {}, heat: {},
     banned: {}, patronBusy: {}, patronMiffed: {}, bra: {}, drunk: 0 };
   G.itemLoc.phone = "inventory";
