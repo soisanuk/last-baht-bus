@@ -12,7 +12,7 @@
 // lost shift (×1.5); after midnight most beer bars quietly waive the fee —
 // except for the popular girls — and the flash joints just discount.
 function _barfinePrice(bt, id) {
-  const base = bt === "soi6" ? BF_SOI6 : bt === "gogo" ? BF_GOGO : BF_BEER;
+  const base = bt === "soi6" ? BF_SOI6 : bt === "gogo" ? BF_GOGO : bt === "gents" ? BF_GENTS : BF_BEER;
   if (G.nightTurn < 30) return Math.round(base * 1.5 / 50) * 50;
   if (G.nightTurn >= 60) {
     if (bt === "beer" && !POPULAR_GIRLS.includes(id)) return 0;
@@ -30,7 +30,7 @@ function _barfinePrices(bt, id) {
   const st = _barfinePrice(bt, id);
   if (G.nightTurn >= 60) return { st, lt: st };
   const mult = bt === "soi6" ? (G.nightTurn < 30 ? 3 : 2) :
-    bt === "gogo" ? 1.5 : 1.75;
+    bt === "gogo" ? 1.5 : bt === "gents" ? 1.5 : 1.75;
   return { st, lt: Math.round(st * mult / 50) * 50 };
 }
 
@@ -230,6 +230,13 @@ function _bfResolve(kind) {
         "home advantage. “Upstairs” turns out to be exactly as advertised. Some " +
         "time later you are back on your stool, thinking about nothing at all, " +
         `while she fixes her hair in the till mirror. (฿${G.money} left.)`, "win");
+      _addHappy(6);
+    } else if (bt === "gents") {
+      _say(`฿${price} to Rose, discreetly, and ${name} takes your hand and walks you ` +
+        "to one of the deep couches along the wall. The curtain draws around it with " +
+        "a soft brass rattle, the cold gold room carries on without you for a while, " +
+        `and then you are back in your seat with a fresh drink you don't remember ` +
+        `ordering. Nobody looked up. Nobody ever does. (฿${G.money} left.)`, "win");
       _addHappy(6);
     } else {
       _say((price ? `฿${price} to the ledger and a` : "A") +

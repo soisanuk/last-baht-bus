@@ -19,7 +19,7 @@ const CHARGER_PRICE = 59;
 const SAFE_CASH = 3000;  // the emergency stash in the hotel room safe
 const EXPAT_SAVINGS = 20000; // wired over when you make the move
 // Barfines (canon: go-gos and Soi 6 are the expensive end)
-const BF_BEER = 400, BF_GOGO = 1000, BF_SOI6 = 700;
+const BF_BEER = 400, BF_GOGO = 1000, BF_SOI6 = 700, BF_GENTS = 900;
 const SAFE_PIN = 719;    // ๗๑๙ — stage number 71 + lucky 9
 
 // ── Rooms ──────────────────────────────────────────────────────────────────
@@ -791,7 +791,7 @@ const ROOMS = {
       "soi — half the letters out, so it reads 'SA AI PA MS', which the long-stay " +
       "guests consider part of the charm. The soi itself is dark as a power cut.",
     busStop: "beachrd",
-    exits: { s: "beach_rd_n", n: "hotel_soi" },
+    exits: { s: "beach_rd_n", n: "hotel_soi", w: "orchid_club" },
   },
   hotel_soi: {
     name: "Sabai Palms Soi (Naklua)",
@@ -801,6 +801,21 @@ const ROOMS = {
       "them since March. Two actual palms flank the lobby entrance somewhere down " +
       "there, and past them, a bed with your name on it.",
     exits: { s: "naklua_rd", n: "hotel_room" },
+  },
+
+  orchid_club: {
+    name: "The Orchid Club",
+    bar: "The Orchid Club",
+    region: "Naklua",
+    barType: "gents", outlet: true,
+    desc: "A repurposed villa behind a high wall and an unmarked door — no neon, no " +
+      "barker, just a brass bell and one orchid in the porch. Inside it is cold " +
+      "enough to hang meat, lit low and gold, with deep leather couches whose " +
+      "curtains draw around them, and ladies in not very much already crossing the " +
+      "floor toward you. It opens at noon, for the men who need somewhere to be " +
+      "that isn't home; by dark the same faces hold the same seats. Tourists never " +
+      "find it. That is the entire point.",
+    exits: { out: "naklua_rd" },
   },
   hotel_room: {
     name: "Your Room — Sabai Palms Hotel",
@@ -1328,6 +1343,156 @@ const NPCS = {
     ],
   },
 
+  mercedes: {
+    name: "Mercedes", th: "เมอร์เซเดส", emoji: "❄️",
+    room: "gold_rush",
+    desc: "A little older than the Gold Rush's other girls and a great deal less " +
+      "nervous — she moves like someone who has already seen the worst a room can " +
+      "do to a person. Her English is good, with a flat European edge the soi " +
+      "doesn't usually carry.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Welcome to the Gold Rush.\" A small, real smile. \"The gold is " +
+          "paint — Nong will tell you, she cannot help herself. Sit. I am Mercedes. " +
+          "Yes, like the car. I had one in the driveway in Munich and never once " +
+          "the keys. Now I keep the name and skip the car.\"",
+        short: "\"Mercedes — like the car. Kept the name, skipped the car. Sit, tilac.\"" },
+      { topic: "german", text: "\"Germany. Five years, Munich. Big house, a car, the " +
+          "health insurance — everything the brochure promise.\" She turns a coaster " +
+          "over. \"And I could not tell a joke. Could not argue, could not be a " +
+          "person — only 'Guten Tag, Danke', like a child with two words. His mother " +
+          "look at me: prostitute who steal my son. Never once she say it. Never once " +
+          "she hide it.\"",
+        short: "\"Munich: big house, no jokes. A mute child with a nice kitchen.\"" },
+      { topic: "husband", text: "\"My visa was married to him — you understand? Not to " +
+          "me. I leave, I am on a plane in one month. So I stay.\" A shrug with a whole " +
+          "country in it. \"Three hundred euro pocket money, and I must account for it. " +
+          "In Pattaya I made eighty thousand baht and sent half to my mother in Isaan. " +
+          "There, I cannot send one baht. A Thai daughter who cannot take care of her " +
+          "mother has lost everything. The house was warm. I was empty.\"",
+        short: "\"Visa tied to him, 300 euro to account for, could not send my mother a baht. Warm house, empty me.\"" },
+      { topic: "hans", text: "\"Hans was not cruel. That is the joke — no black eye, no " +
+          "drama.\" She almost laughs. \"My uncle die. I ask him to book the flight for " +
+          "the funeral. He open Excel. Excel! Turn the screen to me — 'too expensive " +
+          "right now' — and then so gentle: 'You know you have nothing without me.'\" " +
+          "She snaps the coaster flat. \"That night I pack. In Munich, zero friends. In " +
+          "Pattaya, one hundred people waiting for me. Which one is rich?\"",
+        short: "\"He opened a spreadsheet for my uncle's funeral. 'Nothing without me.' I packed that night.\"" },
+      { topic: "free", text: "\"People see an old girl back on the stool and they think " +
+          "— poor thing, could not keep him.\" The smile sharpens, not unkind. \"So let " +
+          "me give you the reality, tilac. In Germany: big house, car, insurance — and I " +
+          "ask permission to buy som tam, I beg to visit my own family. Here: a cheap " +
+          "room and a Honda Click. But I am free. I send my mother money when I want. I " +
+          "laugh loud with my friends. Which one is the real dream? I chose it. Nobody " +
+          "chose for me.\"",
+        short: "\"Big house and permission, or a Honda Click and freedom? I chose. That's the whole story.\"" },
+      { topic: "money", text: "\"Money?\" She waves a hand at the neon. \"It come, it " +
+          "go, like the rain. In Munich I learn the other way — everything counted, " +
+          "everything saved — and it made me small. Here, when I have it I send it " +
+          "home, I buy Nong her dinner; when it is zero, mai pen rai, I earn again. That " +
+          "is not being poor. That is being free of the counting.\"",
+        short: "\"Money is rain — comes, goes, I send it home. In Munich the counting made me small.\"" },
+      { topic: "nong", text: "\"Nong?\" She glances at the trembling new girl with " +
+          "something almost maternal. \"First week. Scared of the door, scared of " +
+          "Mamasan, scared of the paint. I was her, fifteen years ago, a go-go on Soi " +
+          "6.\" A softer smile. \"Somebody should tell her the worst thing that happen " +
+          "is you go all the way to Munich and come back. Not so bad, in the end. I keep " +
+          "an eye on her.\"",
+        short: "\"Nong is me, fifteen years ago. I keep an eye on her.\"" },
+    ],
+  },
+
+  yai: {
+    name: "Mama Yai", th: "ใหญ่", emoji: "🍲",
+    room: "mama_yai",
+    desc: "The Yai in Mama Yai's — sixty-ish, an apron over a buffalo-print blouse, " +
+      "a ladle in one hand and the whole soi's memory in the other. She feeds you " +
+      "before she reads you, and by the time the som tam lands she has done both.",
+    dialogue: [
+      { th: "กินข้าวหรือยัง", rom: "gin khao rue yang",
+        text: "\"Sit, sit. You eat already? No — I can see no.\" A plate of som tam " +
+          "lands in front of you unasked, correct, and faintly threatening. \"Eat " +
+          "first, talk after. Everybody who cry on the Darkside cry with my spoon in " +
+          "their mouth. Cheaper than town — and the crying is free.\"",
+        short: "\"Eat first, talk after. The crying's free.\"" },
+      { topic: "darkside", text: "\"Why they come east? Rent.\" She laughs, big and " +
+          "unashamed. \"Town eat a man alive — barfine, lady drink, room by the hour. " +
+          "Out here: cheap beer, cheap room, and a wife who cook. Half these farang " +
+          "got tired, got old, got smart. Same three thing, na.\"" },
+      { topic: "photos", text: "\"That wall?\" She waves the ladle at forty years of " +
+          "curling snapshots. \"Every farang, every lady, every wedding on this soi. " +
+          "Some — same man, different wife. I never say which.\" A wink. \"Mama Yai " +
+          "know everything and forget on purpose. Good for business.\"", sets: ["knowYaiWall"],
+        short: "\"Every wedding on the soi's on that wall. I forget which on purpose.\"" },
+      { topic: "heron", text: "\"The Heron? At the dark end, padded door, no sign.\" " +
+          "She drops her voice a register and her eyes do the rest. \"Before midnight, " +
+          "a beer bar like any — colder. After, they lock the door and it is not my " +
+          "business and not yours until you knock. Older lady, older money, very " +
+          "discreet. You want that, ask Kratae. You want som tam, you stay with Mama.\"" },
+      { topic: "kratae", text: "\"Kratae my right hand. Dance in town ten year, come " +
+          "here, never look back. Sharp — she keep the young one honest and the old " +
+          "one paying. You be nice to her, or you answer to my spoon.\"" },
+    ],
+  },
+
+  kratae: {
+    name: "Kratae", th: "กระแต", emoji: "🐿️",
+    room: "mama_yai",
+    desc: "Late thirties and entirely unbothered by it — quick-eyed, a laugh like a " +
+      "dropped tray, a beer already sliding toward you. Mama Yai's right hand: she " +
+      "pours, she counts, she misses nothing, and she heard your story before you " +
+      "sat down.",
+    dialogue: [
+      { th: "มาแล้วเหรอ", rom: "maa laeo rer",
+        text: "\"You come all the way out here? Brave.\" She grins, sliding the beer " +
+          "the last inch. \"Town too expensive for you — or you just smart? Same " +
+          "answer, usually.\"",
+        short: "\"Town too expensive, or you just smart? Same answer.\"" },
+      { topic: "darkside", text: "\"I dance Walking Street ten year — Crystal Palace, " +
+          "good money, young.\" She shrugs, easy, no wound in it. \"Out here nobody " +
+          "pretend. No spotlight, no man think he my boyfriend after one drink. Older " +
+          "lady, older farang, honest beer. I make more and I lie less. Better deal, na.\"" },
+      { topic: "mama", text: "\"Mama Yai feed me when I have nothing — 2015, bad year, " +
+          "long story.\" A quick flick of the eyes at the kitchen. \"Now I run her " +
+          "floor. You eat her som tam yet? Eat it. Is not a question.\"" },
+      { topic: "heron", req: ["knowYaiWall"], text: "\"Mama send you to me? Ha.\" She " +
+          "wipes the bar, unhurried. \"The Heron is grown-up business — you knock " +
+          "after midnight, you don't film, you don't ask the ladies their age. Behave " +
+          "and it's the friendliest room on the Darkside. Don't, and Daeng's boys walk " +
+          "you back to Sukhumvit on foot.\"" },
+    ],
+  },
+
+  rose: {
+    name: "Rose", th: "โรส", emoji: "🌷",
+    room: "orchid_club",
+    desc: "The madame of the Orchid Club — fifties, immaculate, a silk blouse and a " +
+      "voice you have to lean in to hear. She runs the quietest, coldest, most " +
+      "expensive room in Naklua, and she knows the name of every regular's wife.",
+    dialogue: [
+      { th: "เชิญค่ะ", rom: "choen kha",
+        text: "\"Welcome to the Orchid. Come in from the heat.\" The door sighs shut " +
+          "and the temperature drops ten degrees. \"You sit; the girls come to you " +
+          "— that is how we do it here. Buy one a drink and she will make you forget " +
+          "the traffic, the year, the wife. Discreet, always. My guests are " +
+          "gentlemen.\" A cool smile. \"Mostly.\"",
+        short: "\"Sit, buy a girl a drink, forget the year. We are discreet here.\"" },
+      { topic: "club", text: "\"Old house, good bones. I take the villa when the last " +
+          "farang owner… left in a hurry.\" A delicate pause. \"Aircon, curtain, no " +
+          "window, no tourist. My men come at noon — golf finish, wife shopping, they " +
+          "need somewhere to be. By dark, same chair, same men. Home away from home. " +
+          "The home they wanted, na.\"" },
+      { topic: "wife", text: "\"Every man here have a wife somewhere — Naklua, " +
+          "Jomtien, Manchester.\" She examines a nail. \"I know all the name. I never " +
+          "say them. That is the business, tilac — not the girls. The quiet. A man pay " +
+          "more for quiet than for anything a girl can do.\"" },
+      { topic: "girls", text: "\"My ladies are older, clever, and they do not chase — " +
+          "you buy a drink, they sit close, and after that it is between you and the " +
+          "curtain.\" She tilts her head. \"Behave like a gentleman and they are very " +
+          "warm. Forget your manners and Rose will remember for a long time.\"" },
+    ],
+  },
+
   pim: {
     name: "Pim", th: "พิม", emoji: "💋",
     room: "starlight_bar",
@@ -1823,6 +1988,9 @@ const MOTOSAI_DESTS = {
 const TONIC_PRICE = 99;      // the friendly ฿99 street bottle — the hook, not the sting
 const TONIC_FLEECE = 6000;   // the side-soi shop's full high-pressure fleece
 const TONIC_SHAKEDOWN = 3000;// what it costs to bully your way back out of the shop
+const FORTUNE_READ = 199;    // the ฿199 palm reading — the hook, not the sting
+const FORTUNE_RITUAL = 1900; // the four-figure "curse-removal" cleansing upsell
+const FORTUNE_MERIT = 500;   // the "small merit" you pay to bully your way clear
 const TONIC_POLICE_CUT = 0.35; // the police "negotiation fee" kept out of any recovery
 
 const ENCOUNTERS = {
@@ -1941,6 +2109,23 @@ const ENCOUNTERS = {
       "treatment, VIP price. Two minute, my friend, two minute!”",
     hint: "(BUY the ฿99 bottle, follow him to the SHOP, or just tell him NO.)",
   },
+  fortune: {
+    // A Beach Road curse-removal con (real Tourist Police bust, Pattaya, 16 Jul
+    // 2026). A man in monk-like robes reads your "unlucky" face on the beachfront,
+    // does a ฿199 palm reading with a blessed string and a "lucky number", then
+    // upsells a four-figure cleansing ritual, turning aggressive if refused. The
+    // fleece is banked in G.curseOwed so a police REPORT claws most of it back —
+    // the ritual + recovery live in _ENC.fortune / _curseRitual / _doReport.
+    rooms: ["beach_rd_s", "beach_rd_c", "beach_rd_n", "promenade"],
+    interactive: true,
+    intro: "A man in saffron robes and a wound head-cloth steps into your path, " +
+      "palms pressed, and studies your face with sudden grave concern. “Friend. " +
+      "Wait — your face…” A slow, sorrowful head-shake. “Very unlucky this month. " +
+      "I see it clear. A dark spirit is following you.” He is already reaching for " +
+      "your hand, a red blessed string looped around his own wrist. “I read your " +
+      "palm, write your lucky number — only one-nine-nine baht. Then we fix. Sit, sit.”",
+    hint: "(Let him READ your palm for ฿199, or tell him NO and walk on.)",
+  },
 };
 
 // ── Quests (adventures) ─────────────────────────────────────────────────────
@@ -2018,6 +2203,37 @@ const QUIZ_POOL = [
 // dialogue trees reset daily. Schema matches NPC dialogue: fallback + topics,
 // `short` for terse repeats.
 const PATRONS = {
+
+  ron: {
+    name: "Ron", emoji: "🦘", age: 66, nat: "Australian",
+    home: "mama_yai", hops: false,
+    desc: "Sixty-six, Wollongong, a faded steel-town singlet and thongs that have " +
+      "worn a groove in this soi. He has the settled bulk of a man who stopped " +
+      "moving fifteen years ago and rates it his finest decision.",
+    dialogue: [
+      { text: "\"Ron.\" He tips a Chang toward the empty stool. \"Wollongong — " +
+        "steel town, back when the mill still made noise. Come for a fortnight in " +
+        "2011, never got on the plane.\" He nods at the kitchen, the photo wall, the " +
+        "lake somewhere out past it. \"Married a cashier off that very stool, paid " +
+        "off a room behind the water, haven't set foot on Walking Street in six " +
+        "years. You can KEEP it, mate.\"",
+        short: "\"Come for a fortnight in 2011, never got on the plane.\"" },
+      { topic: "walking street", text: "\"Town? Mate.\" He snorts into the Chang. " +
+        "\"Six hundred baht a barfine to be lied to by a professional. Out here the " +
+        "beer's ten baht cheaper, the wife's real, and Mama Yai feeds me for what a " +
+        "lady drink costs in town. Tourists reckon WE'RE the sad ones.\" He looks " +
+        "genuinely delighted. \"Let 'em.\"" },
+      { topic: "darkside", text: "\"Darkside's just Pattaya for blokes who did the " +
+        "sums,\" he says, comfortable as an old couch. \"Quieter, cheaper, older, " +
+        "honest. Gary out at the lake'll tell you the same — if he can be bothered " +
+        "talking, which he can't. That's the whole appeal, really.\"" },
+      { topic: "wollongong", text: "\"The Gong. Steel, rugby league, rain sideways " +
+        "off the sea.\" A shrug that forgives the place. \"Mill shed half its men " +
+        "the year I left. No grand tragedy — I just did the arithmetic and the " +
+        "arithmetic said Khao Talo. Same beer money, twice the sun, none of the " +
+        "committee meetings.\"" },
+    ],
+  },
 
   nigel: {
     name: "Nigel", emoji: "🍻", age: 68, nat: "British",
@@ -2754,7 +2970,8 @@ const CANON_HOSTESSES = [
 const NPC_ROLES = {
   lek: "hostess", noi: "hostess", ping: "hostess", aom: "hostess",
   joy: "hostess", fon: "hostess", gift: "hostess", kwan: "hostess",
-  nong: "hostess", pim: "hostess", bee: "hostess", jane: "hostess",
+  nong: "hostess", pim: "hostess", bee: "hostess", jane: "hostess", mercedes: "hostess", kratae: "hostess",
+  yai: "mamasan", rose: "mamasan",
   ploy: "cashier", aek: "cashier", malee: "cashier",
   candy: "mamasan", oy: "mamasan", daeng: "mamasan", mem: "mamasan", wan: "mamasan",
 };
@@ -2943,7 +3160,8 @@ const _FILLER_HOSTESSES = [
   ["Kat","แคท","sunset_dreams"], ["May","เมย์","sunset_dreams"], ["Dear","เดียร์","sunset_dreams"],
   ["Lin","หลิน","water_buffalo"], ["Nim","นิ่ม","water_buffalo"],
   ["Duan","เดือน","firefly_bar"], ["Saifon","สายฝน","firefly_bar"],
-  ["Wanpen","วันเพ็ญ","mama_yai"], ["Kratae","กระแต","mama_yai"],
+  ["Wanpen","วันเพ็ญ","mama_yai"],
+  ["Pear","แพร์","orchid_club"], ["Jinda","จินดา","orchid_club"],
   ["Dokmai","ดอกไม้","night_heron"], ["Jampa","จำปา","night_heron"],
   ["Ing","อิง","blue_dog"], ["Khing","ขิง","blue_dog"],
   ["Bam","บาม","rock_factory"], ["Kwang","กวาง","rock_factory"],
@@ -3083,7 +3301,7 @@ const _FILLER_MAMAS = [
   ["Waew","แวว","silk_rose"], ["Ple","เปิ้ล","jasmine_garden"], ["Orm","อ้อม","gold_rush"],
   ["Jom","จอม","starlight_bar"], ["Nee","หนี่","pink_lotus"], ["Peung","ผึ้ง","golden_dragon"],
   ["Malai","มาลัย","sunset_dreams"], ["Somsri","สมศรี","kinky"], ["Ratree","ราตรี","las_vegas"],
-  ["Wandee","วันดี","water_buffalo"], ["Somjai","สมใจ","firefly_bar"], ["Yai","ใหญ่","mama_yai"],
+  ["Wandee","วันดี","water_buffalo"], ["Somjai","สมใจ","firefly_bar"],
   ["Tui","ตุ่ย","night_heron"],
 ];
 const _FILLER_CASHIERS = [
@@ -3095,6 +3313,7 @@ const _FILLER_CASHIERS = [
   ["Jenny","เจนนี่","pink_lotus"], ["Joon","จูน","golden_dragon"], ["Jun","จัน","sunset_dreams"],
   ["Kaimook","ไข่มุก","slutty"], ["Kanom","ขนม","las_vegas"], ["Keng","เก่ง","khao_talo_bar"],
   ["Best","เบสท์","water_buffalo"], ["Aim","เอม","firefly_bar"], ["Tangmo","แตงโม","mama_yai"],
+  ["Kanya","กัญญา","orchid_club"],
   ["Mon","มล","night_heron"],
 ];
 
@@ -3167,6 +3386,7 @@ const ROOM_GEO = {
   qv_room:          [12.9449, 100.8872],
   // Naklua
   naklua_rd:        [12.9530, 100.8885],
+  orchid_club:      [12.9524, 100.8876],
   hotel_soi:        [12.9565, 100.8898],
   hotel_room:       [12.9567, 100.8900],
   // Second Road

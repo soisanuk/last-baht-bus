@@ -148,6 +148,7 @@ function _salengTick() {
   }
   if (_salengHere()) { if (_rand() < 0.20) _salengVignette(); return; }
   if (!G.game && !G.pendingEnc && !G.salengCart && _inBar() && _room().barType !== "pub" &&
+      _room().barType !== "gents" && // enclosed villa behind a wall — no cart wheels in
       !(G.soc.lockIn && G.soc.lockIn[G.room]) && // the cart can't get past the bolt
       _SALENG_REGIONS.has(_room().region) && G.turns - G.lastSaleng >= 15 && _rand() < 0.10) {
     _salengSpawn();
@@ -861,7 +862,89 @@ const _ENC = {
         "who has done this ten thousand times tonight.");
     }
   },
+
+  fortune(input) {
+    // Second step: you let him read your palm, and now he's working the four-
+    // figure curse-removal upsell (the _curseRitual branch re-arms pendingEnc +
+    // the curseRitual flag). This input is your reaction to the cleansing pitch.
+    if (_flag("curseRitual")) { G.flags.curseRitual = false; return _curseRitual(input); }
+    // Let him read — the ฿199 hook. He ties on the string, scrawls a "lucky
+    // number", then the grave face returns and the real number appears.
+    if (/read|yes|ok|sure|palm|fine|199|sit|deal|hand/.test(input) &&
+        !/\bno\b|walk|leave|away|off|thanks|thank you/.test(input)) {
+      if (G.money < FORTUNE_READ) {
+        _say(`He turns your empty palm over, reads the ฿${G.money} future written ` +
+          "there instantly, and is gone before you can close your hand.");
+        return;
+      }
+      G.money -= FORTUNE_READ;
+      G.pendingEnc = "fortune";
+      _setFlag("curseRitual");
+      _encPrompt(
+        [`You hand over ฿${FORTUNE_READ}. He loops the red string around your wrist, ` +
+          "cradles your palm, hums, and writes a number on a scrap of paper — “your " +
+          "lucky number, keep always.” Then the face changes. “But the string is not " +
+          "enough, friend. The dark spirit is strong. Must do cleansing — incense, " +
+          "prayer, full ritual.” He writes a second number under the first. It has " +
+          "four figures. A hand settles warm and heavy on your shoulder, and two more " +
+          `robed men have drifted in at the edge of the lamplight. (฿${G.money} left.)`, "alert"],
+        [`(PAY the ฿${FORTUNE_RITUAL} “cleansing”, or refuse and try to LEAVE.)`, "dim"]);
+      return;
+    }
+    // You wave him off before he even starts.
+    _say("You keep walking. He calls a soft curse after your back — “bad luck " +
+      "follow you now, friend, you see!” — then turns his grave face on the next " +
+      "sunburnt couple drifting along the rail.");
+  },
 };
+
+// The curse-removal ritual: high-pressure "cleansing" backed by the quiet menace
+// of the three robed men. PAY = the four-figure fleece; LEAVE = a coin-flip on
+// whether your nerve (a piwin clocks the tone) or their pressure (a "small merit"
+// to disengage) wins. Whatever they take is banked in G.curseOwed so a police
+// REPORT can claw most of it back. A stony-broke mark isn't worth the incense.
+function _curseRitual(input) {
+  const _outHint = "(You can REPORT this at the police station, north end of Beach Road.)";
+  if (G.money <= 0) {
+    _say("He lifts your wrist, finds the pulse of a man with nothing left to give, " +
+      "and the grave concern evaporates like temple smoke. A last mutter, and the " +
+      "robes melt back into the promenade crowd — the red string still on your " +
+      "wrist, the one free blessing of the night.");
+    return;
+  }
+  const pay = /pay|yes|ok|sure|fine|ritual|cleansing|1900|whatever|just|do it/.test(input) &&
+    !/\bno\b|leave|out|refuse|go|walk|away/.test(input);
+  if (pay) {
+    const took = Math.min(FORTUNE_RITUAL, G.money);
+    G.money -= took;
+    G.curseOwed = (G.curseOwed || 0) + took;
+    _say(`Out comes the incense, then a little brass bowl, then a chant that lasts ` +
+      `exactly as long as it takes to count your notes. ฿${took} lifts the curse — ` +
+      "and the grave concern switches off the instant the cash is folded away. “Now " +
+      `you very lucky, friend. Very lucky.” (฿${G.money} left.)`, "alert");
+    _say(_outHint, "dim");
+    _addHappy(-3);
+    return;
+  }
+  // You try to leave. Nerve vs the quiet pressure of the three robed men.
+  if (_rand() < 0.5) {
+    _say("You step back and say no — loud, flat, final — and a piwin at the stand " +
+      "twenty feet off turns his head at the tone. That is all it takes. The robes " +
+      "reassemble their smiles, wish you a suspiciously specific amount of luck, and " +
+      "drift away toward easier marks. (You keep your baht.)");
+    _addHappy(-1);
+  } else {
+    const took = Math.min(FORTUNE_MERIT, G.money);
+    G.money -= took;
+    G.curseOwed = (G.curseOwed || 0) + took;
+    _say(`The hand on your shoulder tightens by one honest degree. “Small merit ` +
+      "then, friend — for the temple, for your luck. Then you go.” The other two " +
+      `have quietly closed the gap. You drop ฿${took} in the brass bowl to buy back ` +
+      `your evening, and the pressure releases you into the lamplight. (฿${G.money} left.)`, "alert");
+    _say(_outHint, "dim");
+    _addHappy(-2);
+  }
+}
 
 // The side-soi shop: high-pressure sales backed by the quiet threat of the three
 // men between you and the door. PAY = the full fleece; LEAVE = a coin-flip on

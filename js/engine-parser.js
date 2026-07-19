@@ -838,6 +838,22 @@ function _doMotosai(arg) {
     price = 20;
   }
   if (G.money < price) {
+    // Broke and stranded. Most of town is a free walk home, but the Darkside is
+    // on the wrong side of the highway — a dawn-broke farang out here would be
+    // stuck. A piwin who's seen it a hundred times fronts the ride back to town
+    // (town-ward only; he won't run you deeper into the dark for free).
+    if (G.money === 0 && d.price === MOTOSAI_TOWN) {
+      G.room = d.room;
+      G.darkStreak = 0;
+      _say("The piwin takes in the empty pockets, the hour, and the state of you, " +
+        "and sighs the sigh of a man who has done this before. “Mai pen rai. Get " +
+        "on. Pay next time, boss.” He threads the highway one-handed and sets you " +
+        "back down among the living — no charge, no lecture, just a nod that says " +
+        "don't make a habit of it.", "thai");
+      _describeRoom(true);
+      _maybeEncounter();
+      return;
+    }
     _say(`“${thaiBaht(price)},” says the piwin. You have ฿${G.money}. He shrugs — ` +
       "no hard feelings, no free rides.", "thai");
     return;
@@ -1524,22 +1540,33 @@ function _doReport(arg) {
       "end of Beach Road, between the mall and the bars. (Go there, then REPORT it.)");
     return;
   }
-  if (!G.tonicOwed || G.tonicOwed <= 0) {
+  const owed = (G.tonicOwed || 0) + (G.curseOwed || 0);
+  if (owed <= 0) {
     _say("The desk sergeant looks at you over his glasses with the unhurried " +
       "patience of a man who has heard every farang complaint ever invented. " +
       "“What you want to report?” Nothing you can prove, tonight.");
     return;
   }
-  const owed = G.tonicOwed;
+  const onlyCurse = (G.curseOwed || 0) > 0 && (G.tonicOwed || 0) === 0;
   const fee = Math.round(owed * TONIC_POLICE_CUT);
   const back = owed - fee;
   G.money += back;
   G.tonicOwed = 0;
-  _say("You describe the shop, the soi, the three smiling cousins. The sergeant " +
-    "nods slowly, writes nothing, and explains — kindly — that these are " +
-    "“misunderstanding, my friend, is business.” You push. You keep pushing. " +
-    "Eventually a bored plainclothes officer is dispatched, has a quiet word in " +
-    "the soi, and returns with a fold of your notes — most of them.", "win");
+  G.curseOwed = 0;
+  if (onlyCurse) {
+    _say("You describe the robes, the red string, the beachfront, the four-figure " +
+      "“cleansing”. The sergeant nods slowly, writes nothing, and observes — kindly " +
+      "— that these are “not real monk, my friend, not real problem.” You push. You " +
+      "keep pushing. Eventually a bored plainclothes officer strolls the promenade, " +
+      "has a quiet word among the robes, and returns with a fold of your notes — " +
+      "most of them.", "win");
+  } else {
+    _say("You describe the shop, the soi, the three smiling cousins. The sergeant " +
+      "nods slowly, writes nothing, and explains — kindly — that these are " +
+      "“misunderstanding, my friend, is business.” You push. You keep pushing. " +
+      "Eventually a bored plainclothes officer is dispatched, has a quiet word in " +
+      "the soi, and returns with a fold of your notes — most of them.", "win");
+  }
   _say(`Recovered ฿${back}, minus a ฿${fee} “negotiation fee” nobody offers you a ` +
     `receipt for. (฿${G.money} in pocket.) You decline to speculate about brown ` +
     "envelopes out loud.", "dim");
@@ -1737,7 +1764,7 @@ function engineComplete(input) {
   // you're still owed money by the tonic shop; COMPLAIN while a barfine
   // grievance is on the books.
   else {
-    pool = (G.room === "police_station" || G.tonicOwed > 0)
+    pool = (G.room === "police_station" || G.tonicOwed > 0 || G.curseOwed > 0)
       ? ["report", ..._COMPLETE_VERBS] : _COMPLETE_VERBS;
     if (G.bfIncident) pool = ["complain", ...pool];
   }

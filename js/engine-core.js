@@ -113,6 +113,7 @@ function newGame() {
     hotel: "sabai",      // where you're checked in: sabai | queenvic | metropole
     hotelDebt: 0,        // what's on the night clerk's book
     tonicOwed: 0,        // baht the hair-tonic shop fleeced you for, recoverable via a police REPORT
+    curseOwed: 0,        // baht the beach fortune-teller's "cleansing" fleeced you for, likewise REPORT-recoverable
     thaiSeen: [],        // Thai runs the transcript has shown (the trainer's cross-app deck)
     qvDay: 0,            // last day the Queen Vic balcony paid its happy point
     patronTalk: { day: 0, talked: {} }, // patron dialogue book, reset daily
@@ -584,6 +585,10 @@ function _describeRoom(full) {
   if (r.barType === "beer" || r.barType === "soi6") {
     _say("A Connect 4 frame and a Jackpot dice box sit within reach (PLAY …).", "dim");
   }
+  if (r.barType === "gents") {
+    _say("The couches along the wall have their curtains half-drawn; you are careful " +
+      "where your eyes land. Buy a lady a drink and she'll settle in very close.", "dim");
+  }
   if (r.pool) {
     _say("A pool table waits under a low lamp (PLAY POOL)." +
       (_leagueTonight() ? " Tonight is LEAGUE NIGHT (PLAY KILLER, ฿100 in the ashtray)." : ""), "dim");
@@ -630,6 +635,10 @@ function _describeRoom(full) {
   if (G.room === "police_station" && G.tonicOwed > 0) {
     _say(`You are still out ฿${G.tonicOwed} to the hair-tonic shop. (REPORT it here — ` +
       "for what that's worth.)", "dim");
+  }
+  if (G.room === "police_station" && G.curseOwed > 0) {
+    _say(`You are still out ฿${G.curseOwed} to the beach fortune-teller. (REPORT it ` +
+      "here to claw most of it back.)", "dim");
   }
   // Nok buys glass — say so, tappably, whenever you're holding some near her.
   // Act 1's first earner had no on-screen tap path (HELP only).
