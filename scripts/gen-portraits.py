@@ -328,6 +328,8 @@ CHARS = {
     "nong":     lady(skin=THAI, hair="ponytail", hc=BLACK, shirt=C(0xf090c0),
                      mouth="neutral", blush=True),
     "pim":      lady(skin=THAI, hair="bob", hc=BLACK, shirt=C(0xe07820)),
+    "mercedes": lady(skin=THAI, hair="sleek", hc=BLACK, shirt=C(0x8894a8), bg=BG_BAR,
+                     mouth="neutral", acc=["earrings"]),
     "ploy":     lady(skin=THAI, hair="bun", hc=BLACK, shirt=C(0x181820),
                      acc=["earrings", "ringchain"], mouth="neutral"),
     "dj_beer":  dict(skin=THAI, hair="short", hc=BLACK, shirt=C(0x202030),
