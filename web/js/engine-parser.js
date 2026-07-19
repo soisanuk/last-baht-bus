@@ -1540,22 +1540,33 @@ function _doReport(arg) {
       "end of Beach Road, between the mall and the bars. (Go there, then REPORT it.)");
     return;
   }
-  if (!G.tonicOwed || G.tonicOwed <= 0) {
+  const owed = (G.tonicOwed || 0) + (G.curseOwed || 0);
+  if (owed <= 0) {
     _say("The desk sergeant looks at you over his glasses with the unhurried " +
       "patience of a man who has heard every farang complaint ever invented. " +
       "“What you want to report?” Nothing you can prove, tonight.");
     return;
   }
-  const owed = G.tonicOwed;
+  const onlyCurse = (G.curseOwed || 0) > 0 && (G.tonicOwed || 0) === 0;
   const fee = Math.round(owed * TONIC_POLICE_CUT);
   const back = owed - fee;
   G.money += back;
   G.tonicOwed = 0;
-  _say("You describe the shop, the soi, the three smiling cousins. The sergeant " +
-    "nods slowly, writes nothing, and explains — kindly — that these are " +
-    "“misunderstanding, my friend, is business.” You push. You keep pushing. " +
-    "Eventually a bored plainclothes officer is dispatched, has a quiet word in " +
-    "the soi, and returns with a fold of your notes — most of them.", "win");
+  G.curseOwed = 0;
+  if (onlyCurse) {
+    _say("You describe the robes, the red string, the beachfront, the four-figure " +
+      "“cleansing”. The sergeant nods slowly, writes nothing, and observes — kindly " +
+      "— that these are “not real monk, my friend, not real problem.” You push. You " +
+      "keep pushing. Eventually a bored plainclothes officer strolls the promenade, " +
+      "has a quiet word among the robes, and returns with a fold of your notes — " +
+      "most of them.", "win");
+  } else {
+    _say("You describe the shop, the soi, the three smiling cousins. The sergeant " +
+      "nods slowly, writes nothing, and explains — kindly — that these are " +
+      "“misunderstanding, my friend, is business.” You push. You keep pushing. " +
+      "Eventually a bored plainclothes officer is dispatched, has a quiet word in " +
+      "the soi, and returns with a fold of your notes — most of them.", "win");
+  }
   _say(`Recovered ฿${back}, minus a ฿${fee} “negotiation fee” nobody offers you a ` +
     `receipt for. (฿${G.money} in pocket.) You decline to speculate about brown ` +
     "envelopes out loud.", "dim");
@@ -1753,7 +1764,7 @@ function engineComplete(input) {
   // you're still owed money by the tonic shop; COMPLAIN while a barfine
   // grievance is on the books.
   else {
-    pool = (G.room === "police_station" || G.tonicOwed > 0)
+    pool = (G.room === "police_station" || G.tonicOwed > 0 || G.curseOwed > 0)
       ? ["report", ..._COMPLETE_VERBS] : _COMPLETE_VERBS;
     if (G.bfIncident) pool = ["complain", ...pool];
   }

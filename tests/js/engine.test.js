@@ -827,6 +827,58 @@ test("REPORT: the police settle a tonic-shop claim for most of it, minus their c
   assert.match(lastOut(), /what you want to report|nothing/i);
 });
 
+test("fortune-teller: the ฿199 palm reading is only the hook, then the ritual upsell arms", () => {
+  state().room = "beach_rd_c";
+  state().money = 5000;
+  _startEnc("fortune");
+  run("read my palm");
+  assert.equal(state().money, 5000 - FORTUNE_READ, "the ฿199 reading is taken");
+  assert.ok(state().pendingEnc, "the cleansing upsell re-arms for a second reaction");
+  assert.match(lastOut(), /cleansing|dark spirit|four figures/i);
+});
+
+test("fortune-teller: walking on before the reading costs nothing", () => {
+  state().room = "beach_rd_n";
+  state().money = 500;
+  _startEnc("fortune");
+  run("no thanks");
+  assert.equal(state().money, 500);
+  assert.equal(state().pendingEnc, null);
+  assert.match(lastOut(), /bad luck follow/i);
+});
+
+test("fortune-teller: paying for the cleansing is the full fleece, recoverable via REPORT", () => {
+  state().room = "beach_rd_c";
+  state().money = 5000;
+  _startEnc("fortune");
+  run("read");
+  run("fine, pay for the ritual");
+  assert.equal(state().money, 5000 - FORTUNE_READ - FORTUNE_RITUAL);
+  assert.equal(state().curseOwed, FORTUNE_RITUAL, "the loss is banked for a report");
+  assert.equal(state().pendingEnc, null);
+  // recover it at the station, minus the same negotiation cut as the tonic scam
+  state().room = "police_station";
+  const owed = state().curseOwed, before = state().money;
+  run("report");
+  const fee = Math.round(owed * TONIC_POLICE_CUT);
+  assert.equal(state().money, before + (owed - fee));
+  assert.equal(state().curseOwed, 0, "claim cleared");
+  assert.match(lastOut(), /robes|red string|not real monk/i);
+});
+
+test("fortune-teller: refusing the ritual — nerve walks clean, pressure costs a 'merit'", () => {
+  // nerve wins (_rand < 0.5): you keep your baht
+  state().room = "beach_rd_c"; state().money = 5000;
+  _startEnc("fortune"); run("read"); state().rng = 1; run("no, leave me alone");
+  assert.equal(state().money, 5000 - FORTUNE_READ, "nerve holds — nothing beyond the reading");
+  assert.equal(state().curseOwed, 0);
+  // pressure wins (_rand >= 0.5): a coerced 'merit', banked for a report
+  state().room = "beach_rd_c"; state().money = 5000; state().curseOwed = 0;
+  _startEnc("fortune"); run("read"); state().rng = 22245; run("no, get out of my way");
+  assert.equal(state().money, 5000 - FORTUNE_READ - FORTUNE_MERIT);
+  assert.equal(state().curseOwed, FORTUNE_MERIT);
+});
+
 test("REPORT surfaces in autocomplete only at the station or while still owed", () => {
   state().room = "beach_rd_c"; state().tonicOwed = 0;
   assert.ok(!engineComplete("rep").includes("report"), "not offered on a random street");

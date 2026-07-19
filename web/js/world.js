@@ -1882,6 +1882,9 @@ const MOTOSAI_DESTS = {
 const TONIC_PRICE = 99;      // the friendly ฿99 street bottle — the hook, not the sting
 const TONIC_FLEECE = 6000;   // the side-soi shop's full high-pressure fleece
 const TONIC_SHAKEDOWN = 3000;// what it costs to bully your way back out of the shop
+const FORTUNE_READ = 199;    // the ฿199 palm reading — the hook, not the sting
+const FORTUNE_RITUAL = 1900; // the four-figure "curse-removal" cleansing upsell
+const FORTUNE_MERIT = 500;   // the "small merit" you pay to bully your way clear
 const TONIC_POLICE_CUT = 0.35; // the police "negotiation fee" kept out of any recovery
 
 const ENCOUNTERS = {
@@ -1999,6 +2002,23 @@ const ENCOUNTERS = {
       "better — come my shop, just here in the soi, my cousin show you the full " +
       "treatment, VIP price. Two minute, my friend, two minute!”",
     hint: "(BUY the ฿99 bottle, follow him to the SHOP, or just tell him NO.)",
+  },
+  fortune: {
+    // A Beach Road curse-removal con (real Tourist Police bust, Pattaya, 16 Jul
+    // 2026). A man in monk-like robes reads your "unlucky" face on the beachfront,
+    // does a ฿199 palm reading with a blessed string and a "lucky number", then
+    // upsells a four-figure cleansing ritual, turning aggressive if refused. The
+    // fleece is banked in G.curseOwed so a police REPORT claws most of it back —
+    // the ritual + recovery live in _ENC.fortune / _curseRitual / _doReport.
+    rooms: ["beach_rd_s", "beach_rd_c", "beach_rd_n", "promenade"],
+    interactive: true,
+    intro: "A man in saffron robes and a wound head-cloth steps into your path, " +
+      "palms pressed, and studies your face with sudden grave concern. “Friend. " +
+      "Wait — your face…” A slow, sorrowful head-shake. “Very unlucky this month. " +
+      "I see it clear. A dark spirit is following you.” He is already reaching for " +
+      "your hand, a red blessed string looped around his own wrist. “I read your " +
+      "palm, write your lucky number — only one-nine-nine baht. Then we fix. Sit, sit.”",
+    hint: "(Let him READ your palm for ฿199, or tell him NO and walk on.)",
   },
 };
 
