@@ -12,9 +12,12 @@
 // lost shift (×1.5); after midnight most beer bars quietly waive the fee —
 // except for the popular girls — and the flash joints just discount.
 function _barfinePrice(bt, id) {
-  const base = bt === "soi6" ? BF_SOI6 : bt === "gogo" ? BF_GOGO : bt === "gents" ? BF_GENTS : BF_BEER;
+  let base = bt === "soi6" ? BF_SOI6 : bt === "gogo" ? BF_GOGO : bt === "gents" ? BF_GENTS : BF_BEER;
+  const draw = _isDraw(id);
+  if (draw) base = Math.round(base * 1.5 / 50) * 50; // a prized draw is worth more to the bar
   if (G.nightTurn < 30) return Math.round(base * 1.5 / 50) * 50;
   if (G.nightTurn >= 60) {
+    if (draw) return base;                          // and gets no midnight discount
     if (bt === "beer" && !POPULAR_GIRLS.includes(id)) return 0;
     return Math.round(base * 0.75 / 50) * 50;
   }
@@ -46,6 +49,29 @@ function _bfShark(id) {
 }
 function _bfExploitable(id) {
   return _bfShark(id) && _favor(id) < 6 && !_wingman();
+}
+
+// Some girls are a bar's prized DRAW — new, small, pretty, worth keeping on the
+// floor. Their take-out is blocked while they pull the early crowd (before
+// midnight) and priced at a premium after: the barfine is an appraisal, not a
+// fixed number. A stable hash-picked minority (shared-world-safe like _quizBars).
+function _isDraw(id) {
+  return NPC_ROLES[id] === "hostess" && _hh(id + ":" + G.vacation + ":draw", 61) % 100 < 15;
+}
+// A hash-picked minority are KEPT: a long-time sponsor pays them not to work
+// while he's in town (a ~3-day window per vacation) — except his family night,
+// when a free evening is a free evening.
+function _hasSponsor(id) {
+  return NPC_ROLES[id] === "hostess" && _hh(id + ":sponsor", 71) % 100 < 18;
+}
+function _sponsorStart(id) { return 2 + _hh(id + ":" + G.vacation + ":town", 53) % 4; } // days run 2..8
+function _sponsorInTown(id) {
+  if (!_hasSponsor(id)) return false;
+  const s = _sponsorStart(id);
+  return G.day >= s && G.day <= s + 2;
+}
+function _sponsorFamilyDay(id) {
+  return _sponsorInTown(id) && G.day === _sponsorStart(id) + _hh(id + ":" + G.vacation + ":family", 89) % 3;
 }
 
 function _doBarfine(arg) {
@@ -125,6 +151,12 @@ function _bfRefusal(id, bt) {
     (G.soc.bfRefused = G.soc.bfRefused || {})[id] = { kind, favor: _favor(id) };
     return G.soc.bfRefused[id];
   };
+  // a prized DRAW: the mama won't let her go while she's pulling the early crowd.
+  // Not held — it lifts at midnight (come back then, and pay a premium).
+  if (_isDraw(id) && G.nightTurn < 60) return { kind: "draw" };
+  // a KEPT girl whose sponsor is in town this week isn't working — unless it's
+  // his family night. Also not held: it's a day thing, not a mood.
+  if (_sponsorInTown(id) && !_sponsorFamilyDay(id)) return { kind: "sponsor" };
   if (G.soc.bfBar && G.soc.bfBar[G.room] && G.soc.bfBar[G.room] !== id) return keep("stealing");
   if (G.soc.drunk >= 6 && _rand() < 0.5) return keep("mess");
   const gate = bt === "soi6" ? 2 : 4;
@@ -148,6 +180,14 @@ function _bfRefusalSay(id, r) {
     temple: `${name} makes an apologetic temple of her own hands: “Cannot, na. ` +
       "I go temple in morning, make merit with my mama. Buddha first, boom " +
       "boom later.” It has the ring of complete truth.",
+    draw: `${name} says yes with her whole face — but the mamasan is already at her ` +
+      "shoulder, all smiles and steel: “This one very popular, she bring me many " +
+      "customer. You want? Twenty-five lady drink, five thousand bar fine.” It is " +
+      "not a price. It is a NO with a number on it. (Come back after midnight, when " +
+      "the floor is thin — she'll be cheaper, but never cheap.)",
+    sponsor: `${name} touches your arm, honestly sorry: “Cannot this week, tilac. My ` +
+      "friend here — he take care me, so I no working while he in town. You " +
+      "understand, na?” Everyone understands. It's a calendar, not a heartbreak.",
     dislike: `${name} looks at you kindly, which is worse: “You nice man. But ` +
       "no, na.” She signals the mamasan off with one flick of the eyes, and " +
       "the ledger never even opens. No is a complete sentence here.",
@@ -319,7 +359,26 @@ function _bfResolve(kind) {
     _endNight("bfscam");
     return;
   }
-  // the honest overnight — most girls, most nights
+  // the honest overnight. Sometimes it's the fantasy; sometimes long time hands you
+  // the whole PERSON — the life story, the tears, the five-year-girlfriend morning —
+  // the reality the fantasy edits out. Less สนุก tonight (the escape didn't escape),
+  // but a deeper bond: you saw the real her. "Remind me not to do LT again."
+  // Day-stable hash (like _bfShark) so the same girl the same night is consistent.
+  if (_hh(id + ":" + G.day + ":real", 41) % 100 < 30) {
+    _say((price ? `฿${price} to the mamasan, and ` : "") +
+      `${name} comes home with you — and stays home, in every sense. Somewhere before ` +
+      "midnight she stops being a fantasy and becomes a person: the whole life story, the " +
+      "father, the sister, the kid up-country, thirty minutes of it, then tears you didn't " +
+      "order over something you can't quite follow. You fall asleep before the sex. In the " +
+      "morning she's dressed and cool and kisses your cheek at the door like a wife who's " +
+      `decided something. You wanted a one-day girlfriend; you got a five-year one. (฿${G.money} left.)`, "");
+    _say("(Long time is like that — you paid for the fantasy and she handed you the reality. " +
+      "But you know her now, really know her. Some men call that the good part.)", "dim");
+    G.soc.drinks[id] = (G.soc.drinks[id] || 0) + 6; // you saw the real her — the bond jumps
+    G.lastBfBase = 4;                               // …and the escape didn't escape: less สนุก
+    _endNight("barfine");
+    return;
+  }
   _say((price ?
     `฿${price} to the mamasan, who enters it in the ledger with ceremony and ` +
     `gives ${name} a nod that means back by opening, mind. ` :
