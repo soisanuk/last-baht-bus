@@ -50,19 +50,120 @@ const ROOMS = {
   jomtien_beach_rd: {
     name: "Jomtien Beach Road",
     region: "Jomtien",
-    desc: "Streetlights, seafood smoke, and baht buses rattling past. Soi Rompho's " +
-      "neon flickers to the east, a 7-Eleven hums to the south, and the bus stop " +
-      "is just north. Pratumnak Hill rises darkly to the far north.",
-    exits: { w: "jomtien_beach", e: "soi_rompho", s: "jomtien_7eleven", n: "jomtien_bus_stop", spa: "jomtien_thai" },
+    desc: "Streetlights, seafood smoke, and baht buses rattling past. East, Soi 7 runs inland " +
+      "off the beach road toward Second Road, its little beer bars and massage shops already " +
+      "lit; a 7-Eleven hums to the south and the bus stop is just north. Pratumnak Hill rises " +
+      "darkly to the far north.",
+    exits: { w: "jomtien_beach", e: "soi_7_w", s: "jomtien_7eleven", n: "jomtien_bus_stop", spa: "jomtien_thai" },
   },
   soi_rompho: {
-    name: "Soi Rompho",
+    name: "Rompho Market",
+    bar: "Rompho Market",
     region: "Jomtien",
-    desc: "The market soi: grilled chicken, plastic stools, and a row of open-front beer " +
-      "bars where ladies of a certain vintage call out to gentlemen of a similar one. " +
-      "Everyone here has seen everything twice.",
-    exits: { w: "jomtien_beach_rd" },
+    food: true,
+    desc: "Directly across Second Road from the mouth of Soi 7: the sprawl of Rompho Market — " +
+      "grilled everything, fruit pyramids, plastic stools, and a haze of chilli smoke. Locals, " +
+      "long-stay farang, and a few bar girls off shift graze the stalls. The Jomtien branch of " +
+      "KISS glows just to the north. (BUY FOOD / EAT.)",
+    exits: { w: "jomtien_2nd", n: "kiss_jomtien" },
   },
+
+  // ── Soi 7 (Jomtien) — runs inland from Jomtien Beach Road to Second Road ──
+  soi_7_w: {
+    name: "Soi 7 (beach end)",
+    region: "Jomtien",
+    desc: "The beach end of Soi 7: a mellow strip of open-front beer bars strung with fairy " +
+      "lights, a couple of massage shops, and the easy Jomtien pace — older expats, cold beer, " +
+      "nobody in a hurry. The soi runs east toward the roar of Second Road; the sea breeze " +
+      "follows you a little way in.",
+    exits: { w: "jomtien_beach_rd", e: "soi_7_e", n: "lucky7", s: "seabreeze", spa: "soi7_oil" },
+  },
+  soi_7_e: {
+    name: "Soi 7 (Second Road end)",
+    region: "Jomtien",
+    desc: "The far end of Soi 7, where it spills onto Second Road by a 7-Eleven. A couple more " +
+      "beer bars and a massage shop see out the strip. On the south side, set back behind a fence " +
+      "and a flagpole, squats the grey bulk of the Chonburi Immigration Office — dark and locked " +
+      "at this hour, a place farang only ever visit in daylight and never fondly.",
+    exits: { w: "soi_7_w", e: "jomtien_2nd", n: "coconut", s: "sandbar", spa: "soi7_thai" },
+  },
+  jomtien_2nd: {
+    name: "Second Road / Soi 7 (Jomtien)",
+    region: "Jomtien",
+    seven: true,
+    desc: "The Soi 7 corner on Jomtien's Second Road, traffic hissing both ways. A 7-Eleven holds " +
+      "down the northwest corner, bright as an operating theatre. Straight across the road sprawls " +
+      "Rompho Market; the Jomtien KISS glows just beyond it. Soi 7 runs back west toward the beach.",
+    exits: { w: "soi_7_e", e: "soi_rompho" },
+  },
+  kiss_jomtien: {
+    name: "KISS Jomtien",
+    bar: "KISS Jomtien",
+    region: "Jomtien",
+    food: true,
+    desc: "The Jomtien branch of the famous open-air corner restaurant, just north of Rompho " +
+      "Market — the exact same mile-long menu as the Pattaya original (simple Thai one side, " +
+      "farang comfort food the other) and exactly as packed. Plastic chairs, a grill going full " +
+      "tilt, and in high season a twenty-minute wait for a stool; tonight, just about a seat. " +
+      "(BUY FOOD / EAT.)",
+    exits: { out: "soi_rompho", s: "soi_rompho" },
+  },
+  lucky7: {
+    name: "Lucky 7 Bar",
+    bar: "Lucky 7 Bar", barType: "beer",
+    region: "Jomtien",
+    desc: "The soi's namesake: a friendly open-front beer bar with sevens painted on everything, " +
+      "a Connect 4 frame, and a knot of regulars who've been coming since before the fairy lights. " +
+      "The girls know every one of them by their drink.",
+    exits: { out: "soi_7_w" },
+  },
+  seabreeze: {
+    name: "Sea Breeze Bar",
+    bar: "Sea Breeze Bar", barType: "beer",
+    region: "Jomtien",
+    desc: "Stools that catch the wind straight off the beach, a battered guitar somebody strums " +
+      "between customers, and the most relaxed hostesses in Jomtien. Nobody hard-sells here; the " +
+      "beer is cold and the evening goes where it goes.",
+    exits: { out: "soi_7_w" },
+  },
+  coconut: {
+    name: "Coconut Bar",
+    bar: "Coconut Bar", barType: "beer",
+    region: "Jomtien",
+    desc: "Thatch over the bar, coconut shells for ashtrays, and a blender that hasn't stopped " +
+      "since 2016. A little louder than its neighbours, a little younger — the closest Soi 7 gets " +
+      "to a party, which is not very, which is the point.",
+    exits: { out: "soi_7_e" },
+  },
+  sandbar: {
+    name: "The Sandbar",
+    bar: "The Sandbar", barType: "beer",
+    region: "Jomtien",
+    desc: "Last bar before Second Road: a narrow slot with sand actually underfoot, a dartboard, " +
+      "and a cat that outranks everyone. The end-of-the-soi place, where a slow night winds all the " +
+      "way down and the last customers put the stools up themselves.",
+    exits: { out: "soi_7_e" },
+  },
+  soi7_oil: {
+    name: "Sunset Oil Massage",
+    bar: "Sunset Oil Massage",
+    region: "Jomtien",
+    massage: "oil",
+    desc: "A pink-lit oil shop halfway down Soi 7, girls on the step, the small sticker on the " +
+      "mirror, and the beach breeze doing its best to keep it wholesome. It fails, pleasantly.",
+    exits: { out: "soi_7_w" },
+  },
+  soi7_thai: {
+    name: "Soi 7 Thai Massage",
+    bar: "Soi 7 Thai Massage",
+    region: "Jomtien",
+    massage: "legit",
+    desc: "A proper traditional shop near the Second Road end: foot chairs, tiger balm, aunties in " +
+      "matching polos, and a price list that stops at 'oil, one hour.' Where the long-stay expats " +
+      "come to get their backs put right.",
+    exits: { out: "soi_7_e" },
+  },
+
   jomtien_7eleven: {
     name: "7-Eleven (Jomtien)",
     region: "Jomtien",
@@ -1871,6 +1972,28 @@ const NPCS = {
           "everything good in this town.\" She lets that sit. \"Me, I just run it.\"" },
     ],
   },
+  sumalee: {
+    name: "Sumalee", th: "สุมาลี", emoji: "👑",
+    room: "lucky7", bars: ["lucky7", "seabreeze", "coconut", "sandbar"],
+    desc: "The matriarch of Soi 7 — thirty years in Jomtien, four little beer bars, and not one " +
+      "gram of hurry. Where the Buakhao mamas price you like a market, Sumalee just wants everyone " +
+      "fed, watered, and coming back next season. She works a different bar each night, mostly to " +
+      "keep the girls honest and the regulars guessing.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Welcome to Soi 7, the quiet side of the party.\" Sumalee waves at the strip of " +
+          "fairy lights. \"Four bar, all mine, all easy — Lucky 7, Sea Breeze, Coconut, Sandbar. No " +
+          "go-go, no hard sell, no drama. You want that, go Buakhao. Here you drink slow, you talk " +
+          "to a nice lady, you come back next year. That is Jomtien, na.\"",
+        short: "\"Four easy bars, all mine. Drink slow, talk to a nice lady, come back next year.\"" },
+      { topic: "soi", text: "\"Soi 7 — beach one end, Second Road and Rompho Market the other, the " +
+          "7-Eleven on the corner, the immigration office down the dark end nobody like.\" A dry " +
+          "little laugh. \"Come for the beer, not the go-go. The go-go is other people's headache.\"" },
+      { topic: "jomtien", text: "\"Jomtien is for the ones who already know the game — long-stay, " +
+          "retire, married before, married again.\" She shrugs. \"Slower money than Pattaya, but it " +
+          "come every month, and nobody fall off a balcony on my soi.\"" },
+    ],
+  },
 
   pim: {
     name: "Pim", th: "พิม", emoji: "💋",
@@ -3414,7 +3537,7 @@ const NPC_ROLES = {
   lek: "hostess", noi: "hostess", ping: "hostess", aom: "hostess",
   joy: "hostess", fon: "hostess", gift: "hostess", kwan: "hostess",
   nong: "hostess", pim: "hostess", bee: "hostess", jane: "hostess", mercedes: "hostess", kratae: "hostess",
-  yai: "mamasan", rose: "mamasan", kesorn: "mamasan", lawan: "mamasan",
+  yai: "mamasan", rose: "mamasan", kesorn: "mamasan", lawan: "mamasan", sumalee: "mamasan",
   ploy: "cashier", aek: "cashier", malee: "cashier",
   candy: "mamasan", oy: "mamasan", daeng: "mamasan", mem: "mamasan", wan: "mamasan",
 };
@@ -3616,6 +3739,10 @@ const _FILLER_HOSTESSES = [
   ["Fasai","ฟ้าใส","sapphire"], ["Tarn","ธาร","sapphire"],
   ["Pao","เป้า","sundowner"], ["Poom","ภูมิ","sundowner"],
   ["Bright","ไบรท์","cricketers"], ["Lukkade","ลูกเกด","cricketers"],
+  ["Bpom","บอม","lucky7"], ["Proud","พราว","lucky7"],
+  ["Namo","นะโม","seabreeze"], ["Somruedee","สมฤดี","seabreeze"],
+  ["Ratchada","รัชฎา","coconut"], ["Nittaya","นิตยา","coconut"],
+  ["Duang","ดวง","sandbar"], ["Mookda","มุกดา","sandbar"],
 ];
 
 for (const [name, th, room] of _FILLER_HOSTESSES) {
@@ -3801,7 +3928,18 @@ const ROOM_GEO = {
   dongtan_beach:    [12.8960, 100.8655],
   jomtien_beach_rd: [12.8893, 100.8718],
   jomtien_thai:     [12.8890, 100.8724],
-  soi_rompho:       [12.8901, 100.8742],
+  // Soi 7 (Jomtien Beach Rd → Second Rd) and its Second-Road cluster
+  soi_7_w:          [12.8896, 100.8728],
+  soi_7_e:          [12.8899, 100.8738],
+  jomtien_2nd:      [12.8901, 100.8748],
+  soi_rompho:       [12.8905, 100.8756],
+  kiss_jomtien:     [12.8911, 100.8756],
+  lucky7:           [12.8899, 100.8726],
+  seabreeze:        [12.8892, 100.8730],
+  coconut:          [12.8903, 100.8736],
+  sandbar:          [12.8896, 100.8741],
+  soi7_oil:         [12.8890, 100.8726],
+  soi7_thai:        [12.8905, 100.8739],
   jomtien_7eleven:  [12.8880, 100.8724],
   jomtien_bus_stop: [12.8940, 100.8710],
   // Pratumnak

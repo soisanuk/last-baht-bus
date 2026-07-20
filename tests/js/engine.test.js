@@ -2164,6 +2164,29 @@ test("Soi Diana: threads Second Rd to Buakhao past LK Metro, four beer bars, KIS
   assert.ok(FOOD_STALLS.kiss, "KISS is on the menu");
 });
 
+test("Soi 7 (Jomtien): beach road to Second Rd, four beer bars, Rompho Market, KISS Jomtien", () => {
+  // the soi threads Jomtien Beach Road to the Second Rd corner
+  assert.equal(ROOMS.jomtien_beach_rd.exits.e, "soi_7_w");
+  assert.equal(ROOMS.soi_7_w.exits.e, "soi_7_e");
+  assert.equal(ROOMS.soi_7_e.exits.e, "jomtien_2nd");
+  assert.ok(ROOMS.jomtien_2nd.seven, "7-Eleven on the corner");
+  // across Second Road: Rompho Market, then KISS just north of it
+  assert.equal(ROOMS.jomtien_2nd.exits.e, "soi_rompho");
+  assert.equal(ROOMS.soi_rompho.exits.n, "kiss_jomtien");
+  assert.ok(FOOD_STALLS.kiss_jomtien && FOOD_STALLS.soi_rompho, "both feed you");
+  // the immigration office is flavor at the dark east end, not a room
+  state().room = "soi_7_e"; out = []; run("look");
+  assert.match(lastOut(), /immigration/i);
+  assert.ok(!ROOMS.chonburi_immigration, "immigration is a mention, not a place");
+  // four beer bars, populated, with Sumalee working one of them
+  const bars = ["lucky7", "seabreeze", "coconut", "sandbar"];
+  assert.deepEqual(bars.map(b => ROOMS[b].barType), ["beer", "beer", "beer", "beer"]);
+  for (const b of bars) {
+    assert.ok(Object.keys(NPCS).filter(n => NPC_ROLES[n] === "hostess" && _npcRoom(n) === b).length >= 2, `${b} populated`);
+  }
+  assert.equal(bars.filter(b => _npcRoom("sumalee") === b).length, 1);
+});
+
 test("Areca Lodge is a fourth hotel you can check into", () => {
   state().flags.act1Done = true;
   state().flags.hasWallet = true;

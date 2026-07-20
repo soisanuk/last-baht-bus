@@ -376,6 +376,8 @@ CHARS = {
                      mouth="neutral", acc=["earrings", "chain"], earc=GOLD),
     "lawan":    lady(skin=THAI, hair="chignon", hc=BLACK, shirt=C(0x1a3a2e), bg=BG_BAR,
                      mouth="neutral", acc=["earrings", "chain", "bracelets"], earc=GOLD),
+    "sumalee":  lady(skin=THAI2, hair="bun", hc=SILVER, shirt=C(0x2e7d6e), bg=BG_BEACH,
+                     mouth="smile", acc=["earrings", "glasses", "glasschain"], earc=GOLD, framec=GOLD),
     # --- filler hostesses (generic Isan girls; procedurally varied) ---
     "dao":      lady(skin=THAI, hair="ponytail", hc=DKBRN, shirt=C(0xf05a30), bg=BG_GOGO, mouth="grin", acc=["earrings", "chain"], earc=YELN),
     "mook":     lady(skin=THAI, hair="sleek", hc=DKBRN, shirt=C(0x00e5ff), bg=BG_GOGO, mouth="grin", acc=["earrings", "chain"], earc=PINKN),
@@ -453,6 +455,15 @@ CHARS = {
     "poom":     lady(skin=THAI, hair="ponytail", hc=BLACK, shirt=C(0x3a8a4a), bg=BG_BAR, mouth="grin", acc=["earrings"], earc=CYAN),
     "bright":   lady(skin=THAI2, hair="long", hc=DKBRN, shirt=C(0xe07820), bg=BG_BAR, mouth="smile", acc=["earrings", "flower"], earc=YELN),
     "lukkade":  lady(skin=THAI, hair="bob", hc=BLACK, shirt=C(0xd02040), bg=BG_BAR, mouth="neutral", acc=["earrings"], earc=PINKN),
+    # Soi 7 (Jomtien) beer-bar girls
+    "bpom":     lady(skin=THAI, hair="bob", hc=BLACK, shirt=C(0x3a8a4a), bg=BG_BAR, mouth="grin", acc=["earrings"], earc=YELN),
+    "proud":    lady(skin=THAI2, hair="long", hc=DKBRN, shirt=C(0x2e7d6e), bg=BG_BAR, mouth="smile", acc=["earrings", "flower"], earc=CYAN),
+    "namo":     lady(skin=THAI, hair="ponytail", hc=BLACK, shirt=C(0x00bfff), bg=BG_BAR, mouth="smile", acc=["earrings"], earc=PINKN),
+    "somruedee": lady(skin=THAI2, hair="bob", hc=GRBLK, shirt=C(0xe07820), bg=BG_BAR, mouth="neutral", acc=["earrings"], earc=YELN),
+    "ratchada": lady(skin=THAI, hair="long", hc=BLACK, shirt=C(0xd02040), bg=BG_BAR, mouth="grin", acc=["earrings", "bracelets"], earc=CYAN),
+    "nittaya":  lady(skin=THAI2, hair="bun", hc=GRBLK, shirt=C(0x4a2a6a), bg=BG_BAR, mouth="smile", acc=["earrings"], earc=GOLD),
+    "duang":    lady(skin=THAI, hair="ponytail", hc=BLACK, shirt=C(0xf090c0), bg=BG_BAR, mouth="grin", acc=["earrings"], earc=YELN, blush=True),
+    "mookda":   lady(skin=THAI2, hair="bob", hc=DKBRN, shirt=C(0x2a5aa0), bg=BG_BAR, mouth="neutral", acc=["earrings", "flower"], earc=PINKN),
     # --- filler mamas / cashiers / extra hostesses ---
     "pen":      lady(skin=THAI, hair="bun", hc=GREY, shirt=C(0x4a2a6a), bg=BG_BAR, mouth="neutral", acc=["earrings", "chain"], earc=GOLD),
     "muay":     lady(skin=THAI, hair="sleek", hc=SILVER, shirt=C(0x181820), bg=BG_BAR, mouth="neutral", acc=["earrings", "chain"], earc=PINKN),
