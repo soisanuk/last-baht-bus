@@ -553,6 +553,7 @@ const _ACT1_FAIL_LEDE = {
 function _act1Fail(reason) {
   const reached = _act1Progress(), total = _ACT1_MILESTONES.length;
   const prevBest = G.act1Best || 0, best = Math.max(prevBest, reached);
+  const tries = (G.act1Tries || 0) + 1; // this run counts; ≥1 unlocks HINT next time
   const gotWallet = _flag("hasWallet");
   _say("═══════════════════════════════════", "alert");
   _say(_ACT1_FAIL_LEDE[reason] || _ACT1_FAIL_LEDE.dawn, "alert");
@@ -562,11 +563,49 @@ function _act1Fail(reason) {
   if (reached > prevBest) _say(`★ Furthest yet: ${reached}/${total}. The next run starts ` +
     "cold — but you know the way a little better now.", "win");
   else if (prevBest) _say(`(Your best is still ${prevBest}/${total}. Beat it.)`, "dim");
+  if (tries === 1) _say("(One thing the beating buys you: from here on, the soi will " +
+    "whisper. Type HINT when you're stuck.)", "dim");
   _say("Dawn wipes the slate. Same beach, same day two, same empty pockets — go again.", "room");
   _say("");
   newGame();
-  G.act1Best = best;      // the one thing that survives the reset
+  G.act1Best = best;      // the record…
+  G.act1Tries = tries;    // …and the attempt count survive the reset (unlocking HINT)
   engineIntro();
+}
+
+// Round-2+ HINT system: once the do-or-die opening has beaten you at least once
+// (act1Tries ≥ 1), the soi whispers the next step — keyed to the first unreached
+// milestone. The endgame hint names both routes to the wallet: the polite one
+// (wai Madam Oy and she hands it back) and the safe-crack (her office when
+// 'Sabai Sabai' plays; the code is her dancer's number 71 + a lucky 9).
+const _ACT1_HINTS = [
+  ["knowWasHere", "Start with proof you were even out last night — READ what's still in your " +
+    "pockets, then take it to Candy, the Candy Bar mamasan. She misses nothing on this soi."],
+  ["knowMot", "Candy remembers you leaving toward LK Metro with a little pickpocket, Mot, on " +
+    "your heels. TALK to her about the wallet — a lady drink speeds the story along."],
+  ["knowOyHasIt", "Mot fences everything he lifts to one buyer. Lek at Lucky Tiger saw him flash " +
+    "cash this morning — ASK LEK where your wallet ended up."],
+  ["hasWallet", "It's in Madam Oy's safe at Rainbow Girls, LK Metro. Oy respects manners: WAI her " +
+    "properly, then ask about the wallet — a polite man, she may just hand it back. (The hard way " +
+    "in: slip into her office when DJ Beer plays 'Sabai Sabai', and crack the safe — her old " +
+    "dancer's number was 71, and she puts a lucky 9 on the end of every code. Candy, Ploy, Pim and " +
+    "Daeng each hold a piece.)"],
+];
+function _doHint() {
+  if (_flag("act1Done")) {
+    _say("The wallet's yours and the opening's behind you — out here there are no wrong answers, " +
+      "only better nights. (QUESTS for jobs, WHO for your black book, MAP for the lay of the land.)", "dim");
+    return;
+  }
+  if ((G.act1Tries || 0) < 1) {
+    _say("No hints your first night, tilac — the town is yours to read. But it remembers a face: " +
+      "miss home by dawn and you start over, and the second run… the soi begins to whisper.", "dim");
+    return;
+  }
+  const reached = _act1Progress(), total = _ACT1_MILESTONES.length;
+  const next = _ACT1_HINTS.find(([f]) => !_flag(f));
+  _say(`The soi whispers — you're ${reached}/${total} of the way home. ` + (next ? next[1] :
+    "Everything's in hand. Now just get to room 412 in Naklua before dawn takes the night."), "win");
 }
 
 function _questAvailable(qid) {

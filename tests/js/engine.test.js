@@ -1855,6 +1855,39 @@ test("Act One reset keeps a critical-path high-water mark, shown on the next run
   assert.doesNotMatch(lastOut(), /Furthest yet/, "no false personal-best");
 });
 
+test("HINT is coy on the first run, then whispers the next step from round two", () => {
+  // round one: no real hints, just the setup
+  run("hint");
+  assert.match(lastOut(), /No hints your first night/i);
+  // a failure unlocks it (act1Tries → 1)
+  state().nightTurn = 99;
+  out = [];
+  run("wait");                              // hard fail + reset
+  assert.equal(state().act1Tries, 1, "the attempt counted");
+  assert.match(lastOut(), /soi will whisper|type HINT/i, "and you're told hints are open now");
+  // round two: HINT points at the first undone milestone (find out where you were)
+  out = [];
+  run("hint");
+  assert.match(lastOut(), /soi whispers/i);
+  assert.match(lastOut(), /Candy Bar mamasan|READ what's still/i, "step one: prove the night, ask Candy");
+  // progress the path and the hint advances
+  state().flags.knowWasHere = true;
+  state().flags.knowMot = true;
+  out = [];
+  run("hint");
+  assert.match(lastOut(), /Lek at Lucky Tiger|ASK LEK/i, "now it points at Lek for the fence");
+  // wallet in hand → it stops nagging about clues
+  state().flags.knowOyHasIt = true;
+  state().flags.hasWallet = true;
+  out = [];
+  run("hint");
+  assert.match(lastOut(), /room 412|before dawn/i, "last step: just get home");
+});
+
+test("HINT is offered in autocomplete", () => {
+  assert.ok(engineComplete("hin").includes("hint"));
+});
+
 test("street food and water manage the meters", () => {
   state().room = "buakhao_market";
   state().money = 100;

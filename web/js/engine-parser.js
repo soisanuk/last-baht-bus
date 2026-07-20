@@ -1649,7 +1649,7 @@ const _HELP = `Common commands:
   DIAGNOSE (how bad is it) · AGAIN or G (repeat last command)
   TRAVEL <bar|hotel> (fast travel anywhere you've been — walking pace, bare TRAVEL lists)
   TIME · MAP · WAIT UNTIL <hour> · TIP <lady> <amount> · PHOTO · CHEERS
-  QUESTS · ACCEPT <quest> · ABANDON <quest>
+  QUESTS · ACCEPT <quest> · ABANDON <quest> · HINT (the soi's nudge — Act One, after your first reset)
   CONTACT <lady> (swap numbers) · CONTACTS (your phonebook) · MESSAGE <lady> · CHECK MESSAGES
   WHO / BLACKBOOK (your ladies, ranked by how they feel about you)
   SEND <amount> TO <lady> (banking app)
@@ -1672,7 +1672,7 @@ const _COMPLETE_VERBS = [
   "photo", "call", "shower", "withdraw", "cheers", "dance", "sing", "swim",
   "smell", "listen", "diagnose", "apologize", "quests", "accept", "abandon", "contact",
   "contacts", "who", "blackbook", "message", "check messages", "send", "score", "wait", "again",
-  "request", "help", "save", "load", "undo", "restart",
+  "request", "hint", "help", "save", "load", "undo", "restart",
 ];
 
 function _cInv() {
@@ -2176,8 +2176,9 @@ function doCommand(input) {
         "display board of watches.");
       break;
     case "score": _doScore(); break;
+    case "hint": case "hints": _doHint(); break;
     case "help": case "?": _say(_HELP, "dim"); break;
-    case "restart": { const b = G.act1Best || 0; newGame(); G.act1Best = b; engineIntro(); return; } // keep the critical-path record
+    case "restart": { const b = G.act1Best || 0, t = G.act1Tries || 0; newGame(); G.act1Best = b; G.act1Tries = t; engineIntro(); return; } // keep the critical-path record + hint unlock
     default:
       // bare Thai phrase typed directly
       if (matchThaiPhrase(lower)) { _doSay(lower); break; }
@@ -2206,6 +2207,8 @@ function engineIntro() {
   if (G.act1Best > 0)
     _say(`(Best run home so far: ${G.act1Best}/${_ACT1_MILESTONES.length} of the way ` +
       "back to 412. Do better — dawn is the deadline, and dawn does not wait.)", "dim");
+  if (G.act1Tries > 0)
+    _say("The soi remembers your face now. If the night goes quiet, ask it: (HINT)", "dim");
   _say("");
   _describeRoom(true);
   _say("(Type HELP for commands.)", "dim");

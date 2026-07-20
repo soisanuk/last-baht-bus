@@ -163,6 +163,7 @@ function newGame() {
     lastBusWarned: false, // the nightly last-baht-bus heads-up fires once per night
     bestHappy: 0,
     act1Best: 0,         // furthest point down the opening critical path ever reached; survives the do-or-die Act One reset
+    act1Tries: 0,        // opening-quest attempts so far; ≥1 unlocks the round-2 HINT system (also survives the reset)
     pendingChoice: null, // "vacation_end" gates input at week's end
     atmDay: 0,           // last day the lobby ATM paid out ฿3000
     lastPolice: -99,     // turn of the last boy-in-brown shakedown
