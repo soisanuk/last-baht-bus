@@ -13,6 +13,11 @@ node --test
 # Run a single test file
 node --test tests/js/engine.test.js
 
+# Ad-hoc headless feel-check — loads the whole engine (cwd-proof) and runs a snippet
+# with G / run() / out / show() / lastOut() / sandbox() in scope. Use this instead of
+# re-typing the vm-load boilerplate.
+node tools/probe.mjs 'sandbox(); G.room="stinky_bar"; run("buy man drink"); show()'
+
 # Run the game locally
 open web/index.html   # works from file://, no network requests
 
