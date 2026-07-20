@@ -2149,13 +2149,16 @@ const NPCS = {
           "trouble, you find out how fast a big girl in heels can move.\" A dazzling, weaponised smile.",
         short: "\"Buy a girl a drink, treat her nice, mind your manners. I run this floor.\"" },
       { topic: "hyper", text: "\"You should have seen this place before — sticky floor, dead neon, " +
-          "three girls and a fan.\" She waves a manicured hand at the chrome. \"The Samson brothers " +
-          "buy it, gut it, spend real money. Now it is the best stage in Jomtien, and I am still " +
-          "here, because you do not throw away the one who knows where everything is buried.\"" },
-      { topic: "samson", text: "\"My bosses. Farang-Thai family, own half the strip and plenty on " +
-          "Pratumnak too — beer bar, go-go, the quiet clubs, all of it.\" A cool look. \"Good bosses. " +
-          "They pay on time and they let me run my floor my way. I make them money; they leave me be. " +
-          "That is the whole marriage.\"" },
+          "three girls and a fan.\" She waves a manicured hand at the chrome. \"Two brothers, European, " +
+          "buy it in the COVID time, when every bar in Jomtien is dying. Put in every baht they own — " +
+          "and, crazy, they live UPSTAIRS in the old short-time rooms, to watch the builders with their " +
+          "own eyes. Everybody laugh at them then. Nobody laughing now.\"" },
+      { topic: "samson", text: "\"My bosses. Two brothers — came with their savings and a wreck of a " +
+          "go-go, made a fortune out of it, and never once stopped buying.\" A cool look. \"Now: seven " +
+          "beer bar, three of the quiet clubs, and Hyper. They took partners to grow so fast — quiet " +
+          "money, and you do not ask a Samson brother about the quiet money. The go-go is not their " +
+          "favourite child any more; they just want more strip. Good bosses, though — pay on time, let " +
+          "me run my floor. I make them money; they leave me be.\"" },
       { topic: "ladyboy", text: "\"You have a question, I can hear you thinking it.\" She laughs, not " +
           "unkindly. \"Twenty year ago I danced this soi. Now I run it. In Thailand a katoey can be a " +
           "queen or a punchline — I decided early which one. The girls call me Mae. That is enough " +
