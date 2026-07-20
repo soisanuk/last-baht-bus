@@ -43,9 +43,11 @@ const ROOMS = {
     name: "Dongtan Beach",
     region: "Jomtien",
     dark: true,
-    desc: "The quieter stretch north of Jomtien proper. By day it's rainbow flags and " +
-      "beach chairs; right now it's shapes and shadows and the hiss of surf.",
-    exits: { s: "jomtien_beach", e: "jomtien_beach_rd" },
+    desc: "The quieter stretch north of Jomtien proper — by day rainbow flags and beach " +
+      "chairs, the gay end of the sand; right now it's shapes and shadows and the hiss of " +
+      "surf. Inland the beach road bends and climbs into neon: the Main Strip of Thappraya " +
+      "Road, running UP and east to Second Road.",
+    exits: { s: "jomtien_beach", e: "jomtien_beach_rd", up: "thappraya_w" },
   },
   jomtien_beach_rd: {
     name: "Jomtien Beach Road",
@@ -162,6 +164,143 @@ const ROOMS = {
       "matching polos, and a price list that stops at 'oil, one hour.' Where the long-stay expats " +
       "come to get their backs put right.",
     exits: { out: "soi_7_e" },
+  },
+
+  // ── Thappraya Road (the Jomtien "Main Strip") — Dongtan Beach ↔ Second Road ──
+  thappraya_w: {
+    name: "Thappraya Rd — Main Strip (west)",
+    region: "Thappraya",
+    seven: true,
+    desc: "Where the beach road turns inland and becomes the Main Strip of Jomtien: neon, barkers, " +
+      "and the warm churn of the night starting up. A 7-Eleven holds the north corner where the road " +
+      "bends east. A couple of doors down, ARROW BAR's sign buzzes; across the way a discreet " +
+      "gentleman's club keeps its door shut and its aircon cold. The strip runs east.",
+    exits: { down: "dongtan_beach", e: "thappraya_mid", n: "arrow_bar", s: "the_boardroom", spa: "beach_turn_massage" },
+  },
+  thappraya_mid: {
+    name: "Thappraya Rd — Main Strip (middle)",
+    region: "Thappraya",
+    desc: "The thick of the strip: beer bars and their fairy lights, and on the south side HYPER " +
+      "A-GO-GO throwing chrome light across the road — run-down for years until the Samson brothers " +
+      "gutted and remade it. On the north side a narrow L-shaped alley cuts away toward Second Road: " +
+      "the SUPERTOWN complex, Jomtien's gay quarter, its drag-show lights flickering somewhere " +
+      "around the elbow.",
+    exits: { w: "thappraya_w", e: "thappraya_e", s: "hyper", n: "cheeky_monkey", gents: "velvet_club", super: "supertown_alley" },
+  },
+  thappraya_e: {
+    name: "Thappraya Rd — Main Strip (Second Road end)",
+    region: "Thappraya",
+    seven: true,
+    desc: "The far end of the strip, spilling onto Second Road. TAKE CARE ME, a live-music rock pub, " +
+      "throws a guitar solo out its open front — the freelancers' favourite, and loud about it. " +
+      "Another 7-Eleven glows across the intersection. One last beer bar and a massage shop see out " +
+      "the strip before the traffic of Second Road takes over.",
+    exits: { w: "thappraya_mid", n: "take_care_me", s: "the_office", spa: "thappraya_massage" },
+  },
+  supertown_alley: {
+    name: "Supertown Complex (alley)",
+    region: "Thappraya",
+    desc: "The mouth of the Supertown alley — Jomtien's gay bar complex, an L-bend of shuttered and " +
+      "half-lit venues running back toward Second Road. Rainbow bunting, a poster for a drag revue, " +
+      "and a bored security guy on a stool. It's quiet down here tonight; most of the doors aren't " +
+      "open yet, or aren't open to you.",
+    exits: { out: "thappraya_mid", in: "supertown_elbow", e: "supertown_elbow" },
+  },
+  supertown_elbow: {
+    name: "Supertown Complex (the elbow)",
+    region: "Thappraya",
+    desc: "The elbow of the L, where the alley turns and the drag bars cluster — the stage end, dark " +
+      "and padlocked at this hour, a mirrored cabaret sign catching what light there is. The alley " +
+      "carries on east and opens onto Second Road by the strip's far corner.",
+    exits: { w: "supertown_alley", e: "thappraya_e" },
+  },
+  arrow_bar: {
+    name: "Arrow Bar",
+    bar: "Arrow Bar", barType: "beer",
+    region: "Thappraya",
+    desc: "A couple of doors from the 7-Eleven at the top of the strip: a bright open beer bar with a " +
+      "bullseye painted over the counter, a Connect 4 frame, and a row of hostesses who've clearly " +
+      "done the maths on where the foot traffic enters the soi. First bar most punters hit; many " +
+      "don't get past it.",
+    exits: { out: "thappraya_w" },
+  },
+  cheeky_monkey: {
+    name: "Cheeky Monkey Bar",
+    bar: "Cheeky Monkey Bar", barType: "beer",
+    region: "Thappraya",
+    desc: "A Samson-brothers house, mid-strip: cartoon monkeys over the bar, cold towers of Chang, and " +
+      "a crew of hostesses who run it at a permanent gentle party. Same owners as half the strip, and " +
+      "it shows in the fresh paint and the working aircon.",
+    exits: { out: "thappraya_mid" },
+  },
+  the_office: {
+    name: "The Office Bar",
+    bar: "The Office Bar", barType: "beer",
+    region: "Thappraya",
+    desc: "The other Samson beer bar, down the Second Road end — the joke's on the sign, so a man can " +
+      "honestly say he's 'at the office.' Dartboard, a telly showing football nobody watches, and the " +
+      "easy end-of-strip pace before Second Road takes over.",
+    exits: { out: "thappraya_e" },
+  },
+  hyper: {
+    name: "Hyper A Go-Go",
+    bar: "Hyper A Go-Go", barType: "gogo",
+    region: "Thappraya",
+    desc: "The strip's one go-go, and its jewel: mirrored, chromed, a fog of aircon and bass, a stage " +
+      "of numbered dancers under lights that cost more than the old place ever made. The Samson " +
+      "brothers bought Hyper as a wreck and rebuilt it into this. Working the floor like a general is " +
+      "Diamond, the mamasan — six feet of poise in heels, and every inch of it a choice.",
+    exits: { out: "thappraya_mid" },
+  },
+  take_care_me: {
+    name: "Take Care Me",
+    bar: "Take Care Me", barType: "pub", band: true,
+    region: "Thappraya",
+    desc: "A live-music rock pub at the top of Second Road end of the strip — a proper stage, a tight " +
+      "Filipino band murdering and resurrecting the classics, and a crowd three deep at the rail. No " +
+      "house girls work it, but the freelancers love it: they come for the music, the cold beer, and " +
+      "the chance to pick a man who came for the same. Loud, sweaty, and the best room on the strip.",
+    exits: { out: "thappraya_e" },
+  },
+  the_boardroom: {
+    name: "The Boardroom",
+    bar: "The Boardroom", barType: "gents", outlet: true,
+    region: "Thappraya",
+    desc: "A gentleman's club behind a shut door at the top of the strip: cold, gold, low-lit, deep " +
+      "leather couches with curtains that draw, and ladies already crossing the floor in not very " +
+      "much. Quiet money, discretion, and a barfine that reflects both. The strip's noise dies the " +
+      "moment the door sighs closed behind you.",
+    exits: { out: "thappraya_w" },
+  },
+  velvet_club: {
+    name: "The Velvet Club",
+    bar: "The Velvet Club", barType: "gents", outlet: true,
+    region: "Thappraya",
+    desc: "The strip's second gentleman's club, mid-way and even quieter: velvet, brass, a whisper of " +
+      "a sound system, and hostesses who don't chase — you buy a drink, they settle in close, and the " +
+      "rest is between you and the curtain. Another of the Samson brothers' rooms, run cold and " +
+      "expensive on purpose.",
+    exits: { out: "thappraya_mid" },
+  },
+  beach_turn_massage: {
+    name: "Beach Turn Oil Massage",
+    bar: "Beach Turn Oil Massage",
+    region: "Thappraya",
+    massage: "oil",
+    desc: "A pink-lit oil shop right where the beach road turns into the strip, girls on the step " +
+      "catching the punters as they arrive, the small sticker on the mirror, the usual friendly " +
+      "arrangement.",
+    exits: { out: "thappraya_w" },
+  },
+  thappraya_massage: {
+    name: "Thappraya Thai Massage",
+    bar: "Thappraya Thai Massage",
+    region: "Thappraya",
+    massage: "legit",
+    desc: "A proper traditional shop near the Second Road end of the strip: foot chairs, tiger balm, " +
+      "a wall price list, and firm-thumbed aunties who do exactly one thing and do it well. No sticker " +
+      "on this mirror.",
+    exits: { out: "thappraya_e" },
   },
 
   jomtien_7eleven: {
@@ -1994,6 +2133,71 @@ const NPCS = {
           "come every month, and nobody fall off a balcony on my soi.\"" },
     ],
   },
+  diamond: {
+    name: "Diamond", th: "ไดมอนด์", emoji: "💎",
+    room: "hyper",
+    desc: "The mamasan of Hyper A Go-Go — six feet of poise in heels, cheekbones you could open " +
+      "letters with, and a katoey's hard-won certainty that she is the most finished thing in any " +
+      "room. She ran the floor here when it was a dump and stayed to run it now the Samson brothers " +
+      "have made it shine. Nothing on this stage happens that Diamond didn't allow.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Welcome to Hyper, darling — mind the step, mind your wallet, mind your manners.\" " +
+          "Diamond looks you over the way a jeweller looks at a stone that might be paste. \"Yes, I am " +
+          "a lady-boy, and yes, I am prettier than most of my girls, and no, I am not for sale — I am " +
+          "the one who sells. You buy a dancer a drink, you treat her nice, everybody happy. You make " +
+          "trouble, you find out how fast a big girl in heels can move.\" A dazzling, weaponised smile.",
+        short: "\"Buy a girl a drink, treat her nice, mind your manners. I run this floor.\"" },
+      { topic: "hyper", text: "\"You should have seen this place before — sticky floor, dead neon, " +
+          "three girls and a fan.\" She waves a manicured hand at the chrome. \"The Samson brothers " +
+          "buy it, gut it, spend real money. Now it is the best stage in Jomtien, and I am still " +
+          "here, because you do not throw away the one who knows where everything is buried.\"" },
+      { topic: "samson", text: "\"My bosses. Farang-Thai family, own half the strip and plenty on " +
+          "Pratumnak too — beer bar, go-go, the quiet clubs, all of it.\" A cool look. \"Good bosses. " +
+          "They pay on time and they let me run my floor my way. I make them money; they leave me be. " +
+          "That is the whole marriage.\"" },
+      { topic: "ladyboy", text: "\"You have a question, I can hear you thinking it.\" She laughs, not " +
+          "unkindly. \"Twenty year ago I danced this soi. Now I run it. In Thailand a katoey can be a " +
+          "queen or a punchline — I decided early which one. The girls call me Mae. That is enough " +
+          "answer, na.\"" },
+    ],
+  },
+  wimon: {
+    name: "Wimon", th: "วิมล", emoji: "👑",
+    room: "arrow_bar", bars: ["arrow_bar", "cheeky_monkey", "the_office"],
+    desc: "The mamasan who runs the Samson brothers' three beer bars on the strip — fifties, brisk, a " +
+      "{{phone}} in each hand and an eye on every tab. She works a different bar each night and somehow " +
+      "knows exactly what happened at the other two.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Welcome, sit anywhere.\" Wimon's smile is warm and her arithmetic is instant. \"Three " +
+          "bar I look after for the boss — Arrow, Cheeky Monkey, the Office. Beer cold, girls nice, no " +
+          "funny business. You drink, you play a game, you buy a lady a cola — easy. The go-go and the " +
+          "quiet clubs, different manager; me, I do the honest bars.\"",
+        short: "\"Three beer bars I run for the boss. Drink, play, buy a lady a cola. Easy.\"" },
+      { topic: "samson", text: "\"The Samson brothers own this bar, and that one, and the go-go, and " +
+          "the two quiet clubs — half the strip, really.\" A businesslike nod. \"Good owners. They put " +
+          "the money back in. That is why the aircon work and the roof don't leak, na.\"" },
+    ],
+  },
+  ampai: {
+    name: "Ampai", th: "อำไพ", emoji: "👑",
+    room: "the_boardroom", bars: ["the_boardroom", "velvet_club"],
+    desc: "The madame of the strip's two gentleman's clubs — silk, low voice, immaculate, the kind of " +
+      "calm that costs a fortune to be near. She sells the quiet more than the girls, and she knows " +
+      "every regular's business and says none of it.",
+    dialogue: [
+      { th: "เชิญค่ะ", rom: "choen kha",
+        text: "\"Welcome. Come in from the noise.\" The door closes and the strip vanishes. \"The " +
+          "Boardroom, the Velvet Club — both mine to run, both the same idea: cold, quiet, discreet. " +
+          "You buy a lady a drink, she sits close, and after that it is between you and the curtain. " +
+          "No barkers, no bells, no drama. A man pay for that peace more than for anything else.\"",
+        short: "\"Two quiet clubs, both mine. Buy a lady a drink; the rest is behind the curtain.\"" },
+      { topic: "samson", text: "\"The Samson brothers hold the papers. They understand the quiet end " +
+          "of the business — they leave it quiet.\" A faint smile. \"That is rarer than you think, in " +
+          "men who own bars.\"" },
+    ],
+  },
 
   pim: {
     name: "Pim", th: "พิม", emoji: "💋",
@@ -3538,6 +3742,7 @@ const NPC_ROLES = {
   joy: "hostess", fon: "hostess", gift: "hostess", kwan: "hostess",
   nong: "hostess", pim: "hostess", bee: "hostess", jane: "hostess", mercedes: "hostess", kratae: "hostess",
   yai: "mamasan", rose: "mamasan", kesorn: "mamasan", lawan: "mamasan", sumalee: "mamasan",
+  diamond: "mamasan", wimon: "mamasan", ampai: "mamasan",
   ploy: "cashier", aek: "cashier", malee: "cashier",
   candy: "mamasan", oy: "mamasan", daeng: "mamasan", mem: "mamasan", wan: "mamasan",
 };
@@ -3743,6 +3948,12 @@ const _FILLER_HOSTESSES = [
   ["Namo","นะโม","seabreeze"], ["Somruedee","สมฤดี","seabreeze"],
   ["Ratchada","รัชฎา","coconut"], ["Nittaya","นิตยา","coconut"],
   ["Duang","ดวง","sandbar"], ["Mookda","มุกดา","sandbar"],
+  ["Aoi","อ้อย","hyper"], ["Noey","เนย","hyper"],
+  ["Gig","กิ๊ก","arrow_bar"], ["Kade","เกด","arrow_bar"],
+  ["Pinky","พิงกี้","cheeky_monkey"], ["Mona","โมนา","cheeky_monkey"],
+  ["Gina","จีน่า","the_office"], ["Bpaeng","แป้ง","the_office"],
+  ["Tim","ทิม","the_boardroom"], ["Min","มิน","the_boardroom"],
+  ["Milk","มิ้ลค์","velvet_club"], ["June","จูน","velvet_club"],
 ];
 
 for (const [name, th, room] of _FILLER_HOSTESSES) {
@@ -3940,6 +4151,21 @@ const ROOM_GEO = {
   sandbar:          [12.8896, 100.8741],
   soi7_oil:         [12.8890, 100.8726],
   soi7_thai:        [12.8905, 100.8739],
+  // Thappraya Road / Jomtien Main Strip (Dongtan → Second Rd)
+  thappraya_w:      [12.8968, 100.8668],
+  thappraya_mid:    [12.8972, 100.8685],
+  thappraya_e:      [12.8975, 100.8702],
+  supertown_alley:  [12.8978, 100.8688],
+  supertown_elbow:  [12.8982, 100.8698],
+  arrow_bar:        [12.8971, 100.8666],
+  the_boardroom:    [12.8965, 100.8670],
+  beach_turn_massage:[12.8964, 100.8664],
+  cheeky_monkey:    [12.8975, 100.8683],
+  hyper:            [12.8969, 100.8687],
+  velvet_club:      [12.8970, 100.8690],
+  take_care_me:     [12.8978, 100.8700],
+  the_office:       [12.8972, 100.8704],
+  thappraya_massage:[12.8973, 100.8706],
   jomtien_7eleven:  [12.8880, 100.8724],
   jomtien_bus_stop: [12.8940, 100.8710],
   // Pratumnak

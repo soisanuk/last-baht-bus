@@ -2187,6 +2187,34 @@ test("Soi 7 (Jomtien): beach road to Second Rd, four beer bars, Rompho Market, K
   assert.equal(bars.filter(b => _npcRoom("sumalee") === b).length, 1);
 });
 
+test("Thappraya Main Strip: Dongtan up to Second Rd, the mix of venues, Diamond the katoey mama", () => {
+  // the strip climbs UP off Dongtan Beach and runs east; Dongtan's north stays blocked
+  assert.equal(ROOMS.dongtan_beach.exits.up, "thappraya_w");
+  assert.ok(!ROOMS.dongtan_beach.exits.n, "the blocked-direction test's north stays blocked");
+  assert.equal(ROOMS.thappraya_w.exits.e, "thappraya_mid");
+  assert.equal(ROOMS.thappraya_mid.exits.e, "thappraya_e");
+  assert.ok(ROOMS.thappraya_w.seven && ROOMS.thappraya_e.seven, "a 7-Eleven at each end");
+  // Supertown is walkable (alley → elbow → back to the strip) but unpopulated
+  assert.equal(ROOMS.thappraya_mid.exits.super, "supertown_alley");
+  assert.equal(ROOMS.supertown_alley.exits.in, "supertown_elbow");
+  assert.ok(!ROOMS.supertown_elbow.bar && !ROOMS.supertown_alley.barType, "no bars built in Supertown yet");
+  // the venue mix
+  assert.equal(ROOMS.hyper.barType, "gogo");
+  assert.equal(ROOMS.take_care_me.barType, "pub");
+  assert.ok(ROOMS.take_care_me.band, "the rock pub has live music");
+  assert.deepEqual(["arrow_bar", "cheeky_monkey", "the_office"].map(b => ROOMS[b].barType), ["beer", "beer", "beer"]);
+  assert.deepEqual(["the_boardroom", "velvet_club"].map(b => ROOMS[b].barType), ["gents", "gents"]);
+  // Diamond runs Hyper (fixed), Wimon the beer bars and Ampai the gents (rotating)
+  assert.equal(NPC_ROLES.diamond, "mamasan");
+  assert.equal(_npcRoom("diamond"), "hyper", "Diamond holds her own floor");
+  assert.equal(["arrow_bar", "cheeky_monkey", "the_office"].filter(b => _npcRoom("wimon") === b).length, 1);
+  assert.equal(["the_boardroom", "velvet_club"].filter(b => _npcRoom("ampai") === b).length, 1);
+  // Hyper and the beer bars are populated
+  for (const b of ["hyper", "arrow_bar", "the_boardroom"]) {
+    assert.ok(Object.keys(NPCS).filter(n => NPC_ROLES[n] === "hostess" && _npcRoom(n) === b).length >= 2, `${b} populated`);
+  }
+});
+
 test("Areca Lodge is a fourth hotel you can check into", () => {
   state().flags.act1Done = true;
   state().flags.hasWallet = true;
