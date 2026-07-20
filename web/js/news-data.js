@@ -43,8 +43,13 @@ var NEWS_FEED = [
     "d": "02 Jul 2026"
   },
   {
-    "t": "Thailand's first conscientious objector sentenced to prison",
-    "s": "Bangkok Post",
+    "t": "Princess Anne Meets Thailand’s Queen Suthida in Bangkok",
+    "s": "Town & Country Magazine",
+    "d": "17 Jul 2026"
+  },
+  {
+    "t": "First OE turns into Thai prison ordeal for 18-year-old Kiwi",
+    "s": "Stuff",
     "d": "20 Jul 2026"
   },
   {
@@ -53,35 +58,30 @@ var NEWS_FEED = [
     "d": "20 Jul 2026"
   },
   {
-    "t": "Thailand targets 2030 completion of first phase of high-speed rail link to China",
-    "s": "Reuters",
+    "t": "New Dinosaur with 66-Foot Neck Believed to Have Lived 150 Million Years Ago Found in Thailand",
+    "s": "People.com",
+    "d": "19 Jul 2026"
+  },
+  {
+    "t": "Thailand's first conscientious objector sentenced to prison",
+    "s": "Bangkok Post",
     "d": "20 Jul 2026"
   },
   {
     "t": "U.S., Canadian, Thai Navies Sharpen Maritime Capabilities During Exercise CARAT Thailand",
     "s": "U.S. Department of War (.gov)",
     "d": "17 Jul 2026"
-  },
-  {
-    "t": "Is Thailand’s PM More Concerned About Sound Cannabis Policy or Political Optics?",
-    "s": "The Diplomat – Asia-Pacific",
-    "d": "20 Jul 2026"
-  },
-  {
-    "t": "Thai Cabinet approves changes in pre-travel visa free policy",
-    "s": "Thai PBS World",
-    "d": "20 Jul 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-07-20","USD":33.62,"AUD":23.56,"GBP":45.27,"EUR":38.42};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-07-21","temp":29,"humid":78,"code":0,"hi":33,"rain":22};
+var WX_NOW = {"date":"2026-07-21","temp":28,"humid":74,"code":3,"hi":33,"rain":22};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-18","done":true,"h":"France","hs":4,"a":"England","as":6},{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-07-16","first":"639214","last2":"71","front3":["683","709"],"back3":["427","746"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4013,"date":"2026-07-20","baht":63800};
+var GOLD = {"usd":4009,"date":"2026-07-20","baht":63750};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":65431,"thb":2200211};
+var BTC = {"usd":65258,"thb":2195267};
