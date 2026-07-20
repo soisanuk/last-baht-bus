@@ -1604,6 +1604,8 @@ const FOOD_STALLS = {
   naklua_rd: { name: "grilled chicken and sticky rice off a smoky cart", price: 60, hunger: 60, thirst: 0 },
   ws_gate: { name: "a late-night kebab of negotiable provenance", price: 89, hunger: 45, thirst: 0 },
   kiss: { name: "a proper plate off the mile-long menu at KISS — pad kaprao, or a burger if the soul needs it", price: 120, hunger: 70, thirst: 10 },
+  kiss_jomtien: { name: "the same mile-long KISS menu, Jomtien branch — pad kaprao, or a burger if the soul needs it", price: 120, hunger: 70, thirst: 10 },
+  soi_rompho: { name: "grilled chicken, sticky rice and som tam from a Rompho Market stall", price: 60, hunger: 60, thirst: -5 },
 };
 
 const _EDIBLE = { moo_ping: 35, som_tam: 50, noodles: 20 };
