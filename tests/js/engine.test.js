@@ -686,6 +686,74 @@ test("motosai: quoted, paid, discounted after helmet favour", () => {
   assert.equal(state().money, 80); // Bank's special price ฿20
 });
 
+// ── The last baht bus: the nightly ride-home climax ─────────────────────────
+
+test("last baht bus: the ฿15 ride runs until 2 a.m., then the stop goes dead", () => {
+  state().money = 500;
+  state().rain = 0;
+  state().room = "jomtien_bus_stop";
+  state().nightTurn = 79;              // 01:xx — one last chance
+  run("ride bus to beach road");
+  assert.ok(state().pendingFare, "before the cutoff the bus still runs");
+  newGame(); out = []; state().lastSaleng = 99999;
+  state().money = 500;
+  state().rain = 0;
+  state().room = "jomtien_bus_stop";
+  state().nightTurn = 80;              // 02:00 — the last one's gone
+  run("ride bus to beach road");
+  assert.ok(!state().pendingFare, "no fare opens — the bus won't come");
+  assert.match(lastOut(), /last songthaew|last-baht-bus/i);
+});
+
+test("small-hours motosai gouge kicks in once the buses stop (Bank's rate exempt)", () => {
+  state().room = "buakhao_s";
+  state().money = 300;
+  state().rain = 0;
+  state().nightTurn = 40;              // buses running — base ฿50
+  run("motosai to naklua");
+  assert.equal(state().money, 250);
+  newGame(); out = []; state().lastSaleng = 99999;
+  state().room = "buakhao_s";
+  state().money = 300;
+  state().rain = 0;
+  state().nightTurn = 82;              // past the last bus — gouged to ฿80
+  run("motosai to naklua");
+  assert.equal(state().money, 220, "small-hours tax: ฿50 → ฿80");
+  assert.match(lastOut(), /small-hours/i);
+  // Bank's ฿20 mates' rate is exempt from the gouge
+  newGame(); out = []; state().lastSaleng = 99999;
+  state().room = "buakhao_s";
+  state().money = 300;
+  state().rain = 0;
+  state().flags.helmetDelivered = true;
+  state().nightTurn = 82;
+  run("motosai to naklua");
+  assert.equal(state().money, 280, "Bank still runs you home for ฿20");
+});
+
+test("last-bus warning fires once in the final half hour, away from home", () => {
+  state().flags.act1Done = true;
+  state().room = "beach_rd_c";         // out on the town, not the hotel
+  state().battery = 90;
+  state().nightTurn = 75;              // 01:xx — the warning window opens
+  run("wait 1");
+  assert.match(lastOut(), /last baht bus/i, "the heads-up lands");
+  assert.ok(state().lastBusWarned);
+  out = [];
+  run("wait 1");
+  assert.doesNotMatch(lastOut(), /last baht bus makes its final run/i, "it fires only once");
+});
+
+test("last-bus warning stays quiet if you're already home in bed", () => {
+  state().flags.act1Done = true;
+  state().room = "hotel_room";
+  state().battery = 90;
+  state().nightTurn = 75;
+  run("wait 1");
+  assert.doesNotMatch(lastOut(), /last baht bus makes its final run/i);
+  assert.ok(!state().lastBusWarned, "no race to run from your own pillow");
+});
+
 // ── Street encounters ──────────────────────────────────────────────────────
 // _startEnc fires an encounter directly (deterministic); the roll machinery
 // (_maybeEncounter) is tested separately below.

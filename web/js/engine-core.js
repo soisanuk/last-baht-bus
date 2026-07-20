@@ -704,6 +704,7 @@ function _tick() {
   // any time before it moves on. All of that lives in _salengTick (encounters).
   _salengTick();
   _closingTick(); // midnight: gents/Soi 6/Darkside give last call, then bolt or shutter
+  _lastBusWarn();  // ~01:30: heads-up that the last ฿15 ride home is about to leave
   _maybeIncomingText();
   if (G.lightOn && G.battery > 0) {
     G.battery--;

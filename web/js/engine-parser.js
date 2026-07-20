@@ -806,6 +806,14 @@ function _doRideBus(arg) {
     return;
   }
   if (!r.busStop) { _say("No bus stop here. Look for one on the main roads."); return; }
+  if (G.nightTurn >= LAST_BUS_TURN) {
+    _say("You stand at the stop with your arm half-raised, and nothing comes. Nothing " +
+      "is coming. The last songthaew of the night made its run and rattled off to the " +
+      "depot a while back — this is the last-baht-bus hour, and you're on the wrong " +
+      "side of it. It's a motorbike taxi now, or your own two feet through the dark. " +
+      "(MOTOSAI, or walk it home.)", "alert");
+    return;
+  }
   const lines = Object.entries(BUS_LINES).filter(([, stops]) => stops.includes(G.room));
   const reachable = [...new Set(lines.flatMap(([, stops]) => stops))].filter(s => s !== G.room);
   const w = (arg || "").toLowerCase();
@@ -850,6 +858,10 @@ function _doMotosai(arg) {
   if (_flag("helmetDelivered") && price === MOTOSAI_TOWN) {
     price = 20;
   }
+  // once the last baht bus has gone, the piwins know they're the only ride in town
+  // and price the small hours accordingly (Bank's ฿20 mates' rate stays exempt)
+  const lateGouge = G.nightTurn >= LAST_BUS_TURN && price !== 20;
+  if (lateGouge) price = Math.round(price * LATE_MOTO_MULT / 10) * 10;
   if (G.money < price) {
     // Broke and stranded. Most of town is a free walk home, but the Darkside is
     // on the wrong side of the highway — a dawn-broke farang out here would be
@@ -874,6 +886,9 @@ function _doMotosai(arg) {
   G.money -= price;
   G.room = d.room;
   G.darkStreak = 0;
+  if (lateGouge) _say("Gone two in the morning, the buses long tucked up, and the " +
+    "piwin reads the empty road and your lack of options and names his small-hours " +
+    "number. You both know you'll pay it.", "dim");
   _say(`“${thaiBaht(price)}.” You pay${price === 20 ? " — Bank's special price" : ""}, ` +
     "swing on the back, and the piwin threads traffic like it owes him money. " +
     `That was the fastest ฿${price} of your life. (฿${G.money} left.)`, "thai");
@@ -1297,6 +1312,12 @@ function _doTime() {
   _say(t < 30 ? "(Early doors: barfines run ×1.5 until 21:00.)" :
     t >= 60 ? "(Past midnight: most beer bars have quietly dropped the barfine.)" :
     "(Prime time. Standard rates apply.)", "dim");
+  if (_flag("act1Done")) {
+    _say(t >= LAST_BUS_TURN ? "(The last baht bus has gone — it's the piwin's small-hours " +
+      "tax or shoe leather home now.)" :
+      t >= LAST_BUS_TURN - 10 ? "(Last baht bus around 2 a.m. — the ฿15 ride home is nearly up.)" :
+      "(Baht buses running: ฿15 the ride home until the last one, ~2 a.m.)", "dim");
+  }
 }
 
 function _hourToTurn(h) { // 24h clock → nightTurn; the game lives 18:00–04:00
