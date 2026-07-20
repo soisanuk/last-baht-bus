@@ -1630,6 +1630,7 @@ const _HELP = `Common commands:
   TIME · MAP · WAIT UNTIL <hour> · TIP <lady> <amount> · PHOTO · CHEERS
   QUESTS · ACCEPT <quest> · ABANDON <quest>
   CONTACT <lady> (swap numbers) · CONTACTS (your phonebook) · MESSAGE <lady> · CHECK MESSAGES
+  WHO / BLACKBOOK (your ladies, ranked by how they feel about you)
   SEND <amount> TO <lady> (banking app)
   LIGHT ON / LIGHT OFF · CHARGE PHONE
   SCORE (happiness & progress) · UNDO · RESTART   (the night autosaves itself)`;
@@ -1649,7 +1650,7 @@ const _COMPLETE_VERBS = [
   "sleep", "tv", "column", "watch", "weather", "scores", "lottery", "map", "time", "tip", "wave",
   "photo", "call", "shower", "withdraw", "cheers", "dance", "sing", "swim",
   "smell", "listen", "diagnose", "apologize", "quests", "accept", "abandon", "contact",
-  "contacts", "message", "check messages", "send", "score", "wait", "again",
+  "contacts", "who", "blackbook", "message", "check messages", "send", "score", "wait", "again",
   "request", "help", "save", "load", "undo", "restart",
 ];
 
@@ -1992,6 +1993,7 @@ function doCommand(input) {
     case "messages": case "msgs": case "inbox": _readMessages(); break;
     case "message": case "text": case "msg": _doMessage(arg); break;
     case "contacts": case "phonebook": _doContacts(); break;
+    case "who": case "blackbook": case "little black book": case "ladies": _doBlackbook(); break;
     case "contact": case "number":
       if (!arg) _doContacts(); // bare CONTACT reads as "show my contacts"
       else _doContact(arg.replace(/^(with |for )/, ""));

@@ -611,7 +611,32 @@ function _doContacts() {
     const glow = drinks >= 6 ? " ❤" : drinks >= 3 ? " ✦" : "";
     _say(`  ${n.emoji} ${n.name} — ${bar}${glow}`, "dim");
   }
-  _say("(MESSAGE <name> to charm · SEND <amount> TO <name> — the banking app.)", "dim");
+  _say("(MESSAGE <name> to charm · SEND <amount> TO <name> · WHO / BLACKBOOK — who likes you and how much.)", "dim");
+}
+
+// WHO / BLACKBOOK: the punter's little book — every lady whose number you carry,
+// ranked by the bond (The Regular), where she works tonight, and whether she's
+// asked you over. A relationship dashboard; reads state, changes nothing.
+function _doBlackbook() {
+  if (_phoneDead()) return;
+  const ids = Object.keys(G.phone.contacts).filter(id => G.phone.contacts[id]);
+  if (!ids.length) {
+    _say("The black book's empty. You earn names the honest way out here — CONTACT a " +
+      "lady in her own bar once she likes you, and she goes in the book.");
+    return;
+  }
+  ids.sort((a, b) => _bondTier(b) - _bondTier(a) || (G.soc.drinks[b] || 0) - (G.soc.drinks[a] || 0));
+  _say("── YOUR BLACK BOOK ──", "win");
+  const label = ["a name and a number", "knows your face", "a regular", "★ your girl"];
+  const mark = ["·", "♡", "♥", "★"];
+  for (const id of ids) {
+    const n = NPCS[id], t = _bondTier(id);
+    const bar = _barName(_npcRoom(id)) || "around";
+    const invited = G.phone.invite && G.phone.invite.id === id && G.phone.invite.day === G.day
+      ? " — asked you over tonight" : "";
+    _say(`${mark[t]} ${n.emoji || ""} ${n.name} — ${bar} · ${label[t]}${invited}`, t >= 2 ? "" : "dim");
+  }
+  _say("(A bond cools a notch a night — tend the ones you mean to keep. MESSAGE / SEND / CONTACT.)", "dim");
 }
 
 function _doContact(arg) {
@@ -698,27 +723,43 @@ function _readMessages() {
 
 // Contacts text first, sometimes. Sweet nothings, invitations with a reward
 // for showing up, and money stories — this IS Pattaya.
+// Contacts text unprompted — scaled by the bond (The Regular). A girl you've
+// become a regular/farang for MISSES you: she texts more often, is weighted more
+// likely to be the one who does, and her messages skew to invites and longing
+// ("when you come see me?") rather than the mama-sick game she'd never run on her
+// own farang. New/face contacts still send the classic scam-ask mix.
 function _maybeIncomingText() {
   if (G.battery <= 0 || G.game || G.pendingEnc) return;
   const contacts = Object.keys(G.phone.contacts);
   if (!contacts.length) return;
   if (G.turns - G.phone.lastText < 25) return;
-  if (_rand() >= 0.08) return;
-  const id = contacts[Math.floor(_rand() * contacts.length)];
-  const name = NPCS[id].name;
-  const roll = _rand();
-  if (roll < 0.4) {
-    G.phone.invite = { id, day: G.day };
-    _pushMsg(id, `bar quiet tonight 😴 you come see ${name}?? I keep you seat 💺💕`);
-  } else if (roll < 0.65) {
-    _pushMsg(id, ["mama of me sick, need buy medicine 300 baht 🥺 you help?",
+  const maxT = Math.max(0, ...contacts.map(_bondTier));
+  if (_rand() >= 0.06 + 0.02 * maxT) return;   // regulars miss you, so they text more
+  // weight the pick toward the girls you've built something with
+  const pool = [];
+  for (const c of contacts) for (let i = 0; i <= _bondTier(c); i++) pool.push(c);
+  const id = pool[Math.floor(_rand() * pool.length)];
+  const name = NPCS[id].name, t = _bondTier(id), roll = _rand();
+  if (t >= 3) { // her farang: longing, jealousy, the real ones — no scam game on you
+    if (roll < 0.45) { G.phone.invite = { id, day: G.day };
+      _pushMsg(id, `when you come see me?? 🥺 i keep you seat every night, you no come i sad 💔`); }
+    else _pushMsg(id, ["i dream about you last night na 💭❤️", "you go other bar?? 😤 i see you i KNOW 👀",
+      "miss you so much cannot sleep 😢", "my farang 🥰 when you come back thailand? i wait"][Math.floor(_rand() * 4)]);
+  } else if (t >= 2) { // regular: invites and warmth, a little needy
+    if (roll < 0.45) { G.phone.invite = { id, day: G.day };
+      _pushMsg(id, `bar quiet tonight 😴 you come see ${name}?? i keep you seat 💺💕`); }
+    else if (roll < 0.6) _pushMsg(id, "mama of me sick need medicine 300 🥺 you help little bit na?");
+    else _pushMsg(id, ["thinking of you na 💭", "you eat already?? 🍚", "sabai dee mai 😊",
+      "last night SO funny 5555"][Math.floor(_rand() * 4)]);
+  } else { // a name and a number: the classic mix, scam-ask heavy
+    if (roll < 0.3) { G.phone.invite = { id, day: G.day };
+      _pushMsg(id, `bar quiet tonight 😴 you come see ${name}?? i keep you seat 💺💕`); }
+    else if (roll < 0.65) _pushMsg(id, ["mama of me sick, need buy medicine 300 baht 🥺 you help?",
       "phone of me break!! need 500 for fix... you good heart na 🙏",
       "buffalo of family very sick 😭😭 200 baht help little bit?"][Math.floor(_rand() * 3)]);
-  } else if (roll < 0.9) {
-    _pushMsg(id, ["thinking of you na 💭", "you eat already?? 🍚", "sabai dee mai 😊",
+    else if (roll < 0.9) _pushMsg(id, ["thinking of you na 💭", "you eat already?? 🍚", "sabai dee mai 😊",
       "last night SO funny 5555"][Math.floor(_rand() * 4)]);
-  } else {
-    _pushMsg(id, "lucky day!! I win lottery small small 🎉 send you luck money", 50);
+    else _pushMsg(id, "lucky day!! I win lottery small small 🎉 send you luck money", 50);
   }
   _say("(📱 Your phone buzzes — CHECK MESSAGES.)", "dim");
 }
