@@ -2166,19 +2166,19 @@ const QUESTS = {
   sangsom: {
     name: "The Sister-Bar Run",
     giver: "candy",
-    desc: "Carry Candy's gift bottle of Sang Som to Bee at Candy Bar 2, in Myth " +
-      "Night (GIVE SANG SOM TO BEE).",
+    desc: "Carry Candy's gift bottle of Sang Som to Bee (GIVE SANG SOM TO BEE).",
     deps: [],
     item: "sang_som",
+    at: "bee",              // whose/where the next move is — HINT/journal resolve the live location
     doneFlag: "sangsomDelivered",
     reward: { money: 200, happy: 3 },
   },
   league: {
     name: "King of the Killer Table",
     giver: "bert",
-    desc: "Win a killer pool league night — every third night, ฿100 entry, the " +
-      "Stinky Bar is the league's home felt (PLAY KILLER).",
+    desc: "Win a killer pool league night — every third night, ฿100 entry (PLAY KILLER).",
     deps: [],
+    at: "stinky_bar",       // a room id works too, not just an NPC
     doneFlag: "wonLeague",
     reward: { money: 0, happy: 5 },
   },
@@ -2188,6 +2188,7 @@ const QUESTS = {
     desc: "Bee wants her expansion fund taken seriously: get her number (CONTACT " +
       "BEE) and wire ฿100 through the banking app (SEND 100 TO BEE).",
     deps: ["sangsom"],
+    at: "bee",
     doneFlag: "beeBanked",
     reward: { money: 0, happy: 4 },
   },

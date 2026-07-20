@@ -1899,6 +1899,39 @@ test("HINT is offered in autocomplete", () => {
   assert.ok(engineComplete("hin").includes("hint"));
 });
 
+test("in the sandbox, HINT points at the active quest and where to go", () => {
+  state().flags.act1Done = true;
+  state().stage = "vacation";
+  state().room = "beach_rd_c";
+  state().quests.sangsom = "active";
+  run("hint");
+  assert.match(lastOut(), /Sister-Bar Run.*GIVE SANG SOM TO BEE/s, "the active quest and its move");
+  assert.match(lastOut(), /Bee is at Candy Bar 2.*Myth Night/, "with the recipient's live location");
+  // standing where Bee is → the 'where' clause self-suppresses
+  state().room = "candy_bar_2";
+  out = [];
+  run("hint");
+  assert.doesNotMatch(lastOut(), /Myth Night/, "no directions when you're already there");
+});
+
+test("sandbox HINT nudges an offer, then falls back when the books are empty", () => {
+  state().flags.act1Done = true; state().stage = "vacation"; state().room = "beach_rd_c";
+  state().quests.league = "offered";
+  run("hint");
+  assert.match(lastOut(), /ACCEPT LEAGUE/i, "an offer becomes an ACCEPT nudge");
+  state().quests.league = undefined;
+  out = [];
+  run("hint");
+  assert.match(lastOut(), /givers are out there|TALK to people/i, "nothing on the books → go find one");
+});
+
+test("the quest journal shows the same live location as HINT", () => {
+  state().flags.act1Done = true; state().stage = "vacation"; state().room = "beach_rd_c";
+  state().quests.sangsom = "active";
+  run("quests");
+  assert.match(lastOut(), /Bee is at Candy Bar 2.*Myth Night/);
+});
+
 test("street food and water manage the meters", () => {
   state().room = "buakhao_market";
   state().money = 100;
