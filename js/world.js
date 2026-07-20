@@ -2181,6 +2181,11 @@ const NPCS = {
       { topic: "samson", text: "\"The Samson brothers own this bar, and that one, and the go-go, and " +
           "the two quiet clubs — half the strip, really.\" A businesslike nod. \"Good owners. They put " +
           "the money back in. That is why the aircon work and the roof don't leak, na.\"" },
+      { topic: "glam", text: "\"Ah — Khun Glam.\" Wimon's face softens into something you can't read " +
+          "and will not get past. \"He is our friend, long long time. Very kind man. Very...\" a small, " +
+          "final smile \"...special. His lady take care of him, we take care of him, everybody take " +
+          "care of him. That is all.\" She is already turning to the till. \"You want another beer, na?\" " +
+          "And that is the entire interview." },
     ],
   },
   ampai: {
@@ -2945,6 +2950,40 @@ const QUIZ_POOL = [
 // dialogue trees reset daily. Schema matches NPC dialogue: fallback + topics,
 // `short` for terse repeats.
 const PATRONS = {
+
+  glam: {
+    name: "Glam", emoji: "🎸", age: 77, nat: "German",
+    home: "cheeky_monkey", hops: false, shuttle: { after: 4, to: "hyper" }, protected: true,
+    desc: "Somewhere north of seventy-five and dressed like it's 1983 in a Munich discotheque: a silk " +
+      "shirt open one button too far, and a wild halo of sparse blonde hair caught somewhere between " +
+      "Einstein and a glam rocker on his third encore. Frail now, and — the whole strip agrees, gently " +
+      "— not entirely present. His companion, an older lady-boy who speaks only to the mama, wheels him " +
+      "in on a lovingly modified saleng, and most nights has him escorted across to Hyper once the " +
+      "music starts.",
+    dialogue: [
+      { text: "\"Ach — THERE you are.\" Glam seizes your hand in both of his, delighted, entirely " +
+        "certain he knows you. \"They told me Cologne, but I said no, no — the acoustics, the — you " +
+        "remember the acoustics.\" He leans in, confidential. \"The countess kept the silver. I kept " +
+        "the SHIRTS.\" A radiant pause, and whatever thread he was holding is simply gone; he beams at " +
+        "your left ear as though it, too, has just arrived from Cologne.",
+        short: "\"The countess kept the silver. I kept the SHIRTS.\" He beams at your left ear." },
+      { topic: "wife", text: "You ask, carefully, about the lady-boy at his side. Glam turns, sees " +
+        "her, and his face floods with an uncomplicated joy that stops the question dead. \"My — yes. " +
+        "YES.\" He pats the air near her hand; she does not look up from the mama. \"She drives the — " +
+        "the little one, with the wheels. Very fast. We were in Ibiza. Or we will be.\" He nods, " +
+        "satisfied that this settles it. It does not settle it." },
+      { topic: "music", text: "\"You want to hear about the TOUR.\" It is not a question; his eyes go " +
+        "bright and forty years younger. \"Wembley. Or — no. A tent. A very large tent, and the " +
+        "promoter was a crook, God rest him, and I wore the white one, the SILK—\" He mimes a chord no " +
+        "instrument has ever made. \"They still play it. Somewhere. They must.\" For one second he " +
+        "seems to know exactly that they don't; then the second passes." },
+      { topic: "girls", text: "You glance at the hostesses; Glam catches it and laughs, a real one. " +
+        "\"They understand me,\" he says, and for once it is perfectly clear. \"Perfectly. Every word. " +
+        "You—\" a fond, pitying pat on your arm \"—not so much. Don't worry. Nobody good ever made " +
+        "sense, hm?\" And he's off again, telling one of the girls something in three languages that " +
+        "has her genuinely crying with laughter." },
+    ],
+  },
 
   ron: {
     name: "Ron", emoji: "🦘", age: 66, nat: "Australian",
