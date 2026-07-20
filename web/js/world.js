@@ -53,7 +53,7 @@ const ROOMS = {
     desc: "Streetlights, seafood smoke, and baht buses rattling past. Soi Rompho's " +
       "neon flickers to the east, a 7-Eleven hums to the south, and the bus stop " +
       "is just north. Pratumnak Hill rises darkly to the far north.",
-    exits: { w: "jomtien_beach", e: "soi_rompho", s: "jomtien_7eleven", n: "jomtien_bus_stop" },
+    exits: { w: "jomtien_beach", e: "soi_rompho", s: "jomtien_7eleven", n: "jomtien_bus_stop", spa: "jomtien_thai" },
   },
   soi_rompho: {
     name: "Soi Rompho",
@@ -111,7 +111,7 @@ const ROOMS = {
       "stand idles on the corner, drivers watching the street like sleepy hawks.",
     busStop: "beachrd",
     motosai: true,
-    exits: { s: "ws_gate", n: "beach_rd_c", e: "second_rd_s", w: "short_time_motel" },
+    exits: { s: "ws_gate", n: "beach_rd_c", e: "second_rd_s", w: "short_time_motel", spa: "papaya_massage", spa2: "beachthai_massage" },
   },
 
   short_time_motel: {
@@ -135,7 +135,7 @@ const ROOMS = {
       "just south of it TEQUILA QUEEN's ancient neon señorita kicks her leg, as she " +
       "has since before you were born.",
     busStop: "beachrd",
-    exits: { s: "beach_rd_s", n: "beach_rd_n", w: "promenade", e: "central_mall", in: "tequila_queen" },
+    exits: { s: "beach_rd_s", n: "beach_rd_n", w: "promenade", e: "central_mall", in: "tequila_queen", spa: "beachrd_oil" },
   },
   tequila_queen: {
     name: "Tequila Queen A-Go-Go",
@@ -221,7 +221,7 @@ const ROOMS = {
     desc: "The working road running parallel between Beach Road and Soi Buakhao — less " +
       "neon, more motorbikes, the town with its makeup half off. It climbs south " +
       "onto the north shoulder of Pratumnak Hill, toward Jomtien beyond.",
-    exits: { w: "beach_rd_s", e: "buakhao_s", n: "second_rd_c", s: "pratumnak_rd" },
+    exits: { w: "beach_rd_s", e: "buakhao_s", n: "second_rd_c", s: "pratumnak_rd", spa: "second_thai", honey: "soi_honey_w" },
   },
   second_rd_c: {
     name: "Second Road (Central)",
@@ -229,15 +229,17 @@ const ROOMS = {
     desc: "Mid-Second-Road: baht buses in convoy, pharmacies, and the constant churn " +
       "between the mall's back doors to the west and the fairy-lit mouth of MYTH " +
       "NIGHT market to the east.",
-    exits: { s: "second_rd_s", n: "second_rd_n", w: "central_mall", e: "myth_night" },
+    exits: { s: "second_rd_s", n: "second_rd_n", w: "central_mall", e: "myth_night", diana: "diana_w" },
   },
   second_rd_n: {
     name: "Second Road (North)",
     region: "Second Road",
     desc: "The north stretch, where Second Road angles toward the Dolphin roundabout. " +
       "Central Pattaya Road — Pattaya Klang — crosses just ahead, cutting the whole " +
-      "town into north and south.",
-    exits: { s: "second_rd_c", n: "pattaya_klang" },
+      "town into north and south. This block is a massage row: SMILE MASSAGE winks pink " +
+      "from the west side, and opposite, four floors of blue neon spell POSEIDON MASSAGE " +
+      "over a doorman and a fish tank.",
+    exits: { s: "second_rd_c", n: "pattaya_klang", w: "smile_massage", e: "poseidon_soapy" },
   },
   pattaya_klang: {
     name: "Central Pattaya Road (Pattaya Klang)",
@@ -280,8 +282,10 @@ const ROOMS = {
     desc: "The arch is still there — WALKING STREET PATTAYA, buzzing and flickering, famous " +
       "enough that people photograph it before they've seen what's behind it. The strip runs " +
       "south. It used to be louder. The gap between what this street was and what it is now " +
-      "is not visible from the gate, but you'll feel it by the time you reach the other end.",
-    exits: { s: "ws_south", n: "beach_rd_s", w: "pratumnak_rd" },
+      "is not visible from the gate, but you'll feel it by the time you reach the other end. " +
+      "Just east, RUEAN SABAI THAI MASSAGE has a row of foot chairs out for the walking " +
+      "wounded.",
+    exits: { s: "ws_south", n: "beach_rd_s", w: "pratumnak_rd", e: "thai_massage" },
   },
   ws_south: {
     name: "Walking Street (South)",
@@ -374,9 +378,11 @@ const ROOMS = {
       "stage looms on the corner — currently doing what every band in Thailand does to " +
       "'Hotel California' and somehow getting away with it. LUCKY TIGER BAR is just east. " +
       "The market sprawl is south. A small handwritten LK METRO arrow on a wall points " +
-      "down an alley — easy to miss, worth finding.",
+      "down an alley — easy to miss, worth finding. Soi Diana opens off the 7-Eleven on " +
+      "the corner here, its go-go neon running away west; two doors south toward the " +
+      "market, Candy Bar's rose-pink sign is close enough to read.",
     exits: { w: "myth_night", n: "pattaya_klang", s: "buakhao_market", e: "lucky_tiger",
-             in: "rock_factory", alley: "lk_entrance", hotel: "metropole_room" },
+             in: "rock_factory", alley: "lk_entrance", hotel: "metropole_room", diana: "diana_e" },
   },
   buakhao_market: {
     name: "Buakhao Market",
@@ -385,7 +391,7 @@ const ROOMS = {
       "som tam cart. The smell of papaya salad could pull you here from two sois away. " +
       "CANDY BAR's rose-pink sign glows just south; SILK ROSE and JASMINE GARDEN share " +
       "the block east.",
-    exits: { n: "buakhao_n", s: "buakhao_s", w: "candy_bar", e: "silk_rose", in: "candy_bar" },
+    exits: { n: "buakhao_n", s: "buakhao_s", w: "candy_bar", e: "silk_rose", in: "candy_bar", spa: "buakhao_oil" },
   },
   buakhao_s: {
     name: "Soi Buakhao (South)",
@@ -394,7 +400,7 @@ const ROOMS = {
       "pavement. The Tree Town arch is east — a complex that eats tourists and spits out " +
       "poorer, happier ones. A motosai stand waits by the corner, engines ticking.",
     motosai: true,
-    exits: { n: "buakhao_market", w: "second_rd_s", e: "tt_entrance", s: "jasmine_garden", in: "jasmine_garden" },
+    exits: { n: "buakhao_market", w: "second_rd_s", e: "tt_entrance", s: "jasmine_garden", in: "jasmine_garden", honey: "soi_honey_e" },
   },
   candy_bar: {
     name: "Candy Bar",
@@ -643,7 +649,7 @@ const ROOMS = {
       "slightly here: the regulars who know the place, the girls finishing a shift on the " +
       "back of a motorbike, a few tourists who followed the sound far enough to find it. " +
       "Less overwhelming than Walking Street; more like something you discovered.",
-    exits: { w: "lk_main", s: "las_vegas", in: "las_vegas" },
+    exits: { w: "lk_main", s: "las_vegas", in: "las_vegas", diana: "diana_e" },
   },
   kinky: {
     name: "KINKY Go-Go",
@@ -818,6 +824,262 @@ const ROOMS = {
       "that isn't home; by dark the same faces hold the same seats. Tourists never " +
       "find it. That is the entire point.",
     exits: { out: "naklua_rd" },
+  },
+
+  // ── Massage (three of the town's nine kinds) ──────────────────────────────
+  // In Pattaya "massage" is the most elastic word in the language and the sign
+  // never tells you which kind. Non-bar rooms on purpose (no barType) so none of
+  // the bar apparatus — lady drinks, bell, games, barfine — applies; the MASSAGE
+  // and SOAPY verbs carry the whole interaction.
+  thai_massage: {
+    name: "Ruean Sabai Thai Massage",
+    bar: "Ruean Sabai Thai Massage",
+    region: "Walking Street",
+    massage: "legit",
+    desc: "A clean, bright shopfront a step off the Walking Street gate: a row of reclining " +
+      "chairs facing the street, a laminated price list on the wall — foot 250, Thai 300, " +
+      "oil 350, aloe for the sunburned — and the good sharp smell of tiger balm. The ladies " +
+      "wear matching polo shirts and wais, are mostly old enough to be your aunt, and mean " +
+      "every knuckle of it. Pensri runs the front. No short shorts, no barker, no nonsense — " +
+      "the one honest kind of massage in a town that sells nine.",
+    exits: { out: "ws_gate" },
+  },
+  smile_massage: {
+    name: "Smile Massage",
+    bar: "Smile Massage",
+    region: "Second Road",
+    massage: "oil",
+    desc: "Pink light and an open front, and two girls in very short shorts draped over the " +
+      "doorway chairs who come alive the instant you slow down — “hello handsome, massaaage, " +
+      "you come!” The sign says massage; the shorts file a dissenting opinion. Inside is " +
+      "cooler and dimmer: curtained cubicles, a wall of mirrors, and a small printed sign in " +
+      "three languages you clock without meaning to — no sex. Waan is already smiling at you " +
+      "like she knows something.",
+    exits: { out: "second_rd_n" },
+  },
+  poseidon_soapy: {
+    name: "Poseidon Massage",
+    bar: "Poseidon Massage",
+    region: "Second Road",
+    soapy: true,
+    desc: "Four floors of blue neon and a doorman in a bad suit. Past a lobby of fake marble " +
+      "and a tank of actual fish is the other tank: a wall of bright one-way glass, tiered " +
+      "benches behind it, and behind those a couple of dozen ladies in evening dresses with " +
+      "numbered discs pinned at the hip — some watching a TV you cannot see, some watching " +
+      "you. Toom, the manageress, sits at a little desk with a laminated menu of tiers. You " +
+      "pick a number; everything after that is a set package and a very long shower.",
+    exits: { out: "second_rd_n" },
+  },
+  // Area coverage — the same three kinds, spread across town (generic staff).
+  buakhao_oil: {
+    name: "Golden Touch Massage",
+    bar: "Golden Touch Massage",
+    region: "Soi Buakhao",
+    massage: "oil",
+    desc: "One of a hundred pink-lit shopfronts on Buakhao, indistinguishable from its " +
+      "neighbours except that this one caught your eye. Girls in shorts on the step, a " +
+      "beaded curtain, air-con leaking cold onto the pavement, and the inevitable little " +
+      "sticker on the mirror inside. The oil is warm and the questions are few.",
+    exits: { out: "buakhao_market" },
+  },
+  jomtien_thai: {
+    name: "Jomtien Sabai Massage",
+    bar: "Jomtien Sabai Massage",
+    region: "Jomtien",
+    massage: "legit",
+    desc: "A breezy open front on the beach road, ceiling fans turning, a rack of aloe gel " +
+      "by the till for the day's crop of sunburned farang. Foot chairs face the sea, the " +
+      "ladies wear a tidy uniform, and the only oil on offer goes on your shoulders. After " +
+      "a day frying on Dongtan, this is the kindest ฿300 in Jomtien.",
+    exits: { out: "jomtien_beach_rd" },
+  },
+  beachrd_oil: {
+    name: "Cherry Oil Massage",
+    bar: "Cherry Oil Massage",
+    region: "Beach Road",
+    massage: "oil",
+    desc: "Wedged between a tailor and a currency booth on Beach Road, a narrow shop with a " +
+      "loud sign, a louder girl on the step, and a staircase to curtained rooms up top. The " +
+      "traffic roars past two feet away; inside, the mirror-and-sticker arrangement is " +
+      "exactly as advertised everywhere else in town.",
+    exits: { out: "beach_rd_c" },
+  },
+  second_thai: {
+    name: "Second Road Traditional Massage",
+    bar: "Second Road Traditional Massage",
+    region: "Second Road",
+    massage: "legit",
+    desc: "Blue plastic stools, a certificate on the wall in a gold frame, and a proprietress " +
+      "who runs it like a small clinic. Traditional Thai and oil, done properly and firmly, " +
+      "no funny business — the sort of place the long-stay expats come to get their backs put " +
+      "right after a night that went wrong.",
+    exits: { out: "second_rd_s" },
+  },
+  // ── Soi Honey (the map calls it Soi 11) — cuts between Second Rd and Buakhao ──
+  soi_honey_w: {
+    name: "Soi Honey (west end)",
+    region: "Soi Honey",
+    desc: "A short, narrow soi threading between Second Road and Soi Buakhao — the map calls it " +
+      "Soi 11, everyone else calls it Soi Honey, after the soapland whose blue glow owns the " +
+      "west end. Beer bars string fairy lights and Filipino covers across the lane; a soapy " +
+      "massage hums to the south, and the loudest of the beer bars is just north.",
+    exits: { w: "second_rd_s", e: "soi_honey_e", n: "honey_trap", s: "honey_soapy" },
+  },
+  soi_honey_e: {
+    name: "Soi Honey (east end)",
+    region: "Soi Honey",
+    desc: "The Buakhao end of Soi Honey, where the lane spits you back out among the pharmacies " +
+      "and laundries. Two more beer bars face each other across the narrow strip, close enough " +
+      "that the girls of one heckle the customers of the other. It smells of grilled chicken, " +
+      "spilled Chang, and somebody's jasmine.",
+    exits: { w: "soi_honey_w", e: "buakhao_s", n: "queen_bee", s: "buzz_inn" },
+  },
+  honey_soapy: {
+    name: "Honeycomb Massage",
+    bar: "Honeycomb Massage",
+    region: "Soi Honey",
+    soapy: true,
+    desc: "The blue-neon soapland the soi is named for: three floors, a doorman, a lobby that " +
+      "smells of chlorine and jasmine, and the wall of one-way glass where the numbered girls " +
+      "sit under honeycomb-gold light. A manageress works the menu at a little desk. Same ritual " +
+      "as Poseidon up on Second Road — a number, a set price, a very long shower.",
+    exits: { out: "soi_honey_w" },
+  },
+  honey_trap: {
+    name: "Honey Trap Bar",
+    bar: "Honey Trap Bar", barType: "beer",
+    region: "Soi Honey",
+    desc: "The loud one: a horseshoe bar under a ceiling solid with fairy lights, a Connect 4 " +
+      "frame chained to the rail, and a hand-painted sign promising HAPPY HOUR ALL NIGHT (it is " +
+      "not). The girls clock you from thirty feet and have your stool wiped before you reach it.",
+    exits: { out: "soi_honey_w" },
+  },
+  queen_bee: {
+    name: "The Hive",
+    bar: "The Hive", barType: "beer",
+    region: "Soi Honey",
+    desc: "Yellow-and-black everything, a plywood bee the size of a scooter over the bar, and a " +
+      "sound system punching well above the venue's weight. Smaller and friendlier than the " +
+      "Honey Trap across the way, which the two bars settle nightly by volume.",
+    exits: { out: "soi_honey_e" },
+  },
+  buzz_inn: {
+    name: "Buzz Inn",
+    bar: "Buzz Inn", barType: "beer",
+    region: "Soi Honey",
+    desc: "A narrow slot of a bar, six stools deep, run at a gentle simmer — the sort of place a " +
+      "man ends up when the big bars are too much work. A dartboard nobody uses, a cat asleep on " +
+      "the till, and whichever girls the Honey Trap couldn't seat.",
+    exits: { out: "soi_honey_e" },
+  },
+  // ── Soi Diana (the next big soi south of Soi Honey) — Second Rd ↔ Buakhao ──
+  // Threads past the far arm of the LK Metro "L". KISS marks its Second Road
+  // mouth; Areca Lodge sits along it; it spills out onto Buakhao at the 7-Eleven
+  // corner, two doors up from Candy Bar.
+  diana_w: {
+    name: "Soi Diana (Second Road end)",
+    region: "Soi Diana",
+    desc: "The Second Road mouth of Soi Diana, a long strip of open-fronted beer bars one block " +
+      "south of Soi Honey. On the south corner, the open-air KISS restaurant does brisk trade under " +
+      "its fairy lights — everyone in Pattaya gives directions off it. East, the soi runs away into " +
+      "warm light and eighty different sound systems; the first beer bar's girls are already waving.",
+    exits: { w: "second_rd_c", e: "diana_mid", s: "kiss", n: "dollhouse" },
+  },
+  diana_mid: {
+    name: "Soi Diana (middle)",
+    region: "Soi Diana",
+    desc: "The thick of Soi Diana: open beer bars shoulder to shoulder down both sides, barkers " +
+      "working the narrow strip between, a hundred fairy-lit stools and a lady on every one. A side " +
+      "door of the LK Metro complex breathes cold air and go-go bass from further east — but that's " +
+      "the complex; the soi itself keeps it simple. Somewhere a bell rings and a whole bar cheers.",
+    exits: { w: "diana_w", e: "diana_e", n: "sapphire", s: "sundowner" },
+  },
+  diana_e: {
+    name: "Soi Diana (Buakhao end)",
+    region: "Soi Diana",
+    desc: "The Buakhao end of Soi Diana. The LK Metro alley opens off to one side (its other " +
+      "mouth is up on Buakhao proper); the Areca Lodge's lit driveway is on the other. Ahead, the " +
+      "soi spills onto Soi Buakhao by the 7-Eleven on the corner — Candy Bar's rose-pink sign " +
+      "glows just two doors south of it.",
+    exits: { w: "diana_mid", e: "buakhao_n", n: "cricketers", s: "areca_room", lk: "lk_bend" },
+  },
+  kiss: {
+    name: "KISS Restaurant",
+    bar: "KISS Restaurant",
+    region: "Soi Diana",
+    food: true,
+    desc: "The famous open-air corner restaurant at the mouth of Soi Diana — plastic chairs, " +
+      "paper menus a mile long (simple Thai one side, farang comfort food the other), and a grill " +
+      "going full tilt. Everyone knows KISS; everyone meets at KISS. In high season you can stand " +
+      "twenty minutes waiting for a table; tonight there's a stool free, just. (BUY FOOD / EAT.)",
+    exits: { out: "diana_w" },
+  },
+  dollhouse: {
+    name: "The Dollhouse",
+    bar: "The Dollhouse", barType: "beer",
+    region: "Soi Diana",
+    desc: "A big open-fronted beer bar, all fairy lights and cane stools, its counter wrapped in a " +
+      "horseshoe so the girls can reach every seat. No stage, no pole — just cold Chang, a Connect 4 " +
+      "frame, and a dozen hostesses who treat every farang who slows down as a long-lost friend.",
+    exits: { out: "diana_w" },
+  },
+  sapphire: {
+    name: "Sapphire Bar",
+    bar: "Sapphire Bar", barType: "beer",
+    region: "Soi Diana",
+    desc: "Blue neon over a long open bar, a decent sound system, and stools that face the soi so you " +
+      "can watch Diana churn past while you drink. Friendlier than it is flash — the Sapphire runs on " +
+      "regulars, lady drinks, and the slow art of talking you into one more.",
+    exits: { out: "diana_mid" },
+  },
+  sundowner: {
+    name: "Sundowner Bar",
+    bar: "Sundowner Bar", barType: "beer",
+    region: "Soi Diana",
+    desc: "An open-fronted beer bar with a horseshoe counter, a Connect 4 frame, and a row of " +
+      "friendly girls who'd rather chat than dance. The stools face the soi so you can watch the " +
+      "go-go crowd churn past while you nurse a Chang. Cheaper, easier, kinder on the wallet.",
+    exits: { out: "diana_mid" },
+  },
+  cricketers: {
+    name: "The Cricketers",
+    bar: "The Cricketers", barType: "beer",
+    region: "Soi Diana",
+    desc: "A farang sports bar wedged onto the go-go soi: three screens, a dartboard, a menu of pies, " +
+      "and a knot of expats who've solved the world twice over by nine o'clock. There are girls, and " +
+      "there is beer, but mostly there is opinion. Somebody is explaining the offside rule to a " +
+      "hostess who stopped listening in 2019.",
+    exits: { out: "diana_e" },
+  },
+  papaya_massage: {
+    name: "Papaya Massage",
+    bar: "Papaya Massage",
+    region: "Beach Road",
+    massage: "oil",
+    desc: "Just south of KISS, where Soi Diana's noise gives way to the Beach Road breeze — a " +
+      "pink-lit oil shop with the usual girls on the usual stools and the usual small sticker on " +
+      "the mirror. The sea air almost makes it feel wholesome. Almost.",
+    exits: { out: "beach_rd_s" },
+  },
+  beachthai_massage: {
+    name: "Beach Road Thai Massage",
+    bar: "Beach Road Thai Massage",
+    region: "Beach Road",
+    massage: "legit",
+    desc: "Next door to the oil shop and a world apart: a proper traditional place with foot chairs " +
+      "facing the sea, aunties in a tidy uniform, and a menu that stops at 'oil, one hour.' The spot " +
+      "the tuk-tuk drivers themselves come to get their shoulders sorted.",
+    exits: { out: "beach_rd_s" },
+  },
+  areca_room: {
+    name: "Your Room — Areca Lodge",
+    region: "Soi Diana",
+    outlet: true,
+    desc: "A proper mid-range room at the Areca Lodge on Soi Diana: firm bed, cold aircon that " +
+      "actually works, a kettle, and a window over the garden pool where a few long-stay couples " +
+      "are doing slow lengths. Comfortable, central, unremarkable in the best way — the whole soi's " +
+      "racket is thirty seconds out the door, and none of it follows you in.",
+    exits: { out: "diana_e" },
   },
   hotel_room: {
     name: "Your Room — Sabai Palms Hotel",
@@ -1502,6 +1764,111 @@ const NPCS = {
           "you buy a drink, they sit close, and after that it is between you and the " +
           "curtain.\" She tilts her head. \"Behave like a gentleman and they are very " +
           "warm. Forget your manners and Rose will remember for a long time.\"" },
+    ],
+  },
+
+  // ── Masseuses (not bar staff — deliberately NOT in NPC_ROLES, so barfine and
+  // lady-drink logic ignore them; the MASSAGE / SOAPY verbs carry the trade) ──
+  pensri: {
+    name: "Pensri", emoji: "💆", masseuse: true,
+    room: "thai_massage",
+    desc: "Fifty-odd, iron thumbs, reading glasses on a beaded chain. Pensri has run the " +
+      "front of this shop twenty years and can tell where you hurt before you sit down.",
+    dialogue: [
+      { rom: "sawatdee kha",
+        text: "\"Welcome, welcome. You sit.\" Pensri looks you over the way a mechanic looks " +
+          "at a car that made a noise. \"Farang shoulder, always same — too much {{phone}}, too " +
+          "much Chang, too much walking Soi 6. We fix. Foot, Thai, oil — up to you. No funny " +
+          "business here, na; this one real massage.\" A crisp, kind smile. \"After, you feel " +
+          "like new man.\"",
+        short: "\"Sit. Foot, Thai, or oil — real massage only. After, new man.\"" },
+      { topic: "special", text: "\"Special?\" She laughs, not unkindly, and swats the idea " +
+          "away like a fly. \"Wrong shop, tilac. Go down Second Road, plenty. Here we fix the " +
+          "body, not sell it. You want strong, or soft?\"" },
+      { topic: "hurt", text: "\"Where you pain? Here?\" A thumb finds the exact knot before " +
+          "you can point. \"Mm. This one from carry too much — not money, worry. Lie down.\"" },
+    ],
+  },
+  waan: {
+    name: "Waan", emoji: "💗", masseuse: true,
+    room: "smile_massage",
+    desc: "Young, round-cheeked, shy until she isn't. Waan works the oil room at Smile and " +
+      "has decided, for reasons of her own, that she likes you.",
+    dialogue: [
+      { rom: "sawatdee ka",
+        text: "\"Heee, hello. You want massage? Come, come.\" Waan tugs your sleeve toward a " +
+          "curtain, then goes suddenly bashful. \"I shy with you little bit — you handsome, I " +
+          "like. Is okay?\" She grins at her own admission. \"Oil massage very good. And " +
+          "after… up to you, na.\" A flick of the eyes at the small NO SEX sign on the wall, " +
+          "and a smaller, more private smile that files its own dissent.",
+        short: "\"You want massage? Oil very good — and after, up to you, na.\"" },
+      { topic: "special", text: "\"Special I can do, tilac — hand, mouth, you choose.\" She " +
+          "lowers her voice and nods at the sign. \"But no boom boom HERE — boss rule, " +
+          "sticker everywhere, you see. Boom boom…\" a shrug, a smile \"…when I finish work, " +
+          "you come, na. Different place.\"" },
+      { topic: "shop", text: "\"Smile good shop. Boss okay, not too strict — only the one " +
+          "rule.\" She taps the sign and giggles. \"Every customer read it. Every customer " +
+          "ask me anyway.\"" },
+    ],
+  },
+  toom: {
+    name: "Toom", emoji: "🛁", soapyBoss: true,
+    room: "poseidon_soapy",
+    desc: "Broad, brisk, unbothered. Toom runs the Poseidon floor from a little desk by the " +
+      "glass, and has explained the menu ten thousand times.",
+    dialogue: [
+      { rom: "choen kha",
+        text: "\"Welcome to Poseidon. First time?\" Toom taps the laminated menu without " +
+          "looking at it. \"Very simple. You see the glass — you pick a number, I tell you " +
+          "the price, you go up. Bath, massage, everything: one price, no surprise. Star, " +
+          "super star, model — prettier, more expensive, is honest, na.\" She smiles like a " +
+          "woman who has never once haggled. (SOAPY when you want to choose.)",
+        short: "\"Pick a number from the glass, one price, everything included. (SOAPY)\"" },
+      { topic: "girls", text: "\"All my girl clean, checked, professional. The number on the " +
+          "hip is how you choose — no need talk, no need shy. You like a number, you say the " +
+          "number.\" A shrug. \"Inside, she take care everything.\"" },
+    ],
+  },
+  kesorn: {
+    name: "Kesorn", th: "เกสร", emoji: "👑",
+    room: "honey_trap", bars: ["honey_trap", "queen_bee", "buzz_inn"],
+    desc: "The madam of Soi Honey — sixties, gold everywhere, a voice like a till drawer. She owns " +
+      "all three beer bars on the lane and works them one night at a time, so the girls never " +
+      "quite know which bar mama is watching.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Welcome to my soi, darling.\" Kesorn spreads a ringed hand at the lane. \"Three " +
+          "bar, all mine — the Honey Trap, the Hive, the Buzz Inn. I sit one each night, keep the " +
+          "girls honest. You drink, you play, you buy a lady a cola — everybody happy, nobody " +
+          "cheat. That is the whole business, na.\"",
+        short: "\"Three bars, all mine. Drink, play, buy a lady a cola. Nobody cheat.\"" },
+      { topic: "soi", text: "\"This little lane? Thirty year I am on it — the soapland, the beer " +
+          "bar, the noodle lady, all know me.\" A gold-toothed smile. \"The map call it Soi 11. " +
+          "Nobody call it that.\"" },
+      { topic: "girls", text: "\"My girls are good girls. Isan girls, work hard, send money home. " +
+          "I am strict but I am fair — she no cheat you, you no cheat her. Somebody make problem, " +
+          "they answer to me.\" The smile does not waver, which is somehow the point." },
+    ],
+  },
+  lawan: {
+    name: "Lawan", th: "ลาวัลย์", emoji: "👑",
+    room: "dollhouse", bars: ["dollhouse", "sapphire", "sundowner", "cricketers"],
+    desc: "The grande dame of Soi Diana — a former Crystal Palace headliner who hung up the heels " +
+      "and parlayed twenty years on the stage into four beer bars on the busiest drinking soi in " +
+      "town. Silk, jade, a gaze that prices you before you've sat down. She works a different one " +
+      "of her houses each night, and the girls behave accordingly.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Welcome to Soi Diana.\" Lawan takes you in with a professional's glance. \"Four " +
+          "beer bar, all mine, all down this one soi. No stage, no cover, no nonsense — just cold " +
+          "beer, a lady to talk to, a game if you want. The go-go, that is inside LK Metro, other " +
+          "business. Here we keep it friendly. Only be honest about the money and we are friends.\"",
+        short: "\"Four beer bars, all mine down this soi. Be honest about the money, we're friends.\"" },
+      { topic: "soi", text: "\"Diana is the busiest beer-bar soi in town — LK Metro on one side, " +
+          "KISS on the corner, everybody pass through here.\" A cool smile. \"The go-go dancing is " +
+          "in the complex. My girls just pour, and talk, and win at Connect 4. Cheaper for you, na.\"" },
+      { topic: "diana", text: "\"The soi, or the girl? Ha. The soi is named for a lady, like " +
+          "everything good in this town.\" She lets that sit. \"Me, I just run it.\"" },
     ],
   },
 
@@ -3047,7 +3414,7 @@ const NPC_ROLES = {
   lek: "hostess", noi: "hostess", ping: "hostess", aom: "hostess",
   joy: "hostess", fon: "hostess", gift: "hostess", kwan: "hostess",
   nong: "hostess", pim: "hostess", bee: "hostess", jane: "hostess", mercedes: "hostess", kratae: "hostess",
-  yai: "mamasan", rose: "mamasan",
+  yai: "mamasan", rose: "mamasan", kesorn: "mamasan", lawan: "mamasan",
   ploy: "cashier", aek: "cashier", malee: "cashier",
   candy: "mamasan", oy: "mamasan", daeng: "mamasan", mem: "mamasan", wan: "mamasan",
 };
@@ -3242,6 +3609,13 @@ const _FILLER_HOSTESSES = [
   ["Ing","อิง","blue_dog"], ["Khing","ขิง","blue_dog"],
   ["Bam","บาม","rock_factory"], ["Kwang","กวาง","rock_factory"],
   ["Chompoo","ชมพู่","stinky_bar"], ["Manow","มะนาว","stinky_bar"],
+  ["Goong","กุ้ง","honey_trap"], ["Jiab","เจี๊ยบ","honey_trap"],
+  ["Meen","มีน","queen_bee"], ["Yok","หยก","queen_bee"],
+  ["Namphueng","น้ำผึ้ง","buzz_inn"], ["Gaem","แก้ม","buzz_inn"],
+  ["Bum","บุ๋ม","dollhouse"], ["Ohm","โอม","dollhouse"],
+  ["Fasai","ฟ้าใส","sapphire"], ["Tarn","ธาร","sapphire"],
+  ["Pao","เป้า","sundowner"], ["Poom","ภูมิ","sundowner"],
+  ["Bright","ไบรท์","cricketers"], ["Lukkade","ลูกเกด","cricketers"],
 ];
 
 for (const [name, th, room] of _FILLER_HOSTESSES) {
@@ -3426,6 +3800,7 @@ const ROOM_GEO = {
   jomtien_beach:    [12.8890, 100.8688],
   dongtan_beach:    [12.8960, 100.8655],
   jomtien_beach_rd: [12.8893, 100.8718],
+  jomtien_thai:     [12.8890, 100.8724],
   soi_rompho:       [12.8901, 100.8742],
   jomtien_7eleven:  [12.8880, 100.8724],
   jomtien_bus_stop: [12.8940, 100.8710],
@@ -3434,6 +3809,7 @@ const ROOM_GEO = {
   buddha_hill:      [12.9142, 100.8618],
   // Walking Street (the gate is the north end; "ws_north" is the DEEP end)
   ws_gate:          [12.9268, 100.8703],
+  thai_massage:     [12.9266, 100.8710],
   ws_south:         [12.9247, 100.8697],
   ws_alley:         [12.9245, 100.8689],
   ws_north:         [12.9226, 100.8692],
@@ -3444,8 +3820,11 @@ const ROOM_GEO = {
   midnight_sun:     [12.9220, 100.8693],
   // Beach Road
   beach_rd_s:       [12.9295, 100.8715],
+  papaya_massage:   [12.9290, 100.8712],
+  beachthai_massage:[12.9288, 100.8710],
   short_time_motel: [12.9293, 100.8705],
   beach_rd_c:       [12.9348, 100.8744],
+  beachrd_oil:      [12.9352, 100.8748],
   tequila_queen:    [12.9338, 100.8740],
   promenade:        [12.9357, 100.8737],
   central_mall:     [12.9352, 100.8768],
@@ -3467,8 +3846,11 @@ const ROOM_GEO = {
   hotel_room:       [12.9567, 100.8900],
   // Second Road
   second_rd_s:      [12.9268, 100.8768],
+  second_thai:      [12.9272, 100.8774],
   second_rd_c:      [12.9330, 100.8795],
   second_rd_n:      [12.9345, 100.8805],
+  smile_massage:    [12.9346, 100.8799],
+  poseidon_soapy:   [12.9347, 100.8812],
   pattaya_klang:    [12.9362, 100.8815],
   // Myth Night
   myth_night:       [12.9322, 100.8822],
@@ -3481,8 +3863,26 @@ const ROOM_GEO = {
   buakhao_market:   [12.9262, 100.8820],
   candy_bar:        [12.9264, 100.8814],
   silk_rose:        [12.9260, 100.8826],
+  buakhao_oil:      [12.9260, 100.8832],
   buakhao_s:        [12.9218, 100.8795],
   jasmine_garden:   [12.9214, 100.8797],
+  // Soi Honey (Soi 11, between Second Rd and Buakhao)
+  soi_honey_w:      [12.9255, 100.8778],
+  soi_honey_e:      [12.9238, 100.8786],
+  honey_soapy:      [12.9250, 100.8780],
+  honey_trap:       [12.9260, 100.8776],
+  queen_bee:        [12.9242, 100.8790],
+  buzz_inn:         [12.9232, 100.8784],
+  // Soi Diana (the big go-go soi; Second Rd ↔ Buakhao, past LK Metro)
+  diana_w:          [12.9325, 100.8805],
+  diana_mid:        [12.9320, 100.8822],
+  diana_e:          [12.9316, 100.8840],
+  kiss:             [12.9322, 100.8802],
+  dollhouse:        [12.9328, 100.8806],
+  sapphire:         [12.9323, 100.8823],
+  sundowner:        [12.9317, 100.8821],
+  cricketers:       [12.9319, 100.8842],
+  areca_room:       [12.9312, 100.8840],
   // Tree Town (real: the Buakhao/Klang corner)
   tt_entrance:      [12.9330, 100.8852],
   tt_lane_1:        [12.9331, 100.8857],

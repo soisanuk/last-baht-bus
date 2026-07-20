@@ -1556,6 +1556,10 @@ const _HOTEL_ARRIVALS = {
   metropole: "The Metropole lift hums you up the tower. Blackout curtains, " +
     "arctic aircon — and out the window, the LK Metro alley glowing below " +
     "like a lit fuse. The bellboy mentions the fire stairs again. Wink.",
+  areca: "The Areca Lodge takes your bag with a smile that has checked in ten " +
+    "thousand repeat visitors. A room over the garden pool, the whole racket of " +
+    "Soi Diana thirty seconds out the door and none of it following you in. " +
+    "Comfortable, central, and quietly pleased with itself.",
 };
 
 function _doShower() {
@@ -1679,6 +1683,7 @@ const _HELP = `Common commands:
   THROW COVER [AT <lady>] (the ceiling game — warm her up first)
   BUY BRA FOR <lady> (฿200 — makes FONDLE more interesting)
   RING BELL (฿300, instant popularity) · TALK TO PATRON · BARFINE <lady>
+  MASSAGE (foot rub to happy-ending, by the shop) · SPECIAL (the extra) · SOAPY (the fishbowl)
   Live music (Fri/Sat, Rock Factory every night):
   DANCE · SING · REQUEST <song> · TIP BAND <amount> · BUY ROUND FOR BAND · TALK TO BAND
   EAT <food> · DRINK <thing> · BUY WATER / FOOD (street carts & 7-Elevens) · SLEEP (at the hotel)
@@ -1704,7 +1709,7 @@ const _COMPLETE_VERBS = [
   "look", "examine", "take", "drop", "inventory", "go", "enter", "talk to",
   "ask", "give", "buy", "sell bottles", "pay", "wai", "say", "ride bus to",
   "motosai to", "travel", "light", "charge phone", "read", "use", "open", "play",
-  "flirt", "kiss", "spank", "fondle", "throw cover", "ring bell", "barfine", "eat", "drink",
+  "flirt", "kiss", "spank", "fondle", "throw cover", "ring bell", "barfine", "massage", "special", "soapy", "eat", "drink",
   "sleep", "tv", "column", "watch", "weather", "scores", "lottery", "map", "time", "tip", "wave",
   "photo", "call", "shower", "withdraw", "cheers", "dance", "sing", "swim",
   "smell", "listen", "diagnose", "apologize", "quests", "accept", "abandon", "contact",
@@ -1831,6 +1836,7 @@ function engineComplete(input) {
     pool = [...Object.keys(_HOTELS).filter(k => k !== G.hotel)
       .map(k => _HOTELS[k].name.toLowerCase()), "stay"];
   } else if (G.pendingBf) pool = ["short time", "long time", "no"];
+  else if (G.pendingSoapy) pool = [..._SOAPY_TIERS.map(t => String(t.num)), "star", "super star", "model", "no"];
   else if (G.game && !ctx.length) pool = _gameVerbs();
   else if (ctx.length) pool = _completePool(ctx[0], ctx);
   // REPORT only makes sense at the station (surfaced there, first), or anywhere
@@ -1914,6 +1920,7 @@ function _renderResume() {
   if (G.game) { _renderGame(); return; }
   if (G.pendingEnc) { _renderEncounter(); return; }
   if (G.pendingBf) { _bfPrompt(); return; }
+  if (G.pendingSoapy) { _soapyPrompt(); return; }
   if (G.pendingFare) { _farePrompt(); return; }
 }
 
@@ -1953,6 +1960,7 @@ function doCommand(input) {
     }
     const pick = /sabai|palm|naklua|412/.test(lower) ? "sabai" :
       /queen|vic|balcony/.test(lower) ? "queenvic" :
+      /areca|lodge|diana/.test(lower) ? "areca" :
       /metro|lk/.test(lower) ? "metropole" : null;
     if (!pick || pick === G.hotel) {
       _checkoutPrompt();
@@ -2004,6 +2012,13 @@ function doCommand(input) {
       _bfResolve("open"); _tick(); return;
     }
     _bfPrompt(); // the negotiation eats everything else
+    return;
+  }
+
+  // the soapy fishbowl: Toom is waiting on a number. A pick or NO resolves it
+  // (and ticks); anything else reprompts without spending a turn (see _soapyResolve).
+  if (G.pendingSoapy && v !== "restart") {
+    if (_soapyResolve(lower)) _tick();
     return;
   }
 
@@ -2156,6 +2171,9 @@ function doCommand(input) {
     case "fondle": case "grope": _doSocial("fondle", arg); break;
     case "ring": case "bell": _doBell(); break;
     case "barfine": case "bf": _doBarfine(arg.replace(/^with /, "")); break;
+    case "massage": case "nuad": case "nuat": _doMassage(arg); break;
+    case "special": case "happyending": _doMassage("special"); break;
+    case "soapy": case "fishbowl": _doSoapy(); break;
     case "eat": _doEat(arg); break;
     case "checkout": case "check-out": _doCheckout(); break;
     case "sleep": case "bed": case "crash":

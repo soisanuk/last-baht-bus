@@ -2031,6 +2031,155 @@ test("soi 6 barfine: upstairs, and the night carries on", () => {
   assert.match(lastOut(), /Upstairs/i);
 });
 
+test("soi 6 drink-minimum: some girls want a few lady drinks before upstairs", () => {
+  state().flags.act1Done = true;
+  state().flags.hasWallet = true;
+  state().room = "sunset_dreams"; // Kwan, Soi 6
+  state().money = 2000;
+  state().nightTurn = 40;
+  assert.equal(_soi6DrinkMin("kwan"), 5, "Kwan runs the policy this vacation");
+  state().soc.drinks.kwan = 2; // past the base gate, short of the tariff
+  run("barfine kwan");
+  assert.ok(!state().pendingBf, "the ask is turned away, not opened");
+  assert.match(lastOut(), /bar rule: 5 lady drink/i);
+  // patience clears it — the tariff is a tab thing, re-checked each ask
+  state().soc.drinks.kwan = 5;
+  run("barfine kwan");
+  assert.ok(state().pendingBf, "tariff met, upstairs is on the table");
+  assert.match(lastOut(), /upfront as a menu/i);
+  // reputation girls and the plain girls don't nickel-and-dime
+  assert.equal(_soi6DrinkMin("joy"), 0, "Joy runs no policy this vacation");
+});
+
+// ── Massage: the legit heal, the oil special, and the soapy fishbowl ─────────
+test("legit massage heals hurt and drunk, and refuses to sell the other thing", () => {
+  state().flags.act1Done = true;
+  state().flags.hasWallet = true;
+  state().room = "thai_massage";
+  state().money = 1000;
+  state().hurt = 2;
+  state().soc.drunk = 4;
+  run("massage");
+  assert.equal(state().money, 700, "฿300 for the hour");
+  assert.equal(state().hurt, 1, "the one mid-night repair for a banged-up night");
+  assert.equal(state().soc.drunk, 2, "and it takes the edge off the Chang");
+  assert.match(lastOut(), /actually mends you/i);
+  run("massage special");
+  assert.match(lastOut(), /Wrong shop/i, "Pensri doesn't do extras");
+});
+
+test("oil shop: base rub, then the warmth-gated special, capped once a night", () => {
+  state().flags.act1Done = true;
+  state().flags.hasWallet = true;
+  state().room = "smile_massage";
+  state().money = 5000;
+  run("massage");
+  assert.equal(state().money, 4700, "฿300 oil base");
+  assert.match(lastOut(), /SPECIAL/);
+  const jaded0 = state().jaded;
+  run("special");
+  assert.equal(state().money, 4000, "the special is ฿700 on top of the base");
+  assert.equal(state().jaded, jaded0 + 1, "a real release feeds the hedonic treadmill");
+  assert.match(lastOut(), /finish work|my place/i, "the on-premises wall points off-shift");
+  run("special"); // one is the ration
+  assert.match(lastOut(), /Greedy|ration/i);
+  assert.equal(state().money, 4000, "no double-dip");
+  // and no barfine here — she's not a bar girl
+  run("barfine waan");
+  assert.match(lastOut(), /not a bar girl/i);
+});
+
+test("soapy fishbowl: pick a number, one set price, once a night", () => {
+  state().flags.act1Done = true;
+  state().flags.hasWallet = true;
+  state().room = "poseidon_soapy";
+  state().money = 5000;
+  run("soapy");
+  assert.ok(state().pendingSoapy, "the menu is a modal that waits on a number");
+  assert.match(lastOut(), /super star/i);
+  run("71"); // the super-star tier
+  assert.ok(!state().pendingSoapy, "picking resolves it");
+  assert.equal(state().money, 2800, "฿2200 set package, no haggling");
+  assert.match(lastOut(), /on the premises/i);
+  run("soapy"); // once through Poseidon is plenty
+  assert.match(lastOut(), /Again\?|plenty/i);
+  assert.ok(!state().pendingSoapy);
+});
+
+test("the massage row spreads across town: generic parlors work like the flagships", () => {
+  state().flags.act1Done = true;
+  state().flags.hasWallet = true;
+  state().money = 5000;
+  // a generic oil parlor with no named masseuse still does the base + special
+  state().room = "buakhao_oil";
+  run("massage");
+  assert.match(lastOut(), /the masseuse/i);
+  run("special");
+  assert.match(lastOut(), /finish work|my place/i);
+  // a generic legit parlor still heals
+  state().room = "jomtien_thai";
+  state().hurt = 2;
+  run("massage");
+  assert.equal(state().hurt, 1, "legit massage mends anywhere in town");
+  // the second soapy reads with its own manageress, not Poseidon's Toom
+  state().room = "honey_soapy";
+  run("soapy");
+  assert.ok(state().pendingSoapy);
+  assert.doesNotMatch(lastOut(), /Toom/, "the prose isn't hardwired to Poseidon");
+});
+
+test("Soi Honey: reachable off Second Road, three beer bars, one rotating mama", () => {
+  // the soi hangs off second_rd_s via the `honey` exit, direct 2nd↔Buakhao intact
+  assert.equal(ROOMS.second_rd_s.exits.honey, "soi_honey_w");
+  assert.equal(ROOMS.second_rd_s.exits.e, "buakhao_s", "the old cross-street still connects directly");
+  for (const id of ["honey_trap", "queen_bee", "buzz_inn"]) {
+    assert.equal(ROOMS[id].barType, "beer", `${id} is a beer bar`);
+    const girls = Object.keys(NPCS).filter(n => NPC_ROLES[n] === "hostess" && _npcRoom(n) === id);
+    assert.ok(girls.length >= 2, `${id} has its hostesses`);
+  }
+  // Kesorn owns all three and works one a night — present at exactly one
+  const herBars = ["honey_trap", "queen_bee", "buzz_inn"].filter(id => _npcRoom("kesorn") === id);
+  assert.equal(herBars.length, 1, "the mama is at exactly one of her bars tonight");
+});
+
+test("Soi Diana: threads Second Rd to Buakhao past LK Metro, four beer bars, KISS, Areca", () => {
+  // through-soi: Second Rd (diana key) → the three segments → Buakhao's 7/11 corner
+  assert.equal(ROOMS.second_rd_c.exits.diana, "diana_w");
+  assert.equal(ROOMS.diana_w.exits.e, "diana_mid");
+  assert.equal(ROOMS.diana_mid.exits.e, "diana_e");
+  assert.equal(ROOMS.diana_e.exits.e, "buakhao_n");
+  // the far arm of the LK Metro L opens onto the soi
+  assert.equal(ROOMS.diana_e.exits.lk, "lk_bend");
+  assert.equal(ROOMS.lk_bend.exits.diana, "diana_e");
+  // four populated bars — all beer (the go-go action is inside LK Metro, not on the soi)
+  const bars = ["dollhouse", "sapphire", "sundowner", "cricketers"];
+  assert.deepEqual(bars.map(b => ROOMS[b].barType), ["beer", "beer", "beer", "beer"]);
+  for (const b of bars) {
+    const girls = Object.keys(NPCS).filter(n => NPC_ROLES[n] === "hostess" && _npcRoom(n) === b);
+    assert.ok(girls.length >= 2, `${b} is populated`);
+  }
+  // one madam, working exactly one of her four houses tonight
+  assert.equal(bars.filter(b => _npcRoom("lawan") === b).length, 1);
+  // KISS feeds you
+  assert.ok(FOOD_STALLS.kiss, "KISS is on the menu");
+});
+
+test("Areca Lodge is a fourth hotel you can check into", () => {
+  state().flags.act1Done = true;
+  state().flags.hasWallet = true;
+  state().stage = "vacation";
+  state().hotel = "sabai";
+  state().room = "hotel_room";
+  state().nightTurn = 2;
+  state().money = 5000;
+  assert.ok(_HOTELS.areca && _HOTELS.areca.room === "areca_room", "Areca is in the hotel table");
+  run("checkout");
+  assert.match(lastOut(), /Areca Lodge/i, "it's offered at the desk");
+  run("areca");
+  assert.equal(state().hotel, "areca");
+  assert.equal(state().room, "areca_room", "you wake at the Areca now");
+});
+
 test("no barfining the mamasan, and heat freezes negotiations", () => {
   state().flags.act1Done = true;
   state().flags.hasWallet = true;
@@ -4104,6 +4253,10 @@ test("ask <who> <topic> works without the 'about' connective (the tapped shape)"
   });
   assert.ok(room, "found a bar where Chuck is drinking");
   state().room = room;
+  // keep the two runs deterministic — a street encounter firing between them
+  // (a peddler drifting in) would make the outputs differ for the wrong reason
+  state().encDone = Object.fromEntries(Object.keys(ENCOUNTERS).map(k => [k, true]));
+  state().lastPeddler = 99999; state().lastSaleng = 99999;
   const say = cmd => { // fresh seen-state so repeat-terseness doesn't skew it
     state().patronTalk = { day: state().day, talked: {} };
     out = []; run(cmd); return lastOut();

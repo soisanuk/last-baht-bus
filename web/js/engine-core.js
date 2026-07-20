@@ -272,9 +272,10 @@ const _HOTELS = {
   // rate = vacation nightly; expatRate = the negotiated long-stay daily
   sabai:     { room: "hotel_room",     name: "Sabai Palms Hotel", rate: 400,  expatRate: 270 },
   queenvic:  { room: "qv_room",        name: "Queen Vic Inn",     rate: 700,  expatRate: 400 },
+  areca:     { room: "areca_room",     name: "Areca Lodge",       rate: 900,  expatRate: 520 },
   metropole: { room: "metropole_room", name: "LK Metropole",      rate: 1300, expatRate: 730 },
 };
-const _HOTEL_DOWNGRADE = ["metropole", "queenvic", "sabai"];
+const _HOTEL_DOWNGRADE = ["metropole", "areca", "queenvic", "sabai"];
 const _DEBT_CAP = 2000;
 
 function _hotelRate(k) {
@@ -596,6 +597,17 @@ function _describeRoom(full) {
   if (r.barType === "gents") {
     _say("The couches along the wall have their curtains half-drawn; you are careful " +
       "where your eyes land. Buy a lady a drink and she'll settle in very close.", "dim");
+  }
+  if (r.massage === "legit") {
+    _say("Reclining chairs, tiger balm, a price list on the wall. (MASSAGE — foot, Thai, or oil, " +
+      "the one honest kind in town.)", "dim");
+  } else if (r.massage === "oil") {
+    _say("Curtained cubicles, a wall of mirrors, a small NO SEX sticker nobody quite believes. " +
+      "(MASSAGE — then SPECIAL, up to you.)", "dim");
+  }
+  if (r.soapy) {
+    _say("A wall of bright one-way glass, and behind it numbered girls on tiered benches. " +
+      "(SOAPY to pick a number.)", "dim");
   }
   if (r.pool) {
     _say("A pool table waits under a low lamp (PLAY POOL)." +
