@@ -1855,6 +1855,17 @@ test("Act One reset keeps a critical-path high-water mark, shown on the next run
   assert.doesNotMatch(lastOut(), /Furthest yet/, "no false personal-best");
 });
 
+test("the intro orients a brand-new player, then hands off to the hint loop", () => {
+  out = [];
+  engineIntro();                             // fresh game: act1Tries 0
+  assert.match(lastOut(), /New here\?.*INVENTORY.*QUESTS/s, "run one teaches the interface");
+  assert.doesNotMatch(lastOut(), /soi remembers|Best run home/, "no hint-loop chrome yet");
+  state().act1Tries = 1;                      // once beaten, the orientation retires
+  out = [];
+  engineIntro();
+  assert.doesNotMatch(lastOut(), /New here\?/, "the interface primer is a one-timer");
+});
+
 test("HINT is coy on the first run, then whispers the next step from round two", () => {
   // round one: no real hints, just the setup
   run("hint");

@@ -2204,6 +2204,10 @@ function engineIntro() {
     "the whole town away. The baht bus is ฿15 a head.");
   _say("You have ฿0.");
   _say("It's going to be one of those nights.", "alert");
+  if (!G.act1Tries && !_flag("act1Done"))
+    _say("(New here? Turn out your pockets — INVENTORY, then EXAMINE what you find — " +
+      "and check what you're up against with QUESTS. The rest, the soi teaches: TALK to " +
+      "people and ASK them about your wallet. HELP lists everything.)", "dim");
   if (G.act1Best > 0)
     _say(`(Best run home so far: ${G.act1Best}/${_ACT1_MILESTONES.length} of the way ` +
       "back to 412. Do better — dawn is the deadline, and dawn does not wait.)", "dim");
