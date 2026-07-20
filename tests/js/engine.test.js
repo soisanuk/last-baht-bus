@@ -1926,6 +1926,66 @@ test("midnight closing: walking in during last call gets the warning + barfine n
   assert.match(lastOut(), /Last call|half an hour|BARFINE/i, "warned on arrival");
 });
 
+test("The Regular: bond tiers derive from cumulative favor, and cool a notch a night", () => {
+  const id = "lek";
+  state().soc.drinks[id] = 0; assert.equal(_bondTier(id), 0);
+  state().soc.drinks[id] = 3; assert.equal(_bondTier(id), 1);
+  state().soc.drinks[id] = 7; assert.equal(_bondTier(id), 2);
+  state().soc.drinks[id] = 13; assert.equal(_bondTier(id), 3);
+  // a night's sleep cools every bond by one — tend it or lose it
+  state().flags.act1Done = true; state().flags.hasWallet = true;
+  state().room = "hotel_room"; state().soc.drinks[id] = 10;
+  run("sleep");
+  assert.equal(state().soc.drinks[id], 9, "bonds cool a notch a night");
+});
+
+test("The Regular: depth beats breadth — a bonded conquest gives a bonus and doesn't jade you", () => {
+  state().happy = 0; state().jaded = 0;
+  state().soc.drinks.lek = 10;              // a regular (tier 2)
+  _conquestHappy(6, "lek");
+  assert.equal(state().happy, 8, "base + the bond bonus");
+  assert.equal(state().jaded, 0, "a bonded night doesn't advance the treadmill");
+  _conquestHappy(6, "ping");                // a stranger (drinks 0) jades you normally
+  assert.equal(state().jaded, 1);
+});
+
+test("The Regular: at the top tier she comes off the clock — the barfine is waived", () => {
+  state().flags.act1Done = true; state().flags.hasWallet = true;
+  state().room = "candy_bar"; state().money = 5000;
+  const id = _npcsHere().find(n => NPC_ROLES[n] === "hostess");
+  state().soc.drinks[id] = 14;              // her farang
+  state().pendingBf = { id, st: 900, lt: 1350, room: "candy_bar" };
+  _bfResolve("lt");
+  assert.equal(state().money, 5000, "no fine — she squares it herself");
+  assert.match(lastOut(), /squares it|off the clock|customer to her/i);
+});
+
+test("The Regular: a short-time deepens the bond; recognition greets a returning face", () => {
+  state().flags.act1Done = true; state().flags.hasWallet = true;
+  state().room = "pink_lotus"; state().money = 5000;
+  const id = _npcsHere().find(n => NPC_ROLES[n] === "hostess");
+  const before = state().soc.drinks[id] || 0;
+  state().pendingBf = { id, st: 700, lt: 1400, room: "pink_lotus" };
+  _bfResolve("st");
+  assert.equal((state().soc.drinks[id] || 0), before + 2, "a short-time bumps the bond");
+  // the recognition line speaks by tier; a stranger gets nothing
+  out = []; state().soc.drinks[id] = 8; _relGreeting(id);
+  assert.match(lastOut(), /remembers you|kept seat|only customer|payday/i);
+  out = []; state().soc.drinks[id] = 0; _relGreeting(id);
+  assert.equal(lastOut(), "", "a stranger gets no special greeting");
+});
+
+test("The Regular: butterflying in front of your regular costs you her bond", () => {
+  state().flags.act1Done = true; state().flags.hasWallet = true;
+  state().room = "las_vegas"; state().money = 5000;
+  const here = _npcsHere().filter(n => NPC_ROLES[n] === "hostess");
+  const [a, b] = here;
+  state().soc.drinks[a] = 5; state().soc.drinks[b] = 10; // b is your regular, watching
+  state().pendingBf = { id: a, st: 1000, lt: 1500, room: "las_vegas" };
+  _bfResolve("st");
+  assert.equal(state().soc.drinks[b], 7, "the regular you jilted cools three notches");
+});
+
 test("Darkside girls are veterans: no green tier past Sukhumvit", () => {
   for (const [id, n] of Object.entries(NPCS)) {
     if (!n.filler || NPC_ROLES[id] !== "hostess") continue;

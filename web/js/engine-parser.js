@@ -115,6 +115,12 @@ function _arriveAt(to) {
   // walked in during the final half hour — the courtesy warning, and a barfine nudge
   if (_flag("act1Done") && _closesMidnight(to) && G.nightTurn >= 55 && G.nightTurn < 60 &&
       !(G.soc.lockIn && G.soc.lockIn[to])) _lastCall(to);
+  // a girl you've built something with greets you by name (once per bar a night)
+  if (ROOMS[to].barType && !(G.soc.greeted && G.soc.greeted[to])) {
+    const her = _npcsHere().filter(n => NPC_ROLES[n] === "hostess")
+      .sort((a, b) => _bondTier(b) - _bondTier(a))[0];
+    if (her && _bondTier(her) >= 1) { (G.soc.greeted = G.soc.greeted || {})[to] = true; _relGreeting(her); }
+  }
   // the anti-Simon machine: when the book gets heavy, the town catches you.
   // Candy settles it at whichever of her bars she's working tonight.
   if (G.hotelDebt >= 800 && !_flag("tabSettled") &&

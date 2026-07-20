@@ -1282,22 +1282,55 @@ function _happyLevel(h) {
   return HAPPY_LEVELS.find(([t]) => h >= t)[1];
 }
 
+// ── The Regular: a persistent relationship, built on what you invest ─────────
+// G.soc.drinks[id] already aggregates every kind of attention (lady drinks,
+// MESSAGE charm, gifts, invites, self-barfines — and now barfines) and persists
+// within a vacation, so it IS the bond. Tiers unlock recognition, the
+// depth-beats-breadth conquest bonus (the anti-treadmill), and — at the top —
+// she comes off the clock for you. It cools one notch a night in _endNight (tend
+// it or lose it), and a new vacation starts everyone a stranger again.
+function _bondTier(id) {
+  const d = (G.soc.drinks && G.soc.drinks[id]) || 0;
+  return d >= 13 ? 3 : d >= 7 ? 2 : d >= 3 ? 1 : 0; // stranger / face / regular / her farang
+}
+function _relGreeting(id) {
+  const t = _bondTier(id);
+  if (t < 1) return;
+  const name = NPCS[id].name;
+  _say([
+    "",
+    `${name} clocks you from across the bar, and her face does something real for half ` +
+      "a second before the professional smile catches up. She remembers you.",
+    `${name} is off her stool before you're through the door — the kept seat appears, a ` +
+      "cold towel, your drink the way you take it. For a minute you're the only customer " +
+      "who ever existed.",
+    `${name} lights up like payday and calls you the name she uses for nobody else. She's ` +
+      "told her friends about you — you can tell by how they look over. Around here, that's " +
+      "as close to a girlfriend as the arithmetic allows.",
+  ][t], t >= 2 ? "win" : "");
+}
+
 // Diminishing returns on raw conquest — the hedonic treadmill (see the
 // lonely-punter canon). Each barfine / short-time buys 2 สนุก less than the last
 // (G.jaded), floored at a real −4 penalty, so a binge night runs the ledger to
 // zero and past it. jaded cools one notch a day (_endNight) and resets each
-// vacation; presence, courtship, company and quests never touch it, so the
-// slow road stays fully rewarding.
-function _conquestHappy(base) {
-  const net = Math.max(base - 2 * G.jaded, -4);
+// vacation; presence, courtship, company and quests never touch it. AND a girl
+// you've built a bond with (regular+, `id` passed) gives a +2 bonus and does NOT
+// advance jaded — depth is the correct road, breadth is the treadmill.
+function _conquestHappy(base, id) {
+  const bonded = id && _bondTier(id) >= 2;
+  const net = Math.max(base + (bonded ? 2 : 0) - 2 * G.jaded, -4);
   _addHappy(net); // _addHappy no-ops on 0, so a wash prints nothing
-  if (net <= 0) {
+  if (bonded) {
+    _say("(No treadmill with her — a night with someone who knows you doesn't cheapen. " +
+      "It's the one that keeps giving.)", "dim");
+  } else if (net <= 0) {
     _say("(The thrill just… doesn't arrive. Another one, and you barely felt it — " +
       "you mostly want to be alone now. Too many, too fast.)", "alert");
   } else if (net < base) {
     _say("(Good. Not like the first, though — something's wearing thin at the edges.)", "dim");
   }
-  G.jaded++;
+  if (!bonded) G.jaded++;
 }
 
 function _addHappy(n, why) {
@@ -1485,7 +1518,7 @@ function _endNight(reason) {
         _say("(Under the Sabai Palms' one working porch light, the night clerk " +
           "produces the joiner ledger: ฿300, and a look with footnotes.)", "dim");
       }
-      _conquestHappy(10);
+      _conquestHappy(10, G.lastBfId);
       break;
     case "bfscam": {
       // an operator ran her game on your long time — the veterans warned you.
@@ -1572,6 +1605,9 @@ function _endNight(reason) {
   G.soc.heat = {};
   G.soc.banned = {};
   G.soc.lastCall = {}; // last-call warnings reset with the night
+  G.soc.greeted = {};  // a fresh night — she greets you anew
+  G.lastBfId = null;   // clear the LT-ending bond hook
+  for (const id in G.soc.drinks) G.soc.drinks[id] = Math.max(0, G.soc.drinks[id] - 1); // bonds cool a notch a night; tend them or lose them
   G.soc.patronBusy = {};
   G.soc.patronMiffed = {};
   G.soc.apologized = {}; // a new shift will hear you out afresh

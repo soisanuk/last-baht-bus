@@ -207,6 +207,17 @@ function _bfResolve(kind) {
     }
     kind = "lt";
   }
+  // her farang: at the top bond tier she squares the fine with the mamasan
+  // herself and comes off the clock — you stopped being a customer to her.
+  let offBook = false;
+  if (_bondTier(id) >= 3 && price > 0) {
+    offBook = true;
+    price = 0;
+    _say(`${name} doesn't so much as glance at the till. A word to the mamasan, a ` +
+      "nod, a roll of the eyes at the very idea of a fine for YOU — and she's already " +
+      "untying her apron. She squares it herself. You stopped being a customer to her " +
+      "a while ago.", "win");
+  }
   if (G.money < price) {
     _say(`The number is ฿${price}. Your pocket says ฿${G.money}. The ledger ` +
       "closes with a soft, final flap, and the negotiation is over without " +
@@ -215,7 +226,16 @@ function _bfResolve(kind) {
   }
   G.money -= price;
   (G.soc.bfBar = G.soc.bfBar || {})[G.room] = id; // her colleagues saw you leave with her
-  if (price === 0) {
+  G.lastBfId = id; // so the LT ending's _conquestHappy knows who
+  // butterflying: a regular of yours in the room watches you leave with another
+  for (const other of _npcsHere()) {
+    if (other !== id && NPC_ROLES[other] === "hostess" && _bondTier(other) >= 2) {
+      G.soc.drinks[other] = Math.max(0, (G.soc.drinks[other] || 0) - 3);
+      _say(`(${NPCS[other].name} watches you leave with ${name} and turns very ` +
+        "deliberately back to her phone. That will cost you — and not in baht.)", "dim");
+    }
+  }
+  if (price === 0 && !offBook) {
     _say("The mamasan glances at the clock — past midnight — closes the ledger, and " +
       "waves the fee away with two fingers. The barfine walks out with the girl " +
       "soon anyway; only the famous ones stay on the book all night.", "dim");
@@ -230,26 +250,27 @@ function _bfResolve(kind) {
         "home advantage. “Upstairs” turns out to be exactly as advertised. Some " +
         "time later you are back on your stool, thinking about nothing at all, " +
         `while she fixes her hair in the till mirror. (฿${G.money} left.)`, "win");
-      _conquestHappy(6);
+      _conquestHappy(6, id);
     } else if (bt === "gents") {
       _say(`฿${price} to Rose, discreetly, and ${name} takes your hand and walks you ` +
         "to one of the deep couches along the wall. The curtain draws around it with " +
         "a soft brass rattle, the cold gold room carries on without you for a while, " +
         `and then you are back in your seat with a fresh drink you don't remember ` +
         `ordering. Nobody looked up. Nobody ever does. (฿${G.money} left.)`, "win");
-      _conquestHappy(6);
+      _conquestHappy(6, id);
     } else {
       _say((price ? `฿${price} to the ledger and a` : "A") +
         ` short walk later the short-time hotel's ceiling fan is doing its slow ` +
         `count over the proceedings. ${name} is businesslike, cheerful, and ` +
         "gone within the hour — a kiss on the cheek at the door, back to her " +
         `stool before the ice in your last drink has melted. (฿${G.money} left.)`, "win");
-      _conquestHappy(5);
+      _conquestHappy(5, id);
       for (let i = 0; i < 6; i++) { // the hour passes; the night carries on
         if (G.over) return;
         _tick();
       }
     }
+    G.soc.drinks[id] = (G.soc.drinks[id] || 0) + 2; // a short-time deepens the bond a little
     return;
   }
   // ── LONG TIME: overnight — unless she's running a game on you ──
@@ -306,6 +327,7 @@ function _bfResolve(kind) {
     `${name} vanishes and reappears out of uniform — jeans, clean shirt, ordinary ` +
     `and lovely — and takes your arm like you're the one being rented.` +
     (price ? ` (฿${G.money} left.)` : ""), "win");
+  G.soc.drinks[id] = (G.soc.drinks[id] || 0) + 3; // a whole night together deepens the bond
   _endNight("barfine");
 }
 

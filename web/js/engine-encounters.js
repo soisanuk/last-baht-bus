@@ -499,6 +499,7 @@ const _ENC = {
       return;
     }
     G.money -= price;
+    G.lastBfId = null; // a freelancer isn't a bar girl — no bond bonus on the ending
     if (both) _setFlag("hadThreesome");
     const safe = _rand() < (both ? 0.78 : 0.6);
     if (!safe) { _endNight("robbed"); return; }
