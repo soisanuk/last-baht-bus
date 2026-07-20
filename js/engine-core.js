@@ -160,7 +160,10 @@ function newGame() {
     thirst: 40,          // 0 quenched … 100 collapse (you woke up dry)
     hurt: 0,             // 3 = a night in the clinic
     jaded: 0,            // the hedonic treadmill: conquests this window; each barfine/ST buys less สนุก, cools 1/day
+    lastBusWarned: false, // the nightly last-baht-bus heads-up fires once per night
     bestHappy: 0,
+    act1Best: 0,         // furthest point down the opening critical path ever reached; survives the do-or-die Act One reset
+    act1Tries: 0,        // opening-quest attempts so far; ≥1 unlocks the round-2 HINT system (also survives the reset)
     pendingChoice: null, // "vacation_end" gates input at week's end
     atmDay: 0,           // last day the lobby ATM paid out ฿3000
     lastPolice: -99,     // turn of the last boy-in-brown shakedown
@@ -704,6 +707,7 @@ function _tick() {
   // any time before it moves on. All of that lives in _salengTick (encounters).
   _salengTick();
   _closingTick(); // midnight: gents/Soi 6/Darkside give last call, then bolt or shutter
+  _lastBusWarn();  // ~01:30: heads-up that the last ฿15 ride home is about to leave
   _maybeIncomingText();
   if (G.lightOn && G.battery > 0) {
     G.battery--;

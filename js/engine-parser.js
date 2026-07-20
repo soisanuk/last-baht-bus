@@ -806,6 +806,14 @@ function _doRideBus(arg) {
     return;
   }
   if (!r.busStop) { _say("No bus stop here. Look for one on the main roads."); return; }
+  if (G.nightTurn >= LAST_BUS_TURN) {
+    _say("You stand at the stop with your arm half-raised, and nothing comes. Nothing " +
+      "is coming. The last songthaew of the night made its run and rattled off to the " +
+      "depot a while back — this is the last-baht-bus hour, and you're on the wrong " +
+      "side of it. It's a motorbike taxi now, or your own two feet through the dark. " +
+      "(MOTOSAI, or walk it home.)", "alert");
+    return;
+  }
   const lines = Object.entries(BUS_LINES).filter(([, stops]) => stops.includes(G.room));
   const reachable = [...new Set(lines.flatMap(([, stops]) => stops))].filter(s => s !== G.room);
   const w = (arg || "").toLowerCase();
@@ -850,6 +858,10 @@ function _doMotosai(arg) {
   if (_flag("helmetDelivered") && price === MOTOSAI_TOWN) {
     price = 20;
   }
+  // once the last baht bus has gone, the piwins know they're the only ride in town
+  // and price the small hours accordingly (Bank's ฿20 mates' rate stays exempt)
+  const lateGouge = G.nightTurn >= LAST_BUS_TURN && price !== 20;
+  if (lateGouge) price = Math.round(price * LATE_MOTO_MULT / 10) * 10;
   if (G.money < price) {
     // Broke and stranded. Most of town is a free walk home, but the Darkside is
     // on the wrong side of the highway — a dawn-broke farang out here would be
@@ -874,6 +886,9 @@ function _doMotosai(arg) {
   G.money -= price;
   G.room = d.room;
   G.darkStreak = 0;
+  if (lateGouge) _say("Gone two in the morning, the buses long tucked up, and the " +
+    "piwin reads the empty road and your lack of options and names his small-hours " +
+    "number. You both know you'll pay it.", "dim");
   _say(`“${thaiBaht(price)}.” You pay${price === 20 ? " — Bank's special price" : ""}, ` +
     "swing on the back, and the piwin threads traffic like it owes him money. " +
     `That was the fastest ฿${price} of your life. (฿${G.money} left.)`, "thai");
@@ -1297,6 +1312,12 @@ function _doTime() {
   _say(t < 30 ? "(Early doors: barfines run ×1.5 until 21:00.)" :
     t >= 60 ? "(Past midnight: most beer bars have quietly dropped the barfine.)" :
     "(Prime time. Standard rates apply.)", "dim");
+  if (_flag("act1Done")) {
+    _say(t >= LAST_BUS_TURN ? "(The last baht bus has gone — it's the piwin's small-hours " +
+      "tax or shoe leather home now.)" :
+      t >= LAST_BUS_TURN - 10 ? "(Last baht bus around 2 a.m. — the ฿15 ride home is nearly up.)" :
+      "(Baht buses running: ฿15 the ride home until the last one, ~2 a.m.)", "dim");
+  }
 }
 
 function _hourToTurn(h) { // 24h clock → nightTurn; the game lives 18:00–04:00
@@ -1628,7 +1649,7 @@ const _HELP = `Common commands:
   DIAGNOSE (how bad is it) · AGAIN or G (repeat last command)
   TRAVEL <bar|hotel> (fast travel anywhere you've been — walking pace, bare TRAVEL lists)
   TIME · MAP · WAIT UNTIL <hour> · TIP <lady> <amount> · PHOTO · CHEERS
-  QUESTS · ACCEPT <quest> · ABANDON <quest>
+  QUESTS · ACCEPT <quest> · ABANDON <quest> · HINT (the soi's nudge — Act One, after your first reset)
   CONTACT <lady> (swap numbers) · CONTACTS (your phonebook) · MESSAGE <lady> · CHECK MESSAGES
   WHO / BLACKBOOK (your ladies, ranked by how they feel about you)
   SEND <amount> TO <lady> (banking app)
@@ -1651,7 +1672,7 @@ const _COMPLETE_VERBS = [
   "photo", "call", "shower", "withdraw", "cheers", "dance", "sing", "swim",
   "smell", "listen", "diagnose", "apologize", "quests", "accept", "abandon", "contact",
   "contacts", "who", "blackbook", "message", "check messages", "send", "score", "wait", "again",
-  "request", "help", "save", "load", "undo", "restart",
+  "request", "hint", "help", "save", "load", "undo", "restart",
 ];
 
 function _cInv() {
@@ -2155,8 +2176,9 @@ function doCommand(input) {
         "display board of watches.");
       break;
     case "score": _doScore(); break;
+    case "hint": case "hints": _doHint(); break;
     case "help": case "?": _say(_HELP, "dim"); break;
-    case "restart": newGame(); engineIntro(); return;
+    case "restart": { const b = G.act1Best || 0, t = G.act1Tries || 0; newGame(); G.act1Best = b; G.act1Tries = t; engineIntro(); return; } // keep the critical-path record + hint unlock
     default:
       // bare Thai phrase typed directly
       if (matchThaiPhrase(lower)) { _doSay(lower); break; }
@@ -2182,6 +2204,11 @@ function engineIntro() {
     "the whole town away. The baht bus is ฿15 a head.");
   _say("You have ฿0.");
   _say("It's going to be one of those nights.", "alert");
+  if (G.act1Best > 0)
+    _say(`(Best run home so far: ${G.act1Best}/${_ACT1_MILESTONES.length} of the way ` +
+      "back to 412. Do better — dawn is the deadline, and dawn does not wait.)", "dim");
+  if (G.act1Tries > 0)
+    _say("The soi remembers your face now. If the night goes quiet, ask it: (HINT)", "dim");
   _say("");
   _describeRoom(true);
   _say("(Type HELP for commands.)", "dim");

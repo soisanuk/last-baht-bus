@@ -168,6 +168,21 @@ function _lastCall(id) {
     "is the moment to BARFINE. After the shutters come down it's the street.", "alert");
 }
 
+// The climax the game is named for: the ฿15 ride home has a curfew. One town-wide
+// heads-up in the last half hour before the final songthaew (nightTurn 75–79 ≈ the
+// 1 o'clock hour, last bus at LAST_BUS_TURN = 02:00) — a prompt to break for a main
+// road, or commit to the piwin's tax / the dark walk / a rough wake.
+function _lastBusWarn() {
+  if (!_flag("act1Done") || G.over || G.lastBusWarned) return;
+  if (G.nightTurn < LAST_BUS_TURN - 5 || G.nightTurn >= LAST_BUS_TURN) return;
+  if (G.room === _hotelRoomId()) return; // already home — no race left to run
+  G.lastBusWarned = true;
+  _say("Somewhere a songthaew driver checks his watch and turns the truck toward the " +
+    "depot. The last baht bus makes its final run at two — call it half an hour off. " +
+    "Get to a main road for the ฿15 ride home, or the small hours belong to the piwins " +
+    "and their prices. This is the hour the whole night has been counting down to.", "alert");
+}
+
 function _closingTick() {
   if (!_flag("act1Done") || G.over) return;
   if (!_closesMidnight(G.room) || _lockedIn()) return;
@@ -1521,6 +1536,14 @@ function _crashSpotFor(roomId) {
 }
 
 function _endNight(reason) {
+  // The opening quest (Act One) is do-or-die: fail to reach room 412 before the
+  // night ends — run to dawn, or drop from thirst/drink — and it's a HARD FAIL
+  // that RESETS the game, not the sandbox's soft rough-wake. Only a progress
+  // high-water mark survives (see _act1Fail).
+  if (!_flag("act1Done") && (reason === "dawn" || reason === "collapse" || reason === "blackout")) {
+    _act1Fail(reason);
+    return;
+  }
   G.game = null;
   G.pendingEnc = null;
   G.pendingFare = null;
@@ -1654,6 +1677,7 @@ function _endNight(reason) {
   G.soc.heat = {};
   G.soc.banned = {};
   G.soc.lastCall = {}; // last-call warnings reset with the night
+  G.lastBusWarned = false; // and the last-baht-bus heads-up fires once each night
   G.soc.greeted = {};  // a fresh night — she greets you anew
   G.lastBfId = null;   // clear the LT-ending bond hook
   G.lastBfBase = 10;   // and its สนุก base (reality-LT drops it to 4 for one night)
