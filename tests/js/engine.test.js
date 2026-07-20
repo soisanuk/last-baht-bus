@@ -1935,6 +1935,7 @@ test("the quest journal shows the same live location as HINT", () => {
 test("the bar manager: welcome shot, man drink, monopolise nudge — and NOT a lady", () => {
   state().flags.act1Done = true; state().stage = "vacation"; state().money = 1000;
   for (const k in ENCOUNTERS) state().encDone[k] = true; // silence street noise
+  state().lastPeddler = 99999; state().lastPolice = 99999; // …and the cooldown-gated bar interruptions (peddler/police), so ticks don't eat a command
   assert.equal(NPCS.bert.manager, true, "Bert is the manager type");
   assert.ok(!NPC_ROLES.bert, "…and deliberately NOT in the lady-role map");
   // arriving is a free house shot, once per bar per night
