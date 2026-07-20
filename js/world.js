@@ -1351,6 +1351,16 @@ const NPCS = {
       "do to a person. Her English is good, with a flat European edge the soi " +
       "doesn't usually carry.",
     dialogue: [
+      { bond: 3, text: "\"You keep coming back to the Gold Rush for ME — the paint is not " +
+          "that charming, we both know it.\" For once Mercedes lets the dry line land soft. " +
+          "\"After Munich I made myself one promise: no more man I have to manage. And here " +
+          "is you — needing no managing, buying the paint-bar girl her drink like it is " +
+          "Vienna. Don't make me like you, farang. I am badly out of practice.\"",
+        short: "\"Don't make me like you, farang. I'm badly out of practice.\"" },
+      { bond: 2, text: "\"Sit — the good stool, I saved it.\" Mercedes slides your drink over " +
+          "without asking; she knows the order now. \"You are the only one in here who asks me " +
+          "a question and then waits for the answer. It is a low bar, I know. Munich was lower.\"",
+        short: "\"You ask a question and wait for the answer. Low bar. Munich was lower.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Welcome to the Gold Rush.\" A small, real smile. \"The gold is " +
           "paint — Nong will tell you, she cannot help herself. Sit. I am Mercedes. " +

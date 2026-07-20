@@ -1282,22 +1282,104 @@ function _happyLevel(h) {
   return HAPPY_LEVELS.find(([t]) => h >= t)[1];
 }
 
+// ── The Regular: a persistent relationship, built on what you invest ─────────
+// G.soc.drinks[id] already aggregates every kind of attention (lady drinks,
+// MESSAGE charm, gifts, invites, self-barfines — and now barfines) and persists
+// within a vacation, so it IS the bond. Tiers unlock recognition, the
+// depth-beats-breadth conquest bonus (the anti-treadmill), and — at the top —
+// she comes off the clock for you. It cools one notch a night in _endNight (tend
+// it or lose it), and a new vacation starts everyone a stranger again.
+function _bondTier(id) {
+  const d = (G.soc.drinks && G.soc.drinks[id]) || 0;
+  return d >= 13 ? 3 : d >= 7 ? 2 : d >= 3 ? 1 : 0; // stranger / face / regular / her farang
+}
+// Recognition on arrival — authorial narration (register-free; any quoted speech
+// obeys her English). Varied by tier so a regular's welcome doesn't loop.
+const _REL_GREET = {
+  1: [
+    n => `${n} clocks you from across the bar, and her face does something real for half a ` +
+      "second before the professional smile catches up. She remembers you.",
+    n => `${n} spots you and the practiced hello softens into a smaller, truer one. You're not ` +
+      "a stranger in here any more.",
+  ],
+  2: [
+    n => `${n} is off her stool before you're through the door — the kept seat appears, a cold ` +
+      "towel, your drink the way you take it. For a minute you're the only customer who ever existed.",
+    n => `${n} waves off the girl already heading for you — that one's hers — and slides in beside ` +
+      "you like the seat was always saved. It was.",
+    n => `${n} doesn't do the wide bar smile for you any more; she does the other one, the one that ` +
+      "costs her something, and keeps your stool clear with a bag on it.",
+  ],
+  3: [
+    n => `${n} lights up like payday and calls you the name she uses for nobody else. She's told her ` +
+      "friends about you — you can tell by how they look over. Around here, that's as close to a " +
+      "girlfriend as the arithmetic allows.",
+    n => `${n} is across the room and under your arm before the door's shut, announcing you to the bar ` +
+      "without a word. Whatever this is, she's stopped pretending it's business.",
+    n => `The whole bar clocks it the moment ${n} sees you — the way she goes soft, the little nod the ` +
+      "other girls give you. You're spoken for in here, and everyone knows it but you.",
+  ],
+};
+function _relGreeting(id) {
+  const t = _bondTier(id);
+  if (t < 1) return;
+  const pool = _REL_GREET[t];
+  _say(pool[Math.floor(_rand() * pool.length)](NPCS[id].name), t >= 2 ? "win" : "");
+}
+
+// A regular you TALK to talks back like she knows you — the generic register for
+// the FILLER hostesses only (Tinglish, per the English-ability canon; the mama/
+// cashier and hand-authored NPCs speak in their OWN voice via `bond:` dialogue
+// entries). Narration is authorial; her quoted speech is broken. At her-farang
+// tier she reaches past her English for the phone translator — the canon
+// deep-talk beat.
+const _BOND_TALK = {
+  2: [
+    n => `${n} drops the drink-lady voice and sits close, real. "You again — good. I keep you ` +
+      `seat. Yesterday you no come, I look look, no see you. Where you go?"`,
+    n => `"How you sleep? You eat already?" ${n} asks — not the bar smile, the other one. "You ` +
+      `look tired, tilac. Work too much. Everybody same same, but you I worry."`,
+    n => `${n} tells you a small true thing — her mama phone today, the new girl lazy, her feet ` +
+      `hurt in the heels. "I no tell customer this," she says, then laughs. "But you — you not ` +
+      `really customer now, na."`,
+  ],
+  3: [
+    n => `${n} wants to say a thing bigger than her English can carry, so she types it into her ` +
+      "phone and turns the screen to you. The translation comes out flat and strange — something " +
+      "about a door left open — but her face, watching you read it, is not flat at all.",
+    n => `${n} puts her head on your shoulder, no reason, no ask. "My farang," she says to nobody, ` +
+      `pleased. "Tonight no price, no show. When it you, everything off the clock."`,
+    n => `"I tell my mother about you," ${n} says, watching your face for how you take it. "She ask ` +
+      `when you come back. I say soon. You make me liar, na?" Only half a joke.`,
+  ],
+};
+function _bondTalk(id) {
+  const t = _bondTier(id) >= 3 ? 3 : 2;
+  const pool = _BOND_TALK[t];
+  _say(pool[Math.floor(_rand() * pool.length)](NPCS[id].name), t >= 3 ? "win" : "");
+}
+
 // Diminishing returns on raw conquest — the hedonic treadmill (see the
 // lonely-punter canon). Each barfine / short-time buys 2 สนุก less than the last
 // (G.jaded), floored at a real −4 penalty, so a binge night runs the ledger to
 // zero and past it. jaded cools one notch a day (_endNight) and resets each
-// vacation; presence, courtship, company and quests never touch it, so the
-// slow road stays fully rewarding.
-function _conquestHappy(base) {
-  const net = Math.max(base - 2 * G.jaded, -4);
+// vacation; presence, courtship, company and quests never touch it. AND a girl
+// you've built a bond with (regular+, `id` passed) gives a +2 bonus and does NOT
+// advance jaded — depth is the correct road, breadth is the treadmill.
+function _conquestHappy(base, id) {
+  const bonded = id && _bondTier(id) >= 2;
+  const net = Math.max(base + (bonded ? 2 : 0) - 2 * G.jaded, -4);
   _addHappy(net); // _addHappy no-ops on 0, so a wash prints nothing
-  if (net <= 0) {
+  if (bonded) {
+    _say("(No treadmill with her — a night with someone who knows you doesn't cheapen. " +
+      "It's the one that keeps giving.)", "dim");
+  } else if (net <= 0) {
     _say("(The thrill just… doesn't arrive. Another one, and you barely felt it — " +
       "you mostly want to be alone now. Too many, too fast.)", "alert");
   } else if (net < base) {
     _say("(Good. Not like the first, though — something's wearing thin at the edges.)", "dim");
   }
-  G.jaded++;
+  if (!bonded) G.jaded++;
 }
 
 function _addHappy(n, why) {
@@ -1485,7 +1567,7 @@ function _endNight(reason) {
         _say("(Under the Sabai Palms' one working porch light, the night clerk " +
           "produces the joiner ledger: ฿300, and a look with footnotes.)", "dim");
       }
-      _conquestHappy(10);
+      _conquestHappy(10, G.lastBfId);
       break;
     case "bfscam": {
       // an operator ran her game on your long time — the veterans warned you.
@@ -1572,6 +1654,9 @@ function _endNight(reason) {
   G.soc.heat = {};
   G.soc.banned = {};
   G.soc.lastCall = {}; // last-call warnings reset with the night
+  G.soc.greeted = {};  // a fresh night — she greets you anew
+  G.lastBfId = null;   // clear the LT-ending bond hook
+  for (const id in G.soc.drinks) G.soc.drinks[id] = Math.max(0, G.soc.drinks[id] - 1); // bonds cool a notch a night; tend them or lose them
   G.soc.patronBusy = {};
   G.soc.patronMiffed = {};
   G.soc.apologized = {}; // a new shift will hear you out afresh

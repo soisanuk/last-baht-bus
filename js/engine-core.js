@@ -136,7 +136,7 @@ function newGame() {
     encPrompt: null,     // [[text, cls], …] of the pending encounter's prompt, so a restore can redraw it
     game: null,          // live bar mini-game state (connect 4 / jackpot / pool)
     soc: {               // bar social ledger
-      drinks: {},        //   npcId → lady drinks bought tonight
+      drinks: {},        //   npcId → cumulative attention/favor = the BOND (persists within a vacation, cools 1/night; drives _bondTier — The Regular)
       mamaTreat: {},     //   roomId → true (the mamasan drank on you here)
       bellAt: {},        //   roomId → turn of the last bell ring (the glow)
       bells: {},         //   roomId → rings tonight; while the glow holds, 2 softens the rules, 3 = the room is yours
@@ -475,6 +475,7 @@ function _pickDialogue(npcId, topic) {
     if (topic ? d.topic !== topic && !(d.topic && topic.includes(d.topic)) : d.topic) continue;
     if ((d.req || []).some(f => !_flag(f))) continue;
     if ((d.notFlags || []).some(f => _flag(f))) continue;
+    if (d.bond && _bondTier(npcId) < d.bond) continue; // a warmer line only a regular unlocks (The Regular)
     return d;
   }
   return topic ? _pickDialogue(npcId, null) : null;

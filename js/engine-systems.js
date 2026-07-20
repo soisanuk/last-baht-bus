@@ -207,6 +207,17 @@ function _bfResolve(kind) {
     }
     kind = "lt";
   }
+  // her farang: at the top bond tier she squares the fine with the mamasan
+  // herself and comes off the clock — you stopped being a customer to her.
+  let offBook = false;
+  if (_bondTier(id) >= 3 && price > 0) {
+    offBook = true;
+    price = 0;
+    _say(`${name} doesn't so much as glance at the till. A word to the mamasan, a ` +
+      "nod, a roll of the eyes at the very idea of a fine for YOU — and she's already " +
+      "untying her apron. She squares it herself. You stopped being a customer to her " +
+      "a while ago.", "win");
+  }
   if (G.money < price) {
     _say(`The number is ฿${price}. Your pocket says ฿${G.money}. The ledger ` +
       "closes with a soft, final flap, and the negotiation is over without " +
@@ -215,7 +226,16 @@ function _bfResolve(kind) {
   }
   G.money -= price;
   (G.soc.bfBar = G.soc.bfBar || {})[G.room] = id; // her colleagues saw you leave with her
-  if (price === 0) {
+  G.lastBfId = id; // so the LT ending's _conquestHappy knows who
+  // butterflying: a regular of yours in the room watches you leave with another
+  for (const other of _npcsHere()) {
+    if (other !== id && NPC_ROLES[other] === "hostess" && _bondTier(other) >= 2) {
+      G.soc.drinks[other] = Math.max(0, (G.soc.drinks[other] || 0) - 3);
+      _say(`(${NPCS[other].name} watches you leave with ${name} and turns very ` +
+        "deliberately back to her phone. That will cost you — and not in baht.)", "dim");
+    }
+  }
+  if (price === 0 && !offBook) {
     _say("The mamasan glances at the clock — past midnight — closes the ledger, and " +
       "waves the fee away with two fingers. The barfine walks out with the girl " +
       "soon anyway; only the famous ones stay on the book all night.", "dim");
@@ -230,26 +250,27 @@ function _bfResolve(kind) {
         "home advantage. “Upstairs” turns out to be exactly as advertised. Some " +
         "time later you are back on your stool, thinking about nothing at all, " +
         `while she fixes her hair in the till mirror. (฿${G.money} left.)`, "win");
-      _conquestHappy(6);
+      _conquestHappy(6, id);
     } else if (bt === "gents") {
       _say(`฿${price} to Rose, discreetly, and ${name} takes your hand and walks you ` +
         "to one of the deep couches along the wall. The curtain draws around it with " +
         "a soft brass rattle, the cold gold room carries on without you for a while, " +
         `and then you are back in your seat with a fresh drink you don't remember ` +
         `ordering. Nobody looked up. Nobody ever does. (฿${G.money} left.)`, "win");
-      _conquestHappy(6);
+      _conquestHappy(6, id);
     } else {
       _say((price ? `฿${price} to the ledger and a` : "A") +
         ` short walk later the short-time hotel's ceiling fan is doing its slow ` +
         `count over the proceedings. ${name} is businesslike, cheerful, and ` +
         "gone within the hour — a kiss on the cheek at the door, back to her " +
         `stool before the ice in your last drink has melted. (฿${G.money} left.)`, "win");
-      _conquestHappy(5);
+      _conquestHappy(5, id);
       for (let i = 0; i < 6; i++) { // the hour passes; the night carries on
         if (G.over) return;
         _tick();
       }
     }
+    G.soc.drinks[id] = (G.soc.drinks[id] || 0) + 2; // a short-time deepens the bond a little
     return;
   }
   // ── LONG TIME: overnight — unless she's running a game on you ──
@@ -306,6 +327,7 @@ function _bfResolve(kind) {
     `${name} vanishes and reappears out of uniform — jeans, clean shirt, ordinary ` +
     `and lovely — and takes your arm like you're the one being rented.` +
     (price ? ` (฿${G.money} left.)` : ""), "win");
+  G.soc.drinks[id] = (G.soc.drinks[id] || 0) + 3; // a whole night together deepens the bond
   _endNight("barfine");
 }
 
@@ -1072,6 +1094,8 @@ const _OWL_LEADS = [
   "The town has quietly sorted itself by passport. Walking Street belongs to the South Asian crowd and the giant Indian clubs; Buakhao and LK Metro to the balding Brit; North Pattaya to the Chinese coach parties; Pratumnak and Jomtien, more each year, to the Russians. One coast, four cities, sharing a beach and not much else. Draw your own map, squire, and tip accordingly.",
   "A man asks me when Pattaya was at its best. Not the cheapest year, chief — the years it had CHARACTERS. The fellow on the spangled bicycle. The famous beauty on her stool at the top of the Street who broke a hundred hearts before anyone whispered she'd once been a he. The parrot man. The lady under the tarantulas. Bars run for FUN by lunatics who owned them, not branches of a chain with a spreadsheet. You never knew what you'd see next. That was the magic, and it's the thing that's gone.",
   "A reminder, printed once a season and ignored twice: do NOT behave like an asshole here. Kick the wrong man on the wrong step and by week's end the internet has your life story, the Governor has your visa, and you're on a flight away from your wife, your dog and your whole life. The town forgives a great deal. It does not forgive a scene with a camera on it.",
+  "A reader tries to name the thing that isn't quite love. Four years, the same lady, fifteen visits — a customer still, and yet more than a customer; she remembers everything he likes and throws her whole self into the hours. Watching her ride off into the Jomtien sun, money and all, he feels something real. Not love, he insists — 'a kind of in-the-moment love.' I know exactly what he means, and so, quietly, does half this coast. The transaction and the tenderness are not enemies here. That's the part they'll never get back home.",
+  "A reader files a long-time night under 'remind me never again': he books a lovely girl overnight and gets — a girl. Thirty minutes of her life story before bed, tears over a father and a sister and a child he can't keep straight, a sulk when HE talks too much, a cold shoulder in the night, no morning cuddle. 'She acts like a five-year girlfriend, not the one-day girlfriend you want.' Precisely, squire. Short time sells you the fantasy; long time delivers the person — the whole weeping, needing, remembering person. Most men don't want a girlfriend. They want the FEELING of one, for an hour, credits rolled before the third act. Know which you're buying.",
 ];
 const _OWL_LETTERS = [
   ["A Thai wife writes: 'Met my farang on Beach Road in '89. Two children, a finance degree this year, maybe law school. Mixed marriage is hard and culture harder — but marriage is the START of the bumpy ride, not the happy ending.'",
@@ -1096,6 +1120,10 @@ const _OWL_LETTERS = [
    "The clip joint, alive and well. A signed chit in a dim room is a blank cheque, squire, and the muscle by the door is the collections department. Stick to the big-name houses where the bill is the bill; in the sign-here shops, the only winning move is not to sit down."],
   ["A reader muses: 'My flight over was packed to the doors. Is it truly a terrible low season, or have things simply CHANGED — the aging HOBITS thinning out, and folk coming to holiday rather than throw a week's wages at a pretty face?'",
    "Happy Old Boys In Thailand, for the uninitiated — a dwindling tribe. You may be right. The money that once crossed a bar now buys a beach chair and a seafood lunch. The girls noticed before you did; it's why half of them are in Bang Saen."],
+  ["A reader explains the arithmetic of a kept lady: 'Her sponsor flies in, so she's not working — he pays a generous remittance for exactly that. But today's a family day for him, penned in with the wife and kids, and a girl with a free evening…'",
+   "…is a girl with a free evening. Everyone is discreet, everyone is paid, and nobody, technically, is doing anything wrong. This is not a scandal, squire. This is a calendar."],
+  ["A reader's ordeal: a massage shop by his hotel, ฿600 for oil. In the room she demands 'special'; he declines and asks for his money back — and she ERUPTS, screaming 'pervert', the mamasan hurling shoes and a flower vase, both daring him to call the police: 'many customers say that, nobody calls.' He fled. But his hotel manager heard, went white, and marched round with the bell boy and a guard — four men. The girls scattered; the ฿600 came back with ฿200 on top.'",
+   "There's the whole coast in one story: a shop that will scream you into surrendering your own refund, and a hotel man who'll walk three of his staff round the corner to get it back for a guest. The town will rob you and the town will catch you, often on the same street. Tip the bell boy. Then tip him again."],
 ];
 const _OWL_JOKES = [
   "A constable pulls a weaving driver over. 'You drinking?' Driver: 'Depends — you buying?'",
@@ -1114,6 +1142,9 @@ const _OWL_JOKES = [
   "The Beach Road stroll is an international bazaar now. The local ladies go for a thousand, most of them; the Russians ask fifteen hundred, a Turkish lady two, and the Uzbek — pick of the promenade — the same. The African ladies hold a fixed fifteen hundred by open collusion, and heaven help the sister who undercuts. Add five hundred for the fool who won't wrap up.",
   "Half the small go-gos are zombies — dead on their feet, unable to cover the electric bill let alone the girls, shuffling on out of habit. They were zombies before Covid. Sooner or later they reform, repurpose into a live-music room, or lie down. The street is thinning itself, and not gently.",
   "Two sights that tell you everything: the queue of ladies at the Buakhao wire-transfer window on the first of the month, collecting from a boyfriend in Farangland who believes he's the only one — and, cruising past them, a gentleman's club's promo van got up like a knocking shop on wheels, honking for trade. Supply, meet demand. Demand, meet the wire desk.",
+  "The eternal dilemma of the night's first bar: a flat-out ten sits in front of you, and it's only nine o'clock. Take her now and cap the adventure early, or press on and gamble the night turns up better? Half of Pattaya's regret is the ten a man walked past 'to keep his options open.' Seize the moment, or 'no regrets, press on' — both are wisdom. Only dithering is a mistake.",
+  "A reader nearly took a tiny new beauty home — she'd have gone for two thousand — when the mamasan blocked the door: 'this one is small, she brings me many customers; you want her, twenty-five lady drinks and a five-thousand fine.' The girl cried; he left. A barfine is never a fixed price, squire — it's what the girl is worth to the bar THAT night, and a fresh little draw is worth keeping on the floor. The number isn't a robbery. It's an appraisal.",
+  "For the specialist: the town keeps a fetish club or two — a grand entrance fee, more again for a private room, and a roster of older ladies who, be warned, mostly DOMINATE. Go to be dominated and you're in business; go to dominate and you'll find the market thin. Know your role before you pay at the door.",
 ];
 const _OWL_LISTINGS = [
   "STINKY BAR (Beach Road North), the American's shop, runs killer pool every third night — ฿100 in the ashtray, last cue standing takes the pot. His felt, his rules, his Budweiser.",

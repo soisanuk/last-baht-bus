@@ -115,6 +115,12 @@ function _arriveAt(to) {
   // walked in during the final half hour — the courtesy warning, and a barfine nudge
   if (_flag("act1Done") && _closesMidnight(to) && G.nightTurn >= 55 && G.nightTurn < 60 &&
       !(G.soc.lockIn && G.soc.lockIn[to])) _lastCall(to);
+  // a girl you've built something with greets you by name (once per bar a night)
+  if (ROOMS[to].barType && !(G.soc.greeted && G.soc.greeted[to])) {
+    const her = _npcsHere().filter(n => NPC_ROLES[n] === "hostess")
+      .sort((a, b) => _bondTier(b) - _bondTier(a))[0];
+    if (her && _bondTier(her) >= 1) { (G.soc.greeted = G.soc.greeted || {})[to] = true; _relGreeting(her); }
+  }
   // the anti-Simon machine: when the book gets heavy, the town catches you.
   // Candy settles it at whichever of her bars she's working tonight.
   if (G.hotelDebt >= 800 && !_flag("tabSettled") &&
@@ -382,6 +388,13 @@ function _doTalk(arg, topic) {
     return;
   }
   const d = _pickDialogue(npc, topic || null);
+  // a regular you TALK to warms up: generic Tinglish register for the filler
+  // girls, unless she has a more specific line (a topic, or a bond-gated entry
+  // that just fired). Hand-authored NPCs speak their own bond: lines instead.
+  if (!topic && NPCS[npc].filler && NPC_ROLES[npc] === "hostess" &&
+      _bondTier(npc) >= 2 && !(d && d.bond)) {
+    _bondTalk(npc); _questOffer(npc); return;
+  }
   if (!d) {
     _say(topic ? `${NPCS[npc].name} doesn't have much to say about that.` :
       `${NPCS[npc].name} smiles politely.`);
