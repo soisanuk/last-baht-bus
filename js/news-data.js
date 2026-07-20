@@ -13,14 +13,14 @@ var NEWS_FEED = [
     "d": "29 Jun 2026"
   },
   {
-    "t": "In Thailand’s sex tourism hub, bright lights flash, loud music blares – and underage girls are exploited",
-    "s": "The Guardian",
-    "d": "03 Jul 2026"
-  },
-  {
     "t": "How a Thai teen’s night at a Pattaya beach ended in death",
     "s": "The Japan Times",
     "d": "30 Jun 2026"
+  },
+  {
+    "t": "In Thailand’s sex tourism hub, bright lights flash, loud music blares – and underage girls are exploited",
+    "s": "The Guardian",
+    "d": "03 Jul 2026"
   },
   {
     "t": "Thailand’s suitcase murder raises safety fears as Pattaya mourns for teen victim",
@@ -38,8 +38,13 @@ var NEWS_FEED = [
     "d": "15 Jul 2026"
   },
   {
-    "t": "Thailand Tourism Accelerates China Push With Plans to Revive Chengdu–Chiang Mai Flights, Explore Direct Links to Hua Hin and Pattaya, and La",
-    "s": "Travel And Tour World",
+    "t": "‘$13 an hour’: Tourist’s sick sex confession",
+    "s": "News.com.au",
+    "d": "02 Jul 2026"
+  },
+  {
+    "t": "Thailand's first conscientious objector sentenced to prison",
+    "s": "Bangkok Post",
     "d": "20 Jul 2026"
   },
   {
@@ -48,9 +53,9 @@ var NEWS_FEED = [
     "d": "20 Jul 2026"
   },
   {
-    "t": "Fast train to nowhere",
-    "s": "Bangkok Post",
-    "d": "19 Jul 2026"
+    "t": "Thailand targets 2030 completion of first phase of high-speed rail link to China",
+    "s": "Reuters",
+    "d": "20 Jul 2026"
   },
   {
     "t": "U.S., Canadian, Thai Navies Sharpen Maritime Capabilities During Exercise CARAT Thailand",
@@ -58,30 +63,25 @@ var NEWS_FEED = [
     "d": "17 Jul 2026"
   },
   {
-    "t": "Thailand, China agree to launch new 2+2 security dialogue",
-    "s": "Khaosod English",
+    "t": "Is Thailand’s PM More Concerned About Sound Cannabis Policy or Political Optics?",
+    "s": "The Diplomat – Asia-Pacific",
     "d": "20 Jul 2026"
   },
   {
-    "t": "Workers digging beneath a 1,300-year-old reclining Buddha in Thailand uncovered 33 ancient gold, silver a",
-    "s": "The Times of India",
-    "d": "19 Jul 2026"
-  },
-  {
-    "t": "Scientists identify giant new dinosaur from a single bone found in Thailand",
-    "s": "Yahoo",
+    "t": "Thai Cabinet approves changes in pre-travel visa free policy",
+    "s": "Thai PBS World",
     "d": "20 Jul 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-07-17","USD":33.64,"AUD":23.46,"GBP":45.19,"EUR":38.46};
+var FX_RATES = {"date":"2026-07-20","USD":33.62,"AUD":23.56,"GBP":45.27,"EUR":38.42};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-07-20","temp":32,"humid":43,"code":0,"hi":33,"rain":14};
+var WX_NOW = {"date":"2026-07-21","temp":29,"humid":78,"code":0,"hi":33,"rain":22};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-18","done":true,"h":"France","hs":4,"a":"England","as":6},{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-07-16","first":"639214","last2":"71","front3":["683","709"],"back3":["427","746"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4022,"date":"2026-07-20","baht":64000};
+var GOLD = {"usd":4013,"date":"2026-07-20","baht":63800};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":64265,"thb":2161438};
+var BTC = {"usd":65431,"thb":2200211};

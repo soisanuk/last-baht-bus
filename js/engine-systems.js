@@ -74,7 +74,30 @@ function _sponsorFamilyDay(id) {
   return _sponsorInTown(id) && G.day === _sponsorStart(id) + _hh(id + ":" + G.vacation + ":family", 89) % 3;
 }
 
+// Soi 6 upstairs drink-minimum. A hash-picked minority of Soi 6 girls (and the
+// bars behind them) run a "buy me a few lady drinks before we go upstairs"
+// policy — the bar wants its spend, the girl wants to warm up. It's quoted only
+// when you make the move, and rushing the ask on a single drink is exactly what
+// trips it; a couple more drinks and it lifts. Reputation girls don't bother.
+// N (3–5) is stable per (girl, vacation), shared-world-safe like _quizBars.
+function _soi6DrinkMin(id) {
+  if (_room().barType !== "soi6" || NPC_ROLES[id] !== "hostess") return 0;
+  if (POPULAR_GIRLS.includes(id)) return 0;
+  const h = _hh(id + ":" + G.vacation + ":dmin", 83);
+  if (h % 100 >= 40) return 0;        // ~40% run the policy
+  return 3 + (h >>> 16) % 3;          // 3, 4, or 5
+}
+
 function _doBarfine(arg) {
+  const rm = _room();
+  if (rm.massage === "oil") {
+    _say("No barfine here — she's a masseuse, not a bar girl, and there's no mamasan to " +
+      "square. Buy the massage, ask for the SPECIAL, and if you want the rest she'll tell " +
+      "you to catch her after her shift.");
+    return;
+  }
+  if (rm.massage === "legit") { _say("You are in a legitimate massage shop. Have a word with yourself. (MASSAGE)"); return; }
+  if (rm.soapy) { _say("It doesn't work like that here — it's a set package. (SOAPY to pick a number.)"); return; }
   if (!_inBar()) { _say("Barfines are negotiated indoors, with the mamasan watching."); return; }
   const here = _npcsHere().filter(id => NPC_ROLES[id]);
   const id = arg ? _findNpc(arg) : (here.length === 1 ? here[0] : null);
@@ -157,6 +180,10 @@ function _bfRefusal(id, bt) {
   // a KEPT girl whose sponsor is in town this week isn't working — unless it's
   // his family night. Also not held: it's a day thing, not a mood.
   if (_sponsorInTown(id) && !_sponsorFamilyDay(id)) return { kind: "sponsor" };
+  // the upstairs drink-minimum: not a mood, a tariff — re-checked each ask so a
+  // couple more lady drinks lifts it (not held; it's about your tab, not the day).
+  const dmin = _soi6DrinkMin(id);
+  if (dmin && _favor(id) < dmin) return { kind: "drinkmin", need: dmin };
   if (G.soc.bfBar && G.soc.bfBar[G.room] && G.soc.bfBar[G.room] !== id) return keep("stealing");
   if (G.soc.drunk >= 6 && _rand() < 0.5) return keep("mess");
   const gate = bt === "soi6" ? 2 : 4;
@@ -202,6 +229,11 @@ function _bfRefusalSay(id, r) {
       "low: “Cannot, na. You go with girl from here already — everybody see. " +
       "I don't steal customer.” It doesn't matter that the other girl is " +
       "gone; the rules of the floor outlast the shift.",
+    drinkmin: `${name} is up for it — hand already on your arm — but she tips her ` +
+      `chin at the mamasan minding the till: “Sure sure, tilac, but bar rule: ` +
+      `${r.need} lady drink first, then upstairs.” Not a brush-off. A tariff. ` +
+      "(You moved a shade fast — the ones who rush the stairs on one drink " +
+      "always hit this. Buy her a couple more and ask again.)",
   };
   _say(lines[r.kind] || lines.dislike, "alert");
   if (["dislike", "stealing"].includes(r.kind)) {
@@ -512,6 +544,188 @@ function _maybeSelfBarfine(id) {
       `barfine tonight. You don't tell anybody, na.” The other girls have gone ` +
       "very quiet. This does not happen.", "win"],
     ["(YES / NO — she is not going to ask twice.)", "dim"]);
+}
+
+// ── Massage (three of the town's nine kinds) ─────────────────────────────────
+// Canon: "massage" is the most elastic word in the language and the sign never
+// tells you which kind. A LEGIT shop actually repairs you (the only mid-night
+// fix for G.hurt) and refuses to sell the other thing; an OIL shop does the base
+// rub, then the warmth-gated "special" (hand/mouth) — and the on-premises no-sex
+// rule sends full service off to after her shift. SOAPY is its own modal below.
+// These rooms have no barType on purpose, so no lady-drink/bell/barfine apparatus.
+const MASSAGE_LEGIT = 300, MASSAGE_OIL = 300, MASSAGE_SPECIAL = 1000;
+
+function _doMassage(arg) {
+  const r = _room();
+  if (r.soapy) { _doSoapy(); return; }   // wrong verb, right building — route it
+  if (!r.massage) {
+    _say("No massage bench here. The shops are off the tourist strips and along the " +
+      "Second Road row — a foot rub by the Walking Street gate, or the pink-lit places up north.");
+    return;
+  }
+  arg = (arg || "").replace(/^(a |for |the )/, "").trim();
+  const wantsSpecial = /special|happy|extra|hand|mouth|boom|sex|sexy|finish/.test(arg);
+  const she = _npcsHere().find(id => NPCS[id] && NPCS[id].masseuse);
+  const name = she ? NPCS[she].name : "the masseuse";
+
+  // ── Legit therapeutic: it heals, and it does not sell the other thing ──
+  if (r.massage === "legit") {
+    if (wantsSpecial) {
+      _say(`${name} stops kneading just long enough to give you a look your mother would ` +
+        "recognise. “Wrong shop, tilac. Down Second Road, plenty. Here — real massage only.” " +
+        "The thumbs resume. You behave.");
+      return;
+    }
+    if (G.money < MASSAGE_LEGIT) {
+      _say(`A proper hour is ฿${MASSAGE_LEGIT}; you have ฿${G.money}. ${name} waves you to ` +
+        "come back with the fare — she isn't going anywhere.");
+      return;
+    }
+    G.money -= MASSAGE_LEGIT;
+    const wasHurt = G.hurt, wasDrunk = G.soc.drunk;
+    G.hurt = Math.max(0, G.hurt - 1);
+    G.soc.drunk = Math.max(0, G.soc.drunk - 2);
+    for (let i = 0; i < 6; i++) { if (G.over) return; _tick(); }
+    _say(`฿${MASSAGE_LEGIT}, and ${name} goes to work like she has a personal grudge against ` +
+      "the knot under your shoulder blade — elbows, thumbs, one alarming manoeuvre involving " +
+      "her heel and your spine. An hour later you unpeel off the mat rinsed, loosened, and " +
+      `walking two inches taller. (฿${G.money} left.)`, "win");
+    if (wasHurt > G.hurt) _say("(The banged-up ache eases a notch — this is the one place in " +
+      "town that actually mends you, not just numbs you.)", "dim");
+    if (wasDrunk > G.soc.drunk) _say("(And the Chang fog thins; she pressed something behind " +
+      "your ear and the night stopped ringing.)", "dim");
+    _addHappy(2);
+    return;
+  }
+
+  // ── Oil shop: the base rub, then the warmth-gated "special" ──
+  if (wantsSpecial) { _massageSpecial(she, name); return; }
+  if (G.money < MASSAGE_OIL) {
+    _say(`The oil massage is ฿${MASSAGE_OIL}; you have ฿${G.money}. ${name} pouts, forgives you instantly.`);
+    return;
+  }
+  G.money -= MASSAGE_OIL;
+  G.soc.drunk = Math.max(0, G.soc.drunk - 1);
+  (G.soc.massaged = G.soc.massaged || {})[G.room] = G.day; // the base is done; special is on the table
+  if (she) G.soc.drinks[she] = (G.soc.drinks[she] || 0) + 1; // a soft, cheap bond — no drinks, no mama cut
+  for (let i = 0; i < 5; i++) { if (G.over) return; _tick(); }
+  _say(`฿${MASSAGE_OIL} and ${name} works warm oil down your back in the mirror-walled cubicle, ` +
+    "humming, in no hurry. It is a genuinely good massage. It is also, quite clearly, not the " +
+    "whole menu — somewhere around the base of your spine her thumbs ask a question. " +
+    `(SPECIAL, if you're answering — ฿${MASSAGE_SPECIAL - MASSAGE_OIL} more.)`, "win");
+  _addHappy(1);
+}
+
+function _massageSpecial(she, name) {
+  if (G.soc.special && G.soc.special[G.room] === G.day) {
+    _say(`${name} laughs and pats your cheek: “Greedy! Tomorrow, na.” One is the ration; the ` +
+      "shop has a floor to work and so does she.");
+    return;
+  }
+  const hadBase = G.soc.massaged && G.soc.massaged[G.room] === G.day;
+  const price = hadBase ? MASSAGE_SPECIAL - MASSAGE_OIL : MASSAGE_SPECIAL;
+  if (G.money < price) {
+    _say(`The special runs ฿${price}${hadBase ? " on top" : ""}; you have ฿${G.money}. ${name} ` +
+      "is sweet about it, but the oil stays strictly therapeutic.");
+    return;
+  }
+  G.money -= price;
+  (G.soc.special = G.soc.special || {})[G.room] = G.day;
+  if (!hadBase) for (let i = 0; i < 3; i++) { if (G.over) return; _tick(); }
+  for (let i = 0; i < 3; i++) { if (G.over) return; _tick(); }
+  _say(`${name} checks the curtain, turns the radio up a notch, and ` +
+    (hadBase ? "the massage quietly stops pretending to be only a massage" :
+      "gives you the massage and the actual reason people come to Smile") +
+    ". Hand and mouth, unhurried, her eyes finding yours in the wall of mirrors the whole time — " +
+    `the “I like you” she led with turns out to be at least half true. (฿${G.money} left.)`, "win");
+  _conquestHappy(4, she);        // a real release — feeds the hedonic treadmill, lightly
+  if (she) G.soc.drinks[she] = (G.soc.drinks[she] || 0) + 1;
+  // the on-premises wall, and the door it leaves open (a seed: no live off-shift meet yet)
+  _say(`Afterward she wipes her hands and tips her chin at the little NO SEX sign, rueful. ` +
+    "“Boom boom no can here — boss rule, sticker everywhere. But when I finish work…” " +
+    `${name} writes something on the back of your hand in eyeliner and folds your fingers over ` +
+    "it. “You come, na. Real one, my place.” (A number, and an open invitation — a softer road " +
+    "than any barfine. Whether you ever walk it is another night's business.)", "dim");
+}
+
+// ── Soapy massage: the fishbowl (ab ob nuat) — a modal, like the barfine gate ──
+// The transparent big-ticket end of the trade: tiered, numbered girls behind
+// glass; you pick a number, pay a set package, and everything after is on the
+// premises. No haggling, no barfine games. A Thai-numbers hook by design — the
+// hip discs read in Thai numerals; typing the Arabic number (or the tier) works.
+const _SOAPY_TIERS = [
+  { key: "star",  label: "star",       num: 35, price: 1500 },
+  { key: "super", label: "super star", num: 71, price: 2200 },
+  { key: "model", label: "model",      num: 99, price: 3000 },
+];
+
+function _doSoapy() {
+  if (!_room().soapy) {
+    _say("No fishbowl here. Poseidon, up on the Second Road massage row, is the one with the glass.");
+    return;
+  }
+  if (!_flag("act1Done")) {
+    _say("Four floors of soapy massage on a stolen-wallet budget? Sort the essentials first, Aquaman.");
+    return;
+  }
+  if (G.soc.soapyDone === G.day) {
+    _say(`${_soapyBoss()} takes one look and laughs. “Again? Go home, sleep, eat something — tomorrow.” ` +
+      "Once through the soap is plenty for one night.");
+    return;
+  }
+  G.pendingSoapy = { room: G.room };
+  _soapyPrompt();
+}
+
+// The manageress of the soapy you're standing in (Poseidon's Toom, or a generic
+// one at a filler soapland) — so the prose isn't hardwired to one venue.
+function _soapyBoss() {
+  const id = _npcsHere().find(n => NPCS[n] && NPCS[n].soapyBoss);
+  return id ? NPCS[id].name : "the manageress";
+}
+
+// Single source for the live menu, the invalid-pick reprompt, and the resume
+// redraw (see _renderResume — a new modal gate must redraw or the load is blind).
+function _soapyPrompt() {
+  _say(`${_soapyBoss()} slides the laminated menu across and nods at the glass. Pick a number:`, "dim");
+  for (const t of _SOAPY_TIERS) _say(`  [${thaiDigits(t.num)}]  ${t.label} — ฿${t.price}`, "dim");
+  _say(`(Say a number — ${_SOAPY_TIERS.map(t => t.num).join(" · ")} — or the tier name. NO backs out.)`, "dim");
+}
+
+// Returns true when it consumes the modal (paid or cancelled), false on a
+// reprompt — so doCommand only spends a _tick on a real resolution.
+function _soapyResolve(input) {
+  if (/^(no\b|cancel|never|forget|leave|out|nothing|maybe|nvm)/.test(input)) {
+    G.pendingSoapy = null;
+    _say("You take one more look at the glass and decide your wallet has strong opinions. " +
+      `${_soapyBoss()} shrugs, entirely unoffended — the fish keep swimming.`);
+    return true;
+  }
+  const thai = parseThaiDigits(input);
+  const num = thai != null ? thai : (/\d+/.test(input) ? parseInt(input.match(/\d+/)[0], 10) : null);
+  let tier = num != null ? _SOAPY_TIERS.find(t => t.num === num) : null;
+  if (!tier) tier = _SOAPY_TIERS.find(t =>
+    input.includes(t.key) || input.includes(t.label) ||
+    (t.key === "super" && /\bsuper\b/.test(input)) || (t.key === "model" && /\bmodel\b/.test(input)));
+  if (!tier && /\bstar\b/.test(input)) tier = _SOAPY_TIERS[0]; // bare "star" → the entry tier
+  if (!tier) { _say(`${_soapyBoss()} taps the glass, patient: “That number not here, tilac.”`, "dim"); _soapyPrompt(); return false; }
+  if (G.money < tier.price) {
+    G.pendingSoapy = null;
+    _say(`Number ${thaiDigits(tier.num)} is the ${tier.label} tier — ฿${tier.price}. Your pocket says ` +
+      `฿${G.money}. ${_soapyBoss()} closes the menu with a kind, final click: “Maybe the star, next time.”`);
+    return true;
+  }
+  G.pendingSoapy = null;
+  G.money -= tier.price;
+  G.soc.soapyDone = G.day;
+  for (let i = 0; i < 8; i++) { if (G.over) return true; _tick(); } // the long ritual eats a chunk of night
+  _say(`You point at ${thaiDigits(tier.num)}. A minute later number ${thaiDigits(tier.num)} — the ` +
+    `${tier.label} — collects you with a professional smile and a numbered locker key. Upstairs: a warm ` +
+    "tiled room, a bath the size of a small car, an air mattress, and no clock anywhere. She baths you " +
+    "like it's a vocation, and the set package delivers precisely what the laminated menu promised — " +
+    `everything, unhurried, on the premises. (฿${G.money} left.)`, "win");
+  _conquestHappy(tier.key === "model" ? 7 : tier.key === "super" ? 6 : 5);
+  return true;
 }
 
 // ── Quests (adventures) ──────────────────────────────────────────────────────
@@ -1389,6 +1603,7 @@ const FOOD_STALLS = {
   buakhao_market: { name: "som tam from the cart, extra everything", price: 50, hunger: 55, thirst: -10 },
   naklua_rd: { name: "grilled chicken and sticky rice off a smoky cart", price: 60, hunger: 60, thirst: 0 },
   ws_gate: { name: "a late-night kebab of negotiable provenance", price: 89, hunger: 45, thirst: 0 },
+  kiss: { name: "a proper plate off the mile-long menu at KISS — pad kaprao, or a burger if the soul needs it", price: 120, hunger: 70, thirst: 10 },
 };
 
 const _EDIBLE = { moo_ping: 35, som_tam: 50, noodles: 20 };
