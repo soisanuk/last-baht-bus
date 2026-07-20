@@ -1844,6 +1844,71 @@ test("after midnight the beer-bar barfine is waived (favor still required)", () 
   assert.equal(state().day, 3, "and the night still ends grandly");
 });
 
+// ── v2 barfine seeds: the draw, the kept girl, and too much reality ─────────
+
+test("a prized draw is blocked early, priced up, and gouged in prose", () => {
+  // dao is a hash-picked draw at vacation 1; lek is not.
+  assert.ok(_isDraw("dao"), "dao is a draw");
+  assert.ok(!_isDraw("lek"), "lek is rank and file");
+  // premium: a draw costs more to the bar than a plain go-go girl at base rate
+  state().nightTurn = 40; // 22:00 — base window
+  assert.ok(_barfinePrice("gogo", "dao") > _barfinePrice("gogo", "lek"),
+    "the draw carries a premium");
+  // and gets NO midnight discount
+  state().nightTurn = 65;
+  assert.ok(_barfinePrice("gogo", "dao") > _barfinePrice("gogo", "lek"),
+    "still premium past midnight — no discount for a draw");
+  // before midnight the mama won't let her go: a NO with a number on it
+  state().nightTurn = 40;
+  const r = _bfRefusal("dao", "gogo");
+  assert.equal(r && r.kind, "draw");
+  // after midnight the block lifts (she's takeable, at a price)
+  state().nightTurn = 65;
+  assert.ok(!_bfRefusal("dao", "gogo") || _bfRefusal("dao", "gogo").kind !== "draw",
+    "the draw block lifts after midnight");
+});
+
+test("draw block shows the gouge and doesn't open a negotiation", () => {
+  state().flags.act1Done = true;
+  state().flags.hasWallet = true;
+  state().room = "tequila_queen"; // dao's bar
+  state().money = 8000;
+  state().nightTurn = 40;
+  state().soc.drinks.dao = 6; // clears the favor gate
+  run("barfine dao");
+  assert.ok(!state().pendingBf, "no negotiation — it's a refusal");
+  assert.match(lastOut(), /bring me many customer|after midnight/i);
+});
+
+test("a kept girl is off while her sponsor is in town — except family night", () => {
+  assert.ok(_hasSponsor("gift"), "gift is a kept girl");
+  // window runs days 2..4, family night is day 2 (computed from the hash)
+  state().day = 3; // in town, not family night
+  assert.equal((_bfRefusal("gift", "gogo") || {}).kind, "sponsor");
+  state().day = 2; // his family night — she's free
+  assert.notEqual((_bfRefusal("gift", "gogo") || {}).kind, "sponsor");
+  state().day = 6; // sponsor's flown home
+  assert.notEqual((_bfRefusal("gift", "gogo") || {}).kind, "sponsor");
+});
+
+test("long time can hand you the whole person: less สนุก, deeper bond", () => {
+  state().flags.act1Done = true;
+  state().flags.hasWallet = true;
+  state().room = "lucky_tiger";
+  state().money = 3000;
+  state().nightTurn = 50;
+  state().day = 2;          // lek rolls the reality beat on day 2
+  state().soc.drinks.lek = 6;
+  const bond = state().soc.drinks.lek;
+  run("barfine lek");
+  run("long time");
+  assert.equal(state().day, 3, "the night still ends");
+  assert.match(lastOut(), /five-year|really know her/i, "the reality prose, not the fantasy");
+  // +6 for the reality beat, less the −1 nightly bond decay = net +5 (a plain
+  // grand ending would be +3 −1 = +2, so this cleanly reads as the deeper path)
+  assert.ok(state().soc.drinks.lek >= bond + 5, "seeing the real her deepens the bond");
+});
+
 // ── The Darkside lock-in ────────────────────────────────────────────────────
 
 test("lock-in: a spender at a lockIn bar gets the bolt, not the shutters", () => {

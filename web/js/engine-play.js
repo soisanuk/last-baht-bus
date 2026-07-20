@@ -1567,7 +1567,7 @@ function _endNight(reason) {
         _say("(Under the Sabai Palms' one working porch light, the night clerk " +
           "produces the joiner ledger: ฿300, and a look with footnotes.)", "dim");
       }
-      _conquestHappy(10, G.lastBfId);
+      _conquestHappy(G.lastBfBase || 10, G.lastBfId); // reality-LT sets a lower base
       break;
     case "bfscam": {
       // an operator ran her game on your long time — the veterans warned you.
@@ -1656,6 +1656,7 @@ function _endNight(reason) {
   G.soc.lastCall = {}; // last-call warnings reset with the night
   G.soc.greeted = {};  // a fresh night — she greets you anew
   G.lastBfId = null;   // clear the LT-ending bond hook
+  G.lastBfBase = 10;   // and its สนุก base (reality-LT drops it to 4 for one night)
   for (const id in G.soc.drinks) G.soc.drinks[id] = Math.max(0, G.soc.drinks[id] - 1); // bonds cool a notch a night; tend them or lose them
   G.soc.patronBusy = {};
   G.soc.patronMiffed = {};
