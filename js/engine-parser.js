@@ -121,6 +121,7 @@ function _arriveAt(to) {
       .sort((a, b) => _bondTier(b) - _bondTier(a))[0];
     if (her && _bondTier(her) >= 1) { (G.soc.greeted = G.soc.greeted || {})[to] = true; _relGreeting(her); }
   }
+  _managerWelcome(); // a bar manager stands you the house's first shot (once/bar/night)
   // the anti-Simon machine: when the book gets heavy, the town catches you.
   // Candy settles it at whichever of her bars she's working tonight.
   if (G.hotelDebt >= 800 && !_flag("tabSettled") &&
@@ -401,6 +402,7 @@ function _doTalk(arg, topic) {
     return;
   }
   _deliver(npc, d);
+  if (NPCS[npc].manager) _managerChatTick(npc);
   _questOffer(npc);
 }
 
@@ -608,6 +610,33 @@ function _doSellBottles() {
   }
 }
 
+// Stand the bar manager a "man drink" — a beer's worth (BEER_PRICE). Builds his
+// goodwill (G.soc.manDrinks) and clears any "you've been monopolising me" debt.
+function _buyManDrink(id) {
+  if (!_inBar()) { _say("Buy a drink where drinks are sold, tilac."); return; }
+  const name = NPCS[id].name;
+  if (G.money < BEER_PRICE) { _say(`A man drink runs ฿${BEER_PRICE} and you're short. ${name} waves it off: “Next time, bud.”`); return; }
+  G.money -= BEER_PRICE;
+  G.soc.manDrinks = G.soc.manDrinks || {};
+  G.soc.manDrinks[id] = (G.soc.manDrinks[id] || 0) + 1;
+  if (G.soc.mgrChat) G.soc.mgrChat[id] = 0; // debt squared
+  _addHappy(2);
+  _say(`“Now you're speaking the language.” ${name} pours himself a proper one and ` +
+    `chinks it against yours. ฿${BEER_PRICE} well spent — a manager who likes you is the ` +
+    `best friend a farang has out here. (฿${G.money} left.)`, "win");
+  if (_rand() < 0.5) { G.soc.drunk++; _say("He racks up two more “for the road” before you can argue.", "dim"); }
+}
+
+// Lean on a manager's time and he'll (genially) angle for a man drink back.
+function _managerChatTick(id) {
+  G.soc.mgrChat = G.soc.mgrChat || {};
+  G.soc.mgrChat[id] = (G.soc.mgrChat[id] || 0) + 1;
+  if (G.soc.mgrChat[id] === 3) {
+    _say(`${NPCS[id].name} lets a beat hang, then taps the bar with two knuckles: “You're ` +
+      "good company, bud — but a man gets thirsty holding up his end. Stand us one?” (BUY MAN DRINK.)", "dim");
+  }
+}
+
 function _doBuy(arg) {
   const r = _room();
   if (arg.includes("charger")) {
@@ -677,6 +706,14 @@ function _doBuy(arg) {
     _addHappy(d <= 4 ? 1 : -1);
     _checkDrunk();
     return;
+  }
+  if (arg.includes("drink")) {
+    // a "man drink" for the bar manager — the floor's social tax, kept off the
+    // lady-drink path (managers aren't in NPC_ROLES). "man drink", or "drink for <mgr>".
+    const nm = arg.replace(/\b(buy|order|a|an|the|drink|man|for|him|manager)\b/g, " ").trim();
+    const mgr = /\bman drink\b/.test(arg) ? _managerHere()
+      : (nm && NPCS[_findNpc(nm)] && NPCS[_findNpc(nm)].manager ? _findNpc(nm) : null);
+    if (mgr) { _buyManDrink(mgr); return; }
   }
   if (arg.includes("lady drink") || arg.includes("ladydrink") || arg.includes("drink")) {
     if (!_inBar()) { _say("Buy a drink where drinks are sold, tilac."); return; }
@@ -1638,7 +1675,7 @@ const _HELP = `Common commands:
   WATCH SUNSET · WATCH POLICE (Blue Dog, 6-7pm — best free show in town)
   WEATHER · SCORES (real football) · LOTTERY (the real GLO draw)
   PLAY CONNECT 4 · PLAY JACKPOT [bet] · PLAY POOL   (in the beer bars)
-  FLIRT/KISS/SPANK/FONDLE <lady> · BUY DRINK FOR <lady> · BUY BEER
+  FLIRT/KISS/SPANK/FONDLE <lady> · BUY DRINK FOR <lady> · BUY BEER · BUY MAN DRINK (for the bar manager)
   THROW COVER [AT <lady>] (the ceiling game — warm her up first)
   BUY BRA FOR <lady> (฿200 — makes FONDLE more interesting)
   RING BELL (฿300, instant popularity) · TALK TO PATRON · BARFINE <lady>
@@ -1728,6 +1765,7 @@ function _completePool(verb, ctx) {
     case "buy": case "order": {
       const barItems = ["beer", "water", "lady drink for", "bra for", "charger", "toastie", "food",
         "round for band"];
+      if (_managerHere()) barItems.splice(1, 0, "man drink"); // early, so it survives the 8-result cap
       const sItems = _salengItems();
       if (sItems.length) {
         // a parked cart leads with its items; once one's named, offer a lady to

@@ -183,6 +183,31 @@ function _lastBusWarn() {
     "and their prices. This is the hour the whole night has been counting down to.", "alert");
 }
 
+// ── The bar manager ──────────────────────────────────────────────────────────
+// A distinct NPC type (marked `manager:true` on the NPCS entry, deliberately NOT
+// in NPC_ROLES so lady-logic — barfine/lady-drink/tip/contact — ignores him).
+// Hired help, not the owner: keeps regulars company, pours free shots, and is
+// stood a "man drink" back when you monopolise his time (_buyManDrink). Bert is
+// the exemplar. Reading-customers / interrupt / burnout are deferred.
+function _managerHere() {
+  return _npcsHere().find(id => NPCS[id] && NPCS[id].manager) || null;
+}
+// The house welcome: a free shot, once per bar per night (sandbox only — the
+// tutorial stays dry). You're expected to reciprocate with a man drink.
+function _managerWelcome() {
+  if (!_flag("act1Done") || G.over) return;
+  const id = _managerHere();
+  if (!id) return;
+  G.soc.mgrShot = G.soc.mgrShot || {};
+  if (G.soc.mgrShot[G.room]) return;
+  G.soc.mgrShot[G.room] = true;
+  G.soc.drunk++;
+  _addHappy(1);
+  _say(`${NPCS[id].name} slides a shot down the bar before you've even sat: “House rule, ` +
+    "bud — first one's on me. Chok dee.” It goes down like a warm handshake. (Stand him a " +
+    "BUY MAN DRINK when you've been bending his ear.)", "win");
+}
+
 function _closingTick() {
   if (!_flag("act1Done") || G.over) return;
   if (!_closesMidnight(G.room) || _lockedIn()) return;
@@ -1677,6 +1702,8 @@ function _endNight(reason) {
   G.soc.heat = {};
   G.soc.banned = {};
   G.soc.lastCall = {}; // last-call warnings reset with the night
+  G.soc.mgrShot = {};  // the manager pours a fresh welcome shot each night
+  G.soc.mgrChat = {};  // and forgets last night's bar-leaning (manDrinks goodwill persists)
   G.lastBusWarned = false; // and the last-baht-bus heads-up fires once each night
   G.soc.greeted = {};  // a fresh night — she greets you anew
   G.lastBfId = null;   // clear the LT-ending bond hook

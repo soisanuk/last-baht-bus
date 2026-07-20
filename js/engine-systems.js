@@ -591,10 +591,45 @@ const _ACT1_HINTS = [
     "dancer's number was 71, and she puts a lucky 9 on the end of every code. Candy, Ploy, Pim and " +
     "Daeng each hold a piece.)"],
 ];
+// Resolve a quest's `at` (an NPC id or a room id) to a live location clause for
+// a hint — where the person actually is TODAY (NPCs can move), which venue, and
+// the geographic area. Returns "" when it isn't worth saying (unknown, or you're
+// already standing there).
+function _questWhere(at) {
+  if (!at) return "";
+  if (NPCS[at]) {
+    const room = _npcRoom(at);
+    if (room === G.room || _npcsHere().includes(at)) return ""; // she's right here
+    const r = ROOMS[room];
+    return r ? ` ${NPCS[at].name} is at ${_barName(room)}, over in ${r.region}.` : "";
+  }
+  if (ROOMS[at]) {
+    if (at === G.room) return "";
+    return ` That's the ${_barName(at)}, in ${ROOMS[at].region}.`;
+  }
+  return "";
+}
+
 function _doHint() {
   if (_flag("act1Done")) {
+    // Sandbox: reuse the "next actionable step" idea for the quest journal —
+    // point at one active quest (with where to go), else nudge an offer.
+    const active = Object.keys(QUESTS).filter(q => G.quests[q] === "active");
+    if (active.length) {
+      const q = QUESTS[active[0]];
+      _say(`On the books: ${q.name} — ${q.desc}${_questWhere(q.at)}`, "win");
+      return;
+    }
+    const offered = Object.keys(QUESTS).filter(q => G.quests[q] === "offered");
+    if (offered.length) {
+      const q = QUESTS[offered[0]];
+      const giver = NPCS[q.giver] ? NPCS[q.giver].name : "Someone";
+      _say(`${giver} has a job going — “${q.name}”. Take it on with ACCEPT ${offered[0].toUpperCase()}.`, "win");
+      return;
+    }
     _say("The wallet's yours and the opening's behind you — out here there are no wrong answers, " +
-      "only better nights. (QUESTS for jobs, WHO for your black book, MAP for the lay of the land.)", "dim");
+      "only better nights. Nothing on the books: the givers are out there, so TALK to people. " +
+      "(QUESTS lists jobs, WHO your black book, MAP the lay of the land.)", "dim");
     return;
   }
   if ((G.act1Tries || 0) < 1) {
@@ -683,7 +718,7 @@ function _doQuests() {
   const rows = Object.entries(QUESTS).filter(([qid]) => G.quests[qid]);
   for (const [qid, q] of rows) {
     const st = G.quests[qid];
-    if (st === "active") { _say(`▶ ${q.name} — ${q.desc}`, "win"); shown++; }
+    if (st === "active") { _say(`▶ ${q.name} — ${q.desc}${_questWhere(q.at)}`, "win"); shown++; }
     else if (st === "offered") { _say(`✦ On offer: ${q.name} (ACCEPT ${qid.toUpperCase()})`, "dim"); shown++; }
     else if (st === "done") { _say(`✓ ${q.name}`, "dim"); shown++; }
   }

@@ -145,6 +145,9 @@ function newGame() {
       patronBusy: {},    //   roomId → the regular has a girl's attention
       patronMiffed: {},  //   roomId → you drink-sniped his girl (bad form)
       bra: {},           //   npcId → you bought her the bra (fondle bumps a tier)
+      mgrShot: {},       //   roomId → the manager's free welcome shot poured tonight (nightly)
+      mgrChat: {},       //   managerId → how hard you've leaned on him since your last man drink (nightly)
+      manDrinks: {},     //   managerId → man drinks you've stood him (goodwill, persists the vacation)
       drunk: 0,          //   your own count tonight
     },
     encDone: {},         // encounters that already fired (once per game)
