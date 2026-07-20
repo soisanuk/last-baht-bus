@@ -550,6 +550,8 @@ CHARS = {
                      mouth="smile", acc=["glasses", "stubble"], bg=BG_BAR),
     "ron":      dict(skin=RED, hair="short", hc=SILVER, shirt=C(0x8a8a9a),
                      mouth="grin", acc=["stubble"], bg=BG_BAR),
+    "glam":     dict(skin=PALE, hair="spiky", hc=C(0xe8e0b0), shirt=C(0x9a2a8a), collar=True,
+                     mouth="smile", bg=BG_GOGO),
     "chuck":    dict(skin=RED, hair="combover", hc=BROWN, shirt=C(0x3a6ac0), collar=True,
                      mouth="grin", acc=["logo"], bg=BG_BAR),
     "dave":     dict(skin=PALE, hair="short", hc=C(0x8a7a60), shirt=C(0xc8b890),

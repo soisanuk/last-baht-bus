@@ -2215,6 +2215,21 @@ test("Thappraya Main Strip: Dongtan up to Second Rd, the mix of venues, Diamond 
   }
 });
 
+test("Glam: the Cheeky Monkey regular, shuttled to Hyper, and protected", () => {
+  const g = PATRONS.glam;
+  assert.equal(g.home, "cheeky_monkey");
+  assert.ok(g.protected, "age, money and standing put him off-limits");
+  // early evening at Cheeky Monkey; escorted across to Hyper after 22:00
+  state().nightTurn = 20; assert.equal(_patronRoom("glam"), "cheeky_monkey");
+  state().nightTurn = 55; assert.equal(_patronRoom("glam"), "hyper");
+  // harming a protected regular gets the swift repercussion, not the usual shrug
+  state().flags.act1Done = true; state().flags.hasWallet = true;
+  state().nightTurn = 20; state().room = "cheeky_monkey";
+  out = []; run("kill glam");
+  assert.match(lastOut(), /put you in the road|changes temperature/i);
+  assert.ok((state().soc.heat.cheeky_monkey || 0) >= 2, "and it costs you heat");
+});
+
 test("Areca Lodge is a fourth hotel you can check into", () => {
   state().flags.act1Done = true;
   state().flags.hasWallet = true;

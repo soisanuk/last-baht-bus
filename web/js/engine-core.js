@@ -338,6 +338,8 @@ function _patronHour() { return Math.floor(G.nightTurn / 10); } // 0 = 18:00
 function _patronRoom(id) {
   const p = PATRONS[id];
   if (p.days && !p.days.includes(G.day % 7)) return null; // not his night out
+  // a shuttled regular: home bar early, escorted across to another later (Glam)
+  if (p.shuttle) return _patronHour() >= p.shuttle.after ? p.shuttle.to : p.home;
   if (!p.hops || _patronHour() >= 4) return p.home; // by 22:00 everyone's home
   let h = G.vacation * 7919 + G.day * 104729 + _patronHour() * 48271 + 1;
   for (const c of id) h = (h * 31 + c.charCodeAt(0)) % 2147483647;

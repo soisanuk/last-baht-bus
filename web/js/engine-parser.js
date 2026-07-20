@@ -1124,7 +1124,23 @@ function _doDiagnose() {
     "You will live, which in this town is both a prognosis and a lifestyle.", "dim");
 }
 
-function _doViolence() {
+function _doViolence(arg) {
+  // some regulars are protected by age, money, and long standing — the one
+  // kind of violence the street answers back in kind, and fast.
+  if (arg) {
+    const pid = _findPatron(arg.replace(/^(on |at |the |old )/, "").trim());
+    if (pid && PATRONS[pid].protected) {
+      const n = PATRONS[pid].name;
+      _say(`You so much as square up toward ${n} and the room changes temperature. The ` +
+        "mamasan is between you before you've finished the thought; the security are already " +
+        "moving; a piwin fills the doorway, cracking his knuckles like a man glad of the " +
+        `excuse. Whatever ${n} is — old, rich, gone soft in the head — he is THEIRS, and they ` +
+        "will put you in the road for a great deal less than this. You let the idea die where " +
+        "it stands.", "alert");
+      _addHeat(2);
+      return;
+    }
+  }
   if (_inBar()) {
     _say("Security has already noticed you noticing them: large, patient men " +
       "whose entire job is farangs having this exact idea. Beyond them, the " +
@@ -2189,7 +2205,7 @@ function doCommand(input) {
     case "drink": case "sip": _doDrink(arg); break;
     case "diagnose": case "health": _doDiagnose(); break;
     case "kill": case "attack": case "hit": case "punch": case "fight": case "strangle":
-      _doViolence(); break;
+      _doViolence(arg); break;
     case "xyzzy": case "plugh": case "pray": _doMagic(v); break;
     case "hello": case "hi": case "howdy": _doHello(arg); break;
     case "smell": case "sniff": _doSmell(); break;
