@@ -533,6 +533,42 @@ const _ACT1_MILESTONES = [
   ["hasWallet", "WALLET RECOVERED"],
 ];
 
+// How far down the opening critical path you got: milestones ticked, 0…7.
+function _act1Progress() {
+  return _ACT1_MILESTONES.reduce((n, [f]) => n + (_flag(f) ? 1 : 0), 0);
+}
+
+// The opening quest is do-or-die (called from _endNight when the night ends in
+// Act One). No soft rough-wake — the game RESETS to the beach, keeping only a
+// high-water mark of how far down the path you got, so each run measures against
+// your best. The mark is the one thing carried across the newGame().
+const _ACT1_FAIL_LEDE = {
+  dawn: "The gulf goes grey, then pink. 04:00. The baht buses are carrying home " +
+    "everyone but you — you never made it back to 412, and the beach has you again.",
+  collapse: "Your body files its objection before the bed ever gets a vote. You " +
+    "fold up on the pavement, a long dark town short of room 412.",
+  blackout: "Somewhere the film simply stops. When it restarts it's morning, " +
+    "you're on the sand, and 412 is exactly as far away as it was at sunset.",
+};
+function _act1Fail(reason) {
+  const reached = _act1Progress(), total = _ACT1_MILESTONES.length;
+  const prevBest = G.act1Best || 0, best = Math.max(prevBest, reached);
+  const gotWallet = _flag("hasWallet");
+  _say("═══════════════════════════════════", "alert");
+  _say(_ACT1_FAIL_LEDE[reason] || _ACT1_FAIL_LEDE.dawn, "alert");
+  _say(`THE NIGHT BEAT YOU HOME. You got ${reached} of ${total} steps down the road ` +
+    `back to room 412` +
+    (gotWallet ? " — wallet in hand, just not the hours left to spend it" : "") + ".", "alert");
+  if (reached > prevBest) _say(`★ Furthest yet: ${reached}/${total}. The next run starts ` +
+    "cold — but you know the way a little better now.", "win");
+  else if (prevBest) _say(`(Your best is still ${prevBest}/${total}. Beat it.)`, "dim");
+  _say("Dawn wipes the slate. Same beach, same day two, same empty pockets — go again.", "room");
+  _say("");
+  newGame();
+  G.act1Best = best;      // the one thing that survives the reset
+  engineIntro();
+}
+
 function _questAvailable(qid) {
   const q = QUESTS[qid];
   const st = G.quests[qid];

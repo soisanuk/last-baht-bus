@@ -1757,12 +1757,14 @@ test("a resident who SLEEPs at his hotel wakes home with his money and a full ch
 });
 
 test("the crash spot follows the region you passed out in", () => {
+  state().flags.act1Done = true;     // rough wakes are a resident mechanic now (pre-act1 hard-fails)
   state().room = "ws_north";         // Walking Street → the arch
   state().nightTurn = 99;
   run("wait");
   assert.equal(state().room, "ws_gate");
 
   newGame(); state().lastSaleng = 99999;
+  state().flags.act1Done = true;
   state().room = "water_buffalo";    // Darkside → stranded at the Sukhumvit crossing
   state().nightTurn = 99;
   run("wait");
@@ -1788,7 +1790,10 @@ test("broke and stranded at the Darkside: a piwin fronts the ride to town, but n
   assert.match(lastOut(), /no free rides/i);
 });
 
-test("dehydration collapses the night; pre-act-1 you wake rough on the beach, broke", () => {
+test("a resident's dehydration collapse: rough wake, broke", () => {
+  state().flags.act1Done = true;     // pre-act1 collapse hard-fails now; residents wake rough
+  state().flags.hasWallet = true;
+  state().room = "jomtien_beach";    // beach region → the beach crash spot
   state().thirst = 99;
   state().money = 300;
   run("wait", "wait");
@@ -1810,6 +1815,44 @@ test("blackout: the ninth bottle ends the night rough and broke, near where you 
   assert.equal(state().room, "buakhao_market");
   assert.ok(state().battery <= 15, "phone dying");
   assert.match(lastOut(), /film simply stops/i);
+});
+
+test("Act One is do-or-die: dawn without room 412 hard-resets to the beach", () => {
+  // three milestones down the critical path, then the night runs out
+  state().flags.knowWasHere = true;
+  state().flags.knowMot = true;
+  state().flags.knowOyHasIt = true;
+  state().room = "beach_rd_c";
+  state().money = 500;
+  state().nightTurn = 99;
+  run("wait");
+  assert.match(lastOut(), /BEAT YOU HOME/, "the opening quest fails hard");
+  assert.match(lastOut(), /THE LAST BAHT BUS/, "and the game restarts from the top");
+  assert.equal(state().day, 2, "back to day two");
+  assert.equal(state().room, "jomtien_beach", "back on the sand");
+  assert.equal(state().stage, "act1");
+  assert.ok(!state().flags.act1Done, "still the opening quest");
+  assert.ok(!state().flags.knowMot, "the night's progress is wiped");
+  assert.equal(state().act1Best, 3, "…except the high-water mark, which survives the reset");
+});
+
+test("Act One reset keeps a critical-path high-water mark, shown on the next run", () => {
+  state().flags.knowWasHere = true;
+  state().flags.knowMot = true;
+  state().flags.knowOyHasIt = true;
+  state().flags.knowDoorTrick = true;      // four milestones
+  state().nightTurn = 99;
+  run("wait");
+  assert.equal(state().act1Best, 4);
+  assert.match(lastOut(), /Furthest yet: 4\/7/, "a personal best is called out");
+  assert.match(lastOut(), /Best run home so far: 4\/7/, "and echoed as the new run opens");
+  // a worse run doesn't lower the mark
+  state().flags.knowWasHere = true;         // just one this time
+  state().nightTurn = 99;
+  out = [];
+  run("wait");
+  assert.equal(state().act1Best, 4, "the best stands");
+  assert.doesNotMatch(lastOut(), /Furthest yet/, "no false personal-best");
 });
 
 test("street food and water manage the meters", () => {

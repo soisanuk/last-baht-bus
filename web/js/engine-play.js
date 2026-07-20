@@ -1536,6 +1536,14 @@ function _crashSpotFor(roomId) {
 }
 
 function _endNight(reason) {
+  // The opening quest (Act One) is do-or-die: fail to reach room 412 before the
+  // night ends — run to dawn, or drop from thirst/drink — and it's a HARD FAIL
+  // that RESETS the game, not the sandbox's soft rough-wake. Only a progress
+  // high-water mark survives (see _act1Fail).
+  if (!_flag("act1Done") && (reason === "dawn" || reason === "collapse" || reason === "blackout")) {
+    _act1Fail(reason);
+    return;
+  }
   G.game = null;
   G.pendingEnc = null;
   G.pendingFare = null;

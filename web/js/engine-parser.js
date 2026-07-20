@@ -2177,7 +2177,7 @@ function doCommand(input) {
       break;
     case "score": _doScore(); break;
     case "help": case "?": _say(_HELP, "dim"); break;
-    case "restart": newGame(); engineIntro(); return;
+    case "restart": { const b = G.act1Best || 0; newGame(); G.act1Best = b; engineIntro(); return; } // keep the critical-path record
     default:
       // bare Thai phrase typed directly
       if (matchThaiPhrase(lower)) { _doSay(lower); break; }
@@ -2203,6 +2203,9 @@ function engineIntro() {
     "the whole town away. The baht bus is ฿15 a head.");
   _say("You have ฿0.");
   _say("It's going to be one of those nights.", "alert");
+  if (G.act1Best > 0)
+    _say(`(Best run home so far: ${G.act1Best}/${_ACT1_MILESTONES.length} of the way ` +
+      "back to 412. Do better — dawn is the deadline, and dawn does not wait.)", "dim");
   _say("");
   _describeRoom(true);
   _say("(Type HELP for commands.)", "dim");
