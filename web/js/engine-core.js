@@ -475,6 +475,7 @@ function _pickDialogue(npcId, topic) {
     if (topic ? d.topic !== topic && !(d.topic && topic.includes(d.topic)) : d.topic) continue;
     if ((d.req || []).some(f => !_flag(f))) continue;
     if ((d.notFlags || []).some(f => _flag(f))) continue;
+    if (d.bond && _bondTier(npcId) < d.bond) continue; // a warmer line only a regular unlocks (The Regular)
     return d;
   }
   return topic ? _pickDialogue(npcId, null) : null;

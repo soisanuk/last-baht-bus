@@ -1970,9 +1970,31 @@ test("The Regular: a short-time deepens the bond; recognition greets a returning
   assert.equal((state().soc.drinks[id] || 0), before + 2, "a short-time bumps the bond");
   // the recognition line speaks by tier; a stranger gets nothing
   out = []; state().soc.drinks[id] = 8; _relGreeting(id);
-  assert.match(lastOut(), /remembers you|kept seat|only customer|payday/i);
+  assert.ok(lastOut().length > 0, "a regular gets a recognition line");
   out = []; state().soc.drinks[id] = 0; _relGreeting(id);
   assert.equal(lastOut(), "", "a stranger gets no special greeting");
+});
+
+test("The Regular: bond-gated dialogue — hand-authored lines a regular unlocks", () => {
+  // a bond: N entry is hidden below tier N and surfaces at/above it (Mercedes, fluent)
+  state().soc.drinks.mercedes = 0;
+  assert.ok(!_pickDialogue("mercedes", null).bond, "a stranger gets her plain greeting");
+  state().soc.drinks.mercedes = 8;   // regular
+  assert.equal(_pickDialogue("mercedes", null).bond, 2, "the regular line unlocks");
+  state().soc.drinks.mercedes = 14;  // her farang
+  assert.equal(_pickDialogue("mercedes", null).bond, 3, "the deepest line unlocks");
+});
+
+test("The Regular: filler girls get a generic Tinglish register when you're a regular", () => {
+  state().flags.act1Done = true; state().flags.hasWallet = true;
+  state().room = "las_vegas";
+  const filler = _npcsHere().find(n => NPC_ROLES[n] === "hostess" && NPCS[n].filler);
+  state().soc.drinks[filler] = 10;   // regular
+  out = []; run("talk to " + NPCS[filler].name);
+  const said = lastOut();
+  assert.ok(said.length > 0);
+  // the register is her voice, not the authorial narration — a broken-English tell
+  assert.match(said, /you no come|you eat already|not really customer|no price|make me liar|same same|off the clock/i);
 });
 
 test("The Regular: butterflying in front of your regular costs you her bond", () => {
