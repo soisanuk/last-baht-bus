@@ -2008,6 +2008,36 @@ test("The Regular: butterflying in front of your regular costs you her bond", ()
   assert.equal(state().soc.drinks[b], 7, "the regular you jilted cools three notches");
 });
 
+test("WHO / BLACKBOOK: the little black book, ranked by bond, across all three surfaces", () => {
+  state().flags.act1Done = true; state().battery = 100;
+  out = []; run("blackbook");                       // empty
+  assert.match(lastOut(), /black book.?s empty|CONTACT a lady/i);
+  state().phone.contacts.lek = true; state().soc.drinks.lek = 14;  // your girl
+  state().phone.contacts.joy = true; state().soc.drinks.joy = 4;   // knows your face
+  out = []; run("who");
+  const said = lastOut();
+  assert.match(said, /YOUR BLACK BOOK/i);
+  assert.match(said, /Lek.*your girl/is);
+  assert.ok(said.indexOf("Lek") < said.indexOf("Joy"), "ranked by bond, your-girl first");
+  // autocomplete surface offers both spellings
+  assert.ok(engineComplete("wh").includes("who"));
+  assert.ok(engineComplete("blackb").includes("blackbook"));
+});
+
+test("bond-scaled texting: your farang texts more, and longs — never the mama-sick game", () => {
+  state().phone.contacts.lek = true; state().soc.drinks.lek = 14; // her farang (tier 3)
+  state().battery = 100;
+  let sent = false, msg = "";
+  for (let seed = 1; seed < 500 && !sent; seed++) {
+    state().phone.inbox = []; state().phone.lastText = 0; state().turns = 100; state().rng = seed;
+    _maybeIncomingText();
+    if (state().phone.inbox.length) { sent = true; msg = state().phone.inbox[0].text; }
+  }
+  assert.ok(sent, "a farang-tier contact does reach out");
+  assert.doesNotMatch(msg, /buffalo|medicine|phone of me break|lottery/i, "no scam-ask on her own farang");
+  assert.match(msg, /come see me|miss you|my farang|dream about you|other bar/i, "she longs");
+});
+
 test("Darkside girls are veterans: no green tier past Sukhumvit", () => {
   for (const [id, n] of Object.entries(NPCS)) {
     if (!n.filler || NPC_ROLES[id] !== "hostess") continue;
