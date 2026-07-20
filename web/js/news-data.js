@@ -5,7 +5,7 @@ var NEWS_FEED = [
   {
     "t": "Australian faces death penalty after Pattaya teen killing confession",
     "s": "MSN",
-    "d": "19 Jul 2026"
+    "d": "20 Jul 2026"
   },
   {
     "t": "How a Thai teen's night at a Pattaya beach ended in death",
@@ -13,18 +13,13 @@ var NEWS_FEED = [
     "d": "29 Jun 2026"
   },
   {
-    "t": "How a Thai teen’s night at a Pattaya beach ended in death",
-    "s": "The Japan Times",
-    "d": "30 Jun 2026"
-  },
-  {
     "t": "In Thailand’s sex tourism hub, bright lights flash, loud music blares – and underage girls are exploited",
     "s": "The Guardian",
     "d": "03 Jul 2026"
   },
   {
-    "t": "An Australian man has been charged with homicide in Thailand, after a Thai teenager’s body was found stuffed in a suitcase and abandoned in ",
-    "s": "facebook.com",
+    "t": "How a Thai teen’s night at a Pattaya beach ended in death",
+    "s": "The Japan Times",
     "d": "30 Jun 2026"
   },
   {
@@ -33,24 +28,29 @@ var NEWS_FEED = [
     "d": "01 Jul 2026"
   },
   {
+    "t": "An Australian man has been charged with homicide in Thailand, after a Thai teenager’s body was found stuffed in a suitcase and abandoned in ",
+    "s": "facebook.com",
+    "d": "30 Jun 2026"
+  },
+  {
     "t": "Kuwaiti tourists allege extortion by Pattaya police",
     "s": "Khaosod English",
     "d": "15 Jul 2026"
   },
   {
-    "t": "‘$13 an hour’: Tourist’s sick sex confession",
-    "s": "News.com.au",
-    "d": "02 Jul 2026"
+    "t": "Thailand Tourism Accelerates China Push With Plans to Revive Chengdu–Chiang Mai Flights, Explore Direct Links to Hua Hin and Pattaya, and La",
+    "s": "Travel And Tour World",
+    "d": "20 Jul 2026"
   },
   {
-    "t": "An Alleged Russian FSB Hacker Traveled To Thailand. Now He's Facing 10 Years In A US Prison.",
-    "s": "Radio Free Europe/Radio Liberty",
-    "d": "17 Jul 2026"
+    "t": "Thailand Raises Alarm With China Over Tanks to Cambodia Army",
+    "s": "Bloomberg.com",
+    "d": "20 Jul 2026"
   },
   {
-    "t": "PM courts investors on China trip",
+    "t": "Fast train to nowhere",
     "s": "Bangkok Post",
-    "d": "18 Jul 2026"
+    "d": "19 Jul 2026"
   },
   {
     "t": "U.S., Canadian, Thai Navies Sharpen Maritime Capabilities During Exercise CARAT Thailand",
@@ -58,30 +58,30 @@ var NEWS_FEED = [
     "d": "17 Jul 2026"
   },
   {
-    "t": "IDF reservist detained in Thailand for 8 months finally freed, Netanyahu reveals",
-    "s": "The Times of Israel",
-    "d": "17 Jul 2026"
+    "t": "Thailand, China agree to launch new 2+2 security dialogue",
+    "s": "Khaosod English",
+    "d": "20 Jul 2026"
   },
   {
-    "t": "Teen, 17, Suffers Brain Hemorrhage in Thailand as Family Tries to Bring Her Home",
-    "s": "People.com",
-    "d": "18 Jul 2026"
-  },
-  {
-    "t": "Thailand updates criminal record check rules for foreign applicants",
-    "s": "Nation Thailand",
+    "t": "Workers digging beneath a 1,300-year-old reclining Buddha in Thailand uncovered 33 ancient gold, silver a",
+    "s": "The Times of India",
     "d": "19 Jul 2026"
+  },
+  {
+    "t": "Scientists identify giant new dinosaur from a single bone found in Thailand",
+    "s": "Yahoo",
+    "d": "20 Jul 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-07-17","USD":33.64,"AUD":23.46,"GBP":45.19,"EUR":38.46};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-07-20","temp":29,"humid":72,"code":0,"hi":33,"rain":14};
+var WX_NOW = {"date":"2026-07-20","temp":32,"humid":43,"code":0,"hi":33,"rain":14};
 // the bar TV's one true channel
-var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-18","done":true,"h":"France","hs":4,"a":"England","as":6},{"d":"2026-07-19","done":false,"h":"Spain","hs":0,"a":"Argentina","as":0}]};
+var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-18","done":true,"h":"France","hs":4,"a":"England","as":6},{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-07-16","first":"639214","last2":"71","front3":["683","709"],"back3":["427","746"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4019,"date":"2026-07-19","baht":63950};
+var GOLD = {"usd":4022,"date":"2026-07-20","baht":64000};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":64458,"thb":2167400};
+var BTC = {"usd":64265,"thb":2161438};
