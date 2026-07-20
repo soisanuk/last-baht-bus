@@ -1932,6 +1932,45 @@ test("the quest journal shows the same live location as HINT", () => {
   assert.match(lastOut(), /Bee is at Candy Bar 2.*Myth Night/);
 });
 
+test("the bar manager: welcome shot, man drink, monopolise nudge — and NOT a lady", () => {
+  state().flags.act1Done = true; state().stage = "vacation"; state().money = 1000;
+  for (const k in ENCOUNTERS) state().encDone[k] = true; // silence street noise
+  assert.equal(NPCS.bert.manager, true, "Bert is the manager type");
+  assert.ok(!NPC_ROLES.bert, "…and deliberately NOT in the lady-role map");
+  // arriving is a free house shot, once per bar per night
+  state().room = "beach_rd_s"; state().visited.stinky_bar = true;
+  _arriveAt("stinky_bar");
+  assert.match(lastOut(), /House rule.*first one's on me/s, "the welcome shot");
+  const drunkAfter = state().soc.drunk;
+  out = [];
+  _arriveAt("stinky_bar");
+  assert.doesNotMatch(lastOut(), /House rule/, "only one welcome shot a night");
+  assert.equal(state().soc.drunk, drunkAfter, "and no second free drunk tick");
+  // leaning on his time earns a nudge for a man drink
+  state().room = "stinky_bar"; out = [];
+  run("talk to bert", "ask bert about candy", "ask bert about owner");
+  assert.match(lastOut(), /Stand us one|BUY MAN DRINK/i, "monopolise → nudge");
+  // stand him one: costs a beer, builds goodwill, clears the debt
+  out = [];
+  run("buy man drink");
+  assert.match(lastOut(), /speaking the language/i);
+  assert.equal(state().money, 920, "a man drink is a beer's worth (฿80)");
+  assert.equal(state().soc.manDrinks.bert, 1);
+  assert.equal(state().soc.mgrChat.bert, 0, "the monopolise counter resets");
+  // he is not a lady: no lady drink, no barfine
+  out = [];
+  run("buy lady drink for bert");
+  assert.doesNotMatch(lastOut(), /lady drink for Bert/i, "you can't buy the manager a lady drink");
+});
+
+test("man drink is offered in the buy autocomplete only where a manager works", () => {
+  state().flags.act1Done = true;
+  state().room = "stinky_bar";
+  assert.ok(engineComplete("buy ").includes("man drink"), "offered at Stinky's");
+  state().room = "candy_bar";
+  assert.ok(!engineComplete("buy ").includes("man drink"), "not where there's no manager");
+});
+
 test("street food and water manage the meters", () => {
   state().room = "buakhao_market";
   state().money = 100;

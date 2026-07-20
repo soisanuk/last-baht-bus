@@ -187,8 +187,8 @@ const ROOMS = {
     bar: "Stinky Bar", barType: "beer", pool: true, liveMusic: true,
     desc: "An American-run beer bar that smells, in defiance of its name, of lime and " +
       "cue chalk. League trophies crowd the back bar; the table is brushed like a " +
-      "putting green. Bert holds court from the owner's stool with a bottomless " +
-      "Budweiser and opinions on everyone's break. Next door, the Blue Dog's rail " +
+      "putting green. Bert — the manager — holds court from the end stool with a " +
+      "bottomless Budweiser and opinions on everyone's break. Next door, the Blue Dog's rail " +
       "roars at a sunset — close enough to share a bathroom with, which, in fact, " +
       "the whole row does.",
     exits: { out: "beach_rd_n" },
@@ -1671,9 +1671,12 @@ const NPCS = {
   bert: {
     name: "Bert", th: "เบิร์ต", emoji: "🎱",
     room: "stinky_bar",
-    desc: "The owner: American, sixty-something, forearms like dock rope, a Budweiser " +
-      "that never empties and never seems to get him drunk. Twenty-two years on " +
-      "Beach Road, most of them spent within nine feet of that pool table.",
+    manager: true, // the bar-manager NPC type (see _managerHere/_buyManDrink); NOT in NPC_ROLES, so girl-logic ignores him
+    desc: "The Stinky's manager — American, sixty-something, forearms like dock rope, a " +
+      "Budweiser that never empties and never seems to get him drunk. Candy's man, and " +
+      "once the manager of her bars; now he runs the Stinky for its ailing owner and, " +
+      "quietly, works at being his own man out from under her shadow. Twenty-two years " +
+      "on Beach Road, most of them within nine feet of that pool table.",
     dialogue: [
       { text: "\"Welcome to the Stinky, bud. Name's Bert. Table's true, beer's cold, " +
         "and the only rule is don't sit on the rail.\" He chalks a cue without " +
@@ -1698,6 +1701,19 @@ const NPCS = {
         "got two houses in Buriram and a husband she likes fine. White knights, we " +
         "call 'em. The machine eats 'em alive, bud. The ladies don't need saving — " +
         "they need customers with manners.\"" },
+      { topic: "candy", text: "A crooked grin. \"Candy? My lady, and my old boss — both, " +
+        "which is a hell of a retirement plan. She's got a quiet piece of the Stinky, so " +
+        "don't jump if she wanders in some night to eyeball the girls. Twenty years I ran " +
+        "her bars. Love her to death. Doesn't mean I want her name over my door forever.\"" },
+      { topic: "owner", text: "\"Real owner's a Yank, older than me even, " +
+        "and his ticker's packing up — that's why I'm behind this bar and not Candy's. Good " +
+        "man. Wanted somebody he trusted keeping the lights on while the doctors do their " +
+        "thing. So here I am, bud.\"" },
+      { topic: "manager", text: "\"Managing a bar " +
+        "out here? Six nights a week, seven in the season, and you drink with every customer " +
+        "or you're no damn good at it. Chews a man up in a year, two if he's tough. There's " +
+        "always a stool open somewhere for the next poor bastard.\" He lifts the Bud in a " +
+        "small, tired salute." },
       { topic: "butterfly", text: "\"Butterfly? That's you, maybe — man who flits " +
         "flower to flower, different bar, different girl, every night. Girls'll " +
         "tease you for it, mamasans price you for it. Ain't a crime. Just don't " +
