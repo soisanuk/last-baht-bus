@@ -1429,6 +1429,29 @@ function _doTip(arg) {
     }
     return;
   }
+  // The Peacock's performers take tips the drag way — folded long, held up,
+  // blessed back — and they're role-less (no barfine here), so handle them
+  // before the barType gate below.
+  if (G.room === "peacock_cabaret") {
+    const perf = nameW ? _findNpc(nameW) : "petch";
+    if (perf !== "mala" && perf !== "petch") {
+      _say("Tip which one? MISS MALA compères; PETCH is the young star. (TIP PETCH <amount>.)");
+      return;
+    }
+    if (G.money < amount) { _say(`Generosity of spirit, poverty of pocket: you have ฿${G.money}.`); return; }
+    G.money -= amount;
+    const nm = NPCS[perf].name;
+    if (amount >= 100) {
+      _say(`฿${amount}, folded long and held high — ${nm} sweeps over, takes it with a flourish ` +
+        `that belongs on a bigger stage, and blesses you to a whole-room cheer that is, somehow, ` +
+        `for YOU. (฿${G.money} left.)`, "win");
+      _addHappy(1);
+    } else {
+      _say(`฿${amount}, folded long and held up. ${nm} plucks it away, drops you a wink worth more ` +
+        `than the note, and sails back into the number. (฿${G.money} left.)`);
+    }
+    return;
+  }
   if (!_inBar()) {
     if (_room().motosai) {
       _say("The piwins wave it away, grinning — you haven't ridden anywhere. Tips " +
@@ -1701,6 +1724,7 @@ const _HELP = `Common commands:
   BUY <thing> · SELL BOTTLES · READ <thing> · READ SIGN
   WATCH TV (bars) · READ PAPER (bars & 7-Elevens) — the day's real headlines
   WATCH SUNSET · WATCH POLICE (Blue Dog, 6-7pm — best free show in town)
+  WATCH DRAG (The Peacock Cabaret, Supertown/Jomtien — tip the queens)
   WEATHER · SCORES (real football) · LOTTERY (the real GLO draw)
   PLAY CONNECT 4 · PLAY JACKPOT [bet] · PLAY POOL   (in the beer bars)
   FLIRT/KISS/SPANK/FONDLE <lady> · BUY DRINK FOR <lady> · BUY BEER · BUY MAN DRINK (for the bar manager)
@@ -1830,7 +1854,8 @@ function _completePool(verb, ctx) {
     case "play": case "challenge": return _playOptions();
     case "light": case "turn": return ["on", "off"];
     case "watch":
-      return G.room === "blue_dog" ? ["police", "sunset", "tv"] : ["tv"];
+      return G.room === "blue_dog" ? ["police", "sunset", "tv"]
+        : G.room === "peacock_cabaret" ? ["drag", "show", "cabaret"] : ["tv"];
     case "check": return ["messages"];
     case "throw": case "toss": case "chuck": case "fling":
       return ctx.length >= 2 ? girls() : ["cover", "pastie", "nipple cover"];
@@ -2237,6 +2262,8 @@ function doCommand(input) {
         _doWatchSoi();
       else if (G.room === "blue_dog" && (!arg || /police|road|show|shakedown|bike|checkpoint|sunset|bay|sea|view/.test(arg)))
         _doWatchBlueDog(arg);
+      else if (G.room === "peacock_cabaret" && (!arg || /drag|show|cabaret|revue|queen|stage|dance|petch|mala/.test(arg)))
+        _doWatchDrag();
       else if (!arg || /tv|news|television/.test(arg)) _doTv();
       else _say("You watch. It watches back. Pattaya.");
       break;

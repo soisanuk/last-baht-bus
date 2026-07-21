@@ -117,6 +117,7 @@ function newGame() {
     loan: null,          // Nira's loan: { principal, owed, dueDay, strikes } or null
     thaiSeen: [],        // Thai runs the transcript has shown (the trainer's cross-app deck)
     qvDay: 0,            // last day the Queen Vic balcony paid its happy point
+    dragDay: 0,          // last day the Peacock Cabaret drag revue paid its happy point
     patronTalk: { day: 0, talked: {} }, // patron dialogue book, reset daily
     turns: 0,
     wingmanUntil: 0,     // G.turns before which a wing-woman is vouching for you

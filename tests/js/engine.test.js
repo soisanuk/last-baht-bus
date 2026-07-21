@@ -2379,6 +2379,27 @@ test("gift-as-contract: 'free' is a tab, and tao rai closes it", () => {
   assert.match(lastOut(), /not new here/i);
 });
 
+test("Supertown: the Peacock Cabaret drag revue is populated and watchable", () => {
+  // the once-padlocked stage now opens onto a real venue with performers
+  assert.equal(ROOMS.peacock_cabaret.bar, "The Peacock Cabaret");
+  assert.ok(!ROOMS.peacock_cabaret.barType, "a cabaret, not a barfine bar");
+  assert.equal(NPCS.mala.room, "peacock_cabaret");
+  assert.equal(NPCS.petch.room, "peacock_cabaret");
+  state().flags.act1Done = true; state().room = "supertown_elbow";
+  run("in");
+  assert.equal(state().room, "peacock_cabaret");
+  // WATCH DRAG pays a happy point once a night, like the other free shows
+  const h = state().happy; state().dragDay = 0;
+  out = []; run("watch drag");
+  assert.equal(state().happy, h + 1, "the show pays its สนุก");
+  out = []; run("watch drag");
+  assert.equal(state().happy, h + 1, "but only once a night");
+  // the role-less performers still take a tip (drag-style, no barfine)
+  state().money = 5000;
+  out = []; run("tip petch 200");
+  assert.equal(state().money, 4800, "Petch takes the tip");
+});
+
 test("Areca Lodge is a fourth hotel you can check into", () => {
   state().flags.act1Done = true;
   state().flags.hasWallet = true;
