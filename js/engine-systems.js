@@ -1598,6 +1598,44 @@ function _doWatchSoi() {
   }
 }
 
+// The Jomtien beach cats: Big One and Little One, the two gray-and-white
+// sisters on the lounger. Petting them is a small daily blessing — one happy
+// point a night, same house rules as the sunsets and the free shows. Big One
+// vets every hand before it gets anywhere near her sister; that's the deal.
+function _doPet(arg) {
+  if (G.itemLoc.soi_cats !== G.room) {
+    _say("Nothing here wants petting. The soi dogs are on duty and know it, and the " +
+      "bar cats work strictly for the kitchen.");
+    return;
+  }
+  const little = /little/.test(arg || "");
+  if (G.catDay === G.day) {
+    _say(little
+      ? "Little One is asleep against her sister's flank, one ear still up. Big One " +
+        "meets your eye over her: not a chance, and you both know it. You leave them be."
+      : "Big One accepts one more slow stroke on behalf of the management, then closes " +
+        "her eyes — the audience is over. Little One never stirs. The sea carries on.");
+    return;
+  }
+  if (little) {
+    _say("You reach toward Little One and Big One is simply THERE — not hostile, not " +
+      "hurried, just between your hand and her sister, the way she has been since they " +
+      "were kittens. She inspects your knuckles with the thoroughness of a customs " +
+      "officer. A long moment. Then one slow blink, and she steps aside exactly one " +
+      "cat-width: permitted. Little One creeps out from her sister's lee and headbutts " +
+      "your shin like it's a secret.", "win");
+  } else {
+    _say("Big One watches your hand all the way in, decides — one slow blink — and " +
+      "allows it, chin first. Somewhere in the middle of it Little One materialises " +
+      "under your other hand, purring at a frequency that must be doing structural " +
+      "damage to the lounger. Big One keeps one eye on the sea and one on her sister. " +
+      "She always has.", "win");
+  }
+  G.catDay = G.day;
+  _addHappy(1);
+  _say("(The best two locals on the beach. +1 สนุก.)", "dim");
+}
+
 // The Peacock Cabaret drag revue: the one door in Supertown that's open to
 // everyone. One happy point a night, same house rules as the Blue Dog show.
 const _DRAG_SCENES = [
