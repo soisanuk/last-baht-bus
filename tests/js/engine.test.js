@@ -2588,6 +2588,7 @@ test("The Shamrock Dog: dog-gated quest, and the walk to the dead pub", () => {
   state().room = "khao_talo_strip";
   out = []; run("look");
   assert.match(out.join("\n"), /SEAMUS/);
+  assert.match(out.join("\n"), /soidog\.org/, "the Soi Dog Foundation shout-out rides the scene");
   assert.equal(state().itemLoc.brass_tag, "inventory");
   run("look");
   assert.equal(state().quests.shamrock, "done");
