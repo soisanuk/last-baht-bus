@@ -2230,6 +2230,31 @@ test("Glam: the Cheeky Monkey regular, shuttled to Hyper, and protected", () => 
   assert.ok((state().soc.heat.cheeky_monkey || 0) >= 2, "and it costs you heat");
 });
 
+test("Fergie: haunts Buakhao & Tree Town, shifting tall tales, and the Bert/Candy landmine", () => {
+  const f = PATRONS.fergie;
+  assert.equal(f.home, "gold_rush");
+  assert.ok(f.hops && f.haunts.includes("Soi Buakhao") && f.haunts.includes("Tree Town"));
+  // region-limited hopping — never Candy's bar, never out of his two districts
+  const seen = new Set();
+  for (let d = 1; d <= 8; d++) { state().day = d; for (let t = 0; t < 40; t += 10) { state().nightTurn = t; seen.add(_patronRoom("fergie")); } }
+  assert.ok(!seen.has("candy_bar"), "banned from Candy's, so he skips it");
+  for (const r of seen) assert.ok(["Soi Buakhao", "Tree Town"].includes(ROOMS[r].region), `${r} out of his manor`);
+  // the stories never agree with each other
+  state().room = "gold_rush";
+  state().patronTalk = { day: 1, talked: {} }; out = []; _patronTalk("fergie", "army"); const army = lastOut();
+  state().patronTalk = { day: 1, talked: {} }; out = []; _patronTalk("fergie", "china"); const china = lastOut();
+  assert.notEqual(army, china, "a different lie every time you probe");
+  // Bert/Candy is a landmine: a cold warning most nights, an actual swing on his nasty ones
+  let sawWarn = false, sawSwing = false;
+  for (let d = 1; d <= 30 && !(sawWarn && sawSwing); d++) {
+    state().day = d; state().hurt = 0; state().soc.heat = {}; out = [];
+    _patronTalk("fergie", "bert");
+    if (/swinging|HELL did you say/i.test(lastOut())) { sawSwing = true; assert.equal(state().hurt, 1, "a swing costs you a knock"); }
+    else { sawWarn = true; assert.equal(state().hurt, 0, "a warning leaves you whole"); }
+  }
+  assert.ok(sawWarn && sawSwing, "some nights a warning, some nights he swings");
+});
+
 test("Areca Lodge is a fourth hotel you can check into", () => {
   state().flags.act1Done = true;
   state().flags.hasWallet = true;
