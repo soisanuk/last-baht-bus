@@ -227,8 +227,8 @@ const ROOMS = {
     desc: "Cool gold light, a low mirrored bar, and a raised bench where the hosts sit in numbered " +
       "order — young men, gym-cut, oiled to catch the light, some bored, some working the room with " +
       "their eyes. A drinks list stands on the bar with prices that would make a Walking Street " +
-      "mamasan weep with envy. NOTT runs the floor with a papasan's easy authority; ARM (number 4) " +
-      "and WIN (number 9) are the two who clocked you first. (TALK · BUY DRINK FOR <host> · HIRE " +
+      "mamasan weep with envy. Nott runs the floor with a papasan's easy authority; Arm (number 4) " +
+      "and Win (number 9) are the two who clocked you first. (TALK · BUY DRINK FOR <host> · HIRE " +
       "<host> — all of it, whoever you are.)",
     exits: { out: "supertown_alley" },
   },
@@ -251,9 +251,9 @@ const ROOMS = {
     // apparatus applies. You come to WATCH DRAG, tip, and be gently roasted.
     desc: "Inside it is all mirror and marabou and a stage lit like a jewel box, the little tables " +
       "packed with a mixed, delighted crowd — gay boys, a hen party, three sunburnt husbands whose " +
-      "wives dragged them in and who are now, unexpectedly, having the night of their lives. MISS MALA " +
+      "wives dragged them in and who are now, unexpectedly, having the night of their lives. Miss Mala " +
       "compères from the lip of the stage in a headdress you could signal ships with; a younger star, " +
-      "PETCH, is halfway through a lip-sync that is frankly better than the original. (WATCH DRAG. TIP " +
+      "Petch, is halfway through a lip-sync that is frankly better than the original. (WATCH DRAG. TIP " +
       "the performers. TALK if you dare.)",
     exits: { out: "supertown_elbow" },
   },

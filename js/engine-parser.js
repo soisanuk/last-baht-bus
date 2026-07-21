@@ -1530,6 +1530,10 @@ function _doWait(arg) {
     `rearranging itself. ${_clockStr()}.`);
 }
 
+// The Peacock Cabaret's performers — role-less (not in NPC_ROLES, no barfine),
+// but tippable. Shared with term.js's mobile tap-wheel.
+const _CABARET_PERFORMERS = ["mala", "petch"];
+
 function _doTip(arg) {
   const amtM = arg.match(/(\d+)/);
   const amount = amtM ? parseInt(amtM[1], 10) : 20;
@@ -1551,10 +1555,13 @@ function _doTip(arg) {
   }
   // The Peacock's performers take tips the drag way — folded long, held up,
   // blessed back — and they're role-less (no barfine here), so handle them
-  // before the barType gate below.
+  // before the barType gate below. (_CABARET_PERFORMERS also drives their
+  // mobile tap-wheel "tip …" entry in term.js — they're not in NPC_ROLES,
+  // so without this they'd get no tap-buy path at all, same class of gap
+  // _HOSTS fixes for the host bar.)
   if (G.room === "peacock_cabaret") {
     const perf = nameW ? _findNpc(nameW) : "petch";
-    if (perf !== "mala" && perf !== "petch") {
+    if (!_CABARET_PERFORMERS.includes(perf)) {
       _say("Tip which one? MISS MALA compères; PETCH is the young star. (TIP PETCH <amount>.)");
       return;
     }

@@ -296,14 +296,27 @@ const _term = (() => {
       }
       a.push({ t: "examine", c: "x " + lo, go: true });
       const role = npc && typeof NPC_ROLES !== "undefined" ? NPC_ROLES[npc] : null;
+      // host-bar staff (Arm, Win) aren't in NPC_ROLES — hostesses' wheel logic
+      // skips them entirely, so they'd get no tap path to their own economy.
+      // Mirrors the hostess pattern: a quick buy-drink tap always available,
+      // HIRE (their barfine-equivalent) behind the long-press full wheel.
+      const isHost = npc && typeof _HOSTS !== "undefined" && _HOSTS.includes(npc);
+      // the Peacock's performers (Mala, Petch): also not in NPC_ROLES, but
+      // tippable — same gap class as the host bar.
+      const isPerformer = npc && typeof _CABARET_PERFORMERS !== "undefined" && _CABARET_PERFORMERS.includes(npc);
       if (role) a.push({ t: "buy her a drink", c: "buy drink for " + lo, go: true });
+      else if (isHost) a.push({ t: "buy him a drink", c: "buy drink for " + lo, go: true });
       if (full && role === "hostess") {
         a.push({ t: "flirt", c: "flirt " + lo, go: true });
         a.push({ t: "tip …", c: `tip ${lo} `, go: false });
         a.push({ t: "contact", c: "contact " + lo, go: true });
         a.push({ t: "barfine", c: "barfine " + lo, go: true });
+      } else if (full && isHost) {
+        a.push({ t: "hire", c: "hire " + lo, go: true });
+      } else if (full && isPerformer) {
+        a.push({ t: "tip …", c: `tip ${lo} `, go: false });
       }
-      if (full && !role && npc) a.push({ t: "wai", c: "wai " + lo, go: true });
+      if (full && !role && !isHost && !isPerformer && npc) a.push({ t: "wai", c: "wai " + lo, go: true });
     } catch (e) { /* engine not booted: no actions */ }
     return a;
   }
