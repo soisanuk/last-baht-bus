@@ -209,10 +209,27 @@ const ROOMS = {
   supertown_elbow: {
     name: "Supertown Complex (the elbow)",
     region: "Thappraya",
-    desc: "The elbow of the L, where the alley turns and the drag bars cluster — the stage end, dark " +
-      "and padlocked at this hour, a mirrored cabaret sign catching what light there is. The alley " +
-      "carries on east and opens onto Second Road by the strip's far corner.",
-    exits: { w: "supertown_alley", e: "thappraya_e" },
+    desc: "The elbow of the L, where the alley turns and the drag bars cluster — the stage end. One " +
+      "venue is alive tonight: THE PEACOCK CABARET, its mirrored sign lit and pulsing, a queue of " +
+      "boys and a scatter of curious farang filing in under a poster of a sequinned goddess mid-lip-sync. " +
+      "The bass thumps through the wall. The alley carries on east and opens onto Second Road by the " +
+      "strip's far corner.",
+    exits: { w: "supertown_alley", e: "thappraya_e", in: "peacock_cabaret", cabaret: "peacock_cabaret" },
+  },
+  peacock_cabaret: {
+    name: "The Peacock Cabaret",
+    bar: "The Peacock Cabaret",
+    region: "Thappraya",
+    liveMusic: true,
+    // A drag-cabaret venue, not a barfine bar — no barType, so none of the go-go
+    // apparatus applies. You come to WATCH DRAG, tip, and be gently roasted.
+    desc: "Inside it is all mirror and marabou and a stage lit like a jewel box, the little tables " +
+      "packed with a mixed, delighted crowd — gay boys, a hen party, three sunburnt husbands whose " +
+      "wives dragged them in and who are now, unexpectedly, having the night of their lives. MISS MALA " +
+      "compères from the lip of the stage in a headdress you could signal ships with; a younger star, " +
+      "PETCH, is halfway through a lip-sync that is frankly better than the original. (WATCH DRAG. TIP " +
+      "the performers. TALK if you dare.)",
+    exits: { out: "supertown_elbow" },
   },
   arrow_bar: {
     name: "Arrow Bar",
@@ -2560,6 +2577,61 @@ const NPCS = {
     ],
   },
 
+  mala: {
+    name: "Miss Mala", th: "มาลา", emoji: "🦚",
+    room: "peacock_cabaret",
+    desc: "The Peacock's compère and its mama both — a kathoey of a certain age and total command, " +
+      "in a headdress that arrived by its own truck. Twenty years on this stage; she has watched a " +
+      "hundred nervous farang husbands walk in braced and walk out fans.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Welcome, welcome, sit anywhere the light is kind!\" Miss Mala looks you up and down " +
+          "with the fond, forensic eye of a customs officer who likes you. \"You are not our usual, " +
+          "na — no, don't apologise, we LOVE a tourist. Nobody bites. Not you, anyway, darling. Buy a " +
+          "drink, tip a girl, laugh loud. That is the whole religion here.\"",
+        short: "\"Not our usual, na? Don't apologise — we love a tourist. Nobody bites. Not YOU, darling.\"" },
+      { topic: "show", text: "\"The show?\" She presses a hand to the sequins. \"Sixty minutes, three " +
+          "costume changes, one number that will make your straight little heart cry and you will not " +
+          "know why. We are not Alcazar, not Tiffany's — we are small, we are Jomtien, we are BETTER, " +
+          "because up here she can see your face.\" (WATCH DRAG, and TIP if she moves you.)" },
+      { topic: "scene", text: "\"Gay Jomtien, this little L,\" she gestures down the alley, \"is not " +
+          "Walking Street and not the tourist ladyboy cabaret either — it is the local scene, the boys " +
+          "and the kathoey and whoever wanders in kind. You want the big feathers-and-tourists show, " +
+          "that is Pattaya side. You want a real night, you are already in it.\"" },
+      { topic: "kathoey", text: "\"You are wondering the word, I can see you wondering.\" A patient, " +
+          "generous smile. \"Kathoey — 'ladyboy' the farang say, we don't mind it. Not gay, not quite " +
+          "your Western 'trans' either — a third thing, older than both, room for it here in a way your " +
+          "country only just now is finding. Thailand made space for us a long time ago. On this stage, " +
+          "anyway, I am simply the most beautiful woman you will meet all week.\"" },
+      { topic: "tips", text: "\"How the tip works? You fold the note long-ways, you hold it up, she " +
+          "comes and takes it in her teeth, or her décolletage, and blesses you — and the whole room " +
+          "cheers YOU, not her. Cheapest star turn in Pattaya, forty baht.\" (TIP PETCH <amount>, or TIP MALA.)" },
+    ],
+  },
+  petch: {
+    name: "Petch", th: "เพชร", emoji: "💎",
+    room: "peacock_cabaret",
+    desc: "The Peacock's young star, all cheekbones and ambition, between numbers and still catching " +
+      "her breath. She lip-syncs better than the record and knows it, and she is saving for a face " +
+      "the big-city stages will fight over.",
+    dialogue: [
+      { th: "หวัดดีค่า", rom: "wat-dee khaa",
+        text: "\"You clapped! I saw you clap, don't pretend.\" Petch drops onto the stool beside you, " +
+          "glitter shedding like a friendly weather system. \"Most farang husbands, first time, they " +
+          "sit like this—\" she mimes a rigid plank \"—and by my second song, like this—\" she throws " +
+          "her arms up, radiant. \"You are already at song two, I can tell.\"",
+        short: "\"You clapped, I saw! First-timers sit stiff, then by song two—\" arms up, radiant." },
+      { topic: "dream", text: "\"Alcazar. Tiffany's. The big Pattaya stages, thousand seats, tour buses, " +
+          "real money.\" Her eyes go somewhere bright. \"I am saving — the dancing they teach you, the " +
+          "face they don't. One day a scout sits where you sit now, and I am ready. Until then, I am the " +
+          "biggest star in the smallest room, and that is not nothing.\"" },
+      { topic: "tips", text: "\"Tip? Ohh you are learning fast.\" She pats your hand. \"Fold it long, " +
+          "hold it up, I do the rest and make you look like a hero doing it. Miss Mala takes her cut, " +
+          "of course — she takes everybody's cut, she raised half of us — but the cheer is all yours.\" " +
+          "(TIP PETCH <amount>.)" },
+    ],
+  },
+
   pim: {
     name: "Pim", th: "พิม", emoji: "💋",
     room: "starlight_bar",
@@ -4624,6 +4696,7 @@ const ROOM_GEO = {
   thappraya_e:      [12.8975, 100.8702],
   supertown_alley:  [12.8978, 100.8688],
   supertown_elbow:  [12.8982, 100.8698],
+  peacock_cabaret:  [12.8983, 100.8700],
   arrow_bar:        [12.8971, 100.8666],
   the_boardroom:    [12.8965, 100.8670],
   beach_turn_massage:[12.8964, 100.8664],

@@ -1546,6 +1546,31 @@ function _doWatchSoi() {
   }
 }
 
+// The Peacock Cabaret drag revue: the one door in Supertown that's open to
+// everyone. One happy point a night, same house rules as the Blue Dog show.
+const _DRAG_SCENES = [
+  "Petch takes the stage in a gown made mostly of light and lip-syncs a Thai " +
+    "heartbreak ballad so completely that a sunburnt husband three tables over " +
+    "is quietly, helplessly crying, and his wife is filming HIM.",
+  "A whip-fast disco number, four queens in formation, and a costume reveal so " +
+    "well-timed the whole room gasps as one — then roars. Miss Mala works the " +
+    "front tables like a general reviewing troops who adore her.",
+  "Miss Mala does the comedy number: she picks the stiffest farang in the room " +
+    "(you clock, too late, that it is you), sits in your lap, calls you 'husband' " +
+    "for a verse and a half, and hands you back to the night a local hero.",
+  "A ballad, no tricks, just Petch and a spotlight and a voice she isn't even " +
+    "using — and for three minutes the mirrored little room feels like the " +
+    "thousand-seat stage she's saving for.",
+];
+function _doWatchDrag() {
+  _say(_DRAG_SCENES[Math.floor(_rand() * _DRAG_SCENES.length)]);
+  if (G.dragDay !== G.day) {
+    G.dragDay = G.day;
+    _addHappy(1);
+    _say("(The best show in Jomtien, and the door's open to everyone. +1 สนุก. TIP the performers.)", "win");
+  }
+}
+
 function _doTv() {
   if (!_inBar()) { _say("No TV out here. The street is the channel."); return; }
   _say("The TV over the bar plays the news — sound off, Thai subtitles racing, " +
