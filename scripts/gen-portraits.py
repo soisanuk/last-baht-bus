@@ -429,6 +429,8 @@ CHARS = {
     "jib":      lady(skin=THAI, hair="bob", hc=BLACK, shirt=C(0xe07820), bg=BG_BAR, mouth="smile", acc=["earrings"], earc=PINKN),
     "toon":     lady(skin=THAI2, hair="long", hc=DKBRN, shirt=C(0x10b0a0), bg=BG_BAR, mouth="grin", acc=["earrings", "flower", "chain"], earc=GOLD),
     "yaya":     lady(skin=THAI, hair="sleek", hc=BLACK, shirt=C(0xcf30a0), bg=BG_BAR, mouth="smile", acc=["earrings", "bracelets"], earc=YELN),
+    "near":     lady(skin=THAI, hair="ponytail", hc=BLACK, shirt=C(0x30a0d0), bg=BG_BAR, mouth="smile", acc=["earrings", "chain"], earc=GOLD),
+    "milin":    lady(skin=THAI2, hair="bob", hc=DKBRN, shirt=C(0xd05820), bg=BG_BAR, mouth="grin", acc=["earrings", "flower"], earc=CYAN),
     "ann":      lady(skin=THAI, hair="long", hc=DKBRN, shirt=C(0x10b0a0), bg=BG_BAR, mouth="grin", acc=["earrings"], earc=CYAN),
     "nut":      lady(skin=THAI, hair="bob", hc=GRBLK, shirt=C(0x2e7d6e), bg=BG_BAR, mouth="neutral", acc=["earrings", "flower", "chain"], earc=GOLD),
     "rung":     lady(skin=THAI2, hair="ponytail", hc=BLACK, shirt=C(0x40c060), bg=BG_BAR, mouth="smile", acc=["earrings"], earc=GOLD),
