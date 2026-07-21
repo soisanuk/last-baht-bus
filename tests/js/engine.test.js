@@ -2589,11 +2589,12 @@ test("Sai Krok socialises: beer-bar staff favor (once a night) and rain reaction
   const t = total();
   _dogBarFavor(); _dogBarFavor();
   assert.equal(total(), t, "no double-dipping the same bar tonight");
-  // rain: he reacts where he's in sight — beer bar and street — not from behind a door
+  // rain: he reacts where he's in sight — beer bar and street (prose rotates,
+  // but every variant names him) — and not from behind a door
   state().rain = 0; out = []; _startRain(5);
-  assert.match(out.join("\n"), /shake a full body-length/, "the beer-bar shake");
+  assert.match(out.join("\n"), /Sai Krok/, "a beer-bar rain reaction");
   state().rain = 0; state().room = "beach_rd_c"; out = []; _startRain(5);
-  assert.match(out.join("\n"), /except yours/, "the street awning press");
+  assert.match(out.join("\n"), /Sai Krok/, "a street rain reaction");
   state().rain = 0; state().room = "kinky"; out = []; _startRain(5);
   assert.ok(!/Sai Krok/.test(out.join("\n")), "out of sight behind a go-go door, no line");
 });
