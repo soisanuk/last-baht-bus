@@ -1719,6 +1719,7 @@ const _HELP = `Common commands:
   CONTACT <lady> (swap numbers) · CONTACTS (your phonebook) · MESSAGE <lady> · CHECK MESSAGES
   WHO / BLACKBOOK (your ladies, ranked by how they feel about you)
   SEND <amount> TO <lady> (banking app)
+  BORROW <amount> · REPAY [amount] (Nira's loan at Neon Paradise — 20%, three days, don't be late)
   LIGHT ON / LIGHT OFF · CHARGE PHONE
   SCORE (happiness & progress) · UNDO · RESTART   (the night autosaves itself)`;
 
@@ -1735,7 +1736,7 @@ const _COMPLETE_VERBS = [
   "motosai to", "travel", "light", "charge phone", "read", "use", "open", "play",
   "flirt", "kiss", "spank", "fondle", "throw cover", "ring bell", "barfine", "massage", "special", "soapy", "eat", "drink",
   "sleep", "tv", "column", "watch", "weather", "scores", "lottery", "map", "time", "tip", "wave",
-  "photo", "call", "shower", "withdraw", "cheers", "tao rai", "dance", "sing", "swim",
+  "photo", "call", "shower", "withdraw", "cheers", "tao rai", "borrow", "repay", "dance", "sing", "swim",
   "smell", "listen", "diagnose", "apologize", "quests", "accept", "abandon", "contact",
   "contacts", "who", "blackbook", "message", "check messages", "send", "score", "wait", "again",
   "request", "hint", "help", "save", "load", "undo", "restart",
@@ -2252,6 +2253,8 @@ function doCommand(input) {
     case "complain": _doComplain(); break;
     case "cheers": case "toast": case "chon": _doCheers(); break;
     case "tao": case "taorai": _doTaoRai(); break;
+    case "borrow": case "loan": _doBorrow(arg); break;
+    case "repay": case "payback": _doRepay(arg); break;
     case "haggle": case "bargain":
       _say("Nobody's quoting you a price right now. Save it for the man with the " +
         "display board of watches.");

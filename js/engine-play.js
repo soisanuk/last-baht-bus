@@ -1755,6 +1755,7 @@ function _endNight(reason) {
     "surface mid-afternoon, and by the time you're human again the sun is " +
     "sliding into the gulf and the neon is waking up ──", "win");
   if (hangover >= 4) _say("(The hangover is a physical presence with opinions. Water. Food. Mercy.)", "alert");
+  _loanNightRoll();                   // Nira's loan compounds and her cousins escalate if you're late
   _describeRoom(true);
 }
 
@@ -1790,6 +1791,7 @@ function _newVacation() {
   G.hurt = 0;
   G.tonicOwed = 0; // a month away forfeits any pending tonic-shop claim
   G.curseOwed = 0; // …and any pending fortune-teller claim
+  G.loan = null;   // …but Nira's cousins do not forget; a month away writes it off all the same (for now)
   G.jaded = 0;     // a fresh trip, fresh enthusiasm — the treadmill resets
   G.soc = { drinks: {}, mamaTreat: {}, bellAt: {}, bells: {}, heat: {},
     banned: {}, patronBusy: {}, patronMiffed: {}, bra: {}, drunk: 0 };

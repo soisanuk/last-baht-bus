@@ -88,6 +88,116 @@ function _soi6DrinkMin(id) {
   return 3 + (h >>> 16) % 3;          // 3, 4, or 5
 }
 
+// ── Nira's loan: borrow at 20%, due in three days, and she always gets paid ──
+// A village short-time loan run out of a go-go: BORROW at Neon Paradise, owe
+// principal +20%, due in three days. Miss the date and it compounds 20% a night
+// while her cousins escalate from a text, to asking around, to garnishing the
+// cash in your pocket. One loan at a time. Pure-ish (only touches G + _say).
+const LOAN_MAX = 20000, LOAN_MIN = 1000, LOAN_DAYS = 3;
+function _loanRound(n) { return Math.ceil(n / 100) * 100; }          // to the hundred
+function _loanTerms(amt) { return _loanRound(amt * 1.2); }           // principal +20%
+function _withNira() { return _npcsHere().includes("nira"); }
+function _parseBaht(arg) {
+  const s = String(arg == null ? "" : arg).replace(/[,\s฿]/g, "");
+  if (/^\d+$/.test(s)) return parseInt(s, 10);
+  const t = parseThaiDigits(s);
+  return t == null || Number.isNaN(t) ? null : t;
+}
+
+function _doBorrow(arg) {
+  if (!_withNira()) {
+    _say("Nobody here is lending. Nira reads the room from the stage at Neon Paradise, on " +
+      "Walking Street — ASK her ABOUT LOAN first.", "dim");
+    return;
+  }
+  if (G.loan) {
+    _say(`"One loan at a time." Nira taps the bar. "You owe ฿${G.loan.owed}, due day ` +
+      `${G.loan.dueDay}. REPAY that, then we talk about more."`, "alert");
+    return;
+  }
+  let amt = _parseBaht(arg);
+  if (!amt) {
+    _say(`"How much?" Her pen hovers. (BORROW <amount> — up to ฿${LOAN_MAX}, pay back +20% ` +
+      `in ${LOAN_DAYS} days.)`, "dim");
+    return;
+  }
+  amt = Math.round(amt / 100) * 100;
+  if (amt < LOAN_MIN) { _say(`"Under ฿${LOAN_MIN}? Ask your mother, not me."`, "dim"); return; }
+  if (amt > LOAN_MAX) {
+    _say(`"฿${LOAN_MAX} is your ceiling — I already worked out what you earn and rounded it ` +
+      `down." She will not be moved.`, "dim");
+    return;
+  }
+  const owed = _loanTerms(amt);
+  G.loan = { principal: amt, owed, dueDay: G.day + LOAN_DAYS, strikes: 0 };
+  G.money += amt;
+  _say(`Nira counts out ฿${amt} without once breaking eye contact. "You pay back ฿${owed} by ` +
+    `day ${G.loan.dueDay}. ยี่สิบ — twenty percent, like I said. After that day…" the smile ` +
+    `stays warm and goes nowhere "…it grows, and my cousins get bored. Don't make them bored."`, "win");
+  _say(`(You owe Nira ฿${owed}, due day ${G.loan.dueDay}. REPAY at Neon Paradise — pay early, ` +
+    `pay whole, whatever you like.)`, "dim");
+}
+
+function _doRepay(arg) {
+  if (!G.loan) { _say("You don't owe Nira a baht. Keep it that way.", "dim"); return; }
+  if (!_withNira()) {
+    _say(`You owe Nira ฿${G.loan.owed}${G.loan.strikes ? " (overdue)" : `, due day ${G.loan.dueDay}`}. ` +
+      `Pay her at Neon Paradise on Walking Street.`, "dim");
+    return;
+  }
+  let amt = arg ? _parseBaht(arg) : G.loan.owed;
+  if (amt == null) amt = G.loan.owed;
+  amt = Math.min(amt, G.loan.owed);
+  if (amt <= 0) { _say('"Pay me something real."', "dim"); return; }
+  if (G.money < amt) {
+    _say(`You're ฿${amt - G.money} short of that. (You have ฿${G.money}; you owe ฿${G.loan.owed}.)`, "alert");
+    return;
+  }
+  const late = G.loan.strikes > 0;
+  G.money -= amt;
+  G.loan.owed -= amt;
+  if (G.loan.owed <= 0) {
+    G.loan = null;
+    _say(`Nira takes the last of it and, for the first time, the calculator behind her eyes ` +
+      `clicks off. "Paid." ` + (late
+        ? `"Late — but paid. I remember both." A nod that is almost respect.`
+        : `"On time, even. You, I lend to again — better rate." That is a genuine smile.`), "win");
+    G.soc.drinks.nira = (G.soc.drinks.nira || 0) + (late ? 1 : 2); // a man who pays earns her regard
+  } else {
+    _say(`"฿${amt}." She marks it in a little book. "Still ฿${G.loan.owed}` +
+      (late ? ` — and climbing." ` : `, by day ${G.loan.dueDay}." `) + `Back to the stage.`, "room");
+  }
+}
+
+// Called from _endNight after the day rolls: overdue loans compound and the
+// cousins escalate. Text → asking around → garnishing the cash you carry.
+function _loanNightRoll() {
+  if (!G.loan || G.day <= G.loan.dueDay) return;
+  G.loan.strikes = (G.loan.strikes || 0) + 1;
+  G.loan.owed = _loanRound(G.loan.owed * 1.2); // overdue: +20% a night
+  if (G.loan.strikes === 1) {
+    _say(`(A text from a number you don't have: "You are late, na. It is ฿${G.loan.owed} now, ` +
+      `and it only goes up. Come see me. — N")`, "alert");
+  } else if (G.loan.strikes === 2) {
+    _say(`(Two men you've never met were asking the bar staff about you last night — polite, ` +
+      `patient, unhurried. You owe Nira ฿${G.loan.owed}. This is the last quiet night you get.)`, "alert");
+  } else {
+    const take = Math.min(G.money, G.loan.owed);
+    G.money -= take;
+    G.loan.owed -= take;
+    _addHappy(-6);
+    if (G.loan.owed <= 0) {
+      G.loan = null;
+      _say(`(Nira's cousins catch you outside the 7-Eleven. No drama, no marks — they just wait ` +
+        `while you empty your pockets: ฿${take}. "Nira says thank you. She says don't do this ` +
+        `again." Square. The lesson was never going to be cheap.)`, "alert");
+    } else {
+      _say(`(Nira's cousins find you and lift the ฿${take} you're carrying off the ฿${G.loan.owed} ` +
+        `you owe. "The rest soon, na." They are very calm about it. That's the frightening part.)`, "alert");
+    }
+  }
+}
+
 function _doBarfine(arg) {
   const rm = _room();
   if (rm.massage === "oil") {

@@ -2554,9 +2554,9 @@ const NPCS = {
           "twenty percent, pay back in a few days. Everybody happy.\" A beat. \"You think the bar owns " +
           "me. The bar RENTS me. Different thing, na.\"" },
       { topic: "loan", text: "\"You want to borrow?\" The smile sharpens by exactly one degree. \"From " +
-          "ME — not the family; family rate is for family. For you, we can talk. But understand one " +
-          "thing: I always, always get paid back. Ask anybody in my village. Ask the ones who tried " +
-          "not to.\"" },
+          "ME — not the family; family rate is for family. For you: twenty percent, pay back in three " +
+          "days. But understand one thing: I always, always get paid back. Ask anybody in my village. " +
+          "Ask the ones who tried not to.\" (BORROW <amount> here — REPAY here too, early if you're wise.)" },
     ],
   },
 
