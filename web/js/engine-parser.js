@@ -1854,7 +1854,7 @@ const _COMPLETE_VERBS = [
   "motosai to", "travel", "light", "charge phone", "read", "use", "open", "play",
   "flirt", "kiss", "spank", "fondle", "throw cover", "ring bell", "barfine", "massage", "special", "soapy", "eat", "drink",
   "sleep", "tv", "column", "watch", "weather", "scores", "lottery", "map", "time", "tip", "wave",
-  "photo", "call", "shower", "withdraw", "cheers", "tao rai", "borrow", "repay", "hire", "dance", "sing", "swim",
+  "photo", "call", "shower", "withdraw", "cheers", "tao rai", "borrow", "repay", "hire", "pet", "dance", "sing", "swim",
   "smell", "listen", "diagnose", "apologize", "quests", "accept", "abandon", "contact",
   "contacts", "who", "blackbook", "message", "check messages", "send", "score", "wait", "again",
   "request", "hint", "help", "save", "load", "undo", "restart",
@@ -2386,6 +2386,7 @@ function doCommand(input) {
     case "borrow": case "loan": _doBorrow(arg); break;
     case "repay": case "payback": _doRepay(arg); break;
     case "hire": case "off": _doHire(arg); break;
+    case "pet": case "stroke": _doPet(arg); break;
     case "haggle": case "bargain":
       _say("Nobody's quoting you a price right now. Save it for the man with the " +
         "display board of watches.");

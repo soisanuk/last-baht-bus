@@ -2511,6 +2511,24 @@ test("the scout flyer and the collection run complete on their flags", () => {
   assert.equal(state().money, before + 500, "Nira pays the runner");
 });
 
+test("the Jomtien beach cats: Big One vets, Little One purrs, once a day pays", () => {
+  state().flags.act1Done = true; state().stage = "expat";
+  state().day = 3; state().catDay = 0; state().room = "jomtien_beach";
+  assert.equal(state().itemLoc.soi_cats, "jomtien_beach", "the sisters hold the lounger");
+  out = []; run("examine cats");
+  assert.match(lastOut(), /Big One and Little One/);
+  // reaching for the little one goes through her sister first — always
+  const h = state().happy;
+  out = []; run("pet little one");
+  assert.match(lastOut(), /between your hand and her sister/);
+  assert.equal(state().happy, h + 1, "the daily blessing");
+  out = []; run("pet cats");
+  assert.equal(state().happy, h + 1, "but only once a day");
+  // they are not for taking
+  out = []; run("take cats");
+  assert.equal(state().itemLoc.soi_cats, "jomtien_beach");
+});
+
 test("Areca Lodge is a fourth hotel you can check into", () => {
   state().flags.act1Done = true;
   state().flags.hasWallet = true;

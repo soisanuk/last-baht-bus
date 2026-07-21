@@ -38,7 +38,9 @@ const ROOMS = {
     name: "Jomtien Beach",
     region: "Jomtien",
     desc: "Soft sand, folded-up loungers, and the last smear of sunset dying over the sea. " +
-      "A row of beached longtails to the south. The beach road glows to the east. " +
+      "A row of beached longtails to the south. Two gray-and-white soi cats hold down the end " +
+      "of a lounger, the big one sitting slightly in front of the small one, both watching the " +
+      "water. The beach road glows to the east. " +
       "Your face was in this sand until about a minute ago.",
     exits: { n: "dongtan_beach", e: "jomtien_beach_rd" },
   },
@@ -1811,6 +1813,17 @@ const ITEMS = {
     name: "marigold offering", aliases: ["marigolds", "flowers", "offering", "garland"],
     portable: false, location: "buddha_hill",
     desc: "Somebody's offering. Absolutely not yours to take. The red Fanta too.",
+  },
+  soi_cats: {
+    name: "two soi cats", aliases: ["cats", "cat", "big one", "little one", "kittens", "soi cats"],
+    portable: false, location: "jomtien_beach",
+    desc: "Two gray-and-white shorthairs holding down the end of a lounger like a deposit. " +
+      "Sisters, plainly — same coat, same sea-watching squint — though the little one is a " +
+      "runt who never grew into her ears, and the big one sits slightly in front of her the " +
+      "way she always has and always will. The beach calls them Big One and Little One; " +
+      "Auntie Nok feeds them scraps and calls them her security. They have watched a " +
+      "thousand of these sunsets and fully intend to watch a thousand more. (PET them, " +
+      "if Big One permits it.)",
   },
   safe: {
     name: "steel safe", aliases: ["safe", "keypad"],
