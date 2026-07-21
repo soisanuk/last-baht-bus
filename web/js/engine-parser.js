@@ -966,11 +966,15 @@ function _doMotosai(arg) {
   // and price the small hours accordingly (Bank's ฿20 mates' rate stays exempt)
   const lateGouge = G.nightTurn >= LAST_BUS_TURN && price !== 20;
   if (lateGouge) price = Math.round(price * LATE_MOTO_MULT / 10) * 10;
-  if (G.money < price) {
+  // a dog needs his own bike — flat, not gouged with the late-hour fare
+  const dogFare = G.dog ? DOG_MOTOSAI_FARE : 0;
+  const total = price + dogFare;
+  if (G.money < total) {
     // Broke and stranded. Most of town is a free walk home, but the Darkside is
     // on the wrong side of the highway — a dawn-broke farang out here would be
     // stuck. A piwin who's seen it a hundred times fronts the ride back to town
-    // (town-ward only; he won't run you deeper into the dark for free).
+    // (town-ward only; he won't run you deeper into the dark for free) — and if
+    // you're riding on his mercy, the dog rides on it too. No ฿10.
     if (G.money === 0 && d.price === MOTOSAI_TOWN) {
       G.room = d.room;
       G.darkStreak = 0;
@@ -979,15 +983,17 @@ function _doMotosai(arg) {
         "on. Pay next time, boss.” He threads the highway one-handed and sets you " +
         "back down among the living — no charge, no lecture, just a nod that says " +
         "don't make a habit of it.", "thai");
+      if (G.dog) _say(_dogN(_DOG_MOTOSAI[Math.floor(_rand() * _DOG_MOTOSAI.length)] +
+        " No charge for Sai Krok either, not tonight."), "dim");
       _describeRoom(true);
       _maybeEncounter();
       return;
     }
-    _say(`“${thaiBaht(price)},” says the piwin. You have ฿${G.money}. He shrugs — ` +
-      "no hard feelings, no free rides.", "thai");
+    _say(`“${thaiBaht(price)}${dogFare ? ` — and ฿${dogFare} for his lordship's ride` : ""},” ` +
+      `says the piwin. You have ฿${G.money}. He shrugs — no hard feelings, no free rides.`, "thai");
     return;
   }
-  G.money -= price;
+  G.money -= total;
   G.room = d.room;
   G.darkStreak = 0;
   if (lateGouge) _say("Gone two in the morning, the buses long tucked up, and the " +
@@ -997,6 +1003,8 @@ function _doMotosai(arg) {
     "swing on the back, and the piwin threads traffic like it owes him money. " +
     `That was the fastest ฿${price} of your life. (฿${G.money} left.)`, "thai");
   _engineSpeak(thaiBaht(price));
+  if (G.dog) _say(_dogN(_DOG_MOTOSAI[Math.floor(_rand() * _DOG_MOTOSAI.length)] +
+    ` (+฿${dogFare} for Sai Krok's ride.)`), "dim");
   _describeRoom(true);
   _maybeEncounter();
 }
@@ -1026,6 +1034,7 @@ function _doPay(arg) {
     G.room = dest;
     _say(`฿${price}, exact. He taps the rail twice — thanks in driver — and is gone. (฿${G.money} left.)`);
   }
+  if (G.dog) _say(_dogN(_DOG_BUS[Math.floor(_rand() * _DOG_BUS.length)]), "dim");
   G.darkStreak = 0;
   _describeRoom(true);
   _maybeEncounter();
@@ -2111,7 +2120,14 @@ function doCommand(input) {
   const lower = raw.toLowerCase();
   const words = lower.split(" ");
   const [v, ...rest] = words;
-  const arg = rest.filter(w => !["the", "a", "an", "to", "at", "up", "my"].includes(w)).join(" ");
+  // "up" was in this filler list until 2026-07-22 (caught by e2e-mega's BFS
+  // walk failing at Queen Vic's balcony AND the Thappraya strip's dongtan_beach
+  // exit — both reached only via GO UP): stripped as a generic preposition, it
+  // silently ate itself whenever it was the WHOLE argument, so "go up" became
+  // "go " and _doGo got an empty string instead of the direction. No verb
+  // actually needs "up" stripped (TAKE/PICK/GET/GRAB are already synonyms
+  // without a "pick up" form) — never add it back without checking that.
+  const arg = rest.filter(w => !["the", "a", "an", "to", "at", "my"].includes(w)).join(" ");
 
   // Hidden testing code (gated by CHEATS_ENABLED in engine-core.js). Works in
   // any state, costs no turn, and is never surfaced — a typed secret only.

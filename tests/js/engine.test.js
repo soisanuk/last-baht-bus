@@ -407,6 +407,15 @@ test("every exit key walks: pub, up/down/u/d, hotel — GO accepts what Exits li
   assert.equal(state().room, "qv_room", "a guest walks up (U alias)");
   run("d");
   assert.equal(state().room, "queen_vic", "and back down (D alias)");
+  // the literal two-word phrase, not just the bare/aliased forms: doCommand's
+  // filler-word stripper for "go X" used to include "up" itself, so it ate the
+  // whole argument and "go up" silently failed (caught by e2e-mega's BFS
+  // walk 2026-07-22 — bare "up"/"u" go through a different code path and
+  // never hit the bug, which is exactly how it went untested this long)
+  run("go up");
+  assert.equal(state().room, "qv_room", "the literal phrase GO UP must also walk");
+  run("go down");
+  assert.equal(state().room, "queen_vic", "and GO DOWN back");
   // the Metropole's street door on Buakhao North
   state().room = "buakhao_n"; state().hotel = "sabai";
   run("go hotel");
@@ -2668,6 +2677,36 @@ test("Sai Krok socialises: beer-bar staff favor (once a night) and rain reaction
   assert.match(out.join("\n"), /Sai Krok/, "a street rain reaction");
   state().rain = 0; state().room = "kinky"; out = []; _startRain(5);
   assert.ok(!/Sai Krok/.test(out.join("\n")), "out of sight behind a go-go door, no line");
+});
+
+test("Sai Krok travels: free on the songthaew, ฿10 for his own bike on a motosai", () => {
+  state().flags.act1Done = true; state().stage = "expat"; state().money = 1000;
+  // the baht bus: he rides along free, no fare complication, no dog line without a dog
+  state().dog = null; state().room = "jomtien_bus_stop"; state().nightTurn = 10;
+  run("ride bus to beach");
+  out = []; run("pay " + state().pendingFare.price);
+  assert.ok(!/Sai Krok/.test(out.join("\n")), "no dog, no line");
+  assert.equal(state().room, "beach_rd_s");
+  state().dog = { since: 1 }; state().money = 1000;
+  state().room = "jomtien_bus_stop"; state().nightTurn = 10;
+  run("ride bus to beach");
+  const before = state().money;
+  out = []; run("pay " + state().pendingFare.price);
+  assert.match(out.join("\n"), /Sai Krok/, "he rides the songthaew");
+  assert.equal(before - state().money, BUS_FARE, "no surcharge on the bus — he rides free");
+  // motosai: one pillion seat, already full — a piwin waves over a buddy's
+  // saleng for him, ฿10 on top of the fare (renamed dog re-letters correctly)
+  state().dog = { since: 1, name: "Biscuit" }; state().room = "jomtien_bus_stop"; state().money = 1000;
+  const beforeMoto = state().money;
+  out = []; run("motosai to town");
+  assert.match(out.join("\n"), /Biscuit/, "paid motosai ride, renamed dog");
+  assert.ok(!/Sai Krok/.test(out.join("\n")), "no stray default name");
+  assert.equal(beforeMoto - state().money, MOTOSAI_TOWN + DOG_MOTOSAI_FARE, "fare + his ฿10");
+  // the broke pity-ride: free for both rider and dog, no ฿10
+  state().room = "sukhumvit_crossing"; state().money = 0;
+  out = []; run("motosai to town");
+  assert.match(out.join("\n"), /Biscuit/, "the pity-ride dog line still fires");
+  assert.equal(state().money, 0, "no charge for him either, not even the ฿10");
 });
 
 test("Areca Lodge is a fourth hotel you can check into", () => {
