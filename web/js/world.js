@@ -1755,6 +1755,20 @@ const ITEMS = {
     desc: "A boxed bottle of Sang Som with a rose-pink ribbon and a card in Candy's " +
       "handwriting: 'เปิดร้านใหม่ สู้ๆ นะ' — for the opening shelf at Candy Bar 2.",
   },
+  foreman_keys: {
+    name: "ring of site keys", aliases: ["keys", "site keys", "foreman keys", "ring of keys"],
+    portable: true, location: null, // Wimon hands them over for the shrine run
+    desc: "A heavy ring of brass site keys, every one oiled and worn — the locks of Hyper " +
+      "A Go-Go as they were the day the hoarding came down. Kept polished by a widow's " +
+      "thumb for years.",
+  },
+  revue_flyer: {
+    name: "Peacock revue flyer", aliases: ["flyer", "revue flyer", "peacock flyer"],
+    portable: true, location: null, // Miss Mala hands it over for the scout run
+    desc: "A glossy flyer for the Peacock Cabaret's revue: Petch mid-lip-sync in a gown " +
+      "made of light, Miss Mala's headdress filling the top corner like weather. On the " +
+      "back, in careful biro: 'for the Alcazar man — M.'",
+  },
   fake_rolex: {
     name: "genuine Rolex (allegedly)", aliases: ["rolex", "watch", "fake rolex"],
     portable: true, location: null,
@@ -2524,6 +2538,21 @@ const NPCS = {
       { topic: "upstairs", text: "\"Upstairs?\" Diamond's smile stays warm and shuts like a vault. " +
           "\"That is for friends of the house, tilac. Buy a girl a drink, buy ME one, come back a few " +
           "times. We will see how good a friend you are.\" The subject is closed, pleasantly." },
+      { topic: "glam", req: ["glamTruth"], sets: ["diamondTruth"],
+        text: "\"Wimon sent you. I know — she message me before you finish your beer.\" Diamond " +
+          "looks at you a long time, then out at her floor, her chrome, her lights. \"He is my " +
+          "father.\" Flat and quiet, like setting down something heavy. \"Forty years ago: a German " +
+          "rocker with silk shirts, and a girl from Chonburi. He went home to his money and his wife; " +
+          "mama married a builder — a GOOD man, who raised me and never once made me feel borrowed.\" " +
+          "A slow breath. \"When papa came back old, his boys wanted a bar. Any bar. He walked them " +
+          "past twenty and stopped at the wreck where his kathoey daughter ran the floor, and said: " +
+          "this one. They think they found it themselves.\" The vault-smile, but her eyes are wet. " +
+          "\"The brothers own half the strip and do not know they have a sister in the middle of it. " +
+          "You carry the keys of the man who raised me up to my shrine, so now you carry this too. " +
+          "Carefully, na.\"",
+        short: "\"He is my father. The brothers do not know they have a sister. Carry it carefully, na.\"" },
+      { topic: "glam", text: "\"Khun Glam? An old friend of the house.\" The smile stays warm and " +
+          "shuts like a vault, and a dancer needs her at the far end of the bar, immediately." },
     ],
   },
   wimon: {
@@ -2547,6 +2576,17 @@ const NPCS = {
           "final smile \"...special. His lady take care of him, we take care of him, everybody take " +
           "care of him. That is all.\" She is already turning to the till. \"You want another beer, na?\" " +
           "And that is the entire interview." },
+      { topic: "husband", text: "\"My husband.\" The two phones go down, and for a moment the till " +
+          "does not exist. \"Twenty-eight year a builder. The best foreman in Chonburi — Khun Glam " +
+          "said so, to the brothers' faces, and that is how he got the Hyper job. Studs out, everything " +
+          "new — too much work for the time those boys wanted it in. They pushed. Angry men in a " +
+          "hurry, calling him slow — SLOW, a man who never once sat down on a roof in thirty years.\" " +
+          "A breath. \"Near the end, he fell. The company paid what the law says. And Khun Glam came " +
+          "the day after the temple, alone, with an envelope the law never heard of.\" Her eyes come " +
+          "up, level. \"The brothers don't know about the envelope. They will never know. You " +
+          "understand me, na.\"",
+        short: "\"Glam got him the Hyper job; the brothers pushed the schedule; near the end he fell. " +
+          "The envelope after the temple, the boys never knew.\"" },
     ],
   },
   ampai: {
@@ -3459,6 +3499,81 @@ const QUESTS = {
     doneFlag: "beeBanked",
     reward: { money: 0, happy: 4 },
   },
+  // ── The Glam saga: a four-quest chain up the Thappraya strip ──────────────
+  // Wimon → Diamond → Glam. Each rung is one flag; the revelations live in the
+  // dialogue that sets them (Glam's lucid flashes via the patron `sets` support).
+  oldrocker: {
+    name: "The Man Out of Time",
+    giver: "wimon",
+    desc: "Sit with Glam a while and let him tell you about the tour (ASK GLAM ABOUT MUSIC).",
+    deps: [],
+    at: "cheeky_monkey",
+    doneFlag: "glamHeard",
+    reward: { money: 0, happy: 2 },
+  },
+  keys: {
+    name: "The Foreman's Keys",
+    giver: "wimon",
+    desc: "Carry her late husband's site keys to the bar he built, for the shrine " +
+      "(GIVE KEYS TO DIAMOND).",
+    deps: ["oldrocker"],
+    item: "foreman_keys",
+    at: "diamond",
+    doneFlag: "keysDelivered",
+    reward: { money: 0, happy: 4 },
+  },
+  quietmoney: {
+    name: "The Quiet Money",
+    giver: "diamond",
+    desc: "Nobody asks the Samson brothers where the seed money came from. Ask the man " +
+      "out of time instead (ASK GLAM ABOUT HIS SONS).",
+    deps: ["keys"],
+    at: "cheeky_monkey",
+    doneFlag: "glamTruth",
+    reward: { money: 0, happy: 3 },
+  },
+  family: {
+    name: "Family",
+    giver: "wimon",
+    desc: "Wimon thinks you have earned the whole of it, and gives her blessing to ask " +
+      "(ASK DIAMOND ABOUT GLAM).",
+    deps: ["quietmoney"],
+    at: "diamond",
+    doneFlag: "diamondTruth",
+    reward: { money: 0, happy: 6 },
+  },
+  // ── Standalone jobs ───────────────────────────────────────────────────────
+  recce: {
+    name: "Candy's Competition Recce",
+    giver: "candy",
+    // three targets, so no single at: — the desc carries the geography for once
+    desc: "Walk the new drinking strips with your eyes open — Myth Night's container " +
+      "rows, Tree Town's far lane, and the beachside row off Beach Road North.",
+    deps: [],
+    doneFlag: "recceDone",
+    reward: { money: 300, happy: 2 },
+  },
+  scout: {
+    name: "A Scout for Petch",
+    giver: "mala",
+    desc: "Carry the revue flyer to Diamond — she danced with half of Alcazar in her " +
+      "day, and her scout friend owes her a favour (GIVE FLYER TO DIAMOND).",
+    deps: [],
+    item: "revue_flyer",
+    at: "diamond",
+    doneFlag: "scoutSent",
+    reward: { money: 0, happy: 3 },
+  },
+  debtrun: {
+    name: "The Collection Run",
+    giver: "nira",
+    desc: "฿500 to jog a deadbeat's memory — no rough stuff, just find Fergie in his " +
+      "maze and ASK him ABOUT THE DEBT.",
+    deps: [],
+    at: "gold_rush",
+    doneFlag: "fergieReminded",
+    reward: { money: 500, happy: 2 },
+  },
 };
 
 // ── Quiz night ──────────────────────────────────────────────────────────────
@@ -3521,11 +3636,29 @@ const PATRONS = {
         "YES.\" He pats the air near her hand; she does not look up from the mama. \"She drives the — " +
         "the little one, with the wheels. Very fast. We were in Ibiza. Or we will be.\" He nods, " +
         "satisfied that this settles it. It does not settle it." },
-      { topic: "music", text: "\"You want to hear about the TOUR.\" It is not a question; his eyes go " +
+      { topic: "music", sets: ["glamHeard"],
+        text: "\"You want to hear about the TOUR.\" It is not a question; his eyes go " +
         "bright and forty years younger. \"Wembley. Or — no. A tent. A very large tent, and the " +
         "promoter was a crook, God rest him, and I wore the white one, the SILK—\" He mimes a chord no " +
         "instrument has ever made. \"They still play it. Somewhere. They must.\" For one second he " +
-        "seems to know exactly that they don't; then the second passes." },
+        "seems to know exactly that they don't; then the second passes.",
+        short: "\"Wembley. Or a tent. I wore the SILK—\" He mimes the chord no instrument makes." },
+      { topic: "son", sets: ["glamTruth"],
+        text: "\"My boys?\" And the fog just — parts. For the first time since you sat down, Glam is " +
+        "entirely here, and his eyes are old and clear and amused. \"They call every Sunday. So " +
+        "polite. 'How are you feeling, Papa?' They are not asking how I am feeling.\" A dry little " +
+        "laugh. \"I gave them the bar money — every mark of it, the last of the good years — and they " +
+        "think that was the TASTE. They are waiting for the rest, liebchen. The inheritance.\" He " +
+        "leans in, delighted, conspiratorial, dying. \"There is no rest. I spent it. On the town, on " +
+        "the envelope nobody knows about, on the SHIRTS. A man should go out like a good bottle — " +
+        "empty, and having been a party.\" And the fog rolls back in, gently, like a tide.",
+        short: "\"They are waiting for the inheritance, liebchen. There is no inheritance. A man " +
+        "should go out like a good bottle — empty.\"" },
+      { topic: "diamond", text: "\"Diamant...\" His eyes go soft, and for a moment, terribly clear. " +
+        "\"You have seen her? The tall one, at the boys' bar. The most finished thing in any room — " +
+        "she had that from her mother.\" His hand tightens on yours. \"I steered the boys there, you " +
+        "know. Twenty bars on that strip and I walked them past every one.\" And then Cologne takes " +
+        "him again, mid-sentence, and he is telling your left ear about the countess." },
       { topic: "girls", text: "You glance at the hostesses; Glam catches it and laughs, a real one. " +
         "\"They understand me,\" he says, and for once it is perfectly clear. \"Perfectly. Every word. " +
         "You—\" a fond, pitying pat on your arm \"—not so much. Don't worry. Nobody good ever made " +
@@ -3563,6 +3696,14 @@ const PATRONS = {
         "gone and there's just a hard, tired man off a hard, tired street. \"Belfast,\" he says, and " +
         "nothing else, and the word shuts like a door. Then he blinks and the grin snaps back on like " +
         "a light. \"Ancient history, son. What're you drinking?\"" },
+      { topic: "debt", sets: ["fergieReminded"],
+        text: "\"Debt? DEBT?\" Fergie's outrage arrives before his memory does. \"I PAID that woman. " +
+        "Twice, if you count the—\" he counts nothing. \"And anyway it was never a loan, it was an " +
+        "INVESTMENT, we shook on— who did you say sent you?\" You didn't. He deflates by degrees, " +
+        "glances round the bar, and lands somewhere almost honest. \"Aye. Right. Tell her — tell her " +
+        "Fergie says next week. On my mother's life.\" His mother has died three times this month " +
+        "already, but the message will carry.",
+        short: "\"Tell her next week. On my mother's life.\" His third dead mother this month." },
     ],
   },
 

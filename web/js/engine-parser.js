@@ -548,6 +548,30 @@ function _doGive(itemWord, npcWord) {
     _deliver("ploy", d);
     return;
   }
+  if (id === "foreman_keys" && npc === "diamond") {
+    G.itemLoc.foreman_keys = null;
+    _setFlag("keysDelivered");
+    _say("Diamond takes the ring of keys in both hands and goes somewhere very far away for a " +
+      "moment — thumb moving over the worn brass the exact way its last owner's must have. \"I " +
+      "knew him,\" she says at last, too evenly. \"Everybody here knew him. He built every wall " +
+      "you are looking at, faster than any man should have had to.\" She hangs the ring on the " +
+      "shrine behind the till, beside the marigolds and the strawberry Fanta, and straightens it " +
+      "twice. \"Tell Wimon: they hang where they belong. And tell her—\" the voice catches, is " +
+      "caught, recovers \"—tell her I said thank you.\"", "win");
+    return;
+  }
+  if (id === "revue_flyer" && npc === "diamond") {
+    G.itemLoc.revue_flyer = null;
+    _setFlag("scoutSent");
+    _say("Diamond reads the flyer front and back, and a slow, real smile gets past the vault. " +
+      "\"Mala's little diamond. I saw her lip-sync at the temple fair when she was nineteen — the " +
+      "whole soi stopped walking.\" She taps the biro note. \"The Alcazar man owes me from my " +
+      "dancing days, and he hates that he does. I will make the call tonight; he will sit at the " +
+      "back on Friday and pretend he came for the beer.\" The flyer goes under the till, dead " +
+      "centre, like something valuable. \"Tell Mala: consider it done, and she owes me a " +
+      "headdress.\"", "win");
+    return;
+  }
   if (id === "sang_som" && npc === "bee") {
     G.itemLoc.sang_som = null;
     _setFlag("sangsomDelivered");
@@ -2238,8 +2262,12 @@ function doCommand(input) {
       break;
     }
     case "give": case "hand": case "deliver": {
-      const m = arg.match(/^(.+?) (?:to )?(nok|auntie|bank|candy|lek|noi|ping|aom|joy|fon|gift|kwan|nong|pim|ploy|dj|oy|madam|daeng|gary|mot|security|bee|bert|mem)( .*)?$/);
-      if (m) _doGive(m[1].trim(), m[2]);
+      // "to" is stripped from arg by the filler filter, so the shape is
+      // "<item words> <person>" — last word is the recipient, and _doGive's
+      // _findNpc validates it. (This used to be a hardcoded name whitelist that
+      // silently broke GIVE for every newly added NPC — never again.)
+      const gw = arg.split(" ");
+      if (gw.length >= 2) _doGive(gw.slice(0, -1).join(" ").trim(), gw[gw.length - 1]);
       else _say("Give what to whom? (GIVE <thing> TO <person>)");
       break;
     }

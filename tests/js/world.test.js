@@ -106,7 +106,8 @@ test("room signs reference real sign entries", () => {
 test("gossip chain flags connect: every required flag is set somewhere", () => {
   const settable = new Set(["knowWasHere", "waiedOy", "waiedPloy", "greetedFon",
     "hasWallet", "gotBusFare", "somTamDelivered", "officeOpen",
-  ]); // set by engine actions (read/wai/give/enter), not dialogue
+    "glamTruth", // set by PATRON dialogue (Glam's lucid flash), which this scan doesn't cover
+  ]); // set by engine actions (read/wai/give/enter), not NPC dialogue
   for (const npc of Object.values(NPCS)) {
     for (const d of npc.dialogue) {
       for (const f of d.sets || []) settable.add(f);
@@ -163,6 +164,16 @@ test("bar-social roles reference real NPCs and cover the roster", () => {
     assert.ok(["hostess", "cashier", "mamasan"].includes(role), `${id}: odd role ${role}`);
   }
   for (const h of CANON_HOSTESSES) assert.ok(NPC_ROLES[h], `${h} has no role`);
+});
+
+test("every quest is well-formed: giver, deps, item, and at all resolve", () => {
+  for (const [qid, q] of Object.entries(QUESTS)) {
+    assert.ok(NPCS[q.giver], `${qid}: giver ${q.giver} is not an NPC`);
+    for (const d of q.deps) assert.ok(QUESTS[d], `${qid}: dep ${d} is not a quest`);
+    if (q.item) assert.ok(ITEMS[q.item], `${qid}: item ${q.item} missing`);
+    if (q.at) assert.ok(NPCS[q.at] || ROOMS[q.at], `${qid}: at ${q.at} resolves to nothing`);
+    assert.ok(q.doneFlag && q.reward, `${qid}: needs doneFlag and reward`);
+  }
 });
 
 test("the safe PIN's clue flags both exist in dialogue", () => {

@@ -393,10 +393,12 @@ function _patronTalk(id, topic) {
   const seen = G.patronTalk.talked[id] || (G.patronTalk.talked[id] = []);
   const repeat = seen.includes(idx);
   if (!repeat) seen.push(idx);
-  // Same consistency as the NPCs: a repeat is the `short` gist, or — patron
-  // dialogue being pure flavour (no gives/sets anywhere) — a grizzled-regular
-  // brush-off, so you never get the whole war story twice.
+  // Same consistency as the NPCs: a repeat is the `short` gist, or a grizzled-
+  // regular brush-off, so you never get the whole war story twice. Patron
+  // dialogue is mostly pure flavour, but entries may carry `sets` (quest wiring
+  // — Glam's lucid flashes) exactly like NPC dialogue; no `gives`, though.
   _say(repeat ? (d.short || _patronAgain(id)) : d.text);
+  if (d.sets) d.sets.forEach(f => _setFlag(f));
 }
 
 // A belligerent regular's sore subject. Whether it turns into a swing depends on
@@ -566,6 +568,9 @@ function _deliver(npcId, d) {
 function _describeRoom(full) {
   const r = _room();
   G.visited[G.room] = true; // standing in it is how places join the fast-travel list
+  // Candy's recce quest: eyes on all three new drinking strips completes it
+  // (flag is cheap and idempotent; _questTick only pays while the quest is active)
+  if (G.visited.myth_rows && G.visited.tt_lane_3 && G.visited.beach_row) _setFlag("recceDone");
   // A downpour re-announces itself every time the room is described (LOOK, an
   // arrival, and crucially a restored save) — otherwise a reload mid-rain paints
   // a dry, walkable street and the movement block that follows reads as a bug.

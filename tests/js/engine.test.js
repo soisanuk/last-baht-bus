@@ -2441,6 +2441,76 @@ test("Queer venues: a slur brings the classic fight, milder bashing just gets yo
   assert.equal(state().room, "adonis_club", "talking is not a hate crime");
 });
 
+test("the Glam saga: four rungs from the tour story to 'He is my father'", () => {
+  state().flags.act1Done = true; state().stage = "expat"; state().money = 5000;
+  state().nightTurn = 5; // before Glam's shuttle to Hyper
+  // 1 — Wimon offers; Glam's tour story (patron dialogue `sets`) completes it
+  state().room = NPCS.wimon.room; run("talk wimon"); run("accept oldrocker");
+  state().room = "cheeky_monkey";
+  out = []; run("ask glam about music");
+  assert.ok(state().flags.glamHeard, "the patron sets support fires");
+  assert.equal(state().quests.oldrocker, "done");
+  // 2 — the keys reach Diamond's shrine (generic GIVE, no whitelist)
+  state().room = NPCS.wimon.room; run("talk wimon"); run("accept keys");
+  assert.equal(state().itemLoc.foreman_keys, "inventory");
+  state().room = "hyper";
+  out = []; run("give keys to diamond");
+  assert.match(lastOut(), /hang where they belong/);
+  run("look");
+  assert.equal(state().quests.keys, "done");
+  // 3 — Diamond points you at the quiet money; Glam's lucid flash answers
+  run("talk diamond"); run("accept quietmoney");
+  state().room = "cheeky_monkey";
+  out = []; run("ask glam about sons");
+  assert.match(lastOut(), /There is no rest|inheritance/i);
+  run("look");
+  assert.equal(state().quests.quietmoney, "done");
+  // 4 — with Wimon's blessing, Diamond says it out loud
+  state().room = NPCS.wimon.room; run("talk wimon"); run("accept family");
+  state().room = "hyper";
+  out = []; run("ask diamond about glam");
+  assert.match(lastOut(), /He is my father/);
+  run("look");
+  assert.equal(state().quests.family, "done");
+});
+
+test("Diamond deflects about Glam until the money truth is known", () => {
+  state().flags.act1Done = true; state().room = "hyper";
+  out = []; run("ask diamond about glam");
+  assert.match(lastOut(), /old friend of the house/i, "the req gate holds");
+  assert.ok(!state().flags.diamondTruth);
+});
+
+test("Candy's recce: eyes on all three new strips pays out", () => {
+  state().flags.act1Done = true; state().stage = "expat"; state().money = 1000;
+  state().room = NPCS.candy.room; run("talk candy"); run("accept recce");
+  assert.equal(state().quests.recce, "active");
+  for (const r of ["myth_rows", "tt_lane_3", "beach_row"]) { state().room = r; run("look"); }
+  run("look");
+  assert.equal(state().quests.recce, "done");
+  assert.equal(state().money, 1300, "Candy pays ฿300 for the intel");
+});
+
+test("the scout flyer and the collection run complete on their flags", () => {
+  // scout: Mala's flyer to Diamond
+  state().flags.act1Done = true; state().stage = "expat"; state().money = 1000;
+  state().room = "peacock_cabaret"; run("talk mala"); run("accept scout");
+  assert.equal(state().itemLoc.revue_flyer, "inventory");
+  state().room = "hyper";
+  out = []; run("give flyer to diamond");
+  assert.match(lastOut(), /consider it done/);
+  run("look");
+  assert.equal(state().quests.scout, "done");
+  // debtrun: Nira's ฿500 for jogging Fergie's memory
+  state().room = "neon_paradise"; run("talk nira"); run("accept debtrun");
+  const before = state().money;
+  out = []; _patronTalk("fergie", "debt");
+  assert.match(lastOut(), /next week/i);
+  run("look");
+  assert.equal(state().quests.debtrun, "done");
+  assert.equal(state().money, before + 500, "Nira pays the runner");
+});
+
 test("Areca Lodge is a fourth hotel you can check into", () => {
   state().flags.act1Done = true;
   state().flags.hasWallet = true;
