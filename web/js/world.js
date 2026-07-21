@@ -1231,9 +1231,88 @@ const ROOMS = {
     desc: "North of the Dolphin roundabout the volume drops by half: seafood restaurants, " +
       "temples, long-stay hotels. Up ahead, the SABAI PALMS HOTEL sign glows over its " +
       "soi — half the letters out, so it reads 'SA AI PA MS', which the long-stay " +
-      "guests consider part of the charm. The soi itself is dark as a power cut.",
+      "guests consider part of the charm. The soi itself is dark as a power cut. " +
+      "East, a quiet BAR CORNER of expat beer bars glows low; a SPA ROW of massage " +
+      "and soapland fronts runs off the other way.",
     busStop: "beachrd",
-    exits: { s: "beach_rd_n", n: "hotel_soi", w: "orchid_club" },
+    exits: { s: "beach_rd_n", n: "hotel_soi", w: "orchid_club", e: "naklua_bars", spa: "naklua_massage" },
+  },
+  naklua_bars: {
+    name: "Naklua (Bar Corner)",
+    region: "Naklua",
+    desc: "A pocket of low-key expat beer bars off the main road, the kind that open at four " +
+      "and know every customer's pour by five. No neon war up here — just fairy lights, a " +
+      "sea breeze off the old fishing harbour, and the clack of a single pool table. THE " +
+      "ANCHOR BAR, DOLPHIN BAR, and THE MOORING share the corner and most of the regulars.",
+    exits: { w: "naklua_rd", in: "anchor_bar", n: "dolphin_bar", s: "mooring_bar" },
+  },
+  anchor_bar: {
+    name: "The Anchor Bar",
+    region: "Naklua",
+    bar: "The Anchor Bar", barType: "beer", pool: true, outlet: true,
+    desc: "A nautical-junk beer bar — a real ship's wheel on the wall, glass floats in a net, " +
+      "a barometer nobody trusts. The long-stay crowd holds the stools like moorings. Namfon " +
+      "pours a cold one before you've picked a seat.",
+    exits: { out: "naklua_bars" },
+  },
+  dolphin_bar: {
+    name: "Dolphin Bar",
+    region: "Naklua",
+    bar: "Dolphin Bar", barType: "beer",
+    desc: "Named for the roundabout to the south, painted with a leaping dolphin that's had a " +
+      "few touch-ups too many. Quiet, cheap, and friendly. Bunny keeps the cooler stocked and " +
+      "the football on low.",
+    exits: { out: "naklua_bars" },
+  },
+  mooring_bar: {
+    name: "The Mooring",
+    region: "Naklua",
+    bar: "The Mooring", barType: "beer",
+    desc: "The last light before the dark soi, a single-container bar where the harbour smell " +
+      "wins over the beer. Jaja works the rail and remembers birthdays she has no business " +
+      "remembering.",
+    exits: { out: "naklua_bars" },
+  },
+  naklua_massage: {
+    name: "Naklua (Spa Row)",
+    region: "Naklua",
+    desc: "The quieter, older end of the trade: no shorts on the step, just tall blue-lit " +
+      "soapland towers and clean traditional shopfronts side by side. NAKLUA TRADITIONAL " +
+      "MASSAGE glows honest white; LOTUS OIL MASSAGE leaks pink and cold air; and the " +
+      "EMPEROR looms four floors over the lot, a fish tank behind one-way glass.",
+    exits: { s: "naklua_rd", in: "naklua_thai", n: "lotus_oil", up: "emperor_soapy" },
+  },
+  naklua_thai: {
+    name: "Naklua Traditional Massage",
+    bar: "Naklua Traditional Massage",
+    region: "Naklua",
+    massage: "legit",
+    desc: "A calm white shopfront among the seafood restaurants, ceiling fans turning over rows " +
+      "of proper mats. A laminated list — foot 250, Thai 300, herbal compress 400 — and ladies " +
+      "in tidy uniforms who wai and mean it. The honest kind, for the long-stay aches.",
+    exits: { out: "naklua_massage" },
+  },
+  lotus_oil: {
+    name: "Lotus Oil Massage",
+    bar: "Lotus Oil Massage",
+    region: "Naklua",
+    massage: "oil",
+    desc: "Pink light, a beaded curtain, air-con bleeding cold onto the pavement, and the " +
+      "little NO SEX sticker on the mirror that the warm oil and the few questions rather " +
+      "contradict. Quieter than the town shops, and in less of a hurry.",
+    exits: { out: "naklua_massage" },
+  },
+  emperor_soapy: {
+    name: "The Emperor Massage",
+    bar: "The Emperor Massage",
+    region: "Naklua",
+    soapy: true,
+    desc: "Four floors of blue neon over the Naklua trade, a doorman in a shiny suit, and past " +
+      "the marble lobby the fishbowl: tiered benches behind one-way glass, two dozen ladies in " +
+      "evening gowns with numbered discs at the hip, some watching a hidden TV, some watching " +
+      "you. The manageress has a laminated menu of tiers. Pick a number; the rest is a package " +
+      "and a very long shower.",
+    exits: { out: "naklua_massage" },
   },
   hotel_soi: {
     name: "Sabai Palms Soi (Naklua)",
@@ -4279,6 +4358,7 @@ const _FILLER_HOSTESSES = [
   ["Duan","เดือน","firefly_bar"], ["Saifon","สายฝน","firefly_bar"],
   ["Wanpen","วันเพ็ญ","mama_yai"],
   ["Pear","แพร์","orchid_club"], ["Jinda","จินดา","orchid_club"],
+  ["Namfon","น้ำฝน","anchor_bar"], ["Bunny","บันนี่","dolphin_bar"], ["Jaja","จาจา","mooring_bar"],
   ["Dokmai","ดอกไม้","night_heron"], ["Jampa","จำปา","night_heron"],
   ["Ing","อิง","blue_dog"], ["Khing","ขิง","blue_dog"],
   ["Pukky","ปุ๊กกี้","sunset_rail"], ["Somo","โซโม่","bay_watch"], ["Nina","นีน่า","sandy_toes"],
@@ -4563,6 +4643,14 @@ const ROOM_GEO = {
   orchid_club:      [12.9524, 100.8876],
   hotel_soi:        [12.9565, 100.8898],
   hotel_room:       [12.9567, 100.8900],
+  naklua_bars:      [12.9528, 100.8890],
+  anchor_bar:       [12.9527, 100.8892],
+  dolphin_bar:      [12.9530, 100.8891],
+  mooring_bar:      [12.9525, 100.8892],
+  naklua_massage:   [12.9533, 100.8882],
+  naklua_thai:      [12.9535, 100.8880],
+  lotus_oil:        [12.9531, 100.8879],
+  emperor_soapy:    [12.9536, 100.8883],
   // Second Road
   second_rd_s:      [12.9268, 100.8768],
   second_thai:      [12.9272, 100.8774],
