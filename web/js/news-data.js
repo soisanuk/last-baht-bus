@@ -63,9 +63,9 @@ var NEWS_FEED = [
     "d": "20 Jul 2026"
   },
   {
-    "t": "Flights Cancelled Over Asia As Thailand, Singapore, Hong Kong, Qatar, And More Cancel 339 And Delay 5,098, Grounding Cathay Pacific, Emirate",
-    "s": "Travel And Tour World",
-    "d": "20 Jul 2026"
+    "t": "Disney Run Thailand 2026 criticised over event issues",
+    "s": "Khaosod English",
+    "d": "21 Jul 2026"
   },
   {
     "t": "Thailand’s medical cannabis dream turns into a smuggling nightmare",
@@ -74,14 +74,14 @@ var NEWS_FEED = [
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-07-20","USD":33.62,"AUD":23.56,"GBP":45.27,"EUR":38.42};
+var FX_RATES = {"date":"2026-07-21","USD":33.67,"AUD":23.62,"GBP":45.11,"EUR":38.43};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-07-21","temp":33,"humid":57,"code":3,"hi":33,"rain":31};
+var WX_NOW = {"date":"2026-07-22","temp":29,"humid":75,"code":3,"hi":33,"rain":46};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-18","done":true,"h":"France","hs":4,"a":"England","as":6},{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-07-16","first":"639214","last2":"71","front3":["683","709"],"back3":["427","746"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4064,"date":"2026-07-21","baht":64600};
+var GOLD = {"usd":4073,"date":"2026-07-21","baht":64850};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":66267,"thb":2229164};
+var BTC = {"usd":66519,"thb":2241932};
