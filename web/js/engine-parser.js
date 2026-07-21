@@ -345,6 +345,16 @@ function _doInventory() {
 
 function _doExamine(arg) {
   if (!arg) return _describeRoom(true);
+  if (G.dog && (/\b(dog|sai krok)\b/.test(arg) ||
+      (G.dog.name && arg.includes(G.dog.name.toLowerCase())))) {
+    _say(_dogN(`Sai Krok: a Pattaya-special soi dog with one clipped ear and the settled ` +
+      `bulk of a professional. He chose you on day ${G.dog.since} and has never once ` +
+      `revisited the decision. Currently ` +
+      (_room().barType === "beer" ? "under your stool, officially off duty, actually on duty." :
+       (_room().bar || _room().barType) ? "outside the door, chin on paws, one ear on the room." :
+       "at your heel, reading the street.")));
+    return;
+  }
   const npc = _findNpc(arg);
   if (npc) { _say(NPCS[npc].desc); return; }
   const pat = _findPatron(arg);
@@ -1856,7 +1866,7 @@ const _COMPLETE_VERBS = [
   "motosai to", "travel", "light", "charge phone", "read", "use", "open", "play",
   "flirt", "kiss", "spank", "fondle", "throw cover", "ring bell", "barfine", "massage", "special", "soapy", "eat", "drink",
   "sleep", "tv", "column", "watch", "weather", "scores", "lottery", "map", "time", "tip", "wave",
-  "photo", "call", "shower", "withdraw", "cheers", "tao rai", "borrow", "repay", "hire", "pet", "feed", "dance", "sing", "swim",
+  "photo", "call", "shower", "withdraw", "cheers", "tao rai", "borrow", "repay", "hire", "pet", "feed", "rename", "dance", "sing", "swim",
   "smell", "listen", "diagnose", "apologize", "quests", "accept", "abandon", "contact",
   "contacts", "who", "blackbook", "message", "check messages", "send", "score", "wait", "again",
   "request", "hint", "help", "save", "load", "undo", "restart",
@@ -2390,6 +2400,7 @@ function doCommand(input) {
     case "hire": case "off": _doHire(arg); break;
     case "pet": case "stroke": _doPet(arg); break;
     case "feed": _doFeedDog(arg); break;
+    case "name": case "rename": _doNameDog(arg); break;
     case "haggle": case "bargain":
       _say("Nobody's quoting you a price right now. Save it for the man with the " +
         "display board of watches.");

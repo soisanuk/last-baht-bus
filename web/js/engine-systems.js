@@ -1505,9 +1505,9 @@ function _startRain(len) {
   // arrangements — every dog on this soi knows a dry spot you don't.)
   if (G.dog) {
     if (_room().barType === "beer") {
-      _say(_DOG_RAIN_BAR[Math.floor(_rand() * _DOG_RAIN_BAR.length)], "dim");
+      _say(_dogN(_DOG_RAIN_BAR[Math.floor(_rand() * _DOG_RAIN_BAR.length)]), "dim");
     } else if (!_sheltered(G.room)) {
-      _say(_DOG_RAIN_STREET[Math.floor(_rand() * _DOG_RAIN_STREET.length)], "dim");
+      _say(_dogN(_DOG_RAIN_STREET[Math.floor(_rand() * _DOG_RAIN_STREET.length)]), "dim");
     }
   }
 }
@@ -1646,11 +1646,12 @@ function _doWatchSoi() {
 // point a night, same house rules as the sunsets and the free shows. Big One
 // vets every hand before it gets anywhere near her sister; that's the deal.
 function _doPet(arg) {
-  if (G.dog && /dog|sai|krok/.test(arg || "")) {
-    _say("Sai Krok accepts the ear-scratch with his eyes half-shut and his attention " +
+  if (G.dog && (/dog|sai|krok/.test(arg || "") ||
+      (G.dog.name && (arg || "").includes(G.dog.name.toLowerCase())))) {
+    _say(_dogN("Sai Krok accepts the ear-scratch with his eyes half-shut and his attention " +
       "fully open — somewhere behind you a motorbike slows, and the rumble starts low " +
       "in his chest before you've even registered it. The bike moves on. So does the " +
-      "rumble. You get the last of the scratch in undisturbed.");
+      "rumble. You get the last of the scratch in undisturbed."));
     return;
   }
   if (G.itemLoc.soi_cats !== G.room) {
@@ -1696,7 +1697,32 @@ function _doPet(arg) {
 // scam muscle recalculates around him (tonic shop / curse ritual), and nobody
 // works the pockets of a passed-out farang whose dog is watching. There is no
 // un-adopting him. Nobody consulted you. That is how soi dogs work.
-function _dogName() { return "Sai Krok"; }
+// His registered name is whatever you've renamed him to; the soi's name for
+// him ("Sai Krok" — sausage) is the default and all the prose is written in
+// it, so _dogN() re-letters any dog line at render time. NAME DOG <name>.
+function _dogName() { return (G.dog && G.dog.name) || "Sai Krok"; }
+function _dogN(s) { return s.replace(/Sai Krok/g, _dogName()); }
+
+function _doNameDog(arg) {
+  if (!G.dog) { _say("You haven't got a dog to name. The soi's freelancers already have names — several each."); return; }
+  // doCommand lowercases all input, so re-dignify the name with title case
+  const name = (arg || "").replace(/\b(the|my|dog|him|to|as|rename|name|call)\b/g, " ")
+    .replace(/["'`«»]/g, "").replace(/\s+/g, " ").trim().slice(0, 24)
+    .split(" ").map(w => (w.charAt(0).toUpperCase() + w.slice(1))).join(" ").trim();
+  if (!name) {
+    _say(`He answers — when he chooses to — to ${_dogName()}. (NAME DOG <something> to change it.)`);
+    return;
+  }
+  const old = _dogName();
+  G.dog.name = name;
+  _say(`"${name}," you try, and he looks up — not because he understands, but because ` +
+    `you said it in the voice that sometimes means chicken. Close enough. It's official: ` +
+    `${name}.` + (old === "Sai Krok"
+      ? " The soi will keep calling him Sai Krok regardless — tenure — and he will keep " +
+        "answering to both, and to any word said in the chicken voice."
+      : ` The soi never learned "${old}" either, and remains loyal to Sai Krok. He answers ` +
+        "to all of the above, and to the chicken voice."), "win");
+}
 
 function _doFeedDog(arg) {
   if (arg && !/dog|sai|krok|him|it/.test(arg)) { _say("Feed who, exactly? The whole soi is hungry."); return; }
@@ -1704,19 +1730,19 @@ function _doFeedDog(arg) {
     const food = ["noodles", "moo_ping"].find(id => _inv().includes(id));
     if (food) {
       G.itemLoc[food] = null;
-      _say(`Sai Krok takes the ${ITEMS[food].name} from your hand with a gentleness that ` +
+      _say(_dogN(`Sai Krok takes the ${ITEMS[food].name} from your hand with a gentleness that ` +
         "would astonish everyone who has ever seen him clear a doorway, eats it in one " +
         "efficient movement, and leans his whole weight against your leg. Resource " +
-        "management, done correctly.");
+        "management, done correctly."));
     } else if (G.money >= 20) {
       G.money -= 20;
-      _say(`฿20 to a grill cart for a chicken skewer, which Sai Krok receives like a ` +
+      _say(_dogN(`฿20 to a grill cart for a chicken skewer, which Sai Krok receives like a ` +
         `salary — owed, not begged. He eats, checks the street both ways, and falls ` +
-        `back in at your heel. (฿${G.money} left.)`);
+        `back in at your heel. (฿${G.money} left.)`));
     } else {
-      _say("You have nothing for him. Sai Krok reads your empty hands, forgives you " +
+      _say(_dogN("You have nothing for him. Sai Krok reads your empty hands, forgives you " +
         "instantly and completely, and keeps walking with you anyway. Dogs are better " +
-        "than us and it isn't close.");
+        "than us and it isn't close."));
     }
     return;
   }
@@ -1755,7 +1781,8 @@ function _doFeedDog(arg) {
   _say("A passing bar girl laughs at your face: “Ohhh. He choose you, na.” The soi " +
     "calls him Sai Krok — sausage — after his one great subject. From here on he pads " +
     "at your heel, waits outside every bar, and sleeps against your door. Nobody " +
-    "consulted you. That is how it works.", "win");
+    "consulted you. That is how it works. (He's yours now: NAME DOG <something> if " +
+    "you'd rather he answered to yours.)", "win");
   _addHappy(2);
 }
 
@@ -1840,7 +1867,7 @@ function _dogBarFavor() {
   if (!staff.length) return;
   const id = staff[Math.floor(_rand() * staff.length)];
   const name = NPCS[id].name;
-  _say(_DOG_FAVOR_SCENES[Math.floor(_rand() * _DOG_FAVOR_SCENES.length)](name), "win");
+  _say(_dogN(_DOG_FAVOR_SCENES[Math.floor(_rand() * _DOG_FAVOR_SCENES.length)](name)), "win");
   G.soc.drinks[id] = (G.soc.drinks[id] || 0) + 1;
   _say(`(Everyone likes a dog lover in Thailand — ${name} warms to you.)`, "dim");
 }

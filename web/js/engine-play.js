@@ -1748,9 +1748,9 @@ function _endNight(reason) {
   if (crash) {
     _say(crash.prose[Math.floor(_rand() * crash.prose.length)], "alert");
     _say(G.dog
-      ? `(Phone on ${_CRASH_BATTERY}%. Your pockets are untouched: Sai Krok spent the ` +
+      ? _dogN(`(Phone on ${_CRASH_BATTERY}%. Your pockets are untouched: Sai Krok spent the ` +
         "night sitting on your chest like a paperweight with teeth, and the town let " +
-        "you both be. Nobody works a farang whose dog is watching.)"
+        "you both be. Nobody works a farang whose dog is watching.)")
       : `(Phone on ${_CRASH_BATTERY}%. ${_flag("hasWallet") ? "Wallet" : "Pockets"} ` +
         "turned out, empty — the town works the farang who don't make it home.)", "dim");
   }
@@ -1762,8 +1762,8 @@ function _endNight(reason) {
     "sliding into the gulf and the neon is waking up ──", "win");
   if (hangover >= 4) _say("(The hangover is a physical presence with opinions. Water. Food. Mercy.)", "alert");
   if (G.dog && !crash) {
-    _say("(Sai Krok is asleep against your door when you surface. One eye opens, the " +
-      "tail thumps twice, and the watch resumes.)", "dim");
+    _say(_dogN("(Sai Krok is asleep against your door when you surface. One eye opens, the " +
+      "tail thumps twice, and the watch resumes.)"), "dim");
   }
   _loanNightRoll();                   // Nira's loan compounds and her cousins escalate if you're late
   _describeRoom(true);

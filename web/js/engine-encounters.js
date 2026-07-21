@@ -1109,11 +1109,11 @@ function _curseRitual(input) {
   }
   // You try to leave. The dark spirits have never met your dog.
   if (G.dog) {
-    _say("The hand settles on your shoulder — and Sai Krok, who has been sitting so " +
+    _say(_dogN("The hand settles on your shoulder — and Sai Krok, who has been sitting so " +
       "still the robes forgot him, rises without a sound. He does not growl. He simply " +
       "looks at the hand, then at its owner, with total professional interest. The " +
       "cleansing is abruptly free of charge; the robes remember an appointment down " +
-      "the promenade. (You keep your baht.)", "win");
+      "the promenade. (You keep your baht.)"), "win");
     _addHappy(1);
     return;
   }
@@ -1169,11 +1169,11 @@ function _tonicShop(input) {
   }
   // You try to leave. Your dog outranks their muscle entirely.
   if (G.dog) {
-    _say("You step toward the curtain — and it parts from the OUTSIDE. Sai Krok stands " +
+    _say(_dogN("You step toward the curtain — and it parts from the OUTSIDE. Sai Krok stands " +
       "in the gap, having apparently counted the men through the beads, and produces a " +
       "growl with fifty generations of soi in it. The three friends recalculate the " +
       "evening's economics on the spot. “Okay okay, my friend — next time, na.” You " +
-      "walk out clean, your dog falling in behind you, facing backward.", "win");
+      "walk out clean, your dog falling in behind you, facing backward."), "win");
     _addHappy(1);
     return;
   }

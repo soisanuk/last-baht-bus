@@ -633,13 +633,13 @@ function _describeRoom(full) {
   // most customers)
   if (G.dog) {
     if (r.barType === "beer") {
-      _say("(Sai Krok trots in under the rail — no door to stop him — and folds up " +
-        "beneath your stool.)", "dim");
+      _say(_dogN("(Sai Krok trots in under the rail — no door to stop him — and folds up " +
+        "beneath your stool.)"), "dim");
       _dogBarFavor();
     } else if (r.bar || r.barType || r.massage || r.soapy || r.hostBar) {
-      _say("(Sai Krok folds up outside the door, chin on paws, one ear on the room.)", "dim");
+      _say(_dogN("(Sai Krok folds up outside the door, chin on paws, one ear on the room.)"), "dim");
     } else {
-      _say("Sai Krok pads at your heel, nose reading the street.", "dim");
+      _say(_dogN("Sai Krok pads at your heel, nose reading the street."), "dim");
     }
   }
   // CAPS so the hints tap: the open kw prefills "ride bus to " and the
@@ -798,8 +798,8 @@ function _tick() {
     // your own soi dog outranks the local franchise: the dark sois go quiet
     if (G.dog) {
       if (G.darkStreak === 0) {
-        _say("A growl starts somewhere in the dark ahead — and Sai Krok answers it, " +
-          "once, low, without breaking stride. Silence. The dark has done the maths.", "dim");
+        _say(_dogN("A growl starts somewhere in the dark ahead — and Sai Krok answers it, " +
+          "once, low, without breaking stride. Silence. The dark has done the maths."), "dim");
       }
       G.darkStreak = 1; // held, never escalates
       return;

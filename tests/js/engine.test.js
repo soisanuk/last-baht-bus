@@ -2570,6 +2570,28 @@ test("Sai Krok pays his keep: dark sois, the scam muscle, and your pockets", () 
   assert.ok(state().money > 0, "nobody works a farang whose dog is watching");
 });
 
+test("NAME DOG: rename him and every line of his re-letters, no strays", () => {
+  state().flags.act1Done = true; state().stage = "expat"; state().money = 1000;
+  // no dog, no naming rights
+  state().dog = null;
+  out = []; run("name dog rex");
+  assert.match(lastOut(), /haven't got a dog/);
+  // adopt, rename (parser lowercases input; the name gets its dignity back)
+  state().room = "beach_rd_c"; run("feed dog");
+  out = []; run("name dog biscuit");
+  assert.equal(state().dog.name, "Biscuit");
+  assert.match(lastOut(), /official: Biscuit/);
+  // the whole repertoire re-letters: presence, examine, and no Sai Krok strays
+  out = []; run("look");
+  assert.match(out.join("\n"), /Biscuit pads at your heel/);
+  assert.ok(!/Sai Krok/.test(out.join("\n")), "no stray default-name lines");
+  out = []; run("examine biscuit");
+  assert.match(lastOut(), /Biscuit: a Pattaya-special soi dog/);
+  // bare NAME DOG reports the current name
+  out = []; run("name dog");
+  assert.match(lastOut(), /Biscuit/);
+});
+
 test("Sai Krok socialises: beer-bar staff favor (once a night) and rain reactions", () => {
   state().flags.act1Done = true; state().stage = "expat"; state().dog = { since: 1 };
   state().room = "candy_bar";
