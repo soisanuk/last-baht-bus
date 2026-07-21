@@ -119,6 +119,7 @@ function newGame() {
     qvDay: 0,            // last day the Queen Vic balcony paid its happy point
     dragDay: 0,          // last day the Peacock Cabaret drag revue paid its happy point
     catDay: 0,           // last day the Jomtien beach cats paid theirs
+    dog: null,           // the accidentally-adopted soi dog: { since: day } once you've fed him
     patronTalk: { day: 0, talked: {} }, // patron dialogue book, reset daily
     turns: 0,
     wingmanUntil: 0,     // G.turns before which a wing-woman is vouching for you
@@ -626,6 +627,13 @@ function _describeRoom(full) {
     _say("Step inside: " + [...barDirs].map(([b, d]) => `${b} (${d})`).join(", ") +
       ". (ENTER <name>)", "dim");
   }
+  // the dog: outside he's at your heel; in a venue he folds up by the door
+  // (dogs know the one rule and keep it better than most customers)
+  if (G.dog) {
+    _say((r.bar || r.barType || r.massage || r.soapy || r.hostBar)
+      ? "(Sai Krok folds up outside the door, chin on paws, one ear on the room.)"
+      : "Sai Krok pads at your heel, nose reading the street.", "dim");
+  }
   // CAPS so the hints tap: the open kw prefills "ride bus to " and the
   // destination list rides the suggest bar — the whole fare is keyboard-free.
   if (r.busStop) _say("A baht bus can be caught here. (RIDE BUS TO <place>)", "dim");
@@ -779,6 +787,15 @@ function _tick() {
     }
   }
   if (_isDarkHere() && !G.rain) { // even the soi dogs go to ground in a downpour
+    // your own soi dog outranks the local franchise: the dark sois go quiet
+    if (G.dog) {
+      if (G.darkStreak === 0) {
+        _say("A growl starts somewhere in the dark ahead — and Sai Krok answers it, " +
+          "once, low, without breaking stride. Silence. The dark has done the maths.", "dim");
+      }
+      G.darkStreak = 1; // held, never escalates
+      return;
+    }
     G.darkStreak++;
     if (G.darkStreak === 1) {
       _say("Something shifts in the dark nearby. A low growl. You are likely to be " +

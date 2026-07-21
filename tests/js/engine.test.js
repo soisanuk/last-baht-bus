@@ -2529,6 +2529,43 @@ test("the Jomtien beach cats: Big One vets, Little One purrs, once a day pays", 
   assert.equal(state().itemLoc.soi_cats, "jomtien_beach");
 });
 
+test("Sai Krok: feed a soi dog once and you have a dog, whether you meant to or not", () => {
+  state().flags.act1Done = true; state().stage = "expat";
+  state().money = 1000; state().room = "beach_rd_c";
+  // act-1 noodles are the accidental adoption fee
+  out = []; run("feed dog");
+  assert.ok(state().dog, "he choose you, na");
+  assert.equal(state().itemLoc.noodles, null, "goodbye, dinner — hello, dog");
+  // he follows: at heel outside, outside the door in venues
+  out = []; run("look");
+  assert.match(out.join("\n"), /pads at your heel/);
+  state().room = "candy_bar";
+  out = []; run("look");
+  assert.match(out.join("\n"), /folds up outside the door/);
+});
+
+test("Sai Krok pays his keep: dark sois, the scam muscle, and your pockets", () => {
+  // the dark-soi dog threat is defused, never escalates
+  state().flags.act1Done = true; state().stage = "expat";
+  state().dog = { since: 1 }; state().money = 5000;
+  state().hurt = 0; state().darkStreak = 0; state().lightOn = false;
+  state().room = "ws_alley"; // dark
+  run("look"); run("look"); run("look");
+  assert.equal(state().hurt, 0, "no bites with your own dog on the soi");
+  assert.ok(state().darkStreak <= 1, "the streak holds, never escalates");
+  // the tonic-shop muscle recalculates
+  state().room = "beach_rd_c"; state().tonicOwed = 0;
+  _startEnc("tonic"); run("follow him to the shop");
+  out = []; run("no, let me leave");
+  assert.match(lastOut(), /recalculate/);
+  assert.equal(state().money, 5000, "you walk out clean");
+  assert.equal(state().tonicOwed, 0, "nothing to report — nothing was taken");
+  // and a rough night doesn't empty your pockets
+  state().money = 2222; state().room = "ws_south";
+  _endNight("dawn");
+  assert.ok(state().money > 0, "nobody works a farang whose dog is watching");
+});
+
 test("Areca Lodge is a fourth hotel you can check into", () => {
   state().flags.act1Done = true;
   state().flags.hasWallet = true;
