@@ -627,12 +627,20 @@ function _describeRoom(full) {
     _say("Step inside: " + [...barDirs].map(([b, d]) => `${b} (${d})`).join(", ") +
       ". (ENTER <name>)", "dim");
   }
-  // the dog: outside he's at your heel; in a venue he folds up by the door
-  // (dogs know the one rule and keep it better than most customers)
+  // the dog: at your heel outside; through the rail and under your stool in the
+  // open-air beer bars (no door to stop him, and nobody would dream of it); by
+  // the door everywhere else (dogs know the one rule and keep it better than
+  // most customers)
   if (G.dog) {
-    _say((r.bar || r.barType || r.massage || r.soapy || r.hostBar)
-      ? "(Sai Krok folds up outside the door, chin on paws, one ear on the room.)"
-      : "Sai Krok pads at your heel, nose reading the street.", "dim");
+    if (r.barType === "beer") {
+      _say("(Sai Krok trots in under the rail — no door to stop him — and folds up " +
+        "beneath your stool.)", "dim");
+      _dogBarFavor();
+    } else if (r.bar || r.barType || r.massage || r.soapy || r.hostBar) {
+      _say("(Sai Krok folds up outside the door, chin on paws, one ear on the room.)", "dim");
+    } else {
+      _say("Sai Krok pads at your heel, nose reading the street.", "dim");
+    }
   }
   // CAPS so the hints tap: the open kw prefills "ride bus to " and the
   // destination list rides the suggest bar — the whole fare is keyboard-free.

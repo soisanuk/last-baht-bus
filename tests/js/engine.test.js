@@ -2536,10 +2536,14 @@ test("Sai Krok: feed a soi dog once and you have a dog, whether you meant to or 
   out = []; run("feed dog");
   assert.ok(state().dog, "he choose you, na");
   assert.equal(state().itemLoc.noodles, null, "goodbye, dinner — hello, dog");
-  // he follows: at heel outside, outside the door in venues
+  // he follows: at heel outside, under the rail in open-air beer bars,
+  // outside the door where there's a door
   out = []; run("look");
   assert.match(out.join("\n"), /pads at your heel/);
-  state().room = "candy_bar";
+  state().room = "candy_bar"; // beer bar: open-air, no door to stop him
+  out = []; run("look");
+  assert.match(out.join("\n"), /under the rail/);
+  state().room = "kinky"; // a go-go has a door, and he knows the rule
   out = []; run("look");
   assert.match(out.join("\n"), /folds up outside the door/);
 });
@@ -2564,6 +2568,34 @@ test("Sai Krok pays his keep: dark sois, the scam muscle, and your pockets", () 
   state().money = 2222; state().room = "ws_south";
   _endNight("dawn");
   assert.ok(state().money > 0, "nobody works a farang whose dog is watching");
+});
+
+test("Sai Krok socialises: beer-bar staff favor (once a night) and rain reactions", () => {
+  state().flags.act1Done = true; state().stage = "expat"; state().dog = { since: 1 };
+  state().room = "candy_bar";
+  // the favor roll is ~50% — across attempts it must fire, and only bump once per roll
+  let bumps = 0;
+  for (let i = 0; i < 30 && !bumps; i++) {
+    state().soc.dogFavor = {};
+    const staff = _npcsHere().filter(id => NPC_ROLES[id]);
+    const before = staff.reduce((s, id) => s + (state().soc.drinks[id] || 0), 0);
+    _dogBarFavor();
+    bumps = staff.reduce((s, id) => s + (state().soc.drinks[id] || 0), 0) - before;
+  }
+  assert.equal(bumps, 1, "the fuss lands as exactly one bond bump");
+  // once-per-bar-per-night guard
+  const staff = _npcsHere().filter(id => NPC_ROLES[id]);
+  const total = () => staff.reduce((s, id) => s + (state().soc.drinks[id] || 0), 0);
+  const t = total();
+  _dogBarFavor(); _dogBarFavor();
+  assert.equal(total(), t, "no double-dipping the same bar tonight");
+  // rain: he reacts where he's in sight — beer bar and street — not from behind a door
+  state().rain = 0; out = []; _startRain(5);
+  assert.match(out.join("\n"), /shake a full body-length/, "the beer-bar shake");
+  state().rain = 0; state().room = "beach_rd_c"; out = []; _startRain(5);
+  assert.match(out.join("\n"), /except yours/, "the street awning press");
+  state().rain = 0; state().room = "kinky"; out = []; _startRain(5);
+  assert.ok(!/Sai Krok/.test(out.join("\n")), "out of sight behind a go-go door, no line");
 });
 
 test("Areca Lodge is a fourth hotel you can check into", () => {
