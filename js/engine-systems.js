@@ -1814,6 +1814,10 @@ function _dogShamrock() {
     "stands, shakes from nose to tail, and comes back to your heel. Done. Whatever he " +
     "came to collect, he has it now. So do you."), "dim");
   _addHappy(3);
+  // The one fourth-wall line in the game, and he earned it.
+  _say("(Real dogs sit on real steps like that one, all over Thailand. The Soi Dog " +
+    "Foundation sterilises, vaccinates, patches up, and rehomes them — " +
+    "https://www.soidog.org/content/make-donation if this one earned a tip.)", "dim");
 }
 
 // In the open-air beer bars the dog is a social asset: everyone likes a dog
