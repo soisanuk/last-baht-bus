@@ -876,6 +876,25 @@ test("tonic shop: a stony-broke mark isn't worth robbing", () => {
   assert.equal(state().itemLoc.hair_tonic, "inventory", "one free sample bottle");
 });
 
+test("tonic scam: TAO RAI closes the tab before the side-soi can open", () => {
+  state().room = "beach_rd_c"; state().money = 5000; state().tonicOwed = 0;
+  _startEnc("tonic");
+  run("tao rai");
+  assert.equal(state().money, 5000 - TONIC_PRICE, "you pay the one honest price, nothing more");
+  assert.equal(state().tonicOwed, 0, "no shop, no fleece, no claim to report");
+  assert.equal(state().itemLoc.hair_tonic, "inventory", "you still walk away with the bottle");
+  assert.equal(state().pendingEnc, null, "the encounter closes clean");
+});
+
+test("fortune scam: TAO RAI reads the palm for ฿199 and denies the cleansing upsell", () => {
+  state().room = "beach_rd_s"; state().money = 5000; state().curseOwed = 0;
+  _startEnc("fortune");
+  run("tao rai");
+  assert.equal(state().money, 5000 - FORTUNE_READ, "just the ฿199 reading");
+  assert.equal(state().curseOwed, 0, "no dark spirit, no ฿1900 ritual, no claim");
+  assert.equal(state().pendingEnc, null);
+});
+
 test("REPORT: the police settle a tonic-shop claim for most of it, minus their cut", () => {
   state().tonicOwed = 6000; state().money = 1000;
   // away from the station it just points you there
