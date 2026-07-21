@@ -330,6 +330,14 @@ function _bfResolve(kind) {
         `and then you are back in your seat with a fresh drink you don't remember ` +
         `ordering. Nobody looked up. Nobody ever does. (฿${G.money} left.)`, "win");
       _conquestHappy(6, id);
+    } else if (G.room === "hyper" && _flag("hyperUpstairs")) {
+      // the Samson brothers' secret: the old short-time rooms upstairs — no take-out,
+      // for the regulars Diamond trusts. A go-go that plays like Soi 6 for a friend.
+      _say(`฿${price}, and instead of a taxi ${name} takes your hand and leads you up the back stair ` +
+        "the menu doesn't mention — to one of the old rooms the brothers lived in while they built the " +
+        "place. Diamond watches you go with the small nod she keeps for the house's friends. Some time " +
+        `later you are back on your stool and the night has not even noticed you left. (฿${G.money} left.)`, "win");
+      _conquestHappy(6, id);
     } else {
       _say((price ? `฿${price} to the ledger and a` : "A") +
         ` short walk later the short-time hotel's ceiling fan is doing its slow ` +

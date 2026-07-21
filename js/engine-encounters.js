@@ -210,7 +210,8 @@ function _maybeEncounter() {
   const eligible = Object.keys(ENCOUNTERS).filter(id =>
     !G.encDone[id] && ENCOUNTERS[id].rooms.includes(G.room) &&
     (id !== "powerbank" || G.battery <= 30) &&
-    (id !== "booking" || (_flag("act1Done") && G.nightTurn >= 40))); // late, settled: the apps come alive after 1 a.m.
+    (id !== "booking" || (_flag("act1Done") && G.nightTurn >= 40)) && // late, settled: the apps come alive after 1 a.m.
+    (id !== "clubpickup" || (_flag("act1Done") && G.nightTurn >= 40))); // the clubs empty out late too
   const chance = ENC_CHANCE * (_bandNearby() ? 1.5 : 1);
   if (!eligible.length || _rand() > chance) return;
   _startEnc(eligible[Math.floor(_rand() * eligible.length)]);
@@ -934,7 +935,40 @@ const _ENC = {
         "stepping past you into the room.", "alert"],
       [`(STAY — go through with it, ฿${BOOK_PRICE} — or SEND her off with a token.)`, "dim"]);
   },
+
+  clubpickup(input) { return _clubpickup(input); },
+  freegift(input) { return _freegift(input); },
 };
+
+// "Nothing is free": a 'free' blessed amulet is a bun-khun contract. TAO RAI (ask
+// the price, pay a small tip) closes the account before it opens; ACCEPT signs it,
+// and the debt is called in on the spot; REFUSE hands it back clean.
+function _freegift(input) {
+  const price = /tao ?rai|how much|price|i'?(ll| will) pay|\bpay\b|\bbuy\b/.test(input);
+  const refuse = !price && /\bno\b|refuse|decline|don'?t|not int|pass|wave|walk|away|leave/.test(input);
+  if (price) {
+    const tip = Math.min(GIFT_TIP, G.money); G.money -= tip;
+    _say(`“Tao rai?” you say, already reaching for your wallet. Something shifts in her face — respect, ` +
+      `almost disappointment. ฿${tip} changes hands, the amulet is yours clean, the account closed before ` +
+      "it ever opened. “You not new here,” she says, half a smile, and drifts off toward easier prey. " +
+      `(฿${G.money} left.)`, "");
+    _addHappy(1);
+    return;
+  }
+  if (refuse) {
+    _say("You press the amulet gently back into her hands with a wai — no, thank you, na. No harm, and " +
+      "no debt. She is already scanning the crowd for a warmer mark.");
+    return;
+  }
+  // ACCEPT — and the invoice writes itself
+  const owed = Math.min(GIFT_DEBT, G.money); G.money -= owed;
+  _say("“Thank you,” you say, and she ties it around your wrist, delighted — and just like that you are " +
+    "friends, which is the whole problem. The beam doesn't drop so much as sharpen. “My friend, you so " +
+    `kind — my mother, she sick, the hospital…” and somehow you are ฿${owed} lighter, holding a ฿20 ` +
+    "amulet and a lesson: the instant you took the 'free' thing, you signed for it. (Next time — tao rai: " +
+    `ask the price, pay it, close the tab.) (฿${G.money} left.)`, "alert");
+  _addHappy(-1);
+}
 
 // The catfish at the door: STAY (sunk-cost, a mediocre conquest that still feeds
 // the treadmill) or SEND her off with a face-saving "taxi" token. Broke players
@@ -957,6 +991,67 @@ function _catfishDoor(input) {
     "good tonight,” a wai, and the door. She takes it without a flicker — she has " +
     `heard it before, from better liars — and is gone. (฿${G.money} left.)`, "dim");
   _addHappy(-1);
+}
+
+// The club pickup: the trade in its most polished wrapper. The night is free —
+// no bar, no barfine, real conversation — and that IS the trick; the invoice
+// arrives the next morning as "taxi money". Two-step: TAKE HER HOME → the night
+// (a genuine-feeling conquest) → the morning ฿2,000 ask, resolved in _taxiAsk.
+function _clubpickup(input) {
+  if (_flag("taxiPending")) { G.flags.taxiPending = false; return _taxiAsk(input); }
+  const yes = /yes|ok\b|okay|sure|come|home|room|back|yeah|invite|take her|let'?s/.test(input) &&
+    !/\bno\b|good ?night|sleep|turn in|pass|not tonight|nah|alone/.test(input);
+  if (!yes) {
+    _say("You get her LINE, a real laugh, and a “text me tomorrow” you both know you won't. She melts " +
+      "back into the strobe. Some nights the free one really is just a good night out — you'll never be " +
+      "sure if that's what this was.");
+    return;
+  }
+  for (let i = 0; i < 4; i++) { if (G.over) return; _tick(); } // the night runs long
+  _say("No lady drinks, no barfine, no mamasan doing arithmetic over your shoulder — just the two of " +
+    "you, a late-night mookata, and hours of talk that feels like the realest thing to happen to you in " +
+    "this town. She comes back to your room like it's the most natural thing in the world. It is a " +
+    "wonderful night. You are, briefly, and against all your better judgement, in love.", "win");
+  _conquestHappy(8);
+  G.pendingEnc = "clubpickup";
+  _setFlag("taxiPending");
+  _encPrompt(
+    ["Morning. She does her lipstick at the mirror, clicks the compact shut, swings a little bag onto " +
+      "her shoulder, and holds out one hand, palm up, entirely casual. “Okay baby, I go now. You give " +
+      "me 2,000 baht for taxi.”", "alert"],
+    [`(PAY the ฿${CLUB_TAXI} · offer the ฿80 BOLT instead · REFUSE)`, "dim"]);
+}
+
+function _taxiAsk(input) {
+  const bolt = /bolt|grab|80|150|order|app|cheap|real|where.*live|meter/.test(input);
+  const refuse = !bolt && /refuse|won'?t|not pay|no way|nothing|hell|zero|forget|scam/.test(input);
+  if (!bolt && !refuse && G.money >= CLUB_TAXI) {
+    // pay smiling — the fantasy stays intact; you're a "good man" (a returning account)
+    G.money -= CLUB_TAXI;
+    _say(`You peel off two notes. The instant they leave your hand the sweet girlfriend snaps back on ` +
+      "like a light — the radiant, million-baht smile, a kiss on the cheek. “Thank you na ka! You are " +
+      "good man. See you tonight?” And she's gone, leaving you to work out, in the deafening quiet, that " +
+      `the free trial expired at 9 a.m. and you just upgraded to the standard package. (฿${G.money} left.)`, "");
+    _addHappy(1);
+    return;
+  }
+  if (bolt || G.money < CLUB_TAXI) {
+    // question the taxi and the fiction shatters: girlfriend → corporate accountant
+    const tip = Math.min(150, G.money); G.money -= tip;
+    _say(`“It's an 80-baht Bolt,” you say, reaching for your phone — “where do you actually live?” ` +
+      "Record scratch. The warmth drains out of the room; the loving girlfriend becomes the cold, dead " +
+      `stare of an accountant reading an overdue invoice. She takes the ฿${tip} you end up pressing on ` +
+      "her without a flicker, files you under 'amateur', and is gone — no kiss, no “tonight”, no next " +
+      `time. You saved ฿${CLUB_TAXI - tip} and something you can't name. (฿${G.money} left.)`, "alert");
+    _addHappy(-1);
+    return;
+  }
+  // flat refusal — a scene, and the soi remembers
+  _say("“For a TAXI?” Wrong word. The mask comes off completely — a hiss of fast Thai, a bag swung onto " +
+    "the shoulder like a weapon, a door that doesn't so much slam as detonate, and the whole floor of the " +
+    "guesthouse learning about the farang who won't pay. You keep your ฿2,000 and lose a great deal more " +
+    "than that.", "alert");
+  _addHappy(-2);
 }
 
 // The curse-removal ritual: high-pressure "cleansing" backed by the quiet menace
