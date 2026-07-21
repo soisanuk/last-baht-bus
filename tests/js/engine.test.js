@@ -2265,6 +2265,56 @@ test("Nira: the scam-compound loan-shark hostess with the numbers hook", () => {
   assert.match(lastOut(), /compound|border/i);
 });
 
+test("Nira's loan: borrow at 20%, due in three days, one at a time", () => {
+  state().flags.act1Done = true; state().stage = "expat";
+  state().money = 1000; state().day = 2;
+  // can't borrow away from her
+  state().room = "beach_rd_c"; out = []; run("borrow 5000");
+  assert.ok(!state().loan, "no lending away from Neon Paradise");
+  // borrow at Neon Paradise: cash now, owe principal +20%, due in three days
+  state().room = "neon_paradise"; out = []; run("borrow 5000");
+  assert.equal(state().money, 6000, "the 5k lands in your pocket");
+  assert.equal(state().loan.owed, 6000, "you owe 5000 + 20%");
+  assert.equal(state().loan.dueDay, 5, "due three days out");
+  // one loan at a time
+  out = []; run("borrow 3000");
+  assert.equal(state().money, 6000, "she won't stack a second loan");
+  assert.match(lastOut(), /one loan at a time/i);
+  // over the ceiling is refused
+  state().loan = null; out = []; run("borrow 99999");
+  assert.ok(!state().loan, "฿20,000 ceiling holds");
+});
+
+test("Nira's loan: repay on time clears it and earns her regard", () => {
+  state().flags.act1Done = true; state().stage = "expat";
+  state().room = "neon_paradise"; state().money = 10000; state().day = 2;
+  run("borrow 5000");
+  const bond = state().soc.drinks.nira || 0;
+  out = []; run("repay 2000"); // partial
+  assert.equal(state().loan.owed, 4000, "partial payment knocks it down");
+  out = []; run("repay"); // the rest
+  assert.ok(!state().loan, "paid in full, loan cleared");
+  assert.equal(state().money, 9000, "spent exactly the 6000 owed on a 5000 loan");
+  assert.ok((state().soc.drinks.nira || 0) > bond, "a man who pays earns her regard");
+});
+
+test("Nira's loan: miss the date and it compounds, then the cousins collect", () => {
+  state().flags.act1Done = true; state().stage = "expat";
+  state().room = "neon_paradise"; state().money = 10000; state().day = 2;
+  run("borrow 5000"); // owe 6000, due day 5
+  // three overdue nights: text, then asking-around, then a garnish
+  state().money = 3000;
+  state().day = state().loan.dueDay; _endNight("sleep"); // day 6
+  assert.equal(state().loan.strikes, 1, "first overdue night: a warning text");
+  assert.equal(state().loan.owed, 7200, "overdue compounds 20% a night");
+  _endNight("sleep"); // day 7, strike 2
+  assert.equal(state().loan.strikes, 2);
+  const owedBefore = state().loan.owed, cash = state().money;
+  _endNight("sleep"); // day 8, strike 3 — collection
+  assert.ok(state().money < cash, "the cousins take the cash you're carrying");
+  assert.ok(!state().loan || state().loan.owed < owedBefore, "and put it against the debt");
+});
+
 test("Hyper's upstairs: Diamond bond-gates the reveal, then ST goes on-site", () => {
   state().flags.act1Done = true; state().flags.hasWallet = true; state().money = 5000;
   state().room = "hyper";

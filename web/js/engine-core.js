@@ -114,6 +114,7 @@ function newGame() {
     hotelDebt: 0,        // what's on the night clerk's book
     tonicOwed: 0,        // baht the hair-tonic shop fleeced you for, recoverable via a police REPORT
     curseOwed: 0,        // baht the beach fortune-teller's "cleansing" fleeced you for, likewise REPORT-recoverable
+    loan: null,          // Nira's loan: { principal, owed, dueDay, strikes } or null
     thaiSeen: [],        // Thai runs the transcript has shown (the trainer's cross-app deck)
     qvDay: 0,            // last day the Queen Vic balcony paid its happy point
     patronTalk: { day: 0, talked: {} }, // patron dialogue book, reset daily
