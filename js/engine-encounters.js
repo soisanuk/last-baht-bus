@@ -695,7 +695,7 @@ const _ENC = {
   peddler(input) {
     const deal = _flag("peddlerDeal");
     const px = { watch: deal ? 200 : 300, shades: deal ? 100 : 150, vits: deal ? 120 : 200 };
-    if (/haggle|bargain|cheap|discount|too much|lower/.test(input)) {
+    if (/haggle|bargain|cheap|discount|too much|lower|tao ?rai|how much/.test(input)) {
       G.pendingEnc = "peddler"; // still at your elbow — next command is still the reaction
       if (deal) {
         _say("He clutches his chest — the international sign for “you are killing " +
@@ -827,6 +827,20 @@ const _ENC = {
     // branch below re-arming pendingEnc). This input is your reaction in the
     // back room.
     if (_flag("tonicShop")) { G.flags.tonicShop = false; return _tonicShop(input); }
+    // TAO RAI — the veteran's move. Ask the price straight and the free-sample /
+    // "come see my cousin" / VIP-course machinery has nothing to grip: you pay
+    // the one honest number and walk before the side-soi can happen.
+    if (/tao ?rai|how much|price/.test(input)) {
+      const tip = Math.min(TONIC_PRICE, G.money); G.money -= tip;
+      _say(`"เท่าไหร่?" you ask, flat, wallet already out. The whole warm patter — the free ` +
+        `sample, the friendly cousin, the VIP course — has nowhere to go against a man who just ` +
+        `wants the number and will pay it. He names ฿${TONIC_PRICE}, you pay ฿${tip}, take the one ` +
+        `honest bottle, and you're back on Beach Road before any side-soi could open. "You not ` +
+        `new," he says, almost fond. (฿${G.money} left.)`, "");
+      G.itemLoc.hair_tonic = "inventory";
+      _addHappy(1);
+      return;
+    }
     // Follow him to the shop — the friendly patter's whole purpose.
     if (/shop|soi|follow|come|vip|treatment|cousin|see|show|look/.test(input) &&
         !/\bno\b|walk|leave|away|off|thanks|thank you/.test(input)) {
@@ -871,6 +885,17 @@ const _ENC = {
     // figure curse-removal upsell (the _curseRitual branch re-arms pendingEnc +
     // the curseRitual flag). This input is your reaction to the cleansing pitch.
     if (_flag("curseRitual")) { G.flags.curseRitual = false; return _curseRitual(input); }
+    // TAO RAI — ask the price before he ties a single string. The grave face, the
+    // dark spirit, the robed men waiting in the wings all need you NOT to ask.
+    if (/tao ?rai|how much|price/.test(input)) {
+      const tip = Math.min(FORTUNE_READ, G.money); G.money -= tip;
+      _say(`"เท่าไหร่?" you ask, before he can loop the red string on. He reads your palm for the ` +
+        `฿${FORTUNE_READ} it actually costs, scrawls the "lucky number, keep always" — and there is ` +
+        `no dark spirit, no cleansing, no ฿${FORTUNE_RITUAL} ritual, because you closed the account ` +
+        `before he could open it. "Bad luck no follow you," he says, disappointed. (฿${G.money} left.)`, "");
+      _addHappy(1);
+      return;
+    }
     // Let him read — the ฿199 hook. He ties on the string, scrawls a "lucky
     // number", then the grave face returns and the real number appears.
     if (/read|yes|ok|sure|palm|fine|199|sit|deal|hand/.test(input) &&
