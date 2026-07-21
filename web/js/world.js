@@ -23,8 +23,9 @@ const EXPAT_SAVINGS = 20000; // wired over when you make the move
 // Barfines (canon: go-gos and Soi 6 are the expensive end)
 const BF_BEER = 400, BF_GOGO = 1000, BF_SOI6 = 700, BF_GENTS = 900;
 // Male host bars charge a steep premium — a host drink is 2x+ a lady drink and
-// the "off" fee doubles the go-go barfine (canon).
-const HOST_DRINK = 350, HOST_OFF = 2500;
+// the "off" fee doubles the go-go barfine (canon). Even your own beer is
+// premium-priced (and arrives with ice, whether you wanted ice or not).
+const HOST_DRINK = 350, HOST_OFF = 2500, HOST_BEER = 120;
 const SAFE_PIN = 719;    // ๗๑๙ — stage number 71 + lucky 9
 
 // ── Rooms ──────────────────────────────────────────────────────────────────

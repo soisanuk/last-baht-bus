@@ -540,7 +540,9 @@ function _sayDirectedReact(key, id, name) {
 
 function _doGive(itemWord, npcWord) {
   // "give noodles to dog" — the dog isn't an NPC; feeding is its own path
-  if (/^(dog|sai|krok)$/.test(npcWord)) return _doFeedDog("dog");
+  // (answers to the defaults and to whatever he's been renamed)
+  if (/^(dog|sai|krok)$/.test(npcWord) ||
+      (G.dog && G.dog.name && npcWord === G.dog.name.toLowerCase())) return _doFeedDog("dog");
   const npc = _findNpc(npcWord);
   const id = _inv().find(i => ITEMS[i].name.toLowerCase().includes(itemWord) ||
     ITEMS[i].aliases.some(a => a.includes(itemWord)));
@@ -686,8 +688,21 @@ function _managerChatTick(id) {
 function _doBuy(arg) {
   const r = _room();
   // Host bar: "buy drink for <host>" / "buy <host> a drink" runs on the host
-  // track, not the (female-coded) lady-drink path.
+  // track, not the (female-coded) lady-drink path — and your own beer is
+  // served here too (no barType, so the normal beer path won't fire), at the
+  // house's premium and with unrequested ice.
   if (r.hostBar) {
+    if (/beer|chang|leo|singha/.test(arg) && !arg.includes("drink")) {
+      if (G.money < HOST_BEER) { _say(`฿${HOST_BEER} a bottle here — premium end. You have ฿${G.money}.`); return; }
+      G.money -= HOST_BEER;
+      G.soc.drunk++;
+      G.thirst = Math.max(0, G.thirst - 20);
+      _say(`฿${HOST_BEER} for your own bottle at host-bar prices — cold, ceremonial, and ` +
+        `poured over ice whether you wanted ice or not. (฿${G.money} left.)`);
+      _addHappy(G.soc.drunk <= 4 ? 1 : -1);
+      _checkDrunk();
+      return;
+    }
     const nm = arg.replace(/\b(buy|order|a|an|the|drink|for|him)\b/g, " ").trim();
     if (arg.includes("drink") || _HOSTS.includes(_findNpc(nm))) { _doHostDrink(nm); return; }
   }
@@ -1850,6 +1865,7 @@ const _HELP = `Common commands:
   WHO / BLACKBOOK (your ladies, ranked by how they feel about you)
   SEND <amount> TO <lady> (banking app)
   BORROW <amount> · REPAY [amount] (Nira's loan at Neon Paradise — 20%, three days, don't be late)
+  PET CATS (Jomtien beach) · FEED DOG (a friendship you cannot undo) · PET DOG · NAME DOG <name>
   LIGHT ON / LIGHT OFF · CHARGE PHONE
   SCORE (happiness & progress) · UNDO · RESTART   (the night autosaves itself)`;
 

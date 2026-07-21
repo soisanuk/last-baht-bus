@@ -1650,8 +1650,10 @@ function _doWatchSoi() {
 // point a night, same house rules as the sunsets and the free shows. Big One
 // vets every hand before it gets anywhere near her sister; that's the deal.
 function _doPet(arg) {
-  if (G.dog && (/dog|sai|krok/.test(arg || "") ||
-      (G.dog.name && (arg || "").includes(G.dog.name.toLowerCase())))) {
+  // his by name, or bare PET when he's the animal at hand (the beach cats keep
+  // priority on their own sand)
+  if (G.dog && (_isDogWord(arg || "") ||
+      (!arg && G.itemLoc.soi_cats !== G.room))) {
     _say(_dogN("Sai Krok accepts the ear-scratch with his eyes half-shut and his attention " +
       "fully open — somewhere behind you a motorbike slows, and the rumble starts low " +
       "in his chest before you've even registered it. The bike moves on. So does the " +
@@ -1705,7 +1707,14 @@ function _doPet(arg) {
 // him ("Sai Krok" — sausage) is the default and all the prose is written in
 // it, so _dogN() re-letters any dog line at render time. NAME DOG <name>.
 function _dogName() { return (G.dog && G.dog.name) || "Sai Krok"; }
-function _dogN(s) { return s.replace(/Sai Krok/g, _dogName()); }
+// function replacer so names render literally ("Bo$$" — $-sequences are magic
+// in string replacements and would silently mangle)
+function _dogN(s) { return s.replace(/Sai Krok/g, () => _dogName()); }
+// does this word mean the dog? covers the defaults and whatever he's named now
+function _isDogWord(a) {
+  return /dog|sai|krok/.test(a) ||
+    !!(G.dog && G.dog.name && a.includes(G.dog.name.toLowerCase()));
+}
 
 function _doNameDog(arg) {
   if (!G.dog) { _say("You haven't got a dog to name. The soi's freelancers already have names — several each."); return; }
@@ -1729,7 +1738,7 @@ function _doNameDog(arg) {
 }
 
 function _doFeedDog(arg) {
-  if (arg && !/dog|sai|krok|him|it/.test(arg)) { _say("Feed who, exactly? The whole soi is hungry."); return; }
+  if (arg && !/him|it/.test(arg) && !_isDogWord(arg)) { _say("Feed who, exactly? The whole soi is hungry."); return; }
   if (G.dog) {
     const food = ["noodles", "moo_ping"].find(id => _inv().includes(id));
     if (food) {

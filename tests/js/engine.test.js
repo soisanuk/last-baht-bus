@@ -22,7 +22,11 @@ function run(...cmds) {
 function lastOut() { return out.join("\n"); }
 function state() { return G; } // vm globals share this realm
 
-beforeEach(() => { out = []; sfx = []; newGame(); state().lastSaleng = 99999; }); // suppress saleng by default
+// suppress the two random street pseudo-encounters (saleng cart, bar-stool
+// peddler) by default — both arm a pendingEnc that eats the next command, and
+// newGame() seeds G.rng from Math.random(), so any street-walking test would
+// otherwise flake ~1 run in N. Tests that WANT them set the cooldown back.
+beforeEach(() => { out = []; sfx = []; newGame(); state().lastSaleng = 99999; state().lastPeddler = 99999; });
 
 // Park a saleng cart in the player's current room for the tests that buy from it
 // (the cart is a room fixture now, not a modal encounter). Set state().room first.
@@ -2531,6 +2535,7 @@ test("the Jomtien beach cats: Big One vets, Little One purrs, once a day pays", 
 
 test("Sai Krok: feed a soi dog once and you have a dog, whether you meant to or not", () => {
   state().flags.act1Done = true; state().stage = "expat";
+  for (const k in ENCOUNTERS) state().encDone[k] = true; // silence street noise
   state().money = 1000; state().room = "beach_rd_c";
   // act-1 noodles are the accidental adoption fee
   out = []; run("feed dog");
@@ -2572,6 +2577,7 @@ test("Sai Krok pays his keep: dark sois, the scam muscle, and your pockets", () 
 
 test("The Shamrock Dog: dog-gated quest, and the walk to the dead pub", () => {
   state().flags.act1Done = true; state().stage = "expat"; state().money = 1000;
+  for (const k in ENCOUNTERS) state().encDone[k] = true; // silence street noise — a stray pendingEnc eats the next command
   // no dog: Bert never mentions it (reqFlags gate), and it can't be accepted
   state().dog = null; delete state().flags.hasDog; state().room = "stinky_bar";
   out = []; run("talk bert"); run("talk bert");
@@ -2596,6 +2602,7 @@ test("The Shamrock Dog: dog-gated quest, and the walk to the dead pub", () => {
 
 test("NAME DOG: rename him and every line of his re-letters, no strays", () => {
   state().flags.act1Done = true; state().stage = "expat"; state().money = 1000;
+  for (const k in ENCOUNTERS) state().encDone[k] = true; // silence street noise
   // no dog, no naming rights
   state().dog = null;
   out = []; run("name dog rex");
@@ -2614,6 +2621,24 @@ test("NAME DOG: rename him and every line of his re-letters, no strays", () => {
   // bare NAME DOG reports the current name
   out = []; run("name dog");
   assert.match(lastOut(), /Biscuit/);
+  // review fixes: he answers to the new name on every verb, and $-names render
+  out = []; run("feed biscuit");
+  assert.ok(!/Feed who, exactly/.test(lastOut()), "FEED knows his new name");
+  state().itemLoc.moo_ping = "inventory";
+  out = []; run("give moo ping to biscuit");
+  assert.match(lastOut(), /gentleness/, "GIVE routes to the renamed dog");
+  out = []; run("pet"); // bare PET away from the cats' beach = the dog at hand
+  assert.match(lastOut(), /ear-scratch/, "bare PET reaches your own dog");
+  run("name dog bo$$");
+  out = []; run("look");
+  assert.match(out.join("\n"), /Bo\$\$ pads at your heel/, "replacement-magic $ names render literally");
+});
+
+test("the host bar serves your own beer, at host-bar prices", () => {
+  state().flags.act1Done = true; state().money = 1000; state().room = "adonis_club";
+  out = []; run("buy beer");
+  assert.equal(state().money, 1000 - HOST_BEER);
+  assert.match(lastOut(), /host-bar prices/);
 });
 
 test("Sai Krok socialises: beer-bar staff favor (once a night) and rain reactions", () => {
