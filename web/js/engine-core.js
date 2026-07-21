@@ -640,6 +640,12 @@ function _describeRoom(full) {
     _say("A wall of bright one-way glass, and behind it numbered girls on tiered benches. " +
       "(SOAPY to pick a number.)", "dim");
   }
+  if (G.room === "hyper") {
+    if (_flag("hyperUpstairs"))
+      _say("(You know the back stair now — barfine a girl SHORT TIME and go UP, no take-out.)", "dim");
+    else if (_bondTier("diamond") >= 2)
+      _say("(Diamond has warmed to you — there's more to Hyper than the stage. ASK her ABOUT UPSTAIRS.)", "dim");
+  }
   if (r.pool) {
     _say("A pool table waits under a low lamp (PLAY POOL)." +
       (_leagueTonight() ? " Tonight is LEAGUE NIGHT (PLAY KILLER, ฿100 in the ashtray)." : ""), "dim");

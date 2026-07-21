@@ -2255,6 +2255,61 @@ test("Fergie: haunts Buakhao & Tree Town, shifting tall tales, and the Bert/Cand
   assert.ok(sawWarn && sawSwing, "some nights a warning, some nights he swings");
 });
 
+test("Nira: the scam-compound loan-shark hostess with the numbers hook", () => {
+  assert.equal(NPC_ROLES.nira, "hostess");
+  assert.equal(NPCS.nira.room, "neon_paradise");
+  state().room = "neon_paradise";
+  out = []; run("ask nira about money");
+  assert.match(lastOut(), /twenty percent|ยี่สิบ/);
+  out = []; run("ask nira about cambodia");
+  assert.match(lastOut(), /compound|border/i);
+});
+
+test("Hyper's upstairs: Diamond bond-gates the reveal, then ST goes on-site", () => {
+  state().flags.act1Done = true; state().flags.hasWallet = true; state().money = 5000;
+  state().room = "hyper";
+  out = []; run("ask diamond about upstairs");
+  assert.ok(!state().flags.hyperUpstairs, "a stranger gets the deflection, not the secret");
+  state().soc.drinks.diamond = 7; // regular tier — she trusts you now
+  out = []; run("ask diamond about upstairs");
+  assert.ok(state().flags.hyperUpstairs, "the trusted regular learns Hyper's upstairs");
+  // ST at Hyper now flips from a take-out hotel to the on-site rooms
+  state().nightTurn = 45;
+  let onsite = false;
+  for (const g of _npcsHere().filter(id => NPC_ROLES[id] === "hostess")) {
+    state().soc.drinks[g] = 6; state().soc.bfRefused = {};
+    out = []; run("barfine " + g);
+    if (state().pendingBf) { out = []; run("short time"); if (/back stair|rooms the brothers/i.test(lastOut())) onsite = true; break; }
+  }
+  assert.ok(onsite, "short-time at Hyper goes up, not out");
+});
+
+test("the club pickup: a free-feeling night, then the ฿2,000 taxi", () => {
+  state().flags.act1Done = true; state().flags.hasWallet = true; state().money = 5000;
+  state().room = "ws_south"; state().nightTurn = 45;
+  _startEnc("clubpickup");
+  run("take her home");
+  assert.ok(state().flags.taxiPending, "the night happened; the invoice is coming in the morning");
+  const before = state().money; out = []; run("pay");
+  assert.equal(before - state().money, 2000, "the morning 'taxi money'");
+  assert.match(lastOut(), /good man|see you tonight/i);
+  // and the other way: question it and the fantasy collapses
+  state().money = 5000; state().room = "ws_north"; state().nightTurn = 45; state().encDone = {};
+  _startEnc("clubpickup"); run("take her home"); out = []; run("bolt where do you live");
+  assert.match(lastOut(), /amateur|record scratch|accountant/i);
+});
+
+test("gift-as-contract: 'free' is a tab, and tao rai closes it", () => {
+  state().flags.act1Done = true; state().room = "promenade";
+  state().money = 3000; state().encDone = {};
+  _startEnc("freegift"); let before = state().money; out = []; run("accept thanks");
+  assert.equal(before - state().money, 500, "accepting the 'free' gift signs for it — the debt is called in");
+  state().money = 3000; state().encDone = {};
+  _startEnc("freegift"); before = state().money; out = []; run("tao rai");
+  assert.equal(before - state().money, 100, "asking the price closes the account for a token");
+  assert.match(lastOut(), /not new here/i);
+});
+
 test("Areca Lodge is a fourth hotel you can check into", () => {
   state().flags.act1Done = true;
   state().flags.hasWallet = true;

@@ -330,6 +330,8 @@ CHARS = {
     "pim":      lady(skin=THAI, hair="bob", hc=BLACK, shirt=C(0xe07820)),
     "mercedes": lady(skin=THAI, hair="sleek", hc=BLACK, shirt=C(0x8894a8), bg=BG_BAR,
                      mouth="neutral", acc=["earrings"]),
+    "nira":     lady(skin=THAI, hair="sleek", hc=BLACK, shirt=C(0x6a2a8a), bg=BG_GOGO,
+                     mouth="neutral", acc=["earrings", "chain"], earc=GOLD),
     "rose":     lady(skin=THAI, hair="chignon", hc=BLACK, shirt=C(0x5a1030), bg=BG_BAR,
                      mouth="neutral", acc=["earrings", "chain"], earc=GOLD),
     "pear":     lady(skin=THAI, hair="long", hc=BLACK, shirt=C(0x8a2a5a), bg=BG_BAR,

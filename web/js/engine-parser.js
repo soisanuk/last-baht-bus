@@ -1674,6 +1674,14 @@ function _doCheers() {
     "Nobody needs a reason. Not needing a reason is the entire custom.");
 }
 
+// TAO RAI — the veteran's reflex: ask the price before you accept anything. The
+// one word that keeps a "free" favour from becoming a debt you can't see yet.
+function _doTaoRai() {
+  _say("“เท่าไหร่?” (tao rai — how much?) The only question that matters on this street. Ask it " +
+    "before you take the drink, the gift, the favour, the shortcut — because nothing here is free; " +
+    "you just haven't been shown the price yet. Ask it, pay it, close the account, walk on clean.", "dim");
+}
+
 const _MISC_VERBS = {
   jump: "You jump. The pavement, a lifelong connoisseur of falling farangs, scores it a four.",
   climb: "The only climb worth doing here is Pratumnak Hill, and there's a road to the top with a view waiting on it.",
@@ -1706,7 +1714,7 @@ const _HELP = `Common commands:
   CHECKOUT (your room, before 19:00) — move hotels: Sabai Palms ฿400 · Queen Vic ฿700 · Metropole ฿1300
   DIAGNOSE (how bad is it) · AGAIN or G (repeat last command)
   TRAVEL <bar|hotel> (fast travel anywhere you've been — walking pace, bare TRAVEL lists)
-  TIME · MAP · WAIT UNTIL <hour> · TIP <lady> <amount> · PHOTO · CHEERS
+  TIME · MAP · WAIT UNTIL <hour> · TIP <lady> <amount> · PHOTO · CHEERS · TAO RAI (ask the price)
   QUESTS · ACCEPT <quest> · ABANDON <quest> · HINT (the soi's nudge — Act One, after your first reset)
   CONTACT <lady> (swap numbers) · CONTACTS (your phonebook) · MESSAGE <lady> · CHECK MESSAGES
   WHO / BLACKBOOK (your ladies, ranked by how they feel about you)
@@ -1727,7 +1735,7 @@ const _COMPLETE_VERBS = [
   "motosai to", "travel", "light", "charge phone", "read", "use", "open", "play",
   "flirt", "kiss", "spank", "fondle", "throw cover", "ring bell", "barfine", "massage", "special", "soapy", "eat", "drink",
   "sleep", "tv", "column", "watch", "weather", "scores", "lottery", "map", "time", "tip", "wave",
-  "photo", "call", "shower", "withdraw", "cheers", "dance", "sing", "swim",
+  "photo", "call", "shower", "withdraw", "cheers", "tao rai", "dance", "sing", "swim",
   "smell", "listen", "diagnose", "apologize", "quests", "accept", "abandon", "contact",
   "contacts", "who", "blackbook", "message", "check messages", "send", "score", "wait", "again",
   "request", "hint", "help", "save", "load", "undo", "restart",
@@ -2243,6 +2251,7 @@ function doCommand(input) {
     case "report": case "file": _doReport(arg); break;
     case "complain": _doComplain(); break;
     case "cheers": case "toast": case "chon": _doCheers(); break;
+    case "tao": case "taorai": _doTaoRai(); break;
     case "haggle": case "bargain":
       _say("Nobody's quoting you a price right now. Save it for the man with the " +
         "display board of watches.");

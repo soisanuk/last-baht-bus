@@ -2163,6 +2163,17 @@ const NPCS = {
           "unkindly. \"Twenty year ago I danced this soi. Now I run it. In Thailand a katoey can be a " +
           "queen or a punchline — I decided early which one. The girls call me Mae. That is enough " +
           "answer, na.\"" },
+      { topic: "upstairs", bond: 2, sets: ["hyperUpstairs"],
+        text: "Diamond studies you for a long moment — the look of a woman deciding whether you've " +
+          "earned something — then leans close, voice dropped under the bass. \"You want to know about " +
+          "upstairs. The old short-time rooms, where the brothers used to sleep before the money came. " +
+          "We keep them. For friends. Trusted men only.\" A slow, dazzling smile. \"You are a friend " +
+          "now, na. So — you barfine a girl short-time here, you do not take her to some hotel. You go " +
+          "UP. Quiet, clean, no walk. Our little secret.\" (You've learned Hyper's upstairs.)",
+        short: "\"Upstairs is yours now, friend — barfine a girl short-time here and go UP, no hotel.\"" },
+      { topic: "upstairs", text: "\"Upstairs?\" Diamond's smile stays warm and shuts like a vault. " +
+          "\"That is for friends of the house, tilac. Buy a girl a drink, buy ME one, come back a few " +
+          "times. We will see how good a friend you are.\" The subject is closed, pleasantly." },
     ],
   },
   wimon: {
@@ -2204,6 +2215,38 @@ const NPCS = {
       { topic: "samson", text: "\"The Samson brothers hold the papers. They understand the quiet end " +
           "of the business — they leave it quiet.\" A faint smile. \"That is rarer than you think, in " +
           "men who own bars.\"" },
+    ],
+  },
+  nira: {
+    name: "Nira", th: "นิรา", emoji: "💵",
+    room: "neon_paradise",
+    desc: "A dancer who watches the room the way the mamasan does — the best English on the stage and a " +
+      "calculator behind her eyes. She smiles like she has already worked out your monthly salary and " +
+      "rounded it down.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Sit, sit. You look like a man who reads the menu before he orders — I like that.\" " +
+          "Nira's English is easy, almost accentless, and her attention is total in a way that costs " +
+          "other men money. \"Most girls here want you to buy them a drink. Me, I want to know what you " +
+          "DO. Numbers are more interesting than cola.\"",
+        short: "\"Numbers are more interesting than cola. What is it you do, exactly?\"" },
+      { topic: "english", text: "\"My English?\" A small, dry smile. \"I learn it for work — not this " +
+          "work. Before, two years in a compound over the border, Cambodia side. 'Call centre,' they " +
+          "say. We call the farang, the Australian, the American, all day, very polite — and we take " +
+          "their money.\" A shrug. \"Good training. Same job, better costume, now.\"" },
+      { topic: "cambodia", text: "\"The compound. A hundred-fifty thousand baht a month I make there, " +
+          "commission — more than any girl on this soi.\" Flat, a fact, not a boast. \"Then the border " +
+          "go bad — the two countries, the soldiers — they shut it, send everybody home. So here I am, " +
+          "dancing. For now.\" The 'for now' has a whole business plan folded inside it." },
+      { topic: "money", text: "\"What do I do with money?\" She leans in, and for once it is genuine " +
+          "interest. \"Home, my family lend it. Short-time loan — village people need money for the " +
+          "school fee, the fertiliser, the funeral. We charge…\" she taps the bar twice \"…ยี่สิบ, " +
+          "twenty percent, pay back in a few days. Everybody happy.\" A beat. \"You think the bar owns " +
+          "me. The bar RENTS me. Different thing, na.\"" },
+      { topic: "loan", text: "\"You want to borrow?\" The smile sharpens by exactly one degree. \"From " +
+          "ME — not the family; family rate is for family. For you, we can talk. But understand one " +
+          "thing: I always, always get paid back. Ask anybody in my village. Ask the ones who tried " +
+          "not to.\"" },
     ],
   },
 
@@ -2722,6 +2765,9 @@ const FORTUNE_READ = 199;    // the ฿199 palm reading — the hook, not the st
 const FORTUNE_RITUAL = 1900; // the four-figure "curse-removal" cleansing upsell
 const FORTUNE_MERIT = 500;   // the "small merit" you pay to bully your way clear
 const BOOK_PRICE = 2500;     // a freelancer booked "direct" off the apps — no bar, no barfine
+const CLUB_TAXI = 2000;      // the morning-after "taxi money" — the back-loaded club-pickup fee
+const GIFT_DEBT = 500;       // the bun-khun a "free" gift calls in on the spot
+const GIFT_TIP = 100;        // paying tao-rai up front closes the account clean
 const TONIC_POLICE_CUT = 0.35; // the police "negotiation fee" kept out of any recovery
 
 const ENCOUNTERS = {
@@ -2871,6 +2917,31 @@ const ENCOUNTERS = {
       "barfine, only you.” It is gone 1 a.m. The photos are, it must be said, " +
       "extraordinary.",
     hint: "(YES, book her — she'll be a while — or NO and turn in.)",
+  },
+  clubpickup: {
+    // The back-loaded transaction (from a canon essay): you pull a girl on a
+    // Walking Street club dancefloor — no bar, no lady drinks, no barfine, feels
+    // entirely real — and the invoice arrives the next morning as "taxi money".
+    // Two-step: the night (feels free) → the morning ฿2,000 ask, in _ENC.clubpickup.
+    rooms: ["ws_south", "ws_north"],
+    interactive: true, nightly: true,
+    intro: "Coming out of the club, still half-deaf from the bass, you fall into step with a girl who " +
+      "was on the dancefloor next to you all night — no bar, no barfine, no lady drinks, just a real " +
+      "laugh and a way of listening that undoes you a little. She isn't asking you for anything. She " +
+      "just doesn't seem to want the night to end either.",
+    hint: "(TAKE HER HOME — it feels like the real thing — or say GOODNIGHT.)",
+  },
+  freegift: {
+    // "Nothing is free" made mechanical: a 'free' blessing that's really a tab.
+    // ACCEPT opens a bun-khun the giver calls in on the spot; TAO RAI (pay a small
+    // tip up front) closes it clean; REFUSE declines. Resolved in _ENC.freegift.
+    rooms: ["promenade", "beach_rd_c", "ws_south"],
+    interactive: true, nightly: true,
+    intro: "A soft-faced woman with a tray of blessed strings steps into your path, and before you can " +
+      "wave her off she has pressed a little gold-threaded amulet into your hand, still warm from her own " +
+      "neck. “For you. For luck. No money — we friends, na.” She folds your fingers over it, beaming, and " +
+      "does not quite let go.",
+    hint: "(ACCEPT it · TAO RAI — ask the price and pay it · REFUSE)",
   },
 };
 
@@ -3815,6 +3886,7 @@ const NPC_ROLES = {
   lek: "hostess", noi: "hostess", ping: "hostess", aom: "hostess",
   joy: "hostess", fon: "hostess", gift: "hostess", kwan: "hostess",
   nong: "hostess", pim: "hostess", bee: "hostess", jane: "hostess", mercedes: "hostess", kratae: "hostess",
+  nira: "hostess",
   yai: "mamasan", rose: "mamasan", kesorn: "mamasan", lawan: "mamasan", sumalee: "mamasan",
   diamond: "mamasan", wimon: "mamasan", ampai: "mamasan",
   ploy: "cashier", aek: "cashier", malee: "cashier",
