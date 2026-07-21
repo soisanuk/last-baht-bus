@@ -868,16 +868,17 @@ const ROOMS = {
     name: "Soi 6",
     region: "Soi 6",
     seven: true,
-    desc: "The soi hits you before you round the corner — four bars at volume, each trying " +
-      "to drown the next, the whole street a wall of competing bass lines and shouted Thai " +
-      "pop. Open-air bars on both sides, hostesses spilling out front in sequins and very " +
+    desc: "The soi hits you before you round the corner — a wall of bars at volume, each " +
+      "trying to drown the next, the whole street a wall of competing bass lines and shouted " +
+      "Thai pop. Open-air bars on both sides, hostesses spilling out front in sequins and very " +
       "little else. \"HANDSOME MAN!\" \"Hey! WHERE YOU GO!\" You are grabbed by the wrist. " +
       "You are grabbed by the other wrist. Someone significantly shorter than you attempts " +
       "to climb onto your back. PINK LOTUS LOUNGE (north), GOLDEN DRAGON BAR (east), and " +
       "SUNSET DREAMS LOUNGE (south) are the main combatants. The QUEEN VIC INN (pub) " +
-      "halfway down is the one place that isn't shouting.",
+      "halfway down is the one place that isn't shouting, and the soi keeps going deeper " +
+      "east into more of the same.",
     exits: { w: "beach_rd_n", n: "pink_lotus", e: "golden_dragon", s: "sunset_dreams",
-             in: "pink_lotus", pub: "queen_vic" },
+             in: "pink_lotus", pub: "queen_vic", deep: "soi6_deep" },
   },
   pink_lotus: {
     name: "Pink Lotus Lounge",
@@ -910,6 +911,43 @@ const ROOMS = {
       "fan that needs oiling. Kwan is at the end of the bar folding napkins into cranes, " +
       "adding to a row of them lined up along the rail like a tiny origami militia.",
     exits: { out: "soi6_street" },
+  },
+  soi6_deep: {
+    name: "Soi 6 (East End)",
+    region: "Soi 6",
+    seven: true,
+    desc: "Deeper into the soi, past the Queen Vic, where the bars run on toward Second Road " +
+      "and the shouting never lets up. KITTEN CORNER, CHERRY POP BAR, and RUBY KISS BAR trade " +
+      "wrist-grabs down this stretch. Same open fronts, same three-colour neon, same " +
+      "staircases behind the bar that the menu doesn't mention.",
+    exits: { w: "soi6_street", in: "kitten_corner", n: "cherry_pop", s: "ruby_kiss" },
+  },
+  kitten_corner: {
+    name: "Kitten Corner",
+    region: "Soi 6",
+    bar: "Kitten Corner", barType: "soi6",
+    desc: "Open to the pavement, walled in cat posters and a neon paw print. Praewa and " +
+      "Nangfah work the front, and the grab-and-giggle starts before you've fully stopped " +
+      "walking. A staircase at the back goes up to the short-time rooms.",
+    exits: { out: "soi6_deep" },
+  },
+  cherry_pop: {
+    name: "Cherry Pop Bar",
+    region: "Soi 6",
+    bar: "Cherry Pop Bar", barType: "soi6",
+    desc: "Red from floor to ceiling, a bowl of actual cherries on the bar that nobody eats, " +
+      "and a sound system stuck on one bubblegum playlist. Tabtim and Chaba call the odds " +
+      "from the rail. The stairs are where the stairs always are.",
+    exits: { out: "soi6_deep" },
+  },
+  ruby_kiss: {
+    name: "Ruby Kiss Bar",
+    region: "Soi 6",
+    bar: "Ruby Kiss Bar", barType: "soi6",
+    desc: "The last loud front before the soi spills onto Second Road: lipstick-red lighting, " +
+      "a mirror wall, and a lipstick-mark motif on everything including the glasses. Kluay and " +
+      "Benz have claimed the two nearest stools for you already.",
+    exits: { out: "soi6_deep" },
   },
   queen_vic: {
     name: "Queen Vic Inn",
@@ -4197,6 +4235,9 @@ const _FILLER_HOSTESSES = [
   ["Kai","ไก่","golden_dragon"], ["Nook","นุ้ก","golden_dragon"], ["Dew","ดิว","golden_dragon"],
   ["Puu","ปู","pink_lotus"], ["Belle","เบล","pink_lotus"],
   ["Kat","แคท","sunset_dreams"], ["May","เมย์","sunset_dreams"], ["Dear","เดียร์","sunset_dreams"],
+  ["Praewa","แพรวา","kitten_corner"], ["Nangfah","นางฟ้า","kitten_corner"],
+  ["Tabtim","ทับทิม","cherry_pop"], ["Chaba","ชบา","cherry_pop"],
+  ["Kluay","กล้วย","ruby_kiss"], ["Benz","เบนซ์","ruby_kiss"],
   ["Lin","หลิน","water_buffalo"], ["Nim","นิ่ม","water_buffalo"],
   ["Duan","เดือน","firefly_bar"], ["Saifon","สายฝน","firefly_bar"],
   ["Wanpen","วันเพ็ญ","mama_yai"],
@@ -4471,6 +4512,10 @@ const ROOM_GEO = {
   sunset_dreams:    [12.9445, 100.8860],
   queen_vic:        [12.9449, 100.8872],
   qv_room:          [12.9449, 100.8872],
+  soi6_deep:        [12.9448, 100.8866],
+  kitten_corner:    [12.9450, 100.8867],
+  cherry_pop:       [12.9446, 100.8865],
+  ruby_kiss:        [12.9451, 100.8869],
   // Naklua
   naklua_rd:        [12.9530, 100.8885],
   orchid_club:      [12.9524, 100.8876],
