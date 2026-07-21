@@ -198,8 +198,60 @@ function _loanNightRoll() {
   }
 }
 
+// ── The Adonis Club: a male host bar, priced at the premium end ──────────────
+// The go-go gender-flipped, kept off the female-coded barfine engine. BUY DRINK
+// FOR <host> warms him; HIRE <host> is the club "off" fee. Open to every
+// orientation — engaging is the player's own choice, never assumed — and the
+// prose is honest that most hosts are gay-for-pay (Arm) while a few (Win) are not.
+const _HOSTS = ["arm", "win"];
+function _hostBar() { return !!_room().hostBar; }
+function _hostHere(arg) {
+  const id = arg ? _findNpc(arg) : null;
+  return _HOSTS.includes(id) ? id : null;
+}
+
+function _doHostDrink(arg) {
+  const id = _hostHere(arg) || (!arg ? "arm" : null);
+  if (!id) { _say("Buy a drink for which host — ARM (4) or WIN (9)? (BUY DRINK FOR WIN.)"); return; }
+  if (G.money < HOST_DRINK) {
+    _say(`A host drink is ฿${HOST_DRINK} — twice a lady drink, the premium end. You have ฿${G.money}.`);
+    return;
+  }
+  G.money -= HOST_DRINK;
+  G.soc.drinks[id] = (G.soc.drinks[id] || 0) + 1;
+  _say(`฿${HOST_DRINK} for a host drink — twice what the girl bars charge, and ${NPCS[id].name} settles ` +
+    `in warm and close and turns his whole attention on you like a spotlight. (฿${G.money} left.)`);
+  _addHappy(1);
+}
+
+function _doHire(arg) {
+  if (!_hostBar()) { _say("Nobody to hire here — that's a host-bar thing. The Adonis Club, in Supertown, Jomtien."); return; }
+  const id = _hostHere(arg);
+  if (!id) { _say("Hire which host — ARM (number 4) or WIN (number 9)? (HIRE WIN.)"); return; }
+  if (!_flag("act1Done")) { _say("Not tonight — you've a wallet to find first."); return; }
+  if (G.money < HOST_OFF) {
+    _say(`The club "off" fee is ฿${HOST_OFF} — double a go-go barfine — before whatever you two settle ` +
+      `after. You have ฿${G.money}.`);
+    return;
+  }
+  G.money -= HOST_OFF;
+  const bonded = (G.soc.drinks[id] || 0) >= 3;
+  if (id === "win") {
+    _say(`฿${HOST_OFF} to Nott, and Win — who isn't pretending, and you both know it — takes you out into ` +
+      `the warm Jomtien night. Whatever you are, he meets it head-on and without a single performance note. ` +
+      `Nott will scold him in the morning for how much he meant it. (฿${G.money} left.)`, "win");
+  } else {
+    _say(`฿${HOST_OFF} to Nott, and Arm trades the club grin for something easier the moment you're out the ` +
+      `door. He's a professional and honest about it — gay-for-pay, a good night's work, nobody lied to ` +
+      `anybody — which makes it, in its clean way, one of the more comfortable transactions in this town. ` +
+      `(฿${G.money} left.)`, "win");
+  }
+  _addHappy(bonded ? 8 : 5);
+}
+
 function _doBarfine(arg) {
   const rm = _room();
+  if (rm.hostBar) { _doHire(arg); return; }
   if (rm.massage === "oil") {
     _say("No barfine here — she's a masseuse, not a bar girl, and there's no mamasan to " +
       "square. Buy the massage, ask for the SPECIAL, and if you want the rest she'll tell " +

@@ -96,6 +96,16 @@ function _doGo(dirWord) {
 function _arriveAt(to) {
   // closed for the night? (also covers fast-travel, which skips the doGo gate)
   if (_closedNow(to)) { _say(_closedMsg(to)); return; }
+  // barred from a queer venue (no barType, so the bar-ban block below misses it):
+  // the bigotry ejection radios the whole strip for the rest of the night.
+  if (_QUEER_ROOMS.includes(to) && G.soc.banned[to] !== undefined) {
+    if (G.turns - G.soc.banned[to] < BAN_TURNS) {
+      _say("The security guy who waved you in earlier just shakes his head now, slow " +
+        "and final. Word travelled the whole strip. Not tonight.", "alert");
+      return;
+    }
+    delete G.soc.banned[to];
+  }
   if (ROOMS[to].barType) {
     const b = G.soc.banned[to];
     if (b !== undefined) {
@@ -639,6 +649,12 @@ function _managerChatTick(id) {
 
 function _doBuy(arg) {
   const r = _room();
+  // Host bar: "buy drink for <host>" / "buy <host> a drink" runs on the host
+  // track, not the (female-coded) lady-drink path.
+  if (r.hostBar) {
+    const nm = arg.replace(/\b(buy|order|a|an|the|drink|for|him)\b/g, " ").trim();
+    if (arg.includes("drink") || _HOSTS.includes(_findNpc(nm))) { _doHostDrink(nm); return; }
+  }
   if (arg.includes("charger")) {
     if (!(r.shop && r.shop.charger) && !r.seven) { _say("No chargers sold here. Try a 7-Eleven."); return; }
     if (G.itemLoc.charger === "inventory") { _say("You already own one heroic charger."); return; }
@@ -1151,6 +1167,59 @@ function _doViolence(arg) {
       "first swing lands, and it does not empty in your favour. In Pattaya " +
       "the street polices itself. The urge passes, as urges here should.");
   }
+}
+
+// ── Bigotry has a price in the queer venues ──────────────────────────────────
+// The Peacock Cabaret and the Adonis Club do not turn the other cheek. A slur or
+// a swing gets the classic response — the queens and the hosts and a whole room
+// done taking it put you in the road, and it can cost you the night. Milder
+// bashing just gets you barred. Checked in doCommand before normal dispatch, so
+// it catches the hostility whatever verb it's dressed as. Returns true if it fired.
+const _QUEER_ROOMS = ["peacock_cabaret", "adonis_club"];
+function _queerVenue() { return _QUEER_ROOMS.includes(G.room); }
+const _QV_SLUR = /\bfaggots?\b|\bfaggy\b|\bpoofters?\b|\btrann(y|ie|ies)\b|\bshemales?\b|\bbatty ?boys?\b/i;
+const _QV_HOSTILE = /\b(disgusting|disgust|unnatural|abomination|perverts?|perverted|degenerates?|sinful|against god|not (a )?real (wo)?m(a|e)n)\b/i;
+const _QV_VIOLENCE = /\b(punch|deck|smack|slap|belt|attack|headbutt|throttle|thump|clock|kick|hit)\b/i;
+
+function _queerHostility(input) {
+  const slur = _QV_SLUR.test(input), violent = _QV_VIOLENCE.test(input), hostile = _QV_HOSTILE.test(input);
+  if (!slur && !violent && !hostile) return false;
+  const cab = G.room === "peacock_cabaret";
+  const who = cab ? "Miss Mala" : "Nott";
+  const out = _room().exits.out || Object.values(_room().exits)[0];
+  G.game = null;
+  for (const rid of _QUEER_ROOMS) G.soc.banned[rid] = G.turns; // the alley radios ahead
+  if (slur || violent) {
+    if (cab) {
+      _say("Miss Mala stops mid-sentence and the music cuts dead. Then the room you took for soft comes off " +
+        "its stools — the queens first, six-inch heels and a lifetime of not taking it, and behind them the " +
+        "whole delighted crowd who were having the best night of their year until you opened your mouth. " +
+        "Security barely gets a turn. You leave the fast way, over a table, and the pavement is the gentlest " +
+        "thing that happens to you.", "alert");
+    } else {
+      _say("Nott's easy smile goes out like a blown fuse. \"Out.\" Arm is already up — and Arm is built like a " +
+        "door — with two of the other numbers vaulting the bench behind him. Whatever you came in to prove, you " +
+        "prove the exact opposite, briefly and at speed, and land on the soi wearing your own bad idea.", "alert");
+    }
+    G.hurt = Math.min(3, G.hurt + 2);
+    _addHeat(3);
+    _addHappy(-8);
+    _say(`(Banged up, and barred from the whole Supertown strip — ${cab ? "the hosts" : "the queens"} heard ` +
+      "about it before you hit the ground.)", "dim");
+    G.room = out;
+    if (G.hurt >= 3) { _endNight("hurt"); return true; }
+    _describeRoom(true);
+    return true;
+  }
+  // bigoted, but no slur and no swing — the silence and the door, no fists needed
+  _say(`You say the ugly thing out loud. ${who} lets a silence fall that costs you more than any comeback — ` +
+    `then lifts two fingers, and security walks you out into the alley, unhurried and final. "Not here," ` +
+    `${who} says to your back. "Not ever." You are barred from the strip.`, "alert");
+  _addHappy(-5);
+  _addHeat(1);
+  G.room = out;
+  _describeRoom(true);
+  return true;
 }
 
 function _doMagic(v) {
@@ -1731,6 +1800,7 @@ const _HELP = `Common commands:
   THROW COVER [AT <lady>] (the ceiling game — warm her up first)
   BUY BRA FOR <lady> (฿200 — makes FONDLE more interesting)
   RING BELL (฿300, instant popularity) · TALK TO PATRON · BARFINE <lady>
+  Host bar (The Adonis Club, Supertown): BUY DRINK FOR <host> · HIRE <host> (premium prices; all welcome)
   MASSAGE (foot rub to happy-ending, by the shop) · SPECIAL (the extra) · SOAPY (the fishbowl)
   Live music (Fri/Sat, Rock Factory every night):
   DANCE · SING · REQUEST <song> · TIP BAND <amount> · BUY ROUND FOR BAND · TALK TO BAND
@@ -1760,7 +1830,7 @@ const _COMPLETE_VERBS = [
   "motosai to", "travel", "light", "charge phone", "read", "use", "open", "play",
   "flirt", "kiss", "spank", "fondle", "throw cover", "ring bell", "barfine", "massage", "special", "soapy", "eat", "drink",
   "sleep", "tv", "column", "watch", "weather", "scores", "lottery", "map", "time", "tip", "wave",
-  "photo", "call", "shower", "withdraw", "cheers", "tao rai", "borrow", "repay", "dance", "sing", "swim",
+  "photo", "call", "shower", "withdraw", "cheers", "tao rai", "borrow", "repay", "hire", "dance", "sing", "swim",
   "smell", "listen", "diagnose", "apologize", "quests", "accept", "abandon", "contact",
   "contacts", "who", "blackbook", "message", "check messages", "send", "score", "wait", "again",
   "request", "hint", "help", "save", "load", "undo", "restart",
@@ -1856,6 +1926,7 @@ function _completePool(verb, ctx) {
     case "watch":
       return G.room === "blue_dog" ? ["police", "sunset", "tv"]
         : G.room === "peacock_cabaret" ? ["drag", "show", "cabaret"] : ["tv"];
+    case "hire": return _room().hostBar ? ["arm", "win"] : [];
     case "check": return ["messages"];
     case "throw": case "toss": case "chuck": case "fling":
       return ctx.length >= 2 ? girls() : ["cover", "pastie", "nipple cover"];
@@ -2087,6 +2158,10 @@ function doCommand(input) {
   }
   _lastCmd = raw;
 
+  // Bigotry in the queer venues short-circuits everything else: ejection, and
+  // maybe the classic fight. Checked whatever verb it's dressed as.
+  if (_queerVenue() && _queerHostility(lower)) { _tick(); return; }
+
   if ((_DIRS[v] !== undefined || (_room().exits && _room().exits[v])) &&
       words.length === 1) {
     // bare direction — including this room's own exit keys (pub, hotel, …)
@@ -2282,6 +2357,7 @@ function doCommand(input) {
     case "tao": case "taorai": _doTaoRai(); break;
     case "borrow": case "loan": _doBorrow(arg); break;
     case "repay": case "payback": _doRepay(arg); break;
+    case "hire": case "off": _doHire(arg); break;
     case "haggle": case "bargain":
       _say("Nobody's quoting you a price right now. Save it for the man with the " +
         "display board of watches.");
