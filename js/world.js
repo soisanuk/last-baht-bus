@@ -405,7 +405,44 @@ const ROOMS = {
       "front full of laughter and the crack of pool balls. Across the traffic on the " +
       "beach side (west), BLUE DOG's plastic chairs face the bay like theatre seats.",
     busStop: "beachrd",
-    exits: { s: "beach_rd_c", e: "soi6_street", n: "naklua_rd", in: "stinky_bar", w: "blue_dog" },
+    exits: { s: "beach_rd_c", e: "soi6_street", n: "naklua_rd", in: "stinky_bar", w: "blue_dog",
+             row: "beach_row" },
+  },
+  beach_row: {
+    name: "Beach Road (The Beachside Row)",
+    region: "Beach Road",
+    desc: "The strip of open-air beer bars strung along the sand side, all tin roofs and " +
+      "plastic chairs pointed at the bay — the row the Blue Dog anchors and shares its one " +
+      "sandy bathroom with. SUNSET RAIL BAR, BAY WATCH BAR, and SANDY TOES trade sunsets and " +
+      "cheap Chang down the line, each rail a little louder than the last.",
+    exits: { e: "beach_rd_n", in: "sunset_rail", n: "bay_watch", s: "sandy_toes" },
+  },
+  sunset_rail: {
+    name: "Sunset Rail Bar",
+    region: "Beach Road",
+    bar: "Sunset Rail Bar", barType: "beer", outlet: true,
+    desc: "A long bamboo rail and a row of stools bolted to face west, so the whole bar " +
+      "watches the sun go down together like a congregation. Pukky pours without turning " +
+      "from the view, and gets it right anyway.",
+    exits: { out: "beach_row" },
+  },
+  bay_watch: {
+    name: "Bay Watch Bar",
+    region: "Beach Road",
+    bar: "Bay Watch Bar", barType: "beer",
+    desc: "A red-and-yellow lifeguard theme run entirely as a joke — a plastic float on the " +
+      "wall, a whistle nobody's allowed to blow twice. Somo keeps the cooler cold and the " +
+      "banter warm.",
+    exits: { out: "beach_row" },
+  },
+  sandy_toes: {
+    name: "Sandy Toes",
+    region: "Beach Road",
+    bar: "Sandy Toes", barType: "beer",
+    desc: "The last rail before the sand takes over entirely: no floor to speak of, just swept " +
+      "beach and a string of bulbs. Nina brings the beer to your chair so you never have to " +
+      "leave the view.",
+    exits: { out: "beach_row" },
   },
   blue_dog: {
     name: "Blue Dog",
@@ -4244,6 +4281,7 @@ const _FILLER_HOSTESSES = [
   ["Pear","แพร์","orchid_club"], ["Jinda","จินดา","orchid_club"],
   ["Dokmai","ดอกไม้","night_heron"], ["Jampa","จำปา","night_heron"],
   ["Ing","อิง","blue_dog"], ["Khing","ขิง","blue_dog"],
+  ["Pukky","ปุ๊กกี้","sunset_rail"], ["Somo","โซโม่","bay_watch"], ["Nina","นีน่า","sandy_toes"],
   ["Bam","บาม","rock_factory"], ["Kwang","กวาง","rock_factory"],
   ["Chompoo","ชมพู่","stinky_bar"], ["Manow","มะนาว","stinky_bar"],
   ["Goong","กุ้ง","honey_trap"], ["Jiab","เจี๊ยบ","honey_trap"],
@@ -4505,6 +4543,10 @@ const ROOM_GEO = {
   beach_rd_n:       [12.9425, 100.8827],
   blue_dog:         [12.9426, 100.8819],
   stinky_bar:       [12.9428, 100.8821],
+  beach_row:        [12.9426, 100.8817],
+  sunset_rail:      [12.9427, 100.8815],
+  bay_watch:        [12.9424, 100.8814],
+  sandy_toes:       [12.9428, 100.8816],
   // Soi 6 (Soi Yodsak)
   soi6_street:      [12.9448, 100.8858],
   pink_lotus:       [12.9452, 100.8857],
