@@ -1500,6 +1500,22 @@ function _startRain(len) {
     _say("(Pinned until it passes — though a doorway close enough to dive " +
       "through would still take you. GO <somewhere inside>, or wait it out.)", "dim");
   }
+  // Sai Krok reacts when he's in sight: with you on the street, or under your
+  // stool at an open-air beer bar. (Outside a closed venue he's got his own
+  // arrangements — every dog on this soi knows a dry spot you don't.)
+  if (G.dog) {
+    if (_room().barType === "beer") {
+      _say("Sai Krok was under your stool before the third drop landed — seniority in " +
+        "these matters — and now stands, unhurried, to shake a full body-length of " +
+        "spray across four stools. The whole rail lifts its beers in one practiced " +
+        "motion. Nobody minds. Much. He resettles against your foot, smug and dry.", "dim");
+    } else if (!_sheltered(G.room)) {
+      _say("Every soi dog in Pattaya has vanished — except yours. Sai Krok presses " +
+        "against your shins under the awning, one wet rag of a dog, entirely " +
+        "unbothered. He has out-waited a thousand of these and finds your surprise " +
+        "at the weather gently amusing.", "dim");
+    }
+  }
 }
 
 function _doWeather() {
@@ -1714,6 +1730,36 @@ function _doFeedDog(arg) {
     "at your heel, waits outside every bar, and sleeps against your door. Nobody " +
     "consulted you. That is how it works.", "win");
   _addHappy(2);
+}
+
+// In the open-air beer bars the dog is a social asset: everyone likes a dog
+// lover in Thailand, and the staff fuss over him — sometimes that warmth lands
+// on you as real favor (a bond bump with whoever fussed). Rolls once per bar
+// per night, ~half the time, from the presence line in _describeRoom.
+function _dogBarFavor() {
+  const fav = (G.soc.dogFavor = G.soc.dogFavor || {});
+  if (fav[G.room]) return;
+  fav[G.room] = true;
+  if (_rand() >= 0.5) return; // tonight this bar is busy; the fuss stays small
+  const staff = _npcsHere().filter(id => NPC_ROLES[id]);
+  if (!staff.length) return;
+  const id = staff[Math.floor(_rand() * staff.length)];
+  const name = NPCS[id].name;
+  const scene = [
+    `${name} spots Sai Krok before she spots you, produces an ice-bucket lid of water ` +
+      `from nowhere, and sets it down with ceremony. "Handsome MAN," she tells him — him, ` +
+      `not you — and by the transitive property of Thai dog diplomacy, some of it lands ` +
+      `on you anyway.`,
+    `${name} crouches to Sai Krok's level and conducts a full interview in Thai — his ` +
+      `week, his opinions, the state of the soi. He answers with his tail. When she ` +
+      `stands, some of that warmth comes up with her and settles on you.`,
+    `A plate appears under Sai Krok's nose — grilled chicken, "mistake order, cannot ` +
+      `sell" — and ${name} watches him eat with pure uncomplicated delight. A man whose ` +
+      `dog is loved is halfway to being loved himself. House rules.`,
+  ][Math.floor(_rand() * 3)];
+  _say(scene, "win");
+  G.soc.drinks[id] = (G.soc.drinks[id] || 0) + 1;
+  _say(`(Everyone likes a dog lover in Thailand — ${name} warms to you.)`, "dim");
 }
 
 // The Peacock Cabaret drag revue: the one door in Supertown that's open to
