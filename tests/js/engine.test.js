@@ -2400,6 +2400,47 @@ test("Supertown: the Peacock Cabaret drag revue is populated and watchable", () 
   assert.equal(state().money, 4800, "Petch takes the tip");
 });
 
+test("The Adonis Club: a male host bar priced at the premium end, open to all", () => {
+  // the venue + cast exist and it's NOT a barfine bar
+  assert.equal(ROOMS.adonis_club.bar, "The Adonis Club");
+  assert.ok(ROOMS.adonis_club.hostBar && !ROOMS.adonis_club.barType);
+  for (const id of ["nott", "arm", "win"]) assert.equal(NPCS[id].room, "adonis_club");
+  // premium pricing: 2x+ the female rates
+  assert.ok(HOST_DRINK >= LADY_DRINK * 2, "a host drink is at least double a lady drink");
+  assert.ok(HOST_OFF >= BF_GOGO * 2, "the off-fee at least doubles the go-go barfine");
+  state().flags.act1Done = true; state().room = "adonis_club"; state().money = 10000;
+  // BUY DRINK FOR runs the host track, not the (female-coded) lady-drink path
+  out = []; run("buy drink for win");
+  assert.equal(state().money, 10000 - HOST_DRINK);
+  assert.equal(state().soc.drinks.win, 1, "the host warms up");
+  // HIRE is the club off-fee
+  out = []; run("hire arm");
+  assert.equal(state().money, 10000 - HOST_DRINK - HOST_OFF);
+});
+
+test("Queer venues: a slur brings the classic fight, milder bashing just gets you barred", () => {
+  // a slur or a swing → the fight scene: hurt, and barred from the whole strip
+  state().flags.act1Done = true; state().stage = "expat"; state().money = 5000;
+  state().hurt = 0; state().turns = 50; state().room = "adonis_club";
+  out = []; run("you faggots");
+  assert.ok(state().hurt >= 2, "you take a beating");
+  assert.notEqual(state().room, "adonis_club", "and you're put out on the soi");
+  assert.ok(state().soc.banned.adonis_club !== undefined && state().soc.banned.peacock_cabaret !== undefined,
+    "the whole strip is barred to you");
+  // and the ban actually holds on re-entry (these venues have no barType)
+  run("adonis");
+  assert.notEqual(state().room, "adonis_club", "the doorman turns you away");
+  // milder bigotry (no slur, no swing) → ejection without the beating
+  state().hurt = 0; state().turns = 50; state().room = "peacock_cabaret";
+  out = []; run("you are all disgusting");
+  assert.equal(state().hurt, 0, "no fists for a mere bigot");
+  assert.notEqual(state().room, "peacock_cabaret", "but out you go");
+  // legit commands in the venue are untouched
+  state().room = "adonis_club"; state().soc.banned = {}; state().money = 10000;
+  out = []; run("talk nott");
+  assert.equal(state().room, "adonis_club", "talking is not a hate crime");
+});
+
 test("Areca Lodge is a fourth hotel you can check into", () => {
   state().flags.act1Done = true;
   state().flags.hasWallet = true;

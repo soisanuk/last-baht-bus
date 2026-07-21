@@ -22,6 +22,9 @@ const SAFE_CASH = 3000;  // the emergency stash in the hotel room safe
 const EXPAT_SAVINGS = 20000; // wired over when you make the move
 // Barfines (canon: go-gos and Soi 6 are the expensive end)
 const BF_BEER = 400, BF_GOGO = 1000, BF_SOI6 = 700, BF_GENTS = 900;
+// Male host bars charge a steep premium — a host drink is 2x+ a lady drink and
+// the "off" fee doubles the go-go barfine (canon).
+const HOST_DRINK = 350, HOST_OFF = 2500;
 const SAFE_PIN = 719;    // ๗๑๙ — stage number 71 + lucky 9
 
 // ── Rooms ──────────────────────────────────────────────────────────────────
@@ -200,11 +203,31 @@ const ROOMS = {
   supertown_alley: {
     name: "Supertown Complex (alley)",
     region: "Thappraya",
-    desc: "The mouth of the Supertown alley — Jomtien's gay bar complex, an L-bend of shuttered and " +
-      "half-lit venues running back toward Second Road. Rainbow bunting, a poster for a drag revue, " +
-      "and a bored security guy on a stool. It's quiet down here tonight; most of the doors aren't " +
-      "open yet, or aren't open to you.",
-    exits: { out: "thappraya_mid", in: "supertown_elbow", e: "supertown_elbow" },
+    desc: "The mouth of the Supertown alley — Jomtien's gay bar complex, an L-bend of half-lit " +
+      "venues running back toward Second Road. Rainbow bunting, a poster for a drag revue, and a " +
+      "security guy on a stool who nods you in, easy. One door glows an unhurried gold: THE ADONIS " +
+      "CLUB, a host bar, a numbered row of oiled young men behind the glass instead of girls. The " +
+      "drag stage is deeper in, at the elbow.",
+    exits: { out: "thappraya_mid", in: "supertown_elbow", e: "supertown_elbow",
+             host: "adonis_club", adonis: "adonis_club" },
+  },
+  adonis_club: {
+    name: "The Adonis Club",
+    bar: "The Adonis Club",
+    region: "Thappraya",
+    // A male host bar — the go-go gender-flipped. NOT a barType room, so the
+    // (female-coded) barfine engine never touches it; host drinks and the "off"
+    // fee run on their own premium track (HOST_DRINK / HOST_OFF), and BUY DRINK
+    // FOR / HIRE are intercepted here. Welcoming to every orientation; most of
+    // the boys are gay-for-pay and honest about it.
+    hostBar: true,
+    desc: "Cool gold light, a low mirrored bar, and a raised bench where the hosts sit in numbered " +
+      "order — young men, gym-cut, oiled to catch the light, some bored, some working the room with " +
+      "their eyes. A drinks list stands on the bar with prices that would make a Walking Street " +
+      "mamasan weep with envy. NOTT runs the floor with a papasan's easy authority; ARM (number 4) " +
+      "and WIN (number 9) are the two who clocked you first. (TALK · BUY DRINK FOR <host> · HIRE " +
+      "<host> — all of it, whoever you are.)",
+    exits: { out: "supertown_alley" },
   },
   supertown_elbow: {
     name: "Supertown Complex (the elbow)",
@@ -2632,6 +2655,79 @@ const NPCS = {
     ],
   },
 
+  nott: {
+    name: "Nott", th: "นนท์", emoji: "🕴️",
+    room: "adonis_club",
+    desc: "The Adonis Club's papasan — forties, immaculate, a silk shirt open one button past " +
+      "advisable and a smile that has closed a thousand deals. He runs his boys like a talent " +
+      "agent and reads a room's wallet before its face.",
+    dialogue: [
+      { th: "สวัสดีครับ", rom: "sawatdee khrap",
+        text: "\"Welcome, welcome — sit anywhere.\" Nott spreads his hands over the room like a maître d'. " +
+          "\"First time in a host bar? Then let me save you the worry: here it does not matter one baht what " +
+          "you are. Gay, straight, bi, curious, married, just hiding from your wife — my boys have met all of " +
+          "it and the price is the same for every one. Buy a boy a drink if you like him. Buy nothing and just " +
+          "watch, also fine. Up to you, na.\"",
+        short: "\"Gay, straight, curious, hiding from the wife — doesn't matter here. Same price for everyone. Up to you.\"" },
+      { topic: "prices", text: "\"The list?\" He slides it over, unbothered. \"A host drink is ฿" + HOST_DRINK +
+          " — yes, more than the girl bars, twice more, I know. And to take a boy out, the club fee is ฿" +
+          HOST_OFF + ", plus whatever the two of you agree between yourselves after.\" A shrug of pure commerce. " +
+          "\"We are the premium end. You are not paying for a body, farang — those are cheaper. You are paying " +
+          "for one who makes you believe.\" (BUY DRINK FOR <host>, or HIRE <host>.)" },
+      { topic: "gayforpay", text: "\"You want the honest version? Good, I like that.\" Nott lowers his voice, " +
+          "friendly. \"Most of my boys — most — are what you call gay-for-pay. Straight. Girlfriends up-country, " +
+          "some of them babies. They are here because a good-looking man makes double in this soi what he makes " +
+          "on a building site, and treats his back better.\" A level look. \"It is a job. They are professionals. " +
+          "The ones who are truly gay, like Win, you can count — and they are the ones who slip and fall in love, " +
+          "which is the only real danger in my bar.\"" },
+      { topic: "scene", text: "\"Host bars are small here, three or four doors, not like Bangkok.\" He gestures " +
+          "at the gold walls. \"Our trade is gay farang, a few gay Thai men with money, and — more than you would " +
+          "think — women. Thai women, farang ladies on holiday, a hen party feeling brave. Everybody's baht is " +
+          "the same colour, na.\"" },
+    ],
+  },
+  arm: {
+    name: "Arm", th: "อาร์ม", emoji: "💪",
+    room: "adonis_club",
+    desc: "Host number 4: broad, easy, a footballer's build and a salesman's warmth. He leans in close " +
+      "and makes you feel chosen, which is precisely the product. The tan line of a wedding-adjacent ring " +
+      "is on the wrong finger.",
+    dialogue: [
+      { th: "หวัดดีครับ", rom: "wat-dee khrap",
+        text: "\"You look like you need a cold drink and a laugh, my friend.\" Arm drops onto the stool " +
+          "beside you, all shoulders and grin, close enough to be flattering and not one inch closer. \"Number " +
+          "four. Best number. Nine will tell you HE is the best number — nine is lying.\"",
+        short: "\"Number four — best number. Nine will say he is; nine's lying.\"" },
+      { topic: "job", text: "\"The work?\" He shrugs the big shoulders. \"Sit, talk, pour, make a man feel like " +
+          "the most interesting guy in Jomtien for an hour. Same as the girls do down the road, just — \" he flexes, " +
+          "clowning \"— better lighting on the merchandise. Good money. Easy, mostly. The gym is the hard part.\"" },
+      { topic: "home", text: "\"Home?\" A flicker — the salesman steps back and a tired 24-year-old shows for " +
+          "a second. \"Buriram. I have a girlfriend there, a little girl, two years. They think I do hotel work " +
+          "in Pattaya, which — \" a crooked grin \"— is not a lie, exactly. I send money every week. The customers " +
+          "here, they know what I am. Gay-for-pay, you say. Nobody lied to anybody. That is more than most of this " +
+          "town can promise.\"" },
+    ],
+  },
+  win: {
+    name: "Win", th: "วิน", emoji: "✨",
+    room: "adonis_club",
+    desc: "Host number 9: slighter than Arm, prettier, quieter, with a stillness the loud ones don't have. " +
+      "He watches you a beat longer than the job strictly requires, and means a little more of it than he should.",
+    dialogue: [
+      { th: "หวัดดีครับ", rom: "wat-dee khrap",
+        text: "\"Don't listen to Arm about the numbers.\" Win's smile is smaller and lands harder for it. " +
+          "\"He's louder. I'm—\" a small shrug \"—the one you remember on the plane home. Different skill.\"",
+        short: "\"Arm's louder. I'm the one you remember on the plane home. Different skill.\"" },
+      { topic: "job", text: "\"For me it's not pretend, if you want the truth.\" He says it simply, no pitch " +
+          "in it. \"Most of the boys here are straight, doing a job — good at it, no shame. Me, I'm gay, so the " +
+          "job and the real thing sit very close together, and Nott is always telling me that is dangerous. He's " +
+          "right. I fall a little every slow season and it costs me every time.\"" },
+      { topic: "dream", text: "\"What I want?\" He turns his glass. \"One farang who comes back for ME, not for " +
+          "the row. Who learns which number I am and asks for it by name.\" A rueful tilt. \"Every host wants that " +
+          "and every host knows better. We are the ones who sell the feeling and still, idiots, want it ourselves.\"" },
+    ],
+  },
+
   pim: {
     name: "Pim", th: "พิม", emoji: "💋",
     room: "starlight_bar",
@@ -4697,6 +4793,7 @@ const ROOM_GEO = {
   supertown_alley:  [12.8978, 100.8688],
   supertown_elbow:  [12.8982, 100.8698],
   peacock_cabaret:  [12.8983, 100.8700],
+  adonis_club:      [12.8977, 100.8686],
   arrow_bar:        [12.8971, 100.8666],
   the_boardroom:    [12.8965, 100.8670],
   beach_turn_massage:[12.8964, 100.8664],
