@@ -1765,6 +1765,7 @@ function _endNight(reason) {
     _say(_dogN("(Sai Krok is asleep against your door when you surface. One eye opens, the " +
       "tail thumps twice, and the watch resumes.)"), "dim");
   }
+  if (G.dog) _setFlag("hasDog");      // backfill for saves that adopted before the flag existed
   _loanNightRoll();                   // Nira's loan compounds and her cousins escalate if you're late
   _describeRoom(true);
 }

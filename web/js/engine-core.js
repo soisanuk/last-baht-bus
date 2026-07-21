@@ -119,7 +119,8 @@ function newGame() {
     qvDay: 0,            // last day the Queen Vic balcony paid its happy point
     dragDay: 0,          // last day the Peacock Cabaret drag revue paid its happy point
     catDay: 0,           // last day the Jomtien beach cats paid theirs
-    dog: null,           // the accidentally-adopted soi dog: { since: day } once you've fed him
+    dog: null,           // the accidentally-adopted soi dog: { since: day, name? } once you've fed him
+    dogNudgeDay: 0,      // last day the un-adopted dog made his half-block approach
     patronTalk: { day: 0, talked: {} }, // patron dialogue book, reset daily
     turns: 0,
     wingmanUntil: 0,     // G.turns before which a wing-woman is vouching for you
@@ -641,6 +642,15 @@ function _describeRoom(full) {
     } else {
       _say(_dogN("Sai Krok pads at your heel, nose reading the street."), "dim");
     }
+    if (G.room === "khao_talo_strip") _dogShamrock(); // the dead pub knows him
+  } else if (_flag("act1Done") && !r.bar && !r.barType && !r.massage && !r.soapy &&
+      !r.hostBar && !_isDarkHere() && G.dogNudgeDay !== G.day && _rand() < 0.35) {
+    // the un-adopted dog makes himself known: at most once a night, lit streets
+    // only, and never during Act One's tight opening
+    G.dogNudgeDay = G.day;
+    _say("A soi dog with one clipped ear falls in beside you for half a block, matching " +
+      "your pace with off-duty professionalism, then peels away at the soi mouth with " +
+      "one look back. (FEED DOG, if you'd like that to go differently.)", "dim");
   }
   // CAPS so the hints tap: the open kw prefills "ride bus to " and the
   // destination list rides the suggest bar — the whole fare is keyboard-free.

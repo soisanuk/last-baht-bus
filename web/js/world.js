@@ -1771,6 +1771,13 @@ const ITEMS = {
       "made of light, Miss Mala's headdress filling the top corner like weather. On the " +
       "back, in careful biro: 'for the Alcazar man — M.'",
   },
+  brass_tag: {
+    name: "brass dog tag", aliases: ["tag", "brass tag", "dog tag", "seamus"],
+    portable: true, location: null, // worked free of the Shamrock's shutter hasp
+    desc: "A brass dog tag gone green with four rainy seasons: SEAMUS — THE SHAMROCK — " +
+      "GOOD BOY. The pub is shuttered and Paddy is long gone home, but somebody once " +
+      "paid to have GOOD BOY engraved in brass, and they were right.",
+  },
   fake_rolex: {
     name: "genuine Rolex (allegedly)", aliases: ["rolex", "watch", "fake rolex"],
     portable: true, location: null,
@@ -2966,6 +2973,20 @@ const NPCS = {
       { topic: "pool", text: "\"Table's a Brunswick, older than most of my customers. " +
         "I re-cloth her every year, level her every month, and love her more than " +
         "I loved either of my wives. She holds no grudges. Unlike either of my wives.\"" },
+      { topic: "dog", req: ["hasDog"],
+        text: "Bert looks past you at the dog by the door and sets his Budweiser down " +
+        "slow. \"I'll be damned. That's the Shamrock dog, bud. Paddy's dog — the Irish " +
+        "place out on Khao Talo, went under in COVID. Paddy caught the one flight home " +
+        "and the dog sat that step for a month. Then he went walking.\" He shakes his " +
+        "head. \"Four years walking, and of every farang in this town he picked you. " +
+        "Do him a right thing: walk him out to the old place and let him see it. Dogs " +
+        "need funerals too, in their way.\"",
+        short: "\"That's the Shamrock dog — Paddy's. Walk him out to the old place on " +
+        "Khao Talo. Dogs need funerals too.\"" },
+      { topic: "dog", text: "\"Dogs? Kept one on the rail at Candy's place for years. " +
+        "Best doorman I ever had — worked for chicken and never once stole from the " +
+        "till.\" He chalks a cue. \"This town's full of good dogs. Feed one sometime, " +
+        "see what happens.\"" },
       { topic: "flying club", text: "He goes quiet a beat. \"Pattaya Flying Club. " +
         "That's the joke, bud — the guys who go off the condo balconies when the " +
         "money or the girl or the visa runs out. Every high season there's a few. " +
@@ -3586,6 +3607,17 @@ const QUESTS = {
     at: "gold_rush",
     doneFlag: "fergieReminded",
     reward: { money: 500, happy: 2 },
+  },
+  shamrock: {
+    name: "The Shamrock Dog",
+    giver: "bert",
+    reqFlags: ["hasDog"], // no dog, no quest — Bert has to recognise him at your heel
+    desc: "Bert swears your dog is the old Shamrock bar dog, out on Soi Khao Talo. " +
+      "Walk him out to the dead pub and let him see it.",
+    deps: [],
+    at: "khao_talo_strip",
+    doneFlag: "shamrockVisited",
+    reward: { money: 0, happy: 6 },
   },
 };
 

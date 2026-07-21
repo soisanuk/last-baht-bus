@@ -107,6 +107,7 @@ test("gossip chain flags connect: every required flag is set somewhere", () => {
   const settable = new Set(["knowWasHere", "waiedOy", "waiedPloy", "greetedFon",
     "hasWallet", "gotBusFare", "somTamDelivered", "officeOpen",
     "glamTruth", // set by PATRON dialogue (Glam's lucid flash), which this scan doesn't cover
+    "hasDog",    // set by the adoption action (FEED DOG), not dialogue
   ]); // set by engine actions (read/wai/give/enter), not NPC dialogue
   for (const npc of Object.values(NPCS)) {
     for (const d of npc.dialogue) {
@@ -172,6 +173,8 @@ test("every quest is well-formed: giver, deps, item, and at all resolve", () => 
     for (const d of q.deps) assert.ok(QUESTS[d], `${qid}: dep ${d} is not a quest`);
     if (q.item) assert.ok(ITEMS[q.item], `${qid}: item ${q.item} missing`);
     if (q.at) assert.ok(NPCS[q.at] || ROOMS[q.at], `${qid}: at ${q.at} resolves to nothing`);
+    if (q.reqFlags) assert.ok(Array.isArray(q.reqFlags) && q.reqFlags.every(f => typeof f === "string"),
+      `${qid}: reqFlags must be an array of flag names`);
     assert.ok(q.doneFlag && q.reward, `${qid}: needs doneFlag and reward`);
   }
 });

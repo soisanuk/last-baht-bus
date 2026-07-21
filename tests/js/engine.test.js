@@ -2570,6 +2570,29 @@ test("Sai Krok pays his keep: dark sois, the scam muscle, and your pockets", () 
   assert.ok(state().money > 0, "nobody works a farang whose dog is watching");
 });
 
+test("The Shamrock Dog: dog-gated quest, and the walk to the dead pub", () => {
+  state().flags.act1Done = true; state().stage = "expat"; state().money = 1000;
+  // no dog: Bert never mentions it (reqFlags gate), and it can't be accepted
+  state().dog = null; delete state().flags.hasDog; state().room = "stinky_bar";
+  out = []; run("talk bert"); run("talk bert");
+  assert.ok(!/Shamrock Dog/.test(out.join("\n")), "no dog, no quest");
+  out = []; run("accept shamrock");
+  assert.notEqual(state().quests.shamrock, "active", "reqFlags holds against a direct ACCEPT");
+  // adopt; a giver with a quest already on the table surfaces his NEXT job
+  state().room = "beach_rd_c"; run("feed dog");
+  state().room = "stinky_bar";
+  out = []; run("talk bert");
+  assert.match(out.join("\n"), /Shamrock Dog/, "Bert recognises the dog at your heel");
+  run("accept shamrock");
+  // the walk: the scene fires once, the tag comes home, the quest completes
+  state().room = "khao_talo_strip";
+  out = []; run("look");
+  assert.match(out.join("\n"), /SEAMUS/);
+  assert.equal(state().itemLoc.brass_tag, "inventory");
+  run("look");
+  assert.equal(state().quests.shamrock, "done");
+});
+
 test("NAME DOG: rename him and every line of his re-letters, no strays", () => {
   state().flags.act1Done = true; state().stage = "expat"; state().money = 1000;
   // no dog, no naming rights
