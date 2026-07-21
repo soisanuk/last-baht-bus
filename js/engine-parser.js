@@ -529,6 +529,8 @@ function _sayDirectedReact(key, id, name) {
 }
 
 function _doGive(itemWord, npcWord) {
+  // "give noodles to dog" — the dog isn't an NPC; feeding is its own path
+  if (/^(dog|sai|krok)$/.test(npcWord)) return _doFeedDog("dog");
   const npc = _findNpc(npcWord);
   const id = _inv().find(i => ITEMS[i].name.toLowerCase().includes(itemWord) ||
     ITEMS[i].aliases.some(a => a.includes(itemWord)));
@@ -1854,7 +1856,7 @@ const _COMPLETE_VERBS = [
   "motosai to", "travel", "light", "charge phone", "read", "use", "open", "play",
   "flirt", "kiss", "spank", "fondle", "throw cover", "ring bell", "barfine", "massage", "special", "soapy", "eat", "drink",
   "sleep", "tv", "column", "watch", "weather", "scores", "lottery", "map", "time", "tip", "wave",
-  "photo", "call", "shower", "withdraw", "cheers", "tao rai", "borrow", "repay", "hire", "pet", "dance", "sing", "swim",
+  "photo", "call", "shower", "withdraw", "cheers", "tao rai", "borrow", "repay", "hire", "pet", "feed", "dance", "sing", "swim",
   "smell", "listen", "diagnose", "apologize", "quests", "accept", "abandon", "contact",
   "contacts", "who", "blackbook", "message", "check messages", "send", "score", "wait", "again",
   "request", "hint", "help", "save", "load", "undo", "restart",
@@ -2387,6 +2389,7 @@ function doCommand(input) {
     case "repay": case "payback": _doRepay(arg); break;
     case "hire": case "off": _doHire(arg); break;
     case "pet": case "stroke": _doPet(arg); break;
+    case "feed": _doFeedDog(arg); break;
     case "haggle": case "bargain":
       _say("Nobody's quoting you a price right now. Save it for the man with the " +
         "display board of watches.");

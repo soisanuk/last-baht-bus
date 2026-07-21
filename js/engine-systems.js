@@ -1603,9 +1603,19 @@ function _doWatchSoi() {
 // point a night, same house rules as the sunsets and the free shows. Big One
 // vets every hand before it gets anywhere near her sister; that's the deal.
 function _doPet(arg) {
+  if (G.dog && /dog|sai|krok/.test(arg || "")) {
+    _say("Sai Krok accepts the ear-scratch with his eyes half-shut and his attention " +
+      "fully open — somewhere behind you a motorbike slows, and the rumble starts low " +
+      "in his chest before you've even registered it. The bike moves on. So does the " +
+      "rumble. You get the last of the scratch in undisturbed.");
+    return;
+  }
   if (G.itemLoc.soi_cats !== G.room) {
-    _say("Nothing here wants petting. The soi dogs are on duty and know it, and the " +
-      "bar cats work strictly for the kitchen.");
+    _say(/dog/.test(arg || "")
+      ? "You haven't got a dog. The soi's freelancers accept food, not affection — " +
+        "though the one with the clipped ear has been known to reconsider for dinner. (FEED DOG.)"
+      : "Nothing here wants petting. The soi dogs are on duty and know it, and the " +
+        "bar cats work strictly for the kitchen.");
     return;
   }
   const little = /little/.test(arg || "");
@@ -1634,6 +1644,76 @@ function _doPet(arg) {
   G.catDay = G.day;
   _addHappy(1);
   _say("(The best two locals on the beach. +1 สนุก.)", "dim");
+}
+
+// ── Sai Krok, the accidentally-adopted soi dog ──────────────────────────────
+// Feed a soi dog once and you have a dog: he follows you bar to bar (waiting
+// outside — dogs know the rules), sleeps against your hotel door, and pays his
+// keep in protection: the dark sois go quiet (see the darkStreak block), the
+// scam muscle recalculates around him (tonic shop / curse ritual), and nobody
+// works the pockets of a passed-out farang whose dog is watching. There is no
+// un-adopting him. Nobody consulted you. That is how soi dogs work.
+function _dogName() { return "Sai Krok"; }
+
+function _doFeedDog(arg) {
+  if (arg && !/dog|sai|krok|him|it/.test(arg)) { _say("Feed who, exactly? The whole soi is hungry."); return; }
+  if (G.dog) {
+    const food = ["noodles", "moo_ping"].find(id => _inv().includes(id));
+    if (food) {
+      G.itemLoc[food] = null;
+      _say(`Sai Krok takes the ${ITEMS[food].name} from your hand with a gentleness that ` +
+        "would astonish everyone who has ever seen him clear a doorway, eats it in one " +
+        "efficient movement, and leans his whole weight against your leg. Resource " +
+        "management, done correctly.");
+    } else if (G.money >= 20) {
+      G.money -= 20;
+      _say(`฿20 to a grill cart for a chicken skewer, which Sai Krok receives like a ` +
+        `salary — owed, not begged. He eats, checks the street both ways, and falls ` +
+        `back in at your heel. (฿${G.money} left.)`);
+    } else {
+      _say("You have nothing for him. Sai Krok reads your empty hands, forgives you " +
+        "instantly and completely, and keeps walking with you anyway. Dogs are better " +
+        "than us and it isn't close.");
+    }
+    return;
+  }
+  const r = _room();
+  if (r.bar || r.barType || r.massage || r.soapy || r.hostBar) {
+    _say("No dogs in the venues — even the boldest soi dog respects the one rule. " +
+      "The hungry ones work the street outside.");
+    return;
+  }
+  if (_isDarkHere()) {
+    _say("Whatever is circling you out there in the dark is hunting, not begging. " +
+      "Feeding it is a different transaction entirely — see it lit first.");
+    return;
+  }
+  const food = ["noodles", "moo_ping"].find(id => _inv().includes(id));
+  if (!food && G.money < 20) {
+    _say("A soi dog with one clipped ear materialises at the smell of your optimism, " +
+      "finds no food and no funds, and dematerialises. Fair.");
+    return;
+  }
+  if (food) {
+    G.itemLoc[food] = null;
+    _say(`A soi dog with one clipped ear has been pacing you for half a block, close ` +
+      `enough to be polite about it. You crouch and hold out the ${ITEMS[food].name}. ` +
+      "He takes it with shocking gentleness, eats it in one movement, and then — this " +
+      "is the part nobody warns you about — looks at you. Properly. Files something " +
+      "away.", "win");
+  } else {
+    G.money -= 20;
+    _say("A soi dog with one clipped ear has been pacing you for half a block. ฿20 at " +
+      "a grill cart buys a chicken skewer; he takes it with shocking gentleness, eats " +
+      "it in one movement, and then — this is the part nobody warns you about — looks " +
+      `at you. Properly. Files something away. (฿${G.money} left.)`, "win");
+  }
+  G.dog = { since: G.day };
+  _say("A passing bar girl laughs at your face: “Ohhh. He choose you, na.” The soi " +
+    "calls him Sai Krok — sausage — after his one great subject. From here on he pads " +
+    "at your heel, waits outside every bar, and sleeps against your door. Nobody " +
+    "consulted you. That is how it works.", "win");
+  _addHappy(2);
 }
 
 // The Peacock Cabaret drag revue: the one door in Supertown that's open to

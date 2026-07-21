@@ -1736,7 +1736,8 @@ function _endNight(reason) {
   const crash = rough ? _crashSpotFor(G.room) : null;
   if (crash) {
     G.battery = _CRASH_BATTERY;
-    G.money = 0;                     // the town turns out the sleeping farang's pockets
+    if (!G.dog) G.money = 0;         // the town turns out the sleeping farang's pockets…
+    // …unless a soi dog is sitting on them. Nobody negotiates with Sai Krok.
   } else if (_flag("act1Done")) {
     G.room = _hotelRoomId(); G.battery = 100;
   } else {
@@ -1745,8 +1746,12 @@ function _endNight(reason) {
   _say("");
   if (crash) {
     _say(crash.prose[Math.floor(_rand() * crash.prose.length)], "alert");
-    _say(`(Phone on ${_CRASH_BATTERY}%. ${_flag("hasWallet") ? "Wallet" : "Pockets"} ` +
-      "turned out, empty — the town works the farang who don't make it home.)", "dim");
+    _say(G.dog
+      ? `(Phone on ${_CRASH_BATTERY}%. Your pockets are untouched: Sai Krok spent the ` +
+        "night sitting on your chest like a paperweight with teeth, and the town let " +
+        "you both be. Nobody works a farang whose dog is watching.)"
+      : `(Phone on ${_CRASH_BATTERY}%. ${_flag("hasWallet") ? "Wallet" : "Pockets"} ` +
+        "turned out, empty — the town works the farang who don't make it home.)", "dim");
   }
   _chargeRent();                     // the folio bills you even if you slept rough…
   if (crash) G.room = crash.room;    // …but you wake where the night left you, not at the desk
@@ -1755,6 +1760,10 @@ function _endNight(reason) {
     "surface mid-afternoon, and by the time you're human again the sun is " +
     "sliding into the gulf and the neon is waking up ──", "win");
   if (hangover >= 4) _say("(The hangover is a physical presence with opinions. Water. Food. Mercy.)", "alert");
+  if (G.dog && !crash) {
+    _say("(Sai Krok is asleep against your door when you surface. One eye opens, the " +
+      "tail thumps twice, and the watch resumes.)", "dim");
+  }
   _loanNightRoll();                   // Nira's loan compounds and her cousins escalate if you're late
   _describeRoom(true);
 }
