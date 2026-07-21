@@ -211,3 +211,27 @@ test("patron day schedules are valid weekday indices", () => {
     }
   }
 });
+
+test("no character name is silently written all-caps in their OWN room's desc (kills its mobile tap target)", () => {
+  // term.js's kw-decorator matches character names CASE-SENSITIVELY (a plain
+  // "Miss Mala" won't match "MISS MALA" in prose). The game's ALL-CAPS style is
+  // for venue names / command hints — a character name in that style renders,
+  // but stops being tappable in that sentence. Caught live 2026-07-22 (Peacock
+  // Cabaret's arrival desc wrote "MISS MALA"/"PETCH" as subjects — the "Here:"
+  // roster line still worked, but the flavour-text mention silently didn't).
+  // Scoped to rooms the character actually stands in (not every room in the
+  // game) — a short/common-word name (e.g. filler cashier "Care") will
+  // coincidentally substring-match unrelated ALL-CAPS venue names elsewhere
+  // (e.g. "TAKE CARE ME") with zero real tap-target ambiguity there.
+  for (const [id, n] of Object.entries(NPCS)) {
+    if (n.name === n.name.toUpperCase()) continue; // e.g. single-letter/lowercase-first filler
+    const rooms = n.bars ? n.bars : n.room ? [n.room] : [];
+    const upper = n.name.toUpperCase();
+    const re = new RegExp(`\\b${upper.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`);
+    for (const rid of rooms) {
+      const r = ROOMS[rid];
+      if (r && r.desc) assert.ok(!re.test(r.desc),
+        `${rid}: "${upper}" (${id}'s own room) — write "${n.name}" (natural case) so it stays tappable`);
+    }
+  }
+});
