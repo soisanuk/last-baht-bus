@@ -964,8 +964,20 @@ const ROOMS = {
       "sound bleeding from KINKY Go-Go to the north and SLUTTY Go-Go to the south until " +
       "they're indistinguishable. Good energy — dense, close, the kind of loud that's a " +
       "decision rather than an accident. A motorbike idles past carrying a girl in full " +
-      "sequins at a speed that's technically legal. The alley bends east at the far end.",
-    exits: { w: "lk_entrance", n: "kinky", s: "slutty", e: "lk_bend", in: "kinky" },
+      "sequins at a speed that's technically legal. THE OFFSIDE SPORTS BAR breaks the neon " +
+      "with the cold blue wash of a dozen screens. The alley bends east at the far end.",
+    exits: { w: "lk_entrance", n: "kinky", s: "slutty", e: "lk_bend", in: "kinky", pub: "lk_sports" },
+  },
+  lk_sports: {
+    name: "The Offside Sports Bar",
+    region: "LK Metro",
+    bar: "The Offside Sports Bar", barType: "pub", outlet: true,
+    desc: "A proper sports bar wedged into the go-go alley: a wall of screens, a Premier " +
+      "League fixture list chalked up beside a Thai-boxing card, a dartboard with a queue, " +
+      "and a fridge of import beer at import prices. The commentary is in three languages " +
+      "and the groans when a penalty's missed are universal. A quiet corner to sober up in, " +
+      "if the match lets you.",
+    exits: { out: "lk_main" },
   },
   lk_bend: {
     name: "LK Metro (Corner)",
@@ -974,8 +986,29 @@ const ROOMS = {
       "the second leg — the signage outspends everything else in sight. The crowd thins " +
       "slightly here: the regulars who know the place, the girls finishing a shift on the " +
       "back of a motorbike, a few tourists who followed the sound far enough to find it. " +
-      "Less overwhelming than Walking Street; more like something you discovered.",
-    exits: { w: "lk_main", s: "las_vegas", in: "las_vegas", diana: "diana_e" },
+      "Two open-front beer bars, THE METRO BEER GARDEN and THE PIT STOP, catch the ones " +
+      "who've had enough go-go for one night. Less overwhelming than Walking Street; more " +
+      "like something you discovered.",
+    exits: { w: "lk_main", s: "las_vegas", in: "las_vegas", diana: "diana_e",
+             n: "metro_garden", e: "pit_stop" },
+  },
+  metro_garden: {
+    name: "The Metro Beer Garden",
+    region: "LK Metro",
+    bar: "The Metro Beer Garden", barType: "beer", outlet: true,
+    desc: "A strip of pavement roofed in fairy lights and plastic ivy, a beer garden by " +
+      "sheer force of naming. Cold towels, cheap Chang, and a view straight down the alley " +
+      "at the neon. Near keeps the cooler stocked and the stools filled.",
+    exits: { out: "lk_bend" },
+  },
+  pit_stop: {
+    name: "The Pit Stop",
+    region: "LK Metro",
+    bar: "The Pit Stop", barType: "beer",
+    desc: "One container-width of bar with a motorsport theme it can't quite afford — a " +
+      "cardboard cutout of a pit crew, a checkered valance, a shelf of dusty toy cars. " +
+      "Milin waves you onto a stool like she's flagging you into the pits.",
+    exits: { out: "lk_bend" },
   },
   kinky: {
     name: "KINKY Go-Go",
@@ -4148,6 +4181,7 @@ const _FILLER_HOSTESSES = [
   ["Fang","แฟง","kinky"], ["Gib","กิ๊บ","kinky"], ["Nice","ไนซ์","kinky"],
   ["Tukta","ตุ๊กตา","slutty"], ["Jum","จุ๋ม","slutty"], ["Pop","ป๊อป","slutty"],
   ["Namwan","น้ำหวาน","las_vegas"], ["Orn","อร","las_vegas"], ["Gigi","กีกี้","las_vegas"],
+  ["Near","เนียร์","metro_garden"], ["Milin","มิลิน","pit_stop"],
   ["Kaew","แก้ว","paradise_nights"], ["Meaw","เหมียว","paradise_nights"],
   ["Nan","แนน","candy_bar"], ["Bua","บัว","candy_bar"],
   ["Fern","เฟิร์น","candy_bar_2"], ["Mai","ใหม่","candy_bar_2"],
@@ -4508,6 +4542,9 @@ const ROOM_GEO = {
   slutty:           [12.9296, 100.8853],
   lk_bend:          [12.9300, 100.8858],
   las_vegas:        [12.9298, 100.8860],
+  lk_sports:        [12.9297, 100.8853],
+  metro_garden:     [12.9302, 100.8858],
+  pit_stop:         [12.9301, 100.8861],
   // The Darkside
   sukhumvit_crossing: [12.9100, 100.8975],
   khao_talo_strip:  [12.9078, 100.9090],
