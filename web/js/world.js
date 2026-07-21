@@ -850,9 +850,46 @@ const ROOMS = {
     region: "Tree Town",
     dark: true,
     desc: "The maze's unlit armpit: kitchen doors, a mop graveyard, and rats with " +
-      "routines. Without light, every exit feels like the same wrong one.",
+      "routines. Without light, every exit feels like the same wrong one. South, past " +
+      "the bins, a FAR LANE of cheap bars nobody photographs leaks a little warm light.",
     sign: "maze_3",
-    exits: { n: "tt_lane_1", w: "tt_lane_2", e: "tt_deep" },
+    exits: { n: "tt_lane_1", w: "tt_lane_2", e: "tt_deep", s: "tt_lane_3" },
+  },
+  tt_lane_3: {
+    name: "Tree Town (Far Lane)",
+    region: "Tree Town",
+    desc: "The cheap seats of the maze, behind the kitchens where the rent drops and the " +
+      "neon budget with it: three little bars under one sagging string of bulbs. THE RABBIT " +
+      "HOLE, LUCKY CHARM BAR, and MOONSHINE BAR trade the regulars who ran out of maze. " +
+      "Friendlier than it has any right to be down here.",
+    exits: { n: "tt_back", in: "rabbit_hole", e: "lucky_charm", w: "moonshine_bar" },
+  },
+  rabbit_hole: {
+    name: "The Rabbit Hole",
+    region: "Tree Town",
+    bar: "The Rabbit Hole", barType: "beer", outlet: true,
+    desc: "A burrow of a bar you have to duck to enter, painted with tumbling playing cards " +
+      "and a grinning cat. Deeper than it looks and easy to lose an evening in. Aump and " +
+      "Guitar keep the stools warm and the tab creeping.",
+    exits: { out: "tt_lane_3" },
+  },
+  lucky_charm: {
+    name: "Lucky Charm Bar",
+    region: "Tree Town",
+    bar: "Lucky Charm Bar", barType: "beer", pool: true,
+    desc: "Horseshoes, four-leaf clovers, a lottery-number shrine, and a pool table with a " +
+      "lucky rip in the felt. Namtip and Bella will read your palm for a lady drink and " +
+      "predict, every time, that you buy another.",
+    exits: { out: "tt_lane_3" },
+  },
+  moonshine_bar: {
+    name: "Moonshine Bar",
+    region: "Tree Town",
+    bar: "Moonshine Bar", barType: "beer",
+    desc: "A jars-on-the-shelf hillbilly theme done on a Pattaya budget — fairy lights in " +
+      "mason jars, a banjo nobody plays, ya dong in an unlabelled bottle for the brave. Prik " +
+      "and Mek run the rail and dare you to try the house infusion.",
+    exits: { out: "tt_lane_3" },
   },
   tt_deep: {
     name: "Tree Town (Deep Corner)",
@@ -4347,6 +4384,9 @@ const _FILLER_HOSTESSES = [
   ["Noon","นุ่น","jasmine_garden"], ["Prae","แพร","jasmine_garden"],
   ["Tan","ตาล","gold_rush"], ["Tik","ติ๊ก","gold_rush"],
   ["Pui","ปุ้ย","starlight_bar"], ["Mild","มายด์","starlight_bar"],
+  ["Aump","อั้ม","rabbit_hole"], ["Guitar","กีตาร์","rabbit_hole"],
+  ["Namtip","น้ำทิพย์","lucky_charm"], ["Bella","เบลล่า","lucky_charm"],
+  ["Prik","พริก","moonshine_bar"], ["Mek","เมฆ","moonshine_bar"],
   ["Namtan","น้ำตาล","khao_talo_bar"], ["Ying","หญิง","khao_talo_bar"],
   ["Kai","ไก่","golden_dragon"], ["Nook","นุ้ก","golden_dragon"], ["Dew","ดิว","golden_dragon"],
   ["Puu","ปู","pink_lotus"], ["Belle","เบล","pink_lotus"],
@@ -4710,6 +4750,10 @@ const ROOM_GEO = {
   starlight_bar:    [12.9334, 100.8862],
   rainbow_girls:    [12.9326, 100.8871],
   oy_office:        [12.9325, 100.8873],
+  tt_lane_3:        [12.9326, 100.8863],
+  rabbit_hole:      [12.9325, 100.8861],
+  lucky_charm:      [12.9324, 100.8864],
+  moonshine_bar:    [12.9327, 100.8862],
   // LK Metro (the L-shaped soi off Buakhao)
   lk_entrance:      [12.9297, 100.8845],
   lk_main:          [12.9298, 100.8852],
