@@ -11,6 +11,7 @@ const MOTOSAI_TOWN = 50; // motosai hop inside town
 const MOTOSAI_FAR  = 100;// motosai to/from the Darkside
 const LAST_BUS_TURN = 80;   // 02:00 — the last songthaew makes its final run; after this no ฿15 ride home (the title's climax)
 const LATE_MOTO_MULT = 1.6; // small-hours "stranded tax": piwins gouge once the buses have stopped
+const DOG_MOTOSAI_FARE = 10; // a dog needs his own bike — a buddy's saleng, waved over and paid on top (waived on the free pity-ride)
 const LADY_DRINK = 150;  // canon
 const BEER_PRICE = 80;   // your own big Chang, bar price
 const BELL_PRICE = 300;  // ring it and the round is on you

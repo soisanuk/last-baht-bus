@@ -1549,6 +1549,41 @@ const _DOG_RAIN_STREET = [
     "one enormous shake, and he rejoins you as if nothing passed between them.",
 ];
 
+// A shared songthaew is an open truck bed — a dog riding along is one of the
+// most ordinary sights in Thailand, free, no fuss. A motosai is one bike, one
+// pillion seat, already full — physically no room for him, so he takes his own
+// route and is simply THERE when the bike pulls in (the same "dogs keep maps
+// of this town" competence established in the rain reactions).
+const _DOG_BUS = [
+  "Sai Krok vaults into the truck bed like he's done it a hundred times — which, " +
+    "you're beginning to suspect, he has — ears back, tongue out, thoroughly " +
+    "unbothered by forty kilometres an hour. He's down and at your heel again " +
+    "before the songthaew's fully stopped rolling.",
+  "The driver doesn't even glance twice as Sai Krok hops up onto the bench across " +
+    "from you, settles, and rides the whole way with the bored dignity of a " +
+    "commuter who has seen this route a thousand times. Nobody pays for a dog.",
+  "Sai Krok rides the tailgate the whole way, nose into the wind, ears doing " +
+    "something aerodynamically improbable. An old woman with a sack of rice pats " +
+    "his head at the second stop and he accepts it like a toll.",
+];
+// No dedicated price clause baked in here — _doMotosai appends the actual
+// ฿10 callout (or omits it, on the free pity-ride) once the flavor's picked,
+// so these describe the ARRANGEMENT only.
+const _DOG_MOTOSAI = [
+  "The piwin doesn't even blink — one shout down the row and a second driver " +
+    "swings a saleng round, tailgate down, a ramp for a dog who's clearly done " +
+    "this before. Sai Krok trots up it like a gentleman boarding a first-class " +
+    "carriage.",
+  "\"Ai, dog too?\" The piwin laughs, waves over a mate idling by the stand, " +
+    "and the two of them settle Sai Krok into the saleng's flatbed with more " +
+    "ceremony than they gave you. He rides sitting bolt upright, surveying " +
+    "his kingdom.",
+  "A word passes between the piwins in Thai too fast to catch, and a second " +
+    "bike peels off the rank — a battered saleng, motor coughing awake — with " +
+    "Sai Krok already installed in the back before you've finished climbing " +
+    "onto your own ride.",
+];
+
 function _doWeather() {
   if (G.rain > 0) {
     _say("Current conditions: a wall of water, personally experienced. Your " +
