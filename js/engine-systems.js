@@ -1031,6 +1031,9 @@ function _questAvailable(qid) {
   const q = QUESTS[qid];
   const st = G.quests[qid];
   if (st === "active" || st === "done") return false;
+  // reqFlags: world-state gates (e.g. "hasDog") — deps chain quests, reqFlags
+  // gate on anything a flag can express
+  if (q.reqFlags && !q.reqFlags.every(f => _flag(f))) return false;
   return q.deps.every(d => G.quests[d] === "done");
 }
 
@@ -1038,6 +1041,7 @@ function _questAvailable(qid) {
 function _questOffer(npcId) {
   for (const [qid, q] of Object.entries(QUESTS)) {
     if (q.giver !== npcId || !_questAvailable(qid)) continue;
+    if (G.quests[qid] === "offered") continue; // already on the table — surface the giver's NEXT job instead
     G.quests[qid] = "offered";
     _say(`✦ ${NPCS[npcId].name} has a job for you: “${q.name}” — ${q.desc}`, "win");
     _say(`(ACCEPT ${qid.toUpperCase()} to take it on.)`, "dim");
@@ -1778,12 +1782,38 @@ function _doFeedDog(arg) {
       `at you. Properly. Files something away. (฿${G.money} left.)`, "win");
   }
   G.dog = { since: G.day };
+  _setFlag("hasDog"); // quest gate — see QUESTS reqFlags
   _say("A passing bar girl laughs at your face: “Ohhh. He choose you, na.” The soi " +
     "calls him Sai Krok — sausage — after his one great subject. From here on he pads " +
     "at your heel, waits outside every bar, and sleeps against your door. Nobody " +
     "consulted you. That is how it works. (He's yours now: NAME DOG <something> if " +
     "you'd rather he answered to yours.)", "win");
   _addHappy(2);
+}
+
+// The Shamrock scene: walk him onto the Khao Talo strip — past the dead Irish
+// pub with the sun-bleached sign — and the dog's history surfaces. Fires once
+// ever (the flag completes Bert's "The Shamrock Dog" quest if it's on the
+// books, but the scene itself belongs to anyone who makes the walk).
+function _dogShamrock() {
+  if (_flag("shamrockVisited")) return;
+  _setFlag("shamrockVisited");
+  _say(_dogN("Sai Krok is suddenly not at your heel. He is ahead of you — moving with a " +
+    "purpose you have never seen in him, straight past the Water Buffalo's rail, past " +
+    "the Firefly, all the way down to the dark end of the strip. To the dead pub. THE " +
+    "SHAMROCK, says the sun-bleached sign, and under it he sits at the shuttered door " +
+    "and waits. Not whining. Waiting — the way a dog waits for a shift to start."), "win");
+  _say("Daeng comes out of her place wiping her hands, looks once, and goes very soft. " +
+    "“Ohh,” she says. “Paddy dog. You Paddy dog, na.” She crouches and takes his face " +
+    "in both hands. “Four year. FOUR YEAR he walking.” Behind the shutter hasp, gone " +
+    "green with the seasons, something glints: a brass tag. You work it free — SEAMUS, " +
+    "it says. THE SHAMROCK. GOOD BOY.", "win");
+  G.itemLoc.brass_tag = "inventory";
+  _say(_dogN("(You now have the brass tag.) Sai Krok stays at the door exactly as long as " +
+    "he needs to — a minute, maybe two, the whole strip quietly not watching — then " +
+    "stands, shakes from nose to tail, and comes back to your heel. Done. Whatever he " +
+    "came to collect, he has it now. So do you."), "dim");
+  _addHappy(3);
 }
 
 // In the open-air beer bars the dog is a social asset: everyone likes a dog
