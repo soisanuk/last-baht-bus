@@ -2985,6 +2985,38 @@ const PATRONS = {
     ],
   },
 
+  fergie: {
+    name: "Fergie", emoji: "🥃", age: 58, nat: "Northern Irish",
+    home: "gold_rush", hops: true, haunts: ["Soi Buakhao", "Tree Town"],
+    avoids: ["candy_bar", "candy_bar_2", "stinky_bar"], rage: ["bert", "candy", "stinky"],
+    desc: "Short, bald, and boiled red — the nose of a man who has met a great deal of liquor and " +
+      "won none of the arguments, and two cauliflower ears that agree. Late fifties, Northern Irish, a " +
+      "retired tradesman of some sort, though which sort changes with the tide. Guarded stone-cold " +
+      "sober, a magnificent liar three drinks in, and — on the nights he's had a smoke as well — a " +
+      "nasty piece of work best left entirely alone. Banned from Bert's and Candy's bars, and not " +
+      "sorry about it.",
+    dialogue: [
+      { text: "\"Buy us a wee one and I'll tell you anything you like — and I do mean anything.\" " +
+        "Fergie's grin is missing a tooth and gaining a story. \"See these?\" He turns a cauliflowered " +
+        "ear. \"Nineteen-eighty... ah, doesn't matter. Different life. I've had a few.\" He has, and " +
+        "not one of them agrees with another, and he knows that you know, and it delights him.",
+        short: "\"I've had a few lives, son, and none of them agree with each other.\"" },
+      { topic: "army", text: "\"Regiment,\" he says, tapping the side of that ruined nose, sloshing " +
+        "the glass. \"Two tours nobody's cleared to talk about — don't ask me which sandbox. Came " +
+        "home, fitted bathrooms thirty years after. Best cover there is, a plumber. Nobody looks " +
+        "twice at a man under a sink.\" He is completely sincere. He was completely sincere last week, " +
+        "when he was an English teacher in Shenzhen." },
+      { topic: "china", text: "\"China, aye — six years teaching the Queen's English to wee " +
+        "millionaires' weans in Shenzhen. Or Guangzhou. One of them.\" A fond, faraway sip. \"Married " +
+        "a girl from the school. Or that was the OTHER time — this was before the rigs.\" He frowns " +
+        "briefly at the arithmetic of his own past, then abandons it as a bad job." },
+      { topic: "belfast", text: "The glass stops halfway. For a second the bar-room bullshitter is " +
+        "gone and there's just a hard, tired man off a hard, tired street. \"Belfast,\" he says, and " +
+        "nothing else, and the word shuts like a door. Then he blinks and the grin snaps back on like " +
+        "a light. \"Ancient history, son. What're you drinking?\"" },
+    ],
+  },
+
   ron: {
     name: "Ron", emoji: "🦘", age: 66, nat: "Australian",
     home: "mama_yai", hops: false,

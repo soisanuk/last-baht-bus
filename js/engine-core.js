@@ -344,12 +344,12 @@ function _patronRoom(id) {
   let h = G.vacation * 7919 + G.day * 104729 + _patronHour() * 48271 + 1;
   for (const c of id) h = (h * 31 + c.charCodeAt(0)) % 2147483647;
   h = (h * 48271) % 2147483647;
-  // some patrons have bars they will not set foot in (creditors, history)
-  let i = h % _PATRON_HOP_ROOMS.length;
-  while (p.avoids && p.avoids.includes(_PATRON_HOP_ROOMS[i])) {
-    i = (i + 1) % _PATRON_HOP_ROOMS.length;
-  }
-  return _PATRON_HOP_ROOMS[i];
+  // some regulars only haunt certain districts (Fergie: Buakhao + Tree Town)
+  const pool = p.haunts ? _PATRON_HOP_ROOMS.filter(r => p.haunts.includes(ROOMS[r].region)) : _PATRON_HOP_ROOMS;
+  // some patrons have bars they will not set foot in (creditors, a ban, history)
+  let i = h % pool.length;
+  while (p.avoids && p.avoids.includes(pool[i])) i = (i + 1) % pool.length;
+  return pool[i];
 }
 
 function _patronsHere() {
@@ -373,6 +373,9 @@ function _findPatron(word) {
 function _patronTalk(id, topic) {
   if (G.patronTalk.day !== G.day) G.patronTalk = { day: G.day, talked: {} };
   const p = PATRONS[id];
+  // some regulars have a sore subject that turns them belligerent (Fergie: Bert,
+  // Candy, their bars). On his nasty nights it turns into a swing.
+  if (topic && p.rage && p.rage.some(k => topic.includes(k))) { _patronRage(id); return; }
   let d = null;
   for (const e of p.dialogue) {
     if (topic ? e.topic !== topic && !(e.topic && topic.includes(e.topic)) : e.topic) continue;
@@ -392,6 +395,32 @@ function _patronTalk(id, topic) {
   // dialogue being pure flavour (no gives/sets anywhere) — a grizzled-regular
   // brush-off, so you never get the whole war story twice.
   _say(repeat ? (d.short || _patronAgain(id)) : d.text);
+}
+
+// A belligerent regular's sore subject. Whether it turns into a swing depends on
+// his nightly state — the nights he's on the weed, the drunk turns nasty (a
+// stable per-night hash, so it's the same all evening).
+function _patronRage(id) {
+  const name = PATRONS[id].name;
+  // is he on the weed tonight? (~40% of nights). Mix the day through a big prime —
+  // a bare _hh of consecutive day strings correlates in its low bits.
+  let h = (G.vacation * 7919 + G.day * 104729 + 149) % 2147483647;
+  for (const c of id) h = (h * 31 + c.charCodeAt(0)) % 2147483647;
+  const nasty = ((h * 48271) % 2147483647) % 100 < 40;
+  if (nasty) {
+    _say(`You bring up the wrong name, and something behind ${name}'s eyes just closes. ` +
+      "“...the HELL did you say to me?” He's off the stool and swinging before it lands — wild, " +
+      "drunk, but a lifetime of car-park brawls in it. Hands haul him back; security and a piwin " +
+      "fold him down like a deckchair while he roars Belfast at the ceiling. You come away with a " +
+      "rung ear, a thumping heart, and a room full of people who'd very much rather you hadn't.", "alert");
+    G.hurt = Math.min(3, G.hurt + 1);
+    _addHeat(1);
+    return;
+  }
+  _say(`You bring up Bert — or Candy, or their bars — and ${name} goes very still, then very ` +
+    "quiet. “We don't talk about that. Or them. Not with me.” The flat calm is worse than " +
+    "shouting; the knuckles round the bottle have gone white. “Drink up somewhere else, son.” " +
+    "(Leave it — some night soon he won't be this sober.)", "alert");
 }
 
 // The rail regular's version of "you asked me that" — a male-expat grumble to
