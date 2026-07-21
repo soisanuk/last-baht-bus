@@ -1505,18 +1505,45 @@ function _startRain(len) {
   // arrangements — every dog on this soi knows a dry spot you don't.)
   if (G.dog) {
     if (_room().barType === "beer") {
-      _say("Sai Krok was under your stool before the third drop landed — seniority in " +
-        "these matters — and now stands, unhurried, to shake a full body-length of " +
-        "spray across four stools. The whole rail lifts its beers in one practiced " +
-        "motion. Nobody minds. Much. He resettles against your foot, smug and dry.", "dim");
+      _say(_DOG_RAIN_BAR[Math.floor(_rand() * _DOG_RAIN_BAR.length)], "dim");
     } else if (!_sheltered(G.room)) {
-      _say("Every soi dog in Pattaya has vanished — except yours. Sai Krok presses " +
-        "against your shins under the awning, one wet rag of a dog, entirely " +
-        "unbothered. He has out-waited a thousand of these and finds your surprise " +
-        "at the weather gently amusing.", "dim");
+      _say(_DOG_RAIN_STREET[Math.floor(_rand() * _DOG_RAIN_STREET.length)], "dim");
     }
   }
 }
+
+// The dog's rainy-season repertoire — a few variants each so a wet week
+// doesn't play the same line every squall.
+const _DOG_RAIN_BAR = [
+  "Sai Krok was under your stool before the third drop landed — seniority in these " +
+    "matters — and now stands, unhurried, to shake a full body-length of spray across " +
+    "four stools. The whole rail lifts its beers in one practiced motion. Nobody " +
+    "minds. Much. He resettles against your foot, smug and dry.",
+  "Sai Krok relocates, without visible urgency, from under your stool to the exact " +
+    "geometric centre of the bar's dry footprint — which is under the till. The " +
+    "cashier will step over him for the next hour and never once comment.",
+  "Thunder cracks somewhere over the gulf, and every girl in the bar checks Sai Krok " +
+    "first — the soi's true seismometer. He yawns. The bar relaxes on his authority " +
+    "and the music comes back up.",
+  "Sai Krok watches the water sheet off the awning with a connoisseur's eye, taking " +
+    "the vintage's measure — then folds up and falls asleep mid-downpour. The rail " +
+    "finds this magnificent and toasts him accordingly.",
+];
+const _DOG_RAIN_STREET = [
+  "Every soi dog in Pattaya has vanished — except yours. Sai Krok presses against " +
+    "your shins under the awning, one wet rag of a dog, entirely unbothered. He has " +
+    "out-waited a thousand of these and finds your surprise at the weather gently " +
+    "amusing.",
+  "Sai Krok leans his whole soaked weight against your leg and begins, gently, to " +
+    "steam. The smell is monsoon-flavoured regret. Loyalty has a price, and tonight " +
+    "the price is this smell.",
+  "Sai Krok takes one look at your chosen shelter, dismisses it, and herds you two " +
+    "doorways down to a dry spot he clearly already knew about. Dogs keep maps of " +
+    "this town that men would pay real money for.",
+  "Sai Krok sits precisely at the awning's drip-line, nose out, letting the rain " +
+    "hammer his snout — some private annual ritual between him and the season. Then " +
+    "one enormous shake, and he rejoins you as if nothing passed between them.",
+];
 
 function _doWeather() {
   if (G.rain > 0) {
@@ -1736,6 +1763,74 @@ function _doFeedDog(arg) {
 // lover in Thailand, and the staff fuss over him — sometimes that warmth lands
 // on you as real favor (a bond bump with whoever fussed). Rolls once per bar
 // per night, ~half the time, from the presence line in _describeRoom.
+// 21 scenes deep, because he's a permanent fixture and the rotation shouldn't
+// wear through in a week. Each takes the fussing staffer's name.
+const _DOG_FAVOR_SCENES = [
+  n => `${n} spots Sai Krok before she spots you, produces an ice-bucket lid of water ` +
+    `from nowhere, and sets it down with ceremony. "Handsome MAN," she tells him — him, ` +
+    `not you — and by the transitive property of Thai dog diplomacy, some of it lands ` +
+    `on you anyway.`,
+  n => `${n} crouches to Sai Krok's level and conducts a full interview in Thai — his ` +
+    `week, his opinions, the state of the soi. He answers with his tail. When she ` +
+    `stands, some of that warmth comes up with her and settles on you.`,
+  n => `A plate appears under Sai Krok's nose — grilled chicken, "mistake order, cannot ` +
+    `sell" — and ${n} watches him eat with pure uncomplicated delight. A man whose ` +
+    `dog is loved is halfway to being loved himself. House rules.`,
+  n => `${n} photographs Sai Krok from four angles for the bar's Facebook page. He is ` +
+    `the most engagement they will get all month and carries it well. You are visible ` +
+    `in the background of the winning shot, captioned simply "customer". Fame.`,
+  n => `${n} studies Sai Krok a long moment and delivers the verdict: good dog, old ` +
+    `soul — "maybe a monk, last time." The theology is above your pay grade, but a man ` +
+    `travelling with a former monk enjoys a certain standing.`,
+  n => `${n} finds the clipped ear and inspects it with real concern, turning his head ` +
+    `gently by the chin. Whatever old story she reads there, she decides it ended well ` +
+    `— with you — and your next beer arrives colder than the last.`,
+  n => `${n} swings the bar's one standing fan eleven degrees to point at Sai Krok. The ` +
+    `entire climate diplomacy of the rail is redrawn around a sleeping dog, and your ` +
+    `stool, by no accident, sits squarely in the slipstream.`,
+  n => `The girls convene over Sai Krok and vote on his breed. Deliberation is intense. ` +
+    `${n} delivers the finding — "Pattaya special. Best breed." — and you are handed a ` +
+    `cold towel for no reason anyone explains.`,
+  n => `${n} sets down the last of her own khao man gai for him without a word, like ` +
+    `it was always his. When you try to pay for it, the look you get is genuinely ` +
+    `offended. Some things are between her and the dog.`,
+  n => `Sai Krok performs his one trick — sitting very, very straight — and the bar ` +
+    `reacts like a title fight. "Ohhh, HIGH-SO," ${n} declares, and the dignity of ` +
+    `the household, yours included, is upgraded on the spot.`,
+  n => `${n} settles beside Sai Krok and tells him, in Thai, at length, about her own ` +
+    `dog back home — the one her mother is minding. He listens the way she needed ` +
+    `someone to listen. Afterward she treats you a shade like family.`,
+  n => `${n} produces a scrap of checked phakhama cloth and ties it around Sai Krok's ` +
+    `neck — "for handsome." He wears it like a medal ceremony. The room approves of ` +
+    `you both, in that order, and the order is correct.`,
+  n => `"A dog choosing a farang — good luck, you know." ${n} says it like settled ` +
+    `case law. "He choose you. Everybody see." The rail nods along, and you are ` +
+    `treated, from here on, as a man vouched for.`,
+  n => `Sai Krok rests his chin on the rail cushion, and ${n} starts absent-mindedly ` +
+    `dealing him into the conversation — a question here, a "na?" there — like a ` +
+    `regular of long standing. Which, you realise, he now is. And so are you.`,
+  n => `${n} scolds you — actually scolds you — for walking him in this heat, then ` +
+    `feeds Sai Krok ice cubes one at a time from her hand while he crunches them ` +
+    `with his eyes shut. You are forgiven by association, on conditions.`,
+  n => `The bar's own cat descends from the till to inspect Sai Krok. He offers his ` +
+    `nose with elaborate, old-fashioned courtesy; détente is achieved. "Even the cat ` +
+    `like you now," ${n} reports, "and the cat like NOBODY." High office.`,
+  n => `A packet of the staff's own dried squid makes its way down the bar, girl to ` +
+    `girl, and ends under Sai Krok's nose. He receives it like communion. ${n} has ` +
+    `already named you "squid dog papa" and it is, apparently, permanent.`,
+  n => `${n} declares the stool beside you "his" and props a laminated RESERVED sign ` +
+    `against it. The joke will be old by tomorrow and permanent by next week, which ` +
+    `is how all the best bar institutions start.`,
+  n => `An old regular pronounces, to nobody, that a bar with a sleeping dog in it is ` +
+    `a lucky bar. ${n} hears it, weighs it, and decides it is true — and that you, ` +
+    `as the luck's registered owner, drink among friends now.`,
+  n => `${n} practices her English on Sai Krok — "Hello handsome, how are you today, ` +
+    `I am fine thank you" — and he listens better than any farang she's tried it on. ` +
+    `Your patience while she finishes the whole lesson is noted and banked.`,
+  n => `Sai Krok tours the length of the bar greeting each girl strictly in order of ` +
+    `seniority, like a shift inspection. "Very professional," ${n} says, watching him ` +
+    `work. The audit passes. So, somehow, do you.`,
+];
 function _dogBarFavor() {
   const fav = (G.soc.dogFavor = G.soc.dogFavor || {});
   if (fav[G.room]) return;
@@ -1745,19 +1840,7 @@ function _dogBarFavor() {
   if (!staff.length) return;
   const id = staff[Math.floor(_rand() * staff.length)];
   const name = NPCS[id].name;
-  const scene = [
-    `${name} spots Sai Krok before she spots you, produces an ice-bucket lid of water ` +
-      `from nowhere, and sets it down with ceremony. "Handsome MAN," she tells him — him, ` +
-      `not you — and by the transitive property of Thai dog diplomacy, some of it lands ` +
-      `on you anyway.`,
-    `${name} crouches to Sai Krok's level and conducts a full interview in Thai — his ` +
-      `week, his opinions, the state of the soi. He answers with his tail. When she ` +
-      `stands, some of that warmth comes up with her and settles on you.`,
-    `A plate appears under Sai Krok's nose — grilled chicken, "mistake order, cannot ` +
-      `sell" — and ${name} watches him eat with pure uncomplicated delight. A man whose ` +
-      `dog is loved is halfway to being loved himself. House rules.`,
-  ][Math.floor(_rand() * 3)];
-  _say(scene, "win");
+  _say(_DOG_FAVOR_SCENES[Math.floor(_rand() * _DOG_FAVOR_SCENES.length)](name), "win");
   G.soc.drinks[id] = (G.soc.drinks[id] || 0) + 1;
   _say(`(Everyone likes a dog lover in Thailand — ${name} warms to you.)`, "dim");
 }
