@@ -499,8 +499,94 @@ const ROOMS = {
       "live-music stages wedged between Soi Buakhao and Second Road, directly across " +
       "from Central's glow. Young crowd, shared security in grey polos, craft beer at " +
       "double Chang prices. CANDY BAR 2's rose-pink sign is unmistakably the same " +
-      "pink as the original.",
-    exits: { w: "second_rd_c", e: "buakhao_n", in: "candy_bar_2" },
+      "pink as the original. North, a LIVE-STAGE YARD throws sound over the roofs; " +
+      "south, the CONTAINER ROWS glow like a docked ship someone plugged in.",
+    exits: { w: "second_rd_c", e: "buakhao_n", in: "candy_bar_2", n: "myth_stage", s: "myth_rows" },
+  },
+  myth_stage: {
+    name: "Myth Night — Live-Stage Yard",
+    region: "Myth Night",
+    liveMusic: true,
+    desc: "A gravel yard walled in by container bars, all facing a corrugated stage where " +
+      "a covers band murders a Carabao song to a delighted crowd. THE AMP ROOM, FEEDBACK " +
+      "BAR, ENCORE, and SOUNDCHECK BAR ring the yard, each with its own tap wall and its " +
+      "own idea of how loud is too loud.",
+    exits: { s: "myth_night", in: "amp_room", e: "feedback_bar", w: "encore_bar", n: "soundcheck_bar" },
+  },
+  amp_room: {
+    name: "The Amp Room",
+    region: "Myth Night",
+    bar: "The Amp Room", barType: "beer", liveMusic: true, outlet: true,
+    desc: "Speaker cabinets stacked to the ceiling, half of them decorative, all of them " +
+      "sticky. The beer is cold, the bass is a full-body experience, and Ju has to lean " +
+      "in close to take your order — which is, of course, the point.",
+    exits: { out: "myth_stage" },
+  },
+  feedback_bar: {
+    name: "Feedback Bar",
+    region: "Myth Night",
+    bar: "Feedback Bar", barType: "beer",
+    desc: "A container split down the long side, one wall a chalkboard of craft taps nobody " +
+      "in here can pronounce. Pat pours a flight of four and lines them up like a dare.",
+    exits: { out: "myth_stage" },
+  },
+  encore_bar: {
+    name: "Encore",
+    region: "Myth Night",
+    bar: "Encore", barType: "beer",
+    desc: "The after-the-band bar: fairy lights, low stools, a battered acoustic guitar on " +
+      "a hook that everyone threatens to play and nobody does. Pun keeps the tab and the peace.",
+    exits: { out: "myth_stage" },
+  },
+  soundcheck_bar: {
+    name: "Soundcheck Bar",
+    region: "Myth Night",
+    bar: "Soundcheck Bar", barType: "beer",
+    desc: "Closest to the stage and proud of it — you order in the gaps between songs or not " +
+      "at all. Som mouths the prices and holds up fingers, a whole transaction in mime.",
+    exits: { out: "myth_stage" },
+  },
+  myth_rows: {
+    name: "Myth Night — Container Rows",
+    region: "Myth Night",
+    desc: "Two facing rows of shipping containers cut open into bars, festoon lights strung " +
+      "between them like rigging. Quieter than the stage yard, a degree cooler, the crowd a " +
+      "little older. CRAFT & CARGO, THE GROWLER, CONTAINER 8, and RELOAD BAR trade pours " +
+      "down the line.",
+    exits: { n: "myth_night", in: "craft_cargo", e: "the_growler", w: "container_8", s: "reload_bar" },
+  },
+  craft_cargo: {
+    name: "Craft & Cargo",
+    region: "Myth Night",
+    bar: "Craft & Cargo", barType: "beer", outlet: true,
+    desc: "A shipping container with the doors thrown wide, kegs where the freight used to " +
+      "ride, and a blackboard of guest taps chalked in three colours. Mam runs the taps with " +
+      "the calm of someone who has poured through every kind of night.",
+    exits: { out: "myth_rows" },
+  },
+  the_growler: {
+    name: "The Growler",
+    region: "Myth Night",
+    bar: "The Growler", barType: "beer",
+    desc: "Named for the take-home jugs on the back shelf, half of them dusty. A good stool, " +
+      "a cheap pour, and Jib behind the bar who remembers your drink before your name.",
+    exits: { out: "myth_rows" },
+  },
+  container_8: {
+    name: "Container 8",
+    region: "Myth Night",
+    bar: "Container 8", barType: "beer",
+    desc: "Literally the eighth container in the row, the number stencilled in freight paint " +
+      "and adopted as a name. Toon keeps a jar of chilli-lime peanuts on the bar as bait.",
+    exits: { out: "myth_rows" },
+  },
+  reload_bar: {
+    name: "Reload Bar",
+    region: "Myth Night",
+    bar: "Reload Bar", barType: "beer",
+    desc: "The last container before the wall, where the crowd washes up to steady itself " +
+      "before another lap of the market. Yaya works the rail, quick with a coaster and a joke.",
+    exits: { out: "myth_rows" },
   },
   candy_bar_2: {
     name: "Candy Bar 2",
@@ -4065,6 +4151,8 @@ const _FILLER_HOSTESSES = [
   ["Kaew","แก้ว","paradise_nights"], ["Meaw","เหมียว","paradise_nights"],
   ["Nan","แนน","candy_bar"], ["Bua","บัว","candy_bar"],
   ["Fern","เฟิร์น","candy_bar_2"], ["Mai","ใหม่","candy_bar_2"],
+  ["Ju","จู","amp_room"], ["Pat","แพท","feedback_bar"], ["Pun","ปั้น","encore_bar"], ["Som","ส้ม","soundcheck_bar"],
+  ["Mam","แหม่ม","craft_cargo"], ["Jib","จิ๊บ","the_growler"], ["Toon","ตูน","container_8"], ["Yaya","ยาย่า","reload_bar"],
   ["Ann","แอน","midnight_sun"], ["Nut","นัท","midnight_sun"],
   ["Rung","รุ้ง","lucky_tiger"], ["Oat","โอ๊ต","lucky_tiger"],
   ["Ton","ต้น","silk_rose"], ["Nid","นิด","silk_rose"], ["Wa","หว้า","silk_rose"],
@@ -4365,6 +4453,16 @@ const ROOM_GEO = {
   // Myth Night
   myth_night:       [12.9322, 100.8822],
   candy_bar_2:      [12.9324, 100.8824],
+  myth_stage:       [12.9326, 100.8823],
+  amp_room:         [12.9327, 100.8821],
+  feedback_bar:     [12.9328, 100.8824],
+  encore_bar:       [12.9325, 100.8820],
+  soundcheck_bar:   [12.9329, 100.8823],
+  myth_rows:        [12.9318, 100.8821],
+  craft_cargo:      [12.9317, 100.8819],
+  the_growler:      [12.9316, 100.8823],
+  container_8:      [12.9319, 100.8818],
+  reload_bar:       [12.9315, 100.8822],
   // Soi Buakhao
   buakhao_n:        [12.9315, 100.8848],
   metropole_room:   [12.9308, 100.8853],
