@@ -3,9 +3,19 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
+    "t": "Tyson Fury vs. Wach Preview: Friday in Pattaya With No Broadcast Planned",
+    "s": "Boxing Insider",
+    "d": "21 Jul 2026"
+  },
+  {
     "t": "Australian faces death penalty after Pattaya teen killing confession",
     "s": "MSN",
     "d": "20 Jul 2026"
+  },
+  {
+    "t": "Friend of Thai teen allegedly murdered by Australian man went to his condo after reporting her missing | Thailand",
+    "s": "The Guardian",
+    "d": "01 Jul 2026"
   },
   {
     "t": "How a Thai teen's night at a Pattaya beach ended in death",
@@ -18,9 +28,9 @@ var NEWS_FEED = [
     "d": "30 Jun 2026"
   },
   {
-    "t": "In Thailand’s sex tourism hub, bright lights flash, loud music blares – and underage girls are exploited",
-    "s": "The Guardian",
-    "d": "03 Jul 2026"
+    "t": "An Australian man has been charged with homicide in Thailand, after a Thai teenager’s body was found stuffed in a suitcase and abandoned in ",
+    "s": "facebook.com",
+    "d": "30 Jun 2026"
   },
   {
     "t": "Thailand’s suitcase murder raises safety fears as Pattaya mourns for teen victim",
@@ -28,28 +38,18 @@ var NEWS_FEED = [
     "d": "01 Jul 2026"
   },
   {
-    "t": "An Australian man has been charged with homicide in Thailand, after a Thai teenager’s body was found stuffed in a suitcase and abandoned in ",
-    "s": "facebook.com",
-    "d": "30 Jun 2026"
+    "t": "Australian man charged with murder after dead girl found in suitcase in Thailand",
+    "s": "BBC",
+    "d": "28 Jun 2026"
   },
   {
-    "t": "‘$13 an hour’: Tourist’s sick sex confession",
-    "s": "News.com.au",
-    "d": "02 Jul 2026"
+    "t": "'Deportation best scenario': Kiwi teen released on bail after days in Thai jail",
+    "s": "NZ Herald",
+    "d": "21 Jul 2026"
   },
   {
-    "t": "Australian man charged with murder in death of a girl, 17, in Thailand’s Pattaya area",
-    "s": "Los Angeles Times",
-    "d": "30 Jun 2026"
-  },
-  {
-    "t": "Thailand's first conscientious objector sentenced to prison",
-    "s": "Bangkok Post",
-    "d": "20 Jul 2026"
-  },
-  {
-    "t": "One cannabis mistake at airport could bring 10 years in prison and $15,000 fine",
-    "s": "Fox News",
+    "t": "First OE turns into Thai prison ordeal for 18-year-old Kiwi",
+    "s": "Stuff",
     "d": "20 Jul 2026"
   },
   {
@@ -63,25 +63,25 @@ var NEWS_FEED = [
     "d": "20 Jul 2026"
   },
   {
-    "t": "Disney Run Thailand 2026 criticised over event issues",
-    "s": "Khaosod English",
-    "d": "21 Jul 2026"
+    "t": "Monkey spotted struggling in open water rescued in Thailand",
+    "s": "upi.com",
+    "d": "20 Jul 2026"
   },
   {
-    "t": "Thailand’s medical cannabis dream turns into a smuggling nightmare",
-    "s": "Thai PBS World",
+    "t": "Thailand's first conscientious objector sentenced to prison",
+    "s": "Bangkok Post",
     "d": "20 Jul 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-07-21","USD":33.67,"AUD":23.62,"GBP":45.11,"EUR":38.43};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-07-22","temp":29,"humid":75,"code":3,"hi":33,"rain":46};
+var WX_NOW = {"date":"2026-07-22","temp":29,"humid":77,"code":3,"hi":33,"rain":46};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-18","done":true,"h":"France","hs":4,"a":"England","as":6},{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-07-16","first":"639214","last2":"71","front3":["683","709"],"back3":["427","746"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4073,"date":"2026-07-21","baht":64850};
+var GOLD = {"usd":4079,"date":"2026-07-21","baht":64950};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":66519,"thb":2241932};
+var BTC = {"usd":66309,"thb":2234050};
