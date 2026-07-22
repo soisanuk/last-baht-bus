@@ -408,6 +408,7 @@ function _doTalk(arg, topic) {
     _say("Nobody by that name here.");
     return;
   }
+  _trace(topic ? "ask" : "talk", NPCS[npc].name, topic || ""); // breadcrumb
   const d = _pickDialogue(npc, topic || null);
   // a regular you TALK to warms up: generic Tinglish register for the filler
   // girls, unless she has a more specific line (a topic, or a bond-gated entry
@@ -552,6 +553,7 @@ function _doGive(itemWord, npcWord) {
   const id = _inv().find(i => ITEMS[i].name.toLowerCase().includes(itemWord) ||
     ITEMS[i].aliases.some(a => a.includes(itemWord)));
   if (!id) { _say("You're not carrying that."); return; }
+  _trace("give", NPCS[npc].name, ITEMS[id].name); // breadcrumb
   if (id === "helmet" && npc === "pim") {
     G.itemLoc.helmet = null;
     const d = _pickDialogue("pim"); // helmet entry matches on hasHelmet
@@ -2131,6 +2133,7 @@ function doCommand(input) {
   // actually needs "up" stripped (TAKE/PICK/GET/GRAB are already synonyms
   // without a "pick up" form) — never add it back without checking that.
   const arg = rest.filter(w => !["the", "a", "an", "to", "at", "my"].includes(w)).join(" ");
+  const _room0 = G.room; // for the post-command action breadcrumb (movement inference)
 
   // Hidden testing code (gated by CHEATS_ENABLED in engine-core.js). Works in
   // any state, costs no turn, and is never surfaced — a typed secret only.
@@ -2243,7 +2246,7 @@ function doCommand(input) {
   if ((_DIRS[v] !== undefined || (_room().exits && _room().exits[v])) &&
       words.length === 1) {
     // bare direction — including this room's own exit keys (pub, hotel, …)
-    _doGo(v); _tick(); _checkAct1(); return;
+    _doGo(v); _flushTrace(_room0); _tick(); _checkAct1(); return;
   }
 
   switch (v) {
@@ -2457,6 +2460,7 @@ function doCommand(input) {
       _say("I didn't understand that. (HELP lists commands.)", "dim");
       return; // no tick for parse errors
   }
+  _flushTrace(_room0);
   _tick();
   _questTick();
   _checkAct1();

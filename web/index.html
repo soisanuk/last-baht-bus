@@ -138,6 +138,11 @@
                font-family: "SF Mono", "Cascadia Mono", Menlo, Consolas, "Noto Sans Thai", monospace; }
   .t-dim   { color: var(--violet); font-size: .88em; }
   .t-alert { color: var(--red); text-shadow: 0 0 10px #ff335550; }
+  /* action breadcrumb ("· You asked Nok about beer") — a quiet post-command
+     anchor so a long scroll doesn't lose who/where you just acted. */
+  .t-trace { color: var(--violet); font-size: .8em; opacity: .72;
+             margin-top: .3rem; letter-spacing: .01em; }
+  .t-trace .kw { color: #d9c2f2; font-weight: 600; }
   /* actionable words — names, items, exits, command hints. Bold and a shade
      brighter than their line; tap for quick actions, hold for the full list. */
   .kw { font-weight: 700; color: var(--bright); cursor: pointer;

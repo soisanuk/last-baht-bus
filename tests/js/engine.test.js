@@ -5083,3 +5083,41 @@ test("the transcript collects Thai runs for the trainer bridge, capped and dedup
   for (let i = 0; i < 70; i++) _say("คำ" + "ๆ".repeat(i % 3) + i);
   assert.ok(state().thaiSeen.length <= 60, "capped");
 });
+
+test("action breadcrumb (_traceLine) formats each verb shape", () => {
+  assert.equal(_traceLine({ verb: "talk", target: "Nok" }), "· You talked to Nok");
+  assert.equal(_traceLine({ verb: "ask", target: "Nok", extra: "beer" }), "· You asked Nok about beer");
+  assert.equal(_traceLine({ verb: "ask", target: "Nok", extra: "" }), "· You asked Nok");
+  assert.equal(_traceLine({ verb: "give", target: "Pim", extra: "helmet" }), "· You gave Pim the helmet");
+  assert.equal(_traceLine({ verb: "flirt", target: "Fon" }), "· You flirted with Fon");
+  assert.equal(_traceLine({ verb: "kiss", target: "Fon" }), "· You kissed Fon");
+  assert.equal(_traceLine({ verb: "go", target: "Soi 6" }), "· You went to Soi 6");
+  assert.equal(_traceLine(null), "");
+  assert.equal(_traceLine({}), "");
+  // a long ask-topic is capped to keep the line short
+  assert.equal(_traceLine({ verb: "ask", target: "Nok", extra: "one two three four five" }),
+    "· You asked Nok about one two three four");
+});
+
+test("the breadcrumb prints after a command, infers movement, and explicit wins", () => {
+  out = [];
+  _trace("talk", "Nok"); _flushTrace("beach");
+  assert.ok(lastOut().includes("· You talked to Nok"), "explicit trace prints");
+  // no explicit trace + a room change → inferred movement line
+  out = [];
+  const dest = Object.keys(ROOMS)[0];
+  state().room = dest;
+  _flushTrace("__nowhere__");
+  assert.ok(lastOut().includes("· You went to " + ROOMS[dest].name), "movement inferred");
+  // an explicit trace beats the movement inference
+  out = [];
+  _trace("kiss", "Fon");
+  state().room = dest;
+  _flushTrace("__other__");
+  assert.ok(lastOut().includes("· You kissed Fon"), "explicit wins");
+  assert.ok(!lastOut().includes("went to"), "no movement line when explicit set");
+  // nothing pending + no room change → silent
+  out = [];
+  _flushTrace(state().room);
+  assert.equal(lastOut(), "", "silent when nothing happened");
+});
