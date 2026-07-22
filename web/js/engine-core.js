@@ -137,6 +137,7 @@ function newGame() {
     bfIncident: null,    // { id, room, kind, fine, day } — a girl ran a game; COMPLAIN for recourse
     bfStrikes: {},       //   girlId → complaints upheld against her (2 = the apology scene)
     bfSeq: null,         // { id, kind, fine, spent, room } — mid bar-hop/WS-party sequence
+    rideSeq: null,       // { id, fine, spent, stops, sanuk, seen } — mid night-ride ("her Pattaya")
     pendingEnc: null,    // encounter id awaiting the player's snap reaction
     encPrompt: null,     // [[text, cls], …] of the pending encounter's prompt, so a restore can redraw it
     game: null,          // live bar mini-game state (connect 4 / jackpot / pool)

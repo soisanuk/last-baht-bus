@@ -2831,6 +2831,52 @@ test("long time can hand you the whole person: less สนุก, deeper bond", 
   assert.ok(state().soc.drinks.lek >= bond + 5, "seeing the real her deepens the bond");
 });
 
+test("the night ride: a bonded lady offers to show you HER Pattaya", () => {
+  state().flags.act1Done = true; state().stage = "expat"; state().money = 20000;
+  state().room = NPCS.lek.room;
+  // a stranger (no bond) never gets the offer — across every day (reset the bond
+  // each iteration, since the honest-overnight fallback climbs it otherwise)
+  let strangerOffered = false;
+  for (let d = 2; d < 40; d++) {
+    state().day = d; state().money = 20000; state().soc.bfRefused = {}; state().soc.drinks.lek = 0;
+    state().pendingBf = { id: "lek", base: 1000 };
+    out = []; _bfResolve("lt");
+    if (/show you MY Pattaya/.test(out.join(""))) strangerOffered = true;
+    state().pendingEnc = null; state().rideSeq = null;
+  }
+  assert.ok(!strangerOffered, "a stranger just gets the plain overnight, never the ride");
+  // a regular (bond tier 2) gets it — day-stable, so search for a firing day
+  let day = 0;
+  for (let d = 2; d < 40 && !day; d++) {
+    state().day = d; state().money = 20000; state().soc.bfRefused = {}; state().soc.drinks.lek = 8;
+    state().pendingBf = { id: "lek", base: 1000 };
+    out = []; _bfResolve("lt");
+    if (/show you MY Pattaya/.test(out.join(""))) day = d;
+    else { state().pendingEnc = null; state().rideSeq = null; }
+  }
+  assert.ok(day, "a lady who likes you offers the ride");
+  assert.equal(state().pendingEnc, "nightride");
+});
+
+test("the night ride: stops cost money, pay non-jading สนุก, deepen the bond, and end the night", () => {
+  state().flags.act1Done = true; state().stage = "expat"; state().money = 20000; state().day = 5;
+  state().room = NPCS.lek.room; state().soc.drinks.lek = 8;
+  // drive the loop directly, past the probabilistic offer
+  state().rideSeq = { id: "lek", fine: 1000, spent: 0, stops: 0, sanuk: 0, seen: [] };
+  state().pendingEnc = "nightride";
+  const bond0 = state().soc.drinks.lek, happy0 = state().happy, money0 = state().money;
+  run("ride on"); run("ride on"); run("ride on");
+  assert.equal(state().rideSeq.stops, 3, "three stops taken");
+  assert.ok(state().money < money0, "the night out costs real money");
+  assert.ok(state().happy > happy0, "and pays its สนุก");
+  assert.ok(state().soc.drinks.lek >= bond0 + 3, "every stop deepens the bond");
+  // calling it ends the night (day rolls) via the barfine payoff
+  const day0 = state().day;
+  run("no, take me home with you");
+  assert.equal(state().rideSeq, null, "the ride is over");
+  assert.equal(state().day, day0 + 1, "and the night ends");
+});
+
 // ── The Darkside lock-in ────────────────────────────────────────────────────
 
 test("lock-in: a spender at a lockIn bar gets the bolt, not the shutters", () => {

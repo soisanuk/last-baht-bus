@@ -963,6 +963,7 @@ const _ENC = {
 
   clubpickup(input) { return _clubpickup(input); },
   freegift(input) { return _freegift(input); },
+  nightride(input) { return _nightRide(input); }, // the magic-mystery-tour night (engine-systems.js)
 };
 
 // "Nothing is free": a 'free' blessed amulet is a bun-khun contract. TAO RAI (ask
