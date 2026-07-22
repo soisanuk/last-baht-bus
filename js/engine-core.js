@@ -47,6 +47,47 @@ function _say(text, cls) {
   _enginePrint(text, cls || "");
 }
 
+// ── Action breadcrumb ────────────────────────────────────────────────────────
+// After a command's prose, a short past-tense line naming who/what you just
+// acted on ("· You asked Nok about beer") so a long scroll doesn't lose the
+// thread. Handlers call _trace() on their success path with the CANONICAL name;
+// movement is inferred centrally by doCommand (a room change with no explicit
+// trace). The line prints via _enginePrint so term.js decorate() chips the
+// names — they stay tappable while still in context — but skips _say's
+// name/Thai harvest (a breadcrumb isn't game prose).
+let _pendingTrace = null;
+function _trace(verb, target, extra) {
+  _pendingTrace = { verb, target: target || "", extra: extra || "" };
+}
+const _TRACE_VERBS = {
+  talk: "talked to", ask: "asked", give: "gave", go: "went to",
+  flirt: "flirted with", kiss: "kissed", spank: "spanked", fondle: "fondled",
+};
+// pure + DOM-free: build the breadcrumb string (tested in engine.test.js)
+function _traceLine(t) {
+  if (!t || !t.verb) return "";
+  const target = String(t.target || "").trim();
+  const extra = String(t.extra || "").split(/\s+/).filter(Boolean).slice(0, 4).join(" ");
+  if (t.verb === "ask")
+    return `· You asked ${target}${extra ? ` about ${extra}` : ""}`.trimEnd();
+  if (t.verb === "give")
+    return `· You gave ${target}${extra ? ` the ${extra}` : ""}`.trimEnd();
+  const v = _TRACE_VERBS[t.verb] || t.verb;
+  return `· You ${v}${target ? ` ${target}` : ""}`.trimEnd();
+}
+// Called by doCommand after each command: synthesise a movement breadcrumb when
+// nothing explicit was set but the room changed, then print + clear.
+function _flushTrace(prevRoom) {
+  if (!_pendingTrace && prevRoom != null && G && G.room !== prevRoom &&
+      typeof ROOMS !== "undefined" && ROOMS[G.room])
+    _pendingTrace = { verb: "go", target: ROOMS[G.room].name, extra: "" };
+  const t = _pendingTrace;
+  _pendingTrace = null;
+  if (!t) return;
+  const line = _traceLine(t);
+  if (line && typeof _enginePrint === "function") _enginePrint(line, "trace");
+}
+
 // Render-only markup: authored content wraps a span in {{…}} to mark it literal
 // — the frontend must print it plainly and tap-decorate NOTHING inside (an item
 // someone else owns, "grabs another {{phone}}"; a proper noun that isn't

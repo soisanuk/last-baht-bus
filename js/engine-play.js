@@ -964,6 +964,7 @@ function _doSocial(kind, targetWord) {
   }
   const name = NPCS[id].name;
   const role = NPC_ROLES[id];
+  _trace(kind, name); // breadcrumb (flirt/kiss/spank/fondle)
 
   // outside a bar this almost never goes well (the katoey encounter, handled
   // by its own resolver, is the famous exception)
