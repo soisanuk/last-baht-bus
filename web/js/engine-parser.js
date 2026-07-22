@@ -544,9 +544,13 @@ function _doGive(itemWord, npcWord) {
   if (/^(dog|sai|krok)$/.test(npcWord) ||
       (G.dog && G.dog.name && npcWord === G.dog.name.toLowerCase())) return _doFeedDog("dog");
   const npc = _findNpc(npcWord);
+  if (!npc) { _say("They're not here."); return; }
+  // giving your empties to the vendor who buys them IS selling them — route any
+  // bottle-ish give (incl. the natural plural "bottles", which the strict item
+  // matcher below misses) straight to the sale, which handles the empty case
+  if (npc === "nok" && /bottle|glass/.test(itemWord)) return _doSellBottles();
   const id = _inv().find(i => ITEMS[i].name.toLowerCase().includes(itemWord) ||
     ITEMS[i].aliases.some(a => a.includes(itemWord)));
-  if (!npc) { _say("They're not here."); return; }
   if (!id) { _say("You're not carrying that."); return; }
   if (id === "helmet" && npc === "pim") {
     G.itemLoc.helmet = null;
@@ -595,7 +599,6 @@ function _doGive(itemWord, npcWord) {
       "presses thank-you money into your hand over your objections. Family rules.", "win");
     return;
   }
-  if (id.startsWith("bottle") && npc === "nok") return _doSellBottles();
   const SALENG_GIFTS = ["saleng_sandals", "saleng_heels", "saleng_lingerie"];
   if (SALENG_GIFTS.includes(id) && NPC_ROLES[npc]) {
     G.itemLoc[id] = null;

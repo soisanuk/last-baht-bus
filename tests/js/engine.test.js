@@ -438,6 +438,21 @@ test("the bus stop and Nok's glass trade advertise themselves tappably", () => {
   assert.match(lastOut(), /\(SELL BOTTLES\)/);
 });
 
+test("GIVE bottles to Nok is just selling them — including the natural plural", () => {
+  state().flags.act1Done = true; state().room = NPCS.nok.room;
+  // the strict give-item matcher chokes on "bottles" (items are singular
+  // "bottle"), so a bottle-ish give to the buyer routes straight to the sale
+  for (const phrase of ["give bottles to nok", "give bottle to nok", "give glass to nok"]) {
+    state().itemLoc.bottle1 = "inventory";
+    out = []; run(phrase);
+    assert.match(lastOut(), /counts the glass/, phrase);
+    assert.equal(state().itemLoc.bottle1, null, "the bottle was sold");
+  }
+  // and with none, the sale's own graceful line — not "you're not carrying that"
+  out = []; run("give bottles to nok");
+  assert.match(lastOut(), /No bottle, no baht/);
+});
+
 // ── Battery, darkness, soi dogs ────────────────────────────────────────────
 
 test("bare LIGHT toggles: on, then off (the chip sends it argless)", () => {

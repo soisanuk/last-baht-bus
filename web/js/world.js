@@ -1892,6 +1892,8 @@ const NPCS = {
         short: "\"Bring bottle, I give five baht.\"" },
       { topic: "wallet", text: "\"Wallet gone? Beach at night, tilac. You lucky they leave your shoes. Go town, ask the bar ladies — nothing happen in Pattaya they don't know.\"" },
       { topic: "bus", text: "\"Baht bus fifteen baht now. Used to be ten! Iran war, petrol crazy. Everybody complain, everybody still ride.\"" },
+      { topic: "cat", text: "\"The gray sisters, by the loungers? Mine — well, nobody's, but I feed them, morning and night, ten year now. Big One and Little One. You watch the big one: she never eat before the little one eat. Not one time in ten year.\" Auntie Nok's whole face goes soft. \"They my security, na. Nobody sleep rough on MY beach the cats don't tell me first. Better than police. Cheaper than police, hahaha.\"",
+        short: "\"The gray sisters — I feed them ten year. Big One never eats before Little One. My security.\"" },
     ],
   },
 
