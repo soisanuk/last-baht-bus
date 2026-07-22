@@ -13,6 +13,11 @@ var NEWS_FEED = [
     "d": "20 Jul 2026"
   },
   {
+    "t": "Fury says 'best yet to come' ahead of Thailand fight",
+    "s": "France 24",
+    "d": "22 Jul 2026"
+  },
+  {
     "t": "Friend of Thai teen allegedly murdered by Australian man went to his condo after reporting her missing | Thailand",
     "s": "The Guardian",
     "d": "01 Jul 2026"
@@ -38,50 +43,45 @@ var NEWS_FEED = [
     "d": "01 Jul 2026"
   },
   {
-    "t": "Australian man charged with murder in death of a girl, 17, in Thailand’s Pattaya area",
-    "s": "Los Angeles Times",
-    "d": "30 Jun 2026"
-  },
-  {
     "t": "'Deportation best scenario': Kiwi teen released on bail after days in Thai jail",
     "s": "NZ Herald",
     "d": "22 Jul 2026"
   },
   {
-    "t": "First OE turns into Thai prison ordeal for 18-year-old Kiwi",
-    "s": "Stuff",
-    "d": "20 Jul 2026"
-  },
-  {
-    "t": "China, Thailand eye deeper tech cooperation to drive 'prosperous shared future'",
-    "s": "Reuters",
+    "t": "Teenager faces years in Thailand prison for ‘$100 crime’ at airport",
+    "s": "LADbible",
     "d": "21 Jul 2026"
   },
   {
-    "t": "Monkey spotted struggling in open water rescued in Thailand",
-    "s": "upi.com",
-    "d": "20 Jul 2026"
-  },
-  {
-    "t": "Airport Rail Link service at one hour intervals",
-    "s": "Bangkok Post",
+    "t": "'Would Beckham do it?' - Fury stands by Thailand fight",
+    "s": "BBC",
     "d": "22 Jul 2026"
   },
   {
-    "t": "Thailand Raises Alarm With China Over Tanks to Cambodia Army",
-    "s": "Bloomberg.com",
-    "d": "20 Jul 2026"
+    "t": "Breezy louvre walls enclose restaurant in Thailand by Studio Locomotive",
+    "s": "Dezeen",
+    "d": "22 Jul 2026"
+  },
+  {
+    "t": "Myanmar's Min Aung Hlaing to visit Thailand on August 6-7",
+    "s": "Reuters",
+    "d": "22 Jul 2026"
+  },
+  {
+    "t": "Airport Rail Link delays stretch into evening",
+    "s": "Bangkok Post",
+    "d": "22 Jul 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-07-21","USD":33.67,"AUD":23.62,"GBP":45.11,"EUR":38.43};
+var FX_RATES = {"date":"2026-07-22","USD":33.81,"AUD":23.65,"GBP":45.19,"EUR":38.57};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-07-22","temp":31,"humid":64,"code":3,"hi":33,"rain":42};
+var WX_NOW = {"date":"2026-07-23","temp":29,"humid":78,"code":1,"hi":32,"rain":84};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-07-16","first":"639214","last2":"71","front3":["683","709"],"back3":["427","746"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4118,"date":"2026-07-22","baht":65600};
+var GOLD = {"usd":4149,"date":"2026-07-22","baht":66350};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":65855,"thb":2226543};
+var BTC = {"usd":66197,"thb":2235572};
