@@ -103,7 +103,7 @@ const ROOMS = {
     desc: "The Soi 7 corner on Jomtien's Second Road, traffic hissing both ways. A 7-Eleven holds " +
       "down the northwest corner, bright as an operating theatre. Straight across the road sprawls " +
       "Rompho Market; the Jomtien KISS glows just beyond it. Soi 7 runs back west toward the beach.",
-    exits: { w: "soi_7_e", e: "soi_rompho" },
+    exits: { w: "soi_7_e", e: "soi_rompho", n: "jomtien_2nd_n" },
   },
   kiss_jomtien: {
     name: "KISS Jomtien",
@@ -115,7 +115,16 @@ const ROOMS = {
       "farang comfort food the other) and exactly as packed. Plastic chairs, a grill going full " +
       "tilt, and in high season a twenty-minute wait for a stool; tonight, just about a seat. " +
       "(BUY FOOD / EAT.)",
-    exits: { out: "soi_rompho", s: "soi_rompho" },
+    exits: { out: "soi_rompho", s: "soi_rompho", n: "jomtien_2nd_n" },
+  },
+  jomtien_2nd_n: {
+    name: "Jomtien Second Road (north)",
+    region: "Jomtien",
+    desc: "Second Road heading north from the Soi 7 corner: shuttered day-shops, a late khanom " +
+      "cart, and the traffic thinning as the Jomtien lights give way to the Thappraya junction " +
+      "ahead. TAKE CARE ME throws a guitar solo down the pavement from the top of the road; " +
+      "Rompho Market and the Jomtien KISS glow back to the south.",
+    exits: { s: "jomtien_2nd", e: "kiss_jomtien", n: "take_care_me" },
   },
   lucky7: {
     name: "Lucky 7 Bar",
@@ -182,7 +191,7 @@ const ROOMS = {
       "and the warm churn of the night starting up. A 7-Eleven holds the north corner where the road " +
       "bends east. A couple of doors down, ARROW BAR's sign buzzes; across the way a discreet " +
       "gentleman's club keeps its door shut and its aircon cold. The strip runs east.",
-    exits: { down: "dongtan_beach", e: "thappraya_mid", n: "arrow_bar", s: "the_boardroom", spa: "beach_turn_massage" },
+    exits: { down: "dongtan_beach", e: "thappraya_mid", n: "arrow_bar", s: "the_boardroom", spa: "beach_turn_massage", w: "jomtien_beach_rd_n" },
   },
   thappraya_mid: {
     name: "Thappraya Rd — Main Strip (middle)",
@@ -304,7 +313,7 @@ const ROOMS = {
       "Filipino band murdering and resurrecting the classics, and a crowd three deep at the rail. No " +
       "house girls work it, but the freelancers love it: they come for the music, the cold beer, and " +
       "the chance to pick a man who came for the same. Loud, sweaty, and the best room on the strip.",
-    exits: { out: "thappraya_e" },
+    exits: { out: "thappraya_e", s: "jomtien_2nd_n" },
   },
   the_boardroom: {
     name: "The Boardroom",
@@ -363,7 +372,15 @@ const ROOMS = {
       "sign lists the loop into Pattaya. A lone motosai driver naps on his bike nearby.",
     busStop: "jomtien",
     motosai: true,
-    exits: { s: "jomtien_beach_rd", n: "pratumnak_rd" },
+    exits: { s: "jomtien_beach_rd", n: "pratumnak_rd", w: "jomtien_beach_rd_n" },
+  },
+  jomtien_beach_rd_n: {
+    name: "Jomtien Beach Road (north end)",
+    region: "Jomtien",
+    desc: "Past the songthaew turn the beach road runs on north, quieter and darker, the sea " +
+      "sighing away to the west. Ahead it bends inland and climbs into the neon of the Thappraya " +
+      "Main Strip; the bus stop and the Jomtien lights are back to the east.",
+    exits: { e: "jomtien_bus_stop", up: "thappraya_w" },
   },
 
   // ─── Pratumnak Hill ───
@@ -1891,7 +1908,12 @@ const NPCS = {
         text: "\"Oh, you awake! You sleep on beach like soi dog, hahaha. You want water? No money? Aiyee.\" She taps the sign on her cart. \"Bring bottle, I give five baht. Beach full of bottle. Farang leave everything.\"",
         short: "\"Bring bottle, I give five baht.\"" },
       { topic: "wallet", text: "\"Wallet gone? Beach at night, tilac. You lucky they leave your shoes. Go town, ask the bar ladies — nothing happen in Pattaya they don't know.\"" },
-      { topic: "bus", text: "\"Baht bus fifteen baht now. Used to be ten! Iran war, petrol crazy. Everybody complain, everybody still ride.\"" },
+      { topic: "bus", text: "\"Baht bus fifteen baht now. Used to be ten! Iran war, petrol crazy. Everybody complain, everybody still ride. Stop just north, na — up the beach road, blue trucks, cannot miss.\"",
+        short: "\"Baht bus fifteen baht. Stop just north, up the beach road.\"" },
+      { topic: "stop", text: "\"Bus stop? North, tilac — walk up the beach road, past the songthaew turn, the blue trucks all wait there. Fifteen baht, tell driver where you go.\"",
+        short: "\"Bus stop north, up the beach road. Fifteen baht.\"" },
+      { topic: "direction", text: "\"You lost already? Hahaha. Bus stop north, up the beach road. Bar ladies east, down Soi Seven. Town you get by the bus. Everything start from the bus, na.\"",
+        short: "\"Bus north up the beach road; bar ladies east on Soi Seven.\"" },
       { topic: "cat", text: "\"The gray sisters, by the loungers? Mine — well, nobody's, but I feed them, morning and night, ten year now. Big One and Little One. You watch the big one: she never eat before the little one eat. Not one time in ten year.\" Auntie Nok's whole face goes soft. \"They my security, na. Nobody sleep rough on MY beach the cats don't tell me first. Better than police. Cheaper than police, hahaha.\"",
         short: "\"The gray sisters — I feed them ten year. Big One never eats before Little One. My security.\"" },
     ],
@@ -4970,6 +4992,7 @@ const ROOM_GEO = {
   jomtien_2nd:      [12.8901, 100.8748],
   soi_rompho:       [12.8905, 100.8756],
   kiss_jomtien:     [12.8911, 100.8756],
+  jomtien_2nd_n:    [12.8944, 100.8728],
   lucky7:           [12.8899, 100.8726],
   seabreeze:        [12.8892, 100.8730],
   coconut:          [12.8903, 100.8736],
@@ -4995,6 +5018,7 @@ const ROOM_GEO = {
   thappraya_massage:[12.8973, 100.8706],
   jomtien_7eleven:  [12.8880, 100.8724],
   jomtien_bus_stop: [12.8940, 100.8710],
+  jomtien_beach_rd_n: [12.8954, 100.8689],
   // Pratumnak
   pratumnak_rd:     [12.9105, 100.8690],
   buddha_hill:      [12.9142, 100.8618],
