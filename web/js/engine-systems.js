@@ -771,6 +771,12 @@ function _endRide(seq, reason) {
       `back, the one you'll chase on every trip after and never quite catch again. ${name} won't ` +
       `remember it as anything special. That's the part that'll haunt you.)`, "dim");
   }
+  // the dog kept the door all night — and gets an opinion about who you brought home
+  if (G.dog) _say(_dogN(`You roll in as the sky pales, and Sai Krok is exactly where you left him: ` +
+    `sitting at the door, ears up, having clearly not slept a wink on principle. He gives ${name} a ` +
+    `long, level appraisal — then one slow thump of the tail. Approved. She crouches to him without ` +
+    `being told, murmuring something in Thai, and your chest does a quiet thing about that it isn't ` +
+    `ready to examine.`), "dim");
   G.soc.drinks[id] = (G.soc.drinks[id] || 0) + (great ? 4 : 2); // on top of the per-stop bumps
   G.lastBfId = id;
   G.lastBfBase = 10 + Math.min(4, seq.stops); // a bigger night → a bigger memory at the payout
