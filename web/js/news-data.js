@@ -3,14 +3,14 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
+    "t": "Australian faces death penalty after Pattaya teen killing confession",
+    "s": "msn.com",
+    "d": "20 Jul 2026"
+  },
+  {
     "t": "Tyson Fury vs. Wach Preview: Friday in Pattaya With No Broadcast Planned",
     "s": "Boxing Insider",
     "d": "22 Jul 2026"
-  },
-  {
-    "t": "Australian faces death penalty after Pattaya teen killing confession",
-    "s": "MSN",
-    "d": "20 Jul 2026"
   },
   {
     "t": "Fury says 'best yet to come' ahead of Thailand fight",
@@ -21,6 +21,11 @@ var NEWS_FEED = [
     "t": "Friend of Thai teen allegedly murdered by Australian man went to his condo after reporting her missing | Thailand",
     "s": "The Guardian",
     "d": "01 Jul 2026"
+  },
+  {
+    "t": "Fury in Pattaya ring tomorrow",
+    "s": "Bangkok Post",
+    "d": "22 Jul 2026"
   },
   {
     "t": "How a Thai teen's night at a Pattaya beach ended in death",
@@ -38,28 +43,8 @@ var NEWS_FEED = [
     "d": "30 Jun 2026"
   },
   {
-    "t": "Thailand’s suitcase murder raises safety fears as Pattaya mourns for teen victim",
-    "s": "South China Morning Post",
-    "d": "01 Jul 2026"
-  },
-  {
-    "t": "'Deportation best scenario': Kiwi teen released on bail after days in Thai jail",
-    "s": "NZ Herald",
-    "d": "22 Jul 2026"
-  },
-  {
-    "t": "Teenager faces years in Thailand prison for ‘$100 crime’ at airport",
-    "s": "LADbible",
-    "d": "21 Jul 2026"
-  },
-  {
     "t": "'Would Beckham do it?' - Fury stands by Thailand fight",
     "s": "BBC",
-    "d": "22 Jul 2026"
-  },
-  {
-    "t": "Breezy louvre walls enclose restaurant in Thailand by Studio Locomotive",
-    "s": "Dezeen",
     "d": "22 Jul 2026"
   },
   {
@@ -68,20 +53,35 @@ var NEWS_FEED = [
     "d": "22 Jul 2026"
   },
   {
-    "t": "Airport Rail Link delays stretch into evening",
-    "s": "Bangkok Post",
+    "t": "Breezy louvre walls enclose restaurant in Thailand by Studio Locomotive",
+    "s": "Dezeen",
+    "d": "22 Jul 2026"
+  },
+  {
+    "t": "Monkey spotted struggling in open water rescued in Thailand",
+    "s": "upi.com",
+    "d": "20 Jul 2026"
+  },
+  {
+    "t": "99 pounds of lizard parts, raw meat, and plants from Thailand seized at Los Angeles port",
+    "s": "Yahoo",
+    "d": "22 Jul 2026"
+  },
+  {
+    "t": "Tyson Fury to fight Mariusz Wach in Thailand",
+    "s": "Sky Sports",
     "d": "22 Jul 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-07-22","USD":33.81,"AUD":23.65,"GBP":45.19,"EUR":38.57};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-07-23","temp":29,"humid":78,"code":1,"hi":32,"rain":84};
+var WX_NOW = {"date":"2026-07-23","temp":26,"humid":92,"code":95,"hi":31,"rain":84};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-07-16","first":"639214","last2":"71","front3":["683","709"],"back3":["427","746"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4149,"date":"2026-07-22","baht":66350};
+var GOLD = {"usd":4131,"date":"2026-07-22","baht":66050};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":66197,"thb":2235572};
+var BTC = {"usd":66045,"thb":2231345};
