@@ -5,7 +5,7 @@ var NEWS_FEED = [
   {
     "t": "Tyson Fury vs. Wach Preview: Friday in Pattaya With No Broadcast Planned",
     "s": "Boxing Insider",
-    "d": "21 Jul 2026"
+    "d": "22 Jul 2026"
   },
   {
     "t": "Australian faces death penalty after Pattaya teen killing confession",
@@ -38,14 +38,14 @@ var NEWS_FEED = [
     "d": "01 Jul 2026"
   },
   {
-    "t": "Australian man charged with murder after dead girl found in suitcase in Thailand",
-    "s": "BBC",
-    "d": "28 Jun 2026"
+    "t": "Australian man charged with murder in death of a girl, 17, in Thailand’s Pattaya area",
+    "s": "Los Angeles Times",
+    "d": "30 Jun 2026"
   },
   {
     "t": "'Deportation best scenario': Kiwi teen released on bail after days in Thai jail",
     "s": "NZ Herald",
-    "d": "21 Jul 2026"
+    "d": "22 Jul 2026"
   },
   {
     "t": "First OE turns into Thai prison ordeal for 18-year-old Kiwi",
@@ -58,30 +58,30 @@ var NEWS_FEED = [
     "d": "21 Jul 2026"
   },
   {
-    "t": "Thailand Plans Japanese-Style Savings Plan to Support Market",
-    "s": "Bloomberg.com",
-    "d": "20 Jul 2026"
-  },
-  {
     "t": "Monkey spotted struggling in open water rescued in Thailand",
     "s": "upi.com",
     "d": "20 Jul 2026"
   },
   {
-    "t": "Thailand's first conscientious objector sentenced to prison",
+    "t": "Airport Rail Link service at one hour intervals",
     "s": "Bangkok Post",
+    "d": "22 Jul 2026"
+  },
+  {
+    "t": "Thailand Raises Alarm With China Over Tanks to Cambodia Army",
+    "s": "Bloomberg.com",
     "d": "20 Jul 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-07-21","USD":33.67,"AUD":23.62,"GBP":45.11,"EUR":38.43};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-07-22","temp":29,"humid":77,"code":3,"hi":33,"rain":46};
+var WX_NOW = {"date":"2026-07-22","temp":31,"humid":64,"code":3,"hi":33,"rain":42};
 // the bar TV's one true channel
-var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-18","done":true,"h":"France","hs":4,"a":"England","as":6},{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
+var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-07-16","first":"639214","last2":"71","front3":["683","709"],"back3":["427","746"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4079,"date":"2026-07-21","baht":64950};
+var GOLD = {"usd":4118,"date":"2026-07-22","baht":65600};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":66309,"thb":2234050};
+var BTC = {"usd":65855,"thb":2226543};

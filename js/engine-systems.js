@@ -561,6 +561,22 @@ function _bfResolve(kind) {
     _endNight("bfscam");
     return;
   }
+  // A bonded lady (regular+) sometimes doesn't want the hotel yet — she wants to
+  // show you HER Pattaya, on the back of her bike. The genuine mirror of bfhop's
+  // kickback tour: no fleece, pure serendipity, and with her driving the last-bus
+  // dread lifts for one night. Day-stable roll so the offer's consistent all night.
+  if (_bondTier(id) >= 2 && _hh(id + ":" + G.day + ":ride", 53) % 100 < (_bondTier(id) >= 3 ? 80 : 55)) {
+    G.rideSeq = { id, fine: price, spent: 0, stops: 0, sanuk: 0, seen: [] };
+    G.pendingEnc = "nightride";
+    _encPrompt(
+      [(price ? `฿${price} to the mamasan, and ` : "") +
+        `${name} takes your hand — but instead of the taxi rank she wheels a scuffed Honda ` +
+        `Click off its stand, thumbs it awake, and pats the seat behind her. "Tonight I not ` +
+        `want hotel yet. Come — I show you MY Pattaya, the real one. Hold me tight, na, I ` +
+        `drive little bit crazy." (฿${G.money} left.)`, "win"],
+      [`(RIDE with her into the night · or JUST the hotel — up to you.)`, "dim"]);
+    return;
+  }
   // the honest overnight. Sometimes it's the fantasy; sometimes long time hands you
   // the whole PERSON — the life story, the tears, the five-year-girlfriend morning —
   // the reality the fantasy edits out. Less สนุก tonight (the escape didn't escape),
@@ -589,6 +605,175 @@ function _bfResolve(kind) {
     `and lovely — and takes your arm like you're the one being rented.` +
     (price ? ` (฿${G.money} left.)` : ""), "win");
   G.soc.drinks[id] = (G.soc.drinks[id] || 0) + 3; // a whole night together deepens the bond
+  _endNight("barfine");
+}
+
+// ── The night ride: "her Pattaya" ───────────────────────────────────────────
+// A bonded lady takes you off the tourist map on the back of her bike. Pure
+// serendipity — each stop is random, you only choose RIDE ON or call it. The
+// warm mirror of the bfhop kickback: no fleece, real places, and สนุก that does
+// NOT jade (the "one deepening girl" reward at its peak). She's your ride, so the
+// last-bus dread doesn't apply — the night runs as long as the two of you want.
+const RIDE_MAX_STOPS = 6;   // after this the sky goes grey and she takes you home
+const RIDE_MIN_CASH = 150;  // below this she reads your wallet and calls it, no shame
+
+const _RIDE_HOP = [
+  "She threads the bike out into the night — warm wind, neon smearing past, her hair " +
+    "whipping your face, one hand leaving the bar to point at things you'll never remember. " +
+    "Then she cuts down a soi you'd never have found alone and kills the engine.",
+  "You hold on. She rides like the traffic laws are a rumour she's heard about — a gap here, " +
+    "a red light treated as advisory there, laughing at your grip on her waist — and drops " +
+    "you somewhere the guidebooks have never heard of.",
+  "The bike coughs, catches, and carries the two of you off into the dark between the bright " +
+    "places. She sings along to whatever's in her head. Ten wrong-way minutes later she pulls " +
+    "up, kills the light, and grins over her shoulder: here.",
+  "Off you go again — three lanes, no plan, her flip-flops steering as much as the bars. The " +
+    "town rearranges itself around you, bright to dark to bright, and then she's braking, " +
+    "already off the bike, already tugging your sleeve toward a doorway.",
+];
+
+const _RIDE_VENUES = [
+  { key: "disco", lo: 500, hi: 1200, sanuk: 3, scenes: [
+    n => `A Thai disco — no farang, no English, a live band murdering a luk thung ballad and ` +
+      `the whole room in love with it. ${n} knows half the tables; a whisky set with your name ` +
+      `misspelled on the bottle appears, soda and ice keep coming, and you are the exhibit and ` +
+      `the guest of honour at once.`,
+    n => `A string-band place off the Darkside — red lights, a singer in sequins. ${n} pulls ` +
+      `you up to dance the way the aunties dance, all wrists and no hurry, and a bottle of Hong ` +
+      `Thong lands with the ceremony of a christening. Nobody here is performing for anybody.`,
+  ]},
+  { key: "somtam", lo: 120, hi: 350, sanuk: 2, scenes: [
+    n => `Plastic stools on a dark soi, a woman pounding a mortar like it owes her money. ${n} ` +
+      `orders in a machine-gun burst of Isaan and watches your face when the som tam lands — ` +
+      `"not spicy, I say NOT spicy" — as your whole head catches fire. Grilled chicken, sticky ` +
+      `rice, her laughing too hard to eat. The cheapest joy in Thailand.`,
+    n => `2am and she's hungry: a roadside table, moo ping smoking on the grill, som tam pla ra ` +
+      `so pungent it arrives before the plate does. ${n} builds you the perfect bite and makes ` +
+      `you eat it from her fingers, then howls at your tears. You've never been so awake.`,
+  ]},
+  { key: "wsclub", lo: 700, hi: 1500, sanuk: 3, scenes: [
+    n => `Walking Street's big room — lasers, an imported DJ, ฿300 water. ${n} pulls you into ` +
+      `the crush like she owns the floor, which for the next hour she does: a booth, bottle ` +
+      `service you didn't quite agree to, the bass in your sternum, her mouthing the words with ` +
+      `her eyes shut.`,
+    n => `The superclub, three floors and three genres, ${n} navigating all of them by instinct. ` +
+      `She dances backwards through the whole place daring you to keep up, cashes your baht into ` +
+      `a bucket of something blue, and for a while you're the two youngest people alive.`,
+  ]},
+  { key: "karaoke", lo: 400, hi: 900, sanuk: 3, scenes: [
+    n => `A host bar, of all places — pretty boys in waistcoats, and ${n} plus three friends who ` +
+      `appear from nowhere, here to make YOU sing. A private room, a screen, a tambourine forced ` +
+      `into your hand. You murder a Thai pop song you don't know; they score it 100 out of pure ` +
+      `love and mockery, indistinguishable.`,
+    n => `A karaoke box up an unmarked staircase. ${n} queues eleven songs, hands you the second ` +
+      `mic, will not take no. Somewhere in the power ballad you stop being embarrassed. She films ` +
+      `you "for evidence," and the way she's laughing you'd let her film anything.`,
+  ]},
+  { key: "friendbar", lo: 200, hi: 500, sanuk: 2, scenes: [
+    n => `Her friend's actual bar — a hole in a wall, six stools, a dog asleep under one. The warm ` +
+      `original that every "my friend's bar" scam is a forgery of: no kickback, just ${n}'s friend ` +
+      `refusing to let you pay for the first round and then absolutely letting you pay for the ` +
+      `rest, everyone delighted.`,
+    n => `A beer bar down a lane — off-shift girls and their off-shift boyfriends, a speaker on ` +
+      `something from 2009. ${n} is home here; you can see it in her shoulders coming down. She ` +
+      `introduces you around by a nickname she's decided without telling you. You are "Nong ` +
+      `Handsome" now. It sticks.`,
+  ]},
+  { key: "viewpoint", lo: 0, hi: 0, sanuk: 4, scenes: [
+    n => `She rides you up Pratumnak in the dark, past the sleeping resorts, to the viewpoint — ` +
+      `and there it is: the whole bay, the whole roaring town, laid out silent and glittering, ` +
+      `too far up to hear. ${n} kills the engine. Neither of you says anything for a while. This ` +
+      `is the part nobody sells you, and it's free, and it's the best thing in Pattaya.`,
+    n => `The bike climbs to the Buddha hill overlook and stops. 3am. Below, the strip you've been ` +
+      `drowning in all night is a smear of gold light and, from up here, completely quiet. ${n} ` +
+      `leans back against you and points out her bar, her room, the hospital where her son was ` +
+      `born — a whole life you're only now seeing the shape of. The wind does the talking.`,
+  ]},
+  { key: "market", lo: 60, hi: 200, sanuk: 2, scenes: [
+    n => `A night market winding down, half the stalls shuttered. ${n} buys roti with banana and ` +
+      `condensed milk from a man closing up, splits it with you in the empty aisle, and haggles ` +
+      `for a phone case you don't need out of pure sport. She wins. Of course she wins.`,
+    n => `A cart selling nothing but grilled squid and cold Est, run by a grandmother who clearly ` +
+      `raised ${n} or someone exactly like her. You eat standing under a bare bulb, moths and all, ` +
+      `and it's somehow the most romantic thing that's happened to you in a year.`,
+  ]},
+];
+
+function _pickRideVenue(seen) {
+  const pool = _RIDE_VENUES.filter(v => !seen.includes(v.key));
+  const src = pool.length ? pool : _RIDE_VENUES;
+  return src[Math.floor(_rand() * src.length)];
+}
+
+function _nightRide(input) {
+  const seq = G.rideSeq;
+  if (!seq) { _say("The night's already carried you off. Sleep it off."); return; } // state lost — safety
+  const id = seq.id, name = NPCS[id].name;
+  const go = /\b(ride|yes|on|more|another|sure|ok|okay|go|keep|again|deeper|why not|lets?|come|drive)\b/.test(input) &&
+    !/\bno\b|hotel|home|enough|call|done|bed|sleep|stop|tired|late|finish/.test(input);
+  if (!go) return _endRide(seq, "choice");
+  if (G.money < RIDE_MIN_CASH && seq.stops > 0) return _endRide(seq, "broke");
+  // a random stop
+  const venue = _pickRideVenue(seq.seen);
+  seq.seen.push(venue.key); if (seq.seen.length > 3) seq.seen.shift(); // no immediate venue repeats
+  let hi = Math.floor(_rand() * _RIDE_HOP.length);
+  if (hi === seq.lastHop) hi = (hi + 1) % _RIDE_HOP.length; // and no back-to-back identical ride line
+  seq.lastHop = hi;
+  const hop = _RIDE_HOP[hi];
+  const scene = venue.scenes[Math.floor(_rand() * venue.scenes.length)](name);
+  const cost = venue.lo + Math.floor(_rand() * (venue.hi - venue.lo + 1));
+  const paid = Math.min(cost, G.money);
+  G.money -= paid;
+  seq.spent += paid; seq.stops++; seq.sanuk += venue.sanuk;
+  G.soc.drinks[id] = (G.soc.drinks[id] || 0) + 1; // every stop deepens the bond
+  _say(`${hop}\n\n${scene}` +
+    (paid ? ` (฿${paid}. ฿${G.money} left.)` : " (Free. The best things here are.)"), "win");
+  _addHappy(venue.sanuk); // does NOT jade — a bonded night is the one that keeps giving
+  if (seq.stops >= RIDE_MAX_STOPS) return _endRide(seq, "dawn");
+  G.pendingEnc = "nightride";
+  _encPrompt([`${name} looks back over her shoulder, engine idling, one eyebrow up.`, "room"],
+    [`(RIDE ON — wherever she takes you next · or call it a night with her.)`, "dim"]);
+}
+
+function _endRide(seq, reason) {
+  const id = seq.id, name = NPCS[id].name;
+  G.rideSeq = null;
+  G.pendingEnc = null;
+  if (seq.stops === 0) {
+    // declined the offer outright — no sulk, just the hotel and a good honest night
+    _say(`"Okay tilac — hotel then. Boring man." But she's smiling, no sting in it. She swings ` +
+      `the bike around for the short hop to the room, and the night is exactly what you paid ` +
+      `for: easy, warm, hers till morning. ${name} is asleep before you are.`, "win");
+    G.soc.drinks[id] = (G.soc.drinks[id] || 0) + 3;
+    G.lastBfId = id;
+    _endNight("barfine");
+    return;
+  }
+  const great = seq.stops >= 4;
+  let close;
+  if (reason === "broke") {
+    close = `Somewhere past the fourth stop your wallet gives a polite, final cough. ${name} ` +
+      `reads it in your face before you can say a word — "okay, enough, tilac, we go home now" — ` +
+      `no sulk, no scene, just her hand squeezing yours on the bar. The empty pockets don't ` +
+      `embarrass her, and that tells you more than the whole night did.`;
+  } else if (reason === "dawn") {
+    close = `The sky over the gulf goes the colour of a bruise healing, and ${name} feels you ` +
+      `notice it. "Aaah. Morning already. This town, na — always morning too soon." She points ` +
+      `the bike toward a bed, hers or yours, and lets the last of the dark carry you there.`;
+  } else {
+    close = `"Okay," she says at last, killing the engine one final time. "Enough Pattaya for you ` +
+      `tonight. Now—" and the grin turns private "—now you come see MY room, not some hotel. ` +
+      `Get on. Last ride." And it is.`;
+  }
+  _say(close, "win");
+  if (great) {
+    _say(`(This is the one — the night with no plan that becomes the whole reason you keep coming ` +
+      `back, the one you'll chase on every trip after and never quite catch again. ${name} won't ` +
+      `remember it as anything special. That's the part that'll haunt you.)`, "dim");
+  }
+  G.soc.drinks[id] = (G.soc.drinks[id] || 0) + (great ? 4 : 2); // on top of the per-stop bumps
+  G.lastBfId = id;
+  G.lastBfBase = 10 + Math.min(4, seq.stops); // a bigger night → a bigger memory at the payout
   _endNight("barfine");
 }
 
