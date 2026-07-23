@@ -13,9 +13,19 @@ var NEWS_FEED = [
     "d": "23 Jul 2026"
   },
   {
+    "t": "Tourists urged not to give cash to homeless people in Pattaya",
+    "s": "Thaiger",
+    "d": "23 Jul 2026"
+  },
+  {
     "t": "Pattaya gold shop robber undone by his own ID card",
     "s": "Thaiger",
     "d": "20 Jul 2026"
+  },
+  {
+    "t": "178/1 Soi Muban Ban Pruksa Bun Samphan-Pattaya Klang, Nong Prue, Bang Lamung, Chon Buri 20150, THA",
+    "s": "Realtor.com",
+    "d": "23 Jul 2026"
   },
   {
     "t": "Australian faces death penalty after Pattaya teen killing confession",
@@ -33,28 +43,8 @@ var NEWS_FEED = [
     "d": "01 Jul 2026"
   },
   {
-    "t": "Fury in Pattaya ring tomorrow",
-    "s": "Bangkok Post",
-    "d": "23 Jul 2026"
-  },
-  {
-    "t": "Fury says 'best yet to come' ahead of Thailand fight",
-    "s": "France 24",
-    "d": "22 Jul 2026"
-  },
-  {
     "t": "Five soldiers killed in southern Thailand checkpoint attack",
     "s": "Al Jazeera",
-    "d": "23 Jul 2026"
-  },
-  {
-    "t": "Five security personnel killed, six civilians injured in shooting, pipe bomb attack in Thailand",
-    "s": "The Jerusalem Post",
-    "d": "23 Jul 2026"
-  },
-  {
-    "t": "Thai authorities hunt for suspects after an attack in troubled south kills 5 soldiers",
-    "s": "AP News",
     "d": "23 Jul 2026"
   },
   {
@@ -63,25 +53,35 @@ var NEWS_FEED = [
     "d": "23 Jul 2026"
   },
   {
+    "t": "Tyson Fury weighs in at 26 pounds lighter than Mariusz Wach ahead of Friday's fight in Thailand",
+    "s": "Sky Sports",
+    "d": "23 Jul 2026"
+  },
+  {
     "t": "AI Boom Sees Thailand’s FDI Applications Jump 80% to $41 Billion in First Half",
     "s": "Bloomberg.com",
     "d": "23 Jul 2026"
   },
   {
-    "t": "China’s durian imports from Thailand, Malaysia soar as glut stresses growers",
-    "s": "South China Morning Post",
+    "t": "Thailand seeks extradition of ‘Rose Rose’ in flight attendant heroin case",
+    "s": "Bangkok Post",
+    "d": "23 Jul 2026"
+  },
+  {
+    "t": "Thai authorities hunt for suspects after an attack in troubled south kills 5 soldiers",
+    "s": "AP News",
     "d": "23 Jul 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-07-22","USD":33.81,"AUD":23.65,"GBP":45.19,"EUR":38.57};
+var FX_RATES = {"date":"2026-07-23","USD":33.83,"AUD":23.65,"GBP":45.17,"EUR":38.54};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-07-23","temp":30,"humid":73,"code":3,"hi":31,"rain":100};
+var WX_NOW = {"date":"2026-07-24","temp":29,"humid":78,"code":3,"hi":32,"rain":61};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-07-16","first":"639214","last2":"71","front3":["683","709"],"back3":["427","746"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4091,"date":"2026-07-23","baht":65400};
+var GOLD = {"usd":4054,"date":"2026-07-23","baht":64850};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":65690,"thb":2221177};
+var BTC = {"usd":64743,"thb":2189851};
