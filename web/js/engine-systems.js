@@ -1001,12 +1001,66 @@ function _massageSpecial(she, name) {
     `the “I like you” she led with turns out to be at least half true. (฿${G.money} left.)`, "win");
   _conquestHappy(4, she);        // a real release — feeds the hedonic treadmill, lightly
   if (she) G.soc.drinks[she] = (G.soc.drinks[she] || 0) + 1;
-  // the on-premises wall, and the door it leaves open (a seed: no live off-shift meet yet)
-  _say(`Afterward she wipes her hands and tips her chin at the little NO SEX sign, rueful. ` +
-    "“{{Boom boom}} no can here — boss rule, sticker everywhere. But when I finish work…” " +
-    `${name} writes something on the back of your hand in eyeliner and folds your fingers over ` +
-    "it. “You come, na. Real one, my place.” (A number, and an open invitation — a softer road " +
-    "than any barfine. Whether you ever walk it is another night's business.)", "dim");
+  // the on-premises wall, and the door it leaves open: her number, once per girl,
+  // a real off-shift thread you carry — MEET her when the night's old, or she ghosts.
+  const numKey = "gaveNumber_" + (she || G.room);
+  if (G.offShift) {
+    // already chasing someone's number — she reads it, unoffended
+    _say(`Afterward she nods at the NO SEX sign, rueful — “{{Boom boom}} no can here, boss rule” — ` +
+      `but you don't reach for a pen, and she laughs it off. “You have lady already, na? Mai pen rai.”`, "dim");
+  } else if (_flag(numKey)) {
+    // she's written you her number before (once per girl); the offer just stands
+    _say(`Afterward she taps the NO SEX sign and grins. “{{Boom boom}} no can here — but you still ` +
+      `have my number, na? Offer good: when I finish work, my place. Real one.”`, "dim");
+  } else {
+    _setFlag(numKey);
+    G.itemLoc.masseuse_note = "inventory";
+    G.offShift = { id: she || null, name, home: G.room, day: G.day,
+      ghost: _hh((she || G.room) + ":" + G.day + ":offshift", 71) % 2 === 0 };
+    _say(`Afterward she wipes her hands and tips her chin at the little NO SEX sign, rueful. ` +
+      `“{{Boom boom}} no can here — boss rule, sticker everywhere. But when I finish work…” ` +
+      `${name} biros a number onto a beer mat, folds it into your hand, and holds on a beat too long. ` +
+      `“You come, na. Real one, my place.” (You pocket her number — MEET her when the night's old, ` +
+      `or bin it.)`, "dim");
+  }
+}
+
+const OFFSHIFT_TURN = 45; // she finishes work late — ~22:30 (nightTurn 0 = 18:00, dawn = 100)
+
+// The off-shift meet: the note's payoff, and the mirror of the barfine. Late
+// enough that she's off the floor, a genuine unhurried night in a real room —
+// the "softer road" the SPECIAL seeds — but half of Pattaya's numbers are just
+// numbers, so a day-stable coin (fixed when you pocketed it) decides whether she
+// ever answers. One thread at a time; resolving it (meet OR ghost) closes it.
+function _doMeetOffShift(arg) {
+  if (!G.offShift || G.itemLoc.masseuse_note !== "inventory") {
+    _say("You've nobody's number to chase tonight. (The kind of massage that isn't sometimes ends with one.)");
+    return;
+  }
+  const os = G.offShift;
+  if (G.nightTurn < OFFSHIFT_TURN) {
+    _say(`Too early — ${os.name} is still on the shop floor. Her number's in your pocket; try when the night's old.`);
+    return;
+  }
+  if (os.ghost) {
+    G.itemLoc.masseuse_note = null; G.offShift = null;
+    _say(`You text ${os.name}. Nothing. You text again; the little grey checkmark just sits there and ` +
+      `stays grey. Some numbers are only ever numbers — a kindness at the end of a shift, meant and ` +
+      `then not. You put the phone away.`, "dim");
+    return;
+  }
+  const cost = Math.min(G.money, 300); // taxi both ways + a 7-Eleven raid — a fraction of any barfine
+  G.money -= cost;
+  G.itemLoc.masseuse_note = null;
+  _say(`${os.name} texts back inside a minute — “you come? real one 🙂” — and an hour later you're ` +
+    `somewhere unmistakably a real room and not a short-time one: her kettle, her drying laundry, a ` +
+    `photo of a kid up-country turned face-down before you can ask. No mamasan, no barfine, no clock ` +
+    `on the wall. Just ${os.name}, off the floor and entirely herself. ` +
+    (cost ? `(฿${cost} for the taxi and a 7-Eleven raid — a fraction of the barfine you didn't pay.)` :
+      `(Not a baht changes hands. Some nights the town forgets to charge you.)`), "win");
+  _conquestHappy(9, os.id); // the softer road pays better than the fantasy
+  if (os.id) G.soc.drinks[os.id] = (G.soc.drinks[os.id] || 0) + 4;
+  G.offShift = null;
 }
 
 // ── Soapy massage: the fishbowl (ab ob nuat) — a modal, like the barfine gate ──
