@@ -11,12 +11,58 @@ const _DIRS = {
   alley: "alley", office: "office",
 };
 
+// ── Varied response pools for the hot loop (picked via _pickVary, no repeats) ──
+// The favor grind and the common misfires are the most-printed lines in the game;
+// deep pools keep them from wearing a groove. LADY_DRINK is read lazily at call
+// time, so these can sit above its definition.
+const _LADY_DRINK_LINES = [
+  n => `One lady drink for ${n} — ฿${LADY_DRINK} on the tab that is your life.`,
+  n => `${n} gets her cola-with-benefits; the mamasan's biro logs ฿${LADY_DRINK} without looking up.`,
+  n => `A thimble of something mostly ice lands in front of ${n} — ฿${LADY_DRINK}, gone in three sips.`,
+  n => `“Chon kaew!” ${n} toasts you with her ฿${LADY_DRINK} lady drink and means it for exactly one sip.`,
+  n => `You buy ${n} a drink; she rewards it with a smile calibrated to the exact value of ฿${LADY_DRINK}.`,
+  n => `Another ฿${LADY_DRINK} lady drink for ${n} — the house's real product, sold by the glass.`,
+  n => `${n}'s glass runs dry the way a meter does; ฿${LADY_DRINK} restarts it.`,
+  n => `The waitress doesn't even ask — ${n}'s drink, ฿${LADY_DRINK}, straight onto your tab.`,
+];
+const _NO_EXIT = [
+  "You can't go that way.",
+  "That's a wall, tilac — the soi doesn't run that way.",
+  "No road there: shuttered shophouses and somebody's parked Click.",
+  "Nope. The night isn't laid out like that.",
+  "Dead end. Pattaya keeps its exits where it keeps them.",
+];
+const _NOT_CARRYING = [
+  "You're not carrying that.",
+  "You pat your pockets. Not there.",
+  "You don't have that on you — just lint and regret.",
+  "Nothing like that in your pockets.",
+];
+const _NOT_HERE = [
+  "They're not here.",
+  "Whoever that is, they're somewhere else on the soi.",
+  "Not here right now — the regulars drift around.",
+  "Empty stool where you were looking.",
+];
+const _NOBODY_NAME = [
+  "Nobody by that name here.",
+  "No one here answers to that.",
+  "That name doesn't land on anyone in the room.",
+  "Nobody here goes by that — not tonight.",
+];
+const _HUH = [
+  "I didn't understand that. (HELP lists commands.)",
+  "That one didn't parse. (HELP lists commands.)",
+  "The soi blinks at you. Try again — (HELP lists commands.)",
+  "No idea what you're after there. (HELP lists commands.)",
+];
+
 function _doGo(dirWord) {
   // aliases first; then ANY literal exit key of this room (pub, hotel, …) —
   // the Exits line decorates every key as a tap target, so every key must walk
   const r = _room();
   const dir = _DIRS[dirWord] || (r.exits && r.exits[dirWord] ? dirWord : null);
-  if (!dir || !r.exits[dir]) { _say("You can't go that way."); return; }
+  if (!dir || !r.exits[dir]) { _say(_pickVary(_NO_EXIT, "noexit")); return; }
   const to = r.exits[dir];
   // a downpour owns the street: nothing moves except into shelter
   if (G.rain > 0) {
@@ -330,7 +376,7 @@ function _doTake(arg) {
 function _doDrop(arg) {
   const id = _inv().find(i => ITEMS[i].name.toLowerCase().includes(arg) ||
     ITEMS[i].aliases.some(a => a.includes(arg)));
-  if (!id) { _say("You're not carrying that."); return; }
+  if (!id) { _say(_pickVary(_NOT_CARRYING, "notcarry")); return; }
   if (id === "masseuse_note") {
     const nm = G.offShift ? G.offShift.name : "her";
     G.itemLoc.masseuse_note = null; G.offShift = null;
@@ -422,7 +468,7 @@ function _doTalk(arg, topic) {
     // flat "nobody here", which reads as a bug mid-conversation. See _elsewhereLine.
     const away = _elsewhereLine(arg);
     if (away) { _say(away); return; }
-    _say("Nobody by that name here.");
+    _say(_pickVary(_NOBODY_NAME, "noname"));
     return;
   }
   _trace(topic ? "ask" : "talk", NPCS[npc].name, topic || ""); // breadcrumb
@@ -562,14 +608,14 @@ function _doGive(itemWord, npcWord) {
   if (/^(dog|sai|krok)$/.test(npcWord) ||
       (G.dog && G.dog.name && npcWord === G.dog.name.toLowerCase())) return _doFeedDog("dog");
   const npc = _findNpc(npcWord);
-  if (!npc) { _say("They're not here."); return; }
+  if (!npc) { _say(_pickVary(_NOT_HERE, "nothere")); return; }
   // giving your empties to the vendor who buys them IS selling them — route any
   // bottle-ish give (incl. the natural plural "bottles", which the strict item
   // matcher below misses) straight to the sale, which handles the empty case
   if (npc === "nok" && /bottle|glass/.test(itemWord)) return _doSellBottles();
   const id = _inv().find(i => ITEMS[i].name.toLowerCase().includes(itemWord) ||
     ITEMS[i].aliases.some(a => a.includes(itemWord)));
-  if (!id) { _say("You're not carrying that."); return; }
+  if (!id) { _say(_pickVary(_NOT_CARRYING, "notcarry")); return; }
   _trace("give", NPCS[npc].name, ITEMS[id].name); // breadcrumb
   if (id === "helmet" && npc === "pim") {
     G.itemLoc.helmet = null;
@@ -813,7 +859,7 @@ function _doBuy(arg) {
     if (G.money < LADY_DRINK) { _say(`Lady drinks are ฿${LADY_DRINK}. You have ฿${G.money}. The maths is not on your side.`); return; }
     G.money -= LADY_DRINK;
     G.soc.drinks[id] = (G.soc.drinks[id] || 0) + 1;
-    _say(`One lady drink for ${NPCS[id].name} — ฿${LADY_DRINK} on the tab that is your life. (฿${G.money} left.)`);
+    _say(`${_pickVary(_LADY_DRINK_LINES, "ladydrink")(NPCS[id].name)} (฿${G.money} left.)`);
     _addHappy(1);
     if (Object.keys(G.soc.drinks).length >= 4 && !G.soc.butterflyTeased) {
       G.soc.butterflyTeased = true;
@@ -2477,7 +2523,7 @@ function doCommand(input) {
     default:
       // bare Thai phrase typed directly
       if (matchThaiPhrase(lower)) { _doSay(lower); break; }
-      _say("I didn't understand that. (HELP lists commands.)", "dim");
+      _say(_pickVary(_HUH, "huh"), "dim");
       return; // no tick for parse errors
   }
   _flushTrace(_room0);
