@@ -1637,11 +1637,46 @@ function _crashSpotFor(roomId) {
   return _CRASH_SPOTS[_REGION_CRASH[reg] || "beach"];
 }
 
+// ── The clinic thread: an unprotected barfine's souvenir ─────────────────────
+// You start the week with three condoms and can buy more at any 7-Eleven. Each
+// barfine consumes one if you have it (near-zero risk); go without and there's a
+// small chance the night leaves more than memories — silent for a day or two, then
+// it surfaces in the morning and in DIAGNOSE, dragging สนุก until you GET TESTED
+// (free public clinic, always available). Prevention is ฿40; the cure is dread,
+// lost mornings, and a small humiliation. Fully fictionalised, non-punitive.
+const STD_RISK = 0.10;   // chance an unprotected barfine infects you
+const CONDOM_PRICE = 40; // a 7-Eleven pack
+const CONDOM_PACK = 3;
+const _STD_SAFE = [
+  "(One of the condoms you were carrying gets used the way it's meant to. Unglamorous, unregretted.)",
+  "(You had the sense, somewhere in the blur, to reach for the little foil square. Future-you exhales.)",
+  "(Sober-you packed protection; drunk-you actually used it. A small miracle, quietly banked.)",
+];
+const _STD_MORNING = [
+  "You wake with a wrongness you can't argue away any longer — a burn, an itch, a heat that isn't " +
+    "the weather. Something the night handed you is asking to be dealt with. (DIAGNOSE, or GET TESTED.)",
+  "The thing you've been calling 'probably nothing' is louder this morning. Whatever souvenir you " +
+    "picked up wants seeing to. (GET TESTED at a clinic — it's free, and it won't clear on its own.)",
+  "Another morning, another small alarm from below the belt. You've known what this is for a day now. " +
+    "(GET TESTED — the longer you leave it, the longer it drags.)",
+];
+function _stdBarfineRoll() {
+  if (G.condoms > 0) { G.condoms--; _say(_pickVary(_STD_SAFE, "stdsafe"), "dim"); return; }
+  // no protection, and no immediate tell — the night keeps its secret a day or two
+  if (!G.std && _rand() < STD_RISK) G.std = { day: G.day };
+}
+function _stdSymptomatic() { return !!(G.std && G.day - G.std.day >= 2); }
+function _stdMorningTick() {
+  if (!_stdSymptomatic()) return; // still incubating, or clean
+  _say(_pickVary(_STD_MORNING, "stdmorn"), "alert");
+  _addHappy(-2); // the untreated drag; GET TESTED ends it
+}
+
 // ── The morning after: the public hospital ───────────────────────────────────
 // The one place in Pattaya where the marketplace vanishes — no barfine, no
 // mamasan, no VIPs, everyone holding the same queue number. The game elides the
-// day, so a night that ends in the hospital (violence now; a bike crash or the
-// STD line, once those exist) surfaces it. Rotating pools + fresh vignettes each
+// day, so a night that ends in the hospital (violence, or a motosai crash)
+// surfaces it. Rotating pools + fresh vignettes each
 // visit keep the week's repeat mornings from reading identically. Fully
 // fictionalised — archetypes off the ward, never real people. Insurance covers
 // it: not a baht changes hands, which IS the point.
@@ -1874,6 +1909,7 @@ function _endNight(reason) {
         _say("(Under the Sabai Palms' one working porch light, the night clerk " +
           "produces the joiner ledger: ฿300, and a look with footnotes.)", "dim");
       }
+      _stdBarfineRoll();   // protection used if carried; else the night may keep a secret
       _conquestHappy(G.lastBfBase || 10, G.lastBfId); // reality-LT sets a lower base
       if (_flag("act1Done") && _rand() < 0.35) _cinderellaCoda(); // her 6 a.m., occasionally
       break;
@@ -2028,6 +2064,7 @@ function _endNight(reason) {
   }
   if (G.dog) _setFlag("hasDog");      // backfill for saves that adopted before the flag existed
   _loanNightRoll();                   // Nira's loan compounds and her cousins escalate if you're late
+  _stdMorningTick();                  // an untreated infection makes itself known each morning
   _describeRoom(true);
 }
 
