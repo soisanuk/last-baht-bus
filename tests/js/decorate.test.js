@@ -33,6 +33,7 @@ test("common-word filler names never chip in prose viewed from elsewhere", () =>
   for (const r of Object.values(ROOMS)) {
     if (r.desc) prose.push(r.desc);
     if (r.revisit) for (const s of r.revisit) prose.push(s); // brief-on-revisit pools
+    if (r.reads) for (const s of Object.values(r.reads)) prose.push(s); // readable-fixture flavor
   }
   for (const n of Object.values(NPCS)) for (const d of n.dialogue) {
     if (d.text) prose.push(d.text);
