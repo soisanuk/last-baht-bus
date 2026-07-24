@@ -167,6 +167,7 @@ function newGame() {
     wingmanUntil: 0,     // G.turns before which a wing-woman is vouching for you
     darkStreak: 0,
     flags: {},
+    offShift: null,      // a masseuse's off-shift number you carry: {id,name,home,day,ghost}
     known: {},           // charId → true once their name has printed (ask-topic gate)
     visited: { jomtien_beach: true }, // roomId → true once stood in (fast-travel gate)
     talked: {},          // npcId → [dialogue indices already delivered] (terse repeats)

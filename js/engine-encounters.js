@@ -1028,7 +1028,7 @@ function _clubpickup(input) {
   const yes = /yes|ok\b|okay|sure|come|home|room|back|yeah|invite|take her|let'?s/.test(input) &&
     !/\bno\b|good ?night|sleep|turn in|pass|not tonight|nah|alone/.test(input);
   if (!yes) {
-    _say("You get her LINE, a real laugh, and a “text me tomorrow” you both know you won't. She melts " +
+    _say("You get a real laugh and a “text me tomorrow” that neither of you writes down. She melts " +
       "back into the strobe. Some nights the free one really is just a good night out — you'll never be " +
       "sure if that's what this was.");
     return;

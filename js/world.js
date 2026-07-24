@@ -1864,6 +1864,11 @@ const ITEMS = {
       "Tucked inside: a note in careful English: 'Farang — you buy Mot's dinner tonight. " +
       "Be more careful. — Oy'.",
   },
+  masseuse_note: {
+    name: "a number on a beer mat", aliases: ["number", "beer mat", "note", "her number", "napkin"],
+    portable: true, location: null, // written by a masseuse after the SPECIAL; READ names her
+    desc: "A phone number biro'd onto a soggy beer mat, and under it, underlined twice: \"my place.\"",
+  },
   saleng_sandals: {
     name: "saleng sandals", aliases: ["sandals", "shoes", "flats", "saleng sandals"],
     portable: true, location: null,

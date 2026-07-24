@@ -331,8 +331,23 @@ function _doDrop(arg) {
   const id = _inv().find(i => ITEMS[i].name.toLowerCase().includes(arg) ||
     ITEMS[i].aliases.some(a => a.includes(arg)));
   if (!id) { _say("You're not carrying that."); return; }
+  if (id === "masseuse_note") {
+    const nm = G.offShift ? G.offShift.name : "her";
+    G.itemLoc.masseuse_note = null; G.offShift = null;
+    _say(`You bin ${nm}'s number — a beer mat in a wastebasket somewhere on the soi. Some roads you don't walk.`);
+    return;
+  }
   G.itemLoc[id] = G.room;
   _say(`Dropped: ${ITEMS[id].name}.`);
+}
+
+// The masseuse's number reads dynamically (it names whoever wrote it), so READ
+// and EXAMINE both route here rather than printing the static item desc.
+function _readNote() {
+  const os = G.offShift;
+  _say(os ? `${os.name}'s number, biro'd on a soggy beer mat — under it, underlined twice: “my place.” ` +
+    `She finishes work late; the offer was for after. (MEET her when the night's old — or DROP it and let it go.)`
+    : "A beer mat, a phone number smeared past reading. Whoever wrote it, that road's closed now.", "dim");
 }
 
 function _doInventory() {
@@ -360,6 +375,7 @@ function _doExamine(arg) {
   const pat = _findPatron(arg);
   if (pat) { _say(PATRONS[pat].desc); return; }
   const id = _findItem(arg);
+  if (id === "masseuse_note") { _readNote(); return; }
   if (id) { _say(ITEMS[id].desc); return; }
   if (arg === "sign") return _doRead("sign");
   _say("Nothing special about that — or it isn't here.");
@@ -377,6 +393,7 @@ function _doRead(arg) {
   }
   const id = _findItem(arg);
   if (!id) { _say("You don't have that to read."); return; }
+  if (id === "masseuse_note") return _readNote();
   const it = ITEMS[id];
   if (id === "receipt") {
     _say(it.readTh, "receipt"); // mono, un-enlarged Thai so the columns align
@@ -1874,6 +1891,7 @@ const _HELP = `Common commands:
   RING BELL (฿300, instant popularity) · TALK TO PATRON · BARFINE <lady>
   Host bar (The Adonis Club, Supertown): BUY DRINK FOR <host> · HIRE <host> (premium prices; all welcome)
   MASSAGE (foot rub to happy-ending, by the shop) · SPECIAL (the extra) · SOAPY (the fishbowl)
+  MEET <lady> — an off-shift number, once one's been written you (late nights, no guarantees)
   Live music (Fri/Sat, Rock Factory every night):
   DANCE · SING · REQUEST <song> · TIP BAND <amount> · BUY ROUND FOR BAND · TALK TO BAND
   EAT <food> · DRINK <thing> · BUY WATER / FOOD (street carts & 7-Elevens) · SLEEP (at the hotel)
@@ -1901,7 +1919,7 @@ const _COMPLETE_VERBS = [
   "look", "examine", "take", "drop", "inventory", "go", "enter", "talk to",
   "ask", "give", "buy", "sell bottles", "pay", "wai", "say", "ride bus to",
   "motosai to", "travel", "light", "charge phone", "read", "use", "open", "play",
-  "flirt", "kiss", "spank", "fondle", "throw cover", "ring bell", "barfine", "massage", "special", "soapy", "eat", "drink",
+  "flirt", "kiss", "spank", "fondle", "throw cover", "ring bell", "barfine", "massage", "special", "soapy", "meet", "eat", "drink",
   "sleep", "tv", "column", "watch", "weather", "scores", "lottery", "map", "time", "tip", "wave",
   "photo", "call", "shower", "withdraw", "cheers", "tao rai", "borrow", "repay", "hire", "pet", "feed", "rename", "dance", "sing", "swim",
   "smell", "listen", "diagnose", "apologize", "quests", "accept", "abandon", "contact",
@@ -1955,6 +1973,7 @@ function _completePool(verb, ctx) {
     case "flip": // mid-jackpot the legal moves ("3 4" and "7")
       return _jpChoices();
     case "read": case "use": return _cInv().map(_cItemWord);
+    case "meet": case "visit": return G.offShift ? [G.offShift.name.toLowerCase()] : [];
     case "pay": // the driver names his price — offer it, so the fare is one tap
       return G.pendingFare ? [String(G.pendingFare.price)] : [];
     case "give":
@@ -2381,6 +2400,7 @@ function doCommand(input) {
     case "fondle": case "grope": _doSocial("fondle", arg); break;
     case "ring": case "bell": _doBell(); break;
     case "barfine": case "bf": _doBarfine(arg.replace(/^with /, "")); break;
+    case "meet": case "visit": _doMeetOffShift(arg); break;
     case "massage": case "nuad": case "nuat": _doMassage(arg); break;
     case "special": case "happyending": _doMassage("special"); break;
     case "soapy": case "fishbowl": _doSoapy(); break;
