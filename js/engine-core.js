@@ -169,6 +169,7 @@ function newGame() {
     flags: {},
     offShift: null,      // a masseuse's off-shift number you carry: {id,name,home,day,ghost}
     hospitalVisits: 0,   // morning-after hospital scenes seen — rotates the prose so repeats vary
+    codaSeen: 0,         // dawn "her baht bus home" codas seen — rotates the prose so repeats vary
     known: {},           // charId → true once their name has printed (ask-topic gate)
     visited: { jomtien_beach: true }, // roomId → true once stood in (fast-travel gate)
     talked: {},          // npcId → [dialogue indices already delivered] (terse repeats)
