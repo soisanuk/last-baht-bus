@@ -1915,7 +1915,72 @@ function _endVacation() {
   _say("(MOVE TO PATTAYA — stop pretending you're going home. Make the move; live the sandbox.)", "dim");
 }
 
+// ── The departure ritual: killing the man the city made ──────────────────────
+// Fly home at week's end and the last thing that happens is the airport scrub:
+// the version of you Pattaya grew — the nickname, the bucket rum, the helmetless
+// Click — has to die in a locked toilet so the one with the mortgage can board.
+// Plays at the top of _newVacation (fly-home-and-return); NOT on _goExpat (you're
+// staying). Rotates by G.vacation so repeat trips scrub differently. Fictionalised
+// and nameless — the home life is generic archetype (a dog, a lawn, a cover story),
+// never a named partner, and no brands.
+const _SCRUB_OPEN = [
+  "The taxi drops you at Departures and you move through the terminal like a fugitive, because " +
+    "you are one. Over the next two hours the man Pattaya grew — the one who answered to a nickname, " +
+    "drank rum from a plastic bucket at 2 p.m., rode a scratched Click through the rain with no " +
+    "helmet — has to quietly die. You find the big handicap stall, lock the door, and begin the scrub.",
+  "You know this ritual; you'll perform it again next trip. In a locked airport toilet you kill the " +
+    "version of you the week grew and resurrect the one with the mortgage. Ninety minutes, and a " +
+    "suitcase full of evidence.",
+];
+const _SCRUB_PHYSICAL = [
+  "First the body. The neon singlet comes off — it reeks of stale beer, grilled pork, cheap vanilla " +
+    "and decisions — rolled tight into a convenience-store bag and buried at the very bottom of the " +
+    "case under the dirty socks, where evidence goes. From the pristine, untouched half of the " +
+    "suitcase: a beige polo, sensible chinos, clean loafers. You brush your teeth like you're sanding " +
+    "off a crime and splash the last soi's humidity off your face.",
+  "You strip the beast and dress the accountant — the reeking singlet balled into plastic and sunk " +
+    "under the laundry, the crisp polo and pressed chinos pulled from the side of the case you never " +
+    "opened all week. In the mirror the tan almost passes for a golf tan, if you don't look too hard.",
+];
+const _SCRUB_DIGITAL = [
+  "Then the phone, which is a bomb. The chat app first — forty messages an hour, crying bears, " +
+    "“miss you already na ka” — long-pressed and gone without a glance. Then the gallery: a " +
+    "hundred-odd blurry frames of buckets and neon and peace signs deleted, and then, because " +
+    "amateurs get caught here, Recently Deleted, Select All, gone forever. It never happened.",
+  "The lock screen is the last wire. You swap the red-lit selfie you don't quite remember taking for " +
+    "a bright, high-res photo of the dog and the tidy lawn and the life that must never know. Then you " +
+    "rehearse the lie about the cash you pulled out in three days: “the course only took cash, babe — " +
+    "total scam.” Perfect.",
+];
+const _SCRUB_CALL = [
+  "You walk out into the sterile, air-conditioned scent of Duty-Free, buy an apology-shaped bottle of " +
+    "perfume, and the phone buzzes right on cue. You clear your throat, drop into your most exhausted " +
+    "corporate register, and answer: “Hey babe. Honestly? Exhausting. So humid. Barely did anything but " +
+    "network and eat bad hotel food. Just ready to sleep in my own bed.” The performance of a lifetime, " +
+    "and it lands.",
+  "The call comes as you reach the gate, and you become, instantly and completely, a bored man who " +
+    "spent a week at conference tables. “Golf was alright. Bangkok traffic's a nightmare. Ready to be " +
+    "home, babe.” A sigh, precisely weighted. She believes every word, because you've made it easy to.",
+];
+const _SCRUB_CLOSE = [
+  "You pocket the phone and walk toward boarding. The double life is secured; the illusion holds. The " +
+    "city doesn't notice you leaving — it's already selling your booth to the next man who's sure he's different.",
+  "The scrub is complete: the nickname's under the socks, the accountant's at the gate. In a month the " +
+    "seatbelt sign will ping off over the gulf again, and you'll run the whole ritual in reverse.",
+];
+
+function _suvarnabhumiScrub() {
+  const v = G.vacation;
+  _say("═══════════════════════════════════", "dim");
+  _say(_SCRUB_OPEN[v % _SCRUB_OPEN.length], "room");
+  _say(_SCRUB_PHYSICAL[Math.floor(_rand() * _SCRUB_PHYSICAL.length)]);
+  _say(_SCRUB_DIGITAL[Math.floor(_rand() * _SCRUB_DIGITAL.length)]);
+  _say(_SCRUB_CALL[Math.floor(_rand() * _SCRUB_CALL.length)]);
+  _say(_SCRUB_CLOSE[v % _SCRUB_CLOSE.length], "dim");
+}
+
 function _newVacation() {
+  _suvarnabhumiScrub(); // kill "Sharky" and fly home — before the reset and the return
   G.stage = "vacation";
   G.vacation++;
   G.pendingChoice = null;
