@@ -30,11 +30,17 @@ test("common-word filler names never chip in prose viewed from elsewhere", () =>
   newGame(); state().room = "jomtien_beach"; // no DEMOTED girl works here
   state().lastSaleng = 99999; state().lastPeddler = 99999;
   const prose = [];
-  for (const r of Object.values(ROOMS)) if (r.desc) prose.push(r.desc);
+  for (const r of Object.values(ROOMS)) {
+    if (r.desc) prose.push(r.desc);
+    if (r.revisit) for (const s of r.revisit) prose.push(s); // brief-on-revisit pools
+  }
   for (const n of Object.values(NPCS)) for (const d of n.dialogue) {
     if (d.text) prose.push(d.text);
     if (d.short) prose.push(d.short);
   }
+  // authored variant pools (engine-parser.js) carry the same false-chip risk as descs
+  for (const pool of [_NO_EXIT, _NOT_CARRYING, _NOT_HERE, _NOBODY_NAME, _HUH,
+    _BEER_LINES, _WATER_LINES, _TOASTIE_LINES, _STALL_EAT_LINES]) prose.push(...pool);
   for (const s of prose) {
     const hit = chips(s).filter(w => DEMOTED.includes(w));
     assert.equal(hit.length, 0,
