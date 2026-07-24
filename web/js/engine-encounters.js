@@ -197,6 +197,12 @@ function _maybeEncounter() {
   // public drunkenness attracts the boys in brown (repeatable, unlike the rest)
   if (G.soc.drunk >= 5 && G.turns - G.lastPolice >= 30 && _rand() < 0.2) {
     G.lastPolice = G.turns;
+    if (_dogEgg() === "guard") { // the hound sees the shakedown off before it starts
+      _say(_dogN("A boy in brown peels off a power pole toward your weaving path — then clocks the " +
+        "dog at your heel, reconsiders his entire evening, and melts back into the shade. Nobody " +
+        "fines the man with the hound."), "dim");
+      return;
+    }
     G.pendingEnc = "police";
     _encPrompt(
       ["A whistle, short and bored. A boy in brown detaches from the shade of a " +
