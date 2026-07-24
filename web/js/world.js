@@ -3543,7 +3543,7 @@ const QUESTS = {
   league: {
     name: "King of the Killer Table",
     giver: "bert",
-    desc: "Win a killer pool league night — every third night, ฿100 entry (PLAY KILLER).",
+    desc: "{{Win}} a killer pool league night — every third night, ฿100 entry (PLAY KILLER).",
     deps: [],
     at: "stinky_bar",       // a room id works too, not just an NPC
     doneFlag: "wonLeague",

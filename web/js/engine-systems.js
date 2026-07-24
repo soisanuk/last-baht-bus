@@ -676,7 +676,7 @@ const _RIDE_VENUES = [
       `rest, everyone delighted.`,
     n => `A beer bar down a lane — off-shift girls and their off-shift boyfriends, a speaker on ` +
       `something from 2009. ${n} is home here; you can see it in her shoulders coming down. She ` +
-      `introduces you around by a nickname she's decided without telling you. You are "Nong ` +
+      `introduces you around by a nickname she's decided without telling you. You are "{{Nong}} ` +
       `Handsome" now. It sticks.`,
   ]},
   { key: "viewpoint", lo: 0, hi: 0, sanuk: 4, scenes: [
