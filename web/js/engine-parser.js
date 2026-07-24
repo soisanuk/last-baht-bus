@@ -469,7 +469,17 @@ function _doRead(arg) {
   if (/news|paper/.test(arg)) return _doPaper();
   if (arg.includes("sign")) {
     const s = _room().sign && SIGNS[_room().sign];
-    if (!s) { _say("No signs worth reading here."); return; }
+    if (!s) {
+      // Auntie Nok's hand-lettered cart sign — the ฿5/bottle offer her blurb
+      // promises, wired to the real SELL BOTTLES mechanic (she buys where she stands)
+      if (_npcsHere().includes("nok")) {
+        _say("Auntie Nok's hand-lettered cart sign: “ห้าบาท” per empty — five baht a returned bottle.", "thai");
+        _engineSpeak("ห้าบาท");
+        _say("(SELL BOTTLES here to cash in any empties you're carrying — the beach is full of them.)", "dim");
+        return;
+      }
+      _say("No signs worth reading here."); return;
+    }
     _say(`The sign reads: ${s.th}`, "thai");
     _engineSpeak(s.th);
     _say(`(${s.hint})`, "dim");

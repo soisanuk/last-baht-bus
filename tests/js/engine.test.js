@@ -438,6 +438,17 @@ test("the bus stop and Nok's glass trade advertise themselves tappably", () => {
   assert.match(lastOut(), /\(SELL BOTTLES\)/);
 });
 
+test("READ SIGN reads Auntie Nok's cart sign — her blurb's promise is cashed", () => {
+  // her desc says "a hand-lettered sign… ฿5 per returned bottle"; READ SIGN must honor it
+  state().room = NPCS.nok.room;
+  out = []; run("read sign");
+  assert.match(out.join("\n"), /five baht|฿5|ขวด/, "the cart sign is readable where she stands");
+  assert.match(out.join("\n"), /SELL BOTTLES/, "and it points at the real mechanic");
+  // …and still rebuffs where there genuinely is no sign
+  state().room = "jomtien_beach"; out = []; run("read sign");
+  assert.match(lastOut(), /No signs worth reading/);
+});
+
 test("GIVE bottles to Nok is just selling them — including the natural plural", () => {
   state().flags.act1Done = true; state().room = NPCS.nok.room;
   // the strict give-item matcher chokes on "bottles" (items are singular
