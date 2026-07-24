@@ -2036,8 +2036,8 @@ const _DOG_EGGS = [
     line: "\"Sanuk.\" สนุก — fun, the whole point of this town in one word. You named your dog Fun and he " +
       "agrees completely, all the time, about everything. It's contagious; the nights run a little " +
       "brighter with him in them." },
-  { key: "buffalo", test: /\b(buffalo|kwai|kwaai|khwai)\b/,
-    line: "\"Buffalo\" — after the sick one, the eternal up-country emergency that empties farang " +
+  { key: "buffalo", test: /\b(buffalo|kwai|kwaai|khwai)\b|ควาย/,
+    line: "\"Buffalo\" — ควาย, after the sick one, the eternal up-country emergency that empties farang " +
       "wallets. Your dog is a walking cynicism detector now: when a story's being spun to part you from " +
       "your baht, he growls low, and somehow the story never quite lands." },
   { key: "knight", test: /\b(white ?knight|whiteknight|galahad|sir ?galahad)\b/,
