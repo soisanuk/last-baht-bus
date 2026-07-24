@@ -1110,13 +1110,17 @@ function _doMotosai(arg) {
   // opening quest handles its own fails). Odds scale with drink, the hour, and the
   // fast Darkside run; the delivered helmet cuts them. A mercy ride home (handled
   // above, G.money === 0) is exempt — nobody crashes on the piwin's kindness.
-  if (_flag("act1Done") &&
-      _rand() < _motoCrashRisk(G.soc.drunk, G.nightTurn >= LAST_BUS_TURN,
-                               d.price === MOTOSAI_FAR, _flag("helmetDelivered"))) {
+  const risk = _flag("act1Done")
+    ? _motoCrashRisk(G.soc.drunk, G.nightTurn >= LAST_BUS_TURN, d.price === MOTOSAI_FAR, _flag("helmetDelivered"))
+    : 0;
+  if (_rand() < risk) {
     _say(_pickVary(_MOTO_CRASH, "motocrash"), "alert");
     _endNight("accident");
     return;
   }
+  // survived — but on an elevated-risk ride, telegraph it with a near-miss ~half the
+  // time, so the danger is felt long before the crash odds ever land (no blind death)
+  if (risk >= 0.05 && _rand() < 0.5) _say(_pickVary(_MOTO_NEARMISS, "motonear"), "alert");
   G.room = d.room;
   G.darkStreak = 0;
   if (lateGouge) _say("Gone two in the morning, the buses long tucked up, and the " +
@@ -1318,6 +1322,7 @@ function _doDiagnose() {
       d >= 1 ? `${d} bottle${d > 1 ? "s" : ""} in` : "stone sober, which is fixable",
   ];
   if (G.hurt) parts.push(`banged up (${G.hurt}/3 — a third strike ends the night)`);
+  if (d >= 5) parts.push("in no state to be on the back of a motorbike");
   if (_stdSymptomatic()) parts.push("nursing a barfine souvenir that itches and burns — a clinic job (GET TESTED, it's free)");
   _say(`Self-diagnosis, ${_clockStr()}: ${parts.join(" · ")}.`);
   _say(`Phone ${G.battery}% · ฿${G.money} · สนุก ${G.happy} (${_happyLevel(G.happy)}). ` +
