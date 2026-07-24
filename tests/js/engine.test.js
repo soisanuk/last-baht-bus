@@ -115,7 +115,7 @@ test("movement and look", () => {
 
 test("blocked direction", () => {
   run("n", "n"); // beach → dongtan → no north exit
-  assert.match(lastOut(), /can't go that way/i);
+  assert.ok(_NO_EXIT.some(s => lastOut().includes(s)), "no exit that way (pooled refusal)");
 });
 
 test("take, inventory, drop", () => {
@@ -129,7 +129,7 @@ test("unknown command doesn't consume a turn", () => {
   const t0 = state().turns;
   run("florble the wug");
   assert.equal(state().turns, t0);
-  assert.match(lastOut(), /didn't understand/i);
+  assert.ok(_HUH.some(s => lastOut().includes(s)), "a parse-error line (pooled)");
 });
 
 test("examine NPC and item", () => {
@@ -4109,7 +4109,7 @@ test("TALK TO BAND works when band is playing", () => {
   G.day = 2; // no band
   state().room = "lucky_tiger";
   run("talk to band");
-  assert.match(lastOut(), /Nobody by that name/);
+  assert.ok(_NOBODY_NAME.some(s => lastOut().includes(s)), "a plain deny (pooled)");
 });
 
 // ── QoL verbs: time, waiting, tipping, haggling, the bar-mat map ───────────
@@ -4817,7 +4817,7 @@ test("addressing a known NPC who works elsewhere points you to her bar", () => {
   state().room = "silk_rose"; // Candy is not here
   out = [];
   run("talk to candy");
-  assert.match(lastOut(), /Nobody by that name/, "unmet: a plain deny, no location leaked");
+  assert.ok(_NOBODY_NAME.some(s => lastOut().includes(s)), "unmet: a plain deny, no location leaked");
   state().known.candy = true; // now you've met her
   out = [];
   run("talk to candy");
@@ -4825,7 +4825,7 @@ test("addressing a known NPC who works elsewhere points you to her bar", () => {
   // anonymous staff are nobody, not 'elsewhere'
   out = [];
   run("talk to security");
-  assert.match(lastOut(), /Nobody by that name/);
+  assert.ok(_NOBODY_NAME.some(s => lastOut().includes(s)), "a plain deny (pooled)");
 });
 
 test("Candy alternates nights between her two bars", () => {
@@ -4870,7 +4870,7 @@ test("ask <who> <topic> works without the 'about' connective (the tapped shape)"
   const noAbout = say("ask chuck money");
   const withAbout = say("ask chuck about money");
   assert.equal(noAbout, withAbout, "with and without 'about' reach the same reply");
-  assert.doesNotMatch(noAbout, /Nobody by that name/, "not a dead end");
+  assert.ok(!_NOBODY_NAME.some(s => noAbout.includes(s)), "not a dead end");
 });
 
 test("the Phil triangle: read the phone, then tell him or warn her — not both ways", () => {

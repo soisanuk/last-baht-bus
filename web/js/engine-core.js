@@ -290,6 +290,19 @@ function _rand() {
 function _flag(f) { return !!G.flags[f]; }
 function _setFlag(f) { G.flags[f] = true; }
 
+// Pick a pool entry at random but never the one shown last (the IF "at random"
+// default — pure random() clusters and droughts). `key` namespaces the one-deep
+// memory so different callers don't clobber each other. Pool depth scales with
+// how often the line is hit; the hottest loop actions get the deepest pools.
+function _pickVary(pool, key) {
+  if (!pool || pool.length < 2) return pool && pool[0];
+  G._lastPick = G._lastPick || {};
+  let i = Math.floor(_rand() * pool.length);
+  if (i === G._lastPick[key]) i = (i + 1) % pool.length;
+  G._lastPick[key] = i;
+  return pool[i];
+}
+
 function _inv() {
   return Object.keys(G.itemLoc).filter(id => G.itemLoc[id] === "inventory");
 }
