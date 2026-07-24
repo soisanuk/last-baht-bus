@@ -447,6 +447,29 @@ const _term = (() => {
     }
   }
 
+  // Context chips (the fourth surface): rebuild the quick-command bar from the
+  // engine's _chipSet() each turn, so the buttons match where you are. Pass a
+  // custom [{cmd,label}] to override (the boot continue-prompt does). A cmd ending
+  // in a space prefills and waits for an object; a bare cmd submits immediately.
+  function _renderChips(custom) {
+    const box = document.getElementById("chips");
+    if (!box) return;
+    let set = custom;
+    if (!set) { try { set = typeof _chipSet === "function" ? _chipSet() : []; } catch (e) { set = []; } }
+    box.innerHTML = "";
+    for (const { cmd, label } of set) {
+      const b = document.createElement("button");
+      b.className = "chip";
+      b.dataset.cmd = cmd;
+      b.textContent = label || cmd;
+      b.addEventListener("click", () => {
+        if (cmd.endsWith(" ")) { _input.value = cmd; _input.focus(); _refreshSuggest(); }
+        else { _input.value = cmd; submit(_onCmd); }
+      });
+      box.appendChild(b);
+    }
+  }
+
   function submit(onCommand) {
     const cmd = _input.value.trim();
     if (!cmd) return;
@@ -459,6 +482,7 @@ const _term = (() => {
     _refreshSuggest();
     onCommand(cmd);
     _updateFabs(); // the room/inbox may have changed — show/hide the bell & message glyphs
+    _renderChips(); // …and re-match the quick-command chips to the new context
     _out.scrollTop = _out.scrollHeight;
   }
 
@@ -555,25 +579,10 @@ const _term = (() => {
       if (_fly && !_fly.contains(e.target) && !e.target.closest(".kw")) _closeFly();
     });
 
-    // verb chips: insert text; chips ending in a space wait for an object,
-    // bare chips submit immediately
-    document.querySelectorAll(".chip").forEach(chip => {
-      chip.addEventListener("click", () => {
-        const t = chip.dataset.cmd;
-        if (t.endsWith(" ")) {
-          _input.value = t;
-          _input.focus();
-          _refreshSuggest();
-        } else {
-          _input.value = t;
-          submit(onCommand);
-        }
-      });
-    });
-
     _input.focus();
     _updateFabs(); // in case we boot straight into a bar / with unread texts (restored save)
+    _renderChips(); // first paint of the context chips (main.js re-renders post-boot)
   }
 
-  return { init, print, decorate, kwActions: _kwActions };
+  return { init, print, decorate, kwActions: _kwActions, renderChips: _renderChips };
 })();

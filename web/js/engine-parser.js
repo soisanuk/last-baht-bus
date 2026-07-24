@@ -2073,6 +2073,62 @@ const _COMPLETE_VERBS = [
   "request", "hint", "help", "save", "load", "undo", "restart",
 ];
 
+// ── Context chips: the fourth surface ────────────────────────────────────────
+// The quick-command bar, matched to the moment — a pending modal → a live
+// mini-game → the room in front of you. Returns [{cmd,label}]; a cmd ending in a
+// space prefills and waits for an object (label carries a "…"), a bare cmd
+// submits immediately. DOM-free and pure over G, so term.js renders whatever this
+// returns each turn (the same rule the parser, wheel, and autocomplete consume).
+function _chipSet() {
+  const chips = [];
+  const add = (cmd, label) => chips.push({ cmd, label: label || cmd });
+
+  // 1) A pending modal owns the input — offer only its answers
+  if (G.pendingChoice === "vacation_end") {
+    add("new vacation"); add("move to pattaya", "move to Pattaya"); return chips;
+  }
+  if (G.pendingChoice === "checkout") {
+    add("sabai", "Sabai ฿400"); add("queen vic", "Queen Vic ฿700");
+    add("areca", "Areca ฿900"); add("metropole", "Metropole ฿1300"); add("stay", "stay put");
+    return chips;
+  }
+  // 2) A live mini-game answers to its own moves only
+  if (G.game) {
+    for (const c of _c4Choices()) add(c, "drop " + c);
+    for (const m of _jpChoices()) add("flip " + m, "flip " + m);
+    if (G.game.type === "jp" && !_jpChoices().length) add("flip");
+    if (G.game.type === "pool" || G.game.type === "killer") { add("shot"); add("power"); add("safety"); }
+    if (G.game.type === "quiz") { add("1"); add("2"); add("3"); }
+    add("quit"); return chips;
+  }
+
+  // 3) The room in front of you
+  const r = _room();
+  if (_isDarkHere()) add("light");
+  add("look");
+
+  if (_inBar()) {
+    const girls = _npcsHere().filter(id => NPC_ROLES[id] === "hostess" || NPC_ROLES[id] === "mamasan");
+    if (r.hostBar) { add("buy drink for ", "buy drink…"); add("hire ", "hire…"); }
+    else if (girls.length) { add("flirt ", "flirt…"); add("buy drink for ", "buy drink…"); add("barfine ", "barfine…"); }
+    add("buy beer");
+    if (_playOptions().length) add("play");
+    if (_patronsHere().length) add("talk to patron", "talk patron");
+  } else if (_npcsHere().length || _patronsHere().length) {
+    add("talk to ", "talk…");
+  }
+
+  if (r.seven) { add("buy water"); add("buy condom"); add("buy toastie"); }
+  if (FOOD_STALLS[G.room]) add("buy food");
+
+  for (const k of ["n", "s", "e", "w", "in", "out", "up", "down"]) if (r.exits && r.exits[k]) add(k, k.toUpperCase());
+  if (r.motosai) add("motosai to ", "motosai…");
+  if (r.busStop) add("ride bus", "bus");
+
+  add("i", "inv"); add("map"); add("help");
+  return chips;
+}
+
 function _cInv() {
   return Object.keys(G.itemLoc).filter(id => G.itemLoc[id] === "inventory");
 }

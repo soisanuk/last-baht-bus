@@ -87,9 +87,11 @@ document.addEventListener("DOMContentLoaded", () => {
     _term.print("═══════════════════════════════════", "dim");
     _term.print("A night in progress was found on this device.");
     _term.print("Continue your night? (YES / NO)", "alert");
+    _term.renderChips([{ cmd: "yes", label: "YES — continue" }, { cmd: "no", label: "NO — start fresh" }]);
   } else {
     engineIntro();
     _autosave();
+    _term.renderChips(); // paint the opening context chips
   }
 
   // Web Audio must be unlocked inside a real user gesture — on iOS a touch,
