@@ -4,6 +4,7 @@
 const SAVE_KEY = "lbb_save";
 let _prevSnap = null;         // one-level undo snapshot
 let _awaitingContinue = false;
+let _awaitingReset = false;   // RESET arms a one-shot confirm before wiping the save
 
 function _autosave() {
   try { localStorage.setItem(SAVE_KEY, serializeGame()); } catch (e) {}
@@ -49,6 +50,43 @@ function _dispatch(cmd) {
 
   if (v === "save" || v === "load") {
     _term.print("The night saves itself after every command now. UNDO rewinds one.", "dim");
+    return;
+  }
+
+  // RESET wipes the save — a destructive one-way door, so it takes a confirmation.
+  if (_awaitingReset) {
+    _awaitingReset = false;
+    if (["reset", "yes", "y", "confirm", "wipe"].includes(v)) {
+      try { localStorage.removeItem(SAVE_KEY); } catch (e) {}
+      _prevSnap = null; // the wipe isn't undoable — the confirm was the safety net
+      newGame(); engineIntro(); _autosave();
+      _term.print("⌫ Slate wiped — the wallet, the dog, the debts, the girls' patience, all of it. " +
+        "A clean arrival on the beach, night one.", "alert");
+    } else {
+      _term.print("Reset cancelled — your night stands.", "dim");
+    }
+    _audioForRoom(G.room, G.flags);
+    return;
+  }
+  if (v === "reset") {
+    _awaitingReset = true;
+    _term.print("⚠️  RESET erases your saved game from this device — permanently, no UNDO. " +
+      "(RESTART just begins a fresh night; RESET wipes everything, records and all.)", "alert");
+    _term.print("Type RESET again (or YES) to confirm — anything else cancels.", "alert");
+    return;
+  }
+
+  // QUIT / END / LOGOUT — sign off for the night. Deferred while a mini-game or a
+  // modal is live, so "quit" still concedes a game / answers a prompt as before.
+  const busy = G.game || G.pendingEnc || G.pendingChoice || G.pendingBf || G.pendingSoapy || G.pendingFare;
+  if (!busy && /^(quit|end|logout|log ?out|sign ?off|goodnight|good night)$/.test(v)) {
+    const lvl = typeof _happyLevel === "function" ? _happyLevel(G.happy) : "";
+    _term.print("You settle up, such as it is, and step out into it. The soi roars on without you — " +
+      "it always does.", "win");
+    _term.print(`Tonight so far: day ${G.day}${G.stage === "expat" ? " · Pattaya, home" : " of your trip"} · ` +
+      `สนุก ${G.happy}${lvl ? ` — ${lvl}` : ""}.`, "dim");
+    _term.print("Your night is saved on this device — reload any time to pick it up where you left off. " +
+      "(RESET wipes it for a clean start.)", "dim");
     return;
   }
 

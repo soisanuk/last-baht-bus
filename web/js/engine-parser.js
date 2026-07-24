@@ -2089,7 +2089,8 @@ const _HELP = `Common commands:
   BORROW <amount> · REPAY [amount] (Nira's loan at Neon Paradise — 20%, three days, don't be late)
   PET CATS (Jomtien beach) · FEED DOG (a friendship you cannot undo) · PET DOG · NAME DOG <name>
   LIGHT ON / LIGHT OFF · CHARGE PHONE
-  SCORE (happiness & progress) · UNDO · RESTART   (the night autosaves itself)`;
+  SCORE (happiness & progress) · UNDO · RESTART   (the night autosaves itself)
+  QUIT / END / LOGOUT (sign off; your night is saved) · RESET (wipe the save — asks first)`;
 
 // ── Autocomplete ─────────────────────────────────────────────────────────────
 // engineComplete(input) → candidates for the input's final word, drawn from
@@ -2107,7 +2108,7 @@ const _COMPLETE_VERBS = [
   "photo", "call", "shower", "withdraw", "cheers", "tao rai", "borrow", "repay", "hire", "pet", "feed", "rename", "dance", "sing", "swim",
   "smell", "listen", "diagnose", "get tested", "clinic", "apologize", "quests", "accept", "abandon", "contact",
   "contacts", "who", "blackbook", "message", "check messages", "send", "score", "wait", "again",
-  "request", "hint", "help", "save", "load", "undo", "restart",
+  "request", "hint", "help", "save", "load", "undo", "restart", "quit", "reset", "end", "logout",
 ];
 
 // ── Context chips: the fourth surface ────────────────────────────────────────
