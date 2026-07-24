@@ -1660,7 +1660,46 @@ const _HOSP_WHY = {
       "wasn't there at midnight and the taste of the pavement still in it somewhere. The district " +
       "hospital on Soi Buakhao. The city won last night; this is where it leaves the ones who argued.",
   ],
+  accident: [
+    "You surface to water-stained ceiling tiles and a leg wrapped ankle to knee, the road rash " +
+      "down one forearm dressed in gauze that's already weeping through. Somewhere between one bar " +
+      "and the next, the bike and the tarmac had a disagreement and you were the message. The " +
+      "piwin, they tell you, walked away without a scratch.",
+    "White light, iodine, and a wrist in fresh plaster you don't remember earning. The district " +
+      "hospital off Soi Buakhao. The last clear frame is the back of a motorbike taxi and a corner " +
+      "arriving too fast; the rest the road kept.",
+    "You come to on a gurney with gravel still being tweezered out of your shoulder by a nurse who " +
+      "has done this a thousand times and will do it a thousand more. A motosai, a slick of " +
+      "somebody's spilled oil, a farang certain he was fine to ride. The town files another one " +
+      "under Saturday night.",
+    "A drip in your arm, a dressing across one cheekbone, and the specific ache of a body that met " +
+      "the pavement at speed. You were on the back of a piwin's bike; then you were sliding; then " +
+      "you were here. Pattaya collects this fare too.",
+  ],
 };
+// The road moment itself — said the instant a ride goes wrong, before the ward
+// morning. A real accident, distinct from the pass-out-and-wake-stranded _CRASH_.
+const _MOTO_CRASH = [
+  "The corner comes too fast. The piwin brakes, the back wheel steps out on something slick, and " +
+    "the world goes sideways in a spray of sparks and somebody shouting. Then the tarmac, and then nothing.",
+  "A pickup drifts wide out of an unlit soi with no warning. The piwin swerves, the bike won't hold " +
+    "it, and the last thing you own is the sound of your own sandal leaving your foot. Then the road takes the rest.",
+  "One second you're threading the late traffic, the next the front wheel finds a pothole the dark " +
+    "was hiding and the bike bucks you both toward the oncoming lane. Horns, gravel, the sky where " +
+    "the road should be. Lights out.",
+];
+// Odds a motosai ride ends in a real accident. Scales with drink, the small-hours
+// window, and the fast Darkside highway run — near-zero on a sober, early, in-town
+// hop. The delivered helmet (helmetDelivered) is a real payoff: it cuts the odds
+// hard. Pure and capped, so it's unit-testable.
+function _motoCrashRisk(drunk, late, darkside, helmet) {
+  let risk = 0;
+  if (drunk >= 3) risk += (drunk - 2) * 0.02;
+  if (late) risk += 0.03;
+  if (darkside) risk += 0.04;
+  if (helmet) risk *= 0.4;
+  return Math.min(risk, 0.22);
+}
 const _HOSP_SIGHTS = [
   "Across the bay of curtained cubicles the night's other arrivals are still landing: a farang " +
     "with a taped eyebrow and a police report he can't read, a lad two chairs down folded around " +
@@ -1820,6 +1859,11 @@ function _endNight(reason) {
       _hospitalMorning("hurt"); // insurance covers the public ward — no bill
       _addHappy(-8);
       break;
+    case "accident":
+      _hospitalMorning("accident"); // a road accident — the ward, insurance, no bill
+      _addHappy(-8);
+      G.crashInjury = true; // wake tomorrow banged up (applied after the new-day reset)
+      break;
     case "barfine":
       _say("The rest is nobody's business but the soi's: a shared plate of khao " +
         "man gai at 3 a.m., the beach road with nobody on it, laughing at " +
@@ -1937,6 +1981,7 @@ function _endNight(reason) {
   G.phone.invite = null;
   for (const id in ENCOUNTERS) if (ENCOUNTERS[id].nightly) delete G.encDone[id]; // the street restocks
   G.hurt = 0;
+  if (G.crashInjury) { G.hurt = 1; G.crashInjury = false; } // yesterday's spill still aches
   G.hunger = Math.min(85, 30 + hangover * 5);
   G.thirst = Math.min(90, 40 + hangover * 6);
   G.nightTurn = 0;

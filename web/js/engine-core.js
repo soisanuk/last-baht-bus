@@ -212,6 +212,7 @@ function newGame() {
     hunger: 30,          // 0 fed … 100 collapse
     thirst: 40,          // 0 quenched … 100 collapse (you woke up dry)
     hurt: 0,             // 3 = a night in the clinic
+    crashInjury: false,  // a motosai accident leaves you banged up the next night (hurt:1)
     jaded: 0,            // the hedonic treadmill: conquests this window; each barfine/ST buys less สนุก, cools 1/day
     lastBusWarned: false, // the nightly last-baht-bus heads-up fires once per night
     bestHappy: 0,

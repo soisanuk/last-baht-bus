@@ -38,9 +38,12 @@ test("common-word filler names never chip in prose viewed from elsewhere", () =>
     if (d.text) prose.push(d.text);
     if (d.short) prose.push(d.short);
   }
-  // authored variant pools (engine-parser.js) carry the same false-chip risk as descs
+  // authored variant pools carry the same false-chip risk as descs: engine-parser
+  // misfire/purchase pools, plus the engine-play narrative pools (hospital, coda, crash)
   for (const pool of [_NO_EXIT, _NOT_CARRYING, _NOT_HERE, _NOBODY_NAME, _HUH,
-    _BEER_LINES, _WATER_LINES, _TOASTIE_LINES, _STALL_EAT_LINES]) prose.push(...pool);
+    _BEER_LINES, _WATER_LINES, _TOASTIE_LINES, _STALL_EAT_LINES,
+    ...Object.values(_HOSP_WHY), _HOSP_SIGHTS, _HOSP_THESIS, _HOSP_TOMORROW, _MOTO_CRASH,
+    _CODA_CUT, _CODA_DECON, _CODA_HOME, _CODA_CLOSE]) prose.push(...pool);
   for (const s of prose) {
     const hit = chips(s).filter(w => DEMOTED.includes(w));
     assert.equal(hit.length, 0,
