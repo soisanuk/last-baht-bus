@@ -473,8 +473,8 @@ function _doRead(arg) {
       // Auntie Nok's hand-lettered cart sign — the ฿5/bottle offer her blurb
       // promises, wired to the real SELL BOTTLES mechanic (she buys where she stands)
       if (_npcsHere().includes("nok")) {
-        _say("Auntie Nok's hand-lettered cart sign: “ห้าบาท” per empty — five baht a returned bottle.", "thai");
-        _engineSpeak("ห้าบาท");
+        _say("Auntie Nok's hand-lettered cart sign: “ขวด ห้าบาท” — five baht a returned bottle.", "thai");
+        _engineSpeak("ขวด ห้าบาท");
         _say("(SELL BOTTLES here to cash in any empties you're carrying — the beach is full of them.)", "dim");
         return;
       }
