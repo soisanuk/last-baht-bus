@@ -275,6 +275,12 @@ const ROOMS = {
       "bullseye painted over the counter, a Connect 4 frame, and a row of hostesses who've clearly " +
       "done the maths on where the foot traffic enters the soi. First bar most punters hit; many " +
       "don't get past it.",
+    revisit: [
+      "Back into Arrow Bar — the bullseye over the counter, the Connect 4 frame, the hostesses who read foot traffic for a living.",
+      "The first bar on the soi takes you back. Plenty of punters never get past it; tonight, again, neither did you.",
+      "You drop back onto a stool under the painted bullseye. The girls here did the maths on where the money walks in — and it walks in here.",
+      "Arrow Bar again: bright, open, and stationed exactly where the soi spills its traffic.",
+    ],
     exits: { out: "thappraya_w" },
   },
   cheeky_monkey: {
@@ -284,6 +290,12 @@ const ROOMS = {
     desc: "A Samson-brothers house, mid-strip: cartoon monkeys over the bar, cold towers of Chang, and " +
       "a crew of hostesses who run it at a permanent gentle party. Same owners as half the strip, and " +
       "it shows in the fresh paint and the working aircon.",
+    revisit: [
+      "Back into the Cheeky Monkey — cartoon monkeys over the bar, cold towers of Chang, the permanent gentle party never quite ending.",
+      "The Samson house takes you back: fresh paint, working aircon, and a crew of hostesses running it at an easy simmer.",
+      "You slide back into the party that was already going. Nobody here started it and nobody's going to stop it.",
+      "Cheeky Monkey again — monkeys, Chang towers, and the mid-strip hum of a bar that's always this glad to see you.",
+    ],
     exits: { out: "thappraya_mid" },
   },
   the_office: {
@@ -293,6 +305,12 @@ const ROOMS = {
     desc: "The other Samson beer bar, down the Second Road end — the joke's on the sign, so a man can " +
       "honestly say he's 'at the office.' Dartboard, a telly showing football nobody watches, and the " +
       "easy end-of-strip pace before Second Road takes over.",
+    revisit: [
+      "Back into The Office — dartboard, a telly playing football nobody watches, and the easy end-of-strip pace.",
+      "The Samsons' other beer bar takes you back, and a man can still honestly say he's at the office.",
+      "You settle back in at the far end of the strip, where the noise thins and the Chang stays cold.",
+      "The Office again: the joke on the sign, the darts, the football on to nobody, the unhurried end of the soi.",
+    ],
     exits: { out: "thappraya_e" },
   },
   hyper: {
@@ -329,6 +347,12 @@ const ROOMS = {
       "leather couches with curtains that draw, and ladies already crossing the floor in not very " +
       "much. Quiet money, discretion, and a barfine that reflects both. The strip's noise dies the " +
       "moment the door sighs closed behind you.",
+    revisit: [
+      "Back through the shut door into the Boardroom — cold, gold, low-lit, the strip's noise dying the moment it sighs closed behind you.",
+      "The gentleman's club folds you back into its hush: deep leather, curtains that draw, ladies already crossing the floor.",
+      "You step back into the quiet money. Discretion here has a price, and the barfine reflects it; nobody mentions either.",
+      "The Boardroom again — the door closes, the strip vanishes, and the room lowers its voice to meet yours.",
+    ],
     exits: { out: "thappraya_w" },
   },
   velvet_club: {
@@ -339,6 +363,12 @@ const ROOMS = {
       "a sound system, and hostesses who don't chase — you buy a drink, they settle in close, and the " +
       "rest is between you and the curtain. Another of the Samson brothers' rooms, run cold and " +
       "expensive on purpose.",
+    revisit: [
+      "Back into the Velvet Club — velvet, brass, a whisper of a sound system, and the strip a distant rumour.",
+      "The room settles cold and close around you again. Nobody chases here; you buy a drink and the rest arrives on its own.",
+      "You slip back behind the curtain-quiet. The Velvet is run cold and expensive on purpose, and the purpose is working.",
+      "Velvet Club again — brass, hush, and a hostess already drifting to the stool beside yours.",
+    ],
     exits: { out: "thappraya_mid" },
   },
   beach_turn_massage: {
@@ -453,6 +483,12 @@ const ROOMS = {
       "no mamasan would dare question. What the ladies concede in years they repay in " +
       "showmanship, and the regulars wouldn't trade one of them for the whole of " +
       "Walking Street. Mem runs the floor like a national institution, because it is one.",
+    revisit: [
+      "Back into Tequila Queen — bald red velvet, a mirror ball short a continent of tiles, and dancers who answer to no mamasan but time.",
+      "The oldest go-go in town takes you back: proudly unrestored, and prouder still of the women who've held its floor for years.",
+      "You settle back onto a worn stool. Mem still runs the room like the national institution it is, because it is one.",
+      "Tequila Queen again — what the place concedes in paint and mirror tiles it repays, every night, in showmanship.",
+    ],
     exits: { out: "beach_rd_c" },
   },
   promenade: {
@@ -535,6 +571,12 @@ const ROOMS = {
       "bottomless Budweiser and opinions on everyone's break. Next door, the Blue Dog's rail " +
       "roars at a sunset — close enough to share a bathroom with, which, in fact, " +
       "the whole row does.",
+    revisit: [
+      "Back into Stinky Bar — lime and cue chalk in defiance of the name, trophies crowding the back bar, the table brushed like a green.",
+      "The pool bar takes you back. Bert holds the end stool with a bottomless Budweiser and an opinion on your break already loading.",
+      "You step back into the crack of cue balls. Next door the Blue Dog's rail roars at another sunset, close enough to share a bathroom with.",
+      "Stinky Bar again: chalk, trophies, cold Bud, and Bert's court in permanent session at the end of the bar.",
+    ],
     exits: { out: "beach_rd_n" },
   },
   central_mall: {
@@ -755,6 +797,12 @@ const ROOMS = {
       "rotate with the unhurried confidence of professionals — fewer of them than there used " +
       "to be, and the room notices, but the ones here are good. Security by the door: two " +
       "large gentlemen who have never once been surprised and are not about to start.",
+    revisit: [
+      "Back into Neon Paradise — chrome poles, mirror walls, that sound system finding your fillings again.",
+      "The go-go folds you back into its cold and its bass. The dancers turn on the numbers; the room runs without you.",
+      "Neon Paradise again: fewer girls than the mirrors were built for, but the ones working the poles are worth the walk.",
+      "You slip back past the two large gentlemen at the door — neither surprised to see you — into the mirrored roar.",
+    ],
     exits: { out: "ws_south" },
   },
   club_mirage: {
@@ -766,6 +814,12 @@ const ROOMS = {
       "holding. The crowd is a mix: tourists who found their way in, freelancers working the " +
       "floor, bar girls two hours past their shift drinking on someone else's tab. Aom " +
       "materialises beside your stool. You didn't see her cross the floor.",
+    revisit: [
+      "Back into Club Mirage — ankle-deep dry ice, violet lasers slicing through it, everything looking better than it has any right to.",
+      "The Mirage takes you back: the fog, the thin violet lines, the crowd of tourists and off-shift girls drinking on somebody's tab.",
+      "You wade back into the dry ice. The lasers cut, the model holds, and everyone in here looks improved by the dark.",
+      "Club Mirage again. Somewhere in the fog Aom is already noting your return; you won't see her cross the floor.",
+    ],
     exits: { out: "ws_south" },
   },
   crystal_palace: {
@@ -777,6 +831,12 @@ const ROOMS = {
       "numbered dancers from a different decade — No. 71 circled in red marker, much later, " +
       "by someone who knew what they were looking at. Crystal Palace is older than most of " +
       "the girls in it, and carries itself accordingly.",
+    revisit: [
+      "Back into Crystal Palace — rhinestones on everything that holds still, the cashier's cage glittering like a shrine.",
+      "The old go-go takes you back: subs you feel in the floor, and that carried-lightly dignity of a room older than its dancers.",
+      "You step back into the glitter and the bass. Crystal Palace has seen every kind of man walk back in; it isn't impressed, exactly.",
+      "Rhinestones, a wall of subs, decades of numbered girls on the faded poster — Crystal Palace, exactly as you left it.",
+    ],
     exits: { out: "ws_north" },
   },
   paradise_nights: {
@@ -787,6 +847,12 @@ const ROOMS = {
       "heaves — tourists, freelancers working the margins, bar girls two hours past their " +
       "shift in trainers and someone else's jacket. Ping is everywhere at once. The bass " +
       "physically shortens the room.",
+    revisit: [
+      "Back past the velvet rope into Paradise Nights — wristbands, departure-lounge prices, and a floor that heaves.",
+      "The club swallows you again: bass that physically shortens the room, and Ping somehow everywhere at once.",
+      "You push back into the crush — tourists, freelancers, girls two hours past their shift dancing in someone else's jacket.",
+      "Paradise Nights again. The rope, the wristband, the wall of bass; the night here has no intention of ending.",
+    ],
     exits: { out: "ws_north" },
   },
   midnight_sun: {
@@ -856,6 +922,12 @@ const ROOMS = {
     desc: "Tiger stripes on the bar top, a golden waving cat with dead batteries, and a " +
       "pool table with a lean you could ski off. Loud, friendly, dangerous to wallets " +
       "in the normal, voluntary way.",
+    revisit: [
+      "Back into Lucky Tiger — tiger stripes down the bar top, the golden cat waving on dead batteries, the pool table with its ski-slope lean.",
+      "The bar takes you back loud and friendly, and dangerous to your wallet in the normal, entirely voluntary way.",
+      "You rack up on the leaning table again. The waving cat keeps not waving; nobody's replaced the batteries in years.",
+      "Lucky Tiger again — stripes, that tilted table, and the cheerful certainty you'll leave lighter than you came.",
+    ],
     exits: { out: "buakhao_n" },
   },
   rock_factory: {
@@ -979,6 +1051,12 @@ const ROOMS = {
     bar: "Gold Rush Lounge", barType: "beer",
     desc: "Gold tinsel, gold bar stools, gold-painted everything, none of it gold. A " +
       "nervous sweetness to the place, like it's trying hard on its first week too.",
+    revisit: [
+      "Back into the Gold Rush — gold tinsel, gold stools, gold-painted everything, none of it actually gold.",
+      "The lounge takes you back with its nervous sweetness, still trying a little too hard, still on its first week in spirit.",
+      "You settle back onto a gold-painted stool. The place beams at you like it needs the reassurance.",
+      "Gold Rush again: all that glitter and not an ounce of the real thing, and somehow you don't mind.",
+    ],
     exits: { out: "tt_lane_1" },
   },
   starlight_bar: {
@@ -988,6 +1066,12 @@ const ROOMS = {
     desc: "Blue LEDs pricked into the ceiling like a planetarium with a drinks licence. " +
       "The pours are honest and the banter is not. Pim is behind the bar, looking at you " +
       "the way she looks at everything — like she already knows the punchline.",
+    revisit: [
+      "Back into Starlight — blue LEDs pricked across the ceiling like a planetarium that took out a drinks licence.",
+      "The little bar takes you back: honest pours, dishonest banter, and Pim already reading you like she wrote you.",
+      "You drop back under the fake stars. Pim looks up the way she looks at everything — like she knows the punchline already.",
+      "Starlight again — the ceiling full of blue pinpricks, the talk cheap and warm, the Chang cold and true.",
+    ],
     exits: { out: "tt_lane_2" },
   },
   rainbow_girls: {
@@ -999,6 +1083,12 @@ const ROOMS = {
       "behind the bar — guarded by security who look extremely employed. " +
       "Somewhere behind that door is an office, and in that office is a safe.",
     sign: "office_door",
+    revisit: [
+      "Back into Rainbow Girls — the best-run go-go in the maze, a DJ with actual taste, the cashier's cage strung with fairy lights.",
+      "Madam Oy's flagship takes you back: tight, bright, and behind the bar that guarded door nobody invites you through.",
+      "You step back into Oy's room. Everything runs like it's watched, because it is; the security by the door look extremely employed.",
+      "Rainbow Girls again — fairy lights, clean sound, and the quiet weight of the office somewhere behind the ห้ามเข้า.",
+    ],
     exits: { out: "tt_deep", office: "oy_office" },
   },
   oy_office: {
