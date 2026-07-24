@@ -1561,6 +1561,84 @@ function _crashSpotFor(roomId) {
   return _CRASH_SPOTS[_REGION_CRASH[reg] || "beach"];
 }
 
+// ── The morning after: the public hospital ───────────────────────────────────
+// The one place in Pattaya where the marketplace vanishes — no barfine, no
+// mamasan, no VIPs, everyone holding the same queue number. The game elides the
+// day, so a night that ends in the hospital (violence now; a bike crash or the
+// STD line, once those exist) surfaces it. Rotating pools + fresh vignettes each
+// visit keep the week's repeat mornings from reading identically. Fully
+// fictionalised — archetypes off the ward, never real people. Insurance covers
+// it: not a baht changes hands, which IS the point.
+const _HOSP_WHY = {
+  hurt: [
+    "You surface under a strip light in a curtained bay, an eyebrow taped and a rib filing a " +
+      "formal complaint every breath. The big public hospital off Soi Buakhao, south of the " +
+      "market — the free one, the real one. Whatever last night's argument was, you lost it on points.",
+    "You come to on a gurney parked in a corridor that smells of antiseptic and instant coffee, " +
+      "one hand bandaged, a lump behind your ear you don't remember earning. Somebody poured you " +
+      "into the district hospital while you were still insisting you were fine.",
+    "Morning finds you in a plastic chair you don't remember taking, a fresh row of stitches " +
+      "tugging at your scalp and a form on your knee in a script you can't read. The public " +
+      "hospital past Candy Bar. The night caught up, the way it always eventually does.",
+    "You wake to fluorescent light and the squeak of trolley wheels, an arm in a sling that " +
+      "wasn't there at midnight and the taste of the pavement still in it somewhere. The district " +
+      "hospital on Soi Buakhao. The city won last night; this is where it leaves the ones who argued.",
+  ],
+};
+const _HOSP_SIGHTS = [
+  "Across the bay of curtained cubicles the night's other arrivals are still landing: a farang " +
+    "with a taped eyebrow and a police report he can't read, a lad two chairs down folded around " +
+    "a phone he keeps not answering.",
+  "Three girls off a late shift cluster at the desk, mascara gone to bruises under the strip " +
+    "light, one of them white-lipped over an ankle that met a wet soi at speed in the wrong heels.",
+  "A young man in the lab-test line can't keep his foot still, staring at the inside of his own " +
+    "arm as if he could argue that little constellation of spots back into an allergy by tomorrow.",
+  "Along the wall an old European folds and unfolds his hands in a wheelchair, long past " +
+    "pretending; the Thai woman beside him — no younger — wears the kind of tiredness that isn't " +
+    "from one night but from a hundred, the caregiving kind with no clocking-off.",
+  "A girl unmistakably off the bars sits with both hands on a belly that's started to show, her " +
+    "friend murmuring the encouragement you murmur when there's nothing else, and the room does " +
+    "the arithmetic it doesn't say aloud.",
+  "Two men in bleached Chang singlets and flip-flops stand where a queue used to be, holding a " +
+    "paper number and the expression of men waiting for something nobody has explained, least of " +
+    "all to them.",
+];
+const _HOSP_THESIS = [
+  "No mamasan works this room. Nobody's buying, nobody's selling, nobody's in control. Everyone " +
+    "holds the same crumpled number, everyone sits the same plastic chair, everyone is — for once " +
+    "— on the same side of the counter.",
+  "It's the one address in this town with no VIP list: no sponsors, no working girls, no marks. " +
+    "Take away the neon and the drink and the money and Pattaya is just this — fragile people, " +
+    "scared and hopeful and hurt, waiting to hear a number called.",
+  "The marketplace, so loud out there, simply isn't in here. Strip the night off everyone and " +
+    "what's left is a waiting room full of the same animal, holding the same slip of paper, hoping.",
+];
+const _HOSP_TOMORROW = [
+  "And by the water cooler, half a memory made flesh: a girl you lent a few hundred baht a season " +
+    "ago and never saw again — the LINE messages, the sick buffalo, the province she was forever " +
+    "about to go home to. She clocks you, and for one second something crosses her face. Then she " +
+    "smiles like the debt was a dream you had, and mouths one word across the room: “Tomorrow.” " +
+    "You can't even be angry. It's almost poetic.",
+  "And there, in the queue with everyone else, is one you know — a name half-forgotten, attached " +
+    "to money you'll never see and a story about family and a hometown bus. She meets your eye, " +
+    "unhurried, entirely unbothered, and gives you the smile and the word this whole town runs on: " +
+    "“Tomorrow.” The counter takes her number before it takes yours.",
+];
+
+function _hospitalMorning(reason) {
+  const why = _HOSP_WHY[reason] || _HOSP_WHY.hurt;
+  _say(why[G.hospitalVisits % why.length], "alert");
+  G.hospitalVisits++;
+  const pool = _HOSP_SIGHTS.slice(), pick = [];
+  for (let k = 0; k < 3 && pool.length; k++)
+    pick.push(pool.splice(Math.floor(_rand() * pool.length), 1)[0]);
+  _say(pick.join(" "), "room");
+  _say(_HOSP_THESIS[Math.floor(_rand() * _HOSP_THESIS.length)], "dim");
+  _say("(No charge — your travel insurance covers the public ward. In here, that makes you " +
+    "exactly like everyone else: a number, waiting for it to be called.)", "dim");
+  if (_rand() < 0.55) _say(_HOSP_TOMORROW[G.hospitalVisits % _HOSP_TOMORROW.length]);
+}
+
 function _endNight(reason) {
   // The opening quest (Act One) is do-or-die: fail to reach room 412 before the
   // night ends — run to dawn, or drop from thirst/drink — and it's a HARD FAIL
@@ -1596,16 +1674,10 @@ function _endNight(reason) {
         "night cost, the morning will hand you the invoice.", "alert");
       _addHappy(-5);
       break;
-    case "hurt": {
-      const bill = Math.min(500, G.money);
-      G.money -= bill;
-      _say("Enough. Tonight the city won on points. A quiet clinic off Third Road " +
-        "patches you up with the efficiency of long practice" +
-        (bill ? ` and relieves you of ฿${bill}` : "") +
-        ". The nurse's parting wai contains multitudes.", "alert");
+    case "hurt":
+      _hospitalMorning("hurt"); // insurance covers the public ward — no bill
       _addHappy(-8);
       break;
-    }
     case "barfine":
       _say("The rest is nobody's business but the soi's: a shared plate of khao " +
         "man gai at 3 a.m., the beach road with nobody on it, laughing at " +
