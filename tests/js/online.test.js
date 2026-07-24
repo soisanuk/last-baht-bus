@@ -36,7 +36,7 @@ test("two sessions in one process are fully isolated", () => {
   const b = newSession();
   a.send("e");
   a.send("take bottle");
-  b.send("n"); // b walks into the dark instead
+  b.send("n"); b.send("n"); // b wanders north up the sand to the dark Dongtan end
   assert.equal(a.state().room, "jomtien_beach_rd");
   assert.equal(b.state().room, "dongtan_beach");
   assert.equal(a.state().itemLoc.bottle3, "inventory");
@@ -54,7 +54,8 @@ test("a session round-trips through a save string across contexts (cloud save)",
   later.load(blob);
   assert.equal(later.state().room, "jomtien_beach_rd");
   assert.equal(later.state().itemLoc.bottle3, "inventory");
-  later.send("sell bottles"); // Nok is right here
+  later.send("w"); later.send("s"); // down to Auntie Nok at the Soi 7 beach end
+  later.send("sell bottles");
   assert.equal(later.state().money, 5, "play continues seamlessly");
 });
 

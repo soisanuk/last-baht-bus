@@ -114,7 +114,7 @@ test("movement and look", () => {
 });
 
 test("blocked direction", () => {
-  run("s"); // the start faces the sea to the south — no exit that way
+  run("w"); // the start faces the open sea to the west — no exit that way
   assert.ok(_NO_EXIT.some(s => lastOut().includes(s)), "no exit that way (pooled refusal)");
 });
 
@@ -133,7 +133,7 @@ test("unknown command doesn't consume a turn", () => {
 });
 
 test("examine NPC and item", () => {
-  run("e", "x nok");
+  run("s", "x nok");
   assert.match(lastOut(), /vendor/i);
   run("x receipt");
   assert.match(lastOut(), /Thai/);
@@ -147,7 +147,7 @@ test("printed names become known; lowercase words and fragments do not", () => {
   _say("“My girlfriend Pim — Starlight Bar. Ask Madam Oy, she know.”");
   assert.ok(state().known.pim);
   assert.ok(state().known.oy, "matched on the last word of 'Madam Oy'");
-  run("e"); // Auntie Nok is on the presence line
+  run("s"); // Auntie Nok is on the presence line at the beach end
   assert.ok(state().known.nok, "being in the room prints the name");
 });
 
@@ -345,9 +345,9 @@ test("reading the receipt sets the lead flag", () => {
 });
 
 test("selling three bottles yields exactly the bus fare", () => {
-  run("take bottle", "e", "take bottle",
-    "light on", "w", "n", "take bottle", "e", "light off",
-    "sell bottles");
+  run("take bottle", "e", "take bottle", "w",
+    "n", "light on", "n", "take bottle", "s", "light off", "s",
+    "s", "sell bottles"); // 3 bottles → down to Auntie Nok at the beach end
   assert.equal(state().money, 15);
   assert.ok(state().flags.gotBusFare);
 });
@@ -428,13 +428,13 @@ test("every exit key walks: pub, up/down/u/d, hotel — GO accepts what Exits li
 test("the bus stop and Nok's glass trade advertise themselves tappably", () => {
   // (RIDE BUS TO <place>) is a CAPS hint now — the last keyboard-only steps
   // of the opening funnel got tap paths.
-  run("e", "n"); // the Jomtien bus stop
+  run("e"); // the Jomtien bus stop (the beach road middle)
   assert.match(lastOut(), /\(RIDE BUS TO <place>\)/);
   // holding a bottle near Auntie Nok surfaces (SELL BOTTLES)
   out = [];
-  run("s"); // back to her stretch of beach road, Chang bottle still un-taken
+  run("w", "s"); // down to her beach-end cart, Chang bottle still un-taken
   assert.doesNotMatch(lastOut(), /SELL BOTTLES/, "no glass, no pitch");
-  run("w", "take bottle", "e");
+  run("n", "take bottle", "s"); // grab a bottle on the sand, back to Nok
   assert.match(lastOut(), /\(SELL BOTTLES\)/);
 });
 
@@ -483,7 +483,7 @@ test("flashlight drains battery and dies at zero", () => {
 });
 
 test("darkness: growl then noodle sacrifice", () => {
-  run("n");         // dongtan, dark, streak 1 — growl
+  run("n", "n");    // through the lit middle beach to dark Dongtan — streak 1, growl
   assert.match(lastOut(), /soi dog/i);
   run("wait");      // streak 2 — dog takes the noodles
   assert.equal(state().itemLoc.noodles, null);
@@ -493,7 +493,7 @@ test("darkness: growl then noodle sacrifice", () => {
 test("darkness without noodles: bitten and displaced", () => {
   state().itemLoc.noodles = null;
   state().money = 100;
-  run("n", "wait");
+  run("n", "n", "wait");
   assert.equal(state().money, 70); // ฿30 shed
   assert.notEqual(state().room, "dongtan_beach");
 });
@@ -511,7 +511,7 @@ test("charging needs charger and outlet", () => {
 // ── Gossip chain & puzzles ─────────────────────────────────────────────────
 
 test("re-talking gives the terse gist, not the full spiel again", () => {
-  state().room = "jomtien_beach_rd";
+  state().room = "soi7_beach_end";
   run("talk to nok");
   const first = lastOut();
   assert.match(first, /Beach full of bottle/); // full first-meeting spiel
@@ -833,7 +833,7 @@ test("drunk bargirl: instant charity, no reaction needed", () => {
 test("moo ping placates the soi dog like the noodles do", () => {
   state().itemLoc.noodles = null;
   state().itemLoc.moo_ping = "inventory";
-  run("n", "wait");
+  run("n", "n", "wait");
   assert.equal(state().itemLoc.moo_ping, null);
   assert.equal(state().room, "dongtan_beach", "skewer absorbed the bite");
 });
@@ -1773,7 +1773,7 @@ test("buying your own beers raises the drunk counter", () => {
 });
 
 test("street kisses end badly — except for the katoey", () => {
-  run("e", "kiss nok");
+  run("s", "kiss nok");
   assert.match(lastOut(), /THWACK|flip-flop/i);
   state().room = "beach_rd_c";
   state().money = 100;
@@ -3886,11 +3886,12 @@ test("scripted happy-ending playthrough", () => {
   state().encDone = Object.fromEntries(Object.keys(ENCOUNTERS).map(k => [k, true]));
   run(
     // Act 1 — Jomtien: three bottles, one receipt, one bus
-    "take bottle",
-    "e", "take bottle", "read receipt",
-    "light on", "w", "n", "take bottle", "e", "light off",
-    "sell bottles",
-    "ride bus to beach road", "pay 15",
+    "take bottle",                             // bottle @ the beach (South)
+    "e", "take bottle", "read receipt",        // bottle @ the beach road (bus stop)
+    "w", "n", "light on", "n", "take bottle",  // up through the middle beach to dark Dongtan
+    "s", "light off", "s",                     // back down the sand
+    "s", "sell bottles",                       // to Auntie Nok at the Soi 7 beach end
+    "n", "e", "ride bus to beach road", "pay 15",
     // Act 2 — the gossip chain (Second Road now sits between Beach Rd and Buakhao)
     "e", "e", "n", "in", "talk to candy",            // Candy: Mot did it
     "out", "n", "e", "talk to lek",                  // Lek: Oy has it (in=Rock Factory now, e=Lucky Tiger)
@@ -4568,11 +4569,11 @@ test("lottery verb recites the draw when baked", () => {
 });
 
 test("look at <thing> aliases to examine; bare look still describes the room", () => {
-  run("e", "look at nok");
+  run("s", "look at nok");
   assert.match(lastOut(), /vendor/i);
   out = [];
   run("look");
-  assert.match(lastOut(), /Jomtien Beach Road/);
+  assert.match(lastOut(), /Soi 7 Beach End/);
 });
 
 test("contacts lists the phonebook with bar and favor glow", () => {

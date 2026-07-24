@@ -787,7 +787,7 @@ function _doGive(itemWord, npcWord) {
 }
 
 function _doSellBottles() {
-  if (G.room !== NPCS.nok.room) { _say("No bottle buyer here. Auntie Nok's cart is on Jomtien Beach Road."); return; }
+  if (G.room !== NPCS.nok.room) { _say("No bottle buyer here. Auntie Nok's cart is down at the Soi 7 beach end."); return; }
   const bottles = _inv().filter(id => ITEMS[id].bottle);
   if (!bottles.length) { _say("\"No bottle, no baht, tilac.\" Fair."); return; }
   for (const b of bottles) G.itemLoc[b] = null;

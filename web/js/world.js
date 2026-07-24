@@ -37,17 +37,33 @@ const ROOMS = {
 
   // ─── Jomtien ───
   jomtien_beach: {
-    name: "Jomtien Beach",
+    name: "Jomtien Beach (South)",
     region: "Jomtien",
     desc: "Soft sand, folded-up loungers, and the last smear of sunset dying over the sea. " +
-      "A row of beached longtails to the south. Two gray-and-white soi cats hold down the end " +
-      "of a lounger, the big one sitting slightly in front of the small one, both watching the " +
-      "water. The beach road glows to the east. " +
-      "Your face was in this sand until about a minute ago.",
-    exits: { n: "dongtan_beach", e: "jomtien_beach_rd" },
+      "Two gray-and-white soi cats hold down the end of a lounger, the big one sitting slightly " +
+      "in front of the small one, both watching the water. The beach road glows to the east; the " +
+      "sand runs north up the shore and narrows south toward the Soi 7 end, where a drinks cart " +
+      "is parked. Your face was in this sand until about a minute ago.",
+    exits: { e: "jomtien_beach_rd", n: "jomtien_beach_m", s: "soi7_beach_end" },
+  },
+  jomtien_beach_m: {
+    name: "Jomtien Beach (Middle)",
+    region: "Jomtien",
+    desc: "The long middle of Jomtien Beach: raked sand, stacked loungers under folded umbrellas, " +
+      "the surf hissing to the west and the beach road's lights strung out to the east. The sand " +
+      "runs south back toward the Soi 7 end and north to where Dongtan's quieter stretch begins.",
+    exits: { s: "jomtien_beach", n: "dongtan_beach" },
+  },
+  soi7_beach_end: {
+    name: "Soi 7 Beach End",
+    region: "Jomtien",
+    desc: "Where Soi 7 finally gives out onto the sand: a scrap of hard-packed beach, a couple of " +
+      "upturned boats, and Auntie Nok's drinks cart parked in the lee of a sea almond tree, cooler " +
+      "humming. The beach opens north; Soi 7 runs back inland to the east.",
+    exits: { n: "jomtien_beach", e: "soi_7_m" },
   },
   dongtan_beach: {
-    name: "Dongtan Beach",
+    name: "Dongtan Beach (South Start)",
     region: "Jomtien",
     dark: true,
     desc: "The quieter stretch north of Jomtien proper — by day rainbow flags and beach " +
@@ -55,7 +71,7 @@ const ROOMS = {
       "surf. Inland the beach road bends and climbs into neon: the Main Strip of Thappraya " +
       "Road, running UP and east to Second Road. North, Dongtan Beach Road runs on up the coast " +
       "toward the dark shoulder of Pratumnak Hill.",
-    exits: { s: "jomtien_beach", e: "jomtien_beach_rd", up: "thappraya_w", n: "dongtan_rd_s" },
+    exits: { s: "jomtien_beach_m", e: "jomtien_beach_rd_n", up: "thappraya_w", n: "dongtan_rd_s" },
   },
   jomtien_beach_rd: {
     name: "Jomtien Beach Road (Baht Bus Stop)",
@@ -105,7 +121,7 @@ const ROOMS = {
     desc: "The middle of Soi 7, where the beer bars thin to guesthouses and a lone som tam cart " +
       "doing quiet business. The soi runs west toward the sea and the beach road, and east toward " +
       "the Second Road roar.",
-    exits: { w: "soi_7_w", e: "soi_7_e" },
+    exits: { w: "soi_7_w", e: "soi_7_e", s: "soi7_beach_end" },
   },
   soi_7_e: {
     name: "Soi 7 (East / Second Road end)",
@@ -442,7 +458,7 @@ const ROOMS = {
       "Here it bends inland and climbs into the neon of the Thappraya Main Strip; a hill road runs " +
       "on north into the dark toward Pratumnak and, eventually, Pattaya. The bus stop and the " +
       "Jomtien lights are back to the south.",
-    exits: { s: "jomtien_beach_rd", up: "thappraya_w", n: "pratumnak_rd" },
+    exits: { s: "jomtien_beach_rd", up: "thappraya_w", n: "pratumnak_rd", w: "dongtan_beach" },
   },
 
   // ─── Pratumnak Hill ───
@@ -500,7 +516,24 @@ const ROOMS = {
     dark: true,
     desc: "The top of Dongtan Beach Road, where it bends inland and up onto the Pratumnak crest. " +
       "The sand is a black rumour to the west; Pratumnak Hill Road climbs away east over the top.",
-    exits: { s: "dongtan_rd_m", e: "pratumnak_hill_rd" },
+    exits: { s: "dongtan_rd_m", e: "pratumnak_hill_rd", w: "dongtan_beach_n" },
+  },
+  dongtan_beach_m: {
+    name: "Dongtan Beach (Middle)",
+    region: "Jomtien",
+    dark: true,
+    desc: "A dark reach of Dongtan sand, well off the Jomtien lights: the surf close and loud, a " +
+      "few couples' silhouettes, the beach-access path back up to Dongtan Beach Road to the east.",
+    exits: { e: "dongtan_rd_m" },
+  },
+  dongtan_beach_n: {
+    name: "Dongtan Beach (North)",
+    region: "Jomtien",
+    dark: true,
+    desc: "The north tip of Dongtan Beach, where the sand runs out against the black shoulder of " +
+      "Pratumnak Hill. Quiet, unlit, the sea working away below. Dongtan Beach Road is a path back " +
+      "up to the east.",
+    exits: { e: "dongtan_rd_n" },
   },
   dongtan_rd_m: {
     name: "Dongtan Beach Road (Middle)",
@@ -509,7 +542,7 @@ const ROOMS = {
     desc: "The middle of Dongtan Beach Road: quiet condos, a shuttered café or two, beach-access " +
       "paths down to the sand between them. The road runs south back toward Jomtien and north up " +
       "toward the hill.",
-    exits: { s: "dongtan_rd_s", n: "dongtan_rd_n" },
+    exits: { s: "dongtan_rd_s", n: "dongtan_rd_n", w: "dongtan_beach_m" },
   },
   dongtan_rd_s: {
     name: "Dongtan Beach Road (South)",
@@ -2141,7 +2174,7 @@ const NPCS = {
 
   nok: {
     name: "Auntie Nok", th: "น้อยหน่า", emoji: "🥭",
-    room: "jomtien_beach_rd",
+    room: "soi7_beach_end",
     desc: "A drinks-cart vendor with a cooler of everything and opinions to match. " +
       "A hand-lettered sign on the cart offers ฿5 per returned bottle.",
     dialogue: [
@@ -5260,6 +5293,10 @@ const ROOM_GEO = {
   the_office:       [12.8972, 100.8704],
   thappraya_massage:[12.8973, 100.8706],
   jomtien_7eleven:  [12.8880, 100.8724],
+  jomtien_beach_m:  [12.8918, 100.8688],
+  soi7_beach_end:   [12.8872, 100.8698],
+  dongtan_beach_m:  [12.8985, 100.8632],
+  dongtan_beach_n:  [12.9015, 100.8628],
   jomtien_beach_rd_s: [12.8876, 100.8722],
   soi_7_m:          [12.8878, 100.8735],
   jomtien_2nd_m:    [12.8892, 100.8752],
