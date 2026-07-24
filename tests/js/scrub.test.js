@@ -29,7 +29,7 @@ test("the scrub plays the full ritual: kill Sharky, dress the accountant, perfor
 test("the opener rotates by trip, so repeat scrubs vary", () => {
   const scrub = v => { out = []; G.vacation = v; _suvarnabhumiScrub(); return out[1]; }; // out[0] is the rule
   assert.notEqual(scrub(1), scrub(2), "different trips, different opener");
-  assert.equal(scrub(1), scrub(3), "wraps on the 2-deep opener pool");
+  assert.equal(scrub(1), scrub(1 + _SCRUB_OPEN.length), "wraps after the opener pool");
 });
 
 test("flying home runs the scrub before the return, only on _newVacation", () => {

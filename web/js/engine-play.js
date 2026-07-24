@@ -1623,6 +1623,14 @@ const _HOSP_TOMORROW = [
     "to money you'll never see and a story about family and a hometown bus. She meets your eye, " +
     "unhurried, entirely unbothered, and gives you the smile and the word this whole town runs on: " +
     "“Tomorrow.” The counter takes her number before it takes yours.",
+  "And in the plastic chairs opposite, a face you'd know anywhere: a girl who once cried you a river " +
+    "and a rent shortfall and vanished the day after you paid it. She sees you see her. She doesn't " +
+    "look away, doesn't blush — just lifts her chin a fraction and gives you the whole town in a word: " +
+    "“Tomorrow.” Then she goes back to her phone.",
+  "And three seats down, under the same strip light, is the one the money was for — the emergency, " +
+    "the hospital up-country that may or may not have existed, the number that stopped answering. She " +
+    "recognises you, and something almost like fondness crosses her face. “Tomorrow,” she mouths, and " +
+    "you both know exactly what it's worth.",
 ];
 
 function _hospitalMorning(reason) {
@@ -1685,6 +1693,8 @@ const _CODA_CLOSE = [
     "of coins, going home.",
   "That's the fare the last baht bus really carries — not you, weaving back to your hotel, but her, " +
     "going the other way: toward a room, a few hours' sleep, and a family that never sees this city.",
+  "You'll wake at noon sure you shared something. She's already asleep across the city — the makeup " +
+    "gone, the money hidden, an alarm set for the next performance. Only one of you was ever really there.",
 ];
 
 function _cinderellaCoda() {
@@ -1931,6 +1941,12 @@ const _SCRUB_OPEN = [
   "You know this ritual; you'll perform it again next trip. In a locked airport toilet you kill the " +
     "version of you the week grew and resurrect the one with the mortgage. Ninety minutes, and a " +
     "suitcase full of evidence.",
+  "Departures again, and the fugitive's walk again — chin down, moving fast, a man carrying " +
+    "contraband that is mostly himself. The week's version of you doesn't get to board this plane. " +
+    "You find a stall, throw the bolt, and start taking him apart.",
+  "The gate's in ninety minutes, and the surgery can't be rushed. Somewhere between the taxi rank " +
+    "and seat 34K the man who sang Oasis flat at 3 a.m. has to become a man who files quarterly " +
+    "reports. The airport toilet is the operating theatre.",
 ];
 const _SCRUB_PHYSICAL = [
   "First the body. The neon singlet comes off — it reeks of stale beer, grilled pork, cheap vanilla " +
@@ -1941,6 +1957,12 @@ const _SCRUB_PHYSICAL = [
   "You strip the beast and dress the accountant — the reeking singlet balled into plastic and sunk " +
     "under the laundry, the crisp polo and pressed chinos pulled from the side of the case you never " +
     "opened all week. In the mirror the tan almost passes for a golf tan, if you don't look too hard.",
+  "Off with the costume: the singlet that smells like a small war crime folded into plastic and " +
+    "pressed to the bottom of the bag, the flip-flops swapped for loafers that have never met a wet " +
+    "soi. The polo still holds the fold-lines from the shop. In the mirror, a man who had a quiet week.",
+  "You wash the city off in a steel sink — the humidity, the smoke, the faint sweetness of somebody " +
+    "else's perfume — and dress in the clothes of a man with a lawn to mow. The tan is the only " +
+    "witness left, and tans lie easily enough.",
 ];
 const _SCRUB_DIGITAL = [
   "Then the phone, which is a bomb. The chat app first — forty messages an hour, crying bears, " +
@@ -1951,6 +1973,13 @@ const _SCRUB_DIGITAL = [
     "a bright, high-res photo of the dog and the tidy lawn and the life that must never know. Then you " +
     "rehearse the lie about the cash you pulled out in three days: “the course only took cash, babe — " +
     "total scam.” Perfect.",
+  "The phone is where careers die. You purge the chat threads unread — the crying bears, the " +
+    "“papa miss you,” the voice notes you'll never play — then the gallery, then the folder amateurs " +
+    "forget, until the device holds nothing but a man who went to a conference. Empty the trash. Twice.",
+  "You run the sweep in order, the way you've learned to: messages, gallery, deleted-items, banking " +
+    "history rehearsed into a story about greens fees and cash-only clubhouses. Last, the lock screen — " +
+    "the blurry red-lit stranger swapped for the dog, the lawn, the smiling proof of the life you're " +
+    "about to lie to.",
 ];
 const _SCRUB_CALL = [
   "You walk out into the sterile, air-conditioned scent of Duty-Free, buy an apology-shaped bottle of " +
@@ -1961,12 +1990,22 @@ const _SCRUB_CALL = [
   "The call comes as you reach the gate, and you become, instantly and completely, a bored man who " +
     "spent a week at conference tables. “Golf was alright. Bangkok traffic's a nightmare. Ready to be " +
     "home, babe.” A sigh, precisely weighted. She believes every word, because you've made it easy to.",
+  "In the Duty-Free glare you buy the airport perfume that says sorry without saying why, and the " +
+    "call lands as you pay. You answer as a man bored to the marrow: “Yeah, fine. Long week. Too much " +
+    "networking, not enough sleep. Can't wait to be home.” Not a word of it true, every word believed.",
+  "The phone goes as you reach the seat, and you slide, seamless, into the other voice — flatter, " +
+    "wearier, entirely domestic. “Golf was okay. Weather was rough. Missed you, babe.” You've told " +
+    "this one so many times it's started to feel like a second first language.",
 ];
 const _SCRUB_CLOSE = [
   "You pocket the phone and walk toward boarding. The double life is secured; the illusion holds. The " +
     "city doesn't notice you leaving — it's already selling your booth to the next man who's sure he's different.",
   "The scrub is complete: the nickname's under the socks, the accountant's at the gate. In a month the " +
     "seatbelt sign will ping off over the gulf again, and you'll run the whole ritual in reverse.",
+  "Boarding call. You walk the jet bridge a respectable man with a clean phone and a duty-free bag, " +
+    "and behind you the city closes over the space where you stood without a ripple. Undefeated, as ever.",
+  "The performance holds all the way to the seat. The week is a story about golf and traffic now, " +
+    "filed and locked. Pattaya keeps the truth the way it keeps everyone's — cheaply, and forever.",
 ];
 
 function _suvarnabhumiScrub() {
