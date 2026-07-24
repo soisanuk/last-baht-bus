@@ -2256,6 +2256,10 @@ test("Thappraya Main Strip: Dongtan up to Second Rd, the mix of venues, Diamond 
   // Supertown is walkable (alley → elbow → back to the strip) but unpopulated
   assert.equal(ROOMS.thappraya_mid.exits.super, "supertown_alley");
   assert.equal(ROOMS.supertown_alley.exits.in, "supertown_elbow");
+  // Supertown bridges the main strip (its mouth) and the hill extension (its elbow)
+  assert.equal(ROOMS.supertown_alley.exits.out, "thappraya_mid", "mouth on the main strip");
+  assert.equal(ROOMS.supertown_elbow.exits.e, "thappraya_ext_s", "elbow onto the north extension");
+  assert.equal(ROOMS.thappraya_ext_s.exits.w, "supertown_elbow", "…and back");
   assert.ok(!ROOMS.supertown_elbow.bar && !ROOMS.supertown_alley.barType, "no bars built in Supertown yet");
   // the Pratumnak north extension: two roads climb the hill and join at the crest,
   // walkable as a loop back to the strip (thappraya_e up → … → dongtan_beach up → thappraya_w)

@@ -282,9 +282,9 @@ const ROOMS = {
     desc: "The elbow of the L, where the alley turns and the drag bars cluster — the stage end. One " +
       "venue is alive tonight: THE PEACOCK CABARET, its mirrored sign lit and pulsing, a queue of " +
       "boys and a scatter of curious farang filing in under a poster of a sequinned goddess mid-lip-sync. " +
-      "The bass thumps through the wall. The alley carries on east and opens onto Second Road by the " +
-      "strip's far corner.",
-    exits: { w: "supertown_alley", e: "thappraya_e", in: "peacock_cabaret", cabaret: "peacock_cabaret" },
+      "The bass thumps through the wall. The alley carries on east and out onto the foot of the Thappraya " +
+      "hill road, where the strip's neon finally gives out.",
+    exits: { w: "supertown_alley", e: "thappraya_ext_s", in: "peacock_cabaret", cabaret: "peacock_cabaret" },
   },
   peacock_cabaret: {
     name: "The Peacock Cabaret",
@@ -466,8 +466,8 @@ const ROOMS = {
     region: "Pratumnak",
     desc: "Where the Main Strip's neon finally gives out and the road tips upward: the last few " +
       "late-night noodle carts, then condo walls and the hill proper. The strip is back down to " +
-      "the south; the road climbs on north.",
-    exits: { down: "thappraya_e", n: "thappraya_ext_m" },
+      "the south; the mouth of the Supertown drag alley opens to the west; the road climbs on north.",
+    exits: { down: "thappraya_e", n: "thappraya_ext_m", w: "supertown_elbow" },
   },
   thappraya_ext_m: {
     name: "Thappraya Road — Hill (middle)",
