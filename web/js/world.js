@@ -57,13 +57,24 @@ const ROOMS = {
     exits: { s: "jomtien_beach", e: "jomtien_beach_rd", up: "thappraya_w" },
   },
   jomtien_beach_rd: {
-    name: "Jomtien Beach Road",
+    name: "Jomtien Beach Road (Baht Bus Stop)",
     region: "Jomtien",
-    desc: "Streetlights, seafood smoke, and baht buses rattling past. East, Soi 7 runs inland " +
-      "off the beach road toward Second Road, its little beer bars and massage shops already " +
-      "lit; a 7-Eleven hums to the south and the bus stop is just north. Pratumnak Hill rises " +
-      "darkly to the far north.",
-    exits: { w: "jomtien_beach", e: "soi_7_w", s: "jomtien_7eleven", n: "jomtien_bus_stop", spa: "jomtien_thai" },
+    busStop: "jomtien",
+    motosai: true,
+    desc: "The middle of the beach road and the heart of it: a knot of people waiting where the " +
+      "blue songthaews swing around, a sun-bleached sign listing the loop into Pattaya, a lone " +
+      "motosai driver dozing on his bike. Streetlights, seafood smoke, the sea just west across " +
+      "the sand. The beach road runs north toward the Thappraya climb and south past the 7-Eleven; " +
+      "Soi 7 cuts inland to the east.",
+    exits: { w: "jomtien_beach", n: "jomtien_beach_rd_n", s: "jomtien_beach_rd_s", e: "soi_7_m", spa: "jomtien_thai" },
+  },
+  jomtien_beach_rd_s: {
+    name: "Jomtien Beach Road (South)",
+    region: "Jomtien",
+    desc: "The south end of the beach road, where it meets the mouth of Soi 7. A 7-Eleven glows on " +
+      "the corner, its air-con bleeding into the street; Soi 7's beer bars and massage shops run " +
+      "inland to the east, and the bus stop is back to the north.",
+    exits: { n: "jomtien_beach_rd", e: "soi_7_w", in: "jomtien_7eleven" },
   },
   soi_rompho: {
     name: "Rompho Market",
@@ -79,31 +90,39 @@ const ROOMS = {
 
   // ── Soi 7 (Jomtien) — runs inland from Jomtien Beach Road to Second Road ──
   soi_7_w: {
-    name: "Soi 7 (beach end)",
+    name: "Soi 7 (West / beach end)",
     region: "Jomtien",
-    desc: "The beach end of Soi 7: a mellow strip of open-front beer bars strung with fairy " +
-      "lights, a couple of massage shops, and the easy Jomtien pace — older expats, cold beer, " +
-      "nobody in a hurry. The soi runs east toward the roar of Second Road; the sea breeze " +
-      "follows you a little way in.",
-    exits: { w: "jomtien_beach_rd", e: "soi_7_e", n: "lucky7", s: "seabreeze", spa: "soi7_oil" },
+    desc: "The beach end of Soi 7, off the south end of the beach road: a mellow strip of " +
+      "open-front beer bars strung with fairy lights, a couple of massage shops, and the easy " +
+      "Jomtien pace — older expats, cold beer, nobody in a hurry. The soi runs east, deeper inland " +
+      "toward Second Road; the sea breeze follows you a little way in.",
+    exits: { w: "jomtien_beach_rd_s", e: "soi_7_m", n: "lucky7", s: "seabreeze", spa: "soi7_oil" },
+  },
+  soi_7_m: {
+    name: "Soi 7 (Middle)",
+    region: "Jomtien",
+    desc: "The middle of Soi 7, where the beer bars thin to guesthouses and a lone som tam cart " +
+      "doing quiet business. A short cut north leads back onto the beach road at the bus stop; " +
+      "the soi runs on west to the sea and east to the Second Road roar.",
+    exits: { w: "soi_7_w", e: "soi_7_e", n: "jomtien_beach_rd" },
   },
   soi_7_e: {
-    name: "Soi 7 (Second Road end)",
+    name: "Soi 7 (East / Second Road end)",
     region: "Jomtien",
     desc: "The far end of Soi 7, where it spills onto Second Road by a 7-Eleven. A couple more " +
       "beer bars and a massage shop see out the strip. On the south side, set back behind a fence " +
       "and a flagpole, squats the grey bulk of the Chonburi Immigration Office — dark and locked " +
       "at this hour, a place farang only ever visit in daylight and never fondly.",
-    exits: { w: "soi_7_w", e: "jomtien_2nd", n: "coconut", s: "sandbar", spa: "soi7_thai" },
+    exits: { w: "soi_7_m", e: "jomtien_2nd", n: "coconut", s: "sandbar", spa: "soi7_thai" },
   },
   jomtien_2nd: {
-    name: "Second Road / Soi 7 (Jomtien)",
+    name: "Jomtien Second Road (South)",
     region: "Jomtien",
     seven: true,
     desc: "The Soi 7 corner on Jomtien's Second Road, traffic hissing both ways. A 7-Eleven holds " +
-      "down the northwest corner, bright as an operating theatre. Straight across the road sprawls " +
-      "Rompho Market; the Jomtien KISS glows just beyond it. Soi 7 runs back west toward the beach.",
-    exits: { w: "soi_7_e", e: "soi_rompho", n: "jomtien_2nd_n" },
+      "down the corner, bright as an operating theatre. Straight across the road sprawls Rompho " +
+      "Market. Soi 7 runs back west toward the beach; Second Road runs north up the strip.",
+    exits: { w: "soi_7_e", e: "soi_rompho", n: "jomtien_2nd_m" },
   },
   kiss_jomtien: {
     name: "KISS Jomtien",
@@ -121,16 +140,24 @@ const ROOMS = {
         "legendary Item 47 ('BIG BEER'). Someone has biro'd a smiley beside the pad kaprao. " +
         "Jomtien portions, the regulars swear, run a shade larger.",
     },
-    exits: { out: "soi_rompho", s: "soi_rompho", n: "jomtien_2nd_n" },
+    exits: { out: "jomtien_2nd_m", w: "jomtien_2nd_m", s: "soi_rompho" },
   },
   jomtien_2nd_n: {
-    name: "Jomtien Second Road (north)",
+    name: "Jomtien Second Road (North)",
     region: "Jomtien",
-    desc: "Second Road heading north from the Soi 7 corner: shuttered day-shops, a late khanom " +
-      "cart, and the traffic thinning as the Jomtien lights give way to the Thappraya junction " +
-      "ahead. TAKE CARE ME throws a guitar solo down the pavement from the top of the road; " +
-      "Rompho Market and the Jomtien KISS glow back to the south.",
-    exits: { s: "jomtien_2nd", e: "kiss_jomtien", n: "take_care_me" },
+    desc: "The top of Jomtien's Second Road, where it meets the Thappraya Main Strip climbing up " +
+      "to the east. Shuttered day-shops, a late khanom cart, the traffic thinning. TAKE CARE ME " +
+      "throws a guitar solo down the pavement from the junction; Second Road runs back south down " +
+      "the strip.",
+    exits: { s: "jomtien_2nd_m", n: "thappraya_e", in: "take_care_me" },
+  },
+  jomtien_2nd_m: {
+    name: "Jomtien Second Road (Middle)",
+    region: "Jomtien",
+    desc: "The middle of Second Road: a 24-hour pharmacy, a laundry, a scatter of plastic-stool " +
+      "eateries, and the Jomtien branch of KISS glowing on the east side. The strip runs north to " +
+      "the Thappraya junction and south to the Soi 7 corner.",
+    exits: { n: "jomtien_2nd_n", s: "jomtien_2nd", e: "kiss_jomtien" },
   },
   lucky7: {
     name: "Lucky 7 Bar",
@@ -217,7 +244,7 @@ const ROOMS = {
       "throws a guitar solo out its open front — the freelancers' favourite, and loud about it. " +
       "Another 7-Eleven glows across the intersection. One last beer bar and a massage shop see out " +
       "the strip before the traffic of Second Road takes over.",
-    exits: { w: "thappraya_mid", n: "take_care_me", s: "the_office", spa: "thappraya_massage" },
+    exits: { w: "thappraya_mid", n: "take_care_me", s: "the_office", spa: "thappraya_massage", e: "jomtien_2nd_n" },
   },
   supertown_alley: {
     name: "Supertown Complex (alley)",
@@ -405,24 +432,16 @@ const ROOMS = {
       "of toasties, Mama noodles, and {{phone}} accessories. There's a power outlet by the window.",
     outlet: true,
     shop: { charger: CHARGER_PRICE },
-    exits: { n: "jomtien_beach_rd" },
-  },
-  jomtien_bus_stop: {
-    name: "Baht Bus Stop (Jomtien)",
-    region: "Jomtien",
-    desc: "A cluster of people waiting where the blue songthaews swing around. A sun-bleached " +
-      "sign lists the loop into Pattaya. A lone motosai driver naps on his bike nearby.",
-    busStop: "jomtien",
-    motosai: true,
-    exits: { s: "jomtien_beach_rd", n: "pratumnak_rd", w: "jomtien_beach_rd_n" },
+    exits: { out: "jomtien_beach_rd_s" },
   },
   jomtien_beach_rd_n: {
-    name: "Jomtien Beach Road (north end)",
+    name: "Jomtien Beach Road (North)",
     region: "Jomtien",
-    desc: "Past the songthaew turn the beach road runs on north, quieter and darker, the sea " +
-      "sighing away to the west. Ahead it bends inland and climbs into the neon of the Thappraya " +
-      "Main Strip; the bus stop and the Jomtien lights are back to the east.",
-    exits: { e: "jomtien_bus_stop", up: "thappraya_w" },
+    desc: "The north end of the beach road, quieter and darker, the sea sighing away to the west. " +
+      "Here it bends inland and climbs into the neon of the Thappraya Main Strip; a hill road runs " +
+      "on north into the dark toward Pratumnak and, eventually, Pattaya. The bus stop and the " +
+      "Jomtien lights are back to the south.",
+    exits: { s: "jomtien_beach_rd", up: "thappraya_w", n: "pratumnak_rd" },
   },
 
   // ─── Pratumnak Hill ───
@@ -433,7 +452,7 @@ const ROOMS = {
     desc: "The hill road between Jomtien and Pattaya proper — condos behind walls, " +
       "sleeping soi dogs, and long stretches where the streetlights have given up. " +
       "The Buddha Hill viewpoint is up a path to the west.",
-    exits: { s: "jomtien_bus_stop", n: "ws_gate", w: "buddha_hill", e: "second_rd_s" },
+    exits: { s: "jomtien_beach_rd_n", n: "ws_gate", w: "buddha_hill", e: "second_rd_s" },
   },
   buddha_hill: {
     name: "Buddha Hill Viewpoint",
@@ -3469,7 +3488,7 @@ const NPCS = {
 // ── Bus lines (ordered stops; ride costs BUS_FARE per trip) ────────────────
 
 const BUS_LINES = {
-  jomtien: ["jomtien_bus_stop", "beach_rd_s"],
+  jomtien: ["jomtien_beach_rd", "beach_rd_s"],
   beachrd: ["beach_rd_s", "beach_rd_c", "beach_rd_n", "naklua_rd"],
 };
 
@@ -3482,7 +3501,7 @@ const MOTOSAI_DESTS = {
   "tree town":      { room: "buakhao_s", price: MOTOSAI_TOWN },
   "lk metro":       { room: "lk_entrance", price: MOTOSAI_TOWN },
   "soi 6":          { room: "soi6_street", price: MOTOSAI_TOWN },
-  "jomtien":        { room: "jomtien_bus_stop", price: MOTOSAI_TOWN },
+  "jomtien":        { room: "jomtien_beach_rd", price: MOTOSAI_TOWN },
   "naklua":         { room: "naklua_rd", price: MOTOSAI_TOWN },
   "darkside":       { room: "khao_talo", price: MOTOSAI_FAR },
   "khao talo":      { room: "khao_talo", price: MOTOSAI_FAR },
@@ -3535,7 +3554,7 @@ const ENCOUNTERS = {
     hint: "(Choose your next words carefully.)",
   },
   powerbank: {
-    rooms: ["jomtien_bus_stop", "beach_rd_s", "buakhao_s", "sukhumvit_crossing"],
+    rooms: ["jomtien_beach_rd", "beach_rd_s", "buakhao_s", "sukhumvit_crossing"],
     interactive: true,
     th: "แบตหมดเหรอ", rom: "baet mot rer?",
     intro: "The piwin at the stand nods at the phone clutched in your hand like a " +
@@ -5176,7 +5195,9 @@ const ROOM_GEO = {
   the_office:       [12.8972, 100.8704],
   thappraya_massage:[12.8973, 100.8706],
   jomtien_7eleven:  [12.8880, 100.8724],
-  jomtien_bus_stop: [12.8940, 100.8710],
+  jomtien_beach_rd_s: [12.8876, 100.8722],
+  soi_7_m:          [12.8878, 100.8735],
+  jomtien_2nd_m:    [12.8892, 100.8752],
   jomtien_beach_rd_n: [12.8954, 100.8689],
   // Pratumnak
   pratumnak_rd:     [12.9105, 100.8690],

@@ -353,14 +353,14 @@ test("selling three bottles yields exactly the bus fare", () => {
 });
 
 test("bus refuses the broke", () => {
-  run("e", "n", "ride bus to beach road");
+  run("e", "ride bus to beach road");
   assert.match(lastOut(), /fare is ฿15|climb off/i);
-  assert.equal(state().room, "jomtien_bus_stop");
+  assert.equal(state().room, "jomtien_beach_rd");
 });
 
 test("bus ride: Thai fare quote, exact payment", () => {
   state().money = 15;
-  run("e", "n", "ride bus to beach road");
+  run("e", "ride bus to beach road");
   assert.match(lastOut(), /สิบห้าบาท/);
   assert.ok(state().pendingFare);
   run("pay 15");
@@ -370,7 +370,7 @@ test("bus ride: Thai fare quote, exact payment", () => {
 
 test("underpaying the driver is refused; overpaying costs you", () => {
   state().money = 60;
-  run("e", "n", "ride bus to beach road", "pay 10");
+  run("e", "ride bus to beach road", "pay 10");
   assert.ok(state().pendingFare, "still waiting");
   assert.match(lastOut(), /สิบห้าบาท/);
   run("pay 20");
@@ -380,7 +380,7 @@ test("underpaying the driver is refused; overpaying costs you", () => {
 
 test("pending fare gates other commands", () => {
   state().money = 20;
-  run("e", "n", "ride bus to beach road", "n");
+  run("e", "ride bus to beach road", "n");
   // the nag line rotates; the contract is the price + the PAY tap hint
   assert.match(lastOut(), /PAY <amount>/);
   assert.notEqual(state().room, "pratumnak_rd");
@@ -499,7 +499,7 @@ test("darkness without noodles: bitten and displaced", () => {
 });
 
 test("charging needs charger and outlet", () => {
-  run("e", "s", "charge phone"); // at 7-Eleven, no charger
+  run("e", "s", "in", "charge phone"); // at 7-Eleven, no charger
   assert.match(lastOut(), /need a charger/i);
   state().money = 100;
   run("buy charger");
@@ -730,14 +730,14 @@ test("motosai: quoted, paid, discounted after helmet favour", () => {
 test("last baht bus: the ฿15 ride runs until 2 a.m., then the stop goes dead", () => {
   state().money = 500;
   state().rain = 0;
-  state().room = "jomtien_bus_stop";
+  state().room = "jomtien_beach_rd";
   state().nightTurn = 79;              // 01:xx — one last chance
   run("ride bus to beach road");
   assert.ok(state().pendingFare, "before the cutoff the bus still runs");
   newGame(); out = []; state().lastSaleng = 99999;
   state().money = 500;
   state().rain = 0;
-  state().room = "jomtien_bus_stop";
+  state().room = "jomtien_beach_rd";
   state().nightTurn = 80;              // 02:00 — the last one's gone
   run("ride bus to beach road");
   assert.ok(!state().pendingFare, "no fare opens — the bus won't come");
@@ -2223,10 +2223,11 @@ test("Soi Diana: threads Second Rd to Buakhao past LK Metro, four beer bars, KIS
 });
 
 test("Soi 7 (Jomtien): beach road to Second Rd, four beer bars, Rompho Market, KISS Jomtien", () => {
-  // the soi threads Jomtien Beach Road to the Second Rd corner
-  assert.equal(ROOMS.jomtien_beach_rd.exits.e, "soi_7_w");
-  assert.equal(ROOMS.soi_7_w.exits.e, "soi_7_e");
-  assert.equal(ROOMS.soi_7_e.exits.e, "jomtien_2nd");
+  // Soi 7 is the south side of the Jomtien rectangle, running W → M → E
+  assert.equal(ROOMS.soi_7_w.exits.w, "jomtien_beach_rd_s", "SW corner: beach-road south");
+  assert.equal(ROOMS.soi_7_w.exits.e, "soi_7_m");
+  assert.equal(ROOMS.soi_7_m.exits.e, "soi_7_e");
+  assert.equal(ROOMS.soi_7_e.exits.e, "jomtien_2nd", "SE corner: Second Road south");
   assert.ok(ROOMS.jomtien_2nd.seven, "7-Eleven on the corner");
   // across Second Road: Rompho Market, then KISS just north of it
   assert.equal(ROOMS.jomtien_2nd.exits.e, "soi_rompho");
@@ -2708,13 +2709,13 @@ test("Sai Krok socialises: beer-bar staff favor (once a night) and rain reaction
 test("Sai Krok travels: free on the songthaew, ฿10 for his own bike on a motosai", () => {
   state().flags.act1Done = true; state().stage = "expat"; state().money = 1000;
   // the baht bus: he rides along free, no fare complication, no dog line without a dog
-  state().dog = null; state().room = "jomtien_bus_stop"; state().nightTurn = 10;
+  state().dog = null; state().room = "jomtien_beach_rd"; state().nightTurn = 10;
   run("ride bus to beach");
   out = []; run("pay " + state().pendingFare.price);
   assert.ok(!/Sai Krok/.test(out.join("\n")), "no dog, no line");
   assert.equal(state().room, "beach_rd_s");
   state().dog = { since: 1 }; state().money = 1000;
-  state().room = "jomtien_bus_stop"; state().nightTurn = 10;
+  state().room = "jomtien_beach_rd"; state().nightTurn = 10;
   run("ride bus to beach");
   const before = state().money;
   out = []; run("pay " + state().pendingFare.price);
@@ -2722,7 +2723,7 @@ test("Sai Krok travels: free on the songthaew, ฿10 for his own bike on a motos
   assert.equal(before - state().money, BUS_FARE, "no surcharge on the bus — he rides free");
   // motosai: one pillion seat, already full — a piwin waves over a buddy's
   // saleng for him, ฿10 on top of the fare (renamed dog re-letters correctly)
-  state().dog = { since: 1, name: "Biscuit" }; state().room = "jomtien_bus_stop"; state().money = 1000;
+  state().dog = { since: 1, name: "Biscuit" }; state().room = "jomtien_beach_rd"; state().money = 1000;
   const beforeMoto = state().money;
   out = []; run("motosai to town");
   assert.match(out.join("\n"), /Biscuit/, "paid motosai ride, renamed dog");
@@ -3874,7 +3875,7 @@ test("scripted happy-ending playthrough", () => {
     "e", "take bottle", "read receipt",
     "light on", "w", "n", "take bottle", "e", "light off",
     "sell bottles",
-    "n", "ride bus to beach road", "pay 15",
+    "ride bus to beach road", "pay 15",
     // Act 2 — the gossip chain (Second Road now sits between Beach Rd and Buakhao)
     "e", "e", "n", "in", "talk to candy",            // Candy: Mot did it
     "out", "n", "e", "talk to lek",                  // Lek: Oy has it (in=Rock Factory now, e=Lucky Tiger)
@@ -4352,7 +4353,7 @@ test("haggling the peddler works exactly once", () => {
 
 test("wave hails the bus; map draws the town", () => {
   state().encDone = Object.fromEntries(Object.keys(ENCOUNTERS).map(k => [k, true]));
-  run("e", "n"); // jomtien bus stop
+  run("e"); // jomtien beach road — now the baht bus stop
   assert.ok(ROOMS[state().room].busStop);
   run("wave");
   assert.match(lastOut(), /Stops from here/);
