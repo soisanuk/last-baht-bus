@@ -213,6 +213,8 @@ function newGame() {
     thirst: 40,          // 0 quenched … 100 collapse (you woke up dry)
     hurt: 0,             // 3 = a night in the clinic
     crashInjury: false,  // a motosai accident leaves you banged up the next night (hurt:1)
+    condoms: 3,          // carried protection; consumed per barfine, buyable at any 7-Eleven
+    std: null,           // {day} when contracted from an unprotected barfine; symptoms surface ~2 days on, GET TESTED clears it
     jaded: 0,            // the hedonic treadmill: conquests this window; each barfine/ST buys less สนุก, cools 1/day
     lastBusWarned: false, // the nightly last-baht-bus heads-up fires once per night
     bestHappy: 0,
@@ -747,7 +749,7 @@ function _describeRoom(full, forceFull) {
     _say("A pool table waits under a low lamp (PLAY POOL)." +
       (_leagueTonight() ? " Tonight is LEAGUE NIGHT (PLAY KILLER, ฿100 in the ashtray)." : ""), "dim");
   }
-  if (r.seven) _say("A 7-Eleven glows across the way (BUY TOASTIE · BUY WATER · BUY CHARGER).", "dim");
+  if (r.seven) _say("A 7-Eleven glows across the way (BUY TOASTIE · BUY WATER · BUY CHARGER · BUY CONDOM).", "dim");
   if (_quizDay() && !r.barType) {
     const near = Object.values(r.exits).filter(to => _quizBars().includes(to));
     if (near.length && G.nightTurn < 40) {

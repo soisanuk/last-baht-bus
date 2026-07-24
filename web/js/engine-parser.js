@@ -821,6 +821,15 @@ function _doBuy(arg) {
     _say(`One USB charger, ฿${CHARGER_PRICE}. The doorbell jingles in celebration. (฿${G.money} left.)`);
     return;
   }
+  if (/condom|rubber|johnny|protection/.test(arg)) {
+    if (!r.seven && !(r.shop && r.shop.condom)) { _say("No condoms sold here. Any 7-Eleven has them by the till."); return; }
+    if (G.money < CONDOM_PRICE) { _say(`A pack is ฿${CONDOM_PRICE}. You have ฿${G.money}. The cashier slides it back with a knowing look.`); return; }
+    G.money -= CONDOM_PRICE;
+    G.condoms += CONDOM_PACK;
+    _say(`A pack of ${CONDOM_PACK}, ฿${CONDOM_PRICE} — the most ordinary purchase in this town, rung up without a flicker. ` +
+      `(You're carrying ${G.condoms}. ฿${G.money} left.)`);
+    return;
+  }
   if (/water|nam plao/.test(arg)) {
     const canBuy = r.shop || r.seven || _inBar() || FOOD_STALLS[G.room];
     if (!canBuy) { _say("No water for sale here. 7-Elevens, bars, and the street carts all have it."); return; }
@@ -1309,9 +1318,47 @@ function _doDiagnose() {
       d >= 1 ? `${d} bottle${d > 1 ? "s" : ""} in` : "stone sober, which is fixable",
   ];
   if (G.hurt) parts.push(`banged up (${G.hurt}/3 — a third strike ends the night)`);
+  if (_stdSymptomatic()) parts.push("nursing a barfine souvenir that itches and burns — a clinic job (GET TESTED, it's free)");
   _say(`Self-diagnosis, ${_clockStr()}: ${parts.join(" · ")}.`);
   _say(`Phone ${G.battery}% · ฿${G.money} · สนุก ${G.happy} (${_happyLevel(G.happy)}). ` +
     "You will live, which in this town is both a prognosis and a lifestyle.", "dim");
+}
+
+// GET TESTED — the free public clinic off Soi Buakhao. The responsible-choice
+// counterpart to carrying condoms: it clears an infection (the only cure — the
+// nightly drag doesn't lift on its own) or hands back a clean bill. Day elided,
+// like the morning-after ward; not a baht changes hands, which is the point.
+const _CLINIC_POS = [
+  "The clinic off Soi Buakhao takes your details, your arm, and twenty minutes of the worst waiting " +
+    "in the world. The nurse comes back matter-of-fact: yes — but the common kind, the fixable kind. " +
+    "A jab, a blister-pack of antibiotics, a wag of the finger about next time. You walk out lighter " +
+    "than you've felt in days.",
+  "A cup, a blood draw, and a corridor where nobody meets anyone's eye. The doctor is kind and " +
+    "completely unshockable: a course of pills, taken to the last one, and a leaflet you'll pretend " +
+    "to read. Whatever the night gave you is leaving the way it came. The relief is almost worth the " +
+    "fright. Almost.",
+  "The lab line moves the way lab lines do, and when your number's called the news is the boring kind " +
+    "of bad: treatable, common as rain, gone in a week of tablets. You take the antibiotics and the " +
+    "small, useful humiliation together, and promise yourself the foil square next time. You might even mean it.",
+];
+const _CLINIC_CLEAN = [
+  "The clinic runs the tests, the wait does its slow torture, and the nurse hands back the boring, " +
+    "beautiful word: negative. Clean. Cheaper than a single lady drink, this peace of mind — and free, at that.",
+  "Bloods drawn, cup filled, twenty minutes of imagining the worst, and then a clean bill and a " +
+    "slightly pitying smile. Nothing's wrong. You'll be back to your bad decisions by sundown, but for " +
+    "now the relief tastes like winning.",
+  "A negative test and a leaflet about not needing one next time if you're sensible. You fold the good " +
+    "news into your pocket next to the condoms you should have used, and step back out a free man.",
+];
+function _doClinic() {
+  if (G.std) {
+    _say(_pickVary(_CLINIC_POS, "clinicpos"), "alert");
+    G.std = null;
+    _addHappy(3); // the relief of it being dealt with
+  } else {
+    _say(_pickVary(_CLINIC_CLEAN, "clinicclean"), "dim");
+    _addHappy(1);
+  }
 }
 
 function _doViolence(arg) {
@@ -1981,6 +2028,7 @@ const _HELP = `Common commands:
   THROW COVER [AT <lady>] (the ceiling game — warm her up first)
   BUY BRA FOR <lady> (฿200 — makes FONDLE more interesting)
   RING BELL (฿300, instant popularity) · TALK TO PATRON · BARFINE <lady>
+  BUY CONDOM (฿40 a pack, any 7-Eleven — a barfine uses one; go without at your peril)
   Host bar (The Adonis Club, Supertown): BUY DRINK FOR <host> · HIRE <host> (premium prices; all welcome)
   MASSAGE (foot rub to happy-ending, by the shop) · SPECIAL (the extra) · SOAPY (the fishbowl)
   MEET <lady> — an off-shift number, once one's been written you (late nights, no guarantees)
@@ -1988,7 +2036,8 @@ const _HELP = `Common commands:
   DANCE · SING · REQUEST <song> · TIP BAND <amount> · BUY ROUND FOR BAND · TALK TO BAND
   EAT <food> · DRINK <thing> · BUY WATER / FOOD (street carts & 7-Elevens) · SLEEP (at the hotel)
   CHECKOUT (your room, before 19:00) — move hotels: Sabai Palms ฿400 · Queen Vic ฿700 · Metropole ฿1300
-  DIAGNOSE (how bad is it) · AGAIN or G (repeat last command)
+  DIAGNOSE (how bad is it) · GET TESTED (free clinic — clears a barfine souvenir)
+  AGAIN or G (repeat last command)
   TRAVEL <bar|hotel> (fast travel anywhere you've been — walking pace, bare TRAVEL lists)
   TIME · MAP · WAIT UNTIL <hour> · TIP <lady> <amount> · PHOTO · CHEERS · TAO RAI (ask the price)
   QUESTS · ACCEPT <quest> · ABANDON <quest> · HINT (the soi's nudge — Act One, after your first reset)
@@ -2014,7 +2063,7 @@ const _COMPLETE_VERBS = [
   "flirt", "kiss", "spank", "fondle", "throw cover", "ring bell", "barfine", "massage", "special", "soapy", "meet", "eat", "drink",
   "sleep", "tv", "column", "watch", "weather", "scores", "lottery", "map", "time", "tip", "wave",
   "photo", "call", "shower", "withdraw", "cheers", "tao rai", "borrow", "repay", "hire", "pet", "feed", "rename", "dance", "sing", "swim",
-  "smell", "listen", "diagnose", "apologize", "quests", "accept", "abandon", "contact",
+  "smell", "listen", "diagnose", "get tested", "clinic", "apologize", "quests", "accept", "abandon", "contact",
   "contacts", "who", "blackbook", "message", "check messages", "send", "score", "wait", "again",
   "request", "hint", "help", "save", "load", "undo", "restart",
 ];
@@ -2073,6 +2122,7 @@ function _completePool(verb, ctx) {
     case "buy": case "order": {
       const barItems = ["beer", "water", "lady drink for", "bra for", "charger", "toastie", "food",
         "round for band"];
+      if (_room().seven) barItems.push("condom"); // 7-Eleven staple
       if (_managerHere()) barItems.splice(1, 0, "man drink"); // early, so it survives the 8-result cap
       const sItems = _salengItems();
       if (sItems.length) {
@@ -2397,8 +2447,10 @@ function doCommand(input) {
       if (/^(photo|selfie|picture|pic)\b/.test(arg)) _doPhoto();
       else if (arg === "bus" || arg.startsWith("bus")) _doRideBus(arg.replace(/^bus\s*/, ""));
       else if (arg.startsWith("motosai") || arg.startsWith("bike")) _doMotosai(arg.replace(/^\S+\s*/, ""));
+      else if (/^(tested|checked|test|checkup|screen)\b/.test(arg)) _doClinic();
       else _doTake(arg.replace(/^up /, ""));
       break;
+    case "clinic": case "tested": case "screening": _doClinic(); break;
     case "drop": _doDrop(arg); break;
     case "i": case "inv": case "inventory": _doInventory(); break;
     case "read": _doRead(arg); break;
