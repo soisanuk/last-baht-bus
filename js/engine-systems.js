@@ -851,6 +851,7 @@ function _doComplain() {
 // Does she run a game tonight? Only an operator, only on a mark — the open
 // contract doubles her confidence. Returns a scam kind or null.
 function _bfScamRoll(id, marked) {
+  if (_dogEgg() === "buffalo") return null; // the dog smells the con; every barfine stays honest
   if (!_bfExploitable(id)) return null;
   if (_rand() >= (marked ? 0.6 : 0.3)) return null;
   const r = _rand();
@@ -1996,6 +1997,60 @@ function _isDogWord(a) {
     !!(G.dog && G.dog.name && a.includes(G.dog.name.toLowerCase()));
 }
 
+// ── Dog-name easter eggs ─────────────────────────────────────────────────────
+// Name your soi dog after a famous hound or a bit of Pattaya slang and he picks
+// up a modest power (stored on G.dog.egg, applied at hooks across the engine).
+// Matching is deliberately loose — accents stripped, common variants covered — so
+// nobody has to type "Hachikō" exactly. One egg at a time; rename away and it's
+// lost. `reject` eggs refuse the name outright (XYZZY gets the Zork treatment).
+function _normEgg(s) {
+  return String(s || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "")
+    .replace(/\s+/g, " ").trim();
+}
+const _DOG_EGGS = [
+  { key: "xyzzy", reject: true, test: /\b(xyzzy|plugh|plover)\b/,
+    line: "You say the old magic word to the dog. A hollow voice says, \"Fool.\" XYZZY never " +
+      "opened anything that mattered, and it does not open a dog. He keeps the name he had, and " +
+      "his opinion of you." },
+  { key: "rescue", test: /\b(lassie|lassy)\b/,
+    line: "\"Lassie.\" He tilts his head like he's heard it in a former life spent hauling children " +
+      "out of wells. From here on, if the night ever puts you face-down where you shouldn't be, he " +
+      "won't leave you there — he'll bring you home." },
+  { key: "guard", test: /\b(cerberus|kerberos|cerebus|cujo|rex|rintintin|rin ?tin ?tin)\b/,
+    line: "A guard-dog's name, and he grows into it on the spot — squares up on his one clipped ear " +
+      "like the other two heads are on back-order. The boys in brown will find somewhere else to " +
+      "stand tonight; nobody shakes down a man with a hound like that at heel." },
+  { key: "loyal", test: /\b(hachiko|hachi)\b/,
+    line: "\"Hachiko.\" He doesn't know the story — the dog who waited nine years at the station for a " +
+      "man who never came — but he lives it anyway. Name him that and he never drifts: what you build " +
+      "holds overnight, and every morning he's exactly where you left him, glad past all reason." },
+  { key: "snack", test: /\b(scooby|scoob|scoobydoo)\b/,
+    line: "\"Scooby.\" Something in him answers to the promise of a snack with religious immediacy. Feed " +
+      "him now and he covers it himself, nosing scraps from the gutter like a pro — and now and then " +
+      "he digs up something the street dropped and nobody missed." },
+  { key: "butterfly", test: /\b(butterfly|butterflies|btf)\b/,
+    line: "\"Butterfly\" — the word for a man who flits girl to girl, worn now by a dog who does the " +
+      "exact opposite, loyal as a shadow. The bar girls get the joke instantly and love him for it. " +
+      "Walk a girl bar with Butterfly at the door and the welcome runs warmer than your face has earned." },
+  { key: "sanuk", test: /\b(sanuk|sabai|fun)\b|สนุก|สบาย/,
+    line: "\"Sanuk.\" สนุก — fun, the whole point of this town in one word. You named your dog Fun and he " +
+      "agrees completely, all the time, about everything. It's contagious; the nights run a little " +
+      "brighter with him in them." },
+  { key: "buffalo", test: /\b(buffalo|kwai|kwaai|khwai)\b/,
+    line: "\"Buffalo\" — after the sick one, the eternal up-country emergency that empties farang " +
+      "wallets. Your dog is a walking cynicism detector now: when a story's being spun to part you from " +
+      "your baht, he growls low, and somehow the story never quite lands." },
+  { key: "knight", test: /\b(white ?knight|whiteknight|galahad|sir ?galahad)\b/,
+    line: "\"White Knight.\" The soi's word for the farang certain he can save one. The dog wears it " +
+      "better than any of them — he actually rescues strays, herding the smaller soi dogs clear of the " +
+      "traffic without being asked. No magic, just a good heart doing what good hearts do." },
+];
+function _dogEggFor(raw) {
+  const n = _normEgg(raw);
+  return _DOG_EGGS.find(e => e.test.test(n)) || null;
+}
+function _dogEgg() { return (G.dog && G.dog.egg) || null; }
+
 function _doNameDog(arg) {
   if (!G.dog) { _say("You haven't got a dog to name. The soi's freelancers already have names — several each."); return; }
   // doCommand lowercases all input, so re-dignify the name with title case
@@ -2006,8 +2061,16 @@ function _doNameDog(arg) {
     _say(`He answers — when he chooses to — to ${_dogName()}. (NAME DOG <something> to change it.)`);
     return;
   }
+  const egg = _dogEggFor(name);
+  if (egg && egg.reject) { _say(egg.line, "dim"); return; } // named but refused (XYZZY)
   const old = _dogName();
   G.dog.name = name;
+  G.dog.egg = egg ? egg.key : null; // a plain name clears any prior power
+  if (egg) {
+    _say(egg.line, "win");
+    if (egg.key === "sanuk") _addHappy(2); // naming him Fun is its own small joy
+    return;
+  }
   _say(`"${name}," you try, and he looks up — not because he understands, but because ` +
     `you said it in the voice that sometimes means chicken. Close enough. It's official: ` +
     `${name}.` + (old === "Sai Krok"
@@ -2020,6 +2083,12 @@ function _doNameDog(arg) {
 function _doFeedDog(arg) {
   if (arg && !/him|it/.test(arg) && !_isDogWord(arg)) { _say("Feed who, exactly? The whole soi is hungry."); return; }
   if (G.dog) {
+    if (_dogEgg() === "snack") {
+      _say(_dogN("You reach for your wallet; Sai Krok is already three moves ahead, nosing a " +
+        "forgotten skewer out from under a cart and crunching it down bone and all. Scooby feeds " +
+        "Scooby. He leans his weight against your leg by way of a receipt."));
+      return;
+    }
     const food = ["noodles", "moo_ping"].find(id => _inv().includes(id));
     if (food) {
       G.itemLoc[food] = null;

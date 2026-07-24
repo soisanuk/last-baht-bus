@@ -665,6 +665,14 @@ function _describeRoom(full, forceFull) {
   if (items.length) _say("You can see: " + items.map(id => ITEMS[id].name).join(", ") + ".");
   const npcs = _npcsHere();
   if (npcs.length) _say("Here: " + npcs.map(id => `${NPCS[id].emoji} ${NPCS[id].name}`).join(", ") + ".");
+  // Butterfly the dog: the girls dote on him at the door — a warmer welcome, once a night
+  if (full && G.dog && G.dog.egg === "butterfly" && _inBar() &&
+      npcs.some(id => NPC_ROLES[id]) && G.dog.btfDay !== G.day) {
+    G.dog.btfDay = G.day;
+    _addHappy(1);
+    _say(_dogN("The girls clock Butterfly parked loyally at the door and melt — “aw, your dog, so " +
+      "handsome na!” — and the welcome that lands on you runs a few degrees warmer than your face has earned."), "dim");
+  }
   // A bar owner who alternates nights between her rooms: when this is one of her
   // bars but she's working the other one tonight, say so — otherwise the room
   // reads as hers with no sign of her.

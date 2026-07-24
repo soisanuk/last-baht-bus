@@ -2142,7 +2142,8 @@ function _endNight(reason) {
   G.soc.greeted = {};  // a fresh night — she greets you anew
   G.lastBfId = null;   // clear the LT-ending bond hook
   G.lastBfBase = 10;   // and its สนุก base (reality-LT drops it to 4 for one night)
-  for (const id in G.soc.drinks) G.soc.drinks[id] = Math.max(0, G.soc.drinks[id] - 1); // bonds cool a notch a night; tend them or lose them
+  // bonds cool a notch a night; tend them or lose them — unless a loyal dog (Hachiko) holds them
+  if (_dogEgg() !== "loyal") for (const id in G.soc.drinks) G.soc.drinks[id] = Math.max(0, G.soc.drinks[id] - 1);
   G.soc.patronBusy = {};
   G.soc.patronMiffed = {};
   G.soc.apologized = {}; // a new shift will hear you out afresh
@@ -2166,8 +2167,10 @@ function _endNight(reason) {
   // passed out (unless you're a resident already standing in your own room),
   // phone dying and pockets turned out. Every other ending — you slept at the
   // hotel, went home with her, woke in the clinic — lands you in a bed as before.
-  const rough = (reason === "dawn" || reason === "collapse" || reason === "blackout")
+  const wouldRough = (reason === "dawn" || reason === "collapse" || reason === "blackout")
                 && !(_flag("act1Done") && G.room === _hotelRoomId());
+  // a rescue dog (Lassie) never leaves you in the gutter — he brings you home
+  const rough = wouldRough && _dogEgg() !== "rescue";
   const crash = rough ? _crashSpotFor(G.room) : null;
   if (crash) {
     G.battery = _CRASH_BATTERY;
@@ -2195,9 +2198,26 @@ function _endNight(reason) {
     "surface mid-afternoon, and by the time you're human again the sun is " +
     "sliding into the gulf and the neon is waking up ──", "win");
   if (hangover >= 4) _say("(The hangover is a physical presence with opinions. Water. Food. Mercy.)", "alert");
+  if (wouldRough && !rough && _dogEgg() === "rescue") {
+    _say(_dogN("You should have woken rough — face-down where the night dropped you. Instead you're " +
+      "in your own bed, shoes off, wallet on the side. Sai Krok nudged you awake, herded you onto the " +
+      "last baht bus like a sheep that owed him money, and stood the whole ride home. Lassie brought " +
+      "you back."), "win");
+  }
   if (G.dog && !crash) {
     _say(_dogN("(Sai Krok is asleep against your door when you surface. One eye opens, the " +
       "tail thumps twice, and the watch resumes.)"), "dim");
+    if (_dogEgg() === "loyal" || _dogEgg() === "sanuk") {
+      _addHappy(1);
+      _say(_dogN(_dogEgg() === "loyal"
+        ? "(He waited. Of course he waited. Something in you settles at the sight of him.)"
+        : "(Sai Krok greets the new evening like it personally invited him. Hard not to catch it.)"), "dim");
+    }
+    if (_dogEgg() === "snack" && _rand() < 0.3) {
+      G.money += 20;
+      _say(_dogN("(Sai Krok drops something at your feet, pleased with himself: a damp, folded ฿20 " +
+        "note the street lost and nobody claimed. Finders. +฿20.)"), "dim");
+    }
   }
   if (G.dog) _setFlag("hasDog");      // backfill for saves that adopted before the flag existed
   _loanNightRoll();                   // Nira's loan compounds and her cousins escalate if you're late
