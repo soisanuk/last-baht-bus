@@ -17,13 +17,14 @@ let out = [];
 engineInit(t => out.push(t), null, () => {});
 beforeEach(() => { out = []; newGame(); });
 
-test("the scrub plays the full ritual: kill Sharky, dress the accountant, perform the call", () => {
+test("the scrub plays the full ritual: rule line, five beats, a spoken call", () => {
+  // structural, not keyword-based — every pool has varied vocabulary by design,
+  // so assert the shape (open/physical/digital/call/close) and the fixed points.
+  G.vacation = 1; out = [];
   _suvarnabhumiScrub();
-  const text = out.join("\n");
-  assert.match(text, /singlet|nickname|bucket|Click/i, "the man the city made");
-  assert.match(text, /polo|chinos|accountant|mirror/i, "the resurrection");
-  assert.match(text, /phone|lock screen|Recently Deleted|chat app|gallery/i, "the digital defusal");
-  assert.match(text, /babe|golf|corporate|performance|illusion holds/i, "the call / the cover");
+  assert.equal(out.length, 6, "the divider rule plus five beats");
+  assert.match(out[4], /“[^”]+”/, "the call beat is a spoken performance");
+  assert.equal(out[5], _SCRUB_CLOSE[1 % _SCRUB_CLOSE.length], "closes on the trip-rotated line");
 });
 
 test("the opener rotates by trip, so repeat scrubs vary", () => {
