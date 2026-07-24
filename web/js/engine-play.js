@@ -1639,6 +1639,62 @@ function _hospitalMorning(reason) {
   if (_rand() < 0.55) _say(_HOSP_TOMORROW[G.hospitalVisits % _HOSP_TOMORROW.length]);
 }
 
+// ── The dawn coda: her last baht bus ─────────────────────────────────────────
+// The game's title, made flesh. After a big-illusion night (a barfine) the camera
+// occasionally leaves YOU — passed out, sure you conquered the city — and follows
+// HER home at 6 a.m.: the queen taken off like a costume, the hard bench, the
+// coins, the money zipped away for a family this town never sees. A deliberate
+// POV cutaway. Fully fictionalised, nameless — the archetype, not a real person.
+const _CODA_CUT = [
+  "You are already asleep — face-down, victorious, certain you conquered the city. So you miss " +
+    "this part. Somewhere across town, under a lift's flat fluorescent light, the night is coming " +
+    "off like a costume.",
+  "You sleep the sleep of a man who won, and never see the other half of the night — the half " +
+    "that starts the moment the door clicks shut behind her.",
+  "The last thing you registered was the smoke machine and the bottle sparklers and how " +
+    "untouchable she looked. You sleep. She doesn't, not yet. Across the city the spell is quietly " +
+    "wearing off.",
+];
+const _CODA_DECON = [
+  "In a bathroom that isn't yours the queen comes apart into her pieces: the tight dress folded " +
+    "careful into a tote so it survives another night, the heels kicked off blistered feet, a wet " +
+    "wipe dragging the red mouth and the smoky eyes down the sink until they're gone.",
+  "Out of the bag comes the real uniform — a faded cartoon t-shirt gone soft with washing, grey " +
+    "sweatpants, fifty-baht rubber flip-flops. The mile-long legs go back to being a tired " +
+    "27-year-old's; the untouchable VIP disappears with the makeup, down a drain, in a hotel that " +
+    "will forget her by checkout.",
+  "She scrubs it all off — the lipstick, the eyeshadow, the whole performance — and what's left " +
+    "in the mirror under the hard light is just a woman with dark circles who wants, more than " +
+    "anything she was offered tonight, to sleep.",
+];
+const _CODA_HOME = [
+  "6 a.m. on Second Road: exhaust and grilling moo ping and a yellow, sweaty light. She climbs " +
+    "into the back of an empty baht bus — no leather, no laser, just a hard metal bench — and " +
+    "folds her knees up against the chilly morning.",
+  "In a small purse, past a broken lighter and a stub of lip gloss, she finds the notes and folds " +
+    "them small into the hidden zip. That money isn't hers to spend: it's a hospital bill up-country " +
+    "and a school uniform for a kid she sees four times a year. For the fare she digs out coins and " +
+    "holds them in her fist.",
+  "The baht bus screeches up to a dark, narrow soi in North Pattaya. She presses the buzzer, hands " +
+    "the driver a few coins, and walks the last of the way to a windowless room at four thousand a " +
+    "month — to sleep until three, then put the heels back on and do it again.",
+];
+const _CODA_CLOSE = [
+  "Tourists fall in love with the 2 a.m. version and think the sparkle is the life. But the truest " +
+    "version of a Pattaya girl is the one on the back of a baht bus at dawn, in sweatpants, a fistful " +
+    "of coins, going home.",
+  "That's the fare the last baht bus really carries — not you, weaving back to your hotel, but her, " +
+    "going the other way: toward a room, a few hours' sleep, and a family that never sees this city.",
+];
+
+function _cinderellaCoda() {
+  _say(_CODA_CUT[G.codaSeen % _CODA_CUT.length], "dim");
+  _say(_CODA_DECON[Math.floor(_rand() * _CODA_DECON.length)], "room");
+  _say(_CODA_HOME[Math.floor(_rand() * _CODA_HOME.length)], "room");
+  _say(_CODA_CLOSE[G.codaSeen % _CODA_CLOSE.length], "dim");
+  G.codaSeen++;
+}
+
 function _endNight(reason) {
   // The opening quest (Act One) is do-or-die: fail to reach room 412 before the
   // night ends — run to dawn, or drop from thirst/drink — and it's a HARD FAIL
@@ -1689,6 +1745,7 @@ function _endNight(reason) {
           "produces the joiner ledger: ฿300, and a look with footnotes.)", "dim");
       }
       _conquestHappy(G.lastBfBase || 10, G.lastBfId); // reality-LT sets a lower base
+      if (_flag("act1Done") && _rand() < 0.35) _cinderellaCoda(); // her 6 a.m., occasionally
       break;
     case "bfscam": {
       // an operator ran her game on your long time — the veterans warned you.
