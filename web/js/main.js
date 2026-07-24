@@ -17,7 +17,7 @@ function _dispatch(cmd) {
       _awaitingContinue = false;
       try { deserializeGame(localStorage.getItem(SAVE_KEY)); } catch (e) {}
       _term.print("Welcome back. Where were we…", "dim");
-      _describeRoom(true);
+      _describeRoom(true, true); // restore / rewind: re-orient with the full desc
       _renderResume(); // redraw whatever modal prompt was gating input (game/encounter/checkout/fare/airline)
     } else if (["no", "n", "new", "restart"].includes(v)) {
       _awaitingContinue = false;
@@ -37,7 +37,7 @@ function _dispatch(cmd) {
       deserializeGame(_prevSnap);
       _prevSnap = null;
       _term.print("⌫ Rewound one command.", "dim");
-      _describeRoom(true);
+      _describeRoom(true, true); // restore / rewind: re-orient with the full desc
       _renderResume(); // rewound into a modal state — redraw its prompt (see engine _renderResume)
       _autosave();
     } else {
