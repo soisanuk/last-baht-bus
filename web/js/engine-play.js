@@ -42,6 +42,7 @@ function _playOptions() {
     out.push("pool");
     if (_leagueTonight()) out.push("killer");
   }
+  if (_room().darts) out.push("darts");
   return out;
 }
 
@@ -69,6 +70,7 @@ function _gameVerbs() {
     case "c4": return ["drop", "1", "2", "3", "4", "5", "6", "7", "q", "quit"];
     case "jp": return ["flip", ..._jpChoices(), "quit"];
     case "pool": case "killer": return ["shot", "power", "safety", "quit"];
+    case "darts": return ["big", "steady", "finish", "quit"];
     case "quiz": return ["1", "2", "3", "quit"];
   }
   return ["quit"];
@@ -79,6 +81,7 @@ function _doPlay(arg) {
   const w = arg.toLowerCase();
   if (w.includes("jackpot") || w.includes("dice")) return _startJackpot(w);
   if (w.includes("killer") || w.includes("league")) return _startKiller();
+  if (w.includes("dart")) return _startDarts();
   if (w.includes("pool") || w.includes("8") || w.includes("billiard")) return _startPool();
   if (w.includes("connect") || w.includes("four") || w.includes("4")) return _startC4();
   const opts = _playOptions();
@@ -714,6 +717,124 @@ function _poolInput(input) {
   }
 }
 
+// ─ Darts (501) ─
+// A staked bar game at any board (rooms flagged `darts:true`). Both start at 501
+// and race to zero, checking out on a FINISH. Your aim is dragged down by drink,
+// thirst, and hunger — the shakier you are, the wider the scatter. The opponent,
+// annoyingly, doesn't have that problem.
+const DARTS_STAKE = 40;
+
+// Your steadiness, 0.25–1.0, pure over G. Clear-headed, watered and fed you throw
+// at 1.0; every Chang past the second and every red-lining meter costs you aim —
+// concentration and a steady hand are the first things the night takes.
+function _dartsAim() {
+  let aim = 1;
+  const d = G.soc.drunk;
+  if (d > 2) aim -= (d - 2) * 0.06;                                   // tipsy fine, hammered not
+  if (G.thirst >= 80) aim -= 0.18; else if (G.thirst >= 55) aim -= 0.08;
+  if (G.hunger >= 80) aim -= 0.18; else if (G.hunger >= 55) aim -= 0.08;
+  return Math.max(0.25, Math.min(1, aim));
+}
+
+// One three-dart visit. mode "big" hunts the treble 20 (high variance); "steady"
+// nurses singles. Pure given (mode, aim, rnd) → unit-testable. { score, darts }.
+function _dartsVisit(mode, aim, rnd) {
+  const darts = [];
+  for (let i = 0; i < 3; i++) {
+    const r = rnd();
+    if (mode === "big") {
+      if (r < aim * 0.42) darts.push(60);                              // treble 20
+      else if (r < aim * 0.72) darts.push(20);                         // single 20
+      else if (r < 0.9) darts.push([1, 5, 12, 20][Math.floor(rnd() * 4)]); // stray neighbour
+      else darts.push(0);                                              // wire / off the board
+    } else {
+      if (r < aim) darts.push(20);
+      else if (r < aim + (1 - aim) * 0.6) darts.push([5, 1, 19][Math.floor(rnd() * 3)]);
+      else darts.push(0);
+    }
+  }
+  return { score: darts.reduce((a, b) => a + b, 0), darts };
+}
+
+// A checkout attempt at `remaining` (must be ≤ 50). Pure. True on the exact finish —
+// easier the smaller and tidier the number, and scaled by aim.
+function _dartsFinish(remaining, aim, rnd) {
+  if (remaining > 50 || remaining < 2) return false;
+  const base = remaining <= 20 ? 0.6 : remaining <= 40 ? 0.42 : 0.3;
+  return rnd() < base * aim;
+}
+
+// Why the arm's shaky tonight — names the meter costing the most aim, so the player
+// can go fix it (water / food / slow the beers) instead of guessing.
+function _dartsWobble() {
+  const d = G.soc.drunk;
+  if (G.thirst >= 55 && G.thirst >= G.hunger) return "Your mouth's chalk-dry and the board softens at the edges — a water would steady the arm.";
+  if (G.hunger >= 55) return "Running on empty; that's not nerves in your hand, it's hunger. Food would help.";
+  if (d > 2) return `${d} Changs in, and the treble twenty is doing a slow lap of itself. Steady does it.`;
+  return "You're not quite at your steadiest tonight.";
+}
+
+function _startDarts() {
+  if (!_room().darts) { _say("No dartboard here. The Office, the Cricketers, the sports bars — they keep one on the wall."); return; }
+  const { name } = _gameHostess();
+  const opp = name && _rand() < 0.5 ? name : "a leathery expat with his own darts in a belt case";
+  const stake = _takeStake(DARTS_STAKE);
+  G.game = { type: "darts", you: 501, opp: 501, oppName: opp.length > 22 ? "the old boy" : opp, oppSkill: 0.62, stake };
+  _say(`Chalk up: 501 each, straight off, check out on a double. ${opp} throws for the bull to start and lands it like breathing.`);
+  _say(stake ? `฿${stake} on the shelf under the board.` : "You're skint — this one's for the sanuk and the sledging.");
+  const aim = _dartsAim();
+  if (aim < 0.72) _say(_dartsWobble(), "dim");
+  _say("(Your throw: GO BIG (treble hunt) · STEADY (safe 20s) · FINISH when you're low · QUIT.)", "dim");
+}
+
+function _dartsStatus(g) { _say(`(You: ${g.you} · ${g.oppName}: ${g.opp}.)`, "dim"); }
+
+function _dartsOppTurn(g) {
+  if (_dartsFinish(g.opp, g.oppSkill, _rand)) {
+    _endGame(false, 0, `${g.oppName} steps to the oche, barely sights it, and buries the double. ` +
+      `Game. ${g.stake ? `Your ฿${g.stake} leaves the shelf.` : `"Bad luck, boss."`}`);
+    return;
+  }
+  const { score } = _dartsVisit(g.opp <= 80 ? "steady" : "big", g.oppSkill, _rand);
+  const next = g.opp - score;
+  if (next < 2) _say(`${g.oppName} overcooks the visit and has to nurse it. Still ${g.opp}.`);
+  else { g.opp = next; _say(`${g.oppName} rattles in ${score}. (${g.opp} left.)`); }
+  _dartsStatus(g);
+}
+
+function _dartsInput(input) {
+  const g = G.game;
+  const mode = /\b(big|treble|ton|max|go)\b/.test(input) ? "big" :
+    /\b(steady|safe|single|twenty|20)\b/.test(input) ? "steady" :
+    /\b(finish|check|checkout|double|out|close)\b/.test(input) ? "finish" : null;
+  if (!mode) { _dartsStatus(g); _say("(GO BIG · STEADY · FINISH (when low) · QUIT.)", "dim"); return; }
+  const aim = _dartsAim();
+
+  if (mode === "finish") {
+    if (g.you > 50) { _say(`Too much left to check out (${g.you}) — score first: GO BIG or STEADY.`, "dim"); return; }
+    if (_dartsFinish(g.you, aim, _rand)) {
+      _endGame(true, g.stake * 2, "You call the double, take your time in a suddenly quiet bar, and post it " +
+        `dead centre. ${g.stake ? `฿${g.stake * 2} off the shelf, and a nod from the old boy.` : "The bar erupts. Priceless."}`);
+      return;
+    }
+    _say(aim < 0.6 ? "The dart sails wide — the arm just isn't yours tonight. No score." :
+      "You catch the wire and it spits back out. Agonising. No score.");
+    _dartsOppTurn(g);
+    return;
+  }
+
+  const { score, darts } = _dartsVisit(mode, aim, _rand);
+  if (g.you - score < 2) {
+    _say(`${darts.join(", ")} — ${score}, and that busts it. Voided; still on ${g.you}.`, "alert");
+  } else {
+    g.you -= score;
+    const pre = score >= 100 ? "The bar goes quiet for a beat. " : score === 0 ? "Three darts, nothing — grim. " : "";
+    _say(`${pre}${darts.join(", ")} — ${score}. (${g.you} left.)`);
+    if (g.you <= 50) _say("(Finishing range — FINISH to go for the double.)", "dim");
+  }
+  _dartsOppTurn(g);
+}
+
 // ─ Shared plumbing ─
 
 // won: true / false / null (push). payout is added to money (escrow already taken).
@@ -748,6 +869,7 @@ function _gameInput(input) {
     case "pool": _poolInput(input); break;
     case "kp": _kpInput(input); break;
     case "quiz": _quizInput(input); break;
+    case "darts": _dartsInput(input); break;
   }
 }
 
@@ -762,6 +884,7 @@ function _gameBoard() {
     case "jp":   _say(`[ ${jpRender(g.tiles)} ]`); break;
     case "kp":   _say(kpRender(g.kp), "dim"); break;
     case "pool": _poolStatus(g); break;
+    case "darts": _dartsStatus(g); break;
     case "quiz": _quizAsk(); break;
   }
 }

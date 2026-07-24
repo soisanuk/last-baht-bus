@@ -161,7 +161,7 @@ const ROOMS = {
   },
   sandbar: {
     name: "The Sandbar",
-    bar: "The Sandbar", barType: "beer",
+    bar: "The Sandbar", barType: "beer", darts: true,
     region: "Jomtien",
     desc: "Last bar before Second Road: a narrow slot with sand actually underfoot, a dartboard, " +
       "and a cat that outranks everyone. The end-of-the-soi place, where a slow night winds all the " +
@@ -306,11 +306,11 @@ const ROOMS = {
   },
   the_office: {
     name: "The Office Bar",
-    bar: "The Office Bar", barType: "beer",
+    bar: "The Office Bar", barType: "beer", darts: true,
     region: "Thappraya",
     desc: "The other Samson beer bar, down the Second Road end — the joke's on the sign, so a man can " +
       "honestly say he's 'at the office.' Dartboard, a telly showing football nobody watches, and the " +
-      "easy end-of-strip pace before Second Road takes over.",
+      "easy end-of-strip pace before Second Road takes over. (PLAY DARTS.)",
     revisit: [
       "Back into The Office — dartboard, a telly playing football nobody watches, and the easy end-of-strip pace.",
       "The Samsons' other beer bar takes you back, and a man can still honestly say he's at the office.",
@@ -1208,7 +1208,7 @@ const ROOMS = {
   queen_vic: {
     name: "Queen Vic Inn",
     region: "Soi 6",
-    bar: "Queen Vic Inn", barType: "pub",
+    bar: "Queen Vic Inn", barType: "pub", darts: true,
     desc: "Actual air conditioning. Actual wood panelling. A dartboard. The Queen Vic Inn " +
       "sits halfway down Soi 6 with the righteous calm of a man who has seen it all and " +
       "ordered another pint. Through the window, the soi performs. On the balcony above, " +
@@ -1271,7 +1271,7 @@ const ROOMS = {
   lk_sports: {
     name: "The Offside Sports Bar",
     region: "LK Metro",
-    bar: "The Offside Sports Bar", barType: "pub", outlet: true,
+    bar: "The Offside Sports Bar", barType: "pub", outlet: true, darts: true,
     desc: "A proper sports bar wedged into the go-go alley: a wall of screens, a Premier " +
       "League fixture list chalked up beside a Thai-boxing card, a dartboard with a queue, " +
       "and a fridge of import beer at import prices. The commentary is in three languages " +
@@ -1795,12 +1795,12 @@ const ROOMS = {
   },
   cricketers: {
     name: "The Cricketers",
-    bar: "The Cricketers", barType: "beer",
+    bar: "The Cricketers", barType: "beer", darts: true,
     region: "Soi Diana",
     desc: "A farang sports bar wedged onto the go-go soi: three screens, a dartboard, a menu of pies, " +
       "and a knot of expats who've solved the world twice over by nine o'clock. There are girls, and " +
       "there is beer, but mostly there is opinion. Somebody is explaining the offside rule to a " +
-      "hostess who stopped listening in 2019. (READ MENU.)",
+      "hostess who stopped listening in 2019. (READ MENU · PLAY DARTS.)",
     reads: {
       menu: "A blackboard of PIES, chalked with the reverence of a man a long way from home: " +
         "steak & ale, chicken & mushroom, a 'ploughman's' that is mostly pickle, and a full " +

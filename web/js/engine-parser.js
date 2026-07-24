@@ -481,6 +481,11 @@ function _doExamine(arg) {
   const id = _findItem(arg);
   if (id === "masseuse_note") { _readNote(); return; }
   if (id) { _say(ITEMS[id].desc); return; }
+  if (/dartboard|darts/.test(arg) && _room().darts) {
+    _say("A bristle board on the wall, the treble-20 bed worn pale by decades of " +
+      "closing-time optimism. Chalk and a scoreboard hang beside it. (PLAY DARTS.)");
+    return;
+  }
   if (_roomRead(arg) || arg.includes("sign")) return _doRead(arg);
   _say("Nothing special about that — or it isn't here.");
 }
@@ -2130,6 +2135,7 @@ function _chipSet() {
     for (const m of _jpChoices()) add("flip " + m, "flip " + m);
     if (G.game.type === "jp" && !_jpChoices().length) add("flip");
     if (G.game.type === "pool" || G.game.type === "killer") { add("shot"); add("power"); add("safety"); }
+    if (G.game.type === "darts") { add("go big", "go big"); add("steady"); add("finish"); }
     if (G.game.type === "quiz") { add("1"); add("2"); add("3"); }
     add("quit"); return chips;
   }
@@ -2665,9 +2671,10 @@ function doCommand(input) {
     case "dance": _doDance(); break;
     case "sing": _doSing(); break;
     case "throw": case "toss": case "chuck": case "fling":
-      // THROW COVER / THROW NIPPLE COVER / THROW PASTIE [AT <name>] — the ceiling
-      // game; anything else keeps the old flavor refusal.
-      if (/\b(cover|pastie|pasty|nipple|sticker)s?\b/.test(arg))
+      // THROW DARTS at a board starts the 501 game; THROW COVER / PASTIE [AT <name>]
+      // is the ceiling game; anything else keeps the old flavor refusal.
+      if (/\bdarts?\b/.test(arg)) { if (_room().darts) _doPlay("darts"); else _say("No dartboard here to throw at."); }
+      else if (/\b(cover|pastie|pasty|nipple|sticker)s?\b/.test(arg))
         _doThrowCover(arg.replace(/\b(nipple|cover|pastie|pasty|sticker)s?\b/g, "").replace(/^\s*at\s+/, "").trim());
       else _say(_MISC_VERBS["throw"]);
       break;
