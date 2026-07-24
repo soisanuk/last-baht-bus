@@ -64,9 +64,9 @@ const ROOMS = {
     desc: "The middle of the beach road and the heart of it: a knot of people waiting where the " +
       "blue songthaews swing around, a sun-bleached sign listing the loop into Pattaya, a lone " +
       "motosai driver dozing on his bike. Streetlights, seafood smoke, the sea just west across " +
-      "the sand. The beach road runs north toward the Thappraya climb and south past the 7-Eleven; " +
-      "Soi 7 cuts inland to the east.",
-    exits: { w: "jomtien_beach", n: "jomtien_beach_rd_n", s: "jomtien_beach_rd_s", e: "soi_7_m", spa: "jomtien_thai" },
+      "the sand. The beach road runs north toward the Thappraya climb and south past the 7-Eleven " +
+      "toward the mouth of Soi 7.",
+    exits: { w: "jomtien_beach", n: "jomtien_beach_rd_n", s: "jomtien_beach_rd_s", spa: "jomtien_thai" },
   },
   jomtien_beach_rd_s: {
     name: "Jomtien Beach Road (South)",
@@ -102,9 +102,9 @@ const ROOMS = {
     name: "Soi 7 (Middle)",
     region: "Jomtien",
     desc: "The middle of Soi 7, where the beer bars thin to guesthouses and a lone som tam cart " +
-      "doing quiet business. A short cut north leads back onto the beach road at the bus stop; " +
-      "the soi runs on west to the sea and east to the Second Road roar.",
-    exits: { w: "soi_7_w", e: "soi_7_e", n: "jomtien_beach_rd" },
+      "doing quiet business. The soi runs west toward the sea and the beach road, and east toward " +
+      "the Second Road roar.",
+    exits: { w: "soi_7_w", e: "soi_7_e" },
   },
   soi_7_e: {
     name: "Soi 7 (East / Second Road end)",
