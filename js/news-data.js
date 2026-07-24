@@ -3,7 +3,12 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
-    "t": "Tyson Fury vs Wach in Pattaya: tickets, times and why you can’t watch it on TV",
+    "t": "Boxing News: Weights From Pattaya, Thailand: Fury Vs Wach » July 24, 2026",
+    "s": "FightNews",
+    "d": "24 Jul 2026"
+  },
+  {
+    "t": "Four-metre python captured after entering Pattaya chicken farm",
     "s": "Thaiger",
     "d": "24 Jul 2026"
   },
@@ -13,14 +18,14 @@ var NEWS_FEED = [
     "d": "23 Jul 2026"
   },
   {
-    "t": "Four-metre python captured after entering Pattaya chicken farm",
-    "s": "Thaiger",
-    "d": "24 Jul 2026"
-  },
-  {
     "t": "Indian tourist rescued after becoming stranded in Pattaya waters",
     "s": "Thaiger",
     "d": "23 Jul 2026"
+  },
+  {
+    "t": "Tyson Fury vs Wach in Pattaya: tickets, times and why you can’t watch it on TV",
+    "s": "Thaiger",
+    "d": "24 Jul 2026"
   },
   {
     "t": "Rotary Club Global Pattaya brings clean drinking water to Pattaya City School 7",
@@ -38,11 +43,6 @@ var NEWS_FEED = [
     "d": "23 Jul 2026"
   },
   {
-    "t": "Tourists urged not to give cash to homeless people in Pattaya",
-    "s": "Thaiger",
-    "d": "23 Jul 2026"
-  },
-  {
     "t": "Five soldiers killed in southern Thailand checkpoint attack",
     "s": "Al Jazeera",
     "d": "23 Jul 2026"
@@ -53,35 +53,35 @@ var NEWS_FEED = [
     "d": "23 Jul 2026"
   },
   {
-    "t": "Tyson Fury vs Mariusz Wach LIVE!",
-    "s": "Sky Sports",
-    "d": "24 Jul 2026"
-  },
-  {
-    "t": "Tyson Fury beats Mariusz Wach in Thailand, awaits Anthony Joshua",
-    "s": "WRAL",
-    "d": "24 Jul 2026"
-  },
-  {
-    "t": "Tyson Fury vs. Mariusz Wach results: Winner, method and updates from Thailand fight",
-    "s": "Yahoo Sports",
+    "t": "Fury dominates Wach in Thailand boxing bout ahead of Joshua showdown",
+    "s": "Al Jazeera",
     "d": "24 Jul 2026"
   },
   {
     "t": "Border K9 sniffs out 99 pounds of prohibited meat, plants and monitor lizard in suitcase from Thailand",
     "s": "Fox News",
     "d": "23 Jul 2026"
+  },
+  {
+    "t": "Thailand passport ranking slides, 5th in Asean",
+    "s": "Bangkok Post",
+    "d": "24 Jul 2026"
+  },
+  {
+    "t": "China’s durian imports from Thailand, Malaysia soar as glut stresses growers",
+    "s": "South China Morning Post",
+    "d": "23 Jul 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-07-24","USD":33.69,"AUD":23.54,"GBP":44.88,"EUR":38.33};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-07-25","temp":27,"humid":90,"code":53,"hi":32,"rain":78};
+var WX_NOW = {"date":"2026-07-25","temp":27,"humid":90,"code":51,"hi":31,"rain":78};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-07-16","first":"639214","last2":"71","front3":["683","709"],"back3":["427","746"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4066,"date":"2026-07-24","baht":64800};
+var GOLD = {"usd":4054,"date":"2026-07-24","baht":64600};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":64119,"thb":2160046};
+var BTC = {"usd":64094,"thb":2161219};
