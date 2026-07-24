@@ -303,6 +303,12 @@ const ROOMS = {
       "of numbered dancers under lights that cost more than the old place ever made. The Samson " +
       "brothers bought Hyper as a wreck and rebuilt it into this. Working the floor like a general is " +
       "Diamond, the mamasan — six feet of poise in heels, and every inch of it a choice.",
+    revisit: [
+      "Back into Hyper's cold roar — mirrors, chrome, bass in your sternum, the numbered stage doing its slow turn.",
+      "Hyper again: the aircon fog, the fresh chrome the Samsons paid for, dancers under lights worth more than the building was.",
+      "The go-go swallows you back into its fog and thump. The room doesn't notice you return; the stage keeps turning.",
+      "You push back through into the chrome and the cold and the wall of bass. Somewhere a number changes on the stage.",
+    ],
     exits: { out: "thappraya_mid" },
   },
   take_care_me: {
@@ -835,6 +841,12 @@ const ROOMS = {
       "photos going back decades — same bar, same smile, different haircuts. Run like a " +
       "harbourmaster's deck, nothing out of place. There's a power outlet under the counter, " +
       "for customers the boss likes.",
+    revisit: [
+      "Back in Candy's rose-pink corner — the bell, the wall of photos, the harbourmaster order of it, all exactly where you left them.",
+      "Candy Bar again: spotless glasses, the bell waiting over the till, decades of faces watching from the wall.",
+      "The rose-pink light folds back around you. Nothing here is ever out of place, least of all Candy.",
+      "You duck back into Candy's — same corner, same shine, the same small empire humming along without a wasted motion.",
+    ],
     exits: { out: "buakhao_market" },
   },
   lucky_tiger: {

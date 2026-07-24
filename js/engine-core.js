@@ -626,8 +626,9 @@ function _deliver(npcId, d) {
 
 // ── Look / describe ────────────────────────────────────────────────────────
 
-function _describeRoom(full) {
+function _describeRoom(full, forceFull) {
   const r = _room();
+  const firstTime = !G.visited[G.room]; // full desc on first arrival + LOOK; brief ambient on revisit
   G.visited[G.room] = true; // standing in it is how places join the fast-travel list
   // Candy's recce quest: eyes on all three new drinking strips completes it
   // (flag is cheap and idempotent; _questTick only pays while the quest is active)
@@ -653,7 +654,10 @@ function _describeRoom(full) {
       : "Rain is coming down in sheets; the awning overhead is the whole habitable " +
         "world until it passes.", "alert");
   }
-  if (full) _say(r.desc);
+  // brief-on-revisit (IF verbose/brief): a rotating ambient line instead of the
+  // full desc when you're just walking back through a place you've already read.
+  // Opt-in per room via `revisit`; LOOK and boot/restore force the full desc.
+  if (full) _say(!firstTime && !forceFull && r.revisit ? _pickVary(r.revisit, "rv:" + G.room) : r.desc);
   const items = Object.keys(G.itemLoc).filter(id => _here(id));
   if (items.length) _say("You can see: " + items.map(id => ITEMS[id].name).join(", ") + ".");
   const npcs = _npcsHere();
