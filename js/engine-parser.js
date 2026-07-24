@@ -1097,6 +1097,17 @@ function _doMotosai(arg) {
     return;
   }
   G.money -= total;
+  // The ride itself can go wrong — a real accident (sandbox only; the do-or-die
+  // opening quest handles its own fails). Odds scale with drink, the hour, and the
+  // fast Darkside run; the delivered helmet cuts them. A mercy ride home (handled
+  // above, G.money === 0) is exempt — nobody crashes on the piwin's kindness.
+  if (_flag("act1Done") &&
+      _rand() < _motoCrashRisk(G.soc.drunk, G.nightTurn >= LAST_BUS_TURN,
+                               d.price === MOTOSAI_FAR, _flag("helmetDelivered"))) {
+    _say(_pickVary(_MOTO_CRASH, "motocrash"), "alert");
+    _endNight("accident");
+    return;
+  }
   G.room = d.room;
   G.darkStreak = 0;
   if (lateGouge) _say("Gone two in the morning, the buses long tucked up, and the " +
