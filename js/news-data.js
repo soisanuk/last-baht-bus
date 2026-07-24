@@ -3,9 +3,24 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
-    "t": "178/1 Soi Muban Ban Pruksa Bun Samphan-Pattaya Klang, Nong Prue, Bang Lamung, Chon Buri 20150, THA",
-    "s": "Realtor.com",
+    "t": "Thailand ramps up crime crackdown to safeguard Pattaya/Chonburi tourism",
+    "s": "TravelMole",
+    "d": "24 Jul 2026"
+  },
+  {
+    "t": "Indian tourist rescued after becoming stranded in Pattaya waters",
+    "s": "Thaiger",
     "d": "23 Jul 2026"
+  },
+  {
+    "t": "Tourists urged not to give cash to homeless people in Pattaya",
+    "s": "Thaiger",
+    "d": "23 Jul 2026"
+  },
+  {
+    "t": "Thailand video news | Criminalisation keeps Thailand’s sex industry in the shadows, Bangkok Film fest resists alleged pressure over Taiwan l",
+    "s": "Thaiger",
+    "d": "24 Jul 2026"
   },
   {
     "t": "Australian faces death penalty after Pattaya teen killing confession",
@@ -18,33 +33,28 @@ var NEWS_FEED = [
     "d": "22 Jul 2026"
   },
   {
+    "t": "178/1 Soi Muban Ban Pruksa Bun Samphan-Pattaya Klang, Nong Prue, Bang Lamung, Chon Buri 20150, THA",
+    "s": "Realtor.com",
+    "d": "23 Jul 2026"
+  },
+  {
     "t": "How a Thai teen's night at a Pattaya beach ended in death",
     "s": "Reuters",
     "d": "29 Jun 2026"
   },
   {
-    "t": "Friend of Thai teen allegedly murdered by Australian man went to his condo after reporting her missing | Thailand",
-    "s": "The Guardian",
-    "d": "01 Jul 2026"
-  },
-  {
-    "t": "Fury says 'best yet to come' ahead of Thailand fight",
-    "s": "France 24",
-    "d": "22 Jul 2026"
-  },
-  {
-    "t": "How a Thai teen’s night at a Pattaya beach ended in death",
-    "s": "The Japan Times",
-    "d": "30 Jun 2026"
-  },
-  {
-    "t": "'Would Beckham do it?' - Fury stands by Thailand fight",
-    "s": "BBC",
-    "d": "22 Jul 2026"
+    "t": "Thai authorities hunt for suspects after an attack in troubled south kills 5 soldiers",
+    "s": "AP News",
+    "d": "23 Jul 2026"
   },
   {
     "t": "Five soldiers killed in southern Thailand checkpoint attack",
     "s": "Al Jazeera",
+    "d": "23 Jul 2026"
+  },
+  {
+    "t": "Thailand: 5 soldiers killed in attack on security checkpoint",
+    "s": "DW.com",
     "d": "23 Jul 2026"
   },
   {
@@ -53,18 +63,8 @@ var NEWS_FEED = [
     "d": "23 Jul 2026"
   },
   {
-    "t": "AI Boom Sees Thailand’s FDI Applications Jump 80% to $41 Billion in First Half",
-    "s": "Bloomberg.com",
-    "d": "23 Jul 2026"
-  },
-  {
     "t": "Tyson Fury weighs in at 26 pounds lighter than Mariusz Wach ahead of Friday's fight in Thailand",
     "s": "Sky Sports",
-    "d": "23 Jul 2026"
-  },
-  {
-    "t": "Thailand Fury Files, day one: 'Pretty good interview that, well done'",
-    "s": "BoxingScene",
     "d": "23 Jul 2026"
   },
   {
@@ -76,12 +76,12 @@ var NEWS_FEED = [
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-07-23","USD":33.83,"AUD":23.65,"GBP":45.17,"EUR":38.54};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-07-24","temp":28,"humid":78,"code":3,"hi":32,"rain":61};
+var WX_NOW = {"date":"2026-07-24","temp":27,"humid":88,"code":80,"hi":32,"rain":69};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-07-16","first":"639214","last2":"71","front3":["683","709"],"back3":["427","746"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4051,"date":"2026-07-23","baht":64800};
+var GOLD = {"usd":4056,"date":"2026-07-24","baht":64900};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":65048,"thb":2201215};
+var BTC = {"usd":65079,"thb":2193224};
