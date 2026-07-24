@@ -3,8 +3,18 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
-    "t": "Thailand ramps up crime crackdown to safeguard Pattaya/Chonburi tourism",
-    "s": "TravelMole",
+    "t": "Tyson Fury vs Wach in Pattaya: tickets, times and why you can’t watch it on TV",
+    "s": "Thaiger",
+    "d": "24 Jul 2026"
+  },
+  {
+    "t": "Pattaya flooding disrupts early morning workers and commuters",
+    "s": "Pattaya Mail",
+    "d": "23 Jul 2026"
+  },
+  {
+    "t": "Four-metre python captured after entering Pattaya chicken farm",
+    "s": "Thaiger",
     "d": "24 Jul 2026"
   },
   {
@@ -13,38 +23,23 @@ var NEWS_FEED = [
     "d": "23 Jul 2026"
   },
   {
+    "t": "Rotary Club Global Pattaya brings clean drinking water to Pattaya City School 7",
+    "s": "Pattaya Mail",
+    "d": "23 Jul 2026"
+  },
+  {
+    "t": "Police hunt Norwegian sponsor after Rayong boxing camp raid",
+    "s": "Pattaya Mail",
+    "d": "23 Jul 2026"
+  },
+  {
+    "t": "Pattaya police question both sides after woman damages som tam stall",
+    "s": "Pattaya Mail",
+    "d": "23 Jul 2026"
+  },
+  {
     "t": "Tourists urged not to give cash to homeless people in Pattaya",
     "s": "Thaiger",
-    "d": "23 Jul 2026"
-  },
-  {
-    "t": "Thailand video news | Criminalisation keeps Thailand’s sex industry in the shadows, Bangkok Film fest resists alleged pressure over Taiwan l",
-    "s": "Thaiger",
-    "d": "24 Jul 2026"
-  },
-  {
-    "t": "Australian faces death penalty after Pattaya teen killing confession",
-    "s": "MSN",
-    "d": "20 Jul 2026"
-  },
-  {
-    "t": "Tyson Fury vs. Wach Preview: Friday in Pattaya With No Broadcast Planned",
-    "s": "Boxing Insider",
-    "d": "22 Jul 2026"
-  },
-  {
-    "t": "178/1 Soi Muban Ban Pruksa Bun Samphan-Pattaya Klang, Nong Prue, Bang Lamung, Chon Buri 20150, THA",
-    "s": "Realtor.com",
-    "d": "23 Jul 2026"
-  },
-  {
-    "t": "How a Thai teen's night at a Pattaya beach ended in death",
-    "s": "Reuters",
-    "d": "29 Jun 2026"
-  },
-  {
-    "t": "Thai authorities hunt for suspects after an attack in troubled south kills 5 soldiers",
-    "s": "AP News",
     "d": "23 Jul 2026"
   },
   {
@@ -53,35 +48,40 @@ var NEWS_FEED = [
     "d": "23 Jul 2026"
   },
   {
-    "t": "Thailand: 5 soldiers killed in attack on security checkpoint",
-    "s": "DW.com",
+    "t": "Five security personnel killed, six civilians injured in shooting, pipe bomb attack in Thailand",
+    "s": "The Jerusalem Post",
     "d": "23 Jul 2026"
+  },
+  {
+    "t": "Tyson Fury vs Mariusz Wach LIVE!",
+    "s": "Sky Sports",
+    "d": "24 Jul 2026"
+  },
+  {
+    "t": "Tyson Fury beats Mariusz Wach in Thailand, awaits Anthony Joshua",
+    "s": "WRAL",
+    "d": "24 Jul 2026"
+  },
+  {
+    "t": "Tyson Fury vs. Mariusz Wach results: Winner, method and updates from Thailand fight",
+    "s": "Yahoo Sports",
+    "d": "24 Jul 2026"
   },
   {
     "t": "Border K9 sniffs out 99 pounds of prohibited meat, plants and monitor lizard in suitcase from Thailand",
     "s": "Fox News",
     "d": "23 Jul 2026"
-  },
-  {
-    "t": "Tyson Fury weighs in at 26 pounds lighter than Mariusz Wach ahead of Friday's fight in Thailand",
-    "s": "Sky Sports",
-    "d": "23 Jul 2026"
-  },
-  {
-    "t": "Myanmar's Min Aung Hlaing to visit Thailand on August 6-7",
-    "s": "Reuters",
-    "d": "22 Jul 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-07-23","USD":33.83,"AUD":23.65,"GBP":45.17,"EUR":38.54};
+var FX_RATES = {"date":"2026-07-24","USD":33.69,"AUD":23.54,"GBP":44.88,"EUR":38.33};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-07-24","temp":27,"humid":88,"code":80,"hi":32,"rain":69};
+var WX_NOW = {"date":"2026-07-25","temp":27,"humid":90,"code":53,"hi":32,"rain":78};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-07-16","first":"639214","last2":"71","front3":["683","709"],"back3":["427","746"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4056,"date":"2026-07-24","baht":64900};
+var GOLD = {"usd":4066,"date":"2026-07-24","baht":64800};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":65079,"thb":2193224};
+var BTC = {"usd":64119,"thb":2160046};
