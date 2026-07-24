@@ -47,3 +47,32 @@ test("rooms without a revisit pool are unchanged — full desc every time", () =
   out = []; _describeRoom(true); // re-arrival still full
   assert.match(out.join("\n"), /Soft sand|loungers|sunset/, "still the full desc");
 });
+
+// The rollout covers every go-go plus the named-NPC / quest-hub bars. Guard the
+// whole set generically so new venues can't ship a malformed or thin pool.
+const REVISIT_ROOMS = Object.keys(ROOMS).filter(id => ROOMS[id].revisit);
+
+test("every revisit pool is well-formed (4+ distinct non-empty lines)", () => {
+  assert.ok(REVISIT_ROOMS.length >= 15, `expected the rollout, got ${REVISIT_ROOMS.length}`);
+  for (const id of REVISIT_ROOMS) {
+    const pool = ROOMS[id].revisit;
+    assert.ok(Array.isArray(pool) && pool.length >= 4, `${id}: pool needs 4+ lines`);
+    assert.ok(pool.every(s => typeof s === "string" && s.trim().length > 0), `${id}: blank line`);
+    assert.equal(new Set(pool).size, pool.length, `${id}: duplicate line`);
+  }
+});
+
+test("every revisit room shows brief on return, full on first visit and LOOK", () => {
+  for (const id of REVISIT_ROOMS) {
+    const { desc, revisit } = ROOMS[id];
+    G.visited = {}; G.room = id;              // unvisited
+    out = []; _describeRoom(true);            // first arrival
+    assert.ok(out.join("\n").includes(desc), `${id}: first visit is full desc`);
+    out = []; _describeRoom(true);            // re-arrival
+    const rev = out.join("\n");
+    assert.ok(revisit.some(s => rev.includes(s)), `${id}: return shows a pool line`);
+    assert.ok(!rev.includes(desc), `${id}: return is not the full desc`);
+    out = []; _describeRoom(true, true);      // LOOK forces full
+    assert.ok(out.join("\n").includes(desc), `${id}: LOOK forces full desc`);
+  }
+});
