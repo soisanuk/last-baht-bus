@@ -53,8 +53,9 @@ const ROOMS = {
     desc: "The quieter stretch north of Jomtien proper — by day rainbow flags and beach " +
       "chairs, the gay end of the sand; right now it's shapes and shadows and the hiss of " +
       "surf. Inland the beach road bends and climbs into neon: the Main Strip of Thappraya " +
-      "Road, running UP and east to Second Road.",
-    exits: { s: "jomtien_beach", e: "jomtien_beach_rd", up: "thappraya_w" },
+      "Road, running UP and east to Second Road. North, Dongtan Beach Road runs on up the coast " +
+      "toward the dark shoulder of Pratumnak Hill.",
+    exits: { s: "jomtien_beach", e: "jomtien_beach_rd", up: "thappraya_w", n: "dongtan_rd_s" },
   },
   jomtien_beach_rd: {
     name: "Jomtien Beach Road (Baht Bus Stop)",
@@ -244,7 +245,7 @@ const ROOMS = {
       "throws a guitar solo out its open front — the freelancers' favourite, and loud about it. " +
       "Another 7-Eleven glows across the intersection. One last beer bar and a massage shop see out " +
       "the strip before the traffic of Second Road takes over.",
-    exits: { w: "thappraya_mid", n: "take_care_me", s: "the_office", spa: "thappraya_massage", e: "jomtien_2nd_n" },
+    exits: { w: "thappraya_mid", n: "take_care_me", s: "the_office", spa: "thappraya_massage", e: "jomtien_2nd_n", up: "thappraya_ext_s" },
   },
   supertown_alley: {
     name: "Supertown Complex (alley)",
@@ -446,13 +447,77 @@ const ROOMS = {
 
   // ─── Pratumnak Hill ───
   pratumnak_rd: {
-    name: "Pratumnak Hill Road",
+    name: "Pratumnak Hill Road (to Pattaya)",
     region: "Pratumnak",
     dark: true,
-    desc: "The hill road between Jomtien and Pattaya proper — condos behind walls, " +
+    desc: "The main hill road between Jomtien and Pattaya proper — condos behind walls, " +
       "sleeping soi dogs, and long stretches where the streetlights have given up. " +
-      "The Buddha Hill viewpoint is up a path to the west.",
+      "The Buddha Hill viewpoint is up a path to the west; Walking Street is on north.",
     exits: { s: "jomtien_beach_rd_n", n: "ws_gate", w: "buddha_hill", e: "second_rd_s" },
+  },
+
+  // ── Pratumnak north extension: the loop over the hill ────────────────────────
+  // Two roads climb north off the Jomtien rectangle — Dongtan Beach Road (west,
+  // along the sand) and the Thappraya extension (east) — joined across the top by
+  // Pratumnak Hill Road, so the whole hill walks as a loop back to the strip.
+  // (Separate from pratumnak_rd above, the main road on to Walking Street.)
+  thappraya_ext_s: {
+    name: "Thappraya Road — Hill (lower)",
+    region: "Pratumnak",
+    desc: "Where the Main Strip's neon finally gives out and the road tips upward: the last few " +
+      "late-night noodle carts, then condo walls and the hill proper. The strip is back down to " +
+      "the south; the road climbs on north.",
+    exits: { down: "thappraya_e", n: "thappraya_ext_m" },
+  },
+  thappraya_ext_m: {
+    name: "Thappraya Road — Hill (middle)",
+    region: "Pratumnak",
+    dark: true,
+    desc: "Mid-climb on the eastern shoulder of Pratumnak: gated condos, a sleeping soi dog or " +
+      "three, the streetlights getting shy. The lights of Jomtien spread out below to the south.",
+    exits: { s: "thappraya_ext_s", n: "thappraya_ext_n" },
+  },
+  thappraya_ext_n: {
+    name: "Thappraya Road — Hilltop",
+    region: "Pratumnak",
+    dark: true,
+    desc: "The top of the eastern climb, where the road levels and Pratumnak Hill Road cuts away " +
+      "west across the crest toward the Dongtan side. Quiet, dark, and a long way from a lady drink.",
+    exits: { s: "thappraya_ext_m", w: "pratumnak_hill_rd" },
+  },
+  pratumnak_hill_rd: {
+    name: "Pratumnak Hill Road (crest)",
+    region: "Pratumnak",
+    dark: true,
+    desc: "The saddle over the top of Pratumnak Hill, linking the two roads that climb it — the " +
+      "Thappraya side to the east, the Dongtan Beach side to the west. Walls, viewpoints you can't " +
+      "make out in the dark, and the sea breathing somewhere below on both sides.",
+    exits: { e: "thappraya_ext_n", w: "dongtan_rd_n" },
+  },
+  dongtan_rd_n: {
+    name: "Dongtan Beach Road (North)",
+    region: "Pratumnak",
+    dark: true,
+    desc: "The top of Dongtan Beach Road, where it bends inland and up onto the Pratumnak crest. " +
+      "The sand is a black rumour to the west; Pratumnak Hill Road climbs away east over the top.",
+    exits: { s: "dongtan_rd_m", e: "pratumnak_hill_rd" },
+  },
+  dongtan_rd_m: {
+    name: "Dongtan Beach Road (Middle)",
+    region: "Jomtien",
+    dark: true,
+    desc: "The middle of Dongtan Beach Road: quiet condos, a shuttered café or two, beach-access " +
+      "paths down to the sand between them. The road runs south back toward Jomtien and north up " +
+      "toward the hill.",
+    exits: { s: "dongtan_rd_s", n: "dongtan_rd_n" },
+  },
+  dongtan_rd_s: {
+    name: "Dongtan Beach Road (South)",
+    region: "Jomtien",
+    desc: "The south end of Dongtan Beach Road, where it peels off the top of Jomtien's beach: " +
+      "rainbow flags by day, a mellow gay-friendly stretch, cocktail shacks winding down. Dongtan " +
+      "Beach is back to the south; the road runs on north up the coast.",
+    exits: { s: "dongtan_beach", n: "dongtan_rd_m" },
   },
   buddha_hill: {
     name: "Buddha Hill Viewpoint",
@@ -5201,6 +5266,13 @@ const ROOM_GEO = {
   jomtien_beach_rd_n: [12.8954, 100.8689],
   // Pratumnak
   pratumnak_rd:     [12.9105, 100.8690],
+  thappraya_ext_s:  [12.8998, 100.8700],
+  thappraya_ext_m:  [12.9020, 100.8698],
+  thappraya_ext_n:  [12.9042, 100.8694],
+  pratumnak_hill_rd:[12.9046, 100.8672],
+  dongtan_rd_n:     [12.9036, 100.8648],
+  dongtan_rd_m:     [12.9008, 100.8650],
+  dongtan_rd_s:     [12.8984, 100.8652],
   buddha_hill:      [12.9142, 100.8618],
   // Walking Street (the gate is the north end; "ws_north" is the DEEP end)
   ws_gate:          [12.9268, 100.8703],

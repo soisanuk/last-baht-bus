@@ -114,7 +114,7 @@ test("movement and look", () => {
 });
 
 test("blocked direction", () => {
-  run("n", "n"); // beach → dongtan → no north exit
+  run("s"); // the start faces the sea to the south — no exit that way
   assert.ok(_NO_EXIT.some(s => lastOut().includes(s)), "no exit that way (pooled refusal)");
 });
 
@@ -2247,9 +2247,9 @@ test("Soi 7 (Jomtien): beach road to Second Rd, four beer bars, Rompho Market, K
 });
 
 test("Thappraya Main Strip: Dongtan up to Second Rd, the mix of venues, Diamond the katoey mama", () => {
-  // the strip climbs UP off Dongtan Beach and runs east; Dongtan's north stays blocked
+  // the strip climbs UP off Dongtan Beach and runs east; north now runs up Dongtan Beach Road
   assert.equal(ROOMS.dongtan_beach.exits.up, "thappraya_w");
-  assert.ok(!ROOMS.dongtan_beach.exits.n, "the blocked-direction test's north stays blocked");
+  assert.equal(ROOMS.dongtan_beach.exits.n, "dongtan_rd_s", "north climbs Dongtan Beach Road toward Pratumnak");
   assert.equal(ROOMS.thappraya_w.exits.e, "thappraya_mid");
   assert.equal(ROOMS.thappraya_mid.exits.e, "thappraya_e");
   assert.ok(ROOMS.thappraya_w.seven && ROOMS.thappraya_e.seven, "a 7-Eleven at each end");
@@ -2257,6 +2257,17 @@ test("Thappraya Main Strip: Dongtan up to Second Rd, the mix of venues, Diamond 
   assert.equal(ROOMS.thappraya_mid.exits.super, "supertown_alley");
   assert.equal(ROOMS.supertown_alley.exits.in, "supertown_elbow");
   assert.ok(!ROOMS.supertown_elbow.bar && !ROOMS.supertown_alley.barType, "no bars built in Supertown yet");
+  // the Pratumnak north extension: two roads climb the hill and join at the crest,
+  // walkable as a loop back to the strip (thappraya_e up → … → dongtan_beach up → thappraya_w)
+  assert.equal(ROOMS.thappraya_e.exits.up, "thappraya_ext_s");
+  assert.equal(ROOMS.thappraya_ext_s.exits.n, "thappraya_ext_m");
+  assert.equal(ROOMS.thappraya_ext_m.exits.n, "thappraya_ext_n");
+  assert.equal(ROOMS.thappraya_ext_n.exits.w, "pratumnak_hill_rd");
+  assert.equal(ROOMS.pratumnak_hill_rd.exits.w, "dongtan_rd_n", "the crest links both north ends");
+  assert.equal(ROOMS.dongtan_rd_n.exits.s, "dongtan_rd_m");
+  assert.equal(ROOMS.dongtan_rd_m.exits.s, "dongtan_rd_s");
+  assert.equal(ROOMS.dongtan_rd_s.exits.s, "dongtan_beach", "Dongtan Beach Road drops back onto the sand");
+  assert.notEqual(ROOMS.pratumnak_hill_rd.name, ROOMS.pratumnak_rd.name, "the two Pratumnak roads read distinctly");
   // the venue mix
   assert.equal(ROOMS.hyper.barType, "gogo");
   assert.equal(ROOMS.take_care_me.barType, "pub");
