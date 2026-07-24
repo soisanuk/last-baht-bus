@@ -62,6 +62,38 @@ const _BEER_LINES = [
   "Cold Singha, condensation already running for the door. The bar exhales; so do you.",
   "Another big one, cracked and poured over the last of the ice. The true national anthem.",
 ];
+// Water and food are the survival loop — pressed at 7-Elevens, street carts, and
+// KISS all night. Caller appends the "(฿X left.)" receipt; STALL_EAT follows a
+// "฿X buys <name>." opener that carries the data, so its lines stay posture-neutral
+// (they have to fit both a plastic stool at KISS and eating on your feet at a cart).
+const _WATER_LINES = [
+  "A cold bottle of water, gone in one go. Civilisation.",
+  "Ice-cold plastic, sweating in your hand; half of it's gone before you lower the bottle.",
+  "Cold water straight down, and your body files a quiet note of thanks.",
+  "You crack the cap and drink it where you stand — sweet, cold, worth ten times what it cost.",
+  "A litre of cold water vanishes and the heat loosens its grip a notch.",
+  "Frosted, capped, cracked, drained. The worst of the thirst just... stops.",
+];
+const _TOASTIE_LINES = [
+  "The iconic 7-Eleven cheese toastie, pressed twice while you wait, eaten molten on the kerb " +
+    "like every farang before you back to the dawn of time. There are worse religions.",
+  "A ham-and-cheese toastie, folded and branded with grill lines, handed over blistering. " +
+    "You eat it on the kerb and resent how perfect it is.",
+  "The cheese toastie comes out structurally unsound and molten in the middle. Gone in four " +
+    "bites — a 7-Eleven sacrament.",
+  "฿35 of pressed-bread engineering. You burn the roof of your mouth on the cheese toastie " +
+    "exactly as intended, and would do it again.",
+  "You eat the toastie leaning on a bollard, cheese cauterising your tongue, and understand — " +
+    "briefly, completely — why the expats never leave.",
+];
+const _STALL_EAT_LINES = [
+  "You eat, and the night quietly improves.",
+  "You eat where you are, no ceremony, and something knotted in the evening comes loose.",
+  "Cheap, correct, and exactly what the night needed.",
+  "Hot, unfussy, gone too soon — the good kind, and the hunger backs off.",
+  "You clean the plate. The world softens a degree at the edges.",
+  "Every baht of it earns out; the night steadies on a full stomach.",
+];
 
 function _doGo(dirWord) {
   // aliases first; then ANY literal exit key of this room (pub, hotel, …) —
@@ -796,16 +828,14 @@ function _doBuy(arg) {
     if (G.money < price) { _say(`฿${price} for a cold bottle, and you don't have it. Grim.`); return; }
     G.money -= price;
     G.thirst = Math.max(0, G.thirst - 45);
-    _say(`A cold bottle of water, gone in one go. Civilisation. (฿${G.money} left.)`);
+    _say(`${_pickVary(_WATER_LINES, "water")} (฿${G.money} left.)`);
     return;
   }
   if (r.seven && /toastie|cheese|sandwich|food|snack/.test(arg) && !FOOD_STALLS[G.room]) {
     if (G.money < 35) { _say(`The toastie is ฿35. You have ฿${G.money}. The doorbell jingles in sympathy.`); return; }
     G.money -= 35;
     G.hunger = Math.max(0, G.hunger - 40);
-    _say("The iconic 7-Eleven cheese toastie, pressed twice while you wait, eaten " +
-      "molten on the kerb like every farang before you back to the dawn of time. " +
-      `There are worse religions. (฿${G.money} left.)`);
+    _say(`${_pickVary(_TOASTIE_LINES, "toastie")} (฿${G.money} left.)`);
     _addHappy(1);
     return;
   }
@@ -815,8 +845,7 @@ function _doBuy(arg) {
     G.money -= f.price;
     G.hunger = Math.max(0, G.hunger - f.hunger);
     if (f.thirst) G.thirst = Math.max(0, Math.min(100, G.thirst - f.thirst));
-    _say(`฿${f.price} buys ${f.name}. You eat it standing up like a local and feel ` +
-      `the night improve. (฿${G.money} left.)`);
+    _say(`฿${f.price} buys ${f.name}. ${_pickVary(_STALL_EAT_LINES, "stalleat")} (฿${G.money} left.)`);
     _addHappy(1);
     return;
   }

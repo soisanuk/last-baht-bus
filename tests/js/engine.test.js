@@ -3380,7 +3380,27 @@ test("every district's 7-Eleven presses the iconic cheese toastie", () => {
   run("buy toastie");
   assert.equal(state().money, 65);
   assert.ok(state().hunger <= 25);
-  assert.match(lastOut(), /cheese toastie/i);
+  // prose is pooled — the receipt-stamped line is one of the toastie variants
+  assert.ok(_TOASTIE_LINES.some(s => lastOut().includes(s)), "a pooled toastie line");
+});
+
+test("the food/water survival prose is pooled (7-Eleven water, KISS & carts)", () => {
+  // pools are non-trivial and free of blanks
+  for (const [nm, pool] of [["water", _WATER_LINES], ["toastie", _TOASTIE_LINES], ["stall-eat", _STALL_EAT_LINES]]) {
+    assert.ok(pool.length >= 4, `${nm}: pool has depth`);
+    assert.ok(pool.every(s => typeof s === "string" && s.trim()), `${nm}: no blank lines`);
+    assert.equal(new Set(pool).size, pool.length, `${nm}: no duplicates`);
+  }
+  // water at the 7-Eleven draws from the pool and quenches
+  state().room = "beach_rd_c"; state().money = 100; state().thirst = 80;
+  out = []; run("buy water");
+  assert.ok(_WATER_LINES.some(s => lastOut().includes(s)), "pooled water line");
+  assert.ok(state().thirst < 80, "thirst drops");
+  // KISS names the dish, then a pooled (posture-neutral) eat line
+  state().room = "kiss"; state().money = 300; state().hunger = 90;
+  out = []; run("buy food");
+  assert.ok(lastOut().includes(FOOD_STALLS.kiss.name), "names the KISS dish");
+  assert.ok(_STALL_EAT_LINES.some(s => lastOut().includes(s)), "pooled eat line");
 });
 
 // ── The boy in brown ───────────────────────────────────────────────────────
