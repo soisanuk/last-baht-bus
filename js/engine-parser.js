@@ -442,6 +442,26 @@ function _doInventory() {
     "You are carrying nothing but experience.");
 }
 
+// Readable fixtures a room advertises in its prose — menus, tap boards, cheeky
+// notices, price lists. A room's `reads: { menu|board|poster|sign: "flavor" }`
+// backs them; READ <noun> and EXAMINE <noun> both surface it. Pattaya signage is
+// English, so no printed-Thai here — the Thai-script directional signs stay on the
+// separate `sign`/SIGNS path (a room with a real Thai sign won't set reads.sign).
+const _READ_NOUNS = {
+  menu: ["card", "menus", "price list", "prices", "price board"],
+  board: ["chalkboard", "blackboard", "taps", "tap list", "specials"],
+  poster: ["flyer"],
+  sign: ["notice", "placard"],
+};
+function _roomRead(arg) {
+  const reads = _room().reads;
+  if (!reads) return null;
+  for (const [key, aliases] of Object.entries(_READ_NOUNS)) {
+    if (reads[key] && (arg.includes(key) || aliases.some(a => arg.includes(a)))) return reads[key];
+  }
+  return null;
+}
+
 function _doExamine(arg) {
   if (!arg) return _describeRoom(true, true); // LOOK always gives the full desc
   if (G.dog && (/\b(dog|sai krok)\b/.test(arg) ||
@@ -461,12 +481,14 @@ function _doExamine(arg) {
   const id = _findItem(arg);
   if (id === "masseuse_note") { _readNote(); return; }
   if (id) { _say(ITEMS[id].desc); return; }
-  if (arg === "sign") return _doRead("sign");
+  if (_roomRead(arg) || arg.includes("sign")) return _doRead(arg);
   _say("Nothing special about that — or it isn't here.");
 }
 
 function _doRead(arg) {
   if (/news|paper/.test(arg)) return _doPaper();
+  const flavor = _roomRead(arg);
+  if (flavor) { _say(flavor); return; }
   if (arg.includes("sign")) {
     const s = _room().sign && SIGNS[_room().sign];
     if (!s) {

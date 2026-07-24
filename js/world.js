@@ -114,7 +114,13 @@ const ROOMS = {
       "Market — the exact same mile-long menu as the Pattaya original (simple Thai one side, " +
       "farang comfort food the other) and exactly as packed. Plastic chairs, a grill going full " +
       "tilt, and in high season a twenty-minute wait for a stool; tonight, just about a seat. " +
-      "(BUY FOOD / EAT.)",
+      "(BUY FOOD / EAT · READ MENU.)",
+    reads: {
+      menu: "The same laminated mile of a menu as the Diana original — Thai down one side, farang " +
+        "comfort down the other, the 24-hour full English, the fried-egg 'HANGOVER CURE', the " +
+        "legendary Item 47 ('BIG BEER'). Someone has biro'd a smiley beside the pad kaprao. " +
+        "Jomtien portions, the regulars swear, run a shade larger.",
+    },
     exits: { out: "soi_rompho", s: "soi_rompho", n: "jomtien_2nd_n" },
   },
   jomtien_2nd_n: {
@@ -673,7 +679,14 @@ const ROOMS = {
     region: "Myth Night",
     bar: "Feedback Bar", barType: "beer",
     desc: "A container split down the long side, one wall a chalkboard of craft taps nobody " +
-      "in here can pronounce. Pat pours a flight of four and lines them up like a dare.",
+      "in here can pronounce. Pat pours a flight of four and lines them up like a dare. (READ BOARD.)",
+    reads: {
+      board: "The tap board, four colours of marker and no restraint: 'MEKONG DELTA' RICE " +
+        "LAGER · MANGO-STICKY-RICE SOUR · a 12% imperial stout called 'BUFFALO TEARS' · and a " +
+        "hazy IPA named, inevitably, 'SAME SAME BUT HOPPIER'. Prices climb with the ABV; the " +
+        "stout costs more than a barfine. At the bottom, chalked small: 'if you can read this, " +
+        "have one more.'",
+    },
     exits: { out: "myth_stage" },
   },
   encore_bar: {
@@ -877,6 +890,12 @@ const ROOMS = {
       "down an alley — easy to miss, worth finding. Soi Diana opens off the 7-Eleven on " +
       "the corner here, its go-go neon running away west; two doors south toward the " +
       "market, Candy Bar's rose-pink sign is close enough to read.",
+    reads: {
+      sign: "The LK METRO arrow: black marker on a scrap of board wired to the wall, pointing " +
+        "down an alley that promises nothing. LK Metro — three lanes of go-go and short-time " +
+        "rooms named, like half of Pattaya, after the hotel it grew up around. The arrow knows " +
+        "exactly what it's selling. It just won't say so out loud.",
+    },
     exits: { w: "myth_night", n: "pattaya_klang", s: "buakhao_market", e: "lucky_tiger",
              in: "rock_factory", alley: "lk_entrance", hotel: "metropole_room", diana: "diana_e" },
   },
@@ -1230,6 +1249,12 @@ const ROOMS = {
       "somewhere. The no-entry sign for four-wheelers is doing its job: the only vehicles " +
       "threading through are motorbikes, and the only people on them are very purposeful " +
       "about where they're going.",
+    reads: {
+      sign: "The LK METRO sign and its arrow, hand-marked on board, pointing into the bend that " +
+        "hides the whole warren beyond. Beside it, a battered NO ENTRY plate for four-wheelers, " +
+        "doing honest work — only the motorbikes thread through, and only the purposeful ride " +
+        "them. Two signs, both true, neither telling all of it.",
+    },
     exits: { out: "buakhao_n", e: "lk_main" },
   },
   lk_main: {
@@ -1567,7 +1592,13 @@ const ROOMS = {
       "you come!” The sign says massage; the shorts file a dissenting opinion. Inside is " +
       "cooler and dimmer: curtained cubicles, a wall of mirrors, and a small printed sign in " +
       "three languages you clock without meaning to — no sex. Waan is already smiling at you " +
-      "like she knows something.",
+      "like she knows something. (READ SIGN.)",
+    reads: {
+      sign: "Two signs, quietly at war. The big cheerful one out front: 'TRADITIONAL THAI MASSAGE " +
+        "— HEALTH & RELAX, WELCOME.' The small laminated one by the till, in Thai, English and " +
+        "Russian, thumbed soft from re-reading: 'NO SEX.' Between the two of them stands the " +
+        "establishment's entire business model, and Waan's whole smile.",
+    },
     exits: { out: "second_rd_n" },
   },
   poseidon_soapy: {
@@ -1724,7 +1755,15 @@ const ROOMS = {
     desc: "The famous open-air corner restaurant at the mouth of Soi Diana — plastic chairs, " +
       "paper menus a mile long (simple Thai one side, farang comfort food the other), and a grill " +
       "going full tilt. Everyone knows KISS; everyone meets at KISS. In high season you can stand " +
-      "twenty minutes waiting for a table; tonight there's a stool free, just. (BUY FOOD / EAT.)",
+      "twenty minutes waiting for a table; tonight there's a stool free, just. (BUY FOOD / EAT · READ MENU.)",
+    reads: {
+      menu: "The menu is a laminated broadsheet you could wallpaper a room with. One side is " +
+        "honest Thai — pad kaprao, tom yum, som tam graded by fire — the other a homesick " +
+        "farang's whole diary: full English breakfast (served 24h), cheese toasties, spag bol, a " +
+        "chicken parma the size of a hubcap, and a 'HANGOVER CURE' with a fried egg on top of " +
+        "whatever you point at. Item 47 is simply 'BIG BEER'. It stops at nothing and apologises " +
+        "for none of it.",
+    },
     exits: { out: "diana_w" },
   },
   dollhouse: {
@@ -1761,7 +1800,14 @@ const ROOMS = {
     desc: "A farang sports bar wedged onto the go-go soi: three screens, a dartboard, a menu of pies, " +
       "and a knot of expats who've solved the world twice over by nine o'clock. There are girls, and " +
       "there is beer, but mostly there is opinion. Somebody is explaining the offside rule to a " +
-      "hostess who stopped listening in 2019.",
+      "hostess who stopped listening in 2019. (READ MENU.)",
+    reads: {
+      menu: "A blackboard of PIES, chalked with the reverence of a man a long way from home: " +
+        "steak & ale, chicken & mushroom, a 'ploughman's' that is mostly pickle, and a full " +
+        "Sunday roast (on, of course, Sunday). 'CHIPS WITH EVERYTHING' is not an option, it's the " +
+        "house creed. Down the margin, the week's fixtures and the sacred words: 'ALL GAMES, ALL " +
+        "DAY, PROPER GRAVY.'",
+    },
     exits: { out: "diana_e" },
   },
   papaya_massage: {
@@ -1781,7 +1827,13 @@ const ROOMS = {
     massage: "legit",
     desc: "Next door to the oil shop and a world apart: a proper traditional place with foot chairs " +
       "facing the sea, aunties in a tidy uniform, and a menu that stops at 'oil, one hour.' The spot " +
-      "the tuk-tuk drivers themselves come to get their shoulders sorted.",
+      "the tuk-tuk drivers themselves come to get their shoulders sorted. (READ MENU.)",
+    reads: {
+      menu: "The price board is short and completely honest: FOOT 300 · THAI 300 · OIL 400 — one " +
+        "hour, and it stops there. No asterisks, no 'special', no eyebrow. The aunties in their " +
+        "tidy uniforms mean every line of it, and a hand-added note underneath drives it home: " +
+        "'NO FUNNY. GOOD MASSAGE ONLY.'",
+    },
     exits: { out: "beach_rd_s" },
   },
   areca_room: {
