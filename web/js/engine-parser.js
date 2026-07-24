@@ -56,6 +56,12 @@ const _HUH = [
   "The soi blinks at you. Try again — (HELP lists commands.)",
   "No idea what you're after there. (HELP lists commands.)",
 ];
+const _BEER_LINES = [
+  "One big Chang, cold enough to hurt.",
+  "A sweating bottle of Leo, cap flicked into the gutter — the first pull the best one.",
+  "Cold Singha, condensation already running for the door. The bar exhales; so do you.",
+  "Another big one, cracked and poured over the last of the ice. The true national anthem.",
+];
 
 function _doGo(dirWord) {
   // aliases first; then ANY literal exit key of this room (pub, hotel, …) —
@@ -834,7 +840,7 @@ function _doBuy(arg) {
     G.soc.drunk++;
     G.thirst = Math.max(0, G.thirst - 20);
     const d = G.soc.drunk;
-    _say(`One big Chang, cold enough to hurt. (฿${G.money} left.)` +
+    _say(`${_pickVary(_BEER_LINES, "beer")} (฿${G.money} left.)` +
       (d >= 6 ? " The room has developed a gentle rotation." :
        d >= 4 ? " The neon is starting to smear pleasantly." :
        d >= 2 ? " The night improves by one bottle's worth." : ""));

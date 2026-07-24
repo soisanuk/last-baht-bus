@@ -1545,10 +1545,10 @@ test("pool: table gating, stake, and the visit loop", () => {
 test("flirting is always safe; kissing cold gets you slapped", () => {
   state().room = "jasmine_garden";
   run("flirt with fon");
-  assert.match(lastOut(), /professional warmth/i);
+  assert.match(lastOut(), /professional warmth|so sweet|funny man|harmless/i); // pooled flirt-tier-2
   assert.ok(!state().soc.heat.jasmine_garden);
   run("kiss fon");
-  assert.match(lastOut(), /slap/i);
+  assert.match(lastOut(), /slap|flat palm|isn't there|curdle/i); // pooled cold-kiss rejection
   assert.equal(state().soc.heat.jasmine_garden, 1);
 });
 
@@ -1558,9 +1558,9 @@ test("lady drinks warm the outcome, tier by tier", () => {
   run("buy drink for fon", "buy drink for fon", "buy drink for fon");
   assert.equal(state().soc.drinks.fon, 3);
   run("kiss fon");
-  assert.match(lastOut(), /puppy|Sanuk/i, "tolerated at three drinks");
+  assert.match(lastOut(), /puppy|Sanuk|greedy|sample|nose/i, "tolerated at three drinks");
   run("buy drink for fon", "buy drink for fon", "kiss fon");
-  assert.match(lastOut(), /takes her time/i, "leaned into at five");
+  assert.match(lastOut(), /takes her time|halfway|holds it/i, "leaned into at five");
 });
 
 test("cashiers cap physical contact until the bell has rung twice", () => {
@@ -1575,7 +1575,7 @@ test("cashiers cap physical contact until the bell has rung twice", () => {
   out = [];
   run("spank ploy"); // cap lifted; favor 4 + two-bell warmth lands hot
   assert.doesNotMatch(lastOut(), /books, not the customers/i); // no longer capped
-  assert.match(lastOut(), /returns fire|out-Pattaya|spanks YOU/i); // a real reaction
+  assert.match(lastOut(), /returns fire|out-Pattaya|spanks YOU|retaliates|returns the favour|harder/i); // a real reaction (pooled)
 });
 
 test("three bell rings: the room is yours — hostess reciprocates cold", () => {
@@ -1585,7 +1585,7 @@ test("three bell rings: the room is yours — hostess reciprocates cold", () => 
   assert.equal(state().soc.bells.neon_paradise, 3);
   out = [];
   run("fondle noi"); // zero drinks bought — but three bells top-tiers it anyway
-  assert.match(lastOut(), /puts them where she wants|takes both your hands/i);
+  assert.match(lastOut(), /puts them where she wants|takes both your hands|arranges you|furniture/i);
 });
 
 test("three bells grant amnesty: heat can't accumulate", () => {
@@ -1723,7 +1723,7 @@ test("ringing the bell costs ฿300, clears heat, and lifts every outcome", () =
   assert.equal(state().soc.heat.jasmine_garden, 0);
   assert.ok(sfx.includes("bell"), "the bell clang fires through the sfx hook");
   run("kiss fon"); // bell glow +2 − severity 3 = soft deflection, not a slap
-  assert.match(lastOut(), /cheek|deflection/i);
+  assert.match(lastOut(), /cheek|deflection|hug|Slow|free tonight/i);
 });
 
 test("patron talk: sober tips, drunk rambling, bell-glow hero worship", () => {

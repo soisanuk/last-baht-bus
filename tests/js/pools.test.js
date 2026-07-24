@@ -45,3 +45,17 @@ test("every lady-drink line names her and shows the price", () => {
     assert.match(line, /฿/, "shows the tab");
   }
 });
+
+test("social reactions vary within a tier (pools, not single lines)", () => {
+  for (const kind of ["flirt", "kiss", "spank", "fondle"]) {
+    _SOCIAL_TEXT[kind].forEach((slot, tier) => {
+      if (slot === null) return; // unreachable (flirt drops no lower than tier 2)
+      assert.ok(Array.isArray(slot) && slot.length >= 2, `${kind}[${tier}] is a 2+ pool`);
+      for (const fn of slot) assert.ok(fn("Nok").length > 20, `${kind}[${tier}] renders prose`);
+    });
+  }
+});
+
+test("beer lines are pooled for the thirst loop", () => {
+  assert.ok(_BEER_LINES.length >= 3);
+});
