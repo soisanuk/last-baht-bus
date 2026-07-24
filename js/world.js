@@ -2454,7 +2454,7 @@ const NPCS = {
         short: "\"You want massage? Oil very good — and after, up to you, na.\"" },
       { topic: "special", text: "\"Special I can do, tilac — hand, mouth, you choose.\" She " +
           "lowers her voice and nods at the sign. \"But no boom boom HERE — boss rule, " +
-          "sticker everywhere, you see. Boom boom…\" a shrug, a smile \"…when I finish work, " +
+          "sticker everywhere, you see. {{Boom boom}}…\" a shrug, a smile \"…when I finish work, " +
           "you come, na. Different place.\"" },
       { topic: "shop", text: "\"Smile good shop. Boss okay, not too strict — only the one " +
           "rule.\" She taps the sign and giggles. \"Every customer read it. Every customer " +
@@ -3543,7 +3543,7 @@ const QUESTS = {
   league: {
     name: "King of the Killer Table",
     giver: "bert",
-    desc: "Win a killer pool league night — every third night, ฿100 entry (PLAY KILLER).",
+    desc: "{{Win}} a killer pool league night — every third night, ฿100 entry (PLAY KILLER).",
     deps: [],
     at: "stinky_bar",       // a room id works too, not just an NPC
     doneFlag: "wonLeague",

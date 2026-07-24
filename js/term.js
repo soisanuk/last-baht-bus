@@ -21,6 +21,10 @@ const _term = (() => {
       ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   }
 
+  // Filler-girl names that are also everyday words — decorate only where she
+  // stands, never in prose that merely uses the word ("Best seat", "Sang Som",
+  // "Near the end"). Same treatment as the lowercase anonymous staff below.
+  const _WORD_NAME_NPCS = new Set(["Best", "Proud", "Near", "Nice", "Hong", "Som"]);
   function _kwIndex() {
     const kind = new Map(); // display name → npc | patron | bar | item
     try {
@@ -30,7 +34,8 @@ const _term = (() => {
         // dead-end "ask … about security". Named characters decorate
         // everywhere: gossip about the absent is the whole economy.
         // (_npcRoom, not n.room, so a multi-bar schedule can't strand the gate.)
-        if (/^[a-z]/.test(n.name) && (!G || _npcRoom(nid) !== G.room)) continue;
+        if ((/^[a-z]/.test(n.name) || _WORD_NAME_NPCS.has(n.name)) &&
+            (!G || _npcRoom(nid) !== G.room)) continue;
         kind.set(n.name, "npc");
       }
       if (typeof PATRONS !== "undefined") {

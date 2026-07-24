@@ -676,7 +676,7 @@ const _RIDE_VENUES = [
       `rest, everyone delighted.`,
     n => `A beer bar down a lane — off-shift girls and their off-shift boyfriends, a speaker on ` +
       `something from 2009. ${n} is home here; you can see it in her shoulders coming down. She ` +
-      `introduces you around by a nickname she's decided without telling you. You are "Nong ` +
+      `introduces you around by a nickname she's decided without telling you. You are "{{Nong}} ` +
       `Handsome" now. It sticks.`,
   ]},
   { key: "viewpoint", lo: 0, hi: 0, sanuk: 4, scenes: [
@@ -1003,7 +1003,7 @@ function _massageSpecial(she, name) {
   if (she) G.soc.drinks[she] = (G.soc.drinks[she] || 0) + 1;
   // the on-premises wall, and the door it leaves open (a seed: no live off-shift meet yet)
   _say(`Afterward she wipes her hands and tips her chin at the little NO SEX sign, rueful. ` +
-    "“Boom boom no can here — boss rule, sticker everywhere. But when I finish work…” " +
+    "“{{Boom boom}} no can here — boss rule, sticker everywhere. But when I finish work…” " +
     `${name} writes something on the back of your hand in eyeliner and folds your fingers over ` +
     "it. “You come, na. Real one, my place.” (A number, and an open invitation — a softer road " +
     "than any barfine. Whether you ever walk it is another night's business.)", "dim");

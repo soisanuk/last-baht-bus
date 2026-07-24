@@ -3,9 +3,9 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
-    "t": "Tyson Fury vs. Wach Preview: Friday in Pattaya With No Broadcast Planned",
-    "s": "Boxing Insider",
-    "d": "22 Jul 2026"
+    "t": "178/1 Soi Muban Ban Pruksa Bun Samphan-Pattaya Klang, Nong Prue, Bang Lamung, Chon Buri 20150, THA",
+    "s": "Realtor.com",
+    "d": "23 Jul 2026"
   },
   {
     "t": "Australian faces death penalty after Pattaya teen killing confession",
@@ -13,9 +13,9 @@ var NEWS_FEED = [
     "d": "20 Jul 2026"
   },
   {
-    "t": "Friend of Thai teen allegedly murdered by Australian man went to his condo after reporting her missing | Thailand",
-    "s": "The Guardian",
-    "d": "01 Jul 2026"
+    "t": "Tyson Fury vs. Wach Preview: Friday in Pattaya With No Broadcast Planned",
+    "s": "Boxing Insider",
+    "d": "22 Jul 2026"
   },
   {
     "t": "How a Thai teen's night at a Pattaya beach ended in death",
@@ -23,65 +23,65 @@ var NEWS_FEED = [
     "d": "29 Jun 2026"
   },
   {
+    "t": "Friend of Thai teen allegedly murdered by Australian man went to his condo after reporting her missing | Thailand",
+    "s": "The Guardian",
+    "d": "01 Jul 2026"
+  },
+  {
+    "t": "Fury says 'best yet to come' ahead of Thailand fight",
+    "s": "France 24",
+    "d": "22 Jul 2026"
+  },
+  {
     "t": "How a Thai teen’s night at a Pattaya beach ended in death",
     "s": "The Japan Times",
     "d": "30 Jun 2026"
   },
   {
-    "t": "An Australian man has been charged with homicide in Thailand, after a Thai teenager’s body was found stuffed in a suitcase and abandoned in ",
-    "s": "facebook.com",
-    "d": "30 Jun 2026"
-  },
-  {
-    "t": "Thailand’s suitcase murder raises safety fears as Pattaya mourns for teen victim",
-    "s": "South China Morning Post",
-    "d": "01 Jul 2026"
-  },
-  {
-    "t": "Australian man charged with murder in death of a girl, 17, in Thailand’s Pattaya area",
-    "s": "Los Angeles Times",
-    "d": "30 Jun 2026"
-  },
-  {
-    "t": "'Deportation best scenario': Kiwi teen released on bail after days in Thai jail",
-    "s": "NZ Herald",
+    "t": "'Would Beckham do it?' - Fury stands by Thailand fight",
+    "s": "BBC",
     "d": "22 Jul 2026"
   },
   {
-    "t": "First OE turns into Thai prison ordeal for 18-year-old Kiwi",
-    "s": "Stuff",
-    "d": "20 Jul 2026"
+    "t": "Five soldiers killed in southern Thailand checkpoint attack",
+    "s": "Al Jazeera",
+    "d": "23 Jul 2026"
   },
   {
-    "t": "China, Thailand eye deeper tech cooperation to drive 'prosperous shared future'",
-    "s": "Reuters",
-    "d": "21 Jul 2026"
+    "t": "Border K9 sniffs out 99 pounds of prohibited meat, plants and monitor lizard in suitcase from Thailand",
+    "s": "Fox News",
+    "d": "23 Jul 2026"
   },
   {
-    "t": "Monkey spotted struggling in open water rescued in Thailand",
-    "s": "upi.com",
-    "d": "20 Jul 2026"
-  },
-  {
-    "t": "Airport Rail Link service at one hour intervals",
-    "s": "Bangkok Post",
-    "d": "22 Jul 2026"
-  },
-  {
-    "t": "Thailand Raises Alarm With China Over Tanks to Cambodia Army",
+    "t": "AI Boom Sees Thailand’s FDI Applications Jump 80% to $41 Billion in First Half",
     "s": "Bloomberg.com",
-    "d": "20 Jul 2026"
+    "d": "23 Jul 2026"
+  },
+  {
+    "t": "Tyson Fury weighs in at 26 pounds lighter than Mariusz Wach ahead of Friday's fight in Thailand",
+    "s": "Sky Sports",
+    "d": "23 Jul 2026"
+  },
+  {
+    "t": "Thailand Fury Files, day one: 'Pretty good interview that, well done'",
+    "s": "BoxingScene",
+    "d": "23 Jul 2026"
+  },
+  {
+    "t": "Myanmar's Min Aung Hlaing to visit Thailand on August 6-7",
+    "s": "Reuters",
+    "d": "22 Jul 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-07-21","USD":33.67,"AUD":23.62,"GBP":45.11,"EUR":38.43};
+var FX_RATES = {"date":"2026-07-23","USD":33.83,"AUD":23.65,"GBP":45.17,"EUR":38.54};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-07-22","temp":31,"humid":64,"code":3,"hi":33,"rain":42};
+var WX_NOW = {"date":"2026-07-24","temp":28,"humid":78,"code":3,"hi":32,"rain":61};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-07-16","first":"639214","last2":"71","front3":["683","709"],"back3":["427","746"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4118,"date":"2026-07-22","baht":65600};
+var GOLD = {"usd":4051,"date":"2026-07-23","baht":64800};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":65855,"thb":2226543};
+var BTC = {"usd":65048,"thb":2201215};
