@@ -64,10 +64,40 @@ test("a reckless ride can crash → routes to the ward (forced roll)", () => {
   assert.equal(G.day, day0 + 1, "the night ended");
 });
 
+test("a risky ride that survives telegraphs the danger (a near-miss)", () => {
+  _setFlag("act1Done");
+  const motoRoom = Object.keys(ROOMS).find(id => ROOMS[id].motosai);
+  G.room = motoRoom; G.money = 2000; G.soc.drunk = 8; G.nightTurn = 90; // elevated risk
+  const day0 = G.day;
+  let n = 0;
+  globalThis._rand = () => (n++ === 0 ? 0.99 : 0); // 1st roll: no crash; 2nd: force near-miss
+  _doMotosai("darkside");
+  assert.equal(G.day, day0, "no crash — the night goes on");
+  assert.match(out.join("\n"), /knuckles white|threads the needle|tarmac is very close|could have gone/i,
+    "but the near-miss makes the danger legible");
+});
+
+test("a sober in-town hop is calm — no crash, no near-miss", () => {
+  _setFlag("act1Done");
+  const motoRoom = Object.keys(ROOMS).find(id => ROOMS[id].motosai);
+  G.room = motoRoom; G.money = 2000; G.soc.drunk = 0; G.nightTurn = 10; // risk 0
+  globalThis._rand = () => 0; // even a 0 roll can't crash a zero-risk ride
+  _doMotosai("beach road");
+  assert.doesNotMatch(out.join("\n"), /knuckles white|threads the needle|tarmac is very close/i);
+});
+
+test("DIAGNOSE warns when you're too drunk to be riding", () => {
+  G.soc.drunk = 6; out = []; _doDiagnose();
+  assert.match(out.join("\n"), /no state to be on the back of a motorbike/i);
+  G.soc.drunk = 2; out = []; _doDiagnose();
+  assert.doesNotMatch(out.join("\n"), /back of a motorbike/i, "only when actually drunk");
+});
+
 test("pools are stocked and well-formed", () => {
   assert.ok(_HOSP_WHY.accident.length >= 4, "several accident openers for multi-visit variety");
   assert.ok(_MOTO_CRASH.length >= 3, "a road-moment pool");
-  for (const pool of [_HOSP_WHY.accident, _MOTO_CRASH]) {
+  assert.ok(_MOTO_NEARMISS.length >= 3, "a near-miss telegraph pool");
+  for (const pool of [_HOSP_WHY.accident, _MOTO_CRASH, _MOTO_NEARMISS]) {
     assert.ok(pool.every(s => typeof s === "string" && s.trim()), "no blank lines");
     assert.equal(new Set(pool).size, pool.length, "no duplicates");
   }

@@ -1723,6 +1723,20 @@ const _MOTO_CRASH = [
     "was hiding and the bike bucks you both toward the oncoming lane. Horns, gravel, the sky where " +
     "the road should be. Lights out.",
 ];
+// Survived a risky ride — the telegraph. Shown on elevated-risk rides that DON'T
+// crash, so the danger is legible (and the eventual crash never "blind"): the
+// near-miss teaches what the odds are before they ever collect.
+const _MOTO_NEARMISS = [
+  "The piwin takes the corner faster than your stomach agrees with, the back wheel skittering once " +
+    "on the paint before it bites. You get there — heart going, knuckles white. That could have gone " +
+    "the other way.",
+  "Halfway there a dog, a pothole, and an oncoming pickup all arrive at once; the piwin threads the " +
+    "needle and you don't, quite, come off. You climb down on legs that aren't sure they're yours. " +
+    "Ride like that enough and one night the odds collect.",
+  "You feel the bike step out under you on a slick of something, the piwin's boot goes down, and for " +
+    "one long second the tarmac is very close. Then it isn't. He grins over his shoulder; you do not " +
+    "grin back.",
+];
 // Odds a motosai ride ends in a real accident. Scales with drink, the small-hours
 // window, and the fast Darkside highway run — near-zero on a sober, early, in-town
 // hop. The delivered helmet (helmetDelivered) is a real payoff: it cuts the odds
