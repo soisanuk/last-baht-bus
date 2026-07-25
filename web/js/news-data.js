@@ -13,13 +13,13 @@ var NEWS_FEED = [
     "d": "25 Jul 2026"
   },
   {
-    "t": "Tyson Fury Stops Mariusz Wach After Seven Rounds in Pattaya",
-    "s": "Boxing Insider",
+    "t": "Pattaya releases 480,000 juvenile shrimp to restore coastal marine life",
+    "s": "Pattaya Mail",
     "d": "24 Jul 2026"
   },
   {
-    "t": "Pattaya releases 480,000 juvenile shrimp to restore coastal marine life",
-    "s": "Pattaya Mail",
+    "t": "Four-metre python captured after entering Pattaya chicken farm",
+    "s": "Thaiger",
     "d": "24 Jul 2026"
   },
   {
@@ -33,14 +33,19 @@ var NEWS_FEED = [
     "d": "24 Jul 2026"
   },
   {
-    "t": "Four-metre python captured after entering Pattaya chicken farm",
-    "s": "Thaiger",
+    "t": "Walking Street tourists feel safe with Pattaya Tourist Police patrols",
+    "s": "Pattaya Mail",
     "d": "24 Jul 2026"
   },
   {
-    "t": "Pattaya’s new challenge bar fines vs online prices",
+    "t": "Foreign man shot after stabbing Bangkok police officer during knife rampage",
     "s": "Pattaya Mail",
     "d": "24 Jul 2026"
+  },
+  {
+    "t": "Italian embassy apologises for rowdy teens on BTS",
+    "s": "Bangkok Post",
+    "d": "25 Jul 2026"
   },
   {
     "t": "Thailand to scrap $38.3 billion land bridge project after study",
@@ -48,9 +53,9 @@ var NEWS_FEED = [
     "d": "24 Jul 2026"
   },
   {
-    "t": "Five soldiers killed in southern Thailand checkpoint attack",
+    "t": "Fury dominates Wach in Thailand boxing bout ahead of Joshua showdown",
     "s": "Al Jazeera",
-    "d": "23 Jul 2026"
+    "d": "24 Jul 2026"
   },
   {
     "t": "Tyson Fury stops Mariusz Wach in unaired Thailand fight to set up Anthony Joshua mega-bout",
@@ -58,25 +63,20 @@ var NEWS_FEED = [
     "d": "24 Jul 2026"
   },
   {
-    "t": "Tyson Fury to fight Mariusz Wach in Thailand",
+    "t": "Tyson Fury vs Mariusz Wach LIVE!",
     "s": "Sky Sports",
-    "d": "25 Jul 2026"
-  },
-  {
-    "t": "Fury dominates Wach in Thailand boxing bout ahead of Joshua showdown",
-    "s": "Al Jazeera",
     "d": "24 Jul 2026"
   },
   {
-    "t": "3D-printed bioplastic pods offer new hope for seagrass restoration in Thailand",
-    "s": "Phys.org",
-    "d": "24 Jul 2026"
+    "t": "Thailand works on $700 million EV plan to replace 80,000 vehicles",
+    "s": "Reuters",
+    "d": "23 Jul 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-07-24","USD":33.69,"AUD":23.54,"GBP":44.88,"EUR":38.33};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-07-25","temp":33,"humid":57,"code":3,"hi":33,"rain":84};
+var WX_NOW = {"date":"2026-07-25","temp":29,"humid":75,"code":3,"hi":33,"rain":84};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
@@ -84,4 +84,4 @@ var LOTTO = {"date":"2026-07-16","first":"639214","last2":"71","front3":["683","
 // XAU, plus Thai baht-weight gold (96.5%)
 var GOLD = {"usd":4054,"date":"2026-07-25","baht":64600};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":63964,"thb":2156833};
+var BTC = {"usd":64147,"thb":2163014};
