@@ -18,9 +18,9 @@ var NEWS_FEED = [
     "d": "26 Jul 2026"
   },
   {
-    "t": "Pattaya nightlife believes unity can bring a miracle recovery",
+    "t": "Family SUV wreck near Pattaya leaves boy, 13, seriously injured",
     "s": "Pattaya Mail",
-    "d": "25 Jul 2026"
+    "d": "26 Jul 2026"
   },
   {
     "t": "Pattaya housekeeper alleges threats, racial abuse by foreign neighbours",
@@ -33,14 +33,19 @@ var NEWS_FEED = [
     "d": "25 Jul 2026"
   },
   {
-    "t": "Dropped truck wheel chock sends Pattaya motorcyclist crashing",
+    "t": "Love, money and the endless cycle of Pattaya’s beer bars",
     "s": "Pattaya Mail",
-    "d": "25 Jul 2026"
+    "d": "26 Jul 2026"
   },
   {
-    "t": "Pakistani tourist reunites with phone left on Pattaya baht bus",
+    "t": "Pattaya keeps tourist areas calm amid online buzz over Italian student group",
     "s": "Pattaya Mail",
-    "d": "25 Jul 2026"
+    "d": "26 Jul 2026"
+  },
+  {
+    "t": "Italian students who sparked outcry over bad behaviour on Bangkok train apologise following fines",
+    "s": "The Straits Times",
+    "d": "26 Jul 2026"
   },
   {
     "t": "Italian embassy apologises for rowdy teens on BTS",
@@ -48,19 +53,9 @@ var NEWS_FEED = [
     "d": "25 Jul 2026"
   },
   {
-    "t": "Five security personnel killed, six civilians injured in shooting, pipe bomb attack in Thailand",
-    "s": "The Jerusalem Post",
-    "d": "23 Jul 2026"
-  },
-  {
     "t": "Tyson Fury stops Mariusz Wach in unaired Thailand fight to set up Anthony Joshua mega-bout",
     "s": "Yahoo Sports",
     "d": "24 Jul 2026"
-  },
-  {
-    "t": "Thailand monastery added to Unesco heritage list, boosting tourism hopes",
-    "s": "South China Morning Post",
-    "d": "26 Jul 2026"
   },
   {
     "t": "Man finds a Boeing 747 randomly sitting in a field in Thailand and decides to unravel the mystery over why it's there",
@@ -68,15 +63,20 @@ var NEWS_FEED = [
     "d": "26 Jul 2026"
   },
   {
-    "t": "YOUNG PLAYERS IMPRESS HUDSON IN THAILAND’S OPENING ASEAN HYUNDAI CUP™ WIN",
-    "s": "ASEAN United FC",
+    "t": "Thailand’s aging crisis offers a warning for emerging markets",
+    "s": "Seeking Alpha",
     "d": "26 Jul 2026"
+  },
+  {
+    "t": "3D-printed bioplastic pods offer new hope for seagrass restoration in Thailand",
+    "s": "Phys.org",
+    "d": "24 Jul 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-07-24","USD":33.69,"AUD":23.54,"GBP":44.88,"EUR":38.33};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-07-26","temp":28,"humid":77,"code":3,"hi":33,"rain":80};
+var WX_NOW = {"date":"2026-07-27","temp":27,"humid":81,"code":51,"hi":31,"rain":82};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
@@ -84,4 +84,4 @@ var LOTTO = {"date":"2026-07-16","first":"639214","last2":"71","front3":["683","
 // XAU, plus Thai baht-weight gold (96.5%)
 var GOLD = {"usd":4054,"date":"2026-07-26","baht":64600};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":64737,"thb":2182557};
+var BTC = {"usd":64755,"thb":2180090};
