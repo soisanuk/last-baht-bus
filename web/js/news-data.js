@@ -3,9 +3,9 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
-    "t": "Boxing News: Weights From Pattaya, Thailand: Fury Vs Wach » July 24, 2026",
-    "s": "FightNews",
-    "d": "24 Jul 2026"
+    "t": "Tyson Fury dominant in Pattaya tune-up fight",
+    "s": "Bangkok Post",
+    "d": "25 Jul 2026"
   },
   {
     "t": "Heavy rain floods South Pattaya, stranding early morning commuters",
@@ -13,39 +13,49 @@ var NEWS_FEED = [
     "d": "25 Jul 2026"
   },
   {
-    "t": "Pattaya releases 480,000 juvenile shrimp to restore coastal marine life",
+    "t": "Pattaya nightlife believes unity can bring a miracle recovery",
+    "s": "Pattaya Mail",
+    "d": "25 Jul 2026"
+  },
+  {
+    "t": "Boxing News: Weights From Pattaya, Thailand: Fury Vs Wach » July 24, 2026",
+    "s": "FightNews",
+    "d": "24 Jul 2026"
+  },
+  {
+    "t": "Thailand launches street-food app and certification scheme",
+    "s": "Nation Thailand",
+    "d": "26 Jul 2026"
+  },
+  {
+    "t": "Thailand activates fuel measures to protect consumers",
+    "s": "Pattaya Mail",
+    "d": "25 Jul 2026"
+  },
+  {
+    "t": "Pattaya’s new challenge bar fines vs online prices",
     "s": "Pattaya Mail",
     "d": "24 Jul 2026"
   },
   {
-    "t": "Four-metre python captured after entering Pattaya chicken farm",
+    "t": "Pattaya housekeeper alleges threats, racial abuse by foreign neighbours",
     "s": "Thaiger",
-    "d": "24 Jul 2026"
-  },
-  {
-    "t": "Strong winds topple construction fence, block road in Jomtien",
-    "s": "Pattaya Mail",
-    "d": "24 Jul 2026"
-  },
-  {
-    "t": "Storm Noul threatens flight operations on Thai Airways East Asia routes",
-    "s": "Pattaya Mail",
-    "d": "24 Jul 2026"
-  },
-  {
-    "t": "Pattaya hit hard by monsoon storm, flooding strikes across city",
-    "s": "Pattaya Mail",
-    "d": "24 Jul 2026"
-  },
-  {
-    "t": "Walking Street tourists feel safe with Pattaya Tourist Police patrols",
-    "s": "Pattaya Mail",
-    "d": "24 Jul 2026"
+    "d": "26 Jul 2026"
   },
   {
     "t": "Italian embassy apologises for rowdy teens on BTS",
     "s": "Bangkok Post",
     "d": "25 Jul 2026"
+  },
+  {
+    "t": "Italian Embassy issues apology after Italian youth group sparks fury on Bangkok train",
+    "s": "The Star",
+    "d": "25 Jul 2026"
+  },
+  {
+    "t": "Italian students apologise as BTS dispute ends following fines",
+    "s": "Nation Thailand",
+    "d": "26 Jul 2026"
   },
   {
     "t": "Thailand to scrap $38.3 billion land bridge project after study",
@@ -58,30 +68,20 @@ var NEWS_FEED = [
     "d": "24 Jul 2026"
   },
   {
-    "t": "Fury dominates Wach in Thailand boxing bout ahead of Joshua showdown",
-    "s": "Al Jazeera",
-    "d": "24 Jul 2026"
-  },
-  {
-    "t": "Tyson Fury vs Mariusz Wach LIVE!",
-    "s": "Sky Sports",
-    "d": "24 Jul 2026"
-  },
-  {
-    "t": "Thailand works on $700 million EV plan to replace 80,000 vehicles",
-    "s": "Reuters",
-    "d": "23 Jul 2026"
+    "t": "Thailand make emphatic start with five-goal rout of Laos",
+    "s": "ESPN",
+    "d": "25 Jul 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-07-24","USD":33.69,"AUD":23.54,"GBP":44.88,"EUR":38.33};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-07-26","temp":27,"humid":84,"code":51,"hi":31,"rain":81};
+var WX_NOW = {"date":"2026-07-26","temp":32,"humid":58,"code":3,"hi":32,"rain":85};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-07-16","first":"639214","last2":"71","front3":["683","709"],"back3":["427","746"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4054,"date":"2026-07-25","baht":64600};
+var GOLD = {"usd":4054,"date":"2026-07-26","baht":64600};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":64263,"thb":2166926};
+var BTC = {"usd":64435,"thb":2172384};
