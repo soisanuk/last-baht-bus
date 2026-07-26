@@ -3,14 +3,19 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
-    "t": "Tyson Fury dominant in Pattaya tune-up fight",
-    "s": "Bangkok Post",
-    "d": "25 Jul 2026"
+    "t": "Boxing News: Weights From Pattaya, Thailand: Fury Vs Wach » July 24, 2026",
+    "s": "FightNews",
+    "d": "24 Jul 2026"
   },
   {
-    "t": "Heavy rain floods South Pattaya, stranding early morning commuters",
+    "t": "Tomorrowland reaffirms Pattaya festival after Belgium meeting",
+    "s": "Nation Thailand",
+    "d": "26 Jul 2026"
+  },
+  {
+    "t": "Speedboat sinks off Pattaya, four tourists rescued",
     "s": "Thaiger",
-    "d": "25 Jul 2026"
+    "d": "26 Jul 2026"
   },
   {
     "t": "Pattaya nightlife believes unity can bring a miracle recovery",
@@ -18,29 +23,24 @@ var NEWS_FEED = [
     "d": "25 Jul 2026"
   },
   {
-    "t": "Boxing News: Weights From Pattaya, Thailand: Fury Vs Wach » July 24, 2026",
-    "s": "FightNews",
-    "d": "24 Jul 2026"
-  },
-  {
-    "t": "Thailand launches street-food app and certification scheme",
-    "s": "Nation Thailand",
+    "t": "Pattaya housekeeper alleges threats, racial abuse by foreign neighbours",
+    "s": "Thaiger",
     "d": "26 Jul 2026"
   },
   {
-    "t": "Thailand activates fuel measures to protect consumers",
+    "t": "Heavy rain floods South Pattaya, stranding early morning commuters",
+    "s": "Thaiger",
+    "d": "25 Jul 2026"
+  },
+  {
+    "t": "Dropped truck wheel chock sends Pattaya motorcyclist crashing",
     "s": "Pattaya Mail",
     "d": "25 Jul 2026"
   },
   {
-    "t": "Pattaya’s new challenge bar fines vs online prices",
+    "t": "Pakistani tourist reunites with phone left on Pattaya baht bus",
     "s": "Pattaya Mail",
-    "d": "24 Jul 2026"
-  },
-  {
-    "t": "Pattaya housekeeper alleges threats, racial abuse by foreign neighbours",
-    "s": "Thaiger",
-    "d": "26 Jul 2026"
+    "d": "25 Jul 2026"
   },
   {
     "t": "Italian embassy apologises for rowdy teens on BTS",
@@ -48,19 +48,9 @@ var NEWS_FEED = [
     "d": "25 Jul 2026"
   },
   {
-    "t": "Italian Embassy issues apology after Italian youth group sparks fury on Bangkok train",
-    "s": "The Star",
-    "d": "25 Jul 2026"
-  },
-  {
-    "t": "Italian students apologise as BTS dispute ends following fines",
-    "s": "Nation Thailand",
-    "d": "26 Jul 2026"
-  },
-  {
-    "t": "Thailand to scrap $38.3 billion land bridge project after study",
-    "s": "The Straits Times",
-    "d": "24 Jul 2026"
+    "t": "Five security personnel killed, six civilians injured in shooting, pipe bomb attack in Thailand",
+    "s": "The Jerusalem Post",
+    "d": "23 Jul 2026"
   },
   {
     "t": "Tyson Fury stops Mariusz Wach in unaired Thailand fight to set up Anthony Joshua mega-bout",
@@ -68,15 +58,25 @@ var NEWS_FEED = [
     "d": "24 Jul 2026"
   },
   {
-    "t": "Thailand make emphatic start with five-goal rout of Laos",
-    "s": "ESPN",
-    "d": "25 Jul 2026"
+    "t": "Thailand monastery added to Unesco heritage list, boosting tourism hopes",
+    "s": "South China Morning Post",
+    "d": "26 Jul 2026"
+  },
+  {
+    "t": "Man finds a Boeing 747 randomly sitting in a field in Thailand and decides to unravel the mystery over why it's there",
+    "s": "supercarblondie.com",
+    "d": "26 Jul 2026"
+  },
+  {
+    "t": "YOUNG PLAYERS IMPRESS HUDSON IN THAILAND’S OPENING ASEAN HYUNDAI CUP™ WIN",
+    "s": "ASEAN United FC",
+    "d": "26 Jul 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-07-24","USD":33.69,"AUD":23.54,"GBP":44.88,"EUR":38.33};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-07-26","temp":32,"humid":58,"code":3,"hi":32,"rain":85};
+var WX_NOW = {"date":"2026-07-26","temp":28,"humid":77,"code":3,"hi":33,"rain":80};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
@@ -84,4 +84,4 @@ var LOTTO = {"date":"2026-07-16","first":"639214","last2":"71","front3":["683","
 // XAU, plus Thai baht-weight gold (96.5%)
 var GOLD = {"usd":4054,"date":"2026-07-26","baht":64600};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":64435,"thb":2172384};
+var BTC = {"usd":64737,"thb":2182557};
