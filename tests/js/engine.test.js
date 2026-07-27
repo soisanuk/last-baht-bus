@@ -4905,6 +4905,17 @@ test("addressing a known NPC who works elsewhere points you to her bar", () => {
   assert.ok(_NOBODY_NAME.some(s => lastOut().includes(s)), "a plain deny (pooled)");
 });
 
+test("the 'elsewhere' line says 'around here', not 'this bar', when you're not in a bar", () => {
+  // addressing Auntie Nok (a beach-cart vendor) from the open sand must not claim
+  // you're standing in a bar
+  state().known.nok = true;
+  state().room = "jomtien_beach";
+  out = [];
+  run("talk to auntie nok");
+  assert.match(lastOut(), /Auntie Nok isn't around here tonight — try Soi 7 Beach End/);
+  assert.doesNotMatch(lastOut(), /this bar/, "no bar where there is no bar");
+});
+
 test("Candy alternates nights between her two bars", () => {
   state().known.candy = true;
   // even nights at Candy Bar, odd nights at Candy Bar 2

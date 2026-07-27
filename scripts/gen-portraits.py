@@ -401,7 +401,7 @@ CHARS = {
     "mook":     lady(skin=THAI, hair="sleek", hc=DKBRN, shirt=C(0x00e5ff), bg=BG_GOGO, mouth="grin", acc=["earrings", "chain"], earc=PINKN),
     "ice":      lady(skin=THAI, hair="pigtails", hc=BLACK, shirt=C(0xb090e0), bg=BG_GOGO, mouth="neutral", acc=["earrings"], earc=CYAN),
     "praew":    lady(skin=THAI, hair="pigtails", hc=BLACK, shirt=C(0xe86a9a), bg=BG_GOGO, mouth="grin", acc=["earrings", "nosering"], earc=GOLD),
-    "mint":     lady(skin=THAI, hair="long", hc=DKBRN, shirt=C(0xe86a9a), bg=BG_GOGO, mouth="smile", acc=["earrings", "flower"], earc=CYAN),
+    "mind":     lady(skin=THAI, hair="sleek", hc=BLACK, shirt=C(0xd83a7a), bg=BG_GOGO, mouth="neutral", acc=["earrings"]),
     "fah":      lady(skin=THAI, hair="long", hc=BLACK, shirt=C(0xffe600), bg=BG_GOGO, mouth="grin", acc=["earrings", "nosering"], earc=YELN),
     "view":     lady(skin=THAI, hair="long", hc=DKBRN, shirt=C(0xe07820), bg=BG_GOGO, mouth="grin", acc=["earrings", "chain"], earc=PINKN),
     "sara":     lady(skin=THAI, hair="bob", hc=BLACK, shirt=C(0xf05a30), bg=BG_GOGO, mouth="grin", acc=["earrings", "nosering"], earc=YELN),

@@ -2,11 +2,11 @@
   "generated": "2026-07-27",
   "note": "Distinct, hand-authored characters with a portrait (excludes the 181 generic `filler` NPCs). Derived from web/js/world.js — regenerate with scripts/gen-portrait-manifest.mjs, do not hand-edit. `sex`/`venueKind` are generator heuristics for portrait archetype selection, not game canon.",
   "counts": {
-    "total": 68,
+    "total": 69,
     "byRole": {
       "story": 19,
       "mamasan": 13,
-      "hostess": 15,
+      "hostess": 16,
       "cashier": 3,
       "patron": 18
     }
@@ -577,6 +577,19 @@
       "room": "gold_rush",
       "tags": [],
       "desc": "A little older than the Gold Rush's other girls and a great deal less nervous — she moves like someone who has already seen the worst a room can do to a person. Her English is good, with a flat European edge the soi doesn't usually carry."
+    },
+    {
+      "id": "mind",
+      "name": "Mind",
+      "source": "NPCS",
+      "role": "hostess",
+      "sex": "f",
+      "venueKind": "gogo",
+      "emoji": "💗",
+      "th": "มายด์",
+      "room": "neon_paradise",
+      "tags": [],
+      "desc": "Small and careful, a dancer's economy to every movement — the girl from a certain Danish backpacker's lock screen, though she has no idea she's on it. Twenty-two, and older than that in the ways that pay the rent."
     },
     {
       "id": "nira",
