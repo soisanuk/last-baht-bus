@@ -30,7 +30,7 @@ test("every room is reachable from the start", () => {
     grew = false;
     for (const id of [...seen]) {
       const room = ROOMS[id];
-      const next = [...Object.values(room.exits)];
+      const next = [...Object.values(room.exits), ...(room.venues || [])];
       if (room.busStop) {
         for (const [, stops] of Object.entries(BUS_LINES)) {
           if (stops.includes(id)) next.push(...stops);

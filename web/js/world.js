@@ -83,7 +83,8 @@ const ROOMS = {
       "motosai driver dozing on his bike. Streetlights, seafood smoke, the sea just west across " +
       "the sand. The beach road runs north toward the Thappraya climb and south past the 7-Eleven " +
       "toward the mouth of Soi 7.",
-    exits: { w: "jomtien_beach_m", n: "jomtien_beach_rd_n", s: "jomtien_beach_rd_s", spa: "jomtien_thai" },
+    exits: { w: "jomtien_beach_m", n: "jomtien_beach_rd_n", s: "jomtien_beach_rd_s" },
+    venues: ["jomtien_thai"],
   },
   jomtien_beach_rd_s: {
     name: "Jomtien Beach Road (South)",
@@ -91,7 +92,8 @@ const ROOMS = {
     desc: "The south end of the beach road, where it meets the mouth of Soi 7. A 7-Eleven glows on " +
       "the corner, its air-con bleeding into the street; Soi 7's beer bars and massage shops run " +
       "inland to the east, the bus stop is back to the north, and the sand and the sea lie west.",
-    exits: { n: "jomtien_beach_rd", e: "soi_7_w", in: "jomtien_7eleven", w: "jomtien_beach" },
+    exits: { n: "jomtien_beach_rd", e: "soi_7_w", w: "jomtien_beach" },
+    venues: ["jomtien_7eleven"],
   },
   soi_rompho: {
     name: "Rompho Market",
@@ -102,7 +104,7 @@ const ROOMS = {
       "grilled everything, fruit pyramids, plastic stools, and a haze of chilli smoke. Locals, " +
       "long-stay farang, and a few bar girls off shift graze the stalls. The Jomtien branch of " +
       "KISS glows just to the north. (BUY FOOD / EAT.)",
-    exits: { w: "jomtien_2nd", n: "kiss_jomtien" },
+    exits: { out: "jomtien_2nd" },
   },
 
   // ── Soi 7 (Jomtien) — runs inland from Jomtien Beach Road to Second Road ──
@@ -113,7 +115,8 @@ const ROOMS = {
       "open-front beer bars strung with fairy lights, a couple of massage shops, and the easy " +
       "Jomtien pace — older expats, cold beer, nobody in a hurry. The soi runs east, deeper inland " +
       "toward Second Road; the sea breeze follows you a little way in.",
-    exits: { w: "jomtien_beach_rd_s", e: "soi_7_m", n: "lucky7", s: "seabreeze", spa: "soi7_oil" },
+    exits: { w: "jomtien_beach_rd_s", e: "soi_7_m" },
+    venues: ["lucky7", "seabreeze", "soi7_oil"],
   },
   soi_7_m: {
     name: "Soi 7 (Middle)",
@@ -130,7 +133,8 @@ const ROOMS = {
       "beer bars and a massage shop see out the strip. On the south side, set back behind a fence " +
       "and a flagpole, squats the grey bulk of the Chonburi Immigration Office — dark and locked " +
       "at this hour, a place farang only ever visit in daylight and never fondly.",
-    exits: { w: "soi_7_m", e: "jomtien_2nd", n: "coconut", s: "sandbar", spa: "soi7_thai" },
+    exits: { w: "soi_7_m", e: "jomtien_2nd" },
+    venues: ["coconut", "sandbar", "soi7_thai"],
   },
   jomtien_2nd: {
     name: "Jomtien Second Road (South)",
@@ -139,7 +143,8 @@ const ROOMS = {
     desc: "The Soi 7 corner on Jomtien's Second Road, traffic hissing both ways. A 7-Eleven holds " +
       "down the corner, bright as an operating theatre. Straight across the road sprawls Rompho " +
       "Market. Soi 7 runs back west toward the beach; Second Road runs north up the strip.",
-    exits: { w: "soi_7_e", e: "soi_rompho", n: "jomtien_2nd_m" },
+    exits: { w: "soi_7_e", n: "jomtien_2nd_m" },
+    venues: ["soi_rompho"],
   },
   kiss_jomtien: {
     name: "KISS Jomtien",
@@ -157,7 +162,7 @@ const ROOMS = {
         "legendary Item 47 ('BIG BEER'). Someone has biro'd a smiley beside the pad kaprao. " +
         "Jomtien portions, the regulars swear, run a shade larger.",
     },
-    exits: { out: "jomtien_2nd_m", w: "jomtien_2nd_m", s: "soi_rompho" },
+    exits: { out: "jomtien_2nd_m" },
   },
   jomtien_2nd_n: {
     name: "Jomtien Second Road (North)",
@@ -166,7 +171,8 @@ const ROOMS = {
       "to the east. Shuttered day-shops, a late khanom cart, the traffic thinning. TAKE CARE ME " +
       "throws a guitar solo down the pavement from the junction; Second Road runs back south down " +
       "the strip.",
-    exits: { s: "jomtien_2nd_m", n: "thappraya_e", in: "take_care_me" },
+    exits: { s: "jomtien_2nd_m", n: "thappraya_e" },
+    venues: ["take_care_me"],
   },
   jomtien_2nd_m: {
     name: "Jomtien Second Road (Middle)",
@@ -174,7 +180,8 @@ const ROOMS = {
     desc: "The middle of Second Road: a 24-hour pharmacy, a laundry, a scatter of plastic-stool " +
       "eateries, and the Jomtien branch of KISS glowing on the east side. The strip runs north to " +
       "the Thappraya junction and south to the Soi 7 corner.",
-    exits: { n: "jomtien_2nd_n", s: "jomtien_2nd", e: "kiss_jomtien" },
+    exits: { n: "jomtien_2nd_n", s: "jomtien_2nd" },
+    venues: ["kiss_jomtien"],
   },
   lucky7: {
     name: "Lucky 7 Bar",
@@ -241,7 +248,8 @@ const ROOMS = {
       "and the warm churn of the night starting up. A 7-Eleven holds the north corner where the road " +
       "bends east. A couple of doors down, ARROW BAR's sign buzzes; across the way a discreet " +
       "gentleman's club keeps its door shut and its aircon cold. The strip runs east.",
-    exits: { e: "thappraya_mid", n: "arrow_bar", s: "the_boardroom", spa: "beach_turn_massage", w: "jomtien_beach_rd_n" },
+    exits: { e: "thappraya_mid", w: "jomtien_beach_rd_n" },
+    venues: ["arrow_bar", "the_boardroom", "beach_turn_massage"],
   },
   thappraya_mid: {
     name: "Thappraya Rd — Main Strip (middle)",
@@ -251,7 +259,8 @@ const ROOMS = {
       "gutted and remade it. On the north side a narrow L-shaped alley cuts away toward Second Road: " +
       "the SUPERTOWN complex, Jomtien's gay quarter, its drag-show lights flickering somewhere " +
       "around the elbow.",
-    exits: { w: "thappraya_w", e: "thappraya_e", s: "hyper", n: "cheeky_monkey", gents: "velvet_club", super: "supertown_alley" },
+    exits: { w: "thappraya_w", e: "thappraya_e", n: "supertown_alley" },
+    venues: ["hyper", "cheeky_monkey", "velvet_club"],
   },
   thappraya_e: {
     name: "Thappraya Rd — Main Strip (Second Road end)",
@@ -261,7 +270,8 @@ const ROOMS = {
       "throws a guitar solo out its open front — the freelancers' favourite, and loud about it. " +
       "Another 7-Eleven glows across the intersection. One last beer bar and a massage shop see out " +
       "the strip before the traffic of Second Road takes over.",
-    exits: { w: "thappraya_mid", n: "take_care_me", s: "the_office", spa: "thappraya_massage", e: "jomtien_2nd_n", up: "thappraya_ext_s" },
+    exits: { w: "thappraya_mid", e: "jomtien_2nd_n", up: "thappraya_ext_s" },
+    venues: ["take_care_me", "the_office", "thappraya_massage"],
   },
   supertown_alley: {
     name: "Supertown Complex (alley)",
@@ -271,8 +281,8 @@ const ROOMS = {
       "security guy on a stool who nods you in, easy. One door glows an unhurried gold: THE ADONIS " +
       "CLUB, a host bar, a numbered row of oiled young men behind the glass instead of girls. The " +
       "drag stage is deeper in, at the elbow.",
-    exits: { out: "thappraya_mid", in: "supertown_elbow", e: "supertown_elbow",
-             host: "adonis_club", adonis: "adonis_club" },
+    exits: { s: "thappraya_mid", e: "supertown_elbow" },
+    venues: ["adonis_club"],
   },
   adonis_club: {
     name: "The Adonis Club",
@@ -300,7 +310,8 @@ const ROOMS = {
       "boys and a scatter of curious farang filing in under a poster of a sequinned goddess mid-lip-sync. " +
       "The bass thumps through the wall. The alley carries on east and out onto the foot of the Thappraya " +
       "hill road, where the strip's neon finally gives out.",
-    exits: { w: "supertown_alley", e: "thappraya_ext_s", in: "peacock_cabaret", cabaret: "peacock_cabaret" },
+    exits: { w: "supertown_alley", e: "thappraya_ext_s" },
+    venues: ["peacock_cabaret"],
   },
   peacock_cabaret: {
     name: "The Peacock Cabaret",
@@ -387,7 +398,7 @@ const ROOMS = {
       "Filipino band murdering and resurrecting the classics, and a crowd three deep at the rail. No " +
       "house girls work it, but the freelancers love it: they come for the music, the cold beer, and " +
       "the chance to pick a man who came for the same. Loud, sweaty, and the best room on the strip.",
-    exits: { out: "thappraya_e", s: "jomtien_2nd_n" },
+    exits: { out: "thappraya_e" },
   },
   the_boardroom: {
     name: "The Boardroom",

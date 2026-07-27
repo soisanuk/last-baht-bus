@@ -499,7 +499,7 @@ test("darkness without noodles: bitten and displaced", () => {
 });
 
 test("charging needs charger and outlet", () => {
-  run("e", "in", "charge phone"); // at the Soi 7-corner 7-Eleven, no charger
+  run("e", "enter 7-eleven", "charge phone"); // at the Soi 7-corner 7-Eleven, no charger
   assert.match(lastOut(), /need a charger/i);
   state().money = 100;
   run("buy charger");
@@ -1291,10 +1291,12 @@ test("reload mid-rain: the room description re-announces the downpour", () => {
 test("describeRoom names the bars you can step into", () => {
   state().room = "buakhao_market";
   out = []; _describeRoom(true);
-  assert.match(lastOut(), /Step inside:.*Candy Bar \(w\)/, "names the bar and its direction");
+  assert.match(lastOut(), /Step inside:.*Candy Bar/, "names the bar you can walk into");
   assert.match(lastOut(), /ENTER <name>/, "teaches the ENTER verb");
-  // the same cart reached by two exits (w and in) is listed once, by the compass dir
-  assert.doesNotMatch(lastOut(), /Candy Bar \(in\)/, "prefers a compass direction over 'in'");
+  // a venue is a door, not a compass point — no direction is shown, and a bar
+  // reachable two ways is still listed exactly once
+  assert.doesNotMatch(lastOut(), /Candy Bar \(/, "no compass direction on a venue");
+  assert.equal((lastOut().match(/Candy Bar/g) || []).length, 1, "listed once");
   // inside a bar (exits are just 'out' to the street) there's nothing to step into
   state().room = "candy_bar";
   out = []; _describeRoom(true);
@@ -2229,9 +2231,12 @@ test("Soi 7 (Jomtien): beach road to Second Rd, four beer bars, Rompho Market, K
   assert.equal(ROOMS.soi_7_m.exits.e, "soi_7_e");
   assert.equal(ROOMS.soi_7_e.exits.e, "jomtien_2nd", "SE corner: Second Road south");
   assert.ok(ROOMS.jomtien_2nd.seven, "7-Eleven on the corner");
-  // across Second Road: Rompho Market, then KISS just north of it
-  assert.equal(ROOMS.jomtien_2nd.exits.e, "soi_rompho");
-  assert.equal(ROOMS.soi_rompho.exits.n, "kiss_jomtien");
+  // across Second Road: Rompho Market and KISS are food VENUES you ENTER off the
+  // road (Rompho off the Soi 7 corner, KISS off the middle), each leaving via out
+  assert.ok(ROOMS.jomtien_2nd.venues.includes("soi_rompho"));
+  assert.equal(ROOMS.soi_rompho.exits.out, "jomtien_2nd");
+  assert.ok(ROOMS.jomtien_2nd_m.venues.includes("kiss_jomtien"));
+  assert.equal(ROOMS.kiss_jomtien.exits.out, "jomtien_2nd_m");
   assert.ok(FOOD_STALLS.kiss_jomtien && FOOD_STALLS.soi_rompho, "both feed you");
   // the immigration office is flavor at the dark east end, not a room
   state().room = "soi_7_e"; out = []; run("look");
@@ -2256,14 +2261,16 @@ test("Thappraya Main Strip: reached east off the beach road, the mix of venues, 
   assert.equal(ROOMS.thappraya_w.exits.e, "thappraya_mid");
   assert.equal(ROOMS.thappraya_mid.exits.e, "thappraya_e");
   assert.ok(ROOMS.thappraya_w.seven && ROOMS.thappraya_e.seven, "a 7-Eleven at each end");
-  // Supertown is walkable (alley → elbow → back to the strip) but unpopulated
-  assert.equal(ROOMS.thappraya_mid.exits.super, "supertown_alley");
-  assert.equal(ROOMS.supertown_alley.exits.in, "supertown_elbow");
-  // Supertown bridges the main strip (its mouth) and the hill extension (its elbow)
-  assert.equal(ROOMS.supertown_alley.exits.out, "thappraya_mid", "mouth on the main strip");
+  // Supertown alley is a side-soi off the strip's north side — a road now (not a
+  // `super` verb), with its host bar and drag cabaret fronting it as venues
+  assert.equal(ROOMS.thappraya_mid.exits.n, "supertown_alley", "mouth on the strip's north side");
+  assert.equal(ROOMS.supertown_alley.exits.s, "thappraya_mid", "…and back");
+  assert.equal(ROOMS.supertown_alley.exits.e, "supertown_elbow");
   assert.equal(ROOMS.supertown_elbow.exits.e, "thappraya_ext_s", "elbow onto the north extension");
   assert.equal(ROOMS.thappraya_ext_s.exits.w, "supertown_elbow", "…and back");
-  assert.ok(!ROOMS.supertown_elbow.bar && !ROOMS.supertown_alley.barType, "no bars built in Supertown yet");
+  assert.ok(!ROOMS.supertown_elbow.bar && !ROOMS.supertown_alley.barType, "the alley/elbow are pass-through, not bars");
+  assert.ok(ROOMS.supertown_alley.venues.includes("adonis_club") &&
+    ROOMS.supertown_elbow.venues.includes("peacock_cabaret"), "the host bar and cabaret front the alley");
   // the Pratumnak north extension: two roads climb the hill and join at the crest,
   // walkable as a loop back down the Dongtan sand and east onto the beach road / strip
   // (thappraya_e up → … → dongtan_rd_s → dongtan_beach → e → jomtien_beach_rd_n → e → thappraya_w)
@@ -2291,6 +2298,24 @@ test("Thappraya Main Strip: reached east off the beach road, the mix of venues, 
   for (const b of ["hyper", "arrow_bar", "the_boardroom"]) {
     assert.ok(Object.keys(NPCS).filter(n => NPC_ROLES[n] === "hostess" && _npcRoom(n) === b).length >= 2, `${b} populated`);
   }
+});
+
+test("venues: buildings are entered by name off a block, not a compass point; OUT honors the door", () => {
+  state().flags.act1Done = true;
+  // a migrated block's cardinal exits are roads only — its bars are in `venues`
+  state().room = "thappraya_mid";
+  assert.deepEqual(Object.keys(ROOMS.thappraya_mid.exits).sort(), ["e", "n", "w"], "roads only on the strip block");
+  assert.ok(!Object.values(ROOMS.thappraya_mid.exits).some(to => ROOMS[to].bar), "no bar sits on a compass exit");
+  assert.ok(ROOMS.thappraya_mid.venues.includes("hyper"));
+  run("enter hyper");
+  assert.equal(state().room, "hyper", "entered by name, no direction involved");
+  run("out");
+  assert.equal(state().room, "thappraya_mid", "OUT returns to the block");
+  // a two-door venue: OUT returns you to whichever road you walked in from
+  state().room = "thappraya_e"; run("enter take care me", "out");
+  assert.equal(state().room, "thappraya_e", "in off the strip, out to the strip");
+  state().room = "jomtien_2nd_n"; run("enter take care me", "out");
+  assert.equal(state().room, "jomtien_2nd_n", "in off Second Road, out to Second Road");
 });
 
 test("Glam: the Cheeky Monkey regular, shuttled to Hyper, and protected", () => {
@@ -2445,7 +2470,7 @@ test("Supertown: the Peacock Cabaret drag revue is populated and watchable", () 
   assert.equal(NPCS.mala.room, "peacock_cabaret");
   assert.equal(NPCS.petch.room, "peacock_cabaret");
   state().flags.act1Done = true; state().room = "supertown_elbow";
-  run("in");
+  run("enter peacock");
   assert.equal(state().room, "peacock_cabaret");
   // WATCH DRAG pays a happy point once a night, like the other free shows
   const h = state().happy; state().dragDay = 0;
