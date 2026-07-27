@@ -549,9 +549,13 @@ function _findNpc(word) {
 function _elsewhereLine(word) {
   const w = String(word).toLowerCase().trim();
   if (!w) return null;
+  // "this bar" only reads right when you're actually in one — you can address an
+  // NPC from the beach or the street too.
+  const here = _room();
+  const notHere = here.bar || here.barType ? "isn't at this bar" : "isn't around here";
   const pid = Object.keys(PATRONS).find(id =>
     id === w || PATRONS[id].name.toLowerCase() === w);
-  if (pid) return `${PATRONS[pid].name} isn't at this bar right now — the regulars ` +
+  if (pid) return `${PATRONS[pid].name} ${notHere} right now — the regulars ` +
     "drift between bars through the night, and not every one of them comes out every evening.";
   const nid = Object.keys(NPCS).find(id => {
     const nm = NPCS[id].name;
@@ -565,7 +569,7 @@ function _elsewhereLine(word) {
     // visit elsewhere, once that exists — don't reveal it; just say she's out.
     const own = NPCS[nid].bars ? NPCS[nid].bars.includes(cur) : true;
     if (own && _barName(cur)) {
-      return `${NPCS[nid].name} isn't at this bar tonight — try ${_barName(cur)}.`;
+      return `${NPCS[nid].name} ${notHere} tonight — try ${_barName(cur)}.`;
     }
     return `${NPCS[nid].name} isn't here right now.`;
   }

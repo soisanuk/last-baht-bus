@@ -2304,6 +2304,31 @@ const NPCS = {
       { topic: "wallet", text: "\"Walking Street eats wallets, tilac. But real professionals work the beach and the bus stops. Town gossip flows through Soi Buakhao — the beer bars, not here. Here is only volume.\"" },
     ],
   },
+  mind: {
+    name: "Mind", th: "มายด์", emoji: "💗",
+    room: "neon_paradise",
+    desc: "Small and careful, a dancer's economy to every movement — the girl from a certain " +
+      "Danish backpacker's lock screen, though she has no idea she's on it. Twenty-two, and " +
+      "older than that in the ways that pay the rent.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Hello.\" A practiced smile that stops short of her eyes — then, deciding you're " +
+          "harmless, reaches them anyway. \"You want drink? Sit, sit. No barfine, just talk. Talking is free.\"",
+        short: "\"Sit, sit. No barfine, just talk — talking is free.\"" },
+      { topic: "mikkel", req: ["knowMikkel"],
+        text: "You mention the Danish boy. Something crosses her face — not guilt, quite; more the " +
+          "weight of a kindness that has gotten heavy. \"Mikkel. He is sweet boy. Too sweet.\" She turns " +
+          "her glass a quarter turn. \"He think he save me. My mother farm is real, the money is real — but " +
+          "Denmark?\" A small shake of the head. \"Is winter there. He go home in spring, he cry one week, " +
+          "then he okay. They are always okay.\" It isn't cruel. It is arithmetic she has done before.",
+        short: "\"Mikkel is sweet boy. Too sweet. He go home spring, cry one week, then okay.\"" },
+      { topic: "farm",
+        text: "\"My mother have small farm, Sisaket — rice, few chicken. Every month I send.\" She says " +
+          "it flatly, the way you state a fact that is also the whole reason for everything. \"This—\" a nod " +
+          "at the poles, the mirrors, the chrome \"—is for that. Not for boyfriend. Not for Denmark. For the farm.\"",
+        short: "\"My mother farm, Sisaket. Every month I send. This is for that.\"" },
+    ],
+  },
 
   ping: {
     name: "Ping", th: "ปิง", emoji: "✨",
@@ -4812,7 +4837,8 @@ const PATRONS = {
         "the most genuine people I've ever met?\" He glances at his phone, " +
         "lights it up, glances away. The girl on the lock screen dances at " +
         "Neon Paradise. \"Anyway. What's your story?\"",
-        short: "\"Denmark, gap year, the most genuine people I've ever met!\" The lock screen glows." },
+        short: "\"Denmark, gap year, the most genuine people I've ever met!\" The lock screen glows.",
+        sets: ["knowMikkel"] },
       { topic: "girl", text: "\"Her name's Mind. M-I-N-D, isn't that beautiful? She " +
         "dances at Neon Paradise but she's not like— it's not what you think.\" " +
         "It is a speech he has given often and polished nowhere. \"She's saving " +
@@ -4864,7 +4890,7 @@ const NPC_ROLES = {
   lek: "hostess", noi: "hostess", ping: "hostess", aom: "hostess",
   joy: "hostess", fon: "hostess", gift: "hostess", kwan: "hostess",
   nong: "hostess", pim: "hostess", bee: "hostess", jane: "hostess", mercedes: "hostess", kratae: "hostess",
-  nira: "hostess",
+  nira: "hostess", mind: "hostess",
   yai: "mamasan", rose: "mamasan", kesorn: "mamasan", lawan: "mamasan", sumalee: "mamasan",
   diamond: "mamasan", wimon: "mamasan", ampai: "mamasan",
   ploy: "cashier", aek: "cashier", malee: "cashier",
@@ -5033,7 +5059,7 @@ function _buildHostess(name, th, room) {
 // modest, expat & live-music bars light — Queen Vic is a pub, so none.
 const _FILLER_HOSTESSES = [
   ["Dao","ดาว","tequila_queen"], ["Mook","มุก","tequila_queen"], ["Ice","ไอซ์","tequila_queen"], ["Praew","แพรว","tequila_queen"],
-  ["Mint","มิ้น","neon_paradise"], ["Fah","ฟ้า","neon_paradise"], ["View","วิว","neon_paradise"], ["Sara","ซาร่า","neon_paradise"],
+  ["Fah","ฟ้า","neon_paradise"], ["View","วิว","neon_paradise"], ["Sara","ซาร่า","neon_paradise"],
   ["Bow","โบว์","club_mirage"], ["Nam","น้ำ","club_mirage"], ["Yui","ยุ้ย","club_mirage"],
   ["Aof","อ๊อฟ","crystal_palace"], ["Cherry","เชอรี่","crystal_palace"], ["Beam","บีม","crystal_palace"], ["Boom","บูม","crystal_palace"],
   ["Toey","เตย","rainbow_girls"], ["Pang","แป้ง","rainbow_girls"], ["Ploen","เพลิน","rainbow_girls"], ["Sai","ทราย","rainbow_girls"],
