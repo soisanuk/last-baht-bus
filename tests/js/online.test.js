@@ -37,10 +37,10 @@ test("two sessions in one process are fully isolated", () => {
   a.send("e");
   a.send("take bottle");
   b.send("n"); b.send("n"); // b wanders north up the sand to the dark Dongtan end
-  assert.equal(a.state().room, "jomtien_beach_rd");
+  assert.equal(a.state().room, "jomtien_beach_rd_s");
   assert.equal(b.state().room, "dongtan_beach");
   assert.equal(a.state().itemLoc.bottle3, "inventory");
-  assert.equal(b.state().itemLoc.bottle3, "jomtien_beach_rd", "b's world untouched by a");
+  assert.equal(b.state().itemLoc.bottle3, "jomtien_beach_rd_s", "b's world untouched by a");
   assert.notEqual(a.state().rng, b.state().rng, "independent dice");
   assert.ok(a.out.length && b.out.length, "each session got its own output");
 });
@@ -52,7 +52,7 @@ test("a session round-trips through a save string across contexts (cloud save)",
   const blob = a.save(); // what a server would persist per account
   const later = newSession(); // fresh context — different process, other day
   later.load(blob);
-  assert.equal(later.state().room, "jomtien_beach_rd");
+  assert.equal(later.state().room, "jomtien_beach_rd_s");
   assert.equal(later.state().itemLoc.bottle3, "inventory");
   later.send("w"); later.send("s"); // down to Auntie Nok at the Soi 7 beach end
   later.send("sell bottles");

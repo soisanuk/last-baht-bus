@@ -106,7 +106,7 @@ test("stripMarkup removes render-only {{…}} braces, keeping the inner text", (
 
 test("movement and look", () => {
   run("e");
-  assert.equal(state().room, "jomtien_beach_rd");
+  assert.equal(state().room, "jomtien_beach_rd_s");
   run("look");
   assert.match(lastOut(), /Jomtien Beach Road/);
   run("w");
@@ -353,14 +353,14 @@ test("selling three bottles yields exactly the bus fare", () => {
 });
 
 test("bus refuses the broke", () => {
-  run("e", "ride bus to beach road");
+  run("e", "n", "ride bus to beach road");
   assert.match(lastOut(), /fare is ฿15|climb off/i);
   assert.equal(state().room, "jomtien_beach_rd");
 });
 
 test("bus ride: Thai fare quote, exact payment", () => {
   state().money = 15;
-  run("e", "ride bus to beach road");
+  run("e", "n", "ride bus to beach road");
   assert.match(lastOut(), /สิบห้าบาท/);
   assert.ok(state().pendingFare);
   run("pay 15");
@@ -370,7 +370,7 @@ test("bus ride: Thai fare quote, exact payment", () => {
 
 test("underpaying the driver is refused; overpaying costs you", () => {
   state().money = 60;
-  run("e", "ride bus to beach road", "pay 10");
+  run("e", "n", "ride bus to beach road", "pay 10");
   assert.ok(state().pendingFare, "still waiting");
   assert.match(lastOut(), /สิบห้าบาท/);
   run("pay 20");
@@ -380,7 +380,7 @@ test("underpaying the driver is refused; overpaying costs you", () => {
 
 test("pending fare gates other commands", () => {
   state().money = 20;
-  run("e", "ride bus to beach road", "n");
+  run("e", "n", "ride bus to beach road", "n");
   // the nag line rotates; the contract is the price + the PAY tap hint
   assert.match(lastOut(), /PAY <amount>/);
   assert.notEqual(state().room, "pratumnak_rd");
@@ -428,11 +428,11 @@ test("every exit key walks: pub, up/down/u/d, hotel — GO accepts what Exits li
 test("the bus stop and Nok's glass trade advertise themselves tappably", () => {
   // (RIDE BUS TO <place>) is a CAPS hint now — the last keyboard-only steps
   // of the opening funnel got tap paths.
-  run("e"); // the Jomtien bus stop (the beach road middle)
+  run("e", "n"); // up to the Jomtien bus stop (the beach road middle)
   assert.match(lastOut(), /\(RIDE BUS TO <place>\)/);
   // holding a bottle near Auntie Nok surfaces (SELL BOTTLES)
   out = [];
-  run("w", "s"); // down to her beach-end cart, Chang bottle still un-taken
+  run("w", "s", "s"); // down the sand to her Soi 7 beach-end cart, Chang bottle still un-taken
   assert.doesNotMatch(lastOut(), /SELL BOTTLES/, "no glass, no pitch");
   run("n", "take bottle", "s"); // grab a bottle on the sand, back to Nok
   assert.match(lastOut(), /\(SELL BOTTLES\)/);
@@ -499,7 +499,7 @@ test("darkness without noodles: bitten and displaced", () => {
 });
 
 test("charging needs charger and outlet", () => {
-  run("e", "s", "in", "charge phone"); // at 7-Eleven, no charger
+  run("e", "in", "charge phone"); // at the Soi 7-corner 7-Eleven, no charger
   assert.match(lastOut(), /need a charger/i);
   state().money = 100;
   run("buy charger");
@@ -2246,10 +2246,13 @@ test("Soi 7 (Jomtien): beach road to Second Rd, four beer bars, Rompho Market, K
   assert.equal(bars.filter(b => _npcRoom("sumalee") === b).length, 1);
 });
 
-test("Thappraya Main Strip: Dongtan up to Second Rd, the mix of venues, Diamond the katoey mama", () => {
-  // the strip climbs UP off Dongtan Beach and runs east; north now runs up Dongtan Beach Road
-  assert.equal(ROOMS.dongtan_beach.exits.up, "thappraya_w");
-  assert.equal(ROOMS.dongtan_beach.exits.n, "dongtan_rd_s", "north climbs Dongtan Beach Road toward Pratumnak");
+test("Thappraya Main Strip: reached east off the beach road, the mix of venues, Diamond the katoey mama", () => {
+  // the strip is reached by walking east off the north end of the beach road — no climb off
+  // the sand any more; the beach is a continuous sand lane parallel to the road
+  assert.equal(ROOMS.jomtien_beach_rd_n.exits.e, "thappraya_w", "beach road bends east into the strip");
+  assert.ok(!ROOMS.dongtan_beach.exits.up, "no up-climb off the sand");
+  assert.equal(ROOMS.dongtan_beach.exits.e, "jomtien_beach_rd_n", "the overlap sand steps east onto its parallel road");
+  assert.equal(ROOMS.dongtan_beach.exits.n, "dongtan_beach_m", "the sand runs on north up the Dongtan shore");
   assert.equal(ROOMS.thappraya_w.exits.e, "thappraya_mid");
   assert.equal(ROOMS.thappraya_mid.exits.e, "thappraya_e");
   assert.ok(ROOMS.thappraya_w.seven && ROOMS.thappraya_e.seven, "a 7-Eleven at each end");
@@ -2262,7 +2265,8 @@ test("Thappraya Main Strip: Dongtan up to Second Rd, the mix of venues, Diamond 
   assert.equal(ROOMS.thappraya_ext_s.exits.w, "supertown_elbow", "…and back");
   assert.ok(!ROOMS.supertown_elbow.bar && !ROOMS.supertown_alley.barType, "no bars built in Supertown yet");
   // the Pratumnak north extension: two roads climb the hill and join at the crest,
-  // walkable as a loop back to the strip (thappraya_e up → … → dongtan_beach up → thappraya_w)
+  // walkable as a loop back down the Dongtan sand and east onto the beach road / strip
+  // (thappraya_e up → … → dongtan_rd_s → dongtan_beach → e → jomtien_beach_rd_n → e → thappraya_w)
   assert.equal(ROOMS.thappraya_e.exits.up, "thappraya_ext_s");
   assert.equal(ROOMS.thappraya_ext_s.exits.n, "thappraya_ext_m");
   assert.equal(ROOMS.thappraya_ext_m.exits.n, "thappraya_ext_n");
@@ -3887,11 +3891,11 @@ test("scripted happy-ending playthrough", () => {
   run(
     // Act 1 — Jomtien: three bottles, one receipt, one bus
     "take bottle",                             // bottle @ the beach (South)
-    "e", "take bottle", "read receipt",        // bottle @ the beach road (bus stop)
+    "e", "take bottle", "read receipt",        // bottle @ the beach road south (7-Eleven corner)
     "w", "n", "light on", "n", "take bottle",  // up through the middle beach to dark Dongtan
     "s", "light off", "s",                     // back down the sand
     "s", "sell bottles",                       // to Auntie Nok at the Soi 7 beach end
-    "n", "e", "ride bus to beach road", "pay 15",
+    "n", "e", "n", "ride bus to beach road", "pay 15",  // up to the bus stop, ride out
     // Act 2 — the gossip chain (Second Road now sits between Beach Rd and Buakhao)
     "e", "e", "n", "in", "talk to candy",            // Candy: Mot did it
     "out", "n", "e", "talk to lek",                  // Lek: Oy has it (in=Rock Factory now, e=Lucky Tiger)
@@ -3934,7 +3938,7 @@ test("serialize/deserialize round-trips state", () => {
   const snap = serializeGame();
   run("w");
   deserializeGame(snap);
-  assert.equal(state().room, "jomtien_beach_rd");
+  assert.equal(state().room, "jomtien_beach_rd_s");
   assert.equal(state().itemLoc.bottle1, "inventory");
 });
 
@@ -4369,7 +4373,7 @@ test("haggling the peddler works exactly once", () => {
 
 test("wave hails the bus; map draws the town", () => {
   state().encDone = Object.fromEntries(Object.keys(ENCOUNTERS).map(k => [k, true]));
-  run("e"); // jomtien beach road — now the baht bus stop
+  run("e", "n"); // up the beach road to the baht bus stop
   assert.ok(ROOMS[state().room].busStop);
   run("wave");
   assert.match(lastOut(), /Stops from here/);
