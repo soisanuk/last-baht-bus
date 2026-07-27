@@ -1,0 +1,120 @@
+#!/usr/bin/env node
+// Generate docs/portrait-manifest.json: the distinct, hand-authored characters
+// (the 50 non-`filler` NPCS + the 18 PATRONS) that each warrant a portrait.
+// The 181 generic `filler` bar-population NPCs are deliberately excluded.
+//
+// This is the single source of truth's *export* — regenerate it, never hand-edit
+// the JSON (it's derived from web/js/world.js NPCS / PATRONS + NPC_ROLES).
+//
+//   node scripts/gen-portrait-manifest.mjs          # write docs/portrait-manifest.json
+//   node scripts/gen-portrait-manifest.mjs --check  # verify it's up to date (exit 1 on drift)
+//
+// Consumed by ../portrait_gen (the SDXL portrait generator) via manifest.py.
+
+import { readFileSync, writeFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import { dirname, join } from "node:path";
+import vm from "node:vm";
+
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
+const OUT = join(ROOT, "docs", "portrait-manifest.json");
+
+// Load the engine data into this realm (classic scripts sharing globals).
+for (const f of ["thai.js", "world.js", "games.js", "engine-core.js",
+  "engine-encounters.js", "engine-play.js", "engine-systems.js", "engine-parser.js"]) {
+  vm.runInThisContext(readFileSync(join(ROOT, "web", "js", f), "utf8"), { filename: f });
+}
+
+// Characters whose gender the pronoun heuristic below can't read from prose
+// alone (nicknames, drag/katoey performers presenting female on stage, etc.).
+const SEX_OVERRIDE = {
+  superman: "m", // a patron's nickname — no pronouns in the blurb
+  mala: "f", petch: "f", // Peacock Cabaret drag performers, female-presenting
+  mot: "m", // the skinny kid in the Barça shirt
+  nok: "f", pensri: "f", // Auntie Nok the cart vendor; Pensri the masseuse
+  toom: "f", // runs the soapy floor (mama-san equivalent)
+};
+
+// Bar girls (hostesses, mama-sans, cashiers) are female where the blurb gives
+// no pronoun to read.
+const FEMALE_ROLES = new Set(["hostess", "mamasan", "cashier"]);
+
+// Best-effort gender from the description's pronouns/nouns, for picking a
+// portrait archetype. Heuristic and overridable (SEX_OVERRIDE) — not canon.
+function deriveSex(id, desc) {
+  if (SEX_OVERRIDE[id]) return SEX_OVERRIDE[id];
+  const d = " " + desc.toLowerCase().replace(/[^a-z]+/g, " ") + " ";
+  const count = words => words.reduce((n, w) =>
+    n + (d.match(new RegExp(`\\b${w}\\b`, "g")) || []).length, 0);
+  const m = count(["he", "his", "him", "man", "men", "male", "mr", "guy", "boy",
+    "gentleman", "husband", "father", "son", "papa"]);
+  const f = count(["she", "her", "hers", "woman", "women", "female", "lady",
+    "ladies", "girl", "mother", "wife", "daughter", "katoey", "ladyboy"]);
+  return m > f ? "m" : f > m ? "f" : null;
+}
+
+// The venue's kind (beer / gogo / gents / soi6 / pub / …) drives the beer-vs-gogo
+// split in the portrait archetypes. Null for anyone not standing in a bar.
+function venueKind(room) {
+  const r = ROOMS[room];
+  return (r && r.barType) || null;
+}
+
+const roleOrder = { story: 0, mamasan: 1, hostess: 2, cashier: 3, patron: 4 };
+const chars = [];
+
+for (const id of Object.keys(NPCS)) {
+  const n = NPCS[id];
+  if (n.filler) continue; // generic bar-population — no portrait
+  const tags = [];
+  for (const k of ["c4", "bars", "masseuse", "soapyBoss", "manager"]) if (n[k] !== undefined) tags.push(k);
+  const role = NPC_ROLES[id] || "story";
+  chars.push({
+    id, name: n.name, source: "NPCS", role,
+    sex: deriveSex(id, n.desc) || (FEMALE_ROLES.has(role) ? "f" : null),
+    venueKind: venueKind(n.room),
+    emoji: n.emoji, th: n.th || null, room: n.room, tags, desc: n.desc,
+  });
+}
+for (const id of Object.keys(PATRONS)) {
+  const p = PATRONS[id];
+  const tags = [];
+  if (p.protected) tags.push("protected");
+  if (p.shuttle) tags.push("shuttle");
+  chars.push({
+    id, name: p.name, source: "PATRONS", role: "patron",
+    sex: deriveSex(id, p.desc), venueKind: venueKind(p.home),
+    emoji: p.emoji, th: null, room: p.home, age: p.age, nat: p.nat, tags, desc: p.desc,
+  });
+}
+chars.sort((a, b) => (roleOrder[a.role] - roleOrder[b.role]) || a.id.localeCompare(b.id));
+
+const byRole = {};
+for (const c of chars) byRole[c.role] = (byRole[c.role] || 0) + 1;
+
+const manifest = {
+  generated: new Date().toISOString().slice(0, 10),
+  note: "Distinct, hand-authored characters with a portrait (excludes the 181 " +
+    "generic `filler` NPCs). Derived from web/js/world.js — regenerate with " +
+    "scripts/gen-portrait-manifest.mjs, do not hand-edit. `sex`/`venueKind` are " +
+    "generator heuristics for portrait archetype selection, not game canon.",
+  counts: { total: chars.length, byRole },
+  characters: chars,
+};
+const json = JSON.stringify(manifest, null, 2) + "\n";
+
+if (process.argv.includes("--check")) {
+  let current = "";
+  try { current = readFileSync(OUT, "utf8"); } catch { /* missing */ }
+  // ignore the `generated` date line when comparing (it changes daily)
+  const strip = s => s.replace(/"generated":.*\n/, "");
+  if (strip(current) !== strip(json)) {
+    console.error("portrait-manifest.json is out of date — run: node scripts/gen-portrait-manifest.mjs");
+    process.exit(1);
+  }
+  console.log("portrait-manifest.json is up to date (" + chars.length + " characters)");
+} else {
+  writeFileSync(OUT, json);
+  console.log("wrote docs/portrait-manifest.json — " + chars.length + " characters");
+  console.log("byRole:", JSON.stringify(byRole));
+}
