@@ -629,6 +629,18 @@ function _deliver(npcId, d) {
 
 // ── Look / describe ────────────────────────────────────────────────────────
 
+// The buildings you can ENTER off this block. A migrated road node lists them
+// explicitly in `venues`; an un-migrated one still hangs its bars on compass
+// exits, so fall back to scanning those (identical to the old "Step inside"
+// behaviour) until every district has been moved over.
+function _venuesHere(r) {
+  if (r.venues) return r.venues;
+  const out = [];
+  for (const to of Object.values(r.exits || {}))
+    if (ROOMS[to] && ROOMS[to].bar && !out.includes(to)) out.push(to); // one bar, one listing
+  return out;
+}
+
 function _describeRoom(full, forceFull) {
   const r = _room();
   const firstTime = !G.visited[G.room]; // full desc on first arrival + LOOK; brief ambient on revisit
@@ -688,17 +700,13 @@ function _describeRoom(full, forceFull) {
   }
   const exits = Object.keys(r.exits);
   if (exits.length) _say("Exits: " + exits.join(", ") + ".", "dim");
-  // Which of those exits are bars you can walk straight into. "Exits: w, e"
-  // alone never says a bar is behind them, and the prose doesn't always name
-  // it — so list them by name (tappable) with the direction and the ENTER verb.
-  const barDirs = new Map(); // bar name → a direction (prefer a compass one over "in")
-  for (const [dir, to] of Object.entries(r.exits)) {
-    const b = ROOMS[to].bar;
-    if (!b) continue;
-    if (!barDirs.has(b) || (barDirs.get(b) === "in" && dir !== "in")) barDirs.set(b, dir);
-  }
-  if (barDirs.size) {
-    _say("Step inside: " + [...barDirs].map(([b, d]) => `${b} (${d})`).join(", ") +
+  // Buildings fronting this block: entered by name or a tap, not by a compass
+  // point (a busy soi can front 4–6 of them, and a door isn't a block away —
+  // it's right here). "Exits" is roads only now; the venues list is the doors.
+  const venues = _venuesHere(r);
+  if (venues.length) {
+    _say("Step inside: " + venues.map(id =>
+      (ROOMS[id].bar || ROOMS[id].name).replace(/\s*\(.*\)$/, "")).join(", ") +
       ". (ENTER <name>)", "dim");
   }
   // the dog: at your heel outside; through the rail and under your stool in the

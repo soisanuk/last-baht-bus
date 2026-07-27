@@ -101,7 +101,10 @@ function _doGo(dirWord) {
   const r = _room();
   const dir = _DIRS[dirWord] || (r.exits && r.exits[dirWord] ? dirWord : null);
   if (!dir || !r.exits[dir]) { _say(_pickVary(_NO_EXIT, "noexit")); return; }
-  const to = r.exits[dir];
+  // OUT of a multi-door venue returns you to the road you entered by; any other
+  // move invalidates that memory. (Single-door venues: enteredVia === exits.out.)
+  const to = (dir === "out" && G.enteredVia) ? G.enteredVia : r.exits[dir];
+  G.enteredVia = null;
   // a downpour owns the street: nothing moves except into shelter
   if (G.rain > 0) {
     if (!_sheltered(to)) {
@@ -358,9 +361,29 @@ function _doEnter(arg) {
   const asThai = parseThaiDigits(arg.replace(/\s/g, ""));
   const asNum = /^\d+$/.test(arg) ? parseInt(arg, 10) : asThai;
   if (asNum !== null && !Number.isNaN(asNum) && arg) return _doSafe(asNum);
-  if (!arg) return _doGo("in");
-  // named bar adjacent to here
+  if (!arg) {
+    // bare ENTER: the obvious single door, else the old `in`, else ask which
+    if (r.venues && r.venues.length === 1) { G.enteredVia = G.room; return _arriveAt(r.venues[0]); }
+    if (r.exits && r.exits.in) return _doGo("in");
+    if (r.venues && r.venues.length) {
+      _say("Which one? " + r.venues.map(id => ROOMS[id].bar || ROOMS[id].name).join(", ") + ".");
+      return;
+    }
+    return _doGo("in");
+  }
   const w = arg.toLowerCase();
+  // a building fronting this block (migrated road node): enter it by name, and
+  // remember which door you came in by so OUT returns you to that road.
+  if (r.venues) {
+    for (const id of r.venues) {
+      const v = ROOMS[id];
+      if ([v.bar, v.name].filter(Boolean).some(s => s.toLowerCase().includes(w))) {
+        G.enteredVia = G.room;
+        return _arriveAt(id);
+      }
+    }
+  }
+  // legacy (un-migrated districts): a named bar still sits on a compass exit
   for (const [dir, to] of Object.entries(r.exits)) {
     const target = ROOMS[to];
     if (target.bar && target.bar.toLowerCase().includes(w)) return _doGo(dir);
@@ -2161,6 +2184,10 @@ function _chipSet() {
   if (FOOD_STALLS[G.room]) add("buy food");
 
   for (const k of ["n", "s", "e", "w", "in", "out", "up", "down"]) if (r.exits && r.exits[k]) add(k, k.toUpperCase());
+  for (const id of (r.venues || [])) {
+    const label = (ROOMS[id].bar || ROOMS[id].name).replace(/\s*\(.*\)$/, "");
+    add("enter " + label.toLowerCase(), label);
+  }
   if (r.motosai) add("motosai to ", "motosai…");
   if (r.busStop) add("ride bus", "bus");
 
