@@ -464,7 +464,11 @@ function _doInventory() {
   const inv = _inv();
   _say(`฿${G.money} · phone ${G.battery}%${G.lightOn ? " (flashlight on)" : ""} · ` +
     `${_clockStr()} day ${G.day} · hunger ${G.hunger} · thirst ${G.thirst}`, "dim");
-  _say(inv.length ? "You are carrying: " + inv.map(id => ITEMS[id].name).join(", ") + "." :
+  const carried = inv.map(id => ITEMS[id].name);
+  // Protection is carried, not a placed item — surface it here so a player can
+  // see the three they start the week with (and when they've run out).
+  if (G.condoms > 0) carried.push(`${G.condoms} condom${G.condoms === 1 ? "" : "s"}`);
+  _say(carried.length ? "You are carrying: " + carried.join(", ") + "." :
     "You are carrying nothing but experience.");
 }
 
