@@ -749,9 +749,9 @@ const ROOMS = {
     exits: { e: "beach_row" },
   },
   stinky_bar: {
-    name: "Stinky Bar",
+    name: "The Stinky Pinky",
     region: "Beach Road",
-    bar: "Stinky Bar", barType: "beer", pool: true, liveMusic: true,
+    bar: "The Stinky Pinky", barType: "beer", pool: true, liveMusic: true,
     desc: "An American-run beer bar that smells, in defiance of its name, of lime and " +
       "cue chalk. League trophies crowd the back bar; the table is brushed like a " +
       "putting green. Bert — the manager — holds court from the end stool with a " +
@@ -759,10 +759,10 @@ const ROOMS = {
       "roars at a sunset — close enough to share a bathroom with, which, in fact, " +
       "the whole row does.",
     revisit: [
-      "Back into Stinky Bar — lime and cue chalk in defiance of the name, trophies crowding the back bar, the table brushed like a green.",
+      "Back into the Stinky Pinky — lime and cue chalk in defiance of the name, trophies crowding the back bar, the table brushed like a green.",
       "The pool bar takes you back. Bert holds the end stool with a bottomless Budweiser and an opinion on your break already loading.",
       "You step back into the crack of cue balls. Next door the Blue Dog's rail roars at another sunset, close enough to share a bathroom with.",
-      "Stinky Bar again: chalk, trophies, cold Bud, and Bert's court in permanent session at the end of the bar.",
+      "The Stinky Pinky again: chalk, trophies, cold Bud, and Bert's court in permanent session at the end of the bar.",
     ],
     exits: { out: "beach_rd_n" },
   },
@@ -4881,7 +4881,7 @@ const PATRONS = {
       "sleeve of tattoos that reads like a rap sheet of previous personalities. " +
       "He is always mid-conversation with somebody about an opportunity, and " +
       "always angled so he can see the door. Notably, he is never seen anywhere " +
-      "near the Stinky Bar — or Las Vegas a-go-go — of his own free will.",
+      "near the Stinky Pinky — or Las Vegas a-go-go — of his own free will.",
     dialogue: [
       { text: "\"Hey — hey, big guy.\" You have been selected. The handshake " +
         "arrives with a shoulder squeeze, warm as a heat lamp. \"Danny. Windsor, " +

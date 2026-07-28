@@ -5160,13 +5160,13 @@ test("hotel economics: rent, the downgrade ladder, the book, and the grace note"
   // the town catches you: Bert settles a heavy book, once
   state().room = "beach_rd_n";
   out = [];
-  run("enter stinky bar"); // → Stinky Bar
+  run("enter stinky"); // → The Stinky Pinky (regulars still call it the Stinky)
   assert.match(lastOut(), /squared/i, "Bert handles it");
   assert.equal(state().hotelDebt, 0);
   assert.ok(state().flags.tabSettled);
   state().hotelDebt = 900;
   out = [];
-  run("out", "enter stinky bar");
+  run("out", "enter stinky");
   assert.equal(state().hotelDebt, 900, "grace is once per game");
 
   // flush again: the book settles itself at the desk
