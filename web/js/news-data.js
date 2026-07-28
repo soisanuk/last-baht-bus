@@ -8,9 +8,9 @@ var NEWS_FEED = [
     "d": "28 Jul 2026"
   },
   {
-    "t": "Four ladyboys arrested over alleged robbery, assault of Australian tourist in Pattaya",
-    "s": "Khaosod English",
-    "d": "27 Jul 2026"
+    "t": "Five Indians arrested for kidnapping compatriots for ransom in Pattaya",
+    "s": "Bangkok Post",
+    "d": "28 Jul 2026"
   },
   {
     "t": "Tyson Fury kisses Wach, then stops him, in the Pattaya fight nobody could watch",
@@ -18,8 +18,8 @@ var NEWS_FEED = [
     "d": "27 Jul 2026"
   },
   {
-    "t": "Pattaya motorcycle crash sends rider to hospital with serious injuries",
-    "s": "Pattaya Mail",
+    "t": "Four ladyboys arrested over alleged robbery, assault of Australian tourist in Pattaya",
+    "s": "Khaosod English",
     "d": "27 Jul 2026"
   },
   {
@@ -33,9 +33,9 @@ var NEWS_FEED = [
     "d": "28 Jul 2026"
   },
   {
-    "t": "Police rescue three Indian tourists in Pattaya ransom case",
-    "s": "Nation Thailand",
-    "d": "28 Jul 2026"
+    "t": "Family SUV wreck near Pattaya leaves boy, 13, seriously injured",
+    "s": "Pattaya Mail",
+    "d": "26 Jul 2026"
   },
   {
     "t": "Chai Tsjai shines as MyBar celebrates Dave’s birthday",
@@ -48,40 +48,40 @@ var NEWS_FEED = [
     "d": "27 Jul 2026"
   },
   {
+    "t": "Viral video of woman being insulted on Thai train prompts Italian apology | ITV News",
+    "s": "ITVX",
+    "d": "27 Jul 2026"
+  },
+  {
+    "t": "Italian school forced to apologise to whole of Thailand for bad behaviour",
+    "s": "Metro.co.uk",
+    "d": "27 Jul 2026"
+  },
+  {
     "t": "Thailand to purchase oil outside the Middle East",
     "s": "Bangkok Post",
     "d": "27 Jul 2026"
   },
   {
+    "t": "Lured To Thailand, 3 Indian Men Tortured For Rs 69 Lakh Ransom By Gang Of 4 Pakistanis, 1 Indian",
+    "s": "NDTV",
+    "d": "28 Jul 2026"
+  },
+  {
     "t": "John Romero announced as keynote speaker for Gamescom Asia x Thailand Game Show",
     "s": "GamesIndustry.biz",
     "d": "27 Jul 2026"
-  },
-  {
-    "t": "Italian embassy says sorry for pupils’ bad behaviour in Bangkok",
-    "s": "The Times",
-    "d": "26 Jul 2026"
-  },
-  {
-    "t": "Thailand's T-994 patrol craft receive Sentinel 30 weapon stations",
-    "s": "Janes",
-    "d": "27 Jul 2026"
-  },
-  {
-    "t": "Thailand issues rain warning for northeast and eastern provinces",
-    "s": "The Star",
-    "d": "28 Jul 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-07-27","USD":33.58,"AUD":23.5,"GBP":44.72,"EUR":38.24};
+var FX_RATES = {"date":"2026-07-28","USD":33.61,"AUD":23.42,"GBP":44.66,"EUR":38.2};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-07-28","temp":31,"humid":66,"code":3,"hi":32,"rain":100};
+var WX_NOW = {"date":"2026-07-29","temp":27,"humid":90,"code":95,"hi":29,"rain":90};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-07-16","first":"639214","last2":"71","front3":["683","709"],"back3":["427","746"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4022,"date":"2026-07-28","baht":63900};
+var GOLD = {"usd":4038,"date":"2026-07-28","baht":64200};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":63277,"thb":2128985};
+var BTC = {"usd":63767,"thb":2135711};
