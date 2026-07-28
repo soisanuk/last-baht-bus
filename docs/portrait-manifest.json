@@ -1,12 +1,12 @@
 {
-  "generated": "2026-07-27",
+  "generated": "2026-07-28",
   "note": "Distinct, hand-authored characters with a portrait (excludes the 181 generic `filler` NPCs). Derived from web/js/world.js — regenerate with scripts/gen-portrait-manifest.mjs, do not hand-edit. `sex`/`venueKind` are generator heuristics for portrait archetype selection, not game canon.",
   "counts": {
-    "total": 69,
+    "total": 73,
     "byRole": {
-      "story": 19,
-      "mamasan": 13,
-      "hostess": 16,
+      "story": 20,
+      "mamasan": 14,
+      "hostess": 18,
       "cashier": 3,
       "patron": 18
     }
@@ -78,6 +78,19 @@
       "room": "lake_mabprachan",
       "tags": [],
       "desc": "A sun-cured expat of indeterminate decade walking an elderly golden retriever. He has the serene look of a man whose 7-Eleven receipts are all groceries now."
+    },
+    {
+      "id": "gavin",
+      "name": "Gavin",
+      "source": "NPCS",
+      "role": "story",
+      "sex": "m",
+      "venueKind": "soi6",
+      "emoji": "🍽️",
+      "th": null,
+      "room": "golden_dragon",
+      "tags": [],
+      "desc": "Fifties, a golf shirt with a discreet logo, a lager he barely touches and a way of looking at a bar like a spreadsheet. He calls himself an 'area consultant.' Everyone else calls him the White Dish man. He is unfailingly pleasant, which is the unsettling part."
     },
     {
       "id": "mala",
@@ -322,6 +335,19 @@
       "room": "hyper",
       "tags": [],
       "desc": "The mamasan of Hyper A Go-Go — six feet of poise in heels, cheekbones you could open letters with, and a katoey's hard-won certainty that she is the most finished thing in any room. She ran the floor here when it was a dump and stayed to run it now the Samson brothers have made it shine. Nothing on this stage happens that Diamond didn't allow."
+    },
+    {
+      "id": "kesinee",
+      "name": "Kesinee",
+      "source": "NPCS",
+      "role": "mamasan",
+      "sex": "f",
+      "venueKind": "soi6",
+      "emoji": "🐱",
+      "th": "เกสินี",
+      "room": "kitten_corner",
+      "tags": [],
+      "desc": "The Kitten Corner's mama-san — twenty years on this soi, gold at the wrist, a gaze that prices you before you sit. She ran this bar back when it was hers to run; now there's a logo on the menu and a target on the till, and she is very careful who she says that to."
     },
     {
       "id": "kesorn",
@@ -633,6 +659,19 @@
       "desc": "Sweet, visibly new — first week on the soi — checking her phone between customers and startling whenever the door opens."
     },
     {
+      "id": "pia",
+      "name": "Pia",
+      "source": "NPCS",
+      "role": "hostess",
+      "sex": "f",
+      "venueKind": "soi6",
+      "emoji": "🐉",
+      "th": "เปีย",
+      "room": "golden_dragon",
+      "tags": [],
+      "desc": "Deadpan and unbothered, ten years behind the Golden Dragon's bar and the unofficial keeper of its dead jukebox's memory. She has heard every line and rates them out of ten, silently, and you will never know your score."
+    },
+    {
       "id": "pim",
       "name": "Pim",
       "source": "NPCS",
@@ -657,6 +696,19 @@
       "room": "paradise_nights",
       "tags": [],
       "desc": "Cheerful, sparkly top throwing glitter across the wall, never stops smiling even when shouting drink orders over the bass."
+    },
+    {
+      "id": "wilai",
+      "name": "Wilai",
+      "source": "NPCS",
+      "role": "hostess",
+      "sex": "f",
+      "venueKind": "soi6",
+      "emoji": "💋",
+      "th": "วิไล",
+      "room": "ruby_kiss",
+      "tags": [],
+      "desc": "The ringleader of the Ruby Kiss front stools, lipstick on the rim of every glass by design, quick enough to sell you a drink and roast you for buying it in the same breath."
     },
     {
       "id": "aek",
