@@ -2571,6 +2571,104 @@ const NPCS = {
     ],
   },
 
+  pia: {
+    name: "Pia", th: "เปีย", emoji: "🐉",
+    room: "golden_dragon",
+    desc: "Deadpan and unbothered, ten years behind the Golden Dragon's bar and the " +
+      "unofficial keeper of its dead jukebox's memory. She has heard every line and rates " +
+      "them out of ten, silently, and you will never know your score.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Welcome to the Dragon.\" A coaster slides over before you ask for one. \"Music no good " +
+          "tonight? Same as every night — the jukebox die, we keep the playlist. Nobody complain, " +
+          "nobody dance. Perfect.\" A flat, fond little smile.",
+        short: "\"The jukebox die in 2019. We keep the playlist. Nobody complain.\"" },
+      { topic: "jukebox", text: "\"Broke, five year now. The boss say fix it — then White Dish buy the " +
+        "bar and put the app, the QR. Now {{the phone}} pick the song.\" She wrinkles her nose. \"Worse. " +
+        "The old dead jukebox had better taste.\"",
+        short: "\"White Dish put the QR app in. Now {{the phone}} picks the song. Worse than the dead jukebox.\"" },
+      { topic: "music", text: "\"Vintage Thai pop. Loso, Bird, the old ones — my mother's music.\" She " +
+        "almost smiles. \"The farang think it is romantic. For me it is just Tuesday. But I let them think.\"" },
+    ],
+  },
+  wilai: {
+    name: "Wilai", th: "วิไล", emoji: "💋",
+    room: "ruby_kiss",
+    desc: "The ringleader of the Ruby Kiss front stools, lipstick on the rim of every glass by " +
+      "design, quick enough to sell you a drink and roast you for buying it in the same breath.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Ohh, handsome come to Ruby!\" A lipstick-marked glass is in your hand before you've " +
+          "agreed to anything. \"See? Now you have my kiss already. You buy the drink to go with it, na? " +
+          "Is only polite.\" She is laughing at you and it is somehow flattering.",
+        short: "\"You have my kiss already — now buy the drink to go with it, na?\"" },
+      { topic: "lipstick", text: "\"Every glass, every night — is the brand.\" She marks a fresh one and " +
+        "holds it to the mirror wall, so there are two of everything. \"The farang lose the girl but keep " +
+        "the glass. Then they remember Ruby. Smart, na? Not my idea. But smart.\"" },
+      { topic: "ruby", text: "\"End of the soi, we are the last loud one before the quiet.\" A shrug, a " +
+        "grin. \"The girls at the quiet end are jealous of us. We are jealous of them. Same-same. Everybody " +
+        "want the other bar.\"" },
+    ],
+  },
+  kesinee: {
+    name: "Kesinee", th: "เกสินี", emoji: "🐱",
+    room: "kitten_corner",
+    desc: "The Kitten Corner's mama-san — twenty years on this soi, gold at the wrist, a gaze that " +
+      "prices you before you sit. She ran this bar back when it was hers to run; now there's a logo on " +
+      "the menu and a target on the till, and she is very careful who she says that to.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Come in, come in. My girls will not bite unless you tip for it.\" The practised smile " +
+          "arrives on schedule; the eyes take a beat longer. \"You want a drink, a girl, a quiet corner — " +
+          "Kesinee arrange. Anything except the price. The price is not mine to move any more.\"",
+        short: "\"Anything except the price — that is not mine to move any more.\"" },
+      { topic: "white dish", sets: ["heardWdgInside"],
+        text: "She studies you a long moment, deciding, then talks low under the music. \"White Dish buy " +
+          "this bar three year ago. I tell you straight, because Bert send you and Bert is a good man.\" She " +
+          "turns a gold bracelet. \"The money — real. New aircon, new sign, the roof stop leaking. But now: " +
+          "a target, every night. The tips go through the app and come back less. A boy in Bangkok I never " +
+          "meet decide how many girls, which girls, how late. My girls used to stay five year, build " +
+          "something. Now they last one season and the app move them to another bar like stock.\" A flat " +
+          "look. \"The bar is cleaner. The girls are poorer. Both true. Tell Bert both.\"",
+        short: "\"White Dish bought us. Cleaner bar, poorer girls — both true. Tell Bert both.\"" },
+      { topic: "kittens", text: "\"The posters, the paw? Not my idea — the brand.\" A dry glance at the " +
+        "neon paw print. \"Before, it was my bar, my name over the door. Now it is a 'concept.' The concept " +
+        "tips better than the name, they tell me.\" She does not sound convinced. \"Buy a girl a drink. That " +
+        "part still works the old way.\"" },
+    ],
+  },
+  gavin: {
+    name: "Gavin", emoji: "🍽️",
+    room: "golden_dragon",
+    desc: "Fifties, a golf shirt with a discreet logo, a lager he barely touches and a way of looking " +
+      "at a bar like a spreadsheet. He calls himself an 'area consultant.' Everyone else calls him the " +
+      "White Dish man. He is unfailingly pleasant, which is the unsettling part.",
+    dialogue: [
+      { text: "\"Evening.\" The handshake is warm, brief, professionally sincere. \"Gavin. I look after a " +
+        "few rooms on the soi for the group — White Dish, you'll have heard. Consulting, mostly. Standards, " +
+        "systems, that sort of thing.\" He glances round the Golden Dragon the way a man counts a room. " +
+        "\"Lovely little bar, this. They all are, once they're run properly.\"" },
+      { topic: "offer", sets: ["heardWdgPitch"],
+        text: "\"The pool bar? The Stinky, yes.\" He smiles like it's the most natural thing in the world. " +
+          "\"The owner's unwell, God love him, and the manager — Bert — he's tired, whether he says so or " +
+          "not. We'd take it off their hands at a fair price, freshen it up, put a proper till in. Bert " +
+          "keeps his job, his stool, his league night — we're not monsters, we like a bit of character.\" A " +
+          "sip he doesn't need. \"He'd answer to a number instead of a dying man, that's all. Same work, " +
+          "steadier money. Where's the villainy in that?\" The smile holds a beat too long.",
+        short: "\"We'd take the Stinky off their hands, freshen it up. Bert keeps his stool. Where's the villainy?\"" },
+      { topic: "white dish", sets: ["heardWdgPitch"],
+        text: "\"White Dish Group. We hold the paper on a handful of rooms up and down Soi 6 — six, going " +
+          "on seven if the numbers say so.\" He says it lightly. \"Ryan's vision, really. I just keep the " +
+          "lights on and the books tidy.\" A small, pleasant shrug. \"People make it sinister. It's " +
+          "hospitality. We're only the ones who read the spreadsheet at the end of the night instead of " +
+          "drinking through it.\"",
+        short: "\"White Dish. Six rooms, going on seven. Ryan's vision. It's just hospitality.\"" },
+      { topic: "ryan powers", text: "\"Ryan? Lovely man. Rarely down these days — runs it all from a " +
+        "laptop and a lawyer.\" The pleasantness doesn't waver. \"You won't meet him. Nobody does. That's " +
+        "rather the point of a man like Ryan.\"" },
+    ],
+  },
+
   terry: {
     name: "Terry", emoji: "🍺",
     room: "queen_vic",
@@ -2580,8 +2678,9 @@ const NPCS = {
     dialogue: [
       { topic: "wallet", notFlags: ["hasWallet"],
         text: "\"Wallet gone? On Soi 6?\" He exhales through his nose. \"Right. Soi Buakhao — Candy Bar, ask for Candy herself. Sharp as they come. She'll know who moved it or she'll know who does.\" He returns to his beer with the authority of a man who has solved this problem before." },
-      { topic: "white dish",
-        text: "\"White Dish Group.\" He says it the way you say a diagnosis. \"Ryan Powers. Never here, always here — that's the joke. Before his lot got involved, this soi ran itself. Loud, chaotic, but honest chaos. Now?\" He gestures at the street through the window. \"QR codes. Branded menus. They've got six bars already. Word is they're after another one.\" He takes a long pull of Chang. \"Someone should do something about that.\"" },
+      { topic: "white dish", sets: ["heardWdgHistory"],
+        text: "\"White Dish Group.\" He says it the way you say a diagnosis. \"Ryan Powers. Never here, always here — that's the joke. Before his lot got involved, this soi ran itself. Loud, chaotic, but honest chaos. Now?\" He gestures at the street through the window. \"QR codes. Branded menus. They've got six bars already. Word is they're after another one.\" He takes a long pull of Chang. \"Someone should do something about that.\"",
+        short: "\"White Dish. Ryan Powers. Six bars already, after another. Someone should do something.\"" },
       { topic: "powers",
         text: "\"Ryan Powers. British. Doesn't live here officially, doesn't leave either. Bars run clean on the surface — that's the thing. The books don't, but you'd need someone inside to prove it.\" He taps the bar once. \"{{Nice}} bloke, they say. The dangerous kind.\"" },
       { topic: "tiktok", text: "He gestures at the soi through the window without " +
@@ -3405,6 +3504,28 @@ const NPCS = {
         "looking at it. \"You shoot? League night's every third night — killer " +
         "pool, hundred baht in, winner takes the table money.\"",
         short: "\"Table's true, beer's cold, don't sit on the rail. League night every third night — hundred baht in.\"" },
+      { topic: "offer", req: ["heardWdgHistory", "heardWdgInside", "heardWdgPitch"], notFlags: ["wdgResolved"],
+        sets: ["wdgResolved"],
+        text: "You lay it all out — Terry's history, Kesinee's straight talk, Gavin's smiling pitch. Bert " +
+          "listens without touching the Budweiser, which is how you know it lands. When you're done he's " +
+          "quiet a while. \"Right,\" he says finally. \"So the money's real and the machine's real, and both " +
+          "of 'em would fix this year and cost every one after.\" He looks down the bar — the trophies, Dave " +
+          "on his rounds, Phil on his stool, the dog by the door. \"Kesinee's girls last a season now. Mine's " +
+          "been here since Candy owned the place. That's the whole difference, bud, and it's the only one that " +
+          "matters.\" He finally lifts the Bud. \"I'll tell the old man to hold. He trusts me to keep the " +
+          "lights on — not to sell his soul to a spreadsheet while he's too sick to say no. Ryan Powers wants " +
+          "a pool bar, he can build his own and let the market sort us out.\" He taps the bar once, done. " +
+          "\"You did me a real turn tonight, bud. Bert doesn't forget a thing like that.\"",
+        short: "\"Told the old man to hold — won't sell his soul to a spreadsheet while he's too sick to say no.\"" },
+      { topic: "offer", notFlags: ["wdgResolved"],
+        text: "\"Still chewing on it, bud. Get me the full picture before I advise the old man: Terry's " +
+          "watched White Dish work this soi for years, Kesinee runs one of their bars over at the Kitten " +
+          "Corner — she'll talk straight if you are — and the White Dish man himself, Gavin, he's usually " +
+          "smiling into a lager at the Golden Dragon. Hear all three, then come tell me what you make of it.\"" },
+      { topic: "offer", req: ["wdgResolved"],
+        text: "\"The White Dish thing? Told the old man to hold, and he did. Gavin came back once, all " +
+          "smiles, took the no like it was a delivery running late.\" A crooked grin. \"They'll be back — " +
+          "they always are. But not tonight, and not while I'm behind this bar. Your beer's poured, bud.\"" },
       { topic: "league", text: "\"Killer pool. Everybody's got three lives, pot or " +
         "you lose one, last man standing takes the pot. Every third night, right " +
         "here. Half the piwins in North Pattaya play. Bring your hundred baht and " +
@@ -3943,6 +4064,18 @@ const ENCOUNTERS = {
 // quest ids that must be done first.
 
 const QUESTS = {
+  white_dish: {
+    name: "The White Dish Offer",
+    giver: "bert",
+    desc: "White Dish want to buy Bert's bar out from under its dying owner. Get him the " +
+      "real picture — the history (ASK TERRY ABOUT WHITE DISH), the inside view (ASK KESINEE " +
+      "at the Kitten Corner ABOUT WHITE DISH), and the pitch (ASK GAVIN at the Golden Dragon " +
+      "ABOUT the OFFER) — then tell Bert (ASK BERT ABOUT the OFFER).",
+    deps: [],
+    at: "bert",
+    doneFlag: "wdgResolved",
+    reward: { money: 0, happy: 5 },
+  },
   sangsom: {
     name: "The Sister-Bar Run",
     giver: "candy",
@@ -4990,9 +5123,9 @@ const NPC_ROLES = {
   lek: "hostess", noi: "hostess", ping: "hostess", aom: "hostess",
   joy: "hostess", fon: "hostess", gift: "hostess", kwan: "hostess",
   nong: "hostess", pim: "hostess", bee: "hostess", jane: "hostess", mercedes: "hostess", kratae: "hostess",
-  nira: "hostess", mind: "hostess",
+  nira: "hostess", mind: "hostess", pia: "hostess", wilai: "hostess",
   yai: "mamasan", rose: "mamasan", kesorn: "mamasan", lawan: "mamasan", sumalee: "mamasan",
-  diamond: "mamasan", wimon: "mamasan", ampai: "mamasan",
+  diamond: "mamasan", wimon: "mamasan", ampai: "mamasan", kesinee: "mamasan",
   ploy: "cashier", aek: "cashier", malee: "cashier",
   candy: "mamasan", oy: "mamasan", daeng: "mamasan", mem: "mamasan", wan: "mamasan",
 };
