@@ -340,6 +340,44 @@
   #ad-mini b { color: var(--cyan); }
   @media (min-width: 1220px) { #ad-mini { display: none; } }
 
+  /* ── Start menu / mode-select overlay ─────────────────────────────────── */
+  #start-overlay {
+    position: fixed; inset: 0; z-index: 100; padding: 1.2rem; overflow-y: auto;
+    display: flex; align-items: center; justify-content: center;
+    background: radial-gradient(120% 120% at 50% 0%, #1a0033 0%, #05001a 72%);
+  }
+  #start-overlay[hidden] { display: none; }
+  .start-card {
+    width: 100%; max-width: 440px; text-align: center;
+    background: var(--panel); border: 1px solid var(--pink); border-radius: 14px;
+    padding: 1.5rem 1.3rem 1.6rem; box-shadow: 0 0 44px #ff149355, inset 0 0 40px #00000066;
+  }
+  .start-card h1 { color: var(--yellow); font-size: 1.5rem; letter-spacing: .06em; margin: 0 0 .2rem; text-shadow: 0 0 14px #ffe60055; }
+  .start-sub { color: var(--violet); font-size: .78rem; margin: 0 0 1.2rem; }
+  .start-mode {
+    display: block; width: 100%; text-align: left; cursor: pointer; font-family: inherit;
+    background: #14001f; border: 1px solid #ff149355; border-radius: 10px;
+    padding: .8rem .95rem; margin: .55rem 0; color: var(--bright); transition: all .15s;
+  }
+  .start-mode:hover:not([disabled]) { border-color: var(--pink); background: #1e0030; box-shadow: 0 0 16px #ff149344; }
+  .start-mode[disabled] { opacity: .45; cursor: not-allowed; }
+  .start-mode-title { display: block; color: var(--pink); font-weight: 700; letter-spacing: .04em; }
+  .start-mode[disabled] .start-mode-title { color: #8a6a90; }
+  .start-mode-desc { display: block; font-size: .74rem; color: var(--text); margin-top: .25rem; line-height: 1.35; }
+  #start-intro { text-align: left; }
+  #start-intro h2 { color: var(--yellow); font-size: 1.15rem; text-align: center; margin: 0 0 .85rem; letter-spacing: .04em; }
+  #start-intro ul { list-style: none; padding: 0; margin: 0 0 1.1rem; }
+  #start-intro li { color: var(--text); font-size: .82rem; padding: .3rem 0 .3rem 1.4rem; position: relative; line-height: 1.4; }
+  #start-intro li::before { content: "▸"; color: var(--pink); position: absolute; left: .25rem; }
+  #start-intro li b { color: var(--bright); }
+  #start-intro li.start-goal, #start-intro li.start-goal b { color: var(--yellow); font-weight: 700; }
+  .start-actions { display: flex; gap: .6rem; align-items: center; }
+  .start-actions button { font-family: inherit; cursor: pointer; border-radius: 20px; padding: .55rem 1.1rem; font-size: .9rem; transition: all .15s; }
+  #start-back { background: none; border: 1px solid #ff149355; color: var(--text); }
+  #start-back:hover { border-color: var(--pink); color: var(--bright); }
+  #start-go { flex: 1; background: var(--pink); border: 1px solid var(--pink); color: #05001a; font-weight: 700; box-shadow: 0 0 16px #ff149366; }
+  #start-go:hover { box-shadow: 0 0 26px #ff1493aa; }
+
   /* ── vendored word-card modal (source of truth: trainer index.html) ──── */
   /* the trainer's palette names, same neon values */
   :root {
@@ -612,6 +650,38 @@
   <span class="ad-cta">LEARN THAI →</span>
   <div class="ad-sub">SOI SANUK trainer · free · no signup<br>❖ PATTAYA EDITION ❖</div>
 </a>
+<!-- start menu / mode select (wired in main.js) -->
+<div id="start-overlay" hidden>
+  <div class="start-card">
+    <div id="start-menu">
+      <h1>THE LAST BAHT BUS</h1>
+      <p class="start-sub">a Pattaya misadventure · Soi Sanuk universe</p>
+      <button class="start-mode" data-mode="soi6">
+        <span class="start-mode-title">SOI 6 CHALLENGE ★</span>
+        <span class="start-mode-desc">One week, one street. ฿100,000 and a hard head — max out your สนุก.</span>
+      </button>
+      <button class="start-mode" disabled>
+        <span class="start-mode-title">THE FULL GAME</span>
+        <span class="start-mode-desc">The whole coast — Jomtien to Naklua, lost wallet and all. Coming soon.</span>
+      </button>
+    </div>
+    <div id="start-intro" hidden>
+      <h2>SOI 6 · ONE WEEK</h2>
+      <ul>
+        <li>Seven nights based at the <b>Queen Vic Inn</b>, right on the soi.</li>
+        <li>You're <b>not leaving Soi 6</b> — the rest of Pattaya keeps for the full game.</li>
+        <li><b>฿100,000</b> for the week in the bank; <b>฿1,000</b> in your pocket to start.</li>
+        <li>Draw the rest at the <b>street ATM</b> — ฿300 a pull, ฿20,000 a day.</li>
+        <li class="start-goal">Goal: <b>สบายสบาย</b> — get happy, max out the week. ★</li>
+      </ul>
+      <div class="start-actions">
+        <button id="start-back">← Back</button>
+        <button id="start-go">START ★</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- vendored word-card modal mounts (see wordcard.js) -->
 <div id="wc-overlay"></div>
 <div id="script-tooltip"></div>

@@ -10,6 +10,25 @@ function _autosave() {
   try { localStorage.setItem(SAVE_KEY, serializeGame()); } catch (e) {}
 }
 
+// The mode-select / intro overlay shown on a fresh start (see index.html
+// #start-overlay). Continuing a saved night bypasses it.
+function _showStartMenu() {
+  const ov = document.getElementById("start-overlay");
+  if (!ov) { newGame(); engineIntro(); _autosave(); _term.renderChips(); return; } // safety net
+  document.getElementById("start-menu").hidden = false;
+  document.getElementById("start-intro").hidden = true;
+  ov.hidden = false;
+}
+
+function _startGame() { // START on the Soi 6 intro panel
+  const ov = document.getElementById("start-overlay");
+  if (ov) ov.hidden = true;
+  startSoi6Mode();
+  _autosave();
+  _term.renderChips();
+  _audioForRoom(G.room, G.flags);
+}
+
 function _dispatch(cmd) {
   const v = cmd.trim().toLowerCase();
 
@@ -22,9 +41,8 @@ function _dispatch(cmd) {
       _renderResume(); // redraw whatever modal prompt was gating input (game/encounter/checkout/fare/airline)
     } else if (["no", "n", "new", "restart"].includes(v)) {
       _awaitingContinue = false;
-      newGame();
-      engineIntro();
-      _autosave();
+      _showStartMenu();
+      return;
     } else {
       _term.print("YES to continue your night, NO to start fresh.", "dim");
       return;
@@ -59,9 +77,9 @@ function _dispatch(cmd) {
     if (["reset", "yes", "y", "confirm", "wipe"].includes(v)) {
       try { localStorage.removeItem(SAVE_KEY); } catch (e) {}
       _prevSnap = null; // the wipe isn't undoable — the confirm was the safety net
-      newGame(); engineIntro(); _autosave();
-      _term.print("⌫ Slate wiped — the wallet, the dog, the debts, the girls' patience, all of it. " +
-        "A clean arrival on the beach, night one.", "alert");
+      _term.print("⌫ Slate wiped — the debts, the dog, the girls' patience, all of it.", "alert");
+      _showStartMenu();
+      return;
     } else {
       _term.print("Reset cancelled — your night stands.", "dim");
     }
@@ -111,6 +129,18 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!_audio.muted()) _audioForRoom(G.room, G.flags);
   });
 
+  // start-menu wiring: pick a mode → intro panel → START
+  document.querySelectorAll("#start-menu .start-mode[data-mode]").forEach(b =>
+    b.addEventListener("click", () => {
+      document.getElementById("start-menu").hidden = true;
+      document.getElementById("start-intro").hidden = false;
+    }));
+  document.getElementById("start-back").addEventListener("click", () => {
+    document.getElementById("start-intro").hidden = true;
+    document.getElementById("start-menu").hidden = false;
+  });
+  document.getElementById("start-go").addEventListener("click", _startGame);
+
   newGame();
   let savedLive = false;
   try {
@@ -127,9 +157,7 @@ document.addEventListener("DOMContentLoaded", () => {
     _term.print("Continue your night? (YES / NO)", "alert");
     _term.renderChips([{ cmd: "yes", label: "YES — continue" }, { cmd: "no", label: "NO — start fresh" }]);
   } else {
-    engineIntro();
-    _autosave();
-    _term.renderChips(); // paint the opening context chips
+    _showStartMenu(); // fresh start → mode select + intro modal
   }
 
   // Web Audio must be unlocked inside a real user gesture — on iOS a touch,
