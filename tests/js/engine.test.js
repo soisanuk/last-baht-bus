@@ -397,8 +397,8 @@ test("every exit key walks: pub, up/down/u/d, hotel — GO accepts what Exits li
   // move — _DIRS aliases plus any literal exit key of the room (pub, hotel).
   state().flags.hasWallet = true;
   state().room = "soi6_street";
-  run("go pub");
-  assert.equal(state().room, "queen_vic", "the pub door works");
+  run("enter queen vic");
+  assert.equal(state().room, "queen_vic", "the pub is a venue, entered by name");
   run("up"); // upstairs is for guests only
   assert.match(lastOut(), /Guest, sir/);
   assert.equal(state().room, "queen_vic");
@@ -4800,7 +4800,7 @@ test("Blue Dog: checkpoint show 18:00-19:00, sunset, one happy point a night", (
   state().room = "beach_rd_n";
   state().pendingEnc = null;
   state().lastPeddler = 99999;
-  run("w"); // into Blue Dog at 18:00
+  run("w", "enter blue dog"); // west to the beachside row, into Blue Dog at 18:00
   assert.equal(state().room, "blue_dog");
   assert.match(lastOut(), /evening checkpoint is in session/, "the show is on");
 
@@ -5110,13 +5110,13 @@ test("hotel economics: rent, the downgrade ladder, the book, and the grace note"
   // the town catches you: Bert settles a heavy book, once
   state().room = "beach_rd_n";
   out = [];
-  run("in"); // → Stinky Bar
+  run("enter stinky bar"); // → Stinky Bar
   assert.match(lastOut(), /squared/i, "Bert handles it");
   assert.equal(state().hotelDebt, 0);
   assert.ok(state().flags.tabSettled);
   state().hotelDebt = 900;
   out = [];
-  run("out", "in");
+  run("out", "enter stinky bar");
   assert.equal(state().hotelDebt, 900, "grace is once per game");
 
   // flush again: the book settles itself at the desk

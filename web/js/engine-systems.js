@@ -2119,31 +2119,39 @@ function _doFeedDog(arg) {
       "Feeding it is a different transaction entirely — see it lit first.");
     return;
   }
+  const onSand = G.room === "north_beach"; // he's playing in the surf, not pacing the soi
   const food = ["noodles", "moo_ping"].find(id => _inv().includes(id));
   if (!food && G.money < 20) {
-    _say("A soi dog with one clipped ear materialises at the smell of your optimism, " +
-      "finds no food and no funds, and dematerialises. Fair.");
+    _say(onSand
+      ? "The dog in the shallows clocks your empty hands from twenty feet, decides you are " +
+        "not, after all, dinner, and goes back to fighting the sea. Come back with food."
+      : "A soi dog with one clipped ear materialises at the smell of your optimism, " +
+        "finds no food and no funds, and dematerialises. Fair.");
     return;
   }
+  const approach = onSand
+    ? "The soi dog with one clipped ear comes bounding out of the shallows — sea-slick, sand " +
+      "to the eyebrows, radiant about it — and skids to a polite stop at your feet"
+    : "A soi dog with one clipped ear has been pacing you for half a block, close enough to " +
+      "be polite about it";
   if (food) {
     G.itemLoc[food] = null;
-    _say(`A soi dog with one clipped ear has been pacing you for half a block, close ` +
-      `enough to be polite about it. You crouch and hold out the ${ITEMS[food].name}. ` +
-      "He takes it with shocking gentleness, eats it in one movement, and then — this " +
-      "is the part nobody warns you about — looks at you. Properly. Files something " +
-      "away.", "win");
+    _say(`${approach}. You crouch and hold out the ${ITEMS[food].name}. He takes it with ` +
+      "shocking gentleness, eats it in one movement, and then — this is the part nobody warns " +
+      "you about — looks at you. Properly. Files something away.", "win");
   } else {
     G.money -= 20;
-    _say("A soi dog with one clipped ear has been pacing you for half a block. ฿20 at " +
-      "a grill cart buys a chicken skewer; he takes it with shocking gentleness, eats " +
-      "it in one movement, and then — this is the part nobody warns you about — looks " +
-      `at you. Properly. Files something away. (฿${G.money} left.)`, "win");
+    _say(`${approach}. ฿20 at a grill cart buys a chicken skewer; he takes it with shocking ` +
+      "gentleness, eats it in one movement, and then — this is the part nobody warns you " +
+      `about — looks at you. Properly. Files something away. (฿${G.money} left.)`, "win");
   }
   G.dog = { since: G.day };
   _setFlag("hasDog"); // quest gate — see QUESTS reqFlags
-  _say("A passing bar girl laughs at your face: “Ohhh. He choose you, na.” The soi " +
-    "calls him Sai Krok — sausage — after his one great subject. From here on he pads " +
-    "at your heel, waits outside every bar, and sleeps against your door. Nobody " +
+  _say((onSand
+    ? "A couple picking along the tideline laugh at your face: “Ohhh. He choose you, na.”"
+    : "A passing bar girl laughs at your face: “Ohhh. He choose you, na.”") +
+    " The soi calls him Sai Krok — sausage — after his one great subject. From here on he " +
+    "pads at your heel, waits outside every bar, and sleeps against your door. Nobody " +
     "consulted you. That is how it works. (He's yours now: NAME DOG <something> if " +
     "you'd rather he answered to yours.)", "win");
   _addHappy(2);
