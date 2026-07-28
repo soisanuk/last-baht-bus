@@ -529,6 +529,55 @@ const _ENC = {
     _endNight("barfine");
   },
 
+  coconutbar(input) {
+    const both = /both|two|friend|muk|threesome|them/.test(input);
+    const yes = both || /yes|yeah|ok|sure|company|come|deal|her|why not|how much|price/.test(input);
+    if (!yes) {
+      _say("You shake your head and keep to the pavement side. She shrugs — no drama, the " +
+        "night's long — and folds back into the shade of the palms, where the little orange " +
+        "eye of her cigarette drifts back to Muk's.");
+      return;
+    }
+    if (!_flag("act1Done")) {
+      _say("She reads the sand on your shins and the nothing in your pockets in one flat " +
+        "glance and loses interest before you've finished smiling. “Mai mii tang,” she tells " +
+        "Muk — no money — and turns her stool a few degrees away. She is, annoyingly, correct.");
+      return;
+    }
+    // The coconut-bar rate: cheaper than the soi, because there IS no soi out here —
+    // no bar, no barfine, no mamasan, and no rail full of witnesses either. Cheapest
+    // company in Pattaya, and on a bad night the most expensive. Roll her kind now;
+    // the dark sand makes every version of this riskier than the promenade rail.
+    const price = both ? 900 : 500;
+    if (G.money < price) {
+      _say(`She names ฿${price} without a flicker. Your pocket says ฿${G.money}. “Coconut ` +
+        "bar no give credit, tilac.” She turns her shoulder, and the dark under the palms " +
+        "takes her back.");
+      return;
+    }
+    G.money -= price;
+    G.lastBfId = null; // freelance sand, not a bar girl — no bond bonus on the ending
+    if (both) _setFlag("hadThreesome");
+    const safe = _rand() < (both ? 0.68 : 0.48); // no rail, no mama, no witnesses — the odds bite hardest here
+    if (!safe) { _endNight("robbed"); return; }
+    if (both) {
+      _say(`฿${price}, and Muk stubs out her cigarette and stops pretending she wasn't in on ` +
+        "it from the first word. The rest happens off the sand and out of the lamplight, three " +
+        "shadows and a motosai and a hotel corridor, and none of it will ever appear in a " +
+        `story you tell your mother. (฿${G.money} left, and cheap at the price.)`, "win");
+      _conquestHappy(6);
+    } else {
+      const flavor = _rand() < 0.5 ?
+        "She thumbs a message before you leave the sand — “my friend know I go with you, na” " +
+        "— coconut bar but not careless. " :
+        "She does hair in a Naklua salon by day, she says, and this three nights a week for " +
+        "the room rent; you get the arithmetic of her whole life on the walk off the beach. ";
+      _say(`฿${price} settles it in the dark — no ledger, no mama, every baht of it hers. ` +
+        flavor + "She takes your arm and steers you off the sand toward the lights.", "win");
+    }
+    _endNight("barfine");
+  },
+
   // Not everyone in a bar is for sale. Treat the Bangkok weekender like the
   // trade and she's insulted; treat her like a person and you get a genuine,
   // free moment (the "didn't pay" satisfaction the expats brag about).

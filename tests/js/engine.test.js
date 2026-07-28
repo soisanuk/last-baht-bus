@@ -3700,6 +3700,50 @@ test("freelancer: the risky kind robs you blind while you sleep", () => {
   assert.match(lastOut(), /emptied|gone/i);
 });
 
+test("coconut bar: beach freelancer is cheaper than the soi, and needs a wallet first", () => {
+  state().room = "north_beach";
+  _startEnc("coconutbar");
+  run("yes");
+  assert.match(lastOut(), /mai mii tang|no money/i, "broke, no deal");
+  assert.equal(state().day, 2, "night not spent");
+  state().flags.act1Done = true;
+  state().flags.hasWallet = true;
+  state().money = 1200;
+  state().rng = 1; // tiny first roll → the safe kind, ฿500
+  delete state().encDone.coconutbar;
+  _startEnc("coconutbar");
+  run("yes");
+  assert.equal(state().day, 3, "night over on the sand");
+  assert.equal(state().money, 700); // ฿500, cheaper than a bar or the promenade rail
+});
+
+test("coconut bar: Muk makes it a ฿900 pair", () => {
+  state().flags.act1Done = true;
+  state().flags.hasWallet = true;
+  state().room = "north_beach";
+  state().money = 2000;
+  state().rng = 1; // the safe kind
+  _startEnc("coconutbar");
+  run("both of you");
+  assert.ok(state().flags.hadThreesome);
+  assert.equal(state().money, 1100);
+  assert.equal(state().day, 3);
+});
+
+test("coconut bar: the dark sand bites — the risky kind robs you", () => {
+  state().flags.act1Done = true;
+  state().flags.hasWallet = true;
+  state().room = "north_beach";
+  state().money = 2000;
+  state().happy = 30;
+  state().rng = 40000; // big first roll → the robber
+  _startEnc("coconutbar");
+  run("yes");
+  assert.equal(state().day, 3, "you still lost the night");
+  assert.ok(state().money <= 500, `robbed of the rest (฿${state().money} left)`);
+  assert.match(lastOut(), /emptied|gone/i);
+});
+
 test("Bangkok tourist: money insults her, manners are rewarded", () => {
   state().room = "ws_south";
   state().happy = 10; // above the floor so the −1 is visible

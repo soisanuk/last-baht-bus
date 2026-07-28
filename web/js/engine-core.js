@@ -394,6 +394,9 @@ function _chargeRent() {
 }
 
 function _hotelRoomId() { return _HOTELS[G.hotel].room; }
+// Any hotel guest room — upstairs and behind a locked door, so no street dog,
+// no soi encounter, reaches you here.
+function _isHotelRoom(id) { return Object.values(_HOTELS).some(h => h.room === id); }
 
 // ── Named patrons ──────────────────────────────────────────────────────────
 // Hoppers drift to a hash-chosen bar each hour until 22:00, then settle at
@@ -732,9 +735,10 @@ function _describeRoom(full, forceFull) {
     }
     if (G.room === "khao_talo_strip") _dogShamrock(); // the dead pub knows him
   } else if (_flag("act1Done") && !r.bar && !r.barType && !r.massage && !r.soapy &&
-      !r.hostBar && !_isDarkHere() && G.dogNudgeDay !== G.day && _rand() < 0.35) {
+      !r.hostBar && !_isHotelRoom(G.room) && !_isDarkHere() && G.dogNudgeDay !== G.day && _rand() < 0.35) {
     // the un-adopted dog makes himself known: at most once a night, lit streets
-    // only, and never during Act One's tight opening
+    // only (never a hotel room — he can't climb to your balcony), and never
+    // during Act One's tight opening
     G.dogNudgeDay = G.day;
     _say("A soi dog with one clipped ear falls in beside you for half a block, matching " +
       "your pace with off-duty professionalism, then peels away at the soi mouth with " +
