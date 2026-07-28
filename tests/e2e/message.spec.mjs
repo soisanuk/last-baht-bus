@@ -5,14 +5,14 @@
 // can show at once — a text at the bar. Driven from file:// in headless Chromium.
 // Globals are lexical, so page.evaluate reads G as a bare identifier.
 import { test, expect } from "@playwright/test";
+import { bootIntoGame } from "./_helpers.mjs";
 
 const INDEX_URL = new URL("../../web/index.html", import.meta.url).href;
 
 test("message FAB: hidden with no texts, shows on unread, taps to read, then hides", async ({ page }) => {
   const pageErrors = [];
   page.on("pageerror", e => pageErrors.push(e.message));
-  await page.goto(INDEX_URL);
-  await page.waitForSelector("#term-in");
+  await bootIntoGame(page, INDEX_URL);
 
   const msg = page.locator("#msg-fab");
   await expect(msg).toBeHidden(); // fresh night, empty inbox
@@ -38,8 +38,7 @@ test("message FAB: hidden with no texts, shows on unread, taps to read, then hid
 test("message FAB and bell FAB coexist — a text at the bar shows both", async ({ page }) => {
   const pageErrors = [];
   page.on("pageerror", e => pageErrors.push(e.message));
-  await page.goto(INDEX_URL);
-  await page.waitForSelector("#term-in");
+  await bootIntoGame(page, INDEX_URL);
 
   await page.evaluate(() => {
     G.room = "neon_paradise"; G.money = 2000;          // a bar → the bell shows

@@ -5,17 +5,17 @@
 // Globals are lexical (top-level let/const), so page.evaluate reads G/_audio
 // as bare identifiers, not window.*.
 import { test, expect } from "@playwright/test";
+import { bootIntoGame } from "./_helpers.mjs";
 
 const INDEX_URL = new URL("../../web/index.html", import.meta.url).href;
 
 test("bar bell FAB: hidden outside bars, taps to ring inside, clang fires", async ({ page }) => {
   const pageErrors = [];
   page.on("pageerror", e => pageErrors.push(e.message));
-  await page.goto(INDEX_URL);
-  await page.waitForSelector("#term-in");
+  await bootIntoGame(page, INDEX_URL);
 
   const fab = page.locator("#bell-fab");
-  await expect(fab).toBeHidden(); // Act One opens on the beach — no bar, no bell
+  await expect(fab).toBeHidden(); // Soi 6 opens in the Queen Vic room — no bar, no bell
 
   // step into a bar; a command refreshes visibility. Push the saleng/peddler
   // cooldowns far out so a random encounter can't spawn on the LOOK/ring ticks

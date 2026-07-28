@@ -3,16 +3,17 @@
 // render into #chips in the real DOM, re-render to match context, and that a
 // click round-trips (bare chip submits; a "…" chip prefills the input).
 import { test, expect } from "@playwright/test";
+import { bootIntoGame } from "./_helpers.mjs";
 
 const INDEX_URL = new URL("../../web/index.html", import.meta.url).href;
 
 test("chips render on boot, re-render by context, and clicks act", async ({ page }) => {
   const pageErrors = [];
   page.on("pageerror", e => pageErrors.push(e.message));
-  await page.goto(INDEX_URL);
+  await bootIntoGame(page, INDEX_URL);
 
   const chips = page.locator("#chips .chip");
-  // fresh context (empty localStorage) → intro, not the continue-prompt → real chips
+  // through the mode menu into a live game → real context chips
   await expect(chips.first()).toBeVisible({ timeout: 5000 });
   expect(await chips.count()).toBeGreaterThan(0);
   // the opening room always offers LOOK and the utility chips

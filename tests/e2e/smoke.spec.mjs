@@ -22,8 +22,14 @@ test("boots from file:// and round-trips a typed command", async ({ page }) => {
 
   await page.goto(INDEX_URL);
 
+  // A fresh boot shows the mode-select overlay — proof the scripts loaded, main.js
+  // ran, and the start menu wired up. Click through it into the Soi 6 game.
+  await expect(page.locator("#start-overlay")).toBeVisible({ timeout: 5000 });
+  await page.click('.start-mode[data-mode="soi6"]');
+  await page.click("#start-go");
+
   const out = page.locator("#term-out");
-  // engineIntro() prints on boot — proof the scripts loaded and main.js ran.
+  // startSoi6Mode() prints the intro — the terminal populates.
   await expect(out).toContainText(/\S/, { timeout: 5000 });
 
   // All five engine parts plus the boot wiring actually loaded, in order:
