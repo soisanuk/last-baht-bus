@@ -504,6 +504,10 @@ function _doExamine(arg) {
        "at your heel, reading the street.")));
     return;
   }
+  // EXAMINE PHONE opens the home screen (battery, flashlight, messages, weather,
+  // headlines), not the flat item blurb — but only "phone"/"mobile", so the
+  // flashlight aliases (torch/light) still fall through to the LIGHT machinery.
+  if (/\b(phone|mobile)\b/.test(arg) && _inv().includes("phone")) { _doPhoneScreen(); return; }
   const npc = _findNpc(arg);
   if (npc) { _say(NPCS[npc].desc); return; }
   const pat = _findPatron(arg);
@@ -2168,6 +2172,7 @@ const _HELP = `Common commands:
   TRAVEL <bar|hotel> (fast travel anywhere you've been — walking pace, bare TRAVEL lists)
   TIME · MAP · WAIT UNTIL <hour> · TIP <lady> <amount> · PHOTO · CHEERS · TAO RAI (ask the price)
   QUESTS · ACCEPT <quest> · ABANDON <quest> · HINT (the soi's nudge — Act One, after your first reset)
+  PHONE / EXAMINE PHONE (home screen: battery, messages, weather, headlines)
   CONTACT <lady> (swap numbers) · CONTACTS (your phonebook) · MESSAGE <lady> · CHECK MESSAGES
   WHO / BLACKBOOK (your ladies, ranked by how they feel about you)
   SEND <amount> TO <lady> (banking app)
@@ -2189,7 +2194,7 @@ const _COMPLETE_VERBS = [
   "ask", "give", "buy", "sell bottles", "pay", "wai", "say", "ride bus to",
   "motosai to", "travel", "light", "charge phone", "read", "use", "open", "play",
   "flirt", "kiss", "spank", "fondle", "throw cover", "ring bell", "barfine", "massage", "special", "soapy", "meet", "eat", "drink",
-  "sleep", "tv", "column", "watch", "weather", "scores", "lottery", "map", "time", "tip", "wave",
+  "sleep", "tv", "column", "watch", "weather", "scores", "lottery", "map", "time", "tip", "wave", "phone",
   "photo", "call", "shower", "withdraw", "cheers", "tao rai", "borrow", "repay", "hire", "pet", "feed", "rename", "dance", "sing", "swim",
   "smell", "listen", "diagnose", "get tested", "clinic", "apologize", "quests", "accept", "abandon", "contact",
   "contacts", "who", "blackbook", "message", "check messages", "send", "score", "wait", "again",
@@ -2625,9 +2630,11 @@ function doCommand(input) {
     case "check":
       if (/^out/.test(arg)) _doCheckout();
       else if (/bal|account|atm|fund/.test(arg)) _doBalance();
-      else if (/message|phone|text|inbox/.test(arg)) _readMessages();
+      else if (/message|text|inbox/.test(arg)) _readMessages();
+      else if (/phone|mobile/.test(arg)) _doPhoneScreen();
       else _doExamine(arg);
       break;
+    case "phone": case "mobile": _doPhoneScreen(); break;
     case "messages": case "msgs": case "inbox": _readMessages(); break;
     case "message": case "text": case "msg": _doMessage(arg); break;
     case "contacts": case "phonebook": _doContacts(); break;

@@ -1524,6 +1524,47 @@ function _readMessages() {
   if (!unread.length) _say("(Older messages, re-read for the warm glow.)", "dim");
 }
 
+// EXAMINE PHONE / PHONE — the home screen, not a static description: the two
+// numbers you actually live by (battery, flashlight) up top, then whatever's
+// waiting for you (unread texts, tonight's invite), then the lock-screen
+// widgets a real phone shows — weather and the day's headlines. Weather and
+// news ride the deploy-time news bake (WX_NOW / NEWS_FEED), which is absent
+// offline and in tests, so both degrade to nothing rather than erroring —
+// never gate anything on them.
+function _doPhoneScreen() {
+  if (G.battery <= 0) {
+    _say("Your phone is a black mirror — no screen, no flashlight, no lifeline. " +
+      "Charge it first: a 7-Eleven sells chargers, and some bars let you plug in.");
+    return;
+  }
+  // lead with the time, the way a phone does; battery and flashlight underneath
+  _say(`📱 ${_clockStr()} · day ${G.day}`, "dim");
+  _say(`🔋 Battery ${G.battery}%${G.battery <= 20 ? " — get to a charger" : ""} · ` +
+    `flashlight ${G.lightOn ? "ON" : "off"}`, "dim");
+  const unread = _unreadCount();
+  if (unread) {
+    _say(`📬 ${unread} unread message${unread > 1 ? "s" : ""} waiting — CHECK MESSAGES.`, "win");
+  } else if (G.phone.inbox.length) {
+    _say("📭 No new messages.", "dim");
+  } else {
+    _say("📭 No messages — nobody has your number yet. (CONTACT a lady and she'll start texting.)", "dim");
+  }
+  if (G.phone.invite && G.phone.invite.day === G.day && NPCS[G.phone.invite.id]) {
+    _say(`📌 ${NPCS[G.phone.invite.id].name} asked you to come by her bar tonight.`, "dim");
+  }
+  const wx = _wxLine();
+  if (wx) _say(`🌤️  Pattaya — ${wx}`, "dim");
+  const feed = _newsFeed();
+  if (feed.length) {
+    const seen = new Set();
+    for (let i = 0; i < 6 && seen.size < 2; i++) {
+      const h = _headline();
+      if (h && !seen.has(h.t)) { seen.add(h.t); _say(`📰 ${h.t}`, "thai"); }
+    }
+    _say("(READ PAPER or WATCH TV for the rest.)", "dim");
+  }
+}
+
 // Contacts text first, sometimes. Sweet nothings, invitations with a reward
 // for showing up, and money stories — this IS Pattaya.
 // Contacts text unprompted — scaled by the bond (The Regular). A girl you've
