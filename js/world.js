@@ -640,11 +640,13 @@ const ROOMS = {
     desc: "The north end, near the Dolphin roundabout. Soi 6 runs inland to the east — " +
       "short, loud, and lit like a runway. Naklua lies further north, past the roundabout. " +
       "STINKY BAR's sign — a cartoon skunk hoisting a Chang — buzzes over an open " +
-      "front full of laughter and the crack of pool balls. Across the traffic on the " +
-      "beach side (west), BLUE DOG's plastic chairs face the bay like theatre seats.",
+      "front full of laughter and the crack of pool balls. West, across the traffic, the " +
+      "beachside beer-bar row runs down toward the open sand and the bay. Blue songthaews — " +
+      "the baht buses — keep rattling past toward the rest of Pattaya, a whole neon city " +
+      "that isn't yours to reach just yet; for now you let them go.",
     busStop: "beachrd",
-    exits: { s: "beach_rd_c", e: "soi6_street", n: "naklua_rd", in: "stinky_bar", w: "blue_dog",
-             row: "beach_row" },
+    exits: { s: "beach_rd_c", e: "soi6_street", n: "naklua_rd", w: "beach_row" },
+    venues: ["stinky_bar"],
   },
   beach_row: {
     name: "Beach Road (The Beachside Row)",
@@ -652,8 +654,10 @@ const ROOMS = {
     desc: "The strip of open-air beer bars strung along the sand side, all tin roofs and " +
       "plastic chairs pointed at the bay — the row the Blue Dog anchors and shares its one " +
       "sandy bathroom with. SUNSET RAIL BAR, BAY WATCH BAR, and SANDY TOES trade sunsets and " +
-      "cheap Chang down the line, each rail a little louder than the last.",
-    exits: { e: "beach_rd_n", in: "sunset_rail", n: "bay_watch", s: "sandy_toes" },
+      "cheap Chang down the line, each rail a little louder than the last. Past the last rail " +
+      "the pavement gives out and the open sand of the north beach runs down to the water.",
+    exits: { e: "beach_rd_n", w: "north_beach" },
+    venues: ["blue_dog", "sunset_rail", "bay_watch", "sandy_toes"],
   },
   sunset_rail: {
     name: "Sunset Rail Bar",
@@ -694,7 +698,19 @@ const ROOMS = {
       "do about it. The bathroom is a sandy walk past three other bars' back " +
       "doors — the whole beachside row shares the one, an arrangement older " +
       "than anyone still willing to explain it.",
-    exits: { out: "beach_rd_n" },
+    exits: { out: "beach_row" },
+  },
+  north_beach: {
+    name: "North Pattaya Beach",
+    region: "Beach Road",
+    desc: "Where the pavement quits and the sand takes over: the north end of Pattaya Beach, " +
+      "quiet after the soi's wall of noise — just the hiss of the little waves and the string " +
+      "lights of the beer row behind you. A soi dog with one clipped ear is having the night " +
+      "of his life in the shallows, charging the waves, losing to them, shaking off and " +
+      "charging again — and every few laps he stops to check whether you're watching. He is " +
+      "doing this FOR you. He has decided. (FEED DOG, if you'd like to make it official.) " +
+      "The beer-bar row is back to the east.",
+    exits: { e: "beach_row" },
   },
   stinky_bar: {
     name: "Stinky Bar",
@@ -1258,12 +1274,11 @@ const ROOMS = {
       "Thai pop. Open-air bars on both sides, hostesses spilling out front in sequins and very " +
       "little else. \"HANDSOME MAN!\" \"Hey! WHERE YOU GO!\" You are grabbed by the wrist. " +
       "You are grabbed by the other wrist. Someone significantly shorter than you attempts " +
-      "to climb onto your back. PINK LOTUS LOUNGE (north), GOLDEN DRAGON BAR (east), and " +
-      "SUNSET DREAMS LOUNGE (south) are the main combatants. The QUEEN VIC INN (pub) " +
-      "halfway down is the one place that isn't shouting, and the soi keeps going deeper " +
-      "east into more of the same.",
-    exits: { w: "beach_rd_n", n: "pink_lotus", e: "golden_dragon", s: "sunset_dreams",
-             in: "pink_lotus", pub: "queen_vic", deep: "soi6_deep" },
+      "to climb onto your back. PINK LOTUS LOUNGE, GOLDEN DRAGON BAR, and SUNSET DREAMS " +
+      "LOUNGE are the main combatants. The QUEEN VIC INN halfway down is the one place that " +
+      "isn't shouting, and the soi keeps going deeper east into more of the same.",
+    exits: { w: "beach_rd_n", e: "soi6_deep" },
+    venues: ["pink_lotus", "golden_dragon", "sunset_dreams", "queen_vic"],
   },
   pink_lotus: {
     name: "Pink Lotus Lounge",
@@ -1305,7 +1320,8 @@ const ROOMS = {
       "and the shouting never lets up. KITTEN CORNER, CHERRY POP BAR, and RUBY KISS BAR trade " +
       "wrist-grabs down this stretch. Same open fronts, same three-colour neon, same " +
       "staircases behind the bar that the menu doesn't mention.",
-    exits: { w: "soi6_street", in: "kitten_corner", n: "cherry_pop", s: "ruby_kiss" },
+    exits: { w: "soi6_street" },
+    venues: ["kitten_corner", "cherry_pop", "ruby_kiss"],
   },
   kitten_corner: {
     name: "Kitten Corner",
@@ -5375,6 +5391,7 @@ const ROOM_GEO = {
   blue_dog:         [12.9426, 100.8819],
   stinky_bar:       [12.9428, 100.8821],
   beach_row:        [12.9426, 100.8817],
+  north_beach:      [12.9427, 100.8805],
   sunset_rail:      [12.9427, 100.8815],
   bay_watch:        [12.9424, 100.8814],
   sandy_toes:       [12.9428, 100.8816],
