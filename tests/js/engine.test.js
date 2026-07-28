@@ -3478,6 +3478,37 @@ test("Soi 6 mode: starts at the Queen Vic, confined to the soi, no bus out, saba
   assert.equal(state().day, 1);
 });
 
+test("inventory surfaces the three condoms you start with, and drops them when spent", () => {
+  startSoi6Mode();
+  assert.equal(state().condoms, 3, "the week starts with three");
+  run("inventory");
+  assert.match(lastOut(), /3 condoms/, "visible in the carrying list");
+  state().condoms = 1; out = [];
+  run("i");
+  assert.match(lastOut(), /1 condom\b/, "singular when down to one");
+  state().condoms = 0; out = [];
+  run("i");
+  assert.doesNotMatch(lastOut(), /condom/, "gone from the list when spent");
+});
+
+test("Soi 6 mode: the clinic thread is fully reachable — condoms on the soi, symptoms, GET TESTED clears it", () => {
+  startSoi6Mode();
+  // protection is on-soi: the Soi 6 7-Eleven sells condoms
+  state().room = "soi6_street";
+  state().money = 500;
+  const packs = state().condoms;
+  run("buy condom");
+  assert.ok(state().condoms > packs, "condoms buyable inside the confined mode");
+  // an unprotected barfine's souvenir surfaces two mornings on, in-mode
+  state().std = { day: state().day };
+  state().day += 2;
+  assert.ok(_stdSymptomatic(), "symptoms surface across the soi week");
+  // GET TESTED works anywhere — the clinic verb isn't gated to a room or a mode
+  out = [];
+  run("get tested");
+  assert.equal(state().std, null, "the free clinic clears it without leaving the soi");
+});
+
 test("every district's 7-Eleven presses the iconic cheese toastie", () => {
   state().room = "beach_rd_c";
   state().money = 100;

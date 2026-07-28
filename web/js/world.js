@@ -776,6 +776,15 @@ const ROOMS = {
       "Further up the dark sand, a few women share plastic stools under the coconut palms — " +
       "no bar, no beer, no sign: the “coconut bar,” freelance and unhurried, watching the beach " +
       "for a walk-up. The beer-bar row is back to the east.",
+    revisit: [
+      "Back to the north end where the pavement quits and the sand takes over — the soi's roar behind you now, only the hiss of small waves and the beer row's string lights glowing east.",
+      "The dark sand again, quiet after the wall of noise. Out past the last of the light the bay is black and enormous and supremely uninterested in who you are, which is its own kind of mercy.",
+      "The one-eared soi dog is still out in the shallows, charging the little waves and losing to them with total commitment — and every few laps he stops to check you're still watching. (He'd take a snack, if you had one. FEED DOG.)",
+      "Up the beach, under the coconut palms, the freelance stools are occupied again — a cigarette ember, a low laugh, eyes reading the dark sand for a walk-up. The coconut bar keeps its own hours.",
+      "Back onto the sand, the beer row's bulbs strung warm behind you, the sea working away at the dark in front. A good place to be nobody in particular for a while.",
+      "A soi dog trots the tideline with an air of ownership, pausing to bark down a wave that had it coming. The night is his; you're just passing through it.",
+      "The palms rattle dry overhead. Somewhere up the dark beach the coconut-bar women murmur to each other and wait, and the surf keeps the time for all of you.",
+    ],
     exits: { e: "beach_row" },
   },
   stinky_bar: {
