@@ -3491,6 +3491,33 @@ test("inventory surfaces the three condoms you start with, and drops them when s
   assert.doesNotMatch(lastOut(), /condom/, "gone from the list when spent");
 });
 
+test("EXAMINE PHONE is a home screen: battery, flashlight, and messages awaiting", () => {
+  startSoi6Mode();
+  state().battery = 64;
+  out = [];
+  run("examine phone");
+  let screen = lastOut();
+  assert.match(screen, /Battery 64%/, "battery up top");
+  assert.match(screen, /flashlight off/, "light status shown");
+  assert.match(screen, /No messages/, "empty inbox reads clean");
+  // an unread text turns the screen into a call to action; bare PHONE hits it too
+  out = [];
+  _pushMsg("lek", "when you come see me na 🥺");
+  run("phone");
+  screen = lastOut();
+  assert.match(screen, /1 unread message\b/);
+  assert.match(screen, /CHECK MESSAGES/);
+  // flashlight state is reflected
+  out = []; state().lightOn = true;
+  run("x phone");
+  assert.match(lastOut(), /flashlight ON/);
+  // a dead battery is a black mirror, not a dashboard
+  out = []; state().battery = 0;
+  run("examine phone");
+  assert.match(lastOut(), /black mirror/i);
+  assert.doesNotMatch(lastOut(), /Battery 0%/);
+});
+
 test("Soi 6 mode: the clinic thread is fully reachable — condoms on the soi, symptoms, GET TESTED clears it", () => {
   startSoi6Mode();
   // protection is on-soi: the Soi 6 7-Eleven sells condoms
