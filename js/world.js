@@ -657,6 +657,14 @@ const ROOMS = {
       "the baht buses — keep rattling past toward the rest of Pattaya, a whole neon city " +
       "that isn't yours to reach just yet; for now you let them go.",
     busStop: "beachrd",
+    revisit: [
+      "Back to the north end by the Dolphin roundabout. Soi 6 blazes inland to the east; the beachside row hums quiet to the west across the traffic.",
+      "The Dolphin roundabout turns its slow circle. Soi 6's runway of light runs off east, Naklua waits past the roundabout, and blue songthaews rattle by toward a city that isn't yours yet.",
+      "You're back at the top of Beach Road. The Stinky Pinky's skunk buzzes overhead, pool balls crack inside, and the sand-side bars glow low across the road.",
+      "North end again — the roundabout, the skunk sign, the crack of pool from the Stinky, and Soi 6 daring you east like a lit fuse.",
+      "Back near the Dolphin, where the loud soi and the quiet sand face each other across the songthaew traffic and you get to pick.",
+      "The roundabout, the runway of neon east, the beer-bar row low and golden west. A baht bus slows, hopeful; you wave it on.",
+    ],
     exits: { s: "beach_rd_c", e: "soi6_street", n: "naklua_rd", w: "beach_row" },
     venues: ["stinky_bar"],
   },
@@ -668,6 +676,14 @@ const ROOMS = {
       "sandy bathroom with. SUNSET RAIL BAR, BAY WATCH BAR, and SANDY TOES trade sunsets and " +
       "cheap Chang down the line, each rail a little louder than the last. Past the last rail " +
       "the pavement gives out and the open sand of the north beach runs down to the water.",
+    revisit: [
+      "Back onto the beachside row: tin roofs, plastic chairs, every rail pointed at the bay and a little louder than the last.",
+      "The row takes you back in. The Blue Dog anchors the east end, Sandy Toes dissolves into sand at the west, and Chang runs cheap the whole way down.",
+      "You walk back into the string of open-air bars. Sunset Rail, Bay Watch, Sandy Toes — the sunsets are shared, the bathroom's shared, the view's the point.",
+      "The beachside row again, tin and plastic and low golden light, the pavement running out into sand at the far end.",
+      "Back among the rails, where nobody grabs your wrist and everybody's watching the same sky go down over the water.",
+      "The row hums low and easy. Down west the last bar gives up its floor to the beach; east the Blue Dog holds the line. You pick a rail.",
+    ],
     exits: { e: "beach_rd_n", w: "north_beach" },
     venues: ["blue_dog", "sunset_rail", "bay_watch", "sandy_toes"],
   },
@@ -683,6 +699,9 @@ const ROOMS = {
       "Pukky pours without turning from the view and gets it right anyway. You take the stool she expected you to.",
       "You settle back onto the bamboo rail. The sun's a little lower; nobody's looked away.",
       "Sunset Rail again: the congregation of stools, the sun a fraction lower, Pukky already pouring.",
+      "Back to the west-facing rail, where the entire clientele is pointed at the horizon like sunflowers with beers.",
+      "The Sunset Rail takes you back to your seat in the choir. Nobody speaks over the good part; the good part is now.",
+      "Back onto the bamboo, cold bottle, warm light, the day going down over the bay exactly as advertised.",
     ],
     exits: { out: "beach_row" },
   },
@@ -698,6 +717,9 @@ const ROOMS = {
       "Somo keeps the cooler cold and the banter warm, and slides your Chang over before you ask.",
       "You drop back in under the red-and-yellow gag. Nobody's drowning. Nobody ever is.",
       "Bay Watch again — the whistle, the float, Somo's cold cooler and warm banter, the joke still funny.",
+      "Back to the lifeguard theme nobody asked for and everybody enjoys. Somo salutes you with a bottle opener.",
+      "The float's still on the wall, the whistle's still forbidden, and your stool's still warm. Somo grins and pops a cap.",
+      "Back into the red-and-yellow joke, where the only rescue on offer is another cold Chang and Somo is very good at it.",
     ],
     exits: { out: "beach_row" },
   },
@@ -713,6 +735,9 @@ const ROOMS = {
       "Nina brings the beer to your chair again so you never have to leave the view.",
       "You sink back into a chair on the sand. The last rail before the beach takes over entirely, and it nearly has.",
       "Sandy Toes again, sand underfoot and bulbs overhead, Nina walking your Chang out to the chair.",
+      "Back to the barefoot end of the row, where the pavement gave up and the beach won and nobody minds.",
+      "The string lights, the swept sand, a chair angled at the dark water — Sandy Toes takes you back to the softest seat on Beach Road.",
+      "Back onto the sand with a cold one Nina saw coming. Out past the bulbs the bay is black and patient and yours.",
     ],
     exits: { out: "beach_row" },
   },
@@ -733,6 +758,9 @@ const ROOMS = {
       "The Blue Dog folds you back in — no walls, no door, just the sunset and whatever Beach Road does next.",
       "You reclaim a plastic chair facing the water. The shared sandy bathroom is still a hike; the view still isn't.",
       "The Blue Dog again — the bay, the plastic chairs, the one bathroom, the best cheap view on the coast.",
+      "Back to the rail and the open front. The bay does its slow gold thing to the west, the road does its loud thing behind you, and you sit in the seam between and drink.",
+      "You drop back into a chair aimed at the water. Nobody grabs you out here — the Blue Dog's regulars came to watch the sea, not to be sold anything.",
+      "Back to the tin roof and the theatre seating. Someone points at a boat, someone argues about the boat, the Chang stays cold and the sun keeps sinking.",
     ],
     exits: { out: "beach_row" },
   },
@@ -745,7 +773,9 @@ const ROOMS = {
       "of his life in the shallows, charging the waves, losing to them, shaking off and " +
       "charging again — and every few laps he stops to check whether you're watching. He is " +
       "doing this FOR you. He has decided. (FEED DOG, if you'd like to make it official.) " +
-      "The beer-bar row is back to the east.",
+      "Further up the dark sand, a few women share plastic stools under the coconut palms — " +
+      "no bar, no beer, no sign: the “coconut bar,” freelance and unhurried, watching the beach " +
+      "for a walk-up. The beer-bar row is back to the east.",
     exits: { e: "beach_row" },
   },
   stinky_bar: {
@@ -763,6 +793,9 @@ const ROOMS = {
       "The pool bar takes you back. Bert holds the end stool with a bottomless Budweiser and an opinion on your break already loading.",
       "You step back into the crack of cue balls. Next door the Blue Dog's rail roars at another sunset, close enough to share a bathroom with.",
       "The Stinky Pinky again: chalk, trophies, cold Bud, and Bert's court in permanent session at the end of the bar.",
+      "Back under the buzzing skunk into the crack of pool balls and the smell of lime. Somebody's mid-break; Bert's already narrating it from the end stool.",
+      "The Stinky Pinky folds you back in — league flags, brushed felt, a jukebox arguing with the Blue Dog's rail through the shared wall. Bert lifts his Bud a half-inch in greeting.",
+      "You duck back in past the skunk sign. The regulars call it the Stinky and mean it fondly; the table's free, the Bud's cold, and Bert has a theory about your last shot.",
     ],
     exits: { out: "beach_rd_n" },
   },
@@ -1317,6 +1350,16 @@ const ROOMS = {
       "to climb onto your back. PINK LOTUS LOUNGE, GOLDEN DRAGON BAR, and SUNSET DREAMS " +
       "LOUNGE are the main combatants. The QUEEN VIC INN halfway down is the one place that " +
       "isn't shouting, and the soi keeps going deeper east into more of the same.",
+    revisit: [
+      "Back onto Soi 6 and the wall of noise hits first, the hands second. \"HANDSOME MAN!\" \"WHERE YOU GO SEXY MAN?\" You are grabbed, released, grabbed again, an item passed between bars.",
+      "The soi takes you back into the bass and the barkers. A girl detaches from a doorway to walk backwards in front of you, selling her bar with her whole body. Then another. Then another.",
+      "Back into the loudest hundred metres in Thailand. Six sound systems fight, a dozen girls call you handsome in the same second, and a small one makes another attempt on your back.",
+      "You round the corner and the soi is exactly as you left it: sequins, wrist-grabs, competing basslines, and the flat certainty that you will be spending money very soon.",
+      "Back onto Soi 6, where standing still is not an option — a hand takes your wrist, a voice takes your name (you have no name here, you are Handsome), and a bar takes its shot.",
+      "The soi swallows you again. \"You! Yes you! Come Pink Lotus!\" \"No — Golden Dragon!\" \"He come with ME.\" You are, briefly, the most wanted man in Thailand.",
+      "Back into the churn and the neon. The girls out front read foot traffic for a living, and you are foot traffic; the pitch starts before you've fully arrived.",
+      "Soi 6 again — a river of hands and offers, the Queen Vic glowing quiet halfway down like a lighthouse, the whole street daring you to reach the far end sober and solvent.",
+    ],
     exits: { w: "beach_rd_n", e: "soi6_deep" },
     venues: ["pink_lotus", "golden_dragon", "sunset_dreams", "queen_vic"],
   },
@@ -1330,10 +1373,14 @@ const ROOMS = {
       "talking before you sit down. The staircase at the back leads somewhere the menu " +
       "doesn't mention.",
     revisit: [
-      "Back into the Pink Lotus — pink walls, pink stools, pink air, and Joy already mid-sentence before you sit.",
-      "The three-colour neon swallows you again. Somewhere in all that pink, Joy is laughing at something you haven't said yet.",
-      "You drop back onto a pink stool. The staircase at the back is exactly where you left it, mentioning nothing.",
-      "Pink Lotus, again and pinker. Joy hasn't stopped talking and has no intention of starting.",
+      "Back into the Pink Lotus and three hands find you at once — a lap claimed, a thigh against yours, Joy's mouth already at your ear: \"Lady drink first, then upstairs, na? I show you why they call it Pink.\"",
+      "The pink swallows you again. No warm-up here — a girl is in your lap doing the math on your shirt before you have sat. \"You buy me drink, handsome? Then up. I make you forget the flight home.\"",
+      "You are barely past the door before the offer is on the table, plain as the price list: \"Short time, long time, up to you — but you came back for a reason, na. Sit. Let me remind you.\"",
+      "Pink Lotus does not do coy. A knee hooks yours, a hand slides up your arm, the pitch a purr against your jaw: \"Why you sit alone? One drink, we go up, everybody happy.\"",
+      "Back to the pink and the full-court press — grabbed, seated, straddled by attention, and told warmly and without a flicker of doubt exactly what tonight costs and exactly what it buys.",
+      "The girls clock you the second you round the post and close in like choreography. \"Same handsome from before! You want me now? Upstairs quiet, aircon cold — worth the walk, I promise.\"",
+      "Into the Pink Lotus, where nobody wastes your time or theirs: a lap, a hand, a mouth at your ear naming a number and a room, and the fairy lights doing their best to make it romantic.",
+      "Back onto a pink stool with a girl already arranging herself across you. \"You think about me all day? Liar.\" She laughs, delighted. \"Okay — buy the drink, we go up, you think about me tomorrow.\"",
     ],
     exits: { out: "soi6_street" },
   },
@@ -1347,10 +1394,14 @@ const ROOMS = {
       "jukebox, it died in 2019, but the playlist is a faithful tribute. Nobody has " +
       "updated it and nobody has complained.",
     revisit: [
-      "Back into the Golden Dragon, louder than you remembered, the hand-painted dragon presiding over all of it.",
-      "The dead jukebox's faithful playlist picks up where it never stopped. Nobody's updated it. Nobody's complained.",
-      "You settle back under the cousin-painted dragon — vintage Thai pop, cold Chang, same as it ever was.",
-      "The Golden Dragon takes you back, gold paint flaking, the tribute playlist immortal.",
+      "Back into the Golden Dragon, the dragon presiding, and a girl already peeling you toward a stool with a hand in your belt loop. \"You, handsome. Sit here. Buy me one, then we talk about upstairs.\"",
+      "The vintage playlist and the wall of noise take you back — and so do two girls at once, one on each arm, negotiating you like a shared prize. \"Me first.\" \"No — ME first.\" \"Okay, you choose, but choose FAST.\"",
+      "Louder than you remembered, and more direct: a girl slides into your lap mid-song and puts it plainly. \"Drink, then up, then you go home happy. Simple, na? Everything here is simple.\"",
+      "Back under the cousin-painted dragon. A hand flattens on your chest, a mouth finds your ear: \"Why you shy? This is Soi 6, tilac. Nobody here is shy. You buy me drink, I show you.\"",
+      "The Golden Dragon reels you back in. Somebody already has your hand on her hip and her eyes on your wallet, and the whole thing is disarmingly, aggressively cheerful.",
+      "Back into the gold and the grab. \"Same shirt, same handsome! You come for me tonight?\" She does not wait for an answer; she is already climbing half into your lap. \"Yes. You come for me.\"",
+      "Into the Golden Dragon, where the offer arrives before the beer does: a thigh, a whisper, a price, a room number, all inside the first ten seconds, all with a grin.",
+      "Back to the dragon and the dead jukebox's faithful ghost. A girl hooks a leg over yours and leans in close enough to share breath. \"Upstairs is nicer than down here. Much nicer. Buy me drink, I prove it.\"",
     ],
     exits: { out: "soi6_street" },
   },
@@ -1363,10 +1414,14 @@ const ROOMS = {
       "fan that needs oiling. Kwan is at the end of the bar folding napkins into cranes, " +
       "adding to a row of them lined up along the rail like a tiny origami militia.",
     revisit: [
-      "Back into Sunset Dreams — the door closes, the roar drops to a hum, and Kwan adds another crane to the row.",
-      "The one bar with walls takes you back into its slow, dark calm. The ceiling fan still needs oiling.",
-      "You step back in and the soi goes quiet behind the glass. Kwan looks up and sets a paper crane by your hand.",
-      "Sunset Dreams again — walls, a door, a slower gear. The origami militia has gained a recruit.",
+      "Back into Sunset Dreams — the door closes, the roar drops, and a girl is on you in the hush before you have found your eyes in the dark. \"Quiet here. Good for talking. Better for upstairs. Buy me drink?\"",
+      "The one bar with walls takes you back into its slow dark, where the come-on is a murmur instead of a shout: a hand on your thigh, a mouth at your jaw. \"No hurry, handsome. Long time is better than short. I show you.\"",
+      "Darker, slower, and no less direct. A girl folds herself onto your stool with you already on it. \"Kwan makes the cranes; I make the offer. One drink, then up. The quiet is for you and me.\"",
+      "Back through the door into the manageable roar. Somebody settles against you and gets to the point in a low voice: what's on offer, what it costs, and which staircase.",
+      "Sunset Dreams reels you in soft. The ceiling fan ticks, a girl's hand finds yours and moves it where she wants it, and the pitch is warm, unhurried, and completely unambiguous.",
+      "Back into the dark and the slow. \"You again. Good. The loud girls, they tire you out — me, I take my time.\" A hand slides up. \"Buy me one drink. Then we take our time upstairs.\"",
+      "Into Sunset Dreams, where the walls let the girls lean close and say the quiet part out loud: a number, a room, a promise, all delivered against your ear like a secret.",
+      "Back to the origami militia and the low light. A girl drapes over you and murmurs the whole transaction like sweet nothings. Kwan, at the rail, adds another crane and says nothing at all.",
     ],
     exits: { out: "soi6_street" },
   },
@@ -1378,6 +1433,16 @@ const ROOMS = {
       "and the shouting never lets up. KITTEN CORNER, CHERRY POP BAR, and RUBY KISS BAR trade " +
       "wrist-grabs down this stretch. Same open fronts, same three-colour neon, same " +
       "staircases behind the bar that the menu doesn't mention.",
+    revisit: [
+      "Deeper into the soi again, where the noise doubles down and the bars run on toward Second Road. A girl swings off a Kitten Corner stool to intercept you: \"Where you go? You go with ME.\"",
+      "Back into the far stretch, wrist-grabs down both sides, three-colour neon, three staircases the menus don't mention. \"HANDSOME! Cherry Pop! No — Ruby Kiss! He come here!\"",
+      "The deep end of Soi 6 takes you back — same open fronts, same offers, louder if anything. A hand finds your arm before you've picked a bar; the bar gets picked for you.",
+      "Back past the Queen Vic into the thick of it, where every doorway has a girl and every girl has a plan for your evening and none of them is subtle about it.",
+      "You round into the deep soi and the pitches overlap into one wall of sound: drink, upstairs, short time, long time, come come come, all of it aimed at you and meant.",
+      "Back into the far stretch, the last hundred metres before Second Road, where the girls read your wallet through your shorts and grab accordingly.",
+      "The deep soi again. Kitten, Cherry, Ruby — three fronts, three staircases, three sets of hands already reaching. You are, once more, the entire economy walking past.",
+      "Back to where the soi runs out toward Second Road, neon stacked to the roofline, a girl on your sleeve saying the quiet part first and loud: \"Come upstairs, tilac. Why we pretend?\"",
+    ],
     exits: { w: "soi6_street" },
     venues: ["kitten_corner", "cherry_pop", "ruby_kiss"],
   },
@@ -1389,10 +1454,14 @@ const ROOMS = {
       "Nangfah work the front, and the grab-and-giggle starts before you've fully stopped " +
       "walking. A staircase at the back goes up to the short-time rooms.",
     revisit: [
-      "Back into Kitten Corner — cat posters, the neon paw, and the grab-and-giggle starting before you've stopped walking.",
-      "Praewa and Nangfah reclaim you at the front like you never left. The staircase at the back waits, patient.",
-      "You step back into the cat-poster glow. Somebody's already decided you're staying a while.",
-      "Kitten Corner again: paw prints, posters, and two front-runners who never doubted you'd be back.",
+      "Back into Kitten Corner and the grab-and-giggle is instant — Praewa in your lap, Nangfah at your ear, both purring the offer. \"You want kitten tonight? Two kitten? Buy us drink, we go up, we play.\"",
+      "The neon paw flickers you back in and a girl is already climbing you like furniture. \"Meow, handsome.\" A grin, a hand, a price. \"Short time upstairs — you like? Everybody like.\"",
+      "Cat posters and quick hands. A girl hooks her claws gently into your collar and puts it plainly: \"Why you play hard to get? Nobody play hard to get on Soi 6. Buy me drink, take me up.\"",
+      "Back to the paw print and the pounce. Two of them close in, delighted, competitive, direct — a thigh, a purr, a number — and Kesinee watches the till and lets the girls work.",
+      "Kitten Corner takes you back and does not pretend otherwise: a lap claimed, a mouth at your ear, the staircase nodded at. \"Upstairs is where the kitten really play, tilac.\"",
+      "Back into the cat glow. \"Same handsome! You come back for me — say you come back for me.\" She is already arranging herself across your knees. \"Buy me drink first. Then upstairs. Then you never leave Soi 6.\"",
+      "Into Kitten Corner, all posters and pounce, where the girls tell you exactly what the staircase is for inside the first breath and dare you to be shocked.",
+      "Back to the paw and the purr, and a girl who has decided you are hers for the night. \"No shy, handsome. This Soi 6. We say what we want, you buy the drink, we go up. Easy, na?\"",
     ],
     exits: { out: "soi6_deep" },
   },
@@ -1404,10 +1473,14 @@ const ROOMS = {
       "and a sound system stuck on one bubblegum playlist. Tabtim and Chaba call the odds " +
       "from the rail. The stairs are where the stairs always are.",
     revisit: [
-      "Back into Cherry Pop — red floor to ceiling, the bowl of cherries nobody eats, the one bubblegum playlist looping on.",
-      "Tabtim and Chaba call the odds from the rail again. The stairs are where the stairs always are.",
-      "You drop back into the red. The sound system is still stuck on that one sugary song, and nobody minds.",
-      "Cherry Pop again — the cherries still uneaten, the bubblegum still looping, the red still total.",
+      "Back into Cherry Pop, red on red, and a girl pops a cherry between her teeth and the offer in the same grin. \"Handsome! You taste cherry with me upstairs? Buy me drink, we find out.\"",
+      "The bubblegum loop and the wall of red take you back, and Tabtim takes your lap. \"You came back for Cherry. Everybody come back for Cherry.\" A hand, a price, a wink. \"Short time, sweet like the name.\"",
+      "Red floor to ceiling and a girl already on you before you have sat. \"Why you wait? On Soi 6 nobody wait. One drink, then up, then you go home smiling like a idiot. Good idiot.\"",
+      "Back to the cherries nobody eats and the girls who eat you alive. Chaba drapes over you and names the whole thing — drink, room, price — sweetly, cheerfully, without a shred of shame.",
+      "Cherry Pop reels you in on sugar and directness in equal measure: a thigh across yours, a purr in your ear, and a girl telling you precisely what the staircase behind the bar is for.",
+      "Back into the red. \"Same handsome, same Cherry, same idea!\" She laughs, climbs half into your lap, gets to the point. \"Buy me drink. Take me up. The playlist is bad but I am not.\"",
+      "Into Cherry Pop, where the come-on is as loud and sweet and relentless as the one bubblegum song, and just as impossible to argue with.",
+      "Back to the bowl of untouched cherries and a girl who has claimed your stool and your evening. \"You buy me one drink, I make you forget the flight, the wife, your own name. Upstairs. Yes? Yes.\"",
     ],
     exits: { out: "soi6_deep" },
   },
@@ -1419,10 +1492,14 @@ const ROOMS = {
       "a mirror wall, and a lipstick-mark motif on everything including the glasses. Kluay and " +
       "Benz have claimed the two nearest stools for you already.",
     revisit: [
-      "Back into Ruby Kiss — lipstick lighting, the mirror wall doubling the room, Kluay and Benz already saving you a stool.",
-      "The last loud front before Second Road takes you back, lipstick-marked glasses and all.",
-      "You step back into the red mirror-glare. Two of you walk in; the wall makes it four.",
-      "Ruby Kiss again, all mirror and lipstick, the soi's last shout before it hits Second Road.",
+      "Back into Ruby Kiss and a lipstick-marked glass is in your hand before a girl is in your lap — but only just. \"You have my kiss. Now you want the rest?\" Wilai grins at the mirror, at the two of you the glass makes four. \"Buy me drink, we go up.\"",
+      "Lipstick lighting, mirror wall, and Kluay already arranging herself across you. \"Last bar on the soi, best girls on the soi — you save the best, na?\" A hand, a price, a nod at the stairs.",
+      "The red mirror-glare takes you back and doubles the come-on: two Benzes leaning in, two hands on your thigh, one very direct question about upstairs asked twice at once.",
+      "Back to the lipstick and the last-loud-front energy. A girl marks your cheek with a kiss and the deal in the same motion. \"Short time, long time — you choose, handsome. But you choose me.\"",
+      "Ruby Kiss reels you in on mirrors and mouths. Somebody already has the offer against your ear — drink, room, price — and the wall behind the bar is showing you both exactly how it looks.",
+      "Back into the red. \"Handsome came back to Ruby! Of course. Everybody save Ruby for last.\" She climbs on, points at the stairs, does not stop smiling. \"Buy me drink — then last is best.\"",
+      "Into Ruby Kiss, where the girls kiss the glass, kiss your cheek, and name the whole transaction in one breath, and the mirror makes an audience of it.",
+      "Back to the lipstick marks and a girl draped over your shoulders, chin on your head, watching you both in the mirror wall. \"See? We look good together. Buy me drink. We look even better upstairs.\"",
     ],
     exits: { out: "soi6_deep" },
   },
@@ -1437,9 +1514,12 @@ const ROOMS = {
       "some time. A staircase behind the bar leads UP to the guest rooms.",
     revisit: [
       "Back into the Queen Vic — real aircon, real wood, the dartboard, and the soi safely on the far side of the glass.",
-      "The pub folds you back into its calm. Up on the balcony Terry's beer goes up without him looking down.",
+      "The pub folds you back into its calm. Terry lifts his beer from the corner stool without quite looking up.",
       "You step back into the one quiet room on Soi 6. The bass from outside arrives pre-muffled, the way it should.",
       "The Queen Vic again — the dartboard, the panelling, the deliberate refusal to be Soi 6. It works.",
+      "Back through the door and the volume drops to a civilised hum. Somebody's mid-dart, somebody's mid-story, nobody's mid-grab. Bliss.",
+      "The Vic takes you back into wood and cold air and the low murmur of men who have found their spot and mean to keep it.",
+      "Back to the calm eye of the soi's storm — a pint, a dartboard, a window onto the chaos you don't have to join.",
     ],
     exits: { out: "soi6_street", up: "qv_room" },
   },
@@ -1461,9 +1541,20 @@ const ROOMS = {
     desc: "The balcony room over the Queen Vic: wood floors, a ceiling fan with " +
       "strong opinions, and the balcony itself — a recliner, a small table, and " +
       "the whole of Soi 6 performing below like a fish tank somebody dropped a " +
-      "radio into. Terry's recliner is two balconies over; he raises his beer " +
-      "without looking. Sleep happens here somehow. Nobody knows how.",
-    exits: { down: "queen_vic", out: "queen_vic" },
+      "radio into. Terry's recliner is two balconies over — close enough to raise " +
+      "his beer at you, too far to hear a word over the soi; you'll catch him " +
+      "properly down in the pub. Sleep happens here somehow. Nobody knows how.",
+    revisit: [
+      "Back up to your balcony room over the Queen Vic — the fan turning its opinions over, Soi 6 still howling up over the rail two floors down.",
+      "The room again: wood floors, the recliner on the balcony, the soi throwing its light and its bass up the wall like a fish tank with the volume left on.",
+      "You climb back to the balcony room. Somewhere below a girl is shrieking WHERE YOU GO SEXY MAN at a man who is, in fact, going. The blackout curtains will fix most of it.",
+      "Home, such as it is — one recliner, one small table, and the whole loud soi laid out below like it is putting on the show for you alone.",
+      "Back to the balcony. Six bars' worth of music arrives as one blurred throb, a hostess laughs like a car alarm, and none of it follows you past the blackout curtains.",
+      "Up the stairs to the fan and the recliner. The soi does not quiet down for anyone — but draw the blackout curtains and it drops to a rumour you can sleep through.",
+      "The balcony room takes you back in. HANDSOME MAN! floats up from the pavement, aimed at somebody, everybody, nobody. You have learned to hear it as weather.",
+      "Back to your patch of quiet-ish over the loudest hundred metres in Thailand — recliner, small table, and blackout curtains thick enough to turn the neon and the shouting into a lullaby.",
+    ],
+    exits: { down: "queen_vic" },
   },
 
   // ─── LK Metro ───
@@ -3928,6 +4019,20 @@ const ENCOUNTERS = {
       "not to listen: “Ning also free. VERY boring night, na.”",
     hint: "(Company is ฿700. Ning makes it ฿1400 — cheaper than a bar, but no " +
       "mamasan means nobody to complain to if it goes wrong. YES / NO.)",
+  },
+  coconutbar: {
+    rooms: ["north_beach"],
+    interactive: true, nightly: true, // the beach restocks its shade every night
+    th: "ไปกับหนูไหมคะ", rom: "pai kap nuu mai kha?",
+    intro: "Out past the string lights, in the dark under the palms, three or four women " +
+      "share plastic stools that belong to no bar — the “coconut bar,” the boys call it, " +
+      "because the only roof is the fronds. One is up and crossing the sand toward you before " +
+      "you've decided anything, unhurried and entirely unshy, and she doesn't stop at polite " +
+      "distance. “Why you walk the beach alone, hansum? Waste.” A cigarette glows behind her. " +
+      "“No bar here, no barfine, no mama take my money. Just me. You want, my friend Muk come " +
+      "too — we not shy like the soi girl. We say the price, you say yes.”",
+    hint: "(No bar, no barfine — pay her direct, cheaper than the soi. But this is the dark " +
+      "sand: no mamasan, no rail, nobody at all if it turns. ฿500, or ฿900 with Muk. YES / NO.)",
   },
   bkktourist: {
     rooms: ["ws_south", "ws_north", "beach_rd_c", "second_rd_c", "buakhao_market"],

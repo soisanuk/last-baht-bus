@@ -2205,8 +2205,10 @@ function _endNight(reason) {
       "you back."), "win");
   }
   if (G.dog && !crash) {
-    _say(_dogN("(Sai Krok is asleep against your door when you surface. One eye opens, the " +
-      "tail thumps twice, and the watch resumes.)"), "dim");
+    _say(_dogN("(Sai Krok is " + (G.hotel === "queenvic"
+      ? "curled in the Queen Vic's doorway when you come down"
+      : "asleep against your door when you surface") +
+      ". One eye opens, the tail thumps twice, and the watch resumes.)"), "dim");
     if (_dogEgg() === "loyal" || _dogEgg() === "sanuk") {
       _addHappy(1);
       _say(_dogN(_dogEgg() === "loyal"

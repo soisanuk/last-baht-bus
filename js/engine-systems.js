@@ -2114,6 +2114,11 @@ function _doFeedDog(arg) {
       "The hungry ones work the street outside.");
     return;
   }
+  if (_isHotelRoom(G.room)) {
+    _say("No street dog is climbing to your room, tilac. You meet them where they " +
+      "live — down on the soi, or out on the sand.");
+    return;
+  }
   if (_isDarkHere()) {
     _say("Whatever is circling you out there in the dark is hunting, not begging. " +
       "Feeding it is a different transaction entirely — see it lit first.");
@@ -2151,7 +2156,9 @@ function _doFeedDog(arg) {
     ? "A couple picking along the tideline laugh at your face: “Ohhh. He choose you, na.”"
     : "A passing bar girl laughs at your face: “Ohhh. He choose you, na.”") +
     " The soi calls him Sai Krok — sausage — after his one great subject. From here on he " +
-    "pads at your heel, waits outside every bar, and sleeps against your door. Nobody " +
+    "pads at your heel, waits outside every bar, and sleeps " +
+    (G.hotel === "queenvic" ? "in the Queen Vic's doorway, down on the soi" : "against your door") +
+    ". Nobody " +
     "consulted you. That is how it works. (He's yours now: NAME DOG <something> if " +
     "you'd rather he answered to yours.)", "win");
   _addHappy(2);
