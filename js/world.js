@@ -21,6 +21,10 @@ const WINGMAN_TURNS = 15;// how long a friendly wing-woman's good word lasts
 const CHARGER_PRICE = 59;
 const SAFE_CASH = 3000;  // the emergency stash in the hotel room safe
 const EXPAT_SAVINGS = 20000; // wired over when you make the move
+// The ATM: draw pocket cash from your account (G.bank) at any `atm:true` room.
+const ATM_FEE = 300;         // foreign-card fee per withdrawal (charged to the account)
+const ATM_DAILY_CAP = 20000; // most you can pull in a day (principal, fees don't count)
+const ATM_DENOMS = [1000, 5000, 10000];
 // Barfines (canon: go-gos and Soi 6 are the expensive end)
 const BF_BEER = 400, BF_GOGO = 1000, BF_SOI6 = 700, BF_GENTS = 900;
 // Male host bars charge a steep premium — a host drink is 2x+ a lady drink and
@@ -600,6 +604,7 @@ const ROOMS = {
   },
   beach_rd_c: {
     name: "Beach Road Central",
+    atm: true,
     region: "Beach Road",
     seven: true,
     desc: "Mid-Beach-Road: tour groups, tailor touts, and the sea breathing in the dark " +
@@ -918,6 +923,7 @@ const ROOMS = {
     exits: { s: "ws_south", n: "beach_rd_s", w: "pratumnak_rd", e: "thai_massage" },
   },
   ws_south: {
+    atm: true,
     name: "Walking Street (South)",
     region: "Walking Street",
     desc: "Neon canyon, but the neon mix has changed. Bollywood bass competes with Thai pop " +
@@ -1045,6 +1051,7 @@ const ROOMS = {
              in: "rock_factory", alley: "lk_entrance", hotel: "metropole_room", diana: "diana_e" },
   },
   buakhao_market: {
+    atm: true,
     name: "Buakhao Market",
     region: "Soi Buakhao",
     desc: "Tarps, fans, fruit pyramids, and a man forever restacking ice crates behind a " +
@@ -1127,6 +1134,7 @@ const ROOMS = {
 
   // ─── Tree Town ───
   tt_entrance: {
+    atm: true,
     name: "Tree Town (Entrance Arch)",
     region: "Tree Town",
     seven: true,
@@ -1267,6 +1275,7 @@ const ROOMS = {
   // ─── Soi 6 ───
   soi6_street: {
     name: "Soi 6",
+    atm: true,
     region: "Soi 6",
     seven: true,
     desc: "The soi hits you before you round the corner — a wall of bars at volume, each " +
@@ -1403,6 +1412,7 @@ const ROOMS = {
     exits: { out: "buakhao_n", e: "lk_main" },
   },
   lk_main: {
+    atm: true,
     name: "LK Metro (Main Alley)",
     region: "LK Metro",
     desc: "The first leg of the L: bars packed shoulder to shoulder, neon on both sides, " +
@@ -1596,6 +1606,7 @@ const ROOMS = {
   // ─── Naklua ───
   naklua_rd: {
     name: "Naklua Road",
+    atm: true,
     region: "Naklua",
     seven: true,
     desc: "North of the Dolphin roundabout the volume drops by half: seafood restaurants, " +

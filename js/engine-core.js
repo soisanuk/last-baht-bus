@@ -221,7 +221,9 @@ function newGame() {
     act1Best: 0,         // furthest point down the opening critical path ever reached; survives the do-or-die Act One reset
     act1Tries: 0,        // opening-quest attempts so far; ≥1 unlocks the round-2 HINT system (also survives the reset)
     pendingChoice: null, // "vacation_end" gates input at week's end
-    atmDay: 0,           // last day the lobby ATM paid out ฿3000
+    bank: 100000,        // your account balance — the ATM draws pocket cash from this
+    atmDay: 0,           // last day the ATM was used (pairs with atmToday for the daily cap)
+    atmToday: 0,         // principal withdrawn today (resets when atmDay rolls over)
     lastPolice: -99,     // turn of the last boy-in-brown shakedown
     lastPeddler: -99,    // turn of the last bar-stool peddler visit
     lastSaleng: -99,     // turn of the last saleng (ซาเล้ง) mobile-cart visit
@@ -741,6 +743,7 @@ function _describeRoom(full, forceFull) {
   // destination list rides the suggest bar — the whole fare is keyboard-free.
   if (r.busStop) _say("A baht bus can be caught here. (RIDE BUS TO <place>)", "dim");
   if (r.motosai) _say("A motosai stand is here. (MOTOSAI TO <place>)", "dim");
+  if (r.atm) _say("An ATM stands against the wall. (WITHDRAW <amount> · CHECK BALANCE)", "dim");
   if (r.barType === "beer" || r.barType === "soi6") {
     _say("A Connect 4 frame and a Jackpot dice box sit within reach (PLAY …).", "dim");
   }

@@ -166,13 +166,6 @@ function _doGo(dirWord) {
       return;
     }
   }
-  // the lobby ATM: the daily damage, drawn on the way out
-  if (G.room === _hotelRoomId() && G.stage === "vacation" && G.atmDay !== G.day) {
-    G.atmDay = G.day;
-    G.money += SAFE_CASH;
-    _say(`You stop at the lobby ATM on the way out. It considers your card, sighs, ` +
-      `and surrenders the daily damage: ฿${SAFE_CASH}. (฿${G.money} in pocket.)`, "dim");
-  }
   _arriveAt(to);
 }
 
@@ -1977,32 +1970,77 @@ function _doShower() {
   }
 }
 
+// ── The ATM: pocket cash out of your account (G.bank) ───────────────────────
+// WITHDRAW <amount> at any `atm:true` room; ฿300 fee, ฿20,000/day cap. CHECK
+// BALANCE anywhere. Your card lives in the wallet, so no cash until Act One's
+// wallet is back.
+function _atmDrawnToday() { return G.atmDay === G.day ? (G.atmToday || 0) : 0; }
+
+function _atmParse(arg) {
+  const digits = String(arg || "").replace(/[^\d๐-๙]/g, "");
+  if (/^\d+$/.test(digits)) return parseInt(digits, 10);
+  const t = parseThaiDigits(digits);
+  return t == null ? NaN : t;
+}
+
+function _doWithdraw(arg) {
+  if (!_flag("hasWallet")) {
+    _say("Your bank card was in the wallet — and the wallet is the whole problem. " +
+      "No card, no cash. Solve that first.");
+    return;
+  }
+  if (!_room().atm) {
+    _say("No ATM here. There's one on the main drag of every nightlife area — Soi 6 has " +
+      "one out on the street.");
+    return;
+  }
+  const n = _atmParse(arg);
+  if (!ATM_DENOMS.includes(n)) {
+    _say("The machine pays out in ฿1,000 · ฿5,000 · ฿10,000 notes. (WITHDRAW <amount>)");
+    return;
+  }
+  const drawn = _atmDrawnToday(), left = ATM_DAILY_CAP - drawn;
+  if (n > left) {
+    _say(left <= 0
+      ? `Daily limit reached — ฿${ATM_DAILY_CAP.toLocaleString()} is the max, and you've hit it. ` +
+        "The machine keeps your card just long enough to make the point, then spits it back."
+      : `Over the daily limit. You've drawn ฿${drawn.toLocaleString()} of ฿${ATM_DAILY_CAP.toLocaleString()} ` +
+        `today — only ฿${left.toLocaleString()} left until tomorrow.`);
+    return;
+  }
+  const cost = n + ATM_FEE;
+  if ((G.bank || 0) < cost) {
+    _say(`Insufficient funds. ฿${(G.bank || 0).toLocaleString()} in the account, and the machine ` +
+      `wants ฿${cost.toLocaleString()} (฿${n.toLocaleString()} + ฿${ATM_FEE} fee).`);
+    return;
+  }
+  G.bank -= cost;
+  G.money += n;
+  G.atmDay = G.day;
+  G.atmToday = drawn + n;
+  _say(`The machine whirrs, thinks, and counts out ฿${n.toLocaleString()} — lighter a ฿${ATM_FEE} ` +
+    `foreign-card fee. (฿${G.money.toLocaleString()} in pocket · ฿${G.bank.toLocaleString()} in the account.)`, "win");
+}
+
+function _doBalance() {
+  if (!_flag("hasWallet")) {
+    _say("Your card's in your wallet, wherever that's got to. Nothing to check until it's back.");
+    return;
+  }
+  const drawn = _atmDrawnToday();
+  _say(`Account: ฿${(G.bank || 0).toLocaleString()} · in pocket: ฿${G.money.toLocaleString()} · ` +
+    `withdrawn today: ฿${drawn.toLocaleString()} of ฿${ATM_DAILY_CAP.toLocaleString()}.`, "dim");
+}
+
 function _doAtmVerb() {
-  if (G.stage === "act1") {
-    _say("Your card was in the wallet. The wallet is the whole problem. Solve " +
-      "that first and the money solves itself.");
+  if (!_room().atm) {
+    _say(_flag("hasWallet")
+      ? "No ATM in reach. Every nightlife area keeps one on the main drag."
+      : "Your card was in the wallet, and the wallet is the whole problem. Solve that first.");
     return;
   }
-  if (G.stage === "expat") {
-    _say("Expats don't do daily allowances — the savings came over with you. " +
-      `฿${G.money} in pocket. (The foreign-card fee is ฿220 and the machine can ` +
-      "smell your pension.)");
-    return;
-  }
-  if (G.atmDay === G.day) {
-    _say("Today's ฿3000 is already drawn and partly spent. The daily budget is " +
-      "the only thing keeping this vacation to seven days instead of seven years.");
-    return;
-  }
-  if (G.room === _hotelRoomId()) {
-    G.atmDay = G.day;
-    G.money += SAFE_CASH;
-    _say(`You detour past the lobby ATM. It considers your card, sighs, and ` +
-      `surrenders the daily damage: ฿${SAFE_CASH}. (฿${G.money} in pocket.)`);
-    return;
-  }
-  _say("Your daily ฿3000 waits at the hotel lobby ATM — it pays out on your way " +
-    "into the evening.");
+  _doBalance();
+  _say("(WITHDRAW 1000 · 5000 · 10000 — ฿300 fee, ฿20,000/day.)", "dim");
 }
 
 // Filing a police report — right now only the hair-tonic shop shakedown has a
@@ -2190,6 +2228,7 @@ function _chipSet() {
   }
   if (r.motosai) add("motosai to ", "motosai…");
   if (r.busStop) add("ride bus", "bus");
+  if (r.atm) { add("withdraw 1000", "฿1k"); add("withdraw 5000", "฿5k"); add("withdraw 10000", "฿10k"); add("check balance", "balance"); }
 
   add("i", "inv"); add("map"); add("help");
   return chips;
@@ -2555,6 +2594,7 @@ function doCommand(input) {
     case "examine": case "x": case "inspect": case "search": _doExamine(arg); break;
     case "check":
       if (/^out/.test(arg)) _doCheckout();
+      else if (/bal|account|atm|fund/.test(arg)) _doBalance();
       else if (/message|phone|text|inbox/.test(arg)) _readMessages();
       else _doExamine(arg);
       break;
@@ -2727,7 +2767,9 @@ function doCommand(input) {
     case "photo": case "selfie": case "photograph": _doPhoto(); break;
     case "call": case "dial": _doCall(arg); break;
     case "shower": case "wash": _doShower(); break;
-    case "withdraw": case "atm": _doAtmVerb(); break;
+    case "withdraw": case "withdrawal": case "withdrawl": _doWithdraw(arg); break;
+    case "atm": _doAtmVerb(); break;
+    case "balance": _doBalance(); break;
     case "report": case "file": _doReport(arg); break;
     case "complain": _doComplain(); break;
     case "cheers": case "toast": case "chon": _doCheers(); break;
