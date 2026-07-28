@@ -32,6 +32,13 @@ const _NO_EXIT = [
   "Nope. The night isn't laid out like that.",
   "Dead end. Pattaya keeps its exits where it keeps them.",
 ];
+// Soi 6 challenge mode: the rest of the city is off-limits this trip.
+const _SOI6_BOUND = [
+  "Not this trip. You made yourself a rule — Soi 6, top to bottom, and nothing else — and the rest of Pattaya keeps for next time.",
+  "You get to the edge of the soi and turn around. That way is the whole rest of the city, and the whole rest of the city isn't what you came for.",
+  "One week, one street: those were the terms. Pattaya can wait. Back into Soi 6.",
+  "You could. You don't. For seven days Soi 6 is the entire world by your own decree — and there's plenty of world left in it.",
+];
 const _NOT_CARRYING = [
   "You're not carrying that.",
   "You pat your pockets. Not there.",
@@ -174,6 +181,9 @@ function _doGo(dirWord) {
 // invitations, street encounters. Everything that happens because you're
 // suddenly *here*, however you got here.
 function _arriveAt(to) {
+  // Soi 6 challenge mode fences you into the soi + its beach — the single choke
+  // point for walking, fast-travel, and motosai (the bus is refused in _doRideBus).
+  if (G.mode === "soi6" && !SOI6_ROOMS.has(to)) { _say(_pickVary(_SOI6_BOUND, "soi6bound")); return; }
   // closed for the night? (also covers fast-travel, which skips the doGo gate)
   if (_closedNow(to)) { _say(_closedMsg(to)); return; }
   // barred from a queer venue (no barType, so the bar-ban block below misses it):
@@ -1069,6 +1079,11 @@ function _doBuy(arg) {
 
 function _doRideBus(arg) {
   const r = _room();
+  if (G.mode === "soi6") {
+    _say("A blue songthaew slows, hopeful, and you wave it on. The routes out of here " +
+      "aren't yours this week — one day the whole city, but not this trip.");
+    return;
+  }
   if (G.rain > 0) {
     _say("Headlights crawl past behind the wall of water, but no songthaew is " +
       "stopping — the drivers can't tell a fare from a lamppost in this.");
@@ -2184,6 +2199,7 @@ function _chipSet() {
 
   // 1) A pending modal owns the input — offer only its answers
   if (G.pendingChoice === "vacation_end") {
+    if (G.mode === "soi6") { add("play again"); return chips; }
     add("new vacation"); add("move to pattaya", "move to Pattaya"); return chips;
   }
   if (G.pendingChoice === "checkout") {
@@ -2398,6 +2414,7 @@ let _lastCmd = ""; // for AGAIN/G — deliberately not serialized; repeats die w
 // prompt, the "that wasn't a valid answer" reprompt, and the resume redraw all
 // read identically. See _renderResume.
 function _vacationEndPrompt() {
+  if (G.mode === "soi6") { _say("(PLAY AGAIN — another week on Soi 6.)", "dim"); return; }
   _say("(NEW VACATION · MOVE TO PATTAYA — the airline needs an answer.)", "dim");
 }
 function _checkoutPrompt() {
@@ -2472,6 +2489,10 @@ function doCommand(input) {
 
   // the week is over: the airline needs an answer before anything else
   if (G.pendingChoice === "vacation_end") {
+    if (G.mode === "soi6") {
+      if (/again|play|restart|more|^yes|soi/.test(lower)) { startSoi6Mode(); return; }
+      _vacationEndPrompt(); return;
+    }
     if (/^restart/.test(lower)) { newGame(); engineIntro(); return; }
     if (/vacation|holiday|again|fly back|new/.test(lower)) { _newVacation(); return; }
     if (/move|expat|stay|pattaya|remain/.test(lower)) { _goExpat(); return; }
@@ -2801,6 +2822,35 @@ function doCommand(input) {
 }
 
 // ── Boot text ──────────────────────────────────────────────────────────────
+
+// Start (or restart) the Soi 6 challenge: a fresh week confined to the soi,
+// based at the Queen Vic Inn, ฿100k in the bank and ฿1k in pocket. The start
+// menu calls this; PLAY AGAIN at week's end calls it too.
+function startSoi6Mode() {
+  newGame();
+  G.mode = "soi6";
+  G.stage = "vacation";   // reuse the 7-day-week machinery
+  G.room = "qv_room";
+  G.hotel = "queenvic";
+  G.day = 1;              // Soi 6 starts fresh on day one — no lost first day
+  G.money = 1000;
+  G.bank = 100000;
+  G.visited = { qv_room: true };
+  _setFlag("hasWallet");  // you kept your card this time
+  _setFlag("act1Done");   // no lost-wallet story in this mode
+  _say("THE LAST BAHT BUS", "win");
+  _say("Soi 6 · a Pattaya misadventure · Soi Sanuk universe", "dim");
+  _say("═══════════════════════════════════", "dim");
+  _say("One week in Pattaya, and you've picked your hill to drink on: SOI 6 — the loudest " +
+    "hundred metres in Thailand — with the Queen Vic Inn right in the thick of it. You're " +
+    "not leaving the soi this trip; the rest of the city keeps for next time.");
+  _say("฿100,000 for the week sits in the bank. ฿1,000 is in your pocket — the rest comes " +
+    "out of the ATM on the street (฿300 a pull, ฿20,000 a day) when you need it.");
+  _say("Goal: สบายสบาย. Get happy. Max out the week. ★", "win");
+  _say("");
+  _describeRoom(true);
+  _say("(HELP lists commands. Head DOWN to the pub, then OUT to the soi.)", "dim");
+}
 
 function engineIntro() {
   if (!G) newGame();

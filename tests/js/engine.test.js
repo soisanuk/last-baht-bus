@@ -3445,6 +3445,39 @@ test("the ATM: withdraw pulls from the account, minus a fee, capped at ฿20k/da
   assert.match(lastOut(), /No ATM here/i);
 });
 
+test("Soi 6 mode: starts at the Queen Vic, confined to the soi, no bus out, sabai win", () => {
+  startSoi6Mode();
+  assert.equal(state().mode, "soi6");
+  assert.equal(state().room, "qv_room");
+  assert.equal(state().money, 1000);
+  assert.equal(state().bank, 100000);
+  assert.equal(state().hotel, "queenvic");
+  assert.equal(state().day, 1);
+  assert.ok(state().flags.hasWallet && state().flags.act1Done, "has card, skips Act One");
+  // confined: the roads out of the soi are refused; in-soi moves are fine
+  state().room = "beach_rd_n";
+  run("s"); // beach_rd_c is out of bounds
+  assert.equal(state().room, "beach_rd_n", "can't leave the soi to the south");
+  assert.match(lastOut(), /this trip|one street|entire world|edge of the soi/i);
+  run("n"); // naklua_rd out of bounds
+  assert.equal(state().room, "beach_rd_n");
+  run("w"); // beach_row in bounds
+  assert.equal(state().room, "beach_row", "the beachside row is in bounds");
+  // the bus is waved on
+  state().room = "beach_rd_n"; out = [];
+  run("ride bus to walking street");
+  assert.match(lastOut(), /wave it on|aren't yours/i);
+  assert.equal(state().room, "beach_rd_n", "no leaving by bus");
+  // week's end: สบายสบาย is the win, PLAY AGAIN restarts the mode
+  state().day = 7; state().happy = 100; out = [];
+  _endVacation();
+  assert.match(lastOut(), /สบายสบาย|maxed the week/);
+  assert.equal(state().pendingChoice, "vacation_end");
+  run("play again");
+  assert.equal(state().room, "qv_room");
+  assert.equal(state().day, 1);
+});
+
 test("every district's 7-Eleven presses the iconic cheese toastie", () => {
   state().room = "beach_rd_c";
   state().money = 100;

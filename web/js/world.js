@@ -25,6 +25,13 @@ const EXPAT_SAVINGS = 20000; // wired over when you make the move
 const ATM_FEE = 300;         // foreign-card fee per withdrawal (charged to the account)
 const ATM_DAILY_CAP = 20000; // most you can pull in a day (principal, fees don't count)
 const ATM_DENOMS = [1000, 5000, 10000];
+// The Soi 6 challenge mode confines movement to this pocket of the map.
+const SOI6_ROOMS = new Set([
+  "qv_room", "queen_vic", "soi6_street", "soi6_deep",
+  "pink_lotus", "golden_dragon", "sunset_dreams", "kitten_corner", "cherry_pop", "ruby_kiss",
+  "beach_rd_n", "stinky_bar", "beach_row", "blue_dog", "sunset_rail", "bay_watch", "sandy_toes",
+  "north_beach",
+]);
 // Barfines (canon: go-gos and Soi 6 are the expensive end)
 const BF_BEER = 400, BF_GOGO = 1000, BF_SOI6 = 700, BF_GENTS = 900;
 // Male host bars charge a steep premium — a host drink is 2x+ a lady drink and

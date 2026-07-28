@@ -2233,6 +2233,14 @@ function _endVacation() {
     "doesn't come to see you off — it just keeps roaring, the way it was " +
     "roaring before you came, the way it will roar after. From the highway " +
     "the neon shrinks to a smudge on the coast.", "win");
+  if (G.mode === "soi6") {
+    _say(`SOI 6 · DAY 7 — happiness ${G.happy}: ${_happyLevel(G.happy)}.` +
+      (G.happy >= 100 ? " You maxed the week. ★"
+                      : ` (Best week on the soi so far: ${G.bestHappy}.)`), "win");
+    _say("So — again?", "room");
+    _say("(PLAY AGAIN — one more week on Soi 6. Fresh ฿100,000, fresh liver.)", "dim");
+    return;
+  }
   _say(`VACATION ${G.vacation}: happiness ${G.happy} — ${_happyLevel(G.happy)}` +
     (G.bestHappy > G.happy ? ` (best trip so far: ${G.bestHappy})` : " (your best trip yet)"), "win");
   _say("So. What now?", "room");
