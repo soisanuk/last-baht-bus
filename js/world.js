@@ -5352,6 +5352,8 @@ const _FILLER_MAMAS = [
   ["Malai","มาลัย","sunset_dreams"], ["Somsri","สมศรี","kinky"], ["Ratree","ราตรี","las_vegas"],
   ["Wandee","วันดี","water_buffalo"], ["Somjai","สมใจ","firefly_bar"],
   ["Tui","ตุ่ย","night_heron"],
+  ["Toi","ต้อย","cherry_pop"], ["Saeng","แสง","ruby_kiss"], ["Bussaba","บุษบา","sunset_rail"],
+  ["Sopha","โสภา","bay_watch"], ["Malila","มะลิลา","sandy_toes"],
 ];
 const _FILLER_CASHIERS = [
   ["Golf","กอล์ฟ","tequila_queen"], ["Air","แอร์","blue_dog"], ["Apple","แอปเปิ้ล","rock_factory"],
@@ -5364,6 +5366,8 @@ const _FILLER_CASHIERS = [
   ["Best","เบสท์","water_buffalo"], ["Aim","เอม","firefly_bar"], ["Tangmo","แตงโม","mama_yai"],
   ["Kanya","กัญญา","orchid_club"],
   ["Mon","มล","night_heron"],
+  ["Baimon","ใบหม่อน","kitten_corner"], ["Fahsai","ฟ้าใส","cherry_pop"], ["Preaw","แพรว","ruby_kiss"],
+  ["Numfon","น้ำฝน","sunset_rail"], ["Nu","หนู","bay_watch"], ["Haad","หาด","sandy_toes"],
 ];
 
 for (const [name, th, room] of _FILLER_MAMAS) {
