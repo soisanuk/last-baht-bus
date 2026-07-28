@@ -1873,7 +1873,7 @@ function _doWave(arg) {
 const _MAP = `                    NAKLUA ─ Sabai Palms Hotel
         ~              │
         ~     BEACH RD N ─ SOI 6 (Queen Vic at the pub end)
-        ~      │ (Blue Dog · Stinky Bar)
+        ~      │ (Blue Dog · Stinky Pinky)
         ~      │      PATTAYA KLANG ────► THE DARKSIDE
        ~       │       │      │   (Khao Talo · the lake · motosai out)
        ~  BEACH RD C   │   MYTH NIGHT

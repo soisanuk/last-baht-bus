@@ -587,7 +587,7 @@ function _bandNearby() {
 }
 
 function _startKiller() {
-  if (!_room().pool) { _say("Killer needs a real table. The Stinky Bar's is the league's home felt."); return; }
+  if (!_room().pool) { _say("Killer needs a real table. The Stinky Pinky's is the league's home felt."); return; }
   if (!_leagueTonight()) {
     _say("No league tonight — killer runs every third night. " +
       (G.day % 3 === 2 ? "Tomorrow." : "Check back in a couple of days.") +
