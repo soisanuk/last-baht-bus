@@ -3416,17 +3416,33 @@ test("a regular's girl may barfine herself — the YES path ends the night", () 
   assert.ok(state().happy >= h + 12, `happy ${state().happy}`);
 });
 
-test("the lobby ATM pays ฿3000 once per vacation day", () => {
-  state().flags.act1Done = true;
+test("the ATM: withdraw pulls from the account, minus a fee, capped at ฿20k/day", () => {
   state().flags.hasWallet = true;
-  state().stage = "vacation";
-  state().room = "hotel_room";
-  state().money = 100;
-  run("out");
-  assert.equal(state().money, 3100);
-  assert.match(lastOut(), /daily damage/i);
-  run("n", "out"); // back in, back out — no double dip
-  assert.equal(state().money, 3100);
+  state().room = "beach_rd_c"; // an ATM stands here
+  state().bank = 100000; state().money = 0; state().atmDay = 0; state().atmToday = 0; state().day = 3;
+  run("withdraw 5000");
+  assert.equal(state().money, 5000, "฿5k to pocket");
+  assert.equal(state().bank, 100000 - 5000 - 300, "principal + ฿300 fee off the account");
+  // denomination guard — only 1k/5k/10k
+  out = []; run("withdraw 2000");
+  assert.match(lastOut(), /1,000.*5,000.*10,000/);
+  assert.equal(state().money, 5000, "no change on a bad denomination");
+  // daily cap: 5k + 10k = 15k ok; the next 10k would be 25k → refused
+  run("withdraw 10000");
+  out = []; run("withdraw 10000");
+  assert.match(lastOut(), /daily limit|left until tomorrow/i);
+  assert.equal(state().money, 15000, "capped at ฿20k principal per day");
+  // balance reads the account, pocket, and the day's allowance
+  out = []; run("check balance");
+  assert.match(lastOut(), /Account:.*in pocket:.*withdrawn today/i);
+  // no wallet → no card → no cash
+  state().flags.hasWallet = false;
+  out = []; run("withdraw 1000");
+  assert.match(lastOut(), /No card, no cash|wallet/i);
+  // and only at an ATM
+  state().flags.hasWallet = true; state().room = "qv_room";
+  out = []; run("withdraw 1000");
+  assert.match(lastOut(), /No ATM here/i);
 });
 
 test("every district's 7-Eleven presses the iconic cheese toastie", () => {
@@ -4418,20 +4434,21 @@ test("photo costs battery; call teaches you to text", () => {
   assert.match(lastOut(), /nobody in this town answers a phone/);
 });
 
-test("withdraw knows every stage of your financial decline", () => {
+test("the ATM verb gates on your card and where you're standing", () => {
+  // no wallet yet: the card is the whole problem
   run("withdraw");
   assert.match(lastOut(), /wallet is the whole problem/);
-  state().stage = "vacation";
-  state().flags.act1Done = true; // else _checkAct1 fires at the hotel and pays the safe stash too
-  state().room = "hotel_room";
-  state().atmDay = 0;
-  state().day = 2;
-  const m = state().money;
-  run("atm");
-  assert.equal(state().money, m + SAFE_CASH);
-  out = [];
-  run("withdraw");
-  assert.match(lastOut(), /seven days instead of seven years/);
+  state().flags.hasWallet = true;
+  // card in hand, but no ATM in this room
+  state().room = "hotel_room"; state().day = 2;
+  out = []; run("atm");
+  assert.match(lastOut(), /No ATM in reach|main drag/i);
+  // at an ATM, bare ATM shows the balance and how to draw
+  state().room = "soi6_street";
+  state().bank = 80000; state().money = 500; state().atmDay = 0; state().atmToday = 0;
+  out = []; run("atm");
+  assert.match(lastOut(), /Account: ฿80,000/);
+  assert.match(lastOut(), /WITHDRAW 1000/i);
 });
 
 // ── Rainy season ───────────────────────────────────────────────────────────
