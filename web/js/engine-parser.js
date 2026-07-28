@@ -1928,6 +1928,11 @@ function _doCall(arg) {
 // CHECKOUT — after Act One, at the start of an evening, from your own room.
 // The desk lists the other two hotels; the one you're leaving is understood.
 function _doCheckout() {
+  if (G.mode === "soi6") {
+    _say("You're booked into the Queen Vic for the whole week — one soi, one room, no " +
+      "reception desk to argue with. Sleep it off upstairs.");
+    return;
+  }
   if (!_flag("act1Done")) {
     _say("Check out? You haven't managed to check IN yet — the key card is in " +
       "the wallet, and the wallet is the whole adventure.");

@@ -678,6 +678,12 @@ const ROOMS = {
     desc: "A long bamboo rail and a row of stools bolted to face west, so the whole bar " +
       "watches the sun go down together like a congregation. Pukky pours without turning " +
       "from the view, and gets it right anyway.",
+    revisit: [
+      "Back to the Sunset Rail, stools bolted west, the whole bar watching the sky like a congregation.",
+      "Pukky pours without turning from the view and gets it right anyway. You take the stool she expected you to.",
+      "You settle back onto the bamboo rail. The sun's a little lower; nobody's looked away.",
+      "Sunset Rail again: the congregation of stools, the sun a fraction lower, Pukky already pouring.",
+    ],
     exits: { out: "beach_row" },
   },
   bay_watch: {
@@ -687,6 +693,12 @@ const ROOMS = {
     desc: "A red-and-yellow lifeguard theme run entirely as a joke — a plastic float on the " +
       "wall, a whistle nobody's allowed to blow twice. Somo keeps the cooler cold and the " +
       "banter warm.",
+    revisit: [
+      "Back into Bay Watch — the plastic float, the un-blowable whistle, the lifeguard bit still running as a joke.",
+      "Somo keeps the cooler cold and the banter warm, and slides your Chang over before you ask.",
+      "You drop back in under the red-and-yellow gag. Nobody's drowning. Nobody ever is.",
+      "Bay Watch again — the whistle, the float, Somo's cold cooler and warm banter, the joke still funny.",
+    ],
     exits: { out: "beach_row" },
   },
   sandy_toes: {
@@ -696,6 +708,12 @@ const ROOMS = {
     desc: "The last rail before the sand takes over entirely: no floor to speak of, just swept " +
       "beach and a string of bulbs. Nina brings the beer to your chair so you never have to " +
       "leave the view.",
+    revisit: [
+      "Back to Sandy Toes — no floor to speak of, just swept beach, a string of bulbs, and the sand between your toes.",
+      "Nina brings the beer to your chair again so you never have to leave the view.",
+      "You sink back into a chair on the sand. The last rail before the beach takes over entirely, and it nearly has.",
+      "Sandy Toes again, sand underfoot and bulbs overhead, Nina walking your Chang out to the chair.",
+    ],
     exits: { out: "beach_row" },
   },
   blue_dog: {
@@ -710,6 +728,12 @@ const ROOMS = {
       "do about it. The bathroom is a sandy walk past three other bars' back " +
       "doors — the whole beachside row shares the one, an arrangement older " +
       "than anyone still willing to explain it.",
+    revisit: [
+      "Back onto the Blue Dog's rail, chairs pointed at the bay, the view doing the entertaining.",
+      "The Blue Dog folds you back in — no walls, no door, just the sunset and whatever Beach Road does next.",
+      "You reclaim a plastic chair facing the water. The shared sandy bathroom is still a hike; the view still isn't.",
+      "The Blue Dog again — the bay, the plastic chairs, the one bathroom, the best cheap view on the coast.",
+    ],
     exits: { out: "beach_row" },
   },
   north_beach: {
@@ -1305,6 +1329,12 @@ const ROOMS = {
       "— walls, barstools, the girls' outfits, arguably the air itself. Joy is already " +
       "talking before you sit down. The staircase at the back leads somewhere the menu " +
       "doesn't mention.",
+    revisit: [
+      "Back into the Pink Lotus — pink walls, pink stools, pink air, and Joy already mid-sentence before you sit.",
+      "The three-colour neon swallows you again. Somewhere in all that pink, Joy is laughing at something you haven't said yet.",
+      "You drop back onto a pink stool. The staircase at the back is exactly where you left it, mentioning nothing.",
+      "Pink Lotus, again and pinker. Joy hasn't stopped talking and has no intention of starting.",
+    ],
     exits: { out: "soi6_street" },
   },
   golden_dragon: {
@@ -1316,6 +1346,12 @@ const ROOMS = {
       "there longer than most of the staff. Vintage Thai pop on the speakers — not the " +
       "jukebox, it died in 2019, but the playlist is a faithful tribute. Nobody has " +
       "updated it and nobody has complained.",
+    revisit: [
+      "Back into the Golden Dragon, louder than you remembered, the hand-painted dragon presiding over all of it.",
+      "The dead jukebox's faithful playlist picks up where it never stopped. Nobody's updated it. Nobody's complained.",
+      "You settle back under the cousin-painted dragon — vintage Thai pop, cold Chang, same as it ever was.",
+      "The Golden Dragon takes you back, gold paint flaking, the tribute playlist immortal.",
+    ],
     exits: { out: "soi6_street" },
   },
   sunset_dreams: {
@@ -1326,6 +1362,12 @@ const ROOMS = {
       "to a manageable roar the moment you're in. Darker than the others, slower. A ceiling " +
       "fan that needs oiling. Kwan is at the end of the bar folding napkins into cranes, " +
       "adding to a row of them lined up along the rail like a tiny origami militia.",
+    revisit: [
+      "Back into Sunset Dreams — the door closes, the roar drops to a hum, and Kwan adds another crane to the row.",
+      "The one bar with walls takes you back into its slow, dark calm. The ceiling fan still needs oiling.",
+      "You step back in and the soi goes quiet behind the glass. Kwan looks up and sets a paper crane by your hand.",
+      "Sunset Dreams again — walls, a door, a slower gear. The origami militia has gained a recruit.",
+    ],
     exits: { out: "soi6_street" },
   },
   soi6_deep: {
@@ -1346,6 +1388,12 @@ const ROOMS = {
     desc: "Open to the pavement, walled in cat posters and a neon paw print. Praewa and " +
       "Nangfah work the front, and the grab-and-giggle starts before you've fully stopped " +
       "walking. A staircase at the back goes up to the short-time rooms.",
+    revisit: [
+      "Back into Kitten Corner — cat posters, the neon paw, and the grab-and-giggle starting before you've stopped walking.",
+      "Praewa and Nangfah reclaim you at the front like you never left. The staircase at the back waits, patient.",
+      "You step back into the cat-poster glow. Somebody's already decided you're staying a while.",
+      "Kitten Corner again: paw prints, posters, and two front-runners who never doubted you'd be back.",
+    ],
     exits: { out: "soi6_deep" },
   },
   cherry_pop: {
@@ -1355,6 +1403,12 @@ const ROOMS = {
     desc: "Red from floor to ceiling, a bowl of actual cherries on the bar that nobody eats, " +
       "and a sound system stuck on one bubblegum playlist. Tabtim and Chaba call the odds " +
       "from the rail. The stairs are where the stairs always are.",
+    revisit: [
+      "Back into Cherry Pop — red floor to ceiling, the bowl of cherries nobody eats, the one bubblegum playlist looping on.",
+      "Tabtim and Chaba call the odds from the rail again. The stairs are where the stairs always are.",
+      "You drop back into the red. The sound system is still stuck on that one sugary song, and nobody minds.",
+      "Cherry Pop again — the cherries still uneaten, the bubblegum still looping, the red still total.",
+    ],
     exits: { out: "soi6_deep" },
   },
   ruby_kiss: {
@@ -1364,6 +1418,12 @@ const ROOMS = {
     desc: "The last loud front before the soi spills onto Second Road: lipstick-red lighting, " +
       "a mirror wall, and a lipstick-mark motif on everything including the glasses. Kluay and " +
       "Benz have claimed the two nearest stools for you already.",
+    revisit: [
+      "Back into Ruby Kiss — lipstick lighting, the mirror wall doubling the room, Kluay and Benz already saving you a stool.",
+      "The last loud front before Second Road takes you back, lipstick-marked glasses and all.",
+      "You step back into the red mirror-glare. Two of you walk in; the wall makes it four.",
+      "Ruby Kiss again, all mirror and lipstick, the soi's last shout before it hits Second Road.",
+    ],
     exits: { out: "soi6_deep" },
   },
   queen_vic: {
@@ -1375,6 +1435,12 @@ const ROOMS = {
       "ordered another pint. Through the window, the soi performs. On the balcony above, " +
       "Terry is in a recliner watching it with a beer, and has probably been there for " +
       "some time. A staircase behind the bar leads UP to the guest rooms.",
+    revisit: [
+      "Back into the Queen Vic — real aircon, real wood, the dartboard, and the soi safely on the far side of the glass.",
+      "The pub folds you back into its calm. Up on the balcony Terry's beer goes up without him looking down.",
+      "You step back into the one quiet room on Soi 6. The bass from outside arrives pre-muffled, the way it should.",
+      "The Queen Vic again — the dartboard, the panelling, the deliberate refusal to be Soi 6. It works.",
+    ],
     exits: { out: "soi6_street", up: "qv_room" },
   },
   metropole_room: {
@@ -2429,7 +2495,7 @@ const NPCS = {
       { th: "มาแล้วเหรอ", rom: "maa laeo roe",
         text: "\"You come back!! Wait— no, you new. Same same!\" She collapses in giggles. \"Sit down sit down! You buy me lady drink? Upstairs very nice—\" she catches your expression \"—okay okay, water for you, story for me, hahaha!\"",
         short: "\"Sit sit! Water for you, story for me, hahaha!\"" },
-      { topic: "wallet", text: "\"No wallet?!\" Gales of laughter. \"Tilac, on THIS soi that is a very serious medical condition. Go Soi Buakhao — the mamasans there fix everything. Especially Candy. Everybody's problems go to Candy.\"" },
+      { topic: "wallet", notFlags: ["hasWallet"], text: "\"No wallet?!\" Gales of laughter. \"Tilac, on THIS soi that is a very serious medical condition. Go Soi Buakhao — the mamasans there fix everything. Especially Candy. Everybody's problems go to Candy.\"" },
       { topic: "money", text: "\"Money?\" She waves a hand like she's shooing a cat. \"Money come, money go. Same same. Last month I have — so much! I think wow, I am RICH.\" Two-second pause. \"Then iPhone. Then my cousin need school. Then Koh Chang with the girls. Then my mother — hahaha!\" She is laughing at herself entirely. \"Now I have four hundred baht and big smile. I earn more later. Up to me!\"" },
       { topic: "save", text: "She looks at you like you've said something in a language she recognises but has stopped speaking. \"Save... for what?\" Genuine puzzlement. \"When the thing happen I will find the money. Always I find it. Always!\" She seems more certain of this than she is of anything else. \"You have five hundred? I need for rice.\"" },
       { topic: "dream", text: "\"Dream?\" Full attention, very serious. \"Okay. Right now? My dream is—\" she points at the kitchen hatch \"—the spicy noodle. Tom yum. Because it is ten o'clock and I am hungry.\" She nods once, satisfied. \"That is my dream. What is YOUR dream?\" The follow-up is completely genuine." },
@@ -2494,7 +2560,7 @@ const NPCS = {
       { th: "เหนื่อยไหม", rom: "nueai mai",
         text: "\"You look tired,\" she says, and somehow it's the kindest thing anyone's said to you all night. She sets a paper crane by your hand. \"For luck. The soi makes everyone lucky once.\"",
         short: "She sets another paper crane by your hand. \"For luck.\"" },
-      { topic: "wallet",
+      { topic: "wallet", notFlags: ["hasWallet"],
         text: "She considers this, folding without looking down. \"Soi Buakhao,\" she says finally. \"The mamasans there know everything that moves through this town. Candy Bar — the mamasan there, she's the one.\" She adds the finished crane to the row." },
       { topic: "pajama", text: "She does not look up from the crane she is folding. " +
         "\"Every bar on this soi try to show more. More skin, more loud, more " +
@@ -2512,7 +2578,7 @@ const NPCS = {
       "corner-stool residency. He rents the same balcony room every high season. He was here " +
       "before White Dish. He will tell you about it. He tells it well.",
     dialogue: [
-      { topic: "wallet",
+      { topic: "wallet", notFlags: ["hasWallet"],
         text: "\"Wallet gone? On Soi 6?\" He exhales through his nose. \"Right. Soi Buakhao — Candy Bar, ask for Candy herself. Sharp as they come. She'll know who moved it or she'll know who does.\" He returns to his beer with the authority of a man who has solved this problem before." },
       { topic: "white dish",
         text: "\"White Dish Group.\" He says it the way you say a diagnosis. \"Ryan Powers. Never here, always here — that's the joke. Before his lot got involved, this soi ran itself. Loud, chaotic, but honest chaos. Now?\" He gestures at the street through the window. \"QR codes. Branded menus. They've got six bars already. Word is they're after another one.\" He takes a long pull of Chang. \"Someone should do something about that.\"" },
