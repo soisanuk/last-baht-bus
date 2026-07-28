@@ -3,39 +3,14 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
+    "t": "Three Indians rescued after Pattaya kidnapping, torture",
+    "s": "Bangkok Post",
+    "d": "28 Jul 2026"
+  },
+  {
     "t": "Four ladyboys arrested over alleged robbery, assault of Australian tourist in Pattaya",
     "s": "Khaosod English",
     "d": "27 Jul 2026"
-  },
-  {
-    "t": "One of Pattaya's largest gated-community plots just came up at over 20% below market price",
-    "s": "Thaiger",
-    "d": "27 Jul 2026"
-  },
-  {
-    "t": "Tomorrowland reaffirms Pattaya festival after Belgium meeting",
-    "s": "Nation Thailand",
-    "d": "26 Jul 2026"
-  },
-  {
-    "t": "Police raid hidden Chinese grey capital hub behind Thai hotel walls",
-    "s": "Pattaya Mail",
-    "d": "26 Jul 2026"
-  },
-  {
-    "t": "Motorway 7 crash causes 4km traffic backlog on route to Bangkok",
-    "s": "Pattaya Mail",
-    "d": "26 Jul 2026"
-  },
-  {
-    "t": "Family SUV wreck near Pattaya leaves boy, 13, seriously injured",
-    "s": "Pattaya Mail",
-    "d": "26 Jul 2026"
-  },
-  {
-    "t": "Pattaya worker dies after motorcycle hits 18-wheeler on dark highway",
-    "s": "Pattaya Mail",
-    "d": "25 Jul 2026"
   },
   {
     "t": "Tyson Fury kisses Wach, then stops him, in the Pattaya fight nobody could watch",
@@ -43,9 +18,44 @@ var NEWS_FEED = [
     "d": "27 Jul 2026"
   },
   {
-    "t": "Italian pupils fined over skytrain row",
+    "t": "Pattaya motorcycle crash sends rider to hospital with serious injuries",
+    "s": "Pattaya Mail",
+    "d": "27 Jul 2026"
+  },
+  {
+    "t": "Police identify new leads in former Thai tennis player case",
+    "s": "Thaiger",
+    "d": "28 Jul 2026"
+  },
+  {
+    "t": "Van crashes into four vehicles, injures six foreign tourists in Pattaya",
+    "s": "Thaiger",
+    "d": "28 Jul 2026"
+  },
+  {
+    "t": "Police rescue three Indian tourists in Pattaya ransom case",
+    "s": "Nation Thailand",
+    "d": "28 Jul 2026"
+  },
+  {
+    "t": "Chai Tsjai shines as MyBar celebrates Dave’s birthday",
+    "s": "Pattaya Mail",
+    "d": "27 Jul 2026"
+  },
+  {
+    "t": "Italian students apologise after Bangkok train incident sparks outrage in Thailand",
+    "s": "The Independent",
+    "d": "27 Jul 2026"
+  },
+  {
+    "t": "Thailand to purchase oil outside the Middle East",
     "s": "Bangkok Post",
-    "d": "26 Jul 2026"
+    "d": "27 Jul 2026"
+  },
+  {
+    "t": "John Romero announced as keynote speaker for Gamescom Asia x Thailand Game Show",
+    "s": "GamesIndustry.biz",
+    "d": "27 Jul 2026"
   },
   {
     "t": "Italian embassy says sorry for pupils’ bad behaviour in Bangkok",
@@ -53,35 +63,25 @@ var NEWS_FEED = [
     "d": "26 Jul 2026"
   },
   {
-    "t": "Tyson Fury stops Mariusz Wach in unaired Thailand fight to set up Anthony Joshua mega-bout",
-    "s": "Yahoo Sports",
-    "d": "24 Jul 2026"
+    "t": "Thailand's T-994 patrol craft receive Sentinel 30 weapon stations",
+    "s": "Janes",
+    "d": "27 Jul 2026"
   },
   {
-    "t": "Fury dominates Wach in Thailand boxing bout ahead of Joshua showdown",
-    "s": "Al Jazeera",
-    "d": "24 Jul 2026"
-  },
-  {
-    "t": "Tyson Fury wins in Thailand, stops Mariusz Wach: Watch highlights from the fight",
-    "s": "Bad Left Hook",
-    "d": "24 Jul 2026"
-  },
-  {
-    "t": "Thailand monastery added to Unesco heritage list, boosting tourism hopes",
-    "s": "South China Morning Post",
-    "d": "26 Jul 2026"
+    "t": "Thailand issues rain warning for northeast and eastern provinces",
+    "s": "The Star",
+    "d": "28 Jul 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-07-24","USD":33.69,"AUD":23.54,"GBP":44.88,"EUR":38.33};
+var FX_RATES = {"date":"2026-07-27","USD":33.58,"AUD":23.5,"GBP":44.72,"EUR":38.24};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-07-27","temp":27,"humid":91,"code":3,"hi":33,"rain":89};
+var WX_NOW = {"date":"2026-07-28","temp":31,"humid":66,"code":3,"hi":32,"rain":100};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-07-16","first":"639214","last2":"71","front3":["683","709"],"back3":["427","746"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4087,"date":"2026-07-27","baht":65100};
+var GOLD = {"usd":4022,"date":"2026-07-28","baht":63900};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":64924,"thb":2183021};
+var BTC = {"usd":63277,"thb":2128985};
