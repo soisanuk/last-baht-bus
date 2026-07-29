@@ -4954,40 +4954,77 @@ test("go-go flashlight escalation: two warnings, then security walks you out", (
   assert.equal(state().room, "tequila_queen");
 });
 
-test("Junction bars: WATCH SUNSET pays once a night; WATCH POLICE is on hold", () => {
+test("Junction bars: WATCH POLICE and WATCH SUNSET, one shared show-point a night", () => {
   state().room = "beach_rd_n"; // the foot of Soi 6
   state().pendingEnc = null;
   state().lastPeddler = 99999;
+  state().nightTurn = 5; // ~18:30, the checkpoint window
   run("enter blue dog"); // Blue Dog holds the beach-side corner of the junction
   assert.equal(state().room, "blue_dog");
-  assert.match(lastOut(), /bay is going gold/, "the golden-hour nudge, not a checkpoint");
-  assert.doesNotMatch(lastOut(), /checkpoint is in session/, "the police show is disabled");
+  assert.match(lastOut(), /checkpoint is in session/, "the checkpoint auto-announce is back");
+  assert.match(lastOut(), /south of the soi/i, "and it reads at the new location");
 
   out = [];
   const happy0 = state().happy;
-  // WATCH POLICE gets a soft on-hold note and pays nothing
+  // WATCH POLICE is the checkpoint show and pays the nightly point
   run("watch police");
-  assert.match(lastOut(), /No checkpoint to watch/i, "police show on hold");
-  assert.equal(state().happy, happy0, "no point from the disabled show");
-  // WATCH SUNSET is the paying feature at the junction
+  assert.match(lastOut(), /station|checkpoint|helmet|noodle|U-turn|processing|rail/i, "a shakedown vignette");
+  assert.equal(state().happy, happy0 + 1, "first watch of the night pays");
+  // WATCH SUNSET shares the same daily cap — no double-dip
   out = [];
   run("watch sunset");
-  assert.match(lastOut(), /gold, then rose/, "the bay does its thing");
-  assert.equal(state().happy, happy0 + 1, "the nightly point lands on the sunset");
-  out = [];
-  run("watch sunset");
-  assert.equal(state().happy, happy0 + 1, "and only once a night");
+  assert.match(lastOut(), /gold|islands|sky|bay|squid/i, "the bay does its thing");
+  assert.equal(state().happy, happy0 + 1, "the nightly point is already spent");
 
-  // it works from the Stinky Pinky across the junction too
+  // it works from the Stinky Pinky across the junction too (fresh day)
   state().room = "stinky_bar"; state().blueDogDay = 0; out = [];
-  run("watch sunset");
-  assert.match(lastOut(), /gold, then rose/, "sunset visible from the opposite corner");
+  run("watch police");
+  assert.match(lastOut(), /station|checkpoint|helmet|noodle|U-turn|processing|rail/i, "checkpoint visible from the opposite corner");
+  assert.equal(state().happy, happy0 + 2, "and pays there too on a fresh day");
 
-  // after dark the bay stays open but stops paying
+  // after the window the checkpoint packs up; the bay stays open
   state().nightTurn = 30; // 21:00
-  state().room = "blue_dog"; state().blueDogDay = 0; out = [];
+  state().room = "blue_dog"; out = [];
+  run("watch police");
+  assert.match(lastOut(), /checkpoint|packed up|wrapped up/i, "show's over");
+  out = [];
   run("watch sunset");
-  assert.match(lastOut(), /squid-boat/, "post-sunset bay");
+  assert.match(lastOut(), /squid|boat|embers|afterglow|night/i, "post-sunset bay");
+});
+
+test("WATCH SOI in the quiet middle (and its beer bars) pays the shared show-point", () => {
+  startSoi6Mode();
+  state().room = "soi6_mid";
+  const happy0 = state().happy;
+  out = [];
+  run("watch soi");
+  assert.match(lastOut(), /parade|soi|barker|noodle|som tam|neon/i, "a parade vignette");
+  assert.equal(state().happy, happy0 + 1, "watching the parade pays once");
+  // shares the free-show cap with the balcony and the junction
+  out = [];
+  run("watch"); // bare WATCH in the middle also people-watches
+  assert.equal(state().happy, happy0 + 1, "no double-dip on the same day");
+  // and it works from a front-row beer bar (fresh day)
+  state().room = "bay_watch"; state().blueDogDay = 0; out = [];
+  run("watch");
+  assert.match(lastOut(), /parade|soi|barker|noodle|som tam|neon/i, "the Front Row is for watching");
+  assert.equal(state().happy, happy0 + 2, "the Front Row pays on a fresh day");
+});
+
+test("noodle patrol: decline the pull and take a foam bop (worth a laugh and a point)", () => {
+  startSoi6Mode();
+  state().room = "soi6_street";
+  const happy0 = state().happy;
+  _startEnc("noodle");
+  assert.match(lastOut(), /pool noodle/i, "the challenge is issued");
+  run("no");
+  assert.match(lastOut(), /foam|noodle|FWUMP|sanuk/i, "the bop lands");
+  assert.equal(state().happy, happy0 + 1, "pure sanuk, +1");
+  // going along instead just tows you toward her bar, no point of its own
+  state().room = "soi6_deep"; delete state().encDone.noodle; out = [];
+  _startEnc("noodle");
+  run("yes");
+  assert.match(lastOut(), /tows you|ENTER/i, "she hauls you toward the bar");
 });
 
 test("patrons: hoppers drift by the hour, settle at home by 22:00, chat resets daily", () => {

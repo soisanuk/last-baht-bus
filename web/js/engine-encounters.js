@@ -332,6 +332,43 @@ function _salengBuy(input) {
     }
 }
 
+// The noodle patrol's two outcomes, pooled so the beat varies across the week's
+// nights (the encounter can fire once a night). YES tows you toward her bar; NO
+// earns a foam bop and a point of pure sanuk.
+const _NOODLE_YES = [
+  "She whoops, tucks the noodle under one arm like a lance retired from battle, and tows you " +
+    "by the wrist toward her open front, announcing your capture to the whole bar. (ENTER her " +
+    "bar to follow it through — or don't; the soi forgives fast.)",
+  "\"YES! Good man!\" She drops the noodle on a stool like a soldier laying down arms and " +
+    "hauls you toward her front by the wrist, presenting you to the bar as tonight's prize " +
+    "catch. (ENTER to follow it through — or drift off; nobody's holding you.)",
+  "The noodle goes vertical in triumph. She takes your hand in both of hers and reels you " +
+    "toward the open front, calling ahead so a stool's already being wiped by the time you " +
+    "arrive. (ENTER her bar to make it official, or wander on — the soi forgives fast.)",
+  "She beams, swats you once more on principle, then tows you in by the sleeve, loudly " +
+    "informing the neighbouring bars that this one is HERS. (ENTER to follow through, or peel " +
+    "away — no hard feelings on Soi 6.)",
+];
+const _NOODLE_BOP = [
+  "You smile, wai, and step around her — and the noodle catches you across the back of the " +
+    "shoulders with a soft, absurd FWUMP. Then again, for luck. The whole front is laughing, " +
+    "she's laughing, and being foam-battered down a Soi 6 pavement by a giggling stranger is, " +
+    "you have to admit, the most fun you've had standing still all week.",
+  "You shake your head and keep walking, which turns out to be the wrong answer: FWUMP, the " +
+    "noodle bounces off your shoulder blades, FWUMP again as you speed up, and she chases you " +
+    "three steps down the pavement swatting and cackling while her whole bar loses it. You are " +
+    "laughing too. You can't help it.",
+  "\"No thank you\" gets you exactly one dignified step before the foam lands across your back " +
+    "— FWUMP — and she pursues, delighted, narrating your cowardice to the soi in two " +
+    "languages. You escape. Barely. Grinning like an idiot.",
+  "You decline. She gasps in mock heartbreak, then avenges it with the noodle — a flurry of " +
+    "soft, harmless whacks that follow you out of range while the neighbouring bars offer " +
+    "commentary and scores. Peak Soi 6. You'll allow it.",
+  "You wave her off and get a foam salute for it, square between the shoulders, twice, plus a " +
+    "parting bop on the top of the head as you duck away. The whole front is delighted. So, " +
+    "annoyingly, are you.",
+];
+
 const _ENC = {
   selfbf(input) {
     const name = NPCS[G.selfBfId] ? NPCS[G.selfBfId].name : "She";
@@ -527,6 +564,17 @@ const _ENC = {
         flavor + "She takes your arm; the promenade approves.", "win");
     }
     _endNight("barfine");
+  },
+
+  noodle(input) {
+    if (/yes|yeah|ok|okay|sure|come|fine|why not|\bgo\b|her|deal/.test(input)) {
+      _say(_pickVary(_NOODLE_YES, "noodleyes"));
+      return;
+    }
+    // walk on — THWACK. The bop itself is the payoff: pure, stupid, capped sanuk.
+    _say(_pickVary(_NOODLE_BOP, "noodlebop"));
+    _addHappy(1); // once — the encounter is nightly, so it can't be farmed
+    _say("(Pure sanuk. +1 สนุก.)", "win");
   },
 
   coconutbar(input) {

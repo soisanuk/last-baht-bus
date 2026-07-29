@@ -1903,54 +1903,144 @@ function _sayHeadline(h) {
 function _shakedownOn() { return G.nightTurn < 10; } // 18:00-19:00, ten turns/hour
 
 const _SHAKEDOWN_SCENES = [
-  "An officer steps off the kerb with one raised glove and a big Australian on a " +
-    "rented PCX pulls over with the face of a man doing sums. Helmet: yes. " +
-    "License: the wallet comes out slowly... too slowly. He is escorted toward " +
-    "the station at a gentle, unhurried, absolutely non-negotiable pace. The " +
-    "Blue Dog rail scores it a 7.",
-  "A farang on a Click 125 spots the checkpoint from two hundred metres, executes " +
-    "a U-turn so sudden his flip-flop comes off, and disappears down a side soi. " +
-    "The rail erupts. One of the officers applauds, sincerely, without moving " +
-    "from his spot. The flip-flop stays where it fell, a small monument.",
+  "Down the road, just south of the soi mouth, an officer steps off the kerb with " +
+    "one raised glove and a big Australian on a rented PCX pulls over with the face " +
+    "of a man doing sums. Helmet: yes. License: the wallet comes out slowly... too " +
+    "slowly. He is walked toward the station at a gentle, unhurried, absolutely " +
+    "non-negotiable pace. The rail scores it a 7.",
+  "A farang on a Click 125 clocks the checkpoint from two hundred metres, executes " +
+    "a U-turn so sudden his flip-flop comes off, and vanishes up a side soi. The " +
+    "rail erupts. One of the officers applauds, sincerely, without moving from his " +
+    "spot. The flip-flop stays where it fell, a small monument.",
   "No helmet, no license, board shorts: the full house. He tries the confused-" +
-    "tourist opening; the officer counters with the laminated card in four " +
-    "languages. They walk to the station together like old friends, one of them " +
-    "฿2000 lighter in advance. At the rail, a man who clearly did the same walk " +
-    "last week raises his Chang in silent brotherhood.",
-  "Two officers on each side of the road, working the evening tide with the calm " +
-    "of men netting fish at the river mouth. Thais sail through unwaved. A " +
-    "gap-year kid gets pulled mid-wheelie, which even the rail agrees was earned.",
+    "tourist opening; the officer counters with the laminated card in four languages " +
+    "and an on-the-spot number. When he makes the mistake of protesting, two of them " +
+    "walk him off toward the station — off-camera, for 'processing.' At the rail, a " +
+    "man who did the same walk last week raises his Chang in silent brotherhood.",
+  "Two officers working the evening tide just south of the junction with the calm of " +
+    "men netting fish at the river mouth. Thais and helmets sail through unwaved; a " +
+    "bare-headed gap-year kid gets pulled mid-wheelie, which even the rail agrees was earned.",
+  "A Norwegian on a scooter, girlfriend riding pillion in a sundress and not a helmet " +
+    "between them, gets the glove. He argues the toss on the fine; the officer's face " +
+    "does not change; a second officer drifts over the way a second officer always does. " +
+    "Two minutes later the Norwegian is a great deal poorer and the girlfriend is doing " +
+    "the maths on his behalf.",
+  "The checkpoint runs like a car wash — wave, stop, check, fine, release, next — until " +
+    "a Brit tries to film it 'for his rights.' The phone is not confiscated, exactly. It " +
+    "is just very firmly suggested that the phone go away; the phone goes away; and the " +
+    "number on the fine goes up a notch for the trouble.",
+  "A whole convoy of stag-do lads on matching rented bikes hits the checkpoint at once and " +
+    "scatters like startled pigeons — U-turns, kerb-jumps, one straight up a side soi the " +
+    "wrong way. The officers pick off the slowest with the bored inevitability of a man " +
+    "closing a gate. The rail awards style points.",
+  "Somebody's clearly done this before: helmet on, license out, cash folded to the right " +
+    "amount before he's even fully stopped, the whole transaction over in fifteen seconds " +
+    "flat with a nod on both sides. The rail respects it. That, they agree, is how you take " +
+    "a Tuesday checkpoint.",
 ];
 
-// WATCH SUNSET at the two junction bars (Blue Dog, Stinky Pinky), which face the
-// bay across Beach Road at the foot of Soi 6. WATCH POLICE — the old evening
-// checkpoint show — is disabled for now: it needs a road for the officers to sit
-// across, and the Beach Road geography is due for a rework. The shakedown data
-// (_SHAKEDOWN_SCENES / _shakedownOn) stays put for when it comes back.
-// TODO: restore the checkpoint branch here (and its nudge in engine-core) once
-// the road layout lands.
-function _doWatchSunset(arg) {
-  arg = arg || "";
-  if (/police|checkpoint|shakedown|bike|toll/.test(arg)) {
-    _say("No checkpoint to watch from here tonight — the boys in brown are working " +
-      "another stretch of road. The bay, though, is right there across the traffic. " +
-      "(WATCH SUNSET.)", "dim");
-    return; // the disabled show pays nothing; the sunset is its own command
-  }
-  if (_shakedownOn()) { // ~18:00-19:00, the golden hour (the window the checkpoint used too)
-    _say("Out past the road and the sand the bay does the whole production number: " +
-      "gold, then rose, then a violet that no camera has ever come home with. The " +
-      "islands go to silhouette. Behind you the beer signs buzz on one by one, taking " +
-      "over the shift. Nobody at the rail says anything, which is how you can tell it's good.");
+// WATCH at the two junction bars (Blue Dog, Stinky Pinky) at the foot of Soi 6,
+// which face Beach Road and the bay across it. Two shows: the evening police
+// checkpoint (set up on Beach Road just south of the soi mouth from about five,
+// working the helmetless-farang tide — a paperwork stop, an on-the-spot fine, and
+// an off-camera "processing" walk for anyone who protests) and the bay sunset.
+// WATCH POLICE picks the checkpoint, WATCH SUNSET picks the bay; bare WATCH gives
+// whichever is live. One happy point a night, shared with the balcony/parade.
+const _SUNSET_GOLD = [
+  "Out past the road and the sand the bay does the whole production number: gold, then " +
+    "rose, then a violet that no camera has ever come home with. The islands go to " +
+    "silhouette. Behind you the beer signs buzz on one by one, taking over the shift. " +
+    "Nobody at the rail says anything, which is how you can tell it's good.",
+  "The sun goes down over the bay like it's being paid to: the water hammered copper, the " +
+    "sky bleeding orange into something with no name, the islands flattening to cutouts. " +
+    "Somewhere a phone camera gives up. The rail watches in the particular silence that " +
+    "means it's worth watching.",
+  "West, past the traffic and the sand, the whole sky commits — gold at the waterline, rose " +
+    "stacked above it, a high cold violet at the top the day saves for last. The squid boats " +
+    "prick on one by one. Nobody talks over it.",
+  "The bay does its trick again and it works again: the sun sitting fat and red on the " +
+    "horizon, the water going to beaten metal, the light warming every sunburnt face at the " +
+    "rail for exactly as long as it lasts. Which is never long enough.",
+  "Down goes the sun and the whole junction softens with it — the neon not yet winning, the " +
+    "sky running colours no paint catalogue would dare, the islands black paper against them. " +
+    "A good minute to be exactly here and nowhere else.",
+];
+const _SUNSET_DARK = [
+  "The sun is long gone; across the road the bay is a dark sheet stitched with squid-boat " +
+    "lights. Still worth watching, in the way embers are.",
+  "The show's over — the bay a black expanse pricked with the green-white lights of the " +
+    "squid fleet working the dark. Pretty, in a leftover way, but the paying part has set.",
+  "Only the afterglow now, a bruise of colour low over the islands and the boats lit up " +
+    "beyond. You watch the embers a while; the main event finished without you.",
+  "Night owns the bay now — dark water, boat lights, the last stain of colour draining off " +
+    "the far edge. Beautiful still, the way a shut-up fairground is beautiful.",
+];
+const _SHAKEDOWN_DONE = [
+  "The checkpoint packed up around seven — the officers folded their operation like a market " +
+    "stall and rode off, a couple of them helmetless themselves. The road south is just a road " +
+    "again. The bay, however, is still open.",
+  "Nothing to watch down the road now — the checkpoint's long done, the cones gone, the " +
+    "officers off to wherever officers go once the tide of helmetless farang thins. The road's " +
+    "just a road. Try the bay.",
+  "The show south of the soi wrapped up hours ago; the last fined tourist is long since " +
+    "processed and back on his rented bike, helmet now conspicuously on. The sunset seat's " +
+    "still yours, though.",
+  "Checkpoint's over — packed up on the dot and rolled off in a loose, unhurried convoy. " +
+    "Whatever drama the road had, it's spent. The bay keeps later hours.",
+];
+function _doWatchJunction(arg) {
+  const sunset = /sunset|bay|sea|view|\bsun\b/.test(arg || "");
+  if (sunset || !_shakedownOn()) {
+    if (_shakedownOn()) {
+      _say(_pickVary(_SUNSET_GOLD, "sunsetgold"));
+    } else if (sunset) {
+      _say(_pickVary(_SUNSET_DARK, "sunsetdark"));
+      return;
+    } else {
+      _say(_pickVary(_SHAKEDOWN_DONE, "shakedowndone"));
+      return;
+    }
   } else {
-    _say("The sun is long gone; across the road the bay is a dark sheet stitched with " +
-      "squid-boat lights. Still worth watching, in the way embers are.");
-    return; // no nightly point after dark
+    _say(_pickVary(_SHAKEDOWN_SCENES, "shakedown"));
   }
   if (G.blueDogDay !== G.day) {
     G.blueDogDay = G.day;
     _addHappy(1);
-    _say("(Best free sunset at the foot of the soi. +1 สนุก.)", "win");
+    _say("(Best free show at the foot of the soi. +1 สนุก.)", "win");
+  }
+}
+
+// The quiet middle of Soi 6 (and the beer bars along it) as free theatre: you
+// watch the parade instead of being pulled into it. One happy point a night,
+// shared with the balcony and the junction show (all the same "free show" cap).
+const _PARADE_SCENES = [
+  "From your stool the whole soi streams past: a barker at the west end loses a " +
+    "customer to the bar across the way and takes it personally; a hen party in " +
+    "matching sashes gets gently herded out of one front and into the next; the " +
+    "TikTok kid with the ring light films it all for people who'll never smell it.",
+  "A farang two beers in tries to haggle a barfine down by miming his own poverty; " +
+    "the mama mimes back, better; it ends in a handshake and a lady drink. Down the " +
+    "way a foam pool noodle catches some slower tourist across the shoulders and the " +
+    "whole front cackles.",
+  "The parade does its thing a few feet off the deck: a pull, a giggle, a wrist taken " +
+    "and released, a man walking very fast with his eyes down while three girls call " +
+    "him handsome anyway. You sip and score it privately.",
+  "Two girls share one plate of som tam between customers; a third tries a new English " +
+    "line on a passing German and lands it; a soi dog supervises from the gutter. Best " +
+    "cheap theatre in town, and your seat's already paid for.",
+  "A tout at the east end reels one in with a foam noodle and pure persistence; a " +
+    "bachelor party debates a bar by committee and picks wrong; a girl leans out of a " +
+    "front to wave at a regular by name. Nobody bothers you. You wave the next round over.",
+  "The soi performs and you spectate: the flip-flops, the neon, the offers overlapping " +
+    "into one warm wall of noise, and the small real pleasure of watching all of it from " +
+    "a stool where nobody is trying to climb into your lap.",
+];
+function _doWatchParade() {
+  _say(_pickVary(_PARADE_SCENES, "parade"));
+  if (G.blueDogDay !== G.day) {
+    G.blueDogDay = G.day;
+    _addHappy(1);
+    _say("(Best cheap seat on the soi. +1 สนุก.)", "win");
   }
 }
 
