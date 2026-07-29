@@ -62,6 +62,7 @@ function _trace(verb, target, extra) {
 const _TRACE_VERBS = {
   talk: "talked to", ask: "asked", give: "gave", go: "went to",
   flirt: "flirted with", kiss: "kissed", spank: "spanked", fondle: "fondled",
+  compliment: "complimented", joke: "joked with", tease: "teased",
 };
 // pure + DOM-free: build the breadcrumb string (tested in engine.test.js)
 function _traceLine(t) {
@@ -174,6 +175,8 @@ function newGame() {
     visited: { jomtien_beach: true }, // roomId → true once stood in (fast-travel gate)
     talked: {},          // npcId → [dialogue indices already delivered] (terse repeats)
     npc: {},             // per-character conversation state: id → {trust,mood,dstate,know} (see _npcState)
+    convo: null,         // active conversation partner id — bare topics/actions aim here (see _convoActive)
+    itNpc: null,         // last person addressed — the antecedent for "her/him/them" (see _resolveActor)
     faction: { wdg: 0, samson: 0, indie: 0, syndicate: 0 }, // standing with the powers (see _align) — only moves when you ACT, never for declining
     itemLoc: Object.fromEntries(
       Object.entries(ITEMS).map(([id, it]) => [id, it.location])),
@@ -451,6 +454,84 @@ function _npcState(id) {
   return G.npc[id] || (G.npc[id] = { trust: 0, mood: "guarded", dstate: "stranger", know: {} });
 }
 
+// ── Active conversation context ──────────────────────────────────────────────
+// A sticky "who am I talking to" pointer so the player can speak in bare topics
+// and social actions without re-naming the partner each line ("90s" → ASK ANGELA
+// ABOUT 90s; see _convoResolve). It rides the save like any G field, but every
+// READ goes through _convoActive, which re-checks the partner is still in the
+// room — so walking away, them leaving, or a barfine silently ends it. The
+// parser layer that consumes this lives in engine-parser.js.
+function _convoStart(id) { if (id) { G.convo = id; G.itNpc = id; } }
+function _convoName(id) {
+  return (NPCS[id] && NPCS[id].name) || (PATRONS[id] && PATRONS[id].name) || id;
+}
+function _convoActive() {
+  const id = G.convo;
+  if (!id) return null;
+  const here = (NPCS[id] && _npcRoom(id) === G.room) ||
+               (PATRONS[id] && _patronsHere().includes(id));
+  if (!here) { G.convo = null; return null; } // partner gone → conversation over
+  return id;
+}
+function _convoEnd(quiet) {
+  const id = G.convo;
+  G.convo = null;
+  if (id && !quiet) _say(`You take your leave of ${_convoName(id)}.`, "dim");
+}
+
+// ── Scope & pronoun resolution ───────────────────────────────────────────────
+// The Inform-style "it"/default-object idea, borrowed (not the NLP library that
+// prompted it): bind a pronoun (her/him/them/it) or a bare/omitted target to who
+// the player most obviously means. Antecedent order: the active conversation
+// partner, then the last person we addressed (if still in scope), then — the
+// disambiguation-by-uniqueness rule _doSocial/_doWai already used — the sole
+// person in scope. Returns an id, or null when genuinely ambiguous (caller then
+// asks "who do you mean?"). `pool` restricts the domain (social → girls only).
+const _PRONOUN = /^(her|him|them|they|she|he|it|this|that|the (girl|lady|guy|man|bloke|woman|one))$/;
+function _addressable() { return [..._npcsHere(), ..._patronsHere()]; }
+function _lastActor() {
+  const c = _convoActive();
+  if (c) return c;
+  if (G.itNpc && _addressable().includes(G.itNpc)) return G.itNpc;
+  return null;
+}
+function _noteActor(id) { if (id) G.itNpc = id; } // remember, for the next pronoun
+function _resolveActor(word, pool) {
+  pool = pool || _addressable();
+  const w = String(word || "").replace(/^with /, "").trim().toLowerCase();
+  if (w && !_PRONOUN.test(w)) {                 // an actual name/word
+    const id = _findNpc(w) || _findPatron(w);
+    return pool.includes(id) ? id : null;
+  }
+  const ante = _lastActor();                    // pronoun or omitted → antecedent
+  if (ante && pool.includes(ante)) return ante;
+  return pool.length === 1 ? pool[0] : null;    // else the only candidate, if unambiguous
+}
+
+// The topics currently OPEN with a partner: their dialogue nodes whose gates
+// (req/notFlags/bond/when) pass right now, in authored order, deduped. Mirrors
+// the gate checks in _pickDialogue / _patronTalk, so the chip palette only ever
+// offers what the partner would actually answer — which gives progressive reveal
+// for free (a topic appears the moment its node unlocks on trust/flag). Sore
+// subjects that would set a patron off (rage) are withheld — no rage-bait chips.
+function _convoTopics(id) {
+  const st = _npcState(id);
+  const p = PATRONS[id], n = NPCS[id];
+  const nodes = (n && n.dialogue) || (p && p.dialogue) || [];
+  const rage = (p && p.rage) || [];
+  const out = [];
+  for (const d of nodes) {
+    if (!d.topic) continue;
+    if (rage.some(k => d.topic.includes(k))) continue;
+    if (d.req && d.req.some(f => !_flag(f))) continue;
+    if (d.notFlags && d.notFlags.some(f => _flag(f))) continue;
+    if (d.bond && n && _bondTier(id) < d.bond) continue;
+    if (d.when && !d.when(st, G)) continue;
+    if (!out.includes(d.topic)) out.push(d.topic);
+  }
+  return out;
+}
+
 // Faction standing with the powers of the night — WDG (Ryan Powers' Soi 6 rollup),
 // samson (the brothers' Jomtien/Pratumnak takeover), indie (Bert & the holdouts),
 // syndicate (the unnamed Thai muscle behind the envelopes). Standing only moves
@@ -465,6 +546,7 @@ function _align(name, delta) {
 
 function _patronTalk(id, topic) {
   if (G.patronTalk.day !== G.day) G.patronTalk = { day: G.day, talked: {} };
+  _convoStart(id); // engaging a regular makes him the active conversation partner
   const p = PATRONS[id];
   const st = _npcState(id);
   // some regulars have a sore subject that turns them belligerent (Fergie: Bert,
