@@ -3609,6 +3609,30 @@ test("dialogue state machine: Angela gates the heavy stuff behind trust, then op
   assert.equal(st().trust, t, "re-asking a warmed topic doesn't re-bump trust");
 });
 
+test("factions: Gavin's errand is opt-in — standing moves only on the deed, never on declining", () => {
+  startSoi6Mode(); state().flags.act1Done = true;
+  const fac = () => state().faction;
+  // hearing Gavin's pitch puts the errand on offer but changes nothing
+  state().room = "golden_dragon";
+  run("ask gavin about offer");
+  assert.equal(state().quests.wdg_flip, "offered", "the counter-quest is on the table");
+  assert.deepEqual(fac(), { wdg: 0, samson: 0, indie: 0, syndicate: 0 }, "ignoring it costs nothing");
+  // even accepting is free — you can still walk away with no alignment
+  run("accept wdg_flip");
+  assert.equal(fac().wdg, 0, "accepting the job does not align you");
+  // the deed does it: carry Gavin's pitch to Bert
+  state().room = "stinky_bar";
+  out = []; run("ask bert about selling");
+  assert.match(lastOut(), /carrying his water|came for HIM/i, "Bert clocks the betrayal");
+  assert.ok(fac().wdg > 0 && fac().indie < 0, "now you've taken a side");
+  assert.equal(state().quests.wdg_flip, "done", "quest resolves (WDG pays the errand)");
+  // and standing drives dialogue: Bert ices a WDG stooge
+  out = []; run("talk bert");
+  assert.match(lastOut(), /errand boy|drink it standing/i, "Bert ices you now");
+  // the help-Bert-hold path is now closed — you can't do both
+  assert.ok(!state().flags.wdgResolved, "and you never helped him hold");
+});
+
 test("White Dish quest: Kesinee vets you before she talks — the quest flag is trust-gated", () => {
   startSoi6Mode(); state().flags.act1Done = true;
   state().room = "kitten_corner";
