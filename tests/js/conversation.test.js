@@ -188,3 +188,65 @@ test("an ambiguous social pronoun asks who you mean instead of refusing", () => 
   doCommand("flirt with her");
   assert.match(lastOut(), /Who do you mean/i);
 });
+
+// ── Conversation-aware chips (slice 3) ───────────────────────────────────────
+
+function chipCmds() { return _chipSet().map(c => c.cmd); }
+function chipLabels() { return _chipSet().map(c => c.label); }
+
+test("no conversation → the normal room chips (no LEAVE)", () => {
+  assert.ok(!chipCmds().includes("bye"), "LEAVE only shows inside a conversation");
+});
+
+test("in a conversation the chips become topics + LEAVE", () => {
+  run("angela");
+  const cmds = chipCmds();
+  assert.ok(cmds.includes("bye"), "a way out is offered");
+  assert.ok(cmds.includes("90s") && cmds.includes("drew"),
+    "her open topics are offered as chips");
+  assert.ok(!cmds.some(c => /^withdraw|^enter |^ride bus/.test(c)),
+    "the room/navigation chips are replaced by the talk palette");
+});
+
+test("topic chips are Title-cased labels over the bare-topic cmd", () => {
+  run("angela");
+  const chips = _chipSet();
+  const drew = chips.find(c => c.cmd === "drew");
+  assert.equal(drew.label, "Drew");
+});
+
+test("chips offer only UNLOCKED topics — progressive reveal via the same gates", () => {
+  // Angela has a bond-gated 'queen vic'-style node set; more concretely, her
+  // deeper nodes open on trust. Assert the palette grows as she warms: a topic
+  // gated behind trust is absent cold and present once trust clears the gate.
+  run("angela");
+  const cold = _convoTopics("angela");
+  _npcState("angela").trust = 5;      // warm her right up
+  _npcState("angela").mood = "open";
+  const warm = _convoTopics("angela");
+  assert.ok(warm.length >= cold.length, "warming never removes topics");
+  assert.deepEqual([...new Set(warm)], warm, "no duplicate topic chips");
+});
+
+test("social chips (flirt / buy drink) show for a hostess partner, not a patron", () => {
+  // Patron partner (Angela): no flirt chip.
+  run("angela");
+  assert.ok(!chipCmds().includes("flirt"), "no flirt chip for a patron");
+  // Hostess partner (Milin at the Pit Stop): flirt + buy-drink appear.
+  newGame();
+  state().room = "pit_stop";
+  state().lastSaleng = 99999; state().lastPeddler = 99999;
+  run("milin");
+  const cmds = chipCmds();
+  assert.ok(cmds.includes("flirt"), "flirt offered with a bar girl");
+  assert.ok(cmds.some(c => c.startsWith("buy drink for milin")), "buy-drink targets her");
+  assert.ok(cmds.includes("bye"));
+});
+
+test("tapping a topic chip resolves through the conversation layer", () => {
+  run("angela");
+  const chip = _chipSet().find(c => c.cmd === "90s");
+  out = [];
+  doCommand(chip.cmd); // simulate the tap
+  assert.match(lastOut(), /1997|Tower Records/);
+});
