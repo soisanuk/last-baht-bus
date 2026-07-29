@@ -5166,7 +5166,7 @@ const PATRONS = {
   angela: {
     name: "Angela", emoji: "🎧", age: 47, nat: "American",
     home: "queen_vic", hops: false,
-    desc: "Forty-seven, Navy-short hair gone grey at the temples, a flannel shirt " +
+    desc: "Forty-seven, close-cropped hair gone grey at the temples, a flannel shirt " +
       "tied at the waist in a climate that argues against it. On the bar next to " +
       "her Singha: an actual Discman, its foam headphones held together with " +
       "electrical tape. She has the corner seat with the window view of Soi 6 — " +
@@ -5185,7 +5185,7 @@ const PATRONS = {
           "seat's mine, but the one beside it minds the dart line the same.\" Not warmth, " +
           "exactly. Not not-warmth either.",
         short: "\"You again.\" The headphones come half-down. Provisional." },
-      { text: "\"Angela.\" The handshake is brief and Navy-firm; the eye contact is " +
+      { text: "\"Angela.\" The handshake is brief and firm; the eye contact is " +
         "rationed. \"Yes, that's a Discman. No, it's not ironic.\" She turns the " +
         "corner of a smile at the window, at Soi 6 howling away across the road. " +
         "\"I sit on this side of the glass. Best nature documentary in town — " +
@@ -5212,10 +5212,10 @@ const PATRONS = {
         "with me.\"",
         short: "\"In here it's 1997, permanently. The last decade I trust.\"",
         fx: (st) => { st.trust = Math.min(5, st.trust + 1); } },
-      { topic: "depression", when: (st) => st.trust < 3,
+      { topic: "depression", when: (st) => st.trust < 3, deflect: true,
         text: "A flat look; the headphones stay put. \"That's a third-drink conversation " +
           "and you're on your first. I don't hand strangers my whole chart.\" She turns " +
-          "back to the window, the subject closed with Navy efficiency.",
+          "back to the window, the subject closed with brisk efficiency.",
         short: "\"That's a third-drink conversation and you're on your first.\" (Stick around; earn it.)" },
       { topic: "depression", when: (st) => st.trust >= 3,
         text: "She doesn't flinch at the word; she's clearly " +
@@ -5239,7 +5239,7 @@ const PATRONS = {
         "better with a pane of glass between me and 1999.\"",
         short: "\"Terry holds the corner seat. It's load-bearing. We've never discussed it.\"",
         fx: (st) => { st.trust = Math.min(5, st.trust + 1); } },
-      { topic: "navy", when: (st) => st.trust < 3,
+      { topic: "navy", when: (st) => st.trust < 3, deflect: true,
         text: "The headphones come halfway up — a shutter, not a door. \"We just met and " +
           "you're asking about my service record.\" A thin, unoffended smile. \"Stick " +
           "around. Buy a Singha. Some things you earn.\" The subject is closed with Navy efficiency.",
