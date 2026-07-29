@@ -175,6 +175,7 @@ function newGame() {
     talked: {},          // npcId → [dialogue indices already delivered] (terse repeats)
     npc: {},             // per-character conversation state: id → {trust,mood,dstate,know} (see _npcState)
     convo: null,         // active conversation partner id — bare topics/actions aim here (see _convoActive)
+    itNpc: null,         // last person addressed — the antecedent for "her/him/them" (see _resolveActor)
     faction: { wdg: 0, samson: 0, indie: 0, syndicate: 0 }, // standing with the powers (see _align) — only moves when you ACT, never for declining
     itemLoc: Object.fromEntries(
       Object.entries(ITEMS).map(([id, it]) => [id, it.location])),
@@ -459,7 +460,7 @@ function _npcState(id) {
 // READ goes through _convoActive, which re-checks the partner is still in the
 // room — so walking away, them leaving, or a barfine silently ends it. The
 // parser layer that consumes this lives in engine-parser.js.
-function _convoStart(id) { if (id) G.convo = id; }
+function _convoStart(id) { if (id) { G.convo = id; G.itNpc = id; } }
 function _convoName(id) {
   return (NPCS[id] && NPCS[id].name) || (PATRONS[id] && PATRONS[id].name) || id;
 }
@@ -475,6 +476,35 @@ function _convoEnd(quiet) {
   const id = G.convo;
   G.convo = null;
   if (id && !quiet) _say(`You take your leave of ${_convoName(id)}.`, "dim");
+}
+
+// ── Scope & pronoun resolution ───────────────────────────────────────────────
+// The Inform-style "it"/default-object idea, borrowed (not the NLP library that
+// prompted it): bind a pronoun (her/him/them/it) or a bare/omitted target to who
+// the player most obviously means. Antecedent order: the active conversation
+// partner, then the last person we addressed (if still in scope), then — the
+// disambiguation-by-uniqueness rule _doSocial/_doWai already used — the sole
+// person in scope. Returns an id, or null when genuinely ambiguous (caller then
+// asks "who do you mean?"). `pool` restricts the domain (social → girls only).
+const _PRONOUN = /^(her|him|them|they|she|he|it|this|that|the (girl|lady|guy|man|bloke|woman|one))$/;
+function _addressable() { return [..._npcsHere(), ..._patronsHere()]; }
+function _lastActor() {
+  const c = _convoActive();
+  if (c) return c;
+  if (G.itNpc && _addressable().includes(G.itNpc)) return G.itNpc;
+  return null;
+}
+function _noteActor(id) { if (id) G.itNpc = id; } // remember, for the next pronoun
+function _resolveActor(word, pool) {
+  pool = pool || _addressable();
+  const w = String(word || "").replace(/^with /, "").trim().toLowerCase();
+  if (w && !_PRONOUN.test(w)) {                 // an actual name/word
+    const id = _findNpc(w) || _findPatron(w);
+    return pool.includes(id) ? id : null;
+  }
+  const ante = _lastActor();                    // pronoun or omitted → antecedent
+  if (ante && pool.includes(ante)) return ante;
+  return pool.length === 1 ? pool[0] : null;    // else the only candidate, if unambiguous
 }
 
 // Faction standing with the powers of the night — WDG (Ryan Powers' Soi 6 rollup),

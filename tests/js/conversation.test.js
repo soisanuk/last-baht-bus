@@ -133,3 +133,58 @@ test("an unknown word outside a conversation is still a parse error", () => {
   assert.equal(state().convo, null);
   // no crash, and it did not silently start/990 a conversation
 });
+
+// ── Scope & pronoun resolution ───────────────────────────────────────────────
+
+test("_resolveActor binds a pronoun to the active conversation partner", () => {
+  run("angela"); // sets G.convo = angela
+  assert.equal(_resolveActor("her", _addressable()), "angela");
+  assert.equal(_resolveActor("him", _addressable()), "angela"); // antecedent, not gendered
+  assert.equal(_resolveActor("them", _addressable()), "angela");
+});
+
+test("_resolveActor falls back to the sole candidate in scope (uniqueness)", () => {
+  state().room = "pit_stop"; // exactly one hostess, Milin; no active conversation
+  assert.equal(_resolveActor("her", _npcsHere()), "milin");
+  assert.equal(_resolveActor("", _npcsHere()), "milin", "a bare target resolves too");
+});
+
+test("_resolveActor returns null when a pronoun is genuinely ambiguous", () => {
+  state().room = "neon_paradise"; // six hostesses, nobody addressed yet
+  assert.equal(_resolveActor("her", _npcsHere()), null);
+});
+
+test("_resolveActor honours a name in scope and rejects one out of the pool", () => {
+  state().room = "neon_paradise";
+  assert.equal(_resolveActor("noi", _npcsHere()), "noi", "a named girl in the room");
+  // Angela is a patron, not in the NPC social pool — pronoun/name must not bind her
+  state().room = "queen_vic";
+  assert.equal(_resolveActor("angela", _npcsHere()), null);
+});
+
+test("talk/ask accept a pronoun for the current partner", () => {
+  run("angela");
+  out = [];
+  doCommand("talk to her");
+  assert.equal(state().convo, "angela");
+  assert.doesNotMatch(lastOut(), /didn't parse|Nobody|not here/i);
+  out = [];
+  doCommand("ask her about 90s"); // pronoun in the ASK split
+  assert.match(lastOut(), /1997|Tower Records/, "ask <pronoun> about <topic> resolved");
+});
+
+test("a resolved social target becomes the antecedent for the next pronoun", () => {
+  state().room = "pit_stop"; // one hostess — bare FLIRT resolves by uniqueness
+  doCommand("flirt");
+  assert.equal(state().itNpc, "milin", "the flirt target is remembered");
+  out = [];
+  doCommand("flirt with her"); // "her" now binds to Milin
+  assert.doesNotMatch(lastOut(), /Who do you mean/i, "the antecedent pins it down");
+});
+
+test("an ambiguous social pronoun asks who you mean instead of refusing", () => {
+  state().room = "neon_paradise"; // six girls, none addressed
+  out = [];
+  doCommand("flirt with her");
+  assert.match(lastOut(), /Who do you mean/i);
+});

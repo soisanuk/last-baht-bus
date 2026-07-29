@@ -621,6 +621,15 @@ function _doRead(arg) {
 }
 
 function _doTalk(arg, topic) {
+  arg = (arg || "").trim();
+  // Pronoun / bare target → the person already in play (scope resolution). A
+  // patron antecedent routes straight to _patronTalk; an NPC id flows on as the
+  // "name" (findNpc matches an exact id). Ambiguous/none falls through to the
+  // usual not-here / nobody handling below.
+  if (!arg || _PRONOUN.test(arg.toLowerCase())) {
+    const a = _resolveActor(arg, _addressable());
+    if (a) { if (PATRONS[a]) { _patronTalk(a, topic); return; } arg = a; }
+  }
   const npc = _findNpc(arg);
   if (!npc) {
     const pat = _findPatron(arg);
