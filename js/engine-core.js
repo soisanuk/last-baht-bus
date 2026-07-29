@@ -173,6 +173,7 @@ function newGame() {
     known: {},           // charId → true once their name has printed (ask-topic gate)
     visited: { jomtien_beach: true }, // roomId → true once stood in (fast-travel gate)
     talked: {},          // npcId → [dialogue indices already delivered] (terse repeats)
+    npc: {},             // per-character conversation state: id → {trust,mood,dstate,know} (see _npcState)
     itemLoc: Object.fromEntries(
       Object.entries(ITEMS).map(([id, it]) => [id, it.location])),
     safeTries: 0,
@@ -444,15 +445,27 @@ function _findPatron(word) {
 
 // Same delivery contract as _deliver, but the seen-index book resets daily —
 // a patron's stories are new again every night, which is very true to life.
+// Persistent per-character conversation state — the small state machine behind a
+// dialogue tree: how far the relationship's got (dstate), how much they'll open
+// up (trust), how they're feeling (mood), and what they've told you (know). Nodes
+// gate on it via `when(st, G)` and mutate it via `fx(st, G)`; both optional, so
+// any dialogue entry that doesn't use them behaves exactly as before. Plain data,
+// so it serialises with the save.
+function _npcState(id) {
+  return G.npc[id] || (G.npc[id] = { trust: 0, mood: "guarded", dstate: "stranger", know: {} });
+}
+
 function _patronTalk(id, topic) {
   if (G.patronTalk.day !== G.day) G.patronTalk = { day: G.day, talked: {} };
   const p = PATRONS[id];
+  const st = _npcState(id);
   // some regulars have a sore subject that turns them belligerent (Fergie: Bert,
   // Candy, their bars). On his nasty nights it turns into a swing.
   if (topic && p.rage && p.rage.some(k => topic.includes(k))) { _patronRage(id); return; }
   let d = null;
   for (const e of p.dialogue) {
     if (topic ? e.topic !== topic && !(e.topic && topic.includes(e.topic)) : e.topic) continue;
+    if (e.when && !e.when(st, G)) continue; // state-machine condition: skip nodes whose state gate fails
     d = e;
     break;
   }
@@ -471,6 +484,7 @@ function _patronTalk(id, topic) {
   // — Glam's lucid flashes) exactly like NPC dialogue; no `gives`, though.
   _say(repeat ? (d.short || _patronAgain(id)) : d.text);
   if (d.sets) d.sets.forEach(f => _setFlag(f));
+  if (!repeat && d.fx) d.fx(st, G); // state-machine effects, first delivery only (no farming trust by re-asking)
 }
 
 // A belligerent regular's sore subject. Whether it turns into a swing depends on
