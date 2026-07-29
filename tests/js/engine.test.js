@@ -396,7 +396,7 @@ test("every exit key walks: pub, up/down/u/d, hotel — GO accepts what Exits li
   // The Exits line decorates every key as a tap target, so every key must
   // move — _DIRS aliases plus any literal exit key of the room (pub, hotel).
   state().flags.hasWallet = true;
-  state().room = "soi6_street";
+  state().room = "soi6_mid";
   run("enter queen vic");
   assert.equal(state().room, "queen_vic", "the pub is a venue, entered by name");
   run("up"); // upstairs is for guests only
@@ -2569,7 +2569,7 @@ test("Candy's recce: eyes on all three new strips pays out", () => {
   state().flags.act1Done = true; state().stage = "expat"; state().money = 1000;
   state().room = NPCS.candy.room; run("talk candy"); run("accept recce");
   assert.equal(state().quests.recce, "active");
-  for (const r of ["myth_rows", "tt_lane_3", "beach_row"]) { state().room = r; run("look"); }
+  for (const r of ["myth_rows", "tt_lane_3", "soi6_mid"]) { state().room = r; run("look"); }
   run("look");
   assert.equal(state().quests.recce, "done");
   assert.equal(state().money, 1300, "Candy pays ฿300 for the intel");
@@ -3461,8 +3461,14 @@ test("Soi 6 mode: starts at the Queen Vic, confined to the soi, no bus out, saba
   assert.match(lastOut(), /this trip|one street|entire world|edge of the soi/i);
   run("n"); // naklua_rd out of bounds
   assert.equal(state().room, "beach_rd_n");
-  run("w"); // beach_row in bounds
-  assert.equal(state().room, "beach_row", "the beachside row is in bounds");
+  run("w"); // north_beach (across Beach Road) in bounds
+  assert.equal(state().room, "north_beach", "the beach across the road is in bounds");
+  run("e"); // and back to the junction, then east into the soi
+  assert.equal(state().room, "beach_rd_n");
+  run("e");
+  assert.equal(state().room, "soi6_street", "east into the west end of the soi");
+  run("e");
+  assert.equal(state().room, "soi6_mid", "the new quiet middle stretch is in bounds");
   // the bus is waved on
   state().room = "beach_rd_n"; out = [];
   run("ride bus to walking street");
@@ -4948,36 +4954,40 @@ test("go-go flashlight escalation: two warnings, then security walks you out", (
   assert.equal(state().room, "tequila_queen");
 });
 
-test("Blue Dog: checkpoint show 18:00-19:00, sunset, one happy point a night", () => {
-  state().room = "beach_rd_n";
+test("Junction bars: WATCH SUNSET pays once a night; WATCH POLICE is on hold", () => {
+  state().room = "beach_rd_n"; // the foot of Soi 6
   state().pendingEnc = null;
   state().lastPeddler = 99999;
-  run("w", "enter blue dog"); // west to the beachside row, into Blue Dog at 18:00
+  run("enter blue dog"); // Blue Dog holds the beach-side corner of the junction
   assert.equal(state().room, "blue_dog");
-  assert.match(lastOut(), /evening checkpoint is in session/, "the show is on");
+  assert.match(lastOut(), /bay is going gold/, "the golden-hour nudge, not a checkpoint");
+  assert.doesNotMatch(lastOut(), /checkpoint is in session/, "the police show is disabled");
 
   out = [];
-  _rand = () => 0; // pin the vignette
   const happy0 = state().happy;
+  // WATCH POLICE gets a soft on-hold note and pays nothing
   run("watch police");
-  assert.match(lastOut(), /escorted toward the station/, "a shakedown vignette");
-  assert.equal(state().happy, happy0 + 1, "first watch of the night pays");
+  assert.match(lastOut(), /No checkpoint to watch/i, "police show on hold");
+  assert.equal(state().happy, happy0, "no point from the disabled show");
+  // WATCH SUNSET is the paying feature at the junction
   out = [];
   run("watch sunset");
   assert.match(lastOut(), /gold, then rose/, "the bay does its thing");
-  assert.equal(state().happy, happy0 + 1, "the nightly point is spent");
-
-  // after 19:00 the checkpoint folds; the bay stays open
-  state().nightTurn = 30; // 21:00
-  out = [];
-  run("watch police");
-  assert.match(lastOut(), /packed up at seven/, "show's over");
+  assert.equal(state().happy, happy0 + 1, "the nightly point lands on the sunset");
   out = [];
   run("watch sunset");
+  assert.equal(state().happy, happy0 + 1, "and only once a night");
+
+  // it works from the Stinky Pinky across the junction too
+  state().room = "stinky_bar"; state().blueDogDay = 0; out = [];
+  run("watch sunset");
+  assert.match(lastOut(), /gold, then rose/, "sunset visible from the opposite corner");
+
+  // after dark the bay stays open but stops paying
+  state().nightTurn = 30; // 21:00
+  state().room = "blue_dog"; state().blueDogDay = 0; out = [];
+  run("watch sunset");
   assert.match(lastOut(), /squid-boat/, "post-sunset bay");
-  out = [];
-  run("look");
-  assert.doesNotMatch(lastOut(), /checkpoint is in session/, "no show in the room desc");
 });
 
 test("patrons: hoppers drift by the hour, settle at home by 22:00, chat resets daily", () => {

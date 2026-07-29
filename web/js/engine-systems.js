@@ -1922,32 +1922,35 @@ const _SHAKEDOWN_SCENES = [
     "gap-year kid gets pulled mid-wheelie, which even the rail agrees was earned.",
 ];
 
-function _doWatchBlueDog(arg) {
-  const sunset = /sunset|bay|sea|view/.test(arg || "");
-  if (sunset || !_shakedownOn()) {
-    if (_shakedownOn()) {
-      _say("The bay does the whole production number: gold, then rose, then a " +
-        "violet that no camera has ever come home with. The islands go to " +
-        "silhouette. Behind you the beer signs buzz on one by one, taking over " +
-        "the shift. Nobody at the rail says anything, which is how you can tell " +
-        "it's good.");
-    } else if (sunset) {
-      _say("The sun is long gone; the bay is a dark sheet stitched with squid-boat " +
-        "lights. Still worth watching, in the way embers are.");
-      return;
-    } else {
-      _say("The checkpoint packed up at seven on the dot — the officers folded " +
-        "their operation like a market stall and rode off, mostly helmetless. " +
-        "The road is just a road again. The bay, however, is still open.");
-      return;
-    }
+// WATCH SUNSET at the two junction bars (Blue Dog, Stinky Pinky), which face the
+// bay across Beach Road at the foot of Soi 6. WATCH POLICE — the old evening
+// checkpoint show — is disabled for now: it needs a road for the officers to sit
+// across, and the Beach Road geography is due for a rework. The shakedown data
+// (_SHAKEDOWN_SCENES / _shakedownOn) stays put for when it comes back.
+// TODO: restore the checkpoint branch here (and its nudge in engine-core) once
+// the road layout lands.
+function _doWatchSunset(arg) {
+  arg = arg || "";
+  if (/police|checkpoint|shakedown|bike|toll/.test(arg)) {
+    _say("No checkpoint to watch from here tonight — the boys in brown are working " +
+      "another stretch of road. The bay, though, is right there across the traffic. " +
+      "(WATCH SUNSET.)", "dim");
+    return; // the disabled show pays nothing; the sunset is its own command
+  }
+  if (_shakedownOn()) { // ~18:00-19:00, the golden hour (the window the checkpoint used too)
+    _say("Out past the road and the sand the bay does the whole production number: " +
+      "gold, then rose, then a violet that no camera has ever come home with. The " +
+      "islands go to silhouette. Behind you the beer signs buzz on one by one, taking " +
+      "over the shift. Nobody at the rail says anything, which is how you can tell it's good.");
   } else {
-    _say(_SHAKEDOWN_SCENES[Math.floor(_rand() * _SHAKEDOWN_SCENES.length)]);
+    _say("The sun is long gone; across the road the bay is a dark sheet stitched with " +
+      "squid-boat lights. Still worth watching, in the way embers are.");
+    return; // no nightly point after dark
   }
   if (G.blueDogDay !== G.day) {
     G.blueDogDay = G.day;
     _addHappy(1);
-    _say("(Best free show in Pattaya. +1 สนุก.)", "win");
+    _say("(Best free sunset at the foot of the soi. +1 สนุก.)", "win");
   }
 }
 

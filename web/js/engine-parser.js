@@ -1875,12 +1875,12 @@ function _doWave(arg) {
 
 // The bar-mat map, OSM-checked (tools/gen-map.mjs --audit): the coast runs
 // NNE, so the north end leans right and the sea hugs the whole west edge;
-// Soi 6 hangs off Beach Rd North near the Dolphin roundabout with Naklua
-// beyond; Buakhao slants between Klang and Tai with LK Metro off its north
+// Soi 6 hangs inland off Beach Rd North, a couple of km short of the Dolphin
+// roundabout, with Naklua beyond it; Buakhao slants between Klang and Tai with LK Metro off its north
 // end; the Darkside is a motosai ride east, off any bar mat this size.
 const _MAP = `                    NAKLUA ─ Sabai Palms Hotel
         ~              │
-        ~     BEACH RD N ─ SOI 6 (Queen Vic at the pub end)
+        ~     BEACH RD N ─ SOI 6 (Queen Vic in the quiet middle)
         ~      │ (Blue Dog · Stinky Pinky)
         ~      │      PATTAYA KLANG ────► THE DARKSIDE
        ~       │       │      │   (Khao Talo · the lake · motosai out)
@@ -2789,8 +2789,8 @@ function doCommand(input) {
     case "watch":
       if (G.room === "qv_room" && (!arg || /soi|street|balcony|show|chaos|girls/.test(arg)))
         _doWatchSoi();
-      else if (G.room === "blue_dog" && (!arg || /police|road|show|shakedown|bike|checkpoint|sunset|bay|sea|view/.test(arg)))
-        _doWatchBlueDog(arg);
+      else if ((G.room === "blue_dog" || G.room === "stinky_bar") && (!arg || /police|road|show|shakedown|bike|checkpoint|sunset|bay|sea|view/.test(arg)))
+        _doWatchSunset(arg);
       else if (G.room === "peacock_cabaret" && (!arg || /drag|show|cabaret|revue|queen|stage|dance|petch|mala/.test(arg)))
         _doWatchDrag();
       else if (!arg || /tv|news|television/.test(arg)) _doTv();
