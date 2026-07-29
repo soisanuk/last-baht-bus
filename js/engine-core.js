@@ -480,6 +480,8 @@ function _patronTalk(id, topic) {
   _say(repeat ? (d.short || _patronAgain(id)) : d.text);
   if (d.sets) d.sets.forEach(f => _setFlag(f));
   if (!repeat && d.fx) d.fx(st, G); // state-machine effects, first delivery only (no farming trust by re-asking)
+  // first contact IS the meeting — advance state + grant baseline trust here
+  if (st.dstate === "stranger") { st.dstate = "met"; st.trust = Math.min(5, st.trust + 1); }
 }
 
 // A belligerent regular's sore subject. Whether it turns into a swing depends on
@@ -648,7 +650,11 @@ function _deliver(npcId, d) {
       _say("(Most of the cash is still in it — ฿500 back in play.)", "dim");
     }
   }
-  if (!repeat && d.fx) d.fx(_npcState(npcId), G); // state-machine effects, first delivery only
+  const st = _npcState(npcId);
+  if (!repeat && d.fx) d.fx(st, G);           // state-machine effects, first delivery only
+  // first contact (any exchange) IS the meeting: advance the state and grant the
+  // baseline trust here, so the meeting bonus never depends on which node fired.
+  if (st.dstate === "stranger") { st.dstate = "met"; st.trust = Math.min(5, st.trust + 1); }
 }
 
 // ── Look / describe ────────────────────────────────────────────────────────

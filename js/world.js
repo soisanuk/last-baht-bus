@@ -2744,8 +2744,7 @@ const NPCS = {
         text: "\"Come in, come in. My girls will not bite unless you tip for it.\" The practised smile " +
           "arrives on schedule; the eyes take a beat longer. \"You want a drink, a girl, a quiet corner — " +
           "Kesinee arrange. Anything except the price. The price is not mine to move any more.\"",
-        short: "\"Anything except the price — that is not mine to move any more.\"",
-        fx: (st) => { st.dstate = "met"; if (st.trust < 1) st.trust = 1; } },
+        short: "\"Anything except the price — that is not mine to move any more.\"" },
       // Kesinee vets you before she'll talk White Dish — canon: "she'll talk
       // straight if you are." A stranger gets the careful brush-off + a breadcrumb;
       // the real intel (and the quest flag) opens once you've earned a little trust.
@@ -2793,6 +2792,11 @@ const NPCS = {
       "at a bar like a spreadsheet. He calls himself an 'area consultant.' Everyone else calls him the " +
       "White Dish man. He is unfailingly pleasant, which is the unsettling part.",
     dialogue: [
+      { when: (st) => st.dstate !== "stranger",
+        text: "\"Ah — back again.\" The same warm, brief handshake, filed and instantly retrieved. \"Good to " +
+          "see you. Still turning it over, or just enjoying the room?\" The smile is patient. Gavin is always, " +
+          "unnervingly, patient.",
+        short: "\"Ah, back again.\" The handshake, filed and retrieved. Patient as ever." },
       { text: "\"Evening.\" The handshake is warm, brief, professionally sincere. \"Gavin. I look after a " +
         "few rooms on the soi for the group — White Dish, you'll have heard. Consulting, mostly. Standards, " +
         "systems, that sort of thing.\" He glances round the Golden Dragon the way a man counts a room. " +
@@ -2832,8 +2836,7 @@ const NPCS = {
       { text: "\"Pull up a stool, mind the cue.\" He nudges his glass an inch in welcome. \"Doug. Calgary — " +
           "thirty years in oil and gas, retired over here to do absolutely nothing, and I've been very good " +
           "at it. Apart from the one thing.\" A rueful tilt of the glass.",
-        short: "\"Doug, Calgary. Retired here to do nothing — very good at it. Apart from the one thing.\"",
-        fx: (st) => { st.dstate = "met"; if (st.trust < 1) st.trust = 1; } },
+        short: "\"Doug, Calgary. Retired here to do nothing — very good at it. Apart from the one thing.\"" },
       { topic: "white dish", text: "\"White Dish? Ho. Pour yourself something first.\" He turns the glass " +
           "slowly. \"Two years back a fella buys me a drink right at this bar — smooth, golf shirt, calls " +
           "himself an area consultant. Says the group's opening the portfolio to a few private investors. " +
@@ -2892,6 +2895,11 @@ const NPCS = {
         "Just content.\" He signals the barman again. \"The girls stand out front in " +
         "nothing all night for some kid's YouTube channel. And they can't even say no " +
         "because then they look bad on camera.\"" },
+      { when: (st) => st.dstate !== "stranger",
+        text: "\"Back again. Good.\" Terry shifts his Chang an inch, which for Terry is throwing his arms " +
+          "wide. \"Soi's still performing — it always is. Sit, watch a minute. You're learning the rhythm of " +
+          "the place; I can tell.\"",
+        short: "\"Back again. Good.\" (An inch of shifted Chang — for Terry, arms wide open.)" },
       { text: "He nods at the empty stool beside him and signals the barman. \"Sit down. Watch the soi a minute. Best show in Pattaya and you don't have to tip the girls.\"",
         short: "He signals the barman. \"Sit. Best show in Pattaya, no tipping required.\"" },
     ],
@@ -3699,6 +3707,11 @@ const NPCS = {
       "quietly, works at being his own man out from under her shadow. Twenty-two years " +
       "on Beach Road, most of them within nine feet of that pool table.",
     dialogue: [
+      { when: (st) => st.dstate !== "stranger",
+        text: "\"There he is.\" Bert's got a cold one open before you've sat. \"Not moved off this stool " +
+          "since you left, funny enough. Table's true, beer's cold.\" A crooked grin. \"What's the good " +
+          "word, bud?\"",
+        short: "\"There he is.\" A cold one's open before you sit. \"What's the good word, bud?\"" },
       { text: "\"Welcome to the Stinky, bud. Name's Bert. Table's true, beer's cold, " +
         "and the only rule is don't sit on the rail.\" He chalks a cue without " +
         "looking at it. \"You shoot? League night's every third night — killer " +
@@ -5071,8 +5084,7 @@ const PATRONS = {
         "\"I sit on this side of the glass. Best nature documentary in town — " +
         "you get the whole ecosystem without getting wet.\" She slides the " +
         "headphones down to her neck, which for her is a door opening.",
-        short: "\"Yes, it's a Discman. No, it's not ironic.\" The headphones come down: a door opening.",
-        fx: (st) => { st.dstate = "met"; if (st.trust < 1) st.trust = 1; } },
+        short: "\"Yes, it's a Discman. No, it's not ironic.\" The headphones come down: a door opening." },
       { topic: "drew", text: "\"Drew. Yeah.\" The tone of a fact being filed. \"Same " +
         "schoolhouse at DLI — Korean, he was a class ahead. We weren't friends. We " +
         "just conjugated the same verbs in the same hallways.\" She turns the " +
