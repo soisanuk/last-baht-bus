@@ -3524,6 +3524,36 @@ test("EXAMINE PHONE is a home screen: battery, flashlight, and messages awaiting
   assert.doesNotMatch(lastOut(), /Battery 0%/);
 });
 
+test("hotel-room minibar: two free waters a day, TAKE WATER quenches, restocks at rollover", () => {
+  startSoi6Mode(); // starts in qv_room
+  state().thirst = 80;
+  out = [];
+  run("open fridge");
+  assert.match(lastOut(), /2 cold bottles/i, "starts stocked with two");
+  out = []; run("take water");
+  assert.ok(state().thirst <= 40, "a free bottle takes a big bite out of thirst");
+  run("take water");
+  out = []; run("take water");
+  assert.match(lastOut(), /out of water|had your two/i, "only two a day");
+  // next day housekeeping refills
+  state().day = 2; state().thirst = 90;
+  out = []; run("take water");
+  assert.match(lastOut(), /1 free bottle left/i, "restocked to two overnight");
+  assert.ok(state().thirst <= 50, "and it quenches");
+  // CHECK/EXAMINE reach it too, and it's a room-only amenity
+  state().room = "soi6_mid"; out = [];
+  run("open fridge");
+  assert.match(lastOut(), /no fridge out here/i, "there's no minibar on the pavement");
+});
+
+test("WATCH TV works in your hotel room, not only in bars", () => {
+  startSoi6Mode(); // qv_room
+  out = [];
+  run("watch tv");
+  assert.match(lastOut(), /room's TV|flatscreen/i, "the room has a telly");
+  assert.doesNotMatch(lastOut(), /No TV out here/i, "no longer refused in the room");
+});
+
 test("Soi 6 mode: the clinic thread is fully reachable — condoms on the soi, symptoms, GET TESTED clears it", () => {
   startSoi6Mode();
   // protection is on-soi: the Soi 6 7-Eleven sells condoms

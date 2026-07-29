@@ -426,6 +426,9 @@ function _doSafe(num) {
 
 function _doTake(arg) {
   if (!arg) { _say("Take what?"); return; }
+  // TAKE WATER in your room pulls a free bottle from the minibar (not an item —
+  // it goes straight down, like a bought one, and cuts thirst).
+  if (/water|\bnam\b/.test(arg) && _isHotelRoom(G.room)) { _takeFridgeWater(); return; }
   if (_isDarkHere()) { _say("You grope around in the dark and find nothing but regret."); return; }
   const id = _findItem(arg, "room");
   if (!id) { _say("You don't see that here."); return; }
@@ -435,6 +438,41 @@ function _doTake(arg) {
     "That's staying where it is."); return; }
   G.itemLoc[id] = "inventory";
   _say(`Taken: ${it.name}.`);
+}
+
+// The in-room minibar: housekeeping leaves two free bottles of water a day.
+// Lazy restock — reconcile the day whenever the fridge is opened or a bottle is
+// taken, so it refills at the day rollover without a hook in the morning routine.
+function _fridgeStock() {
+  if (G.fridgeDay !== G.day) { G.fridgeWater = 2; G.fridgeDay = G.day; }
+}
+function _doFridge() {
+  if (!_isHotelRoom(G.room)) {
+    _say("No fridge out here — you'd have to be back in your room for that.");
+    return;
+  }
+  _fridgeStock();
+  if (G.fridgeWater > 0) {
+    _say(`The mini-fridge hums in the corner. Inside, on the house: ${G.fridgeWater} cold ` +
+      `bottle${G.fridgeWater > 1 ? "s" : ""} of water — housekeeping leaves two fresh every ` +
+      "day. (TAKE WATER.)");
+  } else {
+    _say("The mini-fridge hums, empty but for the cold: you've had today's two free bottles. " +
+      "Housekeeping refills it tomorrow. (Any 7-Eleven sells more in the meantime.)");
+  }
+}
+function _takeFridgeWater() {
+  _fridgeStock();
+  if (G.fridgeWater <= 0) {
+    _say("The fridge is out of water until tomorrow's restock — you've had your two free " +
+      "today. (A 7-Eleven has more.)");
+    return;
+  }
+  G.fridgeWater--;
+  G.thirst = Math.max(0, G.thirst - 45);
+  _say(`You crack a cold bottle from the mini-fridge and drink it down — free, and never more ` +
+    `welcome than when you're this dry. (${G.fridgeWater} free bottle${G.fridgeWater === 1 ? "" : "s"} ` +
+    "left today.)");
 }
 
 function _doDrop(arg) {
@@ -508,6 +546,7 @@ function _doExamine(arg) {
   // headlines), not the flat item blurb — but only "phone"/"mobile", so the
   // flashlight aliases (torch/light) still fall through to the LIGHT machinery.
   if (/\b(phone|mobile)\b/.test(arg) && _inv().includes("phone")) { _doPhoneScreen(); return; }
+  if (/\b(fridge|refrigerator|mini.?bar)\b/.test(arg)) { _doFridge(); return; }
   const npc = _findNpc(arg);
   if (npc) { _say(NPCS[npc].desc); return; }
   const pat = _findPatron(arg);
@@ -2150,7 +2189,7 @@ const _HELP = `Common commands:
   WAI [person] · SAY <thai phrase> [TO <person>]
   RIDE BUS TO <place> · MOTOSAI TO <place> · PAY <amount>
   BUY <thing> · SELL BOTTLES · READ <thing> · READ SIGN
-  WATCH TV (bars) · READ PAPER (bars & 7-Elevens) — the day's real headlines
+  WATCH TV (bars & your hotel room) · READ PAPER (bars & 7-Elevens) — the day's real headlines
   WATCH POLICE · WATCH SUNSET (Blue Dog & Stinky Pinky, early evening — the junction show)
   WATCH SOI (Queen Vic balcony, or the quiet middle of Soi 6 — watch the parade, don't join it)
   WATCH DRAG (The Peacock Cabaret, Supertown/Jomtien — tip the queens)
@@ -2167,6 +2206,7 @@ const _HELP = `Common commands:
   Live music (Fri/Sat, Rock Factory every night):
   DANCE · SING · REQUEST <song> · TIP BAND <amount> · BUY ROUND FOR BAND · TALK TO BAND
   EAT <food> · DRINK <thing> · BUY WATER / FOOD (street carts & 7-Elevens) · SLEEP (at the hotel)
+  OPEN FRIDGE · TAKE WATER (your hotel room — two free bottles a day)
   CHECKOUT (your room, before 19:00) — move hotels: Sabai Palms ฿400 · Queen Vic ฿700 · Metropole ฿1300
   DIAGNOSE (how bad is it) · GET TESTED (free clinic — clears a barfine souvenir)
   AGAIN or G (repeat last command)
@@ -2633,6 +2673,7 @@ function doCommand(input) {
       else if (/bal|account|atm|fund/.test(arg)) _doBalance();
       else if (/message|text|inbox/.test(arg)) _readMessages();
       else if (/phone|mobile/.test(arg)) _doPhoneScreen();
+      else if (/fridge|refrigerator|mini.?bar/.test(arg)) _doFridge();
       else _doExamine(arg);
       break;
     case "phone": case "mobile": _doPhoneScreen(); break;
@@ -2739,6 +2780,7 @@ function doCommand(input) {
       break;
     case "open":
       if (arg.includes("safe")) _say("The keypad wants three digits: ENTER <digits> — Thai numerals work too.");
+      else if (/fridge|refrigerator|mini.?bar/.test(arg)) _doFridge();
       else _say("It doesn't open that way.");
       break;
     case "press": case "type": case "code": _doEnter(arg); break;

@@ -2044,15 +2044,39 @@ function _doWatchParade() {
   }
 }
 
-// The Queen Vic balcony: the whole of Soi 6 as theatre, nightly, included
-// in the rate. One happy point a night, same house rules as the Blue Dog.
+// The Queen Vic balcony: the whole of Soi 6 as theatre, nightly, included in the
+// rate. One happy point a night, shared cap with the junction and the parade.
+const _BALCONY_SCENES = [
+  "You take the recliner. Below, Soi 6 performs: the barkers working the walkers, a hen " +
+    "party being gently herded out of Golden Dragon, two girls from Pink Lotus sharing one " +
+    "plate of som tam between customers, and the TikTok kid with the ring light filming it " +
+    "all for people who will never smell it. Two balconies over, Terry raises his beer " +
+    "without looking. You raise yours.",
+  "From the rail the soi is a lit aquarium: a bachelor party circling a doorway like fish " +
+    "deciding on the bait, a girl leaning out to reel one in by the shirt, a foam noodle " +
+    "descending on some dawdler two bars down. Terry, two balconies over, has clearly seen " +
+    "this exact scene a thousand times and rates tonight's a solid six.",
+  "You put your feet on the rail. Below, the whole circus: neon fighting neon, a farang " +
+    "haggling a barfine with his hands, a hostess laughing like a car alarm, a soi dog " +
+    "threading the whole mess untouched like he owns the lease. The bass comes up through " +
+    "the floor and into the recliner. You let it.",
+  "The soi throws its light and noise up the wall and you catch it all from the cheap seats: " +
+    "a stag-do losing a man to a doorway, a mama counting her girls with her eyes, the " +
+    "ring-light kid getting in everyone's way. Terry lifts his beer. Two balconies of quiet " +
+    "smugness, overlooking the loudest hundred metres in Thailand.",
+  "Down in the tank, the eight-o'clock shift change: fresh girls out front stretching and " +
+    "scanning, tired ones slipping upstairs, a barker resetting his voice for the next wave " +
+    "of walkers. You've paid for the best seat in the house and it costs nothing extra to " +
+    "keep it. The recliner agrees.",
+  "A whole play in one glance from the rail: boy meets girl, girl names price, boy does " +
+    "sums, girl loses patience and takes the next boy, first boy pretends it was his idea to " +
+    "leave. Repeated, with variations, all the way down the soi. Terry salutes the classics.",
+  "The parade churns below and you spectate from above, gloriously uninvolved — the grabs " +
+    "and the giggles and the offers all aimed at pavement level, none of it able to climb " +
+    "two floors to your recliner. Best seat, cheapest ticket, no hands on your wrist. Bliss.",
+];
 function _doWatchSoi() {
-  _say("You take the recliner. Below, Soi 6 performs: the barkers working the " +
-    "walkers, a hen party being gently herded out of Golden Dragon, two girls " +
-    "from Pink Lotus sharing one plate of som tam between customers, and the " +
-    "TikTok kid with the ring light filming it all for people who will never " +
-    "smell it. Two balconies over, Terry raises his beer without looking. " +
-    "You raise yours.");
+  _say(_pickVary(_BALCONY_SCENES, "balcony"));
   if (G.blueDogDay !== G.day) {
     G.blueDogDay = G.day;
     _addHappy(1);
@@ -2439,8 +2463,12 @@ function _doWatchDrag() {
 }
 
 function _doTv() {
-  if (!_inBar()) { _say("No TV out here. The street is the channel."); return; }
-  _say("The TV over the bar plays the news — sound off, Thai subtitles racing, " +
+  const inRoom = _isHotelRoom(G.room);
+  if (!_inBar() && !inRoom) { _say("No TV out here. The street is the channel."); return; }
+  _say(inRoom ?
+    "You thumb the room's TV on. A wall-mounted flatscreen, the hotel's welcome " +
+    "channel giving up to actual programming: the news, sound low, Thai subtitles racing." :
+    "The TV over the bar plays the news — sound off, Thai subtitles racing, " +
     "nobody's eyes on it but yours.");
   const h = _headline();
   if (h) {
@@ -2451,17 +2479,23 @@ function _doTv() {
     if (fx) _say(`The ticker crawls underneath: ${fx}`, "dim");
     const wx = _wxLine();
     if (wx) _say(`Then the weather girl, beaming at a map of the Gulf: ${wx}. ` +
-      "Nobody in the bar needed telling.", "dim");
+      "Nobody who lives here needed telling.", "dim");
     const fb = _footyLine();
     if (fb) _say(`Then sport — ${fb}. Kickoff, as ever, at an hour Pattaya ` +
       "calls late and football calls prime time.", "dim");
     const lt = _lotto();
     if (lt) _say(`And the lottery numbers from the ${lt.date} draw crawl past — ` +
-      `first prize ${lt.first}, last two ${lt.last2}. A cashier checks her ` +
+      `first prize ${lt.first}, last two ${lt.last2}. Somewhere a cashier checks her ` +
       "ticket against them without hope, and is proven right.", "dim");
-    _say("The bar absorbs the state of the world and orders another round at it.", "dim");
+    _say(inRoom ?
+      "You absorb the state of the world from the edge of the bed and decide, on balance, " +
+      "that it can wait until you've had a night out." :
+      "The bar absorbs the state of the world and orders another round at it.", "dim");
   } else {
-    _say("Tonight it's muay thai highlights and the lottery draw. The bar approves " +
+    _say(inRoom ?
+      "Tonight it's muay thai highlights and the lottery draw. You watch two rounds, " +
+      "content, and let the rest wash over you." :
+      "Tonight it's muay thai highlights and the lottery draw. The bar approves " +
       "of both, loudly.", "dim");
   }
 }
