@@ -3581,6 +3581,34 @@ test("Soi 6 mode won't offer a quest you can't finish in the pocket (Shamrock is
   assert.ok(bertOffers().includes("shamrock"), "the open-map game offers Shamrock as before");
 });
 
+test("dialogue state machine: Angela gates the heavy stuff behind trust, then opens up", () => {
+  startSoi6Mode();
+  state().room = "queen_vic"; state().flags.act1Done = true;
+  const st = () => state().npc.angela || {};
+  // a stranger asking the heavy question is deflected — she won't open up cold
+  out = []; run("ask angela about navy");
+  assert.match(lastOut(), /some things you earn|service record/i, "deflected before trust");
+  assert.ok(!(st().know && st().know.navy), "and she hasn't actually told you");
+  // meeting her, then a couple of light topics, builds trust
+  run("talk angela");
+  assert.equal(st().dstate, "met", "the greeting advances her from stranger to met");
+  run("ask angela about drew");
+  run("ask angela about 90s");
+  assert.ok(st().trust >= 3, "light topics warm her up (trust >= 3)");
+  // now the Navy story unlocks and opens her up
+  out = []; run("ask angela about navy");
+  assert.match(lastOut(), /cryptologic|twelve years|DLI/i, "the real story, once earned");
+  assert.ok(st().know.navy, "she's told you now (knowledge recorded)");
+  assert.equal(st().mood, "open", "and it opened her up");
+  // the greeting is now the warm, mood-aware one
+  out = []; run("talk angela");
+  assert.match(lastOut(), /honour guard|back on my side/i, "mood-aware returning greeting");
+  // trust doesn't farm by re-asking — a repeat is the terse recap
+  const t = st().trust;
+  out = []; run("ask angela about drew");
+  assert.equal(st().trust, t, "re-asking a warmed topic doesn't re-bump trust");
+});
+
 test("adopting the soi dog gets you a Soi Dog Foundation donation text the next day", () => {
   startSoi6Mode();
   state().dog = { since: 1 };

@@ -5022,13 +5022,27 @@ const PATRONS = {
       "electrical tape. She has the corner seat with the window view of Soi 6 — " +
       "the chaos observed from the calm side of the glass.",
     dialogue: [
+      // Greeting is a little state machine: a stranger gets the full introduction;
+      // a returning face gets a shorter one; once she's opened up (mood "open") it
+      // warms. dstate/trust/mood are set by the nodes below — see _npcState.
+      { when: (st) => st.mood === "open",
+        text: "The headphones are at her neck before you've sat — for Angela, an " +
+          "honour guard. \"Back on my side of the glass. Good.\" A nod at the stool " +
+          "beside her. \"Sit. Mind the dart line.\"",
+        short: "\"Back on my side of the glass. Sit — mind the dart line.\" (Headphones already down: an honour guard.)" },
+      { when: (st) => st.dstate !== "stranger",
+        text: "\"You again.\" The headphones come halfway down, provisional. \"Window " +
+          "seat's mine, but the one beside it minds the dart line the same.\" Not warmth, " +
+          "exactly. Not not-warmth either.",
+        short: "\"You again.\" The headphones come half-down. Provisional." },
       { text: "\"Angela.\" The handshake is brief and Navy-firm; the eye contact is " +
         "rationed. \"Yes, that's a Discman. No, it's not ironic.\" She turns the " +
         "corner of a smile at the window, at Soi 6 howling away across the road. " +
         "\"I sit on this side of the glass. Best nature documentary in town — " +
         "you get the whole ecosystem without getting wet.\" She slides the " +
         "headphones down to her neck, which for her is a door opening.",
-        short: "\"Yes, it's a Discman. No, it's not ironic.\" The headphones come down: a door opening." },
+        short: "\"Yes, it's a Discman. No, it's not ironic.\" The headphones come down: a door opening.",
+        fx: (st) => { st.dstate = "met"; if (st.trust < 1) st.trust = 1; } },
       { topic: "drew", text: "\"Drew. Yeah.\" The tone of a fact being filed. \"Same " +
         "schoolhouse at DLI — Korean, he was a class ahead. We weren't friends. We " +
         "just conjugated the same verbs in the same hallways.\" She turns the " +
@@ -5037,7 +5051,8 @@ const PATRONS = {
         "small shrug at the enormity of the decision. \"I was here four months " +
         "before I told him. He said 'huh.' We nod now, across town. That's the " +
         "right amount of Drew.\"",
-        short: "\"Same schoolhouse, not friends. His Facebook looked unstuck. So. We nod now.\"" },
+        short: "\"Same schoolhouse, not friends. His Facebook looked unstuck. So. We nod now.\"",
+        fx: (st) => { st.trust = Math.min(5, st.trust + 1); } },
       { topic: "90s", text: "She taps the Discman like a witness taking the oath. " +
         "\"In here it's 1997, permanently. Mixtapes, a working Tower Records, my " +
         "whole life ahead of me and none of it wrong yet.\" She says it lightly, " +
@@ -5046,8 +5061,15 @@ const PATRONS = {
         "with the names like minor Star Trek characters.\" The headphones get a " +
         "small adjustment. \"The 90s is the last decade I trust. So I brought it " +
         "with me.\"",
-        short: "\"In here it's 1997, permanently. The last decade I trust.\"" },
-      { topic: "depression", text: "She doesn't flinch at the word; she's clearly " +
+        short: "\"In here it's 1997, permanently. The last decade I trust.\"",
+        fx: (st) => { st.trust = Math.min(5, st.trust + 1); } },
+      { topic: "depression", when: (st) => st.trust < 3,
+        text: "A flat look; the headphones stay put. \"That's a third-drink conversation " +
+          "and you're on your first. I don't hand strangers my whole chart.\" She turns " +
+          "back to the window, the subject closed with Navy efficiency.",
+        short: "\"That's a third-drink conversation and you're on your first.\" (Stick around; earn it.)" },
+      { topic: "depression", when: (st) => st.trust >= 3,
+        text: "She doesn't flinch at the word; she's clearly " +
         "done more reps with it than you have. \"Twenty years of it. The " +
         "brochure calls it 'treatment-resistant,' which is a hell of a review.\" " +
         "A sip. \"Thailand doesn't cure it. Anybody says this town cures " +
@@ -5057,7 +5079,8 @@ const PATRONS = {
         "small transactions a day with people who don't need me to be okay " +
         "first.\" She resettles the headphones. \"It buys me daylight. I " +
         "reinvest the daylight. That's the whole system.\"",
-        short: "\"Back home the sadness had my address. Here it has to commute.\"" },
+        short: "\"Back home the sadness had my address. Here it has to commute.\"",
+        fx: (st) => { st.know.depression = true; st.mood = "open"; } },
       { topic: "queen vic", text: "\"Terry holds the corner seat if I'm late — we " +
         "have never discussed this and never will, it's load-bearing.\" She " +
         "nods at the room: dartboard, wood, air conditioning like a national " +
@@ -5065,8 +5088,15 @@ const PATRONS = {
         "This one just wants you to mind the dart line.\" The window gets " +
         "another look. \"I tried the soi once. {{Nice}} girls. Loud planet. I do " +
         "better with a pane of glass between me and 1999.\"",
-        short: "\"Terry holds the corner seat. It's load-bearing. We've never discussed it.\"" },
-      { topic: "navy", text: "\"The hair and the handshake gave it away, huh.\" A flat, unoffended look. " +
+        short: "\"Terry holds the corner seat. It's load-bearing. We've never discussed it.\"",
+        fx: (st) => { st.trust = Math.min(5, st.trust + 1); } },
+      { topic: "navy", when: (st) => st.trust < 3,
+        text: "The headphones come halfway up — a shutter, not a door. \"We just met and " +
+          "you're asking about my service record.\" A thin, unoffended smile. \"Stick " +
+          "around. Buy a Singha. Some things you earn.\" The subject is closed with Navy efficiency.",
+        short: "\"You just met me and you're asking about my service record. Some things you earn.\"" },
+      { topic: "navy", when: (st) => st.trust >= 3,
+        text: "\"The hair and the handshake gave it away, huh.\" A flat, unoffended look. " +
         "\"Twelve years. Cryptologic technician, interpretive — which is Navy for a person who sits in a " +
         "room with headphones on translating other people's Korean.\" She taps the Discman; the joke lands " +
         "on herself and she lets it. \"DLI Monterey, then a listening post you're not cleared for and, it " +
@@ -5074,7 +5104,8 @@ const PATRONS = {
         "politely — folded flag optional.\" The posture doesn't soften; that's the part that stayed. \"You " +
         "don't demob the reflexes. I still won't sit with my back to a door. Terry's corner seat faces the " +
         "room — that isn't an accident, and neither is why I picked this bar.\"",
-        short: "\"Twelve years, Navy Korean linguist — DLI, a listening post, then a bad back processed me out. The posture stayed.\"" },
+        short: "\"Twelve years, Navy Korean linguist — DLI, a listening post, then a bad back processed me out. The posture stayed.\"",
+        fx: (st) => { st.know.navy = true; st.mood = "open"; } },
     ],
   },
 
