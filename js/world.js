@@ -27,9 +27,9 @@ const ATM_DAILY_CAP = 20000; // most you can pull in a day (principal, fees don'
 const ATM_DENOMS = [1000, 5000, 10000];
 // The Soi 6 challenge mode confines movement to this pocket of the map.
 const SOI6_ROOMS = new Set([
-  "qv_room", "queen_vic", "soi6_street", "soi6_deep",
+  "qv_room", "queen_vic", "soi6_street", "soi6_mid", "soi6_deep",
   "pink_lotus", "golden_dragon", "sunset_dreams", "kitten_corner", "cherry_pop", "ruby_kiss",
-  "beach_rd_n", "stinky_bar", "beach_row", "blue_dog", "sunset_rail", "bay_watch", "sandy_toes",
+  "beach_rd_n", "stinky_bar", "blue_dog", "sunset_rail", "bay_watch", "sandy_toes",
   "north_beach",
 ]);
 // Barfines (canon: go-gos and Soi 6 are the expensive end)
@@ -647,145 +647,128 @@ const ROOMS = {
     exits: { e: "beach_rd_c" },
   },
   beach_rd_n: {
-    name: "Beach Road North",
+    name: "Beach Road (foot of Soi 6)",
     region: "Beach Road",
-    desc: "The north end, near the Dolphin roundabout. Soi 6 runs inland to the east — " +
-      "short, loud, and lit like a runway. Naklua lies further north, past the roundabout. " +
-      "STINKY BAR's sign — a cartoon skunk hoisting a Chang — buzzes over an open " +
-      "front full of laughter and the crack of pool balls. West, across the traffic, the " +
-      "beachside beer-bar row runs down toward the open sand and the bay. Blue songthaews — " +
-      "the baht buses — keep rattling past toward the rest of Pattaya, a whole neon city " +
-      "that isn't yours to reach just yet; for now you let them go.",
+    desc: "Where Soi 6 meets Beach Road. The soi runs inland to the east — short, loud, and " +
+      "lit like a runway. Across Beach Road to the west lies the open sand and the bay; the " +
+      "Dolphin roundabout and Naklua are a couple of kilometres north up the road, out of " +
+      "sight. Two bars hold the corners of the junction and stare each other down: THE STINKY " +
+      "PINKY's sign — a cartoon skunk hoisting a Chang — buzzes over its open front on one " +
+      "side, and across the mouth of the soi the BLUE DOG's rail faces the water. From either " +
+      "corner you can still catch the sun going down over the bay. Blue songthaews — the baht " +
+      "buses — rattle past toward the rest of Pattaya, a whole neon city that isn't yours to " +
+      "reach just yet; for now you let them go.",
     busStop: "beachrd",
     revisit: [
-      "Back to the north end by the Dolphin roundabout. Soi 6 blazes inland to the east; the beachside row hums quiet to the west across the traffic.",
-      "The Dolphin roundabout turns its slow circle. Soi 6's runway of light runs off east, Naklua waits past the roundabout, and blue songthaews rattle by toward a city that isn't yours yet.",
-      "You're back at the top of Beach Road. The Stinky Pinky's skunk buzzes overhead, pool balls crack inside, and the sand-side bars glow low across the road.",
-      "North end again — the roundabout, the skunk sign, the crack of pool from the Stinky, and Soi 6 daring you east like a lit fuse.",
-      "Back near the Dolphin, where the loud soi and the quiet sand face each other across the songthaew traffic and you get to pick.",
-      "The roundabout, the runway of neon east, the beer-bar row low and golden west. A baht bus slows, hopeful; you wave it on.",
+      "Back to the foot of Soi 6, the soi blazing inland east, the bay open across the road west, the Stinky Pinky and the Blue Dog eyeing each other across the junction.",
+      "The mouth of Soi 6 again — the skunk sign buzzing one corner, the Blue Dog's rail facing the water on the other, and the sun thinking about going down over the bay.",
+      "You're back at the junction. Soi 6's runway of light runs off east; blue songthaews rattle by toward a Pattaya that isn't yours this trip, and you wave them on.",
+      "Back where the soi hits Beach Road. Two corner bars, one loud sea breeze, and the choice you keep making: into the noise east, or a quiet cold one with a sunset.",
+      "The foot of the soi, the cartoon skunk and the Blue Dog holding their corners, the bay going gold across the traffic. A baht bus slows, hopeful; you let it pass.",
+      "Back to the junction, the neon fuse of Soi 6 lit and waiting east, the water and the last of the light off west past the road.",
     ],
-    exits: { s: "beach_rd_c", e: "soi6_street", n: "naklua_rd", w: "beach_row" },
-    venues: ["stinky_bar"],
-  },
-  beach_row: {
-    name: "Beach Road (The Beachside Row)",
-    region: "Beach Road",
-    desc: "The strip of open-air beer bars strung along the sand side, all tin roofs and " +
-      "plastic chairs pointed at the bay — the row the Blue Dog anchors and shares its one " +
-      "sandy bathroom with. SUNSET RAIL BAR, BAY WATCH BAR, and SANDY TOES trade sunsets and " +
-      "cheap Chang down the line, each rail a little louder than the last. Past the last rail " +
-      "the pavement gives out and the open sand of the north beach runs down to the water.",
-    revisit: [
-      "Back onto the beachside row: tin roofs, plastic chairs, every rail pointed at the bay and a little louder than the last.",
-      "The row takes you back in. The Blue Dog anchors the east end, Sandy Toes dissolves into sand at the west, and Chang runs cheap the whole way down.",
-      "You walk back into the string of open-air bars. Sunset Rail, Bay Watch, Sandy Toes — the sunsets are shared, the bathroom's shared, the view's the point.",
-      "The beachside row again, tin and plastic and low golden light, the pavement running out into sand at the far end.",
-      "Back among the rails, where nobody grabs your wrist and everybody's watching the same sky go down over the water.",
-      "The row hums low and easy. Down west the last bar gives up its floor to the beach; east the Blue Dog holds the line. You pick a rail.",
-    ],
-    exits: { e: "beach_rd_n", w: "north_beach" },
-    venues: ["blue_dog", "sunset_rail", "bay_watch", "sandy_toes"],
+    exits: { s: "beach_rd_c", e: "soi6_street", n: "naklua_rd", w: "north_beach" },
+    venues: ["stinky_bar", "blue_dog"],
   },
   sunset_rail: {
-    name: "Sunset Rail Bar",
-    region: "Beach Road",
-    bar: "Sunset Rail Bar", barType: "beer", outlet: true,
-    desc: "A long bamboo rail and a row of stools bolted to face west, so the whole bar " +
-      "watches the sun go down together like a congregation. Pukky pours without turning " +
-      "from the view, and gets it right anyway.",
+    name: "The Shady Lady",
+    region: "Soi 6",
+    bar: "The Shady Lady", barType: "beer", outlet: true,
+    desc: "A beer bar in the quiet middle of Soi 6, deliberately set back under a low awning " +
+      "and a stand of potted palms — shade, in both senses. A long rail faces the soi so the " +
+      "regulars can watch the parade go past without being in it. Pukky pours without being " +
+      "asked and misses nothing that happens on the pavement.",
     revisit: [
-      "Back to the Sunset Rail, stools bolted west, the whole bar watching the sky like a congregation.",
-      "Pukky pours without turning from the view and gets it right anyway. You take the stool she expected you to.",
-      "You settle back onto the bamboo rail. The sun's a little lower; nobody's looked away.",
-      "Sunset Rail again: the congregation of stools, the sun a fraction lower, Pukky already pouring.",
-      "Back to the west-facing rail, where the entire clientele is pointed at the horizon like sunflowers with beers.",
-      "The Sunset Rail takes you back to your seat in the choir. Nobody speaks over the good part; the good part is now.",
-      "Back onto the bamboo, cold bottle, warm light, the day going down over the bay exactly as advertised.",
+      "Back to the Shady Lady, set back under its awning, the rail facing the soi so you can watch the circus without joining it.",
+      "Pukky has your bottle open before you've picked a stool. Out front the soi does its thing; in here nobody makes you part of it.",
+      "You settle back onto the rail in the shade. The parade grinds past a few feet away, and the whole pleasure is being just outside it.",
+      "The Shady Lady again — potted palms, low awning, cold Chang, and the best seat on the soi for watching other men get pulled into bars.",
+      "Back under the awning where the noise softens by half. Pukky nods, pours, and goes back to reading the pavement like a form guide.",
+      "The shaded rail takes you back. A go-go tout two doors down loses a customer; the Shady Lady's regulars rate the technique and drink on.",
+      "Back to the quiet middle and the shade, a cold one sweating on the rail, the soi safely at arm's length where you like it.",
     ],
-    exits: { out: "beach_row" },
+    exits: { out: "soi6_mid" },
   },
   bay_watch: {
-    name: "Bay Watch Bar",
-    region: "Beach Road",
-    bar: "Bay Watch Bar", barType: "beer",
-    desc: "A red-and-yellow lifeguard theme run entirely as a joke — a plastic float on the " +
-      "wall, a whistle nobody's allowed to blow twice. Somo keeps the cooler cold and the " +
-      "banter warm.",
+    name: "Front Row Bar",
+    region: "Soi 6",
+    bar: "Front Row Bar", barType: "beer",
+    desc: "A beer bar that leans all the way into what the middle of Soi 6 is good for: a row " +
+      "of stools pulled right up to the open front, angled at the soi like theatre seating. " +
+      "The house joke is a laminated 'SHOW TIMES' card that just reads ALL NIGHT. Somo keeps " +
+      "the cooler cold and the running commentary warm.",
     revisit: [
-      "Back into Bay Watch — the plastic float, the un-blowable whistle, the lifeguard bit still running as a joke.",
-      "Somo keeps the cooler cold and the banter warm, and slides your Chang over before you ask.",
-      "You drop back in under the red-and-yellow gag. Nobody's drowning. Nobody ever is.",
-      "Bay Watch again — the whistle, the float, Somo's cold cooler and warm banter, the joke still funny.",
-      "Back to the lifeguard theme nobody asked for and everybody enjoys. Somo salutes you with a bottle opener.",
-      "The float's still on the wall, the whistle's still forbidden, and your stool's still warm. Somo grins and pops a cap.",
-      "Back into the red-and-yellow joke, where the only rescue on offer is another cold Chang and Somo is very good at it.",
+      "Back into the Front Row, stools pulled up to the open front, the soi playing out a few feet away like it's ticketed.",
+      "Somo slides your Chang over and picks up the commentary mid-sentence, narrating the pavement like a man calling the races.",
+      "You take a front-row stool. Down the soi a barker reels one in; the bar murmurs its scoring and drinks.",
+      "Front Row again — the ALL NIGHT show card, the theatre seating, Somo cold-beer-ready and full of opinions on the passing trade.",
+      "Back to the best cheap seats on the soi, where the entertainment is free, continuous, and always someone else.",
+      "The open front takes you back in. A hen party gets herded past; the Front Row rates it a seven and Somo pours another.",
+      "Back to the row of stools aimed at the parade, a cold one in reach and the whole soi performing for the price of a beer.",
     ],
-    exits: { out: "beach_row" },
+    exits: { out: "soi6_mid" },
   },
   sandy_toes: {
-    name: "Sandy Toes",
-    region: "Beach Road",
-    bar: "Sandy Toes", barType: "beer",
-    desc: "The last rail before the sand takes over entirely: no floor to speak of, just swept " +
-      "beach and a string of bulbs. Nina brings the beer to your chair so you never have to " +
-      "leave the view.",
+    name: "The Verandah",
+    region: "Soi 6",
+    bar: "The Verandah", barType: "beer",
+    desc: "The calmest front on Soi 6: a raised wooden deck a step up off the pavement, a rail, " +
+      "a couple of lazy fans, and enough of a threshold that the soi's aggressive lady-pullers " +
+      "don't bother climbing it. Nina brings the beer to your chair so you never have to give " +
+      "up the good seat.",
     revisit: [
-      "Back to Sandy Toes — no floor to speak of, just swept beach, a string of bulbs, and the sand between your toes.",
-      "Nina brings the beer to your chair again so you never have to leave the view.",
-      "You sink back into a chair on the sand. The last rail before the beach takes over entirely, and it nearly has.",
-      "Sandy Toes again, sand underfoot and bulbs overhead, Nina walking your Chang out to the chair.",
-      "Back to the barefoot end of the row, where the pavement gave up and the beach won and nobody minds.",
-      "The string lights, the swept sand, a chair angled at the dark water — Sandy Toes takes you back to the softest seat on Beach Road.",
-      "Back onto the sand with a cold one Nina saw coming. Out past the bulbs the bay is black and patient and yours.",
+      "Back up onto the Verandah's wooden deck, a step above the soi and just far enough off it to be left alone.",
+      "Nina walks your Chang out to the rail chair again. Down on the pavement the pullers work; up here the fans turn and nobody hurries.",
+      "You settle back into a chair on the raised deck. The step up is doing its quiet job — the grabbers stay on the pavement where they belong.",
+      "The Verandah again — the deck, the lazy fans, the rail, and the small civilised miracle of a Soi 6 seat where no one climbs into your lap.",
+      "Back above the soi by one wooden step, which turns out to be exactly enough. Nina reads your thirst and beats you to it.",
+      "The raised deck takes you back. The soi churns a step below; you put your feet on the rail and let it.",
+      "Back to the quietest chair on the loudest soi, a cold one arriving unbidden, the parade safely down off the deck.",
     ],
-    exits: { out: "beach_row" },
+    exits: { out: "soi6_mid" },
   },
   blue_dog: {
     name: "Blue Dog",
     region: "Beach Road",
     bar: "Blue Dog", barType: "beer",
-    desc: "An open-air beer bar on the beach side of the road — no walls, no door, " +
-      "just a tin roof, a long rail, and an unobstructed view across the bay that " +
-      "the fancier places would kill for. The plastic chairs all face outward, " +
-      "toward the water and the road, because at the Blue Dog the view IS the " +
-      "entertainment: the sunset first, and then whatever Beach Road decides to " +
-      "do about it. The bathroom is a sandy walk past three other bars' back " +
-      "doors — the whole beachside row shares the one, an arrangement older " +
-      "than anyone still willing to explain it.",
+    desc: "An open-air beer bar holding the beach-side corner at the foot of Soi 6 — no walls, " +
+      "no door, just a tin roof, a long rail, and a line of plastic chairs facing out across " +
+      "Beach Road to the bay. The Stinky Pinky glowers back from the opposite corner over the " +
+      "mouth of the soi. At the Blue Dog the view IS the entertainment: the sunset first, out " +
+      "over the water and the sand, and then whatever the junction decides to do about it.",
     revisit: [
-      "Back onto the Blue Dog's rail, chairs pointed at the bay, the view doing the entertaining.",
-      "The Blue Dog folds you back in — no walls, no door, just the sunset and whatever Beach Road does next.",
-      "You reclaim a plastic chair facing the water. The shared sandy bathroom is still a hike; the view still isn't.",
-      "The Blue Dog again — the bay, the plastic chairs, the one bathroom, the best cheap view on the coast.",
-      "Back to the rail and the open front. The bay does its slow gold thing to the west, the road does its loud thing behind you, and you sit in the seam between and drink.",
+      "Back onto the Blue Dog's rail, chairs pointed across the road at the bay, the view doing the entertaining.",
+      "The Blue Dog folds you back in — no walls, no door, just the water across the road and the Stinky Pinky glowering from the far corner.",
+      "You reclaim a plastic chair facing out. The Stinky Pinky's skunk buzzes across the junction; the bay does its slow gold thing beyond the traffic.",
+      "The Blue Dog again — the open front, the plastic chairs, the best cheap sunset at the foot of the soi.",
+      "Back to the rail and the open corner. The soi roars off to the east behind you, the bay glows west past the road, and you sit in the seam and drink.",
       "You drop back into a chair aimed at the water. Nobody grabs you out here — the Blue Dog's regulars came to watch the sea, not to be sold anything.",
-      "Back to the tin roof and the theatre seating. Someone points at a boat, someone argues about the boat, the Chang stays cold and the sun keeps sinking.",
+      "Back to the tin roof and the corner seating. Someone points at a squid boat, someone argues about the squid boat, the Chang stays cold and the sun keeps sinking.",
     ],
-    exits: { out: "beach_row" },
+    exits: { out: "beach_rd_n" },
   },
   north_beach: {
     name: "North Pattaya Beach",
     region: "Beach Road",
-    desc: "Where the pavement quits and the sand takes over: the north end of Pattaya Beach, " +
-      "quiet after the soi's wall of noise — just the hiss of the little waves and the string " +
-      "lights of the beer row behind you. A soi dog with one clipped ear is having the night " +
-      "of his life in the shallows, charging the waves, losing to them, shaking off and " +
-      "charging again — and every few laps he stops to check whether you're watching. He is " +
-      "doing this FOR you. He has decided. (FEED DOG, if you'd like to make it official.) " +
-      "Further up the dark sand, a few women share plastic stools under the coconut palms — " +
-      "no bar, no beer, no sign: the “coconut bar,” freelance and unhurried, watching the beach " +
-      "for a walk-up. The beer-bar row is back to the east.",
+    desc: "The open sand across Beach Road from the foot of Soi 6, quiet after the soi's wall " +
+      "of noise — just the hiss of the little waves and, back east across the road, the neon " +
+      "of the junction where the Stinky Pinky and the Blue Dog hold their corners. A soi dog " +
+      "with one clipped ear is having the night of his life in the shallows, charging the " +
+      "waves, losing to them, shaking off and charging again — and every few laps he stops to " +
+      "check whether you're watching. He is doing this FOR you. He has decided. (FEED DOG, if " +
+      "you'd like to make it official.) Further up the dark sand, a few women share plastic " +
+      "stools under the coconut palms — no bar, no beer, no sign: the “coconut bar,” freelance " +
+      "and unhurried, watching the beach for a walk-up. Beach Road and the soi are back to the east.",
     revisit: [
-      "Back to the north end where the pavement quits and the sand takes over — the soi's roar behind you now, only the hiss of small waves and the beer row's string lights glowing east.",
-      "The dark sand again, quiet after the wall of noise. Out past the last of the light the bay is black and enormous and supremely uninterested in who you are, which is its own kind of mercy.",
+      "Back onto the dark sand across from the soi, the soi's roar softened by the road between, the junction neon glowing east where the Stinky Pinky and the Blue Dog face off.",
+      "The beach again, quiet after the wall of noise. Out past the last of the light the bay is black and enormous and supremely uninterested in who you are, which is its own kind of mercy.",
       "The one-eared soi dog is still out in the shallows, charging the little waves and losing to them with total commitment — and every few laps he stops to check you're still watching. (He'd take a snack, if you had one. FEED DOG.)",
       "Up the beach, under the coconut palms, the freelance stools are occupied again — a cigarette ember, a low laugh, eyes reading the dark sand for a walk-up. The coconut bar keeps its own hours.",
-      "Back onto the sand, the beer row's bulbs strung warm behind you, the sea working away at the dark in front. A good place to be nobody in particular for a while.",
+      "Back onto the sand, the junction's neon strung warm across the road behind you, the sea working away at the dark in front. A good place to be nobody in particular for a while.",
       "A soi dog trots the tideline with an air of ownership, pausing to bark down a wave that had it coming. The night is his; you're just passing through it.",
       "The palms rattle dry overhead. Somewhere up the dark beach the coconut-bar women murmur to each other and wait, and the surf keeps the time for all of you.",
     ],
-    exits: { e: "beach_row" },
+    exits: { e: "beach_rd_n" },
   },
   stinky_bar: {
     name: "The Stinky Pinky",
@@ -794,16 +777,16 @@ const ROOMS = {
     desc: "An American-run beer bar that smells, in defiance of its name, of lime and " +
       "cue chalk. League trophies crowd the back bar; the table is brushed like a " +
       "putting green. Bert — the manager — holds court from the end stool with a " +
-      "bottomless Budweiser and opinions on everyone's break. Next door, the Blue Dog's rail " +
-      "roars at a sunset — close enough to share a bathroom with, which, in fact, " +
-      "the whole row does.",
+      "bottomless Budweiser and opinions on everyone's break. It holds the inland corner at the " +
+      "foot of Soi 6; across the mouth of the soi the Blue Dog faces the water, and from the " +
+      "open front you can watch the sun go down over the bay between shots.",
     revisit: [
       "Back into the Stinky Pinky — lime and cue chalk in defiance of the name, trophies crowding the back bar, the table brushed like a green.",
       "The pool bar takes you back. Bert holds the end stool with a bottomless Budweiser and an opinion on your break already loading.",
-      "You step back into the crack of cue balls. Next door the Blue Dog's rail roars at another sunset, close enough to share a bathroom with.",
+      "You step back into the crack of cue balls. Across the junction the Blue Dog's rail faces another sunset over the bay.",
       "The Stinky Pinky again: chalk, trophies, cold Bud, and Bert's court in permanent session at the end of the bar.",
       "Back under the buzzing skunk into the crack of pool balls and the smell of lime. Somebody's mid-break; Bert's already narrating it from the end stool.",
-      "The Stinky Pinky folds you back in — league flags, brushed felt, a jukebox arguing with the Blue Dog's rail through the shared wall. Bert lifts his Bud a half-inch in greeting.",
+      "The Stinky Pinky folds you back in — league flags, brushed felt, the Blue Dog glowing across the mouth of the soi. Bert lifts his Bud a half-inch in greeting.",
       "You duck back in past the skunk sign. The regulars call it the Stinky and mean it fondly; the table's free, the Bud's cold, and Bert has a theory about your last shot.",
     ],
     exits: { out: "beach_rd_n" },
@@ -1347,30 +1330,32 @@ const ROOMS = {
 
   // ─── Soi 6 ───
   soi6_street: {
-    name: "Soi 6",
+    name: "Soi 6 (West End)",
     atm: true,
     region: "Soi 6",
     seven: true,
-    desc: "The soi hits you before you round the corner — a wall of bars at volume, each " +
-      "trying to drown the next, the whole street a wall of competing bass lines and shouted " +
-      "Thai pop. Open-air bars on both sides, hostesses spilling out front in sequins and very " +
-      "little else. \"HANDSOME MAN!\" \"Hey! WHERE YOU GO!\" You are grabbed by the wrist. " +
-      "You are grabbed by the other wrist. Someone significantly shorter than you attempts " +
-      "to climb onto your back. PINK LOTUS LOUNGE, GOLDEN DRAGON BAR, and SUNSET DREAMS " +
-      "LOUNGE are the main combatants. The QUEEN VIC INN halfway down is the one place that " +
-      "isn't shouting, and the soi keeps going deeper east into more of the same.",
+    desc: "The west end of the soi, and it hits you before you round the corner — a wall of " +
+      "bars at volume, each trying to drown the next in bass and shouted Thai pop. No stages, " +
+      "no dark rooms: just open-air fronts at street level thrown wide to the pavement, and the " +
+      "ladies working them, spilling out in sequins and very little else to reel in anything " +
+      "that walks. \"HANDSOME MAN!\" \"Hey! WHERE YOU GO!\" You are grabbed by the wrist. You " +
+      "are grabbed by the other wrist. Someone significantly shorter than you attempts to climb " +
+      "onto your back. A couple of the girls have armed themselves with foam pool noodles and " +
+      "swat anyone who dares walk past without stopping. PINK LOTUS LOUNGE, GOLDEN DRAGON BAR, " +
+      "and SUNSET DREAMS LOUNGE are the main combatants here. East, the soi opens into a " +
+      "quieter middle stretch before the racket picks up again at the far end.",
     revisit: [
-      "Back onto Soi 6 and the wall of noise hits first, the hands second. \"HANDSOME MAN!\" \"WHERE YOU GO SEXY MAN?\" You are grabbed, released, grabbed again, an item passed between bars.",
-      "The soi takes you back into the bass and the barkers. A girl detaches from a doorway to walk backwards in front of you, selling her bar with her whole body. Then another. Then another.",
-      "Back into the loudest hundred metres in Thailand. Six sound systems fight, a dozen girls call you handsome in the same second, and a small one makes another attempt on your back.",
-      "You round the corner and the soi is exactly as you left it: sequins, wrist-grabs, competing basslines, and the flat certainty that you will be spending money very soon.",
-      "Back onto Soi 6, where standing still is not an option — a hand takes your wrist, a voice takes your name (you have no name here, you are Handsome), and a bar takes its shot.",
+      "Back onto the west end and the wall of noise hits first, the hands second. \"HANDSOME MAN!\" \"WHERE YOU GO SEXY MAN?\" You are grabbed, released, grabbed again, an item passed between bars.",
+      "The soi takes you back into the bass and the barkers. A girl detaches from an open front to walk backwards ahead of you, selling her bar with her whole body. Then another. Then another.",
+      "Back into the loudest hundred metres in Thailand. Six sound systems fight, a dozen girls call you handsome in the same second, and one of them takes a foam pool noodle to your shoulder for walking too slow.",
+      "You round the corner and the west end is exactly as you left it: sequins, wrist-grabs, competing basslines, and the flat certainty that you will be spending money very soon.",
+      "Back onto Soi 6 West, where standing still is not an option — a hand takes your wrist, a voice takes your name (you have no name here, you are Handsome), and a bar takes its shot.",
       "The soi swallows you again. \"You! Yes you! Come Pink Lotus!\" \"No — Golden Dragon!\" \"He come with ME.\" You are, briefly, the most wanted man in Thailand.",
       "Back into the churn and the neon. The girls out front read foot traffic for a living, and you are foot traffic; the pitch starts before you've fully arrived.",
-      "Soi 6 again — a river of hands and offers, the Queen Vic glowing quiet halfway down like a lighthouse, the whole street daring you to reach the far end sober and solvent.",
+      "Soi 6 West again — a river of hands and offers, the quieter middle stretch glowing ahead east like a promise, the whole street daring you to reach it sober and solvent.",
     ],
-    exits: { w: "beach_rd_n", e: "soi6_deep" },
-    venues: ["pink_lotus", "golden_dragon", "sunset_dreams", "queen_vic"],
+    exits: { w: "beach_rd_n", e: "soi6_mid" },
+    venues: ["pink_lotus", "golden_dragon", "sunset_dreams"],
   },
   pink_lotus: {
     name: "Pink Lotus Lounge",
@@ -1418,30 +1403,56 @@ const ROOMS = {
     name: "Sunset Dreams Lounge",
     region: "Soi 6",
     bar: "Sunset Dreams Lounge", barType: "soi6",
-    desc: "The only bar on the soi with actual walls and a door — the noise outside drops " +
-      "to a manageable roar the moment you're in. Darker than the others, slower. A ceiling " +
-      "fan that needs oiling. Kwan is at the end of the bar folding napkins into cranes, " +
-      "adding to a row of them lined up along the rail like a tiny origami militia.",
+    desc: "Open to the pavement like the rest, but bathed in soft pink light instead of " +
+      "three-colour neon, with a hand-painted cloud mural gone streaky above the bar — the " +
+      "'dreams' part, such as it is. It's no gentler for the mood lighting: the girls work the " +
+      "open front as hard as anyone on the soi. Kwan folds napkins into cranes at the end of " +
+      "the rail, adding to a row of them lined up like a tiny origami militia, and still finds " +
+      "a hand free for your sleeve as you pass.",
     revisit: [
-      "Back into Sunset Dreams — the door closes, the roar drops, and a girl is on you in the hush before you have found your eyes in the dark. \"Quiet here. Good for talking. Better for upstairs. Buy me drink?\"",
-      "The one bar with walls takes you back into its slow dark, where the come-on is a murmur instead of a shout: a hand on your thigh, a mouth at your jaw. \"No hurry, handsome. Long time is better than short. I show you.\"",
-      "Darker, slower, and no less direct. A girl folds herself onto your stool with you already on it. \"Kwan makes the cranes; I make the offer. One drink, then up. The quiet is for you and me.\"",
-      "Back through the door into the manageable roar. Somebody settles against you and gets to the point in a low voice: what's on offer, what it costs, and which staircase.",
-      "Sunset Dreams reels you in soft. The ceiling fan ticks, a girl's hand finds yours and moves it where she wants it, and the pitch is warm, unhurried, and completely unambiguous.",
-      "Back into the dark and the slow. \"You again. Good. The loud girls, they tire you out — me, I take my time.\" A hand slides up. \"Buy me one drink. Then we take our time upstairs.\"",
-      "Into Sunset Dreams, where the walls let the girls lean close and say the quiet part out loud: a number, a room, a promise, all delivered against your ear like a secret.",
-      "Back to the origami militia and the low light. A girl drapes over you and murmurs the whole transaction like sweet nothings. Kwan, at the rail, adds another crane and says nothing at all.",
+      "Back into the pink glow of Sunset Dreams, and a girl peels off the open front and onto you before your eyes adjust. \"You like soft light? I like soft man. Buy me drink, we go up where it's softer.\"",
+      "The cloud mural and the rose light take you back, and so does a hand in your belt loop. \"Everybody think pink mean shy. Ha. Buy me drink, handsome — then upstairs, I show you not shy.\"",
+      "Softer lit, no softer sell. A girl folds herself onto your stool with you already on it. \"Kwan makes the cranes; I make the offer. One drink, then up. Simple like everything on the soi.\"",
+      "Back under the streaky clouds into the pink. Somebody settles against you and gets straight to it — what's on offer, what it costs, which staircase — all in a warm purr.",
+      "Sunset Dreams reels you in on rose light and quick hands: a girl's fingers find yours and move them where she wants, and the pitch is warm, direct, and completely unambiguous.",
+      "Back into the pink. \"You again. Good. The loud girls next door, they tire you out — me, I take my time.\" A hand slides up. \"Buy me one drink. Then we take our time upstairs.\"",
+      "Into Sunset Dreams, where the soft light just lets the girls lean closer to say the loud part: a number, a room, a promise, delivered against your ear like a secret.",
+      "Back to the origami militia and the rose glow. A girl drapes over you and names the whole transaction like sweet nothings. Kwan, at the rail, adds another crane and says nothing at all.",
     ],
     exits: { out: "soi6_street" },
+  },
+  soi6_mid: {
+    name: "Soi 6 (Middle)",
+    region: "Soi 6",
+    desc: "The middle of Soi 6, where the wall of noise thins to something you can hear " +
+      "yourself think over. The hard-selling open fronts of the west end give way to a run of " +
+      "easygoing beer bars whose whole business is letting you sit and watch the parade rather " +
+      "than be dragged into it. The pullers here are lazier, or wiser — they leave the grabbing " +
+      "to the loud ends and pick up the men who wander through wanting a cold one and a ringside " +
+      "seat. THE SHADY LADY, FRONT ROW BAR, and THE VERANDAH line the quiet stretch, and the " +
+      "QUEEN VIC INN — real aircon, real wood, a dartboard — anchors it, Terry watching the " +
+      "whole soi from the balcony above. West, the racket starts up again; east, it's worse.",
+    revisit: [
+      "Back to the middle of the soi, where the volume drops by half and the bars let you be. A cold-beer stretch built for watching, not for being grabbed.",
+      "The quiet middle again — the Shady Lady's awning, the Front Row's theatre stools, the Verandah's raised deck, and the Queen Vic glowing calm in the thick of it.",
+      "You come back into the soi's soft spot. Down at the west end a barker loses a fight with a foam noodle; up here nobody bothers, and that's the whole appeal.",
+      "Back to the people-watching stretch, where the pullers are off-duty and the men who wanted a ringside seat without the hassle nurse their Changs and rate the parade.",
+      "The middle takes you back — Terry up on the Vic's balcony with a beer, the easy bars either side, the loud ends holding the noise at arm's length for once.",
+      "Back into the calm centre of the storm. West and east the soi does its shouting; here it just streams past your stool while you drink and watch.",
+      "The quiet stretch again, the Queen Vic's aircon leaking cold onto the pavement, three easy beer bars and nobody on the soi trying to climb you. Rare. Enjoy it.",
+    ],
+    exits: { w: "soi6_street", e: "soi6_deep" },
+    venues: ["queen_vic", "sunset_rail", "bay_watch", "sandy_toes"],
   },
   soi6_deep: {
     name: "Soi 6 (East End)",
     region: "Soi 6",
     seven: true,
-    desc: "Deeper into the soi, past the Queen Vic, where the bars run on toward Second Road " +
-      "and the shouting never lets up. KITTEN CORNER, CHERRY POP BAR, and RUBY KISS BAR trade " +
-      "wrist-grabs down this stretch. Same open fronts, same three-colour neon, same " +
-      "staircases behind the bar that the menu doesn't mention.",
+    desc: "The east end of the soi, past the quieter middle, where the bars run on toward " +
+      "Second Road and the volume comes roaring back. KITTEN CORNER, CHERRY POP BAR, and RUBY " +
+      "KISS BAR trade wrist-grabs down this stretch — same open ground-floor fronts, same " +
+      "three-colour neon, same staircases behind the bar the menu doesn't mention, and the " +
+      "same foam pool noodles that find your ribs if you try to walk on by.",
     revisit: [
       "Deeper into the soi again, where the noise doubles down and the bars run on toward Second Road. A girl swings off a Kitten Corner stool to intercept you: \"Where you go? You go with ME.\"",
       "Back into the far stretch, wrist-grabs down both sides, three-colour neon, three staircases the menus don't mention. \"HANDSOME! Cherry Pop! No — Ruby Kiss! He come here!\"",
@@ -1452,7 +1463,7 @@ const ROOMS = {
       "The deep soi again. Kitten, Cherry, Ruby — three fronts, three staircases, three sets of hands already reaching. You are, once more, the entire economy walking past.",
       "Back to where the soi runs out toward Second Road, neon stacked to the roofline, a girl on your sleeve saying the quiet part first and loud: \"Come upstairs, tilac. Why we pretend?\"",
     ],
-    exits: { w: "soi6_street" },
+    exits: { w: "soi6_mid" },
     venues: ["kitten_corner", "cherry_pop", "ruby_kiss"],
   },
   kitten_corner: {
@@ -1517,10 +1528,11 @@ const ROOMS = {
     region: "Soi 6",
     bar: "Queen Vic Inn", barType: "pub", darts: true,
     desc: "Actual air conditioning. Actual wood panelling. A dartboard. The Queen Vic Inn " +
-      "sits halfway down Soi 6 with the righteous calm of a man who has seen it all and " +
-      "ordered another pint. Through the window, the soi performs. On the balcony above, " +
-      "Terry is in a recliner watching it with a beer, and has probably been there for " +
-      "some time. A staircase behind the bar leads UP to the guest rooms.",
+      "anchors the quiet middle stretch of Soi 6 with the righteous calm of a man who has seen " +
+      "it all and ordered another pint — the one place on the soi that isn't shouting. Through " +
+      "the window, the soi performs. On the balcony above, Terry is in a recliner watching it " +
+      "with a beer, and has probably been there for some time. A staircase behind the bar leads " +
+      "UP to the guest rooms.",
     revisit: [
       "Back into the Queen Vic — real aircon, real wood, the dartboard, and the soi safely on the far side of the glass.",
       "The pub folds you back into its calm. Terry lifts his beer from the corner stool without quite looking up.",
@@ -1530,7 +1542,7 @@ const ROOMS = {
       "The Vic takes you back into wood and cold air and the low murmur of men who have found their spot and mean to keep it.",
       "Back to the calm eye of the soi's storm — a pint, a dartboard, a window onto the chaos you don't have to join.",
     ],
-    exits: { out: "soi6_street", up: "qv_room" },
+    exits: { out: "soi6_mid", up: "qv_room" },
   },
   metropole_room: {
     name: "Your Room — LK Metropole",
@@ -4268,7 +4280,7 @@ const QUESTS = {
     giver: "candy",
     // three targets, so no single at: — the desc carries the geography for once
     desc: "Walk the new drinking strips with your eyes open — Myth Night's container " +
-      "rows, Tree Town's far lane, and the beachside row off Beach Road North.",
+      "rows, Tree Town's far lane, and the quiet middle stretch of Soi 6.",
     deps: [],
     doneFlag: "recceDone",
     reward: { money: 300, happy: 2 },
@@ -5723,24 +5735,24 @@ const ROOM_GEO = {
   central_mall:     [12.9352, 100.8768],
   police_station:   [12.9330, 100.8757],
   beach_rd_n:       [12.9425, 100.8827],
-  blue_dog:         [12.9426, 100.8819],
-  stinky_bar:       [12.9428, 100.8821],
-  beach_row:        [12.9426, 100.8817],
+  stinky_bar:       [12.9424, 100.8829],
+  blue_dog:         [12.9427, 100.8824],
   north_beach:      [12.9427, 100.8805],
-  sunset_rail:      [12.9427, 100.8815],
-  bay_watch:        [12.9424, 100.8814],
-  sandy_toes:       [12.9428, 100.8816],
-  // Soi 6 (Soi Yodsak)
+  // Soi 6 (Soi Yodsak) — runs inland east off Beach Road: west end, middle, east end
   soi6_street:      [12.9448, 100.8858],
   pink_lotus:       [12.9452, 100.8857],
-  golden_dragon:    [12.9447, 100.8866],
-  sunset_dreams:    [12.9445, 100.8860],
-  queen_vic:        [12.9449, 100.8872],
-  qv_room:          [12.9449, 100.8872],
-  soi6_deep:        [12.9448, 100.8866],
-  kitten_corner:    [12.9450, 100.8867],
-  cherry_pop:       [12.9446, 100.8865],
-  ruby_kiss:        [12.9451, 100.8869],
+  golden_dragon:    [12.9447, 100.8858],
+  sunset_dreams:    [12.9445, 100.8859],
+  soi6_mid:         [12.9448, 100.8863],
+  queen_vic:        [12.9449, 100.8863],
+  qv_room:          [12.9449, 100.8863],
+  sunset_rail:      [12.9447, 100.8862],
+  bay_watch:        [12.9450, 100.8863],
+  sandy_toes:       [12.9446, 100.8864],
+  soi6_deep:        [12.9448, 100.8868],
+  kitten_corner:    [12.9450, 100.8869],
+  cherry_pop:       [12.9446, 100.8867],
+  ruby_kiss:        [12.9451, 100.8870],
   // Naklua
   naklua_rd:        [12.9530, 100.8885],
   orchid_club:      [12.9524, 100.8876],

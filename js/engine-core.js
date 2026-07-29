@@ -657,7 +657,7 @@ function _describeRoom(full, forceFull) {
   G.visited[G.room] = true; // standing in it is how places join the fast-travel list
   // Candy's recce quest: eyes on all three new drinking strips completes it
   // (flag is cheap and idempotent; _questTick only pays while the quest is active)
-  if (G.visited.myth_rows && G.visited.tt_lane_3 && G.visited.beach_row) _setFlag("recceDone");
+  if (G.visited.myth_rows && G.visited.tt_lane_3 && G.visited.soi6_mid) _setFlag("recceDone");
   // A downpour re-announces itself every time the room is described (LOOK, an
   // arrival, and crucially a restored save) — otherwise a reload mid-rain paints
   // a dry, walkable street and the movement block that follows reads as a bug.
@@ -805,11 +805,12 @@ function _describeRoom(full, forceFull) {
       (girl ? `, with ${NPCS[girl].name}'s full attention` : "") + "." :
       "A regular nurses a big Chang at the rail, radiating opinions.", "dim");
   }
-  if (G.room === "blue_dog" && _shakedownOn()) {
-    _say("Across the road, the evening checkpoint is in session: officers on both " +
-      "sides of Beach Road, waving over every farang on a motorbike with the bored " +
-      "precision of toll collectors. The whole rail is watching. (WATCH POLICE — " +
-      "or WATCH SUNSET, the bay is doing its thing too.)", "dim");
+  // WATCH POLICE (the evening checkpoint show) is on hold until Beach Road's
+  // geography is reworked — the junction bars just nudge the sunset for now.
+  // TODO: re-enable the checkpoint announce here once the road layout lands.
+  if ((G.room === "blue_dog" || G.room === "stinky_bar") && _shakedownOn()) {
+    _say("Out past the road and the sand the bay is going gold — half the rail has " +
+      "an eye on it. (WATCH SUNSET.)", "dim");
   }
   if (G.soc.lockIn && G.soc.lockIn[G.room]) {
     _say("The front door is bolted and the windows were always black. Inside is " +
