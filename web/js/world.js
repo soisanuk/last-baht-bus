@@ -1341,7 +1341,7 @@ const ROOMS = {
     atm: true,
     region: "Soi 6",
     seven: true,
-    desc: "The west end of the soi, and it hits you before you round the corner — a wall of " +
+    desc: "The west end of the soi, and it hits you the moment you step in — a wall of " +
       "bars at volume, each trying to drown the next in bass and shouted Thai pop. No stages, " +
       "no dark rooms: just open-air fronts at street level thrown wide to the pavement, and the " +
       "ladies working them, spilling out in sequins and very little else to reel in anything " +
@@ -1355,7 +1355,7 @@ const ROOMS = {
       "Back onto the west end and the wall of noise hits first, the hands second. \"HANDSOME MAN!\" \"WHERE YOU GO SEXY MAN?\" You are grabbed, released, grabbed again, an item passed between bars.",
       "The soi takes you back into the bass and the barkers. A girl detaches from an open front to walk backwards ahead of you, selling her bar with her whole body. Then another. Then another.",
       "Back into the loudest hundred metres in Thailand. Six sound systems fight, a dozen girls call you handsome in the same second, and one of them takes a foam pool noodle to your shoulder for walking too slow.",
-      "You round the corner and the west end is exactly as you left it: sequins, wrist-grabs, competing basslines, and the flat certainty that you will be spending money very soon.",
+      "You step back into the west end and it's exactly as you left it: sequins, wrist-grabs, competing basslines, and the flat certainty that you will be spending money very soon.",
       "Back onto Soi 6 West, where standing still is not an option — a hand takes your wrist, a voice takes your name (you have no name here, you are Handsome), and a bar takes its shot.",
       "The soi swallows you again. \"You! Yes you! Come Pink Lotus!\" \"No — Golden Dragon!\" \"He come with ME.\" You are, briefly, the most wanted man in Thailand.",
       "Back into the churn and the neon. The girls out front read foot traffic for a living, and you are foot traffic; the pitch starts before you've fully arrived.",
