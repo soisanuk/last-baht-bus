@@ -2758,6 +2758,13 @@ const NPCS = {
         "neon paw print. \"Before, it was my bar, my name over the door. Now it is a 'concept.' The concept " +
         "tips better than the name, they tell me.\" She does not sound convinced. \"Buy a girl a drink. That " +
         "part still works the old way.\"" },
+      { topic: "police", text: "The smile stays; the voice drops under the bass. \"You see the checkpoint " +
+        "down the road — the helmet, the fine, the tourist walked to the station? That is for outside.\" A " +
+        "small tilt of the head at her own bar. \"Inside a White Dish bar: never a raid, never a problem, " +
+        "never one girl asked for her book. You think that is luck?\" She turns the gold bracelet. \"Every " +
+        "month there is an envelope, and a nice dinner for the men in brown and the men from immigration. I " +
+        "do not see it. I only see that trouble comes to every bar on this soi except the ones with the " +
+        "logo.\" The smile tightens. \"You did not hear this from Kesinee.\"" },
     ],
   },
   gavin: {
@@ -2786,9 +2793,43 @@ const NPCS = {
           "hospitality. We're only the ones who read the spreadsheet at the end of the night instead of " +
           "drinking through it.\"",
         short: "\"White Dish. Six rooms, going on seven. Ryan's vision. It's just hospitality.\"" },
-      { topic: "ryan powers", text: "\"Ryan? Lovely man. Rarely down these days — runs it all from a " +
-        "laptop and a lawyer.\" The pleasantness doesn't waver. \"You won't meet him. Nobody does. That's " +
-        "rather the point of a man like Ryan.\"" },
+      { topic: "ryan powers", text: "\"Ryan?\" For the first time the pleasantness has to work a little. " +
+        "\"A visionary. He'll tell you so himself — he tells everyone, at length, usually to camera.\" A " +
+        "diplomatic sip he doesn't need. \"Rarely down these days; he's 'building the brand' out of Dubai — " +
+        "the videos, the podcast, the speaking gigs. Between us, that's for the best. Marvellous on a stage, " +
+        "our Ryan. A liability in a room.\" The smile reseals over it. \"I keep the lights on. He keeps the " +
+        "profile.\"" },
+    ],
+  },
+
+  doug: {
+    name: "Doug", emoji: "🥃",
+    room: "stinky_bar",
+    desc: "Canadian, sixties, a golf tan gone patchy, nursing a rum-and-coke he makes last an hour. Two " +
+      "years ago he wired his retirement into 'the portfolio' — units in White Dish bars, guaranteed " +
+      "returns, a glossy PDF with a leaping logo. He has been drinking that decision at the Stinky ever " +
+      "since. Bert runs him a tab he mostly settles.",
+    dialogue: [
+      { text: "\"Pull up a stool, mind the cue.\" He nudges his glass an inch in welcome. \"Doug. Calgary — " +
+          "thirty years in oil and gas, retired over here to do absolutely nothing, and I've been very good " +
+          "at it. Apart from the one thing.\" A rueful tilt of the glass.",
+        short: "\"Doug, Calgary. Retired here to do nothing — very good at it. Apart from the one thing.\"" },
+      { topic: "white dish", text: "\"White Dish? Ho. Pour yourself something first.\" He turns the glass " +
+          "slowly. \"Two years back a fella buys me a drink right at this bar — smooth, golf shirt, calls " +
+          "himself an area consultant. Says the group's opening the portfolio to a few private investors. " +
+          "Units in the bars. Eighteen percent, quarterly, all laid out in a lovely PDF with the little " +
+          "logo.\" A dry laugh with no bottom to it. \"I wired four hundred grand. Got two statements, both " +
+          "glowing. Then — nothing. Portal down, emails bouncing, my 'relationship manager' evaporated. " +
+          "Every dollar of it gone into Ryan Powers' brand, and I can't get so much as a {{phone}} call.\"",
+        short: "\"Wired four hundred grand into 'the portfolio' — eighteen percent, quarterly. Two statements, then nothing. Gone.\"" },
+      { topic: "ryan", text: "\"Ryan Powers.\" The glass goes down harder than he means. \"Only ever got him " +
+          "on a video call — sunglasses on, indoors, rented Lambo out the window, 'we're a FAMILY, Doug, " +
+          "trust the process.'\" He does the voice; it isn't kind. \"Now he posts investor-update reels to " +
+          "the very people he hasn't paid. I left one polite comment asking where my money went — blocked " +
+          "inside the hour, and a lawyer emailed me the word 'defamation.'\" A head-shake, almost admiring. " +
+          "\"Four hundred grand, and the man's a coward with a ring light. I've got every email. I've got no " +
+          "recourse. Bert lets me sit here and mostly not talk about it.\"",
+        short: "\"Only met Ryan on a video call — sunglasses indoors, rented Lambo, 'we're a FAMILY.' Blocked me, sent a lawyer. Coward with a ring light.\"" },
     ],
   },
 
@@ -2802,10 +2843,16 @@ const NPCS = {
       { topic: "wallet", notFlags: ["hasWallet"],
         text: "\"Wallet gone? On Soi 6?\" He exhales through his nose. \"Right. Soi Buakhao — Candy Bar, ask for Candy herself. Sharp as they come. She'll know who moved it or she'll know who does.\" He returns to his beer with the authority of a man who has solved this problem before." },
       { topic: "white dish", sets: ["heardWdgHistory"],
-        text: "\"White Dish Group.\" He says it the way you say a diagnosis. \"Ryan Powers. Never here, always here — that's the joke. Before his lot got involved, this soi ran itself. Loud, chaotic, but honest chaos. Now?\" He gestures at the street through the window. \"QR codes. Branded menus. They've got six bars already. Word is they're after another one.\" He takes a long pull of Chang. \"Someone should do something about that.\"",
+        text: "\"White Dish Group.\" He says it the way you say a diagnosis. \"Ryan Powers. Never here in the flesh, always in your feed — that's the joke. Before his lot got involved, this soi ran itself. Loud, chaotic, but honest chaos. Now?\" He gestures at the street through the window. \"QR codes. Branded menus. They've got six bars already. Word is they're after another one.\" He takes a long pull of Chang. \"Someone should do something about that.\"",
         short: "\"White Dish. Ryan Powers. Six bars already, after another. Someone should do something.\"" },
       { topic: "powers",
-        text: "\"Ryan Powers. British. Doesn't live here officially, doesn't leave either. Bars run clean on the surface — that's the thing. The books don't, but you'd need someone inside to prove it.\" He taps the bar once. \"{{Nice}} bloke, they say. The dangerous kind.\"" },
+        text: "\"Ryan Powers.\" Terry snorts into the Chang. \"British, though he's got a voice on now — half " +
+          "American, for the videos. You've not seen the videos? Blessed, you are. 'Hustle,' 'vision,' 'we're " +
+          "a FAMILY,' him draped over a rented supercar he films from three angles.\" A slow head-shake. " +
+          "\"Everyone wants him to be some cold operator out of a film. He's a gobby little self-promoter who " +
+          "blocks you when you ask a straight question and screams 'defamation' when you ask it twice. The " +
+          "dangerous bit's the lawyer and the brown envelope. Ryan's just the one doing the podcast about it.\"",
+        short: "\"Not a cold operator — a gobby self-promoter with a rented supercar and a podcast. The lawyer's the dangerous bit.\"" },
       { topic: "tiktok", text: "He gestures at the soi through the window without " +
         "looking. \"You see those lot? Ring light, selfie stick, little gimbal thing?\" " +
         "He doesn't wait for an answer. \"Walk the whole soi, grab every girl's hand, " +
@@ -3637,7 +3684,8 @@ const NPCS = {
           "been here since Candy owned the place. That's the whole difference, bud, and it's the only one that " +
           "matters.\" He finally lifts the Bud. \"I'll tell the old man to hold. He trusts me to keep the " +
           "lights on — not to sell his soul to a spreadsheet while he's too sick to say no. Ryan Powers wants " +
-          "a pool bar, he can build his own and let the market sort us out.\" He taps the bar once, done. " +
+          "a pool bar, he can build his own — slap his little logo on it and film himself potting the black. " +
+          "Let the market sort us out.\" He taps the bar once, done. " +
           "\"You did me a real turn tonight, bud. Bert doesn't forget a thing like that.\"",
         short: "\"Told the old man to hold — won't sell his soul to a spreadsheet while he's too sick to say no.\"" },
       { topic: "offer", notFlags: ["wdgResolved"],
@@ -3701,10 +3749,11 @@ const NPCS = {
         "the head.\"" },
       { topic: "ryan powers", req: ["knowOyHasIt"],
         text: "He lowers the Budweiser half an inch, which for Bert is a whisper. " +
-        "\"White Dish Group. Front company — owns most of the paper on Soi 6. The " +
-        "man behind it is a Brit named Ryan Powers, and no, you never met him, and " +
-        "neither did I. The bars run clean enough. The books don't. Leave that one " +
-        "alone, bud.\"" },
+        "\"White Dish Group. Front company, owns most of the paper on Soi 6. Man behind " +
+        "it's a Brit, Ryan Powers — and don't go picturing some untouchable villain, bud. " +
+        "He's a jumped-up little marketing lad who ghosts his own investors and hides " +
+        "behind a lawyer.\" A shrug. \"Bars run clean enough on top. The books don't. It " +
+        "isn't him you'd have to get past — it's the money and the envelope. Leave that one alone.\"" },
       { topic: "sponsor", text: "He refills without asking. \"See it every season. " +
         "Good man, sends the money, thinks he's the only one, thinks she thinks " +
         "about him every day. Maybe she does. Maybe Somchai next door does too.\" " +
