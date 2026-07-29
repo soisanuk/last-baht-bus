@@ -216,6 +216,8 @@ function newGame() {
     crashInjury: false,  // a motosai accident leaves you banged up the next night (hurt:1)
     condoms: 3,          // carried protection; consumed per barfine, buyable at any 7-Eleven
     std: null,           // {day} when contracted from an unprotected barfine; symptoms surface ~2 days on, GET TESTED clears it
+    fridgeDay: 0,        // day the in-room minibar was last restocked (lazy; see _fridgeStock)
+    fridgeWater: 2,      // free bottles of water left in the room fridge today (housekeeping refills 2/day)
     jaded: 0,            // the hedonic treadmill: conquests this window; each barfine/ST buys less สนุก, cools 1/day
     lastBusWarned: false, // the nightly last-baht-bus heads-up fires once per night
     bestHappy: 0,
