@@ -2381,7 +2381,10 @@ function _chipSet() {
   //      is the touch surface, not a cage; LEAVE restores the room chips.
   const partner = _convoActive();
   if (partner) {
-    for (const t of _convoTopics(partner).slice(0, 5)) add(t, _topicLabel(t));
+    for (const t of _convoTopics(partner).slice(0, 4)) add(t, _topicLabel(t));
+    add("compliment", "compliment");
+    add("joke", "joke");
+    if (_npcState(partner).trust >= 3) add("tease", "tease"); // banter unlocks once you're close
     if (NPCS[partner] && NPC_ROLES[partner] === "hostess") {
       add("flirt", "flirt");
       add("buy drink for " + _convoName(partner).split(" ")[0].toLowerCase(), "buy drink");
@@ -2913,6 +2916,9 @@ function doCommand(input) {
     case "press": case "type": case "code": _doEnter(arg); break;
     case "play": case "challenge": _doPlay(arg); break;
     case "flirt": _doSocial("flirt", arg); break;
+    case "compliment": case "praise": _doTalkAct("compliment", arg); break;
+    case "joke": case "quip": case "banter": _doTalkAct("joke", arg); break;
+    case "tease": case "rib": _doTalkAct("tease", arg); break;
     case "kiss": case "snog": case "smooch": _doSocial("kiss", arg); break;
     case "spank": _doSocial("spank", arg); break;
     case "fondle": case "grope": _doSocial("fondle", arg); break;

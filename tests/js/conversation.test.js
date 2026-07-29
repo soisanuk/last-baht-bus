@@ -250,3 +250,60 @@ test("tapping a topic chip resolves through the conversation layer", () => {
   doCommand(chip.cmd); // simulate the tap
   assert.match(lastOut(), /1997|Tower Records/);
 });
+
+// ── Verbal social actions (slice 4) ──────────────────────────────────────────
+
+test("compliment warms a known partner (+1 trust, once per day)", () => {
+  run("angela"); // meeting her sets dstate=met, trust=1
+  const t0 = _npcState("angela").trust;
+  out = [];
+  doCommand("compliment"); // bare → the partner
+  assert.equal(_npcState("angela").trust, t0 + 1, "a landed compliment warms her");
+  const t1 = _npcState("angela").trust;
+  doCommand("compliment");
+  assert.equal(_npcState("angela").trust, t1, "but not farmable — same day, no further gain");
+});
+
+test("compliment falls flat on a stranger (no trust gained)", () => {
+  // Address her cold, without the meeting handshake that grants baseline trust.
+  out = [];
+  doCommand("compliment angela");
+  assert.equal(_npcState("angela").dstate, "stranger");
+  assert.equal(_npcState("angela").trust, 0, "flattery from a stranger earns nothing");
+});
+
+test("a joke falls flat when guarded, lands once she's warmer", () => {
+  run("angela");
+  _npcState("angela").trust = 1; _npcState("angela").mood = "guarded";
+  const cold = _npcState("angela").trust;
+  doCommand("joke");
+  assert.equal(_npcState("angela").trust, cold, "a joke to a guarded stranger dies");
+  _npcState("angela").trust = 2; // warm enough now
+  doCommand("joke");
+  assert.equal(_npcState("angela").trust, 3, "the same joke lands once she's warmer");
+});
+
+test("teasing is risky cold (loses trust) and playful once close", () => {
+  run("angela");
+  _npcState("angela").trust = 1; // below the tease threshold
+  out = [];
+  doCommand("tease");
+  assert.match(lastOut(), /too soon|cooler look/i);
+  assert.equal(_npcState("angela").trust, 0, "teasing too early costs you");
+  // reset the day ledger so a second tease can move state, then warm her up
+  state().socialActs = null;
+  _npcState("angela").trust = 4;
+  doCommand("tease");
+  assert.equal(_npcState("angela").trust, 5, "close enough, it's banter now");
+});
+
+test("the tease chip is gated on trust; compliment/joke always offered", () => {
+  run("angela");
+  _npcState("angela").trust = 1;
+  let cmds = _chipSet().map(c => c.cmd);
+  assert.ok(cmds.includes("compliment") && cmds.includes("joke"));
+  assert.ok(!cmds.includes("tease"), "no tease chip until you're close");
+  _npcState("angela").trust = 3;
+  cmds = _chipSet().map(c => c.cmd);
+  assert.ok(cmds.includes("tease"), "tease chip unlocks at trust 3");
+});

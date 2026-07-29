@@ -62,6 +62,7 @@ function _trace(verb, target, extra) {
 const _TRACE_VERBS = {
   talk: "talked to", ask: "asked", give: "gave", go: "went to",
   flirt: "flirted with", kiss: "kissed", spank: "spanked", fondle: "fondled",
+  compliment: "complimented", joke: "joked with", tease: "teased",
 };
 // pure + DOM-free: build the breadcrumb string (tested in engine.test.js)
 function _traceLine(t) {
