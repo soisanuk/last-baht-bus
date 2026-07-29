@@ -705,6 +705,11 @@ function _convoTopic(s) {
   return t.replace(/^(tell me about|talk about|about|whats|what is|your|the)\s+/, "").trim() || t;
 }
 
+// A topic key as a chip label: Title Case the words ("queen vic" → "Queen Vic",
+// "90s" stays "90s"). The chip's cmd is the bare topic — the conversation is
+// live when these show, so it resolves straight through _convoResolve.
+function _topicLabel(t) { return t.replace(/\b\w/g, c => c.toUpperCase()); }
+
 // Last-resort interpretation of an otherwise-unrecognized line. Returns true if
 // the conversation layer consumed it (the caller then ticks, like any real turn).
 function _convoResolve(lower) {
@@ -2367,6 +2372,22 @@ function _chipSet() {
     if (G.game.type === "darts") { add("go big", "go big"); add("steady"); add("finish"); }
     if (G.game.type === "quiz") { add("1"); add("2"); add("3"); }
     add("quit"); return chips;
+  }
+
+  // 2.5) A live conversation turns the chip bar into the talk palette: the
+  //      partner's currently-open topics, the social moves that fit them, and a
+  //      way out. Only the unlocked topics show (see _convoTopics), so the bar
+  //      doubles as progressive reveal. Typing still does everything else — this
+  //      is the touch surface, not a cage; LEAVE restores the room chips.
+  const partner = _convoActive();
+  if (partner) {
+    for (const t of _convoTopics(partner).slice(0, 5)) add(t, _topicLabel(t));
+    if (NPCS[partner] && NPC_ROLES[partner] === "hostess") {
+      add("flirt", "flirt");
+      add("buy drink for " + _convoName(partner).split(" ")[0].toLowerCase(), "buy drink");
+    }
+    add("bye", "leave");
+    return chips;
   }
 
   // 3) The room in front of you

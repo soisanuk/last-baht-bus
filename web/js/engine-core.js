@@ -507,6 +507,30 @@ function _resolveActor(word, pool) {
   return pool.length === 1 ? pool[0] : null;    // else the only candidate, if unambiguous
 }
 
+// The topics currently OPEN with a partner: their dialogue nodes whose gates
+// (req/notFlags/bond/when) pass right now, in authored order, deduped. Mirrors
+// the gate checks in _pickDialogue / _patronTalk, so the chip palette only ever
+// offers what the partner would actually answer — which gives progressive reveal
+// for free (a topic appears the moment its node unlocks on trust/flag). Sore
+// subjects that would set a patron off (rage) are withheld — no rage-bait chips.
+function _convoTopics(id) {
+  const st = _npcState(id);
+  const p = PATRONS[id], n = NPCS[id];
+  const nodes = (n && n.dialogue) || (p && p.dialogue) || [];
+  const rage = (p && p.rage) || [];
+  const out = [];
+  for (const d of nodes) {
+    if (!d.topic) continue;
+    if (rage.some(k => d.topic.includes(k))) continue;
+    if (d.req && d.req.some(f => !_flag(f))) continue;
+    if (d.notFlags && d.notFlags.some(f => _flag(f))) continue;
+    if (d.bond && n && _bondTier(id) < d.bond) continue;
+    if (d.when && !d.when(st, G)) continue;
+    if (!out.includes(d.topic)) out.push(d.topic);
+  }
+  return out;
+}
+
 // Faction standing with the powers of the night — WDG (Ryan Powers' Soi 6 rollup),
 // samson (the brothers' Jomtien/Pratumnak takeover), indie (Bert & the holdouts),
 // syndicate (the unnamed Thai muscle behind the envelopes). Standing only moves
