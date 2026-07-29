@@ -2792,6 +2792,12 @@ const NPCS = {
       "at a bar like a spreadsheet. He calls himself an 'area consultant.' Everyone else calls him the " +
       "White Dish man. He is unfailingly pleasant, which is the unsettling part.",
     dialogue: [
+      { when: (st, G) => _faction("wdg") > 0,
+        text: "\"There's my man.\" The handshake runs a half-beat longer this time, warmer — an investment " +
+          "acknowledged. \"Bert being Bert about it, I hear. No matter. You did the asking, and White Dish " +
+          "remembers who does the asking. Doors open for our friends, you'll find.\" The smile, for once, " +
+          "reaches his eyes a little.",
+        short: "\"There's my man. You did the asking — White Dish remembers its friends. Doors open.\"" },
       { when: (st) => st.dstate !== "stranger",
         text: "\"Ah — back again.\" The same warm, brief handshake, filed and instantly retrieved. \"Good to " +
           "see you. Still turning it over, or just enjoying the room?\" The smile is patient. Gavin is always, " +
@@ -3707,17 +3713,34 @@ const NPCS = {
       "quietly, works at being his own man out from under her shadow. Twenty-two years " +
       "on Beach Road, most of them within nine feet of that pool table.",
     dialogue: [
+      { when: (st, G) => _faction("wdg") > 0,
+        text: "Bert clocks you and the welcome doesn't arrive — no beer opened, no stool offered. \"You. " +
+          "Gavin's errand boy.\" He doesn't look up from the felt. \"Table's still true, beer's still cold. " +
+          "But you drink it standing, and you drink it quiet.\" The silence does the rest.",
+        short: "\"You. Gavin's errand boy.\" No beer, no stool — you drink standing, and quiet." },
       { when: (st) => st.dstate !== "stranger",
         text: "\"There he is.\" Bert's got a cold one open before you've sat. \"Not moved off this stool " +
           "since you left, funny enough. Table's true, beer's cold.\" A crooked grin. \"What's the good " +
           "word, bud?\"",
         short: "\"There he is.\" A cold one's open before you sit. \"What's the good word, bud?\"" },
+      // Delivering Gavin's pitch is the deed — this is where alignment actually
+      // lands (never on accepting the quest, only on going through with it). Bert
+      // holds firm anyway; the cost is your standing and his regard.
+      { topic: "sell", when: (st, G) => G.quests.wdg_flip === "active" && !_flag("wdgFlipTried"),
+        sets: ["wdgFlipTried"],
+        fx: (st, G) => { _align("wdg", 2); _align("indie", -1); },
+        text: "You bring it round to selling — Gavin's word, friend to friend, everyone wins. Bert sets the " +
+          "Budweiser down very slowly and looks at you the way he looks at a bad break. \"So that's the way " +
+          "of it. He's got you carrying his water now.\" No heat, which is worse than heat. \"Answer's no, " +
+          "bud. Always was. You tell your mate Gavin the Stinky's not for sale and neither am I.\" He picks " +
+          "the Bud back up. \"And you — I'll remember you came in here for HIM. Soi's small. Word gets around.\"",
+        short: "\"He's got you carrying his water now. The answer's no — and I'll remember you came for HIM.\"" },
       { text: "\"Welcome to the Stinky, bud. Name's Bert. Table's true, beer's cold, " +
         "and the only rule is don't sit on the rail.\" He chalks a cue without " +
         "looking at it. \"You shoot? League night's every third night — killer " +
         "pool, hundred baht in, winner takes the table money.\"",
         short: "\"Table's true, beer's cold, don't sit on the rail. League night every third night — hundred baht in.\"" },
-      { topic: "offer", req: ["heardWdgHistory", "heardWdgInside", "heardWdgPitch"], notFlags: ["wdgResolved"],
+      { topic: "offer", req: ["heardWdgHistory", "heardWdgInside", "heardWdgPitch"], notFlags: ["wdgResolved", "wdgFlipTried"],
         sets: ["wdgResolved"],
         text: "You lay it all out — Terry's history, Kesinee's straight talk, Gavin's smiling pitch. Bert " +
           "listens without touching the Budweiser, which is how you know it lands. When you're done he's " +
@@ -4314,6 +4337,22 @@ const QUESTS = {
     at: "bert",
     doneFlag: "wdgResolved",
     reward: { money: 0, happy: 5 },
+  },
+  wdg_flip: {
+    name: "Gavin's Errand",
+    giver: "gavin",
+    // Gavin's counter to Bert's job: the WDG side of the same fork. Purely opt-in —
+    // decline it and nothing happens; even accept it and you can still walk away.
+    // Alignment only lands if you actually carry the pitch to Bert (ASK BERT ABOUT
+    // SELLING). See wdgFlipTried in Bert's dialogue.
+    desc: "Gavin would like a quiet favour: have a word with Bert about selling the Stinky to " +
+      "White Dish. \"Friend to friend. Soften him up. Everyone wins, and White Dish looks after " +
+      "its friends.\" (Take it to Bert — ASK BERT ABOUT SELLING — or don't. No one's forcing you.)",
+    reqFlags: ["heardWdgPitch"],
+    deps: [],
+    at: "bert",
+    doneFlag: "wdgFlipTried",
+    reward: { money: 2000, happy: 0 }, // WDG pays for the errand; the real price is your standing
   },
   sangsom: {
     name: "The Sister-Bar Run",

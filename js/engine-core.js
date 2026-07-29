@@ -174,6 +174,7 @@ function newGame() {
     visited: { jomtien_beach: true }, // roomId → true once stood in (fast-travel gate)
     talked: {},          // npcId → [dialogue indices already delivered] (terse repeats)
     npc: {},             // per-character conversation state: id → {trust,mood,dstate,know} (see _npcState)
+    faction: { wdg: 0, samson: 0, indie: 0, syndicate: 0 }, // standing with the powers (see _align) — only moves when you ACT, never for declining
     itemLoc: Object.fromEntries(
       Object.entries(ITEMS).map(([id, it]) => [id, it.location])),
     safeTries: 0,
@@ -448,6 +449,18 @@ function _findPatron(word) {
 // so it serialises with the save.
 function _npcState(id) {
   return G.npc[id] || (G.npc[id] = { trust: 0, mood: "guarded", dstate: "stranger", know: {} });
+}
+
+// Faction standing with the powers of the night — WDG (Ryan Powers' Soi 6 rollup),
+// samson (the brothers' Jomtien/Pratumnak takeover), indie (Bert & the holdouts),
+// syndicate (the unnamed Thai muscle behind the envelopes). Standing only moves
+// when the player ACTS on a faction (takes a job to its end, throws real weight
+// behind it) — never for declining or ignoring. Staying out of the politics
+// costs nothing, forever. Dialogue reads it via `when`; nodes move it via `_align`.
+function _faction(name) { return (G.faction && G.faction[name]) || 0; }
+function _align(name, delta) {
+  if (!G.faction) G.faction = { wdg: 0, samson: 0, indie: 0, syndicate: 0 };
+  G.faction[name] = Math.max(-5, Math.min(5, (G.faction[name] || 0) + delta));
 }
 
 function _patronTalk(id, topic) {

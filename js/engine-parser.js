@@ -1409,8 +1409,17 @@ function _doScore() {
   if (_unreadCount()) _say(`📱 ${_unreadCount()} unread message${_unreadCount() > 1 ? "s" : ""} (CHECK MESSAGES)`, "win");
   const active = Object.entries(QUESTS).filter(([qid]) => G.quests[qid] === "active");
   for (const [, q] of active) _say(`▶ ${q.name}`, "dim");
+  // Faction standing — only surfaces once you've actually taken a side; a player
+  // who stays out of the politics never sees this line, and pays nothing for it.
+  const standing = _FACTION_LABELS
+    .filter(([f]) => _faction(f) !== 0)
+    .map(([f, label]) => `${label} ${_faction(f) > 0 ? "+" : ""}${_faction(f)}`);
+  if (standing.length) _say(`Standing: ${standing.join(" · ")}`, "dim");
   for (const [f, label] of _ACT1_MILESTONES) if (_flag(f)) _say("✓ " + label, "dim");
 }
+const _FACTION_LABELS = [
+  ["wdg", "White Dish"], ["samson", "the Samsons"], ["indie", "the independents"], ["syndicate", "the syndicate"],
+];
 
 // ── The Zork ledger ──────────────────────────────────────────────────────────
 // Verbs a text adventure must answer, even when the answer is no. Zork always
