@@ -3753,7 +3753,8 @@ const NPCS = {
           "a pool bar, he can build his own — slap his little logo on it and film himself potting the black. " +
           "Let the market sort us out.\" He taps the bar once, done. " +
           "\"You did me a real turn tonight, bud. Bert doesn't forget a thing like that.\"",
-        short: "\"Told the old man to hold — won't sell his soul to a spreadsheet while he's too sick to say no.\"" },
+        short: "\"Told the old man to hold — won't sell his soul to a spreadsheet while he's too sick to say no.\"",
+        fx: (st, G) => { _align("indie", 2); _align("wdg", -1); } },
       { topic: "offer", notFlags: ["wdgResolved"],
         text: "\"Still chewing on it, bud. Get me the full picture before I advise the old man: Terry's " +
           "watched White Dish work this soi for years, Kesinee runs one of their bars over at the Kitten " +
