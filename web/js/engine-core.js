@@ -514,6 +514,16 @@ function _resolveActor(word, pool) {
 // offers what the partner would actually answer — which gives progressive reveal
 // for free (a topic appears the moment its node unlocks on trust/flag). Sore
 // subjects that would set a patron off (rage) are withheld — no rage-bait chips.
+// A topic that's really another character's name (gossip / a cross-reference) —
+// e.g. Angela's 'drew'. You ask about a person when you have a reason to, not
+// off a chip suggestion, so these stay off the palette (a node can force one on
+// with chip:true). Everything here is still typeable.
+function _topicNamesCharacter(topic, partnerId) {
+  const t = topic.toLowerCase();
+  const hit = (map) => Object.keys(map).some(cid =>
+    cid !== partnerId && (cid === t || (map[cid].name && map[cid].name.toLowerCase() === t)));
+  return hit(NPCS) || hit(PATRONS);
+}
 function _convoTopics(id) {
   const st = _npcState(id);
   const p = PATRONS[id], n = NPCS[id];
@@ -523,6 +533,7 @@ function _convoTopics(id) {
   for (const d of nodes) {
     if (!d.topic) continue;
     if (d.deflect) continue;              // a gated "come back when you've earned it" refusal — don't offer it as a chip
+    if (!d.chip && _topicNamesCharacter(d.topic, id)) continue; // gossip about a person — typeable, not suggested
     if (rage.some(k => d.topic.includes(k))) continue;
     if (d.req && d.req.some(f => !_flag(f))) continue;
     if (d.notFlags && d.notFlags.some(f => _flag(f))) continue;

@@ -5198,7 +5198,7 @@ const PATRONS = {
         "Singha a quarter. \"Twenty-five years later his Facebook is all neon and " +
         "beach bars, and he looked — unstuck. I'd been stuck a long time. So.\" A " +
         "small shrug at the enormity of the decision. \"I was here four months " +
-        "before I told him. He said 'huh.' We nod now, across town. That's the " +
+        "before I told him. He said 'huh.' We nod now, down the soi. That's the " +
         "right amount of Drew.\"",
         short: "\"Same schoolhouse, not friends. His Facebook looked unstuck. So. We nod now.\"",
         fx: (st) => { st.trust = Math.min(5, st.trust + 1); } },
