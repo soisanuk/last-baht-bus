@@ -1442,6 +1442,12 @@ function _doPatron() {
     _checkDrunk();
     return;
   }
+  // Prefer a real named regular over the faceless archetype: de-hopped locals
+  // anchor their bars, so TALK TO THE REGULAR at the Queen Vic gets you Angela,
+  // not "the regular." The anonymous bar-bore below only surfaces where no named
+  // regular is holding court — which is also where his bar-girl asides fit.
+  const here = _patronsHere();
+  if (here.length) { _patronTalk(here[Math.floor(_rand() * here.length)], null); return; }
   const d = s.drunk;
   // the football comes first; the football always comes first
   if (_footy() && _rand() < 0.25) {

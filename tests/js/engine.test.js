@@ -1739,14 +1739,14 @@ test("ringing the bell costs ฿300, clears heat, and lifts every outcome", () =
   assert.match(lastOut(), /cheek|deflection|hug|Slow|free tonight/i);
 });
 
-test("patron talk: sober tips, drunk rambling, bell-glow hero worship", () => {
-  state().room = "lucky_tiger";
+test("the anonymous bar-bore (no named regular here): sober tips, drunk rambling, bell-glow", () => {
+  state().room = "seabreeze"; // a bar with no named regular — the archetype fills in
   run("talk to patron");
   assert.match(lastOut(), /mamasan|cashiers/i);
   state().soc.drunk = 4;
   run("talk to patron");
   assert.match(lastOut(), /stool away/i);
-  state().soc.bellAt.lucky_tiger = state().turns;
+  state().soc.bellAt.seabreeze = state().turns;
   run("talk to patron");
   assert.match(lastOut(), /THAT'S the fella/i);
   assert.equal(state().soc.drunk, 5, "he bought you one back");
@@ -3609,6 +3609,32 @@ test("dialogue state machine: Angela gates the heavy stuff behind trust, then op
   assert.equal(st().trust, t, "re-asking a warmed topic doesn't re-bump trust");
 });
 
+test("White Dish quest: Kesinee vets you before she talks — the quest flag is trust-gated", () => {
+  startSoi6Mode(); state().flags.act1Done = true;
+  state().room = "kitten_corner";
+  // cold, she brushes you off and withholds the quest flag
+  out = []; run("ask kesinee about white dish");
+  assert.match(lastOut(), /who send you|not before/i, "vetted, not spilled");
+  assert.ok(!state().flags.heardWdgInside, "quest flag withheld from a stranger");
+  // earn a little trust and she talks straight — the flag lands
+  run("talk kesinee");
+  run("ask kesinee about kittens");
+  out = []; run("ask kesinee about white dish");
+  assert.match(lastOut(), /cleaner.*poorer|White Dish buy this bar/i, "the real intel, once earned");
+  assert.ok(state().flags.heardWdgInside, "now the quest flag is set");
+});
+
+test("TALK TO PATRON resolves to a named regular present, not the faceless archetype", () => {
+  startSoi6Mode(); state().flags.act1Done = true;
+  state().room = "queen_vic"; state().lastSaleng = 99999; state().lastPeddler = 99999;
+  out = []; run("talk to patron");
+  assert.match(lastOut(), /Mort|Angela/, "a real named regular holds court at the Queen Vic");
+  // de-hopped: a hopper stays anchored at its local all night
+  state().nightTurn = 5; const early = _patronRoom("nigel");
+  state().nightTurn = 45;
+  assert.equal(_patronRoom("nigel"), early, "no hourly drift — reliably found");
+});
+
 test("adopting the soi dog gets you a Soi Dog Foundation donation text the next day", () => {
   startSoi6Mode();
   state().dog = { since: 1 };
@@ -4824,7 +4850,7 @@ test("the bar's regular has a fixed allegiance, and a win buys the rail a round"
     { d: "2026-07-07", done: true, h: "Alpha", hs: 2, as: 0, a: "Beta" },
   ] };
   try {
-    state().room = "lucky_tiger";
+    state().room = "seabreeze"; // no named regular — the anonymous football bore fills in
     const team = _barTeam();
     assert.ok(["Alpha", "Beta"].includes(team));
     assert.equal(_barTeam(), team, "allegiance never wavers");

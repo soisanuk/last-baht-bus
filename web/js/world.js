@@ -2744,8 +2744,19 @@ const NPCS = {
         text: "\"Come in, come in. My girls will not bite unless you tip for it.\" The practised smile " +
           "arrives on schedule; the eyes take a beat longer. \"You want a drink, a girl, a quiet corner — " +
           "Kesinee arrange. Anything except the price. The price is not mine to move any more.\"",
-        short: "\"Anything except the price — that is not mine to move any more.\"" },
-      { topic: "white dish", sets: ["heardWdgInside"],
+        short: "\"Anything except the price — that is not mine to move any more.\"",
+        fx: (st) => { st.dstate = "met"; if (st.trust < 1) st.trust = 1; } },
+      // Kesinee vets you before she'll talk White Dish — canon: "she'll talk
+      // straight if you are." A stranger gets the careful brush-off + a breadcrumb;
+      // the real intel (and the quest flag) opens once you've earned a little trust.
+      { topic: "white dish", when: (st) => st.trust < 2,
+        text: "The smile holds; the eyes go flat and careful. \"White Dish. Hm. Who send you to ask " +
+          "Kesinee that?\" She lets the question sit. \"Bert, maybe. Or maybe you are White Dish own boy, " +
+          "come see who talks.\" She turns the gold bracelet. \"Buy a girl a drink. Ask me about my bar. Let " +
+          "me see your face is not a problem — then, maybe, we talk straight. Not before.\"",
+        short: "\"Who sent you? Buy a girl a drink, come back, let me know your face. Then we talk. Not before.\"" },
+      { topic: "white dish", when: (st) => st.trust >= 2, sets: ["heardWdgInside"],
+        fx: (st) => { st.know.wdg = true; st.mood = "open"; st.trust = Math.min(5, st.trust + 1); },
         text: "She studies you a long moment, deciding, then talks low under the music. \"White Dish buy " +
           "this bar three year ago. I tell you straight, because Bert send you and Bert is a good man.\" She " +
           "turns a gold bracelet. \"The money — real. New aircon, new sign, the roof stop leaking. But now: " +
@@ -2757,8 +2768,16 @@ const NPCS = {
       { topic: "kittens", text: "\"The posters, the paw? Not my idea — the brand.\" A dry glance at the " +
         "neon paw print. \"Before, it was my bar, my name over the door. Now it is a 'concept.' The concept " +
         "tips better than the name, they tell me.\" She does not sound convinced. \"Buy a girl a drink. That " +
-        "part still works the old way.\"" },
-      { topic: "police", text: "The smile stays; the voice drops under the bass. \"You see the checkpoint " +
+        "part still works the old way.\"",
+        fx: (st) => { st.trust = Math.min(5, st.trust + 1); } },
+      { topic: "police", when: (st) => st.trust < 3,
+        text: "The smile does not move. \"The police? Why you ask Kesinee about the police.\" A beat, cool " +
+          "as the aircon. \"Some things I tell a friend. You are not a friend yet — you are a nice face who " +
+          "buys drinks. Keep buying. Keep coming. Maybe.\"",
+        short: "\"Some things are for friends. You're a nice face who buys drinks. Keep coming. Maybe.\"" },
+      { topic: "police", when: (st) => st.trust >= 3,
+        fx: (st) => { st.know.envelope = true; },
+        text: "The smile stays; the voice drops under the bass. \"You see the checkpoint " +
         "down the road — the helmet, the fine, the tourist walked to the station? That is for outside.\" A " +
         "small tilt of the head at her own bar. \"Inside a White Dish bar: never a raid, never a problem, " +
         "never one girl asked for her book. You think that is luck?\" She turns the gold bracelet. \"Every " +
@@ -2813,7 +2832,8 @@ const NPCS = {
       { text: "\"Pull up a stool, mind the cue.\" He nudges his glass an inch in welcome. \"Doug. Calgary — " +
           "thirty years in oil and gas, retired over here to do absolutely nothing, and I've been very good " +
           "at it. Apart from the one thing.\" A rueful tilt of the glass.",
-        short: "\"Doug, Calgary. Retired here to do nothing — very good at it. Apart from the one thing.\"" },
+        short: "\"Doug, Calgary. Retired here to do nothing — very good at it. Apart from the one thing.\"",
+        fx: (st) => { st.dstate = "met"; if (st.trust < 1) st.trust = 1; } },
       { topic: "white dish", text: "\"White Dish? Ho. Pour yourself something first.\" He turns the glass " +
           "slowly. \"Two years back a fella buys me a drink right at this bar — smooth, golf shirt, calls " +
           "himself an area consultant. Says the group's opening the portfolio to a few private investors. " +
@@ -2821,8 +2841,18 @@ const NPCS = {
           "logo.\" A dry laugh with no bottom to it. \"I wired four hundred grand. Got two statements, both " +
           "glowing. Then — nothing. Portal down, emails bouncing, my 'relationship manager' evaporated. " +
           "Every dollar of it gone into Ryan Powers' brand, and I can't get so much as a {{phone}} call.\"",
-        short: "\"Wired four hundred grand into 'the portfolio' — eighteen percent, quarterly. Two statements, then nothing. Gone.\"" },
-      { topic: "ryan", text: "\"Ryan Powers.\" The glass goes down harder than he means. \"Only ever got him " +
+        short: "\"Wired four hundred grand into 'the portfolio' — eighteen percent, quarterly. Two statements, then nothing. Gone.\"",
+        fx: (st) => { st.trust = Math.min(5, st.trust + 1); } },
+      // The facts he'll give anyone; the raw part — Ryan himself — he saves for
+      // someone who's stuck around, not another stranger who'll vanish like the rest.
+      { topic: "ryan", when: (st) => st.trust < 2,
+        text: "The name lands and he looks at you properly for the first time. \"Ryan Powers. You a " +
+          "reporter? A lawyer? One of his?\" He decides you're probably not — but not all the way. \"I've " +
+          "poured this out to too many strangers already, and every one of 'em nodded and left and nothing " +
+          "changed. Buy a round. Stick around. Prove you're just a guy at a bar. Then I'll tell you what he is.\"",
+        short: "\"You a reporter? One of his? Stick around, prove you're just a guy at a bar. Then I'll tell you.\"" },
+      { topic: "ryan", when: (st) => st.trust >= 2,
+        text: "\"Ryan Powers.\" The glass goes down harder than he means. \"Only ever got him " +
           "on a video call — sunglasses on, indoors, rented Lambo out the window, 'we're a FAMILY, Doug, " +
           "trust the process.'\" He does the voice; it isn't kind. \"Now he posts investor-update reels to " +
           "the very people he hasn't paid. I left one polite comment asking where my money went — blocked " +
