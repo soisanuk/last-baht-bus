@@ -3567,6 +3567,20 @@ test("SLEEP: turn in from the room, or climb up from the pub below, to end the n
   assert.equal(state().day, 3, "and no night lost from the wrong place");
 });
 
+test("Soi 6 mode won't offer a quest you can't finish in the pocket (Shamrock is out of bounds)", () => {
+  startSoi6Mode();
+  state().flags.hasDog = true;
+  const bertOffers = () => Object.keys(QUESTS).filter(q => QUESTS[q].giver === "bert" && _questAvailable(q));
+  const offered = bertOffers();
+  assert.ok(offered.includes("white_dish"), "the in-pocket White Dish job still offers");
+  assert.ok(offered.includes("league"), "the in-pocket League job still offers");
+  assert.ok(!offered.includes("shamrock"), "Shamrock (target on the Darkside) is suppressed in the confined week");
+  // but the full game still offers it
+  newGame(); state().mode = null; state().stage = "expat";
+  state().flags.act1Done = true; state().flags.hasDog = true;
+  assert.ok(bertOffers().includes("shamrock"), "the open-map game offers Shamrock as before");
+});
+
 test("adopting the soi dog gets you a Soi Dog Foundation donation text the next day", () => {
   startSoi6Mode();
   state().dog = { since: 1 };
