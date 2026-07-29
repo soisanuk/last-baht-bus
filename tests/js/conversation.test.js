@@ -202,8 +202,7 @@ test("in a conversation the chips become topics + LEAVE", () => {
   run("angela");
   const cmds = chipCmds();
   assert.ok(cmds.includes("bye"), "a way out is offered");
-  assert.ok(cmds.includes("90s") && cmds.includes("drew"),
-    "her open topics are offered as chips");
+  assert.ok(cmds.includes("90s"), "her open thematic topics are offered as chips");
   assert.ok(!cmds.some(c => /^withdraw|^enter |^ride bus/.test(c)),
     "the room/navigation chips are replaced by the talk palette");
 });
@@ -211,8 +210,18 @@ test("in a conversation the chips become topics + LEAVE", () => {
 test("topic chips are Title-cased labels over the bare-topic cmd", () => {
   run("angela");
   const chips = _chipSet();
-  const drew = chips.find(c => c.cmd === "drew");
-  assert.equal(drew.label, "Drew");
+  const qv = chips.find(c => c.cmd === "queen vic");
+  assert.equal(qv.label, "Queen Vic");
+});
+
+test("person/gossip topics (another character's name) aren't offered as chips", () => {
+  run("angela");
+  const topics = _convoTopics("angela");
+  assert.ok(!topics.includes("drew"), "Drew is a person — typeable, but not suggested");
+  assert.ok(topics.includes("90s"), "thematic topics are still offered");
+  // and _topicNamesCharacter recognises names, not arbitrary words
+  assert.equal(_topicNamesCharacter("drew", "angela"), true);
+  assert.equal(_topicNamesCharacter("90s", "angela"), false);
 });
 
 test("chips offer only UNLOCKED topics — progressive reveal via the same gates", () => {
