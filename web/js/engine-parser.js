@@ -637,6 +637,7 @@ function _doTalk(arg, topic) {
     _say(_pickVary(_NOBODY_NAME, "noname"));
     return;
   }
+  _convoStart(npc); // this NPC is now the active conversation partner (bare topics aim here)
   _trace(topic ? "ask" : "talk", NPCS[npc].name, topic || ""); // breadcrumb
   const d = _pickDialogue(npc, topic || null);
   // a regular you TALK to warms up: generic Tinglish register for the filler
@@ -654,6 +655,53 @@ function _doTalk(arg, topic) {
   _deliver(npc, d);
   if (NPCS[npc].manager) _managerChatTick(npc);
   _questOffer(npc);
+}
+
+// ── Conversation layer ───────────────────────────────────────────────────────
+// A thin layer over the parser (NOT a replacement): once you're talking to
+// someone, bare words resolve against them, so play reads like a conversation
+// ("angela" / "90s" / "depression" / "bye") instead of "ask angela about …"
+// every line. It is invoked ONLY from doCommand's default branch, so every real
+// verb, direction, and modal gate keeps first refusal — bare topics can never
+// shadow LOOK, MAP, movement, or a shop. See _convoActive/_convoStart in
+// engine-core.js for the sticky partner pointer and its self-teardown.
+
+// Common phrasings → the canonical topic word the dialogue nodes use. A seed of
+// the fuller intent map (Slice 2); unknown words pass straight through, and an
+// NPC with no matching node just gives their "not much to say about that" line.
+const _CONVO_TOPIC_SYNONYMS = {
+  "where are you from": "home", "where you from": "home", "where from": "home",
+  "your home": "home", "hometown": "home", "from": "home",
+  "your family": "family", "kids": "family", "children": "family",
+  "your wife": "wife", "your husband": "husband",
+  "what do you do": "job", "your job": "job", "your work": "job", "work": "job",
+  "the scene": "scene", "this town": "thailand", "why thailand": "thailand",
+};
+function _convoTopic(s) {
+  const k = s.replace(/^(ask|tell|about)\s+/, "").replace(/\?+$/, "").trim();
+  return _CONVO_TOPIC_SYNONYMS[s] || _CONVO_TOPIC_SYNONYMS[k] || k || s;
+}
+
+// Last-resort interpretation of an otherwise-unrecognized line. Returns true if
+// the conversation layer consumed it (the caller then ticks, like any real turn).
+function _convoResolve(lower) {
+  const bare = lower.replace(/[,.!?]+$/, "").trim();
+  // 1) Leave-taking ends an active conversation.
+  if (_convoActive() &&
+      /^(goodbye|bye|cheerio|laters?|later|see ?ya|ciao)$/.test(bare)) {
+    _convoEnd(); return true;
+  }
+  // 2) A bare name for someone present starts (or switches) the conversation —
+  //    this is the `> angela` opener. Routes through the normal TALK path, which
+  //    delivers their greeting and sets the partner via _convoStart.
+  if (bare && bare.split(" ").length <= 3 && (_findNpc(bare) || _findPatron(bare))) {
+    _doTalk(bare, null); return true;
+  }
+  // 3) While a conversation is live, take the whole line as a topic aimed at the
+  //    partner — the same route as ASK <them> ABOUT <topic>.
+  const id = _convoActive();
+  if (id) { _doTalk(_convoName(id), _convoTopic(lower)); return true; }
+  return false;
 }
 
 function _doWai(arg) {
@@ -2915,6 +2963,10 @@ function doCommand(input) {
     default:
       // bare Thai phrase typed directly
       if (matchThaiPhrase(lower)) { _doSay(lower); break; }
+      // conversation layer: a bare name opens a chat; while one's live, a bare
+      // topic or "bye" resolves against the partner. Reached only after every
+      // real verb/direction missed, so it never shadows them (see _convoResolve).
+      if (_convoResolve(lower)) break;
       _say(_pickVary(_HUH, "huh"), "dim");
       return; // no tick for parse errors
   }

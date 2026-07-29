@@ -174,6 +174,7 @@ function newGame() {
     visited: { jomtien_beach: true }, // roomId → true once stood in (fast-travel gate)
     talked: {},          // npcId → [dialogue indices already delivered] (terse repeats)
     npc: {},             // per-character conversation state: id → {trust,mood,dstate,know} (see _npcState)
+    convo: null,         // active conversation partner id — bare topics/actions aim here (see _convoActive)
     faction: { wdg: 0, samson: 0, indie: 0, syndicate: 0 }, // standing with the powers (see _align) — only moves when you ACT, never for declining
     itemLoc: Object.fromEntries(
       Object.entries(ITEMS).map(([id, it]) => [id, it.location])),
@@ -451,6 +452,31 @@ function _npcState(id) {
   return G.npc[id] || (G.npc[id] = { trust: 0, mood: "guarded", dstate: "stranger", know: {} });
 }
 
+// ── Active conversation context ──────────────────────────────────────────────
+// A sticky "who am I talking to" pointer so the player can speak in bare topics
+// and social actions without re-naming the partner each line ("90s" → ASK ANGELA
+// ABOUT 90s; see _convoResolve). It rides the save like any G field, but every
+// READ goes through _convoActive, which re-checks the partner is still in the
+// room — so walking away, them leaving, or a barfine silently ends it. The
+// parser layer that consumes this lives in engine-parser.js.
+function _convoStart(id) { if (id) G.convo = id; }
+function _convoName(id) {
+  return (NPCS[id] && NPCS[id].name) || (PATRONS[id] && PATRONS[id].name) || id;
+}
+function _convoActive() {
+  const id = G.convo;
+  if (!id) return null;
+  const here = (NPCS[id] && _npcRoom(id) === G.room) ||
+               (PATRONS[id] && _patronsHere().includes(id));
+  if (!here) { G.convo = null; return null; } // partner gone → conversation over
+  return id;
+}
+function _convoEnd(quiet) {
+  const id = G.convo;
+  G.convo = null;
+  if (id && !quiet) _say(`You take your leave of ${_convoName(id)}.`, "dim");
+}
+
 // Faction standing with the powers of the night — WDG (Ryan Powers' Soi 6 rollup),
 // samson (the brothers' Jomtien/Pratumnak takeover), indie (Bert & the holdouts),
 // syndicate (the unnamed Thai muscle behind the envelopes). Standing only moves
@@ -465,6 +491,7 @@ function _align(name, delta) {
 
 function _patronTalk(id, topic) {
   if (G.patronTalk.day !== G.day) G.patronTalk = { day: G.day, talked: {} };
+  _convoStart(id); // engaging a regular makes him the active conversation partner
   const p = PATRONS[id];
   const st = _npcState(id);
   // some regulars have a sore subject that turns them belligerent (Fergie: Bert,
