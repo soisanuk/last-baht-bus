@@ -2909,6 +2909,7 @@ function startSoi6Mode() {
   G.day = 1;              // Soi 6 starts fresh on day one — no lost first day
   G.money = 1000;
   G.bank = 100000;
+  G.battery = 100;        // a solvent tourist charged up before going out — not the Act-One 13%
   G.visited = {}; // fresh — the opening describe shows qv_room's full desc, then marks it visited
   _setFlag("hasWallet");  // you kept your card this time
   _setFlag("act1Done");   // no lost-wallet story in this mode

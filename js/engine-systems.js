@@ -1388,8 +1388,10 @@ function _phoneDead() {
   return false;
 }
 
-function _pushMsg(from, text, gives) {
-  G.phone.inbox.push({ from, text, turn: G.turns, read: false, gives: gives || 0 });
+function _pushMsg(from, text, gives, fromName) {
+  // fromName carries a display name for senders that aren't NPCs (e.g. the Soi
+  // Dog Foundation broadcast); NPC texts leave it null and render by NPCS name.
+  G.phone.inbox.push({ from, text, turn: G.turns, read: false, gives: gives || 0, fromName: fromName || null });
   G.phone.lastText = G.turns;
 }
 
@@ -1514,7 +1516,8 @@ function _readMessages() {
   const unread = G.phone.inbox.filter(m => !m.read);
   const show = unread.length ? unread : G.phone.inbox.slice(-3);
   for (const msg of show) {
-    _say(`📱 ${NPCS[msg.from].name}: “${msg.text}”`, "thai");
+    const sender = msg.fromName || (NPCS[msg.from] ? NPCS[msg.from].name : msg.from);
+    _say(`📱 ${sender}: “${msg.text}”`, "thai");
     if (!msg.read && msg.gives) {
       G.money += msg.gives;
       _say(`(She's transferred you ฿${msg.gives}. ฿${G.money} in pocket. This town.)`, "win");
@@ -1562,6 +1565,24 @@ function _doPhoneScreen() {
       if (h && !seen.has(h.t)) { seen.add(h.t); _say(`📰 ${h.t}`, "thai"); }
     }
     _say("(READ PAPER or WATCH TV for the rest.)", "dim");
+  }
+}
+
+// Adopt a soi dog and the Soi Dog Foundation somehow has your number by the next
+// day (word travels fast on the soi), hitting you up for a donation with the real
+// charity link — same day if you took him in on the last night of a capped week,
+// so a day-seven adoption doesn't miss it. Fires once.
+function _soidogTick() {
+  if (!G.dog || _flag("soidogTexted") || G.battery <= 0) return;
+  const cappedLastDay = (G.mode === "soi6" || G.stage === "vacation") && G.day >= 7;
+  if (G.day > G.dog.since || (cappedLastDay && G.day === G.dog.since)) {
+    _setFlag("soidogTexted");
+    _pushMsg("soidog",
+      "Word on the soi says you've adopted one of Pattaya's own — khob khun, khun jai dee! " +
+      "🐕 The rest of them still need jabs, food, and a vet who works for smiles. Pay it " +
+      "forward for the dogs still on the street: https://www.soidog.org/content/make-donation 🙏",
+      0, "Soi Dog Foundation");
+    _say("(📱 Your phone buzzes — a text from the Soi Dog Foundation. CHECK MESSAGES.)", "dim");
   }
 }
 
