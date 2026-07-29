@@ -228,6 +228,17 @@ test("chips offer only UNLOCKED topics — progressive reveal via the same gates
   assert.deepEqual([...new Set(warm)], warm, "no duplicate topic chips");
 });
 
+test("a gated-refusal topic isn't offered as a chip until it truly unlocks", () => {
+  run("angela"); // trust 1 — below the depression/navy gate
+  let topics = _convoTopics("angela");
+  assert.ok(!topics.includes("depression"), "she'd only refuse — don't offer it");
+  assert.ok(!topics.includes("navy"), "same for her service record");
+  _npcState("angela").trust = 5; // earned
+  topics = _convoTopics("angela");
+  assert.ok(topics.includes("depression") && topics.includes("navy"),
+    "once the real node opens, the topic surfaces");
+});
+
 test("social chips (flirt / buy drink) show for a hostess partner, not a patron", () => {
   // Patron partner (Angela): no flirt chip.
   run("angela");
