@@ -415,16 +415,11 @@ function _patronRoom(id) {
   if (p.days && !p.days.includes(G.day % 7)) return null; // not his night out
   // a shuttled regular: home bar early, escorted across to another later (Glam)
   if (p.shuttle) return _patronHour() >= p.shuttle.after ? p.shuttle.to : p.home;
-  if (!p.hops || _patronHour() >= 4) return p.home; // by 22:00 everyone's home
-  let h = G.vacation * 7919 + G.day * 104729 + _patronHour() * 48271 + 1;
-  for (const c of id) h = (h * 31 + c.charCodeAt(0)) % 2147483647;
-  h = (h * 48271) % 2147483647;
-  // some regulars only haunt certain districts (Fergie: Buakhao + Tree Town)
-  const pool = p.haunts ? _PATRON_HOP_ROOMS.filter(r => p.haunts.includes(ROOMS[r].region)) : _PATRON_HOP_ROOMS;
-  // some patrons have bars they will not set foot in (creditors, a ban, history)
-  let i = h % pool.length;
-  while (p.avoids && p.avoids.includes(pool[i])) i = (i + 1) % pool.length;
-  return pool[i];
+  // De-hopped: regulars anchor their local, so TALK TO PATRON reliably finds a
+  // real named person instead of an empty rail. (The hourly-drift machinery —
+  // p.hops / p.haunts / p.avoids / _PATRON_HOP_ROOMS — is retired but left in the
+  // data for now; flip this back to re-enable roaming.)
+  return p.home;
 }
 
 function _patronsHere() {
@@ -603,11 +598,13 @@ function _elsewhereLine(word) {
 // classic adventure behaviour: they answer with whatever they always say.
 function _pickDialogue(npcId, topic) {
   const n = NPCS[npcId];
+  const st = _npcState(npcId); // conversation state machine — see _npcState
   for (const d of n.dialogue) {
     if (topic ? d.topic !== topic && !(d.topic && topic.includes(d.topic)) : d.topic) continue;
     if ((d.req || []).some(f => !_flag(f))) continue;
     if ((d.notFlags || []).some(f => _flag(f))) continue;
     if (d.bond && _bondTier(npcId) < d.bond) continue; // a warmer line only a regular unlocks (The Regular)
+    if (d.when && !d.when(st, G)) continue;            // state-machine condition (trust/mood/dstate/know)
     return d;
   }
   return topic ? _pickDialogue(npcId, null) : null;
@@ -651,6 +648,7 @@ function _deliver(npcId, d) {
       _say("(Most of the cash is still in it — ฿500 back in play.)", "dim");
     }
   }
+  if (!repeat && d.fx) d.fx(_npcState(npcId), G); // state-machine effects, first delivery only
 }
 
 // ── Look / describe ────────────────────────────────────────────────────────
