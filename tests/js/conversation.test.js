@@ -61,6 +61,46 @@ test("a phrasing synonym maps to the canonical topic", () => {
     "a known phrasing is not a parse error inside a conversation");
 });
 
+test("_convoTopic maps no-shared-word phrasings to canonical topics", () => {
+  const cases = [
+    ["where are you from", "home"], ["whereabouts you from", "home"],
+    ["where do you live", "home"], ["your country", "home"],
+    ["what do you do", "job"], ["what do you do for a living", "job"],
+    ["are you married", "wife"], ["the missus", "wife"],
+    ["any kids", "family"], ["your folks", "family"],
+    ["got any cash", "money"], ["how much do you earn", "money"],
+    ["were you in the military", "navy"],
+    ["the nineties", "90s"], ["the 1990s", "90s"],
+    ["the nightlife", "scene"], ["this town", "pattaya"], ["living here", "thailand"],
+    ["you single", "girlfriend"], ["your love life", "girlfriend"],
+  ];
+  for (const [input, want] of cases) {
+    assert.equal(_convoTopic(input), want, `"${input}" → ${want}`);
+  }
+});
+
+test("_convoTopic leaves already-matching phrasings alone (CONTAINS handles them)", () => {
+  // These share the key word, so they pass through — the dialogue matcher's
+  // topic.includes(key) resolves them without a synonym rule.
+  assert.match(_convoTopic("your wife"), /wife/);
+  assert.match(_convoTopic("the darkside"), /darkside/);
+  assert.equal(_convoTopic("90s"), "90s");
+});
+
+test("_convoTopic does not mis-map proper-noun topics", () => {
+  for (const name of ["candy", "ryan powers", "bert", "oy", "drew"]) {
+    assert.match(_convoTopic(name), new RegExp(name.split(" ")[0]),
+      `"${name}" should still route to itself, not a synonym`);
+  }
+});
+
+test("a phrasing with no shared word still fires the node (nineties → 90s)", () => {
+  run("angela");
+  out = [];
+  doCommand("the nineties"); // → 90s → Angela's node
+  assert.match(lastOut(), /1997|Tower Records/, "the synonym reached her 90s line");
+});
+
 test("goodbye ends the conversation", () => {
   run("angela");
   out = [];

@@ -666,20 +666,34 @@ function _doTalk(arg, topic) {
 // shadow LOOK, MAP, movement, or a shop. See _convoActive/_convoStart in
 // engine-core.js for the sticky partner pointer and its self-teardown.
 
-// Common phrasings → the canonical topic word the dialogue nodes use. A seed of
-// the fuller intent map (Slice 2); unknown words pass straight through, and an
-// NPC with no matching node just gives their "not much to say about that" line.
-const _CONVO_TOPIC_SYNONYMS = {
-  "where are you from": "home", "where you from": "home", "where from": "home",
-  "your home": "home", "hometown": "home", "from": "home",
-  "your family": "family", "kids": "family", "children": "family",
-  "your wife": "wife", "your husband": "husband",
-  "what do you do": "job", "your job": "job", "your work": "job", "work": "job",
-  "the scene": "scene", "this town": "thailand", "why thailand": "thailand",
-};
+// Natural phrasings → the canonical topic word the dialogue nodes are keyed on.
+// Topic matching (see _pickDialogue / _patronTalk) is "player-topic CONTAINS
+// node-key", so a phrasing that already contains the key ("your wife" → wife,
+// "the darkside" → darkside) resolves with no help — this list is ONLY for
+// phrasings that share no word with the key ("where you from" → home). Keys
+// chosen from the topics that actually recur across the roster. Ordered: first
+// regex to match wins, so specific sits above general.
+const _CONVO_TOPIC_RULES = [
+  [/where.*(from|grew up|born)|whereabout|your country|back home|where.*\blive/, "home"],
+  [/for a living|line of work|what.*you do\b|what.*you did/,                     "job"],
+  [/marri(ed|age)|the missus|other half|settle down/,                            "wife"],
+  [/\bkids?\b|children|your folks|your parents/,                                 "family"],
+  [/\bcash\b|how much.*(make|earn|cost)|afford|expensive/,                       "money"],
+  [/military|armed forces|the forces|you serve|were you in/,                     "navy"],
+  [/ninet(y|ies)|1990s|the 90s/,                                                 "90s"],
+  [/nightlife|the scene/,                                                        "scene"],
+  [/this town|round here|around here/,                                           "pattaya"],
+  [/this country|living here|life (out )?here|being here/,                       "thailand"],
+  [/the ladies|working girls/,                                                   "girls"],
+  [/love life|relationship|\bdating\b|you single|got a girl/,                    "girlfriend"],
+];
+
 function _convoTopic(s) {
-  const k = s.replace(/^(ask|tell|about)\s+/, "").replace(/\?+$/, "").trim();
-  return _CONVO_TOPIC_SYNONYMS[s] || _CONVO_TOPIC_SYNONYMS[k] || k || s;
+  const t = s.replace(/[?.!,]+\s*$/g, "").trim();
+  for (const [re, topic] of _CONVO_TOPIC_RULES) if (re.test(t)) return topic;
+  // no synonym match: strip leading framing so "tell me about X" / "your X" pass
+  // X through cleanly (the CONTAINS match then finds the node keyed on X).
+  return t.replace(/^(tell me about|talk about|about|whats|what is|your|the)\s+/, "").trim() || t;
 }
 
 // Last-resort interpretation of an otherwise-unrecognized line. Returns true if
