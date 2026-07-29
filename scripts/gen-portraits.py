@@ -372,6 +372,7 @@ CHARS = {
                      vest=C(0x707888), mouth="neutral", bg=BG_BAR),
     "gavin":    dict(skin=PALE, hair="short", hc=C(0x8a8a90), shirt=C(0xf0f0f0), collar=True, mouth="smile", bg=BG_BAR),
     "doug":     dict(skin=TAN, hair="combover", hc=GREY, shirt=C(0x8a3a3a), collar=True, mouth="stern", bg=BG_BAR),
+    "powers":   dict(skin=TAN, hair="slick", hc=BLACK, shirt=C(0xe8e0d0), collar=True, mouth="grin", acc=["sunglasses"], bg=BG_GOGO),
     "nit":      lady(skin=THAI2, hair="ponytail", hc=BLACK, shirt=C(0x3a6ac0),
                      bg=BG_STREET, mouth="smile"),
     "bee":      lady(skin=THAI, hair="ponytail", hc=BLACK, shirt=C(0xe86a9a),

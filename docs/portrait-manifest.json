@@ -2,9 +2,9 @@
   "generated": "2026-07-29",
   "note": "Distinct, hand-authored characters with a portrait (excludes the 181 generic `filler` NPCs). Derived from web/js/world.js — regenerate with scripts/gen-portrait-manifest.mjs, do not hand-edit. `sex`/`venueKind` are generator heuristics for portrait archetype selection, not game canon.",
   "counts": {
-    "total": 74,
+    "total": 75,
     "byRole": {
-      "story": 21,
+      "story": 22,
       "mamasan": 14,
       "hostess": 18,
       "cashier": 3,
@@ -210,6 +210,19 @@
       "room": "stinky_bar",
       "tags": [],
       "desc": "Mid-fifties, a fleece vest in the Pattaya heat, {{phone}} face-down on the bar in the specific way of a man waiting for a message he wants and dreads in equal measure. Bristol accent. He has the look of someone who has been coming here for long enough that 'holiday romance' stopped fitting years ago."
+    },
+    {
+      "id": "powers",
+      "name": "Ryan Powers",
+      "source": "NPCS",
+      "role": "story",
+      "sex": "m",
+      "venueKind": "soi6",
+      "emoji": "🕶️",
+      "th": null,
+      "room": "orchid_room",
+      "tags": [],
+      "desc": "Late thirties dressed for late twenties: a linen shirt one button too honest, a watch that wants to be noticed, sunglasses on indoors at midnight. He films himself more than he talks and talks more than he listens. Up close, the empire is just a man who has never once been told no by anyone he pays."
     },
     {
       "id": "security",

@@ -3610,6 +3610,24 @@ test("dialogue state machine: Angela gates the heavy stuff behind trust, then op
   assert.equal(st().trust, t, "re-asking a warmed topic doesn't re-bump trust");
 });
 
+test("The Orchid Room: WDG's members-only back room, gated by standing, is the only place Powers is", () => {
+  startSoi6Mode(); state().flags.act1Done = true;
+  state().room = "pink_lotus";
+  state().lastSaleng = 99999; state().lastPeddler = 99999;
+  // the velvet rope holds for a non-member
+  out = []; run("go back");
+  assert.match(lastOut(), /members|velvet rope|not tonight|White Dish|friends of the group/i, "the bouncer turns you away");
+  assert.equal(state().room, "pink_lotus", "you don't get in");
+  // once you're White Dish's man, the rope lifts
+  state().faction.wdg = 2;
+  out = []; run("go back");
+  assert.equal(state().room, "orchid_room", "in you go");
+  // Powers — never met anywhere else — holds court here, and fears only the syndicate
+  assert.equal(_npcRoom("powers"), "orchid_room", "Powers is only ever here");
+  out = []; run("ask powers about syndicate");
+  assert.match(lastOut(), /not a topic|right number|don't want his name/i, "even Powers fears the one man he can't buy");
+});
+
 test("factions: Gavin's errand is opt-in — standing moves only on the deed, never on declining", () => {
   startSoi6Mode(); state().flags.act1Done = true;
   state().lastSaleng = 99999; state().lastPeddler = 99999; // startSoi6Mode's newGame reset the beforeEach suppression
