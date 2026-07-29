@@ -1261,6 +1261,93 @@ function _doSocial(kind, targetWord) {
   }
 }
 
+// ── Verbal social actions ────────────────────────────────────────────────────
+// Banter that plays off the CONVERSATION state machine (trust/mood/dstate), as
+// opposed to the physical _doSocial above (favor/severity, bar girls only).
+// These work on anyone you can address — bar girl or patron — resolved through
+// _resolveActor, so "compliment", "joke", "tease" all aim at the conversation
+// partner with no target word. Each landing nudges state at most once per day,
+// so rapport is built over nights, not farmed in one sitting. Outcome buckets:
+// warm (landed), flat (no traction), cool (misfired). Every repeatable line
+// ships a _pickVary pool. Gender-neutral: patrons and hostesses both pass here.
+const _TALK_ACT_TEXT = {
+  compliment: {
+    warm: [
+      n => `${n} takes it cleanly — a small, real smile, filed where the good ones go.`,
+      n => `"You're sweet," ${n} says, meaning about sixty percent of it, which here is a lot.`,
+      n => `${n} waves it off, pleased anyway. The warmth in the room ticks up a notch.`,
+    ],
+    flat: [
+      n => `${n} takes the flattery the way you'd take a flyer — polite, unconvinced. Early for that.`,
+      n => `A cool nod from ${n}. Compliments from strangers are weather here; the real warmth is earned.`,
+    ],
+  },
+  joke: {
+    warm: [
+      n => `${n} laughs — the genuine kind, caught off guard. The table feels lighter.`,
+      n => `That lands. ${n} snorts, tries not to encourage you, fails.`,
+      n => `${n} groans, grins. "Okay — that one was good." The ice, such as it was, thins.`,
+    ],
+    flat: [
+      n => `${n} gives you a courtesy smile with nothing behind it. Read the room, farang.`,
+      n => `The joke dies in the air between you. ${n} was not, it turns out, in the mood.`,
+    ],
+  },
+  tease: {
+    warm: [
+      n => `${n} fires straight back, quicker and meaner and delighted about it. A game you're both winning.`,
+      n => `${n} gasps in mock outrage, swats at you. "You! I allow this only because I like you."`,
+      n => `${n} matches you beat for beat — somewhere in the needling you've become people who needle each other.`,
+    ],
+    cool: [
+      n => `Too soon. ${n}'s smile goes flat and formal; teasing is for people who've earned it.`,
+      n => `${n} doesn't take it as play. A cool beat, a cooler look. You feel the ground you lost.`,
+    ],
+  },
+};
+
+// Per-day ledger so a landed action moves state only once each day (built over
+// nights, not farmed). Lazy — survives old saves without a template migration.
+function _socialLedger() {
+  if (!G.socialActs || G.socialActs.day !== G.day) G.socialActs = { day: G.day, done: {} };
+  return G.socialActs.done;
+}
+
+function _doTalkAct(kind, targetWord) {
+  const id = _resolveActor(targetWord, _addressable());
+  if (!id) {
+    const pool = _addressable();
+    if (pool.length > 1 && targetWord && _PRONOUN.test(targetWord.toLowerCase()))
+      _say(`Who do you mean? (${pool.map(_convoName).join(", ")})`);
+    else _say(`There's nobody here to ${kind}.`);
+    return;
+  }
+  _noteActor(id);
+  const name = _convoName(id);
+  const st = _npcState(id);
+
+  // How it lands is a function of how warm they already are.
+  let outcome;
+  if (kind === "compliment") outcome = (st.dstate === "stranger" || st.trust <= 0) ? "flat" : "warm";
+  else if (kind === "joke")  outcome = (st.mood === "open" || st.trust >= 2) ? "warm" : "flat";
+  else                        outcome = st.trust >= 3 ? "warm" : "cool"; // tease is earned
+
+  _say(_pickVary(_TALK_ACT_TEXT[kind][outcome], "act:" + kind + outcome)(name),
+       outcome === "cool" ? "alert" : outcome === "warm" ? "win" : "");
+  _trace(kind, name);
+
+  // First state-moving outcome of this action today counts; repeats are just
+  // talk. A flat (no-traction) attempt doesn't burn the day — you can try again
+  // once you've warmed them up.
+  const ledger = _socialLedger();
+  const key = id + ":" + kind;
+  if (outcome !== "flat" && !ledger[key]) {
+    ledger[key] = true;
+    if (outcome === "warm") { st.trust = Math.min(5, st.trust + 1); _addHappy(1); }
+    else if (outcome === "cool") st.trust = Math.max(0, st.trust - 1);
+  }
+}
+
 // ─ The ceiling game ─
 // Going commando is technically illegal in Thailand and cheerfully unenforced;
 // a braless dancer wears nipple covers, and the bar sport is to peel one and
