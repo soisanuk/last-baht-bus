@@ -1571,9 +1571,11 @@ const ROOMS = {
       "the whole of Soi 6 performing below like a fish tank somebody dropped a " +
       "radio into. Terry's recliner is two balconies over — close enough to raise " +
       "his beer at you, too far to hear a word over the soi; you'll catch him " +
-      "properly down in the pub. A flatscreen on the wall and a mini-fridge in the " +
-      "corner — two free waters a day, housekeeping's one kindness — round out the " +
-      "luxuries. Sleep happens here somehow. Nobody knows how. (WATCH TV · OPEN FRIDGE.)",
+      "properly down in the pub. A firm double bed fills the rest of the room — the " +
+      "neon never quite lets go of it, but the blackout curtains and the aircon get " +
+      "you there. A flatscreen on the wall and a mini-fridge in the corner — two free " +
+      "waters a day, housekeeping's one kindness — round out the luxuries. " +
+      "(SLEEP to turn in and end the night · WATCH TV · OPEN FRIDGE.)",
     revisit: [
       "Back up to your balcony room over the Queen Vic — the fan turning its opinions over, Soi 6 still howling up over the rail two floors down.",
       "The room again: wood floors, the recliner on the balcony, the soi throwing its light and its bass up the wall like a fish tank with the volume left on.",

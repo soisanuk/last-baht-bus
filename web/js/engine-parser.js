@@ -547,6 +547,12 @@ function _doExamine(arg) {
   // flashlight aliases (torch/light) still fall through to the LIGHT machinery.
   if (/\b(phone|mobile)\b/.test(arg) && _inv().includes("phone")) { _doPhoneScreen(); return; }
   if (/\b(fridge|refrigerator|mini.?bar)\b/.test(arg)) { _doFridge(); return; }
+  if (/\bbed\b/.test(arg) && _isHotelRoom(G.room)) {
+    _say("A firm double under a thin batik cover, the pillows veterans of a thousand " +
+      "previous guests. Right now it is the single most persuasive object in Pattaya. " +
+      "(SLEEP to turn in and end the night.)");
+    return;
+  }
   const npc = _findNpc(arg);
   if (npc) { _say(NPCS[npc].desc); return; }
   const pat = _findPatron(arg);
@@ -2799,8 +2805,15 @@ function doCommand(input) {
     case "checkout": case "check-out": _doCheckout(); break;
     case "sleep": case "bed": case "crash":
       if (!_flag("act1Done")) _say("Sleep where? The beach already had you once tonight. Get the wallet, get the room.");
-      else if (G.room !== _hotelRoomId()) _say(`Your bed is at the ${_HOTELS[G.hotel].name}. It'll keep.`);
-      else { _endNight("sleep"); return; }
+      else if (G.room === _hotelRoomId()) { _endNight("sleep"); return; }
+      // one flight below your own bed (the pub under the Queen Vic, a lobby):
+      // turning in should just walk you up, not scold you for being close.
+      else if (_room().exits && _room().exits.up === _hotelRoomId()) {
+        _say("You climb the stairs to your room and fall into bed.");
+        G.room = _hotelRoomId();
+        _endNight("sleep"); return;
+      }
+      else _say(`Your bed's up in your room at the ${_HOTELS[G.hotel].name} — get there and SLEEP.`);
       break;
     case "tv": _doTv(); break;
     case "column": case "owl": case "niteowl": _doColumn(); break;

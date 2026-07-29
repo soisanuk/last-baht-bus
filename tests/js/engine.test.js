@@ -3546,6 +3546,26 @@ test("hotel-room minibar: two free waters a day, TAKE WATER quenches, restocks a
   assert.match(lastOut(), /no fridge out here/i, "there's no minibar on the pavement");
 });
 
+test("SLEEP: turn in from the room, or climb up from the pub below, to end the night", () => {
+  startSoi6Mode(); // qv_room, day 1
+  out = []; run("examine bed");
+  assert.match(lastOut(), /SLEEP/i, "the bed advertises how to use it");
+  // from the pub under your room, SLEEP walks you up and ends the night
+  state().room = "queen_vic";
+  out = []; run("sleep");
+  assert.match(lastOut(), /climb the stairs|fall into bed/i, "you're walked up, not scolded");
+  assert.equal(state().room, "qv_room", "and land in your room");
+  assert.equal(state().day, 2, "the night is over");
+  // and directly from the room
+  out = []; run("sleep");
+  assert.equal(state().day, 3, "SLEEP in the room ends the night too");
+  // from a bar with no bed above, a clear pointer instead
+  state().room = "pink_lotus"; out = [];
+  run("sleep");
+  assert.match(lastOut(), /bed's up|get there and SLEEP/i, "elsewhere, point at the room");
+  assert.equal(state().day, 3, "and no night lost from the wrong place");
+});
+
 test("WATCH TV works in your hotel room, not only in bars", () => {
   startSoi6Mode(); // qv_room
   out = [];
