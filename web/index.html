@@ -158,13 +158,18 @@
   .kw-av { width: 20px; height: 20px; image-rendering: pixelated;
            vertical-align: -4px; margin-right: 4px; border-radius: 4px;
            border: 1px solid #ff149340; }
-  .fly-head { display: flex; align-items: center; gap: .6rem;
-              padding: .35rem .7rem .45rem;
+  .fly-head { display: flex; flex-direction: column; align-items: center;
+              gap: .4rem; padding: .5rem .7rem .5rem;
               border-bottom: 1px solid #ff149330; margin-bottom: 2px;
-              color: var(--yellow); font-weight: 700; }
-  .fly-av { width: 44px; height: 44px; image-rendering: pixelated;
-            border-radius: 6px; border: 1px solid #ff149360;
-            box-shadow: 0 0 10px #ff149330; }
+              color: var(--yellow); font-weight: 700; text-align: center; }
+  /* the character-card portrait: sized so a realistic/painterly render is worth
+     looking at. object-fit cover handles square busts and taller portraits alike;
+     smooth rendering (not pixelated) suits photographic/painterly art — pixel
+     busts read a little soft at this size until they're replaced. */
+  .fly-portrait { width: 140px; height: 140px; object-fit: cover;
+            object-position: center 22%; image-rendering: auto;
+            border-radius: 8px; border: 1px solid #ff149360;
+            box-shadow: 0 0 12px #ff149330; display: block; }
   /* the flyout wheel */
   #flyout {
     position: fixed; z-index: 50;

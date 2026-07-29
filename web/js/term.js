@@ -359,7 +359,7 @@ const _term = (() => {
     if (pid) {
       const head = document.createElement("div");
       head.className = "fly-head";
-      head.appendChild(_avatar(pid, "fly-av"));
+      head.appendChild(_avatar(pid, "fly-portrait"));
       const nm = document.createElement("span");
       nm.textContent = kwEl.dataset.k === "thai" ? NPCS[pid].name : kwEl.dataset.v;
       head.appendChild(nm);
