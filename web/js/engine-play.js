@@ -1158,12 +1158,18 @@ const _SOCIAL_TEXT = {
 function _doSocial(kind, targetWord) {
   const w = (targetWord || "").replace(/^with /, "").trim();
   const here = _npcsHere();
-  const id = w ? _findNpc(w) : (here.length === 1 ? here[0] : null);
+  // Pronoun/default resolution: "flirt with her" → whoever you're dealing with;
+  // bare "flirt" → the conversation partner, or the sole girl in scope.
+  const id = _resolveActor(w, here);
   if (!id) {
-    _say(w ? "They're not here." :
-      `You ${kind} the ambience. The neon flickers back, noncommittally.`);
+    if (!w) { _say(`You ${kind} the ambience. The neon flickers back, noncommittally.`); return; }
+    // a pronoun the scope couldn't pin down → ask, rather than a flat refusal
+    if (_PRONOUN.test(w.toLowerCase()) && here.length > 1)
+      _say(`Who do you mean? (${here.map(x => NPCS[x].name).join(", ")})`);
+    else _say("They're not here.");
     return;
   }
+  _noteActor(id); // this person is now the antecedent for the next "her/him"
   const name = NPCS[id].name;
   const role = NPC_ROLES[id];
   _trace(kind, name); // breadcrumb (flirt/kiss/spank/fondle)
