@@ -3,7 +3,7 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
-    "t": "Police search for missing Russian siblings in Pattaya",
+    "t": "Missing Russian siblings’ motorcycle found buried",
     "s": "Bangkok Post",
     "d": "29 Jul 2026"
   },
@@ -13,23 +13,13 @@ var NEWS_FEED = [
     "d": "28 Jul 2026"
   },
   {
-    "t": "Four ladyboys arrested over alleged robbery, assault of Australian tourist in Pattaya",
-    "s": "Khaosod English",
-    "d": "27 Jul 2026"
+    "t": "Cheap Thailand trip turns into horror, 3 Indians kidnapped by Indians in Pattaya",
+    "s": "India Today",
+    "d": "29 Jul 2026"
   },
   {
     "t": "Myanmar man wanted for murder of former national tennis player in Pattaya",
-    "s": "Thaiger",
-    "d": "29 Jul 2026"
-  },
-  {
-    "t": "Missing Russian siblings’ motorcycle found buried",
-    "s": "Bangkok Post",
-    "d": "29 Jul 2026"
-  },
-  {
-    "t": "A legal way for foreigners to own a house in Thailand, without nominee companies.",
-    "s": "Thaiger",
+    "s": "thethaiger.com",
     "d": "29 Jul 2026"
   },
   {
@@ -38,23 +28,33 @@ var NEWS_FEED = [
     "d": "28 Jul 2026"
   },
   {
-    "t": "Police rescue three Indian tourists in Pattaya ransom case",
-    "s": "Nation Thailand",
+    "t": "Qatar tourist faces visa revocation after Hua Hin rampage injures six",
+    "s": "Pattaya Mail",
     "d": "28 Jul 2026"
   },
   {
-    "t": "Italian students apologise after Bangkok train incident sparks outrage in Thailand",
-    "s": "The Independent",
+    "t": "Van plows into waiting traffic in Pattaya, tourists injured",
+    "s": "Pattaya Mail",
+    "d": "28 Jul 2026"
+  },
+  {
+    "t": "Four ladyboys arrested over alleged robbery, assault of Australian tourist in Pattaya",
+    "s": "Khaosod English",
     "d": "27 Jul 2026"
   },
   {
-    "t": "Italian school forced to apologise to whole of Thailand for bad behaviour",
-    "s": "Metro.co.uk",
-    "d": "27 Jul 2026"
+    "t": "5 Indians arrested in Thailand for kidnapping fellow nationals for ₹70 lakh; Pakistani mastermind behind plot | India News",
+    "s": "Hindustan Times",
+    "d": "29 Jul 2026"
   },
   {
-    "t": "Mine-clearance officer critically hurt in Thailand's Sa Kaeo blast",
-    "s": "The Star",
+    "t": "Michelle Yeoh EP’d Martial Arts Pic ‘Nak Muay’ Set August 2 Start Date",
+    "s": "Deadline",
+    "d": "29 Jul 2026"
+  },
+  {
+    "t": "Missing Thai Travel Vlogger Found Dead in Tbilisi, Police Say",
+    "s": "Civil Georgia",
     "d": "29 Jul 2026"
   },
   {
@@ -68,20 +68,20 @@ var NEWS_FEED = [
     "d": "27 Jul 2026"
   },
   {
-    "t": "Thailand Unveils \"Siam Silica\" Plan to Drive Regional Chip Hub",
-    "s": "Nation Thailand",
-    "d": "28 Jul 2026"
+    "t": "Italian students apologise after Bangkok train incident sparks outrage in Thailand",
+    "s": "The Independent",
+    "d": "27 Jul 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-07-28","USD":33.61,"AUD":23.42,"GBP":44.66,"EUR":38.2};
+var FX_RATES = {"date":"2026-07-29","USD":33.53,"AUD":23.27,"GBP":44.56,"EUR":38.15};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-07-29","temp":28,"humid":83,"code":53,"hi":29,"rain":100};
+var WX_NOW = {"date":"2026-07-29","temp":27,"humid":97,"code":3,"hi":30,"rain":96};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-07-16","first":"639214","last2":"71","front3":["683","709"],"back3":["427","746"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4033,"date":"2026-07-29","baht":64100};
+var GOLD = {"usd":4024,"date":"2026-07-29","baht":63800};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":64587,"thb":2164311};
+var BTC = {"usd":63667,"thb":2137572};
