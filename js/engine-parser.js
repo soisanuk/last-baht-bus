@@ -621,6 +621,15 @@ function _doRead(arg) {
 }
 
 function _doTalk(arg, topic) {
+  arg = (arg || "").trim();
+  // Pronoun / bare target → the person already in play (scope resolution). A
+  // patron antecedent routes straight to _patronTalk; an NPC id flows on as the
+  // "name" (findNpc matches an exact id). Ambiguous/none falls through to the
+  // usual not-here / nobody handling below.
+  if (!arg || _PRONOUN.test(arg.toLowerCase())) {
+    const a = _resolveActor(arg, _addressable());
+    if (a) { if (PATRONS[a]) { _patronTalk(a, topic); return; } arg = a; }
+  }
   const npc = _findNpc(arg);
   if (!npc) {
     const pat = _findPatron(arg);
@@ -637,6 +646,7 @@ function _doTalk(arg, topic) {
     _say(_pickVary(_NOBODY_NAME, "noname"));
     return;
   }
+  _convoStart(npc); // this NPC is now the active conversation partner (bare topics aim here)
   _trace(topic ? "ask" : "talk", NPCS[npc].name, topic || ""); // breadcrumb
   const d = _pickDialogue(npc, topic || null);
   // a regular you TALK to warms up: generic Tinglish register for the filler
@@ -654,6 +664,72 @@ function _doTalk(arg, topic) {
   _deliver(npc, d);
   if (NPCS[npc].manager) _managerChatTick(npc);
   _questOffer(npc);
+}
+
+// ── Conversation layer ───────────────────────────────────────────────────────
+// A thin layer over the parser (NOT a replacement): once you're talking to
+// someone, bare words resolve against them, so play reads like a conversation
+// ("angela" / "90s" / "depression" / "bye") instead of "ask angela about …"
+// every line. It is invoked ONLY from doCommand's default branch, so every real
+// verb, direction, and modal gate keeps first refusal — bare topics can never
+// shadow LOOK, MAP, movement, or a shop. See _convoActive/_convoStart in
+// engine-core.js for the sticky partner pointer and its self-teardown.
+
+// Natural phrasings → the canonical topic word the dialogue nodes are keyed on.
+// Topic matching (see _pickDialogue / _patronTalk) is "player-topic CONTAINS
+// node-key", so a phrasing that already contains the key ("your wife" → wife,
+// "the darkside" → darkside) resolves with no help — this list is ONLY for
+// phrasings that share no word with the key ("where you from" → home). Keys
+// chosen from the topics that actually recur across the roster. Ordered: first
+// regex to match wins, so specific sits above general.
+const _CONVO_TOPIC_RULES = [
+  [/where.*(from|grew up|born)|whereabout|your country|back home|where.*\blive/, "home"],
+  [/for a living|line of work|what.*you do\b|what.*you did/,                     "job"],
+  [/marri(ed|age)|the missus|other half|settle down/,                            "wife"],
+  [/\bkids?\b|children|your folks|your parents/,                                 "family"],
+  [/\bcash\b|how much.*(make|earn|cost)|afford|expensive/,                       "money"],
+  [/military|armed forces|the forces|you serve|were you in/,                     "navy"],
+  [/ninet(y|ies)|1990s|the 90s/,                                                 "90s"],
+  [/nightlife|the scene/,                                                        "scene"],
+  [/this town|round here|around here/,                                           "pattaya"],
+  [/this country|living here|life (out )?here|being here/,                       "thailand"],
+  [/the ladies|working girls/,                                                   "girls"],
+  [/love life|relationship|\bdating\b|you single|got a girl/,                    "girlfriend"],
+];
+
+function _convoTopic(s) {
+  const t = s.replace(/[?.!,]+\s*$/g, "").trim();
+  for (const [re, topic] of _CONVO_TOPIC_RULES) if (re.test(t)) return topic;
+  // no synonym match: strip leading framing so "tell me about X" / "your X" pass
+  // X through cleanly (the CONTAINS match then finds the node keyed on X).
+  return t.replace(/^(tell me about|talk about|about|whats|what is|your|the)\s+/, "").trim() || t;
+}
+
+// A topic key as a chip label: Title Case the words ("queen vic" → "Queen Vic",
+// "90s" stays "90s"). The chip's cmd is the bare topic — the conversation is
+// live when these show, so it resolves straight through _convoResolve.
+function _topicLabel(t) { return t.replace(/\b\w/g, c => c.toUpperCase()); }
+
+// Last-resort interpretation of an otherwise-unrecognized line. Returns true if
+// the conversation layer consumed it (the caller then ticks, like any real turn).
+function _convoResolve(lower) {
+  const bare = lower.replace(/[,.!?]+$/, "").trim();
+  // 1) Leave-taking ends an active conversation.
+  if (_convoActive() &&
+      /^(goodbye|bye|cheerio|laters?|later|see ?ya|ciao)$/.test(bare)) {
+    _convoEnd(); return true;
+  }
+  // 2) A bare name for someone present starts (or switches) the conversation —
+  //    this is the `> angela` opener. Routes through the normal TALK path, which
+  //    delivers their greeting and sets the partner via _convoStart.
+  if (bare && bare.split(" ").length <= 3 && (_findNpc(bare) || _findPatron(bare))) {
+    _doTalk(bare, null); return true;
+  }
+  // 3) While a conversation is live, take the whole line as a topic aimed at the
+  //    partner — the same route as ASK <them> ABOUT <topic>.
+  const id = _convoActive();
+  if (id) { _doTalk(_convoName(id), _convoTopic(lower)); return true; }
+  return false;
 }
 
 function _doWai(arg) {
@@ -2298,6 +2374,25 @@ function _chipSet() {
     add("quit"); return chips;
   }
 
+  // 2.5) A live conversation turns the chip bar into the talk palette: the
+  //      partner's currently-open topics, the social moves that fit them, and a
+  //      way out. Only the unlocked topics show (see _convoTopics), so the bar
+  //      doubles as progressive reveal. Typing still does everything else — this
+  //      is the touch surface, not a cage; LEAVE restores the room chips.
+  const partner = _convoActive();
+  if (partner) {
+    for (const t of _convoTopics(partner).slice(0, 4)) add(t, _topicLabel(t));
+    add("compliment", "compliment");
+    add("joke", "joke");
+    if (_npcState(partner).trust >= 3) add("tease", "tease"); // banter unlocks once you're close
+    if (NPCS[partner] && NPC_ROLES[partner] === "hostess") {
+      add("flirt", "flirt");
+      add("buy drink for " + _convoName(partner).split(" ")[0].toLowerCase(), "buy drink");
+    }
+    add("bye", "leave");
+    return chips;
+  }
+
   // 3) The room in front of you
   const r = _room();
   if (_isDarkHere()) add("light");
@@ -2821,6 +2916,9 @@ function doCommand(input) {
     case "press": case "type": case "code": _doEnter(arg); break;
     case "play": case "challenge": _doPlay(arg); break;
     case "flirt": _doSocial("flirt", arg); break;
+    case "compliment": case "praise": _doTalkAct("compliment", arg); break;
+    case "joke": case "quip": case "banter": _doTalkAct("joke", arg); break;
+    case "tease": case "rib": _doTalkAct("tease", arg); break;
     case "kiss": case "snog": case "smooch": _doSocial("kiss", arg); break;
     case "spank": _doSocial("spank", arg); break;
     case "fondle": case "grope": _doSocial("fondle", arg); break;
@@ -2915,6 +3013,10 @@ function doCommand(input) {
     default:
       // bare Thai phrase typed directly
       if (matchThaiPhrase(lower)) { _doSay(lower); break; }
+      // conversation layer: a bare name opens a chat; while one's live, a bare
+      // topic or "bye" resolves against the partner. Reached only after every
+      // real verb/direction missed, so it never shadows them (see _convoResolve).
+      if (_convoResolve(lower)) break;
       _say(_pickVary(_HUH, "huh"), "dim");
       return; // no tick for parse errors
   }

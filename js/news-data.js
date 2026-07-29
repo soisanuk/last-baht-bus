@@ -23,6 +23,11 @@ var NEWS_FEED = [
     "d": "29 Jul 2026"
   },
   {
+    "t": "Suspects sought in young Russians’ disappearance flee",
+    "s": "Bangkok Post",
+    "d": "29 Jul 2026"
+  },
+  {
     "t": "Money trail leads police to suspect in Pattaya tennis coach murder",
     "s": "Pattaya Mail",
     "d": "28 Jul 2026"
@@ -33,18 +38,23 @@ var NEWS_FEED = [
     "d": "28 Jul 2026"
   },
   {
-    "t": "Van plows into waiting traffic in Pattaya, tourists injured",
-    "s": "Pattaya Mail",
-    "d": "28 Jul 2026"
-  },
-  {
     "t": "Four ladyboys arrested over alleged robbery, assault of Australian tourist in Pattaya",
     "s": "Khaosod English",
     "d": "27 Jul 2026"
   },
   {
-    "t": "5 Indians arrested in Thailand for kidnapping fellow nationals for ₹70 lakh; Pakistani mastermind behind plot | India News",
-    "s": "Hindustan Times",
+    "t": "5 Indians arrested in Thailand for kidnapping compatriots; Pakistan-linked mastermind in Dubai under scanner",
+    "s": "Firstpost",
+    "d": "29 Jul 2026"
+  },
+  {
+    "t": "Italian students apologise after Bangkok train incident sparks outrage in Thailand",
+    "s": "The Independent",
+    "d": "27 Jul 2026"
+  },
+  {
+    "t": "Thai YouTuber ‘Hlun Solo’ found dead in Georgia",
+    "s": "Bangkok Post",
     "d": "29 Jul 2026"
   },
   {
@@ -53,35 +63,25 @@ var NEWS_FEED = [
     "d": "29 Jul 2026"
   },
   {
-    "t": "Missing Thai Travel Vlogger Found Dead in Tbilisi, Police Say",
-    "s": "Civil Georgia",
+    "t": "‘Fall 2: Deadpoint’ Official Trailer Finds New Fear 5,000 Feet Above Thailand",
+    "s": "Bloody Disgusting",
     "d": "29 Jul 2026"
   },
   {
     "t": "John Romero announced as keynote speaker for Gamescom Asia x Thailand Game Show",
     "s": "GamesIndustry.biz",
     "d": "27 Jul 2026"
-  },
-  {
-    "t": "Hackers used autonomous AI agent to spy on Thailand's finance ministry",
-    "s": "The Record from Recorded Future News",
-    "d": "27 Jul 2026"
-  },
-  {
-    "t": "Italian students apologise after Bangkok train incident sparks outrage in Thailand",
-    "s": "The Independent",
-    "d": "27 Jul 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-07-29","USD":33.53,"AUD":23.27,"GBP":44.56,"EUR":38.15};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-07-29","temp":27,"humid":97,"code":3,"hi":30,"rain":96};
+var WX_NOW = {"date":"2026-07-30","temp":26,"humid":91,"code":80,"hi":29,"rain":73};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-07-16","first":"639214","last2":"71","front3":["683","709"],"back3":["427","746"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4024,"date":"2026-07-29","baht":63800};
+var GOLD = {"usd":4067,"date":"2026-07-29","baht":64500};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":63667,"thb":2137572};
+var BTC = {"usd":63475,"thb":2122906};
