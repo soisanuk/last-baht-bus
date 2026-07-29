@@ -571,6 +571,8 @@ function _doExamine(arg) {
 
 function _doRead(arg) {
   if (/news|paper/.test(arg)) return _doPaper();
+  if (/column|owl/.test(arg)) return _doColumn(); // READ (THE) COLUMN / NITE OWL
+
   const flavor = _roomRead(arg);
   if (flavor) { _say(flavor); return; }
   if (arg.includes("sign")) {
@@ -2916,7 +2918,7 @@ function startSoi6Mode() {
   _say("THE LAST BAHT BUS", "win");
   _say("Soi 6 · a Pattaya misadventure · Soi Sanuk universe", "dim");
   _say("═══════════════════════════════════", "dim");
-  _say("One week in Pattaya, and you've picked your hill to drink on: SOI 6 — the loudest " +
+  _say("One week in Pattaya, and you've picked your street and planted your flag: SOI 6 — the loudest " +
     "hundred metres in Thailand — with the Queen Vic Inn right in the thick of it. You're " +
     "not leaving the soi this trip; the rest of the city keeps for next time.");
   _say("฿100,000 for the week sits in the bank. ฿1,000 is in your pocket — the rest comes " +

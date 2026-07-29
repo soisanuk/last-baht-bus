@@ -5066,6 +5066,15 @@ const PATRONS = {
         "another look. \"I tried the soi once. {{Nice}} girls. Loud planet. I do " +
         "better with a pane of glass between me and 1999.\"",
         short: "\"Terry holds the corner seat. It's load-bearing. We've never discussed it.\"" },
+      { topic: "navy", text: "\"The hair and the handshake gave it away, huh.\" A flat, unoffended look. " +
+        "\"Twelve years. Cryptologic technician, interpretive — which is Navy for a person who sits in a " +
+        "room with headphones on translating other people's Korean.\" She taps the Discman; the joke lands " +
+        "on herself and she lets it. \"DLI Monterey, then a listening post you're not cleared for and, it " +
+        "turned out, neither was my spine. Two ruptured discs, a diagnosis, and they process you out very " +
+        "politely — folded flag optional.\" The posture doesn't soften; that's the part that stayed. \"You " +
+        "don't demob the reflexes. I still won't sit with my back to a door. Terry's corner seat faces the " +
+        "room — that isn't an accident, and neither is why I picked this bar.\"",
+        short: "\"Twelve years, Navy Korean linguist — DLI, a listening post, then a bad back processed me out. The posture stayed.\"" },
     ],
   },
 
