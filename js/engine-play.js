@@ -776,8 +776,11 @@ function _dartsWobble() {
 
 function _startDarts() {
   if (!_room().darts) { _say("No dartboard here. The Office, the Cricketers, the sports bars — they keep one on the wall."); return; }
-  const { name } = _gameHostess();
-  const opp = name && _rand() < 0.5 ? name : "a leathery expat with his own darts in a belt case";
+  // darts opponents are drinkers, not bar girls — only put a hostess on the oche
+  // if one is actually working this room (never the "hostess on shift" fallback,
+  // which would conjure one in a pub like the Queen Vic).
+  const gh = _gameHostess();
+  const opp = gh.id && _rand() < 0.5 ? gh.name : "a leathery expat with his own darts in a belt case";
   const stake = _takeStake(DARTS_STAKE);
   G.game = { type: "darts", you: 501, opp: 501, oppName: opp.length > 22 ? "the old boy" : opp, oppSkill: 0.62, stake };
   _say(`Chalk up: 501 each, straight off, check out on a double. ${opp} throws for the bull to start and lands it like breathing.`);
@@ -1349,25 +1352,75 @@ function _doBell() {
   G.soc.heat[r] = 0;
   delete G.soc.patronMiffed[r];
   _say("You reach up and RING THE BELL.", "win");
-  _say("The bar detonates. Cheering from the girls, a drum-roll on the counter " +
-    "from the cashier, the mamasan's first fully unguarded smile of the night. " +
-    "Drinks materialise down the length of the bar and every lady in the room " +
-    `now knows your name. (-฿${BELL_PRICE}, ฿${G.money} left — reign while it lasts.)`);
+  const bt = _room().barType;
+  const pool = bt === "pub" ? _BELL_PUB
+    : (bt === "soi6" || bt === "gogo") ? _BELL_GOGO
+    : _BELL_BEER; // beer bars, and any other bar-type, buy a round for the staff
+  _say(`${_pickVary(pool, "bell:" + bt)} (-฿${BELL_PRICE}, ฿${G.money} left — reign while it lasts.)`);
   const rings = G.soc.bells[r];
   if (rings === 2) {
-    _say("That's two bells this visit. The girls are giddy now, the whole room " +
-      "tilting hard your way — hardly anything you try lands wrong.", "win");
+    _say("That's two bells this visit. The whole room's tilting hard your way now — " +
+      "hardly anything you try lands wrong.", "win");
   } else if (rings === 3) {
-    _say("Three bells. You own this bar tonight — the ladies are all over you, " +
-      "the mamasan's looking the other way, and nobody is counting.", "win");
+    _say("Three bells. You own this place tonight — the whole room's looking the other " +
+      "way on your behalf, and nobody is counting.", "win");
   } else if (rings > 3) {
-    _say("Another bell on top of three. The room has been yours since the third; " +
-      "now you are just making noise, and they love you for it.", "win");
+    _say("Another bell on top of three. The room's been yours since the third; now " +
+      "you're just making noise, and they love you for it.", "win");
   }
   _engineSfx("bell");
   _engineSpeak("ชนแก้ว");
   _addHappy(2);
 }
+
+// RING BELL means different things by venue. A go-go bell is a round for the
+// stage and the floor; a beer-bar bell is a round for the handful of staff; a
+// pub bell is the oldest magic there is — a round for the whole house.
+const _BELL_GOGO = [
+  "The bar detonates. Cheering from the girls, a drum-roll on the counter from the cashier, " +
+    "the mamasan's first fully unguarded smile of the night. Drinks materialise down the length " +
+    "of the bar and every lady in the room now knows your name.",
+  "You ring it and the whole floor turns: the girls on stage break character to cheer, the ones " +
+    "off it swarm the rail, the mamasan's guard drops for exactly one smile. A round for everyone " +
+    "working tonight — and everyone working tonight now knows your name.",
+  "The bell goes and the place ignites — a round for the stage and the floor both. Cheers over " +
+    "the bass, a drum-roll from the cashier's cage, hands on your shoulders you didn't invite and " +
+    "don't mind. For one whole song you are the most popular man on Soi 6.",
+  "One pull and the room goes off: drinks down the whole rail, the girls whooping, the DJ " +
+    "shouting something with your description in it. The mamasan lets you have this one.",
+  "You haul the rope and the bar erupts — a round for the ladies on stage and off, every eye and " +
+    "every smile suddenly aimed at you. Expensive way to be handsome. Works every time.",
+];
+const _BELL_BEER = [
+  "A round for the staff, and the little beer bar loves you for it. The two or three girls behind " +
+    "the rail cheer, the cashier bangs the counter, and a cold one lands in front of you before " +
+    "you've even lowered your arm.",
+  "The bell means the staff drink on you, and they do, gladly — whoops from behind the rail, a " +
+    "bottle-opener drum-roll, the whole open front a few degrees warmer. Small bar, big welcome.",
+  "You ring it: a round for everyone working the bar. The girls toast you, the cashier grins, and " +
+    "a comped bottle finds its way back to your hand. Beer-bar economics — everybody wins.",
+  "A round for the house, which here is a handful of staff and whoever wandered in off the soi. " +
+    "Cheers, clinks, and your name suddenly known the length of a very short bar.",
+  "The bell brings the staff's whole attention and their whole thanks: a cheer, a toast, a cold " +
+    "one on the house right back at you. Cheap at the price for a bar this glad to see you.",
+];
+const _BELL_PUB = [
+  "The pub erupts in the particular joy of the British abroad: a round for the house, on you. " +
+    "Glasses go up the length of the bar, Terry included; someone starts a chant that never quite " +
+    "finds its words. You are, briefly and expensively, everyone's best mate.",
+  "You've bought the whole room a drink and the room lets you know it — cheers, a bottle raised " +
+    "from every stool, the barman already lining them up, a hoarse 'GOOD MAN' from over by the " +
+    "dartboard. This is precisely what the bell is for.",
+  "A round for the house, the oldest magic in any pub. The drinkers turn as one, salute, and " +
+    "settle back a notch friendlier. The staff get theirs too — nobody rings the bell and stiffs " +
+    "the bar.",
+  "The bell brings the whole room's head round, then the whole room's goodwill. Beers appear, " +
+    "glasses clink, the regular who's ignored you all week decides you're alright after all. Cheap, " +
+    "for a room full of temporary friends.",
+  "You ring it and the pub does the thing pubs do: a ragged cheer, every glass raised, a round on " +
+    "your tab with the staff cut in. Terry lifts his without a word — which, from Terry, is a " +
+    "standing ovation.",
+];
 
 // ─ Patrons ─
 
@@ -1478,7 +1531,7 @@ function _doPatron() {
       "cashiers, and the cashiers hear everything. That's free, that is.”",
     ][Math.floor(_rand() * 2)]);
   } else if (d <= 3) {
-    _say(["The regular warms up over shared beers: bar gossip, fuel prices, which " +
+    const chat = ["The regular warms up over shared beers: bar gossip, fuel prices, which " +
       "mamasans danced where, back when. “Buy the mama a drink,” he confides. " +
       "“The girls treat you different after. House might even stand you one.”",
       "You and the regular put the world to rights. “See that bell?” he says, " +
@@ -1487,15 +1540,19 @@ function _doPatron() {
       "The regular tells you a long story about a night on Soi 6 in 2009 that " +
       "ends with the phrase “and THAT is why I can't go back to Bristol.” " +
       "Solid company, this man.",
-      "The regular nods at a fresh-faced kid down the bar mooning over a hostess. " +
-      "“White knight. Gonna try and rescue her by Friday, skint by Sunday, Flying " +
-      "Club by high season if his mates don't fly him home first. Seen it a " +
-      "hundred times.” He drinks. “The girls do the arithmetic better than we do.”",
       "The regular leans in, quieter: “You drink on Soi 6, you're drinking with " +
       "the White Dish Group, whoever's name is over the door. Front company. " +
       "Fella called Ryan Powers behind it — Brit, never here, always here. Bars " +
       "run fine. Just don't go asking who owns what.”",
-    ][Math.floor(_rand() * 5)]);
+    ];
+    // the white-knight gag only makes sense where there's a hostess to moon over
+    if (_npcsHere().some(id => NPC_ROLES[id] === "hostess")) {
+      chat.push("The regular nods at a fresh-faced kid down the bar mooning over a hostess. " +
+        "“White knight. Gonna try and rescue her by Friday, skint by Sunday, Flying " +
+        "Club by high season if his mates don't fly him home first. Seen it a " +
+        "hundred times.” He drinks. “The girls do the arithmetic better than we do.”");
+    }
+    _say(chat[Math.floor(_rand() * chat.length)]);
     s.patronFriend = s.patronFriend || {};
     if (!s.patronFriend[G.room]) { s.patronFriend[G.room] = true; _addHappy(1); }
   } else {
