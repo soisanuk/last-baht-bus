@@ -805,12 +805,13 @@ function _describeRoom(full, forceFull) {
       (girl ? `, with ${NPCS[girl].name}'s full attention` : "") + "." :
       "A regular nurses a big Chang at the rail, radiating opinions.", "dim");
   }
-  // WATCH POLICE (the evening checkpoint show) is on hold until Beach Road's
-  // geography is reworked — the junction bars just nudge the sunset for now.
-  // TODO: re-enable the checkpoint announce here once the road layout lands.
+  // The two junction bars look out on the evening's two free shows: the police
+  // checkpoint down the road just south of the soi, and the bay sunset.
   if ((G.room === "blue_dog" || G.room === "stinky_bar") && _shakedownOn()) {
-    _say("Out past the road and the sand the bay is going gold — half the rail has " +
-      "an eye on it. (WATCH SUNSET.)", "dim");
+    _say("Down the road, just south of the soi, the evening checkpoint is in session: " +
+      "officers waving over every bare-headed farang on a motorbike with the bored " +
+      "precision of toll collectors. Half the rail is a regular who ducked in here to " +
+      "dodge exactly that. (WATCH POLICE — or WATCH SUNSET, the bay's going gold too.)", "dim");
   }
   if (G.soc.lockIn && G.soc.lockIn[G.room]) {
     _say("The front door is bolted and the windows were always black. Inside is " +

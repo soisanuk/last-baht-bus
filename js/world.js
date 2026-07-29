@@ -655,9 +655,12 @@ const ROOMS = {
       "sight. Two bars hold the corners of the junction and stare each other down: THE STINKY " +
       "PINKY's sign — a cartoon skunk hoisting a Chang — buzzes over its open front on one " +
       "side, and across the mouth of the soi the BLUE DOG's rail faces the water. From either " +
-      "corner you can still catch the sun going down over the bay. Blue songthaews — the baht " +
-      "buses — rattle past toward the rest of Pattaya, a whole neon city that isn't yours to " +
-      "reach just yet; for now you let them go.",
+      "corner you can still catch the sun going down over the bay. From about five, the police " +
+      "run a checkpoint on Beach Road just south of the junction, waving over helmetless farang " +
+      "for a paperwork stop and an on-the-spot fine — more than a few of the two bars' regulars " +
+      "first came in off the road ducking exactly that. Blue songthaews — the baht buses — " +
+      "rattle past toward the rest of Pattaya, a whole neon city that isn't yours to reach just " +
+      "yet; for now you let them go.",
     busStop: "beachrd",
     revisit: [
       "Back to the foot of Soi 6, the soi blazing inland east, the bay open across the road west, the Stinky Pinky and the Blue Dog eyeing each other across the junction.",
@@ -734,8 +737,10 @@ const ROOMS = {
     desc: "An open-air beer bar holding the beach-side corner at the foot of Soi 6 — no walls, " +
       "no door, just a tin roof, a long rail, and a line of plastic chairs facing out across " +
       "Beach Road to the bay. The Stinky Pinky glowers back from the opposite corner over the " +
-      "mouth of the soi. At the Blue Dog the view IS the entertainment: the sunset first, out " +
-      "over the water and the sand, and then whatever the junction decides to do about it.",
+      "mouth of the soi. At the Blue Dog the view IS the entertainment: the evening police " +
+      "checkpoint down the road to the south, the sunset out over the water and the sand, and " +
+      "then whatever the junction decides to do about it. Half the regulars found the place " +
+      "ducking in off a helmetless motorbike. (WATCH POLICE · WATCH SUNSET.)",
     revisit: [
       "Back onto the Blue Dog's rail, chairs pointed across the road at the bay, the view doing the entertaining.",
       "The Blue Dog folds you back in — no walls, no door, just the water across the road and the Stinky Pinky glowering from the far corner.",
@@ -778,8 +783,10 @@ const ROOMS = {
       "cue chalk. League trophies crowd the back bar; the table is brushed like a " +
       "putting green. Bert — the manager — holds court from the end stool with a " +
       "bottomless Budweiser and opinions on everyone's break. It holds the inland corner at the " +
-      "foot of Soi 6; across the mouth of the soi the Blue Dog faces the water, and from the " +
-      "open front you can watch the sun go down over the bay between shots.",
+      "foot of Soi 6; across the mouth of the soi the Blue Dog faces the water. From the open " +
+      "front you can watch the evening checkpoint work the road to the south — half of Bert's " +
+      "regulars ducked in here to dodge it once and never left — and the sun go down over the " +
+      "bay between shots. (WATCH POLICE · WATCH SUNSET.)",
     revisit: [
       "Back into the Stinky Pinky — lime and cue chalk in defiance of the name, trophies crowding the back bar, the table brushed like a green.",
       "The pool bar takes you back. Bert holds the end stool with a bottomless Budweiser and an opinion on your break already loading.",
@@ -4040,6 +4047,16 @@ const ENCOUNTERS = {
       "not to listen: “Ning also free. VERY boring night, na.”",
     hint: "(Company is ฿700. Ning makes it ฿1400 — cheaper than a bar, but no " +
       "mamasan means nobody to complain to if it goes wrong. YES / NO.)",
+  },
+  noodle: {
+    rooms: ["soi6_street", "soi6_deep"],
+    interactive: true, nightly: true, // the loud ends re-arm their noodle patrol each night
+    th: "ไปไหนคะ", rom: "pai nai kha?",
+    intro: "A girl steps out of an open front brandishing a fluorescent foam pool noodle like " +
+      "a swordsman, plants herself square in your path, and levels it at your chest. \"YOU. " +
+      "Where you go? You come MY bar. NOW.\" It is not entirely a question. The noodle wavers, " +
+      "loaded and ready.",
+    hint: "(Go with her, or walk on and take the consequences. YES / NO.)",
   },
   coconutbar: {
     rooms: ["north_beach"],

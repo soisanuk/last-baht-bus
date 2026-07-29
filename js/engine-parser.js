@@ -2151,7 +2151,8 @@ const _HELP = `Common commands:
   RIDE BUS TO <place> · MOTOSAI TO <place> · PAY <amount>
   BUY <thing> · SELL BOTTLES · READ <thing> · READ SIGN
   WATCH TV (bars) · READ PAPER (bars & 7-Elevens) — the day's real headlines
-  WATCH SUNSET · WATCH POLICE (Blue Dog, 6-7pm — best free show in town)
+  WATCH POLICE · WATCH SUNSET (Blue Dog & Stinky Pinky, early evening — the junction show)
+  WATCH SOI (Queen Vic balcony, or the quiet middle of Soi 6 — watch the parade, don't join it)
   WATCH DRAG (The Peacock Cabaret, Supertown/Jomtien — tip the queens)
   WEATHER · SCORES (real football) · LOTTERY (the real GLO draw)
   PLAY CONNECT 4 · PLAY JACKPOT [bet] · PLAY POOL   (in the beer bars)
@@ -2787,10 +2788,12 @@ function doCommand(input) {
     case "knock": case "shout": case "yell":
       _say(_MISC_VERBS[v === "yell" ? "shout" : v]); break;
     case "watch":
-      if (G.room === "qv_room" && (!arg || /soi|street|balcony|show|chaos|girls/.test(arg)))
+      if (G.room === "qv_room" && (!arg || /soi|street|balcony|show|chaos|girls|parade/.test(arg)))
         _doWatchSoi();
-      else if ((G.room === "blue_dog" || G.room === "stinky_bar") && (!arg || /police|road|show|shakedown|bike|checkpoint|sunset|bay|sea|view/.test(arg)))
-        _doWatchSunset(arg);
+      else if ((G.room === "blue_dog" || G.room === "stinky_bar") && (!arg || /police|road|show|shakedown|bike|checkpoint|sunset|bay|sea|view|sun/.test(arg)))
+        _doWatchJunction(arg);
+      else if ((G.room === "soi6_mid" || G.room === "sunset_rail" || G.room === "bay_watch" || G.room === "sandy_toes") && (!arg || /soi|street|parade|people|show|girls|circus|watch/.test(arg)))
+        _doWatchParade();
       else if (G.room === "peacock_cabaret" && (!arg || /drag|show|cabaret|revue|queen|stage|dance|petch|mala/.test(arg)))
         _doWatchDrag();
       else if (!arg || /tv|news|television/.test(arg)) _doTv();
