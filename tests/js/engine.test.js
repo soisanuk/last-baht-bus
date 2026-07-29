@@ -3633,6 +3633,38 @@ test("factions: Gavin's errand is opt-in — standing moves only on the deed, ne
   assert.ok(!state().flags.wdgResolved, "and you never helped him hold");
 });
 
+test("factions: cross Bert (go WDG) and his girls close ranks — no barfine at the Stinky", () => {
+  startSoi6Mode(); state().flags.act1Done = true;
+  state().room = "stinky_bar";
+  const girl = _npcsHere().find(id => NPC_ROLES[id] === "hostess");
+  const nm = NPCS[girl].name.toLowerCase();
+  // neutral: the usual barfine liturgy applies, not a loyalty block
+  out = []; run("barfine " + nm);
+  assert.doesNotMatch(lastOut(), /after Bert|closed to you|not here/i, "no loyalty block when you're neutral");
+  // once you're White Dish's man, none of Bert's girls will go with you
+  state().faction.wdg = 2;
+  out = []; run("barfine " + nm);
+  assert.match(lastOut(), /Bert|closed to you/i, "his girls refuse the barfine");
+  // and it's Bert's bar only — other bars are unaffected
+  state().room = "pink_lotus";
+  const g2 = _npcsHere().find(id => NPC_ROLES[id] === "hostess");
+  out = []; run("barfine " + NPCS[g2].name.toLowerCase());
+  assert.doesNotMatch(lastOut(), /closed to you|not any girl/i, "the block is the Stinky only");
+});
+
+test("factions: do right by Bert and his girls warm to you — an easy barfine at the Stinky", () => {
+  startSoi6Mode(); state().flags.act1Done = true;
+  state().room = "stinky_bar";
+  const girl = _npcsHere().find(id => NPC_ROLES[id] === "hostess");
+  const nm = NPCS[girl].name.toLowerCase();
+  state().faction.indie = 2; // Bert's ally
+  state().money = 5000;
+  run("buy drink for " + nm); // just one lady drink — normally not enough at a beer bar
+  out = []; run("barfine " + nm);
+  assert.match(lastOut(), /did right by Bert|drink easy|warmer for it/i, "his girls don't make you work for it");
+  assert.ok(state().pendingBf, "the barfine proceeds to the number");
+});
+
 test("White Dish quest: Kesinee vets you before she talks — the quest flag is trust-gated", () => {
   startSoi6Mode(); state().flags.act1Done = true;
   state().room = "kitten_corner";

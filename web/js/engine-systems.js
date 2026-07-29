@@ -249,6 +249,23 @@ function _doHire(arg) {
   _addHappy(bonded ? 8 : 5);
 }
 
+// Bert's girls, closing ranks after you threw in with White Dish. {name} is the
+// girl you tried to barfine. Repeatable, so pooled.
+const _BERT_LOYAL = [
+  "{name} starts to smile, then something shutters behind her eyes — she's clocked whose water you " +
+    "carry now. \"You come to Bert's bar, after Bert?\" She steps back off the stool. \"No. Not me, not " +
+    "any girl here.\" The whole rail has gone quiet and cold. Bert looks after his girls; his girls look " +
+    "after Bert. Not tonight, and not any night you're White Dish's man.",
+  "You start the ask and {name} is already shaking her head, gently, finally. \"We know who buy our som " +
+    "tam when it rain, tilac. Not the man with the QR code. Not you.\" She turns her shoulder; down the " +
+    "bar another girl does the same, and another — a slow wave of no. Bert doesn't even look up from the felt.",
+  "\"Barfine? Me?\" {name} laughs, and there's no fun in it. \"You sell out the man who keeps this bar " +
+    "open, then you want to take his girl home?\" She flicks two fingers — not an invitation, a dismissal. " +
+    "\"Every girl here heard what you did. The Stinky's closed to you, that way.\"",
+  "{name} glances to Bert at the end of the bar, reads something in the set of his shoulders, and steps " +
+    "back. \"Sorry, tilac. Not you. Not here.\" No anger — just a door quietly shut. Bert's girls don't " +
+    "cross Bert, not for you, not for all the baht in Ryan Powers' spreadsheet.",
+];
 function _doBarfine(arg) {
   const rm = _room();
   if (rm.hostBar) { _doHire(arg); return; }
@@ -266,6 +283,13 @@ function _doBarfine(arg) {
   if (!id || !NPC_ROLES[id]) { _say(arg ? "She's not working this bar." : "Barfine whom, exactly?"); return; }
   const name = NPCS[id].name, role = NPC_ROLES[id];
   if (role === "mamasan") { _say(`You cannot barfine ${name}. She IS the bar. She looks almost flattered. Almost.`); return; }
+  // Cross Bert (go WDG) and his whole bar closes to you — the girls run on his
+  // goodwill, not White Dish's, and none of them will go with the man who came
+  // in to sell him out. (See Bert's iced greeting; same trigger.)
+  if (G.room === "stinky_bar" && _faction("wdg") > 0) {
+    _say(_pickVary(_BERT_LOYAL, "bertloyal").replace("{name}", name));
+    return;
+  }
   if (role === "cashier" && (G.soc.bells[G.room] || 0) < 2) {
     _say(`${name} taps the till: somebody has to count the money. (Cashiers do go, ` +
       "sometimes — for the right customer, on the right night. The bell defines both.)");
@@ -282,7 +306,11 @@ function _doBarfine(arg) {
     return;
   }
   const bt = _room().barType;
-  if (_favor(id) < (bt === "soi6" ? 2 : 4)) {
+  // Do right by Bert (or spite White Dish) and his whole bar warms to you: his
+  // girls need less coaxing and won't turn a friend of Bert's down. The mirror
+  // of the WDG-stooge freeze-out above.
+  const bertAlly = G.room === "stinky_bar" && (_faction("indie") > 0 || _faction("wdg") < 0);
+  if (_favor(id) < (bertAlly ? 1 : bt === "soi6" ? 2 : 4)) {
     _say(bt === "soi6" ?
       `${name} laughs, not unkindly: “Lady drink first, na. One or three.” Even ` +
       "Soi 6 has liturgy." :
@@ -290,10 +318,16 @@ function _doBarfine(arg) {
       "this is Pattaya, not a vending machine.”");
     return;
   }
-  // She can say no — and the sting is that it lands after the drinks you
-  // invested in the rapport. Veterans ask early for exactly this reason.
-  const refusal = _bfRefusal(id, bt);
-  if (refusal) { _bfRefusalSay(id, refusal); return; }
+  if (bertAlly) {
+    _say(`Word's got round that you did right by Bert, and the whole rail is a degree ` +
+      `warmer for it. ${name} doesn't make you work for the yes — Bert's friends drink ` +
+      "easy at the Stinky.", "dim");
+  } else {
+    // She can say no — and the sting is that it lands after the drinks you
+    // invested in the rapport. Veterans ask early for exactly this reason.
+    const refusal = _bfRefusal(id, bt);
+    if (refusal) { _bfRefusalSay(id, refusal); return; }
+  }
   // The negotiation. On Soi 6 the girl quotes upfront — volume business, no
   // mystery. Everywhere else the girl won't name the number (she gets a cut):
   // the mamasan or the cashier drifts over to do the arithmetic.
