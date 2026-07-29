@@ -3454,6 +3454,7 @@ test("Soi 6 mode: starts at the Queen Vic, confined to the soi, no bus out, saba
   assert.equal(state().hotel, "queenvic");
   assert.equal(state().day, 1);
   assert.ok(state().flags.hasWallet && state().flags.act1Done, "has card, skips Act One");
+  assert.ok(state().battery >= 80, "starts charged — not the Act-One 13% that would kill the phone by turn 13");
   // confined: the roads out of the soi are refused; in-soi moves are fine
   state().room = "beach_rd_n";
   run("s"); // beach_rd_c is out of bounds
@@ -3564,6 +3565,31 @@ test("SLEEP: turn in from the room, or climb up from the pub below, to end the n
   run("sleep");
   assert.match(lastOut(), /bed's up|get there and SLEEP/i, "elsewhere, point at the room");
   assert.equal(state().day, 3, "and no night lost from the wrong place");
+});
+
+test("adopting the soi dog gets you a Soi Dog Foundation donation text the next day", () => {
+  startSoi6Mode();
+  state().dog = { since: 1 };
+  out = []; run("look");
+  assert.doesNotMatch(lastOut(), /Soi Dog Foundation/i, "nothing the day you adopt him");
+  // the following day it lands, from a non-NPC sender, with the real charity link
+  state().day = 2;
+  out = []; run("look");
+  assert.match(lastOut(), /phone buzzes/i, "the Foundation texts the next day");
+  out = []; run("check messages");
+  assert.match(lastOut(), /Soi Dog Foundation:/, "rendered under the Foundation's name, not an NPC's");
+  assert.match(lastOut(), /soidog\.org\/content\/make-donation/, "with the donation link from the dog quest");
+  // once only
+  state().day = 3; out = []; run("look");
+  assert.doesNotMatch(lastOut(), /phone buzzes/i, "fires exactly once");
+});
+
+test("a last-night adoption gets the Soi Dog text the same day (no next day to wait for)", () => {
+  startSoi6Mode();
+  state().day = 7;
+  state().dog = { since: 7 };
+  out = []; run("look");
+  assert.match(lastOut(), /phone buzzes/i, "same-day on the final night of the capped week");
 });
 
 test("WATCH TV works in your hotel room, not only in bars", () => {

@@ -892,6 +892,7 @@ function _tick() {
   _closingTick(); // midnight: gents/Soi 6/Darkside give last call, then bolt or shutter
   _lastBusWarn();  // ~01:30: heads-up that the last ฿15 ride home is about to leave
   _maybeIncomingText();
+  _soidogTick();   // the day after you adopt the soi dog, the Foundation texts for a donation
   if (G.lightOn && G.battery > 0) {
     G.battery--;
     if (G.battery === 0) {
