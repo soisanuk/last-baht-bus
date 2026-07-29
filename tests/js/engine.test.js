@@ -3584,6 +3584,7 @@ test("Soi 6 mode won't offer a quest you can't finish in the pocket (Shamrock is
 test("dialogue state machine: Angela gates the heavy stuff behind trust, then opens up", () => {
   startSoi6Mode();
   state().room = "queen_vic"; state().flags.act1Done = true;
+  state().lastSaleng = 99999; state().lastPeddler = 99999; // startSoi6Mode's newGame reset the beforeEach suppression
   const st = () => state().npc.angela || {};
   // a stranger asking the heavy question is deflected — she won't open up cold
   out = []; run("ask angela about navy");
@@ -3611,6 +3612,7 @@ test("dialogue state machine: Angela gates the heavy stuff behind trust, then op
 
 test("factions: Gavin's errand is opt-in — standing moves only on the deed, never on declining", () => {
   startSoi6Mode(); state().flags.act1Done = true;
+  state().lastSaleng = 99999; state().lastPeddler = 99999; // startSoi6Mode's newGame reset the beforeEach suppression
   const fac = () => state().faction;
   // hearing Gavin's pitch puts the errand on offer but changes nothing
   state().room = "golden_dragon";
@@ -3635,6 +3637,7 @@ test("factions: Gavin's errand is opt-in — standing moves only on the deed, ne
 
 test("factions: cross Bert (go WDG) and his girls close ranks — no barfine at the Stinky", () => {
   startSoi6Mode(); state().flags.act1Done = true;
+  state().lastSaleng = 99999; state().lastPeddler = 99999; // startSoi6Mode's newGame reset the beforeEach suppression
   state().room = "stinky_bar";
   const girl = _npcsHere().find(id => NPC_ROLES[id] === "hostess");
   const nm = NPCS[girl].name.toLowerCase();
@@ -3652,8 +3655,26 @@ test("factions: cross Bert (go WDG) and his girls close ranks — no barfine at 
   assert.doesNotMatch(lastOut(), /closed to you|not any girl/i, "the block is the Stinky only");
 });
 
+test("autocomplete: 'buy drink for' completes with the ladies present, not the bar menu", () => {
+  startSoi6Mode(); state().flags.act1Done = true;
+  state().lastSaleng = 99999; state().lastPeddler = 99999; // startSoi6Mode's newGame reset the beforeEach suppression
+  state().room = "pink_lotus";
+  const here = _npcsHere().filter(id => NPC_ROLES[id]).map(id => NPCS[id].name.toLowerCase());
+  const c = engineComplete("buy drink for ");
+  assert.ok(c.length && c.every(n => here.includes(n)), "suggests the working ladies");
+  assert.deepEqual(engineComplete("buy drink for j").sort(),
+    here.filter(n => n.startsWith("j")).sort(), "and filters by the partial name");
+  // the bar menu still completes normally for a bare buy
+  assert.ok(engineComplete("buy ").includes("beer"), "bare BUY still lists the menu");
+  // bras and the pastie game are deliberately undocumented finds — never chipped
+  assert.ok(!engineComplete("buy ").includes("bra for"), "bra is off the menu chips");
+  assert.ok(!engineComplete("buy bra for ").some(n => here.includes(n)), "and 'buy bra for' doesn't chip names either");
+  assert.ok(!engineComplete("throw ").some(c => /cover|pastie|nipple/.test(c)), "the pastie game is not chipped");
+});
+
 test("factions: do right by Bert and his girls warm to you — an easy barfine at the Stinky", () => {
   startSoi6Mode(); state().flags.act1Done = true;
+  state().lastSaleng = 99999; state().lastPeddler = 99999; // startSoi6Mode's newGame reset the beforeEach suppression
   state().room = "stinky_bar";
   const girl = _npcsHere().find(id => NPC_ROLES[id] === "hostess");
   const nm = NPCS[girl].name.toLowerCase();
@@ -3667,6 +3688,7 @@ test("factions: do right by Bert and his girls warm to you — an easy barfine a
 
 test("White Dish quest: Kesinee vets you before she talks — the quest flag is trust-gated", () => {
   startSoi6Mode(); state().flags.act1Done = true;
+  state().lastSaleng = 99999; state().lastPeddler = 99999; // startSoi6Mode's newGame reset the beforeEach suppression
   state().room = "kitten_corner";
   // cold, she brushes you off and withholds the quest flag
   out = []; run("ask kesinee about white dish");
@@ -3682,6 +3704,7 @@ test("White Dish quest: Kesinee vets you before she talks — the quest flag is 
 
 test("TALK TO PATRON resolves to a named regular present, not the faceless archetype", () => {
   startSoi6Mode(); state().flags.act1Done = true;
+  state().lastSaleng = 99999; state().lastPeddler = 99999; // startSoi6Mode's newGame reset the beforeEach suppression
   state().room = "queen_vic"; state().lastSaleng = 99999; state().lastPeddler = 99999;
   out = []; run("talk to patron");
   assert.match(lastOut(), /Mort|Angela/, "a real named regular holds court at the Queen Vic");

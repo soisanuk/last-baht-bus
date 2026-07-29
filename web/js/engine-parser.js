@@ -2213,8 +2213,6 @@ const _HELP = `Common commands:
   WEATHER · SCORES (real football) · LOTTERY (the real GLO draw)
   PLAY CONNECT 4 · PLAY JACKPOT [bet] · PLAY POOL   (in the beer bars)
   FLIRT/KISS/SPANK/FONDLE <lady> · BUY DRINK FOR <lady> · BUY BEER · BUY MAN DRINK (for the bar manager)
-  THROW COVER [AT <lady>] (the ceiling game — warm her up first)
-  BUY BRA FOR <lady> (฿200 — makes FONDLE more interesting)
   RING BELL (฿300, instant popularity) · TALK TO PATRON · BARFINE <lady>
   BUY CONDOM (฿40 a pack, any 7-Eleven — a barfine uses one; go without at your peril)
   Host bar (The Adonis Club, Supertown): BUY DRINK FOR <host> · HIRE <host> (premium prices; all welcome)
@@ -2251,7 +2249,7 @@ const _COMPLETE_VERBS = [
   "look", "examine", "take", "drop", "inventory", "go", "enter", "talk to",
   "ask", "give", "buy", "sell bottles", "pay", "wai", "say", "ride bus to",
   "motosai to", "travel", "light", "charge phone", "read", "use", "open", "play",
-  "flirt", "kiss", "spank", "fondle", "throw cover", "ring bell", "barfine", "massage", "special", "soapy", "meet", "eat", "drink",
+  "flirt", "kiss", "spank", "fondle", "ring bell", "barfine", "massage", "special", "soapy", "meet", "eat", "drink",
   "sleep", "tv", "column", "watch", "weather", "scores", "lottery", "map", "time", "tip", "wave", "phone",
   "photo", "call", "shower", "withdraw", "cheers", "tao rai", "borrow", "repay", "hire", "pet", "feed", "rename", "dance", "sing", "swim",
   "smell", "listen", "diagnose", "get tested", "clinic", "apologize", "quests", "accept", "abandon", "contact",
@@ -2374,7 +2372,15 @@ function _completePool(verb, ctx) {
     case "give":
       return ctx.length >= 2 ? _cNpcsHere() : _cInv().map(_cItemWord);
     case "buy": case "order": {
-      const barItems = ["beer", "water", "lady drink for", "bra for", "charger", "toastie", "food",
+      // "buy [lady] drink for <name>" — once the drink's named, complete WHO it's
+      // for with the ladies (or hosts) in the room, not the bar menu again.
+      // ("man drink" is for the manager, so no name.) BRA is deliberately left out
+      // of the chips — an undocumented find, like the pastie game.
+      const rest = ctx.slice(1);
+      if (rest.some(w => /^(drink|lady)$/.test(w)) && !rest.includes("man")) {
+        return _room().hostBar ? _cNpcsHere() : girls();
+      }
+      const barItems = ["beer", "water", "lady drink for", "charger", "toastie", "food",
         "round for band"];
       if (_room().seven) barItems.push("condom"); // 7-Eleven staple
       if (_managerHere()) barItems.splice(1, 0, "man drink"); // early, so it survives the 8-result cap
@@ -2417,7 +2423,9 @@ function _completePool(verb, ctx) {
     case "hire": return _room().hostBar ? ["arm", "win"] : [];
     case "check": return ["messages"];
     case "throw": case "toss": case "chuck": case "fling":
-      return ctx.length >= 2 ? girls() : ["cover", "pastie", "nipple cover"];
+      // darts only; the pastie/nipple-cover ceiling game is an undocumented find,
+      // not a chip suggestion (still works if you type it — see _doThrowCover).
+      return _room().darts ? ["darts"] : [];
     case "say": case "speak":
       // a matched phrase already sitting there → offer who to aim it at
       return ctx.slice(1).some(w => matchThaiPhrase(w))
