@@ -28,7 +28,7 @@ const ATM_DENOMS = [1000, 5000, 10000];
 // The Soi 6 challenge mode confines movement to this pocket of the map.
 const SOI6_ROOMS = new Set([
   "qv_room", "queen_vic", "soi6_street", "soi6_mid", "soi6_deep",
-  "pink_lotus", "golden_dragon", "sunset_dreams", "kitten_corner", "cherry_pop", "ruby_kiss",
+  "pink_lotus", "orchid_room", "golden_dragon", "sunset_dreams", "kitten_corner", "cherry_pop", "ruby_kiss",
   "beach_rd_n", "stinky_bar", "blue_dog", "sunset_rail", "bay_watch", "sandy_toes",
   "north_beach",
 ]);
@@ -1367,12 +1367,15 @@ const ROOMS = {
   pink_lotus: {
     name: "Pink Lotus Lounge",
     region: "Soi 6",
-    bar: "Pink Lotus Lounge", barType: "soi6",
-    desc: "The front is open to the street; half the bar is technically the pavement. Neon " +
-      "tubes frame the sign in three colours simultaneously. Inside, the pink is structural " +
-      "— walls, barstools, the girls' outfits, arguably the air itself. Joy is already " +
-      "talking before you sit down. The staircase at the back leads somewhere the menu " +
-      "doesn't mention.",
+    bar: "Pink Lotus Lounge", barType: "soi6", owner: "wdg",
+    desc: "White Dish's flagship, and the loudest argument for why the group should not be " +
+      "allowed nice things. The front is open to the street; half the bar is technically the " +
+      "pavement. Neon tubes frame the sign in three colours simultaneously. Inside, the pink " +
+      "is structural — walls, barstools, the girls' outfits, arguably the air itself. Joy is " +
+      "already talking before you sit down. A staircase at the back climbs to the short-time " +
+      "rooms; beside it, a velvet-roped, unmarked door leads to the ORCHID ROOM — the group's " +
+      "members-only back room, and very much not for tonight's walk-up trade. (GO BACK, if you " +
+      "think you're on the list.)",
     revisit: [
       "Back into the Pink Lotus and three hands find you at once — a lap claimed, a thigh against yours, Joy's mouth already at your ear: \"Lady drink first, then upstairs, na? I show you why they call it Pink.\"",
       "The pink swallows you again. No warm-up here — a girl is in your lap doing the math on your shirt before you have sat. \"You buy me drink, handsome? Then up. I make you forget the flight home.\"",
@@ -1383,7 +1386,30 @@ const ROOMS = {
       "Into the Pink Lotus, where nobody wastes your time or theirs: a lap, a hand, a mouth at your ear naming a number and a room, and the fairy lights doing their best to make it romantic.",
       "Back onto a pink stool with a girl already arranging herself across you. \"You think about me all day? Liar.\" She laughs, delighted. \"Okay — buy the drink, we go up, you think about me tomorrow.\"",
     ],
-    exits: { out: "soi6_street" },
+    exits: { out: "soi6_street", back: "orchid_room" },
+  },
+  orchid_room: {
+    name: "The Orchid Room",
+    region: "Soi 6",
+    bar: "The Orchid Room", barType: "soi6", owner: "wdg", vip: true,
+    desc: "The name is the last classy thing about it. Ryan Powers wanted a members' club — " +
+      "leather, low light, single malt, discretion — and got a bacchanal, because the room " +
+      "curdled to match its owner. The 'hostesses' start the night topless and end it well " +
+      "past that; the low light is a strobe; the discretion is a joke told at volume. The " +
+      "clientele is the soi's real economy: high rollers who tip in colours the pavement " +
+      "trade never sees, and at the corner tables the men the monthly envelope actually pays " +
+      "— a patched MC president holding court over a bottle of Blue Label, and, at the best " +
+      "table in the room, a soft-spoken Thai man in an unremarkable shirt whom everyone, the " +
+      "MC president included, is very careful to defer to. On a raised banquette at the back, " +
+      "filming himself over all of it, is Ryan Powers — actually, improbably, down tonight.",
+    revisit: [
+      "Back into the Orchid Room and the strobe and the noise and the skin, the members' club Powers keeps calling classy while it proves him wrong in every direction at once.",
+      "The Orchid takes you back into its expensive bacchanal — the high rollers, the MC patches, the quiet Thai man at the good table, and Powers on his banquette narrating himself to his own phone.",
+      "Back past the velvet rope into the wild dark. Nobody here is walk-up trade; everybody here is somebody's problem, and Powers throws you a two-fingered salute without pausing his livestream.",
+      "The back room again — topless going on nude, Blue Label going on trouble, and the one soft-spoken man everyone watches without looking at him. You've learned to sit where you can see the door.",
+      "Back into the Orchid, where the money is loud, the girls are louder, the real power is silent, and Ryan Powers mistakes the whole arrangement for something he built.",
+    ],
+    exits: { out: "pink_lotus" },
   },
   golden_dragon: {
     name: "Golden Dragon Bar",
@@ -2831,6 +2857,47 @@ const NPCS = {
     ],
   },
 
+  powers: {
+    name: "Ryan Powers", emoji: "🕶️",
+    room: "orchid_room",
+    desc: "Late thirties dressed for late twenties: a linen shirt one button too honest, a watch " +
+      "that wants to be noticed, sunglasses on indoors at midnight. He films himself more than he " +
+      "talks and talks more than he listens. Up close, the empire is just a man who has never once " +
+      "been told no by anyone he pays.",
+    dialogue: [
+      { text: "\"You made it in.\" He doesn't get up; he does angle his phone so you're in frame. " +
+          "\"That means somebody vouched, which means you're useful, which means we're basically " +
+          "FAMILY now.\" A grin with a tooth too many. \"Ryan Powers. But you knew that. Everyone " +
+          "knows that.\" He sweeps a hand at the room like a man showing off a yacht. \"The Orchid. " +
+          "I built this. Well — I had the VISION. The vision did the rest.\"",
+        short: "\"You made it in — basically FAMILY now. Ryan Powers. I built this. Well, I had the VISION.\"" },
+      { topic: "white dish", text: "He lights up; the business is his favourite subject, narrowly ahead " +
+          "of himself. \"Twenty-four rooms and counting. I came here with six hundred quid and a laptop " +
+          "and I OUT-HUSTLED an entire industry of lazy expats crying into their Changs.\" He says " +
+          "'hustle' like a prayer. \"People call it ruthless. I call it standards. The soi had no " +
+          "systems, no data, no BRAND. I gave it a brand.\" He does not notice, or does not care, that " +
+          "the brand is a topless strobe-lit room full of criminals.",
+        short: "\"Twenty-four rooms. Came with six hundred quid, OUT-HUSTLED the whole soi. Not ruthless — standards.\"" },
+      { topic: "bert", text: "\"The pool bar? The old fella?\" He waves it away with his phone. " +
+          "\"Sentiment. Sentiment doesn't scale, mate. He sells or he dies, and either way White Dish " +
+          "holds the paper on the building, so.\" A shrug that thinks it's charming. \"No hard feelings. " +
+          "I don't do hard feelings. Hard feelings are a poor man's hobby.\"",
+        short: "\"The pool bar? Sentiment doesn't scale. He sells or he dies; we hold the paper either way.\"" },
+      { topic: "jail", text: "\"Jail?\" The laugh comes a shade too fast. \"Some blogger keeps writing " +
+          "that. White Dish this, corruption that. Let him.\" He leans back. \"I am not going to jail. " +
+          "You know who goes to jail? People who can't afford NOT to.\" He taps the table where the " +
+          "arithmetic presumably happens. \"Everything here is looked after. Everything. That's not a " +
+          "crime, that's OPERATIONS.\"",
+        short: "\"I'm not going to jail. Jail's for people who can't afford not to. It's not corruption, it's OPERATIONS.\"" },
+      { topic: "syndicate", text: "For the first time his phone goes down. \"Don't—\" He recovers, " +
+          "lowers his voice, leans in, and for one honest second is a real person and a frightened one. " +
+          "\"That table is not a topic. That gentleman is the reason everything here is 'looked after.' " +
+          "I write a number every month; he decides if it's the right number. I don't know his name. I " +
+          "don't WANT his name.\" The grin snaps back on like a switched light. \"Anyway! Drink? The " +
+          "girls? Whatever you want, it's handled — you're FAMILY.\"",
+        short: "(Phone down, voice low.) \"That table's not a topic. He decides if my number's the right number. I don't want his name.\"" },
+    ],
+  },
   doug: {
     name: "Doug", emoji: "🥃",
     room: "stinky_bar",
@@ -5933,6 +6000,7 @@ const ROOM_GEO = {
   // Soi 6 (Soi Yodsak) — runs inland east off Beach Road: west end, middle, east end
   soi6_street:      [12.9448, 100.8858],
   pink_lotus:       [12.9452, 100.8857],
+  orchid_room:      [12.9453, 100.8856],
   golden_dragon:    [12.9447, 100.8858],
   sunset_dreams:    [12.9445, 100.8859],
   soi6_mid:         [12.9448, 100.8863],

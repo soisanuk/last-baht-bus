@@ -39,6 +39,12 @@ const _SOI6_BOUND = [
   "One week, one street: those were the terms. Pattaya can wait. Back into Soi 6.",
   "You could. You don't. For seven days Soi 6 is the entire world by your own decree — and there's plenty of world left in it.",
 ];
+const _ORCHID_BOUNCER = [
+  "A man the size of a doorway fills the doorway. He doesn't ask a question; he just looks at you until you understand the answer. \"Members,\" he says, once. You are not, yet, a member.",
+  "The velvet rope stays hooked. The doorman glances at a phone, glances at you, and finds no match. \"Not tonight, boss.\" The 'boss' is doing a lot of work, and none of it is for you.",
+  "You reach for the rope and a hand the weight of a Chang crate settles on your shoulder. \"This one's White Dish's room. You White Dish?\" You are not, and he already knew it, and that was the whole conversation.",
+  "The doorman doesn't move and doesn't blink. \"Friends of the group only.\" A beat. \"You want in, be a friend of the group. Everybody knows how that works.\" The rope does not lift.",
+];
 const _NOT_CARRYING = [
   "You're not carrying that.",
   "You pat your pockets. Not there.",
@@ -184,6 +190,10 @@ function _arriveAt(to) {
   // Soi 6 challenge mode fences you into the soi + its beach — the single choke
   // point for walking, fast-travel, and motosai (the bus is refused in _doRideBus).
   if (G.mode === "soi6" && !SOI6_ROOMS.has(to)) { _say(_pickVary(_SOI6_BOUND, "soi6bound")); return; }
+  // The Orchid Room is White Dish's members-only back room — the velvet rope only
+  // lifts for a friend of the group (Gavin's "doors open for our friends"). Do the
+  // errand, earn the standing, get in. It's also the one place Ryan Powers ever is.
+  if (to === "orchid_room" && _faction("wdg") < 2) { _say(_pickVary(_ORCHID_BOUNCER, "orchidrope")); return; }
   // closed for the night? (also covers fast-travel, which skips the doGo gate)
   if (_closedNow(to)) { _say(_closedMsg(to)); return; }
   // barred from a queer venue (no barType, so the bar-ban block below misses it):
