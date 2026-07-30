@@ -2774,7 +2774,7 @@ const NPCS = {
       // Kesinee vets you before she'll talk White Dish — canon: "she'll talk
       // straight if you are." A stranger gets the careful brush-off + a breadcrumb;
       // the real intel (and the quest flag) opens once you've earned a little trust.
-      { topic: "white dish", when: (st) => st.trust < 2,
+      { topic: "white dish", when: (st) => st.trust < 2, deflect: true,
         text: "The smile holds; the eyes go flat and careful. \"White Dish. Hm. Who send you to ask " +
           "Kesinee that?\" She lets the question sit. \"Bert, maybe. Or maybe you are White Dish own boy, " +
           "come see who talks.\" She turns the gold bracelet. \"Buy a girl a drink. Ask me about my bar. Let " +
@@ -2795,7 +2795,7 @@ const NPCS = {
         "tips better than the name, they tell me.\" She does not sound convinced. \"Buy a girl a drink. That " +
         "part still works the old way.\"",
         fx: (st) => { st.trust = Math.min(5, st.trust + 1); } },
-      { topic: "police", when: (st) => st.trust < 3,
+      { topic: "police", when: (st) => st.trust < 3, deflect: true,
         text: "The smile does not move. \"The police? Why you ask Kesinee about the police.\" A beat, cool " +
           "as the aircon. \"Some things I tell a friend. You are not a friend yet — you are a nice face who " +
           "buys drinks. Keep buying. Keep coming. Maybe.\"",
