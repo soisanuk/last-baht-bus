@@ -426,6 +426,39 @@ test("Joy asks your dream back, and it is remembered", () => {
   assert.equal(state().player.said.dream, "a quiet bar");
 });
 
+test("an NPC quotes back what you told them (richer callback)", () => {
+  state().room = "queen_vic";
+  run("angela"); run("london"); run("bye"); // she now knows home = london
+  out = [];
+  run("angela"); // return visit
+  assert.match(lastOut(), /London/, "she opens by quoting your hometown back");
+});
+
+test("_fillSaid fills %key% tokens from memory, leaves unknown ones and percentages", () => {
+  state().player = { said: { home: "london" } };
+  assert.equal(_fillSaid("From %home%, then?"), "From London, then?");
+  assert.equal(_fillSaid("Your %job%?"), "Your %job%?", "unknown key untouched");
+  assert.equal(_fillSaid("a 12% imperial stout"), "a 12% imperial stout", "no false match on percentages");
+});
+
+test("filler hostesses are inquisitive but shallow (they ask a small question)", () => {
+  const h = Object.keys(NPCS).find(id => NPCS[id].filler && NPCS[id].dialogue[0].asks);
+  assert.ok(h, "the hostess factory attaches a shallow ask");
+  state().room = _npcRoom(h);
+  state().lastSaleng = 99999; state().lastPeddler = 99999;
+  run(h);
+  assert.ok(state().convoQ && state().convoQ.id === h, "she puts a small question to you");
+  assert.ok(["home", "stay", "girlfriend", "return"].includes(state().convoQ.key),
+    "and it's one of the stock, limited-English openers");
+});
+
+test("an expat regular asks a broader question (Bert)", () => {
+  state().room = "stinky_bar";
+  run("bert");
+  assert.ok(state().convoQ && state().convoQ.key === "why",
+    "Bert asks what brought you out here — the deeper kind of question");
+});
+
 test("compliment warms a known partner (+1 trust, once per day)", () => {
   run("angela"); // meeting her sets dstate=met, trust=1
   const t0 = _npcState("angela").trust;
