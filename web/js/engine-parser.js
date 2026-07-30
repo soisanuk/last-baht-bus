@@ -1536,7 +1536,11 @@ function _doScore() {
   _say(`hunger ${G.hunger} · thirst ${G.thirst}` +
     (G.soc.drunk ? ` · ${G.soc.drunk} bottle${G.soc.drunk > 1 ? "s" : ""} deep` : "") +
     (G.hurt ? ` · banged up (${G.hurt}/3)` : ""), "dim");
-  if (_flag("act1Done")) _say(`✓ ACT ONE COMPLETE — scored ${G.score}` +
+  // Soi 6 mode never plays Act One (act1Done/hasWallet are force-set at start),
+  // so the "ACT ONE COMPLETE — scored 0 / WALLET RECOVERED" ledger below would be
+  // nonsense to a player who never lost a wallet — suppress the whole full-game
+  // progress block in the launch mode.
+  if (_flag("act1Done") && G.mode !== "soi6") _say(`✓ ACT ONE COMPLETE — scored ${G.score}` +
     (G.vacation > 1 ? ` · vacation #${G.vacation}` : ""), "dim");
   if (_unreadCount()) _say(`📱 ${_unreadCount()} unread message${_unreadCount() > 1 ? "s" : ""} (CHECK MESSAGES)`, "win");
   const active = Object.entries(QUESTS).filter(([qid]) => G.quests[qid] === "active");
@@ -1547,7 +1551,8 @@ function _doScore() {
     .filter(([f]) => _faction(f) !== 0)
     .map(([f, label]) => `${label} ${_faction(f) > 0 ? "+" : ""}${_faction(f)}`);
   if (standing.length) _say(`Standing: ${standing.join(" · ")}`, "dim");
-  for (const [f, label] of _ACT1_MILESTONES) if (_flag(f)) _say("✓ " + label, "dim");
+  if (G.mode !== "soi6")
+    for (const [f, label] of _ACT1_MILESTONES) if (_flag(f)) _say("✓ " + label, "dim");
 }
 const _FACTION_LABELS = [
   ["wdg", "White Dish"], ["samson", "the Samsons"], ["indie", "the independents"], ["syndicate", "the syndicate"],
@@ -1924,7 +1929,9 @@ function _doTime() {
   _say(t < 30 ? "(Early doors: barfines run ×1.5 until 21:00.)" :
     t >= 60 ? "(Past midnight: most beer bars have quietly dropped the barfine.)" :
     "(Prime time. Standard rates apply.)", "dim");
-  if (_flag("act1Done")) {
+  // Soi 6 mode never leaves the street (the bus is refused), so the last-bus
+  // status — the titular tension of the full game — simply doesn't apply here.
+  if (_flag("act1Done") && G.mode !== "soi6") {
     _say(t >= LAST_BUS_TURN ? "(The last baht bus has gone — it's the piwin's small-hours " +
       "tax or shoe leather home now.)" :
       t >= LAST_BUS_TURN - 10 ? "(Last baht bus around 2 a.m. — the ฿15 ride home is nearly up.)" :
