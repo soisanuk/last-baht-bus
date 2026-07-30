@@ -3,38 +3,33 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
+    "t": "Five Indians arrested for kidnapping compatriots for ransom in Pattaya",
+    "s": "Bangkok Post",
+    "d": "28 Jul 2026"
+  },
+  {
     "t": "Missing Russian siblings’ motorcycle found buried",
     "s": "Bangkok Post",
     "d": "29 Jul 2026"
   },
   {
-    "t": "Lured To Thailand, 3 Indian Men Tortured For Rs 69 Lakh Ransom By Gang Of 4 Pakistanis, 1 Indian",
-    "s": "NDTV",
-    "d": "28 Jul 2026"
+    "t": "The Standard Pattaya Na Jomtien brings beachside luxury to the party town",
+    "s": "South China Morning Post",
+    "d": "30 Jul 2026"
   },
   {
-    "t": "Cheap Thailand trip turns into horror, 3 Indians kidnapped by Indians in Pattaya",
-    "s": "India Today",
+    "t": "Pattaya Police keep watch on Kuwaiti youth motorcycle gatherings near pier",
+    "s": "pattayamail.com",
     "d": "29 Jul 2026"
   },
   {
     "t": "Myanmar man wanted for murder of former national tennis player in Pattaya",
-    "s": "thethaiger.com",
+    "s": "Thaiger",
     "d": "29 Jul 2026"
   },
   {
-    "t": "Suspects sought in young Russians’ disappearance flee",
-    "s": "Bangkok Post",
-    "d": "29 Jul 2026"
-  },
-  {
-    "t": "Money trail leads police to suspect in Pattaya tennis coach murder",
-    "s": "Pattaya Mail",
-    "d": "28 Jul 2026"
-  },
-  {
-    "t": "Qatar tourist faces visa revocation after Hua Hin rampage injures six",
-    "s": "Pattaya Mail",
+    "t": "Police rescue three Indian tourists in Pattaya ransom case",
+    "s": "Nation Thailand",
     "d": "28 Jul 2026"
   },
   {
@@ -43,13 +38,28 @@ var NEWS_FEED = [
     "d": "27 Jul 2026"
   },
   {
-    "t": "5 Indians arrested in Thailand for kidnapping compatriots; Pakistan-linked mastermind in Dubai under scanner",
-    "s": "Firstpost",
+    "t": "5 Indians held in Thailand for kidnapping Indian tourists; cops allege Pakistani link",
+    "s": "The Indian Express",
+    "d": "29 Jul 2026"
+  },
+  {
+    "t": "5 Indians Arrested For Kidnapping 3 Indians In Thailand. Cops Probe Pak Link",
+    "s": "NDTV",
+    "d": "30 Jul 2026"
+  },
+  {
+    "t": "Cheap Thailand trip turns into horror, 3 Indians kidnapped by Indians in Pattaya",
+    "s": "India Today",
+    "d": "29 Jul 2026"
+  },
+  {
+    "t": "5 Indians arrested in Thailand for kidnapping fellow nationals for ₹70 lakh; Pakistani mastermind behind plot | India News",
+    "s": "Hindustan Times",
     "d": "29 Jul 2026"
   },
   {
     "t": "Italian students apologise after Bangkok train incident sparks outrage in Thailand",
-    "s": "The Independent",
+    "s": "the-independent.com",
     "d": "27 Jul 2026"
   },
   {
@@ -58,30 +68,20 @@ var NEWS_FEED = [
     "d": "29 Jul 2026"
   },
   {
-    "t": "Michelle Yeoh EP’d Martial Arts Pic ‘Nak Muay’ Set August 2 Start Date",
-    "s": "Deadline",
-    "d": "29 Jul 2026"
-  },
-  {
-    "t": "‘Fall 2: Deadpoint’ Official Trailer Finds New Fear 5,000 Feet Above Thailand",
-    "s": "Bloody Disgusting",
-    "d": "29 Jul 2026"
-  },
-  {
-    "t": "John Romero announced as keynote speaker for Gamescom Asia x Thailand Game Show",
-    "s": "GamesIndustry.biz",
-    "d": "27 Jul 2026"
+    "t": "Tensions remain high on Thai-Cambodian border",
+    "s": "DW.com",
+    "d": "30 Jul 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-07-29","USD":33.53,"AUD":23.27,"GBP":44.56,"EUR":38.15};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-07-30","temp":26,"humid":91,"code":80,"hi":29,"rain":73};
+var WX_NOW = {"date":"2026-07-30","temp":29,"humid":78,"code":3,"hi":29,"rain":100};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-07-16","first":"639214","last2":"71","front3":["683","709"],"back3":["427","746"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4067,"date":"2026-07-29","baht":64500};
+var GOLD = {"usd":4066,"date":"2026-07-30","baht":64450};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":63475,"thb":2122906};
+var BTC = {"usd":64503,"thb":2169112};
