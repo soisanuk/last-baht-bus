@@ -3856,7 +3856,11 @@ const NPCS = {
         "I re-cloth her every year, level her every month, and love her more than " +
         "I loved either of my wives. She holds no grudges. Unlike either of my wives.\"",
         fx: (st) => { st.trust = Math.min(5, st.trust + 1); } },
-      { topic: "dog", req: ["hasDog"],
+      // Soi 6 mode can't reach Khao Talo, so this "walk him out to the old place"
+      // line points off the map — and its quest (_questAvailable's at: gate) is
+      // already suppressed there. Skip it in the confined mode and fall through to
+      // Bert's generic dog line below.
+      { topic: "dog", req: ["hasDog"], when: () => G.mode !== "soi6",
         text: "Bert looks past you at the dog by the door and sets his Budweiser down " +
         "slow. \"I'll be damned. That's the Shamrock dog, bud. Paddy's dog — the Irish " +
         "place out on Khao Talo, went under in COVID. Paddy caught the one flight home " +
