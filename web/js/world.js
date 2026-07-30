@@ -2647,7 +2647,21 @@ const NPCS = {
       { topic: "wallet", notFlags: ["hasWallet"], text: "\"No wallet?!\" Gales of laughter. \"Tilac, on THIS soi that is a very serious medical condition. Go Soi Buakhao — the mamasans there fix everything. Especially Candy. Everybody's problems go to Candy.\"" },
       { topic: "money", text: "\"Money?\" She waves a hand like she's shooing a cat. \"Money come, money go. Same same. Last month I have — so much! I think wow, I am RICH.\" Two-second pause. \"Then iPhone. Then my cousin need school. Then Koh Chang with the girls. Then my mother — hahaha!\" She is laughing at herself entirely. \"Now I have four hundred baht and big smile. I earn more later. Up to me!\"" },
       { topic: "save", text: "She looks at you like you've said something in a language she recognises but has stopped speaking. \"Save... for what?\" Genuine puzzlement. \"When the thing happen I will find the money. Always I find it. Always!\" She seems more certain of this than she is of anything else. \"You have five hundred? I need for rice.\"" },
-      { topic: "dream", text: "\"Dream?\" Full attention, very serious. \"Okay. Right now? My dream is—\" she points at the kitchen hatch \"—the spicy noodle. Tom yum. Because it is ten o'clock and I am hungry.\" She nods once, satisfied. \"That is my dream. What is YOUR dream?\" The follow-up is completely genuine." },
+      { topic: "dream", text: "\"Dream?\" Full attention, very serious. \"Okay. Right now? My dream is—\" she points at the kitchen hatch \"—the spicy noodle. Tom yum. Because it is ten o'clock and I am hungry.\" She nods once, satisfied. \"That is my dream. What is YOUR dream?\" The follow-up is completely genuine.",
+        fx: (st) => { st.trust = Math.min(5, st.trust + 1); } },
+      // The earned beat: once she trusts you, the relentless present tense cracks
+      // for a second and you see WHY she doesn't plan — Pink Lotus is a White Dish
+      // bar, and the app moves the girls like stock (the cost Kesinee names, from
+      // the girl's side). Then the smile comes straight back on.
+      { topic: "future", when: (st) => st.trust >= 3,
+        text: "The laugh starts, then doesn't quite arrive. For once she lets the quiet sit. \"You really " +
+          "want to know? I no plan future because—\" a small gesture at the pink room, at the tablet glowing " +
+          "by the till \"—is not up to me. The app decide. Which bar, which night, how many girl, how late. My " +
+          "friend work here two year, then one day the app move her Jomtien, like moving a box. Nobody ask " +
+          "her.\" The smile switches back on, deliberate, a little tired around the edges. \"So I live today, " +
+          "BIG. Today I am here, today I am Joy. Tomorrow up to the app, not up to me. Better I laugh, na?\"",
+        short: "\"I no plan future — the app decide which bar, which night. Live today, big. Better I laugh, na?\"",
+        fx: (st) => { st.know.wdgCost = true; st.mood = "open"; } },
       { topic: "future", text: "\"Five year?\" She waves it away cheerfully. \"Five year is VERY far. Tonight is already hard enough! Tonight I need: noodle, maybe one more drink, and—\" she tilts her head \"—maybe you stay a little longer? That is my five-year plan.\" Another collapse of giggles. \"Okay okay, three minutes plan. Same same.\"" },
     ],
   },
@@ -2921,7 +2935,7 @@ const NPCS = {
         fx: (st) => { st.trust = Math.min(5, st.trust + 1); } },
       // The facts he'll give anyone; the raw part — Ryan himself — he saves for
       // someone who's stuck around, not another stranger who'll vanish like the rest.
-      { topic: "ryan", when: (st) => st.trust < 2,
+      { topic: "ryan", when: (st) => st.trust < 2, deflect: true,
         text: "The name lands and he looks at you properly for the first time. \"Ryan Powers. You a " +
           "reporter? A lawyer? One of his?\" He decides you're probably not — but not all the way. \"I've " +
           "poured this out to too many strangers already, and every one of 'em nodded and left and nothing " +
