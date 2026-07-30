@@ -8,6 +8,16 @@ var NEWS_FEED = [
     "d": "28 Jul 2026"
   },
   {
+    "t": "Lured To Thailand, 3 Indian Men Tortured For Rs 69 Lakh Ransom By Gang Of 4 Pakistanis, 1 Indian",
+    "s": "NDTV",
+    "d": "28 Jul 2026"
+  },
+  {
+    "t": "Cheap Thailand trip turns into horror, 3 Indians kidnapped by Indians in Pattaya",
+    "s": "India Today",
+    "d": "29 Jul 2026"
+  },
+  {
     "t": "Missing Russian siblings’ motorcycle found buried",
     "s": "Bangkok Post",
     "d": "29 Jul 2026"
@@ -33,28 +43,13 @@ var NEWS_FEED = [
     "d": "28 Jul 2026"
   },
   {
-    "t": "Four ladyboys arrested over alleged robbery, assault of Australian tourist in Pattaya",
-    "s": "Khaosod English",
-    "d": "27 Jul 2026"
-  },
-  {
-    "t": "5 Indians held in Thailand for kidnapping Indian tourists; cops allege Pakistani link",
-    "s": "The Indian Express",
-    "d": "29 Jul 2026"
-  },
-  {
     "t": "5 Indians Arrested For Kidnapping 3 Indians In Thailand. Cops Probe Pak Link",
     "s": "NDTV",
     "d": "30 Jul 2026"
   },
   {
-    "t": "Cheap Thailand trip turns into horror, 3 Indians kidnapped by Indians in Pattaya",
-    "s": "India Today",
-    "d": "29 Jul 2026"
-  },
-  {
-    "t": "5 Indians arrested in Thailand for kidnapping fellow nationals for ₹70 lakh; Pakistani mastermind behind plot | India News",
-    "s": "Hindustan Times",
+    "t": "3 lured to Thailand with holiday trip, held for ransom; 5 Indians arrested",
+    "s": "The Indian Express",
     "d": "29 Jul 2026"
   },
   {
@@ -63,25 +58,30 @@ var NEWS_FEED = [
     "d": "27 Jul 2026"
   },
   {
+    "t": "Thailand: A new Bishop for a vibrant, diverse Church",
+    "s": "Vatican News",
+    "d": "30 Jul 2026"
+  },
+  {
     "t": "Thai YouTuber ‘Hlun Solo’ found dead in Georgia",
     "s": "Bangkok Post",
     "d": "29 Jul 2026"
   },
   {
-    "t": "Tensions remain high on Thai-Cambodian border",
-    "s": "DW.com",
-    "d": "30 Jul 2026"
+    "t": "Indian woman shares biggest culture shocks she experienced in Thailand: 'No moral policing, no judgment' | Trending",
+    "s": "Hindustan Times",
+    "d": "29 Jul 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-07-29","USD":33.53,"AUD":23.27,"GBP":44.56,"EUR":38.15};
+var FX_RATES = {"date":"2026-07-30","USD":33.55,"AUD":23.42,"GBP":44.9,"EUR":38.49};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-07-30","temp":29,"humid":78,"code":3,"hi":29,"rain":100};
+var WX_NOW = {"date":"2026-07-31","temp":27,"humid":95,"code":3,"hi":29,"rain":92};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-07-16","first":"639214","last2":"71","front3":["683","709"],"back3":["427","746"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4066,"date":"2026-07-30","baht":64450};
+var GOLD = {"usd":4109,"date":"2026-07-30","baht":65200};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":64503,"thb":2169112};
+var BTC = {"usd":64788,"thb":2163164};
