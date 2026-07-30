@@ -782,19 +782,19 @@ const ROOMS = {
     desc: "An American-run beer bar that smells, in defiance of its name, of lime and " +
       "cue chalk. League trophies crowd the back bar; the table is brushed like a " +
       "putting green. Bert — the manager — holds court from the end stool with a " +
-      "bottomless Budweiser and opinions on everyone's break. It holds the inland corner at the " +
+      "bottomless Singha and opinions on everyone's break. It holds the inland corner at the " +
       "foot of Soi 6; across the mouth of the soi the Blue Dog faces the water. From the open " +
       "front you can watch the evening checkpoint work the road to the south — half of Bert's " +
       "regulars ducked in here to dodge it once and never left — and the sun go down over the " +
       "bay between shots. (WATCH POLICE · WATCH SUNSET.)",
     revisit: [
       "Back into the Stinky Pinky — lime and cue chalk in defiance of the name, trophies crowding the back bar, the table brushed like a green.",
-      "The pool bar takes you back. Bert holds the end stool with a bottomless Budweiser and an opinion on your break already loading.",
+      "The pool bar takes you back. Bert holds the end stool with a bottomless Singha and an opinion on your break already loading.",
       "You step back into the crack of cue balls. Across the junction the Blue Dog's rail faces another sunset over the bay.",
-      "The Stinky Pinky again: chalk, trophies, cold Bud, and Bert's court in permanent session at the end of the bar.",
+      "The Stinky Pinky again: chalk, trophies, cold Singha, and Bert's court in permanent session at the end of the bar.",
       "Back under the buzzing skunk into the crack of pool balls and the smell of lime. Somebody's mid-break; Bert's already narrating it from the end stool.",
-      "The Stinky Pinky folds you back in — league flags, brushed felt, the Blue Dog glowing across the mouth of the soi. Bert lifts his Bud a half-inch in greeting.",
-      "You duck back in past the skunk sign. The regulars call it the Stinky and mean it fondly; the table's free, the Bud's cold, and Bert has a theory about your last shot.",
+      "The Stinky Pinky folds you back in — league flags, brushed felt, the Blue Dog glowing across the mouth of the soi. Bert lifts his Singha a half-inch in greeting.",
+      "You duck back in past the skunk sign. The regulars call it the Stinky and mean it fondly; the table's free, the Singha's cold, and Bert has a theory about your last shot.",
     ],
     exits: { out: "beach_rd_n" },
   },
@@ -3791,7 +3791,7 @@ const NPCS = {
     room: "stinky_bar",
     manager: true, // the bar-manager NPC type (see _managerHere/_buyManDrink); NOT in NPC_ROLES, so girl-logic ignores him
     desc: "The Stinky's manager — American, sixty-something, forearms like dock rope, a " +
-      "Budweiser that never empties and never seems to get him drunk. Candy's man, and " +
+      "Singha that never empties and never seems to get him drunk. Candy's man, and " +
       "once the manager of her bars; now he runs the Stinky for its ailing owner and, " +
       "quietly, works at being his own man out from under her shadow. Twenty-two years " +
       "on Beach Road, most of them within nine feet of that pool table.",
@@ -3813,10 +3813,10 @@ const NPCS = {
         sets: ["wdgFlipTried"],
         fx: (st, G) => { _align("wdg", 2); _align("indie", -1); },
         text: "You bring it round to selling — Gavin's word, friend to friend, everyone wins. Bert sets the " +
-          "Budweiser down very slowly and looks at you the way he looks at a bad break. \"So that's the way " +
+          "Singha down very slowly and looks at you the way he looks at a bad break. \"So that's the way " +
           "of it. He's got you carrying his water now.\" No heat, which is worse than heat. \"Answer's no, " +
           "bud. Always was. You tell your mate Gavin the Stinky's not for sale and neither am I.\" He picks " +
-          "the Bud back up. \"And you — I'll remember you came in here for HIM. Soi's small. Word gets around.\"",
+          "the Singha back up. \"And you — I'll remember you came in here for HIM. Soi's small. Word gets around.\"",
         short: "\"He's got you carrying his water now. The answer's no — and I'll remember you came for HIM.\"" },
       { text: "\"Welcome to the Stinky, bud. Name's Bert. Table's true, beer's cold, " +
         "and the only rule is don't sit on the rail.\" He chalks a cue without " +
@@ -3827,12 +3827,12 @@ const NPCS = {
       { topic: "offer", chip: false, req: ["heardWdgHistory", "heardWdgInside", "heardWdgPitch"], notFlags: ["wdgResolved", "wdgFlipTried"],
         sets: ["wdgResolved"],
         text: "You lay it all out — Terry's history, Kesinee's straight talk, Gavin's smiling pitch. Bert " +
-          "listens without touching the Budweiser, which is how you know it lands. When you're done he's " +
+          "listens without touching the Singha, which is how you know it lands. When you're done he's " +
           "quiet a while. \"Right,\" he says finally. \"So the money's real and the machine's real, and both " +
           "of 'em would fix this year and cost every one after.\" He looks down the bar — the trophies, Dave " +
           "on his rounds, Phil on his stool, the dog by the door. \"Kesinee's girls last a season now. Mine's " +
           "been here since Candy owned the place. That's the whole difference, bud, and it's the only one that " +
-          "matters.\" He finally lifts the Bud. \"I'll tell the old man to hold. He trusts me to keep the " +
+          "matters.\" He finally lifts the Singha. \"I'll tell the old man to hold. He trusts me to keep the " +
           "lights on — not to sell his soul to a spreadsheet while he's too sick to say no. Ryan Powers wants " +
           "a pool bar, he can build his own — slap his little logo on it and film himself potting the black. " +
           "Let the market sort us out.\" He taps the bar once, done. " +
@@ -3856,8 +3856,12 @@ const NPCS = {
         "I re-cloth her every year, level her every month, and love her more than " +
         "I loved either of my wives. She holds no grudges. Unlike either of my wives.\"",
         fx: (st) => { st.trust = Math.min(5, st.trust + 1); } },
-      { topic: "dog", req: ["hasDog"],
-        text: "Bert looks past you at the dog by the door and sets his Budweiser down " +
+      // Soi 6 mode can't reach Khao Talo, so this "walk him out to the old place"
+      // line points off the map — and its quest (_questAvailable's at: gate) is
+      // already suppressed there. Skip it in the confined mode and fall through to
+      // Bert's generic dog line below.
+      { topic: "dog", req: ["hasDog"], when: () => G.mode !== "soi6",
+        text: "Bert looks past you at the dog by the door and sets his Singha down " +
         "slow. \"I'll be damned. That's the Shamrock dog, bud. Paddy's dog — the Irish " +
         "place out on Khao Talo, went under in COVID. Paddy caught the one flight home " +
         "and the dog sat that step for a month. Then he went walking.\" He shakes his " +
@@ -3901,7 +3905,7 @@ const NPCS = {
       { topic: "manager", text: "\"Managing a bar " +
         "out here? Six nights a week, seven in the season, and you drink with every customer " +
         "or you're no damn good at it. Chews a man up in a year, two if he's tough. There's " +
-        "always a stool open somewhere for the next poor bastard.\" He lifts the Bud in a " +
+        "always a stool open somewhere for the next poor bastard.\" He lifts the Singha in a " +
         "small, tired salute." },
       { topic: "butterfly", text: "\"Butterfly? That's you, maybe — man who flits " +
         "flower to flower, different bar, different girl, every night. Girls'll " +
@@ -3909,7 +3913,7 @@ const NPCS = {
         "butterfly inside ONE bar, that's how a man loses a drink to the back of " +
         "the head.\"" },
       { topic: "ryan powers", req: ["knowOyHasIt"],
-        text: "He lowers the Budweiser half an inch, which for Bert is a whisper. " +
+        text: "He lowers the Singha half an inch, which for Bert is a whisper. " +
         "\"White Dish Group. Front company, owns most of the paper on Soi 6. Man behind " +
         "it's a Brit, Ryan Powers — and don't go picturing some untouchable villain, bud. " +
         "He's a jumped-up little marketing lad who ghosts his own investors and hides " +
@@ -3923,34 +3927,34 @@ const NPCS = {
         "make it yours.\"" },
       { topic: "phil", req: ["toldPhilTruth"],
         text: "He looks at you a long time before he speaks. \"You did a hard thing.\" " +
-        "The Budweiser goes up once, comes down. \"Man needed to know. Or he needed " +
+        "The Singha goes up once, comes down. \"Man needed to know. Or he needed " +
         "not to know, and you made that call for him. Either way —\" he taps the bar " +
         "once \"— not your fault. Some things end.\"" },
-      { topic: "1998", text: "He sets the Budweiser down with the quiet authority of a " +
+      { topic: "1998", text: "He sets the Singha down with the quiet authority of a " +
         "man who has heard this speech many times, from many Nigels. \"The baht was " +
         "fifty to the dollar in '98, bud. Tom Yum Goong crash — half the Thai economy " +
         "went sideways overnight. Your British pensioner walking in with sterling felt " +
         "like a king because he was, arithmetically.\" He refills without ceremony. " +
         "\"That's point one. Point two: Nigel in 1998 was forty years old with a full " +
         "head of hair and a functioning liver. He's sixty-eight now and his main topic " +
-        "is his prostate. The girls didn't change.\" He picks the Budweiser back up. " +
+        "is his prostate. The girls didn't change.\" He picks the Singha back up. " +
         "\"Point three: before smartphones, this town ran on beautiful anonymity. You " +
         "could reinvent yourself completely. No one Googled you. The girl couldn't " +
         "see the Good Morning texts from the other three guys in Europe. Technology " +
         "didn't kill the romance, bud. It killed the illusion.\" He drains it. " +
         "\"The city never grew a conscience. Nigel just grew old.\"" },
-      { topic: "free drink", text: "He points the Budweiser at you. \"You know what I " +
+      { topic: "free drink", text: "He points the Singha at you. \"You know what I " +
         "call it? The Oklahoma Trap. Guy walks in — plumber from Tulsa, first night " +
         "in town — mamasan sends him a free shot. He thinks he beat the system.\" " +
-        "The Budweiser comes down. \"You ever go to Walmart back home and the promo " +
+        "The Singha comes down. \"You ever go to Walmart back home and the promo " +
         "girl gives you a sausage on a toothpick? Do you lose your mind? Do you go " +
         "to the register and buy a thousand dollars of sausages for the cashier and " +
         "the store manager just to prove what a great guy you are?\" He waits. \"No. " +
         "But you put that same man under neon lights with loud music and a pretty girl " +
         "telling him he's special — the receipt at two a.m. says thirty thousand baht " +
-        "and he can't tell you where it went.\" He drains the Budweiser. \"The free " +
+        "and he can't tell you where it went.\" He drains the Singha. \"The free " +
         "drink is a business investment, bud. The cheapest one they'll make all night.\"" },
-      { topic: "danny", text: "The Budweiser stops an inch off the bar. \"Danny " +
+      { topic: "danny", text: "The Singha stops an inch off the bar. \"Danny " +
         "the Coin Guy.\" He sets it down with exaggerated care, the way you " +
         "handle something instead of someone. \"Eighty thousand baht of mine in " +
         "'PattayaChain,' bud. Whole pitch, whitepaper, the works — I've been " +
@@ -3961,13 +3965,13 @@ const NPCS = {
         "kind of promise.\"" },
       { topic: "shame", text: "He stares at the pool table for a while. \"The ones " +
         "who worry me aren't the ones who complain. Complain all day — fine, they're " +
-        "still talking. It's the ones who stopped bragging.\" The Budweiser goes " +
+        "still talking. It's the ones who stopped bragging.\" The Singha goes " +
         "down on the bar with no particular force. \"Man spends two years telling " +
         "everybody he found himself a good woman, mocking the butterflies, the " +
         "bar-hoppers — you think that man can pick up the {{phone}} when it all goes " +
         "sideways and say he needs help?\" He doesn't look at you. \"The pride is " +
         "the part that kills 'em, bud. Not the girl, not the visa, not the money. " +
-        "The pride.\" He picks the Budweiser back up. \"So you call anyway. You " +
+        "The pride.\" He picks the Singha back up. \"So you call anyway. You " +
         "call and you let them hang up on you. And then you call again.\"" },
     ],
   },
@@ -4732,9 +4736,10 @@ const PATRONS = {
   mort: {
     name: "Mort", emoji: "🦉", age: 74, nat: "American",
     home: "queen_vic", hops: false,
-    desc: "Seventy-four, a Hawaiian shirt at war with itself, a spiral notebook and a " +
-      "biro he clicks while he watches the soi. He has been on this coast longer than " +
-      "most of the bars, and he is writing all of it down whether it likes it or not.",
+    desc: "Seventy-four, horn-rimmed glasses and a Hawaiian shirt at war with itself, a " +
+      "spiral notebook and a biro he clicks while he watches the soi. He has been on this " +
+      "coast longer than most of the bars, and he is writing all of it down whether it " +
+      "likes it or not.",
     dialogue: [
       { text: "\"Mort.\" He finishes the line before he looks up. \"I write the Nite " +
         "Owl — the back-page column, the one your granddad read on the toilet. Retired " +
@@ -5194,7 +5199,7 @@ const PATRONS = {
   angela: {
     name: "Angela", emoji: "🎧", age: 47, nat: "American",
     home: "queen_vic", hops: false,
-    desc: "Forty-seven, close-cropped hair gone grey at the temples, a flannel shirt " +
+    desc: "Forty-seven, unkempt shoulder-length hair gone grey, a faded flannel shirt " +
       "tied at the waist in a climate that argues against it. On the bar next to " +
       "her Singha: an actual Discman, its foam headphones held together with " +
       "electrical tape. She has the corner seat with the window view of Soi 6 — " +
@@ -5714,7 +5719,7 @@ function _buildHostess(name, th, room) {
       { topic: "family", text: idx(FAMILY, 31) },
       { topic: "home", text: idx(HOME, 43) },
       { topic: "plan", text: idx(PLAN, 37) },
-      { topic: "wallet", text: idx(WALLET, 41) },
+      { topic: "wallet", notFlags: ["hasWallet"], text: idx(WALLET, 41) },
     ],
   };
 }
@@ -5858,7 +5863,7 @@ function _buildMama(name, th, room) {
       { topic: "girls", text: idx(GIRLS, 31) },
       { topic: "family", text: idx(FAMILY, 37) },
       { topic: "plan", text: idx(PLAN, 41) },
-      { topic: "wallet", text: idx(WALLET, 43) },
+      { topic: "wallet", notFlags: ["hasWallet"], text: idx(WALLET, 43) },
     ],
   };
 }
@@ -5899,7 +5904,7 @@ function _buildCashier(name, th, room) {
       { topic: "money", text: idx(MONEY, 31) },
       { topic: "tab", text: idx(MONEY, 31) },
       { topic: "family", text: idx(FAMILY, 37) },
-      { topic: "wallet", text: idx(WALLET, 43) },
+      { topic: "wallet", notFlags: ["hasWallet"], text: idx(WALLET, 43) },
     ],
   };
 }
