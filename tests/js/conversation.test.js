@@ -363,6 +363,69 @@ test("Joy: chatting builds trust, and her future cracks open once earned", () =>
   assert.ok(_npcState("joy").know.wdgCost, "and she's let you see the cost from the girl's side");
 });
 
+// ── NPCs drive the conversation: they ask, you answer, they remember ─────────
+
+test("an NPC puts a question to you and remembers the answer", () => {
+  state().room = "queen_vic";
+  run("angela"); // her greeting asks where home is
+  assert.ok(state().convoQ && state().convoQ.key === "home", "she poses the question");
+  const t = _npcState("angela").trust;
+  out = [];
+  run("london");
+  assert.equal(state().player.said.home, "london", "the answer is remembered");
+  assert.equal(state().convoQ, null, "the question is resolved");
+  assert.equal(_npcState("angela").trust, t + 1, "opening up warms her a little");
+  assert.match(lastOut(), /files it|question put away/i, "she acknowledges it");
+});
+
+test("telling an NPC a different answer than before is caught", () => {
+  state().room = "queen_vic";
+  run("angela"); run("london"); // heard.home = london
+  state().convoQ = { id: "angela", key: "home" }; // she asks again, another night
+  out = [];
+  run("manchester");
+  assert.match(lastOut(), /not what you told me|had you down differently/i, "she catches the change");
+  assert.equal(state().player.said.home, "manchester", "memory updates to the latest");
+});
+
+test("a pending question lapses when you change the subject", () => {
+  state().room = "queen_vic";
+  run("angela"); // asks home
+  assert.ok(state().convoQ);
+  out = [];
+  run("90s"); // ask one of her topics instead of answering
+  assert.equal(state().convoQ, null, "the question lapses");
+  assert.match(lastOut(), /1997|Tower Records/, "and the topic you asked is delivered");
+  assert.ok(!(state().player.said && state().player.said.home), "the dodge wasn't recorded as an answer");
+});
+
+test("a real command while a question pends is not captured as the answer", () => {
+  state().room = "queen_vic";
+  run("angela");
+  out = [];
+  run("look");
+  assert.ok(!(state().player.said && state().player.said.home), "LOOK is a command, not an answer");
+});
+
+test("walking away clears a pending question", () => {
+  state().room = "queen_vic";
+  run("angela");
+  assert.ok(state().convoQ);
+  state().room = "beach_rd_n"; // partner no longer present
+  assert.equal(_convoActive(), null);
+  assert.equal(state().convoQ, null, "no orphaned question hanging over an empty stool");
+});
+
+test("Joy asks your dream back, and it is remembered", () => {
+  state().room = "pink_lotus";
+  run("joy");
+  run("ask joy about dream"); // her node literally asks "what is YOUR dream?"
+  assert.ok(state().convoQ && state().convoQ.key === "dream");
+  out = [];
+  run("a quiet bar");
+  assert.equal(state().player.said.dream, "a quiet bar");
+});
+
 test("compliment warms a known partner (+1 trust, once per day)", () => {
   run("angela"); // meeting her sets dstate=met, trust=1
   const t0 = _npcState("angela").trust;

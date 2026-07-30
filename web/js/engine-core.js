@@ -177,6 +177,8 @@ function newGame() {
     npc: {},             // per-character conversation state: id → {trust,mood,dstate,know} (see _npcState)
     convo: null,         // active conversation partner id — bare topics/actions aim here (see _convoActive)
     itNpc: null,         // last person addressed — the antecedent for "her/him/them" (see _resolveActor)
+    convoQ: null,        // a question the partner has put to YOU, awaiting a reply: {id,key} (see _convoAsk/_convoAnswer)
+    player: { said: {} },// what you've told NPCs about yourself (home, dream, …) — memory for reactions/lie-catching
     faction: { wdg: 0, samson: 0, indie: 0, syndicate: 0 }, // standing with the powers (see _align) — only moves when you ACT, never for declining
     itemLoc: Object.fromEntries(
       Object.entries(ITEMS).map(([id, it]) => [id, it.location])),
@@ -451,7 +453,7 @@ function _findPatron(word) {
 // any dialogue entry that doesn't use them behaves exactly as before. Plain data,
 // so it serialises with the save.
 function _npcState(id) {
-  return G.npc[id] || (G.npc[id] = { trust: 0, mood: "guarded", dstate: "stranger", know: {} });
+  return G.npc[id] || (G.npc[id] = { trust: 0, mood: "guarded", dstate: "stranger", know: {}, heard: {} });
 }
 
 // ── Active conversation context ──────────────────────────────────────────────
@@ -470,13 +472,29 @@ function _convoActive() {
   if (!id) return null;
   const here = (NPCS[id] && _npcRoom(id) === G.room) ||
                (PATRONS[id] && _patronsHere().includes(id));
-  if (!here) { G.convo = null; return null; } // partner gone → conversation over
+  if (!here) { G.convo = null; G.convoQ = null; return null; } // partner gone → conversation (and any pending question) over
   return id;
 }
 function _convoEnd(quiet) {
   const id = G.convo;
   G.convo = null;
+  G.convoQ = null;
   if (id && !quiet) _say(`You take your leave of ${_convoName(id)}.`, "dim");
+}
+
+// The other half of a conversation: the partner puts a question to YOU. A
+// dialogue node carries `asks: {key, q}`; after it's delivered, we pose the
+// question once (q printed if the node's text didn't already contain it) and
+// arm G.convoQ so the next plain reply is captured (see _convoAnswer). Asked at
+// most once per key per partner — no nagging.
+function _convoAsk(id, d, st) {
+  if (!d || !d.asks) return;
+  const key = d.asks.key;
+  st.know = st.know || {};
+  if (st.know["asked_" + key]) return;
+  st.know["asked_" + key] = true;
+  if (d.asks.q) _say(d.asks.q);
+  G.convoQ = { id, key };
 }
 
 // ── Scope & pronoun resolution ───────────────────────────────────────────────
@@ -590,6 +608,7 @@ function _patronTalk(id, topic) {
   if (!repeat && d.fx) d.fx(st, G); // state-machine effects, first delivery only (no farming trust by re-asking)
   // first contact IS the meeting — advance state + grant baseline trust here
   if (st.dstate === "stranger") { st.dstate = "met"; st.trust = Math.min(5, st.trust + 1); }
+  _convoAsk(id, d, st); // …and the regular may put a question back to you
 }
 
 // A belligerent regular's sore subject. Whether it turns into a swing depends on
@@ -763,6 +782,7 @@ function _deliver(npcId, d) {
   // first contact (any exchange) IS the meeting: advance the state and grant the
   // baseline trust here, so the meeting bonus never depends on which node fired.
   if (st.dstate === "stranger") { st.dstate = "met"; st.trust = Math.min(5, st.trust + 1); }
+  _convoAsk(npcId, d, st);                     // …and the partner may put a question back to you
 }
 
 // ── Look / describe ────────────────────────────────────────────────────────
