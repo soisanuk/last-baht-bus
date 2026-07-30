@@ -2085,7 +2085,25 @@ const _MAP = `                    NAKLUA ─ Sabai Palms Hotel
      ~    (the gate, then the deep)
     ~ ~ ~ ~ ~ ~ ~ ~ ~ ~  JOMTIEN ~ the beach where it all began`;
 
+// Soi 6 Challenge never leaves the street, so the greater-Pattaya bar-mat above
+// is all noise — it names a dozen districts you can't reach. The confined mode
+// gets its own strip map: the soi west-to-east, the beach at its head, the bars
+// under each end. Keep the venue lists in step with SOI6_ROOMS.
+const _MAP_SOI6 = `    THE BEACH ~~~ BEACH RD ─── WEST ──────── MIDDLE ──────── DEEP END
+                  (junction)   (loud)         (quiet)         (loudest)
+
+    north beach   Blue Dog     Pink Lotus     Queen Vic Inn   Kitten Corner
+    Sai Krok's    Stinky       Golden Dragon  (your room ↑)   Cherry Pop
+    surf          Pinky        Sunset Dreams  The Shady Lady  Ruby Kiss
+                               ATM · 7-Eleven Front Row Bar
+                                              The Verandah`;
+
 function _doMap() {
+  if (G.mode === "soi6") {
+    _say("Soi 6 — one street, west to east, the beach at its head:", "dim");
+    _say(_MAP_SOI6, "dim");
+    return;
+  }
   _say("The bar-mat map of greater Pattaya, not to scale, like all bar maps:", "dim");
   _say(_MAP, "dim");
 }
@@ -2368,6 +2386,42 @@ const _HELP = `Common commands:
   PET CATS (Jomtien beach) · FEED DOG (a friendship you cannot undo) · PET DOG · NAME DOG <name>
   LIGHT ON / LIGHT OFF · CHARGE PHONE
   SCORE (happiness & progress) · UNDO · RESTART   (the night autosaves itself)
+  QUIT / END / LOGOUT (sign off; your night is saved) · RESET (wipe the save — asks first)`;
+
+// Soi 6 Challenge is a confined mode — one street, one week, no baht bus off it.
+// The full-game HELP advertises a dozen venues and verbs that don't exist here
+// (the Adonis host bar, the Peacock cabaret, Rock Factory, Jomtien's cats, Nira's
+// loan, the massage shops, RIDE BUS / MOTOSAI / CHECKOUT), so the launch mode
+// gets its own list — only what's reachable inside SOI6_ROOMS, or a new player's
+// first HELP walks them straight into a wall. Keep in sync with the full HELP
+// above for verbs the two share.
+const _HELP_SOI6 = `Common commands:
+  LOOK · EXAMINE <thing> · TAKE <thing> · DROP <thing> · INVENTORY (I)
+  N/S/E/W · IN/OUT · ENTER <place> · TRAVEL <bar> (fast-hop to any bar you've seen)
+  TALK TO <person> · ASK <person> ABOUT <topic> · GIVE <thing> TO <person>
+  WAI [person] · SAY <thai phrase> [TO <person>]
+  WATCH TV · READ PAPER — the day's real headlines · WEATHER · SCORES · LOTTERY
+  WATCH SUNSET (Blue Dog & Stinky Pinky, early evening — the junction show)
+  WATCH SOI (Queen Vic balcony, or the quiet middle of Soi 6 — watch, don't join)
+  PLAY CONNECT 4 · PLAY JACKPOT [bet] · PLAY POOL   (in the beer bars)
+  FLIRT/KISS/SPANK/FONDLE <lady> · BUY DRINK FOR <lady> · BUY BEER · BUY MAN DRINK
+  RING BELL (฿300, instant popularity) · TALK TO PATRON · BARFINE <lady>
+  BUY CONDOM (฿40 a pack, the 7-Eleven — a barfine uses one; go without at your peril)
+  DIAGNOSE (how bad is it) · GET TESTED (free clinic — clears a barfine souvenir)
+  QUESTS · ACCEPT <quest> · ABANDON <quest>   (the soi has its own jobs going)
+  EAT <food> · DRINK <thing> · BUY WATER / FOOD (street carts & the 7-Eleven)
+  WITHDRAW <amount> · CHECK BALANCE (the street ATM — ฿300 a pull, ฿20,000 a day)
+  SLEEP (your room, ends the night) · OPEN FRIDGE · TAKE WATER (two free bottles a day)
+  PHONE / EXAMINE PHONE (battery, messages, weather, headlines)
+  CONTACT <lady> (swap numbers) · CONTACTS · MESSAGE <lady> · CHECK MESSAGES
+  WHO / BLACKBOOK (your ladies, ranked by how they feel about you)
+  SEND <amount> TO <lady> (banking app)
+  FEED DOG (a friendship you cannot undo) · PET DOG · NAME DOG <name>
+  LIGHT ON / LIGHT OFF · CHARGE PHONE
+  TIME · MAP · WAIT UNTIL <hour> · TIP <lady> <amount> · PHOTO · CHEERS · TAO RAI (ask the price)
+  AGAIN or G (repeat last command)
+  SCORE (happiness & progress) · UNDO · RESTART   (the night autosaves itself)
+  PLAY AGAIN (once the week's up — another seven days on the soi)
   QUIT / END / LOGOUT (sign off; your night is saved) · RESET (wipe the save — asks first)`;
 
 // ── Autocomplete ─────────────────────────────────────────────────────────────
@@ -3054,7 +3108,7 @@ function doCommand(input) {
       break;
     case "score": _doScore(); break;
     case "hint": case "hints": _doHint(); break;
-    case "help": case "?": _say(_HELP, "dim"); break;
+    case "help": case "?": _say(G.mode === "soi6" ? _HELP_SOI6 : _HELP, "dim"); break;
     case "restart": { const b = G.act1Best || 0, t = G.act1Tries || 0; newGame(); G.act1Best = b; G.act1Tries = t; engineIntro(); return; } // keep the critical-path record + hint unlock
     default:
       // bare Thai phrase typed directly
