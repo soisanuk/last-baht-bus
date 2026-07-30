@@ -335,6 +335,34 @@ test("Kesinee guards the White Dish intel until trust — no offer-then-refuse c
   assert.match(lastOut(), /cleaner|poorer/i);
 });
 
+test("Doug guards the raw Ryan Powers story until you've stuck around", () => {
+  state().room = "stinky_bar";
+  run("doug"); // meet → trust 1, below his gate
+  assert.ok(!_convoTopics("doug").includes("ryan"),
+    "at trust<2 he'd only ask if you're a reporter — don't dangle it as a chip");
+  _npcState("doug").trust = 2;
+  assert.ok(_convoTopics("doug").includes("ryan"), "once you've stuck around it surfaces");
+  out = [];
+  run("ask doug about ryan"); // deflect hides the chip, not the answer
+  assert.match(lastOut(), /ring light|coward|Lambo/i, "the raw version lands when asked");
+});
+
+test("Joy: chatting builds trust, and her future cracks open once earned", () => {
+  state().room = "pink_lotus";
+  run("joy");
+  const t0 = _npcState("joy").trust;
+  run("ask joy about dream");
+  assert.equal(_npcState("joy").trust, t0 + 1, "the genuine 'what's YOUR dream' moment warms her");
+  out = [];
+  run("ask joy about future"); // trust 2 — still the cheerful deflection
+  assert.match(lastOut(), /five year|three minutes/i, "not yet — she laughs it off");
+  _npcState("joy").trust = 3;
+  out = [];
+  run("ask joy about future"); // the earned beat
+  assert.match(lastOut(), /the app|up to the app/i, "once trusted, the present-tense cheer cracks");
+  assert.ok(_npcState("joy").know.wdgCost, "and she's let you see the cost from the girl's side");
+});
+
 test("compliment warms a known partner (+1 trust, once per day)", () => {
   run("angela"); // meeting her sets dstate=met, trust=1
   const t0 = _npcState("angela").trust;
