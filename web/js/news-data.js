@@ -18,9 +18,14 @@ var NEWS_FEED = [
     "d": "29 Jul 2026"
   },
   {
-    "t": "Missing Russian siblings’ motorcycle found buried",
+    "t": "Police search for missing Russian siblings in Pattaya",
     "s": "Bangkok Post",
     "d": "29 Jul 2026"
+  },
+  {
+    "t": "Thai Police Find Buried Motorcycle Belonging to Missing Russian Siblings",
+    "s": "Kyiv Post",
+    "d": "30 Jul 2026"
   },
   {
     "t": "The Standard Pattaya Na Jomtien brings beachside luxury to the party town",
@@ -28,9 +33,9 @@ var NEWS_FEED = [
     "d": "30 Jul 2026"
   },
   {
-    "t": "Pattaya Police keep watch on Kuwaiti youth motorcycle gatherings near pier",
-    "s": "pattayamail.com",
-    "d": "29 Jul 2026"
+    "t": "Huge python removed from Pattaya home garden",
+    "s": "Pattaya Mail",
+    "d": "30 Jul 2026"
   },
   {
     "t": "Myanmar man wanted for murder of former national tennis player in Pattaya",
@@ -38,9 +43,9 @@ var NEWS_FEED = [
     "d": "29 Jul 2026"
   },
   {
-    "t": "Police rescue three Indian tourists in Pattaya ransom case",
-    "s": "Nation Thailand",
-    "d": "28 Jul 2026"
+    "t": "Italian students apologise after Bangkok train incident sparks outrage in Thailand",
+    "s": "the-independent.com",
+    "d": "27 Jul 2026"
   },
   {
     "t": "5 Indians Arrested For Kidnapping 3 Indians In Thailand. Cops Probe Pak Link",
@@ -53,9 +58,9 @@ var NEWS_FEED = [
     "d": "29 Jul 2026"
   },
   {
-    "t": "Italian students apologise after Bangkok train incident sparks outrage in Thailand",
-    "s": "the-independent.com",
-    "d": "27 Jul 2026"
+    "t": "Scientists identified a new giant dinosaur in Thailand, bigger than a Diplodocus",
+    "s": "futura-sciences.com",
+    "d": "30 Jul 2026"
   },
   {
     "t": "Thailand: A new Bishop for a vibrant, diverse Church",
@@ -66,22 +71,17 @@ var NEWS_FEED = [
     "t": "Thai YouTuber ‘Hlun Solo’ found dead in Georgia",
     "s": "Bangkok Post",
     "d": "29 Jul 2026"
-  },
-  {
-    "t": "Indian woman shares biggest culture shocks she experienced in Thailand: 'No moral policing, no judgment' | Trending",
-    "s": "Hindustan Times",
-    "d": "29 Jul 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-07-30","USD":33.55,"AUD":23.42,"GBP":44.9,"EUR":38.49};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-07-31","temp":27,"humid":95,"code":3,"hi":29,"rain":92};
+var WX_NOW = {"date":"2026-07-31","temp":27,"humid":93,"code":51,"hi":30,"rain":92};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-07-16","first":"639214","last2":"71","front3":["683","709"],"back3":["427","746"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4109,"date":"2026-07-30","baht":65200};
+var GOLD = {"usd":4105,"date":"2026-07-30","baht":65150};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":64788,"thb":2163164};
+var BTC = {"usd":64685,"thb":2159846};
