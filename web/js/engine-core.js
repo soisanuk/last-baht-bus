@@ -497,6 +497,19 @@ function _convoAsk(id, d, st) {
   G.convoQ = { id, key };
 }
 
+// The callback half of the ask loop: a delivered line can quote back what the
+// player told the town about themselves via a %key% token (e.g. "%home%. Still
+// there?"). Only keys actually in G.player.said are filled — anything else is
+// left untouched — and callback nodes gate on the value being known, so a token
+// never shows raw. Title-cased for display.
+function _fillSaid(s) {
+  if (typeof s !== "string" || !(G.player && G.player.said)) return s;
+  return s.replace(/%(\w+)%/g, (m, k) =>
+    G.player.said[k] != null
+      ? String(G.player.said[k]).replace(/\b\w/g, c => c.toUpperCase())
+      : m);
+}
+
 // ── Scope & pronoun resolution ───────────────────────────────────────────────
 // The Inform-style "it"/default-object idea, borrowed (not the NLP library that
 // prompted it): bind a pronoun (her/him/them/it) or a bare/omitted target to who
@@ -603,7 +616,7 @@ function _patronTalk(id, topic) {
   // regular brush-off, so you never get the whole war story twice. Patron
   // dialogue is mostly pure flavour, but entries may carry `sets` (quest wiring
   // — Glam's lucid flashes) exactly like NPC dialogue; no `gives`, though.
-  _say(repeat ? (d.short || _patronAgain(id)) : d.text);
+  _say(_fillSaid(repeat ? (d.short || _patronAgain(id)) : d.text));
   if (d.sets) d.sets.forEach(f => _setFlag(f));
   if (!repeat && d.fx) d.fx(st, G); // state-machine effects, first delivery only (no farming trust by re-asking)
   // first contact IS the meeting — advance state + grant baseline trust here
@@ -767,7 +780,7 @@ function _deliver(npcId, d) {
   const terse = repeat && (!!d.short || flavor);
   if (!repeat) seen.push(idx);
   if (d.th && !terse) { _say(`${n.emoji} ${n.name}: “${d.th}” (${d.rom})`, "thai"); _engineSpeak(d.th); }
-  _say(terse ? (d.short || _askAgain(npcId)) : d.text);
+  _say(_fillSaid(terse ? (d.short || _askAgain(npcId)) : d.text));
   for (const f of d.sets || []) _setFlag(f);
   if (d.gives && G.itemLoc[d.gives] === null) {
     G.itemLoc[d.gives] = "inventory";
