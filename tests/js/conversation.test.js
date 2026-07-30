@@ -318,6 +318,23 @@ test("Bert guards the Candy topic until he trusts you (audit: deflect node)", ()
   assert.match(lastOut(), /his and not hers|whole of it/i, "opens up once earned");
 });
 
+test("Kesinee guards the White Dish intel until trust — no offer-then-refuse chip", () => {
+  state().room = "kitten_corner";
+  run("kesinee"); // meet → trust 1, below her white-dish gate (2)
+  assert.ok(!_convoTopics("kesinee").includes("white dish"),
+    "at low trust she'd only brush you off — don't dangle it as a chip");
+  assert.ok(!_convoTopics("kesinee").includes("police"),
+    "same for the police/envelope intel (gated at trust 3)");
+  _npcState("kesinee").trust = 2;
+  assert.ok(_convoTopics("kesinee").includes("white dish"),
+    "once she trusts you it's on the palette");
+  // deflect only hides the chip — asking still delivers, so the quest still works
+  out = [];
+  run("ask kesinee about white dish");
+  assert.ok(state().flags.heardWdgInside, "the quest flag still lands when asked");
+  assert.match(lastOut(), /cleaner|poorer/i);
+});
+
 test("compliment warms a known partner (+1 trust, once per day)", () => {
   run("angela"); // meeting her sets dstate=met, trust=1
   const t0 = _npcState("angela").trust;
