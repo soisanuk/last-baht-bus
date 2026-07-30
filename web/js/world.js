@@ -2648,7 +2648,8 @@ const NPCS = {
       { topic: "money", text: "\"Money?\" She waves a hand like she's shooing a cat. \"Money come, money go. Same same. Last month I have — so much! I think wow, I am RICH.\" Two-second pause. \"Then iPhone. Then my cousin need school. Then Koh Chang with the girls. Then my mother — hahaha!\" She is laughing at herself entirely. \"Now I have four hundred baht and big smile. I earn more later. Up to me!\"" },
       { topic: "save", text: "She looks at you like you've said something in a language she recognises but has stopped speaking. \"Save... for what?\" Genuine puzzlement. \"When the thing happen I will find the money. Always I find it. Always!\" She seems more certain of this than she is of anything else. \"You have five hundred? I need for rice.\"" },
       { topic: "dream", text: "\"Dream?\" Full attention, very serious. \"Okay. Right now? My dream is—\" she points at the kitchen hatch \"—the spicy noodle. Tom yum. Because it is ten o'clock and I am hungry.\" She nods once, satisfied. \"That is my dream. What is YOUR dream?\" The follow-up is completely genuine.",
-        fx: (st) => { st.trust = Math.min(5, st.trust + 1); } },
+        fx: (st) => { st.trust = Math.min(5, st.trust + 1); },
+        asks: { key: "dream" } },
       // The earned beat: once she trusts you, the relentless present tense cracks
       // for a second and you see WHY she doesn't plan — Pink Lotus is a White Dish
       // bar, and the app moves the girls like stock (the cost Kesinee names, from
@@ -5216,7 +5217,8 @@ const PATRONS = {
         "\"I sit on this side of the glass. Best nature documentary in town — " +
         "you get the whole ecosystem without getting wet.\" She slides the " +
         "headphones down to her neck, which for her is a door opening.",
-        short: "\"Yes, it's a Discman. No, it's not ironic.\" The headphones come down: a door opening." },
+        short: "\"Yes, it's a Discman. No, it's not ironic.\" The headphones come down: a door opening.",
+        asks: { key: "home", q: "She studies you a moment, unhurried. \"So where's home, before all this? Humour me.\"" } },
       { topic: "drew", text: "\"Drew. Yeah.\" The tone of a fact being filed. \"Same " +
         "schoolhouse at DLI — Korean, he was a class ahead. We weren't friends. We " +
         "just conjugated the same verbs in the same hallways.\" She turns the " +

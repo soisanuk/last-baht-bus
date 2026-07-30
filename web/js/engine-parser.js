@@ -710,10 +710,56 @@ function _convoTopic(s) {
 // live when these show, so it resolves straight through _convoResolve.
 function _topicLabel(t) { return t.replace(/\b\w/g, c => c.toUpperCase()); }
 
+// When the partner has asked YOU something (G.convoQ), your plain reply lands
+// here: it's remembered (globally in G.player.said, and per-partner in st.heard
+// so they can catch a change), and they react. First time you open up warms them
+// a touch; a different answer than before gets caught.
+const _ANSWER_ACK = [
+  n => `${n} takes it in and files it somewhere. You've handed over a true thing; it counts for a little.`,
+  n => `A small nod from ${n}, the question put away satisfied — the talk feels a degree warmer for it.`,
+];
+const _ANSWER_CAUGHT = [
+  n => `${n} tilts their head a fraction. "Hm. That's not what you told me before." The change lands, and not only on you.`,
+  n => `A flicker behind ${n}'s eyes. "Funny — I had you down differently." They let it sit. People misremember. Or they don't.`,
+];
+function _partnerHasTopic(id, t) {
+  const nodes = ((NPCS[id] || PATRONS[id] || {}).dialogue) || [];
+  return nodes.some(d => d.topic && (d.topic === t || t.includes(d.topic)));
+}
+function _convoAnswer(text) {
+  const { id, key } = G.convoQ;
+  G.convoQ = null;
+  const st = _npcState(id);
+  const heard = (st.heard = st.heard || {});
+  const val = text.replace(/[.!?,]+$/, "").trim();
+  (G.player = G.player || { said: {} }).said[key] = val;
+  const prior = heard[key];
+  heard[key] = val;
+  const name = _convoName(id);
+  if (prior && prior !== val) {
+    _say(_pickVary(_ANSWER_CAUGHT, "ansCaught")(name));
+  } else {
+    _say(_pickVary(_ANSWER_ACK, "ansAck")(name));
+    if (!prior) st.trust = Math.min(5, st.trust + 1); // opening up, once
+  }
+  return true;
+}
+
 // Last-resort interpretation of an otherwise-unrecognized line. Returns true if
 // the conversation layer consumed it (the caller then ticks, like any real turn).
 function _convoResolve(lower) {
   const bare = lower.replace(/[,.!?]+$/, "").trim();
+  // 0) A pending question from the partner: your reply. A recognizable move
+  //    (leave-taking, a name, or one of their own topics) changes the subject
+  //    and lapses it; anything else is your answer, remembered and reacted to.
+  if (G.convoQ && _convoActive() === G.convoQ.id) {
+    const changingSubject =
+      /^(goodbye|bye|cheerio|laters?|later|see ?ya|ciao)$/.test(bare) ||
+      _findNpc(bare) || _findPatron(bare) ||
+      _partnerHasTopic(G.convoQ.id, _convoTopic(lower));
+    if (!changingSubject) return _convoAnswer(lower);
+    G.convoQ = null; // dodged — fall through to normal handling
+  }
   // 1) Leave-taking ends an active conversation.
   if (_convoActive() &&
       /^(goodbye|bye|cheerio|laters?|later|see ?ya|ciao)$/.test(bare)) {
