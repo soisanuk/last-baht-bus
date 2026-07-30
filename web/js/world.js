@@ -5714,7 +5714,7 @@ function _buildHostess(name, th, room) {
       { topic: "family", text: idx(FAMILY, 31) },
       { topic: "home", text: idx(HOME, 43) },
       { topic: "plan", text: idx(PLAN, 37) },
-      { topic: "wallet", text: idx(WALLET, 41) },
+      { topic: "wallet", notFlags: ["hasWallet"], text: idx(WALLET, 41) },
     ],
   };
 }
@@ -5858,7 +5858,7 @@ function _buildMama(name, th, room) {
       { topic: "girls", text: idx(GIRLS, 31) },
       { topic: "family", text: idx(FAMILY, 37) },
       { topic: "plan", text: idx(PLAN, 41) },
-      { topic: "wallet", text: idx(WALLET, 43) },
+      { topic: "wallet", notFlags: ["hasWallet"], text: idx(WALLET, 43) },
     ],
   };
 }
@@ -5899,7 +5899,7 @@ function _buildCashier(name, th, room) {
       { topic: "money", text: idx(MONEY, 31) },
       { topic: "tab", text: idx(MONEY, 31) },
       { topic: "family", text: idx(FAMILY, 37) },
-      { topic: "wallet", text: idx(WALLET, 43) },
+      { topic: "wallet", notFlags: ["hasWallet"], text: idx(WALLET, 43) },
     ],
   };
 }
