@@ -4736,9 +4736,10 @@ const PATRONS = {
   mort: {
     name: "Mort", emoji: "🦉", age: 74, nat: "American",
     home: "queen_vic", hops: false,
-    desc: "Seventy-four, a Hawaiian shirt at war with itself, a spiral notebook and a " +
-      "biro he clicks while he watches the soi. He has been on this coast longer than " +
-      "most of the bars, and he is writing all of it down whether it likes it or not.",
+    desc: "Seventy-four, horn-rimmed glasses and a Hawaiian shirt at war with itself, a " +
+      "spiral notebook and a biro he clicks while he watches the soi. He has been on this " +
+      "coast longer than most of the bars, and he is writing all of it down whether it " +
+      "likes it or not.",
     dialogue: [
       { text: "\"Mort.\" He finishes the line before he looks up. \"I write the Nite " +
         "Owl — the back-page column, the one your granddad read on the toilet. Retired " +
@@ -5198,7 +5199,7 @@ const PATRONS = {
   angela: {
     name: "Angela", emoji: "🎧", age: 47, nat: "American",
     home: "queen_vic", hops: false,
-    desc: "Forty-seven, close-cropped hair gone grey at the temples, a flannel shirt " +
+    desc: "Forty-seven, unkempt shoulder-length hair gone grey, a faded flannel shirt " +
       "tied at the waist in a climate that argues against it. On the bar next to " +
       "her Singha: an actual Discman, its foam headphones held together with " +
       "electrical tape. She has the corner seat with the window view of Soi 6 — " +
