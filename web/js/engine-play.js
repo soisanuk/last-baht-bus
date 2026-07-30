@@ -176,6 +176,9 @@ function _lastCall(id) {
 // 1 o'clock hour, last bus at LAST_BUS_TURN = 02:00) — a prompt to break for a main
 // road, or commit to the piwin's tax / the dark walk / a rough wake.
 function _lastBusWarn() {
+  // Soi 6 mode can't ride the bus and is always steps from the Queen Vic — the
+  // last-baht-bus race (and its warning) is a full-game mechanic only.
+  if (G.mode === "soi6") return;
   if (!_flag("act1Done") || G.over || G.lastBusWarned) return;
   if (G.nightTurn < LAST_BUS_TURN - 5 || G.nightTurn >= LAST_BUS_TURN) return;
   if (G.room === _hotelRoomId()) return; // already home — no race left to run
