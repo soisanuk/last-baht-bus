@@ -1314,6 +1314,9 @@ function _questAvailable(qid) {
   // reqFlags: world-state gates (e.g. "hasDog") — deps chain quests, reqFlags
   // gate on anything a flag can express
   if (q.reqFlags && !q.reqFlags.every(f => _flag(f))) return false;
+  // trust: a giver won't hand you a personal/serious job until they know you
+  // (see _npcState). Gates the offer AND accept, so you can't shortcut it.
+  if (q.trust && q.giver && _npcState(q.giver).trust < q.trust) return false;
   // Soi 6 mode confines you to the pocket, so don't offer a job whose target
   // (a room, or an NPC's bar) lies outside it — e.g. the Shamrock Dog, out on
   // the Darkside. You'd accept it and have no way to finish it this trip.

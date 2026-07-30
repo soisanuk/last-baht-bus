@@ -533,6 +533,7 @@ function _convoTopics(id) {
   for (const d of nodes) {
     if (!d.topic) continue;
     if (d.deflect) continue;              // a gated "come back when you've earned it" refusal — don't offer it as a chip
+    if (d.chip === false) continue;       // a plot/quest node the quest flow drives — typeable, never suggested
     if (!d.chip && _topicNamesCharacter(d.topic, id)) continue; // gossip about a person — typeable, not suggested
     if (rage.some(k => d.topic.includes(k))) continue;
     if (d.req && d.req.some(f => !_flag(f))) continue;
