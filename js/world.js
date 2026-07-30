@@ -2924,7 +2924,8 @@ const NPCS = {
       { text: "\"Pull up a stool, mind the cue.\" He nudges his glass an inch in welcome. \"Doug. Calgary — " +
           "thirty years in oil and gas, retired over here to do absolutely nothing, and I've been very good " +
           "at it. Apart from the one thing.\" A rueful tilt of the glass.",
-        short: "\"Doug, Calgary. Retired here to do nothing — very good at it. Apart from the one thing.\"" },
+        short: "\"Doug, Calgary. Retired here to do nothing — very good at it. Apart from the one thing.\"",
+        asks: { key: "invested", q: "He eyes you over the rum, not unkindly. \"You got money in anything out here, friend? Property, a bar, one of them 'opportunities'? Humour an old man — tell me you said no.\"" } },
       { topic: "white dish", text: "\"White Dish? Ho. Pour yourself something first.\" He turns the glass " +
           "slowly. \"Two years back a fella buys me a drink right at this bar — smooth, golf shirt, calls " +
           "himself an area consultant. Says the group's opening the portfolio to a few private investors. " +
@@ -3821,7 +3822,8 @@ const NPCS = {
         "and the only rule is don't sit on the rail.\" He chalks a cue without " +
         "looking at it. \"You shoot? League night's every third night — killer " +
         "pool, hundred baht in, winner takes the table money.\"",
-        short: "\"Table's true, beer's cold, don't sit on the rail. League night every third night — hundred baht in.\"" },
+        short: "\"Table's true, beer's cold, don't sit on the rail. League night every third night — hundred baht in.\"",
+        asks: { key: "why", q: "He racks the balls without hurry. \"So what's your story, bud? Everybody out here's running to something or from something. Which one's you?\"" } },
       { topic: "offer", chip: false, req: ["heardWdgHistory", "heardWdgInside", "heardWdgPitch"], notFlags: ["wdgResolved", "wdgFlipTried"],
         sets: ["wdgResolved"],
         text: "You lay it all out — Terry's history, Kesinee's straight talk, Gavin's smiling pitch. Bert " +
@@ -5201,6 +5203,12 @@ const PATRONS = {
       // Greeting is a little state machine: a stranger gets the full introduction;
       // a returning face gets a shorter one; once she's opened up (mood "open") it
       // warms. dstate/trust/mood are set by the nodes below — see _npcState.
+      // Callback: if she's heard where you're from, she quotes it back (%home% is
+      // filled by _fillSaid from G.player.said) — she keeps most things.
+      { when: (st, G) => st.dstate !== "stranger" && G.player.said && G.player.said.home,
+        text: "\"%home%.\" She says it like a thing she filed and kept. \"Still standing, or did you " +
+          "burn that one down behind you too?\" The headphones are already at her neck — you're a known quantity now.",
+        short: "\"%home%. Still standing?\" (She kept it. She keeps most things.)" },
       { when: (st) => st.mood === "open",
         text: "The headphones are at her neck before you've sat — for Angela, an " +
           "honour guard. \"Back on my side of the glass. Good.\" A nod at the stool " +
@@ -5683,6 +5691,16 @@ function _buildHostess(name, th, room) {
     '"No no, not my bar. Try Candy, Soi Buakhao side. Everybody problem go to Candy, my mama say."',
   ];
 
+  // Naturally nosy, but the English caps how far the questions reach — small,
+  // stock openers, one per girl (deterministic via idx). Answers feed the same
+  // G.player.said memory the expats tap; see _convoAsk / _convoAnswer.
+  const ASK = [
+    { key: "home", q: '"You from where? England? America? Australia?" Bright, practised, already guessing.' },
+    { key: "stay", q: '"How long you stay Pattaya? Short time or looong time?" She giggles at her own joke.' },
+    { key: "girlfriend", q: '"You have girlfriend? Wife? Nooo, really?" A delighted, skeptical squint.' },
+    { key: "return", q: '"First time Pattaya, or you come back? Come back for somebody, maybe na?"' },
+  ];
+
   // a girl whose desc says she's new plays Connect 4 like she's new — the
   // tier the player can actually beat, signalled by what they read of her
   const green = look.startsWith("New enough") || look.startsWith("Baby-faced");
@@ -5691,7 +5709,8 @@ function _buildHostess(name, th, room) {
     ...(green ? { c4: 2 } : {}),
     desc: `${look} — one of the ${bar} girls, from ${from}. ${phone}`,
     dialogue: [
-      { th: "สวัสดีค่ะ", rom: "sawatdee kha", text: idx(GREET, 23), short: idx(GREET_SHORT, 29) },
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", text: idx(GREET, 23), short: idx(GREET_SHORT, 29),
+        asks: idx(ASK, 47) },
       { topic: "family", text: idx(FAMILY, 31) },
       { topic: "home", text: idx(HOME, 43) },
       { topic: "plan", text: idx(PLAN, 37) },
