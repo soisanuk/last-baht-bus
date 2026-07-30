@@ -3793,7 +3793,7 @@ const NPCS = {
       // Delivering Gavin's pitch is the deed — this is where alignment actually
       // lands (never on accepting the quest, only on going through with it). Bert
       // holds firm anyway; the cost is your standing and his regard.
-      { topic: "sell", when: (st, G) => G.quests.wdg_flip === "active" && !_flag("wdgFlipTried"),
+      { topic: "sell", chip: false, when: (st, G) => G.quests.wdg_flip === "active" && !_flag("wdgFlipTried"),
         sets: ["wdgFlipTried"],
         fx: (st, G) => { _align("wdg", 2); _align("indie", -1); },
         text: "You bring it round to selling — Gavin's word, friend to friend, everyone wins. Bert sets the " +
@@ -3807,7 +3807,7 @@ const NPCS = {
         "looking at it. \"You shoot? League night's every third night — killer " +
         "pool, hundred baht in, winner takes the table money.\"",
         short: "\"Table's true, beer's cold, don't sit on the rail. League night every third night — hundred baht in.\"" },
-      { topic: "offer", req: ["heardWdgHistory", "heardWdgInside", "heardWdgPitch"], notFlags: ["wdgResolved", "wdgFlipTried"],
+      { topic: "offer", chip: false, req: ["heardWdgHistory", "heardWdgInside", "heardWdgPitch"], notFlags: ["wdgResolved", "wdgFlipTried"],
         sets: ["wdgResolved"],
         text: "You lay it all out — Terry's history, Kesinee's straight talk, Gavin's smiling pitch. Bert " +
           "listens without touching the Budweiser, which is how you know it lands. When you're done he's " +
@@ -3822,12 +3822,12 @@ const NPCS = {
           "\"You did me a real turn tonight, bud. Bert doesn't forget a thing like that.\"",
         short: "\"Told the old man to hold — won't sell his soul to a spreadsheet while he's too sick to say no.\"",
         fx: (st, G) => { _align("indie", 2); _align("wdg", -1); } },
-      { topic: "offer", notFlags: ["wdgResolved"],
+      { topic: "offer", chip: false, notFlags: ["wdgResolved"],
         text: "\"Still chewing on it, bud. Get me the full picture before I advise the old man: Terry's " +
           "watched White Dish work this soi for years, Kesinee runs one of their bars over at the Kitten " +
           "Corner — she'll talk straight if you are — and the White Dish man himself, Gavin, he's usually " +
           "smiling into a lager at the Golden Dragon. Hear all three, then come tell me what you make of it.\"" },
-      { topic: "offer", req: ["wdgResolved"],
+      { topic: "offer", chip: false, req: ["wdgResolved"],
         text: "\"The White Dish thing? Told the old man to hold, and he did. Gavin came back once, all " +
           "smiles, took the no like it was a delivery running late.\" A crooked grin. \"They'll be back — " +
           "they always are. But not tonight, and not while I'm behind this bar. Your beer's poured, bud.\"" },
@@ -3837,7 +3837,8 @@ const NPCS = {
         "your humility.\"" },
       { topic: "pool", text: "\"Table's a Brunswick, older than most of my customers. " +
         "I re-cloth her every year, level her every month, and love her more than " +
-        "I loved either of my wives. She holds no grudges. Unlike either of my wives.\"" },
+        "I loved either of my wives. She holds no grudges. Unlike either of my wives.\"",
+        fx: (st) => { st.trust = Math.min(5, st.trust + 1); } },
       { topic: "dog", req: ["hasDog"],
         text: "Bert looks past you at the dog by the door and sets his Budweiser down " +
         "slow. \"I'll be damned. That's the Shamrock dog, bud. Paddy's dog — the Irish " +
@@ -3857,16 +3858,25 @@ const NPCS = {
         "money or the girl or the visa runs out. Every high season there's a few. " +
         "We laugh about it because the other option's worse.\" He taps the bar. " +
         "\"Anybody ever seems that far gone, you buy 'em a beer and you SIT with " +
-        "'em, you hear?\"" },
+        "'em, you hear?\"",
+        fx: (st) => { st.trust = Math.min(5, st.trust + 1); } },
       { topic: "white knight", text: "\"See that kid last month — flew in, fell in " +
         "love in forty minutes, tried to 'rescue' a girl from Tequila Queen who's " +
         "got two houses in Buriram and a husband she likes fine. White knights, we " +
         "call 'em. The machine eats 'em alive, bud. The ladies don't need saving — " +
         "they need customers with manners.\"" },
-      { topic: "candy", text: "A crooked grin. \"Candy? My lady, and my old boss — both, " +
-        "which is a hell of a retirement plan. She's got a quiet piece of the Stinky, so " +
-        "don't jump if she wanders in some night to eyeball the girls. Twenty years I ran " +
-        "her bars. Love her to death. Doesn't mean I want her name over my door forever.\"" },
+      { topic: "candy", when: (st) => st.trust < 3, deflect: true,
+        text: "\"Candy?\" A short look, the cue still in his hands. \"My lady, and she's got a quiet " +
+          "piece of this place — so mind your manners if she wanders in of a night. That's all you need " +
+          "off a stool you just sat down on, bud.\"",
+        short: "\"My lady, and a piece of this place. That's all you need for now, bud.\"" },
+      { topic: "candy", when: (st) => st.trust >= 3,
+        text: "A crooked grin, and the cue goes down. \"Candy. My lady, and my old boss — both, which is a " +
+          "hell of a retirement plan. Twenty years I ran her bars. Love her to death.\" The grin steadies into " +
+          "something more honest. \"Doesn't mean I want her name over my door forever. Man gets to my age, he'd " +
+          "like one thing in this town that's his and not hers. The Stinky's it. That's the whole of it, bud.\"",
+        short: "\"My lady and my old boss both. Love her to death — but I'd like one thing here that's mine, not hers.\"",
+        fx: (st) => { st.trust = Math.min(5, st.trust + 1); st.mood = "open"; } },
       { topic: "owner", text: "\"Real owner's a Yank, older than me even, " +
         "and his ticker's packing up — that's why I'm behind this bar and not Candy's. Good " +
         "man. Wanted somebody he trusted keeping the lights on while the doctors do their " +
@@ -4397,6 +4407,7 @@ const QUESTS = {
   white_dish: {
     name: "The White Dish Offer",
     giver: "bert",
+    trust: 2, // he won't ask a near-stranger to weigh in on selling his bar — earn a little rapport first
     desc: "White Dish want to buy Bert's bar out from under its dying owner. Get him the " +
       "real picture — the history (ASK TERRY ABOUT WHITE DISH), the inside view (ASK KESINEE " +
       "at the Kitten Corner ABOUT WHITE DISH), and the pitch (ASK GAVIN at the Golden Dragon " +

@@ -273,6 +273,51 @@ test("tapping a topic chip resolves through the conversation layer", () => {
 
 // ── Verbal social actions (slice 4) ──────────────────────────────────────────
 
+// ── Bert: trust-gated quest + audit (slice follow-up) ────────────────────────
+
+test("Bert won't offer the White Dish job until he trusts you", () => {
+  state().room = "stinky_bar";
+  assert.equal(_questAvailable("white_dish"), false, "a stranger doesn't get the serious ask");
+  run("bert"); // meeting grants only baseline trust (1) — still below the gate
+  assert.notEqual(state().quests.white_dish, "offered", "meeting alone isn't enough");
+  assert.equal(_questAvailable("white_dish"), false);
+  _npcState("bert").trust = 2; // rapport earned
+  assert.equal(_questAvailable("white_dish"), true, "now he'll bring it up");
+  out = [];
+  run("bert");
+  assert.match(lastOut(), /White Dish/, "and talking surfaces the offer");
+});
+
+test("chatting Bert up builds trust toward the gate (pool talk warms him)", () => {
+  state().room = "stinky_bar";
+  run("bert");                       // trust 1
+  const t0 = _npcState("bert").trust;
+  run("ask bert about pool");        // a rapport topic
+  assert.equal(_npcState("bert").trust, t0 + 1, "his pool table is a way in");
+});
+
+test("Bert's chips exclude quest topics (offer/sell) and the person topic (candy)", () => {
+  state().room = "stinky_bar";
+  run("bert");
+  const topics = _convoTopics("bert");
+  assert.ok(!topics.includes("offer") && !topics.includes("sell"),
+    "quest topics are driven by the quest flow, not suggested as chips");
+  assert.ok(!topics.includes("candy"), "Candy is a person — typeable, not a chip");
+  assert.ok(topics.includes("pool"), "his flavour topics still surface");
+});
+
+test("Bert guards the Candy topic until he trusts you (audit: deflect node)", () => {
+  state().room = "stinky_bar";
+  run("bert"); // trust 1
+  out = [];
+  run("ask bert about candy");
+  assert.match(lastOut(), /all you need|for now, bud/i, "guarded from a near-stranger");
+  _npcState("bert").trust = 3;
+  out = [];
+  run("ask bert about candy");
+  assert.match(lastOut(), /his and not hers|whole of it/i, "opens up once earned");
+});
+
 test("compliment warms a known partner (+1 trust, once per day)", () => {
   run("angela"); // meeting her sets dstate=met, trust=1
   const t0 = _npcState("angela").trust;

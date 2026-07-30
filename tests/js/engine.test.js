@@ -3570,6 +3570,7 @@ test("SLEEP: turn in from the room, or climb up from the pub below, to end the n
 test("Soi 6 mode won't offer a quest you can't finish in the pocket (Shamrock is out of bounds)", () => {
   startSoi6Mode();
   state().flags.hasDog = true;
+  _npcState("bert").trust = 2; // white_dish now needs a little rapport (trust>=2); this test is about geography, not trust
   const bertOffers = () => Object.keys(QUESTS).filter(q => QUESTS[q].giver === "bert" && _questAvailable(q));
   const offered = bertOffers();
   assert.ok(offered.includes("white_dish"), "the in-pocket White Dish job still offers");
