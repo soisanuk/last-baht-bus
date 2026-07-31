@@ -147,44 +147,43 @@ test("the wheel: exits and closed hints fire straight; open hints prefill", () =
   assert.match(open.c, /^tip /);
 });
 
-test("the wheel: quick vs comprehensive for a present hostess", () => {
+test("the wheel: talk + actions, no ASK-about topics", () => {
   G.room = "lucky_tiger"; // Lek's bar
   const quick = _term.kwActions("npc", "Lek", false);
   const labels = quick.map(a => a.t);
-  assert.ok(labels.includes("talk"), "talk is quick");
+  assert.ok(labels.includes("talk"), "talk opens the conversation");
   assert.ok(labels.includes("buy her a drink"), "the soi's love language");
   assert.ok(!labels.includes("barfine"), "barfine is not a quick tap");
   const full = _term.kwActions("npc", "Lek", true);
   const fullLabels = full.map(a => a.t);
   assert.ok(fullLabels.includes("flirt"));
   assert.ok(fullLabels.includes("barfine"));
-  G.known.oy = true; // Oy's name has come up in gossip
-  const known = _term.kwActions("npc", "Lek", true).map(a => a.t);
-  assert.ok(known.some(t => /^ask about oy$/.test(t)), "live topics surface on hold");
+  // ASK-about topics no longer live on the wheel — they're inside the conversation
+  // (the chip bar) now. The wheel never emits an "ask …" action, even for a known name.
+  G.known.oy = true;
+  const cmds = _term.kwActions("npc", "Lek", true).map(a => a.c);
+  assert.ok(!cmds.some(c => /^ask /.test(c)), "the wheel exposes no ASK");
 });
 
-test("the wheel: name-topics stay hidden until the name has printed", () => {
+test("topic reveal lives in the chip bar: place topics show, name-gossip hidden", () => {
   newGame();
-  G.room = "beach_rd_s"; // Bank's motosai stand; Pim never mentioned yet
-  let topics = _term.kwActions("npc", "Bank", true).map(a => a.t);
-  assert.ok(!topics.includes("ask about pim"), "who is Pim?");
-  assert.ok(topics.includes("ask about darkside"), "place topics are not gated");
-  _say("“My girlfriend Pim — Starlight Bar, LK Metro.”");
-  topics = _term.kwActions("npc", "Bank", true).map(a => a.t);
-  assert.ok(topics.includes("ask about pim"), "the transcript named her");
+  G.room = "beach_rd_s"; // Bank's motosai stand
+  _doTalk("bank", null);              // open the conversation → chip bar is the topic surface
+  const topics = _convoTopics("bank");
+  assert.ok(topics.includes("darkside"), "place topics are suggested as chips");
+  assert.ok(!topics.includes("pim"), "gossip about a person (Pim) is typeable, never chip-suggested");
 });
 
-test("the wheel: an absent name routes through whoever is here", () => {
+test("the wheel: an absent name offers to talk (no ASK-gossip routing)", () => {
   G.room = "candy_bar"; // Candy present, Oy absent
   const acts = _term.kwActions("npc", "Madam Oy", false);
-  assert.match(acts[0].c, /^ask candy about madam oy$/);
+  assert.equal(acts.length, 1, "no gossip-ask when someone is here");
+  assert.match(acts[0].c, /^talk to madam oy$/);
   assert.equal(acts[0].go, true);
-  assert.ok(acts.every(x => x.go), "no dangling 'ask …' when someone is here");
-  G.room = "jomtien_beach"; // nobody around to gossip with: a talk attempt, which
-  const alone = _term.kwActions("npc", "Madam Oy", false); // gives honest feedback
+  G.room = "jomtien_beach"; // nobody around
+  const alone = _term.kwActions("npc", "Madam Oy", false);
   assert.equal(alone.length, 1);
   assert.match(alone[0].c, /^talk to madam oy$/);
-  assert.equal(alone[0].go, true);
 });
 
 test("the wheel: tapping a regular who has hopped away offers to talk (not gossip)", () => {

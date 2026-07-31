@@ -151,13 +151,16 @@ test("printed names become known; lowercase words and fragments do not", () => {
   assert.ok(state().known.nok, "being in the room prints the name");
 });
 
-test("autocomplete won't suggest ask-topics naming strangers", () => {
+test("autocomplete no longer suggests ask-topics (they live in the conversation now)", () => {
   state().room = "beach_rd_s";
-  run("look"); // Bank hits the presence line; Pim is still nobody
-  assert.ok(!engineComplete("ask bank about ").includes("pim"), "who is Pim?");
-  assert.ok(engineComplete("ask bank about ").includes("darkside"));
+  run("look"); // Bank present
+  // The ASK-about suggestion surface is gone: completing `ask <npc> about …` yields
+  // no topics, whether or not the name has been mentioned. Topics surface as
+  // in-conversation chips (see _convoTopics). Typed ASK still answers.
+  assert.deepEqual(engineComplete("ask bank about "), [], "no topic suggestions");
   _say("“My girlfriend Pim — Starlight Bar, LK Metro.”");
-  assert.ok(engineComplete("ask bank about ").includes("pim"));
+  assert.deepEqual(engineComplete("ask bank about "), [], "still none after she's named");
+  assert.ok(engineComplete("ask ").includes("bank"), "ask <npc> still name-completes");
 });
 
 test("_topicKnown: patron names gate too; non-name topics always pass", () => {
@@ -1574,6 +1577,50 @@ test("lady drinks warm the outcome, tier by tier", () => {
   assert.match(lastOut(), /puppy|Sanuk|greedy|sample|nose/i, "tolerated at three drinks");
   run("buy drink for fon", "buy drink for fon", "kiss fon");
   assert.match(lastOut(), /takes her time|halfway|holds it/i, "leaned into at five");
+});
+
+test("dialogue choices: Bert's WDG-flip is a pick-a-side fork; effects land, closes once taken", () => {
+  // (rely on the beforeEach's newGame — it also suppresses random saleng/peddler
+  // events that would otherwise swallow the follow-up command mid-test)
+  state().room = "stinky_bar"; state().quests.wdg_flip = "active";
+  run("talk bert"); run("talk bert"); // returning greeting carries the fork
+  assert.ok(_convoChoices().some(c => /push him to sell/i.test(c.label)), "the sell choice is offered");
+  run("push him to sell"); // exact typed label wins over the PUSH verb (pre-verb pick)
+  assert.equal(_faction("wdg"), 2, "carrying Gavin's pitch aligns you to WDG");
+  assert.equal(_faction("indie"), -1);
+  assert.ok(state().flags.wdgFlipTried);
+  assert.ok(!_convoChoices().some(c => /sell/i.test(c.label)), "the fork closes once taken");
+});
+
+test("dialogue choices: the honest picture resolves the flip the other way", () => {
+  state().room = "stinky_bar";
+  ["heardWdgHistory", "heardWdgInside", "heardWdgPitch"].forEach(f => state().flags[f] = true);
+  run("talk bert"); run("talk bert");
+  assert.ok(_convoChoices().some(c => /honest picture/i.test(c.label)));
+  run("give him the honest picture"); // number "2" or a chip tap would do the same
+  assert.equal(_faction("indie"), 2);
+  assert.equal(_faction("wdg"), -1);
+  assert.ok(state().flags.wdgResolved);
+});
+
+test("flirt is orientation-aware: a man gets the awkward brush-off, no side effects", () => {
+  state().room = "stinky_bar";
+  run("flirt bert");
+  assert.match(lastOut(), /not that way|wrong tree|steady on/i, "Bert deflects — awkward, not the favor tiers");
+  assert.equal(_faction("wdg"), 0, "a whiffed pass moves no standing");
+  assert.ok(!state().soc.heat.stinky_bar, "awkward costs no heat");
+});
+
+test("a saleng only interrupts a conversation if the partner bolts to it", () => {
+  state().room = "candy_bar";
+  const g = _npcsHere().find(id => NPC_ROLES[id] === "hostess");
+  _doTalk(NPCS[g].name.split(" ")[0].toLowerCase(), null);
+  assert.equal(state().convo, g, "in conversation");
+  state().salengCart = "fruit"; state().salengRoom = state().room;
+  // the vignette picks a random hostess each tick; when it lands on the partner
+  // she's physically gone to the cart → the conversation ends (the "she jumps" rule)
+  for (let i = 0; i < 60 && state().convo; i++) _salengVignette();
+  assert.equal(state().convo, null, "she bolted to the cart mid-sentence → conversation over");
 });
 
 test("cashiers cap physical contact until the bell has rung twice", () => {
@@ -5079,19 +5126,13 @@ test("engineComplete: verbs first, context after, spoilers never", () => {
   assert.ok(engineComplete("take b").includes("bottle"));
 });
 
-test("engineComplete: quests, contacts, and live ask topics", () => {
+test("engineComplete: quests, contacts, watch, fare", () => {
   state().quests.sangsom = "offered";
   assert.ok(engineComplete("accept ").includes("sangsom"));
   state().quests.sangsom = "active";
   assert.ok(engineComplete("abandon ").includes("sangsom"));
   state().phone.contacts.fon = true;
   assert.deepEqual(engineComplete("message "), ["fon"]);
-  // ask topics respect req flags: candy's wallet talk needs no flag, deeper cuts do
-  state().room = "candy_bar";
-  const before = engineComplete("ask candy ");
-  state().flags.knowOyHasIt = true;
-  const after = engineComplete("ask candy ");
-  assert.ok(after.length >= before.length, "topics unlock with knowledge, never lock");
   // WATCH is a real mechanic (Blue Dog show, TV), not just an alias — it completes
   assert.ok(engineComplete("wat").includes("watch"));
   // a pending fare offers its own amount, so PAY is one tap on mobile

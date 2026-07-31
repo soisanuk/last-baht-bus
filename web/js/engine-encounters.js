@@ -186,9 +186,17 @@ function _salengVignette() {
   const girls = _npcsHere().filter(id => NPC_ROLES[id] === "hostess" || NPC_ROLES[id] === "mamasan");
   if (!girls.length) return; // nobody to play with it — stay quiet
   if (G.salengCart === "lingerie") { _say(_salengPick(_SALENG_LINGERIE_SCENE), "dim"); return; }
-  const gName = NPCS[girls[Math.floor(_rand() * girls.length)]].name;
+  const gid = girls[Math.floor(_rand() * girls.length)];
+  const gName = NPCS[gid].name;
   const pool = _SALENG_VIGNETTES[G.salengCart] || _SALENG_VIGNETTES._default;
   _say(_salengPick(pool).replace(/\{g\}/g, gName), "dim");
+  // The cart itself is ambient — it doesn't break a conversation. But if the girl
+  // who bolts to it is the one you were talking to, she's physically gone
+  // mid-sentence, so THAT ends the conversation (the "she jumps to the cart" rule).
+  if (_convoActive() === gid) {
+    _convoInterrupt();
+    _say(`(${gName.split(" ")[0]} is up and gone to the cart mid-sentence — so much for that conversation.)`, "dim");
+  }
 }
 
 function _maybeEncounter() {

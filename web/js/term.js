@@ -269,36 +269,17 @@ const _term = (() => {
       const npc = typeof _findNpc === "function" ? _findNpc(lo) : null;
       const pat = !npc && typeof _findPatron === "function" ? _findPatron(lo) : null;
       if (!npc && !pat) {
-        // A regular who isn't here: patrons hop bars every hour, so the name you
-        // tapped from a moment ago may already have drifted off. Offer to talk —
-        // which reports plainly that they've moved on — rather than gossip about
-        // them (that's for story NPCs, below), which loses what you meant.
-        if (k === "patron") return [{ t: "talk to " + lo, c: "talk to " + lo, go: true }];
-        // A story NPC mentioned in passing: route the question through everyone
-        // who IS here — a complete action per NPC beats a dangling "ask …" that
-        // loses the topic. If nobody's here, a talk attempt gives honest feedback.
-        const here = _npcsHere();
-        for (const id of here.slice(0, 3)) {
-          a.push({ t: `ask ${NPCS[id].name} about ${lo}`,
-            c: `ask ${NPCS[id].name.toLowerCase()} about ${lo}`, go: true });
-        }
-        if (!here.length) a.push({ t: "talk to " + lo, c: "talk to " + lo, go: true });
-        return a;
+        // Nobody here by that name — a patron who hopped off, or a story NPC named
+        // only in passing. Offer to TALK, which reports plainly where they are or
+        // that they've moved on. No ASK-about gossip routing: conversations start
+        // with TALK now, and topics live inside the conversation (the chip bar),
+        // not on a bystander's wheel.
+        return [{ t: "talk to " + lo, c: "talk to " + lo, go: true }];
       }
+      // TALK opens the conversation; the topic list + action-choices then live on
+      // the in-conversation chip bar (see _chipSet), not here — the wheel no longer
+      // exposes ASK-about topics.
       a.push({ t: "talk", c: "talk to " + lo, go: true });
-      const topics = (npc
-        ? NPCS[npc].dialogue.filter(d => d.topic &&
-            (!d.req || d.req.every(f => G.flags[f])) &&
-            (!d.notFlags || d.notFlags.every(f => !G.flags[f]))).map(d => d.topic)
-        : PATRONS[pat].dialogue.filter(d => d.topic).map(d => d.topic)
-      ).filter(_topicKnown);
-      if (full) {
-        for (const t of topics.slice(0, 6)) {
-          a.push({ t: "ask about " + t, c: `ask ${lo} about ${t}`, go: true });
-        }
-      } else if (topics.length) {
-        a.push({ t: "ask about …", c: `ask ${lo} about `, go: false });
-      }
       a.push({ t: "examine", c: "x " + lo, go: true });
       const role = npc && typeof NPC_ROLES !== "undefined" ? NPC_ROLES[npc] : null;
       // host-bar staff (Arm, Win) aren't in NPC_ROLES — hostesses' wheel logic

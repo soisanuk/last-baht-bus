@@ -1170,6 +1170,35 @@ const _SOCIAL_TEXT = {
   ],
 };
 
+// A farang man's pass only lands with a woman who's into men. Everyone else —
+// another man, or a tom/tomboy who bats the other way — gets an awkward-to-hostile
+// brush-off instead of the favor tiers, keyed to the target's disposition:
+//   orientation "gay"  → the wrong-team let-down (she's into girls, same as you)
+//   NPCS[id].flirtHostile → a cold, dangerous refusal (+heat)
+//   otherwise          → awkward, brushed off good-naturedly
+const _FLIRT_WRONGTEAM = [
+  n => `${n} laughs, not unkindly. "Aww, tilac — not my type. I like the ladies, same-same you." A pat on the cheek, and she's moved on.`,
+  n => `"Handsome, but—" ${n} tips her head at a girl across the bar and grins. "—wrong team, na. I bat the other way." No offence in it, plenty of amusement.`,
+];
+const _FLIRT_AWKWARD = [
+  n => `${n} blinks, then snorts. "Ha — no. Not that way, mate. Buy me a beer if you like, but keep the eyelashes to yourself." More baffled than bothered.`,
+  n => `A beat of confusion, then ${n} laughs it off and shifts his stool an inch away. "Steady on, fella. Wrong tree entirely." Good-natured, but that's a no.`,
+];
+const _FLIRT_HOSTILE = [
+  n => `${n}'s face shuts like a door. "No. Do that again and we have a problem." The temperature in your corner of the bar drops several degrees.`,
+  n => `"You WHAT?" ${n} sets the glass down very deliberately. That is not a look you flirt through. Leave it.`,
+];
+function _flirtUnwelcome(id, name) {
+  const o = NPCS[id] && NPCS[id].orientation;
+  let pool, hostile = false;
+  if (o === "gay") pool = _FLIRT_WRONGTEAM;
+  else if (NPCS[id] && NPCS[id].flirtHostile) { pool = _FLIRT_HOSTILE; hostile = true; }
+  else pool = _FLIRT_AWKWARD;
+  _say(_pickVary(pool, "flirtno:" + id)(name), hostile ? "alert" : "");
+  if (hostile) { _addHeat(1); _addHappy(-1); }
+  _noteActor(id);
+}
+
 function _doSocial(kind, targetWord) {
   const w = (targetWord || "").replace(/^with /, "").trim();
   const here = _npcsHere();
@@ -1239,7 +1268,9 @@ function _doSocial(kind, targetWord) {
         "crossfade. “Love you too, bro. Still no Wonderwall.”");
       return;
     }
-    _say(`${name} would rather you didn't.`);
+    // any other non-staff target (a male manager, a patron): orientation-aware
+    // brush-off, not a flat "would rather you didn't"
+    _flirtUnwelcome(id, name);
     return;
   }
 
@@ -1257,6 +1288,8 @@ function _doSocial(kind, targetWord) {
     return;
   }
 
+  // a hostess who bats for the other team gets the wrong-team let-down, not the tiers
+  if (NPCS[id].orientation === "gay") { _flirtUnwelcome(id, name); return; }
   // the bra you bought her makes fondling "more interesting" — one tier warmer
   const braBump = (kind === "fondle" && G.soc.bra && G.soc.bra[id]) ? 2 : 0;
   const net = _favor(id) - SEV[kind] + braBump;
