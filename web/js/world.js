@@ -2548,6 +2548,12 @@ const NPCS = {
     room: "lucky_tiger",
     desc: "Petite, bright smile, glittery earrings catching the bar lights. She's beating " +
       "two customers at pool simultaneously.",
+    selfies: [
+      { cap: "new earring ✨ shiny like me 555", pic: "lek_sel1" },
+      { cap: "somtam so spicy 🥵🌶️ i cry 555", pic: "lek_sel2" },
+      { cap: "win pool AGAIN 🎱😎 nobody beat me", pic: "lek_sel3" },
+      { cap: "bar quiet 😴 you come play?? 💕", pic: "lek_sel4" },
+    ],
     dialogue: [
       { req: ["knowMot"], notFlags: ["knowOyHasIt"], th: "อุ๊ยจริงหรอ", rom: "ui jing ro",
         text: "\"Mot?! That little— okay okay. This morning he come here all big smile, buy whisky-cola, PAY CASH. Say he 'do business' with Madam Oy at Rainbow Girls. Business!\" She snorts. \"Your wallet in Oy's safe by lunchtime, guarantee.\"",
@@ -2603,6 +2609,12 @@ const NPCS = {
     room: "paradise_nights",
     desc: "Cheerful, sparkly top throwing glitter across the wall, never stops smiling " +
       "even when shouting drink orders over the bass.",
+    selfies: [
+      { cap: "glitter EVERYWHERE 😆✨ cannot wash off 555", pic: "ping_sel1" },
+      { cap: "new phone case 📱💖 you like??", pic: "ping_sel2" },
+      { cap: "beach today 🏖️ so hot i melt", pic: "ping_sel3" },
+      { cap: "club so loud 🔊 my ear go beep beeep 555", pic: "ping_sel4" },
+    ],
     dialogue: [
       { th: "สนุกไหม", rom: "sanuk mai",
         text: "\"Having fun?! This club so loud I answer questions nobody ask yet!\" She beams and slides you a glass of iced water on the house. \"You look like you need free one.\"",
@@ -2797,6 +2809,16 @@ const NPCS = {
     room: "ruby_kiss",
     desc: "The ringleader of the Ruby Kiss front stools, lipstick on the rim of every glass by " +
       "design, quick enough to sell you a drink and roast you for buying it in the same breath.",
+    // The front-stool showwoman runs a LINE photo-drip like she runs the window:
+    // she performs on purpose, and charges for the encore. First frame free, the
+    // rest escalate, and she roasts you the whole way. PG-13 by design.
+    // (See _startPicDeal / _advancePicDeal / _doSendMoney.)
+    paidPics: [
+      { cap: "look what the front stool see tonight 💋😏 (this ONE free — enjoy)", pic: "wilai_pic1", words: "handsome!! i take special photo, you lucky boy 😘" },
+      { cap: "little bit more shoulder... you looking?? 👀 course you looking 555", pic: "wilai_pic2", ask: 300 },
+      { cap: "you want see the back?? 😏 turn around just for you 👙🍑 Ruby red", pic: "wilai_pic3", ask: 500 },
+      { cap: "555 last look 🍑😘 rest you come sit my stool and see LIVE", pic: "wilai_pic4", ask: 800 },
+    ],
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Ohh, handsome come to Ruby!\" A lipstick-marked glass is in your hand before you've " +
@@ -2888,6 +2910,7 @@ const NPCS = {
   },
   gavin: {
     name: "Gavin", emoji: "🍽️",
+    title: "a golf-shirted man appraising the bar like a spreadsheet",
     room: "golden_dragon",
     desc: "Fifties, a golf shirt with a discreet logo, a lager he barely touches and a way of looking " +
       "at a bar like a spreadsheet. He calls himself an 'area consultant.' Everyone else calls him the " +
@@ -5628,6 +5651,32 @@ const PATRONS = {
   },
 };
 
+// What a patron looks like before you've learned their name — shown on the "At
+// the rail" line and typeable/tappable to TALK ("talk to the owlish old-timer"),
+// until you meet them (talk / photo / someone names them) and the name takes over.
+// Assigned as a batch so the PATRONS entries stay lean. See _patronLabel.
+const _PATRON_TITLES = {
+  glam:     "an ancient German in disco-era finery",
+  fergie:   "a red-faced, bald Ulsterman",
+  ron:      "a leathery Aussie in a faded singlet",
+  mort:     "an owlish old-timer scribbling in a notebook",
+  nigel:    "a sun-spotted Brit in a grey Chang vest",
+  chuck:    "a peeling American in a plumbing-company polo",
+  dave:     "a tidy Brit nursing a flat shandy",
+  helmut:   "a fastidious German with polished glasses",
+  somsak:   "a quiet Thai in a maintenance polo",
+  randy:    "a huge, big-handed American",
+  drew:     "a chain-smoking American with Navy posture",
+  david:    "a beaming Canadian in a soft ball cap",
+  superman: "an old-timer in a faded Superman shirt",
+  angela:   "a grey, flannel-shirted American woman",
+  danny:    "a gym-hard Canadian in a tank top",
+  josey:    "a broad-shouldered young Aussie in gym gear",
+  reginald: "a well-preserved Brit in crisp linen",
+  mikkel:   "a young Danish backpacker in friendship bracelets",
+};
+for (const [id, t] of Object.entries(_PATRON_TITLES)) if (PATRONS[id]) PATRONS[id].title = t;
+
 const CANON_BARS = [
   "Lucky Tiger Bar", "Pink Lotus Lounge", "Neon Paradise A-Go-Go",
   "Golden Dragon Bar", "Sunset Dreams Lounge", "Starlight Bar",
@@ -5728,6 +5777,14 @@ const _H_PHONE = [
   "Google Translate is open before you finish the sentence.",
   "She types more than she talks — and laughs at both.",
 ];
+// Texted-selfie captions for filler hostesses who keep photos on their phone
+// (about two in five do — see _buildHostess). PG-13 Tinglish, same voice as theirs.
+const _H_SELFIES = [
+  "new dress 👗 you like?? 😊", "beach today 🏖️ miss you na", "me eat somtam 🥵🌶️ so spicy 555",
+  "new hair 💇‍♀️ good mai??", "waiting work 💕 think about you", "my cat 🐈 cute like me na 😽",
+  "market this morning 🛵 buy food mama", "new nail 💅 pink na", "so hot today 🥵 i melt 555",
+  "friend birthday 🎂 we sing loud loud", "rainy 🌧️ i stay home lonely 🥺", "gym 💪 strong for you",
+];
 
 function _hh(s, salt) {
   let h = salt >>> 0;
@@ -5815,9 +5872,16 @@ function _buildHostess(name, th, room) {
   // a girl whose desc says she's new plays Connect 4 like she's new — the
   // tier the player can actually beat, signalled by what they read of her
   const green = look.startsWith("New enough") || look.startsWith("Baby-faced");
+  // about two in five keep photos on the phone and will text one to a contact —
+  // three captions, hash-picked so she's stable (see _selfiesFor / _maybePhotoText)
+  const hasPics = _hh(id, 37) % 5 < 2;
+  const selfies = hasPics
+    ? [0, 1, 2].map(k => _H_SELFIES[_hh(id, 51 + k * 17) % _H_SELFIES.length])
+    : null;
   return {
     name, th, emoji, room, filler: true,
     ...(green ? { c4: 2 } : {}),
+    ...(selfies ? { selfies } : {}),
     desc: `${look} — one of the ${bar} girls, from ${from}. ${phone}`,
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", text: idx(GREET, 23), short: idx(GREET_SHORT, 29),

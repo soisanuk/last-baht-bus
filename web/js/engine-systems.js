@@ -1432,10 +1432,13 @@ function _phoneDead() {
   return false;
 }
 
-function _pushMsg(from, text, gives, fromName) {
+function _pushMsg(from, text, gives, fromName, photo) {
   // fromName carries a display name for senders that aren't NPCs (e.g. the Soi
   // Dog Foundation broadcast); NPC texts leave it null and render by NPCS name.
-  G.phone.inbox.push({ from, text, turn: G.turns, read: false, gives: gives || 0, fromName: fromName || null });
+  // photo (a caption string) marks a texted selfie — rendered with her portrait
+  // and filed in the gallery when read.
+  G.phone.inbox.push({ from, text, turn: G.turns, read: false, gives: gives || 0,
+    fromName: fromName || null, photo: photo || null });
   G.phone.lastText = G.turns;
 }
 
@@ -1546,6 +1549,16 @@ function _doSendMoney(arg) {
   const bump = amt >= 500 ? 3 : amt >= 100 ? 2 : 1;
   G.soc.drinks[id] = (G.soc.drinks[id] || 0) + bump;
   _say(`฿${amt} crosses town in one green blink. (฿${G.money} left.)`);
+  // paying into an active pics-drip: enough unlocks the next shot, short of it teases
+  const deal = G.phone.picDeal;
+  if (deal && !deal.done && deal.id === id && deal.idx != null) {
+    if (amt >= deal.ask) _advancePicDeal();
+    else {
+      _pushMsg(id, `😏 not quite na... ฿${deal.ask} then i send. this one i keep for tips 555`);
+      _say("(📱 A reply lands before you've pocketed the phone.)", "dim");
+    }
+    return;
+  }
   _pushMsg(id, amt >= 500 ? "🙏🙏🙏 you TOO good to me. tonight I take care YOU" :
     amt >= 100 ? "khop khun kha!! 💕 you number one" : "55555 cheap Charlie... but sweet 💕");
   _say("(📱 A reply lands before you've pocketed the phone.)", "dim");
@@ -1561,7 +1574,15 @@ function _readMessages() {
   const show = unread.length ? unread : G.phone.inbox.slice(-3);
   for (const msg of show) {
     const sender = msg.fromName || (NPCS[msg.from] ? NPCS[msg.from].name : msg.from);
-    _say(`📱 ${sender}: “${msg.text}”`, "thai");
+    if (msg.photo) {
+      // a received selfie: the "📷 " prefix + her known name lets term.js drop her
+      // portrait in inline; it also files into the gallery the first time it's read.
+      _say(`📷 ${sender}: «${msg.photo}»`, "thai");
+      if (msg.text) _say(`📱 ${sender}: “${msg.text}”`, "thai");
+      if (!msg.read && typeof _addPhoto === "function") _addPhoto(msg.from, msg.photo);
+    } else {
+      _say(`📱 ${sender}: “${msg.text}”`, "thai");
+    }
     if (!msg.read && msg.gives) {
       G.money += msg.gives;
       _say(`(She's transferred you ฿${msg.gives}. ฿${G.money} in pocket. This town.)`, "win");
@@ -1599,6 +1620,8 @@ function _doPhoneScreen() {
   if (G.phone.invite && G.phone.invite.day === G.day && NPCS[G.phone.invite.id]) {
     _say(`📌 ${NPCS[G.phone.invite.id].name} asked you to come by her bar tonight.`, "dim");
   }
+  const nPhotos = (Array.isArray(G.phone.photos) ? G.phone.photos : []).filter(p => NPCS[p.id] || PATRONS[p.id]).length;
+  if (nPhotos) _say(`📸 ${nPhotos} photo${nPhotos > 1 ? "s" : ""} in your gallery — GALLERY.`, "dim");
   const wx = _wxLine();
   if (wx) _say(`🌤️  Pattaya — ${wx}`, "dim");
   const feed = _newsFeed();
@@ -1637,6 +1660,63 @@ function _soidogTick() {
 // likely to be the one who does, and her messages skew to invites and longing
 // ("when you come see me?") rather than the mama-sick game she'd never run on her
 // own farang. New/face contacts still send the classic scam-ask mix.
+// A lady's texted selfies. Story girls author their own `selfies` for character;
+// filler hostesses get a small hash-picked pool in _buildHostess. PG-13, Tinglish,
+// Google-Translate-and-emoji — the same voice they text in.
+const _SELFIE_CAPS = [
+  "new dress 👗 you like?? 😊", "beach today 🏖️ miss you na",
+  "me and my friend eat MK 🍲😋", "new hair!! 💇‍♀️ good mai? 555",
+  "waiting work 💕 i think about you", "555 my cat 🐈 cute like me na 😽",
+  "gym today 💪 strong for my farang", "sunset Jomtien 🌅 wish you here",
+  "market this morning 🛵 buy food for mama", "new nail 💅 pink you favourite na",
+];
+
+function _selfiesFor(id) {
+  const n = NPCS[id];
+  return (n && Array.isArray(n.selfies)) ? n.selfies : [];
+}
+// A selfie entry is either a bare caption string (filler) or {cap, pic} (authored
+// girls with distinct art); term.js resolves the pic — the engine only needs the cap.
+function _selfieCap(e) { return typeof e === "string" ? e : (e && e.cap) || ""; }
+
+// She just sends a photo, no words — files to the gallery on read.
+function _maybePhotoText(id) {
+  const caps = _selfiesFor(id);
+  if (!caps.length) return false;
+  _pushMsg(id, "", 0, null, _selfieCap(caps[Math.floor(_rand() * caps.length)]));
+  return true;
+}
+
+// The pay-per-photo drip (Gift's hustle). paidPics is an ordered set; the first is
+// a free teaser, each later one costs its `ask`. Opening it sends the teaser + the
+// pitch and arms G.phone.picDeal; SEND >= ask advances it (see _doSendMoney).
+function _startPicDeal(id) {
+  const pics = NPCS[id] && NPCS[id].paidPics;
+  if (!pics || !pics.length) return;
+  _pushMsg(id, pics[0].words || "hi handsome 😘 i take picture just for you...", 0, null, pics[0].cap);
+  if (pics.length > 1) {
+    G.phone.picDeal = { id, idx: 1, ask: pics[1].ask };
+    _pushMsg(id, `😏 you like?? more sexy waiting... only ฿${pics[1].ask} i send next one 💸`);
+  } else {
+    G.phone.picDeal = { id, done: true };
+  }
+}
+
+function _advancePicDeal() {
+  const deal = G.phone.picDeal, id = deal.id, pics = NPCS[id].paidPics;
+  const shot = pics[deal.idx];
+  _pushMsg(id, shot.words || "😘💕", 0, null, shot.cap);
+  const next = deal.idx + 1;
+  if (next < pics.length) {
+    G.phone.picDeal = { id, idx: next, ask: pics[next].ask };
+    _pushMsg(id, `like?? 😏 next one better... ฿${pics[next].ask} 💸`);
+  } else {
+    G.phone.picDeal = { id, done: true };
+    _pushMsg(id, `that ALL i got here na 🙈 rest you come ${_barName(_npcRoom(id)) || "see me"} see LIVE 😘`);
+  }
+  _say("(📱 She's sent something. CHECK MESSAGES.)", "dim");
+}
+
 function _maybeIncomingText() {
   if (G.battery <= 0 || G.game || G.pendingEnc) return;
   const contacts = Object.keys(G.phone.contacts);
@@ -1648,6 +1728,16 @@ function _maybeIncomingText() {
   const pool = [];
   for (const c of contacts) for (let i = 0; i <= _bondTier(c); i++) pool.push(c);
   const id = pool[Math.floor(_rand() * pool.length)];
+  const buzz = () => _say("(📱 Your phone buzzes — CHECK MESSAGES.)", "dim");
+  // the pics-hustle girl opens her drip the first time she texts, then nudges
+  // until you pay through it
+  if (NPCS[id].paidPics && !G.phone.picDeal) { _startPicDeal(id); buzz(); return; }
+  if (G.phone.picDeal && !G.phone.picDeal.done && G.phone.picDeal.id === id) {
+    _pushMsg(id, `you see my photo?? 😏 more waiting for you... ฿${G.phone.picDeal.ask} 💸`);
+    buzz(); return;
+  }
+  // a lady who keeps photos sometimes just sends one, out of the blue
+  if (_selfiesFor(id).length && _rand() < 0.25) { _maybePhotoText(id); buzz(); return; }
   const name = NPCS[id].name, t = _bondTier(id), roll = _rand();
   if (t >= 3) { // her farang: longing, jealousy, the real ones — no scam game on you
     if (roll < 0.45) { G.phone.invite = { id, day: G.day };

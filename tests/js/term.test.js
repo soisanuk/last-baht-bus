@@ -27,6 +27,15 @@ test("character and bar names get the kw wrap; longest name wins", () => {
   assert.ok(_term.decorate("Madam Oy owns the place.").includes(kw("Madam Oy", "npc")));
 });
 
+test("_picFor maps a photo caption to its distinct frame, else null (portrait fallback)", () => {
+  // a paid-pic caption → its frame stem (term.js renders portraits/pics/<stem>.png)
+  assert.equal(_term.picFor("wilai", "you want see the back?? 😏 turn around just for you 👙🍑 Ruby red"), "wilai_pic3");
+  // an authored selfie → its frame
+  assert.equal(_term.picFor("ping", "beach today 🏖️ so hot i melt"), "ping_sel3");
+  // a filler string selfie carries no frame → null (falls back to her portrait)
+  assert.equal(_term.picFor("wilai", "some caption she never sent"), null);
+});
+
 test("items decorate only where they are present", () => {
   // the receipt starts in your pocket
   assert.ok(G.itemLoc.receipt === "inventory");

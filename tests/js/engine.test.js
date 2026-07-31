@@ -4888,6 +4888,92 @@ test("photo costs battery; call teaches you to text", () => {
   assert.match(lastOut(), /nobody in this town answers a phone/);
 });
 
+test("PHOTO <someone> collects a portrait, learns the name, and GALLERY lists it", () => {
+  state().stage = "vacation"; state().room = "golden_dragon"; state().nightTurn = 30; state().battery = 80;
+  const b = state().battery;
+  // photograph him by his look, before you know he's "Gavin"
+  run("photo the golf-shirted man");
+  assert.ok(state().known.gavin, "the shot puts you on first-name terms");
+  assert.ok(state().phone.photos.some(p => p.id === "gavin"), "saved to the gallery");
+  assert.equal(state().battery, b - 1, "costs 1% battery");
+  out = []; run("gallery");
+  assert.match(lastOut(), /Gallery — 1 photo/);
+  assert.match(lastOut(), /Gavin/);
+  assert.match(lastOut(), /Golden Dragon/, "the gallery says where he holds court");
+  // a second shot is a duplicate, not a fresh collectible
+  out = []; run("photo gavin");
+  assert.match(lastOut(), /for the collection|isn't complaining|never hurt a gallery/);
+});
+
+test("PHOTO obeys the go-go house rule unless she's your regular", () => {
+  state().stage = "vacation"; state().room = "neon_paradise"; state().nightTurn = 30; state().battery = 80;
+  const girl = _npcsHere().find(id => NPC_ROLES[id] === "hostess");
+  run("photo " + NPCS[girl].name);
+  assert.match(lastOut(), /No photo|No camera/i, "a stranger's camera is refused");
+  assert.ok(!state().phone.photos.some(p => p.id === girl), "nothing captured, no name learned");
+  // become her farang and she sneaks one cheek-to-cheek
+  state().phone.contacts[girl] = true;
+  out = []; run("photo " + NPCS[girl].name);
+  assert.ok(state().phone.photos.some(p => p.id === girl), "your regular poses for you");
+  assert.match(lastOut(), /Only you|out of the mamasan|under the rail/i);
+});
+
+test("an empty gallery nudges you to start collecting", () => {
+  state().stage = "vacation"; state().room = "queen_vic"; state().battery = 80;
+  run("gallery");
+  assert.match(lastOut(), /PHOTO someone/);
+});
+
+test("a lady who keeps photos texts you a selfie that files in the gallery", () => {
+  state().stage = "vacation"; state().battery = 90; state().turns = 10;
+  // Ping keeps photos (authored selfies)
+  state().phone.contacts.ping = true;
+  _maybePhotoText("ping");
+  run("check messages");
+  assert.match(lastOut(), /📷 Ping:/, "the selfie renders as a photo");
+  assert.ok(state().phone.photos.some(p => p.id === "ping" && p.cap), "and lands in the gallery, captioned");
+  assert.ok(state().known.ping, "receiving it puts you on name terms");
+});
+
+test("Wilai runs a pay-per-photo drip: teaser free, each next shot behind an escalating ask", () => {
+  state().stage = "vacation"; state().battery = 90; state().money = 9000; state().turns = 10;
+  state().phone.contacts.wilai = true;
+  _startPicDeal("wilai");
+  run("check messages");
+  assert.equal(state().phone.picDeal.ask, 300, "the teaser lands and she pitches the first paid shot");
+  assert.equal(state().phone.photos.filter(p => p.id === "wilai").length, 1, "teaser is free");
+  // underpaying teases, doesn't deliver
+  out = []; run("send 100 to wilai"); run("check messages");
+  assert.match(lastOut(), /not quite|then i send/i);
+  assert.equal(state().phone.photos.filter(p => p.id === "wilai").length, 1, "no new shot for a short payment");
+  // paying the ask (or more) unlocks the next and raises the price
+  out = []; run("send 500 to wilai"); run("check messages");
+  assert.equal(state().phone.photos.filter(p => p.id === "wilai").length, 2, "paid shot delivered");
+  assert.equal(state().phone.picDeal.ask, 500, "the ask escalates");
+  // pay through to the end
+  run("send 500 to wilai"); run("send 800 to wilai"); run("check messages");
+  assert.ok(state().phone.picDeal.done, "the set runs out");
+  assert.equal(state().phone.photos.filter(p => p.id === "wilai").length, 4, "four frames collected");
+  out = []; run("gallery");
+  assert.match(lastOut(), /Gallery — 4 photos/);
+});
+
+test("unmet characters show a look, not a name — in presence and autocomplete", () => {
+  state().stage = "vacation"; state().room = "queen_vic"; state().nightTurn = 30;
+  run("look");
+  assert.match(lastOut(), /owlish old-timer/, "the rail shows Mort by his look");
+  assert.doesNotMatch(lastOut(), /Mort/, "not his name — you haven't met him");
+  // autocomplete offers the look, never the unmet name
+  const pool = engineComplete("talk to ").map(s => s.toLowerCase());
+  assert.ok(pool.some(s => /owlish old-timer/.test(s)), "completes by look");
+  assert.ok(!pool.some(s => /\bmort\b/.test(s)), "never leaks the name");
+  // talking by the look introduces you, and the name takes over
+  run("talk to the owlish old-timer");
+  assert.ok(state().known.mort, "now you've met");
+  out = []; run("look");
+  assert.match(lastOut(), /Mort \(74, American\)/, "the rail uses his name once met");
+});
+
 test("the ATM verb gates on your card and where you're standing", () => {
   // no wallet yet: the card is the whole problem
   run("withdraw");
@@ -5354,10 +5440,16 @@ test("patrons: hoppers drift by the hour, settle at home by 22:00, chat resets d
   state().pendingEnc = null; state().lastSaleng = 99999; state().lastPeddler = 99999;
   out = [];
   run("look");
-  assert.match(lastOut(), /Helmut \(61, German\)/, "patron on the rail");
+  // unmet: shown by his look, not his name
+  assert.match(lastOut(), /fastidious German with polished glasses/, "patron on the rail (by look)");
+  assert.doesNotMatch(lastOut(), /Helmut/, "name hidden until met");
   out = [];
   run("talk to helmut");
   assert.match(lastOut(), /quality of life/i, "fallback line");
+  // meeting him reveals the name on the rail
+  out = [];
+  run("look");
+  assert.match(lastOut(), /Helmut \(61, German\)/, "name shown once met");
   out = [];
   run("ask helmut about stool");
   assert.match(lastOut(), /evaluated all nine/, "topic line");
