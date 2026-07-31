@@ -793,10 +793,44 @@ function _convoAnswer(text) {
   return true;
 }
 
+// Running a chosen action-choice: apply its flags/effects, print the partner's
+// reaction, then either jump to another topic node (chaining its own choices) or
+// clear the live choices (a terminal beat action). Effects reuse the node `fx`
+// hook, so a choice can move st.trust, G.soc.drinks, _addHeat, _align — the whole
+// standing toolkit — exactly like an authored node.
+function _runChoice(id, c) {
+  const st = _npcState(id);
+  for (const f of c.sets || []) _setFlag(f);
+  if (c.fx) c.fx(st, G);
+  if (c.text) _say(_fillSaid(c.text));
+  if (c.topic) _doTalk(_convoName(id), c.topic); // jump: delivers that node + its choices
+  else G.convoIdx = null;                          // terminal — choices consumed
+}
+// Did the player pick one of the partner's live action-choices? Matches a chip
+// tap (exact lowercased label), a number, or a typed substring. Kept fairly
+// strict so a real topic word doesn't get swallowed as a choice.
+function _convoPickChoice(bare, exactOnly) {
+  const id = _convoActive();
+  if (!id) return false;
+  const choices = _convoChoices();
+  if (!choices.length) return false;
+  let c = /^[1-9]$/.test(bare) ? choices[+bare - 1] : null;
+  if (!c) c = choices.find(x => x.label.toLowerCase() === bare);
+  if (!c && !exactOnly && bare.length >= 3) c = choices.find(x => x.label.toLowerCase().includes(bare));
+  if (!c) return false;
+  _runChoice(id, c);
+  return true;
+}
+
 // Last-resort interpretation of an otherwise-unrecognized line. Returns true if
 // the conversation layer consumed it (the caller then ticks, like any real turn).
 function _convoResolve(lower) {
   const bare = lower.replace(/[,.!?]+$/, "").trim();
+  // 0a) An explicit action-choice the partner just offered wins over everything —
+  //     if the line matches one, it IS the player's move (a chip tap or typed).
+  //     Only consumes the line on a real match, so free-text answers still fall
+  //     through to the pending-question handler below.
+  if (_convoActive() && _convoPickChoice(bare)) return true;
   // 0) A pending question from the partner: your reply. A recognizable move
   //    (leave-taking, a name, or one of their own topics) changes the subject
   //    and lapses it; anything else is your answer, remembered and reacted to.
@@ -2536,7 +2570,11 @@ function _chipSet() {
   //      is the touch surface, not a cage; LEAVE restores the room chips.
   const partner = _convoActive();
   if (partner) {
-    for (const t of _convoTopics(partner).slice(0, 4)) add(t, _topicLabel(t));
+    // Beat-specific action-choices the partner just offered come first (the
+    // "player's side" of the exchange); they crowd out most of the topic list.
+    const acts = _convoChoices();
+    for (const c of acts.slice(0, 3)) add(c.label.toLowerCase(), c.label);
+    for (const t of _convoTopics(partner).slice(0, acts.length ? 2 : 4)) add(t, _topicLabel(t));
     add("compliment", "compliment");
     add("joke", "joke");
     if (_npcState(partner).trust >= 3) add("tease", "tease"); // banter unlocks once you're close
@@ -2599,21 +2637,10 @@ function _completePool(verb, ctx) {
     case "flirt": case "kiss": case "spank": case "fondle": case "tip":
     case "barfine": case "bf": return girls();
     case "ask": {
-      if (ctx.length >= 2) { // ask <npc> [about] <topic> — her live topics
-        const id = _findNpc(ctx[1]);
-        if (id && NPCS[id].dialogue) {
-          return NPCS[id].dialogue.filter(d => d.topic &&
-            (!d.req || d.req.every(f => _flag(f))) &&
-            (!d.notFlags || d.notFlags.every(f => !_flag(f))))
-            .map(d => d.topic).filter(_topicKnown);
-        }
-        const pat = _findPatron(ctx[1]);
-        if (pat) {
-          return PATRONS[pat].dialogue.filter(d => d.topic)
-            .map(d => d.topic).filter(_topicKnown);
-        }
-        return [];
-      }
+      // Topic suggestions are gone: conversations run on TALK + the in-conversation
+      // chip bar now, not ASK-about autocomplete. Typed ASK still works; we just
+      // don't prompt topics. Name completion for `ask <npc>` stays.
+      if (ctx.length >= 2) return [];
       return _cNpcsHere();
     }
     case "look": case "examine": case "x": case "inspect":
@@ -2926,6 +2953,14 @@ function doCommand(input) {
     return;
   }
   _lastCmd = raw;
+
+  // A live conversation's action-choice, matched EXACTLY by its label or number
+  // (a chip tap submits the label), beats verb parsing — otherwise a choice like
+  // "Hear him out" is eaten by the LISTEN verb before the conversation layer sees
+  // it. Loose/partial typed matches still fall through to _convoResolve.
+  if (_convoActive() && _convoPickChoice(lower.replace(/[,.!?]+$/, "").trim(), true)) {
+    _tick(); return;
+  }
 
   // Bigotry in the queer venues short-circuits everything else: ejection, and
   // maybe the classic fight. Checked whatever verb it's dressed as.

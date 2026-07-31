@@ -178,6 +178,7 @@ function newGame() {
     convo: null,         // active conversation partner id — bare topics/actions aim here (see _convoActive)
     itNpc: null,         // last person addressed — the antecedent for "her/him/them" (see _resolveActor)
     convoQ: null,        // a question the partner has put to YOU, awaiting a reply: {id,key} (see _convoAsk/_convoAnswer)
+    convoIdx: null,      // index of the partner's last-delivered node — its `choices` are the live action-choices (see _convoChoices)
     player: { said: {} },// what you've told NPCs about yourself (home, dream, …) — memory for reactions/lie-catching
     faction: { wdg: 0, samson: 0, indie: 0, syndicate: 0 }, // standing with the powers (see _align) — only moves when you ACT, never for declining
     itemLoc: Object.fromEntries(
@@ -479,7 +480,28 @@ function _convoEnd(quiet) {
   const id = G.convo;
   G.convo = null;
   G.convoQ = null;
+  G.convoIdx = null;
   if (id && !quiet) _say(`You take your leave of ${_convoName(id)}.`, "dim");
+}
+// Pull-away interrupt: the NPC or the player is yanked out of the conversation
+// (kickout, barfine, an encounter, night-end, the NPC bolting to a saleng cart).
+// Silent by design — the pulling event narrates itself. Ambient events that touch
+// neither party (rain, a saleng merely parking) must NOT call this.
+function _convoInterrupt() { if (G.convo) _convoEnd(true); }
+
+// The live action-choices: the `choices` on the partner's last-delivered node,
+// filtered by any per-choice `when(st,G)` gate. Serializable — we store only the
+// node index (G.convoIdx), never the choice objects (they carry fx functions).
+// Schema: { label, text?, when?, sets?, fx?, topic? } — picking one applies its
+// effects and prints text, then either jumps to `topic` or clears (see _runChoice).
+function _convoChoices() {
+  const id = _convoActive();
+  if (id == null || G.convoIdx == null) return [];
+  const arr = ((NPCS[id] || PATRONS[id] || {}).dialogue) || [];
+  const d = arr[G.convoIdx];
+  if (!d || !d.choices) return [];
+  const st = _npcState(id);
+  return d.choices.filter(c => !c.when || c.when(st, G));
 }
 
 // The other half of a conversation: the partner puts a question to YOU. A
@@ -795,6 +817,8 @@ function _deliver(npcId, d) {
   // first contact (any exchange) IS the meeting: advance the state and grant the
   // baseline trust here, so the meeting bonus never depends on which node fired.
   if (st.dstate === "stranger") { st.dstate = "met"; st.trust = Math.min(5, st.trust + 1); }
+  // this node is now the live one — its `choices` (if any) become the action-choices
+  G.convoIdx = G.convo === npcId ? idx : G.convoIdx;
   _convoAsk(npcId, d, st);                     // …and the partner may put a question back to you
 }
 

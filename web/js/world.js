@@ -3824,7 +3824,20 @@ const NPCS = {
         text: "\"There he is.\" Bert's got a cold one open before you've sat. \"Not moved off this stool " +
           "since you left, funny enough. Table's true, beer's cold.\" A crooked grin. \"What's the good " +
           "word, bud?\"",
-        short: "\"There he is.\" A cold one's open before you sit. \"What's the good word, bud?\"" },
+        short: "\"There he is.\" A cold one's open before you sit. \"What's the good word, bud?\"",
+        // The WDG-flip fork, offered as pick-a-side action-choices during the live
+        // decision window (was ASK BERT ABOUT SELLING / THE OFFER). Each jumps to
+        // the existing resolution node, reusing its text/effects. The `when` gates
+        // mean the choices vanish the moment the fork is closed out either way.
+        choices: [
+          { label: "Push him to sell",
+            when: (st, G) => G.quests.wdg_flip === "active" && !_flag("wdgFlipTried"),
+            topic: "sell" },
+          { label: "Give him the honest picture",
+            when: (st, G) => _flag("heardWdgHistory") && _flag("heardWdgInside") &&
+              _flag("heardWdgPitch") && !_flag("wdgResolved") && !_flag("wdgFlipTried"),
+            topic: "offer" },
+        ] },
       // Delivering Gavin's pitch is the deed — this is where alignment actually
       // lands (never on accepting the quest, only on going through with it). Bert
       // holds firm anyway; the cost is your standing and his regard.
