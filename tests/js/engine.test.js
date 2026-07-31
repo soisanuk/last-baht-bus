@@ -1623,6 +1623,30 @@ test("a saleng only interrupts a conversation if the partner bolts to it", () =>
   assert.equal(state().convo, null, "she bolted to the cart mid-sentence → conversation over");
 });
 
+test("WDG-cast choices move faction, NPC-trust, and bond from the player's response", () => {
+  // Gavin — leaning in is a WDG act (declining is free); apostrophe label typed plainly
+  state().room = "golden_dragon"; state().flags.heardWdgPitch = true;
+  run("talk gavin"); run("talk gavin");
+  run("tell him youre in");
+  assert.equal(_faction("wdg"), 1, "playing along aligns you to WDG");
+  // Kesinee — Bert vouching earns the trust that unlocks her reveal
+  state().room = "kitten_corner";
+  run("talk kesinee");
+  const t0 = _npcState("kesinee").trust;
+  run("tell her bert sent you");
+  assert.ok(_npcState("kesinee").trust >= t0 + 2, "Bert's name buys real trust");
+  // Powers — needling the boss costs you WDG standing
+  state().room = "orchid_room";
+  run("talk powers");
+  run("call it a room full of criminals");
+  assert.equal(_faction("wdg"), 0, "the needle undoes Gavin's +1");
+  // Joy — a warm response deepens the Regular bond
+  state().room = "pink_lotus"; _npcState("joy").trust = 3;
+  run("talk joy"); run("ask joy about future");
+  run("tell her she deserves better");
+  assert.equal(state().soc.drinks.joy, 1, "warmth deepens the bond");
+});
+
 test("cashiers cap physical contact until the bell has rung twice", () => {
   state().room = "rainbow_girls";
   state().money = 1000;

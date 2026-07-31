@@ -2681,7 +2681,25 @@ const NPCS = {
           "her.\" The smile switches back on, deliberate, a little tired around the edges. \"So I live today, " +
           "BIG. Today I am here, today I am Joy. Tomorrow up to the app, not up to me. Better I laugh, na?\"",
         short: "\"I no plan future — the app decide which bar, which night. Live today, big. Better I laugh, na?\"",
-        fx: (st) => { st.know.wdgCost = true; st.mood = "open"; } },
+        fx: (st) => { st.know.wdgCost = true; st.mood = "open"; },
+        // She's shown you the real her for one second. Meeting it with warmth
+        // deepens the bond (the Regular); letting her keep the joke is a kindness too,
+        // just a lighter one.
+        choices: [
+          { label: "Tell her she deserves better",
+            when: (st, G) => st.know && st.know.wdgCost,
+            fx: (st, G) => { st.trust = Math.min(5, st.trust + 1);
+              G.soc.drinks.joy = (G.soc.drinks.joy || 0) + 1; _addHappy(1); },
+            text: "You say it plainly — she deserves better than a tablet in Bangkok deciding her nights. Joy " +
+              "goes still, the performance off for a whole second. \"You know, most man never say that. They " +
+              "like the laugh, not the girl.\" She bumps your shoulder with hers, and the warmth in it is real, " +
+              "not on the tab." },
+          { label: "Let her keep the laugh",
+            when: (st, G) => st.know && st.know.wdgCost,
+            text: "You don't push. You let her have the joke back, and the pink room, and the tonight-is-big of " +
+              "it. She flashes the grin, grateful you didn't make her stay in the quiet. \"Good man. We drink, " +
+              "we laugh, no think too much. Same same!\"" },
+        ] },
       { topic: "future", text: "\"Five year?\" She waves it away cheerfully. \"Five year is VERY far. Tonight is already hard enough! Tonight I need: noodle, maybe one more drink, and—\" she tilts her head \"—maybe you stay a little longer? That is my five-year plan.\" Another collapse of giggles. \"Okay okay, three minutes plan. Same same.\"" },
     ],
   },
@@ -2804,7 +2822,30 @@ const NPCS = {
         text: "\"Come in, come in. My girls will not bite unless you tip for it.\" The practised smile " +
           "arrives on schedule; the eyes take a beat longer. \"You want a drink, a girl, a quiet corner — " +
           "Kesinee arrange. Anything except the price. The price is not mine to move any more.\"",
-        short: "\"Anything except the price — that is not mine to move any more.\"" },
+        short: "\"Anything except the price — that is not mine to move any more.\"",
+        // She won't talk White Dish until she trusts you (trust >= 2 opens the
+        // reveal). How you present yourself moves that: Bert vouching is worth most
+        // (canon: "because Bert send you"), plain reassurance a little; pressing her
+        // for names sets her back.
+        choices: [
+          { label: "Tell her Bert sent you",
+            when: (st, G) => st.trust < 2 && !_flag("heardWdgInside"),
+            fx: (st) => { st.trust = Math.min(5, st.trust + 2); },
+            text: "\"Bert.\" The name does more than any drink. \"He is a good man, that one — old soi, before " +
+              "all this.\" The careful smile loosens into a real one. \"If Bert send you, maybe I talk. Ask me " +
+              "— White Dish — and this time I answer straight.\"" },
+          { label: "Swear you're no White Dish man",
+            when: (st, G) => st.trust < 2 && !_flag("heardWdgInside"),
+            fx: (st) => { st.trust = Math.min(5, st.trust + 1); },
+            text: "You tell her plainly: nobody's boy, least of all Ryan Powers'. She weighs it against twenty " +
+              "years of faces. \"Maybe,\" she allows, and the eyes thaw a half-degree. \"We see.\"" },
+          { label: "Press her for names",
+            when: (st, G) => st.trust < 3 && !_flag("heardWdgInside"),
+            fx: (st) => { st.trust = Math.max(0, st.trust - 1); st.mood = "guarded"; },
+            text: "You lean in and push for specifics. Bad move. The shutters come straight back down. \"You ask " +
+              "like a policeman — or a man who works for them. Kesinee gives names to neither.\" The gold " +
+              "bracelet turns. It just got colder in here." },
+        ] },
       // Kesinee vets you before she'll talk White Dish — canon: "she'll talk
       // straight if you are." A stranger gets the careful brush-off + a breadcrumb;
       // the real intel (and the quest flag) opens once you've earned a little trust.
@@ -2862,7 +2903,22 @@ const NPCS = {
         text: "\"Ah — back again.\" The same warm, brief handshake, filed and instantly retrieved. \"Good to " +
           "see you. Still turning it over, or just enjoying the room?\" The smile is patient. Gavin is always, " +
           "unnervingly, patient.",
-        short: "\"Ah, back again.\" The handshake, filed and retrieved. Patient as ever." },
+        short: "\"Ah, back again.\" The handshake, filed and retrieved. Patient as ever.",
+        // Once you've heard the pitch, where do you stand? Leaning in is a soft act
+        // of alignment (wdg+). Keeping it vague is declining — free, per the faction
+        // contract; Gavin never holds it against you.
+        choices: [
+          { label: "Tell him you're in",
+            when: (st, G) => _flag("heardWdgPitch") && _faction("wdg") <= 0 &&
+              !_flag("wdgResolved") && !_flag("wdgFlipTried"),
+            fx: (st, G) => { _align("wdg", 1); },
+            text: "\"That's what I like to hear.\" The handshake finds you again, a shade warmer. \"A man " +
+              "who sees the shape of things. White Dish looks after its friends — you'll find that out.\"" },
+          { label: "Keep it vague",
+            when: (st, G) => _flag("heardWdgPitch"),
+            text: "You keep it noncommittal. Gavin's smile doesn't flicker; he just files it and sips. \"No " +
+              "rush at all. Long soi, patient man.\" Declining costs you nothing here — with Gavin it never does." },
+        ] },
       { text: "\"Evening.\" The handshake is warm, brief, professionally sincere. \"Gavin. I look after a " +
         "few rooms on the soi for the group — White Dish, you'll have heard. Consulting, mostly. Standards, " +
         "systems, that sort of thing.\" He glances round the Golden Dragon the way a man counts a room. " +
@@ -2904,7 +2960,25 @@ const NPCS = {
           "FAMILY now.\" A grin with a tooth too many. \"Ryan Powers. But you knew that. Everyone " +
           "knows that.\" He sweeps a hand at the room like a man showing off a yacht. \"The Orchid. " +
           "I built this. Well — I had the VISION. The vision did the rest.\"",
-        short: "\"You made it in — basically FAMILY now. Ryan Powers. I built this. Well, I had the VISION.\"" },
+        short: "\"You made it in — basically FAMILY now. Ryan Powers. I built this. Well, I had the VISION.\"",
+        // The boss laps up flattery (a soft WDG act) and bristles at the truth (an
+        // anti-WDG one). Needling him toward the corner table reuses his one honest,
+        // frightened beat.
+        choices: [
+          { label: "Flatter the great man",
+            when: (st, G) => _faction("wdg") < 5,
+            fx: (st, G) => { _align("wdg", 1); },
+            text: "You tell him the Orchid's the best room on the soi and the VISION is undeniable. Powers glows " +
+              "like a switched-on sign. \"See — YOU get it.\" The phone swings to include you; you've been " +
+              "promoted from useful to family. White Dish files you friendly." },
+          { label: "Call it a room full of criminals",
+            when: (st, G) => _faction("wdg") > -5,
+            fx: (st, G) => { _align("wdg", -1); },
+            text: "You say the quiet part out loud — twenty-four rooms of laundered fun. The grin freezes half a " +
+              "second before the recovery. \"Bit RICH, coming from a man drinking in one.\" Still a smile. Not a " +
+              "friendly one. Word of that travels the soi with the envelopes." },
+          { label: "Ask about that quiet table", topic: "syndicate" },
+        ] },
       { topic: "white dish", text: "He lights up; the business is his favourite subject, narrowly ahead " +
           "of himself. \"Twenty-four rooms and counting. I came here with six hundred quid and a laptop " +
           "and I OUT-HUSTLED an entire industry of lazy expats crying into their Changs.\" He says " +
