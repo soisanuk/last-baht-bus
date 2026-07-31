@@ -814,9 +814,14 @@ function _convoPickChoice(bare, exactOnly) {
   if (!id) return false;
   const choices = _convoChoices();
   if (!choices.length) return false;
+  // Normalize away apostrophes/punctuation so a typed "tell him youre in" still
+  // matches the label "Tell him you're in" — authors get natural labels, players
+  // don't have to hit the apostrophe. Chip taps submit the exact label regardless.
+  const nm = s => s.toLowerCase().replace(/['’]/g, "").replace(/[.,!?]+/g, "").trim();
+  const nb = nm(bare);
   let c = /^[1-9]$/.test(bare) ? choices[+bare - 1] : null;
-  if (!c) c = choices.find(x => x.label.toLowerCase() === bare);
-  if (!c && !exactOnly && bare.length >= 3) c = choices.find(x => x.label.toLowerCase().includes(bare));
+  if (!c) c = choices.find(x => nm(x.label) === nb);
+  if (!c && !exactOnly && nb.length >= 3) c = choices.find(x => nm(x.label).includes(nb));
   if (!c) return false;
   _runChoice(id, c);
   return true;
