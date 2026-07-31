@@ -3,28 +3,18 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
-    "t": "Five Indians arrested for kidnapping compatriots for ransom in Pattaya",
+    "t": "Missing Russian siblings’ motorcycle found buried",
     "s": "Bangkok Post",
-    "d": "28 Jul 2026"
+    "d": "29 Jul 2026"
   },
   {
-    "t": "Lured To Thailand, 3 Indian Men Tortured For Rs 69 Lakh Ransom By Gang Of 4 Pakistanis, 1 Indian",
+    "t": "5 Indians Arrested For Kidnapping 3 Indians In Thailand. Cops Probe Pak Link",
     "s": "NDTV",
-    "d": "28 Jul 2026"
-  },
-  {
-    "t": "Cheap Thailand trip turns into horror, 3 Indians kidnapped by Indians in Pattaya",
-    "s": "India Today",
-    "d": "29 Jul 2026"
-  },
-  {
-    "t": "Police search for missing Russian siblings in Pattaya",
-    "s": "Bangkok Post",
-    "d": "29 Jul 2026"
+    "d": "30 Jul 2026"
   },
   {
     "t": "Thai Police Find Buried Motorcycle Belonging to Missing Russian Siblings",
-    "s": "Kyiv Post",
+    "s": "kyivpost.com",
     "d": "30 Jul 2026"
   },
   {
@@ -33,55 +23,65 @@ var NEWS_FEED = [
     "d": "30 Jul 2026"
   },
   {
-    "t": "Huge python removed from Pattaya home garden",
+    "t": "Two men arrested in hunt for young Russian siblings",
+    "s": "Bangkok Post",
+    "d": "30 Jul 2026"
+  },
+  {
+    "t": "Thai Police clarify Georgia’s Article 115 in Hlun Solo death investigation",
     "s": "Pattaya Mail",
     "d": "30 Jul 2026"
   },
   {
-    "t": "Myanmar man wanted for murder of former national tennis player in Pattaya",
-    "s": "Thaiger",
+    "t": "Tour bus crashes into car before plunging into roadside canal in Korat",
+    "s": "Pattaya Mail",
     "d": "29 Jul 2026"
   },
   {
-    "t": "Italian students apologise after Bangkok train incident sparks outrage in Thailand",
-    "s": "the-independent.com",
-    "d": "27 Jul 2026"
-  },
-  {
-    "t": "5 Indians Arrested For Kidnapping 3 Indians In Thailand. Cops Probe Pak Link",
-    "s": "NDTV",
+    "t": "Mayor receives royal award honoring Pattaya’s marine conservation work",
+    "s": "Pattaya Mail",
     "d": "30 Jul 2026"
   },
   {
-    "t": "3 lured to Thailand with holiday trip, held for ransom; 5 Indians arrested",
-    "s": "The Indian Express",
+    "t": "Thailand to evade US currency list",
+    "s": "Bangkok Post",
+    "d": "30 Jul 2026"
+  },
+  {
+    "t": "Cheap Thailand trip turns into horror, 3 Indians kidnapped by Indians in Pattaya",
+    "s": "India Today",
     "d": "29 Jul 2026"
   },
   {
-    "t": "Scientists identified a new giant dinosaur in Thailand, bigger than a Diplodocus",
-    "s": "futura-sciences.com",
-    "d": "30 Jul 2026"
+    "t": "MotoGP to begin 2027 season in Thailand",
+    "s": "motogp.com",
+    "d": "31 Jul 2026"
+  },
+  {
+    "t": "Does Thailand have leverage to negotiate with the US over new tariffs?",
+    "s": "Thai PBS World",
+    "d": "31 Jul 2026"
+  },
+  {
+    "t": "Meet police prodigy Samran, Thailand’s next top cop",
+    "s": "Thai PBS World",
+    "d": "31 Jul 2026"
   },
   {
     "t": "Thailand: A new Bishop for a vibrant, diverse Church",
     "s": "Vatican News",
-    "d": "30 Jul 2026"
-  },
-  {
-    "t": "Thai YouTuber ‘Hlun Solo’ found dead in Georgia",
-    "s": "Bangkok Post",
-    "d": "29 Jul 2026"
+    "d": "31 Jul 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-07-30","USD":33.55,"AUD":23.42,"GBP":44.9,"EUR":38.49};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-07-31","temp":27,"humid":93,"code":51,"hi":30,"rain":92};
+var WX_NOW = {"date":"2026-07-31","temp":30,"humid":75,"code":2,"hi":30,"rain":100};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-07-16","first":"639214","last2":"71","front3":["683","709"],"back3":["427","746"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4105,"date":"2026-07-30","baht":65150};
+var GOLD = {"usd":4059,"date":"2026-07-31","baht":64400};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":64685,"thb":2159846};
+var BTC = {"usd":63633,"thb":2124984};
