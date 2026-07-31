@@ -7,7 +7,7 @@
 const _DIRS = {
   n: "n", north: "n", s: "s", south: "s", e: "e", east: "e", w: "w", west: "w",
   in: "in", inside: "in", out: "out", outside: "out",
-  up: "up", u: "up", down: "down", d: "down",
+  up: "up", u: "up", upstairs: "up", down: "down", d: "down", downstairs: "down",
   alley: "alley", office: "office",
 };
 
@@ -108,11 +108,29 @@ const _STALL_EAT_LINES = [
   "Every baht of it earns out; the night steadies on a full stomach.",
 ];
 
+// The go-go back staircase is right there in the room prose, but you don't just
+// wander up it: the mamasan heads you off — choose a lady and pay her barfine
+// first, THEN upstairs. Turns a dead-end UP into a nudge toward the mechanic.
+const _GOGO_UPSTAIRS = [
+  "A hand lands on your chest before your foot finds the first stair — the mamasan, all smile, no give. \"Upstairs later, tilac. First you choose a lady, buy her a drink, pay her barfine — THEN up. Not before.\"",
+  "The mamasan slides between you and the staircase like she teleported there. \"Ah-ah. No lady, no upstairs. Find one you like, take care of her proper, and the stairs are yours. Backwards no good, na.\"",
+  "You get one hand on the rail. The mamasan clears her throat and the rail is suddenly hers. \"Nothing up there for a man on his own, handsome. BARFINE a girl, do it right — then I show you up myself.\"",
+  "The staircase is right there and entirely off-limits: the mamasan plants herself on the bottom step. \"You want to go up? Buy a lady, pay her fine, she takes you. Only way the stairs work here.\"",
+];
+
 function _doGo(dirWord) {
   // aliases first; then ANY literal exit key of this room (pub, hotel, …) —
   // the Exits line decorates every key as a tap target, so every key must walk
   const r = _room();
   const dir = _DIRS[dirWord] || (r.exits && r.exits[dirWord] ? dirWord : null);
+  // The go-go short-time rooms are up the back staircase the prose keeps
+  // mentioning — but you don't just climb it. The mamasan sends you to BARFINE
+  // a lady first (only when there's no real `up` exit to honour).
+  if ((dirWord === "up" || dirWord === "upstairs" || dir === "up") &&
+      r.barType === "soi6" && !(r.exits && r.exits.up)) {
+    _say(_pickVary(_GOGO_UPSTAIRS, "gogoup"));
+    return;
+  }
   if (!dir || !r.exits[dir]) { _say(_pickVary(_NO_EXIT, "noexit")); return; }
   // OUT of a multi-door venue returns you to the road you entered by; any other
   // move invalidates that memory. (Single-door venues: enteredVia === exits.out.)
@@ -530,6 +548,10 @@ const _READ_NOUNS = {
   board: ["chalkboard", "blackboard", "taps", "tap list", "specials"],
   poster: ["flyer"],
   sign: ["notice", "placard"],
+  jukebox: ["juke"],
+  crane: ["cranes", "origami", "napkin", "napkins"],
+  cherries: ["cherry"],
+  card: ["show times", "showtimes", "show-times"],
 };
 function _roomRead(arg) {
   const reads = _room().reads;
@@ -620,6 +642,26 @@ function _doRead(arg) {
   _say(it.desc);
 }
 
+// The Orchid Room describes two untouchables at the corner tables — a patched MC
+// president and the silent Thai man everyone defers to (the real power behind
+// White Dish). They're scenery you can't approach: try, and the muscle (or a
+// suddenly-serious Powers) heads you off. Keeps the room's central menace intact
+// without dead-ending the player on "nobody by that name."
+const _ORCHID_DEFLECT = [
+  "You take half a step toward the good table and a wall of a man in a too-tight polo is simply " +
+    "there — not touching you, not needing to. \"Not that table, boss.\" A smile with nothing " +
+    "behind it. \"Everything else in this room is for you. That corner isn't on the menu.\"",
+  "A hand the size of a dinner plate settles on your shoulder before you've finished turning, and " +
+    "walks you back two steps, pleasant as a maître d'. \"Nobody at that table is taking meetings, " +
+    "na. Drink, dance, spend — anything but that.\" The men in the corner never even look up.",
+  "Powers clocks where you're looking and is beside you fast, steering you off by the elbow, the " +
+    "party grin gone. \"Mate. MATE. You don't go over there. You don't LOOK over there. Have a drink " +
+    "on me, yeah? Trust me on this one.\" For once he isn't performing.",
+  "Two men you hadn't noticed peel off the wall and close the lane to the corner tables without a " +
+    "word — just standing where you were about to walk. Whatever that quiet man is, he is emphatically " +
+    "not tonight's entertainment.",
+];
+
 function _doTalk(arg, topic) {
   arg = (arg || "").trim();
   // Pronoun / bare target → the person already in play (scope resolution). A
@@ -632,6 +674,12 @@ function _doTalk(arg, topic) {
   }
   const npc = _findNpc(arg);
   if (!npc) {
+    // The Orchid Room's corner-table untouchables: described, never approachable.
+    if (G.room === "orchid_room" &&
+        /thai man|quiet man|\bboss\b|president|\bmc\b|banquette|good table|best table|silent|\bpower\b|man in the corner|corner table/i.test(arg)) {
+      _say(_pickVary(_ORCHID_DEFLECT, "orchiddef"));
+      return;
+    }
     const pat = _findPatron(arg);
     if (pat) { _patronTalk(pat, topic); return; }
     if (_inBar() && /patron|regular|expat|customer|guy|bloke|farang/.test(arg)) {

@@ -2720,6 +2720,20 @@ const FOOD_STALLS = {
 const _EDIBLE = { moo_ping: 35, som_tam: 50, noodles: 20 };
 
 function _doEat(arg) {
+  // Cherry Pop's bowl of maraschino cherries: a real nibble, but not a hunger
+  // farm — one free cherry a night, the rest is just décor you're pawing at.
+  if (arg && /\bcherr/.test(arg) && G.room === "cherry_pop") {
+    if (G.cherryDay === G.day) {
+      _say("You've already had your cherry off the communal bowl tonight. A second dig " +
+        "under the mamasan's eye is a look you can't afford.");
+      return;
+    }
+    G.cherryDay = G.day;
+    G.hunger = Math.max(0, G.hunger - 1);
+    _say("You fish a maraschino cherry from the sticky bowl and eat it. Syrupy, artificial, " +
+      "faintly of the last decade — but it's something, and the hunger notices, barely.");
+    return;
+  }
   const inv = _inv().filter(i => _EDIBLE[i] !== undefined);
   const id = arg ? inv.find(i => ITEMS[i].name.toLowerCase().includes(arg) ||
     ITEMS[i].aliases.some(a => a.includes(arg))) : inv[0];

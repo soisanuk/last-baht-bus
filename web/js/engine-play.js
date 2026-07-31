@@ -76,9 +76,21 @@ function _gameVerbs() {
   return ["quit"];
 }
 
+const _JUKEBOX_DEAD = [
+  "You jab the buttons. Somewhere in its chest the jukebox makes a noise like a fridge " +
+    "giving up — a descending mechanical groan, a click, and silence. It died in 2019 and " +
+    "resents the reminder.",
+  "The jukebox wheezes, spins up half a second of warped Thai pop pitched down to a dirge, " +
+    "then coughs itself dark again. Pia doesn't look over. \"It don't work. Everybody try.\"",
+  "A hopeful thunk from inside, a grinding whir, and then the specific silence of a machine " +
+    "that has decided, permanently, against you. The playlist on the speakers plays on, indifferent.",
+];
+
 function _doPlay(arg) {
   if (G.game) { _say("One game at a time, champ."); return; }
   const w = arg.toLowerCase();
+  // The Golden Dragon's jukebox has been dead since 2019 — poke it and it says so.
+  if (/juke/.test(w) && G.room === "golden_dragon") { _say(_pickVary(_JUKEBOX_DEAD, "juke")); return; }
   if (w.includes("jackpot") || w.includes("dice")) return _startJackpot(w);
   if (w.includes("killer") || w.includes("league")) return _startKiller();
   if (w.includes("dart")) return _startDarts();

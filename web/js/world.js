@@ -700,6 +700,11 @@ const ROOMS = {
       "of stools pulled right up to the open front, angled at the soi like theatre seating. " +
       "The house joke is a laminated 'SHOW TIMES' card that just reads ALL NIGHT. Somo keeps " +
       "the cooler cold and the running commentary warm.",
+    reads: {
+      card: "The laminated 'SHOW TIMES' card, greasy at the corners: 6PM — ALL NIGHT. 9PM — ALL " +
+        "NIGHT. MIDNIGHT — STILL ALL NIGHT. LAST SHOW — THERE IS NO LAST SHOW. Underneath, smaller: " +
+        "'the show is the soi. seats face out.'",
+    },
     revisit: [
       "Back into the Front Row, stools pulled up to the open front, the soi playing out a few feet away like it's ticketed.",
       "Somo slides your Chang over and picks up the commentary mid-sentence, narrating the pavement like a man calling the races.",
@@ -1419,7 +1424,13 @@ const ROOMS = {
       "The gold dragon above the bar was hand-painted by someone's cousin and has been " +
       "there longer than most of the staff. Vintage Thai pop on the speakers — not the " +
       "jukebox, it died in 2019, but the playlist is a faithful tribute. Nobody has " +
-      "updated it and nobody has complained.",
+      "updated it and nobody has complained. Pia keeps the bar — and the dead " +
+      "jukebox's memory — with a flat, unbothered calm.",
+    reads: {
+      jukebox: "The jukebox slumps in the corner, unplugged since 2019, buttons gummy with old " +
+        "fingerprints and a folded beer mat wedged under one leg. It plays nothing now but the " +
+        "part it plays best: dead. (PLAY JUKEBOX if you must.)",
+    },
     revisit: [
       "Back into the Golden Dragon, the dragon presiding, and a girl already peeling you toward a stool with a hand in your belt loop. \"You, handsome. Sit here. Buy me one, then we talk about upstairs.\"",
       "The vintage playlist and the wall of noise take you back — and so do two girls at once, one on each arm, negotiating you like a shared prize. \"Me first.\" \"No — ME first.\" \"Okay, you choose, but choose FAST.\"",
@@ -1442,6 +1453,11 @@ const ROOMS = {
       "open front as hard as anyone on the soi. Kwan folds napkins into cranes at the end of " +
       "the rail, adding to a row of them lined up like a tiny origami militia, and still finds " +
       "a hand free for your sleeve as you pass.",
+    reads: {
+      crane: "Kwan's napkin cranes, a whole squadron lined along the rail — some crisp, some " +
+        "already collapsing, each folded in the dead minutes between customers. Sit long enough " +
+        "and she'll fold you into the flock.",
+    },
     revisit: [
       "Back into the pink glow of Sunset Dreams, and a girl peels off the open front and onto you before your eyes adjust. \"You like soft light? I like soft man. Buy me drink, we go up where it's softer.\"",
       "The cloud mural and the rose light take you back, and so does a hand in your belt loop. \"Everybody think pink mean shy. Ha. Buy me drink, handsome — then upstairs, I show you not shy.\"",
@@ -1463,14 +1479,14 @@ const ROOMS = {
       "than be dragged into it. The pullers here are lazier, or wiser — they leave the grabbing " +
       "to the loud ends and pick up the men who wander through wanting a cold one and a ringside " +
       "seat. THE SHADY LADY, FRONT ROW BAR, and THE VERANDAH line the quiet stretch, and the " +
-      "QUEEN VIC INN — real aircon, real wood, a dartboard — anchors it, Terry watching the " +
-      "whole soi from the balcony above. West, the racket starts up again; east, it's worse.",
+      "QUEEN VIC INN — real aircon, real wood, a dartboard — anchors it, the one place on the " +
+      "soi that isn't shouting. West, the racket starts up again; east, it's worse.",
     revisit: [
       "Back to the middle of the soi, where the volume drops by half and the bars let you be. A cold-beer stretch built for watching, not for being grabbed.",
       "The quiet middle again — the Shady Lady's awning, the Front Row's theatre stools, the Verandah's raised deck, and the Queen Vic glowing calm in the thick of it.",
       "You come back into the soi's soft spot. Down at the west end a barker loses a fight with a foam noodle; up here nobody bothers, and that's the whole appeal.",
       "Back to the people-watching stretch, where the pullers are off-duty and the men who wanted a ringside seat without the hassle nurse their Changs and rate the parade.",
-      "The middle takes you back — Terry up on the Vic's balcony with a beer, the easy bars either side, the loud ends holding the noise at arm's length for once.",
+      "The middle takes you back — the Queen Vic glowing calm, the easy bars either side, the loud ends holding the noise at arm's length for once.",
       "Back into the calm centre of the storm. West and east the soi does its shouting; here it just streams past your stool while you drink and watch.",
       "The quiet stretch again, the Queen Vic's aircon leaking cold onto the pavement, three easy beer bars and nobody on the soi trying to climb you. Rare. Enjoy it.",
     ],
@@ -1505,7 +1521,8 @@ const ROOMS = {
     bar: "Kitten Corner", barType: "soi6",
     desc: "Open to the pavement, walled in cat posters and a neon paw print. Praewa and " +
       "Nangfah work the front, and the grab-and-giggle starts before you've fully stopped " +
-      "walking. A staircase at the back goes up to the short-time rooms.",
+      "walking; Kesinee watches it all from the till, pricing you before you sit. A " +
+      "staircase at the back goes up to the short-time rooms.",
     revisit: [
       "Back into Kitten Corner and the grab-and-giggle is instant — Praewa in your lap, Nangfah at your ear, both purring the offer. \"You want kitten tonight? Two kitten? Buy us drink, we go up, we play.\"",
       "The neon paw flickers you back in and a girl is already climbing you like furniture. \"Meow, handsome.\" A grin, a hand, a price. \"Short time upstairs — you like? Everybody like.\"",
@@ -1525,6 +1542,10 @@ const ROOMS = {
     desc: "Red from floor to ceiling, a bowl of actual cherries on the bar that nobody eats, " +
       "and a sound system stuck on one bubblegum playlist. Tabtim and Chaba call the odds " +
       "from the rail. The stairs are where the stairs always are.",
+    reads: {
+      cherries: "The bowl of maraschino cherries on the bar, sticky and untouched — more décor " +
+        "than snack, going tacky under the neon. (EAT one, if you're brave.)",
+    },
     revisit: [
       "Back into Cherry Pop, red on red, and a girl pops a cherry between her teeth and the offer in the same grin. \"Handsome! You taste cherry with me upstairs? Buy me drink, we find out.\"",
       "The bubblegum loop and the wall of red take you back, and Tabtim takes your lap. \"You came back for Cherry. Everybody come back for Cherry.\" A hand, a price, a wink. \"Short time, sweet like the name.\"",
@@ -1542,8 +1563,8 @@ const ROOMS = {
     region: "Soi 6",
     bar: "Ruby Kiss Bar", barType: "soi6",
     desc: "The last loud front before the soi spills onto Second Road: lipstick-red lighting, " +
-      "a mirror wall, and a lipstick-mark motif on everything including the glasses. Kluay and " +
-      "Benz have claimed the two nearest stools for you already.",
+      "a mirror wall, and a lipstick-mark motif on everything including the glasses. Wilai runs " +
+      "the front stools, and Kluay and Benz have already claimed the two nearest for you.",
     revisit: [
       "Back into Ruby Kiss and a lipstick-marked glass is in your hand before a girl is in your lap — but only just. \"You have my kiss. Now you want the rest?\" Wilai grins at the mirror, at the two of you the glass makes four. \"Buy me drink, we go up.\"",
       "Lipstick lighting, mirror wall, and Kluay already arranging herself across you. \"Last bar on the soi, best girls on the soi — you save the best, na?\" A hand, a price, a nod at the stairs.",
@@ -1563,8 +1584,8 @@ const ROOMS = {
     desc: "Actual air conditioning. Actual wood panelling. A dartboard. The Queen Vic Inn " +
       "anchors the quiet middle stretch of Soi 6 with the righteous calm of a man who has seen " +
       "it all and ordered another pint — the one place on the soi that isn't shouting. Through " +
-      "the window, the soi performs. On the balcony above, Terry is in a recliner watching it " +
-      "with a beer, and has probably been there for some time. A staircase behind the bar leads " +
+      "the window, the soi performs. Terry holds down the corner stool with a beer and the settled " +
+      "air of a man who has watched it all twice. A staircase behind the bar leads " +
       "UP to the guest rooms.",
     revisit: [
       "Back into the Queen Vic — real aircon, real wood, the dartboard, and the soi safely on the far side of the glass.",
@@ -1595,9 +1616,7 @@ const ROOMS = {
     desc: "The balcony room over the Queen Vic: wood floors, a ceiling fan with " +
       "strong opinions, and the balcony itself — a recliner, a small table, and " +
       "the whole of Soi 6 performing below like a fish tank somebody dropped a " +
-      "radio into. Terry's recliner is two balconies over — close enough to raise " +
-      "his beer at you, too far to hear a word over the soi; you'll catch him " +
-      "properly down in the pub. A firm double bed fills the rest of the room — the " +
+      "radio into. A firm double bed fills the rest of the room — the " +
       "neon never quite lets go of it, but the blackout curtains and the aircon get " +
       "you there. A flatscreen on the wall and a mini-fridge in the corner — two free " +
       "waters a day, housekeeping's one kindness — round out the luxuries. " +
@@ -5807,19 +5826,38 @@ const _M_LOOK = [
   "Warm to your face, ice at the till, and fluent in both",
   "Sits like she owns the stool, because she does",
   "Older, sharper, and entirely done being impressed by farang",
+  "Silk blouse, jade bangle, and the calm of a woman who has heard every line",
+  "A cloud of perfume and authority, hair lacquered against the fans",
+  "Half-moon glasses down her nose, appraising you over the top of them",
+  "Broad, motherly, and entirely able to have you removed by smiling",
+  "Rings on every finger and a voice that cuts the music when she wants it",
+  "Elegant, weathered, and plainly the last word on everything in the room",
 ];
 const _M_STORY = [
   "danced this same street before you were her problem",
   "came up from the rice fields and never once looked back",
   "has run this floor longer than most of the girls have been alive",
   "buried a husband, raised two kids, and built a concrete house on lady drinks",
+  "married a farang, buried the marriage, and kept the house",
+  "started on the stage at seventeen and owns three of these stools now",
+  "puts four kids through school on other men's lonely nights",
+  "has watched the soi flood, burn, and rebuild, and outlasted all three",
 ];
+// Kept deliberately deep: Soi 6 alone puts six cashiers within a short walk, so
+// a shallow pool reads as copy-paste bar to bar (see the prose-review notes).
 const _C_LOOK = [
   "In a cage of fairy lights, counting notes faster than the eye follows",
   "Black polo, a lanyard of too many keys, a calculator she never needs",
   "Neat bun, neat ledger, an engagement ring worn on a chain",
   "Headset on one ear, {{phone}} in one hand, the till in perfect order",
   "Quiet and quick, the still point the whole loud room pays into",
+  "Fingers flying over a calculator app, eyes never leaving the cash",
+  "Reading glasses, a receipt spike, and no patience for a disputed tab",
+  "A note-counting machine at her elbow and a faster one behind her eyes",
+  "A blunt bob, red lipstick, and a stare that reconciles you at a glance",
+  "Perched above the till like a lifeguard watching a pool of drunks",
+  "Cash drawer open, phone face-down, all of her attention on the maths",
+  "Sleeve of faded tattoos and an abacus brain — the least-fooled soul in here",
 ];
 
 function _buildMama(name, th, room) {
