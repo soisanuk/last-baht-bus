@@ -13,19 +13,19 @@ var NEWS_FEED = [
     "d": "30 Jul 2026"
   },
   {
-    "t": "Thai Police Find Buried Motorcycle Belonging to Missing Russian Siblings",
-    "s": "kyivpost.com",
-    "d": "30 Jul 2026"
-  },
-  {
     "t": "The Standard Pattaya Na Jomtien brings beachside luxury to the party town",
     "s": "South China Morning Post",
     "d": "30 Jul 2026"
   },
   {
-    "t": "Two men arrested in hunt for young Russian siblings",
-    "s": "Bangkok Post",
+    "t": "Thai Police Find Buried Motorcycle Belonging to Missing Russian Siblings",
+    "s": "Kyiv Post",
     "d": "30 Jul 2026"
+  },
+  {
+    "t": "Russian siblings dead, suspects confess",
+    "s": "Bangkok Post",
+    "d": "31 Jul 2026"
   },
   {
     "t": "Thai Police clarify Georgia’s Article 115 in Hlun Solo death investigation",
@@ -49,8 +49,18 @@ var NEWS_FEED = [
   },
   {
     "t": "Cheap Thailand trip turns into horror, 3 Indians kidnapped by Indians in Pattaya",
-    "s": "India Today",
+    "s": "indiatoday.in",
     "d": "29 Jul 2026"
+  },
+  {
+    "t": "Thailand: A new Bishop for a vibrant, diverse Church",
+    "s": "Vatican News",
+    "d": "31 Jul 2026"
+  },
+  {
+    "t": "Death of travel YouTuber Hlun Solo highlights hidden risks faced by Thailand’s solo creators",
+    "s": "Asia News Network",
+    "d": "31 Jul 2026"
   },
   {
     "t": "MotoGP to begin 2027 season in Thailand",
@@ -58,30 +68,20 @@ var NEWS_FEED = [
     "d": "31 Jul 2026"
   },
   {
-    "t": "Does Thailand have leverage to negotiate with the US over new tariffs?",
+    "t": "Former Philippine Airlines pilot found homeless in Bangkok",
     "s": "Thai PBS World",
-    "d": "31 Jul 2026"
-  },
-  {
-    "t": "Meet police prodigy Samran, Thailand’s next top cop",
-    "s": "Thai PBS World",
-    "d": "31 Jul 2026"
-  },
-  {
-    "t": "Thailand: A new Bishop for a vibrant, diverse Church",
-    "s": "Vatican News",
-    "d": "31 Jul 2026"
+    "d": "30 Jul 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-07-30","USD":33.55,"AUD":23.42,"GBP":44.9,"EUR":38.49};
+var FX_RATES = {"date":"2026-07-31","USD":33.47,"AUD":23.49,"GBP":44.92,"EUR":38.43};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-07-31","temp":30,"humid":75,"code":2,"hi":30,"rain":100};
+var WX_NOW = {"date":"2026-08-01","temp":27,"humid":87,"code":3,"hi":30,"rain":67};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-07-16","first":"639214","last2":"71","front3":["683","709"],"back3":["427","746"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4059,"date":"2026-07-31","baht":64400};
+var GOLD = {"usd":4042,"date":"2026-07-31","baht":64000};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":63633,"thb":2124984};
+var BTC = {"usd":62813,"thb":2100071};
