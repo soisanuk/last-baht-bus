@@ -2202,10 +2202,87 @@ function _doMap() {
   _say(_MAP, "dim");
 }
 
-function _doPhoto() {
+// PHOTO <someone here> is the collectible: it saves their portrait to the phone
+// gallery (GALLERY/PHOTOS) and, since you're clearly on first-name terms now,
+// learns their name. Bare PHOTO keeps the old throwaway scene shots.
+const _PHOTO_NEW = [
+  (nm) => `You catch ${nm} mid-laugh and the phone, for once, actually gets it. Saved to your gallery (GALLERY).`,
+  (nm) => `${nm} gives the lens half a second of the real face before the pose snaps back. You keep the real one. (GALLERY)`,
+  (nm) => `One frame of ${nm}, neon and all — proof you were here. It's in the gallery now. (GALLERY)`,
+  (nm) => `${nm} throws a peace sign a beat too late. The blurry one's better; both go to the gallery. (GALLERY)`,
+];
+const _PHOTO_DUP = [
+  (nm) => `Another ${nm} for the collection. The gallery already had a better one.`,
+  (nm) => `${nm} again — same grin, same peace sign. Your gallery isn't complaining.`,
+  (nm) => `You've got ${nm} already, but one more never hurt a gallery.`,
+];
+const _PHOTO_GOGO_NO = [
+  `A hand closes over your lens before the shutter does. « No photo. No video. House rule, tilac. » The phone goes back in your pocket.`,
+  `The mamasan is at your elbow before the screen even lights. « No camera, na. » Not a request. You put it away.`,
+];
+const _PHOTO_GOGO_YES = [
+  (nm) => `${nm} palms your phone under the rail, out of the mamasan's sightline, and pulls you in cheek-to-cheek. One quick frame, then it's back in your pocket. (GALLERY)`,
+  (nm) => `« Only you, na. Don't show nobody. » ${nm} angles the phone low, throws a quick pout, and the shutter's done before anyone looks up. (GALLERY)`,
+];
+
+function _photoWhere(id) {
+  if (NPCS[id]) return _barName(_npcRoom(id)) || "";
+  if (PATRONS[id]) return _barName(PATRONS[id].home) || "the rail";
+  return "";
+}
+
+// The gallery is an array of {id, cap?, turn}: a cap-less entry is a portrait you
+// snapped, a captioned one is a photo she texted you. Coerce here so a save from
+// the object-keyed prototype (or a missing field) can't throw.
+function _photoList() {
+  if (!Array.isArray(G.phone.photos)) G.phone.photos = [];
+  return G.phone.photos;
+}
+function _hasPortrait(id) { return _photoList().some(p => p.id === id && !p.cap); }
+// Add a photo to the gallery. No cap = a portrait (deduped per character); a cap =
+// a texted selfie (always a distinct new frame). Learns her name either way.
+function _addPhoto(id, cap) {
+  if (!(NPCS[id] || PATRONS[id])) return false;
+  if (!cap && _hasPortrait(id)) return false;
+  if (G.known) G.known[id] = true;
+  _photoList().push(cap ? { id, cap, turn: G.turns } : { id, turn: G.turns });
+  return true;
+}
+
+function _photoChar(id) {
+  const n = NPCS[id] || PATRONS[id];
+  if (!n) return;
+  // the go-go / Soi 6 house rule: the girls are never a photo op — for a stranger.
+  // Your own regular (a contact, or bonded regular+) will sneak one, cheek-to-cheek.
+  let sneaky = false;
+  if (NPC_ROLES[id] && /gogo|soi6/.test(_room().barType || "")) {
+    const close = (G.phone.contacts && G.phone.contacts[id]) ||
+      (typeof _bondTier === "function" && _bondTier(id) >= 2);
+    if (!close) { _say(_pickVary(_PHOTO_GOGO_NO, "photono"), "alert"); return; }
+    sneaky = true;
+  }
+  G.battery--;
+  const had = _hasPortrait(id);
+  _addPhoto(id);
+  if (had) _say(_pickVary(_PHOTO_DUP, "photodup")(n.name));
+  else if (sneaky) { _say(_pickVary(_PHOTO_GOGO_YES, "photosneak")(n.name)); _addHappy(1); }
+  else { _say(_pickVary(_PHOTO_NEW, "photonew")(n.name)); _addHappy(1); }
+}
+
+function _doPhoto(arg) {
   if (G.battery <= 0) {
     _say("Your phone is dead. The moment goes unrecorded, like the best ones always do.");
     return;
+  }
+  arg = (arg || "").replace(/^(of|the|a|an|with|at)\s+/i, "").trim();
+  if (arg) {
+    const id = _findNpc(arg) || _findPatron(arg);
+    if (id) {
+      if (_npcsHere().includes(id) || _patronsHere().includes(id)) { _photoChar(id); return; }
+      _say("You raise the phone, but they've drifted off — nobody by that description in front of you now.");
+      return;
+    }
+    // an unrecognised word ("sunset", "bar") falls through to a scene shot
   }
   G.battery--;
   if (_inBar()) {
@@ -2220,6 +2297,26 @@ function _doPhoto() {
     _say("You take a photo you will never look at again. The neon doesn't " +
       "photograph. It never has.");
   }
+}
+
+function _doGallery() {
+  const photos = _photoList().filter(p => NPCS[p.id] || PATRONS[p.id]);
+  if (!photos.length) {
+    _say("Your gallery is one blurry thumb and a lot of smeared neon. PHOTO someone — " +
+      "a face at the rail, a lady who's caught your eye — to start a collection.");
+    return;
+  }
+  if (G.battery <= 0) {
+    _say("Dead phone, dark gallery. The faces are in there somewhere. Find a charger.");
+    return;
+  }
+  const rows = photos.slice().sort((a, b) => (a.turn || 0) - (b.turn || 0)).map(p => {
+    const n = NPCS[p.id] || PATRONS[p.id];
+    // a texted selfie shows its caption; a snapped portrait, where she works
+    const detail = p.cap ? `«${p.cap}»` : _photoWhere(p.id);
+    return `${n.emoji} ${n.name}${detail ? " — " + detail : ""}`;
+  });
+  _say(`Gallery — ${rows.length} photo${rows.length > 1 ? "s" : ""}:\n` + rows.join("\n"), "room");
 }
 
 function _doCall(arg) {
@@ -2475,6 +2572,7 @@ const _HELP = `Common commands:
   PHONE / EXAMINE PHONE (home screen: battery, messages, weather, headlines)
   CONTACT <lady> (swap numbers) · CONTACTS (your phonebook) · MESSAGE <lady> · CHECK MESSAGES
   WHO / BLACKBOOK (your ladies, ranked by how they feel about you)
+  PHOTO <someone> (a portrait for your phone) · GALLERY (the faces you've collected)
   SEND <amount> TO <lady> (banking app)
   BORROW <amount> · REPAY [amount] (Nira's loan at Neon Paradise — 20%, three days, don't be late)
   PET CATS (Jomtien beach) · FEED DOG (a friendship you cannot undo) · PET DOG · NAME DOG <name>
@@ -2531,7 +2629,7 @@ const _COMPLETE_VERBS = [
   "motosai to", "travel", "light", "charge phone", "read", "use", "open", "play",
   "flirt", "kiss", "spank", "fondle", "ring bell", "barfine", "massage", "special", "soapy", "meet", "eat", "drink",
   "sleep", "tv", "column", "watch", "weather", "scores", "lottery", "map", "time", "tip", "wave", "phone",
-  "photo", "call", "shower", "withdraw", "cheers", "tao rai", "borrow", "repay", "hire", "pet", "feed", "rename", "dance", "sing", "swim",
+  "photo", "gallery", "photos", "call", "shower", "withdraw", "cheers", "tao rai", "borrow", "repay", "hire", "pet", "feed", "rename", "dance", "sing", "swim",
   "smell", "listen", "diagnose", "get tested", "clinic", "apologize", "quests", "accept", "abandon", "contact",
   "contacts", "who", "blackbook", "message", "check messages", "send", "score", "wait", "again",
   "request", "hint", "help", "save", "load", "undo", "restart", "quit", "reset", "end", "logout",
@@ -2602,7 +2700,10 @@ function _chipSet() {
     else if (girls.length) { add("flirt ", "flirt…"); add("buy drink for ", "buy drink…"); add("barfine ", "barfine…"); }
     add("buy beer");
     if (_playOptions().length) add("play");
-    if (_patronsHere().length) add("talk to patron", "talk patron");
+    for (const pid of _patronsHere().slice(0, 2)) {
+      const lbl = _patronLabel(pid);
+      add("talk to " + lbl.toLowerCase(), lbl.length > 24 ? lbl.slice(0, 22) + "…" : lbl);
+    }
   } else if (_npcsHere().length || _patronsHere().length) {
     add("talk to ", "talk…");
   }
@@ -2628,8 +2729,10 @@ function _cInv() {
 }
 function _cItemWord(id) { return ITEMS[id].name.split(" ").pop().toLowerCase(); }
 function _cNpcsHere() {
-  return [..._npcsHere().map(id => NPCS[id].name.toLowerCase()),
-    ..._patronsHere().map(id => PATRONS[id].name.toLowerCase())];
+  // suggest by label — a character's look until you've met them, their name after —
+  // so autocomplete never leaks an unmet name (typed name still resolves via _findNpc).
+  return [..._npcsHere().map(id => _npcLabel(id).toLowerCase()),
+    ..._patronsHere().map(id => _patronLabel(id).toLowerCase())];
 }
 
 function _completePool(verb, ctx) {
@@ -2639,6 +2742,8 @@ function _completePool(verb, ctx) {
     .filter(id => G.phone.contacts[id]).map(id => NPCS[id].name.toLowerCase());
   switch (verb) {
     case "talk": case "chat": case "wai": return _cNpcsHere();
+    case "photo": case "selfie": case "photograph": case "snap":
+      return ctx.length >= 2 ? [] : _cNpcsHere();
     case "flirt": case "kiss": case "spank": case "fondle": case "tip":
     case "barfine": case "bf": return girls();
     case "ask": {
@@ -3015,7 +3120,7 @@ function doCommand(input) {
     case "accept": _doAccept(arg); break;
     case "abandon": _doAbandon(arg); break;
     case "take": case "get": case "grab": case "pick":
-      if (/^(photo|selfie|picture|pic)\b/.test(arg)) _doPhoto();
+      if (/^(photo|selfie|picture|pic)\b/.test(arg)) _doPhoto(arg.replace(/^(photo|selfie|picture|pic)\s*/, ""));
       else if (arg === "bus" || arg.startsWith("bus")) _doRideBus(arg.replace(/^bus\s*/, ""));
       else if (arg.startsWith("motosai") || arg.startsWith("bike")) _doMotosai(arg.replace(/^\S+\s*/, ""));
       else if (/^(tested|checked|test|checkup|screen)\b/.test(arg)) _doClinic();
@@ -3181,7 +3286,8 @@ function doCommand(input) {
     case "tip": _doTip(arg); break;
     case "wave": _doWave(arg); break;
     case "map": _doMap(); break;
-    case "photo": case "selfie": case "photograph": _doPhoto(); break;
+    case "photo": case "selfie": case "photograph": case "snap": _doPhoto(arg); break;
+    case "gallery": case "photos": case "album": _doGallery(); break;
     case "call": case "dial": _doCall(arg); break;
     case "shower": case "wash": _doShower(); break;
     case "withdraw": case "withdrawal": case "withdrawl": _doWithdraw(arg); break;

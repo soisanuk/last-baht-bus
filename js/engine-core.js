@@ -254,6 +254,8 @@ function newGame() {
       lastText: 0,       //   turn of the last incoming message
       msgCd: {},         //   npcId → day you last sweet-talked her by text
       invite: null,      //   {id, day} — she asked you to drop by tonight
+      photos: [],        //   [{id, cap?, turn}] — the gallery (portraits you took + selfies she sent)
+      picDeal: null,     //   {id, idx, ask} | {id, done} — the pay-per-photo drip
     },
     over: false,         // legacy field; the sandbox never ends the night
   };
@@ -442,6 +444,11 @@ function _findPatron(word) {
   for (const id of here) {
     if (PATRONS[id].name.toLowerCase().startsWith(w)) return id;
   }
+  for (const id of here) {
+    const t = PATRONS[id].title;
+    if (t && !(G.known && G.known[id]) && (t.toLowerCase() === w ||
+        (w.length >= 4 && t.toLowerCase().includes(w)))) return id;
+  }
   return null;
 }
 
@@ -464,7 +471,7 @@ function _npcState(id) {
 // READ goes through _convoActive, which re-checks the partner is still in the
 // room — so walking away, them leaving, or a barfine silently ends it. The
 // parser layer that consumes this lives in engine-parser.js.
-function _convoStart(id) { if (id) { G.convo = id; G.itNpc = id; } }
+function _convoStart(id) { if (id) { G.convo = id; G.itNpc = id; if (G.known) G.known[id] = true; } } // talking to someone IS meeting them → you learn the name
 function _convoName(id) {
   return (NPCS[id] && NPCS[id].name) || (PATRONS[id] && PATRONS[id].name) || id;
 }
@@ -715,7 +722,28 @@ function _findNpc(word) {
   for (const id of here) {
     if (NPCS[id].name.toLowerCase().includes(w)) return id;
   }
+  // a descriptive title before you know the name ("the manager" → bert). Only
+  // while unknown; once known, the name paths above already catch them.
+  for (const id of here) {
+    const t = NPCS[id].title;
+    if (t && !(G.known && G.known[id]) && (t.toLowerCase() === w ||
+        (w.length >= 4 && t.toLowerCase().includes(w)))) return id;
+  }
   return null;
+}
+
+// Descriptive-title-until-known: a character you haven't met shows their `title`
+// (a look, not a name) in the world; once you know them — talked to them, took
+// their photo, or someone named them (G.known) — the name. Opt-in: a character
+// with no `title` always shows their name, so the roster converts over gradually
+// and untitled NPCs are completely unaffected.
+function _npcLabel(id) {
+  const n = NPCS[id]; if (!n) return id;
+  return (n.title && !(G.known && G.known[id])) ? n.title : n.name;
+}
+function _patronLabel(id) {
+  const p = PATRONS[id]; if (!p) return id;
+  return (p.title && !(G.known && G.known[id])) ? p.title : p.name;
 }
 
 // A named character the player addressed who isn't in THIS room — used to turn a
@@ -871,7 +899,7 @@ function _describeRoom(full, forceFull) {
   const items = Object.keys(G.itemLoc).filter(id => _here(id));
   if (items.length) _say("You can see: " + items.map(id => ITEMS[id].name).join(", ") + ".");
   const npcs = _npcsHere();
-  if (npcs.length) _say("Here: " + npcs.map(id => `${NPCS[id].emoji} ${NPCS[id].name}`).join(", ") + ".");
+  if (npcs.length) _say("Here: " + npcs.map(id => `${NPCS[id].emoji} ${_npcLabel(id)}`).join(", ") + ".");
   // Butterfly the dog: the girls dote on him at the door — a warmer welcome, once a night
   if (full && G.dog && G.dog.egg === "butterfly" && _inBar() &&
       npcs.some(id => NPC_ROLES[id]) && G.dog.btfDay !== G.day) {
@@ -890,8 +918,14 @@ function _describeRoom(full, forceFull) {
   }
   const pats = _patronsHere();
   if (pats.length) {
-    _say("At the rail: " + pats.map(id =>
-      `${PATRONS[id].emoji} ${PATRONS[id].name} (${PATRONS[id].age}, ${PATRONS[id].nat})`).join(", ") + ".");
+    _say("At the rail: " + pats.map(id => {
+      const p = PATRONS[id];
+      // a titled patron you haven't met shows the look; otherwise the old
+      // Name (age, nat) — so untitled patrons are unchanged.
+      return (p.title && !(G.known && G.known[id]))
+        ? `${p.emoji} ${p.title}`
+        : `${p.emoji} ${p.name} (${p.age}, ${p.nat})`;
+    }).join(", ") + ".");
   }
   const exits = Object.keys(r.exits);
   if (exits.length) _say("Exits: " + exits.join(", ") + ".", "dim");
