@@ -161,20 +161,53 @@ const _term = (() => {
     } catch (e) { return null; }
   }
 
-  function _avatar(id, cls) {
+  function _avatarSrc(src, cls, fallback) {
     const img = document.createElement("img");
     img.className = cls;
-    img.src = "portraits/" + id + ".png";
+    img.src = src;
     img.alt = "";
-    img.addEventListener("error", () => img.remove());
+    img.addEventListener("error", () => {
+      // a missing photo-specific frame falls back to her standard portrait once,
+      // then (if that's missing too) removes itself — the game never needs the art
+      if (fallback && img.getAttribute("src") !== fallback) img.src = fallback;
+      else img.remove();
+    });
     return img;
+  }
+  function _avatar(id, cls) { return _avatarSrc("portraits/" + id + ".png", cls); }
+
+  // A texted selfie / paid pic can carry its own image (a distinct frame, not her
+  // bust portrait): world.js data marks it with a `pic` stem, matched here by the
+  // caption printed on the row. Presentation-only — a missing file just falls back.
+  function _picFor(id, cap) {
+    try {
+      const n = NPCS[id];
+      if (!n || !cap) return null;
+      for (const pool of [n.paidPics, n.selfies]) {
+        if (!Array.isArray(pool)) continue;
+        for (const e of pool) {
+          const c = typeof e === "string" ? e : (e && e.cap);
+          if (c === cap && e && e.pic) return e.pic;
+        }
+      }
+    } catch (e) { /* ignore */ }
+    return null;
+  }
+  // The «caption» on a gallery/photo row sits in the text node just after the name.
+  function _capAfter(kw) {
+    const t = kw.nextSibling;
+    if (t && t.nodeType === 3) {
+      const m = /«([^»]*)»/.exec(t.nodeValue.split("\n")[0]);
+      if (m) return m[1];
+    }
+    return null;
   }
 
   // On the presence lines the engine's emoji becomes a portrait: the emoji
   // is the last token of the text node before each name, so strip it there
   // and drop the avatar in at the front of the name span.
   function _addAvatars(div, text) {
-    if (!/^(Here: |At the rail: )/.test(text)) return;
+    if (!/^(Here: |At the rail: |Gallery — |📷 )/.test(text)) return;
     for (const kw of div.querySelectorAll('.kw[data-k="npc"], .kw[data-k="patron"]')) {
       const id = _portraitId(kw.dataset.k, kw.dataset.v);
       if (!id) continue;
@@ -182,7 +215,11 @@ const _term = (() => {
       if (prev && prev.nodeType === 3) {
         prev.nodeValue = prev.nodeValue.replace(/[^\s,]+\s*$/, "");
       }
-      kw.insertBefore(_avatar(id, "kw-av"), kw.firstChild);
+      const pic = _picFor(id, _capAfter(kw));
+      const av = pic
+        ? _avatarSrc("portraits/pics/" + pic + ".png", "kw-av", "portraits/" + id + ".png")
+        : _avatar(id, "kw-av");
+      kw.insertBefore(av, kw.firstChild);
     }
   }
 
@@ -281,6 +318,7 @@ const _term = (() => {
       // exposes ASK-about topics.
       a.push({ t: "talk", c: "talk to " + lo, go: true });
       a.push({ t: "examine", c: "x " + lo, go: true });
+      a.push({ t: "photo", c: "photo " + lo, go: true });
       const role = npc && typeof NPC_ROLES !== "undefined" ? NPC_ROLES[npc] : null;
       // host-bar staff (Arm, Win) aren't in NPC_ROLES — hostesses' wheel logic
       // skips them entirely, so they'd get no tap path to their own economy.
@@ -565,5 +603,5 @@ const _term = (() => {
     _renderChips(); // first paint of the context chips (main.js re-renders post-boot)
   }
 
-  return { init, print, decorate, kwActions: _kwActions, renderChips: _renderChips };
+  return { init, print, decorate, kwActions: _kwActions, renderChips: _renderChips, picFor: _picFor };
 })();
