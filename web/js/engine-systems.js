@@ -2344,13 +2344,74 @@ const _BALCONY_SCENES = [
     "and the giggles and the offers all aimed at pavement level, none of it able to climb " +
     "two floors to your recliner. Best seat, cheapest ticket, no hands on your wrist. Bliss.",
 ];
-function _doWatchSoi() {
-  _say(_pickVary(_BALCONY_SCENES, "balcony"));
+
+// The pub-window vantage (ground floor, Queen Vic). Eye-level, glass between you
+// and the grab; the calm inside against the storm outside — the opposite of the
+// balcony's serene distance.
+const _PUB_SOI_SCENES = [
+  "You take a stool by the window. On the far side of the glass Soi 6 goes about its business at eye level — a " +
+    "tout's patter, a girl's laugh pitched to carry, a farang being steered by the elbow toward a doorway he is " +
+    "pretending to resist. In here: aircon, a dartboard, a pint going warm at exactly your own pace. The glass does " +
+    "the rest.",
+  "Through the Vic's front window the soi plays as a silent film with the bass leaking under the door — a barfine " +
+    "haggled in mime, a hen party spilling off the kerb, a soi dog trotting through the lot of it on business of his " +
+    "own. Terry doesn't turn from his corner. After a minute, neither do you.",
+  "An arm's length of pavement and a pane of glass between you and the whole circus: the leaning-out, the " +
+    "sleeve-grabbing, the WHERE YOU GO landing on the window like rain. Inside, a dart thunks the board and somebody " +
+    "swears amiably about the football. The calm side of the glass has a lot to recommend it.",
+  "Street level, front row: the parade presses right up to the window — a price named on someone's fingers, a boy " +
+    "doing the arithmetic, a mama watching her girls the way a cat watches a door. In the Vic it is just wood and " +
+    "cold air and the low talk of men who found their stool and mean to keep it.",
+  "The soi at arm's length through the glass — louder and grabbier down here than it ever looks from up top, every " +
+    "offer aimed at pavement height. You nurse the pint; the window holds. Terry lifts his without looking, a man who " +
+    "has watched this exact hundred metres longer than some of the girls out there have been alive.",
+];
+// One spectator happy-point a night, shared across every vantage (balcony, pub
+// window, the quiet-middle parade, the Blue Dog show) via G.blueDogDay.
+function _soiSpectateHappy(msg) {
   if (G.blueDogDay !== G.day) {
     G.blueDogDay = G.day;
     _addHappy(1);
-    _say("(Best seat above the best free show. +1 สนุก.)", "win");
+    _say(msg, "win");
   }
+}
+
+// The upper vantage: your third-floor balcony over the Queen Vic. The FIRST look
+// is the tone-setter — a vibrant, orienting wall that lays the whole soi out and
+// points you at what to do (once per game; `sawBalcony` resets with newGame).
+// Every look after that draws the varied _BALCONY_SCENES pool, so no repeated wall.
+function _doWatchSoi() {
+  if (!_flag("sawBalcony")) {
+    _setFlag("sawBalcony");
+    _say("You step out to the third-floor rail, and Soi 6 opens up underneath you like somebody kicked over a crate of neon.");
+    _say("A hundred metres of it, wall to wall: the loud end off to your left — Golden Dragon, Pink Lotus, the go-go " +
+      "fronts throwing pink light and bass up the walls — thinning east into the deep end on your right, where the " +
+      "signs get smaller and the promises get bigger. In between, the parade. Barkers working the walkers. Girls " +
+      "leaning out of doorways to reel a passing shirt in by the sleeve — HANDSOME MAN, WHERE YOU GO — half of them " +
+      "meaning it, all of them counting. A stag party circling a lit doorway like fish deciding on the bait. A som-tam " +
+      "cart, a ring-light kid filming a night he'll never actually smell, a soi dog threading the whole mess like he " +
+      "holds the lease on it.");
+    _say("It is gaudy and it is grubby and — you can feel it already — it is going to be very hard to leave.");
+    // The soi runs between Beach Rd and Second Rd; the songthaew passes those, not
+    // the soi itself. In the Soi 6 week you never leave — you sleep right up here —
+    // so the last-bus worry only belongs to the full game's ranging nights.
+    const _close = G.mode === "soi6"
+      ? "It runs west-loud to east-deep. Pace your baht — one street, one week, and you sleep right up here at the head of it."
+      : "It runs west-loud to east-deep. Pace your baht, and keep an ear out for the last songthaew home off Beach Road.";
+    _say("Somewhere down there is a week's worth of trouble with your name on it. (It's all just DOWN the stairs — " +
+      "the pub first, then out into the soi. " + _close + ")", "dim");
+  } else {
+    _say(_pickVary(_BALCONY_SCENES, "balcony"));
+  }
+  _soiSpectateHappy("(Best seat above the best free show. +1 สนุก.)");
+}
+
+// The ground vantage: the Queen Vic's front window. Same soi, opposite feeling —
+// eye-level, an arm's length of pavement and a pane of glass between you and the
+// whole grabby circus, the pub's cold-aircon calm behind you. Its own pool.
+function _doWatchPubSoi() {
+  _say(_pickVary(_PUB_SOI_SCENES, "pubsoi"));
+  _soiSpectateHappy("(A pint, and the whole circus safely behind glass. +1 สนุก.)");
 }
 
 // The Jomtien beach cats: Big One and Little One, the two gray-and-white
