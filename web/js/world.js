@@ -2767,6 +2767,167 @@ const NPCS = {
         short: "\"Sometime I lie, sometime true — I stop knowing which. Money into me is water in sand.\"" },
     ],
   },
+  // ── The rest of the Soi 6 cast, promoted from _FILLER_HOSTESSES ──────────────
+  // Praewa (Kitten Corner) — homesick-simple, kind, half on the bus home. No vector.
+  praewa: {
+    name: "Praewa", th: "แพรวา", emoji: "🌷",
+    room: "kitten_corner",
+    desc: "Pretty and a little far away, like part of her is always on the bus back to a village you'll never " +
+      "see. Kind to you, and not quite here.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Hello ka.\" A soft, real smile that doesn't quite reach wherever she's gone. \"You want " +
+          "company? I sit. I not so good talking tonight, but I sit nice.\" And she does — a warm, quiet " +
+          "presence with the volume of the room turned down around her.",
+        short: "\"I not so good talking tonight, but I sit nice.\"",
+        asks: { key: "home", q: "\"You far from home too?\" She asks it like it matters. \"Everybody here far from home. Some people it don't bother. Me—\" a small shrug \"—me it bother.\"" } },
+      { topic: "home", text: "\"Loei. By the river.\" Her whole face changes — softer, younger. \"My " +
+        "grandmother house, the mango tree, the morning cold. Real cold, you see your breath. Here never " +
+        "cold.\" The smile fades to the middle distance. \"Two more year. Then home. I count the month.\"" },
+      { topic: "sad", bond: 2, text: "\"You are kind to ask.\" She looks at you properly for the first time. " +
+        "\"Not sad exactly. Just — I am here, but I am there. All the time, both. Ten hour I smile, and in my " +
+        "head I am picking mango.\" A tired little laugh. \"Homesick don't kill nobody. Just make the night " +
+        "long.\"",
+        short: "\"I am here, but I am there, both, all the time. Homesick don't kill nobody — just make the night long.\"" },
+    ],
+  },
+  // Nangfah (Kitten Corner) — the spark: sharp, educated, executing a real plan, and
+  // she'll tell the white knight to his face that a man is not a financial strategy.
+  // Cleaner English (top of the fluency ladder); plays Connect 4 like she means it.
+  nangfah: {
+    name: "Nangfah", th: "นางฟ้า", emoji: "⭐", c4: 8,
+    room: "kitten_corner",
+    desc: "Composed in a way the room isn't, watching more than she performs. There's a textbook in her bag " +
+      "under the going-out clothes, and she'd rather you didn't make a thing of it.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Evening.\" Even, unhurried, her English a notch cleaner than the room's. \"You can buy me a " +
+          "drink if you like. Fair warning — I'm poor company for a man who wants the fantasy. I ask too many " +
+          "questions back.\" A small, testing smile: she's already decided how clever you are.",
+        short: "\"Buy me a drink if you like. Fair warning: I ask too many questions back.\"" },
+      { topic: "book", text: "\"You saw it.\" Not embarrassed, just recalibrating. \"Accounting. Online, " +
+        "Ramkhamhaeng — cheap, no-name, a real degree at the end.\" Flat, factual. \"Two more years. This—\" a " +
+        "small gesture at the bar \"—pays the fees and the rent while I do it. A job with terrible hours and no " +
+        "tax. That's all it is to me.\"",
+        short: "\"Accounting, online. The bar pays the fees. It's just a job with terrible hours.\"" },
+      { topic: "plan", bond: 2, text: "\"The plan works or it doesn't — but at least it's a plan, not a " +
+        "lottery ticket.\" She's watched a hundred girls wait for a farang to fix it. \"I'm not waiting for " +
+        "anybody to rescue me. No offence — you seem nice. But a man is not a financial strategy.\" She sips. " +
+        "\"Bookkeeper for a hotel chain by thirty. Boring. I want boring so badly I can taste it.\"",
+        short: "\"A man is not a financial strategy. I want a boring desk job so badly I can taste it.\"" },
+    ],
+  },
+  // Tabtim (Cherry Pop) — dim, sweet, self-aware about it, beloved by the bar. No vector.
+  tabtim: {
+    name: "Tabtim", th: "ทับทิม", emoji: "🍉",
+    room: "cherry_pop",
+    desc: "Round-cheeked and permanently pleased, a half-step behind every joke and laughing at it anyway, on " +
+      "faith. Sweetest girl in the bar, and the bar knows it.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Hi hi hi!\" Three his, delighted. \"You are new? Or I forget? I forget a lot — is okay, my " +
+          "heart remember even when my head don't.\" She pats her own chest, very pleased with this. \"You " +
+          "sit! I get you something. Maybe the wrong one. Then we laugh.\"",
+        short: "\"My heart remember even when my head don't! Sit — I bring you something, maybe wrong, we laugh.\"" },
+      { topic: "plan", text: "\"Plan is...\" Deep thought. \"...be happy? Yes. Plan: happy.\" A satisfied nod, " +
+        "the philosophy complete. \"My friend Nangfah, she have the big plan, the book, the number — make my " +
+        "head hurt. Me, I do the happy. Somebody have to do the happy, na.\"" },
+      { topic: "money", text: "\"I don't count good.\" Cheerfully, no shame. \"Mama keep my money. She honest, " +
+        "she love me, she give me when I need. I keep it myself, gone in one day. I know myself!\" She beams, " +
+        "genuinely proud of the self-knowledge, which is, in fairness, more than some manage." },
+    ],
+  },
+  // Chaba (Cherry Pop) — the glorious-hurricane drunk. type:"drunk" → the mao vector.
+  chaba: {
+    name: "Chaba", th: "ชบา", emoji: "🌺", type: "drunk",
+    room: "cherry_pop",
+    desc: "Loud, glorious, and pouring — for you, for herself, for the room. At Cherry Pop she's the party's " +
+      "engine, right up until she's its wreckage.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"HELLO my new best friend!\" A shot is in your hand that you did not order. \"We drink, we " +
+          "dance, no talk about sad thing! Tonight is CHERRY POP, baby — best bar, best girl, best YOU.\" She's " +
+          "a hurricane, and for an hour you will love being in it.",
+        short: "\"We drink, we dance, no sad thing! Tonight is Cherry Pop, baby!\"" },
+      { topic: "drink", text: "\"Drink is my job AND my hobby!\" She toasts the whole bar. \"Some girl sip " +
+        "water, pretend. Not Chaba. I give the customer real party, so they buy real bottle. Good for " +
+        "business.\" Already three ahead of you. \"Bad for—\" she waves vaguely at all of herself, laughing " +
+        "\"—this. Cheers!\"" },
+      { topic: "okay", text: "\"Aiy, you sound like my mama.\" Sharp for a flash, then swallowed in a big " +
+        "laugh. \"I am FINE, I am the best! Tomorrow I feel like dying — but tomorrow is not invited to " +
+        "tonight. You worry too much. DRINK.\"" },
+    ],
+  },
+  // Pukky (The Shady Lady, beer) — the good egg; beer-bar warmth, the honest slow lane.
+  pukky: {
+    name: "Pukky", th: "ปุ๊กกี้", emoji: "🌻",
+    room: "sunset_rail",
+    desc: "Easy and unhurried behind the Shady Lady's rail — the kind of company that feels like a night off " +
+      "rather than a transaction. No hurry in her, and no hustle either.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Evening. Cold beer?\" No performance, a friendly nod and a real question. \"Beer bar is " +
+          "different from the go-go, na. Nobody rush you here. You want to talk, we talk. You want to just sit " +
+          "and watch the football, also fine. Up to you.\"",
+        short: "\"Cold beer? No rush here — talk, or just watch the football. Up to you.\"",
+        asks: { key: "return", q: "\"First time this bar? You look around like first time.\" Warm, curious, not selling. \"Is a good one. The go-go take your money fast; here we take it slow. Friendlier — and honestly, cheaper for you.\"" } },
+      { topic: "beer bar", text: "\"Go-go is a show. Here is a bar.\" No judgement either way. \"Some man want " +
+        "the lights and the loud. Some man just want a cold one and somebody nice to drink it with, no games. " +
+        "Those men, they come here. They come back, too.\"" },
+      { topic: "money", text: "\"I make less than the go-go girl, sure.\" A comfortable shrug. \"But I sleep at " +
+        "night, I don't do the games, nobody scam nobody. Slow money, clean money. I send home a little less, I " +
+        "keep my—\" she taps her chest \"—this. Fair trade, for me.\"" },
+    ],
+  },
+  // Somo (Front Row, beer) — the tomboy: football, no makeup, one of the lads. No romance
+  // angle, and she says so. Learned English off the match commentary. No vector.
+  somo: {
+    name: "Somo", th: "โซโม่", emoji: "⚽",
+    room: "bay_watch",
+    desc: "In a Liverpool shirt and zero makeup, arguing offside with two regulars and winning. More one-of-" +
+      "the-lads than hostess, and she'll tell you so before you get the wrong idea.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Alright.\" A nod, like to a mate. \"Sit, watch the game. Fair warning — I don't do the " +
+          "sweetheart thing, I'm rubbish at it, and you look like you got enough people lying to you already.\" " +
+          "She turns back to the TV. \"United? Please tell me you are not United.\"",
+        short: "\"Sit, watch the game. I don't do the sweetheart thing — I'm rubbish at it.\"" },
+      { topic: "football", text: "\"Liverpool, since I am small.\" She lights up, all business. \"My uncle " +
+        "drive taxi Bangkok, always the match on the radio. I learn English from the football commentary " +
+        "before the schoolbook.\" A grin. \"Ask me the ninety-five squad. Go on. I know it better than my own " +
+        "cousin name.\"" },
+      { topic: "work", bond: 2, text: "\"Why here? Money same as anywhere — and here I don't have to pretend I " +
+        "fancy anybody.\" Blunt, comfortable. \"I pour beer, I talk football, the men leave happy and nobody " +
+        "feel stupid after. The go-go girls, some look at me like I'm mad.\" A shrug. \"Maybe. But I'm the one " +
+        "having a laugh.\"",
+        short: "\"Here I don't pretend I fancy anybody. I pour beer, talk football, everybody leave happy.\"" },
+    ],
+  },
+  // Nina (The Verandah, beer) — the auntie: older, mothers the whole bar and the young
+  // girls in it, at peace with her own kids grown. Warm, dignified. No vector.
+  nina: {
+    name: "Nina", th: "นีน่า", emoji: "🍲",
+    room: "sandy_toes",
+    desc: "A little older than the rail usually runs, and she mothers the whole bar — the young girls, the " +
+      "drunk regulars, and, within about four minutes, you. You'll have eaten something before you leave.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"You eat already?\" Before hello, before anything — frowning at how tired you look. \"No? " +
+          "Aiyo. Sit. Beer first, but I get you something also. You too skinny, you drink on empty stomach, " +
+          "tomorrow you feel terrible.\" She's already flagging the food cart. Resistance is pointless.",
+        short: "\"You eat already? No? Sit — beer first, but I get you food. Resistance is pointless.\"",
+        asks: { key: "girlfriend", q: "\"Somebody feed you at home? A wife, a girlfriend?\" Half-worried, like an aunt. \"No? Then who make sure you okay? Everybody need one person make sure they okay.\"" } },
+      { topic: "young girls", text: "\"The young ones here, I watch them.\" A nod down the rail. \"First month, " +
+        "they don't know nothing — who is safe, who is not, when to say no. I teach them. Their mama not here, " +
+        "so.\" Matter-of-fact. \"Somebody have to be the auntie. I am old for this job anyway. Might as well be " +
+        "useful old.\"" },
+      { topic: "family", bond: 2, text: "\"My own kids grown now — one working Bangkok, one married.\" Quiet " +
+        "pride, no self-pity. \"They think I have a little shop here. Not so far from true: I sell beer, I feed " +
+        "people, I keep an eye. Just the shop is on Soi 6.\" A warm, tired smile. \"They don't need to know the " +
+        "address.\"",
+        short: "\"My kids think I have a little shop. Not far from true — I sell beer, feed people. Just the address is Soi 6.\"" },
+    ],
+  },
 
   fon: {
     name: "Fon", th: "ฝน", emoji: "🌺",
@@ -6107,6 +6268,8 @@ const NPC_ROLES = {
   kai: "hostess", nook: "hostess", dew: "hostess",
   kat: "hostess", may: "hostess", dear: "hostess",
   kluay: "hostess", benz: "hostess", puu: "hostess", belle: "hostess",
+  praewa: "hostess", nangfah: "hostess", tabtim: "hostess", chaba: "hostess",
+  pukky: "hostess", somo: "hostess", nina: "hostess",
   joy: "hostess", fon: "hostess", gift: "hostess", kwan: "hostess",
   nong: "hostess", pim: "hostess", bee: "hostess", jane: "hostess", mercedes: "hostess", kratae: "hostess",
   nira: "hostess", mind: "hostess", pia: "hostess", wilai: "hostess",
@@ -6330,8 +6493,6 @@ const _FILLER_HOSTESSES = [
   /* Golden Dragon girls (Kai, Nook, Dew) promoted to authored NPCs */
   /* Pink Lotus girls (Puu, Belle) promoted to authored NPCs */
   /* Sunset Dreams girls (Kat, May, Dear) promoted to authored NPCs */
-  ["Praewa","แพรวา","kitten_corner"], ["Nangfah","นางฟ้า","kitten_corner"],
-  ["Tabtim","ทับทิม","cherry_pop"], ["Chaba","ชบา","cherry_pop"],
   /* Ruby Kiss girls (Kluay, Benz) promoted to authored NPCs */
   ["Lin","หลิน","water_buffalo"], ["Nim","นิ่ม","water_buffalo"],
   ["Duan","เดือน","firefly_bar"], ["Saifon","สายฝน","firefly_bar"],
@@ -6340,7 +6501,7 @@ const _FILLER_HOSTESSES = [
   ["Namfon","น้ำฝน","anchor_bar"], ["Bunny","บันนี่","dolphin_bar"], ["Jaja","จาจา","mooring_bar"],
   ["Dokmai","ดอกไม้","night_heron"], ["Jampa","จำปา","night_heron"],
   ["Ing","อิง","blue_dog"], ["Khing","ขิง","blue_dog"],
-  ["Pukky","ปุ๊กกี้","sunset_rail"], ["Somo","โซโม่","bay_watch"], ["Nina","นีน่า","sandy_toes"],
+  /* Kitten Corner, Cherry Pop, and Soi 6 beer-bar girls promoted to authored NPCs */
   ["Bam","บาม","rock_factory"], ["Kwang","กวาง","rock_factory"],
   ["Chompoo","ชมพู่","stinky_bar"], ["Manow","มะนาว","stinky_bar"],
   ["Goong","กุ้ง","honey_trap"], ["Jiab","เจี๊ยบ","honey_trap"],
