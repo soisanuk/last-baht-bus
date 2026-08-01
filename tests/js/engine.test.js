@@ -1703,6 +1703,29 @@ test("mamasans read you: Nee clocks your manner, Peung clocks your origin", () =
   assert.match(peung("running"), /not really here/i, "and the man running from something");
 });
 
+test("recognition spreads across the soi — the main mamas + Bert read you", () => {
+  state().stage = "vacation";
+  const read = (room, npc, set) => { set(); state().room = room; state().talked = {};
+                                     out = []; run("talk " + npc); return lastOut(); };
+  // personality readers
+  assert.match(read("sunset_dreams", "malai", () => state().player.personality = "whiteknight"),
+    /good heart/i, "Malai prices the white knight");
+  assert.match(read("ruby_kiss", "saeng", () => state().player.personality = "operator"),
+    /watch the room the way i/i, "Saeng clocks a fellow operator");
+  // origin readers
+  assert.match(read("cherry_pop", "toi", () => state().player.origin = "pi"),
+    /police eyes/i, "Toi spots the ex-cop");
+  const kes = read("kitten_corner", "kesinee", () => state().player.origin = "running");
+  assert.match(kes, /you are hiding/i, "Kesinee reads the man running from something");
+  // ...and her Bert-vouch trust fork still rides the origin greeting
+  const t0 = _npcState("kesinee").trust;
+  run("tell her bert sent you");
+  assert.ok(_npcState("kesinee").trust >= t0 + 2, "the WDG vetting survives the origin read");
+  // Bert (Beach Road) clocks your origin on the first meeting
+  assert.match(read("stinky_bar", "bert", () => state().player.origin = "married"),
+    /real version/i, "Bert clocks the returner");
+});
+
 test("Soi 6 cashiers: toms refuse the wrong team, kin refuse at any price, sponsors flip for money", () => {
   assert.equal(NPCS.joon.orientation, "gay", "a tom");
   assert.equal(NPCS.jun.type, "kin");
