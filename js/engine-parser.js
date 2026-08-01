@@ -3490,6 +3490,8 @@ function doCommand(input) {
     case "score": _doScore(); break;
     case "hint": case "hints": _doHint(); break;
     case "help": case "?": _say(G.mode === "soi6" ? _HELP_SOI6 : _HELP, "dim"); break;
+    case "quit": case "end": case "logout": _doQuit(); break;
+    case "reset":
     case "restart": {
       // RESTART = start over from character creation, IN THE CURRENT MODE. Was
       // beach-only (newGame resets mode to null), which wrongly dropped a Soi 6

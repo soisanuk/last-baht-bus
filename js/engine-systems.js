@@ -230,6 +230,30 @@ function _loanNightRoll() {
 // orientation — engaging is the player's own choice, never assumed — and the
 // prose is honest that most hosts are gay-for-pay (Arm) while a few (Win) are not.
 const _HOSTS = ["arm", "win"];
+
+// Which verbs a character affords, as frontend-agnostic action keys — the single
+// source of truth the terminal wheel (and a future 2D tap UI) reads to decide
+// which buttons to show. `full` is the long-press wheel; the short menu is the
+// always-safe subset. Works for any character id: a patron (not in NPCS) or an
+// unroled NPC gets the plain talk/examine/photo set. Rendering (labels, command
+// strings, her/him) stays in the frontend; this returns only the SET.
+function _npcActions(id, full) {
+  const isNpc = !!(typeof NPCS !== "undefined" && NPCS[id]);
+  const role = isNpc && typeof NPC_ROLES !== "undefined" ? NPC_ROLES[id] : null;
+  const isHost = isNpc && _HOSTS.includes(id);
+  const isPerformer = isNpc && typeof _CABARET_PERFORMERS !== "undefined" && _CABARET_PERFORMERS.includes(id);
+  const acts = ["talk", "examine", "photo"];
+  if (role) acts.push("buyher");             // hostess/cashier/mamasan economy
+  else if (isHost) acts.push("buyhim");      // host bar, gender-flipped
+  if (full) {
+    if (role === "hostess") acts.push("flirt", "tip", "contact", "barfine");
+    else if (isHost) acts.push("hire");      // the club "off" fee
+    else if (isPerformer) acts.push("tip");  // cabaret performers: tippable, no barfine
+    else if (isNpc && !role) acts.push("wai"); // a plain punter/NPC — just a polite wai
+  }
+  return acts;
+}
+
 function _hostBar() { return !!_room().hostBar; }
 function _hostHere(arg) {
   const id = arg ? _findNpc(arg) : null;
@@ -1375,6 +1399,17 @@ function _questWhere(at) {
     return ` That's the ${_barName(at)}, in ${ROOMS[at].region}.`;
   }
   return "";
+}
+
+// QUIT / END / LOGOUT — a text adventure that saves after every move has
+// nothing to log out OF; the front-end owns the start menu. Voice the refusal
+// (house rule: a plausible verb gets an answer, never "didn't parse") and point
+// at the real verbs. Frontend-agnostic on purpose — no "tab"/"window" here.
+function _doQuit() {
+  if (G.game) { _gameQuit(); return; } // a live mini-game: concede it (belt-and-braces; doCommand routes first)
+  _say("Nothing to quit out here — the soi keeps your place between visits, so you " +
+    "can wander off any time and pick up right where you stood. To turn in, (SLEEP) " +
+    "ends the night; to start the whole trip over from the airport, (RESTART).", "dim");
 }
 
 function _doHint() {
