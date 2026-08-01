@@ -2297,6 +2297,24 @@ test("blackout: the ninth bottle ends the night rough and broke, near where you 
   assert.match(lastOut(), /film simply stops/i);
 });
 
+test("watching the soi: the balcony's first-time tone-setter, then it varies; the pub is its own view", () => {
+  state().room = "qv_room";
+  // first time onto the balcony: the big orienting wall + directional hints
+  out = []; run("balcony");
+  assert.match(lastOut(), /kicked over a crate of neon|opens up underneath you/i, "the first-time tone-setter");
+  assert.match(lastOut(), /DOWN the stairs|west-loud to east-deep/i, "with orientation hints");
+  assert.ok(_flag("sawBalcony"), "flagged so it won't wall you again");
+  // a later look varies from the pool — never the wall again
+  out = []; run("watch soi");
+  assert.doesNotMatch(lastOut(), /kicked over a crate of neon/i, "no repeated wall");
+  assert.ok(_BALCONY_SCENES.some(s => lastOut().includes(s.slice(0, 40))), "a varied balcony scene instead");
+  // the pub is a distinct, ground-level, behind-the-glass view
+  state().room = "queen_vic";
+  out = []; run("watch soi");
+  assert.ok(_PUB_SOI_SCENES.some(s => lastOut().includes(s.slice(0, 40))), "the pub's own through-the-glass view");
+  assert.doesNotMatch(lastOut(), /third-floor rail|recliner/i, "not the balcony copy");
+});
+
 test("RESTART re-runs character creation in the CURRENT mode (Soi 6 stays Soi 6)", () => {
   // The bug: RESTART did newGame()+engineIntro() unconditionally, dumping a Soi 6
   // challenge player onto the beach/Act One. It must re-open the mode you're in.
@@ -6220,11 +6238,12 @@ test("hotel economics: rent, the downgrade ladder, the book, and the grace note"
   // Queen Vic balcony: WATCH SOI pays once a night
   state().hotel = "queenvic";
   state().room = "qv_room";
+  state().flags.sawBalcony = true; // past the one-time tone-setter; test the nightly perk on the pooled view
   state().blueDogDay = 0;
   const h1 = state().happy;
   out = [];
   run("watch soi");
-  assert.match(lastOut(), /Terry raises his beer/);
+  assert.ok(_BALCONY_SCENES.some(s => lastOut().includes(s.slice(0, 40))), "a balcony scene prints");
   assert.equal(state().happy, h1 + 1);
   run("watch soi");
   assert.equal(state().happy, h1 + 1, "the nightly point is spent");
