@@ -140,6 +140,7 @@ function _salengMatchItem(input) {
 // one (~20%), or roll a new cart up to the bar the player is in.
 function _salengTick() {
   if (!G) return;
+  if (G.offstage) return; // you're away (e.g. off on a short-time) — the bar's cart isn't your scene right now
   if (G.salengCart && G.turns >= G.salengUntil) { // its time is up — it moves on
     const here = G.salengRoom === G.room;
     G.salengCart = null; G.salengRoom = null; G.salengUntil = 0;
