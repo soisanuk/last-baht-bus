@@ -757,6 +757,8 @@ const _CONVO_TOPIC_RULES = [
   [/\bscam\b|\bhustle\b|the act\b|playing me|working me|you real|for real/,       "game"],
   [/you okay|you alright|are you (ok|alright|fine)|everything okay/,              "okay"],
   [/\bfollower|instagram|tiktok|content|famous|algorithm|the app/,                "content"],
+  [/\btemper\b|\bangry\b|\bjealous\b|too much|crazy/,                             "temper"],
+  [/you lie|lying|the truth|honest with me/,                                     "lie"],
   [/military|armed forces|the forces|you serve|were you in/,                     "navy"],
   [/ninet(y|ies)|1990s|the 90s/,                                                 "90s"],
   [/nightlife|the scene/,                                                        "scene"],

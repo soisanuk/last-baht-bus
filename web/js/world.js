@@ -2715,6 +2715,58 @@ const NPCS = {
       { topic: "future", text: "\"Five year?\" She waves it away cheerfully. \"Five year is VERY far. Tonight is already hard enough! Tonight I need: noodle, maybe one more drink, and—\" she tilts her head \"—maybe you stay a little longer? That is my five-year plan.\" Another collapse of giggles. \"Okay okay, three minutes plan. Same same.\"" },
     ],
   },
+  // Puu (Pink Lotus, WDG flagship) — volatile. type:"volatile" → barfine her and the
+  // night can detonate into a jealousy scene (the "scene" vector: money gone, banged
+  // up, barred). Her intensity IS the tell; the white knight reads the fire as love.
+  puu: {
+    name: "Puu", th: "ปู", emoji: "🔥", type: "volatile",
+    room: "pink_lotus",
+    desc: "Beautiful and burning a little too bright, all the way in from the first minute. Her eyes flick to " +
+      "{{your phone}} when it lights, to the girl who walks past, and back to you, fast. Lovely. A live wire.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"You. I like you already — don't laugh, I mean it.\" She takes your face in one hand, serious, " +
+          "thrilling. \"Tonight you are mine, okay? Only mine. You look at other girl, I know. I always know.\" " +
+          "It is the most alive anyone has made you feel in a year, and every instinct you own is quietly " +
+          "filing a report.",
+        short: "\"Tonight you are mine — only mine. You look at other girl, I know.\"" },
+      { topic: "love", text: "\"Fast? Yes, fast — I am always fast.\" Not embarrassed by it. \"When I love, I " +
+        "love like a house on fire. When I angry—\" a bright, dangerous smile \"—also the fire. You take the " +
+        "two together, or you take nothing. Most man too small for me. You?\"" },
+      { topic: "temper", bond: 2, text: "\"Every farang say the same. 'Puu, you too much.'\" Flat, unbothered, " +
+        "a little proud. \"Then they go home and miss me so bad they cannot breathe. You will miss me too. Or—\" " +
+        "the smile again, all teeth \"—you make me angry, and you will be sorry. One of the two, tilac. Never " +
+        "the boring middle.\"",
+        short: "\"You miss me so bad you cannot breathe — or you make me angry and you be sorry. One of two.\"" },
+    ],
+  },
+  // Belle (Pink Lotus, WDG flagship) — the moneypit. type:"moneypit" → she turns
+  // nearly every text into an escalating ask (_moneypitText); money into her is water
+  // in sand. Ambiguous, not a clean villain — she's drowning AND working it, and has
+  // stopped being able to tell the difference. The white knight can't say no.
+  belle: {
+    name: "Belle", th: "เบล", emoji: "🥺", type: "moneypit",
+    room: "pink_lotus",
+    desc: "Sweet, soft-eyed, always in the middle of a small catastrophe — a sick relative, a broken thing, a " +
+      "bill with today's date. She holds your hand when she tells you, and she is often, genuinely, not lying.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Oh — hello, sorry, my face.\" She dabs at an eye that may or may not be wet. \"Bad day. No no, " +
+          "sit, I don't want to put my problem on you, is not your job.\" She puts her problem on you, gently, " +
+          "expertly, inside ninety seconds, holding your hand the whole time.",
+        short: "\"Bad day. No no, sit — I don't want to put my problem on you...\" (she will).",
+        asks: { key: "hotel", q: "\"You okay for money, you? Good job at home?\" Warm, worried-for-you. \"I ask only because— no. Never mind. Is my problem, not yours.\" It becomes yours within the hour." } },
+      { topic: "family", text: "\"My family—\" she stops, breathes, brave \"—is a lot. Mama sick, papa gamble, " +
+        "sister have baby no husband. I am the only one send money. Every month more.\" It is a real weight, " +
+        "and she carries it, and she has also learned exactly how to set it down in front of you. \"Sorry — you " +
+        "don't want to hear. Buy me one drink? Then I smile, promise.\"" },
+      { topic: "lie", bond: 2, text: "\"You want to know if I lie to you.\" She looks tired, suddenly older " +
+        "than the sweet face. \"Sometime yes. Sometime completely true. And—\" a small, awful shrug \"—I stop " +
+        "being able to tell which. Is all just need now, all the time, every direction. You give money, is " +
+        "like water in sand. I know. I take it anyway. What else I do.\"",
+        short: "\"Sometime I lie, sometime true — I stop knowing which. Money into me is water in sand.\"" },
+    ],
+  },
 
   fon: {
     name: "Fon", th: "ฝน", emoji: "🌺",
@@ -6054,7 +6106,7 @@ const NPC_ROLES = {
   lek: "hostess", noi: "hostess", ping: "hostess", aom: "hostess",
   kai: "hostess", nook: "hostess", dew: "hostess",
   kat: "hostess", may: "hostess", dear: "hostess",
-  kluay: "hostess", benz: "hostess",
+  kluay: "hostess", benz: "hostess", puu: "hostess", belle: "hostess",
   joy: "hostess", fon: "hostess", gift: "hostess", kwan: "hostess",
   nong: "hostess", pim: "hostess", bee: "hostess", jane: "hostess", mercedes: "hostess", kratae: "hostess",
   nira: "hostess", mind: "hostess", pia: "hostess", wilai: "hostess",
@@ -6276,7 +6328,7 @@ const _FILLER_HOSTESSES = [
   ["Prik","พริก","moonshine_bar"], ["Mek","เมฆ","moonshine_bar"],
   ["Namtan","น้ำตาล","khao_talo_bar"], ["Ying","หญิง","khao_talo_bar"],
   /* Golden Dragon girls (Kai, Nook, Dew) promoted to authored NPCs */
-  ["Puu","ปู","pink_lotus"], ["Belle","เบล","pink_lotus"],
+  /* Pink Lotus girls (Puu, Belle) promoted to authored NPCs */
   /* Sunset Dreams girls (Kat, May, Dear) promoted to authored NPCs */
   ["Praewa","แพรวา","kitten_corner"], ["Nangfah","นางฟ้า","kitten_corner"],
   ["Tabtim","ทับทิม","cherry_pop"], ["Chaba","ชบา","cherry_pop"],
