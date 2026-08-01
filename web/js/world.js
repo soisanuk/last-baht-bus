@@ -3328,8 +3328,8 @@ const NPCS = {
   poy: {
     name: "Poy", th: "พอย", emoji: "🌸", ladyboy: true,
     room: "golden_dragon",
-    desc: "Soft-featured and softly spoken, and you would not know unless she told you — which, being decent, " +
-      "she does, early, before anyone wastes an evening. Tired of the two reactions, hoping for a third.",
+    desc: "Softly spoken and glamorously done up, and decent enough to say it at hello — she would rather tell " +
+      "you straight than be anyone's surprise. Tired of the two reactions, hoping for a third.",
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Hello. Sit if you like.\" Gentle, a little braced — the manner of someone who has learned to " +
