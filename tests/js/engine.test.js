@@ -26,7 +26,11 @@ function state() { return G; } // vm globals share this realm
 // peddler) by default — both arm a pendingEnc that eats the next command, and
 // newGame() seeds G.rng from Math.random(), so any street-walking test would
 // otherwise flake ~1 run in N. Tests that WANT them set the cooldown back.
-beforeEach(() => { out = []; sfx = []; newGame(); state().lastSaleng = 99999; state().lastPeddler = 99999; });
+beforeEach(() => { out = []; sfx = []; newGame();
+  // every real player has been through the taxi-ride character creation before
+  // Act One; default an identity so engineIntro/resets open the beach, not the taxi
+  state().player.origin = "monger"; state().player.personality = "joker"; state().player.orientation = "straight";
+  state().lastSaleng = 99999; state().lastPeddler = 99999; });
 
 // Park a saleng cart in the player's current room for the tests that buy from it
 // (the cart is a room fixture now, not a modal encounter). Set state().room first.
@@ -2005,6 +2009,56 @@ test("Act One reset keeps a critical-path high-water mark, shown on the next run
   run("wait");
   assert.equal(state().act1Best, 4, "the best stands");
   assert.doesNotMatch(lastOut(), /Furthest yet/, "no false personal-best");
+});
+
+test("the taxi intro picks who you are (origin/personality/orientation), then opens the beach", () => {
+  state().player.origin = null;  // a truly brand-new player, no identity yet
+  out = [];
+  engineIntro();
+  assert.equal(state().pendingChoice, "intro", "the ride in gates the game");
+  assert.match(lastOut(), /Tan/, "Tan is driving");
+  assert.match(lastOut(), /homicide detective/, "the origins are offered");
+  run("4");                                   // the detective
+  assert.match(lastOut(), /ask questions for a living/, "Tan reads you back");
+  run("3");                                   // blunt
+  run("2");                                   // open-minded
+  assert.deepEqual(
+    [state().player.origin, state().player.personality, state().player.orientation],
+    ["pi", "blunt", "bi"], "all three land in G.player");
+  assert.equal(state().pendingChoice, null, "the modal closes");
+  assert.match(lastOut(), /face-down on\s+Jomtien beach|wallet is GONE/s, "and the beach opening follows");
+});
+
+test("the taxi intro gates Soi 6 mode too, then opens the week", () => {
+  state().player.origin = null;
+  out = [];
+  startSoi6Mode();
+  assert.equal(state().pendingChoice, "intro");
+  assert.equal(state().introAfter, "soi6", "it will open the soi-6 week, not the beach");
+  run("7"); run("1"); run("1");               // monger / charmer / straight
+  assert.equal(state().pendingChoice, null);
+  assert.equal(state().mode, "soi6");
+  assert.equal(state().room, "qv_room");
+  assert.match(lastOut(), /planted your flag: SOI 6/, "the week's framing opens");
+});
+
+test("your identity is picked once and survives an Act One reset", () => {
+  // beforeEach set monger/joker/straight; a hard fail must not re-ask it
+  state().nightTurn = 99;
+  run("wait");                                // dawn → _act1Fail → reset
+  assert.equal(state().player.origin, "monger", "who you are carries across the reset");
+  assert.notEqual(state().pendingChoice, "intro", "no second trip through the taxi");
+  assert.match(lastOut(), /wallet is GONE|Jomtien beach/s, "straight back to the beach");
+});
+
+test("WHO AM I / IDENTITY report your character; the intro re-asks on nonsense", () => {
+  assert.match((run("who am i"), lastOut()), /The monger.*Joker.*ladies/s);
+  out = []; assert.match((run("identity"), lastOut()), /monger/i);
+  // nonsense mid-intro just re-prompts
+  state().player.origin = null; out = []; engineIntro();
+  out = []; run("banana");
+  assert.match(lastOut(), /a number, my friend/i, "Tan waves off a non-answer");
+  assert.equal(state().pendingChoice, "intro", "still waiting");
 });
 
 test("the intro orients a brand-new player, then hands off to the hint loop", () => {
