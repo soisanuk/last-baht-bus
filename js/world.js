@@ -2450,6 +2450,29 @@ const ITEMS = {
 //   so re-talking gives the point, not the whole spiel again. Optional — an
 //   entry without one just repeats in full.
 
+// Kesinee's WDG-vetting choices, hoisted so they ride on whichever of her greetings
+// fires — her plain welcome OR an origin-gated one (a greeting node owns its choices,
+// so the origin reads would otherwise drop the trust-building fork).
+const _KES_VET = [
+  { label: "Tell her Bert sent you",
+    when: (st, G) => st.trust < 2 && !_flag("heardWdgInside"),
+    fx: (st) => { st.trust = Math.min(5, st.trust + 2); },
+    text: "\"Bert.\" The name does more than any drink. \"He is a good man, that one — old soi, before " +
+      "all this.\" The careful smile loosens into a real one. \"If Bert send you, maybe I talk. Ask me " +
+      "— White Dish — and this time I answer straight.\"" },
+  { label: "Swear you're no White Dish man",
+    when: (st, G) => st.trust < 2 && !_flag("heardWdgInside"),
+    fx: (st) => { st.trust = Math.min(5, st.trust + 1); },
+    text: "You tell her plainly: nobody's boy, least of all Ryan Powers'. She weighs it against twenty " +
+      "years of faces. \"Maybe,\" she allows, and the eyes thaw a half-degree. \"We see.\"" },
+  { label: "Press her for names",
+    when: (st, G) => st.trust < 3 && !_flag("heardWdgInside"),
+    fx: (st) => { st.trust = Math.max(0, st.trust - 1); st.mood = "guarded"; },
+    text: "You lean in and push for specifics. Bad move. The shutters come straight back down. \"You ask " +
+      "like a policeman — or a man who works for them. Kesinee gives names to neither.\" The gold " +
+      "bracelet turns. It just got colder in here." },
+];
+
 const NPCS = {
 
   nok: {
@@ -3064,6 +3087,32 @@ const NPCS = {
     desc: "Soft-spoken and grandmotherly, Sunset Dreams' mamasan pours you tea and asks after your health, and " +
       "somewhere in the warmth your wallet opens without a sound. The gentlest operator on the soi.",
     dialogue: [
+      // Malai reads your MANNER through the grandmotherly warmth — the gentlest
+      // operator on the soi, and none of the warmth is fake, and all of it is aimed.
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _pers("charmer"),
+        text: "\"Ohh, a sweet-mouth one.\" Malai pats your hand like a favourite grandson. \"The girls will " +
+          "fight over you, luk — and I will let them, because a charmer tips to keep the peace. Sit. Grandma " +
+          "will look after you, and your wallet, both.\"",
+        short: "\"A sweet-mouth one — the girls will fight over you, and a charmer tips to keep the peace. Sit, luk.\"" },
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _pers("joker"),
+        text: "\"So funny already!\" She laughs before you've said anything, warm as the tea. \"Laugh all night, " +
+          "luk — a happy man forget to count his change. Lucky for you, grandma count it for him.\"",
+        short: "\"So funny! Laugh all night, luk — a happy man forgets to count his change. Grandma counts it for him.\"" },
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _pers("blunt"),
+        text: "\"You don't waste words. Nah.\" A grandmotherly nod, genuinely approving. \"Then I won't waste " +
+          "yours, luk: the tea is free, the girls are not, and I am the sweetest thief on this whole soi. Sit " +
+          "anyway. You knew that walking in.\"",
+        short: "\"You don't waste words — so I won't: tea free, girls not, and I'm the sweetest thief on the soi. Sit anyway.\"" },
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _pers("operator"),
+        text: "\"Ahh — you SEE me.\" The grandmother's eyes twinkle, entirely unashamed. \"Most men feel only " +
+          "the warm. You feel the hand in the pocket too, na. Clever boy.\" She pours your tea regardless. \"We " +
+          "will both enjoy pretending you can resist it.\"",
+        short: "\"You SEE me — most men feel only the warm, you feel the hand in the pocket too. We'll both enjoy pretending you can resist it.\"" },
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _pers("whiteknight"),
+        text: "\"Such a good heart.\" Malai cups your face for a moment, and means it, and prices it in the same " +
+          "breath. \"I have a girl for you, luk — so sweet, so unlucky, her family, ohh.\" A sorrowful, " +
+          "much-practised sigh. \"You will want to help her. Grandma will make very sure you can.\"",
+        short: "\"Such a good heart. I have a girl for you — so sweet, so unlucky. You'll want to help. Grandma will make sure you can.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Ohh, you look tired — sit, sit. You eat already? You want tea?\" She fusses like your own " +
           "auntie, and it is completely genuine, and it is also the most effective sales technique on Soi 6. " +
@@ -3085,6 +3134,43 @@ const NPCS = {
     desc: "Cherry Pop's mamasan — loud enough to run a loud bar, sharp enough behind it to run the numbers " +
       "while the party roars. She sells fun by the bottle, and business is very good.",
     dialogue: [
+      // Toi clocks your ORIGIN at full volume — the flick of the eyes behind the big
+      // welcome that reads your whole story before the first bottle lands.
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("monger"),
+        text: "\"HA — I know you!\" Toi points, delighted, over the music. \"Not YOU you. Your TYPE. Been to " +
+          "Pattaya more time than the songthaew, packed your golf club, never swing one. Welcome home, tilac — " +
+          "the party missed you!\"",
+        short: "\"HA, I know your TYPE — more trips than the songthaew, packed the clubs, never swung one. Welcome home!\"" },
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("married"),
+        text: "\"You had a wife here.\" Toi says it grinning, no cruelty in it at all. \"I can tell — you tip " +
+          "like a man saying sorry to somebody who is not in the room. Don't worry, tilac. Tonight, nobody in " +
+          "the room but us. LOUD music, na? Good for forgetting.\"",
+        short: "\"You had a wife here — you tip like a man apologising to somebody not in the room. Loud music tonight, na. Good for forgetting.\"" },
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("business"),
+        text: "\"Investor face!\" She claps once, delighted. \"You look at my bar like you want to OWN one. Ha! " +
+          "Everybody do, tilac. Buy a drink first — much cheaper than buy a bar, and you keep more of your " +
+          "money. I tell you this as a FRIEND, and I never tell customer that.\"",
+        short: "\"Investor face — you look at my bar like you want to own one. Buy a drink first, tilac, much cheaper than a bar.\"" },
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("pi"),
+        text: "\"You watching the room, not the girls.\" A shrewd flash under all the loud. \"Police eyes. " +
+          "Ex-police, maybe. Relax, tilac — nothing happen in MY bar the envelope don't already know about. " +
+          "Drink. Watch. Whatever make you happy. Just tip the girl for standing in your eyeline.\"",
+        short: "\"You watching the room, not the girls — police eyes. Nothing happens in my bar the envelope don't know. Watch all you like.\"" },
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("pension"),
+        text: "\"A regular! A REAL one!\" Toi beams like you're family. \"Fixed money, good manner, no drama — " +
+          "you, I keep the cold beer special. Sit by the rail with the old boys, tilac. They so boring you will " +
+          "fit right in — ha! I love them. Don't tell them.\"",
+        short: "\"A REAL regular — fixed money, no drama. Sit with the old boys by the rail, tilac, you'll fit right in.\"" },
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("redundancy"),
+        text: "\"First big trip! I see it, tilac — you SHINE.\" She loves it and warns it in the same breath. " +
+          "\"Money in the pocket, no boss, whole town saying yes to you. Enjoy, enjoy — but slow, na? The shine, " +
+          "the bar want to buy it off you cheap. Grandma Toi telling you free.\"",
+        short: "\"First big trip — you SHINE. Money in the pocket, no boss. Enjoy, but slow, na — the bar wants to buy that shine off you cheap.\"" },
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("running"),
+        text: "\"You not here to party.\" Toi drops the volume, just for you, unexpectedly gentle. \"You here to " +
+          "be too loud to think. Okay, tilac — I am very, very good at loud. Sit. Let the bar do your shouting " +
+          "for you tonight. On the house, the first one. Nobody tell you that in here but me.\"",
+        short: "\"You're not here to party — you're here to be too loud to think. Sit, tilac. Let the bar shout for you tonight.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"CHERRY POP! Welcome, welcome — tonight you have fun, guarantee!\" Big energy, big smile, and a " +
           "fast flick of the eyes that counts your table, your watch, your capacity. \"Chaba, look after this " +
@@ -3106,6 +3192,32 @@ const NPCS = {
     desc: "Ruby Kiss's mamasan, content to sit back while Wilai works the window — because a mama who's found a " +
       "girl that good knows to stay out of her light and just count.",
     dialogue: [
+      // Saeng watches and counts — she reads your MANNER dry and unhurried, from the
+      // till, having already priced you against tonight's take.
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _pers("charmer"),
+        text: "\"A charmer.\" Saeng barely lifts her eyes from the till, unimpressed and unbothered. \"Save it " +
+          "for the girls, tilac — I already counted you. The charm work on them. On me, it just make the " +
+          "evening pleasant while you spend.\"",
+        short: "\"A charmer — save it for the girls, I already counted you. On me it just makes the evening pleasant while you spend.\"" },
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _pers("joker"),
+        text: "\"Funny man.\" A small, economical smile that costs her nothing. \"Wilai will play with you — she " +
+          "like a live one. Me, I laugh when the till laugh. So far tonight, tilac, we both very quiet.\"",
+        short: "\"Funny man. Wilai will play with you. Me, I laugh when the till laughs — so far tonight we're both quiet.\"" },
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _pers("blunt"),
+        text: "\"Straight talker. Good.\" She approves without warming a degree. \"Then straight: Wilai is the " +
+          "show, the show is not free, and I am the one who count what the show earn. Enjoy her. Pay me. Simple, " +
+          "the way you like it.\"",
+        short: "\"Straight talker — then straight: Wilai's the show, the show's not free, I count what it earns. Enjoy her, pay me.\"" },
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _pers("operator"),
+        text: "\"Mm.\" Saeng finally looks up, and something behind her eyes recalculates. \"You watch the room " +
+          "the way I watch the room. An operator.\" A dry beat. \"Then you already see it — Wilai is the bait, " +
+          "the bar is the hook. Knowing never once stopped a hungry man. Sit. Be hungry professionally.\"",
+        short: "\"You watch the room the way I do — an operator. Then you see it: Wilai's the bait, the bar's the hook. Knowing never stopped a hungry man.\"" },
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _pers("whiteknight"),
+        text: "\"Ohh. A careful one, this.\" She says it almost to herself, almost a sigh. \"The good heart. " +
+          "Wilai eat the good hearts for breakfast, tilac, and I count what she leave on the plate.\" A shrug, " +
+          "not unkind. \"Go on. You came to be a hero. Be one. It cost exactly the same as being a fool.\"",
+        short: "\"The good heart — Wilai eats those for breakfast, and I count what she leaves. Go be a hero. It costs the same as being a fool.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Welcome to Ruby. You met Wilai already? Of course you did.\" A satisfied, unhurried smile. \"I " +
           "let her run the front. A smart mama know when to work and when to watch. With Wilai, I watch, and I " +
@@ -3126,6 +3238,24 @@ const NPCS = {
     desc: "The Shady Lady's mamasan, running a beer bar the slow honest way — no bottle-service hustle, no " +
       "bank of go-go tricks, just cold beer, decent girls, and a chair you're welcome to keep all night.",
     dialogue: [
+      // The honest beer-bar mama doesn't price you — she reads a few kinds and only
+      // wants to look after them. Signature ORIGIN reads; everyone else gets the warm
+      // welcome below.
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("pension"),
+        text: "\"A regular — I can tell, you sit like a man who owns the stool.\" The weathered smile deepens. " +
+          "\"Fixed money, long memory, no drama. My favourite kind. Keep the chair all night, tilac. Nobody " +
+          "take it from you here.\"",
+        short: "\"A regular — you sit like a man who owns the stool. Keep the chair all night, nobody takes it here.\"" },
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("redundancy"),
+        text: "\"First time with money in the pocket and nobody telling you no.\" She reads the shine, and " +
+          "unlike the go-go mamas she only wants to keep it safe. \"You come to the right bar to start, tilac. " +
+          "Nobody scam you here. Learn the soi slow, from a place that won't rob you first.\"",
+        short: "\"First money in the pocket, nobody telling you no. Right bar to start — learn the soi slow, from a place that won't rob you first.\"" },
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("running"),
+        text: "\"You want a quiet corner, a cold beer, and nobody asking a single question.\" A gentle, knowing " +
+          "nod. \"That is the whole menu at my bar, tilac. Sit. Nobody bother you here — I make sure of it " +
+          "myself.\"",
+        short: "\"A quiet corner, a cold beer, nobody asking questions — that's the whole menu here. Nobody bothers you; I make sure.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Sit, have a cold one. No hurry here.\" An easy, weathered smile. \"Beer bar is a different " +
           "game from the go-go. Small money, but honest money. Nobody scam nobody at my bar — I don't have the " +
@@ -3145,6 +3275,21 @@ const NPCS = {
     desc: "Front Row's mamasan, who put the big screens in herself and knows the league table better than half " +
       "the punters. Runs a football bar for football people, and keeps the drama outside.",
     dialogue: [
+      // Football-bar mama, drama kept outside — a few signature PERSONALITY reads
+      // framed through the match; everyone else gets the plain kickoff welcome.
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _pers("joker"),
+        text: "\"Ha — a funny one. Good, we need the noise.\" Half an eye stays on the screen. \"You'll fit the " +
+          "Saturday crowd fine, tilac. One rule: no jokes during a penalty. That, even I cannot forgive.\"",
+        short: "\"A funny one — you'll fit the Saturday crowd. One rule: no jokes during a penalty.\"" },
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _pers("blunt"),
+        text: "\"Straight talker. Football people, all of us — no soft-soap in a footy bar.\" A brisk, approving " +
+          "nod. \"You'll do fine here, tilac. Beer's cold, ref's blind, sit down.\"",
+        short: "\"Straight talker — football people, no soft-soap. You'll do fine. Beer's cold, ref's blind, sit down.\"" },
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _pers("operator"),
+        text: "\"You're watching the room and the match both.\" She half-approves, half-warns. \"Careful man. " +
+          "But nothing to work in here, tilac — just football and cold beer. Switch it off a while. Even the " +
+          "angles take a night off for a good game.\"",
+        short: "\"Watching the room and the match both — careful man. Nothing to work here, just football. Switch it off a while.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Grab a stool, game's about to start.\" A brisk nod, eyes half on the screen. \"Front Row is a " +
           "football bar first, girl bar second. Somo pour the beer, we all shout at the referee, everybody " +
@@ -3164,6 +3309,24 @@ const NPCS = {
     desc: "The Verandah's mamasan, who runs the most easygoing bar on Soi 6 like a long Sunday lunch — Nina " +
       "feeds the customers, Malila makes sure everyone's alright, and the money, such as it is, sees to itself.",
     dialogue: [
+      // The quiet-end mama runs the calmest bar on the soi — she reads the men who
+      // came to rest, and leaves the reading gentle. Signature ORIGIN reads; the rest
+      // get the unhurried welcome below.
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("running"),
+        text: "\"You came to breathe.\" Malila says it softly, certain — and it is the kindest read anyone has " +
+          "given you all night. \"I know the look, tilac. You are safe to sit here and be nobody a while. Nina " +
+          "will bring food you didn't order. Let her.\"",
+        short: "\"You came to breathe — I know the look. Safe to sit here and be nobody a while. Nina will bring food you didn't order. Let her.\"" },
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("married"),
+        text: "\"You've done the long version of this town.\" A comfortable, unhurried smile. \"I can tell — " +
+          "you don't grab, you don't rush, you know how the whole thing goes. Then you know the Verandah is " +
+          "where a man comes once he's learned better. Sit, tilac.\"",
+        short: "\"You've done the long version — you don't grab, don't rush. The Verandah's where a man comes once he's learned better.\"" },
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("monger"),
+        text: "\"You know the drill, na. No hustle needed for you.\" She gestures at the easy, half-empty bar. " +
+          "\"Then you already know why a man who has seen it all ends up at the quiet end. Sit. Breathe. The " +
+          "loud is still out there when you want it back.\"",
+        short: "\"You know the drill — no hustle needed. A man who's seen it all ends up at the quiet end. Sit, breathe.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Welcome, welcome. Nina feed you yet? She will.\" A comfortable, unhurried warmth. \"The " +
           "Verandah is the quiet end of a loud soi. People come here to breathe. I am not going to hustle a man " +
@@ -3900,34 +4063,63 @@ const NPCS = {
       "prices you before you sit. She ran this bar back when it was hers to run; now there's a logo on " +
       "the menu and a target on the till, and she is very careful who she says that to.",
     dialogue: [
+      // Kesinee prices you before you sit (her desc) — the sharpest reader on the soi,
+      // an owner-turned-manager who reads your ORIGIN and, being WDG-wary, says the
+      // dangerous half of it only to the right man.
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("monger"),
+        choices: _KES_VET,
+        text: "\"Ah. A returner.\" Kesinee places you before you reach the stool, exactly as advertised. \"Not " +
+          "this bar — this life. You know the dance, so I will not waste the music on you. Girls are good, price " +
+          "is White Dish's, and you know precisely what you came for. Refreshing, honestly.\"",
+        short: "\"A returner — you know the dance, so I won't waste the music. You know exactly what you came for. Refreshing.\"" },
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("married"),
+        choices: _KES_VET,
+        text: "\"You wore a ring here once.\" She notes it without judgement — a fact for the ledger. \"A man " +
+          "who married one holds his money like he learned the hard way, and says thank you like he means it. " +
+          "Then I will not need to explain anything to you. Sit where you like, tilac.\"",
+        short: "\"You wore a ring here once — a man who married one learned the hard way. I won't need to explain anything. Sit.\"" },
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("business"),
+        choices: _KES_VET,
+        text: "\"An investor.\" The smile cools by a precise, professional degree. \"Since I liked you for three " +
+          "whole seconds, tilac, I save you a conversation: whatever they offer, White Dish keep the paper and " +
+          "you keep the risk. I ran this bar when it was mine. Now I rent my own eyes back from them.\" Quieter: " +
+          "\"Ask me the rest in a corner, not at the door.\"",
+        short: "\"An investor — whatever they offer, White Dish keeps the paper and you keep the risk. I ran this bar when it was mine. Ask me the rest in a corner.\"" },
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("pi"),
+        choices: _KES_VET,
+        text: "\"You price the room, not the girls.\" Her gaze takes its usual extra beat, then one beat more. " +
+          "\"That is my job you are doing. ...Or it was somebody's job, once.\" She does not ask which. \"In " +
+          "here, tilac, the less I know about a man, the longer I get to keep knowing him. Sit. Watch. Tip.\"",
+        short: "\"You price the room, not the girls — that's my job you're doing. Or was somebody's, once. The less I know, the longer I keep you.\"" },
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("pension"),
+        choices: _KES_VET,
+        text: "\"A regular. Twenty years of you, maybe.\" Something almost fond crosses the sharp face. \"You " +
+          "remember when this bar had another name and I had another title — owner, not manager. You are a " +
+          "witness to that. I keep witnesses close, tilac. Sit. The good stool is yours.\"",
+        short: "\"Twenty years of you, maybe — you remember when I was owner, not manager. You're a witness. I keep witnesses close.\"" },
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("redundancy"),
+        choices: _KES_VET,
+        text: "\"First real freedom, money you never had before — I see it in one pass.\" The gaze softens a " +
+          "fraction and prices you anyway. \"A thousand of you walk in lit up and walk out lighter, tilac. " +
+          "Spend careful. The bar will not love you back — but I tell you that honestly, which is more than most " +
+          "on this soi will bother to.\"",
+        short: "\"First freedom, money you never had — a thousand of you walk in lit up, out lighter. The bar won't love you back. Spend careful.\"" },
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("running"),
+        choices: _KES_VET,
+        text: "\"You are hiding.\" Flat, quiet, and not a threat at all. \"I know the look — I wore it myself, " +
+          "running from White Dish's lawyers inside my own bar. We do not ask the question here, tilac, and we " +
+          "are very, very good at not asking. You are safe to be nobody. It is the one thing this soi sell " +
+          "honest.\"",
+        short: "\"You are hiding — I know the look, I wore it running from White Dish's lawyers in my own bar. Here you're safe to be nobody.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Come in, come in. My girls will not bite unless you tip for it.\" The practised smile " +
           "arrives on schedule; the eyes take a beat longer. \"You want a drink, a girl, a quiet corner — " +
           "Kesinee arrange. Anything except the price. The price is not mine to move any more.\"",
         short: "\"Anything except the price — that is not mine to move any more.\"",
-        // She won't talk White Dish until she trusts you (trust >= 2 opens the
-        // reveal). How you present yourself moves that: Bert vouching is worth most
-        // (canon: "because Bert send you"), plain reassurance a little; pressing her
-        // for names sets her back.
-        choices: [
-          { label: "Tell her Bert sent you",
-            when: (st, G) => st.trust < 2 && !_flag("heardWdgInside"),
-            fx: (st) => { st.trust = Math.min(5, st.trust + 2); },
-            text: "\"Bert.\" The name does more than any drink. \"He is a good man, that one — old soi, before " +
-              "all this.\" The careful smile loosens into a real one. \"If Bert send you, maybe I talk. Ask me " +
-              "— White Dish — and this time I answer straight.\"" },
-          { label: "Swear you're no White Dish man",
-            when: (st, G) => st.trust < 2 && !_flag("heardWdgInside"),
-            fx: (st) => { st.trust = Math.min(5, st.trust + 1); },
-            text: "You tell her plainly: nobody's boy, least of all Ryan Powers'. She weighs it against twenty " +
-              "years of faces. \"Maybe,\" she allows, and the eyes thaw a half-degree. \"We see.\"" },
-          { label: "Press her for names",
-            when: (st, G) => st.trust < 3 && !_flag("heardWdgInside"),
-            fx: (st) => { st.trust = Math.max(0, st.trust - 1); st.mood = "guarded"; },
-            text: "You lean in and push for specifics. Bad move. The shutters come straight back down. \"You ask " +
-              "like a policeman — or a man who works for them. Kesinee gives names to neither.\" The gold " +
-              "bracelet turns. It just got colder in here." },
-        ] },
+        // She won't talk White Dish until she trusts you (trust >= 2 opens the reveal).
+        // How you present yourself moves that — the vetting fork lives in _KES_VET so
+        // it rides her origin greetings too (canon: "because Bert send you").
+        choices: _KES_VET },
       // Kesinee vets you before she'll talk White Dish — canon: "she'll talk
       // straight if you are." A stranger gets the careful brush-off + a breadcrumb;
       // the real intel (and the quest flag) opens once you've earned a little trust.
@@ -5513,6 +5705,57 @@ const NPCS = {
           "bud. Always was. You tell your mate Gavin the Stinky's not for sale and neither am I.\" He picks " +
           "the Singha back up. \"And you — I'll remember you came in here for HIM. Soi's small. Word gets around.\"",
         short: "\"He's got you carrying his water now. The answer's no — and I'll remember you came for HIM.\"" },
+      // Twenty-two years behind the rail: Bert reads your ORIGIN on the first
+      // meeting without needing the question, then asks it anyway (his `why` beat,
+      // the story mechanic). Gated on stranger so his returning/iced greetings own
+      // every visit after. A no-origin player (pre-intro/old save) gets the plain
+      // welcome below.
+      { when: (st, G) => st.dstate === "stranger" && _isOrigin("monger"),
+        text: "\"Golf shirt, easy grin, and I'd bet those clubs are still zipped up back at the hotel.\" Bert " +
+          "has a cold one open before you sit. \"Twenty-two years I've poured for your exact type, bud, and I " +
+          "got no beef with a one of you — you know what you came for and you don't gussy it up. Welcome to the " +
+          "Stinky.\"",
+        short: "\"Golf shirt, easy grin, clubs still zipped at the hotel. I've poured for your type for twenty-two years, bud. Welcome.\"",
+        asks: { key: "why", q: "He racks the balls without hurry. \"So — running to something, or from something? Which one's you, bud?\"" } },
+      { when: (st, G) => st.dstate === "stranger" && _isOrigin("married"),
+        text: "\"You've done the real version of this, haven't you.\" Bert reads it in a beat, and something in " +
+          "him gentles. \"Married one, rode the whole thing out, came through still standing and still smiling. " +
+          "That's a beer on the house, bud. Not many walk that road and keep their sense of humor.\"",
+        short: "\"You've done the real version — married one, rode it out, still smiling. That's a beer on the house, bud.\"",
+        asks: { key: "why", q: "He racks the balls without hurry. \"So — running to something, or from something? Which one's you, bud?\"" } },
+      { when: (st, G) => st.dstate === "stranger" && _isOrigin("business"),
+        text: "\"Here to make a deal, huh.\" Bert sets the beer down a hair harder than he needs to. \"Do " +
+          "yourself one favor, bud — 'fore you sign your name to a damn thing in this town, you sit at this bar " +
+          "and let me tell you which farang really owns his 'own' place. Costs you a beer. Saves you your " +
+          "shirt.\"",
+        short: "\"Here to make a deal. 'Fore you sign a damn thing, let me tell you which farang really owns his 'own' bar. Costs a beer, saves your shirt.\"",
+        asks: { key: "why", q: "He racks the balls without hurry. \"So — running to something, or from something? Which one's you, bud?\"" } },
+      { when: (st, G) => st.dstate === "stranger" && _isOrigin("pi"),
+        text: "\"You clocked my exits before you clocked my beer.\" A slow, knowing look, one old hand to " +
+          "another. \"Job like that doesn't quit a man when he retires, does it. I don't need your business, " +
+          "bud — but you ever want a quiet word with somebody who's watched this soi twenty-two years, the " +
+          "stool's yours.\"",
+        short: "\"You clocked my exits before my beer. That job never quits a man. Want a quiet word with somebody who's watched this soi twenty-two years, the stool's yours.\"",
+        asks: { key: "why", q: "He racks the balls without hurry. \"So — running to something, or from something? Which one's you, bud?\"" } },
+      { when: (st, G) => st.dstate === "stranger" && _isOrigin("pension"),
+        text: "\"A lifer. I can always spot one.\" Bert grins like he found a twenty in a winter coat. \"You " +
+          "been coming back longer than half these bars been standing. Then you don't need the welcome speech, " +
+          "bud — you were here for the first draft of it. Beer's cold, same as it ever was.\"",
+        short: "\"A lifer — coming back longer than half these bars been standing. You don't need the speech, bud, you helped write it. Beer's cold.\"",
+        asks: { key: "why", q: "He racks the balls without hurry. \"So — running to something, or from something? Which one's you, bud?\"" } },
+      { when: (st, G) => st.dstate === "stranger" && _isOrigin("redundancy"),
+        text: "\"First proper taste of freedom, bit of money to spend on it, and a face like Christmas " +
+          "morning.\" Warm — but he's watched this reel before. \"Good on you, bud, you earned it, twenty-odd " +
+          "years on the tools I'd wager. Just pace it. This town'll take the whole payout in a fortnight and " +
+          "hand you a hangover for change.\"",
+        short: "\"First taste of freedom, face like Christmas morning. You earned it on the tools, bud. Just pace it — this town takes the payout in a fortnight.\"",
+        asks: { key: "why", q: "He racks the balls without hurry. \"So — running to something, or from something? Which one's you, bud?\"" } },
+      { when: (st, G) => st.dstate === "stranger" && _isOrigin("running"),
+        text: "\"You've got the look of a man who left somewhere in a hurry.\" No judgment in it, just weather. " +
+          "\"That's alright, bud — half of Beach Road's a forwarding address for a life that quit working. The " +
+          "Stinky don't ask for references. Beer's cold, table's true, and nobody in here knew you yesterday.\"",
+        short: "\"The look of a man who left in a hurry. Half of Beach Road's a forwarding address, bud. The Stinky don't ask for references.\"",
+        asks: { key: "why", q: "He racks the balls without hurry. \"So — which is it, bud? What'd you leave, and does it know you're here?\"" } },
       { text: "\"Welcome to the Stinky, bud. Name's Bert. Table's true, beer's cold, " +
         "and the only rule is don't sit on the rail.\" He chalks a cue without " +
         "looking at it. \"You shoot? League night's every third night — killer " +
