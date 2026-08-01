@@ -380,6 +380,15 @@ function _doBarfine(arg) {
   // the mamasan or the cashier drifts over to do the arithmetic.
   const { st, lt } = _barfinePrices(bt, id);
   G.pendingBf = { id, st, lt, room: G.room };
+  // The Operator's edge made visible: on a girl who's actually running an angle,
+  // his instinct flags it before the money moves (and _scamLean already halves his
+  // odds of being taken). Fires once, on opening — the reprompt/redraw is _bfPrompt.
+  if (typeof _pers === "function" && _pers("operator") &&
+      (_bfExploitable(id) || NPCS[id].type === "drunk" || NPCS[id].type === "volatile")) {
+    _say("(Operator's instinct, cold and useful: something here doesn't sit right — the " +
+      "way she's counting the room, the too-quick yes. You keep a hand near your wallet " +
+      "and your wits about you.)", "dim");
+  }
   if (bt === "soi6") {
     _say(`${name} counts it out on her fingers, upfront as a menu — she quotes ` +
       "upstairs the way a noodle cart quotes noodles, one eye still counting " +
@@ -947,24 +956,30 @@ function _doComplain() {
 
 // Does she run a game tonight? Only an operator, only on a mark — the open
 // contract doubles her confidence. Returns a scam kind or null.
+// Personality tilts the scam odds: the white knight is in deeper and eats it more;
+// the operator reads the tell and ducks the worst of it. Everyone else is baseline.
+function _scamLean() {
+  if (typeof _pers !== "function") return 1;
+  if (_pers("whiteknight")) return 1.5;
+  if (_pers("operator")) return 0.5;
+  return 1;
+}
 function _bfScamRoll(id, marked) {
   if (_dogEgg() === "buffalo") return null; // the dog smells the con; every barfine stays honest
   // A drink-too-much girl doesn't need to be a shark to wreck the night — she's
   // simply too gone by the time you leave together (the "mao" ending). The white
   // knight, sure he'll look after her, takes her home more often and eats it more.
   if (NPCS[id].type === "drunk") {
-    const p = (typeof _pers === "function" && _pers("whiteknight")) ? 0.75 : 0.5;
-    if (_rand() < p) return "mao";
+    if (_rand() < 0.5 * _scamLean()) return "mao";
   }
   // A volatile girl: the night can detonate into a jealousy scene — a shouting match,
   // a thrown drink, sometimes a slap and the mamasan hauling her off you. The white
   // knight, in deeper and slower to leave, eats it more often.
   if (NPCS[id].type === "volatile") {
-    const p = (typeof _pers === "function" && _pers("whiteknight")) ? 0.6 : 0.4;
-    if (_rand() < p) return "scene";
+    if (_rand() < 0.4 * _scamLean()) return "scene";
   }
   if (!_bfExploitable(id)) return null;
-  if (_rand() >= (marked ? 0.6 : 0.3)) return null;
+  if (_rand() >= (marked ? 0.6 : 0.3) * _scamLean()) return null;
   const r = _rand();
   if (r < 0.15) return "period";
   if (r < 0.40) return "runner";
