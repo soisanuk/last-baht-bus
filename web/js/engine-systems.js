@@ -599,10 +599,7 @@ function _bfResolve(kind) {
         `back a few minutes behind her, and the night picks you up where it left off. (฿${G.money} left.)`, "win");
       _conquestHappy(5, id);
       G.offstage = true; // the hour away — the bar's ambient (saleng, etc.) isn't your scene
-      for (let i = 0; i < 6; i++) { // the hour passes; the night carries on
-        if (G.over) break;
-        _tick();
-      }
+      _passTime(6); // the hour passes; the night carries on (aborts if it ends mid-hour)
       G.offstage = false;
     }
     G.soc.drinks[id] = (G.soc.drinks[id] || 0) + 2; // a short-time deepens the bond a little
@@ -625,7 +622,6 @@ function _bfResolve(kind) {
     // jealousy detonates. You paid the fine and got a war instead of a night: a
     // scene, a shove, a thrown drink, the mamasan dragging her off you. Money gone,
     // banged up a notch, the whole bar watching.
-    G.hurt = Math.min(3, (G.hurt || 0) + 1);
     _addHappy(-4);
     _say(`It goes wrong before you reach the door. ${name} clocks something — a look ` +
       "you gave the girl at the rail, a name in your phone, a ghost only she can see — " +
@@ -634,6 +630,7 @@ function _bfResolve(kind) {
       "cheek, and then the mamasan and two of the girls have her by the arms and you " +
       "by the shoulder, steering you out into the soi. Your ฿" + price + " bought that. " +
       "You're barred here for the night, and you'll feel the scratch tomorrow.", "alert");
+    if (_hurt(1)) return;
     _kickOut();
     return;
   }
@@ -1076,7 +1073,7 @@ function _doMassage(arg) {
     const wasHurt = G.hurt, wasDrunk = G.soc.drunk;
     G.hurt = Math.max(0, G.hurt - 1);
     G.soc.drunk = Math.max(0, G.soc.drunk - 2);
-    for (let i = 0; i < 6; i++) { if (G.over) return; _tick(); }
+    if (_passTime(6)) return;
     _say(`฿${MASSAGE_LEGIT}, and ${name} goes to work like she has a personal grudge against ` +
       "the knot under your shoulder blade — elbows, thumbs, one alarming manoeuvre involving " +
       "her heel and your spine. An hour later you unpeel off the mat rinsed, loosened, and " +
@@ -1099,7 +1096,7 @@ function _doMassage(arg) {
   G.soc.drunk = Math.max(0, G.soc.drunk - 1);
   (G.soc.massaged = G.soc.massaged || {})[G.room] = G.day; // the base is done; special is on the table
   if (she) G.soc.drinks[she] = (G.soc.drinks[she] || 0) + 1; // a soft, cheap bond — no drinks, no mama cut
-  for (let i = 0; i < 5; i++) { if (G.over) return; _tick(); }
+  if (_passTime(5)) return;
   _say(`฿${MASSAGE_OIL} and ${name} works warm oil down your back in the mirror-walled cubicle, ` +
     "humming, in no hurry. It is a genuinely good massage. It is also, quite clearly, not the " +
     "whole menu — somewhere around the base of your spine her thumbs ask a question. " +
@@ -1122,8 +1119,8 @@ function _massageSpecial(she, name) {
   }
   G.money -= price;
   (G.soc.special = G.soc.special || {})[G.room] = G.day;
-  if (!hadBase) for (let i = 0; i < 3; i++) { if (G.over) return; _tick(); }
-  for (let i = 0; i < 3; i++) { if (G.over) return; _tick(); }
+  if (!hadBase && _passTime(3)) return;
+  if (_passTime(3)) return;
   _say(`${name} checks the curtain, turns the radio up a notch, and ` +
     (hadBase ? "the massage quietly stops pretending to be only a massage" :
       "gives you the massage and the actual reason people come to Smile") +
@@ -1263,7 +1260,7 @@ function _soapyResolve(input) {
   G.pendingSoapy = null;
   G.money -= tier.price;
   G.soc.soapyDone = G.day;
-  for (let i = 0; i < 8; i++) { if (G.over) return true; _tick(); } // the long ritual eats a chunk of night
+  if (_passTime(8)) return true; // the long ritual eats a chunk of night
   _say(`You point at ${thaiDigits(tier.num)}. A minute later number ${thaiDigits(tier.num)} — the ` +
     `${tier.label} — collects you with a professional smile and a numbered locker key. Upstairs: a warm ` +
     "tiled room, a bath the size of a small car, an air mattress, and no clock anywhere. She baths you " +

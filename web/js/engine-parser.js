@@ -63,7 +63,7 @@ function _poachAnger(id) {
       "where it becomes your problem: a chest, a finger, a voice raised in a language you " +
       "half-follow — and the mamasan moving fast to get between you before security does it " +
       "less gently. Out on the soi you go, and lucky it's only that.", "alert");
-    if (_rand() < 0.3) G.hurt = Math.min(3, (G.hurt || 0) + 1); // sometimes a shove lands
+    if (_rand() < 0.3 && _hurt(1)) return; // sometimes a shove lands hard enough for the clinic
     _addHeat(3);   // → kicked out
     return;
   }
@@ -1913,13 +1913,13 @@ function _queerHostility(input) {
         "door — with two of the other numbers vaulting the bench behind him. Whatever you came in to prove, you " +
         "prove the exact opposite, briefly and at speed, and land on the soi wearing your own bad idea.", "alert");
     }
-    G.hurt = Math.min(3, G.hurt + 2);
+    G.hurt = Math.min(HURT_CAP, G.hurt + 2);
     _addHeat(3);
     _addHappy(-8);
     _say(`(Banged up, and barred from the whole Supertown strip — ${cab ? "the hosts" : "the queens"} heard ` +
       "about it before you hit the ground.)", "dim");
     G.room = out;
-    if (G.hurt >= 3) { _endNight("hurt"); return true; }
+    if (G.hurt >= HURT_CAP) { _endNight("hurt"); return true; }
     _describeRoom(true);
     return true;
   }
