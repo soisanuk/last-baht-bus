@@ -2337,6 +2337,34 @@ test("a venue's own name, tapped from inside it, doesn't walk you to your room",
   assert.equal(state().room, "queen_vic", "you stayed put");
 });
 
+test("_passTime aborts a multi-tick action when the night ends — no phantom ticks past dawn", () => {
+  // The old `if (G.over) …` guards never fired (G.over is never set true), so
+  // short-time/massage/soapy loops ticked straight past _endNight into the next
+  // night. _passTime stops the moment the day advances.
+  state().stage = "vacation"; state().flags.act1Done = true;
+  state().day = 3; state().nightTurn = 98; state().room = "sunset_rail";
+  const ended = _passTime(6);
+  assert.ok(ended, "it reports the night ended mid-pass");
+  assert.equal(state().day, 4, "the day advanced (dawn came)");
+  assert.ok(state().nightTurn <= 3, "and it stopped promptly — not 6 ticks deep into the new night");
+});
+
+test("_hurt enforces the third-injury clinic rule uniformly (caps + ends the night)", () => {
+  // Several injury sites bumped G.hurt with no `>= HURT_CAP` check, silently pinning
+  // you at max with no ending. _hurt is the one gate now.
+  state().stage = "vacation"; state().flags.act1Done = true;
+  state().day = 3; state().nightTurn = 40; state().hurt = 2;
+  const clinic = _hurt(2); // 2 + 2 saturates at the cap and trips the clinic
+  assert.ok(clinic, "the third hit reports a hospitalisation");
+  assert.equal(state().day, 4, "the night ended — you woke up the next day");
+
+  // a non-fatal knock caps but does NOT end the night
+  state().day = 3; state().nightTurn = 40; state().hurt = 0;
+  assert.equal(_hurt(1), false, "a first knock does not hospitalise");
+  assert.equal(state().hurt, 1);
+  assert.equal(state().day, 3, "and the night carries on");
+});
+
 test("a hotel room's dead-direction refusal is indoor-appropriate, not a street line", () => {
   // qv_room only exits `down` — trying OUT used to give the street pool ("shuttered
   // shophouses, a parked Click"), nonsense from a third-floor room.

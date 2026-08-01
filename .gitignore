@@ -9,3 +9,4 @@ node_modules/
 
 # walkthrough tool output
 /tools/out/
+__pycache__/

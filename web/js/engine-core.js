@@ -688,7 +688,7 @@ function _patronRage(id) {
       "drunk, but a lifetime of car-park brawls in it. Hands haul him back; security and a piwin " +
       "fold him down like a deckchair while he roars Belfast at the ceiling. You come away with a " +
       "rung ear, a thumping heart, and a room full of people who'd very much rather you hadn't.", "alert");
-    G.hurt = Math.min(3, G.hurt + 1);
+    if (_hurt(1)) return;
     _addHeat(1);
     return;
   }
@@ -1082,6 +1082,32 @@ function _describeRoom(full, forceFull) {
 }
 
 // ── Turn bookkeeping: battery, darkness, soi dogs ──────────────────────────
+
+// Pass time inside a multi-tick action (short-time, massage, soapy, night ride,
+// etc.). Ticks up to n times but ABORTS the moment the night actually ends —
+// _endNight advances G.day, so a day change is the signal. Returns true if the
+// night ended mid-pass (the caller should stop). Replaces the old `if (G.over)`
+// guards, which never fired (G.over is never set true), so those loops used to
+// tick straight past _endNight into the next night.
+function _passTime(n) {
+  const startDay = G.day;
+  for (let i = 0; i < n; i++) {
+    _tick();
+    if (G.day !== startDay || G.pendingChoice === "vacation_end") return true;
+  }
+  return false;
+}
+
+// Take n points of injury, capped, and enforce the "third one puts you in the
+// clinic" rule uniformly — several sites (the barfine jealousy scene, poaching
+// anger) used to bump hurt WITHOUT the hospital check, silently pinning you at
+// max with no ending. Print the injury prose first, then `if (_hurt(n)) return;`.
+const HURT_CAP = 3;
+function _hurt(n) {
+  G.hurt = Math.min(HURT_CAP, (G.hurt || 0) + n);
+  if (G.hurt >= HURT_CAP) { _endNight("hurt"); return true; }
+  return false;
+}
 
 function _tick() {
   G.turns++;
