@@ -2801,6 +2801,71 @@ const NPCS = {
         "used to. Everything, you get used to.\"" },
     ],
   },
+  // Kat (Sunset Dreams) — great fun for ninety minutes, then the drink turns.
+  // type:"drunk" → the mao vector, like Dew, but a different drunk: loud-fun-then-flint.
+  kat: {
+    name: "Kat", th: "แคท", emoji: "🍸", type: "drunk",
+    room: "sunset_dreams",
+    desc: "The loudest laugh in the bar at nine, and by midnight the one the others are steering away from " +
+      "the edge of things. Great fun for exactly ninety minutes.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"YOU. I like you — come, sit, we drink!\" Magnetic, and already three ahead of you. \"Tonight " +
+          "we have fun, BIG fun, no sad face allow at my table.\" It is genuinely a good time. It will stay a " +
+          "good time for about an hour.",
+        short: "\"You! Sit, we drink, big fun — no sad face at my table.\"" },
+      { topic: "drink", text: "\"One more! Always one more — that is my rule.\" She toasts nothing in " +
+        "particular. \"You cannot have fun careful. Careful is for tomorrow, and tomorrow is a coward.\" " +
+        "Laughing — but the edge is closer than it was an hour ago." },
+      { topic: "okay", text: "\"Why everybody ask me that?\" Sharper now, a flint under the fun. \"I am FINE. I " +
+        "am the fun one, you don't—\" She catches herself, softens, loses the thread. \"...you buy me one more, " +
+        "na? Then we okay. We okay.\"" },
+    ],
+  },
+  // May (Sunset Dreams) — the sweet-simple type: no angle because there isn't one.
+  // Harmless, good; agency without victimhood (proud of the sister she's putting
+  // through school). Exactly as nice as she seems.
+  may: {
+    name: "May", th: "เมย์", emoji: "🌼",
+    room: "sunset_dreams",
+    desc: "Soft, unhurried, genuinely pleased to see you — no angle you can find, because there isn't one. " +
+      "Exactly as nice as she seems, which on this soi is its own kind of rare.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Oh, hello! Sit, sit — you want water, or beer? I get you.\" No performance, no lipstick " +
+          "trick, just a kind round face and a real welcome. \"Long day? You look like long day. Is okay — you " +
+          "rest here little bit.\"",
+        short: "\"Sit, rest here little bit. Water or beer? I get you.\"",
+        asks: { key: "girlfriend", q: "\"You have someone home?\" Warm, not fishing. \"I hope she nice to you. Everybody deserve somebody nice.\" She means it about you, about herself, about everybody." } },
+      { topic: "plan", bond: 2, text: "\"My dream small — I know people say too small.\" A shy smile. \"I want " +
+        "marry a good man, have one baby, little house, my mama close. That is all.\" She shrugs, content. \"Not " +
+        "exciting, na. But I sleep good when the thing I want is simple.\"" },
+      { topic: "family", text: "\"I send home every month, never miss. My little sister, she in school — first " +
+        "one in my family.\" Her whole face lights. \"She going to be teacher. I work here, she read book. Good " +
+        "trade, na.\"" },
+    ],
+  },
+  // Dear (Sunset Dreams) — genuinely dim, and written with affection, never mockery.
+  // Sweet, a half-beat slow, beloved by the bar. No hidden depth, cheerfully.
+  dear: {
+    name: "Dear", th: "เดียร์", emoji: "🐣",
+    room: "sunset_dreams",
+    desc: "Sweet and a half-beat slow, laughing a little after everyone else because she's still catching up. " +
+      "Nobody at this bar has a bad word for her, which tells you everything.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Hello! You are...\" She studies you with total concentration. \"...tall! You are tall.\" " +
+          "Delighted with the observation. \"I am Dear. Like the animal — but spell different. Or same? I don't " +
+          "know. Dear.\" She beams, having lost and won the sentence at once.",
+        short: "\"I am Dear — like the animal but spell different. Or same. I don't know!\"" },
+      { topic: "plan", text: "\"Plan?\" She thinks very hard. \"I want... a big TV. And a scooter — pink one.\" " +
+        "A satisfied nod, the list complete. \"My friend say think bigger. But those are the thing I want. Why " +
+        "I lie?\"" },
+      { topic: "money", text: "\"Money is confusing.\" Cheerful honesty. \"Mama keep mine safe, give me some " +
+        "when I need. Other time I spend all on—\" she gestures at her own earrings, a keychain, a small " +
+        "plastic cat clipped to her bag \"—the cute thing. I love the cute thing.\"" },
+    ],
+  },
 
   pia: {
     name: "Pia", th: "เปีย", emoji: "🐉",
@@ -5942,6 +6007,7 @@ const CANON_HOSTESSES = [
 const NPC_ROLES = {
   lek: "hostess", noi: "hostess", ping: "hostess", aom: "hostess",
   kai: "hostess", nook: "hostess", dew: "hostess",
+  kat: "hostess", may: "hostess", dear: "hostess",
   joy: "hostess", fon: "hostess", gift: "hostess", kwan: "hostess",
   nong: "hostess", pim: "hostess", bee: "hostess", jane: "hostess", mercedes: "hostess", kratae: "hostess",
   nira: "hostess", mind: "hostess", pia: "hostess", wilai: "hostess",
@@ -6164,7 +6230,7 @@ const _FILLER_HOSTESSES = [
   ["Namtan","น้ำตาล","khao_talo_bar"], ["Ying","หญิง","khao_talo_bar"],
   /* Golden Dragon girls (Kai, Nook, Dew) promoted to authored NPCs */
   ["Puu","ปู","pink_lotus"], ["Belle","เบล","pink_lotus"],
-  ["Kat","แคท","sunset_dreams"], ["May","เมย์","sunset_dreams"], ["Dear","เดียร์","sunset_dreams"],
+  /* Sunset Dreams girls (Kat, May, Dear) promoted to authored NPCs */
   ["Praewa","แพรวา","kitten_corner"], ["Nangfah","นางฟ้า","kitten_corner"],
   ["Tabtim","ทับทิม","cherry_pop"], ["Chaba","ชบา","cherry_pop"],
   ["Kluay","กล้วย","ruby_kiss"], ["Benz","เบนซ์","ruby_kiss"],
