@@ -5496,20 +5496,17 @@ test("Wilai runs a pay-per-photo drip: teaser free, each next shot behind an esc
   assert.match(lastOut(), /Gallery — 4 photos/);
 });
 
-test("unmet characters show a look, not a name — in presence and autocomplete", () => {
+test("every character is named on sight — one consistent rule, no name-hiding", () => {
+  // The "descriptive title until met" reveal was dropped: everyone (patrons and the
+  // origin NPCs included) shows their name immediately, like the staff always have.
   state().stage = "vacation"; state().room = "queen_vic"; state().nightTurn = 30;
   run("look");
-  assert.match(lastOut(), /owlish old-timer/, "the rail shows Mort by his look");
-  assert.doesNotMatch(lastOut(), /Mort/, "not his name — you haven't met him");
-  // autocomplete offers the look, never the unmet name
-  const pool = engineComplete("talk to ").map(s => s.toLowerCase());
-  assert.ok(pool.some(s => /owlish old-timer/.test(s)), "completes by look");
-  assert.ok(!pool.some(s => /\bmort\b/.test(s)), "never leaks the name");
-  // talking by the look introduces you, and the name takes over
-  run("talk to the owlish old-timer");
-  assert.ok(state().known.mort, "now you've met");
-  out = []; run("look");
-  assert.match(lastOut(), /Mort \(74, American\)/, "the rail uses his name once met");
+  assert.match(lastOut(), /Mort/, "the rail names Mort on sight (no 'owlish old-timer' screen)");
+  assert.match(lastOut(), /Doyle/, "and the origin NPC is named too, not shown as a look");
+  assert.doesNotMatch(lastOut(), /owlish old-timer|watchful older farang/, "no look substitutes for a name");
+  // the label helpers always return the name now
+  assert.equal(_npcLabel("doyle"), "Doyle", "NPC label is the name");
+  assert.equal(_patronLabel("mort"), "Mort", "patron label is the name");
 });
 
 test("the ATM verb gates on your card and where you're standing", () => {
@@ -5978,16 +5975,12 @@ test("patrons: hoppers drift by the hour, settle at home by 22:00, chat resets d
   state().pendingEnc = null; state().lastSaleng = 99999; state().lastPeddler = 99999;
   out = [];
   run("look");
-  // unmet: shown by his look, not his name
-  assert.match(lastOut(), /fastidious German with polished glasses/, "patron on the rail (by look)");
-  assert.doesNotMatch(lastOut(), /Helmut/, "name hidden until met");
+  // named on sight now — no name-hiding
+  assert.match(lastOut(), /Helmut \(61, German\)/, "patron named on the rail");
+  assert.doesNotMatch(lastOut(), /fastidious German with polished glasses/, "his look never replaces his name");
   out = [];
   run("talk to helmut");
   assert.match(lastOut(), /quality of life/i, "fallback line");
-  // meeting him reveals the name on the rail
-  out = [];
-  run("look");
-  assert.match(lastOut(), /Helmut \(61, German\)/, "name shown once met");
   out = [];
   run("ask helmut about stool");
   assert.match(lastOut(), /evaluated all nine/, "topic line");
