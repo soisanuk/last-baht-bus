@@ -1341,7 +1341,7 @@ function _doSocial(kind, targetWord) {
   if (tier >= 3) _maybeSelfBarfine(id);
   if (kind === "fondle" && tier === 4 && G.money >= LADY_DRINK) {
     G.money -= LADY_DRINK;
-    G.soc.drinks[id] = (G.soc.drinks[id] || 0) + 1;
+    _addBond(id, 1);
     _say(`(-฿${LADY_DRINK} for her drink. ฿${G.money} left, and worth it.)`, "dim");
   }
 }
@@ -2387,7 +2387,7 @@ function _endNight(reason) {
   G.lastBfId = null;   // clear the LT-ending bond hook
   G.lastBfBase = 10;   // and its สนุก base (reality-LT drops it to 4 for one night)
   // bonds cool a notch a night; tend them or lose them — unless a loyal dog (Hachiko) holds them
-  if (_dogEgg() !== "loyal") for (const id in G.soc.drinks) G.soc.drinks[id] = Math.max(0, G.soc.drinks[id] - 1);
+  if (_dogEgg() !== "loyal") for (const id in G.soc.drinks) _addBond(id, -1);
   G.soc.patronBusy = {};
   G.soc.patronMiffed = {};
   G.soc.apologized = {}; // a new shift will hear you out afresh

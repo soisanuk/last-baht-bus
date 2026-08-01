@@ -2349,6 +2349,15 @@ test("_passTime aborts a multi-tick action when the night ends — no phantom ti
   assert.ok(state().nightTurn <= 3, "and it stopped promptly — not 6 ticks deep into the new night");
 });
 
+test("_addBond moves a girl's bond and floors it at 0 (souring can't go negative)", () => {
+  state().soc.drinks = {};
+  assert.equal(_addBond("nok", 3), 3, "seeds from nothing");
+  assert.equal(_addBond("nok", 2), 5, "and accumulates");
+  assert.equal(state().soc.drinks.nok, 5, "written through to the counter");
+  assert.equal(_addBond("nok", -9), 0, "souring past zero floors at 0, never negative");
+  assert.equal(_addBond("ghost", -1), 0, "decaying an absent girl stays 0");
+});
+
 test("_hurt enforces the third-injury clinic rule uniformly (caps + ends the night)", () => {
   // Several injury sites bumped G.hurt with no `>= HURT_CAP` check, silently pinning
   // you at max with no ending. _hurt is the one gate now.

@@ -274,7 +274,7 @@ function _salengBuy(input) {
     G.money -= price;
     if (forHer) {
       const name = NPCS[forId].name;
-      G.soc.drinks[forId] = (G.soc.drinks[forId] || 0) + 1;
+      _addBond(forId, 1);
       const REACTIONS = {
         "moo ping": `${name} takes the skewers with both hands and wais before she's even ` +
           `bitten in. "Aoy, so sweet!" She eats standing up and immediately tries to feed you one.`,

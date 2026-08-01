@@ -14,12 +14,12 @@
 function _barfinePrice(bt, id) {
   let base = bt === "soi6" ? BF_SOI6 : bt === "gogo" ? BF_GOGO : bt === "gents" ? BF_GENTS : BF_BEER;
   const draw = _isDraw(id);
-  if (draw) base = Math.round(base * 1.5 / 50) * 50; // a prized draw is worth more to the bar
-  if (G.nightTurn < 30) return Math.round(base * 1.5 / 50) * 50;
+  if (draw) base = _round50(base * 1.5); // a prized draw is worth more to the bar
+  if (G.nightTurn < 30) return _round50(base * 1.5);
   if (G.nightTurn >= 60) {
     if (draw) return base;                          // and gets no midnight discount
     if (bt === "beer" && !POPULAR_GIRLS.includes(id)) return 0;
-    return Math.round(base * 0.75 / 50) * 50;
+    return _round50(base * 0.75);
   }
   return base;
 }
@@ -43,9 +43,9 @@ function _barfinePrices(bt, id) {
   else {
     const mult = bt === "soi6" ? (G.nightTurn < 30 ? 3 : 2) :
       bt === "gogo" ? 1.5 : bt === "gents" ? 1.5 : 1.75;
-    lt = Math.round(st * mult / 50) * 50;
+    lt = _round50(st * mult);
   }
-  if (_roomMamaOperator()) { st = Math.round(st * 1.1 / 50) * 50; lt = Math.round(lt * 1.1 / 50) * 50; }
+  if (_roomMamaOperator()) { st = _round50(st * 1.1); lt = _round50(lt * 1.1); }
   return { st, lt };
 }
 
@@ -244,7 +244,7 @@ function _doHostDrink(arg) {
     return;
   }
   G.money -= HOST_DRINK;
-  G.soc.drinks[id] = (G.soc.drinks[id] || 0) + 1;
+  _addBond(id, 1);
   _say(`฿${HOST_DRINK} for a host drink — twice what the girl bars charge, and ${NPCS[id].name} settles ` +
     `in warm and close and turns his whole attention on you like a spotlight. (฿${G.money} left.)`);
   _addHappy(1);
@@ -516,7 +516,7 @@ function _bfResolve(kind) {
   if (kind === "open") {
     if (_bfExploitable(id)) {
       marked = true;
-      price = Math.round(lt * 1.3 / 50) * 50;
+      price = _round50(lt * 1.3);
       _say(`You put money on the bar without settling what it buys. ${name}'s ` +
         "smile widens one professional notch, and by the time the arithmetic " +
         "reaches you it has quietly become the long-time rate — plus a little " +
@@ -554,7 +554,7 @@ function _bfResolve(kind) {
   // butterflying: a regular of yours in the room watches you leave with another
   for (const other of _npcsHere()) {
     if (other !== id && NPC_ROLES[other] === "hostess" && _bondTier(other) >= 2) {
-      G.soc.drinks[other] = Math.max(0, (G.soc.drinks[other] || 0) - 3);
+      _addBond(other, -3);
       _say(`(${NPCS[other].name} watches you leave with ${name} and turns very ` +
         "deliberately back to her phone. That will cost you — and not in baht.)", "dim");
     }
@@ -602,7 +602,7 @@ function _bfResolve(kind) {
       _passTime(6); // the hour passes; the night carries on (aborts if it ends mid-hour)
       G.offstage = false;
     }
-    G.soc.drinks[id] = (G.soc.drinks[id] || 0) + 2; // a short-time deepens the bond a little
+    _addBond(id, 2); // a short-time deepens the bond a little
     return;
   }
   // ── LONG TIME: overnight — unless she's running a game on you ──
@@ -698,7 +698,7 @@ function _bfResolve(kind) {
       `decided something. You wanted a one-day girlfriend; you got a five-year one. (฿${G.money} left.)`, "");
     _say("(Long time is like that — you paid for the fantasy and she handed you the reality. " +
       "But you know her now, really know her. Some men call that the good part.)", "dim");
-    G.soc.drinks[id] = (G.soc.drinks[id] || 0) + 6; // you saw the real her — the bond jumps
+    _addBond(id, 6); // you saw the real her — the bond jumps
     G.lastBfBase = 4;                               // …and the escape didn't escape: less สนุก
     _endNight("barfine");
     return;
@@ -710,7 +710,7 @@ function _bfResolve(kind) {
     `${name} vanishes and reappears out of uniform — jeans, clean shirt, ordinary ` +
     `and lovely — and takes your arm like you're the one being rented.` +
     (price ? ` (฿${G.money} left.)` : ""), "win");
-  G.soc.drinks[id] = (G.soc.drinks[id] || 0) + 3; // a whole night together deepens the bond
+  _addBond(id, 3); // a whole night together deepens the bond
   _endNight("barfine");
 }
 
@@ -831,7 +831,7 @@ function _nightRide(input) {
   const paid = Math.min(cost, G.money);
   G.money -= paid;
   seq.spent += paid; seq.stops++; seq.sanuk += venue.sanuk;
-  G.soc.drinks[id] = (G.soc.drinks[id] || 0) + 1; // every stop deepens the bond
+  _addBond(id, 1); // every stop deepens the bond
   _say(`${hop}\n\n${scene}` +
     (paid ? ` (฿${paid}. ฿${G.money} left.)` : " (Free. The best things here are.)"), "win");
   _addHappy(venue.sanuk); // does NOT jade — a bonded night is the one that keeps giving
@@ -850,7 +850,7 @@ function _endRide(seq, reason) {
     _say(`"Okay tilac — hotel then. Boring man." But she's smiling, no sting in it. She swings ` +
       `the bike around for the short hop to the room, and the night is exactly what you paid ` +
       `for: easy, warm, hers till morning. ${name} is asleep before you are.`, "win");
-    G.soc.drinks[id] = (G.soc.drinks[id] || 0) + 3;
+    _addBond(id, 3);
     G.lastBfId = id;
     _endNight("barfine");
     return;
@@ -883,7 +883,7 @@ function _endRide(seq, reason) {
     `long, level appraisal — then one slow thump of the tail. Approved. She crouches to him without ` +
     `being told, murmuring something in Thai, and your chest does a quiet thing about that it isn't ` +
     `ready to examine.`), "dim");
-  G.soc.drinks[id] = (G.soc.drinks[id] || 0) + (great ? 4 : 2); // on top of the per-stop bumps
+  _addBond(id, (great ? 4 : 2)); // on top of the per-stop bumps
   G.lastBfId = id;
   G.lastBfBase = 10 + Math.min(4, seq.stops); // a bigger night → a bigger memory at the payout
   _endNight("barfine");
@@ -946,7 +946,7 @@ function _doComplain() {
   const rel = _npcsHere().find(n => n !== inc.id && NPC_ROLES[n] === "hostess" &&
     (POPULAR_GIRLS.includes(n) || NPCS[n].c4 === 2));
   if (rel) {
-    G.soc.drinks[rel] = (G.soc.drinks[rel] || 0) + 2;
+    _addBond(rel, 2);
     _say(`Then ${mn} turns, considers the floor, and beckons ${NPCS[rel].name} ` +
       `over with two fingers. “This one,” she says, like a guarantee. ` +
       `${NPCS[rel].name} sits beside you already half on your side.`, "dim");
@@ -1095,7 +1095,7 @@ function _doMassage(arg) {
   G.money -= MASSAGE_OIL;
   G.soc.drunk = Math.max(0, G.soc.drunk - 1);
   (G.soc.massaged = G.soc.massaged || {})[G.room] = G.day; // the base is done; special is on the table
-  if (she) G.soc.drinks[she] = (G.soc.drinks[she] || 0) + 1; // a soft, cheap bond — no drinks, no mama cut
+  if (she) _addBond(she, 1); // a soft, cheap bond — no drinks, no mama cut
   if (_passTime(5)) return;
   _say(`฿${MASSAGE_OIL} and ${name} works warm oil down your back in the mirror-walled cubicle, ` +
     "humming, in no hurry. It is a genuinely good massage. It is also, quite clearly, not the " +
@@ -1127,7 +1127,7 @@ function _massageSpecial(she, name) {
     ". Hand and mouth, unhurried, her eyes finding yours in the wall of mirrors the whole time — " +
     `the “I like you” she led with turns out to be at least half true. (฿${G.money} left.)`, "win");
   _conquestHappy(4, she);        // a real release — feeds the hedonic treadmill, lightly
-  if (she) G.soc.drinks[she] = (G.soc.drinks[she] || 0) + 1;
+  if (she) _addBond(she, 1);
   // the on-premises wall, and the door it leaves open: her number, once per girl,
   // a real off-shift thread you carry — MEET her when the night's old, or she ghosts.
   const numKey = "gaveNumber_" + (she || G.room);
@@ -1186,7 +1186,7 @@ function _doMeetOffShift(arg) {
     (cost ? `(฿${cost} for the taxi and a 7-Eleven raid — a fraction of the barfine you didn't pay.)` :
       `(Not a baht changes hands. Some nights the town forgets to charge you.)`), "win");
   _conquestHappy(9, os.id); // the softer road pays better than the fantasy
-  if (os.id) G.soc.drinks[os.id] = (G.soc.drinks[os.id] || 0) + 4;
+  if (os.id) _addBond(os.id, 4);
   G.offShift = null;
 }
 
@@ -1630,7 +1630,7 @@ function _doMessage(arg) {
     return;
   }
   G.phone.msgCd[id] = G.day;
-  G.soc.drinks[id] = (G.soc.drinks[id] || 0) + 1; // charm counts toward favor
+  _addBond(id, 1); // charm counts toward favor
   _say(`You send ${NPCS[id].name} something short and sweet with one emoji too many.`);
   _pushMsg(id, ["555+ you funny", "miss you na 🥺", "come see me tonight!!",
     "work boring... you come make sanuk"][Math.floor(_rand() * 4)]);
@@ -1651,7 +1651,7 @@ function _doSendMoney(arg) {
   (G.soc.given = G.soc.given || {})[id] = (G.soc.given[id] || 0) + amt; // toward a sponsor flip
   G.battery = Math.max(0, G.battery - 1);
   const bump = amt >= 500 ? 3 : amt >= 100 ? 2 : 1;
-  G.soc.drinks[id] = (G.soc.drinks[id] || 0) + bump;
+  _addBond(id, bump);
   _say(`฿${amt} crosses town in one green blink. (฿${G.money} left.)`);
   // paying into an active pics-drip: enough unlocks the next shot, short of it teases
   const deal = G.phone.picDeal;
@@ -2772,7 +2772,7 @@ function _dogBarFavor() {
   const id = staff[Math.floor(_rand() * staff.length)];
   const name = NPCS[id].name;
   _say(_dogN(_DOG_FAVOR_SCENES[Math.floor(_rand() * _DOG_FAVOR_SCENES.length)](name)), "win");
-  G.soc.drinks[id] = (G.soc.drinks[id] || 0) + 1;
+  _addBond(id, 1);
   _say(`(Everyone likes a dog lover in Thailand — ${name} warms to you.)`, "dim");
 }
 
