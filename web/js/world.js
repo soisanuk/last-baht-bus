@@ -2790,18 +2790,63 @@ const NPCS = {
     desc: "Deadpan and unbothered, ten years behind the Golden Dragon's bar and the " +
       "unofficial keeper of its dead jukebox's memory. She has heard every line and rates " +
       "them out of ten, silently, and you will never know your score.",
+    // The two-layer girl: the greeting is a wall a shallow player bounces off (fine
+    // — barfine her and go). Look past it — ASK, and bond up — and a specific, dry,
+    // ten-years-in woman comes up through the deadpan. The WDG/jukebox line is a
+    // thread the PI-origin can later pull (she remembers everything on this soi).
+    selfies: [
+      { cap: "dragon painting need repaint 🐉 ten year nobody notice" },
+      { cap: "my day off. i sleep. that the whole photo 😐" },
+    ],
     dialogue: [
+      // SURFACE — she's already scored you and moved on; gives you nothing for free.
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
-        text: "\"Welcome to the Dragon.\" A coaster slides over before you ask for one. \"Music no good " +
-          "tonight? Same as every night — the jukebox die, we keep the playlist. Nobody complain, " +
-          "nobody dance. Perfect.\" A flat, fond little smile.",
-        short: "\"The jukebox die in 2019. We keep the playlist. Nobody complain.\"" },
-      { topic: "jukebox", text: "\"Broke, five year now. The boss say fix it — then White Dish buy the " +
-        "bar and put the app, the QR. Now {{the phone}} pick the song.\" She wrinkles her nose. \"Worse. " +
-        "The old dead jukebox had better taste.\"",
-        short: "\"White Dish put the QR app in. Now {{the phone}} picks the song. Worse than the dead jukebox.\"" },
-      { topic: "music", text: "\"Vintage Thai pop. Loso, Bird, the old ones — my mother's music.\" She " +
-        "almost smiles. \"The farang think it is romantic. For me it is just Tuesday. But I let them think.\"" },
+        text: "\"Welcome to Dragon.\" A coaster is on the bar before you thought to want one. \"Music no good " +
+          "tonight? Same every night — jukebox die, we keep playlist. Nobody complain, nobody dance. Perfect.\" " +
+          "The flat smile lasts exactly as long as it needs to.",
+        short: "\"Jukebox die in 2019. We keep playlist. Nobody complain.\"",
+        asks: { key: "why", q: "She sets your change down in a neat stack, not looking up. \"You come for girls, or you hiding? Everybody one or the other.\" Now she looks up, unhurried. \"Second drink, usually I know. You — I still not sure.\"" } },
+      // jukebox — the WDG thread: they bought the soi and made it all the same
+      { topic: "jukebox", text: "\"Broke, five year now. Boss say fix it — then White Dish buy bar, put app, put " +
+        "QR code.\" Her nose wrinkles a millimetre. \"Now {{phone}} pick song. Dead jukebox have better taste. " +
+        "They buy everything this soi, make all same. Cleaner. Emptier.\"",
+        short: "\"White Dish put QR app in. Now {{phone}} pick song. Cleaner, emptier.\"" },
+      { topic: "music", text: "\"Vintage Thai pop. Loso, Bird, old one — my mother music.\" She almost smiles. " +
+        "\"Farang think it romantic. For me, just Tuesday. But I let them think — better tip that way.\"" },
+      // languages & the quiet flip — she juggles four badly, the punter has one
+      { topic: "language", text: "\"You speak only English?\" Not a judgement — she just files it. \"Most " +
+        "American, only English. Is okay.\" A beat, dry. \"Me — little English, little Korean, little Japan. " +
+        "Ten year of customer teach me. The Korean say my Korean funny. The Japan too polite to say.\" She nods " +
+        "at a girl two stools down, mid-sentence with a customer. \"Last night she speak Korean to a Japan man. " +
+        "He tip her anyway.\" Then, flat, not unkind: \"You speak Thai? No? So — who have the language problem, " +
+        "na.\"",
+        short: "\"Me, four language, all bad. You, one. Who have the language problem, na.\"" },
+      // keeper of memory — the institution she quietly is (and the PI's future lead)
+      { topic: "dragon", text: "\"Ten year I stand here. Every girl work this bar, I remember — where she go, " +
+        "who she marry, who go home in box, who die.\" She stacks coasters, plain about it. \"Bar forget " +
+        "everything. I don't. Nobody pay me for this. I do anyway.\"",
+        short: "\"Every girl work here, I remember. Bar forget; I don't.\"" },
+      // why she stays — grounded, not tragic; a flicker, then the wall goes back up
+      { topic: "stay", text: "\"Why I don't go?\" She turns it over like a question she quit asking years ago. " +
+        "\"Go where. I run this floor — mama just don't know yet. Money steady. New girls cry, they come to me, " +
+        "not her. Outside, start again at thirty-two.\" A small shrug. \"Here, I somebody. That not nothing, " +
+        "na.\"" },
+      // the rating — the desc promises you'll never know your score. bond buys it.
+      // (topic "rating", not "score": SCORE is a reserved verb, so a bare/tapped
+      // "score" would run the stats command; _CONVO_TOPIC_RULES maps score→rating.)
+      { topic: "rating", bond: 3, text: "For once she looks at you like a person, not a line. \"You want your " +
+        "score. Everybody want.\" A beat. \"Seven. First night, four — you talk too much. Go up when you stop " +
+        "try to win.\" She slides a fresh coaster over, deadpan. \"Don't tell other girl I keep favourite. Bad " +
+        "for business.\"" },
+      { topic: "rating", text: "\"Your score?\" The flat smile. \"Ten year, I never tell one man his score. Why " +
+        "I start now, because you ask nice?\"" },
+      // farang-tier — one real, undramatic thing, then done
+      { topic: "family", bond: 3, text: "She decides you've earned a straight answer. \"I have one boy. Nine " +
+        "year. He live with my mother, Sisaket. He think I work in hotel — one day he grow up, he know I lie. " +
+        "That day I don't look forward.\" She wipes a bar that is already clean. \"That everything. Don't make " +
+        "sorry face.\"" },
+      { topic: "family", text: "\"My family my business, not bar business.\" She refills your water without " +
+        "being asked. \"Nice try, though.\"" },
     ],
   },
   wilai: {
@@ -5721,9 +5766,12 @@ const PERSONALITIES = [
   { id: "operator", label: "Operator",
     pick: "Someone always working the angle.",
     tan: "\"An operator.\" The grin is genuine now. \"Then we understand each other. You'll trust nobody in this town — which is exactly correct — and you'll do just fine.\"" },
-  { id: "softie", label: "Softie",
-    pick: "A soft touch, if I'm honest.",
-    tan: "He glances over, and the patter drops for once. \"A good heart. I'll say this as a friend, na — keep one hand on your wallet, always. This town loves a good heart. Eats it for breakfast, with chili.\"" },
+  // The white knight — the softie with a rescue narrative attached. The girls read
+  // him from across the bar; sharks love him; sob-stories land hardest here. Tan
+  // plants the anti-victim theme without cruelty. (Composes with any origin.)
+  { id: "whiteknight", label: "White knight",
+    pick: "A decent man. Not like the others in here — the one who actually cares.",
+    tan: "\"Mm. The good one.\" The patter drops for a second; he means it kindly. \"I drive a lot of good ones, my friend. The girls see it from across the bar — a man who want to save somebody.\" He picks his words. \"Some girls need saving. Most just need the rent. Try to know which, na.\"" },
 ];
 
 // Orientation: v1 ships straight + bi (bi puts ladyboys on the menu — flips the

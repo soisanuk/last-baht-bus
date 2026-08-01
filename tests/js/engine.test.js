@@ -1583,6 +1583,28 @@ test("lady drinks warm the outcome, tier by tier", () => {
   assert.match(lastOut(), /takes her time|halfway|holds it/i, "leaned into at five");
 });
 
+test("Pia: same surface for everyone, the person comes up only if you look (two-layer girl)", () => {
+  state().stage = "vacation"; state().room = "golden_dragon";
+  run("talk to pia");
+  assert.match(lastOut(), /or you hiding/i, "she reads YOU — an NPC-driven ask");
+  // a stranger gets nothing real about her
+  out = []; run("rating");
+  assert.match(lastOut(), /never tell one man/i, "no score for a stranger");
+  out = []; run("family");
+  assert.match(lastOut(), /my family my business/i, "no real life for a stranger");
+  // the language flip: she juggles four, the punter has one (English maps → language)
+  out = []; run("do you speak english");
+  assert.match(lastOut(), /who have the language problem/i, "the multilingual/intelligence flip lands");
+  // earn it (farang tier) and the deadpan cracks — grounded, no violin
+  state().soc.drinks.pia = 14; state().talked.pia = ""; state().convo = null;
+  run("talk to pia");
+  out = []; run("my score");                 // "score" is a reserved verb; "my score" → rating topic
+  assert.match(lastOut(), /Seven\. First night, four/, "your rating, finally");
+  out = []; run("family");
+  assert.match(lastOut(), /one boy[\s\S]*Sisaket/, "one real thing");
+  assert.match(lastOut(), /sorry face/i, "told plainly, not milked");
+});
+
 test("conversations are two-way: every NPC turn surfaces the reply palette in the prose", () => {
   state().stage = "vacation"; state().room = "stinky_bar";
   run("talk to bert");
