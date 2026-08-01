@@ -3628,6 +3628,7 @@ function _introAnswer(input) {
   if (stepIdx < _INTRO_STEPS.length - 1) { G.introStep = stepIdx + 1; _introPrompt(); return; }
   // done — Tan drops you on Soi 6; the chosen scenario opens
   G.pendingChoice = null; G.introStep = null;
+  (G.known = G.known || {}).tan = true; // you rode in with him — he's no stranger (a findable NPC at the soi mouth)
   _say("\"Okay. I got you.\" Tan swings off Second Road and the neon of Soi 6 " +
     "swallows the windscreen. He drops you at the mouth of the soi, presses a cold " +
     "water you didn't ask for into your hand, and taps the card already in your " +
