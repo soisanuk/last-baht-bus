@@ -25,6 +25,15 @@ const _LADY_DRINK_LINES = [
   n => `${n}'s glass runs dry the way a meter does; ฿${LADY_DRINK} restarts it.`,
   n => `The waitress doesn't even ask — ${n}'s drink, ฿${LADY_DRINK}, straight onto your tab.`,
 ];
+// A lazy girl (type:"lazy") takes the drink and gives you the minimum back — the
+// favor rarely sticks (the "you spend, get little" punishment). Not unkind, just
+// not working for it; a savvy player reads it and stops paying.
+const _LAZY_DRINK_LINES = [
+  n => `${n} says thanks without looking up from {{her phone}}, and the ฿${LADY_DRINK} drink sits between you like a receipt.`,
+  n => `${n} clinks your glass on autopilot, already half-turned toward the door and whoever comes through it next. ฿${LADY_DRINK}.`,
+  n => `${n} takes the ฿${LADY_DRINK} drink, gives you a smile with the wattage turned right down, and lets the silence finish her shift.`,
+  n => `"Thank you na." That is, it turns out, the whole of it — ${n} isn't unkind, she's just not going to work for ฿${LADY_DRINK}.`,
+];
 const _NO_EXIT = [
   "You can't go that way.",
   "That's a wall, tilac — the soi doesn't run that way.",
@@ -747,6 +756,7 @@ const _CONVO_TOPIC_RULES = [
   [/\bcranes?\b|\bnapkins?\b|\borigami\b|paper bird/,                             "crane"],
   [/\bscam\b|\bhustle\b|the act\b|playing me|working me|you real|for real/,       "game"],
   [/you okay|you alright|are you (ok|alright|fine)|everything okay/,              "okay"],
+  [/\bfollower|instagram|tiktok|content|famous|algorithm|the app/,                "content"],
   [/military|armed forces|the forces|you serve|were you in/,                     "navy"],
   [/ninet(y|ies)|1990s|the 90s/,                                                 "90s"],
   [/nightlife|the scene/,                                                        "scene"],
@@ -1274,8 +1284,11 @@ function _doBuy(arg) {
     if (!id || !NPC_ROLES[id]) { _say(nameW ? "She's not working this bar." : "Nobody here to buy one for."); return; }
     if (G.money < LADY_DRINK) { _say(`Lady drinks are ฿${LADY_DRINK}. You have ฿${G.money}. The maths is not on your side.`); return; }
     G.money -= LADY_DRINK;
-    G.soc.drinks[id] = (G.soc.drinks[id] || 0) + 1;
-    _say(`${_pickVary(_LADY_DRINK_LINES, "ladydrink")(NPCS[id].name)} (฿${G.money} left.)`);
+    // a lazy girl banks the drink but rarely the warmth — favor sticks only ~40%.
+    // (only lazy girls consume the extra die, so nothing else's determinism moves.)
+    const _lazy = NPCS[id].type === "lazy";
+    if (!_lazy || _rand() < 0.4) G.soc.drinks[id] = (G.soc.drinks[id] || 0) + 1;
+    _say(`${_pickVary(_lazy ? _LAZY_DRINK_LINES : _LADY_DRINK_LINES, _lazy ? "lazydrink" : "ladydrink")(NPCS[id].name)} (฿${G.money} left.)`);
     _addHappy(1);
     if (Object.keys(G.soc.drinks).length >= 4 && !G.soc.butterflyTeased) {
       G.soc.butterflyTeased = true;
