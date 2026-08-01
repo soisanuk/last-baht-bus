@@ -137,6 +137,14 @@
   .t-receipt { color: var(--cyan); text-shadow: 0 0 10px #00e5ff50;
                font-family: "SF Mono", "Cascadia Mono", Menlo, Consolas, "Noto Sans Thai", monospace; }
   .t-dim   { color: var(--violet); font-size: .88em; }
+  /* The ASCII bar-mat map (MAP): monospace art that must NOT wrap. Opt out of the
+     Thai XL face, keep it on one pre-formatted block, and shrink the font on narrow
+     screens so ~68 columns fit a phone; overflow-x is the safety net past that. */
+  .t-line.t-map { color: var(--violet); white-space: pre; word-break: normal;
+                  overflow-x: auto; -webkit-overflow-scrolling: touch;
+                  font-family: "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+                  font-size: clamp(.45rem, 1.95vw, .8rem); line-height: 1.25; }
+  .t-line.t-map::-webkit-scrollbar { height: 4px; }
   .t-alert { color: var(--red); text-shadow: 0 0 10px #ff335550; }
   /* action breadcrumb ("· You asked Nok about beer") — a quiet post-command
      anchor so a long scroll doesn't lose who/where you just acted. */

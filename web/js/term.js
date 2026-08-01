@@ -406,7 +406,11 @@ const _term = (() => {
     if (!_out) return;
     const div = document.createElement("div");
     div.className = "t-line" + (cls ? " t-" + cls : "");
-    div.innerHTML = decorate(text);
+    // The ASCII bar-mat map is monospace art — skip decorate() so bar-name kw
+    // spans can't shift a glyph and break the alignment (see .t-map CSS: no-wrap,
+    // horizontal-scroll, font shrinks to fit narrow screens).
+    if (cls === "map") div.textContent = text;
+    else div.innerHTML = decorate(text);
     _addAvatars(div, text);
     _out.appendChild(div);
     _out.scrollTop = _out.scrollHeight;
