@@ -2691,7 +2691,7 @@ const _HELP = `Common commands:
   BUY <thing> · SELL BOTTLES · READ <thing> · READ SIGN
   WATCH TV (bars & your hotel room) · READ PAPER (bars & 7-Elevens) — the day's real headlines
   WATCH POLICE · WATCH SUNSET (Blue Dog & Stinky Pinky, early evening — the junction show)
-  WATCH SOI (Queen Vic balcony, or the quiet middle of Soi 6 — watch the parade, don't join it)
+  WATCH SOI · BALCONY (your balcony above, the Queen Vic window below, or the quiet middle of the soi — watch the parade, don't join it)
   WATCH DRAG (The Peacock Cabaret, Supertown/Jomtien — tip the queens)
   WEATHER · SCORES (real football) · LOTTERY (the real GLO draw)
   PLAY CONNECT 4 · PLAY JACKPOT [bet] · PLAY POOL   (in the beer bars)
@@ -2736,7 +2736,7 @@ const _HELP_SOI6 = `Common commands:
   WAI [person] · SAY <thai phrase> [TO <person>]
   WATCH TV · READ PAPER — the day's real headlines · WEATHER · SCORES · LOTTERY
   WATCH SUNSET (Blue Dog & Stinky Pinky, early evening — the junction show)
-  WATCH SOI (Queen Vic balcony, or the quiet middle of Soi 6 — watch, don't join)
+  WATCH SOI · BALCONY (your balcony above, the Queen Vic window below, or the quiet middle of the soi — watch, don't join)
   PLAY CONNECT 4 · PLAY JACKPOT [bet] · PLAY POOL   (in the beer bars)
   FLIRT/KISS/SPANK/FONDLE <lady> · BUY DRINK FOR <lady> · BUY BEER · BUY MAN DRINK
   RING BELL (฿300, instant popularity) · TALK TO PATRON · BARFINE <lady>
@@ -2770,7 +2770,7 @@ const _COMPLETE_VERBS = [
   "ask", "give", "buy", "sell bottles", "pay", "wai", "say", "ride bus to",
   "motosai to", "travel", "light", "charge phone", "read", "use", "open", "play",
   "flirt", "kiss", "spank", "fondle", "ring bell", "barfine", "massage", "special", "soapy", "meet", "eat", "drink",
-  "sleep", "tv", "column", "watch", "weather", "scores", "lottery", "map", "time", "tip", "wave", "phone",
+  "sleep", "tv", "column", "watch", "watch soi", "balcony", "weather", "scores", "lottery", "map", "time", "tip", "wave", "phone",
   "photo", "gallery", "photos", "call", "shower", "withdraw", "cheers", "tao rai", "borrow", "repay", "hire", "pet", "feed", "rename", "dance", "sing", "swim",
   "smell", "listen", "diagnose", "get tested", "clinic", "apologize", "quests", "accept", "abandon", "contact",
   "contacts", "who", "who am i", "identity", "blackbook", "message", "check messages", "send", "score", "wait", "again",
@@ -3424,9 +3424,15 @@ function doCommand(input) {
     case "jump": case "climb": case "push": case "pull":
     case "knock": case "shout": case "yell":
       _say(_MISC_VERBS[v === "yell" ? "shout" : v]); break;
+    case "balcony": case "rail":
+      if (G.room === "qv_room") _doWatchSoi();
+      else _say("No balcony here. Yours is the one over the Queen Vic — head UP to your room and WATCH SOI from the rail.");
+      break;
     case "watch":
       if (G.room === "qv_room" && (!arg || /soi|street|balcony|show|chaos|girls|parade/.test(arg)))
         _doWatchSoi();
+      else if (G.room === "queen_vic" && (!arg || /soi|street|window|glass|outside|show|chaos|girls|parade/.test(arg)))
+        _doWatchPubSoi();
       else if ((G.room === "blue_dog" || G.room === "stinky_bar") && (!arg || /police|road|show|shakedown|bike|checkpoint|sunset|bay|sea|view|sun/.test(arg)))
         _doWatchJunction(arg);
       else if ((G.room === "soi6_mid" || G.room === "sunset_rail" || G.room === "bay_watch" || G.room === "sandy_toes") && (!arg || /soi|street|parade|people|show|girls|circus|watch/.test(arg)))
@@ -3466,7 +3472,14 @@ function doCommand(input) {
     case "score": _doScore(); break;
     case "hint": case "hints": _doHint(); break;
     case "help": case "?": _say(G.mode === "soi6" ? _HELP_SOI6 : _HELP, "dim"); break;
-    case "restart": { const b = G.act1Best || 0, t = G.act1Tries || 0; newGame(); G.act1Best = b; G.act1Tries = t; engineIntro(); return; } // keep the critical-path record + hint unlock
+    case "restart": {
+      // RESTART = start over from character creation, IN THE CURRENT MODE. Was
+      // beach-only (newGame resets mode to null), which wrongly dropped a Soi 6
+      // challenge player onto the beach/Act One. Clearing identity re-runs the taxi
+      // intro; keep the Act One record + hint unlock on the full-game path.
+      if (G.mode === "soi6") { G.player = null; startSoi6Mode(); return; } // re-pick + fresh Soi 6 week
+      const b = G.act1Best || 0, t = G.act1Tries || 0; newGame(); G.act1Best = b; G.act1Tries = t; engineIntro(); return;
+    }
     default:
       // bare Thai phrase typed directly
       if (matchThaiPhrase(lower)) { _doSay(lower); break; }
@@ -3584,6 +3597,11 @@ const _INTRO_STEPS = [
 
 function _taxiIntro(after) {
   G.introAfter = after || "beach";  // which scenario opens once you've said who you are
+  // Enter the modal BEFORE printing any prose, so the frontend suppresses
+  // tap-decoration on the whole intro (Tan the driver, "Golf" the origin, etc. —
+  // they'd otherwise tap into "talk to tan"/"talk to golf" the numbered modal rejects).
+  G.pendingChoice = "intro";
+  G.introStep = 0;
   _say("THE LAST BAHT BUS", "win");
   _say("a Pattaya misadventure · Soi Sanuk universe", "dim");
   _say("═══════════════════════════════════", "dim");
@@ -3596,8 +3614,6 @@ function _taxiIntro(after) {
     "for a film degree. Now I drive, and I fix — turns out the English was the only " +
     "part of the degree that pays.\" He finds your eye in the mirror. \"Two hours, na. " +
     "Might as well know who I'm dropping off.\"");
-  G.pendingChoice = "intro";
-  G.introStep = 0;
   _introPrompt();
 }
 

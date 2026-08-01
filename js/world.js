@@ -1584,7 +1584,7 @@ const ROOMS = {
     desc: "Actual air conditioning. Actual wood panelling. A dartboard. The Queen Vic Inn " +
       "anchors the quiet middle stretch of Soi 6 with the righteous calm of a man who has seen " +
       "it all and ordered another pint — the one place on the soi that isn't shouting. Through " +
-      "the window, the soi performs. Terry holds down the corner stool with a beer and the settled " +
+      "the window, the soi performs — the show without the sweat (WATCH SOI). Terry holds down the corner stool with a beer and the settled " +
       "air of a man who has watched it all twice. A staircase behind the bar leads " +
       "UP to the guest rooms.",
     revisit: [
@@ -1620,7 +1620,7 @@ const ROOMS = {
       "neon never quite lets go of it, but the blackout curtains and the aircon get " +
       "you there. A flatscreen on the wall and a mini-fridge in the corner — two free " +
       "waters a day, housekeeping's one kindness — round out the luxuries. " +
-      "(SLEEP to turn in and end the night · WATCH TV · OPEN FRIDGE.)",
+      "(SLEEP to turn in and end the night · WATCH TV · OPEN FRIDGE · or step onto the BALCONY.)",
     revisit: [
       "Back up to your balcony room over the Queen Vic — the fan turning its opinions over, Soi 6 still howling up over the rail two floors down.",
       "The room again: wood floors, the recliner on the balcony, the soi throwing its light and its bass up the wall like a fish tank with the volume left on.",
