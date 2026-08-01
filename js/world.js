@@ -5677,6 +5677,68 @@ const _PATRON_TITLES = {
 };
 for (const [id, t] of Object.entries(_PATRON_TITLES)) if (PATRONS[id]) PATRONS[id].title = t;
 
+// ── Character creation: who you are ─────────────────────────────────────────
+// Picked in the taxi-ride intro (see _taxiIntro). Dialogue-only for v1: origin/
+// personality/orientation gate and flavour conversation + courtship via when(st,G)
+// predicates, no starting-stat modifiers. Each origin is ALSO an NPC on Soi 6
+// (Phase B) — the one you pick is deactivated (you ARE him). `pick` is the line
+// Tan hears; `tan` is his read on you. Voice: wry US-inflected English, the odd
+// Thai particle, sees every farang clearly by the second traffic light.
+const ORIGINS = [
+  { id: "redundancy", label: "Redundancy",
+    pick: "A redundancy cheque and a trade nobody's hiring for anymore.",
+    tan: "\"Twenty years on the tools, then a letter, na. I drive a lot of you this year.\" He crosses three lanes without looking. \"The payout feels like a fortune here. It is — for about a month. Spend it like it has to last, my friend, because it does.\"" },
+  { id: "pension", label: "The pension",
+    pick: "A pension, and twenty years of coming back to spend it.",
+    tan: "\"Ahh, a regular! Then you don't need my airport speech.\" He grins into the mirror. \"You know this road better than the man who paved it. Same bars, mostly. Some of the same girls, even — don't tell them I said.\"" },
+  { id: "running", label: "Running from it",
+    pick: "Something back home I'd rather not get into.",
+    tan: "A small nod; he lets it lie. \"Mai pen rai. Half this town is a forwarding address for a life that stopped working. Pattaya never asks for references — that's the whole product, na.\"" },
+  { id: "pi", label: "The detective",
+    pick: "I was a homicide detective. Now I find things quietly, for people.",
+    tan: "The eyes flick to the mirror, a half-second too long. \"...Scouting for retirement, or working?\" A pause. \"No — don't answer. I drive people who ask questions for a living too. Sometimes I'm the one who called them.\" A card is in your hand before you saw it move. \"You need a door in this town — you have my number now.\"" },
+  { id: "business", label: "The investor",
+    pick: "I'm here to make something happen — a bar, property, an opportunity.",
+    tan: "\"An opportunity.\" He says it like it tastes of something. \"Everybody's got one out here. One in ten is even real. Do yourself a favour — before you sign your name to anything, buy me a coffee. I'll tell you which farang really owns his 'own' bar.\"" },
+  { id: "married", label: "The returner",
+    pick: "I was married to a Thai woman once. That's over. So — here I am.",
+    tan: "\"So you speak a little, you know how the song goes, and you know how it ends.\" He softens. \"Welcome back. Slower this time, maybe. Second time through, you watch the hands, not the smile.\"" },
+  { id: "monger", label: "The monger",
+    pick: "Golf. With the APAC team. (you did actually pack the clubs)",
+    tan: "\"555 — the APAC team.\" Delighted, not unkind. \"I drive a hundred golfers who never find a course. You brought the clubs, which is somehow worse.\" A cheerful shrug. \"No shame, my man. This whole town is built on exactly you. Play your eighteen holes. All of them.\"" },
+];
+
+const PERSONALITIES = [
+  { id: "charmer", label: "Charmer",
+    pick: "Someone easy to like.",
+    tan: "\"A charmer. The girls will love you — and your wallet — equally. The trick is knowing, each night, which one they mean.\"" },
+  { id: "joker", label: "Joker",
+    pick: "A laugh. I keep it light.",
+    tan: "\"A joker. Good — sanuk is the real currency here, better than baht.\" A beat. \"Just read the table. Not every man at the bar wants a comedian at midnight.\"" },
+  { id: "blunt", label: "Blunt",
+    pick: "Straight talk. Take me or leave me.",
+    tan: "\"Blunt.\" An approving nod. \"Out here that's exotic — everyone's selling in a soft voice. Opens some doors fast, slams others faster. Worth it, mostly.\"" },
+  { id: "operator", label: "Operator",
+    pick: "Someone always working the angle.",
+    tan: "\"An operator.\" The grin is genuine now. \"Then we understand each other. You'll trust nobody in this town — which is exactly correct — and you'll do just fine.\"" },
+  { id: "softie", label: "Softie",
+    pick: "A soft touch, if I'm honest.",
+    tan: "He glances over, and the patter drops for once. \"A good heart. I'll say this as a friend, na — keep one hand on your wallet, always. This town loves a good heart. Eats it for breakfast, with chili.\"" },
+];
+
+// Orientation: v1 ships straight + bi (bi puts ladyboys on the menu — flips the
+// katoey encounter / Peacock performers from gag to courtship). Gay is stubbed for
+// the full version with Jomtien's scene — the field + _flirtUnwelcome routing can
+// already carry it; just not offered here.
+const ORIENTATIONS = [
+  { id: "straight", label: "The ladies",
+    pick: "The ladies.",
+    tan: "\"The ladies. The factory setting of Soi 6.\" He signals the turn. \"Easy. Everyone here is on your side.\"" },
+  { id: "bi", label: "Open-minded",
+    pick: "The ladies — and I keep an open mind.",
+    tan: "\"An open mind.\" A knowing tilt of the head. \"Good. This town rewards it — and it is very, very good at surprising the men who swear they are closed. Some of the most beautiful girls on this soi, my friend, weren't born girls. I'll point you right.\"" },
+];
+
 const CANON_BARS = [
   "Lucky Tiger Bar", "Pink Lotus Lounge", "Neon Paradise A-Go-Go",
   "Golden Dragon Bar", "Sunset Dreams Lounge", "Starlight Bar",

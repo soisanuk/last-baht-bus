@@ -1231,9 +1231,11 @@ function _act1Fail(reason) {
     "whisper. Type HINT when you're stuck.)", "dim");
   _say("Dawn wipes the slate. Same beach, same day two, same empty pockets — go again.", "room");
   _say("");
+  const identity = G.player;  // who you are was decided in the taxi — not re-picked each attempt
   newGame();
   G.act1Best = best;      // the record…
   G.act1Tries = tries;    // …and the attempt count survive the reset (unlocking HINT)
+  if (identity && identity.origin) G.player = identity;
   engineIntro();
 }
 

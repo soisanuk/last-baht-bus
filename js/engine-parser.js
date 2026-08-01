@@ -2600,7 +2600,7 @@ const _HELP = `Common commands:
   QUESTS · ACCEPT <quest> · ABANDON <quest> · HINT (the soi's nudge — Act One, after your first reset)
   PHONE / EXAMINE PHONE (home screen: battery, messages, weather, headlines)
   CONTACT <lady> (swap numbers) · CONTACTS (your phonebook) · MESSAGE <lady> · CHECK MESSAGES
-  WHO / BLACKBOOK (your ladies, ranked by how they feel about you)
+  WHO / BLACKBOOK (your ladies, ranked by how they feel about you) · WHO AM I (who you chose to be)
   PHOTO <someone> (a portrait for your phone) · GALLERY (the faces you've collected)
   SEND <amount> TO <lady> (banking app)
   BORROW <amount> · REPAY [amount] (Nira's loan at Neon Paradise — 20%, three days, don't be late)
@@ -2635,7 +2635,7 @@ const _HELP_SOI6 = `Common commands:
   SLEEP (your room, ends the night) · OPEN FRIDGE · TAKE WATER (two free bottles a day)
   PHONE / EXAMINE PHONE (battery, messages, weather, headlines)
   CONTACT <lady> (swap numbers) · CONTACTS · MESSAGE <lady> · CHECK MESSAGES
-  WHO / BLACKBOOK (your ladies, ranked by how they feel about you)
+  WHO / BLACKBOOK (your ladies, ranked by how they feel about you) · WHO AM I (who you chose to be)
   SEND <amount> TO <lady> (banking app)
   FEED DOG (a friendship you cannot undo) · PET DOG · NAME DOG <name>
   LIGHT ON / LIGHT OFF · CHARGE PHONE
@@ -2660,7 +2660,7 @@ const _COMPLETE_VERBS = [
   "sleep", "tv", "column", "watch", "weather", "scores", "lottery", "map", "time", "tip", "wave", "phone",
   "photo", "gallery", "photos", "call", "shower", "withdraw", "cheers", "tao rai", "borrow", "repay", "hire", "pet", "feed", "rename", "dance", "sing", "swim",
   "smell", "listen", "diagnose", "get tested", "clinic", "apologize", "quests", "accept", "abandon", "contact",
-  "contacts", "who", "blackbook", "message", "check messages", "send", "score", "wait", "again",
+  "contacts", "who", "who am i", "identity", "blackbook", "message", "check messages", "send", "score", "wait", "again",
   "request", "hint", "help", "save", "load", "undo", "restart", "quit", "reset", "end", "logout",
 ];
 
@@ -2675,6 +2675,11 @@ function _chipSet() {
   const add = (cmd, label) => chips.push({ cmd, label: label || cmd });
 
   // 1) A pending modal owns the input — offer only its answers
+  if (G.pendingChoice === "intro") {
+    const step = _INTRO_STEPS[G.introStep || 0];
+    if (step) step.table().forEach((e, i) => add(String(i + 1), e.label));
+    return chips;
+  }
   if (G.pendingChoice === "vacation_end") {
     if (G.mode === "soi6") { add("play again"); return chips; }
     add("new vacation"); add("move to pattaya", "move to Pattaya"); return chips;
@@ -2959,6 +2964,7 @@ function _renderResume() {
   if (_unreadCount()) {
     _say(`📱 ${_unreadCount()} unread message${_unreadCount() > 1 ? "s" : ""} waiting (CHECK MESSAGES).`, "win");
   }
+  if (G.pendingChoice === "intro") { _introPrompt(); return; }
   if (G.pendingChoice === "vacation_end") { _vacationEndPrompt(); return; }
   if (G.pendingChoice === "checkout") { _checkoutPrompt(); return; }
   if (G.game) { _renderGame(); return; }
@@ -2992,6 +2998,9 @@ function doCommand(input) {
     _say(`💰 Two-week millionaire: ฿2,000,000 for testing. (฿${G.money} in pocket.)`, "win");
     return;
   }
+
+  // the taxi ride owns input until you've said who you are
+  if (G.pendingChoice === "intro") { _introAnswer(lower); return; }
 
   // the week is over: the airline needs an answer before anything else
   if (G.pendingChoice === "vacation_end") {
@@ -3139,7 +3148,11 @@ function doCommand(input) {
     case "messages": case "msgs": case "inbox": _readMessages(); break;
     case "message": case "text": case "msg": _doMessage(arg); break;
     case "contacts": case "phonebook": _doContacts(); break;
-    case "who": case "blackbook": case "little black book": case "ladies": _doBlackbook(); break;
+    case "who": // "who am i" → your identity; bare WHO → the black book
+      if (/\bam i\b|\bi am\b/.test(arg)) { _doWhoAmI(); break; }
+      _doBlackbook(); break;
+    case "blackbook": case "little black book": case "ladies": _doBlackbook(); break;
+    case "identity": case "me": case "self": _doWhoAmI(); break;
     case "contact": case "number":
       if (!arg) _doContacts(); // bare CONTACT reads as "show my contacts"
       else _doContact(arg.replace(/^(with |for )/, ""));
@@ -3362,7 +3375,18 @@ function doCommand(input) {
 // based at the Queen Vic Inn, ฿100k in the bank and ฿1k in pocket. The start
 // menu calls this; PLAY AGAIN at week's end calls it too.
 function startSoi6Mode() {
+  const identity = G && G.player;  // keep who you are across the fresh-week reset
   newGame();
+  if (identity && identity.origin) G.player = identity;
+  _soi6Setup();
+  // Same character creation as the full game: on a first-ever start (no identity
+  // yet) Tan drives you in and you say who you are; a later week keeps your
+  // character (RESTART re-opens the picks if you want a different origin).
+  if (!G.player.origin) { _taxiIntro("soi6"); return; }
+  _soi6Opening();
+}
+
+function _soi6Setup() {
   G.mode = "soi6";
   G.stage = "vacation";   // reuse the 7-day-week machinery
   G.room = "qv_room";
@@ -3374,7 +3398,11 @@ function startSoi6Mode() {
   G.visited = {}; // fresh — the opening describe shows qv_room's full desc, then marks it visited
   _setFlag("hasWallet");  // you kept your card this time
   _setFlag("act1Done");   // no lost-wallet story in this mode
-  _say("THE LAST BAHT BUS", "win");
+}
+
+// The Soi 6 week's framing — always reached just after the taxi drops you (which
+// already printed the title), so no title line here.
+function _soi6Opening() {
   _say("Soi 6 · a Pattaya misadventure · Soi Sanuk universe", "dim");
   _say("═══════════════════════════════════", "dim");
   _say("One week in Pattaya, and you've picked your street and planted your flag: SOI 6 — the loudest " +
@@ -3390,9 +3418,21 @@ function startSoi6Mode() {
 
 function engineIntro() {
   if (!G) newGame();
-  _say("THE LAST BAHT BUS", "win");
-  _say("a Pattaya misadventure · Soi Sanuk universe", "dim");
-  _say("═══════════════════════════════════", "dim");
+  // First ever start: work out who you are on the ride in, THEN wake up on the
+  // beach. Once picked (identity persists across Act One resets), skip the taxi.
+  if (!G.player || !G.player.origin) { _taxiIntro("beach"); return; }
+  _beachOpening(true);
+}
+
+// The day-two beach opening — the do-or-die Act One. Split out of engineIntro so
+// the taxi intro can hand off to it (no title the second time) and resets can
+// replay it straight (with title).
+function _beachOpening(withTitle) {
+  if (withTitle) {
+    _say("THE LAST BAHT BUS", "win");
+    _say("a Pattaya misadventure · Soi Sanuk universe", "dim");
+    _say("═══════════════════════════════════", "dim");
+  }
   _say("Day two of your week in Pattaya, and it starts like this: face-down on " +
     "Jomtien beach, sunset bleeding into the sea, your head pounding like a bass " +
     "bin outside Neon Paradise A-Go-Go. Day one went well, is the thing. Too well.");
@@ -3412,4 +3452,84 @@ function engineIntro() {
   _say("");
   _describeRoom(true);
   _say("(Type HELP for commands.)", "dim");
+}
+
+// ── The taxi-ride intro ──────────────────────────────────────────────────────
+// Tan the driver-fixer runs a three-question "who are you?" beat on the way in
+// from the airport (a pendingChoice modal: origin → personality → orientation),
+// then drops you on Soi 6 and the day-two beach opening follows. Picks land in
+// G.player and persist across resets (set once — see _act1Fail / RESTART).
+const _INTRO_STEPS = [
+  { field: "origin", table: () => ORIGINS,
+    q: "\"So — what's the story back home?\" A glance in the mirror. \"Everybody on this drive is leaving something behind. What's yours?\"" },
+  { field: "personality", table: () => PERSONALITIES,
+    q: "\"Okay. Two hours to fill.\" He drums the wheel. \"When a room turns to look at you — and out here, my friend, it will — what do they get?\"" },
+  { field: "orientation", table: () => ORIENTATIONS,
+    q: "\"Last one — saves us both time later, na.\" An easy shrug. \"What are you in the market for?\"" },
+];
+
+function _taxiIntro(after) {
+  G.introAfter = after || "beach";  // which scenario opens once you've said who you are
+  _say("THE LAST BAHT BUS", "win");
+  _say("a Pattaya misadventure · Soi Sanuk universe", "dim");
+  _say("═══════════════════════════════════", "dim");
+  _say("The minibus out of Suvarnabhumi smells of pine air-freshener and someone " +
+    "else's last beer. Ninety minutes of motorway to Pattaya, and the driver — a " +
+    "compact Thai guy about thirty-five, a faded Cleveland State hoodie, English " +
+    "better than the arrivals-hall signage — has already decided the two of you are " +
+    "going to be friends.");
+  _say("\"Tan,\" he says, tapping his chest, not turning round. \"Six years in Ohio " +
+    "for a film degree. Now I drive, and I fix — turns out the English was the only " +
+    "part of the degree that pays.\" He finds your eye in the mirror. \"Two hours, na. " +
+    "Might as well know who I'm dropping off.\"");
+  G.pendingChoice = "intro";
+  G.introStep = 0;
+  _introPrompt();
+}
+
+function _introPrompt() {
+  const step = _INTRO_STEPS[G.introStep || 0];
+  if (!step) return;
+  _say(step.q);
+  _say(step.table().map((e, i) => `${i + 1}) ${e.pick}`).join("\n"), "dim");
+  _say("(Pick a number.)", "dim");
+}
+
+function _introMatch(input, table) {
+  const s = (input || "").trim().toLowerCase().replace(/[.,!?]+$/, "");
+  const n = parseInt(s, 10);
+  if (n >= 1 && n <= table.length) return table[n - 1];
+  return table.find(e => e.id === s || e.label.toLowerCase() === s) ||
+    (s.length >= 4 ? table.find(e => e.label.toLowerCase().includes(s) || e.id.includes(s)) : null) ||
+    null;
+}
+
+function _introAnswer(input) {
+  const stepIdx = G.introStep || 0;
+  const step = _INTRO_STEPS[stepIdx];
+  const pick = _introMatch(input, step.table());
+  if (!pick) { _say("\"Hah — a number, my friend. Long drive.\"", "dim"); _introPrompt(); return; }
+  G.player[step.field] = pick.id;
+  _say(pick.tan);
+  if (stepIdx < _INTRO_STEPS.length - 1) { G.introStep = stepIdx + 1; _introPrompt(); return; }
+  // done — Tan drops you on Soi 6; the chosen scenario opens
+  G.pendingChoice = null; G.introStep = null;
+  _say("\"Okay. I got you.\" Tan swings off Second Road and the neon of Soi 6 " +
+    "swallows the windscreen. He drops you at the mouth of the soi, presses a cold " +
+    "water you didn't ask for into your hand, and taps the card already in your " +
+    "pocket. \"First night is on you, my friend. Do me one favour—\" the grin again " +
+    "\"—try to keep your wallet.\"");
+  _say("");
+  const after = G.introAfter; G.introAfter = null;
+  if (after === "soi6") _soi6Opening();
+  else _beachOpening(false);
+}
+
+function _doWhoAmI() {
+  if (!G.player || !G.player.origin) {
+    _say("You haven't worked out who you are yet — the night's still young.");
+    return;
+  }
+  const find = (t, id) => (t.find(e => e.id === id) || {}).label || "?";
+  _say(`You are: ${find(ORIGINS, G.player.origin)} · ${find(PERSONALITIES, G.player.personality)} · ${find(ORIENTATIONS, G.player.orientation)}.`, "win");
 }
