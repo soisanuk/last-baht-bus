@@ -387,6 +387,8 @@ CHARS = {
     "pete":     dict(skin=PALE, hair="short", hc=GREY, shirt=C(0x3a3a44), collar=True, mouth="stern", bg=BG_BAR),
     "rob":      dict(skin=TAN, hair="short", hc=C(0x6a5a48), shirt=C(0x4a6a8a), collar=True, mouth="neutral", bg=BG_GOGO),
     "barry":    dict(skin=RED, hair="combover", hc=C(0x8a7a58), shirt=C(0xe8d84a), collar=True, mouth="grin", bg=BG_GOGO),
+    # Tan — the driver/fixer/hub. Deliberately unremarkable: plain, calm, forgettable.
+    "tan":      dict(skin=THAI2, hair="short", hc=BLACK, shirt=C(0x6a7078), collar=True, mouth="neutral", bg=BG_STREET),
     "powers":   dict(skin=TAN, hair="slick", hc=BLACK, shirt=C(0xe8e0d0), collar=True, mouth="grin", acc=["sunglasses"], bg=BG_GOGO),
     "nit":      lady(skin=THAI2, hair="ponytail", hc=BLACK, shirt=C(0x3a6ac0),
                      bg=BG_STREET, mouth="smile"),
@@ -489,7 +491,7 @@ CHARS = {
     "wa":       lady(skin=THAI, hair="ponytail", hc=BLACK, shirt=C(0x10b0a0), bg=BG_BAR, mouth="grin", acc=["earrings", "nosering"], earc=YELN),
     "noon":     lady(skin=THAI, hair="ponytail", hc=BLACK, shirt=C(0x3a8a4a), bg=BG_BAR, mouth="smile", acc=["earrings", "chain"], earc=GOLD),
     "prae":     lady(skin=THAI, hair="bun", hc=BLACK, shirt=C(0x7a3ad0), bg=BG_BAR, mouth="neutral", acc=["earrings", "chain"], earc=CYAN),
-    "tan":      lady(skin=THAI, hair="bob", hc=DKBRN, shirt=C(0xd028b0), bg=BG_BAR, mouth="smile", acc=["earrings", "nosering"], earc=YELN),
+    "taan":     lady(skin=THAI, hair="bob", hc=DKBRN, shirt=C(0xd028b0), bg=BG_BAR, mouth="smile", acc=["earrings", "nosering"], earc=YELN),
     "tik":      lady(skin=THAI, hair="ponytail", hc=BLACK, shirt=C(0x8a1030), bg=BG_BAR, mouth="grin", acc=["earrings", "flower"], earc=GOLD),
     "pui":      lady(skin=THAI, hair="ponytail", hc=BLACK, shirt=C(0xe07820), bg=BG_BAR, mouth="smile", acc=["earrings"], earc=GOLD, blush=True),
     "mild":     lady(skin=THAI2, hair="ponytail", hc=DKBRN, shirt=C(0x00e5ff), bg=BG_BAR, mouth="smile", acc=["earrings"], earc=YELN, blush=True),

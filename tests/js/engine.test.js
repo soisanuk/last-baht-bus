@@ -2307,6 +2307,29 @@ test("all seven origin archetypes are NPCs on Soi 6, each deactivated by its own
   }
 });
 
+test("Tan the driver: known from the intro, a hub whose knowingness escalates with the clues you gather", () => {
+  // you rode in with him — he's a findable NPC at the soi mouth, no stranger
+  state().player.origin = null; out = [];
+  startSoi6Mode(); run("7"); run("1"); run("1");   // monger / charmer / straight
+  assert.ok(state().known.tan, "you know Tan after the taxi ride");
+  assert.equal(_npcRoom("tan"), "soi6_street", "he's at the mouth of Soi 6");
+
+  // the hub reveal needs you to have met a couple of the archetypes he drove
+  state().room = "soi6_street"; state().player.origin = "pi"; // you're the detective, so he's driven the others
+  out = []; run("ask tan about others");
+  assert.doesNotMatch(lastOut(), /back seat|manifest/i, "he won't list them before you've met them");
+  state().known.wayne = true; state().known.roy = true;
+  out = []; run("ask tan about others");
+  assert.match(lastOut(), /back seat|drove every one|ask the driver/i, "now he owns up to driving them all");
+
+  // the good-table topic: a smooth deflection until you've circled the quiet man enough
+  out = []; run("ask tan about table");
+  assert.match(lastOut(), /don't ask about|not even me/i, "deflection before the clues add up");
+  state().flags.orchidReported = true; state().flags.nameKept = true; state().flags.oldDaysHeard = true;
+  out = []; run("ask tan about table");
+  assert.match(lastOut(), /quiet man|drive taxis/i, "the near-confirmation — never quite stated");
+});
+
 test("the detective's recon quest completes only after you've seen the Orchid's good table", () => {
   state().room = "queen_vic";
   state().player.origin = "monger";   // Doyle active
