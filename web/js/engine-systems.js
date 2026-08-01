@@ -54,6 +54,14 @@ function _barfinePrices(bt, id) {
 // too nervous, and the popular girls have a reputation worth more than one
 // inflated fine. Liking you (favor ≥ 6) or a vouching wing-woman also keeps
 // everyone honest — they play a newbie they can get away with, nobody else.
+// A good-girl cashier (type:"sponsor") stays off-limits, kept clean by a western
+// sponsor's monthly money — until you outbid him. G.soc.given[id] tracks the baht
+// you've put on her (TIP + SEND); past the threshold the fidelity breaks and the
+// barfine unlocks. The white knight who "rescues" her by paying is the one who
+// breaks the thing he thinks he's saving.
+const SPONSOR_FLIP = 15000;
+function _sponsorFlipped(id) { return ((G.soc.given && G.soc.given[id]) || 0) >= SPONSOR_FLIP; }
+
 function _bfShark(id) {
   if (POPULAR_GIRLS.includes(id)) return false;
   if (NPCS[id].c4 === 2) return false;            // the new girls play it straight
@@ -308,10 +316,29 @@ function _doBarfine(arg) {
     _say(_pickVary(_BERT_LOYAL, "bertloyal").replace("{name}", name));
     return;
   }
-  if (role === "cashier" && (G.soc.bells[G.room] || 0) < 2) {
-    _say(`${name} taps the till: somebody has to count the money. (Cashiers do go, ` +
-      "sometimes — for the right customer, on the right night. The bell defines both.)");
-    return;
+  if (role === "cashier") {
+    if (NPCS[id].orientation === "gay") {   // a tom — wrong shop, and she'll tell you
+      _say(`${name} laughs — actually laughs. "Tilac, wrong shop. I like the ladies, same as ` +
+        "you. Plenty girls here for you. Not me.\"");
+      return;
+    }
+    if (NPCS[id].type === "kin") {           // family, not floor — at any price
+      _say(`${name} doesn't look up from the till. "I am family here, not floor. No bell, no ` +
+        "money, no night change that. Buy one of the girls a drink — I ring it up.\"");
+      return;
+    }
+    if (NPCS[id].type === "sponsor" && !_sponsorFlipped(id)) {
+      _say(`${name} shows you a fraction of {{her phone}} without quite meaning to — a farang ` +
+        "name, a bank notification. \"I have someone. He take care of me, I stay good for him. " +
+        "Not for sale, tilac.\" She means it — for now. Everything on this soi has a number, and " +
+        "you have not reached hers.", "alert");
+      return;
+    }
+    if (!NPCS[id].type && (G.soc.bells[G.room] || 0) < 2) {
+      _say(`${name} taps the till: somebody has to count the money. (Cashiers do go, ` +
+        "sometimes — for the right customer, on the right night. The bell defines both.)");
+      return;
+    }
   }
   if (!_flag("act1Done")) {
     _say("And take her where? You have no room key, sand in your shoes, and a " +
@@ -1595,6 +1622,7 @@ function _doSendMoney(arg) {
   if (!amt || amt <= 0) { _say("How much? (SEND <amount> TO <name>)"); return; }
   if (amt > G.money) { _say(`The app regrets to inform you: ฿${G.money} available, ฿${amt} dreamed of.`); return; }
   G.money -= amt;
+  (G.soc.given = G.soc.given || {})[id] = (G.soc.given[id] || 0) + amt; // toward a sponsor flip
   G.battery = Math.max(0, G.battery - 1);
   const bump = amt >= 500 ? 3 : amt >= 100 ? 2 : 1;
   G.soc.drinks[id] = (G.soc.drinks[id] || 0) + bump;
