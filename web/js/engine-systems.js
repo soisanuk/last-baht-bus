@@ -892,6 +892,13 @@ function _doComplain() {
 // contract doubles her confidence. Returns a scam kind or null.
 function _bfScamRoll(id, marked) {
   if (_dogEgg() === "buffalo") return null; // the dog smells the con; every barfine stays honest
+  // A drink-too-much girl doesn't need to be a shark to wreck the night — she's
+  // simply too gone by the time you leave together (the "mao" ending). The white
+  // knight, sure he'll look after her, takes her home more often and eats it more.
+  if (NPCS[id].type === "drunk") {
+    const p = (typeof _pers === "function" && _pers("whiteknight")) ? 0.75 : 0.5;
+    if (_rand() < p) return "mao";
+  }
   if (!_bfExploitable(id)) return null;
   if (_rand() >= (marked ? 0.6 : 0.3)) return null;
   const r = _rand();

@@ -1622,6 +1622,26 @@ test("Kai: the operator — a forced shark you must read; the white knight can't
   assert.match(lastOut(), /straight price[\s\S]*discount/i, "seen through, she goes straight (and dearer)");
 });
 
+test("Dew (drunk) & Nook (party): the honest ordinary types — one has teeth, one doesn't", () => {
+  assert.ok(!NPCS.dew.filler && !NPCS.nook.filler, "both promoted from filler");
+  assert.equal(NPCS.dew.type, "drunk");
+  assert.equal(NPCS.nook.type, "party");
+  // the drunk vector: barfine her and the night is often a write-off ("mao"); an
+  // ordinary girl never triggers it that way
+  let dewMao = 0, kwanMao = 0;
+  for (let i = 0; i < 40; i++) { state().rng = (i * 2654435761) >>> 0 || 1; if (_bfScamRoll("dew", false) === "mao") dewMao++; }
+  for (let i = 0; i < 40; i++) { state().rng = (i * 40503) >>> 0 || 1; if (_bfScamRoll("kwan", false) === "mao") kwanMao++; }
+  assert.ok(dewMao > 10, "the drink-too-much girl wrecks the night often");
+  assert.equal(kwanMao, 0, "an ordinary girl doesn't");
+  // Dew refuses the rescue in her own words (the anti-white-knight beat)
+  state().stage = "vacation"; state().room = "golden_dragon"; state().soc.drinks.dew = 8;
+  run("talk to dew"); out = []; run("you okay");
+  assert.match(lastOut(), /not the one you fix/i);
+  // Nook has no hidden layer — and that's honest, not a failing
+  out = []; run("talk to nook");
+  assert.match(lastOut(), /forget your name|call you handsome/i);
+});
+
 test("Kwan: the green rung — soft and simple, but self-possessed, not a dim sweet girl", () => {
   state().stage = "vacation"; state().room = "sunset_dreams";
   run("talk to kwan");
