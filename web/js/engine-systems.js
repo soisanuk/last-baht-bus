@@ -568,6 +568,22 @@ function _bfResolve(kind) {
     _say("(COMPLAIN — the mamasan is right there, and this is bad for business.)", "dim");
     return;
   }
+  if (scam === "scene") {
+    // jealousy detonates. You paid the fine and got a war instead of a night: a
+    // scene, a shove, a thrown drink, the mamasan dragging her off you. Money gone,
+    // banged up a notch, the whole bar watching.
+    G.hurt = Math.min(3, (G.hurt || 0) + 1);
+    _addHappy(-4);
+    _say(`It goes wrong before you reach the door. ${name} clocks something — a look ` +
+      "you gave the girl at the rail, a name in your phone, a ghost only she can see — " +
+      "and the sweet goes out of her like a fuse blowing. The shouting is in two " +
+      "languages and the thrown drink is in neither. A shove, a nail catching your " +
+      "cheek, and then the mamasan and two of the girls have her by the arms and you " +
+      "by the shoulder, steering you out into the soi. Your ฿" + price + " bought that. " +
+      "You're barred here for the night, and you'll feel the scratch tomorrow.", "alert");
+    _kickOut();
+    return;
+  }
   if (scam === "barhop" || scam === "wsparty") {
     G.bfSeq = { id, kind: scam, fine: price, spent: 0, room: G.room };
     G.pendingEnc = scam === "barhop" ? "bfhop" : "bfparty";
@@ -898,6 +914,13 @@ function _bfScamRoll(id, marked) {
   if (NPCS[id].type === "drunk") {
     const p = (typeof _pers === "function" && _pers("whiteknight")) ? 0.75 : 0.5;
     if (_rand() < p) return "mao";
+  }
+  // A volatile girl: the night can detonate into a jealousy scene — a shouting match,
+  // a thrown drink, sometimes a slap and the mamasan hauling her off you. The white
+  // knight, in deeper and slower to leave, eats it more often.
+  if (NPCS[id].type === "volatile") {
+    const p = (typeof _pers === "function" && _pers("whiteknight")) ? 0.6 : 0.4;
+    if (_rand() < p) return "scene";
   }
   if (!_bfExploitable(id)) return null;
   if (_rand() >= (marked ? 0.6 : 0.3)) return null;
@@ -1694,6 +1717,22 @@ function _selfiesFor(id) {
 // girls with distinct art); term.js resolves the pic — the engine only needs the cap.
 function _selfieCap(e) { return typeof e === "string" ? e : (e && e.cap) || ""; }
 
+// The moneypit's asks — always another emergency, the number always higher. Not a
+// scam exactly (some are even true); just a bottomless need pointed at a soft target.
+const _MONEYPIT_ASKS = [
+  "mama go hospital 😢 need 2000 this time. only you i can ask 🙏",
+  "landlord come today 😭 i short 3500... you help little bit? i pay back promise promise",
+  "phone break AGAIN 😩 4000 for new one, i cannot work without it na 💔",
+  "brother crash motorbike 😰 family need 5000 emergency. you my only good man 😢🙏",
+  "aiyo big problem, i tell you when i see you 😭 but i need 8000 quick. you the only one 💔",
+];
+function _moneypitText(id) {
+  const wk = typeof _pers === "function" && _pers("whiteknight");
+  const i = wk ? Math.min(_MONEYPIT_ASKS.length - 1, 2 + Math.floor(_rand() * 3))
+               : Math.floor(_rand() * 3);
+  _pushMsg(id, _MONEYPIT_ASKS[i]);
+}
+
 // She just sends a photo, no words — files to the gallery on read.
 function _maybePhotoText(id) {
   const caps = _selfiesFor(id);
@@ -1753,6 +1792,9 @@ function _maybeIncomingText() {
   }
   // a lady who keeps photos sometimes just sends one, out of the blue
   if (_selfiesFor(id).length && _rand() < 0.25) { _maybePhotoText(id); buzz(); return; }
+  // a moneypit contact turns nearly every text into an ask, and the numbers climb;
+  // the white knight gets steered to the top of the list and can't say no.
+  if (NPCS[id].type === "moneypit") { _moneypitText(id); buzz(); return; }
   const name = NPCS[id].name, t = _bondTier(id), roll = _rand();
   if (t >= 3) { // her farang: longing, jealousy, the real ones — no scam game on you
     if (roll < 0.45) { G.phone.invite = { id, day: G.day };

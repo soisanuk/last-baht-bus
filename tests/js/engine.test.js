@@ -1622,6 +1622,39 @@ test("Kai: the operator — a forced shark you must read; the white knight can't
   assert.match(lastOut(), /straight price[\s\S]*discount/i, "seen through, she goes straight (and dearer)");
 });
 
+test("Pink Lotus (WDG flagship): volatile (Puu) & moneypit (Belle) — the crazy bar", () => {
+  assert.equal(NPCS.puu.type, "volatile");
+  assert.equal(NPCS.belle.type, "moneypit");
+  assert.ok(!NPCS.puu.filler && !NPCS.belle.filler, "promoted from filler");
+  // volatile → the jealousy "scene" on barfine; an ordinary girl never triggers it
+  let puuScene = 0, mayScene = 0;
+  for (let i = 0; i < 40; i++) { state().rng = (i * 2654435761) >>> 0 || 1; if (_bfScamRoll("puu", false) === "scene") puuScene++; }
+  for (let i = 0; i < 40; i++) { state().rng = (i * 40503) >>> 0 || 1; if (_bfScamRoll("may", false) === "scene") mayScene++; }
+  assert.ok(puuScene > 8, "the volatile girl detonates often");
+  assert.equal(mayScene, 0, "an ordinary girl never does");
+  // moneypit → the text is always another escalating ask
+  state().phone.inbox = []; _moneypitText("belle");
+  assert.match(state().phone.inbox.at(-1).text, /\d{4}|hospital|landlord|emergency|need \d/i, "always another number");
+});
+
+test("the volatile scene resolves: you pay, you get a fight — hurt, and out on the soi", () => {
+  let fired = false;
+  for (let s = 1; s < 60 && !fired; s++) {
+    state().stage = "vacation"; state().room = "pink_lotus"; state().money = 5000; state().happy = 20;
+    state().hurt = 0; state().player.personality = "whiteknight";     // in deeper → eats it more
+    state().pendingBf = { id: "puu", st: 600, lt: 1500 };
+    state().rng = (s * 2654435761) >>> 0 || 1; out = [];
+    _bfResolve("lt");
+    if (/goes wrong before you reach the door/.test(lastOut())) {
+      fired = true;
+      assert.equal(state().hurt, 1, "banged up a notch");
+      assert.ok(state().money < 5000, "the fine is gone");
+      assert.notEqual(state().room, "pink_lotus", "hauled out to the soi");
+    }
+  }
+  assert.ok(fired, "a scene triggers and resolves cleanly");
+});
+
 test("Kluay (lazy) & Benz (vain): indie-bar human types; lazy = you spend, get little", () => {
   assert.ok(!NPCS.kluay.filler && !NPCS.benz.filler, "promoted from filler");
   assert.equal(NPCS.kluay.type, "lazy");
