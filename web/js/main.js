@@ -13,8 +13,15 @@ function _autosave() {
 // The mode-select / intro overlay shown on a fresh start (see index.html
 // #start-overlay). Continuing a saved night bypasses it.
 function _showStartMenu() {
+  // Fresh-start gateway (boot with no save, RESET, or continue→NO): clear any
+  // in-memory state so a full RESET actually re-runs character creation (the taxi
+  // intro), not just wipes the save. Without this, a lingering G.player.origin from
+  // the session makes startSoi6Mode restore it and skip the intro straight to the
+  // Queen Vic. (The automatic in-game resets — _act1Fail, new week — still keep
+  // identity on purpose; this only affects the explicit fresh-start paths.)
+  newGame();
   const ov = document.getElementById("start-overlay");
-  if (!ov) { newGame(); engineIntro(); _autosave(); _term.renderChips(); return; } // safety net
+  if (!ov) { engineIntro(); _autosave(); _term.renderChips(); return; } // safety net
   document.getElementById("start-menu").hidden = false;
   document.getElementById("start-intro").hidden = true;
   ov.hidden = false;

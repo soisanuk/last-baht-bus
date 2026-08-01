@@ -56,6 +56,14 @@ test("RESET warns first, then wipes the save on confirmation", async ({ page }) 
   // the wipe drops you back to the mode-select menu, and the save is gone
   await expect(page.locator("#start-overlay")).toBeVisible();
   expect(await page.evaluate(k => localStorage.getItem(k), SAVE_KEY)).toBeNull();
+
+  // ...and starting again RE-RUNS character creation — RESET clears the in-memory
+  // identity, so the taxi intro fires instead of silently skipping to a room (the bug).
+  await page.locator('.start-mode[data-mode="soi6"]').click();
+  await page.locator("#start-go").click();
+  await expect
+    .poll(() => page.evaluate(() => (typeof G !== "undefined" && G) ? G.pendingChoice : null))
+    .toBe("intro");
 });
 
 test("QUIT concedes a live mini-game instead of signing off", async ({ page }) => {
