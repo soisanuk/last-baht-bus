@@ -1724,6 +1724,9 @@ test("recognition spreads across the soi — the main mamas + Bert read you", ()
   // Bert (Beach Road) clocks your origin on the first meeting
   assert.match(read("stinky_bar", "bert", () => state().player.origin = "married"),
     /real version/i, "Bert clocks the returner");
+  // the warm quiet-end mamas read a few signature types too (Malila: the man who came to breathe)
+  assert.match(read("sandy_toes", "malila", () => state().player.origin = "running"),
+    /came to breathe/i, "even the quiet-end mamas have signature reads");
 });
 
 test("Soi 6 cashiers: toms refuse the wrong team, kin refuse at any price, sponsors flip for money", () => {
