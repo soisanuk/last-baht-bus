@@ -464,8 +464,9 @@ function _findPatron(word) {
   }
   for (const id of here) {
     const t = PATRONS[id].title;
-    if (t && !(G.known && G.known[id]) && (t.toLowerCase() === w ||
-        (w.length >= 4 && t.toLowerCase().includes(w)))) return id;
+    if (!t || (G.known && G.known[id])) continue;
+    const tt = _titleNorm(t), ww = _titleNorm(w);
+    if (tt === ww || (ww.length >= 4 && tt.includes(ww))) return id;
   }
   return null;
 }
@@ -726,6 +727,17 @@ function _findItem(word, where) {
   return pool.length ? pool[0][0] : null;
 }
 
+// Titles are stored with their articles ("an owlish old-timer scribbling in a
+// notebook"), but doCommand strips filler words (a/an/the/to/at/my) from ANYWHERE
+// in an arg — so a tapped title arrives as "owlish old-timer scribbling in notebook".
+// Normalise both sides the same way when matching a title, or an INTERNAL article
+// (Mort's "in a notebook") silently breaks resolution while a leading-only one
+// (Angela's "a grey…") survives.
+function _titleNorm(s) {
+  return String(s || "").toLowerCase().split(/\s+/)
+    .filter(x => !["the", "a", "an", "to", "at", "my"].includes(x)).join(" ");
+}
+
 function _findNpc(word) {
   const w = word.toLowerCase();
   const here = _npcsHere();
@@ -744,8 +756,9 @@ function _findNpc(word) {
   // while unknown; once known, the name paths above already catch them.
   for (const id of here) {
     const t = NPCS[id].title;
-    if (t && !(G.known && G.known[id]) && (t.toLowerCase() === w ||
-        (w.length >= 4 && t.toLowerCase().includes(w)))) return id;
+    if (!t || (G.known && G.known[id])) continue;
+    const tt = _titleNorm(t), ww = _titleNorm(w);
+    if (tt === ww || (ww.length >= 4 && tt.includes(ww))) return id;
   }
   return null;
 }
