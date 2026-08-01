@@ -13,14 +13,14 @@ var NEWS_FEED = [
     "d": "31 Jul 2026"
   },
   {
+    "t": "Pattaya court denies bail for suspects in five Chonburi killings",
+    "s": "Khaosod English",
+    "d": "01 Aug 2026"
+  },
+  {
     "t": "Thai Police Find Buried Motorcycle Belonging to Missing Russian Siblings",
     "s": "Kyiv Post",
     "d": "30 Jul 2026"
-  },
-  {
-    "t": "Chinese tourist safely brought ashore after falling ill during Pattaya sea trip",
-    "s": "Pattaya Mail",
-    "d": "31 Jul 2026"
   },
   {
     "t": "Russian siblings dead, suspects confess",
@@ -33,19 +33,24 @@ var NEWS_FEED = [
     "d": "30 Jul 2026"
   },
   {
-    "t": "Pattaya five-day manhunt ends with shocking confession in Russian siblings case",
+    "t": "Police detain two men in hunt for missing Russian siblings",
+    "s": "Pattaya Mail",
+    "d": "30 Jul 2026"
+  },
+  {
+    "t": "Chinese tourist safely brought ashore after falling ill during Pattaya sea trip",
     "s": "Pattaya Mail",
     "d": "31 Jul 2026"
   },
   {
-    "t": "Two men arrested in hunt for young Russian siblings",
+    "t": "Missing family of three found buried near Russians",
     "s": "Bangkok Post",
-    "d": "30 Jul 2026"
+    "d": "01 Aug 2026"
   },
   {
-    "t": "Suspects confess to killing two Russians who disappeared in Thailand",
-    "s": "Meduza",
-    "d": "31 Jul 2026"
+    "t": "Malaysia suffer first loss at ASEAN Championship as Thailand climb to the top",
+    "s": "ESPN",
+    "d": "01 Aug 2026"
   },
   {
     "t": "MotoGP to begin 2027 season in Thailand",
@@ -53,19 +58,14 @@ var NEWS_FEED = [
     "d": "31 Jul 2026"
   },
   {
-    "t": "Thailand: A new Bishop for a vibrant, diverse Church",
-    "s": "Vatican News",
-    "d": "30 Jul 2026"
-  },
-  {
     "t": "Death of travel YouTuber Hlun Solo highlights hidden risks faced by Thailand’s solo creators",
     "s": "Asia News Network",
     "d": "31 Jul 2026"
   },
   {
-    "t": "Donald Trump Is Missing Thailand’s Strategic Moment",
-    "s": "The National Interest",
-    "d": "01 Aug 2026"
+    "t": "Thailand: A new Bishop for a vibrant, diverse Church",
+    "s": "Vatican News",
+    "d": "30 Jul 2026"
   },
   {
     "t": "Scientists identified a new giant dinosaur in Thailand, bigger than a Diplodocus",
@@ -76,12 +76,12 @@ var NEWS_FEED = [
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-07-31","USD":33.47,"AUD":23.49,"GBP":44.92,"EUR":38.43};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-01","temp":30,"humid":70,"code":3,"hi":31,"rain":71};
+var WX_NOW = {"date":"2026-08-01","temp":28,"humid":85,"code":3,"hi":32,"rain":71};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
-var LOTTO = {"date":"2026-07-16","first":"639214","last2":"71","front3":["683","709"],"back3":["427","746"]};
+var LOTTO = {"date":"2026-08-01","first":"932479","last2":"69","front3":["413","672"],"back3":["039","154"]};
 // XAU, plus Thai baht-weight gold (96.5%)
 var GOLD = {"usd":4044,"date":"2026-08-01","baht":64000};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":62992,"thb":2112131};
+var BTC = {"usd":63000,"thb":2112410};
