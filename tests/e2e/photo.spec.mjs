@@ -60,3 +60,28 @@ test("the gallery renders a portrait per collected photo", async ({ page }) => {
 
   expect(pageErrors).toEqual([]);
 });
+
+test("tapping a gallery photo opens the full-size lightbox, then dismisses", async ({ page }) => {
+  const pageErrors = [];
+  page.on("pageerror", e => pageErrors.push(e.message));
+  await bootIntoGame(page, INDEX_URL);
+
+  await page.evaluate(() => {
+    G.battery = 90; G.known.gift = true;
+    G.phone.photos = [{ id: "gift", turn: 1 }];
+  });
+  await page.fill("#term-in", "gallery");
+  await page.press("#term-in", "Enter");
+
+  const av = page.locator("#term-out img.pic-tap").first();
+  await expect(av).toHaveCount(1);
+  await av.click();
+
+  const overlay = page.locator("#pic-overlay.open");
+  await expect(overlay).toBeVisible();
+  expect(await overlay.locator("img").getAttribute("src")).toMatch(/portraits\/gift\.png/);
+  await overlay.click(); // click anywhere on the overlay to dismiss
+  await expect(page.locator("#pic-overlay.open")).toHaveCount(0);
+
+  expect(pageErrors).toEqual([]);
+});

@@ -212,8 +212,24 @@ const _term = (() => {
   // On the presence lines the engine's emoji becomes a portrait: the emoji
   // is the last token of the text node before each name, so strip it there
   // and drop the avatar in at the front of the name span.
+  // The photo lightbox: tap a gallery photo / texted selfie to see it full-size.
+  function _openPic(src, cap) {
+    const ov = document.getElementById("pic-overlay");
+    if (!ov || !src) return;
+    if (!ov._wired) { ov.addEventListener("click", () => ov.classList.remove("open")); ov._wired = true; }
+    ov.innerHTML = "";
+    const img = document.createElement("img");
+    img.src = src; img.alt = cap || "";
+    ov.appendChild(img);
+    if (cap) { const c = document.createElement("div"); c.className = "pic-cap"; c.textContent = cap; ov.appendChild(c); }
+    ov.classList.add("open");
+  }
+
   function _addAvatars(div, text) {
     if (!/^(Here: |At the rail: |Gallery — |📷 )/.test(text)) return;
+    // Gallery rows and texted selfies are the COLLECTION — their photos enlarge on
+    // tap. The Here/rail avatars are just presence markers, so they stay inert.
+    const enlargeable = /^(Gallery — |📷 )/.test(text);
     for (const kw of div.querySelectorAll('.kw[data-k="npc"], .kw[data-k="patron"]')) {
       const id = _portraitId(kw.dataset.k, kw.dataset.v);
       if (!id) continue;
@@ -225,6 +241,12 @@ const _term = (() => {
       const av = pic
         ? _avatarSrc("portraits/pics/" + pic + ".png", "kw-av", "portraits/" + id + ".png")
         : _avatar(id, "kw-av");
+      if (enlargeable) {
+        av.classList.add("pic-tap");
+        av.style.cursor = "zoom-in";
+        const cap = kw.dataset.v;
+        av.addEventListener("click", e => { e.stopPropagation(); _openPic(av.getAttribute("src"), cap); });
+      }
       kw.insertBefore(av, kw.firstChild);
     }
   }
