@@ -44,11 +44,17 @@ function _barfinePrices(bt, id) {
 // everyone honest — they play a newbie they can get away with, nobody else.
 function _bfShark(id) {
   if (POPULAR_GIRLS.includes(id)) return false;
-  if (NPCS[id].c4 === 2) return false; // the new girls play it straight
+  if (NPCS[id].c4 === 2) return false;            // the new girls play it straight
+  if (NPCS[id].type === "operator") return true;  // an authored shark, by design
   return _hh(id, 97) % 100 < 35;
 }
 function _bfExploitable(id) {
-  return _bfShark(id) && _favor(id) < 6 && !_wingman();
+  if (!_bfShark(id)) return false;
+  if (_wingman()) return false;
+  // The white knight is the perfect mark: he over-invests and can't read the tells,
+  // so bonding never buys him the safety a savvy punter earns at favor >= 6.
+  if (typeof _pers === "function" && _pers("whiteknight")) return true;
+  return _favor(id) < 6;
 }
 
 // Some girls are a bar's prized DRAW — new, small, pretty, worth keeping on the
