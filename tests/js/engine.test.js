@@ -2315,6 +2315,16 @@ test("watching the soi: the balcony's first-time tone-setter, then it varies; th
   assert.doesNotMatch(lastOut(), /third-floor rail|recliner/i, "not the balcony copy");
 });
 
+test("a venue's own name, tapped from inside it, doesn't walk you to your room", () => {
+  // "Queen Vic Inn" (the pub) substring-collides with "Your Room — Queen Vic Inn",
+  // so from inside the pub it used to route upstairs. Now: you're standing in it.
+  state().hotel = "queenvic"; state().room = "queen_vic";
+  state().visited = state().visited || {}; state().visited.queen_vic = true;
+  out = []; run("travel queen vic inn");
+  assert.match(lastOut(), /standing in it/i, "no navigation");
+  assert.equal(state().room, "queen_vic", "you stayed put");
+});
+
 test("a hotel room's dead-direction refusal is indoor-appropriate, not a street line", () => {
   // qv_room only exits `down` — trying OUT used to give the street pool ("shuttered
   // shophouses, a parked Click"), nonsense from a third-floor room.
