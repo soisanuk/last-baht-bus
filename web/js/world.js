@@ -4438,6 +4438,85 @@ const NPCS = {
     ],
   },
 
+  // ── TAN — the driver, the fixer, the hub (the payoff of the whole web) ──────
+  // Your airport driver from the intro, now a findable NPC at the mouth of Soi 6.
+  // Every origin's quest dropped a fragment pointing here without naming him; nobody
+  // joins the dots but the player. Tan's own dialogue escalates with how many clues
+  // you've gathered, culminating in a near-confirmation he is the syndicate's quiet
+  // man at the Orchid good table — delivered as free advice, never once stated. Kept
+  // deliberately never-obvious: on run 1 he's a helpful driver; on replay he's the
+  // spider. Known from the intro (you rode in with him), so he shows as "Tan".
+  tan: {
+    name: "Tan", th: "ต้น", emoji: "🚕",
+    room: "soi6_street",
+    desc: "Your airport driver, leaning on a plain grey sedan at the mouth of the soi as though he never " +
+      "drove off — mid-thirties, neat, a polo shirt you would forget the instant you looked away. Six years " +
+      "in Ohio for a film degree that paid nothing and taught him everything about how a shot is framed. " +
+      "\"I drive and I fix,\" he says, and both are true, and neither is the whole of it. The most forgettable " +
+      "man on Soi 6 — which, on Soi 6, is its own kind of power.",
+    dialogue: [
+      { text: "\"Ha — my airport friend.\" Tan comes off the car, genuinely pleased, or doing pleased so well " +
+          "it makes no difference. \"Still got your wallet? ...Mostly. Good. Most of you I drop once and never " +
+          "see again. The ones I see twice—\" a warm shrug \"—those are the interesting ones.\" He tips his " +
+          "chin at the neon swallowing the soi. \"So. You are finding your feet. Anything you need, you " +
+          "remember what I told you in the car: you have my number.\"",
+        short: "\"My airport friend. Still got your wallet? ...Mostly. Anything you need — you have my number.\"",
+        asks: { key: "finding", q: "\"Tell me true—\" the easy grin, the eyes a half-beat behind it \"—this town, is it what you came for? Or is it turning out to be something else?\"" } },
+
+      { topic: "fix", text: "\"What can I fix?\" He says it like the question delights him. \"A ride. A room. A " +
+          "visa man who actually answers his phone. A problem that needs to quietly become not-a-problem. A " +
+          "door that is closed to you—\" the smallest smile \"—and open to me.\" He lets that hang a half-beat " +
+          "too long, then laughs it off the way you'd wave off smoke. \"Small things, my friend. I am only a " +
+          "driver. But I drive everybody, and everybody, sooner or later, needs a small thing.\"",
+        short: "\"A ride, a room, a visa man, a door that's closed to you and open to me. Small things. But everybody needs a small thing.\"" },
+
+      { topic: "drive", text: "\"Six years in Ohio. Film school.\" He says the state like the punchline it " +
+          "became. \"You learn to frame a shot, light a face, tell a lie the camera believes. Then you come " +
+          "home and there is no film industry, so—\" the shrug \"—you drive. But you never stop seeing the " +
+          "frame, my friend. Who is really in the shot. Who is standing just outside it, where the camera does " +
+          "not think to look.\" A pleasant, bottomless smile. \"THAT part paid. The English paid. The rest was " +
+          "tuition.\"",
+        short: "\"Ohio, film school — frame a shot, who's in it, who's standing just outside where the camera don't look. That part paid.\"" },
+
+      // The hub reveal — unlocks once you've met a couple of the archetypes he drove.
+      { topic: "others", when: (st, G) => ["doyle", "wayne", "roy", "macca", "pete", "rob", "barry"]
+          .filter(id => G.known && G.known[id]).length >= 2,
+        text: "\"The others?\" A knowing tilt. \"The detective. The Australian with the bar he should not " +
+          "buy. The old one who remembers too much. The quiet one who booked under a name that is not his. The " +
+          "golfer who has never once found the course.\" He recites them like a man reading a passenger " +
+          "manifest, because that is precisely what he is doing. \"I drove every one of them, my friend. From " +
+          "the airport. This whole soi came to town in my back seat, one at a time, telling me everything " +
+          "before we reached Second Road.\" The grin. \"You want to know a town, you don't ask the mayor. You " +
+          "ask the driver. The driver hears it all — and the driver is the one man they forget is even in the " +
+          "room.\"",
+        short: "\"I drove every one of them — the detective, the Australian, the old one, the runner, the golfer. The whole soi came to town in my back seat. You want to know a town, ask the driver.\"" },
+
+      // Good-table deflection — the smooth close, before you've circled it enough.
+      { topic: "table", when: (st, G) => ["orchidReported", "nameKept", "oldDaysHeard", "wrongShot", "nomineeWarned"]
+          .filter(f => _flag(f)).length < 3,
+        text: "\"The good table.\" The warmth stays on his face while something behind it goes very still and " +
+          "very patient. \"Some tables you do not ask about, my friend. Not the detective. Not the blogger who " +
+          "keeps writing his little articles. Not you.\" A beat. \"Not even me.\" And he changes the subject so " +
+          "smoothly you almost don't feel the door shut. \"Now — you eat yet? You never eat. Come, I know a " +
+          "place.\"",
+        short: "\"Some tables you don't ask about, my friend. Not even me.\" The door shuts so smoothly you almost don't feel it." },
+
+      // The near-confirmation — once the fragments add up. He never says the words.
+      { topic: "table", when: (st, G) => ["orchidReported", "nameKept", "oldDaysHeard", "wrongShot", "nomineeWarned"]
+          .filter(f => _flag(f)).length >= 3,
+        text: "For a long moment Tan simply looks at you, and the airport grin is nowhere to be found. \"You " +
+          "have been busy. The Orchid. The old man's stories. A name a driver had no way to know.\" He counts " +
+          "your evenings back to you without hurry, and you understand, with a small cold drop, that he has " +
+          "known each piece as you gathered it. \"You are asking about a quiet man. A man the whole room bends " +
+          "toward and no one can name.\" He leans in, still perfectly pleasant, and that is the most " +
+          "frightening thing about him. \"So here is the one piece of advice I will ever give you for nothing: " +
+          "quiet men stay quiet for a reason. And some of them—\" he pats the roof of his very ordinary car, " +
+          "twice \"—drive taxis.\" Then the grin snaps back on like a switched light. \"ANYWAY. You need a " +
+          "ride, any hour, you call me. But you knew that already.\"",
+        short: "\"You are asking about a quiet man the whole room bends toward and no one can name. Quiet men stay quiet for a reason — and some of them drive taxis.\" The grin snaps back." },
+    ],
+  },
+
   doug: {
     name: "Doug", emoji: "🥃",
     room: "stinky_bar",
@@ -7494,7 +7573,7 @@ const _FILLER_HOSTESSES = [
   ["Rung","รุ้ง","lucky_tiger"], ["Oat","โอ๊ต","lucky_tiger"],
   ["Ton","ต้น","silk_rose"], ["Nid","นิด","silk_rose"], ["Wa","หว้า","silk_rose"],
   ["Noon","นุ่น","jasmine_garden"], ["Prae","แพร","jasmine_garden"],
-  ["Tan","ตาล","gold_rush"], ["Tik","ติ๊ก","gold_rush"],
+  ["Taan","ตาล","gold_rush"], ["Tik","ติ๊ก","gold_rush"],
   ["Pui","ปุ้ย","starlight_bar"], ["Mild","มายด์","starlight_bar"],
   ["Aump","อั้ม","rabbit_hole"], ["Guitar","กีตาร์","rabbit_hole"],
   ["Namtip","น้ำทิพย์","lucky_charm"], ["Bella","เบลล่า","lucky_charm"],
