@@ -179,7 +179,7 @@ function newGame() {
     itNpc: null,         // last person addressed — the antecedent for "her/him/them" (see _resolveActor)
     convoQ: null,        // a question the partner has put to YOU, awaiting a reply: {id,key} (see _convoAsk/_convoAnswer)
     convoIdx: null,      // index of the partner's last-delivered node — its `choices` are the live action-choices (see _convoChoices)
-    player: { said: {} },// what you've told NPCs about yourself (home, dream, …) — memory for reactions/lie-catching
+    player: { said: {}, origin: null, personality: null, orientation: null },// what you've told NPCs + WHO YOU ARE (origin/personality/orientation, picked in the taxi intro; persists across Act One resets)
     faction: { wdg: 0, samson: 0, indie: 0, syndicate: 0 }, // standing with the powers (see _align) — only moves when you ACT, never for declining
     itemLoc: Object.fromEntries(
       Object.entries(ITEMS).map(([id, it]) => [id, it.location])),
@@ -307,6 +307,14 @@ function _rand() {
 
 function _flag(f) { return !!G.flags[f]; }
 function _setFlag(f) { G.flags[f] = true; }
+
+// Who the player chose to be in the taxi intro. Readable predicates for dialogue
+// gates (when(st,G) => _isOrigin("pi")) and courtship routing. Before the intro
+// runs they're null, so every check is false — a save with no identity behaves
+// exactly as before.
+function _isOrigin(id) { return G.player && G.player.origin === id; }
+function _pers(id) { return G.player && G.player.personality === id; }
+function _orient(id) { return G.player && G.player.orientation === id; }
 
 // Pick a pool entry at random but never the one shown last (the IF "at random"
 // default — pure random() clusters and droughts). `key` namespaces the one-deep
