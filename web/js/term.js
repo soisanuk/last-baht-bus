@@ -57,6 +57,12 @@ const _term = (() => {
   }
 
   function decorate(text) {
+    // The taxi-ride intro is a pure numbered-choice modal — its answers come from
+    // the chip bar, and its prose names entities (Tan the driver, "Golf" the origin
+    // colliding with Golf the hostess) that must NOT become taps: tapping submits
+    // "talk to tan" / "talk to golf", which the modal rejects. Render it plain.
+    if (typeof G !== "undefined" && G && G.pendingChoice === "intro")
+      return _escapeHtml(text).replace(/\{\{([\s\S]*?)\}\}/g, "$1");
     let html = _escapeHtml(text);
     // exits line: every token is a direction you can walk
     if (/^Exits: /.test(text)) {

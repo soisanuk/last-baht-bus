@@ -3591,6 +3591,11 @@ const _INTRO_STEPS = [
 
 function _taxiIntro(after) {
   G.introAfter = after || "beach";  // which scenario opens once you've said who you are
+  // Enter the modal BEFORE printing any prose, so the frontend suppresses
+  // tap-decoration on the whole intro (Tan the driver, "Golf" the origin, etc. —
+  // they'd otherwise tap into "talk to tan"/"talk to golf" the numbered modal rejects).
+  G.pendingChoice = "intro";
+  G.introStep = 0;
   _say("THE LAST BAHT BUS", "win");
   _say("a Pattaya misadventure · Soi Sanuk universe", "dim");
   _say("═══════════════════════════════════", "dim");
@@ -3603,8 +3608,6 @@ function _taxiIntro(after) {
     "for a film degree. Now I drive, and I fix — turns out the English was the only " +
     "part of the degree that pays.\" He finds your eye in the mirror. \"Two hours, na. " +
     "Might as well know who I'm dropping off.\"");
-  G.pendingChoice = "intro";
-  G.introStep = 0;
   _introPrompt();
 }
 

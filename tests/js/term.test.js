@@ -27,6 +27,19 @@ test("character and bar names get the kw wrap; longest name wins", () => {
   assert.ok(_term.decorate("Madam Oy owns the place.").includes(kw("Madam Oy", "npc")));
 });
 
+test("the taxi intro suppresses all tap-decoration (Tan/Golf don't become 'talk to' chips)", () => {
+  // Tan is a roster NPC and Golf is a hostess, so both names decorate everywhere —
+  // but in the numbered-choice intro modal a tap submits "talk to tan"/"talk to golf"
+  // and gets rejected. While pendingChoice==="intro", decorate() renders plain.
+  const line = "\"Tan,\" he says. 7) Golf. With the APAC team.";
+  G.pendingChoice = "intro";
+  const inIntro = _term.decorate(line);
+  assert.ok(!inIntro.includes("data-k="), "nothing taps during the intro");
+  assert.ok(inIntro.includes("Tan") && inIntro.includes("Golf"), "the text still prints");
+  G.pendingChoice = null;
+  assert.ok(_term.decorate(line).includes("data-k="), "outside the intro, names decorate normally");
+});
+
 test("_picFor maps a photo caption to its distinct frame, else null (portrait fallback)", () => {
   // a paid-pic caption → its frame stem (term.js renders portraits/pics/<stem>.png)
   assert.equal(_term.picFor("wilai", "you want see the back?? 😏 turn around just for you 👙🍑 Ruby red"), "wilai_pic3");
