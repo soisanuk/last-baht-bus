@@ -29,12 +29,24 @@ function _barfinePrice(bt, id) {
 // ×1.5, and Soi 6 — a volume business that hates losing a girl for a whole
 // night — quotes a prohibitive early LT, sometimes more than a go-go fine.
 // After midnight the collapse flattens everything: same fine either way.
+// The sharp-operator mama running THIS room takes a quiet house cut on the fine —
+// the subtle extraction the girls are too obvious for. Savvy players notice her bar
+// runs a touch dearer; that's the whole point of a good mamasan.
+function _roomMamaOperator() {
+  const mama = _npcsHere().find(x => NPC_ROLES[x] === "mamasan");
+  return !!(mama && NPCS[mama].type === "operator");
+}
 function _barfinePrices(bt, id) {
-  const st = _barfinePrice(bt, id);
-  if (G.nightTurn >= 60) return { st, lt: st };
-  const mult = bt === "soi6" ? (G.nightTurn < 30 ? 3 : 2) :
-    bt === "gogo" ? 1.5 : bt === "gents" ? 1.5 : 1.75;
-  return { st, lt: Math.round(st * mult / 50) * 50 };
+  let st = _barfinePrice(bt, id);
+  let lt;
+  if (G.nightTurn >= 60) lt = st;
+  else {
+    const mult = bt === "soi6" ? (G.nightTurn < 30 ? 3 : 2) :
+      bt === "gogo" ? 1.5 : bt === "gents" ? 1.5 : 1.75;
+    lt = Math.round(st * mult / 50) * 50;
+  }
+  if (_roomMamaOperator()) { st = Math.round(st * 1.1 / 50) * 50; lt = Math.round(lt * 1.1 / 50) * 50; }
+  return { st, lt };
 }
 
 // Which girls run games on a mark? MOST don't — it's the experienced
