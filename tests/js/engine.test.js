@@ -2315,6 +2315,18 @@ test("watching the soi: the balcony's first-time tone-setter, then it varies; th
   assert.doesNotMatch(lastOut(), /third-floor rail|recliner/i, "not the balcony copy");
 });
 
+test("a tapped title with an internal article still resolves (doCommand strips a/an/the anywhere)", () => {
+  state().room = "queen_vic"; state().mode = "soi6"; state().day = 1; state().nightTurn = 10;
+  // Mort's patron title is "an owlish old-timer scribbling in a notebook" — the
+  // internal "a" gets filtered out of the arg, so the chip used to dead-end.
+  out = []; run("talk to an owlish old-timer scribbling in a notebook");
+  assert.match(lastOut(), /Mort/i, "the tapped patron title resolves despite the stripped internal article");
+  // and an NPC title with an internal article (Doyle: "nursing a soda water")
+  state().player.origin = "monger"; // Doyle active
+  out = []; run("talk to a watchful older farang nursing a soda water");
+  assert.match(lastOut(), /Doyle|clocks you/i, "same for an NPC title");
+});
+
 test("a venue's own name, tapped from inside it, doesn't walk you to your room", () => {
   // "Queen Vic Inn" (the pub) substring-collides with "Your Room — Queen Vic Inn",
   // so from inside the pub it used to route upstairs. Now: you're standing in it.
