@@ -2297,6 +2297,24 @@ test("blackout: the ninth bottle ends the night rough and broke, near where you 
   assert.match(lastOut(), /film simply stops/i);
 });
 
+test("RESTART re-runs character creation in the CURRENT mode (Soi 6 stays Soi 6)", () => {
+  // The bug: RESTART did newGame()+engineIntro() unconditionally, dumping a Soi 6
+  // challenge player onto the beach/Act One. It must re-open the mode you're in.
+  state().mode = "soi6"; state().player.origin = "monger"; state().room = "qv_room";
+  state().flags.act1Done = true;
+  run("restart");
+  assert.equal(state().pendingChoice, "intro", "the taxi intro re-runs");
+  assert.equal(state().introAfter, "soi6", "and it re-opens the Soi 6 week, not the beach");
+  assert.equal(state().player.origin, null, "identity is cleared for the re-pick");
+  // Full game: RESTART re-runs the taxi toward the beach opening, keeping the record
+  newGame(); state().player.origin = "pi"; state().act1Best = 4; state().act1Tries = 2;
+  run("restart");
+  assert.equal(state().pendingChoice, "intro", "taxi re-runs in the full game too");
+  assert.equal(state().introAfter, "beach", "toward the beach opening");
+  assert.equal(state().act1Best, 4, "the personal-best record survives the restart");
+  assert.equal(state().act1Tries, 2, "and the tries count");
+});
+
 test("Act One is do-or-die: dawn without room 412 hard-resets to the beach", () => {
   // three milestones down the critical path, then the night runs out
   state().flags.knowWasHere = true;

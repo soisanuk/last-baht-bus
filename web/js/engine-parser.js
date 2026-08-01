@@ -3466,7 +3466,14 @@ function doCommand(input) {
     case "score": _doScore(); break;
     case "hint": case "hints": _doHint(); break;
     case "help": case "?": _say(G.mode === "soi6" ? _HELP_SOI6 : _HELP, "dim"); break;
-    case "restart": { const b = G.act1Best || 0, t = G.act1Tries || 0; newGame(); G.act1Best = b; G.act1Tries = t; engineIntro(); return; } // keep the critical-path record + hint unlock
+    case "restart": {
+      // RESTART = start over from character creation, IN THE CURRENT MODE. Was
+      // beach-only (newGame resets mode to null), which wrongly dropped a Soi 6
+      // challenge player onto the beach/Act One. Clearing identity re-runs the taxi
+      // intro; keep the Act One record + hint unlock on the full-game path.
+      if (G.mode === "soi6") { G.player = null; startSoi6Mode(); return; } // re-pick + fresh Soi 6 week
+      const b = G.act1Best || 0, t = G.act1Tries || 0; newGame(); G.act1Best = b; G.act1Tries = t; engineIntro(); return;
+    }
     default:
       // bare Thai phrase typed directly
       if (matchThaiPhrase(lower)) { _doSay(lower); break; }
