@@ -1199,6 +1199,20 @@ function _flirtUnwelcome(id, name) {
   _noteActor(id);
 }
 
+// A ladyboy hostess. For a bi player she's a full courtship option (proceed); for a
+// straight one, a gracious pass — and SHE reads YOU and declines, so her agency stays
+// intact and it never plays as the punter rejecting her. Never a gag.
+const _LADYBOY_PASS = [
+  n => `${n} clocks you clocking her and is already three steps ahead. "Not for you, tilac — no problem. I know my customer, and you are not him." No hurt in it; she's been read a thousand times and long since stopped minding which way it goes. "Plenty girls here. Go, be happy."`,
+  n => `A slow, knowing smile. "You didn't know? Now you know." ${n} gives you the beat to decide, and reads the answer off your face before you find it. "Is okay, tilac — you are not the first, and I am not offended. The ladies are that way." A graceful tilt of the head, and she turns to a customer looking for exactly her.`,
+];
+function _ladyboyGate(id) {
+  if (!NPCS[id] || !NPCS[id].ladyboy) return false; // not a ladyboy → proceed
+  if (typeof _orient === "function" && _orient("bi")) return false; // open mind → a real option
+  _say(_pickVary(_LADYBOY_PASS, "lbpass")(NPCS[id].name));
+  return true;                                       // straight player: a gracious pass
+}
+
 function _doSocial(kind, targetWord) {
   const w = (targetWord || "").replace(/^with /, "").trim();
   const here = _npcsHere();
@@ -1290,6 +1304,9 @@ function _doSocial(kind, targetWord) {
 
   // a hostess who bats for the other team gets the wrong-team let-down, not the tiers
   if (NPCS[id].orientation === "gay") { _flirtUnwelcome(id, name); return; }
+  // a ladyboy: welcomed courtship for a bi player, a gracious pass for a straight one
+  // (she reads you and declines — agency intact). Bi → falls through to the tiers.
+  if (_ladyboyGate(id)) return;
   // the bra you bought her makes fondling "more interesting" — one tier warmer
   const braBump = (kind === "fondle" && G.soc.bra && G.soc.bra[id]) ? 2 : 0;
   const net = _favor(id) - SEV[kind] + braBump;
