@@ -663,6 +663,11 @@ const _ORCHID_DEFLECT = [
 ];
 
 function _doTalk(arg, topic) {
+  _doTalkBody(arg, topic);
+  // surface the player's response options in the prose, every conversational turn
+  if (_convoActive()) _convoPrompt(_convoActive());
+}
+function _doTalkBody(arg, topic) {
   arg = (arg || "").trim();
   // Pronoun / bare target → the person already in play (scope resolution). A
   // patron antecedent routes straight to _patronTalk; an NPC id flows on as the
@@ -803,8 +808,9 @@ function _runChoice(id, c) {
   for (const f of c.sets || []) _setFlag(f);
   if (c.fx) c.fx(st, G);
   if (c.text) _say(_fillSaid(c.text));
-  if (c.topic) _doTalk(_convoName(id), c.topic); // jump: delivers that node + its choices
-  else G.convoIdx = null;                          // terminal — choices consumed
+  if (c.topic) { _doTalk(_convoName(id), c.topic); return; } // jump: delivers that node + its choices (+ prompt)
+  G.convoIdx = null;                               // terminal — choices consumed
+  if (_convoActive()) _convoPrompt(_convoActive()); // re-show the palette after the beat
 }
 // Did the player pick one of the partner's live action-choices? Matches a chip
 // tap (exact lowercased label), a number, or a typed substring. Kept fairly
@@ -863,6 +869,29 @@ function _convoResolve(lower) {
   const id = _convoActive();
   if (id) { _doTalk(_convoName(id), _convoTopic(lower)); return true; }
   return false;
+}
+
+// The player's half of the conversation, surfaced in the PROSE — not just the chip
+// bar. Without this a typing player reads an NPC monologue with no visible way to
+// answer, so the two-way exchange reads one-way. Mirrors _chipSet's talk palette
+// exactly (same options, same order) so prose and chips agree; CAPS-in-parens makes
+// each one tappable via the command-hint idiom, keeping mobile/desktop at parity.
+// Dim, and printed at the end of every in-conversation turn.
+function _convoPrompt(id) {
+  if (!id || _convoActive() !== id) return;
+  // An apostrophe breaks a CAPS-in-parens run into two dead kws ("YOU'RE" →
+  // "YOU" + "RE"), so strip it — the tap command loses the apostrophe too, but
+  // _convoPickChoice normalizes apostrophes out when matching, so it still fires.
+  const CAP = s => s.toUpperCase().replace(/['']/g, "");
+  const opts = [];
+  const acts = _convoChoices();
+  for (const c of acts.slice(0, 3)) opts.push(CAP(c.label));
+  for (const t of _convoTopics(id).slice(0, acts.length ? 2 : 4)) opts.push(CAP(t));
+  opts.push("COMPLIMENT", "JOKE");
+  if (_npcState(id).trust >= 3) opts.push("TEASE");
+  if (NPCS[id] && NPC_ROLES[id] === "hostess") opts.push("FLIRT");
+  opts.push("GOODBYE");
+  _say("(" + opts.join(" · ") + ")", "dim");
 }
 
 function _doWai(arg) {
