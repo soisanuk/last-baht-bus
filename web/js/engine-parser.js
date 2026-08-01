@@ -34,6 +34,44 @@ const _LAZY_DRINK_LINES = [
   n => `${n} takes the ฿${LADY_DRINK} drink, gives you a smile with the wattage turned right down, and lets the silence finish her shift.`,
   n => `"Thank you na." That is, it turns out, the whole of it — ${n} isn't unkind, she's just not going to work for ฿${LADY_DRINK}.`,
 ];
+// Bar etiquette: a girl already sitting with another customer declines a lady drink
+// from you — poaching is a scene nobody asked for. Insist (send it again) and she'll
+// take it, money being money, and that's when her customer starts to turn.
+const _BUSY_DECLINE = [
+  n => `${n} gives you a gracious little smile and the smallest shake of the head — she's sitting with someone, and a drink from a second man is a scene nobody wants. "Thank you, na. Maybe later." The 'later' is manners, not a promise.`,
+  n => `The waitress carries your offer over; ${n} glances at the man already beside her, then back, and declines it soft. "I am with customer now, tilac. Is not polite." She means the etiquette — and she's right about it.`,
+  n => `${n} looks up, clocks that she's already got company, and waves the drink off with an apologetic wince. "Sorry sorry — not now. You see I am busy, na?" The man beside her has noticed you noticing.`,
+];
+const _BUSY_INSIST = [
+  n => `You send it again, and this time ${n} takes it — money is money, and you left her no graceful way to say no twice. She sips fast, not looking at you, very aware of the man beside her, who has gone quiet in the particular way that isn't calm.`,
+  n => `${n} accepts the second offer with a thin smile and an apology aimed sideways — at the customer whose evening you've just walked into. He sets his glass down a shade too precisely.`,
+];
+function _girlBusy(id) {
+  if (NPC_ROLES[id] !== "hostess") return false;   // mamas/cashiers aren't "with a customer"
+  const r = ROOMS[_npcRoom(id)];
+  if (!r || r.region !== "Soi 6") return false;    // the crowded soi is the etiquette context
+  if (_convoActive() === id) return false;         // she's with YOU right now
+  if ((G.soc.drinks[id] || 0) > 0) return false;   // already your acquaintance tonight
+  const block = G.day + ":" + Math.floor((G.nightTurn || 0) / 10); // stable per hour-ish
+  return _hh(id + ":" + block, 61) % 100 < 25;     // ~1 in 4 un-engaged girls is taken
+}
+function _poachAnger(id) {
+  const name = NPCS[id].name;
+  const boils = _rand() < (_pers("whiteknight") ? 0.6 : 0.4); // the WK doesn't read the room
+  if (boils) {
+    _say(`The man beside ${name} is on his feet before her glass is down. This is the part ` +
+      "where it becomes your problem: a chest, a finger, a voice raised in a language you " +
+      "half-follow — and the mamasan moving fast to get between you before security does it " +
+      "less gently. Out on the soi you go, and lucky it's only that.", "alert");
+    if (_rand() < 0.3) G.hurt = Math.min(3, (G.hurt || 0) + 1); // sometimes a shove lands
+    _addHeat(3);   // → kicked out
+    return;
+  }
+  _say(`The man beside ${name} has gone quiet in the way that isn't calm — jaw working, glass ` +
+    "set down too precisely. You bought his whole attention for one lady drink; on this soi " +
+    "that has started fights over less. Push it again and it stops being a look.", "alert");
+  _addHeat(2);
+}
 const _NO_EXIT = [
   "You can't go that way.",
   "That's a wall, tilac — the soi doesn't run that way.",
@@ -1290,6 +1328,20 @@ function _doBuy(arg) {
     const id = nameW ? _findNpc(nameW) : girlsHere[0];
     if (!id || !NPC_ROLES[id]) { _say(nameW ? "She's not working this bar." : "Nobody here to buy one for."); return; }
     if (G.money < LADY_DRINK) { _say(`Lady drinks are ฿${LADY_DRINK}. You have ฿${G.money}. The maths is not on your side.`); return; }
+    // she's already sitting with someone: a polite decline first, then — if you insist —
+    // she takes it and her customer starts to turn.
+    if (_girlBusy(id)) {
+      G.soc.declined = G.soc.declined || {};
+      const insisting = (id in G.soc.declined) && G.turns - G.soc.declined[id] <= 30;
+      if (!insisting) { G.soc.declined[id] = G.turns; _say(_pickVary(_BUSY_DECLINE, "busyd")(NPCS[id].name)); return; }
+      delete G.soc.declined[id];
+      G.money -= LADY_DRINK;
+      G.soc.drinks[id] = (G.soc.drinks[id] || 0) + 1;
+      _say(`${_pickVary(_BUSY_INSIST, "busyi")(NPCS[id].name)} (฿${G.money} left.)`);
+      _addHappy(-1);
+      _poachAnger(id);
+      return;
+    }
     G.money -= LADY_DRINK;
     // a lazy girl banks the drink but rarely the warmth — favor sticks only ~40%.
     // (only lazy girls consume the extra die, so nothing else's determinism moves.)

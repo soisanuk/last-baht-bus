@@ -1622,6 +1622,24 @@ test("Kai: the operator — a forced shark you must read; the white knight can't
   assert.match(lastOut(), /straight price[\s\S]*discount/i, "seen through, she goes straight (and dearer)");
 });
 
+test("bar etiquette: a girl with another customer declines your lady drink; insist and he turns", () => {
+  state().stage = "vacation"; state().room = "pink_lotus"; state().money = 5000;
+  let busy;
+  for (let nt = 20; nt <= 55 && !busy; nt += 10) {
+    state().nightTurn = nt;
+    busy = _npcsHere().find(id => NPC_ROLES[id] === "hostess" && _girlBusy(id));
+  }
+  assert.ok(busy, "some hour has a Soi 6 girl sitting with another customer");
+  // first offer: a polite decline, nothing spent
+  run("buy drink for " + NPCS[busy].name);
+  assert.match(lastOut(), /with customer|maybe later|I am busy|not polite/i, "she declines gracefully");
+  assert.equal(state().money, 5000, "no money moves");
+  // insist: she takes it, and her customer starts to turn
+  out = []; run("buy drink for " + NPCS[busy].name);
+  assert.equal(state().money, 4850, "the second one she takes");
+  assert.match(lastOut(), /the man beside/i, "you've bought his whole attention");
+});
+
 test("Soi 6 mamas: sharp operators take a quiet house cut; beer-bar mamas run warm", () => {
   assert.equal(NPCS.nee.type, "operator", "the WDG flagship mama is an operator");
   assert.ok(!NPCS.bussaba.type, "the beer-bar mama is not");
