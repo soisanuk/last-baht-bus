@@ -2772,7 +2772,8 @@ const NPCS = {
     dialogue: [
       { th: "เหนื่อยไหม", rom: "nueai mai",
         text: "\"You look tired,\" she says, and somehow it's the kindest thing anyone's said to you all night. She sets a paper crane by your hand. \"For luck. The soi makes everyone lucky once.\"",
-        short: "She sets another paper crane by your hand. \"For luck.\"" },
+        short: "She sets another paper crane by your hand. \"For luck.\"",
+        asks: { key: "girlfriend", q: "She folds, not looking up, in no hurry. \"You have somebody? Home, waiting?\" It is not the sale question — she seems to want to know. \"Kwan think everybody here miss somebody. Even the loud one.\"" } },
       { topic: "wallet", notFlags: ["hasWallet"],
         text: "She considers this, folding without looking down. \"Soi Buakhao,\" she says finally. \"The mamasans there know everything that moves through this town. Candy Bar — the mamasan there, she's the one.\" She adds the finished crane to the row." },
       { topic: "pajama", text: "She does not look up from the crane she is folding. " +
@@ -2781,6 +2782,23 @@ const NPCS = {
         "\"Last month Kwan make all the girls wear the pajama. Pink, with little " +
         "cloud pattern.\" Another pause. \"The owner say no. The owner is wrong.\" " +
         "She begins a new crane with complete serenity." },
+      // the cranes — homesick hands making one quiet thing in the noise; the green
+      // rung (simple words, reaches for a word and doesn't find it) hiding a settled mind
+      { topic: "crane", text: "\"My grandmother teach me. In the village — rain come, no work, we fold all day, " +
+        "talk and fold.\" She adds one to the row. \"Here, when the soi too loud, Kwan fold. Make one quiet " +
+        "thing.\" She looks for a word, does not find it, folds instead. \"The men think cute. For Kwan it is " +
+        "only... quiet. That is enough.\"",
+        short: "\"My grandmother teach me. When the soi too loud, Kwan make one quiet thing.\"" },
+      // home — two layers. surface: where she's from, the plain homesickness. bond 2:
+      // the quiet plan out — agency, and the sharp line under the soft one.
+      { topic: "home", bond: 2, text: "\"Kwan not stay here forever. Two year more, maybe three.\" She folds, " +
+        "calm. \"Then Kwan go home, open little coffee shop. Small. Quiet. No neon, no music — only the " +
+        "mountain.\" A crane goes down like a full stop. \"People say Kwan dream too small. Kwan think — my " +
+        "dream not small. Just quiet.\"",
+        short: "\"Two year more, then home — a little coffee shop, no neon. Not a small dream. A quiet one.\"" },
+      { topic: "home", text: "\"Nan. Far up — very green, very quiet, mountain everywhere.\" A small smile, then " +
+        "it goes. \"Here, no mountain. All concrete, all noise. Too loud for Kwan.\" She folds. \"But Kwan get " +
+        "used to. Everything, you get used to.\"" },
     ],
   },
 

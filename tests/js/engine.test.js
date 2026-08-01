@@ -1605,6 +1605,21 @@ test("Pia: same surface for everyone, the person comes up only if you look (two-
   assert.match(lastOut(), /sorry face/i, "told plainly, not milked");
 });
 
+test("Kwan: the green rung — soft and simple, but self-possessed, not a dim sweet girl", () => {
+  state().stage = "vacation"; state().room = "sunset_dreams";
+  run("talk to kwan");
+  assert.match(lastOut(), /everybody here miss somebody/i, "her gentle, un-sales ask");
+  out = []; run("crane");
+  assert.match(lastOut(), /grandmother teach me[\s\S]*quiet/i, "homesick hands, plain feeling");
+  out = []; run("home");
+  assert.match(lastOut(), /you get used to/i, "stranger: homesickness rendered plain, no violin");
+  // a regular earns the plan under the softness — agency + the sharp reframe
+  state().soc.drinks.kwan = 8; state().talked.kwan = ""; state().convo = null;
+  run("talk to kwan");
+  out = []; run("home");
+  assert.match(lastOut(), /coffee shop[\s\S]*not small\. Just quiet/i, "her quiet plan, and the line under it");
+});
+
 test("Wilai: a different rung from Pia — the showwoman, and she reads your personality", () => {
   state().stage = "vacation"; state().room = "ruby_kiss";
   // a white knight gets punctured on sight — personality gates the greeting (anti-victim)
