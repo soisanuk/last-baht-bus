@@ -805,6 +805,7 @@ const _CONVO_TOPIC_RULES = [
   [/\btom\b|are you.*tom|lesbian|you gay|the ladies/,                            "tom"],
   [/\bsponsor\b|your man|who take care|klaus|the boyfriend/,                     "sponsor"],
   [/the ring|promise ring/,                                                      "ring"],
+  [/ladyboy|kath?oey|were you born|are you.*(girl|woman|real)/,                  "ladyboy"],
   [/military|armed forces|the forces|you serve|were you in/,                     "navy"],
   [/ninet(y|ies)|1990s|the 90s/,                                                 "90s"],
   [/nightlife|the scene/,                                                        "scene"],

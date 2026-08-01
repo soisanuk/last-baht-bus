@@ -3291,6 +3291,56 @@ const NPCS = {
     ],
   },
 
+  // ── Ladyboy hostesses at the WDG bars ────────────────────────────────────────
+  // ladyboy:true → for a bi player they're full courtship options; for a straight
+  // player, a gracious pass where SHE reads YOU and declines (agency intact — see
+  // _ladyboyGate). Written as full people, never a gag. At the flagship it's on
+  // brand: "White Dish love a full menu."
+  bebe: {
+    name: "Bebe", th: "บีบี", emoji: "💅", ladyboy: true,
+    room: "pink_lotus",
+    desc: "Six feet of engineered glamour in heels that make it seven, sharper-tongued than the whole bar and " +
+      "twice as funny. Ladyboy, and not hiding it for a second — the confidence is the whole act, and the act " +
+      "is magnificent.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Well, HELLO.\" She looks you over like a menu she's decided about. \"Yes, I am ladyboy — we " +
+          "save time, you and me. Now: you are curious, or you are lost, or you are exactly where you want to " +
+          "be. I like all three. I only respect the third.\" A dazzling, dangerous smile.",
+        short: "\"Yes, I am ladyboy — we save time. Curious, lost, or exactly where you want to be?\"" },
+      { topic: "ladyboy", text: "\"Since sixteen I know. Since eighteen I do something about it.\" Matter-of-" +
+        "fact, no invitation to pity. \"My family—\" a flick of the wrist, done with the subject \"—they come " +
+        "around. Money help them come around. Now they cash the transfer and don't ask what bar.\" A bright, " +
+        "hard laugh. \"Same as every girl here, na? Only I look better doing it.\"" },
+      { topic: "girls", text: "\"The real girls?\" Fond, and merciless. \"They love me and they hate me. I get " +
+        "the customer who want the fantasy turn up to eleven — the show, the confidence, the mouth. They get " +
+        "the boyfriend experience. Different product, same shop.\" A wink. \"I outsell half of them, and Nee " +
+        "know it. That is why the flagship keep a ladyboy. Variety, tilac — White Dish love a full menu.\"" },
+    ],
+  },
+  poy: {
+    name: "Poy", th: "พอย", emoji: "🌸", ladyboy: true,
+    room: "golden_dragon",
+    desc: "Soft-featured and softly spoken, and you would not know unless she told you — which, being decent, " +
+      "she does, early, before anyone wastes an evening. Tired of the two reactions, hoping for a third.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Hello. Sit if you like.\" Gentle, a little braced — the manner of someone who has learned to " +
+          "get the hard part out of the way. \"I tell you now, so nobody feel stupid later: I am ladyboy. You " +
+          "can stay, you can go, both okay. I just don't like the surprise. The surprise never go well, for " +
+          "anybody.\"",
+        short: "\"I tell you now so nobody feel stupid later: I am ladyboy. Stay or go, both okay.\"" },
+      { topic: "ladyboy", text: "\"Two reaction, always.\" She counts them on soft fingers. \"The man run, " +
+        "angry, like I trick him — I told you at hello, but okay. Or the man get too excited, like I am a " +
+        "secret he found. Both make me tired.\" A small, hopeful look. \"Sometime, not often, a man just talk " +
+        "to me like a person. That one I remember. That one I keep the seat for.\"",
+        short: "\"Two reaction, always — run angry, or too excited. Sometime a man just talk to me like a person.\"" },
+      { topic: "family", text: "\"Isan, like everybody. My mother know, my father pretend not to.\" No drama, " +
+        "just the shape of it. \"I send money home same as my sisters. The money spend the same, na — the bank " +
+        "don't ask who I am. Funny, the money is the one thing that never care.\"" },
+    ],
+  },
+
   fon: {
     name: "Fon", th: "ฝน", emoji: "🌺",
     room: "jasmine_garden",
@@ -6631,7 +6681,7 @@ const NPC_ROLES = {
   kat: "hostess", may: "hostess", dear: "hostess",
   kluay: "hostess", benz: "hostess", puu: "hostess", belle: "hostess",
   praewa: "hostess", nangfah: "hostess", tabtim: "hostess", chaba: "hostess",
-  pukky: "hostess", somo: "hostess", nina: "hostess",
+  pukky: "hostess", somo: "hostess", nina: "hostess", bebe: "hostess", poy: "hostess",
   joy: "hostess", fon: "hostess", gift: "hostess", kwan: "hostess",
   nong: "hostess", pim: "hostess", bee: "hostess", jane: "hostess", mercedes: "hostess", kratae: "hostess",
   nira: "hostess", mind: "hostess", pia: "hostess", wilai: "hostess",
