@@ -1622,6 +1622,24 @@ test("Kai: the operator — a forced shark you must read; the white knight can't
   assert.match(lastOut(), /straight price[\s\S]*discount/i, "seen through, she goes straight (and dearer)");
 });
 
+test("Nangfah: the spark in the crowd — a real plan, and no man is a financial strategy", () => {
+  state().stage = "vacation"; state().room = "kitten_corner"; state().soc.drinks.nangfah = 8;
+  run("talk to nangfah");
+  out = []; run("your book");
+  assert.match(lastOut(), /accounting|degree/i, "the real plan under the going-out clothes");
+  out = []; run("plan");
+  assert.match(lastOut(), /not a financial strategy/i, "she rejects the rescue outright — agency, not a victim");
+});
+
+test("the whole Soi 6 hostess cast is hand-authored — no procedural filler left", () => {
+  const soi6Hostesses = Object.keys(NPCS).filter(id =>
+    NPC_ROLES[id] === "hostess" &&
+    ROOMS[NPCS[id].room || (NPCS[id].bars || [])[0]]?.region === "Soi 6");
+  const stillFiller = soi6Hostesses.filter(id => NPCS[id].filler);
+  assert.deepEqual(stillFiller, [], "every Soi 6 girl is a specific, authored person");
+  assert.ok(soi6Hostesses.length >= 20, "the full cast is present");
+});
+
 test("Pink Lotus (WDG flagship): volatile (Puu) & moneypit (Belle) — the crazy bar", () => {
   assert.equal(NPCS.puu.type, "volatile");
   assert.equal(NPCS.belle.type, "moneypit");
