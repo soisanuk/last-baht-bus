@@ -2940,6 +2940,38 @@ const NPCS = {
     desc: "The flagship's mamasan: still, precise, a tablet where another mama keeps a smile. She runs Pink " +
       "Lotus like the asset it is on White Dish's books, and she priced you before you sat down.",
     dialogue: [
+      // Nee reads your MANNER the instant you sit — the operator mama's whole craft.
+      // One gated greeting per personality (a player always has exactly one after the
+      // intro, so one fires; the plain welcome below is the pre-intro fallback).
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _pers("charmer"),
+        text: "\"A charmer.\" Nee's read is instant and unbothered. \"Good — for me. The charmer spend to be " +
+          "liked, and liked is the one thing I sell that never run out of stock.\" She has already chosen the " +
+          "girl who will believe you the most beautifully. \"Sit, tilac. Enjoy being adored. It is very " +
+          "reasonably priced.\"",
+        short: "\"A charmer — good, for me. You spend to be liked, and liked never runs out of stock. Sit.\"" },
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _pers("joker"),
+        text: "\"The funny one.\" Not a smile — an assessment. \"The girls will laugh, tilac. That is the job; " +
+          "they laugh at everybody. Be as funny as you like.\" The tablet does not look up. \"The bill has no " +
+          "sense of humour, and past midnight, na, neither do I. Enjoy yourself until then.\"",
+        short: "\"The funny one. The girls laugh at everybody — the bill has no sense of humour, and past midnight neither do I.\"" },
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _pers("blunt"),
+        text: "\"You say what you mean.\" A flicker of something close to respect. \"Rare, in here — everybody " +
+          "sell in a soft voice. You make my job faster: no dance, no pretend. You want, you say; I price, you " +
+          "pay.\" The measured warmth is almost genuine. \"We will get along, you and I. Briefly. And honestly.\"",
+        short: "\"You say what you mean — rare in here. You want, you say; I price, you pay. We'll get along. Briefly.\"" },
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _pers("operator"),
+        text: "\"Ahh.\" For the first time the measured warmth cracks into something real — recognition. \"You " +
+          "are working the room. Same as me.\" The tablet lowers a full inch. \"Then we will not insult each " +
+          "other, tilac. I know what you are; you know what I am; and the girls—\" a nod at the floor \"—will " +
+          "separate you from your money regardless. Enjoy the professional courtesy. It is the only thing in " +
+          "here that really is free.\"",
+        short: "\"You are working the room — same as me. We won't insult each other. The girls take your money regardless. Professional courtesy.\"" },
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _pers("whiteknight"),
+        text: "\"Oh.\" Nee's eyes soften in a way that costs her nothing and means less. \"The good one. The " +
+          "one who want to HELP.\" She has already chosen the girl — the one with the sickest buffalo and the " +
+          "saddest story on her cracked screen, the one you will not survive. \"Sit, tilac. You are going to be so " +
+          "happy here.\" A pause, precisely warm. \"And so useful.\"",
+        short: "\"The good one — the one who want to HELP.\" She's already picked the girl with the saddest story. \"You'll be so happy here. And so useful.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Welcome to Pink Lotus.\" The warmth is real and exactly measured, not a degree more. \"Sit, " +
           "enjoy. The girls will look after you. Anything the girls cannot give you — that is me.\" She has " +
@@ -2966,6 +2998,52 @@ const NPCS = {
     desc: "Golden Dragon's mamasan since before White Dish bought the paper — and she stayed on when they did, " +
       "because the numbers didn't care who owned them, and neither, in the end, does she.",
     dialogue: [
+      // Peung has worked this floor through three owners and can place a farang by the
+      // way he holds his money. One gated greeting per ORIGIN (the player always has
+      // one after the intro; the plain welcome below is the pre-intro fallback). The
+      // recognition lands even when your own archetype-NPC is deactivated — she reads
+      // YOU, not him.
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("monger"),
+        text: "\"You been here before.\" Not a question. \"Not my bar — this TOWN. Is in how you don't look " +
+          "around no more, how you already know where is the toilet in a bar you never walk into.\" A brisk, " +
+          "unbothered nod. \"Welcome back, tilac. The girls are new. The game is not.\"",
+        short: "\"You been here before — not my bar, this town. The girls are new; the game is not.\"" },
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("married"),
+        text: "\"You had a Thai wife.\" Peung says it flat, certain. \"Is in how you hold the money — careful, " +
+          "not scared. And how you say thank you to the girl, like you actually mean it.\" A shrewd tilt. \"So " +
+          "you know the song already, tilac. Which mean you know I am the second verse. Sit anyway. Knowing " +
+          "never stopped anybody.\"",
+        short: "\"You had a Thai wife — is in how you hold the money. You know the song, so you know I'm the second verse. Sit anyway.\"" },
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("business"),
+        text: "\"You are not here to drink.\" She prices the shoes, the watch, the wanting, in one pass. \"You " +
+          "are here to BUY — a bar, a piece of something, a whole new life. Everybody like you end up across a " +
+          "table from White Dish sooner or later.\" A shrug that has watched it happen. \"Do yourself a " +
+          "kindness, tilac: drink first, sign later. Much later than they tell you.\"",
+        short: "\"You're not here to drink — you're here to buy. Everybody like you ends up across a table from White Dish. Drink first, sign much later.\"" },
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("pi"),
+        text: "\"You watch the room like it owe you money.\" A long, level look, taken slowly. \"Or like " +
+          "somebody pay you to watch it. ...Was pay you.\" She lets that go on purpose, and pours the beer she " +
+          "didn't ask you about. \"Not my business, tilac. In here nobody is what they used to be — that is the " +
+          "whole product. Watch all you like. Just tip while you do it.\"",
+        short: "\"You watch the room like somebody pays you to. ...Was pay you. Not my business. Watch all you like — tip while you do.\"" },
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("pension"),
+        text: "\"A regular. A proper one.\" Approval, rare from her. \"Fixed money, long memory, no surprises — " +
+          "my favourite kind of farang.\" She tips her chin down the rail. \"The old ones there will adopt you " +
+          "before your first beer go warm. Go sit with them, tilac. They tip in stories, and the stories at " +
+          "least are free.\"",
+        short: "\"A regular, proper one — fixed money, long memory. The old ones will adopt you; they tip in stories, and those are free.\"" },
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("redundancy"),
+        text: "\"First real freedom, and money in the pocket the first time in your life — I see it, tilac, you " +
+          "are lit up like the sign outside.\" Not unkind. A warning folded into it. \"So I tell you one time, " +
+          "for free, because you remind me of my first year here too: this town LOVE exactly you. The happy " +
+          "one who cannot believe his luck. Spend slow. The luck is the bar's, not yours.\"",
+        short: "\"Lit up like the sign outside — first freedom, money in the pocket. This town loves exactly you. Spend slow; the luck is the bar's.\"" },
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("running"),
+        text: "\"You are not really here for the girls.\" Gentle, for Peung. \"You are here to be somewhere that " +
+          "is not THERE. Wherever there is.\" She sets the beer down without a bill on it, this once. \"Is " +
+          "okay, tilac. Half my customer the same. We don't ask the question in here — that is the product. " +
+          "Sit. Be nobody a while. Nobody is very comfortable, if you let it.\"",
+        short: "\"You're not here for the girls — you're here to be somewhere that is not there. Half my customer the same. Sit. Be nobody a while.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Sit, sit. Cold beer coming — you didn't ask, is fine.\" Brisk, unbothered, a woman who has run " +
           "this floor through three owners. \"Old jukebox, new app, same job: keep the men happy and the till " +

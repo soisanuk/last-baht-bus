@@ -1689,6 +1689,20 @@ test("personalities bite in the social system — charmer/joker/blunt/operator",
   assert.match(lastOut(), /Operator's instinct/, "he clocks the angle before the money moves");
 });
 
+test("mamasans read you: Nee clocks your manner, Peung clocks your origin", () => {
+  state().stage = "vacation";
+  const nee = (p) => { state().player.personality = p; state().room = "pink_lotus";
+                       state().talked = {}; out = []; run("talk nee"); return lastOut(); };
+  assert.match(nee("operator"), /working the room/i, "Nee recognises a fellow operator");
+  assert.match(nee("whiteknight"), /the good one|so useful/i, "and prices the white knight highest");
+  assert.match(nee("blunt"), /say what you mean/i, "and respects the blunt man");
+  const peung = (o) => { state().player.origin = o; state().room = "golden_dragon";
+                         state().talked = {}; out = []; run("talk peung"); return lastOut(); };
+  assert.match(peung("monger"), /been here before/i, "Peung clocks the repeat monger");
+  assert.match(peung("married"), /Thai wife/i, "and the ex-husband");
+  assert.match(peung("running"), /not really here/i, "and the man running from something");
+});
+
 test("Soi 6 cashiers: toms refuse the wrong team, kin refuse at any price, sponsors flip for money", () => {
   assert.equal(NPCS.joon.orientation, "gay", "a tom");
   assert.equal(NPCS.jun.type, "kin");
