@@ -381,6 +381,12 @@ CHARS = {
     "doug":     dict(skin=TAN, hair="combover", hc=GREY, shirt=C(0x8a3a3a), collar=True, mouth="stern", bg=BG_BAR),
     # ── Origin archetypes (the seven "who are you?" NPCs on Soi 6) ──
     "doyle":    dict(skin=TAN, hair="short", hc=GREY, shirt=C(0x6a7078), collar=True, mouth="stern", bg=BG_BAR),
+    "wayne":    dict(skin=RED, hair="short", hc=C(0x7a6a58), shirt=C(0xd88a2a), collar=True, mouth="grin", acc=["sunglasses"], bg=BG_GOGO),
+    "roy":      dict(skin=PALE, hair="balding", hc=GREY, shirt=C(0x3a6a4a), collar=True, mouth="neutral", bg=BG_BAR),
+    "macca":    dict(skin=PALE, hair="short", hc=C(0xc06a2a), shirt=C(0xc82a2a), mouth="grin", bg=BG_BAR),
+    "pete":     dict(skin=PALE, hair="short", hc=GREY, shirt=C(0x3a3a44), collar=True, mouth="stern", bg=BG_BAR),
+    "rob":      dict(skin=TAN, hair="short", hc=C(0x6a5a48), shirt=C(0x4a6a8a), collar=True, mouth="neutral", bg=BG_GOGO),
+    "barry":    dict(skin=RED, hair="combover", hc=C(0x8a7a58), shirt=C(0xe8d84a), collar=True, mouth="grin", bg=BG_GOGO),
     "powers":   dict(skin=TAN, hair="slick", hc=BLACK, shirt=C(0xe8e0d0), collar=True, mouth="grin", acc=["sunglasses"], bg=BG_GOGO),
     "nit":      lady(skin=THAI2, hair="ponytail", hc=BLACK, shirt=C(0x3a6ac0),
                      bg=BG_STREET, mouth="smile"),
