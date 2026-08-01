@@ -1622,6 +1622,23 @@ test("Kai: the operator — a forced shark you must read; the white knight can't
   assert.match(lastOut(), /straight price[\s\S]*discount/i, "seen through, she goes straight (and dearer)");
 });
 
+test("ladyboy hostesses: a bi player's real option, a straight player's gracious pass", () => {
+  assert.ok(NPCS.bebe.ladyboy && NPCS.poy.ladyboy, "both flagged ladyboy");
+  assert.ok(!NPCS.bebe.filler, "authored, at a WDG bar");
+  state().stage = "vacation"; state().room = "pink_lotus";
+  // straight player: SHE reads him and passes — agency intact, never the punter rejecting her
+  state().player.orientation = "straight";
+  run("flirt bebe");
+  assert.match(lastOut(), /not for you|not him|the ladies are that way/i, "a gracious pass");
+  state().flags.act1Done = true; state().flags.hasWallet = true;
+  out = []; run("barfine bebe");
+  assert.match(lastOut(), /not for you|not him|ladies are that way/i, "the barfine passes too");
+  // bi player: a full courtship option — flirt falls through to the normal tiers
+  state().player.orientation = "bi"; state().soc.drinks.bebe = 6;
+  out = []; run("flirt bebe");
+  assert.doesNotMatch(lastOut(), /not for you|the ladies are that way/i, "open mind → she's a real option");
+});
+
 test("Soi 6 cashiers: toms refuse the wrong team, kin refuse at any price, sponsors flip for money", () => {
   assert.equal(NPCS.joon.orientation, "gay", "a tom");
   assert.equal(NPCS.jun.type, "kin");

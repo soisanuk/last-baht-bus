@@ -309,6 +309,8 @@ function _doBarfine(arg) {
   if (!id || !NPC_ROLES[id]) { _say(arg ? "She's not working this bar." : "Barfine whom, exactly?"); return; }
   const name = NPCS[id].name, role = NPC_ROLES[id];
   if (role === "mamasan") { _say(`You cannot barfine ${name}. She IS the bar. She looks almost flattered. Almost.`); return; }
+  // a ladyboy: for a straight player, a gracious pass; for a bi player, proceed normally
+  if (_ladyboyGate(id)) return;
   // Cross Bert (go WDG) and his whole bar closes to you — the girls run on his
   // goodwill, not White Dish's, and none of them will go with the man who came
   // in to sell him out. (See Bert's iced greeting; same trigger.)

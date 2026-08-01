@@ -314,6 +314,11 @@ CHARS = {
                      mouth="neutral"),
     "joy":      lady(skin=THAI, hair="pigtails", hc=BLACK, shirt=YELN, bg=BG_BAR,
                      mouth="grin", blush=True),
+    # ladyboy hostesses (WDG bars): Bebe = glamour dialled up, Noon = soft, passes
+    "bebe":     lady(skin=THAI, hair="sleek", hc=BLACK, shirt=C(0xe01060), bg=BG_BAR,
+                     acc=["earrings", "chain"], mouth="grin"),
+    "poy":      lady(skin=THAI, hair="long", hc=BLACK, shirt=C(0xf0a0c0), bg=BG_BAR,
+                     blush=True),
     "fon":      lady(skin=THAI, hair="bob", hc=DKBRN, shirt=C(0x3a8a4a), bg=BG_BAR,
                      acc=["earrings", "flower"], blush=True),
     "gift":     lady(skin=THAI, hair="sleek", hc=BLACK, shirt=WHITE),
