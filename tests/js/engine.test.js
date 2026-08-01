@@ -1605,6 +1605,26 @@ test("Pia: same surface for everyone, the person comes up only if you look (two-
   assert.match(lastOut(), /sorry face/i, "told plainly, not milked");
 });
 
+test("Wilai: a different rung from Pia — the showwoman, and she reads your personality", () => {
+  state().stage = "vacation"; state().room = "ruby_kiss";
+  // a white knight gets punctured on sight — personality gates the greeting (anti-victim)
+  state().player.personality = "whiteknight";
+  run("talk to wilai");
+  assert.match(lastOut(), /don't need saving[\s\S]*need customer/i, "she clocks the rescuer and reframes it");
+  // any other type gets the normal showwoman patter + her qualifying ask
+  state().convo = null; state().talked.wilai = ""; state().player.personality = "charmer";
+  out = []; run("talk to wilai");
+  assert.match(lastOut(), /you have my kiss already/i, "the kiss-glass close");
+  assert.match(lastOut(), /how long you here/i, "she qualifies the lead");
+  // stool is two-layer: agency for a stranger, the real plan once bonded
+  out = []; run("stool");
+  assert.match(lastOut(), /I am the window/i, "surface: she runs the window, not a victim");
+  state().soc.drinks.wilai = 14; state().talked.wilai = ""; state().convo = null;
+  run("talk to wilai");
+  out = []; run("the window");                // → stool topic (rule)
+  assert.match(lastOut(), /I have a deposit/i, "earned: the ambition under the show");
+});
+
 test("conversations are two-way: every NPC turn surfaces the reply palette in the prose", () => {
   state().stage = "vacation"; state().room = "stinky_bar";
   run("talk to bert");
