@@ -743,6 +743,7 @@ const _CONVO_TOPIC_RULES = [
   [/\bcash\b|how much.*(make|earn|cost)|afford|expensive/,                       "money"],
   [/\bmy score\b|out of ten|rate me|how.*(you )?rate|\brating\b/,                 "rating"],
   [/\blanguages?\b|\benglish\b|\bkorean\b|\bjapan(ese)?\b|\bfrench\b|\bgerman\b|do you speak/, "language"],
+  [/front stool|the window/,                                                     "stool"],
   [/military|armed forces|the forces|you serve|were you in/,                     "navy"],
   [/ninet(y|ies)|1990s|the 90s/,                                                 "90s"],
   [/nightlife|the scene/,                                                        "scene"],

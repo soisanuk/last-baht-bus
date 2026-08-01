@@ -2865,17 +2865,42 @@ const NPCS = {
       { cap: "555 last look 🍑😘 rest you come sit my stool and see LIVE", pic: "wilai_pic4", ask: 800 },
     ],
     dialogue: [
+      // Personality-gated OPENER: she clocks a white knight from the door and
+      // punctures the rescue narrative on sight — warm, not cruel. The anti-victim
+      // theme in her mouth. Fires first for a white-knight player; else falls through
+      // to the normal showwoman greeting below. (see _pers / the White knight type)
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _pers("whiteknight"),
+        text: "\"Ohh.\" Wilai looks at you the way you read a menu you know by heart. \"You one of the nice " +
+          "one. The good man — you want to take care of somebody, I see it from the door.\" A lipstick glass " +
+          "goes into your hand, amused, not cruel. \"Tilac, listen one time: I don't need saving. I need " +
+          "customer. You want to be different from every farang in here? Be the one who know that.\" A wink. " +
+          "\"Now — you buy me drink, or you buy me drink?\"",
+        short: "\"I don't need saving, tilac. I need customer. Be the farang who know that.\"" },
+      // Normal SURFACE — the showwoman patter; the kiss-glass close before you sit.
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Ohh, handsome come to Ruby!\" A lipstick-marked glass is in your hand before you've " +
           "agreed to anything. \"See? Now you have my kiss already. You buy the drink to go with it, na? " +
           "Is only polite.\" She is laughing at you and it is somehow flattering.",
-        short: "\"You have my kiss already — now buy the drink to go with it, na?\"" },
+        short: "\"You have my kiss already — now buy the drink to go with it, na?\"",
+        asks: { key: "stay", q: "\"How long you here — one week? Two?\" She's already refilling, doing sums she won't show you. \"Okay. Then we don't waste time being shy, na. The clock, it run for both of us.\"" } },
       { topic: "lipstick", text: "\"Every glass, every night — is the brand.\" She marks a fresh one and " +
         "holds it to the mirror wall, so there are two of everything. \"The farang lose the girl but keep " +
         "the glass. Then they remember Ruby. Smart, na? Not my idea. But smart.\"" },
       { topic: "ruby", text: "\"End of the soi, we are the last loud one before the quiet.\" A shrug, a " +
         "grin. \"The girls at the quiet end are jealous of us. We are jealous of them. Same-same. Everybody " +
         "want the other bar.\"" },
+      // stool — two layers. Surface: the working woman running the window (agency,
+      // not a victim). bond 3: the real thing under the show — the deposit, the plan.
+      { topic: "stool", bond: 3, text: "She glances round, then pulls up her phone — not a photo this time, a " +
+        "screenshot. A rental listing. \"You want the real thing? Not the show. This.\" A small bar, a side " +
+        "soi. \"My name go on this lease next year. Everybody here have a dream they talk about all night. " +
+        "Me—\" she puts it away \"—I have a deposit. Front stool pay for it, one glass at a time.\"",
+        short: "\"Everybody here have a dream. Me, I have a deposit — front stool pay for it, one glass at a time.\"" },
+      { topic: "stool", text: "\"You know why I sit front stool, not the back?\" She doesn't wait. \"Front " +
+        "stool is the window. One good girl in the window, the men come in. I am the window — mama know it, " +
+        "that is why she never touch me.\" She taps the bar, proud. \"Ten year I run somebody else window. " +
+        "Not forever, na. Watch.\"",
+        short: "\"Front stool is the window. I am the window — that is why mama never touch me.\"" },
     ],
   },
   kesinee: {
