@@ -1658,6 +1658,37 @@ test("ladyboy courtship deepens with bond — Poy's third reaction, Bebe's armor
   assert.match(lastOut(), /wall|past breakfast|put it down/i, "Bebe lets the act down for a regular");
 });
 
+test("personalities bite in the social system — charmer/joker/blunt/operator", () => {
+  // the modifier helpers resolve per personality
+  state().player.personality = "charmer";
+  assert.equal(_persSocialMod("flirt"), 1, "charmer's flirt lands a tier warmer");
+  assert.equal(_persTalkOutcome("compliment", "flat"), "warm", "and his compliment always lands");
+  state().player.personality = "blunt";
+  assert.equal(_persSocialMod("flirt"), 0, "the blunt man isn't smooth");
+  assert.equal(_persTalkOutcome("compliment", "warm"), "flat", "flattery rings false from him");
+  state().player.personality = "joker";
+  assert.equal(_persTalkOutcome("joke", "flat"), "warm", "the joker's joke lands where others fall flat");
+  assert.equal(_persTalkOutcome("tease", "cool"), "warm", "banter is his native tongue");
+  state().player.personality = "operator";
+  assert.equal(_scamLean(), 0.5, "the operator reads the con — halved scam odds");
+  state().player.personality = "whiteknight";
+  assert.equal(_scamLean(), 1.5, "the white knight is in deeper — worse odds");
+
+  // integration: JOKER's joke on a cold stranger still lands warm (+happy)
+  state().stage = "vacation"; state().room = "golden_dragon";
+  state().player.personality = "joker";
+  state().soc.drinks.kai = 0; _npcState("kai").trust = 0; _npcState("kai").mood = "";
+  out = []; run("joke kai");
+  assert.match(lastOut(), /สนุก/, "warm joke → +happy even from a standing start");
+
+  // integration: OPERATOR gets the pre-pay tell on a risky (drunk-type) girl
+  state().player.personality = "operator";
+  state().flags.act1Done = true; state().flags.hasWallet = true;
+  state().soc.drinks.dew = 6;
+  out = []; run("barfine dew");
+  assert.match(lastOut(), /Operator's instinct/, "he clocks the angle before the money moves");
+});
+
 test("Soi 6 cashiers: toms refuse the wrong team, kin refuse at any price, sponsors flip for money", () => {
   assert.equal(NPCS.joon.orientation, "gay", "a tom");
   assert.equal(NPCS.jun.type, "kin");

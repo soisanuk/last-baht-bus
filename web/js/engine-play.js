@@ -1213,6 +1213,26 @@ function _ladyboyGate(id) {
   return true;                                       // straight player: a gracious pass
 }
 
+// ── Personality in the social system ───────────────────────────────────────
+// The four non-whiteknight types finally bite here (whiteknight lives in the
+// scam odds + authored openers). Charmer's flirt lands warmer; the Joker's
+// jokes/banter land where a straight man's would fall flat; the Blunt man's
+// flattery rings false (compliments don't land — but see his negotiation edge);
+// the Operator's edge is in reading scams, not in charm. All keyed off _pers.
+function _persSocialMod(kind) {
+  if (typeof _pers !== "function") return 0;
+  if (_pers("charmer") && kind === "flirt") return 1; // a charmer's flirt lands a tier warmer
+  return 0;
+}
+function _persTalkOutcome(kind, outcome) {
+  if (typeof _pers !== "function") return outcome;
+  if (_pers("charmer") && kind === "compliment" && outcome === "flat") return "warm"; // he means it, and it shows
+  if (_pers("joker") && kind === "joke" && outcome === "flat") return "warm";          // timing is his whole game
+  if (_pers("joker") && kind === "tease" && outcome === "cool") return "warm";          // banter is his native tongue
+  if (_pers("blunt") && kind === "compliment" && outcome === "warm") return "flat";     // flattery rings false from a blunt man
+  return outcome;
+}
+
 function _doSocial(kind, targetWord) {
   const w = (targetWord || "").replace(/^with /, "").trim();
   const here = _npcsHere();
@@ -1309,7 +1329,7 @@ function _doSocial(kind, targetWord) {
   if (_ladyboyGate(id)) return;
   // the bra you bought her makes fondling "more interesting" — one tier warmer
   const braBump = (kind === "fondle" && G.soc.bra && G.soc.bra[id]) ? 2 : 0;
-  const net = _favor(id) - SEV[kind] + braBump;
+  const net = _favor(id) - SEV[kind] + braBump + _persSocialMod(kind);
   const tier = net <= -3 ? 0 : net <= -1 ? 1 : net <= 1 ? 2 : net <= 3 ? 3 : 4;
   const fn = _pickVary(_SOCIAL_TEXT[kind][tier], "soc:" + kind + tier);
   _say(fn(name), tier === 0 ? "alert" : tier >= 3 ? "win" : "");
@@ -1396,6 +1416,7 @@ function _doTalkAct(kind, targetWord) {
   if (kind === "compliment") outcome = (st.dstate === "stranger" || st.trust <= 0) ? "flat" : "warm";
   else if (kind === "joke")  outcome = (st.mood === "open" || st.trust >= 2) ? "warm" : "flat";
   else                        outcome = st.trust >= 3 ? "warm" : "cool"; // tease is earned
+  outcome = _persTalkOutcome(kind, outcome); // your personality tilts how it lands
 
   _say(_pickVary(_TALK_ACT_TEXT[kind][outcome], "act:" + kind + outcome)(name),
        outcome === "cool" ? "alert" : outcome === "warm" ? "win" : "");
