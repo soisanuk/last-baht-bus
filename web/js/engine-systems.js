@@ -1361,6 +1361,15 @@ function _questWhere(at) {
     const r = ROOMS[room];
     return r ? ` ${NPCS[at].name} is at ${_barName(room)}, over in ${r.region}.` : "";
   }
+  if (PATRONS[at]) {
+    // A patron giver moves too — a shuttled regular (Glam: home bar early, walked
+    // across after 22:00) or, if hopping is ever re-enabled, an hourly drift. Read
+    // his LIVE room via _patronRoom so the clue never points at a stale bar.
+    const room = _patronRoom(at);
+    if (!room || room === G.room || _patronsHere().includes(at)) return "";
+    const r = ROOMS[room];
+    return r ? ` ${PATRONS[at].name} is at ${_barName(room)}, over in ${r.region}.` : "";
+  }
   if (ROOMS[at]) {
     if (at === G.room) return "";
     return ` That's the ${_barName(at)}, in ${ROOMS[at].region}.`;
