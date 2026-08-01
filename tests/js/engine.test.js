@@ -1622,6 +1622,18 @@ test("Kai: the operator — a forced shark you must read; the white knight can't
   assert.match(lastOut(), /straight price[\s\S]*discount/i, "seen through, she goes straight (and dearer)");
 });
 
+test("Soi 6 mamas: sharp operators take a quiet house cut; beer-bar mamas run warm", () => {
+  assert.equal(NPCS.nee.type, "operator", "the WDG flagship mama is an operator");
+  assert.ok(!NPCS.bussaba.type, "the beer-bar mama is not");
+  assert.ok(!NPCS.nee.filler && !NPCS.bussaba.filler, "both promoted from filler");
+  state().stage = "vacation"; state().nightTurn = 40;
+  state().room = "pink_lotus";
+  assert.ok(_roomMamaOperator(), "an operator runs the flagship room");
+  assert.equal(_barfinePrices("soi6", "joy").st, 750, "her 10% cut lifts the ฿700 base — the subtle mama tax");
+  state().room = "sunset_rail";
+  assert.ok(!_roomMamaOperator(), "the beer-bar mama takes no cut");
+});
+
 test("Nangfah: the spark in the crowd — a real plan, and no man is a financial strategy", () => {
   state().stage = "vacation"; state().room = "kitten_corner"; state().soc.drinks.nangfah = 8;
   run("talk to nangfah");
@@ -2392,7 +2404,9 @@ test("soi 6 barfine: upstairs, and the night carries on", () => {
   run("short time");
   assert.equal(state().room, "pink_lotus", "still on your stool");
   assert.equal(state().day, 2, "night continues");
-  assert.equal(state().money, 300);
+  // Pink Lotus's mama Nee is a sharp operator (type:"operator") — her quiet 10% house
+  // cut lifts the ฿700 base to ฿750, so ฿250 remains, not ฿300. The subtle mama tax.
+  assert.equal(state().money, 250);
   assert.match(lastOut(), /Upstairs/i);
 });
 

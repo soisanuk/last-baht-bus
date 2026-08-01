@@ -762,6 +762,8 @@ const _CONVO_TOPIC_RULES = [
   [/\bbook\b|studying|\bstudy\b|\bdegree\b|university|accounting|the textbook/,   "book"],
   [/football|soccer|liverpool|united|the match|premier league|the game\b/,       "football"],
   [/homesick|miss home|miss your home/,                                          "sad"],
+  [/the free|free drink|welcome drink|why.*free|on the house/,                   "free"],
+  [/go.?go|the gogo/,                                                            "go-go"],
   [/military|armed forces|the forces|you serve|were you in/,                     "navy"],
   [/ninet(y|ies)|1990s|the 90s/,                                                 "90s"],
   [/nightlife|the scene/,                                                        "scene"],

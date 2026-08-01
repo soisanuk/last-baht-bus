@@ -2929,6 +2929,178 @@ const NPCS = {
     ],
   },
 
+  // ── Soi 6 mamasans (promoted from _FILLER_MAMAS) ─────────────────────────────
+  // Business ladies first, less volatile than the girls. Most are sharp operators —
+  // type:"operator" adds a quiet house cut on the barfine (_roomMamaOperator) — and
+  // their dialogue names the subtle extraction ("free is the most expensive word").
+  // The go-go/WDG mamas run hard; the beer-bar mamas (Bussaba/Sopha/Malila) run warm.
+  nee: {
+    name: "Nee", th: "หนี่", emoji: "👑", type: "operator",
+    room: "pink_lotus",
+    desc: "The flagship's mamasan: still, precise, a tablet where another mama keeps a smile. She runs Pink " +
+      "Lotus like the asset it is on White Dish's books, and she priced you before you sat down.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Welcome to Pink Lotus.\" The warmth is real and exactly measured, not a degree more. \"Sit, " +
+          "enjoy. The girls will look after you. Anything the girls cannot give you — that is me.\" She has " +
+          "already chosen which girl to send, and how much you'll spend before you leave.",
+        short: "\"Welcome. The girls look after you; anything they cannot give is me.\"" },
+      { topic: "girls", text: "\"Good girls, all of them — I choose careful.\" A precise nod. \"The customer " +
+        "think he choose the girl. Mostly the mama choose the girl for the customer — the right one, for him, " +
+        "for the bill. He leave happy, I leave happy, White Dish leave happy. Everybody happy is only good " +
+        "management.\"" },
+      { topic: "free", text: "\"You wonder why the welcome drink is free.\" She does not wait for you to deny " +
+        "it. \"Because free is the most expensive word in this bar. Free drink, you stay. You stay, you buy. " +
+        "Small psychology, twenty year old, work every night.\" Fact, not confession. \"I tell you because " +
+        "knowing does not stop it. You will still stay.\"",
+        short: "\"Free is the most expensive word in this bar. Free drink, you stay; you stay, you buy.\"" },
+      { topic: "white dish", when: (st) => st.trust >= 2, text: "\"They own the paper. I run the room.\" " +
+        "Careful now. \"The app tell me the numbers — how many girl, how late, which one move where. I make the " +
+        "numbers happen. Is a job. Good pay, and I do not ask what I do not need to know.\" The tablet glows. " +
+        "\"You ask a great many questions, for a tourist.\"" },
+    ],
+  },
+  peung: {
+    name: "Peung", th: "ผึ้ง", emoji: "👑", type: "operator",
+    room: "golden_dragon",
+    desc: "Golden Dragon's mamasan since before White Dish bought the paper — and she stayed on when they did, " +
+      "because the numbers didn't care who owned them, and neither, in the end, does she.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Sit, sit. Cold beer coming — you didn't ask, is fine.\" Brisk, unbothered, a woman who has run " +
+          "this floor through three owners. \"Old jukebox, new app, same job: keep the men happy and the till " +
+          "full. Not so different.\"",
+        short: "\"Same job through three owners — men happy, till full. Sit.\"" },
+      { topic: "white dish", text: "\"White Dish bought the bar. They did not buy me — they rent me, and I let " +
+        "them.\" A shrug that has seen everything. \"Better owner, worse owner, the girls still need the shift, " +
+        "I still take my cut. You survive this business by not falling in love with who sign the cheque.\"" },
+      { topic: "free", text: "\"The beer I send you — on the house.\" A dry look. \"On the house mean on your " +
+        "next three, tilac. I am not hiding it. A mama who hide the arithmetic is a mama who does not trust her " +
+        "arithmetic.\" She almost smiles. \"Mine is very good.\"",
+        short: "\"On the house mean on your next three. I don't hide the arithmetic — mine's good.\"" },
+    ],
+  },
+  malai: {
+    name: "Malai", th: "มาลัย", emoji: "👑", type: "operator",
+    room: "sunset_dreams",
+    desc: "Soft-spoken and grandmotherly, Sunset Dreams' mamasan pours you tea and asks after your health, and " +
+      "somewhere in the warmth your wallet opens without a sound. The gentlest operator on the soi.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Ohh, you look tired — sit, sit. You eat already? You want tea?\" She fusses like your own " +
+          "auntie, and it is completely genuine, and it is also the most effective sales technique on Soi 6. " +
+          "\"My bar is a soft bar. No pressure here. You relax — you stay long.\"",
+        short: "\"You look tired — sit, tea? No pressure here. You relax, you stay long.\"" },
+      { topic: "girls", text: "\"My girls are soft girls, gentle ones — Kwan, May, the sweet type.\" A fond " +
+        "nod. \"Not every man want the loud bar, the fight for attention. Some man want kindness. Kindness—\" a " +
+        "small, knowing pause \"—also has a price. Just a quieter one.\"" },
+      { topic: "free", text: "\"The tea is free, of course.\" She pats your hand. \"Everything soft is free, " +
+        "tilac. The soft things keep you in the chair. The hard things — the drink, the fine, the tip — those I " +
+        "let you decide, all by yourself, after the tea make you comfortable.\" A grandmother's smile. " +
+        "\"Clever, na? I am a nice lady. Nice ladies are the most expensive.\"",
+        short: "\"The soft things are free — they keep you in the chair. Nice ladies are the most expensive.\"" },
+    ],
+  },
+  toi: {
+    name: "Toi", th: "ต้อย", emoji: "👑", type: "operator",
+    room: "cherry_pop",
+    desc: "Cherry Pop's mamasan — loud enough to run a loud bar, sharp enough behind it to run the numbers " +
+      "while the party roars. She sells fun by the bottle, and business is very good.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"CHERRY POP! Welcome, welcome — tonight you have fun, guarantee!\" Big energy, big smile, and a " +
+          "fast flick of the eyes that counts your table, your watch, your capacity. \"Chaba, look after this " +
+          "one! Bottle service, my friend? More fun in a bottle than a glass, everybody know.\"",
+        short: "\"Cherry Pop! Bottle service? More fun in a bottle than a glass.\"" },
+      { topic: "girls", text: "\"Chaba is my engine — she make the party, the party make the bottle sell.\" A " +
+        "businesslike nod. \"I know she drink too much. Is a cost. But a party bar need a party girl, and she " +
+        "is the best I have. I keep her on water when I can. Cannot always.\" A shrug: the math wins." },
+      { topic: "free", text: "\"Free shot for the table! Yeah!\" She pours it herself, generous, loud. Then, " +
+        "lower, just to you, dry: \"One free shot, the table order four more to keep up. Oldest trick, still " +
+        "the best. You buy fun, you buy it in a round — nobody drink alone at Cherry Pop. Nobody spend alone " +
+        "either.\"",
+        short: "\"One free shot, the table order four to keep up. Nobody spend alone at Cherry Pop.\"" },
+    ],
+  },
+  saeng: {
+    name: "Saeng", th: "แสง", emoji: "👑", type: "operator",
+    room: "ruby_kiss",
+    desc: "Ruby Kiss's mamasan, content to sit back while Wilai works the window — because a mama who's found a " +
+      "girl that good knows to stay out of her light and just count.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Welcome to Ruby. You met Wilai already? Of course you did.\" A satisfied, unhurried smile. \"I " +
+          "let her run the front. A smart mama know when to work and when to watch. With Wilai, I watch, and I " +
+          "count. Best job in the bar.\"",
+        short: "\"You met Wilai? Of course. I let her run the front — I just watch and count.\"" },
+      { topic: "wilai", text: "\"She want her own bar. I know — she think I don't.\" No malice in it. \"Good. " +
+        "When she go, it hurt my numbers a season. But a girl with a plan work harder than a girl without one, " +
+        "and I get the good years before she leave. Fair trade. I was her once, and my mama let me go too.\"" },
+      { topic: "free", text: "\"The lipstick on the glass — Wilai's idea, but I pay for the lipstick.\" She " +
+        "taps the mirror wall. \"Little cost, big return. The man keep the glass, remember the bar, come back. " +
+        "Marketing, tilac. I don't advertise. I just make sure you cannot forget us.\"",
+        short: "\"The lipstick's a little cost, big return — you keep the glass, you come back. Marketing.\"" },
+    ],
+  },
+  bussaba: {
+    name: "Bussaba", th: "บุษบา", emoji: "👑",
+    room: "sunset_rail",
+    desc: "The Shady Lady's mamasan, running a beer bar the slow honest way — no bottle-service hustle, no " +
+      "bank of go-go tricks, just cold beer, decent girls, and a chair you're welcome to keep all night.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Sit, have a cold one. No hurry here.\" An easy, weathered smile. \"Beer bar is a different " +
+          "game from the go-go. Small money, but honest money. Nobody scam nobody at my bar — I don't have the " +
+          "stomach for it, and the customer come back for exactly that.\"",
+        short: "\"Sit, cold one. Small money, honest money — nobody scam nobody here.\"" },
+      { topic: "go-go", text: "\"The go-go mamas play the deep game — the free drink that cost you, the fine " +
+        "that grow after dark.\" Mostly without judgement. \"Good business, I not deny. But I sleep good, and " +
+        "my regulars are ten-year regulars. Slow and honest is also a business. Just a smaller one.\"" },
+      { topic: "girls", text: "\"My girls, I don't push them at you. You like Pukky, talk to Pukky. You just " +
+        "want to drink and watch the football — also fine, buy nobody a drink, I don't mind.\" A shrug. " +
+        "\"Pressure is for the go-go. Here we let the beer do the work.\"" },
+    ],
+  },
+  sopha: {
+    name: "Sopha", th: "โสภา", emoji: "👑",
+    room: "bay_watch",
+    desc: "Front Row's mamasan, who put the big screens in herself and knows the league table better than half " +
+      "the punters. Runs a football bar for football people, and keeps the drama outside.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Grab a stool, game's about to start.\" A brisk nod, eyes half on the screen. \"Front Row is a " +
+          "football bar first, girl bar second. Somo pour the beer, we all shout at the referee, everybody " +
+          "happy. You want the other kind of bar, plenty on the soi. This one is for the match.\"",
+        short: "\"Football bar first, girl bar second. Grab a stool — game's starting.\"" },
+      { topic: "football", text: "\"I put the screens in myself — four, good ones, the sport package that cost " +
+        "a fortune.\" Proud of it. \"Best investment I make. A man watching his team drink beer steady two " +
+        "hour and never once cause trouble. Football is the best mamasan I ever hire.\"" },
+      { topic: "girls", text: "\"Somo is worth three go-go girls to me.\" Flat, certain. \"She don't flirt, " +
+        "don't scam, don't cry — she talk football, pour fast, the men treat her like a mate. My bar have no " +
+        "drama because my best girl have no drama. I hire for that now.\"" },
+    ],
+  },
+  malila: {
+    name: "Malila", th: "มะลิลา", emoji: "👑",
+    room: "sandy_toes",
+    desc: "The Verandah's mamasan, who runs the most easygoing bar on Soi 6 like a long Sunday lunch — Nina " +
+      "feeds the customers, Malila makes sure everyone's alright, and the money, such as it is, sees to itself.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Welcome, welcome. Nina feed you yet? She will.\" A comfortable, unhurried warmth. \"The " +
+          "Verandah is the quiet end of a loud soi. People come here to breathe. I am not going to hustle a man " +
+          "who came to breathe.\"",
+        short: "\"The Verandah is the quiet end of a loud soi. People come here to breathe.\"" },
+      { topic: "money", text: "\"Rich? No. I make enough.\" She says it like it's plenty, and for her it is. " +
+        "\"The big-money bars burn hot — big nights, big trouble, girls come and go. Mine burn low and long. My " +
+        "girls stay years. Nina been with me eight. Worth more than a good Friday, to me.\"" },
+      { topic: "girls", text: "\"I keep older girls, mostly — the ones the go-go finished with.\" No pity, just " +
+        "fact. \"They know the job, they don't make drama, they mother the customers a little. A tired man at " +
+        "the end of a hard trip, sometimes he don't want a twenty-year-old. Sometimes he want somebody kind who " +
+        "bring him soup.\"" },
+    ],
+  },
+
   fon: {
     name: "Fon", th: "ฝน", emoji: "🌺",
     room: "jasmine_garden",
@@ -6277,6 +6449,8 @@ const NPC_ROLES = {
   diamond: "mamasan", wimon: "mamasan", ampai: "mamasan", kesinee: "mamasan",
   ploy: "cashier", aek: "cashier", malee: "cashier",
   candy: "mamasan", oy: "mamasan", daeng: "mamasan", mem: "mamasan", wan: "mamasan",
+  nee: "mamasan", peung: "mamasan", malai: "mamasan", toi: "mamasan", saeng: "mamasan",
+  bussaba: "mamasan", sopha: "mamasan", malila: "mamasan",
 };
 
 // ── Generic (filler) hostesses ──────────────────────────────────────────────
@@ -6673,12 +6847,10 @@ const _FILLER_MAMAS = [
   ["Jeab","เจี๊ยบ","neon_paradise"], ["Da","ดา","club_mirage"], ["Rin","ริน","crystal_palace"],
   ["Kob","กบ","paradise_nights"], ["Koi","ก้อย","midnight_sun"], ["Ratana","รัตนา","lucky_tiger"],
   ["Waew","แวว","silk_rose"], ["Ple","เปิ้ล","jasmine_garden"], ["Orm","อ้อม","gold_rush"],
-  ["Jom","จอม","starlight_bar"], ["Nee","หนี่","pink_lotus"], ["Peung","ผึ้ง","golden_dragon"],
-  ["Malai","มาลัย","sunset_dreams"], ["Somsri","สมศรี","kinky"], ["Ratree","ราตรี","las_vegas"],
+  ["Jom","จอม","starlight_bar"], ["Somsri","สมศรี","kinky"], ["Ratree","ราตรี","las_vegas"],
   ["Wandee","วันดี","water_buffalo"], ["Somjai","สมใจ","firefly_bar"],
   ["Tui","ตุ่ย","night_heron"],
-  ["Toi","ต้อย","cherry_pop"], ["Saeng","แสง","ruby_kiss"], ["Bussaba","บุษบา","sunset_rail"],
-  ["Sopha","โสภา","bay_watch"], ["Malila","มะลิลา","sandy_toes"],
+  
 ];
 const _FILLER_CASHIERS = [
   ["Golf","กอล์ฟ","tequila_queen"], ["Air","แอร์","blue_dog"], ["Apple","แอปเปิ้ล","rock_factory"],
