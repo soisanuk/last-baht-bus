@@ -806,6 +806,7 @@ const _CONVO_TOPIC_RULES = [
   [/\bsponsor\b|your man|who take care|klaus|the boyfriend/,                     "sponsor"],
   [/the ring|promise ring/,                                                      "ring"],
   [/ladyboy|kath?oey|were you born|are you.*(girl|woman|real)/,                  "ladyboy"],
+  [/\bcigarette|ยาดม|inhaler|\byadom\b|\bciggy\b/,                                "smoke"],
   [/military|armed forces|the forces|you serve|were you in/,                     "navy"],
   [/ninet(y|ies)|1990s|the 90s/,                                                 "90s"],
   [/nightlife|the scene/,                                                        "scene"],
@@ -2507,6 +2508,35 @@ function _doShower() {
   }
 }
 
+// SMOKE is a flavor verb with a Soi 6 double meaning: to a ladyboy the word is
+// slang for something you pay for, and she hears THAT before the Marlboro. Bebe,
+// who also hates cigarette smoke, gets both jokes at once (the ยาดม comes out).
+function _doSmoke() {
+  const lb = _npcsHere().find(id => NPCS[id] && NPCS[id].ladyboy);
+  if (lb) {
+    const n = NPCS[lb].name;
+    _say(`"Smoke." ${n} lets the word hang, one eyebrow arched, enjoying your face. "You know what that mean ` +
+      "on this soi, tilac? The smoke I am famous for is not the Marlboro kind.\" A wicked, delighted beat. " +
+      "\"THAT one is extra — barfine first, and no free sample, ha. The other smoke, the cigarette—\" " +
+      (NPCS[lb].hatesSmoke
+        ? "the ยาดม is already at one nostril, a wounded inhale, a shudder"
+        : "she wrinkles her nose") +
+      " \"—THAT one you take OUTSIDE. One word, two smoke, tilac: one kill the glamour, one very good for " +
+      "business.\"", "");
+    return;
+  }
+  const hater = _npcsHere().find(id => NPCS[id] && NPCS[id].hatesSmoke);
+  if (hater) {
+    _say(`You go to light one, and ${NPCS[hater].name} materialises a ยาดม like a duellist drawing — one ` +
+      "nostril, then the other, a wounded, theatrical inhale. \"NO. Not near me — outside, the beer bar, " +
+      "anywhere but here.\" You have never seen anyone quite so personally betrayed by a packet of Marlboro. " +
+      "The cigarette goes back unlit.", "");
+    return;
+  }
+  if (_inBar()) { _say("You light one; nobody minds. It does what cigarettes do — a little worse for you, a little calmer for a minute."); return; }
+  _say("A cigarette out here on the soi, neon and noise all round. It fixes nothing; it never does. You have it anyway.");
+}
+
 // ── The ATM: pocket cash out of your account (G.bank) ───────────────────────
 // WITHDRAW <amount> at any `atm:true` room; ฿300 fee, ฿20,000/day cap. CHECK
 // BALANCE anywhere. Your card lives in the wallet, so no cash until Act One's
@@ -3415,6 +3445,7 @@ function doCommand(input) {
     case "gallery": case "photos": case "album": _doGallery(); break;
     case "call": case "dial": _doCall(arg); break;
     case "shower": case "wash": _doShower(); break;
+    case "smoke": case "cigarette": case "ciggy": _doSmoke(); break;
     case "withdraw": case "withdrawal": case "withdrawl": _doWithdraw(arg); break;
     case "atm": _doAtmVerb(); break;
     case "balance": _doBalance(); break;

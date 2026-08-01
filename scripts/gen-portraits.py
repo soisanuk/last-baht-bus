@@ -319,6 +319,8 @@ CHARS = {
                      acc=["earrings", "chain"], mouth="grin"),
     "poy":      lady(skin=THAI, hair="long", hc=BLACK, shirt=C(0xf0a0c0), bg=BG_BAR,
                      blush=True),
+    "aum":      lady(skin=THAI, hair="long", hc=DKBRN, shirt=C(0xf5b8cf), bg=BG_BAR,
+                     blush=True, mouth="smile"),
     "fon":      lady(skin=THAI, hair="bob", hc=DKBRN, shirt=C(0x3a8a4a), bg=BG_BAR,
                      acc=["earrings", "flower"], blush=True),
     "gift":     lady(skin=THAI, hair="sleek", hc=BLACK, shirt=WHITE),

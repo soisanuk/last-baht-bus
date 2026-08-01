@@ -3297,11 +3297,12 @@ const NPCS = {
   // _ladyboyGate). Written as full people, never a gag. At the flagship it's on
   // brand: "White Dish love a full menu."
   bebe: {
-    name: "Bebe", th: "บีบี", emoji: "💅", ladyboy: true,
+    name: "Bebe", th: "บีบี", emoji: "💅", ladyboy: true, hatesSmoke: true,
     room: "pink_lotus",
     desc: "Six feet of engineered glamour in heels that make it seven, sharper-tongued than the whole bar and " +
       "twice as funny. Ladyboy, and not hiding it for a second — the confidence is the whole act, and the act " +
-      "is magnificent.",
+      "is magnificent. A ยาดม inhaler is never further than her reach, in case a smoker wanders in and dares to " +
+      "light up.",
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Well, HELLO.\" She looks you over like a menu she's decided about. \"Yes, I am ladyboy — we " +
@@ -3316,6 +3317,12 @@ const NPCS = {
         "the customer who want the fantasy turn up to eleven — the show, the confidence, the mouth. They get " +
         "the boyfriend experience. Different product, same shop.\" A wink. \"I outsell half of them, and Nee " +
         "know it. That is why the flagship keep a ladyboy. Variety, tilac — White Dish love a full menu.\"" },
+      { topic: "smoke", text: "Her whole face closes like a shop at a raid. \"You smoke? Not near ME you " +
+        "don't.\" The ยาดม is already at one nostril, then the other — a theatrical inhale, a shudder of " +
+        "recovery. \"Cigarette is the ONE thing kill the glamour, tilac. It get in the hair, the dress, " +
+        "everything. I work too hard on this face to marinate it like a som tam.\" She waves the offending air " +
+        "away with a whole flat hand. \"Go smoke by the beer bar — the football men don't care. I care.\"",
+        short: "\"You smoke? Not near me — cigarette kill the glamour. Go smoke by the beer bar.\"" },
     ],
   },
   poy: {
@@ -3338,6 +3345,28 @@ const NPCS = {
       { topic: "family", text: "\"Isan, like everybody. My mother know, my father pretend not to.\" No drama, " +
         "just the shape of it. \"I send money home same as my sisters. The money spend the same, na — the bank " +
         "don't ask who I am. Funny, the money is the one thing that never care.\"" },
+    ],
+  },
+  // Aum (Kitten Corner) — the new girl, still learning to meter the smile. Soft,
+  // sweet, honest, six months in and still deciding how she feels about the job.
+  aum: {
+    name: "Aum", th: "อุ้ม", emoji: "🌷",
+    room: "kitten_corner",
+    desc: "Pretty in the soft, unstudied way that stops men mid-sentence, with a smile she gives away too " +
+      "easily for this business. New enough that the job hasn't finished teaching her its lessons yet.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Hello ka.\" A warm, slightly shy smile — she hasn't learned to meter it yet. \"You want " +
+          "company? I sit with you. I am still new, so I am not so good at the—\" a small gesture at the whole " +
+          "loud business of the bar \"—the tricks. I just talk. Is that okay?\"",
+        short: "\"I am still new — not so good at the tricks. I just talk. Is that okay?\"",
+        asks: { key: "home", q: "\"You are far from home? Me too — six month now.\" A soft, honest look. \"Some day I think I am used to it. Then some day, not at all. You know this feeling?\"" } },
+      { topic: "new", text: "\"Six month.\" She counts it like it is longer. \"My friend from home work here " +
+        "already two year — she bring me. She say the money is good, and it is, more than the factory, much " +
+        "more. She also say, 'Aum, don't give the smile for free.' I am still learning that part.\"" },
+      { topic: "home", text: "\"Roi Et. Rice, and my grandmother, and quiet.\" Her face softens all the way. \"I " +
+        "send money every month — my grandmother raise me, now is my turn. That part I don't mind. The rest—\" " +
+        "a small shrug, still figuring it out \"—the rest I am still deciding how I feel.\"" },
     ],
   },
 
@@ -6681,7 +6710,7 @@ const NPC_ROLES = {
   kat: "hostess", may: "hostess", dear: "hostess",
   kluay: "hostess", benz: "hostess", puu: "hostess", belle: "hostess",
   praewa: "hostess", nangfah: "hostess", tabtim: "hostess", chaba: "hostess",
-  pukky: "hostess", somo: "hostess", nina: "hostess", bebe: "hostess", poy: "hostess",
+  pukky: "hostess", somo: "hostess", nina: "hostess", bebe: "hostess", poy: "hostess", aum: "hostess",
   joy: "hostess", fon: "hostess", gift: "hostess", kwan: "hostess",
   nong: "hostess", pim: "hostess", bee: "hostess", jane: "hostess", mercedes: "hostess", kratae: "hostess",
   nira: "hostess", mind: "hostess", pia: "hostess", wilai: "hostess",
