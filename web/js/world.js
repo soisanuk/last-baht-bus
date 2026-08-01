@@ -3969,6 +3969,95 @@ const NPCS = {
         short: "(Phone down, voice low.) \"That table's not a topic. He decides if my number's the right number. I don't want his name.\"" },
     ],
   },
+
+  // ── Origin archetype: THE DETECTIVE ──────────────────────────────────────
+  // One of the seven "who are you?" origins, all present on Soi 6 as NPCs; the
+  // one the player picked is deactivated (_npcActive → you ARE him). Doyle is the
+  // investigative spine into the WDG/syndicate thread: a semi-retired ex-homicide
+  // detective, quietly asked to identify the MC president once word got out he'd be
+  // in Thailand. His recon quest resolves toward the OTHER man at the good table —
+  // the soft-spoken Thai everyone defers to (the syndicate seed), described in terms
+  // that recontextualise your airport driver on replay. Breadcrumb, never the name.
+  doyle: {
+    name: "Doyle", th: "ดอยล์", emoji: "🕵️",
+    room: "queen_vic",
+    origin: "pi",
+    title: "a watchful older farang nursing a soda water",
+    desc: "American, sixty, built like a retired middleweight gone comfortable. Twenty-six years " +
+      "working homicide in a city he won't name, then a private ticket — \"cheating husbands don't " +
+      "try to kill you; I like boring now.\" Drinks soda water and watches the door, out of a habit " +
+      "he's given up pretending is retired. Came to price Thailand for good; found a job following him.",
+    dialogue: [
+      { text: "The older man clocks you before you've picked a stool — top to bottom, hands and shoes, " +
+          "done in the time it takes to nod. \"Relax, force of habit. Doyle.\" Soda water, no ice melting; " +
+          "he's been nursing it. \"Twenty-six years I read rooms for a living. Can't switch it off. You " +
+          "learn more about a man from where he sits than anything he tells you.\" He tips the glass at the " +
+          "stool beside him — the one with a sightline to the door. \"Sit. I don't bite. Not for boring people.\"",
+        short: "\"Doyle.\" He reads you head to foot out of habit. \"Sit — I don't bite. Not for boring people.\"",
+        asks: { key: "here", q: "\"So.\" He turns the glass a slow quarter-turn. \"Everybody out here's answering a question they won't say out loud. What brought YOU — the girls, the money, or the getting-away?\"" } },
+
+      { topic: "doyle", text: "\"Homicide, mostly. Big-city, the kind that makes the papers and then makes " +
+          "you old.\" He says it flat, a man reporting weather. \"Put in my twenty-six, took the pension, " +
+          "got a private ticket to keep the lights on. Cheating husbands, insurance frauds, the odd runaway " +
+          "kid — nobody's trying to kill you over any of it. That's the whole appeal. I like boring now.\" " +
+          "A dry almost-smile. \"Came out here to see if a man could retire on a detective's pension. Turns " +
+          "out he can. Turns out the work followed me anyway.\"",
+        short: "\"Twenty-six years' homicide, then a private ticket. Came to retire out here. The work followed me.\"" },
+
+      // The quest hook — his 'boring' retirement snagged a job. Giver dialogue; the
+      // offer itself is surfaced by _questOffer (giver: doyle). This just frames it.
+      { topic: "job", text: "He weighs whether to say it, then does — you passed the sightline test. \"Word got " +
+          "out back home I'd be in-country. An old contact called in a marker: there's a man out here he wants " +
+          "eyes on. Patched vest, motorcycle-club president, holds court in a back room on this very soi over a " +
+          "bottle of Blue Label he never pays for.\" The glass stops turning. \"Trouble is, I'm the wrong face " +
+          "for that room — too old, too sober, too obviously what I am. But a punter wandering through, having a " +
+          "look? Nobody clocks a punter.\" He lets that sit. \"You want to be useful, and earn a few baht doing it?\"",
+        short: "\"There's an MC president in a back room off this soi. Wrong face for me. A punter, though — nobody clocks a punter.\"" },
+
+      // THE RECON REPORT — gated on having actually been inside the Orchid Room.
+      // The president is a known quantity; the find is the quiet Thai man. This is
+      // the syndicate seed + the Tan breadcrumb, delivered through the detective's
+      // eye, never joined to the driver by Doyle himself. doneFlag → _questTick pays.
+      { topic: "table", when: (st, G) => G.quests.orchid_recon === "active" &&
+          G.visited && G.visited.orchid_room && !_flag("orchidReported"),
+        sets: ["orchidReported"],
+        text: "You give him the room — the strobe, the Blue Label, the patched vest holding court. Doyle nods " +
+          "along, unsurprised; he's read the president already, a loud man is an easy read. Then you mention the " +
+          "other one. The soft-spoken Thai at the best table, unremarkable shirt, saying almost nothing — and the " +
+          "president, the patch, the whole loud room bending a careful half-inch toward him without seeming to.\n\n" +
+          "Doyle goes very still. \"Say that again. The one nobody looks straight at.\" He sets the glass down. " +
+          "\"That's the man. The president's a mascot — that one's the reason the lights stay on.\" He turns it " +
+          "over. \"Educated voice, you said. American vowels under the Thai. Watches the door same as me.\" A short, " +
+          "unamused breath. \"Men like that don't sit in rooms like that unless they own the room. And the soi. " +
+          "And the police who'd raid it.\" He slides folded notes across. \"You did good work. Forget his face — " +
+          "I mean it. That's not a man you investigate. That's a man who investigates you.\"",
+        short: "\"The soft-spoken Thai, not the president — HE'S the one the room bends toward. Forget his face. That's a man who investigates you.\"" },
+      // Before you've seen it — a nudge, no spoiler.
+      { topic: "table", when: (st, G) => !_flag("orchidReported"),
+        text: "\"The good table? That's the whole job — I need it seen, not guessed. The back room off the Pink " +
+          "Lotus, the velvet-rope one. Have your look, then come tell me who's really holding it.\"",
+        short: "\"Get inside the Orchid's back room, have a look at the good table, then come tell me who holds it.\"" },
+
+      // TAN BREADCRUMB — his 'contact here', the local who arranged his ride and put
+      // a card in his hand. The exact card from the intro's pi-origin Tan beat. Never
+      // joined to the quiet-table man by Doyle; the player joins them, on replay.
+      { topic: "contact", when: (st) => st.trust >= 1,
+        text: "\"My contact here's a local. Younger fella — studied in the States, speaks better English than I " +
+          "do, drives for a living, or says he does.\" Doyle almost smiles. \"Picked me up at the airport before " +
+          "I'd asked anyone for a ride. Had a card in my hand before I saw him reach for it. 'You need a door in " +
+          "this town, you have my number.'\" He shakes his head slowly. \"Thirty years I put men in cages. I know " +
+          "the difference between a man who drives and a man who wants you to think he drives. Haven't decided " +
+          "which he is yet.\" A beat. \"That bothers me more than I'd like.\"",
+        short: "\"My contact — young local, US-schooled, 'drives for a living.' Had his card in my hand before I asked. Haven't decided what he really is.\"" },
+
+      { topic: "retire", text: "\"Hua Hin, I was thinking. Quiet, golf, a wife who cooks — the retirement " +
+          "brochure.\" He tips his head at the window, the neon, the noise. \"Then a marker gets called and here " +
+          "I am on Soi 6 at midnight, working for beer money. Old dog, old tricks.\" The almost-smile again. " +
+          "\"Ask me in a year. If I'm still here, you'll know the town won.\"",
+        short: "\"Was going to retire quiet in Hua Hin. Instead I'm on Soi 6 working for beer money. Old dog.\"" },
+    ],
+  },
+
   doug: {
     name: "Doug", emoji: "🥃",
     room: "stinky_bar",
@@ -5522,6 +5611,21 @@ const QUESTS = {
     at: "bert",
     doneFlag: "wdgFlipTried",
     reward: { money: 2000, happy: 0 }, // WDG pays for the errand; the real price is your standing
+  },
+  // Origin quest (the detective): recon the Orchid Room's good table for Doyle.
+  // Completes by ASK DOYLE ABOUT THE TABLE once you've actually been inside the
+  // Orchid (G.visited.orchid_room, gated by the report node's `when`). The reveal
+  // is the syndicate seed; the reward's small — the real payoff is the thread.
+  orchid_recon: {
+    name: "The President's Table",
+    giver: "doyle",
+    trust: 1, // he reads you first — a sightline test — before handing over a job
+    desc: "Get eyes on the Orchid Room's good table — the back room off the Pink Lotus — and see who " +
+      "really holds it, then tell Doyle (ASK DOYLE ABOUT THE TABLE).",
+    deps: [],
+    at: "orchid_room",
+    doneFlag: "orchidReported",
+    reward: { money: 1500, happy: 4 },
   },
   sangsom: {
     name: "The Sister-Bar Run",
