@@ -591,16 +591,19 @@ function _bfResolve(kind) {
         `later you are back on your stool and the night has not even noticed you left. (฿${G.money} left.)`, "win");
       _conquestHappy(6, id);
     } else {
-      _say((price ? `฿${price} to the ledger and a` : "A") +
-        ` short walk later the short-time hotel's ceiling fan is doing its slow ` +
-        `count over the proceedings. ${name} is businesslike, cheerful, and ` +
-        "gone within the hour — a kiss on the cheek at the door, back to her " +
-        `stool before the ice in your last drink has melted. (฿${G.money} left.)`, "win");
+      const bar = _barName(G.room) || "the bar";
+      _say((price ? `฿${price} to the ledger, and a` : "A") +
+        ` short walk to a short-time hotel with a ceiling fan doing its slow count over the ` +
+        `proceedings. ${name} is businesslike and cheerful and gone within the hour — a kiss at ` +
+        `the door, and she's back on her stool at ${bar} before your ice has melted. You amble ` +
+        `back a few minutes behind her, and the night picks you up where it left off. (฿${G.money} left.)`, "win");
       _conquestHappy(5, id);
+      G.offstage = true; // the hour away — the bar's ambient (saleng, etc.) isn't your scene
       for (let i = 0; i < 6; i++) { // the hour passes; the night carries on
-        if (G.over) return;
+        if (G.over) break;
         _tick();
       }
+      G.offstage = false;
     }
     G.soc.drinks[id] = (G.soc.drinks[id] || 0) + 2; // a short-time deepens the bond a little
     return;
