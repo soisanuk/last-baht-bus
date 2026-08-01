@@ -274,7 +274,7 @@ function _salengBuy(input) {
     G.money -= price;
     if (forHer) {
       const name = NPCS[forId].name;
-      G.soc.drinks[forId] = (G.soc.drinks[forId] || 0) + 1;
+      _addBond(forId, 1);
       const REACTIONS = {
         "moo ping": `${name} takes the skewers with both hands and wais before she's even ` +
           `bitten in. "Aoy, so sweet!" She eats standing up and immediately tries to feed you one.`,
@@ -748,13 +748,13 @@ const _ENC = {
     if (/grope|grab|touch|fondle|kiss|snog|cop a feel|hand on|spank/.test(input)) {
       const lost = Math.min(G.money, 300);
       G.money -= lost;
-      G.hurt = Math.min(3, G.hurt + 1);
       _say("You put a hand where a hand should never go. Her husband is not slow and " +
         "the piwins are slower only than him. It is brief, it is one-sided, and it is " +
         "educational. You are on the pavement before the apology forms" +
         (lost ? `, ฿${lost} lighter and a rib unhappier` : ", a rib unhappier") +
         ". “Not in my town, sunshine.”", "alert");
       _addHappy(-4);
+      _hurt(1);
       return;
     }
     if (/money|baht|barfine|how much|price|\bpay\b|short time|long time|come with/.test(input)) {
@@ -1052,7 +1052,7 @@ const _ENC = {
       return;
     }
     // she runs on the apps' 'tomorrow' clock even at 1 a.m. — the wait is the tax
-    for (let i = 0; i < 4; i++) { if (G.over) return; _tick(); }
+    if (_passTime(4)) return;
     if (_rand() < 0.45) { // the honest 10/10 — the app pays out, sometimes
       G.money -= BOOK_PRICE;
       _say(`Forty minutes later she is at the door and — for once — she is exactly ` +
@@ -1145,7 +1145,7 @@ function _clubpickup(input) {
       "sure if that's what this was.");
     return;
   }
-  for (let i = 0; i < 4; i++) { if (G.over) return; _tick(); } // the night runs long
+  if (_passTime(4)) return; // the night runs long
   _say("No lady drinks, no barfine, no mamasan doing arithmetic over your shoulder — just the two of " +
     "you, a late-night mookata, and hours of talk that feels like the realest thing to happen to you in " +
     "this town. She comes back to your room like it's the most natural thing in the world. It is a " +

@@ -63,7 +63,7 @@ function _poachAnger(id) {
       "where it becomes your problem: a chest, a finger, a voice raised in a language you " +
       "half-follow — and the mamasan moving fast to get between you before security does it " +
       "less gently. Out on the soi you go, and lucky it's only that.", "alert");
-    if (_rand() < 0.3) G.hurt = Math.min(3, (G.hurt || 0) + 1); // sometimes a shove lands
+    if (_rand() < 0.3 && _hurt(1)) return; // sometimes a shove lands hard enough for the clinic
     _addHeat(3);   // → kicked out
     return;
   }
@@ -334,7 +334,7 @@ function _arriveAt(to) {
   const inv = G.phone.invite;
   if (inv && inv.day === G.day && _npcRoom(inv.id) === G.room) {
     G.phone.invite = null;
-    G.soc.drinks[inv.id] = (G.soc.drinks[inv.id] || 0) + 1;
+    _addBond(inv.id, 1);
     _say(`${NPCS[inv.id].name} spots you from across the room and lights up like ` +
       "payday — the kept seat is produced, a cold towel appears, and for one whole " +
       "minute you are the only customer who has ever existed. Showing up counts " +
@@ -1155,7 +1155,7 @@ function _doGive(itemWord, npcWord) {
   const SALENG_GIFTS = ["saleng_sandals", "saleng_heels", "saleng_lingerie"];
   if (SALENG_GIFTS.includes(id) && NPC_ROLES[npc]) {
     G.itemLoc[id] = null;
-    G.soc.drinks[npc] = (G.soc.drinks[npc] || 0) + 1;
+    _addBond(npc, 1);
     const name = NPCS[npc].name;
     const GIFT_TEXT = {
       saleng_sandals: {
@@ -1359,7 +1359,7 @@ function _doBuy(arg) {
       if (!insisting) { G.soc.declined[id] = G.turns; _say(_pickVary(_BUSY_DECLINE, "busyd")(NPCS[id].name)); return; }
       delete G.soc.declined[id];
       G.money -= LADY_DRINK;
-      G.soc.drinks[id] = (G.soc.drinks[id] || 0) + 1;
+      _addBond(id, 1);
       _say(`${_pickVary(_BUSY_INSIST, "busyi")(NPCS[id].name)} (฿${G.money} left.)`);
       _addHappy(-1);
       _poachAnger(id);
@@ -1369,7 +1369,7 @@ function _doBuy(arg) {
     // a lazy girl banks the drink but rarely the warmth — favor sticks only ~40%.
     // (only lazy girls consume the extra die, so nothing else's determinism moves.)
     const _lazy = NPCS[id].type === "lazy";
-    if (!_lazy || _rand() < 0.4) G.soc.drinks[id] = (G.soc.drinks[id] || 0) + 1;
+    if (!_lazy || _rand() < 0.4) _addBond(id, 1);
     _say(`${_pickVary(_lazy ? _LAZY_DRINK_LINES : _LADY_DRINK_LINES, _lazy ? "lazydrink" : "ladydrink")(NPCS[id].name)} (฿${G.money} left.)`);
     _addHappy(1);
     if (Object.keys(G.soc.drinks).length >= 4 && !G.soc.butterflyTeased) {
@@ -1913,13 +1913,13 @@ function _queerHostility(input) {
         "door — with two of the other numbers vaulting the bench behind him. Whatever you came in to prove, you " +
         "prove the exact opposite, briefly and at speed, and land on the soi wearing your own bad idea.", "alert");
     }
-    G.hurt = Math.min(3, G.hurt + 2);
+    G.hurt = Math.min(HURT_CAP, G.hurt + 2);
     _addHeat(3);
     _addHappy(-8);
     _say(`(Banged up, and barred from the whole Supertown strip — ${cab ? "the hosts" : "the queens"} heard ` +
       "about it before you hit the ground.)", "dim");
     G.room = out;
-    if (G.hurt >= 3) { _endNight("hurt"); return true; }
+    if (G.hurt >= HURT_CAP) { _endNight("hurt"); return true; }
     _describeRoom(true);
     return true;
   }
@@ -2260,7 +2260,7 @@ function _doTip(arg) {
   const name = NPCS[id].name;
   if (amount >= 100) {
     const bump = amount >= 300 ? 2 : 1;
-    G.soc.drinks[id] = (G.soc.drinks[id] || 0) + bump;
+    _addBond(id, bump);
     _say(`฿${amount}, folded small and passed with a wai. ${name} makes it vanish ` +
       `with a conjurer's economy, and the news crosses the bar by whole-room ` +
       `telepathy before your hand is back in your pocket. (฿${G.money} left.)`);
