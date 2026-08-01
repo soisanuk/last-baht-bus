@@ -1394,6 +1394,8 @@ function _doTalkAct(kind, targetWord) {
     if (outcome === "warm") { st.trust = Math.min(5, st.trust + 1); _addHappy(1); }
     else if (outcome === "cool") st.trust = Math.max(0, st.trust - 1);
   }
+  // still talking to them → re-show the response palette in the prose
+  if (typeof _convoPrompt === "function" && _convoActive() === id) _convoPrompt(id);
 }
 
 // ─ The ceiling game ─

@@ -1579,6 +1579,27 @@ test("lady drinks warm the outcome, tier by tier", () => {
   assert.match(lastOut(), /takes her time|halfway|holds it/i, "leaned into at five");
 });
 
+test("conversations are two-way: every NPC turn surfaces the reply palette in the prose", () => {
+  state().stage = "vacation"; state().room = "stinky_bar";
+  run("talk to bert");
+  // the player's options are PRINTED (not left to the chip bar), tappable CAPS-in-parens
+  assert.match(lastOut(), /\(.*GOODBYE\)/, "a reply palette closes the turn");
+  assert.match(lastOut(), /COMPLIMENT/, "verbal moves are offered");
+  assert.match(lastOut(), /LEAGUE/, "and his open topics");
+  // asking a topic keeps the conversation open — palette re-shows
+  out = []; run("league");
+  assert.match(lastOut(), /GOODBYE\)/, "still two-way after a topic");
+  // a live action-choice appears in the palette too
+  out = []; state().room = "golden_dragon"; _convoEnd();
+  run("talk to gavin"); if (typeof _setFlag === "function") _setFlag("heardWdgPitch");
+  out = []; run("talk to gavin");
+  // apostrophe stripped so the CAPS run stays one tappable kw (tap still resolves)
+  assert.match(lastOut(), /TELL HIM YOURE IN/, "the standing-moving choice is surfaced");
+  // leaving closes it — no palette after goodbye
+  out = []; run("goodbye");
+  assert.doesNotMatch(lastOut(), /GOODBYE\)/, "the palette is gone once you take your leave");
+});
+
 test("dialogue choices: Bert's WDG-flip is a pick-a-side fork; effects land, closes once taken", () => {
   // (rely on the beforeEach's newGame — it also suppresses random saleng/peddler
   // events that would otherwise swallow the follow-up command mid-test)
