@@ -2308,11 +2308,11 @@ const _MAP_SOI6 = `    THE BEACH ~~~ BEACH RD ─── WEST ──────�
 function _doMap() {
   if (G.mode === "soi6") {
     _say("Soi 6 — one street, west to east, the beach at its head:", "dim");
-    _say(_MAP_SOI6, "dim");
+    _say(_MAP_SOI6, "map");
     return;
   }
   _say("The bar-mat map of greater Pattaya, not to scale, like all bar maps:", "dim");
-  _say(_MAP, "dim");
+  _say(_MAP, "map");
 }
 
 // PHOTO <someone here> is the collectible: it saves their portrait to the phone
