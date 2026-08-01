@@ -4058,6 +4058,344 @@ const NPCS = {
     ],
   },
 
+  // ── Origin archetype: THE INVESTOR (the mark) ────────────────────────────
+  // Being love-bombed by WDG at the Golden Dragon. He thinks he's buying a bar;
+  // he's signing as the disposable farang face of one the "silent local partner"
+  // actually controls — the nominee structure Tan (and the intro's business-origin
+  // line, "which farang really owns his 'own' bar") already flagged. The PARTNER
+  // topic gushes the seed regardless; the warn only lands once you've seen how WDG
+  // works. Never names the partner.
+  wayne: {
+    name: "Wayne", th: "เวย์น", emoji: "🕶️",
+    room: "golden_dragon",
+    origin: "business",
+    title: "a sunburnt farang holding court with a bottle service he didn't need to buy",
+    desc: "Australian, forty-five, a Gold Coast tan and a shirt with the top three buttons making a " +
+      "decision. Made real money in earthmoving back home and has decided, with the total confidence of " +
+      "a man who's never been conned, that a Soi 6 bar is 'basically the same game, mate — plant, cashflow, " +
+      "location.' The girls have his order memorised. So has the till.",
+    dialogue: [
+      { text: "\"Mate! Siddown, siddown — oi, one for my friend here.\" A bottle of Sang Som and a fresh glass " +
+          "arrive before you can decline. Wayne is three ahead of you and delighted about everything. \"Wayne. " +
+          "Earthmoving, twenty years, sold the lot. Now I'm gettin' INTO something out here — proper business, " +
+          "not this—\" a magnanimous wave at the bar keeping him \"—the OWNERSHIP side.\" He taps the bar. \"You " +
+          "want in on the ground floor of anything, this town, you come see Wayne.\"",
+        short: "\"Mate! One for my friend. Wayne — earthmoving, sold the lot, gettin' into the OWNERSHIP side out here.\"",
+        asks: { key: "smart", q: "\"Straight up though—\" he leans in, suddenly wanting it \"—bloke buys a bar out here, farang like me, cashed up, eyes open. That's a SMART move, yeah? Tell me that's smart.\"" } },
+
+      // The offer hook — his 'opportunity'. _questOffer surfaces the quest (giver: wayne).
+      { topic: "deal", text: "\"The DEAL.\" He says it like a girl's name. \"Bar just up the soi, mate. " +
+          "Turnkey — staff, stock, the lot, running already. My name goes on the lease 'cause farang can't own " +
+          "the land, right, everyone knows that — so there's a local partner holds the company side. Silent " +
+          "fella. Very connected. Sorts the police, the paperwork, all the boring gear.\" He beams. \"I put in " +
+          "the capital, he sorts the Thai side, we split it. Bosh. Signin' Friday.\" He tops you up. \"Tell me " +
+          "that's not the cleanest deal you ever heard.\"",
+        short: "\"Turnkey bar up the soi. My name on the lease, a silent local partner holds the company side. Signin' Friday.\"" },
+
+      // THE WARN — completes the quest. Gated on having seen how WDG actually works
+      // (heard Gavin's pitch, or been inside the Orchid). You tell Wayne what the
+      // 'clean deal' is; the silent partner is the whole point of it.
+      { topic: "partner", when: (st, G) => G.quests.nominee_deal === "active" && !_flag("nomineeWarned") &&
+          (_flag("heardWdgPitch") || (G.visited && G.visited.orchid_room)),
+        sets: ["nomineeWarned"],
+        text: "You lay it out flat, because he needs it flat. The 'silent partner' owns the company outright — " +
+          "his name's on the shares, Wayne's is on nothing but the lease and the risk. The capital goes in; the " +
+          "control never does. It's the White Dish move, run a hundred times up this soi: a cashed-up farang " +
+          "buys himself a job he can be sacked from, and one bad month later the partner buys the 'failing' bar " +
+          "back for nothing.\n\nWayne's grin comes off in stages. \"...Nah. Nah, he's a good bloke. Drives " +
+          "himself everywhere, shakes on it, none of your—\" He stops. Hears himself. Sets the glass down for the " +
+          "first time all night. \"...Won't do it in writing, will he. Everything face to face.\" A long breath. " +
+          "\"Aw, mate.\" Quieter: \"Twenty years I never signed a thing I didn't read. First week off the plane " +
+          "and I nearly—\" He doesn't finish. \"...Yeah. Yeah. Ta. I owe ya more than a Sang Som for that one.\"",
+        short: "\"The silent partner owns everything, you own the risk — it's the White Dish move.\" Wayne sets the glass down. \"...Aw, mate. Ta.\"" },
+      // Before you can warn him — he gushes about the mysterious partner. THE TAN SEED,
+      // landed regardless of the quest: a local who drives himself, fixes anything,
+      // does everything in person, no paper. Never named.
+      { topic: "partner", when: (st, G) => !_flag("nomineeWarned"),
+        text: "\"The partner? Solid. Never met a Thai bloke like him — went to uni in the STATES, mate, better " +
+          "English than half me tradies.\" Wayne is warm with it. \"Drives himself everywhere — nice motor, no " +
+          "flash, you'd never look twice. Doesn't do email, barely touches a mobile. Everything face to face, a " +
+          "handshake, sorted.\" He taps his nose. \"That's old-school. That's a man you can TRUST.\" He has no " +
+          "idea he's just described exactly the sort of man you cannot.",
+        short: "\"The partner — US-educated, drives himself, plain motor, no email, everything face to face. Old-school. You can trust that.\"" },
+
+      { topic: "money", text: "\"Nah, money's not the worry, mate, I'm cashed up.\" He says it a touch too " +
+          "loud, the way a man does when the number's bigger than he meant it to be. \"Whole earthmoving mob, " +
+          "sold. This is just—\" he searches for it \"—puttin' it to WORK. Man's gotta put it to work, eh? " +
+          "Can't just sit on it drinkin'.\" He drinks. \"That'd be a waste.\"",
+        short: "\"Money's not the worry — cashed up, sold the earthmoving mob. Gotta put it to WORK, eh.\"" },
+    ],
+  },
+
+  // ── Origin archetype: THE PENSION (the living memory) ─────────────────────
+  // Twenty years of coming back; he knew the soi before the brands. His "old days"
+  // quest is the DEEPEST Tan seed — he remembers a quiet young US-sounding Thai
+  // always at the good table's elbow fifteen years ago, deferred to even then, and
+  // nobody could say why. On replay: the driver has been the power for a generation.
+  roy: {
+    name: "Roy", th: "รอย", emoji: "🍺",
+    room: "cherry_pop",
+    origin: "pension",
+    title: "a lean old regular in a faded bar-crawl polo, watching the door like he owns the stool",
+    desc: "English, seventy, been coming since the soi had neon on one side only. Retired on a fixed " +
+      "pension he counts to the baht and never complains about; nurses a single Chang an hour and makes it " +
+      "last. Knows every bar's real name, every one it used to be, and half the ghosts propping up the other " +
+      "half. Not bitter. Just here, the way the tide is here.",
+    dialogue: [
+      { text: "The old boy doesn't look up from the door. \"Sit if you're sitting. Roy.\" A nod at the room " +
+          "without warmth or coldness. \"Twenty year I've had this stool, more or less. Watched 'em knock this " +
+          "bar down and build it twice.\" He sips, unhurried. \"You learn to stop minding. Everything out here's " +
+          "on its way to being something else. Girls, bars, blokes. Me an' all.\"",
+        short: "\"Roy. Twenty year on this stool. Everything out here's on its way to being something else.\"",
+        asks: { key: "trips", q: "He finally turns, mild grey eyes doing a slow inventory. \"First time out, are you? Or you got some miles on you? I can usually tell — but you, I can't call it.\"" } },
+
+      // THE OLD DAYS — completion + the historical Tan seed. doneFlag → _questTick pays.
+      { topic: "old days", when: (st, G) => G.quests.old_days === "active" && !_flag("oldDaysHeard"),
+        sets: ["oldDaysHeard"],
+        text: "You buy him the time and he spends it gladly — the soi when the bars had bands not apps, the " +
+          "mamasans who ran the street better than any council, the farang who came and stayed and are under " +
+          "the wat now.\n\nThen, unprompted, his voice drops a register. \"Funny thing the money never " +
+          "changes, though. Back table at the flash bar — always was a quiet fella at it. Thai, but he'd talk " +
+          "like a Yank when he talked, which weren't often. Young, back then. Drove one of the big men about — " +
+          "and here's the thing stuck with me forty year—\" he taps the bar \"—everyone deferred to the " +
+          "DRIVER. Not the big man. The driver. And not a soul could tell you why.\" A dry sip. \"Same sort's " +
+          "still out there, I'd wager. Men like that don't age. They just get quieter.\"",
+        short: "\"Always a quiet US-sounding Thai at the good table — drove the big men about, and everyone deferred to the DRIVER. Nobody could say why.\"" },
+      { topic: "old days", when: (st, G) => !_flag("oldDaysHeard"),
+        text: "\"The old days?\" A dry look. \"Costs you a Chang and an hour of your night, son. You in a " +
+          "hurry, or you want it proper?\" He's not really asking; he's telling you to slow down.",
+        short: "\"The old days cost you a Chang and an hour. You want it proper, or you in a hurry?\"" },
+
+      { topic: "money", text: "\"Pension, son. Comes the first of the month, goes by the twentieth if I'm " +
+          "careful, and I'm always careful.\" No self-pity in it. \"That's the trick nobody tells the young " +
+          "ones — this town'll take exactly what you've got, whether that's a fortune or a fixed income. So " +
+          "you decide the number BEFORE you walk out the door, and then you're a rich man all night, because " +
+          "you've already spent it.\" He lifts the Chang an inch. \"Cheapest wisdom you'll get on this soi.\"",
+        short: "\"The town takes exactly what you've got. Decide your number before you leave — then you're rich all night.\"" },
+
+      { topic: "soi", text: "\"Changed? 'Course it's changed. Same as everywhere — the little fellas sold up " +
+          "to the big fella, and now it's all one brand with a different sign out front.\" He shrugs, a man " +
+          "long past outrage. \"White Dish, they call it now. Used to be the mamasans' street. Now it's a " +
+          "spreadsheet's street. But the tide still comes in at six and goes out at two, and the lonely still " +
+          "come looking, so.\" He drinks. \"It's still Pattaya. It just costs more and means less.\"",
+        short: "\"The little fellas sold to the big fella — White Dish now. Still Pattaya. Costs more, means less.\"" },
+    ],
+  },
+
+  // ── Origin archetype: THE REDUNDANCY (first freedom, no armour) ────────────
+  // Payout in hand, first time properly abroad and properly free, trusts everyone.
+  // His Tan seed is the WARM angle: the airport driver was the kindest man he met,
+  // rings back any hour, "everywhere." Reads as decency on run 1; as omnipresence
+  // on replay. His quest is honest counsel about a payout going out too fast.
+  macca: {
+    name: "Macca", th: "แม็คก้า", emoji: "⚡",
+    room: "sunset_dreams",
+    origin: "redundancy",
+    title: "a beaming fella in a red football shirt standing everyone a round",
+    desc: "Scouse, fifty-three, twenty-two years an electrician and then a letter and a cheque with more " +
+      "noughts than he's ever seen at once. First time abroad that isn't Spain, first time in his life with " +
+      "no shift in the morning, and it's gone to his head like sunshine. Buys rounds for strangers. Means " +
+      "every word. Hasn't yet met the version of this town that isn't his friend.",
+    dialogue: [
+      { text: "\"Eyyy, there he is! Sit down, la, what you havin'?\" You didn't ask for anything; a beer lands " +
+          "anyway. Macca is lit up like the bar sign. \"Macca. Sparky, twenty-two year, then they only go an' " +
+          "make us redundant, dun't they — best thing ever happened, turns out! Cashed me chips, got on a " +
+          "plane, and would you look at this—\" he gestures at the entire soi like he owns it \"—would you " +
+          "just LOOK at it.\"",
+        short: "\"Eyyy! Macca — sparky, twenty-two year, made redundant, best thing ever happened. Look at this place!\"",
+        asks: { key: "firsttime", q: "\"'Ere, straight up — is it always like this? Every night? 'Cause I keep thinkin' someone's gonna tap us on the shoulder an' say the party's over, go home.\"" } },
+
+      // THE PAYOUT — completion. Once you've clocked how the town works (seen WDG or
+      // just spent a while here), he asks you straight if he's going too fast. He is.
+      { topic: "payout", when: (st, G) => G.quests.easy_come === "active" && !_flag("payoutPaced"),
+        sets: ["payoutPaced"],
+        text: "He shows you the maths without being asked — a photo of a bank balance, proud and terrified at " +
+          "once. \"That's the lot. Twenty-two year, that number. Feels like a KING out here, dunnit — but " +
+          "I done the sum on the flight over an' at this rate she's gone by Christmas.\" The grin flickers. " +
+          "\"Go on then. You've been about. Am I bein' a soft lad?\"\n\nYou give it to him honest: not soft, " +
+          "just new — the rounds for the whole bar, the 'girlfriend' at three bars, the tab he never sees " +
+          "totalled. Decide the nightly number BEFORE the first pint, like the old boys do, and the payout " +
+          "lasts years instead of months. He takes it well, because he's a good man. \"...Yeah. Me mam'd say " +
+          "the same, God rest her. Ta, la. Next one's still on me, mind — but just the one round. See? " +
+          "Learnin' already.\"",
+        short: "\"That's twenty-two year, that number — gone by Christmas at this rate.\" You give it honest; he takes it well. \"Ta, la. Learnin' already.\"" },
+      { topic: "payout", when: (st, G) => !_flag("payoutPaced"),
+        text: "\"Money?\" He waves it off, too breezy. \"Sound, la, I'm sound. Redundancy, innit — proper " +
+          "wedge. First time in me life I'm not countin' it.\" A tiny shadow crosses and he drinks it away. " +
+          "\"That's the whole point, ISN'T it. Not countin' it.\"",
+        short: "\"I'm sound — proper redundancy wedge. First time in me life I'm not countin' it.\"" },
+
+      // TAN SEED (warm): the airport driver, kindest man he met, rings back any hour.
+      { topic: "driver", when: (st) => st.trust >= 1,
+        text: "\"Best fella I've met out here? Not even a bird, la — the DRIVER. Off the plane, dead " +
+          "lost, and this Thai lad sorts us a ride, won't take the full fare, gives us his number — 'you get " +
+          "stuck, any hour, you ring.'\" Macca shakes his head, genuinely moved. \"An' I DID, first night, " +
+          "lost as owt at three in the mornin' — rang it expectin' nowt — bloke picks up, wide awake, has us " +
+          "a taxi in two minutes flat.\" He taps his temple. \"Speaks lovely English an' all, like a Yank. " +
+          "Only Thai number I'd actually trust, that. Everywhere, that lad. How's he everywhere?\"",
+        short: "\"Best fella out here's the DRIVER — won't take full fare, rings back at 3am, US English, everywhere. Only number I trust.\"" },
+    ],
+  },
+
+  // ── Origin archetype: THE RUNNING (a forwarding address for a stopped life) ─
+  // Evasive; goes by "Pete", which isn't the name on his passport. His Tan seed is
+  // the SINISTER one: the airport driver greeted him by his real name though he'd
+  // booked under Pete. The profiler reads the manifest. His quest is the small,
+  // human ask to keep that name quiet.
+  pete: {
+    name: "Pete", th: "พีท", emoji: "🚬",
+    room: "sandy_toes",
+    origin: "running",
+    title: "a careful man at the dark end of the bar who sits facing the door",
+    desc: "English, fifties, the kind of grey you go when you've stopped sleeping properly. Sits where he " +
+      "can see who comes in, drinks slow, gives nothing. Calls himself Pete, and it's a good enough name. " +
+      "Whatever he left behind, he left it fast and he left it whole — Pattaya never asks for references, " +
+      "which is the entire reason he's on this stool and not another.",
+    dialogue: [
+      { text: "He clocks you the second you approach and you can see him decide you're nobody. Only then does " +
+          "he ease a quarter-inch. \"...Alright.\" A pause that's doing work. \"Pete.\" He leaves it there, the " +
+          "way you'd leave a door open just wide enough to shut fast. \"Don't mind me. I'm just having a quiet " +
+          "one. Lot of quiet ones out here. That's the appeal.\"",
+        short: "\"...Pete.\" He decides you're nobody, eases a quarter-inch. \"Just having a quiet one. That's the appeal.\"",
+        asks: { key: "sentme", q: "The question comes out flat and careful, watching your eyes when it lands: \"Nobody sent you over, did they. Just being friendly. That's all this is.\"" } },
+
+      // THE NAME — completion + the sinister Tan seed. He trusts you enough to say
+      // the thing that's been eating him, and asks the small favour.
+      { topic: "name", when: (st, G) => G.quests.quiet_one === "active" && !_flag("nameKept"),
+        sets: ["nameKept"],
+        text: "He weighs you a long moment, then decides — a man who's been carrying it alone too long. \"Pete's " +
+          "not it. Doesn't matter what is. Point is I booked everything under Pete — flight, hotel, the lot. " +
+          "Careful. I'm always careful.\" His jaw works. \"Driver at the airport. Never met him, never gave " +
+          "him a name — and he opens the door and says my REAL one. Pleasant as you like. 'Welcome, khun'—\" " +
+          "he stops himself before he says it. \"Then hands me a card. 'Anything you need.'\" Pete's knuckles " +
+          "are white on the glass. \"How does a driver have my real name? You tell me that.\" He steadies. " +
+          "\"...Just — if anyone asks after that name, I'm Pete. You never heard the other. Can you do that " +
+          "for a stranger?\" You tell him you can. Something in his shoulders lets go, an inch.",
+        short: "\"Driver at the airport used my REAL name — I'd booked everything under Pete. How's a driver have that?\" He asks you to keep it quiet. You do.",
+        fx: (st, G) => { st.trust = Math.max(st.trust, 3); } },
+      { topic: "name", when: (st, G) => !_flag("nameKept"),
+        text: "\"My name's Pete.\" Flat, final, a shutter coming down. \"Why — someone been asking?\" The look " +
+          "he gives you could strip paint. It takes him a second to remember you're nobody. \"...Forget it. " +
+          "Long night.\"",
+        short: "\"My name's Pete. Why — someone been asking?\" A shutter comes down." },
+
+      { topic: "running", when: (st) => st.trust >= 2,
+        text: "\"Everyone out here's running from something, that's the line, isn't it.\" He almost smiles and " +
+          "it doesn't reach anything. \"Difference is most of 'em can go home when the money runs out. I'm the " +
+          "other kind.\" He turns the glass. \"Don't feel sorry for me. I did a thing. Not the worst thing, " +
+          "but a thing. This is the bill for it — warm beer and no winters and never sitting with my back to " +
+          "a door again.\" A shrug. \"Worse bills going. I pay it quiet.\"",
+        short: "\"Most can go home when the money runs out. I'm the other kind. I did a thing. This is the bill. I pay it quiet.\"" },
+    ],
+  },
+
+  // ── Origin archetype: THE RETURNER (married one once; knows how it ends) ────
+  // Ex-Thai-wife, back solo, jaded, sees the scams. His fragment is the OTHER
+  // shadow power (variety): his ex-wife's brother rides with the Orchid MC, and he
+  // wants word carried — the president/MC thread, not Tan.
+  rob: {
+    name: "Rob", th: "ร็อบ", emoji: "💍",
+    room: "kitten_corner",
+    origin: "married",
+    title: "a calm farang who watches the girls work with no hunger in it at all",
+    desc: "English, forty-eight, married a Buriram girl for nine years and buried the marriage a year ago, " +
+      "not unkindly on either side. Speaks passable Isan-accented Thai, knows the family system from the " +
+      "inside, and watches the bar's whole performance with the fond, tired eye of a man who's seen the " +
+      "machinery from backstage. Not here to be fooled. Here because where else would he be.",
+    dialogue: [
+      { text: "He watches you get worked by the room and there's no judgement in it, only recognition. " +
+          "\"They're good, aren't they. The best of 'em could sell sand to a beach.\" A nod to the stool. " +
+          "\"Rob. Nine years married to one, so I get to enjoy the show now without paying admission. Took me " +
+          "the whole nine to learn to watch the hands instead of the smile.\" He sips. \"You'll learn. " +
+          "Everyone learns. Question's just how dear the lesson.\"",
+        short: "\"Rob. Nine years married to one — I watch the hands now, not the smile. Everyone learns. Question's how dear.\"",
+        asks: { key: "believe", q: "\"Let me guess — you've already met the one who's DIFFERENT. The one who's not like the other girls.\" A kind, knowing look. \"Have you? Be honest.\"" } },
+
+      // THE BROTHER — completion + the MC/president fragment. He asks you to carry a
+      // careful word, because he can't be seen near that room himself.
+      { topic: "brother", when: (st, G) => G.quests.her_brother === "active" && !_flag("brotherWord"),
+        sets: ["brotherWord"],
+        text: "\"Her brother. Nong.\" Rob says it carefully. \"Good lad once — drove a taxi, sent money home " +
+          "like they all do. Then he got a patch.\" He tips his head vaguely soi-ward, toward the flash bar " +
+          "with the velvet rope. \"Rides with the club that holds court in that back room now. The one nobody " +
+          "walks into by accident.\" He turns his glass. \"I'm not after trouble — I'm the ex-husband, I'm " +
+          "nothing to them. But the family's still MY family, some ways that matter. If you're ever in that " +
+          "room and you clock a big Buriram lad, patched, quiet — tell him Rob says his mother's well, and " +
+          "the land's paid, and nobody's angry.\" A breath. \"That's all. He'll know what it means.\" You " +
+          "agree to carry it. \"Ta. Some doors a farang shouldn't knock on twice. That's one.\"",
+        short: "\"Her brother rides with the club in that back room. If you're ever in there — tell him Rob says his mum's well, the land's paid, nobody's angry.\"" },
+      { topic: "brother", when: (st, G) => !_flag("brotherWord"),
+        text: "\"Family business. Nothing you'd want the weight of yet.\" He deflects it easy, practised. " +
+          "\"Ask me when you know me. Or don't — safer, honestly.\"",
+        short: "\"Family business. Ask me when you know me. Or don't — safer.\"" },
+
+      { topic: "married", text: "\"Nine years. Good ones, mostly — I'm not one of these blokes who'll tell " +
+          "you they're all liars, because mine wasn't, and it does her a disservice.\" He says it firmly, a " +
+          "line he's decided to hold. \"We just wanted different endings to the same story. Her family were " +
+          "decent to me the whole way — still are, which is its own complication.\" A wry tilt. \"Marriage out " +
+          "here isn't the scam the barflies tell you. It's just a marriage, with an exchange rate. Same maths, " +
+          "harder sums.\"",
+        short: "\"Nine years, good ones mostly — mine wasn't a liar, and saying they all are does her a disservice. Just wanted different endings.\"" },
+    ],
+  },
+
+  // ── Origin archetype: THE MONGER (zero shame, comic relief) ────────────────
+  // "Golf with the APAC team" — packed the clubs, will never find a course. His
+  // Tan seed is the COMIC one ("the driver took one look at me clubs and laughed"),
+  // and his quest is the light one: he unknowingly photographed the Orchid's good
+  // table on a boozy walk-through and has no idea what he's holding.
+  barry: {
+    name: "Barry", th: "แบร์รี่", emoji: "⛳",
+    room: "ruby_kiss",
+    origin: "monger",
+    title: "a delighted, sunburnt man in golf gear who has plainly not been near a golf course",
+    desc: "English, fifty, here on the eleventh 'golf trip' of a marriage that politely doesn't ask. Packed " +
+      "the clubs, means to play, will not play. Zero shame and boundless goodwill; knows half the girls on " +
+      "this soi by name and all of them by drink order. The most honest dishonest man in Pattaya — lies only " +
+      "to his wife, and even then only about the golf.",
+    dialogue: [
+      { text: "\"NEW fella! Marvellous.\" Barry pumps your hand like a fruit machine paying out. \"Barry. " +
+          "Here with the APAC golf society—\" he says it with a wink so enormous it's practically audible " +
+          "\"—the golf society. Brought the CLUBS an' everything. Haven't found the course yet. Eleven trips, " +
+          "still lookin'.\" He roars at his own line, because it's a good one and he's earned it. \"Siddown, " +
+          "the girls here are DIAMOND, I'll introduce ya.\"",
+        short: "\"Barry! APAC golf society—\" enormous wink \"—brought the clubs, never found the course. Eleven trips. Siddown, the girls are diamond.\"",
+        asks: { key: "shame", q: "\"Go on, be honest with old Barry — first big trip, are you still doin' the GUILT thing? The 'ooh I shouldn't'?\" A warm, conspiratorial grin. \"'Cause I can save you a lot of wasted energy there, son.\"" } },
+
+      // THE WRONG PHOTO — completion. He proudly shows off his trophy album; one shot
+      // caught the good table by accident. Gated on you knowing why that matters
+      // (been in the Orchid, or done Doyle's recon). doneFlag → _questTick pays.
+      { topic: "photo", when: (st, G) => G.quests.wrong_shot === "active" && !_flag("wrongShot") &&
+          ((G.visited && G.visited.orchid_room) || _flag("orchidReported")),
+        sets: ["wrongShot"],
+        text: "He scrolls you through the album, beaming — himself and eleven years of grinning girls, a " +
+          "hall of fame with no villains in it. Then a blurry one: Barry mid-conga through a back room he " +
+          "'wandered into lookin' for the gents,' flash on, thumb half over the lens. \"Don't know whose " +
+          "party THAT was, threw us out sharpish—\" \n\nYou take the device off him. Behind Barry's grin, " +
+          "in focus by pure drunk luck: the good table. The patched president mid-laugh — and beside him, " +
+          "caught turning away from the flash a half-second too slow, the soft-spoken man, clear as day. The " +
+          "one face nobody photographs, photographed. \"That old boy?\" Barry squints. \"Miserable sort. " +
+          "Wouldn't smile for the picture.\" He has no idea he's holding the only known photo of the quietest " +
+          "man on Soi 6. You tell him to keep it very much to himself. \"...Righto. You've gone all serious, " +
+          "son. Have a shot, you'll feel better.\"",
+        short: "One blurry conga shot caught the good table — the president, and the soft-spoken man turning from the flash a half-second too slow. The only photo of him. Barry has no idea.",
+        fx: (st, G) => { _addHappy(2); } },
+      { topic: "photo", when: (st, G) => !_flag("wrongShot"),
+        text: "\"Photos? Son, I've got ELEVEN YEARS of photos.\" He brandishes the album proudly. \"Every " +
+          "one a stunner, every one a diamond. Can't show the wife, obviously — she thinks these thumbs have " +
+          "been on a five-iron.\" He cackles. \"Have a scroll, they're works of art.\"",
+        short: "\"Eleven years of photos, every one a diamond. Can't show the wife — she thinks these thumbs've been on a five-iron.\"" },
+
+      // TAN SEED (comic): the airport driver laughed at the clubs.
+      { topic: "driver", text: "\"The airport lad! Lovely fella. Takes one look at me golf bag comin' off " +
+          "the belt and just—\" Barry mimes a slow, knowing shake of the head \"—LAUGHS. Not nasty. Like he " +
+          "KNEW. 'Play your eighteen holes, khun Barry,' he says, dead straight face.\" Barry wheezes with " +
+          "delight. \"Eleven trips, first bloke to see straight through me on the tarmac. Gave us his card an' " +
+          "all — 'anything you need.' Proper operator. Wasted on drivin', that one.\"",
+        short: "\"Airport lad took one look at me clubs and LAUGHED. 'Play your eighteen holes, khun Barry.' Saw straight through me. Wasted on drivin', that one.\"" },
+    ],
+  },
+
   doug: {
     name: "Doug", emoji: "🥃",
     room: "stinky_bar",
@@ -5626,6 +5964,87 @@ const QUESTS = {
     at: "orchid_room",
     doneFlag: "orchidReported",
     reward: { money: 1500, happy: 4 },
+  },
+  // Origin quest (the investor): stop Wayne signing as a WDG nominee. Completes by
+  // ASK WAYNE ABOUT THE PARTNER once you've seen how White Dish operates (heard
+  // Gavin's pitch or been inside the Orchid — the warn node's `when`). Reward is
+  // pure สนุก: you saved a man's life savings and got a Sang Som for it.
+  nominee_deal: {
+    name: "The Silent Partner",
+    giver: "wayne",
+    trust: 1,
+    desc: "Wayne's about to sign as the farang face of a bar he'll never really own. Once you've seen how " +
+      "White Dish works, set him straight (ASK WAYNE ABOUT THE PARTNER).",
+    deps: [],
+    at: "wayne",
+    doneFlag: "nomineeWarned",
+    reward: { money: 0, happy: 5 },
+  },
+  // Origin quest (the pension): hear the soi as it was — the deepest Tan seed, the
+  // quiet man at the good table a generation ago. Pure dialogue; sitting still is
+  // the whole mechanic.
+  old_days: {
+    name: "The Old Days",
+    giver: "roy",
+    trust: 1,
+    desc: "Buy Roy's time and let the old soi come back to him — the bars before the brands, and the " +
+      "ghosts still propping the place up (ASK ROY ABOUT THE OLD DAYS).",
+    deps: [],
+    at: "roy",
+    doneFlag: "oldDaysHeard",
+    reward: { money: 0, happy: 3 },
+  },
+  // Origin quest (the redundancy): honest counsel to a good man burning his payout
+  // too fast. No money reward — the point is that you were straight with him.
+  easy_come: {
+    name: "Easy Come",
+    giver: "macca",
+    trust: 1,
+    desc: "Macca's redundancy is going out faster than he'll admit. Give him the honest maths (ASK MACCA " +
+      "ABOUT THE PAYOUT).",
+    deps: [],
+    at: "macca",
+    doneFlag: "payoutPaced",
+    reward: { money: 0, happy: 4 },
+  },
+  // Origin quest (the running): earn enough trust that Pete says the thing eating
+  // him — the driver who knew his real name — and keep it quiet for him.
+  quiet_one: {
+    name: "A Quiet One",
+    giver: "pete",
+    trust: 2, // he gives nothing to a near-stranger; this one you earn
+    desc: "Pete is sitting on something heavy. Earn his trust and hear it (ASK PETE ABOUT THE NAME).",
+    deps: [],
+    at: "pete",
+    doneFlag: "nameKept",
+    reward: { money: 0, happy: 4 },
+  },
+  // Origin quest (the returner): carry a careful family word into a room Rob can't
+  // be seen in — the Orchid MC thread.
+  her_brother: {
+    name: "Her Brother",
+    giver: "rob",
+    trust: 2,
+    desc: "Rob's ex-wife's brother rides with the club in the Orchid's back room. Carry his word if you " +
+      "ever get in there (ASK ROB ABOUT THE BROTHER).",
+    deps: [],
+    at: "rob",
+    doneFlag: "brotherWord",
+    reward: { money: 0, happy: 4 },
+  },
+  // Origin quest (the monger): Barry's trophy album accidentally holds the only
+  // photo of the quiet man. Completes once you know why that matters (been in the
+  // Orchid or done Doyle's recon).
+  wrong_shot: {
+    name: "The Wrong Photo",
+    giver: "barry",
+    trust: 1,
+    desc: "Somewhere in Barry's eleven years of trophy snaps is one he shouldn't have. Get a proper look " +
+      "once you know what you're looking at (ASK BARRY ABOUT THE PHOTO).",
+    deps: [],
+    at: "barry",
+    doneFlag: "wrongShot",
+    reward: { money: 500, happy: 3 },
   },
   sangsom: {
     name: "The Sister-Bar Run",

@@ -2272,6 +2272,22 @@ test("origin NPCs: the archetype matching your pick is deactivated (you ARE him)
   assert.equal(_findNpc("doyle"), null, "and you can't address him");
 });
 
+test("all seven origin archetypes are NPCs on Soi 6, each deactivated by its own pick, each a quest giver", () => {
+  const origins = { doyle: "pi", wayne: "business", roy: "pension", macca: "redundancy",
+                    pete: "running", rob: "married", barry: "monger" };
+  const givers = {};
+  for (const [qid, q] of Object.entries(QUESTS)) if (q.giver) givers[q.giver] = qid;
+  for (const [id, origin] of Object.entries(origins)) {
+    assert.equal(NPCS[id] && NPCS[id].origin, origin, `${id} carries origin "${origin}"`);
+    assert.ok(givers[id], `${id} gives a quest`);
+    state().room = _npcRoom(id);
+    state().player.origin = origin === "pi" ? "monger" : "pi";  // you're someone else
+    assert.ok(_npcsHere().includes(id), `${id} is present when you aren't him`);
+    state().player.origin = origin;                             // you ARE him
+    assert.ok(!_npcsHere().includes(id), `${id} is hidden when you're him`);
+  }
+});
+
 test("the detective's recon quest completes only after you've seen the Orchid's good table", () => {
   state().room = "queen_vic";
   state().player.origin = "monger";   // Doyle active
