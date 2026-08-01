@@ -178,7 +178,17 @@ function _doGo(dirWord) {
     _say(_pickVary(_GOGO_UPSTAIRS, "gogoup"));
     return;
   }
-  if (!dir || !r.exits[dir]) { _say(_pickVary(_NO_EXIT, "noexit")); return; }
+  if (!dir || !r.exits[dir]) {
+    // A hotel room is indoors — the street "no road" pool ("shuttered shophouses,
+    // a parked Click") reads as nonsense from a third-floor room. Point at the real
+    // way out instead, with the exit(s) as live taps.
+    if (typeof _HOTELS !== "undefined" && Object.values(_HOTELS).some(h => h.room === G.room)) {
+      _say(`No door that way — the only way out of the room is the stairs. (${
+        Object.keys(r.exits).map(d => d.toUpperCase()).join(" · ")})`);
+      return;
+    }
+    _say(_pickVary(_NO_EXIT, "noexit")); return;
+  }
   // OUT of a multi-door venue returns you to the road you entered by; any other
   // move invalidates that memory. (Single-door venues: enteredVia === exits.out.)
   const to = (dir === "out" && G.enteredVia) ? G.enteredVia : r.exits[dir];
@@ -383,6 +393,14 @@ function _doTravel(arg) {
     }
     _say("(TRAVEL <place>. Walking pace — no shortcuts through the clock.)", "dim");
     return;
+  }
+  // Already standing in it — a venue's own name, tapped from inside it, must not
+  // route anywhere. Check the CURRENT room before any hotel/destination match, or
+  // "Queen Vic Inn" (the pub) resolves to "Your Room — Queen Vic Inn" and walks you
+  // upstairs. (The later !dest branch keeps this for the never-found case.)
+  const _here0 = _room();
+  if ((_here0.bar && _here0.bar.toLowerCase().includes(w)) || _here0.name.toLowerCase().includes(w)) {
+    _say("You're standing in it."); return;
   }
   let dest = null;
   if (/^(hotel|my room|home|room)$/.test(w) ||
@@ -3540,7 +3558,9 @@ function _soi6Opening() {
   _say("Goal: สบายสบาย. Get happy. Max out the week. ★", "win");
   _say("");
   _describeRoom(true);
-  _say("(HELP lists commands. Head DOWN to the pub, then OUT to the soi.)", "dim");
+  // Only DOWN is a live exit from the room — keep OUT out of the tap-hint (it's a
+  // step you take FROM the pub, not the room; a tappable OUT here just dead-ends).
+  _say("(HELP lists commands. Your night is DOWN the stairs — the pub first, then out into the soi.)", "dim");
 }
 
 function engineIntro() {
