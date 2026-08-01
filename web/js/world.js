@@ -3238,6 +3238,24 @@ const NPCS = {
     desc: "The Shady Lady's mamasan, running a beer bar the slow honest way — no bottle-service hustle, no " +
       "bank of go-go tricks, just cold beer, decent girls, and a chair you're welcome to keep all night.",
     dialogue: [
+      // The honest beer-bar mama doesn't price you — she reads a few kinds and only
+      // wants to look after them. Signature ORIGIN reads; everyone else gets the warm
+      // welcome below.
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("pension"),
+        text: "\"A regular — I can tell, you sit like a man who owns the stool.\" The weathered smile deepens. " +
+          "\"Fixed money, long memory, no drama. My favourite kind. Keep the chair all night, tilac. Nobody " +
+          "take it from you here.\"",
+        short: "\"A regular — you sit like a man who owns the stool. Keep the chair all night, nobody takes it here.\"" },
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("redundancy"),
+        text: "\"First time with money in the pocket and nobody telling you no.\" She reads the shine, and " +
+          "unlike the go-go mamas she only wants to keep it safe. \"You come to the right bar to start, tilac. " +
+          "Nobody scam you here. Learn the soi slow, from a place that won't rob you first.\"",
+        short: "\"First money in the pocket, nobody telling you no. Right bar to start — learn the soi slow, from a place that won't rob you first.\"" },
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("running"),
+        text: "\"You want a quiet corner, a cold beer, and nobody asking a single question.\" A gentle, knowing " +
+          "nod. \"That is the whole menu at my bar, tilac. Sit. Nobody bother you here — I make sure of it " +
+          "myself.\"",
+        short: "\"A quiet corner, a cold beer, nobody asking questions — that's the whole menu here. Nobody bothers you; I make sure.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Sit, have a cold one. No hurry here.\" An easy, weathered smile. \"Beer bar is a different " +
           "game from the go-go. Small money, but honest money. Nobody scam nobody at my bar — I don't have the " +
@@ -3257,6 +3275,21 @@ const NPCS = {
     desc: "Front Row's mamasan, who put the big screens in herself and knows the league table better than half " +
       "the punters. Runs a football bar for football people, and keeps the drama outside.",
     dialogue: [
+      // Football-bar mama, drama kept outside — a few signature PERSONALITY reads
+      // framed through the match; everyone else gets the plain kickoff welcome.
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _pers("joker"),
+        text: "\"Ha — a funny one. Good, we need the noise.\" Half an eye stays on the screen. \"You'll fit the " +
+          "Saturday crowd fine, tilac. One rule: no jokes during a penalty. That, even I cannot forgive.\"",
+        short: "\"A funny one — you'll fit the Saturday crowd. One rule: no jokes during a penalty.\"" },
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _pers("blunt"),
+        text: "\"Straight talker. Football people, all of us — no soft-soap in a footy bar.\" A brisk, approving " +
+          "nod. \"You'll do fine here, tilac. Beer's cold, ref's blind, sit down.\"",
+        short: "\"Straight talker — football people, no soft-soap. You'll do fine. Beer's cold, ref's blind, sit down.\"" },
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _pers("operator"),
+        text: "\"You're watching the room and the match both.\" She half-approves, half-warns. \"Careful man. " +
+          "But nothing to work in here, tilac — just football and cold beer. Switch it off a while. Even the " +
+          "angles take a night off for a good game.\"",
+        short: "\"Watching the room and the match both — careful man. Nothing to work here, just football. Switch it off a while.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Grab a stool, game's about to start.\" A brisk nod, eyes half on the screen. \"Front Row is a " +
           "football bar first, girl bar second. Somo pour the beer, we all shout at the referee, everybody " +
@@ -3276,6 +3309,24 @@ const NPCS = {
     desc: "The Verandah's mamasan, who runs the most easygoing bar on Soi 6 like a long Sunday lunch — Nina " +
       "feeds the customers, Malila makes sure everyone's alright, and the money, such as it is, sees to itself.",
     dialogue: [
+      // The quiet-end mama runs the calmest bar on the soi — she reads the men who
+      // came to rest, and leaves the reading gentle. Signature ORIGIN reads; the rest
+      // get the unhurried welcome below.
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("running"),
+        text: "\"You came to breathe.\" Malila says it softly, certain — and it is the kindest read anyone has " +
+          "given you all night. \"I know the look, tilac. You are safe to sit here and be nobody a while. Nina " +
+          "will bring food you didn't order. Let her.\"",
+        short: "\"You came to breathe — I know the look. Safe to sit here and be nobody a while. Nina will bring food you didn't order. Let her.\"" },
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("married"),
+        text: "\"You've done the long version of this town.\" A comfortable, unhurried smile. \"I can tell — " +
+          "you don't grab, you don't rush, you know how the whole thing goes. Then you know the Verandah is " +
+          "where a man comes once he's learned better. Sit, tilac.\"",
+        short: "\"You've done the long version — you don't grab, don't rush. The Verandah's where a man comes once he's learned better.\"" },
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => _isOrigin("monger"),
+        text: "\"You know the drill, na. No hustle needed for you.\" She gestures at the easy, half-empty bar. " +
+          "\"Then you already know why a man who has seen it all ends up at the quiet end. Sit. Breathe. The " +
+          "loud is still out there when you want it back.\"",
+        short: "\"You know the drill — no hustle needed. A man who's seen it all ends up at the quiet end. Sit, breathe.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Welcome, welcome. Nina feed you yet? She will.\" A comfortable, unhurried warmth. \"The " +
           "Verandah is the quiet end of a loud soi. People come here to breathe. I am not going to hustle a man " +
