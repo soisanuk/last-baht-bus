@@ -746,6 +746,7 @@ const _CONVO_TOPIC_RULES = [
   [/front stool|the window/,                                                     "stool"],
   [/\bcranes?\b|\bnapkins?\b|\borigami\b|paper bird/,                             "crane"],
   [/\bscam\b|\bhustle\b|the act\b|playing me|working me|you real|for real/,       "game"],
+  [/you okay|you alright|are you (ok|alright|fine)|everything okay/,              "okay"],
   [/military|armed forces|the forces|you serve|were you in/,                     "navy"],
   [/ninet(y|ies)|1990s|the 90s/,                                                 "90s"],
   [/nightlife|the scene/,                                                        "scene"],
