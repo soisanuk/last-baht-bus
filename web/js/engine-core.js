@@ -1109,6 +1109,18 @@ function _hurt(n) {
   return false;
 }
 
+// Move a girl's bond (G.soc.drinks[id]) by n and return the new total. n may be
+// negative (souring, nightly decay); the bond floors at 0. This IS _bondTier's
+// underlying counter — the one place attention of every kind is tallied.
+function _addBond(id, n) {
+  G.soc.drinks[id] = Math.max(0, (G.soc.drinks[id] || 0) + n);
+  return G.soc.drinks[id];
+}
+
+// Round a baht figure to the nearest ฿50 — how every negotiated price on the soi
+// lands (mamasan maths, never odd change).
+function _round50(n) { return Math.round(n / 50) * 50; }
+
 function _tick() {
   G.turns++;
   G.nightTurn++;
