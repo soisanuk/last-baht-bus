@@ -2406,6 +2406,46 @@ test("RESTART re-runs character creation in the CURRENT mode (Soi 6 stays Soi 6)
   assert.equal(state().act1Tries, 2, "and the tries count");
 });
 
+test("QUIT/END/LOGOUT get a voiced refusal, not 'didn't parse'; RESET aliases RESTART", () => {
+  // They were advertised in the autocomplete pool but had no handler — a typed
+  // 'quit' fell through to the huh line, so the completion menu lied.
+  state().stage = "vacation"; state().flags.act1Done = true;
+  for (const v of ["quit", "end", "logout"]) {
+    out = []; run(v);
+    assert.match(lastOut(), /Nothing to quit|SLEEP|RESTART/i, `${v} gets the real answer`);
+    assert.doesNotMatch(lastOut(), /didn't parse|no idea|blinks at you/i, `${v} isn't a parse miss`);
+  }
+  // RESET now means RESTART (start over from the taxi), not a parse miss
+  newGame(); state().player.origin = "pi";
+  out = []; run("reset");
+  assert.equal(state().pendingChoice, "intro", "RESET re-runs character creation like RESTART");
+});
+
+test("_npcActions is the single source of a character's tap affordances (by role)", () => {
+  // The terminal wheel used to hard-code the role→verb map; it now reads this.
+  const short = id => _npcActions(id, false);
+  const full = id => _npcActions(id, true);
+  // everyone gets the safe basics
+  for (const id of ["candy", "arm", "mala", "bert"]) {
+    assert.deepEqual(short(id).slice(0, 3), ["talk", "examine", "photo"]);
+  }
+  // a hostess: the full female economy on the long-press wheel
+  const lek = Object.keys(NPC_ROLES).find(id => NPC_ROLES[id] === "hostess");
+  assert.deepEqual(full(lek), ["talk", "examine", "photo", "buyher", "flirt", "tip", "contact", "barfine"]);
+  // cashier / mamasan: buy-drink but no flirt/barfine
+  const cash = Object.keys(NPC_ROLES).find(id => NPC_ROLES[id] === "cashier");
+  assert.deepEqual(full(cash), ["talk", "examine", "photo", "buyher"]);
+  // host bar (gender-flipped): buyhim + hire
+  assert.deepEqual(full("arm"), ["talk", "examine", "photo", "buyhim", "hire"]);
+  // cabaret performer: tippable, no barfine
+  assert.deepEqual(full("mala"), ["talk", "examine", "photo", "tip"]);
+  // a plain NPC (manager, unroled): a polite wai in the full wheel
+  assert.deepEqual(full("bert"), ["talk", "examine", "photo", "wai"]);
+  // a patron (not an NPC at all) and an unknown id: just the basics, no crash
+  assert.deepEqual(full("glam"), ["talk", "examine", "photo"]);
+  assert.deepEqual(full("nobody_here_xyz"), ["talk", "examine", "photo"]);
+});
+
 test("Act One is do-or-die: dawn without room 412 hard-resets to the beach", () => {
   // three milestones down the critical path, then the night runs out
   state().flags.knowWasHere = true;

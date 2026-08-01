@@ -341,34 +341,26 @@ const _term = (() => {
         // not on a bystander's wheel.
         return [{ t: "talk to " + lo, c: "talk to " + lo, go: true }];
       }
-      // TALK opens the conversation; the topic list + action-choices then live on
-      // the in-conversation chip bar (see _chipSet), not here — the wheel no longer
-      // exposes ASK-about topics.
-      a.push({ t: "talk", c: "talk to " + lo, go: true });
-      a.push({ t: "examine", c: "x " + lo, go: true });
-      a.push({ t: "photo", c: "photo " + lo, go: true });
-      const role = npc && typeof NPC_ROLES !== "undefined" ? NPC_ROLES[npc] : null;
-      // host-bar staff (Arm, Win) aren't in NPC_ROLES — hostesses' wheel logic
-      // skips them entirely, so they'd get no tap path to their own economy.
-      // Mirrors the hostess pattern: a quick buy-drink tap always available,
-      // HIRE (their barfine-equivalent) behind the long-press full wheel.
-      const isHost = npc && typeof _HOSTS !== "undefined" && _HOSTS.includes(npc);
-      // the Peacock's performers (Mala, Petch): also not in NPC_ROLES, but
-      // tippable — same gap class as the host bar.
-      const isPerformer = npc && typeof _CABARET_PERFORMERS !== "undefined" && _CABARET_PERFORMERS.includes(npc);
-      if (role) a.push({ t: "buy her a drink", c: "buy drink for " + lo, go: true });
-      else if (isHost) a.push({ t: "buy him a drink", c: "buy drink for " + lo, go: true });
-      if (full && role === "hostess") {
-        a.push({ t: "flirt", c: "flirt " + lo, go: true });
-        a.push({ t: "tip …", c: `tip ${lo} `, go: false });
-        a.push({ t: "contact", c: "contact " + lo, go: true });
-        a.push({ t: "barfine", c: "barfine " + lo, go: true });
-      } else if (full && isHost) {
-        a.push({ t: "hire", c: "hire " + lo, go: true });
-      } else if (full && isPerformer) {
-        a.push({ t: "tip …", c: `tip ${lo} `, go: false });
-      }
-      if (full && !role && !isHost && !isPerformer && npc) a.push({ t: "wai", c: "wai " + lo, go: true });
+      // Which verbs this character affords is engine logic — _npcActions(id, full)
+      // is the single source of truth (shared with a future 2D tap UI). TALK opens
+      // the conversation; the topic list + action-choices then live on the in-
+      // conversation chip bar (see _chipSet), not here. This wheel just maps each
+      // engine action-key to its label + command string (presentation).
+      const _NPC_ACT = {
+        talk:    l => ({ t: "talk",            c: "talk to " + l,      go: true }),
+        examine: l => ({ t: "examine",         c: "x " + l,            go: true }),
+        photo:   l => ({ t: "photo",           c: "photo " + l,        go: true }),
+        buyher:  l => ({ t: "buy her a drink", c: "buy drink for " + l, go: true }),
+        buyhim:  l => ({ t: "buy him a drink", c: "buy drink for " + l, go: true }),
+        flirt:   l => ({ t: "flirt",           c: "flirt " + l,        go: true }),
+        tip:     l => ({ t: "tip …",           c: `tip ${l} `,         go: false }),
+        contact: l => ({ t: "contact",         c: "contact " + l,      go: true }),
+        barfine: l => ({ t: "barfine",         c: "barfine " + l,      go: true }),
+        hire:    l => ({ t: "hire",            c: "hire " + l,         go: true }),
+        wai:     l => ({ t: "wai",             c: "wai " + l,          go: true }),
+      };
+      const keys = typeof _npcActions === "function" ? _npcActions(npc || pat, full) : ["talk", "examine", "photo"];
+      for (const key of keys) { const m = _NPC_ACT[key]; if (m) a.push(m(lo)); }
     } catch (e) { /* engine not booted: no actions */ }
     return a;
   }
@@ -430,6 +422,16 @@ const _term = (() => {
     _fly.style.top = y + "px";
   }
 
+  // A long night is thousands of commands; every line is a DOM node that never
+  // left the scrollback, so memory (and layout cost) grew without bound. Keep a
+  // generous window of recent lines and drop the oldest — plenty of history to
+  // scroll, and the game state itself lives in G, never in the transcript.
+  const _SCROLL_CAP = 800;
+  function _trimScroll() {
+    if (!_out) return;
+    while (_out.childElementCount > _SCROLL_CAP) _out.removeChild(_out.firstChild);
+  }
+
   function print(text, cls) {
     if (!_out) return;
     const div = document.createElement("div");
@@ -441,6 +443,7 @@ const _term = (() => {
     else div.innerHTML = decorate(text);
     _addAvatars(div, text);
     _out.appendChild(div);
+    _trimScroll();
     _out.scrollTop = _out.scrollHeight;
   }
 
@@ -449,6 +452,7 @@ const _term = (() => {
     div.className = "t-line t-echo";
     div.textContent = "❯ " + cmd;
     _out.appendChild(div);
+    _trimScroll();
   }
 
   function _candidates(base) {

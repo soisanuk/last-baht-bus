@@ -61,3 +61,28 @@ test("boots from file:// and round-trips a typed command", async ({ page }) => {
   // No uncaught exceptions during boot or the command.
   expect(pageErrors).toEqual([]);
 });
+
+test("the scrollback is capped — a long session doesn't grow the DOM without bound", async ({ page }) => {
+  await page.goto(INDEX_URL);
+  await expect(page.locator("#start-overlay")).toBeVisible({ timeout: 5000 });
+  await page.click('.start-mode[data-mode="soi6"]');
+  await page.click("#start-go");
+  await expect(page.locator("#term-out")).toContainText(/\S/, { timeout: 5000 });
+
+  // Print far past the cap and confirm the transcript window holds steady while
+  // the newest line survives and the very first is evicted.
+  const result = await page.evaluate(() => {
+    _term.print("FIRST_SENTINEL_LINE");
+    for (let i = 0; i < 2000; i++) _term.print("filler line " + i);
+    _term.print("LAST_SENTINEL_LINE");
+    const out = document.getElementById("term-out");
+    return {
+      count: out.childElementCount,
+      hasFirst: out.textContent.includes("FIRST_SENTINEL_LINE"),
+      hasLast: out.textContent.includes("LAST_SENTINEL_LINE"),
+    };
+  });
+  expect(result.count).toBeLessThanOrEqual(800);
+  expect(result.hasFirst).toBe(false); // the oldest line was trimmed away
+  expect(result.hasLast).toBe(true);   // the newest is still there
+});
