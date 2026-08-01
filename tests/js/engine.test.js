@@ -2970,6 +2970,22 @@ test("Glam: the Cheeky Monkey regular, shuttled to Hyper, and protected", () => 
   assert.ok((state().soc.heat.cheeky_monkey || 0) >= 2, "and it costs you heat");
 });
 
+test("_questWhere tracks a shuttled patron giver's live bar, not a stale room", () => {
+  // oldrocker/quietmoney target Glam, who is at Cheeky Monkey early and walked over
+  // to Hyper after 22:00. _questWhere must read his LIVE room, not a fixed one.
+  state().room = "sunset_rail"; // somewhere else, so the clause isn't suppressed
+  state().nightTurn = 20;
+  const early = _questWhere("glam");
+  assert.match(early, /Cheeky Monkey/, "before 22:00 he's at his home bar");
+  state().nightTurn = 55;
+  const late = _questWhere("glam");
+  assert.match(late, /Hyper/, "after the shuttle the clue follows him to Hyper");
+  assert.notEqual(early, late, "the where-clause actually moved with him");
+  // and it self-suppresses when you're already with him
+  state().room = "hyper";
+  assert.equal(_questWhere("glam"), "", "no direction when you're in the room");
+});
+
 test("Fergie: haunts Buakhao & Tree Town, shifting tall tales, and the Bert/Candy landmine", () => {
   const f = PATRONS.fergie;
   assert.equal(f.home, "gold_rush");

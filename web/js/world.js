@@ -3703,7 +3703,7 @@ const NPCS = {
   },
 
   kwan: {
-    name: "Kwan", th: "กวาง", emoji: "🦋",
+    name: "Kwan", th: "ขวัญ", emoji: "🦋",
     room: "sunset_dreams",
     desc: "Gentle, soft-voiced, folding paper napkins into birds while the soi roars outside.",
     dialogue: [
@@ -6320,7 +6320,7 @@ const ENCOUNTERS = {
     // apps run on the 'tomorrow' clock even at 1 a.m.); then a photos-vs-reality
     // roll — sometimes a genuine payout, more often the catfish, worst in heels.
     // The two-step catfish + the hit live in _ENC.booking / _catfishDoor.
-    rooms: ["hotel_room", "qv_room", "metropole_room", "naklua_rd"],
+    rooms: ["hotel_room", "qv_room", "areca_room", "metropole_room", "naklua_rd"],
     interactive: true, nightly: true,
     intro: "Your phone buzzes — one of the girls you'd been messaging off the apps, " +
       "the stunner from the photos who kept leaving you on read, is suddenly awake " +
@@ -6525,7 +6525,7 @@ const QUESTS = {
     giver: "wimon",
     desc: "Sit with Glam a while and let him tell you about the tour (ASK GLAM ABOUT MUSIC).",
     deps: [],
-    at: "cheeky_monkey",
+    at: "glam",             // a shuttled patron — _questWhere reads his live bar
     doneFlag: "glamHeard",
     reward: { money: 0, happy: 2 },
   },
@@ -6546,7 +6546,7 @@ const QUESTS = {
     desc: "Nobody asks the Samson brothers where the seed money came from. Ask the man " +
       "out of time instead (ASK GLAM ABOUT HIS SONS).",
     deps: ["keys"],
-    at: "cheeky_monkey",
+    at: "glam",
     doneFlag: "glamTruth",
     reward: { money: 0, happy: 3 },
   },
@@ -6588,7 +6588,7 @@ const QUESTS = {
     desc: "฿500 to jog a deadbeat's memory — no rough stuff, just find Fergie in his " +
       "maze and ASK him ABOUT THE DEBT.",
     deps: [],
-    at: "gold_rush",
+    at: "fergie",           // patron giver — live location via _patronRoom (his maze today)
     doneFlag: "fergieReminded",
     reward: { money: 500, happy: 2 },
   },

@@ -173,7 +173,7 @@ test("every quest is well-formed: giver, deps, item, and at all resolve", () => 
     assert.ok(NPCS[q.giver], `${qid}: giver ${q.giver} is not an NPC`);
     for (const d of q.deps) assert.ok(QUESTS[d], `${qid}: dep ${d} is not a quest`);
     if (q.item) assert.ok(ITEMS[q.item], `${qid}: item ${q.item} missing`);
-    if (q.at) assert.ok(NPCS[q.at] || ROOMS[q.at], `${qid}: at ${q.at} resolves to nothing`);
+    if (q.at) assert.ok(NPCS[q.at] || PATRONS[q.at] || ROOMS[q.at], `${qid}: at ${q.at} resolves to nothing`);
     if (q.reqFlags) assert.ok(Array.isArray(q.reqFlags) && q.reqFlags.every(f => typeof f === "string"),
       `${qid}: reqFlags must be an array of flag names`);
     assert.ok(q.doneFlag && q.reward, `${qid}: needs doneFlag and reward`);
