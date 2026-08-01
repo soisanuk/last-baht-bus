@@ -2527,6 +2527,78 @@ test("the detective's recon quest completes only after you've seen the Orchid's 
   assert.ok(_flag("orchidReported"), "the recon flag is set");
 });
 
+// The seven origin quests (one per playable origin — the one you ARE is
+// deactivated). Each is given by its Soi 6 NPC, gated on trust, and completed by
+// ASK <giver> ABOUT <topic>, which sets a doneFlag that _questTick pays out.
+const _ORIGIN_QUESTS = [
+  { qid: "orchid_recon", giver: "doyle", gOrigin: "pi",         topic: "table",    done: "orchidReported", pre: () => { state().visited = { orchid_room: true }; } },
+  { qid: "nominee_deal", giver: "wayne", gOrigin: "business",   topic: "partner",  done: "nomineeWarned",  pre: () => { state().visited = { orchid_room: true }; } },
+  { qid: "old_days",     giver: "roy",   gOrigin: "pension",    topic: "old days", done: "oldDaysHeard" },
+  { qid: "easy_come",    giver: "macca", gOrigin: "redundancy", topic: "payout",   done: "payoutPaced" },
+  { qid: "quiet_one",    giver: "pete",  gOrigin: "running",    topic: "name",     done: "nameKept" },
+  { qid: "her_brother",  giver: "rob",   gOrigin: "married",    topic: "brother",  done: "brotherWord" },
+  { qid: "wrong_shot",   giver: "barry", gOrigin: "monger",     topic: "photo",    done: "wrongShot",      pre: () => { state().visited = { orchid_room: true }; } },
+];
+
+test("every origin quest completes on ASK and pays its reward via _questTick", () => {
+  for (const q of _ORIGIN_QUESTS) {
+    newGame();
+    state().stage = "vacation"; state().flags.act1Done = true;
+    // be any origin BUT the giver's, so the giver NPC isn't deactivated
+    state().player.origin = q.gOrigin === "pi" ? "monger" : "pi";
+    state().player.personality = "joker"; state().player.orientation = "straight";
+    assert.ok(_npcActive(q.giver), `${q.qid}: giver ${q.giver} is active for this identity`);
+    if (q.pre) q.pre();
+    state().room = _npcRoom(q.giver);          // present, and its own bar
+    state().quests[q.qid] = "active";
+    const money0 = state().money;
+    out = [];
+    run(`ask ${q.giver} about ${q.topic}`);
+    assert.ok(_flag(q.done), `${q.qid}: the ASK set ${q.done}`);
+    assert.equal(state().quests[q.qid], "done", `${q.qid}: _questTick closed it same-turn`);
+    assert.match(lastOut(), /QUEST COMPLETE/, `${q.qid}: the completion banner printed`);
+    const reward = QUESTS[q.qid].reward.money || 0;
+    assert.equal(state().money, money0 + reward, `${q.qid}: paid its ฿${reward} reward`);
+  }
+});
+
+test("an origin quest is offered on TALK once trust is earned, and ACCEPT activates it", () => {
+  // Roy's is the cleanest: trust 1, no deps, no preconditions.
+  state().stage = "vacation"; state().flags.act1Done = true;
+  state().player.origin = "pi"; // not pension, so Roy is active
+  state().room = _npcRoom("roy");
+
+  // a near-stranger gets no personal job — the gate lives at the availability layer
+  _npcState("roy").trust = 0;
+  assert.equal(_questAvailable("old_days"), false, "a cold giver's job isn't available");
+  out = []; run("accept old_days");
+  assert.notEqual(state().quests.old_days, "active", "and you can't shortcut it with a bare ACCEPT");
+
+  // earn his trust and the job surfaces on the next talk
+  _npcState("roy").trust = 1;
+  assert.ok(_questAvailable("old_days"), "known enough now, it's on the table");
+  out = []; run("talk roy");
+  assert.match(lastOut(), /has a job for you|ACCEPT OLD_DAYS/i, "now he offers it");
+  assert.equal(state().quests.old_days, "offered");
+  out = []; run("accept old days");
+  assert.equal(state().quests.old_days, "active", "ACCEPT takes it on");
+  assert.match(lastOut(), /Quest accepted/i);
+});
+
+test("_introMatch resolves a taxi-intro answer by number, exact id/label, and substring", () => {
+  const t = ORIGINS;
+  assert.equal(_introMatch("1", t).id, t[0].id, "a number picks by position");
+  assert.equal(_introMatch("2", t).id, t[1].id);
+  assert.equal(_introMatch("pi", t).id, "pi", "an exact id matches even under 4 chars");
+  assert.equal(_introMatch("the detective", t).id, "pi", "an exact label matches");
+  assert.equal(_introMatch("detective", t).id, "pi", "a ≥4-char substring of the label matches");
+  assert.equal(_introMatch("invest", t).id, "business", "substring of 'The investor'");
+  assert.equal(_introMatch("  PI. ", t).id, "pi", "whitespace + trailing punctuation are stripped");
+  assert.equal(_introMatch("xyz", t), null, "a <4-char non-match is null (no wild substring)");
+  assert.equal(_introMatch("99", t), null, "an out-of-range number falls through to null");
+  assert.equal(_introMatch("", t), null, "empty is null");
+});
+
 test("the taxi intro gates Soi 6 mode too, then opens the week", () => {
   state().player.origin = null;
   out = [];

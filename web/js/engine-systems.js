@@ -1424,7 +1424,9 @@ function _questAvailable(qid) {
   // (a room, or an NPC's bar) lies outside it — e.g. the Shamrock Dog, out on
   // the Darkside. You'd accept it and have no way to finish it this trip.
   if (G.mode === "soi6" && q.at) {
-    const targetRoom = ROOMS[q.at] ? q.at : (NPCS[q.at] ? _npcRoom(q.at) : null);
+    const targetRoom = ROOMS[q.at] ? q.at :
+      NPCS[q.at] ? _npcRoom(q.at) :
+      PATRONS[q.at] ? _patronRoom(q.at) : null;
     if (targetRoom && !SOI6_ROOMS.has(targetRoom)) return false;
   }
   return q.deps.every(d => G.quests[d] === "done");
