@@ -1605,6 +1605,23 @@ test("Pia: same surface for everyone, the person comes up only if you look (two-
   assert.match(lastOut(), /sorry face/i, "told plainly, not milked");
 });
 
+test("Kai: the operator — a forced shark you must read; the white knight can't bond clear of it", () => {
+  state().stage = "vacation"; state().room = "golden_dragon";
+  assert.equal(NPCS.kai.type, "operator");
+  assert.ok(!NPCS.kai.filler, "promoted from filler to authored");
+  assert.ok(_bfShark("kai"), "type:operator forces the shark, no hash luck involved");
+  // a savvy punter who bonds (favor>=6) buys safety; the white knight never does
+  state().player.personality = "charmer"; state().soc.drinks.kai = 8;
+  assert.ok(!_bfExploitable("kai"), "bonding protects the savvy player");
+  state().player.personality = "whiteknight";
+  assert.ok(_bfExploitable("kai"), "the white knight stays the mark, however bonded");
+  // the tells are in the prose; reading her (ask 'game') drops the act for a straight, dearer price
+  run("talk to kai");
+  assert.match(lastOut(), /reaches her eyes/i, "the smile-lands-late tell");
+  out = []; run("you playing me");                 // → game topic (rule)
+  assert.match(lastOut(), /straight price[\s\S]*discount/i, "seen through, she goes straight (and dearer)");
+});
+
 test("Kwan: the green rung — soft and simple, but self-possessed, not a dim sweet girl", () => {
   state().stage = "vacation"; state().room = "sunset_dreams";
   run("talk to kwan");

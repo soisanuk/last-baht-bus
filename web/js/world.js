@@ -2867,6 +2867,41 @@ const NPCS = {
         "being asked. \"Nice try, though.\"" },
     ],
   },
+  // Kai (Golden Dragon) — the operator. type:"operator" makes her an authored shark
+  // (_bfShark): barfine her without reading the tells and the game runs; the white
+  // knight can't bond his way clear of it. No victim, no heart of gold — a pro doing
+  // a job well. Read her (blunt, or ask "game") and she'll drop the act for a
+  // straight, more expensive price. Promoted from filler; portrait already exists.
+  kai: {
+    name: "Kai", th: "ไก่", emoji: "💅", type: "operator",
+    room: "golden_dragon",
+    desc: "Warmer than the room and faster than the room — your name inside a minute, both her hands around " +
+      "yours inside two. It is a very good act. She is very good at it.",
+    dialogue: [
+      // SURFACE — the love-bomb. Too warm, too fast: that IS the tell.
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Where you BEEN?\" Like she waited all night, only for you. Both hands find yours. \"I see you " +
+          "come in, I tell my friend — that one, he look kind. Not like other farang.\" The smile is dazzling " +
+          "and lands half a second before it reaches her eyes.",
+        short: "\"There you are! I wait for you all night.\" Both hands find yours.",
+        asks: { key: "hotel", q: "\"You stay nice hotel? Beach side?\" Sweet, folded into the flirting — but she's pricing the room, the watch, the shoes. \"I ask because I want you comfortable, tilac. Only that.\"" } },
+      // the tells a savvy player clocks — the program running on schedule
+      { topic: "love", text: "\"I think I love you little bit already.\" She says it like a gift, on the first " +
+        "night, to a man whose name she learned twenty minutes ago. \"Is fast, I know. But Kai heart just know, " +
+        "na.\" She squeezes your hand on the word heart, and on the word know." },
+      { topic: "family", text: "\"My mama, in Buriram—\" a shadow crosses, perfectly timed \"—she sick. The " +
+        "hospital want twelve thousand. I not ask you, tilac, I never ask. I just... worry.\" A brave little " +
+        "smile. \"Sorry. You come here for fun, not for my problem. Forget I say.\"",
+        short: "\"My mama sick, hospital want twelve thousand. I not ask you — I never ask. Forget I say.\"" },
+      // the operator reveal — for a player who SEES it, she drops the act cold.
+      // No shame, no victim: a pro respecting a mark who turned out not to be one.
+      { topic: "game", text: "\"...Okay.\" The warmth switches off like a tap; the pro looks out from behind it. " +
+        "\"You see it. Good — save us both the show, na. You want me tonight, is fine. But no more 'I love you', " +
+        "no sick mama.\" She names a number, flat. \"Straight price. Higher — the show was the discount. You pay " +
+        "for honest now.\"",
+        short: "\"You see it. Straight price then — higher, na. The show was the discount.\"" },
+    ],
+  },
   wilai: {
     name: "Wilai", th: "วิไล", emoji: "💋",
     room: "ruby_kiss",
@@ -5853,7 +5888,7 @@ const CANON_HOSTESSES = [
 // (Ringing the bell a couple of times has been known to soften the rules.)
 
 const NPC_ROLES = {
-  lek: "hostess", noi: "hostess", ping: "hostess", aom: "hostess",
+  lek: "hostess", noi: "hostess", ping: "hostess", aom: "hostess", kai: "hostess",
   joy: "hostess", fon: "hostess", gift: "hostess", kwan: "hostess",
   nong: "hostess", pim: "hostess", bee: "hostess", jane: "hostess", mercedes: "hostess", kratae: "hostess",
   nira: "hostess", mind: "hostess", pia: "hostess", wilai: "hostess",
@@ -6074,7 +6109,7 @@ const _FILLER_HOSTESSES = [
   ["Namtip","น้ำทิพย์","lucky_charm"], ["Bella","เบลล่า","lucky_charm"],
   ["Prik","พริก","moonshine_bar"], ["Mek","เมฆ","moonshine_bar"],
   ["Namtan","น้ำตาล","khao_talo_bar"], ["Ying","หญิง","khao_talo_bar"],
-  ["Kai","ไก่","golden_dragon"], ["Nook","นุ้ก","golden_dragon"], ["Dew","ดิว","golden_dragon"],
+  ["Nook","นุ้ก","golden_dragon"], ["Dew","ดิว","golden_dragon"],  /* Kai promoted to authored NPC */
   ["Puu","ปู","pink_lotus"], ["Belle","เบล","pink_lotus"],
   ["Kat","แคท","sunset_dreams"], ["May","เมย์","sunset_dreams"], ["Dear","เดียร์","sunset_dreams"],
   ["Praewa","แพรวา","kitten_corner"], ["Nangfah","นางฟ้า","kitten_corner"],
