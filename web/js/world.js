@@ -3304,6 +3304,23 @@ const NPCS = {
       "is magnificent. A ยาดม inhaler is never further than her reach, in case a smoker wanders in and dares to " +
       "light up.",
     dialogue: [
+      // The armor arc — the magnificent confidence is a wall, and a bonded regular is
+      // the one person she lets see behind it. Bond-tiered, her own sharp English.
+      { bond: 3,
+        text: "She lets the whole act down at once, like heels kicked off at 3am, and what's left is quieter " +
+          "and younger than the glamour ever admits to. \"The confidence, the mouth, the big Bebe — is real. " +
+          "Is also a wall, tilac. Behind it—\" she taps her own chest, wry \"—just a person who wanted, so " +
+          "bad, to be exactly this. And got it. And still nobody stay past breakfast.\" Then the wall is back " +
+          "up, dazzling, defended. \"ANYWAY. You want to stay past breakfast, we see. No promises. I am very " +
+          "high maintenance and worth every baht.\"",
+        short: "The act comes down. \"The big Bebe is real — but also a wall. Behind it, a person who got exactly what she wanted, and still nobody stay past breakfast.\"" },
+      { bond: 2,
+        text: "Bebe drops onto the stool beside you and, for once, doesn't aim the whole show at you — the " +
+          "mouth goes quiet, the eyes stay sharp. \"You, I don't have to sell. Is restful, actually.\" She " +
+          "says it like a confession she'll deny later. \"You know how tiring, being switch-ON all night? The " +
+          "mouth, the hair, the walk — all night.\" A sideways look, almost shy under all that gloss. \"With " +
+          "you I can put it down a minute. Don't tell nobody. I have a reputation to bankrupt.\"",
+        short: "For once she doesn't perform at you. \"You I don't have to sell — is restful. You know how tiring, being switch-on all night?\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Well, HELLO.\" She looks you over like a menu she's decided about. \"Yes, I am ladyboy — we " +
           "save time, you and me. Now: you are curious, or you are lost, or you are exactly where you want to " +
@@ -3331,6 +3348,25 @@ const NPCS = {
     desc: "Softly spoken and glamorously done up, and decent enough to say it at hello — she would rather tell " +
       "you straight than be anyone's surprise. Tired of the two reactions, hoping for a third.",
     dialogue: [
+      // The courtship payoff of her whole setup — the rare "third reaction," the man
+      // who just talks to her like a person, the seat she said she keeps. Bond-tiered
+      // in her own soft English (authored NPC, not the filler _bondTalk). Reachable
+      // by any bonded player; a bi player additionally gets the flirt/barfine routing.
+      { bond: 3,
+        text: "No braced hello any more — Poy just exhales when she sees you, the whole careful performance " +
+          "set down at the door. \"You.\" She takes your hand in both of hers, unhurried, nothing for sale in " +
+          "it. \"You know what you are, tilac? You are the third one. The man who only... talk to me. Like a " +
+          "person.\" A soft, disbelieving laugh at herself. \"Long time I keep this seat for a man like that. " +
+          "I stop believing he come. Then—\" a shrug, wet-eyed and smiling \"—you come.\" She asks you for " +
+          "nothing at all. That is how you know it's real.",
+        short: "Poy exhales when she sees you, the performance set down. \"You are the third one, tilac — the man who only talk to me like a person. I stop believing he come.\"" },
+      { bond: 2,
+        text: "The braced manner is gone before you reach the stool; she saved it, the way she said she " +
+          "would. \"You came back.\" Poy says it like it still surprises her. \"Most men, once they know — " +
+          "they don't. Or they come back too much, the wrong reason.\" She studies you, careful and a little " +
+          "hopeful. \"You are neither, I think. That is new, for me. I don't quite know what to do with you, " +
+          "tilac. Is a nice problem to have.\"",
+        short: "\"You came back.\" The braced manner's gone — she kept you the seat. \"Most men don't. Or come back the wrong reason. You are neither. A nice problem.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Hello. Sit if you like.\" Gentle, a little braced — the manner of someone who has learned to " +
           "get the hard part out of the way. \"I tell you now, so nobody feel stupid later: I am ladyboy. You " +
@@ -3345,6 +3381,12 @@ const NPCS = {
       { topic: "family", text: "\"Isan, like everybody. My mother know, my father pretend not to.\" No drama, " +
         "just the shape of it. \"I send money home same as my sisters. The money spend the same, na — the bank " +
         "don't ask who I am. Funny, the money is the one thing that never care.\"" },
+      { topic: "dream", bond: 2, text: "\"You want the dream? Everybody think ladyboy dream is to be " +
+        "beautiful. I am ALREADY beautiful—\" a flash of armor, then it softens away \"—the dream is smaller " +
+        "than that. One person who, when somebody ask him what I am, he only say my name. Not 'my ladyboy.' " +
+        "Not explain, not defend. Just—'that is Poy.'\" She looks at you, then away, having said more than she " +
+        "meant to. \"Silly dream. Cheaper than a house. Harder to buy.\"",
+        short: "\"The dream is small — one person who, asked what I am, only says my name. Not 'my ladyboy.' Just 'that is Poy.'\"" },
     ],
   },
   // Aum (Kitten Corner) — the new girl, still learning to meter the smile. Soft,

@@ -1639,6 +1639,25 @@ test("ladyboy hostesses: a bi player's real option, a straight player's gracious
   assert.doesNotMatch(lastOut(), /not for you|the ladies are that way/i, "open mind → she's a real option");
 });
 
+test("ladyboy courtship deepens with bond — Poy's third reaction, Bebe's armor", () => {
+  state().stage = "vacation";
+  state().room = "golden_dragon";        // Poy's bar
+  state().soc.drinks.poy = 13;           // her-farang tier
+  run("talk poy");
+  assert.match(lastOut(), /third one|talk to me like a person|stop believing/i, "Poy opens up at the top tier");
+  out = []; state().soc.drinks.poy = 7;  // regular tier — the bond-gated dream unlocks
+  run("ask poy about dream");
+  assert.match(lastOut(), /only say my name|that is Poy|silly dream/i, "the dream unlocks at regular");
+  // a stranger doesn't get the deep line
+  out = []; state().soc.drinks.poy = 0;
+  run("ask poy about dream");
+  assert.doesNotMatch(lastOut(), /only say my name/i, "no depth before the bond is earned");
+  // Bebe's wall comes down at her-farang tier
+  state().room = "pink_lotus"; state().soc.drinks.bebe = 13;
+  out = []; run("talk bebe");
+  assert.match(lastOut(), /wall|past breakfast|put it down/i, "Bebe lets the act down for a regular");
+});
+
 test("Soi 6 cashiers: toms refuse the wrong team, kin refuse at any price, sponsors flip for money", () => {
   assert.equal(NPCS.joon.orientation, "gay", "a tom");
   assert.equal(NPCS.jun.type, "kin");
