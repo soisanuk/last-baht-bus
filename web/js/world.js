@@ -3073,6 +3073,52 @@ const NPCS = {
         short: "\"Front stool is the window. I am the window — that is why mama never touch me.\"" },
     ],
   },
+  // Kluay (Ruby Kiss) — lazy, and honest about it. type:"lazy" → lady drinks rarely
+  // build favor (you spend, get little). Not unkind; just coasting, and fine with it.
+  // Indie-bar human-scale, no predation.
+  kluay: {
+    name: "Kluay", th: "กล้วย", emoji: "🍌", type: "lazy",
+    room: "ruby_kiss",
+    desc: "Pretty and profoundly unbothered, one of Wilai's front-stool pair, mostly here in body. She'll " +
+      "take the drink. She will not be chasing it.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Oh. Hi.\" A smile that costs her nothing, then her eyes are back on {{her phone}}. \"You want " +
+          "buy me drink? Okay.\" She doesn't say it like a hustle or a favour — more like weather. \"Wilai do " +
+          "the talking. Me, I just look nice and let the night go past.\"",
+        short: "\"You want buy me drink? Okay.\" Said like weather, eyes back on {{her phone}}." },
+      { topic: "work", text: "\"Hungry? No.\" She considers the word like it's someone else's. \"Some girl " +
+        "chase the money all night — Wilai, Kai, run run run. Me, I sit, I look pretty, whatever come, come.\" " +
+        "A slow shrug. \"Mama not happy with me. I know. I not happy enough to change it, na.\"",
+        short: "\"Some girl chase the money all night. Me, I sit, whatever come come.\"" },
+      { topic: "plan", text: "\"Plan.\" She almost laughs, too lazy to finish it. \"My plan is finish this " +
+        "shift. Then sleep. Big plan for tomorrow: wake up.\" She's not sad about it. She's not anything about " +
+        "it. \"You want somebody with a dream, go talk to Wilai. She have enough for both of us.\"" },
+    ],
+  },
+  // Benz (Ruby Kiss) — vain, phone-camera-obsessed, shallow-but-not-dumb: she's
+  // running the follower game, not the money game, and using YOU for content. No hard
+  // punishment vector; the attention just flows one way (toward her own screen).
+  benz: {
+    name: "Benz", th: "เบนซ์", emoji: "🤳", type: "vain",
+    room: "ruby_kiss",
+    desc: "Genuinely stunning and entirely aware of it, angling for the light and the mirror more than for " +
+      "you. There is a screen between you at all times, and you are not the one she's looking at on it.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Wait — don't move, the light good here.\" She leans in cheek-to-cheek, not for you, for {{the " +
+          "camera}}. \"Okay, now you can talk.\" The photo already matters more than the conversation, and she " +
+          "is not pretending otherwise.",
+        short: "\"Don't move, light good here.\" The photo matters more than the talk." },
+      { topic: "content", text: "\"Forty thousand follower.\" She says the number the way Wilai says 'deposit'. " +
+        "\"This bar, just my content. The men think I here for them — no offence. I here for the algorithm.\" A " +
+        "flawless smile at {{the lens}}. \"One day, brand deal. Then bye-bye Soi 6, hello Bangkok.\"",
+        short: "\"Forty thousand follower. Men think I here for them. I here for the algorithm.\"" },
+      { topic: "money", text: "\"Farang money is small money.\" Not rude, just arithmetic. \"You buy me drink, " +
+        "okay, thank you. But the real money is up here—\" she taps her own temple, then, correcting, {{the " +
+        "phone}} \"—here. Attention is the money now. You still buying the old kind.\"" },
+    ],
+  },
   kesinee: {
     name: "Kesinee", th: "เกสินี", emoji: "🐱",
     room: "kitten_corner",
@@ -6008,6 +6054,7 @@ const NPC_ROLES = {
   lek: "hostess", noi: "hostess", ping: "hostess", aom: "hostess",
   kai: "hostess", nook: "hostess", dew: "hostess",
   kat: "hostess", may: "hostess", dear: "hostess",
+  kluay: "hostess", benz: "hostess",
   joy: "hostess", fon: "hostess", gift: "hostess", kwan: "hostess",
   nong: "hostess", pim: "hostess", bee: "hostess", jane: "hostess", mercedes: "hostess", kratae: "hostess",
   nira: "hostess", mind: "hostess", pia: "hostess", wilai: "hostess",
@@ -6233,7 +6280,7 @@ const _FILLER_HOSTESSES = [
   /* Sunset Dreams girls (Kat, May, Dear) promoted to authored NPCs */
   ["Praewa","แพรวา","kitten_corner"], ["Nangfah","นางฟ้า","kitten_corner"],
   ["Tabtim","ทับทิม","cherry_pop"], ["Chaba","ชบา","cherry_pop"],
-  ["Kluay","กล้วย","ruby_kiss"], ["Benz","เบนซ์","ruby_kiss"],
+  /* Ruby Kiss girls (Kluay, Benz) promoted to authored NPCs */
   ["Lin","หลิน","water_buffalo"], ["Nim","นิ่ม","water_buffalo"],
   ["Duan","เดือน","firefly_bar"], ["Saifon","สายฝน","firefly_bar"],
   ["Wanpen","วันเพ็ญ","mama_yai"],

@@ -1622,6 +1622,20 @@ test("Kai: the operator — a forced shark you must read; the white knight can't
   assert.match(lastOut(), /straight price[\s\S]*discount/i, "seen through, she goes straight (and dearer)");
 });
 
+test("Kluay (lazy) & Benz (vain): indie-bar human types; lazy = you spend, get little", () => {
+  assert.ok(!NPCS.kluay.filler && !NPCS.benz.filler, "promoted from filler");
+  assert.equal(NPCS.kluay.type, "lazy");
+  // the lazy vector: buy her many drinks, favor sticks only ~40% (a normal girl banks all)
+  state().stage = "vacation"; state().room = "ruby_kiss"; state().money = 100000;
+  const before = state().soc.drinks.kluay || 0;
+  for (let i = 0; i < 20; i++) { state().rng = (i * 2654435761) >>> 0 || 1; run("buy drink for kluay"); }
+  const gained = (state().soc.drinks.kluay || 0) - before;
+  assert.ok(gained > 3 && gained < 16, "she banks the drink but rarely the warmth");
+  // Benz runs the follower game, not the money game
+  run("talk to benz"); out = []; run("content");
+  assert.match(lastOut(), /algorithm|follower/i);
+});
+
 test("Dew (drunk) & Nook (party): the honest ordinary types — one has teeth, one doesn't", () => {
   assert.ok(!NPCS.dew.filler && !NPCS.nook.filler, "both promoted from filler");
   assert.equal(NPCS.dew.type, "drunk");
