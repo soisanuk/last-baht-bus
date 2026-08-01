@@ -3,19 +3,14 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
-    "t": "Missing Russian siblings’ motorcycle found buried",
-    "s": "Bangkok Post",
-    "d": "29 Jul 2026"
-  },
-  {
     "t": "Missing Russian siblings found murdered, buried in Pattaya, suspects arrested",
     "s": "Thaiger",
     "d": "31 Jul 2026"
   },
   {
-    "t": "Pattaya court denies bail for suspects in five Chonburi killings",
-    "s": "Khaosod English",
-    "d": "01 Aug 2026"
+    "t": "Two men arrested in hunt for young Russian siblings",
+    "s": "Bangkok Post",
+    "d": "30 Jul 2026"
   },
   {
     "t": "Thai Police Find Buried Motorcycle Belonging to Missing Russian Siblings",
@@ -23,22 +18,27 @@ var NEWS_FEED = [
     "d": "30 Jul 2026"
   },
   {
+    "t": "Pattaya court denies bail for suspects in five Chonburi killings",
+    "s": "khaosodenglish.com",
+    "d": "01 Aug 2026"
+  },
+  {
+    "t": "Chinese tourist safely brought ashore after falling ill during Pattaya sea trip",
+    "s": "Pattaya Mail",
+    "d": "31 Jul 2026"
+  },
+  {
     "t": "Russian siblings dead, suspects confess",
     "s": "Bangkok Post",
     "d": "31 Jul 2026"
   },
   {
-    "t": "Thai Police clarify Georgia’s Article 115 in Hlun Solo death investigation",
+    "t": "Mystery man found dead floating in Pattaya canal wearing guard shirt",
     "s": "Pattaya Mail",
-    "d": "30 Jul 2026"
+    "d": "31 Jul 2026"
   },
   {
-    "t": "Police detain two men in hunt for missing Russian siblings",
-    "s": "Pattaya Mail",
-    "d": "30 Jul 2026"
-  },
-  {
-    "t": "Chinese tourist safely brought ashore after falling ill during Pattaya sea trip",
+    "t": "Pattaya needs spending visitors, not endless labels",
     "s": "Pattaya Mail",
     "d": "31 Jul 2026"
   },
@@ -63,20 +63,20 @@ var NEWS_FEED = [
     "d": "31 Jul 2026"
   },
   {
-    "t": "Thailand: A new Bishop for a vibrant, diverse Church",
-    "s": "Vatican News",
-    "d": "30 Jul 2026"
+    "t": "Suspects confess to killing two Russians who disappeared in Thailand",
+    "s": "Meduza",
+    "d": "31 Jul 2026"
   },
   {
-    "t": "Scientists identified a new giant dinosaur in Thailand, bigger than a Diplodocus",
-    "s": "Futura, le média qui explore le monde",
-    "d": "30 Jul 2026"
+    "t": "Cambodian jobseekers fear debt trap over Thailand’s border reinforcement",
+    "s": "South China Morning Post",
+    "d": "31 Jul 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-07-31","USD":33.47,"AUD":23.49,"GBP":44.92,"EUR":38.43};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-01","temp":28,"humid":85,"code":3,"hi":32,"rain":71};
+var WX_NOW = {"date":"2026-08-02","temp":27,"humid":88,"code":51,"hi":30,"rain":56};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
@@ -84,4 +84,4 @@ var LOTTO = {"date":"2026-08-01","first":"932479","last2":"69","front3":["413","
 // XAU, plus Thai baht-weight gold (96.5%)
 var GOLD = {"usd":4044,"date":"2026-08-01","baht":64000};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":63000,"thb":2112410};
+var BTC = {"usd":62701,"thb":2102374};
