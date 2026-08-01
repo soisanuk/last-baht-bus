@@ -394,6 +394,14 @@ function _doTravel(arg) {
     _say("(TRAVEL <place>. Walking pace — no shortcuts through the clock.)", "dim");
     return;
   }
+  // Already standing in it — a venue's own name, tapped from inside it, must not
+  // route anywhere. Check the CURRENT room before any hotel/destination match, or
+  // "Queen Vic Inn" (the pub) resolves to "Your Room — Queen Vic Inn" and walks you
+  // upstairs. (The later !dest branch keeps this for the never-found case.)
+  const _here0 = _room();
+  if ((_here0.bar && _here0.bar.toLowerCase().includes(w)) || _here0.name.toLowerCase().includes(w)) {
+    _say("You're standing in it."); return;
+  }
   let dest = null;
   if (/^(hotel|my room|home|room)$/.test(w) ||
       _HOTELS[G.hotel].name.toLowerCase().includes(w)) {
