@@ -472,6 +472,24 @@
   justify-content: center;
 }
 #wc-overlay.open { display: flex; }
+/* Photo lightbox — tap a gallery photo / texted selfie to view it full-size */
+#pic-overlay {
+  display: none; position: fixed; inset: 0; z-index: 10001;
+  align-items: center; justify-content: center;
+  background: rgba(4, 0, 10, .9); cursor: zoom-out; padding: 20px;
+}
+#pic-overlay.open { display: flex; }
+#pic-overlay img {
+  max-width: 92vw; max-height: 84vh; border-radius: 10px;
+  border: 1px solid #ff149355; box-shadow: 0 0 44px #ff149366;
+  image-rendering: pixelated;
+}
+#pic-overlay .pic-cap {
+  position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%);
+  color: #ecd7ff; font: 13px/1.4 "SF Mono", Menlo, monospace;
+  background: #1a0a2a; padding: 5px 12px;
+  border-radius: 8px; max-width: 90vw; text-align: center;
+}
 /* Each stacked card sits in its own full-screen layer */
 .wc-layer {
   position: absolute;
@@ -697,6 +715,7 @@
 
 <!-- vendored word-card modal mounts (see wordcard.js) -->
 <div id="wc-overlay"></div>
+<div id="pic-overlay"></div>
 <div id="script-tooltip"></div>
 <div id="word-tooltip">
   <div class="tt-thai" id="tt-thai"></div>

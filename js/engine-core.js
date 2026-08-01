@@ -763,18 +763,17 @@ function _findNpc(word) {
   return null;
 }
 
-// Descriptive-title-until-known: a character you haven't met shows their `title`
-// (a look, not a name) in the world; once you know them — talked to them, took
-// their photo, or someone named them (G.known) — the name. Opt-in: a character
-// with no `title` always shows their name, so the roster converts over gradually
-// and untitled NPCs are completely unaffected.
+// Everyone is named on sight — one consistent rule across the whole cast (the
+// "descriptive title until met" reveal was dropped: gating a few characters while
+// the ~230 staff were named on sight read as inconsistent, per playtest). The
+// `title` fields + _findNpc/_findPatron look-resolution stay in the data (harmless,
+// still let "talk to the owlish old-timer" resolve), but they never replace a name
+// in the UI. To restore reveal-on-met, gate these on `!(G.known && G.known[id])`.
 function _npcLabel(id) {
-  const n = NPCS[id]; if (!n) return id;
-  return (n.title && !(G.known && G.known[id])) ? n.title : n.name;
+  const n = NPCS[id]; return n ? n.name : id;
 }
 function _patronLabel(id) {
-  const p = PATRONS[id]; if (!p) return id;
-  return (p.title && !(G.known && G.known[id])) ? p.title : p.name;
+  const p = PATRONS[id]; return p ? p.name : id;
 }
 
 // A named character the player addressed who isn't in THIS room — used to turn a
@@ -951,11 +950,8 @@ function _describeRoom(full, forceFull) {
   if (pats.length) {
     _say("At the rail: " + pats.map(id => {
       const p = PATRONS[id];
-      // a titled patron you haven't met shows the look; otherwise the old
-      // Name (age, nat) — so untitled patrons are unchanged.
-      return (p.title && !(G.known && G.known[id]))
-        ? `${p.emoji} ${p.title}`
-        : `${p.emoji} ${p.name} (${p.age}, ${p.nat})`;
+      // Everyone is named on sight now — the patron's Name (age, nat), never a look.
+      return `${p.emoji} ${p.name} (${p.age}, ${p.nat})`;
     }).join(", ") + ".");
   }
   const exits = Object.keys(r.exits);
