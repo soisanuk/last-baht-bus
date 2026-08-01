@@ -2315,6 +2315,20 @@ test("watching the soi: the balcony's first-time tone-setter, then it varies; th
   assert.doesNotMatch(lastOut(), /third-floor rail|recliner/i, "not the balcony copy");
 });
 
+test("a hotel room's dead-direction refusal is indoor-appropriate, not a street line", () => {
+  // qv_room only exits `down` — trying OUT used to give the street pool ("shuttered
+  // shophouses, a parked Click"), nonsense from a third-floor room.
+  state().room = "qv_room";
+  out = []; run("out");
+  assert.match(lastOut(), /only way out of the room is the stairs/i, "an indoor refusal");
+  assert.doesNotMatch(lastOut(), /shophouse|parked Click|No road/i, "not the street pool");
+  assert.match(lastOut(), /\(DOWN\)/, "with the real exit offered as a live tap");
+  // a genuine street room still gets the street refusal
+  state().room = "soi6_street";
+  out = []; run("north");
+  assert.doesNotMatch(lastOut(), /only way out of the room/i, "street rooms keep the street pool");
+});
+
 test("RESTART re-runs character creation in the CURRENT mode (Soi 6 stays Soi 6)", () => {
   // The bug: RESTART did newGame()+engineIntro() unconditionally, dumping a Soi 6
   // challenge player onto the beach/Act One. It must re-open the mode you're in.
