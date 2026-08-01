@@ -859,6 +859,17 @@ const _ANSWER_CAUGHT = [
   n => `${n} tilts their head a fraction. "Hm. That's not what you told me before." The change lands, and not only on you.`,
   n => `A flicker behind ${n}'s eyes. "Funny — I had you down differently." They let it sit. People misremember. Or they don't.`,
 ];
+// The soi grapevine: you never told THIS person, but you told someone else
+// something different, and word got around. A soft catch — a shrug, not an
+// accusation — but the discrepancy is noted, and it earns no warm "opening up".
+const _ANSWER_GOSSIP = [
+  (n, p) => `${n} pauses half a beat. "Funny — somebody in here had you from ${_wrapSaid(p)}." A small shrug, filed away. The soi talks, out here.`,
+  (n, p) => `"${_wrapSaid(p)}?" ${n} says it before you can stop them. "That's what I heard. Now you tell it different." Nothing's really private on this street.`,
+  (n, p) => `${n}'s eyes do a slow, amused inventory. "Word travels, na. I heard ${_wrapSaid(p)} — from you, they say." They let the gap hang, then move on. But it's noted.`,
+];
+// Quote the player's own past words back — verbatim, but suppress any decorate()
+// tap-decoration inside (it's remembered free text, not a live entity).
+function _wrapSaid(v) { return "{{“" + v + "”}}"; }
 function _partnerHasTopic(id, t) {
   const nodes = ((NPCS[id] || PATRONS[id] || {}).dialogue) || [];
   return nodes.some(d => d.topic && (d.topic === t || t.includes(d.topic)));
@@ -869,12 +880,17 @@ function _convoAnswer(text) {
   const st = _npcState(id);
   const heard = (st.heard = st.heard || {});
   const val = text.replace(/[.!?,]+$/, "").trim();
-  (G.player = G.player || { said: {} }).said[key] = val;
+  const said = (G.player = G.player || { said: {} }).said;
+  const globalPrior = said[key]; // what you last told ANYONE (before this answer)
+  said[key] = val;
   const prior = heard[key];
   heard[key] = val;
   const name = _convoName(id);
   if (prior && prior !== val) {
-    _say(_pickVary(_ANSWER_CAUGHT, "ansCaught")(name));
+    _say(_pickVary(_ANSWER_CAUGHT, "ansCaught")(name));           // she caught you herself
+  } else if (!prior && globalPrior && globalPrior !== val) {
+    _say(_pickVary(_ANSWER_GOSSIP, "ansGossip")(name, globalPrior)); // the soi grapevine caught you
+    // no +1 — you didn't open up, you got caught telling it two ways
   } else {
     _say(_pickVary(_ANSWER_ACK, "ansAck")(name));
     if (!prior) st.trust = Math.min(5, st.trust + 1); // opening up, once
