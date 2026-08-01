@@ -2902,6 +2902,58 @@ const NPCS = {
         short: "\"You see it. Straight price then — higher, na. The show was the discount.\"" },
     ],
   },
+  // Nook (Golden Dragon) — the party girl. The honest anti-romanticization type:
+  // look past the patter and there is no second layer, and that's fine. Harmless,
+  // no punishment vector — just genuinely here for the music and the free drinks.
+  nook: {
+    name: "Nook", th: "นุ้ก", emoji: "🍒", type: "party",
+    room: "golden_dragon",
+    desc: "Twenty-two and delighted about all of it — the music, the lights, the free drinks, the men who " +
+      "think she is magic. She is having the best night of her life. Again.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"HELLO handsome!\" She's already dancing a little, to a song only she hears. \"You buy me " +
+          "tequila? I like you already, you have a nice face. Wait — what your name? Doesn't matter, I call " +
+          "you handsome. HANDSOME.\" She's laughing before the joke arrives.",
+        short: "\"Handsome! Buy me tequila? I forget your name already — is okay, I call you handsome.\"",
+        asks: { key: "return", q: "\"You come back tomorrow?\" She asks everyone this. \"I have SO much fun with you!\" She met you ninety seconds ago. She means it, though — that is the strange part. She has fun with everybody." } },
+      // there's no earned layer. she is exactly what she looks like, cheerfully.
+      { topic: "plan", text: "\"Plan?\" The word does not land. \"Tonight, I plan to have fun. Tomorrow—\" a " +
+        "shrug, a grin, gone already \"—tomorrow is tomorrow, na. You think too much, handsome. Dance!\"" },
+      { topic: "family", text: "\"I send my mama money when I have it. Sometime I forget.\" No guilt, no drama " +
+        "— she is simply not built for it. \"She understand. I am the fun one. Every family have one fun one.\" " +
+        "She's already watching the door for the next friend." },
+      { topic: "home", text: "\"Ubon. Boring! Here is not boring.\" She waves the whole subject away. \"Why you " +
+        "want talk boring thing? Buy me one more, we dance, you forget your problem, I forget your name — " +
+        "everybody happy!\" And the thing is, she is not wrong." },
+    ],
+  },
+  // Dew (Golden Dragon) — the booze/edge girl. type:"drunk" → barfine her and the
+  // night is 50% a write-off (the "mao" ending), 75% for the white knight who's sure
+  // he can look after her. She refuses the rescue in her own words. PG-13: the edge
+  // is implied ("nobody says the word out loud"), never depicted.
+  dew: {
+    name: "Dew", th: "ดิว", emoji: "🥃", type: "drunk",
+    room: "golden_dragon",
+    desc: "A half-step behind the room all night, warm and unfocused, a drink she didn't order already in " +
+      "her hand. The other girls keep an eye on her and finish her sentences. Nobody says the word out loud.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Ohh, hello, you...\" She loses the end of it, finds your hand instead, holds on. \"You are... " +
+          "nice. I can tell. I always can tell.\" Her eyes are warm and a little unmoored, half a second late " +
+          "to everything. Down the bar, Kai watches her, then watches you.",
+        short: "\"Hello, you... you are nice, I can tell.\" Warm, unmoored, a half-second late." },
+      { topic: "drink", text: "\"This one?\" She looks at the glass like she's surprised to see it. \"Somebody " +
+        "buy it for me. Somebody always buy it for me. Is the one nice thing about here.\" A smile that doesn't " +
+        "quite dock. \"You want one? No? Good boy. One of us should be the good boy.\"" },
+      // the anti-white-knight beat, in her own mouth — self-aware, tired, no violin
+      { topic: "okay", bond: 2, text: "The question — are you okay — lands somewhere, and for a second the fog " +
+        "thins. \"You are sweet. Don't.\" Gentle, tired, completely certain. \"I know what I am, tilac. I am " +
+        "not the one you fix. You want to help somebody, help Kwan, help the new girl. Not me — me is a long " +
+        "time already.\" Then it closes over again, and she is smiling at the middle distance.",
+        short: "\"I know what I am. I am not the one you fix. Don't try, sweet boy.\"" },
+    ],
+  },
   wilai: {
     name: "Wilai", th: "วิไล", emoji: "💋",
     room: "ruby_kiss",
@@ -5888,7 +5940,8 @@ const CANON_HOSTESSES = [
 // (Ringing the bell a couple of times has been known to soften the rules.)
 
 const NPC_ROLES = {
-  lek: "hostess", noi: "hostess", ping: "hostess", aom: "hostess", kai: "hostess",
+  lek: "hostess", noi: "hostess", ping: "hostess", aom: "hostess",
+  kai: "hostess", nook: "hostess", dew: "hostess",
   joy: "hostess", fon: "hostess", gift: "hostess", kwan: "hostess",
   nong: "hostess", pim: "hostess", bee: "hostess", jane: "hostess", mercedes: "hostess", kratae: "hostess",
   nira: "hostess", mind: "hostess", pia: "hostess", wilai: "hostess",
@@ -6109,7 +6162,7 @@ const _FILLER_HOSTESSES = [
   ["Namtip","น้ำทิพย์","lucky_charm"], ["Bella","เบลล่า","lucky_charm"],
   ["Prik","พริก","moonshine_bar"], ["Mek","เมฆ","moonshine_bar"],
   ["Namtan","น้ำตาล","khao_talo_bar"], ["Ying","หญิง","khao_talo_bar"],
-  ["Nook","นุ้ก","golden_dragon"], ["Dew","ดิว","golden_dragon"],  /* Kai promoted to authored NPC */
+  /* Golden Dragon girls (Kai, Nook, Dew) promoted to authored NPCs */
   ["Puu","ปู","pink_lotus"], ["Belle","เบล","pink_lotus"],
   ["Kat","แคท","sunset_dreams"], ["May","เมย์","sunset_dreams"], ["Dear","เดียร์","sunset_dreams"],
   ["Praewa","แพรวา","kitten_corner"], ["Nangfah","นางฟ้า","kitten_corner"],
