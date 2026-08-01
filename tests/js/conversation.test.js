@@ -388,6 +388,46 @@ test("telling an NPC a different answer than before is caught", () => {
   assert.equal(state().player.said.home, "manchester", "memory updates to the latest");
 });
 
+test("the soi grapevine: tell one person X, tell another Y, the second hears about it", () => {
+  // Angela hears "london"; over at Stinky's, Bert — who never asked before — still
+  // catches the discrepancy, because word gets around. A soft, trust-neutral catch.
+  state().room = "queen_vic";
+  run("angela"); run("london");
+  assert.equal(state().player.said.home, "london");
+
+  // cross the town to a fresh partner in his own bar, and answer differently
+  state().room = NPCS.bert.room;
+  run("bert"); // engage him so he's the active present partner
+  const t0 = _npcState("bert").trust;
+  state().convoQ = { id: "bert", key: "home" };
+  out = [];
+  run("manchester");
+  assert.match(lastOut(), /the soi talks|word travels|nothing's really private|had you from/i, "the grapevine catches the change");
+  assert.doesNotMatch(lastOut(), /files it|question put away/i, "it is NOT the warm 'opened up' ack");
+  assert.equal(_npcState("bert").trust, t0, "a caught discrepancy earns no trust bump");
+  assert.equal(state().player.said.home, "manchester", "global memory tracks the latest telling");
+  assert.equal(_npcState("bert").heard.home, "manchester", "and this partner now has their own record");
+
+  // telling THIS partner the same thing again is clean (consistent with them)
+  state().convoQ = { id: "bert", key: "home" };
+  out = [];
+  run("manchester");
+  assert.match(lastOut(), /files it|question put away|takes it in/i, "consistent re-telling is acknowledged, not caught");
+});
+
+test("a consistent story across the soi is NOT caught (same answer to two people)", () => {
+  state().room = "queen_vic";
+  run("angela"); run("london");
+  state().room = NPCS.bert.room;
+  run("bert");
+  const t0 = _npcState("bert").trust;
+  state().convoQ = { id: "bert", key: "home" };
+  out = [];
+  run("london"); // same story
+  assert.doesNotMatch(lastOut(), /the soi talks|word travels|had you from/i, "no catch — the story holds up");
+  assert.equal(_npcState("bert").trust, t0 + 1, "and telling a straight story warms the new person");
+});
+
 test("a pending question lapses when you change the subject", () => {
   state().room = "queen_vic";
   run("angela"); // asks home
