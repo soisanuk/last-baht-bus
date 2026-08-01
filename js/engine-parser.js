@@ -802,6 +802,9 @@ const _CONVO_TOPIC_RULES = [
   [/homesick|miss home|miss your home/,                                          "sad"],
   [/the free|free drink|welcome drink|why.*free|on the house/,                   "free"],
   [/go.?go|the gogo/,                                                            "go-go"],
+  [/\btom\b|are you.*tom|lesbian|you gay|the ladies/,                            "tom"],
+  [/\bsponsor\b|your man|who take care|klaus|the boyfriend/,                     "sponsor"],
+  [/the ring|promise ring/,                                                      "ring"],
   [/military|armed forces|the forces|you serve|were you in/,                     "navy"],
   [/ninet(y|ies)|1990s|the 90s/,                                                 "90s"],
   [/nightlife|the scene/,                                                        "scene"],
@@ -2233,6 +2236,7 @@ function _doTip(arg) {
   if (!id || !NPC_ROLES[id]) { _say("Tip who? Name one of the ladies."); return; }
   if (G.money < amount) { _say(`Generosity of spirit, poverty of pocket: you have ฿${G.money}.`); return; }
   G.money -= amount;
+  (G.soc.given = G.soc.given || {})[id] = (G.soc.given[id] || 0) + amount; // toward a sponsor flip
   const name = NPCS[id].name;
   if (amount >= 100) {
     const bump = amount >= 300 ? 2 : 1;
