@@ -2263,6 +2263,32 @@ test("the taxi intro picks who you are (origin/personality/orientation), then op
   assert.match(lastOut(), /face-down on\s+Jomtien beach|wallet is GONE/s, "and the beach opening follows");
 });
 
+test("origin NPCs: the archetype matching your pick is deactivated (you ARE him)", () => {
+  state().room = "queen_vic";
+  state().player.origin = "monger";   // you're the golfer, so the detective is a separate man
+  assert.ok(_npcsHere().includes("doyle"), "Doyle the detective is in the world");
+  state().player.origin = "pi";       // now you ARE the detective
+  assert.ok(!_npcsHere().includes("doyle"), "your own archetype isn't a separate NPC");
+  assert.equal(_findNpc("doyle"), null, "and you can't address him");
+});
+
+test("the detective's recon quest completes only after you've seen the Orchid's good table", () => {
+  state().room = "queen_vic";
+  state().player.origin = "monger";   // Doyle active
+  state().quests.orchid_recon = "active";
+  out = [];
+  run("ask doyle about table");       // before the visit — a nudge, no completion
+  assert.match(lastOut(), /back room|have a look|velvet-rope/i, "he sends you to look first");
+  assert.ok(!_flag("orchidReported"), "nothing completes without the recon");
+
+  state().visited = state().visited || {};
+  state().visited.orchid_room = true; // now you've been inside
+  out = [];
+  run("ask doyle about table");
+  assert.match(lastOut(), /soft-spoken Thai|the room bends|investigates you/i, "the reveal lands");
+  assert.ok(_flag("orchidReported"), "the recon flag is set");
+});
+
 test("the taxi intro gates Soi 6 mode too, then opens the week", () => {
   state().player.origin = null;
   out = [];

@@ -350,8 +350,18 @@ function _npcRoom(id) {
   return n.room;
 }
 
+// Character-creation Phase B: the seven origin archetypes are all NPCs on Soi 6
+// at once — except the one matching YOUR pick, who is deactivated because you ARE
+// him. An `origin` field on an NPCS entry marks an archetype; _npcActive hides the
+// chosen one from every presence/lookup path (all of which route through _npcsHere).
+// Before the intro (no origin picked) everyone is active, so old saves are unchanged.
+function _npcActive(id) {
+  const n = NPCS[id];
+  return !(n && n.origin && G.player && n.origin === G.player.origin);
+}
+
 function _npcsHere() {
-  return Object.keys(NPCS).filter(id => _npcRoom(id) === G.room);
+  return Object.keys(NPCS).filter(id => _npcActive(id) && _npcRoom(id) === G.room);
 }
 
 // ── Hotels: where the key card works ───────────────────────────────────────
