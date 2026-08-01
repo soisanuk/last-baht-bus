@@ -1622,6 +1622,34 @@ test("Kai: the operator — a forced shark you must read; the white knight can't
   assert.match(lastOut(), /straight price[\s\S]*discount/i, "seen through, she goes straight (and dearer)");
 });
 
+test("Soi 6 cashiers: toms refuse the wrong team, kin refuse at any price, sponsors flip for money", () => {
+  assert.equal(NPCS.joon.orientation, "gay", "a tom");
+  assert.equal(NPCS.jun.type, "kin");
+  assert.equal(NPCS.jenny.type, "sponsor");
+  assert.ok(!NPCS.jenny.filler && !NPCS.joon.filler, "promoted from filler");
+  state().stage = "vacation";
+  // a tom cashier's barfine is a hard no (wrong shop)
+  state().room = "golden_dragon"; run("barfine joon");
+  assert.match(lastOut(), /wrong shop|like the ladies/i);
+  // the mama's kin: family, not floor, at any price
+  state().room = "sunset_dreams"; out = []; run("barfine jun");
+  assert.match(lastOut(), /family|not floor/i);
+  // the good-girl sponsor: off-limits until you outbid him
+  state().flags.act1Done = true; state().flags.hasWallet = true;
+  state().room = "pink_lotus"; state().money = 40000; state().soc.given = {};
+  out = []; run("barfine jenny");
+  assert.match(lastOut(), /not for sale|spoken|take care of me/i, "kept clean by the sponsor");
+  assert.ok(!_sponsorFlipped("jenny"));
+  // gifts accumulate toward her number (TIP feeds G.soc.given — and builds favor too)
+  run("tip jenny 5000"); run("tip jenny 5000"); run("tip jenny 5000"); run("tip jenny 5000");
+  assert.equal(state().soc.given.jenny, 20000, "the gifts log toward her number");
+  assert.ok(_sponsorFlipped("jenny"), "20k outbids Klaus's monthly");
+  out = []; run("talk to jenny"); out = []; run("sponsor");
+  assert.match(lastOut(), /number too big|not clean anymore/i, "the facade drops — you bought that");
+  out = []; run("barfine jenny");
+  assert.ok(state().pendingBf, "flipped: now the barfine goes through");
+});
+
 test("bar etiquette: a girl with another customer declines your lady drink; insist and he turns", () => {
   state().stage = "vacation"; state().room = "pink_lotus"; state().money = 5000;
   let busy;

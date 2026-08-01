@@ -3101,6 +3101,196 @@ const NPCS = {
     ],
   },
 
+  // ── Soi 6 cashiers (promoted from _FILLER_CASHIERS) ──────────────────────────
+  // Businesslike, fluent. Three seams: TOMS (orientation:"gay" → flirt hits the
+  // wrong-team refusal; barfine a hard no); the MAMA'S KIN (type:"kin" → family, not
+  // floor, at any price); and the GOOD-GIRL-WITH-A-SPONSOR (type:"sponsor" → off-limits,
+  // kept clean by a farang's money, until you outbid him — _sponsorFlipped, and the
+  // facade drops in a bond-less `when` variant. Bleak, honest, anti-white-knight).
+  jenny: {
+    name: "Jenny", th: "เจนนี่", emoji: "🧾", type: "sponsor",
+    room: "pink_lotus",
+    desc: "Neat, quick with the till, a promise ring she touches when she's thinking. She took the cashier " +
+      "seat on purpose — off the floor, off the market, kept clean for the man in Germany who sends the money.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Hello, welcome.\" Warm, with a boundary in it — the smile of a woman who has practised saying " +
+          "no nicely. \"I do the till, not the floor. You want a girl, I call a good one over, no problem. Me, I " +
+          "am spoken for.\" She touches the ring without knowing she does.",
+        short: "\"I do the till, not the floor. I am spoken for — I'll call a girl over for you.\"" },
+      { topic: "sponsor", when: () => _sponsorFlipped("jenny"),
+        text: "She doesn't touch the ring this time. \"You know what you did, na. You made the number too big " +
+          "to say no to.\" Not angry — tired, ashamed, and doing the arithmetic anyway. \"Klaus send forty " +
+          "thousand a month. You put more than that on the bar tonight. So.\" A flat breath. \"I am not clean " +
+          "anymore. You bought that. I hope it was worth what it cost. For both of us.\"",
+        short: "\"You made the number too big to say no. I am not clean anymore — you bought that.\"" },
+      { topic: "sponsor", text: "\"Klaus. Germany.\" She says the name like an anchor. \"Two year now. He send " +
+        "money every month, I keep clean, I stay off the floor, I go with nobody. That is the deal, I keep my " +
+        "side.\" A steadiness that is mostly real. \"He come Pattaya twice a year. In between, I count the " +
+        "drinks and I count the days. Good deal. Better than the floor.\"" },
+      { topic: "ring", text: "\"Not married. Not yet.\" She turns it. \"Promise ring. He say when he retire he " +
+        "take me Germany, we marry proper. I believe him. Mostly.\" The 'mostly' escapes before she can stop " +
+        "it, and she files it away, embarrassed. \"He is a good man. Really. Two year, always the money come.\"" },
+    ],
+  },
+  joon: {
+    name: "Joon", th: "จูน", emoji: "🧾", orientation: "gay",
+    room: "golden_dragon",
+    desc: "Short hair, men's watch, a handshake instead of a wai, running Golden Dragon's till like a foreman. " +
+      "A tom, and entirely uninterested in being anything else for your benefit.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Alright, boss.\" A firm nod, all business. \"I keep the money, I keep the girls honest, I keep " +
+          "the drunk farang from doing something we all regret. You buy a lady a drink, I make sure she " +
+          "actually get it. That is my job.\" No flirt in it, none coming.",
+        short: "\"I keep the money and the girls honest. No flirt in it, none coming.\"" },
+      { topic: "tom", text: "\"Yeah, I'm tom. You noticed — good for you.\" Dry, heard it a thousand times. \"My " +
+        "girlfriend work Jomtien, the dee side. Ten year.\" A rare, real softness, gone fast. \"So: no, I don't " +
+        "want your drink; no, you cannot change my mind; and no, it is not a challenge. Anything else?\"" },
+      { topic: "girls", text: "\"They trust me because I am not trying to get anything from them.\" Matter-of-" +
+        "fact. \"A man cashier skim, flirt, cause trouble. A tom just do the numbers and watch their backs. " +
+        "Best cashier a mama can hire — Peung know it. That is why I am here.\"" },
+    ],
+  },
+  jun: {
+    name: "Jun", th: "จัน", emoji: "🧾", type: "kin",
+    room: "sunset_dreams",
+    desc: "Malai's daughter, home from a Bangkok college for the season and minding her mother's till — polite, " +
+      "sharp, and quietly counting the months until she never has to do this again.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Good evening.\" University English, careful and a little cool. \"I'm helping my mother this " +
+          "month — Malai, the mamasan. I handle the money. If you need anything I can help, but—\" a polite, " +
+          "immovable beat \"—I am not one of the girls. I am the daughter.\"",
+        short: "\"I handle the money for my mother. I am not one of the girls — I am the daughter.\"" },
+      { topic: "mother", text: "\"She built everything here. This bar put me through school.\" Complicated " +
+        "pride, no shame. \"I used to be embarrassed. Now I am just practical about it. It is a business, my " +
+        "mother is very good at it, I love her, and I am also never, ever doing it myself.\" A small, honest " +
+        "smile. \"She agree, actually. She works so I don't have to.\"" },
+      { topic: "you", text: "\"You are wondering if the daughter can be persuaded.\" Not offended, just " +
+        "accurate. \"They always wonder. No. My mother would end you, and honestly so would I — I am studying " +
+        "law.\" A cool smile. \"Buy Kwan a drink. She is lovely. I'll ring it up.\"" },
+    ],
+  },
+  baimon: {
+    name: "Baimon", th: "ใบหม่อน", emoji: "🧾", type: "sponsor",
+    room: "kitten_corner",
+    desc: "Soft-spoken, careful with the money and with herself, a photo of a couple propped by the till in a " +
+      "glittery case. Kesinee gave her the cashier seat as a kindness — off the floor, where the sponsor's money keeps her.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Welcome ka.\" Gentle, a little guarded. \"I only do the money here. Kesinee is good to me — she " +
+          "keep me off the floor. My boyfriend prefer that.\" She glances at the photo without meaning to. \"He " +
+          "is in Australia. He is coming back for me. Soon.\"",
+        short: "\"I only do the money. My boyfriend prefer that — he in Australia, coming back for me. Soon.\"" },
+      { topic: "boyfriend", when: () => _sponsorFlipped("baimon"),
+        text: "The photo is turned face-down now; she did it herself, earlier, and hasn't turned it back. " +
+          "\"Don't. Whatever you going to say — don't.\" Quiet, not looking at you. \"You have more money than " +
+          "Dave. I found that out tonight, and now I cannot un-know it, and Dave is in Perth and you are " +
+          "here.\" Her hands are very still on the till. \"He said a good girl deserve better. Turn out " +
+          "'better' just mean 'more'. Okay. Okay.\"",
+        short: "\"You have more money than Dave. A good girl deserve better — turn out 'better' just mean 'more'.\"" },
+      { topic: "boyfriend", text: "\"Dave. Perth.\" A soft, careful pride. \"He send money so I don't work the " +
+        "floor. Just the till. He say a good girl deserve better than the floor, and he make it true for me. One " +
+        "year already, he send every week, never miss.\" A tiny pause. \"He is coming. He say he is coming.\"" },
+    ],
+  },
+  fahsai: {
+    name: "Fahsai", th: "ฟ้าใส", emoji: "🧾", orientation: "gay",
+    room: "cherry_pop",
+    desc: "The one still point in Cherry Pop's chaos — a tom in a snapback, arms folded behind the till, " +
+      "watching the party she is emphatically not part of with the patience of a designated driver.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Evening.\" A nod from behind the till, unhurried in a bar with no other speed. \"I keep the " +
+          "money and I keep Chaba upright. Two full-time job.\" A dry glance at the dance floor. \"You have " +
+          "fun. I'll be here, being the adult. Somebody has to.\"",
+        short: "\"I keep the money and I keep Chaba upright. You have fun; I'll be the adult.\"" },
+      { topic: "tom", text: "\"Tom, yes.\" Flat, faintly amused you asked. \"In a bar full of girls whose whole " +
+        "job is to make men feel something — I am the one they can relax around. No agenda. Not selling them, " +
+        "not wanting anything from you either.\" She uncrosses her arms to make change. \"Restful, honestly. " +
+        "For everybody.\"" },
+      { topic: "chaba", text: "\"Somebody watch her. Might as well be me.\" No judgement. \"She drink too much, " +
+        "she is the best party girl on the soi — both true. When she go too far, I put her in a taxi, pay it " +
+        "myself, Toi take it off my pay and we don't talk about it.\" A small shrug. \"She'd do it for me. She " +
+        "has.\"" },
+    ],
+  },
+  preaw: {
+    name: "Preaw", th: "แพรว", emoji: "🧾", type: "kin",
+    room: "ruby_kiss",
+    desc: "Saeng's niece, brisk and unsentimental behind the Ruby Kiss till, running the money while Wilai runs " +
+      "the window — the two halves of the operation that never need to discuss it.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Yes? Drink, girl, or bill?\" Efficient, not unfriendly, a woman with a queue in her head. \"My " +
+          "aunt is the mamasan — Saeng. I run the money, Wilai run the front. You want to be worked, see Wilai; " +
+          "she is the best there is. You want to pay, that is me.\"",
+        short: "\"Drink, girl, or bill? Wilai works the front; I run the money.\"" },
+      { topic: "wilai", text: "\"She is going to leave and open her own place — everybody know.\" A shrug, no " +
+        "drama. \"My aunt let her. Good business: a hungry girl earn double. When Wilai go, I stay. Family " +
+        "always keep the till. That is why my aunt hire blood — blood don't skim.\"" },
+      { topic: "money", text: "\"You want to know how the bar really make money?\" A thin, professional smile. " +
+        "\"Not the barfine — the barfine is the headline. The money is the lady drinks, the small markup on the " +
+        "whisky, the fine that grow after midnight, the tip you give because you are drunk and generous. Little " +
+        "cuts, all night. Nobody feel the small ones. That is the art.\"" },
+    ],
+  },
+  numfon: {
+    name: "Numfon", th: "น้ำฝน", emoji: "🧾",
+    room: "sunset_rail",
+    desc: "The Shady Lady's cashier, comfortable and unbothered, running an honest till at an honest bar — the " +
+      "numbers are small, the trouble is smaller, and that suits her exactly.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Evening, love. Cold one? I'll ring it in.\" Easy, weathered, no edge to her at all. \"Beer bar " +
+          "till is a nice job. Small number, honest customer, nobody try the funny business — Bussaba don't " +
+          "allow it, and honestly nobody bother. You relax.\"",
+        short: "\"Cold one? I'll ring it in. Small numbers, honest customers — you relax.\"" },
+      { topic: "money", text: "\"No games here.\" She taps the till, content. \"The go-go till, aiyo — the " +
+        "markup, the padded bill, the mama cut, the fine that move. So much arithmetic, so much watching. Here, " +
+        "a beer is a beer, the price on the board is the price. I sleep at night. Small money, clean " +
+        "conscience. My kind of maths.\"" },
+    ],
+  },
+  nu: {
+    name: "Nu", th: "หนู", emoji: "🧾", orientation: "gay",
+    room: "bay_watch",
+    desc: "Front Row's cashier, a tom in a footy shirt matching Somo's, the two of them running the bar like a " +
+      "five-a-side team — one on the beer, one on the money, both shouting at the ref.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Alright mate, what you having?\" Brisk, cheerful, football on three screens behind her. \"Me " +
+          "and Somo run this place — she pour, I count, we both scream at the telly. Best job on the soi: no " +
+          "drama, all football.\" A grin. \"You're not United, are you? Had to bar a bloke last week. Joking. " +
+          "Mostly.\"",
+        short: "\"What you having? Me and Somo run this — she pour, I count, we scream at the telly.\"" },
+      { topic: "somo", text: "\"Somo? Nah, we're not together — everybody ask.\" She laughs. \"Two toms in one " +
+        "bar, must be dating, ha. No. She's my best mate. We just both like football more than most people.\" A " +
+        "shrug. \"Found the one bar on Soi 6 where nobody expect us to flirt with the customers. Paradise, " +
+        "honestly.\"" },
+      { topic: "tom", text: "\"Yeah. And before you make it weird—\" she holds up a hand, friendly \"—I'm " +
+        "working, you're drinking, the match is on, everybody's happy. That is the whole thing. Your beer is " +
+        "฿90.\"" },
+    ],
+  },
+  haad: {
+    name: "Haad", th: "หาด", emoji: "🧾", type: "kin",
+    room: "sandy_toes",
+    desc: "Malila's younger sister and the Verandah's cashier, cut from the same easygoing cloth — she runs the " +
+      "till the way the bar runs everything, slowly and kindly, and always has a bowl of peanuts within reach.",
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Sit, sit. Peanut?\" She pushes the bowl over before the hello. \"My sister run the bar, I run " +
+          "the till, Nina feed everybody. Family business, the slow kind. You are not in a hurry, na? Good. " +
+          "Nobody here is.\"",
+        short: "\"Peanut? My sister run the bar, I run the till. Family business, the slow kind.\"" },
+      { topic: "family", text: "\"Malila older — always the boss, even when we small.\" A fond laugh. \"She " +
+        "took me in when my marriage finish. 'Come sit at my till,' she say, 'stop crying, count something.' " +
+        "Best thing she ever do for me. Ten year now. This bar is more my family than my family was.\"" },
+    ],
+  },
+
   fon: {
     name: "Fon", th: "ฝน", emoji: "🌺",
     room: "jasmine_garden",
@@ -6448,6 +6638,8 @@ const NPC_ROLES = {
   yai: "mamasan", rose: "mamasan", kesorn: "mamasan", lawan: "mamasan", sumalee: "mamasan",
   diamond: "mamasan", wimon: "mamasan", ampai: "mamasan", kesinee: "mamasan",
   ploy: "cashier", aek: "cashier", malee: "cashier",
+  jenny: "cashier", joon: "cashier", jun: "cashier", baimon: "cashier", fahsai: "cashier",
+  preaw: "cashier", numfon: "cashier", nu: "cashier", haad: "cashier",
   candy: "mamasan", oy: "mamasan", daeng: "mamasan", mem: "mamasan", wan: "mamasan",
   nee: "mamasan", peung: "mamasan", malai: "mamasan", toi: "mamasan", saeng: "mamasan",
   bussaba: "mamasan", sopha: "mamasan", malila: "mamasan",
@@ -6858,13 +7050,11 @@ const _FILLER_CASHIERS = [
   ["Earn","เอิร์น","club_mirage"], ["Eye","อาย","crystal_palace"], ["Fai","ฝ้าย","paradise_nights"],
   ["Gam","แก้ม","candy_bar"], ["Ging","กิ่ง","lucky_tiger"], ["Grace","เกรซ","silk_rose"],
   ["Hong","ห่อง","jasmine_garden"], ["Jah","จ๊ะ","gold_rush"], ["Jeed","จี๊ด","starlight_bar"],
-  ["Jenny","เจนนี่","pink_lotus"], ["Joon","จูน","golden_dragon"], ["Jun","จัน","sunset_dreams"],
   ["Kaimook","ไข่มุก","slutty"], ["Kanom","ขนม","las_vegas"], ["Keng","เก่ง","khao_talo_bar"],
   ["Best","เบสท์","water_buffalo"], ["Aim","เอม","firefly_bar"], ["Tangmo","แตงโม","mama_yai"],
   ["Kanya","กัญญา","orchid_club"],
   ["Mon","มล","night_heron"],
-  ["Baimon","ใบหม่อน","kitten_corner"], ["Fahsai","ฟ้าใส","cherry_pop"], ["Preaw","แพรว","ruby_kiss"],
-  ["Numfon","น้ำฝน","sunset_rail"], ["Nu","หนู","bay_watch"], ["Haad","หาด","sandy_toes"],
+  
 ];
 
 for (const [name, th, room] of _FILLER_MAMAS) {
