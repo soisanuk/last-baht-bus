@@ -881,7 +881,8 @@ function _convoAnswer(text) {
   const st = _npcState(id);
   const heard = (st.heard = st.heard || {});
   const val = text.replace(/[.!?,]+$/, "").trim();
-  const said = (G.player = G.player || { said: {} }).said;
+  const player = (G.player = G.player || {});
+  const said = (player.said = player.said || {}); // harden: a hand-built/very-old state may lack .said
   const globalPrior = said[key]; // what you last told ANYONE (before this answer)
   said[key] = val;
   const prior = heard[key];
@@ -983,17 +984,22 @@ function _convoResolve(lower) {
 // Dim, and printed at the end of every in-conversation turn.
 function _convoPrompt(id) {
   if (!id || _convoActive() !== id) return;
+  // The generic topic/compliment/joke/goodbye list already lives in the chip bar
+  // every conversation turn — echoing it in the prose too is just clutter. So the
+  // in-prose prompt now only fires when it carries something the chips DON'T make
+  // obvious: an answer cue when the partner has put a question to you, or the
+  // beat-specific action-choices a node offers.
+  if (G.convoQ && G.convoQ.id === id) { // a question is on the table — the chips show topics, not "reply"
+    _say(`(${_convoName(id)} put that to you — just answer, in your own words.)`, "dim");
+    return;
+  }
+  const acts = _convoChoices();
+  if (!acts.length) return; // an ordinary turn: the chip bar has it covered
   // An apostrophe breaks a CAPS-in-parens run into two dead kws ("YOU'RE" →
   // "YOU" + "RE"), so strip it — the tap command loses the apostrophe too, but
   // _convoPickChoice normalizes apostrophes out when matching, so it still fires.
   const CAP = s => s.toUpperCase().replace(/['']/g, "");
-  const opts = [];
-  const acts = _convoChoices();
-  for (const c of acts.slice(0, 3)) opts.push(CAP(c.label));
-  for (const t of _convoTopics(id).slice(0, acts.length ? 2 : 4)) opts.push(CAP(t));
-  opts.push("COMPLIMENT", "JOKE");
-  if (_npcState(id).trust >= 3) opts.push("TEASE");
-  if (NPCS[id] && NPC_ROLES[id] === "hostess") opts.push("FLIRT");
+  const opts = acts.slice(0, 3).map(c => CAP(c.label));
   opts.push("GOODBYE");
   _say("(" + opts.join(" · ") + ")", "dim");
 }
