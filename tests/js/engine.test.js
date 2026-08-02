@@ -6271,7 +6271,7 @@ test("patrons: hoppers drift by the hour, settle at home by 22:00, chat resets d
   assert.equal(_patronRoom("chuck"), "tequila_queen");
   assert.equal(_patronRoom("dave"), "stinky_bar");
 
-  // room description shows the rail; talk and topics work
+  // room description lists the patron in the "Here:" line; talk and topics work
   state().room = "silk_rose";
   state().pendingEnc = null; state().lastSaleng = 99999; state().lastPeddler = 99999;
   out = [];
@@ -6298,6 +6298,27 @@ test("patrons: hoppers drift by the hour, settle at home by 22:00, chat resets d
   out = [];
   run("x helmut");
   assert.match(lastOut(), /third stool from the left/);
+});
+
+test("one 'Here:' line lists staff and patrons together — no separate rail line", () => {
+  state().stage = "vacation"; state().room = "queen_vic"; state().nightTurn = 30;
+  out = []; run("look");
+  const o = lastOut();
+  assert.doesNotMatch(o, /At the rail:/, "the old split rail line is gone");
+  const here = o.split("\n").find(l => l.startsWith("Here:"));
+  assert.ok(here, "a single Here: presence line");
+  assert.match(here, /Doyle/, "an NPC is on it");
+  assert.match(here, /Mort \(74, American\)/, "and a patron, with (age, nat), on the same line");
+});
+
+test("the bar's ambient regular is unreachable background, not an addressable NPC", () => {
+  state().stage = "vacation"; state().room = "candy_bar"; state().day = 2; state().nightTurn = 30;
+  delete state().soc.patronBusy.candy_bar;
+  out = []; run("look");
+  assert.ok(_BAR_REGULAR.some(s => lastOut().includes(s)), "the ambient line comes from the pool");
+  // and there's no 'regular' entity you can actually open a conversation with
+  out = []; run("talk regular");
+  assert.doesNotMatch(lastOut(), /welded|fixture|drones|holds court/i, "the flavour isn't a talkable character");
 });
 
 test("David only drinks on his days off: Mondays and Fridays", () => {
