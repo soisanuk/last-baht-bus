@@ -896,6 +896,23 @@ function _venuesHere(r) {
   return out;
 }
 
+// The bar's ambient regular — atmosphere, NOT a person you can reach. He's
+// deliberately never in the "Here:" list and can't be talked to, so the wording
+// has to read as furniture-you-overhear, not an unmet character (an undelivered
+// promise otherwise). Pooled — it prints on every bar describe. The "busy" pool
+// takes the clause naming whichever hostess he's monopolising.
+const _BAR_REGULAR = [
+  "Down the far end, a knot of regulars are welded to the bar, deep in an argument only they follow — part of the furniture, not the cast.",
+  "A lifer holds down the corner stool, holding forth at the room in general; the kind of fixture you nod past, never actually meet.",
+  "The far stools run to the usual weathered faces — here before you, here after you, and not looking for anyone new tonight.",
+  "Somewhere down the bar a regular drones on to nobody in particular, background hum under the music.",
+];
+const _BAR_REGULAR_BUSY = [
+  g => `Down the far end a sunburnt regular holds court${g}, sealed in his own little world — no seam in it for you to get a word through.`,
+  g => `A red-faced fixture works the far stools${g}, mid-story, mid-myth; whatever that is, it isn't yours to join.`,
+  g => `At the far end a regular reigns${g} — the sort of scene you watch from across the bar, not one you walk into.`,
+];
+
 function _describeRoom(full, forceFull) {
   const r = _room();
   const firstTime = !G.visited[G.room]; // full desc on first arrival + LOOK; brief ambient on revisit
@@ -931,7 +948,14 @@ function _describeRoom(full, forceFull) {
   const items = Object.keys(G.itemLoc).filter(id => _here(id));
   if (items.length) _say("You can see: " + items.map(id => ITEMS[id].name).join(", ") + ".");
   const npcs = _npcsHere();
-  if (npcs.length) _say("Here: " + npcs.map(id => `${NPCS[id].emoji} ${_npcLabel(id)}`).join(", ") + ".");
+  const pats = _patronsHere();
+  // One presence line for everyone actually in the room — staff and patrons in the
+  // same "Here:" list (it used to split into "Here:" + "At the rail:", which read
+  // like two separate crowds and confused who you could talk to). NPCs carry just
+  // their name; patrons still carry (age, nat).
+  const here = npcs.map(id => `${NPCS[id].emoji} ${_npcLabel(id)}`)
+    .concat(pats.map(id => { const p = PATRONS[id]; return `${p.emoji} ${p.name} (${p.age}, ${p.nat})`; }));
+  if (here.length) _say("Here: " + here.join(", ") + ".");
   // Butterfly the dog: the girls dote on him at the door — a warmer welcome, once a night
   if (full && G.dog && G.dog.egg === "butterfly" && _inBar() &&
       npcs.some(id => NPC_ROLES[id]) && G.dog.btfDay !== G.day) {
@@ -947,14 +971,6 @@ function _describeRoom(full, forceFull) {
     if (n.bars && n.bars.includes(G.room) && _npcRoom(id) !== G.room) {
       _say(`${n.name} is working ${_barName(_npcRoom(id))} tonight; the floor staff keep this one running.`, "dim");
     }
-  }
-  const pats = _patronsHere();
-  if (pats.length) {
-    _say("At the rail: " + pats.map(id => {
-      const p = PATRONS[id];
-      // Everyone is named on sight now — the patron's Name (age, nat), never a look.
-      return `${p.emoji} ${p.name} (${p.age}, ${p.nat})`;
-    }).join(", ") + ".");
   }
   const exits = Object.keys(r.exits);
   if (exits.length) _say("Exits: " + exits.join(", ") + ".", "dim");
@@ -1047,11 +1063,13 @@ function _describeRoom(full, forceFull) {
     _say(c.here + " " + c.hint, "dim");
   }
   if (r.barType) {
-    const girl = _npcsHere().find(id => NPC_ROLES[id] === "hostess");
-    _say(G.soc.patronBusy[G.room] ?
-      "A sunburnt regular holds court at the far end" +
-      (girl ? `, with ${NPCS[girl].name}'s full attention` : "") + "." :
-      "A regular nurses a big Chang at the rail, radiating opinions.", "dim");
+    if (G.soc.patronBusy[G.room]) {
+      const girl = _npcsHere().find(id => NPC_ROLES[id] === "hostess");
+      const g = girl ? `, ${NPCS[girl].name} laughing on cue beside him` : "";
+      _say(_pickVary(_BAR_REGULAR_BUSY, "barReg")(g), "dim");
+    } else {
+      _say(_pickVary(_BAR_REGULAR, "barReg"), "dim");
+    }
   }
   // The two junction bars look out on the evening's two free shows: the police
   // checkpoint down the road just south of the soi, and the bay sunset.
