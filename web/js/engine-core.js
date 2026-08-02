@@ -954,7 +954,7 @@ function _describeRoom(full, forceFull) {
   // like two separate crowds and confused who you could talk to). NPCs carry just
   // their name; patrons still carry (age, nat).
   const here = npcs.map(id => `${NPCS[id].emoji} ${_npcLabel(id)}`)
-    .concat(pats.map(id => { const p = PATRONS[id]; return `${p.emoji} ${p.name} (${p.age}, ${p.nat})`; }));
+    .concat(pats.map(id => `${PATRONS[id].emoji} ${PATRONS[id].name}`)); // just emoji + name — age/nat live in EXAMINE
   if (here.length) _say("Here: " + here.join(", ") + ".");
   // Butterfly the dog: the girls dote on him at the door — a warmer welcome, once a night
   if (full && G.dog && G.dog.egg === "butterfly" && _inBar() &&
