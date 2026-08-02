@@ -226,9 +226,9 @@ const _term = (() => {
   }
 
   function _addAvatars(div, text) {
-    if (!/^(Here: |At the rail: |Gallery — |📷 )/.test(text)) return;
+    if (!/^(Here: |Gallery — |📷 )/.test(text)) return;
     // Gallery rows and texted selfies are the COLLECTION — their photos enlarge on
-    // tap. The Here/rail avatars are just presence markers, so they stay inert.
+    // tap. The "Here:" avatars (staff + patrons) are just presence markers, inert.
     const enlargeable = /^(Gallery — |📷 )/.test(text);
     for (const kw of div.querySelectorAll('.kw[data-k="npc"], .kw[data-k="patron"]')) {
       const id = _portraitId(kw.dataset.k, kw.dataset.v);
