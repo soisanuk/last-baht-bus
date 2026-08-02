@@ -8,44 +8,39 @@ var NEWS_FEED = [
     "d": "31 Jul 2026"
   },
   {
-    "t": "Thai Police Find Buried Motorcycle Belonging to Missing Russian Siblings",
-    "s": "Kyiv Post",
-    "d": "30 Jul 2026"
-  },
-  {
-    "t": "Missing Russian siblings found murdered, buried in Pattaya, suspects arrested",
-    "s": "Thaiger",
-    "d": "31 Jul 2026"
-  },
-  {
     "t": "Body found floating in Pattaya canal",
     "s": "Thaiger",
     "d": "02 Aug 2026"
   },
   {
-    "t": "Mayor launches beach road parking blitz across Pattaya",
+    "t": "John Horrigan shares Antarctic adventure with Pattaya City Expats Club",
     "s": "Pattaya Mail",
-    "d": "01 Aug 2026"
+    "d": "02 Aug 2026"
   },
   {
-    "t": "Pattaya Mail offers exclusive August promotion package for businesses",
-    "s": "Pattaya Mail",
-    "d": "01 Aug 2026"
+    "t": "Thai Police Find Buried Motorcycle Belonging to Missing Russian Siblings",
+    "s": "Kyiv Post",
+    "d": "30 Jul 2026"
   },
   {
-    "t": "Pattaya covers busy Sukhumvit footbridges with new shelters",
+    "t": "Father injured, daughter critical in horror pickup plunge from Bangkok expressway",
     "s": "Pattaya Mail",
-    "d": "01 Aug 2026"
+    "d": "02 Aug 2026"
   },
   {
-    "t": "Pattaya firefighters torch dangerous wasp nest at Jomtien house",
-    "s": "Pattaya Mail",
-    "d": "01 Aug 2026"
+    "t": "Corrections Department defends risk checks before Chon Buri release",
+    "s": "Thaiger",
+    "d": "02 Aug 2026"
   },
   {
-    "t": "Super El Niño to arrive in Thailand next year",
-    "s": "Bangkok Post",
-    "d": "01 Aug 2026"
+    "t": "Pattaya court denies bail for Russian siblings’ murder suspects",
+    "s": "Thaiger",
+    "d": "02 Aug 2026"
+  },
+  {
+    "t": "Pattaya turns fitness into tourism gold with popular trail race",
+    "s": "Pattaya Mail",
+    "d": "02 Aug 2026"
   },
   {
     "t": "Missing family of three found buried near Russians",
@@ -54,13 +49,8 @@ var NEWS_FEED = [
   },
   {
     "t": "As Thailand's next generation shines, Malaysia could be dragged into ASEAN Championship dogfight",
-    "s": "ESPN",
+    "s": "africa.espn.com",
     "d": "01 Aug 2026"
-  },
-  {
-    "t": "Rescued wild elephant calf in critical condition after being found alone in Kanchanaburi",
-    "s": "The Star",
-    "d": "02 Aug 2026"
   },
   {
     "t": "Donald Trump Is Missing Thailand’s Strategic Moment",
@@ -71,12 +61,22 @@ var NEWS_FEED = [
     "t": "MotoGP to begin 2027 season in Thailand",
     "s": "motogp.com",
     "d": "31 Jul 2026"
+  },
+  {
+    "t": "Death of travel YouTuber Hlun Solo highlights hidden risks faced by Thailand’s solo creators",
+    "s": "Asia News Network",
+    "d": "31 Jul 2026"
+  },
+  {
+    "t": "In Thailand, a 75-year-old found the python she says ate her cats back in her home",
+    "s": "Yahoo",
+    "d": "02 Aug 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-07-31","USD":33.47,"AUD":23.49,"GBP":44.92,"EUR":38.43};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-02","temp":28,"humid":83,"code":3,"hi":32,"rain":57};
+var WX_NOW = {"date":"2026-08-03","temp":28,"humid":82,"code":2,"hi":32,"rain":68};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
@@ -84,4 +84,4 @@ var LOTTO = {"date":"2026-08-01","first":"932479","last2":"69","front3":["413","
 // XAU, plus Thai baht-weight gold (96.5%)
 var GOLD = {"usd":4044,"date":"2026-08-02","baht":64000};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":63090,"thb":2101536};
+var BTC = {"usd":63475,"thb":2111884};
