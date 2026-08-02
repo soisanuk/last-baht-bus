@@ -161,6 +161,8 @@ function newGame() {
     qvDay: 0,            // last day the Queen Vic balcony paid its happy point
     dragDay: 0,          // last day the Peacock Cabaret drag revue paid its happy point
     catDay: 0,           // last day the Jomtien beach cats paid theirs
+    rep: 0,              // the soi's collective read on you (−20..+20); slow to build, quick to lose
+    repDay: null,        // last day a good deed banked its +1 (the shared daily gain cap)
     dog: null,           // the accidentally-adopted soi dog: { since: day, name? } once you've fed him
     dogNudgeDay: 0,      // last day the un-adopted dog made his half-block approach
     patronTalk: { day: 0, talked: {} }, // patron dialogue book, reset daily
@@ -1120,6 +1122,43 @@ function _addBond(id, n) {
 // Round a baht figure to the nearest ฿50 — how every negotiated price on the soi
 // lands (mamasan maths, never odd change).
 function _round50(n) { return Math.round(n / 50) * 50; }
+
+// ── Reputation: the soi's collective read on you ────────────────────────────
+// A single town-wide standing, distinct from per-girl bond / per-NPC trust /
+// per-bar heat / faction alignment. It colours how STRANGERS receive you before
+// you've earned anything with them. Deliberately asymmetric: good conduct is
+// throttled to +1 a day (a good day is a good day, no matter how many rounds you
+// stand), while incidents land in full and stack — reputation is slow to build,
+// quick to lose. Only tracked once the opening quest is behind you (act1Done);
+// player-local, so it stays per-player in any future shared world.
+const REP_MIN = -20, REP_MAX = 20;
+function _repGain() {
+  if (!_flag("act1Done")) return false;
+  if (G.repDay === G.day) return false;      // today's goodwill is already banked
+  G.repDay = G.day;
+  G.rep = Math.min(REP_MAX, (G.rep || 0) + 1);
+  return true;
+}
+function _repHit(n) {                          // an incident: lands in full, uncapped, stacks
+  if (!_flag("act1Done")) return false;
+  G.rep = Math.max(REP_MIN, (G.rep || 0) - Math.abs(n));
+  return true;
+}
+function _repTier() {                          // −2..+2, drives effects + the label
+  const r = G.rep || 0;
+  if (r <= -10) return -2;
+  if (r <= -3) return -1;
+  if (r >= 10) return 2;
+  if (r >= 3) return 1;
+  return 0;
+}
+const _REP_LABELS = {
+  "-2": "trouble — a name that walks into the bar a step ahead of you",
+  "-1": "a bit of a cheap charlie, and not shy about it",
+  "0": "nobody in particular yet — the soi hasn't made up its mind",
+  "1": "a good sort, the kind the mamas nod to",
+  "2": "a proper face on the soi — known, and mostly liked",
+};
 
 function _tick() {
   G.turns++;

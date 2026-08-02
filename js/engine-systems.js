@@ -188,7 +188,8 @@ function _doRepay(arg) {
       `clicks off. "Paid." ` + (late
         ? `"Late — but paid. I remember both." A nod that is almost respect.`
         : `"On time, even. You, I lend to again — better rate." That is a genuine smile.`), "win");
-    G.soc.drinks.nira = (G.soc.drinks.nira || 0) + (late ? 1 : 2); // a man who pays earns her regard
+    _addBond("nira", late ? 1 : 2); // a man who pays earns her regard
+    if (!late) _repGain(); // squaring a debt on time is good for your name; late is just even
   } else {
     _say(`"฿${amt}." She marks it in a little book. "Still ฿${G.loan.owed}` +
       (late ? ` — and climbing." ` : `, by day ${G.loan.dueDay}." `) + `Back to the stage.`, "room");
@@ -579,6 +580,7 @@ function _bfResolve(kind) {
   for (const other of _npcsHere()) {
     if (other !== id && NPC_ROLES[other] === "hostess" && _bondTier(other) >= 2) {
       _addBond(other, -3);
+      _repHit(2); // jilting a regular in front of the bar is a bad look, and it travels
       _say(`(${NPCS[other].name} watches you leave with ${name} and turns very ` +
         "deliberately back to her phone. That will cost you — and not in baht.)", "dim");
     }
@@ -1558,6 +1560,7 @@ function _questTick() {
       _say(`(+฿${q.reward.money} — ฿${G.money} in pocket.)`, "dim");
     }
     if (q.reward.happy) _addHappy(q.reward.happy);
+    _repGain(); // seeing a job through is the sort of thing that earns you a name (throttled)
   }
 }
 
