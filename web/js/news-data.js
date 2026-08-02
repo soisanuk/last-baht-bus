@@ -3,14 +3,9 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
-    "t": "Missing Russian siblings found murdered, buried in Pattaya, suspects arrested",
-    "s": "Thaiger",
-    "d": "31 Jul 2026"
-  },
-  {
-    "t": "Two men arrested in hunt for young Russian siblings",
+    "t": "Russian siblings dead, suspects confess",
     "s": "Bangkok Post",
-    "d": "30 Jul 2026"
+    "d": "31 Jul 2026"
   },
   {
     "t": "Thai Police Find Buried Motorcycle Belonging to Missing Russian Siblings",
@@ -19,69 +14,74 @@ var NEWS_FEED = [
   },
   {
     "t": "Pattaya court denies bail for suspects in five Chonburi killings",
-    "s": "khaosodenglish.com",
+    "s": "Khaosod English",
     "d": "01 Aug 2026"
   },
   {
-    "t": "Chinese tourist safely brought ashore after falling ill during Pattaya sea trip",
+    "t": "Body found floating in Pattaya canal",
+    "s": "thethaiger.com",
+    "d": "02 Aug 2026"
+  },
+  {
+    "t": "Young Russian interpreter wins hearts during Pattaya murder probe",
     "s": "Pattaya Mail",
-    "d": "31 Jul 2026"
+    "d": "01 Aug 2026"
   },
   {
-    "t": "Russian siblings dead, suspects confess",
-    "s": "Bangkok Post",
-    "d": "31 Jul 2026"
-  },
-  {
-    "t": "Mystery man found dead floating in Pattaya canal wearing guard shirt",
+    "t": "Runaway trailer crushes EV on Chonburi overpass, three injured",
     "s": "Pattaya Mail",
-    "d": "31 Jul 2026"
+    "d": "01 Aug 2026"
   },
   {
-    "t": "Pattaya needs spending visitors, not endless labels",
+    "t": "Discount travel offer becomes kidnap trap for Indian tourists in Pattaya",
     "s": "Pattaya Mail",
-    "d": "31 Jul 2026"
+    "d": "01 Aug 2026"
   },
   {
-    "t": "Missing family of three found buried near Russians",
+    "t": "Pattaya Mail offers exclusive August promotion package for businesses",
+    "s": "Pattaya Mail",
+    "d": "01 Aug 2026"
+  },
+  {
+    "t": "Super El Niño to arrive in Thailand next year",
     "s": "Bangkok Post",
     "d": "01 Aug 2026"
   },
   {
-    "t": "Malaysia suffer first loss at ASEAN Championship as Thailand climb to the top",
+    "t": "Anutin vows justice over murders",
+    "s": "Bangkok Post",
+    "d": "01 Aug 2026"
+  },
+  {
+    "t": "As Thailand's next generation shines, Malaysia could be dragged into ASEAN Championship dogfight",
     "s": "ESPN",
     "d": "01 Aug 2026"
   },
   {
-    "t": "MotoGP to begin 2027 season in Thailand",
-    "s": "motogp.com",
-    "d": "31 Jul 2026"
+    "t": "Donald Trump Is Missing Thailand’s Strategic Moment",
+    "s": "The National Interest",
+    "d": "01 Aug 2026"
   },
   {
     "t": "Death of travel YouTuber Hlun Solo highlights hidden risks faced by Thailand’s solo creators",
-    "s": "Asia News Network",
+    "s": "asianews.network",
     "d": "31 Jul 2026"
   },
   {
-    "t": "Suspects confess to killing two Russians who disappeared in Thailand",
-    "s": "Meduza",
-    "d": "31 Jul 2026"
-  },
-  {
-    "t": "Cambodian jobseekers fear debt trap over Thailand’s border reinforcement",
-    "s": "South China Morning Post",
+    "t": "MotoGP to begin 2027 season in Thailand",
+    "s": "motogp.com",
     "d": "31 Jul 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-07-31","USD":33.47,"AUD":23.49,"GBP":44.92,"EUR":38.43};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-02","temp":27,"humid":88,"code":51,"hi":30,"rain":56};
+var WX_NOW = {"date":"2026-08-02","temp":30,"humid":71,"code":3,"hi":31,"rain":49};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-08-01","first":"932479","last2":"69","front3":["413","672"],"back3":["039","154"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4044,"date":"2026-08-01","baht":64000};
+var GOLD = {"usd":4044,"date":"2026-08-02","baht":64000};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":62701,"thb":2102374};
+var BTC = {"usd":63146,"thb":2115432};
