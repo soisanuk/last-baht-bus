@@ -654,7 +654,12 @@ function _doExamine(arg) {
   const npc = _findNpc(arg);
   if (npc) { _say(NPCS[npc].desc); return; }
   const pat = _findPatron(arg);
-  if (pat) { _say(PATRONS[pat].desc); return; }
+  if (pat) {
+    const p = PATRONS[pat];
+    _say(p.desc);
+    _say(`(${p.age}, ${p.nat}.)`, "dim"); // age/nat live here now, off the presence line
+    return;
+  }
   const id = _findItem(arg);
   if (id === "masseuse_note") { _readNote(); return; }
   if (id) { _say(ITEMS[id].desc); return; }

@@ -6277,7 +6277,8 @@ test("patrons: hoppers drift by the hour, settle at home by 22:00, chat resets d
   out = [];
   run("look");
   // named on sight now — no name-hiding
-  assert.match(lastOut(), /Helmut \(61, German\)/, "patron named on the rail");
+  assert.match(lastOut(), /Helmut/, "patron named on sight in the Here: line");
+  assert.doesNotMatch(lastOut(), /\(61, German\)/, "age/nat is NOT on the presence line anymore");
   assert.doesNotMatch(lastOut(), /fastidious German with polished glasses/, "his look never replaces his name");
   out = [];
   run("talk to helmut");
@@ -6294,10 +6295,11 @@ test("patrons: hoppers drift by the hour, settle at home by 22:00, chat resets d
   out = [];
   run("ask helmut about stool");
   assert.match(lastOut(), /fan number two/, "full spiel again next day");
-  // examine works too
+  // examine works too — and carries the age/nat that left the presence line
   out = [];
   run("x helmut");
   assert.match(lastOut(), /third stool from the left/);
+  assert.match(lastOut(), /\(61, German\.\)/, "EXAMINE surfaces age + nationality");
 });
 
 test("one 'Here:' line lists staff and patrons together — no separate rail line", () => {
@@ -6308,7 +6310,11 @@ test("one 'Here:' line lists staff and patrons together — no separate rail lin
   const here = o.split("\n").find(l => l.startsWith("Here:"));
   assert.ok(here, "a single Here: presence line");
   assert.match(here, /Doyle/, "an NPC is on it");
-  assert.match(here, /Mort \(74, American\)/, "and a patron, with (age, nat), on the same line");
+  assert.match(here, /Mort/, "and a patron, on the same line");
+  assert.doesNotMatch(here, /\(74, American\)/, "just emoji + name — no age/nat clutter on the line");
+  // the age/nat now lives in EXAMINE
+  out = []; run("x mort");
+  assert.match(lastOut(), /\(74, American\.\)/, "EXAMINE carries the patron's age + nationality");
 });
 
 test("the bar's ambient regular is unreachable background, not an addressable NPC", () => {
