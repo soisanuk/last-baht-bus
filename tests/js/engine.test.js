@@ -2406,6 +2406,116 @@ test("RESTART re-runs character creation in the CURRENT mode (Soi 6 stays Soi 6)
   assert.equal(state().act1Tries, 2, "and the tries count");
 });
 
+test("reputation: gains throttle to +1/day, losses land in full and stack, act1 is exempt", () => {
+  state().stage = "vacation"; state().flags.act1Done = true; state().day = 2;
+  assert.equal(state().rep, 0, "starts neutral");
+
+  // a good day is worth +1 no matter how many good deeds
+  assert.equal(_repGain(), true, "first good deed banks the day");
+  assert.equal(_repGain(), false, "a second good deed the same day banks nothing");
+  assert.equal(state().rep, 1, "still just +1 for the day");
+  state().day = 3;
+  assert.equal(_repGain(), true, "a new day, a new +1");
+  assert.equal(state().rep, 2);
+
+  // incidents land in full and stack within a night, uncapped by the daily gate
+  _repHit(3); _repHit(2);
+  assert.equal(state().rep, -3, "two incidents in one night both count (2 - 3 - 2)");
+
+  // clamps
+  state().rep = 0; for (let i = 0; i < 30; i++) _repHit(1);
+  assert.equal(state().rep, REP_MIN, "floors at REP_MIN");
+
+  // the opening quest is exempt — no reputation before you've found your feet
+  state().flags.act1Done = false; state().rep = 0;
+  assert.equal(_repGain(), false, "no gain during act1");
+  _repHit(5);
+  assert.equal(state().rep, 0, "no loss during act1 either");
+});
+
+test("reputation tiers + STANDING readout + a fresh vacation wipes the slate", () => {
+  state().stage = "vacation"; state().flags.act1Done = true;
+  const tierOf = r => { state().rep = r; return _repTier(); };
+  assert.deepEqual([tierOf(-12), tierOf(-5), tierOf(0), tierOf(5), tierOf(12)], [-2, -1, 0, 1, 2]);
+
+  state().rep = 6;
+  out = []; run("standing");
+  assert.match(lastOut(), /good sort/i, "STANDING reads your current tier");
+  out = []; run("rep");
+  assert.match(lastOut(), /good sort/i, "REP is the same readout");
+
+  // a new vacation is a clean slate (the soi forgets a month later)
+  state().rep = -8; state().repDay = 3;
+  state().day = 8; state().pendingChoice = null;
+  _newVacation();
+  assert.equal(state().rep, 0, "reputation resets with the new trip");
+  assert.equal(state().repDay, null, "and the daily-gain gate resets too");
+});
+
+test("reputation moves on real play: a big tip lifts it, a kickout craters it", () => {
+  state().stage = "vacation"; state().flags.act1Done = true; state().day = 2;
+  state().room = "stinky_bar"; state().money = 5000;
+  const girl = Object.keys(NPCS).find(id => _npcRoom(id) === "stinky_bar" && NPC_ROLES[id]);
+  run(`tip ${girl} 200`);
+  assert.equal(state().rep, 1, "a generous tip is a good deed (+1)");
+
+  // that same night, get bounced — the loss dwarfs the day's gain
+  _kickOut();
+  assert.equal(state().rep, -2, "a kickout (-3) wipes the +1 and then some");
+});
+
+test("reputation colours a stranger's reception (±1 favor), but never a regular's", () => {
+  state().stage = "vacation"; state().flags.act1Done = true;
+  state().room = "stinky_bar";
+  const girl = Object.keys(NPCS).find(id => _npcRoom(id) === "stinky_bar" && NPC_ROLES[id] === "hostess");
+  state().soc.drinks = {};
+  state().rep = 0; const base = _favor(girl);
+  state().rep = 12; const warm = _favor(girl);
+  state().rep = -12; const cold = _favor(girl);
+  assert.equal(warm, base + 1, "a good name warms a stranger by 1");
+  assert.equal(cold, base - 1, "a bad name cools a stranger by 1");
+  // a regular (bond ≥ 3) is immune — earned bond outweighs the town's read
+  state().soc.drinks[girl] = 5;
+  state().rep = 12; const regWarm = _favor(girl);
+  state().rep = -12; const regCold = _favor(girl);
+  assert.equal(regWarm, regCold, "a regular's favour doesn't ride on your street rep");
+});
+
+test("the grapevine and the bounce move reputation the right way", () => {
+  state().stage = "vacation"; state().flags.act1Done = true;
+  state().room = "queen_vic";
+  run("angela"); run("london");
+  state().room = NPCS.bert.room; run("bert");
+
+  // a cross-soi gossip catch docks 1
+  state().rep = 5; state().repDay = state().day; // baseline + today's gain already spent
+  state().convoQ = { id: "bert", key: "home" };
+  run("manchester");
+  assert.equal(state().rep, 4, "the grapevine catch docks 1");
+
+  // lying to the same person's face docks 2
+  state().rep = 5;
+  state().convoQ = { id: "bert", key: "home" };
+  run("london"); // different from what Bert now has (manchester)
+  assert.equal(state().rep, 3, "a lie to her face docks 2");
+});
+
+test("reputation greets you at a stranger bar — but only at the notable tiers", () => {
+  state().stage = "vacation"; state().flags.act1Done = true; state().nightTurn = 30;
+  // a face on the soi: a warm welcome at a bar you don't know
+  state().room = "beach_rd_c"; state().rep = 12; state().soc.greeted = {};
+  out = []; _arriveAt("candy_bar");
+  assert.match(lastOut(), /warmer|good ones|decided it likes/i, "a face gets a warm reception");
+  // trouble: a cool one
+  state().room = "beach_rd_c"; state().rep = -12; state().soc.greeted = {};
+  out = []; _arriveAt("candy_bar");
+  assert.match(lastOut(), /cools a half-degree|behind her hand|warm one/i, "trouble gets a cold shoulder");
+  // a middling rep is unremarkable — no special line
+  state().room = "beach_rd_c"; state().rep = 0; state().soc.greeted = {};
+  out = []; _arriveAt("candy_bar");
+  assert.doesNotMatch(lastOut(), /warmer|cools a half-degree|good ones|behind her hand/i, "a nobody gets no special reception");
+});
+
 test("QUIT/END/LOGOUT get a voiced refusal, not 'didn't parse'; RESET aliases RESTART", () => {
   // They were advertised in the autocomplete pool but had no handler — a typed
   // 'quit' fell through to the huh line, so the completion menu lied.

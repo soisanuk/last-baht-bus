@@ -972,6 +972,10 @@ function _favor(id) {
   else if (bl === 2) f += 4;             // two bells: much friendlier
   else if (bl === 1) f += 2;             // one bell: everybody loves the bell man
   if (_wingman()) f += 2;                // a wing-woman put in a good word
+  if ((G.soc.drinks[id] || 0) < 3) {     // a stranger (below regular): first impressions ride on your name
+    const rt = _repTier();               // ±1 only, never enough to override earned bond
+    if (rt > 0) f += 1; else if (rt < 0) f -= 1;
+  }
   return f;
 }
 
@@ -1038,6 +1042,7 @@ function _kickOut() {
       `${r.region}, in the worst way.)`, "alert");
   }
   _addHappy(-5);
+  _repHit(3); // being walked out by security is public and reads the same however you got there
   G.room = r.exits.out || Object.values(r.exits)[0];
   _describeRoom(true);
 }
@@ -1809,6 +1814,29 @@ function _relGreeting(id) {
   if (t < 1) return;
   const pool = _REL_GREET[t];
   _say(pool[Math.floor(_rand() * pool.length)](NPCS[id].name), t >= 2 ? "win" : "");
+}
+
+// Walking into a bar where you're still a stranger, your street reputation
+// arrives a half-step ahead of you — but only at the notable ends of the scale
+// (a face on the soi, or trouble). Once per bar per night, and it stands down
+// the moment a bar you actually know greets you by name (shares G.soc.greeted).
+const _REP_ARRIVAL_GOOD = [
+  "A hostess you've never met murmurs to the mamasan as you come in, and the welcome lands a shade warmer than a stranger earns — word's travelled up the soi ahead of you.",
+  "The mamasan gives you the once-over, then the nod she keeps for the good ones. Somebody's been saying the right things about you on this street.",
+  "You're barely through the beads before a seat and a smile find you — the easy reception of a man the soi has already decided it likes.",
+];
+const _REP_ARRIVAL_BAD = [
+  "The welcome cools a half-degree as you clear the door — a look passes between the mama and the rail that says your name got here first, and not in a good way.",
+  "A hostess clocks you, leans to the mamasan, says something behind her hand. Whatever the soi's been telling them about you, it walked in ahead of you.",
+  "Nobody hurries over. The mama keeps one eye on you the way she keeps one on the till — you've a name out here now, and it isn't a warm one.",
+];
+function _repArrival() {
+  if (!_flag("act1Done") || !ROOMS[G.room].barType) return;
+  if (G.soc.greeted && G.soc.greeted[G.room]) return; // a bar you know already greeted you
+  const t = _repTier();
+  if (t !== 2 && t !== -2) return;                     // only the notable ends of the scale
+  (G.soc.greeted = G.soc.greeted || {})[G.room] = true;
+  _say(_pickVary(t === 2 ? _REP_ARRIVAL_GOOD : _REP_ARRIVAL_BAD, "repArrival"), t === 2 ? "win" : "alert");
 }
 
 // A regular you TALK to talks back like she knows you — the generic register for
@@ -2607,6 +2635,7 @@ function _newVacation() {
   G.curseOwed = 0; // …and any pending fortune-teller claim
   G.loan = null;   // …but Nira's cousins do not forget; a month away writes it off all the same (for now)
   G.jaded = 0;     // a fresh trip, fresh enthusiasm — the treadmill resets
+  G.rep = 0; G.repDay = null; // a month away and the soi's memory of your antics is a clean slate (expat keeps its rep — you live there)
   G.soc = { drinks: {}, mamaTreat: {}, bellAt: {}, bells: {}, heat: {},
     banned: {}, patronBusy: {}, patronMiffed: {}, bra: {}, drunk: 0 };
   G.itemLoc.phone = "inventory";

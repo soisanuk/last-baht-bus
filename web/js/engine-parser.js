@@ -306,6 +306,7 @@ function _arriveAt(to) {
       .sort((a, b) => _bondTier(b) - _bondTier(a))[0];
     if (her && _bondTier(her) >= 1) { (G.soc.greeted = G.soc.greeted || {})[to] = true; _relGreeting(her); }
   }
+  _repArrival(); // your street name precedes you at a stranger bar (notable tiers only)
   _managerWelcome(); // a bar manager stands you the house's first shot (once/bar/night)
   // the anti-Simon machine: when the book gets heavy, the town catches you.
   // Candy settles it at whichever of her bars she's working tonight.
@@ -888,12 +889,15 @@ function _convoAnswer(text) {
   const name = _convoName(id);
   if (prior && prior !== val) {
     _say(_pickVary(_ANSWER_CAUGHT, "ansCaught")(name));           // she caught you herself
+    _repHit(2);                                                   // caught lying to her face
   } else if (!prior && globalPrior && globalPrior !== val) {
     _say(_pickVary(_ANSWER_GOSSIP, "ansGossip")(name, globalPrior)); // the soi grapevine caught you
+    _repHit(1);                                                   // a softer catch — but the town noticed
     // no +1 — you didn't open up, you got caught telling it two ways
   } else {
     _say(_pickVary(_ANSWER_ACK, "ansAck")(name));
     if (!prior) st.trust = Math.min(5, st.trust + 1); // opening up, once
+    _repGain(); // a straight, honest answer is part of being a good sort (throttled)
   }
   return true;
 }
@@ -1240,7 +1244,7 @@ function _buyManDrink(id) {
   G.soc.manDrinks = G.soc.manDrinks || {};
   G.soc.manDrinks[id] = (G.soc.manDrinks[id] || 0) + 1;
   if (G.soc.mgrChat) G.soc.mgrChat[id] = 0; // debt squared
-  _addHappy(2);
+  _addHappy(2); _repGain(); // standing the manager a drink is exactly the sort of thing that gets around well
   _say(`“Now you're speaking the language.” ${name} pours himself a proper one and ` +
     `chinks it against yours. ฿${BEER_PRICE} well spent — a manager who likes you is the ` +
     `best friend a farang has out here. (฿${G.money} left.)`, "win");
@@ -2225,7 +2229,7 @@ function _doTip(arg) {
       _say(`฿${amount} into the tip box. The guitarist catches your eye mid-riff and ` +
         "nods — you've been seen, which out here counts as a whole conversation. " +
         `(฿${G.money} left.)`, "win");
-      _addHappy(1);
+      _addHappy(1); _repGain();
     } else {
       _say(`฿${amount} drops into the tip box on the monitor wedge. The band plays on, ` +
         `professionally. (฿${G.money} left.)`);
@@ -2251,7 +2255,7 @@ function _doTip(arg) {
       _say(`฿${amount}, folded long and held high — ${nm} sweeps over, takes it with a flourish ` +
         `that belongs on a bigger stage, and blesses you to a whole-room cheer that is, somehow, ` +
         `for YOU. (฿${G.money} left.)`, "win");
-      _addHappy(1);
+      _addHappy(1); _repGain();
     } else {
       _say(`฿${amount}, folded long and held up. ${nm} plucks it away, drops you a wink worth more ` +
         `than the note, and sails back into the number. (฿${G.money} left.)`);
@@ -2280,7 +2284,7 @@ function _doTip(arg) {
     _say(`฿${amount}, folded small and passed with a wai. ${name} makes it vanish ` +
       `with a conjurer's economy, and the news crosses the bar by whole-room ` +
       `telepathy before your hand is back in your pocket. (฿${G.money} left.)`);
-    _addHappy(1);
+    _addHappy(1); _repGain();
   } else {
     _say(`฿${amount} into ${name}'s tip jar. A warm smile, a small wai — noted, ` +
       `filed, appreciated. The big ledger, though, runs on lady drinks. (฿${G.money} left.)`);
@@ -2748,7 +2752,7 @@ const _HELP = `Common commands:
   PHONE / EXAMINE PHONE (home screen: battery, messages, weather, headlines)
   CONTACT <lady> (swap numbers) · CONTACTS (your phonebook) · MESSAGE <lady> · CHECK MESSAGES
   WHO / BLACKBOOK (your ladies, ranked by how they feel about you) · WHO AM I (who you chose to be)
-  PHOTO <someone> (a portrait for your phone) · GALLERY (the faces you've collected)
+  STANDING (the soi's read on you) · PHOTO <someone> (a portrait for your phone) · GALLERY (the faces you've collected)
   SEND <amount> TO <lady> (banking app)
   BORROW <amount> · REPAY [amount] (Nira's loan at Neon Paradise — 20%, three days, don't be late)
   PET CATS (Jomtien beach) · FEED DOG (a friendship you cannot undo) · PET DOG · NAME DOG <name>
@@ -2807,7 +2811,7 @@ const _COMPLETE_VERBS = [
   "sleep", "tv", "column", "watch", "watch soi", "balcony", "weather", "scores", "lottery", "map", "time", "tip", "wave", "phone",
   "photo", "gallery", "photos", "call", "shower", "withdraw", "cheers", "tao rai", "borrow", "repay", "hire", "pet", "feed", "rename", "dance", "sing", "swim",
   "smell", "listen", "diagnose", "get tested", "clinic", "apologize", "quests", "accept", "abandon", "contact",
-  "contacts", "who", "who am i", "identity", "blackbook", "message", "check messages", "send", "score", "wait", "again",
+  "contacts", "who", "who am i", "identity", "blackbook", "message", "check messages", "send", "score", "standing", "wait", "again",
   "request", "hint", "help", "save", "load", "undo", "restart", "quit", "reset", "end", "logout",
 ];
 
@@ -3504,6 +3508,7 @@ function doCommand(input) {
         "display board of watches.");
       break;
     case "score": _doScore(); break;
+    case "rep": case "reputation": case "standing": _doRep(); break;
     case "hint": case "hints": _doHint(); break;
     case "help": case "?": _say(G.mode === "soi6" ? _HELP_SOI6 : _HELP, "dim"); break;
     case "quit": case "end": case "logout": _doQuit(); break;
@@ -3701,4 +3706,26 @@ function _doWhoAmI() {
   }
   const find = (t, id) => (t.find(e => e.id === id) || {}).label || "?";
   _say(`You are: ${find(ORIGINS, G.player.origin)} · ${find(PERSONALITIES, G.player.personality)} · ${find(ORIENTATIONS, G.player.orientation)}.`, "win");
+  if (_flag("act1Done")) _say(`On the soi, you're ${_REP_LABELS[_repTier()]}. (STANDING for more.)`, "dim");
+}
+
+// REP / STANDING / REPUTATION — where the soi has you. A single town-wide read,
+// built slowly from generosity and a straight story, dented fast by scenes,
+// jiltings, and getting bounced. Distinct from any one girl's regard.
+function _doRep() {
+  if (!_flag("act1Done")) {
+    _say("Too early to have a name out here — you're still finding your feet, and the " +
+      "soi hasn't clocked you yet.", "dim");
+    return;
+  }
+  const tier = _repTier();
+  _say(`The soi has you down as: ${_REP_LABELS[tier]}.`, tier < 0 ? "alert" : tier > 0 ? "win" : "dim");
+  const hint = tier <= -1
+    ? "A round for the bar, a straight answer, a job seen through — a name mends slower than it breaks, but it mends."
+    : tier >= 2
+      ? "Doors open a crack before you knock. Keep it — one bad scene and the soi remembers that instead."
+      : tier === 1
+        ? "The mamas nod you in. Keep standing your rounds and telling it straight and it only grows."
+        : "Stand a round, tip a lady, keep your story straight — or don't, and find out how small the soi is.";
+  _say(hint, "dim");
 }
