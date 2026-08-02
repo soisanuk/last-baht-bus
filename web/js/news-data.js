@@ -13,27 +13,17 @@ var NEWS_FEED = [
     "d": "30 Jul 2026"
   },
   {
-    "t": "Pattaya court denies bail for suspects in five Chonburi killings",
-    "s": "Khaosod English",
-    "d": "01 Aug 2026"
+    "t": "Missing Russian siblings found murdered, buried in Pattaya, suspects arrested",
+    "s": "Thaiger",
+    "d": "31 Jul 2026"
   },
   {
     "t": "Body found floating in Pattaya canal",
-    "s": "thethaiger.com",
+    "s": "Thaiger",
     "d": "02 Aug 2026"
   },
   {
-    "t": "Young Russian interpreter wins hearts during Pattaya murder probe",
-    "s": "Pattaya Mail",
-    "d": "01 Aug 2026"
-  },
-  {
-    "t": "Runaway trailer crushes EV on Chonburi overpass, three injured",
-    "s": "Pattaya Mail",
-    "d": "01 Aug 2026"
-  },
-  {
-    "t": "Discount travel offer becomes kidnap trap for Indian tourists in Pattaya",
+    "t": "Mayor launches beach road parking blitz across Pattaya",
     "s": "Pattaya Mail",
     "d": "01 Aug 2026"
   },
@@ -43,12 +33,22 @@ var NEWS_FEED = [
     "d": "01 Aug 2026"
   },
   {
+    "t": "Pattaya covers busy Sukhumvit footbridges with new shelters",
+    "s": "Pattaya Mail",
+    "d": "01 Aug 2026"
+  },
+  {
+    "t": "Pattaya firefighters torch dangerous wasp nest at Jomtien house",
+    "s": "Pattaya Mail",
+    "d": "01 Aug 2026"
+  },
+  {
     "t": "Super El Niño to arrive in Thailand next year",
     "s": "Bangkok Post",
     "d": "01 Aug 2026"
   },
   {
-    "t": "Anutin vows justice over murders",
+    "t": "Missing family of three found buried near Russians",
     "s": "Bangkok Post",
     "d": "01 Aug 2026"
   },
@@ -58,14 +58,14 @@ var NEWS_FEED = [
     "d": "01 Aug 2026"
   },
   {
+    "t": "Rescued wild elephant calf in critical condition after being found alone in Kanchanaburi",
+    "s": "The Star",
+    "d": "02 Aug 2026"
+  },
+  {
     "t": "Donald Trump Is Missing Thailand’s Strategic Moment",
     "s": "The National Interest",
     "d": "01 Aug 2026"
-  },
-  {
-    "t": "Death of travel YouTuber Hlun Solo highlights hidden risks faced by Thailand’s solo creators",
-    "s": "asianews.network",
-    "d": "31 Jul 2026"
   },
   {
     "t": "MotoGP to begin 2027 season in Thailand",
@@ -76,7 +76,7 @@ var NEWS_FEED = [
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-07-31","USD":33.47,"AUD":23.49,"GBP":44.92,"EUR":38.43};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-02","temp":30,"humid":71,"code":3,"hi":31,"rain":49};
+var WX_NOW = {"date":"2026-08-02","temp":28,"humid":83,"code":3,"hi":32,"rain":57};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
@@ -84,4 +84,4 @@ var LOTTO = {"date":"2026-08-01","first":"932479","last2":"69","front3":["413","
 // XAU, plus Thai baht-weight gold (96.5%)
 var GOLD = {"usd":4044,"date":"2026-08-02","baht":64000};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":63146,"thb":2115432};
+var BTC = {"usd":63090,"thb":2101536};
