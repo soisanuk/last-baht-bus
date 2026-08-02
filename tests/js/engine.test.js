@@ -1907,25 +1907,29 @@ test("Wilai: a different rung from Pia — the showwoman, and she reads your per
   assert.match(lastOut(), /I have a deposit/i, "earned: the ambition under the show");
 });
 
-test("conversations are two-way: every NPC turn surfaces the reply palette in the prose", () => {
+test("the in-prose reply prompt is trimmed: an answer cue for a question, choices for a fork, else nothing", () => {
+  // The chip bar carries the generic topic/compliment/goodbye list every turn, so
+  // the prose prompt no longer echoes it (that was redundant). It fires only when
+  // it adds something: an answer cue for a pending question, or a node's choices.
   state().stage = "vacation"; state().room = "stinky_bar";
-  run("talk to bert");
-  // the player's options are PRINTED (not left to the chip bar), tappable CAPS-in-parens
-  assert.match(lastOut(), /\(.*GOODBYE\)/, "a reply palette closes the turn");
-  assert.match(lastOut(), /COMPLIMENT/, "verbal moves are offered");
-  assert.match(lastOut(), /LEAGUE/, "and his open topics");
-  // asking a topic keeps the conversation open — palette re-shows
+  out = []; run("talk to bert");
+  // Bert's greeting puts a question to you → an answer cue, NOT the topic palette
+  assert.match(lastOut(), /put that to you|just answer/i, "a pending question cues you to answer");
+  assert.doesNotMatch(lastOut(), /GOODBYE\)/, "and it doesn't echo the topic palette (chips carry that)");
+  // answer him; a following ordinary topic turn carries NO redundant prose palette
+  out = []; run("just bored at home");   // a plain reply resolves the question
   out = []; run("league");
-  assert.match(lastOut(), /GOODBYE\)/, "still two-way after a topic");
-  // a live action-choice appears in the palette too
+  assert.doesNotMatch(lastOut(), /GOODBYE\)/, "an ordinary turn leaves the options to the chip bar");
+  // a live action-choice DOES earn the in-prose prompt
   out = []; state().room = "golden_dragon"; _convoEnd();
   run("talk to gavin"); if (typeof _setFlag === "function") _setFlag("heardWdgPitch");
   out = []; run("talk to gavin");
   // apostrophe stripped so the CAPS run stays one tappable kw (tap still resolves)
-  assert.match(lastOut(), /TELL HIM YOURE IN/, "the standing-moving choice is surfaced");
-  // leaving closes it — no palette after goodbye
+  assert.match(lastOut(), /TELL HIM YOURE IN/, "a real fork is surfaced in the prose");
+  assert.match(lastOut(), /GOODBYE\)/, "and closes with GOODBYE");
+  // leaving closes it — no prompt after goodbye
   out = []; run("goodbye");
-  assert.doesNotMatch(lastOut(), /GOODBYE\)/, "the palette is gone once you take your leave");
+  assert.doesNotMatch(lastOut(), /GOODBYE\)/, "gone once you take your leave");
 });
 
 test("dialogue choices: Bert's WDG-flip is a pick-a-side fork; effects land, closes once taken", () => {
@@ -2712,6 +2716,25 @@ test("every origin quest completes on ASK and pays its reward via _questTick", (
   }
 });
 
+test("a giver's job offer waits for you to answer their question, not the same turn", () => {
+  // Doyle greets, asks 'girls, money, or getting-away?', AND used to dump the job
+  // in the same turn — overwhelming, and unclear which to respond to. The offer now
+  // holds until the question is resolved.
+  state().stage = "vacation"; state().flags.act1Done = true;
+  state().player.origin = "pension"; // not PI, so Doyle is active
+  state().room = "queen_vic";
+  _npcState("doyle").trust = 1;
+  out = []; run("talk doyle");
+  assert.ok(state().convoQ && state().convoQ.id === "doyle", "he's put a question to you");
+  assert.doesNotMatch(lastOut(), /has a job for you/i, "no job offer while the question hangs");
+  assert.notEqual(state().quests.orchid_recon, "offered", "and the quest isn't marked offered yet");
+  // answer him, then the next talk surfaces the job
+  run("the getting-away");
+  out = []; run("talk doyle");
+  assert.match(lastOut(), /has a job for you|ACCEPT ORCHID_RECON/i, "now the job comes");
+  assert.equal(state().quests.orchid_recon, "offered");
+});
+
 test("an origin quest is offered on TALK once trust is earned, and ACCEPT activates it", () => {
   // Roy's is the cleanest: trust 1, no deps, no preconditions.
   state().stage = "vacation"; state().flags.act1Done = true;
@@ -2727,6 +2750,8 @@ test("an origin quest is offered on TALK once trust is earned, and ACCEPT activa
   // earn his trust and the job surfaces on the next talk
   _npcState("roy").trust = 1;
   assert.ok(_questAvailable("old_days"), "known enough now, it's on the table");
+  out = []; run("talk roy");   // his greeting first puts a getting-to-know-you question to you
+  state().convoQ = null;       // (answering it is covered elsewhere) — resolved, so the job can land
   out = []; run("talk roy");
   assert.match(lastOut(), /has a job for you|ACCEPT OLD_DAYS/i, "now he offers it");
   assert.equal(state().quests.old_days, "offered");
@@ -3544,13 +3569,14 @@ test("The Shamrock Dog: dog-gated quest, and the walk to the dead pub", () => {
   for (const k in ENCOUNTERS) state().encDone[k] = true; // silence street noise — a stray pendingEnc eats the next command
   // no dog: Bert never mentions it (reqFlags gate), and it can't be accepted
   state().dog = null; delete state().flags.hasDog; state().room = "stinky_bar";
-  out = []; run("talk bert"); run("talk bert");
+  out = []; run("talk bert"); state().convoQ = null; run("talk bert"); // clear his 'why' so his first job (league) gets offered
   assert.ok(!/Shamrock Dog/.test(out.join("\n")), "no dog, no quest");
   out = []; run("accept shamrock");
   assert.notEqual(state().quests.shamrock, "active", "reqFlags holds against a direct ACCEPT");
   // adopt; a giver with a quest already on the table surfaces his NEXT job
   state().room = "beach_rd_c"; run("feed dog");
   state().room = "stinky_bar";
+  state().convoQ = null; // his one 'why are you here' question already dealt with — don't hold the offer
   out = []; run("talk bert");
   assert.match(out.join("\n"), /Shamrock Dog/, "Bert recognises the dog at your heel");
   run("accept shamrock");
