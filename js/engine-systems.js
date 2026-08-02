@@ -1471,6 +1471,10 @@ function _questAvailable(qid) {
 
 // Called after a giver's dialogue lands: surface any offer they have.
 function _questOffer(npcId) {
+  // Don't pile a job offer on top of a question the giver just put to you — let
+  // the player answer first (it reads as one overwhelming turn otherwise, and it's
+  // unclear which thing to respond to). The offer surfaces next time you talk.
+  if (G.convoQ) return;
   for (const [qid, q] of Object.entries(QUESTS)) {
     if (q.giver !== npcId || !_questAvailable(qid)) continue;
     if (G.quests[qid] === "offered") continue; // already on the table — surface the giver's NEXT job instead
@@ -2433,20 +2437,21 @@ function _doWatchSoi() {
   if (!_flag("sawBalcony")) {
     _setFlag("sawBalcony");
     _say("You step out to the third-floor rail, and Soi 6 opens up underneath you like somebody kicked over a crate of neon.");
-    _say("A hundred metres of it, wall to wall: the loud end off to your left — Golden Dragon, Pink Lotus, the go-go " +
-      "fronts throwing pink light and bass up the walls — thinning east into the deep end on your right, where the " +
-      "signs get smaller and the promises get bigger. In between, the parade. Barkers working the walkers. Girls " +
-      "leaning out of doorways to reel a passing shirt in by the sleeve — HANDSOME MAN, WHERE YOU GO — half of them " +
-      "meaning it, all of them counting. A stag party circling a lit doorway like fish deciding on the bait. A som-tam " +
-      "cart, a ring-light kid filming a night he'll never actually smell, a soi dog threading the whole mess like he " +
-      "holds the lease on it.");
+    _say("Four hundred metres of it, wall to wall, and you're perched right over the middle: both ends flaring away " +
+      "from you — go-go fronts throwing pink light and bass up the walls, west toward Beach Road and east toward Second, " +
+      "the signs getting bigger and the promises smaller the further out they go — with the quieter stretch laid out " +
+      "directly below, close enough to eavesdrop. The parade never stops. Barkers working the walkers. Girls leaning " +
+      "out of doorways to reel a passing shirt in by the sleeve — HANDSOME MAN, WHERE YOU GO — half of them meaning it, " +
+      "all of them counting. A stag party circling a lit doorway like fish deciding on the bait. A som-tam cart, a kid " +
+      "with a ring light livestreaming the whole street to people who'll never actually stand in it, a soi dog threading " +
+      "the mess like he holds the lease on it.");
     _say("It is gaudy and it is grubby and — you can feel it already — it is going to be very hard to leave.");
     // The soi runs between Beach Rd and Second Rd; the songthaew passes those, not
-    // the soi itself. In the Soi 6 week you never leave — you sleep right up here —
-    // so the last-bus worry only belongs to the full game's ranging nights.
+    // the soi itself. In the Soi 6 week you never leave — you sleep right up here,
+    // over the quiet middle — so the last-bus worry only belongs to the full game.
     const _close = G.mode === "soi6"
-      ? "It runs west-loud to east-deep. Pace your baht — one street, one week, and you sleep right up here at the head of it."
-      : "It runs west-loud to east-deep. Pace your baht, and keep an ear out for the last songthaew home off Beach Road.";
+      ? "The loud ends bracket the calm middle you're perched over. Pace your baht — one street, one week, and you sleep right up here above the thick of it."
+      : "The loud ends bracket the calm middle. Pace your baht, and keep an ear out for the last songthaew home off Beach Road.";
     _say("Somewhere down there is a week's worth of trouble with your name on it. (It's all just DOWN the stairs — " +
       "the pub first, then out into the soi. " + _close + ")", "dim");
   } else {
