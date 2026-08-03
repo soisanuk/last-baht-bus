@@ -226,6 +226,20 @@ test("Soi 6 core-loop renders German: room desc, revisit, buy, social, inventory
   assert.match(lastOut(), /SHORT TIME|LONG TIME|NO /, "…but SHORT TIME/LONG TIME/NO stay commands");
 });
 
+test("German stat screens + ladyboy-pass: SCORE, DIAGNOSE, and the katoey gracious-pass localise", () => {
+  state().flags.act1Done = true; state().stage = "vacation"; state().player.lang = "de";
+  state().mode = "soi6"; state().happy = 30; state().hunger = 45; state().thirst = 20; state().soc.drunk = 2;
+  out = []; run("score");
+  assert.match(lastOut(), /Zufriedenheit|Hunger .* Durst|Bier intus/, "SCORE readout in German");
+  out = []; run("diagnose");
+  assert.match(lastOut(), /Selbstdiagnose|Du wirst überleben/, "DIAGNOSE in German");
+  // a straight player flirting a ladyboy → the gracious-pass, now German (tilac kept)
+  state().room = "ruby_kiss"; state().soc.bells = { ruby_kiss: 3 }; state().soc.drinks = { chompoo: 5 };
+  out = []; run("flirt chompoo");
+  assert.match(lastOut(), /kein Problem|Damen sind da drüben|meinen Kunden/, "ladyboy gracious-pass in German");
+  assert.match(lastOut(), /tilac/, "…Thai particle preserved");
+});
+
 test("Fluent (not Taitch): Chompoo answers a German player in real, idiomatic Berlin German", () => {
   state().flags.act1Done = true; state().stage = "vacation"; state().room = "ruby_kiss";
   state().player.lang = "de";

@@ -1781,20 +1781,22 @@ function _doCharge() {
 }
 
 function _doScore() {
-  _say(`สนุก happiness: ${G.happy} — ${_happyLevel(G.happy)}`, "win");
-  _say(`${_weekday()}, day ${G.day}${G.stage === "expat" ? " · expat life" : " of 7"} · ${_clockStr()} · ` +
-    `฿${G.money} · battery ${G.battery}%` +
-    (_quizDay() ? " · QUIZ NIGHT 20:00-22:00" : ""), "dim");
-  _say(`hunger ${G.hunger} · thirst ${G.thirst}` +
-    (G.soc.drunk ? ` · ${G.soc.drunk} bottle${G.soc.drunk > 1 ? "s" : ""} deep` : "") +
-    (G.hurt ? ` · banged up (${G.hurt}/3)` : ""), "dim");
+  _say(_fmt("สนุก happiness: {h} — {lvl}", { h: G.happy, lvl: _L(_happyLevel(G.happy)) }), "win");
+  _say(_fmt("{wd}, day {d}{stage} · {clock} · ฿{m} · battery {bat}%{quiz}", {
+    wd: _L(_weekday()), d: G.day, stage: G.stage === "expat" ? _L(" · expat life") : _L(" of 7"),
+    clock: _clockStr(), m: G.money, bat: G.battery,
+    quiz: _quizDay() ? _L(" · QUIZ NIGHT 20:00-22:00") : "" }), "dim");
+  let _body = _fmt("hunger {hu} · thirst {th}", { hu: G.hunger, th: G.thirst });
+  if (G.soc.drunk) _body += _fmt(" · {d} bottle{s} deep", { d: G.soc.drunk, s: G.soc.drunk > 1 ? "s" : "" });
+  if (G.hurt) _body += _fmt(" · banged up ({h}/3)", { h: G.hurt });
+  _say(_body, "dim");
   // Soi 6 mode never plays Act One (act1Done/hasWallet are force-set at start),
   // so the "ACT ONE COMPLETE — scored 0 / WALLET RECOVERED" ledger below would be
   // nonsense to a player who never lost a wallet — suppress the whole full-game
   // progress block in the launch mode.
   if (_flag("act1Done") && G.mode !== "soi6") _say(`✓ ACT ONE COMPLETE — scored ${G.score}` +
     (G.vacation > 1 ? ` · vacation #${G.vacation}` : ""), "dim");
-  if (_unreadCount()) _say(`📱 ${_unreadCount()} unread message${_unreadCount() > 1 ? "s" : ""} (CHECK MESSAGES)`, "win");
+  if (_unreadCount()) _say(_fmt("📱 {c} unread message{s} (CHECK MESSAGES)", { c: _unreadCount(), s: _unreadCount() > 1 ? "s" : "" }), "win");
   const active = Object.entries(QUESTS).filter(([qid]) => G.quests[qid] === "active");
   for (const [, q] of active) _say(`▶ ${q.name}`, "dim");
   // Faction standing — only surfaces once you've actually taken a side; a player
@@ -1802,7 +1804,7 @@ function _doScore() {
   const standing = _FACTION_LABELS
     .filter(([f]) => _faction(f) !== 0)
     .map(([f, label]) => `${label} ${_faction(f) > 0 ? "+" : ""}${_faction(f)}`);
-  if (standing.length) _say(`Standing: ${standing.join(" · ")}`, "dim");
+  if (standing.length) _say(_fmt("Standing: {s}", { s: standing.join(" · ") }), "dim");
   if (G.mode !== "soi6")
     for (const [f, label] of _ACT1_MILESTONES) if (_flag(f)) _say("✓ " + label, "dim");
 }
@@ -1834,20 +1836,20 @@ function _doDrink(arg) {
 function _doDiagnose() {
   const d = G.soc.drunk;
   const parts = [
-    G.hunger >= 70 ? "hungry enough to envy the soi dogs" :
-      G.hunger >= 40 ? "peckish, and every cart on the street smells personal" : "fed",
-    G.thirst >= 70 ? "dry as a temple bell" :
-      G.thirst >= 40 ? "thirsty" : "watered",
-    d >= 6 ? `${d} bottles deep and navigating by neon` :
-      d >= 3 ? `${d} bottles deep, the world pleasantly loose at the hinges` :
-      d >= 1 ? `${d} bottle${d > 1 ? "s" : ""} in` : "stone sober, which is fixable",
+    _L(G.hunger >= 70 ? "hungry enough to envy the soi dogs" :
+      G.hunger >= 40 ? "peckish, and every cart on the street smells personal" : "fed"),
+    _L(G.thirst >= 70 ? "dry as a temple bell" :
+      G.thirst >= 40 ? "thirsty" : "watered"),
+    d >= 6 ? _fmt("{d} bottles deep and navigating by neon", { d }) :
+      d >= 3 ? _fmt("{d} bottles deep, the world pleasantly loose at the hinges", { d }) :
+      d >= 1 ? _fmt("{d} bottle{s} in", { d, s: d > 1 ? "s" : "" }) : _L("stone sober, which is fixable"),
   ];
-  if (G.hurt) parts.push(`banged up (${G.hurt}/3 — a third strike ends the night)`);
-  if (d >= 5) parts.push("in no state to be on the back of a motorbike");
-  if (_stdSymptomatic()) parts.push("nursing a barfine souvenir that itches and burns — a clinic job (GET TESTED, it's free)");
-  _say(`Self-diagnosis, ${_clockStr()}: ${parts.join(" · ")}.`);
-  _say(`Phone ${G.battery}% · ฿${G.money} · สนุก ${G.happy} (${_happyLevel(G.happy)}). ` +
-    "You will live, which in this town is both a prognosis and a lifestyle.", "dim");
+  if (G.hurt) parts.push(_fmt("banged up ({h}/3 — a third strike ends the night)", { h: G.hurt }));
+  if (d >= 5) parts.push(_L("in no state to be on the back of a motorbike"));
+  if (_stdSymptomatic()) parts.push(_L("nursing a barfine souvenir that itches and burns — a clinic job (GET TESTED, it's free)"));
+  _say(_fmt("Self-diagnosis, {clock}: {parts}.", { clock: _clockStr(), parts: parts.join(" · ") }));
+  _say(_fmt("Phone {bat}% · ฿{m} · สนุก {h} ({lvl}). You will live, which in this town is both a prognosis and a lifestyle.",
+    { bat: G.battery, m: G.money, h: G.happy, lvl: _L(_happyLevel(G.happy)) }), "dim");
 }
 
 // GET TESTED — the free public clinic off Soi Buakhao. The responsible-choice
