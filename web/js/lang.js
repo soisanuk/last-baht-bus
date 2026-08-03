@@ -210,11 +210,11 @@ const _CATALOGS = {
     // SPEECH → Taitch (dropped endings, no articles, Thai syntax + German vocab,
     // her dry wit intact). Thai particles (na, tilac, mai pen rai) stay. Only her
     // lines are catalogued, so every other NPC still falls back to English speech.
-    "A little older than the Gold Rush's other girls and a great deal less nervous — she moves like someone who has already seen the worst a room can do to a person. Her English is good, with a flat European edge the soi doesn't usually carry.":
-      "Ein bisschen älter als die anderen Mädchen im Gold Rush und ein gutes Stück weniger nervös — sie bewegt sich wie jemand, der das Schlimmste, das ein Raum einem Menschen antun kann, schon gesehen hat. Ihr Deutsch ist gut, mit einer flachen europäischen Kante, die die Soi sonst nicht trägt.",
+    "A little older than the other girls here and a great deal less nervous — she moves like someone who has already seen the worst a room can do to a person. Her English is good, with a flat European edge the soi doesn't usually carry.":
+      "Ein bisschen älter als die anderen Mädchen hier und ein gutes Stück weniger nervös — sie bewegt sich wie jemand, der das Schlimmste, das ein Raum einem Menschen antun kann, schon gesehen hat. Ihr Deutsch ist gut, mit einer flachen europäischen Kante, die die Soi sonst nicht trägt.",
 
-    "\"Welcome to the Gold Rush.\" A small, real smile. \"The gold is paint — Nong will tell you, she cannot help herself. Sit. I am Mercedes. Yes, like the car. I had one in the driveway in Munich and never once the keys. Now I keep the name and skip the car.\"":
-      "\"Willkommen im Gold Rush.\" Ein kleines, echtes Lächeln. \"Gold ist Farbe — Nong wird dir sagen, sie kann nicht anders. Setz. Ich bin Mercedes. Ja, wie Auto. Ich hab einen gehabt in Einfahrt in München, und nie einmal Schlüssel. Jetzt ich behalt Name und lass Auto weg.\"",
+    "\"Welcome to Cherry Pop.\" A small, real smile. \"Loud, pink, entirely a machine — but the drinks are cold and I do not lie to you, which on this soi is a luxury. Sit. I am Mercedes. Yes, like the car. I had one in the driveway in Munich and never once the keys. Now I keep the name and skip the car.\"":
+      "\"Willkommen im Cherry Pop.\" Ein kleines, echtes Lächeln. \"Laut, pink, komplett Maschine — aber Drinks sind kalt und ich lüg dich nicht an, was auf dieser Soi Luxus ist. Setz. Ich bin Mercedes. Ja, wie Auto. Ich hab einen gehabt in Einfahrt in München, und nie einmal Schlüssel. Jetzt ich behalt Name und lass Auto weg.\"",
     "\"Mercedes — like the car. Kept the name, skipped the car. Sit, tilac.\"":
       "\"Mercedes — wie Auto. Name behalt, Auto weg. Setz, tilac.\"",
 
@@ -243,13 +243,13 @@ const _CATALOGS = {
     "\"Money is rain — comes, goes, I send it home. In Munich the counting made me small.\"":
       "\"Geld ist Regen — komm, geh, ich schick nach Haus. In München Zählerei macht mich klein.\"",
 
-    "\"Nong?\" She glances at the trembling new girl with something almost maternal. \"First week. Scared of the door, scared of Mamasan, scared of the paint. I was her, fifteen years ago, a go-go on Soi 6.\" A softer smile. \"Somebody should tell her the worst thing that happen is you go all the way to Munich and come back. Not so bad, in the end. I keep an eye on her.\"":
-      "\"Nong?\" Sie schaut zum zitternden neuen Mädchen mit etwas fast Mütterlichem. \"Erste Woche. Angst vor Tür, Angst vor Mamasan, Angst vor Farbe. Ich war sie, vor fünfzehn Jahr, Go-go auf Soi 6.\" Ein weicheres Lächeln. \"Jemand soll ihr sag: schlimmste, was passier, ist du geh ganz bis München und komm zurück. Nicht so schlimm, am Ende. Ich pass auf sie auf.\"",
-    "\"Nong is me, fifteen years ago. I keep an eye on her.\"":
-      "\"Nong ist ich, vor fünfzehn Jahr. Ich pass auf sie auf.\"",
+    "\"Nong? The trembling one over at the Gold Rush.\" Something almost maternal crosses her face. \"I worked that bar before this one — first week she was, scared of the door, scared of Mamasan, scared of everything. I was her, fifteen years ago, a go-go on Soi 6.\" A softer smile. \"Somebody should tell her the worst thing that happen is you go all the way to Munich and come back. Not so bad, in the end. I still keep an eye out, from here.\"":
+      "\"Nong? Die Zittrige drüben im Gold Rush.\" Etwas fast Mütterliches geht über ihr Gesicht. \"Ich hab die Bar vor dieser gearbeit — erste Woche war sie, Angst vor Tür, Angst vor Mamasan, Angst vor allem. Ich war sie, vor fünfzehn Jahr, Go-go auf Soi 6.\" Ein weicheres Lächeln. \"Jemand soll ihr sag: schlimmste, was passier, ist du geh ganz bis München und komm zurück. Nicht so schlimm, am Ende. Ich pass immer noch auf, von hier.\"",
+    "\"Nong, over at the Gold Rush — I was her, fifteen years ago. I keep an eye out.\"":
+      "\"Nong, drüben im Gold Rush — ich war sie, vor fünfzehn Jahr. Ich pass auf.\"",
 
-    "\"You keep coming back to the Gold Rush for ME — the paint is not that charming, we both know it.\" For once Mercedes lets the dry line land soft. \"After Munich I made myself one promise: no more man I have to manage. And here is you — needing no managing, buying the paint-bar girl her drink like it is Vienna. Don't make me like you, farang. I am badly out of practice.\"":
-      "\"Du komm immer zurück zum Gold Rush für MICH — Farbe ist nicht so charmant, wir wissen beide.\" Ausnahmsweise lässt Mercedes die trockene Zeile weich landen. \"Nach München ich hab mir ein Versprech gemacht: kein Mann mehr, den ich manag muss. Und hier bist du — brauch kein Managen, kaufst dem Farb-Bar-Mädchen ihr Drink wie es Wien wär. Mach nicht, dass ich dich mag, Farang. Ich bin schlecht aus Übung.\"",
+    "\"You keep coming back to Cherry Pop for ME — the neon is not that charming, we both know it.\" For once Mercedes lets the dry line land soft. \"After Munich I made myself one promise: no more man I have to manage. And here is you — needing no managing, buying the old girl at the loud bar her drink like it is Vienna. Don't make me like you, farang. I am badly out of practice.\"":
+      "\"Du komm immer zurück zum Cherry Pop für MICH — Neon ist nicht so charmant, wir wissen beide.\" Ausnahmsweise lässt Mercedes die trockene Zeile weich landen. \"Nach München ich hab mir ein Versprech gemacht: kein Mann mehr, den ich manag muss. Und hier bist du — brauch kein Managen, kaufst der alten Frau an der lauten Bar ihr Drink wie es Wien wär. Mach nicht, dass ich dich mag, Farang. Ich bin schlecht aus Übung.\"",
     "\"Don't make me like you, farang. I'm badly out of practice.\"":
       "\"Mach nicht, dass ich dich mag, Farang. Ich bin schlecht aus Übung.\"",
 

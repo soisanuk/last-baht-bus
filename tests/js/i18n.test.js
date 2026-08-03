@@ -120,7 +120,7 @@ test("tap-interface labels translate to German (the command underneath stays Eng
 });
 
 test("Taitch: Mercedes meets a German player in broken German, an English player in English", () => {
-  state().flags.act1Done = true; state().stage = "vacation"; state().room = "gold_rush";
+  state().flags.act1Done = true; state().stage = "vacation"; state().room = "cherry_pop"; // moved onto Soi 6
   // German player → German narration + Taitch speech
   state().player.lang = "de";
   out = []; run("ask mercedes about german");
