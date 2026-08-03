@@ -156,6 +156,27 @@ test("speech stays English by default — a non-Taitch NPC is unaffected by Germ
   assert.doesNotMatch(lastOut(), /Willkommen|Setz|guten Tag/i, "no accidental German for Bert");
 });
 
+test("_fmt fills a translated template word-order-safely, English fallback when uncatalogued", () => {
+  state().player.lang = "de";
+  assert.equal(
+    _fmt("{clock}, {weekday} — day {day} of 7.", { clock: "22:00", weekday: "Donnerstag", day: 4 }),
+    "22:00, Donnerstag — Tag 4 von 7.");
+  assert.equal(_fmt("nothing {x} here", { x: "Z" }), "nothing Z here", "uncatalogued template → English filled");
+  state().player.lang = "en";
+  assert.equal(
+    _fmt("{clock}, {weekday} — day {day} of 7.", { clock: "22:00", weekday: "Thursday", day: 4 }),
+    "22:00, Thursday — day 4 of 7.", "en is a passthrough");
+});
+
+test("TIME reads out in German: the _fmt clock line + fixed status lines + weekday", () => {
+  state().stage = "vacation"; state().flags.act1Done = true; state().mode = "soi6";
+  state().player.lang = "de"; state().day = 4; state().nightTurn = 45;
+  out = []; run("time");
+  const o = lastOut();
+  assert.match(o, /Donnerstag — Tag 4 von 7/, "the clock line (via _fmt) + localised weekday");
+  assert.match(o, /Hauptzeit\. Es gelten die Standardpreise/, "and a fixed status line is German");
+});
+
 test("G.player.lang survives a save/restore round-trip", () => {
   state().player.lang = "de";
   const blob = serializeGame();
