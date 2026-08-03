@@ -112,5 +112,35 @@ const _CATALOGS = {
     // ── Tan drops you on the soi (last intro beat before the opening) ─────────
     "\"Okay. I got you.\" Tan swings off Second Road and the neon of Soi 6 swallows the windscreen. He drops you at the mouth of the soi, presses a cold water you didn't ask for into your hand, and taps the card already in your pocket. \"First night is on you, my friend. Do me one favour—\" the grin again \"—try to keep your wallet.\"":
       "\"Okay. Ich hab dich.\" Tan biegt von der Second Road ab, und das Neon der Soi 6 verschluckt die Windschutzscheibe. Er setzt dich an der Mündung der Soi ab, drückt dir ein kaltes Wasser in die Hand, um das du nicht gebeten hast, und tippt auf die Karte, die schon in deiner Tasche steckt. \"Die erste Nacht geht auf dich, mein Freund. Tu mir einen Gefallen—\" wieder das Grinsen \"—versuch, dein Portemonnaie zu behalten.\"",
+
+    // ── the opening scenes (what you land in right after the intro) ───────────
+    // ALL-CAPS command tokens (HELP, DOWN, INVENTORY, EXAMINE, QUESTS, TALK, ASK,
+    // HINT) are kept in English — they are the actual commands the parser accepts
+    // and the words decorate() turns into taps; the German prose wraps around them.
+    // Thai (สบายสบาย) and ฿ amounts stay; German uses ฿100.000-style separators.
+    "Soi 6 · a Pattaya misadventure · Soi Sanuk universe":
+      "Soi 6 · ein Pattaya-Schlamassel · Soi-Sanuk-Universum",
+    "One week in Pattaya, and you've picked your street and planted your flag: SOI 6 — the loudest hundred metres in Thailand — with the Queen Vic Inn right in the thick of it. You're not leaving the soi this trip; the rest of the city keeps for next time.":
+      "Eine Woche in Pattaya, und du hast deine Straße gewählt und deine Flagge gepflanzt: SOI 6 — die lautesten hundert Meter Thailands — mit dem Queen Vic Inn mittendrin. Diese Reise verlässt du die Soi nicht; der Rest der Stadt hält sich bis zum nächsten Mal.",
+    "฿100,000 for the week sits in the bank. ฿1,000 is in your pocket — the rest comes out of the ATM on the street (฿300 a pull, ฿20,000 a day) when you need it.":
+      "฿100.000 für die Woche liegen auf der Bank. ฿1.000 hast du in der Tasche — der Rest kommt aus dem Geldautomaten auf der Straße (฿300 pro Abhebung, ฿20.000 am Tag), wenn du ihn brauchst.",
+    "Goal: สบายสบาย. Get happy. Max out the week. ★":
+      "Ziel: สบายสบาย. Werd glücklich. Hol das Maximum aus der Woche. ★",
+    "(HELP lists commands. Your night is DOWN the stairs — the pub first, then out into the soi.)":
+      "(HELP zeigt die Befehle. Dein Abend geht die Treppe DOWN — erst der Pub, dann raus auf die Soi.)",
+
+    "a Pattaya misadventure · Soi Sanuk universe":
+      "ein Pattaya-Schlamassel · Soi-Sanuk-Universum",
+    "Day two of your week in Pattaya, and it starts like this: face-down on Jomtien beach, sunset bleeding into the sea, your head pounding like a bass bin outside Neon Paradise A-Go-Go. Day one went well, is the thing. Too well.":
+      "Tag zwei deiner Woche in Pattaya, und er beginnt so: mit dem Gesicht nach unten am Strand von Jomtien, der Sonnenuntergang blutet ins Meer, dein Kopf dröhnt wie eine Bassbox vor dem Neon Paradise A-Go-Go. Tag eins lief gut, das ist die Sache. Zu gut.",
+    "Your wallet is GONE. Your phone reads 13% battery. Your hotel is in Naklua — the whole town away. The baht bus is ฿15 a head.":
+      "Deine Brieftasche ist WEG. Dein Handy zeigt 13% Akku. Dein Hotel ist in Naklua — am anderen Ende der Stadt. Der Baht-Bus kostet ฿15 pro Kopf.",
+    "You have ฿0.": "Du hast ฿0.",
+    "It's going to be one of those nights.": "Es wird eine von diesen Nächten.",
+    "(New here? Turn out your pockets — INVENTORY, then EXAMINE what you find — and check what you're up against with QUESTS. The rest, the soi teaches: TALK to people and ASK them about your wallet. HELP lists everything.)":
+      "(Neu hier? Leer deine Taschen — INVENTORY, dann EXAMINE, was du findest — und sieh mit QUESTS, was dir bevorsteht. Den Rest bringt dir die Soi bei: TALK mit Leuten und ASK sie nach deiner Brieftasche. HELP zeigt alles.)",
+    "The soi remembers your face now. If the night goes quiet, ask it: (HINT)":
+      "Die Soi kennt jetzt dein Gesicht. Wenn die Nacht still wird, frag sie: (HINT)",
+    "(Type HELP for commands.)": "(Tippe HELP für die Befehle.)",
   },
 };
