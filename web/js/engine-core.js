@@ -970,7 +970,7 @@ function _describeRoom(full, forceFull) {
   // Opt-in per room via `revisit`; LOOK and boot/restore force the full desc.
   if (full) _say(!firstTime && !forceFull && r.revisit ? _pickVary(r.revisit, "rv:" + G.room) : r.desc);
   const items = Object.keys(G.itemLoc).filter(id => _here(id));
-  if (items.length) _say(_L("You can see: ") + items.map(id => ITEMS[id].name).join(", ") + ".");
+  if (items.length) _say(_L("You can see: ") + items.map(id => _L(ITEMS[id].name)).join(", ") + ".");
   const npcs = _npcsHere();
   const pats = _patronsHere();
   // One presence line for everyone actually in the room — staff and patrons in the
