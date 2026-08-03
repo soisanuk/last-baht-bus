@@ -46,3 +46,24 @@ test("chips render on boot, re-render by context, and clicks act", async ({ page
 
   expect(pageErrors).toEqual([]);
 });
+
+test("chip labels localise to German while the submitted command stays English", async ({ page }) => {
+  const pageErrors = [];
+  page.on("pageerror", e => pageErrors.push(e.message));
+  await bootIntoGame(page, INDEX_URL);
+
+  // flip to German and re-render the room's chips
+  await page.evaluate(() => { G.player.lang = "de"; _term.renderChips(); });
+
+  // the LOOK chip now DISPLAYS "Umsehen" — but carries the English command
+  const look = page.locator('#chips .chip', { hasText: /^Umsehen$/ });
+  await expect(look).toBeVisible();
+  await expect(look).toHaveAttribute("data-cmd", "look");
+  await expect(page.locator('#chips .chip', { hasText: /^look$/ })).toHaveCount(0);
+
+  // clicking it runs the English command (echoes "❯ look")
+  await look.click();
+  await expect(page.locator("#term-out")).toContainText("❯ look");
+
+  expect(pageErrors).toEqual([]);
+});

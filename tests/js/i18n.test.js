@@ -102,6 +102,23 @@ test("LOOK renders a German room: name, description, and scaffolding labels", ()
   assert.match(o, /Eintreten: Queen Vic Inn\. \(ENTER <Name>\)/, "Step-inside label German, venue + ENTER kept");
 });
 
+test("tap-interface labels translate to German (the command underneath stays English)", () => {
+  // term.js renders _L(label); these prove the catalog. The English cmd the chip
+  // submits is unchanged — only the display text is localised.
+  state().player.lang = "de";
+  assert.equal(_L("look"), "Umsehen");
+  assert.equal(_L("help"), "Hilfe");
+  assert.equal(_L("talk"), "Reden");
+  assert.equal(_L("buy her a drink"), "Ihr einen Drink");
+  assert.equal(_L("leave"), "Gehen");
+  assert.equal(_L("DOWN"), "RUNTER");
+  assert.equal(_L("E"), "O", "even the compass label (chip cmd 'e' still fires east)");
+  assert.equal(_L("barfine…"), "Barfine…", "trailing ellipsis preserved");
+  assert.equal(_L("Candy"), "Candy", "a dynamic NPC-name label falls back to English");
+  state().player.lang = "en";
+  assert.equal(_L("look"), "look", "English mode leaves labels untouched");
+});
+
 test("G.player.lang survives a save/restore round-trip", () => {
   state().player.lang = "de";
   const blob = serializeGame();
