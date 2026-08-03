@@ -4265,10 +4265,10 @@ test("refusals: customer-stealing, the honest lady-time, temple, and the recover
   out = [];
   run("barfine nan"); // held for the night
   assert.match(lastOut(), /answer hasn't changed/i);
-  // the honest upfront lady-time (aom's life-hash, day 3) — BEFORE any money
+  // the honest upfront lady-time (aom's life-hash, day 1) — BEFORE any money
   newGame(); state().lastSaleng = 99999;
   state().flags.act1Done = true; state().flags.hasWallet = true;
-  state().day = 3; state().room = "club_mirage"; state().money = 5000;
+  state().day = 1; state().room = "club_mirage"; state().money = 5000;
   state().soc.drinks.aom = 6;
   run("barfine aom");
   assert.match(lastOut(), /Lady time, jing jing/i);

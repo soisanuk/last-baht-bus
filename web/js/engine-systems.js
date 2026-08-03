@@ -465,7 +465,12 @@ function _bfRefusal(id, bt) {
   if (G.soc.drunk >= 6 && _rand() < 0.5) return keep("mess");
   const gate = bt === "soi6" ? 2 : 4;
   if (_favor(id) < gate + 2 && _rand() < 0.2) return keep(_rand() < 0.5 ? "cheap" : "dislike");
-  const life = _hh(id + ":" + G.vacation + ":" + G.day, 131) % 100;
+  // day goes MID-key (not trailing) so consecutive days don't hash to consecutive
+  // values — _hh has no output mixing, so a trailing ":day" made this ~10% refusal
+  // cluster into week-long runs (a girl refused every night of the vacation). The
+  // constant ":life" suffix diffuses the day through the polynomial. (Sibling
+  // callers _nightRide/_bfResolve already put day mid-key for the same reason.)
+  const life = _hh(id + ":" + G.day + ":" + G.vacation + ":life", 131) % 100;
   if (life < 10) return keep(life < 5 ? "period" : "temple");
   return null;
 }
@@ -1460,11 +1465,21 @@ function _questAvailable(qid) {
   // Soi 6 mode confines you to the pocket, so don't offer a job whose target
   // (a room, or an NPC's bar) lies outside it — e.g. the Shamrock Dog, out on
   // the Darkside. You'd accept it and have no way to finish it this trip.
-  if (G.mode === "soi6" && q.at) {
-    const targetRoom = ROOMS[q.at] ? q.at :
-      NPCS[q.at] ? _npcRoom(q.at) :
-      PATRONS[q.at] ? _patronRoom(q.at) : null;
-    if (targetRoom && !SOI6_ROOMS.has(targetRoom)) return false;
+  if (G.mode === "soi6") {
+    // the GIVER must be reachable in the pocket — else you can never be offered it
+    // in-fiction, yet ACCEPT-autocomplete (which lists _questAvailable) would still
+    // surface it and let you accept a quest you can't finish (e.g. Candy's 'recce',
+    // giver off-map at Candy Bar, and with no q.at to catch it below).
+    const giverRoom = q.giver && (NPCS[q.giver] ? _npcRoom(q.giver) :
+      PATRONS[q.giver] ? _patronRoom(q.giver) : null);
+    if (giverRoom && !SOI6_ROOMS.has(giverRoom)) return false;
+    // and the target (a room, or an NPC/patron's bar) must be in-pocket too
+    if (q.at) {
+      const targetRoom = ROOMS[q.at] ? q.at :
+        NPCS[q.at] ? _npcRoom(q.at) :
+        PATRONS[q.at] ? _patronRoom(q.at) : null;
+      if (targetRoom && !SOI6_ROOMS.has(targetRoom)) return false;
+    }
   }
   return q.deps.every(d => G.quests[d] === "done");
 }
