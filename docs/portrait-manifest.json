@@ -2,11 +2,11 @@
   "generated": "2026-08-03",
   "note": "Distinct, hand-authored characters with a portrait (excludes the 181 generic `filler` NPCs). Derived from web/js/world.js — regenerate with scripts/gen-portrait-manifest.mjs, do not hand-edit. `sex`/`venueKind` are generator heuristics for portrait archetype selection, not game canon.",
   "counts": {
-    "total": 120,
+    "total": 121,
     "byRole": {
       "story": 30,
       "mamasan": 22,
-      "hostess": 38,
+      "hostess": 39,
       "cashier": 12,
       "patron": 18
     }
@@ -798,6 +798,19 @@
       "room": "cherry_pop",
       "tags": [],
       "desc": "Loud, glorious, and pouring — for you, for herself, for the room. At Cherry Pop she's the party's engine, right up until she's its wreckage."
+    },
+    {
+      "id": "chompoo",
+      "name": "Chompoo",
+      "source": "NPCS",
+      "role": "hostess",
+      "sex": "f",
+      "venueKind": "soi6",
+      "emoji": "🦋",
+      "th": "ชมพู่",
+      "room": "ruby_kiss",
+      "tags": [],
+      "desc": "The one on the little stage who dances like she's bored of being the most interesting person in the room, because she is. Cheekbones, a dancer's line, and an amused, appraising calm that reads a man in a glance and prices him in the next. Drops a German word now and then like she's forgotten you might not follow."
     },
     {
       "id": "dear",

@@ -1757,6 +1757,38 @@ test("Soi 6 cashiers: toms refuse the wrong team, kin refuse at any price, spons
   assert.ok(state().pendingBf, "flipped: now the barfine goes through");
 });
 
+test("sponsor-flip photo drip: gifts to a kept cashier text back escalating selfies, filed to the gallery", () => {
+  state().stage = "vacation"; state().flags.act1Done = true;
+  state().phone.contacts = { baimon: true };   // she texts back — needs your number
+  state().money = 60000; state().soc.given = {};
+  // pic1 crosses at ฿5k
+  out = []; run("send 6000 to baimon");
+  assert.match(lastOut(), /sent you something|CHECK MESSAGES/i, "a frame texts back on a gift");
+  assert.doesNotMatch(lastOut(), /cheap charlie|number one/i, "no cheap-charlie patter for a sponsor girl");
+  out = []; run("check messages");
+  assert.match(lastOut(), /off-shift/i, "pic1 delivered");
+  // pic2 at ฿10k
+  run("send 5000 to baimon"); out = []; run("check messages");
+  assert.match(lastOut(), /one shoulder|dressed up/i, "pic2 delivered");
+  // pic3 (฿14k) must still ride the same send that crosses the ฿15k flip
+  run("send 5000 to baimon"); out = []; run("check messages");
+  assert.match(lastOut(), /beach/i, "the climax frame lands on the flipping send, not skipped");
+  assert.ok(_sponsorFlipped("baimon"), "16k outbids Dave");
+  const caps = _photoList().map(p => p.cap || "");
+  assert.equal(caps.filter(c => /Baimon/.test(c)).length, 3, "all three frames filed to the gallery");
+});
+
+test("sponsor drip: a single lump sum jumps straight to the climax frame", () => {
+  state().stage = "vacation"; state().flags.act1Done = true;
+  state().phone.contacts = { jenny: true };
+  state().money = 60000; state().soc.given = {};
+  out = []; run("send 15000 to jenny");        // crosses all thresholds + the flip at once
+  out = []; run("check messages");
+  assert.match(lastOut(), /beach/i, "one big send delivers the highest unlocked frame");
+  assert.ok(_sponsorFlipped("jenny"), "and she's flipped");
+  assert.equal(state().soc.sponsorPix.jenny, 3, "all frames marked sent — no re-drip on later gifts");
+});
+
 test("bar etiquette: a girl with another customer declines your lady drink; insist and he turns", () => {
   state().stage = "vacation"; state().room = "pink_lotus"; state().money = 5000;
   let busy;

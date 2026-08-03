@@ -148,6 +148,21 @@ test("Taitch: Jenny speaks a lighter, phrasebook German learned off her sponsor 
   assert.match(lastOut(), /Klaus\. Germany/, "an English player hears her English");
 });
 
+test("Taitch: Jenny's loosening-drip selfie texts arrive in her phrasebook German", () => {
+  state().flags.act1Done = true; state().stage = "vacation";
+  state().player.lang = "de";
+  state().phone.contacts = { jenny: true };
+  state().money = 60000; state().soc.given = {};
+  run("send 6000 to jenny");                 // crosses pic1's ฿5k threshold
+  out = []; run("check messages");
+  assert.match(lastOut(), /heut ruhig Schicht|ich denk ein bisschen an dich/,
+    "the drip text lands in Taitch for a German player");
+  // Baimon's stay English (Australian sponsor, no German) — proven by absence of a de entry:
+  assert.equal(_L("you make me smile today na 😊 i take one picture, only for you"),
+    "you make me smile today na 😊 i take one picture, only for you",
+    "Baimon's drip falls back to English");
+});
+
 test("speech stays English by default — a non-Taitch NPC is unaffected by German mode", () => {
   state().flags.act1Done = true; state().stage = "vacation"; state().room = "stinky_bar";
   state().player.lang = "de";
@@ -184,4 +199,42 @@ test("G.player.lang survives a save/restore round-trip", () => {
   assert.equal(state().player.lang, "en", "a fresh game is English");
   deserializeGame(blob);
   assert.equal(state().player.lang, "de", "the saved language is restored");
+});
+
+test("Fluent (not Taitch): Chompoo answers a German player in real, idiomatic Berlin German", () => {
+  state().flags.act1Done = true; state().stage = "vacation"; state().room = "ruby_kiss";
+  state().player.lang = "de";
+  out = []; run("ask chompoo about berlin");
+  const de = lastOut();
+  assert.match(de, /Stipendium|Mediendesign/, "the Berlin backstory, in German");
+  assert.match(de, /Adressbuch/, "and the idiomatic address-book punchline");
+  assert.match(de, /beigebracht|bezahlt hat/, "full conjugation / verb-final — fluent, not phrasebook");
+  state().player.lang = "en"; state().talked = {};
+  out = []; run("ask chompoo about berlin");
+  assert.match(lastOut(), /Scholarship|address book/, "an English player hears her English");
+});
+
+test("Discovery beat: a German player's first line from each German lady clocks the accent and switches", () => {
+  state().flags.act1Done = true; state().stage = "vacation"; state().player.lang = "de";
+  state().room = "ruby_kiss"; out = []; run("talk chompoo");
+  assert.match(lastOut(), /Na endlich|Akzent|Groschen/, "Chompoo catches it");
+  state().room = "cherry_pop"; state().talked = {}; out = []; run("talk mercedes");
+  assert.match(lastOut(), /Deutscher|Akzent/, "Mercedes catches it");
+  state().room = "pink_lotus"; state().talked = {}; out = []; run("talk jenny");
+  assert.match(lastOut(), /du bist Deutsch|Akzent/, "Jenny catches it");
+});
+
+test("German-phrase Easter egg: an EN player trying German at the 3 ladies gets a witty stick-to-English", () => {
+  state().flags.act1Done = true; state().stage = "vacation"; state().player.lang = "en";
+  state().room = "ruby_kiss"; out = []; run("guten tag");
+  assert.match(lastOut(), /English/i, "Chompoo deflects to English");
+  state().room = "pink_lotus"; out = []; run("ich liebe dich");
+  assert.match(lastOut(), /English/i, "Jenny deflects to English");
+  state().room = "cherry_pop"; out = []; run("danke");
+  assert.match(lastOut(), /English/i, "Mercedes deflects to English");
+  // guardrails: no German lady present → no gag; a German-speaking player → no gag
+  state().room = "stinky_bar"; out = []; run("hallo");
+  assert.doesNotMatch(lastOut(), /stick to english|Duolingo|dative/i, "no lady present, no gag");
+  state().player.lang = "de"; state().room = "ruby_kiss"; out = []; run("guten tag");
+  assert.doesNotMatch(lastOut(), /Duolingo|dative|stick to english/i, "a German speaker gets no stick-to-English gag");
 });
