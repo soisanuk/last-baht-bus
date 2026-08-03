@@ -203,5 +203,59 @@ const _CATALOGS = {
       "Das Westende der Soi, und es trifft dich in dem Moment, in dem du hineintrittst — eine Wand aus Bars auf voller Lautstärke, jede versucht die nächste in Bass und gebrülltem Thai-Pop zu ertränken. Keine Bühnen, keine dunklen Zimmer: nur Freiluft-Fronten auf Straßenniveau, weit zum Gehweg hin aufgerissen, und die Damen, die sie bespielen, quellen in Pailletten und sehr wenig sonst heraus, um alles hereinzuangeln, was vorbeiläuft. \"HANDSOME MAN!\" \"Hey! WHERE YOU GO!\" Du wirst am Handgelenk gepackt. Du wirst am anderen Handgelenk gepackt. Jemand deutlich Kleineres als du versucht, dir auf den Rücken zu klettern. Ein paar der Mädchen haben sich mit Schaumstoff-Poolnudeln bewaffnet und hauen jeden, der es wagt, ohne anzuhalten vorbeizugehen. PINK LOTUS LOUNGE, GOLDEN DRAGON BAR und SUNSET DREAMS LOUNGE sind hier die Hauptkämpfer. Im Osten öffnet sich die Soi in ein ruhigeres Mittelstück, bevor der Krach am anderen Ende wieder losgeht.",
     "The east end of the soi, past the quieter middle, where the bars run on toward Second Road and the volume comes roaring back. KITTEN CORNER, CHERRY POP BAR, and RUBY KISS BAR trade wrist-grabs down this stretch — same open ground-floor fronts, same three-colour neon, same staircases behind the bar the menu doesn't mention, and the same foam pool noodles that find your ribs if you try to walk on by.":
       "Das Ostende der Soi, hinter der ruhigeren Mitte, wo die Bars weiter zur Second Road hin laufen und die Lautstärke brüllend zurückkommt. KITTEN CORNER, CHERRY POP BAR und RUBY KISS BAR tauschen auf diesem Stück Handgelenk-Griffe aus — dieselben offenen Erdgeschossfronten, dasselbe dreifarbige Neon, dieselben Treppen hinter der Bar, die die Karte nicht erwähnt, und dieselben Schaumstoff-Poolnudeln, die deine Rippen finden, wenn du versuchst vorbeizugehen.",
+
+    // ══ TAITCH — Mercedes (gold_rush) ════════════════════════════════════════
+    // A Taitch lady: 5 years in Munich, so she meets a German punter in the German
+    // that once made her small — now on HER terms. NARRATION → clean German; HER
+    // SPEECH → Taitch (dropped endings, no articles, Thai syntax + German vocab,
+    // her dry wit intact). Thai particles (na, tilac, mai pen rai) stay. Only her
+    // lines are catalogued, so every other NPC still falls back to English speech.
+    "A little older than the Gold Rush's other girls and a great deal less nervous — she moves like someone who has already seen the worst a room can do to a person. Her English is good, with a flat European edge the soi doesn't usually carry.":
+      "Ein bisschen älter als die anderen Mädchen im Gold Rush und ein gutes Stück weniger nervös — sie bewegt sich wie jemand, der das Schlimmste, das ein Raum einem Menschen antun kann, schon gesehen hat. Ihr Deutsch ist gut, mit einer flachen europäischen Kante, die die Soi sonst nicht trägt.",
+
+    "\"Welcome to the Gold Rush.\" A small, real smile. \"The gold is paint — Nong will tell you, she cannot help herself. Sit. I am Mercedes. Yes, like the car. I had one in the driveway in Munich and never once the keys. Now I keep the name and skip the car.\"":
+      "\"Willkommen im Gold Rush.\" Ein kleines, echtes Lächeln. \"Gold ist Farbe — Nong wird dir sagen, sie kann nicht anders. Setz. Ich bin Mercedes. Ja, wie Auto. Ich hab einen gehabt in Einfahrt in München, und nie einmal Schlüssel. Jetzt ich behalt Name und lass Auto weg.\"",
+    "\"Mercedes — like the car. Kept the name, skipped the car. Sit, tilac.\"":
+      "\"Mercedes — wie Auto. Name behalt, Auto weg. Setz, tilac.\"",
+
+    "\"Germany. Five years, Munich. Big house, a car, the health insurance — everything the brochure promise.\" She turns a coaster over. \"And I could not tell a joke. Could not argue, could not be a person — only 'Guten Tag, Danke', like a child with two words. His mother look at me: prostitute who steal my son. Never once she say it. Never once she hide it.\"":
+      "\"Deutschland. Fünf Jahr, München. Großes Haus, Auto, Krankenversicherung — alles was Broschüre versprech.\" Sie dreht einen Bierdeckel um. \"Und ich konnt kein Witz erzähl. Konnt nicht streit, konnt nicht Mensch sein — nur 'Guten Tag, Danke', wie Kind mit zwei Wort. Seine Mutter schau mich an: Prostituierte, die mein Sohn stiehl. Nie einmal sie sagt. Nie einmal sie versteck.\"",
+    "\"Munich: big house, no jokes. A mute child with a nice kitchen.\"":
+      "\"München: großes Haus, kein Witz. Ein stumm Kind mit schön Küche.\"",
+
+    "\"My visa was married to him — you understand? Not to me. I leave, I am on a plane in one month. So I stay.\" A shrug with a whole country in it. \"Three hundred euro pocket money, and I must account for it. In Pattaya I made eighty thousand baht and sent half to my mother in Isaan. There, I cannot send one baht. A Thai daughter who cannot take care of her mother has lost everything. The house was warm. I was empty.\"":
+      "\"Mein Visum war verheirat mit ihm — du versteh? Nicht mit mir. Ich geh, ich bin in Flugzeug in ein Monat. Also ich bleib.\" Ein Achselzucken mit einem ganzen Land drin. \"Dreihundert Euro Taschengeld, und ich muss abrechne dafür. In Pattaya ich hab achtzigtausend Baht gemacht und Hälfte geschickt zu meine Mutter in Isaan. Dort, ich kann nicht ein Baht schick. Thai-Tochter, die nicht kann sorg für ihre Mutter, hat alles verlor. Haus war warm. Ich war leer.\"",
+    "\"Visa tied to him, 300 euro to account for, could not send my mother a baht. Warm house, empty me.\"":
+      "\"Visum an ihn gebund, 300 Euro abrechne, kein Baht für meine Mutter. Warmes Haus, leere ich.\"",
+
+    "\"Hans was not cruel. That is the joke — no black eye, no drama.\" She almost laughs. \"My uncle die. I ask him to book the flight for the funeral. He open Excel. Excel! Turn the screen to me — 'too expensive right now' — and then so gentle: 'You know you have nothing without me.'\" She snaps the coaster flat. \"That night I pack. In Munich, zero friends. In Pattaya, one hundred people waiting for me. Which one is rich?\"":
+      "\"Hans war nicht grausam. Das ist Witz — kein blaues Auge, kein Drama.\" Sie lacht fast. \"Mein Onkel stirb. Ich frag ihn, Flug buch für Beerdigung. Er macht Excel auf. Excel! Dreht Bildschirm zu mir — 'zu teuer grad' — und dann so sanft: 'Du weiß, du hast nichts ohne mich.'\" Sie knallt den Bierdeckel flach. \"Diese Nacht ich pack. In München, null Freund. In Pattaya, hundert Leute wart auf mich. Welche ist reich?\"",
+    "\"He opened a spreadsheet for my uncle's funeral. 'Nothing without me.' I packed that night.\"":
+      "\"Er macht Tabelle auf für Beerdigung von mein Onkel. 'Nichts ohne mich.' Diese Nacht ich pack.\"",
+
+    "\"People see an old girl back on the stool and they think — poor thing, could not keep him.\" The smile sharpens, not unkind. \"So let me give you the reality, tilac. In Germany: big house, car, insurance — and I ask permission to buy som tam, I beg to visit my own family. Here: a cheap room and a Honda Click. But I am free. I send my mother money when I want. I laugh loud with my friends. Which one is the real dream? I chose it. Nobody chose for me.\"":
+      "\"Leute sehen alte Frau zurück auf Hocker und denk — arme Ding, konnt ihn nicht halt.\" Das Lächeln wird schärfer, nicht unfreundlich. \"Also lass mich dir Wahrheit geb, tilac. In Deutschland: großes Haus, Auto, Versicherung — und ich frag Erlaubnis für som tam kauf, ich bettel, meine eigene Familie besuch. Hier: billiges Zimmer und Honda Click. Aber ich bin frei. Ich schick meine Mutter Geld wann ich will. Ich lach laut mit meine Freund. Welche ist der echte Traum? Ich hab gewählt. Keiner hat für mich gewählt.\"",
+    "\"Big house and permission, or a Honda Click and freedom? I chose. That's the whole story.\"":
+      "\"Großes Haus und Erlaubnis, oder Honda Click und Freiheit? Ich hab gewählt. Das ist ganze Geschichte.\"",
+
+    "\"Money?\" She waves a hand at the neon. \"It come, it go, like the rain. In Munich I learn the other way — everything counted, everything saved — and it made me small. Here, when I have it I send it home, I buy Nong her dinner; when it is zero, mai pen rai, I earn again. That is not being poor. That is being free of the counting.\"":
+      "\"Geld?\" Sie winkt mit der Hand zum Neon. \"Es komm, es geh, wie Regen. In München ich lern andere Weg — alles gezählt, alles gespart — und das macht mich klein. Hier, wenn ich hab, ich schick nach Haus, ich kauf Nong ihr Essen; wenn null, mai pen rai, ich verdien wieder. Das ist nicht arm sein. Das ist frei sein von Zählerei.\"",
+    "\"Money is rain — comes, goes, I send it home. In Munich the counting made me small.\"":
+      "\"Geld ist Regen — komm, geh, ich schick nach Haus. In München Zählerei macht mich klein.\"",
+
+    "\"Nong?\" She glances at the trembling new girl with something almost maternal. \"First week. Scared of the door, scared of Mamasan, scared of the paint. I was her, fifteen years ago, a go-go on Soi 6.\" A softer smile. \"Somebody should tell her the worst thing that happen is you go all the way to Munich and come back. Not so bad, in the end. I keep an eye on her.\"":
+      "\"Nong?\" Sie schaut zum zitternden neuen Mädchen mit etwas fast Mütterlichem. \"Erste Woche. Angst vor Tür, Angst vor Mamasan, Angst vor Farbe. Ich war sie, vor fünfzehn Jahr, Go-go auf Soi 6.\" Ein weicheres Lächeln. \"Jemand soll ihr sag: schlimmste, was passier, ist du geh ganz bis München und komm zurück. Nicht so schlimm, am Ende. Ich pass auf sie auf.\"",
+    "\"Nong is me, fifteen years ago. I keep an eye on her.\"":
+      "\"Nong ist ich, vor fünfzehn Jahr. Ich pass auf sie auf.\"",
+
+    "\"You keep coming back to the Gold Rush for ME — the paint is not that charming, we both know it.\" For once Mercedes lets the dry line land soft. \"After Munich I made myself one promise: no more man I have to manage. And here is you — needing no managing, buying the paint-bar girl her drink like it is Vienna. Don't make me like you, farang. I am badly out of practice.\"":
+      "\"Du komm immer zurück zum Gold Rush für MICH — Farbe ist nicht so charmant, wir wissen beide.\" Ausnahmsweise lässt Mercedes die trockene Zeile weich landen. \"Nach München ich hab mir ein Versprech gemacht: kein Mann mehr, den ich manag muss. Und hier bist du — brauch kein Managen, kaufst dem Farb-Bar-Mädchen ihr Drink wie es Wien wär. Mach nicht, dass ich dich mag, Farang. Ich bin schlecht aus Übung.\"",
+    "\"Don't make me like you, farang. I'm badly out of practice.\"":
+      "\"Mach nicht, dass ich dich mag, Farang. Ich bin schlecht aus Übung.\"",
+
+    "\"Sit — the good stool, I saved it.\" Mercedes slides your drink over without asking; she knows the order now. \"You are the only one in here who asks me a question and then waits for the answer. It is a low bar, I know. Munich was lower.\"":
+      "\"Setz — guter Hocker, ich hab gespart.\" Mercedes schiebt dir dein Drink rüber, ohne zu frag; sie kennt die Bestellung jetzt. \"Du bist einzige hier, der mir Frage stellt und dann wart auf Antwort. Ist niedrige Latte, ich weiß. München war niedriger.\"",
+    "\"You ask a question and wait for the answer. Low bar. Munich was lower.\"":
+      "\"Du stell Frage und wart auf Antwort. Niedrige Latte. München war niedriger.\"",
   },
 };
