@@ -15,15 +15,17 @@ const _DIRS = {
 // The favor grind and the common misfires are the most-printed lines in the game;
 // deep pools keep them from wearing a groove. LADY_DRINK is read lazily at call
 // time, so these can sit above its definition.
+// _fmt templates (not raw interpolation): the {n}/{p} placeholders let the German
+// catalog reorder them. EN output is byte-identical to the old strings.
 const _LADY_DRINK_LINES = [
-  n => `One lady drink for ${n} — ฿${LADY_DRINK} on the tab that is your life.`,
-  n => `${n} gets her cola-with-benefits; the mamasan's biro logs ฿${LADY_DRINK} without looking up.`,
-  n => `A thimble of something mostly ice lands in front of ${n} — ฿${LADY_DRINK}, gone in three sips.`,
-  n => `“Chon kaew!” ${n} toasts you with her ฿${LADY_DRINK} lady drink and means it for exactly one sip.`,
-  n => `You buy ${n} a drink; she rewards it with a smile calibrated to the exact value of ฿${LADY_DRINK}.`,
-  n => `Another ฿${LADY_DRINK} lady drink for ${n} — the house's real product, sold by the glass.`,
-  n => `${n}'s glass runs dry the way a meter does; ฿${LADY_DRINK} restarts it.`,
-  n => `The waitress doesn't even ask — ${n}'s drink, ฿${LADY_DRINK}, straight onto your tab.`,
+  n => _fmt("One lady drink for {n} — ฿{p} on the tab that is your life.", { n, p: LADY_DRINK }),
+  n => _fmt("{n} gets her cola-with-benefits; the mamasan's biro logs ฿{p} without looking up.", { n, p: LADY_DRINK }),
+  n => _fmt("A thimble of something mostly ice lands in front of {n} — ฿{p}, gone in three sips.", { n, p: LADY_DRINK }),
+  n => _fmt("“Chon kaew!” {n} toasts you with her ฿{p} lady drink and means it for exactly one sip.", { n, p: LADY_DRINK }),
+  n => _fmt("You buy {n} a drink; she rewards it with a smile calibrated to the exact value of ฿{p}.", { n, p: LADY_DRINK }),
+  n => _fmt("Another ฿{p} lady drink for {n} — the house's real product, sold by the glass.", { n, p: LADY_DRINK }),
+  n => _fmt("{n}'s glass runs dry the way a meter does; ฿{p} restarts it.", { n, p: LADY_DRINK }),
+  n => _fmt("The waitress doesn't even ask — {n}'s drink, ฿{p}, straight onto your tab.", { n, p: LADY_DRINK }),
 ];
 // A lazy girl (type:"lazy") takes the drink and gives you the minimum back — the
 // favor rarely sticks (the "you spend, get little" punishment). Not unkind, just
@@ -596,12 +598,12 @@ function _doInventory() {
   const inv = _inv();
   _say(`฿${G.money} · phone ${G.battery}%${G.lightOn ? " (flashlight on)" : ""} · ` +
     `${_clockStr()} day ${G.day} · hunger ${G.hunger} · thirst ${G.thirst}`, "dim");
-  const carried = inv.map(id => ITEMS[id].name);
+  const carried = inv.map(id => _L(ITEMS[id].name));
   // Protection is carried, not a placed item — surface it here so a player can
   // see the three they start the week with (and when they've run out).
-  if (G.condoms > 0) carried.push(`${G.condoms} condom${G.condoms === 1 ? "" : "s"}`);
-  _say(carried.length ? "You are carrying: " + carried.join(", ") + "." :
-    "You are carrying nothing but experience.");
+  if (G.condoms > 0) carried.push(_fmt("{c} condom{s}", { c: G.condoms, s: G.condoms === 1 ? "" : "s" }));
+  _say(carried.length ? _L("You are carrying: ") + carried.join(", ") + "." :
+    _L("You are carrying nothing but experience."));
 }
 
 // Readable fixtures a room advertises in its prose — menus, tap boards, cheeky
@@ -1318,14 +1320,14 @@ function _doBuy(arg) {
     if (G.money < price) { _say(`฿${price} for a cold bottle, and you don't have it. Grim.`); return; }
     G.money -= price;
     G.thirst = Math.max(0, G.thirst - 45);
-    _say(`${_pickVary(_WATER_LINES, "water")} (฿${G.money} left.)`);
+    _say(_fmt("{line} (฿{m} left.)", { line: _L(_pickVary(_WATER_LINES, "water")), m: G.money }));
     return;
   }
   if (r.seven && /toastie|cheese|sandwich|food|snack/.test(arg) && !FOOD_STALLS[G.room]) {
     if (G.money < 35) { _say(`The toastie is ฿35. You have ฿${G.money}. The doorbell jingles in sympathy.`); return; }
     G.money -= 35;
     G.hunger = Math.max(0, G.hunger - 40);
-    _say(`${_pickVary(_TOASTIE_LINES, "toastie")} (฿${G.money} left.)`);
+    _say(_fmt("{line} (฿{m} left.)", { line: _L(_pickVary(_TOASTIE_LINES, "toastie")), m: G.money }));
     _addHappy(1);
     return;
   }
@@ -1335,7 +1337,8 @@ function _doBuy(arg) {
     G.money -= f.price;
     G.hunger = Math.max(0, G.hunger - f.hunger);
     if (f.thirst) G.thirst = Math.max(0, Math.min(100, G.thirst - f.thirst));
-    _say(`฿${f.price} buys ${f.name}. ${_pickVary(_STALL_EAT_LINES, "stalleat")} (฿${G.money} left.)`);
+    _say(_fmt("฿{p} buys {name}. {line} (฿{m} left.)",
+      { p: f.price, name: f.name, line: _L(_pickVary(_STALL_EAT_LINES, "stalleat")), m: G.money }));
     _addHappy(1);
     return;
   }
@@ -1359,10 +1362,11 @@ function _doBuy(arg) {
     G.soc.drunk++;
     G.thirst = Math.max(0, G.thirst - 20);
     const d = G.soc.drunk;
-    _say(`${_pickVary(_BEER_LINES, "beer")} (฿${G.money} left.)` +
-      (d >= 6 ? " The room has developed a gentle rotation." :
-       d >= 4 ? " The neon is starting to smear pleasantly." :
-       d >= 2 ? " The night improves by one bottle's worth." : ""));
+    const _beerTail = d >= 6 ? "The room has developed a gentle rotation." :
+      d >= 4 ? "The neon is starting to smear pleasantly." :
+      d >= 2 ? "The night improves by one bottle's worth." : "";
+    _say(_fmt("{line} (฿{m} left.)", { line: _L(_pickVary(_BEER_LINES, "beer")), m: G.money }) +
+      (_beerTail ? " " + _L(_beerTail) : ""));
     _addHappy(d <= 4 ? 1 : -1);
     _checkDrunk();
     return;
@@ -1401,7 +1405,7 @@ function _doBuy(arg) {
     // (only lazy girls consume the extra die, so nothing else's determinism moves.)
     const _lazy = NPCS[id].type === "lazy";
     if (!_lazy || _rand() < 0.4) _addBond(id, 1);
-    _say(`${_pickVary(_lazy ? _LAZY_DRINK_LINES : _LADY_DRINK_LINES, _lazy ? "lazydrink" : "ladydrink")(NPCS[id].name)} (฿${G.money} left.)`);
+    _say(_fmt("{line} (฿{m} left.)", { line: _pickVary(_lazy ? _LAZY_DRINK_LINES : _LADY_DRINK_LINES, _lazy ? "lazydrink" : "ladydrink")(NPCS[id].name), m: G.money }));
     _addHappy(1);
     if (Object.keys(G.soc.drinks).length >= 4 && !G.soc.butterflyTeased) {
       G.soc.butterflyTeased = true;
