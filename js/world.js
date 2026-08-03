@@ -3353,6 +3353,17 @@ const NPCS = {
     room: "pink_lotus",
     desc: "Neat, quick with the till, a promise ring she touches when she's thinking. She took the cashier " +
       "seat on purpose — off the floor, off the market, kept clean for the man in Germany who sends the money.",
+    // The "loosening" drip: as your gifts (G.soc.given) climb toward outbidding Klaus
+    // (SPONSOR_FLIP ฿15k), she cracks a little more each threshold — a texted selfie
+    // that says, without saying, that it's working. Rendered pics in portraits/pics.
+    sponsorPics: [
+      { at: 5000, pic: "jenny_pic1", cap: "Jenny — cozy, the ring in frame",
+        words: "hi 😊 quiet shift today. i think of you a little na" },
+      { at: 10000, pic: "jenny_pic2", cap: "Jenny — dressed up, a longing look",
+        words: "Klaus always busy now. you not too busy for me na? 🙈 don't tell" },
+      { at: 14000, pic: "jenny_pic3", cap: "Jenny — beach, coy over the shoulder",
+        words: "just for you. i never do this before 😳 don't make me regret it" },
+    ],
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Hello, welcome.\" Warm, with a boundary in it — the smile of a woman who has practised saying " +
@@ -3361,9 +3372,10 @@ const NPCS = {
         short: "\"I do the till, not the floor. I am spoken for — I'll call a girl over for you.\"" },
       { topic: "sponsor", when: () => _sponsorFlipped("jenny"),
         text: "She doesn't touch the ring this time. \"You know what you did, na. You made the number too big " +
-          "to say no to.\" Not angry — tired, ashamed, and doing the arithmetic anyway. \"Klaus send forty " +
-          "thousand a month. You put more than that on the bar tonight. So.\" A flat breath. \"I am not clean " +
-          "anymore. You bought that. I hope it was worth what it cost. For both of us.\"",
+          "to say no to.\" Not angry — tired, ashamed, and doing the arithmetic anyway. \"Klaus send good money, " +
+          "every month, two year. You just... kept putting it in. Week after week. Till your number bigger than " +
+          "his, and I saw it, and now I cannot un-see.\" A flat breath. \"I am not clean anymore. You bought that. " +
+          "I hope it was worth what it cost. For both of us.\"",
         short: "\"You made the number too big to say no. I am not clean anymore — you bought that.\"" },
       { topic: "sponsor", text: "\"Klaus. Germany.\" She says the name like an anchor. \"Two year now. He send " +
         "money every month, I keep clean, I stay off the floor, I go with nobody. That is the deal, I keep my " +
@@ -3418,6 +3430,16 @@ const NPCS = {
     room: "kitten_corner",
     desc: "Soft-spoken, careful with the money and with herself, a photo of a couple propped by the till in a " +
       "glittery case. Kesinee gave her the cashier seat as a kindness — off the floor, where the sponsor's money keeps her.",
+    // The "loosening" drip toward outbidding Dave (SPONSOR_FLIP ฿15k) — softer than
+    // Jenny's, more guilt than longing. Texted selfies filed to the gallery on read.
+    sponsorPics: [
+      { at: 5000, pic: "baimon_pic1", cap: "Baimon — off-shift, a shy smile",
+        words: "you make me smile today na 😊 i take one picture, only for you" },
+      { at: 10000, pic: "baimon_pic2", cap: "Baimon — dressed up, one shoulder",
+        words: "Dave don't call so much now 🙈 i think about you. don't tell nobody" },
+      { at: 14000, pic: "baimon_pic3", cap: "Baimon — beach, teasing",
+        words: "i shouldn't send you this 😳 delete after, na 💗" },
+    ],
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Welcome ka.\" Gentle, a little guarded. \"I only do the money here. Kesinee is good to me — she " +
@@ -3628,6 +3650,78 @@ const NPCS = {
         "Not explain, not defend. Just—'that is Poy.'\" She looks at you, then away, having said more than she " +
         "meant to. \"Silly dream. Cheaper than a house. Harder to buy.\"",
         short: "\"The dream is small — one person who, asked what I am, only says my name. Not 'my ladyboy.' Just 'that is Poy.'\"" },
+    ],
+  },
+  // Chompoo (Ruby Kiss) — the third ladyboy, and the opposite of Poy: not braced or
+  // hoping, but Berlin-cool and armoured in wit. Went out on a media-design scholarship
+  // with textbook German, came home FLUENT (softened Berlin accent) after years in the
+  // KitKat/warehouse scene — and a discreet run of high-end escort work she's left
+  // behind professionally but not reputationally. Every season a former client "happens"
+  // to holiday on her schedule. She knows exactly why, and exactly what it's worth. Her
+  // German is real and idiomatic (contrast to Jenny's phrasebook Taitch); her English
+  // greeting drops the Berlin thread on purpose, so a punter learns she speaks it — the
+  // hook for the German-phrase Easter egg (engine-parser _GERMAN_TRY). ladyboy:true →
+  // _ladyboyGate routes straight players a gracious pass, bi players full courtship.
+  chompoo: {
+    name: "Chompoo", th: "ชมพู่", emoji: "🦋", ladyboy: true,
+    room: "ruby_kiss",
+    desc: "The one on the little stage who dances like she's bored of being the most interesting person in the " +
+      "room, because she is. Cheekbones, a dancer's line, and an amused, appraising calm that reads a man in a " +
+      "glance and prices him in the next. Drops a German word now and then like she's forgotten you might not follow.",
+    dialogue: [
+      // The bond payoff — distinct from Poy's "third reaction." Everyone who comes wants
+      // the Berlin legend or the old arrangement; the rare man who just likes HER company
+      // is the one thing money never sends her. Reachable by any bonded player.
+      { bond: 3,
+        text: "The performance drops the moment she clocks you — not the stage one, the OTHER one, the arch " +
+          "little price-tag smile she wears for the room. \"Ach, du.\" Just that, warm and unguarded and a " +
+          "little rueful. \"You know what you are, Schatz? You are the one who never booked the legend. All of " +
+          "them fly around the world for a woman who does not exist any more — the Berlin one, the story.\" She " +
+          "shrugs, and for once there is no angle in it. \"You just... like when I sit here. That one nobody can " +
+          "wire me. That one I keep for free.\"",
+        short: "\"Ach, du.\" The price-tag smile drops. \"You never booked the legend, Schatz. Everyone else flies here for a woman who doesn't exist any more. You just like when I sit here — that one nobody can wire me.\"" },
+      { bond: 2,
+        text: "\"Back again, and you did not even pretend it was Berlin business.\" A real smile, drier and " +
+          "closer than the stage one. \"Refreshing. Most of my regulars need a story — old times, old " +
+          "arrangement, makes it feel less like what it is.\" She tilts her head, reading you. \"You don't run " +
+          "the story. I don't quite know what to do with that yet. Sit, na. We find out.\"",
+        short: "\"Back again — and no Berlin-business excuse. Refreshing. Most regulars need a story. You don't. Sit, na.\"" },
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "She finishes the eight-count before she even looks at you — the stage is hers and she knows it. " +
+          "\"Hi. Yes, ladyboy, before you spend an hour wondering — I like to save everyone the detective work.\" " +
+          "The English is quick and unaccented in the wrong places, schooled somewhere colder than here. \"Berlin " +
+          "polished it. Long story, expensive city. Buy me a drink and I might tell you a little of it — auf " +
+          "Englisch, don't worry, Schatz.\"",
+        short: "\"Yes, ladyboy — saves us the detective work. My English got polished in Berlin. Buy me a drink and I tell you a little — auf Englisch, don't worry.\"" },
+      { topic: "ladyboy", text: "\"In Pattaya it is a category. In Berlin it was just Tuesday.\" She says it " +
+        "without heat, filing her nail. \"Five years in a city that had genuinely seen everything cured me of " +
+        "flinching about it. I came back unshockable, Schatz — do you know how restful that is? The men here who " +
+        "think they are being daring...\" A small, delighted laugh. \"Süß. I have been to parties that would " +
+        "stop their hearts.\"",
+        short: "\"In Pattaya it is a category. In Berlin it was just Tuesday. I came back unshockable — do you know how restful that is?\"" },
+      { topic: "berlin", text: "\"Scholarship. Media design — I was going to be very serious and make title " +
+        "sequences.\" A wry tilt. \"I arrived with textbook German and a suitcase, and the city taught me the " +
+        "rest at three in the morning. Bartenders, DJs, the KitKat crowd, artists who never slept.\" She turns " +
+        "the glass. \"University gave me a diploma. Berlin gave me the language, the nerve, and a very particular " +
+        "address book. Guess which one paid the rent.\"",
+        short: "\"Scholarship — media design. Arrived with textbook German; the city taught me the rest at 3am. The diploma, or the address book — guess which paid rent.\"" },
+      { topic: "german",
+        text: "\"Fließend. Fluent, genuinely — not the bar kind.\" A note of real pride, quickly disowned. \"Five " +
+          "years living it, arguing in it, being heartbroken in it. You do not forget a language you cried in.\" " +
+          "She studies you. \"The German men love it, of course — they get off the plane braced to translate " +
+          "themselves and instead a katoey in Soi 6 corrects their grammar. Some of them never recover. Gut so.\"",
+        short: "\"Fließend — genuinely fluent, not the bar kind. Five years living it. The German men get off the plane and a katoey on Soi 6 corrects their grammar. Some never recover.\"" },
+      { topic: "clients", text: "\"Every high season, the same faces book the same two weeks.\" She counts them " +
+        "off, amused, unsentimental. \"Frankfurt banker. The film-money one from Munich. Two who still think they " +
+        "discovered me.\" A cool, clear-eyed shrug. \"They call it a holiday. It happens to land on my schedule " +
+        "every year, funny that. I let them buy the drink and the nostalgia. The rest retired with the address " +
+        "book — but a girl lets a man hope. Hope is the most expensive thing I sell now, Schatz.\"",
+        short: "\"Same faces, same two weeks, every high season. They call it a holiday; it lands on my schedule, funny that. I sell them the drink and the nostalgia. Hope is the most expensive thing I sell now.\"" },
+      { topic: "dance", text: "\"The stage? A formality. I could stop and they would still watch.\" Not vanity — " +
+        "an audit. \"Six years of it teaches you exactly where every eye in a room is. Useful skill. Transfers " +
+        "to almost everything.\" She steps back up onto the little stage in one unhurried movement. \"Watch or " +
+        "don't, Schatz. I dance for the mirror.\"",
+        short: "\"The stage is a formality — I could stop and they'd still watch. Six years teaches you where every eye is. I dance for the mirror.\"" },
     ],
   },
   // Aum (Kitten Corner) — the new girl, still learning to meter the smile. Soft,
@@ -6840,6 +6934,15 @@ const PATRONS = {
         "been Beach Road. If it happens to you, go back and tell the mamasan — " +
         "she'll make it right. Not out of kindness. Bad girls are bad business.\"",
         short: "\"Settle ST or LT before money moves, ask early, and if she runs — tell the mamasan.\"" },
+      { topic: "sponsor", text: "\"Ah. The one behind the till who won't come out to play.\" He " +
+        "nods slow, an old campaigner reading the ground. \"Kept girl, son. Some fella back home — " +
+        "Germany, Australia, wherever — wires her every month to stay off the floor. She'll show you " +
+        "his name on her phone and mean the 'no'.\" The glass turns. \"One lever only, and it's an " +
+        "ugly one: you outbid him. Not the barfine — HER. Send it, gift it, week on week, till your " +
+        "number's the bigger one and she can't un-see it. Costs a fortune, and it's not a nice thing " +
+        "you're doing — you're buying a person off another man, and she knows it, and takes it anyway. " +
+        "That's the part nobody warns you about.\"",
+        short: "\"A kept girl? One lever: outbid her sponsor — send her money, week on week, till your number's bigger. Costs a fortune, and it isn't clean.\"" },
     ],
   },
 
@@ -7692,7 +7795,7 @@ const NPC_ROLES = {
   pukky: "hostess", somo: "hostess", nina: "hostess", bebe: "hostess", poy: "hostess", aum: "hostess",
   joy: "hostess", fon: "hostess", gift: "hostess", kwan: "hostess",
   nong: "hostess", pim: "hostess", bee: "hostess", jane: "hostess", mercedes: "hostess", kratae: "hostess",
-  nira: "hostess", mind: "hostess", pia: "hostess", wilai: "hostess",
+  nira: "hostess", mind: "hostess", pia: "hostess", wilai: "hostess", chompoo: "hostess",
   yai: "mamasan", rose: "mamasan", kesorn: "mamasan", lawan: "mamasan", sumalee: "mamasan",
   diamond: "mamasan", wimon: "mamasan", ampai: "mamasan", kesinee: "mamasan",
   ploy: "cashier", aek: "cashier", malee: "cashier",
@@ -7927,7 +8030,7 @@ const _FILLER_HOSTESSES = [
   ["Ing","อิง","blue_dog"], ["Khing","ขิง","blue_dog"],
   /* Kitten Corner, Cherry Pop, and Soi 6 beer-bar girls promoted to authored NPCs */
   ["Bam","บาม","rock_factory"], ["Kwang","กวาง","rock_factory"],
-  ["Chompoo","ชมพู่","stinky_bar"], ["Manow","มะนาว","stinky_bar"],
+  ["Manow","มะนาว","stinky_bar"],
   ["Goong","กุ้ง","honey_trap"], ["Jiab","เจี๊ยบ","honey_trap"],
   ["Meen","มีน","queen_bee"], ["Yok","หยก","queen_bee"],
   ["Namphueng","น้ำผึ้ง","buzz_inn"], ["Gaem","แก้ม","buzz_inn"],
