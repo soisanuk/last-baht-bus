@@ -1,13 +1,13 @@
 {
-  "generated": "2026-07-30",
+  "generated": "2026-08-03",
   "note": "Distinct, hand-authored characters with a portrait (excludes the 181 generic `filler` NPCs). Derived from web/js/world.js — regenerate with scripts/gen-portrait-manifest.mjs, do not hand-edit. `sex`/`venueKind` are generator heuristics for portrait archetype selection, not game canon.",
   "counts": {
-    "total": 75,
+    "total": 120,
     "byRole": {
-      "story": 22,
-      "mamasan": 14,
-      "hostess": 18,
-      "cashier": 3,
+      "story": 30,
+      "mamasan": 22,
+      "hostess": 38,
+      "cashier": 12,
       "patron": 18
     }
   },
@@ -37,6 +37,19 @@
       "room": "beach_rd_s",
       "tags": [],
       "desc": "A motosai driver in an orange vest, boots up on his handlebars, watching the street with professional calm. The other drivers at the stand defer to him."
+    },
+    {
+      "id": "barry",
+      "name": "Barry",
+      "source": "NPCS",
+      "role": "story",
+      "sex": "m",
+      "venueKind": "soi6",
+      "emoji": "⛳",
+      "th": "แบร์รี่",
+      "room": "ruby_kiss",
+      "tags": [],
+      "desc": "English, fifty, here on the eleventh 'golf trip' of a marriage that politely doesn't ask. Packed the clubs, means to play, will not play. Zero shame and boundless goodwill; knows half the girls on this soi by name and all of them by drink order. The most honest dishonest man in Pattaya — lies only to his wife, and even then only about the golf."
     },
     {
       "id": "bert",
@@ -80,6 +93,19 @@
       "desc": "Canadian, sixties, a golf tan gone patchy, nursing a rum-and-coke he makes last an hour. Two years ago he wired his retirement into 'the portfolio' — units in White Dish bars, guaranteed returns, a glossy PDF with a leaping logo. He has been drinking that decision at the Stinky ever since. Bert runs him a tab he mostly settles."
     },
     {
+      "id": "doyle",
+      "name": "Doyle",
+      "source": "NPCS",
+      "role": "story",
+      "sex": "m",
+      "venueKind": "pub",
+      "emoji": "🕵️",
+      "th": "ดอยล์",
+      "room": "queen_vic",
+      "tags": [],
+      "desc": "American, sixty, built like a retired middleweight gone comfortable. Twenty-six years working homicide in a city he won't name, then a private ticket — \"cheating husbands don't try to kill you; I like boring now.\" Drinks soda water and watches the door, out of a habit he's given up pretending is retired. Came to price Thailand for good; found a job following him."
+    },
+    {
       "id": "gary",
       "name": "Lake Gary",
       "source": "NPCS",
@@ -104,6 +130,19 @@
       "room": "golden_dragon",
       "tags": [],
       "desc": "Fifties, a golf shirt with a discreet logo, a lager he barely touches and a way of looking at a bar like a spreadsheet. He calls himself an 'area consultant.' Everyone else calls him the White Dish man. He is unfailingly pleasant, which is the unsettling part."
+    },
+    {
+      "id": "macca",
+      "name": "Macca",
+      "source": "NPCS",
+      "role": "story",
+      "sex": "m",
+      "venueKind": "soi6",
+      "emoji": "⚡",
+      "th": "แม็คก้า",
+      "room": "sunset_dreams",
+      "tags": [],
+      "desc": "Scouse, fifty-three, twenty-two years an electrician and then a letter and a cheque with more noughts than he's ever seen at once. First time abroad that isn't Spain, first time in his life with no shift in the morning, and it's gone to his head like sunshine. Buys rounds for strangers. Means every word. Hasn't yet met the version of this town that isn't his friend."
     },
     {
       "id": "mala",
@@ -199,6 +238,19 @@
       "desc": "The Peacock's young star, all cheekbones and ambition, between numbers and still catching her breath. She lip-syncs better than the record and knows it, and she is saving for a face the big-city stages will fight over."
     },
     {
+      "id": "pete",
+      "name": "Pete",
+      "source": "NPCS",
+      "role": "story",
+      "sex": "m",
+      "venueKind": "beer",
+      "emoji": "🚬",
+      "th": "พีท",
+      "room": "sandy_toes",
+      "tags": [],
+      "desc": "English, fifties, the kind of grey you go when you've stopped sleeping properly. Sits where he can see who comes in, drinks slow, gives nothing. Calls himself Pete, and it's a good enough name. Whatever he left behind, he left it fast and he left it whole — Pattaya never asks for references, which is the entire reason he's on this stool and not another."
+    },
+    {
       "id": "phil",
       "name": "Phil",
       "source": "NPCS",
@@ -225,6 +277,32 @@
       "desc": "Late thirties dressed for late twenties: a linen shirt one button too honest, a watch that wants to be noticed, sunglasses on indoors at midnight. He films himself more than he talks and talks more than he listens. Up close, the empire is just a man who has never once been told no by anyone he pays."
     },
     {
+      "id": "rob",
+      "name": "Rob",
+      "source": "NPCS",
+      "role": "story",
+      "sex": "m",
+      "venueKind": "soi6",
+      "emoji": "💍",
+      "th": "ร็อบ",
+      "room": "kitten_corner",
+      "tags": [],
+      "desc": "English, forty-eight, married a Buriram girl for nine years and buried the marriage a year ago, not unkindly on either side. Speaks passable Isan-accented Thai, knows the family system from the inside, and watches the bar's whole performance with the fond, tired eye of a man who's seen the machinery from backstage. Not here to be fooled. Here because where else would he be."
+    },
+    {
+      "id": "roy",
+      "name": "Roy",
+      "source": "NPCS",
+      "role": "story",
+      "sex": "m",
+      "venueKind": "soi6",
+      "emoji": "🍺",
+      "th": "รอย",
+      "room": "cherry_pop",
+      "tags": [],
+      "desc": "English, seventy, been coming since the soi had neon on one side only. Retired on a fixed pension he counts to the baht and never complains about; nurses a single Chang an hour and makes it last. Knows every bar's real name, every one it used to be, and half the ghosts propping up the other half. Not bitter. Just here, the way the tide is here."
+    },
+    {
       "id": "security",
       "name": "security",
       "source": "NPCS",
@@ -249,6 +327,19 @@
       "room": "short_time_motel",
       "tags": [],
       "desc": "Sixty-something, a weathered face that holds a permanent quiet warmth, the thermos of coffee always close. He keeps the keys, keeps the counter, keeps everything running on this shift without any fuss. The girls coming through treat him like a favourite uncle."
+    },
+    {
+      "id": "tan",
+      "name": "Tan",
+      "source": "NPCS",
+      "role": "story",
+      "sex": "m",
+      "venueKind": null,
+      "emoji": "🚕",
+      "th": "ต้น",
+      "room": "soi6_street",
+      "tags": [],
+      "desc": "Your airport driver, leaning on a plain grey sedan at the mouth of the soi as though he never drove off — mid-thirties, neat, a polo shirt you would forget the instant you looked away. Six years in Ohio for a film degree that paid nothing and taught him everything about how a shot is framed. \"I drive and I fix,\" he says, and both are true, and neither is the whole of it. The most forgettable man on Soi 6 — which, on Soi 6, is its own kind of power."
     },
     {
       "id": "terry",
@@ -294,6 +385,19 @@
       "desc": "Young, round-cheeked, shy until she isn't. Waan works the oil room at Smile and has decided, for reasons of her own, that she likes you."
     },
     {
+      "id": "wayne",
+      "name": "Wayne",
+      "source": "NPCS",
+      "role": "story",
+      "sex": "m",
+      "venueKind": "soi6",
+      "emoji": "🕶️",
+      "th": "เวย์น",
+      "room": "golden_dragon",
+      "tags": [],
+      "desc": "Australian, forty-five, a Gold Coast tan and a shirt with the top three buttons making a decision. Made real money in earthmoving back home and has decided, with the total confidence of a man who's never been conned, that a Soi 6 bar is 'basically the same game, mate — plant, cashflow, location.' The girls have his order memorised. So has the till."
+    },
+    {
       "id": "win",
       "name": "Win",
       "source": "NPCS",
@@ -320,6 +424,19 @@
         "bars"
       ],
       "desc": "The madame of the strip's two gentleman's clubs — silk, low voice, immaculate, the kind of calm that costs a fortune to be near. She sells the quiet more than the girls, and she knows every regular's business and says none of it."
+    },
+    {
+      "id": "bussaba",
+      "name": "Bussaba",
+      "source": "NPCS",
+      "role": "mamasan",
+      "sex": "f",
+      "venueKind": "beer",
+      "emoji": "👑",
+      "th": "บุษบา",
+      "room": "sunset_rail",
+      "tags": [],
+      "desc": "The Shady Lady's mamasan, running a beer bar the slow honest way — no bottle-service hustle, no bank of go-go tricks, just cold beer, decent girls, and a chair you're welcome to keep all night."
     },
     {
       "id": "candy",
@@ -406,6 +523,32 @@
       "desc": "The grande dame of Soi Diana — a former Crystal Palace headliner who hung up the heels and parlayed twenty years on the stage into four beer bars on the busiest drinking soi in town. Silk, jade, a gaze that prices you before you've sat down. She works a different one of her houses each night, and the girls behave accordingly."
     },
     {
+      "id": "malai",
+      "name": "Malai",
+      "source": "NPCS",
+      "role": "mamasan",
+      "sex": "f",
+      "venueKind": "soi6",
+      "emoji": "👑",
+      "th": "มาลัย",
+      "room": "sunset_dreams",
+      "tags": [],
+      "desc": "Soft-spoken and grandmotherly, Sunset Dreams' mamasan pours you tea and asks after your health, and somewhere in the warmth your wallet opens without a sound. The gentlest operator on the soi."
+    },
+    {
+      "id": "malila",
+      "name": "Malila",
+      "source": "NPCS",
+      "role": "mamasan",
+      "sex": "f",
+      "venueKind": "beer",
+      "emoji": "👑",
+      "th": "มะลิลา",
+      "room": "sandy_toes",
+      "tags": [],
+      "desc": "The Verandah's mamasan, who runs the most easygoing bar on Soi 6 like a long Sunday lunch — Nina feeds the customers, Malila makes sure everyone's alright, and the money, such as it is, sees to itself."
+    },
+    {
       "id": "mem",
       "name": "Mamasan Mem",
       "source": "NPCS",
@@ -417,6 +560,19 @@
       "room": "tequila_queen",
       "tags": [],
       "desc": "The Tequila Queen's mamasan — silver-streaked chignon, reading glasses on a gold chain, and a stage presence undimmed since she headlined this same room in another century. The dancers call her 'Khun Mae'. So do some customers."
+    },
+    {
+      "id": "nee",
+      "name": "Nee",
+      "source": "NPCS",
+      "role": "mamasan",
+      "sex": "f",
+      "venueKind": "soi6",
+      "emoji": "👑",
+      "th": "หนี่",
+      "room": "pink_lotus",
+      "tags": [],
+      "desc": "The flagship's mamasan: still, precise, a tablet where another mama keeps a smile. She runs Pink Lotus like the asset it is on White Dish's books, and she priced you before you sat down."
     },
     {
       "id": "oy",
@@ -432,6 +588,19 @@
       "desc": "The Mamasan. Undefeated since 2009. She surveys her flagship from the end of the bar with the stillness of someone who owns the building, two more like it, and three condos. You have the sudden feeling your posture is being graded."
     },
     {
+      "id": "peung",
+      "name": "Peung",
+      "source": "NPCS",
+      "role": "mamasan",
+      "sex": "f",
+      "venueKind": "soi6",
+      "emoji": "👑",
+      "th": "ผึ้ง",
+      "room": "golden_dragon",
+      "tags": [],
+      "desc": "Golden Dragon's mamasan since before White Dish bought the paper — and she stayed on when they did, because the numbers didn't care who owned them, and neither, in the end, does she."
+    },
+    {
       "id": "rose",
       "name": "Rose",
       "source": "NPCS",
@@ -443,6 +612,32 @@
       "room": "orchid_club",
       "tags": [],
       "desc": "The madame of the Orchid Club — fifties, immaculate, a silk blouse and a voice you have to lean in to hear. She runs the quietest, coldest, most expensive room in Naklua, and she knows the name of every regular's wife."
+    },
+    {
+      "id": "saeng",
+      "name": "Saeng",
+      "source": "NPCS",
+      "role": "mamasan",
+      "sex": "f",
+      "venueKind": "soi6",
+      "emoji": "👑",
+      "th": "แสง",
+      "room": "ruby_kiss",
+      "tags": [],
+      "desc": "Ruby Kiss's mamasan, content to sit back while Wilai works the window — because a mama who's found a girl that good knows to stay out of her light and just count."
+    },
+    {
+      "id": "sopha",
+      "name": "Sopha",
+      "source": "NPCS",
+      "role": "mamasan",
+      "sex": "f",
+      "venueKind": "beer",
+      "emoji": "👑",
+      "th": "โสภา",
+      "room": "bay_watch",
+      "tags": [],
+      "desc": "Front Row's mamasan, who put the big screens in herself and knows the league table better than half the punters. Runs a football bar for football people, and keeps the drama outside."
     },
     {
       "id": "sumalee",
@@ -458,6 +653,19 @@
         "bars"
       ],
       "desc": "The matriarch of Soi 7 — thirty years in Jomtien, four little beer bars, and not one gram of hurry. Where the Buakhao mamas price you like a market, Sumalee just wants everyone fed, watered, and coming back next season. She works a different bar each night, mostly to keep the girls honest and the regulars guessing."
+    },
+    {
+      "id": "toi",
+      "name": "Toi",
+      "source": "NPCS",
+      "role": "mamasan",
+      "sex": "f",
+      "venueKind": "soi6",
+      "emoji": "👑",
+      "th": "ต้อย",
+      "room": "cherry_pop",
+      "tags": [],
+      "desc": "Cherry Pop's mamasan — loud enough to run a loud bar, sharp enough behind it to run the numbers while the party roars. She sells fun by the bottle, and business is very good."
     },
     {
       "id": "wan",
@@ -514,6 +722,32 @@
       "desc": "Mysterious, sharp eyes, a slow smile that arrives about four seconds after whatever caused it. She materialised beside you rather than walked."
     },
     {
+      "id": "aum",
+      "name": "Aum",
+      "source": "NPCS",
+      "role": "hostess",
+      "sex": "f",
+      "venueKind": "soi6",
+      "emoji": "🌷",
+      "th": "อุ้ม",
+      "room": "kitten_corner",
+      "tags": [],
+      "desc": "Pretty in the soft, unstudied way that stops men mid-sentence, with a smile she gives away too easily for this business. New enough that the job hasn't finished teaching her its lessons yet."
+    },
+    {
+      "id": "bebe",
+      "name": "Bebe",
+      "source": "NPCS",
+      "role": "hostess",
+      "sex": "f",
+      "venueKind": "soi6",
+      "emoji": "💅",
+      "th": "บีบี",
+      "room": "pink_lotus",
+      "tags": [],
+      "desc": "Six feet of engineered glamour in heels that make it seven, sharper-tongued than the whole bar and twice as funny. Ladyboy, and not hiding it for a second — the confidence is the whole act, and the act is magnificent. A ยาดม inhaler is never further than her reach, in case a smoker wanders in and dares to light up."
+    },
+    {
       "id": "bee",
       "name": "Bee",
       "source": "NPCS",
@@ -525,6 +759,71 @@
       "room": "candy_bar_2",
       "tags": [],
       "desc": "Candy Bar 2's floor boss — early twenties, quick everywhere at once, wearing the same rose-pink polo as the original bar. Candy's niece, though nobody says it and everybody knows it. The smile is the family franchise."
+    },
+    {
+      "id": "belle",
+      "name": "Belle",
+      "source": "NPCS",
+      "role": "hostess",
+      "sex": "f",
+      "venueKind": "soi6",
+      "emoji": "🥺",
+      "th": "เบล",
+      "room": "pink_lotus",
+      "tags": [],
+      "desc": "Sweet, soft-eyed, always in the middle of a small catastrophe — a sick relative, a broken thing, a bill with today's date. She holds your hand when she tells you, and she is often, genuinely, not lying."
+    },
+    {
+      "id": "benz",
+      "name": "Benz",
+      "source": "NPCS",
+      "role": "hostess",
+      "sex": "f",
+      "venueKind": "soi6",
+      "emoji": "🤳",
+      "th": "เบนซ์",
+      "room": "ruby_kiss",
+      "tags": [],
+      "desc": "Genuinely stunning and entirely aware of it, angling for the light and the mirror more than for you. There is a screen between you at all times, and you are not the one she's looking at on it."
+    },
+    {
+      "id": "chaba",
+      "name": "Chaba",
+      "source": "NPCS",
+      "role": "hostess",
+      "sex": "f",
+      "venueKind": "soi6",
+      "emoji": "🌺",
+      "th": "ชบา",
+      "room": "cherry_pop",
+      "tags": [],
+      "desc": "Loud, glorious, and pouring — for you, for herself, for the room. At Cherry Pop she's the party's engine, right up until she's its wreckage."
+    },
+    {
+      "id": "dear",
+      "name": "Dear",
+      "source": "NPCS",
+      "role": "hostess",
+      "sex": "f",
+      "venueKind": "soi6",
+      "emoji": "🐣",
+      "th": "เดียร์",
+      "room": "sunset_dreams",
+      "tags": [],
+      "desc": "Sweet and a half-beat slow, laughing a little after everyone else because she's still catching up. Nobody at this bar has a bad word for her, which tells you everything."
+    },
+    {
+      "id": "dew",
+      "name": "Dew",
+      "source": "NPCS",
+      "role": "hostess",
+      "sex": "f",
+      "venueKind": "soi6",
+      "emoji": "🥃",
+      "th": "ดิว",
+      "room": "golden_dragon",
+      "tags": [],
+      "desc": "A half-step behind the room all night, warm and unfocused, a drink she didn't order already in her hand. The other girls keep an eye on her and finish her sentences. Nobody says the word out loud."
     },
     {
       "id": "fon",
@@ -579,6 +878,45 @@
       "desc": "Bubbly, laughing at everything you say before you finish saying it — the undisputed morale champion of Pink Lotus Lounge."
     },
     {
+      "id": "kai",
+      "name": "Kai",
+      "source": "NPCS",
+      "role": "hostess",
+      "sex": "f",
+      "venueKind": "soi6",
+      "emoji": "💅",
+      "th": "ไก่",
+      "room": "golden_dragon",
+      "tags": [],
+      "desc": "Warmer than the room and faster than the room — your name inside a minute, both her hands around yours inside two. It is a very good act. She is very good at it."
+    },
+    {
+      "id": "kat",
+      "name": "Kat",
+      "source": "NPCS",
+      "role": "hostess",
+      "sex": "f",
+      "venueKind": "soi6",
+      "emoji": "🍸",
+      "th": "แคท",
+      "room": "sunset_dreams",
+      "tags": [],
+      "desc": "The loudest laugh in the bar at nine, and by midnight the one the others are steering away from the edge of things. Great fun for exactly ninety minutes."
+    },
+    {
+      "id": "kluay",
+      "name": "Kluay",
+      "source": "NPCS",
+      "role": "hostess",
+      "sex": "f",
+      "venueKind": "soi6",
+      "emoji": "🍌",
+      "th": "กล้วย",
+      "room": "ruby_kiss",
+      "tags": [],
+      "desc": "Pretty and profoundly unbothered, one of Wilai's front-stool pair, mostly here in body. She'll take the drink. She will not be chasing it."
+    },
+    {
       "id": "kratae",
       "name": "Kratae",
       "source": "NPCS",
@@ -599,7 +937,7 @@
       "sex": "f",
       "venueKind": "soi6",
       "emoji": "🦋",
-      "th": "กวาง",
+      "th": "ขวัญ",
       "room": "sunset_dreams",
       "tags": [],
       "desc": "Gentle, soft-voiced, folding paper napkins into birds while the soi roars outside."
@@ -618,17 +956,30 @@
       "desc": "Petite, bright smile, glittery earrings catching the bar lights. She's beating two customers at pool simultaneously."
     },
     {
+      "id": "may",
+      "name": "May",
+      "source": "NPCS",
+      "role": "hostess",
+      "sex": "f",
+      "venueKind": "soi6",
+      "emoji": "🌼",
+      "th": "เมย์",
+      "room": "sunset_dreams",
+      "tags": [],
+      "desc": "Soft, unhurried, genuinely pleased to see you — no angle you can find, because there isn't one. Exactly as nice as she seems, which on this soi is its own kind of rare."
+    },
+    {
       "id": "mercedes",
       "name": "Mercedes",
       "source": "NPCS",
       "role": "hostess",
       "sex": "f",
-      "venueKind": "beer",
+      "venueKind": "soi6",
       "emoji": "❄️",
       "th": "เมอร์เซเดส",
-      "room": "gold_rush",
+      "room": "cherry_pop",
       "tags": [],
-      "desc": "A little older than the Gold Rush's other girls and a great deal less nervous — she moves like someone who has already seen the worst a room can do to a person. Her English is good, with a flat European edge the soi doesn't usually carry."
+      "desc": "A little older than the other girls here and a great deal less nervous — she moves like someone who has already seen the worst a room can do to a person. Her English is good, with a flat European edge the soi doesn't usually carry."
     },
     {
       "id": "mind",
@@ -642,6 +993,34 @@
       "room": "neon_paradise",
       "tags": [],
       "desc": "Small and careful, a dancer's economy to every movement — the girl from a certain Danish backpacker's lock screen, though she has no idea she's on it. Twenty-two, and older than that in the ways that pay the rent."
+    },
+    {
+      "id": "nangfah",
+      "name": "Nangfah",
+      "source": "NPCS",
+      "role": "hostess",
+      "sex": "f",
+      "venueKind": "soi6",
+      "emoji": "⭐",
+      "th": "นางฟ้า",
+      "room": "kitten_corner",
+      "tags": [
+        "c4"
+      ],
+      "desc": "Composed in a way the room isn't, watching more than she performs. There's a textbook in her bag under the going-out clothes, and she'd rather you didn't make a thing of it."
+    },
+    {
+      "id": "nina",
+      "name": "Nina",
+      "source": "NPCS",
+      "role": "hostess",
+      "sex": "f",
+      "venueKind": "beer",
+      "emoji": "🍲",
+      "th": "นีน่า",
+      "room": "sandy_toes",
+      "tags": [],
+      "desc": "A little older than the rail usually runs, and she mothers the whole bar — the young girls, the drunk regulars, and, within about four minutes, you. You'll have eaten something before you leave."
     },
     {
       "id": "nira",
@@ -685,6 +1064,19 @@
       "desc": "Sweet, visibly new — first week on the soi — checking her phone between customers and startling whenever the door opens."
     },
     {
+      "id": "nook",
+      "name": "Nook",
+      "source": "NPCS",
+      "role": "hostess",
+      "sex": "f",
+      "venueKind": "soi6",
+      "emoji": "🍒",
+      "th": "นุ้ก",
+      "room": "golden_dragon",
+      "tags": [],
+      "desc": "Twenty-two and delighted about all of it — the music, the lights, the free drinks, the men who think she is magic. She is having the best night of her life. Again."
+    },
+    {
       "id": "pia",
       "name": "Pia",
       "source": "NPCS",
@@ -724,6 +1116,84 @@
       "desc": "Cheerful, sparkly top throwing glitter across the wall, never stops smiling even when shouting drink orders over the bass."
     },
     {
+      "id": "poy",
+      "name": "Poy",
+      "source": "NPCS",
+      "role": "hostess",
+      "sex": "f",
+      "venueKind": "soi6",
+      "emoji": "🌸",
+      "th": "พอย",
+      "room": "golden_dragon",
+      "tags": [],
+      "desc": "Softly spoken and glamorously done up, and decent enough to say it at hello — she would rather tell you straight than be anyone's surprise. Tired of the two reactions, hoping for a third."
+    },
+    {
+      "id": "praewa",
+      "name": "Praewa",
+      "source": "NPCS",
+      "role": "hostess",
+      "sex": "f",
+      "venueKind": "soi6",
+      "emoji": "🌷",
+      "th": "แพรวา",
+      "room": "kitten_corner",
+      "tags": [],
+      "desc": "Pretty and a little far away, like part of her is always on the bus back to a village you'll never see. Kind to you, and not quite here."
+    },
+    {
+      "id": "pukky",
+      "name": "Pukky",
+      "source": "NPCS",
+      "role": "hostess",
+      "sex": "f",
+      "venueKind": "beer",
+      "emoji": "🌻",
+      "th": "ปุ๊กกี้",
+      "room": "sunset_rail",
+      "tags": [],
+      "desc": "Easy and unhurried behind the Shady Lady's rail — the kind of company that feels like a night off rather than a transaction. No hurry in her, and no hustle either."
+    },
+    {
+      "id": "puu",
+      "name": "Puu",
+      "source": "NPCS",
+      "role": "hostess",
+      "sex": "f",
+      "venueKind": "soi6",
+      "emoji": "🔥",
+      "th": "ปู",
+      "room": "pink_lotus",
+      "tags": [],
+      "desc": "Beautiful and burning a little too bright, all the way in from the first minute. Her eyes flick to {{your phone}} when it lights, to the girl who walks past, and back to you, fast. Lovely. A live wire."
+    },
+    {
+      "id": "somo",
+      "name": "Somo",
+      "source": "NPCS",
+      "role": "hostess",
+      "sex": "f",
+      "venueKind": "beer",
+      "emoji": "⚽",
+      "th": "โซโม่",
+      "room": "bay_watch",
+      "tags": [],
+      "desc": "In a Liverpool shirt and zero makeup, arguing offside with two regulars and winning. More one-of-the-lads than hostess, and she'll tell you so before you get the wrong idea."
+    },
+    {
+      "id": "tabtim",
+      "name": "Tabtim",
+      "source": "NPCS",
+      "role": "hostess",
+      "sex": "f",
+      "venueKind": "soi6",
+      "emoji": "🍉",
+      "th": "ทับทิม",
+      "room": "cherry_pop",
+      "tags": [],
+      "desc": "Round-cheeked and permanently pleased, a half-step behind every joke and laughing at it anyway, on faith. Sweetest girl in the bar, and the bar knows it."
+    },
+    {
       "id": "wilai",
       "name": "Wilai",
       "source": "NPCS",
@@ -750,6 +1220,84 @@
       "desc": "The cashier, planted behind the till like she grew there — cropped hair, oversized bar polo, a silver ring through one nostril and a biro tucked behind her ear. Tom through and through: she runs the money, calls the floor, and misses nothing across the whole open front of the bar."
     },
     {
+      "id": "baimon",
+      "name": "Baimon",
+      "source": "NPCS",
+      "role": "cashier",
+      "sex": "f",
+      "venueKind": "soi6",
+      "emoji": "🧾",
+      "th": "ใบหม่อน",
+      "room": "kitten_corner",
+      "tags": [],
+      "desc": "Soft-spoken, careful with the money and with herself, a photo of a couple propped by the till in a glittery case. Kesinee gave her the cashier seat as a kindness — off the floor, where the sponsor's money keeps her."
+    },
+    {
+      "id": "fahsai",
+      "name": "Fahsai",
+      "source": "NPCS",
+      "role": "cashier",
+      "sex": "f",
+      "venueKind": "soi6",
+      "emoji": "🧾",
+      "th": "ฟ้าใส",
+      "room": "cherry_pop",
+      "tags": [],
+      "desc": "The one still point in Cherry Pop's chaos — a tom in a snapback, arms folded behind the till, watching the party she is emphatically not part of with the patience of a designated driver."
+    },
+    {
+      "id": "haad",
+      "name": "Haad",
+      "source": "NPCS",
+      "role": "cashier",
+      "sex": "f",
+      "venueKind": "beer",
+      "emoji": "🧾",
+      "th": "หาด",
+      "room": "sandy_toes",
+      "tags": [],
+      "desc": "Malila's younger sister and the Verandah's cashier, cut from the same easygoing cloth — she runs the till the way the bar runs everything, slowly and kindly, and always has a bowl of peanuts within reach."
+    },
+    {
+      "id": "jenny",
+      "name": "Jenny",
+      "source": "NPCS",
+      "role": "cashier",
+      "sex": "f",
+      "venueKind": "soi6",
+      "emoji": "🧾",
+      "th": "เจนนี่",
+      "room": "pink_lotus",
+      "tags": [],
+      "desc": "Neat, quick with the till, a promise ring she touches when she's thinking. She took the cashier seat on purpose — off the floor, off the market, kept clean for the man in Germany who sends the money."
+    },
+    {
+      "id": "joon",
+      "name": "Joon",
+      "source": "NPCS",
+      "role": "cashier",
+      "sex": "m",
+      "venueKind": "soi6",
+      "emoji": "🧾",
+      "th": "จูน",
+      "room": "golden_dragon",
+      "tags": [],
+      "desc": "Short hair, men's watch, a handshake instead of a wai, running Golden Dragon's till like a foreman. A tom, and entirely uninterested in being anything else for your benefit."
+    },
+    {
+      "id": "jun",
+      "name": "Jun",
+      "source": "NPCS",
+      "role": "cashier",
+      "sex": "f",
+      "venueKind": "soi6",
+      "emoji": "🧾",
+      "th": "จัน",
+      "room": "sunset_dreams",
+      "tags": [],
+      "desc": "Malai's daughter, home from a Bangkok college for the season and minding her mother's till — polite, sharp, and quietly counting the months until she never has to do this again."
+    },
+    {
       "id": "malee",
       "name": "Malee",
       "source": "NPCS",
@@ -763,6 +1311,32 @@
       "desc": "The cashier — cropped hair, black polo, a lanyard with what looks like seventeen keys. She runs the KINKY till with the detached authority of someone who's counted more money than you've seen and found it unremarkable."
     },
     {
+      "id": "nu",
+      "name": "Nu",
+      "source": "NPCS",
+      "role": "cashier",
+      "sex": "f",
+      "venueKind": "beer",
+      "emoji": "🧾",
+      "th": "หนู",
+      "room": "bay_watch",
+      "tags": [],
+      "desc": "Front Row's cashier, a tom in a footy shirt matching Somo's, the two of them running the bar like a five-a-side team — one on the beer, one on the money, both shouting at the ref."
+    },
+    {
+      "id": "numfon",
+      "name": "Numfon",
+      "source": "NPCS",
+      "role": "cashier",
+      "sex": "f",
+      "venueKind": "beer",
+      "emoji": "🧾",
+      "th": "น้ำฝน",
+      "room": "sunset_rail",
+      "tags": [],
+      "desc": "The Shady Lady's cashier, comfortable and unbothered, running an honest till at an honest bar — the numbers are small, the trouble is smaller, and that suits her exactly."
+    },
+    {
       "id": "ploy",
       "name": "Ploy",
       "source": "NPCS",
@@ -774,6 +1348,19 @@
       "room": "rainbow_girls",
       "tags": [],
       "desc": "The cashier, in a cage of fairy lights, counting money with impossible speed. Former dancer's posture; engagement ring worn on a chain. Her boyfriend doesn't love her working here, so the cage suits everyone."
+    },
+    {
+      "id": "preaw",
+      "name": "Preaw",
+      "source": "NPCS",
+      "role": "cashier",
+      "sex": "f",
+      "venueKind": "soi6",
+      "emoji": "🧾",
+      "th": "แพรว",
+      "room": "ruby_kiss",
+      "tags": [],
+      "desc": "Saeng's niece, brisk and unsentimental behind the Ruby Kiss till, running the money while Wilai runs the window — the two halves of the operation that never need to discuss it."
     },
     {
       "id": "angela",
