@@ -8,39 +8,39 @@ var NEWS_FEED = [
     "d": "31 Jul 2026"
   },
   {
+    "t": "Mayor inspects new covered footbridge project across Pattaya",
+    "s": "Pattaya Mail",
+    "d": "03 Aug 2026"
+  },
+  {
     "t": "Body found floating in Pattaya canal",
     "s": "Thaiger",
     "d": "03 Aug 2026"
   },
   {
-    "t": "Parking shortcuts could lead to costly tickets in Pattaya",
+    "t": "The Pattaya you see depends on why you came",
     "s": "Pattaya Mail",
-    "d": "02 Aug 2026"
-  },
-  {
-    "t": "Unwanted garden guest! Pattaya firefighters safely capture young 2-meter python",
-    "s": "Pattaya Mail",
-    "d": "02 Aug 2026"
-  },
-  {
-    "t": "PM Anutin meets family of Russian siblings and vows full investigation",
-    "s": "Thaiger",
     "d": "03 Aug 2026"
   },
   {
-    "t": "Corrections Department defends risk checks before Chon Buri release",
-    "s": "Thaiger",
-    "d": "02 Aug 2026"
+    "t": "Pattaya Prison places murder suspects under 24-hour watch after transfer",
+    "s": "Pattaya Mail",
+    "d": "03 Aug 2026"
   },
   {
-    "t": "Runaway trailer crushes EV on Chonburi overpass, three injured",
+    "t": "East Pattaya residents relieved after water meter theft suspect arrested",
     "s": "Pattaya Mail",
-    "d": "01 Aug 2026"
+    "d": "03 Aug 2026"
   },
   {
-    "t": "John Horrigan shares Antarctic adventure with Pattaya City Expats Club",
+    "t": "Fatal midnight crash under investigation in Chonburi",
     "s": "Pattaya Mail",
-    "d": "02 Aug 2026"
+    "d": "03 Aug 2026"
+  },
+  {
+    "t": "Watch the colors before you park on Pattaya beach roads",
+    "s": "Pattaya Mail",
+    "d": "03 Aug 2026"
   },
   {
     "t": "Super El Niño to arrive in Thailand next year",
@@ -48,40 +48,40 @@ var NEWS_FEED = [
     "d": "01 Aug 2026"
   },
   {
-    "t": "Trump's diplomacy is nudging Thailand toward China",
-    "s": "Nikkei Asia",
-    "d": "02 Aug 2026"
-  },
-  {
-    "t": "Philippines brace for vengeful Thailand in crucial ASEAN Championship reunion",
-    "s": "ESPN",
-    "d": "03 Aug 2026"
-  },
-  {
-    "t": "Typhoon Dolphin to bypass Thailand as monsoon strengthens",
-    "s": "The Star",
-    "d": "03 Aug 2026"
-  },
-  {
-    "t": "Thailand among top destinations for Koreans in drug‑trafficking cases",
-    "s": "Bangkok Post",
+    "t": "Irish woman, 28, who 'went mad' on Thailand trip now has just months to live",
+    "s": "Irish Mirror",
     "d": "03 Aug 2026"
   },
   {
     "t": "In Thailand, a 75-year-old found the python she says ate her cats back in her home",
-    "s": "Yahoo",
+    "s": "yahoo.com",
+    "d": "02 Aug 2026"
+  },
+  {
+    "t": "As Thailand's next generation shines, Malaysia could be dragged into ASEAN Championship dogfight",
+    "s": "ESPN",
+    "d": "01 Aug 2026"
+  },
+  {
+    "t": "China Mobile Is Said to Explore Selling Stake in Thailand’s True",
+    "s": "Bloomberg.com",
+    "d": "03 Aug 2026"
+  },
+  {
+    "t": "Trump's diplomacy is nudging Thailand toward China",
+    "s": "Nikkei Asia",
     "d": "02 Aug 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-07-31","USD":33.47,"AUD":23.49,"GBP":44.92,"EUR":38.43};
+var FX_RATES = {"date":"2026-08-03","USD":33.33,"AUD":23.36,"GBP":44.9,"EUR":38.45};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-03","temp":29,"humid":76,"code":3,"hi":32,"rain":54};
+var WX_NOW = {"date":"2026-08-04","temp":27,"humid":89,"code":51,"hi":31,"rain":75};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-08-01","first":"932479","last2":"69","front3":["413","672"],"back3":["039","154"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4044,"date":"2026-08-02","baht":64000};
+var GOLD = {"usd":4057,"date":"2026-08-03","baht":63950};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":62573,"thb":2086852};
+var BTC = {"usd":63591,"thb":2123311};
