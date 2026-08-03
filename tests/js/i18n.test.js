@@ -62,7 +62,7 @@ test("picking English keeps the intro English (the fallback path is a no-op)", (
   assert.doesNotMatch(o, /Mordkommission|Wähl eine Zahl/, "no German when English is chosen");
 });
 
-test("a German intro still opens into (as-yet-untranslated) English game prose — graceful partial coverage", () => {
+test("a German intro flows straight into a German beach opening", () => {
   _taxiIntro("beach");
   run("2");        // Deutsch
   run("4");        // detective
@@ -70,9 +70,24 @@ test("a German intro still opens into (as-yet-untranslated) English game prose �
   out = [];
   run("2");        // open-minded — completes the intro, opens the beach
   assert.equal(state().pendingChoice, null, "the intro closed");
-  // the drop-off beat IS translated; the beach opening beyond it is not yet, and
-  // that's fine — it falls back to English rather than breaking.
-  assert.match(lastOut(), /Portemonnaie/, "Tan's drop-off line came through in German");
+  const o = lastOut();
+  assert.match(o, /Portemonnaie/, "Tan's drop-off is German");
+  assert.match(o, /Tag zwei deiner Woche|Deine Brieftasche ist WEG/, "the beach opening is German");
+  assert.match(o, /Du hast ฿0\./, "the ฿0 line is localised, ฿ kept");
+  assert.match(o, /INVENTORY/, "command tokens stay English (they're the real commands)");
+});
+
+test("the Soi 6 challenge opening renders in German", () => {
+  state().player = null;
+  startSoi6Mode();
+  out = [];
+  run("2");        // Deutsch
+  run("7"); run("1"); run("1");   // monger / charmer / straight — completes, opens the soi
+  const o = lastOut();
+  assert.match(o, /die lautesten hundert Meter Thailands/, "the Soi 6 framing is German");
+  assert.match(o, /liegen auf der Bank/, "the money briefing is German (฿100.000-style)");
+  assert.match(o, /Treppe DOWN/, "the nav hint is German with DOWN kept as the command");
+  assert.match(o, /สบายสบาย/, "the Thai goal word stays Thai");
 });
 
 test("G.player.lang survives a save/restore round-trip", () => {
