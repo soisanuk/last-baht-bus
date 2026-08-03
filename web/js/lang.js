@@ -383,6 +383,46 @@ const _CATALOGS = {
     "The neon is starting to smear pleasantly.": "Das Neon fängt an, angenehm zu verschmieren.",
     "The night improves by one bottle's worth.": "Der Abend wird um eine Flasche besser.",
 
+    // ── SCORE / DIAGNOSE stat readouts ({placeholders} filled by _fmt) ────────
+    "สนุก happiness: {h} — {lvl}": "สนุก Zufriedenheit: {h} — {lvl}",
+    "{wd}, day {d}{stage} · {clock} · ฿{m} · battery {bat}%{quiz}":
+      "{wd}, Tag {d}{stage} · {clock} · ฿{m} · Akku {bat}%{quiz}",
+    " of 7": " von 7",
+    " · expat life": " · Expat-Leben",
+    " · QUIZ NIGHT 20:00-22:00": " · QUIZNIGHT 20:00-22:00",
+    "hunger {hu} · thirst {th}": "Hunger {hu} · Durst {th}",
+    " · {d} bottle{s} deep": " · {d} Bier intus",
+    " · banged up ({h}/3)": " · lädiert ({h}/3)",
+    "📱 {c} unread message{s} (CHECK MESSAGES)": "📱 {c} ungelesene Nachricht(en) (CHECK MESSAGES)",
+    "Standing: {s}": "Ansehen: {s}",
+    // happy-level glosses (the romanised-Thai tiers stay; only the English glosses translate)
+    "โอเค — finding your feet": "โอเค — Fuß fassen",
+    "เหนื่อย — running on empty": "เหนื่อย — am Limit",
+    // DIAGNOSE parts
+    "hungry enough to envy the soi dogs": "hungrig genug, um die Soi-Hunde zu beneiden",
+    "peckish, and every cart on the street smells personal": "leicht hungrig, und jeder Karren auf der Straße riecht persönlich",
+    "fed": "satt",
+    "dry as a temple bell": "trocken wie eine Tempelglocke",
+    "thirsty": "durstig",
+    "watered": "getränkt",
+    "stone sober, which is fixable": "stocknüchtern, was sich beheben lässt",
+    "in no state to be on the back of a motorbike": "nicht in der Verfassung, hinten auf ein Motorrad zu steigen",
+    "nursing a barfine souvenir that itches and burns — a clinic job (GET TESTED, it's free)":
+      "pflegst ein Barfine-Souvenir, das juckt und brennt — ein Fall für die Klinik (GET TESTED, kostenlos)",
+    "{d} bottles deep and navigating by neon": "{d} Bier intus und navigierst nach Neon",
+    "{d} bottles deep, the world pleasantly loose at the hinges": "{d} Bier intus, die Welt angenehm locker in den Angeln",
+    "{d} bottle{s} in": "{d} Bier intus",
+    "banged up ({h}/3 — a third strike ends the night)": "lädiert ({h}/3 — der dritte Treffer beendet die Nacht)",
+    "Self-diagnosis, {clock}: {parts}.": "Selbstdiagnose, {clock}: {parts}.",
+    "Phone {bat}% · ฿{m} · สนุก {h} ({lvl}). You will live, which in this town is both a prognosis and a lifestyle.":
+      "Handy {bat}% · ฿{m} · สนุก {h} ({lvl}). Du wirst überleben, was in dieser Stadt sowohl eine Prognose als auch ein Lebensstil ist.",
+
+    // ── Ladyboy gracious-pass (straight player flirts/barfines a katoey) ──────
+    "{n} clocks you clocking her and is already three steps ahead. \"Not for you, tilac — no problem. I know my customer, and you are not him.\" No hurt in it; she's been read a thousand times and long since stopped minding which way it goes. \"Plenty girls here. Go, be happy.\"":
+      "{n} bemerkt, wie du sie musterst, und ist dir schon drei Schritte voraus. \"Nicht für dich, tilac — kein Problem. Ich kenn meinen Kunden, und du bist es nicht.\" Kein Groll darin; sie ist tausendmal durchschaut worden und hat längst aufgehört, sich zu kümmern, in welche Richtung es geht. \"Genug Mädchen hier. Geh, sei glücklich.\"",
+    "A slow, knowing smile. \"You didn't know? Now you know.\" {n} gives you the beat to decide, and reads the answer off your face before you find it. \"Is okay, tilac — you are not the first, and I am not offended. The ladies are that way.\" A graceful tilt of the head, and she turns to a customer looking for exactly her.":
+      "Ein langsames, wissendes Lächeln. \"Du wusstest nicht? Jetzt weißt du.\" {n} lässt dir den Moment zum Entscheiden und liest die Antwort aus deinem Gesicht, bevor du sie selbst findest. \"Ist okay, tilac — du bist nicht der Erste, und ich bin nicht beleidigt. Die Damen sind da drüben.\" Eine anmutige Neigung des Kopfes, und sie wendet sich einem Kunden zu, der genau sie sucht.",
+
     // ── Barfine negotiation modal (SHORT TIME/LONG TIME/NO stay as commands) ──
     "(SHORT TIME {st} — one round, the night carries on · LONG TIME {lt} — overnight · NO backs out.)":
       "(SHORT TIME {st} — eine Runde, der Abend geht weiter · LONG TIME {lt} — über Nacht · NO steigt aus.)",
