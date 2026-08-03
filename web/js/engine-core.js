@@ -960,7 +960,7 @@ function _describeRoom(full, forceFull) {
   // Opt-in per room via `revisit`; LOOK and boot/restore force the full desc.
   if (full) _say(!firstTime && !forceFull && r.revisit ? _pickVary(r.revisit, "rv:" + G.room) : r.desc);
   const items = Object.keys(G.itemLoc).filter(id => _here(id));
-  if (items.length) _say("You can see: " + items.map(id => ITEMS[id].name).join(", ") + ".");
+  if (items.length) _say(_L("You can see: ") + items.map(id => ITEMS[id].name).join(", ") + ".");
   const npcs = _npcsHere();
   const pats = _patronsHere();
   // One presence line for everyone actually in the room — staff and patrons in the
@@ -969,7 +969,7 @@ function _describeRoom(full, forceFull) {
   // their name; patrons still carry (age, nat).
   const here = npcs.map(id => `${NPCS[id].emoji} ${_npcLabel(id)}`)
     .concat(pats.map(id => `${PATRONS[id].emoji} ${PATRONS[id].name}`)); // just emoji + name — age/nat live in EXAMINE
-  if (here.length) _say("Here: " + here.join(", ") + ".");
+  if (here.length) _say(_L("Here: ") + here.join(", ") + ".");
   // Butterfly the dog: the girls dote on him at the door — a warmer welcome, once a night
   if (full && G.dog && G.dog.egg === "butterfly" && _inBar() &&
       npcs.some(id => NPC_ROLES[id]) && G.dog.btfDay !== G.day) {
@@ -987,15 +987,15 @@ function _describeRoom(full, forceFull) {
     }
   }
   const exits = Object.keys(r.exits);
-  if (exits.length) _say("Exits: " + exits.join(", ") + ".", "dim");
+  if (exits.length) _say(_L("Exits: ") + exits.join(", ") + ".", "dim");
   // Buildings fronting this block: entered by name or a tap, not by a compass
   // point (a busy soi can front 4–6 of them, and a door isn't a block away —
   // it's right here). "Exits" is roads only now; the venues list is the doors.
   const venues = _venuesHere(r);
   if (venues.length) {
-    _say("Step inside: " + venues.map(id =>
+    _say(_L("Step inside: ") + venues.map(id =>
       (ROOMS[id].bar || ROOMS[id].name).replace(/\s*\(.*\)$/, "")).join(", ") +
-      ". (ENTER <name>)", "dim");
+      _L(". (ENTER <name>)"), "dim");
   }
   // the dog: at your heel outside; through the rail and under your stool in the
   // open-air beer bars (no door to stop him, and nobody would dream of it); by

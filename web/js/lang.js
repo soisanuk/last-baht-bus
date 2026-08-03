@@ -142,5 +142,22 @@ const _CATALOGS = {
     "The soi remembers your face now. If the night goes quiet, ask it: (HINT)":
       "Die Soi kennt jetzt dein Gesicht. Wenn die Nacht still wird, frag sie: (HINT)",
     "(Type HELP for commands.)": "(Tippe HELP für die Befehle.)",
+
+    // ── room scaffolding labels (the frame around every LOOK) ────────────────
+    // Only the label word is translated; the direction/venue/command tokens after
+    // it (out, s, Queen Vic Inn, ENTER) stay as-is.
+    "You can see: ": "Du siehst: ",
+    "Here: ": "Hier: ",
+    "Exits: ": "Ausgänge: ",
+    "Step inside: ": "Eintreten: ",
+    ". (ENTER <name>)": ". (ENTER <Name>)",
+
+    // ── landing-room names + descriptions (where each mode drops you) ─────────
+    "Your Room — Queen Vic Inn": "Dein Zimmer — Queen Vic Inn",
+    "Jomtien Beach (South)": "Jomtien Beach (Süd)",
+    "The balcony room over the Queen Vic: wood floors, a ceiling fan with strong opinions, and the balcony itself — a recliner, a small table, and the whole of Soi 6 performing below like a fish tank somebody dropped a radio into. A firm double bed fills the rest of the room — the neon never quite lets go of it, but the blackout curtains and the aircon get you there. A flatscreen on the wall and a mini-fridge in the corner — two free waters a day, housekeeping's one kindness — round out the luxuries. (SLEEP to turn in and end the night · WATCH TV · OPEN FRIDGE · or step onto the BALCONY.)":
+      "Das Balkonzimmer über dem Queen Vic: Holzböden, ein Deckenventilator mit starken Meinungen, und der Balkon selbst — ein Liegestuhl, ein kleiner Tisch und die ganze Soi 6, die unten aufführt wie ein Aquarium, in das jemand ein Radio geworfen hat. Ein festes Doppelbett füllt den Rest des Zimmers — das Neon lässt nie ganz von ihm ab, aber die Verdunklungsvorhänge und die Klimaanlage bringen dich hin. Ein Flachbildschirm an der Wand und ein Minikühlschrank in der Ecke — zwei kostenlose Wasser am Tag, die eine Freundlichkeit des Zimmerservice — runden den Luxus ab. (SLEEP zum Schlafengehen und die Nacht beenden · WATCH TV · OPEN FRIDGE · oder tritt auf den BALCONY.)",
+    "Soft sand, folded-up loungers, and the last smear of sunset dying over the sea. Two gray-and-white soi cats hold down the end of a lounger, the big one sitting slightly in front of the small one, both watching the water. The beach road glows to the east; the sand runs north up the shore and narrows south toward the Soi 7 end, where a drinks cart is parked. Your face was in this sand until about a minute ago.":
+      "Weicher Sand, zusammengeklappte Liegen und der letzte Streifen Sonnenuntergang, der überm Meer verglüht. Zwei grau-weiße Soi-Katzen halten das Ende einer Liege besetzt, die große sitzt ein Stück vor der kleinen, beide beobachten das Wasser. Die Strandstraße glüht im Osten; der Sand zieht sich nach Norden die Küste hinauf und verengt sich südlich zum Soi-7-Ende, wo ein Getränkewagen parkt. Dein Gesicht lag bis vor etwa einer Minute in diesem Sand.",
   },
 };
