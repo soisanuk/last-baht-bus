@@ -1707,6 +1707,16 @@ function _doSendMoney(arg) {
     }
     return;
   }
+  // a kept cashier: your gift goes toward outbidding her sponsor. She cracks a selfie
+  // back at each threshold (incl. the one that flips her), and never texts the
+  // cheap-charlie / number-one patter — a quiet thank-you, or the warm post-flip line.
+  if (NPCS[id].type === "sponsor") {
+    if (_sponsorDrip(id)) return;                 // a frame went out (its own CHECK MESSAGES nudge)
+    _pushMsg(id, _sponsorFlipped(id) ? "💗 come see me na, tilac" :
+      amt >= 500 ? "khop khun ka 🙏 you too kind to me" : "thank you na 😊");
+    _say("(📱 A reply lands before you've pocketed the phone.)", "dim");
+    return;
+  }
   _pushMsg(id, amt >= 500 ? "🙏🙏🙏 you TOO good to me. tonight I take care YOU" :
     amt >= 100 ? "khop khun kha!! 💕 you number one" : "55555 cheap Charlie... but sweet 💕");
   _say("(📱 A reply lands before you've pocketed the phone.)", "dim");
@@ -1725,11 +1735,14 @@ function _readMessages() {
     if (msg.photo) {
       // a received selfie: the "📷 " prefix + her known name lets term.js drop her
       // portrait in inline; it also files into the gallery the first time it's read.
-      _say(`📷 ${sender}: «${msg.photo}»`, "thai");
-      if (msg.text) _say(`📱 ${sender}: “${msg.text}”`, "thai");
+      // _L the inner content, not the composed line: the catalog is keyed by the raw
+      // message text (a Taitch lady's drip words translate; everything else falls back
+      // to English). The gallery still files the RAW cap so term.js _picFor can match it.
+      _say(`📷 ${sender}: «${_L(msg.photo)}»`, "thai");
+      if (msg.text) _say(`📱 ${sender}: “${_L(msg.text)}”`, "thai");
       if (!msg.read && typeof _addPhoto === "function") _addPhoto(msg.from, msg.photo);
     } else {
-      _say(`📱 ${sender}: “${msg.text}”`, "thai");
+      _say(`📱 ${sender}: “${_L(msg.text)}”`, "thai");
     }
     if (!msg.read && msg.gives) {
       G.money += msg.gives;
@@ -1848,6 +1861,33 @@ function _maybePhotoText(id) {
   const caps = _selfiesFor(id);
   if (!caps.length) return false;
   _pushMsg(id, "", 0, null, _selfieCap(caps[Math.floor(_rand() * caps.length)]));
+  return true;
+}
+
+// The kept-cashier "loosening" drip. A type:"sponsor" girl (Jenny, Baimon) is off the
+// market — kept clean by a farang's monthly money — until your gifts (G.soc.given)
+// outweigh his and she flips (_sponsorFlipped, SPONSOR_FLIP). On the way there she
+// cracks: each gift-threshold she crosses texts back the next, less-guarded selfie —
+// the wordless "it's working" signal that makes the ฿15k arc discoverable. Needs your
+// number (she texts). A lump sum jumps straight to the highest frame unlocked. Returns
+// true iff a frame went out (the caller then skips its own generic reply). sponsorPix
+// counts frames sent; it rides G.soc, so it resets each vacation with `given`.
+function _sponsorDrip(id) {
+  const n = NPCS[id];
+  if (!n || n.type !== "sponsor") return false;   // NOT gated on flipped: the send that
+  // crosses ฿15k also crosses pic3's ฿14k, so the climax frame must still go out on it.
+  const frames = n.sponsorPics;
+  if (!frames || !frames.length) return false;
+  if (!(G.phone.contacts && G.phone.contacts[id])) return false;   // she texts you — needs the number
+  const given = (G.soc.given && G.soc.given[id]) || 0;
+  const sent = (G.soc.sponsorPix && G.soc.sponsorPix[id]) || 0;
+  let target = sent;
+  while (target < frames.length && given >= frames[target].at) target++;
+  if (target <= sent) return false;
+  const f = frames[target - 1];                          // the highest newly-unlocked frame
+  _pushMsg(id, f.words || "😘", 0, null, f.cap);
+  (G.soc.sponsorPix = G.soc.sponsorPix || {})[id] = target;
+  _say("(📱 She's sent you something. CHECK MESSAGES.)", "dim");
   return true;
 }
 

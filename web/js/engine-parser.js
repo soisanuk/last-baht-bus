@@ -2303,6 +2303,8 @@ function _doTip(arg) {
     _say(`฿${amount} into ${name}'s tip jar. A warm smile, a small wai — noted, ` +
       `filed, appreciated. The big ledger, though, runs on lady drinks. (฿${G.money} left.)`);
   }
+  // a kept cashier you've tipped enough will text a selfie later, if she has your number
+  if (typeof _sponsorDrip === "function") _sponsorDrip(id);
 }
 
 function _doWave(arg) {
@@ -3139,6 +3141,59 @@ function _renderResume() {
   if (G.pendingFare) { _farePrompt(); return; }
 }
 
+// ── The German-phrase Easter egg ─────────────────────────────────────────────
+// An English-speaking punter trying out schoolbook German at one of the three
+// German-speaking ladies (Mercedes/Jenny/Chompoo) gets a witty brush-off, IN
+// character, telling him to stick to English. Typed-only flavour; EN players only
+// (a de-player IS German — he just talks to her, no gag). One-off per attempt.
+const _GERMAN_TRY = new RegExp("\\b(" + [
+  "hallo", "guten\\s+(tag|morgen|abend)", "wie\\s+geht('?s|\\s+es\\s+dir)?",
+  "ich\\s+(liebe|mag|heiße|heisse|bin|möchte|moechte|will|komme|spreche)",
+  "sprichst\\s+du", "sprechen\\s+sie", "kannst\\s+du", "auf\\s+wiedersehen",
+  "tschü(ss|ß)", "danke(\\s+schön|\\s+schoen)?", "bitte(\\s+schön|\\s+schoen)?",
+  "prost", "entschuldigung", "wunderbar", "sehr\\s+(schön|schoen|gut)",
+  "mein\\s+schatz", "schatz", "liebling", "schätzchen", "nein", "jawohl",
+  "natürlich", "natuerlich", "ich\\s+heiße", "wie\\s+heißt\\s+du", "möchtest\\s+du",
+].join("|") + ")\\b", "i");
+const _GERMAN_LADIES = ["mercedes", "jenny", "chompoo"];
+function _germanLadyHere() {
+  const here = _npcsHere();
+  return _GERMAN_LADIES.find(id => here.includes(id)) || null;
+}
+const _GERMAN_QUIP = {
+  // Mercedes — dry, Taitch-English, takes the scissors from the child
+  mercedes: [
+    n => "«Bitte. Genug.» She lifts one flat hand before you can finish. \"Two word from " +
+      "the airplane magazine and suddenly we are cousin. No, tilac. Your German hurt me a " +
+      "little. English — you do it much less bad.\"",
+    n => "Mercedes lets you get all the way to the end, then does not applaud. \"Sehr... " +
+      "brave,\" she says, the way you'd say it about furniture built without the picture. " +
+      "\"English, na. For both of us.\"",
+    n => "\"Nein.\" Kind, final, the tone you'd use taking scissors off a child. \"You keep " +
+      "the German for reading the menu. We talk English, tilac — I like you too much for this.\"",
+  ],
+  // Jenny — warm, delighted, phrasebook-Taitch, merciful
+  jenny: [
+    n => "Jenny presses the back of her hand to her mouth, giggling. \"Aiyoo, your German! 😅 " +
+      "So cute, so wrong. Klaus try Thai ONE time — one — I still laugh at him. Stick English " +
+      "na, sweetheart.\"",
+    n => "\"Oh! You try for me!\" Delighted, then merciful. \"But no. Was like three word in " +
+      "a blender, tilac. English better. I keep the German for Klaus, hah.\"",
+    n => "A warm, helpless laugh. \"Stop, stop — my heart! 😆 That word, I don't even know " +
+      "what you did to it. English, na. You are handsome, don't ruin it.\"",
+  ],
+  // Chompoo — fluent, arch, grades the grammar and finds it wanting
+  chompoo: [
+    n => "She lets you finish, then one corner of her mouth lifts. \"Ach, Schätzchen. That " +
+      "was a valiant little crime against the dative case.\" She pats your hand. \"Stick to " +
+      "English — you are charming in it, and merely tragic in mine.\"",
+    n => "\"Mm. Duolingo owl, four days, quit on a Tuesday?\" Not unkind — a diagnosis. " +
+      "\"Adorable effort. Now say it in English, before the grammar police deport us both, Schatz.\"",
+    n => "One eyebrow climbs, slowly. \"You conjugated that like a man defusing a bomb he does " +
+      "not believe in.\" A slow, delighted smile. \"English, Liebling. Leave the German to the professional.\"",
+  ],
+};
+
 function doCommand(input) {
   if (!G) newGame();
   const raw = _norm(input);
@@ -3266,6 +3321,14 @@ function doCommand(input) {
     return;
   }
   _lastCmd = raw;
+
+  // Easter egg: an English-speaking punter trying German at one of the three
+  // German-speaking ladies gets a witty, in-character "stick to English." A de
+  // player IS German, so it never fires for him. Costs a normal turn.
+  if ((!G.player || G.player.lang !== "de") && _GERMAN_TRY.test(lower)) {
+    const gl = _germanLadyHere();
+    if (gl) { _say(_pickVary(_GERMAN_QUIP[gl], "germanquip_" + gl)(NPCS[gl].name)); _tick(); return; }
+  }
 
   // A live conversation's action-choice, matched EXACTLY by its label or number
   // (a chip tap submits the label), beats verb parsing — otherwise a choice like

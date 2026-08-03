@@ -189,7 +189,7 @@ const _term = (() => {
     try {
       const n = NPCS[id];
       if (!n || !cap) return null;
-      for (const pool of [n.paidPics, n.selfies]) {
+      for (const pool of [n.paidPics, n.selfies, n.sponsorPics]) {
         if (!Array.isArray(pool)) continue;
         for (const e of pool) {
           const c = typeof e === "string" ? e : (e && e.cap);
