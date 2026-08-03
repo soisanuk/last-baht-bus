@@ -281,5 +281,33 @@ const _CATALOGS = {
 
     "\"Not married. Not yet.\" She turns it. \"Promise ring. He say when he retire he take me Germany, we marry proper. I believe him. Mostly.\" The 'mostly' escapes before she can stop it, and she files it away, embarrassed. \"He is a good man. Really. Two year, always the money come.\"":
       "\"Nicht verheirat. Noch nicht.\" Sie dreht ihn. \"Versprechensring. Er sag, wenn er Rente, er nimm mich Deutschland, wir heirat richtig. Ich glaub ihm. Meistens.\" Das 'meistens' entwischt, bevor sie es stoppen kann, und sie legt es beschämt weg. \"Er ist guter Mann. Wirklich. Zwei Jahr, immer kommt Geld.\"",
+
+    // ── TIME (the clock readout) — first line via _fmt, the rest fixed ────────
+    // The {clock}/{weekday}/{day} template is filled by _fmt (word-order-safe).
+    "{clock}, {weekday} — day {day} of 7.": "{clock}, {weekday} — Tag {day} von 7.",
+    "{clock}, {weekday} — day {day} of the rest of your life.":
+      "{clock}, {weekday} — Tag {day} vom Rest deines Lebens.",
+    // weekdays (fed through _L inside the template fill)
+    "Sunday": "Sonntag", "Monday": "Montag", "Tuesday": "Dienstag",
+    "Wednesday": "Mittwoch", "Thursday": "Donnerstag", "Friday": "Freitag",
+    "Saturday": "Samstag",
+    // quiz-night status
+    "(Quiz night tonight: 20:00–22:00, three bars, teachers in from Rayong.)":
+      "(Heute Quiznight: 20:00–22:00, drei Bars, Lehrer aus Rayong angereist.)",
+    "(Quiz night is ON somewhere right now.)": "(Quiznight läuft gerade irgendwo.)",
+    "(Quiz night has been and gone.)": "(Quiznight war und ist vorbei.)",
+    // barfine-rate status
+    "(Early doors: barfines run ×1.5 until 21:00.)":
+      "(Frühschicht: Barfines kosten ×1,5 bis 21:00.)",
+    "(Past midnight: most beer bars have quietly dropped the barfine.)":
+      "(Nach Mitternacht: die meisten Bierbars haben die Barfine still fallen lassen.)",
+    "(Prime time. Standard rates apply.)": "(Hauptzeit. Es gelten die Standardpreise.)",
+    // last-baht-bus status (the titular tension)
+    "(The last baht bus has gone — it's the piwin's small-hours tax or shoe leather home now.)":
+      "(Der letzte Baht-Bus ist weg — jetzt heißt es Piwin-Nachttarif oder zu Fuß nach Haus.)",
+    "(Last baht bus around 2 a.m. — the ฿15 ride home is nearly up.)":
+      "(Letzter Baht-Bus gegen 2 Uhr — die ฿15-Fahrt nach Haus ist fast vorbei.)",
+    "(Baht buses running: ฿15 the ride home until the last one, ~2 a.m.)":
+      "(Baht-Busse fahren: ฿15 nach Haus bis zum letzten, ~2 Uhr.)",
   },
 };

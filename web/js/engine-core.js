@@ -46,6 +46,16 @@ function _L(s) {
   return hit != null ? hit : s;
 }
 
+// Localised string interpolation: for a line whose values are spliced in at
+// runtime (money, clock, counts), a flat source-string catalog can't match the
+// composed result. Author it as an English TEMPLATE with {named} placeholders,
+// catalogue that template (the German value can reorder the placeholders for word
+// order), and fill it here. English fallback when the template isn't catalogued.
+//   _say(_fmt("day {day} of 7.", { day: G.day }))
+function _fmt(en, params) {
+  return _L(en).replace(/\{(\w+)\}/g, (m, k) => (params && params[k] != null) ? params[k] : m);
+}
+
 function _say(text, cls) {
   _learnNames(text); // name/Thai harvest run on the ENGLISH source (language-independent)
   // collect the Thai the night shows you (capped, deduped) — the trainer

@@ -2166,8 +2166,11 @@ function _doBandTalk() {
 }
 
 function _doTime() {
-  _say(`${_clockStr()}, ${_weekday()} — day ${G.day}` +
-    (G.stage === "expat" ? " of the rest of your life." : " of 7."));
+  _say(G.stage === "expat"
+    ? _fmt("{clock}, {weekday} — day {day} of the rest of your life.",
+        { clock: _clockStr(), weekday: _L(_weekday()), day: G.day })
+    : _fmt("{clock}, {weekday} — day {day} of 7.",
+        { clock: _clockStr(), weekday: _L(_weekday()), day: G.day }));
   const t = G.nightTurn;
   if (_quizDay()) {
     _say(t < 20 ? "(Quiz night tonight: 20:00–22:00, three bars, teachers in from Rayong.)" :
