@@ -1550,7 +1550,8 @@ function _doQuests() {
       _say(`  ${_flag(f) ? "✓" : "·"} ${label}`, "dim");
     }
     shown++;
-  } else if (_flag("act1Done")) {
+  } else if (_flag("act1Done") && G.mode !== "soi6") {
+    // soi6 mode force-sets act1Done but never plays Act One — no wallet, no score
     _say(`✓ The Last Baht Bus — Act One, scored ${G.score}`, "dim");
     shown++;
   }
