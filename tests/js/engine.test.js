@@ -2604,7 +2604,10 @@ test("the taxi intro picks who you are (origin/personality/orientation), then op
   engineIntro();
   assert.equal(state().pendingChoice, "intro", "the ride in gates the game");
   assert.match(lastOut(), /Tan/, "Tan is driving");
-  assert.match(lastOut(), /homicide detective/, "the origins are offered");
+  assert.match(lastOut(), /what do you think in|English/i, "he settles your language first");
+  run("1");                                   // English
+  assert.equal(state().player.lang, "en", "language recorded");
+  assert.match(lastOut(), /homicide detective/, "then the origins are offered");
   run("4");                                   // the detective
   assert.match(lastOut(), /ask questions for a living/, "Tan reads you back");
   run("3");                                   // blunt
@@ -2644,7 +2647,7 @@ test("all seven origin archetypes are NPCs on Soi 6, each deactivated by its own
 test("Tan the driver: known from the intro, a hub whose knowingness escalates with the clues you gather", () => {
   // you rode in with him — he's a findable NPC at the soi mouth, no stranger
   state().player.origin = null; out = [];
-  startSoi6Mode(); run("7"); run("1"); run("1");   // monger / charmer / straight
+  startSoi6Mode(); run("1"); run("7"); run("1"); run("1");   // English / monger / charmer / straight
   assert.ok(state().known.tan, "you know Tan after the taxi ride");
   assert.equal(_npcRoom("tan"), "soi6_street", "he's at the mouth of Soi 6");
 
@@ -2780,7 +2783,7 @@ test("the taxi intro gates Soi 6 mode too, then opens the week", () => {
   startSoi6Mode();
   assert.equal(state().pendingChoice, "intro");
   assert.equal(state().introAfter, "soi6", "it will open the soi-6 week, not the beach");
-  run("7"); run("1"); run("1");               // monger / charmer / straight
+  run("1"); run("7"); run("1"); run("1");     // English / monger / charmer / straight
   assert.equal(state().pendingChoice, null);
   assert.equal(state().mode, "soi6");
   assert.equal(state().room, "qv_room");

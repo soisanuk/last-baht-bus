@@ -1,0 +1,85 @@
+// Localization tests: the _L translation seam, the taxi-intro language pick, and
+// English fallback. Loads lang.js (the German catalog) alongside the engine.
+import { test, beforeEach } from "node:test";
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import vm from "node:vm";
+
+for (const f of ["thai.js", "world.js", "games.js", "lang.js", "engine-core.js",
+  "engine-encounters.js", "engine-play.js", "engine-systems.js", "engine-parser.js"]) {
+  vm.runInThisContext(
+    readFileSync(fileURLToPath(new URL(`../../web/js/${f}`, import.meta.url)), "utf8"),
+    { filename: f });
+}
+
+let out = [];
+engineInit((t) => out.push(t), null, () => {});
+function run(...cmds) { for (const c of cmds) doCommand(c); }
+function lastOut() { return out.join("\n"); }
+function state() { return G; }
+beforeEach(() => { out = []; newGame(); });
+
+test("_L: default en is a passthrough; a de catalog hit translates; a de miss falls back", () => {
+  assert.equal(state().player.lang, "en", "fresh game defaults to English");
+  assert.equal(_L("(Pick a number.)"), "(Pick a number.)", "en → the source string, untouched");
+  state().player.lang = "de";
+  assert.equal(_L("(Pick a number.)"), "(Wähl eine Zahl.)", "de → the catalogued German");
+  assert.equal(_L("a line nobody has translated yet"), "a line nobody has translated yet",
+    "an un-catalogued string falls back to English (partial coverage still runs)");
+});
+
+test("the taxi intro asks language first, in English", () => {
+  _taxiIntro("beach");
+  assert.equal(state().pendingChoice, "intro");
+  assert.equal(state().introStep, 0, "language is step 0");
+  const o = lastOut();
+  assert.match(o, /what do you think in/i, "Tan asks your language, in English");
+  assert.match(o, /1\) English/, "and English is the first option");
+  assert.match(o, /2\) Deutsch/, "with Deutsch offered");
+});
+
+test("picking Deutsch renders the rest of the intro in German", () => {
+  _taxiIntro("beach");
+  out = [];
+  run("2");                              // Deutsch
+  assert.equal(state().player.lang, "de", "language recorded on G.player");
+  const o = lastOut();
+  assert.match(o, /Ab hier in deiner Sprache/, "Tan acknowledges the switch, in German");
+  assert.match(o, /Was ist deins\?/, "the origin question is German");
+  assert.match(o, /Mordkommission/, "the origin options are German");
+  assert.match(o, /\(Wähl eine Zahl\.\)/, "the number prompt is German");
+  assert.doesNotMatch(o, /Pick a number|homicide detective/, "no English leaks into the German turn");
+});
+
+test("picking English keeps the intro English (the fallback path is a no-op)", () => {
+  _taxiIntro("beach");
+  out = [];
+  run("1");                              // English
+  assert.equal(state().player.lang, "en");
+  const o = lastOut();
+  assert.match(o, /story back home|homicide detective/i, "still English");
+  assert.doesNotMatch(o, /Mordkommission|Wähl eine Zahl/, "no German when English is chosen");
+});
+
+test("a German intro still opens into (as-yet-untranslated) English game prose — graceful partial coverage", () => {
+  _taxiIntro("beach");
+  run("2");        // Deutsch
+  run("4");        // detective
+  run("3");        // blunt
+  out = [];
+  run("2");        // open-minded — completes the intro, opens the beach
+  assert.equal(state().pendingChoice, null, "the intro closed");
+  // the drop-off beat IS translated; the beach opening beyond it is not yet, and
+  // that's fine — it falls back to English rather than breaking.
+  assert.match(lastOut(), /Portemonnaie/, "Tan's drop-off line came through in German");
+});
+
+test("G.player.lang survives a save/restore round-trip", () => {
+  state().player.lang = "de";
+  const blob = serializeGame();
+  newGame();
+  assert.equal(state().player.lang, "en", "a fresh game is English");
+  deserializeGame(blob);
+  assert.equal(state().player.lang, "de", "the saved language is restored");
+});

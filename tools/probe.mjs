@@ -24,7 +24,7 @@ import vm from "node:vm";
 import fs from "node:fs";
 
 const JS = new URL("../web/js/", import.meta.url);
-const FILES = ["thai", "world", "games", "engine-core", "engine-encounters",
+const FILES = ["thai", "world", "games", "lang", "engine-core", "engine-encounters",
   "engine-play", "engine-systems", "engine-parser"];
 for (const f of FILES)
   vm.runInThisContext(fs.readFileSync(new URL(f + ".js", JS), "utf8"), { filename: f });

@@ -2839,7 +2839,7 @@ function _chipSet() {
   // 1) A pending modal owns the input — offer only its answers
   if (G.pendingChoice === "intro") {
     const step = _INTRO_STEPS[G.introStep || 0];
-    if (step) step.table().forEach((e, i) => add(String(i + 1), e.label));
+    if (step) step.table().forEach((e, i) => add(String(i + 1), _L(e.label)));
     return chips;
   }
   if (G.pendingChoice === "vacation_end") {
@@ -3641,6 +3641,8 @@ function _beachOpening(withTitle) {
 // then drops you on Soi 6 and the day-two beach opening follows. Picks land in
 // G.player and persist across resets (set once — see _act1Fail / RESTART).
 const _INTRO_STEPS = [
+  { field: "lang", table: () => LANGUAGES,
+    q: "\"First, so I know how to talk to you—\" a tap of the temple, eyes still on the road. \"—what do you think in? I'll set the rest of the ride to match.\"" },
   { field: "origin", table: () => ORIGINS,
     q: "\"So — what's the story back home?\" A glance in the mirror. \"Everybody on this drive is leaving something behind. What's yours?\"" },
   { field: "personality", table: () => PERSONALITIES,
@@ -3674,8 +3676,8 @@ function _taxiIntro(after) {
 function _introPrompt() {
   const step = _INTRO_STEPS[G.introStep || 0];
   if (!step) return;
-  _say(step.q);
-  _say(step.table().map((e, i) => `${i + 1}) ${e.pick}`).join("\n"), "dim");
+  _say(step.q); // _say translates fixed strings; the option list is interpolated, so _L each pick
+  _say(step.table().map((e, i) => `${i + 1}) ${_L(e.pick)}`).join("\n"), "dim");
   _say("(Pick a number.)", "dim");
 }
 
