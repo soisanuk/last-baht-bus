@@ -4942,16 +4942,16 @@ const NPCS = {
 
   mercedes: {
     name: "Mercedes", th: "เมอร์เซเดส", emoji: "❄️",
-    room: "gold_rush",
-    desc: "A little older than the Gold Rush's other girls and a great deal less " +
+    room: "cherry_pop",
+    desc: "A little older than the other girls here and a great deal less " +
       "nervous — she moves like someone who has already seen the worst a room can " +
       "do to a person. Her English is good, with a flat European edge the soi " +
       "doesn't usually carry.",
     dialogue: [
-      { bond: 3, text: "\"You keep coming back to the Gold Rush for ME — the paint is not " +
+      { bond: 3, text: "\"You keep coming back to Cherry Pop for ME — the neon is not " +
           "that charming, we both know it.\" For once Mercedes lets the dry line land soft. " +
           "\"After Munich I made myself one promise: no more man I have to manage. And here " +
-          "is you — needing no managing, buying the paint-bar girl her drink like it is " +
+          "is you — needing no managing, buying the old girl at the loud bar her drink like it is " +
           "Vienna. Don't make me like you, farang. I am badly out of practice.\"",
         short: "\"Don't make me like you, farang. I'm badly out of practice.\"" },
       { bond: 2, text: "\"Sit — the good stool, I saved it.\" Mercedes slides your drink over " +
@@ -4959,10 +4959,10 @@ const NPCS = {
           "a question and then waits for the answer. It is a low bar, I know. Munich was lower.\"",
         short: "\"You ask a question and wait for the answer. Low bar. Munich was lower.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
-        text: "\"Welcome to the Gold Rush.\" A small, real smile. \"The gold is " +
-          "paint — Nong will tell you, she cannot help herself. Sit. I am Mercedes. " +
-          "Yes, like the car. I had one in the driveway in Munich and never once " +
-          "the keys. Now I keep the name and skip the car.\"",
+        text: "\"Welcome to Cherry Pop.\" A small, real smile. \"Loud, pink, entirely " +
+          "a machine — but the drinks are cold and I do not lie to you, which on this soi " +
+          "is a luxury. Sit. I am Mercedes. Yes, like the car. I had one in the driveway " +
+          "in Munich and never once the keys. Now I keep the name and skip the car.\"",
         short: "\"Mercedes — like the car. Kept the name, skipped the car. Sit, tilac.\"" },
       { topic: "german", text: "\"Germany. Five years, Munich. Big house, a car, the " +
           "health insurance — everything the brochure promise.\" She turns a coaster " +
@@ -4999,13 +4999,13 @@ const NPCS = {
           "home, I buy Nong her dinner; when it is zero, mai pen rai, I earn again. That " +
           "is not being poor. That is being free of the counting.\"",
         short: "\"Money is rain — comes, goes, I send it home. In Munich the counting made me small.\"" },
-      { topic: "nong", text: "\"Nong?\" She glances at the trembling new girl with " +
-          "something almost maternal. \"First week. Scared of the door, scared of " +
-          "Mamasan, scared of the paint. I was her, fifteen years ago, a go-go on Soi " +
-          "6.\" A softer smile. \"Somebody should tell her the worst thing that happen " +
-          "is you go all the way to Munich and come back. Not so bad, in the end. I keep " +
-          "an eye on her.\"",
-        short: "\"Nong is me, fifteen years ago. I keep an eye on her.\"" },
+      { topic: "nong", text: "\"Nong? The trembling one over at the Gold Rush.\" Something " +
+          "almost maternal crosses her face. \"I worked that bar before this one — first " +
+          "week she was, scared of the door, scared of Mamasan, scared of everything. I was " +
+          "her, fifteen years ago, a go-go on Soi 6.\" A softer smile. \"Somebody should " +
+          "tell her the worst thing that happen is you go all the way to Munich and come " +
+          "back. Not so bad, in the end. I still keep an eye out, from here.\"",
+        short: "\"Nong, over at the Gold Rush — I was her, fifteen years ago. I keep an eye out.\"" },
     ],
   },
 
