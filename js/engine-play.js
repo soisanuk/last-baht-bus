@@ -1051,126 +1051,88 @@ function _kickOut() {
 // Each reachable (kind × tier) slot is a small pool, drawn via _pickVary so the
 // warm-up grind (repeated at the same tier while favour builds) doesn't wear a
 // groove. flirt[0]/[1] stay null — SEV.flirt is 0, so flirt never drops that low.
+// _fmt templates ({n}=name). EN output is byte-identical to the old interpolations;
+// the German catalog reorders {n} as needed. Call site (fn(name)) is unchanged.
 const _SOCIAL_TEXT = {
   flirt: [
     null, null,
     [
-      n => `${n} receives your best line with the professional warmth of a woman ` +
-        "who has heard nine thousand better ones tonight alone. “Ooo, so sweet, na.”",
-      n => `${n} tilts her head, gives your line a two-second appraisal, and files it ` +
-        "under harmless. “You funny man. Buy me drink, funny man.”",
+      n => _fmt("{n} receives your best line with the professional warmth of a woman who has heard nine thousand better ones tonight alone. “Ooo, so sweet, na.”", { n }),
+      n => _fmt("{n} tilts her head, gives your line a two-second appraisal, and files it under harmless. “You funny man. Buy me drink, funny man.”", { n }),
     ],
     [
-      n => `${n} laughs for real this time, touches your arm, and tells you ` +
-        "something genuinely rude about the man at the end of the bar. Progress.",
-      n => `${n} actually snorts, covers it, and leans an inch closer than the job ` +
-        "requires. For a second the meter isn't running. Then it is again — but you saw it.",
+      n => _fmt("{n} laughs for real this time, touches your arm, and tells you something genuinely rude about the man at the end of the bar. Progress.", { n }),
+      n => _fmt("{n} actually snorts, covers it, and leans an inch closer than the job requires. For a second the meter isn't running. Then it is again — but you saw it.", { n }),
     ],
     [
-      n => `${n} slides onto the stool beside you, steals a sip of your drink, and ` +
-        "starts flirting back with alarming professionalism. The other girls exchange looks.",
-      n => `${n} decides you'll do for the night and turns the full wattage on — knee ` +
-        "against yours, laughing before you finish the joke. The other girls give you up for lost.",
+      n => _fmt("{n} slides onto the stool beside you, steals a sip of your drink, and starts flirting back with alarming professionalism. The other girls exchange looks.", { n }),
+      n => _fmt("{n} decides you'll do for the night and turns the full wattage on — knee against yours, laughing before you finish the joke. The other girls give you up for lost.", { n }),
     ],
   ],
   kiss: [
     [
-      n => `You lean in. ${n} leans back — the full matador. The kiss lands on ` +
-        "ambient air; a slap lands on you, precisely, like punctuation. The bar notices.",
-      n => `You go for it; ${n} simply isn't there. Where her face was is a flat palm ` +
-        "and a look that could curdle Chang. “No.” Just the one word, and the bar heard it.",
+      n => _fmt("You lean in. {n} leans back — the full matador. The kiss lands on ambient air; a slap lands on you, precisely, like punctuation. The bar notices.", { n }),
+      n => _fmt("You go for it; {n} simply isn't there. Where her face was is a flat palm and a look that could curdle Chang. “No.” Just the one word, and the bar heard it.", { n }),
     ],
     [
-      n => `${n} presents a cheek at the last microsecond — professional deflection, ` +
-        "executed with the footwork of a woman who has dodged far better. “Buy drink first, tilac.”",
-      n => `${n} turns the kiss into a hug you didn't ask for and a laugh that closes ` +
-        "the subject. “Slow, tilac. You want everything free tonight?”",
+      n => _fmt("{n} presents a cheek at the last microsecond — professional deflection, executed with the footwork of a woman who has dodged far better. “Buy drink first, tilac.”", { n }),
+      n => _fmt("{n} turns the kiss into a hug you didn't ask for and a laugh that closes the subject. “Slow, tilac. You want everything free tonight?”", { n }),
     ],
     [
-      n => `A quick peck is permitted, the way one permits a puppy on a sofa. ` +
-        `${n} pats your cheek: “Okay, okay. Sanuk.”`,
-      n => `A brief kiss is granted, then withdrawn like a sample. ${n} taps your nose. ` +
-        "“Enough. You greedy.”",
+      n => _fmt("A quick peck is permitted, the way one permits a puppy on a sofa. {n} pats your cheek: “Okay, okay. Sanuk.”", { n }),
+      n => _fmt("A brief kiss is granted, then withdrawn like a sample. {n} taps your nose. “Enough. You greedy.”", { n }),
     ],
     [
-      n => `${n} allows it — and takes her time about it. The cashier rings the ` +
-        "till just to make a noise.",
-      n => `${n} meets you halfway and holds it a beat past friendly. When she pulls ` +
-        "back she's smiling at something she's decided not to tell you.",
+      n => _fmt("{n} allows it — and takes her time about it. The cashier rings the till just to make a noise.", { n }),
+      n => _fmt("{n} meets you halfway and holds it a beat past friendly. When she pulls back she's smiling at something she's decided not to tell you.", { n }),
     ],
     [
-      n => `${n} kisses YOU, decisively, to a smattering of applause from the far ` +
-        "end of the bar. You are now, officially, sitting with her.",
-      n => `${n} takes your face in both hands and kisses you like she means the ` +
-        "version of it she's selling. A glass goes up down the bar. You're hers for the night.",
+      n => _fmt("{n} kisses YOU, decisively, to a smattering of applause from the far end of the bar. You are now, officially, sitting with her.", { n }),
+      n => _fmt("{n} takes your face in both hands and kisses you like she means the version of it she's selling. A glass goes up down the bar. You're hers for the night.", { n }),
     ],
   ],
   spank: [
     [
-      n => `${n} catches your wrist mid-air with a speed that suggests long practice, ` +
-        "and the look she gives you drops the bar five degrees. Somewhere behind you, " +
-        "security uncrosses its arms.",
-      n => `Your hand doesn't get halfway. ${n} steps out of range without appearing to ` +
-        "move, and the temperature around you drops. A large man near the door stops chewing.",
+      n => _fmt("{n} catches your wrist mid-air with a speed that suggests long practice, and the look she gives you drops the bar five degrees. Somewhere behind you, security uncrosses its arms.", { n }),
+      n => _fmt("Your hand doesn't get halfway. {n} steps out of range without appearing to move, and the temperature around you drops. A large man near the door stops chewing.", { n }),
     ],
     [
-      n => `${n} sidesteps neatly. “Uh-uh. You not buy enough drink for that, tilac.” ` +
-        "The mamasan's eyes flick your way like a till drawer closing.",
-      n => `${n} pivots and your hand meets air. “Aht aht. That one cost more than you ` +
-        "spend so far, tilac.” The till drawer of her eyes slides shut.",
+      n => _fmt("{n} sidesteps neatly. “Uh-uh. You not buy enough drink for that, tilac.” The mamasan's eyes flick your way like a till drawer closing.", { n }),
+      n => _fmt("{n} pivots and your hand meets air. “Aht aht. That one cost more than you spend so far, tilac.” The till drawer of her eyes slides shut.", { n }),
     ],
     [
-      n => `A token swat is absorbed with an eye-roll and precisely zero sincerity. ` +
-        `“Hundred-fifty baht says you can try again, na.”`,
-      n => `A glancing swat lands and is filed with an unimpressed hum. “Mm. Buy two ` +
-        "more drink, maybe I let you.” She's joking. Mostly.",
+      n => _fmt("A token swat is absorbed with an eye-roll and precisely zero sincerity. “Hundred-fifty baht says you can try again, na.”", { n }),
+      n => _fmt("A glancing swat lands and is filed with an unimpressed hum. “Mm. Buy two more drink, maybe I let you.” She's joking. Mostly.", { n }),
     ],
     [
-      n => `${n} yelps theatrically, laughs, and returns fire twice as hard. ` +
-        "Yours was a swat; hers is a correction.",
-      n => `${n} jumps, laughs, and retaliates immediately and harder, to whoops from ` +
-        "the next stool. You started a war you are structurally guaranteed to lose.",
+      n => _fmt("{n} yelps theatrically, laughs, and returns fire twice as hard. Yours was a swat; hers is a correction.", { n }),
+      n => _fmt("{n} jumps, laughs, and retaliates immediately and harder, to whoops from the next stool. You started a war you are structurally guaranteed to lose.", { n }),
     ],
     [
-      n => `${n} struts past deliberately slowly — then spanks YOU on the way back, ` +
-        "to a roar from the entire bar. You have been out-Pattaya'd.",
-      n => `${n} lets it happen, turns, and returns the favour with interest and a wink, ` +
-        "timing it for the exact moment the whole bar is looking. The applause is for her.",
+      n => _fmt("{n} struts past deliberately slowly — then spanks YOU on the way back, to a roar from the entire bar. You have been out-Pattaya'd.", { n }),
+      n => _fmt("{n} lets it happen, turns, and returns the favour with interest and a wink, timing it for the exact moment the whole bar is looking. The applause is for her.", { n }),
     ],
   ],
   fondle: [
     [
-      n => `Your hand sets off in a direction it has no visa for. ${n} removes it ` +
-        "like a bomb-disposal expert, and the smile she keeps on while doing it is " +
-        "the scariest thing you've seen tonight.",
-      n => `Your hand embarks; ${n} intercepts it at the border and hands it back, still ` +
-        "smiling — the smile of a woman who has ended men for less and found it tedious.",
+      n => _fmt("Your hand sets off in a direction it has no visa for. {n} removes it like a bomb-disposal expert, and the smile she keeps on while doing it is the scariest thing you've seen tonight.", { n }),
+      n => _fmt("Your hand embarks; {n} intercepts it at the border and hands it back, still smiling — the smile of a woman who has ended men for less and found it tedious.", { n }),
     ],
     [
-      n => `${n} intercepts your hand and returns it to your own knee, patting it ` +
-        "twice — stay. “Naughty hands drink more first, na.”",
-      n => `${n} lifts your wandering hand by the wrist, sets it on the bar, and puts ` +
-        "her cold drink in it. “Hold this. Safer.”",
+      n => _fmt("{n} intercepts your hand and returns it to your own knee, patting it twice — stay. “Naughty hands drink more first, na.”", { n }),
+      n => _fmt("{n} lifts your wandering hand by the wrist, sets it on the bar, and puts her cold drink in it. “Hold this. Safer.”", { n }),
     ],
     [
-      n => `${n} tolerates approximately 1.5 seconds of wandering hand before ` +
-        "redirecting it to the Connect 4 box. “Play this instead.”",
-      n => `${n} allows the scenic route for exactly as long as it amuses her, then ` +
-        "redirects your hand to your own beer. “Drink. Cool down, tilac.”",
+      n => _fmt("{n} tolerates approximately 1.5 seconds of wandering hand before redirecting it to the Connect 4 box. “Play this instead.”", { n }),
+      n => _fmt("{n} allows the scenic route for exactly as long as it amuses her, then redirects your hand to your own beer. “Drink. Cool down, tilac.”", { n }),
     ],
     [
-      n => `${n} settles in closer and lets the moment linger just past professional. ` +
-        "The mamasan develops an intense interest in the till.",
-      n => `${n} doesn't move your hand away this time — just raises an eyebrow that sets ` +
-        "a price, and settles closer while you decide whether to pay it.",
+      n => _fmt("{n} settles in closer and lets the moment linger just past professional. The mamasan develops an intense interest in the till.", { n }),
+      n => _fmt("{n} doesn't move your hand away this time — just raises an eyebrow that sets a price, and settles closer while you decide whether to pay it.", { n }),
     ],
     [
-      n => `${n} takes both your hands, inspects them like market produce, and puts ` +
-        "them where she wants them — around her waist, while she orders herself " +
-        "another lady drink on your tab. Checkmate, but you don't mind.",
-      n => `${n} sighs, gives up the pretence, and arranges you around her like furniture ` +
-        "she's chosen — then orders herself another lady drink on your tab, because " +
-        "winning shouldn't be free.",
+      n => _fmt("{n} takes both your hands, inspects them like market produce, and puts them where she wants them — around her waist, while she orders herself another lady drink on your tab. Checkmate, but you don't mind.", { n }),
+      n => _fmt("{n} sighs, gives up the pretence, and arranges you around her like furniture she's chosen — then orders herself another lady drink on your tab, because winning shouldn't be free.", { n }),
     ],
   ],
 };

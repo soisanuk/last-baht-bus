@@ -204,6 +204,39 @@ const _CATALOGS = {
     "The east end of the soi, past the quieter middle, where the bars run on toward Second Road and the volume comes roaring back. KITTEN CORNER, CHERRY POP BAR, and RUBY KISS BAR trade wrist-grabs down this stretch — same open ground-floor fronts, same three-colour neon, same staircases behind the bar the menu doesn't mention, and the same foam pool noodles that find your ribs if you try to walk on by.":
       "Das Ostende der Soi, hinter der ruhigeren Mitte, wo die Bars weiter zur Second Road hin laufen und die Lautstärke brüllend zurückkommt. KITTEN CORNER, CHERRY POP BAR und RUBY KISS BAR tauschen auf diesem Stück Handgelenk-Griffe aus — dieselben offenen Erdgeschossfronten, dasselbe dreifarbige Neon, dieselben Treppen hinter der Bar, die die Karte nicht erwähnt, und dieselben Schaumstoff-Poolnudeln, die deine Rippen finden, wenn du versuchst vorbeizugehen.",
 
+    // ── Soi 6 bar interiors (the 7 bars + 3 beer bars you enter on the strip) ─
+    // Venue names (Pink Lotus Lounge, The Shady Lady…), character names, CAPS
+    // commands (ORCHID ROOM, GO BACK), and brands (Blue Label) stay as-is.
+    "A beer bar in the quiet middle of Soi 6, deliberately set back under a low awning and a stand of potted palms — shade, in both senses. A long rail faces the soi so the regulars can watch the parade go past without being in it. Pukky pours without being asked and misses nothing that happens on the pavement.":
+      "Eine Bierbar in der ruhigen Mitte der Soi 6, bewusst zurückgesetzt unter einer niedrigen Markise und einer Reihe Topfpalmen — Schatten, in beiderlei Sinn. Ein langer Tresen zeigt zur Soi, damit die Stammgäste die Parade vorbeiziehen sehen, ohne selbst mittendrin zu sein. Pukky schenkt nach, ohne gefragt zu werden, und ihr entgeht nichts, was auf dem Gehsteig passiert.",
+
+    "A beer bar that leans all the way into what the middle of Soi 6 is good for: a row of stools pulled right up to the open front, angled at the soi like theatre seating. The house joke is a laminated 'SHOW TIMES' card that just reads ALL NIGHT. Somo keeps the cooler cold and the running commentary warm.":
+      "Eine Bierbar, die voll auf das setzt, wofür die Mitte der Soi 6 gut ist: eine Reihe Hocker direkt an die offene Front gezogen, zur Soi ausgerichtet wie Theatersitze. Der Hauswitz ist eine laminierte 'SHOW TIMES'-Karte, auf der nur ALL NIGHT steht. Somo hält den Kühler kalt und den laufenden Kommentar warm.",
+
+    "The calmest front on Soi 6: a raised wooden deck a step up off the pavement, a rail, a couple of lazy fans, and enough of a threshold that the soi's aggressive lady-pullers don't bother climbing it. Nina brings the beer to your chair so you never have to give up the good seat.":
+      "Die ruhigste Front der Soi 6: ein erhöhtes Holzdeck, eine Stufe über dem Gehsteig, ein Geländer, ein paar träge Ventilatoren, und gerade genug Schwelle, dass die aggressiven Lady-Puller der Soi sich das Hochsteigen sparen. Nina bringt das Bier an deinen Stuhl, damit du den guten Platz nie aufgeben musst.",
+
+    "White Dish's flagship, and the loudest argument for why the group should not be allowed nice things. The front is open to the street; half the bar is technically the pavement. Neon tubes frame the sign in three colours simultaneously. Inside, the pink is structural — walls, barstools, the girls' outfits, arguably the air itself. Joy is already talking before you sit down. A staircase at the back climbs to the short-time rooms; beside it, a velvet-roped, unmarked door leads to the ORCHID ROOM — the group's members-only back room, and very much not for tonight's walk-up trade. (GO BACK, if you think you're on the list.)":
+      "White Dishs Flaggschiff, und das lauteste Argument dafür, warum man der Gruppe keine schönen Dinge anvertrauen sollte. Die Front ist offen zur Straße; die halbe Bar ist streng genommen Gehsteig. Neonröhren rahmen das Schild in drei Farben gleichzeitig. Drinnen ist das Pink strukturell — Wände, Barhocker, die Outfits der Mädchen, wohl auch die Luft selbst. Joy redet schon, bevor du dich setzt. Eine Treppe hinten führt hinauf zu den Kurzzeit-Zimmern; daneben führt eine samtbeseilte, unbeschriftete Tür zum ORCHID ROOM — dem Members-only-Hinterzimmer der Gruppe, und ganz sicher nichts für die Laufkundschaft von heute Abend. (GO BACK, falls du glaubst, du stehst auf der Liste.)",
+
+    "The name is the last classy thing about it. Ryan Powers wanted a members' club — leather, low light, single malt, discretion — and got a bacchanal, because the room curdled to match its owner. The 'hostesses' start the night topless and end it well past that; the low light is a strobe; the discretion is a joke told at volume. The clientele is the soi's real economy: high rollers who tip in colours the pavement trade never sees, and at the corner tables the men the monthly envelope actually pays — a patched MC president holding court over a bottle of Blue Label, and, at the best table in the room, a soft-spoken Thai man in an unremarkable shirt whom everyone, the MC president included, is very careful to defer to. On a raised banquette at the back, filming himself over all of it, is Ryan Powers — actually, improbably, down tonight.":
+      "Der Name ist das letzte Stück Klasse daran. Ryan Powers wollte einen Members' Club — Leder, gedämpftes Licht, Single Malt, Diskretion — und bekam ein Bacchanal, weil der Raum verdarb, bis er zu seinem Besitzer passte. Die 'Hostessen' beginnen den Abend oben ohne und enden ihn deutlich darüber hinaus; das gedämpfte Licht ist ein Stroboskop; die Diskretion ist ein laut erzählter Witz. Die Klientel ist die wahre Ökonomie der Soi: Highroller, die in Farben Trinkgeld geben, die das Straßengeschäft nie zu sehen bekommt, und an den Ecktischen die Männer, die der monatliche Umschlag wirklich bezahlt — ein MC-Präsident mit Kutte, der bei einer Flasche Blue Label Hof hält, und, am besten Tisch im Raum, ein leise sprechender Thai in einem unscheinbaren Hemd, dem alle, den MC-Präsidenten eingeschlossen, sehr sorgfältig den Vortritt lassen. Auf einer erhöhten Bank hinten, sich selbst über allem filmend, sitzt Ryan Powers — tatsächlich, wider Erwarten, heute Abend da.",
+
+    "Open-fronted, louder than you expected from outside, which is saying something. The gold dragon above the bar was hand-painted by someone's cousin and has been there longer than most of the staff. Vintage Thai pop on the speakers — not the jukebox, it died in 2019, but the playlist is a faithful tribute. Nobody has updated it and nobody has complained. Pia keeps the bar — and the dead jukebox's memory — with a flat, unbothered calm.":
+      "Nach vorn offen, lauter als von außen erwartet, was etwas heißen will. Der goldene Drache über der Bar wurde von irgendjemandes Cousin von Hand gemalt und hängt dort länger als die meisten Angestellten. Alter Thai-Pop aus den Boxen — nicht die Jukebox, die starb 2019, aber die Playlist ist eine treue Hommage. Niemand hat sie aktualisiert und niemand hat sich beschwert. Pia führt die Bar — und das Andenken der toten Jukebox — mit flacher, unbeeindruckter Ruhe.",
+
+    "Open to the pavement like the rest, but bathed in soft pink light instead of three-colour neon, with a hand-painted cloud mural gone streaky above the bar — the 'dreams' part, such as it is. It's no gentler for the mood lighting: the girls work the open front as hard as anyone on the soi. Kwan folds napkins into cranes at the end of the rail, adding to a row of them lined up like a tiny origami militia, and still finds a hand free for your sleeve as you pass.":
+      "Zur Straße offen wie der Rest, aber in weiches rosa Licht getaucht statt in dreifarbiges Neon, mit einem handgemalten Wolken-Wandbild, das über der Bar verlaufen ist — der 'Dreams'-Teil, so wie er ist. Sanfter macht es die Stimmungsbeleuchtung nicht: Die Mädchen bearbeiten die offene Front so hart wie alle anderen auf der Soi. Kwan faltet am Ende des Tresens Servietten zu Kranichen, einer wachsenden Reihe, aufgereiht wie eine winzige Origami-Miliz, und hat trotzdem eine Hand frei für deinen Ärmel, wenn du vorbeigehst.",
+
+    "Open to the pavement, walled in cat posters and a neon paw print. Praewa and Nangfah work the front, and the grab-and-giggle starts before you've fully stopped walking; Kesinee watches it all from the till, pricing you before you sit. A staircase at the back goes up to the short-time rooms.":
+      "Zur Straße offen, zugepflastert mit Katzenpostern und einem Neon-Pfotenabdruck. Praewa und Nangfah bearbeiten die Front, und das Grapschen-und-Kichern beginnt, bevor du ganz zum Stehen gekommen bist; Kesinee beobachtet alles von der Kasse und preist dich ein, bevor du dich setzt. Eine Treppe hinten führt hinauf zu den Kurzzeit-Zimmern.",
+
+    "Red from floor to ceiling, a bowl of actual cherries on the bar that nobody eats, and a sound system stuck on one bubblegum playlist. Tabtim and Chaba call the odds from the rail. The stairs are where the stairs always are.":
+      "Rot von oben bis unten, eine Schale echter Kirschen auf der Bar, die niemand isst, und eine Anlage, die auf einer einzigen Bubblegum-Playlist festhängt. Tabtim und Chaba geben vom Tresen die Quoten aus. Die Treppe ist da, wo die Treppe immer ist.",
+
+    "The last loud front before the soi spills onto Second Road: lipstick-red lighting, a mirror wall, and a lipstick-mark motif on everything including the glasses. Wilai runs the front stools, and Kluay and Benz have already claimed the two nearest for you.":
+      "Die letzte laute Front, bevor die Soi auf die Second Road ausläuft: lippenstiftrotes Licht, eine Spiegelwand und ein Lippenstift-Kuss-Motiv auf allem, die Gläser eingeschlossen. Wilai führt die vorderen Hocker, und Kluay und Benz haben die zwei nächsten schon für dich beansprucht.",
+
     // ══ TAITCH — Mercedes (gold_rush) ════════════════════════════════════════
     // A Taitch lady: 5 years in Munich, so she meets a German punter in the German
     // that once made her small — now on HER terms. NARRATION → clean German; HER
@@ -342,6 +375,88 @@ const _CATALOGS = {
     "\"Back again — and no Berlin-business excuse. Refreshing. Most regulars need a story. You don't. Sit, na.\"":
       "\"Schon wieder da — und keine Berlin-Ausrede. Erfrischend. Die meisten Stammgäste brauchen eine Geschichte. Du nicht. Setz dich, na.\"",
 
+    // Reusable composite templates: {line}=an already-localised pool pick, {m}=cash,
+    // {p}=price, {name}=item. ONE entry each localises the money suffix everywhere.
+    "{line} (฿{m} left.)": "{line} (฿{m} übrig.)",
+    "฿{p} buys {name}. {line} (฿{m} left.)": "฿{p} für {name}. {line} (฿{m} übrig.)",
+    "The room has developed a gentle rotation.": "Der Raum hat eine sanfte Drehung entwickelt.",
+    "The neon is starting to smear pleasantly.": "Das Neon fängt an, angenehm zu verschmieren.",
+    "The night improves by one bottle's worth.": "Der Abend wird um eine Flasche besser.",
+
+    // ── INVENTORY scaffolds (item names localised per-name at the call site) ──
+    "You are carrying: ": "Du trägst: ",
+    "You are carrying nothing but experience.": "Du trägst nichts außer Erfahrung.",
+    "{c} condom{s}": "{c} Kondom{s}",
+
+    // ── Repeatable action pools (fire every turn: buy beer/water, eat) ────────
+    // Pure-string _pickVary pools (_BEER_LINES/_WATER_LINES/_TOASTIE_LINES/
+    // _STALL_EAT_LINES): _say runs each picked line through _L, so a catalog hit
+    // translates it. Brands (Chang/Leo/Singha/7-Eleven) and ฿ stay.
+    "One big Chang, cold enough to hurt.":
+      "Ein großes Chang, kalt genug, dass es wehtut.",
+    "A sweating bottle of Leo, cap flicked into the gutter — the first pull the best one.":
+      "Eine schwitzende Flasche Leo, der Kronkorken in die Gosse geschnippt — der erste Zug der beste.",
+    "Cold Singha, condensation already running for the door. The bar exhales; so do you.":
+      "Kaltes Singha, das Kondenswasser läuft schon Richtung Tür. Die Bar atmet aus; du auch.",
+    "Another big one, cracked and poured over the last of the ice. The true national anthem.":
+      "Noch ein Großes, aufgemacht und über die letzten Eiswürfel gegossen. Die wahre Nationalhymne.",
+
+    "A cold bottle of water, gone in one go. Civilisation.":
+      "Eine kalte Flasche Wasser, in einem Zug weg. Zivilisation.",
+    "Ice-cold plastic, sweating in your hand; half of it's gone before you lower the bottle.":
+      "Eiskaltes Plastik, das dir in der Hand schwitzt; die Hälfte ist weg, bevor du die Flasche absetzt.",
+    "Cold water straight down, and your body files a quiet note of thanks.":
+      "Kaltes Wasser direkt runter, und dein Körper reicht ein leises Dankeschön ein.",
+    "You crack the cap and drink it where you stand — sweet, cold, worth ten times what it cost.":
+      "Du drehst den Deckel auf und trinkst im Stehen — süß, kalt, zehnmal so viel wert wie der Preis.",
+    "A litre of cold water vanishes and the heat loosens its grip a notch.":
+      "Ein Liter kaltes Wasser verschwindet und die Hitze lockert ihren Griff eine Stufe.",
+    "Frosted, capped, cracked, drained. The worst of the thirst just... stops.":
+      "Beschlagen, verschlossen, aufgemacht, geleert. Das Schlimmste vom Durst hört einfach... auf.",
+
+    "The iconic 7-Eleven cheese toastie, pressed twice while you wait, eaten molten on the kerb like every farang before you back to the dawn of time. There are worse religions.":
+      "Der ikonische 7-Eleven-Käsetoast, zweimal gepresst, während du wartest, glühend heiß am Bordstein gegessen wie jeder Farang vor dir bis zum Anbeginn der Zeit. Es gibt schlimmere Religionen.",
+    "A ham-and-cheese toastie, folded and branded with grill lines, handed over blistering. You eat it on the kerb and resent how perfect it is.":
+      "Ein Schinken-Käse-Toast, gefaltet und mit Grillstreifen gebrandmarkt, kochend heiß überreicht. Du isst ihn am Bordstein und nimmst es ihm übel, wie perfekt er ist.",
+    "The cheese toastie comes out structurally unsound and molten in the middle. Gone in four bites — a 7-Eleven sacrament.":
+      "Der Käsetoast kommt statisch instabil und in der Mitte geschmolzen heraus. Nach vier Bissen weg — ein 7-Eleven-Sakrament.",
+    "฿35 of pressed-bread engineering. You burn the roof of your mouth on the cheese toastie exactly as intended, and would do it again.":
+      "฿35 Pressbrot-Ingenieurskunst. Du verbrennst dir am Käsetoast den Gaumen genau wie vorgesehen, und würdest es wieder tun.",
+    "You eat the toastie leaning on a bollard, cheese cauterising your tongue, and understand — briefly, completely — why the expats never leave.":
+      "Du isst den Toast an einen Poller gelehnt, der Käse verätzt dir die Zunge, und du verstehst — kurz, vollständig — warum die Expats nie weggehen.",
+
+    "You eat, and the night quietly improves.":
+      "Du isst, und der Abend wird still ein bisschen besser.",
+    "You eat where you are, no ceremony, and something knotted in the evening comes loose.":
+      "Du isst, wo du gerade bist, ohne Zeremonie, und etwas am Abend Verknotetes löst sich.",
+    "Cheap, correct, and exactly what the night needed.":
+      "Billig, richtig, und genau das, was der Abend brauchte.",
+    "Hot, unfussy, gone too soon — the good kind, and the hunger backs off.":
+      "Heiß, unkompliziert, zu schnell weg — die gute Sorte, und der Hunger zieht sich zurück.",
+    "You clean the plate. The world softens a degree at the edges.":
+      "Du machst den Teller leer. Die Welt wird an den Rändern ein Grad weicher.",
+    "Every baht of it earns out; the night steadies on a full stomach.":
+      "Jeder Baht davon zahlt sich aus; der Abend wird auf vollem Magen ruhiger.",
+
+    // Lady-drink lines — _fmt templates ({n}=name, {p}=price). The "(฿X left.)"
+    // suffix is appended by the caller and handled as its own fragment below.
+    "One lady drink for {n} — ฿{p} on the tab that is your life.":
+      "Ein Lady Drink für {n} — ฿{p} auf der Rechnung, die dein Leben ist.",
+    "{n} gets her cola-with-benefits; the mamasan's biro logs ฿{p} without looking up.":
+      "{n} bekommt ihre Cola-mit-Vorteilen; der Kuli der Mamasan verbucht ฿{p}, ohne aufzublicken.",
+    "A thimble of something mostly ice lands in front of {n} — ฿{p}, gone in three sips.":
+      "Ein Fingerhut von irgendwas, überwiegend Eis, landet vor {n} — ฿{p}, in drei Schlucken weg.",
+    "“Chon kaew!” {n} toasts you with her ฿{p} lady drink and means it for exactly one sip.":
+      "„Chon kaew!“ {n} stößt mit ihrem ฿{p}-Lady-Drink auf dich an und meint es für genau einen Schluck.",
+    "You buy {n} a drink; she rewards it with a smile calibrated to the exact value of ฿{p}.":
+      "Du kaufst {n} einen Drink; sie belohnt es mit einem Lächeln, geeicht auf den exakten Wert von ฿{p}.",
+    "Another ฿{p} lady drink for {n} — the house's real product, sold by the glass.":
+      "Noch ein ฿{p}-Lady-Drink für {n} — das eigentliche Produkt des Hauses, glasweise verkauft.",
+    "{n}'s glass runs dry the way a meter does; ฿{p} restarts it.":
+      "{n}s Glas läuft leer wie ein Taxameter; ฿{p} startet es neu.",
+    "The waitress doesn't even ask — {n}'s drink, ฿{p}, straight onto your tab.":
+      "Die Kellnerin fragt nicht mal — {n}s Drink, ฿{p}, direkt auf deine Rechnung.",
+
     // ── TIME (the clock readout) — first line via _fmt, the rest fixed ────────
     // The {clock}/{weekday}/{day} template is filled by _fmt (word-order-safe).
     "{clock}, {weekday} — day {day} of 7.": "{clock}, {weekday} — Tag {day} von 7.",
@@ -369,5 +484,411 @@ const _CATALOGS = {
       "(Letzter Baht-Bus gegen 2 Uhr — die ฿15-Fahrt nach Haus ist fast vorbei.)",
     "(Baht buses running: ฿15 the ride home until the last one, ~2 a.m.)":
       "(Baht-Busse fahren: ฿15 nach Haus bis zum letzten, ~2 Uhr.)",
+    // ── Soi 6 revisit pools + item names/descs (workflow-translated, Opus-reviewed) ──
+    "Back to the Shady Lady, set back under its awning, the rail facing the soi so you can watch the circus without joining it.":
+      "Zurück zur Shady Lady, zurückgesetzt unter ihre Markise, die Theke zur Soi hin ausgerichtet, sodass du den Zirkus beobachten kannst, ohne mitzumachen.",
+    "Pukky has your bottle open before you've picked a stool. Out front the soi does its thing; in here nobody makes you part of it.":
+      "Pukky hat deine Flasche schon geöffnet, bevor du dir einen Hocker ausgesucht hast. Draußen macht die Soi ihr Ding; hier drin zwingt dich niemand, mitzumachen.",
+    "You settle back onto the rail in the shade. The parade grinds past a few feet away, and the whole pleasure is being just outside it.":
+      "Du lässt dich wieder an der Theke im Schatten nieder. Die Parade zieht ein paar Schritte entfernt vorbei, und das ganze Vergnügen besteht darin, knapp außerhalb davon zu sein.",
+    "The Shady Lady again — potted palms, low awning, cold Chang, and the best seat on the soi for watching other men get pulled into bars.":
+      "Wieder die Shady Lady — Palmen in Kübeln, niedrige Markise, kaltes Chang, und der beste Platz auf der Soi, um zuzusehen, wie andere Männer in Bars gezogen werden.",
+    "Back under the awning where the noise softens by half. Pukky nods, pours, and goes back to reading the pavement like a form guide.":
+      "Zurück unter die Markise, wo der Lärm um die Hälfte leiser wird. Pukky nickt, schenkt ein und liest weiter den Gehweg wie eine Formtabelle.",
+    "The shaded rail takes you back. A go-go tout two doors down loses a customer; the Shady Lady's regulars rate the technique and drink on.":
+      "Die schattige Theke nimmt dich wieder auf. Zwei Türen weiter verliert ein Go-Go-Anwerber einen Kunden; die Stammgäste der Shady Lady bewerten die Technik und trinken weiter.",
+    "Back to the quiet middle and the shade, a cold one sweating on the rail, the soi safely at arm's length where you like it.":
+      "Zurück zur ruhigen Mitte und dem Schatten, ein kaltes Bier schwitzt auf der Theke, die Soi sicher auf Armeslänge, so wie du es magst.",
+    "Back into the Front Row, stools pulled up to the open front, the soi playing out a few feet away like it's ticketed.":
+      "Zurück in die Front Row, Hocker an die offene Front herangezogen, die Soi spielt sich ein paar Schritte entfernt ab, als bräuchte man ein Ticket.",
+    "Somo slides your Chang over and picks up the commentary mid-sentence, narrating the pavement like a man calling the races.":
+      "Somo schiebt dir dein Chang rüber und nimmt den Kommentar mitten im Satz wieder auf, beschreibt den Gehweg wie ein Mann, der ein Pferderennen kommentiert.",
+    "You take a front-row stool. Down the soi a barker reels one in; the bar murmurs its scoring and drinks.":
+      "Du nimmst einen Hocker in der ersten Reihe. Die Soi hinunter angelt ein Anwerber sich einen; die Bar murmelt ihre Wertung und trinkt weiter.",
+    "Front Row again — the ALL NIGHT show card, the theatre seating, Somo cold-beer-ready and full of opinions on the passing trade.":
+      "Wieder die Front Row — die ALL NIGHT-Showkarte, die Theaterbestuhlung, Somo bereit mit kaltem Bier und voller Meinungen über die vorbeiziehende Laufkundschaft.",
+    "Back to the best cheap seats on the soi, where the entertainment is free, continuous, and always someone else.":
+      "Zurück zu den besten billigen Plätzen auf der Soi, wo die Unterhaltung kostenlos, ununterbrochen und immer jemand anderes ist.",
+    "The open front takes you back in. A hen party gets herded past; the Front Row rates it a seven and Somo pours another.":
+      "Die offene Front lässt dich wieder ein. Ein Junggesellinnenabschied wird vorbeigetrieben; die Front Row bewertet es mit einer Sieben, und Somo schenkt noch eins ein.",
+    "Back to the row of stools aimed at the parade, a cold one in reach and the whole soi performing for the price of a beer.":
+      "Zurück zur Hockerreihe mit Blick auf die Parade, ein kaltes Bier in Reichweite, und die ganze Soi tritt auf für den Preis eines Bieres.",
+    "Back up onto the Verandah's wooden deck, a step above the soi and just far enough off it to be left alone.":
+      "Zurück hinauf auf das Holzdeck der Verandah, eine Stufe über der Soi und gerade weit genug davon entfernt, um in Ruhe gelassen zu werden.",
+    "Nina walks your Chang out to the rail chair again. Down on the pavement the pullers work; up here the fans turn and nobody hurries.":
+      "Nina bringt dein Chang wieder hinaus zum Stuhl an der Reling. Unten auf dem Gehweg arbeiten die Anreißer; hier oben drehen sich die Ventilatoren, und niemand hat es eilig.",
+    "You settle back into a chair on the raised deck. The step up is doing its quiet job — the grabbers stay on the pavement where they belong.":
+      "Du lässt dich wieder in einen Stuhl auf dem erhöhten Deck sinken. Die Stufe nach oben erledigt still ihre Arbeit — die Zupacker bleiben auf dem Gehweg, wo sie hingehören.",
+    "The Verandah again — the deck, the lazy fans, the rail, and the small civilised miracle of a Soi 6 seat where no one climbs into your lap.":
+      "Wieder die Verandah — das Deck, die trägen Ventilatoren, die Reling, und das kleine zivilisierte Wunder eines Platzes auf Soi 6, wo dir niemand auf den Schoß klettert.",
+    "Back above the soi by one wooden step, which turns out to be exactly enough. Nina reads your thirst and beats you to it.":
+      "Zurück über der Soi, eine Holzstufe höher, was sich als genau ausreichend erweist. Nina erkennt deinen Durst und ist dir schon einen Schritt voraus.",
+    "The raised deck takes you back. The soi churns a step below; you put your feet on the rail and let it.":
+      "Das erhöhte Deck nimmt dich wieder auf. Die Soi brodelt eine Stufe tiefer; du legst die Füße auf die Reling und lässt es geschehen.",
+    "Back to the quietest chair on the loudest soi, a cold one arriving unbidden, the parade safely down off the deck.":
+      "Zurück zum ruhigsten Stuhl auf der lautesten Soi, ein kaltes Bier kommt ungebeten, die Parade sicher unten, weg vom Deck.",
+    "Back onto the west end and the wall of noise hits first, the hands second. \"HANDSOME MAN!\" \"WHERE YOU GO SEXY MAN?\" You are grabbed, released, grabbed again, an item passed between bars.":
+      "Zurück am Westende, und zuerst trifft dich die Lärmwand, dann die Hände. \"HANDSOME MAN!\" \"WHERE YOU GO SEXY MAN?\" Du wirst gepackt, losgelassen, wieder gepackt, ein Gegenstand, der zwischen Bars weitergereicht wird.",
+    "The soi takes you back into the bass and the barkers. A girl detaches from an open front to walk backwards ahead of you, selling her bar with her whole body. Then another. Then another.":
+      "Die Soi holt dich zurück in den Bass und die Anpreiser. Ein Mädchen löst sich von einer offenen Front, um rückwärts vor dir herzugehen und ihre Bar mit dem ganzen Körper zu verkaufen. Dann noch eine. Dann noch eine.",
+    "Back into the loudest hundred metres in Thailand. Six sound systems fight, a dozen girls call you handsome in the same second, and one of them takes a foam pool noodle to your shoulder for walking too slow.":
+      "Zurück in die lautesten hundert Meter Thailands. Sechs Soundsysteme kämpfen gegeneinander, ein Dutzend Mädchen nennen dich im selben Moment handsome, und eine von ihnen verpasst dir eine Schwimmnudel aus Schaumstoff auf die Schulter, weil du zu langsam läufst.",
+    "You step back into the west end and it's exactly as you left it: sequins, wrist-grabs, competing basslines, and the flat certainty that you will be spending money very soon.":
+      "Du trittst zurück ins Westende, und es ist genau so, wie du es verlassen hast: Pailletten, Handgelenk-Griffe, konkurrierende Basslinien und die schlichte Gewissheit, dass du sehr bald Geld ausgeben wirst.",
+    "Back onto Soi 6 West, where standing still is not an option — a hand takes your wrist, a voice takes your name (you have no name here, you are Handsome), and a bar takes its shot.":
+      "Zurück auf Soi 6 West, wo Stillstehen keine Option ist — eine Hand nimmt dein Handgelenk, eine Stimme nimmt deinen Namen (du hast hier keinen Namen, du bist Handsome), und eine Bar nutzt ihre Chance.",
+    "The soi swallows you again. \"You! Yes you! Come Pink Lotus!\" \"No — Golden Dragon!\" \"He come with ME.\" You are, briefly, the most wanted man in Thailand.":
+      "Die Soi verschluckt dich wieder. \"You! Yes you! Come Pink Lotus!\" \"No — Golden Dragon!\" \"He come with ME.\" Du bist, kurzzeitig, der begehrteste Mann Thailands.",
+    "Back into the churn and the neon. The girls out front read foot traffic for a living, and you are foot traffic; the pitch starts before you've fully arrived.":
+      "Zurück in den Trubel und das Neonlicht. Die Mädchen davor lesen Laufkundschaft zum Broterwerb, und du bist Laufkundschaft; die Anmache beginnt, bevor du überhaupt richtig angekommen bist.",
+    "Soi 6 West again — a river of hands and offers, the quieter middle stretch glowing ahead east like a promise, the whole street daring you to reach it sober and solvent.":
+      "Wieder Soi 6 West — ein Fluss aus Händen und Angeboten, das ruhigere Mittelstück leuchtet im Osten voraus wie ein Versprechen, und die ganze Straße fordert dich heraus, es nüchtern und solvent zu erreichen.",
+    "Back into the Pink Lotus and three hands find you at once — a lap claimed, a thigh against yours, Joy's mouth already at your ear: \"Lady drink first, then upstairs, na? I show you why they call it Pink.\"":
+      "Zurück in den Pink Lotus, und gleich drei Hände finden dich auf einmal — ein Schoß beansprucht, ein Schenkel an deinem, Joys Mund schon an deinem Ohr: \"Lady drink zuerst, dann nach oben, na? Ich zeig dir, warum sie es Pink nennen.\"",
+    "The pink swallows you again. No warm-up here — a girl is in your lap doing the math on your shirt before you have sat. \"You buy me drink, handsome? Then up. I make you forget the flight home.\"":
+      "Das Pink verschluckt dich wieder. Kein Aufwärmen hier — ein Mädchen sitzt schon auf deinem Schoß und rechnet dein Hemd durch, bevor du dich gesetzt hast. \"Du kaufst mir drink, handsome? Dann hoch. Ich lass dich den Flug nach Hause vergessen.\"",
+    "You are barely past the door before the offer is on the table, plain as the price list: \"Short time, long time, up to you — but you came back for a reason, na. Sit. Let me remind you.\"":
+      "Kaum bist du zur Tür rein, liegt das Angebot schon auf dem Tisch, klar wie die Preisliste: \"Short time, long time, du entscheidest — aber du bist nicht ohne Grund zurückgekommen, na. Setz dich. Lass mich dich erinnern.\"",
+    "Pink Lotus does not do coy. A knee hooks yours, a hand slides up your arm, the pitch a purr against your jaw: \"Why you sit alone? One drink, we go up, everybody happy.\"":
+      "Der Pink Lotus tut nicht zimperlich. Ein Knie hakt sich in deins, eine Hand gleitet deinen Arm hoch, das Angebot ein Schnurren an deinem Kiefer: \"Warum du allein sitzen? Ein drink, wir gehen hoch, alle happy.\"",
+    "Back to the pink and the full-court press — grabbed, seated, straddled by attention, and told warmly and without a flicker of doubt exactly what tonight costs and exactly what it buys.":
+      "Zurück ins Pink und die volle Breitseite — gegriffen, gesetzt, von Aufmerksamkeit umzingelt, und dir wird warm und ohne den leisesten Zweifel genau gesagt, was heute Nacht kostet und was es dir bringt.",
+    "The girls clock you the second you round the post and close in like choreography. \"Same handsome from before! You want me now? Upstairs quiet, aircon cold — worth the walk, I promise.\"":
+      "Die Mädchen erkennen dich in der Sekunde, in der du um den Pfosten biegst, und rücken an wie einstudiert. \"Derselbe handsome von vorhin! Willst du mich jetzt? Oben ruhig, Klimaanlage kalt — der Weg lohnt sich, versprochen.\"",
+    "Into the Pink Lotus, where nobody wastes your time or theirs: a lap, a hand, a mouth at your ear naming a number and a room, and the fairy lights doing their best to make it romantic.":
+      "Hinein in den Pink Lotus, wo niemand deine Zeit verschwendet oder seine eigene: ein Schoß, eine Hand, ein Mund an deinem Ohr, der eine Zahl und ein Zimmer nennt, und die Lichterketten geben ihr Bestes, das Ganze romantisch wirken zu lassen.",
+    "Back onto a pink stool with a girl already arranging herself across you. \"You think about me all day? Liar.\" She laughs, delighted. \"Okay — buy the drink, we go up, you think about me tomorrow.\"":
+      "Zurück auf einen pinken Hocker, ein Mädchen drapiert sich schon über dir. \"Du hast den ganzen Tag an mich gedacht? Lügner.\" Sie lacht, entzückt. \"Okay — kauf den drink, wir gehen hoch, morgen denkst du an mich.\"",
+    "Back into the Orchid Room and the strobe and the noise and the skin, the members' club Powers keeps calling classy while it proves him wrong in every direction at once.":
+      "Zurück in den Orchid Room, das Stroboskop, der Lärm, die nackte Haut — der Mitgliederclub, den Powers ständig \"classy\" nennt, während er ihm in jeder Hinsicht gleichzeitig widerspricht.",
+    "The Orchid takes you back into its expensive bacchanal — the high rollers, the MC patches, the quiet Thai man at the good table, and Powers on his banquette narrating himself to his own phone.":
+      "Der Orchid holt dich zurück in seine teure Bacchanalie — die High Roller, die MC-Patches, der stille Thai-Mann am guten Tisch, und Powers auf seiner Bank, der sich selbst seinem eigenen Handy vorführt.",
+    "Back past the velvet rope into the wild dark. Nobody here is walk-up trade; everybody here is somebody's problem, and Powers throws you a two-fingered salute without pausing his livestream.":
+      "Zurück am Samtseil vorbei in das wilde Dunkel. Hier ist niemand Laufkundschaft; jeder hier ist irgendjemandes Problem, und Powers wirft dir einen Zwei-Finger-Gruß zu, ohne seinen Livestream zu unterbrechen.",
+    "The back room again — topless going on nude, Blue Label going on trouble, and the one soft-spoken man everyone watches without looking at him. You've learned to sit where you can see the door.":
+      "Der Hinterraum, wieder — oben ohne wird zu nackt, Blue Label wird zu Ärger, und der eine leise sprechende Mann, den alle beobachten, ohne ihn anzusehen. Du hast gelernt, dich so zu setzen, dass du die Tür sehen kannst.",
+    "Back into the Orchid, where the money is loud, the girls are louder, the real power is silent, and Ryan Powers mistakes the whole arrangement for something he built.":
+      "Zurück in den Orchid, wo das Geld laut ist, die Mädchen lauter, die wirkliche Macht schweigt, und Ryan Powers das ganze Arrangement mit etwas verwechselt, das er selbst aufgebaut hat.",
+    "Back into the Golden Dragon, the dragon presiding, and a girl already peeling you toward a stool with a hand in your belt loop. \"You, handsome. Sit here. Buy me one, then we talk about upstairs.\"":
+      "Zurück in den Golden Dragon, der Drache thront darüber, und ein Mädchen zieht dich schon an einem Gürtelbund zu einem Hocker. \"Du, handsome. Setz dich hier. Kauf mir einen, dann reden wir über oben.\"",
+    "The vintage playlist and the wall of noise take you back — and so do two girls at once, one on each arm, negotiating you like a shared prize. \"Me first.\" \"No — ME first.\" \"Okay, you choose, but choose FAST.\"":
+      "Die Vintage-Playlist und die Lärmwand holen dich zurück — genau wie zwei Mädchen auf einmal, je eine an jedem Arm, die dich wie einen geteilten Preis verhandeln. \"Ich zuerst.\" \"Nein — ICH zuerst.\" \"Okay, du entscheidest, aber entscheide SCHNELL.\"",
+    "Louder than you remembered, and more direct: a girl slides into your lap mid-song and puts it plainly. \"Drink, then up, then you go home happy. Simple, na? Everything here is simple.\"":
+      "Lauter als du es in Erinnerung hattest, und direkter: Ein Mädchen gleitet mitten im Song auf deinen Schoß und sagt es unverblümt. \"Drink, dann hoch, dann gehst du happy nach Hause. Einfach, na? Hier ist alles einfach.\"",
+    "Back under the cousin-painted dragon. A hand flattens on your chest, a mouth finds your ear: \"Why you shy? This is Soi 6, tilac. Nobody here is shy. You buy me drink, I show you.\"":
+      "Zurück unter den von der Cousine gemalten Drachen. Eine Hand legt sich flach auf deine Brust, ein Mund findet dein Ohr: \"Warum du schüchtern? Das ist Soi 6, tilac. Hier ist niemand schüchtern. Du kaufst mir drink, ich zeig's dir.\"",
+    "The Golden Dragon reels you back in. Somebody already has your hand on her hip and her eyes on your wallet, and the whole thing is disarmingly, aggressively cheerful.":
+      "Der Golden Dragon zieht dich wieder rein. Jemand hat deine Hand schon auf ihrer Hüfte und die Augen auf deiner Brieftasche, und das Ganze ist entwaffnend, aggressiv fröhlich.",
+    "Back into the gold and the grab. \"Same shirt, same handsome! You come for me tonight?\" She does not wait for an answer; she is already climbing half into your lap. \"Yes. You come for me.\"":
+      "Zurück ins Gold und den Griff. \"Gleiches Hemd, gleicher handsome! Du kommst heute Nacht für mich?\" Sie wartet keine Antwort ab; sie klettert schon halb auf deinen Schoß. \"Ja. Du kommst für mich.\"",
+    "Into the Golden Dragon, where the offer arrives before the beer does: a thigh, a whisper, a price, a room number, all inside the first ten seconds, all with a grin.":
+      "Hinein in den Golden Dragon, wo das Angebot vor dem Bier eintrifft: ein Schenkel, ein Flüstern, ein Preis, eine Zimmernummer, alles in den ersten zehn Sekunden, alles mit einem Grinsen.",
+    "Back to the dragon and the dead jukebox's faithful ghost. A girl hooks a leg over yours and leans in close enough to share breath. \"Upstairs is nicer than down here. Much nicer. Buy me drink, I prove it.\"":
+      "Zurück zum Drachen und dem treuen Geist der toten Jukebox. Ein Mädchen hakt ein Bein über deins und lehnt sich so nah heran, dass ihr denselben Atem teilt. \"Oben ist schöner als hier unten. Viel schöner. Kauf mir drink, ich beweis es dir.\"",
+    "Back into the pink glow of Sunset Dreams, and a girl peels off the open front and onto you before your eyes adjust. \"You like soft light? I like soft man. Buy me drink, we go up where it's softer.\"":
+      "Zurück in das pinke Leuchten von Sunset Dreams, und ein Mädchen löst sich von der offenen Front und ist bei dir, bevor sich deine Augen angepasst haben. \"Du magst weiches Licht? Ich mag weichen Mann. Kauf mir drink, wir gehen hoch, wo es weicher ist.\"",
+    "The cloud mural and the rose light take you back, and so does a hand in your belt loop. \"Everybody think pink mean shy. Ha. Buy me drink, handsome — then upstairs, I show you not shy.\"":
+      "Das Wolkenwandbild und das rosa Licht holen dich zurück, ebenso wie eine Hand in deinem Gürtelbund. \"Alle denken, pink heißt schüchtern. Ha. Kauf mir drink, handsome — dann nach oben, ich zeig dir, nicht schüchtern.\"",
+    "Softer lit, no softer sell. A girl folds herself onto your stool with you already on it. \"Kwan makes the cranes; I make the offer. One drink, then up. Simple like everything on the soi.\"":
+      "Weicher beleuchtet, nicht weicher verkauft. Ein Mädchen faltet sich auf deinen Hocker, obwohl du schon darauf sitzt. \"Kwan macht die Kraniche; ich mache das Angebot. Ein drink, dann hoch. Einfach wie alles auf der soi.\"",
+    "Back under the streaky clouds into the pink. Somebody settles against you and gets straight to it — what's on offer, what it costs, which staircase — all in a warm purr.":
+      "Zurück unter die verwischten Wolken, hinein ins Pink. Jemand schmiegt sich an dich und kommt gleich zur Sache — was im Angebot ist, was es kostet, welche Treppe — alles in einem warmen Schnurren.",
+    "Sunset Dreams reels you in on rose light and quick hands: a girl's fingers find yours and move them where she wants, and the pitch is warm, direct, and completely unambiguous.":
+      "Sunset Dreams zieht dich mit rosa Licht und flinken Händen an: Die Finger eines Mädchens finden deine und führen sie, wohin sie will, und das Angebot ist warm, direkt und völlig unmissverständlich.",
+    "Back into the pink. \"You again. Good. The loud girls next door, they tire you out — me, I take my time.\" A hand slides up. \"Buy me one drink. Then we take our time upstairs.\"":
+      "Zurück ins Pink. \"Du wieder. Gut. Die lauten Mädchen nebenan, die machen dich müde — ich, ich lasse mir Zeit.\" Eine Hand gleitet hoch. \"Kauf mir einen drink. Dann lassen wir uns Zeit, oben.\"",
+    "Into Sunset Dreams, where the soft light just lets the girls lean closer to say the loud part: a number, a room, a promise, delivered against your ear like a secret.":
+      "Hinein in Sunset Dreams, wo das sanfte Licht den Mädchen nur erlaubt, sich näher heranzulehnen, um den lauten Teil zu sagen: eine Zahl, ein Zimmer, ein Versprechen, an dein Ohr geflüstert wie ein Geheimnis.",
+    "Back to the origami militia and the rose glow. A girl drapes over you and names the whole transaction like sweet nothings. Kwan, at the rail, adds another crane and says nothing at all.":
+      "Zurück zur Origami-Miliz und dem rosa Schimmer. Ein Mädchen drapiert sich über dir und benennt das ganze Geschäft wie Kosenamen. Kwan, an der Theke, faltet noch einen Kranich und sagt gar nichts.",
+    "Back to the middle of the soi, where the volume drops by half and the bars let you be. A cold-beer stretch built for watching, not for being grabbed.":
+      "Zurück in die Mitte der Soi, wo die Lautstärke auf die Hälfte fällt und die Bars dich in Ruhe lassen. Ein Kaltes-Bier-Abschnitt, gebaut zum Zuschauen, nicht zum Gegrapscht-Werden.",
+    "The quiet middle again — the Shady Lady's awning, the Front Row's theatre stools, the Verandah's raised deck, and the Queen Vic glowing calm in the thick of it.":
+      "Die stille Mitte, wieder — die Markise der Shady Lady, die Theaterhocker des Front Row, die erhöhte Terrasse der Verandah, und mittendrin die Queen Vic, die ruhig vor sich hin leuchtet.",
+    "You come back into the soi's soft spot. Down at the west end a barker loses a fight with a foam noodle; up here nobody bothers, and that's the whole appeal.":
+      "Du kommst zurück in den ruhigen Fleck der Soi. Unten am Westende verliert ein Anwerber einen Kampf gegen eine Schaumstoff-Nudel; hier oben stört dich niemand, und genau das ist der ganze Reiz.",
+    "Back to the people-watching stretch, where the pullers are off-duty and the men who wanted a ringside seat without the hassle nurse their Changs and rate the parade.":
+      "Zurück zum Leute-Beobachten-Abschnitt, wo die Anwerberinnen Feierabend haben und die Männer, die einen Logenplatz ohne den ganzen Stress wollten, ihre Changs nippen und die Parade bewerten.",
+    "The middle takes you back — the Queen Vic glowing calm, the easy bars either side, the loud ends holding the noise at arm's length for once.":
+      "Die Mitte nimmt dich wieder auf — die Queen Vic leuchtet ruhig, die entspannten Bars zu beiden Seiten, die lauten Enden halten den Lärm für einmal auf Abstand.",
+    "Back into the calm centre of the storm. West and east the soi does its shouting; here it just streams past your stool while you drink and watch.":
+      "Zurück in das ruhige Zentrum des Sturms. Im Westen und Osten schreit sich die Soi die Kehle aus; hier zieht alles nur an deinem Hocker vorbei, während du trinkst und schaust.",
+    "The quiet stretch again, the Queen Vic's aircon leaking cold onto the pavement, three easy beer bars and nobody on the soi trying to climb you. Rare. Enjoy it.":
+      "Der stille Abschnitt, wieder, die Klimaanlage der Queen Vic lässt kalte Luft aufs Pflaster tropfen, drei entspannte Bierbars, und niemand auf der Soi, der an dir hochklettern will. Selten. Genieß es.",
+    "Deeper into the soi again, where the noise doubles down and the bars run on toward Second Road. A girl swings off a Kitten Corner stool to intercept you: \"Where you go? You go with ME.\"":
+      "Wieder tiefer in die Soi, wo der Lärm sich verdoppelt und die Bars weiter bis zur Second Road reichen. Ein Mädchen schwingt sich von einem Kitten-Corner-Hocker, um dich abzufangen: \"Where you go? You go with ME.\"",
+    "Back into the far stretch, wrist-grabs down both sides, three-colour neon, three staircases the menus don't mention. \"HANDSOME! Cherry Pop! No — Ruby Kiss! He come here!\"":
+      "Zurück in den hinteren Abschnitt, Handgelenk-Griffe auf beiden Seiten, dreifarbiges Neon, drei Treppenhäuser, die auf keiner Speisekarte stehen. \"HANDSOME! Cherry Pop! No — Ruby Kiss! He come here!\"",
+    "The deep end of Soi 6 takes you back — same open fronts, same offers, louder if anything. A hand finds your arm before you've picked a bar; the bar gets picked for you.":
+      "Das tiefe Ende der Soi 6 nimmt dich wieder auf — dieselben offenen Fronten, dieselben Angebote, wenn überhaupt noch lauter. Eine Hand findet deinen Arm, bevor du dich für eine Bar entschieden hast; die Bar wird für dich entschieden.",
+    "Back past the Queen Vic into the thick of it, where every doorway has a girl and every girl has a plan for your evening and none of them is subtle about it.":
+      "Zurück, vorbei an der Queen Vic, mitten hinein, wo in jeder Türöffnung ein Mädchen steht und jedes Mädchen einen Plan für deinen Abend hat, und keine davon macht ein Geheimnis draus.",
+    "You round into the deep soi and the pitches overlap into one wall of sound: drink, upstairs, short time, long time, come come come, all of it aimed at you and meant.":
+      "Du biegst in die tiefe Soi und die Anmachsprüche überlappen sich zu einer einzigen Wand aus Lärm: Drink, upstairs, short time, long time, come come come, alles auf dich gerichtet und alles ernst gemeint.",
+    "Back into the far stretch, the last hundred metres before Second Road, where the girls read your wallet through your shorts and grab accordingly.":
+      "Zurück in den hinteren Abschnitt, die letzten hundert Meter vor der Second Road, wo die Mädchen deine Brieftasche durch die Shorts hindurch lesen und entsprechend zugreifen.",
+    "The deep soi again. Kitten, Cherry, Ruby — three fronts, three staircases, three sets of hands already reaching. You are, once more, the entire economy walking past.":
+      "Die tiefe Soi, wieder. Kitten, Cherry, Ruby — drei Fronten, drei Treppenhäuser, drei Paar Hände, die schon nach dir greifen. Du bist, einmal mehr, die gesamte Wirtschaft, die hier vorbeiläuft.",
+    "Back to where the soi runs out toward Second Road, neon stacked to the roofline, a girl on your sleeve saying the quiet part first and loud: \"Come upstairs, tilac. Why we pretend?\"":
+      "Zurück dorthin, wo die Soi auf die Second Road zuläuft, Neon bis zur Dachkante gestapelt, ein Mädchen an deinem Ärmel, das das Unausgesprochene zuerst und laut sagt: \"Come upstairs, tilac. Why we pretend?\"",
+    "Back into Kitten Corner and the grab-and-giggle is instant — Praewa in your lap, Nangfah at your ear, both purring the offer. \"You want kitten tonight? Two kitten? Buy us drink, we go up, we play.\"":
+      "Zurück im Kitten Corner, und das Grapschen-und-Kichern setzt sofort ein — Praewa auf deinem Schoß, Nangfah an deinem Ohr, beide schnurren das Angebot. \"You want kitten tonight? Two kitten? Buy us drink, we go up, we play.\"",
+    "The neon paw flickers you back in and a girl is already climbing you like furniture. \"Meow, handsome.\" A grin, a hand, a price. \"Short time upstairs — you like? Everybody like.\"":
+      "Die Neon-Pfote flackert dich zurück hinein, und ein Mädchen erklimmt dich schon wie ein Möbelstück. \"Meow, handsome.\" Ein Grinsen, eine Hand, ein Preis. \"Short time upstairs — you like? Everybody like.\"",
+    "Cat posters and quick hands. A girl hooks her claws gently into your collar and puts it plainly: \"Why you play hard to get? Nobody play hard to get on Soi 6. Buy me drink, take me up.\"":
+      "Katzenposter und schnelle Hände. Ein Mädchen hakt ihre Krallen sanft in deinen Kragen und sagt es klipp und klar: \"Why you play hard to get? Nobody play hard to get on Soi 6. Buy me drink, take me up.\"",
+    "Back to the paw print and the pounce. Two of them close in, delighted, competitive, direct — a thigh, a purr, a number — and Kesinee watches the till and lets the girls work.":
+      "Zurück zum Pfotenabdruck und zum Sprung. Zwei von ihnen rücken näher, entzückt, konkurrierend, direkt — ein Schenkel, ein Schnurren, eine Zahl — und Kesinee behält die Kasse im Auge und lässt die Mädchen arbeiten.",
+    "Kitten Corner takes you back and does not pretend otherwise: a lap claimed, a mouth at your ear, the staircase nodded at. \"Upstairs is where the kitten really play, tilac.\"":
+      "Kitten Corner nimmt dich wieder auf und tut nicht so, als wäre es anders: ein Schoß beansprucht, ein Mund an deinem Ohr, ein Nicken zur Treppe. \"Upstairs is where the kitten really play, tilac.\"",
+    "Back into the cat glow. \"Same handsome! You come back for me — say you come back for me.\" She is already arranging herself across your knees. \"Buy me drink first. Then upstairs. Then you never leave Soi 6.\"":
+      "Zurück in den Katzen-Schimmer. \"Same handsome! You come back for me — say you come back for me.\" Sie drapiert sich schon über deinen Knien. \"Buy me drink first. Then upstairs. Then you never leave Soi 6.\"",
+    "Into Kitten Corner, all posters and pounce, where the girls tell you exactly what the staircase is for inside the first breath and dare you to be shocked.":
+      "Hinein in den Kitten Corner, ganz Poster und Sprung, wo dir die Mädchen im ersten Atemzug haargenau sagen, wofür die Treppe da ist, und dich herausfordern, schockiert zu sein.",
+    "Back to the paw and the purr, and a girl who has decided you are hers for the night. \"No shy, handsome. This Soi 6. We say what we want, you buy the drink, we go up. Easy, na?\"":
+      "Zurück zur Pfote und zum Schnurren, und ein Mädchen, das entschieden hat, dass du ihr für die Nacht gehörst. \"No shy, handsome. This Soi 6. We say what we want, you buy the drink, we go up. Easy, na?\"",
+    "Back into Cherry Pop, red on red, and a girl pops a cherry between her teeth and the offer in the same grin. \"Handsome! You taste cherry with me upstairs? Buy me drink, we find out.\"":
+      "Zurück im Cherry Pop, Rot auf Rot, und ein Mädchen zerbeißt eine Kirsche zwischen den Zähnen und das Angebot im selben Grinsen. \"Handsome! You taste cherry with me upstairs? Buy me drink, we find out.\"",
+    "The bubblegum loop and the wall of red take you back, and Tabtim takes your lap. \"You came back for Cherry. Everybody come back for Cherry.\" A hand, a price, a wink. \"Short time, sweet like the name.\"":
+      "Die Bubblegum-Schleife und die Wand aus Rot nehmen dich wieder auf, und Tabtim nimmt sich deinen Schoß. \"You came back for Cherry. Everybody come back for Cherry.\" Eine Hand, ein Preis, ein Augenzwinkern. \"Short time, sweet like the name.\"",
+    "Red floor to ceiling and a girl already on you before you have sat. \"Why you wait? On Soi 6 nobody wait. One drink, then up, then you go home smiling like a idiot. Good idiot.\"":
+      "Rot vom Boden bis zur Decke, und ein Mädchen ist schon an dir, bevor du dich gesetzt hast. \"Why you wait? On Soi 6 nobody wait. One drink, then up, then you go home smiling like a idiot. Good idiot.\"",
+    "Back to the cherries nobody eats and the girls who eat you alive. Chaba drapes over you and names the whole thing — drink, room, price — sweetly, cheerfully, without a shred of shame.":
+      "Zurück zu den Kirschen, die niemand isst, und den Mädchen, die dich bei lebendigem Leib fressen. Chaba drapiert sich über dich und benennt das Ganze — Drink, Zimmer, Preis — süß, fröhlich, ohne einen Funken Scham.",
+    "Cherry Pop reels you in on sugar and directness in equal measure: a thigh across yours, a purr in your ear, and a girl telling you precisely what the staircase behind the bar is for.":
+      "Cherry Pop zieht dich mit Zucker und Direktheit zu gleichen Teilen an: ein Schenkel über deinem, ein Schnurren an deinem Ohr, und ein Mädchen, das dir haargenau erklärt, wofür die Treppe hinter der Bar da ist.",
+    "Back into the red. \"Same handsome, same Cherry, same idea!\" She laughs, climbs half into your lap, gets to the point. \"Buy me drink. Take me up. The playlist is bad but I am not.\"":
+      "Zurück ins Rote. \"Same handsome, same Cherry, same idea!\" Sie lacht, klettert halb auf deinen Schoß, kommt zum Punkt. \"Buy me drink. Take me up. The playlist is bad but I am not.\"",
+    "Into Cherry Pop, where the come-on is as loud and sweet and relentless as the one bubblegum song, and just as impossible to argue with.":
+      "Hinein ins Cherry Pop, wo die Anmache so laut, süß und unerbittlich ist wie der eine Bubblegum-Song, und genauso unmöglich zu widerlegen.",
+    "Back to the bowl of untouched cherries and a girl who has claimed your stool and your evening. \"You buy me one drink, I make you forget the flight, the wife, your own name. Upstairs. Yes? Yes.\"":
+      "Zurück zur Schale unberührter Kirschen und einem Mädchen, das sich deinen Hocker und deinen Abend geschnappt hat. \"You buy me one drink, I make you forget the flight, the wife, your own name. Upstairs. Yes? Yes.\"",
+    "Back into Ruby Kiss and a lipstick-marked glass is in your hand before a girl is in your lap — but only just. \"You have my kiss. Now you want the rest?\" Wilai grins at the mirror, at the two of you the glass makes four. \"Buy me drink, we go up.\"":
+      "Zurück in die Ruby Kiss, und ein lippenstiftbeschmiertes Glas ist in deiner Hand, noch bevor ein Mädchen auf deinem Schoß sitzt — aber nur knapp. \"Du hast meinen Kuss. Jetzt willst du den Rest?\" Wilai grinst in den Spiegel, aus euch beiden macht das Glas vier. \"Kauf mir Drink, wir gehen hoch.\"",
+    "Lipstick lighting, mirror wall, and Kluay already arranging herself across you. \"Last bar on the soi, best girls on the soi — you save the best, na?\" A hand, a price, a nod at the stairs.":
+      "Lippenstift-Beleuchtung, Spiegelwand, und Kluay drapiert sich schon über dich. \"Letzte Bar auf der Soi, beste Mädchen auf der Soi — du hebst dir das Beste auf, na?\" Eine Hand, ein Preis, ein Nicken zur Treppe.",
+    "The red mirror-glare takes you back and doubles the come-on: two Benzes leaning in, two hands on your thigh, one very direct question about upstairs asked twice at once.":
+      "Der rote Spiegelglanz holt dich zurück und verdoppelt die Anmache: zwei Benzes, die sich zu dir lehnen, zwei Hände auf deinem Oberschenkel, eine sehr direkte Frage nach oben, gleichzeitig zweimal gestellt.",
+    "Back to the lipstick and the last-loud-front energy. A girl marks your cheek with a kiss and the deal in the same motion. \"Short time, long time — you choose, handsome. But you choose me.\"":
+      "Zurück zum Lippenstift und der Energie der letzten lauten Front. Ein Mädchen markiert deine Wange mit einem Kuss und den Deal in derselben Bewegung. \"Short time, long time — du entscheidest, Handsome. Aber du entscheidest dich für mich.\"",
+    "Ruby Kiss reels you in on mirrors and mouths. Somebody already has the offer against your ear — drink, room, price — and the wall behind the bar is showing you both exactly how it looks.":
+      "Die Ruby Kiss zieht dich an mit Spiegeln und Mündern. Jemand hat das Angebot schon an deinem Ohr — Drink, Zimmer, Preis — und die Wand hinter der Bar zeigt euch beiden ganz genau, wie das aussieht.",
+    "Back into the red. \"Handsome came back to Ruby! Of course. Everybody save Ruby for last.\" She climbs on, points at the stairs, does not stop smiling. \"Buy me drink — then last is best.\"":
+      "Zurück ins Rot. \"Handsome ist zu Ruby zurückgekommen! Klar doch. Alle heben sich Ruby für zuletzt auf.\" Sie klettert auf dich, zeigt zur Treppe, hört nicht auf zu lächeln. \"Kauf mir Drink — dann ist zuletzt am besten.\"",
+    "Into Ruby Kiss, where the girls kiss the glass, kiss your cheek, and name the whole transaction in one breath, and the mirror makes an audience of it.":
+      "Hinein in die Ruby Kiss, wo die Mädchen das Glas küssen, deine Wange küssen und das ganze Geschäft in einem Atemzug benennen, und der Spiegel macht ein Publikum daraus.",
+    "Back to the lipstick marks and a girl draped over your shoulders, chin on your head, watching you both in the mirror wall. \"See? We look good together. Buy me drink. We look even better upstairs.\"":
+      "Zurück zu den Lippenstiftspuren und einem Mädchen, das über deinen Schultern hängt, das Kinn auf deinem Kopf, und euch beide in der Spiegelwand beobachtet. \"Siehst du? Wir sehen gut aus zusammen. Kauf mir Drink. Oben sehen wir noch besser aus.\"",
+    "Back into the Queen Vic — real aircon, real wood, the dartboard, and the soi safely on the far side of the glass.":
+      "Zurück in die Queen Vic — echte Klimaanlage, echtes Holz, die Dartscheibe, und die Soi sicher auf der anderen Seite des Glases.",
+    "The pub folds you back into its calm. Terry lifts his beer from the corner stool without quite looking up.":
+      "Der Pub nimmt dich zurück in seine Ruhe. Terry hebt sein Bier vom Eckhocker, ohne wirklich aufzublicken.",
+    "You step back into the one quiet room on Soi 6. The bass from outside arrives pre-muffled, the way it should.":
+      "Du trittst zurück in den einen ruhigen Raum auf Soi 6. Der Bass von draußen kommt schon gedämpft an, so wie es sein soll.",
+    "The Queen Vic again — the dartboard, the panelling, the deliberate refusal to be Soi 6. It works.":
+      "Wieder die Queen Vic — die Dartscheibe, die Holzvertäfelung, die bewusste Weigerung, Soi 6 zu sein. Es funktioniert.",
+    "Back through the door and the volume drops to a civilised hum. Somebody's mid-dart, somebody's mid-story, nobody's mid-grab. Bliss.":
+      "Zurück durch die Tür, und die Lautstärke sinkt auf ein zivilisiertes Summen. Einer ist mitten im Wurf, einer mitten in der Geschichte, niemand mitten im Grapschen. Herrlich.",
+    "The Vic takes you back into wood and cold air and the low murmur of men who have found their spot and mean to keep it.":
+      "Die Vic nimmt dich zurück in Holz und kalte Luft und das leise Murmeln von Männern, die ihren Platz gefunden haben und ihn behalten wollen.",
+    "Back to the calm eye of the soi's storm — a pint, a dartboard, a window onto the chaos you don't have to join.":
+      "Zurück zum ruhigen Auge im Sturm der Soi — ein Pint, eine Dartscheibe, ein Fenster in das Chaos, an dem du nicht teilnehmen musst.",
+    "Back up to your balcony room over the Queen Vic — the fan turning its opinions over, Soi 6 still howling up over the rail two floors down.":
+      "Zurück hoch in dein Balkonzimmer über der Queen Vic — der Ventilator wälzt seine Meinungen, Soi 6 heult noch immer über das Geländer zwei Stockwerke tiefer herauf.",
+    "The room again: wood floors, the recliner on the balcony, the soi throwing its light and its bass up the wall like a fish tank with the volume left on.":
+      "Das Zimmer wieder: Holzböden, der Liegestuhl auf dem Balkon, die Soi wirft ihr Licht und ihren Bass die Wand hoch wie ein Aquarium, bei dem die Lautstärke aufgedreht blieb.",
+    "You climb back to the balcony room. Somewhere below a girl is shrieking WHERE YOU GO SEXY MAN at a man who is, in fact, going. The blackout curtains will fix most of it.":
+      "Du steigst zurück ins Balkonzimmer. Irgendwo unten kreischt ein Mädchen WHERE YOU GO SEXY MAN einen Mann an, der tatsächlich gerade geht. Die Verdunkelungsvorhänge werden das meiste davon regeln.",
+    "Home, such as it is — one recliner, one small table, and the whole loud soi laid out below like it is putting on the show for you alone.":
+      "Zuhause, so wie es eben ist — ein Liegestuhl, ein kleiner Tisch, und die ganze laute Soi liegt unten ausgebreitet, als würde sie die Show nur für dich allein abziehen.",
+    "Back to the balcony. Six bars' worth of music arrives as one blurred throb, a hostess laughs like a car alarm, and none of it follows you past the blackout curtains.":
+      "Zurück auf den Balkon. Die Musik von sechs Bars kommt als ein einziges verschwommenes Wummern an, eine Hostess lacht wie eine Autoalarmanlage, und nichts davon folgt dir hinter die Verdunkelungsvorhänge.",
+    "Up the stairs to the fan and the recliner. The soi does not quiet down for anyone — but draw the blackout curtains and it drops to a rumour you can sleep through.":
+      "Die Treppe hoch zum Ventilator und zum Liegestuhl. Die Soi wird für niemanden leiser — aber zieh die Verdunkelungsvorhänge zu, und sie sinkt zu einem Gerücht herab, bei dem du durchschlafen kannst.",
+    "The balcony room takes you back in. HANDSOME MAN! floats up from the pavement, aimed at somebody, everybody, nobody. You have learned to hear it as weather.":
+      "Das Balkonzimmer nimmt dich wieder auf. HANDSOME MAN! schwebt vom Gehsteig herauf, gerichtet an jemanden, alle, niemanden. Du hast gelernt, es wie Wetter zu hören.",
+    "Back to your patch of quiet-ish over the loudest hundred metres in Thailand — recliner, small table, and blackout curtains thick enough to turn the neon and the shouting into a lullaby.":
+      "Zurück zu deinem einigermaßen ruhigen Fleckchen über den lautesten hundert Metern Thailands — Liegestuhl, kleiner Tisch, und Verdunkelungsvorhänge dick genug, um Neon und Geschrei in ein Schlaflied zu verwandeln.",
+    "phone":
+      "Handy",
+    "Your phone. Battery anxiety made object. The flashlight works — for now.":
+      "Dein Handy. Akku-Angst, gegenständlich geworden. Die Taschenlampe funktioniert – vorerst.",
+    "7-Eleven receipt":
+      "7-Eleven-Kassenbon",
+    "A crumpled 7-Eleven receipt from your pocket. The print is in Thai.":
+      "Ein zerknüllter 7-Eleven-Kassenbon aus deiner Tasche. Der Aufdruck ist auf Thai.",
+    "packet of Mama noodles":
+      "Packung Mama-Nudeln",
+    "Half a packet of Mama noodles, chicken flavour. Dry. Technically food. A soi dog would commit crimes for this.":
+      "Eine halbe Packung Mama-Nudeln, Geschmacksrichtung Huhn. Trocken. Technisch gesehen Essen. Ein Soi-Hund würde dafür Verbrechen begehen.",
+    "empty Chang bottle":
+      "leere Chang-Flasche",
+    "An empty Chang big bottle. Deposit value: ฿5 to the right buyer.":
+      "Eine leere große Chang-Flasche. Pfandwert: ฿5 beim richtigen Käufer.",
+    "empty Leo bottle":
+      "leere Leo-Flasche",
+    "An empty Leo bottle, sand in the neck. Worth ฿5 in deposit.":
+      "Eine leere Leo-Flasche, Sand im Flaschenhals. ฿5 Pfand wert.",
+    "empty Singha bottle":
+      "leere Singha-Flasche",
+    "An empty Singha bottle standing politely by a bin outside the 7-Eleven. ฿5 of glass.":
+      "Eine leere Singha-Flasche, die brav neben einem Mülleimer vor dem 7-Eleven steht. ฿5 Glas.",
+    "phone charger":
+      "Handy-Ladegerät",
+    "A ฿59 USB charger of heroic optimism. Pair with an outlet to resurrect your phone.":
+      "Ein USB-Ladegerät für ฿59, voller heldenhaftem Optimismus. Mit einer Steckdose kombinieren, um dein Handy wiederzubeleben.",
+    "spare helmet":
+      "Ersatzhelm",
+    "Bank's spare helmet — hot pink, with a Rainbow Girls Bar sticker on the side. He wants it delivered to Pim at the Starlight Bar.":
+      "Banks Ersatzhelm – knallpink, mit einem Rainbow-Girls-Bar-Aufkleber an der Seite. Er will, dass er bei Pim in der Starlight Bar abgeliefert wird.",
+    "som tam (extra spicy)":
+      "Som Tam (extra scharf)",
+    "A takeaway box of som tam poo plara, spicy enough to be classed as a weapon. Candy's peace offering for Ploy, the cashier at Rainbow Girls.":
+      "Eine Take-away-Box Som Tam Poo Plara, scharf genug, um als Waffe zu gelten. Candys Friedensangebot für Ploy, die Kassiererin bei Rainbow Girls.",
+    "bottle of Sang Som":
+      "Flasche Sang Som",
+    "A boxed bottle of Sang Som with a rose-pink ribbon and a card in Candy's handwriting: 'เปิดร้านใหม่ สู้ๆ นะ' — for the opening shelf at Candy Bar 2.":
+      "Eine verpackte Flasche Sang Som mit rosa Schleife und einer Karte in Candys Handschrift: 'เปิดร้านใหม่ สู้ๆ นะ' – für das Eröffnungsregal in der Candy Bar 2.",
+    "ring of site keys":
+      "Ring mit Geländeschlüsseln",
+    "A heavy ring of brass site keys, every one oiled and worn — the locks of Hyper A Go-Go as they were the day the hoarding came down. Kept polished by a widow's thumb for years.":
+      "Ein schwerer Ring mit Messingschlüsseln, jeder geölt und abgegriffen – die Schlösser des Hyper A Go-Go, genau wie an dem Tag, als der Bauzaun fiel. Jahrelang vom Daumen einer Witwe blank poliert.",
+    "Peacock revue flyer":
+      "Flyer der Peacock-Revue",
+    "A glossy flyer for the Peacock Cabaret's revue: Petch mid-lip-sync in a gown made of light, Miss Mala's headdress filling the top corner like weather. On the back, in careful biro: 'for the Alcazar man — M.'":
+      "Ein Hochglanz-Flyer für die Revue des Peacock Cabaret: Petch mitten im Playback in einem Kleid aus Licht, Miss Malas Kopfschmuck füllt die obere Ecke wie ein Wetterphänomen. Auf der Rückseite, in sorgfältigem Kugelschreiber: 'für den Alcazar-Mann – M.'",
+    "brass dog tag":
+      "Hundemarke aus Messing",
+    "A brass dog tag gone green with four rainy seasons: SEAMUS — THE SHAMROCK — GOOD BOY. The pub is shuttered and Paddy is long gone home, but somebody once paid to have GOOD BOY engraved in brass, and they were right.":
+      "Eine Hundemarke aus Messing, grün angelaufen nach vier Regenzeiten: SEAMUS — THE SHAMROCK — GOOD BOY. Der Pub ist verrammelt und Paddy längst zurück in der Heimat, aber irgendjemand hat einmal bezahlt, um GOOD BOY in Messing gravieren zu lassen, und er hatte recht.",
+    "genuine Rolex (allegedly)":
+      "echte Rolex (angeblich)",
+    "A 'Rolex' of tremendous confidence and negligible mass. The second hand moves in a way Rolex engineers would describe as 'jazz'. It has already started a conversation at every bar you've worn it to.":
+      "Eine 'Rolex' von enormem Selbstbewusstsein und verschwindend geringem Gewicht. Der Sekundenzeiger bewegt sich auf eine Weise, die Rolex-Ingenieure als 'Jazz' bezeichnen würden. Sie hat in jeder Bar, in der du sie getragen hast, schon für Gesprächsstoff gesorgt.",
+    "designer sunglasses":
+      "Designer-Sonnenbrille",
+    "RayBens. The B is doing a lot of work. Worn at night, indoors, they say either 'international man of mystery' or 'hungover' — both true.":
+      "RayBens. Das B leistet ganze Arbeit. Nachts, drinnen getragen, sagen sie entweder 'internationaler Mann des Mysteriums' oder 'verkatert' – beides stimmt.",
+    "packet of 'vitamins'":
+      "Packung 'Vitamine'",
+    "A foil strip of blue diamonds from the peddler's deepest pocket, labelled in four languages, none convincingly. Sold with a wink you didn't ask for.":
+      "Ein Folienstreifen mit blauen Rauten aus der tiefsten Tasche des Straßenhändlers, in vier Sprachen beschriftet, keine davon überzeugend. Verkauft mit einem Augenzwinkern, um das du nicht gebeten hast.",
+    "moo ping skewer":
+      "Moo-Ping-Spieß",
+    "A grilled pork skewer, still warm, glistening with the good marinade. Technically dinner. A soi dog would trade its entire territory for this.":
+      "Ein gegrillter Schweinefleischspieß, noch warm, glänzend von der guten Marinade. Technisch gesehen Abendessen. Ein Soi-Hund würde dafür sein ganzes Revier eintauschen.",
+    "bottle of hair tonic":
+      "Flasche Haartonikum",
+    "HIMALAYAN HERBAL HAIR TONIC — 100% GROW BACK GUARANTEE. Smells of cooking oil and ambition. The ฿99 you paid for it is in another province by now.":
+      "HIMALAYA-KRÄUTER-HAARTONIKUM — 100% NACHWUCHS-GARANTIE. Riecht nach Speiseöl und Ehrgeiz. Die ฿99, die du dafür bezahlt hast, sind längst in einer anderen Provinz.",
+    "faded poster":
+      "verblasstes Poster",
+    "A faded Walking Street poster from another decade: 'CRYSTAL PALACE PRESENTS — MISS OY — DANCER No. 71'. The young woman in the photo has a look you recognise from somewhere much more recent.":
+      "Ein verblasstes Walking-Street-Poster aus einem anderen Jahrzehnt: 'CRYSTAL PALACE PRESENTS — MISS OY — DANCER No. 71'. Die junge Frau auf dem Foto hat einen Blick, den du von irgendwo viel Jüngerem wiedererkennst.",
+    "marigold offering":
+      "Ringelblumen-Opfergabe",
+    "Somebody's offering. Absolutely not yours to take. The red Fanta too.":
+      "Die Opfergabe von jemandem. Ganz sicher nicht deine, um sie zu nehmen. Die rote Fanta auch nicht.",
+    "two soi cats":
+      "zwei Soi-Katzen",
+    "Two gray-and-white shorthairs holding down the end of a lounger like a deposit. Sisters, plainly — same coat, same sea-watching squint — though the little one is a runt who never grew into her ears, and the big one sits slightly in front of her the way she always has and always will. The beach calls them Big One and Little One; Auntie Nok feeds them scraps and calls them her security. They have watched a thousand of these sunsets and fully intend to watch a thousand more. (PET them, if Big One permits it.)":
+      "Zwei grau-weiße Kurzhaarkatzen, die das Ende einer Liege besetzt halten wie ein Pfand. Schwestern, ganz offensichtlich – gleiches Fell, gleiches meerwärts blinzelndes Kneifen –, wobei die Kleine ein Kümmerling ist, die nie in ihre Ohren hineingewachsen ist, und die Große leicht vor ihr sitzt, wie sie es immer getan hat und immer tun wird. Der Strand nennt sie Big One und Little One; Auntie Nok füttert sie mit Resten und nennt sie ihre Security. Sie haben tausend solcher Sonnenuntergänge gesehen und haben fest vor, noch tausend weitere zu sehen. (PET sie, wenn Big One es erlaubt.)",
+    "steel safe":
+      "Stahltresor",
+    "A floor-bolted steel safe. The keypad's buttons are Thai numerals: ๐ ๑ ๒ ๓ ๔ ๕ ๖ ๗ ๘ ๙. It wants three digits.":
+      "Ein bodenverschraubter Stahltresor. Die Tasten des Zahlenfelds sind Thai-Ziffern: ๐ ๑ ๒ ๓ ๔ ๕ ๖ ๗ ๘ ๙. Er verlangt drei Stellen.",
+    "your wallet":
+      "deine Brieftasche",
+    "Your wallet! Cards, hotel key card, and — miraculously — most of the cash. Tucked inside: a note in careful English: 'Farang — you buy Mot's dinner tonight. Be more careful. — Oy'.":
+      "Deine Brieftasche! Karten, Hotel-Schlüsselkarte und – wie durch ein Wunder – der größte Teil des Bargelds. Darin steckt ein Zettel in sorgfältigem Englisch: 'Farang – du kaufst Mot heute Abend Abendessen. Sei vorsichtiger. – Oy'.",
+    "a number on a beer mat":
+      "eine Nummer auf einem Bierdeckel",
+    "A phone number biro'd onto a soggy beer mat, and under it, underlined twice: \"my place.\"":
+      "Eine mit Kugelschreiber auf einen durchweichten Bierdeckel gekritzelte Telefonnummer, darunter, zweimal unterstrichen: \"bei mir.\"",
+    "saleng sandals":
+      "Saleng-Sandalen",
+    "Sequinned sandals from a saleng cart, carried in a thin plastic bag. Sized for a Thai woman's foot. They are not for you — but you know who they are for.":
+      "Pailletten-Sandalen von einem Saleng-Karren, in einer dünnen Plastiktüte getragen. Für den Fuß einer Thai-Frau geschnitten. Sie sind nicht für dich – aber du weißt, für wen.",
+    "saleng heels":
+      "Saleng-Highheels",
+    "Platform heels from the saleng cart, still in the carry bag. Someone is going to look very good in these. You are not that someone.":
+      "Plateau-Highheels vom Saleng-Karren, noch in der Tragetasche. Jemand wird darin sehr gut aussehen. Du bist nicht dieser Jemand.",
+    "saleng lingerie":
+      "Saleng-Dessous",
+    "A bag of lingerie from the saleng cart — lace, silk-adjacent, the kind of purchase that requires a recipient to make sense.":
+      "Eine Tüte Dessous vom Saleng-Karren – Spitze, seidenähnlich, die Art Einkauf, die nur mit einer Empfängerin einen Sinn ergibt.",
+    // ── Social text (flirt/kiss/spank/fondle) — {n}=name, Opus-translated ──
+    "{n} receives your best line with the professional warmth of a woman who has heard nine thousand better ones tonight alone. “Ooo, so sweet, na.”":
+      "{n} nimmt deinen besten Spruch mit der professionellen Wärme einer Frau entgegen, die allein heute Abend neuntausend bessere gehört hat. “Ooo, so süß, na.”",
+    "{n} tilts her head, gives your line a two-second appraisal, and files it under harmless. “You funny man. Buy me drink, funny man.”":
+      "{n} legt den Kopf schief, mustert deinen Spruch zwei Sekunden lang und legt ihn unter harmlos ab. “Du lustig, na. Kauf mir Drink, lustiger Mann.”",
+    "{n} laughs for real this time, touches your arm, and tells you something genuinely rude about the man at the end of the bar. Progress.":
+      "{n} lacht diesmal echt, berührt deinen Arm und erzählt dir etwas richtig Gemeines über den Mann am Ende der Bar. Fortschritt.",
+    "{n} actually snorts, covers it, and leans an inch closer than the job requires. For a second the meter isn't running. Then it is again — but you saw it.":
+      "{n} prustet tatsächlich los, verbirgt es und lehnt sich einen Zentimeter näher, als der Job es verlangt. Eine Sekunde lang läuft die Uhr nicht. Dann läuft sie wieder — aber du hast es gesehen.",
+    "{n} slides onto the stool beside you, steals a sip of your drink, and starts flirting back with alarming professionalism. The other girls exchange looks.":
+      "{n} gleitet auf den Hocker neben dir, klaut einen Schluck von deinem Drink und flirtet mit beunruhigender Professionalität zurück. Die anderen Mädchen tauschen Blicke.",
+    "{n} decides you'll do for the night and turns the full wattage on — knee against yours, laughing before you finish the joke. The other girls give you up for lost.":
+      "{n} entscheidet, dass du für heute Abend reichst, und dreht voll auf — Knie an deinem, lacht schon, bevor du den Witz zu Ende bringst. Die anderen Mädchen geben dich verloren.",
+    "You lean in. {n} leans back — the full matador. The kiss lands on ambient air; a slap lands on you, precisely, like punctuation. The bar notices.":
+      "Du lehnst dich vor. {n} lehnt sich zurück — der volle Torero. Der Kuss landet in der Luft; eine Ohrfeige landet auf dir, präzise, wie ein Satzzeichen. Die Bar bemerkt es.",
+    "You go for it; {n} simply isn't there. Where her face was is a flat palm and a look that could curdle Chang. “No.” Just the one word, and the bar heard it.":
+      "Du machst deinen Zug; {n} ist einfach nicht da. Wo ihr Gesicht war, sind eine flache Hand und ein Blick, der Chang gerinnen lassen könnte. “Nein.” Nur das eine Wort, und die Bar hat es gehört.",
+    "{n} presents a cheek at the last microsecond — professional deflection, executed with the footwork of a woman who has dodged far better. “Buy drink first, tilac.”":
+      "{n} bietet in der letzten Mikrosekunde eine Wange an — professionelle Abwehr, ausgeführt mit der Beinarbeit einer Frau, die weit Besseren ausgewichen ist. “Erst Drink kaufen, tilac.”",
+    "{n} turns the kiss into a hug you didn't ask for and a laugh that closes the subject. “Slow, tilac. You want everything free tonight?”":
+      "{n} verwandelt den Kuss in eine Umarmung, um die du nicht gebeten hast, und ein Lachen, das das Thema beendet. “Langsam, tilac. Du willst heute alles umsonst?”",
+    "A quick peck is permitted, the way one permits a puppy on a sofa. {n} pats your cheek: “Okay, okay. Sanuk.”":
+      "Ein schnelles Küsschen wird gestattet, so wie man einem Welpen das Sofa gestattet. {n} tätschelt deine Wange: “Okay, okay. Sanuk.”",
+    "A brief kiss is granted, then withdrawn like a sample. {n} taps your nose. “Enough. You greedy.”":
+      "Ein kurzer Kuss wird gewährt, dann wie eine Kostprobe wieder zurückgezogen. {n} tippt dir auf die Nase. “Genug. Du gierig.”",
+    "{n} allows it — and takes her time about it. The cashier rings the till just to make a noise.":
+      "{n} lässt es zu — und lässt sich dabei Zeit. Die Kassiererin klingelt die Kasse, nur um Lärm zu machen.",
+    "{n} meets you halfway and holds it a beat past friendly. When she pulls back she's smiling at something she's decided not to tell you.":
+      "{n} kommt dir auf halbem Weg entgegen und hält ihn einen Moment länger, als freundlich wäre. Als sie sich zurückzieht, lächelt sie über etwas, das sie beschlossen hat, dir nicht zu verraten.",
+    "{n} kisses YOU, decisively, to a smattering of applause from the far end of the bar. You are now, officially, sitting with her.":
+      "{n} küsst DICH, entschlossen, begleitet von vereinzeltem Applaus vom anderen Ende der Bar. Du sitzt jetzt, ganz offiziell, bei ihr.",
+    "{n} takes your face in both hands and kisses you like she means the version of it she's selling. A glass goes up down the bar. You're hers for the night.":
+      "{n} nimmt dein Gesicht in beide Hände und küsst dich, als meinte sie die Version davon, die sie verkauft. Weiter unten an der Bar hebt sich ein Glas. Du gehörst ihr für heute Nacht.",
+    "{n} catches your wrist mid-air with a speed that suggests long practice, and the look she gives you drops the bar five degrees. Somewhere behind you, security uncrosses its arms.":
+      "{n} fängt dein Handgelenk mitten in der Luft ab, mit einer Schnelligkeit, die auf lange Übung schließen lässt, und der Blick, den sie dir zuwirft, kühlt die Bar um fünf Grad. Irgendwo hinter dir löst der Türsteher die verschränkten Arme.",
+    "Your hand doesn't get halfway. {n} steps out of range without appearing to move, and the temperature around you drops. A large man near the door stops chewing.":
+      "Deine Hand schafft nicht mal die Hälfte des Wegs. {n} tritt aus der Reichweite, ohne sich sichtbar zu bewegen, und die Temperatur um dich herum sinkt. Ein großer Mann neben der Tür hört auf zu kauen.",
+    "{n} sidesteps neatly. “Uh-uh. You not buy enough drink for that, tilac.” The mamasan's eyes flick your way like a till drawer closing.":
+      "{n} weicht sauber aus. “Äh-äh. Du nicht genug Drink kaufen für das, tilac.” Die Augen der Mamasan zucken zu dir herüber wie eine zufallende Kassenlade.",
+    "{n} pivots and your hand meets air. “Aht aht. That one cost more than you spend so far, tilac.” The till drawer of her eyes slides shut.":
+      "{n} dreht sich weg und deine Hand trifft nur Luft. “Aht aht. Das kostet mehr, als du bisher ausgibst, tilac.” Die Kassenlade ihrer Augen schiebt sich zu.",
+    "A token swat is absorbed with an eye-roll and precisely zero sincerity. “Hundred-fifty baht says you can try again, na.”":
+      "Ein pflichtschuldiger Klaps wird mit einem Augenrollen und exakt null Ernsthaftigkeit hingenommen. “Hundertfünfzig Baht, dass du es nochmal versuchen darfst, na.”",
+    "A glancing swat lands and is filed with an unimpressed hum. “Mm. Buy two more drink, maybe I let you.” She's joking. Mostly.":
+      "Ein streifender Klaps landet und wird mit einem unbeeindruckten Summen abgelegt. “Mm. Kauf zwei Drink mehr, vielleicht lass ich dich.” Sie scherzt. Meistens.",
+    "{n} yelps theatrically, laughs, and returns fire twice as hard. Yours was a swat; hers is a correction.":
+      "{n} quiekt theatralisch, lacht und feuert doppelt so hart zurück. Deiner war ein Klaps; ihrer ist eine Korrektur.",
+    "{n} jumps, laughs, and retaliates immediately and harder, to whoops from the next stool. You started a war you are structurally guaranteed to lose.":
+      "{n} zuckt hoch, lacht und schlägt sofort und härter zurück, begleitet von Jubel vom Nachbarhocker. Du hast einen Krieg angefangen, den zu verlieren dir strukturell garantiert ist.",
+    "{n} struts past deliberately slowly — then spanks YOU on the way back, to a roar from the entire bar. You have been out-Pattaya'd.":
+      "{n} stolziert betont langsam vorbei — und versohlt dann auf dem Rückweg DICH, begleitet von einem Gebrüll der ganzen Bar. Du wurdest in Sachen Pattaya ausgestochen.",
+    "{n} lets it happen, turns, and returns the favour with interest and a wink, timing it for the exact moment the whole bar is looking. The applause is for her.":
+      "{n} lässt es geschehen, dreht sich um und revanchiert sich mit Zinsen und einem Zwinkern, exakt in dem Moment getimt, in dem die ganze Bar hinsieht. Der Applaus gilt ihr.",
+    "Your hand sets off in a direction it has no visa for. {n} removes it like a bomb-disposal expert, and the smile she keeps on while doing it is the scariest thing you've seen tonight.":
+      "Deine Hand macht sich in eine Richtung auf, für die sie kein Visum hat. {n} entfernt sie wie eine Bombenentschärferin, und das Lächeln, das sie dabei aufbehält, ist das Gruseligste, was du heute Abend gesehen hast.",
+    "Your hand embarks; {n} intercepts it at the border and hands it back, still smiling — the smile of a woman who has ended men for less and found it tedious.":
+      "Deine Hand bricht auf; {n} fängt sie an der Grenze ab und gibt sie dir zurück, immer noch lächelnd — das Lächeln einer Frau, die Männer für weniger erledigt und es langweilig gefunden hat.",
+    "{n} intercepts your hand and returns it to your own knee, patting it twice — stay. “Naughty hands drink more first, na.”":
+      "{n} fängt deine Hand ab und legt sie zurück auf dein eigenes Knie, tätschelt sie zweimal — bleib. “Freche Hände erst mehr trinken, na.”",
+    "{n} lifts your wandering hand by the wrist, sets it on the bar, and puts her cold drink in it. “Hold this. Safer.”":
+      "{n} hebt deine wandernde Hand am Handgelenk, setzt sie auf die Theke und drückt ihren kalten Drink hinein. “Halt das. Sicherer.”",
+    "{n} tolerates approximately 1.5 seconds of wandering hand before redirecting it to the Connect 4 box. “Play this instead.”":
+      "{n} toleriert etwa 1,5 Sekunden wandernde Hand, bevor sie sie zum Vier-gewinnt-Karton umleitet. “Spiel lieber das.”",
+    "{n} allows the scenic route for exactly as long as it amuses her, then redirects your hand to your own beer. “Drink. Cool down, tilac.”":
+      "{n} erlaubt die Panoramaroute genau so lange, wie es sie amüsiert, dann leitet sie deine Hand zu deinem eigenen Bier um. “Trink. Abkühlen, tilac.”",
+    "{n} settles in closer and lets the moment linger just past professional. The mamasan develops an intense interest in the till.":
+      "{n} rückt näher und lässt den Moment gerade eben über professionell hinaus andauern. Die Mamasan entwickelt ein intensives Interesse an der Kasse.",
+    "{n} doesn't move your hand away this time — just raises an eyebrow that sets a price, and settles closer while you decide whether to pay it.":
+      "{n} schiebt deine Hand diesmal nicht weg — hebt nur eine Augenbraue, die einen Preis festsetzt, und rückt näher, während du entscheidest, ob du ihn zahlst.",
+    "{n} takes both your hands, inspects them like market produce, and puts them where she wants them — around her waist, while she orders herself another lady drink on your tab. Checkmate, but you don't mind.":
+      "{n} nimmt beide deiner Hände, begutachtet sie wie Marktware und legt sie dahin, wo sie sie haben will — um ihre Taille, während sie sich auf deine Rechnung noch einen Lady Drink bestellt. Schachmatt, aber es macht dir nichts aus.",
+    "{n} sighs, gives up the pretence, and arranges you around her like furniture she's chosen — then orders herself another lady drink on your tab, because winning shouldn't be free.":
+      "{n} seufzt, gibt die Fassade auf und arrangiert dich um sich herum wie Möbel, die sie ausgesucht hat — dann bestellt sie sich auf deine Rechnung noch einen Lady Drink, denn Gewinnen sollte nicht umsonst sein.",
   },
 };
