@@ -90,6 +90,18 @@ test("the Soi 6 challenge opening renders in German", () => {
   assert.match(o, /สบายสบาย/, "the Thai goal word stays Thai");
 });
 
+test("LOOK renders a German room: name, description, and scaffolding labels", () => {
+  state().flags.act1Done = true; state().stage = "vacation";
+  state().player.lang = "de"; state().room = "qv_room";
+  out = []; run("look");
+  const o = lastOut();
+  assert.match(o, /Dein Zimmer — Queen Vic Inn/, "the room name is German (venue name kept)");
+  assert.match(o, /Das Balkonzimmer über dem Queen Vic/, "the description is German");
+  assert.match(o, /Ausgänge: /, "the Exits label is German");
+  assert.match(o, /\bdown\b/, "…but the direction token stays English (it's the command)");
+  assert.match(o, /Eintreten: Queen Vic Inn\. \(ENTER <Name>\)/, "Step-inside label German, venue + ENTER kept");
+});
+
 test("G.player.lang survives a save/restore round-trip", () => {
   state().player.lang = "de";
   const blob = serializeGame();
