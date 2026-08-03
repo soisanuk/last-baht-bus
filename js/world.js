@@ -7589,6 +7589,20 @@ for (const [id, t] of Object.entries(_PATRON_TITLES)) if (PATRONS[id]) PATRONS[i
 // (Phase B) — the one you pick is deactivated (you ARE him). `pick` is the line
 // Tan hears; `tan` is his read on you. Voice: wry US-inflected English, the odd
 // Thai particle, sees every farang clearly by the second traffic light.
+// The narration language — the first thing Tan settles on the ride in. Picked in
+// English (he's the lingua-franca contact); from the pick onward the game renders
+// in the chosen tongue (Thai stays Thai). Endonym labels (English/Deutsch) are not
+// translated; the `tan` reaction for a non-English pick renders in that language
+// (it fires after G.player.lang is set — see _introAnswer / _L). Ships en + de.
+const LANGUAGES = [
+  { id: "en", label: "English",
+    pick: "English is fine.",
+    tan: "\"English — easy, half my job is English.\" He settles back into the drive." },
+  { id: "de", label: "Deutsch",
+    pick: "Deutsch. (German)",
+    tan: "\"Deutsch — gut.\" Something in his patter loosens, like a channel he prefers. \"From here it's your language, my friend. The town stays foreign. That's the fun of it.\"" },
+];
+
 const ORIGINS = [
   { id: "redundancy", label: "Redundancy",
     pick: "A redundancy cheque and a trade nobody's hiring for anymore.",

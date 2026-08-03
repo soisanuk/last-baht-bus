@@ -32,8 +32,22 @@ function engineInit(printFn, speakFn, sfxFn) {
 }
 
 // say(text, cls) — cls hints the renderer: "room", "thai", "dim", "alert", "win"
+// Localization: translate an English source string to the player's language, with
+// English fallback for any un-catalogued string. The catalog lives in lang.js
+// (`_CATALOGS`, loaded before the engine); it may be absent (tests/headless), so
+// guard for it. When lang === "en" (the default, ~all players) this is a no-op —
+// zero cost on the hot output path. Only whole FIXED strings match; interpolated
+// composites fall back to English until their pieces are wrapped in _L() (which is
+// why the catalog is keyed by exact English source, mirroring the th/rom pattern).
+function _L(s) {
+  const lang = G && G.player && G.player.lang;
+  if (!lang || lang === "en" || typeof _CATALOGS === "undefined" || !_CATALOGS[lang]) return s;
+  const hit = _CATALOGS[lang][s];
+  return hit != null ? hit : s;
+}
+
 function _say(text, cls) {
-  _learnNames(text);
+  _learnNames(text); // name/Thai harvest run on the ENGLISH source (language-independent)
   // collect the Thai the night shows you (capped, deduped) — the trainer
   // (same origin) reads it out of lbb_save and offers "words from the bus"
   if (G && G.thaiSeen) {
@@ -44,7 +58,7 @@ function _say(text, cls) {
       }
     }
   }
-  _enginePrint(text, cls || "");
+  _enginePrint(_L(text), cls || ""); // …but the player sees it in their language
 }
 
 // ── Action breadcrumb ────────────────────────────────────────────────────────
@@ -181,7 +195,7 @@ function newGame() {
     itNpc: null,         // last person addressed — the antecedent for "her/him/them" (see _resolveActor)
     convoQ: null,        // a question the partner has put to YOU, awaiting a reply: {id,key} (see _convoAsk/_convoAnswer)
     convoIdx: null,      // index of the partner's last-delivered node — its `choices` are the live action-choices (see _convoChoices)
-    player: { said: {}, origin: null, personality: null, orientation: null },// what you've told NPCs + WHO YOU ARE (origin/personality/orientation, picked in the taxi intro; persists across Act One resets)
+    player: { said: {}, lang: "en", origin: null, personality: null, orientation: null },// what you've told NPCs + WHO YOU ARE (lang + origin/personality/orientation, picked in the taxi intro; persists across Act One resets)
     faction: { wdg: 0, samson: 0, indie: 0, syndicate: 0 }, // standing with the powers (see _align) — only moves when you ACT, never for declining
     itemLoc: Object.fromEntries(
       Object.entries(ITEMS).map(([id, it]) => [id, it.location])),
