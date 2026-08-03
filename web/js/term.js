@@ -408,7 +408,9 @@ const _term = (() => {
       const b = document.createElement("button");
       // open (prefill) actions get an ellipsis — unless the label already
       // carries one ("ask about …", "tip …"), which doubled it up
-      b.textContent = act.t + (act.go || /…\s*$/.test(act.t) ? "" : " …");
+      // localise the display label (English cmd underneath is unchanged); the
+      // ellipsis decision keys off the English label's shape, not the German
+      b.textContent = _L(act.t) + (act.go || /…\s*$/.test(act.t) ? "" : " …");
       b.addEventListener("click", e => { e.stopPropagation(); _runAct(act); });
       _fly.appendChild(b);
     }
@@ -516,7 +518,7 @@ const _term = (() => {
       const b = document.createElement("button");
       b.className = "chip";
       b.dataset.cmd = cmd;
-      b.textContent = label || cmd;
+      b.textContent = _L(label || cmd); // German display label; the cmd submitted stays English
       b.addEventListener("click", () => {
         if (cmd.endsWith(" ")) { _input.value = cmd; _input.focus(); _refreshSuggest(); }
         else { _input.value = cmd; submit(_onCmd); }
