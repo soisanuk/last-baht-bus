@@ -119,6 +119,30 @@ test("tap-interface labels translate to German (the command underneath stays Eng
   assert.equal(_L("look"), "look", "English mode leaves labels untouched");
 });
 
+test("Taitch: Mercedes meets a German player in broken German, an English player in English", () => {
+  state().flags.act1Done = true; state().stage = "vacation"; state().room = "gold_rush";
+  // German player → German narration + Taitch speech
+  state().player.lang = "de";
+  out = []; run("ask mercedes about german");
+  const de = lastOut();
+  assert.match(de, /Fünf Jahr, München/, "her Munich line comes through in German");
+  assert.match(de, /wie Kind mit zwei Wort/, "…and it's Taitch — dropped endings, no articles");
+  assert.match(de, /Sie dreht einen Bierdeckel um/, "the narration around her speech is clean German");
+  // English player → her voice is unchanged (only the catalogued lady is affected)
+  state().player.lang = "en"; state().talked = {}; // reset the seen-book so the full line delivers again
+  out = []; run("ask mercedes about german");
+  assert.match(lastOut(), /Germany\. Five years, Munich/, "an English player hears her English");
+  assert.doesNotMatch(lastOut(), /Fünf Jahr/, "no German for the English player");
+});
+
+test("speech stays English by default — a non-Taitch NPC is unaffected by German mode", () => {
+  state().flags.act1Done = true; state().stage = "vacation"; state().room = "stinky_bar";
+  state().player.lang = "de";
+  out = []; run("talk bert");
+  // Bert isn't a Taitch lady and has no catalog entry → his English speech stands
+  assert.doesNotMatch(lastOut(), /Willkommen|Setz|guten Tag/i, "no accidental German for Bert");
+});
+
 test("G.player.lang survives a save/restore round-trip", () => {
   state().player.lang = "de";
   const blob = serializeGame();
