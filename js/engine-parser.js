@@ -360,7 +360,12 @@ function _hops(from, to) {
   const q = [from];
   while (q.length) {
     const cur = q.shift();
-    for (const nxt of Object.values(ROOMS[cur].exits || {})) {
+    // exits AND venues: in the migrated-geography rooms (all of Soi 6, plus ~16
+    // full-game rooms) a bar's door lives in its host street's `venues` list, not
+    // in `exits` — so a BFS over exits alone can leave the street but never reach a
+    // bar, making TRAVEL/GO find zero destinations. Treat venues as edges too.
+    const nbrs = Object.values(ROOMS[cur].exits || {}).concat(ROOMS[cur].venues || []);
+    for (const nxt of nbrs) {
       if (seen[nxt] !== undefined) continue;
       seen[nxt] = seen[cur] + 1;
       if (nxt === to) return seen[nxt];
@@ -3052,7 +3057,7 @@ function engineComplete(input) {
   const ctx = (endsSpace ? words : words.slice(0, -1))
     .filter(w => !["the", "a", "an", "to", "at", "for", "with", "about", "my"].includes(w));
   let pool;
-  if (G.pendingChoice === "vacation_end") pool = ["new vacation", "move to pattaya"];
+  if (G.pendingChoice === "vacation_end") pool = G.mode === "soi6" ? ["play again"] : ["new vacation", "move to pattaya"];
   else if (G.pendingChoice === "checkout") {
     pool = [...Object.keys(_HOTELS).filter(k => k !== G.hotel)
       .map(k => _HOTELS[k].name.toLowerCase()), "stay"];
@@ -3299,7 +3304,10 @@ function doCommand(input) {
       _tick();
       return;
     }
-    if (/pay|yes|ok\b|okay|sure|fine|deal|whatever|up to you/.test(lower)) {
+    // ANCHORED to the start of the answer: an unanchored match let LOOK (contains
+    // "ok"), any word ending "…ok", "fine" inside "barfine", etc. silently sign the
+    // paid open contract and roll the scam table. The answer must BE one of these.
+    if (/^(pay|yes|ok(ay)?|sure|fine|deal|whatever|up to you)\b/.test(lower)) {
       _bfResolve("open"); _tick(); return;
     }
     _bfPrompt(); // the negotiation eats everything else
@@ -3627,8 +3635,11 @@ function doCommand(input) {
 // menu calls this; PLAY AGAIN at week's end calls it too.
 function startSoi6Mode() {
   const identity = G && G.player;  // keep who you are across the fresh-week reset
+  const bestHappy = (G && G.bestHappy) || 0; // …and the best-week record PLAY AGAIN shows
   newGame();
-  if (identity && identity.origin) G.player = identity;
+  // PLAY AGAIN keeps identity AND the best-week high-water mark; a RESTART (which
+  // clears G.player first) falls through here with no identity and resets both.
+  if (identity && identity.origin) { G.player = identity; G.bestHappy = bestHappy; }
   _soi6Setup();
   // Same character creation as the full game: on a first-ever start (no identity
   // yet) Tan drives you in and you say who you are; a later week keeps your

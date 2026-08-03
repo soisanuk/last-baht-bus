@@ -264,6 +264,9 @@ function _closingTick() {
     "Midnight on Soi 6. The frontages roll down, the sound systems die mid-song, " +
     "and the ladies shoo the last punters back toward Beach Road. The party, such " +
     "as it was, is over.", "alert");
+  // a barfine still mid-negotiation dies with the shutters — else its answer would
+  // resolve against the street you've just been walked out onto (wrong barType/price).
+  if (G.pendingBf) { G.pendingBf = null; _say("The half-finished barfine closes with the ledger — no deal, no harm, and the mamasan is already counting the till.", "dim"); }
   const out = r.exits && r.exits.out;
   if (out) { G.room = out; _describeRoom(true); }
 }
@@ -1968,6 +1971,20 @@ const _CRASH_SPOTS = {
       "around your shoes without breaking rhythm.",
     "Naklua Road. North, and alone.",
   ] },
+  // The Soi 6 challenge: the pocket IS the world, so a rough wake stays in it —
+  // never the off-map promenade/beach spots the fence would then refuse.
+  soi6: { room: "soi6_street", prose: [
+    "You come to on the Soi 6 pavement, back against a shuttered bar front. The " +
+      "loudest hundred metres in Thailand has gone eerily silent — a soi dog, a " +
+      "sweeper, the neon dead overhead. Whatever you were chasing last night got away.",
+    "Soi 6 at dawn: the bars folded down to steel shutters, the beer smell hosed " +
+      "toward the drains, and you in a plastic chair somebody left out, exactly " +
+      "where the night mislaid you.",
+    "You surface on a stool outside a closed bar, the soi grey and empty, a " +
+      "cleaning lady working around your feet with the patience of someone who has " +
+      "seen every possible way a farang can end a night.",
+    "Soi 6. Shutters down, sun up, dignity pending.",
+  ] },
   darkside: { room: "sukhumvit_crossing", prose: [
     "You wake at the Sukhumvit crossing, the six-lane highway roaring six inches " +
       "from your dreams, the Darkside behind you and the whole long ride back to " +
@@ -1990,6 +2007,7 @@ const _REGION_CRASH = {
   "Darkside": "darkside",
 };
 function _crashSpotFor(roomId) {
+  if (G.mode === "soi6") return _CRASH_SPOTS.soi6; // stay in-pocket, never off-map
   const reg = (ROOMS[roomId] && ROOMS[roomId].region) || "Jomtien";
   return _CRASH_SPOTS[_REGION_CRASH[reg] || "beach"];
 }
@@ -2366,8 +2384,17 @@ function _endNight(reason) {
   const _quietHelped = _flag("act1Done") && G.hotel === "sabai" && hangover > 0;
   if (_quietHelped) hangover--;
   G.soc.bellAt = {};
+  G.soc.bells = {};    // the bell COUNT resets too, not just the glow timer (bellAt) —
+                       // else one week's three bells makes any later ฿300 ring an instant
+                       // level-3 room (full heat amnesty, hands-on cap lifted) for free
   G.soc.heat = {};
   G.soc.banned = {};
+  G.soc.bfBar = {};    // "a colleague already left with you" is a tonight thing — else one
+                       // barfine locks every other girl at that bar for the whole vacation
+  G.soc.bfRefused = {}; // life-refusals ("temple in the morning") are night-scoped
+  G.soc.goWith = {};   // the "I go with you, na" opener re-arms each night
+  G.soc.lockIn = {};   // Darkside lock-ins are per-night (their own comment says so)
+  G.soc.bra = {};      // the fondle bump is a one-night thing (as CLAUDE.md documents)
   G.soc.lastCall = {}; // last-call warnings reset with the night
   G.soc.mgrShot = {};  // the manager pours a fresh welcome shot each night
   G.soc.dogFavor = {}; // and the beer-bar staff get to fuss over Sai Krok anew

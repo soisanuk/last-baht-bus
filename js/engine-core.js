@@ -425,16 +425,21 @@ function _chargeRent() {
       `, the ${_HOTELS[G.hotel].name}. ฿${G.money} left.)`, "dim");
     return;
   }
-  // step down toward the Sabai Palms
-  let idx = _HOTEL_DOWNGRADE.indexOf(G.hotel);
-  while (idx < _HOTEL_DOWNGRADE.length - 1 && G.money < _hotelRate(_HOTEL_DOWNGRADE[idx])) idx++;
-  const to = _HOTEL_DOWNGRADE[idx];
-  if (to !== G.hotel) {
-    _say(`The ${_HOTELS[G.hotel].name} folio and your pockets have a short, frank ` +
-      `exchange, and by noon your bag has made its own way to the ` +
-      `${_HOTELS[to].name}. Nobody is unkind about it, which is somehow worse.`, "alert");
-    G.hotel = to;
-    G.room = _hotelRoomId();
+  // step down toward the Sabai Palms — but NOT in the Soi 6 challenge, whose whole
+  // world is the one pocket: a downgrade there would strand you at the off-map Sabai
+  // (outside SOI6_ROOMS) with the fence refusing every exit. Keep the Queen Vic and
+  // let the debt book below instead (capped, same as anywhere).
+  if (G.mode !== "soi6") {
+    let idx = _HOTEL_DOWNGRADE.indexOf(G.hotel);
+    while (idx < _HOTEL_DOWNGRADE.length - 1 && G.money < _hotelRate(_HOTEL_DOWNGRADE[idx])) idx++;
+    const to = _HOTEL_DOWNGRADE[idx];
+    if (to !== G.hotel) {
+      _say(`The ${_HOTELS[G.hotel].name} folio and your pockets have a short, frank ` +
+        `exchange, and by noon your bag has made its own way to the ` +
+        `${_HOTELS[to].name}. Nobody is unkind about it, which is somehow worse.`, "alert");
+      G.hotel = to;
+      G.room = _hotelRoomId();
+    }
   }
   const rate = _hotelRate(G.hotel);
   if (G.money >= rate) {
