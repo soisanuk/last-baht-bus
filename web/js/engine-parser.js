@@ -3299,7 +3299,10 @@ function doCommand(input) {
       _tick();
       return;
     }
-    if (/pay|yes|ok\b|okay|sure|fine|deal|whatever|up to you/.test(lower)) {
+    // ANCHORED to the start of the answer: an unanchored match let LOOK (contains
+    // "ok"), any word ending "…ok", "fine" inside "barfine", etc. silently sign the
+    // paid open contract and roll the scam table. The answer must BE one of these.
+    if (/^(pay|yes|ok(ay)?|sure|fine|deal|whatever|up to you)\b/.test(lower)) {
       _bfResolve("open"); _tick(); return;
     }
     _bfPrompt(); // the negotiation eats everything else
