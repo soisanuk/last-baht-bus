@@ -135,6 +135,19 @@ test("Taitch: Mercedes meets a German player in broken German, an English player
   assert.doesNotMatch(lastOut(), /Fünf Jahr/, "no German for the English player");
 });
 
+test("Taitch: Jenny speaks a lighter, phrasebook German learned off her sponsor Klaus", () => {
+  state().flags.act1Done = true; state().stage = "vacation"; state().room = "pink_lotus";
+  state().player.lang = "de";
+  out = []; run("ask jenny about sponsor");
+  const de = lastOut();
+  assert.match(de, /Klaus\. Deutschland/, "Klaus comes through in German");
+  assert.match(de, /Zwei Jahr jetzt/, "Taitch: dropped plural + fragment");
+  assert.match(de, /ich bleib sauber/, "phrasebook 'I stay clean'");
+  state().player.lang = "en"; state().talked = {};
+  out = []; run("ask jenny about sponsor");
+  assert.match(lastOut(), /Klaus\. Germany/, "an English player hears her English");
+});
+
 test("speech stays English by default — a non-Taitch NPC is unaffected by German mode", () => {
   state().flags.act1Done = true; state().stage = "vacation"; state().room = "stinky_bar";
   state().player.lang = "de";

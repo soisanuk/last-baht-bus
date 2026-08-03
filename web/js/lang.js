@@ -257,5 +257,29 @@ const _CATALOGS = {
       "\"Setz — guter Hocker, ich hab gespart.\" Mercedes schiebt dir dein Drink rüber, ohne zu frag; sie kennt die Bestellung jetzt. \"Du bist einzige hier, der mir Frage stellt und dann wart auf Antwort. Ist niedrige Latte, ich weiß. München war niedriger.\"",
     "\"You ask a question and wait for the answer. Low bar. Munich was lower.\"":
       "\"Du stell Frage und wart auf Antwort. Niedrige Latte. München war niedriger.\"",
+
+    // ══ TAITCH — Jenny (pink_lotus) ══════════════════════════════════════════
+    // The 2nd Taitch lady — deliberately LIGHTER than Mercedes. Jenny never lived
+    // in Germany; she picked her German off Klaus, her sponsor of two years. So her
+    // Taitch is more fragmentary and warmer — phrasebook German (endearments, money,
+    // "sauber"/clean, "vergeben"/spoken-for), heavier Thai syntax, present tense.
+    "Neat, quick with the till, a promise ring she touches when she's thinking. She took the cashier seat on purpose — off the floor, off the market, kept clean for the man in Germany who sends the money.":
+      "Ordentlich, flink an der Kasse, ein Versprechensring, den sie berührt, wenn sie nachdenkt. Sie hat den Kassenplatz mit Absicht genommen — weg vom Parkett, weg vom Markt, sauber gehalten für den Mann in Deutschland, der das Geld schickt.",
+
+    "\"Hello, welcome.\" Warm, with a boundary in it — the smile of a woman who has practised saying no nicely. \"I do the till, not the floor. You want a girl, I call a good one over, no problem. Me, I am spoken for.\" She touches the ring without knowing she does.":
+      "\"Hallo, willkommen.\" Warm, mit einer Grenze drin — das Lächeln einer Frau, die geübt hat, nett Nein zu sagen. \"Ich mach Kasse, nicht Parkett. Du willst Mädchen, ich ruf eine Gute, kein Problem. Ich — ich bin vergeben.\" Sie berührt den Ring, ohne zu wissen, dass sie es tut.",
+    "\"I do the till, not the floor. I am spoken for — I'll call a girl over for you.\"":
+      "\"Ich mach Kasse, nicht Parkett. Ich bin vergeben — ich ruf dir eine Gute.\"",
+
+    "\"Klaus. Germany.\" She says the name like an anchor. \"Two year now. He send money every month, I keep clean, I stay off the floor, I go with nobody. That is the deal, I keep my side.\" A steadiness that is mostly real. \"He come Pattaya twice a year. In between, I count the drinks and I count the days. Good deal. Better than the floor.\"":
+      "\"Klaus. Deutschland.\" Sie sagt den Namen wie einen Anker. \"Zwei Jahr jetzt. Er schick Geld jeden Monat, ich bleib sauber, ich bleib weg vom Parkett, ich geh mit keinem. Das ist Deal, ich halt meine Seite.\" Eine Festigkeit, die größtenteils echt ist. \"Er komm Pattaya zweimal im Jahr. Dazwischen ich zähl Drinks und ich zähl Tage. Guter Deal. Besser als Parkett.\"",
+
+    "She doesn't touch the ring this time. \"You know what you did, na. You made the number too big to say no to.\" Not angry — tired, ashamed, and doing the arithmetic anyway. \"Klaus send forty thousand a month. You put more than that on the bar tonight. So.\" A flat breath. \"I am not clean anymore. You bought that. I hope it was worth what it cost. For both of us.\"":
+      "Diesmal berührt sie den Ring nicht. \"Du weiß, was du getan hast, na. Du hast Zahl zu groß gemacht, um Nein zu sag.\" Nicht wütend — müde, beschämt, und rechnet trotzdem. \"Klaus schick vierzig tausend im Monat. Du hast mehr als das heut Abend auf Bar gelegt. Also.\" Ein flacher Atemzug. \"Ich bin nicht mehr sauber. Du hast das gekauft. Ich hoff, es war wert, was es gekostet hat. Für uns beide.\"",
+    "\"You made the number too big to say no. I am not clean anymore — you bought that.\"":
+      "\"Du hast Zahl zu groß gemacht für Nein. Ich bin nicht mehr sauber — du hast das gekauft.\"",
+
+    "\"Not married. Not yet.\" She turns it. \"Promise ring. He say when he retire he take me Germany, we marry proper. I believe him. Mostly.\" The 'mostly' escapes before she can stop it, and she files it away, embarrassed. \"He is a good man. Really. Two year, always the money come.\"":
+      "\"Nicht verheirat. Noch nicht.\" Sie dreht ihn. \"Versprechensring. Er sag, wenn er Rente, er nimm mich Deutschland, wir heirat richtig. Ich glaub ihm. Meistens.\" Das 'meistens' entwischt, bevor sie es stoppen kann, und sie legt es beschämt weg. \"Er ist guter Mann. Wirklich. Zwei Jahr, immer kommt Geld.\"",
   },
 };
