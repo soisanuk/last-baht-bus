@@ -523,9 +523,9 @@ function _bfRefusalSay(id, r) {
 // reprompt, and the restore redraw all read identically (see _renderResume).
 function _bfPrompt() {
   const { st, lt } = G.pendingBf;
-  const p = n => n ? "฿" + n : "waived — past midnight";
-  _say(`(SHORT TIME ${p(st)} — one round, the night carries on · LONG TIME ` +
-    `${p(lt)} — overnight · NO backs out.)`, "dim");
+  const p = n => n ? "฿" + n : _L("waived — past midnight");
+  _say(_fmt("(SHORT TIME {st} — one round, the night carries on · LONG TIME {lt} — overnight · NO backs out.)",
+    { st: p(st), lt: p(lt) }), "dim");
 }
 
 // The player answered the negotiation. kind: "st" | "lt" | "open" — open is

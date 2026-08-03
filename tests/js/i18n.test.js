@@ -201,6 +201,31 @@ test("G.player.lang survives a save/restore round-trip", () => {
   assert.equal(state().player.lang, "de", "the saved language is restored");
 });
 
+test("Soi 6 core-loop renders German: room desc, revisit, buy, social, inventory, barfine modal", () => {
+  state().flags.act1Done = true; state().stage = "vacation"; state().player.lang = "de";
+  // bar interior description
+  state().room = "cherry_pop"; out = []; run("look");
+  assert.match(lastOut(), /Rot von oben bis unten|Kirschen/, "bar interior desc in German");
+  // buy beer — pool line + the reusable money-suffix template
+  state().money = 9999; out = []; run("buy beer");
+  assert.match(lastOut(), /übrig/, "money suffix localised (übrig, not 'left')");
+  // revisit line on re-entry
+  state().room = "soi6_mid"; run("look"); state().room = "cherry_pop"; out = []; run("look");
+  assert.doesNotMatch(lastOut(), /The stairs are where|Red from floor/, "revisit isn't English");
+  // social text (_fmt {n} template) — a non-ladyboy hostess
+  state().soc.bells = { cherry_pop: 3 }; state().soc.drinks = { tabtim: 8 };
+  out = []; run("flirt tabtim");
+  assert.doesNotMatch(lastOut(), /receives your best line|slides onto the stool/, "flirt text isn't English");
+  // inventory item names localise per-item
+  state().itemLoc.phone = "inventory"; out = []; run("inventory");
+  assert.match(lastOut(), /Du trägst:.*Handy/, "inventory + item name in German");
+  // barfine negotiation modal, commands kept
+  state().pendingBf = { id: "tabtim", st: 500, lt: 900 };
+  out = []; _bfPrompt();
+  assert.match(lastOut(), /über Nacht|steigt aus/, "barfine modal localised");
+  assert.match(lastOut(), /SHORT TIME|LONG TIME|NO /, "…but SHORT TIME/LONG TIME/NO stay commands");
+});
+
 test("Fluent (not Taitch): Chompoo answers a German player in real, idiomatic Berlin German", () => {
   state().flags.act1Done = true; state().stage = "vacation"; state().room = "ruby_kiss";
   state().player.lang = "de";
