@@ -69,6 +69,10 @@ function _bfShark(id) {
   return _hh(id, 97) % 100 < 35;
 }
 function _bfExploitable(id) {
+  // A sponsor girl you've just outbid (flipped) has left a paying man FOR you —
+  // her first night out isn't the moment she runs a scam, even if her hash marks
+  // her a shark. She's earned honesty.
+  if (NPCS[id].type === "sponsor" && _sponsorFlipped(id)) return false;
   if (!_bfShark(id)) return false;
   if (_wingman()) return false;
   // The white knight is the perfect mark: he over-invests and can't read the tells,
@@ -1758,10 +1762,12 @@ function _doSendMoney(arg) {
   // back at each threshold (incl. the one that flips her), and never texts the
   // cheap-charlie / number-one patter — a quiet thank-you, or the warm post-flip line.
   if (NPCS[id].type === "sponsor") {
-    if (_sponsorDrip(id)) return;                 // a frame went out (its own CHECK MESSAGES nudge)
-    _pushMsg(id, _sponsorFlipped(id) ? "💗 come see me na, tilac" :
-      amt >= 500 ? "khop khun ka 🙏 you too kind to me" : "thank you na 😊");
-    _say("(📱 A reply lands before you've pocketed the phone.)", "dim");
+    const dripped = _sponsorDrip(id);             // a frame may go out (its own CHECK MESSAGES nudge)
+    // The flip payoff must still land when this same send crossed both ฿14k (the
+    // climax frame) and ฿15k (the flip) — don't let the drip swallow "come see me na".
+    if (_sponsorFlipped(id)) _pushMsg(id, "💗 come see me na, tilac");
+    else if (!dripped) _pushMsg(id, amt >= 500 ? "khop khun ka 🙏 you too kind to me" : "thank you na 😊");
+    if (!dripped) _say("(📱 A reply lands before you've pocketed the phone.)", "dim");
     return;
   }
   _pushMsg(id, amt >= 500 ? "🙏🙏🙏 you TOO good to me. tonight I take care YOU" :
