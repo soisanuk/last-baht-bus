@@ -938,5 +938,67 @@ const _CATALOGS = {
     // ── HELP_SOI6 command reference (commands/venues English; prose German) ──
     "Common commands:\n  LOOK · EXAMINE <thing> · TAKE <thing> · DROP <thing> · INVENTORY (I)\n  N/S/E/W · IN/OUT · ENTER <place> · TRAVEL <bar> (fast-hop to any bar you've seen)\n  TALK TO <person> · ASK <person> ABOUT <topic> · GIVE <thing> TO <person>\n  WAI [person] · SAY <thai phrase> [TO <person>]\n  WATCH TV · READ PAPER — the day's real headlines · WEATHER · SCORES · LOTTERY\n  WATCH SUNSET (Blue Dog & Stinky Pinky, early evening — the junction show)\n  WATCH SOI · BALCONY (your balcony above, the Queen Vic window below, or the quiet middle of the soi — watch, don't join)\n  PLAY CONNECT 4 · PLAY JACKPOT [bet] · PLAY POOL   (in the beer bars)\n  FLIRT/KISS/SPANK/FONDLE <lady> · BUY DRINK FOR <lady> · BUY BEER · BUY MAN DRINK\n  RING BELL (฿300, instant popularity) · TALK TO PATRON · BARFINE <lady>\n  BUY CONDOM (฿40 a pack, the 7-Eleven — a barfine uses one; go without at your peril)\n  DIAGNOSE (how bad is it) · GET TESTED (free clinic — clears a barfine souvenir)\n  QUESTS · ACCEPT <quest> · ABANDON <quest>   (the soi has its own jobs going)\n  EAT <food> · DRINK <thing> · BUY WATER / FOOD (street carts & the 7-Eleven)\n  WITHDRAW <amount> · CHECK BALANCE (the street ATM — ฿300 a pull, ฿20,000 a day)\n  SLEEP (your room, ends the night) · OPEN FRIDGE · TAKE WATER (two free bottles a day)\n  PHONE / EXAMINE PHONE (battery, messages, weather, headlines)\n  CONTACT <lady> (swap numbers) · CONTACTS · MESSAGE <lady> · CHECK MESSAGES\n  WHO / BLACKBOOK (your ladies, ranked by how they feel about you) · WHO AM I (who you chose to be)\n  SEND <amount> TO <lady> (banking app)\n  FEED DOG (a friendship you cannot undo) · PET DOG · NAME DOG <name>\n  LIGHT ON / LIGHT OFF · CHARGE PHONE\n  TIME · MAP · WAIT UNTIL <hour> · TIP <lady> <amount> · PHOTO · CHEERS · TAO RAI (ask the price)\n  AGAIN or G (repeat last command)\n  SCORE (happiness & progress) · UNDO · RESTART   (the night autosaves itself)\n  PLAY AGAIN (once the week's up — another seven days on the soi)\n  QUIT / END / LOGOUT (sign off; your night is saved) · RESET (wipe the save — asks first)":
       "Gängige Befehle:\n  LOOK · EXAMINE <thing> · TAKE <thing> · DROP <thing> · INVENTORY (I)\n  N/S/E/W · IN/OUT · ENTER <place> · TRAVEL <bar> (Schnellsprung zu jeder Bar, die du gesehen hast)\n  TALK TO <person> · ASK <person> ABOUT <topic> · GIVE <thing> TO <person>\n  WAI [person] · SAY <thai phrase> [TO <person>]\n  WATCH TV · READ PAPER — die echten Schlagzeilen des Tages · WEATHER · SCORES · LOTTERY\n  WATCH SUNSET (Blue Dog & Stinky Pinky, früher Abend — die Show an der Kreuzung)\n  WATCH SOI · BALCONY (dein Balkon oben, das Fenster des Queen Vic unten oder die stille Mitte der Soi — zuschauen, nicht mitmachen)\n  PLAY CONNECT 4 · PLAY JACKPOT [bet] · PLAY POOL   (in den Bierbars)\n  FLIRT/KISS/SPANK/FONDLE <lady> · BUY DRINK FOR <lady> · BUY BEER · BUY MAN DRINK\n  RING BELL (฿300, sofortige Beliebtheit) · TALK TO PATRON · BARFINE <lady>\n  BUY CONDOM (฿40 pro Packung, der 7-Eleven — ein Barfine verbraucht eines; ohne auf eigene Gefahr)\n  DIAGNOSE (wie schlimm steht es) · GET TESTED (kostenlose Klinik — beseitigt ein Barfine-Souvenir)\n  QUESTS · ACCEPT <quest> · ABANDON <quest>   (die Soi hat ihre eigenen Aufträge am Laufen)\n  EAT <food> · DRINK <thing> · BUY WATER / FOOD (Straßenkarren & der 7-Eleven)\n  WITHDRAW <amount> · CHECK BALANCE (der Straßen-Geldautomat — ฿300 pro Abhebung, ฿20.000 am Tag)\n  SLEEP (dein Zimmer, beendet die Nacht) · OPEN FRIDGE · TAKE WATER (zwei Gratisflaschen am Tag)\n  PHONE / EXAMINE PHONE (Akku, Nachrichten, Wetter, Schlagzeilen)\n  CONTACT <lady> (Nummern tauschen) · CONTACTS · MESSAGE <lady> · CHECK MESSAGES\n  WHO / BLACKBOOK (deine Ladys, sortiert danach, was sie für dich empfinden) · WHO AM I (wer du sein wolltest)\n  SEND <amount> TO <lady> (Banking-App)\n  FEED DOG (eine Freundschaft, die du nicht rückgängig machen kannst) · PET DOG · NAME DOG <name>\n  LIGHT ON / LIGHT OFF · CHARGE PHONE\n  TIME · MAP · WAIT UNTIL <hour> · TIP <lady> <amount> · PHOTO · CHEERS · TAO RAI (nach dem Preis fragen)\n  AGAIN oder G (letzten Befehl wiederholen)\n  SCORE (Zufriedenheit & Fortschritt) · UNDO · RESTART   (die Nacht speichert sich selbst)\n  PLAY AGAIN (wenn die Woche um ist — weitere sieben Tage auf der Soi)\n  QUIT / END / LOGOUT (abmelden; deine Nacht ist gespeichert) · RESET (Speicherstand löschen — fragt vorher)",
+
+    // ── soi6 night-loop ambience — de-sweep batch 1 (tools/soak.mjs --lang de,
+    // 2026-08-05): the highest-frequency FIXED strings from the gap report.
+    // Templated lines (interpolated ฿/amounts) need _fmt refactors — next batch. ──
+    "The saleng packs up its trestles and putters on down the soi, the girls waving after it.":
+      "Der Saleng packt seine Klappböcke zusammen und knattert die Soi hinunter, die Mädchen winken ihm hinterher.",
+    "You only know the way to bars and hotels you've already found. (Bare TRAVEL lists them.)":
+      "Du kennst den Weg nur zu Bars und Hotels, die du schon gefunden hast. (TRAVEL ohne Ziel listet sie auf.)",
+    "The far stools run to the usual weathered faces — here before you, here after you, and not looking for anyone new tonight.":
+      "Auf den hinteren Hockern die üblichen verwitterten Gesichter — schon vor dir da, nach dir noch da, und heute Nacht nicht auf der Suche nach jemand Neuem.",
+    "Down the far end, a knot of regulars are welded to the bar, deep in an argument only they follow — part of the furniture, not the cast.":
+      "Ganz hinten ist eine Traube Stammgäste mit dem Tresen verschweißt, tief in einem Wortgefecht, dem nur sie folgen — Teil des Mobiliars, nicht der Besetzung.",
+    "No adventures on the books. The givers are out there — talk to people.":
+      "Nichts im Auftragsbuch. Die Auftraggeber sind da draußen — sprich mit den Leuten.",
+    "You dance between the stools. A hostess joins you instantly and without inquiry — enthusiasm is the house style — and for eight bars of luk thung you are the floor show.":
+      "Du tanzt zwischen den Hockern. Sofort und ungefragt tanzt eine Hostess mit — Begeisterung ist der Hausstil — und für acht Takte Luk Thung bist du die Showeinlage.",
+    "{{Ice}} settling in buckets, Connect Four counters clacking, and the chorus of “HELLO WELCOME” as somebody richer walks past outside.":
+      "Eis sackt in den Kübeln nach, Vier-gewinnt-Steine klackern, und der Chor aus „HELLO WELCOME“ setzt ein, sobald draußen jemand Reicheres vorbeigeht.",
+    "Perfume, cold Chang, cigarette ghosts in the upholstery, and the bleach that fights a nightly holding action against all three. Every bar in town, one smell.":
+      "Parfüm, kaltes Chang, Zigarettengeister im Polster und der Chlorreiniger, der Nacht für Nacht ein Hinhaltegefecht gegen alle drei führt. Jede Bar der Stadt, ein und derselbe Geruch.",
+    "The sky over the gulf goes grey, then pink, and even Pattaya blinks. 04:00. The last bars stack their stools; the baht buses carry home the wreckage; somewhere a rooster who fears nothing starts up. You drift back and let the day take you.":
+      "Der Himmel über dem Golf wird grau, dann rosa, und selbst Pattaya blinzelt. 04:00. Die letzten Bars stapeln ihre Hocker; die Baht-Busse tragen die Trümmer der Nacht heim; irgendwo legt ein Hahn los, der nichts und niemanden fürchtet. Du lässt dich zurücksinken und überlässt dich dem Tag.",
+    "“ชนแก้ว!” (chon gaew — glasses meet!) Every glass within reach angles toward yours: the girls', the regular's, possibly the mamasan's calculator. Nobody needs a reason. Not needing a reason is the entire custom.":
+      "“ชนแก้ว!” (chon gaew — die Gläser treffen sich!) Jedes Glas in Reichweite neigt sich deinem zu: die Gläser der Mädchen, das Glas des Stammgasts, womöglich der Taschenrechner der Mamasan. Niemand braucht einen Grund. Keinen Grund zu brauchen ist der ganze Brauch.",
+    "A lifer holds down the corner stool, holding forth at the room in general; the kind of fixture you nod past, never actually meet.":
+      "Ein Urgestein hält den Eckhocker besetzt und doziert in den Raum hinein; die Sorte Inventar, der man zunickt und die man nie wirklich kennenlernt.",
+    "The 7-Eleven fridge hums somewhere, but this calls for a bar stool.":
+      "Irgendwo brummt ein 7-Eleven-Kühlschrank, aber dafür braucht's einen Barhocker.",
+    "You give it a verse. Three hostesses join the chorus without asking what the song is. It has never once mattered.":
+      "Du gibst eine Strophe zum Besten. Drei Hostessen steigen in den Refrain ein, ohne zu fragen, welches Lied es ist. Das hat noch nie eine Rolle gespielt.",
+    "A peddler drifts in off the street with a display board of watches, a fan of sunglasses, and — produced from an inner pocket with a meaningful eyebrow — certain 'vitamins'. He stations himself at your elbow, patient as weather.":
+      "Ein fliegender Händler treibt von der Straße herein, mit einem Brett voller Uhren, einem Fächer Sonnenbrillen und — aus der Innentasche gezogen, mit einer bedeutungsvollen Augenbraue dazu — gewissen „Vitaminen“. Er bezieht Stellung an deinem Ellbogen, geduldig wie das Wetter.",
+    "A slow head-shake. He re-shoulders the display board — watches swinging like wind chimes — and moves down the bar to a man who has already made eye contact, the fatal error.":
+      "Ein langsames Kopfschütteln. Er schultert das Brett wieder — die Uhren schaukeln wie Windspiele — und zieht den Tresen entlang zu einem Mann, der schon Blickkontakt aufgenommen hat: der fatale Fehler.",
+    "A soi dog with one clipped ear falls in beside you for half a block, matching your pace with off-duty professionalism, then peels away at the soi mouth with one look back. (FEED DOG, if you'd like that to go differently.)":
+      "Ein Soi-Hund mit gestutztem Ohr schließt für einen halben Block zu dir auf, hält mit dienstfreier Professionalität dein Tempo und schert mit einem letzten Blick zurück an der Soi-Mündung aus. (FEED DOG, wenn das anders ausgehen soll.)",
+    "You concede with what dignity remains.":
+      "Du gibst auf, mit dem bisschen Würde, das dir noch bleibt.",
+    "You toast the night air. The night, in fairness, has earned it.":
+      "Du stößt mit der Nachtluft an. Fairerweise hat sie es sich verdient.",
+    "You sing to the street. Somewhere down the soi a karaoke bar answers, worse. Honour is satisfied.":
+      "Du singst der Straße etwas vor. Irgendwo weiter unten an der Soi antwortet eine Karaoke-Bar, schlechter. Der Ehre ist Genüge getan.",
+    "You dance alone on the pavement. A passing baht bus honks the beat, which is generous, because you weren't keeping one.":
+      "Du tanzt allein auf dem Gehweg. Ein vorbeifahrender Baht-Bus hupt den Takt, was großzügig ist, denn du hast keinen gehalten.",
+    "Soi 6's shutters are down, the frontages black, the sound systems finally and mercifully off. Whatever you were after here shut at midnight — the beer bars and the Queen Vic are what's still awake now.":
+      "Die Rollläden der Soi 6 sind unten, die Fronten schwarz, die Anlagen endlich und gnädig aus. Was auch immer du hier wolltest, hat um Mitternacht geschlossen — wach sind jetzt noch die Bierbars und die Queen Vic.",
+    "Perfume applied with intent, cheap floor cleaner, and hotel soap from rooms rented by the hour.":
+      "Absichtsvoll aufgetragenes Parfüm, billiger Bodenreiniger und Hotelseife aus stundenweise vermieteten Zimmern.",
+    "No water for sale here. 7-Elevens, bars, and the street carts all have it.":
+      "Hier gibt es kein Wasser zu kaufen. 7-Elevens, Bars und Straßenkarren haben alle welches.",
+    "At the far end a regular reigns — the sort of scene you watch from across the bar, not one you walk into.":
+      "Am hinteren Ende regiert ein Stammgast — die Sorte Szene, die man von der anderen Seite der Bar aus betrachtet, nicht die, in die man sich einmischt.",
+    "A ซาเล้ง hung with sequinned sandals and platform heels rolls up outside; the girls are on it before it stops.":
+      "Ein ซาเล้ง, behängt mit Pailletten-Sandalen und Plateauschuhen, rollt draußen heran; die Mädchen sind drauf, bevor er hält.",
+    "A ซาเล้ง putters up outside, burner going and pork smoke ahead of it; the girls drift to the window.":
+      "Ein ซาเล้ง knattert draußen heran, der Brenner an, der Grillrauch voraus; die Mädchen ziehen ans Fenster.",
+    "You thumb the room's TV on. A wall-mounted flatscreen, the hotel's welcome channel giving up to actual programming: the news, sound low, Thai subtitles racing.":
+      "Du schaltest den Fernseher im Zimmer an. Ein Flachbildschirm an der Wand, der Begrüßungskanal des Hotels weicht echtem Programm: die Nachrichten, leise, die thailändischen Untertitel im Renntempo.",
+    "Tonight it's muay thai highlights and the lottery draw. You watch two rounds, content, and let the rest wash over you.":
+      "Heute Abend: Muay-Thai-Highlights und die Lottoziehung. Du schaust zwei Runden zu, zufrieden, und lässt den Rest über dich hinwegrauschen.",
+    "You call it. The air-con rattles its lullaby, the neon leaks through the curtains, and Pattaya carries on politely without you.":
+      "Du machst Schluss für heute. Die Klimaanlage rattert ihr Schlaflied, das Neon sickert durch die Vorhänge, und Pattaya macht höflich ohne dich weiter.",
   },
 };
