@@ -2042,6 +2042,7 @@ const _STD_MORNING = [
     "(GET TESTED — the longer you leave it, the longer it drags.)",
 ];
 function _stdBarfineRoll() {
+  if (G.lastBfChaste) { G.lastBfChaste = false; return; } // reality-LT night was sexless — no condom used, no risk
   if (G.condoms > 0) { G.condoms--; _say(_pickVary(_STD_SAFE, "stdsafe"), "dim"); return; }
   // no protection, and no immediate tell — the night keeps its secret a day or two
   if (!G.std && _rand() < STD_RISK) G.std = { day: G.day };
@@ -2416,6 +2417,7 @@ function _endNight(reason) {
   G.soc.apologized = {}; // a new shift will hear you out afresh
   G.soc.selfBf = false;
   G.soc.butterflyTeased = false;
+  G.offstage = false; // never carry an "off with her" flag into a new night
   G.selfBfId = null;
   G.quizPlayed = {};
   G.phone.msgCd = {};
