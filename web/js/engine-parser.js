@@ -389,16 +389,17 @@ function _doTravel(arg) {
   const w = (arg || "").toLowerCase().replace(/^to (the )?/, "").trim();
   const dests = _travelDests();
   if (!w) {
-    if (!dests.length) {
-      _say("You don't know the way anywhere yet. Places join the list once you've stood in them.");
+    // Only list places actually reachable on foot from here — at a dead-end like
+    // the Sukhumvit crossing every hop is null, so the header would otherwise sit
+    // above an empty list.
+    const rows = dests.map(id => [id, _hops(G.room, id)]).filter(([, h]) => h !== null);
+    if (!rows.length) {
+      _say("You don't know the way anywhere from here yet. Places join the list once you've stood in them.");
       return;
     }
     _say("You know the way to:", "dim");
-    for (const id of dests) {
-      const h = _hops(G.room, id);
-      if (h === null) continue;
+    for (const [id, h] of rows)
       _say(`  ${_barName(id)} — ${h} turn${h === 1 ? "" : "s"}`, "dim");
-    }
     _say("(TRAVEL <place>. Walking pace — no shortcuts through the clock.)", "dim");
     return;
   }
@@ -410,18 +411,24 @@ function _doTravel(arg) {
   if ((_here0.bar && _here0.bar.toLowerCase().includes(w)) || _here0.name.toLowerCase().includes(w)) {
     _say("You're standing in it."); return;
   }
+  const home = _hotelRoomId();
   let dest = null;
-  if (/^(hotel|my room|home|room)$/.test(w) ||
-      _HOTELS[G.hotel].name.toLowerCase().includes(w)) {
-    dest = _hotelRoomId();
-  }
+  // "home"/"my room"/etc. always mean your room.
+  if (/^(hotel|my room|your room|home|room)$/.test(w)) dest = home;
+  // Then a visited venue by name — bars first, and skip the home room here so the
+  // Queen Vic *pub* wins over "Your Room — Queen Vic Inn" (both contain "queen vic
+  // inn"); the room is reachable via the keywords above and the hotel-name match below.
   if (!dest) {
     for (const id of dests) {
+      if (id === home) continue;
       const r = ROOMS[id];
       if ((r.bar && r.bar.toLowerCase().includes(w)) ||
           r.name.toLowerCase().includes(w)) { dest = id; break; }
     }
   }
+  // Finally the hotel's own name (so "travel sabai palms" works) — after venues,
+  // so a same-named pub isn't shadowed by the hotel you happen to sleep in.
+  if (!dest && _HOTELS[G.hotel].name.toLowerCase().includes(w)) dest = home;
   if (!dest) {
     const here = _room();
     if ((here.bar && here.bar.toLowerCase().includes(w)) ||
@@ -1530,23 +1537,30 @@ function _doBuy(arg) {
 
 function _doRideBus(arg) {
   const r = _room();
-  if (G.mode === "soi6") {
-    _say("A blue songthaew slows, hopeful, and you wave it on. The routes out of here " +
-      "aren't yours this week — one day the whole city, but not this trip.");
-    return;
-  }
+  // Order matters: "no stop here" (indoors) and the curfew both describe the
+  // real situation, so they come before the soi6-mode refusal — otherwise BUS
+  // typed indoors or after 02:00 would narrate a songthaew slowing where none is.
+  if (!r.busStop) { _say("No bus stop here. Look for one on the main roads."); return; }
   if (G.rain > 0) {
     _say("Headlights crawl past behind the wall of water, but no songthaew is " +
       "stopping — the drivers can't tell a fare from a lamppost in this.");
     return;
   }
-  if (!r.busStop) { _say("No bus stop here. Look for one on the main roads."); return; }
   if (G.nightTurn >= LAST_BUS_TURN) {
+    // Only advertise MOTOSAI where there's actually a stand (beach_rd_c/_n, naklua_rd
+    // and the soi6 pocket have none — it's the two feet from here).
     _say("You stand at the stop with your arm half-raised, and nothing comes. Nothing " +
       "is coming. The last songthaew of the night made its run and rattled off to the " +
       "depot a while back — this is the last-baht-bus hour, and you're on the wrong " +
-      "side of it. It's a motorbike taxi now, or your own two feet through the dark. " +
-      "(MOTOSAI, or walk it home.)", "alert");
+      "side of it. " + (r.motosai
+        ? "It's a motorbike taxi now, or your own two feet through the dark. (MOTOSAI, or walk it home.)"
+        : "No motorbike stand at this stop either — it's your own two feet through the dark from here."),
+      "alert");
+    return;
+  }
+  if (G.mode === "soi6") {
+    _say("A blue songthaew slows, hopeful, and you wave it on. The routes out of here " +
+      "aren't yours this week — one day the whole city, but not this trip.");
     return;
   }
   const lines = Object.entries(BUS_LINES).filter(([, stops]) => stops.includes(G.room));
@@ -2327,9 +2341,10 @@ function _doTip(arg) {
 
 function _doWave(arg) {
   if (/bus/.test(arg) || (!arg && _room().busStop)) {
-    // only if a bus will actually come — else _doRideBus's curfew/rain refusal
-    // would follow a "swerves in within four seconds" that contradicts it
-    if (G.nightTurn < LAST_BUS_TURN && !G.rain)
+    // only if a bus will actually come — else _doRideBus's refusal (no stop here /
+    // curfew / rain / soi6 routes-aren't-yours) would follow a "swerves in within
+    // four seconds" that contradicts it. WAVE BUS indoors is the common trap.
+    if (_room().busStop && G.nightTurn < LAST_BUS_TURN && !G.rain && G.mode !== "soi6")
       _say("You put an arm out at road height. A blue songthaew swerves in within " +
         "four seconds — they can smell an undecided farang at three hundred metres.");
     _doRideBus("");
@@ -2632,8 +2647,14 @@ function _doWithdraw(arg) {
     return;
   }
   if (!_room().atm) {
-    _say("No ATM here. There's one on the main drag of every nightlife area — Soi 6 has " +
-      "one out on the street.");
+    // On Soi 6 the only machine is at the West End by the junction — don't tell a
+    // player already standing on the soi that "Soi 6 has one out on the street."
+    if (["soi6_mid", "soi6_deep"].includes(G.room))
+      _say("No ATM on this stretch — the only machine on Soi 6 is back at the West End, " +
+        "by the beach-road junction. Head WEST.");
+    else
+      _say("No ATM here. There's one on the main drag of every nightlife area — Soi 6 has " +
+        "one at the West End, by the junction.");
     return;
   }
   const n = _atmParse(arg);
@@ -3378,7 +3399,10 @@ function doCommand(input) {
       const gw = arg.replace(/^to (the )?/, "");
       // a direction alias OR one of this room's own exit keys (pub, hotel, …)
       if (!gw || _DIRS[gw] !== undefined || (_room().exits && _room().exits[gw])) _doGo(gw);
-      else _doTravel(gw); // "go candy bar" — a place, not a direction
+      // "go candy bar" — a place, not a direction. Route through _doEnter so a bar
+      // fronting THIS block enters on the first try (its venues/exits are checked by
+      // name), exactly like ENTER; _doEnter falls through to TRAVEL when not adjacent.
+      else _doEnter(gw);
       break;
     }
     case "travel": case "goto": _doTravel(arg); break;
