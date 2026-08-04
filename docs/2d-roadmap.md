@@ -45,6 +45,9 @@ Owl voice. Every stage below stages the prose; none replaces it.
 A visual layer stacked above the existing scrollback, in the same no-build classic-
 script stack. Reads `G` after each command; owns no state; degrades to nothing.
 **Ships before a single backdrop is drawn** — the art slot hides gracefully.
+**Implementation spec (hand-off-ready): `docs/2d-v0-spec.md`** — exact anchors,
+reference code, decided edge cases, acceptance checklist; this section is the
+design rationale behind it.
 
 ![v0 mock — Queen Vic Inn and Ruby Kiss Bar simulated screens](img/2d-v0-mock.png)
 
@@ -199,6 +202,10 @@ start. Do it **lazily**:
 - 2026-08: Roadmap written; v0 sketched against real seams (`submit()`/boot
   hooks, `_term` export, `_isDarkHere`, `_bellActive`, label seam). Nothing
   implemented yet.
+- 2026-08: v0 implementation spec written (`docs/2d-v0-spec.md`) — hand-off-ready
+  for a smaller model: hard rails, exact anchors (term.js export/hooks, index.html
+  mounts), full reference scene.js + E2E spec, decided edge cases, acceptance
+  checklist. Not yet implemented.
 - 2026-08: v0 mocked as simulated screens (Queen Vic + Ruby Kiss, fig. above)
   from real engine data — the layout works at 390px with a 7-strong cast row,
   and the mock's data pulls confirmed every panel row has a live engine seam to
