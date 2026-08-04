@@ -199,6 +199,12 @@ start. Do it **lazily**:
 
 ## Decision log
 
+- 2026-08-05: **v1 implementation spec written** (`docs/2d-v1-spec.md`) — hotspot
+  data as a sidecar classic script keyed by ART key (never region images — shared
+  art means a painted door is a different exit per room), percent-of-image coords
+  mapped through the object-fit:cover transform (formula in the spec), static
+  painted-objects only, console author mode, integrity test reusing the
+  promise-lint mechanism. Not yet implemented.
 - 2026-08-05: **the visual layer defaults OFF** behind hidden verbs — `TOGGLE_V0`
   (the scene panel) and `TOGGLE_V1` (hotspots, pre-wired). Intercepted in
   main.js's `_dispatch` like RESET; prefs in localStorage (`lbb_v0_on`/
