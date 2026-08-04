@@ -199,6 +199,12 @@ start. Do it **lazily**:
 
 ## Decision log
 
+- 2026-08-05: **v1 shipped** per `docs/2d-v1-spec.md` — `web/js/scene-hotspots.js`
+  (new, 18 hotspots hand-authored + visually verified across the Soi 6 pocket's
+  9 bespoke-art rooms), `scene.js`'s `_sceneArt` extended with the cover-transform
+  render + console author mode, `index.html` script tag + CSS, `main.js`'s
+  toggle message trimmed, `tests/js/hotspots.test.js` + `tests/e2e/hotspots.spec.mjs`
+  (new). `node --test` and `npx playwright test` green, no engine file touched.
 - 2026-08-05: **v1 implementation spec written** (`docs/2d-v1-spec.md`) — hotspot
   data as a sidecar classic script keyed by ART key (never region images — shared
   art means a painted door is a different exit per room), percent-of-image coords
