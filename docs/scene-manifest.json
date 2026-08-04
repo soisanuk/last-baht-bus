@@ -1,0 +1,2880 @@
+{
+  "generated": "2026-08-04",
+  "note": "Every room in the game + its region, for the scene-art pipeline (docs/art-pipeline-spec.md). Derived from web/js/world.js — regenerate with scripts/gen-scene-manifest.mjs, do not hand-edit. `kind` is a generator heuristic for prompt-template selection, not game canon. `regionSlug` is produced by the same regex as web/js/scene.js `_sceneArt()`; art files are web/art/rooms/<id>.png with web/art/regions/<slug>.png as the fallback.",
+  "counts": {
+    "rooms": 176,
+    "regions": 15,
+    "byKind": {
+      "street": 59,
+      "massage": 14,
+      "beer": 49,
+      "shop": 2,
+      "beach": 9,
+      "interior": 3,
+      "gogo": 9,
+      "viewpoint": 2,
+      "food": 2,
+      "market": 4,
+      "pub": 3,
+      "soapy": 3,
+      "hotel_room": 4,
+      "gents": 3,
+      "soi6": 7,
+      "hostbar": 1,
+      "cabaret": 1,
+      "club": 1
+    }
+  },
+  "regions": [
+    {
+      "slug": "beach-road",
+      "name": "Beach Road",
+      "roomIds": [
+        "beach_rd_c",
+        "beach_rd_n",
+        "beach_rd_s",
+        "beachrd_oil",
+        "beachthai_massage",
+        "blue_dog",
+        "central_mall",
+        "north_beach",
+        "papaya_massage",
+        "police_station",
+        "promenade",
+        "short_time_motel",
+        "stinky_bar",
+        "tequila_queen"
+      ],
+      "sampleDescs": [
+        "Where Soi 6 meets Beach Road. The soi runs inland to the east — short, loud, and lit like a runway. Across Beach Road to the west lies the open sand and the bay; the Dolphin roundabout and Naklua are a couple of kilometres north up the road, out of sight. Two bars hold the corners of the junction and stare each other down: THE STINKY PINKY's sign — a cartoon skunk hoisting a Chang — buzzes over its open front on one side, and across the mouth of the soi the BLUE DOG's rail faces the water. From either corner you can still catch the sun going down over the bay. From about five, the police run a checkpoint on Beach Road just south of the junction, waving over helmetless farang for a paperwork stop and an on-the-spot fine — more than a few of the two bars' regulars first came in off the road ducking exactly that. Blue songthaews — the baht buses — rattle past toward the rest of Pattaya, a whole neon city that isn't yours to reach just yet; for now you let them go.",
+        "Mid-Beach-Road: tour groups, tailor touts, and the sea breathing in the dark beyond the promenade. The glass cliff of CENTRAL mall rises a block inland, and just south of it TEQUILA QUEEN's ancient neon señorita kicks her leg, as she has since before you were born.",
+        "The south end of Beach Road, where the palms wear fairy lights and the baht buses bunch up like beads. The Walking Street arch blazes to the south. A motosai stand idles on the corner, drivers watching the street like sleepy hawks."
+      ]
+    },
+    {
+      "slug": "darkside",
+      "name": "Darkside",
+      "roomIds": [
+        "firefly_bar",
+        "khao_talo",
+        "khao_talo_bar",
+        "khao_talo_strip",
+        "lake_mabprachan",
+        "mama_yai",
+        "night_heron",
+        "sukhumvit_crossing",
+        "water_buffalo"
+      ],
+      "sampleDescs": [
+        "A long, plain soi of beer bars with no neon budget and no need for one. The ladies here are older, the customers older still, and every bar knows every customer's pour. It's seedier than town and more honest about it. One bar's doorway glows warmer than the rest, and from the south side MAMA YAI'S sends out charcoal smoke and the smell of som tam being argued about.",
+        "The working stretch of the soi: a dozen open-front bars shoulder to shoulder under one long tin roof, fairy lights doing the job neon does in town at a tenth of the wattage. Ladies call the odds from bamboo rails, a pool table clacks somewhere, and every third stool holds an expat who has been on it since the flood. THE WATER BUFFALO and FIREFLY BAR glow closest; the soi runs on east toward Daeng's end. At the dark end, a padded door with no sign worth reading — THE NIGHT HERON, if you know to ask — and beside it a dead Irish pub, THE SHAMROCK on its sun-bleached sign, shutters down for good.",
+        "Eight lanes of Sukhumvit Road roaring between you and the Darkside — the east side, where expats go when they stop being tourists. On foot this is a coin flip with a truck. The motosai drivers do it forty times a night."
+      ]
+    },
+    {
+      "slug": "jomtien",
+      "name": "Jomtien",
+      "roomIds": [
+        "coconut",
+        "dongtan_beach",
+        "dongtan_beach_m",
+        "dongtan_beach_n",
+        "dongtan_rd_m",
+        "dongtan_rd_s",
+        "jomtien_2nd",
+        "jomtien_2nd_m",
+        "jomtien_2nd_n",
+        "jomtien_7eleven",
+        "jomtien_beach",
+        "jomtien_beach_m",
+        "jomtien_beach_rd",
+        "jomtien_beach_rd_n",
+        "jomtien_beach_rd_s",
+        "jomtien_thai",
+        "kiss_jomtien",
+        "lucky7",
+        "sandbar",
+        "seabreeze",
+        "soi_7_e",
+        "soi_7_m",
+        "soi_7_w",
+        "soi_rompho",
+        "soi7_beach_end",
+        "soi7_oil",
+        "soi7_thai"
+      ],
+      "sampleDescs": [
+        "The middle of the beach road and the heart of it: a knot of people waiting where the blue songthaews swing around, a sun-bleached sign listing the loop into Pattaya, a lone motosai driver dozing on his bike. Streetlights, seafood smoke, the sea just west across the sand. The beach road runs north toward the Thappraya climb and south past the 7-Eleven toward the mouth of Soi 7.",
+        "The Soi 7 corner on Jomtien's Second Road, traffic hissing both ways. A 7-Eleven holds down the corner, bright as an operating theatre. Straight across the road sprawls Rompho Market. Soi 7 runs back west toward the beach; Second Road runs north up the strip.",
+        "The south end of the beach road, where it meets the mouth of Soi 7. A 7-Eleven glows on the corner, its air-con bleeding into the street; Soi 7's beer bars and massage shops run inland to the east, the bus stop is back to the north, and the sand and the sea lie west."
+      ]
+    },
+    {
+      "slug": "lk-metro",
+      "name": "LK Metro",
+      "roomIds": [
+        "kinky",
+        "las_vegas",
+        "lk_bend",
+        "lk_entrance",
+        "lk_main",
+        "lk_sports",
+        "metro_garden",
+        "pit_stop",
+        "slutty"
+      ],
+      "sampleDescs": [
+        "The corner where the alley turns south. LAS VEGAS GO-GO burns at the end of the second leg — the signage outspends everything else in sight. The crowd thins slightly here: the regulars who know the place, the girls finishing a shift on the back of a motorbike, a few tourists who followed the sound far enough to find it. Two open-front beer bars, THE METRO BEER GARDEN and THE PIT STOP, catch the ones who've had enough go-go for one night. Less overwhelming than Walking Street; more like something you discovered.",
+        "The first leg of the L: bars packed shoulder to shoulder, neon on both sides, sound bleeding from KINKY Go-Go to the north and SLUTTY Go-Go to the south until they're indistinguishable. Good energy — dense, close, the kind of loud that's a decision rather than an accident. A motorbike idles past carrying a girl in full sequins at a speed that's technically legal. THE OFFSIDE SPORTS BAR breaks the neon with the cold blue wash of a dozen screens. The alley bends east at the far end.",
+        "The alley mouth off Soi Buakhao — easy to walk past if you don't know it's there. A handwritten sign on the wall says LK METRO with an arrow, named for the hotel invisible from here. Ten metres in, the alley bends and opens up and suddenly you're somewhere. The no-entry sign for four-wheelers is doing its job: the only vehicles threading through are motorbikes, and the only people on them are very purposeful about where they're going."
+      ]
+    },
+    {
+      "slug": "myth-night",
+      "name": "Myth Night",
+      "roomIds": [
+        "amp_room",
+        "candy_bar_2",
+        "container_8",
+        "craft_cargo",
+        "encore_bar",
+        "feedback_bar",
+        "myth_night",
+        "myth_rows",
+        "myth_stage",
+        "reload_bar",
+        "soundcheck_bar",
+        "the_growler"
+      ],
+      "sampleDescs": [
+        "The newest bar complex in town: shipping-container bars, festoon lights, and live-music stages wedged between Soi Buakhao and Second Road, directly across from Central's glow. Young crowd, shared security in grey polos, craft beer at double Chang prices. CANDY BAR 2's rose-pink sign is unmistakably the same pink as the original. North, a LIVE-STAGE YARD throws sound over the roofs; south, the CONTAINER ROWS glow like a docked ship someone plugged in.",
+        "Two facing rows of shipping containers cut open into bars, festoon lights strung between them like rigging. Quieter than the stage yard, a degree cooler, the crowd a little older. CRAFT & CARGO, THE GROWLER, CONTAINER 8, and RELOAD BAR trade pours down the line.",
+        "A gravel yard walled in by container bars, all facing a corrugated stage where a covers band murders a Carabao song to a delighted crowd. THE AMP ROOM, FEEDBACK BAR, ENCORE, and SOUNDCHECK BAR ring the yard, each with its own tap wall and its own idea of how loud is too loud."
+      ]
+    },
+    {
+      "slug": "naklua",
+      "name": "Naklua",
+      "roomIds": [
+        "anchor_bar",
+        "dolphin_bar",
+        "emperor_soapy",
+        "hotel_room",
+        "hotel_soi",
+        "lotus_oil",
+        "mooring_bar",
+        "naklua_bars",
+        "naklua_massage",
+        "naklua_rd",
+        "naklua_thai",
+        "orchid_club"
+      ],
+      "sampleDescs": [
+        "North of the Dolphin roundabout the volume drops by half: seafood restaurants, temples, long-stay hotels. Up ahead, the SABAI PALMS HOTEL sign glows over its soi — half the letters out, so it reads 'SA AI PA MS', which the long-stay guests consider part of the charm. The soi itself is dark as a power cut. East, a quiet BAR CORNER of expat beer bars glows low; a SPA ROW of massage and soapland fronts runs off the other way.",
+        "A pocket of low-key expat beer bars off the main road, the kind that open at four and know every customer's pour by five. No neon war up here — just fairy lights, a sea breeze off the old fishing harbour, and the clack of a single pool table. THE ANCHOR BAR, DOLPHIN BAR, and THE MOORING share the corner and most of the regulars.",
+        "The quieter, older end of the trade: no shorts on the step, just tall blue-lit soapland towers and clean traditional shopfronts side by side. NAKLUA TRADITIONAL MASSAGE glows honest white; LOTUS OIL MASSAGE leaks pink and cold air; and the EMPEROR looms four floors over the lot, a fish tank behind one-way glass."
+      ]
+    },
+    {
+      "slug": "pratumnak",
+      "name": "Pratumnak",
+      "roomIds": [
+        "buddha_hill",
+        "dongtan_rd_n",
+        "pratumnak_hill_rd",
+        "pratumnak_rd",
+        "thappraya_ext_m",
+        "thappraya_ext_n",
+        "thappraya_ext_s"
+      ],
+      "sampleDescs": [
+        "Where the Main Strip's neon finally gives out and the road tips upward: the last few late-night noodle carts, then condo walls and the hill proper. The strip is back down to the south; the mouth of the Supertown drag alley opens to the west; the road climbs on north.",
+        "The main hill road between Jomtien and Pattaya proper — condos behind walls, sleeping soi dogs, and long stretches where the streetlights have given up. The Buddha Hill viewpoint is up a path to the west; Walking Street is on north.",
+        "The top of Dongtan Beach Road, where it bends inland and up onto the Pratumnak crest. The sand is a black rumour to the west; Pratumnak Hill Road climbs away east over the top."
+      ]
+    },
+    {
+      "slug": "second-road",
+      "name": "Second Road",
+      "roomIds": [
+        "pattaya_klang",
+        "poseidon_soapy",
+        "second_rd_c",
+        "second_rd_n",
+        "second_rd_s",
+        "second_thai",
+        "smile_massage"
+      ],
+      "sampleDescs": [
+        "The working road running parallel between Beach Road and Soi Buakhao — less neon, more motorbikes, the town with its makeup half off. It climbs south onto the north shoulder of Pratumnak Hill, toward Jomtien beyond.",
+        "Mid-Second-Road: baht buses in convoy, pharmacies, and the constant churn between the mall's back doors to the west and the fairy-lit mouth of MYTH NIGHT market to the east.",
+        "The north stretch, where Second Road angles toward the Dolphin roundabout. Central Pattaya Road — Pattaya Klang — crosses just ahead, cutting the whole town into north and south. This block is a massage row: SMILE MASSAGE winks pink from the west side, and opposite, four floors of blue neon spell POSEIDON MASSAGE over a doorman and a fish tank."
+      ]
+    },
+    {
+      "slug": "soi-6",
+      "name": "Soi 6",
+      "roomIds": [
+        "bay_watch",
+        "cherry_pop",
+        "golden_dragon",
+        "kitten_corner",
+        "orchid_room",
+        "pink_lotus",
+        "queen_vic",
+        "qv_room",
+        "ruby_kiss",
+        "sandy_toes",
+        "soi6_deep",
+        "soi6_mid",
+        "soi6_street",
+        "sunset_dreams",
+        "sunset_rail"
+      ],
+      "sampleDescs": [
+        "The west end of the soi, and it hits you the moment you step in — a wall of bars at volume, each trying to drown the next in bass and shouted Thai pop. No stages, no dark rooms: just open-air fronts at street level thrown wide to the pavement, and the ladies working them, spilling out in sequins and very little else to reel in anything that walks. \"HANDSOME MAN!\" \"Hey! WHERE YOU GO!\" You are grabbed by the wrist. You are grabbed by the other wrist. Someone significantly shorter than you attempts to climb onto your back. A couple of the girls have armed themselves with foam pool noodles and swat anyone who dares walk past without stopping. PINK LOTUS LOUNGE, GOLDEN DRAGON BAR, and SUNSET DREAMS LOUNGE are the main combatants here. East, the soi opens into a quieter middle stretch before the racket picks up again at the far end.",
+        "The east end of the soi, past the quieter middle, where the bars run on toward Second Road and the volume comes roaring back. KITTEN CORNER, CHERRY POP BAR, and RUBY KISS BAR trade wrist-grabs down this stretch — same open ground-floor fronts, same three-colour neon, same staircases behind the bar the menu doesn't mention, and the same foam pool noodles that find your ribs if you try to walk on by.",
+        "The middle of Soi 6, where the wall of noise thins to something you can hear yourself think over. The hard-selling open fronts of the west end give way to a run of easygoing beer bars whose whole business is letting you sit and watch the parade rather than be dragged into it. The pullers here are lazier, or wiser — they leave the grabbing to the loud ends and pick up the men who wander through wanting a cold one and a ringside seat. THE SHADY LADY, FRONT ROW BAR, and THE VERANDAH line the quiet stretch, and the QUEEN VIC INN — real aircon, real wood, a dartboard — anchors it, the one place on the soi that isn't shouting. West, the racket starts up again; east, it's worse."
+      ]
+    },
+    {
+      "slug": "soi-buakhao",
+      "name": "Soi Buakhao",
+      "roomIds": [
+        "buakhao_market",
+        "buakhao_n",
+        "buakhao_oil",
+        "buakhao_s",
+        "candy_bar",
+        "jasmine_garden",
+        "lucky_tiger",
+        "metropole_room",
+        "rock_factory",
+        "silk_rose"
+      ],
+      "sampleDescs": [
+        "The expat artery: pharmacies, laundry, bars, repeat. ROCK FACTORY's two-storey stage looms on the corner — currently doing what every band in Thailand does to 'Hotel California' and somehow getting away with it. LUCKY TIGER BAR is just east. The market sprawl is south. A small handwritten LK METRO arrow on a wall points down an alley — easy to miss, worth finding. Soi Diana opens off the 7-Eleven on the corner here, its go-go neon running away west; two doors south toward the market, Candy Bar's rose-pink sign is close enough to read.",
+        "Tarps, fans, fruit pyramids, and a man forever restacking ice crates behind a som tam cart. The smell of papaya salad could pull you here from two sois away. CANDY BAR's rose-pink sign glows just south; SILK ROSE and JASMINE GARDEN share the block east.",
+        "The south end, where Tree Town's fairy-lit maze of mini-bars spills onto the pavement. The Tree Town arch is east — a complex that eats tourists and spits out poorer, happier ones. A motosai stand waits by the corner, engines ticking."
+      ]
+    },
+    {
+      "slug": "soi-diana",
+      "name": "Soi Diana",
+      "roomIds": [
+        "areca_room",
+        "cricketers",
+        "diana_e",
+        "diana_mid",
+        "diana_w",
+        "dollhouse",
+        "kiss",
+        "sapphire",
+        "sundowner"
+      ],
+      "sampleDescs": [
+        "The Buakhao end of Soi Diana. The LK Metro alley opens off to one side (its other mouth is up on Buakhao proper); the Areca Lodge's lit driveway is on the other. Ahead, the soi spills onto Soi Buakhao by the 7-Eleven on the corner — Candy Bar's rose-pink sign glows just two doors south of it.",
+        "The thick of Soi Diana: open beer bars shoulder to shoulder down both sides, barkers working the narrow strip between, a hundred fairy-lit stools and a lady on every one. A side door of the LK Metro complex breathes cold air and go-go bass from further east — but that's the complex; the soi itself keeps it simple. Somewhere a bell rings and a whole bar cheers.",
+        "The Second Road mouth of Soi Diana, a long strip of open-fronted beer bars one block south of Soi Honey. On the south corner, the open-air KISS restaurant does brisk trade under its fairy lights — everyone in Pattaya gives directions off it. East, the soi runs away into warm light and eighty different sound systems; the first beer bar's girls are already waving."
+      ]
+    },
+    {
+      "slug": "soi-honey",
+      "name": "Soi Honey",
+      "roomIds": [
+        "buzz_inn",
+        "honey_soapy",
+        "honey_trap",
+        "queen_bee",
+        "soi_honey_e",
+        "soi_honey_w"
+      ],
+      "sampleDescs": [
+        "The Buakhao end of Soi Honey, where the lane spits you back out among the pharmacies and laundries. Two more beer bars face each other across the narrow strip, close enough that the girls of one heckle the customers of the other. It smells of grilled chicken, spilled Chang, and somebody's jasmine.",
+        "A short, narrow soi threading between Second Road and Soi Buakhao — the map calls it Soi 11, everyone else calls it Soi Honey, after the soapland whose blue glow owns the west end. Beer bars string fairy lights and Filipino covers across the lane; a soapy massage hums to the south, and the loudest of the beer bars is just north."
+      ]
+    },
+    {
+      "slug": "thappraya",
+      "name": "Thappraya",
+      "roomIds": [
+        "adonis_club",
+        "arrow_bar",
+        "beach_turn_massage",
+        "cheeky_monkey",
+        "hyper",
+        "peacock_cabaret",
+        "supertown_alley",
+        "supertown_elbow",
+        "take_care_me",
+        "thappraya_e",
+        "thappraya_massage",
+        "thappraya_mid",
+        "thappraya_w",
+        "the_boardroom",
+        "the_office",
+        "velvet_club"
+      ],
+      "sampleDescs": [
+        "The far end of the strip, spilling onto Second Road. TAKE CARE ME, a live-music rock pub, throws a guitar solo out its open front — the freelancers' favourite, and loud about it. Another 7-Eleven glows across the intersection. One last beer bar and a massage shop see out the strip before the traffic of Second Road takes over.",
+        "Where the beach road turns inland and becomes the Main Strip of Jomtien: neon, barkers, and the warm churn of the night starting up. A 7-Eleven holds the north corner where the road bends east. A couple of doors down, ARROW BAR's sign buzzes; across the way a discreet gentleman's club keeps its door shut and its aircon cold. The strip runs east.",
+        "The thick of the strip: beer bars and their fairy lights, and on the south side HYPER A-GO-GO throwing chrome light across the road — run-down for years until the Samson brothers gutted and remade it. On the north side a narrow L-shaped alley cuts away toward Second Road: the SUPERTOWN complex, Jomtien's gay quarter, its drag-show lights flickering somewhere around the elbow."
+      ]
+    },
+    {
+      "slug": "tree-town",
+      "name": "Tree Town",
+      "roomIds": [
+        "gold_rush",
+        "lucky_charm",
+        "moonshine_bar",
+        "oy_office",
+        "rabbit_hole",
+        "rainbow_girls",
+        "starlight_bar",
+        "tt_back",
+        "tt_deep",
+        "tt_entrance",
+        "tt_lane_1",
+        "tt_lane_2",
+        "tt_lane_3"
+      ],
+      "sampleDescs": [
+        "The neon arch of TREE TOWN, gateway to a pocket maze of go-gos and beer bars. Painted directions in Thai point into the tangle. Shared security lounges by the arch on plastic stools — bounce out of one bar here and you've bounced out of all of them.",
+        "Bars stacked shoulder to shoulder, neon bleeding into neon. GOLD RUSH LOUNGE glitters to the north. Painted Thai arrows on the wall offer guidance to those who can read them.",
+        "A junction where the lanes cross and the signage starts to feel personal — like it was designed to confuse. STARLIGHT BAR's blue sign fizzes at the north corner. Thai arrows point in three directions, contradicting each other with quiet confidence."
+      ]
+    },
+    {
+      "slug": "walking-street",
+      "name": "Walking Street",
+      "roomIds": [
+        "club_mirage",
+        "crystal_palace",
+        "midnight_sun",
+        "neon_paradise",
+        "paradise_nights",
+        "thai_massage",
+        "ws_alley",
+        "ws_gate",
+        "ws_north",
+        "ws_south"
+      ],
+      "sampleDescs": [
+        "Neon canyon, but the neon mix has changed. Bollywood bass competes with Thai pop from somewhere inside Little India's encroachment from the east — restaurant signs in Hindi above what used to be go-go bars, the smell of curry drifting across the touts. NEON PARADISE A-GO-GO still strobes on the west side. CLUB MIRAGE shimmers opposite. The touts with the laminated menus are still here. A dark side-alley slinks off between them.",
+        "The arch is still there — WALKING STREET PATTAYA, buzzing and flickering, famous enough that people photograph it before they've seen what's behind it. The strip runs south. It used to be louder. The gap between what this street was and what it is now is not visible from the gate, but you'll feel it by the time you reach the other end. Just east, RUEAN SABAI THAI MASSAGE has a row of foot chairs out for the walking wounded.",
+        "The deep end of the strip, where the go-gos that survived COVID hold their ground through stubbornness and reputation. CRYSTAL PALACE A-GO-GO at the west, PARADISE NIGHTS CLUB beside it. MIDNIGHT SUN BAR glows a quieter yellow at the south end — beer bar, conversation levels, the kind of place you end up after you've stopped trying. Late enough, the whole strip fills with barfined ladies and their friends en route to the clubs."
+      ]
+    }
+  ],
+  "rooms": [
+    {
+      "id": "beach_rd_c",
+      "name": "Beach Road Central",
+      "bar": null,
+      "barType": null,
+      "region": "Beach Road",
+      "regionSlug": "beach-road",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "Mid-Beach-Road: tour groups, tailor touts, and the sea breathing in the dark beyond the promenade. The glass cliff of CENTRAL mall rises a block inland, and just south of it TEQUILA QUEEN's ancient neon señorita kicks her leg, as she has since before you were born."
+    },
+    {
+      "id": "beach_rd_n",
+      "name": "Beach Road (foot of Soi 6)",
+      "bar": null,
+      "barType": null,
+      "region": "Beach Road",
+      "regionSlug": "beach-road",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "Where Soi 6 meets Beach Road. The soi runs inland to the east — short, loud, and lit like a runway. Across Beach Road to the west lies the open sand and the bay; the Dolphin roundabout and Naklua are a couple of kilometres north up the road, out of sight. Two bars hold the corners of the junction and stare each other down: THE STINKY PINKY's sign — a cartoon skunk hoisting a Chang — buzzes over its open front on one side, and across the mouth of the soi the BLUE DOG's rail faces the water. From either corner you can still catch the sun going down over the bay. From about five, the police run a checkpoint on Beach Road just south of the junction, waving over helmetless farang for a paperwork stop and an on-the-spot fine — more than a few of the two bars' regulars first came in off the road ducking exactly that. Blue songthaews — the baht buses — rattle past toward the rest of Pattaya, a whole neon city that isn't yours to reach just yet; for now you let them go."
+    },
+    {
+      "id": "beach_rd_s",
+      "name": "Beach Road South",
+      "bar": null,
+      "barType": null,
+      "region": "Beach Road",
+      "regionSlug": "beach-road",
+      "kind": "street",
+      "dark": false,
+      "people": [
+        "Bank"
+      ],
+      "desc": "The south end of Beach Road, where the palms wear fairy lights and the baht buses bunch up like beads. The Walking Street arch blazes to the south. A motosai stand idles on the corner, drivers watching the street like sleepy hawks."
+    },
+    {
+      "id": "beachrd_oil",
+      "name": "Cherry Oil Massage",
+      "bar": "Cherry Oil Massage",
+      "barType": null,
+      "region": "Beach Road",
+      "regionSlug": "beach-road",
+      "kind": "massage",
+      "dark": false,
+      "people": [],
+      "desc": "Wedged between a tailor and a currency booth on Beach Road, a narrow shop with a loud sign, a louder girl on the step, and a staircase to curtained rooms up top. The traffic roars past two feet away; inside, the mirror-and-sticker arrangement is exactly as advertised everywhere else in town."
+    },
+    {
+      "id": "beachthai_massage",
+      "name": "Beach Road Thai Massage",
+      "bar": "Beach Road Thai Massage",
+      "barType": null,
+      "region": "Beach Road",
+      "regionSlug": "beach-road",
+      "kind": "massage",
+      "dark": false,
+      "people": [],
+      "desc": "Next door to the oil shop and a world apart: a proper traditional place with foot chairs facing the sea, aunties in a tidy uniform, and a menu that stops at 'oil, one hour.' The spot the tuk-tuk drivers themselves come to get their shoulders sorted. (READ MENU.)"
+    },
+    {
+      "id": "blue_dog",
+      "name": "Blue Dog",
+      "bar": "Blue Dog",
+      "barType": "beer",
+      "region": "Beach Road",
+      "regionSlug": "beach-road",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Air",
+        "Ing",
+        "Khing",
+        "Pen",
+        "Pinky",
+        "Somsak",
+        "Superman"
+      ],
+      "desc": "An open-air beer bar holding the beach-side corner at the foot of Soi 6 — no walls, no door, just a tin roof, a long rail, and a line of plastic chairs facing out across Beach Road to the bay. The Stinky Pinky glowers back from the opposite corner over the mouth of the soi. At the Blue Dog the view IS the entertainment: the evening police checkpoint down the road to the south, the sunset out over the water and the sand, and then whatever the junction decides to do about it. Half the regulars found the place ducking in off a helmetless motorbike. (WATCH POLICE · WATCH SUNSET.)"
+    },
+    {
+      "id": "central_mall",
+      "name": "Central Mall (Beach Road front)",
+      "bar": null,
+      "barType": null,
+      "region": "Beach Road",
+      "regionSlug": "beach-road",
+      "kind": "shop",
+      "dark": false,
+      "people": [],
+      "desc": "The air-conditioned mothership: seven storeys of glass, brand names, and farang families who have no idea what this town does after dinner. Free outlets by the food court, arctic air, and security guards who wai. Beach Road glitters west; Second Road runs behind the mall to the east; the police station squats to the north like a paperweight."
+    },
+    {
+      "id": "north_beach",
+      "name": "North Pattaya Beach",
+      "bar": null,
+      "barType": null,
+      "region": "Beach Road",
+      "regionSlug": "beach-road",
+      "kind": "beach",
+      "dark": false,
+      "people": [
+        "Pinky"
+      ],
+      "desc": "The open sand across Beach Road from the foot of Soi 6, quiet after the soi's wall of noise — just the hiss of the little waves and, back east across the road, the neon of the junction where the Stinky Pinky and the Blue Dog hold their corners. A soi dog with one clipped ear is having the night of his life in the shallows, charging the waves, losing to them, shaking off and charging again — and every few laps he stops to check whether you're watching. He is doing this FOR you. He has decided. (FEED DOG, if you'd like to make it official.) Further up the dark sand, a few women share plastic stools under the coconut palms — no bar, no beer, no sign: the “coconut bar,” freelance and unhurried, watching the beach for a walk-up. Beach Road and the soi are back to the east."
+    },
+    {
+      "id": "papaya_massage",
+      "name": "Papaya Massage",
+      "bar": "Papaya Massage",
+      "barType": null,
+      "region": "Beach Road",
+      "regionSlug": "beach-road",
+      "kind": "massage",
+      "dark": false,
+      "people": [],
+      "desc": "Just south of KISS, where Soi Diana's noise gives way to the Beach Road breeze — a pink-lit oil shop with the usual girls on the usual stools and the usual small sticker on the mirror. The sea air almost makes it feel wholesome. Almost."
+    },
+    {
+      "id": "police_station",
+      "name": "Pattaya Central Police Station",
+      "bar": null,
+      "barType": null,
+      "region": "Beach Road",
+      "regionSlug": "beach-road",
+      "kind": "interior",
+      "dark": false,
+      "people": [
+        "Best"
+      ],
+      "desc": "Brown uniforms, whiteboards of unpaid fines, and a desk sergeant with the unhurried patience of a man who has seen every possible farang. A wall of confiscated selfie sticks. Sitting between the mall and the Beach Road bars, it catches whatever the tide washes up. Best visited voluntarily."
+    },
+    {
+      "id": "promenade",
+      "name": "Beach Promenade",
+      "bar": null,
+      "barType": null,
+      "region": "Beach Road",
+      "regionSlug": "beach-road",
+      "kind": "beach",
+      "dark": false,
+      "people": [],
+      "desc": "The paved walk between road and sand. Couples, joggers who've made bad choices, and ladies standing in the lamplight with nowhere in particular to be. The bins are full of collectable glass, if a man were desperate."
+    },
+    {
+      "id": "short_time_motel",
+      "name": "Short-Time Motel",
+      "bar": null,
+      "barType": null,
+      "region": "Beach Road",
+      "regionSlug": "beach-road",
+      "kind": "interior",
+      "dark": false,
+      "people": [
+        "Somchith"
+      ],
+      "desc": "A dark alley off Beach Road that smells of lemongrass floor cleaner and old air conditioning. The motel has no sign you could read from the street — its reputation travels by word of mouth and the direction of high heels. A small reception counter lit by one fluorescent tube. A ring of numbered keys on a nail. Two plastic stools. An older Thai man sits behind the counter, a thermos of coffee at his elbow, watching the alley with the patient stillness of someone who has long stopped being surprised by anything."
+    },
+    {
+      "id": "stinky_bar",
+      "name": "The Stinky Pinky",
+      "bar": "The Stinky Pinky",
+      "barType": "beer",
+      "region": "Beach Road",
+      "regionSlug": "beach-road",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Bert",
+        "Cake",
+        "Dave",
+        "David",
+        "Doug",
+        "Drew",
+        "Lamai",
+        "Manow",
+        "Phil"
+      ],
+      "desc": "An American-run beer bar that smells, in defiance of its name, of lime and cue chalk. League trophies crowd the back bar; the table is brushed like a putting green. Bert — the manager — holds court from the end stool with a bottomless Singha and opinions on everyone's break. It holds the inland corner at the foot of Soi 6; across the mouth of the soi the Blue Dog faces the water. From the open front you can watch the evening checkpoint work the road to the south — half of Bert's regulars ducked in here to dodge it once and never left — and the sun go down over the bay between shots. (WATCH POLICE · WATCH SUNSET.)"
+    },
+    {
+      "id": "tequila_queen",
+      "name": "Tequila Queen A-Go-Go",
+      "bar": "Tequila Queen A-Go-Go",
+      "barType": "gogo",
+      "region": "Beach Road",
+      "regionSlug": "beach-road",
+      "kind": "gogo",
+      "dark": false,
+      "people": [
+        "Chuck",
+        "Dao",
+        "Golf",
+        "Ice",
+        "Mamasan Mem",
+        "Mem",
+        "Mook",
+        "Praew"
+      ],
+      "desc": "The oldest go-go in Pattaya, and proudly unrestored: red velvet gone bald in patches, a mirror ball missing a continent of tiles, and dancers with seniority no mamasan would dare question. What the ladies concede in years they repay in showmanship, and the regulars wouldn't trade one of them for the whole of Walking Street. Mem runs the floor like a national institution, because it is one."
+    },
+    {
+      "id": "firefly_bar",
+      "name": "Firefly Bar",
+      "bar": "Firefly Bar",
+      "barType": "beer",
+      "region": "Darkside",
+      "regionSlug": "darkside",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Aim",
+        "Duan",
+        "Saifon",
+        "Somjai"
+      ],
+      "desc": "A small bar strung with more fairy lights than structure — from the soi it pulses like its namesake. The ladies here commute from the villages past the lake, and the whole place runs on the kind of easy, shoes-off familiarity that town bars imitate and never quite land."
+    },
+    {
+      "id": "khao_talo",
+      "name": "Soi Khao Talo",
+      "bar": null,
+      "barType": null,
+      "region": "Darkside",
+      "regionSlug": "darkside",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "A long, plain soi of beer bars with no neon budget and no need for one. The ladies here are older, the customers older still, and every bar knows every customer's pour. It's seedier than town and more honest about it. One bar's doorway glows warmer than the rest, and from the south side MAMA YAI'S sends out charcoal smoke and the smell of som tam being argued about."
+    },
+    {
+      "id": "khao_talo_bar",
+      "name": "Daeng's Place (Khao Talo)",
+      "bar": "Daeng's Place",
+      "barType": "beer",
+      "region": "Darkside",
+      "regionSlug": "darkside",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Daeng",
+        "Keng",
+        "Namtan",
+        "Ying"
+      ],
+      "desc": "A beer bar with a ceiling fan, a shrine over the till, and photos of Walking Street's glory days behind the bar — including one of a dancer mid-spin that you'd swear is the woman now pouring your drink. There's an outlet by the cooler."
+    },
+    {
+      "id": "khao_talo_strip",
+      "name": "Soi Khao Talo (the strip)",
+      "bar": null,
+      "barType": null,
+      "region": "Darkside",
+      "regionSlug": "darkside",
+      "kind": "street",
+      "dark": false,
+      "people": [
+        "Daeng"
+      ],
+      "desc": "The working stretch of the soi: a dozen open-front bars shoulder to shoulder under one long tin roof, fairy lights doing the job neon does in town at a tenth of the wattage. Ladies call the odds from bamboo rails, a pool table clacks somewhere, and every third stool holds an expat who has been on it since the flood. THE WATER BUFFALO and FIREFLY BAR glow closest; the soi runs on east toward Daeng's end. At the dark end, a padded door with no sign worth reading — THE NIGHT HERON, if you know to ask — and beside it a dead Irish pub, THE SHAMROCK on its sun-bleached sign, shutters down for good."
+    },
+    {
+      "id": "lake_mabprachan",
+      "name": "Lake Mabprachan",
+      "bar": null,
+      "barType": null,
+      "region": "Darkside",
+      "regionSlug": "darkside",
+      "kind": "viewpoint",
+      "dark": false,
+      "people": [
+        "Lake Gary"
+      ],
+      "desc": "Still water, lakeside restaurants, retired expats walking retired soi dogs. Families eat grilled fish under string lights. It's so peaceful your ears ring. Nobody here has been pickpocketed since the nineties."
+    },
+    {
+      "id": "mama_yai",
+      "name": "Mama Yai's",
+      "bar": "Mama Yai's",
+      "barType": "beer",
+      "region": "Darkside",
+      "regionSlug": "darkside",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Kratae",
+        "Mama",
+        "Mama Yai",
+        "Ron",
+        "Tangmo",
+        "Wanpen",
+        "Yai"
+      ],
+      "desc": "Half bar, half kitchen, all Mama Yai: a Darkside institution where the som tam arrives unasked and correct, the beer arrives cold, and the arguing about both is complimentary. Expats who got tired of town rents eat here nightly; the wall of photos knows everyone's second wife. There's an outlet by the till, for customers who finish their plate."
+    },
+    {
+      "id": "night_heron",
+      "name": "The Night Heron",
+      "bar": "The Night Heron",
+      "barType": "beer",
+      "region": "Darkside",
+      "regionSlug": "darkside",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Dokmai",
+        "Jampa",
+        "Mon",
+        "Tui"
+      ],
+      "desc": "An enclosed, air-conditioned box at the dark end of the strip: painted-out windows, a padded door, a sign small enough to deny. Before midnight it pours like any beer bar, only colder and quieter — but the regulars keep checking the clock, which should tell you something, and the ladies watch your spending with the warm professional attention of women who know exactly what the bolt on that door is for."
+    },
+    {
+      "id": "sukhumvit_crossing",
+      "name": "Sukhumvit Crossing",
+      "bar": null,
+      "barType": null,
+      "region": "Darkside",
+      "regionSlug": "darkside",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "Eight lanes of Sukhumvit Road roaring between you and the Darkside — the east side, where expats go when they stop being tourists. On foot this is a coin flip with a truck. The motosai drivers do it forty times a night."
+    },
+    {
+      "id": "water_buffalo",
+      "name": "The Water Buffalo",
+      "bar": "The Water Buffalo",
+      "barType": "beer",
+      "region": "Darkside",
+      "regionSlug": "darkside",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Best",
+        "Lin",
+        "Nim",
+        "Wandee"
+      ],
+      "desc": "A Darkside sports bar built like its namesake: wide, unhurried, and impossible to move once settled. Three screens run three different football matches; the pool table is the soi's court of appeal. The beer is ten baht cheaper than town and the regulars will tell you that number before they tell you their names."
+    },
+    {
+      "id": "coconut",
+      "name": "Coconut Bar",
+      "bar": "Coconut Bar",
+      "barType": "beer",
+      "region": "Jomtien",
+      "regionSlug": "jomtien",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Nittaya",
+        "Ratchada",
+        "Sumalee"
+      ],
+      "desc": "Thatch over the bar, coconut shells for ashtrays, and a blender that hasn't stopped since 2016. A little louder than its neighbours, a little younger — the closest Soi 7 gets to a party, which is not very, which is the point."
+    },
+    {
+      "id": "dongtan_beach",
+      "name": "Dongtan Beach (South)",
+      "bar": null,
+      "barType": null,
+      "region": "Jomtien",
+      "regionSlug": "jomtien",
+      "kind": "beach",
+      "dark": true,
+      "people": [],
+      "desc": "The quieter stretch north of Jomtien proper — by day rainbow flags and beach chairs, the gay end of the sand; right now it's shapes and shadows and the hiss of surf. This is where the two beaches meet: south the sand runs back down to Jomtien, north it carries on up the darker Dongtan shore. Inland to the east the beach road reaches its north end, where it bends into the neon of the Thappraya Main Strip."
+    },
+    {
+      "id": "dongtan_beach_m",
+      "name": "Dongtan Beach (Middle)",
+      "bar": null,
+      "barType": null,
+      "region": "Jomtien",
+      "regionSlug": "jomtien",
+      "kind": "beach",
+      "dark": true,
+      "people": [],
+      "desc": "A dark reach of Dongtan sand, well off the Jomtien lights: the surf close and loud, a few couples' silhouettes. The sand runs south back toward Jomtien and north on up the shore; a beach-access path cuts up to Dongtan Beach Road to the east."
+    },
+    {
+      "id": "dongtan_beach_n",
+      "name": "Dongtan Beach (North)",
+      "bar": null,
+      "barType": null,
+      "region": "Jomtien",
+      "regionSlug": "jomtien",
+      "kind": "beach",
+      "dark": true,
+      "people": [],
+      "desc": "The north tip of Dongtan Beach, where the sand runs out against the black shoulder of Pratumnak Hill. Quiet, unlit, the sea working away below. The sand runs south back down the shore; a beach-access path climbs to Dongtan Beach Road to the east."
+    },
+    {
+      "id": "dongtan_rd_m",
+      "name": "Dongtan Beach Road (Middle)",
+      "bar": null,
+      "barType": null,
+      "region": "Jomtien",
+      "regionSlug": "jomtien",
+      "kind": "street",
+      "dark": true,
+      "people": [],
+      "desc": "The middle of Dongtan Beach Road: quiet condos, a shuttered café or two, beach-access paths down to the sand between them. The road runs south back toward Jomtien and north up toward the hill."
+    },
+    {
+      "id": "dongtan_rd_s",
+      "name": "Dongtan Beach Road (South)",
+      "bar": null,
+      "barType": null,
+      "region": "Jomtien",
+      "regionSlug": "jomtien",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "The south end of Dongtan Beach Road, where it peels off the top of Jomtien's beach: rainbow flags by day, a mellow gay-friendly stretch, cocktail shacks winding down. Dongtan Beach is back to the south; the road runs on north up the coast."
+    },
+    {
+      "id": "jomtien_2nd",
+      "name": "Jomtien Second Road (South)",
+      "bar": null,
+      "barType": null,
+      "region": "Jomtien",
+      "regionSlug": "jomtien",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "The Soi 7 corner on Jomtien's Second Road, traffic hissing both ways. A 7-Eleven holds down the corner, bright as an operating theatre. Straight across the road sprawls Rompho Market. Soi 7 runs back west toward the beach; Second Road runs north up the strip."
+    },
+    {
+      "id": "jomtien_2nd_m",
+      "name": "Jomtien Second Road (Middle)",
+      "bar": null,
+      "barType": null,
+      "region": "Jomtien",
+      "regionSlug": "jomtien",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "The middle of Second Road: a 24-hour pharmacy, a laundry, a scatter of plastic-stool eateries, and the Jomtien branch of KISS glowing on the east side. The strip runs north to the Thappraya junction and south to the Soi 7 corner."
+    },
+    {
+      "id": "jomtien_2nd_n",
+      "name": "Jomtien Second Road (North)",
+      "bar": null,
+      "barType": null,
+      "region": "Jomtien",
+      "regionSlug": "jomtien",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "The top of Jomtien's Second Road, where it meets the Thappraya Main Strip climbing up to the east. Shuttered day-shops, a late khanom cart, the traffic thinning. TAKE CARE ME throws a guitar solo down the pavement from the junction; Second Road runs back south down the strip."
+    },
+    {
+      "id": "jomtien_7eleven",
+      "name": "7-Eleven (Jomtien)",
+      "bar": null,
+      "barType": null,
+      "region": "Jomtien",
+      "regionSlug": "jomtien",
+      "kind": "shop",
+      "dark": false,
+      "people": [
+        "Mama"
+      ],
+      "desc": "The cold blast of air-con and the doorbell jingle of civilisation. Shelves of toasties, Mama noodles, and {{phone}} accessories. There's a power outlet by the window."
+    },
+    {
+      "id": "jomtien_beach",
+      "name": "Jomtien Beach (South)",
+      "bar": null,
+      "barType": null,
+      "region": "Jomtien",
+      "regionSlug": "jomtien",
+      "kind": "beach",
+      "dark": false,
+      "people": [],
+      "desc": "Soft sand, folded-up loungers, and the last smear of sunset dying over the sea. Two gray-and-white soi cats hold down the end of a lounger, the big one sitting slightly in front of the small one, both watching the water. The beach road glows to the east; the sand runs north up the shore and narrows south toward the Soi 7 end, where a drinks cart is parked. Your face was in this sand until about a minute ago."
+    },
+    {
+      "id": "jomtien_beach_m",
+      "name": "Jomtien Beach (North)",
+      "bar": null,
+      "barType": null,
+      "region": "Jomtien",
+      "regionSlug": "jomtien",
+      "kind": "beach",
+      "dark": false,
+      "people": [],
+      "desc": "The north end of Jomtien Beach: raked sand, stacked loungers under folded umbrellas, the surf hissing to the west and the beach road's bus stop lit up to the east. The sand runs south back toward the Soi 7 end and north to where Dongtan's quieter stretch begins."
+    },
+    {
+      "id": "jomtien_beach_rd",
+      "name": "Jomtien Beach Road (Baht Bus Stop)",
+      "bar": null,
+      "barType": null,
+      "region": "Jomtien",
+      "regionSlug": "jomtien",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "The middle of the beach road and the heart of it: a knot of people waiting where the blue songthaews swing around, a sun-bleached sign listing the loop into Pattaya, a lone motosai driver dozing on his bike. Streetlights, seafood smoke, the sea just west across the sand. The beach road runs north toward the Thappraya climb and south past the 7-Eleven toward the mouth of Soi 7."
+    },
+    {
+      "id": "jomtien_beach_rd_n",
+      "name": "Jomtien Beach Road (North)",
+      "bar": null,
+      "barType": null,
+      "region": "Jomtien",
+      "regionSlug": "jomtien",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "The north end of the beach road, quieter and darker, the sea sighing away to the west. Here it bends east into the neon of the Thappraya Main Strip; a hill road runs on north into the dark toward Pratumnak and, eventually, Pattaya. The bus stop and the Jomtien lights are back to the south, the Dongtan sand off to the west."
+    },
+    {
+      "id": "jomtien_beach_rd_s",
+      "name": "Jomtien Beach Road (South)",
+      "bar": null,
+      "barType": null,
+      "region": "Jomtien",
+      "regionSlug": "jomtien",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "The south end of the beach road, where it meets the mouth of Soi 7. A 7-Eleven glows on the corner, its air-con bleeding into the street; Soi 7's beer bars and massage shops run inland to the east, the bus stop is back to the north, and the sand and the sea lie west."
+    },
+    {
+      "id": "jomtien_thai",
+      "name": "Jomtien Sabai Massage",
+      "bar": "Jomtien Sabai Massage",
+      "barType": null,
+      "region": "Jomtien",
+      "regionSlug": "jomtien",
+      "kind": "massage",
+      "dark": false,
+      "people": [],
+      "desc": "A breezy open front on the beach road, ceiling fans turning, a rack of aloe gel by the till for the day's crop of sunburned farang. Foot chairs face the sea, the ladies wear a tidy uniform, and the only oil on offer goes on your shoulders. After a day frying on Dongtan, this is the kindest ฿300 in Jomtien."
+    },
+    {
+      "id": "kiss_jomtien",
+      "name": "KISS Jomtien",
+      "bar": "KISS Jomtien",
+      "barType": null,
+      "region": "Jomtien",
+      "regionSlug": "jomtien",
+      "kind": "food",
+      "dark": false,
+      "people": [],
+      "desc": "The Jomtien branch of the famous open-air corner restaurant, just north of Rompho Market — the exact same mile-long menu as the Pattaya original (simple Thai one side, farang comfort food the other) and exactly as packed. Plastic chairs, a grill going full tilt, and in high season a twenty-minute wait for a stool; tonight, just about a seat. (BUY FOOD / EAT · READ MENU.)"
+    },
+    {
+      "id": "lucky7",
+      "name": "Lucky 7 Bar",
+      "bar": "Lucky 7 Bar",
+      "barType": "beer",
+      "region": "Jomtien",
+      "regionSlug": "jomtien",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Bpom",
+        "Proud",
+        "Sumalee"
+      ],
+      "desc": "The soi's namesake: a friendly open-front beer bar with sevens painted on everything, a Connect 4 frame, and a knot of regulars who've been coming since before the fairy lights. The girls know every one of them by their drink."
+    },
+    {
+      "id": "sandbar",
+      "name": "The Sandbar",
+      "bar": "The Sandbar",
+      "barType": "beer",
+      "region": "Jomtien",
+      "regionSlug": "jomtien",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Duang",
+        "Mookda",
+        "Sumalee"
+      ],
+      "desc": "Last bar before Second Road: a narrow slot with sand actually underfoot, a dartboard, and a cat that outranks everyone. The end-of-the-soi place, where a slow night winds all the way down and the last customers put the stools up themselves."
+    },
+    {
+      "id": "seabreeze",
+      "name": "Sea Breeze Bar",
+      "bar": "Sea Breeze Bar",
+      "barType": "beer",
+      "region": "Jomtien",
+      "regionSlug": "jomtien",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Namo",
+        "Somruedee",
+        "Sumalee"
+      ],
+      "desc": "Stools that catch the wind straight off the beach, a battered guitar somebody strums between customers, and the most relaxed hostesses in Jomtien. Nobody hard-sells here; the beer is cold and the evening goes where it goes."
+    },
+    {
+      "id": "soi_7_e",
+      "name": "Soi 7 (East / Second Road end)",
+      "bar": null,
+      "barType": null,
+      "region": "Jomtien",
+      "regionSlug": "jomtien",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "The far end of Soi 7, where it spills onto Second Road by a 7-Eleven. A couple more beer bars and a massage shop see out the strip. On the south side, set back behind a fence and a flagpole, squats the grey bulk of the Chonburi Immigration Office — dark and locked at this hour, a place farang only ever visit in daylight and never fondly."
+    },
+    {
+      "id": "soi_7_m",
+      "name": "Soi 7 (Middle)",
+      "bar": null,
+      "barType": null,
+      "region": "Jomtien",
+      "regionSlug": "jomtien",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "The middle of Soi 7, where the beer bars thin to guesthouses and a lone som tam cart doing quiet business. The soi runs west toward the sea and the beach road, and east toward the Second Road roar."
+    },
+    {
+      "id": "soi_7_w",
+      "name": "Soi 7 (West / beach end)",
+      "bar": null,
+      "barType": null,
+      "region": "Jomtien",
+      "regionSlug": "jomtien",
+      "kind": "beach",
+      "dark": false,
+      "people": [],
+      "desc": "The beach end of Soi 7, off the south end of the beach road: a mellow strip of open-front beer bars strung with fairy lights, a couple of massage shops, and the easy Jomtien pace — older expats, cold beer, nobody in a hurry. The soi runs east, deeper inland toward Second Road; the sea breeze follows you a little way in."
+    },
+    {
+      "id": "soi_rompho",
+      "name": "Rompho Market",
+      "bar": "Rompho Market",
+      "barType": null,
+      "region": "Jomtien",
+      "regionSlug": "jomtien",
+      "kind": "market",
+      "dark": false,
+      "people": [],
+      "desc": "Directly across Second Road from the mouth of Soi 7: the sprawl of Rompho Market — grilled everything, fruit pyramids, plastic stools, and a haze of chilli smoke. Locals, long-stay farang, and a few bar girls off shift graze the stalls. The Jomtien branch of KISS glows just to the north. (BUY FOOD / EAT.)"
+    },
+    {
+      "id": "soi7_beach_end",
+      "name": "Soi 7 Beach End",
+      "bar": null,
+      "barType": null,
+      "region": "Jomtien",
+      "regionSlug": "jomtien",
+      "kind": "beach",
+      "dark": false,
+      "people": [
+        "Auntie",
+        "Auntie Nok",
+        "Nok"
+      ],
+      "desc": "Where Soi 7 finally gives out onto the sand: a scrap of hard-packed beach, a couple of upturned boats, and Auntie Nok's drinks cart parked in the lee of a sea almond tree, cooler humming. The beach opens north; Soi 7 runs back inland to the east."
+    },
+    {
+      "id": "soi7_oil",
+      "name": "Sunset Oil Massage",
+      "bar": "Sunset Oil Massage",
+      "barType": null,
+      "region": "Jomtien",
+      "regionSlug": "jomtien",
+      "kind": "massage",
+      "dark": false,
+      "people": [],
+      "desc": "A pink-lit oil shop halfway down Soi 7, girls on the step, the small sticker on the mirror, and the beach breeze doing its best to keep it wholesome. It fails, pleasantly."
+    },
+    {
+      "id": "soi7_thai",
+      "name": "Soi 7 Thai Massage",
+      "bar": "Soi 7 Thai Massage",
+      "barType": null,
+      "region": "Jomtien",
+      "regionSlug": "jomtien",
+      "kind": "massage",
+      "dark": false,
+      "people": [],
+      "desc": "A proper traditional shop near the Second Road end: foot chairs, tiger balm, aunties in matching polos, and a price list that stops at 'oil, one hour.' Where the long-stay expats come to get their backs put right."
+    },
+    {
+      "id": "kinky",
+      "name": "KINKY Go-Go",
+      "bar": "KINKY Go-Go",
+      "barType": "gogo",
+      "region": "LK Metro",
+      "regionSlug": "lk-metro",
+      "kind": "gogo",
+      "dark": false,
+      "people": [
+        "Fang",
+        "Gib",
+        "Malee",
+        "Nice",
+        "Somsri"
+      ],
+      "desc": "KINKY in hot pink and black, chrome poles catching the light in a room that's working with what it's got. Good what-it's-got. The dancers are on their game and they know it; the crowd is almost entirely men who've been here before, which is its own kind of recommendation."
+    },
+    {
+      "id": "las_vegas",
+      "name": "Las Vegas Go-Go",
+      "bar": "Las Vegas Go-Go",
+      "barType": "gogo",
+      "region": "LK Metro",
+      "regionSlug": "lk-metro",
+      "kind": "gogo",
+      "dark": false,
+      "people": [
+        "Gigi",
+        "Jane",
+        "Kanom",
+        "Namwan",
+        "Orn",
+        "Ratree",
+        "Reginald"
+      ],
+      "desc": "The signage budget of a casino, the floor plan of a go-go: LAS VEGAS in letters you can probably read from Soi Buakhao. Inside it earns it — the lights are right, the DJ is good, and the room has the particular buzz of a place that's been doing well since COVID redistributed the western traffic from Walking Street."
+    },
+    {
+      "id": "lk_bend",
+      "name": "LK Metro (Corner)",
+      "bar": null,
+      "barType": null,
+      "region": "LK Metro",
+      "regionSlug": "lk-metro",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "The corner where the alley turns south. LAS VEGAS GO-GO burns at the end of the second leg — the signage outspends everything else in sight. The crowd thins slightly here: the regulars who know the place, the girls finishing a shift on the back of a motorbike, a few tourists who followed the sound far enough to find it. Two open-front beer bars, THE METRO BEER GARDEN and THE PIT STOP, catch the ones who've had enough go-go for one night. Less overwhelming than Walking Street; more like something you discovered."
+    },
+    {
+      "id": "lk_entrance",
+      "name": "LK Metro (Entrance)",
+      "bar": null,
+      "barType": null,
+      "region": "LK Metro",
+      "regionSlug": "lk-metro",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "The alley mouth off Soi Buakhao — easy to walk past if you don't know it's there. A handwritten sign on the wall says LK METRO with an arrow, named for the hotel invisible from here. Ten metres in, the alley bends and opens up and suddenly you're somewhere. The no-entry sign for four-wheelers is doing its job: the only vehicles threading through are motorbikes, and the only people on them are very purposeful about where they're going."
+    },
+    {
+      "id": "lk_main",
+      "name": "LK Metro (Main Alley)",
+      "bar": null,
+      "barType": null,
+      "region": "LK Metro",
+      "regionSlug": "lk-metro",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "The first leg of the L: bars packed shoulder to shoulder, neon on both sides, sound bleeding from KINKY Go-Go to the north and SLUTTY Go-Go to the south until they're indistinguishable. Good energy — dense, close, the kind of loud that's a decision rather than an accident. A motorbike idles past carrying a girl in full sequins at a speed that's technically legal. THE OFFSIDE SPORTS BAR breaks the neon with the cold blue wash of a dozen screens. The alley bends east at the far end."
+    },
+    {
+      "id": "lk_sports",
+      "name": "The Offside Sports Bar",
+      "bar": "The Offside Sports Bar",
+      "barType": "pub",
+      "region": "LK Metro",
+      "regionSlug": "lk-metro",
+      "kind": "pub",
+      "dark": false,
+      "people": [],
+      "desc": "A proper sports bar wedged into the go-go alley: a wall of screens, a Premier League fixture list chalked up beside a Thai-boxing card, a dartboard with a queue, and a fridge of import beer at import prices. The commentary is in three languages and the groans when a penalty's missed are universal. A quiet corner to sober up in, if the match lets you."
+    },
+    {
+      "id": "metro_garden",
+      "name": "The Metro Beer Garden",
+      "bar": "The Metro Beer Garden",
+      "barType": "beer",
+      "region": "LK Metro",
+      "regionSlug": "lk-metro",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Near"
+      ],
+      "desc": "A strip of pavement roofed in fairy lights and plastic ivy, a beer garden by sheer force of naming. Cold towels, cheap Chang, and a view straight down the alley at the neon. Near keeps the cooler stocked and the stools filled."
+    },
+    {
+      "id": "pit_stop",
+      "name": "The Pit Stop",
+      "bar": "The Pit Stop",
+      "barType": "beer",
+      "region": "LK Metro",
+      "regionSlug": "lk-metro",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Milin"
+      ],
+      "desc": "One container-width of bar with a motorsport theme it can't quite afford — a cardboard cutout of a pit crew, a checkered valance, a shelf of dusty toy cars. Milin waves you onto a stool like she's flagging you into the pits."
+    },
+    {
+      "id": "slutty",
+      "name": "Slutty Go-Go",
+      "bar": "Slutty Go-Go",
+      "barType": "gogo",
+      "region": "LK Metro",
+      "regionSlug": "lk-metro",
+      "kind": "gogo",
+      "dark": false,
+      "people": [
+        "Jum",
+        "Kaimook",
+        "Pop",
+        "Tukta",
+        "Wan"
+      ],
+      "desc": "The name is the entire marketing budget and it works. SLUTTY is smaller than it looks from the door, warmer, fuller — a proper standing crowd most nights. The stage is close enough to the bar that the dividing line is mainly theoretical."
+    },
+    {
+      "id": "amp_room",
+      "name": "The Amp Room",
+      "bar": "The Amp Room",
+      "barType": "beer",
+      "region": "Myth Night",
+      "regionSlug": "myth-night",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Ju"
+      ],
+      "desc": "Speaker cabinets stacked to the ceiling, half of them decorative, all of them sticky. The beer is cold, the bass is a full-body experience, and Ju has to lean in close to take your order — which is, of course, the point."
+    },
+    {
+      "id": "candy_bar_2",
+      "name": "Candy Bar 2",
+      "bar": "Candy Bar 2",
+      "barType": "beer",
+      "region": "Myth Night",
+      "regionSlug": "myth-night",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Bee",
+        "Candy",
+        "Care",
+        "Fern",
+        "Mai"
+      ],
+      "desc": "Candy's second front: the same rose-pink, the same spotless glasses, the same bell over a newer till — the empire expands. Bee runs the floor with a trainee's energy and the boss's exact smile. A framed photo of the original bar hangs behind the bottles, signed 'สู้ๆ — Candy'."
+    },
+    {
+      "id": "container_8",
+      "name": "Container 8",
+      "bar": "Container 8",
+      "barType": "beer",
+      "region": "Myth Night",
+      "regionSlug": "myth-night",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Toon"
+      ],
+      "desc": "Literally the eighth container in the row, the number stencilled in freight paint and adopted as a name. Toon keeps a jar of chilli-lime peanuts on the bar as bait."
+    },
+    {
+      "id": "craft_cargo",
+      "name": "Craft & Cargo",
+      "bar": "Craft & Cargo",
+      "barType": "beer",
+      "region": "Myth Night",
+      "regionSlug": "myth-night",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Mam"
+      ],
+      "desc": "A shipping container with the doors thrown wide, kegs where the freight used to ride, and a blackboard of guest taps chalked in three colours. Mam runs the taps with the calm of someone who has poured through every kind of night."
+    },
+    {
+      "id": "encore_bar",
+      "name": "Encore",
+      "bar": "Encore",
+      "barType": "beer",
+      "region": "Myth Night",
+      "regionSlug": "myth-night",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Pun"
+      ],
+      "desc": "The after-the-band bar: fairy lights, low stools, a battered acoustic guitar on a hook that everyone threatens to play and nobody does. Pun keeps the tab and the peace."
+    },
+    {
+      "id": "feedback_bar",
+      "name": "Feedback Bar",
+      "bar": "Feedback Bar",
+      "barType": "beer",
+      "region": "Myth Night",
+      "regionSlug": "myth-night",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Pat"
+      ],
+      "desc": "A container split down the long side, one wall a chalkboard of craft taps nobody in here can pronounce. Pat pours a flight of four and lines them up like a dare. (READ BOARD.)"
+    },
+    {
+      "id": "myth_night",
+      "name": "Myth Night Market",
+      "bar": null,
+      "barType": null,
+      "region": "Myth Night",
+      "regionSlug": "myth-night",
+      "kind": "market",
+      "dark": false,
+      "people": [],
+      "desc": "The newest bar complex in town: shipping-container bars, festoon lights, and live-music stages wedged between Soi Buakhao and Second Road, directly across from Central's glow. Young crowd, shared security in grey polos, craft beer at double Chang prices. CANDY BAR 2's rose-pink sign is unmistakably the same pink as the original. North, a LIVE-STAGE YARD throws sound over the roofs; south, the CONTAINER ROWS glow like a docked ship someone plugged in."
+    },
+    {
+      "id": "myth_rows",
+      "name": "Myth Night — Container Rows",
+      "bar": null,
+      "barType": null,
+      "region": "Myth Night",
+      "regionSlug": "myth-night",
+      "kind": "market",
+      "dark": false,
+      "people": [],
+      "desc": "Two facing rows of shipping containers cut open into bars, festoon lights strung between them like rigging. Quieter than the stage yard, a degree cooler, the crowd a little older. CRAFT & CARGO, THE GROWLER, CONTAINER 8, and RELOAD BAR trade pours down the line."
+    },
+    {
+      "id": "myth_stage",
+      "name": "Myth Night — Live-Stage Yard",
+      "bar": null,
+      "barType": null,
+      "region": "Myth Night",
+      "regionSlug": "myth-night",
+      "kind": "market",
+      "dark": false,
+      "people": [],
+      "desc": "A gravel yard walled in by container bars, all facing a corrugated stage where a covers band murders a Carabao song to a delighted crowd. THE AMP ROOM, FEEDBACK BAR, ENCORE, and SOUNDCHECK BAR ring the yard, each with its own tap wall and its own idea of how loud is too loud."
+    },
+    {
+      "id": "reload_bar",
+      "name": "Reload Bar",
+      "bar": "Reload Bar",
+      "barType": "beer",
+      "region": "Myth Night",
+      "regionSlug": "myth-night",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Yaya"
+      ],
+      "desc": "The last container before the wall, where the crowd washes up to steady itself before another lap of the market. Yaya works the rail, quick with a coaster and a joke."
+    },
+    {
+      "id": "soundcheck_bar",
+      "name": "Soundcheck Bar",
+      "bar": "Soundcheck Bar",
+      "barType": "beer",
+      "region": "Myth Night",
+      "regionSlug": "myth-night",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Som"
+      ],
+      "desc": "Closest to the stage and proud of it — you order in the gaps between songs or not at all. Som mouths the prices and holds up fingers, a whole transaction in mime."
+    },
+    {
+      "id": "the_growler",
+      "name": "The Growler",
+      "bar": "The Growler",
+      "barType": "beer",
+      "region": "Myth Night",
+      "regionSlug": "myth-night",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Jib"
+      ],
+      "desc": "Named for the take-home jugs on the back shelf, half of them dusty. A good stool, a cheap pour, and Jib behind the bar who remembers your drink before your name."
+    },
+    {
+      "id": "anchor_bar",
+      "name": "The Anchor Bar",
+      "bar": "The Anchor Bar",
+      "barType": "beer",
+      "region": "Naklua",
+      "regionSlug": "naklua",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Namfon"
+      ],
+      "desc": "A nautical-junk beer bar — a real ship's wheel on the wall, glass floats in a net, a barometer nobody trusts. The long-stay crowd holds the stools like moorings. Namfon pours a cold one before you've picked a seat."
+    },
+    {
+      "id": "dolphin_bar",
+      "name": "Dolphin Bar",
+      "bar": "Dolphin Bar",
+      "barType": "beer",
+      "region": "Naklua",
+      "regionSlug": "naklua",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Bunny"
+      ],
+      "desc": "Named for the roundabout to the south, painted with a leaping dolphin that's had a few touch-ups too many. Quiet, cheap, and friendly. Bunny keeps the cooler stocked and the football on low."
+    },
+    {
+      "id": "emperor_soapy",
+      "name": "The Emperor Massage",
+      "bar": "The Emperor Massage",
+      "barType": null,
+      "region": "Naklua",
+      "regionSlug": "naklua",
+      "kind": "soapy",
+      "dark": false,
+      "people": [],
+      "desc": "Four floors of blue neon over the Naklua trade, a doorman in a shiny suit, and past the marble lobby the fishbowl: tiered benches behind one-way glass, two dozen ladies in evening gowns with numbered discs at the hip, some watching a hidden TV, some watching you. The manageress has a laminated menu of tiers. Pick a number; the rest is a package and a very long shower."
+    },
+    {
+      "id": "hotel_room",
+      "name": "Your Room — Sabai Palms Hotel",
+      "bar": null,
+      "barType": null,
+      "region": "Naklua",
+      "regionSlug": "naklua",
+      "kind": "hotel_room",
+      "dark": false,
+      "people": [],
+      "desc": "Room 412 of the Sabai Palms Hotel (โรงแรมสบายปาล์ม) — a name the place has spent decades cheerfully failing to live up to. The air-con stutters awake. The bed is exactly as terrible as you remember. A hot shower, a change of shirt — and below the window, the city hums on, wide open."
+    },
+    {
+      "id": "hotel_soi",
+      "name": "Sabai Palms Soi (Naklua)",
+      "bar": null,
+      "barType": null,
+      "region": "Naklua",
+      "regionSlug": "naklua",
+      "kind": "street",
+      "dark": true,
+      "people": [],
+      "desc": "The Sabai Palms' soi. No streetlights — the municipality has been 'fixing' them since March. Two actual palms flank the lobby entrance somewhere down there, and past them, a bed with your name on it."
+    },
+    {
+      "id": "lotus_oil",
+      "name": "Lotus Oil Massage",
+      "bar": "Lotus Oil Massage",
+      "barType": null,
+      "region": "Naklua",
+      "regionSlug": "naklua",
+      "kind": "massage",
+      "dark": false,
+      "people": [],
+      "desc": "Pink light, a beaded curtain, air-con bleeding cold onto the pavement, and the little NO SEX sticker on the mirror that the warm oil and the few questions rather contradict. Quieter than the town shops, and in less of a hurry."
+    },
+    {
+      "id": "mooring_bar",
+      "name": "The Mooring",
+      "bar": "The Mooring",
+      "barType": "beer",
+      "region": "Naklua",
+      "regionSlug": "naklua",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Jaja"
+      ],
+      "desc": "The last light before the dark soi, a single-container bar where the harbour smell wins over the beer. Jaja works the rail and remembers birthdays she has no business remembering."
+    },
+    {
+      "id": "naklua_bars",
+      "name": "Naklua (Bar Corner)",
+      "bar": null,
+      "barType": null,
+      "region": "Naklua",
+      "regionSlug": "naklua",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "A pocket of low-key expat beer bars off the main road, the kind that open at four and know every customer's pour by five. No neon war up here — just fairy lights, a sea breeze off the old fishing harbour, and the clack of a single pool table. THE ANCHOR BAR, DOLPHIN BAR, and THE MOORING share the corner and most of the regulars."
+    },
+    {
+      "id": "naklua_massage",
+      "name": "Naklua (Spa Row)",
+      "bar": null,
+      "barType": null,
+      "region": "Naklua",
+      "regionSlug": "naklua",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "The quieter, older end of the trade: no shorts on the step, just tall blue-lit soapland towers and clean traditional shopfronts side by side. NAKLUA TRADITIONAL MASSAGE glows honest white; LOTUS OIL MASSAGE leaks pink and cold air; and the EMPEROR looms four floors over the lot, a fish tank behind one-way glass."
+    },
+    {
+      "id": "naklua_rd",
+      "name": "Naklua Road",
+      "bar": null,
+      "barType": null,
+      "region": "Naklua",
+      "regionSlug": "naklua",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "North of the Dolphin roundabout the volume drops by half: seafood restaurants, temples, long-stay hotels. Up ahead, the SABAI PALMS HOTEL sign glows over its soi — half the letters out, so it reads 'SA AI PA MS', which the long-stay guests consider part of the charm. The soi itself is dark as a power cut. East, a quiet BAR CORNER of expat beer bars glows low; a SPA ROW of massage and soapland fronts runs off the other way."
+    },
+    {
+      "id": "naklua_thai",
+      "name": "Naklua Traditional Massage",
+      "bar": "Naklua Traditional Massage",
+      "barType": null,
+      "region": "Naklua",
+      "regionSlug": "naklua",
+      "kind": "massage",
+      "dark": false,
+      "people": [],
+      "desc": "A calm white shopfront among the seafood restaurants, ceiling fans turning over rows of proper mats. A laminated list — foot 250, Thai 300, herbal compress 400 — and ladies in tidy uniforms who wai and mean it. The honest kind, for the long-stay aches."
+    },
+    {
+      "id": "orchid_club",
+      "name": "The Orchid Club",
+      "bar": "The Orchid Club",
+      "barType": "gents",
+      "region": "Naklua",
+      "regionSlug": "naklua",
+      "kind": "gents",
+      "dark": false,
+      "people": [
+        "Jinda",
+        "Kanya",
+        "Pear",
+        "Rose"
+      ],
+      "desc": "A repurposed villa behind a high wall and an unmarked door — no neon, no barker, just a brass bell and one orchid in the porch. Inside it is cold enough to hang meat, lit low and gold, with deep leather couches whose curtains draw around them, and ladies in not very much already crossing the floor toward you. It opens at noon, for the men who need somewhere to be that isn't home; by dark the same faces hold the same seats. Tourists never find it. That is the entire point."
+    },
+    {
+      "id": "buddha_hill",
+      "name": "Buddha Hill Viewpoint",
+      "bar": null,
+      "barType": null,
+      "region": "Pratumnak",
+      "regionSlug": "pratumnak",
+      "kind": "viewpoint",
+      "dark": true,
+      "people": [],
+      "desc": "The big golden Buddha watches the bay with infinite patience. Below, the whole curve of Pattaya glitters — Walking Street burning neon-pink at the south end. Someone has left an offering of marigolds and a small bottle of red Fanta."
+    },
+    {
+      "id": "dongtan_rd_n",
+      "name": "Dongtan Beach Road (North)",
+      "bar": null,
+      "barType": null,
+      "region": "Pratumnak",
+      "regionSlug": "pratumnak",
+      "kind": "street",
+      "dark": true,
+      "people": [],
+      "desc": "The top of Dongtan Beach Road, where it bends inland and up onto the Pratumnak crest. The sand is a black rumour to the west; Pratumnak Hill Road climbs away east over the top."
+    },
+    {
+      "id": "pratumnak_hill_rd",
+      "name": "Pratumnak Hill Road (crest)",
+      "bar": null,
+      "barType": null,
+      "region": "Pratumnak",
+      "regionSlug": "pratumnak",
+      "kind": "street",
+      "dark": true,
+      "people": [],
+      "desc": "The saddle over the top of Pratumnak Hill, linking the two roads that climb it — the Thappraya side to the east, the Dongtan Beach side to the west. Walls, viewpoints you can't make out in the dark, and the sea breathing somewhere below on both sides."
+    },
+    {
+      "id": "pratumnak_rd",
+      "name": "Pratumnak Hill Road (to Pattaya)",
+      "bar": null,
+      "barType": null,
+      "region": "Pratumnak",
+      "regionSlug": "pratumnak",
+      "kind": "street",
+      "dark": true,
+      "people": [],
+      "desc": "The main hill road between Jomtien and Pattaya proper — condos behind walls, sleeping soi dogs, and long stretches where the streetlights have given up. The Buddha Hill viewpoint is up a path to the west; Walking Street is on north."
+    },
+    {
+      "id": "thappraya_ext_m",
+      "name": "Thappraya Road — Hill (middle)",
+      "bar": null,
+      "barType": null,
+      "region": "Pratumnak",
+      "regionSlug": "pratumnak",
+      "kind": "street",
+      "dark": true,
+      "people": [],
+      "desc": "Mid-climb on the eastern shoulder of Pratumnak: gated condos, a sleeping soi dog or three, the streetlights getting shy. The lights of Jomtien spread out below to the south."
+    },
+    {
+      "id": "thappraya_ext_n",
+      "name": "Thappraya Road — Hilltop",
+      "bar": null,
+      "barType": null,
+      "region": "Pratumnak",
+      "regionSlug": "pratumnak",
+      "kind": "street",
+      "dark": true,
+      "people": [],
+      "desc": "The top of the eastern climb, where the road levels and Pratumnak Hill Road cuts away west across the crest toward the Dongtan side. Quiet, dark, and a long way from a lady drink."
+    },
+    {
+      "id": "thappraya_ext_s",
+      "name": "Thappraya Road — Hill (lower)",
+      "bar": null,
+      "barType": null,
+      "region": "Pratumnak",
+      "regionSlug": "pratumnak",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "Where the Main Strip's neon finally gives out and the road tips upward: the last few late-night noodle carts, then condo walls and the hill proper. The strip is back down to the south; the mouth of the Supertown drag alley opens to the west; the road climbs on north."
+    },
+    {
+      "id": "pattaya_klang",
+      "name": "Central Pattaya Road (Pattaya Klang)",
+      "bar": null,
+      "barType": null,
+      "region": "Second Road",
+      "regionSlug": "second-road",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "The big east-west artery, bisecting Beach Road, Second Road, and Soi Buakhao in one straight shot from the sea to Sukhumvit. Baht buses, banks, gold shops, and a river of traffic that never quite jams and never quite flows."
+    },
+    {
+      "id": "poseidon_soapy",
+      "name": "Poseidon Massage",
+      "bar": "Poseidon Massage",
+      "barType": null,
+      "region": "Second Road",
+      "regionSlug": "second-road",
+      "kind": "soapy",
+      "dark": false,
+      "people": [
+        "Toom"
+      ],
+      "desc": "Four floors of blue neon and a doorman in a bad suit. Past a lobby of fake marble and a tank of actual fish is the other tank: a wall of bright one-way glass, tiered benches behind it, and behind those a couple of dozen ladies in evening dresses with numbered discs pinned at the hip — some watching a TV you cannot see, some watching you. Toom, the manageress, sits at a little desk with a laminated menu of tiers. You pick a number; everything after that is a set package and a very long shower."
+    },
+    {
+      "id": "second_rd_c",
+      "name": "Second Road (Central)",
+      "bar": null,
+      "barType": null,
+      "region": "Second Road",
+      "regionSlug": "second-road",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "Mid-Second-Road: baht buses in convoy, pharmacies, and the constant churn between the mall's back doors to the west and the fairy-lit mouth of MYTH NIGHT market to the east."
+    },
+    {
+      "id": "second_rd_n",
+      "name": "Second Road (North)",
+      "bar": null,
+      "barType": null,
+      "region": "Second Road",
+      "regionSlug": "second-road",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "The north stretch, where Second Road angles toward the Dolphin roundabout. Central Pattaya Road — Pattaya Klang — crosses just ahead, cutting the whole town into north and south. This block is a massage row: SMILE MASSAGE winks pink from the west side, and opposite, four floors of blue neon spell POSEIDON MASSAGE over a doorman and a fish tank."
+    },
+    {
+      "id": "second_rd_s",
+      "name": "Second Road (South)",
+      "bar": null,
+      "barType": null,
+      "region": "Second Road",
+      "regionSlug": "second-road",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "The working road running parallel between Beach Road and Soi Buakhao — less neon, more motorbikes, the town with its makeup half off. It climbs south onto the north shoulder of Pratumnak Hill, toward Jomtien beyond."
+    },
+    {
+      "id": "second_thai",
+      "name": "Second Road Traditional Massage",
+      "bar": "Second Road Traditional Massage",
+      "barType": null,
+      "region": "Second Road",
+      "regionSlug": "second-road",
+      "kind": "massage",
+      "dark": false,
+      "people": [],
+      "desc": "Blue plastic stools, a certificate on the wall in a gold frame, and a proprietress who runs it like a small clinic. Traditional Thai and oil, done properly and firmly, no funny business — the sort of place the long-stay expats come to get their backs put right after a night that went wrong."
+    },
+    {
+      "id": "smile_massage",
+      "name": "Smile Massage",
+      "bar": "Smile Massage",
+      "barType": null,
+      "region": "Second Road",
+      "regionSlug": "second-road",
+      "kind": "massage",
+      "dark": false,
+      "people": [
+        "Waan"
+      ],
+      "desc": "Pink light and an open front, and two girls in very short shorts draped over the doorway chairs who come alive the instant you slow down — “hello handsome, massaaage, you come!” The sign says massage; the shorts file a dissenting opinion. Inside is cooler and dimmer: curtained cubicles, a wall of mirrors, and a small printed sign in three languages you clock without meaning to — no sex. Waan is already smiling at you like she knows something. (READ SIGN.)"
+    },
+    {
+      "id": "bay_watch",
+      "name": "Front Row Bar",
+      "bar": "Front Row Bar",
+      "barType": "beer",
+      "region": "Soi 6",
+      "regionSlug": "soi-6",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Nu",
+        "Somo",
+        "Sopha"
+      ],
+      "desc": "A beer bar that leans all the way into what the middle of Soi 6 is good for: a row of stools pulled right up to the open front, angled at the soi like theatre seating. The house joke is a laminated 'SHOW TIMES' card that just reads ALL NIGHT. Somo keeps the cooler cold and the running commentary warm."
+    },
+    {
+      "id": "cherry_pop",
+      "name": "Cherry Pop Bar",
+      "bar": "Cherry Pop Bar",
+      "barType": "soi6",
+      "region": "Soi 6",
+      "regionSlug": "soi-6",
+      "kind": "soi6",
+      "dark": false,
+      "people": [
+        "Chaba",
+        "Fahsai",
+        "Mercedes",
+        "Roy",
+        "Tabtim",
+        "Toi"
+      ],
+      "desc": "Red from floor to ceiling, a bowl of actual cherries on the bar that nobody eats, and a sound system stuck on one bubblegum playlist. Tabtim and Chaba call the odds from the rail. The stairs are where the stairs always are."
+    },
+    {
+      "id": "golden_dragon",
+      "name": "Golden Dragon Bar",
+      "bar": "Golden Dragon Bar",
+      "barType": "soi6",
+      "region": "Soi 6",
+      "regionSlug": "soi-6",
+      "kind": "soi6",
+      "dark": false,
+      "people": [
+        "Dew",
+        "Gavin",
+        "Joon",
+        "Kai",
+        "Nook",
+        "Peung",
+        "Pia",
+        "Poy",
+        "Wayne"
+      ],
+      "desc": "Open-fronted, louder than you expected from outside, which is saying something. The gold dragon above the bar was hand-painted by someone's cousin and has been there longer than most of the staff. Vintage Thai pop on the speakers — not the jukebox, it died in 2019, but the playlist is a faithful tribute. Nobody has updated it and nobody has complained. Pia keeps the bar — and the dead jukebox's memory — with a flat, unbothered calm."
+    },
+    {
+      "id": "kitten_corner",
+      "name": "Kitten Corner",
+      "bar": "Kitten Corner",
+      "barType": "soi6",
+      "region": "Soi 6",
+      "regionSlug": "soi-6",
+      "kind": "soi6",
+      "dark": false,
+      "people": [
+        "Aum",
+        "Baimon",
+        "Kesinee",
+        "Nangfah",
+        "Praewa",
+        "Rob"
+      ],
+      "desc": "Open to the pavement, walled in cat posters and a neon paw print. Praewa and Nangfah work the front, and the grab-and-giggle starts before you've fully stopped walking; Kesinee watches it all from the till, pricing you before you sit. A staircase at the back goes up to the short-time rooms."
+    },
+    {
+      "id": "orchid_room",
+      "name": "The Orchid Room",
+      "bar": "The Orchid Room",
+      "barType": "soi6",
+      "region": "Soi 6",
+      "regionSlug": "soi-6",
+      "kind": "soi6",
+      "dark": false,
+      "people": [
+        "Powers",
+        "Ryan",
+        "Ryan Powers"
+      ],
+      "desc": "The name is the last classy thing about it. Ryan Powers wanted a members' club — leather, low light, single malt, discretion — and got a bacchanal, because the room curdled to match its owner. The 'hostesses' start the night topless and end it well past that; the low light is a strobe; the discretion is a joke told at volume. The clientele is the soi's real economy: high rollers who tip in colours the pavement trade never sees, and at the corner tables the men the monthly envelope actually pays — a patched MC president holding court over a bottle of Blue Label, and, at the best table in the room, a soft-spoken Thai man in an unremarkable shirt whom everyone, the MC president included, is very careful to defer to. On a raised banquette at the back, filming himself over all of it, is Ryan Powers — actually, improbably, down tonight."
+    },
+    {
+      "id": "pink_lotus",
+      "name": "Pink Lotus Lounge",
+      "bar": "Pink Lotus Lounge",
+      "barType": "soi6",
+      "region": "Soi 6",
+      "regionSlug": "soi-6",
+      "kind": "soi6",
+      "dark": false,
+      "people": [
+        "Bebe",
+        "Belle",
+        "Jenny",
+        "Joy",
+        "Nee",
+        "Puu"
+      ],
+      "desc": "White Dish's flagship, and the loudest argument for why the group should not be allowed nice things. The front is open to the street; half the bar is technically the pavement. Neon tubes frame the sign in three colours simultaneously. Inside, the pink is structural — walls, barstools, the girls' outfits, arguably the air itself. Joy is already talking before you sit down. A staircase at the back climbs to the short-time rooms; beside it, a velvet-roped, unmarked door leads to the ORCHID ROOM — the group's members-only back room, and very much not for tonight's walk-up trade. (GO BACK, if you think you're on the list.)"
+    },
+    {
+      "id": "queen_vic",
+      "name": "Queen Vic Inn",
+      "bar": "Queen Vic Inn",
+      "barType": "pub",
+      "region": "Soi 6",
+      "regionSlug": "soi-6",
+      "kind": "pub",
+      "dark": false,
+      "people": [
+        "Angela",
+        "Doyle",
+        "Mort",
+        "Terry"
+      ],
+      "desc": "Actual air conditioning. Actual wood panelling. A dartboard. The Queen Vic Inn anchors the quiet middle stretch of Soi 6 with the righteous calm of a man who has seen it all and ordered another pint — the one place on the soi that isn't shouting. Through the window, the soi performs — the show without the sweat (WATCH SOI). Terry holds down the corner stool with a beer and the settled air of a man who has watched it all twice. A staircase behind the bar leads UP to the guest rooms."
+    },
+    {
+      "id": "qv_room",
+      "name": "Your Room — Queen Vic Inn",
+      "bar": null,
+      "barType": null,
+      "region": "Soi 6",
+      "regionSlug": "soi-6",
+      "kind": "hotel_room",
+      "dark": false,
+      "people": [],
+      "desc": "The balcony room over the Queen Vic: wood floors, a ceiling fan with strong opinions, and the balcony itself — a recliner, a small table, and the whole of Soi 6 performing below like a fish tank somebody dropped a radio into. A firm double bed fills the rest of the room — the neon never quite lets go of it, but the blackout curtains and the aircon get you there. A flatscreen on the wall and a mini-fridge in the corner — two free waters a day, housekeeping's one kindness — round out the luxuries. (SLEEP to turn in and end the night · WATCH TV · OPEN FRIDGE · or step onto the BALCONY.)"
+    },
+    {
+      "id": "ruby_kiss",
+      "name": "Ruby Kiss Bar",
+      "bar": "Ruby Kiss Bar",
+      "barType": "soi6",
+      "region": "Soi 6",
+      "regionSlug": "soi-6",
+      "kind": "soi6",
+      "dark": false,
+      "people": [
+        "Barry",
+        "Benz",
+        "Chompoo",
+        "Kluay",
+        "Preaw",
+        "Saeng",
+        "Wilai"
+      ],
+      "desc": "The last loud front before the soi spills onto Second Road: lipstick-red lighting, a mirror wall, and a lipstick-mark motif on everything including the glasses. Wilai runs the front stools, and Kluay and Benz have already claimed the two nearest for you."
+    },
+    {
+      "id": "sandy_toes",
+      "name": "The Verandah",
+      "bar": "The Verandah",
+      "barType": "beer",
+      "region": "Soi 6",
+      "regionSlug": "soi-6",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Haad",
+        "Malila",
+        "Nina",
+        "Pete"
+      ],
+      "desc": "The calmest front on Soi 6: a raised wooden deck a step up off the pavement, a rail, a couple of lazy fans, and enough of a threshold that the soi's aggressive lady-pullers don't bother climbing it. Nina brings the beer to your chair so you never have to give up the good seat."
+    },
+    {
+      "id": "soi6_deep",
+      "name": "Soi 6 (East End)",
+      "bar": null,
+      "barType": null,
+      "region": "Soi 6",
+      "regionSlug": "soi-6",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "The east end of the soi, past the quieter middle, where the bars run on toward Second Road and the volume comes roaring back. KITTEN CORNER, CHERRY POP BAR, and RUBY KISS BAR trade wrist-grabs down this stretch — same open ground-floor fronts, same three-colour neon, same staircases behind the bar the menu doesn't mention, and the same foam pool noodles that find your ribs if you try to walk on by."
+    },
+    {
+      "id": "soi6_mid",
+      "name": "Soi 6 (Middle)",
+      "bar": null,
+      "barType": null,
+      "region": "Soi 6",
+      "regionSlug": "soi-6",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "The middle of Soi 6, where the wall of noise thins to something you can hear yourself think over. The hard-selling open fronts of the west end give way to a run of easygoing beer bars whose whole business is letting you sit and watch the parade rather than be dragged into it. The pullers here are lazier, or wiser — they leave the grabbing to the loud ends and pick up the men who wander through wanting a cold one and a ringside seat. THE SHADY LADY, FRONT ROW BAR, and THE VERANDAH line the quiet stretch, and the QUEEN VIC INN — real aircon, real wood, a dartboard — anchors it, the one place on the soi that isn't shouting. West, the racket starts up again; east, it's worse."
+    },
+    {
+      "id": "soi6_street",
+      "name": "Soi 6 (West End)",
+      "bar": null,
+      "barType": null,
+      "region": "Soi 6",
+      "regionSlug": "soi-6",
+      "kind": "street",
+      "dark": false,
+      "people": [
+        "Tan"
+      ],
+      "desc": "The west end of the soi, and it hits you the moment you step in — a wall of bars at volume, each trying to drown the next in bass and shouted Thai pop. No stages, no dark rooms: just open-air fronts at street level thrown wide to the pavement, and the ladies working them, spilling out in sequins and very little else to reel in anything that walks. \"HANDSOME MAN!\" \"Hey! WHERE YOU GO!\" You are grabbed by the wrist. You are grabbed by the other wrist. Someone significantly shorter than you attempts to climb onto your back. A couple of the girls have armed themselves with foam pool noodles and swat anyone who dares walk past without stopping. PINK LOTUS LOUNGE, GOLDEN DRAGON BAR, and SUNSET DREAMS LOUNGE are the main combatants here. East, the soi opens into a quieter middle stretch before the racket picks up again at the far end."
+    },
+    {
+      "id": "sunset_dreams",
+      "name": "Sunset Dreams Lounge",
+      "bar": "Sunset Dreams Lounge",
+      "barType": "soi6",
+      "region": "Soi 6",
+      "regionSlug": "soi-6",
+      "kind": "soi6",
+      "dark": false,
+      "people": [
+        "Dear",
+        "Jun",
+        "Kat",
+        "Kwan",
+        "Macca",
+        "Malai",
+        "May"
+      ],
+      "desc": "Open to the pavement like the rest, but bathed in soft pink light instead of three-colour neon, with a hand-painted cloud mural gone streaky above the bar — the 'dreams' part, such as it is. It's no gentler for the mood lighting: the girls work the open front as hard as anyone on the soi. Kwan folds napkins into cranes at the end of the rail, adding to a row of them lined up like a tiny origami militia, and still finds a hand free for your sleeve as you pass."
+    },
+    {
+      "id": "sunset_rail",
+      "name": "The Shady Lady",
+      "bar": "The Shady Lady",
+      "barType": "beer",
+      "region": "Soi 6",
+      "regionSlug": "soi-6",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Bussaba",
+        "Numfon",
+        "Pukky"
+      ],
+      "desc": "A beer bar in the quiet middle of Soi 6, deliberately set back under a low awning and a stand of potted palms — shade, in both senses. A long rail faces the soi so the regulars can watch the parade go past without being in it. Pukky pours without being asked and misses nothing that happens on the pavement."
+    },
+    {
+      "id": "buakhao_market",
+      "name": "Buakhao Market",
+      "bar": null,
+      "barType": null,
+      "region": "Soi Buakhao",
+      "regionSlug": "soi-buakhao",
+      "kind": "street",
+      "dark": false,
+      "people": [
+        "Nit"
+      ],
+      "desc": "Tarps, fans, fruit pyramids, and a man forever restacking ice crates behind a som tam cart. The smell of papaya salad could pull you here from two sois away. CANDY BAR's rose-pink sign glows just south; SILK ROSE and JASMINE GARDEN share the block east."
+    },
+    {
+      "id": "buakhao_n",
+      "name": "Soi Buakhao (North)",
+      "bar": null,
+      "barType": null,
+      "region": "Soi Buakhao",
+      "regionSlug": "soi-buakhao",
+      "kind": "street",
+      "dark": false,
+      "people": [
+        "Candy"
+      ],
+      "desc": "The expat artery: pharmacies, laundry, bars, repeat. ROCK FACTORY's two-storey stage looms on the corner — currently doing what every band in Thailand does to 'Hotel California' and somehow getting away with it. LUCKY TIGER BAR is just east. The market sprawl is south. A small handwritten LK METRO arrow on a wall points down an alley — easy to miss, worth finding. Soi Diana opens off the 7-Eleven on the corner here, its go-go neon running away west; two doors south toward the market, Candy Bar's rose-pink sign is close enough to read."
+    },
+    {
+      "id": "buakhao_oil",
+      "name": "Golden Touch Massage",
+      "bar": "Golden Touch Massage",
+      "barType": null,
+      "region": "Soi Buakhao",
+      "regionSlug": "soi-buakhao",
+      "kind": "massage",
+      "dark": false,
+      "people": [],
+      "desc": "One of a hundred pink-lit shopfronts on Buakhao, indistinguishable from its neighbours except that this one caught your eye. Girls in shorts on the step, a beaded curtain, air-con leaking cold onto the pavement, and the inevitable little sticker on the mirror inside. The oil is warm and the questions are few."
+    },
+    {
+      "id": "buakhao_s",
+      "name": "Soi Buakhao (South)",
+      "bar": null,
+      "barType": null,
+      "region": "Soi Buakhao",
+      "regionSlug": "soi-buakhao",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "The south end, where Tree Town's fairy-lit maze of mini-bars spills onto the pavement. The Tree Town arch is east — a complex that eats tourists and spits out poorer, happier ones. A motosai stand waits by the corner, engines ticking."
+    },
+    {
+      "id": "candy_bar",
+      "name": "Candy Bar",
+      "bar": "Candy Bar",
+      "barType": "beer",
+      "region": "Soi Buakhao",
+      "regionSlug": "soi-buakhao",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Bua",
+        "Candy",
+        "Gam",
+        "Nan"
+      ],
+      "desc": "A rose-pink corner bar, spotless, with a bell over the till and a wall of photos going back decades — same bar, same smile, different haircuts. Run like a harbourmaster's deck, nothing out of place. There's a power outlet under the counter, for customers the boss likes."
+    },
+    {
+      "id": "jasmine_garden",
+      "name": "Jasmine Garden Bar",
+      "bar": "Jasmine Garden Bar",
+      "barType": "beer",
+      "region": "Soi Buakhao",
+      "regionSlug": "soi-buakhao",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Fon",
+        "Hong",
+        "Noon",
+        "Ple",
+        "Prae",
+        "Randy"
+      ],
+      "desc": "Plants everywhere — real ones, thriving, which tells you someone here shows up in daylight too. Jasmine garlands over the spirit house out front."
+    },
+    {
+      "id": "lucky_tiger",
+      "name": "Lucky Tiger Bar",
+      "bar": "Lucky Tiger Bar",
+      "barType": "beer",
+      "region": "Soi Buakhao",
+      "regionSlug": "soi-buakhao",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Ging",
+        "Lek",
+        "Nigel",
+        "Oat",
+        "Ratana",
+        "Rung"
+      ],
+      "desc": "Tiger stripes on the bar top, a golden waving cat with dead batteries, and a pool table with a lean you could ski off. Loud, friendly, dangerous to wallets in the normal, voluntary way."
+    },
+    {
+      "id": "metropole_room",
+      "name": "Your Room — LK Metropole",
+      "bar": null,
+      "barType": null,
+      "region": "Soi Buakhao",
+      "regionSlug": "soi-buakhao",
+      "kind": "hotel_room",
+      "dark": false,
+      "people": [],
+      "desc": "A proper tower room at the LK Metropole: blackout curtains, aircon set to walk-in fridge, a shower with municipal water pressure. From the window, the LK Metro alley glows directly below like a lit fuse. The lift goes down to the lobby on Soi Buakhao — and the fire stairs, the bellboy mentions with a wink, come out in the alley itself."
+    },
+    {
+      "id": "rock_factory",
+      "name": "Rock Factory",
+      "bar": "Rock Factory",
+      "barType": "beer",
+      "region": "Soi Buakhao",
+      "regionSlug": "soi-buakhao",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Apple",
+        "Bam",
+        "Josey",
+        "Kwang",
+        "Muay"
+      ],
+      "desc": "A two-storey live-music bar that earns its name: the sound hits you at the gate — guitar, bass, and drums in genuine conversation, not just backing-track volume. The stage is at the back, elevated two steps, a Filipino four-piece in matching black polos working through the classic-rock songbook with the conviction of people who have never once been wrong. A tip box balances on the monitor wedge. The crowd is looser than a go-go and livelier than an average beer bar — one or two faces here weren't waiting for a mamasan's nod before they showed up."
+    },
+    {
+      "id": "silk_rose",
+      "name": "Silk Rose Bar",
+      "bar": "Silk Rose Bar",
+      "barType": "beer",
+      "region": "Soi Buakhao",
+      "regionSlug": "soi-buakhao",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Grace",
+        "Helmut",
+        "Nid",
+        "Ton",
+        "Wa",
+        "Waew"
+      ],
+      "desc": "Quieter. Silk flowers in Singha bottles, a cashier doing sudoku, and two regulars who have been mid-argument about football since 2019."
+    },
+    {
+      "id": "areca_room",
+      "name": "Your Room — Areca Lodge",
+      "bar": null,
+      "barType": null,
+      "region": "Soi Diana",
+      "regionSlug": "soi-diana",
+      "kind": "hotel_room",
+      "dark": false,
+      "people": [],
+      "desc": "A proper mid-range room at the Areca Lodge on Soi Diana: firm bed, cold aircon that actually works, a kettle, and a window over the garden pool where a few long-stay couples are doing slow lengths. Comfortable, central, unremarkable in the best way — the whole soi's racket is thirty seconds out the door, and none of it follows you in."
+    },
+    {
+      "id": "cricketers",
+      "name": "The Cricketers",
+      "bar": "The Cricketers",
+      "barType": "beer",
+      "region": "Soi Diana",
+      "regionSlug": "soi-diana",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Bright",
+        "Lawan",
+        "Lukkade"
+      ],
+      "desc": "A farang sports bar wedged onto the go-go soi: three screens, a dartboard, a menu of pies, and a knot of expats who've solved the world twice over by nine o'clock. There are girls, and there is beer, but mostly there is opinion. Somebody is explaining the offside rule to a hostess who stopped listening in 2019. (READ MENU · PLAY DARTS.)"
+    },
+    {
+      "id": "diana_e",
+      "name": "Soi Diana (Buakhao end)",
+      "bar": null,
+      "barType": null,
+      "region": "Soi Diana",
+      "regionSlug": "soi-diana",
+      "kind": "street",
+      "dark": false,
+      "people": [
+        "Candy"
+      ],
+      "desc": "The Buakhao end of Soi Diana. The LK Metro alley opens off to one side (its other mouth is up on Buakhao proper); the Areca Lodge's lit driveway is on the other. Ahead, the soi spills onto Soi Buakhao by the 7-Eleven on the corner — Candy Bar's rose-pink sign glows just two doors south of it."
+    },
+    {
+      "id": "diana_mid",
+      "name": "Soi Diana (middle)",
+      "bar": null,
+      "barType": null,
+      "region": "Soi Diana",
+      "regionSlug": "soi-diana",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "The thick of Soi Diana: open beer bars shoulder to shoulder down both sides, barkers working the narrow strip between, a hundred fairy-lit stools and a lady on every one. A side door of the LK Metro complex breathes cold air and go-go bass from further east — but that's the complex; the soi itself keeps it simple. Somewhere a bell rings and a whole bar cheers."
+    },
+    {
+      "id": "diana_w",
+      "name": "Soi Diana (Second Road end)",
+      "bar": null,
+      "barType": null,
+      "region": "Soi Diana",
+      "regionSlug": "soi-diana",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "The Second Road mouth of Soi Diana, a long strip of open-fronted beer bars one block south of Soi Honey. On the south corner, the open-air KISS restaurant does brisk trade under its fairy lights — everyone in Pattaya gives directions off it. East, the soi runs away into warm light and eighty different sound systems; the first beer bar's girls are already waving."
+    },
+    {
+      "id": "dollhouse",
+      "name": "The Dollhouse",
+      "bar": "The Dollhouse",
+      "barType": "beer",
+      "region": "Soi Diana",
+      "regionSlug": "soi-diana",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Bum",
+        "Lawan",
+        "Ohm"
+      ],
+      "desc": "A big open-fronted beer bar, all fairy lights and cane stools, its counter wrapped in a horseshoe so the girls can reach every seat. No stage, no pole — just cold Chang, a Connect 4 frame, and a dozen hostesses who treat every farang who slows down as a long-lost friend."
+    },
+    {
+      "id": "kiss",
+      "name": "KISS Restaurant",
+      "bar": "KISS Restaurant",
+      "barType": null,
+      "region": "Soi Diana",
+      "regionSlug": "soi-diana",
+      "kind": "food",
+      "dark": false,
+      "people": [],
+      "desc": "The famous open-air corner restaurant at the mouth of Soi Diana — plastic chairs, paper menus a mile long (simple Thai one side, farang comfort food the other), and a grill going full tilt. Everyone knows KISS; everyone meets at KISS. In high season you can stand twenty minutes waiting for a table; tonight there's a stool free, just. (BUY FOOD / EAT · READ MENU.)"
+    },
+    {
+      "id": "sapphire",
+      "name": "Sapphire Bar",
+      "bar": "Sapphire Bar",
+      "barType": "beer",
+      "region": "Soi Diana",
+      "regionSlug": "soi-diana",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Fasai",
+        "Lawan",
+        "Tarn"
+      ],
+      "desc": "Blue neon over a long open bar, a decent sound system, and stools that face the soi so you can watch Diana churn past while you drink. Friendlier than it is flash — the Sapphire runs on regulars, lady drinks, and the slow art of talking you into one more."
+    },
+    {
+      "id": "sundowner",
+      "name": "Sundowner Bar",
+      "bar": "Sundowner Bar",
+      "barType": "beer",
+      "region": "Soi Diana",
+      "regionSlug": "soi-diana",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Lawan",
+        "Pao",
+        "Poom"
+      ],
+      "desc": "An open-fronted beer bar with a horseshoe counter, a Connect 4 frame, and a row of friendly girls who'd rather chat than dance. The stools face the soi so you can watch the go-go crowd churn past while you nurse a Chang. Cheaper, easier, kinder on the wallet."
+    },
+    {
+      "id": "buzz_inn",
+      "name": "Buzz Inn",
+      "bar": "Buzz Inn",
+      "barType": "beer",
+      "region": "Soi Honey",
+      "regionSlug": "soi-honey",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Gaem",
+        "Kesorn",
+        "Namphueng"
+      ],
+      "desc": "A narrow slot of a bar, six stools deep, run at a gentle simmer — the sort of place a man ends up when the big bars are too much work. A dartboard nobody uses, a cat asleep on the till, and whichever girls the Honey Trap couldn't seat."
+    },
+    {
+      "id": "honey_soapy",
+      "name": "Honeycomb Massage",
+      "bar": "Honeycomb Massage",
+      "barType": null,
+      "region": "Soi Honey",
+      "regionSlug": "soi-honey",
+      "kind": "soapy",
+      "dark": false,
+      "people": [],
+      "desc": "The blue-neon soapland the soi is named for: three floors, a doorman, a lobby that smells of chlorine and jasmine, and the wall of one-way glass where the numbered girls sit under honeycomb-gold light. A manageress works the menu at a little desk. Same ritual as Poseidon up on Second Road — a number, a set price, a very long shower."
+    },
+    {
+      "id": "honey_trap",
+      "name": "Honey Trap Bar",
+      "bar": "Honey Trap Bar",
+      "barType": "beer",
+      "region": "Soi Honey",
+      "regionSlug": "soi-honey",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Goong",
+        "Jiab",
+        "Kesorn"
+      ],
+      "desc": "The loud one: a horseshoe bar under a ceiling solid with fairy lights, a Connect 4 frame chained to the rail, and a hand-painted sign promising HAPPY HOUR ALL NIGHT (it is not). The girls clock you from thirty feet and have your stool wiped before you reach it."
+    },
+    {
+      "id": "queen_bee",
+      "name": "The Hive",
+      "bar": "The Hive",
+      "barType": "beer",
+      "region": "Soi Honey",
+      "regionSlug": "soi-honey",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Kesorn",
+        "Meen",
+        "Yok"
+      ],
+      "desc": "Yellow-and-black everything, a plywood bee the size of a scooter over the bar, and a sound system punching well above the venue's weight. Smaller and friendlier than the Honey Trap across the way, which the two bars settle nightly by volume."
+    },
+    {
+      "id": "soi_honey_e",
+      "name": "Soi Honey (east end)",
+      "bar": null,
+      "barType": null,
+      "region": "Soi Honey",
+      "regionSlug": "soi-honey",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "The Buakhao end of Soi Honey, where the lane spits you back out among the pharmacies and laundries. Two more beer bars face each other across the narrow strip, close enough that the girls of one heckle the customers of the other. It smells of grilled chicken, spilled Chang, and somebody's jasmine."
+    },
+    {
+      "id": "soi_honey_w",
+      "name": "Soi Honey (west end)",
+      "bar": null,
+      "barType": null,
+      "region": "Soi Honey",
+      "regionSlug": "soi-honey",
+      "kind": "street",
+      "dark": false,
+      "people": [
+        "Beer"
+      ],
+      "desc": "A short, narrow soi threading between Second Road and Soi Buakhao — the map calls it Soi 11, everyone else calls it Soi Honey, after the soapland whose blue glow owns the west end. Beer bars string fairy lights and Filipino covers across the lane; a soapy massage hums to the south, and the loudest of the beer bars is just north."
+    },
+    {
+      "id": "adonis_club",
+      "name": "The Adonis Club",
+      "bar": "The Adonis Club",
+      "barType": null,
+      "region": "Thappraya",
+      "regionSlug": "thappraya",
+      "kind": "hostbar",
+      "dark": false,
+      "people": [
+        "Arm",
+        "Nott",
+        "Win"
+      ],
+      "desc": "Cool gold light, a low mirrored bar, and a raised bench where the hosts sit in numbered order — young men, gym-cut, oiled to catch the light, some bored, some working the room with their eyes. A drinks list stands on the bar with prices that would make a Walking Street mamasan weep with envy. Nott runs the floor with a papasan's easy authority; Arm (number 4) and Win (number 9) are the two who clocked you first. (TALK · BUY DRINK FOR <host> · HIRE <host> — all of it, whoever you are.)"
+    },
+    {
+      "id": "arrow_bar",
+      "name": "Arrow Bar",
+      "bar": "Arrow Bar",
+      "barType": "beer",
+      "region": "Thappraya",
+      "regionSlug": "thappraya",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Gig",
+        "Kade",
+        "Wimon"
+      ],
+      "desc": "A couple of doors from the 7-Eleven at the top of the strip: a bright open beer bar with a bullseye painted over the counter, a Connect 4 frame, and a row of hostesses who've clearly done the maths on where the foot traffic enters the soi. First bar most punters hit; many don't get past it."
+    },
+    {
+      "id": "beach_turn_massage",
+      "name": "Beach Turn Oil Massage",
+      "bar": "Beach Turn Oil Massage",
+      "barType": null,
+      "region": "Thappraya",
+      "regionSlug": "thappraya",
+      "kind": "massage",
+      "dark": false,
+      "people": [],
+      "desc": "A pink-lit oil shop right where the beach road turns into the strip, girls on the step catching the punters as they arrive, the small sticker on the mirror, the usual friendly arrangement."
+    },
+    {
+      "id": "cheeky_monkey",
+      "name": "Cheeky Monkey Bar",
+      "bar": "Cheeky Monkey Bar",
+      "barType": "beer",
+      "region": "Thappraya",
+      "regionSlug": "thappraya",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Glam",
+        "Mona",
+        "Pinky",
+        "Wimon"
+      ],
+      "desc": "A Samson-brothers house, mid-strip: cartoon monkeys over the bar, cold towers of Chang, and a crew of hostesses who run it at a permanent gentle party. Same owners as half the strip, and it shows in the fresh paint and the working aircon."
+    },
+    {
+      "id": "hyper",
+      "name": "Hyper A Go-Go",
+      "bar": "Hyper A Go-Go",
+      "barType": "gogo",
+      "region": "Thappraya",
+      "regionSlug": "thappraya",
+      "kind": "gogo",
+      "dark": false,
+      "people": [
+        "Aoi",
+        "Diamond",
+        "Noey"
+      ],
+      "desc": "The strip's one go-go, and its jewel: mirrored, chromed, a fog of aircon and bass, a stage of numbered dancers under lights that cost more than the old place ever made. The Samson brothers bought Hyper as a wreck and rebuilt it into this. Working the floor like a general is Diamond, the mamasan — six feet of poise in heels, and every inch of it a choice."
+    },
+    {
+      "id": "peacock_cabaret",
+      "name": "The Peacock Cabaret",
+      "bar": "The Peacock Cabaret",
+      "barType": null,
+      "region": "Thappraya",
+      "regionSlug": "thappraya",
+      "kind": "cabaret",
+      "dark": false,
+      "people": [
+        "Mala",
+        "Miss",
+        "Miss Mala",
+        "Petch"
+      ],
+      "desc": "Inside it is all mirror and marabou and a stage lit like a jewel box, the little tables packed with a mixed, delighted crowd — gay boys, a hen party, three sunburnt husbands whose wives dragged them in and who are now, unexpectedly, having the night of their lives. Miss Mala compères from the lip of the stage in a headdress you could signal ships with; a younger star, Petch, is halfway through a lip-sync that is frankly better than the original. (WATCH DRAG. TIP the performers. TALK if you dare.)"
+    },
+    {
+      "id": "supertown_alley",
+      "name": "Supertown Complex (alley)",
+      "bar": null,
+      "barType": null,
+      "region": "Thappraya",
+      "regionSlug": "thappraya",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "The mouth of the Supertown alley — Jomtien's gay bar complex, an L-bend of half-lit venues running back toward Second Road. Rainbow bunting, a poster for a drag revue, and a security guy on a stool who nods you in, easy. One door glows an unhurried gold: THE ADONIS CLUB, a host bar, a numbered row of oiled young men behind the glass instead of girls. The drag stage is deeper in, at the elbow."
+    },
+    {
+      "id": "supertown_elbow",
+      "name": "Supertown Complex (the elbow)",
+      "bar": null,
+      "barType": null,
+      "region": "Thappraya",
+      "regionSlug": "thappraya",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "The elbow of the L, where the alley turns and the drag bars cluster — the stage end. One venue is alive tonight: THE PEACOCK CABARET, its mirrored sign lit and pulsing, a queue of boys and a scatter of curious farang filing in under a poster of a sequinned goddess mid-lip-sync. The bass thumps through the wall. The alley carries on east and out onto the foot of the Thappraya hill road, where the strip's neon finally gives out."
+    },
+    {
+      "id": "take_care_me",
+      "name": "Take Care Me",
+      "bar": "Take Care Me",
+      "barType": "pub",
+      "region": "Thappraya",
+      "regionSlug": "thappraya",
+      "kind": "pub",
+      "dark": false,
+      "people": [],
+      "desc": "A live-music rock pub at the top of Second Road end of the strip — a proper stage, a tight Filipino band murdering and resurrecting the classics, and a crowd three deep at the rail. No house girls work it, but the freelancers love it: they come for the music, the cold beer, and the chance to pick a man who came for the same. Loud, sweaty, and the best room on the strip."
+    },
+    {
+      "id": "thappraya_e",
+      "name": "Thappraya Rd — Main Strip (Second Road end)",
+      "bar": null,
+      "barType": null,
+      "region": "Thappraya",
+      "regionSlug": "thappraya",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "The far end of the strip, spilling onto Second Road. TAKE CARE ME, a live-music rock pub, throws a guitar solo out its open front — the freelancers' favourite, and loud about it. Another 7-Eleven glows across the intersection. One last beer bar and a massage shop see out the strip before the traffic of Second Road takes over."
+    },
+    {
+      "id": "thappraya_massage",
+      "name": "Thappraya Thai Massage",
+      "bar": "Thappraya Thai Massage",
+      "barType": null,
+      "region": "Thappraya",
+      "regionSlug": "thappraya",
+      "kind": "massage",
+      "dark": false,
+      "people": [],
+      "desc": "A proper traditional shop near the Second Road end of the strip: foot chairs, tiger balm, a wall price list, and firm-thumbed aunties who do exactly one thing and do it well. No sticker on this mirror."
+    },
+    {
+      "id": "thappraya_mid",
+      "name": "Thappraya Rd — Main Strip (middle)",
+      "bar": null,
+      "barType": null,
+      "region": "Thappraya",
+      "regionSlug": "thappraya",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "The thick of the strip: beer bars and their fairy lights, and on the south side HYPER A-GO-GO throwing chrome light across the road — run-down for years until the Samson brothers gutted and remade it. On the north side a narrow L-shaped alley cuts away toward Second Road: the SUPERTOWN complex, Jomtien's gay quarter, its drag-show lights flickering somewhere around the elbow."
+    },
+    {
+      "id": "thappraya_w",
+      "name": "Thappraya Rd — Main Strip (west)",
+      "bar": null,
+      "barType": null,
+      "region": "Thappraya",
+      "regionSlug": "thappraya",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "Where the beach road turns inland and becomes the Main Strip of Jomtien: neon, barkers, and the warm churn of the night starting up. A 7-Eleven holds the north corner where the road bends east. A couple of doors down, ARROW BAR's sign buzzes; across the way a discreet gentleman's club keeps its door shut and its aircon cold. The strip runs east."
+    },
+    {
+      "id": "the_boardroom",
+      "name": "The Boardroom",
+      "bar": "The Boardroom",
+      "barType": "gents",
+      "region": "Thappraya",
+      "regionSlug": "thappraya",
+      "kind": "gents",
+      "dark": false,
+      "people": [
+        "Ampai",
+        "Min",
+        "Tim"
+      ],
+      "desc": "A gentleman's club behind a shut door at the top of the strip: cold, gold, low-lit, deep leather couches with curtains that draw, and ladies already crossing the floor in not very much. Quiet money, discretion, and a barfine that reflects both. The strip's noise dies the moment the door sighs closed behind you."
+    },
+    {
+      "id": "the_office",
+      "name": "The Office Bar",
+      "bar": "The Office Bar",
+      "barType": "beer",
+      "region": "Thappraya",
+      "regionSlug": "thappraya",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Bpaeng",
+        "Gina",
+        "Wimon"
+      ],
+      "desc": "The other Samson beer bar, down the Second Road end — the joke's on the sign, so a man can honestly say he's 'at the office.' Dartboard, a telly showing football nobody watches, and the easy end-of-strip pace before Second Road takes over. (PLAY DARTS.)"
+    },
+    {
+      "id": "velvet_club",
+      "name": "The Velvet Club",
+      "bar": "The Velvet Club",
+      "barType": "gents",
+      "region": "Thappraya",
+      "regionSlug": "thappraya",
+      "kind": "gents",
+      "dark": false,
+      "people": [
+        "Ampai",
+        "June",
+        "Milk"
+      ],
+      "desc": "The strip's second gentleman's club, mid-way and even quieter: velvet, brass, a whisper of a sound system, and hostesses who don't chase — you buy a drink, they settle in close, and the rest is between you and the curtain. Another of the Samson brothers' rooms, run cold and expensive on purpose."
+    },
+    {
+      "id": "gold_rush",
+      "name": "Gold Rush Lounge",
+      "bar": "Gold Rush Lounge",
+      "barType": "beer",
+      "region": "Tree Town",
+      "regionSlug": "tree-town",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Fergie",
+        "Jah",
+        "Nong",
+        "Orm",
+        "Taan",
+        "Tik"
+      ],
+      "desc": "Gold tinsel, gold bar stools, gold-painted everything, none of it gold. A nervous sweetness to the place, like it's trying hard on its first week too."
+    },
+    {
+      "id": "lucky_charm",
+      "name": "Lucky Charm Bar",
+      "bar": "Lucky Charm Bar",
+      "barType": "beer",
+      "region": "Tree Town",
+      "regionSlug": "tree-town",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Bella",
+        "Namtip"
+      ],
+      "desc": "Horseshoes, four-leaf clovers, a lottery-number shrine, and a pool table with a lucky rip in the felt. Namtip and Bella will read your palm for a lady drink and predict, every time, that you buy another."
+    },
+    {
+      "id": "moonshine_bar",
+      "name": "Moonshine Bar",
+      "bar": "Moonshine Bar",
+      "barType": "beer",
+      "region": "Tree Town",
+      "regionSlug": "tree-town",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Mek",
+        "Prik"
+      ],
+      "desc": "A jars-on-the-shelf hillbilly theme done on a Pattaya budget — fairy lights in mason jars, a banjo nobody plays, ya dong in an unlabelled bottle for the brave. Prik and Mek run the rail and dare you to try the house infusion."
+    },
+    {
+      "id": "oy_office",
+      "name": "Madam Oy's Office",
+      "bar": null,
+      "barType": null,
+      "region": "Tree Town",
+      "regionSlug": "tree-town",
+      "kind": "interior",
+      "dark": false,
+      "people": [],
+      "desc": "Ledgers squared to the desk edge, a shrine shelf with fresh marigolds, framed photos: a farm gate in Isaan, a young dancer with a number pinned to her hip, three condo lobbies. Bolted to the floor: a steel safe with a Thai-numeral keypad."
+    },
+    {
+      "id": "rabbit_hole",
+      "name": "The Rabbit Hole",
+      "bar": "The Rabbit Hole",
+      "barType": "beer",
+      "region": "Tree Town",
+      "regionSlug": "tree-town",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Aump",
+        "Guitar"
+      ],
+      "desc": "A burrow of a bar you have to duck to enter, painted with tumbling playing cards and a grinning cat. Deeper than it looks and easy to lose an evening in. Aump and Guitar keep the stools warm and the tab creeping."
+    },
+    {
+      "id": "rainbow_girls",
+      "name": "Rainbow Girls Bar",
+      "bar": "Rainbow Girls Bar",
+      "barType": "gogo",
+      "region": "Tree Town",
+      "regionSlug": "tree-town",
+      "kind": "gogo",
+      "dark": false,
+      "people": [
+        "DJ Beer",
+        "Madam",
+        "Madam Oy",
+        "Pang",
+        "Ploen",
+        "Ploy",
+        "Sai",
+        "Toey",
+        "security"
+      ],
+      "desc": "Madam Oy's flagship: the best-run go-go in the maze. A DJ booth with actual taste, a cashier's cage strung with fairy lights, and a door marked ห้ามเข้า behind the bar — guarded by security who look extremely employed. Somewhere behind that door is an office, and in that office is a safe."
+    },
+    {
+      "id": "starlight_bar",
+      "name": "Starlight Bar",
+      "bar": "Starlight Bar",
+      "barType": "beer",
+      "region": "Tree Town",
+      "regionSlug": "tree-town",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Jeed",
+        "Jom",
+        "Mild",
+        "Pim",
+        "Pui"
+      ],
+      "desc": "Blue LEDs pricked into the ceiling like a planetarium with a drinks licence. The pours are honest and the banter is not. Pim is behind the bar, looking at you the way she looks at everything — like she already knows the punchline."
+    },
+    {
+      "id": "tt_back",
+      "name": "Tree Town (Back Lane)",
+      "bar": null,
+      "barType": null,
+      "region": "Tree Town",
+      "regionSlug": "tree-town",
+      "kind": "street",
+      "dark": true,
+      "people": [],
+      "desc": "The maze's unlit armpit: kitchen doors, a mop graveyard, and rats with routines. Without light, every exit feels like the same wrong one. South, past the bins, a FAR LANE of cheap bars nobody photographs leaks a little warm light."
+    },
+    {
+      "id": "tt_deep",
+      "name": "Tree Town (Deep Corner)",
+      "bar": null,
+      "barType": null,
+      "region": "Tree Town",
+      "regionSlug": "tree-town",
+      "kind": "street",
+      "dark": true,
+      "people": [],
+      "desc": "The deepest corner of the maze, where the neon gives out entirely. One big sign burns at the end of the lane: RAINBOW GIRLS BAR, every letter a different colour."
+    },
+    {
+      "id": "tt_entrance",
+      "name": "Tree Town (Entrance Arch)",
+      "bar": null,
+      "barType": null,
+      "region": "Tree Town",
+      "regionSlug": "tree-town",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "The neon arch of TREE TOWN, gateway to a pocket maze of go-gos and beer bars. Painted directions in Thai point into the tangle. Shared security lounges by the arch on plastic stools — bounce out of one bar here and you've bounced out of all of them."
+    },
+    {
+      "id": "tt_lane_1",
+      "name": "Tree Town (Inner Lane)",
+      "bar": null,
+      "barType": null,
+      "region": "Tree Town",
+      "regionSlug": "tree-town",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "Bars stacked shoulder to shoulder, neon bleeding into neon. GOLD RUSH LOUNGE glitters to the north. Painted Thai arrows on the wall offer guidance to those who can read them."
+    },
+    {
+      "id": "tt_lane_2",
+      "name": "Tree Town (Cross Lane)",
+      "bar": null,
+      "barType": null,
+      "region": "Tree Town",
+      "regionSlug": "tree-town",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "A junction where the lanes cross and the signage starts to feel personal — like it was designed to confuse. STARLIGHT BAR's blue sign fizzes at the north corner. Thai arrows point in three directions, contradicting each other with quiet confidence."
+    },
+    {
+      "id": "tt_lane_3",
+      "name": "Tree Town (Far Lane)",
+      "bar": null,
+      "barType": null,
+      "region": "Tree Town",
+      "regionSlug": "tree-town",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "The cheap seats of the maze, behind the kitchens where the rent drops and the neon budget with it: three little bars under one sagging string of bulbs. THE RABBIT HOLE, LUCKY CHARM BAR, and MOONSHINE BAR trade the regulars who ran out of maze. Friendlier than it has any right to be down here."
+    },
+    {
+      "id": "club_mirage",
+      "name": "Club Mirage",
+      "bar": "Club Mirage",
+      "barType": "gogo",
+      "region": "Walking Street",
+      "regionSlug": "walking-street",
+      "kind": "gogo",
+      "dark": false,
+      "people": [
+        "Aom",
+        "Bow",
+        "Da",
+        "Danny",
+        "Earn",
+        "Nam",
+        "Yui"
+      ],
+      "desc": "Dry ice at ankle height, violet lasers cutting through it in thin lines. Everything in here looks better than it is — that was always the business model, and the model is holding. The crowd is a mix: tourists who found their way in, freelancers working the floor, bar girls two hours past their shift drinking on someone else's tab. Aom materialises beside your stool. You didn't see her cross the floor."
+    },
+    {
+      "id": "crystal_palace",
+      "name": "Crystal Palace A-Go-Go",
+      "bar": "Crystal Palace A-Go-Go",
+      "barType": "gogo",
+      "region": "Walking Street",
+      "regionSlug": "walking-street",
+      "kind": "gogo",
+      "dark": false,
+      "people": [
+        "Aof",
+        "Beam",
+        "Boom",
+        "Cherry",
+        "Eye",
+        "Gift",
+        "Rin"
+      ],
+      "desc": "Rhinestones on everything that holds still. The DJ booth rules a wall of subs; the cashier's cage glitters like a shrine. On the back wall, a faded poster of numbered dancers from a different decade — No. 71 circled in red marker, much later, by someone who knew what they were looking at. Crystal Palace is older than most of the girls in it, and carries itself accordingly."
+    },
+    {
+      "id": "midnight_sun",
+      "name": "Midnight Sun Bar",
+      "bar": "Midnight Sun Bar",
+      "barType": "beer",
+      "region": "Walking Street",
+      "regionSlug": "walking-street",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Aek",
+        "Ann",
+        "Koi",
+        "Nut"
+      ],
+      "desc": "An open-front beer bar with actual conversation levels. Connect 4 boards and sticky Jenga blocks on every table, and a pool table under a low lamp at the back. The yellow neon sun above the till has one ray that won't stop twitching."
+    },
+    {
+      "id": "neon_paradise",
+      "name": "Neon Paradise A-Go-Go",
+      "bar": "Neon Paradise A-Go-Go",
+      "barType": "gogo",
+      "region": "Walking Street",
+      "regionSlug": "walking-street",
+      "kind": "gogo",
+      "dark": false,
+      "people": [
+        "Cartoon",
+        "Fah",
+        "Jeab",
+        "Mikkel",
+        "Mind",
+        "Nira",
+        "Noi",
+        "Sara",
+        "View"
+      ],
+      "desc": "Chrome poles, mirror walls, a sound system you feel in your fillings. The dancers rotate with the unhurried confidence of professionals — fewer of them than there used to be, and the room notices, but the ones here are good. Security by the door: two large gentlemen who have never once been surprised and are not about to start."
+    },
+    {
+      "id": "paradise_nights",
+      "name": "Paradise Nights Club",
+      "bar": "Paradise Nights Club",
+      "barType": "club",
+      "region": "Walking Street",
+      "regionSlug": "walking-street",
+      "kind": "club",
+      "dark": false,
+      "people": [
+        "Fai",
+        "Kaew",
+        "Kob",
+        "Meaw",
+        "Ping"
+      ],
+      "desc": "Velvet rope, wristbands, drinks that cost like a departure lounge. The floor heaves — tourists, freelancers working the margins, bar girls two hours past their shift in trainers and someone else's jacket. Ping is everywhere at once. The bass physically shortens the room."
+    },
+    {
+      "id": "thai_massage",
+      "name": "Ruean Sabai Thai Massage",
+      "bar": "Ruean Sabai Thai Massage",
+      "barType": null,
+      "region": "Walking Street",
+      "regionSlug": "walking-street",
+      "kind": "massage",
+      "dark": false,
+      "people": [
+        "Pensri"
+      ],
+      "desc": "A clean, bright shopfront a step off the Walking Street gate: a row of reclining chairs facing the street, a laminated price list on the wall — foot 250, Thai 300, oil 350, aloe for the sunburned — and the good sharp smell of tiger balm. The ladies wear matching polo shirts and wais, are mostly old enough to be your aunt, and mean every knuckle of it. Pensri runs the front. No short shorts, no barker, no nonsense — the one honest kind of massage in a town that sells nine."
+    },
+    {
+      "id": "ws_alley",
+      "name": "Walking Street Side-Alley",
+      "bar": null,
+      "barType": null,
+      "region": "Walking Street",
+      "regionSlug": "walking-street",
+      "kind": "street",
+      "dark": true,
+      "people": [
+        "Mot"
+      ],
+      "desc": "Kitchen steam, stacked kegs, a motorbike with no plates. The kind of alley where wallets change hands in both directions."
+    },
+    {
+      "id": "ws_gate",
+      "name": "Walking Street Gate",
+      "bar": null,
+      "barType": null,
+      "region": "Walking Street",
+      "regionSlug": "walking-street",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "The arch is still there — WALKING STREET PATTAYA, buzzing and flickering, famous enough that people photograph it before they've seen what's behind it. The strip runs south. It used to be louder. The gap between what this street was and what it is now is not visible from the gate, but you'll feel it by the time you reach the other end. Just east, RUEAN SABAI THAI MASSAGE has a row of foot chairs out for the walking wounded."
+    },
+    {
+      "id": "ws_north",
+      "name": "Walking Street (North End)",
+      "bar": null,
+      "barType": null,
+      "region": "Walking Street",
+      "regionSlug": "walking-street",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "The deep end of the strip, where the go-gos that survived COVID hold their ground through stubbornness and reputation. CRYSTAL PALACE A-GO-GO at the west, PARADISE NIGHTS CLUB beside it. MIDNIGHT SUN BAR glows a quieter yellow at the south end — beer bar, conversation levels, the kind of place you end up after you've stopped trying. Late enough, the whole strip fills with barfined ladies and their friends en route to the clubs."
+    },
+    {
+      "id": "ws_south",
+      "name": "Walking Street (South)",
+      "bar": null,
+      "barType": null,
+      "region": "Walking Street",
+      "regionSlug": "walking-street",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "Neon canyon, but the neon mix has changed. Bollywood bass competes with Thai pop from somewhere inside Little India's encroachment from the east — restaurant signs in Hindi above what used to be go-go bars, the smell of curry drifting across the touts. NEON PARADISE A-GO-GO still strobes on the west side. CLUB MIRAGE shimmers opposite. The touts with the laminated menus are still here. A dark side-alley slinks off between them."
+    }
+  ]
+}
