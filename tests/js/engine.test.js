@@ -2578,9 +2578,9 @@ test("_npcActions is the single source of a character's tap affordances (by role
   // a hostess: the full female economy on the long-press wheel
   const lek = Object.keys(NPC_ROLES).find(id => NPC_ROLES[id] === "hostess");
   assert.deepEqual(full(lek), ["talk", "examine", "photo", "buyher", "flirt", "tip", "contact", "barfine"]);
-  // cashier / mamasan: buy-drink but no flirt/barfine
-  const cash = Object.keys(NPC_ROLES).find(id => NPC_ROLES[id] === "cashier");
-  assert.deepEqual(full(cash), ["talk", "examine", "photo", "buyher"]);
+  // cashier: buy-drink + tip/contact (the sponsor-cashier arc), no flirt; barfine only once flipped
+  const cash = Object.keys(NPC_ROLES).find(id => NPC_ROLES[id] === "cashier" && !_sponsorFlipped(id));
+  assert.deepEqual(full(cash), ["talk", "examine", "photo", "buyher", "tip", "contact"]);
   // host bar (gender-flipped): buyhim + hire
   assert.deepEqual(full("arm"), ["talk", "examine", "photo", "buyhim", "hire"]);
   // cabaret performer: tippable, no barfine
