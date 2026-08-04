@@ -78,7 +78,7 @@ pure-text experience one tap away.
 | rain overlay | `G.rain > 0` | mirrors `_describeRoom`'s re-announce rule |
 | dark tint | `_isDarkHere()` (engine-core) | flashlight state rides it via `G.lightOn` |
 | bell glow | `_bellActive()` | a warm edge while the room loves you |
-| `#scene-cast` | `_npcsHere()` + `_patronsHere()` | bust = `portraits/<id>.png`; **label via `_npcLabel`/`_patronLabel`** so unmet titled characters show a look, never a leaked name (bust ≠ name; the identity-reveal rules hold) |
+| `#scene-cast` | `_npcsHere()` + `_patronsHere()` | bust = `portraits/<id>.png`; label via `_npcLabel`/`_patronLabel` (today these just return the name — the titles-until-met reveal was dropped per playtest — but they stay the single label seam, so if the reveal ever returns the panel follows for free) |
 | `#scene-hud` | `G.money`, `_clockStr()`, `G.day`, `G.soc.drunk`, `G.hunger`, `G.thirst`, `G.battery`, `G.happy`/`_happyLevel` | the DIAGNOSE stats as meters |
 | `#scene-exits` | `_room().exits` keys + `_room().venues` | venue chips use `_barName`; a closed venue may grey via `_closedNow` |
 
