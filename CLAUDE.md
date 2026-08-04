@@ -91,7 +91,7 @@ Bar mini-games (Connect 4 / Jackpot / pool / killer pool on league nights — `G
 
 ### Designed for a future 2D conversion
 
-A 2D version of this game is a live possibility. The text terminal must stay a **disposable frontend**; everything below it must remain frontend-agnostic:
+A 2D version of this game is a live possibility — the staged plan (v0 scene panel → art pipeline → hotspots → event layer → the VN-vs-top-down fork) lives in `docs/2d-roadmap.md`; these rules remain the law it walks. The text terminal must stay a **disposable frontend**; everything below it must remain frontend-agnostic:
 
 1. **All game logic goes in `engine-*.js`/`world.js`, never in `term.js`/`main.js`.** The terminal renders and persists; it must not know rules.
 2. **Every action is its own `_do*` function** (`_doGo`, `_doTalk`, `_doBuy`, …). `doCommand` is only a text parser that maps words onto these — a 2D frontend will call the `_do*` functions directly (tap an exit → `_doGo("n")`) and skip the parser entirely. Never bury game-state changes inside parsing code.
