@@ -2653,6 +2653,7 @@ function _newVacation() {
   G.hunger = 20;
   G.thirst = 30;
   G.hurt = 0;
+  G.atmDay = 0; G.atmToday = 0; // day resets to 1, so clear the daily-cap tracking or a day-1 withdrawal carries over
   G.tonicOwed = 0; // a month away forfeits any pending tonic-shop claim
   G.curseOwed = 0; // …and any pending fortune-teller claim
   G.loan = null;   // …but Nira's cousins do not forget; a month away writes it off all the same (for now)
