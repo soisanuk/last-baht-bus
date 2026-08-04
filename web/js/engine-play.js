@@ -168,6 +168,10 @@ function _closedMsg(to) {
     return "The gentleman's club is dark and bolted. They keep gentleman's hours — " +
       "the afternoon-and-early trade is long done by midnight, before the go-gos " +
       "have hit their stride. Come back when the golf finishes tomorrow.";
+  if (G.mode === "soi6")
+    return "Soi 6's shutters are down, the frontages black, the sound systems finally " +
+      "and mercifully off. Whatever you were after here shut at midnight — the beer bars " +
+      "and the Queen Vic are what's still awake now.";
   return "Soi 6's shutters are down, the frontages black, the sound systems finally " +
     "and mercifully off. Whatever you were after here shut at midnight — it's " +
     "Walking Street or nowhere now.";
@@ -2199,8 +2203,24 @@ const _HOSP_TOMORROW = [
     "you both know exactly what it's worth.",
 ];
 
+// Soi 6 pocket variant — the challenge week never reaches Soi Buakhao or Candy
+// Bar, so the ward is reframed to the north end near Naklua, off-map names dropped.
+const _HOSP_WHY_SOI6 = {
+  hurt: [
+    "You surface under a strip light in a curtained bay, an eyebrow taped and a rib filing a " +
+      "formal complaint every breath. The public hospital up past Naklua — the free one, the " +
+      "real one. Whatever last night's argument on the soi was, you lost it on points.",
+    "You come to on a gurney parked in a corridor that smells of antiseptic and instant coffee, " +
+      "one hand bandaged, a lump behind your ear you don't remember earning. Somebody poured you " +
+      "into the district hospital north of the beach while you were still insisting you were fine.",
+    "You wake to fluorescent light and the squeak of trolley wheels, an arm in a sling that " +
+      "wasn't there at midnight and the taste of the Soi 6 pavement still in it somewhere. The " +
+      "public ward up the coast. The city won last night; this is where it leaves the ones who argued.",
+  ],
+};
 function _hospitalMorning(reason) {
-  const why = _HOSP_WHY[reason] || _HOSP_WHY.hurt;
+  const why = (G.mode === "soi6" && _HOSP_WHY_SOI6[reason]) ||
+    _HOSP_WHY[reason] || (G.mode === "soi6" && _HOSP_WHY_SOI6.hurt) || _HOSP_WHY.hurt;
   _say(why[G.hospitalVisits % why.length], "alert");
   G.hospitalVisits++;
   const pool = _HOSP_SIGHTS.slice(), pick = [];
@@ -2295,13 +2315,21 @@ function _endNight(reason) {
         "back and let the day take you.", "room");
       break;
     case "collapse":
-      _say(G.thirst >= G.hunger ?
-        "The neon smears, the pavement tilts, and the last thing you register " +
-        "is a motorcycle taxi vest and the words “mai pen rai, boss, I got you.” " +
-        "Dehydration takes the rest of the night." :
-        "Your legs vote no-confidence. You fold up gently next to a som tam cart " +
-        "whose owner feeds you out of pure pity before calling you a ride. " +
-        "Hunger wins the night.", "alert");
+      _say((_flag("act1Done") && G.room === _hotelRoomId()) ?
+        (G.thirst >= G.hunger ?
+          "You make it as far as your own room and no further — the walls tilt, " +
+          "the bed comes up to meet you, and dehydration takes the rest of the " +
+          "night. At least you're home for it." :
+          "You make it as far as your own room and no further — legs folding, you " +
+          "go down onto your own mattress with your shoes still on. Hunger wins " +
+          "the night, but it wins it in your own bed.") :
+        (G.thirst >= G.hunger ?
+          "The neon smears, the pavement tilts, and the last thing you register " +
+          "is a motorcycle taxi vest and the words “mai pen rai, boss, I got you.” " +
+          "Dehydration takes the rest of the night." :
+          "Your legs vote no-confidence. You fold up gently next to a som tam cart " +
+          "whose owner feeds you out of pure pity before calling you a ride. " +
+          "Hunger wins the night."), "alert");
       _addHappy(-8);
       break;
     case "blackout":

@@ -858,8 +858,14 @@ const _RIDE_VENUES = [
 ];
 
 function _pickRideVenue(seen) {
-  const pool = _RIDE_VENUES.filter(v => !seen.includes(v.key));
-  const src = pool.length ? pool : _RIDE_VENUES;
+  // Soi 6 mode fences Walking Street off entirely (the mode blocks you from walking
+  // there and calls it off-map), so a ride that drops you in "Walking Street's big
+  // room" contradicts the pocket — drop it. Pratumnak stays: it's a hill overlook
+  // she rides you up to, never a walkable pocket room.
+  let venues = _RIDE_VENUES;
+  if (G.mode === "soi6") venues = venues.filter(v => v.key !== "wsclub");
+  const pool = venues.filter(v => !seen.includes(v.key));
+  const src = pool.length ? pool : venues;
   return src[Math.floor(_rand() * src.length)];
 }
 
@@ -1038,8 +1044,10 @@ function _bfScamRoll(id, marked) {
   if (r < 0.40) return "runner";
   if (r < 0.60) return "mao";
   if (r < 0.75) return "leaveAfter";
+  // wsparty's whole scene is set on Walking Street, which Soi 6 mode fences off —
+  // fold it into the pocket-neutral "my friend's bar, very close" barhop there.
   if (r < 0.90) return "barhop";
-  return "wsparty";
+  return G.mode === "soi6" ? "barhop" : "wsparty";
 }
 
 // The indirect ask. A girl warming to you (favor 4-5 — below self-barfine
