@@ -714,6 +714,7 @@ function _bfResolve(kind) {
   // dread lifts for one night. Day-stable roll so the offer's consistent all night.
   if (_bondTier(id) >= 2 && _hh(id + ":" + G.day + ":ride", 53) % 100 < (_bondTier(id) >= 3 ? 80 : 55)) {
     G.rideSeq = { id, fine: price, spent: 0, stops: 0, sanuk: 0, seen: [] };
+    G.offstage = true; // off the tourist map on her bike — the origin bar's saleng/ambient isn't your scene
     G.pendingEnc = "nightride";
     _encPrompt(
       [(price ? `฿${price} to the mamasan, and ` : "") +
@@ -887,6 +888,7 @@ function _endRide(seq, reason) {
   const id = seq.id, name = NPCS[id].name;
   G.rideSeq = null;
   G.pendingEnc = null;
+  G.offstage = false; // back in the world (also belt-and-braces cleared by _endNight)
   if (seq.stops === 0) {
     // declined the offer outright — no sulk, just the hotel and a good honest night
     _say(`"Okay tilac — hotel then. Boring man." But she's smiling, no sting in it. She swings ` +
