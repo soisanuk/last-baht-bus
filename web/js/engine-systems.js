@@ -328,6 +328,8 @@ const _BERT_LOYAL = [
 ];
 function _doBarfine(arg) {
   const rm = _room();
+  // the Orchid Room's women are the power players' — you're here for a meeting, not to shop
+  if (G.room === "orchid_room") { _say(_pickVary(_ORCHID_NOTOUCH, "orchidno"), "alert"); return; }
   if (rm.hostBar) { _doHire(arg); return; }
   if (rm.massage === "oil") {
     _say("No barfine here — she's a masseuse, not a bar girl, and there's no mamasan to " +
