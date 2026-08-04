@@ -3,23 +3,23 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
-    "t": "Russian siblings dead, suspects confess",
+    "t": "Chinese man gets 46 years for illegal Pattaya arsenal",
     "s": "Bangkok Post",
-    "d": "31 Jul 2026"
+    "d": "04 Aug 2026"
   },
   {
-    "t": "Mayor inspects new covered footbridge project across Pattaya",
-    "s": "Pattaya Mail",
-    "d": "03 Aug 2026"
-  },
-  {
-    "t": "Body found floating in Pattaya canal",
+    "t": "Norwegian man disappears after travelling to Jomtien",
     "s": "Thaiger",
+    "d": "04 Aug 2026"
+  },
+  {
+    "t": "British tourist refuses treatment after Pattaya fall until police step in",
+    "s": "Pattaya Mail",
     "d": "03 Aug 2026"
   },
   {
-    "t": "The Pattaya you see depends on why you came",
-    "s": "Pattaya Mail",
+    "t": "Atiruj ends long wait with Pattaya triumph",
+    "s": "Bangkok Post",
     "d": "03 Aug 2026"
   },
   {
@@ -38,50 +38,50 @@ var NEWS_FEED = [
     "d": "03 Aug 2026"
   },
   {
-    "t": "Watch the colors before you park on Pattaya beach roads",
+    "t": "Mayor inspects new covered footbridge project across Pattaya",
     "s": "Pattaya Mail",
     "d": "03 Aug 2026"
   },
   {
-    "t": "Super El Niño to arrive in Thailand next year",
-    "s": "Bangkok Post",
-    "d": "01 Aug 2026"
+    "t": "Thai PM urges 'calibrated re-engagement' with Myanmar ahead of meeting with Min Aung Hlaing",
+    "s": "Reuters",
+    "d": "04 Aug 2026"
   },
   {
-    "t": "Irish woman, 28, who 'went mad' on Thailand trip now has just months to live",
-    "s": "Irish Mirror",
-    "d": "03 Aug 2026"
-  },
-  {
-    "t": "In Thailand, a 75-year-old found the python she says ate her cats back in her home",
-    "s": "yahoo.com",
-    "d": "02 Aug 2026"
-  },
-  {
-    "t": "As Thailand's next generation shines, Malaysia could be dragged into ASEAN Championship dogfight",
+    "t": "Halftime anger sparked Philippines' ASEAN Championship revival as Thailand test looms",
     "s": "ESPN",
-    "d": "01 Aug 2026"
-  },
-  {
-    "t": "China Mobile Is Said to Explore Selling Stake in Thailand’s True",
-    "s": "Bloomberg.com",
     "d": "03 Aug 2026"
   },
   {
-    "t": "Trump's diplomacy is nudging Thailand toward China",
+    "t": "Myanmar grants access to Suu Kyi ahead of Thailand visit",
     "s": "Nikkei Asia",
-    "d": "02 Aug 2026"
+    "d": "03 Aug 2026"
+  },
+  {
+    "t": "Laos-China railway gets closer to regional link as Thailand advances high-speed rail expansion",
+    "s": "Asia News Network",
+    "d": "04 Aug 2026"
+  },
+  {
+    "t": "Thailand seizes illegal squishy toys over cancer-risk chemicals",
+    "s": "The Straits Times",
+    "d": "03 Aug 2026"
+  },
+  {
+    "t": "PM blasts UN border report",
+    "s": "Bangkok Post",
+    "d": "03 Aug 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-08-03","USD":33.33,"AUD":23.36,"GBP":44.9,"EUR":38.45};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-04","temp":27,"humid":89,"code":51,"hi":31,"rain":75};
+var WX_NOW = {"date":"2026-08-04","temp":31,"humid":63,"code":3,"hi":32,"rain":61};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-08-01","first":"932479","last2":"69","front3":["413","672"],"back3":["039","154"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4057,"date":"2026-08-03","baht":63950};
+var GOLD = {"usd":4048,"date":"2026-08-04","baht":63800};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":63591,"thb":2123311};
+var BTC = {"usd":63457,"thb":2120215};
