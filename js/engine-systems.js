@@ -69,6 +69,10 @@ function _bfShark(id) {
   return _hh(id, 97) % 100 < 35;
 }
 function _bfExploitable(id) {
+  // A sponsor girl you've just outbid (flipped) has left a paying man FOR you —
+  // her first night out isn't the moment she runs a scam, even if her hash marks
+  // her a shark. She's earned honesty.
+  if (NPCS[id].type === "sponsor" && _sponsorFlipped(id)) return false;
   if (!_bfShark(id)) return false;
   if (_wingman()) return false;
   // The white knight is the perfect mark: he over-invests and can't read the tells,
@@ -858,8 +862,14 @@ const _RIDE_VENUES = [
 ];
 
 function _pickRideVenue(seen) {
-  const pool = _RIDE_VENUES.filter(v => !seen.includes(v.key));
-  const src = pool.length ? pool : _RIDE_VENUES;
+  // Soi 6 mode fences Walking Street off entirely (the mode blocks you from walking
+  // there and calls it off-map), so a ride that drops you in "Walking Street's big
+  // room" contradicts the pocket — drop it. Pratumnak stays: it's a hill overlook
+  // she rides you up to, never a walkable pocket room.
+  let venues = _RIDE_VENUES;
+  if (G.mode === "soi6") venues = venues.filter(v => v.key !== "wsclub");
+  const pool = venues.filter(v => !seen.includes(v.key));
+  const src = pool.length ? pool : venues;
   return src[Math.floor(_rand() * src.length)];
 }
 
@@ -1038,8 +1048,10 @@ function _bfScamRoll(id, marked) {
   if (r < 0.40) return "runner";
   if (r < 0.60) return "mao";
   if (r < 0.75) return "leaveAfter";
+  // wsparty's whole scene is set on Walking Street, which Soi 6 mode fences off —
+  // fold it into the pocket-neutral "my friend's bar, very close" barhop there.
   if (r < 0.90) return "barhop";
-  return "wsparty";
+  return G.mode === "soi6" ? "barhop" : "wsparty";
 }
 
 // The indirect ask. A girl warming to you (favor 4-5 — below self-barfine
@@ -1750,10 +1762,12 @@ function _doSendMoney(arg) {
   // back at each threshold (incl. the one that flips her), and never texts the
   // cheap-charlie / number-one patter — a quiet thank-you, or the warm post-flip line.
   if (NPCS[id].type === "sponsor") {
-    if (_sponsorDrip(id)) return;                 // a frame went out (its own CHECK MESSAGES nudge)
-    _pushMsg(id, _sponsorFlipped(id) ? "💗 come see me na, tilac" :
-      amt >= 500 ? "khop khun ka 🙏 you too kind to me" : "thank you na 😊");
-    _say("(📱 A reply lands before you've pocketed the phone.)", "dim");
+    const dripped = _sponsorDrip(id);             // a frame may go out (its own CHECK MESSAGES nudge)
+    // The flip payoff must still land when this same send crossed both ฿14k (the
+    // climax frame) and ฿15k (the flip) — don't let the drip swallow "come see me na".
+    if (_sponsorFlipped(id)) _pushMsg(id, "💗 come see me na, tilac");
+    else if (!dripped) _pushMsg(id, amt >= 500 ? "khop khun ka 🙏 you too kind to me" : "thank you na 😊");
+    if (!dripped) _say("(📱 A reply lands before you've pocketed the phone.)", "dim");
     return;
   }
   _pushMsg(id, amt >= 500 ? "🙏🙏🙏 you TOO good to me. tonight I take care YOU" :

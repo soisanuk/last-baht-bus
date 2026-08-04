@@ -389,16 +389,17 @@ function _doTravel(arg) {
   const w = (arg || "").toLowerCase().replace(/^to (the )?/, "").trim();
   const dests = _travelDests();
   if (!w) {
-    if (!dests.length) {
-      _say("You don't know the way anywhere yet. Places join the list once you've stood in them.");
+    // Only list places actually reachable on foot from here — at a dead-end like
+    // the Sukhumvit crossing every hop is null, so the header would otherwise sit
+    // above an empty list.
+    const rows = dests.map(id => [id, _hops(G.room, id)]).filter(([, h]) => h !== null);
+    if (!rows.length) {
+      _say("You don't know the way anywhere from here yet. Places join the list once you've stood in them.");
       return;
     }
     _say("You know the way to:", "dim");
-    for (const id of dests) {
-      const h = _hops(G.room, id);
-      if (h === null) continue;
+    for (const [id, h] of rows)
       _say(`  ${_barName(id)} — ${h} turn${h === 1 ? "" : "s"}`, "dim");
-    }
     _say("(TRAVEL <place>. Walking pace — no shortcuts through the clock.)", "dim");
     return;
   }
@@ -410,18 +411,24 @@ function _doTravel(arg) {
   if ((_here0.bar && _here0.bar.toLowerCase().includes(w)) || _here0.name.toLowerCase().includes(w)) {
     _say("You're standing in it."); return;
   }
+  const home = _hotelRoomId();
   let dest = null;
-  if (/^(hotel|my room|home|room)$/.test(w) ||
-      _HOTELS[G.hotel].name.toLowerCase().includes(w)) {
-    dest = _hotelRoomId();
-  }
+  // "home"/"my room"/etc. always mean your room.
+  if (/^(hotel|my room|your room|home|room)$/.test(w)) dest = home;
+  // Then a visited venue by name — bars first, and skip the home room here so the
+  // Queen Vic *pub* wins over "Your Room — Queen Vic Inn" (both contain "queen vic
+  // inn"); the room is reachable via the keywords above and the hotel-name match below.
   if (!dest) {
     for (const id of dests) {
+      if (id === home) continue;
       const r = ROOMS[id];
       if ((r.bar && r.bar.toLowerCase().includes(w)) ||
           r.name.toLowerCase().includes(w)) { dest = id; break; }
     }
   }
+  // Finally the hotel's own name (so "travel sabai palms" works) — after venues,
+  // so a same-named pub isn't shadowed by the hotel you happen to sleep in.
+  if (!dest && _HOTELS[G.hotel].name.toLowerCase().includes(w)) dest = home;
   if (!dest) {
     const here = _room();
     if ((here.bar && here.bar.toLowerCase().includes(w)) ||
@@ -779,7 +786,17 @@ function _doTalkBody(arg, topic) {
   }
   _convoStart(npc); // this NPC is now the active conversation partner (bare topics aim here)
   _trace(topic ? "ask" : "talk", NPCS[npc].name, topic || ""); // breadcrumb
-  const d = _pickDialogue(npc, topic || null);
+  // Try the literal topic first (so a node keyed on a word that's ALSO a synonym —
+  // Mercedes's "german" backstory vs the german→language rule — keeps its literal
+  // match), then fall back to the synonym-normalised key when nothing literal hit.
+  // This makes typed "ask jenny about boyfriend" resolve on the first ask (boyfriend
+  // → sponsor) without stealing literal keys. _pickDialogue returns the topicless
+  // greeting on a miss, so `!d.topic` is the miss signal.
+  let d = _pickDialogue(npc, topic || null);
+  if (topic && (!d || !d.topic)) {
+    const norm = _convoTopic(topic);
+    if (norm !== topic) { const d2 = _pickDialogue(npc, norm); if (d2 && d2.topic) d = d2; }
+  }
   // a regular you TALK to warms up: generic Tinglish register for the filler
   // girls, unless she has a more specific line (a topic, or a bond-gated entry
   // that just fired). Hand-authored NPCs speak their own bond: lines instead.
@@ -834,7 +851,7 @@ const _CONVO_TOPIC_RULES = [
   [/the free|free drink|welcome drink|why.*free|on the house/,                   "free"],
   [/go.?go|the gogo/,                                                            "go-go"],
   [/\btom\b|are you.*tom|lesbian|you gay|the ladies/,                            "tom"],
-  [/\bsponsor\b|your man|who take care|klaus|the boyfriend/,                     "sponsor"],
+  [/\bsponsor\b|your man|who take care|klaus|\bdave\b|\bboyfriend\b/,             "sponsor"],
   [/the ring|promise ring/,                                                      "ring"],
   [/ladyboy|kath?oey|were you born|are you.*(girl|woman|real)/,                  "ladyboy"],
   [/\bcigarette|ยาดม|inhaler|\byadom\b|\bciggy\b/,                                "smoke"],
@@ -1286,6 +1303,35 @@ function _managerChatTick(id) {
   }
 }
 
+// A named non-working regular present in the bar (Terry, Mort at the Queen Vic):
+// someone you STAND a drink, not a working girl and not the manager. So "buy terry
+// a beer" doesn't silently pour YOU one, and "buy drink for terry" doesn't answer
+// "she's not working" about a bald man in a Chang vest.
+function _regularHere(nameW) {
+  if (!nameW) return null;
+  const id = _findNpc(nameW);
+  if (id && _npcsHere().includes(id) && !NPC_ROLES[id] && !NPCS[id].manager && !NPCS[id].filler)
+    return id;
+  return null;
+}
+function _standRegular(id) {
+  if (G.money < BEER_PRICE) {
+    _say(`A bottle for ${id ? NPCS[id].name : "the regular"} runs ฿${BEER_PRICE}; you have ฿${G.money}.`);
+    return;
+  }
+  G.money -= BEER_PRICE;
+  const who = id ? NPCS[id].name : "the regular";
+  if (G.soc.patronMiffed[G.room]) {
+    delete G.soc.patronMiffed[G.room];
+    G.soc.heat[G.room] = Math.max(0, (G.soc.heat[G.room] || 0) - 1);
+    _say(`A cold one slides down the bar to ${who}. He studies it, studies ` +
+      `you, and the shoulder unturns. “No harm done, lad.” Form restored. (฿${G.money} left.)`);
+  } else {
+    _say(`You stand ${who} a Chang. He receives it like a sacrament and ` +
+      `immediately begins a story about Walking Street in 2004. (฿${G.money} left.)`);
+  }
+}
+
 function _doBuy(arg) {
   const r = _room();
   // Host bar: "buy drink for <host>" / "buy <host> a drink" runs on the host
@@ -1357,19 +1403,11 @@ function _doBuy(arg) {
   if (/beer|chang|leo|singha/.test(arg) && !arg.includes("drink")) {
     if (!_inBar()) { _say("The 7-Eleven fridge hums somewhere, but this calls for a bar stool."); return; }
     if (G.money < BEER_PRICE) { _say(`A big bottle is ฿${BEER_PRICE} here. You have ฿${G.money}. The cashier's calculator stays in the drawer.`); return; }
-    if (/patron|regular|expat|him|guy|bloke/.test(arg)) {
-      G.money -= BEER_PRICE;
-      if (G.soc.patronMiffed[G.room]) {
-        delete G.soc.patronMiffed[G.room];
-        G.soc.heat[G.room] = Math.max(0, (G.soc.heat[G.room] || 0) - 1);
-        _say(`A cold one slides down the bar to the regular. He studies it, studies ` +
-          `you, and the shoulder unturns. “No harm done, lad.” Form restored. (฿${G.money} left.)`);
-      } else {
-        _say(`You stand the regular a Chang. He receives it like a sacrament and ` +
-          `immediately begins a story about Walking Street in 2004. (฿${G.money} left.)`);
-      }
-      return;
-    }
+    // standing a beer to the rail regular — the generic word, or a named male
+    // regular present ("buy terry a beer" → Terry gets it, not you).
+    const beerName = arg.replace(/\b(buy|order|get|a|an|the|beer|chang|leo|singha|bottle|for|him)\b/g, " ").trim();
+    const regId = _regularHere(beerName);
+    if (/patron|regular|expat|him|guy|bloke/.test(arg) || regId) { _standRegular(regId); return; }
     G.money -= BEER_PRICE;
     G.soc.drunk++;
     G.thirst = Math.max(0, G.thirst - 20);
@@ -1390,6 +1428,10 @@ function _doBuy(arg) {
     const mgr = /\bman drink\b/.test(arg) ? _managerHere()
       : (nm && NPCS[_findNpc(nm)] && NPCS[_findNpc(nm)].manager ? _findNpc(nm) : null);
     if (mgr) { _buyManDrink(mgr); return; }
+    // "buy drink for terry" — a named male regular, not a working girl: stand him
+    // one instead of the lady-drink path's "she's not working this bar".
+    const regId = _regularHere(nm);
+    if (regId) { _standRegular(regId); return; }
   }
   if (arg.includes("lady drink") || arg.includes("ladydrink") || arg.includes("drink")) {
     if (!_inBar()) { _say("Buy a drink where drinks are sold, tilac."); return; }
@@ -1508,10 +1550,7 @@ function _doBuy(arg) {
     }
     const r = G.room;
     G.money -= BAND_ROUND;
-    G.soc.bellAt[r] = G.turns;
-    G.soc.bells[r] = (G.soc.bells[r] || 0) + 1;
-    G.soc.heat[r] = 0;
-    delete G.soc.patronMiffed[r];
+    _ringBell(r);
     _say(`฿${BAND_ROUND} to the mama for the band. Four ice-cold Changs materialise on ` +
       "the monitor wedge — the vocalist nods, the guitarist raises his bottle, the " +
       "drummer doesn't stop playing but somehow conveys gratitude. The whole bar " +
@@ -1530,23 +1569,30 @@ function _doBuy(arg) {
 
 function _doRideBus(arg) {
   const r = _room();
-  if (G.mode === "soi6") {
-    _say("A blue songthaew slows, hopeful, and you wave it on. The routes out of here " +
-      "aren't yours this week — one day the whole city, but not this trip.");
-    return;
-  }
+  // Order matters: "no stop here" (indoors) and the curfew both describe the
+  // real situation, so they come before the soi6-mode refusal — otherwise BUS
+  // typed indoors or after 02:00 would narrate a songthaew slowing where none is.
+  if (!r.busStop) { _say("No bus stop here. Look for one on the main roads."); return; }
   if (G.rain > 0) {
     _say("Headlights crawl past behind the wall of water, but no songthaew is " +
       "stopping — the drivers can't tell a fare from a lamppost in this.");
     return;
   }
-  if (!r.busStop) { _say("No bus stop here. Look for one on the main roads."); return; }
   if (G.nightTurn >= LAST_BUS_TURN) {
+    // Only advertise MOTOSAI where there's actually a stand (beach_rd_c/_n, naklua_rd
+    // and the soi6 pocket have none — it's the two feet from here).
     _say("You stand at the stop with your arm half-raised, and nothing comes. Nothing " +
       "is coming. The last songthaew of the night made its run and rattled off to the " +
       "depot a while back — this is the last-baht-bus hour, and you're on the wrong " +
-      "side of it. It's a motorbike taxi now, or your own two feet through the dark. " +
-      "(MOTOSAI, or walk it home.)", "alert");
+      "side of it. " + (r.motosai
+        ? "It's a motorbike taxi now, or your own two feet through the dark. (MOTOSAI, or walk it home.)"
+        : "No motorbike stand at this stop either — it's your own two feet through the dark from here."),
+      "alert");
+    return;
+  }
+  if (G.mode === "soi6") {
+    _say("A blue songthaew slows, hopeful, and you wave it on. The routes out of here " +
+      "aren't yours this week — one day the whole city, but not this trip.");
     return;
   }
   const lines = Object.entries(BUS_LINES).filter(([, stops]) => stops.includes(G.room));
@@ -2327,9 +2373,10 @@ function _doTip(arg) {
 
 function _doWave(arg) {
   if (/bus/.test(arg) || (!arg && _room().busStop)) {
-    // only if a bus will actually come — else _doRideBus's curfew/rain refusal
-    // would follow a "swerves in within four seconds" that contradicts it
-    if (G.nightTurn < LAST_BUS_TURN && !G.rain)
+    // only if a bus will actually come — else _doRideBus's refusal (no stop here /
+    // curfew / rain / soi6 routes-aren't-yours) would follow a "swerves in within
+    // four seconds" that contradicts it. WAVE BUS indoors is the common trap.
+    if (_room().busStop && G.nightTurn < LAST_BUS_TURN && !G.rain && G.mode !== "soi6")
       _say("You put an arm out at road height. A blue songthaew swerves in within " +
         "four seconds — they can smell an undecided farang at three hundred metres.");
     _doRideBus("");
@@ -2632,8 +2679,14 @@ function _doWithdraw(arg) {
     return;
   }
   if (!_room().atm) {
-    _say("No ATM here. There's one on the main drag of every nightlife area — Soi 6 has " +
-      "one out on the street.");
+    // On Soi 6 the only machine is at the West End by the junction — don't tell a
+    // player already standing on the soi that "Soi 6 has one out on the street."
+    if (["soi6_mid", "soi6_deep"].includes(G.room))
+      _say("No ATM on this stretch — the only machine on Soi 6 is back at the West End, " +
+        "by the beach-road junction. Head WEST.");
+    else
+      _say("No ATM here. There's one on the main drag of every nightlife area — Soi 6 has " +
+        "one at the West End, by the junction.");
     return;
   }
   const n = _atmParse(arg);
@@ -2999,7 +3052,13 @@ function _completePool(verb, ctx) {
       if (rest.some(w => /^(drink|lady)$/.test(w)) && !rest.includes("man")) {
         return _room().hostBar ? _cNpcsHere() : girls();
       }
-      const barItems = ["beer", "water", "lady drink for", "charger", "toastie", "food"];
+      // Only suggest what THIS room actually sells — toastie/condom at a 7-Eleven
+      // room, food at a food stall, chargers where there's a shop/seven — else a
+      // Soi 6 bar's "buy " chips include items it flatly refuses ("Not for sale here").
+      const barItems = ["beer", "water", "lady drink for"];
+      if (_room().seven) barItems.push("toastie");
+      if (typeof FOOD_STALLS !== "undefined" && FOOD_STALLS[G.room]) barItems.push("food");
+      if ((_room().shop && _room().shop.charger) || _room().seven) barItems.push("charger");
       if (_bandHere()) barItems.push("round for band"); // only where a band's actually playing
       if (_room().seven) barItems.push("condom"); // 7-Eleven staple
       if (_managerHere()) barItems.splice(1, 0, "man drink"); // early, so it survives the 8-result cap
@@ -3378,7 +3437,10 @@ function doCommand(input) {
       const gw = arg.replace(/^to (the )?/, "");
       // a direction alias OR one of this room's own exit keys (pub, hotel, …)
       if (!gw || _DIRS[gw] !== undefined || (_room().exits && _room().exits[gw])) _doGo(gw);
-      else _doTravel(gw); // "go candy bar" — a place, not a direction
+      // "go candy bar" — a place, not a direction. Route through _doEnter so a bar
+      // fronting THIS block enters on the first try (its venues/exits are checked by
+      // name), exactly like ENTER; _doEnter falls through to TRAVEL when not adjacent.
+      else _doEnter(gw);
       break;
     }
     case "travel": case "goto": _doTravel(arg); break;

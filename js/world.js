@@ -3367,6 +3367,11 @@ const NPCS = {
         words: "just for you. i never do this before 😳 don't make me regret it" },
     ],
     dialogue: [
+      { when: () => _sponsorFlipped("jenny"),
+        text: "\"You.\" The practised welcome-smile isn't there; something quieter and more dangerous has " +
+          "taken its place. \"I keep the ring in my bag now, when I know you coming. Klaus's ring, in my bag.\" " +
+          "A small, wry, unhappy tilt. \"That is your doing. So — hello, tilac. Don't make me sorry for it.\"",
+        short: "\"I keep the ring in my bag now when you come. That is your doing. Don't make me sorry.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Hello, welcome.\" Warm, with a boundary in it — the smile of a woman who has practised saying " +
           "no nicely. \"I do the till, not the floor. You want a girl, I call a good one over, no problem. Me, I " +
@@ -3443,19 +3448,24 @@ const NPCS = {
         words: "i shouldn't send you this 😳 delete after, na 💗" },
     ],
     dialogue: [
+      { when: () => _sponsorFlipped("baimon"),
+        text: "\"You came.\" Softer than the welcome-smile, and heavier. The couple photo is face-down by " +
+          "the till, and she doesn't turn it back. \"Kesinee pretend she don't see the picture down. You are " +
+          "the reason it is down, so — hello.\" Her hand rests flat on the frame. \"Be gentle with it, na.\"",
+        short: "\"You came. The photo is face-down now, and you are the reason. Be gentle with it, na.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Welcome ka.\" Gentle, a little guarded. \"I only do the money here. Kesinee is good to me — she " +
           "keep me off the floor. My boyfriend prefer that.\" She glances at the photo without meaning to. \"He " +
           "is in Australia. He is coming back for me. Soon.\"",
         short: "\"I only do the money. My boyfriend prefer that — he in Australia, coming back for me. Soon.\"" },
-      { topic: "boyfriend", when: () => _sponsorFlipped("baimon"),
+      { topic: "sponsor", when: () => _sponsorFlipped("baimon"),
         text: "The photo is turned face-down now; she did it herself, earlier, and hasn't turned it back. " +
           "\"Don't. Whatever you going to say — don't.\" Quiet, not looking at you. \"You have more money than " +
           "Dave. I found that out tonight, and now I cannot un-know it, and Dave is in Perth and you are " +
           "here.\" Her hands are very still on the till. \"He said a good girl deserve better. Turn out " +
           "'better' just mean 'more'. Okay. Okay.\"",
         short: "\"You have more money than Dave. A good girl deserve better — turn out 'better' just mean 'more'.\"" },
-      { topic: "boyfriend", text: "\"Dave. Perth.\" A soft, careful pride. \"He send money so I don't work the " +
+      { topic: "sponsor", text: "\"Dave. Perth.\" A soft, careful pride. \"He send money so I don't work the " +
         "floor. Just the till. He say a good girl deserve better than the floor, and he make it true for me. One " +
         "year already, he send every week, never miss.\" A tiny pause. \"He is coming. He say he is coming.\"" },
     ],
