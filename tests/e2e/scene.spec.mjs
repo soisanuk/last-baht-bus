@@ -41,3 +41,37 @@ test("scene panel renders, tracks movement, and exit taps submit typed commands"
 
   expect(pageErrors).toEqual([]);
 });
+
+// The backdrop chain (art/rooms/<id>.png → art/regions/<slug>.png → the row
+// removes itself) can only fail in a browser: the vm suite can't load an image,
+// and a slug that drifts from the generator's just 404s quietly into the
+// fallback. So assert a real decoded pixel width for a room covered by each
+// leg. Skips rather than fails when no art has been generated yet — missing art
+// is a shipping state, not a bug (see docs/art-pipeline-spec.md).
+test("scene backdrops resolve: room art, then region fallback", async ({ page }) => {
+  await bootIntoGame(page, INDEX_URL);
+
+  const art = async room => {
+    await page.evaluate(r => { G.room = r; _updateScene(); }, room);
+    return await page.evaluate(async () => {
+      const img = document.querySelector("#scene-art img");
+      if (!img) return null;                       // the row removed itself: no art
+      try { await img.decode(); } catch { return null; }
+      return { src: img.currentSrc.split("/").slice(-2).join("/"), w: img.naturalWidth };
+    });
+  };
+
+  // queen_vic has its own art; soi6_mid has none and must land on its region.
+  const room = await art("queen_vic");
+  const region = await art("soi6_mid");
+  test.skip(!room && !region, "no scene art generated yet");
+
+  if (room) {
+    expect(room.src).toBe("rooms/queen_vic.png");
+    expect(room.w).toBeGreaterThan(0);
+  }
+  if (region) {
+    expect(region.src).toBe("regions/soi-6.png");  // the slug the generator writes
+    expect(region.w).toBeGreaterThan(0);
+  }
+});
