@@ -647,6 +647,45 @@
 #word-tooltip .tt-en   { color: var(--parchment); }
 
 /* ── Tone Drill ──────────────────────────────────────────────────────────── */
+
+/* ── v0 scene panel (presentation only; scene.js owns the DOM) ── */
+#scene { border-bottom: 1px solid #241145; }
+#scene-art { position: relative; }
+#scene-art img { display: block; width: 100%; max-height: 210px; object-fit: cover; }
+#scene-art .overlay-rain { position: absolute; inset: 0; pointer-events: none;
+  background: repeating-linear-gradient(115deg, transparent 0 7px, #9fc4ff22 7px 9px); }
+#scene-art .overlay-dark { position: absolute; inset: 0; pointer-events: none;
+  background: #05001aa8; }
+#scene-art .overlay-bell { position: absolute; inset: 0; pointer-events: none;
+  box-shadow: inset 0 0 34px 10px #ffb84d55; }
+#scene-cast { display: flex; gap: 10px; padding: 10px 12px 6px; overflow-x: auto; }
+#scene-cast .bust { flex: 0 0 auto; width: 56px; text-align: center; cursor: pointer;
+  background: none; border: none; padding: 0; font: inherit; }
+#scene-cast .bust img { width: 52px; height: 52px; object-fit: cover; border-radius: 9px;
+  border: 1px solid #ff149366; background: #140a2e; }
+/* the bust also carries .kw (term.js's flyout-dismiss check spares .kw only) —
+   neutralise .kw's typographic styling, keep only its behavioural role */
+#scene-cast .bust { font-weight: normal; }
+#scene-cast .bust:hover { text-decoration: none; }
+#scene-cast .bust span { display: block; font-size: 9px; color: #9a86b8; margin-top: 3px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#scene-hud { display: flex; align-items: center; gap: 7px; padding: 7px 14px;
+  font-size: 11px; color: var(--text); }
+#scene-hud b { color: var(--green); }
+#scene-hud .sep { color: #9a86b8; }
+#scene-hud .grow { flex: 1; }
+#scene-hud .m { display: flex; align-items: center; gap: 3px; font-size: 10px; }
+#scene-hud .bar { display: inline-block; width: 22px; height: 5px; background: #1c0f3a;
+  border-radius: 3px; overflow: hidden; }
+#scene-hud .bar i { display: block; height: 100%; }
+#scene-exits { display: flex; gap: 8px; padding: 2px 12px 11px; overflow-x: auto; }
+#scene-exits button { flex: 0 0 auto; font: inherit; font-size: 11px; color: var(--cyan);
+  background: #0a0530; border: 1px solid #00e5ff55; border-radius: 7px; padding: 4px 14px;
+  cursor: pointer; }
+#scene-toggle { position: absolute; top: 6px; right: 8px; z-index: 5; font: inherit;
+  font-size: 11px; color: #9a86b8; background: #05001ad9; border: 1px solid #24114588;
+  border-radius: 5px; padding: 1px 8px; cursor: pointer; }
+#scene.collapsed #scene-art, #scene.collapsed #scene-cast { display: none; }
 </style>
 </head>
 <body>
@@ -659,6 +698,7 @@
   <a id="ad-mini" href="https://soisanuk.github.io/" target="_blank" rel="noopener">
     😘 The girls speak two languages. You barely speak one. <b>Learn Thai →</b>
   </a>
+  <div id="scene" hidden></div>
   <div id="term-out"></div>
   <!-- context chips are rendered per-turn by term.js _renderChips() from the engine's _chipSet() -->
   <div id="chips"></div>
@@ -742,6 +782,7 @@
 <script src="js/thai-script.js"></script>
 <script src="js/wordcard.js"></script>
 <script src="js/term.js"></script>
+<script src="js/scene.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>

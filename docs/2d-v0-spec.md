@@ -1,5 +1,14 @@
 # v0 Scene Panel — Implementation Spec
 
+> **Implemented 2026-08** (see the decision log in `docs/2d-roadmap.md`). Two
+> errata surfaced at implementation — the shipped code is the source of truth:
+> (1) the E2E echo assertion must match past term.js's `"❯ "` echo prefix;
+> (2) the reference `_sceneCast` below has a bug — the bust button needs class
+> `"bust kw"`, because term.js's document-level flyout-dismiss listener spares
+> only `.closest(".kw")`, so a bare `.bust` click closes the wheel it just
+> opened in the same tick (index.html neutralises `.kw`'s typographic styling
+> for busts).
+
 Hand-off spec for implementing the v0 scene panel from `docs/2d-roadmap.md`.
 Everything is decided here; where this spec and reality disagree, **stop and say
 so** rather than improvising. Visual target: `docs/img/2d-v0-mock.png` (the
