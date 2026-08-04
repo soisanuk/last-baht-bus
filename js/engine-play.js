@@ -1203,7 +1203,23 @@ function _persTalkOutcome(kind, outcome) {
   return outcome;
 }
 
+// The Orchid Room's women belong to the corner tables — the patched MC president,
+// the money from Munich, the quiet Thai everyone defers to — not to a walk-up punter.
+// You're in here on sufferance, for a meeting, not to shop. Any pass gets the freeze.
+const _ORCHID_NOTOUCH = [
+  "The women in here aren't working the floor — they're the room's, the way the " +
+    "Blue Label and the low light are the room's, draped over men you do not interrupt. " +
+    "You're in the Orchid Room on sufferance, for business, not to shop. The soft-spoken " +
+    "man in the unremarkable shirt clocks the thought before you finish it, and lets it go. This once.",
+  "You reach, on reflex, and the room drops a degree. These girls belong to the corner " +
+    "tables — the patched president, the money from Munich, the quiet Thai everyone defers " +
+    "to — and a walk-up putting a hand out in HERE is a category error the whole room notes " +
+    "at once. You came for a meeting. Act like it.",
+];
+
 function _doSocial(kind, targetWord) {
+  // not a pickup room — the girls are the power players', and you're here on business
+  if (G.room === "orchid_room") { _say(_pickVary(_ORCHID_NOTOUCH, "orchidno"), "alert"); return; }
   const w = (targetWord || "").replace(/^with /, "").trim();
   const here = _npcsHere();
   // Pronoun/default resolution: "flirt with her" → whoever you're dealing with;
