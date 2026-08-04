@@ -1407,7 +1407,8 @@ function _questWhere(at) {
   }
   if (ROOMS[at]) {
     if (at === G.room) return "";
-    return ` That's the ${_barName(at)}, in ${ROOMS[at].region}.`;
+    const vn = _barName(at); // some venue names already lead with "The" (The Orchid Room)
+    return ` That's ${/^the\b/i.test(vn) ? vn : "the " + vn}, in ${ROOMS[at].region}.`;
   }
   return "";
 }
