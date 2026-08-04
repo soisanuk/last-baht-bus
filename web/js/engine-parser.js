@@ -1303,6 +1303,35 @@ function _managerChatTick(id) {
   }
 }
 
+// A named non-working regular present in the bar (Terry, Mort at the Queen Vic):
+// someone you STAND a drink, not a working girl and not the manager. So "buy terry
+// a beer" doesn't silently pour YOU one, and "buy drink for terry" doesn't answer
+// "she's not working" about a bald man in a Chang vest.
+function _regularHere(nameW) {
+  if (!nameW) return null;
+  const id = _findNpc(nameW);
+  if (id && _npcsHere().includes(id) && !NPC_ROLES[id] && !NPCS[id].manager && !NPCS[id].filler)
+    return id;
+  return null;
+}
+function _standRegular(id) {
+  if (G.money < BEER_PRICE) {
+    _say(`A bottle for ${id ? NPCS[id].name : "the regular"} runs ฿${BEER_PRICE}; you have ฿${G.money}.`);
+    return;
+  }
+  G.money -= BEER_PRICE;
+  const who = id ? NPCS[id].name : "the regular";
+  if (G.soc.patronMiffed[G.room]) {
+    delete G.soc.patronMiffed[G.room];
+    G.soc.heat[G.room] = Math.max(0, (G.soc.heat[G.room] || 0) - 1);
+    _say(`A cold one slides down the bar to ${who}. He studies it, studies ` +
+      `you, and the shoulder unturns. “No harm done, lad.” Form restored. (฿${G.money} left.)`);
+  } else {
+    _say(`You stand ${who} a Chang. He receives it like a sacrament and ` +
+      `immediately begins a story about Walking Street in 2004. (฿${G.money} left.)`);
+  }
+}
+
 function _doBuy(arg) {
   const r = _room();
   // Host bar: "buy drink for <host>" / "buy <host> a drink" runs on the host
@@ -1374,19 +1403,11 @@ function _doBuy(arg) {
   if (/beer|chang|leo|singha/.test(arg) && !arg.includes("drink")) {
     if (!_inBar()) { _say("The 7-Eleven fridge hums somewhere, but this calls for a bar stool."); return; }
     if (G.money < BEER_PRICE) { _say(`A big bottle is ฿${BEER_PRICE} here. You have ฿${G.money}. The cashier's calculator stays in the drawer.`); return; }
-    if (/patron|regular|expat|him|guy|bloke/.test(arg)) {
-      G.money -= BEER_PRICE;
-      if (G.soc.patronMiffed[G.room]) {
-        delete G.soc.patronMiffed[G.room];
-        G.soc.heat[G.room] = Math.max(0, (G.soc.heat[G.room] || 0) - 1);
-        _say(`A cold one slides down the bar to the regular. He studies it, studies ` +
-          `you, and the shoulder unturns. “No harm done, lad.” Form restored. (฿${G.money} left.)`);
-      } else {
-        _say(`You stand the regular a Chang. He receives it like a sacrament and ` +
-          `immediately begins a story about Walking Street in 2004. (฿${G.money} left.)`);
-      }
-      return;
-    }
+    // standing a beer to the rail regular — the generic word, or a named male
+    // regular present ("buy terry a beer" → Terry gets it, not you).
+    const beerName = arg.replace(/\b(buy|order|get|a|an|the|beer|chang|leo|singha|bottle|for|him)\b/g, " ").trim();
+    const regId = _regularHere(beerName);
+    if (/patron|regular|expat|him|guy|bloke/.test(arg) || regId) { _standRegular(regId); return; }
     G.money -= BEER_PRICE;
     G.soc.drunk++;
     G.thirst = Math.max(0, G.thirst - 20);
@@ -1407,6 +1428,10 @@ function _doBuy(arg) {
     const mgr = /\bman drink\b/.test(arg) ? _managerHere()
       : (nm && NPCS[_findNpc(nm)] && NPCS[_findNpc(nm)].manager ? _findNpc(nm) : null);
     if (mgr) { _buyManDrink(mgr); return; }
+    // "buy drink for terry" — a named male regular, not a working girl: stand him
+    // one instead of the lady-drink path's "she's not working this bar".
+    const regId = _regularHere(nm);
+    if (regId) { _standRegular(regId); return; }
   }
   if (arg.includes("lady drink") || arg.includes("ladydrink") || arg.includes("drink")) {
     if (!_inBar()) { _say("Buy a drink where drinks are sold, tilac."); return; }
@@ -1525,10 +1550,7 @@ function _doBuy(arg) {
     }
     const r = G.room;
     G.money -= BAND_ROUND;
-    G.soc.bellAt[r] = G.turns;
-    G.soc.bells[r] = (G.soc.bells[r] || 0) + 1;
-    G.soc.heat[r] = 0;
-    delete G.soc.patronMiffed[r];
+    _ringBell(r);
     _say(`฿${BAND_ROUND} to the mama for the band. Four ice-cold Changs materialise on ` +
       "the monitor wedge — the vocalist nods, the guitarist raises his bottle, the " +
       "drummer doesn't stop playing but somehow conveys gratitude. The whole bar " +
@@ -3030,7 +3052,13 @@ function _completePool(verb, ctx) {
       if (rest.some(w => /^(drink|lady)$/.test(w)) && !rest.includes("man")) {
         return _room().hostBar ? _cNpcsHere() : girls();
       }
-      const barItems = ["beer", "water", "lady drink for", "charger", "toastie", "food"];
+      // Only suggest what THIS room actually sells — toastie/condom at a 7-Eleven
+      // room, food at a food stall, chargers where there's a shop/seven — else a
+      // Soi 6 bar's "buy " chips include items it flatly refuses ("Not for sale here").
+      const barItems = ["beer", "water", "lady drink for"];
+      if (_room().seven) barItems.push("toastie");
+      if (typeof FOOD_STALLS !== "undefined" && FOOD_STALLS[G.room]) barItems.push("food");
+      if ((_room().shop && _room().shop.charger) || _room().seven) barItems.push("charger");
       if (_bandHere()) barItems.push("round for band"); // only where a band's actually playing
       if (_room().seven) barItems.push("condom"); // 7-Eleven staple
       if (_managerHere()) barItems.splice(1, 0, "man drink"); // early, so it survives the 8-result cap
