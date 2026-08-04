@@ -137,6 +137,25 @@ function deepEq(a, b, path = "") {
   return null;
 }
 
+// ── language-leak heuristic (the de sweep) ───────────────────────────────────
+// Deliberately English things: CAPS command tokens, paren hint groups, venue/brand
+// names, Thai script + romanisations, ฿ amounts. Strip those, then vote with
+// language-distinctive stopwords — a line that still reads as English prose in a
+// de run is a catalog coverage gap. Precision over recall: 3+ EN votes, EN > 2x DE.
+const _EN_STOP = /\b(the|and|you|your|of|with|she|he|his|they|that|this|from|have|are|was|what|into|but|not|it's|its|her)\b/gi;
+const _DE_STOP = /\b(und|nicht|das|der|die|ist|ein|eine|einen|mit|für|auf|aus|sich|dich|dir|du|zu|dem|den|im|ich|es|wie|noch|schon|kein|keine|mehr|aber|oder|wenn|dann|nur|auch|jetzt|hier|schon)\b/gi;
+function langLeak(line) {
+  let t = String(line).replace(/\{\{[^{}]*\}\}/g, " ");  // {{…}} is decorate-suppression markup, not _fmt
+  if (/\{[a-z_]+\}/.test(t)) return "defmt";           // an unfilled _fmt placeholder reached the player
+  t = t.replace(/\([^()]*\)/g, " ")                    // hint groups are English by design
+       .replace(/[A-Z]{2,}[A-Z0-9 ]*/g, " ")            // CAPS command tokens
+       .replace(/[\u0E00-\u0E7F]+/g, " ")              // Thai stays Thai
+       .replace(/฿[\d,]+/g, " ");
+  if (t.length < 30) return null;
+  const en = (t.match(_EN_STOP) || []).length, de = (t.match(_DE_STOP) || []).length;
+  return en >= 3 && en > de * 2 ? "langleak" : null;
+}
+
 const OFFPOCKET = /(Walking Street|Soi Buakhao|Buakhao|LK Metro|Tree Town|Myth Night|Jomtien)/;
 const OFFPOCKET_OK = ["in 2004", "Nite Owl", "DON'T GIVE A HOOT", "up-country"];
 
@@ -145,17 +164,20 @@ export function runSoak(opts = {}) {
   const nights = opts.nights ?? 5;
   const mode = opts.mode ?? "vacation";
   const maxCommands = opts.maxCommands ?? nights * 300 + 500;
+  const lang = opts.lang || null;  // e.g. "de": force G.player.lang each turn (survives intro/resets)
   _pseed = (seed * 2654435761 % 2147483646) + 1;
 
   const buf = [];
   engineInit(t => buf.push(String(t)), null, () => {});
   newGame();
-  G.rng = (seed * 48271 % 2147483646) + 1;
   if (mode === "vacation") {
     G.flags.act1Done = true; G.stage = "vacation"; G.money = 3000;
   } else if (mode === "soi6") {
     G.player = null; startSoi6Mode();
   } // act1: raw opening, resets expected
+  // Seed the GAME dice AFTER mode setup — startSoi6Mode() runs its own newGame(),
+  // which re-seeds G.rng from Math.random and silently broke soi6 determinism.
+  G.rng = (seed * 48271 % 2147483646) + 1;
 
   const maxMs = opts.maxMs ?? 90_000;
   const t0 = Date.now();
@@ -174,6 +196,10 @@ export function runSoak(opts = {}) {
   while (stats.commands < maxCommands && stats.nights < nights && !failures.length) {
     if (Date.now() - t0 > maxMs) { stats.truncated = true; break; }  // wall-clock cap
     if (++spins > maxCommands * 4) { fail("spin", "policy can't produce commands"); break; }
+    if (lang) {  // the de-sweep: language pinned no matter what the intro picked or a reset cleared
+      if (!G.player) G.player = { origin: "monger", personality: "joker", orientation: "straight" };
+      G.player.lang = lang;
+    }
     // choose
     if (process.env.SOAK_PIN) fs.writeFileSync(process.env.SOAK_PIN,
       JSON.stringify({ phase: "select", save: serializeGame() }));
@@ -230,6 +256,10 @@ export function runSoak(opts = {}) {
     if (mode === "soi6") for (const l of lines)
       if (OFFPOCKET.test(l) && !OFFPOCKET_OK.some(s => l.includes(s)))
         warns.push({ kind: "offpocket", line: String(l).slice(0, 140), at: stats.commands });
+    if (lang && G.player && G.player.lang === lang) for (const l of lines) {
+      const kind = langLeak(l);
+      if (kind) warns.push({ kind, line: String(l).slice(0, 400), at: stats.commands, cmd });
+    }
 
     // invariants
     const n = snapshotNums();
@@ -274,17 +304,23 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const seeds = String(arg("seed", "1")).split(",").map(Number);
   const nights = Number(arg("nights", 5));
   const mode = arg("mode", "vacation");
+  const lang = arg("lang", null);
+  const leakTally = new Map();  // normalised line → count, across all seeds
   const tPath = arg("transcript", null);
   let anyFail = false;
 
   for (const seed of seeds) {
-    const r = runSoak({ seed, nights, mode });
+    const r = runSoak({ seed, nights, mode, lang });
+    for (const x of r.warns) if (x.kind === "langleak" || x.kind === "defmt") {
+      const key = (x.kind === "defmt" ? "⚠ {unfilled} " : "") + x.line.slice(0, 400);
+      leakTally.set(key, (leakTally.get(key) || 0) + 1);
+    }
     const w = {};
     for (const x of r.warns) w[x.kind] = (w[x.kind] || 0) + 1;
     console.log(`seed ${seed} [${mode}]: ${r.stats.commands} cmds, ${r.stats.nights} nights, ` +
       `${r.stats.vacations} vacation-ends, warns ${JSON.stringify(w)}, failures ${r.failures.length}`);
     for (const x of r.warns.slice(0, 8))
-      console.log("  WARN " + x.kind + ": " + (x.cmd ? `'${x.cmd}' in ${x.room}` : x.line));
+      console.log("  WARN " + x.kind + ": " + (x.line || (`'${x.cmd}'` + (x.room ? " in " + x.room : ""))));
     for (const f of r.failures) {
       anyFail = true;
       console.log("  FAIL " + f.kind + " @cmd " + f.at + " (day " + f.day + ", nt " + f.nightTurn +
@@ -295,6 +331,11 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     }
     if (tPath) fs.writeFileSync(tPath.replace(/(\.\w+)?$/, m => "-" + seed + (m || ".txt")),
       r.transcript.join("\n"));
+  }
+  if (leakTally.size) {
+    console.log("\n── language-leak report (unique lines × occurrences across seeds) ──");
+    for (const [line, n] of [...leakTally].sort((a, b) => b[1] - a[1]))
+      console.log(String(n).padStart(4) + "×  " + line);
   }
   process.exit(anyFail ? 1 : 0);
 }
