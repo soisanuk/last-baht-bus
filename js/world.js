@@ -6476,7 +6476,7 @@ const QUESTS = {
     desc: "White Dish want to buy Bert's bar out from under its dying owner. Get him the " +
       "real picture — the history (ASK TERRY ABOUT WHITE DISH), the inside view (ASK KESINEE " +
       "at the Kitten Corner ABOUT WHITE DISH), and the pitch (ASK GAVIN at the Golden Dragon " +
-      "ABOUT the OFFER) — then tell Bert (ASK BERT ABOUT the OFFER).",
+      "ABOUT THE OFFER) — then tell Bert (ASK BERT ABOUT THE OFFER).",
     deps: [],
     at: "bert",
     doneFlag: "wdgResolved",
