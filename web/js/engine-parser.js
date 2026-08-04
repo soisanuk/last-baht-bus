@@ -429,6 +429,9 @@ function _doTravel(arg) {
   // Finally the hotel's own name (so "travel sabai palms" works) — after venues,
   // so a same-named pub isn't shadowed by the hotel you happen to sleep in.
   if (!dest && _HOTELS[G.hotel].name.toLowerCase().includes(w)) dest = home;
+  // "travel home" while standing in your room: the keyword branch resolves before
+  // the standing-in-it check can, so catch the zero-hop self-trip here.
+  if (dest === G.room) { _say("You're standing in it."); return; }
   if (!dest) {
     const here = _room();
     if ((here.bar && here.bar.toLowerCase().includes(w)) ||
@@ -1308,12 +1311,15 @@ function _managerChatTick(id) {
 // a beer" doesn't silently pour YOU one, and "buy drink for terry" doesn't answer
 // "she's not working" about a bald man in a Chang vest.
 function _regularHere(nameW) {
-  if (!nameW) return null;
+  if (!_inBar() || !nameW) return null;  // a bar-rail gesture only — the street/massage/
+  // cabaret crowd has its own verbs, and the Adonis hosts run their own drink path
   const id = _findNpc(nameW);
   if (id && _npcsHere().includes(id) && !NPC_ROLES[id] && !NPCS[id].manager && !NPCS[id].filler)
     return id;
   return null;
 }
+// Pronoun-free on purpose: the role-less rail crowd is male today, but nothing
+// enforces that — keep the prose safe for whoever takes the stool next.
 function _standRegular(id) {
   if (G.money < BEER_PRICE) {
     _say(`A bottle for ${id ? NPCS[id].name : "the regular"} runs ฿${BEER_PRICE}; you have ฿${G.money}.`);
@@ -1324,11 +1330,11 @@ function _standRegular(id) {
   if (G.soc.patronMiffed[G.room]) {
     delete G.soc.patronMiffed[G.room];
     G.soc.heat[G.room] = Math.max(0, (G.soc.heat[G.room] || 0) - 1);
-    _say(`A cold one slides down the bar to ${who}. He studies it, studies ` +
-      `you, and the shoulder unturns. “No harm done, lad.” Form restored. (฿${G.money} left.)`);
+    _say(`A cold one slides down the bar to ${who}, who studies it, studies ` +
+      `you — and the shoulder unturns. “No harm done, lad.” Form restored. (฿${G.money} left.)`);
   } else {
-    _say(`You stand ${who} a Chang. He receives it like a sacrament and ` +
-      `immediately begins a story about Walking Street in 2004. (฿${G.money} left.)`);
+    _say(`You stand ${who} a Chang. It's received like a sacrament and repaid, ` +
+      `immediately, with a story about Walking Street in 2004. (฿${G.money} left.)`);
   }
 }
 
