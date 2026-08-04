@@ -539,6 +539,7 @@ const _term = (() => {
     _refreshSuggest();
     onCommand(cmd);
     _updateFabs(); // the room/inbox may have changed — show/hide the bell & message glyphs
+    if (typeof _updateScene === "function") _updateScene(); // v0 scene panel
     _renderChips(); // …and re-match the quick-command chips to the new context
     _out.scrollTop = _out.scrollHeight;
   }
@@ -638,8 +639,13 @@ const _term = (() => {
 
     _input.focus();
     _updateFabs(); // in case we boot straight into a bar / with unread texts (restored save)
+    if (typeof _updateScene === "function") _updateScene(); // v0 scene panel
     _renderChips(); // first paint of the context chips (main.js re-renders post-boot)
   }
 
-  return { init, print, decorate, kwActions: _kwActions, renderChips: _renderChips, picFor: _picFor };
+  return { init, print, decorate, kwActions: _kwActions, renderChips: _renderChips, picFor: _picFor,
+    // v0 scene panel (scene.js): reuse the bust builder + character wheel, and
+    // submit a typed command exactly as a chip tap would (tap-echo invariant).
+    avatar: _avatar, openFly: _openFly,
+    submitCmd: (cmd) => { if (!_onCmd) return; _input.value = cmd; submit(_onCmd); } };
 })();
