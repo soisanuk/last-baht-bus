@@ -457,9 +457,10 @@ function _doTravel(arg) {
     `feet do the remembering — ${hops} turn${hops === 1 ? "" : "s"} of soi, neon, ` +
     "and shortcuts.", "dim");
   // walking pace: hops turns in total; doCommand pays the last at the bottom
-  const startDay = G.day;
+  const startDay = G.day, g0 = G;
   for (let i = 0; i < hops - 1; i++) {
     _tick();
+    if (G !== g0) return; // an Act One dawn mid-walk rebuilt the world (same-day reset — see _doWait)
     if (G.day !== startDay || G.over) return; // the night ended mid-walk
     if (G.pendingEnc || G.game) {
       _say(`(${_clockStr()} — the street has other plans.)`, "dim");
@@ -1407,7 +1408,10 @@ function _doBuy(arg) {
     return;
   }
   if (/beer|chang|leo|singha/.test(arg) && !arg.includes("drink")) {
-    if (!_inBar()) { _say("The 7-Eleven fridge hums somewhere, but this calls for a bar stool."); return; }
+    // a restaurant serves beer too — KISS's Item 47 IS 'BIG BEER'
+    if (!_inBar() && !_room().food && !FOOD_STALLS[G.room]) {
+      _say("The 7-Eleven fridge hums somewhere, but this calls for a bar stool."); return;
+    }
     if (G.money < BEER_PRICE) { _say(`A big bottle is ฿${BEER_PRICE} here. You have ฿${G.money}. The cashier's calculator stays in the drawer.`); return; }
     // standing a beer to the rail regular — the generic word, or a named male
     // regular present ("buy terry a beer" → Terry gets it, not you).
@@ -2285,10 +2289,15 @@ function _doWait(arg) {
   }
   if (target === null) { _say("WAIT <turns>, or WAIT UNTIL <hour> (say, MIDNIGHT)."); return; }
   if (target <= G.nightTurn) { _say(`It's already ${_clockStr()}. Time only runs one way, even here.`); return; }
-  const startDay = G.day, inbox0 = G.phone.inbox.length;
+  const startDay = G.day, inbox0 = G.phone.inbox.length, g0 = G;
   // leave one turn for the tick every command pays at the bottom of doCommand
   while (G.nightTurn < target - 1) {
     _tick();
+    // The world was rebuilt out from under us: an Act One dawn mid-wait hard-fails
+    // (_act1Fail → newGame() reassigns G) and resets to the SAME day number, so the
+    // day guard below can't see it — without this check the loop ticks the fresh
+    // game back to dawn forever (a frozen tab; found by the soak harness, seed 2).
+    if (G !== g0) return;
     if (G.day !== startDay || G.pendingChoice) return; // the night (or the week) ended out from under you
     if (G.pendingEnc || G.game) { _say(`(${_clockStr()} — so much for waiting.)`, "dim"); return; }
     if (G.phone.inbox.length > inbox0) { _say(`(${_clockStr()} — your phone interrupts.)`, "dim"); return; }
@@ -3611,6 +3620,12 @@ function doCommand(input) {
     case "scores": case "football": case "footy": case "match": _doScores(); break;
     case "lottery": case "lotto": _doLottery(); break;
     case "drink": case "sip": _doDrink(arg); break;
+    // bare beer nouns are taps waiting to happen — KISS's menu advertises
+    // ('BIG BEER'), and a tapped noun must never dead-end in "didn't understand"
+    case "beer": case "chang": case "leo": case "singha": _doBuy("beer"); break;
+    case "big": case "large":
+      if (/beer|chang|leo|singha/.test(arg)) { _doBuy("beer"); break; }
+      _say("Big what? The night is full of options."); break;
     case "diagnose": case "health": _doDiagnose(); break;
     case "kill": case "attack": case "hit": case "punch": case "fight": case "strangle":
       _doViolence(arg); break;

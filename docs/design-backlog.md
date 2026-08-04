@@ -9,7 +9,21 @@ tokens only on judging — the one thing that actually needs taste.
 
 ---
 
-## 1. The soak harness (top priority — build first)
+## 1. The soak harness — BUILT (tools/soak.mjs + tests/js/soak.test.js, 2026-08)
+
+Status: shipped as specified below, plus refinements learned building it: the
+save invariant is second-pass idempotence (save-compat unions skeleton defaults
+in), night counting is world-rebuild-aware (RESTART/_act1Fail reset to the same
+day number), and modal prompts' options aren't banked as room hints. CI runs 3
+short seeded runs via node --test (gates deploy); the full spread is
+`node tools/soak.mjs --seed 1,2,3,... --nights 8 [--mode soi6]` — ~1s for 13
+runs. First session's catches: a real player-reachable infinite loop (Act One
+WAIT across dawn with a persisted identity — a frozen tab, fixed in _doWait/
+_doTravel with a G-identity guard), and KISS's advertised-but-dead 'BIG BEER'
+tap (fixed: bare beer nouns route to _doBuy; food rooms serve beer). The
+hint-tap promise-catcher and the soi6 off-pocket grep both proved out.
+
+### Original design (for reference)
 
 **`tools/soak.mjs`** — a monte-carlo autoplayer over the existing vm harness.
 Everything it needs already exists: seeded deterministic RNG (`G.rng`), the
