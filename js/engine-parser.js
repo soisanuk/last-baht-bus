@@ -2237,7 +2237,7 @@ function _doWait(arg) {
   // leave one turn for the tick every command pays at the bottom of doCommand
   while (G.nightTurn < target - 1) {
     _tick();
-    if (G.day !== startDay) return; // the night ended out from under you
+    if (G.day !== startDay || G.pendingChoice) return; // the night (or the week) ended out from under you
     if (G.pendingEnc || G.game) { _say(`(${_clockStr()} — so much for waiting.)`, "dim"); return; }
     if (G.phone.inbox.length > inbox0) { _say(`(${_clockStr()} — your phone interrupts.)`, "dim"); return; }
   }
