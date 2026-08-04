@@ -2327,8 +2327,11 @@ function _doTip(arg) {
 
 function _doWave(arg) {
   if (/bus/.test(arg) || (!arg && _room().busStop)) {
-    _say("You put an arm out at road height. A blue songthaew swerves in within " +
-      "four seconds — they can smell an undecided farang at three hundred metres.");
+    // only if a bus will actually come — else _doRideBus's curfew/rain refusal
+    // would follow a "swerves in within four seconds" that contradicts it
+    if (G.nightTurn < LAST_BUS_TURN && !G.rain)
+      _say("You put an arm out at road height. A blue songthaew swerves in within " +
+        "four seconds — they can smell an undecided farang at three hundred metres.");
     _doRideBus("");
     return;
   }
