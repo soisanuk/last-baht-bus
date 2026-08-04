@@ -46,6 +46,17 @@ A visual layer stacked above the existing scrollback, in the same no-build class
 script stack. Reads `G` after each command; owns no state; degrades to nothing.
 **Ships before a single backdrop is drawn** — the art slot hides gracefully.
 
+![v0 mock — Queen Vic Inn and Ruby Kiss Bar simulated screens](img/2d-v0-mock.png)
+
+*Simulated screens (2026-08). Everything except the two backdrops is real engine
+output: the busts are the shipped `web/portraits/` set for who's actually in each
+room tonight, the prose is the live `look` text with its kws, the chips are
+`_chipSet()`'s answer for each room, exits/HUD read from `G`. The backdrops are
+hand-sketched SVG placeholders standing in for the gen-scenes art track. Left
+frame is annotated with the v0 DOM rows; right frame shows an ambient overlay
+(the bell glow, two rings up) and a 7-strong cast row scrolling off-frame —
+both by design.*
+
 ### Layout (mobile-first, stacked above `#term-out` inside `#shell`)
 
 ```
@@ -186,5 +197,11 @@ start. Do it **lazily**:
 ## Decision log
 
 - 2026-08: Roadmap written; v0 sketched against real seams (`submit()`/boot
-  hooks, `_term` export, `_isDarkHere`, `_bellActive`, label gating). Nothing
+  hooks, `_term` export, `_isDarkHere`, `_bellActive`, label seam). Nothing
   implemented yet.
+- 2026-08: v0 mocked as simulated screens (Queen Vic + Ruby Kiss, fig. above)
+  from real engine data — the layout works at 390px with a 7-strong cast row,
+  and the mock's data pulls confirmed every panel row has a live engine seam to
+  read from. Building it surfaced (and fixed) a doc drift: the identity-reveal
+  gating CLAUDE.md described had been dropped per playtest — labels are names
+  on sight; `_npcLabel`/`_patronLabel` remain the label seam regardless.
