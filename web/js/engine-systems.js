@@ -248,6 +248,10 @@ function _npcActions(id, full) {
   else if (isHost) acts.push("buyhim");      // host bar, gender-flipped
   if (full) {
     if (role === "hostess") acts.push("flirt", "tip", "contact", "barfine");
+    else if (role === "cashier") {           // the sponsor-cashier arc's verbs (were typed-only)
+      acts.push("tip", "contact");
+      if (typeof _sponsorFlipped === "function" && _sponsorFlipped(id)) acts.push("barfine");
+    }
     else if (isHost) acts.push("hire");      // the club "off" fee
     else if (isPerformer) acts.push("tip");  // cabaret performers: tippable, no barfine
     else if (isNpc && !role) acts.push("wai"); // a plain punter/NPC — just a polite wai

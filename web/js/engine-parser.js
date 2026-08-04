@@ -1133,6 +1133,13 @@ function _doGive(itemWord, npcWord) {
   // (answers to the defaults and to whatever he's been renamed)
   if (/^(dog|sai|krok)$/.test(npcWord) ||
       (G.dog && G.dog.name && npcWord === G.dog.name.toLowerCase())) return _doFeedDog("dog");
+  // "give 500 to jenny" — a money amount isn't an item; hand it over the right way:
+  // TIP if she's in front of you, else a pointer at TIP/SEND (don't hit not-carrying).
+  if (/^\d+$/.test(itemWord)) {
+    if (_findNpc(npcWord)) return _doTip(npcWord + " " + itemWord);
+    _say("To hand someone cash: TIP <lady> <amount> if she's in front of you, or SEND <amount> TO <name> for a phone contact.");
+    return;
+  }
   const npc = _findNpc(npcWord);
   if (!npc) { _say(_pickVary(_NOT_HERE, "nothere")); return; }
   // giving your empties to the vendor who buys them IS selling them — route any
