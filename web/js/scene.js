@@ -4,8 +4,13 @@
 // owns no game state, submits taps as typed commands via _term. The one piece of
 // persistence is the collapse preference — a DISPLAY pref, deliberately not in G
 // (game persistence stays in main.js; presentation never enters the save).
+// v1 hotspots (docs/2d-v1-spec.md) extend _sceneArt below: invisible tap regions
+// over painted objects in bespoke room art, data in the sidecar web/js/scene-
+// hotspots.js (SCENE_HOTSPOTS), gated on localStorage.lbb_v1_on. Also DOM-free
+// at load, also presentation-only, also taps-as-typed-commands.
 /* global G, ROOMS, NPCS, PATRONS, _room, _npcsHere, _patronsHere, _npcLabel,
-   _patronLabel, _clockStr, _isDarkHere, _bellActive, _barName, _L, _term */
+   _patronLabel, _clockStr, _isDarkHere, _bellActive, _barName, _L, _term,
+   SCENE_HOTSPOTS */
 
 function _updateScene() {
   const box = document.getElementById("scene");
@@ -56,6 +61,7 @@ function _sceneArt() {
     if (!triedRegion) { triedRegion = true; img.src = "art/regions/" + slug(_room().region) + ".png"; }
     else div.remove();
   };
+  if (typeof _attachHotspots === "function") _attachHotspots(div, img, G.room); // v1 hotspots (no-op unless gated on)
   img.src = "art/rooms/" + G.room + ".png";
   div.appendChild(img);
   // ambient overlays — only meaningful over art; harmless when the row removes itself
@@ -65,6 +71,116 @@ function _sceneArt() {
   return div;
 }
 function _ov(cls) { const d = document.createElement("div"); d.className = cls; return d; }
+
+// ── v1 hotspots (docs/2d-v1-spec.md) ────────────────────────────────────────
+// Tap regions over painted objects in BESPOKE room art only — the region
+// fallback is shared by many rooms, so a painted door means a different exit
+// in each; a hotspot there would be a bug by construction (rail 5). Gated on
+// localStorage.lbb_v1_on, on top of v0's own lbb_v0_on gate (#scene already
+// requires it to exist at all). Presentation only: taps go through
+// _term.submitCmd (rail 3), exactly like an exit button.
+let _hsResizeListener = null; // replaced (not stacked) per render — #scene-art
+                              // is fully rebuilt every command (v0's accepted
+                              // "full row rebuild" cost), so a stale listener
+                              // from a previous render must not pile up.
+let _hsPulseRoom = null;     // last room the arrival-pulse fired for — a plain
+                              // module-local (like engine-parser's _lastCmd),
+                              // never G/localStorage: "once per room-arrival"
+                              // without smuggling presentation state into the save.
+
+function _hotspotFlag(key) {
+  try { return localStorage.getItem(key) === "1"; } catch (e) { return false; }
+}
+
+function _attachHotspots(div, img, roomId) {
+  const hsOn = _hotspotFlag("lbb_v1_on");
+  const authorOn = _hotspotFlag("lbb_v1_author");
+  if (!hsOn && !authorOn) return;
+
+  const key = "rooms/" + roomId;
+  const isRealRoomImg = () => {
+    try { return !!img.currentSrc && img.currentSrc.endsWith("/" + key + ".png"); }
+    catch (e) { return false; }
+  };
+
+  const render = () => {
+    div.querySelectorAll(".hotspot").forEach(n => n.remove());
+    if (!hsOn || !isRealRoomImg()) return; // region art (or no art) → never hotspots
+    const list = (typeof SCENE_HOTSPOTS !== "undefined" && SCENE_HOTSPOTS[key]) || [];
+    if (!list.length) return;
+    const cw = div.clientWidth, ch = div.clientHeight;
+    const iw = img.naturalWidth, ih = img.naturalHeight;
+    if (!cw || !ch || !iw || !ih) return;
+    const s = Math.max(cw / iw, ch / ih); // object-fit: cover scale
+    const offX = (cw - iw * s) / 2, offY = (ch - ih * s) / 2; // crop offsets (≤ 0)
+    for (const h of list) {
+      const [x, y, w, hgt] = h.box;
+      const px = { left: offX + (x / 100) * iw * s, top: offY + (y / 100) * ih * s,
+        width: (w / 100) * iw * s, height: (hgt / 100) * ih * s };
+      // fully in the cropped-off margin → not rendered
+      if (px.left + px.width <= 0 || px.top + px.height <= 0 || px.left >= cw || px.top >= ch) continue;
+      const btn = document.createElement("button");
+      btn.className = "hotspot";
+      btn.style.left = px.left + "px"; btn.style.top = px.top + "px";
+      btn.style.width = px.width + "px"; btn.style.height = px.height + "px";
+      const label = _L(h.label);
+      btn.setAttribute("aria-label", label);
+      const lab = document.createElement("span");
+      lab.className = "hs-label";
+      lab.textContent = label;
+      btn.appendChild(lab);
+      btn.addEventListener("click", () => { if (!authorOn) _term.submitCmd(h.cmd); });
+      div.appendChild(btn);
+    }
+    // pulse once per room-arrival so touch players learn the art is alive —
+    // CSS animation (index.html), keyed off a room change, not a timer/G/save.
+    if (_hsPulseRoom !== roomId) {
+      _hsPulseRoom = roomId;
+      div.classList.add("hs-pulse");
+      setTimeout(() => div.classList.remove("hs-pulse"), 1200);
+    }
+  };
+
+  if (img.complete && img.naturalWidth) render();
+  img.addEventListener("load", render);
+  if (_hsResizeListener) window.removeEventListener("resize", _hsResizeListener);
+  let t = null;
+  _hsResizeListener = () => { clearTimeout(t); t = setTimeout(render, 150); };
+  window.addEventListener("resize", _hsResizeListener);
+
+  if (authorOn) _armHotspotAuthor(div, img, key);
+}
+
+// Author mode (console workbench, no verb, no UI): localStorage.lbb_v1_author
+// = "1". Click-drag on #scene-art logs the percent-of-image box (inverting the
+// same cover transform) as a ready-to-paste SCENE_HOTSPOTS entry. Hotspot
+// buttons still render (if lbb_v1_on is also set) so you can see what's placed
+// already, but their click handler no-ops in author mode (see render() above)
+// so an authoring click never also submits a command.
+function _armHotspotAuthor(div, img, key) {
+  let start = null;
+  const toPct = e => {
+    const cw = div.clientWidth, ch = div.clientHeight;
+    const iw = img.naturalWidth, ih = img.naturalHeight;
+    if (!cw || !ch || !iw || !ih) return null;
+    const s = Math.max(cw / iw, ch / ih);
+    const offX = (cw - iw * s) / 2, offY = (ch - ih * s) / 2;
+    const rect = div.getBoundingClientRect();
+    return { x: ((e.clientX - rect.left) - offX) / s / iw * 100,
+             y: ((e.clientY - rect.top) - offY) / s / ih * 100 };
+  };
+  div.addEventListener("mousedown", e => { start = toPct(e); });
+  div.addEventListener("mouseup", e => {
+    const end = toPct(e);
+    if (!start || !end) return;
+    const x = Math.min(start.x, end.x), y = Math.min(start.y, end.y);
+    const w = Math.abs(end.x - start.x), h = Math.abs(end.y - start.y);
+    const box = [x, y, w, h].map(n => Math.round(n * 10) / 10);
+    console.log("[hotspot] " + key + "  box: [" + box.join(", ") + "]");
+    console.log('{ box: [' + box.join(", ") + '], cmd: "", label: "" },');
+    start = null;
+  });
+}
 
 // Cast row: everyone present, as portrait busts. data-k/data-v carry the same
 // contract decorate() emits, so _term.openFly serves the identical wheel

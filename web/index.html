@@ -688,6 +688,20 @@
   font-size: 11px; color: #9a86b8; background: #05001ad9; border: 1px solid #24114588;
   border-radius: 5px; padding: 1px 8px; cursor: pointer; }
 #scene.collapsed #scene-art, #scene.collapsed #scene-cast { display: none; }
+
+/* ── v1 hotspots (presentation only; scene.js/scene-hotspots.js own the data) ── */
+.hotspot { position: absolute; background: none; border: 1px solid transparent;
+  border-radius: 8px; cursor: pointer; padding: 0; }
+.hotspot:hover, .hotspot:focus-visible { border-color: #00e5ff88;
+  box-shadow: 0 0 12px #00e5ff33 inset; }
+.hotspot .hs-label { position: absolute; left: 50%; bottom: 100%;
+  transform: translateX(-50%); margin-bottom: 4px; padding: 1px 8px;
+  font-size: 10px; color: var(--cyan); background: #05001ad9;
+  border: 1px solid #00e5ff44; border-radius: 5px; white-space: nowrap;
+  opacity: 0; pointer-events: none; transition: opacity .15s; }
+.hotspot:hover .hs-label, .hotspot:focus-visible .hs-label,
+#scene-art.hs-pulse .hotspot { opacity: 1; }
+#scene-art.hs-pulse .hotspot { border-color: #00e5ff66; }
 </style>
 </head>
 <body>
@@ -784,6 +798,7 @@
 <script src="js/thai-script.js"></script>
 <script src="js/wordcard.js"></script>
 <script src="js/term.js"></script>
+<script src="js/scene-hotspots.js"></script>
 <script src="js/scene.js"></script>
 <script src="js/main.js"></script>
 </body>

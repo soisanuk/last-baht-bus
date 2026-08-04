@@ -93,8 +93,7 @@ function _dispatch(cmd) {
       on = localStorage.getItem(key) !== "1";
       localStorage.setItem(key, on ? "1" : "0");
     } catch (e) {}
-    _term.print(`▦ v${tog[1]} ${tog[1] === "0" ? "scene panel" : "hotspots"}: ${on ? "ON" : "OFF"}` +
-      (tog[1] === "1" ? " (wired for when v1 lands — nothing renders from it yet)" : ""), "dim");
+    _term.print(`▦ v${tog[1]} ${tog[1] === "0" ? "scene panel" : "hotspots"}: ${on ? "ON" : "OFF"}`, "dim");
     if (typeof _updateScene === "function") _updateScene();
     return;
   }
