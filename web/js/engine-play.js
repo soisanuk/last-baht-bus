@@ -2417,6 +2417,7 @@ function _endNight(reason) {
   G.soc.apologized = {}; // a new shift will hear you out afresh
   G.soc.selfBf = false;
   G.soc.butterflyTeased = false;
+  G.offstage = false; // never carry an "off with her" flag into a new night
   G.selfBfId = null;
   G.quizPlayed = {};
   G.phone.msgCd = {};

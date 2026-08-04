@@ -1007,7 +1007,9 @@ function _describeRoom(full, forceFull) {
   // point (a busy soi can front 4–6 of them, and a door isn't a block away —
   // it's right here). "Exits" is roads only now; the venues list is the doors.
   const venues = _venuesHere(r);
-  if (venues.length) {
+  // …but not in your own hotel room, whose single DOWN/OUT is the venue the
+  // exit-scan fallback would otherwise re-list as "Step inside: <the bar below>".
+  if (venues.length && G.room !== _hotelRoomId()) {
     _say(_L("Step inside: ") + venues.map(id =>
       (ROOMS[id].bar || ROOMS[id].name).replace(/\s*\(.*\)$/, "")).join(", ") +
       _L(". (ENTER <name>)"), "dim");
@@ -1218,10 +1220,15 @@ function _tick() {
   if (G.nightTurn % 20 === 0 && G.soc.drunk > 0) G.soc.drunk--;
   if (G.nightTurn % 3 === 0) G.hunger++;
   if (G.nightTurn % 2 === 0) G.thirst++;
-  if (G.hunger === 70) _say("(Your stomach growls loudly enough to turn heads. Eat something.)", "alert");
-  if (G.thirst === 70) _say("(Your throat is sandpaper. Drink something — ideally water.)", "alert");
-  if (G.hunger === 90) _say("(You are running on fumes. Food. Now.)", "alert");
-  if (G.thirst === 90) _say("(Dizzy. The neon is doing things it shouldn't. WATER.)", "alert");
+  // latched threshold warnings: hunger/thirst only tick up every 2-3 turns, so an
+  // `=== 70` check fired 2-3× while the meter dwelt on the value. Fire once on the
+  // crossing, re-arm only after the meter drops back below (eat/drink and re-cross).
+  G.warned = G.warned || {};
+  const _warn = (k, on, m) => { if (on) { if (!G.warned[k]) { _say(m, "alert"); G.warned[k] = true; } } else G.warned[k] = false; };
+  _warn("h70", G.hunger >= 70 && G.hunger < 90, "(Your stomach growls loudly enough to turn heads. Eat something.)");
+  _warn("t70", G.thirst >= 70 && G.thirst < 90, "(Your throat is sandpaper. Drink something — ideally water.)");
+  _warn("h90", G.hunger >= 90, "(You are running on fumes. Food. Now.)");
+  _warn("t90", G.thirst >= 90, "(Dizzy. The neon is doing things it shouldn't. WATER.)");
   if ((G.hunger >= 80 || G.thirst >= 80) && G.nightTurn % 10 === 0) {
     _addHappy(-1, G.thirst >= G.hunger ? "you're parched" : "you're starving");
   }
