@@ -786,7 +786,17 @@ function _doTalkBody(arg, topic) {
   }
   _convoStart(npc); // this NPC is now the active conversation partner (bare topics aim here)
   _trace(topic ? "ask" : "talk", NPCS[npc].name, topic || ""); // breadcrumb
-  const d = _pickDialogue(npc, topic || null);
+  // Try the literal topic first (so a node keyed on a word that's ALSO a synonym —
+  // Mercedes's "german" backstory vs the german→language rule — keeps its literal
+  // match), then fall back to the synonym-normalised key when nothing literal hit.
+  // This makes typed "ask jenny about boyfriend" resolve on the first ask (boyfriend
+  // → sponsor) without stealing literal keys. _pickDialogue returns the topicless
+  // greeting on a miss, so `!d.topic` is the miss signal.
+  let d = _pickDialogue(npc, topic || null);
+  if (topic && (!d || !d.topic)) {
+    const norm = _convoTopic(topic);
+    if (norm !== topic) { const d2 = _pickDialogue(npc, norm); if (d2 && d2.topic) d = d2; }
+  }
   // a regular you TALK to warms up: generic Tinglish register for the filler
   // girls, unless she has a more specific line (a topic, or a bond-gated entry
   // that just fired). Hand-authored NPCs speak their own bond: lines instead.
@@ -841,7 +851,7 @@ const _CONVO_TOPIC_RULES = [
   [/the free|free drink|welcome drink|why.*free|on the house/,                   "free"],
   [/go.?go|the gogo/,                                                            "go-go"],
   [/\btom\b|are you.*tom|lesbian|you gay|the ladies/,                            "tom"],
-  [/\bsponsor\b|your man|who take care|klaus|the boyfriend/,                     "sponsor"],
+  [/\bsponsor\b|your man|who take care|klaus|\bdave\b|\bboyfriend\b/,             "sponsor"],
   [/the ring|promise ring/,                                                      "ring"],
   [/ladyboy|kath?oey|were you born|are you.*(girl|woman|real)/,                  "ladyboy"],
   [/\bcigarette|ยาดม|inhaler|\byadom\b|\bciggy\b/,                                "smoke"],
