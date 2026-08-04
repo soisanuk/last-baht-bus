@@ -82,7 +82,12 @@ function _bfExploitable(id) {
 // midnight) and priced at a premium after: the barfine is an appraisal, not a
 // fixed number. A stable hash-picked minority (shared-world-safe like _quizBars).
 function _isDraw(id) {
-  return NPC_ROLES[id] === "hostess" && _hh(id + ":" + G.vacation + ":draw", 61) % 100 < 15;
+  if (NPC_ROLES[id] !== "hostess") return false;
+  // the draw refusal lifts at midnight — meaningless in a bar that CLOSES at midnight
+  // (soi6/gents/Darkside), where it would just make her un-barfineable all night (the
+  // featured Soi 6 shows were all hitting this). Draws only in bars open past midnight.
+  if (_closesMidnight(_npcRoom(id))) return false;
+  return _hh(id + ":" + G.vacation + ":draw", 61) % 100 < 15;
 }
 // A hash-picked minority are KEPT: a long-time sponsor pays them not to work
 // while he's in town (a ~3-day window per vacation) — except his family night,
@@ -638,7 +643,9 @@ function _bfResolve(kind) {
         `back a few minutes behind her, and the night picks you up where it left off. (฿${G.money} left.)`, "win");
       _conquestHappy(5, id);
       G.offstage = true; // the hour away — the bar's ambient (saleng, etc.) isn't your scene
-      _passTime(6); // the hour passes; the night carries on (aborts if it ends mid-hour)
+      // cap the skip so a late-night ST doesn't fast-forward you PAST dawn into an
+      // involuntary rough wake — you got the short time; keep your last turns to get home.
+      _passTime(Math.min(6, Math.max(0, NIGHT_TURNS - 1 - G.nightTurn)));
       G.offstage = false;
     }
     _addBond(id, 2); // a short-time deepens the bond a little

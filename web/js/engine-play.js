@@ -2256,6 +2256,10 @@ function _cinderellaCoda() {
 }
 
 function _endNight(reason) {
+  // Idempotency: a mid-command multi-tick (WAIT through dawn) or a collapse on the
+  // last night could re-enter here after the week's already ended — don't run the
+  // whole night-end/_endVacation sequence twice.
+  if (G.pendingChoice === "vacation_end") return;
   // The opening quest (Act One) is do-or-die: fail to reach room 412 before the
   // night ends — run to dawn, or drop from thirst/drink — and it's a HARD FAIL
   // that RESETS the game, not the sandbox's soft rough-wake. Only a progress
@@ -2422,6 +2426,7 @@ function _endNight(reason) {
   G.soc.selfBf = false;
   G.soc.butterflyTeased = false;
   G.offstage = false; // never carry an "off with her" flag into a new night
+  G.pendingBf = null; // a barfine still mid-negotiation at the bell dies with the night
   G.selfBfId = null;
   G.quizPlayed = {};
   G.phone.msgCd = {};
