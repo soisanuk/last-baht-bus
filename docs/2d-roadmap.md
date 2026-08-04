@@ -212,3 +212,8 @@ start. Do it **lazily**:
   read from. Building it surfaced (and fixed) a doc drift: the identity-reveal
   gating CLAUDE.md described had been dropped per playtest — labels are names
   on sight; `_npcLabel`/`_patronLabel` remain the label seam regardless.
+- 2026-08: v0 shipped per `docs/2d-v0-spec.md` — `web/js/scene.js` (new),
+  `index.html` mount/CSS/script tag, two guarded hooks in `term.js`'s
+  export/`submit()`/boot, `tests/e2e/scene.spec.mjs` (new). `node --test`
+  698/698, full Playwright suite 16/16 (15 existing + the new spec), no engine
+  file touched.
