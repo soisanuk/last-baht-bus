@@ -605,13 +605,17 @@ function _bfResolve(kind) {
   // ── SHORT TIME: one round, off she goes, the night carries on ──
   if (kind === "st") {
     if (bt === "soi6") {
-      _say(`฿${price} to the till and ${name} takes your hand with the confidence of ` +
+      _say((price ? `฿${price} to the till and ${name} takes` :
+        `No fee crosses the till — she squared it with the mama herself — and ${name} takes`) +
+        " your hand with the confidence of " +
         "home advantage. “Upstairs” turns out to be exactly as advertised. Some " +
         "time later you are back on your stool, thinking about nothing at all, " +
         `while she fixes her hair in the till mirror. (฿${G.money} left.)`, "win");
       _conquestHappy(6, id);
     } else if (bt === "gents") {
-      _say(`฿${price} to Rose, discreetly, and ${name} takes your hand and walks you ` +
+      _say((price ? `฿${price} to Rose, discreetly, and ${name} takes` :
+        `No fee to Rose tonight — she squared it herself — and ${name} takes`) +
+        " your hand and walks you " +
         "to one of the deep couches along the wall. The curtain draws around it with " +
         "a soft brass rattle, the cold gold room carries on without you for a while, " +
         `and then you are back in your seat with a fresh drink you don't remember ` +
@@ -644,6 +648,8 @@ function _bfResolve(kind) {
   const scam = _bfScamRoll(id, marked);
   if (scam === "period") {
     // sprung before you even leave: the reveal comes AFTER the fine is paid
+    if (G.soc.bfBar) delete G.soc.bfBar[G.room]; // she never actually left — don't lock the bar on her colleagues
+    (G.soc.bfRefused = G.soc.bfRefused || {})[id] = { kind: "period", favor: _favor(id) }; // and she's out for the night — no instant re-quote
     G.bfIncident = { id, room: G.room, kind: "period", fine: price, day: G.day };
     _say(`The fine is barely in the ledger when ${name} leans close, all ` +
       "apology: “Cannot boom boom tonight, na. Lady time.” She pats your arm " +
@@ -735,6 +741,7 @@ function _bfResolve(kind) {
       "But you know her now, really know her. Some men call that the good part.)", "dim");
     _addBond(id, 6); // you saw the real her — the bond jumps
     G.lastBfBase = 4;                               // …and the escape didn't escape: less สนุก
+    G.lastBfChaste = true;                          // "you fall asleep before the sex" — no STD/condom coda
     _endNight("barfine");
     return;
   }
