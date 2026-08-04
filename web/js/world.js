@@ -6882,6 +6882,15 @@ const PATRONS = {
         "a joke, and whatever the street taught me that week. I don't moralise — I report " +
         "the weather and the women and let a man draw his own conclusions.\" A dry look. " +
         "\"He never does. READ THE COLUMN — you can pull it up anywhere now.\"" },
+      { topic: "sponsor", text: "\"The kept ones?\" He clicks the pen, pleased to be asked. " +
+        "\"Some fella back home wires her every month to stay off the floor — Germany, " +
+        "Australia, a name on her phone she'll show you like a passport. She means the 'no'.\" " +
+        "A dry look over the horn-rims. \"One lever only, squire, and it's an ugly one: you " +
+        "outbid him. Not the barfine — HER. Send it, week on week, till your number's the " +
+        "bigger one and she can't un-see it. Costs a fortune, and you're buying a person off " +
+        "another man, and she knows it, and takes it. I've filed that story forty years. " +
+        "Nobody ever likes how it reads.\"",
+        short: "\"A kept girl? One lever: outbid her sponsor — send her money, week on week, till your number's bigger. Costs a fortune, and it never reads clean.\"" },
       { topic: "sane", text: "\"Boredom's the killer out here — not the drink, not the " +
         "girls, the BOREDOM. Fella retires on his pension, sits in the condo, and by March " +
         "he's counting ceiling tiles and eyeing the balcony.\" He taps the notebook. \"This " +
