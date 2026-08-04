@@ -29,7 +29,7 @@ npm run test:e2e                  # drives web/index.html in headless Chromium
 
 Deploy is automatic: any push to `main` runs `.github/workflows/pages.yml` (tests gate the deploy), which publishes `web/` to the `gh-pages` branch. Live at https://soisanuk.github.io/last-baht-bus/.
 
-**Testing cheats:** `CHEATS_ENABLED` (a `let` in engine-core.js — no build step, so the constant is the switch) gates hidden typed codes. **Currently `true`; the intended production default is `false`** — flip it before a real release. Codes are deliberately not surfaced (no autocomplete/decoration): `twoweekmillionaire` grants ฿2,000,000 for spending (handled early in `doCommand`, works in any state, costs no turn).
+**Testing cheats:** `CHEATS_ENABLED` (a `let` in engine-core.js — no build step, so the constant is the switch) gates hidden typed codes. **Currently `true`; the intended production default is `false`** — flip it before a real release. Codes are deliberately not surfaced (no autocomplete/decoration): `twoweekmillionaire` grants ฿2,000,000 for spending (handled early in `doCommand`, works in any state, costs no turn). **Hidden display toggles** (same unsurfaced treatment, but NOT gated on `CHEATS_ENABLED` — display modes, not advantages): `TOGGLE_V0` / `TOGGLE_V1` flip the visual layers (the v0 scene panel; v1 hotspots when they land), **default OFF** — intercepted in main.js's `_dispatch` (presentation, so the prefs are localStorage `lbb_v0_on`/`lbb_v1_on` read by scene.js, never `G`).
 
 ## Architecture
 

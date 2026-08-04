@@ -12,6 +12,11 @@ test("scene panel renders, tracks movement, and exit taps submit typed commands"
   page.on("pageerror", e => pageErrors.push(e.message));
   await bootIntoGame(page, INDEX_URL);
 
+  // OFF by default — the visual layer waits for its hidden verb
+  await expect(page.locator("#scene")).toBeHidden();
+  await page.fill("#term-in", "toggle_v0");
+  await page.press("#term-in", "Enter");
+  await expect(page.locator("#term-out")).toContainText("v0 scene panel: ON");
   await expect(page.locator("#scene")).toBeVisible();
   // cast row mirrors who's actually present
   const expected = await page.evaluate(() => _npcsHere().length + _patronsHere().length);
@@ -50,6 +55,8 @@ test("scene panel renders, tracks movement, and exit taps submit typed commands"
 // is a shipping state, not a bug (see docs/art-pipeline-spec.md).
 test("scene backdrops resolve: room art, then region fallback", async ({ page }) => {
   await bootIntoGame(page, INDEX_URL);
+  // the visual layer defaults OFF (TOGGLE_V0, main.js) — throw the switch first
+  await page.evaluate(() => { localStorage.setItem("lbb_v0_on", "1"); _updateScene(); });
 
   const art = async room => {
     await page.evaluate(r => { G.room = r; _updateScene(); }, room);
