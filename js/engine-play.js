@@ -1306,7 +1306,11 @@ function _doSocial(kind, targetWord) {
   // the bra you bought her makes fondling "more interesting" — one tier warmer
   const braBump = (kind === "fondle" && G.soc.bra && G.soc.bra[id]) ? 2 : 0;
   const net = _favor(id) - SEV[kind] + braBump + _persSocialMod(kind);
-  const tier = net <= -3 ? 0 : net <= -1 ? 1 : net <= 1 ? 2 : net <= 3 ? 3 : 4;
+  let tier = net <= -3 ? 0 : net <= -1 ? 1 : net <= 1 ? 2 : net <= 3 ? 3 : 4;
+  // flirt is the soft action: it has no tier-0/1 rejection pools (they're null),
+  // so a very-low-favor flirt (e.g. a bad-rep stranger) must clamp UP to its lowest
+  // defined tier — "filed under harmless" — rather than crash on a null pool.
+  while (!_SOCIAL_TEXT[kind][tier]) tier++;
   const fn = _pickVary(_SOCIAL_TEXT[kind][tier], "soc:" + kind + tier);
   _say(fn(name), tier === 0 ? "alert" : tier >= 3 ? "win" : "");
   if (braBump && tier >= 3) _say("(The bra you bought her is, as advertised, doing work.)", "dim");
