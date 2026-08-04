@@ -78,6 +78,27 @@ function _dispatch(cmd) {
     return;
   }
 
+  // TOGGLE_V0 / TOGGLE_V1 — hidden switches for the visual layers (the v0 scene
+  // panel; v1 hotspots when they land). Deliberately unsurfaced like the cheat
+  // codes: no autocomplete, no decoration, no HELP line — but NOT gated on
+  // CHEATS_ENABLED (display modes, not advantages). Default OFF. The prefs are
+  // presentation, so they live here in localStorage ("lbb_v0_on"/"lbb_v1_on",
+  // read by scene.js) and never in G — saves, determinism, and the vm suite
+  // can't see them. v1 renders on v0's panel, so v1 needs v0 on too.
+  const tog = v.match(/^toggle[_ ]?v([01])$/);
+  if (tog) {
+    const key = "lbb_v" + tog[1] + "_on";
+    let on = false;
+    try {
+      on = localStorage.getItem(key) !== "1";
+      localStorage.setItem(key, on ? "1" : "0");
+    } catch (e) {}
+    _term.print(`▦ v${tog[1]} ${tog[1] === "0" ? "scene panel" : "hotspots"}: ${on ? "ON" : "OFF"}` +
+      (tog[1] === "1" ? " (wired for when v1 lands — nothing renders from it yet)" : ""), "dim");
+    if (typeof _updateScene === "function") _updateScene();
+    return;
+  }
+
   // RESET wipes the save — a destructive one-way door, so it takes a confirmation.
   if (_awaitingReset) {
     _awaitingReset = false;

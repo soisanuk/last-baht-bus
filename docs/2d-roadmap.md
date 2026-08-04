@@ -199,6 +199,12 @@ start. Do it **lazily**:
 
 ## Decision log
 
+- 2026-08-05: **the visual layer defaults OFF** behind hidden verbs — `TOGGLE_V0`
+  (the scene panel) and `TOGGLE_V1` (hotspots, pre-wired). Intercepted in
+  main.js's `_dispatch` like RESET; prefs in localStorage (`lbb_v0_on`/
+  `lbb_v1_on`), never `G`. The text game is the shipped product until the
+  visual layer earns its place; flipping the default later is a one-line change.
+
 - 2026-08: Roadmap written; v0 sketched against real seams (`submit()`/boot
   hooks, `_term` export, `_isDarkHere`, `_bellActive`, label seam). Nothing
   implemented yet.

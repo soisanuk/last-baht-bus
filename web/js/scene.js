@@ -11,6 +11,12 @@ function _updateScene() {
   const box = document.getElementById("scene");
   if (!box) return;
   try {
+    // The hidden-verb gate (TOGGLE_V0, intercepted in main.js): the visual layer
+    // is OFF by default — the panel renders only after the switch is thrown.
+    // (v1 hotspots will gate on "lbb_v1_on" the same way, on top of this.)
+    let on = false;
+    try { on = localStorage.getItem("lbb_v0_on") === "1"; } catch (e) {}
+    if (!on) { box.hidden = true; return; }
     if (typeof G === "undefined" || !G || !G.room || !ROOMS[G.room]) {
       box.hidden = true; return;
     }
