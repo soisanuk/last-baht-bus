@@ -3246,7 +3246,8 @@ function doCommand(input) {
   // the week is over: the airline needs an answer before anything else
   if (G.pendingChoice === "vacation_end") {
     if (G.mode === "soi6") {
-      if (/again|play|restart|more|^yes|soi/.test(lower)) { startSoi6Mode(); return; }
+      if (/^restart/.test(lower)) { G.player = null; startSoi6Mode(); return; } // RESTART re-picks identity (matches the verb everywhere else)
+      if (/again|play|more|^yes|soi/.test(lower)) { startSoi6Mode(); return; }  // PLAY AGAIN keeps who you are
       _vacationEndPrompt(); return;
     }
     if (/^restart/.test(lower)) { newGame(); engineIntro(); return; }
