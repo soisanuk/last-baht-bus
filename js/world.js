@@ -1346,6 +1346,7 @@ const ROOMS = {
     atm: true,
     region: "Soi 6",
     seven: true,
+    outlet: true, // the 7-Eleven has a socket — else CHARGE PHONE points at a 7-Eleven you're standing in
     desc: "The west end of the soi, and it hits you the moment you step in — a wall of " +
       "bars at volume, each trying to drown the next in bass and shouted Thai pop. No stages, " +
       "no dark rooms: just open-air fronts at street level thrown wide to the pavement, and the " +
@@ -1497,6 +1498,7 @@ const ROOMS = {
     name: "Soi 6 (East End)",
     region: "Soi 6",
     seven: true,
+    outlet: true, // the 7-Eleven has a socket (see soi6_street)
     desc: "The east end of the soi, past the quieter middle, where the bars run on toward " +
       "Second Road and the volume comes roaring back. KITTEN CORNER, CHERRY POP BAR, and RUBY " +
       "KISS BAR trade wrist-grabs down this stretch — same open ground-floor fronts, same " +

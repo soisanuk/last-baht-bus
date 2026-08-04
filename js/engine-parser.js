@@ -1133,6 +1133,13 @@ function _doGive(itemWord, npcWord) {
   // (answers to the defaults and to whatever he's been renamed)
   if (/^(dog|sai|krok)$/.test(npcWord) ||
       (G.dog && G.dog.name && npcWord === G.dog.name.toLowerCase())) return _doFeedDog("dog");
+  // "give 500 to jenny" — a money amount isn't an item; hand it over the right way:
+  // TIP if she's in front of you, else a pointer at TIP/SEND (don't hit not-carrying).
+  if (/^\d+$/.test(itemWord)) {
+    if (_findNpc(npcWord)) return _doTip(npcWord + " " + itemWord);
+    _say("To hand someone cash: TIP <lady> <amount> if she's in front of you, or SEND <amount> TO <name> for a phone contact.");
+    return;
+  }
   const npc = _findNpc(npcWord);
   if (!npc) { _say(_pickVary(_NOT_HERE, "nothere")); return; }
   // giving your empties to the vendor who buys them IS selling them — route any
@@ -2320,8 +2327,11 @@ function _doTip(arg) {
 
 function _doWave(arg) {
   if (/bus/.test(arg) || (!arg && _room().busStop)) {
-    _say("You put an arm out at road height. A blue songthaew swerves in within " +
-      "four seconds — they can smell an undecided farang at three hundred metres.");
+    // only if a bus will actually come — else _doRideBus's curfew/rain refusal
+    // would follow a "swerves in within four seconds" that contradicts it
+    if (G.nightTurn < LAST_BUS_TURN && !G.rain)
+      _say("You put an arm out at road height. A blue songthaew swerves in within " +
+        "four seconds — they can smell an undecided farang at three hundred metres.");
     _doRideBus("");
     return;
   }
@@ -2478,14 +2488,14 @@ function _doPhoto(arg) {
 }
 
 function _doGallery() {
+  if (G.battery <= 0) { // dead phone first — else an empty gallery nudges 'PHOTO someone' on a dead phone
+    _say("Dead phone, dark gallery. The faces are in there somewhere. Find a charger.");
+    return;
+  }
   const photos = _photoList().filter(p => NPCS[p.id] || PATRONS[p.id]);
   if (!photos.length) {
     _say("Your gallery is one blurry thumb and a lot of smeared neon. PHOTO someone — " +
       "a face at the rail, a lady who's caught your eye — to start a collection.");
-    return;
-  }
-  if (G.battery <= 0) {
-    _say("Dead phone, dark gallery. The faces are in there somewhere. Find a charger.");
     return;
   }
   const rows = photos.slice().sort((a, b) => (a.turn || 0) - (b.turn || 0)).map(p => {
@@ -2989,8 +2999,8 @@ function _completePool(verb, ctx) {
       if (rest.some(w => /^(drink|lady)$/.test(w)) && !rest.includes("man")) {
         return _room().hostBar ? _cNpcsHere() : girls();
       }
-      const barItems = ["beer", "water", "lady drink for", "charger", "toastie", "food",
-        "round for band"];
+      const barItems = ["beer", "water", "lady drink for", "charger", "toastie", "food"];
+      if (_bandHere()) barItems.push("round for band"); // only where a band's actually playing
       if (_room().seven) barItems.push("condom"); // 7-Eleven staple
       if (_managerHere()) barItems.splice(1, 0, "man drink"); // early, so it survives the 8-result cap
       const sItems = _salengItems();

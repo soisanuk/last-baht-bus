@@ -248,6 +248,10 @@ function _npcActions(id, full) {
   else if (isHost) acts.push("buyhim");      // host bar, gender-flipped
   if (full) {
     if (role === "hostess") acts.push("flirt", "tip", "contact", "barfine");
+    else if (role === "cashier") {           // the sponsor-cashier arc's verbs (were typed-only)
+      acts.push("tip", "contact");
+      if (typeof _sponsorFlipped === "function" && _sponsorFlipped(id)) acts.push("barfine");
+    }
     else if (isHost) acts.push("hire");      // the club "off" fee
     else if (isPerformer) acts.push("tip");  // cabaret performers: tippable, no barfine
     else if (isNpc && !role) acts.push("wai"); // a plain punter/NPC — just a polite wai
@@ -1403,7 +1407,8 @@ function _questWhere(at) {
   }
   if (ROOMS[at]) {
     if (at === G.room) return "";
-    return ` That's the ${_barName(at)}, in ${ROOMS[at].region}.`;
+    const vn = _barName(at); // some venue names already lead with "The" (The Orchid Room)
+    return ` That's ${/^the\b/i.test(vn) ? vn : "the " + vn}, in ${ROOMS[at].region}.`;
   }
   return "";
 }
@@ -1550,7 +1555,8 @@ function _doQuests() {
       _say(`  ${_flag(f) ? "✓" : "·"} ${label}`, "dim");
     }
     shown++;
-  } else if (_flag("act1Done")) {
+  } else if (_flag("act1Done") && G.mode !== "soi6") {
+    // soi6 mode force-sets act1Done but never plays Act One — no wallet, no score
     _say(`✓ The Last Baht Bus — Act One, scored ${G.score}`, "dim");
     shown++;
   }

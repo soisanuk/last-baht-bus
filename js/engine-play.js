@@ -1214,7 +1214,13 @@ function _doSocial(kind, targetWord) {
     // a pronoun the scope couldn't pin down → ask, rather than a flat refusal
     if (_PRONOUN.test(w.toLowerCase()) && here.length > 1)
       _say(`Who do you mean? (${here.map(x => NPCS[x].name).join(", ")})`);
-    else _say("They're not here.");
+    else {
+      // a visible rail regular is a punter, not staff — a brush-off, not "not here"
+      const pat = _findPatron(w);
+      if (pat) _say(`${_patronLabel(pat)} is a regular at the rail, not one of the girls — ` +
+        "the look you get back ends the idea before it finishes forming.");
+      else _say("They're not here.");
+    }
     return;
   }
   _noteActor(id); // this person is now the antecedent for the next "her/him"
