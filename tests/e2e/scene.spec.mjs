@@ -3,9 +3,33 @@
 // submit real typed commands, and the collapse pref sticks. file:// + headless
 // Chromium; globals are lexical, so page.evaluate reads G as a bare name.
 import { test, expect } from "@playwright/test";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { bootIntoGame } from "./_helpers.mjs";
 
 const INDEX_URL = new URL("../../web/index.html", import.meta.url).href;
+const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "..");
+
+// Choose the two rooms the backdrop test drives, from the art actually on disk:
+// one room that has its own PNG (the room leg) and one that has none but whose
+// region does (the fallback leg). Naming rooms here goes stale every time an art
+// batch lands — this can't. Returns nulls when there's no art at all.
+function pickSubjects() {
+  const art = sub => {
+    const d = path.join(ROOT, "web", "art", sub);
+    return fs.existsSync(d) ? new Set(fs.readdirSync(d).filter(f => f.endsWith(".png"))) : new Set();
+  };
+  const rooms = art("rooms"), regions = art("regions");
+  const manifest = path.join(ROOT, "docs", "scene-manifest.json");
+  if (!fs.existsSync(manifest)) return { withArt: null, artless: null };
+  const all = JSON.parse(fs.readFileSync(manifest, "utf8")).rooms;
+
+  const withArtId = [...rooms][0]?.replace(/\.png$/, "");
+  const withArt = all.find(r => r.id === withArtId) || null;
+  const artless = all.find(r => !rooms.has(r.id + ".png") && regions.has(r.regionSlug + ".png")) || null;
+  return { withArt, artless };
+}
 
 test("scene panel renders, tracks movement, and exit taps submit typed commands", async ({ page }) => {
   const pageErrors = [];
@@ -68,17 +92,21 @@ test("scene backdrops resolve: room art, then region fallback", async ({ page })
     });
   };
 
-  // queen_vic has its own art; soi6_mid has none and must land on its region.
-  const room = await art("queen_vic");
-  const region = await art("soi6_mid");
-  test.skip(!room && !region, "no scene art generated yet");
+  // Pick the two subjects from what's on disk rather than naming rooms: art
+  // coverage grows batch by batch, so any hard-coded "this room has no art"
+  // room eventually gets some and fails the fallback leg for no real reason.
+  const { withArt, artless } = pickSubjects();
+  test.skip(!withArt && !artless, "no scene art generated yet");
 
-  if (room) {
-    expect(room.src).toBe("rooms/queen_vic.png");
+  if (withArt) {
+    const room = await art(withArt.id);
+    expect(room.src).toBe(`rooms/${withArt.id}.png`);
     expect(room.w).toBeGreaterThan(0);
   }
-  if (region) {
-    expect(region.src).toBe("regions/soi-6.png");  // the slug the generator writes
+  if (artless) {
+    const region = await art(artless.id);
+    // the slug the generator writes — this is the leg that catches slug drift
+    expect(region.src).toBe(`regions/${artless.regionSlug}.png`);
     expect(region.w).toBeGreaterThan(0);
   }
 });

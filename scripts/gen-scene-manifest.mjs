@@ -46,6 +46,8 @@ const KIND_OVERRIDE = {
   myth_stage: "market",
   myth_rows: "market",
   soi_rompho: "market",           // grilled everything, fruit pyramids, plastic stools
+  soi_7_w: "street",              // "Soi 7 (West / beach end)" — a soi AT the beach,
+                                  // not sand; the name heuristic reads it wrong
 };
 
 // The framing a scene prompt needs. `barType` when the room is a bar; otherwise
