@@ -7158,6 +7158,20 @@ const PATRONS = {
         "apology with it. These bars run on repeat customers, son. The mamas " +
         "know it better than anybody.\"",
         short: "\"Most girls are straight. The sharp ones read newbies like a menu — and the mama pays you back.\"" },
+      { topic: "girlfriend", text: "\"Fella I knew out here — pipeline money, " +
+        "patient sort — barfined the same girl twenty-one nights straight. " +
+        "Dinners. Beach walks. Coffee on the balcony of a mornin'.\" The bottle " +
+        "turns a slow quarter. \"Weren't a lie anywhere in it, that's the thing. " +
+        "He didn't look at nobody else. Neither did she.\" A pull, unhurried. " +
+        "\"Then one mornin' he tells her, darlin', you can quit the bar now — " +
+        "and she says, real sweet, real confused, okay... but send mama the fine " +
+        "by three. Or did he maybe wanna pay her salary by the month instead.\" " +
+        "He sets the bottle down soft, like it might bruise. \"Weren't nobody " +
+        "lyin', see. That's the part that'll get you. He was in love, and she " +
+        "was at work, and them two things look exactly the same from the " +
+        "outside. Every damn day of it.\" A beat. \"She told him he was special, " +
+        "and I believe she meant it. I believe that made it worse.\"",
+        short: "\"Twenty-one nights, same girl. He was in love; she was at work. Both true — that's the part that'll get you.\"" },
     ],
   },
 
