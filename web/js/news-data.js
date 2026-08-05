@@ -18,53 +18,53 @@ var NEWS_FEED = [
     "d": "04 Aug 2026"
   },
   {
-    "t": "British tourist refuses treatment after Pattaya fall until police step in",
+    "t": "Face down beside busy road Pattaya officials rush to save woman",
     "s": "Pattaya Mail",
-    "d": "03 Aug 2026"
-  },
-  {
-    "t": "Pattaya Prison places murder suspects under 24-hour watch after transfer",
-    "s": "Pattaya Mail",
-    "d": "03 Aug 2026"
-  },
-  {
-    "t": "East Pattaya residents relieved after water meter theft suspect arrested",
-    "s": "Pattaya Mail",
-    "d": "03 Aug 2026"
-  },
-  {
-    "t": "Fatal midnight crash under investigation in Chonburi",
-    "s": "Pattaya Mail",
-    "d": "03 Aug 2026"
-  },
-  {
-    "t": "PM Anutin meets family of Russian siblings and vows full investigation",
-    "s": "Thaiger",
-    "d": "03 Aug 2026"
-  },
-  {
-    "t": "Thailand seizes illegal squishy toys over cancer-risk chemicals",
-    "s": "The Straits Times",
-    "d": "03 Aug 2026"
-  },
-  {
-    "t": "Irish woman, 28, who 'went mad' on Thailand trip now has just months to live",
-    "s": "irishmirror.ie",
-    "d": "03 Aug 2026"
-  },
-  {
-    "t": "Philippines brace for vengeful Thailand in crucial ASEAN Championship reunion",
-    "s": "ESPN",
-    "d": "03 Aug 2026"
-  },
-  {
-    "t": "Laos-China railway gets closer to regional link as Thailand advances high-speed rail expansion",
-    "s": "Asia News Network",
     "d": "04 Aug 2026"
   },
   {
-    "t": "Twelve wounded after Air India flight hits severe turbulence",
-    "s": "The Jerusalem Post",
+    "t": "Pattaya C4 explosives rifles and war gear lead Chinese man to 44-year prison sentence",
+    "s": "Pattaya Mail",
+    "d": "04 Aug 2026"
+  },
+  {
+    "t": "When cases go quiet questions grow over Thailand’s crime response",
+    "s": "Pattaya Mail",
+    "d": "04 Aug 2026"
+  },
+  {
+    "t": "Pattaya massage workers report alleged kidnapping amid fresh fears",
+    "s": "Pattaya Mail",
+    "d": "04 Aug 2026"
+  },
+  {
+    "t": "Billions of views put Bangkok Pattaya and Thailand’s hidden gems on world stage",
+    "s": "Pattaya Mail",
+    "d": "04 Aug 2026"
+  },
+  {
+    "t": "Irish woman, 28, who 'went mad' on Thailand trip now has just months to live",
+    "s": "Irish Mirror",
+    "d": "03 Aug 2026"
+  },
+  {
+    "t": "Thailand close in on ASEAN Championship semis as Philippines face do-or-die clash with Malaysia",
+    "s": "ESPN",
+    "d": "04 Aug 2026"
+  },
+  {
+    "t": "Thailand Rules Out Fully Owned SpaceX Venture in US Trade Talks",
+    "s": "Bloomberg.com",
+    "d": "05 Aug 2026"
+  },
+  {
+    "t": "Thailand Eyes Ship-Sinking BrahMos Supersonic Missiles From India",
+    "s": "thedefensepost.com",
+    "d": "04 Aug 2026"
+  },
+  {
+    "t": "Chinese activist held by Thailand arrives in Canada",
+    "s": "Bangkok Post",
     "d": "04 Aug 2026"
   },
   {
@@ -76,12 +76,12 @@ var NEWS_FEED = [
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-08-04","USD":33.33,"AUD":23.44,"GBP":44.82,"EUR":38.39};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-05","temp":28,"humid":84,"code":53,"hi":31,"rain":88};
+var WX_NOW = {"date":"2026-08-05","temp":29,"humid":84,"code":53,"hi":32,"rain":82};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-08-01","first":"932479","last2":"69","front3":["413","672"],"back3":["039","154"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4089,"date":"2026-08-04","baht":64450};
+var GOLD = {"usd":4152,"date":"2026-08-05","baht":65450};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":64206,"thb":2136776};
+var BTC = {"usd":64099,"thb":2128821};
