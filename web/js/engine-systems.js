@@ -850,6 +850,12 @@ const _RIDE_VENUES = [
       `drowning in all night is a smear of gold light and, from up here, completely quiet. ${n} ` +
       `leans back against you and points out her bar, her room, the hospital where her son was ` +
       `born — a whole life you're only now seeing the shape of. The wind does the talking.`,
+    n => `"Somewhere dark, na? No people." She sounds smaller than she has all night. The bike ` +
+      `climbs away from the neon until the town is a rumour below, and she parks facing the ` +
+      `water and performs nothing at all — no wide smile, no laugh on cue, the makeup mostly ` +
+      `gone. Just her head against your shoulder and the engine ticking cool. The smile she ` +
+      `finds for you up here is a small, tired, fragile thing, and it is not for sale. It has ` +
+      `never been for sale.`,
   ]},
   { key: "ranlao", lo: 300, hi: 700, sanuk: 3, scenes: [
     n => `A ran lao on South Pattaya Road — Thai live music, whisky sets, and a fifteen-minute ` +
@@ -3092,6 +3098,8 @@ const _OWL_LETTERS = [
    "Happy Old Boys In Thailand, for the uninitiated — a dwindling tribe. You may be right. The money that once crossed a bar now buys a beach chair and a seafood lunch. The girls noticed before you did; it's why half of them are in Bang Saen."],
   ["A reader explains the arithmetic of a kept lady: 'Her sponsor flies in, so she's not working — he pays a generous remittance for exactly that. But today's a family day for him, penned in with the wife and kids, and a girl with a free evening…'",
    "…is a girl with a free evening. Everyone is discreet, everyone is paid, and nobody, technically, is doing anything wrong. This is not a scandal, squire. This is a calendar."],
+  ["A regular writes, wounded: 'My girl of two seasons has left the bar — and not for a bigger wallet. Somebody saw her at a mookata place with a Thai fellow in an office shirt. I would have paid anything. What did he pay?'",
+   "Nothing, squire, and that is the entire point. You never saw him coming because he does not come to the bar — he waits in the car park in a sensible Honda, and he knows every single thing you are afraid she is hiding, and he stays anyway. His mother is against it, his friends tell him to 'be careful', and he is paying in a currency you do not hold: face. Against that, your wallet is confetti. Wish her well, sir. This is the one way out of here that the town does not own."],
   ["A reader, nine months in, writes with some swagger: 'Took her out of a go-go and set her up in my condo. She threw out the bikinis, cooks every night, drinks nothing. The bitter old boys in the sports bars are simply doing it wrong — treat them like human beings and they change.'",
    "Delighted for you, squire. Now a small prophecy, free of charge: one day the phone will ring from up-country — a brother, a motorbike, a hospital, a number with four zeros — and your answer will be worth more than nine months of home cooking. Pay it and you are her harbour. Explain about boundaries instead, and you will come home to a wardrobe of modest jeans and one suitcase gone. Nobody will have played you. The bar is not a place, sir. It is a survival mechanism, and it never closes."],
   ["A reader writes, quietly: 'Three weeks now — same girl, every single night. Dinners, the beach, coffee on my balcony of a morning. Neither of us has so much as looked at anyone else. This morning I told her she could give the bar away, we'd make a weekend of the islands. She smiled and said lovely — but send mama the fine before three, or would I rather just cover her salary by the month?'",
