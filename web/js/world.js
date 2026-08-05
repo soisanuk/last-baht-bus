@@ -5043,6 +5043,14 @@ const NPCS = {
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"W-welcome to Gold Rush! First week— I mean, MY first week. The gold is paint. I'm not supposed to say that. Please don't tell.\"",
         short: "\"W-welcome to Gold Rush! Please — don't tell anyone about the paint.\"" },
+      { topic: "ring", text: "She turns the little gold ring on her finger — new, thin, " +
+        "the plating already going at the band. \"He buy me this. He say I don't belong " +
+        "in a bar. He say when he get home he fix everything, I come stay with him.\" " +
+        "Her phone is in her other hand, the chat open to one grey word: Read. Two days " +
+        "now. \"He is probably just very busy with work,\" she says — to the screen, not " +
+        "to you. \"His boss is very strict.\" The smile she puts on next is the bravest, " +
+        "worst thing on the whole soi tonight.",
+        short: "\"He is probably just very busy with work. His boss is very strict.\" The ring turns and turns." },
     ],
   },
 
@@ -5123,6 +5131,17 @@ const NPCS = {
         "soft. If he explains about boundaries...\" A small, cold smile. \"...she packs " +
         "one suitcase. We always pack light. That is also from being hungry.\"",
         short: "\"It is not a lie, it is a uniform — hungry teaches you tailoring. Wait for the first hospital bill from the village.\"" },
+      { topic: "warn", text: "\"You think somebody should tell her. How it goes. How " +
+        "the ring is hollow, how her phone stays quiet, how this soi files a girl " +
+        "down.\" Mercedes looks across the room for a long moment. \"Fifteen years ago " +
+        "a woman like me could have told a girl like me all of it, word for word. You " +
+        "know what I would have done? Hated her. The truth doesn't pay a mother's " +
+        "hospital bill — the warning changes nothing, the girl stays anyway, and now " +
+        "she also has an enemy.\" She turns her glass. \"Some lessons only bleed in. " +
+        "So no. I don't warn. When the som tam cart comes, I send a bowl over. I keep " +
+        "a tissue in my sleeve. That is the whole of what knowing is worth — and it " +
+        "took me years to learn even that.\"",
+        short: "\"The truth doesn't pay a mother's hospital bill. I don't warn — I send som tam over, and I keep a tissue in my sleeve.\"" },
     ],
   },
 
