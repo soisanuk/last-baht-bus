@@ -49,8 +49,12 @@ test("no orphaned region art", () => {
 });
 
 test("art files are real PNGs and inside the size budget", () => {
-  for (const sub of ["rooms", "regions"]) {
+  // filler/ is held to format + budget but NOT to a naming rule: it's an unwired
+  // library (see the stray-entries test below), so there's nothing to orphan
+  // against until something references it.
+  for (const sub of ["rooms", "regions", "filler"]) {
     for (const f of list(sub)) {
+      if (!f.endsWith(".png")) continue;   // filler/ carries a README
       const p = path.join(artDir, sub, f);
       assert.ok(fs.readFileSync(p).subarray(0, 8).equals(PNG_SIG), sub + "/" + f + " is not a valid PNG");
       const kb = fs.statSync(p).size / 1024;
@@ -59,12 +63,35 @@ test("art files are real PNGs and inside the size budget", () => {
   }
 });
 
-test("web/art holds nothing but rooms/, regions/ and a README", () => {
+test("web/art holds nothing but rooms/, regions/, filler/ and a README", () => {
   if (!fs.existsSync(artDir)) return;
   const stray = fs.readdirSync(artDir)
     .filter(f => !f.startsWith("."))
-    .filter(f => !["rooms", "regions"].includes(f) && !/^README/i.test(f));
+    .filter(f => !["rooms", "regions", "filler"].includes(f) && !/^README/i.test(f));
   assert.deepEqual(stray, [], "unexpected entries in web/art/");
+});
+
+// filler/ is a library, not a surface: generated art kept for later use, wired
+// to nothing. Nothing in the game loads it today, so the one thing worth
+// asserting is that it STAYS unwired — the day a filler frame gets referenced,
+// it should move to a directory whose names are guarded (rooms/, regions/, or
+// portraits/pics/ with its orphan rule) rather than being loaded from here.
+test("filler art is not referenced by the game", () => {
+  const dir = path.join(artDir, "filler");
+  if (!fs.existsSync(dir)) return;
+  const stray = list("filler").filter(f => !f.endsWith(".png") && !/^README/i.test(f));
+  assert.deepEqual(stray, [], "filler/ holds PNGs and a README, nothing else");
+  const names = fs.readdirSync(dir).filter(f => f.endsWith(".png")).map(f => f.replace(/\.png$/, ""));
+  if (!names.length) return;
+  const src = ["scene.js", "term.js", "main.js", "world.js"]
+    .map(f => path.join(root, "web", "js", f))
+    .filter(fs.existsSync)
+    .map(f => fs.readFileSync(f, "utf8"))
+    .join("\n");
+  assert.ok(!/art\/filler/.test(src), "something now loads art/filler — give those files a guarded home");
+  for (const n of names) {
+    assert.ok(!new RegExp(`["'\`/]${n}["'\`.]`).test(src), n + " is referenced in web/js — move it out of filler/");
+  }
 });
 
 test("the scene manifest is in sync with world.js", () => {
