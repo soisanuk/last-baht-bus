@@ -3842,6 +3842,16 @@ const NPCS = {
       { topic: "home", text: "\"Nan. Far up — very green, very quiet, mountain everywhere.\" A small smile, then " +
         "it goes. \"Here, no mountain. All concrete, all noise. Too loud for Kwan.\" She folds. \"But Kwan get " +
         "used to. Everything, you get used to.\"" },
+      { topic: "dance", text: "She sets the half-folded crane down and thinks about it " +
+        "properly, the way she thinks about everything. \"I dance to make people happy. " +
+        "All the people. The happy customer, the shy one — even the ones who come in " +
+        "only to look, and think something not so nice about us.\" A small pause. \"One " +
+        "time a man tell me: two lady in the corner watch you dance, and feel bad. " +
+        "About themselves.\" The crane turns in her fingers. \"I think about it the " +
+        "whole night. If my dancing make somebody feel small, that make me feel very " +
+        "bad. I want everybody to leave here a little bit better than they come in.\" " +
+        "She picks the crane back up. \"Otherwise, what is it for?\"",
+        short: "\"I dance to make people happy — all the people. If it make somebody feel small, that make me feel very bad.\"" },
     ],
   },
   // Kat (Sunset Dreams) — great fun for ninety minutes, then the drink turns.
