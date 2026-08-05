@@ -855,6 +855,7 @@ const _CONVO_TOPIC_RULES = [
   [/the free|free drink|welcome drink|why.*free|on the house/,                   "free"],
   [/go.?go|the gogo/,                                                            "go-go"],
   [/\btom\b|are you.*tom|lesbian|you gay|the ladies/,                            "tom"],
+  [/changed? her|save (her|them)|\brescue\b|good girl now|left the bar|out of the bar/,  "change"],
   [/\bsponsor\b|your man|who take care|klaus|\bdave\b|\bboyfriend\b/,             "sponsor"],
   [/the ring|promise ring/,                                                      "ring"],
   [/ladyboy|kath?oey|were you born|are you.*(girl|woman|real)/,                  "ladyboy"],
