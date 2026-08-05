@@ -850,6 +850,36 @@ const _RIDE_VENUES = [
       `drowning in all night is a smear of gold light and, from up here, completely quiet. ${n} ` +
       `leans back against you and points out her bar, her room, the hospital where her son was ` +
       `born — a whole life you're only now seeing the shape of. The wind does the talking.`,
+    n => `"Somewhere dark, na? No people." She sounds smaller than she has all night. The bike ` +
+      `climbs away from the neon until the town is a rumour below, and she parks facing the ` +
+      `water and performs nothing at all — no wide smile, no laugh on cue, the makeup mostly ` +
+      `gone. Just her head against your shoulder and the engine ticking cool. The smile she ` +
+      `finds for you up here is a small, tired, fragile thing, and it is not for sale. It has ` +
+      `never been for sale.`,
+  ]},
+  { key: "ranlao", lo: 300, hi: 700, sanuk: 3, scenes: [
+    n => `A ran lao on South Pattaya Road — Thai live music, whisky sets, and a fifteen-minute ` +
+      `queue that ${n} walks straight past on somebody's nod. Inside, the mystery of the quiet ` +
+      `strip solves itself: everyone is HERE. Half the rail crews of the beer bars, out of ` +
+      `uniform and off the clock, and the room sings every chorus back at the band. You are the ` +
+      `only farang in the building, and with her hand on your arm, nobody minds at all.`,
+    n => `A Thai music hall, tables of whisky-soda, and a roll call at every second one — ${n} ` +
+      `trades wais and shrieks of greeting the whole way to your seats. The girls who pour ` +
+      `drinks all week are being poured for tonight, and they tip like emperors. Somewhere in ` +
+      `the second set she translates a lyric into your ear, gets it half right, and laughs too ` +
+      `hard to finish.`,
+  ]},
+  { key: "afterhours", lo: 200, hi: 500, sanuk: 3, scenes: [
+    n => `An after-hours room where the blackout curtains are load-bearing: outside the sky has ` +
+      `gone traitorously bright, inside it is packed and pretending otherwise. Time starts ` +
+      `dropping frames. At some point you surface mid-sentence with a freshly poured beer in ` +
+      `front of you and ${n} laughing at something you apparently just said. You reach for your ` +
+      `pocket; the table waves you off. Already paid. Forget about it.`,
+    n => `The club the town's whole night shift disappears into when the shutters come down. ` +
+      `${n} knows the door and the door knows her, and the hour stops meaning anything at all. ` +
+      `When you finally step out blinking, the street is doing a whole honest morning around ` +
+      `you — motorbikes, market bags, monks on the almsround — and none of it seems entirely ` +
+      `plausible.`,
   ]},
   { key: "market", lo: 60, hi: 200, sanuk: 2, scenes: [
     n => `A night market winding down, half the stalls shuttered. ${n} buys roti with banana and ` +
@@ -3031,6 +3061,9 @@ const _OWL_LEADS = [
   "She forgives her jobless Thai boyfriend three days' cheating and screams at YOU for smelling of massage oil. You are not the villain, squire — you are the stable ATM, and one gets audited while the other gets forgiven. Do not audition for bad-boy on a sponsor's salary.",
   "A first-timer reports a 'free' welcome drink and feels he's beaten the house. He has not. That drink was an interview, and he passed the part where he thinks he's clever. By closing time the tab will have four figures and one of them won't be him.",
   "Every year a foreign paper 'discovers' the world's oldest profession in the Land of Smiles as though we invented it. I have watched it ply its trade in New York and London, Amsterdam and Hamburg, Rome and Tokyo — it is no more Thai than the moon is. Supply meets demand; it is here to stay; and the published figures should be taken with a barrel of salt and a slice of lime.",
+  "Every night a pair of them takes a corner table on the cultural sightseeing tour — one overpriced beer, arms crossed, here to watch the fallen women and feel taller for it. And every night, the same quiet collapse: the girl on stage turns out to be twenty-one, radiant, and kind, and the superiority curdles into something that needs another drink. Here is what nobody tells the sightseers, squire. I have sat in these rooms a thousand nights, and the only person in them with a clean soul is usually the one being looked down on. She dances to make the room happy — all of it. Even the corner table.",
+  "Bars change names and the girls rotate street to street, but every door on this coast has its fixture. I know a doorman who, three years back, sat on the pavement opposite every night until four — a Thai man may wait outside a farang bar, never drink in it — to take one of the girls home. She left through that door with a customer and didn't come back. He crossed the road and asked the mamasan for the job. The new girls call him P', send him out for som tam, and know nothing; ask how long he's worked there and you get 'three years', and nothing else. The monks call it ploi wang — letting go. Some men let go of everything except the geography.",
+  "A reader walked the neon on a Friday night — thin crowds on the strip, empty stools in the maze — and pronounces the town dead. That same midnight, squire, there was a fifteen-minute queue outside a ran lao on South Pattaya Road, and every second face at every table inside was one he'd have recognised from behind a bar. The pulse hasn't stopped. It clocked off, changed its clothes, and went out to spend its own money where the music is Thai and the prices are honest. The town is not dead. You are walking down the wrong streets.",
   "Rents rise, the tea money rises with every contract renewal, and so the price of your beer rises to meet them — that is the whole economics of this coast in one sentence. The bakshish never stops, no matter who sits in which chair. Only the ingenuous believe it can be halted, and the ingenuous don't last a season.",
   "They set a closing time and call it reform. It reforms nothing — the market wants four a.m., or six, and the market finds a way: a bolted door on the Darkside, a painted-out window, a party that closes for no clock. Business hours belong to business, not the almanac.",
   "Low season, and the town's a ghost of itself — a beach walk to yourself before noon, hotels checking in one guest a night. Which makes it, for the naughty boy, the finest season of all: bars crammed with ladies and empty of men, and the ladies keen. Not desperate, mind — they've the family money still — just keen to make more. There is no better time to be the only customer in the room.",
@@ -3067,6 +3100,14 @@ const _OWL_LETTERS = [
    "Happy Old Boys In Thailand, for the uninitiated — a dwindling tribe. You may be right. The money that once crossed a bar now buys a beach chair and a seafood lunch. The girls noticed before you did; it's why half of them are in Bang Saen."],
   ["A reader explains the arithmetic of a kept lady: 'Her sponsor flies in, so she's not working — he pays a generous remittance for exactly that. But today's a family day for him, penned in with the wife and kids, and a girl with a free evening…'",
    "…is a girl with a free evening. Everyone is discreet, everyone is paid, and nobody, technically, is doing anything wrong. This is not a scandal, squire. This is a calendar."],
+  ["A hopeful reader asks: 'One reads about the girls who make it out — the house in the village, the flight to Europe, the snow. Has anyone actually SEEN a happy ending, or is it all forum talk?'",
+   "I have seen exactly one kind, squire, and it involves no snow. Drive twenty minutes into the Darkside, past the railway tracks: an open-air shophouse, six coin-op washing machines, a nail corner. The proprietor kept a notebook under her mattress for three years and banked a sponsor's allowance like a fund manager — rent, mother, and the rest into an account no boyfriend knew existed. One Tuesday she hit her number, paid her last 500-baht uniform fee, and walked out into the afternoon. The sponsor was blocked within the week; the contract was concluded, and he had received precisely what he paid for. She answers to no mamasan now and owns the lease. That is the real happy ending on this coast — a laundry bought in cash, by a woman who beat the house. Her old roommate, meanwhile, is still on the soi, waiting for the prince. The prince was never coming, madam. He was the seed capital."],
+  ["A regular writes, wounded: 'My girl of two seasons has left the bar — and not for a bigger wallet. Somebody saw her at a mookata place with a Thai fellow in an office shirt. I would have paid anything. What did he pay?'",
+   "Nothing, squire, and that is the entire point. You never saw him coming because he does not come to the bar — he waits in the car park in a sensible Honda, and he knows every single thing you are afraid she is hiding, and he stays anyway. His mother is against it, his friends tell him to 'be careful', and he is paying in a currency you do not hold: face. Against that, your wallet is confetti. Wish her well, sir. This is the one way out of here that the town does not own."],
+  ["A reader, nine months in, writes with some swagger: 'Took her out of a go-go and set her up in my condo. She threw out the bikinis, cooks every night, drinks nothing. The bitter old boys in the sports bars are simply doing it wrong — treat them like human beings and they change.'",
+   "Delighted for you, squire. Now a small prophecy, free of charge: one day the phone will ring from up-country — a brother, a motorbike, a hospital, a number with four zeros — and your answer will be worth more than nine months of home cooking. Pay it and you are her harbour. Explain about boundaries instead, and you will come home to a wardrobe of modest jeans and one suitcase gone. Nobody will have played you. The bar is not a place, sir. It is a survival mechanism, and it never closes."],
+  ["A reader writes, quietly: 'Three weeks now — same girl, every single night. Dinners, the beach, coffee on my balcony of a morning. Neither of us has so much as looked at anyone else. This morning I told her she could give the bar away, we'd make a weekend of the islands. She smiled and said lovely — but send mama the fine before three, or would I rather just cover her salary by the month?'",
+   "Sit down, squire. For twenty-one days you were in a relationship and she was at work, and the terrible truth of this coast is that from the outside the two are indistinguishable — that is the entire product. Nobody cheated you. She kept her side flawlessly; by her lights 'special customer' is the warmest thing there is to be. Was any of it real? The coast declines to answer. It always declines. The only question it will price for you is the one she asked: by the night, or by the month."],
   ["A reader's ordeal: a massage shop by his hotel, ฿600 for oil. In the room she demands 'special'; he declines and asks for his money back — and she ERUPTS, screaming 'pervert', the mamasan hurling shoes and a flower vase, both daring him to call the police: 'many customers say that, nobody calls.' He fled. But his hotel manager heard, went white, and marched round with the bell boy and a guard — four men. The girls scattered; the ฿600 came back with ฿200 on top.'",
    "There's the whole coast in one story: a shop that will scream you into surrendering your own refund, and a hotel man who'll walk three of his staff round the corner to get it back for a guest. The town will rob you and the town will catch you, often on the same street. Tip the bell boy. Then tip him again."],
 ];

@@ -3842,6 +3842,16 @@ const NPCS = {
       { topic: "home", text: "\"Nan. Far up — very green, very quiet, mountain everywhere.\" A small smile, then " +
         "it goes. \"Here, no mountain. All concrete, all noise. Too loud for Kwan.\" She folds. \"But Kwan get " +
         "used to. Everything, you get used to.\"" },
+      { topic: "dance", text: "She sets the half-folded crane down and thinks about it " +
+        "properly, the way she thinks about everything. \"I dance to make people happy. " +
+        "All the people. The happy customer, the shy one — even the ones who come in " +
+        "only to look, and think something not so nice about us.\" A small pause. \"One " +
+        "time a man tell me: two lady in the corner watch you dance, and feel bad. " +
+        "About themselves.\" The crane turns in her fingers. \"I think about it the " +
+        "whole night. If my dancing make somebody feel small, that make me feel very " +
+        "bad. I want everybody to leave here a little bit better than they come in.\" " +
+        "She picks the crane back up. \"Otherwise, what is it for?\"",
+        short: "\"I dance to make people happy — all the people. If it make somebody feel small, that make me feel very bad.\"" },
     ],
   },
   // Kat (Sunset Dreams) — great fun for ninety minutes, then the drink turns.
@@ -5043,6 +5053,14 @@ const NPCS = {
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"W-welcome to Gold Rush! First week— I mean, MY first week. The gold is paint. I'm not supposed to say that. Please don't tell.\"",
         short: "\"W-welcome to Gold Rush! Please — don't tell anyone about the paint.\"" },
+      { topic: "ring", text: "She turns the little gold ring on her finger — new, thin, " +
+        "the plating already going at the band. \"He buy me this. He say I don't belong " +
+        "in a bar. He say when he get home he fix everything, I come stay with him.\" " +
+        "Her phone is in her other hand, the chat open to one grey word: Read. Two days " +
+        "now. \"He is probably just very busy with work,\" she says — to the screen, not " +
+        "to you. \"His boss is very strict.\" The smile she puts on next is the bravest, " +
+        "worst thing on the whole soi tonight.",
+        short: "\"He is probably just very busy with work. His boss is very strict.\" The ring turns and turns." },
     ],
   },
 
@@ -5112,6 +5130,28 @@ const NPCS = {
           "tell her the worst thing that happen is you go all the way to Munich and come " +
           "back. Not so bad, in the end. I still keep an eye out, from here.\"",
         short: "\"Nong, over at the Gold Rush — I was her, fifteen years ago. I keep an eye out.\"" },
+      { topic: "change", text: "\"Ah. You met one of the quiet ones. Jeans now, cooks " +
+        "every night, doesn't drink — and her man walks around proud like a doctor who " +
+        "cured something.\" She turns her glass slowly. \"I was the quiet one. Five " +
+        "years, Munich. I wore what that life needed — same as I wore the bikini " +
+        "before it, same as I wear this now.\" A shrug, not unkind. \"It is not a lie. " +
+        "It is a uniform. We are very good at uniforms; hungry teaches you " +
+        "tailoring.\" The glass comes down. \"You want to know if she changed? Wait " +
+        "for the first hospital bill from the village. If his love pays it, she stays " +
+        "soft. If he explains about boundaries...\" A small, cold smile. \"...she packs " +
+        "one suitcase. We always pack light. That is also from being hungry.\"",
+        short: "\"It is not a lie, it is a uniform — hungry teaches you tailoring. Wait for the first hospital bill from the village.\"" },
+      { topic: "warn", text: "\"You think somebody should tell her. How it goes. How " +
+        "the ring is hollow, how her phone stays quiet, how this soi files a girl " +
+        "down.\" Mercedes looks across the room for a long moment. \"Fifteen years ago " +
+        "a woman like me could have told a girl like me all of it, word for word. You " +
+        "know what I would have done? Hated her. The truth doesn't pay a mother's " +
+        "hospital bill — the warning changes nothing, the girl stays anyway, and now " +
+        "she also has an enemy.\" She turns her glass. \"Some lessons only bleed in. " +
+        "So no. I don't warn. When the som tam cart comes, I send a bowl over. I keep " +
+        "a tissue in my sleeve. That is the whole of what knowing is worth — and it " +
+        "took me years to learn even that.\"",
+        short: "\"The truth doesn't pay a mother's hospital bill. I don't warn — I send som tam over, and I keep a tissue in my sleeve.\"" },
     ],
   },
 
@@ -7158,6 +7198,20 @@ const PATRONS = {
         "apology with it. These bars run on repeat customers, son. The mamas " +
         "know it better than anybody.\"",
         short: "\"Most girls are straight. The sharp ones read newbies like a menu — and the mama pays you back.\"" },
+      { topic: "girlfriend", text: "\"Fella I knew out here — pipeline money, " +
+        "patient sort — barfined the same girl twenty-one nights straight. " +
+        "Dinners. Beach walks. Coffee on the balcony of a mornin'.\" The bottle " +
+        "turns a slow quarter. \"Weren't a lie anywhere in it, that's the thing. " +
+        "He didn't look at nobody else. Neither did she.\" A pull, unhurried. " +
+        "\"Then one mornin' he tells her, darlin', you can quit the bar now — " +
+        "and she says, real sweet, real confused, okay... but send mama the fine " +
+        "by three. Or did he maybe wanna pay her salary by the month instead.\" " +
+        "He sets the bottle down soft, like it might bruise. \"Weren't nobody " +
+        "lyin', see. That's the part that'll get you. He was in love, and she " +
+        "was at work, and them two things look exactly the same from the " +
+        "outside. Every damn day of it.\" A beat. \"She told him he was special, " +
+        "and I believe she meant it. I believe that made it worse.\"",
+        short: "\"Twenty-one nights, same girl. He was in love; she was at work. Both true — that's the part that'll get you.\"" },
     ],
   },
 
