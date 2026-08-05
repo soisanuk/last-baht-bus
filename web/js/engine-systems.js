@@ -851,6 +851,30 @@ const _RIDE_VENUES = [
       `leans back against you and points out her bar, her room, the hospital where her son was ` +
       `born — a whole life you're only now seeing the shape of. The wind does the talking.`,
   ]},
+  { key: "ranlao", lo: 300, hi: 700, sanuk: 3, scenes: [
+    n => `A ran lao on South Pattaya Road — Thai live music, whisky sets, and a fifteen-minute ` +
+      `queue that ${n} walks straight past on somebody's nod. Inside, the mystery of the quiet ` +
+      `strip solves itself: everyone is HERE. Half the rail crews of the beer bars, out of ` +
+      `uniform and off the clock, and the room sings every chorus back at the band. You are the ` +
+      `only farang in the building, and with her hand on your arm, nobody minds at all.`,
+    n => `A Thai music hall, tables of whisky-soda, and a roll call at every second one — ${n} ` +
+      `trades wais and shrieks of greeting the whole way to your seats. The girls who pour ` +
+      `drinks all week are being poured for tonight, and they tip like emperors. Somewhere in ` +
+      `the second set she translates a lyric into your ear, gets it half right, and laughs too ` +
+      `hard to finish.`,
+  ]},
+  { key: "afterhours", lo: 200, hi: 500, sanuk: 3, scenes: [
+    n => `An after-hours room where the blackout curtains are load-bearing: outside the sky has ` +
+      `gone traitorously bright, inside it is packed and pretending otherwise. Time starts ` +
+      `dropping frames. At some point you surface mid-sentence with a freshly poured beer in ` +
+      `front of you and ${n} laughing at something you apparently just said. You reach for your ` +
+      `pocket; the table waves you off. Already paid. Forget about it.`,
+    n => `The club the town's whole night shift disappears into when the shutters come down. ` +
+      `${n} knows the door and the door knows her, and the hour stops meaning anything at all. ` +
+      `When you finally step out blinking, the street is doing a whole honest morning around ` +
+      `you — motorbikes, market bags, monks on the almsround — and none of it seems entirely ` +
+      `plausible.`,
+  ]},
   { key: "market", lo: 60, hi: 200, sanuk: 2, scenes: [
     n => `A night market winding down, half the stalls shuttered. ${n} buys roti with banana and ` +
       `condensed milk from a man closing up, splits it with you in the empty aisle, and haggles ` +
@@ -3031,6 +3055,7 @@ const _OWL_LEADS = [
   "She forgives her jobless Thai boyfriend three days' cheating and screams at YOU for smelling of massage oil. You are not the villain, squire — you are the stable ATM, and one gets audited while the other gets forgiven. Do not audition for bad-boy on a sponsor's salary.",
   "A first-timer reports a 'free' welcome drink and feels he's beaten the house. He has not. That drink was an interview, and he passed the part where he thinks he's clever. By closing time the tab will have four figures and one of them won't be him.",
   "Every year a foreign paper 'discovers' the world's oldest profession in the Land of Smiles as though we invented it. I have watched it ply its trade in New York and London, Amsterdam and Hamburg, Rome and Tokyo — it is no more Thai than the moon is. Supply meets demand; it is here to stay; and the published figures should be taken with a barrel of salt and a slice of lime.",
+  "A reader walked the neon on a Friday night — thin crowds on the strip, empty stools in the maze — and pronounces the town dead. That same midnight, squire, there was a fifteen-minute queue outside a ran lao on South Pattaya Road, and every second face at every table inside was one he'd have recognised from behind a bar. The pulse hasn't stopped. It clocked off, changed its clothes, and went out to spend its own money where the music is Thai and the prices are honest. The town is not dead. You are walking down the wrong streets.",
   "Rents rise, the tea money rises with every contract renewal, and so the price of your beer rises to meet them — that is the whole economics of this coast in one sentence. The bakshish never stops, no matter who sits in which chair. Only the ingenuous believe it can be halted, and the ingenuous don't last a season.",
   "They set a closing time and call it reform. It reforms nothing — the market wants four a.m., or six, and the market finds a way: a bolted door on the Darkside, a painted-out window, a party that closes for no clock. Business hours belong to business, not the almanac.",
   "Low season, and the town's a ghost of itself — a beach walk to yourself before noon, hotels checking in one guest a night. Which makes it, for the naughty boy, the finest season of all: bars crammed with ladies and empty of men, and the ladies keen. Not desperate, mind — they've the family money still — just keen to make more. There is no better time to be the only customer in the room.",
