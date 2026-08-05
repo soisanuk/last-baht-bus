@@ -5112,6 +5112,17 @@ const NPCS = {
           "tell her the worst thing that happen is you go all the way to Munich and come " +
           "back. Not so bad, in the end. I still keep an eye out, from here.\"",
         short: "\"Nong, over at the Gold Rush — I was her, fifteen years ago. I keep an eye out.\"" },
+      { topic: "change", text: "\"Ah. You met one of the quiet ones. Jeans now, cooks " +
+        "every night, doesn't drink — and her man walks around proud like a doctor who " +
+        "cured something.\" She turns her glass slowly. \"I was the quiet one. Five " +
+        "years, Munich. I wore what that life needed — same as I wore the bikini " +
+        "before it, same as I wear this now.\" A shrug, not unkind. \"It is not a lie. " +
+        "It is a uniform. We are very good at uniforms; hungry teaches you " +
+        "tailoring.\" The glass comes down. \"You want to know if she changed? Wait " +
+        "for the first hospital bill from the village. If his love pays it, she stays " +
+        "soft. If he explains about boundaries...\" A small, cold smile. \"...she packs " +
+        "one suitcase. We always pack light. That is also from being hungry.\"",
+        short: "\"It is not a lie, it is a uniform — hungry teaches you tailoring. Wait for the first hospital bill from the village.\"" },
     ],
   },
 
