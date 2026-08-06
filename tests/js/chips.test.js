@@ -80,3 +80,24 @@ test("the vacation-end prompt shows its two answers", () => {
   G.pendingChoice = "vacation_end";
   assert.deepEqual(cmds(), ["new vacation", "move to pattaya"]);
 });
+
+test("the barfine negotiation owns the chip bar: ST / LT / NO, priced", () => {
+  // Regression: the ST/LT modal swallowed every command while the chip bar kept
+  // showing room chips — a touch player faced a row of dead buttons (the soak's
+  // seed-12 wedge: a whole night spent tapping inside the modal).
+  G.room = "lucky_tiger";
+  G.pendingBf = { id: "lek", st: 400, lt: 700, room: "lucky_tiger" };
+  assert.deepEqual(cmds(), ["short time", "long time", "no"]);
+  assert.ok(labels()[0].includes("฿400") && labels()[1].includes("฿700"), "terms carry their prices");
+});
+
+test("the soapy menu and a pending fare own the chip bar too", () => {
+  G.pendingSoapy = true;
+  const c = cmds();
+  for (const t of _SOAPY_TIERS) assert.ok(c.includes(String(t.num)), `tier ${t.num} chipped`);
+  assert.ok(c.includes("no"));
+  G.pendingSoapy = null;
+  G.pendingFare = { price: 15 };
+  assert.deepEqual(cmds(), ["pay"]);
+  assert.ok(labels()[0].includes("฿15"));
+});
