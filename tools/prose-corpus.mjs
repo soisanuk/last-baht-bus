@@ -88,31 +88,57 @@ if (typeof ASK_REPLIES !== "undefined")
     list.forEach((r, i) => add("reply", `reply.${key}[${i}]`,
       r.pers || r.origin || "anyone", r.text));
 
-// ── engine prose pools: const _NAME = [ …strings/fns… ] ─────────────────────
+// ── engine prose: pools AND function bodies ─────────────────────────────────
 // Top-level consts from vm scripts land in lexical scope (not enumerable), so
-// pools are scanned textually: each block's string literals ≥ 40 chars are
-// records. Fragments of concatenations still read fine for voice/canon review.
-const POOL_RE = /^const (_[A-Z][A-Z0-9_]*) = [\[{]/m;
+// the engine is scanned textually, line by line, with a running "owner": either
+// the `const _POOL = [` block we're inside, or the last `function name(` seen.
+//
+// Function-body prose was invisible here until 2026-08-06 and it is ~40% of the
+// engine's player-facing words (1,162 literals, ~78KB) — the class of miss that
+// let Tan drive a minibus in the intro and a grey sedan everywhere else. Pools
+// are the `pool` group (stable refs, already in the ledger); function-body
+// literals are the `fn` group, attributed to their enclosing function so a
+// reviewer can see which scene a line belongs to. See docs/prose-defects.md.
+const POOL_RE = /^const (_[A-Z][A-Z0-9_]*) = [\[{]/;
+const FN_RE = /^(?:function (\w+)|const (\w+) = (?:function|\([^)]*\) =>))/;
+const LIT_RE = /"((?:[^"\\]|\\.)*)"|`((?:[^`\\]|\\.)*)`/g;
+const unesc = s => s.replace(/\\"/g, '"').replace(/\\n/g, "\n").replace(/\\\\/g, "\\");
 for (const f of ["engine-core.js", "engine-encounters.js", "engine-play.js",
   "engine-systems.js", "engine-parser.js"]) {
-  const src = fs.readFileSync(new URL(f, JS), "utf8");
-  const lines = src.split("\n");
+  const lines = fs.readFileSync(new URL(f, JS), "utf8").split("\n");
+  let pool = null, fn = null, idx = 0;
   for (let i = 0; i < lines.length; i++) {
-    const m = lines[i].match(POOL_RE);
-    if (!m) continue;
-    // slice to the closing "];" / "};" at column 0
-    let j = i, depth = 0, block = [];
-    for (; j < lines.length; j++) {
-      block.push(lines[j]);
-      if (j > i && /^[\]}];/.test(lines[j])) break;
+    const line = lines[i];
+    if (pool) {
+      if (/^[\]}];/.test(line)) { pool = null; idx = 0; continue; }
+    } else {
+      const pm = line.match(POOL_RE);
+      if (pm) {
+        idx = 0;
+        // A one-line const (`const _HOSTS = ["arm", "win"];`) never meets a
+        // closing brace at column 0 — the old block-slicer therefore stayed in
+        // "pool" mode forever and filed every following function's prose under
+        // that name (the _QUEER_ROOMS-carrying-_queerHostility mislabel). Only
+        // enter block mode when the declaration is actually still open.
+        if (/[\]}];\s*(\/\/.*)?$/.test(line)) {
+          for (const lit of line.matchAll(LIT_RE)) {
+            const s = unesc(lit[1] ?? lit[2] ?? "");
+            if (s.length >= 40) add("pool", `${f}:${pm[1]}[${idx++}]`, pm[1], s);
+          }
+          continue;
+        }
+        pool = pm[1];
+        continue;
+      }
+      const fm = line.match(FN_RE);
+      if (fm) { fn = fm[1] || fm[2]; idx = 0; }
     }
-    const body = block.join("\n");
-    let k = 0;
-    for (const lit of body.matchAll(/"((?:[^"\\]|\\.)*)"|`((?:[^`\\]|\\.)*)`/g)) {
-      const s = (lit[1] ?? lit[2] ?? "").replace(/\\"/g, '"').replace(/\\n/g, "\n").replace(/\\\\/g, "\\");
-      if (s.length >= 40) add("pool", `${f}:${m[1]}[${k++}]`, m[1], s);
+    for (const lit of line.matchAll(LIT_RE)) {
+      const s = unesc(lit[1] ?? lit[2] ?? "");
+      if (s.length < 40) continue;
+      if (pool) add("pool", `${f}:${pool}[${idx++}]`, pool, s);
+      else if (fn) add("fn", `${f}:${fn}[${idx++}]`, fn, s);
     }
-    i = j;
   }
 }
 
@@ -148,6 +174,60 @@ if (has("seed")) {
   for (const r of out) { const h = hash(r.text); if (!ledger[h]) { ledger[h] = { ref: r.ref, reviewed: today }; added++; } }
   fs.writeFileSync(LEDGER_PATH, JSON.stringify(ledger, null, 0) + "\n");
   console.log(`ledger: +${added} hashes (${Object.keys(ledger).length} total) — the dumped set is marked reviewed`);
+  process.exit(0);
+}
+
+// ── the dossier pivot (--about <subject> / --dossiers) ──────────────────────
+// Per-record review reads the corpus in FILE order, so every line about a
+// subject is scattered across NPCS, room descs, pools and function bodies —
+// and two lines that contradict each other never land on the same page. This
+// regroups by WHO/WHAT a line is about: one document per entity, every claim
+// the game makes about it, in one read. Purely mechanical (the entity list is
+// world.js itself); it makes contradictions visible, it doesn't judge them.
+// See docs/prose-defects.md.
+// Matching is CASE-SENSITIVE on the display name (plus the Thai name), never on
+// the lowercase id — "tan" the id would drag in every "Gold Coast tan", which is
+// the same collision class term.js fights with _WORD_NAME_NPCS. Names that are
+// ordinary capitalised words are speaker-only, or a sentence-initial "May"/"Win"
+// floods their dossier. Short names are skipped for the same reason.
+const _WORDY = new Set(["Best", "Proud", "Near", "Nice", "Hong", "Som", "May", "Win",
+  "Arm", "Gift", "Mind", "Joy", "Dear", "Ice", "View", "Bee", "Mem", "Pim", "Nong"]);
+function _subjects() {
+  const subs = new Map(); // display name → {re, speakerOnly}
+  const put = (name, extra) => {
+    if (!name || name.length < 3) return;              // "Oy"/"Nu" match everywhere
+    if (_WORDY.has(name)) { subs.set(name, { speakerOnly: true }); return; }
+    const esc = s => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const alts = [name, ...(extra || [])].filter(Boolean).map(esc);
+    subs.set(name, { re: new RegExp(`\\b(${alts.join("|")})\\b`) });
+  };
+  for (const n of Object.values(NPCS)) if (!n.filler) put(n.name, [n.th]);
+  for (const p of Object.values(PATRONS)) put(p.name);
+  for (const r of Object.values(ROOMS)) if (r.bar) put(r.bar);
+  for (const it of Object.values(ITEMS)) put(it.name);
+  return subs;
+}
+if (has("about") || has("dossiers")) {
+  const subs = _subjects();
+  const want = val("about");
+  const pick = want
+    ? [...subs.keys()].filter(k => k.toLowerCase().includes(want.toLowerCase()))
+    : [...subs.keys()];
+  if (!pick.length) {
+    console.log(`No subject matching "${want}". Known subjects are NPCs, patrons, bars, items.`);
+    process.exit(1);
+  }
+  for (const name of pick) {
+    const { re, speakerOnly } = subs.get(name);
+    // a record is ABOUT a subject if it names them, or is spoken by them
+    const hits = out.filter(r => r.speaker === name || (!speakerOnly && re.test(r.text)));
+    if (hits.length < (want ? 1 : 2)) continue;        // a bulk dump skips one-liners
+    console.log(`\n\n════════ ${name} — ${hits.length} records ════════`);
+    for (const r of hits) {
+      console.log(`\n— ${r.ref}${r.speaker ? "  (" + r.speaker + ")" : ""}  [${r.group}]`);
+      console.log(r.text);
+    }
+  }
   process.exit(0);
 }
 
