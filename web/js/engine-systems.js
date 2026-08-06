@@ -256,13 +256,15 @@ function _npcActions(id, full) {
   if (role) acts.push("buyher");             // hostess/cashier/mamasan economy
   else if (isHost) acts.push("buyhim");      // host bar, gender-flipped
   if (full) {
-    if (role === "hostess") acts.push("flirt", "tip", "contact", "barfine");
+    // cabaret performers: the courtship rails (drinks/flirt/tip/contact) with
+    // no barfine — the theatre keeps no ledger (_doBarfine's peacock branch)
+    if (isPerformer) acts.push("flirt", "tip", "contact");
+    else if (role === "hostess") acts.push("flirt", "tip", "contact", "barfine");
     else if (role === "cashier") {           // the sponsor-cashier arc's verbs (were typed-only)
       acts.push("tip", "contact");
       if (typeof _sponsorFlipped === "function" && _sponsorFlipped(id)) acts.push("barfine");
     }
     else if (isHost) acts.push("hire");      // the club "off" fee
-    else if (isPerformer) acts.push("tip");  // cabaret performers: tippable, no barfine
     else if (isNpc && !role) acts.push("wai"); // a plain punter/NPC — just a polite wai
   }
   return acts;
@@ -330,6 +332,21 @@ const _BERT_LOYAL = [
     "back. \"Sorry, tilac. Not you. Not here.\" No anger — just a door quietly shut. Bert's girls don't " +
     "cross Bert, not for you, not for all the baht in Ryan Powers' spreadsheet.",
 ];
+// The Peacock sells a show, not a night — no mamasan ledger, no fine, and Miss
+// Mala has retired the question so many times it has its own choreography.
+// Courtship with the performers runs on the honest rails instead: drinks, tips,
+// bond, CONTACT — same for a bi player as for anyone she'd actually choose.
+const _PEACOCK_NO_BF = [
+  "Miss Mala doesn't even break stride at the mic. \"He wants to BARFINE somebody!\" The room " +
+    "howls. \"Tilac, this is a THEATRE. You cannot barfine the show. You can tip the show, you " +
+    "can buy the show a drink, you can fall in love a little — everybody does — but at two a.m. " +
+    "the show goes home to its own bed to rest its face.\" A wink with the wattage of the rig. " +
+    "\"Court like a gentleman or clap like one. Both are welcome.\"",
+  "The idea reaches Miss Mala before the sentence does. \"No fine here, tilac — my stars are not " +
+    "on a ledger.\" Said kindly, and with total finality, the way you'd tell a man the museum " +
+    "pieces aren't for sale. \"You like one of my girls? Come back. Tip. Learn her name and use " +
+    "it. That currency we take.\"",
+];
 function _doBarfine(arg) {
   const rm = _room();
   // the Orchid Room's women are the power players' — you're here for a meeting, not to shop
@@ -343,6 +360,8 @@ function _doBarfine(arg) {
   }
   if (rm.massage === "legit") { _say("You are in a legitimate massage shop. Have a word with yourself. (MASSAGE)"); return; }
   if (rm.soapy) { _say("It doesn't work like that here — it's a set package. (SOAPY to pick a number.)"); return; }
+  // the cabaret: performers, not floor — Miss Mala retires the idea with style
+  if (G.room === "peacock_cabaret") { _say(_pickVary(_PEACOCK_NO_BF, "pcnobf")); return; }
   if (!_inBar()) { _say("Barfines are negotiated indoors, with the mamasan watching."); return; }
   const here = _npcsHere().filter(id => NPC_ROLES[id]);
   const id = arg ? _findNpc(arg) : (here.length === 1 ? here[0] : null);
@@ -1113,6 +1132,7 @@ function _maybeSelfBarfine(id) {
   if (!_flag("act1Done") || G.pendingEnc || G.game) return;
   if (G.nightTurn < 60) return;                 // the thought arrives after midnight
   if (NPC_ROLES[id] !== "hostess") return;
+  if (_queerVenue()) return;                    // the cabaret has no barfine to self-pay
   if ((G.soc.heat[G.room] || 0) > 0) return;
   if (G.soc.selfBf) return;                     // one such offer per night, city-wide
   if (_favor(id) < 6) return;
