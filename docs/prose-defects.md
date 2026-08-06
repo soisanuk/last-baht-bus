@@ -91,6 +91,28 @@ would drag in every "Gold Coast tan"), and names that are ordinary capitalised
 words are speaker-only, the same collision problem term.js solves with
 `_WORD_NAME_NPCS`.
 
+### Layer 1½ — the reference lint (done)
+
+`tests/js/references.test.js` — a corpus test in the shape of decorate.test.js,
+so a new bad reference fails the suite with no wordlist to maintain:
+
+- **venues**: a venue-shaped name in prose must exist in ROOMS (catches a rename
+  orphaning old prose). Three names are fiction on purpose and named as such —
+  the dead Marine Bar in Nigel's list, and the Pattaya Flying Club.
+- **people**: a name in an instruction position (*ask X, give it to X*) must be
+  somebody addressable — otherwise the line is a dead end the player can't act
+  on. Came back at zero.
+- **prices**: a `฿N` typed into prose where a constant holds N. This one has to
+  scan **source, not corpus**: world.js records are evaluated, so a correct
+  `"฿" + BEER_PRICE` is textually identical to a hard-coded `"฿80"`. And the
+  economy reuses round numbers — ฿300 is the ATM fee *and* a Thai massage *and*
+  the joiner fee; ฿500 is the quiz prize *and* the wallet — so only constants
+  with a distinctive value can be checked at all. Guarded list stays short,
+  comments are stripped, and genuine collisions are named.
+
+The first run found a real one (Pim quoting ฿150 rather than `LADY_DRINK`) and
+proved out on an injected regression.
+
 ### Layer 2 — claims and probes (designed, not built)
 
 The model reads each dossier **once** and emits structured claims:

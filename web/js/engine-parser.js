@@ -515,8 +515,8 @@ function _doSafe(num) {
       "lucky nine. A pause. A clunk that sounds like forgiveness. The safe swings open.");
     G.itemLoc.wallet = "inventory";
     _setFlag("hasWallet");
-    G.money += 500;
-    _say("(You take your wallet. Most of the cash is still in it — ฿500 back in " +
+    G.money += WALLET_CASH;
+    _say(`(You take your wallet. Most of the cash is still in it — ฿${WALLET_CASH} back in ` +
       "play — and there's a note inside, worth reading.)", "dim");
   } else {
     G.safeTries++;
@@ -2296,8 +2296,8 @@ function _doTime() {
   if (_flag("act1Done") && G.mode !== "soi6") {
     _say(t >= LAST_BUS_TURN ? "(The last baht bus has gone — it's the piwin's small-hours " +
       "tax or shoe leather home now.)" :
-      t >= LAST_BUS_TURN - 10 ? "(Last baht bus around 2 a.m. — the ฿15 ride home is nearly up.)" :
-      "(Baht buses running: ฿15 the ride home until the last one, ~2 a.m.)", "dim");
+      t >= LAST_BUS_TURN - 10 ? `(Last baht bus around 2 a.m. — the ฿${BUS_FARE} ride home is nearly up.)` :
+      `(Baht buses running: ฿${BUS_FARE} the ride home until the last one, ~2 a.m.)`, "dim");
   }
 }
 
@@ -2792,7 +2792,7 @@ function _doAtmVerb() {
     return;
   }
   _doBalance();
-  _say("(WITHDRAW 1000 · 5000 · 10000 — ฿300 fee, ฿20,000/day.)", "dim");
+  _say(`(WITHDRAW 1000 · 5000 · 10000 — ฿${ATM_FEE} fee, ฿${ATM_DAILY_CAP.toLocaleString("en-US")}/day.)`, "dim");
 }
 
 // Filing a police report — right now only the hair-tonic shop shakedown has a
@@ -3491,6 +3491,15 @@ function doCommand(input) {
   }
   _lastCmd = raw;
 
+  // Standing at the keypad, a bare number IS a command — nobody types "enter"
+  // at a safe. Every modal gate (intro picks, quiz answers, game moves, canned
+  // replies) has already run and returned by here, so a bare digit reaching
+  // this point can only mean the room's one numeric affordance.
+  if (G.room === "oy_office" && !_flag("hasWallet") && /^[\d๐-๙]{1,4}$/.test(lower.trim())) {
+    const n = /^\d+$/.test(lower.trim()) ? parseInt(lower.trim(), 10) : parseThaiDigits(lower.trim());
+    if (n !== null && !Number.isNaN(n)) { _doSafe(n); _tick(); return; }
+  }
+
   // Easter egg: an English-speaking punter trying German at one of the three
   // German-speaking ladies gets a witty, in-character "stick to English." A de
   // player IS German, so it never fires for him. Costs a normal turn.
@@ -3745,6 +3754,14 @@ function doCommand(input) {
     case "call": case "dial": _doCall(arg); break;
     case "share": _doShare(); break;
     case "follow": _doFollow(arg); break;
+    // The keypad answers to the two things a player actually types at a safe.
+    // ENTER <digits> was the only route, so SAFE 719 — and a bare 719 — fell
+    // into "I didn't understand that" at the climax of the opening quest.
+    case "safe": case "keypad": case "code": case "pin": {
+      const n = /^\d+$/.test(arg) ? parseInt(arg, 10) : parseThaiDigits(arg.replace(/\s/g, ""));
+      if (n === null || Number.isNaN(n)) { _say("Three digits, on the keypad. (ENTER <digits>)"); break; }
+      _doSafe(n); break;
+    }
     case "shower": case "wash": _doShower(); break;
     case "smoke": case "cigarette": case "ciggy": _doSmoke(); break;
     case "withdraw": case "withdrawal": case "withdrawl": _doWithdraw(arg); break;
@@ -3942,8 +3959,8 @@ function _soi6Setup() {
   G.room = "qv_room";
   G.hotel = "queenvic";
   G.day = 1;              // Soi 6 starts fresh on day one — no lost first day
-  G.money = 1000;
-  G.bank = 100000;
+  G.money = SOI6_POCKET;
+  G.bank = SOI6_BANK;
   G.battery = 100;        // a solvent tourist charged up before going out — not the Act-One 13%
   G.visited = {}; // fresh — the opening describe shows qv_room's full desc, then marks it visited
   _setFlag("hasWallet");  // you kept your card this time
@@ -3958,8 +3975,9 @@ function _soi6Opening() {
   _say("One week in Pattaya, and you've picked your street and planted your flag: SOI 6 — the loudest " +
     "hundred metres in Thailand — with the Queen Vic Inn right in the thick of it. You're " +
     "not leaving the soi this trip; the rest of the city keeps for next time.");
-  _say("฿100,000 for the week sits in the bank. ฿1,000 is in your pocket — the rest comes " +
-    "out of the ATM on the street (฿300 a pull, ฿20,000 a day) when you need it.");
+  _say(`฿${SOI6_BANK.toLocaleString("en-US")} for the week sits in the bank. ` +
+    `฿${SOI6_POCKET.toLocaleString("en-US")} is in your pocket — the rest comes out of the ATM ` +
+    `on the street (฿${ATM_FEE} a pull, ฿${ATM_DAILY_CAP.toLocaleString("en-US")} a day) when you need it.`);
   _say("Goal: สบายสบาย. Get happy. Max out the week. ★", "win");
   if (G.dailyId) {
     _say(`Today's soi — the ${G.dailyId} daily: same week, same dice, everyone ` +
@@ -3993,7 +4011,7 @@ function _beachOpening(withTitle) {
     "Jomtien beach, sunset bleeding into the sea, your head pounding like a bass " +
     "bin outside Neon Paradise A-Go-Go. Day one went well, is the thing. Too well.");
   _say("Your wallet is GONE. Your phone reads 13% battery. Your hotel is in Naklua — " +
-    "the whole town away. The baht bus is ฿15 a head.");
+    `the whole town away. The baht bus is ฿${BUS_FARE} a head.`);
   _say("You have ฿0.");
   _say("It's going to be one of those nights.", "alert");
   if (!G.act1Tries && !_flag("act1Done"))

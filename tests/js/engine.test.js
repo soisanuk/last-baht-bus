@@ -2794,6 +2794,32 @@ test("phone-Tan: texts and transfers stay fixer-voiced, and the girl machinery i
   assert.match(lastOut(), /book's empty/i, "the fixer doesn't rank on the bond ladder");
 });
 
+test("the safe answers to what a player actually types at a keypad", () => {
+  // Regression: ENTER <digits> was the ONLY route, so `SAFE 719` and a bare
+  // `719` — the two most natural inputs — hit the didn't-understand pool at
+  // the climax of the opening quest.
+  for (const cmd of ["safe 719", "719", "enter 719", "safe ๗๑๙"]) {
+    newGame();
+    state().player = { origin: "monger", personality: "joker", orientation: "straight" };
+    state().room = "oy_office";
+    out = []; run(cmd);
+    assert.match(out.join("\n"), /clunk that sounds like forgiveness/,
+      `"${cmd}" should open the safe`);
+    assert.ok(_flag("hasWallet"), `"${cmd}" recovers the wallet`);
+    assert.equal(state().money, WALLET_CASH, "and the prose's number IS the constant");
+  }
+  // a wrong number still costs you a try, in any phrasing
+  newGame();
+  state().player = { origin: "monger", personality: "joker", orientation: "straight" };
+  state().room = "oy_office";
+  out = []; run("safe 123");
+  assert.ok(!_flag("hasWallet"));
+  assert.ok(state().safeTries > 0, "a wrong code is a real attempt");
+  // and SAFE with no number asks for one rather than falling through
+  out = []; run("safe");
+  assert.match(lastOut(), /Three digits/);
+});
+
 test("FOLLOW TAN: his standing food invite is real, once a night, and not during Act One", () => {
   state().lastPeddler = 9e9; state().lastSaleng = 9e9;
   state().room = "soi6_street";

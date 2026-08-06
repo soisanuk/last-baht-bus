@@ -899,8 +899,8 @@ function _deliver(npcId, d) {
     G.itemLoc[d.gives] = "inventory";
     _say(`(You now have the ${ITEMS[d.gives].name}.)`, "dim");
     if (d.gives === "wallet") {
-      G.money += 500;
-      _say("(Most of the cash is still in it — ฿500 back in play.)", "dim");
+      G.money += WALLET_CASH;
+      _say(`(Most of the cash is still in it — ฿${WALLET_CASH} back in play.)`, "dim");
     }
   }
   const st = _npcState(npcId);
@@ -1083,7 +1083,7 @@ function _describeRoom(full, forceFull) {
   }
   if (r.pool) {
     _say("A pool table waits under a low lamp (PLAY POOL)." +
-      (_leagueTonight() ? " Tonight is LEAGUE NIGHT (PLAY KILLER, ฿100 in the ashtray)." : ""), "dim");
+      (_leagueTonight() ? ` Tonight is LEAGUE NIGHT (PLAY KILLER, ฿${KP_ENTRY} in the ashtray).` : ""), "dim");
   }
   if (r.seven) _say("A 7-Eleven glows across the way (BUY TOASTIE · BUY WATER · BUY CHARGER · BUY CONDOM).", "dim");
   if (_quizDay() && !r.barType) {
