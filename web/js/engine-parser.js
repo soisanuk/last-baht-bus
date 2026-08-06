@@ -2905,7 +2905,8 @@ const _HELP_SOI6 = `Common commands:
   LIGHT ON / LIGHT OFF · CHARGE PHONE
   TIME · MAP · WAIT UNTIL <hour> · TIP <lady> <amount> · PHOTO · CHEERS · TAO RAI (ask the price)
   AGAIN or G (repeat last command)
-  SCORE (happiness & progress) · UNDO · RESTART   (the night autosaves itself)
+  SCORE (happiness & progress) · SHARE (your week card — one emoji a night, copy & compare)
+  UNDO · RESTART   (the night autosaves itself)
   PLAY AGAIN (once the week's up — another seven days on the soi)
   QUIT / END / LOGOUT (sign off; your night is saved) · RESET (wipe the save — asks first)`;
 
@@ -2922,7 +2923,7 @@ const _COMPLETE_VERBS = [
   "motosai to", "travel", "light", "charge phone", "read", "use", "open", "play",
   "flirt", "kiss", "spank", "fondle", "ring bell", "barfine", "massage", "special", "soapy", "meet", "eat", "drink",
   "sleep", "tv", "column", "watch", "watch soi", "balcony", "weather", "scores", "lottery", "map", "time", "tip", "wave", "phone",
-  "photo", "gallery", "photos", "call", "shower", "withdraw", "cheers", "tao rai", "borrow", "repay", "hire", "pet", "feed", "rename", "dance", "sing", "swim",
+  "photo", "gallery", "photos", "call", "share", "shower", "withdraw", "cheers", "tao rai", "borrow", "repay", "hire", "pet", "feed", "rename", "dance", "sing", "swim",
   "smell", "listen", "diagnose", "get tested", "clinic", "apologize", "quests", "accept", "abandon", "contact",
   "contacts", "who", "who am i", "identity", "blackbook", "message", "check messages", "send", "score", "standing", "wait", "again",
   "request", "hint", "help", "save", "load", "undo", "restart", "quit", "reset", "end", "logout",
@@ -2945,7 +2946,7 @@ function _chipSet() {
     return chips;
   }
   if (G.pendingChoice === "vacation_end") {
-    if (G.mode === "soi6") { add("play again"); return chips; }
+    if (G.mode === "soi6") { add("play again"); add("share", "share card"); return chips; }
     add("new vacation"); add("move to pattaya", "move to Pattaya"); return chips;
   }
   if (G.pendingChoice === "checkout") {
@@ -3214,7 +3215,7 @@ let _lastCmd = ""; // for AGAIN/G — deliberately not serialized; repeats die w
 // prompt, the "that wasn't a valid answer" reprompt, and the resume redraw all
 // read identically. See _renderResume.
 function _vacationEndPrompt() {
-  if (G.mode === "soi6") { _say("(PLAY AGAIN — another week on Soi 6.)", "dim"); return; }
+  if (G.mode === "soi6") { _say("(PLAY AGAIN — another week on Soi 6 · SHARE — your week card.)", "dim"); return; }
   _say("(NEW VACATION · MOVE TO PATTAYA — the airline needs an answer.)", "dim");
 }
 function _checkoutPrompt() {
@@ -3348,6 +3349,7 @@ function doCommand(input) {
   if (G.pendingChoice === "vacation_end") {
     if (G.mode === "soi6") {
       if (/^restart/.test(lower)) { G.player = null; startSoi6Mode(); return; } // RESTART re-picks identity (matches the verb everywhere else)
+      if (/^share/.test(lower)) { _doShare(); return; } // the week card stays reachable through the gate
       if (/again|play|more|^yes|soi/.test(lower)) { startSoi6Mode(); return; }  // PLAY AGAIN keeps who you are
       _vacationEndPrompt(); return;
     }
@@ -3700,6 +3702,7 @@ function doCommand(input) {
     case "photo": case "selfie": case "photograph": case "snap": _doPhoto(arg); break;
     case "gallery": case "photos": case "album": _doGallery(); break;
     case "call": case "dial": _doCall(arg); break;
+    case "share": _doShare(); break;
     case "shower": case "wash": _doShower(); break;
     case "smoke": case "cigarette": case "ciggy": _doSmoke(); break;
     case "withdraw": case "withdrawal": case "withdrawl": _doWithdraw(arg); break;
@@ -3749,18 +3752,72 @@ function doCommand(input) {
   _checkAct1();
 }
 
+// ── The daily challenge + the share card ────────────────────────────────────
+// Seed-of-the-day (design backlog §3.2): the frontend hashes today's date and
+// passes {seed, dailyId} into startSoi6Mode, so everyone who plays "today's
+// soi" starts from the same dice stream and the same stable-hash week (draws,
+// sponsors, quiz nights are (vacation, day) hashes — identical for all). The
+// engine never reads a clock (shared-world rule 1): the date arrives as a
+// string. _dailySeed is a pure FNV-1a fold onto the LCG's range.
+function _dailySeed(str) {
+  let h = 2166136261 >>> 0;
+  for (let i = 0; i < String(str).length; i++) {
+    h ^= String(str).charCodeAt(i);
+    h = Math.imul(h, 16777619) >>> 0;
+  }
+  return 1 + (h % 2147483645);
+}
+
+// One emoji per night's ending — outcome class only, never content (no girl,
+// no quest, no venue), so a posted card teases without spoiling.
+const _NIGHT_EMOJI = {
+  sleep: "🛏", barfine: "💋", dawn: "🌅", blackout: "🍺", collapse: "😵",
+  hurt: "🚑", accident: "🛵", robbed: "💸", bfscam: "🐍",
+};
+
+// The Wordle-shaped result card. Returns lines (the SHARE verb prints them;
+// the frontend joins them for the clipboard). Un-played nights pad with "·"
+// so a mid-week share reads as a week in progress.
+function _shareCard() {
+  const log = G.nightLog || [];
+  const nights = log.map(r => _NIGHT_EMOJI[r] || "▫").join("") +
+    "·".repeat(Math.max(0, 7 - log.length));
+  const label = G.dailyId ? `daily ${G.dailyId}` : "free week";
+  const done = G.pendingChoice === "vacation_end" || log.length >= 7;
+  return [
+    `🚌 THE LAST BAHT BUS — Soi 6 (${label})`,
+    `🌙 ${nights}`,
+    `สนุก ${G.happy}${G.happy >= 100 ? " ★ สบายสบาย" : ""} · ฿${G.money.toLocaleString("en-US")} in pocket` +
+      (done ? " · week complete" : ` · night ${Math.min(G.day, 7)}/7`),
+    "soisanuk.github.io/last-baht-bus",
+  ];
+}
+
+function _doShare() {
+  if (G.mode !== "soi6") {
+    _say("The share card is a Soi 6 challenge thing — the vacation is nobody's " +
+      "business but the soi's.");
+    return;
+  }
+  for (const l of _shareCard()) _say(l, "win");
+  _say("(Post it wherever the lads compare weeks.)", "dim");
+}
+
 // ── Boot text ──────────────────────────────────────────────────────────────
 
 // Start (or restart) the Soi 6 challenge: a fresh week confined to the soi,
 // based at the Queen Vic Inn, ฿100k in the bank and ฿1k in pocket. The start
-// menu calls this; PLAY AGAIN at week's end calls it too.
-function startSoi6Mode() {
+// menu calls this; PLAY AGAIN at week's end calls it too. `opts` ({seed,
+// dailyId}) makes the week the seeded daily — PLAY AGAIN and RESTART call
+// with no opts, so a repeat week is always a fresh roll (the daily is once).
+function startSoi6Mode(opts) {
   const identity = G && G.player;  // keep who you are across the fresh-week reset
   const bestHappy = (G && G.bestHappy) || 0; // …and the best-week record PLAY AGAIN shows
   newGame();
   // PLAY AGAIN keeps identity AND the best-week high-water mark; a RESTART (which
   // clears G.player first) falls through here with no identity and resets both.
   if (identity && identity.origin) { G.player = identity; G.bestHappy = bestHappy; }
+  if (opts && opts.seed) { G.rng = opts.seed; G.dailyId = opts.dailyId || null; }
   _soi6Setup();
   // Same character creation as the full game: on a first-ever start (no identity
   // yet) Tan drives you in and you say who you are; a later week keeps your
@@ -3794,6 +3851,10 @@ function _soi6Opening() {
   _say("฿100,000 for the week sits in the bank. ฿1,000 is in your pocket — the rest comes " +
     "out of the ATM on the street (฿300 a pull, ฿20,000 a day) when you need it.");
   _say("Goal: สบายสบาย. Get happy. Max out the week. ★", "win");
+  if (G.dailyId) {
+    _say(`Today's soi — the ${G.dailyId} daily: same week, same dice, everyone ` +
+      "who plays it today. (SHARE prints your week card, any time.)", "dim");
+  }
   _say("");
   _describeRoom(true);
   // Only DOWN is a live exit from the room — keep OUT out of the tap-hint (it's a

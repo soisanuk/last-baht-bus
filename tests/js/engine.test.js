@@ -2790,6 +2790,62 @@ test("phone-Tan: texts and transfers stay fixer-voiced, and the girl machinery i
   assert.match(lastOut(), /book's empty/i, "the fixer doesn't rank on the bond ladder");
 });
 
+test("seed-of-the-day: _dailySeed is stable, startSoi6Mode takes it, and same seed + same commands = same week", () => {
+  assert.equal(_dailySeed("2026-08-06"), _dailySeed("2026-08-06"), "stable hash");
+  assert.notEqual(_dailySeed("2026-08-06"), _dailySeed("2026-08-07"), "dates differ");
+  const s = _dailySeed("x");
+  assert.ok(s >= 1 && s <= 2147483645, "lands in the LCG's range");
+
+  const playOpening = seed => {
+    state().player = { origin: "monger", personality: "joker", orientation: "straight" };
+    startSoi6Mode({ seed, dailyId: "2026-08-06" });
+    out = [];
+    run("down"); run("buy beer"); run("out"); run("look");
+    return out.join("\n");
+  };
+  const a = playOpening(777);
+  assert.equal(state().dailyId, "2026-08-06", "the week knows it's the daily");
+  const b = playOpening(777);
+  assert.equal(a, b, "identical seed + commands → identical transcript (rule 2)");
+  // and the daily line is advertised in the opening
+  state().player = { origin: "monger", personality: "joker", orientation: "straight" };
+  out = []; startSoi6Mode({ seed: 42, dailyId: "2026-08-06" });
+  assert.match(out.join("\n"), /Today's soi — the 2026-08-06 daily/, "the opening names the daily");
+  // PLAY AGAIN (no opts) is always a fresh, non-daily roll
+  startSoi6Mode();
+  assert.equal(state().dailyId, null, "the daily is once — a repeat week rolls its own");
+});
+
+test("the week card: nightLog records each night's ending and SHARE renders it, gate and all", () => {
+  // the full game politely declines — the card is challenge furniture
+  out = []; run("share");
+  assert.match(lastOut(), /Soi 6 challenge thing/i);
+  // a soi6 week logs its nights
+  state().player = { origin: "monger", personality: "joker", orientation: "straight" };
+  startSoi6Mode();
+  assert.deepEqual(state().nightLog, [], "fresh week, empty spine");
+  _endNight("barfine");
+  _endNight("dawn");
+  assert.deepEqual(state().nightLog, ["barfine", "dawn"]);
+  // mid-week share: two emoji, five pending dots, no spoilers
+  out = []; run("share");
+  let text = out.join("\n");
+  assert.match(text, /THE LAST BAHT BUS — Soi 6 \(free week\)/);
+  assert.ok(text.includes("💋🌅·····"), "one emoji a night, the rest padded");
+  assert.match(text, /สนุก \d+/);
+  // week's end: the card auto-prints, and SHARE still answers through the gate
+  state().day = 7;
+  out = []; _endNight("sleep");
+  assert.equal(state().pendingChoice, "vacation_end");
+  text = out.join("\n");
+  assert.match(text, /THE LAST BAHT BUS/, "the card is the week's parting shot");
+  assert.match(text, /week complete/);
+  out = []; run("share");
+  assert.match(out.join("\n"), /💋🌅🛏····/, "three nights logged");
+  assert.equal(state().pendingChoice, "vacation_end", "sharing doesn't answer the gate");
+  assert.ok(_chipSet().map(c => c.cmd).includes("share"), "the chip bar offers the card");
+});
+
 test("the Peacock performers: real courtship for a bi player, the cabaret's own pass for a straight one", () => {
   state().flags.act1Done = true; state().stage = "vacation";
   state().room = "peacock_cabaret"; state().money = 5000;
