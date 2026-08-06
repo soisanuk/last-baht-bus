@@ -2692,10 +2692,14 @@ test("Tan the driver: known from the intro, a hub whose knowingness escalates wi
   out = []; run("ask tan about others");
   assert.match(lastOut(), /back seat|drove every one|ask the driver/i, "now he owns up to driving them all");
 
-  // the good-table topic: a smooth deflection until you've circled the quiet man enough
+  // the good-table topic: a smooth deflection until you've circled the quiet man
+  // enough — and the chip palette must NOT advertise it before the fiction has
+  // (the player hears of the table from prose, never from a menu; typed ASK is open)
+  assert.ok(!_convoTopics("tan").includes("table"), "no 'table' chip before the clues exist");
   out = []; run("ask tan about table");
   assert.match(lastOut(), /don't ask about|not even me/i, "deflection before the clues add up");
   state().flags.orchidReported = true; state().flags.nameKept = true; state().flags.oldDaysHeard = true;
+  assert.ok(_convoTopics("tan").includes("table"), "at ≥3 fragments the topic surfaces — the telegraph");
   out = []; run("ask tan about table");
   assert.match(lastOut(), /quiet man|drive taxis/i, "the near-confirmation — never quite stated");
   assert.ok(_flag("tanSuspected"), "hearing the near-confirmation arms the Orchid reveal");
