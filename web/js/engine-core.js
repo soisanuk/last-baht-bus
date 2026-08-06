@@ -241,6 +241,8 @@ function newGame() {
     happy: 0,            // สนุก — the long game. 100 = สบายสบาย.
     stage: "act1",       // act1 → vacation → expat
     mode: null,          // null = the full-game story; "soi6" = the Soi 6-only challenge
+    dailyId: null,       // "YYYY-MM-DD" when this week is the seeded daily challenge (frontend passes the date in — the engine never reads a clock)
+    nightLog: [],        // how each night ended (_endNight reason strings, capped) — the share card's spine
     vacation: 1,         // which trip this is
     day: 2,              // you lost day one to the beach
     nightTurn: 0,        // 10 turns ≈ 1 hour; the night runs 18:00–04:00
