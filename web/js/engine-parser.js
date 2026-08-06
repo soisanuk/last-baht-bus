@@ -3926,7 +3926,7 @@ function _taxiIntro(after) {
   _say("THE LAST BAHT BUS", "win");
   _say("a Pattaya misadventure · Soi Sanuk universe", "dim");
   _say("═══════════════════════════════════", "dim");
-  _say("The minibus out of Suvarnabhumi smells of pine air-freshener and someone " +
+  _say("The grey sedan out of Suvarnabhumi smells of pine air-freshener and someone " +
     "else's last beer. Ninety minutes of motorway to Pattaya, and the driver — a " +
     "compact Thai guy about thirty-five, a faded Cleveland State hoodie, English " +
     "better than the arrivals-hall signage — has already decided the two of you are " +
