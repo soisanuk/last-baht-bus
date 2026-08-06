@@ -1,0 +1,141 @@
+# Cross-Reference Prose Defects — the failure mode of generated prose
+
+Written 2026-08-06, after two playtest catches that every automated check and a
+full 3,228-record corpus review had walked straight past.
+
+## The two bugs
+
+**The minibus.** Tan's taxi-ride intro opened *"The minibus out of
+Suvarnabhumi…"*. Everywhere else in the game — his roster desc, the
+near-confirmation where he pats "his very ordinary car", the Orchid reveal, the
+once-a-vacation pickup — he drives a plain grey sedan. Two facts, both fine on
+their own page, and one of them false about the world.
+
+**"Come, I know a place."** His good-table deflection ended with an invitation
+to go and eat. There was no place, no scene, and no FOLLOW verb — so the most
+natural response to a direct invitation was `I didn't understand that`.
+
+Neither is a typo, a broken flag, or a bad line. Both are **assertions that are
+individually correct and globally false**: true of the sentence, wrong about the
+world it claims to describe.
+
+## Why this is the characteristic defect of generated prose
+
+Hand-written prose accumulates in one head that holds the world. Generated prose
+does not. A model writes each string with *local* context — this character, this
+beat, this paragraph — and it is very good at that, which is exactly the problem:
+
+1. **Plausible detail becomes canon by accident.** An airport transfer in
+   Thailand *is* usually a minibus. The inference is sound, reads well, and
+   silently contradicts five other lines written in a different session.
+2. **Every string is written alone, so nothing collides.** The author of line
+   #4,912 has no page on which line #212 is visible. Contradiction requires
+   co-location, and generation never co-locates.
+3. **Fluency conceals the seam.** A wrong fact in flat prose reads as a mistake;
+   the same fact in good prose reads as *characterisation*. "The minibus smells
+   of pine air-freshener and someone else's last beer" is a nice sentence. It is
+   nice in the way that stops you checking it.
+4. **Prose invents affordances for free.** Fiction speaks in invitations —
+   *come*, *follow me*, *ask around* — and a model writes them because they are
+   what a person would say. Nothing in the sentence knows whether a verb exists.
+
+The through-line: **a model's failures are not local, so local review cannot see
+them.** Per-string review confirms each record is well-written, in voice, and
+canon-consistent *as text*. It structurally cannot ask "is this true of the
+world?", because the world isn't on the page.
+
+## Why the existing tiers missed them
+
+| Check | Covers | Missed these because |
+| --- | --- | --- |
+| `promises.test.js` (tier 1) | every `(CAPS IN PARENS)` hint resolves to a real verb | the invitation was plain speech, not a hint |
+| decorate/name-collision corpus (tier 1) | tap targets, name collisions | not a rendering defect |
+| `prose-corpus.mjs` review (tier 2) | every string, read once, in voice | reads records in FILE order, one at a time |
+| soak `hint-tap` (tier 1½) | printed CAPS hints actually work when played | again: only parenthesised hints |
+| playtest (tier 3) | a human holding the world in their head | **caught both** |
+
+And a fifth, worse gap found while investigating: the corpus tool only collected
+declarative tables and top-level `const _POOL = [...]` arrays. **Prose passed
+directly to `_say(...)` inside a function body — 1,861 records, ~40% of the
+engine's player-facing words — was never in the corpus at all.** The minibus
+line lived there. "Full corpus coverage" was true of the collection, not of the
+game.
+
+## How we're addressing it
+
+Three layers, cheapest first. The doctrine is unchanged — *finding is `node`,
+judging is the model* — applied one level up: the model's job is turning prose
+into **claims**, and mechanical checks do the cross-referencing forever after.
+
+### Layer 0 — collect everything (done)
+
+`tools/prose-corpus.mjs` now walks the engine line by line with a running owner
+(the enclosing `const _POOL` **or** the enclosing `function`), so function-body
+prose enters the corpus as the `fn` group, attributed to its scene. Corpus:
+3,309 → 5,076 records. The same rewrite fixed a real mislabel: a single-line
+const (`const _HOSTS = ["arm","win"];`) never met a closing brace at column 0,
+so the old block-slicer stayed in pool mode forever and filed every following
+function's prose under that pool's name.
+
+### Layer 1 — the dossier pivot (done)
+
+`--about <subject>` / `--dossiers` regroups the corpus by **who or what a line is
+about**, not which file it lives in: one document per NPC, patron, bar, or item,
+carrying every claim the game makes about it. Mechanical — the entity list is
+world.js itself. It does not judge anything; it makes contradiction *visible*
+instead of *findable*, which is the entire trick. `--about tan` returns 72
+records with all five vehicle claims on one page.
+
+Matching is case-sensitive on display names (never the lowercase id — "tan"
+would drag in every "Gold Coast tan"), and names that are ordinary capitalised
+words are speaker-only, the same collision problem term.js solves with
+`_WORD_NAME_NPCS`.
+
+### Layer 2 — claims and probes (designed, not built)
+
+The model reads each dossier **once** and emits structured claims:
+
+```
+{ subject, kind, value, ref }
+kind ∈ attribute | location | price | schedule | relationship | affordance | history
+```
+
+Then the split that makes it cheap forever — most kinds become **mechanically
+checkable from then on**, with no model in the loop:
+
+- `price` → against the constants (`LADY_DRINK`, `BEER_PRICE`, `BF_*`…)
+- `location` → against `_npcRoom` / `ROOMS`
+- `schedule` → against the calendar helpers (`_quizDay`, `_leagueTonight`…)
+- `affordance` → against the verb set and the handler that would run
+- `attribute` / `history` → the only kinds needing judgement, and only when two
+  claims about one subject disagree
+
+Claims cache against the same content hashes the review ledger uses, so a
+changed string invalidates only its own claims: delta-sized, like the review.
+
+The `affordance` probe is the generalised form of the "Come, I know a place"
+bug. A first pass over the current corpus finds **10 spoken invitations, 9 with
+no parenthesised command hint** — nearly all legitimately backed by a mechanic
+(the motosai, the upstairs barfine, the invite system), which is the point: the
+class is small, and now it is auditable instead of invisible.
+
+## Authoring rules that follow
+
+For anyone — human or model — writing prose in this repo:
+
+1. **A detail about a recurring entity is a claim about the world.** Vehicles,
+   home provinces, ages, who works where, what something costs. Before inventing
+   one, run `node tools/prose-corpus.mjs --about <subject>` and read what the
+   game already says. Inventing is the default failure; checking is one command.
+2. **An invitation is a promise.** *Come, follow me, I'll show you, meet me* —
+   either a verb delivers it or the line doesn't say it. If a verb does deliver
+   it, add the tappable `(CAPS)` hint so tier 1 can see it too.
+3. **Numbers belong to constants.** Concatenate `BEER_PRICE`, don't type "฿90"
+   — the one Nu line that hard-coded a price drifted the moment the constant
+   moved.
+4. **Novel prose gets a delta review.** `--delta` after any prose change; it is
+   sized to what you touched.
+5. **None of this replaces playing it.** Both bugs in this document were caught
+   by a human reading prose against a world they held in their head. Tiers 0–2
+   exist to keep that human's attention scarce and expensive — not to replace
+   them.
