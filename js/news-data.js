@@ -8,80 +8,80 @@ var NEWS_FEED = [
     "d": "04 Aug 2026"
   },
   {
+    "t": "Pattaya and Sattahip residents roll the dice under dark rain clouds",
+    "s": "pattayamail.com",
+    "d": "05 Aug 2026"
+  },
+  {
+    "t": "Foreign man caught on CCTV stealing phone in Pattaya café",
+    "s": "thethaiger.com",
+    "d": "05 Aug 2026"
+  },
+  {
     "t": "Cat suspected after Pattaya condo fire forces overnight evacuation",
     "s": "Khaosod English",
     "d": "04 Aug 2026"
   },
   {
-    "t": "Norwegian man disappears after travelling to Jomtien",
-    "s": "Thaiger",
+    "t": "Pattaya C4 explosives rifles and war gear lead Chinese man to 44-year prison sentence",
+    "s": "pattayamail.com",
     "d": "04 Aug 2026"
   },
   {
-    "t": "British tourist refuses treatment after Pattaya fall until police step in",
-    "s": "Pattaya Mail",
-    "d": "03 Aug 2026"
+    "t": "When cases go quiet questions grow over Thailand’s crime response",
+    "s": "pattayamail.com",
+    "d": "04 Aug 2026"
   },
   {
-    "t": "Pattaya Prison places murder suspects under 24-hour watch after transfer",
-    "s": "Pattaya Mail",
-    "d": "03 Aug 2026"
+    "t": "Pattaya massage workers report alleged kidnapping amid fresh fears",
+    "s": "pattayamail.com",
+    "d": "04 Aug 2026"
   },
   {
-    "t": "East Pattaya residents relieved after water meter theft suspect arrested",
-    "s": "Pattaya Mail",
-    "d": "03 Aug 2026"
+    "t": "Swaying car draws Pattaya police attention, leads to Glock seizure and arrest",
+    "s": "pattayamail.com",
+    "d": "05 Aug 2026"
   },
   {
-    "t": "Fatal midnight crash under investigation in Chonburi",
-    "s": "Pattaya Mail",
-    "d": "03 Aug 2026"
+    "t": "Late Thailand dagger leaves Philippines' ASEAN Championship hopes hanging by a thread",
+    "s": "ESPN",
+    "d": "04 Aug 2026"
   },
   {
-    "t": "PM Anutin meets family of Russian siblings and vows full investigation",
-    "s": "Thaiger",
-    "d": "03 Aug 2026"
-  },
-  {
-    "t": "Thailand seizes illegal squishy toys over cancer-risk chemicals",
-    "s": "The Straits Times",
-    "d": "03 Aug 2026"
-  },
-  {
-    "t": "Irish woman, 28, who 'went mad' on Thailand trip now has just months to live",
-    "s": "irishmirror.ie",
-    "d": "03 Aug 2026"
+    "t": "CUADRAT CONCERNED PHILIPPINES COULD MISS SEMIS AFTER THAILAND DEFEAT",
+    "s": "ASEAN United FC",
+    "d": "05 Aug 2026"
   },
   {
     "t": "Philippines brace for vengeful Thailand in crucial ASEAN Championship reunion",
-    "s": "ESPN",
+    "s": "ESPN Philippines",
     "d": "03 Aug 2026"
   },
   {
-    "t": "Laos-China railway gets closer to regional link as Thailand advances high-speed rail expansion",
-    "s": "Asia News Network",
-    "d": "04 Aug 2026"
+    "t": "Bangkok airport apologises after clash with Chinese tourists at boarding gate",
+    "s": "South China Morning Post",
+    "d": "05 Aug 2026"
   },
   {
-    "t": "Twelve wounded after Air India flight hits severe turbulence",
-    "s": "The Jerusalem Post",
-    "d": "04 Aug 2026"
+    "t": "Thailand Rules Out Fully Owned SpaceX Venture in US Trade Talks",
+    "s": "Bloomberg.com",
+    "d": "05 Aug 2026"
   },
   {
-    "t": "Thai PM urges 'calibrated re-engagement' with Myanmar ahead of meeting with Min Aung Hlaing",
-    "s": "Reuters",
+    "t": "Chinese activist held by Thailand arrives in Canada",
+    "s": "Bangkok Post",
     "d": "04 Aug 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-08-04","USD":33.33,"AUD":23.44,"GBP":44.82,"EUR":38.39};
+var FX_RATES = {"date":"2026-08-05","USD":33.15,"AUD":23.37,"GBP":44.66,"EUR":38.28};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-05","temp":28,"humid":84,"code":53,"hi":31,"rain":88};
+var WX_NOW = {"date":"2026-08-06","temp":27,"humid":93,"code":51,"hi":31,"rain":84};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-08-01","first":"932479","last2":"69","front3":["413","672"],"back3":["039","154"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4089,"date":"2026-08-04","baht":64450};
+var GOLD = {"usd":4249,"date":"2026-08-05","baht":66600};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":64206,"thb":2136776};
+var BTC = {"usd":64627,"thb":2138108};
