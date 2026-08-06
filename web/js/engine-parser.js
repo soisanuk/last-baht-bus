@@ -2574,6 +2574,12 @@ function _doGallery() {
 
 function _doCall(arg) {
   if (!arg) { _say("Call who?"); return; }
+  // Tan answers — the one exception to the nobody-answers gag, and he keeps his
+  // "any hour" promise for real (see _tanCall). Exact word only: "taan" is a
+  // different person entirely (the Gold Rush hostess).
+  if (arg.trim().toLowerCase() === "tan" && G.phone.contacts && G.phone.contacts.tan) {
+    _tanCall(); return;
+  }
   const id = _findNpc(arg);
   if (!id) { _say("Call who? Nobody by that name in your phone or your eyeline."); return; }
   if (G.battery <= 0) { _say("Dead phone. The town's most reliable excuse."); return; }
@@ -3881,11 +3887,14 @@ function _introAnswer(input) {
   // done — Tan drops you on Soi 6; the chosen scenario opens
   G.pendingChoice = null; G.introStep = null;
   (G.known = G.known || {}).tan = true; // you rode in with him — he's no stranger (a findable NPC at the soi mouth)
+  G.phone.contacts.tan = true; // the card IS his number — your first local contact, and the promise is real (see _tanCall)
   _say("\"Okay. I got you.\" Tan swings off Second Road and the neon of Soi 6 " +
     "swallows the windscreen. He drops you at the mouth of the soi, presses a cold " +
     "water you didn't ask for into your hand, and taps the card already in your " +
     "pocket. \"First night is on you, my friend. Do me one favour—\" the grin again " +
     "\"—try to keep your wallet.\"");
+  _say("(The card has a number. Your phone has the number. CALL TAN — any hour, he " +
+    "says, and he means it.)", "dim");
   _say("");
   const after = G.introAfter; G.introAfter = null;
   if (after === "soi6") _soi6Opening();

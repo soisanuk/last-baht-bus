@@ -1699,7 +1699,8 @@ function _doContacts() {
 // asked you over. A relationship dashboard; reads state, changes nothing.
 function _doBlackbook() {
   if (_phoneDead()) return;
-  const ids = Object.keys(G.phone.contacts).filter(id => G.phone.contacts[id]);
+  // the punter's book of GIRLS — the fixer doesn't rank on a bond ladder
+  const ids = Object.keys(G.phone.contacts).filter(id => G.phone.contacts[id] && NPC_ROLES[id]);
   if (!ids.length) {
     _say("The black book's empty. You earn names the honest way out here — CONTACT a " +
       "lady in her own bar once she likes you, and she goes in the book.");
@@ -1722,6 +1723,16 @@ function _doBlackbook() {
 function _doContact(arg) {
   const id = _findNpc(arg);
   if (!id) { _say("They're not here to ask."); return; }
+  // Tan handed you the card at the airport — the number was always yours (this
+  // path backfills saves from before he lived in the phone)
+  if (id === "tan") {
+    if (G.phone.contacts.tan) { _say("Tan's number has been in your pocket since the airport. He knows. (CALL TAN)"); return; }
+    G.phone.contacts.tan = true;
+    _say("You go to ask — and Tan just taps your shirt pocket, where the card from the " +
+      "airport has been the whole time. \"Any hour,\" he says, the way other men say " +
+      "good evening. (CALL TAN)", "win");
+    return;
+  }
   if (!NPC_ROLES[id]) { _say(`${NPCS[id].name} keeps that number for family and better customers.`); return; }
   if (G.phone.contacts[id]) { _say(`You already have ${NPCS[id].name}'s number. She knows you know.`); return; }
   if (_phoneDead()) return;
@@ -1745,6 +1756,8 @@ function _doContact(arg) {
 function _doMessage(arg) {
   if (_phoneDead()) return;
   const w = arg.toLowerCase().replace(/^(to )/, "");
+  // the fixer texts like a fixer — no charm loop, no bond arithmetic
+  if (w === "tan" && G.phone.contacts.tan) { _tanText(); return; }
   const id = Object.keys(G.phone.contacts).find(c =>
     c === w || NPCS[c].name.toLowerCase().includes(w.split(" ")[0]));
   if (!id) { _say(w ? "No such number in your phone. (CONTACT a girl in her bar first.)" : "Message whom?"); return; }
@@ -1762,6 +1775,110 @@ function _doMessage(arg) {
   _say("(📱 She replies almost instantly. CHECK MESSAGES.)", "dim");
 }
 
+// ── Phone-Tan: the fixer in your contacts ───────────────────────────────────
+// "You need a ride, any hour, you call me" is a spoken promise, so it's a real
+// mechanic: CALL TAN answers (the one phone in Pattaya that does), and once per
+// vacation — in the small hours after the last bus, or in a downpour — he
+// actually comes and drives you home. Deliberately a parachute, not a taxi
+// rank: the once-a-vacation limit keeps the last-bus dread intact, and before
+// the cutoff he just tells you to take the bus. MESSAGE/SEND get their own
+// fixer-voiced branches so the girl-charm machinery never misfires on him.
+const _TAN_WAIT_LINES = [
+  "\"The buses are still running, my friend. Fifteen baht, same as ever. Save my petrol " +
+    "for when the town runs out of ways home — I will know when that is before you do.\"",
+  "\"Now? You have legs, you have buses, you have a whole town still awake. Call me when " +
+    "none of those are true. You will know the hour. So will I.\"",
+  "\"Everything still runs, my friend. Even the piwins are honest for another hour or two. " +
+    "I am the phone call you make after all of that stops being true.\"",
+  "\"Not yet, my friend. The night has not run out of options — and I am strictly a " +
+    "last-option man. It is better for both of us that way.\"",
+];
+const _TAN_BUSY_LINES = [
+  "\"Tonight I am driving somebody, my friend.\" A pause you are not invited into. \"Even " +
+    "I am one man. The piwins never sleep — you will be fine. You are always fine.\"",
+  "\"Ah — tonight, no. Tonight the car is full.\" He doesn't say of what. \"One favour a " +
+    "trip, my friend, that is the arithmetic of friendship. Walk careful.\"",
+  "\"My friend, tonight I cannot. Some other passenger, some other errand — you don't " +
+    "want the details and I don't give them. Next trip, the seat is yours again.\"",
+  "\"No, my friend, not tonight — tonight I fix a different problem.\" Traffic noise, a " +
+    "voice in the background that stops abruptly. \"Take care of yourself. You know how.\"",
+];
+const _TAN_HOME_LINES = [
+  "\"My friend. You are calling me from your own room — I can hear the aircon. Sleep. " +
+    "Even fixers sleep.\" Click.",
+  "\"You are home, my friend. This is the one problem I cannot improve. Goodnight.\" Click.",
+  "\"From your bed? 555. Go to sleep, my friend. Tomorrow the town will make you new " +
+    "problems, and I will still be here.\" Click.",
+];
+const _TAN_RIDE_LINES = [
+  "He drives the way he talks — smooth, unhurried, nothing wasted. Somewhere on Second " +
+    "Road he asks, lightly, how the detective is finding his retirement, and you realise " +
+    "you are paying the fare after all — just not in baht.",
+  "The town slides past the windows, neon going out district by district. \"Good night?\" " +
+    "he asks, and listens to your answer with slightly more attention than the question " +
+    "deserved. The fare, you understand, is conversational.",
+  "He takes a route home you have never once walked, past bars with no signs and lights " +
+    "still on, and hums something tuneless and content. Twice he lifts two fingers off " +
+    "the wheel to someone in a doorway, and twice the doorway waves back.",
+  "\"You know what I like about you, my friend?\" he says at a red light that stays red " +
+    "a suspiciously long time for him. \"You call exactly when you said you would need " +
+    "to, and not before. A man who knows what a favour costs. Very rare in this town.\"",
+];
+function _tanCall() {
+  if (G.battery <= 0) { _say("Dead phone. The town's most reliable excuse."); return; }
+  G.battery = Math.max(0, G.battery - 1);
+  // nobody in this town answers a phone — except the man whose job is answering
+  _say("Two rings. \"My friend.\" The one phone in Pattaya that answers.");
+  if (G.mode === "soi6") {
+    _say("\"A ride? My friend — the whole week is one soi. You can fall home from " +
+      "anywhere on it. Enjoy the falling.\" Click.");
+    return;
+  }
+  if (!_flag("act1Done")) {
+    _say("\"First night is on you, my friend — I told you at the airport. Find the " +
+      "wallet. THEN we talk about rides.\" Click. He knew about the wallet before " +
+      "you said a word. Of course he did.");
+    return;
+  }
+  if (G.room === _hotelRoomId()) { _say(_pickVary(_TAN_HOME_LINES, "tanhome")); return; }
+  if (G.nightTurn < LAST_BUS_TURN && !(G.rain > 0)) {
+    _say(_pickVary(_TAN_WAIT_LINES, "tanwait"));
+    return;
+  }
+  if (G.phone.tanRideVac === G.vacation) {
+    _say(_pickVary(_TAN_BUSY_LINES, "tanbusy"));
+    return;
+  }
+  // the ride — once a vacation, and he keeps the promise to the letter
+  G.phone.tanRideVac = G.vacation;
+  _say("You say where you are. \"Stay in the light. Seven minutes.\" It is six: the grey " +
+    "sedan comes around the corner with the calm of a vehicle that has never once " +
+    "hurried, and the door opens on aircon and quiet.", "win");
+  _say(_pickVary(_TAN_RIDE_LINES, "tanride"));
+  if (G.dog) _say(_dogN("Sai Krok gets the back seat without discussion, arranges himself " +
+    "on the upholstery like a minor diplomat, and watches the town go by."), "dim");
+  G.room = _hotelRoomId();
+  G.darkStreak = 0;
+  _say("He sets you down at your own door. \"Friendship rate,\" he says, waving the money " +
+    "away before your hand reaches a pocket. \"The first one is free, my friend.\" You " +
+    "will work out later that there is never a second one — per trip, the arithmetic of " +
+    "friendship. The taillights take the corner without hurry.", "win");
+  _addHappy(1);
+  _describeRoom(true);
+}
+const _TAN_TEXT_REPLIES = [
+  "K.",
+  "speak, my friend 🙂",
+  "driving. if it is money, no. if it is trouble, call.",
+  "555 you bored. go make some sanuk, my friend — that is what the town is FOR.",
+];
+function _tanText() {
+  G.battery = Math.max(0, G.battery - 1);
+  _say("You text Tan — nothing much, the kind of message you'd send a mate.");
+  _pushMsg("tan", _pickVary(_TAN_TEXT_REPLIES, "tantext"));
+  _say("(📱 The reply is instant. Of course it is. CHECK MESSAGES.)", "dim");
+}
+
 function _doSendMoney(arg) {
   if (_phoneDead()) return;
   const m = arg.match(/(\d+)/);
@@ -1772,6 +1889,15 @@ function _doSendMoney(arg) {
   if (!id) { _say("Send to whom? The banking app only knows your contacts."); return; }
   if (!amt || amt <= 0) { _say("How much? (SEND <amount> TO <name>)"); return; }
   if (amt > G.money) { _say(`The app regrets to inform you: ฿${G.money} available, ฿${amt} dreamed of.`); return; }
+  // Tan sends it straight back — his currency is favours, never baht
+  if (id === "tan") {
+    _say(`฿${amt} crosses town in one green blink — and comes straight back in another, ` +
+      "before you've pocketed the phone.");
+    _pushMsg("tan", "I am not your mamasan, my friend. When I want something from you, I " +
+      "will ask for it — and it will not be money. 🙂");
+    _say("(📱 CHECK MESSAGES.)", "dim");
+    return;
+  }
   G.money -= amt;
   (G.soc.given = G.soc.given || {})[id] = (G.soc.given[id] || 0) + amt; // toward a sponsor flip
   G.battery = Math.max(0, G.battery - 1);
@@ -2006,7 +2132,10 @@ function _advancePicDeal() {
 
 function _maybeIncomingText() {
   if (G.battery <= 0 || G.game || G.pendingEnc) return;
-  const contacts = Object.keys(G.phone.contacts);
+  // ladies only: the unprompted-text machinery (invites, scam-asks, selfies) is
+  // girl-voiced through and through — Tan (no NPC_ROLES entry) texts back when
+  // texted, never into the mama-sick patter
+  const contacts = Object.keys(G.phone.contacts).filter(id => NPC_ROLES[id]);
   if (!contacts.length) return;
   if (G.turns - G.phone.lastText < 25) return;
   const maxT = Math.max(0, ...contacts.map(_bondTier));
