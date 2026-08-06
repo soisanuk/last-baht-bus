@@ -2598,7 +2598,7 @@ const NPCS = {
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Welcome to Paradise.\" A beat. \"The bar, na — the other kind you find yourself.\" The knowing look intensifies.",
-        short: "\"Real gossip is on Soi Buakhao, tilac. Here is only volume.\"" },
+        short: "\"Welcome to Paradise — the bar, na. The other kind you find yourself.\"" },
       { topic: "wallet", text: "\"Walking Street eats wallets, tilac. But real professionals work the beach and the bus stops. Town gossip flows through Soi Buakhao — the beer bars, not here. Here is only volume.\"" },
     ],
   },
@@ -3545,7 +3545,7 @@ const NPCS = {
         "honestly.\"" },
       { topic: "tom", text: "\"Yeah. And before you make it weird—\" she holds up a hand, friendly \"—I'm " +
         "working, you're drinking, the match is on, everybody's happy. That is the whole thing. Your beer is " +
-        "฿90.\"" },
+        "฿" + BEER_PRICE + ".\"" },
     ],
   },
   haad: {
