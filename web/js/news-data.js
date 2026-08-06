@@ -3,17 +3,12 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
-    "t": "Chinese man gets 46 years for illegal Pattaya arsenal",
-    "s": "Bangkok Post",
-    "d": "04 Aug 2026"
-  },
-  {
-    "t": "Cat suspected after Pattaya condo fire forces overnight evacuation",
+    "t": "Chinese man jailed 46 years over Pattaya weapons cache",
     "s": "Khaosod English",
     "d": "04 Aug 2026"
   },
   {
-    "t": "Language barrier leaves Chinese tourist stranded in taxi",
+    "t": "Language barrier leaves Chinese tourist stranded in Pattaya",
     "s": "Pattaya Mail",
     "d": "05 Aug 2026"
   },
@@ -43,45 +38,50 @@ var NEWS_FEED = [
     "d": "05 Aug 2026"
   },
   {
+    "t": "MTV’s The Challenge Season 42 showcases Bangkok and Pattaya to global audiences",
+    "s": "Pattaya Mail",
+    "d": "05 Aug 2026"
+  },
+  {
     "t": "Myanmar leader breaks diplomatic isolation on first official visit to Thailand since coup",
     "s": "BBC",
     "d": "06 Aug 2026"
   },
   {
-    "t": "Late Thailand dagger leaves Philippines' ASEAN Championship hopes hanging by a thread",
-    "s": "ESPN",
-    "d": "04 Aug 2026"
-  },
-  {
-    "t": "Lightning strike kills soccer player, injuring 12 during match in Thailand",
-    "s": "New York Post",
-    "d": "05 Aug 2026"
-  },
-  {
-    "t": "Chinese activist Zhang Xinyan, wanted by Hong Kong gov’t, finally arrives in Canada after Thailand detention",
-    "s": "Hong Kong Free Press HKFP",
-    "d": "06 Aug 2026"
-  },
-  {
-    "t": "Thailand's rice exports seen at 7 million tonnes this year",
+    "t": "Body of popular Thai YouTuber Hlun Solo returns home",
     "s": "Bangkok Post",
-    "d": "05 Aug 2026"
+    "d": "06 Aug 2026"
   },
   {
     "t": "Everything you need to decide, and do, before relocating to Thailand in 2026",
     "s": "Thaiger",
     "d": "06 Aug 2026"
+  },
+  {
+    "t": "Woman’s mid-flight horror with passenger",
+    "s": "News.com.au",
+    "d": "06 Aug 2026"
+  },
+  {
+    "t": "Lightning bolt strikes football field in Thailand, killing a player during a match",
+    "s": "WION",
+    "d": "06 Aug 2026"
+  },
+  {
+    "t": "Lightning strike kills Thai footballer, 24, during match in Thailand",
+    "s": "mothership.sg",
+    "d": "06 Aug 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-08-05","USD":33.15,"AUD":23.37,"GBP":44.66,"EUR":38.28};
+var FX_RATES = {"date":"2026-08-06","USD":33.07,"AUD":23.28,"GBP":44.52,"EUR":38.17};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-06","temp":29,"humid":80,"code":55,"hi":30,"rain":98};
+var WX_NOW = {"date":"2026-08-06","temp":27,"humid":91,"code":95,"hi":31,"rain":98};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-08-01","first":"932479","last2":"69","front3":["413","672"],"back3":["039","154"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4281,"date":"2026-08-06","baht":67100};
+var GOLD = {"usd":4269,"date":"2026-08-06","baht":66750};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":64821,"thb":2143190};
+var BTC = {"usd":64381,"thb":2128841};
