@@ -966,6 +966,10 @@ const BELL_GLOW = 25;  // turns the whole bar loves you after a ring
 const BAN_TURNS = 40;  // security shift length
 
 function _inBar() { return !!_room().barType; }
+// The Peacock Cabaret sells drinks and takes flirting seriously without any of
+// the barType apparatus (no bells, games, closing hour, or barfine ledger) —
+// social verbs and lady drinks treat it as a bar, everything else doesn't.
+function _socialVenue() { return _inBar() || G.room === "peacock_cabaret"; }
 
 function _bellActive() {
   const t = G.soc.bellAt[G.room];
@@ -1207,10 +1211,19 @@ const _LADYBOY_PASS = [
   n => _fmt("{n} clocks you clocking her and is already three steps ahead. \"Not for you, tilac — no problem. I know my customer, and you are not him.\" No hurt in it; she's been read a thousand times and long since stopped minding which way it goes. \"Plenty girls here. Go, be happy.\"", { n }),
   n => _fmt("A slow, knowing smile. \"You didn't know? Now you know.\" {n} gives you the beat to decide, and reads the answer off your face before you find it. \"Is okay, tilac — you are not the first, and I am not offended. The ladies are that way.\" A graceful tilt of the head, and she turns to a customer looking for exactly her.", { n }),
 ];
+// The cabaret's own pass: at an all-kathoey venue "the ladies are that way" is
+// nonsense — a straight man's flirt gets folded into the show instead, and he
+// leaves feeling like a star turn rather than a rejection. Same agency rule:
+// SHE reads HIM, and the room loves them both for it.
+const _LADYBOY_PASS_CAB = [
+  n => _fmt("{n} receives the flirt, holds it up to the light like a tipped note, and hands it to the room: \"He is FLIRTING with me, everybody!\" The crowd roars. \"Tilac, you are adorable, and you are also a tourist in more ways than one, na.\" She pats your cheek, precise as choreography. \"Stay for the show. THAT part is for you.\"", { n }),
+  n => _fmt("A beat, an eyebrow, and {n} reads you all the way down — the curiosity, the beer, the vacation — and grades it kindly. \"You don't want what you think you might want, tilac. Is okay. Half this room came in not sure and they are having the best night of the year.\" She spins your drink a quarter-turn like a compass. \"Watch. Cheer. Tip. That is your part, and you will be wonderful at it.\"", { n }),
+];
 function _ladyboyGate(id) {
   if (!NPCS[id] || !NPCS[id].ladyboy) return false; // not a ladyboy → proceed
   if (typeof _orient === "function" && _orient("bi")) return false; // open mind → a real option
-  _say(_pickVary(_LADYBOY_PASS, "lbpass")(NPCS[id].name));
+  const cab = typeof _queerVenue === "function" && _queerVenue();
+  _say(_pickVary(cab ? _LADYBOY_PASS_CAB : _LADYBOY_PASS, "lbpass")(NPCS[id].name));
   return true;                                       // straight player: a gracious pass
 }
 
@@ -1276,8 +1289,9 @@ function _doSocial(kind, targetWord) {
   _trace(kind, name); // breadcrumb (flirt/kiss/spank/fondle)
 
   // outside a bar this almost never goes well (the katoey encounter, handled
-  // by its own resolver, is the famous exception)
-  if (!_inBar()) {
+  // by its own resolver, is the famous exception; the Peacock counts as inside
+  // — see _socialVenue)
+  if (!_socialVenue()) {
     if (kind === "flirt") {
       _say(id === "nok" ?
         "Auntie Nok cackles like a drain and offers you a discount mango. Rejected, fondly." :

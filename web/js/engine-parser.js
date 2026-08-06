@@ -1447,7 +1447,7 @@ function _doBuy(arg) {
     if (regId) { _standRegular(regId); return; }
   }
   if (arg.includes("lady drink") || arg.includes("ladydrink") || arg.includes("drink")) {
-    if (!_inBar()) { _say("Buy a drink where drinks are sold, tilac."); return; }
+    if (!_socialVenue()) { _say("Buy a drink where drinks are sold, tilac."); return; }
     const nameW = arg.replace(/\blady\b|\bdrinks?\b|\bfor\b/g, " ").trim();
     const girlsHere = _npcsHere().filter(id => NPC_ROLES[id]);
     const id = nameW ? _findNpc(nameW) : girlsHere[0];
@@ -2309,8 +2309,10 @@ function _doWait(arg) {
     `rearranging itself. ${_clockStr()}.`);
 }
 
-// The Peacock Cabaret's performers — role-less (not in NPC_ROLES, no barfine),
-// but tippable. Shared with term.js's mobile tap-wheel.
+// The Peacock Cabaret's performers — in NPC_ROLES for the courtship rails
+// (drinks/flirt/bond/contact; a bi player's real option), but the theatre keeps
+// no barfine ledger: _doBarfine refuses at the venue, _npcActions drops the
+// barfine tap, and _maybeSelfBarfine skips queer venues. Tips stay the drag way.
 const _CABARET_PERFORMERS = ["mala", "petch"];
 
 function _doTip(arg) {
@@ -2333,11 +2335,8 @@ function _doTip(arg) {
     return;
   }
   // The Peacock's performers take tips the drag way — folded long, held up,
-  // blessed back — and they're role-less (no barfine here), so handle them
-  // before the barType gate below. (_CABARET_PERFORMERS also drives their
-  // mobile tap-wheel "tip …" entry in term.js — they're not in NPC_ROLES,
-  // so without this they'd get no tap-buy path at all, same class of gap
-  // _HOSTS fixes for the host bar.)
+  // blessed back — so handle them before the barType gate below. (Room-gated:
+  // the same girls tip normally nowhere else, since they work nowhere else.)
   if (G.room === "peacock_cabaret") {
     const perf = nameW ? _findNpc(nameW) : "petch";
     if (!_CABARET_PERFORMERS.includes(perf)) {

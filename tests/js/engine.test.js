@@ -2583,8 +2583,9 @@ test("_npcActions is the single source of a character's tap affordances (by role
   assert.deepEqual(full(cash), ["talk", "examine", "photo", "buyher", "tip", "contact"]);
   // host bar (gender-flipped): buyhim + hire
   assert.deepEqual(full("arm"), ["talk", "examine", "photo", "buyhim", "hire"]);
-  // cabaret performer: tippable, no barfine
-  assert.deepEqual(full("mala"), ["talk", "examine", "photo", "tip"]);
+  // cabaret performer: the courtship rails, no barfine — the theatre keeps no ledger
+  assert.deepEqual(full("mala"), ["talk", "examine", "photo", "buyher", "flirt", "tip", "contact"]);
+  assert.deepEqual(full("petch"), ["talk", "examine", "photo", "buyher", "flirt", "tip", "contact"]);
   // a plain NPC (manager, unroled): a polite wai in the full wheel
   assert.deepEqual(full("bert"), ["talk", "examine", "photo", "wai"]);
   // a patron (not an NPC at all) and an unknown id: just the basics, no crash
@@ -2787,6 +2788,55 @@ test("phone-Tan: texts and transfers stay fixer-voiced, and the girl machinery i
   // and the black book stays a book of girls
   out = []; run("blackbook");
   assert.match(lastOut(), /book's empty/i, "the fixer doesn't rank on the bond ladder");
+});
+
+test("the Peacock performers: real courtship for a bi player, the cabaret's own pass for a straight one", () => {
+  state().flags.act1Done = true; state().stage = "vacation";
+  state().room = "peacock_cabaret"; state().money = 5000;
+  // straight (the beforeEach default): the flirt folds into the show — the
+  // cabaret pool, never the bar-floor "the ladies are that way" pass
+  out = []; run("flirt with petch");
+  let text = out.join("\n");
+  assert.ok(_LADYBOY_PASS_CAB.some(f => text.includes(f("Petch"))), "the show absorbs it");
+  assert.ok(!_LADYBOY_PASS.some(f => text.includes(f("Petch"))), "not the bar-floor pass");
+  // bi: falls through to the real social tiers
+  state().player.orientation = "bi";
+  out = []; run("flirt with petch");
+  text = out.join("\n");
+  assert.ok(out.length, "something answered");
+  assert.ok(!_LADYBOY_PASS_CAB.concat(_LADYBOY_PASS).some(f => text.includes(f("Petch"))),
+    "no pass for a bi player — she's a real option");
+  // no barfine apparatus at the theatre, whoever's asking
+  out = []; run("barfine petch");
+  assert.ok(_PEACOCK_NO_BF.some(s => out.join("\n").includes(s)), "Miss Mala retires the question");
+  // and the self-barfine thought never arrives at the cabaret
+  state().nightTurn = 70; state().soc.drinks.petch = 13;
+  for (let i = 0; i < 30; i++) _maybeSelfBarfine("petch");
+  assert.ok(!state().pendingEnc, "no ledger to self-pay");
+});
+
+test("the Peacock bond arcs: the deeper cuts unlock at regular and her-farang tiers", () => {
+  state().flags.act1Done = true;
+  state().room = "peacock_cabaret";
+  // a stranger gets the public dream
+  out = []; run("ask petch about dream");
+  assert.match(lastOut(), /Alcazar|biggest star in the smallest room/i, "the public version");
+  assert.doesNotMatch(lastOut(), /Ploynapas/i, "the true version stays behind the bond");
+  // a regular hears what happened with the scout
+  state().soc.drinks.petch = 7;
+  out = []; run("ask petch about dream");
+  assert.match(lastOut(), /Ploynapas|pass me twice|cannot pass twice/i, "the true version");
+  // her farang hears about Buriram
+  state().soc.drinks.petch = 13;
+  out = []; run("ask petch about family");
+  assert.match(lastOut(), /gold chain|neighbours/i, "the mother who says 'star'");
+  // Miss Mala: the daughters at regular, the name at her-farang
+  state().soc.drinks.mala = 7;
+  out = []; run("ask mala about girls");
+  assert.match(lastOut(), /theatre of daughters|doses/i, "raise is the right word");
+  state().soc.drinks.mala = 13;
+  out = []; run("ask mala about name");
+  assert.match(lastOut(), /cut a self|jewel/i, "the gem cutter's child");
 });
 
 test("the detective's recon quest completes only after you've seen the Orchid's good table", () => {

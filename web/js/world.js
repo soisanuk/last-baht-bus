@@ -5541,7 +5541,7 @@ const NPCS = {
   },
 
   mala: {
-    name: "Miss Mala", th: "มาลา", emoji: "🦚",
+    name: "Miss Mala", th: "มาลา", emoji: "🦚", ladyboy: true,
     room: "peacock_cabaret",
     desc: "The Peacock's compère and its mama both — a kathoey of a certain age and total command, " +
       "in a headdress that arrived by its own truck. Twenty years on this stage; she has watched a " +
@@ -5569,10 +5569,29 @@ const NPCS = {
       { topic: "tips", text: "\"How the tip works? You fold the note long-ways, you hold it up, she " +
           "comes and takes it in her teeth, or her décolletage, and blesses you — and the whole room " +
           "cheers YOU, not her. Cheapest star turn in Pattaya, forty baht.\" (TIP PETCH <amount>, or TIP MALA.)" },
+      // The regulars' cut — she raised half this stage, and "raised" is not a figure of speech.
+      { topic: "girls", bond: 2,
+        text: "\"My girls?\" The compère voice steps down to something room-temperature. \"Petch you " +
+          "know. {{Gaew}} came to me at seventeen with a sports bag and a black eye and I did not ask " +
+          "which she minded more. 'Raise' is the right word, tilac — I do the paperwork, I watch the doses, I " +
+          "know which boyfriends get tea and which get the door. Twice a year I stand at a temple in " +
+          "somebody's home village and I am introduced as 'her manager from Pattaya,' and the mother and " +
+          "I look at each other, and we both know, and we drink the tea.\" She resets the headdress a " +
+          "degree. \"Twenty years. My little theatre of daughters.\"",
+        short: "\"'Raise' is the right word — paperwork, doses, which boyfriends get tea and which get the door. Twenty years. My theatre of daughters.\"" },
+      { topic: "name", bond: 3,
+        text: "\"My name.\" She looks at you a long moment, deciding — then the headdress comes off, " +
+          "onto the table between you, feathers still nodding. \"A boy from Chanthaburi had a name; his " +
+          "father was a gem cutter and wanted a gem cutter. I was eleven when I heard 'Mala' in a lakhon " +
+          "on the television and I thought: there. That is the one that fits. It took the rest of them " +
+          "thirty years to catch up to what I knew at eleven.\" She puts the headdress back on, and Miss " +
+          "Mala reassembles around her like a curtain rising. \"His father cut stones. I cut a self. " +
+          "Same trade, tilac — you take away everything that is not the jewel.\"",
+        short: "\"His father cut stones. I cut a self. Same trade — you take away everything that is not the jewel.\"" },
     ],
   },
   petch: {
-    name: "Petch", th: "เพชร", emoji: "💎",
+    name: "Petch", th: "เพชร", emoji: "💎", ladyboy: true,
     room: "peacock_cabaret",
     desc: "The Peacock's young star, all cheekbones and ambition, between numbers and still catching " +
       "her breath. She lip-syncs better than the record and knows it, and she is saving for a face " +
@@ -5584,10 +5603,30 @@ const NPCS = {
           "sit like this—\" she mimes a rigid plank \"—and by my second song, like this—\" she throws " +
           "her arms up, radiant. \"You are already at song two, I can tell.\"",
         short: "\"You clapped, I saw! First-timers sit stiff, then by song two—\" arms up, radiant." },
+      // Under the ambition (bond first — the deeper cut outranks the public version)
+      { topic: "dream", bond: 2,
+        text: "\"You want the true version?\" Petch checks the room the way you check a mirror — fast, " +
+          "professional — and sits closer. \"A scout DID come. Two years ago, from Tiffany's. He watched " +
+          "the whole show and he took Ploynapas.\" A beat, perfectly held; she is, after all, a performer. " +
+          "\"I cried one night. ONE. Then I learned her closing number better than she does it, and now " +
+          "when the scout comes back — and he will — the girl he passed on is not here anymore. I ate " +
+          "her.\" The grin comes up, all cheekbones. \"That is the dream, na. Not the stage. Being the " +
+          "one they cannot pass twice.\"",
+        short: "\"A scout came. He took Ploynapas. I cried one night — ONE — then I learned her number better than her. Nobody passes me twice.\"" },
       { topic: "dream", text: "\"Alcazar. Tiffany's. The big Pattaya stages, thousand seats, tour buses, " +
           "real money.\" Her eyes go somewhere bright. \"I am saving — the dancing they teach you, the " +
           "face they don't. One day a scout sits where you sit now, and I am ready. Until then, I am the " +
           "biggest star in the smallest room, and that is not nothing.\"" },
+      { topic: "family", bond: 3,
+        text: "\"Buriram.\" She says the province like a stone she has carried so long it is smooth. " +
+          "\"You think they don't know? My mother sold a gold chain for my first costume. She rehearsed " +
+          "my wai with me before my first Loy Krathong on this stage — over video call, both of us " +
+          "laughing.\" She turns her phone so you can see the wallpaper: an older woman, a temple, a " +
+          "girl in sequins between them. \"The money goes home like every girl in this town, but MY " +
+          "mother tells the neighbours what I am. Dancer. Star. Her word is 'star.'\" She pockets her " +
+          "phone before the room can see her face do what it is doing. \"So the face I am saving for is " +
+          "not so I can be somebody else, na. It is so the neighbours see what my mother already sees.\"",
+        short: "\"My mother sold a gold chain for my first costume. Her word for me is 'star.' The face is so the neighbours see what she already sees.\"" },
       { topic: "tips", text: "\"Tip? Ohh you are learning fast.\" She pats your hand. \"Fold it long, " +
           "hold it up, I do the rest and make you look like a hero doing it. Miss Mala takes her cut, " +
           "of course — she takes everybody's cut, she raised half of us — but the cheer is all yours.\" " +
@@ -7904,6 +7943,10 @@ const NPC_ROLES = {
   candy: "mamasan", oy: "mamasan", daeng: "mamasan", mem: "mamasan", wan: "mamasan",
   nee: "mamasan", peung: "mamasan", malai: "mamasan", toi: "mamasan", saeng: "mamasan",
   bussaba: "mamasan", sopha: "mamasan", malila: "mamasan",
+  // The Peacock: performers in the social machinery (courtship for a bi player,
+  // the gracious pass for a straight one — _ladyboyGate). No barfine apparatus:
+  // the cabaret refuses it in-fiction (_doBarfine's peacock branch).
+  petch: "hostess", mala: "mamasan",
 };
 
 // ── Generic (filler) hostesses ──────────────────────────────────────────────
