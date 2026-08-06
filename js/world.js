@@ -20,6 +20,11 @@ const BAND_ROUND = 400;  // buying the band a round (≈ bell to the mama; girls
 const WINGMAN_TURNS = 15;// how long a friendly wing-woman's good word lasts
 const CHARGER_PRICE = 59;
 const SAFE_CASH = 3000;  // the emergency stash in the hotel room safe
+const WALLET_CASH = 500; // what's left in the recovered wallet — TWO recovery paths
+                         // (Oy hands it back in _deliver; you crack the safe in _doSafe),
+                         // each printing the number, so it must be one constant
+const SOI6_POCKET = 1000, SOI6_BANK = 100000; // the challenge week's stake — _soi6Setup
+                         // sets them, _soi6Opening and index.html quote them
 const EXPAT_SAVINGS = 20000; // wired over when you make the move
 // The ATM: draw pocket cash from your account (G.bank) at any `atm:true` room.
 const ATM_FEE = 300;         // foreign-card fee per withdrawal (charged to the account)
@@ -2407,7 +2412,7 @@ const ITEMS = {
     name: "steel safe", aliases: ["safe", "keypad"],
     portable: false, location: "oy_office",
     desc: "A floor-bolted steel safe. The keypad's buttons are Thai numerals: " +
-      "๐ ๑ ๒ ๓ ๔ ๕ ๖ ๗ ๘ ๙. It wants three digits.",
+      "๐ ๑ ๒ ๓ ๔ ๕ ๖ ๗ ๘ ๙. It wants three digits. (ENTER <digits>)",
   },
   wallet: {
     name: "your wallet", aliases: ["wallet"],
@@ -5728,7 +5733,7 @@ const NPCS = {
         sets: ["pinPart9"],
         short: "\"Whatever lock Oy owns has a nine — เก้า — in it. That was your free answer.\"" },
       { topic: "oy", notFlags: ["helmetDelivered"],
-        text: "\"Madam Oy? Mmm. Information about the Mamasan is premium shelf, darling.\" She taps the lady-drink menu meaningfully: ฿150." },
+        text: "\"Madam Oy? Mmm. Information about the Mamasan is premium shelf, darling.\" She taps the lady-drink menu meaningfully: ฿" + LADY_DRINK + "." },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Well well. You have the look of a man on a quest.\" She rests her chin on her hand. \"Starlight Bar: honest pours, dishonest company. What do you want to know and what's it worth?\"",
         short: "\"What do you want to know, darling — and what's it worth?\"" },
