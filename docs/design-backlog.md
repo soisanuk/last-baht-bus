@@ -195,7 +195,12 @@ should keep the human's flags scarce and interesting.
    prose change, `--about <subject>` before inventing an entity detail, 2–3
    soak transcripts read, human flags as they come.
 
-Still unbuilt, in value order: **Layer 2 claims/probes** (`docs/prose-defects.md`
-— model extracts claims once, then price/location/schedule/affordance checks run
-mechanically forever), and **transcript review**, which has never actually been
-run despite being cheap.
+**Layer 2 claims/probes is BUILT** (`tools/prose-claims.mjs`, 2026-08-07): slot
+conflicts, location claims, affordance claims — in the suite, and verified by
+reintroducing the minibus bug and watching it fail. The lesson worth keeping is
+in `docs/prose-defects.md`: attribution has to happen at SCENE scope, because
+the corpus splits prose at line granularity and the minibus line never contains
+the word "Tan" at all.
+
+Still unbuilt: **transcript review**, which has never actually been run despite
+the soak generating the transcripts for free.
