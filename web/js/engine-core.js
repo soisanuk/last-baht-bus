@@ -450,9 +450,9 @@ function _chargeRent() {
   } else {
     G.hotelDebt = Math.min(_DEBT_CAP, G.hotelDebt + rate);
     _addHappy(-1);
-    _say(`The night clerk takes in the situation and adds ฿${rate} to the book ` +
-      `without a word — ฿${G.hotelDebt} on it now. His kindness is the heaviest ` +
-      "thing you'll carry today.", "alert");
+    _say(_fmt("The night clerk takes in the situation and adds ฿{r} to the book " +
+      "without a word — ฿{d} on it now. His kindness is the heaviest " +
+      "thing you'll carry today.", { r: rate, d: G.hotelDebt }), "alert");
   }
 }
 
