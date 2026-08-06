@@ -153,6 +153,34 @@ instead), `schedule`, `relationship`, `history`, and caching claims against
 content hashes — none needed yet, because the mechanical extraction is fast
 enough to just re-run.
 
+### Tier 2b — transcript review (run 2026-08-07)
+
+The soak writes full transcripts for free (`--transcript`), and a seeded one
+replays exactly. Reading a couple end-to-end catches a class the corpus cannot
+even represent, because **the corpus has no order**: defects that exist only in
+the *assembly* of lines, not in any line.
+
+Three findings from the first run, none of which any static check could see:
+
+- **The Nite Owl's doubled attribution.** `_doColumn` prefixed every letter with
+  "• A reader writes: ", but six of the nine authored letters introduce their own
+  writer — so two-thirds of columns read *"A reader writes: A Thai wife writes:
+  …"*. Template fine. Letter fine. Only the rendered column is wrong. The prefix
+  is now conditional on the letter being a bare quote.
+- **A doubled award.** `_soiSpectateHappy` printed its own "+1 สนุก" directly
+  under `_addHappy`'s automatic "(+1 สนุก)" — two lines saying the same thing,
+  reading like a double payout. Invisible per-string; obvious in sequence.
+- **Markup leaking into transcripts.** `{{…}}` is render-only tap-suppression
+  that decorate() strips, but the soak's print callback didn't, so transcripts
+  showed `{{Nice}} girls` — noise that makes a reviewer distrust the artefact.
+  The harness now uses `stripMarkup`, like any non-decorate consumer.
+
+Worth noting what the transcript ALSO revealed and didn't need fixing here: a
+German-language run shows English seams (the `CALL TAN` hint, MAP, the stat
+line) — the localization gap that `docs/i18n-de-gaps.md` already tracks. New
+prose widens that gap by default, which is the argument for finishing de
+coverage before adding much more.
+
 ## Authoring rules that follow
 
 For anyone — human or model — writing prose in this repo:
