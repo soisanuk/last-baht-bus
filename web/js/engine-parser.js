@@ -2963,6 +2963,25 @@ function _chipSet() {
     if (G.game.type === "quiz") { add("1"); add("2"); add("3"); }
     add("quit"); return chips;
   }
+  // 2.2) The negotiation/fare gates own the input the same way (doCommand
+  //      swallows everything else and reprompts), so the chip bar must offer
+  //      their answers — otherwise a touch player faces a row of dead chips.
+  //      (The soak's seed-12 wedge: a whole night spent inside the ST/LT
+  //      modal tapping room chips.) pendingEnc is deliberately absent here:
+  //      an encounter routes ANY command to its resolver as the snap
+  //      reaction, so the room chips stay live there.
+  if (G.pendingBf) {
+    add("short time", `short time ฿${G.pendingBf.st}`);
+    add("long time", `long time ฿${G.pendingBf.lt}`);
+    add("no", "no, thanks");
+    return chips;
+  }
+  if (G.pendingSoapy) {
+    for (const t of _SOAPY_TIERS) add(String(t.num), `${t.num} · ฿${t.price}`);
+    add("no", "no, thanks");
+    return chips;
+  }
+  if (G.pendingFare) { add("pay", `pay ฿${G.pendingFare.price}`); return chips; }
 
   // 2.5) A live conversation turns the chip bar into the talk palette: the
   //      partner's currently-open topics, the social moves that fit them, and a

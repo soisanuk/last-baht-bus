@@ -97,6 +97,17 @@ function wildPool() {
       const n = NPCS[id].name.toLowerCase();
       pool.push("talk to " + n, "buy drink for " + n, "flirt with " + n);
       if (prand() < 0.3) pool.push("tip " + n + " 100", "barfine " + n, "photo " + n);
+      // the talk-acts (player + NPC personality tilts both live here)
+      if (prand() < 0.3) pool.push("compliment " + n, "tease " + n, "joke");
+    }
+    // the phone: messages, transfers, and the fixer's any-hour promise
+    const contacts = Object.keys((G.phone && G.phone.contacts) || {}).filter(c => G.phone.contacts[c]);
+    if (contacts.length && prand() < 0.4) {
+      const c = NPCS[contacts[Math.floor(prand() * contacts.length)]];
+      if (c) {
+        const cn = c.name.toLowerCase();
+        pool.push("message " + cn, "send 100 to " + cn, "call " + cn);
+      }
     }
     if (r.barType) pool.push("ring bell", "play connect 4", "play jackpot");
     if (r.atm) pool.push("withdraw 1000", "check balance");
@@ -114,7 +125,7 @@ function wildPool() {
 }
 
 const modalActive = () =>
-  !!(G.pendingChoice || G.pendingEnc || G.game || G.pendingBf || G.pendingFare);
+  !!(G.pendingChoice || G.pendingEnc || G.game || G.pendingBf || G.pendingSoapy || G.pendingFare);
 
 function modalPool() {
   const pool = [];
@@ -158,6 +169,11 @@ function langLeak(line) {
 
 const OFFPOCKET = /(Walking Street|Soi Buakhao|Buakhao|LK Metro|Tree Town|Myth Night|Jomtien)/;
 const OFFPOCKET_OK = ["in 2004", "Nite Owl", "DON'T GIVE A HOOT", "up-country"];
+// The town's media are canon-sanctioned reminiscence surfaces — the Nite Owl
+// column, the paper, the TV all speak town-wide by design (backlog §1: the
+// off-pocket grep excludes reminiscence). Suppress the check for lines those
+// verbs printed; per-line markers can't cover every letter/listing in a pool.
+const OFFPOCKET_MEDIA_CMD = /^(column|owl|read( |$)|watch( |$)|scores|lottery|lotto|weather)/;
 
 export function runSoak(opts = {}) {
   const seed = opts.seed ?? 1;
@@ -184,7 +200,7 @@ export function runSoak(opts = {}) {
   const failures = [], warns = [], transcript = [];
   const stats = { commands: 0, nights: 0, vacations: 0, understoodMisses: 0, truncated: false };
   let hintQueue = [], hintRoom = null, lastDay = G.day, lastTurns = G.turns,
-    cmdsThisNight = 0, forcedWaits = 0, spins = 0;
+    cmdsThisNight = 0, forcedWaits = 0, spins = 0, modalStreak = 0;
 
   const fail = (kind, detail) => failures.push({ kind, detail, at: stats.commands,
     day: G.day, nightTurn: G.nightTurn, room: G.room });
@@ -229,6 +245,7 @@ export function runSoak(opts = {}) {
       JSON.stringify({ phase: "exec", cmd, save: serializeGame() }));
     if (process.env.SOAK_TRACE) fs.writeSync(1, "→ " + cmd + " [" + source + "] d" + G.day + " nt" + G.nightTurn + " " + G.room + "\n");
     const mark = buf.length;
+    const modalBefore = modalActive(); // a game-move's output must never be banked as room hints
     const tCmd = Date.now();
     try { doCommand(cmd); } catch (e) {
       fail("throw", cmd + " → " + (e && e.stack ? e.stack.split("\n").slice(0, 4).join(" | ") : e));
@@ -244,7 +261,14 @@ export function runSoak(opts = {}) {
 
     // harvest hints from THIS room's output (stale on room change)
     if (G.room !== hintRoom) { hintQueue = []; hintRoom = G.room; }
-    if (!modalActive())  // modal options (encounters, barfine terms) die with the modal
+    // Modal options (encounters, barfine terms, game moves) die with the modal —
+    // checked BEFORE and after — and a command during which the night ended is
+    // never harvested at all: its output straddles two worlds (a "play jackpot"
+    // whose start-tick hits dawn prints the (FLIP …) prompt AND the beach
+    // wake-up, and the flip would be banked against the sand — the seed-6
+    // false positive).
+    const nightEndedThisCmd = G.day !== lastDay || G.turns < lastTurns;
+    if (!modalBefore && !modalActive() && !nightEndedThisCmd)
       for (const l of lines) for (const h of extractHints(l))
         if (!hintQueue.includes(h) && hintQueue.length < 12) hintQueue.push(h);
 
@@ -253,7 +277,7 @@ export function runSoak(opts = {}) {
       stats.understoodMisses++;
       warns.push({ kind: "hint-miss", cmd, room: G.room, at: stats.commands });
     }
-    if (mode === "soi6") for (const l of lines)
+    if (mode === "soi6" && !OFFPOCKET_MEDIA_CMD.test(cmd)) for (const l of lines)
       if (OFFPOCKET.test(l) && !OFFPOCKET_OK.some(s => l.includes(s)))
         warns.push({ kind: "offpocket", line: String(l).slice(0, 140), at: stats.commands });
     if (lang && G.player && G.player.lang === lang) for (const l of lines) {
@@ -271,6 +295,16 @@ export function runSoak(opts = {}) {
       fail("meter", `hunger ${n.hunger} thirst ${n.thirst} after '${cmd}'`);
     if (n.battery < 0 || n.battery > 100) fail("meter", "battery " + n.battery);
     if (n.day > 400) fail("runaway", "day " + n.day);
+    // modal-wedge detector (design doc §1: "modal states always answerable").
+    // The modal pool draws from _chipSet + fallbacks, so a healthy modal clears
+    // within a handful of tries; 60 consecutive gated commands means the chips
+    // don't include an answer the gate accepts (the seed-12 ST/LT wedge).
+    modalStreak = modalActive() ? modalStreak + 1 : 0;
+    if (modalStreak > 60)
+      fail("modal-wedge", "input gated for " + modalStreak + " consecutive commands (" +
+        JSON.stringify({ pendingChoice: G.pendingChoice, pendingEnc: G.pendingEnc,
+          game: G.game && G.game.type, pendingBf: !!G.pendingBf,
+          pendingSoapy: !!G.pendingSoapy, pendingFare: !!G.pendingFare }) + ")");
 
     if (stats.commands % 150 === 0) {
       // Save-compat merges skeleton defaults IN (e.g. visited.jomtien_beach), so
