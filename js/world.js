@@ -4912,7 +4912,7 @@ const NPCS = {
           "very patient. \"Some tables you do not ask about, my friend. Not the detective. Not the blogger who " +
           "keeps writing his little articles. Not you.\" A beat. \"Not even me.\" And he changes the subject so " +
           "smoothly you almost don't feel the door shut. \"Now — you eat yet? You never eat. Come, I know a " +
-          "place.\"",
+          "place.\" (FOLLOW TAN, if you're hungry — he means it.)",
         short: "\"Some tables you don't ask about, my friend. Not even me.\" The door shuts so smoothly you almost don't feel it." },
 
       // The near-confirmation — once the fragments add up. He never says the words.
@@ -7915,6 +7915,145 @@ const ORIENTATIONS = [
     pick: "The ladies — and I keep an open mind.",
     tan: "\"An open mind.\" A knowing tilt of the head. \"Good. This town rewards it — and it is very, very good at surprising the men who swear they are closed. Some of the most beautiful girls on this soi, my friend, weren't born girls. I'll point you right.\"" },
 ];
+
+// ── Answering back: the player's side of the ask loop ───────────────────────
+// A dialogue node's `asks: {key, q}` puts a question to the PLAYER and arms
+// G.convoQ; the reply is free text, remembered in G.player.said[key], and the
+// soi catches you if you tell it two ways (_convoAnswer). Free text is still
+// the whole point — but a bare "answer in your own words" prompt gave a touch
+// player nothing to tap and a new player nothing to imitate, so each key ships
+// canned replies IN YOUR OWN VOICE. Entries are tagged `pers` (personality) or
+// `origin`; an untagged one suits anybody. _askReplies (engine-parser) offers
+// the identity-matched ones first, capped, and the chip bar renders them.
+//
+// AUTHORING RULES:
+//  · Short. It's a line said at a bar, and it's stored verbatim.
+//  · A key quoted back through a %token% (today: %home%) is TITLE-CASED on
+//    replay, so those answers must be a place or a couple of words at most —
+//    "Sheffield" reads right, a whole sentence does not.
+//  · Tapping your own voice keeps your story straight across the soi; typing a
+//    different answer somewhere else is exactly what the grapevine punishes.
+//    That tension is the feature — don't "fix" it by de-duping keys.
+const ASK_REPLIES = {
+  // where you're from — quoted back by %home%, so: places only
+  home: [
+    { origin: "redundancy", text: "Sheffield" },
+    { origin: "pension", text: "Portsmouth" },
+    { origin: "running", text: "Nowhere I miss" },
+    { origin: "pi", text: "Chicago" },
+    { origin: "business", text: "Gold Coast" },
+    { origin: "married", text: "Buriram, half the year" },
+    { origin: "monger", text: "Reading" },
+    { text: "Back home. It'll keep." },
+  ],
+  // why you're out here — the big one, nine NPCs ask it
+  why: [
+    { pers: "charmer", text: "Running to something, I'd like to think" },
+    { pers: "joker", text: "Running from the weather, mostly" },
+    { pers: "blunt", text: "Running from it. Next question" },
+    { pers: "operator", text: "Neither. I go where the work is" },
+    { pers: "whiteknight", text: "I wanted to be somewhere I was some use" },
+    { text: "Bit of both, if I'm honest" },
+  ],
+  here: [
+    { pers: "charmer", text: "The company. It's always the company" },
+    { pers: "joker", text: "The beer's cold and nobody knows my name" },
+    { pers: "blunt", text: "The girls. Let's not dress it up" },
+    { pers: "operator", text: "Opportunity. Same as everybody" },
+    { pers: "whiteknight", text: "Something that felt real, I suppose" },
+  ],
+  finding: [
+    { pers: "charmer", text: "Better than I came for" },
+    { pers: "joker", text: "Turning out expensive, mainly" },
+    { pers: "blunt", text: "Exactly what it says on the tin" },
+    { pers: "operator", text: "Turning out useful" },
+    { pers: "whiteknight", text: "Sadder than the brochure. Still glad I came" },
+  ],
+  girlfriend: [
+    { pers: "charmer", text: "Nobody waiting up. Which is a shame for somebody" },
+    { pers: "joker", text: "Only my landlord, and she's cold to me" },
+    { pers: "blunt", text: "No. Not for a while now" },
+    { pers: "operator", text: "Nobody I'd owe an explanation to" },
+    { pers: "whiteknight", text: "There was. She got tired of waiting" },
+    { origin: "monger", text: "There is. We don't talk about the trips" },
+    { origin: "married", text: "Was married to one. That's the whole story" },
+  ],
+  hotel: [
+    { pers: "charmer", text: "Nothing fancy. I'm out all night anyway" },
+    { pers: "joker", text: "A room with a fan that hates me" },
+    { pers: "blunt", text: "Cheap. And I'm not saying where" },
+    { pers: "operator", text: "Comfortable enough. Why do you ask?" },
+    { pers: "whiteknight", text: "Decent little place. I'm easy to please" },
+  ],
+  stay: [
+    { pers: "joker", text: "A week. Possibly forever, ask me Friday" },
+    { pers: "blunt", text: "A week. Then home" },
+    { pers: "operator", text: "Long enough to see what's what" },
+    { text: "The week. Same as everybody" },
+  ],
+  return: [
+    { pers: "charmer", text: "For you? Tomorrow" },
+    { pers: "joker", text: "If the liver signs off, yes" },
+    { pers: "blunt", text: "Maybe. I don't make promises in bars" },
+    { pers: "operator", text: "If tonight's worth repeating" },
+    { pers: "whiteknight", text: "I'd like to. I mean that" },
+  ],
+  trips: [
+    { origin: "pension", text: "Twenty years of them" },
+    { origin: "monger", text: "Lost count. Eleven? Twelve?" },
+    { origin: "married", text: "I lived here. Different thing entirely" },
+    { pers: "joker", text: "First time, and it shows, doesn't it" },
+    { text: "A few. Enough to know the road" },
+  ],
+  firsttime: [
+    { pers: "charmer", text: "Every night, they tell me. Enjoy it" },
+    { pers: "joker", text: "Every night. Nobody's ever tapped a shoulder yet" },
+    { pers: "blunt", text: "Every night. It stops being a party eventually" },
+    { pers: "operator", text: "Every night — that's the business model" },
+    { pers: "whiteknight", text: "Every night. Pace yourself, though" },
+  ],
+  shame: [
+    { pers: "charmer", text: "Not for a long time, Barry" },
+    { pers: "joker", text: "I left the guilt in the overhead locker" },
+    { pers: "blunt", text: "No. I know what I came for" },
+    { pers: "operator", text: "Guilt's expensive. I don't buy it" },
+    { pers: "whiteknight", text: "Bit, yeah. Still working that out" },
+  ],
+  believe: [
+    { pers: "charmer", text: "Met a few. They're all different, that's the trick" },
+    { pers: "joker", text: "Three of them. All different. All Tuesday" },
+    { pers: "blunt", text: "No. They're at work and so am I" },
+    { pers: "operator", text: "I've met the act. It's a good act" },
+    { pers: "whiteknight", text: "Yeah. And I know how that sounds" },
+  ],
+  smart: [
+    { pers: "charmer", text: "Only if you love it more than the money" },
+    { pers: "joker", text: "Smart's a strong word, Wayne" },
+    { pers: "blunt", text: "No. Read the paperwork first" },
+    { pers: "operator", text: "Only if your name's on the shares" },
+    { pers: "whiteknight", text: "Careful, mate. Ask around first" },
+  ],
+  invested: [
+    { pers: "joker", text: "Only in beer futures" },
+    { pers: "blunt", text: "No. And I won't be" },
+    { pers: "operator", text: "Not yet. I read things twice" },
+    { origin: "business", text: "Looking at it. Talk me out of it" },
+    { text: "No. You can relax" },
+  ],
+  sentme: [
+    { pers: "charmer", text: "Nobody sent me. I just liked the look of you" },
+    { pers: "blunt", text: "Nobody. I'm nobody" },
+    { pers: "operator", text: "Nobody sends me anywhere" },
+    { text: "Nobody sent me. Just being friendly" },
+  ],
+  dream: [
+    { pers: "charmer", text: "Right now? This chair, this conversation" },
+    { pers: "joker", text: "A bar with my name on it and a chair I never leave" },
+    { pers: "blunt", text: "Enough money to stop counting it" },
+    { pers: "operator", text: "To be the one who owns the room" },
+    { pers: "whiteknight", text: "Somebody glad I turned up" },
+  ],
+};
 
 const CANON_BARS = [
   "Lucky Tiger Bar", "Pink Lotus Lounge", "Neon Paradise A-Go-Go",

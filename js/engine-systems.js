@@ -266,6 +266,9 @@ function _npcActions(id, full) {
     }
     else if (isHost) acts.push("hire");      // the club "off" fee
     else if (isNpc && !role) acts.push("wai"); // a plain punter/NPC — just a polite wai
+    // Tan's standing food invite is a real option, so it gets the third surface
+    // (parser + autocomplete + here). Hidden during Act One, when he refuses.
+    if (id === "tan" && typeof _flag === "function" && _flag("act1Done")) acts.push("follow");
   }
   return acts;
 }
@@ -3363,6 +3366,9 @@ const FOOD_STALLS = {
 const _EDIBLE = { moo_ping: 35, som_tam: 50, noodles: 20 };
 
 function _doEat(arg) {
+  // "EAT WITH TAN" is the other natural phrasing of his standing food invite —
+  // route it to the same scene rather than the you're-not-carrying-that shrug.
+  if (arg && /\btan\b/.test(arg) && _npcsHere().includes("tan")) { _tanFood(); return; }
   // Cherry Pop's bowl of maraschino cherries: a real nibble, but not a hunger
   // farm — one free cherry a night, the rest is just décor you're pawing at.
   if (arg && /\bcherr/.test(arg) && G.room === "cherry_pop") {
