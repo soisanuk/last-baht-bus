@@ -659,13 +659,13 @@ const ROOMS = {
       "run a checkpoint on Beach Road just south of the junction, waving over helmetless farang " +
       "for a paperwork stop and an on-the-spot fine — more than a few of the two bars' regulars " +
       "first came in off the road ducking exactly that. Blue songthaews — the baht buses — " +
-      "rattle past toward the rest of Pattaya, a whole neon city that isn't yours to reach just " +
-      "yet; for now you let them go.",
+      "rattle past on the Beach Road run, headlights strung north toward the Dolphin and south " +
+      "into the rest of the neon city.",
     busStop: "beachrd",
     revisit: [
       "Back to the foot of Soi 6, the soi blazing inland east, the bay open across the road west, the Stinky Pinky and the Blue Dog eyeing each other across the junction.",
       "The mouth of Soi 6 again — the skunk sign buzzing one corner, the Blue Dog's rail facing the water on the other, and the sun thinking about going down over the bay.",
-      "You're back at the junction. Soi 6's runway of light runs off east; blue songthaews rattle by toward a Pattaya that isn't yours this trip, and you wave them on.",
+      "You're back at the junction. Soi 6's runway of light runs off east; blue songthaews rattle by on the Beach Road run, and the junction absorbs you back into its noise.",
       "Back where the soi hits Beach Road. Two corner bars, one loud sea breeze, and the choice you keep making: into the noise east, or a quiet cold one with a sunset.",
       "The foot of the soi, the cartoon skunk and the Blue Dog holding their corners, the bay going gold across the traffic. A baht bus slows, hopeful; you let it pass.",
       "Back to the junction, the neon fuse of Soi 6 lit and waiting east, the water and the last of the light off west past the road.",
@@ -763,16 +763,15 @@ const ROOMS = {
     desc: "The open sand across Beach Road from the foot of Soi 6, quiet after the soi's wall " +
       "of noise — just the hiss of the little waves and, back east across the road, the neon " +
       "of the junction where the Stinky Pinky and the Blue Dog hold their corners. A soi dog " +
-      "with one clipped ear is having the night of his life in the shallows, charging the " +
-      "waves, losing to them, shaking off and charging again — and every few laps he stops to " +
-      "check whether you're watching. He is doing this FOR you. He has decided. (FEED DOG, if " +
-      "you'd like to make it official.) Further up the dark sand, a few women share plastic " +
+      "is having the night of his life in the shallows, charging the waves, losing to them, " +
+      "shaking off and charging again — and every few laps he stops to check whether anyone's " +
+      "watching. Tonight, that's you. (FEED DOG, if you'd like to matter to one.) Further up the dark sand, a few women share plastic " +
       "stools under the coconut palms — no bar, no beer, no sign: the “coconut bar,” freelance " +
       "and unhurried, watching the beach for a walk-up. Beach Road and the soi are back to the east.",
     revisit: [
       "Back onto the dark sand across from the soi, the soi's roar softened by the road between, the junction neon glowing east where the Stinky Pinky and the Blue Dog face off.",
       "The beach again, quiet after the wall of noise. Out past the last of the light the bay is black and enormous and supremely uninterested in who you are, which is its own kind of mercy.",
-      "The one-eared soi dog is still out in the shallows, charging the little waves and losing to them with total commitment — and every few laps he stops to check you're still watching. (He'd take a snack, if you had one. FEED DOG.)",
+      "A soi dog is out in the shallows, charging the little waves and losing to them with total commitment — and every few laps he checks whether anybody on the sand is appreciating this. (A snack would be appreciated too. FEED DOG.)",
       "Up the beach, under the coconut palms, the freelance stools are occupied again — a cigarette ember, a low laugh, eyes reading the dark sand for a walk-up. The coconut bar keeps its own hours.",
       "Back onto the sand, the junction's neon strung warm across the road behind you, the sea working away at the dark in front. A good place to be nobody in particular for a while.",
       "A soi dog trots the tideline with an air of ownership, pausing to bark down a wave that had it coming. The night is his; you're just passing through it.",
@@ -1149,7 +1148,7 @@ const ROOMS = {
     revisit: [
       "Back in Candy's rose-pink corner — the bell, the wall of photos, the harbourmaster order of it, all exactly where you left them.",
       "Candy Bar again: spotless glasses, the bell waiting over the till, decades of faces watching from the wall.",
-      "The rose-pink light folds back around you. Nothing here is ever out of place, least of all Candy.",
+      "The rose-pink light folds back around you. Nothing here is ever out of place — the boss's standards hold whether or not the boss is on the floor tonight.",
       "You duck back into Candy's — same corner, same shine, the same small empire humming along without a wasted motion.",
     ],
     exits: { out: "buakhao_market" },
@@ -2304,7 +2303,7 @@ const ITEMS = {
   bottle3: {
     name: "empty Singha bottle", aliases: ["bottle", "singha bottle", "glass"],
     portable: true, location: "jomtien_beach_rd_s",
-    desc: "An empty Singha bottle standing politely by a bin outside the 7-Eleven. ฿5 of glass.", bottle: true,
+    desc: "An empty Singha bottle, rinsed by somebody more organised than its drinker. ฿5 of glass.", bottle: true,
   },
   charger: {
     name: "phone charger", aliases: ["charger", "cable"],
