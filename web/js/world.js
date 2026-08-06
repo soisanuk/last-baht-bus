@@ -2521,7 +2521,7 @@ const NPCS = {
   },
 
   candy: {
-    name: "Candy", th: "แคนดี้", emoji: "🌹",
+    name: "Candy", th: "แคนดี้", emoji: "🌹", personality: "charmer",
     room: "candy_bar",
     // She owns both Candy Bars and works them on alternate nights (even days at
     // the original, odd days at Candy Bar 2). _npcRoom resolves tonight's room;
@@ -2692,7 +2692,7 @@ const NPCS = {
   },
 
   joy: {
-    name: "Joy", th: "จอย", emoji: "💕",
+    name: "Joy", th: "จอย", emoji: "💕", personality: "joker",
     room: "pink_lotus",
     desc: "Bubbly, laughing at everything you say before you finish saying it — the " +
       "undisputed morale champion of Pink Lotus Lounge.",
@@ -4073,7 +4073,7 @@ const NPCS = {
     ],
   },
   wilai: {
-    name: "Wilai", th: "วิไล", emoji: "💋",
+    name: "Wilai", th: "วิไล", emoji: "💋", personality: "charmer",
     room: "ruby_kiss",
     desc: "The ringleader of the Ruby Kiss front stools, lipstick on the rim of every glass by " +
       "design, quick enough to sell you a drink and roast you for buying it in the same breath.",
@@ -4561,7 +4561,7 @@ const NPCS = {
   // always at the good table's elbow fifteen years ago, deferred to even then, and
   // nobody could say why. On replay: the driver has been the power for a generation.
   roy: {
-    name: "Roy", th: "รอย", emoji: "🍺",
+    name: "Roy", th: "รอย", emoji: "🍺", personality: "whiteknight",
     room: "cherry_pop",
     origin: "pension",
     title: "a lean old regular in a faded bar-crawl polo, watching the door like he owns the stool",
@@ -4833,7 +4833,7 @@ const NPCS = {
   // deliberately never-obvious: on run 1 he's a helpful driver; on replay he's the
   // spider. Known from the intro (you rode in with him), so he shows as "Tan".
   tan: {
-    name: "Tan", th: "ต้น", emoji: "🚕",
+    name: "Tan", th: "ต้น", emoji: "🚕", personality: "operator",
     room: "soi6_street",
     desc: "Your airport driver, leaning on a plain grey sedan at the mouth of the soi as though he never " +
       "drove off — mid-thirties, neat, a polo shirt you would forget the instant you looked away. Six years " +
@@ -5090,7 +5090,7 @@ const NPCS = {
   },
 
   mercedes: {
-    name: "Mercedes", th: "เมอร์เซเดส", emoji: "❄️",
+    name: "Mercedes", th: "เมอร์เซเดส", emoji: "❄️", personality: "operator",
     room: "cherry_pop",
     desc: "A little older than the other girls here and a great deal less " +
       "nervous — she moves like someone who has already seen the worst a room can " +
@@ -5541,7 +5541,7 @@ const NPCS = {
   },
 
   mala: {
-    name: "Miss Mala", th: "มาลา", emoji: "🦚", ladyboy: true,
+    name: "Miss Mala", th: "มาลา", emoji: "🦚", ladyboy: true, personality: "charmer",
     room: "peacock_cabaret",
     desc: "The Peacock's compère and its mama both — a kathoey of a certain age and total command, " +
       "in a headdress that arrived by its own truck. Twenty years on this stage; she has watched a " +
@@ -5591,7 +5591,7 @@ const NPCS = {
     ],
   },
   petch: {
-    name: "Petch", th: "เพชร", emoji: "💎", ladyboy: true,
+    name: "Petch", th: "เพชร", emoji: "💎", ladyboy: true, personality: "joker",
     room: "peacock_cabaret",
     desc: "The Peacock's young star, all cheekbones and ambition, between numbers and still catching " +
       "her breath. She lip-syncs better than the record and knows it, and she is saving for a face " +
@@ -5797,7 +5797,7 @@ const NPCS = {
   },
 
   daeng: {
-    name: "Daeng", th: "แดง", emoji: "🌶️",
+    name: "Daeng", th: "แดง", emoji: "🌶️", personality: "blunt",
     room: "khao_talo_bar",
     desc: "The owner — mid-forties, laugh lines over old glitter, pouring with a bar " +
       "towel over one shoulder. The dancer in the Walking Street photos behind her, " +
@@ -5871,7 +5871,7 @@ const NPCS = {
   },
 
   bert: {
-    name: "Bert", th: "เบิร์ต", emoji: "🎱",
+    name: "Bert", th: "เบิร์ต", emoji: "🎱", personality: "blunt",
     room: "stinky_bar",
     manager: true, // the bar-manager NPC type (see _managerHere/_buyManDrink); NOT in NPC_ROLES, so girl-logic ignores him
     desc: "The Stinky's manager — American, sixty-something, forearms like dock rope, a " +
@@ -7869,6 +7869,13 @@ const ORIGINS = [
     tan: "\"555 — the APAC team.\" Delighted, not unkind. \"I drive a hundred golfers who never find a course. You brought the clubs, which is somehow worse.\" A cheerful shrug. \"No shame, my man. This whole town is built on exactly you. Play your eighteen holes. All of them.\"" },
 ];
 
+// The same five ids also apply to NPCs: a hand-authored NPC may opt in with a
+// `personality:` field, which tilts how YOUR compliment/joke/tease resolve on
+// them (_npcPersTalkOutcome, engine-play) — the NPC's tilt gets the last word
+// over the player's. Showcase set: Mercedes/Tan operator, Bert/Daeng blunt,
+// Candy/Wilai/Mala charmer, Joy/Petch joker, Roy whiteknight. (Kai stays
+// personality-less on purpose: her `type: "operator"` is the scam vector, and
+// the player-personality tests use her as a neutral conversational fixture.)
 const PERSONALITIES = [
   { id: "charmer", label: "Charmer",
     pick: "Someone easy to like.",

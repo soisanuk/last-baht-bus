@@ -1247,6 +1247,59 @@ function _persTalkOutcome(kind, outcome) {
   return outcome;
 }
 
+// ── NPC personality — the other side of the same axis ──────────────────────
+// Hand-authored NPCs opt in with a `personality:` field (same five ids as the
+// player's PERSONALITIES table), and it tilts how YOUR compliment/joke/tease
+// resolve on THEM. Applied AFTER the player's own tilt, so the NPC gets the
+// last word: an operator mamasan stays unmoved by the charmer's best line,
+// and a joker girl fires the tease back whoever's asking. When the tilt
+// actually flips the outcome, a dim recognition note says why — the mechanic
+// stays readable in the prose, never a silent die-roll.
+const _NPC_PERS_NOTES = {
+  operator: [
+    n => `(${n} hears compliments the way a cashier hears coins — counted, banked, worth face value exactly.)`,
+    n => `(Charm is a currency ${n} changes for a living. Yours isn't counterfeit; it is merely small.)`,
+  ],
+  blunt: [
+    n => `(${n} doesn't traffic in flattery, in either direction. Say something true instead.)`,
+    n => `(Flattery slides off ${n} like rain off a tin roof. Straight talk is the door in.)`,
+  ],
+  joker: [
+    n => `(With ${n}, the needle IS the handshake.)`,
+    n => `(${n} runs on banter the way this town runs on neon.)`,
+  ],
+  charmer: [
+    n => `(${n} plays the compliment game professionally, and appreciates a fellow player.)`,
+    n => `(Flattery is ${n}'s home ground — everything you serve comes back, prettier.)`,
+  ],
+  whiteknight: [
+    n => `(${n} takes kindness the way dry ground takes rain — all of it, instantly.)`,
+    n => `(A little warmth goes a long way with ${n}. Further than it should, probably.)`,
+  ],
+};
+let _npcPersNote = null; // transient, printed by _doTalkAct right after the outcome line
+function _npcPersTalkOutcome(id, kind, outcome) {
+  const p = typeof NPCS !== "undefined" && NPCS[id] && NPCS[id].personality;
+  if (!p) return outcome;
+  let tilted = outcome;
+  if (p === "joker") {
+    if (kind === "joke" && outcome === "flat") tilted = "warm";   // banter is her native tongue too
+    if (kind === "tease" && outcome === "cool") tilted = "warm";  // the needle is affection here
+  } else if (p === "charmer") {
+    if (kind === "compliment" && outcome === "flat") tilted = "warm"; // she plays the game back
+  } else if (p === "blunt") {
+    if (kind === "compliment" && outcome === "warm") tilted = "flat"; // flattery bounces off
+  } else if (p === "operator") {
+    if ((kind === "compliment" || kind === "joke") && outcome === "warm") tilted = "flat"; // charm gets counted, not felt
+  } else if (p === "whiteknight") {
+    if (kind === "compliment" && outcome === "flat") tilted = "warm"; // aches to be liked
+  }
+  if (tilted !== outcome && _NPC_PERS_NOTES[p]) {
+    _npcPersNote = _pickVary(_NPC_PERS_NOTES[p], "npcpers:" + p)(NPCS[id].name);
+  }
+  return tilted;
+}
+
 // The Orchid Room's women belong to the corner tables — the patched MC president,
 // the money from Munich, the quiet Thai everyone defers to — not to a walk-up punter.
 // You're in here on sufferance, for a meeting, not to shop. Any pass gets the freeze.
@@ -1457,10 +1510,12 @@ function _doTalkAct(kind, targetWord) {
   if (kind === "compliment") outcome = (st.dstate === "stranger" || st.trust <= 0) ? "flat" : "warm";
   else if (kind === "joke")  outcome = (st.mood === "open" || st.trust >= 2) ? "warm" : "flat";
   else                        outcome = st.trust >= 3 ? "warm" : "cool"; // tease is earned
-  outcome = _persTalkOutcome(kind, outcome); // your personality tilts how it lands
+  outcome = _persTalkOutcome(kind, outcome);        // your personality tilts how it lands…
+  outcome = _npcPersTalkOutcome(id, kind, outcome); // …and theirs gets the last word
 
   _say(_pickVary(_TALK_ACT_TEXT[kind][outcome], "act:" + kind + outcome)(name),
        outcome === "cool" ? "alert" : outcome === "warm" ? "win" : "");
+  if (_npcPersNote) { _say(_npcPersNote, "dim"); _npcPersNote = null; }
   _trace(kind, name);
 
   // First state-moving outcome of this action today counts; repeats are just

@@ -2839,6 +2839,42 @@ test("the Peacock bond arcs: the deeper cuts unlock at regular and her-farang ti
   assert.match(lastOut(), /cut a self|jewel/i, "the gem cutter's child");
 });
 
+test("NPC personality: their side of the axis gets the last word on compliment/joke/tease", () => {
+  state().flags.act1Done = true;
+  // a joker girl fires the tease straight back, stranger or not (Petch) — pin the
+  // player to blunt so it's HER tilt doing the work, not the beforeEach joker's
+  state().player.personality = "blunt";
+  state().room = "peacock_cabaret";
+  out = []; run("tease petch");
+  let text = out.join("\n");
+  assert.ok(_TALK_ACT_TEXT.tease.warm.some(f => text.includes(f("Petch"))), "the needle is the handshake");
+  assert.ok(_NPC_PERS_NOTES.joker.some(f => text.includes(f("Petch"))), "and the note says why");
+  // an operator hears the compliment, counts it, banks it — even fully warmed up
+  // (player personality → joker, which has no compliment tilt of its own)
+  state().player.personality = "joker";
+  state().room = _npcRoom("mercedes");
+  _npcState("mercedes").trust = 3; _npcState("mercedes").dstate = "familiar";
+  out = []; run("compliment mercedes");
+  text = out.join("\n");
+  assert.ok(_TALK_ACT_TEXT.compliment.flat.some(f => text.includes(f("Mercedes"))), "counted, not felt");
+  assert.ok(_NPC_PERS_NOTES.operator.some(f => text.includes(f("Mercedes"))), "the note explains the wall");
+  // …and the operator outranks even a charmer player (NPC tilt is applied last)
+  state().player.personality = "charmer";
+  out = []; run("compliment mercedes");
+  text = out.join("\n");
+  assert.ok(_TALK_ACT_TEXT.compliment.flat.some(f => text.includes(f("Mercedes"))), "the operator outranks the charmer");
+  // blunt Bert: flattery bounces off the tin roof
+  state().player.personality = "joker";
+  state().room = _npcRoom("bert");
+  _npcState("bert").trust = 2; _npcState("bert").dstate = "familiar";
+  out = []; run("compliment bert");
+  text = out.join("\n");
+  assert.ok(_TALK_ACT_TEXT.compliment.flat.some(f => text.includes(f("Bert"))), "say something true instead");
+  // an untyped NPC is untouched by any of this — the tilt is strictly opt-in
+  assert.equal(_npcPersTalkOutcome("lek", "compliment", "warm"), "warm");
+  assert.equal(_npcPersTalkOutcome("lek", "joke", "flat"), "flat");
+});
+
 test("the detective's recon quest completes only after you've seen the Orchid's good table", () => {
   state().room = "queen_vic";
   state().player.origin = "monger";   // Doyle active
