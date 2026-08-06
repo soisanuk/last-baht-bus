@@ -2794,6 +2794,72 @@ test("phone-Tan: texts and transfers stay fixer-voiced, and the girl machinery i
   assert.match(lastOut(), /book's empty/i, "the fixer doesn't rank on the bond ladder");
 });
 
+test("canned replies: an NPC's question offers your own voice, by personality and origin", () => {
+  state().lastPeddler = 9e9; state().lastSaleng = 9e9; // no encounter can eat the reply
+  state().player = { origin: "pi", personality: "blunt", orientation: "straight" };
+  state().room = "stinky_bar";
+  out = []; run("talk to bert");
+  // Bert asks "why"; a blunt player is offered the blunt line + the anybody one
+  assert.equal(state().convoQ.key, "why");
+  let reps = _askReplies("why");
+  assert.ok(reps[0].includes("Next question"), "your personality's line comes first");
+  assert.ok(reps.includes("Bit of both, if I'm honest"), "the anybody line rides along");
+  assert.ok(reps.length <= 3, "capped — a bar chat, not a dialogue tree");
+  assert.match(out.join("\n"), /Answer in your own words — or:/);
+  assert.ok(_chipSet().map(c => c.cmd).includes(reps[0]), "the chip bar carries them");
+
+  // a number picks one, and the TEXT is what's remembered (never the digit)
+  out = []; run("1");
+  assert.equal(state().player.said.why, reps[0]);
+  assert.equal(state().convoQ, null, "the question is answered");
+
+  // the origin axis answers the factual keys — and %home% quotes back a place
+  state().player.origin = "married";
+  assert.ok(_askReplies("home").includes("Buriram, half the year"), "origin picks the true answer");
+  state().player.origin = "pi";
+  assert.ok(_askReplies("home").includes("Chicago"));
+
+  // an out-of-range digit re-prompts — it must never be stored as your answer.
+  // (origin must not be "pi" here: you'd BE Doyle, and _npcActive hides him.)
+  state().player.origin = "monger"; state().player.personality = "charmer";
+  state().room = _npcRoom("doyle");
+  run("talk to doyle");
+  const before = JSON.stringify(state().player.said);
+  out = []; run("9");
+  assert.equal(JSON.stringify(state().player.said), before, "a stray digit isn't an answer");
+  assert.match(out.join("\n"), /Answer in your own words/, "it re-prompts instead");
+});
+
+test("canned replies keep your story straight — or hand the grapevine the catch", () => {
+  state().lastPeddler = 9e9; state().lastSaleng = 9e9;
+  state().flags.act1Done = true; // reputation only runs in the sandbox
+  state().player = { origin: "monger", personality: "joker", orientation: "straight" };
+  // tell Bert your version
+  state().room = "stinky_bar"; run("talk to bert"); run("1");
+  const mine = state().player.said.why;
+  // …tap the SAME voice for Pia (who asks the same key) — consistent, no catch
+  state().room = _npcRoom("pia");
+  out = []; run("talk to pia"); run("1");
+  assert.equal(state().player.said.why, mine, "your voice is stable across the soi");
+  // assert against the POOLS, never one string — _pickVary rotates variants
+  const caught = t => _ANSWER_GOSSIP.some(f => t.includes(f("Pia", mine))) ||
+                      _ANSWER_CAUGHT.some(f => t.includes(f("Pia")));
+  assert.ok(!caught(out.join("\n")), "nothing to catch");
+  // …but a different answer to the same question travels. Fresh week, same
+  // two askers, second one answered in a different voice.
+  newGame();
+  state().lastPeddler = 9e9; state().lastSaleng = 9e9; state().flags.act1Done = true;
+  state().player = { origin: "monger", personality: "joker", orientation: "straight" };
+  state().room = "stinky_bar"; run("talk to bert"); run("1");
+  const rep0 = state().rep;
+  const told = state().player.said.why;
+  state().room = _npcRoom("pia");
+  out = []; run("talk to pia"); run("2");
+  const text = out.join("\n");
+  assert.ok(_ANSWER_GOSSIP.some(f => text.includes(f("Pia", told))), "told two ways — the grapevine has it");
+  assert.ok(state().rep < rep0, "and the soi marks you down for it");
+});
+
 test("seed-of-the-day: _dailySeed is stable, startSoi6Mode takes it, and same seed + same commands = same week", () => {
   assert.equal(_dailySeed("2026-08-06"), _dailySeed("2026-08-06"), "stable hash");
   assert.notEqual(_dailySeed("2026-08-06"), _dailySeed("2026-08-07"), "dates differ");

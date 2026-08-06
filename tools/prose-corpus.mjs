@@ -81,6 +81,12 @@ for (const [id, q] of Object.entries(QUESTS)) {
 for (const [tbl, name] of [[LANGUAGES, "lang"], [ORIGINS, "origin"],
   [PERSONALITIES, "personality"], [ORIENTATIONS, "orientation"]])
   for (const e of tbl) walk("intro", `intro.${name}.${e.id}`, "Tan", e);
+// the player's own canned answers (ASK_REPLIES) — short, but player-facing and
+// voice-critical, so they belong in the review corpus like any other prose
+if (typeof ASK_REPLIES !== "undefined")
+  for (const [key, list] of Object.entries(ASK_REPLIES))
+    list.forEach((r, i) => add("reply", `reply.${key}[${i}]`,
+      r.pers || r.origin || "anyone", r.text));
 
 // ── engine prose pools: const _NAME = [ …strings/fns… ] ─────────────────────
 // Top-level consts from vm scripts land in lexical scope (not enumerable), so

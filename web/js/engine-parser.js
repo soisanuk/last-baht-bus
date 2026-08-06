@@ -911,6 +911,20 @@ function _partnerHasTopic(id, t) {
   const nodes = ((NPCS[id] || PATRONS[id] || {}).dialogue) || [];
   return nodes.some(d => d.topic && (d.topic === t || t.includes(d.topic)));
 }
+// Canned replies for the question currently on the table — your own voice,
+// tappable. Identity-matched first (personality, then origin — the axis the
+// player picked to BE), then the anybody entries, capped at 3 so the chip bar
+// stays a bar conversation and not a dialogue tree. Data lives in world.js
+// (ASK_REPLIES); free text remains the primary path and always will.
+function _askReplies(key) {
+  const table = (typeof ASK_REPLIES !== "undefined" && ASK_REPLIES[key]) || [];
+  const mine = table.filter(r => (r.pers && _pers(r.pers)) || (r.origin && _isOrigin(r.origin)));
+  const anyone = table.filter(r => !r.pers && !r.origin);
+  const out = [];
+  for (const r of [...mine, ...anyone]) if (!out.includes(r.text)) out.push(r.text);
+  return out.slice(0, 3);
+}
+
 function _convoAnswer(text) {
   const { id, key } = G.convoQ;
   G.convoQ = null;
@@ -987,6 +1001,17 @@ function _convoResolve(lower) {
   //    (leave-taking, a name, or one of their own topics) changes the subject
   //    and lapses it; anything else is your answer, remembered and reacted to.
   if (G.convoQ && _convoActive() === G.convoQ.id) {
+    // A bare number picks one of the offered canned replies (the prose numbers
+    // them, the chips carry the text). Without this, "2" would be STORED as
+    // your answer — and quoted back to you all week. An OUT-OF-RANGE digit
+    // re-prompts instead of falling through to free text, for the same reason:
+    // with numbered options on screen a stray digit is a misfire, not an answer.
+    const reps = _askReplies(G.convoQ.key);
+    if (reps.length && /^[1-9]$/.test(bare)) {
+      if (reps[+bare - 1]) return _convoAnswer(reps[+bare - 1]);
+      _convoPrompt(G.convoQ.id);
+      return true;
+    }
     const changingSubject =
       /^(goodbye|bye|cheerio|laters?|later|see ?ya|ciao)$/.test(bare) ||
       _findNpc(bare) || _findPatron(bare) ||
@@ -1025,8 +1050,17 @@ function _convoPrompt(id) {
   // in-prose prompt now only fires when it carries something the chips DON'T make
   // obvious: an answer cue when the partner has put a question to you, or the
   // beat-specific action-choices a node offers.
-  if (G.convoQ && G.convoQ.id === id) { // a question is on the table — the chips show topics, not "reply"
-    _say(`(${_convoName(id)} put that to you — just answer, in your own words.)`, "dim");
+  if (G.convoQ && G.convoQ.id === id) {
+    // A question is on the table. The chip bar carries your own-voice replies
+    // (see _askReplies); the prose numbers them so a typed "2" works too, and
+    // free text stays the headline option — it's the whole point of the loop.
+    const reps = _askReplies(G.convoQ.key);
+    if (reps.length) {
+      _say(`(${_convoName(id)} put that to you. Answer in your own words — or:)`, "dim");
+      _say(reps.map((t, i) => `  ${i + 1}) “${t}”`).join("\n"), "dim");
+    } else {
+      _say(`(${_convoName(id)} put that to you — just answer, in your own words.)`, "dim");
+    }
     return;
   }
   const acts = _convoChoices();
@@ -2991,6 +3025,12 @@ function _chipSet() {
   //      is the touch surface, not a cage; LEAVE restores the room chips.
   const partner = _convoActive();
   if (partner) {
+    // A question on the table owns the bar: your own-voice replies first, so a
+    // touch player has something to SAY rather than only ways to change the
+    // subject (topics still follow — dodging stays a legitimate move).
+    if (G.convoQ && G.convoQ.id === partner) {
+      for (const t of _askReplies(G.convoQ.key)) add(t, `“${t}”`);
+    }
     // Beat-specific action-choices the partner just offered come first (the
     // "player's side" of the exchange); they crowd out most of the topic list.
     const acts = _convoChoices();
