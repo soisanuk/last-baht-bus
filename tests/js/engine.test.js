@@ -2794,6 +2794,50 @@ test("phone-Tan: texts and transfers stay fixer-voiced, and the girl machinery i
   assert.match(lastOut(), /book's empty/i, "the fixer doesn't rank on the bond ladder");
 });
 
+test("FOLLOW TAN: his standing food invite is real, once a night, and not during Act One", () => {
+  state().lastPeddler = 9e9; state().lastSaleng = 9e9;
+  state().room = "soi6_street";
+  // Act One: he sends you after the wallet instead (the invite is a resident thing)
+  delete state().flags.act1Done;
+  out = []; run("follow tan");
+  assert.match(lastOut(), /Find it\. THEN I feed you/i, "no free dinner before the wallet");
+  assert.notEqual(state().soc.tanFedDay, state().day, "and nothing was consumed");
+
+  // sandbox: the meal happens — feeds you, costs no baht, pays a little สนุก
+  state().flags.act1Done = true;
+  state().hunger = 80; state().thirst = 60; state().money = 500;
+  const happy0 = state().happy, turn0 = state().turns;
+  out = []; run("follow tan");
+  const text = out.join("\n");
+  assert.ok(_TAN_FOOD.some(s => text.includes(s)), "one of the authored carts");
+  assert.ok(_TAN_FOOD_TALK.some(s => text.includes(s)), "…and the table talk");
+  assert.ok(state().hunger < 30, "properly fed");
+  assert.ok(state().thirst < 45, "and watered");
+  assert.equal(state().money, 500, "he waves the money away — the fare is conversational");
+  assert.ok(state().happy > happy0, "company pays");
+  assert.ok(state().turns > turn0, "a meal costs night");
+  assert.equal(state().soc.tanFedDay, state().day);
+
+  // twice in one night: he laughs at you
+  out = []; run("follow tan");
+  assert.match(lastOut(), /Twice in one night|not your mother/i);
+  // EAT WITH TAN is the same door (it used to hit the you're-not-carrying-that shrug)
+  out = []; run("eat with tan");
+  assert.match(lastOut(), /Twice in one night|not your mother/i, "same scene, other phrasing");
+  // and the wheel offers it — the third surface
+  assert.ok(_npcActions("tan", true).includes("follow"));
+});
+
+test("FOLLOW is a real verb everywhere else too — a voiced refusal, never a parse failure", () => {
+  state().room = "stinky_bar";
+  out = []; run("follow bert");
+  assert.ok(_FOLLOW_NO.some(f => lastOut().includes(f("Bert"))), "Bert isn't leading a tour");
+  assert.doesNotMatch(lastOut(), /didn't understand|didn't parse/i);
+  out = []; run("follow nobody_at_all");
+  assert.ok(_FOLLOW_NOBODY.some(s => lastOut().includes(s)), "and a voiced nobody-line");
+  assert.doesNotMatch(lastOut(), /didn't understand|didn't parse/i);
+});
+
 test("canned replies: an NPC's question offers your own voice, by personality and origin", () => {
   state().lastPeddler = 9e9; state().lastSaleng = 9e9; // no encounter can eat the reply
   state().player = { origin: "pi", personality: "blunt", orientation: "straight" };

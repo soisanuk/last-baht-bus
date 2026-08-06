@@ -2957,7 +2957,7 @@ const _COMPLETE_VERBS = [
   "motosai to", "travel", "light", "charge phone", "read", "use", "open", "play",
   "flirt", "kiss", "spank", "fondle", "ring bell", "barfine", "massage", "special", "soapy", "meet", "eat", "drink",
   "sleep", "tv", "column", "watch", "watch soi", "balcony", "weather", "scores", "lottery", "map", "time", "tip", "wave", "phone",
-  "photo", "gallery", "photos", "call", "share", "shower", "withdraw", "cheers", "tao rai", "borrow", "repay", "hire", "pet", "feed", "rename", "dance", "sing", "swim",
+  "photo", "gallery", "photos", "call", "share", "follow", "shower", "withdraw", "cheers", "tao rai", "borrow", "repay", "hire", "pet", "feed", "rename", "dance", "sing", "swim",
   "smell", "listen", "diagnose", "get tested", "clinic", "apologize", "quests", "accept", "abandon", "contact",
   "contacts", "who", "who am i", "identity", "blackbook", "message", "check messages", "send", "score", "standing", "wait", "again",
   "request", "hint", "help", "save", "load", "undo", "restart", "quit", "reset", "end", "logout",
@@ -3104,6 +3104,7 @@ function _completePool(verb, ctx) {
       return ctx.length >= 2 ? [] : _cNpcsHere();
     case "flirt": case "kiss": case "spank": case "fondle": case "tip":
     case "barfine": case "bf": return girls();
+    case "follow": return ctx.length >= 2 ? [] : _cNpcsHere();
     case "ask": {
       // Topic suggestions are gone: conversations run on TALK + the in-conversation
       // chip bar now, not ASK-about autocomplete. Typed ASK still works; we just
@@ -3743,6 +3744,7 @@ function doCommand(input) {
     case "gallery": case "photos": case "album": _doGallery(); break;
     case "call": case "dial": _doCall(arg); break;
     case "share": _doShare(); break;
+    case "follow": _doFollow(arg); break;
     case "shower": case "wash": _doShower(); break;
     case "smoke": case "cigarette": case "ciggy": _doSmoke(); break;
     case "withdraw": case "withdrawal": case "withdrawl": _doWithdraw(arg); break;
@@ -3790,6 +3792,74 @@ function doCommand(input) {
   _tick();
   _questTick();
   _checkAct1();
+}
+
+// ── FOLLOW ──────────────────────────────────────────────────────────────────
+// A plausible verb that used to fall through to "I didn't understand that" —
+// against the house rule (a voiced refusal beats a parse failure). Nobody in
+// this town leads a farang anywhere except Tan, who invites you to eat, so
+// FOLLOW is his verb and everyone else gets a refusal in character.
+const _FOLLOW_NOBODY = [
+  "Follow who? Half this soi would love you to try, and none of them are going anywhere you'd like.",
+  "You fall in behind nobody in particular and arrive nowhere in particular. The soi absorbs the attempt.",
+  "Following people around Soi 6 is a hobby with a very short career. Pick a name, or stay where you are.",
+];
+const _FOLLOW_NO = [
+  n => `${n} is working, not leading a tour. Whatever you're hoping happens next happens at this bar or not at all.`,
+  n => `You make to follow ${n} and get a look that stops it dead — friendly, final, entirely practised.`,
+  n => `${n} isn't going anywhere you're invited. On this soi, the person you follow is the person who asked you.`,
+];
+
+function _doFollow(arg) {
+  const w = (arg || "").replace(/^(to |after )/, "").trim();
+  const id = _resolveActor(w, _addressable());
+  if (!id) { _say(_pickVary(_FOLLOW_NOBODY, "follownob")); return; }
+  _noteActor(id);
+  if (id === "tan") { _tanFood(); return; }
+  _say(_pickVary(_FOLLOW_NO, "followno")(_convoName(id)));
+}
+
+// Tan's standing invitation, honoured. His good-table deflection ends "you eat
+// yet? You never eat. Come, I know a place." — so the place exists: a cart round
+// the corner, no room change (soi6 mode is one street, and the beat belongs at
+// the soi mouth anyway). He waves your money away, same as the ride: the fare is
+// conversational. Once a night, so a free meal can't solve the hunger meter for
+// a week, and never during Act One — the wallet comes first, as he keeps saying.
+const _TAN_FOOD = [
+  "He walks you thirty metres and around a corner you'd never have taken, to a cart with four plastic stools and a queue of exactly nobody who looks like you. Two plates of khao man gai arrive without an order being placed. \"They know what I eat,\" Tan says. \"Now they know what you eat. Congratulations, you have a place.\"",
+  "The cart is behind the soi, under a bulb and a tarp, run by a woman who calls Tan something that is not his name and doesn't look at you at all. Noodles, pork, a broth that tastes like somebody's grandmother meant it. He eats fast and neatly and lets you get on with the business of being astonished.",
+  "Around the corner, a folding table and a griddle. Tan orders in a burst of Isan too fast to follow, and what lands is moo ping, sticky rice, and a bag of som tam that could stop a clock. \"Eat the sticky rice with your hands,\" he says. \"You are not a tourist tonight. Tonight you are a man having dinner.\"",
+];
+const _TAN_FOOD_TALK = [
+  "Between mouthfuls he reads the street back to you — that bar changed owners in March, that girl's brother drives for his cousin, that farang has been walking the same hundred metres for eleven years and calls it a life. None of it is gossip, exactly. It is more like a man showing you the wiring.",
+  "He does not ask you a single question, which you notice about ten minutes in — and by then you have told him three things you had not planned to. He nods at each one, unsurprised, filing nothing, apparently. Apparently.",
+  "He talks about the food. Only the food: where the good pork is, which cart to trust after 2 a.m., why this broth and not that one. It is the most relaxing conversation you have had in this country, and you understand — dimly, gratefully — that it is a gift he is choosing to give you.",
+  "Somewhere in the second plate he says, mildly, that a man who eats properly makes better decisions at three in the morning than a man who doesn't. Then he lets it sit there, in case you need it, which you might.",
+];
+function _tanFood() {
+  if (!_flag("act1Done")) {
+    _say("\"Ha — no.\" Tan doesn't move off the car. \"You want dinner from me while your " +
+      "wallet is out there having a better night than you are? Find it. THEN I feed you, " +
+      "and you will enjoy it more.\"");
+    return;
+  }
+  if (G.soc.tanFedDay === G.day) {
+    _say("\"Twice in one night?\" Tan laughs at you, entirely without mercy. \"My friend, " +
+      "I like you, but I am not your mother. Tomorrow.\"");
+    return;
+  }
+  G.soc.tanFedDay = G.day;
+  _say(_pickVary(_TAN_FOOD, "tanfood"), "win");
+  _say(_pickVary(_TAN_FOOD_TALK, "tanfoodtalk"));
+  if (G.dog) _say(_dogN("Sai Krok is served last and best — a bowl of broth and the good " +
+    "trimmings, set down by the cart woman without a word to either of you."), "dim");
+  G.hunger = Math.max(0, G.hunger - 55);
+  G.thirst = Math.max(0, G.thirst - 20);
+  _addHappy(2);                       // company, not conquest — never touches the treadmill
+  if (_passTime(5)) return;           // the meal eats a chunk of the night
+  _say("You reach for your pocket and Tan is already standing, already paying, already " +
+    "waving it off. \"Next time,\" he says, and you both know there is no next time for " +
+    "this either — only the same kindness, offered again, at the same non-price.", "dim");
 }
 
 // ── The daily challenge + the share card ────────────────────────────────────
