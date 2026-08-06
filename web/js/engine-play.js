@@ -206,7 +206,7 @@ function _lastBusWarn() {
   G.lastBusWarned = true;
   _say("Somewhere a songthaew driver checks his watch and turns the truck toward the " +
     "depot. The last baht bus makes its final run at two — call it half an hour off. " +
-    "Get to a main road for the ฿15 ride home, or the small hours belong to the piwins " +
+    `Get to a main road for the ฿${BUS_FARE} ride home, or the small hours belong to the piwins ` +
     "and their prices. This is the hour the whole night has been counting down to.", "alert");
 }
 
@@ -2617,10 +2617,15 @@ function _endNight(reason) {
     "sliding into the gulf and the neon is waking up ──", "win");
   if (hangover >= 4) _say("(The hangover is a physical presence with opinions. Water. Food. Mercy.)", "alert");
   if (wouldRough && !rough && _dogEgg() === "rescue") {
+    // NOT "the last baht bus" — this fires only on nights you failed to get home,
+    // i.e. after the curfew that the game is named for. The piwins are the only
+    // ride at that hour (see _doMotosai's small-hours gouge), and the dog-in-a-
+    // saleng is already canon (_DOG_MOTOSAI).
     _say(_dogN("You should have woken rough — face-down where the night dropped you. Instead you're " +
-      "in your own bed, shoes off, wallet on the side. Sai Krok nudged you awake, herded you onto the " +
-      "last baht bus like a sheep that owed him money, and stood the whole ride home. Lassie brought " +
-      "you back."), "win");
+      "in your own bed, shoes off, wallet on the side. Sai Krok nudged you awake, herded you to the " +
+      "piwin stand like a sheep that owed him money — the buses long gone, the way they always are by " +
+      "then — and rode the whole way home in the saleng behind you, upright and vigilant. Lassie " +
+      "brought you back."), "win");
   }
   if (G.dog && !crash) {
     _say(_dogN("(Sai Krok is " + (G.hotel === "queenvic"
