@@ -2727,6 +2727,68 @@ test("the Orchid reveal: Tan at the good table — armed by the near-confirmatio
   assert.match(lastOut(), /not the same at all|Good evening for a drive/i, "the greeting knows you know");
 });
 
+test("phone-Tan: the intro puts his card in your phone; the Soi 6 week needs no ride", () => {
+  state().player.origin = null; out = [];
+  startSoi6Mode(); run("1"); run("7"); run("1"); run("1");   // English / monger / charmer / straight
+  assert.ok(state().phone.contacts.tan, "the airport card is your first contact");
+  out = []; run("call tan");
+  assert.match(lastOut(), /one soi|enjoy the falling/i, "one-soi week: he declines gracefully");
+});
+
+test("phone-Tan: the any-hour pickup is real — gated to the small hours, once a vacation", () => {
+  state().phone.contacts.tan = true;
+  // the do-or-die opening takes no shortcuts
+  out = []; run("call tan");
+  assert.match(lastOut(), /find the wallet|first night is on you/i, "no ride through Act One");
+  // sandbox, buses still running: he points you at the ฿15 songthaew
+  state().flags.act1Done = true; state().stage = "vacation";
+  state().room = "beach_rd_c"; state().nightTurn = 30;
+  out = []; run("call tan");
+  assert.ok(_TAN_WAIT_LINES.some(s => out.join("\n").includes(s)), "before the cutoff: take the bus");
+  assert.equal(state().room, "beach_rd_c", "no ride happened");
+  // after the last bus: the grey sedan comes, door to door, free
+  state().nightTurn = 85;
+  const money0 = state().money;
+  out = []; run("call tan");
+  assert.match(out.join("\n"), /grey sedan|friendship rate/i, "the promise kept to the letter");
+  assert.equal(state().room, _hotelRoomId(), "he sets you down at your own door");
+  assert.equal(state().money, money0, "friendship rate — no fare");
+  assert.equal(state().phone.tanRideVac, state().vacation, "the favour is spent");
+  // same vacation, second call: tonight he is driving somebody
+  state().room = "beach_rd_c"; state().nightTurn = 85;
+  out = []; run("call tan");
+  assert.ok(_TAN_BUSY_LINES.some(s => out.join("\n").includes(s)), "once a vacation — the parachute, not a taxi rank");
+  assert.equal(state().room, "beach_rd_c", "no second ride");
+  // calling from your own bed gets you told to sleep
+  state().room = _hotelRoomId();
+  out = []; run("call tan");
+  assert.ok(_TAN_HOME_LINES.some(s => out.join("\n").includes(s)), "you are home, my friend");
+});
+
+test("phone-Tan: texts and transfers stay fixer-voiced, and the girl machinery ignores him", () => {
+  state().flags.act1Done = true;
+  state().phone.contacts.tan = true;
+  // MESSAGE: no charm loop, no bond arithmetic — a fixer reply lands in the inbox
+  out = []; run("message tan");
+  assert.doesNotMatch(out.join("\n"), /short and sweet|charm/i, "not the girl path");
+  assert.ok(state().phone.inbox.some(m => m.from === "tan" && _TAN_TEXT_REPLIES.includes(m.text)),
+    "a fixer-voiced reply");
+  assert.ok(!(state().soc.drinks.tan), "no bond bump");
+  // SEND: the money comes straight back
+  state().money = 2000;
+  const money0 = state().money;
+  out = []; run("send 500 to tan");
+  assert.match(out.join("\n"), /comes straight back/i);
+  assert.equal(state().money, money0, "he returns it");
+  // the unprompted-text pool is ladies-only: with Tan as the sole contact it never fires
+  state().phone.inbox = []; state().phone.lastText = -999;
+  for (let i = 0; i < 40; i++) _maybeIncomingText();
+  assert.equal(state().phone.inbox.length, 0, "Tan never texts the mama-sick patter");
+  // and the black book stays a book of girls
+  out = []; run("blackbook");
+  assert.match(lastOut(), /book's empty/i, "the fixer doesn't rank on the bond ladder");
+});
+
 test("the detective's recon quest completes only after you've seen the Orchid's good table", () => {
   state().room = "queen_vic";
   state().player.origin = "monger";   // Doyle active
