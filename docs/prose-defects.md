@@ -113,33 +113,45 @@ so a new bad reference fails the suite with no wordlist to maintain:
 The first run found a real one (Pim quoting ฿150 rather than `LADY_DRINK`) and
 proved out on an injected regression.
 
-### Layer 2 — claims and probes (designed, not built)
+### Layer 2 — claims and probes (built)
 
-The model reads each dossier **once** and emits structured claims:
+`tools/prose-claims.mjs`, in the suite via `references.test.js`. It runs three
+probes and **is proven against the original bug**: reintroduce the minibus line
+and the suite fails, naming both sides —
 
 ```
-{ subject, kind, value, ref }
-kind ∈ attribute | location | price | schedule | relationship | affordance | history
+Tan: two vehicle values — sedan (npc.tan.desc) vs minibus (engine-parser.js:_taxiIntro[1])
 ```
 
-Then the split that makes it cheap forever — most kinds become **mechanically
-checkable from then on**, with no model in the loop:
+- **slots** — a slot is a closed vocabulary of mutually exclusive values
+  (`vehicle`, `dancerNumber`). Two values of one slot for one subject is the
+  minibus shape.
+- **locations** — "X works at *Venue*" checked against `NPCS[id].room` / `bars`.
+- **affordances** — spoken invitations with no command hint, the generalised
+  "Come, I know a place". Ones that ARE delivered carry a reason in the tool's
+  OK map (the invite system, third-party speech).
 
-- `price` → against the constants (`LADY_DRINK`, `BEER_PRICE`, `BF_*`…)
-- `location` → against `_npcRoom` / `ROOMS`
-- `schedule` → against the calendar helpers (`_quizDay`, `_leagueTonight`…)
-- `affordance` → against the verb set and the handler that would run
-- `attribute` / `history` → the only kinds needing judgement, and only when two
-  claims about one subject disagree
+Two things building it taught, both worth more than the tool:
 
-Claims cache against the same content hashes the review ledger uses, so a
-changed string invalidates only its own claims: delta-sized, like the review.
+**Attribution must happen at SCENE scope, not record scope.** The corpus splits
+prose at line granularity, so a scene's subject and its attributes routinely
+land in different records — *the minibus line never contains the word "Tan"*;
+his name is in the next `_say`. Record-scope attribution therefore missed the
+one bug it was written to catch. Grouping records by container (a function, a
+pool, an NPC entry) and asking "who is named anywhere in this scene?" is what
+makes a claim attachable at all.
 
-The `affordance` probe is the generalised form of the "Come, I know a place"
-bug. A first pass over the current corpus finds **10 spoken invitations, 9 with
-no parenthesised command hint** — nearly all legitimately backed by a mechanic
-(the motosai, the upstairs barfine, the invite system), which is the point: the
-class is small, and now it is auditable instead of invisible.
+**A slot only works if its values are mutually exclusive AND the prose is
+reliably about the subject.** `nationality` was tried and dropped: characters
+describe each *other's* nationality constantly ("Ryan Powers. British, though
+he's got a voice on now — half American"), so it fired on correct prose more
+often than wrong prose. Precision over ambition — two good slots beat five noisy
+ones, and a noisy check gets ignored, which is worse than no check.
+
+Still unbuilt from the original design: `price` (covered by the reference lint
+instead), `schedule`, `relationship`, `history`, and caching claims against
+content hashes — none needed yet, because the mechanical extraction is fast
+enough to just re-run.
 
 ## Authoring rules that follow
 

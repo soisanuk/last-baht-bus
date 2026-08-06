@@ -104,3 +104,19 @@ test("prose doesn't hard-code a price that already has a constant", () => {
   }
   assert.deepEqual(bad, [], "a price is hard-coded in prose instead of tracking its constant");
 });
+
+// ── Layer 2: claims (docs/prose-defects.md) ─────────────────────────────────
+// tools/prose-claims.mjs turns prose into claims about the world and checks
+// them against the world: attribute-slot conflicts per subject (the minibus
+// shape — two vehicles for one Tan), location claims vs where an NPC actually
+// is, and spoken invitations vs the verbs that would deliver them. Genuine
+// conflicts are recorded IN THE TOOL with a reason, so this test just asserts
+// the report is empty. Proven against an injected minibus, not just a clean run.
+test("prose claims agree with the world", () => {
+  const out = execFileSync("node",
+    [fileURLToPath(new URL("../../tools/prose-claims.mjs", import.meta.url)), "--json"],
+    { encoding: "utf8", maxBuffer: 64 * 1024 * 1024 });
+  const findings = JSON.parse(out);
+  assert.deepEqual(findings, [],
+    "a prose claim contradicts the world (or needs a reason in the tool's OK list)");
+});
