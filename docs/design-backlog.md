@@ -121,10 +121,16 @@ possible way to read prose.** Split the work by who's good at it:
   resolves — a `doCommand` case, `_COMPLETE_VERBS` entry, or `_kwActions`
   route. Catches dead hints at author time. (Context-validity — the right verb
   in the wrong room — is the soak harness's hint-tap job, §1.)
-- **Reference lint:** prose naming a venue must match a real `bar`/`name` in
-  ROOMS (catches renames orphaning old prose); dialogue `topic` keys should be
-  either roster-canonical or in `_CONVO_TOPIC_RULES` (the Jenny/Baimon
-  boyfriend/sponsor split, as a test).
+- **Reference lint — BUILT** (`tests/js/references.test.js`, 2026-08-07): venue
+  names in prose resolve to real rooms; people named in an instruction (*ask X*,
+  *give it to X*) are addressable; no `฿N` typed into prose where a constant
+  holds N. Caveats learned building it: the price check must scan **source, not
+  corpus** (world.js records are evaluated, so correct concatenation and a
+  hard-code look identical), and it can only guard constants with a
+  *distinctive* value — ฿300 is the ATM fee AND a Thai massage AND the joiner
+  fee. Found one real defect on first run (Pim quoting ฿150 not `LADY_DRINK`).
+  Still open here: dialogue `topic` keys should be roster-canonical or in
+  `_CONVO_TOPIC_RULES` (the Jenny/Baimon boyfriend/sponsor split, as a test).
 - **Already built, keep extending:** the decorate corpus test (name
   collisions), the Thai-coverage scan, pool-variant tests, world-integrity
   tests. The pattern is proven — new bug class, new corpus test.
@@ -133,9 +139,16 @@ possible way to read prose.** Split the work by who's good at it:
 
 **Never review prose by playing.** Two batch surfaces instead:
 
-- **Corpus review** (`tools/prose-corpus.mjs`): dump every player-facing string
-  — dialogue entries, pools, encounter text, quest descs — as structured
-  records `{file, ref, speaker?, text}`. Review the *corpus*, grouped by
+- **Corpus review — BUILT** (`tools/prose-corpus.mjs`; full pass complete
+  2026-08-07, 5,079/5,079 records reviewed and in the ledger). Dumps every
+  player-facing string as structured records `{group, ref, speaker?, text}`.
+  Two things the first build got wrong, both fixed and worth remembering:
+  it collected only declarative tables and top-level `const _POOL` arrays, so
+  **function-body `_say` prose — 40% of the engine's words — was never in the
+  corpus** (a `fn` group now covers it); and file-order review can't see
+  cross-record contradictions at all, which is what the `--about` dossier pivot
+  is for. See `docs/prose-defects.md` — that class of bug, and the three layers
+  addressing it, is the important reading. Review the *corpus*, grouped by
   character/venue/theme, against: voice tiers (Tinglish hostess / businesslike
   cashier / fluent mamasan), canon (`pattaya-nightlife-universe.md`), factual
   self-consistency (a hand-authored girl's hometown/backstory stable across
@@ -175,7 +188,14 @@ should keep the human's flags scarce and interesting.
 
 ### Cadence
 
-1. Build soak + promise lint (§1, tier 1) — they run forever, free.
-2. One full corpus pass (tier 2) → fix batch → seed the hash ledger.
-3. Per release after that: soak in CI, delta corpus review, 2–3 soak
-   transcripts read, human flags as they come.
+1. ~~Build soak + promise lint (§1, tier 1)~~ — done; reference lint too.
+2. ~~One full corpus pass (tier 2) → fix batch → seed the hash ledger.~~ — done
+   2026-08-07, all 5,079 records.
+3. **Per release from here:** soak in CI, `--delta` corpus review after any
+   prose change, `--about <subject>` before inventing an entity detail, 2–3
+   soak transcripts read, human flags as they come.
+
+Still unbuilt, in value order: **Layer 2 claims/probes** (`docs/prose-defects.md`
+— model extracts claims once, then price/location/schedule/affordance checks run
+mechanically forever), and **transcript review**, which has never actually been
+run despite being cheap.

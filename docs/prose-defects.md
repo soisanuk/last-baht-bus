@@ -56,7 +56,7 @@ world?", because the world isn't on the page.
 
 And a fifth, worse gap found while investigating: the corpus tool only collected
 declarative tables and top-level `const _POOL = [...]` arrays. **Prose passed
-directly to `_say(...)` inside a function body — 1,861 records, ~40% of the
+directly to `_say(...)` inside a function body — 1,864 records, ~40% of the
 engine's player-facing words — was never in the corpus at all.** The minibus
 line lived there. "Full corpus coverage" was true of the collection, not of the
 game.
@@ -72,7 +72,7 @@ into **claims**, and mechanical checks do the cross-referencing forever after.
 `tools/prose-corpus.mjs` now walks the engine line by line with a running owner
 (the enclosing `const _POOL` **or** the enclosing `function`), so function-body
 prose enters the corpus as the `fn` group, attributed to its scene. Corpus:
-3,309 → 5,076 records. The same rewrite fixed a real mislabel: a single-line
+3,309 → 5,079 records. The same rewrite fixed a real mislabel: a single-line
 const (`const _HOSTS = ["arm","win"];`) never met a closing brace at column 0,
 so the old block-slicer stayed in pool mode forever and filed every following
 function's prose under that pool's name.
