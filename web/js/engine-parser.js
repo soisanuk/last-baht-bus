@@ -1419,14 +1419,14 @@ function _doBuy(arg) {
     const canBuy = r.shop || r.seven || _inBar() || FOOD_STALLS[G.room];
     if (!canBuy) { _say("No water for sale here. 7-Elevens, bars, and the street carts all have it."); return; }
     const price = _inBar() ? 20 : 10;
-    if (G.money < price) { _say(`฿${price} for a cold bottle, and you don't have it. Grim.`); return; }
+    if (G.money < price) { _say(_fmt("฿{p} for a cold bottle, and you don't have it. Grim.", { p: price })); return; }
     G.money -= price;
     G.thirst = Math.max(0, G.thirst - 45);
     _say(_fmt("{line} (฿{m} left.)", { line: _L(_pickVary(_WATER_LINES, "water")), m: G.money }));
     return;
   }
   if (r.seven && /toastie|cheese|sandwich|food|snack/.test(arg) && !FOOD_STALLS[G.room]) {
-    if (G.money < 35) { _say(`The toastie is ฿35. You have ฿${G.money}. The doorbell jingles in sympathy.`); return; }
+    if (G.money < 35) { _say(_fmt("The toastie is ฿{p}. You have ฿{m}. The doorbell jingles in sympathy.", { p: 35, m: G.money })); return; }
     G.money -= 35;
     G.hunger = Math.max(0, G.hunger - 40);
     _say(_fmt("{line} (฿{m} left.)", { line: _L(_pickVary(_TOASTIE_LINES, "toastie")), m: G.money }));
@@ -1449,7 +1449,7 @@ function _doBuy(arg) {
     if (!_inBar() && !_room().food && !FOOD_STALLS[G.room]) {
       _say("The 7-Eleven fridge hums somewhere, but this calls for a bar stool."); return;
     }
-    if (G.money < BEER_PRICE) { _say(`A big bottle is ฿${BEER_PRICE} here. You have ฿${G.money}. The cashier's calculator stays in the drawer.`); return; }
+    if (G.money < BEER_PRICE) { _say(_fmt("A big bottle is ฿{p} here. You have ฿{m}. The cashier's calculator stays in the drawer.", { p: BEER_PRICE, m: G.money })); return; }
     // standing a beer to the rail regular — the generic word, or a named male
     // regular present ("buy terry a beer" → Terry gets it, not you).
     const beerName = arg.replace(/\b(buy|order|get|a|an|the|beer|chang|leo|singha|bottle|for|him)\b/g, " ").trim();
@@ -1486,7 +1486,7 @@ function _doBuy(arg) {
     const girlsHere = _npcsHere().filter(id => NPC_ROLES[id]);
     const id = nameW ? _findNpc(nameW) : girlsHere[0];
     if (!id || !NPC_ROLES[id]) { _say(nameW ? "She's not working this bar." : "Nobody here to buy one for."); return; }
-    if (G.money < LADY_DRINK) { _say(`Lady drinks are ฿${LADY_DRINK}. You have ฿${G.money}. The maths is not on your side.`); return; }
+    if (G.money < LADY_DRINK) { _say(_fmt("Lady drinks are ฿{p}. You have ฿{m}. The maths is not on your side.", { p: LADY_DRINK, m: G.money })); return; }
     // she's already sitting with someone: a polite decline first, then — if you insist —
     // she takes it and her customer starts to turn.
     if (_girlBusy(id)) {
@@ -2339,8 +2339,8 @@ function _doWait(arg) {
     if (G.pendingEnc || G.game) { _say(`(${_clockStr()} — so much for waiting.)`, "dim"); return; }
     if (G.phone.inbox.length > inbox0) { _say(`(${_clockStr()} — your phone interrupts.)`, "dim"); return; }
   }
-  _say(`You let the night idle past — ice melting, songs turning over, the street ` +
-    `rearranging itself. ${_clockStr()}.`);
+  _say(_fmt("You let the night idle past — ice melting, songs turning over, the street " +
+    "rearranging itself. {t}.", { t: _clockStr() }));
 }
 
 // The Peacock Cabaret's performers — in NPC_ROLES for the courtship rails

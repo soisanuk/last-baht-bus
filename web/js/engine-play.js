@@ -1617,9 +1617,9 @@ function _doThrowCover(targetWord) {
 function _doBell() {
   if (!_inBar()) { _say("No bell out here. The bell is a bar instrument, like the till."); return; }
   if (G.money < BELL_PRICE) {
-    _say(`The bell rope dangles there, daring you. A ring is a round for the ` +
-      `house — ฿${BELL_PRICE} — and you have ฿${G.money}. Ringing a bell you ` +
-      "can't pay for is how farang end up in the khlong.");
+    _say(_fmt("The bell rope dangles there, daring you. A ring is a round for the " +
+      "house — ฿{p} — and you have ฿{m}. Ringing a bell you " +
+      "can't pay for is how farang end up in the khlong.", { p: BELL_PRICE, m: G.money }));
     return;
   }
   G.money -= BELL_PRICE;
@@ -2612,9 +2612,12 @@ function _endNight(reason) {
   _chargeRent();                     // the folio bills you even if you slept rough…
   if (crash) G.room = crash.room;    // …but you wake where the night left you, not at the desk
   if (_quietHelped) _say("(Naklua quiet: the hangover wakes one size smaller.)", "dim");
-  _say(`── DAY ${G.day}${G.stage === "expat" ? " · PATTAYA, HOME" : " of 7"} — you ` +
+  // Templated so one catalog entry covers every day of the week (the day number
+  // was baked into the string, so `de` needed seven copies of the same sentence).
+  _say(_fmt("── DAY {d}{home} — you " +
     "surface mid-afternoon, and by the time you're human again the sun is " +
-    "sliding into the gulf and the neon is waking up ──", "win");
+    "sliding into the gulf and the neon is waking up ──",
+    { d: G.day, home: G.stage === "expat" ? _L(" · PATTAYA, HOME") : _L(" of 7") }), "win");
   if (hangover >= 4) _say("(The hangover is a physical presence with opinions. Water. Food. Mercy.)", "alert");
   if (wouldRough && !rough && _dogEgg() === "rescue") {
     // NOT "the last baht bus" — this fires only on nights you failed to get home,
