@@ -1001,6 +1001,9 @@ function _describeRoom(full, forceFull) {
       _say(`${n.name} is working ${_barName(_npcRoom(id))} tonight; the floor staff keep this one running.`, "dim");
     }
   }
+  // The Orchid good table: once Tan's near-confirmation has armed it, walking in
+  // (or LOOKing) pays off the whole hidden-hub arc — see _tanOrchidReveal.
+  if (G.room === "orchid_room") _tanOrchidReveal();
   const exits = Object.keys(r.exits);
   if (exits.length) _say(_L("Exits: ") + exits.join(", ") + ".", "dim");
   // Buildings fronting this block: entered by name or a tap, not by a compass
