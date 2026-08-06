@@ -4841,6 +4841,16 @@ const NPCS = {
       "\"I drive and I fix,\" he says, and both are true, and neither is the whole of it. The most forgettable " +
       "man on Soi 6 — which, on Soi 6, is its own kind of power.",
     dialogue: [
+      // Post-reveal greeting: he knows you saw him at the good table, and the
+      // relationship recalibrates without a word of it being said out loud.
+      { when: (st, G) => _flag("tanRevealed"),
+        text: "\"My friend.\" Tan comes off the car the same as always — and not the same at all, because " +
+          "now you both know what you saw, and he watches you decide, in real time, what to do about it. " +
+          "You say nothing. Something behind his eyes files that away with what might, in a different man, " +
+          "be respect. \"Good evening for a drive,\" he says pleasantly, and the town rearranges itself " +
+          "around the sentence: the driver, the fixer, the quiet man — all of them leaning on one ordinary " +
+          "grey car, offering you a ride.",
+        short: "\"My friend.\" The same as always — and not the same at all. You say nothing; he files that away. \"Good evening for a drive.\"" },
       { text: "\"Ha — my airport friend.\" Tan comes off the car, genuinely pleased, or doing pleased so well " +
           "it makes no difference. \"Still got your wallet? ...Mostly. Good. Most of you I drop once and never " +
           "see again. The ones I see twice—\" a warm shrug \"—those are the interesting ones.\" He tips his " +
@@ -4877,6 +4887,18 @@ const NPCS = {
           "room.\"",
         short: "\"I drove every one of them — the detective, the Australian, the old one, the runner, the golfer. The whole soi came to town in my back seat. You want to know a town, ask the driver.\"" },
 
+      // After the Orchid reveal — you SAW him at the good table. He still never
+      // says the words; confirmation stays a thing that happened, not a thing said.
+      // (First in the table set — it must outrank the deflection's count<3 match.)
+      { topic: "table", when: (st, G) => _flag("tanRevealed"),
+        text: "\"The good table.\" He looks at you the way a man looks at a photograph of himself he " +
+          "didn't pose for. Neither of you says the other thing. \"A man sits where there is a chair, my " +
+          "friend. Sometimes the chair is at the airport. Sometimes—\" the smallest shrug in Thailand " +
+          "\"—somewhere quieter. You saw a man at a table. Rooms are full of tables.\" He opens the car " +
+          "door for you, courteous as ever. \"What matters is this: you never asked, and I never said. " +
+          "Keep it exactly that way, and you and I will always have a great deal to talk about.\"",
+        short: "\"You saw a man at a table. Rooms are full of tables. You never asked, I never said — keep it that way.\"" },
+
       // Good-table deflection — the smooth close, before you've circled it enough.
       { topic: "table", when: (st, G) => ["orchidReported", "nameKept", "oldDaysHeard", "wrongShot", "nomineeWarned"]
           .filter(f => _flag(f)).length < 3,
@@ -4888,8 +4910,11 @@ const NPCS = {
         short: "\"Some tables you don't ask about, my friend. Not even me.\" The door shuts so smoothly you almost don't feel it." },
 
       // The near-confirmation — once the fragments add up. He never says the words.
+      // Hearing it arms the Orchid reveal (tanSuspected): the advice is the setup,
+      // the good table is the payoff.
       { topic: "table", when: (st, G) => ["orchidReported", "nameKept", "oldDaysHeard", "wrongShot", "nomineeWarned"]
           .filter(f => _flag(f)).length >= 3,
+        sets: ["tanSuspected"],
         text: "For a long moment Tan simply looks at you, and the airport grin is nowhere to be found. \"You " +
           "have been busy. The Orchid. The old man's stories. A name a driver had no way to know.\" He counts " +
           "your evenings back to you without hurry, and you understand, with a small cold drop, that he has " +

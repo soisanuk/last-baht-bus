@@ -2697,6 +2697,34 @@ test("Tan the driver: known from the intro, a hub whose knowingness escalates wi
   state().flags.orchidReported = true; state().flags.nameKept = true; state().flags.oldDaysHeard = true;
   out = []; run("ask tan about table");
   assert.match(lastOut(), /quiet man|drive taxis/i, "the near-confirmation — never quite stated");
+  assert.ok(_flag("tanSuspected"), "hearing the near-confirmation arms the Orchid reveal");
+});
+
+test("the Orchid reveal: Tan at the good table — armed by the near-confirmation, fired on entry, once", () => {
+  state().room = "orchid_room"; state().visited.orchid_room = true;
+  // not armed yet: the room describes as normal, no reveal
+  out = []; run("look");
+  assert.doesNotMatch(out.join("\n"), /ridden behind it|arrivals ramp/i, "no reveal before he's armed it");
+  assert.ok(!_flag("tanRevealed"));
+  // armed: walking in (or LOOKing) pays off the whole web
+  state().flags.tanSuspected = true;
+  const happy0 = state().happy;
+  out = []; run("look");
+  assert.match(out.join("\n"), /you know that shirt|ridden behind it/i, "you recognise the airport driver");
+  assert.match(out.join("\n"), /good table is empty/i, "and he's gone before your drink arrives");
+  assert.ok(_flag("tanRevealed"), "the reveal flag sets");
+  assert.ok(state().happy > happy0, "the payoff pays สนุก");
+  // subsequent visits: a pooled you-know-now line, never the scene again
+  out = []; run("look");
+  const text = out.join("\n");
+  assert.doesNotMatch(text, /ridden behind it/i, "the scene never replays");
+  assert.ok(_TAN_TABLE_LINES.some(s => text.includes(s)), "a recurring good-table line from the pool");
+  // and Tan's dialogue recalibrates: the table topic goes post-reveal
+  state().room = "soi6_street"; state().player.origin = "pi";
+  out = []; run("ask tan about table");
+  assert.match(lastOut(), /never asked|full of tables/i, "post-reveal: confirmation stays unsaid");
+  out = []; run("talk to tan");
+  assert.match(lastOut(), /not the same at all|Good evening for a drive/i, "the greeting knows you know");
 });
 
 test("the detective's recon quest completes only after you've seen the Orchid's good table", () => {

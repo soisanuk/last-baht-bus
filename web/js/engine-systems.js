@@ -2833,6 +2833,47 @@ function _doFeedDog(arg) {
 // pub with the sun-bleached sign — and the dog's history surfaces. Fires once
 // ever (the flag completes Bert's "The Shamrock Dog" quest if it's on the
 // books, but the scene itself belongs to anyone who makes the walk).
+// ── The Orchid reveal — the payoff of the whole Tan web ─────────────────────
+// Armed by hearing his near-confirmation ("quiet men drive taxis" sets
+// tanSuspected); fires once, from _describeRoom, the next time you walk into
+// the Orchid Room and actually LOOK at the good table. He never says the words
+// — the reveal is a thing you see, not a thing anyone states. The recurring
+// lines afterwards are deliberately about YOUR knowing, never about whether
+// he's sitting there tonight: the room's revisit pool already places "the
+// quiet Thai man" freely, and his roster room stays soi6_street, so asserting
+// his presence here would promise a TALK target the engine can't honour.
+const _TAN_TABLE_LINES = [
+  "The good table again. You know now. Knowing does not make the room feel smaller — it " +
+    "makes one ordinary grey sedan, parked somewhere out there in the night, feel very " +
+    "much larger.",
+  "You keep your eyes off the good table with the studied ease of a man not looking at " +
+    "anything in particular. You never asked. Nobody ever said. That arithmetic is what " +
+    "lets you keep walking in here.",
+  "The MC president defers toward the good table the way he always did. You are the only " +
+    "customer in the room who knows exactly how far that deference has to travel to " +
+    "reach its object.",
+  "The good table sits in its pool of low light. Whoever is or isn't at it tonight, you " +
+    "know whose it is — and you order your drink, and you do not look. Much.",
+];
+function _tanOrchidReveal() {
+  if (!_flag("tanSuspected")) return;
+  if (_flag("tanRevealed")) { _say(_pickVary(_TAN_TABLE_LINES, "tantable"), "dim"); return; }
+  _setFlag("tanRevealed");
+  _say("You look at the good table. Properly, this time — past the strobe, past the skin, " +
+    "past the Blue Label — at the soft-spoken Thai man in the unremarkable shirt whom the " +
+    "whole room bends toward. And the floor of the evening drops away, because you know " +
+    "that shirt. You have ridden behind it for two hours with your luggage in the boot.", "win");
+  _say("Tan. The airport driver. The forgettable polo, the pleasant bottomless smile — " +
+    "holding court without raising his voice while a patched MC president leans in for a " +
+    "ruling and gets one, quietly, like weather being decided. \"I drive and I fix.\" Both " +
+    "true. Neither the whole of it.", "win");
+  _say("He sees you seeing him. One beat. Two. Then the smallest nod in Thailand — the nod " +
+    "from the arrivals ramp, my friend, welcome to Pattaya — and he turns back to his " +
+    "table, and the room closes over the moment like water. By the time your drink " +
+    "arrives, the good table is empty.", "win");
+  _addHappy(3);
+}
+
 function _dogShamrock() {
   if (_flag("shamrockVisited")) return;
   _setFlag("shamrockVisited");
