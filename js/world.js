@@ -2521,7 +2521,7 @@ const NPCS = {
   },
 
   candy: {
-    name: "Candy", th: "แคนดี้", emoji: "🌹",
+    name: "Candy", th: "แคนดี้", emoji: "🌹", personality: "charmer",
     room: "candy_bar",
     // She owns both Candy Bars and works them on alternate nights (even days at
     // the original, odd days at Candy Bar 2). _npcRoom resolves tonight's room;
@@ -2692,7 +2692,7 @@ const NPCS = {
   },
 
   joy: {
-    name: "Joy", th: "จอย", emoji: "💕",
+    name: "Joy", th: "จอย", emoji: "💕", personality: "joker",
     room: "pink_lotus",
     desc: "Bubbly, laughing at everything you say before you finish saying it — the " +
       "undisputed morale champion of Pink Lotus Lounge.",
@@ -4073,7 +4073,7 @@ const NPCS = {
     ],
   },
   wilai: {
-    name: "Wilai", th: "วิไล", emoji: "💋",
+    name: "Wilai", th: "วิไล", emoji: "💋", personality: "charmer",
     room: "ruby_kiss",
     desc: "The ringleader of the Ruby Kiss front stools, lipstick on the rim of every glass by " +
       "design, quick enough to sell you a drink and roast you for buying it in the same breath.",
@@ -4561,7 +4561,7 @@ const NPCS = {
   // always at the good table's elbow fifteen years ago, deferred to even then, and
   // nobody could say why. On replay: the driver has been the power for a generation.
   roy: {
-    name: "Roy", th: "รอย", emoji: "🍺",
+    name: "Roy", th: "รอย", emoji: "🍺", personality: "whiteknight",
     room: "cherry_pop",
     origin: "pension",
     title: "a lean old regular in a faded bar-crawl polo, watching the door like he owns the stool",
@@ -4833,7 +4833,7 @@ const NPCS = {
   // deliberately never-obvious: on run 1 he's a helpful driver; on replay he's the
   // spider. Known from the intro (you rode in with him), so he shows as "Tan".
   tan: {
-    name: "Tan", th: "ต้น", emoji: "🚕",
+    name: "Tan", th: "ต้น", emoji: "🚕", personality: "operator",
     room: "soi6_street",
     desc: "Your airport driver, leaning on a plain grey sedan at the mouth of the soi as though he never " +
       "drove off — mid-thirties, neat, a polo shirt you would forget the instant you looked away. Six years " +
@@ -4841,6 +4841,16 @@ const NPCS = {
       "\"I drive and I fix,\" he says, and both are true, and neither is the whole of it. The most forgettable " +
       "man on Soi 6 — which, on Soi 6, is its own kind of power.",
     dialogue: [
+      // Post-reveal greeting: he knows you saw him at the good table, and the
+      // relationship recalibrates without a word of it being said out loud.
+      { when: (st, G) => _flag("tanRevealed"),
+        text: "\"My friend.\" Tan comes off the car the same as always — and not the same at all, because " +
+          "now you both know what you saw, and he watches you decide, in real time, what to do about it. " +
+          "You say nothing. Something behind his eyes files that away with what might, in a different man, " +
+          "be respect. \"Good evening for a drive,\" he says pleasantly, and the town rearranges itself " +
+          "around the sentence: the driver, the fixer, the quiet man — all of them leaning on one ordinary " +
+          "grey car, offering you a ride.",
+        short: "\"My friend.\" The same as always — and not the same at all. You say nothing; he files that away. \"Good evening for a drive.\"" },
       { text: "\"Ha — my airport friend.\" Tan comes off the car, genuinely pleased, or doing pleased so well " +
           "it makes no difference. \"Still got your wallet? ...Mostly. Good. Most of you I drop once and never " +
           "see again. The ones I see twice—\" a warm shrug \"—those are the interesting ones.\" He tips his " +
@@ -4877,6 +4887,18 @@ const NPCS = {
           "room.\"",
         short: "\"I drove every one of them — the detective, the Australian, the old one, the runner, the golfer. The whole soi came to town in my back seat. You want to know a town, ask the driver.\"" },
 
+      // After the Orchid reveal — you SAW him at the good table. He still never
+      // says the words; confirmation stays a thing that happened, not a thing said.
+      // (First in the table set — it must outrank the deflection's count<3 match.)
+      { topic: "table", when: (st, G) => _flag("tanRevealed"),
+        text: "\"The good table.\" He looks at you the way a man looks at a photograph of himself he " +
+          "didn't pose for. Neither of you says the other thing. \"A man sits where there is a chair, my " +
+          "friend. Sometimes the chair is at the airport. Sometimes—\" the smallest shrug in Thailand " +
+          "\"—somewhere quieter. You saw a man at a table. Rooms are full of tables.\" He opens the car " +
+          "door for you, courteous as ever. \"What matters is this: you never asked, and I never said. " +
+          "Keep it exactly that way, and you and I will always have a great deal to talk about.\"",
+        short: "\"You saw a man at a table. Rooms are full of tables. You never asked, I never said — keep it that way.\"" },
+
       // Good-table deflection — the smooth close, before you've circled it enough.
       { topic: "table", when: (st, G) => ["orchidReported", "nameKept", "oldDaysHeard", "wrongShot", "nomineeWarned"]
           .filter(f => _flag(f)).length < 3,
@@ -4888,8 +4910,11 @@ const NPCS = {
         short: "\"Some tables you don't ask about, my friend. Not even me.\" The door shuts so smoothly you almost don't feel it." },
 
       // The near-confirmation — once the fragments add up. He never says the words.
+      // Hearing it arms the Orchid reveal (tanSuspected): the advice is the setup,
+      // the good table is the payoff.
       { topic: "table", when: (st, G) => ["orchidReported", "nameKept", "oldDaysHeard", "wrongShot", "nomineeWarned"]
           .filter(f => _flag(f)).length >= 3,
+        sets: ["tanSuspected"],
         text: "For a long moment Tan simply looks at you, and the airport grin is nowhere to be found. \"You " +
           "have been busy. The Orchid. The old man's stories. A name a driver had no way to know.\" He counts " +
           "your evenings back to you without hurry, and you understand, with a small cold drop, that he has " +
@@ -5065,7 +5090,7 @@ const NPCS = {
   },
 
   mercedes: {
-    name: "Mercedes", th: "เมอร์เซเดส", emoji: "❄️",
+    name: "Mercedes", th: "เมอร์เซเดส", emoji: "❄️", personality: "operator",
     room: "cherry_pop",
     desc: "A little older than the other girls here and a great deal less " +
       "nervous — she moves like someone who has already seen the worst a room can " +
@@ -5516,7 +5541,7 @@ const NPCS = {
   },
 
   mala: {
-    name: "Miss Mala", th: "มาลา", emoji: "🦚",
+    name: "Miss Mala", th: "มาลา", emoji: "🦚", ladyboy: true, personality: "charmer",
     room: "peacock_cabaret",
     desc: "The Peacock's compère and its mama both — a kathoey of a certain age and total command, " +
       "in a headdress that arrived by its own truck. Twenty years on this stage; she has watched a " +
@@ -5544,10 +5569,29 @@ const NPCS = {
       { topic: "tips", text: "\"How the tip works? You fold the note long-ways, you hold it up, she " +
           "comes and takes it in her teeth, or her décolletage, and blesses you — and the whole room " +
           "cheers YOU, not her. Cheapest star turn in Pattaya, forty baht.\" (TIP PETCH <amount>, or TIP MALA.)" },
+      // The regulars' cut — she raised half this stage, and "raised" is not a figure of speech.
+      { topic: "girls", bond: 2,
+        text: "\"My girls?\" The compère voice steps down to something room-temperature. \"Petch you " +
+          "know. {{Gaew}} came to me at seventeen with a sports bag and a black eye and I did not ask " +
+          "which she minded more. 'Raise' is the right word, tilac — I do the paperwork, I watch the doses, I " +
+          "know which boyfriends get tea and which get the door. Twice a year I stand at a temple in " +
+          "somebody's home village and I am introduced as 'her manager from Pattaya,' and the mother and " +
+          "I look at each other, and we both know, and we drink the tea.\" She resets the headdress a " +
+          "degree. \"Twenty years. My little theatre of daughters.\"",
+        short: "\"'Raise' is the right word — paperwork, doses, which boyfriends get tea and which get the door. Twenty years. My theatre of daughters.\"" },
+      { topic: "name", bond: 3,
+        text: "\"My name.\" She looks at you a long moment, deciding — then the headdress comes off, " +
+          "onto the table between you, feathers still nodding. \"A boy from Chanthaburi had a name; his " +
+          "father was a gem cutter and wanted a gem cutter. I was eleven when I heard 'Mala' in a lakhon " +
+          "on the television and I thought: there. That is the one that fits. It took the rest of them " +
+          "thirty years to catch up to what I knew at eleven.\" She puts the headdress back on, and Miss " +
+          "Mala reassembles around her like a curtain rising. \"His father cut stones. I cut a self. " +
+          "Same trade, tilac — you take away everything that is not the jewel.\"",
+        short: "\"His father cut stones. I cut a self. Same trade — you take away everything that is not the jewel.\"" },
     ],
   },
   petch: {
-    name: "Petch", th: "เพชร", emoji: "💎",
+    name: "Petch", th: "เพชร", emoji: "💎", ladyboy: true, personality: "joker",
     room: "peacock_cabaret",
     desc: "The Peacock's young star, all cheekbones and ambition, between numbers and still catching " +
       "her breath. She lip-syncs better than the record and knows it, and she is saving for a face " +
@@ -5559,10 +5603,30 @@ const NPCS = {
           "sit like this—\" she mimes a rigid plank \"—and by my second song, like this—\" she throws " +
           "her arms up, radiant. \"You are already at song two, I can tell.\"",
         short: "\"You clapped, I saw! First-timers sit stiff, then by song two—\" arms up, radiant." },
+      // Under the ambition (bond first — the deeper cut outranks the public version)
+      { topic: "dream", bond: 2,
+        text: "\"You want the true version?\" Petch checks the room the way you check a mirror — fast, " +
+          "professional — and sits closer. \"A scout DID come. Two years ago, from Tiffany's. He watched " +
+          "the whole show and he took Ploynapas.\" A beat, perfectly held; she is, after all, a performer. " +
+          "\"I cried one night. ONE. Then I learned her closing number better than she does it, and now " +
+          "when the scout comes back — and he will — the girl he passed on is not here anymore. I ate " +
+          "her.\" The grin comes up, all cheekbones. \"That is the dream, na. Not the stage. Being the " +
+          "one they cannot pass twice.\"",
+        short: "\"A scout came. He took Ploynapas. I cried one night — ONE — then I learned her number better than her. Nobody passes me twice.\"" },
       { topic: "dream", text: "\"Alcazar. Tiffany's. The big Pattaya stages, thousand seats, tour buses, " +
           "real money.\" Her eyes go somewhere bright. \"I am saving — the dancing they teach you, the " +
           "face they don't. One day a scout sits where you sit now, and I am ready. Until then, I am the " +
           "biggest star in the smallest room, and that is not nothing.\"" },
+      { topic: "family", bond: 3,
+        text: "\"Buriram.\" She says the province like a stone she has carried so long it is smooth. " +
+          "\"You think they don't know? My mother sold a gold chain for my first costume. She rehearsed " +
+          "my wai with me before my first Loy Krathong on this stage — over video call, both of us " +
+          "laughing.\" She turns her phone so you can see the wallpaper: an older woman, a temple, a " +
+          "girl in sequins between them. \"The money goes home like every girl in this town, but MY " +
+          "mother tells the neighbours what I am. Dancer. Star. Her word is 'star.'\" She pockets her " +
+          "phone before the room can see her face do what it is doing. \"So the face I am saving for is " +
+          "not so I can be somebody else, na. It is so the neighbours see what my mother already sees.\"",
+        short: "\"My mother sold a gold chain for my first costume. Her word for me is 'star.' The face is so the neighbours see what she already sees.\"" },
       { topic: "tips", text: "\"Tip? Ohh you are learning fast.\" She pats your hand. \"Fold it long, " +
           "hold it up, I do the rest and make you look like a hero doing it. Miss Mala takes her cut, " +
           "of course — she takes everybody's cut, she raised half of us — but the cheer is all yours.\" " +
@@ -5733,7 +5797,7 @@ const NPCS = {
   },
 
   daeng: {
-    name: "Daeng", th: "แดง", emoji: "🌶️",
+    name: "Daeng", th: "แดง", emoji: "🌶️", personality: "blunt",
     room: "khao_talo_bar",
     desc: "The owner — mid-forties, laugh lines over old glitter, pouring with a bar " +
       "towel over one shoulder. The dancer in the Walking Street photos behind her, " +
@@ -5807,7 +5871,7 @@ const NPCS = {
   },
 
   bert: {
-    name: "Bert", th: "เบิร์ต", emoji: "🎱",
+    name: "Bert", th: "เบิร์ต", emoji: "🎱", personality: "blunt",
     room: "stinky_bar",
     manager: true, // the bar-manager NPC type (see _managerHere/_buyManDrink); NOT in NPC_ROLES, so girl-logic ignores him
     desc: "The Stinky's manager — American, sixty-something, forearms like dock rope, a " +
@@ -7805,6 +7869,13 @@ const ORIGINS = [
     tan: "\"555 — the APAC team.\" Delighted, not unkind. \"I drive a hundred golfers who never find a course. You brought the clubs, which is somehow worse.\" A cheerful shrug. \"No shame, my man. This whole town is built on exactly you. Play your eighteen holes. All of them.\"" },
 ];
 
+// The same five ids also apply to NPCs: a hand-authored NPC may opt in with a
+// `personality:` field, which tilts how YOUR compliment/joke/tease resolve on
+// them (_npcPersTalkOutcome, engine-play) — the NPC's tilt gets the last word
+// over the player's. Showcase set: Mercedes/Tan operator, Bert/Daeng blunt,
+// Candy/Wilai/Mala charmer, Joy/Petch joker, Roy whiteknight. (Kai stays
+// personality-less on purpose: her `type: "operator"` is the scam vector, and
+// the player-personality tests use her as a neutral conversational fixture.)
 const PERSONALITIES = [
   { id: "charmer", label: "Charmer",
     pick: "Someone easy to like.",
@@ -7879,6 +7950,10 @@ const NPC_ROLES = {
   candy: "mamasan", oy: "mamasan", daeng: "mamasan", mem: "mamasan", wan: "mamasan",
   nee: "mamasan", peung: "mamasan", malai: "mamasan", toi: "mamasan", saeng: "mamasan",
   bussaba: "mamasan", sopha: "mamasan", malila: "mamasan",
+  // The Peacock: performers in the social machinery (courtship for a bi player,
+  // the gracious pass for a straight one — _ladyboyGate). No barfine apparatus:
+  // the cabaret refuses it in-fiction (_doBarfine's peacock branch).
+  petch: "hostess", mala: "mamasan",
 };
 
 // ── Generic (filler) hostesses ──────────────────────────────────────────────

@@ -966,6 +966,10 @@ const BELL_GLOW = 25;  // turns the whole bar loves you after a ring
 const BAN_TURNS = 40;  // security shift length
 
 function _inBar() { return !!_room().barType; }
+// The Peacock Cabaret sells drinks and takes flirting seriously without any of
+// the barType apparatus (no bells, games, closing hour, or barfine ledger) —
+// social verbs and lady drinks treat it as a bar, everything else doesn't.
+function _socialVenue() { return _inBar() || G.room === "peacock_cabaret"; }
 
 function _bellActive() {
   const t = G.soc.bellAt[G.room];
@@ -1207,10 +1211,19 @@ const _LADYBOY_PASS = [
   n => _fmt("{n} clocks you clocking her and is already three steps ahead. \"Not for you, tilac — no problem. I know my customer, and you are not him.\" No hurt in it; she's been read a thousand times and long since stopped minding which way it goes. \"Plenty girls here. Go, be happy.\"", { n }),
   n => _fmt("A slow, knowing smile. \"You didn't know? Now you know.\" {n} gives you the beat to decide, and reads the answer off your face before you find it. \"Is okay, tilac — you are not the first, and I am not offended. The ladies are that way.\" A graceful tilt of the head, and she turns to a customer looking for exactly her.", { n }),
 ];
+// The cabaret's own pass: at an all-kathoey venue "the ladies are that way" is
+// nonsense — a straight man's flirt gets folded into the show instead, and he
+// leaves feeling like a star turn rather than a rejection. Same agency rule:
+// SHE reads HIM, and the room loves them both for it.
+const _LADYBOY_PASS_CAB = [
+  n => _fmt("{n} receives the flirt, holds it up to the light like a tipped note, and hands it to the room: \"He is FLIRTING with me, everybody!\" The crowd roars. \"Tilac, you are adorable, and you are also a tourist in more ways than one, na.\" She pats your cheek, precise as choreography. \"Stay for the show. THAT part is for you.\"", { n }),
+  n => _fmt("A beat, an eyebrow, and {n} reads you all the way down — the curiosity, the beer, the vacation — and grades it kindly. \"You don't want what you think you might want, tilac. Is okay. Half this room came in not sure and they are having the best night of the year.\" She spins your drink a quarter-turn like a compass. \"Watch. Cheer. Tip. That is your part, and you will be wonderful at it.\"", { n }),
+];
 function _ladyboyGate(id) {
   if (!NPCS[id] || !NPCS[id].ladyboy) return false; // not a ladyboy → proceed
   if (typeof _orient === "function" && _orient("bi")) return false; // open mind → a real option
-  _say(_pickVary(_LADYBOY_PASS, "lbpass")(NPCS[id].name));
+  const cab = typeof _queerVenue === "function" && _queerVenue();
+  _say(_pickVary(cab ? _LADYBOY_PASS_CAB : _LADYBOY_PASS, "lbpass")(NPCS[id].name));
   return true;                                       // straight player: a gracious pass
 }
 
@@ -1232,6 +1245,59 @@ function _persTalkOutcome(kind, outcome) {
   if (_pers("joker") && kind === "tease" && outcome === "cool") return "warm";          // banter is his native tongue
   if (_pers("blunt") && kind === "compliment" && outcome === "warm") return "flat";     // flattery rings false from a blunt man
   return outcome;
+}
+
+// ── NPC personality — the other side of the same axis ──────────────────────
+// Hand-authored NPCs opt in with a `personality:` field (same five ids as the
+// player's PERSONALITIES table), and it tilts how YOUR compliment/joke/tease
+// resolve on THEM. Applied AFTER the player's own tilt, so the NPC gets the
+// last word: an operator mamasan stays unmoved by the charmer's best line,
+// and a joker girl fires the tease back whoever's asking. When the tilt
+// actually flips the outcome, a dim recognition note says why — the mechanic
+// stays readable in the prose, never a silent die-roll.
+const _NPC_PERS_NOTES = {
+  operator: [
+    n => `(${n} hears compliments the way a cashier hears coins — counted, banked, worth face value exactly.)`,
+    n => `(Charm is a currency ${n} changes for a living. Yours isn't counterfeit; it is merely small.)`,
+  ],
+  blunt: [
+    n => `(${n} doesn't traffic in flattery, in either direction. Say something true instead.)`,
+    n => `(Flattery slides off ${n} like rain off a tin roof. Straight talk is the door in.)`,
+  ],
+  joker: [
+    n => `(With ${n}, the needle IS the handshake.)`,
+    n => `(${n} runs on banter the way this town runs on neon.)`,
+  ],
+  charmer: [
+    n => `(${n} plays the compliment game professionally, and appreciates a fellow player.)`,
+    n => `(Flattery is ${n}'s home ground — everything you serve comes back, prettier.)`,
+  ],
+  whiteknight: [
+    n => `(${n} takes kindness the way dry ground takes rain — all of it, instantly.)`,
+    n => `(A little warmth goes a long way with ${n}. Further than it should, probably.)`,
+  ],
+};
+let _npcPersNote = null; // transient, printed by _doTalkAct right after the outcome line
+function _npcPersTalkOutcome(id, kind, outcome) {
+  const p = typeof NPCS !== "undefined" && NPCS[id] && NPCS[id].personality;
+  if (!p) return outcome;
+  let tilted = outcome;
+  if (p === "joker") {
+    if (kind === "joke" && outcome === "flat") tilted = "warm";   // banter is her native tongue too
+    if (kind === "tease" && outcome === "cool") tilted = "warm";  // the needle is affection here
+  } else if (p === "charmer") {
+    if (kind === "compliment" && outcome === "flat") tilted = "warm"; // she plays the game back
+  } else if (p === "blunt") {
+    if (kind === "compliment" && outcome === "warm") tilted = "flat"; // flattery bounces off
+  } else if (p === "operator") {
+    if ((kind === "compliment" || kind === "joke") && outcome === "warm") tilted = "flat"; // charm gets counted, not felt
+  } else if (p === "whiteknight") {
+    if (kind === "compliment" && outcome === "flat") tilted = "warm"; // aches to be liked
+  }
+  if (tilted !== outcome && _NPC_PERS_NOTES[p]) {
+    _npcPersNote = _pickVary(_NPC_PERS_NOTES[p], "npcpers:" + p)(NPCS[id].name);
+  }
+  return tilted;
 }
 
 // The Orchid Room's women belong to the corner tables — the patched MC president,
@@ -1276,8 +1342,9 @@ function _doSocial(kind, targetWord) {
   _trace(kind, name); // breadcrumb (flirt/kiss/spank/fondle)
 
   // outside a bar this almost never goes well (the katoey encounter, handled
-  // by its own resolver, is the famous exception)
-  if (!_inBar()) {
+  // by its own resolver, is the famous exception; the Peacock counts as inside
+  // — see _socialVenue)
+  if (!_socialVenue()) {
     if (kind === "flirt") {
       _say(id === "nok" ?
         "Auntie Nok cackles like a drain and offers you a discount mango. Rejected, fondly." :
@@ -1443,10 +1510,12 @@ function _doTalkAct(kind, targetWord) {
   if (kind === "compliment") outcome = (st.dstate === "stranger" || st.trust <= 0) ? "flat" : "warm";
   else if (kind === "joke")  outcome = (st.mood === "open" || st.trust >= 2) ? "warm" : "flat";
   else                        outcome = st.trust >= 3 ? "warm" : "cool"; // tease is earned
-  outcome = _persTalkOutcome(kind, outcome); // your personality tilts how it lands
+  outcome = _persTalkOutcome(kind, outcome);        // your personality tilts how it lands…
+  outcome = _npcPersTalkOutcome(id, kind, outcome); // …and theirs gets the last word
 
   _say(_pickVary(_TALK_ACT_TEXT[kind][outcome], "act:" + kind + outcome)(name),
        outcome === "cool" ? "alert" : outcome === "warm" ? "win" : "");
+  if (_npcPersNote) { _say(_npcPersNote, "dim"); _npcPersNote = null; }
   _trace(kind, name);
 
   // First state-moving outcome of this action today counts; repeats are just

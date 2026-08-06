@@ -8,54 +8,44 @@ var NEWS_FEED = [
     "d": "04 Aug 2026"
   },
   {
-    "t": "Pattaya and Sattahip residents roll the dice under dark rain clouds",
-    "s": "pattayamail.com",
-    "d": "05 Aug 2026"
+    "t": "Cat suspected after Pattaya condo fire forces overnight evacuation",
+    "s": "khaosodenglish.com",
+    "d": "04 Aug 2026"
+  },
+  {
+    "t": "Pattaya an undying city expanding beyond expectations amid an influx of people",
+    "s": "Pattaya Mail",
+    "d": "06 Aug 2026"
   },
   {
     "t": "Foreign man caught on CCTV stealing phone in Pattaya café",
-    "s": "thethaiger.com",
+    "s": "Thaiger",
     "d": "05 Aug 2026"
   },
   {
-    "t": "Cat suspected after Pattaya condo fire forces overnight evacuation",
-    "s": "Khaosod English",
-    "d": "04 Aug 2026"
-  },
-  {
-    "t": "Pattaya C4 explosives rifles and war gear lead Chinese man to 44-year prison sentence",
-    "s": "pattayamail.com",
-    "d": "04 Aug 2026"
-  },
-  {
     "t": "When cases go quiet questions grow over Thailand’s crime response",
-    "s": "pattayamail.com",
+    "s": "Pattaya Mail",
     "d": "04 Aug 2026"
   },
   {
     "t": "Pattaya massage workers report alleged kidnapping amid fresh fears",
-    "s": "pattayamail.com",
+    "s": "Pattaya Mail",
     "d": "04 Aug 2026"
   },
   {
-    "t": "Swaying car draws Pattaya police attention, leads to Glock seizure and arrest",
-    "s": "pattayamail.com",
-    "d": "05 Aug 2026"
-  },
-  {
-    "t": "Late Thailand dagger leaves Philippines' ASEAN Championship hopes hanging by a thread",
-    "s": "ESPN",
+    "t": "Pattaya C4 explosives rifles and war gear lead Chinese man to 44-year prison sentence",
+    "s": "Pattaya Mail",
     "d": "04 Aug 2026"
   },
   {
-    "t": "CUADRAT CONCERNED PHILIPPINES COULD MISS SEMIS AFTER THAILAND DEFEAT",
-    "s": "ASEAN United FC",
+    "t": "Language barrier leaves Chinese tourist stranded in taxi",
+    "s": "Pattaya Mail",
     "d": "05 Aug 2026"
   },
   {
-    "t": "Philippines brace for vengeful Thailand in crucial ASEAN Championship reunion",
-    "s": "ESPN Philippines",
-    "d": "03 Aug 2026"
+    "t": "Myanmar president visits Thailand on quest for legitimacy as Bangkok backs engagement",
+    "s": "reuters.com",
+    "d": "05 Aug 2026"
   },
   {
     "t": "Bangkok airport apologises after clash with Chinese tourists at boarding gate",
@@ -68,20 +58,30 @@ var NEWS_FEED = [
     "d": "05 Aug 2026"
   },
   {
+    "t": "Late Thailand dagger leaves Philippines' ASEAN Championship hopes hanging by a thread",
+    "s": "ESPN",
+    "d": "04 Aug 2026"
+  },
+  {
     "t": "Chinese activist held by Thailand arrives in Canada",
     "s": "Bangkok Post",
+    "d": "04 Aug 2026"
+  },
+  {
+    "t": "Laos-China railway gets closer to regional link as Thailand advances high-speed rail expansion",
+    "s": "Asia News Network",
     "d": "04 Aug 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-08-05","USD":33.15,"AUD":23.37,"GBP":44.66,"EUR":38.28};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-06","temp":27,"humid":93,"code":51,"hi":31,"rain":84};
+var WX_NOW = {"date":"2026-08-06","temp":29,"humid":77,"code":51,"hi":30,"rain":98};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-08-01","first":"932479","last2":"69","front3":["413","672"],"back3":["039","154"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4249,"date":"2026-08-05","baht":66600};
+var GOLD = {"usd":4268,"date":"2026-08-06","baht":66900};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":64627,"thb":2138108};
+var BTC = {"usd":64469,"thb":2132274};
