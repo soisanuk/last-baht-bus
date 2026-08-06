@@ -395,6 +395,8 @@
   #start-back:hover { border-color: var(--pink); color: var(--bright); }
   #start-go { flex: 1; background: var(--pink); border: 1px solid var(--pink); color: #05001a; font-weight: 700; box-shadow: 0 0 16px #ff149366; }
   #start-go:hover { box-shadow: 0 0 26px #ff1493aa; }
+  #start-daily { flex: 1; background: none; border: 1px solid var(--yellow); color: var(--yellow); font-weight: 700; box-shadow: 0 0 12px #ffd70033; }
+  #start-daily:hover { box-shadow: 0 0 22px #ffd70077; }
 
   /* ── vendored word-card modal (source of truth: trainer index.html) ──── */
   /* the trainer's palette names, same neon values */
@@ -765,9 +767,12 @@
         <li><b>฿100,000</b> for the week in the bank; <b>฿1,000</b> in your pocket to start.</li>
         <li>Draw the rest at the <b>street ATM</b> — ฿300 a pull, ฿20,000 a day.</li>
         <li class="start-goal">Goal: <b>สบายสบาย</b> — get happy, max out the week. ★</li>
+        <li><b>TODAY'S SOI</b> deals everyone who plays it today the same week —
+          finish, <b>SHARE</b> your card, compare. <b>START</b> rolls a week of your own.</li>
       </ul>
       <div class="start-actions">
         <button id="start-back">← Back</button>
+        <button id="start-daily">TODAY'S SOI 📅</button>
         <button id="start-go">START ★</button>
       </div>
     </div>

@@ -27,10 +27,18 @@ function _showStartMenu() {
   ov.hidden = false;
 }
 
-function _startGame() { // START on the Soi 6 intro panel
+function _startGame(daily) { // START / TODAY'S SOI on the Soi 6 intro panel
   const ov = document.getElementById("start-overlay");
   if (ov) ov.hidden = true;
-  startSoi6Mode();
+  if (daily) {
+    // Seed-of-the-day: the engine never reads a clock (shared-world rule 1),
+    // so the DATE is computed here and handed in as a string — everyone who
+    // presses TODAY'S SOI on the same calendar day gets the same week.
+    const d = new Date().toISOString().slice(0, 10);
+    startSoi6Mode({ seed: _dailySeed(d), dailyId: d });
+  } else {
+    startSoi6Mode();
+  }
   _autosave();
   _term.renderChips();
   _audioForRoom(G.room, G.flags);
@@ -135,6 +143,17 @@ function _dispatch(cmd) {
     return;
   }
 
+  // SHARE: the engine prints the week card; the frontend also drops it on the
+  // clipboard (presentation concern — the engine stays clipboard-free). Copy is
+  // attempted before dispatch so the "(copied)" note lands after the card.
+  const sharing = v === "share" && typeof G !== "undefined" && G && G.mode === "soi6" &&
+    typeof _shareCard === "function";
+  if (sharing && navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(_shareCard().join("\n"))
+      .then(() => _term.print("(Week card copied to the clipboard — paste it anywhere.)", "dim"))
+      .catch(() => {}); // clipboard permission denied (file:// etc.) — the printed card still copies by hand
+  }
+
   _prevSnap = serializeGame();
   doCommand(cmd);
   _autosave();
@@ -166,7 +185,9 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("start-intro").hidden = true;
     document.getElementById("start-menu").hidden = false;
   });
-  document.getElementById("start-go").addEventListener("click", _startGame);
+  document.getElementById("start-go").addEventListener("click", () => _startGame(false));
+  const dailyBtn = document.getElementById("start-daily");
+  if (dailyBtn) dailyBtn.addEventListener("click", () => _startGame(true));
 
   newGame();
   let savedLive = false;

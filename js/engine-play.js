@@ -2400,6 +2400,9 @@ function _endNight(reason) {
   G.game = null;
   G.pendingEnc = null;
   G.pendingFare = null;
+  // the week's spine, one entry per night — what the share card renders.
+  // Capped so an endless expat run can't grow the save without bound.
+  if ((G.nightLog = G.nightLog || []).length < 30) G.nightLog.push(reason);
   switch (reason) {
     case "dawn":
       _say("The sky over the gulf goes grey, then pink, and even Pattaya blinks. " +
@@ -2654,8 +2657,12 @@ function _endVacation() {
     _say(`SOI 6 · DAY 7 — happiness ${G.happy}: ${_happyLevel(G.happy)}.` +
       (G.happy >= 100 ? " You maxed the week. ★"
                       : ` (Best week on the soi so far: ${G.bestHappy}.)`), "win");
+    // the week card, Wordle-style — printed here so it's the last thing the
+    // week leaves you with, and SHARE re-prints (and copies) it on demand
+    for (const l of _shareCard()) _say(l, "win");
     _say("So — again?", "room");
-    _say("(PLAY AGAIN — one more week on Soi 6. Fresh ฿100,000, fresh liver.)", "dim");
+    _say("(PLAY AGAIN — one more week on Soi 6. Fresh ฿100,000, fresh liver. " +
+      "SHARE copies your week card.)", "dim");
     return;
   }
   _say(`VACATION ${G.vacation}: happiness ${G.happy} — ${_happyLevel(G.happy)}` +
