@@ -4912,7 +4912,7 @@ const NPCS = {
           "very patient. \"Some tables you do not ask about, my friend. Not the detective. Not the blogger who " +
           "keeps writing his little articles. Not you.\" A beat. \"Not even me.\" And he changes the subject so " +
           "smoothly you almost don't feel the door shut. \"Now — you eat yet? You never eat. Come, I know a " +
-          "place.\"",
+          "place.\" (FOLLOW TAN, if you're hungry — he means it.)",
         short: "\"Some tables you don't ask about, my friend. Not even me.\" The door shuts so smoothly you almost don't feel it." },
 
       // The near-confirmation — once the fragments add up. He never says the words.
