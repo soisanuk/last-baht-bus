@@ -225,8 +225,10 @@ function _maybeEncounter() {
   const eligible = Object.keys(ENCOUNTERS).filter(id =>
     !G.encDone[id] && ENCOUNTERS[id].rooms.includes(G.room) &&
     (id !== "powerbank" || G.battery <= 30) &&
-    (id !== "booking" || (_flag("act1Done") && G.nightTurn >= 40)) && // late, settled: the apps come alive after 1 a.m.
-    (id !== "clubpickup" || (_flag("act1Done") && G.nightTurn >= 40))); // the clubs empty out late too
+    // 70 = 01:00, which is when her text claims she finishes ("It is gone 1 a.m.")
+    // — the old gate of 40 fired the "gone 1 a.m." prose at half past ten.
+    (id !== "booking" || (_flag("act1Done") && G.nightTurn >= 70)) && // the apps come alive after 1 a.m.
+    (id !== "clubpickup" || (_flag("act1Done") && G.nightTurn >= 40))); // you can spill out of a club any time from mid-evening
   const chance = ENC_CHANCE * (_bandNearby() ? 1.5 : 1);
   if (!eligible.length || _rand() > chance) return;
   _startEnc(eligible[Math.floor(_rand() * eligible.length)]);
