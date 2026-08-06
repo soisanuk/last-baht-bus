@@ -4899,7 +4899,14 @@ const NPCS = {
         short: "\"You saw a man at a table. Rooms are full of tables. You never asked, I never said — keep it that way.\"" },
 
       // Good-table deflection — the smooth close, before you've circled it enough.
-      { topic: "table", when: (st, G) => ["orchidReported", "nameKept", "oldDaysHeard", "wrongShot", "nomineeWarned"]
+      // deflect: the chip palette must NOT offer "table" before the fiction has
+      // introduced it (the player learns of the good table from the Pink Lotus
+      // door, Doyle, Roy, Barry — never from a menu). Typing ASK TAN ABOUT TABLE
+      // early still gets this refusal — the ask-the-driver inference is earned.
+      // The chip appears when the ≥3-fragments node below unlocks, so the topic
+      // surfacing at all IS the telegraph that Tan is ready to say the real thing.
+      { topic: "table", deflect: true,
+        when: (st, G) => ["orchidReported", "nameKept", "oldDaysHeard", "wrongShot", "nomineeWarned"]
           .filter(f => _flag(f)).length < 3,
         text: "\"The good table.\" The warmth stays on his face while something behind it goes very still and " +
           "very patient. \"Some tables you do not ask about, my friend. Not the detective. Not the blogger who " +
