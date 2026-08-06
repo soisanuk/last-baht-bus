@@ -202,5 +202,14 @@ in `docs/prose-defects.md`: attribution has to happen at SCENE scope, because
 the corpus splits prose at line granularity and the minibus line never contains
 the word "Tan" at all.
 
-Still unbuilt: **transcript review**, which has never actually been run despite
-the soak generating the transcripts for free.
+**Transcript review: RUN** (2026-08-07). Catches the class the corpus cannot
+represent, because the corpus has no order — defects that live in the ASSEMBLY
+of lines. First run found the Nite Owl printing "A reader writes: A Thai wife
+writes:" for six of nine letters, a doubled "+1 สนุก" award, and {{…}} markup
+leaking into transcripts. All fixed; details in `docs/prose-defects.md`.
+Cheap enough to repeat per release: `node tools/soak.mjs --seed N --nights 3
+--transcript out.txt`, then read it.
+
+Nothing left unbuilt in the review strategy. Remaining work is features —
+bar-owning is the headline — plus the German localization gap, which every new
+line widens (a de-mode transcript still shows English seams).

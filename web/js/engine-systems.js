@@ -2696,6 +2696,9 @@ const _PUB_SOI_SCENES = [
 ];
 // One spectator happy-point a night, shared across every vantage (balcony, pub
 // window, the quiet-middle parade, the Blue Dog show) via G.blueDogDay.
+// _addHappy already prints "(+1 สนุก)", so the caller's line must NOT repeat
+// it — spotted in a soak transcript, where the two landed back to back and read
+// like a double award. The kind of defect only sequence shows.
 function _soiSpectateHappy(msg) {
   if (G.blueDogDay !== G.day) {
     G.blueDogDay = G.day;
@@ -2732,7 +2735,7 @@ function _doWatchSoi() {
   } else {
     _say(_pickVary(_BALCONY_SCENES, "balcony"));
   }
-  _soiSpectateHappy("(Best seat above the best free show. +1 สนุก.)");
+  _soiSpectateHappy("(Best seat above the best free show.)");
 }
 
 // The ground vantage: the Queen Vic's front window. Same soi, opposite feeling —
@@ -2740,7 +2743,7 @@ function _doWatchSoi() {
 // whole grabby circus, the pub's cold-aircon calm behind you. Its own pool.
 function _doWatchPubSoi() {
   _say(_pickVary(_PUB_SOI_SCENES, "pubsoi"));
-  _soiSpectateHappy("(A pint, and the whole circus safely behind glass. +1 สนุก.)");
+  _soiSpectateHappy("(A pint, and the whole circus safely behind glass.)");
 }
 
 // The Jomtien beach cats: Big One and Little One, the two gray-and-white
@@ -3344,7 +3347,13 @@ function _doColumn() {
   _say(_owlPick(_OWL_LEADS, 1));
   _say("• " + _owlPick(_OWL_LISTINGS, 7), "dim");
   const [letter, reply] = _owlPick(_OWL_LETTERS, 13);
-  _say("• A reader writes: " + letter);
+  // The pool holds two authored styles: a bare quote ("'Which is the honest
+  // soi?'") that needs an attribution, and a letter that introduces its own
+  // writer ("A Thai wife writes: …"). A blanket prefix doubled the latter —
+  // "A reader writes: A Thai wife writes:" — for six of nine letters. Spotted
+  // in a soak transcript, where the column renders assembled; the template and
+  // the letter are each perfectly fine on their own page.
+  _say(/^['"“]/.test(letter) ? "• A reader writes: " + letter : "• " + letter);
   _say("  OWL: " + reply);
   _say("• " + _owlPick(_OWL_JOKES, 29), "dim");
   _say("BUT, I DON'T GIVE A HOOT!", "win");

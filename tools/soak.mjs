@@ -184,7 +184,11 @@ export function runSoak(opts = {}) {
   _pseed = (seed * 2654435761 % 2147483646) + 1;
 
   const buf = [];
-  engineInit(t => buf.push(String(t)), null, () => {});
+  // stripMarkup, like any non-decorate() consumer: {{…}} is render-only
+  // tap-suppression markup, and leaving it raw makes transcripts read
+  // differently from the game — noise for anyone reviewing one.
+  engineInit(t => buf.push(typeof stripMarkup === "function"
+    ? stripMarkup(String(t)) : String(t)), null, () => {});
   newGame();
   if (mode === "vacation") {
     G.flags.act1Done = true; G.stage = "vacation"; G.money = 3000;
