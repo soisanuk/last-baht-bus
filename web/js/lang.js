@@ -1078,5 +1078,90 @@ const _CATALOGS = {
       "Die Brieftasche gehört wieder dir und der Anfang liegt hinter dir — hier draußen gibt es keine falschen Antworten, nur bessere Nächte. Nichts im Auftragsbuch: Die Auftraggeber sind da draußen, also TALK mit den Leuten. (QUESTS listet die Jobs, WHO dein schwarzes Buch, MAP die Gegend.)",
     "The black book's empty. You earn names the honest way out here — CONTACT a lady in her own bar once she likes you, and she goes in the book.":
       "Das schwarze Buch ist leer. Namen verdient man sich hier draußen auf die ehrliche Tour — CONTACT eine Lady in ihrer eigenen Bar, sobald sie dich mag, und sie landet im Buch.",
+
+    // ── de-sweep batch 4 (2026-08-07) — the templating batch ─────────────────
+    // 20 _say sites were refactored to _fmt FIRST (batch 2's lesson): these lines
+    // carry a NAME or an AMOUNT, so without a slot German needed one entry per
+    // character and per price. "Terry laughs it off" and "Doyle laughs it off"
+    // were two separate leaks of one sentence.
+
+    // the flirt rebuffs — a name, and a no
+    "{n} blinks, then snorts. \"Ha — no. Not that way, mate. Buy me a beer if you like, but keep the eyelashes to yourself.\" More baffled than bothered.":
+      "{n} blinzelt, dann schnaubt. „Ha — nein. Nicht so, Kumpel. Gib mir ein Bier aus, wenn du magst, aber den Augenaufschlag behalt für dich.“ Mehr verdutzt als verärgert.",
+    "A beat of confusion, then {n} laughs it off and shifts his stool an inch away. \"Steady on, fella. Wrong tree entirely.\" Good-natured, but that's a no.":
+      "Ein Moment Verwirrung, dann tut {n} es mit einem Lachen ab und rückt seinen Hocker ein Stück beiseite. „Ganz ruhig, Kollege. Da bist du bei mir komplett an der falschen Adresse.“ Gutmütig, aber ein Nein.",
+    "{n} laughs, not unkindly. \"Aww, tilac — not my type. I like the ladies, same-same you.\" A pat on the cheek, and she's moved on.":
+      "{n} lacht, nicht unfreundlich. „Aww, Tilac — nicht mein Typ. Ich mag die Ladys, same-same wie du.“ Ein Klaps auf die Wange, und sie ist weitergezogen.",
+    "\"Handsome, but—\" {n} tips her head at a girl across the bar and grins. \"—wrong team, na. I bat the other way.\" No offence in it, plenty of amusement.":
+      "„Hübsch, aber—“ {n} deutet mit dem Kinn auf ein Mädchen auf der anderen Seite der Bar und grinst. „—falsches Team, na. Ich spiele für die andere Mannschaft.“ Nicht böse gemeint, und sichtlich amüsiert.",
+    "{n}'s face shuts like a door. \"No. Do that again and we have a problem.\" The temperature in your corner of the bar drops several degrees.":
+      "{n} macht das Gesicht zu wie eine Tür. „Nein. Mach das noch mal und wir haben ein Problem.“ Die Temperatur in deiner Ecke der Bar fällt um mehrere Grad.",
+    "\"You WHAT?\" {n} sets the glass down very deliberately. That is not a look you flirt through. Leave it.":
+      "„Bitte WAS?“ {n} stellt das Glas sehr bedächtig ab. Durch diesen Blick flirtet man nicht hindurch. Lass es.",
+
+    // Connect 4 / Jackpot / pool / darts — the opponent's name, and the stake
+    "{n} lights up, fetches the frame, and drops a counter on the way over. She sorts the colours carefully and counts hers twice. Down the bar, one of the older girls watches with something between fondness and pity.":
+      "{n} strahlt, holt das Spielbrett und lässt auf dem Weg einen Stein fallen. Sie sortiert die Farben sorgfältig und zählt ihre zweimal nach. Weiter hinten am Tresen schaut eine von den älteren Mädels zu, mit etwas zwischen Zuneigung und Mitleid.",
+    "{n} racks the frame with the easy speed of a woman who plays every shift, and gives you first drop like it costs her nothing. It doesn't.":
+      "{n} baut das Spiel auf, flott und beiläufig wie eine, die jede Schicht spielt, und überlässt dir den ersten Zug, als koste es sie nichts. Tut es auch nicht.",
+    "฿{s} on the table.": "฿{s} liegen auf dem Tisch.",
+    "{n} slides over the battered Jackpot box — nine tiles up, two dice, the felt worn smooth by ten thousand losing farang. Flip the dice, or flip their sum. Lowest score wins; shut the box and it's JACKPOT.":
+      "{n} schiebt dir den ramponierten Jackpot-Kasten hin — neun Klappen oben, zwei Würfel, der Filz blank gescheuert von zehntausend verlierenden Farang. Klapp die Würfelzahlen um, oder ihre Summe. Wer am wenigsten stehen lässt, gewinnt; alle Klappen zu, und es ist JACKPOT.",
+    "฿{s} rides on it.": "฿{s} stehen auf dem Spiel.",
+    "{n} catches the look on your face and grins. \"First time, na? Okay — I show you. Slow-slow. You do every flip yourself tonight; you learn faster that way.\" She rolls for you.":
+      "{n} liest dir den Blick vom Gesicht ab und grinst. „Erstes Mal, na? Okay — ich zeig dir. Langsam-langsam. Heute Abend klappst du jede Klappe selbst um; so lernst du schneller.“ Sie würfelt für dich.",
+    "{n} leans in. \"Two ways here, na. Flip the two dice numbers — or flip their sum, one tile. Never both. Whatever's still standing at the end is your score, and low wins. You choose.\"":
+      "{n} beugt sich vor. „Zwei Wege, na. Klapp die beiden Würfelzahlen um — oder ihre Summe, eine Klappe. Nie beides. Was am Ende noch steht, ist dein Ergebnis, und wenig gewinnt. Du entscheidest.“",
+    "{n} taps the felt. \"This roll, only one way to play it — so play it. Type the flip. The box doesn't move itself… not until you know it does.\"":
+      "{n} tippt auf den Filz. „Dieser Wurf, nur ein Weg — also spiel ihn. Tipp den Flip ein. Der Kasten bewegt sich nicht von allein… jedenfalls nicht, bevor du weißt, dass er es doch tut.“",
+    "You rack. {n} breaks — dry. Seven balls each, then the black.":
+      "Du baust auf. {n} breakt — nichts fällt. Sieben Kugeln für jeden, dann die Schwarze.",
+    "฿{s} under the corner cushion.": "฿{s} liegen unter der Eckbande.",
+    "Chalk up: 501 each, straight off, check out on a double. {n} throws for the bull to start and lands it like breathing.":
+      "Angeschrieben: 501 für jeden, Straight In, Double Out. {n} bullt aus und trifft, als wäre es Atmen.",
+    "฿{s} on the shelf under the board.": "฿{s} liegen auf der Ablage unter der Scheibe.",
+
+    // shops, the app, and walking there
+    "A pack is ฿{p}. You have ฿{m}. The cashier slides it back with a knowing look.":
+      "Eine Packung kostet ฿{p}. Du hast ฿{m}. An der Kasse schiebt man sie dir mit wissendem Blick zurück.",
+    "The app regrets to inform you: ฿{m} available, ฿{a} dreamed of.":
+      "Die App bedauert mitteilen zu müssen: ฿{m} verfügbar, ฿{a} erträumt.",
+    "You point yourself at {v} and let your feet do the remembering — one turn of soi, neon, and shortcuts.":
+      "Du peilst {v} an und überlässt das Erinnern deinen Füßen — eine Ecke Soi, Neon und Abkürzungen.",
+    "You point yourself at {v} and let your feet do the remembering — {n} turns of soi, neon, and shortcuts.":
+      "Du peilst {v} an und überlässt das Erinnern deinen Füßen — {n} Ecken Soi, Neon und Abkürzungen.",
+
+    // the quest journal frames. The name and desc are _L'd separately (they are
+    // world.js data), so a frame translated alone still reads half-German until
+    // batch 5 does the quest text — deliberate: the frames are what repeat.
+    "On the books: {name} — {desc}{where}": "Im Auftragsbuch: {name} — {desc}{where}",
+    "{giver} has a job going — “{name}”. Take it on with ACCEPT {id}.":
+      "{giver} hätte da einen Auftrag — „{name}“. Nimm ihn an mit ACCEPT {id}.",
+    "✦ {who} has a job for you: “{name}” — {desc}":
+      "✦ {who} hat einen Auftrag für dich: „{name}“ — {desc}",
+    "✦ Quest accepted: {name}": "✦ Auftrag angenommen: {name}",
+    "✦ Abandoned: {name}. The soi forgives; the giver may offer it again.":
+      "✦ Aufgegeben: {name}. Die Soi verzeiht; wer ihn vergeben hat, bietet ihn vielleicht wieder an.",
+    // "▶ {name} — {desc}{where}" and "▶ {name}" need no entry: they are
+    // punctuation and slots only, identical in both languages.
+    "✦ On offer: {name} (ACCEPT {id})": "✦ Zu vergeben: {name} (ACCEPT {id})",
+
+    // fixed lines riding along
+    // these two land in the {n} slot of the pool/darts intros — a DESCRIPTION, not
+    // a name, so without _L at the assignment German prose wrapped an English
+    // clause. Same defect class the {item} slot had: invisible in the string
+    // pairs, obvious the moment you run a German game.
+    "a leathery expat off the rail who hasn't missed since 1997":
+      // NB: no trailing relative clause. The host sentence's verb resumes right
+      // after this slot, and German would need a closing comma the template
+      // cannot supply ("…hat stößt an"). A mid-sentence slot filler must be a
+      // self-contained noun phrase.
+      "ein ledriger, seit 1997 unfehlbarer Dauergast vom Tresen",
+    "a leathery expat with his own darts in a belt case":
+      "ein ledriger Auswanderer mit eigenen Darts im Gürteletui",
+    "You're broke, so this one's for sanuk — and her professional pride.":
+      "Du bist pleite, also geht die hier auf Sanuk — und auf ihren Berufsstolz.",
+    "Last call — the mamasan taps her watch: about half an hour to closing. This place shuts at midnight, so if you mean to take a lady home tonight, now is the moment to BARFINE. After the shutters come down it's the street.":
+      "Letzte Runde — die Mamasan tippt auf ihre Uhr: noch etwa eine halbe Stunde bis Feierabend. Der Laden macht um Mitternacht zu, wenn du also heute Nacht eine Lady mitnehmen willst, ist jetzt der Moment für BARFINE. Wenn die Rollläden unten sind, bleibt nur noch die Straße.",
   },
 };

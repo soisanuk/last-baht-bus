@@ -1514,14 +1514,16 @@ function _doHint() {
     const active = Object.keys(QUESTS).filter(q => G.quests[q] === "active");
     if (active.length) {
       const q = QUESTS[active[0]];
-      _say(`On the books: ${q.name} — ${q.desc}${_questWhere(q.at)}`, "win");
+      _say(_fmt("On the books: {name} — {desc}{where}",
+        { name: _L(q.name), desc: _L(q.desc), where: _questWhere(q.at) }), "win");
       return;
     }
     const offered = Object.keys(QUESTS).filter(q => G.quests[q] === "offered");
     if (offered.length) {
       const q = QUESTS[offered[0]];
       const giver = NPCS[q.giver] ? NPCS[q.giver].name : "Someone";
-      _say(`${giver} has a job going — “${q.name}”. Take it on with ACCEPT ${offered[0].toUpperCase()}.`, "win");
+      _say(_fmt("{giver} has a job going — “{name}”. Take it on with ACCEPT {id}.",
+      { giver, name: _L(q.name), id: offered[0].toUpperCase() }), "win");
       return;
     }
     _say("The wallet's yours and the opening's behind you — out here there are no wrong answers, " +
@@ -1582,7 +1584,8 @@ function _questOffer(npcId) {
     if (q.giver !== npcId || !_questAvailable(qid)) continue;
     if (G.quests[qid] === "offered") continue; // already on the table — surface the giver's NEXT job instead
     G.quests[qid] = "offered";
-    _say(`✦ ${NPCS[npcId].name} has a job for you: “${q.name}” — ${q.desc}`, "win");
+    _say(_fmt("✦ {who} has a job for you: “{name}” — {desc}",
+      { who: NPCS[npcId].name, name: _L(q.name), desc: _L(q.desc) }), "win");
     _say(`(ACCEPT ${qid.toUpperCase()} to take it on.)`, "dim");
     return; // one offer at a time keeps the bar chatter sane
   }
@@ -1606,7 +1609,7 @@ function _doAccept(arg) {
     _say("You've heard of it, but nobody's actually offered it to you yet."); return;
   }
   G.quests[qid] = "active";
-  _say(`✦ Quest accepted: ${q.name}`, "win");
+  _say(_fmt("✦ Quest accepted: {name}", { name: _L(q.name) }), "win");
   _say(q.desc, "dim");
   if (q.item && G.itemLoc[q.item] === null) {
     G.itemLoc[q.item] = "inventory";
@@ -1627,7 +1630,8 @@ function _doAbandon(arg) {
   G.quests[qid] = "abandoned";
   const q = QUESTS[qid];
   if (q.item && G.itemLoc[q.item] === "inventory") G.itemLoc[q.item] = null;
-  _say(`✦ Abandoned: ${q.name}. The soi forgives; the giver may offer it again.`, "dim");
+  _say(_fmt("✦ Abandoned: {name}. The soi forgives; the giver may offer it again.",
+    { name: _L(q.name) }), "dim");
 }
 
 function _doQuests() {
@@ -1646,8 +1650,10 @@ function _doQuests() {
   const rows = Object.entries(QUESTS).filter(([qid]) => G.quests[qid]);
   for (const [qid, q] of rows) {
     const st = G.quests[qid];
-    if (st === "active") { _say(`▶ ${q.name} — ${q.desc}${_questWhere(q.at)}`, "win"); shown++; }
-    else if (st === "offered") { _say(`✦ On offer: ${q.name} (ACCEPT ${qid.toUpperCase()})`, "dim"); shown++; }
+    if (st === "active") { _say(_fmt("▶ {name} — {desc}{where}",
+      { name: _L(q.name), desc: _L(q.desc), where: _questWhere(q.at) }), "win"); shown++; }
+    else if (st === "offered") { _say(_fmt("✦ On offer: {name} (ACCEPT {id})",
+      { name: _L(q.name), id: qid.toUpperCase() }), "dim"); shown++; }
     else if (st === "done") { _say(`✓ ${q.name}`, "dim"); shown++; }
   }
   if (!shown) _say("No adventures on the books. The givers are out there — talk to people.");
@@ -1911,7 +1917,7 @@ function _doSendMoney(arg) {
     c === nameW || NPCS[c].name.toLowerCase().includes(nameW.split(" ")[0] || "~"));
   if (!id) { _say("Send to whom? The banking app only knows your contacts."); return; }
   if (!amt || amt <= 0) { _say("How much? (SEND <amount> TO <name>)"); return; }
-  if (amt > G.money) { _say(`The app regrets to inform you: ฿${G.money} available, ฿${amt} dreamed of.`); return; }
+  if (amt > G.money) { _say(_fmt("The app regrets to inform you: ฿{m} available, ฿{a} dreamed of.", { m: G.money, a: amt })); return; }
   // Tan sends it straight back — his currency is favours, never baht
   if (id === "tan") {
     _say(_fmt("฿{a} crosses town in one green blink — and comes straight back in another, " +
