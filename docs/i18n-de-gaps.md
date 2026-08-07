@@ -38,8 +38,16 @@ Templating is worth more than translating: do it first, every time.
   not a catalog key.
 - **Dialogue**: story-NPC lines get `de` treatment in their own register pass.
 - Author minimal + pattern-anchored, then a **cross-model critique pass** before
-  shipping. Batch 1: 6 of 29 strings survived review unchanged. The review is
-  not optional, and batch 2's 11 entries have NOT yet had it.
+  shipping. The review is NOT optional and the numbers keep saying so: batch 1,
+  6 of 29 strings survived unchanged; batch 2, 6 of 11. Two failure modes recur
+  in this author's German — (a) **idiom calquing**: translating the English
+  syntactic frame instead of reaching for the German idiom that carries the
+  meaning ("die Rechnung steht nicht auf deiner Seite" for what German says as
+  *die Rechnung geht nicht auf*), and (b) **parallelism collapse**: starting a
+  three-item list and dropping the pattern on the last item.
+- The review must look at the RUNTIME, not just the strings. Batch 2's reviewer
+  caught that `{item}` slots were never routed through the catalog at all, so
+  German prose rendered "฿150 für sandals" — a defect invisible in the pairs.
 
 ## The remaining gap list (unique lines × occurrences)
 ```
