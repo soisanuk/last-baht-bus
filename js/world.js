@@ -2570,45 +2570,28 @@ const NPCS = {
         "fall in.\" A beat. \"That's how I open this bar. I had nothing. That's the " +
         "only reason it work.\"" },
     
-      // ── bar-owning chain, step 3: staff ─────────────────────────────────
+      // ── bar-owning chain, step 3: the 51% ──────────────────────────────
+      // Wayne's answer was "pick a person, not a structure". This is the person.
+      // She does not say yes warmly — she says yes like a woman who has watched
+      // this arrangement destroy people, and wants it written down.
       {
-        topic: "staff", chip: false,
-        req: ["expatLife", "barLicence"], notFlags: ["barStaff"], sets: ["barStaff"],
-        text: "\"Ohh.\" Candy sets down the glass she is drying and gives you her " +
-          "whole attention, which she does not do often. \"So it is true. Everybody " +
-          "say it already.\" She thinks. \"Okay. Listen. A bar is not a room, tilac. " +
-          "A bar is who is standing in it.\" She holds up one finger. \"First is " +
-          "mamasan. Not a girl — a woman who can say no to a customer and no to you, " +
-          "same day, same voice. If you hire a nice one you have no bar, you have a " +
-          "party, and in four month you have nothing.\" A second finger. \"Then " +
-          "cashier. Somebody's cousin, and you check the till yourself for six month " +
-          "anyway, and she must know that you check. Is not insult. Is the job.\" " +
-          "The third finger stays down. \"Girls come by themselves if the first two " +
-          "are right. They talk to each other more than you talk to them.\" She picks " +
-          "the glass back up. \"I send you two women I trust. If they say yes to you, " +
-          "you have a bar. If they say no — listen to why, na.\"",
-        short: "\"Mamasan who can say no to you. A cashier who knows you count. Girls come after.\"",
-      },
-      // ── step 4: opening night ───────────────────────────────────────────
-      {
-        topic: "opening", chip: false,
-        req: ["expatLife", "barStaff"], notFlags: ["barOpen"], sets: ["barOpen"],
-        text: "She closes early — actually closes, shutters and all, which nobody " +
-          "has seen her do — and walks you out to Khao Talo herself.\n\n" +
-          "The Shamrock has its lights on for the first time in three years. The " +
-          "long tin roof, the fairy lights, the ceiling fan somebody has cleaned. " +
-          "Your mamasan is behind the rail with her arms folded, reading the room " +
-          "before a single customer is in it. The cashier has already counted the " +
-          "float twice. Down the soi, Daeng is standing in her own doorway with a " +
-          "beer, not coming over, just watching — which from Daeng is a parade.\n\n" +
-          "Nobody comes for twenty minutes. Then Bert, because of course Bert, with " +
-          "a Singha he brought himself and an opinion about the speakers. Then two " +
-          "of Daeng's regulars who fancy a change of forty metres. Then a couple who " +
-          "took the wrong soi and stay anyway.\n\n" +
-          "\"Is not a good bar yet,\" Candy says, entirely happy, watching the till " +
-          "she doesn't own. \"Is a bar. Good takes years.\" She raises her glass to " +
-          "the room. \"Congratulations, boss.\"",
-        short: "\"Congratulations, boss.\"",
+        topic: "partnership", chip: false,
+        req: ["expatLife", "barLicence"], notFlags: ["barPartner"],
+        sets: ["barPartner", "partnerCandy"],
+        fx: (st, G) => { _align("indie", 2); _align("wdg", -2); },
+        text: "Candy does not answer for a long moment, and when she does it is not " +
+          "the voice she uses on the floor.\n\n\"You know what you are asking me.\" " +
+          "Not a question. \"Fifty-one is not a favour, tilac. Fifty-one is my name " +
+          "on your bar. If you drink it away, is my name. If you hit a girl, is my " +
+          "name. If you go home to England and never come back—\" a small shrug " +
+          "\"—then I have a bar, and everybody on this soi know how I got it.\"\n\n" +
+          "She lets that sit.\n\n\"So. We go to a lawyer, a real one, in Bangkok, " +
+          "not the man Gavin use. Everything written. What I take, what you take, " +
+          "what happen if one of us die.\" She almost smiles. \"Is not romantic. Is " +
+          "why it work.\" Then she does smile, and it is the real one, the one that " +
+          "is worth more than the bar. \"And yes. I say yes. You did not sell Bert's " +
+          "bar to that man when you could have. I watch that. Everybody watch that.\"",
+        short: "\"Fifty-one is my name on your bar. Lawyer in Bangkok, everything written. And yes.\"",
       },
     ],
   },
@@ -5000,6 +4983,40 @@ const NPCS = {
           "twice \"—drive taxis.\" Then the grin snaps back on like a switched light. \"ANYWAY. You need a " +
           "ride, any hour, you call me. But you knew that already.\"",
         short: "\"You are asking about a quiet man the whole room bends toward and no one can name. Quiet men stay quiet for a reason — and some of them drive taxis.\" The grin snaps back." },
+    
+      // ── bar-owning chain, step 3 (the OTHER route): Tan as the 51% ──────
+      // The fork's whole point. Candy's yes is slow, written, and costs a
+      // Bangkok lawyer; Tan's is instant, free, and costs nothing you can see.
+      // He has refused money all game — the banking app bounces it straight back
+      // — and his own words are "when I want something from you, I will ask for
+      // it, and it will not be money" (_tanText, engine-systems.js). This is the
+      // player handing that man 51% of a bar and a debt with no figure on it.
+      // Deliberately warm and not sinister: he means every word he says here.
+      {
+        topic: "partnership", chip: false,
+        req: ["expatLife", "barLicence"], notFlags: ["barPartner"],
+        sets: ["barPartner", "partnerTan"],
+        // indie: it stays out of the rollups. syndicate: you are now inside
+        // somebody's web of favours, whether or not you can see the web.
+        fx: (st, G) => { _align("indie", 1); _align("wdg", -1); _align("syndicate", 1); },
+        text: "You have barely finished the sentence before he is nodding.\n\n" +
+          "\"Yes. Of course.\" Tan says it the way you would agree to hold a door. " +
+          "\"My name, your bar. Is no problem, my friend.\"\n\nYou start on the " +
+          "part about a lawyer, and about what he would take, and he waves the " +
+          "whole thing away with two fingers, still smiling.\n\n\"No, no. Land " +
+          "office is my wife cousin. Two hour, finish. Lawyer is for people who do " +
+          "not know anybody.\" He tilts his head. \"And I take nothing. Please. Do " +
+          "not insult us both.\"\n\nYou try once more, because it is too easy, and " +
+          "something in you has been on this soi long enough to know that nothing " +
+          "here is free.\n\n\"My friend.\" He is not smiling any less. \"I told " +
+          "you already. When I want something from you, I will ask.\" He opens the " +
+          "sedan door, because there is always somewhere he has to be. \"Today I do " +
+          "not want anything. Today is a good day — you are staying, and now you " +
+          "have a reason to stay. Come, we go to the land office tomorrow, ten " +
+          "o'clock, and after I know a place for lunch.\"\n\nIt is done by " +
+          "Tuesday. It costs you nothing at all.",
+        short: "\"My name, your bar. Land office is my wife cousin. And I take nothing — do not insult us both.\"",
+      },
     ],
   },
 
@@ -5892,19 +5909,27 @@ const NPCS = {
     
       // ── bar-owning chain, step 1: premises ──────────────────────────────
       {
+        // NOT part of the bar chain: the Shamrock is out on the Darkside, where
+        // neither WDG nor the Samsons have any reason to care. Planted here as a
+        // second-bar hook once you already run one — the pressure out this way
+        // would come from local Thai interests, which is its own arc.
         topic: "shamrock", chip: false,
-        req: ["expatLife"], notFlags: ["barPremises"], sets: ["barPremises"],
-        text: "\"The Shamrock.\" Daeng doesn't look up from the till. \"Irish man, " +
-          "Sean. Good bar. Twelve years.\" She closes the drawer. \"Then he go home " +
-          "for operation and not come back, and the family in Ireland don't want a " +
-          "bar in Thailand, so it just… sit there.\" A shrug that has watched a lot " +
-          "of bars sit there. \"Land is Khun Rattana, up the soi — she own three " +
-          "shophouse, she is not rich, she just never sell. Rent is cheap because " +
-          "dead bar make no money for nobody.\" She finally looks at you, and there " +
-          "is something almost kind in it. \"You want it? Then you talk to a farang " +
-          "who nearly sign the wrong paper. Ask him first. Then come back to me and " +
-          "I tell Sumalee you are not stupid.\"",
-        short: "\"Sean's old place. Land is Khun Rattana. Talk to your farang about the paper first.\"",
+        req: ["expatLife", "barOpen"],
+        text: "\"So. You have a bar now.\" Daeng says it to the till, not to you, " +
+          "and there is no particular warmth in it — but she says it, which from " +
+          "Daeng is a toast.\n\n\"Then I tell you something, for later.\" She " +
+          "nods up the soi, past the tin roof, to the dark shape at the end with " +
+          "no lights in it. \"The Shamrock. Irish man, Sean. Good bar, twelve " +
+          "year. Then he go home for operation and not come back, and the family " +
+          "in Ireland don't want a bar in Thailand, so it just… sit there.\" A " +
+          "shrug that has watched a lot of bars sit there. \"Land is Khun Rattana, " +
+          "three shophouse, never sell. Rent is nothing because dead bar make money " +
+          "for nobody.\"\n\nShe closes the drawer.\n\n\"Out here is not town, " +
+          "na. Nobody from Soi 6 care what happen on Khao Talo — is good and is " +
+          "bad. Different people to keep happy.\" She looks at you for the first " +
+          "time. \"When your bar is standing by itself, come ask me again. Not " +
+          "before. One bar is already more than most farang can hold.\"",
+        short: "\"The Shamrock, up the soi. Land is Khun Rattana. Ask me again when your bar stands by itself.\"",
       },
     ],
   },
@@ -6213,6 +6238,78 @@ const NPCS = {
         "the part that kills 'em, bud. Not the girl, not the visa, not the money. " +
         "The pride.\" He picks the Singha back up. \"So you call anyway. You " +
         "call and you let them hang up on you. And then you call again.\"" },
+    
+      // ── bar-owning chain, step 1: the premises ──────────────────────────
+      // Only reachable once white_dish is resolved — you're the reason it wasn't
+      // sold, which is the only reason this conversation happens at all.
+      {
+        topic: "buying", chip: false,
+        req: ["expatLife", "wdgResolved"], notFlags: ["barPremises"], sets: ["barPremises"],
+        text: "Bert doesn't answer straight away. He looks down the bar — the " +
+          "trophies, the brushed table, the girls who've been here since Candy " +
+          "owned it.\n\n\"I told him to hold,\" he says. \"And he held. But " +
+          "holding's not a plan, bud, it's a stall, and the old man's running out " +
+          "of stall.\" He turns the Singha a quarter turn. \"Doctors want another " +
+          "go at his ticker. He's not coming back out here. He knows it, I know " +
+          "it, and Gavin knows it, which is why that lot are being so bloody " +
+          "patient.\"\n\nHe finally looks at you.\n\n\"So it sells. That's not " +
+          "the question. The question's who to.\" A pause. \"He'll take a regular " +
+          "over a company. Not for the money — he'll lose money on you, and he " +
+          "knows that too. For the lights staying on the way they are.\" He pushes " +
+          "his glass aside, which from Bert is standing to attention. \"I'll ring " +
+          "him tonight. You go and find out what a farang can actually sign in " +
+          "this country, because it isn't what you think it is.\"",
+        short: "\"It sells, bud. Question's who to — and he'd take a regular over a company. Go learn what you can sign.\"",
+      },
+      // ── step 4: opening night — one per partner ─────────────────────────
+      // The fork has to be VISIBLE at the payoff or it wasn't a choice, it was a
+      // coin toss. Candy's night is paperwork pinned behind the till. Tan's is
+      // the same happy room with nobody able to say what the arrangement is.
+      {
+        topic: "opening", chip: false,
+        req: ["expatLife", "barPartner", "partnerCandy"], notFlags: ["barOpen"],
+        sets: ["barOpen"],
+        fx: (st, G) => { _align("indie", 2); _align("wdg", -1); },
+        text: "Nothing changes, which is the point.\n\nThe sign stays. The trophies " +
+          "stay. Bert is exactly where Bert has always been, except that tonight he " +
+          "is working for a man who isn't selling, and it has taken ten years off " +
+          "him. Candy comes over from her own bar at nine, looks at the paperwork " +
+          "pinned behind the till — her name first, as the law requires and as she " +
+          "insisted twice — and says only \"good\" before taking a stool like any " +
+          "customer.\n\nThe old man is on speakerphone from a hospital corridor in " +
+          "Ohio for about four minutes. He asks after the table, not the takings. " +
+          "Bert holds the {{phone}} up so he can hear the room.\n\nAnd at half eleven " +
+          "Gavin comes in, because of course he does. Buys a beer, pays for it, " +
+          "looks round with a valuer's eye and finds nothing to work with. " +
+          "\"Congratulations,\" he says, and means about half of it. \"You know " +
+          "we'd have paid more.\"\n\n\"He knows,\" says Bert, not looking up from " +
+          "the pumps.",
+        short: "\"Sign stays, trophies stay, Bert stays. Gavin bought a beer and paid for it.\"",
+      },
+      {
+        topic: "opening", chip: false,
+        req: ["expatLife", "barPartner", "partnerTan"], notFlags: ["barOpen"],
+        sets: ["barOpen"],
+        fx: (st, G) => { _align("indie", 1); },
+        text: "Nothing changes, which is the point.\n\nThe sign stays, the trophies " +
+          "stay, and Bert is exactly where Bert has always been — working for a man " +
+          "who isn't selling, which has taken ten years off him. There is no " +
+          "paperwork behind the till to look at. There was never a meeting. It was " +
+          "two hours at the land office and a very good lunch afterwards, and the " +
+          "only document in the building is a photocopy Tan handed you in the car " +
+          "park, folded once.\n\nThe old man is on speakerphone from a corridor in " +
+          "Ohio for four minutes and asks after the table, not the takings.\n\n" +
+          "Tan does not come. He sends a crate of Singha and a text — 🙂 — and is " +
+          "somewhere else, being somewhere else.\n\nAt half eleven Gavin comes in, " +
+          "because of course he does. Buys a beer, pays for it, and does the sum " +
+          "behind his eyes: who signed, what it cost, why it was quick. Whatever he " +
+          "arrives at, he doesn't say it. \"Congratulations,\" he says, and for " +
+          "once there is no pitch behind it at all. He looks at you a moment longer " +
+          "than is comfortable. \"Do you know what you've agreed to?\"\n\n" +
+          "\"He's got the paperwork,\" says Bert, not looking up from the pumps. " +
+          "Which is, you notice on the walk home, not the same answer.",
+        short: "\"No paperwork behind the till. Tan sent a crate and a smiley. Gavin asked if you knew what you'd agreed to.\"",
+      },
     ],
   },
 
@@ -6908,62 +7005,65 @@ const QUESTS = {
 
   // ── The bar-owning chain (expat only) ─────────────────────────────────────
   // _goExpat's closing line promises this — "They say the smart ones end up
-  // owning a bar…" — so it exists to make that a door rather than a wink.
+  // owning a bar…" — so the chain exists to make it a door rather than a wink.
   //
-  // Built AS a dep chain, not a subsystem: each step completes off a `sets` on
-  // a giver's dialogue node, like every other quest here. The four steps are
-  // premises → licence → staff → opening night.
+  // The bar is THE STINKY PINKY, and that choice is the whole design. You already
+  // spent `white_dish` talking Bert out of selling it to Ryan Powers; the ailing
+  // American owner is still ailing, and holding is not a plan. So the arc pays
+  // off: the only buyer who isn't WDG is you. Gavin's smiling pitch loses to a
+  // regular, which is exactly the thing WDG cannot price.
   //
-  // The givers aren't arbitrary. Bert manages a bar he'll never own and knows
-  // exactly what that costs; Daeng owns hers outright on a soi with no neon
-  // budget; Wayne nearly signed his name to somebody else's bar and can only
-  // explain the structure honestly BECAUSE you talked him out of it (hence the
-  // dep on nominee_deal — you can't be trusted with the answer until you've
-  // seen the question); Candy runs two bars and is the only person in town who
-  // could staff a third.
+  // (Soi Khao Talo's dead Shamrock is deliberately NOT this bar — it's the
+  // Darkside, and neither WDG nor the Samsons have any reason to care what
+  // happens out there. It's planted as a second-bar hook instead; the pressure
+  // out there would come from local Thai interests, not the town rollups.)
+  //
+  // Built AS a dep chain, not a subsystem: each step completes off a `sets:` on
+  // a giver's dialogue node. Four steps: premises → licence → partner → opening.
   bar_premises: {
-    name: "The Dead Shamrock",
+    name: "The Old Man's Bar",
     giver: "bert",
-    reqFlags: ["expatLife"],       // a vacation doesn't buy a bar
-    desc: "Bert reckons the dead Shamrock out on Soi Khao Talo could be brought " +
-      "back, and that Daeng knows whose name is on the lease (ASK DAENG ABOUT THE SHAMROCK).",
-    deps: [],
-    at: "daeng",
+    reqFlags: ["expatLife"],
+    // you can only be offered the bar if you're the reason it wasn't sold
+    deps: ["white_dish"],
+    desc: "The old man's not getting better, and Bert says holding isn't a plan — " +
+      "the Stinky sells to somebody. Ask him whether it could be you (ASK BERT ABOUT BUYING).",
+    at: "bert",
     doneFlag: "barPremises",
-    reward: { money: 0, happy: 3 },
+    reward: { money: 0, happy: 4 },
   },
   bar_licence: {
     name: "Whose Name Is On It",
     giver: "wayne",
     reqFlags: ["expatLife"],
-    // nominee_deal is a real prerequisite, not flavour: Wayne can only give the
-    // straight answer to someone who stopped him signing the crooked one.
-    desc: "A farang can't hold the majority, and that's where the town eats people. " +
-      "Wayne owes you a straight answer about how it's actually done (ASK WAYNE ABOUT THE LICENCE).",
+    // nominee_deal is a real prerequisite: Wayne gives the straight answer to the
+    // one person who stopped him signing the crooked one.
     deps: ["bar_premises", "nominee_deal"],
+    desc: "A farang can't hold the majority — that's the law, not a loophole. Wayne " +
+      "owes you a straight answer about how it's actually done (ASK WAYNE ABOUT THE LICENCE).",
     at: "wayne",
     doneFlag: "barLicence",
     reward: { money: 0, happy: 4 },
   },
-  bar_staff: {
-    name: "Your Own Rail",
+  bar_partner: {
+    name: "Fifty-One Percent",
     giver: "candy",
     reqFlags: ["expatLife"],
-    desc: "A room with a licence is a room. Candy has run two bars for years and " +
-      "knows what the third one needs first (ASK CANDY ABOUT STAFF).",
+    desc: "Fifty-one percent has to be a person, not a structure — someone you'd hand " +
+      "your passport to. There is one obvious name (ASK CANDY ABOUT THE PARTNERSHIP).",
     deps: ["bar_licence"],
     at: "candy",
-    doneFlag: "barStaff",
-    reward: { money: 0, happy: 4 },
+    doneFlag: "barPartner",
+    reward: { money: 0, happy: 6 },
   },
   bar_opening: {
-    name: "Opening Night",
-    giver: "candy",
+    name: "Under New Management",
+    giver: "bert",
     reqFlags: ["expatLife"],
-    desc: "Everything's signed, hired and swept. All that's left is to open the " +
-      "doors and find out who comes (ASK CANDY ABOUT OPENING).",
-    deps: ["bar_staff"],
-    at: "candy",
+    desc: "Signed, stamped and paid. All that's left is to open your own doors and " +
+      "find out who walks in (ASK BERT ABOUT OPENING).",
+    deps: ["bar_partner"],
+    at: "bert",
     doneFlag: "barOpen",
     reward: { money: 0, happy: 10 },
   },
