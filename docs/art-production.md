@@ -61,8 +61,14 @@ is the largest but the rarest.
 
 ### 1. A thumbnail track, generated at the source
 
-`portraits/thumb/<id>.webp` at **384 px** on the long edge. Expect **60–100 KB**
-each at WebP q80 for painterly output, against 1.44 MB now: **~93% smaller**.
+`portraits/thumb/<id>.webp` at **384 px** on the long edge. **Landed 2026-08-08:
+72 files, 1.1 MB total — 14 KB average, 19 KB max, against 104 MB of full-size
+renders. 99% smaller.**
+
+The estimate here was 60–100 KB and the measurement came in at 14 KB, because
+illustrated LoRA output compresses far harder than photographic material. Worth
+recording rather than quietly correcting: every size estimate in this document
+before that point was guessed from photographic assumptions and ran 4–7× high.
 
 **Why 384 and not 192.** The flyout is a 140 px *CSS* box, and a 3× phone renders
 that at ~420 device pixels — a 192 px source would be visibly soft on exactly the
@@ -107,13 +113,26 @@ mirroring the existing room → region → nothing chain. That keeps the migrati
 incremental in exactly the way this doc argues for: a character or room converts
 the moment its WebP lands, with no flag day and no broken intermediate state.
 
-### 3. Extend the budget guard to portraits
+### 3. Budget the thumbnails, not the renders
 
-`tests/js/art.test.js` already enforces **≤ 400 KB per file** on scene art, with
-a comment pointing at `pngquant`. Portraits have **no budget at all**, which is
-why 1.59 MB files exist. Add one — and set it low enough to be a real constraint
-(**≤ 250 KB** for anything in `portraits/`, once the thumbnail track exists), so
-the next batch can't quietly re-open this.
+**This section originally proposed ≤ 250 KB for anything in `portraits/`. That
+rule cannot be enforced and should not be added.** All 72 full-size renders are
+1.2–1.67 MB, so it would fail 72 files the day it landed — and the gallery and
+lightbox paths genuinely want that detail, so shrinking them isn't the answer
+either. A rule that fails on arrival gets "fixed" by deleting the assertion,
+which leaves you worse off than having no rule.
+
+What landed instead (`tests/js/portraits.test.js`, 2026-08-08):
+
+- **thumbs ≤ 60 KB**, must be real WebP, one per render, no orphans — a real
+  constraint against the actual 14 KB average
+- **full-size ≤ 2 MB** — a drift ceiling, not a diet: it stops the existing
+  files getting worse without pretending they're going to get smaller
+
+The ≤ 250 KB rule only becomes possible if the full-size renders leave the repo
+— the middle option in §4 below. The reasoning is also left in a comment at the
+test, so nobody later "fixes" the gap by adding the 250 KB rule and then
+deleting the failing assertion.
 
 ### 4. Decide about `.git` separately, and honestly
 
@@ -152,10 +171,11 @@ state in between.
 1. **Extension-agnostic lookup first** (`.webp` → `.png`) in `scene.js` and
    `term.js`, plus the two tests. Nothing changes visually, but every later step
    becomes incremental instead of a flag day.
-2. Thumbnail track in `portrait_gen` (**384 px** WebP), for the 72 already generated.
-3. Point both games' small-format displays at `thumb/`, keeping full-size only
-   for the gallery path.
-4. Add the portraits budget to `portraits.test.js` (≤ 250 KB once thumbs exist).
+2. ~~Thumbnail track in `portrait_gen`~~ — **done 2026-08-08**, 384 px WebP, 72 files.
+3. ~~Point both games' small-format displays at `thumb/`~~ — **done 2026-08-08**
+   (LBB `_avatarSrc`, Second Road `portraitUrl`); full-size kept for the gallery.
+4. ~~Add a ≤ 250 KB portraits budget~~ — **not enforceable; see §3.** The thumb
+   budget (≤ 60 KB) and a 2 MB drift ceiling landed instead.
 5. Convert scene art to WebP under the same 400 KB budget — it's the second
    curve and it's growing fastest.
 6. Decide the `.git` question — and do it before the migration finishes, not
