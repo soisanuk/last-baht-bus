@@ -59,18 +59,18 @@ test("regression: Act One WAIT across dawn can't loop the same-day reset forever
 // only Soi 6 was ratcheted, so every de batch tightened a guard on the path
 // FEWER players walk while the main path could regress unseen.
 const DE_CEILINGS = [
-  { mode: "soi6", seeds: [1, 2, 3], nights: 2, ceiling: 150 },
+  { mode: "soi6", seeds: [1, 2, 3], nights: 2, ceiling: 149 },
   // vacation runs longer (4 nights × 5 seeds) because Act One occupies the first
   // two and the sandbox prose only starts after it. Verified stable across five
   // consecutive runs; ~240ms.
-  { mode: "vacation", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 327 },
+  { mode: "vacation", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 309 },
   // act1 is the do-or-die opening — the wallet chain, the fail/reset screens, the
   // hint whispers. NEITHER other mode reaches it: soi6 force-sets act1Done, and
   // so does the soak's own vacation setup. It was unguarded until 2026-08-07, and
   // it could not be guarded before that either: _act1Fail's newGame() re-seeds
   // G.rng from Math.random, so five identical runs gave 156/144/143/152/143.
   // soak.mjs now pins a deterministic successor seed on reset.
-  { mode: "act1", seeds: [1, 2, 3, 4, 5], nights: 3, ceiling: 146 },
+  { mode: "act1", seeds: [1, 2, 3, 4, 5], nights: 3, ceiling: 131 },
 ];
 
 for (const { mode, seeds, nights, ceiling } of DE_CEILINGS) {
