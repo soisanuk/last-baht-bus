@@ -104,7 +104,7 @@ const ROOMS = {
       "in front of the small one, both watching the water. The beach road glows to the east; the " +
       "sand runs north up the shore and narrows south toward the Soi 7 end, where a drinks cart " +
       "is parked. Your face was in this sand until about a minute ago.",
-    exits: { e: "jomtien_beach_rd_s", n: "jomtien_beach_m", s: "soi7_beach_end" },
+    exits: { e: "jomtien_beach_rd_s", n: "jomtien_beach_m", s: "jomtien_soi_7_beach_end" },
   },
   jomtien_beach_m: {
     name: "Jomtien Beach (North)",
@@ -114,13 +114,13 @@ const ROOMS = {
       "runs south back toward the Soi 7 end and north to where Dongtan's quieter stretch begins.",
     exits: { s: "jomtien_beach", n: "dongtan_beach", e: "jomtien_beach_rd" },
   },
-  soi7_beach_end: {
-    name: "Soi 7 Beach End",
+  jomtien_soi_7_beach_end: {
+    name: "Jomtien Soi 7 Beach End",
     region: "Jomtien",
     desc: "Where Soi 7 finally gives out onto the sand: a scrap of hard-packed beach, a couple of " +
       "upturned boats, and Auntie Nok's drinks cart parked in the lee of a sea almond tree, cooler " +
       "humming. The beach opens north; Soi 7 runs back inland to the east.",
-    exits: { n: "jomtien_beach", e: "soi_7_m" },
+    exits: { n: "jomtien_beach", e: "jomtien_soi_7_m" },
   },
   dongtan_beach: {
     name: "Dongtan Beach (South)",
@@ -152,7 +152,7 @@ const ROOMS = {
     desc: "The south end of the beach road, where it meets the mouth of Soi 7. A 7-Eleven glows on " +
       "the corner, its air-con bleeding into the street; Soi 7's beer bars and massage shops run " +
       "inland to the east, the bus stop is back to the north, and the sand and the sea lie west.",
-    exits: { n: "jomtien_beach_rd", e: "soi_7_w", w: "jomtien_beach" },
+    exits: { n: "jomtien_beach_rd", e: "jomtien_soi_7_w", w: "jomtien_beach" },
     venues: ["jomtien_7eleven"],
   },
   soi_rompho: {
@@ -168,33 +168,33 @@ const ROOMS = {
   },
 
   // ── Soi 7 (Jomtien) — runs inland from Jomtien Beach Road to Second Road ──
-  soi_7_w: {
-    name: "Soi 7 (West / beach end)",
+  jomtien_soi_7_w: {
+    name: "Jomtien Soi 7 (West / beach end)",
     region: "Jomtien",
     desc: "The beach end of Soi 7, off the south end of the beach road: a mellow strip of " +
       "open-front beer bars strung with fairy lights, a couple of massage shops, and the easy " +
       "Jomtien pace — older expats, cold beer, nobody in a hurry. The soi runs east, deeper inland " +
       "toward Second Road; the sea breeze follows you a little way in.",
-    exits: { w: "jomtien_beach_rd_s", e: "soi_7_m" },
-    venues: ["lucky7", "seabreeze", "soi7_oil"],
+    exits: { w: "jomtien_beach_rd_s", e: "jomtien_soi_7_m" },
+    venues: ["lucky7", "seabreeze", "jomtien_soi_7_oil"],
   },
-  soi_7_m: {
-    name: "Soi 7 (Middle)",
+  jomtien_soi_7_m: {
+    name: "Jomtien Soi 7 (Middle)",
     region: "Jomtien",
     desc: "The middle of Soi 7, where the beer bars thin to guesthouses and a lone som tam cart " +
       "doing quiet business. The soi runs west toward the sea and the beach road, and east toward " +
       "the Second Road roar.",
-    exits: { w: "soi_7_w", e: "soi_7_e", s: "soi7_beach_end" },
+    exits: { w: "jomtien_soi_7_w", e: "jomtien_soi_7_e", s: "jomtien_soi_7_beach_end" },
   },
-  soi_7_e: {
-    name: "Soi 7 (East / Second Road end)",
+  jomtien_soi_7_e: {
+    name: "Jomtien Soi 7 (East / Second Road end)",
     region: "Jomtien",
     desc: "The far end of Soi 7, where it spills onto Second Road by a 7-Eleven. A couple more " +
       "beer bars and a massage shop see out the strip. On the south side, set back behind a fence " +
       "and a flagpole, squats the grey bulk of the Chonburi Immigration Office — dark and locked " +
       "at this hour, a place farang only ever visit in daylight and never fondly.",
-    exits: { w: "soi_7_m", e: "jomtien_2nd" },
-    venues: ["coconut", "sandbar", "soi7_thai"],
+    exits: { w: "jomtien_soi_7_m", e: "jomtien_2nd" },
+    venues: ["coconut", "sandbar", "jomtien_soi_7_thai"],
   },
   jomtien_2nd: {
     name: "Jomtien Second Road (South)",
@@ -203,7 +203,7 @@ const ROOMS = {
     desc: "The Soi 7 corner on Jomtien's Second Road, traffic hissing both ways. A 7-Eleven holds " +
       "down the corner, bright as an operating theatre. Straight across the road sprawls Rompho " +
       "Market. Soi 7 runs back west toward the beach; Second Road runs north up the strip.",
-    exits: { w: "soi_7_e", n: "jomtien_2nd_m" },
+    exits: { w: "jomtien_soi_7_e", n: "jomtien_2nd_m" },
     venues: ["soi_rompho"],
   },
   kiss_jomtien: {
@@ -250,7 +250,7 @@ const ROOMS = {
     desc: "The soi's namesake: a friendly open-front beer bar with sevens painted on everything, " +
       "a Connect 4 frame, and a knot of regulars who've been coming since before the fairy lights. " +
       "The girls know every one of them by their drink.",
-    exits: { out: "soi_7_w" },
+    exits: { out: "jomtien_soi_7_w" },
   },
   seabreeze: {
     name: "Sea Breeze Bar",
@@ -259,7 +259,7 @@ const ROOMS = {
     desc: "Stools that catch the wind straight off the beach, a battered guitar somebody strums " +
       "between customers, and the most relaxed hostesses in Jomtien. Nobody hard-sells here; the " +
       "beer is cold and the evening goes where it goes.",
-    exits: { out: "soi_7_w" },
+    exits: { out: "jomtien_soi_7_w" },
   },
   coconut: {
     name: "Coconut Bar",
@@ -268,7 +268,7 @@ const ROOMS = {
     desc: "Thatch over the bar, coconut shells for ashtrays, and a blender that hasn't stopped " +
       "since 2016. A little louder than its neighbours, a little younger — the closest Soi 7 gets " +
       "to a party, which is not very, which is the point.",
-    exits: { out: "soi_7_e" },
+    exits: { out: "jomtien_soi_7_e" },
   },
   sandbar: {
     name: "The Sandbar",
@@ -277,26 +277,26 @@ const ROOMS = {
     desc: "Last bar before Second Road: a narrow slot with sand actually underfoot, a dartboard, " +
       "and a cat that outranks everyone. The end-of-the-soi place, where a slow night winds all the " +
       "way down and the last customers put the stools up themselves.",
-    exits: { out: "soi_7_e" },
+    exits: { out: "jomtien_soi_7_e" },
   },
-  soi7_oil: {
+  jomtien_soi_7_oil: {
     name: "Sunset Oil Massage",
     bar: "Sunset Oil Massage",
     region: "Jomtien",
     massage: "oil",
     desc: "A pink-lit oil shop halfway down Soi 7, girls on the step, the small sticker on the " +
       "mirror, and the beach breeze doing its best to keep it wholesome. It fails, pleasantly.",
-    exits: { out: "soi_7_w" },
+    exits: { out: "jomtien_soi_7_w" },
   },
-  soi7_thai: {
-    name: "Soi 7 Thai Massage",
+  jomtien_soi_7_thai: {
+    name: "Jomtien Soi 7 Thai Massage",
     bar: "Soi 7 Thai Massage",
     region: "Jomtien",
     massage: "legit",
     desc: "A proper traditional shop near the Second Road end: foot chairs, tiger balm, aunties in " +
       "matching polos, and a price list that stops at 'oil, one hour.' Where the long-stay expats " +
       "come to get their backs put right.",
-    exits: { out: "soi_7_e" },
+    exits: { out: "jomtien_soi_7_e" },
   },
 
   // ── Thappraya Road (the Jomtien "Main Strip") — Dongtan Beach ↔ Second Road ──
@@ -2564,7 +2564,7 @@ const NPCS = {
 
   nok: {
     name: "Auntie Nok", th: "น้อยหน่า", emoji: "🥭",
-    room: "soi7_beach_end",
+    room: "jomtien_soi_7_beach_end",
     desc: "A drinks-cart vendor with a cooler of everything and opinions to match. " +
       "A hand-lettered sign on the cart offers ฿5 per returned bottle.",
     dialogue: [
@@ -9091,13 +9091,16 @@ const POPULAR_GIRLS = ["fon", "gift", "noi", "pim"];
 //   original the Tahitian Queen, 12.931642/100.879457. Order down the road is
 //   PK, Soi 7, Soi 8, Soi 9, Central Mall — worth stating because the sois do
 //   NOT simply run north to south past Klang.
-//   Deliberately left flagged: `beach_rd_s —w→ short_time_motel` audits at 161°
-//   because west of Beach Road is the SEA. The motel is placed east where a
-//   building can be, so the wrong compass word shows up instead of being hidden
-//   by a coordinate. That's bar-mat work, not survey work.
+//   Deliberately left flagged: `beach_rd_s —w→ short_time_motel` audits at 139°.
+//   West of Beach Road is the SEA, so the motel can't go where its compass word
+//   says; it now sits where a short-time place actually would, midway along
+//   Pattaya's Soi 7 between Beach Road and Second Road. The exit stays wrong
+//   because the graph hangs it off beach_rd_s, 700 m south — and it can't be
+//   re-hung until a Pattaya Soi 7 room EXISTS. That's bar-mat work. Better a
+//   loud flag than a coordinate bent to quiet it.
 //   NOT YET PINNED (no room exists): Mike Shopping Mall 12.931899/100.880812,
-//   and Pattaya's own Soi 7 — note every `soi_7_*` room is JOMTIEN's Soi 7, a
-//   different street with the same number.
+//   and Pattaya's own Soi 7 (Beach Rd end 12.937147/100.883067, Second Rd end
+//   ~12.935370/100.886989) — the street the motel now stands on.
 //
 //   Soi 6 + its Beach Road foot — DONE 2026-08-08, the first pass and the
 //   center of truth. Laid along the real ซอยพัทยา 6: 359 m, west end
@@ -9120,8 +9123,8 @@ const ROOM_GEO = {
   jomtien_beach_rd: [12.8893, 100.8718],
   jomtien_thai:     [12.8890, 100.8724],
   // Soi 7 (Jomtien Beach Rd → Second Rd) and its Second-Road cluster
-  soi_7_w:          [12.8896, 100.8728],
-  soi_7_e:          [12.8899, 100.8738],
+  jomtien_soi_7_w:          [12.8896, 100.8728],
+  jomtien_soi_7_e:          [12.8899, 100.8738],
   jomtien_2nd:      [12.8901, 100.8748],
   soi_rompho:       [12.8905, 100.8756],
   kiss_jomtien:     [12.8911, 100.8756],
@@ -9130,8 +9133,8 @@ const ROOM_GEO = {
   seabreeze:        [12.8892, 100.8730],
   coconut:          [12.8903, 100.8736],
   sandbar:          [12.8896, 100.8741],
-  soi7_oil:         [12.8890, 100.8726],
-  soi7_thai:        [12.8905, 100.8739],
+  jomtien_soi_7_oil:         [12.8890, 100.8726],
+  jomtien_soi_7_thai:        [12.8905, 100.8739],
   // Thappraya Road / Jomtien Main Strip (Dongtan → Second Rd)
   thappraya_w:      [12.8968, 100.8668],
   thappraya_mid:    [12.8972, 100.8685],
@@ -9151,11 +9154,11 @@ const ROOM_GEO = {
   thappraya_massage:[12.8973, 100.8706],
   jomtien_7eleven:  [12.8880, 100.8724],
   jomtien_beach_m:  [12.8918, 100.8688],
-  soi7_beach_end:   [12.8872, 100.8698],
+  jomtien_soi_7_beach_end:   [12.8872, 100.8698],
   dongtan_beach_m:  [12.8985, 100.8632],
   dongtan_beach_n:  [12.9015, 100.8628],
   jomtien_beach_rd_s: [12.8876, 100.8722],
-  soi_7_m:          [12.8878, 100.8735],
+  jomtien_soi_7_m:          [12.8878, 100.8735],
   jomtien_2nd_m:    [12.8892, 100.8752],
   jomtien_beach_rd_n: [12.8954, 100.8689],
   // Pratumnak
@@ -9183,7 +9186,7 @@ const ROOM_GEO = {
   beach_rd_s:       [12.92983, 100.87751],
   papaya_massage:   [12.92934, 100.87788],
   beachthai_massage:[12.92906, 100.87788],
-  short_time_motel: [12.92965, 100.87806],
+  short_time_motel: [12.93626, 100.88503],
   beach_rd_c:       [12.93450, 100.88159],
   beachrd_oil:      [12.93396, 100.88186],
   tequila_queen:    [12.93164, 100.87946],
