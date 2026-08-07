@@ -11,11 +11,8 @@
 // drops a min-height reads as harmless in review and is only felt by someone
 // playing on a phone, which is nobody on this repo.
 //
-// Deliberately NOT asserted here: the inline prose keywords (.kw, ~15-18px).
-// They're inline text spans, and 44px line boxes would wreck the reading rhythm
-// of a game that is entirely reading. That's a real tradeoff, not an oversight.
-// The flyout wheel rows (~23px) are a genuine gap still open — see the note at
-// the end of this file.
+// Covered: the send button, the chip rail, and the long-press wheel's rows.
+// Deliberately not covered: the inline prose keywords — see the closing note.
 import { test, expect, devices } from "@playwright/test";
 import { bootIntoGame } from "./_helpers.mjs";
 
@@ -55,6 +52,54 @@ test.describe("touch device", () => {
     expect(short.map(c => `${c.label} (${Math.round(c.h)}px)`), "chips under 44px tall").toEqual([]);
   });
 
+  // Long-press is the only route to anything past the chip rail on a phone, so
+  // the wheel's rows are load-bearing. Opening one takes a little work: a
+  // keyword with a SINGLE action fires it immediately instead of opening a
+  // wheel, and #flyout is built lazily, so a long-press on the wrong name
+  // leaves no element at all. Walk the NPC keywords until one opens.
+  test("the long-press wheel's rows meet the 44px minimum", async ({ page }) => {
+    await bootIntoGame(page, INDEX_URL);
+    await page.fill("#term-in", "down");
+    await page.press("#term-in", "Enter");
+    await page.fill("#term-in", "out");
+    await page.press("#term-in", "Enter");
+    // drop into the first bar the world defines, so there are staff to tap
+    await page.evaluate(() => {
+      const bar = Object.keys(ROOMS).find(id => ROOMS[id].barType);
+      G.room = bar; G.visited[bar] = true;
+    });
+    await page.fill("#term-in", "look");
+    await page.press("#term-in", "Enter");
+    await expect(page.locator("#term-out .kw[data-k='npc']").first()).toBeVisible();
+
+    const cands = await page.evaluate(() =>
+      [...document.querySelectorAll("#term-out .kw")]
+        .filter(e => e.dataset.k === "npc" && e.getBoundingClientRect().width > 0)
+        .map(e => { const b = e.getBoundingClientRect();
+                    return { x: b.x + b.width / 2, y: b.y + b.height / 2 }; }));
+
+    let rows = null;
+    for (const t of cands) {
+      await page.mouse.move(t.x, t.y);
+      await page.mouse.down();
+      await page.waitForTimeout(700);          // term.js opens the wheel at 500ms
+      await page.mouse.up();
+      await page.waitForTimeout(250);
+      rows = await page.evaluate(() => {
+        const w = document.getElementById("flyout");
+        if (!w || getComputedStyle(w).display === "none") return null;
+        const b = [...w.querySelectorAll("button")];
+        return b.length ? b.map(e => ({ label: e.textContent.trim().slice(0, 24),
+                                        h: Math.round(e.getBoundingClientRect().height) })) : null;
+      });
+      if (rows) break;
+    }
+
+    expect(rows, "a long-press should open the action wheel on some NPC").not.toBeNull();
+    const short = rows.filter(r => r.h < MIN_TAP);
+    expect(short.map(r => `${r.label} (${r.h}px)`), "wheel rows under 44px tall").toEqual([]);
+  });
+
   test("no horizontal page scroll on a phone", async ({ page }) => {
     // The chip RAIL scrolls sideways by design; the PAGE must not — a body that
     // scrolls horizontally on a phone is the classic broken-mobile tell.
@@ -86,8 +131,12 @@ test.describe("mouse device", () => {
   });
 });
 
-// STILL OPEN, from the same play-test: the long-press flyout wheel renders rows
-// ~23px tall. Long-press is how a phone player reaches anything past the chips,
-// so a thin row between two other rows is a mis-tap waiting to happen. Not
-// asserted here because it isn't fixed yet — adding a failing test would just
-// get skipped. Fix the rows, then add the assertion.
+// A note on measuring this. The play-test that prompted these fixes first
+// reported the wheel rows at 23px, which was wrong: the probe measured every
+// leaf element in #flyout, including the non-interactive .fly-head label and
+// the portrait. The actionable buttons were 40px all along — a 4px gap, not a
+// 21px one. Hence this test asserts over `button` elements specifically.
+//
+// Left as-is on purpose: the inline prose keywords (.kw, ~15-18px). They're the
+// most-tapped thing in the game, but 44px line boxes would wreck the reading
+// rhythm of a game that is entirely reading. A real tradeoff, not an oversight.
