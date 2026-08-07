@@ -659,7 +659,10 @@ function _convoTopics(id) {
 
 // Faction standing with the powers of the night — WDG (Ryan Powers' Soi 6 rollup),
 // samson (the brothers' Jomtien/Pratumnak takeover), indie (Bert & the holdouts),
-// syndicate (the unnamed Thai muscle behind the envelopes). Standing only moves
+// syndicate (Tan's network — NOT muscle and not a jao pho: phu kwang khwang,
+// dealing in favours rather than cash. The envelopes on the good table are what
+// WDG pays to be tolerated, because a foreigner can't be owed a favour — see
+// docs/factions-thai.md). Standing only moves
 // when the player ACTS on a faction (takes a job to its end, throws real weight
 // behind it) — never for declining or ignoring. Staying out of the politics
 // costs nothing, forever. Dialogue reads it via `when`; nodes move it via `_align`.
