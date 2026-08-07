@@ -939,9 +939,9 @@ const _BAR_REGULAR = [
   "Somewhere down the bar a regular drones on to nobody in particular, background hum under the music.",
 ];
 const _BAR_REGULAR_BUSY = [
-  g => `Down the far end a sunburnt regular holds court${g}, sealed in his own little world — no seam in it for you to get a word through.`,
-  g => `A red-faced fixture works the far stools${g}, mid-story, mid-myth; whatever that is, it isn't yours to join.`,
-  g => `At the far end a regular reigns${g} — the sort of scene you watch from across the bar, not one you walk into.`,
+  g => _fmt("Down the far end a sunburnt regular holds court{g}, sealed in his own little world — no seam in it for you to get a word through.", { g }),
+  g => _fmt("A red-faced fixture works the far stools{g}, mid-story, mid-myth; whatever that is, it isn't yours to join.", { g }),
+  g => _fmt("At the far end a regular reigns{g} — the sort of scene you watch from across the bar, not one you walk into.", { g }),
 ];
 
 function _describeRoom(full, forceFull) {

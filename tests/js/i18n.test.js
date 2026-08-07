@@ -277,3 +277,100 @@ test("German-phrase Easter egg: an EN player trying German at the 3 ladies gets 
   state().player.lang = "de"; state().room = "ruby_kiss"; out = []; run("guten tag");
   assert.doesNotMatch(lastOut(), /Duolingo|dative|stick to english/i, "a German speaker gets no stick-to-English gag");
 });
+
+
+// ── catalog integrity (added 2026-08-07 after the cross-model audit) ────────
+// The failure these stop: editing an English string silently orphans its
+// translation. The catalog is keyed by exact English text, so a reworded line
+// doesn't error — it quietly falls back to English forever. BOTH dead keys the
+// audit found were introduced the same day by ordinary prose edits (a bottle
+// desc reworded in a review pass; a SHARE line added to _HELP_SOI6, which
+// killed the whole German help screen).
+const SRC = p => readFileSync(fileURLToPath(new URL(p, import.meta.url)), "utf8");
+// A searchable blob of every English string the game can print. Two sources,
+// because the codebase writes prose two ways:
+//  · world.js is DATA — evaluate it and walk the objects, so concatenated
+//    strings arrive already assembled (exact, no reconstruction needed).
+//  · the engine files build prose with `"…" +` runs and template literals, so
+//    the raw source is normalised: join the concatenations, then flatten
+//    whitespace so a key that spans lines still matches.
+function engineBlob() {
+  let out = "";
+  // world.js is included as SOURCE as well as data: the evaluated walk below
+  // only covers the tables it names, and world.js holds many more (the intro
+  // tables, ASK_REPLIES, QUIZ_POOL, the fare lines…).
+  for (const f of ["world.js", "engine-core.js", "engine-encounters.js", "engine-play.js",
+    "engine-systems.js", "engine-parser.js", "term.js"]) {
+    out += SRC("../../web/js/" + f)
+      .replace(/"\s*\+\s*\n?\s*"/g, "")      // "a " +\n  "b"  →  "a b"
+      .replace(/`\s*\+\s*\n?\s*`/g, "")
+      .replace(/\\n/g, "\n").replace(/\\"/g, '"').replace(/\\'/g, "'") + "\n";
+  }
+  return out;
+}
+function dataStrings() {
+  const seen = [];
+  const walk = v => {
+    if (typeof v === "string") seen.push(v);
+    else if (Array.isArray(v)) v.forEach(walk);
+    else if (v && typeof v === "object") Object.values(v).forEach(walk);
+  };
+  for (const t of [ROOMS, NPCS, PATRONS, ITEMS, ENCOUNTERS, QUESTS]) walk(t);
+  return seen.join("\n");
+}
+const flat = s => s.replace(/\s+/g, " ").trim();
+const HAYSTACK = flat(dataStrings() + "\n" + engineBlob());
+
+const de = _CATALOGS.de;
+
+test("every catalog key still matches live English source (no orphaned translations)", () => {
+  // Labels that live in the frontend's own tables rather than game prose —
+  // the catalog's header comments describe this class.
+  const FRONTEND_LABELS = new Set(["buy him a drink", "tip …"]);
+  const dead = [];
+  for (const key of Object.keys(de)) {
+    if (FRONTEND_LABELS.has(key)) continue;
+    // keys carrying {slots} are _fmt templates: the source holds the template
+    // itself, so they match literally like any other key.
+    if (!HAYSTACK.includes(flat(key))) dead.push(key.slice(0, 80));
+  }
+  assert.deepEqual(dead, [],
+    "catalog key no longer matches any English source — the English was edited " +
+    "and the translation silently fell back. Re-key it (and re-translate the change).");
+});
+
+test("translations keep every {slot} the English key carries", () => {
+  // {{…}} is decorate()'s tap-suppression markup, not a slot — strip it first
+  // or "{{Ice}} settling in buckets" reads as a slot named Ice.
+  const slots = s => new Set([...s.replace(/\{\{[^{}]*\}\}/g, "")
+    .matchAll(/\{(\w+)\}/g)].map(m => m[1]));
+  // {s} is an English-only pluralisation particle ("bottle{s}") with no German
+  // equivalent — German expresses the plural in the noun or with "(en)", so
+  // dropping it is correct, not a lost slot.
+  const ENGLISH_ONLY = new Set(["s"]);
+  const bad = [];
+  for (const [en, deVal] of Object.entries(de)) {
+    const want = [...slots(en)].filter(x => !ENGLISH_ONLY.has(x));
+    const got = slots(deVal);
+    const missing = want.filter(x => !got.has(x));
+    const extra = [...got].filter(x => !slots(en).has(x));
+    if (missing.length) bad.push(`${en.slice(0, 50)}… missing {${missing.join("},{")}}`);
+    if (extra.length) bad.push(`${en.slice(0, 50)}… unknown {${extra.join("},{")}}`);
+  }
+  assert.deepEqual(bad, [],
+    "a slot vanished or was invented in translation — missing means data " +
+    "disappears from the player's screen; unknown renders as literal braces");
+});
+
+test("no duplicate keys, and nothing is left untranslated", () => {
+  const src = SRC("../../web/js/lang.js");
+  const deBlock = src.slice(src.indexOf("de: {"));
+  const keys = [...deBlock.matchAll(/^\s{4}"((?:[^"\\]|\\.)*)":/gm)].map(m => m[1]);
+  const dupes = keys.filter((k, i) => keys.indexOf(k) !== i);
+  assert.deepEqual(dupes, [], "duplicate catalog key — the later one silently wins");
+
+  const identical = Object.entries(de)
+    .filter(([en, d]) => en === d && /[a-zA-Z]{4}/.test(en))   // ignore pure punctuation/numerals
+    .map(([en]) => en.slice(0, 60));
+  assert.deepEqual(identical, [], "catalog value identical to its English key — forgotten translation?");
+});

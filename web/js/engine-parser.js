@@ -2296,8 +2296,9 @@ function _doTime() {
   if (_flag("act1Done") && G.mode !== "soi6") {
     _say(t >= LAST_BUS_TURN ? "(The last baht bus has gone — it's the piwin's small-hours " +
       "tax or shoe leather home now.)" :
-      t >= LAST_BUS_TURN - 10 ? `(Last baht bus around 2 a.m. — the ฿${BUS_FARE} ride home is nearly up.)` :
-      `(Baht buses running: ฿${BUS_FARE} the ride home until the last one, ~2 a.m.)`, "dim");
+      t >= LAST_BUS_TURN - 10
+        ? _fmt("(Last baht bus around 2 a.m. — the ฿{f} ride home is nearly up.)", { f: BUS_FARE })
+        : _fmt("(Baht buses running: ฿{f} the ride home until the last one, ~2 a.m.)", { f: BUS_FARE }), "dim");
   }
 }
 
@@ -3975,9 +3976,10 @@ function _soi6Opening() {
   _say("One week in Pattaya, and you've picked your street and planted your flag: SOI 6 — the loudest " +
     "hundred metres in Thailand — with the Queen Vic Inn right in the thick of it. You're " +
     "not leaving the soi this trip; the rest of the city keeps for next time.");
-  _say(`฿${SOI6_BANK.toLocaleString("en-US")} for the week sits in the bank. ` +
-    `฿${SOI6_POCKET.toLocaleString("en-US")} is in your pocket — the rest comes out of the ATM ` +
-    `on the street (฿${ATM_FEE} a pull, ฿${ATM_DAILY_CAP.toLocaleString("en-US")} a day) when you need it.`);
+  _say(_fmt("฿{bank} for the week sits in the bank. ฿{pocket} is in your pocket — the rest " +
+    "comes out of the ATM on the street (฿{fee} a pull, ฿{cap} a day) when you need it.",
+    { bank: SOI6_BANK.toLocaleString("en-US"), pocket: SOI6_POCKET.toLocaleString("en-US"),
+      fee: ATM_FEE, cap: ATM_DAILY_CAP.toLocaleString("en-US") }));
   _say("Goal: สบายสบาย. Get happy. Max out the week. ★", "win");
   if (G.dailyId) {
     _say(`Today's soi — the ${G.dailyId} daily: same week, same dice, everyone ` +
@@ -4010,8 +4012,8 @@ function _beachOpening(withTitle) {
   _say("Day two of your week in Pattaya, and it starts like this: face-down on " +
     "Jomtien beach, sunset bleeding into the sea, your head pounding like a bass " +
     "bin outside Neon Paradise A-Go-Go. Day one went well, is the thing. Too well.");
-  _say("Your wallet is GONE. Your phone reads 13% battery. Your hotel is in Naklua — " +
-    `the whole town away. The baht bus is ฿${BUS_FARE} a head.`);
+  _say(_fmt("Your wallet is GONE. Your phone reads 13% battery. Your hotel is in Naklua — " +
+    "the whole town away. The baht bus is ฿{f} a head.", { f: BUS_FARE }));
   _say("You have ฿0.");
   _say("It's going to be one of those nights.", "alert");
   if (!G.act1Tries && !_flag("act1Done"))
