@@ -119,7 +119,7 @@ This is the first task and it costs a day. Nothing else starts until it's done.
 | **s0** | Four week-summaries as prose. Go/no-go. **DONE 2026-08-07 → GO** (`docs/second-road-weeks.md`) | — |
 | **s1** | Repo, save-baton read/write, a round-trip test on both sides. **DONE 2026-08-08** — both halves plus an end-to-end cross-repo handoff test | s0 passes |
 | **s2** | One bar, one season, no UI beyond text. The loop proven headless. **DONE 2026-08-08** — the Stinky, 52 weeks, 20 tests; generated weeks read | s1 |
-| **s3** | The map (`ROOM_GEO`) + roster (portraits). The first real 2D. | s2 |
+| **s3** | The map (`ROOM_GEO`) + roster (portraits). The first real 2D. **DONE 2026-08-08** — 176 venues plotted, roster with real faces, 21 tests | s2 |
 | **s4** | Second bar, delegation, the trust mechanic. The actual game. | s3 |
 | **s5** | Factions as strategy: the Darkside family, WDG's fragility. | s4 |
 
@@ -259,7 +259,25 @@ Three things worth carrying forward:
   worth rather than by the money actually handed over. Found by noticing a gap in
   the payment schedule (4, 8, …, 32, then 40), not by reading the code.
 
-**Next: s3** — the map (`ROOM_GEO`) and the roster (portraits). The first real 2D.
+**s3 is done (2026-08-08).** 176 venues plotted from real lat/lon, the Stinky in
+gold, the roster drawn with actual portraits, the week rendered beside them —
+about eighty lines, because the data was already there and already good. That's
+the macro-game-is-the-2D-game argument made concrete.
+
+**One decision it forced: portraits are referenced, not vendored.** Measured
+first — LBB's `web/portraits/` is **125 MB across 277 files**, and it's a mix of
+~400-byte pixel-art placeholders and **1.4 MB generated SDXL portraits**
+(832×1088), because the art pipeline replaces them in place. Copying that into a
+second repo for images shown at 64 px is wrong, so the asset base is config and
+`vendor/portraits/` is gitignored dev-only.
+
+**Worth acting on in LBB regardless:** 1.4 MB a face is too heavy for any roster
+view, and 125 MB of portraits in a repo that deploys to GitHub Pages is a real
+cost to LBB itself. A `portraits/thumb/<id>.png` track at ~192 px would serve
+both games, and the art pipeline is already shaped to produce it.
+
+**Next: s4** — the second bar, delegation, and the trust mechanic. The actual
+game.
 
 **Next: the Second Road repo.** Needs a location decision (sibling to
 `last-baht-bus`, same origin as the trainer is the cheap answer).
