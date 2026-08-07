@@ -1477,7 +1477,8 @@ function _questWhere(at) {
     const room = _npcRoom(at);
     if (room === G.room || _npcsHere().includes(at)) return ""; // she's right here
     const r = ROOMS[room];
-    return r ? ` ${NPCS[at].name} is at ${_barName(room)}, over in ${r.region}.` : "";
+    return r ? _fmt(" {who} is at {v}, over in {r}.",
+      { who: NPCS[at].name, v: _barName(room), r: r.region }) : "";
   }
   if (PATRONS[at]) {
     // A patron giver moves too — a shuttled regular (Glam: home bar early, walked
@@ -1486,12 +1487,17 @@ function _questWhere(at) {
     const room = _patronRoom(at);
     if (!room || room === G.room || _patronsHere().includes(at)) return "";
     const r = ROOMS[room];
-    return r ? ` ${PATRONS[at].name} is at ${_barName(room)}, over in ${r.region}.` : "";
+    return r ? _fmt(" {who} is at {v}, over in {r}.",
+      { who: PATRONS[at].name, v: _barName(room), r: r.region }) : "";
   }
   if (ROOMS[at]) {
     if (at === G.room) return "";
     const vn = _barName(at); // some venue names already lead with "The" (The Orchid Room)
-    return ` That's ${/^the\b/i.test(vn) ? vn : "the " + vn}, in ${ROOMS[at].region}.`;
+    // the article is a FORK, not a slot: English needs one where the name lacks it,
+    // German drops it before a proper venue name (no gender to guess at).
+    return /^the\b/i.test(vn)
+      ? _fmt(" That's {v}, in {r}.", { v: vn, r: ROOMS[at].region })
+      : _fmt(" That's the {v}, in {r}.", { v: vn, r: ROOMS[at].region });
   }
   return "";
 }
@@ -1514,14 +1520,16 @@ function _doHint() {
     const active = Object.keys(QUESTS).filter(q => G.quests[q] === "active");
     if (active.length) {
       const q = QUESTS[active[0]];
-      _say(`On the books: ${q.name} — ${q.desc}${_questWhere(q.at)}`, "win");
+      _say(_fmt("On the books: {name} — {desc}{where}",
+        { name: _L(q.name), desc: _L(q.desc), where: _questWhere(q.at) }), "win");
       return;
     }
     const offered = Object.keys(QUESTS).filter(q => G.quests[q] === "offered");
     if (offered.length) {
       const q = QUESTS[offered[0]];
       const giver = NPCS[q.giver] ? NPCS[q.giver].name : "Someone";
-      _say(`${giver} has a job going — “${q.name}”. Take it on with ACCEPT ${offered[0].toUpperCase()}.`, "win");
+      _say(_fmt("{giver} has a job going — “{name}”. Take it on with ACCEPT {id}.",
+      { giver, name: _L(q.name), id: offered[0].toUpperCase() }), "win");
       return;
     }
     _say("The wallet's yours and the opening's behind you — out here there are no wrong answers, " +
@@ -1582,7 +1590,8 @@ function _questOffer(npcId) {
     if (q.giver !== npcId || !_questAvailable(qid)) continue;
     if (G.quests[qid] === "offered") continue; // already on the table — surface the giver's NEXT job instead
     G.quests[qid] = "offered";
-    _say(`✦ ${NPCS[npcId].name} has a job for you: “${q.name}” — ${q.desc}`, "win");
+    _say(_fmt("✦ {who} has a job for you: “{name}” — {desc}",
+      { who: NPCS[npcId].name, name: _L(q.name), desc: _L(q.desc) }), "win");
     _say(`(ACCEPT ${qid.toUpperCase()} to take it on.)`, "dim");
     return; // one offer at a time keeps the bar chatter sane
   }
@@ -1606,7 +1615,7 @@ function _doAccept(arg) {
     _say("You've heard of it, but nobody's actually offered it to you yet."); return;
   }
   G.quests[qid] = "active";
-  _say(`✦ Quest accepted: ${q.name}`, "win");
+  _say(_fmt("✦ Quest accepted: {name}", { name: _L(q.name) }), "win");
   _say(q.desc, "dim");
   if (q.item && G.itemLoc[q.item] === null) {
     G.itemLoc[q.item] = "inventory";
@@ -1627,7 +1636,8 @@ function _doAbandon(arg) {
   G.quests[qid] = "abandoned";
   const q = QUESTS[qid];
   if (q.item && G.itemLoc[q.item] === "inventory") G.itemLoc[q.item] = null;
-  _say(`✦ Abandoned: ${q.name}. The soi forgives; the giver may offer it again.`, "dim");
+  _say(_fmt("✦ Abandoned: {name}. The soi forgives; the giver may offer it again.",
+    { name: _L(q.name) }), "dim");
 }
 
 function _doQuests() {
@@ -1635,7 +1645,7 @@ function _doQuests() {
   if (G.stage === "act1") {
     _say("▶ The Last Baht Bus — find your wallet, get back to room 412 in Naklua.", "win");
     for (const [f, label] of _ACT1_MILESTONES) {
-      _say(`  ${_flag(f) ? "✓" : "·"} ${label}`, "dim");
+      _say(_fmt("  {mark} {label}", { mark: _flag(f) ? "✓" : "·", label: _L(label) }), "dim");
     }
     shown++;
   } else if (_flag("act1Done") && G.mode !== "soi6") {
@@ -1646,8 +1656,10 @@ function _doQuests() {
   const rows = Object.entries(QUESTS).filter(([qid]) => G.quests[qid]);
   for (const [qid, q] of rows) {
     const st = G.quests[qid];
-    if (st === "active") { _say(`▶ ${q.name} — ${q.desc}${_questWhere(q.at)}`, "win"); shown++; }
-    else if (st === "offered") { _say(`✦ On offer: ${q.name} (ACCEPT ${qid.toUpperCase()})`, "dim"); shown++; }
+    if (st === "active") { _say(_fmt("▶ {name} — {desc}{where}",
+      { name: _L(q.name), desc: _L(q.desc), where: _questWhere(q.at) }), "win"); shown++; }
+    else if (st === "offered") { _say(_fmt("✦ On offer: {name} (ACCEPT {id})",
+      { name: _L(q.name), id: qid.toUpperCase() }), "dim"); shown++; }
     else if (st === "done") { _say(`✓ ${q.name}`, "dim"); shown++; }
   }
   if (!shown) _say("No adventures on the books. The givers are out there — talk to people.");
@@ -1911,11 +1923,11 @@ function _doSendMoney(arg) {
     c === nameW || NPCS[c].name.toLowerCase().includes(nameW.split(" ")[0] || "~"));
   if (!id) { _say("Send to whom? The banking app only knows your contacts."); return; }
   if (!amt || amt <= 0) { _say("How much? (SEND <amount> TO <name>)"); return; }
-  if (amt > G.money) { _say(`The app regrets to inform you: ฿${G.money} available, ฿${amt} dreamed of.`); return; }
+  if (amt > G.money) { _say(_fmt("The app regrets to inform you: ฿{m} available, ฿{a} dreamed of.", { m: G.money, a: amt })); return; }
   // Tan sends it straight back — his currency is favours, never baht
   if (id === "tan") {
-    _say(`฿${amt} crosses town in one green blink — and comes straight back in another, ` +
-      "before you've pocketed the phone.");
+    _say(_fmt("฿{a} crosses town in one green blink — and comes straight back in another, " +
+      "before you've pocketed the phone.", { a: amt }));
     _pushMsg("tan", "I am not your mamasan, my friend. When I want something from you, I " +
       "will ask for it — and it will not be money. 🙂");
     _say("(📱 CHECK MESSAGES.)", "dim");
@@ -1926,7 +1938,7 @@ function _doSendMoney(arg) {
   G.battery = Math.max(0, G.battery - 1);
   const bump = amt >= 500 ? 3 : amt >= 100 ? 2 : 1;
   _addBond(id, bump);
-  _say(`฿${amt} crosses town in one green blink. (฿${G.money} left.)`);
+  _say(_fmt("฿{a} crosses town in one green blink. (฿{m} left.)", { a: amt, m: G.money }));
   // paying into an active pics-drip: enough unlocks the next shot, short of it teases
   const deal = G.phone.picDeal;
   if (deal && !deal.done && deal.id === id && deal.idx != null) {

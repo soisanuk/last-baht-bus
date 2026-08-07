@@ -269,8 +269,8 @@ function _salengBuy(input) {
     const thirst = m ? m.thirst : 0;
     if (!item) return; // _doBuy only routes real cart items here
     if (G.money < price) {
-      _say(`฿${price} for the ${item} — you have ฿${G.money}. The driver clocks it ` +
-        "without embarrassing you and putters on.");
+      _say(_fmt("฿{p} for the {item} — you have ฿{m}. The driver clocks it " +
+        "without embarrassing you and putters on.", { p: price, item: _L(item), m: G.money }));
       return;
     }
     G.money -= price;
@@ -312,8 +312,8 @@ function _salengBuy(input) {
         const iid = INV_ITEMS[item];
         if (G.itemLoc[iid] === "inventory") {
           G.money += price; // refund — already have one
-          _say(`You already have one. The driver shrugs and keeps the change for your ` +
-            `indecision. Just kidding — ฿${price} back.`);
+          _say(_fmt("You already have one. The driver shrugs and keeps the change for your " +
+            "indecision. Just kidding — ฿{p} back.", { p: price }));
           return;
         }
         G.itemLoc[iid] = "inventory";

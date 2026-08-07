@@ -122,8 +122,8 @@ const _CATALOGS = {
       "Soi 6 · ein Pattaya-Schlamassel · Soi-Sanuk-Universum",
     "One week in Pattaya, and you've picked your street and planted your flag: SOI 6 — the loudest hundred metres in Thailand — with the Queen Vic Inn right in the thick of it. You're not leaving the soi this trip; the rest of the city keeps for next time.":
       "Eine Woche in Pattaya, und du hast deine Straße gewählt und deine Flagge gepflanzt: SOI 6 — die lautesten hundert Meter Thailands — mit dem Queen Vic Inn mittendrin. Diese Reise verlässt du die Soi nicht; der Rest der Stadt hält sich bis zum nächsten Mal.",
-    "฿100,000 for the week sits in the bank. ฿1,000 is in your pocket — the rest comes out of the ATM on the street (฿300 a pull, ฿20,000 a day) when you need it.":
-      "฿100.000 für die Woche liegen auf der Bank. ฿1.000 hast du in der Tasche — der Rest kommt aus dem Geldautomaten auf der Straße (฿300 pro Abhebung, ฿20.000 am Tag), wenn du ihn brauchst.",
+    "฿{bank} for the week sits in the bank. ฿{pocket} is in your pocket — the rest comes out of the ATM on the street (฿{fee} a pull, ฿{cap} a day) when you need it.":
+      "฿{bank} für die Woche liegen auf der Bank. ฿{pocket} hast du in der Tasche — der Rest kommt aus dem Geldautomaten auf der Straße (฿{fee} pro Abhebung, ฿{cap} am Tag), wenn du ihn brauchst.",
     "Goal: สบายสบาย. Get happy. Max out the week. ★":
       "Ziel: สบายสบาย. Werd glücklich. Hol das Maximum aus der Woche. ★",
     "(HELP lists commands. Your night is DOWN the stairs — the pub first, then out into the soi.)":
@@ -133,8 +133,8 @@ const _CATALOGS = {
       "ein Pattaya-Schlamassel · Soi-Sanuk-Universum",
     "Day two of your week in Pattaya, and it starts like this: face-down on Jomtien beach, sunset bleeding into the sea, your head pounding like a bass bin outside Neon Paradise A-Go-Go. Day one went well, is the thing. Too well.":
       "Tag zwei deiner Woche in Pattaya, und er beginnt so: mit dem Gesicht nach unten am Strand von Jomtien, der Sonnenuntergang blutet ins Meer, dein Kopf dröhnt wie eine Bassbox vor dem Neon Paradise A-Go-Go. Tag eins lief gut, das ist die Sache. Zu gut.",
-    "Your wallet is GONE. Your phone reads 13% battery. Your hotel is in Naklua — the whole town away. The baht bus is ฿15 a head.":
-      "Deine Brieftasche ist WEG. Dein Handy zeigt 13% Akku. Dein Hotel ist in Naklua — am anderen Ende der Stadt. Der Baht-Bus kostet ฿15 pro Kopf.",
+    "Your wallet is GONE. Your phone reads 13% battery. Your hotel is in Naklua — the whole town away. The baht bus is ฿{f} a head.":
+      "Deine Brieftasche ist WEG. Dein Handy zeigt 13% Akku. Dein Hotel ist in Naklua — am anderen Ende der Stadt. Der Baht-Bus kostet ฿{f} pro Kopf.",
     "You have ฿0.": "Du hast ฿0.",
     "It's going to be one of those nights.": "Es wird eine von diesen Nächten.",
     "(New here? Turn out your pockets — INVENTORY, then EXAMINE what you find — and check what you're up against with QUESTS. The rest, the soi teaches: TALK to people and ASK them about your wallet. HELP lists everything.)":
@@ -525,10 +525,10 @@ const _CATALOGS = {
     // last-baht-bus status (the titular tension)
     "(The last baht bus has gone — it's the piwin's small-hours tax or shoe leather home now.)":
       "(Der letzte Baht-Bus ist weg — jetzt heißt es Piwin-Nachttarif oder zu Fuß nach Haus.)",
-    "(Last baht bus around 2 a.m. — the ฿15 ride home is nearly up.)":
-      "(Letzter Baht-Bus gegen 2 Uhr — die ฿15-Fahrt nach Haus ist fast vorbei.)",
-    "(Baht buses running: ฿15 the ride home until the last one, ~2 a.m.)":
-      "(Baht-Busse fahren: ฿15 nach Haus bis zum letzten, ~2 Uhr.)",
+    "(Last baht bus around 2 a.m. — the ฿{f} ride home is nearly up.)":
+      "(Letzter Baht-Bus gegen 2 Uhr — die ฿{f}-Fahrt nach Haus ist fast vorbei.)",
+    "(Baht buses running: ฿{f} the ride home until the last one, ~2 a.m.)":
+      "(Baht-Busse fahren: ฿{f} nach Haus bis zum letzten, ~2 Uhr.)",
     // ── Soi 6 revisit pools + item names/descs (workflow-translated, Opus-reviewed) ──
     "Back to the Shady Lady, set back under its awning, the rail facing the soi so you can watch the circus without joining it.":
       "Zurück zur Shady Lady, zurückgesetzt unter ihre Markise, die Theke zur Soi hin ausgerichtet, sodass du den Zirkus beobachten kannst, ohne mitzumachen.",
@@ -776,8 +776,8 @@ const _CATALOGS = {
       "Eine leere Leo-Flasche, Sand im Flaschenhals. ฿5 Pfand wert.",
     "empty Singha bottle":
       "leere Singha-Flasche",
-    "An empty Singha bottle standing politely by a bin outside the 7-Eleven. ฿5 of glass.":
-      "Eine leere Singha-Flasche, die brav neben einem Mülleimer vor dem 7-Eleven steht. ฿5 Glas.",
+    "An empty Singha bottle, rinsed by somebody more organised than its drinker. ฿5 of glass.":
+      "Eine leere Singha-Flasche, ausgespült von jemandem, der ordentlicher ist als ihr Trinker. ฿5 Glas.",
     "phone charger":
       "Handy-Ladegerät",
     "A ฿59 USB charger of heroic optimism. Pair with an outlet to resurrect your phone.":
@@ -936,8 +936,8 @@ const _CATALOGS = {
     "{n} sighs, gives up the pretence, and arranges you around her like furniture she's chosen — then orders herself another lady drink on your tab, because winning shouldn't be free.":
       "{n} seufzt, gibt die Fassade auf und arrangiert dich um sich herum wie Möbel, die sie ausgesucht hat — dann bestellt sie sich auf deine Rechnung noch einen Lady Drink, denn Gewinnen sollte nicht umsonst sein.",
     // ── HELP_SOI6 command reference (commands/venues English; prose German) ──
-    "Common commands:\n  LOOK · EXAMINE <thing> · TAKE <thing> · DROP <thing> · INVENTORY (I)\n  N/S/E/W · IN/OUT · ENTER <place> · TRAVEL <bar> (fast-hop to any bar you've seen)\n  TALK TO <person> · ASK <person> ABOUT <topic> · GIVE <thing> TO <person>\n  WAI [person] · SAY <thai phrase> [TO <person>]\n  WATCH TV · READ PAPER — the day's real headlines · WEATHER · SCORES · LOTTERY\n  WATCH SUNSET (Blue Dog & Stinky Pinky, early evening — the junction show)\n  WATCH SOI · BALCONY (your balcony above, the Queen Vic window below, or the quiet middle of the soi — watch, don't join)\n  PLAY CONNECT 4 · PLAY JACKPOT [bet] · PLAY POOL   (in the beer bars)\n  FLIRT/KISS/SPANK/FONDLE <lady> · BUY DRINK FOR <lady> · BUY BEER · BUY MAN DRINK\n  RING BELL (฿300, instant popularity) · TALK TO PATRON · BARFINE <lady>\n  BUY CONDOM (฿40 a pack, the 7-Eleven — a barfine uses one; go without at your peril)\n  DIAGNOSE (how bad is it) · GET TESTED (free clinic — clears a barfine souvenir)\n  QUESTS · ACCEPT <quest> · ABANDON <quest>   (the soi has its own jobs going)\n  EAT <food> · DRINK <thing> · BUY WATER / FOOD (street carts & the 7-Eleven)\n  WITHDRAW <amount> · CHECK BALANCE (the street ATM — ฿300 a pull, ฿20,000 a day)\n  SLEEP (your room, ends the night) · OPEN FRIDGE · TAKE WATER (two free bottles a day)\n  PHONE / EXAMINE PHONE (battery, messages, weather, headlines)\n  CONTACT <lady> (swap numbers) · CONTACTS · MESSAGE <lady> · CHECK MESSAGES\n  WHO / BLACKBOOK (your ladies, ranked by how they feel about you) · WHO AM I (who you chose to be)\n  SEND <amount> TO <lady> (banking app)\n  FEED DOG (a friendship you cannot undo) · PET DOG · NAME DOG <name>\n  LIGHT ON / LIGHT OFF · CHARGE PHONE\n  TIME · MAP · WAIT UNTIL <hour> · TIP <lady> <amount> · PHOTO · CHEERS · TAO RAI (ask the price)\n  AGAIN or G (repeat last command)\n  SCORE (happiness & progress) · UNDO · RESTART   (the night autosaves itself)\n  PLAY AGAIN (once the week's up — another seven days on the soi)\n  QUIT / END / LOGOUT (sign off; your night is saved) · RESET (wipe the save — asks first)":
-      "Gängige Befehle:\n  LOOK · EXAMINE <thing> · TAKE <thing> · DROP <thing> · INVENTORY (I)\n  N/S/E/W · IN/OUT · ENTER <place> · TRAVEL <bar> (Schnellsprung zu jeder Bar, die du gesehen hast)\n  TALK TO <person> · ASK <person> ABOUT <topic> · GIVE <thing> TO <person>\n  WAI [person] · SAY <thai phrase> [TO <person>]\n  WATCH TV · READ PAPER — die echten Schlagzeilen des Tages · WEATHER · SCORES · LOTTERY\n  WATCH SUNSET (Blue Dog & Stinky Pinky, früher Abend — die Show an der Kreuzung)\n  WATCH SOI · BALCONY (dein Balkon oben, das Fenster des Queen Vic unten oder die stille Mitte der Soi — zuschauen, nicht mitmachen)\n  PLAY CONNECT 4 · PLAY JACKPOT [bet] · PLAY POOL   (in den Bierbars)\n  FLIRT/KISS/SPANK/FONDLE <lady> · BUY DRINK FOR <lady> · BUY BEER · BUY MAN DRINK\n  RING BELL (฿300, sofortige Beliebtheit) · TALK TO PATRON · BARFINE <lady>\n  BUY CONDOM (฿40 pro Packung, der 7-Eleven — ein Barfine verbraucht eines; ohne auf eigene Gefahr)\n  DIAGNOSE (wie schlimm steht es) · GET TESTED (kostenlose Klinik — beseitigt ein Barfine-Souvenir)\n  QUESTS · ACCEPT <quest> · ABANDON <quest>   (die Soi hat ihre eigenen Aufträge am Laufen)\n  EAT <food> · DRINK <thing> · BUY WATER / FOOD (Straßenkarren & der 7-Eleven)\n  WITHDRAW <amount> · CHECK BALANCE (der Straßen-Geldautomat — ฿300 pro Abhebung, ฿20.000 am Tag)\n  SLEEP (dein Zimmer, beendet die Nacht) · OPEN FRIDGE · TAKE WATER (zwei Gratisflaschen am Tag)\n  PHONE / EXAMINE PHONE (Akku, Nachrichten, Wetter, Schlagzeilen)\n  CONTACT <lady> (Nummern tauschen) · CONTACTS · MESSAGE <lady> · CHECK MESSAGES\n  WHO / BLACKBOOK (deine Ladys, sortiert danach, was sie für dich empfinden) · WHO AM I (wer du sein wolltest)\n  SEND <amount> TO <lady> (Banking-App)\n  FEED DOG (eine Freundschaft, die du nicht rückgängig machen kannst) · PET DOG · NAME DOG <name>\n  LIGHT ON / LIGHT OFF · CHARGE PHONE\n  TIME · MAP · WAIT UNTIL <hour> · TIP <lady> <amount> · PHOTO · CHEERS · TAO RAI (nach dem Preis fragen)\n  AGAIN oder G (letzten Befehl wiederholen)\n  SCORE (Zufriedenheit & Fortschritt) · UNDO · RESTART   (die Nacht speichert sich selbst)\n  PLAY AGAIN (wenn die Woche um ist — weitere sieben Tage auf der Soi)\n  QUIT / END / LOGOUT (abmelden; deine Nacht ist gespeichert) · RESET (Speicherstand löschen — fragt vorher)",
+    "Common commands:\n  LOOK · EXAMINE <thing> · TAKE <thing> · DROP <thing> · INVENTORY (I)\n  N/S/E/W · IN/OUT · ENTER <place> · TRAVEL <bar> (fast-hop to any bar you've seen)\n  TALK TO <person> · ASK <person> ABOUT <topic> · GIVE <thing> TO <person>\n  WAI [person] · SAY <thai phrase> [TO <person>]\n  WATCH TV · READ PAPER — the day's real headlines · WEATHER · SCORES · LOTTERY\n  WATCH SUNSET (Blue Dog & Stinky Pinky, early evening — the junction show)\n  WATCH SOI · BALCONY (your balcony above, the Queen Vic window below, or the quiet middle of the soi — watch, don't join)\n  PLAY CONNECT 4 · PLAY JACKPOT [bet] · PLAY POOL   (in the beer bars)\n  FLIRT/KISS/SPANK/FONDLE <lady> · BUY DRINK FOR <lady> · BUY BEER · BUY MAN DRINK\n  RING BELL (฿300, instant popularity) · TALK TO PATRON · BARFINE <lady>\n  BUY CONDOM (฿40 a pack, the 7-Eleven — a barfine uses one; go without at your peril)\n  DIAGNOSE (how bad is it) · GET TESTED (free clinic — clears a barfine souvenir)\n  QUESTS · ACCEPT <quest> · ABANDON <quest>   (the soi has its own jobs going)\n  EAT <food> · DRINK <thing> · BUY WATER / FOOD (street carts & the 7-Eleven)\n  WITHDRAW <amount> · CHECK BALANCE (the street ATM — ฿300 a pull, ฿20,000 a day)\n  SLEEP (your room, ends the night) · OPEN FRIDGE · TAKE WATER (two free bottles a day)\n  PHONE / EXAMINE PHONE (battery, messages, weather, headlines)\n  CONTACT <lady> (swap numbers) · CONTACTS · MESSAGE <lady> · CHECK MESSAGES\n  WHO / BLACKBOOK (your ladies, ranked by how they feel about you) · WHO AM I (who you chose to be)\n  SEND <amount> TO <lady> (banking app)\n  FEED DOG (a friendship you cannot undo) · PET DOG · NAME DOG <name>\n  LIGHT ON / LIGHT OFF · CHARGE PHONE\n  TIME · MAP · WAIT UNTIL <hour> · TIP <lady> <amount> · PHOTO · CHEERS · TAO RAI (ask the price)\n  AGAIN or G (repeat last command)\n  SCORE (happiness & progress) · SHARE (your week card — one emoji a night, copy & compare)\n  UNDO · RESTART   (the night autosaves itself)\n  PLAY AGAIN (once the week's up — another seven days on the soi)\n  QUIT / END / LOGOUT (sign off; your night is saved) · RESET (wipe the save — asks first)":
+      "Gängige Befehle:\n  LOOK · EXAMINE <thing> · TAKE <thing> · DROP <thing> · INVENTORY (I)\n  N/S/E/W · IN/OUT · ENTER <place> · TRAVEL <bar> (Schnellsprung zu jeder Bar, die du gesehen hast)\n  TALK TO <person> · ASK <person> ABOUT <topic> · GIVE <thing> TO <person>\n  WAI [person] · SAY <thai phrase> [TO <person>]\n  WATCH TV · READ PAPER — die echten Schlagzeilen des Tages · WEATHER · SCORES · LOTTERY\n  WATCH SUNSET (Blue Dog & Stinky Pinky, früher Abend — die Show an der Kreuzung)\n  WATCH SOI · BALCONY (dein Balkon oben, das Fenster des Queen Vic unten oder die stille Mitte der Soi — zuschauen, nicht mitmachen)\n  PLAY CONNECT 4 · PLAY JACKPOT [bet] · PLAY POOL   (in den Bierbars)\n  FLIRT/KISS/SPANK/FONDLE <lady> · BUY DRINK FOR <lady> · BUY BEER · BUY MAN DRINK\n  RING BELL (฿300, sofortige Beliebtheit) · TALK TO PATRON · BARFINE <lady>\n  BUY CONDOM (฿40 pro Packung, der 7-Eleven — ein Barfine verbraucht eines; ohne auf eigene Gefahr)\n  DIAGNOSE (wie schlimm steht es) · GET TESTED (kostenlose Klinik — beseitigt ein Barfine-Souvenir)\n  QUESTS · ACCEPT <quest> · ABANDON <quest>   (die Soi hat ihre eigenen Aufträge am Laufen)\n  EAT <food> · DRINK <thing> · BUY WATER / FOOD (Straßenkarren & der 7-Eleven)\n  WITHDRAW <amount> · CHECK BALANCE (der Straßen-Geldautomat — ฿300 pro Abhebung, ฿20.000 am Tag)\n  SLEEP (dein Zimmer, beendet die Nacht) · OPEN FRIDGE · TAKE WATER (zwei Gratisflaschen am Tag)\n  PHONE / EXAMINE PHONE (Akku, Nachrichten, Wetter, Schlagzeilen)\n  CONTACT <lady> (Nummern tauschen) · CONTACTS · MESSAGE <lady> · CHECK MESSAGES\n  WHO / BLACKBOOK (deine Ladys, sortiert danach, was sie für dich empfinden) · WHO AM I (wer du sein wolltest)\n  SEND <amount> TO <lady> (Banking-App)\n  FEED DOG (eine Freundschaft, die du nicht rückgängig machen kannst) · PET DOG · NAME DOG <name>\n  LIGHT ON / LIGHT OFF · CHARGE PHONE\n  TIME · MAP · WAIT UNTIL <hour> · TIP <lady> <amount> · PHOTO · CHEERS · TAO RAI (nach dem Preis fragen)\n  AGAIN oder G (letzten Befehl wiederholen)\n  SCORE (Zufriedenheit & Fortschritt) · SHARE (deine Wochenkarte — ein Emoji pro Nacht, kopieren & vergleichen)\n  UNDO · RESTART   (die Nacht speichert sich selbst)\n  PLAY AGAIN (wenn die Woche um ist — weitere sieben Tage auf der Soi)\n  QUIT / END / LOGOUT (abmelden; deine Nacht ist gespeichert) · RESET (Speicherstand löschen — fragt vorher)",
 
     // ── soi6 night-loop ambience — de-sweep batch 1 (tools/soak.mjs --lang de,
     // 2026-08-05): the highest-frequency FIXED strings from the gap report.
@@ -988,8 +988,8 @@ const _CATALOGS = {
       "Absichtsvoll aufgetragenes Parfüm, billiger Bodenreiniger und Hotelseife aus stundenweise vermieteten Zimmern.",
     "No water for sale here. 7-Elevens, bars, and the street carts all have it.":
       "Hier gibt es kein Wasser zu kaufen. 7-Elevens, Bars und Straßenkarren haben alle welches.",
-    "At the far end a regular reigns — the sort of scene you watch from across the bar, not one you walk into.":
-      "Am hinteren Ende regiert ein Stammgast — die Sorte Szene, die man von der anderen Seite der Bar aus betrachtet, nicht die, in die man sich einmischt.",
+    "At the far end a regular reigns{g} — the sort of scene you watch from across the bar, not one you walk into.":
+      "Am hinteren Ende regiert ein Stammgast{g} — die Sorte Szene, die man von der anderen Seite der Bar aus betrachtet, nicht die, in die man sich einmischt.",
     "A ซาเล้ง hung with sequinned sandals and platform heels rolls up outside; the girls are on it before it stops.":
       "Ein ซาเล้ง, behängt mit Pailletten-Sandalen und Plateauschuhen, rollt draußen heran; die Mädchen sind drauf, bevor er hält.",
     "A ซาเล้ง putters up outside, burner going and pork smoke ahead of it; the girls drift to the window.":
@@ -1000,5 +1000,278 @@ const _CATALOGS = {
       "Heute Abend: Muay-Thai-Highlights und die Lottoziehung. Du schaust zwei Runden zu, zufrieden, und lässt den Rest über dich hinwegrauschen.",
     "You call it. The air-con rattles its lullaby, the neon leaks through the curtains, and Pattaya carries on politely without you.":
       "Du machst Schluss für heute. Die Klimaanlage rattert ihr Schlaflied, das Neon sickert durch die Vorhänge, und Pattaya macht höflich ohne dich weiter.",
+
+    // ── de-sweep batch 2 (2026-08-07): the TEMPLATED lines. Each of these was
+    // an interpolated string baked with live ฿ amounts, so `de` would have
+    // needed one entry per amount — the gap report showed 7 variants of the
+    // beer refusal alone. The _say sites were refactored to _fmt first, so one
+    // entry per template now covers every amount. {slots} must survive
+    // translation verbatim; German word order may move them, which is fine. ──
+    "A big bottle is ฿{p} here. You have ฿{m}. The cashier's calculator stays in the drawer.":
+      "Eine große Flasche kostet hier ฿{p}. Du hast ฿{m}. Der Taschenrechner der Kassiererin bleibt in der Schublade.",
+    "Lady drinks are ฿{p}. You have ฿{m}. The maths is not on your side.":
+      "Lady Drinks kosten ฿{p}. Du hast ฿{m}. Die Rechnung geht nicht auf.",
+    "฿{p} for a cold bottle, and you don't have it. Grim.":
+      "฿{p} für eine kalte Flasche, und das hast du nicht. Bitter.",
+    "The toastie is ฿{p}. You have ฿{m}. The doorbell jingles in sympathy.":
+      "Der Toastie kostet ฿{p}. Du hast ฿{m}. Die Türglocke bimmelt mitfühlend.",
+    "You let the night idle past — ice melting, songs turning over, the street rearranging itself. {t}.":
+      "Du lässt die Nacht im Leerlauf vorbeiziehen — schmelzendes Eis, wechselnde Lieder, eine sich neu ordnende Straße. {t}.",
+    "฿{p} for the {item} — you have ฿{m}. The driver clocks it without embarrassing you and putters on.":
+      "฿{p} für {item} — du hast ฿{m}. Der Fahrer bemerkt es, ohne dich bloßzustellen, und knattert weiter.",
+    "The bell rope dangles there, daring you. A ring is a round for the house — ฿{p} — and you have ฿{m}. Ringing a bell you can't pay for is how farang end up in the khlong.":
+      "Das Glockenseil baumelt da und fordert dich heraus. Einmal läuten heißt eine Runde für alle — ฿{p} — und du hast ฿{m}. Eine Glocke zu läuten, die man nicht bezahlen kann, ist der sicherste Weg für einen Farang, im Khlong zu landen.",
+    "The night clerk takes in the situation and adds ฿{r} to the book without a word — ฿{d} on it now. His kindness is the heaviest thing you'll carry today.":
+      "Der Nachtportier überblickt die Lage und schreibt wortlos ฿{r} an — ฿{d} stehen jetzt drauf. Seine Freundlichkeit ist das Schwerste, was du heute trägst.",
+    "── DAY {d}{home} — you surface mid-afternoon, and by the time you're human again the sun is sliding into the gulf and the neon is waking up ──":
+      "── TAG {d}{home} — du tauchst am Nachmittag auf, und bis du wieder ein Mensch bist, sinkt die Sonne schon in den Golf und das Neon wacht auf ──",
+    // (" of 7" is already keyed further up — one entry serves both the TIME
+    // readout and the day header.)
+    " · PATTAYA, HOME": " · PATTAYA, ZUHAUSE",
+
+    // The {item} slot in the saleng-cart refusal is filled with _L(item), so the
+    // bare cart nouns need entries of their own — without them a German sentence
+    // renders "฿150 für sandals". Caught by the batch-2 review: the kind of seam
+    // only a second pair of eyes looking at the RUNTIME will notice. Thai dish
+    // names stay Thai, same rule as Chang/farang/som tam elsewhere.
+    "noodles": "Nudeln",
+    "sandals": "Sandalen",
+    "heels": "High Heels",
+    "lingerie": "Dessous",
+    "fruit": "Obst",
+
+    // ── de-sweep batch 3 (2026-08-07) ────────────────────────────────────────
+    // Top of the remaining gap. Note what four of these are: the phone-Tan beat
+    // shipped THIS DAY — 144 leak occurrences from one feature, which is the
+    // whole argument for translating at authoring time rather than in sweeps.
+    // keyed on the RAW message body, not the composed "📱 Tan: “…”" line —
+    // _readMessages calls _L on msg.text and adds the wrapper itself.
+    "I am not your mamasan, my friend. When I want something from you, I will ask for it — and it will not be money. 🙂":
+      "Ich bin nicht deine Mamasan, mein Freund. Wenn ich etwas von dir will, bitte ich dich darum — und Geld wird es nicht sein. 🙂",
+    "You text Tan — nothing much, the kind of message you'd send a mate.":
+      "Du schreibst Tan — nichts Besonderes, die Sorte Nachricht, die man einem Kumpel schickt.",
+    "\"A ride? My friend — the whole week is one soi. You can fall home from anywhere on it. Enjoy the falling.\" Click.":
+      "„Eine Fahrt? Mein Freund — die ganze Woche ist eine einzige Soi. Da fällst du von überall nach Hause. Genieß das Fallen.“ Klick.",
+    "555 you bored. go make some sanuk, my friend — that is what the town is FOR.":
+      "555 dir ist langweilig. geh Sanuk machen, mein Freund — genau DAFÜR ist die Stadt da.",
+    "฿{a} crosses town in one green blink — and comes straight back in another, before you've pocketed the phone.":
+      "฿{a} fliegen in einem grünen Blinken durch die Stadt — und im nächsten schon wieder zurück, bevor du das Handy eingesteckt hast.",
+    "฿{a} crosses town in one green blink. (฿{m} left.)":
+      "฿{a} fliegen in einem grünen Blinken durch die Stadt. (฿{m} übrig.)",
+
+    // the saleng cart, arriving and being swarmed
+    "A ซาเล้ง strung with lingerie idles up outside, and every girl in the place turns her head at once.":
+      "Ein ซาเล้ง, behängt mit Dessous, tuckert draußen heran, und jedes Mädchen im Laden dreht auf einen Schlag den Kopf.",
+    "A som-tam ซาเล้ง drifts to a stop outside, pestle already going, and the girls call their orders over your head.":
+      "Ein Som-Tam-ซาเล้ง rollt draußen aus, der Stößel schon am Stampfen, und die Mädchen rufen ihre Bestellungen über deinen Kopf hinweg.",
+    "Two of them have turned the saleng into a fashion show, striking increasingly theatrical poses at the punters with each new slip. Nobody at the bar is pretending to watch the football any more.":
+      "Zwei von ihnen haben den Saleng in eine Modenschau verwandelt und posieren mit jedem neuen Hemdchen theatralischer für die Kundschaft. Niemand am Tresen tut noch so, als würde er Fußball schauen.",
+    "The girls swarm the lingerie line in a giggling scrum, holding lace up against each other and turning to pose at the rail — the customers are the mirror they're using. One drapes a slip across your shoulder, delighted, before her friend snatches it back.":
+      "Die Mädchen fallen kichernd über die Dessous-Leine her, halten sich gegenseitig Spitze an und drehen sich zum Tresen, um zu posieren — die Gäste sind der Spiegel, den sie benutzen. Eine legt dir begeistert ein Hemdchen über die Schulter, bevor ihre Freundin es sich wieder schnappt.",
+    "A bra is held up, then held up against you for scale, to shrieks of laughter; the girls model the better pieces down the bar with the straight-faced confidence of women who know exactly what the room is worth.":
+      "Ein BH wird hochgehalten, dann zum Größenvergleich an dich gehalten, unter kreischendem Gelächter; die Mädchen führen die besseren Stücke den Tresen entlang vor, mit der ungerührten Sicherheit von Frauen, die genau wissen, was das Publikum wert ist.",
+    "You already have one. The driver shrugs and keeps the change for your indecision. Just kidding — ฿{p} back.":
+      "Du hast schon welche. Der Fahrer zuckt mit den Schultern und behält das Wechselgeld als Gebühr für deine Unentschlossenheit. Kleiner Scherz — ฿{p} zurück.",
+
+    // journal / black book, when there is nothing in them yet
+    "The wallet's yours and the opening's behind you — out here there are no wrong answers, only better nights. Nothing on the books: the givers are out there, so TALK to people. (QUESTS lists jobs, WHO your black book, MAP the lay of the land.)":
+      "Die Brieftasche gehört wieder dir und der Anfang liegt hinter dir — hier draußen gibt es keine falschen Antworten, nur bessere Nächte. Nichts im Auftragsbuch: Die Auftraggeber sind da draußen, also TALK mit den Leuten. (QUESTS listet die Jobs, WHO dein schwarzes Buch, MAP die Gegend.)",
+    "The black book's empty. You earn names the honest way out here — CONTACT a lady in her own bar once she likes you, and she goes in the book.":
+      "Das schwarze Buch ist leer. Namen verdient man sich hier draußen auf die ehrliche Tour — CONTACT eine Lady in ihrer eigenen Bar, sobald sie dich mag, und sie landet im Buch.",
+
+    // ── de-sweep batch 4 (2026-08-07) — the templating batch ─────────────────
+    // 20 _say sites were refactored to _fmt FIRST (batch 2's lesson): these lines
+    // carry a NAME or an AMOUNT, so without a slot German needed one entry per
+    // character and per price. "Terry laughs it off" and "Doyle laughs it off"
+    // were two separate leaks of one sentence.
+
+    // the flirt rebuffs — a name, and a no
+    "{n} blinks, then snorts. \"Ha — no. Not that way, mate. Buy me a beer if you like, but keep the eyelashes to yourself.\" More baffled than bothered.":
+      "{n} blinzelt, dann schnaubt. „Ha — nein. Nicht so, Kumpel. Gib mir ein Bier aus, wenn du magst, aber den Augenaufschlag behalt für dich.“ Mehr verdutzt als verärgert.",
+    "A beat of confusion, then {n} laughs it off and shifts his stool an inch away. \"Steady on, fella. Wrong tree entirely.\" Good-natured, but that's a no.":
+      "Ein Moment Verwirrung, dann tut {n} es mit einem Lachen ab und rückt seinen Hocker ein Stück beiseite. „Ganz ruhig, Kollege. Da bist du bei mir komplett an der falschen Adresse.“ Gutmütig, aber ein Nein.",
+    "{n} laughs, not unkindly. \"Aww, tilac — not my type. I like the ladies, same-same you.\" A pat on the cheek, and she's moved on.":
+      "{n} lacht, nicht unfreundlich. „Aww, Tilac — nicht mein Typ. Ich mag die Ladys, same-same wie du.“ Ein Klaps auf die Wange, und sie ist weitergezogen.",
+    "\"Handsome, but—\" {n} tips her head at a girl across the bar and grins. \"—wrong team, na. I bat the other way.\" No offence in it, plenty of amusement.":
+      "„Hübsch, aber—“ {n} deutet mit dem Kinn auf ein Mädchen auf der anderen Seite der Bar und grinst. „—falsches Team, na. Ich spiele für die andere Mannschaft.“ Nicht böse gemeint, und sichtlich amüsiert.",
+    "{n}'s face shuts like a door. \"No. Do that again and we have a problem.\" The temperature in your corner of the bar drops several degrees.":
+      "{n} macht das Gesicht zu wie eine Tür. „Nein. Mach das noch mal und wir haben ein Problem.“ Die Temperatur in deiner Ecke der Bar fällt um mehrere Grad.",
+    "\"You WHAT?\" {n} sets the glass down very deliberately. That is not a look you flirt through. Leave it.":
+      "„Bitte WAS?“ {n} stellt das Glas sehr bedächtig ab. Durch diesen Blick flirtet man nicht hindurch. Lass es.",
+
+    // Connect 4 / Jackpot / pool / darts — the opponent's name, and the stake
+    "{n} lights up, fetches the frame, and drops a counter on the way over. She sorts the colours carefully and counts hers twice. Down the bar, one of the older girls watches with something between fondness and pity.":
+      "{n} strahlt, holt das Spielbrett und lässt auf dem Weg einen Stein fallen. Sie sortiert die Farben sorgfältig und zählt ihre zweimal nach. Weiter hinten am Tresen schaut eine von den älteren Mädels zu, mit etwas zwischen Zuneigung und Mitleid.",
+    "{n} racks the frame with the easy speed of a woman who plays every shift, and gives you first drop like it costs her nothing. It doesn't.":
+      "{n} baut das Spiel auf, flott und beiläufig wie eine, die jede Schicht spielt, und überlässt dir den ersten Zug, als koste es sie nichts. Tut es auch nicht.",
+    "฿{s} on the table.": "฿{s} liegen auf dem Tisch.",
+    "{n} slides over the battered Jackpot box — nine tiles up, two dice, the felt worn smooth by ten thousand losing farang. Flip the dice, or flip their sum. Lowest score wins; shut the box and it's JACKPOT.":
+      "{n} schiebt dir den ramponierten Jackpot-Kasten hin — neun Klappen oben, zwei Würfel, der Filz blank gescheuert von zehntausend verlierenden Farang. Klapp die Würfelzahlen um, oder ihre Summe. Wer am wenigsten stehen lässt, gewinnt; alle Klappen zu, und es ist JACKPOT.",
+    "฿{s} rides on it.": "฿{s} stehen auf dem Spiel.",
+    "{n} catches the look on your face and grins. \"First time, na? Okay — I show you. Slow-slow. You do every flip yourself tonight; you learn faster that way.\" She rolls for you.":
+      "{n} liest dir den Blick vom Gesicht ab und grinst. „Erstes Mal, na? Okay — ich zeig dir. Langsam-langsam. Heute Abend klappst du jede Klappe selbst um; so lernst du schneller.“ Sie würfelt für dich.",
+    "{n} leans in. \"Two ways here, na. Flip the two dice numbers — or flip their sum, one tile. Never both. Whatever's still standing at the end is your score, and low wins. You choose.\"":
+      "{n} beugt sich vor. „Zwei Wege, na. Klapp die beiden Würfelzahlen um — oder ihre Summe, eine Klappe. Nie beides. Was am Ende noch steht, ist dein Ergebnis, und wenig gewinnt. Du entscheidest.“",
+    "{n} taps the felt. \"This roll, only one way to play it — so play it. Type the flip. The box doesn't move itself… not until you know it does.\"":
+      "{n} tippt auf den Filz. „Dieser Wurf, nur ein Weg — also spiel ihn. Tipp den Flip ein. Der Kasten bewegt sich nicht von allein… jedenfalls nicht, bevor du weißt, dass er es doch tut.“",
+    "You rack. {n} breaks — dry. Seven balls each, then the black.":
+      "Du baust auf. {n} breakt — nichts fällt. Sieben Kugeln für jeden, dann die Schwarze.",
+    "฿{s} under the corner cushion.": "฿{s} liegen unter der Eckbande.",
+    "Chalk up: 501 each, straight off, check out on a double. {n} throws for the bull to start and lands it like breathing.":
+      "Angeschrieben: 501 für jeden, Straight In, Double Out. {n} bullt aus und trifft, als wäre es Atmen.",
+    "฿{s} on the shelf under the board.": "฿{s} liegen auf der Ablage unter der Scheibe.",
+
+    // shops, the app, and walking there
+    "A pack is ฿{p}. You have ฿{m}. The cashier slides it back with a knowing look.":
+      "Eine Packung kostet ฿{p}. Du hast ฿{m}. An der Kasse schiebt man sie dir mit wissendem Blick zurück.",
+    "The app regrets to inform you: ฿{m} available, ฿{a} dreamed of.":
+      "Die App bedauert mitteilen zu müssen: ฿{m} verfügbar, ฿{a} erträumt.",
+    "You point yourself at {v} and let your feet do the remembering — one turn of soi, neon, and shortcuts.":
+      "Du peilst {v} an und überlässt das Erinnern deinen Füßen — eine Ecke Soi, Neon und Abkürzungen.",
+    "You point yourself at {v} and let your feet do the remembering — {n} turns of soi, neon, and shortcuts.":
+      "Du peilst {v} an und überlässt das Erinnern deinen Füßen — {n} Ecken Soi, Neon und Abkürzungen.",
+
+    // the quest journal frames. The name and desc are _L'd separately (they are
+    // world.js data), so a frame translated alone still reads half-German until
+    // batch 5 does the quest text — deliberate: the frames are what repeat.
+    "On the books: {name} — {desc}{where}": "Im Auftragsbuch: {name} — {desc}{where}",
+    "{giver} has a job going — “{name}”. Take it on with ACCEPT {id}.":
+      "{giver} hätte da einen Auftrag — „{name}“. Nimm ihn an mit ACCEPT {id}.",
+    "✦ {who} has a job for you: “{name}” — {desc}":
+      "✦ {who} hat einen Auftrag für dich: „{name}“ — {desc}",
+    "✦ Quest accepted: {name}": "✦ Auftrag angenommen: {name}",
+    "✦ Abandoned: {name}. The soi forgives; the giver may offer it again.":
+      "✦ Aufgegeben: {name}. Die Soi verzeiht; wer ihn vergeben hat, bietet ihn vielleicht wieder an.",
+    // "▶ {name} — {desc}{where}" and "▶ {name}" need no entry: they are
+    // punctuation and slots only, identical in both languages.
+    "✦ On offer: {name} (ACCEPT {id})": "✦ Zu vergeben: {name} (ACCEPT {id})",
+
+    // fixed lines riding along
+    // these two land in the {n} slot of the pool/darts intros — a DESCRIPTION, not
+    // a name, so without _L at the assignment German prose wrapped an English
+    // clause. Same defect class the {item} slot had: invisible in the string
+    // pairs, obvious the moment you run a German game.
+    "a leathery expat off the rail who hasn't missed since 1997":
+      // NB: no trailing relative clause. The host sentence's verb resumes right
+      // after this slot, and German would need a closing comma the template
+      // cannot supply ("…hat stößt an"). A mid-sentence slot filler must be a
+      // self-contained noun phrase.
+      "ein ledriger, seit 1997 unfehlbarer Dauergast vom Tresen",
+    "a leathery expat with his own darts in a belt case":
+      "ein ledriger Auswanderer mit eigenen Darts im Gürteletui",
+    "You're broke, so this one's for sanuk — and her professional pride.":
+      "Du bist pleite, also geht die hier auf Sanuk — und auf ihren Berufsstolz.",
+    // ── de-sweep batch 5 (2026-08-07) — the quest journal ────────────────────
+    // Quest names and descs are world.js DATA, now routed through _L by the
+    // batch-4 render templating. Rules that bind every entry below:
+    //   · the (ALL CAPS IN PARENS) hints are literal typed commands AND the
+    //     decorate() tap targets — they stay English, capitalised, in parens.
+    //   · character and venue names stay as-is (they are tap targets too).
+    //   · no {{…}} braces needed on the league desc: the English suppressed a
+    //     collision with the host NPC "Win", and German "Gewinne" doesn't
+    //     contain that word.
+
+    "The White Dish Offer": "Das Angebot von White Dish",
+    "White Dish want to buy Bert's bar out from under its dying owner. Get him the real picture — the history (ASK TERRY ABOUT WHITE DISH), the inside view (ASK KESINEE at the Kitten Corner ABOUT WHITE DISH), and the pitch (ASK GAVIN at the Golden Dragon ABOUT THE OFFER) — then tell Bert (ASK BERT ABOUT THE OFFER).":
+      "White Dish will Berts Bar dem sterbenden Besitzer unter dem Hintern wegkaufen. Verschaff ihm das ganze Bild — die Vorgeschichte (ASK TERRY ABOUT WHITE DISH), die Sicht von innen (ASK KESINEE at the Kitten Corner ABOUT WHITE DISH) und das Angebot selbst (ASK GAVIN at the Golden Dragon ABOUT THE OFFER) — und dann sag es Bert (ASK BERT ABOUT THE OFFER).",
+
+    "Gavin's Errand": "Gavins Botengang",
+    "Gavin would like a quiet favour: have a word with Bert about selling the Stinky to White Dish. \"Friend to friend. Soften him up. Everyone wins, and White Dish looks after its friends.\" (Take it to Bert — ASK BERT ABOUT SELLING — or don't. No one's forcing you.)":
+      "Gavin hätte gern einen stillen Gefallen: Red mal mit Bert darüber, das Stinky an White Dish zu verkaufen. „Von Freund zu Freund. Mach ihn weich. Alle gewinnen, und White Dish kümmert sich um seine Freunde.“ (Trag es zu Bert — ASK BERT ABOUT SELLING — oder lass es. Dich zwingt niemand.)",
+
+    "The President's Table": "Der Tisch des Präsidenten",
+    "Get eyes on the Orchid Room's good table — the back room off the Pink Lotus — and see who really holds it, then tell Doyle (ASK DOYLE ABOUT THE TABLE).":
+      "Wirf einen Blick auf den guten Tisch im Orchid Room — dem Hinterzimmer hinter dem Pink Lotus — und sieh nach, wer ihn wirklich hält, dann sag es Doyle (ASK DOYLE ABOUT THE TABLE).",
+
+    "The Silent Partner": "Der stille Teilhaber",
+    "Wayne's about to sign as the farang face of a bar he'll never really own. Once you've seen how White Dish works, set him straight (ASK WAYNE ABOUT THE PARTNER).":
+      "Wayne unterschreibt gleich als Farang-Gesicht einer Bar, die ihm nie wirklich gehören wird. Wenn du erst mal gesehen hast, wie White Dish arbeitet, sag ihm die Wahrheit (ASK WAYNE ABOUT THE PARTNER).",
+
+    "The Old Days": "Die alten Zeiten",
+    "Buy Roy's time and let the old soi come back to him — the bars before the brands, and the ghosts still propping the place up (ASK ROY ABOUT THE OLD DAYS).":
+      "Kauf dir Roys Zeit und lass die alte Soi zu ihm zurückkommen — die Bars vor den Marken, und die Geister, die den Laden immer noch stützen (ASK ROY ABOUT THE OLD DAYS).",
+
+    "Easy Come": "Wie gewonnen",
+    "Macca's redundancy is going out faster than he'll admit. Give him the honest maths (ASK MACCA ABOUT THE PAYOUT).":
+      "Maccas Abfindung geht schneller raus, als er zugeben will. Rechne es ihm ehrlich vor (ASK MACCA ABOUT THE PAYOUT).",
+
+    "A Quiet One": "Ein Stiller",
+    "Pete is sitting on something heavy. Earn his trust and hear it (ASK PETE ABOUT THE NAME).":
+      "Pete trägt etwas Schweres mit sich herum. Verdien dir sein Vertrauen und hör es dir an (ASK PETE ABOUT THE NAME).",
+
+    "Her Brother": "Ihr Bruder",
+    "Rob's ex-wife's brother rides with the club in the Orchid's back room. Carry his word if you ever get in there (ASK ROB ABOUT THE BROTHER).":
+      "Der Bruder von Robs Ex-Frau fährt mit dem Club im Hinterzimmer des Orchid. Nimm seine Botschaft mit, falls du je da reinkommst (ASK ROB ABOUT THE BROTHER).",
+
+    "The Wrong Photo": "Das falsche Foto",
+    "Somewhere in Barry's eleven years of trophy snaps is one he shouldn't have. Get a proper look once you know what you're looking at (ASK BARRY ABOUT THE PHOTO).":
+      "Irgendwo in Barrys elf Jahren Trophäenfotos ist eins, das er nicht haben sollte. Sieh es dir richtig an, sobald du weißt, wonach du suchst (ASK BARRY ABOUT THE PHOTO).",
+
+    "The Sister-Bar Run": "Die Tour zur Schwesterbar",
+    "Carry Candy's gift bottle of Sang Som to Bee (GIVE SANG SOM TO BEE).":
+      "Bring Candys Geschenkflasche Sang Som zu Bee (GIVE SANG SOM TO BEE).",
+
+    "King of the Killer Table": "König des Killer-Tisches",
+    "{{Win}} a killer pool league night — every third night, ฿100 entry (PLAY KILLER).":
+      "Gewinne einen Killer-Pool-Ligaabend — jede dritte Nacht, ฿100 Startgeld (PLAY KILLER).",
+
+    "Bee's First Investor": "Bees erster Investor",
+    "Bee wants her expansion fund taken seriously: get her number (CONTACT BEE) and wire ฿100 through the banking app (SEND 100 TO BEE).":
+      "Bee will, dass ihr Expansionsfonds ernst genommen wird: Besorg dir ihre Nummer (CONTACT BEE) und überweis ฿100 über die Banking-App (SEND 100 TO BEE).",
+
+    "The Man Out of Time": "Der Mann aus der Zeit gefallen",
+    "Sit with Glam a while and let him tell you about the tour (ASK GLAM ABOUT MUSIC).":
+      "Setz dich eine Weile zu Glam und lass ihn von der Tour erzählen (ASK GLAM ABOUT MUSIC).",
+
+    "The Foreman's Keys": "Die Schlüssel des Poliers",
+    "Carry her late husband's site keys to the bar he built, for the shrine (GIVE KEYS TO DIAMOND).":
+      "Bring die Baustellenschlüssel ihres verstorbenen Mannes in die Bar, die er gebaut hat, für den Schrein (GIVE KEYS TO DIAMOND).",
+
+    "The Quiet Money": "Das stille Geld",
+    "Nobody asks the Samson brothers where the seed money came from. Ask the man out of time instead (ASK GLAM ABOUT HIS SONS).":
+      "Niemand fragt die Samson-Brüder, woher das Startkapital kam. Frag stattdessen den Mann, der aus der Zeit gefallen ist (ASK GLAM ABOUT HIS SONS).",
+
+    "Family": "Familie",
+    "Wimon thinks you have earned the whole of it, and gives her blessing to ask (ASK DIAMOND ABOUT GLAM).":
+      "Wimon findet, du hast dir die ganze Geschichte verdient, und gibt ihren Segen zu fragen (ASK DIAMOND ABOUT GLAM).",
+
+    "Candy's Competition Recce": "Candys Erkundung der Konkurrenz",
+    "Walk the new drinking strips with your eyes open — Myth Night's container rows, Tree Town's far lane, and the quiet middle stretch of Soi 6.":
+      "Lauf die neuen Kneipenmeilen mit offenen Augen ab — die Containerreihen von Myth Night, die hintere Gasse von Tree Town und das ruhige Mittelstück der Soi 6.",
+
+    "A Scout for Petch": "Ein Scout für Petch",
+    "Carry the revue flyer to Diamond — she danced with half of Alcazar in her day, and her scout friend owes her a favour (GIVE FLYER TO DIAMOND).":
+      "Bring den Revue-Flyer zu Diamond — sie hat seinerzeit mit dem halben Alcazar getanzt, und ihre Scout-Freundin schuldet ihr einen Gefallen (GIVE FLYER TO DIAMOND).",
+
+    "The Collection Run": "Die Inkasso-Tour",
+    "฿500 to jog a deadbeat's memory — no rough stuff, just find Fergie in his maze and ASK him ABOUT THE DEBT.":
+      "฿500 dafür, dem Gedächtnis eines Schuldners auf die Sprünge zu helfen — nichts Grobes, find einfach Fergie in seinem Labyrinth und ASK him ABOUT THE DEBT.",
+
+    "The Shamrock Dog": "Der Shamrock-Hund",
+    "Bert swears your dog is the old Shamrock bar dog, out on Soi Khao Talo. Walk him out to the dead pub and let him see it.":
+      "Bert schwört, dein Hund sei der alte Barhund vom Shamrock, draußen an der Soi Khao Talo. Lauf mit ihm raus zum toten Pub und lass ihn es sehen.",
+
+    // Act One's own journal block — the founding adventure isn't a QUESTS entry,
+    // so its header and milestone labels need their own keys. The labels are
+    // _L'd individually because the line is composed with a ✓/· marker.
+    "▶ The Last Baht Bus — find your wallet, get back to room 412 in Naklua.":
+      "▶ Der letzte Baht-Bus — finde deine Brieftasche, zurück auf Zimmer 412 in Naklua.",
+    "Worked out where you were last night": "Herausgefunden, wo du letzte Nacht warst",
+    "Learned who lifted the wallet": "Erfahren, wer die Brieftasche mitgehen ließ",
+    "Traced the wallet to Madam Oy": "Die Brieftasche bis zu Madam Oy verfolgt",
+    "Learned the office door trick": "Den Trick mit der Bürotür gelernt",
+    "Clue: the number 71": "Hinweis: die Zahl 71",
+    "Clue: the lucky 9": "Hinweis: die Glückszahl 9",
+    "WALLET RECOVERED": "BRIEFTASCHE WIEDER DA",
+
+    // _questWhere — the live "where" clause shared by HINT and the QUESTS journal.
+    // Both article variants map to one German line: German takes no article
+    // before a proper venue name, so there is nothing to guess at.
+    " {who} is at {v}, over in {r}.": " {who} ist im {v}, drüben in {r}.",
+    " That's {v}, in {r}.": " Das ist {v}, drüben in {r}.",
+    " That's the {v}, in {r}.": " Das ist {v}, drüben in {r}.",
+
+    "Last call — the mamasan taps her watch: about half an hour to closing. This place shuts at midnight, so if you mean to take a lady home tonight, now is the moment to BARFINE. After the shutters come down it's the street.":
+      "Letzte Runde — die Mamasan tippt auf ihre Uhr: noch etwa eine halbe Stunde bis Feierabend. Der Laden macht um Mitternacht zu, wenn du also heute Nacht eine Lady mitnehmen willst, ist jetzt der Moment für BARFINE. Wenn die Rollläden unten sind, bleibt nur noch die Straße.",
   },
 };
