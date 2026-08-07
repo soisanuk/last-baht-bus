@@ -2946,6 +2946,139 @@ function _tanFavourNo() {
     "and that he came in and asked instead.", "dim");
 }
 
+// ── Procurement, and the price of staying out of it ──────────────────────────
+// Once you own a bar, work gets given out through partners: cleaning, the
+// screen behind the bar, the till. The jobs themselves are data (SYNDICATE_JOBS,
+// world.js); this is the machinery and the consequences.
+//
+// The frame, because the obvious version of this content is wrong: it is not
+// corruption being discovered by a farang. It's how business is done here and
+// everywhere — the only local difference is that nobody troubles to pretend
+// otherwise. Nobody in the thread treats it as a scandal, and the words "bribe"
+// and "corruption" never appear. Gavin's "White Dish looks after its friends"
+// is the same sentence in a British accent.
+//
+// NEUTRALITY IS ALWAYS AVAILABLE AND NOTHING IS EVER BLOCKED. Refuse and the
+// work still gets done, often cheaper on the invoice. What you lose is the
+// frictionlessness: you pay list, you wait, the paperwork finds you. It's
+// survivable while the bar is busy. `G.syn.friction` is that meter, and the
+// pressure test is low season, when the margin that absorbed it isn't there.
+function _synState() {
+  if (!G.syn) G.syn = { done: {}, asked: {}, friction: 0 };
+  return G.syn;
+}
+
+// the next job he hasn't put to you yet — asked in table order
+function _synNextJob() {
+  if (!_flag("partnerTan") || !_flag("barOpen")) return null;
+  const st = _synState();
+  return SYNDICATE_JOBS.find(j => !st.asked[j.id]) || null;
+}
+
+function _synDue() {
+  return G.room === "stinky_bar" && G.nightTurn >= 30 &&
+    _flag("tanAsked") &&                  // the free favour comes first
+    _synState().lastAskDay !== G.day &&   // one procurement beat a night, at most
+    !!_synNextJob();
+}
+
+function _synAsk() {
+  const job = _synNextJob();
+  if (!job) return;
+  const st = _synState();
+  st.asked[job.id] = true;
+  st.lastAskDay = G.day;
+  G.pendingChoice = "synjob";
+  G.synJob = job.id;
+  _say("");
+  if (job.first) {
+    _say("Tan is at the end of your rail again, waiting for Bert to finish " +
+      "pouring rather than cutting in front of a customer.");
+  }
+  _say(job.lead, "alert");
+  _say(job.ask);
+  _synPrompt();
+}
+
+function _synJobById(id) { return SYNDICATE_JOBS.find(j => j.id === id) || null; }
+
+function _synPrompt() {
+  const job = _synJobById(G.synJob);
+  _say(_fmt("(YES · NO · ASK — {label})", { label: job ? job.whoLabel : "ask about it" }), "dim");
+}
+
+function _synWho() {
+  const job = _synJobById(G.synJob);
+  if (job) _say(job.who);
+  _synPrompt();
+}
+
+function _synYes() {
+  const job = _synJobById(G.synJob);
+  G.pendingChoice = null; G.synJob = null;
+  if (!job) return;
+  _synState().done[job.id] = true;
+  _align("syndicate", 2);
+  _say(job.yes, "win");
+  if (job.perk) _say(job.perk, "dim");
+  if (job.first) {
+    _say("(★ You are a partner now, and partners' interests get looked after " +
+      "first. That is not a Thai arrangement — it's the arrangement everywhere. " +
+      "Here nobody troubles to hide it.)", "dim");
+  }
+}
+
+function _synNo() {
+  const job = _synJobById(G.synJob);
+  G.pendingChoice = null; G.synJob = null;
+  if (!job) return;
+  const st = _synState();
+  st.friction = (st.friction || 0) + 1;
+  // no _align: staying out is not a deed against anybody, and nothing is done
+  // to you. The cost is that nothing is done FOR you either.
+  _say(job.no);
+  _say("Nothing is done to you. Nothing at all is done to you, and that turns " +
+    "out to be the whole of it.", "dim");
+  if (st.friction === 1) {
+    _say("The bin men go back to coming when they come. The beer uncle keeps " +
+      "quoting the invoice price, perfectly friendly about it. A delivery is " +
+      "short and the shortage is nobody's fault.", "dim");
+  } else {
+    _say("It is a little heavier each time. You could not point at a single " +
+      "thing that was done to you, and you would be right, and the bar is " +
+      "harder to run every month.", "dim");
+  }
+}
+
+// Refusing isn't an event, it's weather — felt at your own bar over months.
+// Everything here is survivable and none of it is retaliation; it is the
+// ordinary cost of paying list price and waiting your turn.
+const _SYN_FRICTION = [
+  "The beer uncle's Hilux comes at eleven instead of nine. Not a problem, " +
+    "except the fridges were empty until eleven.",
+  "A crate you paid for isn't in the delivery. The uncle is genuinely sorry, " +
+    "rings somebody, shrugs. It arrives Thursday. It is Saturday.",
+  "One of the girls asks, very politely, whether the bar is going to be all " +
+    "right. You say yes. She nods as though you had said something else.",
+  "A form you have never seen before needs a stamp from an office that shuts " +
+    "at three. It costs you an afternoon and is entirely correct.",
+  "Two of the mamasans on the strip stop asking you to their bars' birthdays. " +
+    "Nothing is said. You simply stop being on the list.",
+  "The invoice price again. You mention, lightly, that you heard there was a " +
+    "better number. The uncle agrees that there is, doesn't offer it, and helps " +
+    "you carry the crates in.",
+];
+
+function _synFrictionTick() {
+  const st = _synState();
+  if (!st.friction || G.room !== "stinky_bar") return;
+  if (st.frictionDay === G.day) return;
+  // scales with how far outside you've stayed, and never becomes a drumbeat
+  if (_rand() > Math.min(0.25 + st.friction * 0.12, 0.6)) return;
+  st.frictionDay = G.day;
+  _say(_pickVary(_SYN_FRICTION, "synfriction"), "dim");
+}
+
 // ── Dog-name easter eggs ─────────────────────────────────────────────────────
 // Name your soi dog after a famous hound or a bit of Pattaya slang and he picks
 // up a modest power (stored on G.dog.egg, applied at hooks across the engine).
