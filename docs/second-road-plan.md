@@ -118,7 +118,7 @@ This is the first task and it costs a day. Nothing else starts until it's done.
 | --- | --- | --- |
 | **s0** | Four week-summaries as prose. Go/no-go. **DONE 2026-08-07 → GO** (`docs/second-road-weeks.md`) | — |
 | **s1** | Repo, save-baton read/write, a round-trip test on both sides. **DONE 2026-08-08** — both halves plus an end-to-end cross-repo handoff test | s0 passes |
-| **s2** | One bar, one season, no UI beyond text. The loop proven headless. | s1 |
+| **s2** | One bar, one season, no UI beyond text. The loop proven headless. **DONE 2026-08-08** — the Stinky, 52 weeks, 20 tests; generated weeks read | s1 |
 | **s3** | The map (`ROOM_GEO`) + roster (portraits). The first real 2D. | s2 |
 | **s4** | Second bar, delegation, the trust mechanic. The actual game. | s3 |
 | **s5** | Factions as strategy: the Darkside family, WDG's fragility. | s4 |
@@ -235,8 +235,31 @@ Until 1 and 2 exist, any shortcut taken on the Second Road side — reading
   pair; this is the only test that runs a real character through the real
   handoff. Proven by bumping `BATON_VERSION` on one side alone.
 
-**Next: s2** — one bar, one season, headless text. Prove the loop where it's
-cheap to change, before spending anything on pixels.
+**s2 is done (2026-08-08).** The Stinky, 52 weeks, headless, 20 tests.
+
+The economics are LBB's, *aggregated rather than re-simulated* — a week is seven
+nights of trade, of which you worked some. High season nets ~+฿24k/week, low
+season ~−฿6k; a year at three nights a week drains the till ฿160k → ฿41k through
+May–August and recovers by November. That's the pressure the game is about.
+
+**The question s2 existed to answer was whether GENERATED weeks read**, since s0
+only proved hand-written ones did. They do — and the vendored roster is most of
+why, because the prose names Bert, Lamai, Manow and Cake, so a week is about
+people rather than numbers.
+
+Three things worth carrying forward:
+
+- **Three-item pools produce A-B-A** under a one-deep no-repeat memory. Weeks 1
+  and 3 came out identical. Pools are now 6–7 deep and `pickVary` loops rather
+  than re-rolling once — at ~1/n² a repeated *opening line* still lands about
+  once a year, and that's the most legible tell that prose was generated.
+- **An eventless week needs texture**, or it's one sentence and reads like a
+  stub.
+- **A real modelling bug**: paying off arrears reduced the debt by one month's
+  worth rather than by the money actually handed over. Found by noticing a gap in
+  the payment schedule (4, 8, …, 32, then 40), not by reading the code.
+
+**Next: s3** — the map (`ROOM_GEO`) and the roster (portraits). The first real 2D.
 
 **Next: the Second Road repo.** Needs a location decision (sibling to
 `last-baht-bus`, same origin as the trainer is the cheap answer).
