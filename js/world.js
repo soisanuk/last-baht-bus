@@ -1036,11 +1036,11 @@ const ROOMS = {
       "is not visible from the gate, but you'll feel it by the time you reach the other end. " +
       "Just east, RUEAN SABAI THAI MASSAGE has a row of foot chairs out for the walking " +
       "wounded.",
-    exits: { s: "ws_south", n: "beach_rd_s", w: "pratumnak_rd", e: "thai_massage" },
+    exits: { s: "ws_north", n: "beach_rd_s", w: "pratumnak_rd", e: "thai_massage" },
   },
-  ws_south: {
+  ws_north: {
     atm: true,
-    name: "Walking Street (South)",
+    name: "Walking Street (North)",
     region: "Walking Street",
     desc: "Neon canyon, but the neon mix has changed. Bollywood bass competes with Thai pop " +
       "from somewhere inside Little India's encroachment from the east — restaurant signs in " +
@@ -1048,7 +1048,7 @@ const ROOMS = {
       "NEON PARADISE A-GO-GO still strobes on the west side. CLUB MIRAGE shimmers opposite. " +
       "The touts with the laminated menus are still here. A dark side-alley slinks off " +
       "between them.",
-    exits: { n: "ws_gate", s: "ws_north", w: "neon_paradise", e: "club_mirage", in: "neon_paradise", out: "ws_gate", alley: "ws_alley" },
+    exits: { n: "ws_gate", s: "ws_south", w: "neon_paradise", e: "club_mirage", in: "neon_paradise", out: "ws_gate", alley: "ws_alley" },
   },
   ws_alley: {
     name: "Walking Street Side-Alley",
@@ -1056,10 +1056,10 @@ const ROOMS = {
     dark: true,
     desc: "Kitchen steam, stacked kegs, a motorbike with no plates. The kind of alley " +
       "where wallets change hands in both directions.",
-    exits: { out: "ws_south", e: "ws_south" },
+    exits: { out: "ws_north", e: "ws_north" },
   },
-  ws_north: {
-    name: "Walking Street (North End)",
+  ws_south: {
+    name: "Walking Street (South)",
     region: "Walking Street",
     desc: "The deep end of the strip, where the go-gos that survived COVID hold their ground " +
       "through stubbornness and reputation. CRYSTAL PALACE A-GO-GO at the west, PARADISE " +
@@ -1067,7 +1067,7 @@ const ROOMS = {
       "beer bar, conversation levels, the kind of place you end up after you've stopped " +
       "trying. Late enough, the whole strip fills with barfined ladies and their friends " +
       "en route to the clubs.",
-    exits: { n: "ws_south", w: "crystal_palace", e: "paradise_nights", s: "midnight_sun" },
+    exits: { n: "ws_north", w: "crystal_palace", e: "paradise_nights", s: "midnight_sun" },
   },
   neon_paradise: {
     name: "Neon Paradise A-Go-Go",
@@ -1083,7 +1083,7 @@ const ROOMS = {
       "Neon Paradise again: fewer girls than the mirrors were built for, but the ones working the poles are worth the walk.",
       "You slip back past the two large gentlemen at the door — neither surprised to see you — into the mirrored roar.",
     ],
-    exits: { out: "ws_south" },
+    exits: { out: "ws_north" },
   },
   club_mirage: {
     name: "Club Mirage",
@@ -1100,7 +1100,7 @@ const ROOMS = {
       "You wade back into the dry ice. The lasers cut, the model holds, and everyone in here looks improved by the dark.",
       "Club Mirage again. Somewhere in the fog Aom is already noting your return; you won't see her cross the floor.",
     ],
-    exits: { out: "ws_south" },
+    exits: { out: "ws_north" },
   },
   crystal_palace: {
     name: "Crystal Palace A-Go-Go",
@@ -1117,7 +1117,7 @@ const ROOMS = {
       "You step back into the glitter and the bass. Crystal Palace has seen every kind of man walk back in; it isn't impressed, exactly.",
       "Rhinestones, a wall of subs, decades of numbered girls on the faded poster — Crystal Palace, exactly as you left it.",
     ],
-    exits: { out: "ws_north" },
+    exits: { out: "ws_south" },
   },
   paradise_nights: {
     name: "Paradise Nights Club",
@@ -1133,7 +1133,7 @@ const ROOMS = {
       "You push back into the crush — tourists, freelancers, girls two hours past their shift dancing in someone else's jacket.",
       "Paradise Nights again. The rope, the wristband, the wall of bass; the night here has no intention of ending.",
     ],
-    exits: { out: "ws_north" },
+    exits: { out: "ws_south" },
   },
   midnight_sun: {
     name: "Midnight Sun Bar",
@@ -1142,7 +1142,7 @@ const ROOMS = {
     desc: "An open-front beer bar with actual conversation levels. Connect 4 boards and " +
       "sticky Jenga blocks on every table, and a pool table under a low lamp at the " +
       "back. The yellow neon sun above the till has one ray that won't stop twitching.",
-    exits: { out: "ws_north" },
+    exits: { out: "ws_south" },
   },
 
   // ─── Soi Buakhao ───
@@ -6639,7 +6639,7 @@ const TONIC_POLICE_CUT = 0.35; // the police "negotiation fee" kept out of any r
 
 const ENCOUNTERS = {
   katoey: {
-    rooms: ["beach_rd_s", "beach_rd_c", "beach_rd_n", "promenade", "ws_south", "ws_north"],
+    rooms: ["beach_rd_s", "beach_rd_c", "beach_rd_n", "promenade", "ws_north", "ws_south"],
     interactive: true,
     th: "หล่อจังเลย", rom: "lor jang loei",
     intro: "Out of the neon, a tall and devastating vision in a sequinned dress is " +
@@ -6649,14 +6649,14 @@ const ENCOUNTERS = {
     hint: "(Quick — do something.)",
   },
   bargirl: {
-    rooms: ["buakhao_n", "buakhao_market", "buakhao_s", "tt_entrance", "lk_entrance", "lk_main", "soi6_street", "ws_south"],
+    rooms: ["buakhao_n", "buakhao_market", "buakhao_s", "tt_entrance", "lk_entrance", "lk_main", "soi6_street", "ws_north"],
     interactive: false,
     th: "โถ น่าสงสาร", rom: "thoh, naa songsaan",
     intro: "A bargirl weaves out of the nearest doorway, somewhere past her fourth " +
       "lady drink of the shift, and stops dead at the sight of you.",
   },
   brit: {
-    rooms: ["ws_gate", "ws_south", "ws_north", "soi6_street", "beach_rd_c"],
+    rooms: ["ws_gate", "ws_north", "ws_south", "soi6_street", "beach_rd_c"],
     interactive: true,
     intro: "A sunburnt mountain in a Chang vest is abruptly in your face, swaying " +
       "like a condemned building. “YOU. You’re the muppet who spilled my pint in " +
@@ -6709,7 +6709,7 @@ const ENCOUNTERS = {
       "sand: no mamasan, no rail, nobody at all if it turns. ฿500, or ฿900 with Muk. YES / NO.)",
   },
   bkktourist: {
-    rooms: ["ws_south", "ws_north", "beach_rd_c", "second_rd_c", "buakhao_market"],
+    rooms: ["ws_north", "ws_south", "beach_rd_c", "second_rd_c", "buakhao_market"],
     interactive: true, nightly: true,
     th: "รอเพื่อนอยู่ค่ะ", rom: "ror phuean yu kha",
     intro: "A young woman in good sneakers and a Bangkok-boutique dress is checking " +
@@ -6719,7 +6719,7 @@ const ENCOUNTERS = {
     hint: "(She's a tourist, not a trade. Manners — or a little Thai — go further than a wallet here.)",
   },
   jptourist: {
-    rooms: ["ws_gate", "ws_south", "ws_north", "beach_rd_c"],
+    rooms: ["ws_gate", "ws_north", "ws_south", "beach_rd_c"],
     interactive: true, nightly: true,
     intro: "At the go-go rail a sharply-dressed Japanese woman is watching the dancers " +
       "with the frank, appraising interest of someone shopping rather than spectating. " +
@@ -6728,7 +6728,7 @@ const ENCOUNTERS = {
     hint: "(She isn't working, and she isn't shy. Read it right — money is the wrong move.)",
   },
   britles: {
-    rooms: ["ws_gate", "ws_south", "ws_north", "beach_rd_c"],
+    rooms: ["ws_gate", "ws_north", "ws_south", "beach_rd_c"],
     interactive: true, nightly: true,
     intro: "At the go-go rail, pint in hand and entirely at home, a British woman is " +
       "watching the dancers with more expertise than you will ever have. One of the " +
@@ -6738,7 +6738,7 @@ const ENCOUNTERS = {
     hint: "(Not on the menu — for you. Play it decent and she might be the best wingman you get all night.)",
   },
   punterwife: {
-    rooms: ["ws_south", "ws_north", "beach_rd_c", "second_rd_c", "buakhao_market"],
+    rooms: ["ws_north", "ws_south", "beach_rd_c", "second_rd_c", "buakhao_market"],
     interactive: true, nightly: true,
     intro: "A poised Filipina woman stands beside a farang who is unmistakably her " +
       "husband — matching rings, the comfortable boredom of the long-married. He's " +
@@ -6748,7 +6748,7 @@ const ENCOUNTERS = {
     hint: "(Somebody's wife. Hands to yourself. Friendly, though — and she knows everyone on this soi.)",
   },
   pingpong: {
-    rooms: ["ws_gate", "ws_south", "ws_north"],
+    rooms: ["ws_gate", "ws_north", "ws_south"],
     interactive: true,
     intro: "A wiry tout materialises at your elbow with a laminated card he holds " +
       "like a royal decree. “PING PONG SHOW! Very famous! No cover charge, one " +
@@ -6814,7 +6814,7 @@ const ENCOUNTERS = {
     // Walking Street club dancefloor — no bar, no lady drinks, no barfine, feels
     // entirely real — and the invoice arrives the next morning as "taxi money".
     // Two-step: the night (feels free) → the morning ฿2,000 ask, in _ENC.clubpickup.
-    rooms: ["ws_south", "ws_north"],
+    rooms: ["ws_north", "ws_south"],
     interactive: true, nightly: true,
     intro: "Coming out of the club, still half-deaf from the bass, you fall into step with a girl who " +
       "was on the dancefloor next to you all night — no bar, no barfine, no lady drinks, just a real " +
@@ -6826,7 +6826,7 @@ const ENCOUNTERS = {
     // "Nothing is free" made mechanical: a 'free' blessing that's really a tab.
     // ACCEPT opens a bun-khun the giver calls in on the spot; TAO RAI (pay a small
     // tip up front) closes it clean; REFUSE declines. Resolved in _ENC.freegift.
-    rooms: ["promenade", "beach_rd_c", "ws_south"],
+    rooms: ["promenade", "beach_rd_c", "ws_north"],
     interactive: true, nightly: true,
     intro: "A soft-faced woman with a tray of blessed strings steps into your path, and before you can " +
       "wave her off she has pressed a little gold-threaded amulet into your hand, still warm from her own " +
@@ -9082,6 +9082,23 @@ const POPULAR_GIRLS = ["fon", "gift", "noi", "pim"];
 // pinned district by district against OSM, and the decimal count is the marker
 // of which have had their pass. Don't "tidy" a 5dp district back to 4.
 //
+//   Walking Street — DONE 2026-08-08. In OSM it carries Beach Road's own name
+//   (ถนนพัทยาสายหนึ่ง) tagged highway=pedestrian, because it IS Beach Road,
+//   pedestrianised — searching for a way named "Walking Street" finds only a
+//   7 m stub at the arch. 737 m: the gate at 12.927447/100.874687 down to
+//   Bali Hai pier at 12.924602/100.868548, the traditional end of the strip.
+//   Bali Hai has NO ROOM yet; the coordinate is banked here for when it gets one.
+//   The two stretch rooms had their names BACKWARDS — the middle one was called
+//   South and the far one North, on a street that runs south from the gate. Ids
+//   encoded it too, so both were swapped rather than just the labels; fixing
+//   only the labels would have left the same trap one layer down.
+//   Deliberately left flagged: the spine audits at ~64°, because Walking Street
+//   really runs WSW (bearing 244°) and `w` would be the closer compass word.
+//   The graph keeps `s` on purpose — everyone, including our own gate prose,
+//   says the strip runs south, and "go west along Walking Street" would be
+//   nonsense. This is the bar mat map matching the VERNACULAR rather than the
+//   compass, which is what a bar mat map is for. Don't "fix" it.
+//
 //   Beach Road, Soi 6 south to the Walking Street gate — DONE 2026-08-08.
 //   Every room was 344–755 m off the real road; now 0–90 m. Landmarks pinned
 //   from OSM: Pattaya Klang junction 12.937594/100.883266, Soi 7's Beach Road
@@ -9171,17 +9188,17 @@ const ROOM_GEO = {
   dongtan_rd_m:     [12.9008, 100.8650],
   dongtan_rd_s:     [12.8984, 100.8652],
   buddha_hill:      [12.9142, 100.8618],
-  // Walking Street (the gate is the north end; "ws_north" is the DEEP end)
-  ws_gate:          [12.9268, 100.8703],
-  thai_massage:     [12.9266, 100.8710],
-  ws_south:         [12.9247, 100.8697],
-  ws_alley:         [12.9245, 100.8689],
-  ws_north:         [12.9226, 100.8692],
-  neon_paradise:    [12.9248, 100.8694],
-  club_mirage:      [12.9246, 100.8701],
-  crystal_palace:   [12.9227, 100.8689],
-  paradise_nights:  [12.9225, 100.8695],
-  midnight_sun:     [12.9220, 100.8693],
+  // Walking Street (the gate is the north end; "ws_south" is the DEEP end)
+  ws_gate:          [12.92745, 100.87469],
+  thai_massage:     [12.92731, 100.87496],
+  ws_north:         [12.92645, 100.87254],
+  ws_alley:         [12.92674, 100.87241],
+  ws_south:         [12.92531, 100.87008],
+  neon_paradise:    [12.92645, 100.87228],
+  club_mirage:      [12.92645, 100.87280],
+  crystal_palace:   [12.92531, 100.86982],
+  paradise_nights:  [12.92531, 100.87034],
+  midnight_sun:     [12.92490, 100.86978],
   // Beach Road
   beach_rd_s:       [12.92983, 100.87751],
   papaya_massage:   [12.92934, 100.87788],
