@@ -3946,6 +3946,8 @@
    "region": "Second Road"
   },
   "shamrock": {
+   "bar": "The Shamrock",
+   "closed": true,
    "geo": [
     12.9076,
     100.9082

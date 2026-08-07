@@ -44,6 +44,10 @@ export function buildExport() {
     if (r.pool) v.pool = true;
     if (r.liveMusic) v.liveMusic = true;
     if (r.seven) v.seven = true;
+    // a venue that isn't trading. LBB has one (the dead Shamrock); a consumer
+    // that can reopen it needs this as data rather than parsing "(closed)" out
+    // of a display name, which is how it first reached Second Road's prose.
+    if (r.closed) v.closed = true;
     if (geo) v.geo = [geo[0], geo[1]];        // real lat/lon — this is the map
     venues[id] = v;
   }

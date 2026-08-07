@@ -59,6 +59,18 @@ test("the export says which art track each portrait is on", () => {
   assert.equal(e.renders.includes("bert"), true, "Bert has been generated");
 });
 
+test("a venue's trading name is separate from its room label", () => {
+  // LBB names the dead pub "The Shamrock (closed)" because here it is closed.
+  // A consumer that can REOPEN it must not inherit our state baked into a
+  // string — Second Road printed "the float at The Shamrock (closed)" before
+  // this existed, which is state leaking across a boundary as prose.
+  const e = buildExport();
+  const s = e.venues.shamrock;
+  assert.equal(s.bar, "The Shamrock", "the trading name is clean");
+  assert.equal(s.closed, true, "…and the state is data");
+  assert.match(s.name, /closed/, "while OUR label still says what it is here");
+});
+
 test("night content does not cross — the boundary is the point", () => {
   const raw = JSON.stringify(buildExport());
   // dialogue is ~90% of world.js and none of it is usable at macro scale
