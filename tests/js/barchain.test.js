@@ -211,7 +211,7 @@ test("the modal answers on all its surfaces, and swallows anything else", () => 
   const stray = say("dance");
   assert.match(stray, /Tan waits/, "an unrelated command doesn't escape the modal");
   assert.equal(G.pendingChoice, "tanfavour", "…and doesn't answer it either");
-  assert.match(say("ask"), /Nong Khai/, "ASK gets a straight answer");
+  assert.match(say("ask"), /She is Lao/, "ASK gets a straight answer");
   assert.equal(G.pendingChoice, "tanfavour", "…and re-prompts rather than deciding for you");
 });
 
