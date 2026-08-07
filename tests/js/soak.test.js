@@ -52,7 +52,7 @@ test("regression: Act One WAIT across dawn can't loop the same-day reset forever
 // _fmt FIRST if the line interpolates amounts), or, if the growth is deliberate
 // and accepted, lower... no: RAISE this number in the same commit, so the
 // tradeoff is visible in review rather than invisible in a sweep nobody runs.
-const DE_LEAK_CEILING = 176;
+const DE_LEAK_CEILING = 153;
 test("de coverage doesn't regress — English must not leak further into a German game", () => {
   const uniq = new Set();
   for (const seed of [1, 2, 3]) {

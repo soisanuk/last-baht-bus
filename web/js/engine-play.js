@@ -119,14 +119,16 @@ function _startC4() {
     _say(`${_ucfirst(name)} has the Connect 4 frame up and loaded before you finish asking. ` +
       "This is not her first game today. It is not her hundredth.");
   } else if (depth <= 2) {
-    _say(`${_ucfirst(name)} lights up, fetches the frame, and drops a counter on the way ` +
+    _say(_fmt("{n} lights up, fetches the frame, and drops a counter on the way " +
       "over. She sorts the colours carefully and counts hers twice. Down the " +
-      "bar, one of the older girls watches with something between fondness and pity.");
+      "bar, one of the older girls watches with something between fondness and pity.",
+      { n: _ucfirst(name) }));
   } else {
-    _say(`${_ucfirst(name)} racks the frame with the easy speed of a woman who plays ` +
-      "every shift, and gives you first drop like it costs her nothing. It doesn't.");
+    _say(_fmt("{n} racks the frame with the easy speed of a woman who plays " +
+      "every shift, and gives you first drop like it costs her nothing. It doesn't.",
+      { n: _ucfirst(name) }));
   }
-  _say(stake ? `฿${stake} on the table.` :
+  _say(stake ? _fmt("฿{s} on the table.", { s: stake }) :
     "You're broke, so this one's for sanuk — and her professional pride.");
   _say(c4Render(G.game.board));
   _say("(You're ●. Tap a column 1-7 to drop · Q quits.)", "dim");
@@ -377,14 +379,14 @@ function _startJackpot(w) {
   // that, forced single-option rolls auto-play and only real choices stop for you.
   const tutorial = !_flag("jpLearned");
   G.game = { type: "jp", tiles: jpNew(), opp, stake, pending: null, tutorial, taught: {} };
-  _say(`${_ucfirst(opp)} slides over the battered Jackpot box — nine tiles up, two dice, ` +
+  _say(_fmt("{n} slides over the battered Jackpot box — nine tiles up, two dice, " +
     "the felt worn smooth by ten thousand losing farang. Flip the dice, or flip " +
-    "their sum. Lowest score wins; shut the box and it's JACKPOT.");
-  _say(stake ? `฿${stake} rides on it.` : "No baht? Sanuk rules — loser drinks anyway.");
+    "their sum. Lowest score wins; shut the box and it's JACKPOT.", { n: _ucfirst(opp) }));
+  _say(stake ? _fmt("฿{s} rides on it.", { s: stake }) : "No baht? Sanuk rules — loser drinks anyway.");
   if (tutorial) {
-    _say(`${_ucfirst(opp)} catches the look on your face and grins. "First time, na? Okay — ` +
-      `I show you. Slow-slow. You do every flip yourself tonight; you learn faster ` +
-      `that way." She rolls for you.`);
+    _say(_fmt("{n} catches the look on your face and grins. \"First time, na? Okay — " +
+      "I show you. Slow-slow. You do every flip yourself tonight; you learn faster " +
+      "that way.\" She rolls for you.", { n: _ucfirst(opp) }));
   }
   _jpTurn();
 }
@@ -403,13 +405,13 @@ function _jpTeach(g, moves) {
   if (!g.tutorial) return;
   if (moves.length === 2 && !g.taught.choice) {
     g.taught.choice = true;
-    _say(`${g.opp} leans in. "Two ways here, na. Flip the two dice numbers — or ` +
-      `flip their sum, one tile. Never both. Whatever's still standing at the end ` +
-      `is your score, and low wins. You choose."`);
+    _say(_fmt("{n} leans in. \"Two ways here, na. Flip the two dice numbers — or " +
+      "flip their sum, one tile. Never both. Whatever's still standing at the end " +
+      "is your score, and low wins. You choose.\"", { n: g.opp }));
   } else if (moves.length === 1 && !g.taught.single) {
     g.taught.single = true;
-    _say(`${g.opp} taps the felt. "This roll, only one way to play it — so play it. ` +
-      `Type the flip. The box doesn't move itself… not until you know it does."`);
+    _say(_fmt("{n} taps the felt. \"This roll, only one way to play it — so play it. " +
+      "Type the flip. The box doesn't move itself… not until you know it does.\"", { n: g.opp }));
   }
 }
 
@@ -691,12 +693,14 @@ function _kpInput(input) {
 function _startPool() {
   if (!_room().pool) { _say("No pool table here. The Midnight Sun has one; so does Daeng's place out on Khao Talo."); return; }
   const daeng = G.room === "khao_talo_bar";
-  const opp = daeng ? "Daeng" : "a leathery expat off the rail who hasn't missed since 1997";
+  const opp = daeng ? "Daeng" : _L("a leathery expat off the rail who hasn't missed since 1997");
   const stake = _takeStake(POOL_STAKE);
   G.game = { type: "pool", you: 7, opp: 7, oppName: daeng ? "Daeng" : "the old boy",
     oppSkill: daeng ? 0.65 : 0.6, oppNext: null, oppWon: false, stake };
-  _say(`You rack. ${opp} breaks — dry. Seven balls each, then the black.`);
-  _say(stake ? `฿${stake} under the corner cushion.` : "You're skint, so it's for the table — winner stays on.");
+  _say(_fmt("You rack. {n} breaks — dry. Seven balls each, then the black.",
+    { n: _ucfirst(opp) }));
+  _say(stake ? _fmt("฿{s} under the corner cushion.", { s: stake })
+    : "You're skint, so it's for the table — winner stays on.");
   _say("(Each visit: SHOT, POWER, or SAFETY · QUIT concedes.)", "dim");
 }
 
@@ -816,11 +820,13 @@ function _startDarts() {
   // if one is actually working this room (never the "hostess on shift" fallback,
   // which would conjure one in a pub like the Queen Vic).
   const gh = _gameHostess();
-  const opp = gh.id && _rand() < 0.5 ? gh.name : "a leathery expat with his own darts in a belt case";
+  const opp = gh.id && _rand() < 0.5 ? gh.name : _L("a leathery expat with his own darts in a belt case");
   const stake = _takeStake(DARTS_STAKE);
   G.game = { type: "darts", you: 501, opp: 501, oppName: opp.length > 22 ? "the old boy" : opp, oppSkill: 0.62, stake };
-  _say(`Chalk up: 501 each, straight off, check out on a double. ${opp} throws for the bull to start and lands it like breathing.`);
-  _say(stake ? `฿${stake} on the shelf under the board.` : "You're skint — this one's for the sanuk and the sledging.");
+  _say(_fmt("Chalk up: 501 each, straight off, check out on a double. {n} throws " +
+    "for the bull to start and lands it like breathing.", { n: _ucfirst(opp) }));
+  _say(stake ? _fmt("฿{s} on the shelf under the board.", { s: stake })
+    : "You're skint — this one's for the sanuk and the sledging.");
   const aim = _dartsAim();
   if (aim < 0.72) _say(_dartsWobble(), "dim");
   _say("(Your throw: GO BIG (treble hunt) · STEADY (safe 20s) · FINISH when you're low · QUIT.)", "dim");
@@ -1182,16 +1188,16 @@ const _SOCIAL_TEXT = {
 //   NPCS[id].flirtHostile → a cold, dangerous refusal (+heat)
 //   otherwise          → awkward, brushed off good-naturedly
 const _FLIRT_WRONGTEAM = [
-  n => `${n} laughs, not unkindly. "Aww, tilac — not my type. I like the ladies, same-same you." A pat on the cheek, and she's moved on.`,
-  n => `"Handsome, but—" ${n} tips her head at a girl across the bar and grins. "—wrong team, na. I bat the other way." No offence in it, plenty of amusement.`,
+  n => _fmt("{n} laughs, not unkindly. \"Aww, tilac — not my type. I like the ladies, same-same you.\" A pat on the cheek, and she's moved on.", { n }),
+  n => _fmt("\"Handsome, but—\" {n} tips her head at a girl across the bar and grins. \"—wrong team, na. I bat the other way.\" No offence in it, plenty of amusement.", { n }),
 ];
 const _FLIRT_AWKWARD = [
-  n => `${n} blinks, then snorts. "Ha — no. Not that way, mate. Buy me a beer if you like, but keep the eyelashes to yourself." More baffled than bothered.`,
-  n => `A beat of confusion, then ${n} laughs it off and shifts his stool an inch away. "Steady on, fella. Wrong tree entirely." Good-natured, but that's a no.`,
+  n => _fmt("{n} blinks, then snorts. \"Ha — no. Not that way, mate. Buy me a beer if you like, but keep the eyelashes to yourself.\" More baffled than bothered.", { n }),
+  n => _fmt("A beat of confusion, then {n} laughs it off and shifts his stool an inch away. \"Steady on, fella. Wrong tree entirely.\" Good-natured, but that's a no.", { n }),
 ];
 const _FLIRT_HOSTILE = [
-  n => `${n}'s face shuts like a door. "No. Do that again and we have a problem." The temperature in your corner of the bar drops several degrees.`,
-  n => `"You WHAT?" ${n} sets the glass down very deliberately. That is not a look you flirt through. Leave it.`,
+  n => _fmt("{n}'s face shuts like a door. \"No. Do that again and we have a problem.\" The temperature in your corner of the bar drops several degrees.", { n }),
+  n => _fmt("\"You WHAT?\" {n} sets the glass down very deliberately. That is not a look you flirt through. Leave it.", { n }),
 ];
 function _flirtUnwelcome(id, name) {
   const o = NPCS[id] && NPCS[id].orientation;

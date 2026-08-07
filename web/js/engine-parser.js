@@ -453,9 +453,11 @@ function _doTravel(arg) {
   }
   const hops = _hops(G.room, dest);
   if (hops === null) { _say("You can't get there from here."); return; }
-  _say(`You point yourself at ${_barName(dest)} and let your ` +
-    `feet do the remembering — ${hops} turn${hops === 1 ? "" : "s"} of soi, neon, ` +
-    "and shortcuts.", "dim");
+  _say(hops === 1
+    ? _fmt("You point yourself at {v} and let your feet do the remembering — " +
+        "one turn of soi, neon, and shortcuts.", { v: _barName(dest) })
+    : _fmt("You point yourself at {v} and let your feet do the remembering — " +
+        "{n} turns of soi, neon, and shortcuts.", { v: _barName(dest), n: hops }), "dim");
   // walking pace: hops turns in total; doCommand pays the last at the bottom
   const startDay = G.day, g0 = G;
   for (let i = 0; i < hops - 1; i++) {
@@ -1408,7 +1410,7 @@ function _doBuy(arg) {
   }
   if (/condom|rubber|johnny|protection/.test(arg)) {
     if (!r.seven && !(r.shop && r.shop.condom)) { _say("No condoms sold here. Any 7-Eleven has them by the till."); return; }
-    if (G.money < CONDOM_PRICE) { _say(`A pack is ฿${CONDOM_PRICE}. You have ฿${G.money}. The cashier slides it back with a knowing look.`); return; }
+    if (G.money < CONDOM_PRICE) { _say(_fmt("A pack is ฿{p}. You have ฿{m}. The cashier slides it back with a knowing look.", { p: CONDOM_PRICE, m: G.money })); return; }
     G.money -= CONDOM_PRICE;
     G.condoms += CONDOM_PACK;
     _say(`A pack of ${CONDOM_PACK}, ฿${CONDOM_PRICE} — the most ordinary purchase in this town, rung up without a flicker. ` +
@@ -1903,7 +1905,7 @@ function _doScore() {
     (G.vacation > 1 ? ` · vacation #${G.vacation}` : ""), "dim");
   if (_unreadCount()) _say(_fmt("📱 {c} unread message{s} (CHECK MESSAGES)", { c: _unreadCount(), s: _unreadCount() > 1 ? "s" : "" }), "win");
   const active = Object.entries(QUESTS).filter(([qid]) => G.quests[qid] === "active");
-  for (const [, q] of active) _say(`▶ ${q.name}`, "dim");
+  for (const [, q] of active) _say(_fmt("▶ {name}", { name: _L(q.name) }), "dim");
   // Faction standing — only surfaces once you've actually taken a side; a player
   // who stays out of the politics never sees this line, and pays nothing for it.
   const standing = _FACTION_LABELS
