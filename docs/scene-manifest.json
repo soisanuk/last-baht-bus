@@ -5,11 +5,11 @@
     "rooms": 177,
     "regions": 15,
     "byKind": {
-      "street": 61,
+      "street": 60,
       "massage": 14,
       "beer": 49,
       "shop": 2,
-      "beach": 8,
+      "beach": 9,
       "interior": 3,
       "gogo": 9,
       "viewpoint": 2,
@@ -91,18 +91,18 @@
         "jomtien_beach_rd",
         "jomtien_beach_rd_n",
         "jomtien_beach_rd_s",
+        "jomtien_soi_7_beach_end",
+        "jomtien_soi_7_e",
+        "jomtien_soi_7_m",
+        "jomtien_soi_7_oil",
+        "jomtien_soi_7_thai",
+        "jomtien_soi_7_w",
         "jomtien_thai",
         "kiss_jomtien",
         "lucky7",
         "sandbar",
         "seabreeze",
-        "soi_7_e",
-        "soi_7_m",
-        "soi_7_w",
-        "soi_rompho",
-        "soi7_beach_end",
-        "soi7_oil",
-        "soi7_thai"
+        "soi_rompho"
       ],
       "sampleDescs": [
         "The middle of the beach road and the heart of it: a knot of people waiting where the blue songthaews swing around, a sun-bleached sign listing the loop into Pattaya, a lone motosai driver dozing on his bike. Streetlights, seafood smoke, the sea just west across the sand. The beach road runs north toward the Thappraya climb and south past the 7-Eleven toward the mouth of Soi 7.",
@@ -686,7 +686,7 @@
     {
       "id": "shamrock",
       "name": "The Shamrock (closed)",
-      "bar": null,
+      "bar": "The Shamrock",
       "barType": null,
       "region": "Darkside",
       "regionSlug": "darkside",
@@ -911,6 +911,82 @@
       "desc": "The south end of the beach road, where it meets the mouth of Soi 7. A 7-Eleven glows on the corner, its air-con bleeding into the street; Soi 7's beer bars and massage shops run inland to the east, the bus stop is back to the north, and the sand and the sea lie west."
     },
     {
+      "id": "jomtien_soi_7_beach_end",
+      "name": "Jomtien Soi 7 Beach End",
+      "bar": null,
+      "barType": null,
+      "region": "Jomtien",
+      "regionSlug": "jomtien",
+      "kind": "beach",
+      "dark": false,
+      "people": [
+        "Auntie",
+        "Auntie Nok",
+        "Nok"
+      ],
+      "desc": "Where Soi 7 finally gives out onto the sand: a scrap of hard-packed beach, a couple of upturned boats, and Auntie Nok's drinks cart parked in the lee of a sea almond tree, cooler humming. The beach opens north; Soi 7 runs back inland to the east."
+    },
+    {
+      "id": "jomtien_soi_7_e",
+      "name": "Jomtien Soi 7 (East / Second Road end)",
+      "bar": null,
+      "barType": null,
+      "region": "Jomtien",
+      "regionSlug": "jomtien",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "The far end of Soi 7, where it spills onto Second Road by a 7-Eleven. A couple more beer bars and a massage shop see out the strip. On the south side, set back behind a fence and a flagpole, squats the grey bulk of the Chonburi Immigration Office — dark and locked at this hour, a place farang only ever visit in daylight and never fondly."
+    },
+    {
+      "id": "jomtien_soi_7_m",
+      "name": "Jomtien Soi 7 (Middle)",
+      "bar": null,
+      "barType": null,
+      "region": "Jomtien",
+      "regionSlug": "jomtien",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "The middle of Soi 7, where the beer bars thin to guesthouses and a lone som tam cart doing quiet business. The soi runs west toward the sea and the beach road, and east toward the Second Road roar."
+    },
+    {
+      "id": "jomtien_soi_7_oil",
+      "name": "Sunset Oil Massage",
+      "bar": "Sunset Oil Massage",
+      "barType": null,
+      "region": "Jomtien",
+      "regionSlug": "jomtien",
+      "kind": "massage",
+      "dark": false,
+      "people": [],
+      "desc": "A pink-lit oil shop halfway down Soi 7, girls on the step, the small sticker on the mirror, and the beach breeze doing its best to keep it wholesome. It fails, pleasantly."
+    },
+    {
+      "id": "jomtien_soi_7_thai",
+      "name": "Jomtien Soi 7 Thai Massage",
+      "bar": "Soi 7 Thai Massage",
+      "barType": null,
+      "region": "Jomtien",
+      "regionSlug": "jomtien",
+      "kind": "massage",
+      "dark": false,
+      "people": [],
+      "desc": "A proper traditional shop near the Second Road end: foot chairs, tiger balm, aunties in matching polos, and a price list that stops at 'oil, one hour.' Where the long-stay expats come to get their backs put right."
+    },
+    {
+      "id": "jomtien_soi_7_w",
+      "name": "Jomtien Soi 7 (West / beach end)",
+      "bar": null,
+      "barType": null,
+      "region": "Jomtien",
+      "regionSlug": "jomtien",
+      "kind": "beach",
+      "dark": false,
+      "people": [],
+      "desc": "The beach end of Soi 7, off the south end of the beach road: a mellow strip of open-front beer bars strung with fairy lights, a couple of massage shops, and the easy Jomtien pace — older expats, cold beer, nobody in a hurry. The soi runs east, deeper inland toward Second Road; the sea breeze follows you a little way in."
+    },
+    {
       "id": "jomtien_thai",
       "name": "Jomtien Sabai Massage",
       "bar": "Jomtien Sabai Massage",
@@ -983,42 +1059,6 @@
       "desc": "Stools that catch the wind straight off the beach, a battered guitar somebody strums between customers, and the most relaxed hostesses in Jomtien. Nobody hard-sells here; the beer is cold and the evening goes where it goes."
     },
     {
-      "id": "soi_7_e",
-      "name": "Soi 7 (East / Second Road end)",
-      "bar": null,
-      "barType": null,
-      "region": "Jomtien",
-      "regionSlug": "jomtien",
-      "kind": "street",
-      "dark": false,
-      "people": [],
-      "desc": "The far end of Soi 7, where it spills onto Second Road by a 7-Eleven. A couple more beer bars and a massage shop see out the strip. On the south side, set back behind a fence and a flagpole, squats the grey bulk of the Chonburi Immigration Office — dark and locked at this hour, a place farang only ever visit in daylight and never fondly."
-    },
-    {
-      "id": "soi_7_m",
-      "name": "Soi 7 (Middle)",
-      "bar": null,
-      "barType": null,
-      "region": "Jomtien",
-      "regionSlug": "jomtien",
-      "kind": "street",
-      "dark": false,
-      "people": [],
-      "desc": "The middle of Soi 7, where the beer bars thin to guesthouses and a lone som tam cart doing quiet business. The soi runs west toward the sea and the beach road, and east toward the Second Road roar."
-    },
-    {
-      "id": "soi_7_w",
-      "name": "Soi 7 (West / beach end)",
-      "bar": null,
-      "barType": null,
-      "region": "Jomtien",
-      "regionSlug": "jomtien",
-      "kind": "street",
-      "dark": false,
-      "people": [],
-      "desc": "The beach end of Soi 7, off the south end of the beach road: a mellow strip of open-front beer bars strung with fairy lights, a couple of massage shops, and the easy Jomtien pace — older expats, cold beer, nobody in a hurry. The soi runs east, deeper inland toward Second Road; the sea breeze follows you a little way in."
-    },
-    {
       "id": "soi_rompho",
       "name": "Rompho Market",
       "bar": "Rompho Market",
@@ -1029,46 +1069,6 @@
       "dark": false,
       "people": [],
       "desc": "Directly across Second Road from the mouth of Soi 7: the sprawl of Rompho Market — grilled everything, fruit pyramids, plastic stools, and a haze of chilli smoke. Locals, long-stay farang, and a few bar girls off shift graze the stalls. The Jomtien branch of KISS glows just to the north. (BUY FOOD / EAT.)"
-    },
-    {
-      "id": "soi7_beach_end",
-      "name": "Soi 7 Beach End",
-      "bar": null,
-      "barType": null,
-      "region": "Jomtien",
-      "regionSlug": "jomtien",
-      "kind": "beach",
-      "dark": false,
-      "people": [
-        "Auntie",
-        "Auntie Nok",
-        "Nok"
-      ],
-      "desc": "Where Soi 7 finally gives out onto the sand: a scrap of hard-packed beach, a couple of upturned boats, and Auntie Nok's drinks cart parked in the lee of a sea almond tree, cooler humming. The beach opens north; Soi 7 runs back inland to the east."
-    },
-    {
-      "id": "soi7_oil",
-      "name": "Sunset Oil Massage",
-      "bar": "Sunset Oil Massage",
-      "barType": null,
-      "region": "Jomtien",
-      "regionSlug": "jomtien",
-      "kind": "massage",
-      "dark": false,
-      "people": [],
-      "desc": "A pink-lit oil shop halfway down Soi 7, girls on the step, the small sticker on the mirror, and the beach breeze doing its best to keep it wholesome. It fails, pleasantly."
-    },
-    {
-      "id": "soi7_thai",
-      "name": "Soi 7 Thai Massage",
-      "bar": "Soi 7 Thai Massage",
-      "barType": null,
-      "region": "Jomtien",
-      "regionSlug": "jomtien",
-      "kind": "massage",
-      "dark": false,
-      "people": [],
-      "desc": "A proper traditional shop near the Second Road end: foot chairs, tiger balm, aunties in matching polos, and a price list that stops at 'oil, one hour.' Where the long-stay expats come to get their backs put right."
     },
     {
       "id": "kinky",

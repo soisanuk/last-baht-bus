@@ -518,7 +518,7 @@ test("charging needs charger and outlet", () => {
 // ── Gossip chain & puzzles ─────────────────────────────────────────────────
 
 test("re-talking gives the terse gist, not the full spiel again", () => {
-  state().room = "soi7_beach_end";
+  state().room = "jomtien_soi_7_beach_end";
   run("talk to nok");
   const first = lastOut();
   assert.match(first, /Beach full of bottle/); // full first-meeting spiel
@@ -3526,10 +3526,10 @@ test("Soi Diana: threads Second Rd to Buakhao past LK Metro, four beer bars, KIS
 
 test("Soi 7 (Jomtien): beach road to Second Rd, four beer bars, Rompho Market, KISS Jomtien", () => {
   // Soi 7 is the south side of the Jomtien rectangle, running W → M → E
-  assert.equal(ROOMS.soi_7_w.exits.w, "jomtien_beach_rd_s", "SW corner: beach-road south");
-  assert.equal(ROOMS.soi_7_w.exits.e, "soi_7_m");
-  assert.equal(ROOMS.soi_7_m.exits.e, "soi_7_e");
-  assert.equal(ROOMS.soi_7_e.exits.e, "jomtien_2nd", "SE corner: Second Road south");
+  assert.equal(ROOMS.jomtien_soi_7_w.exits.w, "jomtien_beach_rd_s", "SW corner: beach-road south");
+  assert.equal(ROOMS.jomtien_soi_7_w.exits.e, "jomtien_soi_7_m");
+  assert.equal(ROOMS.jomtien_soi_7_m.exits.e, "jomtien_soi_7_e");
+  assert.equal(ROOMS.jomtien_soi_7_e.exits.e, "jomtien_2nd", "SE corner: Second Road south");
   assert.ok(ROOMS.jomtien_2nd.seven, "7-Eleven on the corner");
   // across Second Road: Rompho Market and KISS are food VENUES you ENTER off the
   // road (Rompho off the Soi 7 corner, KISS off the middle), each leaving via out
@@ -3539,7 +3539,7 @@ test("Soi 7 (Jomtien): beach road to Second Rd, four beer bars, Rompho Market, K
   assert.equal(ROOMS.kiss_jomtien.exits.out, "jomtien_2nd_m");
   assert.ok(FOOD_STALLS.kiss_jomtien && FOOD_STALLS.soi_rompho, "both feed you");
   // the immigration office is flavor at the dark east end, not a room
-  state().room = "soi_7_e"; out = []; run("look");
+  state().room = "jomtien_soi_7_e"; out = []; run("look");
   assert.match(lastOut(), /immigration/i);
   assert.ok(!ROOMS.chonburi_immigration, "immigration is a mention, not a place");
   // four beer bars, populated, with Sumalee working one of them
@@ -6776,7 +6776,7 @@ test("the 'elsewhere' line says 'around here', not 'this bar', when you're not i
   state().room = "jomtien_beach";
   out = [];
   run("talk to auntie nok");
-  assert.match(lastOut(), /Auntie Nok isn't around here tonight — try Soi 7 Beach End/);
+  assert.match(lastOut(), /Auntie Nok isn't around here tonight — try Jomtien Soi 7 Beach End/);
   assert.doesNotMatch(lastOut(), /this bar/, "no bar where there is no bar");
 });
 

@@ -1625,7 +1625,7 @@
    "desc": "A drinks-cart vendor with a cooler of everything and opinions to match. A hand-lettered sign on the cart offers ฿5 per returned bottle.",
    "emoji": "🥭",
    "name": "Auntie Nok",
-   "room": "soi7_beach_end",
+   "room": "jomtien_soi_7_beach_end",
    "th": "น้อยหน่า"
   },
   "nong": {
@@ -3450,6 +3450,56 @@
    "name": "Jomtien Beach Road (South)",
    "region": "Jomtien"
   },
+  "jomtien_soi_7_beach_end": {
+   "geo": [
+    12.8872,
+    100.8698
+   ],
+   "name": "Jomtien Soi 7 Beach End",
+   "region": "Jomtien"
+  },
+  "jomtien_soi_7_e": {
+   "geo": [
+    12.8899,
+    100.8738
+   ],
+   "name": "Jomtien Soi 7 (East / Second Road end)",
+   "region": "Jomtien"
+  },
+  "jomtien_soi_7_m": {
+   "geo": [
+    12.8878,
+    100.8735
+   ],
+   "name": "Jomtien Soi 7 (Middle)",
+   "region": "Jomtien"
+  },
+  "jomtien_soi_7_oil": {
+   "bar": "Sunset Oil Massage",
+   "geo": [
+    12.889,
+    100.8726
+   ],
+   "name": "Sunset Oil Massage",
+   "region": "Jomtien"
+  },
+  "jomtien_soi_7_thai": {
+   "bar": "Soi 7 Thai Massage",
+   "geo": [
+    12.8905,
+    100.8739
+   ],
+   "name": "Jomtien Soi 7 Thai Massage",
+   "region": "Jomtien"
+  },
+  "jomtien_soi_7_w": {
+   "geo": [
+    12.8896,
+    100.8728
+   ],
+   "name": "Jomtien Soi 7 (West / beach end)",
+   "region": "Jomtien"
+  },
   "jomtien_thai": {
    "bar": "Jomtien Sabai Massage",
    "geo": [
@@ -4055,8 +4105,8 @@
   },
   "short_time_motel": {
    "geo": [
-    12.92965,
-    100.87806
+    12.93626,
+    100.88503
    ],
    "name": "Short-Time Motel",
    "region": "Beach Road"
@@ -4115,56 +4165,6 @@
    "name": "Soi 6 (West End)",
    "region": "Soi 6",
    "seven": true
-  },
-  "soi7_beach_end": {
-   "geo": [
-    12.8872,
-    100.8698
-   ],
-   "name": "Soi 7 Beach End",
-   "region": "Jomtien"
-  },
-  "soi7_oil": {
-   "bar": "Sunset Oil Massage",
-   "geo": [
-    12.889,
-    100.8726
-   ],
-   "name": "Sunset Oil Massage",
-   "region": "Jomtien"
-  },
-  "soi7_thai": {
-   "bar": "Soi 7 Thai Massage",
-   "geo": [
-    12.8905,
-    100.8739
-   ],
-   "name": "Soi 7 Thai Massage",
-   "region": "Jomtien"
-  },
-  "soi_7_e": {
-   "geo": [
-    12.8899,
-    100.8738
-   ],
-   "name": "Soi 7 (East / Second Road end)",
-   "region": "Jomtien"
-  },
-  "soi_7_m": {
-   "geo": [
-    12.8878,
-    100.8735
-   ],
-   "name": "Soi 7 (Middle)",
-   "region": "Jomtien"
-  },
-  "soi_7_w": {
-   "geo": [
-    12.8896,
-    100.8728
-   ],
-   "name": "Soi 7 (West / beach end)",
-   "region": "Jomtien"
   },
   "soi_honey_e": {
    "geo": [
