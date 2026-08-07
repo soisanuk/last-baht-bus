@@ -176,6 +176,24 @@ fs.writeFileSync(ROOT + "shots/map.svg", S.join("\n"));
 console.log(`shots/map.svg written (${Object.keys(ROOM_GEO).length} rooms placed)`);
 
 // ── the audit: declared exit direction vs real bearing ──────────────────────
+//
+// WHY 60°, AND WHY IT MUST NOT BE TIGHTENED. There are two geometries here and
+// they are not supposed to agree exactly:
+//
+//   relational — the exit graph. What the player walks. Cardinal-only, so it
+//     has FOUR words for 360°, and a diagonal street has to pick one.
+//   actual     — ROOM_GEO. Real lat/lon, exact, read by nobody but the map.
+//
+// A four-direction graph cannot do better than 45° on a diagonal: a street
+// running true NE is described equally badly by "n" and by "e", and no choice
+// of word improves it. So deviation under 45° is not an error, it's the grid
+// working as designed. Soi 6 is the worked example — it really runs ESE (109°)
+// and the graph calls it `e`, which is right; every spine exit audits at 19°.
+//
+// 60° sits just above that floor, so honest cardinal approximation stays quiet
+// while a genuinely wrong turn still speaks up. Tighten this to 20° and the
+// audit fills with diagonal streets that are already correct, which is how a
+// useful signal gets trained into noise and then ignored.
 if (process.argv.includes("--audit")) {
   const DIR_DEG = { n: 0, e: 90, s: 180, w: 270 };
   console.log("\nexits vs reality (deviation > 60° listed; > 120° is a lie):");
