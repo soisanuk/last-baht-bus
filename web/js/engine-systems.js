@@ -2946,6 +2946,134 @@ function _tanFavourNo() {
     "and that he came in and asked instead.", "dim");
 }
 
+// ── Working your own bar: the presence dilemma ───────────────────────────────
+// The one decision the expat stage is actually about. WORK commits your evening
+// to your own rail: the takings come in properly, the staff steady, and you get
+// the quiet satisfaction of a good night's trade. What it costs is the night —
+// no encounters, no new faces, no soi. Go out instead and the bar runs on Bert,
+// who is very good and is not the owner.
+//
+// Deliberately NOT a passive location check. The player could always have stood
+// in their own bar; making it a declared shift is what turns standing about into
+// a choice, gives it a cost, and lets the prose acknowledge it.
+const _WORK_SHIFT = [
+  "You take the far end of the rail, where you can see the door and the till at " +
+    "the same time, and you do not sit down again for five hours.",
+  "Bert hands you a cloth without being asked, which is either respect or a " +
+    "test, and by eleven you have stopped wondering which.",
+  "You work the room the way you used to work a bar as a customer, except that " +
+    "now every conversation has a second job, and you are surprised how little " +
+    "you mind.",
+  "Nothing goes wrong. That is what a good night is: a long list of things that " +
+    "did not go wrong, and nobody but you will ever know the list existed.",
+];
+const _WORK_SEEN = [
+  "A regular you have never spoken to asks whether you're the new owner, is told " +
+    "yes, and buys a round for the rail on the strength of it.",
+  "One of the girls corrects your Thai in front of a customer, delightedly, and " +
+    "the customer tips her for it.",
+  "The pool table has a bad cushion. You learn this from a man who has been " +
+    "complaining about it for two years to somebody who could never fix it.",
+  "Two of the girls have a system for the ice that nobody explained to you, and " +
+    "it is better than yours would have been.",
+];
+// what you gave up
+// ten nights straight behind your own rail. The bar is doing well.
+const _WORK_GRIND = [
+  "You moved to this town for the nights. You have now spent ten of them in a " +
+    "row on the working side of the same four metres of teak.",
+  "A customer asks how long you've been out here and you have to think about " +
+    "it, and the number that comes back is not the number you'd have given a " +
+    "month ago, because a month ago you were still going out in it.",
+  "The soi is forty seconds from this door. You know exactly what it sounds " +
+    "like tonight, and you have known for ten nights, and you have not been in " +
+    "it once.",
+  "Bert says you look tired. Bert, who has done this for eleven years and looks " +
+    "like a man who sleeps beautifully, says you look tired.",
+];
+const _WORK_MISSED = [
+  "Somewhere out there the soi is doing what it does without you, which is the " +
+    "arrangement you signed up for and still feels like a window you walked past.",
+  "Your phone buzzes twice. You look at it at two in the morning, both times too " +
+    "late to matter.",
+  "A song you associate with a particular night comes on, and you are behind a " +
+    "bar for it, which is not the same as being in front of one.",
+];
+
+function _canWork() { return _barOwned() && G.room === "stinky_bar"; }
+
+// One roll per shift over WORK_NIGHTS (world.js). Most nights return nothing,
+// which is deliberate: the great night and the bad night only mean something
+// against a run of ordinary ones. Note `weightFn` — police attention scales
+// with how far outside the arrangement you've stayed, and is gated off
+// entirely once you're properly inside it. That is what being inside IS, and
+// it's the first place faction standing changes a night rather than a label.
+const WORK_EVENT_ODDS = 0.42;   // the rest of the time, nothing worth reporting
+
+function _workNight() {
+  if (_rand() > WORK_EVENT_ODDS) return null;
+  const pool = WORK_NIGHTS.filter(e => !e.when || e.when(G));
+  const weights = pool.map(e => e.weightFn ? e.weightFn(G) : e.weight);
+  const total = weights.reduce((a, b) => a + b, 0);
+  if (total <= 0) return null;
+  let roll = _rand() * total, pick = pool[0];
+  for (let i = 0; i < pool.length; i++) {
+    roll -= weights[i];
+    if (roll <= 0) { pick = pool[i]; break; }
+  }
+  _say(pick.text, (pick.happy || 0) < 0 ? "alert" : "win");
+  if (pick.money) {
+    G.bar.cash += pick.money;
+    _say(_fmt(pick.money > 0 ? "(฿{amt} on the night, over the ordinary take.)"
+      : "(฿{amt} out of the till.)", { amt: Math.abs(pick.money) }), "dim");
+  }
+  // a genuinely good night behind your own bar counts, and counts honestly —
+  // it does NOT go through the treadmill, because it isn't a conquest.
+  if (pick.happy) _addHappy(pick.happy);
+  (G.bar.seen = G.bar.seen || {})[pick.id] = (G.bar.seen[pick.id] || 0) + 1;
+  return pick;
+}
+
+function _doWork() {
+  if (!_barOwned()) {
+    _say(_flag("barPartner")
+      ? "Not yet. Until the deposit's paid it's still somebody else's rail."
+      : "You don't own a bar. Standing behind somebody else's is a different job, " +
+        "and they have people for it.");
+    return;
+  }
+  if (G.room !== "stinky_bar") {
+    _say(_fmt("Your bar is the Stinky Pinky, and you are not in it. Bert is " +
+      "managing beautifully, which is the problem.", {}));
+    return;
+  }
+  if (G.bar.workedDay === G.day) {
+    _say("You're already on. Bert has stopped offering you a stool.");
+    return;
+  }
+  G.bar.workedDay = G.day;
+  G.bar.worked = (G.bar.worked || 0) + 1;
+  G.bar.away = 0;
+  _say(_pickVary(_WORK_SHIFT, "workshift"), "win");
+  _say(_pickVary(_WORK_SEEN, "workseen"));
+  _say(_pickVary(_WORK_MISSED, "workmissed"), "dim");
+  _say("(You're working tonight. The takings will show it — and so will the " +
+    "night you didn't have. TIME to check the hour, BOOKS for the damage.)", "dim");
+  const streak = (G.bar.streak = (G.bar.streak || 0) + 1);
+  // What you get out of a shift is WHAT HAPPENED, not the fact of working. Most
+  // nights that's nothing — and the nothing is what makes the other two land.
+  _workNight();
+  // …and a man who works every night in Pattaya has quietly stopped living in
+  // Pattaya, however good the takings are.
+  if (streak >= 10) {
+    _say(_pickVary(_WORK_GRIND, "workgrind"), "alert");
+    _addHappy(-1);
+  }
+}
+
+// did you work tonight? read at settle
+function _workedTonight() { return _barOwned() && G.bar.workedDay === G.day; }
+
 // ── The bar's books ──────────────────────────────────────────────────────────
 // The purchase is seller-financed (see the constants in world.js): a deposit
 // that empties you, then BAR_MONTHLY to the old man every thirty days for six
@@ -3009,8 +3137,16 @@ function _barNight() {
   b.nights++;
   const low = _lowSeason();
   let take = BAR_TAKINGS + Math.floor(_rand() * BAR_SWING);
-  if (G.room === "stinky_bar") take += BAR_PRESENT;   // you were behind your own rail
+  // the presence dilemma, in one line. Working your own rail is worth roughly
+  // double an evening spent elsewhere — which is exactly what makes going out
+  // a decision instead of a default.
+  const worked = _workedTonight();
+  take = Math.round(take * (worked ? WORK_TAKINGS : AWAY_TAKINGS));
+  if (worked) take += BAR_PRESENT;
   if (low) take = Math.round(take * LOW_SEASON);
+  // nights away pile up; the staff notice before the books do
+  b.away = worked ? 0 : (b.away || 0) + 1;
+  if (!worked) b.streak = 0;   // one night out and the grind resets
   // every procurement job you turned down is on the supply bill, permanently
   const friction = (G.syn && G.syn.friction) || 0;
   const costs = Math.round(BAR_COSTS * (1 + friction * BAR_FRICTION));
@@ -3028,7 +3164,7 @@ function _barNight() {
     b.cash += fromPocket;
   }
   const underwater = b.cash < 0;
-  return { take, costs, net, low, friction, fromPocket, underwater };
+  return { take, costs, net, low, friction, fromPocket, underwater, worked, away: b.away };
 }
 
 // the old man's money, every thirty days. Comes out of the till first, your
@@ -3080,9 +3216,27 @@ function _barSettle() {
   const n = _barNight();
   const m = _barMonthly();
   // the nightly line is quiet; the monthly one is not
-  _say(_fmt("(The bar: ฿{take} in, ฿{costs} out{low}. Till: ฿{cash}.)",
+  _say(_fmt("(The bar: ฿{take} in, ฿{costs} out{low}{who}. Till: ฿{cash}.)",
     { take: n.take, costs: n.costs, cash: G.bar.cash,
-      low: n.low ? _L(" — low season") : "" }), "dim");
+      low: n.low ? _L(" — low season") : "",
+      who: n.worked ? _L(" — you worked it") : _L(" — Bert ran it") }), "dim");
+  if (n.away === WORK_DRIFT) {
+    _say("Bert mentions, without making anything of it, that one of the girls " +
+      "asked whether you still own the place. He told her yes. He did not tell " +
+      "you which girl.", "alert");
+  } else if (n.away > WORK_DRIFT && n.away % WORK_DRIFT === 0) {
+    // an absent owner costs bonds, not baht — the books are the last to know
+    const ids = Object.keys(G.soc.drinks || {}).filter(id => NPCS[id] && NPCS[id].room === "stinky_bar");
+    const her = ids.sort((a, b2) => (G.soc.drinks[b2] || 0) - (G.soc.drinks[a] || 0))[0];
+    if (her && G.soc.drinks[her] > 0) {
+      G.soc.drinks[her] = Math.max(0, G.soc.drinks[her] - 1);
+      _say(_fmt("{who} has started saying your name the way the staff at the " +
+        "other bars do. Politely.", { who: NPCS[her].name }), "alert");
+    } else {
+      _say("The bar is fine. The bar is completely fine, and walking into it " +
+        "feels a little more like walking into somebody else's.", "alert");
+    }
+  }
   if (n.fromPocket > 0) {
     _say(_fmt("(The till didn't cover it. ฿{amt} of your own money went in to " +
       "keep the lights on — nobody saw you do it, which is most of the job.)",
