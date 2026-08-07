@@ -8,7 +8,7 @@ var NEWS_FEED = [
     "d": "04 Aug 2026"
   },
   {
-    "t": "Jordanian tourist finds friendly solution after Pattaya shop dispute",
+    "t": "Injured dog saved after urgent plea sparks rescue on Pattaya hill",
     "s": "Pattaya Mail",
     "d": "06 Aug 2026"
   },
@@ -18,17 +18,12 @@ var NEWS_FEED = [
     "d": "05 Aug 2026"
   },
   {
-    "t": "Pattaya expat life in 2026: Paradise or Challenge?",
+    "t": "Pattaya takes back beach parking spaces from illegal occupiers",
     "s": "Pattaya Mail",
     "d": "06 Aug 2026"
   },
   {
-    "t": "Pattaya keeps Jomtien Beach open to all, not private business",
-    "s": "Pattaya Mail",
-    "d": "06 Aug 2026"
-  },
-  {
-    "t": "Pattaya hill injured dog rescued after public plea for help",
+    "t": "Koh Samui builds foreign eyes and ears network against tourism crime",
     "s": "Pattaya Mail",
     "d": "06 Aug 2026"
   },
@@ -38,9 +33,19 @@ var NEWS_FEED = [
     "d": "06 Aug 2026"
   },
   {
-    "t": "Pattaya welcomes the world with smoother walkways and brighter streets",
+    "t": "Jordanian tourist finds friendly solution after Pattaya shop dispute",
     "s": "Pattaya Mail",
     "d": "06 Aug 2026"
+  },
+  {
+    "t": "Pattaya expat life in 2026: Paradise or Challenge?",
+    "s": "Pattaya Mail",
+    "d": "06 Aug 2026"
+  },
+  {
+    "t": "Three teachers and three students killed in Thailand school shooting",
+    "s": "CNN",
+    "d": "07 Aug 2026"
   },
   {
     "t": "Leader of Myanmar’s military-backed government seeks political legitimacy in Thailand visit",
@@ -63,12 +68,7 @@ var NEWS_FEED = [
     "d": "06 Aug 2026"
   },
   {
-    "t": "Israeli mother and daughter brutally attacked in Thailand: ‘He asked where we were from, then beat us’",
-    "s": "Ynetnews",
-    "d": "06 Aug 2026"
-  },
-  {
-    "t": "Thailand to adopt checked baggage opening without owners present",
+    "t": "Thailand to ramp up creative cities drive",
     "s": "Bangkok Post",
     "d": "06 Aug 2026"
   }
@@ -76,12 +76,12 @@ var NEWS_FEED = [
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-08-06","USD":33.07,"AUD":23.28,"GBP":44.52,"EUR":38.17};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-07","temp":27,"humid":88,"code":51,"hi":31,"rain":92};
+var WX_NOW = {"date":"2026-08-07","temp":31,"humid":73,"code":95,"hi":31,"rain":78};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-08-01","first":"932479","last2":"69","front3":["413","672"],"back3":["039","154"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4245,"date":"2026-08-07","baht":66400};
+var GOLD = {"usd":4287,"date":"2026-08-07","baht":67050};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":64263,"thb":2128414};
+var BTC = {"usd":64351,"thb":2129806};
