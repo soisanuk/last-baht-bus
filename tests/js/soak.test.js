@@ -52,14 +52,37 @@ test("regression: Act One WAIT across dawn can't loop the same-day reset forever
 // _fmt FIRST if the line interpolates amounts), or, if the growth is deliberate
 // and accepted, lower... no: RAISE this number in the same commit, so the
 // tradeoff is visible in review rather than invisible in a sweep nobody runs.
-const DE_LEAK_CEILING = 150;
-test("de coverage doesn't regress — English must not leak further into a German game", () => {
-  const uniq = new Set();
-  for (const seed of [1, 2, 3]) {
-    const r = runSoak({ seed, nights: 2, mode: "soi6", lang: "de" });
-    for (const w of r.warns) if (w.kind === "langleak") uniq.add(w.line);
-  }
-  assert.ok(uniq.size <= DE_LEAK_CEILING,
-    `de leaks rose to ${uniq.size} (ceiling ${DE_LEAK_CEILING}). New prose needs a de entry — ` +
-    `see docs/i18n-de-gaps.md. Sample: ${[...uniq][0]?.slice(0, 90)}`);
-});
+// Two ceilings, because the two modes walk different halves of the game and a
+// guard on one says nothing about the other. Soi 6 mode is the daily challenge:
+// one street, no Act One. Vacation mode is the full game — the wallet quest, the
+// hotels, the Darkside, everything the challenge never reaches. Until 2026-08-07
+// only Soi 6 was ratcheted, so every de batch tightened a guard on the path
+// FEWER players walk while the main path could regress unseen.
+const DE_CEILINGS = [
+  { mode: "soi6", seeds: [1, 2, 3], nights: 2, ceiling: 150 },
+  // vacation runs longer (4 nights × 5 seeds) because Act One occupies the first
+  // two and the sandbox prose only starts after it. Verified stable across five
+  // consecutive runs; ~240ms.
+  { mode: "vacation", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 327 },
+  // act1 is the do-or-die opening — the wallet chain, the fail/reset screens, the
+  // hint whispers. NEITHER other mode reaches it: soi6 force-sets act1Done, and
+  // so does the soak's own vacation setup. It was unguarded until 2026-08-07, and
+  // it could not be guarded before that either: _act1Fail's newGame() re-seeds
+  // G.rng from Math.random, so five identical runs gave 156/144/143/152/143.
+  // soak.mjs now pins a deterministic successor seed on reset.
+  { mode: "act1", seeds: [1, 2, 3, 4, 5], nights: 3, ceiling: 146 },
+];
+
+for (const { mode, seeds, nights, ceiling } of DE_CEILINGS) {
+  test(`de coverage doesn't regress in ${mode} mode — English must not leak further ` +
+    `into a German game`, () => {
+    const uniq = new Set();
+    for (const seed of seeds) {
+      const r = runSoak({ seed, nights, mode, lang: "de" });
+      for (const w of r.warns) if (w.kind === "langleak") uniq.add(w.line);
+    }
+    assert.ok(uniq.size <= ceiling,
+      `de leaks rose to ${uniq.size} in ${mode} mode (ceiling ${ceiling}). New prose needs ` +
+      `a de entry — see docs/i18n-de-gaps.md. Sample: ${[...uniq][0]?.slice(0, 90)}`);
+  });
+}
