@@ -65,6 +65,61 @@ test("portraits/pics frames are real PNGs, and none are orphaned", () => {
   }
 });
 
+// ── The thumbnail track (docs/art-production.md) ───────────────────────────
+// portraits/thumb/<id>.webp at 384px is what every small display should load:
+// nothing in either game shows a portrait above 140 CSS px, and a full render is
+// ~1.44 MB against ~14 KB here. The resolution chain both games share is
+//   portraits/thumb/<id>.webp → portraits/<id>.png → drop the element
+// so a missing thumb degrades to today's behaviour rather than breaking.
+const thumbDir = path.join(dir, "thumb");
+const WEBP_SIG = Buffer.from("WEBP", "ascii");
+const THUMB_MAX = 60 * 1024;   // real constraint: they land at 14 KB, max 19 KB
+
+// The generated renders — the export's `renders` array is the contract both
+// games read, and it's what separates renders from pixel-art placeholders.
+function renderIds() {
+  const p = path.join(root, "docs", "world-export.json");
+  if (!fs.existsSync(p)) return null;
+  return JSON.parse(fs.readFileSync(p, "utf8")).renders;
+}
+
+test("every generated render has a 384px WebP thumbnail", () => {
+  const ids = renderIds();
+  if (!ids || !fs.existsSync(thumbDir)) return;  // pre-migration clone
+  const missing = ids.filter(id => !fs.existsSync(path.join(thumbDir, id + ".webp")));
+  assert.deepEqual(missing, [], "run portrait_gen's gen_thumbs.py");
+});
+
+test("thumbnails are real WebP, inside budget, and none are orphaned", () => {
+  if (!fs.existsSync(thumbDir)) return;
+  const ids = new Set(renderIds() || []);
+  for (const f of fs.readdirSync(thumbDir)) {
+    if (f.startsWith(".")) continue;
+    assert.ok(f.endsWith(".webp"), "thumb/" + f + " is not a .webp");
+    const buf = fs.readFileSync(path.join(thumbDir, f));
+    assert.ok(buf.subarray(8, 12).equals(WEBP_SIG), "thumb/" + f + " is not a valid WebP");
+    const kb = buf.length / 1024;
+    assert.ok(buf.length <= THUMB_MAX, `thumb/${f} is ${kb.toFixed(0)} KB — budget is 60 KB`);
+    if (ids.size) assert.ok(ids.has(f.replace(/\.webp$/, "")), "thumb/" + f + " matches no render");
+  }
+});
+
+// NOTE on the full-size budget: docs/art-production.md proposes ≤250 KB for
+// `portraits/`. That CANNOT apply while the full-size renders are still
+// committed — all 72 are 1.2-1.67 MB, and the gallery path genuinely wants that
+// detail. The ≤250 KB rule only becomes enforceable if the renders move out of
+// the repo (the doc's middle `.git` option). Until then this ceiling just stops
+// the existing files drifting further upward.
+test("full-size renders don't grow", () => {
+  const RENDER_MAX = 2 * 1024 * 1024;
+  for (const f of fs.readdirSync(dir)) {
+    if (!f.endsWith(".png")) continue;
+    const size = fs.statSync(path.join(dir, f)).size;
+    assert.ok(size <= RENDER_MAX,
+      `${f} is ${(size / 1e6).toFixed(2)} MB — ceiling is 2 MB (see docs/art-production.md)`);
+  }
+});
+
 test("the generator's cast list matches the world", () => {
   const gen = fs.readFileSync(path.join(root, "scripts", "gen-portraits.py"), "utf8");
   const specIds = [...gen.matchAll(/^    "([a-z_0-9]+)":\s/gm)].map(m => m[1]);
