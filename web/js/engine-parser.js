@@ -310,6 +310,8 @@ function _arriveAt(to) {
   }
   _repArrival(); // your street name precedes you at a stranger bar (notable tiers only)
   _managerWelcome(); // a bar manager stands you the house's first shot (once/bar/night)
+  // the partnerTan route comes due: he said he'd ask, and this is him asking
+  if (typeof _tanFavourDue === "function" && _tanFavourDue()) { _tanFavour(); return; }
   // the anti-Simon machine: when the book gets heavy, the town catches you.
   // Candy settles it at whichever of her bars she's working tonight.
   if (G.hotelDebt >= 800 && !_flag("tabSettled") &&
@@ -2986,6 +2988,9 @@ function _chipSet() {
     if (G.mode === "soi6") { add("play again"); add("share", "share card"); return chips; }
     add("new vacation"); add("move to pattaya", "move to Pattaya"); return chips;
   }
+  if (G.pendingChoice === "tanfavour") {
+    add("yes"); add("no"); add("ask", "ask what it's for"); return chips;
+  }
   if (G.pendingChoice === "checkout") {
     add("sabai", "Sabai ฿400"); add("queen vic", "Queen Vic ฿700");
     add("areca", "Areca ฿900"); add("metropole", "Metropole ฿1300"); add("stay", "stay put");
@@ -3214,6 +3219,7 @@ function engineComplete(input) {
     .filter(w => !["the", "a", "an", "to", "at", "for", "with", "about", "my"].includes(w));
   let pool;
   if (G.pendingChoice === "vacation_end") pool = G.mode === "soi6" ? ["play again"] : ["new vacation", "move to pattaya"];
+  else if (G.pendingChoice === "tanfavour") pool = ["yes", "no", "ask"];
   else if (G.pendingChoice === "checkout") {
     pool = [...Object.keys(_HOTELS).filter(k => k !== G.hotel)
       .map(k => _HOTELS[k].name.toLowerCase()), "stay"];
@@ -3301,6 +3307,7 @@ function _renderResume() {
   if (G.pendingChoice === "intro") { _introPrompt(); return; }
   if (G.pendingChoice === "vacation_end") { _vacationEndPrompt(); return; }
   if (G.pendingChoice === "checkout") { _checkoutPrompt(); return; }
+  if (G.pendingChoice === "tanfavour") { _tanFavourPrompt(); return; }
   if (G.game) { _renderGame(); return; }
   if (G.pendingEnc) { _renderEncounter(); return; }
   if (G.pendingBf) { _bfPrompt(); return; }
@@ -3401,6 +3408,16 @@ function doCommand(input) {
     if (/vacation|holiday|again|fly back|new/.test(lower)) { _newVacation(); return; }
     if (/move|expat|stay|pattaya|remain/.test(lower)) { _goExpat(); return; }
     _vacationEndPrompt();
+    return;
+  }
+
+  // Tan is stood at your rail with a folded slip on the bar
+  if (G.pendingChoice === "tanfavour") {
+    if (/^(ask|what|why|who|explain|tell)/.test(lower)) { _tanFavourAsk(); return; }
+    if (/^(y|yes|ok|okay|sure|fine|deal|take|agree)/.test(lower)) { _tanFavourYes(); return; }
+    if (/^(n|no|refuse|decline|sorry|nope|never)/.test(lower)) { _tanFavourNo(); return; }
+    _say("Tan waits. The slip is still on the bar, and he has all night.", "dim");
+    _tanFavourPrompt();
     return;
   }
 

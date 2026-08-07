@@ -177,3 +177,67 @@ test("the dead Shamrock is a sequel hook, not part of this chain", () => {
   assert.match(say("ask daeng about shamrock"), /Shamrock/,
     "once you own one, she mentions the next");
 });
+
+// ── Tan calls the favour in ─────────────────────────────────────────────────
+// The payoff of the partnerTan route, and the reason the fork isn't cosmetic.
+// He refused money all game — SEND him baht and the app bounces it back — and
+// said "when I want something from you, I will ask for it, and it will not be
+// money." This is him asking, and it's deliberately small: a name for the staff
+// list. What's being established is that he CAN ask.
+function ownsBarWith(partner) {
+  becomeExpat();
+  for (const f of ["barPremises", "barLicence", "barPartner", partner, "barOpen"]) _setFlag(f);
+  G.nightTurn = 35;          // an evening beat
+  G.room = "stinky_bar";
+  out = []; _arriveAt("stinky_bar");
+  return out.join("\n");
+}
+
+test("Tan comes to the bar and asks — but only if he's the one who signed", () => {
+  const tan = ownsBarWith("partnerTan");
+  assert.match(tan, /Tan comes into your bar/, "the partnerTan route comes due");
+  assert.equal(G.pendingChoice, "tanfavour", "it gates input like any modal");
+
+  const candy = ownsBarWith("partnerCandy");
+  assert.equal(/Tan comes into your bar/.test(candy), false,
+    "Candy's 51% is a Bangkok lawyer's paperwork — there is nothing to call in");
+  assert.notEqual(G.pendingChoice, "tanfavour");
+});
+
+test("the modal answers on all its surfaces, and swallows anything else", () => {
+  ownsBarWith("partnerTan");
+  assert.deepEqual(_chipSet().map(c => c.cmd), ["yes", "no", "ask"],
+    "touch players get the answers as chips");
+  const stray = say("dance");
+  assert.match(stray, /Tan waits/, "an unrelated command doesn't escape the modal");
+  assert.equal(G.pendingChoice, "tanfavour", "…and doesn't answer it either");
+  assert.match(say("ask"), /Nong Khai/, "ASK gets a straight answer");
+  assert.equal(G.pendingChoice, "tanfavour", "…and re-prompts rather than deciding for you");
+});
+
+test("saying yes puts you inside somebody's web of favours", () => {
+  ownsBarWith("partnerTan");
+  say("yes");
+  assert.ok(_flag("tanFavourDone"));
+  assert.equal(G.pendingChoice, null);
+  assert.ok(G.faction.syndicate >= 2, "the obligation is now on the books");
+});
+
+test("saying no is free — the cost is a sentence, not a penalty", () => {
+  ownsBarWith("partnerTan");
+  const no = say("no");
+  assert.ok(_flag("tanFavourRefused"));
+  assert.equal(G.faction.syndicate || 0, 0,
+    "faction doctrine: standing moves on the deed, declining costs nothing");
+  assert.equal(G.faction.wdg || 0, 0, "…and triggers no reprisal anywhere else");
+  // the sting is that he could have written the name himself and came and asked
+  assert.match(no, /fifty-one percent|It is your bar/i);
+});
+
+test("he asks once, ever", () => {
+  ownsBarWith("partnerTan");
+  say("no");
+  out = []; _arriveAt("stinky_bar");
+  assert.equal(/Tan comes into your bar/.test(out.join("\n")), false,
+    "tanAsked is set on the ask itself, so it can't re-fire after either answer");
+});
