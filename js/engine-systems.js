@@ -2892,11 +2892,14 @@ function _tanFavourPrompt() {
 function _tanFavourAsk() {
   _say("\"Of course. You should ask.\" He does not hesitate, and he does not " +
     "look around the room first, which is somehow worse than if he had.");
-  _say("\"She is from Nong Khai. Her permit is with a company in Bangkok that " +
-    "does not exist any more, so on paper she is nothing, and a person who is " +
-    "nothing on paper cannot open a bank account, cannot rent, cannot be sick " +
-    "in a hospital that asks questions.\" A shrug. \"She is somebody's " +
-    "daughter. Not mine. It does not matter whose.\"");
+  _say("\"She is Lao. Came over at Nong Khai when she was nineteen, and her " +
+    "permit is with a company in Bangkok that does not exist any more.\" He says " +
+    "it the way you would read out a bus timetable. \"So on paper she is " +
+    "nothing. A person who is nothing on paper cannot open a bank account, " +
+    "cannot rent, cannot be sick in a hospital that asks questions — and if the " +
+    "wrong policeman is bored on the wrong day, she is at the border by " +
+    "Friday.\" A shrug. \"She is somebody's daughter. Not mine. It does not " +
+    "matter whose.\"");
   _say("\"Nothing happens in your bar. Nobody comes. In one year a man from " +
     "the labour office looks at a list and sees a name on it, and that is the " +
     "whole of it, my friend.\" He waits. \"And if you say no, that is also the " +
