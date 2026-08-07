@@ -161,6 +161,60 @@ ordinary CAPS emphasis still translates freely ("WALLET RECOVERED" →
 run. Both reviewers confirmed the hint surface was clean — but that check is now
 free forever.
 
+## What batch 6 did (vacation mode, and two structural finds)
+
+26 entries, the first batch aimed at the FULL game rather than the Soi 6
+challenge. Ceilings: soi6 150→149, **vacation 327→309**, **act1 146→131**.
+
+Room descriptions needed no code at all — `_describeRoom` does `_say(r.desc)`,
+so `_L` already saw the whole string. They were only ever missing entries, which
+is why 26 entries moved vacation mode 18 points. The single biggest leak in the
+game was one line: the MAP header, at 257 occurrences.
+
+**All dog prose was untranslatable, and nothing would have told us.** `_dogN()`
+re-letters the authored "Sai Krok" into whatever the player named their dog —
+and it ran INSIDE the `_say(...)` argument, so the catalog saw a string with the
+player's own name already substituted in. One entry per line could never match
+for anyone who used RENAME DOG. `_dogN` now calls `_L` first and re-letters
+after, so the key stays the authored form. The same shape as the `{item}` and
+`{n}` slot defects: **something mutated the string before the catalog saw it.**
+That is now three times. When a line passes through a helper on its way to
+`_say`, ask what the helper did to it.
+
+Two mechanical checks came out of the review rather than staying in it:
+
+- **ALL-CAPS command words** (batch 5) — a translated `(ASK DOYLE ABOUT THE
+  TABLE)` tells the player to type a verb the parser doesn't know.
+- **Compass directions** (this batch) — room descriptions are how a player
+  navigates, and a direction that flips or vanishes is a navigation bug, not a
+  style problem. The test counts each direction on both sides and requires the
+  multisets to match; counting rather than checking presence catches the slip a
+  long desc hides. Both reviewers independently confirmed the batch was clean,
+  and so did the test — but it is free forever now.
+
+The review also caught the kind of thing only a native reader does: *"ein
+einzelner Som-Tam-Wagen macht sein stilles Geschäft"* collides head-on with the
+German toilet euphemism (*sein Geschäft verrichten*). Fine as a sentence,
+completely the wrong joke.
+
+Where the two reviewers split — "Groß-Pattaya", and whether *"Namensgeberin der
+Soi"* inverts who named whom — I took the position the ENGLISH supports. English
+"namesake" asserts no direction at all, so neither should the German; the fix
+was a neutral rendering rather than picking a contested side.
+
+## A surface the ratchet cannot see: room NAMES
+
+`_say(r.name)` routes through `_L` fine, but names are short — well under the
+leak heuristic's 30-character, 3-stopword threshold — so **no ceiling will ever
+count them.** 59 rooms carry a descriptive parenthetical ("Jomtien Beach
+(South)", "Soi 7 (West / beach end)") that a German player reads in English
+today. Bounded and coherent as a future batch. The venue proper names ("The
+Sandbar", "Lucky 7 Bar") should stay English — they're tap targets and brands.
+
+Worth stating plainly: a ratchet measures what its instrument can see. This one
+is deliberately precision-over-recall, so a clean sweep is not the same as full
+coverage.
+
 ## The ratchet guards three modes, not one (2026-08-07)
 
 `tests/js/soak.test.js` asserts the leak count never RISES. Until now it watched

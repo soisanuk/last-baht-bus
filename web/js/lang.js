@@ -1271,6 +1271,66 @@ const _CATALOGS = {
     " That's {v}, in {r}.": " Das ist {v}, drüben in {r}.",
     " That's the {v}, in {r}.": " Das ist {v}, drüben in {r}.",
 
+    // ── de-sweep batch 6 (2026-08-07) — vacation mode ────────────────────────
+    // First batch aimed at the FULL game rather than the Soi 6 challenge. Room
+    // descs need no code change: _describeRoom does _say(r.desc), so _L already
+    // sees the whole string — they only ever needed entries.
+
+    // the single biggest leak in the game, by a factor of four: the MAP header.
+    // (The ASCII map below it is monospace art and place names — left alone.)
+    "The bar-mat map of greater Pattaya, not to scale, like all bar maps:":
+      "Die Bierdeckelkarte vom Großraum Pattaya, nicht maßstabsgetreu, wie alle Bierdeckelkarten:",
+
+    // the dark, the dog, and the clock — the three things that kill you
+    "It is pitch dark. If your phone has any battery left, its flashlight would help. Sois this dark tend to have soi dogs in them.":
+      "Es ist stockdunkel. Falls dein Handy noch Saft hat, wäre jetzt der Moment für die Taschenlampe. In so dunklen Sois treiben sich gern Soi-Hunde herum.",
+    // dog prose is authored against "Sai Krok" and re-lettered by _dogN at
+    // render time — which now localises FIRST, so this key stays the authored
+    // form and the German keeps the placeholder name for the same treatment.
+    "A growl starts somewhere in the dark ahead — and Sai Krok answers it, once, low, without breaking stride. Silence. The dark has done the maths.":
+      "Irgendwo vorn im Dunkeln hebt ein Knurren an — und Sai Krok antwortet, einmal, tief, ohne aus dem Tritt zu geraten. Stille. Das Dunkel hat nachgerechnet.",
+    // templated first (the fare is BUS_FARE) — otherwise de needs one entry per price
+    "Somewhere a songthaew driver checks his watch and turns the truck toward the depot. The last baht bus makes its final run at two — call it half an hour off. Get to a main road for the ฿{fare} ride home, or the small hours belong to the piwins and their prices. This is the hour the whole night has been counting down to.":
+      "Irgendwo schaut ein Songthaew-Fahrer auf die Uhr und lenkt den Pick-up Richtung Depot. Der letzte Baht-Bus fährt um zwei — sagen wir, in einer halben Stunde. Ab auf eine Hauptstraße, wenn du die ฿{fare}-Fahrt heim willst, sonst gehören die frühen Morgenstunden den Piwins und ihren Preisen. Das ist die Stunde, auf die die ganze Nacht heruntergezählt hat.",
+    // the RAW message body — _readMessages composes the "📱 Sender: “…”" wrapper
+    // and calls _L on msg.text. (Same trap as batch 3; the dead-key test caught
+    // it both times.) The donation URL is the game's one fourth-wall line — it
+    // stays verbatim.
+    "Word on the soi says you've adopted one of Pattaya's own — khob khun, khun jai dee! 🐕 The rest of them still need jabs, food, and a vet who works for smiles. Pay it forward for the dogs still on the street: https://www.soidog.org/content/make-donation 🙏":
+      "Auf der Soi heißt es, du hast einem von Pattayas Straßenhunden ein Zuhause gegeben — khob khun, khun jai dee! 🐕 Die anderen brauchen weiterhin Impfungen, Futter und einen Tierarzt, der für ein Lächeln arbeitet. Gib das Glück weiter — an die Hunde, die noch auf der Straße sind: https://www.soidog.org/content/make-donation 🙏",
+
+    // Act One, before the wallet is back
+    "Your bank card was in the wallet — and the wallet is the whole problem. No card, no cash. Solve that first.":
+      "Deine Bankkarte war in der Brieftasche — und die Brieftasche ist ja das ganze Problem. Keine Karte, kein Bargeld. Erst mal das lösen.",
+    "Your card's in your wallet, wherever that's got to. Nothing to check until it's back.":
+      "Deine Karte steckt in deiner Brieftasche, wo immer die abgeblieben ist. Nichts zu prüfen, solange sie weg ist.",
+
+    // ── the Soi 7 / Jomtien pocket (rooms) ──────────────────────────────────
+    "The beach end of Soi 7, off the south end of the beach road: a mellow strip of open-front beer bars strung with fairy lights, a couple of massage shops, and the easy Jomtien pace — older expats, cold beer, nobody in a hurry. The soi runs east, deeper inland toward Second Road; the sea breeze follows you a little way in.":
+      "Das Strandende der Soi 7, am Südende der Strandstraße: eine gemächliche Reihe offener Bierbars mit Lichterketten, ein paar Massageläden und das entspannte Jomtien-Tempo — ältere Expats, kaltes Bier, niemand in Eile. Die Soi führt nach Osten, tiefer landeinwärts Richtung Second Road; die Meeresbrise begleitet dich noch ein Stück hinein.",
+    "The south end of the beach road, where it meets the mouth of Soi 7. A 7-Eleven glows on the corner, its air-con bleeding into the street; Soi 7's beer bars and massage shops run inland to the east, the bus stop is back to the north, and the sand and the sea lie west.":
+      "Das Südende der Strandstraße, wo sie auf die Mündung der Soi 7 trifft. An der Ecke leuchtet ein 7-Eleven, seine Klimaanlage blutet auf die Straße; die Bierbars und Massageläden der Soi 7 ziehen sich nach Osten landeinwärts, die Bushaltestelle liegt ein Stück zurück im Norden, und Sand und Meer liegen im Westen.",
+    "Where Soi 7 finally gives out onto the sand: a scrap of hard-packed beach, a couple of upturned boats, and Auntie Nok's drinks cart parked in the lee of a sea almond tree, cooler humming. The beach opens north; Soi 7 runs back inland to the east.":
+      "Wo die Soi 7 endlich auf den Sand ausläuft: ein Flecken festgetretener Strand, ein paar umgedrehte Boote und Tante Noks Getränkewagen im Windschatten eines Seemandelbaums, die Kühlbox brummt. Der Strand öffnet sich nach Norden; die Soi 7 läuft nach Osten landeinwärts zurück.",
+    "The middle of Soi 7, where the beer bars thin to guesthouses and a lone som tam cart doing quiet business. The soi runs west toward the sea and the beach road, and east toward the Second Road roar.":
+      "Die Mitte der Soi 7, wo die Bierbars Gästehäusern weichen und ein einzelner Som-Tam-Wagen in aller Ruhe verkauft. Die Soi führt nach Westen zum Meer und zur Strandstraße, nach Osten zum Getöse der Second Road.",
+    "The far end of Soi 7, where it spills onto Second Road by a 7-Eleven. A couple more beer bars and a massage shop see out the strip. On the south side, set back behind a fence and a flagpole, squats the grey bulk of the Chonburi Immigration Office — dark and locked at this hour, a place farang only ever visit in daylight and never fondly.":
+      "Das andere Ende der Soi 7, wo sie neben einem 7-Eleven auf die Second Road mündet. Noch ein paar Bierbars und ein Massageladen beschließen die Reihe. Auf der Südseite, zurückgesetzt hinter Zaun und Fahnenmast, hockt der graue Klotz des Chonburi Immigration Office — dunkel und verschlossen um diese Zeit, ein Ort, den Farang nur bei Tageslicht aufsuchen und nie gern.",
+    "A pink-lit oil shop halfway down Soi 7, girls on the step, the small sticker on the mirror, and the beach breeze doing its best to keep it wholesome. It fails, pleasantly.":
+      "Ein rosa beleuchteter Ölmassage-Laden auf halber Höhe der Soi 7, Mädchen auf den Stufen davor, der kleine Aufkleber am Spiegel, und die Meeresbrise gibt ihr Bestes, die Sache anständig zu halten. Sie scheitert, angenehm.",
+    "The soi's namesake: a friendly open-front beer bar with sevens painted on everything, a Connect 4 frame, and a knot of regulars who've been coming since before the fairy lights. The girls know every one of them by their drink.":
+      "Die Bar, die so heißt wie die Soi: eine freundliche offene Bierbar mit aufgemalten Siebenen auf allem, einem Vier-gewinnt-Brett und einer Traube Stammgäste, die schon vor den Lichterketten hier waren. Die Mädchen erkennen jeden von ihnen am Getränk.",
+    "Stools that catch the wind straight off the beach, a battered guitar somebody strums between customers, and the most relaxed hostesses in Jomtien. Nobody hard-sells here; the beer is cold and the evening goes where it goes.":
+      "Hocker, die den Wind direkt vom Strand abbekommen, eine ramponierte Gitarre, die jemand zwischen zwei Bestellungen anschlägt, und die entspanntesten Hostessen in Jomtien. Hier bedrängt dich niemand; das Bier ist kalt und der Abend geht, wohin er geht.",
+    "The north end of Jomtien Beach: raked sand, stacked loungers under folded umbrellas, the surf hissing to the west and the beach road's bus stop lit up to the east. The sand runs south back toward the Soi 7 end and north to where Dongtan's quieter stretch begins.":
+      "Das Nordende von Jomtien Beach: geharkter Sand, gestapelte Liegen unter zusammengeklappten Schirmen, die Brandung zischt im Westen und im Osten leuchtet die Bushaltestelle der Strandstraße. Nach Süden läuft der Sand zurück zum Ende der Soi 7, nach Norden dorthin, wo Dongtans ruhigerer Abschnitt beginnt.",
+
+    // SMELL / LISTEN on the beach
+    "Waves, a beach dog arguing with a kite, the flat slap of sandals on the promenade.":
+      "Wellen, ein Strandhund im Streit mit einem Drachen, das trockene Klatschen von Sandalen auf der Promenade.",
+    "Salt, yesterday's sunscreen, grilled squid from a cart you can't see. Underneath it all, the sea — patient.":
+      "Salz, die Sonnencreme von gestern, gegrillter Tintenfisch von einem Wagen, den du nicht sehen kannst. Unter allem das Meer — geduldig.",
+
     "Last call — the mamasan taps her watch: about half an hour to closing. This place shuts at midnight, so if you mean to take a lady home tonight, now is the moment to BARFINE. After the shutters come down it's the street.":
       "Letzte Runde — die Mamasan tippt auf ihre Uhr: noch etwa eine halbe Stunde bis Feierabend. Der Laden macht um Mitternacht zu, wenn du also heute Nacht eine Lady mitnehmen willst, ist jetzt der Moment für BARFINE. Wenn die Rollläden unten sind, bleibt nur noch die Straße.",
   },

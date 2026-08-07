@@ -206,10 +206,11 @@ function _lastBusWarn() {
   if (G.nightTurn < LAST_BUS_TURN - 5 || G.nightTurn >= LAST_BUS_TURN) return;
   if (G.room === _hotelRoomId()) return; // already home — no race left to run
   G.lastBusWarned = true;
-  _say("Somewhere a songthaew driver checks his watch and turns the truck toward the " +
+  _say(_fmt("Somewhere a songthaew driver checks his watch and turns the truck toward the " +
     "depot. The last baht bus makes its final run at two — call it half an hour off. " +
-    `Get to a main road for the ฿${BUS_FARE} ride home, or the small hours belong to the piwins ` +
-    "and their prices. This is the hour the whole night has been counting down to.", "alert");
+    "Get to a main road for the ฿{fare} ride home, or the small hours belong to the piwins " +
+    "and their prices. This is the hour the whole night has been counting down to.",
+    { fare: BUS_FARE }), "alert");
 }
 
 // ── The bar manager ──────────────────────────────────────────────────────────

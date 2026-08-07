@@ -403,3 +403,38 @@ test("ALL-CAPS command words survive translation untouched", () => {
     "a typed command was translated; the player would be told to type a verb the parser " +
     "doesn't know:\n" + bad.join("\n"));
 });
+
+// ── compass directions survive translation ──────────────────────────────────
+// Room descriptions are how a player navigates: "the soi runs east", "the sand
+// runs south". A direction that flips or vanishes in translation is a
+// navigation bug, not a style problem — the German player is sent the wrong way
+// and the map stops agreeing with the prose.
+//
+// Mechanical, so it doesn't ride on a reviewer's patience. Counts each compass
+// direction on both sides and requires the multisets to match. Note it counts
+// rather than just checks presence: "north ... north ... south" losing one
+// "north" is exactly the kind of slip a long room desc hides.
+const _DIR_EN = { north: /\bnorth(?!ern\b)\w*/gi, south: /\bsouth(?!ern\b)\w*/gi,
+                  east: /\beast\w*/gi, west: /\bwest\w*/gi };
+// German carries the same four as Nord-/Süd-/Ost-/West- stems, in any compound
+// (Nordende, nach Süden, im Osten, Westseite). Matching the stem covers them all.
+const _DIR_DE = { north: /\bNord\w*|\bnördlich\w*/g, south: /\bSüd\w*|\bsüdlich\w*/g,
+                  east: /\bOst\w*|\böstlich\w*/g, west: /\bWest\w*|\bwestlich\w*/g };
+
+test("compass directions survive translation — a flipped direction is a navigation bug", () => {
+  const bad = [];
+  for (const [lang, cat] of Object.entries(_CATALOGS || {})) {
+    if (lang !== "de") continue;   // the DE stems above are language-specific
+    for (const [en, de] of Object.entries(cat)) {
+      for (const dir of Object.keys(_DIR_EN)) {
+        const nEn = (en.match(_DIR_EN[dir]) || []).length;
+        const nDe = (de.match(_DIR_DE[dir]) || []).length;
+        if (nEn !== nDe)
+          bad.push(`${dir}: ${nEn} in EN, ${nDe} in DE — ${en.slice(0, 60)}…`);
+      }
+    }
+  }
+  assert.deepEqual(bad, [],
+    "a compass direction changed count in translation; the player would be sent the " +
+    "wrong way:\n" + bad.join("\n"));
+});

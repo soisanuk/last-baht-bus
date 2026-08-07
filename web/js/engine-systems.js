@@ -2822,7 +2822,16 @@ function _doPet(arg) {
 function _dogName() { return (G.dog && G.dog.name) || "Sai Krok"; }
 // function replacer so names render literally ("Bo$$" — $-sequences are magic
 // in string replacements and would silently mangle)
-function _dogN(s) { return s.replace(/Sai Krok/g, () => _dogName()); }
+//
+// _L FIRST, then re-letter. The order is load-bearing: this runs inside the
+// _say(...) argument, so without it _say would receive a string with the
+// player's OWN dog name already substituted in — "…and Bo answers it, once,
+// low" — which matches no catalog key and made every dog line untranslatable
+// for anyone who used RENAME DOG. Keying on the authored "Sai Krok" form keeps
+// one entry per line for all names; the German value carries "Sai Krok" too and
+// gets re-lettered here. (_say re-runs _L on the result; it won't match, which
+// is harmless.)
+function _dogN(s) { return _L(s).replace(/Sai Krok/g, () => _dogName()); }
 // does this word mean the dog? covers the defaults and whatever he's named now
 function _isDogWord(a) {
   return /dog|sai|krok/.test(a) ||
