@@ -71,6 +71,17 @@ const DE_CEILINGS = [
   // G.rng from Math.random, so five identical runs gave 156/144/143/152/143.
   // soak.mjs now pins a deterministic successor seed on reset.
   { mode: "act1", seeds: [1, 2, 3, 4, 5], nights: 3, ceiling: 131 },
+  // expat: the endless stage, unreachable from the other modes (soi6 and the
+  // soak's own vacation setup both force act1Done and stop there). Added with
+  // the bar-owning chain.
+  //
+  // Scope this honestly: it covers the stage's AMBIENT prose — rooms, encounters,
+  // system lines. It does NOT cover the bar-owning chain, or any other quest: the
+  // soak plays randomly and a dep chain needs talk-until-offered → ACCEPT →
+  // travel → a specific ASK at each step. A five-seed expat run offers zero
+  // quests. Authored quest prose is guarded by scripted playthroughs instead
+  // (tests/js/barchain.test.js).
+  { mode: "expat", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 311 },
 ];
 
 for (const { mode, seeds, nights, ceiling } of DE_CEILINGS) {

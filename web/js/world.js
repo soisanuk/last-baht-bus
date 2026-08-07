@@ -2569,6 +2569,47 @@ const NPCS = {
         "don't know why it work this way. But it only work when there is no net to " +
         "fall in.\" A beat. \"That's how I open this bar. I had nothing. That's the " +
         "only reason it work.\"" },
+    
+      // ── bar-owning chain, step 3: staff ─────────────────────────────────
+      {
+        topic: "staff", chip: false,
+        req: ["expatLife", "barLicence"], notFlags: ["barStaff"], sets: ["barStaff"],
+        text: "\"Ohh.\" Candy sets down the glass she is drying and gives you her " +
+          "whole attention, which she does not do often. \"So it is true. Everybody " +
+          "say it already.\" She thinks. \"Okay. Listen. A bar is not a room, tilac. " +
+          "A bar is who is standing in it.\" She holds up one finger. \"First is " +
+          "mamasan. Not a girl — a woman who can say no to a customer and no to you, " +
+          "same day, same voice. If you hire a nice one you have no bar, you have a " +
+          "party, and in four month you have nothing.\" A second finger. \"Then " +
+          "cashier. Somebody's cousin, and you check the till yourself for six month " +
+          "anyway, and she must know that you check. Is not insult. Is the job.\" " +
+          "The third finger stays down. \"Girls come by themselves if the first two " +
+          "are right. They talk to each other more than you talk to them.\" She picks " +
+          "the glass back up. \"I send you two women I trust. If they say yes to you, " +
+          "you have a bar. If they say no — listen to why, na.\"",
+        short: "\"Mamasan who can say no to you. A cashier who knows you count. Girls come after.\"",
+      },
+      // ── step 4: opening night ───────────────────────────────────────────
+      {
+        topic: "opening", chip: false,
+        req: ["expatLife", "barStaff"], notFlags: ["barOpen"], sets: ["barOpen"],
+        text: "She closes early — actually closes, shutters and all, which nobody " +
+          "has seen her do — and walks you out to Khao Talo herself.\n\n" +
+          "The Shamrock has its lights on for the first time in three years. The " +
+          "long tin roof, the fairy lights, the ceiling fan somebody has cleaned. " +
+          "Your mamasan is behind the rail with her arms folded, reading the room " +
+          "before a single customer is in it. The cashier has already counted the " +
+          "float twice. Down the soi, Daeng is standing in her own doorway with a " +
+          "beer, not coming over, just watching — which from Daeng is a parade.\n\n" +
+          "Nobody comes for twenty minutes. Then Bert, because of course Bert, with " +
+          "a Singha he brought himself and an opinion about the speakers. Then two " +
+          "of Daeng's regulars who fancy a change of forty metres. Then a couple who " +
+          "took the wrong soi and stay anyway.\n\n" +
+          "\"Is not a good bar yet,\" Candy says, entirely happy, watching the till " +
+          "she doesn't own. \"Is a bar. Good takes years.\" She raises her glass to " +
+          "the room. \"Congratulations, boss.\"",
+        short: "\"Congratulations, boss.\"",
+      },
     ],
   },
 
@@ -4556,6 +4597,29 @@ const NPCS = {
           "sold. This is just—\" he searches for it \"—puttin' it to WORK. Man's gotta put it to work, eh? " +
           "Can't just sit on it drinkin'.\" He drinks. \"That'd be a waste.\"",
         short: "\"Money's not the worry — cashed up, sold the earthmoving mob. Gotta put it to WORK, eh.\"" },
+    
+      // ── bar-owning chain, step 2: the licence ───────────────────────────
+      // Gated on barPremises AND nomineeWarned (the quest deps enforce the
+      // latter too) — he gives the straight answer to the one person who
+      // stopped him signing the crooked one.
+      {
+        topic: "licence", chip: false,
+        req: ["expatLife", "barPremises", "nomineeWarned"],
+        notFlags: ["barLicence"], sets: ["barLicence"],
+        text: "Wayne laughs, once, with no humour in it at all. \"You want to know " +
+          "how it's really done. Right.\" He turns his glass a quarter turn — Bert's " +
+          "tell, you notice; they all pick it up eventually. \"Fifty-one percent is " +
+          "Thai. That's not a loophole, that's the law, and every farang who thinks " +
+          "he's clever about it is the story somebody tells in this bar later.\" He " +
+          "counts it off. \"Nominee is a stranger holding your life. Company is real " +
+          "but it's accountants and it's audited and it costs. Or—\" and here he " +
+          "actually looks at you \"—your name isn't on it at all. You're the manager. " +
+          "You take a wage and a cut and you sleep at night, and the person whose " +
+          "name IS on it has to be someone you'd hand your passport to.\" A pause. " +
+          "\"I was three days off signing the first one. You cost me a bar and saved " +
+          "me about four years. So: not the nominee. Pick a person, not a structure.\"",
+        short: "\"Fifty-one percent Thai, and that's the law. Pick a person, not a structure.\"",
+      },
     ],
   },
 
@@ -5825,6 +5889,23 @@ const NPCS = {
       { topic: "darkside", text: "\"The Darkside good to us old girls. Rent cheap, customers loyal, nobody in a hurry. The lake is for the married ones — go see, it's like Pattaya with the volume off.\"" },
       { topic: "covid", text: "She doesn't go quiet the way you expect. She goes very practical instead. \"Six of us, one room — tiny. No work, no money, nothing.\" She counts on her fingers. \"Morning: we walk to the beach, fill a bucket with clam. Afternoon: sell the clam to local people. Take that money, buy rice, buy pork.\" She pauses. \"Next morning — we cook extra and give away free food. To people more poor than us. Then go back for more clam.\" A short laugh. \"On the way home: we pick herb, pick fruit from the tree by the road — nobody plant it, it's just there. And that night?\" She taps the bar. \"Feast. Real feast. Better than high season.\" She fills your glass. \"The farang sit and wait to be rescued. We just find the next thing.\"" },
       { topic: "money", text: "She laughs, but it is a different kind of laugh from the ones aimed at customers — older, shorter. \"Money I understand. Not like the farang understand. Farang save the water in a big pot, very careful. Thai girl — the water goes through. I have it today, is good. Gone tomorrow — mai bpen rai, I find more water.\" She taps the bar. \"The pot people worry all the time. The river people never worry. Which one you think sleep better?\"" },
+    
+      // ── bar-owning chain, step 1: premises ──────────────────────────────
+      {
+        topic: "shamrock", chip: false,
+        req: ["expatLife"], notFlags: ["barPremises"], sets: ["barPremises"],
+        text: "\"The Shamrock.\" Daeng doesn't look up from the till. \"Irish man, " +
+          "Sean. Good bar. Twelve years.\" She closes the drawer. \"Then he go home " +
+          "for operation and not come back, and the family in Ireland don't want a " +
+          "bar in Thailand, so it just… sit there.\" A shrug that has watched a lot " +
+          "of bars sit there. \"Land is Khun Rattana, up the soi — she own three " +
+          "shophouse, she is not rich, she just never sell. Rent is cheap because " +
+          "dead bar make no money for nobody.\" She finally looks at you, and there " +
+          "is something almost kind in it. \"You want it? Then you talk to a farang " +
+          "who nearly sign the wrong paper. Ask him first. Then come back to me and " +
+          "I tell Sumalee you are not stupid.\"",
+        short: "\"Sean's old place. Land is Khun Rattana. Talk to your farang about the paper first.\"",
+      },
     ],
   },
 
@@ -6823,6 +6904,68 @@ const QUESTS = {
     at: "khao_talo_strip",
     doneFlag: "shamrockVisited",
     reward: { money: 0, happy: 6 },
+  },
+
+  // ── The bar-owning chain (expat only) ─────────────────────────────────────
+  // _goExpat's closing line promises this — "They say the smart ones end up
+  // owning a bar…" — so it exists to make that a door rather than a wink.
+  //
+  // Built AS a dep chain, not a subsystem: each step completes off a `sets` on
+  // a giver's dialogue node, like every other quest here. The four steps are
+  // premises → licence → staff → opening night.
+  //
+  // The givers aren't arbitrary. Bert manages a bar he'll never own and knows
+  // exactly what that costs; Daeng owns hers outright on a soi with no neon
+  // budget; Wayne nearly signed his name to somebody else's bar and can only
+  // explain the structure honestly BECAUSE you talked him out of it (hence the
+  // dep on nominee_deal — you can't be trusted with the answer until you've
+  // seen the question); Candy runs two bars and is the only person in town who
+  // could staff a third.
+  bar_premises: {
+    name: "The Dead Shamrock",
+    giver: "bert",
+    reqFlags: ["expatLife"],       // a vacation doesn't buy a bar
+    desc: "Bert reckons the dead Shamrock out on Soi Khao Talo could be brought " +
+      "back, and that Daeng knows whose name is on the lease (ASK DAENG ABOUT THE SHAMROCK).",
+    deps: [],
+    at: "daeng",
+    doneFlag: "barPremises",
+    reward: { money: 0, happy: 3 },
+  },
+  bar_licence: {
+    name: "Whose Name Is On It",
+    giver: "wayne",
+    reqFlags: ["expatLife"],
+    // nominee_deal is a real prerequisite, not flavour: Wayne can only give the
+    // straight answer to someone who stopped him signing the crooked one.
+    desc: "A farang can't hold the majority, and that's where the town eats people. " +
+      "Wayne owes you a straight answer about how it's actually done (ASK WAYNE ABOUT THE LICENCE).",
+    deps: ["bar_premises", "nominee_deal"],
+    at: "wayne",
+    doneFlag: "barLicence",
+    reward: { money: 0, happy: 4 },
+  },
+  bar_staff: {
+    name: "Your Own Rail",
+    giver: "candy",
+    reqFlags: ["expatLife"],
+    desc: "A room with a licence is a room. Candy has run two bars for years and " +
+      "knows what the third one needs first (ASK CANDY ABOUT STAFF).",
+    deps: ["bar_licence"],
+    at: "candy",
+    doneFlag: "barStaff",
+    reward: { money: 0, happy: 4 },
+  },
+  bar_opening: {
+    name: "Opening Night",
+    giver: "candy",
+    reqFlags: ["expatLife"],
+    desc: "Everything's signed, hired and swept. All that's left is to open the " +
+      "doors and find out who comes (ASK CANDY ABOUT OPENING).",
+    deps: ["bar_staff"],
+    at: "candy",
+    doneFlag: "barOpen",
+    reward: { money: 0, happy: 10 },
   },
 };
 

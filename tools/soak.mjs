@@ -6,7 +6,8 @@
 //   node tools/soak.mjs --mode soi6 --nights 20 --transcript /tmp/soak.txt
 //
 // Modes: vacation (sandbox past Act One, encounters LIVE) · soi6 (the challenge
-// week, intro answered by policy) · act1 (the do-or-die opening; resets expected).
+// week, intro answered by policy) · expat (the endless stage; the only mode that
+//   reaches the bar-owning chain) · act1 (the do-or-die opening; resets expected).
 //
 // Per-turn invariants (FAIL, exit 1): doCommand never throws; money/meters/day
 // finite and in loose bounds (NaN and runaway catchers, not balance tuning);
@@ -192,6 +193,13 @@ export function runSoak(opts = {}) {
   newGame();
   if (mode === "vacation") {
     G.flags.act1Done = true; G.stage = "vacation"; G.money = 3000;
+  } else if (mode === "expat") {
+    // the endless stage. Reached in play by choosing to stay at the week's end,
+    // and NOT reachable from the other soak modes — so without this, everything
+    // gated on expatLife (the whole bar-owning chain) is invisible to every
+    // ceiling. _goExpat does the flags, the savings and the room.
+    G.flags.act1Done = true; G.flags.hasWallet = true; G.stage = "vacation";
+    G.day = 8; _goExpat();
   } else if (mode === "soi6") {
     G.player = null; startSoi6Mode();
   } // act1: raw opening, resets expected

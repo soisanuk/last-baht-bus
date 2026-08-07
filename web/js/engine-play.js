@@ -2822,6 +2822,10 @@ function _goExpat() {
   G.pendingChoice = null;
   _setFlag("act1Done");
   _setFlag("hasWallet");
+  // gates the bar-owning chain: a seven-day vacation doesn't buy a bar, and the
+  // closing line below promises one. reqFlags rather than a stage check so the
+  // quests stay pure data.
+  _setFlag("expatLife");
   G.money += EXPAT_SAVINGS;
   G.nightTurn = 0;
   G.hunger = 20;
