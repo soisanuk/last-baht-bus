@@ -407,7 +407,7 @@ test("the old man is paid every thirty days, from the till then your pocket", ()
   const before = G.bar.months;
   let paidLine = "";
   for (let i = 0; i < 31; i++) {
-    G.day++; out = []; _barSettle();
+    G.day++; G.room = "stinky_bar"; _doWork(); out = []; _barSettle();
     if (/to the old man/.test(out.join("\n"))) paidLine = out.join("\n");
   }
   assert.equal(G.bar.months, before + 1, "one payment a month, not one a night");
@@ -420,7 +420,7 @@ test("refusing procurement is what makes the month hard — it's on the supply l
   const yearEnd = friction => {
     readyToBuy(); G.money = BAR_DEPOSIT; _barDeposit(); _setFlag("barOpen");
     G.syn = { done: {}, asked: {}, friction };
-    for (let d = 0; d < 360; d++) { G.day++; out = []; _barSettle(); }
+    for (let d = 0; d < 360; d++) { G.day++; G.room = "stinky_bar"; _doWork(); out = []; _barSettle(); }
     return G.bar.cash;
   };
   const inside = yearEnd(0), outside = yearEnd(6);
@@ -454,4 +454,79 @@ test("BOOKS is reachable as a typed verb", () => {
   G.pendingEnc = null; G.pendingChoice = null;   // nothing gating input
   assert.match(cmd("books"), /deposit isn't paid|nothing to keep books on/i);
   assert.match(cmd("takings"), /deposit isn't paid|nothing to keep books on/i);
+});
+
+// ── The presence dilemma ────────────────────────────────────────────────────
+// The expat stage's actual question: stand behind your own rail, or go out and
+// have the night you moved here for. Both real, neither sustainable.
+function running(friction = 0) {
+  becomeExpat();
+  for (const f of ["barPremises", "barLicence", "barPartner", "partnerTan"]) _setFlag(f);
+  G.room = "stinky_bar"; G.money = BAR_DEPOSIT; _barDeposit(); _setFlag("barOpen");
+  G.syn = { done: {}, asked: {}, friction };
+}
+
+test("WORK needs a bar of your own to work in", () => {
+  becomeExpat();
+  assert.match(cmd("work"), /don't own a bar/i);
+  running();
+  G.room = "candy_bar";
+  assert.match(cmd("work"), /not in it|Bert is managing/i, "you can't work somebody else's rail");
+  G.room = "stinky_bar";
+  cmd("work");
+  assert.equal(G.bar.workedDay, G.day, "a shift is a declared thing, once a night");
+  assert.match(cmd("work"), /already on/i);
+});
+
+test("working roughly doubles the night — that's what makes going out a decision", () => {
+  const takeOver = (work, nights) => {
+    running(); let total = 0;
+    for (let i = 0; i < nights; i++) {
+      G.day++; G.room = "stinky_bar";
+      if (work) _doWork();
+      const before = G.bar.cash; out = []; _barSettle();
+      total += G.bar.cash - before;
+    }
+    return total;
+  };
+  const worked = takeOver(true, 60), away = takeOver(false, 60);
+  assert.ok(worked > away, "your own rail out-earns Bert's");
+  assert.ok(worked > away * 1.5, `and by enough to matter (${worked} vs ${away})`);
+});
+
+test("a year of unbroken shifts is rich and joyless — the grind is the cost", () => {
+  running();
+  let grind = 0;
+  for (let i = 0; i < 40; i++) {
+    G.day++; G.room = "stinky_bar"; out = []; _doWork();
+    if (/ten of them in a row|ten nights|look tired|forty seconds from this door/.test(out.join("\n"))) grind++;
+  }
+  assert.ok(G.bar.streak >= 10, "consecutive shifts accumulate");
+  assert.ok(grind > 0, "a man who works every night has stopped living here, and the game says so");
+  // one night out resets it
+  G.day++; G.room = "candy_bar"; out = []; _barSettle();
+  assert.equal(G.bar.streak, 0, "a single night out breaks the grind");
+});
+
+test("what you get from a shift is what HAPPENED, not the fact of working", () => {
+  running();
+  const seen = new Set();
+  for (let i = 0; i < 400; i++) { G.day++; G.room = "stinky_bar"; out = []; _doWork(); }
+  for (const k of Object.keys(G.bar.seen || {})) seen.add(k);
+  assert.ok(seen.size >= 4, `several kinds of night should turn up (saw ${[...seen].join(",")})`);
+  assert.ok(seen.has("millionaires") || seen.has("allin"),
+    "some nights behind your own bar are the best nights you have");
+});
+
+test("faction standing is what keeps the police away — and nothing else does", () => {
+  const policeNights = (friction, syndicate) => {
+    running(friction); G.faction.syndicate = syndicate;
+    for (let i = 0; i < 300; i++) { G.day++; G.room = "stinky_bar"; out = []; _doWork(); }
+    return (G.bar.seen || {}).police || 0;
+  };
+  assert.equal(policeNights(6, 3), 0,
+    "inside the arrangement it simply does not happen — that is what being inside IS");
+  assert.equal(policeNights(0, 0), 0, "and with nothing refused there's no friction to notice");
+  assert.ok(policeNights(6, 0) > 0,
+    "outside it, with jobs refused, the licence and the staff list get looked at");
 });
