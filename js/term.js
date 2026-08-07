@@ -180,7 +180,25 @@ const _term = (() => {
     });
     return img;
   }
-  function _avatar(id, cls) { return _avatarSrc("portraits/" + id + ".png", cls); }
+  // The generated renders are ~1.44 MB each at 832x1088; the largest portrait
+  // this game ever shows is the 140px flyout header. So load the 384px WebP
+  // thumbnail where one exists and keep the full render for nothing at all —
+  // 14 KB against 1.44 MB, and 384px still covers 140 CSS px on a 3x phone.
+  //
+  // WHICH ids have one is data, not a guess: _THUMBS is baked from the same
+  // renders list docs/world-export.json publishes. Guessing would cost a 404 per
+  // pixel-art portrait, and 205 of the 277 are pixel art.
+  //
+  // The chain is thumb -> full -> remove, so a missing thumb degrades to exactly
+  // today's behaviour. Shared verbatim with Second Road (HANDOFF §3).
+  function _portraitSrc(id) {
+    return (typeof _THUMBS !== "undefined" && _THUMBS.has(id))
+      ? "portraits/thumb/" + id + ".webp"
+      : "portraits/" + id + ".png";
+  }
+  function _avatar(id, cls) {
+    return _avatarSrc(_portraitSrc(id), cls, "portraits/" + id + ".png");
+  }
 
   // A texted selfie / paid pic can carry its own image (a distinct frame, not her
   // bust portrait): world.js data marks it with a `pic` stem, matched here by the
