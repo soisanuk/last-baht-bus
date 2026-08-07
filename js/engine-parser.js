@@ -312,6 +312,10 @@ function _arriveAt(to) {
   _managerWelcome(); // a bar manager stands you the house's first shot (once/bar/night)
   // the partnerTan route comes due: he said he'd ask, and this is him asking
   if (typeof _tanFavourDue === "function" && _tanFavourDue()) { _tanFavour(); return; }
+  // procurement: a name on a list was free, the cleaning contract is not
+  if (typeof _synDue === "function" && _synDue()) { _synAsk(); return; }
+  // and if you've stayed outside it, the weather at your own bar changes
+  if (typeof _synFrictionTick === "function") _synFrictionTick();
   // the anti-Simon machine: when the book gets heavy, the town catches you.
   // Candy settles it at whichever of her bars she's working tonight.
   if (G.hotelDebt >= 800 && !_flag("tabSettled") &&
@@ -2991,6 +2995,10 @@ function _chipSet() {
   if (G.pendingChoice === "tanfavour") {
     add("yes"); add("no"); add("ask", "ask what it's for"); return chips;
   }
+  if (G.pendingChoice === "synjob") {
+    const j = typeof _synJobById === "function" ? _synJobById(G.synJob) : null;
+    add("yes"); add("no"); add("ask", j ? j.whoLabel : "ask about it"); return chips;
+  }
   if (G.pendingChoice === "checkout") {
     add("sabai", "Sabai ฿400"); add("queen vic", "Queen Vic ฿700");
     add("areca", "Areca ฿900"); add("metropole", "Metropole ฿1300"); add("stay", "stay put");
@@ -3220,6 +3228,7 @@ function engineComplete(input) {
   let pool;
   if (G.pendingChoice === "vacation_end") pool = G.mode === "soi6" ? ["play again"] : ["new vacation", "move to pattaya"];
   else if (G.pendingChoice === "tanfavour") pool = ["yes", "no", "ask"];
+  else if (G.pendingChoice === "synjob") pool = ["yes", "no", "ask"];
   else if (G.pendingChoice === "checkout") {
     pool = [...Object.keys(_HOTELS).filter(k => k !== G.hotel)
       .map(k => _HOTELS[k].name.toLowerCase()), "stay"];
@@ -3308,6 +3317,7 @@ function _renderResume() {
   if (G.pendingChoice === "vacation_end") { _vacationEndPrompt(); return; }
   if (G.pendingChoice === "checkout") { _checkoutPrompt(); return; }
   if (G.pendingChoice === "tanfavour") { _tanFavourPrompt(); return; }
+  if (G.pendingChoice === "synjob") { _synPrompt(); return; }
   if (G.game) { _renderGame(); return; }
   if (G.pendingEnc) { _renderEncounter(); return; }
   if (G.pendingBf) { _bfPrompt(); return; }
@@ -3408,6 +3418,16 @@ function doCommand(input) {
     if (/vacation|holiday|again|fly back|new/.test(lower)) { _newVacation(); return; }
     if (/move|expat|stay|pattaya|remain/.test(lower)) { _goExpat(); return; }
     _vacationEndPrompt();
+    return;
+  }
+
+  // procurement: stated, not asked
+  if (G.pendingChoice === "synjob") {
+    if (/^(ask|who|what|why|explain|tell)/.test(lower)) { _synWho(); return; }
+    if (/^(y|yes|ok|okay|sure|fine|deal|agree|hire)/.test(lower)) { _synYes(); return; }
+    if (/^(n|no|refuse|decline|nope|never)/.test(lower)) { _synNo(); return; }
+    _say("Tan waits, entirely comfortable. It was not really a question.", "dim");
+    _synPrompt();
     return;
   }
 
