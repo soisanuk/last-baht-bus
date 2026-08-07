@@ -128,6 +128,31 @@ test("regeneration is stable — a reorder in world.js is not a content change",
     "a timestamp would make the sync test fail on every run");
 });
 
+test("the export says which venues are actually verified", () => {
+  // LBB ships one playable mode because the geography outside the reworked
+  // districts is still suspect. Second Road has been told to honour the same
+  // restriction, and it can only do that if the boundary crosses as data.
+  const e = buildExport();
+  assert.ok(Array.isArray(e.playable.soi6), "keyed by mode name, so unlocking a district adds a key");
+  assert.equal(e.playable.soi6.length, SOI6_ROOMS.size, "…and it IS the engine's fence, not a copy of it");
+  assert.deepEqual(e.playable.soi6, [...SOI6_ROOMS].sort());
+  for (const id of e.playable.soi6) {
+    assert.ok(e.venues[id], `${id} is fenced-in but not a venue`);
+  }
+});
+
+test("the pocket cannot be re-derived by filtering on region", () => {
+  // The trap this exists to stop: four of the nineteen are region "Beach Road",
+  // and one of them is the bar the entire ownership chain is about. A consumer
+  // that filters `region === "Soi 6"` loses it and looks correct doing so.
+  const e = buildExport();
+  const byRegion = e.playable.soi6.filter(id => e.venues[id].region === "Soi 6");
+  assert.notEqual(byRegion.length, e.playable.soi6.length,
+    "if this ever passes, the trap is gone and the warning above can go too");
+  assert.equal(e.venues.stinky_bar.region, "Beach Road");
+  assert.ok(e.playable.soi6.includes("stinky_bar"), "…and the Stinky is in the pocket");
+});
+
 test("display names are marked English, so localisation can be added without a version bump", () => {
   const e = buildExport();
   assert.equal(e.lang, "en");
