@@ -374,3 +374,32 @@ test("no duplicate keys, and nothing is left untranslated", () => {
     .map(([en]) => en.slice(0, 60));
   assert.deepEqual(identical, [], "catalog value identical to its English key — forgotten translation?");
 });
+
+// ── command tokens survive translation ──────────────────────────────────────
+// The command-hint idiom is load-bearing twice over: an ALL-CAPS word in a line
+// is what the player TYPES, and it's what decorate() turns into a tap target.
+// Translate it and the German player is told to type a command the parser has
+// never heard of — a broken game, not a rough sentence.
+//
+// This is mechanical, so it must not depend on a reviewer noticing. For every
+// catalog entry, any ALL-CAPS token in the English key whose lowercase form is
+// a real engine verb must appear verbatim in the translation.
+//
+// Deliberately keyed on _COMPLETE_VERBS rather than "all CAPS": CAPS outside a
+// command is ordinary emphasis and SHOULD translate ("WALLET RECOVERED" ->
+// "BRIEFTASCHE WIEDER DA", "that is what the town is FOR" -> "DAFÜR").
+test("ALL-CAPS command words survive translation untouched", () => {
+  const verbs = new Set(_COMPLETE_VERBS.map(v => v.toLowerCase()));
+  const bad = [];
+  for (const [lang, cat] of Object.entries(_CATALOGS || {})) {
+    for (const [en, de] of Object.entries(cat)) {
+      for (const tok of en.match(/\b[A-Z][A-Z0-9]{2,}\b/g) || []) {
+        if (!verbs.has(tok.toLowerCase())) continue;
+        if (!de.includes(tok)) bad.push(`${lang}: "${tok}" lost in — ${en.slice(0, 70)}…`);
+      }
+    }
+  }
+  assert.deepEqual(bad, [],
+    "a typed command was translated; the player would be told to type a verb the parser " +
+    "doesn't know:\n" + bad.join("\n"));
+});

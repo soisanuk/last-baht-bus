@@ -1161,6 +1161,116 @@ const _CATALOGS = {
       "ein ledriger Auswanderer mit eigenen Darts im Gürteletui",
     "You're broke, so this one's for sanuk — and her professional pride.":
       "Du bist pleite, also geht die hier auf Sanuk — und auf ihren Berufsstolz.",
+    // ── de-sweep batch 5 (2026-08-07) — the quest journal ────────────────────
+    // Quest names and descs are world.js DATA, now routed through _L by the
+    // batch-4 render templating. Rules that bind every entry below:
+    //   · the (ALL CAPS IN PARENS) hints are literal typed commands AND the
+    //     decorate() tap targets — they stay English, capitalised, in parens.
+    //   · character and venue names stay as-is (they are tap targets too).
+    //   · no {{…}} braces needed on the league desc: the English suppressed a
+    //     collision with the host NPC "Win", and German "Gewinne" doesn't
+    //     contain that word.
+
+    "The White Dish Offer": "Das Angebot von White Dish",
+    "White Dish want to buy Bert's bar out from under its dying owner. Get him the real picture — the history (ASK TERRY ABOUT WHITE DISH), the inside view (ASK KESINEE at the Kitten Corner ABOUT WHITE DISH), and the pitch (ASK GAVIN at the Golden Dragon ABOUT THE OFFER) — then tell Bert (ASK BERT ABOUT THE OFFER).":
+      "White Dish will Berts Bar dem sterbenden Besitzer unter dem Hintern wegkaufen. Verschaff ihm das ganze Bild — die Vorgeschichte (ASK TERRY ABOUT WHITE DISH), die Sicht von innen (ASK KESINEE at the Kitten Corner ABOUT WHITE DISH) und das Angebot selbst (ASK GAVIN at the Golden Dragon ABOUT THE OFFER) — und dann sag es Bert (ASK BERT ABOUT THE OFFER).",
+
+    "Gavin's Errand": "Gavins Botengang",
+    "Gavin would like a quiet favour: have a word with Bert about selling the Stinky to White Dish. \"Friend to friend. Soften him up. Everyone wins, and White Dish looks after its friends.\" (Take it to Bert — ASK BERT ABOUT SELLING — or don't. No one's forcing you.)":
+      "Gavin hätte gern einen stillen Gefallen: Red mal mit Bert darüber, das Stinky an White Dish zu verkaufen. „Von Freund zu Freund. Mach ihn weich. Alle gewinnen, und White Dish kümmert sich um seine Freunde.“ (Trag es zu Bert — ASK BERT ABOUT SELLING — oder lass es. Dich zwingt niemand.)",
+
+    "The President's Table": "Der Tisch des Präsidenten",
+    "Get eyes on the Orchid Room's good table — the back room off the Pink Lotus — and see who really holds it, then tell Doyle (ASK DOYLE ABOUT THE TABLE).":
+      "Wirf einen Blick auf den guten Tisch im Orchid Room — dem Hinterzimmer hinter dem Pink Lotus — und sieh nach, wer ihn wirklich hält, dann sag es Doyle (ASK DOYLE ABOUT THE TABLE).",
+
+    "The Silent Partner": "Der stille Teilhaber",
+    "Wayne's about to sign as the farang face of a bar he'll never really own. Once you've seen how White Dish works, set him straight (ASK WAYNE ABOUT THE PARTNER).":
+      "Wayne unterschreibt gleich als Farang-Gesicht einer Bar, die ihm nie wirklich gehören wird. Wenn du erst mal gesehen hast, wie White Dish arbeitet, sag ihm die Wahrheit (ASK WAYNE ABOUT THE PARTNER).",
+
+    "The Old Days": "Die alten Zeiten",
+    "Buy Roy's time and let the old soi come back to him — the bars before the brands, and the ghosts still propping the place up (ASK ROY ABOUT THE OLD DAYS).":
+      "Kauf dir Roys Zeit und lass die alte Soi zu ihm zurückkommen — die Bars vor den Marken, und die Geister, die den Laden immer noch stützen (ASK ROY ABOUT THE OLD DAYS).",
+
+    "Easy Come": "Wie gewonnen",
+    "Macca's redundancy is going out faster than he'll admit. Give him the honest maths (ASK MACCA ABOUT THE PAYOUT).":
+      "Maccas Abfindung geht schneller raus, als er zugeben will. Rechne es ihm ehrlich vor (ASK MACCA ABOUT THE PAYOUT).",
+
+    "A Quiet One": "Ein Stiller",
+    "Pete is sitting on something heavy. Earn his trust and hear it (ASK PETE ABOUT THE NAME).":
+      "Pete trägt etwas Schweres mit sich herum. Verdien dir sein Vertrauen und hör es dir an (ASK PETE ABOUT THE NAME).",
+
+    "Her Brother": "Ihr Bruder",
+    "Rob's ex-wife's brother rides with the club in the Orchid's back room. Carry his word if you ever get in there (ASK ROB ABOUT THE BROTHER).":
+      "Der Bruder von Robs Ex-Frau fährt mit dem Club im Hinterzimmer des Orchid. Nimm seine Botschaft mit, falls du je da reinkommst (ASK ROB ABOUT THE BROTHER).",
+
+    "The Wrong Photo": "Das falsche Foto",
+    "Somewhere in Barry's eleven years of trophy snaps is one he shouldn't have. Get a proper look once you know what you're looking at (ASK BARRY ABOUT THE PHOTO).":
+      "Irgendwo in Barrys elf Jahren Trophäenfotos ist eins, das er nicht haben sollte. Sieh es dir richtig an, sobald du weißt, wonach du suchst (ASK BARRY ABOUT THE PHOTO).",
+
+    "The Sister-Bar Run": "Die Tour zur Schwesterbar",
+    "Carry Candy's gift bottle of Sang Som to Bee (GIVE SANG SOM TO BEE).":
+      "Bring Candys Geschenkflasche Sang Som zu Bee (GIVE SANG SOM TO BEE).",
+
+    "King of the Killer Table": "König des Killer-Tisches",
+    "{{Win}} a killer pool league night — every third night, ฿100 entry (PLAY KILLER).":
+      "Gewinne einen Killer-Pool-Ligaabend — jede dritte Nacht, ฿100 Startgeld (PLAY KILLER).",
+
+    "Bee's First Investor": "Bees erster Investor",
+    "Bee wants her expansion fund taken seriously: get her number (CONTACT BEE) and wire ฿100 through the banking app (SEND 100 TO BEE).":
+      "Bee will, dass ihr Expansionsfonds ernst genommen wird: Besorg dir ihre Nummer (CONTACT BEE) und überweis ฿100 über die Banking-App (SEND 100 TO BEE).",
+
+    "The Man Out of Time": "Der Mann aus der Zeit gefallen",
+    "Sit with Glam a while and let him tell you about the tour (ASK GLAM ABOUT MUSIC).":
+      "Setz dich eine Weile zu Glam und lass ihn von der Tour erzählen (ASK GLAM ABOUT MUSIC).",
+
+    "The Foreman's Keys": "Die Schlüssel des Poliers",
+    "Carry her late husband's site keys to the bar he built, for the shrine (GIVE KEYS TO DIAMOND).":
+      "Bring die Baustellenschlüssel ihres verstorbenen Mannes in die Bar, die er gebaut hat, für den Schrein (GIVE KEYS TO DIAMOND).",
+
+    "The Quiet Money": "Das stille Geld",
+    "Nobody asks the Samson brothers where the seed money came from. Ask the man out of time instead (ASK GLAM ABOUT HIS SONS).":
+      "Niemand fragt die Samson-Brüder, woher das Startkapital kam. Frag stattdessen den Mann, der aus der Zeit gefallen ist (ASK GLAM ABOUT HIS SONS).",
+
+    "Family": "Familie",
+    "Wimon thinks you have earned the whole of it, and gives her blessing to ask (ASK DIAMOND ABOUT GLAM).":
+      "Wimon findet, du hast dir die ganze Geschichte verdient, und gibt ihren Segen zu fragen (ASK DIAMOND ABOUT GLAM).",
+
+    "Candy's Competition Recce": "Candys Erkundung der Konkurrenz",
+    "Walk the new drinking strips with your eyes open — Myth Night's container rows, Tree Town's far lane, and the quiet middle stretch of Soi 6.":
+      "Lauf die neuen Kneipenmeilen mit offenen Augen ab — die Containerreihen von Myth Night, die hintere Gasse von Tree Town und das ruhige Mittelstück der Soi 6.",
+
+    "A Scout for Petch": "Ein Scout für Petch",
+    "Carry the revue flyer to Diamond — she danced with half of Alcazar in her day, and her scout friend owes her a favour (GIVE FLYER TO DIAMOND).":
+      "Bring den Revue-Flyer zu Diamond — sie hat seinerzeit mit dem halben Alcazar getanzt, und ihre Scout-Freundin schuldet ihr einen Gefallen (GIVE FLYER TO DIAMOND).",
+
+    "The Collection Run": "Die Inkasso-Tour",
+    "฿500 to jog a deadbeat's memory — no rough stuff, just find Fergie in his maze and ASK him ABOUT THE DEBT.":
+      "฿500 dafür, dem Gedächtnis eines Schuldners auf die Sprünge zu helfen — nichts Grobes, find einfach Fergie in seinem Labyrinth und ASK him ABOUT THE DEBT.",
+
+    "The Shamrock Dog": "Der Shamrock-Hund",
+    "Bert swears your dog is the old Shamrock bar dog, out on Soi Khao Talo. Walk him out to the dead pub and let him see it.":
+      "Bert schwört, dein Hund sei der alte Barhund vom Shamrock, draußen an der Soi Khao Talo. Lauf mit ihm raus zum toten Pub und lass ihn es sehen.",
+
+    // Act One's own journal block — the founding adventure isn't a QUESTS entry,
+    // so its header and milestone labels need their own keys. The labels are
+    // _L'd individually because the line is composed with a ✓/· marker.
+    "▶ The Last Baht Bus — find your wallet, get back to room 412 in Naklua.":
+      "▶ Der letzte Baht-Bus — finde deine Brieftasche, zurück auf Zimmer 412 in Naklua.",
+    "Worked out where you were last night": "Herausgefunden, wo du letzte Nacht warst",
+    "Learned who lifted the wallet": "Erfahren, wer die Brieftasche mitgehen ließ",
+    "Traced the wallet to Madam Oy": "Die Brieftasche bis zu Madam Oy verfolgt",
+    "Learned the office door trick": "Den Trick mit der Bürotür gelernt",
+    "Clue: the number 71": "Hinweis: die Zahl 71",
+    "Clue: the lucky 9": "Hinweis: die Glückszahl 9",
+    "WALLET RECOVERED": "BRIEFTASCHE WIEDER DA",
+
+    // _questWhere — the live "where" clause shared by HINT and the QUESTS journal.
+    // Both article variants map to one German line: German takes no article
+    // before a proper venue name, so there is nothing to guess at.
+    " {who} is at {v}, over in {r}.": " {who} ist im {v}, drüben in {r}.",
+    " That's {v}, in {r}.": " Das ist {v}, drüben in {r}.",
+    " That's the {v}, in {r}.": " Das ist {v}, drüben in {r}.",
+
     "Last call — the mamasan taps her watch: about half an hour to closing. This place shuts at midnight, so if you mean to take a lady home tonight, now is the moment to BARFINE. After the shutters come down it's the street.":
       "Letzte Runde — die Mamasan tippt auf ihre Uhr: noch etwa eine halbe Stunde bis Feierabend. Der Laden macht um Mitternacht zu, wenn du also heute Nacht eine Lady mitnehmen willst, ist jetzt der Moment für BARFINE. Wenn die Rollläden unten sind, bleibt nur noch die Straße.",
   },
