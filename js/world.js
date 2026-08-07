@@ -9070,6 +9070,25 @@ const POPULAR_GIRLS = ["fon", "gift", "noi", "pim"];
 // Klang corner (north end — the game graph hangs it off Buakhao south), and
 // the real police station is on Soi 9 SOUTH of Central Festival (the graph
 // walks north from the mall).
+//
+// DISTRICT PASSES — 4 DECIMALS IS SKETCHED, 5 IS SURVEYED. The map is being
+// pinned district by district against OSM, and the decimal count is the marker
+// of which have had their pass. Don't "tidy" a 5dp district back to 4.
+//
+//   Soi 6 + its Beach Road foot — DONE 2026-08-08, the first pass and the
+//   center of truth. Laid along the real ซอยพัทยา 6: 359 m, west end
+//   12.942883/100.884751 at Beach Road, east end 12.941817/100.887880 at
+//   Second Road. It runs ESE, dropping 118 m of latitude on the way, which is
+//   why the old dead-flat 108 m strip could never have read as a street.
+//
+// Known consequence, deliberately left for the next pass rather than fudged:
+// moving the Soi 6 junction ~220 m east to its true spot puts a kink in Beach
+// Road, so `pattaya_klang —w→ beach_rd_n` audits worse than before. Beach Road
+// south to Walking Street is the next segment; it fixes itself there.
+//
+// Pin each district on its OWN real coordinates, never by chaining off the
+// last one — a chain accumulates every previous district's drift. Adjacency is
+// the CHECK that they meet, not the source.
 const ROOM_GEO = {
   // Jomtien
   jomtien_beach:    [12.8890, 100.8688],
@@ -9147,26 +9166,26 @@ const ROOM_GEO = {
   promenade:        [12.9357, 100.8737],
   central_mall:     [12.9352, 100.8768],
   police_station:   [12.9330, 100.8757],
-  beach_rd_n:       [12.9425, 100.8827],
-  stinky_bar:       [12.9424, 100.8829],
-  blue_dog:         [12.9427, 100.8824],
-  north_beach:      [12.9427, 100.8805],
+  beach_rd_n:       [12.94288, 100.88475],
+  stinky_bar:       [12.94275, 100.88459],
+  blue_dog:         [12.94309, 100.88471],
+  north_beach:      [12.94324, 100.88371],
   // Soi 6 (Soi Yodsak) — runs inland east off Beach Road: west end, middle, east end
-  soi6_street:      [12.9448, 100.8858],
-  pink_lotus:       [12.9452, 100.8857],
-  orchid_room:      [12.9453, 100.8856],
-  golden_dragon:    [12.9447, 100.8858],
-  sunset_dreams:    [12.9445, 100.8859],
-  soi6_mid:         [12.9448, 100.8863],
-  queen_vic:        [12.9449, 100.8863],
-  qv_room:          [12.9449, 100.8863],
-  sunset_rail:      [12.9447, 100.8862],
-  bay_watch:        [12.9450, 100.8863],
-  sandy_toes:       [12.9446, 100.8864],
-  soi6_deep:        [12.9448, 100.8868],
-  kitten_corner:    [12.9450, 100.8869],
-  cherry_pop:       [12.9446, 100.8867],
-  ruby_kiss:        [12.9451, 100.8870],
+  soi6_street:      [12.94265, 100.88544],
+  pink_lotus:       [12.94285, 100.88530],
+  orchid_room:      [12.94285, 100.88530],
+  golden_dragon:    [12.94251, 100.88539],
+  sunset_dreams:    [12.94272, 100.88568],
+  soi6_mid:         [12.94230, 100.88647],
+  queen_vic:        [12.94253, 100.88623],
+  qv_room:          [12.94253, 100.88623],
+  sunset_rail:      [12.94219, 100.88633],
+  bay_watch:        [12.94240, 100.88662],
+  sandy_toes:       [12.94206, 100.88671],
+  soi6_deep:        [12.94198, 100.88741],
+  kitten_corner:    [12.94218, 100.88727],
+  cherry_pop:       [12.94184, 100.88736],
+  ruby_kiss:        [12.94205, 100.88765],
   // Naklua
   naklua_rd:        [12.9530, 100.8885],
   orchid_club:      [12.9524, 100.8876],
