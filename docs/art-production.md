@@ -6,49 +6,69 @@ after the portrait migration finishes.
 
 ## Measured, not estimated
 
+Re-measured 2026-08-08 (later the same day, after the Soi 6 art pass):
+
 | | files | on disk |
 | --- | --- | --- |
 | `web/portraits/` | 277 | **125 MB** |
 | `web/portraits/pics/` | 18 | 25 MB |
 | `web/art/rooms/` | 33 | 12 MB |
 | `web/art/regions/` | 15 | 5.5 MB |
+| `web/art/filler/` | 11 | 4.1 MB |
 | **`web/` total** | | **149 MB** |
 | `.git` | | **324 MB** |
 
-The portraits split cleanly in two: **205 are pixel-art placeholders under 10 KB**,
-and **72 are generated SDXL portraits at 832×1088, averaging ~1.4 MB** (largest
-1.59 MB). Nothing sits in between.
+The portraits split cleanly in two: **205 are pixel-art placeholders averaging
+0.4 KB**, and **72 are generated SDXL portraits at 832×1088, averaging 1.44 MB**
+(largest 1.67 MB). Nothing sits in between — there is no middle tier to trim,
+which is why this is a format problem and not a compression one.
 
 ## The number that actually matters
 
 **The migration is 26% done.** 72 of 277 portraits have been replaced with
 generated art. At the current average, finishing it means:
 
-> **~388 MB of portraits alone**, before any new characters, and before scene
-> art (33 of 176 rooms so far) goes the same way.
+> **~400 MB of portraits alone**, before any new characters, and before scene
+> art goes the same way.
 
 So this isn't a 125 MB problem. It's a ~400 MB problem that is 26% arrived, and
 every batch of generated art makes the eventual cleanup more expensive.
 
+**Scene art is a second curve, not a footnote.** 21.6 MB today across
+rooms/regions/filler, held under a 400 KB per-file budget — but that's 33 of 176
+rooms. Finished, it's **~70 MB**, and it's growing faster than portraits right
+now because a region shot covers many rooms and hero rooms keep overriding them.
+The same WebP argument applies to it unchanged.
+
 ## Nothing displays these anywhere near full size
 
-| where | rendered at |
-| --- | --- |
-| LBB `Here:`/`At the rail:` inline avatars | ~24–32 px |
-| LBB flyout wheel header (`.fly-portrait`) | **140 px** — the largest anywhere |
-| Second Road roster card | 64 × 78 px |
-| LBB scene panel | ≤ ~800 px wide |
+| where | rendered at | CSS |
+| --- | --- | --- |
+| LBB `Here:`/`At the rail:` inline avatars | **20 px** | `.kw-av` |
+| LBB scene-panel cast row | **52 px** | `#scene-cast .bust img` |
+| Second Road roster card | 64 × 78 px | |
+| LBB flyout wheel header | **140 px** — the largest anywhere | `.fly-portrait` |
+| LBB scene backdrop | ≤ 820 × 210 px | `#scene-art img` |
 
 The biggest portrait display in either game is 140 px. Serving an 832×1088 PNG
 for it is roughly **50× the pixels needed**, and about **30× the bytes**.
+
+Note the **cast row at 52 px** is the most *frequent* portrait display in LBB —
+it repaints every time you enter a room, for everyone present. The 140 px flyout
+is the largest but the rarest.
 
 ## What to do
 
 ### 1. A thumbnail track, generated at the source
 
-`portraits/thumb/<id>.webp` at **192 px** on the long edge — covers the 140 px
-flyout at ~1.4×, the roster at 3×, and inline avatars at 6×. Expect **20–40 KB**
-each at WebP q80 for painterly output, against 1.4 MB now: **~97% smaller**.
+`portraits/thumb/<id>.webp` at **384 px** on the long edge. Expect **60–100 KB**
+each at WebP q80 for painterly output, against 1.44 MB now: **~93% smaller**.
+
+**Why 384 and not 192.** The flyout is a 140 px *CSS* box, and a 3× phone renders
+that at ~420 device pixels — a 192 px source would be visibly soft on exactly the
+display it was sized for. 384 px is 2× the largest consumer, covers the 52 px cast
+row at 7× and the 20 px inline avatars at 19×, and still throws away ~93% of the
+bytes. Device-pixel-ratio is the thing that makes the obvious 192 px answer wrong.
 
 Generate it in `portrait_gen` alongside the full render, not as a later
 conversion pass in LBB. The generator is the source of truth for what a
@@ -67,6 +87,25 @@ PNG for this material with no visible loss at display size.
 **Keep PNG for the 205 pixel-art placeholders** — flat-colour 24×24 art is
 already tiny and PNG is the right format for it. This is a two-track problem and
 treating it as one is how you end up degrading the pixel art.
+
+#### `.png` is hardcoded in four places — this is not a drop-in swap
+
+Worth knowing before starting, because a reader would otherwise hit it cold:
+
+| file | what assumes `.png` |
+| --- | --- |
+| `web/js/scene.js` | the whole fallback chain — `art/rooms/<id>.png`, `art/regions/<slug>.png`, and the `_sceneHas` check |
+| `web/js/term.js` | `portraits/<id>.png` and `portraits/pics/<pic>.png` |
+| `tests/js/art.test.js` | asserts every art file ends `.png` |
+| `tests/js/portraits.test.js` | asserts PNG magic bytes |
+
+`docs/art-pipeline-spec.md` also states the hardcoding as a deliberate contract
+("the shipped fallback chain hardcodes `.png`"), so that line needs updating too.
+
+The clean route is **extension-agnostic lookup with `.webp` → `.png` fallback**,
+mirroring the existing room → region → nothing chain. That keeps the migration
+incremental in exactly the way this doc argues for: a character or room converts
+the moment its WebP lands, with no flag day and no broken intermediate state.
 
 ### 3. Extend the budget guard to portraits
 

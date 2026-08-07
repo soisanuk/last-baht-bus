@@ -121,7 +121,7 @@ This is the first task and it costs a day. Nothing else starts until it's done.
 | **s2** | One bar, one season, no UI beyond text. The loop proven headless. **DONE 2026-08-08** — the Stinky, 52 weeks, 20 tests; generated weeks read | s1 |
 | **s3** | The map (`ROOM_GEO`) + roster (portraits). The first real 2D. **DONE 2026-08-08** — 176 venues plotted, roster with real faces, 21 tests | s2 |
 | **s4** | Second bar, delegation, the trust mechanic. The actual game. **DONE 2026-08-08** — allocation across venues, managers, the ambiguous float; 30 tests | s3 |
-| **s5** | Factions as strategy: the Darkside family, WDG's fragility. | s4 |
+| **s5** | Factions as strategy: the Darkside family, WDG's fragility. **PART DONE 2026-08-08** — two powers, per-region friction, standing that doesn't transfer; WDG's fragility still unbuilt | s4 |
 
 s2 before s3 is deliberate: prove the loop in text where it's cheap to change,
 and only then spend on pixels. The same discipline that kept LBB's engine
@@ -296,8 +296,21 @@ venue-agnostic and runs against any Darkside bar today, but the *canon* second
 bar needs a room in `world.js` first — which LBB arguably wants anyway, since the
 Shamrock is a real place in the fiction that currently exists only as talk.
 
-**Next: s5** — factions as strategy (the Darkside family, WDG's fragility), and
-the Shamrock room in LBB.
+**The Shamrock is a room here now** (2026-08-08) — not gated, because a
+boarded-up pub isn't unfinished content and gating it would have meant weakening
+the reachability test for no reader-facing benefit. It carries `bar` (trading
+name) and `closed: true` separately from its room label, after Second Road
+printed *"the float at The Shamrock (closed)"* — state leaking across a boundary
+as prose.
+
+**s5 is part done.** Two powers, per-region friction, and the rule that matters:
+**standing does not transfer.** Same week and seed, one bar in town and one out
+east, solid with Tan and nothing with the family — town costs ฿21,000, the
+Darkside ฿29,400. Reversing the standings reverses the numbers.
+
+Still unbuilt in s5: **WDG's fragility** — the cash-hungry rollup whose position
+rests on continuing to pay, and which nobody would need to *do* anything to;
+they'd only need to stop being helped. `docs/factions-thai.md` has the argument.
 
 **Next: the Second Road repo.** Needs a location decision (sibling to
 `last-baht-bus`, same origin as the trainer is the cheap answer).
