@@ -341,12 +341,23 @@ books, only symptoms: shortened hours nobody announced, a refit where the
 scaffolding is still up and the men are not. The real tell is the *terms* of the
 offer.
 
-**Still blocked HERE, not there: the manager-on-duty drop-in.** LBB has no
-manager role — Bert has no player verbs, and there's no framing for a night where
-you answer for the room without owning it. Second Road deliberately didn't fake
-it, because a drop-in identical to the owner's with different wording is worse
-than none. If you want that role, it's LBB content: a way to play a night as
-staff.
+**The manager-on-duty drop-in will not be built, and that's a decision rather
+than a queue item** — I first recorded it as "blocked on LBB content", which was
+the wrong framing.
+
+Mechanically it re-skins the owner: same rail, same events, same soi given up,
+with stakes as the only real difference. And the fiction doesn't hold — if you
+own the bar, the coherent "manager on duty" is *Ploy*, not you, and **LBB is a
+game about being a farang on the soi.** Barfine, freelancers, the soi dog, the
+last bus: the verb set and every encounter assume a farang customer. A Thai
+woman's night running a bar is a different content set wearing this engine, which
+is a creative decision about what to write, not a role to add.
+
+The need was met anyway: seeing your room from outside is what the **punter**
+drop-in does, and it cost LBB nothing. Second Road ships a **manager's report**
+instead — she tells you what her week contained, and it's deliberately identical
+whether or not she's taking something, because she's honest about the room and
+the room genuinely is fine.
 
 **Next: the Second Road repo.** Needs a location decision (sibling to
 `last-baht-bus`, same origin as the trainer is the cheap answer).
