@@ -44,6 +44,21 @@ test("it carries what a macro game actually needs", () => {
   assert.equal(bert.manager, true, "roles a macro game hires and fires on");
 });
 
+test("the export says which art track each portrait is on", () => {
+  // A consumer can't tell a 96×96 pixel bust from an 832×1088 render without
+  // fetching and measuring, and they need different crops — Second Road got this
+  // wrong first and a character came out unrecognisable. So the boundary reports
+  // it. See the art contract in Second Road's HANDOFF §2b.
+  const e = buildExport();
+  assert.ok(Array.isArray(e.renders));
+  assert.ok(e.renders.length > 0, "some of the cast has been through the art pipeline");
+  assert.ok(e.renders.length < e.portraits.length, "and some of it is still pixel art");
+  for (const id of e.renders) {
+    assert.ok(e.portraits.includes(id), `${id} is a render but not a portrait`);
+  }
+  assert.equal(e.renders.includes("bert"), true, "Bert has been generated");
+});
+
 test("night content does not cross — the boundary is the point", () => {
   const raw = JSON.stringify(buildExport());
   // dialogue is ~90% of world.js and none of it is usable at macro scale
