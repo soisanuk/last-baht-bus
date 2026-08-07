@@ -23,12 +23,12 @@ var NEWS_FEED = [
     "d": "06 Aug 2026"
   },
   {
-    "t": "Koh Samui builds foreign eyes and ears network against tourism crime",
+    "t": "Pattaya Police arrest pair linked to 50 water meter thefts",
     "s": "Pattaya Mail",
     "d": "06 Aug 2026"
   },
   {
-    "t": "Pattaya Police arrest pair linked to 50 water meter thefts",
+    "t": "Koh Samui builds foreign eyes and ears network against tourism crime",
     "s": "Pattaya Mail",
     "d": "06 Aug 2026"
   },
@@ -43,45 +43,45 @@ var NEWS_FEED = [
     "d": "06 Aug 2026"
   },
   {
-    "t": "Three teachers and three students killed in Thailand school shooting",
+    "t": "Teachers and students killed in Thailand school shooting",
     "s": "CNN",
     "d": "07 Aug 2026"
   },
   {
-    "t": "Leader of Myanmar’s military-backed government seeks political legitimacy in Thailand visit",
-    "s": "AP News",
-    "d": "06 Aug 2026"
+    "t": "Trump defends Pete Hegseth and school shooting leaves multiple dead in Thailand: Morning Rundown",
+    "s": "NBC News",
+    "d": "07 Aug 2026"
   },
   {
-    "t": "Myanmar leader breaks diplomatic isolation on first official visit to Thailand since coup",
-    "s": "BBC",
-    "d": "06 Aug 2026"
+    "t": "At least five killed in Thailand school shooting, police say",
+    "s": "Al Jazeera",
+    "d": "07 Aug 2026"
   },
   {
-    "t": "Myanmar's Min Aung Hlaing visits Thailand in quest for legitimacy",
+    "t": "Thailand high school shooting leaves 5 dead after teen suspect kills his grandparents, officials say",
+    "s": "CBS News",
+    "d": "07 Aug 2026"
+  },
+  {
+    "t": "Thailand shooting incidents in recent years",
     "s": "Reuters",
-    "d": "05 Aug 2026"
+    "d": "07 Aug 2026"
   },
   {
-    "t": "Irish man dies in Thailand",
-    "s": "RTE.ie",
-    "d": "06 Aug 2026"
-  },
-  {
-    "t": "Thailand to ramp up creative cities drive",
-    "s": "Bangkok Post",
-    "d": "06 Aug 2026"
+    "t": "Student killed at least 6 in shooting at high school in Thailand, authorities say",
+    "s": "KCBD",
+    "d": "07 Aug 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-08-06","USD":33.07,"AUD":23.28,"GBP":44.52,"EUR":38.17};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-07","temp":31,"humid":73,"code":95,"hi":31,"rain":78};
+var WX_NOW = {"date":"2026-08-07","temp":27,"humid":92,"code":3,"hi":31,"rain":78};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-08-01","first":"932479","last2":"69","front3":["413","672"],"back3":["039","154"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4287,"date":"2026-08-07","baht":67050};
+var GOLD = {"usd":4357,"date":"2026-08-07","baht":68150};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":64351,"thb":2129806};
+var BTC = {"usd":65211,"thb":2147398};
