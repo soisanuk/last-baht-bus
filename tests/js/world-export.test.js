@@ -71,6 +71,30 @@ test("a venue's trading name is separate from its room label", () => {
   assert.match(s.name, /closed/, "while OUR label still says what it is here");
 });
 
+test("the export says which portraits have a thumbnail", () => {
+  // Consumers use this to decide whether to TRY the thumb chain. Guessing costs
+  // a 404 per portrait without one, and 205 of 277 are pixel art that will never
+  // have one — 205 wasted requests on a roster view.
+  const e = buildExport();
+  assert.ok(Array.isArray(e.thumbs));
+  for (const id of e.thumbs) {
+    assert.ok(e.renders.includes(id), `${id} has a thumb but isn't a render`);
+  }
+  const noThumb = e.renders.filter(id => !e.thumbs.includes(id));
+  assert.deepEqual(noThumb, [], "every render should have one — run portrait_gen's thumb pass");
+});
+
+test("the baked thumb list matches the export", () => {
+  // term.js has no module loader and can't fetch (it must work from file://), so
+  // the thumb set is baked as a classic-script global. Two sources of truth is
+  // one too many, so this pins them together.
+  const js = readFileSync(
+    fileURLToPath(new URL("../../web/js/portrait-thumbs.js", import.meta.url)), "utf8");
+  const ids = JSON.parse(js.match(/new Set\((\[[^)]*\])\)/)[1]);
+  assert.deepEqual(ids.sort(), [...buildExport().thumbs].sort(),
+    "web/js/portrait-thumbs.js is stale — run: node tools/gen-world-export.mjs");
+});
+
 test("night content does not cross — the boundary is the point", () => {
   const raw = JSON.stringify(buildExport());
   // dialogue is ~90% of world.js and none of it is usable at macro scale
