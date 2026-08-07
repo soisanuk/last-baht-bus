@@ -7069,6 +7069,112 @@ const QUESTS = {
   },
 };
 
+// ── Procurement: how work actually gets given out ───────────────────────────
+// Once you own a bar, every improvement to it is a procurement decision, and
+// procurement runs through whoever your partners are. Cleaning, mounting a
+// screen, a till system — you do not shop around, and you do not do it
+// yourself. The last one matters: a farang up a ladder with a drill isn't being
+// thrifty, he's taking work off Thai people, and everyone around him will read
+// it that way.
+//
+// The frame this content holds (see engine-systems _synAsk): this is not
+// corruption being discovered. It is how business is done, here and everywhere
+// — the only local difference is that nobody troubles to pretend otherwise.
+// So no character treats it as a scandal, and the words "bribe" and
+// "corruption" never appear. Gavin's "White Dish looks after its friends" is
+// the identical sentence in a British accent.
+//
+// Refusing is allowed and nothing is DONE to you. You simply stop being helped,
+// which for a business arrives as weather rather than as an event.
+const SYNDICATE_JOBS = [
+  {
+    id: "cleaning",
+    first: true,                        // the induction: stated, not asked
+    lead: "\"Now. The cleaning.\"",
+    ask: "It is not a question, and it isn't framed as one. Tan says it the way he " +
+      "would tell you which road is shut — a thing already arranged, mentioned only " +
+      "so you aren't surprised by it. \"I have three women. Good women, they do the " +
+      "Orchid and two of the hotels. They will do your bar — morning, before you are " +
+      "awake, you never see them.\" He names a monthly figure that is neither cheap " +
+      "nor a swindle; it is simply the number. \"You pay them direct, not me. I take " +
+      "nothing, my friend, you know this.\"",
+    whoLabel: "ask who they are",
+    who: "\"They are Burmese.\" He says it as flatly as he said the number. \"Most " +
+      "of the cleaning in this town is Burmese, and most of the building, and most of " +
+      "the kitchens you have eaten in this week. You did not notice, which is the job " +
+      "done properly.\"\n\n\"They speak Thai — enough for the market, enough for " +
+      "the police if they are polite. Reading, no. That is the part that makes " +
+      "trouble.\" A small movement of the hand, dismissing his own digression. " +
+      "\"Anyway. They are reliable, they do not steal, and if you keep them then some " +
+      "other things become easier for you also. Not from me. Just — easier.\"",
+    yes: "\"Good.\" That is the whole of his reaction; he is already texting " +
+      "somebody.\n\nThey start Thursday. They are very good, the bar has never been " +
+      "this clean, and Bert — who has opinions about most things — has none about this " +
+      "at all. \"Best cleaners on the Darkside, bud. Wouldn't ask where they came " +
+      "from.\"",
+    perk: "The bin men, who used to come when they came, now come. And the uncle who " +
+      "brings the beer up from Sattahip in a Hilux with one working door starts quoting " +
+      "you the price he quotes everybody inside — not the price on the invoice. He does " +
+      "it without ceremony: says a smaller number, starts unloading.",
+    no: "\"Ah.\" A nod, perfectly pleasant. \"Then you will find somebody. It is not " +
+      "difficult.\"\n\nAnd he's right; it isn't. You hire two women through Bert, " +
+      "they're fine, the bar is clean enough.",
+  },
+  {
+    id: "screen",
+    lead: "\"The football. You need a screen.\"",
+    ask: "He has evidently already discussed this with Bert, and possibly with the " +
+      "regulars. \"Big one, behind the bar, on the bracket — and the wiring done " +
+      "properly, in the trunking, not taped along the beam like the Water Buffalo.\" " +
+      "A number, again without any theatre about it. \"My wife brother-in-law does the " +
+      "hotels. Two men, one morning.\"",
+    whoLabel: "ask why not do it yourself",
+    // the rule stated by a character, not explained by the narrator
+    who: "You mention, mildly, that you could put a bracket up yourself and save the " +
+      "money.\n\nThe pause is very short and entirely good-natured, and it is the " +
+      "first time all night he looks at you as though you have said something foreign. " +
+      "\"No, no.\" He is smiling. \"My friend — you, up a ladder, with a drill, in " +
+      "your own bar, where everybody can see.\" He lets you picture it. \"That is " +
+      "work. Thai people do that work. You take it from them and you save — what, six " +
+      "thousand baht? And every man on this soi knows the farang does his own wiring " +
+      "because he will not pay.\"\n\nA shrug, the subject closed. \"You are the " +
+      "owner. Owning is your job. Let the men who do the work do the work.\"",
+    yes: "Two men arrive at nine, are finished by one, and take tea rather than beer " +
+      "because they are working. The trunking is straight. The screen is enormous and " +
+      "sits exactly level, which you only notice because the one at the Water Buffalo " +
+      "never has.",
+    perk: "Neither of them will take a tip. A week later a man you have never met " +
+      "reboots your frozen till over the phone, for nothing, because he owes somebody " +
+      "who owes somebody.",
+    no: "\"Of course.\" No shift in tone at all. \"There are many people who do " +
+      "this.\"\n\nThere are. The two lads you find are cheaper by half and pleasant " +
+      "company, and the bracket goes up in an afternoon, and it is fine.",
+  },
+  {
+    id: "pos",
+    lead: "\"And the till.\"",
+    ask: "\"That box is from before the flood. When it dies on a Saturday you will " +
+      "lose the whole night, and it will die on a Saturday, because that is when they " +
+      "die.\" He does not oversell it; he never does. \"There is a company. They do " +
+      "the Orchid, the Golden Dragon, four hotels. They come out same day, always. It " +
+      "is not the cheapest and it is not close to the cheapest.\"",
+    whoLabel: "ask what you're really paying for",
+    who: "\"You are paying for same day.\" He says it as though it were obvious, " +
+      "which it is. \"Anybody can sell you a till. On a Saturday in high season, when " +
+      "every bar on this coast has the same problem, you are one of forty phone calls " +
+      "— or you are one of the four they come to first.\"\n\nHe opens the car door. " +
+      "\"That is the only thing you ever buy in this country, my friend. Not the " +
+      "thing. The order of the phone calls.\"",
+    yes: "It costs what he said it would cost, which is too much. In August it dies on " +
+      "a Saturday at nine in the evening and a man is standing in your bar at ten past " +
+      "with the replacement under his arm, and you understand exactly what you bought.",
+    perk: "You are one of the four.",
+    no: "\"Mm.\" He considers the street for a moment. \"Then I hope it does not " +
+      "die on a Saturday.\"\n\nThe system you buy instead is genuinely good and " +
+      "genuinely cheaper, from a company in Bangkok with a very smart website.",
+  },
+];
+
 // ── Quiz night ──────────────────────────────────────────────────────────────
 // Thursday, 20:00–22:00, at three bars drawn fresh each week. Walk in during
 // the window and you're a contestant — the host does not take no.

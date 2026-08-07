@@ -241,3 +241,99 @@ test("he asks once, ever", () => {
   assert.equal(/Tan comes into your bar/.test(out.join("\n")), false,
     "tanAsked is set on the ask itself, so it can't re-fire after either answer");
 });
+
+// ── Procurement: how work gets given out, and the price of staying out ──────
+// Once you own the bar, cleaning / the screen / the till all run through
+// partners. The content's frame is that this is ordinary business here and
+// everywhere, so nothing in it is written as a scandal. Mechanically the rule
+// is: neutrality is ALWAYS available and nothing is ever blocked — refusing
+// costs you the frictionlessness, not the option.
+// like ownsBarWith above, but WITHOUT walking in — these tests control arrival
+// themselves, since arriving is what fires a procurement beat.
+function ownsBar(partner) {
+  becomeExpat();
+  for (const f of ["barPremises", "barLicence", "barPartner", partner, "barOpen"]) _setFlag(f);
+  G.nightTurn = 35;
+  G.room = "stinky_bar";
+}
+const arriveAtBar = () => {
+  if (G.syn) G.syn.lastAskDay = null;      // clear the one-a-night gate
+  out = []; _arriveAt("stinky_bar"); return out.join("\n");
+};
+
+test("procurement only comes to the Tan route, and only after the free favour", () => {
+  ownsBar("partnerCandy"); _setFlag("tanAsked");
+  arriveAtBar();
+  assert.notEqual(G.pendingChoice, "synjob", "Candy handles her own arrangements");
+
+  ownsBar("partnerTan");               // tanAsked NOT set: the favour comes first
+  arriveAtBar();
+  assert.notEqual(G.pendingChoice, "synjob", "the small free ask precedes the priced one");
+
+  _setFlag("tanAsked");
+  arriveAtBar();
+  assert.equal(G.pendingChoice, "synjob", "then the jobs start");
+});
+
+test("the jobs arrive in order, one a night", () => {
+  ownsBar("partnerTan"); _setFlag("tanAsked");
+  arriveAtBar();
+  assert.equal(G.synJob, SYNDICATE_JOBS[0].id, "cleaning is the induction");
+  say("yes");
+  out = []; _arriveAt("stinky_bar");       // same night — no second ask
+  assert.notEqual(G.pendingChoice, "synjob", "one procurement beat a night at most");
+  G.day++; arriveAtBar();
+  assert.equal(G.synJob, SYNDICATE_JOBS[1].id, "next night, next job");
+});
+
+test("saying yes buys the frictionless version", () => {
+  ownsBar("partnerTan"); _setFlag("tanAsked");
+  arriveAtBar();
+  const before = G.faction.syndicate || 0;
+  say("yes");
+  assert.ok(G.syn.done.cleaning, "the job is on the books");
+  assert.ok((G.faction.syndicate || 0) > before, "you're further inside");
+  assert.equal(G.pendingChoice, null);
+});
+
+test("staying out is allowed, costs no standing, and blocks nothing", () => {
+  ownsBar("partnerTan"); _setFlag("tanAsked");
+  arriveAtBar();
+  const no = say("no");
+  assert.equal(G.faction.syndicate || 0, 0,
+    "declining is not a deed against anybody — no standing moves");
+  assert.equal(G.faction.wdg || 0, 0, "and nothing is done to you anywhere else");
+  assert.ok(G.syn.friction >= 1, "what you lose is the frictionlessness");
+  // the work still happens — neutrality is priced, never blocked
+  assert.match(no, /you find somebody|hire two women|there are many people/i);
+});
+
+test("friction is weather at your own bar, and scales with how far outside you stay", () => {
+  ownsBar("partnerTan"); _setFlag("tanAsked");
+  arriveAtBar(); say("no");
+  G.room = "candy_bar"; out = []; _synFrictionTick();
+  assert.equal(out.length, 0, "somebody else's bar isn't your supply problem");
+
+  G.room = "stinky_bar";
+  let fired = 0;
+  for (let i = 0; i < 40; i++) { G.syn.frictionDay = null; out = []; _synFrictionTick(); if (out.length) fired++; }
+  assert.ok(fired > 0, "it should surface at your own bar");
+  assert.ok(fired < 40, "…without becoming a drumbeat");
+});
+
+test("the don't-do-it-yourself rule is stated by a character, not narrated", () => {
+  ownsBar("partnerTan"); _setFlag("tanAsked");
+  arriveAtBar(); say("yes");               // cleaning
+  G.day++; arriveAtBar();                  // the screen
+  const why = say("ask");
+  assert.match(why, /Thai people do that work|takes? it from them/i,
+    "a farang up a ladder is taking work, and Tan is the one who says so");
+});
+
+test("nothing in this thread is written as a scandal", () => {
+  // the frame is that this is ordinary business, here and everywhere — the only
+  // local difference being that nobody pretends otherwise
+  const prose = SYNDICATE_JOBS.map(j => [j.lead, j.ask, j.who, j.yes, j.perk, j.no].join(" ")).join(" ");
+  for (const word of [/\bbribe/i, /\bcorrupt/i, /\bkickback/i, /\bmafia/i])
+    assert.equal(word.test(prose), false, `procurement prose shouldn't reach for ${word}`);
+});
