@@ -116,22 +116,22 @@
 <line x1="147.4" y1="1241.3" x2="196.0" y2="1196.2" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="196.0" y1="1196.2" x2="201.4" y2="1243.3" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="201.4" y1="1243.3" x2="209.5" y2="1290.4" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
-<line x1="371.5" y1="632.8" x2="339.1" y2="685.8" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
-<line x1="371.5" y1="632.8" x2="449.8" y2="528.7" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
-<line x1="371.5" y1="632.8" x2="514.6" y2="685.8" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
-<line x1="371.5" y1="632.8" x2="344.5" y2="636.7" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
-<line x1="371.5" y1="632.8" x2="363.4" y2="642.6" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
-<line x1="371.5" y1="632.8" x2="358.0" y2="646.5" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
-<line x1="449.8" y1="528.7" x2="729.3" y2="370.1" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
-<line x1="449.8" y1="528.7" x2="430.9" y2="511.0" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
-<line x1="449.8" y1="528.7" x2="514.6" y2="520.9" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
-<line x1="449.8" y1="528.7" x2="460.6" y2="520.9" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
+<line x1="533.8" y1="626.3" x2="339.1" y2="685.8" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
+<line x1="533.8" y1="626.3" x2="643.9" y2="534.6" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
+<line x1="533.8" y1="626.3" x2="514.6" y2="685.8" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
+<line x1="533.8" y1="626.3" x2="548.6" y2="629.8" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
+<line x1="533.8" y1="626.3" x2="543.8" y2="635.9" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
+<line x1="533.8" y1="626.3" x2="543.8" y2="641.4" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
+<line x1="643.9" y1="534.6" x2="729.3" y2="370.1" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
+<line x1="643.9" y1="534.6" x2="632.6" y2="534.6" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
+<line x1="643.9" y1="534.6" x2="694.2" y2="536.6" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
+<line x1="643.9" y1="534.6" x2="651.2" y2="545.2" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="729.3" y1="370.1" x2="747.9" y2="374.6" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="729.3" y1="370.1" x2="830.5" y2="171.4" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="729.3" y1="370.1" x2="701.2" y2="363.0" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
-<line x1="514.6" y1="520.9" x2="587.5" y2="564.1" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
-<line x1="514.6" y1="520.9" x2="484.9" y2="564.1" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
-<line x1="484.9" y1="564.1" x2="729.3" y2="370.1" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
+<line x1="694.2" y1="536.6" x2="587.5" y2="564.1" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
+<line x1="694.2" y1="536.6" x2="677.1" y2="505.4" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
+<line x1="677.1" y1="505.4" x2="729.3" y2="370.1" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="514.6" y1="685.8" x2="587.5" y2="783.9" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="514.6" y1="685.8" x2="587.5" y2="564.1" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="514.6" y1="685.8" x2="530.8" y2="677.9" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
@@ -295,14 +295,14 @@
 <circle cx="201.4" cy="1243.3" r="2.6" fill="#e8c46a" opacity="0.8"/>
 <circle cx="109.6" cy="933.1" r="2.6" fill="#8a6ae8" opacity="0.8"/>
 <text x="118.6" y="927.1" font-size="15" fill="#8a6ae8" text-anchor="start" opacity="0.95">Big Buddha</text>
-<circle cx="371.5" cy="632.8" r="2.6" fill="#00e5ff" opacity="0.8"/>
-<text x="380.5" y="626.8" font-size="15" fill="#00e5ff" text-anchor="start" opacity="0.95">Beach Rd S</text>
-<circle cx="344.5" cy="636.7" r="2.6" fill="#00e5ff" opacity="0.8"/>
-<circle cx="449.8" cy="528.7" r="2.6" fill="#00e5ff" opacity="0.8"/>
-<text x="439.8" y="522.7" font-size="15" fill="#00e5ff" text-anchor="end" opacity="0.95">Beach Rd C</text>
-<circle cx="439.0" cy="548.3" r="5" fill="#00e5ff" opacity="0.95"><title>Tequila Queen A-Go-Go</title></circle>
-<circle cx="439.0" cy="548.3" r="9" fill="none" stroke="#00e5ff" opacity="0.35"/>
-<circle cx="430.9" cy="511.0" r="2.6" fill="#00e5ff" opacity="0.8"/>
+<circle cx="533.8" cy="626.3" r="2.6" fill="#00e5ff" opacity="0.8"/>
+<text x="542.8" y="620.3" font-size="15" fill="#00e5ff" text-anchor="start" opacity="0.95">Beach Rd S</text>
+<circle cx="548.6" cy="629.8" r="2.6" fill="#00e5ff" opacity="0.8"/>
+<circle cx="643.9" cy="534.6" r="2.6" fill="#00e5ff" opacity="0.8"/>
+<text x="633.9" y="528.6" font-size="15" fill="#00e5ff" text-anchor="end" opacity="0.95">Beach Rd C</text>
+<circle cx="586.4" cy="590.8" r="5" fill="#00e5ff" opacity="0.95"><title>Tequila Queen A-Go-Go</title></circle>
+<circle cx="586.4" cy="590.8" r="9" fill="none" stroke="#00e5ff" opacity="0.35"/>
+<circle cx="632.6" cy="534.6" r="2.6" fill="#00e5ff" opacity="0.8"/>
 <circle cx="729.3" cy="370.1" r="2.6" fill="#00e5ff" opacity="0.8"/>
 <text x="738.3" y="364.1" font-size="15" fill="#00e5ff" text-anchor="start" opacity="0.95">Beach Rd N</text>
 <circle cx="771.9" cy="383.6" r="5" fill="#ff9a3c" opacity="0.95"><title>The Shady Lady</title></circle>
@@ -316,10 +316,10 @@
 <circle cx="701.2" cy="363.0" r="2.6" fill="#00e5ff" opacity="0.8"/>
 <circle cx="724.9" cy="372.6" r="5" fill="#00e5ff" opacity="0.95"><title>The Stinky Pinky</title></circle>
 <circle cx="724.9" cy="372.6" r="9" fill="none" stroke="#00e5ff" opacity="0.35"/>
-<circle cx="514.6" cy="520.9" r="2.6" fill="#00e5ff" opacity="0.8"/>
-<text x="524.6" y="536.9" font-size="15" fill="#00e5ff" text-anchor="start" opacity="0.95">Central</text>
-<circle cx="484.9" cy="564.1" r="2.6" fill="#00e5ff" opacity="0.8"/>
-<text x="474.9" y="568.1" font-size="15" fill="#00e5ff" text-anchor="end" opacity="0.95">police</text>
+<circle cx="694.2" cy="536.6" r="2.6" fill="#00e5ff" opacity="0.8"/>
+<text x="704.2" y="552.6" font-size="15" fill="#00e5ff" text-anchor="start" opacity="0.95">Central</text>
+<circle cx="677.1" cy="505.4" r="2.6" fill="#00e5ff" opacity="0.8"/>
+<text x="667.1" y="509.4" font-size="15" fill="#00e5ff" text-anchor="end" opacity="0.95">police</text>
 <circle cx="514.6" cy="685.8" r="2.6" fill="#7a8aa8" opacity="0.8"/>
 <circle cx="587.5" cy="564.1" r="2.6" fill="#7a8aa8" opacity="0.8"/>
 <text x="577.5" y="558.1" font-size="15" fill="#7a8aa8" text-anchor="end" opacity="0.95">Second Rd</text>
@@ -466,8 +466,8 @@
 <circle cx="687.4" cy="701.5" r="9" fill="none" stroke="#ff6a9a" opacity="0.35"/>
 <circle cx="395.8" cy="1427.8" r="5" fill="#e8c46a" opacity="0.95"><title>Jomtien Sabai Massage</title></circle>
 <circle cx="395.8" cy="1427.8" r="9" fill="none" stroke="#e8c46a" opacity="0.35"/>
-<circle cx="460.6" cy="520.9" r="5" fill="#00e5ff" opacity="0.95"><title>Cherry Oil Massage</title></circle>
-<circle cx="460.6" cy="520.9" r="9" fill="none" stroke="#00e5ff" opacity="0.35"/>
+<circle cx="651.2" cy="545.2" r="5" fill="#00e5ff" opacity="0.95"><title>Cherry Oil Massage</title></circle>
+<circle cx="651.2" cy="545.2" r="9" fill="none" stroke="#00e5ff" opacity="0.35"/>
 <circle cx="530.8" cy="677.9" r="5" fill="#7a8aa8" opacity="0.95"><title>Second Road Traditional Massage</title></circle>
 <circle cx="530.8" cy="677.9" r="9" fill="none" stroke="#7a8aa8" opacity="0.35"/>
 <circle cx="541.6" cy="711.3" r="2.6" fill="#ffffff" opacity="0.8"/>
@@ -493,10 +493,10 @@
 <circle cx="657.7" cy="589.6" r="9" fill="none" stroke="#ffffff" opacity="0.35"/>
 <circle cx="714.4" cy="585.6" r="5" fill="#ffffff" opacity="0.95"><title>The Cricketers</title></circle>
 <circle cx="714.4" cy="585.6" r="9" fill="none" stroke="#ffffff" opacity="0.35"/>
-<circle cx="363.4" cy="642.6" r="5" fill="#00e5ff" opacity="0.95"><title>Papaya Massage</title></circle>
-<circle cx="363.4" cy="642.6" r="9" fill="none" stroke="#00e5ff" opacity="0.35"/>
-<circle cx="358.0" cy="646.5" r="5" fill="#00e5ff" opacity="0.95"><title>Beach Road Thai Massage</title></circle>
-<circle cx="358.0" cy="646.5" r="9" fill="none" stroke="#00e5ff" opacity="0.35"/>
+<circle cx="543.8" cy="635.9" r="5" fill="#00e5ff" opacity="0.95"><title>Papaya Massage</title></circle>
+<circle cx="543.8" cy="635.9" r="9" fill="none" stroke="#00e5ff" opacity="0.35"/>
+<circle cx="543.8" cy="641.4" r="5" fill="#00e5ff" opacity="0.95"><title>Beach Road Thai Massage</title></circle>
+<circle cx="543.8" cy="641.4" r="9" fill="none" stroke="#00e5ff" opacity="0.35"/>
 <circle cx="709.0" cy="599.4" r="2.6" fill="#ffffff" opacity="0.8"/>
 <circle cx="871.0" cy="98.8" r="2.6" fill="#3cd0a8" opacity="0.8"/>
 <text x="266.2" y="748.6" font-size="16" fill="#ff1493" opacity="0.9">Walking Street</text>

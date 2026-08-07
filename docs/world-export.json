@@ -2950,8 +2950,8 @@
   },
   "beach_rd_c": {
    "geo": [
-    12.9348,
-    100.8744
+    12.9345,
+    100.88159
    ],
    "name": "Beach Road Central",
    "region": "Beach Road",
@@ -2967,8 +2967,8 @@
   },
   "beach_rd_s": {
    "geo": [
-    12.9295,
-    100.8715
+    12.92983,
+    100.87751
    ],
    "name": "Beach Road South",
    "region": "Beach Road"
@@ -2985,8 +2985,8 @@
   "beachrd_oil": {
    "bar": "Cherry Oil Massage",
    "geo": [
-    12.9352,
-    100.8748
+    12.93396,
+    100.88186
    ],
    "name": "Cherry Oil Massage",
    "region": "Beach Road"
@@ -2994,8 +2994,8 @@
   "beachthai_massage": {
    "bar": "Beach Road Thai Massage",
    "geo": [
-    12.9288,
-    100.871
+    12.92906,
+    100.87788
    ],
    "name": "Beach Road Thai Massage",
    "region": "Beach Road"
@@ -3085,8 +3085,8 @@
   },
   "central_mall": {
    "geo": [
-    12.9352,
-    100.8768
+    12.9344,
+    100.88345
    ],
    "name": "Central Mall (Beach Road front)",
    "region": "Beach Road"
@@ -3796,8 +3796,8 @@
   "papaya_massage": {
    "bar": "Papaya Massage",
    "geo": [
-    12.929,
-    100.8712
+    12.92934,
+    100.87788
    ],
    "name": "Papaya Massage",
    "region": "Beach Road"
@@ -3852,8 +3852,8 @@
   },
   "police_station": {
    "geo": [
-    12.933,
-    100.8757
+    12.93599,
+    100.88282
    ],
    "name": "Pattaya Central Police Station",
    "region": "Beach Road"
@@ -3885,8 +3885,8 @@
   },
   "promenade": {
    "geo": [
-    12.9357,
-    100.8737
+    12.9345,
+    100.88117
    ],
    "name": "Beach Promenade",
    "region": "Beach Road"
@@ -4055,8 +4055,8 @@
   },
   "short_time_motel": {
    "geo": [
-    12.9293,
-    100.8705
+    12.92965,
+    100.87806
    ],
    "name": "Short-Time Motel",
    "region": "Beach Road"
@@ -4291,8 +4291,8 @@
    "bar": "Tequila Queen A-Go-Go",
    "barType": "gogo",
    "geo": [
-    12.9338,
-    100.874
+    12.93164,
+    100.87946
    ],
    "name": "Tequila Queen A-Go-Go",
    "region": "Beach Road"
