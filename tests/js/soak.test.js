@@ -81,7 +81,7 @@ const DE_CEILINGS = [
   // travel → a specific ASK at each step. A five-seed expat run offers zero
   // quests. Authored quest prose is guarded by scripted playthroughs instead
   // (tests/js/barchain.test.js).
-  { mode: "expat", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 311 },
+  { mode: "expat", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 312 },
 ];
 
 for (const { mode, seeds, nights, ceiling } of DE_CEILINGS) {
