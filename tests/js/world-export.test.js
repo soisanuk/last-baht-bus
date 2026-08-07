@@ -60,6 +60,17 @@ test("night content does not cross — the boundary is the point", () => {
   }
 });
 
+test("the portrait index covers the cast", () => {
+  const e = buildExport();
+  assert.ok(e.portraits.length > 250);
+  // a face missing here becomes a broken image in Second Road months later, so
+  // it fails at the boundary instead
+  const noFace = Object.keys(e.people).filter(id => !e.portraits.includes(id));
+  assert.deepEqual(noFace, [], "every person in the export has a portrait");
+  const noPatronFace = Object.keys(e.patrons).filter(id => !e.portraits.includes(id));
+  assert.deepEqual(noPatronFace, [], "…and every patron");
+});
+
 test("regeneration is stable — a reorder in world.js is not a content change", () => {
   assert.equal(renderExport(), renderExport(), "keys sorted, no clock in the file");
   assert.equal(committed.includes("generated"), false,
