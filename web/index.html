@@ -282,11 +282,24 @@
     font: inherit;
     font-size: 1rem;
     min-width: 44px;
-    min-height: 38px;
+    min-height: 44px;   /* was 38 — 44 is the HIG/Material minimum for a thumb */
     cursor: pointer;
     text-shadow: 0 0 8px #ff149380;
   }
   #term-send:active { background: #2a0040; }
+
+  /* Touch sizing. Gated on (pointer: coarse) rather than a width breakpoint —
+     the question is whether a FINGER is the input device, not how wide the
+     screen is: a narrow desktop window still has a mouse, a big tablet doesn't.
+     Mobile play-test measured chips at 28px tall; 44px is the thumb minimum.
+     Costs ~16px of scrollback, which measured at 70% of the viewport. */
+  @media (pointer: coarse) {
+    .chip {
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+    }
+  }
   @media (min-width: 700px) {
     #shell { border-left: 1px solid #ff149330; border-right: 1px solid #ff149330; }
   }
