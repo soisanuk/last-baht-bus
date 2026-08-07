@@ -1819,6 +1819,11 @@ const ROOMS = {
   // (docs/factions-thai.md).
   shamrock: {
     name: "The Shamrock (closed)",
+    // The TRADING name, separate from the room label. LBB shows "(closed)"
+    // because here it is; a consumer that reopens it should not inherit our
+    // state baked into a string. `closed` says the same thing as data.
+    bar: "The Shamrock",
+    closed: true,
     region: "Darkside",
     desc: "A dead pub at the dark end of the strip. The shamrock over the door " +
       "has lost most of its green and all of its bulbs, and somebody long ago " +
