@@ -15,7 +15,7 @@ for (const f of ["thai.js", "world.js", "audio.js"]) {
 }
 
 test("neon streets carry music, the seafront carries surf, the rest stays silent", () => {
-  assert.equal(_trackForRoom("ws_south"), "street");
+  assert.equal(_trackForRoom("ws_north"), "street");
   assert.equal(_trackForRoom("ws_gate"), "street");
   assert.equal(_trackForRoom("lk_main"), "soi6");
   assert.equal(_trackForRoom("soi6_street"), "soi6");

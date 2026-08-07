@@ -2867,7 +2867,7 @@
     },
     {
       "id": "ws_north",
-      "name": "Walking Street (North End)",
+      "name": "Walking Street (North)",
       "bar": null,
       "barType": null,
       "region": "Walking Street",
@@ -2875,7 +2875,7 @@
       "kind": "street",
       "dark": false,
       "people": [],
-      "desc": "The deep end of the strip, where the go-gos that survived COVID hold their ground through stubbornness and reputation. CRYSTAL PALACE A-GO-GO at the west, PARADISE NIGHTS CLUB beside it. MIDNIGHT SUN BAR glows a quieter yellow at the south end — beer bar, conversation levels, the kind of place you end up after you've stopped trying. Late enough, the whole strip fills with barfined ladies and their friends en route to the clubs."
+      "desc": "Neon canyon, but the neon mix has changed. Bollywood bass competes with Thai pop from somewhere inside Little India's encroachment from the east — restaurant signs in Hindi above what used to be go-go bars, the smell of curry drifting across the touts. NEON PARADISE A-GO-GO still strobes on the west side. CLUB MIRAGE shimmers opposite. The touts with the laminated menus are still here. A dark side-alley slinks off between them."
     },
     {
       "id": "ws_south",
@@ -2887,7 +2887,7 @@
       "kind": "street",
       "dark": false,
       "people": [],
-      "desc": "Neon canyon, but the neon mix has changed. Bollywood bass competes with Thai pop from somewhere inside Little India's encroachment from the east — restaurant signs in Hindi above what used to be go-go bars, the smell of curry drifting across the touts. NEON PARADISE A-GO-GO still strobes on the west side. CLUB MIRAGE shimmers opposite. The touts with the laminated menus are still here. A dark side-alley slinks off between them."
+      "desc": "The deep end of the strip, where the go-gos that survived COVID hold their ground through stubbornness and reputation. CRYSTAL PALACE A-GO-GO at the west, PARADISE NIGHTS CLUB beside it. MIDNIGHT SUN BAR glows a quieter yellow at the south end — beer bar, conversation levels, the kind of place you end up after you've stopped trying. Late enough, the whole strip fills with barfined ladies and their friends en route to the clubs."
     }
   ]
 }

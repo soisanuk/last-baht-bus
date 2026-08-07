@@ -3115,8 +3115,8 @@
    "bar": "Club Mirage",
    "barType": "gogo",
    "geo": [
-    12.9246,
-    100.8701
+    12.92645,
+    100.8728
    ],
    "name": "Club Mirage",
    "region": "Walking Street"
@@ -3165,8 +3165,8 @@
    "bar": "Crystal Palace A-Go-Go",
    "barType": "gogo",
    "geo": [
-    12.9227,
-    100.8689
+    12.92531,
+    100.86982
    ],
    "name": "Crystal Palace A-Go-Go",
    "region": "Walking Street"
@@ -3700,8 +3700,8 @@
    "bar": "Midnight Sun Bar",
    "barType": "beer",
    "geo": [
-    12.922,
-    100.8693
+    12.9249,
+    100.86978
    ],
    "name": "Midnight Sun Bar",
    "pool": true,
@@ -3791,8 +3791,8 @@
    "bar": "Neon Paradise A-Go-Go",
    "barType": "gogo",
    "geo": [
-    12.9248,
-    100.8694
+    12.92645,
+    100.87228
    ],
    "name": "Neon Paradise A-Go-Go",
    "region": "Walking Street"
@@ -3856,8 +3856,8 @@
    "bar": "Paradise Nights Club",
    "barType": "club",
    "geo": [
-    12.9225,
-    100.8695
+    12.92531,
+    100.87034
    ],
    "name": "Paradise Nights Club",
    "region": "Walking Street"
@@ -4300,8 +4300,8 @@
   "thai_massage": {
    "bar": "Ruean Sabai Thai Massage",
    "geo": [
-    12.9266,
-    100.871
+    12.92731,
+    100.87496
    ],
    "name": "Ruean Sabai Thai Massage",
    "region": "Walking Street"
@@ -4467,16 +4467,16 @@
   },
   "ws_alley": {
    "geo": [
-    12.9245,
-    100.8689
+    12.92674,
+    100.87241
    ],
    "name": "Walking Street Side-Alley",
    "region": "Walking Street"
   },
   "ws_gate": {
    "geo": [
-    12.9268,
-    100.8703
+    12.92745,
+    100.87469
    ],
    "name": "Walking Street Gate",
    "region": "Walking Street",
@@ -4484,16 +4484,16 @@
   },
   "ws_north": {
    "geo": [
-    12.9226,
-    100.8692
+    12.92645,
+    100.87254
    ],
-   "name": "Walking Street (North End)",
+   "name": "Walking Street (North)",
    "region": "Walking Street"
   },
   "ws_south": {
    "geo": [
-    12.9247,
-    100.8697
+    12.92531,
+    100.87008
    ],
    "name": "Walking Street (South)",
    "region": "Walking Street"

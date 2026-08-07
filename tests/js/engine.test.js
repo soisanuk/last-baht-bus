@@ -846,7 +846,7 @@ test("moo ping placates the soi dog like the noodles do", () => {
 });
 
 test("drunk brit: an apology turns him generous", () => {
-  state().room = "ws_south";
+  state().room = "ws_north";
   state().money = 10;
   _startEnc("brit");
   run("sorry mate, my mistake");
@@ -854,7 +854,7 @@ test("drunk brit: an apology turns him generous", () => {
 });
 
 test("drunk brit: squaring up gets expensive and piwin-adjacent", () => {
-  state().room = "ws_south";
+  state().room = "ws_north";
   state().money = 100;
   _startEnc("brit");
   run("swing at him");
@@ -2274,7 +2274,7 @@ test("a resident who SLEEPs at his hotel wakes home with his money and a full ch
 
 test("the crash spot follows the region you passed out in", () => {
   state().flags.act1Done = true;     // rough wakes are a resident mechanic now (pre-act1 hard-fails)
-  state().room = "ws_north";         // Walking Street → the arch
+  state().room = "ws_south";         // Walking Street → the arch
   state().nightTurn = 99;
   run("wait");
   assert.equal(state().room, "ws_gate");
@@ -3755,7 +3755,7 @@ test("Hyper's upstairs: Diamond bond-gates the reveal, then ST goes on-site", ()
 
 test("the club pickup: a free-feeling night, then the ฿2,000 taxi", () => {
   state().flags.act1Done = true; state().flags.hasWallet = true; state().money = 5000;
-  state().room = "ws_south"; state().nightTurn = 45;
+  state().room = "ws_north"; state().nightTurn = 45;
   _startEnc("clubpickup");
   run("take her home");
   assert.ok(state().flags.taxiPending, "the night happened; the invoice is coming in the morning");
@@ -3763,7 +3763,7 @@ test("the club pickup: a free-feeling night, then the ฿2,000 taxi", () => {
   assert.equal(before - state().money, 2000, "the morning 'taxi money'");
   assert.match(lastOut(), /good man|see you tonight/i);
   // and the other way: question it and the fantasy collapses
-  state().money = 5000; state().room = "ws_north"; state().nightTurn = 45; state().encDone = {};
+  state().money = 5000; state().room = "ws_south"; state().nightTurn = 45; state().encDone = {};
   _startEnc("clubpickup"); run("take her home"); out = []; run("bolt where do you live");
   assert.match(lastOut(), /amateur|record scratch|accountant/i);
 });
@@ -3966,7 +3966,7 @@ test("Sai Krok pays his keep: dark sois, the scam muscle, and your pockets", () 
   assert.equal(state().money, 5000, "you walk out clean");
   assert.equal(state().tonicOwed, 0, "nothing to report — nothing was taken");
   // and a rough night doesn't empty your pockets
-  state().money = 2222; state().room = "ws_south";
+  state().money = 2222; state().room = "ws_north";
   _endNight("dawn");
   assert.ok(state().money > 0, "nobody works a farang whose dog is watching");
 });
@@ -5368,7 +5368,7 @@ test("coconut bar: the dark sand bites — the risky kind robs you", () => {
 });
 
 test("Bangkok tourist: money insults her, manners are rewarded", () => {
-  state().room = "ws_south";
+  state().room = "ws_north";
   state().happy = 10; // above the floor so the −1 is visible
   const h0 = state().happy;
   _startEnc("bkktourist");
@@ -5385,7 +5385,7 @@ test("Bangkok tourist: money insults her, manners are rewarded", () => {
 });
 
 test("Japanese lady: read her right and it's a threesome; money is the wrong move", () => {
-  state().room = "ws_south";
+  state().room = "ws_north";
   _startEnc("jptourist");
   run("how much for you"); // amateur move
   assert.match(lastOut(), /filed under 'amateur'|You think I am working/i);
@@ -5407,7 +5407,7 @@ test("Japanese lady: read her right and it's a threesome; money is the wrong mov
 });
 
 test("British lesbian: hands-on is a scene, good vibes make her a wingman", () => {
-  state().room = "ws_south";
+  state().room = "ws_north";
   state().happy = 10;
   _startEnc("britles");
   run("grope her");
@@ -5424,7 +5424,7 @@ test("British lesbian: hands-on is a scene, good vibes make her a wingman", () =
 });
 
 test("punter's wife: grope her and the husband educates you; be decent for a wingman", () => {
-  state().room = "ws_south";
+  state().room = "ws_north";
   state().money = 1000;
   state().hurt = 0;
   state().happy = 12;
@@ -5454,7 +5454,7 @@ test("peddler works the Beach Road bar stools; buying the watch is a choice", ()
 });
 
 test("the ping pong show is exactly the scam everyone says it is", () => {
-  state().room = "ws_south";
+  state().room = "ws_north";
   state().money = 1500;
   const h = state().happy;
   _startEnc("pingpong");
