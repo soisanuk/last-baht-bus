@@ -73,6 +73,83 @@ known.
 | Being inside feels | intimate, unsettling | like overhead |
 | Refusing costs | the frictionlessness | the same, but itemised |
 
+## What is actually in the envelope
+
+This looked like a contradiction — Tan's currency is favours, *never* money, yet
+the good table has brown envelopes on it. It isn't a contradiction. It's the
+distinction, and it's the sharpest thing in this document.
+
+**Thais deal in favours. Foreigners pay cash.**
+
+An obligation is better than a payment in every way that matters: it doesn't
+expire, it can't be audited, it compounds, and it binds a person rather than
+settling an account. You can only be *owed* a favour if you're inside — if there
+is some plausible future in which you are useful. That is a relationship, and it
+is permanent.
+
+**The envelope is what you pay when you cannot be owed a favour.**
+
+So the money on the good table is not the syndicate's income from its own
+people. It's what the White Dish Group pays to be *tolerated* — and that
+tolerance is the only reason a foreign rollup is allowed to operate on Soi 6 at
+all. Kesinee already says the true version out loud: *"the dangerous bit's the
+lawyer and the brown envelope. Ryan's just the one doing the podcast about it."*
+
+Two consequences worth having:
+
+**The Orchid Room's good table is not WDG's power seat. It is their tribute
+desk.** They host, in their own members-only back room, the table at which they
+pay for permission to exist. That is why `orchid_recon` — *see who really holds
+it* — resolves to Tan, and why the answer is quietly devastating rather than
+exciting. The player thinks they're scouting the seat of power. They're
+watching rent get collected.
+
+**WDG is therefore structurally fragile in a way it does not look.** Its whole
+position rests on continuing to pay. A rollup is cash-hungry by nature — it buys
+bars, refits them, runs them on volume — so a bad season, an over-leveraged
+acquisition or a spooked investor doesn't just hurt the P&L, it interrupts the
+tribute. And tolerance, unlike an obligation, can simply be withdrawn. Nobody
+would need to *do* anything to White Dish; they would only need to stop being
+helped, exactly as the player does when they refuse the cleaning crew.
+
+That gives the faction a real, unforced vulnerability, and it means WDG's
+smiling confidence is the confidence of a tenant who thinks he owns the
+building. Unbuilt, but the arc is sitting there.
+
+And it re-reads Tan's refusal of the player's money correctly. He isn't being
+modest or mysterious. **He won't take your cash because taking it would settle
+the account** — and settling the account is what he does with people who are
+never coming inside.
+
+## Nobody hands over what actually matters
+
+A second design law for the whole bar-owning arc, and the reason the player has
+to be put through procurement rather than told about it.
+
+When you buy a business here you learn everything important the hard way,
+because the previous owner cannot tell you. There are only three reasons, and
+the game has one of each:
+
+- **He never learned it himself.** The ailing American who owned the Stinky had
+  Bert, and Bert absorbed the friction for a decade. Four minutes on a hospital
+  phone from Ohio and he asks after the pool table, not the takings — not
+  because he's sentimental, but because the takings were never the part he
+  understood.
+- **He is too proud to say it.** Nobody explains that they spent years paying to
+  be left alone, or that the good year was good because somebody allowed it.
+  It reads as weakness in the telling and as obvious in the living.
+- **He is dead, or gone, and gone is the same thing.** Sean and the Shamrock.
+
+So every source of advice in the arc is *partial, and partial in character*:
+Bert knows the room and the regulars but has never in his life paid *suay* — he
+is staff, and the arrangements went over his head to an owner who didn't
+understand them either. Candy knows all of it and assumes you know it too, so
+she explains the wrong half. Tan tells you exactly as much as is useful to Tan.
+Gavin's version is true and serves White Dish.
+
+**The player is never given a briefing, and should never be.** The knowledge is
+not transferable; that's the point of the arc.
+
 ## Vocabulary worth using (romanised, per house rule)
 
 - **ส่วย (*suay*)** — the regular levy paid to be left alone. Old word for
