@@ -161,6 +161,39 @@ ordinary CAPS emphasis still translates freely ("WALLET RECOVERED" →
 run. Both reviewers confirmed the hint surface was clean — but that check is now
 free forever.
 
+## The ratchet guards three modes, not one (2026-08-07)
+
+`tests/js/soak.test.js` asserts the leak count never RISES. Until now it watched
+**one** mode — Soi 6, the daily challenge. Every batch above tightened a guard on
+the path fewer players walk, while the main game could regress unseen.
+
+Now three ceilings: `soi6` (150), `vacation` (327), `act1` (146). They are not
+alternatives, they are disjoint surfaces:
+
+- **soi6** — one street, no Act One (`startSoi6Mode` force-sets `act1Done`).
+- **vacation** — the full sandbox. Note the soak's own setup ALSO force-sets
+  `act1Done`, so this mode never plays the opening either.
+- **act1** — the do-or-die opening: the wallet chain, the fail/reset screens, the
+  hint whispers. **Neither other mode reaches a line of it.**
+
+Act One could not have been ratcheted before today, for a reason worth recording:
+`_act1Fail` calls `newGame()`, which re-seeds `G.rng` from `Math.random`. Five
+identical runs gave 156/144/143/152/143. That is correct for a *player* — a fresh
+attempt deserves fresh dice — but it makes the mode unreplayable, which costs
+more than the ratchet (no seeded bug repro, no stable transcript). `soak.mjs` now
+pins a deterministic successor seed at the reset it already detects. Five runs:
+146 every time. Same hazard the `startSoi6Mode` comment records; this was the
+other door into it.
+
+**A note on proving these.** Three of my first four injections did not fire, and
+none of the three was a ratchet failure: one line sat behind a fee gate that Act
+One disables, one behind a `nightTurn` value the run never hit, and one had only
+two English stopwords where the leak heuristic requires three (precision over
+recall, deliberately). A green suite after an injection means *the injection was
+wrong* at least as often as it means the guard is. Verify the probe reached the
+player — print it, count the stopwords — before concluding anything about the
+check.
+
 ## The remaining gap list (unique lines × occurrences)
 ```
   30×  "Get inside the Orchid's back room, have a look at the good table, then come tell me who holds it."

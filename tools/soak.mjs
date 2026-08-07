@@ -324,7 +324,16 @@ export function runSoak(opts = {}) {
 
     if (G.day !== lastDay || G.turns < lastTurns) {
       stats.nights++; lastDay = G.day; cmdsThisNight = 0; forcedWaits = 0;
-      if (G.turns < lastTurns) stats.resets = (stats.resets || 0) + 1; // RESTART / act1 hard-fail rebuilt the world
+      if (G.turns < lastTurns) {
+        stats.resets = (stats.resets || 0) + 1; // RESTART / act1 hard-fail rebuilt the world
+        // …and _act1Fail's newGame() re-seeded G.rng from Math.random, so from
+        // here the run diverges: same seed, different transcript. That is correct
+        // for a PLAYER (a fresh attempt deserves fresh dice) but it makes act1
+        // mode unreplayable, so the harness pins a deterministic successor seed.
+        // Same hazard the startSoi6Mode comment above records — this is the other
+        // door into it, and the one the de-coverage ratchet walked through.
+        G.rng = ((seed * 48271 * (stats.resets + 1)) % 2147483646) + 1;
+      }
     }
     lastTurns = G.turns;
     if (G.pendingChoice === "vacation_end") stats.vacations++;
