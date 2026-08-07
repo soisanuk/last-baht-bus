@@ -180,9 +180,16 @@ console.log(`shots/map.svg written (${Object.keys(ROOM_GEO).length} rooms placed
 // WHY 60°, AND WHY IT MUST NOT BE TIGHTENED. There are two geometries here and
 // they are not supposed to agree exactly:
 //
-//   relational — the exit graph. What the player walks. Cardinal-only, so it
-//     has FOUR words for 360°, and a diagonal street has to pick one.
-//   actual     — ROOM_GEO. Real lat/lon, exact, read by nobody but the map.
+//   the BAR MAT MAP — the exit graph. What the player walks. Topological, not
+//     to scale, cardinal-only: FOUR words for 360°, and a diagonal street has
+//     to pick one. Drawn the way a regular sketches the soi for you on a beer
+//     mat. `_MAP` / `_MAP_SOI6` in engine-parser.js are it, literally — Soi 6
+//     is a straight horizontal line there, and that is RIGHT.
+//   the SURVEY — ROOM_GEO. Real lat/lon, exact, read by nothing but this tool
+//     and a future 2D frontend. Never walked.
+//
+// Proof they're genuinely separate: the Soi 6 pass moved 19 rooms' coordinates
+// and neither ASCII map needed an edit, because both are drawn from exits.
 //
 // A four-direction graph cannot do better than 45° on a diagonal: a street
 // running true NE is described equally badly by "n" and by "e", and no choice
