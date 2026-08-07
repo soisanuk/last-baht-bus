@@ -194,9 +194,35 @@ The contract, so Second Road can be built against it:
   than the code. This is what stops the coupling needing a migration every time
   either game grows a field.
 
-**Still to do in s1:** the Second Road repo, and the mirror of `baton.test.js`
-on its side. The coupling is only half-tested until both exist — that was
-condition 2 of the recommendation and it stands.
+**Repo opened** at `~/projects/second-road`, with `HANDOFF.md` as the contract —
+the baton, plus the vendoring decision. That doc is now the **single operational
+dependency** between the two games.
+
+**Vendoring is decided: a generated manifest, never `world.js`.** That file is
+642 KB and almost all of it is dialogue, prose pools and encounter scripts —
+LBB's night content, unusable at macro scale. Vendoring it would import a game
+engine's worth of strings to obtain a list of venues and their coordinates. The
+precedent is already a stated rule here: the scene-art pipeline couples through
+a generated `docs/scene-manifest.json` and never reads the source.
+
+**This is not yet possible, and that's the next LBB work.** Nothing emits the
+export. In order:
+
+1. `tools/gen-world-export.mjs` → `docs/world-export.json` — venues, `ROOM_GEO`,
+   people *without dialogue*, patrons, portrait index, `CANON_BARS`. Versioned.
+   Explicitly not exits: those are a walking graph for a game about walking.
+2. A sync test, mirroring how `tests/js/art.test.js` guards the scene manifest —
+   regenerate and diff, so a world.js change that should have moved the export
+   fails the suite instead of drifting.
+3. A portrait index in the same export.
+4. A sync script on the Second Road side with the trainer's proven shape
+   (`// VENDORED from …` banner + `--check` drift detection).
+
+Until 1 and 2 exist, any shortcut taken on the Second Road side — reading
+`world.js` directly, hand-copying data — becomes the thing that rots.
+
+**Still owed:** the mirror of `baton.test.js` on the Second Road side. The
+coupling is half-tested until both exist.
 
 **Next: the Second Road repo.** Needs a location decision (sibling to
 `last-baht-bus`, same origin as the trainer is the cheap answer).
