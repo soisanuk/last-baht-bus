@@ -22,12 +22,12 @@
   "Blue Dog"
  ],
  "counts": {
-  "geolocated": 176,
+  "geolocated": 177,
   "patrons": 18,
   "people": 259,
   "portraits": 277,
   "renders": 72,
-  "venues": 176
+  "venues": 177
  },
  "frames": [
   "baimon_pic1",
@@ -3944,6 +3944,14 @@
    ],
    "name": "Second Road Traditional Massage",
    "region": "Second Road"
+  },
+  "shamrock": {
+   "geo": [
+    12.9076,
+    100.9082
+   ],
+   "name": "The Shamrock (closed)",
+   "region": "Darkside"
   },
   "short_time_motel": {
    "geo": [
