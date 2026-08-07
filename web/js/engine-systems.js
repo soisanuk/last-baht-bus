@@ -2838,6 +2838,111 @@ function _isDogWord(a) {
     !!(G.dog && G.dog.name && a.includes(G.dog.name.toLowerCase()));
 }
 
+// ── Tan calls the favour in ──────────────────────────────────────────────────
+// The payoff of the partnerTan route. All game he refuses money — SEND him baht
+// and the app bounces it back — and his line is "when I want something from you,
+// I will ask for it, and it will not be money." He meant it, and this is the ask.
+//
+// Design rules this beat obeys:
+//   · It is SMALL. Not a shipment, not a crime. A name on a staff list — the
+//     smallness IS the point: what's being established is that he can ask.
+//   · He is not menacing, and never becomes menacing. He is the same warm man
+//     who bought you lunch. The unease has to come from the arrangement, not
+//     from his manner, or it's a different (worse, stock) story.
+//   · Refusing is FREE. The faction doctrine is that standing moves on the deed
+//     and declining costs nothing, forever — so NO moves no standing, triggers
+//     no reprisal, and closes the thread warmly. The sting is a sentence, not a
+//     penalty.
+//   · Only the Tan route can ever see it. Candy's 51% is pinned behind the till
+//     in a Bangkok lawyer's handwriting; there is nothing to call in.
+function _tanFavourDue() {
+  return _flag("partnerTan") && _flag("barOpen") && !_flag("tanAsked") &&
+    G.room === "stinky_bar" && G.nightTurn >= 30;   // an evening beat, not a dawn one
+}
+
+function _tanFavour() {
+  _setFlag("tanAsked");
+  G.pendingChoice = "tanfavour";
+  _say("");
+  _say("Tan comes into your bar.", "alert");
+  _say("He has never done that. He didn't come on opening night — he sent a " +
+    "crate and a smiley and was somewhere else, being somewhere else. Tonight " +
+    "he is here, in the polo shirt you would forget the instant you looked away, " +
+    "and he waits at the end of the rail until Bert has finished pouring rather " +
+    "than cutting in front of a customer.");
+  _say("\"My friend.\" The same warmth. It is not a performance; it never was. " +
+    "\"The bar is good. Busy on a Tuesday — that is the real test, not " +
+    "Saturday.\" He turns down the beer Bert offers him, the way he turns down " +
+    "everything.");
+  _say("Then he puts a folded slip of paper on the bar, and does not push it " +
+    "across.");
+  _tanFavourPrompt();
+}
+
+function _tanFavourPrompt() {
+  _say("\"A name. Put it on your staff list — the papers, the address, the wage " +
+    "each month. She will not work a shift; you do not need to meet her. I pay " +
+    "the wage, you pay nothing.\" A small, apologetic tilt of the head, as " +
+    "though the imposition were the paperwork. \"She needs to be employed by " +
+    "somebody real. That is all.\"", "alert");
+  _say("(YES · NO · ASK what it's for)", "dim");
+}
+
+// He answers straight, because he always has. It doesn't make it smaller.
+function _tanFavourAsk() {
+  _say("\"Of course. You should ask.\" He does not hesitate, and he does not " +
+    "look around the room first, which is somehow worse than if he had.");
+  _say("\"She is from Nong Khai. Her permit is with a company in Bangkok that " +
+    "does not exist any more, so on paper she is nothing, and a person who is " +
+    "nothing on paper cannot open a bank account, cannot rent, cannot be sick " +
+    "in a hospital that asks questions.\" A shrug. \"She is somebody's " +
+    "daughter. Not mine. It does not matter whose.\"");
+  _say("\"Nothing happens in your bar. Nobody comes. In one year a man from " +
+    "the labour office looks at a list and sees a name on it, and that is the " +
+    "whole of it, my friend.\" He waits. \"And if you say no, that is also the " +
+    "whole of it.\"");
+  _tanFavourPrompt();
+}
+
+function _tanFavourYes() {
+  G.pendingChoice = null;
+  _setFlag("tanFavourDone");
+  _align("syndicate", 2);
+  _say("You take the slip. Tan does not thank you extravagantly — a nod, the " +
+    "way you would nod at a man who held a door — and that restraint is the " +
+    "most eloquent thing about him.", "win");
+  _say("\"Good. Bert will put her on the book Monday.\" He is already half " +
+    "turned toward the door and whatever is next. Then, without any change in " +
+    "tone: \"And if anyone from the land office comes to the bar, or anyone " +
+    "asking who owns what — you do not answer, you call me. Any hour. This is " +
+    "not a worry, my friend. This is only how it works.\"");
+  _say("Nothing bad happens. Nothing bad happens all week, or the week after. " +
+    "The name sits on the staff list in Bert's neat capitals between two girls " +
+    "who actually exist, and the wage goes out and comes back, and the bar is " +
+    "busy on Tuesdays.");
+  _say("(★ You are inside somebody's web of favours now. It cost you nothing, " +
+    "which is the part to think about.)", "dim");
+  _addHappy(2);
+}
+
+function _tanFavourNo() {
+  G.pendingChoice = null;
+  _setFlag("tanFavourRefused");
+  // no _align: declining is free, always. The cost here is one sentence.
+  _say("\"No,\" you say. \"I'm sorry.\"");
+  _say("There is no pause at all — no flicker, no cooling. He picks the slip " +
+    "back up and it is gone into a pocket before you have finished the " +
+    "apology.", "alert");
+  _say("\"Of course. Do not be sorry.\" And he means that too; that is the " +
+    "maddening thing. \"It is your bar.\"");
+  _say("He shakes your hand, tells Bert the table is looking well, and is out " +
+    "the door and into the grey sedan inside a minute. He texts you two days " +
+    "later about nothing in particular, exactly as he always has.");
+  _say("It is a while before it occurs to you that the bar is fifty-one percent " +
+    "his, and that he could simply have written the name on the list himself, " +
+    "and that he came in and asked instead.", "dim");
+}
+
 // ── Dog-name easter eggs ─────────────────────────────────────────────────────
 // Name your soi dog after a famous hound or a bit of Pattaya slang and he picks
 // up a modest power (stored on G.dog.egg, applied at hooks across the engine).
