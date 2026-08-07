@@ -121,6 +121,40 @@ modest or mysterious. **He won't take your cash because taking it would settle
 the account** — and settling the account is what he does with people who are
 never coming inside.
 
+## Influence, not violence
+
+The syndicate's power is that **it never has to act.** That is not a softening
+and it is not squeamishness — it is competence.
+
+Violence is available and is contracted out, never done in-house. It is also
+rare, and never reached for lightly, for two entirely unsentimental reasons:
+**attention** and **chaos**. Both are catastrophic for a business whose whole
+asset is that things run smoothly and nobody looks closely. A body brings police
+who can't be managed, journalists, a provincial governor who has to be seen
+doing something, and six months of everybody's arrangements being inspected.
+Nobody wants that, least of all the people who would have ordered it.
+
+So the threat is essentially never made, because **making it is already a
+failure**. If you have to say the sentence out loud, the influence has stopped
+working and you are now doing an expensive, risky thing that influence was
+supposed to make unnecessary.
+
+**This is why the procurement mechanic is built the way it is, and the reasoning
+should be preserved if anyone changes it.** Refuse the cleaning crew and nothing
+is done to you — not out of forbearance, but because doing something would be
+costly, loud and stupid when withdrawal achieves the identical result at zero
+risk. The bin men simply come when they come. The uncle quotes list. A form
+finds you. It costs them nothing, exposes them to nothing, and works.
+
+The restraint is the menace. Nobody in this game should ever threaten the
+player, and the game is more frightening for it.
+
+This also sits squarely on a house rule that predates all of this: **violence
+never becomes mechanics.** The KILL/HIT refusal already says the same thing from
+street level — *"the motosai stand empties before your first swing lands, and it
+does not empty in your favour. In Pattaya the street polices itself."* Same
+doctrine, seen from the bottom instead of the top.
+
 ## Nobody hands over what actually matters
 
 A second design law for the whole bar-owning arc, and the reason the player has
