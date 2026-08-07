@@ -2946,6 +2946,173 @@ function _tanFavourNo() {
     "and that he came in and asked instead.", "dim");
 }
 
+// ── The bar's books ──────────────────────────────────────────────────────────
+// The purchase is seller-financed (see the constants in world.js): a deposit
+// that empties you, then BAR_MONTHLY to the old man every thirty days for six
+// years. That obligation is the engine of the whole expat stage — it's owed
+// whether or not it rains, which is what gives low season teeth and what makes
+// the procurement decision cost something instead of merely reading well.
+//
+// Kept deliberately small and legible: nightly take, nightly costs, a monthly
+// payment. No staff roster, no stock, no depreciation. The bar's till (G.bar.cash)
+// is separate from your pocket so that a good week at the bar and a good week
+// for you are different things.
+
+// one month in four, the town empties and the beer bars find out who has a
+// cushion. Derived from the day count so it's deterministic and reads the same
+// for every player.
+function _lowSeason() { return Math.floor(G.day / 30) % 4 === 2; }
+
+function _barOwned() { return _flag("barOpen") && !!G.bar; }
+
+// ── The deposit ──────────────────────────────────────────────────────────────
+// The one moment in the arc where the money has to actually exist. Fires at
+// your own bar once the 51% is settled; until it's paid there is no opening
+// night. If you're short, Bert tells you how short — the ATM caps at ฿20k a
+// day, so assembling it is a few days' work, and that grind is deliberate: it
+// is the last thing that happens before the bar stops being an idea.
+function _barDepositDue() {
+  return _flag("barPartner") && !_flag("barPaid") && G.room === "stinky_bar";
+}
+
+function _barDeposit() {
+  if (G.money < BAR_DEPOSIT) {
+    if (G.soc.depositNagDay === G.day) return;
+    G.soc.depositNagDay = G.day;
+    _say(_fmt("Bert has the figure written on the back of a docket. \"Deposit's " +
+      "฿{dep}, and the old man carries the rest — ฿{monthly} a month, six " +
+      "years.\" He slides it over. \"You're ฿{short} short, bud. Bank won't give " +
+      "you it all in one day either.\"",
+      { dep: BAR_DEPOSIT, monthly: BAR_MONTHLY, short: BAR_DEPOSIT - G.money }), "alert");
+    return;
+  }
+  _setFlag("barPaid");
+  G.money -= BAR_DEPOSIT;
+  G.bar.owed = BAR_PRICE - BAR_DEPOSIT;
+  G.bar.lastMonthDay = G.day;
+  _say("");
+  _say(_fmt("You count out ฿{dep}. It is every baht you have, and it does not " +
+    "look like very much on a bar towel.", { dep: BAR_DEPOSIT }), "alert");
+  _say(_fmt("\"Right.\" Bert doesn't make a thing of it. \"Rest is ฿{monthly} " +
+    "a month for six years, direct to him, and he'll not chase you for it " +
+    "because he's not the sort and he's not well enough — which if you've any " +
+    "sense you'll find worse than if he was.\" He writes the date on the docket " +
+    "and pins it behind the till, next to nothing else.",
+    { monthly: BAR_MONTHLY }));
+  _say(_fmt("(You owe ฿{owed}. The bar is yours the day it opens — ASK BERT " +
+    "ABOUT OPENING.)", { owed: G.bar.owed }), "win");
+}
+
+// what tonight's trade did. Called once from _endNight when you own the place.
+function _barNight() {
+  const b = G.bar;
+  b.nights++;
+  const low = _lowSeason();
+  let take = BAR_TAKINGS + Math.floor(_rand() * BAR_SWING);
+  if (G.room === "stinky_bar") take += BAR_PRESENT;   // you were behind your own rail
+  if (low) take = Math.round(take * LOW_SEASON);
+  // every procurement job you turned down is on the supply bill, permanently
+  const friction = (G.syn && G.syn.friction) || 0;
+  const costs = Math.round(BAR_COSTS * (1 + friction * BAR_FRICTION));
+  const net = take - costs;
+  b.cash += net;
+  if (net > b.best) b.best = net;
+  // a losing night is covered out of the till; when the till is empty the owner
+  // puts his hand in his own pocket, because that is what owning means. Only
+  // when BOTH are empty is the bar actually underwater — a visible state, not a
+  // silent negative number.
+  let fromPocket = 0;
+  if (b.cash < 0) {
+    fromPocket = Math.min(G.money, -b.cash);
+    G.money -= fromPocket;
+    b.cash += fromPocket;
+  }
+  const underwater = b.cash < 0;
+  return { take, costs, net, low, friction, fromPocket, underwater };
+}
+
+// the old man's money, every thirty days. Comes out of the till first, your
+// pocket second, and becomes arrears third — he is never chased, never rings,
+// and that is worse.
+function _barMonthly() {
+  const b = G.bar;
+  if (G.day - b.lastMonthDay < 30) return null;
+  b.lastMonthDay = G.day;
+  b.months++;
+  let due = BAR_MONTHLY + b.arrears, paidFrom = [];
+  const fromTill = Math.min(b.cash, due);
+  if (fromTill > 0) { b.cash -= fromTill; due -= fromTill; paidFrom.push("the till"); }
+  if (due > 0) {
+    const fromPocket = Math.min(G.money, due);
+    if (fromPocket > 0) { G.money -= fromPocket; due -= fromPocket; paidFrom.push("your own pocket"); }
+  }
+  b.arrears = due;
+  if (due <= 0) b.owed = Math.max(0, b.owed - BAR_MONTHLY);
+  return { paidFrom, short: due, month: b.months };
+}
+
+// BOOKS / TAKINGS — the player has to be able to look at it. Deliberately terse
+// and slightly unhelpful, like a real set of bar books.
+function _doBooks() {
+  if (!_barOwned()) {
+    _say(_flag("barPartner")
+      ? "Not yet. The deposit isn't paid, so there is nothing to keep books on."
+      : "You don't own a bar. Your books are your pocket, and you know what's in it.");
+    return;
+  }
+  const b = G.bar;
+  _say("── THE STINKY PINKY ──", "win");
+  _say(_fmt("Till: ฿{cash}   ·   Owed to the old man: ฿{owed}", { cash: b.cash, owed: b.owed }));
+  _say(_fmt("Months paid: {m} of {term}   ·   Nights open: {n}",
+    { m: b.months, term: BAR_TERM, n: b.nights }));
+  if (b.arrears > 0) _say(_fmt("In arrears: ฿{a}. He hasn't asked.", { a: b.arrears }), "alert");
+  const friction = (G.syn && G.syn.friction) || 0;
+  if (friction) {
+    _say(_fmt("Supply is costing you about {pct}% over the going rate — the jobs " +
+      "you didn't give out are on this line, every night, forever.",
+      { pct: Math.round(friction * BAR_FRICTION * 100) }), "dim");
+  }
+  if (_lowSeason()) _say("It's low season. It will pass. It always passes.", "dim");
+}
+
+function _barSettle() {
+  if (!_barOwned()) return;
+  const n = _barNight();
+  const m = _barMonthly();
+  // the nightly line is quiet; the monthly one is not
+  _say(_fmt("(The bar: ฿{take} in, ฿{costs} out{low}. Till: ฿{cash}.)",
+    { take: n.take, costs: n.costs, cash: G.bar.cash,
+      low: n.low ? _L(" — low season") : "" }), "dim");
+  if (n.fromPocket > 0) {
+    _say(_fmt("(The till didn't cover it. ฿{amt} of your own money went in to " +
+      "keep the lights on — nobody saw you do it, which is most of the job.)",
+      { amt: n.fromPocket }), "alert");
+  }
+  if (n.underwater) {
+    _say("(The bar is running on nothing at all now. Bert hasn't said anything. " +
+      "Bert wouldn't.)", "alert");
+    _addHappy(-1);
+  }
+  if (n.friction && n.low) {
+    _say("(Low season, and you buy everything at list. This is the month that " +
+      "finds out whether you have a cushion.)", "dim");
+  }
+  if (!m) return;
+  if (m.short <= 0) {
+    _say(_fmt("Month {n} to the old man: ฿{amt}, paid from {src}. He does not " +
+      "acknowledge it. He never does; the money simply goes, and somewhere in " +
+      "Ohio a man you have met once is still alive and still owns a little less " +
+      "of your bar.", { n: m.month, amt: BAR_MONTHLY, src: _L(m.paidFrom.join(" and ")) }), "win");
+  } else {
+    _say(_fmt("Month {n} to the old man: you are ฿{short} short.", { n: m.month, short: m.short }), "alert");
+    _say("Nothing happens. No call, no letter, no lawyer — he is not the sort " +
+      "and he is not well enough. The shortfall simply rolls onto next month, " +
+      "and you carry it around with you, which turns out to be the heaviest way " +
+      "anyone has ever collected a debt.", "alert");
+    _addHappy(-2);
+  }
+}
+
 // ── Procurement, and the price of staying out of it ──────────────────────────
 // Once you own a bar, work gets given out through partners: cleaning, the
 // screen behind the bar, the till. The jobs themselves are data (SYNDICATE_JOBS,

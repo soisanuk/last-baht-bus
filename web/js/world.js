@@ -26,6 +26,34 @@ const WALLET_CASH = 500; // what's left in the recovered wallet — TWO recovery
 const SOI6_POCKET = 1000, SOI6_BANK = 100000; // the challenge week's stake — _soi6Setup
                          // sets them, _soi6Opening and index.html quote them
 const EXPAT_SAVINGS = 20000; // wired over when you make the move
+
+// ── Buying the Stinky: the old man carries the paper ────────────────────────
+// The player cannot buy a bar. Pocket + bank tops out at ฿120,000 and an
+// established Soi 6 beer bar with a lease, fittings and ten years of goodwill
+// is seven figures. So the sale is SELLER-FINANCED, which is what Bert's line
+// already implies — "he'll take a regular over a company… he'll lose money on
+// you, and he knows that too. For the lights staying on the way they are."
+// White Dish offers cash up front; you offer a promise over six years. He takes
+// the promise, because a company would gut the place in a season.
+//
+// BAR_DEPOSIT is deliberately the player's entire plausible ceiling: it empties
+// you, and leaves nothing for the first month's supply. The monthly is owed to
+// a dying man in Ohio whether or not it rains, which is what makes low season
+// bite instead of merely being mentioned.
+const BAR_PRICE    = 1800000;  // the headline, mostly for the prose
+const BAR_DEPOSIT  = 120000;   // everything you have
+const BAR_MONTHLY  = 25000;    // to the old man, every 30 days, for six years
+const BAR_TERM     = 72;       // months
+
+// Nightly trade. Tuned so a well-run bar clears the monthly and a badly-run one
+// doesn't — the margin is thin ON PURPOSE, because that's the whole point of
+// the procurement decision.
+const BAR_TAKINGS  = 3200;     // base take on an ordinary night
+const BAR_SWING    = 2800;     // …plus up to this, on the night's luck
+const BAR_COSTS    = 3000;     // wages, supply, rent, the lot
+const BAR_PRESENT  = 800;      // you behind your own rail sells drinks
+const BAR_FRICTION = 0.08;     // each refused procurement job adds this to costs
+const LOW_SEASON   = 0.55;     // takings multiplier when the town empties
 // The ATM: draw pocket cash from your account (G.bank) at any `atm:true` room.
 const ATM_FEE = 300;         // foreign-card fee per withdrawal (charged to the account)
 const ATM_DAILY_CAP = 20000; // most you can pull in a day (principal, fees don't count)
@@ -6267,7 +6295,7 @@ const NPCS = {
       // the same happy room with nobody able to say what the arrangement is.
       {
         topic: "opening", chip: false,
-        req: ["expatLife", "barPartner", "partnerCandy"], notFlags: ["barOpen"],
+        req: ["expatLife", "barPartner", "barPaid", "partnerCandy"], notFlags: ["barOpen"],
         sets: ["barOpen"],
         fx: (st, G) => { _align("indie", 2); _align("wdg", -1); },
         text: "Nothing changes, which is the point.\n\nThe sign stays. The trophies " +
@@ -6288,7 +6316,7 @@ const NPCS = {
       },
       {
         topic: "opening", chip: false,
-        req: ["expatLife", "barPartner", "partnerTan"], notFlags: ["barOpen"],
+        req: ["expatLife", "barPartner", "barPaid", "partnerTan"], notFlags: ["barOpen"],
         sets: ["barOpen"],
         fx: (st, G) => { _align("indie", 1); },
         text: "Nothing changes, which is the point.\n\nThe sign stays, the trophies " +
