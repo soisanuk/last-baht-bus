@@ -34,6 +34,56 @@ also the theme, without announcing itself as a management game.
 - **The prose is still the soul.** A week comes back as three paragraphs. If
   those paragraphs read like a report, the project is wrong (see the go/no-go).
 
+## The drop-in: LBB is the match engine
+
+Added 2026-08-07, and it changes the shape of everything below.
+
+Second Road is the macro game — managing nightlife venues in Pattaya at whatever
+scale you're playing at. But **on any given day you can click into a bar and drop
+to the micro level, and the micro level is LBB.** The season is Second Road; the
+night you choose to actually live through is The Last Baht Bus.
+
+Three ways to drop in, and they are not the same game:
+
+- **As yourself**, the owner walking his own floor. Closest to what LBB's expat
+  stage already does (WORK, the night events, the presence dilemma).
+- **As the manager on duty.** A role LBB does not currently have — Bert has no
+  player verbs. Different pressures: you don't own it, you answer for it, and
+  you go home at four whatever happens.
+- **As a randomly rolled punter.** The sharp one. You play a tourist on a
+  seven-day holiday — which is *exactly what LBB already is* — inside a venue
+  you own. You meet the prices you set, the staff you hired, the room you made,
+  from the other side of the rail. Whether that character persists across
+  drop-ins is deferred; rolled-fresh is the cheap first version.
+
+**Who you play at the macro level is also open.** An individual owner is the
+default, but a WDG-shaped rollup is a legitimate and very different game: more
+capital, more political exposure, the tribute at the good table, and the
+structural fragility already noted in `docs/factions-thai.md` — a cash-hungry
+acquirer whose position rests on continuing to pay.
+
+### What this costs, architecturally
+
+It commits us to the **bidirectional baton**, which the architecture note flagged
+as the strongest version and the hardest. Consequences to accept up front:
+
+- LBB must be **callable with an injected character and world state**, not only
+  bootable from its own save. The seeded soi6 challenge mode (`startSoi6Mode({seed})`)
+  is the closest existing thing and the right precedent.
+- The **event layer** (2D roadmap v2) stops being optional. Second Road needs a
+  night's outcome as structured data, not as a transcript it has to parse.
+- The **manager role** is new LBB content, not a re-skin.
+
+### What it does to the week-summary
+
+A week-summary is no longer only a report. It does double duty: it tells you
+what happened, **and it tempts you into a night.** Something in each week should
+read as an invitation — Thursday looks like it will be a mess, Saturday is the
+Shamrock's opening, the new manager's first weekend is this one.
+
+If the summaries can carry that second job, the drop-in loop has a reason to
+exist. That is now part of the s0 go/no-go.
+
 ## Hard constraints, inherited and non-negotiable
 
 1. **Data and assets are reused. The engine is not.** `world.js`, `ROOM_GEO`,
@@ -66,7 +116,7 @@ This is the first task and it costs a day. Nothing else starts until it's done.
 
 | | | gate |
 | --- | --- | --- |
-| **s0** | Four week-summaries as prose. Go/no-go. | — |
+| **s0** | Four week-summaries as prose. Go/no-go. **DONE 2026-08-07 → GO** (`docs/second-road-weeks.md`) | — |
 | **s1** | Repo, save-baton read/write, a round-trip test on both sides. | s0 passes |
 | **s2** | One bar, one season, no UI beyond text. The loop proven headless. | s1 |
 | **s3** | The map (`ROOM_GEO`) + roster (portraits). The first real 2D. | s2 |
@@ -106,4 +156,21 @@ and it is under-used in a text game.
 
 ## First task
 
-s0. Four week-summaries. Nothing else.
+~~s0. Four week-summaries.~~ **Done 2026-08-07 — see `docs/second-road-weeks.md`.
+Verdict: GO.**
+
+The weeks read. A week has the same shape as a good night — a concrete detail, a
+person doing something you can picture, a closing line that turns rather than
+concludes — because the *unit* changed while the register didn't. A night reports
+moments; a week reports decisions and their weather.
+
+The argument for the whole project is week 63: three weeks of knowing, a pattern
+in a float, and a manager who has quietly become better at your job than you
+were. **That week is not writable in LBB at any length.**
+
+One caveat carried forward: the good week (41) leans on an unfinished roof for
+tension — it borrows a bad thing in order to be readable. If every good week needs
+a flat note, the game will read as relentlessly grim. **A good week has to be
+allowed to just be good sometimes**, and that's a design rule, not a prose note.
+
+**Next: s1** — repo, save-baton read/write, round-trip test on both sides.
