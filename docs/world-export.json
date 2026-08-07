@@ -1,0 +1,4019 @@
+{
+ "canonBars": [
+  "Lucky Tiger Bar",
+  "Pink Lotus Lounge",
+  "Neon Paradise A-Go-Go",
+  "Golden Dragon Bar",
+  "Sunset Dreams Lounge",
+  "Starlight Bar",
+  "Rainbow Girls Bar",
+  "Paradise Nights Club",
+  "Gold Rush Lounge",
+  "Silk Rose Bar",
+  "Club Mirage",
+  "Jasmine Garden Bar",
+  "Crystal Palace A-Go-Go",
+  "Midnight Sun Bar",
+  "Candy Bar",
+  "Rock Factory",
+  "KINKY Go-Go",
+  "Slutty Go-Go",
+  "Las Vegas Go-Go",
+  "Blue Dog"
+ ],
+ "counts": {
+  "geolocated": 176,
+  "patrons": 18,
+  "people": 259,
+  "venues": 176
+ },
+ "lang": "en",
+ "patrons": {
+  "angela": {
+   "desc": "Forty-seven, unkempt shoulder-length hair gone grey, a faded flannel shirt tied at the waist in a climate that argues against it. On the bar next to her Singha: an actual Discman, its foam headphones held together with electrical tape. She has the corner seat with the window view of Soi 6 — the chaos observed from the calm side of the glass.",
+   "emoji": "🎧",
+   "home": "queen_vic",
+   "name": "Angela",
+   "nat": "American"
+  },
+  "chuck": {
+   "desc": "Sunburn over sunburn, a polo shirt with a plumbing-company logo, and the unmistakable glow of a man who believes he is winning. Day four of two weeks. There is usually a drink in front of him that he will tell you was free.",
+   "emoji": "🤠",
+   "home": "tequila_queen",
+   "hops": true,
+   "name": "Chuck",
+   "nat": "American"
+  },
+  "danny": {
+   "avoids": [
+    "stinky_bar",
+    "las_vegas"
+   ],
+   "desc": "Fifty, but built like a rendering of forty — tank top, veins, a full sleeve of tattoos that reads like a rap sheet of previous personalities. He is always mid-conversation with somebody about an opportunity, and always angled so he can see the door. Notably, he is never seen anywhere near the Stinky Pinky — or Las Vegas a-go-go — of his own free will.",
+   "emoji": "💪",
+   "home": "club_mirage",
+   "hops": true,
+   "name": "Danny",
+   "nat": "Canadian"
+  },
+  "dave": {
+   "desc": "Fifty-five, neat polo, shandy in front of him going flat. He drinks less than anyone in whatever bar he's in and looks at the door more. His phone sits face-up: a long list of names, a lot of them greyed out.",
+   "emoji": "📋",
+   "home": "stinky_bar",
+   "hops": true,
+   "name": "Dave",
+   "nat": "British"
+  },
+  "david": {
+   "days": [
+    1,
+    5
+   ],
+   "desc": "Fifty-two, ball cap gone soft with washing, the delighted open face of a golden retriever that learned English. One beer in front of him, nursed with the skill of a man who has budgeted exactly four. He is either talking, about to talk, or dancing.",
+   "emoji": "🇨🇦",
+   "home": "stinky_bar",
+   "name": "David",
+   "nat": "Canadian"
+  },
+  "drew": {
+   "desc": "Fifty-three, Navy posture that never demobbed, a Marlboro going and its successor already tapped out of the pack. In front of him: Jack and Coke, no lemon — an arrangement he supervises like a treaty. The eyes do a room-sweep every few minutes, out of training rather than interest.",
+   "emoji": "🚬",
+   "home": "stinky_bar",
+   "hops": true,
+   "name": "Drew",
+   "nat": "American"
+  },
+  "fergie": {
+   "avoids": [
+    "candy_bar",
+    "candy_bar_2",
+    "stinky_bar"
+   ],
+   "desc": "Short, bald, and boiled red — the nose of a man who has met a great deal of liquor and won none of the arguments, and two cauliflower ears that agree. Late fifties, Northern Irish, a retired tradesman of some sort, though which sort changes with the tide. Guarded stone-cold sober, a magnificent liar three drinks in, and — on the nights he's had a smoke as well — a nasty piece of work best left entirely alone. Banned from Bert's and Candy's bars, and not sorry about it.",
+   "emoji": "🥃",
+   "home": "gold_rush",
+   "hops": true,
+   "name": "Fergie",
+   "nat": "Northern Irish"
+  },
+  "glam": {
+   "desc": "Somewhere north of seventy-five and dressed like it's 1983 in a Munich discotheque: a silk shirt open one button too far, and a wild halo of sparse blonde hair caught somewhere between Einstein and a glam rocker on his third encore. Frail now, and — the whole strip agrees, gently — not entirely present. His companion, an older lady-boy who speaks only to the mama, wheels him in on a lovingly modified saleng, and most nights has him escorted across to Hyper once the music starts.",
+   "emoji": "🎸",
+   "home": "cheeky_monkey",
+   "name": "Glam",
+   "nat": "German"
+  },
+  "helmut": {
+   "desc": "Sixty-one, pressed short-sleeve shirt, glasses polished to optical-lab standard. He occupies the third stool from the left as if allocated it by the state. One Chang, one glass, one coaster, all aligned.",
+   "emoji": "🔧",
+   "home": "silk_rose",
+   "name": "Helmut",
+   "nat": "German"
+  },
+  "josey": {
+   "desc": "Thirty-two, Australian, shoulders that still remember lane ropes, in gym wear that is clearly working clothes rather than costume. She has a regular table by the stage with sightlines on the drummer, a {{phone}} on a small tripod she mostly ignores, and the settled ease of someone who is exactly where she decided to be.",
+   "emoji": "🏋️",
+   "home": "rock_factory",
+   "name": "Josey",
+   "nat": "Australian"
+  },
+  "mikkel": {
+   "desc": "Twenty-four, backpacker tan, friendship bracelets to the elbow, and the incandescent certainty of a man eleven days into the love of his life. He shows people his phone a lot. There is a girl on the lock screen.",
+   "emoji": "🎒",
+   "home": "neon_paradise",
+   "hops": true,
+   "name": "Mikkel",
+   "nat": "Danish"
+  },
+  "mort": {
+   "desc": "Seventy-four, horn-rimmed glasses and a Hawaiian shirt at war with itself, a spiral notebook and a biro he clicks while he watches the soi. He has been on this coast longer than most of the bars, and he is writing all of it down whether it likes it or not.",
+   "emoji": "🦉",
+   "home": "queen_vic",
+   "name": "Mort",
+   "nat": "American"
+  },
+  "nigel": {
+   "desc": "Sixty-eight, sun-spotted, a Chang vest gone grey at the seams. He has the fixed forward stare of a man permanently addressing an audience of 1998. Whatever bar he's in, he looks like he's comparing it to a better one.",
+   "emoji": "🍻",
+   "home": "lucky_tiger",
+   "hops": true,
+   "name": "Nigel",
+   "nat": "British"
+  },
+  "randy": {
+   "desc": "Six-foot-four and built like the loads he used to carry, with hands that make the Chang bottle look like a miniature. Fifty-four, Alabama drawl, and a permanently mild expression of a man who still can't quite believe where he wakes up. There is usually at least one hostess using him as furniture.",
+   "emoji": "🐻",
+   "home": "jasmine_garden",
+   "hops": true,
+   "name": "Randy",
+   "nat": "American"
+  },
+  "reginald": {
+   "desc": "Sixty and annoyingly aware that he doesn't look it: linen shirt with exactly the right number of buttons open, a tan that took discipline, silver hair with a part you could draw a property line down. He holds a glass like a man who used to be paid to make rooms enjoy themselves — because he was. Wherever he stands becomes, gradually, the centre.",
+   "emoji": "🥂",
+   "home": "las_vegas",
+   "hops": true,
+   "name": "Reginald",
+   "nat": "British"
+  },
+  "ron": {
+   "desc": "Sixty-six, Wollongong, a faded steel-town singlet and thongs that have worn a groove in this soi. He has the settled bulk of a man who stopped moving fifteen years ago and rates it his finest decision.",
+   "emoji": "🦘",
+   "home": "mama_yai",
+   "name": "Ron",
+   "nat": "Australian"
+  },
+  "somsak": {
+   "desc": "Forty-seven, hotel-maintenance polo, the end seat at the Blue Dog rail with the best line on both the sunset and the checkpoint. He drinks one big Leo very slowly and misses absolutely nothing on the road.",
+   "emoji": "🌇",
+   "home": "blue_dog",
+   "name": "Somsak",
+   "nat": "Thai"
+  },
+  "superman": {
+   "desc": "Sixty-two, in tonight's Superman shirt — the S faded from a hundred washes, stretched over a chest that carries three stents and a story. He sits angled to the bay, not the bar. Sometimes, mid-sentence, he goes perfectly still for a few seconds — like a video buffering — then carries on from the exact word he stopped at.",
+   "emoji": "🦸",
+   "home": "blue_dog",
+   "name": "Superman",
+   "nat": "American"
+  }
+ },
+ "people": {
+  "aek": {
+   "desc": "The cashier, planted behind the till like she grew there — cropped hair, oversized bar polo, a silver ring through one nostril and a biro tucked behind her ear. Tom through and through: she runs the money, calls the floor, and misses nothing across the whole open front of the bar.",
+   "emoji": "⚡",
+   "name": "Aek",
+   "role": "cashier",
+   "room": "midnight_sun",
+   "th": "เอก"
+  },
+  "aim": {
+   "desc": "Quiet and quick, the still point the whole loud room pays into — the cashier at Firefly Bar, from Maha Sarakham.",
+   "emoji": "🧾",
+   "filler": true,
+   "name": "Aim",
+   "role": "cashier",
+   "room": "firefly_bar",
+   "th": "เอม"
+  },
+  "air": {
+   "desc": "Perched above the till like a lifeguard watching a pool of drunks — the cashier at Blue Dog, from Khon Kaen.",
+   "emoji": "🧾",
+   "filler": true,
+   "name": "Air",
+   "role": "cashier",
+   "room": "blue_dog",
+   "th": "แอร์"
+  },
+  "ampai": {
+   "bars": [
+    "the_boardroom",
+    "velvet_club"
+   ],
+   "desc": "The madame of the strip's two gentleman's clubs — silk, low voice, immaculate, the kind of calm that costs a fortune to be near. She sells the quiet more than the girls, and she knows every regular's business and says none of it.",
+   "emoji": "👑",
+   "name": "Ampai",
+   "role": "mamasan",
+   "room": "the_boardroom",
+   "th": "อำไพ"
+  },
+  "ann": {
+   "desc": "New enough to still look a little nervous — one of the Midnight Sun Bar girls, from Kalasin. The {{phone}} never leaves her hand.",
+   "emoji": "🌸",
+   "filler": true,
+   "name": "Ann",
+   "role": "hostess",
+   "room": "midnight_sun",
+   "th": "แอน"
+  },
+  "aof": {
+   "desc": "Sleepy-eyed and entirely unbothered — one of the Crystal Palace A-Go-Go girls, from Loei. She types more than she talks — and laughs at both.",
+   "emoji": "🍒",
+   "filler": true,
+   "name": "Aof",
+   "role": "hostess",
+   "room": "crystal_palace",
+   "th": "อ๊อฟ"
+  },
+  "aoi": {
+   "desc": "A crooked, disarming grin — one of the Hyper A Go-Go girls, from Amnat Charoen. She types more than she talks — and laughs at both.",
+   "emoji": "💐",
+   "filler": true,
+   "name": "Aoi",
+   "role": "hostess",
+   "room": "hyper",
+   "th": "อ้อย"
+  },
+  "aom": {
+   "desc": "Mysterious, sharp eyes, a slow smile that arrives about four seconds after whatever caused it. She materialised beside you rather than walked.",
+   "emoji": "🌙",
+   "name": "Aom",
+   "role": "hostess",
+   "room": "club_mirage",
+   "th": "อ้อม"
+  },
+  "apple": {
+   "desc": "Black polo, a lanyard of too many keys, a calculator she never needs — the cashier at Rock Factory, from Nakhon Phanom.",
+   "emoji": "🧾",
+   "filler": true,
+   "name": "Apple",
+   "role": "cashier",
+   "room": "rock_factory",
+   "th": "แอปเปิ้ล"
+  },
+  "arm": {
+   "desc": "Host number 4: broad, easy, a footballer's build and a salesman's warmth. He leans in close and makes you feel chosen, which is precisely the product. The tan line of a wedding-adjacent ring is on the wrong finger.",
+   "emoji": "💪",
+   "name": "Arm",
+   "room": "adonis_club",
+   "th": "อาร์ม"
+  },
+  "aum": {
+   "desc": "Pretty in the soft, unstudied way that stops men mid-sentence, with a smile she gives away too easily for this business. New enough that the job hasn't finished teaching her its lessons yet.",
+   "emoji": "🌷",
+   "name": "Aum",
+   "role": "hostess",
+   "room": "kitten_corner",
+   "th": "อุ้ม"
+  },
+  "aump": {
+   "desc": "Older than the go-go average, and unhurried about it — one of the The Rabbit Hole girls, from Udon Thani. Google Translate is open before you finish the sentence.",
+   "emoji": "🌼",
+   "filler": true,
+   "name": "Aump",
+   "role": "hostess",
+   "room": "rabbit_hole",
+   "th": "อั้ม"
+  },
+  "baimon": {
+   "desc": "Soft-spoken, careful with the money and with herself, a photo of a couple propped by the till in a glittery case. Kesinee gave her the cashier seat as a kindness — off the floor, where the sponsor's money keeps her.",
+   "emoji": "🧾",
+   "name": "Baimon",
+   "role": "cashier",
+   "room": "kitten_corner",
+   "th": "ใบหม่อน"
+  },
+  "bam": {
+   "desc": "Baby-faced, chewing gum, thumbing her phone under the bar — one of the Rock Factory girls, from {{Nong Khai}}. She types more than she talks — and laughs at both.",
+   "emoji": "🌻",
+   "filler": true,
+   "name": "Bam",
+   "role": "hostess",
+   "room": "rock_factory",
+   "th": "บาม"
+  },
+  "bank": {
+   "desc": "A motosai driver in an orange vest, boots up on his handlebars, watching the street with professional calm. The other drivers at the stand defer to him.",
+   "emoji": "🏍️",
+   "name": "Bank",
+   "room": "beach_rd_s",
+   "th": "แบงค์"
+  },
+  "barry": {
+   "desc": "English, fifty, here on the eleventh 'golf trip' of a marriage that politely doesn't ask. Packed the clubs, means to play, will not play. Zero shame and boundless goodwill; knows half the girls on this soi by name and all of them by drink order. The most honest dishonest man in Pattaya — lies only to his wife, and even then only about the golf.",
+   "emoji": "⛳",
+   "name": "Barry",
+   "room": "ruby_kiss",
+   "th": "แบร์รี่"
+  },
+  "beam": {
+   "desc": "Older than the go-go average, and unhurried about it — one of the Crystal Palace A-Go-Go girls, from Udon Thani. Google Translate is open before you finish the sentence.",
+   "emoji": "🌼",
+   "filler": true,
+   "name": "Beam",
+   "role": "hostess",
+   "room": "crystal_palace",
+   "th": "บีม"
+  },
+  "bebe": {
+   "desc": "Six feet of engineered glamour in heels that make it seven, sharper-tongued than the whole bar and twice as funny. Ladyboy, and not hiding it for a second — the confidence is the whole act, and the act is magnificent. A ยาดม inhaler is never further than her reach, in case a smoker wanders in and dares to light up.",
+   "emoji": "💅",
+   "name": "Bebe",
+   "role": "hostess",
+   "room": "pink_lotus",
+   "th": "บีบี"
+  },
+  "bee": {
+   "desc": "Candy Bar 2's floor boss — early twenties, quick everywhere at once, wearing the same rose-pink polo as the original bar. Candy's niece, though nobody says it and everybody knows it. The smile is the family franchise.",
+   "emoji": "🐝",
+   "name": "Bee",
+   "role": "hostess",
+   "room": "candy_bar_2",
+   "th": "ผึ้ง"
+  },
+  "bella": {
+   "desc": "Tall and quiet, watching the door — one of the Lucky Charm Bar girls, from {{Nong Bua Lamphu}}. The {{phone}} never leaves her hand.",
+   "emoji": "💕",
+   "filler": true,
+   "name": "Bella",
+   "role": "hostess",
+   "room": "lucky_charm",
+   "th": "เบลล่า"
+  },
+  "belle": {
+   "desc": "Sweet, soft-eyed, always in the middle of a small catastrophe — a sick relative, a broken thing, a bill with today's date. She holds your hand when she tells you, and she is often, genuinely, not lying.",
+   "emoji": "🥺",
+   "name": "Belle",
+   "role": "hostess",
+   "room": "pink_lotus",
+   "th": "เบล"
+  },
+  "benz": {
+   "desc": "Genuinely stunning and entirely aware of it, angling for the light and the mirror more than for you. There is a screen between you at all times, and you are not the one she's looking at on it.",
+   "emoji": "🤳",
+   "name": "Benz",
+   "role": "hostess",
+   "room": "ruby_kiss",
+   "th": "เบนซ์"
+  },
+  "bert": {
+   "desc": "The Stinky's manager — American, sixty-something, forearms like dock rope, a Singha that never empties and never seems to get him drunk. Candy's man, and once the manager of her bars; now he runs the Stinky for its ailing owner and, quietly, works at being his own man out from under her shadow. Twenty-two years on Beach Road, most of them within nine feet of that pool table.",
+   "emoji": "🎱",
+   "manager": true,
+   "name": "Bert",
+   "personality": "blunt",
+   "room": "stinky_bar",
+   "th": "เบิร์ต"
+  },
+  "best": {
+   "desc": "Perched above the till like a lifeguard watching a pool of drunks — the cashier at The Water Buffalo, from {{Nong Khai}}.",
+   "emoji": "🧾",
+   "filler": true,
+   "name": "Best",
+   "role": "cashier",
+   "room": "water_buffalo",
+   "th": "เบสท์"
+  },
+  "boom": {
+   "desc": "Older than the go-go average, and unhurried about it — one of the Crystal Palace A-Go-Go girls, from Udon Thani. Google Translate is open before you finish the sentence.",
+   "emoji": "🌼",
+   "filler": true,
+   "name": "Boom",
+   "role": "hostess",
+   "room": "crystal_palace",
+   "th": "บูม"
+  },
+  "bow": {
+   "desc": "Baby-faced, chewing gum, thumbing her phone under the bar — one of the Club Mirage girls, from Khon Kaen. She types more than she talks — and laughs at both.",
+   "emoji": "🌻",
+   "filler": true,
+   "name": "Bow",
+   "role": "hostess",
+   "room": "club_mirage",
+   "th": "โบว์"
+  },
+  "bpaeng": {
+   "desc": "New enough to still look a little nervous — one of the The Office Bar girls, from Maha Sarakham. The {{phone}} never leaves her hand.",
+   "emoji": "🌼",
+   "filler": true,
+   "name": "Bpaeng",
+   "role": "hostess",
+   "room": "the_office",
+   "th": "แป้ง"
+  },
+  "bpom": {
+   "desc": "Baby-faced, chewing gum, thumbing her phone under the bar — one of the Lucky 7 Bar girls, from {{Nong Khai}}. She types more than she talks — and laughs at both.",
+   "emoji": "🌻",
+   "filler": true,
+   "name": "Bpom",
+   "role": "hostess",
+   "room": "lucky7",
+   "th": "บอม"
+  },
+  "bright": {
+   "desc": "Small and sharp, and misses nothing — one of the The Cricketers girls, from Sakon Nakhon. Google Translate is open before you finish the sentence.",
+   "emoji": "🍒",
+   "filler": true,
+   "name": "Bright",
+   "role": "hostess",
+   "room": "cricketers",
+   "th": "ไบรท์"
+  },
+  "bua": {
+   "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of the Candy Bar girls, from Sisaket. Google Translate is open before you finish the sentence.",
+   "emoji": "🌺",
+   "filler": true,
+   "name": "Bua",
+   "role": "hostess",
+   "room": "candy_bar",
+   "th": "บัว"
+  },
+  "bum": {
+   "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of the The Dollhouse girls, from Sakon Nakhon. Google Translate is open before you finish the sentence.",
+   "emoji": "🌺",
+   "filler": true,
+   "name": "Bum",
+   "role": "hostess",
+   "room": "dollhouse",
+   "th": "บุ๋ม"
+  },
+  "bunny": {
+   "desc": "Baby-faced, chewing gum, thumbing her phone under the bar — one of the Dolphin Bar girls, from {{Nong Khai}}. She types more than she talks — and laughs at both.",
+   "emoji": "🌻",
+   "filler": true,
+   "name": "Bunny",
+   "role": "hostess",
+   "room": "dolphin_bar",
+   "th": "บันนี่"
+  },
+  "bussaba": {
+   "desc": "The Shady Lady's mamasan, running a beer bar the slow honest way — no bottle-service hustle, no bank of go-go tricks, just cold beer, decent girls, and a chair you're welcome to keep all night.",
+   "emoji": "👑",
+   "name": "Bussaba",
+   "role": "mamasan",
+   "room": "sunset_rail",
+   "th": "บุษบา"
+  },
+  "cake": {
+   "desc": "Black polo, a lanyard of too many keys, a calculator she never needs — the cashier at The Stinky Pinky, from Ubon.",
+   "emoji": "🧾",
+   "filler": true,
+   "name": "Cake",
+   "role": "cashier",
+   "room": "stinky_bar",
+   "th": "เค้ก"
+  },
+  "candy": {
+   "bars": [
+    "candy_bar",
+    "candy_bar_2"
+   ],
+   "desc": "The mamasan of Candy Bar — sharp as a razor, warm as a Chang on a hot night, and on the soi longer than most expats have had passports. She clocked you the second you walked in.",
+   "emoji": "🌹",
+   "name": "Candy",
+   "personality": "charmer",
+   "role": "mamasan",
+   "room": "candy_bar",
+   "th": "แคนดี้"
+  },
+  "care": {
+   "desc": "Neat bun, neat ledger, an engagement ring worn on a chain — the cashier at Candy Bar 2, from Surin.",
+   "emoji": "🧾",
+   "filler": true,
+   "name": "Care",
+   "role": "cashier",
+   "room": "candy_bar_2",
+   "th": "แคร์"
+  },
+  "cartoon": {
+   "desc": "Fingers flying over a calculator app, eyes never leaving the cash — the cashier at Neon Paradise A-Go-Go, from Loei.",
+   "emoji": "🧾",
+   "filler": true,
+   "name": "Cartoon",
+   "role": "cashier",
+   "room": "neon_paradise",
+   "th": "การ์ตูน"
+  },
+  "chaba": {
+   "desc": "Loud, glorious, and pouring — for you, for herself, for the room. At Cherry Pop she's the party's engine, right up until she's its wreckage.",
+   "emoji": "🌺",
+   "name": "Chaba",
+   "role": "hostess",
+   "room": "cherry_pop",
+   "th": "ชบา"
+  },
+  "cherry": {
+   "desc": "A crooked, disarming grin — one of the Crystal Palace A-Go-Go girls, from Mukdahan. She types more than she talks — and laughs at both.",
+   "emoji": "💫",
+   "filler": true,
+   "name": "Cherry",
+   "role": "hostess",
+   "room": "crystal_palace",
+   "th": "เชอรี่"
+  },
+  "chompoo": {
+   "desc": "The one on the little stage who dances like she's bored of being the most interesting person in the room, because she is. Cheekbones, a dancer's line, and an amused, appraising calm that reads a man in a glance and prices him in the next. Drops a German word now and then like she's forgotten you might not follow.",
+   "emoji": "🦋",
+   "name": "Chompoo",
+   "role": "hostess",
+   "room": "ruby_kiss",
+   "th": "ชมพู่"
+  },
+  "da": {
+   "desc": "Rings on every finger and a voice that cuts the music when she wants it — the mamasan of Club Mirage, from Maha Sarakham. She married a farang, buried the marriage, and kept the house.",
+   "emoji": "👑",
+   "filler": true,
+   "name": "Da",
+   "role": "mamasan",
+   "room": "club_mirage",
+   "th": "ดา"
+  },
+  "daeng": {
+   "desc": "The owner — mid-forties, laugh lines over old glitter, pouring with a bar towel over one shoulder. The dancer in the Walking Street photos behind her, unmistakably. She was number 72.",
+   "emoji": "🌶️",
+   "name": "Daeng",
+   "personality": "blunt",
+   "role": "mamasan",
+   "room": "khao_talo_bar",
+   "th": "แดง"
+  },
+  "dao": {
+   "desc": "Tall and quiet, watching the door — one of the Tequila Queen A-Go-Go girls, from Ubon. The {{phone}} never leaves her hand.",
+   "emoji": "💕",
+   "filler": true,
+   "name": "Dao",
+   "role": "hostess",
+   "room": "tequila_queen",
+   "th": "ดาว"
+  },
+  "dear": {
+   "desc": "Sweet and a half-beat slow, laughing a little after everyone else because she's still catching up. Nobody at this bar has a bad word for her, which tells you everything.",
+   "emoji": "🐣",
+   "name": "Dear",
+   "role": "hostess",
+   "room": "sunset_dreams",
+   "th": "เดียร์"
+  },
+  "dew": {
+   "desc": "A half-step behind the room all night, warm and unfocused, a drink she didn't order already in her hand. The other girls keep an eye on her and finish her sentences. Nobody says the word out loud.",
+   "emoji": "🥃",
+   "name": "Dew",
+   "role": "hostess",
+   "room": "golden_dragon",
+   "th": "ดิว"
+  },
+  "diamond": {
+   "desc": "The mamasan of Hyper A Go-Go — six feet of poise in heels, cheekbones you could open letters with, and a katoey's hard-won certainty that she is the most finished thing in any room. She ran the floor here when it was a dump and stayed to run it now the Samson brothers have made it shine. Nothing on this stage happens that Diamond didn't allow.",
+   "emoji": "💎",
+   "name": "Diamond",
+   "role": "mamasan",
+   "room": "hyper",
+   "th": "ไดมอนด์"
+  },
+  "dj_beer": {
+   "desc": "The DJ, headphones half-on, nodding to something only partially related to what's playing. His booth is a fortress of stickers and Red Bull cans.",
+   "emoji": "🎧",
+   "name": "DJ Beer",
+   "room": "rainbow_girls",
+   "th": "ดีเจเบียร์"
+  },
+  "dokmai": {
+   "desc": "Twenty seasons of soi behind her eyes and a laugh that got louder every one — one of the The Night Heron girls, from Buriram. She types more than she talks — and laughs at both.",
+   "emoji": "💫",
+   "filler": true,
+   "name": "Dokmai",
+   "role": "hostess",
+   "room": "night_heron",
+   "th": "ดอกไม้"
+  },
+  "doug": {
+   "desc": "Canadian, sixties, a golf tan gone patchy, nursing a rum-and-coke he makes last an hour. Two years ago he wired his retirement into 'the portfolio' — units in White Dish bars, guaranteed returns, a glossy PDF with a leaping logo. He has been drinking that decision at the Stinky ever since. Bert runs him a tab he mostly settles.",
+   "emoji": "🥃",
+   "name": "Doug",
+   "room": "stinky_bar"
+  },
+  "doyle": {
+   "desc": "American, sixty, built like a retired middleweight gone comfortable. Twenty-six years working homicide in a city he won't name, then a private ticket — \"cheating husbands don't try to kill you; I like boring now.\" Drinks soda water and watches the door, out of a habit he's given up pretending is retired. Came to price Thailand for good; found a job following him.",
+   "emoji": "🕵️",
+   "name": "Doyle",
+   "room": "queen_vic",
+   "th": "ดอยล์"
+  },
+  "duan": {
+   "desc": "Pouring out here since the lake road was dirt; minds her regulars like livestock — one of the Firefly Bar girls, from {{Nong Khai}}. She types more than she talks — and laughs at both.",
+   "emoji": "🍒",
+   "filler": true,
+   "name": "Duan",
+   "role": "hostess",
+   "room": "firefly_bar",
+   "th": "เดือน"
+  },
+  "duang": {
+   "desc": "New enough to still look a little nervous — one of the The Sandbar girls, from Maha Sarakham. The {{phone}} never leaves her hand.",
+   "emoji": "🌸",
+   "filler": true,
+   "name": "Duang",
+   "role": "hostess",
+   "room": "sandbar",
+   "th": "ดวง"
+  },
+  "earn": {
+   "desc": "Black polo, a lanyard of too many keys, a calculator she never needs — the cashier at Club Mirage, from {{Nong Bua Lamphu}}.",
+   "emoji": "🧾",
+   "filler": true,
+   "name": "Earn",
+   "role": "cashier",
+   "room": "club_mirage",
+   "th": "เอิร์น"
+  },
+  "eye": {
+   "desc": "Quiet and quick, the still point the whole loud room pays into — the cashier at Crystal Palace A-Go-Go, from Kalasin.",
+   "emoji": "🧾",
+   "filler": true,
+   "name": "Eye",
+   "role": "cashier",
+   "room": "crystal_palace",
+   "th": "อาย"
+  },
+  "fah": {
+   "desc": "Older than the go-go average, and unhurried about it — one of the Neon Paradise A-Go-Go girls, from Chaiyaphum. Google Translate is open before you finish the sentence.",
+   "emoji": "🌼",
+   "filler": true,
+   "name": "Fah",
+   "role": "hostess",
+   "room": "neon_paradise",
+   "th": "ฟ้า"
+  },
+  "fahsai": {
+   "desc": "The one still point in Cherry Pop's chaos — a tom in a snapback, arms folded behind the till, watching the party she is emphatically not part of with the patience of a designated driver.",
+   "emoji": "🧾",
+   "name": "Fahsai",
+   "role": "cashier",
+   "room": "cherry_pop",
+   "th": "ฟ้าใส"
+  },
+  "fai": {
+   "desc": "Perched above the till like a lifeguard watching a pool of drunks — the cashier at Paradise Nights Club, from Loei.",
+   "emoji": "🧾",
+   "filler": true,
+   "name": "Fai",
+   "role": "cashier",
+   "room": "paradise_nights",
+   "th": "ฝ้าย"
+  },
+  "fang": {
+   "desc": "Baby-faced, chewing gum, thumbing her phone under the bar — one of the KINKY Go-Go girls, from Loei. She types more than she talks — and laughs at both.",
+   "emoji": "🌻",
+   "filler": true,
+   "name": "Fang",
+   "role": "hostess",
+   "room": "kinky",
+   "th": "แฟง"
+  },
+  "fasai": {
+   "desc": "Small and sharp, and misses nothing — one of the Sapphire Bar girls, from Sakon Nakhon. Google Translate is open before you finish the sentence.",
+   "emoji": "✨",
+   "filler": true,
+   "name": "Fasai",
+   "role": "hostess",
+   "room": "sapphire",
+   "th": "ฟ้าใส"
+  },
+  "fern": {
+   "desc": "Round-faced and quick to laugh — one of the Candy Bar 2 girls, from Mukdahan. She types more than she talks — and laughs at both.",
+   "emoji": "🌙",
+   "filler": true,
+   "name": "Fern",
+   "role": "hostess",
+   "room": "candy_bar_2",
+   "th": "เฟิร์น"
+  },
+  "fon": {
+   "desc": "Shy, half-hiding behind the plants she obviously waters herself. She brightens the instant anyone tries even one word of Thai.",
+   "emoji": "🌺",
+   "name": "Fon",
+   "role": "hostess",
+   "room": "jasmine_garden",
+   "th": "ฝน"
+  },
+  "gaem": {
+   "desc": "Bored until you try a word of Thai, then radiant — one of the Buzz Inn girls, from Nakhon Phanom. The {{phone}} never leaves her hand.",
+   "emoji": "🌷",
+   "filler": true,
+   "name": "Gaem",
+   "role": "hostess",
+   "room": "buzz_inn",
+   "th": "แก้ม"
+  },
+  "gam": {
+   "desc": "Neat bun, neat ledger, an engagement ring worn on a chain — the cashier at Candy Bar, from Surin.",
+   "emoji": "🧾",
+   "filler": true,
+   "name": "Gam",
+   "role": "cashier",
+   "room": "candy_bar",
+   "th": "แก้ม"
+  },
+  "gary": {
+   "desc": "A sun-cured expat of indeterminate decade walking an elderly golden retriever. He has the serene look of a man whose 7-Eleven receipts are all groceries now.",
+   "emoji": "🎣",
+   "name": "Lake Gary",
+   "room": "lake_mabprachan",
+   "th": "แกรี่"
+  },
+  "gavin": {
+   "desc": "Fifties, a golf shirt with a discreet logo, a lager he barely touches and a way of looking at a bar like a spreadsheet. He calls himself an 'area consultant.' Everyone else calls him the White Dish man. He is unfailingly pleasant, which is the unsettling part.",
+   "emoji": "🍽️",
+   "name": "Gavin",
+   "room": "golden_dragon"
+  },
+  "gib": {
+   "desc": "Small and sharp, and misses nothing — one of the KINKY Go-Go girls, from Yasothon. Google Translate is open before you finish the sentence.",
+   "emoji": "✨",
+   "filler": true,
+   "name": "Gib",
+   "role": "hostess",
+   "room": "kinky",
+   "th": "กิ๊บ"
+  },
+  "gift": {
+   "desc": "Confident, perfect makeup, running the floor of Crystal Palace with the crisp authority of a duty-free manager.",
+   "emoji": "💎",
+   "name": "Gift",
+   "role": "hostess",
+   "room": "crystal_palace",
+   "th": "กิ๊ฟ"
+  },
+  "gig": {
+   "desc": "New enough to still look a little nervous — one of the Arrow Bar girls, from Maha Sarakham. The {{phone}} never leaves her hand.",
+   "emoji": "🌸",
+   "filler": true,
+   "name": "Gig",
+   "role": "hostess",
+   "room": "arrow_bar",
+   "th": "กิ๊ก"
+  },
+  "gigi": {
+   "desc": "Tall and quiet, watching the door — one of the Las Vegas Go-Go girls, from {{Nong Bua Lamphu}}. The {{phone}} never leaves her hand.",
+   "emoji": "💕",
+   "filler": true,
+   "name": "Gigi",
+   "role": "hostess",
+   "room": "las_vegas",
+   "th": "กีกี้"
+  },
+  "gina": {
+   "desc": "A crooked, disarming grin — one of the The Office Bar girls, from Mukdahan. She types more than she talks — and laughs at both.",
+   "emoji": "💐",
+   "filler": true,
+   "name": "Gina",
+   "role": "hostess",
+   "room": "the_office",
+   "th": "จีน่า"
+  },
+  "ging": {
+   "desc": "In a cage of fairy lights, counting notes faster than the eye follows — the cashier at Lucky Tiger Bar, from Amnat Charoen.",
+   "emoji": "🧾",
+   "filler": true,
+   "name": "Ging",
+   "role": "cashier",
+   "room": "lucky_tiger",
+   "th": "กิ่ง"
+  },
+  "golf": {
+   "desc": "Headset on one ear, {{phone}} in one hand, the till in perfect order — the cashier at Tequila Queen A-Go-Go, from Loei.",
+   "emoji": "🧾",
+   "filler": true,
+   "name": "Golf",
+   "role": "cashier",
+   "room": "tequila_queen",
+   "th": "กอล์ฟ"
+  },
+  "goong": {
+   "desc": "Sleepy-eyed and entirely unbothered — one of the Honey Trap Bar girls, from Khon Kaen. She types more than she talks — and laughs at both.",
+   "emoji": "🍒",
+   "filler": true,
+   "name": "Goong",
+   "role": "hostess",
+   "room": "honey_trap",
+   "th": "กุ้ง"
+  },
+  "grace": {
+   "desc": "Headset on one ear, {{phone}} in one hand, the till in perfect order — the cashier at Silk Rose Bar, from Loei.",
+   "emoji": "🧾",
+   "filler": true,
+   "name": "Grace",
+   "role": "cashier",
+   "room": "silk_rose",
+   "th": "เกรซ"
+  },
+  "guitar": {
+   "desc": "Small and sharp, and misses nothing — one of the The Rabbit Hole girls, from Sakon Nakhon. Google Translate is open before you finish the sentence.",
+   "emoji": "🍒",
+   "filler": true,
+   "name": "Guitar",
+   "role": "hostess",
+   "room": "rabbit_hole",
+   "th": "กีตาร์"
+  },
+  "haad": {
+   "desc": "Malila's younger sister and the Verandah's cashier, cut from the same easygoing cloth — she runs the till the way the bar runs everything, slowly and kindly, and always has a bowl of peanuts within reach.",
+   "emoji": "🧾",
+   "name": "Haad",
+   "role": "cashier",
+   "room": "sandy_toes",
+   "th": "หาด"
+  },
+  "hong": {
+   "desc": "Black polo, a lanyard of too many keys, a calculator she never needs — the cashier at Jasmine Garden Bar, from Ubon.",
+   "emoji": "🧾",
+   "filler": true,
+   "name": "Hong",
+   "role": "cashier",
+   "room": "jasmine_garden",
+   "th": "ห่อง"
+  },
+  "ice": {
+   "desc": "Long hair, longer eyelashes, a practised pout — one of the Tequila Queen A-Go-Go girls, from Roi Et. The {{phone}} never leaves her hand.",
+   "emoji": "💫",
+   "filler": true,
+   "name": "Ice",
+   "role": "hostess",
+   "room": "tequila_queen",
+   "th": "ไอซ์"
+  },
+  "ing": {
+   "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of the Blue Dog girls, from Sisaket. Google Translate is open before you finish the sentence.",
+   "emoji": "🌺",
+   "filler": true,
+   "name": "Ing",
+   "role": "hostess",
+   "room": "blue_dog",
+   "th": "อิง"
+  },
+  "jah": {
+   "desc": "In a cage of fairy lights, counting notes faster than the eye follows — the cashier at Gold Rush Lounge, from Buriram.",
+   "emoji": "🧾",
+   "filler": true,
+   "name": "Jah",
+   "role": "cashier",
+   "room": "gold_rush",
+   "th": "จ๊ะ"
+  },
+  "jaja": {
+   "desc": "Sleepy-eyed and entirely unbothered — one of the The Mooring girls, from Loei. She types more than she talks — and laughs at both.",
+   "emoji": "🍒",
+   "filler": true,
+   "name": "Jaja",
+   "role": "hostess",
+   "room": "mooring_bar",
+   "th": "จาจา"
+  },
+  "jampa": {
+   "desc": "A veteran's easy patience — she will out-sit, out-drink, and out-earn the room — one of the The Night Heron girls, from Maha Sarakham. The {{phone}} never leaves her hand.",
+   "emoji": "💫",
+   "filler": true,
+   "name": "Jampa",
+   "role": "hostess",
+   "room": "night_heron",
+   "th": "จำปา"
+  },
+  "jane": {
+   "desc": "A hostess at Las Vegas, sitting on the end of the bar with her legs crossed and a cocktail she's been nursing since before you arrived. She has the relaxed energy of someone who has already decided tonight will be fine.",
+   "emoji": "⭐",
+   "name": "Jane",
+   "role": "hostess",
+   "room": "las_vegas",
+   "th": "เจน"
+  },
+  "jeab": {
+   "desc": "Older, sharper, and entirely done being impressed by farang — the mamasan of Neon Paradise A-Go-Go, from Sakon Nakhon. She buried a husband, raised two kids, and built a concrete house on lady drinks.",
+   "emoji": "👑",
+   "filler": true,
+   "name": "Jeab",
+   "role": "mamasan",
+   "room": "neon_paradise",
+   "th": "เจี๊ยบ"
+  },
+  "jeed": {
+   "desc": "Sleeve of faded tattoos and an abacus brain — the least-fooled soul in here — the cashier at Starlight Bar, from Sakon Nakhon.",
+   "emoji": "🧾",
+   "filler": true,
+   "name": "Jeed",
+   "role": "cashier",
+   "room": "starlight_bar",
+   "th": "จี๊ด"
+  },
+  "jenny": {
+   "desc": "Neat, quick with the till, a promise ring she touches when she's thinking. She took the cashier seat on purpose — off the floor, off the market, kept clean for the man in Germany who sends the money.",
+   "emoji": "🧾",
+   "name": "Jenny",
+   "role": "cashier",
+   "room": "pink_lotus",
+   "th": "เจนนี่"
+  },
+  "jiab": {
+   "desc": "Baby-faced, chewing gum, thumbing her phone under the bar — one of the Honey Trap Bar girls, from {{Nong Khai}}. She types more than she talks — and laughs at both.",
+   "emoji": "🌻",
+   "filler": true,
+   "name": "Jiab",
+   "role": "hostess",
+   "room": "honey_trap",
+   "th": "เจี๊ยบ"
+  },
+  "jib": {
+   "desc": "Tiny and loud, all elbows and energy — one of the The Growler girls, from Chaiyaphum. Google Translate is open before you finish the sentence.",
+   "emoji": "🦋",
+   "filler": true,
+   "name": "Jib",
+   "role": "hostess",
+   "room": "the_growler",
+   "th": "จิ๊บ"
+  },
+  "jinda": {
+   "desc": "Bored until you try a word of Thai, then radiant — one of the The Orchid Club girls, from {{Nong Bua Lamphu}}. The {{phone}} never leaves her hand.",
+   "emoji": "🌷",
+   "filler": true,
+   "name": "Jinda",
+   "role": "hostess",
+   "room": "orchid_club",
+   "th": "จินดา"
+  },
+  "jom": {
+   "desc": "A cloud of perfume and authority, hair lacquered against the fans — the mamasan of Starlight Bar, from Nakhon Phanom. She came up from the rice fields and never once looked back.",
+   "emoji": "👑",
+   "filler": true,
+   "name": "Jom",
+   "role": "mamasan",
+   "room": "starlight_bar",
+   "th": "จอม"
+  },
+  "joon": {
+   "desc": "Short hair, men's watch, a handshake instead of a wai, running Golden Dragon's till like a foreman. A tom, and entirely uninterested in being anything else for your benefit.",
+   "emoji": "🧾",
+   "name": "Joon",
+   "role": "cashier",
+   "room": "golden_dragon",
+   "th": "จูน"
+  },
+  "joy": {
+   "desc": "Bubbly, laughing at everything you say before you finish saying it — the undisputed morale champion of Pink Lotus Lounge.",
+   "emoji": "💕",
+   "name": "Joy",
+   "personality": "joker",
+   "role": "hostess",
+   "room": "pink_lotus",
+   "th": "จอย"
+  },
+  "ju": {
+   "desc": "Round-faced and quick to laugh — one of the The Amp Room girls, from Buriram. She types more than she talks — and laughs at both.",
+   "emoji": "🌙",
+   "filler": true,
+   "name": "Ju",
+   "role": "hostess",
+   "room": "amp_room",
+   "th": "จู"
+  },
+  "jum": {
+   "desc": "Tall and quiet, watching the door — one of the Slutty Go-Go girls, from {{Nong Bua Lamphu}}. The {{phone}} never leaves her hand.",
+   "emoji": "💕",
+   "filler": true,
+   "name": "Jum",
+   "role": "hostess",
+   "room": "slutty",
+   "th": "จุ๋ม"
+  },
+  "jun": {
+   "desc": "Malai's daughter, home from a Bangkok college for the season and minding her mother's till — polite, sharp, and quietly counting the months until she never has to do this again.",
+   "emoji": "🧾",
+   "name": "Jun",
+   "role": "cashier",
+   "room": "sunset_dreams",
+   "th": "จัน"
+  },
+  "june": {
+   "desc": "Bored until you try a word of Thai, then radiant — one of the The Velvet Club girls, from Nakhon Phanom. The {{phone}} never leaves her hand.",
+   "emoji": "🌷",
+   "filler": true,
+   "name": "June",
+   "role": "hostess",
+   "room": "velvet_club",
+   "th": "จูน"
+  },
+  "kade": {
+   "desc": "Older than the go-go average, and unhurried about it — one of the Arrow Bar girls, from Chaiyaphum. Google Translate is open before you finish the sentence.",
+   "emoji": "🌼",
+   "filler": true,
+   "name": "Kade",
+   "role": "hostess",
+   "room": "arrow_bar",
+   "th": "เกด"
+  },
+  "kaew": {
+   "desc": "Baby-faced, chewing gum, thumbing her phone under the bar — one of the Paradise Nights Club girls, from {{Nong Khai}}. She types more than she talks — and laughs at both.",
+   "emoji": "🌻",
+   "filler": true,
+   "name": "Kaew",
+   "role": "hostess",
+   "room": "paradise_nights",
+   "th": "แก้ว"
+  },
+  "kai": {
+   "desc": "Warmer than the room and faster than the room — your name inside a minute, both her hands around yours inside two. It is a very good act. She is very good at it.",
+   "emoji": "💅",
+   "name": "Kai",
+   "role": "hostess",
+   "room": "golden_dragon",
+   "th": "ไก่"
+  },
+  "kaimook": {
+   "desc": "A blunt bob, red lipstick, and a stare that reconciles you at a glance — the cashier at Slutty Go-Go, from Amnat Charoen.",
+   "emoji": "🧾",
+   "filler": true,
+   "name": "Kaimook",
+   "role": "cashier",
+   "room": "slutty",
+   "th": "ไข่มุก"
+  },
+  "kanom": {
+   "desc": "Fingers flying over a calculator app, eyes never leaving the cash — the cashier at Las Vegas Go-Go, from Sakon Nakhon.",
+   "emoji": "🧾",
+   "filler": true,
+   "name": "Kanom",
+   "role": "cashier",
+   "room": "las_vegas",
+   "th": "ขนม"
+  },
+  "kanya": {
+   "desc": "Headset on one ear, {{phone}} in one hand, the till in perfect order — the cashier at The Orchid Club, from {{Nong Khai}}.",
+   "emoji": "🧾",
+   "filler": true,
+   "name": "Kanya",
+   "role": "cashier",
+   "room": "orchid_club",
+   "th": "กัญญา"
+  },
+  "kat": {
+   "desc": "The loudest laugh in the bar at nine, and by midnight the one the others are steering away from the edge of things. Great fun for exactly ninety minutes.",
+   "emoji": "🍸",
+   "name": "Kat",
+   "role": "hostess",
+   "room": "sunset_dreams",
+   "th": "แคท"
+  },
+  "keng": {
+   "desc": "In a cage of fairy lights, counting notes faster than the eye follows — the cashier at Daeng's Place, from Mukdahan.",
+   "emoji": "🧾",
+   "filler": true,
+   "name": "Keng",
+   "role": "cashier",
+   "room": "khao_talo_bar",
+   "th": "เก่ง"
+  },
+  "kesinee": {
+   "desc": "The Kitten Corner's mama-san — twenty years on this soi, gold at the wrist, a gaze that prices you before you sit. She ran this bar back when it was hers to run; now there's a logo on the menu and a target on the till, and she is very careful who she says that to.",
+   "emoji": "🐱",
+   "name": "Kesinee",
+   "role": "mamasan",
+   "room": "kitten_corner",
+   "th": "เกสินี"
+  },
+  "kesorn": {
+   "bars": [
+    "honey_trap",
+    "queen_bee",
+    "buzz_inn"
+   ],
+   "desc": "The madam of Soi Honey — sixties, gold everywhere, a voice like a till drawer. She owns all three beer bars on the lane and works them one night at a time, so the girls never quite know which bar mama is watching.",
+   "emoji": "👑",
+   "name": "Kesorn",
+   "role": "mamasan",
+   "room": "honey_trap",
+   "th": "เกสร"
+  },
+  "khing": {
+   "desc": "Round-faced and quick to laugh — one of the Blue Dog girls, from Buriram. She types more than she talks — and laughs at both.",
+   "emoji": "🌙",
+   "filler": true,
+   "name": "Khing",
+   "role": "hostess",
+   "room": "blue_dog",
+   "th": "ขิง"
+  },
+  "kluay": {
+   "desc": "Pretty and profoundly unbothered, one of Wilai's front-stool pair, mostly here in body. She'll take the drink. She will not be chasing it.",
+   "emoji": "🍌",
+   "name": "Kluay",
+   "role": "hostess",
+   "room": "ruby_kiss",
+   "th": "กล้วย"
+  },
+  "kob": {
+   "desc": "Broad, motherly, and entirely able to have you removed by smiling — the mamasan of Paradise Nights Club, from {{Nong Khai}}. She has watched the soi flood, burn, and rebuild, and outlasted all three.",
+   "emoji": "👑",
+   "filler": true,
+   "name": "Kob",
+   "role": "mamasan",
+   "room": "paradise_nights",
+   "th": "กบ"
+  },
+  "koi": {
+   "desc": "Sits like she owns the stool, because she does — the mamasan of Midnight Sun Bar, from Maha Sarakham. She puts four kids through school on other men's lonely nights.",
+   "emoji": "👑",
+   "filler": true,
+   "name": "Koi",
+   "role": "mamasan",
+   "room": "midnight_sun",
+   "th": "ก้อย"
+  },
+  "kratae": {
+   "desc": "Late thirties and entirely unbothered by it — quick-eyed, a laugh like a dropped tray, a beer already sliding toward you. Mama Yai's right hand: she pours, she counts, she misses nothing, and she heard your story before you sat down.",
+   "emoji": "🐿️",
+   "name": "Kratae",
+   "role": "hostess",
+   "room": "mama_yai",
+   "th": "กระแต"
+  },
+  "kwan": {
+   "desc": "Gentle, soft-voiced, folding paper napkins into birds while the soi roars outside.",
+   "emoji": "🦋",
+   "name": "Kwan",
+   "role": "hostess",
+   "room": "sunset_dreams",
+   "th": "ขวัญ"
+  },
+  "kwang": {
+   "desc": "Tall and quiet, watching the door — one of the Rock Factory girls, from {{Nong Bua Lamphu}}. The {{phone}} never leaves her hand.",
+   "emoji": "💕",
+   "filler": true,
+   "name": "Kwang",
+   "role": "hostess",
+   "room": "rock_factory",
+   "th": "กวาง"
+  },
+  "lamai": {
+   "desc": "Elegant, weathered, and plainly the last word on everything in the room — the mamasan of The Stinky Pinky, from Sakon Nakhon. She came up from the rice fields and never once looked back.",
+   "emoji": "👑",
+   "filler": true,
+   "name": "Lamai",
+   "role": "mamasan",
+   "room": "stinky_bar",
+   "th": "ละมัย"
+  },
+  "lawan": {
+   "bars": [
+    "dollhouse",
+    "sapphire",
+    "sundowner",
+    "cricketers"
+   ],
+   "desc": "The grande dame of Soi Diana — a former Crystal Palace headliner who hung up the heels and parlayed twenty years on the stage into four beer bars on the busiest drinking soi in town. Silk, jade, a gaze that prices you before you've sat down. She works a different one of her houses each night, and the girls behave accordingly.",
+   "emoji": "👑",
+   "name": "Lawan",
+   "role": "mamasan",
+   "room": "dollhouse",
+   "th": "ลาวัลย์"
+  },
+  "lek": {
+   "desc": "Petite, bright smile, glittery earrings catching the bar lights. She's beating two customers at pool simultaneously.",
+   "emoji": "💃",
+   "name": "Lek",
+   "role": "hostess",
+   "room": "lucky_tiger",
+   "th": "เล็ก"
+  },
+  "lin": {
+   "desc": "A veteran's easy patience — she will out-sit, out-drink, and out-earn the room — one of the The Water Buffalo girls, from Roi Et. The {{phone}} never leaves her hand.",
+   "emoji": "🌸",
+   "filler": true,
+   "name": "Lin",
+   "role": "hostess",
+   "room": "water_buffalo",
+   "th": "หลิน"
+  },
+  "lukkade": {
+   "desc": "Round-faced and quick to laugh — one of the The Cricketers girls, from Roi Et. The {{phone}} never leaves her hand.",
+   "emoji": "🌙",
+   "filler": true,
+   "name": "Lukkade",
+   "role": "hostess",
+   "room": "cricketers",
+   "th": "ลูกเกด"
+  },
+  "macca": {
+   "desc": "Scouse, fifty-three, twenty-two years an electrician and then a letter and a cheque with more noughts than he's ever seen at once. First time abroad that isn't Spain, first time in his life with no shift in the morning, and it's gone to his head like sunshine. Buys rounds for strangers. Means every word. Hasn't yet met the version of this town that isn't his friend.",
+   "emoji": "⚡",
+   "name": "Macca",
+   "room": "sunset_dreams",
+   "th": "แม็คก้า"
+  },
+  "mai": {
+   "desc": "New enough to still look a little nervous — one of the Candy Bar 2 girls, from Kalasin. The {{phone}} never leaves her hand.",
+   "emoji": "🌸",
+   "filler": true,
+   "name": "Mai",
+   "role": "hostess",
+   "room": "candy_bar_2",
+   "th": "ใหม่"
+  },
+  "mala": {
+   "desc": "The Peacock's compère and its mama both — a kathoey of a certain age and total command, in a headdress that arrived by its own truck. Twenty years on this stage; she has watched a hundred nervous farang husbands walk in braced and walk out fans.",
+   "emoji": "🦚",
+   "name": "Miss Mala",
+   "personality": "charmer",
+   "role": "mamasan",
+   "room": "peacock_cabaret",
+   "th": "มาลา"
+  },
+  "malai": {
+   "desc": "Soft-spoken and grandmotherly, Sunset Dreams' mamasan pours you tea and asks after your health, and somewhere in the warmth your wallet opens without a sound. The gentlest operator on the soi.",
+   "emoji": "👑",
+   "name": "Malai",
+   "role": "mamasan",
+   "room": "sunset_dreams",
+   "th": "มาลัย"
+  },
+  "malee": {
+   "desc": "The cashier — cropped hair, black polo, a lanyard with what looks like seventeen keys. She runs the KINKY till with the detached authority of someone who's counted more money than you've seen and found it unremarkable.",
+   "emoji": "⚡",
+   "name": "Malee",
+   "role": "cashier",
+   "room": "kinky",
+   "th": "มาลี"
+  },
+  "malila": {
+   "desc": "The Verandah's mamasan, who runs the most easygoing bar on Soi 6 like a long Sunday lunch — Nina feeds the customers, Malila makes sure everyone's alright, and the money, such as it is, sees to itself.",
+   "emoji": "👑",
+   "name": "Malila",
+   "role": "mamasan",
+   "room": "sandy_toes",
+   "th": "มะลิลา"
+  },
+  "mam": {
+   "desc": "Older than the go-go average, and unhurried about it — one of the Craft & Cargo girls, from Chaiyaphum. Google Translate is open before you finish the sentence.",
+   "emoji": "🌼",
+   "filler": true,
+   "name": "Mam",
+   "role": "hostess",
+   "room": "craft_cargo",
+   "th": "แหม่ม"
+  },
+  "manow": {
+   "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of the The Stinky Pinky girls, from Sakon Nakhon. Google Translate is open before you finish the sentence.",
+   "emoji": "🌺",
+   "filler": true,
+   "name": "Manow",
+   "role": "hostess",
+   "room": "stinky_bar",
+   "th": "มะนาว"
+  },
+  "may": {
+   "desc": "Soft, unhurried, genuinely pleased to see you — no angle you can find, because there isn't one. Exactly as nice as she seems, which on this soi is its own kind of rare.",
+   "emoji": "🌼",
+   "name": "May",
+   "role": "hostess",
+   "room": "sunset_dreams",
+   "th": "เมย์"
+  },
+  "meaw": {
+   "desc": "Small and sharp, and misses nothing — one of the Paradise Nights Club girls, from Sisaket. Google Translate is open before you finish the sentence.",
+   "emoji": "✨",
+   "filler": true,
+   "name": "Meaw",
+   "role": "hostess",
+   "room": "paradise_nights",
+   "th": "เหมียว"
+  },
+  "meen": {
+   "desc": "A crooked, disarming grin — one of the The Hive girls, from Mukdahan. She types more than she talks — and laughs at both.",
+   "emoji": "💐",
+   "filler": true,
+   "name": "Meen",
+   "role": "hostess",
+   "room": "queen_bee",
+   "th": "มีน"
+  },
+  "mek": {
+   "desc": "Long hair, longer eyelashes, a practised pout — one of the Moonshine Bar girls, from Kalasin. The {{phone}} never leaves her hand.",
+   "emoji": "💫",
+   "filler": true,
+   "name": "Mek",
+   "role": "hostess",
+   "room": "moonshine_bar",
+   "th": "เมฆ"
+  },
+  "mem": {
+   "desc": "The Tequila Queen's mamasan — silver-streaked chignon, reading glasses on a gold chain, and a stage presence undimmed since she headlined this same room in another century. The dancers call her 'Khun Mae'. So do some customers.",
+   "emoji": "👵",
+   "name": "Mamasan Mem",
+   "role": "mamasan",
+   "room": "tequila_queen",
+   "th": "เม้ม"
+  },
+  "mercedes": {
+   "desc": "A little older than the other girls here and a great deal less nervous — she moves like someone who has already seen the worst a room can do to a person. Her English is good, with a flat European edge the soi doesn't usually carry.",
+   "emoji": "❄️",
+   "name": "Mercedes",
+   "personality": "operator",
+   "role": "hostess",
+   "room": "cherry_pop",
+   "th": "เมอร์เซเดส"
+  },
+  "mild": {
+   "desc": "Tall and quiet, watching the door — one of the Starlight Bar girls, from Nakhon Phanom. The {{phone}} never leaves her hand.",
+   "emoji": "💕",
+   "filler": true,
+   "name": "Mild",
+   "role": "hostess",
+   "room": "starlight_bar",
+   "th": "มายด์"
+  },
+  "milin": {
+   "desc": "Older than the go-go average, and unhurried about it — one of the The Pit Stop girls, from Chaiyaphum. Google Translate is open before you finish the sentence.",
+   "emoji": "🌼",
+   "filler": true,
+   "name": "Milin",
+   "role": "hostess",
+   "room": "pit_stop",
+   "th": "มิลิน"
+  },
+  "milk": {
+   "desc": "Older than the go-go average, and unhurried about it — one of the The Velvet Club girls, from Udon Thani. Google Translate is open before you finish the sentence.",
+   "emoji": "🌼",
+   "filler": true,
+   "name": "Milk",
+   "role": "hostess",
+   "room": "velvet_club",
+   "th": "มิ้ลค์"
+  },
+  "min": {
+   "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of the The Boardroom girls, from Yasothon. Google Translate is open before you finish the sentence.",
+   "emoji": "🌺",
+   "filler": true,
+   "name": "Min",
+   "role": "hostess",
+   "room": "the_boardroom",
+   "th": "มิน"
+  },
+  "mind": {
+   "desc": "Small and careful, a dancer's economy to every movement — the girl from a certain Danish backpacker's lock screen, though she has no idea she's on it. Twenty-two, and older than that in the ways that pay the rent.",
+   "emoji": "💗",
+   "name": "Mind",
+   "role": "hostess",
+   "room": "neon_paradise",
+   "th": "มายด์"
+  },
+  "mon": {
+   "desc": "Sleeve of faded tattoos and an abacus brain — the least-fooled soul in here — the cashier at The Night Heron, from Sakon Nakhon.",
+   "emoji": "🧾",
+   "filler": true,
+   "name": "Mon",
+   "role": "cashier",
+   "room": "night_heron",
+   "th": "มล"
+  },
+  "mona": {
+   "desc": "A crooked, disarming grin — one of the Cheeky Monkey Bar girls, from Buriram. She types more than she talks — and laughs at both.",
+   "emoji": "💐",
+   "filler": true,
+   "name": "Mona",
+   "role": "hostess",
+   "room": "cheeky_monkey",
+   "th": "โมนา"
+  },
+  "mook": {
+   "desc": "Small and sharp, and misses nothing — one of the Tequila Queen A-Go-Go girls, from Yasothon. Google Translate is open before you finish the sentence.",
+   "emoji": "✨",
+   "filler": true,
+   "name": "Mook",
+   "role": "hostess",
+   "room": "tequila_queen",
+   "th": "มุก"
+  },
+  "mookda": {
+   "desc": "Round-faced and quick to laugh — one of the The Sandbar girls, from Amnat Charoen. She types more than she talks — and laughs at both.",
+   "emoji": "🌸",
+   "filler": true,
+   "name": "Mookda",
+   "role": "hostess",
+   "room": "sandbar",
+   "th": "มุกดา"
+  },
+  "mot": {
+   "desc": "A skinny kid in a fake Barça shirt, materialising from behind the kegs only after word got around that you're not the swinging type. Quick eyes, quicker feet.",
+   "emoji": "🐜",
+   "name": "Mot",
+   "room": "ws_alley",
+   "th": "มด"
+  },
+  "muay": {
+   "desc": "Older, sharper, and entirely done being impressed by farang — the mamasan of Rock Factory, from Yasothon. She has watched the soi flood, burn, and rebuild, and outlasted all three.",
+   "emoji": "👑",
+   "filler": true,
+   "name": "Muay",
+   "role": "mamasan",
+   "room": "rock_factory",
+   "th": "หมวย"
+  },
+  "nam": {
+   "desc": "Baby-faced, chewing gum, thumbing her phone under the bar — one of the Club Mirage girls, from Khon Kaen. She types more than she talks — and laughs at both.",
+   "emoji": "🌻",
+   "filler": true,
+   "name": "Nam",
+   "role": "hostess",
+   "room": "club_mirage",
+   "th": "น้ำ"
+  },
+  "namfon": {
+   "desc": "New enough to still look a little nervous — one of the The Anchor Bar girls, from Maha Sarakham. The {{phone}} never leaves her hand.",
+   "emoji": "🌼",
+   "filler": true,
+   "name": "Namfon",
+   "role": "hostess",
+   "room": "anchor_bar",
+   "th": "น้ำฝน"
+  },
+  "namo": {
+   "desc": "A crooked, disarming grin — one of the Sea Breeze Bar girls, from Amnat Charoen. She types more than she talks — and laughs at both.",
+   "emoji": "💐",
+   "filler": true,
+   "name": "Namo",
+   "role": "hostess",
+   "room": "seabreeze",
+   "th": "นะโม"
+  },
+  "namphueng": {
+   "desc": "Tiny and loud, all elbows and energy — one of the Buzz Inn girls, from Surin. She types more than she talks — and laughs at both.",
+   "emoji": "💐",
+   "filler": true,
+   "name": "Namphueng",
+   "role": "hostess",
+   "room": "buzz_inn",
+   "th": "น้ำผึ้ง"
+  },
+  "namtan": {
+   "desc": "A veteran's easy patience — she will out-sit, out-drink, and out-earn the room — one of the Daeng's Place girls, from Roi Et. The {{phone}} never leaves her hand.",
+   "emoji": "🌼",
+   "filler": true,
+   "name": "Namtan",
+   "role": "hostess",
+   "room": "khao_talo_bar",
+   "th": "น้ำตาล"
+  },
+  "namtip": {
+   "desc": "Tiny and loud, all elbows and energy — one of the Lucky Charm Bar girls, from Udon Thani. Google Translate is open before you finish the sentence.",
+   "emoji": "💐",
+   "filler": true,
+   "name": "Namtip",
+   "role": "hostess",
+   "room": "lucky_charm",
+   "th": "น้ำทิพย์"
+  },
+  "namwan": {
+   "desc": "Bored until you try a word of Thai, then radiant — one of the Las Vegas Go-Go girls, from Ubon. The {{phone}} never leaves her hand.",
+   "emoji": "✨",
+   "filler": true,
+   "name": "Namwan",
+   "role": "hostess",
+   "room": "las_vegas",
+   "th": "น้ำหวาน"
+  },
+  "nan": {
+   "desc": "Long hair, longer eyelashes, a practised pout — one of the Candy Bar girls, from Roi Et. The {{phone}} never leaves her hand.",
+   "emoji": "💫",
+   "filler": true,
+   "name": "Nan",
+   "role": "hostess",
+   "room": "candy_bar",
+   "th": "แนน"
+  },
+  "nangfah": {
+   "desc": "Composed in a way the room isn't, watching more than she performs. There's a textbook in her bag under the going-out clothes, and she'd rather you didn't make a thing of it.",
+   "emoji": "⭐",
+   "name": "Nangfah",
+   "role": "hostess",
+   "room": "kitten_corner",
+   "th": "นางฟ้า"
+  },
+  "near": {
+   "desc": "Tall and quiet, watching the door — one of the The Metro Beer Garden girls, from {{Nong Bua Lamphu}}. The {{phone}} never leaves her hand.",
+   "emoji": "💕",
+   "filler": true,
+   "name": "Near",
+   "role": "hostess",
+   "room": "metro_garden",
+   "th": "เนียร์"
+  },
+  "nee": {
+   "desc": "The flagship's mamasan: still, precise, a tablet where another mama keeps a smile. She runs Pink Lotus like the asset it is on White Dish's books, and she priced you before you sat down.",
+   "emoji": "👑",
+   "name": "Nee",
+   "role": "mamasan",
+   "room": "pink_lotus",
+   "th": "หนี่"
+  },
+  "nice": {
+   "desc": "A crooked, disarming grin — one of the KINKY Go-Go girls, from Buriram. She types more than she talks — and laughs at both.",
+   "emoji": "💐",
+   "filler": true,
+   "name": "Nice",
+   "role": "hostess",
+   "room": "kinky",
+   "th": "ไนซ์"
+  },
+  "nid": {
+   "desc": "Older than the go-go average, and unhurried about it — one of the Silk Rose Bar girls, from Surin. Google Translate is open before you finish the sentence.",
+   "emoji": "🌼",
+   "filler": true,
+   "name": "Nid",
+   "role": "hostess",
+   "room": "silk_rose",
+   "th": "นิด"
+  },
+  "nim": {
+   "desc": "Somebody's mother, twice over, and nobody's fool ever — one of the The Water Buffalo girls, from Sakon Nakhon. Google Translate is open before you finish the sentence.",
+   "emoji": "🌺",
+   "filler": true,
+   "name": "Nim",
+   "role": "hostess",
+   "room": "water_buffalo",
+   "th": "นิ่ม"
+  },
+  "nina": {
+   "desc": "A little older than the rail usually runs, and she mothers the whole bar — the young girls, the drunk regulars, and, within about four minutes, you. You'll have eaten something before you leave.",
+   "emoji": "🍲",
+   "name": "Nina",
+   "role": "hostess",
+   "room": "sandy_toes",
+   "th": "นีน่า"
+  },
+  "nira": {
+   "desc": "A dancer who watches the room the way the mamasan does — the best English on the stage and a calculator behind her eyes. She smiles like she has already worked out your monthly salary and rounded it down.",
+   "emoji": "💵",
+   "name": "Nira",
+   "role": "hostess",
+   "room": "neon_paradise",
+   "th": "นิรา"
+  },
+  "nit": {
+   "desc": "Mid-thirties, upcountry-neat, working the fabric stalls with the practised eye of a woman who buys to sell. Two checked laundry bags of folded cotton already at her feet. Something in the way she reads the market — which vendors she wais, which she doesn't — says she worked a soi like this once, and left it on her own terms.",
+   "emoji": "🧵",
+   "name": "Nit",
+   "room": "buakhao_market",
+   "th": "นิด"
+  },
+  "nittaya": {
+   "desc": "Tall and quiet, watching the door — one of the Coconut Bar girls, from Yasothon. The {{phone}} never leaves her hand.",
+   "emoji": "💕",
+   "filler": true,
+   "name": "Nittaya",
+   "role": "hostess",
+   "room": "coconut",
+   "th": "นิตยา"
+  },
+  "noey": {
+   "desc": "Long hair, longer eyelashes, a practised pout — one of the Hyper A Go-Go girls, from Roi Et. The {{phone}} never leaves her hand.",
+   "emoji": "💫",
+   "filler": true,
+   "name": "Noey",
+   "role": "hostess",
+   "room": "hyper",
+   "th": "เนย"
+  },
+  "noi": {
+   "desc": "Tall, long dark hair, a knowing look that suggests she's already guessed why you're here and finds it funny.",
+   "emoji": "🌸",
+   "name": "Noi",
+   "role": "hostess",
+   "room": "neon_paradise",
+   "th": "น้อย"
+  },
+  "nok": {
+   "desc": "A drinks-cart vendor with a cooler of everything and opinions to match. A hand-lettered sign on the cart offers ฿5 per returned bottle.",
+   "emoji": "🥭",
+   "name": "Auntie Nok",
+   "room": "soi7_beach_end",
+   "th": "น้อยหน่า"
+  },
+  "nong": {
+   "desc": "Sweet, visibly new — first week on the soi — checking her phone between customers and startling whenever the door opens.",
+   "emoji": "🌸",
+   "name": "Nong",
+   "role": "hostess",
+   "room": "gold_rush",
+   "th": "น้อง"
+  },
+  "nook": {
+   "desc": "Twenty-two and delighted about all of it — the music, the lights, the free drinks, the men who think she is magic. She is having the best night of her life. Again.",
+   "emoji": "🍒",
+   "name": "Nook",
+   "role": "hostess",
+   "room": "golden_dragon",
+   "th": "นุ้ก"
+  },
+  "noon": {
+   "desc": "Baby-faced, chewing gum, thumbing her phone under the bar — one of the Jasmine Garden Bar girls, from Loei. She types more than she talks — and laughs at both.",
+   "emoji": "🌻",
+   "filler": true,
+   "name": "Noon",
+   "role": "hostess",
+   "room": "jasmine_garden",
+   "th": "นุ่น"
+  },
+  "nott": {
+   "desc": "The Adonis Club's papasan — forties, immaculate, a silk shirt open one button past advisable and a smile that has closed a thousand deals. He runs his boys like a talent agent and reads a room's wallet before its face.",
+   "emoji": "🕴️",
+   "name": "Nott",
+   "room": "adonis_club",
+   "th": "นนท์"
+  },
+  "nu": {
+   "desc": "Front Row's cashier, a tom in a footy shirt matching Somo's, the two of them running the bar like a five-a-side team — one on the beer, one on the money, both shouting at the ref.",
+   "emoji": "🧾",
+   "name": "Nu",
+   "role": "cashier",
+   "room": "bay_watch",
+   "th": "หนู"
+  },
+  "numfon": {
+   "desc": "The Shady Lady's cashier, comfortable and unbothered, running an honest till at an honest bar — the numbers are small, the trouble is smaller, and that suits her exactly.",
+   "emoji": "🧾",
+   "name": "Numfon",
+   "role": "cashier",
+   "room": "sunset_rail",
+   "th": "น้ำฝน"
+  },
+  "nut": {
+   "desc": "Round-faced and quick to laugh — one of the Midnight Sun Bar girls, from Amnat Charoen. She types more than she talks — and laughs at both.",
+   "emoji": "🌙",
+   "filler": true,
+   "name": "Nut",
+   "role": "hostess",
+   "room": "midnight_sun",
+   "th": "นัท"
+  },
+  "oat": {
+   "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of the Lucky Tiger Bar girls, from Sakon Nakhon. Google Translate is open before you finish the sentence.",
+   "emoji": "🌺",
+   "filler": true,
+   "name": "Oat",
+   "role": "hostess",
+   "room": "lucky_tiger",
+   "th": "โอ๊ต"
+  },
+  "ohm": {
+   "desc": "Small and sharp, and misses nothing — one of the The Dollhouse girls, from Yasothon. Google Translate is open before you finish the sentence.",
+   "emoji": "✨",
+   "filler": true,
+   "name": "Ohm",
+   "role": "hostess",
+   "room": "dollhouse",
+   "th": "โอม"
+  },
+  "orm": {
+   "desc": "Broad, motherly, and entirely able to have you removed by smiling — the mamasan of Gold Rush Lounge, from Loei. She buried a husband, raised two kids, and built a concrete house on lady drinks.",
+   "emoji": "👑",
+   "filler": true,
+   "name": "Orm",
+   "role": "mamasan",
+   "room": "gold_rush",
+   "th": "อ้อม"
+  },
+  "orn": {
+   "desc": "Long hair, longer eyelashes, a practised pout — one of the Las Vegas Go-Go girls, from Maha Sarakham. The {{phone}} never leaves her hand.",
+   "emoji": "💫",
+   "filler": true,
+   "name": "Orn",
+   "role": "hostess",
+   "room": "las_vegas",
+   "th": "อร"
+  },
+  "oy": {
+   "desc": "The Mamasan. Undefeated since 2009. She surveys her flagship from the end of the bar with the stillness of someone who owns the building, two more like it, and three condos. You have the sudden feeling your posture is being graded.",
+   "emoji": "👑",
+   "name": "Madam Oy",
+   "role": "mamasan",
+   "room": "rainbow_girls",
+   "th": "ออย"
+  },
+  "pang": {
+   "desc": "Bored until you try a word of Thai, then radiant — one of the Rainbow Girls Bar girls, from Ubon. The {{phone}} never leaves her hand.",
+   "emoji": "🌷",
+   "filler": true,
+   "name": "Pang",
+   "role": "hostess",
+   "room": "rainbow_girls",
+   "th": "แป้ง"
+  },
+  "pao": {
+   "desc": "Tall and quiet, watching the door — one of the Sundowner Bar girls, from {{Nong Bua Lamphu}}. The {{phone}} never leaves her hand.",
+   "emoji": "💕",
+   "filler": true,
+   "name": "Pao",
+   "role": "hostess",
+   "room": "sundowner",
+   "th": "เป้า"
+  },
+  "pat": {
+   "desc": "A crooked, disarming grin — one of the Feedback Bar girls, from Buriram. She types more than she talks — and laughs at both.",
+   "emoji": "💐",
+   "filler": true,
+   "name": "Pat",
+   "role": "hostess",
+   "room": "feedback_bar",
+   "th": "แพท"
+  },
+  "pear": {
+   "desc": "Sleepy-eyed and entirely unbothered — one of the The Orchid Club girls, from Khon Kaen. She types more than she talks — and laughs at both.",
+   "emoji": "🍒",
+   "filler": true,
+   "name": "Pear",
+   "role": "hostess",
+   "room": "orchid_club",
+   "th": "แพร์"
+  },
+  "pen": {
+   "desc": "Sits like she owns the stool, because she does — the mamasan of Blue Dog, from Maha Sarakham. She has run this floor longer than most of the girls have been alive.",
+   "emoji": "👑",
+   "filler": true,
+   "name": "Pen",
+   "role": "mamasan",
+   "room": "blue_dog",
+   "th": "เพ็ญ"
+  },
+  "pensri": {
+   "desc": "Fifty-odd, iron thumbs, reading glasses on a beaded chain. Pensri has run the front of this shop twenty years and can tell where you hurt before you sit down.",
+   "emoji": "💆",
+   "name": "Pensri",
+   "room": "thai_massage"
+  },
+  "petch": {
+   "desc": "The Peacock's young star, all cheekbones and ambition, between numbers and still catching her breath. She lip-syncs better than the record and knows it, and she is saving for a face the big-city stages will fight over.",
+   "emoji": "💎",
+   "name": "Petch",
+   "personality": "joker",
+   "role": "hostess",
+   "room": "peacock_cabaret",
+   "th": "เพชร"
+  },
+  "pete": {
+   "desc": "English, fifties, the kind of grey you go when you've stopped sleeping properly. Sits where he can see who comes in, drinks slow, gives nothing. Calls himself Pete, and it's a good enough name. Whatever he left behind, he left it fast and he left it whole — Pattaya never asks for references, which is the entire reason he's on this stool and not another.",
+   "emoji": "🚬",
+   "name": "Pete",
+   "room": "sandy_toes",
+   "th": "พีท"
+  },
+  "peung": {
+   "desc": "Golden Dragon's mamasan since before White Dish bought the paper — and she stayed on when they did, because the numbers didn't care who owned them, and neither, in the end, does she.",
+   "emoji": "👑",
+   "name": "Peung",
+   "role": "mamasan",
+   "room": "golden_dragon",
+   "th": "ผึ้ง"
+  },
+  "phil": {
+   "desc": "Mid-fifties, a fleece vest in the Pattaya heat, {{phone}} face-down on the bar in the specific way of a man waiting for a message he wants and dreads in equal measure. Bristol accent. He has the look of someone who has been coming here for long enough that 'holiday romance' stopped fitting years ago.",
+   "emoji": "📱",
+   "name": "Phil",
+   "room": "stinky_bar",
+   "th": "ฟิล"
+  },
+  "pia": {
+   "desc": "Deadpan and unbothered, ten years behind the Golden Dragon's bar and the unofficial keeper of its dead jukebox's memory. She has heard every line and rates them out of ten, silently, and you will never know your score.",
+   "emoji": "🐉",
+   "name": "Pia",
+   "role": "hostess",
+   "room": "golden_dragon",
+   "th": "เปีย"
+  },
+  "pim": {
+   "desc": "Five years behind this bar and never once paid for her own drink. She looks you over like a customs officer with a sense of humour.",
+   "emoji": "💋",
+   "name": "Pim",
+   "role": "hostess",
+   "room": "starlight_bar",
+   "th": "พิม"
+  },
+  "ping": {
+   "desc": "Cheerful, sparkly top throwing glitter across the wall, never stops smiling even when shouting drink orders over the bass.",
+   "emoji": "✨",
+   "name": "Ping",
+   "role": "hostess",
+   "room": "paradise_nights",
+   "th": "ปิง"
+  },
+  "pinky": {
+   "desc": "Tiny and loud, all elbows and energy — one of the Cheeky Monkey Bar girls, from Chaiyaphum. Google Translate is open before you finish the sentence.",
+   "emoji": "🦋",
+   "filler": true,
+   "name": "Pinky",
+   "role": "hostess",
+   "room": "cheeky_monkey",
+   "th": "พิงกี้"
+  },
+  "ple": {
+   "desc": "Half-moon glasses down her nose, appraising you over the top of them — the mamasan of Jasmine Garden Bar, from Surin. She has run this floor longer than most of the girls have been alive.",
+   "emoji": "👑",
+   "filler": true,
+   "name": "Ple",
+   "role": "mamasan",
+   "room": "jasmine_garden",
+   "th": "เปิ้ล"
+  },
+  "ploen": {
+   "desc": "Bored until you try a word of Thai, then radiant — one of the Rainbow Girls Bar girls, from Ubon. The {{phone}} never leaves her hand.",
+   "emoji": "🌷",
+   "filler": true,
+   "name": "Ploen",
+   "role": "hostess",
+   "room": "rainbow_girls",
+   "th": "เพลิน"
+  },
+  "ploy": {
+   "desc": "The cashier, in a cage of fairy lights, counting money with impossible speed. Former dancer's posture; engagement ring worn on a chain. Her boyfriend doesn't love her working here, so the cage suits everyone.",
+   "emoji": "💐",
+   "name": "Ploy",
+   "role": "cashier",
+   "room": "rainbow_girls",
+   "th": "พลอย"
+  },
+  "poom": {
+   "desc": "Long hair, longer eyelashes, a practised pout — one of the Sundowner Bar girls, from Maha Sarakham. The {{phone}} never leaves her hand.",
+   "emoji": "💫",
+   "filler": true,
+   "name": "Poom",
+   "role": "hostess",
+   "room": "sundowner",
+   "th": "ภูมิ"
+  },
+  "pop": {
+   "desc": "New enough to still look a little nervous — one of the Slutty Go-Go girls, from Roi Et. The {{phone}} never leaves her hand.",
+   "emoji": "🌸",
+   "filler": true,
+   "name": "Pop",
+   "role": "hostess",
+   "room": "slutty",
+   "th": "ป๊อป"
+  },
+  "powers": {
+   "desc": "Late thirties dressed for late twenties: a linen shirt one button too honest, a watch that wants to be noticed, sunglasses on indoors at midnight. He films himself more than he talks and talks more than he listens. Up close, the empire is just a man who has never once been told no by anyone he pays.",
+   "emoji": "🕶️",
+   "name": "Ryan Powers",
+   "room": "orchid_room"
+  },
+  "poy": {
+   "desc": "Softly spoken and glamorously done up, and decent enough to say it at hello — she would rather tell you straight than be anyone's surprise. Tired of the two reactions, hoping for a third.",
+   "emoji": "🌸",
+   "name": "Poy",
+   "role": "hostess",
+   "room": "golden_dragon",
+   "th": "พอย"
+  },
+  "prae": {
+   "desc": "Sleepy-eyed and entirely unbothered — one of the Jasmine Garden Bar girls, from {{Nong Khai}}. She types more than she talks — and laughs at both.",
+   "emoji": "🍒",
+   "filler": true,
+   "name": "Prae",
+   "role": "hostess",
+   "room": "jasmine_garden",
+   "th": "แพร"
+  },
+  "praew": {
+   "desc": "Older than the go-go average, and unhurried about it — one of the Tequila Queen A-Go-Go girls, from Chaiyaphum. Google Translate is open before you finish the sentence.",
+   "emoji": "🌼",
+   "filler": true,
+   "name": "Praew",
+   "role": "hostess",
+   "room": "tequila_queen",
+   "th": "แพรว"
+  },
+  "praewa": {
+   "desc": "Pretty and a little far away, like part of her is always on the bus back to a village you'll never see. Kind to you, and not quite here.",
+   "emoji": "🌷",
+   "name": "Praewa",
+   "role": "hostess",
+   "room": "kitten_corner",
+   "th": "แพรวา"
+  },
+  "preaw": {
+   "desc": "Saeng's niece, brisk and unsentimental behind the Ruby Kiss till, running the money while Wilai runs the window — the two halves of the operation that never need to discuss it.",
+   "emoji": "🧾",
+   "name": "Preaw",
+   "role": "cashier",
+   "room": "ruby_kiss",
+   "th": "แพรว"
+  },
+  "prik": {
+   "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of the Moonshine Bar girls, from Yasothon. Google Translate is open before you finish the sentence.",
+   "emoji": "🌺",
+   "filler": true,
+   "name": "Prik",
+   "role": "hostess",
+   "room": "moonshine_bar",
+   "th": "พริก"
+  },
+  "proud": {
+   "desc": "Bored until you try a word of Thai, then radiant — one of the Lucky 7 Bar girls, from Nakhon Phanom. The {{phone}} never leaves her hand.",
+   "emoji": "🌷",
+   "filler": true,
+   "name": "Proud",
+   "role": "hostess",
+   "room": "lucky7",
+   "th": "พราว"
+  },
+  "pui": {
+   "desc": "Sleepy-eyed and entirely unbothered — one of the Starlight Bar girls, from Khon Kaen. She types more than she talks — and laughs at both.",
+   "emoji": "🍒",
+   "filler": true,
+   "name": "Pui",
+   "role": "hostess",
+   "room": "starlight_bar",
+   "th": "ปุ้ย"
+  },
+  "pukky": {
+   "desc": "Easy and unhurried behind the Shady Lady's rail — the kind of company that feels like a night off rather than a transaction. No hurry in her, and no hustle either.",
+   "emoji": "🌻",
+   "name": "Pukky",
+   "role": "hostess",
+   "room": "sunset_rail",
+   "th": "ปุ๊กกี้"
+  },
+  "pun": {
+   "desc": "Older than the go-go average, and unhurried about it — one of the Encore girls, from Surin. Google Translate is open before you finish the sentence.",
+   "emoji": "🌼",
+   "filler": true,
+   "name": "Pun",
+   "role": "hostess",
+   "room": "encore_bar",
+   "th": "ปั้น"
+  },
+  "puu": {
+   "desc": "Beautiful and burning a little too bright, all the way in from the first minute. Her eyes flick to {{your phone}} when it lights, to the girl who walks past, and back to you, fast. Lovely. A live wire.",
+   "emoji": "🔥",
+   "name": "Puu",
+   "role": "hostess",
+   "room": "pink_lotus",
+   "th": "ปู"
+  },
+  "ratana": {
+   "desc": "Half-moon glasses down her nose, appraising you over the top of them — the mamasan of Lucky Tiger Bar, from Surin. She puts four kids through school on other men's lonely nights.",
+   "emoji": "👑",
+   "filler": true,
+   "name": "Ratana",
+   "role": "mamasan",
+   "room": "lucky_tiger",
+   "th": "รัตนา"
+  },
+  "ratchada": {
+   "desc": "Tall and quiet, watching the door — one of the Coconut Bar girls, from Yasothon. The {{phone}} never leaves her hand.",
+   "emoji": "🌺",
+   "filler": true,
+   "name": "Ratchada",
+   "role": "hostess",
+   "room": "coconut",
+   "th": "รัชฎา"
+  },
+  "ratree": {
+   "desc": "Gold at the wrist and throat, reading glasses pushed up into her hair — the mamasan of Las Vegas Go-Go, from Chaiyaphum. She married a farang, buried the marriage, and kept the house.",
+   "emoji": "👑",
+   "filler": true,
+   "name": "Ratree",
+   "role": "mamasan",
+   "room": "las_vegas",
+   "th": "ราตรี"
+  },
+  "rin": {
+   "desc": "Rings on every finger and a voice that cuts the music when she wants it — the mamasan of Crystal Palace A-Go-Go, from Kalasin. She danced this same street before you were her problem.",
+   "emoji": "👑",
+   "filler": true,
+   "name": "Rin",
+   "role": "mamasan",
+   "room": "crystal_palace",
+   "th": "ริน"
+  },
+  "rob": {
+   "desc": "English, forty-eight, married a Buriram girl for nine years and buried the marriage a year ago, not unkindly on either side. Speaks passable Isan-accented Thai, knows the family system from the inside, and watches the bar's whole performance with the fond, tired eye of a man who's seen the machinery from backstage. Not here to be fooled. Here because where else would he be.",
+   "emoji": "💍",
+   "name": "Rob",
+   "room": "kitten_corner",
+   "th": "ร็อบ"
+  },
+  "rose": {
+   "desc": "The madame of the Orchid Club — fifties, immaculate, a silk blouse and a voice you have to lean in to hear. She runs the quietest, coldest, most expensive room in Naklua, and she knows the name of every regular's wife.",
+   "emoji": "🌷",
+   "name": "Rose",
+   "role": "mamasan",
+   "room": "orchid_club",
+   "th": "โรส"
+  },
+  "roy": {
+   "desc": "English, seventy, been coming since the soi had neon on one side only. Retired on a fixed pension he counts to the baht and never complains about; nurses a single Chang an hour and makes it last. Knows every bar's real name, every one it used to be, and half the ghosts propping up the other half. Not bitter. Just here, the way the tide is here.",
+   "emoji": "🍺",
+   "name": "Roy",
+   "personality": "whiteknight",
+   "room": "cherry_pop",
+   "th": "รอย"
+  },
+  "rung": {
+   "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of the Lucky Tiger Bar girls, from Sisaket. Google Translate is open before you finish the sentence.",
+   "emoji": "🌺",
+   "filler": true,
+   "name": "Rung",
+   "role": "hostess",
+   "room": "lucky_tiger",
+   "th": "รุ้ง"
+  },
+  "saeng": {
+   "desc": "Ruby Kiss's mamasan, content to sit back while Wilai works the window — because a mama who's found a girl that good knows to stay out of her light and just count.",
+   "emoji": "👑",
+   "name": "Saeng",
+   "role": "mamasan",
+   "room": "ruby_kiss",
+   "th": "แสง"
+  },
+  "sai": {
+   "desc": "Long hair, longer eyelashes, a practised pout — one of the Rainbow Girls Bar girls, from Maha Sarakham. The {{phone}} never leaves her hand.",
+   "emoji": "💫",
+   "filler": true,
+   "name": "Sai",
+   "role": "hostess",
+   "room": "rainbow_girls",
+   "th": "ทราย"
+  },
+  "saifon": {
+   "desc": "Somebody's mother, twice over, and nobody's fool ever — one of the Firefly Bar girls, from Yasothon. Google Translate is open before you finish the sentence.",
+   "emoji": "🍒",
+   "filler": true,
+   "name": "Saifon",
+   "role": "hostess",
+   "room": "firefly_bar",
+   "th": "สายฝน"
+  },
+  "sara": {
+   "desc": "Tiny and loud, all elbows and energy — one of the Neon Paradise A-Go-Go girls, from Udon Thani. Google Translate is open before you finish the sentence.",
+   "emoji": "🦋",
+   "filler": true,
+   "name": "Sara",
+   "role": "hostess",
+   "room": "neon_paradise",
+   "th": "ซาร่า"
+  },
+  "security": {
+   "desc": "Three large men arranged around the room like load-bearing furniture. One watches the door marked ห้ามเข้า specifically. They are polite, immovable, and backed by every piwin within three sois.",
+   "emoji": "🦍",
+   "name": "security",
+   "room": "rainbow_girls",
+   "th": "รปภ."
+  },
+  "som": {
+   "desc": "New enough to still look a little nervous — one of the Soundcheck Bar girls, from Roi Et. The {{phone}} never leaves her hand.",
+   "emoji": "🌸",
+   "filler": true,
+   "name": "Som",
+   "role": "hostess",
+   "room": "soundcheck_bar",
+   "th": "ส้ม"
+  },
+  "somchith": {
+   "desc": "Sixty-something, a weathered face that holds a permanent quiet warmth, the thermos of coffee always close. He keeps the keys, keeps the counter, keeps everything running on this shift without any fuss. The girls coming through treat him like a favourite uncle.",
+   "emoji": "🔑",
+   "name": "Somchith",
+   "room": "short_time_motel",
+   "th": "สมชิต"
+  },
+  "somjai": {
+   "desc": "Gold at the wrist and throat, reading glasses pushed up into her hair — the mamasan of Firefly Bar, from Udon Thani. She danced this same street before you were her problem.",
+   "emoji": "👑",
+   "filler": true,
+   "name": "Somjai",
+   "role": "mamasan",
+   "room": "firefly_bar",
+   "th": "สมใจ"
+  },
+  "somo": {
+   "desc": "In a Liverpool shirt and zero makeup, arguing offside with two regulars and winning. More one-of-the-lads than hostess, and she'll tell you so before you get the wrong idea.",
+   "emoji": "⚽",
+   "name": "Somo",
+   "role": "hostess",
+   "room": "bay_watch",
+   "th": "โซโม่"
+  },
+  "somruedee": {
+   "desc": "A crooked, disarming grin — one of the Sea Breeze Bar girls, from Buriram. She types more than she talks — and laughs at both.",
+   "emoji": "💐",
+   "filler": true,
+   "name": "Somruedee",
+   "role": "hostess",
+   "room": "seabreeze",
+   "th": "สมฤดี"
+  },
+  "somsri": {
+   "desc": "Rings on every finger and a voice that cuts the music when she wants it — the mamasan of KINKY Go-Go, from Maha Sarakham. She danced this same street before you were her problem.",
+   "emoji": "👑",
+   "filler": true,
+   "name": "Somsri",
+   "role": "mamasan",
+   "room": "kinky",
+   "th": "สมศรี"
+  },
+  "sopha": {
+   "desc": "Front Row's mamasan, who put the big screens in herself and knows the league table better than half the punters. Runs a football bar for football people, and keeps the drama outside.",
+   "emoji": "👑",
+   "name": "Sopha",
+   "role": "mamasan",
+   "room": "bay_watch",
+   "th": "โสภา"
+  },
+  "sumalee": {
+   "bars": [
+    "lucky7",
+    "seabreeze",
+    "coconut",
+    "sandbar"
+   ],
+   "desc": "The matriarch of Soi 7 — thirty years in Jomtien, four little beer bars, and not one gram of hurry. Where the Buakhao mamas price you like a market, Sumalee just wants everyone fed, watered, and coming back next season. She works a different bar each night, mostly to keep the girls honest and the regulars guessing.",
+   "emoji": "👑",
+   "name": "Sumalee",
+   "role": "mamasan",
+   "room": "lucky7",
+   "th": "สุมาลี"
+  },
+  "taan": {
+   "desc": "Small and sharp, and misses nothing — one of the Gold Rush Lounge girls, from Yasothon. Google Translate is open before you finish the sentence.",
+   "emoji": "✨",
+   "filler": true,
+   "name": "Taan",
+   "role": "hostess",
+   "room": "gold_rush",
+   "th": "ตาล"
+  },
+  "tabtim": {
+   "desc": "Round-cheeked and permanently pleased, a half-step behind every joke and laughing at it anyway, on faith. Sweetest girl in the bar, and the bar knows it.",
+   "emoji": "🍉",
+   "name": "Tabtim",
+   "role": "hostess",
+   "room": "cherry_pop",
+   "th": "ทับทิม"
+  },
+  "tan": {
+   "desc": "Your airport driver, leaning on a plain grey sedan at the mouth of the soi as though he never drove off — mid-thirties, neat, a polo shirt you would forget the instant you looked away. Six years in Ohio for a film degree that paid nothing and taught him everything about how a shot is framed. \"I drive and I fix,\" he says, and both are true, and neither is the whole of it. The most forgettable man on Soi 6 — which, on Soi 6, is its own kind of power.",
+   "emoji": "🚕",
+   "name": "Tan",
+   "personality": "operator",
+   "room": "soi6_street",
+   "th": "ต้น"
+  },
+  "tangmo": {
+   "desc": "Fingers flying over a calculator app, eyes never leaving the cash — the cashier at Mama Yai's, from Sisaket.",
+   "emoji": "🧾",
+   "filler": true,
+   "name": "Tangmo",
+   "role": "cashier",
+   "room": "mama_yai",
+   "th": "แตงโม"
+  },
+  "tarn": {
+   "desc": "Long hair, longer eyelashes, a practised pout — one of the Sapphire Bar girls, from Maha Sarakham. The {{phone}} never leaves her hand.",
+   "emoji": "💫",
+   "filler": true,
+   "name": "Tarn",
+   "role": "hostess",
+   "room": "sapphire",
+   "th": "ธาร"
+  },
+  "terry": {
+   "desc": "Bald, red-faced, Chang vest, fifteen years of Pattaya compressed into a permanent corner-stool residency. He rents the same balcony room every high season. He was here before White Dish. He will tell you about it. He tells it well.",
+   "emoji": "🍺",
+   "name": "Terry",
+   "room": "queen_vic"
+  },
+  "tik": {
+   "desc": "Baby-faced, chewing gum, thumbing her phone under the bar — one of the Gold Rush Lounge girls, from Khon Kaen. She types more than she talks — and laughs at both.",
+   "emoji": "🌻",
+   "filler": true,
+   "name": "Tik",
+   "role": "hostess",
+   "room": "gold_rush",
+   "th": "ติ๊ก"
+  },
+  "tim": {
+   "desc": "Small and sharp, and misses nothing — one of the The Boardroom girls, from Sisaket. Google Translate is open before you finish the sentence.",
+   "emoji": "✨",
+   "filler": true,
+   "name": "Tim",
+   "role": "hostess",
+   "room": "the_boardroom",
+   "th": "ทิม"
+  },
+  "toey": {
+   "desc": "New enough to still look a little nervous — one of the Rainbow Girls Bar girls, from Kalasin. The {{phone}} never leaves her hand.",
+   "emoji": "🌸",
+   "filler": true,
+   "name": "Toey",
+   "role": "hostess",
+   "room": "rainbow_girls",
+   "th": "เตย"
+  },
+  "toi": {
+   "desc": "Cherry Pop's mamasan — loud enough to run a loud bar, sharp enough behind it to run the numbers while the party roars. She sells fun by the bottle, and business is very good.",
+   "emoji": "👑",
+   "name": "Toi",
+   "role": "mamasan",
+   "room": "cherry_pop",
+   "th": "ต้อย"
+  },
+  "ton": {
+   "desc": "A crooked, disarming grin — one of the Silk Rose Bar girls, from Mukdahan. She types more than she talks — and laughs at both.",
+   "emoji": "💐",
+   "filler": true,
+   "name": "Ton",
+   "role": "hostess",
+   "room": "silk_rose",
+   "th": "ต้น"
+  },
+  "toom": {
+   "desc": "Broad, brisk, unbothered. Toom runs the Poseidon floor from a little desk by the glass, and has explained the menu ten thousand times.",
+   "emoji": "🛁",
+   "name": "Toom",
+   "room": "poseidon_soapy"
+  },
+  "toon": {
+   "desc": "Sleepy-eyed and entirely unbothered — one of the Container 8 girls, from Khon Kaen. She types more than she talks — and laughs at both.",
+   "emoji": "🍒",
+   "filler": true,
+   "name": "Toon",
+   "role": "hostess",
+   "room": "container_8",
+   "th": "ตูน"
+  },
+  "tui": {
+   "desc": "A cloud of perfume and authority, hair lacquered against the fans — the mamasan of The Night Heron, from Nakhon Phanom. She came up from the rice fields and never once looked back.",
+   "emoji": "👑",
+   "filler": true,
+   "name": "Tui",
+   "role": "mamasan",
+   "room": "night_heron",
+   "th": "ตุ่ย"
+  },
+  "tukta": {
+   "desc": "A crooked, disarming grin — one of the Slutty Go-Go girls, from Buriram. She types more than she talks — and laughs at both.",
+   "emoji": "💐",
+   "filler": true,
+   "name": "Tukta",
+   "role": "hostess",
+   "room": "slutty",
+   "th": "ตุ๊กตา"
+  },
+  "view": {
+   "desc": "Long hair, longer eyelashes, a practised pout — one of the Neon Paradise A-Go-Go girls, from Roi Et. The {{phone}} never leaves her hand.",
+   "emoji": "💫",
+   "filler": true,
+   "name": "View",
+   "role": "hostess",
+   "room": "neon_paradise",
+   "th": "วิว"
+  },
+  "wa": {
+   "desc": "Small and sharp, and misses nothing — one of the Silk Rose Bar girls, from Yasothon. Google Translate is open before you finish the sentence.",
+   "emoji": "✨",
+   "filler": true,
+   "name": "Wa",
+   "role": "hostess",
+   "room": "silk_rose",
+   "th": "หว้า"
+  },
+  "waan": {
+   "desc": "Young, round-cheeked, shy until she isn't. Waan works the oil room at Smile and has decided, for reasons of her own, that she likes you.",
+   "emoji": "💗",
+   "name": "Waan",
+   "room": "smile_massage"
+  },
+  "waew": {
+   "desc": "Broad, motherly, and entirely able to have you removed by smiling — the mamasan of Silk Rose Bar, from Khon Kaen. She buried a husband, raised two kids, and built a concrete house on lady drinks.",
+   "emoji": "👑",
+   "filler": true,
+   "name": "Waew",
+   "role": "mamasan",
+   "room": "silk_rose",
+   "th": "แวว"
+  },
+  "wan": {
+   "desc": "The mamasan of Slutty: compact, efficient, wearing a headset that may or may not be connected to anything. She's been on LK Metro since before it was worth being on, and carries that seniority in every glance.",
+   "emoji": "💫",
+   "name": "Wan",
+   "role": "mamasan",
+   "room": "slutty",
+   "th": "วัน"
+  },
+  "wandee": {
+   "desc": "Older, sharper, and entirely done being impressed by farang — the mamasan of The Water Buffalo, from Sakon Nakhon. She has watched the soi flood, burn, and rebuild, and outlasted all three.",
+   "emoji": "👑",
+   "filler": true,
+   "name": "Wandee",
+   "role": "mamasan",
+   "room": "water_buffalo",
+   "th": "วันดี"
+  },
+  "wanpen": {
+   "desc": "A gold tooth, a sharper tongue, and drink arithmetic you can watch happening — one of the Mama Yai's girls, from Udon Thani. Google Translate is open before you finish the sentence.",
+   "emoji": "💐",
+   "filler": true,
+   "name": "Wanpen",
+   "role": "hostess",
+   "room": "mama_yai",
+   "th": "วันเพ็ญ"
+  },
+  "wayne": {
+   "desc": "Australian, forty-five, a Gold Coast tan and a shirt with the top three buttons making a decision. Made real money in earthmoving back home and has decided, with the total confidence of a man who's never been conned, that a Soi 6 bar is 'basically the same game, mate — plant, cashflow, location.' The girls have his order memorised. So has the till.",
+   "emoji": "🕶️",
+   "name": "Wayne",
+   "room": "golden_dragon",
+   "th": "เวย์น"
+  },
+  "wilai": {
+   "desc": "The ringleader of the Ruby Kiss front stools, lipstick on the rim of every glass by design, quick enough to sell you a drink and roast you for buying it in the same breath.",
+   "emoji": "💋",
+   "name": "Wilai",
+   "personality": "charmer",
+   "role": "hostess",
+   "room": "ruby_kiss",
+   "th": "วิไล"
+  },
+  "wimon": {
+   "bars": [
+    "arrow_bar",
+    "cheeky_monkey",
+    "the_office"
+   ],
+   "desc": "The mamasan who runs the Samson brothers' three beer bars on the strip — fifties, brisk, a {{phone}} in each hand and an eye on every tab. She works a different bar each night and somehow knows exactly what happened at the other two.",
+   "emoji": "👑",
+   "name": "Wimon",
+   "role": "mamasan",
+   "room": "arrow_bar",
+   "th": "วิมล"
+  },
+  "win": {
+   "desc": "Host number 9: slighter than Arm, prettier, quieter, with a stillness the loud ones don't have. He watches you a beat longer than the job strictly requires, and means a little more of it than he should.",
+   "emoji": "✨",
+   "name": "Win",
+   "room": "adonis_club",
+   "th": "วิน"
+  },
+  "yai": {
+   "desc": "The Yai in Mama Yai's — sixty-ish, an apron over a buffalo-print blouse, a ladle in one hand and the whole soi's memory in the other. She feeds you before she reads you, and by the time the som tam lands she has done both.",
+   "emoji": "🍲",
+   "name": "Mama Yai",
+   "role": "mamasan",
+   "room": "mama_yai",
+   "th": "ใหญ่"
+  },
+  "yaya": {
+   "desc": "Baby-faced, chewing gum, thumbing her phone under the bar — one of the Reload Bar girls, from {{Nong Khai}}. She types more than she talks — and laughs at both.",
+   "emoji": "🌻",
+   "filler": true,
+   "name": "Yaya",
+   "role": "hostess",
+   "room": "reload_bar",
+   "th": "ยาย่า"
+  },
+  "ying": {
+   "desc": "Twenty seasons of soi behind her eyes and a laugh that got louder every one — one of the Daeng's Place girls, from Amnat Charoen. She types more than she talks — and laughs at both.",
+   "emoji": "💐",
+   "filler": true,
+   "name": "Ying",
+   "role": "hostess",
+   "room": "khao_talo_bar",
+   "th": "หญิง"
+  },
+  "yok": {
+   "desc": "Older than the go-go average, and unhurried about it — one of the The Hive girls, from Surin. Google Translate is open before you finish the sentence.",
+   "emoji": "🌼",
+   "filler": true,
+   "name": "Yok",
+   "role": "hostess",
+   "room": "queen_bee",
+   "th": "หยก"
+  },
+  "yui": {
+   "desc": "Round-faced and quick to laugh — one of the Club Mirage girls, from Mukdahan. She types more than she talks — and laughs at both.",
+   "emoji": "🌙",
+   "filler": true,
+   "name": "Yui",
+   "role": "hostess",
+   "room": "club_mirage",
+   "th": "ยุ้ย"
+  }
+ },
+ "v": 1,
+ "venues": {
+  "adonis_club": {
+   "bar": "The Adonis Club",
+   "geo": [
+    12.8977,
+    100.8686
+   ],
+   "name": "The Adonis Club",
+   "region": "Thappraya"
+  },
+  "amp_room": {
+   "bar": "The Amp Room",
+   "barType": "beer",
+   "geo": [
+    12.9327,
+    100.8821
+   ],
+   "liveMusic": true,
+   "name": "The Amp Room",
+   "region": "Myth Night"
+  },
+  "anchor_bar": {
+   "bar": "The Anchor Bar",
+   "barType": "beer",
+   "geo": [
+    12.9527,
+    100.8892
+   ],
+   "name": "The Anchor Bar",
+   "pool": true,
+   "region": "Naklua"
+  },
+  "areca_room": {
+   "geo": [
+    12.9312,
+    100.884
+   ],
+   "name": "Your Room — Areca Lodge",
+   "region": "Soi Diana"
+  },
+  "arrow_bar": {
+   "bar": "Arrow Bar",
+   "barType": "beer",
+   "geo": [
+    12.8971,
+    100.8666
+   ],
+   "name": "Arrow Bar",
+   "region": "Thappraya"
+  },
+  "bay_watch": {
+   "bar": "Front Row Bar",
+   "barType": "beer",
+   "geo": [
+    12.945,
+    100.8863
+   ],
+   "name": "Front Row Bar",
+   "region": "Soi 6"
+  },
+  "beach_rd_c": {
+   "geo": [
+    12.9348,
+    100.8744
+   ],
+   "name": "Beach Road Central",
+   "region": "Beach Road",
+   "seven": true
+  },
+  "beach_rd_n": {
+   "geo": [
+    12.9425,
+    100.8827
+   ],
+   "name": "Beach Road (foot of Soi 6)",
+   "region": "Beach Road"
+  },
+  "beach_rd_s": {
+   "geo": [
+    12.9295,
+    100.8715
+   ],
+   "name": "Beach Road South",
+   "region": "Beach Road"
+  },
+  "beach_turn_massage": {
+   "bar": "Beach Turn Oil Massage",
+   "geo": [
+    12.8964,
+    100.8664
+   ],
+   "name": "Beach Turn Oil Massage",
+   "region": "Thappraya"
+  },
+  "beachrd_oil": {
+   "bar": "Cherry Oil Massage",
+   "geo": [
+    12.9352,
+    100.8748
+   ],
+   "name": "Cherry Oil Massage",
+   "region": "Beach Road"
+  },
+  "beachthai_massage": {
+   "bar": "Beach Road Thai Massage",
+   "geo": [
+    12.9288,
+    100.871
+   ],
+   "name": "Beach Road Thai Massage",
+   "region": "Beach Road"
+  },
+  "blue_dog": {
+   "bar": "Blue Dog",
+   "barType": "beer",
+   "geo": [
+    12.9427,
+    100.8824
+   ],
+   "name": "Blue Dog",
+   "region": "Beach Road"
+  },
+  "buakhao_market": {
+   "geo": [
+    12.9262,
+    100.882
+   ],
+   "name": "Buakhao Market",
+   "region": "Soi Buakhao"
+  },
+  "buakhao_n": {
+   "geo": [
+    12.9315,
+    100.8848
+   ],
+   "name": "Soi Buakhao (North)",
+   "region": "Soi Buakhao",
+   "seven": true
+  },
+  "buakhao_oil": {
+   "bar": "Golden Touch Massage",
+   "geo": [
+    12.926,
+    100.8832
+   ],
+   "name": "Golden Touch Massage",
+   "region": "Soi Buakhao"
+  },
+  "buakhao_s": {
+   "geo": [
+    12.9218,
+    100.8795
+   ],
+   "name": "Soi Buakhao (South)",
+   "region": "Soi Buakhao"
+  },
+  "buddha_hill": {
+   "geo": [
+    12.9142,
+    100.8618
+   ],
+   "name": "Buddha Hill Viewpoint",
+   "region": "Pratumnak"
+  },
+  "buzz_inn": {
+   "bar": "Buzz Inn",
+   "barType": "beer",
+   "geo": [
+    12.9232,
+    100.8784
+   ],
+   "name": "Buzz Inn",
+   "region": "Soi Honey"
+  },
+  "candy_bar": {
+   "bar": "Candy Bar",
+   "barType": "beer",
+   "geo": [
+    12.9264,
+    100.8814
+   ],
+   "name": "Candy Bar",
+   "region": "Soi Buakhao"
+  },
+  "candy_bar_2": {
+   "bar": "Candy Bar 2",
+   "barType": "beer",
+   "geo": [
+    12.9324,
+    100.8824
+   ],
+   "liveMusic": true,
+   "name": "Candy Bar 2",
+   "region": "Myth Night"
+  },
+  "central_mall": {
+   "geo": [
+    12.9352,
+    100.8768
+   ],
+   "name": "Central Mall (Beach Road front)",
+   "region": "Beach Road"
+  },
+  "cheeky_monkey": {
+   "bar": "Cheeky Monkey Bar",
+   "barType": "beer",
+   "geo": [
+    12.8975,
+    100.8683
+   ],
+   "name": "Cheeky Monkey Bar",
+   "region": "Thappraya"
+  },
+  "cherry_pop": {
+   "bar": "Cherry Pop Bar",
+   "barType": "soi6",
+   "geo": [
+    12.9446,
+    100.8867
+   ],
+   "name": "Cherry Pop Bar",
+   "region": "Soi 6"
+  },
+  "club_mirage": {
+   "bar": "Club Mirage",
+   "barType": "gogo",
+   "geo": [
+    12.9246,
+    100.8701
+   ],
+   "name": "Club Mirage",
+   "region": "Walking Street"
+  },
+  "coconut": {
+   "bar": "Coconut Bar",
+   "barType": "beer",
+   "geo": [
+    12.8903,
+    100.8736
+   ],
+   "name": "Coconut Bar",
+   "region": "Jomtien"
+  },
+  "container_8": {
+   "bar": "Container 8",
+   "barType": "beer",
+   "geo": [
+    12.9319,
+    100.8818
+   ],
+   "name": "Container 8",
+   "region": "Myth Night"
+  },
+  "craft_cargo": {
+   "bar": "Craft & Cargo",
+   "barType": "beer",
+   "geo": [
+    12.9317,
+    100.8819
+   ],
+   "name": "Craft & Cargo",
+   "region": "Myth Night"
+  },
+  "cricketers": {
+   "bar": "The Cricketers",
+   "barType": "beer",
+   "geo": [
+    12.9319,
+    100.8842
+   ],
+   "name": "The Cricketers",
+   "region": "Soi Diana"
+  },
+  "crystal_palace": {
+   "bar": "Crystal Palace A-Go-Go",
+   "barType": "gogo",
+   "geo": [
+    12.9227,
+    100.8689
+   ],
+   "name": "Crystal Palace A-Go-Go",
+   "region": "Walking Street"
+  },
+  "diana_e": {
+   "geo": [
+    12.9316,
+    100.884
+   ],
+   "name": "Soi Diana (Buakhao end)",
+   "region": "Soi Diana"
+  },
+  "diana_mid": {
+   "geo": [
+    12.932,
+    100.8822
+   ],
+   "name": "Soi Diana (middle)",
+   "region": "Soi Diana"
+  },
+  "diana_w": {
+   "geo": [
+    12.9325,
+    100.8805
+   ],
+   "name": "Soi Diana (Second Road end)",
+   "region": "Soi Diana"
+  },
+  "dollhouse": {
+   "bar": "The Dollhouse",
+   "barType": "beer",
+   "geo": [
+    12.9328,
+    100.8806
+   ],
+   "name": "The Dollhouse",
+   "region": "Soi Diana"
+  },
+  "dolphin_bar": {
+   "bar": "Dolphin Bar",
+   "barType": "beer",
+   "geo": [
+    12.953,
+    100.8891
+   ],
+   "name": "Dolphin Bar",
+   "region": "Naklua"
+  },
+  "dongtan_beach": {
+   "geo": [
+    12.896,
+    100.8655
+   ],
+   "name": "Dongtan Beach (South)",
+   "region": "Jomtien"
+  },
+  "dongtan_beach_m": {
+   "geo": [
+    12.8985,
+    100.8632
+   ],
+   "name": "Dongtan Beach (Middle)",
+   "region": "Jomtien"
+  },
+  "dongtan_beach_n": {
+   "geo": [
+    12.9015,
+    100.8628
+   ],
+   "name": "Dongtan Beach (North)",
+   "region": "Jomtien"
+  },
+  "dongtan_rd_m": {
+   "geo": [
+    12.9008,
+    100.865
+   ],
+   "name": "Dongtan Beach Road (Middle)",
+   "region": "Jomtien"
+  },
+  "dongtan_rd_n": {
+   "geo": [
+    12.9036,
+    100.8648
+   ],
+   "name": "Dongtan Beach Road (North)",
+   "region": "Pratumnak"
+  },
+  "dongtan_rd_s": {
+   "geo": [
+    12.8984,
+    100.8652
+   ],
+   "name": "Dongtan Beach Road (South)",
+   "region": "Jomtien"
+  },
+  "emperor_soapy": {
+   "bar": "The Emperor Massage",
+   "geo": [
+    12.9536,
+    100.8883
+   ],
+   "name": "The Emperor Massage",
+   "region": "Naklua"
+  },
+  "encore_bar": {
+   "bar": "Encore",
+   "barType": "beer",
+   "geo": [
+    12.9325,
+    100.882
+   ],
+   "name": "Encore",
+   "region": "Myth Night"
+  },
+  "feedback_bar": {
+   "bar": "Feedback Bar",
+   "barType": "beer",
+   "geo": [
+    12.9328,
+    100.8824
+   ],
+   "name": "Feedback Bar",
+   "region": "Myth Night"
+  },
+  "firefly_bar": {
+   "bar": "Firefly Bar",
+   "barType": "beer",
+   "geo": [
+    12.9077,
+    100.9086
+   ],
+   "name": "Firefly Bar",
+   "region": "Darkside"
+  },
+  "gold_rush": {
+   "bar": "Gold Rush Lounge",
+   "barType": "beer",
+   "geo": [
+    12.9333,
+    100.8857
+   ],
+   "name": "Gold Rush Lounge",
+   "region": "Tree Town"
+  },
+  "golden_dragon": {
+   "bar": "Golden Dragon Bar",
+   "barType": "soi6",
+   "geo": [
+    12.9447,
+    100.8858
+   ],
+   "name": "Golden Dragon Bar",
+   "region": "Soi 6"
+  },
+  "honey_soapy": {
+   "bar": "Honeycomb Massage",
+   "geo": [
+    12.925,
+    100.878
+   ],
+   "name": "Honeycomb Massage",
+   "region": "Soi Honey"
+  },
+  "honey_trap": {
+   "bar": "Honey Trap Bar",
+   "barType": "beer",
+   "geo": [
+    12.926,
+    100.8776
+   ],
+   "name": "Honey Trap Bar",
+   "region": "Soi Honey"
+  },
+  "hotel_room": {
+   "geo": [
+    12.9567,
+    100.89
+   ],
+   "name": "Your Room — Sabai Palms Hotel",
+   "region": "Naklua"
+  },
+  "hotel_soi": {
+   "geo": [
+    12.9565,
+    100.8898
+   ],
+   "name": "Sabai Palms Soi (Naklua)",
+   "region": "Naklua"
+  },
+  "hyper": {
+   "bar": "Hyper A Go-Go",
+   "barType": "gogo",
+   "geo": [
+    12.8969,
+    100.8687
+   ],
+   "name": "Hyper A Go-Go",
+   "region": "Thappraya"
+  },
+  "jasmine_garden": {
+   "bar": "Jasmine Garden Bar",
+   "barType": "beer",
+   "geo": [
+    12.9214,
+    100.8797
+   ],
+   "name": "Jasmine Garden Bar",
+   "region": "Soi Buakhao"
+  },
+  "jomtien_2nd": {
+   "geo": [
+    12.8901,
+    100.8748
+   ],
+   "name": "Jomtien Second Road (South)",
+   "region": "Jomtien",
+   "seven": true
+  },
+  "jomtien_2nd_m": {
+   "geo": [
+    12.8892,
+    100.8752
+   ],
+   "name": "Jomtien Second Road (Middle)",
+   "region": "Jomtien"
+  },
+  "jomtien_2nd_n": {
+   "geo": [
+    12.8944,
+    100.8728
+   ],
+   "name": "Jomtien Second Road (North)",
+   "region": "Jomtien"
+  },
+  "jomtien_7eleven": {
+   "geo": [
+    12.888,
+    100.8724
+   ],
+   "name": "7-Eleven (Jomtien)",
+   "region": "Jomtien"
+  },
+  "jomtien_beach": {
+   "geo": [
+    12.889,
+    100.8688
+   ],
+   "name": "Jomtien Beach (South)",
+   "region": "Jomtien"
+  },
+  "jomtien_beach_m": {
+   "geo": [
+    12.8918,
+    100.8688
+   ],
+   "name": "Jomtien Beach (North)",
+   "region": "Jomtien"
+  },
+  "jomtien_beach_rd": {
+   "geo": [
+    12.8893,
+    100.8718
+   ],
+   "name": "Jomtien Beach Road (Baht Bus Stop)",
+   "region": "Jomtien"
+  },
+  "jomtien_beach_rd_n": {
+   "geo": [
+    12.8954,
+    100.8689
+   ],
+   "name": "Jomtien Beach Road (North)",
+   "region": "Jomtien"
+  },
+  "jomtien_beach_rd_s": {
+   "geo": [
+    12.8876,
+    100.8722
+   ],
+   "name": "Jomtien Beach Road (South)",
+   "region": "Jomtien"
+  },
+  "jomtien_thai": {
+   "bar": "Jomtien Sabai Massage",
+   "geo": [
+    12.889,
+    100.8724
+   ],
+   "name": "Jomtien Sabai Massage",
+   "region": "Jomtien"
+  },
+  "khao_talo": {
+   "geo": [
+    12.9073,
+    100.9113
+   ],
+   "name": "Soi Khao Talo",
+   "region": "Darkside",
+   "seven": true
+  },
+  "khao_talo_bar": {
+   "bar": "Daeng's Place",
+   "barType": "beer",
+   "geo": [
+    12.9071,
+    100.9118
+   ],
+   "name": "Daeng's Place (Khao Talo)",
+   "pool": true,
+   "region": "Darkside"
+  },
+  "khao_talo_strip": {
+   "geo": [
+    12.9078,
+    100.909
+   ],
+   "name": "Soi Khao Talo (the strip)",
+   "region": "Darkside"
+  },
+  "kinky": {
+   "bar": "KINKY Go-Go",
+   "barType": "gogo",
+   "geo": [
+    12.93,
+    100.8851
+   ],
+   "name": "KINKY Go-Go",
+   "region": "LK Metro"
+  },
+  "kiss": {
+   "bar": "KISS Restaurant",
+   "geo": [
+    12.9322,
+    100.8802
+   ],
+   "name": "KISS Restaurant",
+   "region": "Soi Diana"
+  },
+  "kiss_jomtien": {
+   "bar": "KISS Jomtien",
+   "geo": [
+    12.8911,
+    100.8756
+   ],
+   "name": "KISS Jomtien",
+   "region": "Jomtien"
+  },
+  "kitten_corner": {
+   "bar": "Kitten Corner",
+   "barType": "soi6",
+   "geo": [
+    12.945,
+    100.8869
+   ],
+   "name": "Kitten Corner",
+   "region": "Soi 6"
+  },
+  "lake_mabprachan": {
+   "geo": [
+    12.93,
+    100.956
+   ],
+   "name": "Lake Mabprachan",
+   "region": "Darkside"
+  },
+  "las_vegas": {
+   "bar": "Las Vegas Go-Go",
+   "barType": "gogo",
+   "geo": [
+    12.9298,
+    100.886
+   ],
+   "name": "Las Vegas Go-Go",
+   "region": "LK Metro"
+  },
+  "lk_bend": {
+   "geo": [
+    12.93,
+    100.8858
+   ],
+   "name": "LK Metro (Corner)",
+   "region": "LK Metro"
+  },
+  "lk_entrance": {
+   "geo": [
+    12.9297,
+    100.8845
+   ],
+   "name": "LK Metro (Entrance)",
+   "region": "LK Metro"
+  },
+  "lk_main": {
+   "geo": [
+    12.9298,
+    100.8852
+   ],
+   "name": "LK Metro (Main Alley)",
+   "region": "LK Metro"
+  },
+  "lk_sports": {
+   "bar": "The Offside Sports Bar",
+   "barType": "pub",
+   "geo": [
+    12.9297,
+    100.8853
+   ],
+   "name": "The Offside Sports Bar",
+   "region": "LK Metro"
+  },
+  "lotus_oil": {
+   "bar": "Lotus Oil Massage",
+   "geo": [
+    12.9531,
+    100.8879
+   ],
+   "name": "Lotus Oil Massage",
+   "region": "Naklua"
+  },
+  "lucky7": {
+   "bar": "Lucky 7 Bar",
+   "barType": "beer",
+   "geo": [
+    12.8899,
+    100.8726
+   ],
+   "name": "Lucky 7 Bar",
+   "region": "Jomtien"
+  },
+  "lucky_charm": {
+   "bar": "Lucky Charm Bar",
+   "barType": "beer",
+   "geo": [
+    12.9324,
+    100.8864
+   ],
+   "name": "Lucky Charm Bar",
+   "pool": true,
+   "region": "Tree Town"
+  },
+  "lucky_tiger": {
+   "bar": "Lucky Tiger Bar",
+   "barType": "beer",
+   "geo": [
+    12.9312,
+    100.8852
+   ],
+   "liveMusic": true,
+   "name": "Lucky Tiger Bar",
+   "region": "Soi Buakhao"
+  },
+  "mama_yai": {
+   "bar": "Mama Yai's",
+   "barType": "beer",
+   "geo": [
+    12.9066,
+    100.9114
+   ],
+   "name": "Mama Yai's",
+   "region": "Darkside"
+  },
+  "metro_garden": {
+   "bar": "The Metro Beer Garden",
+   "barType": "beer",
+   "geo": [
+    12.9302,
+    100.8858
+   ],
+   "name": "The Metro Beer Garden",
+   "region": "LK Metro"
+  },
+  "metropole_room": {
+   "geo": [
+    12.9308,
+    100.8853
+   ],
+   "name": "Your Room — LK Metropole",
+   "region": "Soi Buakhao"
+  },
+  "midnight_sun": {
+   "bar": "Midnight Sun Bar",
+   "barType": "beer",
+   "geo": [
+    12.922,
+    100.8693
+   ],
+   "name": "Midnight Sun Bar",
+   "pool": true,
+   "region": "Walking Street"
+  },
+  "moonshine_bar": {
+   "bar": "Moonshine Bar",
+   "barType": "beer",
+   "geo": [
+    12.9327,
+    100.8862
+   ],
+   "name": "Moonshine Bar",
+   "region": "Tree Town"
+  },
+  "mooring_bar": {
+   "bar": "The Mooring",
+   "barType": "beer",
+   "geo": [
+    12.9525,
+    100.8892
+   ],
+   "name": "The Mooring",
+   "region": "Naklua"
+  },
+  "myth_night": {
+   "geo": [
+    12.9322,
+    100.8822
+   ],
+   "liveMusic": true,
+   "name": "Myth Night Market",
+   "region": "Myth Night"
+  },
+  "myth_rows": {
+   "geo": [
+    12.9318,
+    100.8821
+   ],
+   "name": "Myth Night — Container Rows",
+   "region": "Myth Night"
+  },
+  "myth_stage": {
+   "geo": [
+    12.9326,
+    100.8823
+   ],
+   "liveMusic": true,
+   "name": "Myth Night — Live-Stage Yard",
+   "region": "Myth Night"
+  },
+  "naklua_bars": {
+   "geo": [
+    12.9528,
+    100.889
+   ],
+   "name": "Naklua (Bar Corner)",
+   "region": "Naklua"
+  },
+  "naklua_massage": {
+   "geo": [
+    12.9533,
+    100.8882
+   ],
+   "name": "Naklua (Spa Row)",
+   "region": "Naklua"
+  },
+  "naklua_rd": {
+   "geo": [
+    12.953,
+    100.8885
+   ],
+   "name": "Naklua Road",
+   "region": "Naklua",
+   "seven": true
+  },
+  "naklua_thai": {
+   "bar": "Naklua Traditional Massage",
+   "geo": [
+    12.9535,
+    100.888
+   ],
+   "name": "Naklua Traditional Massage",
+   "region": "Naklua"
+  },
+  "neon_paradise": {
+   "bar": "Neon Paradise A-Go-Go",
+   "barType": "gogo",
+   "geo": [
+    12.9248,
+    100.8694
+   ],
+   "name": "Neon Paradise A-Go-Go",
+   "region": "Walking Street"
+  },
+  "night_heron": {
+   "bar": "The Night Heron",
+   "barType": "beer",
+   "geo": [
+    12.9079,
+    100.9098
+   ],
+   "name": "The Night Heron",
+   "region": "Darkside"
+  },
+  "north_beach": {
+   "geo": [
+    12.9427,
+    100.8805
+   ],
+   "name": "North Pattaya Beach",
+   "region": "Beach Road"
+  },
+  "orchid_club": {
+   "bar": "The Orchid Club",
+   "barType": "gents",
+   "geo": [
+    12.9524,
+    100.8876
+   ],
+   "name": "The Orchid Club",
+   "region": "Naklua"
+  },
+  "orchid_room": {
+   "bar": "The Orchid Room",
+   "barType": "soi6",
+   "geo": [
+    12.9453,
+    100.8856
+   ],
+   "name": "The Orchid Room",
+   "region": "Soi 6"
+  },
+  "oy_office": {
+   "geo": [
+    12.9325,
+    100.8873
+   ],
+   "name": "Madam Oy's Office",
+   "region": "Tree Town"
+  },
+  "papaya_massage": {
+   "bar": "Papaya Massage",
+   "geo": [
+    12.929,
+    100.8712
+   ],
+   "name": "Papaya Massage",
+   "region": "Beach Road"
+  },
+  "paradise_nights": {
+   "bar": "Paradise Nights Club",
+   "barType": "club",
+   "geo": [
+    12.9225,
+    100.8695
+   ],
+   "name": "Paradise Nights Club",
+   "region": "Walking Street"
+  },
+  "pattaya_klang": {
+   "geo": [
+    12.9362,
+    100.8815
+   ],
+   "name": "Central Pattaya Road (Pattaya Klang)",
+   "region": "Second Road"
+  },
+  "peacock_cabaret": {
+   "bar": "The Peacock Cabaret",
+   "geo": [
+    12.8983,
+    100.87
+   ],
+   "liveMusic": true,
+   "name": "The Peacock Cabaret",
+   "region": "Thappraya"
+  },
+  "pink_lotus": {
+   "bar": "Pink Lotus Lounge",
+   "barType": "soi6",
+   "geo": [
+    12.9452,
+    100.8857
+   ],
+   "name": "Pink Lotus Lounge",
+   "region": "Soi 6"
+  },
+  "pit_stop": {
+   "bar": "The Pit Stop",
+   "barType": "beer",
+   "geo": [
+    12.9301,
+    100.8861
+   ],
+   "name": "The Pit Stop",
+   "region": "LK Metro"
+  },
+  "police_station": {
+   "geo": [
+    12.933,
+    100.8757
+   ],
+   "name": "Pattaya Central Police Station",
+   "region": "Beach Road"
+  },
+  "poseidon_soapy": {
+   "bar": "Poseidon Massage",
+   "geo": [
+    12.9347,
+    100.8812
+   ],
+   "name": "Poseidon Massage",
+   "region": "Second Road"
+  },
+  "pratumnak_hill_rd": {
+   "geo": [
+    12.9046,
+    100.8672
+   ],
+   "name": "Pratumnak Hill Road (crest)",
+   "region": "Pratumnak"
+  },
+  "pratumnak_rd": {
+   "geo": [
+    12.9105,
+    100.869
+   ],
+   "name": "Pratumnak Hill Road (to Pattaya)",
+   "region": "Pratumnak"
+  },
+  "promenade": {
+   "geo": [
+    12.9357,
+    100.8737
+   ],
+   "name": "Beach Promenade",
+   "region": "Beach Road"
+  },
+  "queen_bee": {
+   "bar": "The Hive",
+   "barType": "beer",
+   "geo": [
+    12.9242,
+    100.879
+   ],
+   "name": "The Hive",
+   "region": "Soi Honey"
+  },
+  "queen_vic": {
+   "bar": "Queen Vic Inn",
+   "barType": "pub",
+   "geo": [
+    12.9449,
+    100.8863
+   ],
+   "name": "Queen Vic Inn",
+   "region": "Soi 6"
+  },
+  "qv_room": {
+   "geo": [
+    12.9449,
+    100.8863
+   ],
+   "name": "Your Room — Queen Vic Inn",
+   "region": "Soi 6"
+  },
+  "rabbit_hole": {
+   "bar": "The Rabbit Hole",
+   "barType": "beer",
+   "geo": [
+    12.9325,
+    100.8861
+   ],
+   "name": "The Rabbit Hole",
+   "region": "Tree Town"
+  },
+  "rainbow_girls": {
+   "bar": "Rainbow Girls Bar",
+   "barType": "gogo",
+   "geo": [
+    12.9326,
+    100.8871
+   ],
+   "name": "Rainbow Girls Bar",
+   "region": "Tree Town"
+  },
+  "reload_bar": {
+   "bar": "Reload Bar",
+   "barType": "beer",
+   "geo": [
+    12.9315,
+    100.8822
+   ],
+   "name": "Reload Bar",
+   "region": "Myth Night"
+  },
+  "rock_factory": {
+   "bar": "Rock Factory",
+   "barType": "beer",
+   "geo": [
+    12.9318,
+    100.8845
+   ],
+   "liveMusic": true,
+   "name": "Rock Factory",
+   "region": "Soi Buakhao"
+  },
+  "ruby_kiss": {
+   "bar": "Ruby Kiss Bar",
+   "barType": "soi6",
+   "geo": [
+    12.9451,
+    100.887
+   ],
+   "name": "Ruby Kiss Bar",
+   "region": "Soi 6"
+  },
+  "sandbar": {
+   "bar": "The Sandbar",
+   "barType": "beer",
+   "geo": [
+    12.8896,
+    100.8741
+   ],
+   "name": "The Sandbar",
+   "region": "Jomtien"
+  },
+  "sandy_toes": {
+   "bar": "The Verandah",
+   "barType": "beer",
+   "geo": [
+    12.9446,
+    100.8864
+   ],
+   "name": "The Verandah",
+   "region": "Soi 6"
+  },
+  "sapphire": {
+   "bar": "Sapphire Bar",
+   "barType": "beer",
+   "geo": [
+    12.9323,
+    100.8823
+   ],
+   "name": "Sapphire Bar",
+   "region": "Soi Diana"
+  },
+  "seabreeze": {
+   "bar": "Sea Breeze Bar",
+   "barType": "beer",
+   "geo": [
+    12.8892,
+    100.873
+   ],
+   "name": "Sea Breeze Bar",
+   "region": "Jomtien"
+  },
+  "second_rd_c": {
+   "geo": [
+    12.933,
+    100.8795
+   ],
+   "name": "Second Road (Central)",
+   "region": "Second Road"
+  },
+  "second_rd_n": {
+   "geo": [
+    12.9345,
+    100.8805
+   ],
+   "name": "Second Road (North)",
+   "region": "Second Road"
+  },
+  "second_rd_s": {
+   "geo": [
+    12.9268,
+    100.8768
+   ],
+   "name": "Second Road (South)",
+   "region": "Second Road"
+  },
+  "second_thai": {
+   "bar": "Second Road Traditional Massage",
+   "geo": [
+    12.9272,
+    100.8774
+   ],
+   "name": "Second Road Traditional Massage",
+   "region": "Second Road"
+  },
+  "short_time_motel": {
+   "geo": [
+    12.9293,
+    100.8705
+   ],
+   "name": "Short-Time Motel",
+   "region": "Beach Road"
+  },
+  "silk_rose": {
+   "bar": "Silk Rose Bar",
+   "barType": "beer",
+   "geo": [
+    12.926,
+    100.8826
+   ],
+   "name": "Silk Rose Bar",
+   "region": "Soi Buakhao"
+  },
+  "slutty": {
+   "bar": "Slutty Go-Go",
+   "barType": "gogo",
+   "geo": [
+    12.9296,
+    100.8853
+   ],
+   "name": "Slutty Go-Go",
+   "region": "LK Metro"
+  },
+  "smile_massage": {
+   "bar": "Smile Massage",
+   "geo": [
+    12.9346,
+    100.8799
+   ],
+   "name": "Smile Massage",
+   "region": "Second Road"
+  },
+  "soi6_deep": {
+   "geo": [
+    12.9448,
+    100.8868
+   ],
+   "name": "Soi 6 (East End)",
+   "region": "Soi 6",
+   "seven": true
+  },
+  "soi6_mid": {
+   "geo": [
+    12.9448,
+    100.8863
+   ],
+   "name": "Soi 6 (Middle)",
+   "region": "Soi 6"
+  },
+  "soi6_street": {
+   "geo": [
+    12.9448,
+    100.8858
+   ],
+   "name": "Soi 6 (West End)",
+   "region": "Soi 6",
+   "seven": true
+  },
+  "soi7_beach_end": {
+   "geo": [
+    12.8872,
+    100.8698
+   ],
+   "name": "Soi 7 Beach End",
+   "region": "Jomtien"
+  },
+  "soi7_oil": {
+   "bar": "Sunset Oil Massage",
+   "geo": [
+    12.889,
+    100.8726
+   ],
+   "name": "Sunset Oil Massage",
+   "region": "Jomtien"
+  },
+  "soi7_thai": {
+   "bar": "Soi 7 Thai Massage",
+   "geo": [
+    12.8905,
+    100.8739
+   ],
+   "name": "Soi 7 Thai Massage",
+   "region": "Jomtien"
+  },
+  "soi_7_e": {
+   "geo": [
+    12.8899,
+    100.8738
+   ],
+   "name": "Soi 7 (East / Second Road end)",
+   "region": "Jomtien"
+  },
+  "soi_7_m": {
+   "geo": [
+    12.8878,
+    100.8735
+   ],
+   "name": "Soi 7 (Middle)",
+   "region": "Jomtien"
+  },
+  "soi_7_w": {
+   "geo": [
+    12.8896,
+    100.8728
+   ],
+   "name": "Soi 7 (West / beach end)",
+   "region": "Jomtien"
+  },
+  "soi_honey_e": {
+   "geo": [
+    12.9238,
+    100.8786
+   ],
+   "name": "Soi Honey (east end)",
+   "region": "Soi Honey"
+  },
+  "soi_honey_w": {
+   "geo": [
+    12.9255,
+    100.8778
+   ],
+   "name": "Soi Honey (west end)",
+   "region": "Soi Honey"
+  },
+  "soi_rompho": {
+   "bar": "Rompho Market",
+   "geo": [
+    12.8905,
+    100.8756
+   ],
+   "name": "Rompho Market",
+   "region": "Jomtien"
+  },
+  "soundcheck_bar": {
+   "bar": "Soundcheck Bar",
+   "barType": "beer",
+   "geo": [
+    12.9329,
+    100.8823
+   ],
+   "name": "Soundcheck Bar",
+   "region": "Myth Night"
+  },
+  "starlight_bar": {
+   "bar": "Starlight Bar",
+   "barType": "beer",
+   "geo": [
+    12.9334,
+    100.8862
+   ],
+   "name": "Starlight Bar",
+   "region": "Tree Town"
+  },
+  "stinky_bar": {
+   "bar": "The Stinky Pinky",
+   "barType": "beer",
+   "geo": [
+    12.9424,
+    100.8829
+   ],
+   "liveMusic": true,
+   "name": "The Stinky Pinky",
+   "pool": true,
+   "region": "Beach Road"
+  },
+  "sukhumvit_crossing": {
+   "geo": [
+    12.91,
+    100.8975
+   ],
+   "name": "Sukhumvit Crossing",
+   "region": "Darkside"
+  },
+  "sundowner": {
+   "bar": "Sundowner Bar",
+   "barType": "beer",
+   "geo": [
+    12.9317,
+    100.8821
+   ],
+   "name": "Sundowner Bar",
+   "region": "Soi Diana"
+  },
+  "sunset_dreams": {
+   "bar": "Sunset Dreams Lounge",
+   "barType": "soi6",
+   "geo": [
+    12.9445,
+    100.8859
+   ],
+   "name": "Sunset Dreams Lounge",
+   "region": "Soi 6"
+  },
+  "sunset_rail": {
+   "bar": "The Shady Lady",
+   "barType": "beer",
+   "geo": [
+    12.9447,
+    100.8862
+   ],
+   "name": "The Shady Lady",
+   "region": "Soi 6"
+  },
+  "supertown_alley": {
+   "geo": [
+    12.8978,
+    100.8688
+   ],
+   "name": "Supertown Complex (alley)",
+   "region": "Thappraya"
+  },
+  "supertown_elbow": {
+   "geo": [
+    12.8982,
+    100.8698
+   ],
+   "name": "Supertown Complex (the elbow)",
+   "region": "Thappraya"
+  },
+  "take_care_me": {
+   "bar": "Take Care Me",
+   "barType": "pub",
+   "geo": [
+    12.8978,
+    100.87
+   ],
+   "name": "Take Care Me",
+   "region": "Thappraya"
+  },
+  "tequila_queen": {
+   "bar": "Tequila Queen A-Go-Go",
+   "barType": "gogo",
+   "geo": [
+    12.9338,
+    100.874
+   ],
+   "name": "Tequila Queen A-Go-Go",
+   "region": "Beach Road"
+  },
+  "thai_massage": {
+   "bar": "Ruean Sabai Thai Massage",
+   "geo": [
+    12.9266,
+    100.871
+   ],
+   "name": "Ruean Sabai Thai Massage",
+   "region": "Walking Street"
+  },
+  "thappraya_e": {
+   "geo": [
+    12.8975,
+    100.8702
+   ],
+   "name": "Thappraya Rd — Main Strip (Second Road end)",
+   "region": "Thappraya",
+   "seven": true
+  },
+  "thappraya_ext_m": {
+   "geo": [
+    12.902,
+    100.8698
+   ],
+   "name": "Thappraya Road — Hill (middle)",
+   "region": "Pratumnak"
+  },
+  "thappraya_ext_n": {
+   "geo": [
+    12.9042,
+    100.8694
+   ],
+   "name": "Thappraya Road — Hilltop",
+   "region": "Pratumnak"
+  },
+  "thappraya_ext_s": {
+   "geo": [
+    12.8998,
+    100.87
+   ],
+   "name": "Thappraya Road — Hill (lower)",
+   "region": "Pratumnak"
+  },
+  "thappraya_massage": {
+   "bar": "Thappraya Thai Massage",
+   "geo": [
+    12.8973,
+    100.8706
+   ],
+   "name": "Thappraya Thai Massage",
+   "region": "Thappraya"
+  },
+  "thappraya_mid": {
+   "geo": [
+    12.8972,
+    100.8685
+   ],
+   "name": "Thappraya Rd — Main Strip (middle)",
+   "region": "Thappraya"
+  },
+  "thappraya_w": {
+   "geo": [
+    12.8968,
+    100.8668
+   ],
+   "name": "Thappraya Rd — Main Strip (west)",
+   "region": "Thappraya",
+   "seven": true
+  },
+  "the_boardroom": {
+   "bar": "The Boardroom",
+   "barType": "gents",
+   "geo": [
+    12.8965,
+    100.867
+   ],
+   "name": "The Boardroom",
+   "region": "Thappraya"
+  },
+  "the_growler": {
+   "bar": "The Growler",
+   "barType": "beer",
+   "geo": [
+    12.9316,
+    100.8823
+   ],
+   "name": "The Growler",
+   "region": "Myth Night"
+  },
+  "the_office": {
+   "bar": "The Office Bar",
+   "barType": "beer",
+   "geo": [
+    12.8972,
+    100.8704
+   ],
+   "name": "The Office Bar",
+   "region": "Thappraya"
+  },
+  "tt_back": {
+   "geo": [
+    12.933,
+    100.8865
+   ],
+   "name": "Tree Town (Back Lane)",
+   "region": "Tree Town"
+  },
+  "tt_deep": {
+   "geo": [
+    12.9327,
+    100.8867
+   ],
+   "name": "Tree Town (Deep Corner)",
+   "region": "Tree Town"
+  },
+  "tt_entrance": {
+   "geo": [
+    12.933,
+    100.8852
+   ],
+   "name": "Tree Town (Entrance Arch)",
+   "region": "Tree Town",
+   "seven": true
+  },
+  "tt_lane_1": {
+   "geo": [
+    12.9331,
+    100.8857
+   ],
+   "name": "Tree Town (Inner Lane)",
+   "region": "Tree Town"
+  },
+  "tt_lane_2": {
+   "geo": [
+    12.9332,
+    100.8862
+   ],
+   "name": "Tree Town (Cross Lane)",
+   "region": "Tree Town"
+  },
+  "tt_lane_3": {
+   "geo": [
+    12.9326,
+    100.8863
+   ],
+   "name": "Tree Town (Far Lane)",
+   "region": "Tree Town"
+  },
+  "velvet_club": {
+   "bar": "The Velvet Club",
+   "barType": "gents",
+   "geo": [
+    12.897,
+    100.869
+   ],
+   "name": "The Velvet Club",
+   "region": "Thappraya"
+  },
+  "water_buffalo": {
+   "bar": "The Water Buffalo",
+   "barType": "beer",
+   "geo": [
+    12.9078,
+    100.9092
+   ],
+   "name": "The Water Buffalo",
+   "pool": true,
+   "region": "Darkside"
+  },
+  "ws_alley": {
+   "geo": [
+    12.9245,
+    100.8689
+   ],
+   "name": "Walking Street Side-Alley",
+   "region": "Walking Street"
+  },
+  "ws_gate": {
+   "geo": [
+    12.9268,
+    100.8703
+   ],
+   "name": "Walking Street Gate",
+   "region": "Walking Street",
+   "seven": true
+  },
+  "ws_north": {
+   "geo": [
+    12.9226,
+    100.8692
+   ],
+   "name": "Walking Street (North End)",
+   "region": "Walking Street"
+  },
+  "ws_south": {
+   "geo": [
+    12.9247,
+    100.8697
+   ],
+   "name": "Walking Street (South)",
+   "region": "Walking Street"
+  }
+ }
+}

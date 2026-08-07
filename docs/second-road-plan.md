@@ -208,15 +208,17 @@ a generated `docs/scene-manifest.json` and never reads the source.
 **This is not yet possible, and that's the next LBB work.** Nothing emits the
 export. In order:
 
-1. `tools/gen-world-export.mjs` → `docs/world-export.json` — venues, `ROOM_GEO`,
-   people *without dialogue*, patrons, portrait index, `CANON_BARS`. Versioned.
-   Explicitly not exits: those are a walking graph for a game about walking.
-2. A sync test, mirroring how `tests/js/art.test.js` guards the scene manifest —
-   regenerate and diff, so a world.js change that should have moved the export
-   fails the suite instead of drifting.
-3. A portrait index in the same export.
+1. ~~`tools/gen-world-export.mjs` → `docs/world-export.json`~~ **DONE 2026-08-08.**
+   176 venues (all geolocated), 259 people, 18 patrons, 20 canon bars — **120 KB
+   against world.js's 658 KB**, and zero dialogue. Versioned, stable-sorted, no
+   timestamp. `--check` mode for CI.
+2. ~~A sync test~~ **DONE** — `tests/js/world-export.test.js` (5 tests). Proven by
+   renaming a bar in world.js and watching it fail. Also asserts the *boundary*:
+   no dialogue, no room prose, and **no exits** — a walking graph for a game
+   about walking, where the macro game has coordinates instead.
+3. A portrait index in the same export. **Still to do.**
 4. A sync script on the Second Road side with the trainer's proven shape
-   (`// VENDORED from …` banner + `--check` drift detection).
+   (`// VENDORED from …` banner + `--check` drift detection). **Still to do.**
 
 Until 1 and 2 exist, any shortcut taken on the Second Road side — reading
 `world.js` directly, hand-copying data — becomes the thing that rots.

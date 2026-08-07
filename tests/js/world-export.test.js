@@ -1,0 +1,75 @@
+// docs/world-export.json — the single sanctioned coupling to Second Road.
+//
+// Same doctrine as the scene manifest: a GENERATED file is the interface, and
+// world.js is never read directly by anything outside this repo. world.js is
+// ~640KB, almost all of it dialogue and prose that a macro game can't use;
+// vendoring it would import a game engine's worth of strings to obtain a list of
+// venues and their coordinates.
+//
+// These tests do two jobs. They keep the export in sync (a world.js change that
+// should have moved it fails here rather than drifting silently), and they
+// enforce the boundary — night content must not leak across.
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import { buildExport, renderExport, EXPORT_VERSION } from "../../tools/gen-world-export.mjs";
+
+const committed = readFileSync(
+  fileURLToPath(new URL("../../docs/world-export.json", import.meta.url)), "utf8");
+
+test("the committed export is in sync with world.js", () => {
+  assert.equal(renderExport(), committed,
+    "docs/world-export.json is stale — run: node tools/gen-world-export.mjs");
+});
+
+test("it carries what a macro game actually needs", () => {
+  const e = buildExport();
+  assert.equal(e.v, EXPORT_VERSION, "versioned, so the coupling can break loudly");
+  assert.ok(e.counts.venues > 150, "every room, because every room is a place on a map");
+  assert.equal(e.counts.geolocated, e.counts.venues,
+    "…and every one of them geolocated — ROOM_GEO is the whole point");
+  assert.ok(e.counts.people > 200);
+  assert.equal(e.canonBars.length, 20);
+
+  const stinky = e.venues.stinky_bar;
+  assert.equal(stinky.bar, "The Stinky Pinky", "the trading name, not the room id");
+  assert.equal(stinky.barType, "beer");
+  assert.equal(stinky.geo.length, 2);
+  assert.ok(stinky.geo[0] > 12.8 && stinky.geo[0] < 13.0, "real latitude");
+
+  const bert = e.people.bert;
+  assert.equal(bert.name, "Bert");
+  assert.equal(bert.room, "stinky_bar");
+  assert.equal(bert.manager, true, "roles a macro game hires and fires on");
+});
+
+test("night content does not cross — the boundary is the point", () => {
+  const raw = JSON.stringify(buildExport());
+  // dialogue is ~90% of world.js and none of it is usable at macro scale
+  for (const key of ["dialogue", "topic", "notFlags", "revisit", "asks", "gives"]) {
+    assert.equal(raw.includes(`"${key}"`), false, `${key} leaked into the export`);
+  }
+  const e = buildExport();
+  for (const p of Object.values(e.people)) assert.equal(p.dialogue, undefined);
+  // EXITS especially: a walking graph for a game about walking. The macro game
+  // has coordinates, which is strictly better for a map and implies nobody walks.
+  for (const v of Object.values(e.venues)) {
+    assert.equal(v.exits, undefined, "exits are LBB's, not Second Road's");
+    assert.equal(v.desc, undefined, "room prose stays where the prose is read");
+  }
+});
+
+test("regeneration is stable — a reorder in world.js is not a content change", () => {
+  assert.equal(renderExport(), renderExport(), "keys sorted, no clock in the file");
+  assert.equal(committed.includes("generated"), false,
+    "a timestamp would make the sync test fail on every run");
+});
+
+test("display names are marked English, so localisation can be added without a version bump", () => {
+  const e = buildExport();
+  assert.equal(e.lang, "en");
+  // the shape allows a `de` sibling per entry later; saying so here is what stops
+  // someone discovering it the hard way after Second Road has shipped
+  assert.equal(e.venues.stinky_bar.de, undefined);
+});
