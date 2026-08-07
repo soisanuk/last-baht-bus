@@ -112,17 +112,45 @@ Angebot"* is supermarket-discount German, not "available".
   caught that `{item}` slots were never routed through the catalog at all, so
   German prose rendered "฿150 für sandals" — a defect invisible in the pairs.
 
-## What batch 5 did (the quest journal) — REVIEW PENDING
+## What batch 5 did (the quest journal)
 
 19 quest titles + 19 descriptions, plus `_questWhere` (the live "where" clause
-shared by HINT and QUESTS) and Act One's own journal block. Committed BEFORE the
-cross-model review came back, at the author's request; the review fixes land in
-a follow-up commit. Treat these entries as provisional until then.
+shared by HINT and QUESTS) and Act One's own journal block. 13 of 43 keys
+changed in review.
 
-Rendering the journal in German is what found the last two: the frames were
-translated in batch 4, so the screen read German-frame/English-content until the
-data went through `_L` too. Half-translated is worse than untranslated — it
-looks like a bug rather than a gap.
+Rendering the journal in German is what found the last two leaks on that screen:
+the frames were translated in batch 4, so it read German-frame/English-content
+until the data went through `_L` too. Half-translated is worse than untranslated
+— it looks like a bug rather than a gap.
+
+**The most important finding in this batch is not about German.** Reviewer A
+caught that "her scout friend owes her a favour" had become *"ihre
+Scout-Freundin"* — a **female** scout. The payoff scene (engine-parser.js:1244)
+has Diamond say *"The Alcazar man owes me… he hates that he does."* The
+translation invented an entity detail that the delivery scene contradicts:
+precisely the cross-reference claim defect this project documents in
+`docs/prose-defects.md`, arriving through a door nobody was watching.
+
+Translation is a **claim surface**. A translator resolves ambiguity the English
+left open — English "her scout friend" is gender-silent, German is not — and
+every resolution is a new assertion about the world. So the authoring rule
+applies to translation too: *before resolving a detail the source left vague,
+check what the game already says.*
+
+The same batch produced the second instance of the sibling pattern, gendered
+grammar exposing what English hides: `" {who} ist im {v}"` hardcodes a
+masculine/neuter dative and breaks on any feminine venue ("im Candy Bar"). Now
+`"bei {v}"`, which is gender-proof. Batch 3's "Du hast schon eins" was the same
+shape. **When a template's slot takes a proper noun, German case is a landmine
+— prefer a preposition that doesn't inflect.**
+
+Two more worth keeping: a time-claim that goes stale in a persistent journal
+(*"unterschreibt gleich"* = within minutes, but the entry sits there for days),
+and a geography claim — the Orchid Room is reached by the `back` exit *from* the
+Pink Lotus (world.js:1399), so *"hinter dem Pink Lotus"* moved a room.
+
+Where the reviewers disagreed (the scout, the geography, the `{v}` case) I went
+to the source rather than picking a side. All three times the source settled it.
 
 One thing this batch made mechanical instead of human: **`tests/js/i18n.test.js`
 now asserts that ALL-CAPS command words survive translation.** A translated
@@ -130,7 +158,8 @@ now asserts that ALL-CAPS command words survive translation.** A translated
 type a verb the parser has never heard of. Keyed on `_COMPLETE_VERBS`, so
 ordinary CAPS emphasis still translates freely ("WALLET RECOVERED" →
 "BRIEFTASCHE WIEDER DA"). Proven by injecting a translated hint, not by a clean
-run.
+run. Both reviewers confirmed the hint surface was clean — but that check is now
+free forever.
 
 ## The remaining gap list (unique lines × occurrences)
 ```
