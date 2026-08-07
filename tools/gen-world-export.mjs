@@ -22,7 +22,7 @@
 //   node tools/gen-world-export.mjs            # write docs/world-export.json
 //   node tools/gen-world-export.mjs --check    # exit 1 if the file is stale
 //   node tools/gen-world-export.mjs --stdout   # print, write nothing
-import { readFileSync, writeFileSync, readdirSync } from "node:fs";
+import { readFileSync, writeFileSync, readdirSync, statSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import vm from "node:vm";
 
@@ -83,10 +83,17 @@ export function buildExport() {
   // as a diff in the sync test rather than as a broken image months later.
   // Sorted, so the file stays diff-stable.
   const dir = fileURLToPath(new URL("web/portraits", root));
-  const portraits = readdirSync(dir)
-    .filter(f => f.endsWith(".png"))
-    .map(f => f.slice(0, -4))
-    .sort();
+  const files = readdirSync(dir).filter(f => f.endsWith(".png")).sort();
+  const portraits = files.map(f => f.slice(0, -4));
+  // WHICH TRACK each face is on. The cast is mid-migration: 24×24-grid pixel art
+  // (~400 bytes, square) alongside generated renders (832×1088, 3:4, head in the
+  // upper third). A consumer cannot tell them apart without fetching and
+  // measuring, and they need DIFFERENT CROPS — a square-art crop at 16% from the
+  // top clips a pixel bust's chin, and a render shown square loses the face.
+  // Second Road hit exactly this. So the boundary reports it.
+  const renders = files
+    .filter(f => statSync(`${dir}/${f}`).size > 100 * 1024)
+    .map(f => f.slice(0, -4));
   let frames = [];
   try {
     frames = readdirSync(fileURLToPath(new URL("web/portraits/pics", root)))
@@ -105,12 +112,13 @@ export function buildExport() {
       people: Object.keys(people).length,
       patrons: Object.keys(patrons).length,
       portraits: portraits.length,
+      renders: renders.length,
     },
     canonBars: typeof CANON_BARS !== "undefined" ? [...CANON_BARS] : [],
     venues, people, patrons,
     // art/<id>.png relative to LBB's web/portraits/; `frames` are the distinct
     // photo frames under pics/ (see LBB's gallery system)
-    portraits, frames,
+    portraits, renders, frames,
   };
 }
 
