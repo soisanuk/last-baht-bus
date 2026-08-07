@@ -1039,5 +1039,44 @@ const _CATALOGS = {
     "heels": "High Heels",
     "lingerie": "Dessous",
     "fruit": "Obst",
+
+    // ── de-sweep batch 3 (2026-08-07) ────────────────────────────────────────
+    // Top of the remaining gap. Note what four of these are: the phone-Tan beat
+    // shipped THIS DAY — 144 leak occurrences from one feature, which is the
+    // whole argument for translating at authoring time rather than in sweeps.
+    // keyed on the RAW message body, not the composed "📱 Tan: “…”" line —
+    // _readMessages calls _L on msg.text and adds the wrapper itself.
+    "I am not your mamasan, my friend. When I want something from you, I will ask for it — and it will not be money. 🙂":
+      "Ich bin nicht deine Mamasan, mein Freund. Wenn ich etwas von dir will, bitte ich dich darum — und Geld wird es nicht sein. 🙂",
+    "You text Tan — nothing much, the kind of message you'd send a mate.":
+      "Du schreibst Tan — nichts Besonderes, die Sorte Nachricht, die man einem Kumpel schickt.",
+    "\"A ride? My friend — the whole week is one soi. You can fall home from anywhere on it. Enjoy the falling.\" Click.":
+      "„Eine Fahrt? Mein Freund — die ganze Woche ist eine einzige Soi. Da fällst du von überall nach Hause. Genieß das Fallen.“ Klick.",
+    "555 you bored. go make some sanuk, my friend — that is what the town is FOR.":
+      "555 dir ist langweilig. geh Sanuk machen, mein Freund — genau DAFÜR ist die Stadt da.",
+    "฿{a} crosses town in one green blink — and comes straight back in another, before you've pocketed the phone.":
+      "฿{a} fliegen in einem grünen Blinken durch die Stadt — und im nächsten schon wieder zurück, bevor du das Handy eingesteckt hast.",
+    "฿{a} crosses town in one green blink. (฿{m} left.)":
+      "฿{a} fliegen in einem grünen Blinken durch die Stadt. (฿{m} übrig.)",
+
+    // the saleng cart, arriving and being swarmed
+    "A ซาเล้ง strung with lingerie idles up outside, and every girl in the place turns her head at once.":
+      "Ein ซาเล้ง, behängt mit Dessous, tuckert draußen heran, und jedes Mädchen im Laden dreht auf einen Schlag den Kopf.",
+    "A som-tam ซาเล้ง drifts to a stop outside, pestle already going, and the girls call their orders over your head.":
+      "Ein Som-Tam-ซาเล้ง rollt draußen aus, der Stößel schon am Stampfen, und die Mädchen rufen ihre Bestellungen über deinen Kopf hinweg.",
+    "Two of them have turned the saleng into a fashion show, striking increasingly theatrical poses at the punters with each new slip. Nobody at the bar is pretending to watch the football any more.":
+      "Zwei von ihnen haben den Saleng in eine Modenschau verwandelt und posieren mit jedem neuen Hemdchen theatralischer für die Kundschaft. Niemand am Tresen tut noch so, als würde er Fußball schauen.",
+    "The girls swarm the lingerie line in a giggling scrum, holding lace up against each other and turning to pose at the rail — the customers are the mirror they're using. One drapes a slip across your shoulder, delighted, before her friend snatches it back.":
+      "Die Mädchen fallen kichernd über die Dessous-Leine her, halten sich gegenseitig Spitze an und drehen sich zum Tresen, um zu posieren — die Gäste sind der Spiegel, den sie benutzen. Eine legt dir begeistert ein Hemdchen über die Schulter, bevor ihre Freundin es sich wieder schnappt.",
+    "A bra is held up, then held up against you for scale, to shrieks of laughter; the girls model the better pieces down the bar with the straight-faced confidence of women who know exactly what the room is worth.":
+      "Ein BH wird hochgehalten, dann zum Größenvergleich an dich gehalten, unter kreischendem Gelächter; die Mädchen führen die besseren Stücke den Tresen entlang vor, mit der ungerührten Sicherheit von Frauen, die genau wissen, was das Publikum wert ist.",
+    "You already have one. The driver shrugs and keeps the change for your indecision. Just kidding — ฿{p} back.":
+      "Du hast schon welche. Der Fahrer zuckt mit den Schultern und behält das Wechselgeld als Gebühr für deine Unentschlossenheit. Kleiner Scherz — ฿{p} zurück.",
+
+    // journal / black book, when there is nothing in them yet
+    "The wallet's yours and the opening's behind you — out here there are no wrong answers, only better nights. Nothing on the books: the givers are out there, so TALK to people. (QUESTS lists jobs, WHO your black book, MAP the lay of the land.)":
+      "Die Brieftasche gehört wieder dir und der Anfang liegt hinter dir — hier draußen gibt es keine falschen Antworten, nur bessere Nächte. Nichts im Auftragsbuch: Die Auftraggeber sind da draußen, also TALK mit den Leuten. (QUESTS listet die Jobs, WHO dein schwarzes Buch, MAP die Gegend.)",
+    "The black book's empty. You earn names the honest way out here — CONTACT a lady in her own bar once she likes you, and she goes in the book.":
+      "Das schwarze Buch ist leer. Namen verdient man sich hier draußen auf die ehrliche Tour — CONTACT eine Lady in ihrer eigenen Bar, sobald sie dich mag, und sie landet im Buch.",
   },
 };

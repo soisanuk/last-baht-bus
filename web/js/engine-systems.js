@@ -1914,8 +1914,8 @@ function _doSendMoney(arg) {
   if (amt > G.money) { _say(`The app regrets to inform you: ฿${G.money} available, ฿${amt} dreamed of.`); return; }
   // Tan sends it straight back — his currency is favours, never baht
   if (id === "tan") {
-    _say(`฿${amt} crosses town in one green blink — and comes straight back in another, ` +
-      "before you've pocketed the phone.");
+    _say(_fmt("฿{a} crosses town in one green blink — and comes straight back in another, " +
+      "before you've pocketed the phone.", { a: amt }));
     _pushMsg("tan", "I am not your mamasan, my friend. When I want something from you, I " +
       "will ask for it — and it will not be money. 🙂");
     _say("(📱 CHECK MESSAGES.)", "dim");
@@ -1926,7 +1926,7 @@ function _doSendMoney(arg) {
   G.battery = Math.max(0, G.battery - 1);
   const bump = amt >= 500 ? 3 : amt >= 100 ? 2 : 1;
   _addBond(id, bump);
-  _say(`฿${amt} crosses town in one green blink. (฿${G.money} left.)`);
+  _say(_fmt("฿{a} crosses town in one green blink. (฿{m} left.)", { a: amt, m: G.money }));
   // paying into an active pics-drip: enough unlocks the next shot, short of it teases
   const deal = G.phone.picDeal;
   if (deal && !deal.done && deal.id === id && deal.idx != null) {
