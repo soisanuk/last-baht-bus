@@ -1010,22 +1010,34 @@ const _CATALOGS = {
     "A big bottle is ฿{p} here. You have ฿{m}. The cashier's calculator stays in the drawer.":
       "Eine große Flasche kostet hier ฿{p}. Du hast ฿{m}. Der Taschenrechner der Kassiererin bleibt in der Schublade.",
     "Lady drinks are ฿{p}. You have ฿{m}. The maths is not on your side.":
-      "Lady Drinks kosten ฿{p}. Du hast ฿{m}. Die Rechnung steht nicht auf deiner Seite.",
+      "Lady Drinks kosten ฿{p}. Du hast ฿{m}. Die Rechnung geht nicht auf.",
     "฿{p} for a cold bottle, and you don't have it. Grim.":
-      "฿{p} für eine kalte Flasche, und du hast es nicht. Bitter.",
+      "฿{p} für eine kalte Flasche, und das hast du nicht. Bitter.",
     "The toastie is ฿{p}. You have ฿{m}. The doorbell jingles in sympathy.":
       "Der Toastie kostet ฿{p}. Du hast ฿{m}. Die Türglocke bimmelt mitfühlend.",
     "You let the night idle past — ice melting, songs turning over, the street rearranging itself. {t}.":
-      "Du lässt die Nacht im Leerlauf vorbeiziehen — schmelzendes Eis, wechselnde Lieder, die Straße ordnet sich neu. {t}.",
+      "Du lässt die Nacht im Leerlauf vorbeiziehen — schmelzendes Eis, wechselnde Lieder, eine sich neu ordnende Straße. {t}.",
     "฿{p} for the {item} — you have ฿{m}. The driver clocks it without embarrassing you and putters on.":
       "฿{p} für {item} — du hast ฿{m}. Der Fahrer bemerkt es, ohne dich bloßzustellen, und knattert weiter.",
     "The bell rope dangles there, daring you. A ring is a round for the house — ฿{p} — and you have ฿{m}. Ringing a bell you can't pay for is how farang end up in the khlong.":
-      "Das Glockenseil baumelt da und fordert dich heraus. Einmal läuten heißt eine Runde für alle — ฿{p} — und du hast ฿{m}. Eine Glocke zu läuten, die man nicht bezahlen kann, ist der Weg, auf dem Farang im Khlong landen.",
+      "Das Glockenseil baumelt da und fordert dich heraus. Einmal läuten heißt eine Runde für alle — ฿{p} — und du hast ฿{m}. Eine Glocke zu läuten, die man nicht bezahlen kann, ist der sicherste Weg für einen Farang, im Khlong zu landen.",
     "The night clerk takes in the situation and adds ฿{r} to the book without a word — ฿{d} on it now. His kindness is the heaviest thing you'll carry today.":
       "Der Nachtportier überblickt die Lage und schreibt wortlos ฿{r} an — ฿{d} stehen jetzt drauf. Seine Freundlichkeit ist das Schwerste, was du heute trägst.",
     "── DAY {d}{home} — you surface mid-afternoon, and by the time you're human again the sun is sliding into the gulf and the neon is waking up ──":
-      "── TAG {d}{home} — du tauchst am Nachmittag auf, und bis du wieder ein Mensch bist, sinkt die Sonne in den Golf und das Neon wacht auf ──",
-    " of 7": " von 7",
+      "── TAG {d}{home} — du tauchst am Nachmittag auf, und bis du wieder ein Mensch bist, sinkt die Sonne schon in den Golf und das Neon wacht auf ──",
+    // (" of 7" is already keyed further up — one entry serves both the TIME
+    // readout and the day header.)
     " · PATTAYA, HOME": " · PATTAYA, ZUHAUSE",
+
+    // The {item} slot in the saleng-cart refusal is filled with _L(item), so the
+    // bare cart nouns need entries of their own — without them a German sentence
+    // renders "฿150 für sandals". Caught by the batch-2 review: the kind of seam
+    // only a second pair of eyes looking at the RUNTIME will notice. Thai dish
+    // names stay Thai, same rule as Chang/farang/som tam elsewhere.
+    "noodles": "Nudeln",
+    "sandals": "Sandalen",
+    "heels": "High Heels",
+    "lingerie": "Dessous",
+    "fruit": "Obst",
   },
 };
