@@ -1807,6 +1807,37 @@ const ROOMS = {
       "sends out charcoal smoke and the smell of som tam being argued about.",
     exits: { w: "khao_talo_strip", n: "lake_mabprachan", in: "khao_talo_bar", e: "khao_talo_bar", s: "mama_yai" },
   },
+  // The dead Shamrock. Daeng points at it — "come ask me again when your bar
+  // stands by itself" — and until now it existed only as something people said,
+  // which is the undelivered-promise defect docs/prose-defects.md is about. It
+  // is a place, so it gets to be a place.
+  //
+  // Deliberately no `barType`: nothing trades here. No staff, no saleng, no
+  // bell, no closing time. You can stand in a dead room and read it, and that is
+  // the whole of what it does. Buying it belongs to Second Road; here it is the
+  // warning — a bar that died because its owner never got inside anything
+  // (docs/factions-thai.md).
+  shamrock: {
+    name: "The Shamrock (closed)",
+    region: "Darkside",
+    desc: "A dead pub at the dark end of the strip. The shamrock over the door " +
+      "has lost most of its green and all of its bulbs, and somebody long ago " +
+      "screwed a sheet of ply over the serving hatch and then, apparently, " +
+      "thought better of finishing the job. Inside it still smells faintly of " +
+      "beer and strongly of dust. The stools are stacked. There is a darts board " +
+      "with three darts still in it, and a fixtures list for a season that " +
+      "finished years ago. It is not derelict, which is the strange part — " +
+      "somebody swept it once, after the end, turned the taps off properly and " +
+      "squared the tables, and then locked the door and did not come back.",
+    revisit: [
+      "The Shamrock, still shut, still swept. The darts are still in the board.",
+      "Dust, stacked stools, and a fixtures list nobody took down.",
+      "The dead pub. Cooler in here than the soi, which is most of its appeal.",
+      "Nothing has moved. Nothing has moved in here for a long time, and the " +
+        "not-moving is somehow busier than the soi outside.",
+    ],
+    exits: { out: "khao_talo_strip" },
+  },
   khao_talo_bar: {
     name: "Daeng's Place (Khao Talo)",
     // Registered like every other bar so the name taps as a venue (and doesn't
@@ -1833,7 +1864,8 @@ const ROOMS = {
       "beside it a dead Irish pub, THE SHAMROCK on its sun-bleached sign, shutters " +
       "down for good.",
     exits: { w: "sukhumvit_crossing", e: "khao_talo", in: "water_buffalo",
-      n: "water_buffalo", s: "firefly_bar", dark: "night_heron" },
+      n: "water_buffalo", s: "firefly_bar", dark: "night_heron",
+      shamrock: "shamrock" },
   },
   water_buffalo: {
     name: "The Water Buffalo",
@@ -9219,6 +9251,7 @@ const ROOM_GEO = {
   // The Darkside
   sukhumvit_crossing: [12.9100, 100.8975],
   khao_talo_strip:  [12.9078, 100.9090],
+  shamrock:         [12.9076, 100.9082],  // the dark end of the strip
   water_buffalo:    [12.9078, 100.9092],
   firefly_bar:      [12.9077, 100.9086],
   night_heron:      [12.9079, 100.9098],
