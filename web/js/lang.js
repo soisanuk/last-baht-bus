@@ -1177,15 +1177,15 @@ const _CATALOGS = {
 
     "Gavin's Errand": "Gavins Botengang",
     "Gavin would like a quiet favour: have a word with Bert about selling the Stinky to White Dish. \"Friend to friend. Soften him up. Everyone wins, and White Dish looks after its friends.\" (Take it to Bert — ASK BERT ABOUT SELLING — or don't. No one's forcing you.)":
-      "Gavin hätte gern einen stillen Gefallen: Red mal mit Bert darüber, das Stinky an White Dish zu verkaufen. „Von Freund zu Freund. Mach ihn weich. Alle gewinnen, und White Dish kümmert sich um seine Freunde.“ (Trag es zu Bert — ASK BERT ABOUT SELLING — oder lass es. Dich zwingt niemand.)",
+      "Gavin hätte gern einen stillen Gefallen: Red mal mit Bert darüber, das Stinky an White Dish zu verkaufen. „Von Freund zu Freund. Mach ihn weich. Alle gewinnen, und White Dish kümmert sich um seine Freunde.“ (Sprich mit Bert darüber — ASK BERT ABOUT SELLING — oder lass es. Dich zwingt niemand.)",
 
     "The President's Table": "Der Tisch des Präsidenten",
     "Get eyes on the Orchid Room's good table — the back room off the Pink Lotus — and see who really holds it, then tell Doyle (ASK DOYLE ABOUT THE TABLE).":
-      "Wirf einen Blick auf den guten Tisch im Orchid Room — dem Hinterzimmer hinter dem Pink Lotus — und sieh nach, wer ihn wirklich hält, dann sag es Doyle (ASK DOYLE ABOUT THE TABLE).",
+      "Wirf einen Blick auf den guten Tisch im Orchid Room — dem Hinterzimmer vom Pink Lotus — und sieh nach, wer dort wirklich das Sagen hat, dann sag es Doyle (ASK DOYLE ABOUT THE TABLE).",
 
     "The Silent Partner": "Der stille Teilhaber",
     "Wayne's about to sign as the farang face of a bar he'll never really own. Once you've seen how White Dish works, set him straight (ASK WAYNE ABOUT THE PARTNER).":
-      "Wayne unterschreibt gleich als Farang-Gesicht einer Bar, die ihm nie wirklich gehören wird. Wenn du erst mal gesehen hast, wie White Dish arbeitet, sag ihm die Wahrheit (ASK WAYNE ABOUT THE PARTNER).",
+      "Wayne steht kurz davor, als Farang-Gesicht einer Bar zu unterschreiben, die ihm nie wirklich gehören wird. Wenn du erst mal gesehen hast, wie White Dish arbeitet, sag ihm die Wahrheit (ASK WAYNE ABOUT THE PARTNER).",
 
     "The Old Days": "Die alten Zeiten",
     "Buy Roy's time and let the old soi come back to him — the bars before the brands, and the ghosts still propping the place up (ASK ROY ABOUT THE OLD DAYS).":
@@ -1201,11 +1201,11 @@ const _CATALOGS = {
 
     "Her Brother": "Ihr Bruder",
     "Rob's ex-wife's brother rides with the club in the Orchid's back room. Carry his word if you ever get in there (ASK ROB ABOUT THE BROTHER).":
-      "Der Bruder von Robs Ex-Frau fährt mit dem Club im Hinterzimmer des Orchid. Nimm seine Botschaft mit, falls du je da reinkommst (ASK ROB ABOUT THE BROTHER).",
+      "Der Bruder von Robs Ex-Frau fährt für den Club im Hinterzimmer des Orchid. Nimm seine Botschaft mit, falls du je da reinkommst (ASK ROB ABOUT THE BROTHER).",
 
     "The Wrong Photo": "Das falsche Foto",
     "Somewhere in Barry's eleven years of trophy snaps is one he shouldn't have. Get a proper look once you know what you're looking at (ASK BARRY ABOUT THE PHOTO).":
-      "Irgendwo in Barrys elf Jahren Trophäenfotos ist eins, das er nicht haben sollte. Sieh es dir richtig an, sobald du weißt, wonach du suchst (ASK BARRY ABOUT THE PHOTO).",
+      "Irgendwo in den Trophäenfotos aus Barrys elf Jahren ist eins, das er nicht haben sollte. Sieh es dir genau an, sobald du weißt, was du da vor dir hast (ASK BARRY ABOUT THE PHOTO).",
 
     "The Sister-Bar Run": "Die Tour zur Schwesterbar",
     "Carry Candy's gift bottle of Sang Som to Bee (GIVE SANG SOM TO BEE).":
@@ -1219,13 +1219,13 @@ const _CATALOGS = {
     "Bee wants her expansion fund taken seriously: get her number (CONTACT BEE) and wire ฿100 through the banking app (SEND 100 TO BEE).":
       "Bee will, dass ihr Expansionsfonds ernst genommen wird: Besorg dir ihre Nummer (CONTACT BEE) und überweis ฿100 über die Banking-App (SEND 100 TO BEE).",
 
-    "The Man Out of Time": "Der Mann aus der Zeit gefallen",
+    "The Man Out of Time": "Der Mann, der aus der Zeit gefallen ist",
     "Sit with Glam a while and let him tell you about the tour (ASK GLAM ABOUT MUSIC).":
       "Setz dich eine Weile zu Glam und lass ihn von der Tour erzählen (ASK GLAM ABOUT MUSIC).",
 
     "The Foreman's Keys": "Die Schlüssel des Poliers",
     "Carry her late husband's site keys to the bar he built, for the shrine (GIVE KEYS TO DIAMOND).":
-      "Bring die Baustellenschlüssel ihres verstorbenen Mannes in die Bar, die er gebaut hat, für den Schrein (GIVE KEYS TO DIAMOND).",
+      "Bring die Baustellenschlüssel ihres verstorbenen Mannes für den Schrein in die Bar, die er gebaut hat (GIVE KEYS TO DIAMOND).",
 
     "The Quiet Money": "Das stille Geld",
     "Nobody asks the Samson brothers where the seed money came from. Ask the man out of time instead (ASK GLAM ABOUT HIS SONS).":
@@ -1235,17 +1235,17 @@ const _CATALOGS = {
     "Wimon thinks you have earned the whole of it, and gives her blessing to ask (ASK DIAMOND ABOUT GLAM).":
       "Wimon findet, du hast dir die ganze Geschichte verdient, und gibt ihren Segen zu fragen (ASK DIAMOND ABOUT GLAM).",
 
-    "Candy's Competition Recce": "Candys Erkundung der Konkurrenz",
+    "Candy's Competition Recce": "Candys Feindaufklärung",
     "Walk the new drinking strips with your eyes open — Myth Night's container rows, Tree Town's far lane, and the quiet middle stretch of Soi 6.":
       "Lauf die neuen Kneipenmeilen mit offenen Augen ab — die Containerreihen von Myth Night, die hintere Gasse von Tree Town und das ruhige Mittelstück der Soi 6.",
 
     "A Scout for Petch": "Ein Scout für Petch",
     "Carry the revue flyer to Diamond — she danced with half of Alcazar in her day, and her scout friend owes her a favour (GIVE FLYER TO DIAMOND).":
-      "Bring den Revue-Flyer zu Diamond — sie hat seinerzeit mit dem halben Alcazar getanzt, und ihre Scout-Freundin schuldet ihr einen Gefallen (GIVE FLYER TO DIAMOND).",
+      "Bring den Revue-Flyer zu Diamond — sie hat seinerzeit mit dem halben Alcazar getanzt, und ein befreundeter Scout schuldet ihr einen Gefallen (GIVE FLYER TO DIAMOND).",
 
     "The Collection Run": "Die Inkasso-Tour",
     "฿500 to jog a deadbeat's memory — no rough stuff, just find Fergie in his maze and ASK him ABOUT THE DEBT.":
-      "฿500 dafür, dem Gedächtnis eines Schuldners auf die Sprünge zu helfen — nichts Grobes, find einfach Fergie in seinem Labyrinth und ASK him ABOUT THE DEBT.",
+      "฿500 dafür, dem Gedächtnis eines Zahlungsmuffels auf die Sprünge zu helfen — nichts Grobes, find einfach Fergie in seinem Labyrinth und ASK him ABOUT THE DEBT.",
 
     "The Shamrock Dog": "Der Shamrock-Hund",
     "Bert swears your dog is the old Shamrock bar dog, out on Soi Khao Talo. Walk him out to the dead pub and let him see it.":
@@ -1255,10 +1255,10 @@ const _CATALOGS = {
     // so its header and milestone labels need their own keys. The labels are
     // _L'd individually because the line is composed with a ✓/· marker.
     "▶ The Last Baht Bus — find your wallet, get back to room 412 in Naklua.":
-      "▶ Der letzte Baht-Bus — finde deine Brieftasche, zurück auf Zimmer 412 in Naklua.",
+      "▶ The Last Baht Bus — finde deine Brieftasche, zurück auf Zimmer 412 in Naklua.",
     "Worked out where you were last night": "Herausgefunden, wo du letzte Nacht warst",
     "Learned who lifted the wallet": "Erfahren, wer die Brieftasche mitgehen ließ",
-    "Traced the wallet to Madam Oy": "Die Brieftasche bis zu Madam Oy verfolgt",
+    "Traced the wallet to Madam Oy": "Die Brieftasche bis zu Madam Oy zurückverfolgt",
     "Learned the office door trick": "Den Trick mit der Bürotür gelernt",
     "Clue: the number 71": "Hinweis: die Zahl 71",
     "Clue: the lucky 9": "Hinweis: die Glückszahl 9",
@@ -1267,7 +1267,7 @@ const _CATALOGS = {
     // _questWhere — the live "where" clause shared by HINT and the QUESTS journal.
     // Both article variants map to one German line: German takes no article
     // before a proper venue name, so there is nothing to guess at.
-    " {who} is at {v}, over in {r}.": " {who} ist im {v}, drüben in {r}.",
+    " {who} is at {v}, over in {r}.": " {who} ist bei {v}, drüben in {r}.",
     " That's {v}, in {r}.": " Das ist {v}, drüben in {r}.",
     " That's the {v}, in {r}.": " Das ist {v}, drüben in {r}.",
 

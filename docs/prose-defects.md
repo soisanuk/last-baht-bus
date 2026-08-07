@@ -181,6 +181,35 @@ line) — the localization gap that `docs/i18n-de-gaps.md` already tracks. New
 prose widens that gap by default, which is the argument for finishing de
 coverage before adding much more.
 
+### A door nobody was watching — translation (found 2026-08-07)
+
+The German localization pass produced a fresh instance of the exact defect this
+document describes, by a route not anticipated here. "her scout friend owes her
+a favour" was translated as *"ihre Scout-Freundin"* — a female scout — while the
+delivery scene (`engine-parser.js:1244`) has Diamond say *"The Alcazar man owes
+me… he hates that he does."*
+
+The mechanism is the one from the top of this document, one level removed:
+**translation forces a resolution the source left open.** English "her scout
+friend" is silent about gender; German cannot be. Every such resolution is a new
+assertion about the world, made — as always — with only the local string in
+view. The `--about` dossier would have answered it in one command.
+
+So the corpus rules bind translators too, and a second rule joins them:
+**gendered grammar exposes what English hides.** Two bugs in two batches came
+from English concealing an agreement question — "You already have one" (neuter
+singular, but it fires for three plural items) and `"{who} ist im {v}"` (a
+hardcoded dative that breaks on a feminine venue name). Neither is visible in
+English. When a template slot takes a proper noun, prefer a preposition that
+doesn't inflect.
+
+Worth noting the direction of travel: reading prose *as translation candidates*
+also surfaced a plain English bug two full corpus reviews had walked past —
+`You rack. ${opp} breaks` renders "You rack. a leathery expat…" whenever the
+opponent is the descriptor rather than a name. Localization is a prose review
+in disguise, because it forces every line to be read again by someone who
+cannot skim.
+
 ## Authoring rules that follow
 
 For anyone — human or model — writing prose in this repo:
