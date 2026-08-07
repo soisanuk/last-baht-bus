@@ -9065,15 +9065,39 @@ const POPULAR_GIRLS = ["fon", "gift", "noi", "pim"];
 // tools/gen-map.mjs (the neon city map + the exits-vs-reality audit) and any
 // future 2D frontend. Real venues sit at their real spots (LK Metropole, the
 // Buakhao market, Big Buddha); fictional venues sit where their canon puts
-// them. Two knowing deviations from the game graph, kept for the audit to
-// flag rather than silently smoothed: the REAL Tree Town is at the Buakhao/
-// Klang corner (north end — the game graph hangs it off Buakhao south), and
-// the real police station is on Soi 9 SOUTH of Central Festival (the graph
-// walks north from the mall).
+// them. One knowing deviation from the game graph, kept for the audit to flag
+// rather than silently smoothed: the REAL Tree Town is at the Buakhao/Klang
+// corner (north end — the game graph hangs it off Buakhao south).
+//
+// A SECOND "deviation" was listed here and was simply wrong. It said the police
+// station is on Soi 9 *south of Central Festival* and that the graph therefore
+// walks north from the mall in error. The station really is on Soi 9 — OSM puts
+// it at 12.935987/100.882822, the same latitude as Soi 9's Beach Road end to
+// five decimals — but the order down Beach Road is PK, Soi 7, Soi 8, Soi 9,
+// Central Mall, so Soi 9 is NORTH of the mall. `central_mall —n→
+// police_station` was right all along. Removed rather than carried, because a
+// note claiming a correct thing is broken is worse than no note.
 //
 // DISTRICT PASSES — 4 DECIMALS IS SKETCHED, 5 IS SURVEYED. The map is being
 // pinned district by district against OSM, and the decimal count is the marker
 // of which have had their pass. Don't "tidy" a 5dp district back to 4.
+//
+//   Beach Road, Soi 6 south to the Walking Street gate — DONE 2026-08-08.
+//   Every room was 344–755 m off the real road; now 0–90 m. Landmarks pinned
+//   from OSM: Pattaya Klang junction 12.937594/100.883266, Soi 7's Beach Road
+//   end 12.937147/100.883067, the police station at Soi 9 12.935987/100.882822,
+//   Central Festival 12.934403/100.883454 (it straddles through to Second Rd,
+//   so its room is the Beach Road front), and Tequila Queen at its real-world
+//   original the Tahitian Queen, 12.931642/100.879457. Order down the road is
+//   PK, Soi 7, Soi 8, Soi 9, Central Mall — worth stating because the sois do
+//   NOT simply run north to south past Klang.
+//   Deliberately left flagged: `beach_rd_s —w→ short_time_motel` audits at 161°
+//   because west of Beach Road is the SEA. The motel is placed east where a
+//   building can be, so the wrong compass word shows up instead of being hidden
+//   by a coordinate. That's bar-mat work, not survey work.
+//   NOT YET PINNED (no room exists): Mike Shopping Mall 12.931899/100.880812,
+//   and Pattaya's own Soi 7 — note every `soi_7_*` room is JOMTIEN's Soi 7, a
+//   different street with the same number.
 //
 //   Soi 6 + its Beach Road foot — DONE 2026-08-08, the first pass and the
 //   center of truth. Laid along the real ซอยพัทยา 6: 359 m, west end
@@ -9156,16 +9180,16 @@ const ROOM_GEO = {
   paradise_nights:  [12.9225, 100.8695],
   midnight_sun:     [12.9220, 100.8693],
   // Beach Road
-  beach_rd_s:       [12.9295, 100.8715],
-  papaya_massage:   [12.9290, 100.8712],
-  beachthai_massage:[12.9288, 100.8710],
-  short_time_motel: [12.9293, 100.8705],
-  beach_rd_c:       [12.9348, 100.8744],
-  beachrd_oil:      [12.9352, 100.8748],
-  tequila_queen:    [12.9338, 100.8740],
-  promenade:        [12.9357, 100.8737],
-  central_mall:     [12.9352, 100.8768],
-  police_station:   [12.9330, 100.8757],
+  beach_rd_s:       [12.92983, 100.87751],
+  papaya_massage:   [12.92934, 100.87788],
+  beachthai_massage:[12.92906, 100.87788],
+  short_time_motel: [12.92965, 100.87806],
+  beach_rd_c:       [12.93450, 100.88159],
+  beachrd_oil:      [12.93396, 100.88186],
+  tequila_queen:    [12.93164, 100.87946],
+  promenade:        [12.93450, 100.88117],
+  central_mall:     [12.93440, 100.88345],
+  police_station:   [12.93599, 100.88282],
   beach_rd_n:       [12.94288, 100.88475],
   stinky_bar:       [12.94275, 100.88459],
   blue_dog:         [12.94309, 100.88471],
