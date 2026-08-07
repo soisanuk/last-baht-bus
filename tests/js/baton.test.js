@@ -47,6 +47,17 @@ test("a baton only changes hands at dawn", () => {
   assert.equal(batonReady().ok, false, "mid-night is not a handoff point");
   assert.equal(exportBaton(), null);
 
+  // …but the clock is CONTINUOUS: the command that ends a night starts the next,
+  // so nightTurn is a value the game passes through rather than rests at. A
+  // consumer that plays a night to its end is one or two ticks into the next one
+  // and must still be able to hand back. Second Road hit this exactly.
+  G.nightTurn = 1;
+  assert.equal(batonReady().ok, true, "a night that has barely begun is still dawn");
+  G.nightTurn = 2;
+  assert.equal(batonReady().ok, true);
+  G.nightTurn = 3;
+  assert.equal(batonReady().ok, false, "and the window is narrow on purpose");
+
   G.nightTurn = 0; G.pendingChoice = "tanfavour";
   assert.equal(batonReady().ok, false, "nor is a question somebody is waiting on");
   assert.match(batonReady().why, /waiting on an answer/);

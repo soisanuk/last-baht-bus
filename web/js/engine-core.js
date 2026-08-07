@@ -324,11 +324,24 @@ const BATON_FIELDS = [
 // `soc` is per-night bookkeeping (bells, heat, refusals) and stays behind.
 const BATON_SOC_FIELDS = ["drinks", "bfBar", "bfStrikes"];
 
-// A baton may only change hands at dawn: the night resolved, the books settled,
-// no modal mid-question. _endNight is already that seam.
+// A baton changes hands at dawn: the night resolved, the books settled, no modal
+// mid-question. _endNight is that seam.
+//
+// But THE CLOCK IS CONTINUOUS, and the first version of this rule assumed
+// otherwise. The command that ends a night immediately begins the next one, so
+// `nightTurn === 0` is a value the game passes through rather than rests at —
+// there is no persistent dawn to wait for. A consumer that played a night to its
+// end and then tried to hand back was refused for being "mid-night" one turn
+// into a night it had not played. Found by Second Road doing exactly that.
+//
+// So the seam is "a night that has barely begun". Nothing in the baton depends
+// on nightTurn (the body deliberately doesn't cross), so a couple of ticks in
+// costs nothing; what the rule is really guarding is a handover in the MIDDLE of
+// a night, and that it still refuses.
+const BATON_DAWN_TURNS = 2;
 function batonReady() {
   if (!G) return { ok: false, why: "no game" };
-  if (G.nightTurn > 0) return { ok: false, why: "mid-night — finish the night first" };
+  if (G.nightTurn > BATON_DAWN_TURNS) return { ok: false, why: "mid-night — finish the night first" };
   for (const gate of ["pendingChoice", "pendingEnc", "pendingBf", "pendingSoapy",
                       "pendingFare", "game"]) {
     if (G[gate]) return { ok: false, why: "something is waiting on an answer (" + gate + ")" };
