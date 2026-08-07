@@ -43,6 +43,11 @@ var NEWS_FEED = [
     "d": "06 Aug 2026"
   },
   {
+    "t": "Three teachers and three students killed in Thailand school shooting",
+    "s": "CNN",
+    "d": "07 Aug 2026"
+  },
+  {
     "t": "Leader of Myanmar’s military-backed government seeks political legitimacy in Thailand visit",
     "s": "AP News",
     "d": "06 Aug 2026"
@@ -63,12 +68,7 @@ var NEWS_FEED = [
     "d": "06 Aug 2026"
   },
   {
-    "t": "Israeli mother and daughter brutally attacked in Thailand: ‘He asked where we were from, then beat us’",
-    "s": "Ynetnews",
-    "d": "06 Aug 2026"
-  },
-  {
-    "t": "Thailand to adopt checked baggage opening without owners present",
+    "t": "Thailand to ramp up creative cities drive",
     "s": "Bangkok Post",
     "d": "06 Aug 2026"
   }
@@ -76,12 +76,12 @@ var NEWS_FEED = [
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-08-06","USD":33.07,"AUD":23.28,"GBP":44.52,"EUR":38.17};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-07","temp":29,"humid":75,"code":3,"hi":30,"rain":92};
+var WX_NOW = {"date":"2026-08-07","temp":31,"humid":73,"code":95,"hi":31,"rain":78};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-08-01","first":"932479","last2":"69","front3":["413","672"],"back3":["039","154"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4256,"date":"2026-08-07","baht":66550};
+var GOLD = {"usd":4287,"date":"2026-08-07","baht":67050};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":64286,"thb":2130619};
+var BTC = {"usd":64351,"thb":2129806};
