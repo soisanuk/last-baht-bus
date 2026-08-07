@@ -120,7 +120,7 @@ This is the first task and it costs a day. Nothing else starts until it's done.
 | **s1** | Repo, save-baton read/write, a round-trip test on both sides. **DONE 2026-08-08** — both halves plus an end-to-end cross-repo handoff test | s0 passes |
 | **s2** | One bar, one season, no UI beyond text. The loop proven headless. **DONE 2026-08-08** — the Stinky, 52 weeks, 20 tests; generated weeks read | s1 |
 | **s3** | The map (`ROOM_GEO`) + roster (portraits). The first real 2D. **DONE 2026-08-08** — 176 venues plotted, roster with real faces, 21 tests | s2 |
-| **s4** | Second bar, delegation, the trust mechanic. The actual game. | s3 |
+| **s4** | Second bar, delegation, the trust mechanic. The actual game. **DONE 2026-08-08** — allocation across venues, managers, the ambiguous float; 30 tests | s3 |
 | **s5** | Factions as strategy: the Darkside family, WDG's fragility. | s4 |
 
 s2 before s3 is deliberate: prove the loop in text where it's cheap to change,
@@ -276,8 +276,28 @@ view, and 125 MB of portraits in a repo that deploys to GitHub Pages is a real
 cost to LBB itself. A `portraits/thumb/<id>.png` track at ~192 px would serve
 both games, and the art pipeline is already shaped to produce it.
 
-**Next: s4** — the second bar, delegation, and the trust mechanic. The actual
-game.
+**s4 is done (2026-08-08).** Seven nights allocate across venues (nine is
+refused, not clipped); a room you're never in trades on whoever you left in it;
+and the trust model **refuses to tell the player which kind of skimming they're
+looking at**. The customary kind and the other kind are within 25% of each other
+at nine weeks and nearly 2× apart by forty. The prose is asserted never to
+contain *honest*, *dishonest*, *stealing* or *theft* — from outside there is no
+difference, and the game has no business adjudicating.
+
+Where you hire from is the real decision, and **the recommended manager being
+more competent is the trap**. A bond carried across the baton makes somebody
+measurably likelier to be straight with you — never certainly. That's LBB's
+relationship system paying off at macro scale, which is the best argument yet
+for the two games sharing a character.
+
+**This needs LBB work: the Shamrock isn't a venue here.** It exists only in
+Daeng's dialogue, so it never reaches the export. Second Road's machinery is
+venue-agnostic and runs against any Darkside bar today, but the *canon* second
+bar needs a room in `world.js` first — which LBB arguably wants anyway, since the
+Shamrock is a real place in the fiction that currently exists only as talk.
+
+**Next: s5** — factions as strategy (the Darkside family, WDG's fragility), and
+the Shamrock room in LBB.
 
 **Next: the Second Road repo.** Needs a location decision (sibling to
 `last-baht-bus`, same origin as the trainer is the cheap answer).
