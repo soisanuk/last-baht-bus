@@ -2942,8 +2942,8 @@
    "bar": "Front Row Bar",
    "barType": "beer",
    "geo": [
-    12.945,
-    100.8863
+    12.9424,
+    100.88662
    ],
    "name": "Front Row Bar",
    "region": "Soi 6"
@@ -2959,8 +2959,8 @@
   },
   "beach_rd_n": {
    "geo": [
-    12.9425,
-    100.8827
+    12.94288,
+    100.88475
    ],
    "name": "Beach Road (foot of Soi 6)",
    "region": "Beach Road"
@@ -3004,8 +3004,8 @@
    "bar": "Blue Dog",
    "barType": "beer",
    "geo": [
-    12.9427,
-    100.8824
+    12.94309,
+    100.88471
    ],
    "name": "Blue Dog",
    "region": "Beach Road"
@@ -3105,8 +3105,8 @@
    "bar": "Cherry Pop Bar",
    "barType": "soi6",
    "geo": [
-    12.9446,
-    100.8867
+    12.94184,
+    100.88736
    ],
    "name": "Cherry Pop Bar",
    "region": "Soi 6"
@@ -3316,8 +3316,8 @@
    "bar": "Golden Dragon Bar",
    "barType": "soi6",
    "geo": [
-    12.9447,
-    100.8858
+    12.94251,
+    100.88539
    ],
    "name": "Golden Dragon Bar",
    "region": "Soi 6"
@@ -3519,8 +3519,8 @@
    "bar": "Kitten Corner",
    "barType": "soi6",
    "geo": [
-    12.945,
-    100.8869
+    12.94218,
+    100.88727
    ],
    "name": "Kitten Corner",
    "region": "Soi 6"
@@ -3759,8 +3759,8 @@
   },
   "north_beach": {
    "geo": [
-    12.9427,
-    100.8805
+    12.94324,
+    100.88371
    ],
    "name": "North Pattaya Beach",
    "region": "Beach Road"
@@ -3779,8 +3779,8 @@
    "bar": "The Orchid Room",
    "barType": "soi6",
    "geo": [
-    12.9453,
-    100.8856
+    12.94285,
+    100.8853
    ],
    "name": "The Orchid Room",
    "region": "Soi 6"
@@ -3834,8 +3834,8 @@
    "bar": "Pink Lotus Lounge",
    "barType": "soi6",
    "geo": [
-    12.9452,
-    100.8857
+    12.94285,
+    100.8853
    ],
    "name": "Pink Lotus Lounge",
    "region": "Soi 6"
@@ -3905,16 +3905,16 @@
    "bar": "Queen Vic Inn",
    "barType": "pub",
    "geo": [
-    12.9449,
-    100.8863
+    12.94253,
+    100.88623
    ],
    "name": "Queen Vic Inn",
    "region": "Soi 6"
   },
   "qv_room": {
    "geo": [
-    12.9449,
-    100.8863
+    12.94253,
+    100.88623
    ],
    "name": "Your Room — Queen Vic Inn",
    "region": "Soi 6"
@@ -3964,8 +3964,8 @@
    "bar": "Ruby Kiss Bar",
    "barType": "soi6",
    "geo": [
-    12.9451,
-    100.887
+    12.94205,
+    100.88765
    ],
    "name": "Ruby Kiss Bar",
    "region": "Soi 6"
@@ -3984,8 +3984,8 @@
    "bar": "The Verandah",
    "barType": "beer",
    "geo": [
-    12.9446,
-    100.8864
+    12.94206,
+    100.88671
    ],
    "name": "The Verandah",
    "region": "Soi 6"
@@ -4092,8 +4092,8 @@
   },
   "soi6_deep": {
    "geo": [
-    12.9448,
-    100.8868
+    12.94198,
+    100.88741
    ],
    "name": "Soi 6 (East End)",
    "region": "Soi 6",
@@ -4101,16 +4101,16 @@
   },
   "soi6_mid": {
    "geo": [
-    12.9448,
-    100.8863
+    12.9423,
+    100.88647
    ],
    "name": "Soi 6 (Middle)",
    "region": "Soi 6"
   },
   "soi6_street": {
    "geo": [
-    12.9448,
-    100.8858
+    12.94265,
+    100.88544
    ],
    "name": "Soi 6 (West End)",
    "region": "Soi 6",
@@ -4215,8 +4215,8 @@
    "bar": "The Stinky Pinky",
    "barType": "beer",
    "geo": [
-    12.9424,
-    100.8829
+    12.94275,
+    100.88459
    ],
    "liveMusic": true,
    "name": "The Stinky Pinky",
@@ -4245,8 +4245,8 @@
    "bar": "Sunset Dreams Lounge",
    "barType": "soi6",
    "geo": [
-    12.9445,
-    100.8859
+    12.94272,
+    100.88568
    ],
    "name": "Sunset Dreams Lounge",
    "region": "Soi 6"
@@ -4255,8 +4255,8 @@
    "bar": "The Shady Lady",
    "barType": "beer",
    "geo": [
-    12.9447,
-    100.8862
+    12.94219,
+    100.88633
    ],
    "name": "The Shady Lady",
    "region": "Soi 6"
