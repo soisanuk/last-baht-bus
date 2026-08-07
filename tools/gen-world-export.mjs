@@ -114,6 +114,25 @@ export function buildExport() {
       .filter(f => f.endsWith(".png")).map(f => f.slice(0, -4)).sort();
   } catch { /* the pics/ subfolder is optional */ }
 
+  // WHICH VENUES ARE ACTUALLY VERIFIED. LBB ships one playable mode — the Soi 6
+  // pocket — because the geography outside the reworked districts is still
+  // suspect: wrong compass bearings, corner-cutting diagonals, buildings sitting
+  // on cardinal exits instead of `venues:[]`. Four regions of fifteen have had
+  // their pass. So the full 177 are exported (they're all real places, all
+  // geolocated) but only these are known-good, and a consumer honouring the same
+  // restriction needs the boundary rather than a hand-copied list that goes
+  // stale the day a district unlocks.
+  //
+  // It CANNOT be re-derived by filtering on region: four of the nineteen are
+  // region "Beach Road", among them stinky_bar — the bar the whole ownership
+  // chain is about. Filtering `region === "Soi 6"` silently drops it.
+  //
+  // Keyed by mode name (LBB's `G.mode`) so unlocking a district adds a key
+  // rather than changing this one's meaning. Additive and optional, so no
+  // version bump — same tolerance as `lang` below.
+  const playable = {};
+  if (typeof SOI6_ROOMS !== "undefined") playable.soi6 = [...SOI6_ROOMS].sort();
+
   return {
     v: EXPORT_VERSION,
     // Display names are English today. Second Road may localise them later; the
@@ -130,6 +149,7 @@ export function buildExport() {
       thumbs: thumbs.length,
     },
     canonBars: typeof CANON_BARS !== "undefined" ? [...CANON_BARS] : [],
+    playable,
     venues, people, patrons,
     // art/<id>.png relative to LBB's web/portraits/; `frames` are the distinct
     // photo frames under pics/ (see LBB's gallery system)

@@ -2437,6 +2437,29 @@
    "th": "ยุ้ย"
   }
  },
+ "playable": {
+  "soi6": [
+   "bay_watch",
+   "beach_rd_n",
+   "blue_dog",
+   "cherry_pop",
+   "golden_dragon",
+   "kitten_corner",
+   "north_beach",
+   "orchid_room",
+   "pink_lotus",
+   "queen_vic",
+   "qv_room",
+   "ruby_kiss",
+   "sandy_toes",
+   "soi6_deep",
+   "soi6_mid",
+   "soi6_street",
+   "stinky_bar",
+   "sunset_dreams",
+   "sunset_rail"
+  ]
+ },
  "portraits": [
   "aek",
   "aim",
