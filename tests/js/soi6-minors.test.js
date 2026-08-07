@@ -58,7 +58,7 @@ test("a named male regular gets the beer you buy him — you don't drink it for 
 });
 
 test("standing a drink is a bar-rail gesture — a street/massage name never routes there", () => {
-  S().room = "soi7_beach_end"; S().money = 1000;   // Auntie Nok's mango cart, not a bar
+  S().room = "jomtien_soi_7_beach_end"; S().money = 1000;   // Auntie Nok's mango cart, not a bar
   doCommand("buy drink for nok");
   assert.doesNotMatch(last(), /stand .* a Chang|slides down the bar/i,
     "no rail to slide a Chang down out here");
