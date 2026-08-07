@@ -2656,6 +2656,7 @@ function _endNight(reason) {
   }
   if (G.dog) _setFlag("hasDog");      // backfill for saves that adopted before the flag existed
   _loanNightRoll();                   // Nira's loan compounds and her cousins escalate if you're late
+  if (typeof _barSettle === "function") _barSettle();  // your own bar's night, and the old man's month
   _stdMorningTick();                  // an untreated infection makes itself known each morning
   _describeRoom(true);
 }

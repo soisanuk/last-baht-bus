@@ -38,8 +38,21 @@ function becomeExpat() {
   _setFlag("act1Done"); _setFlag("hasWallet");
   G.day = 8;
   _goExpat();
+  // silence ambient vendors and street noise. A peddler or saleng can arm
+  // pendingEnc on any turn, and a live modal legitimately eats the next typed
+  // command — which made these tests flake ~1 run in 20 with a peddler's
+  // head-shake standing in for the answer. Same idiom engine.test.js uses.
+  for (const k in ENCOUNTERS) G.encDone[k] = true;
+  G.pendingEnc = null;
 }
 const say = cmd => { out = []; doCommand(cmd); return out.join("\n"); };
+// These are unit tests of specific mechanics, not of ambient bar life — but the
+// bar is alive: a vendor can arm pendingEnc on any tick, and a live modal then
+// legitimately eats the NEXT typed command (a peddler's head-shake standing in
+// for the answer). Clearing beforehand isn't enough, because it's the PRECEDING
+// command that arms it. So drain the gates immediately before anything we're
+// about to assert on. Found by a 1-in-20 flake, not by reasoning.
+const cmd = c => { G.pendingEnc = null; G.pendingChoice = null; G.game = null; return say(c); };
 // you saved the bar from White Dish — the precondition for being offered it
 const savedTheBar = () => { G.quests.white_dish = "done"; _setFlag("wdgResolved"); };
 // walk the chain up to (not including) the partner fork
@@ -83,14 +96,14 @@ test("the licence step is gated on having warned Wayne — you meet the trap bef
 test("premises and licence complete off their givers' answers", () => {
   savedTheBar();
   G.quests.bar_premises = "active";
-  G.room = "stinky_bar"; say("ask bert about buying");
+  G.room = "stinky_bar"; cmd("ask bert about buying");
   assert.ok(_flag("barPremises"), "Bert's answer sets the flag");
   say("look");
   assert.equal(G.quests.bar_premises, "done");
 
   G.quests.nominee_deal = "done"; _setFlag("nomineeWarned");
   G.quests.bar_licence = "active";
-  G.room = "golden_dragon"; say("ask wayne about licence");
+  G.room = "golden_dragon"; cmd("ask wayne about licence");
   assert.ok(_flag("barLicence"));
   say("look");
   assert.equal(G.quests.bar_licence, "done");
@@ -130,6 +143,7 @@ test("the two routes leave you standing in different places", () => {
 test("opening night is told differently depending on who signed", () => {
   becomeExpat(); upToTheFork();
   G.room = "candy_bar"; say("ask candy about partnership");
+  _setFlag("barPaid");                 // deposit settled — see _barDeposit
   G.quests.bar_opening = "active"; G.room = "stinky_bar";
   const candyNight = say("ask bert about opening");
   assert.ok(_flag("barOpen"));
@@ -138,6 +152,7 @@ test("opening night is told differently depending on who signed", () => {
 
   becomeExpat(); upToTheFork();
   G.room = "soi6_street"; say("ask tan about partnership");
+  _setFlag("barPaid");                 // deposit settled — see _barDeposit
   G.quests.bar_opening = "active"; G.room = "stinky_bar";
   const tanNight = say("ask bert about opening");
   assert.ok(_flag("barOpen"));
@@ -150,7 +165,8 @@ test("Gavin turns up either way — he loses the bar to a regular", () => {
   for (const [who, room] of [["candy", "candy_bar"], ["tan", "soi6_street"]]) {
     becomeExpat(); upToTheFork();
     G.room = room; say(`ask ${who} about partnership`);
-    G.quests.bar_opening = "active"; G.room = "stinky_bar";
+    _setFlag("barPaid");                 // deposit settled — see _barDeposit
+  G.quests.bar_opening = "active"; G.room = "stinky_bar";
     assert.match(say("ask bert about opening"), /Gavin/,
       `${who} route: Gavin should still walk in and buy a beer`);
   }
@@ -173,7 +189,7 @@ test("the dead Shamrock is a sequel hook, not part of this chain", () => {
   G.room = "khao_talo_bar";
   assert.equal(/Shamrock/.test(say("ask daeng about shamrock")), false,
     "she shouldn't be dangling a second bar at someone who hasn't opened a first");
-  for (const f of ["barPremises", "barLicence", "barPartner", "barOpen"]) _setFlag(f);
+  for (const f of ["barPremises", "barLicence", "barPartner", "barPaid", "barOpen"]) _setFlag(f);
   assert.match(say("ask daeng about shamrock"), /Shamrock/,
     "once you own one, she mentions the next");
 });
@@ -186,7 +202,7 @@ test("the dead Shamrock is a sequel hook, not part of this chain", () => {
 // list. What's being established is that he CAN ask.
 function ownsBarWith(partner) {
   becomeExpat();
-  for (const f of ["barPremises", "barLicence", "barPartner", partner, "barOpen"]) _setFlag(f);
+  for (const f of ["barPremises", "barLicence", "barPartner", "barPaid", partner, "barOpen"]) _setFlag(f);
   G.nightTurn = 35;          // an evening beat
   G.room = "stinky_bar";
   out = []; _arriveAt("stinky_bar");
@@ -252,7 +268,7 @@ test("he asks once, ever", () => {
 // themselves, since arriving is what fires a procurement beat.
 function ownsBar(partner) {
   becomeExpat();
-  for (const f of ["barPremises", "barLicence", "barPartner", partner, "barOpen"]) _setFlag(f);
+  for (const f of ["barPremises", "barLicence", "barPartner", "barPaid", partner, "barOpen"]) _setFlag(f);
   G.nightTurn = 35;
   G.room = "stinky_bar";
 }
@@ -336,4 +352,106 @@ test("nothing in this thread is written as a scandal", () => {
   const prose = SYNDICATE_JOBS.map(j => [j.lead, j.ask, j.who, j.yes, j.perk, j.no].join(" ")).join(" ");
   for (const word of [/\bbribe/i, /\bcorrupt/i, /\bkickback/i, /\bmafia/i])
     assert.equal(word.test(prose), false, `procurement prose shouldn't reach for ${word}`);
+});
+
+// ── The books ───────────────────────────────────────────────────────────────
+// The purchase is seller-financed, because the player cannot buy a bar: pocket
+// plus bank tops out at ฿120,000 and an established Soi 6 beer bar is seven
+// figures. Bert's existing line already implies it — "he'll take a regular over
+// a company… he'll lose money on you, and he knows that too" — so the deposit
+// empties you and the old man carries the rest. That monthly is what gives low
+// season teeth and what makes the procurement decision cost something.
+function readyToBuy() {
+  becomeExpat();
+  for (const f of ["barPremises", "barLicence", "barPartner", "partnerTan"]) _setFlag(f);
+  G.room = "stinky_bar";
+}
+
+test("you cannot buy a bar with what you have — the deposit is your ceiling", () => {
+  readyToBuy();
+  assert.ok(G.money < BAR_DEPOSIT, "expat savings alone must not cover it");
+  out = []; _barDeposit();
+  assert.equal(_flag("barPaid"), false, "short is short");
+  assert.match(out.join("\n"), /short/, "and Bert says how short");
+
+  G.money = BAR_DEPOSIT + 10000;          // a week at the ATM
+  out = []; _barDeposit();
+  assert.ok(_flag("barPaid"));
+  assert.equal(G.money, 10000, "it takes every baht of the deposit");
+  assert.equal(G.bar.owed, BAR_PRICE - BAR_DEPOSIT, "the old man carries the rest");
+});
+
+test("no deposit, no opening night", () => {
+  readyToBuy();
+  G.quests.bar_opening = "active";
+  say("ask bert about opening");
+  assert.equal(_flag("barOpen"), false, "the bar isn't yours until it's paid for");
+});
+
+test("a losing night comes out of your own pocket before it shows anywhere", () => {
+  readyToBuy(); G.money = BAR_DEPOSIT; _barDeposit(); _setFlag("barOpen");
+  G.bar.cash = 0; G.money = 5000;
+  // friction high enough that costs exceed even the best night's take, so every
+  // night loses — otherwise the till builds a buffer and absorbs it, which is
+  // itself the correct behaviour and why this needs forcing to observe.
+  G.syn = { done: {}, asked: {}, friction: 20 };
+  let covered = false;
+  for (let i = 0; i < 10 && !covered; i++) { G.day++; out = []; _barSettle(); covered = /your own money went in/.test(out.join("\n")); }
+  assert.ok(covered, "the owner quietly funds the shortfall — that's the job");
+  assert.ok(G.money < 5000);
+});
+
+test("the old man is paid every thirty days, from the till then your pocket", () => {
+  readyToBuy(); G.money = BAR_DEPOSIT; _barDeposit(); _setFlag("barOpen");
+  G.bar.cash = 200000;
+  const before = G.bar.months;
+  let paidLine = "";
+  for (let i = 0; i < 31; i++) {
+    G.day++; out = []; _barSettle();
+    if (/to the old man/.test(out.join("\n"))) paidLine = out.join("\n");
+  }
+  assert.equal(G.bar.months, before + 1, "one payment a month, not one a night");
+  assert.match(paidLine, /paid from the till/, "and it comes out of the till first");
+  // NB: not asserting the till shrank — a month of trade outpaces one payment,
+  // which is the whole point of a bar that works.
+});
+
+test("refusing procurement is what makes the month hard — it's on the supply line forever", () => {
+  const yearEnd = friction => {
+    readyToBuy(); G.money = BAR_DEPOSIT; _barDeposit(); _setFlag("barOpen");
+    G.syn = { done: {}, asked: {}, friction };
+    for (let d = 0; d < 360; d++) { G.day++; out = []; _barSettle(); }
+    return G.bar.cash;
+  };
+  const inside = yearEnd(0), outside = yearEnd(6);
+  assert.ok(inside > 0, "a bar run inside the arrangement clears its monthly");
+  assert.ok(outside < inside,
+    "and every job you turned down is on the supply bill, every night, forever");
+});
+
+test("BOOKS is honest about all of it", () => {
+  // NB: the CONTENT assertions call _doBooks() directly rather than typing the
+  // verb. A bar vendor (watch peddler, saleng) can arm pendingEnc on any turn,
+  // and a live modal legitimately eats the next input — so a typed "books" is
+  // occasionally answered by a peddler's head-shake instead. That's correct
+  // behaviour and made this test flake 1 run in ~20 before it was pinned.
+  readyToBuy();
+  out = []; _doBooks();
+  assert.match(out.join("\n"), /deposit isn't paid|nothing to keep books on/i,
+    "before the purchase there is nothing to look at");
+
+  G.money = BAR_DEPOSIT; _barDeposit(); _setFlag("barOpen");
+  G.syn = { done: {}, asked: {}, friction: 3 };
+  G.day += 31; out = []; _barSettle();
+  out = []; _doBooks();
+  const books = out.join("\n");
+  assert.match(books, /Owed to the old man/, "the debt is the headline");
+  assert.match(books, /over the going rate/, "…and the friction is itemised");
+});
+
+test("BOOKS is reachable as a typed verb", () => {
+  readyToBuy();
+  G.pendingEnc = null; G.pendingChoice = null;   // nothing gating input
+  assert.match(cmd("books"), /deposit isn't paid|nothing to keep books on/i);
+  assert.match(cmd("takings"), /deposit isn't paid|nothing to keep books on/i);
 });

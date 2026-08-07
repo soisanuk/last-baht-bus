@@ -262,6 +262,11 @@ function newGame() {
     pendingChoice: null, // "vacation_end" gates input at week's end
     bank: 100000,        // your account balance — the ATM draws pocket cash from this
     atmDay: 0,           // last day the ATM was used (pairs with atmToday for the daily cap)
+    // the bar you own, once you own one (see _barSettle). `owed` is what's still
+    // due to the old man; `arrears` is what you failed to pay him and haven't
+    // made up. Nightly trade lands in `cash` — the bar's own till, kept separate
+    // from your pocket so a good week at the bar isn't the same as a good week.
+    bar: { cash: 0, owed: 0, arrears: 0, months: 0, lastMonthDay: 0, nights: 0, best: 0 },
     atmToday: 0,         // principal withdrawn today (resets when atmDay rolls over)
     lastPolice: -99,     // turn of the last boy-in-brown shakedown
     lastPeddler: -99,    // turn of the last bar-stool peddler visit

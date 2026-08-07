@@ -311,6 +311,8 @@ function _arriveAt(to) {
   _repArrival(); // your street name precedes you at a stranger bar (notable tiers only)
   _managerWelcome(); // a bar manager stands you the house's first shot (once/bar/night)
   // the partnerTan route comes due: he said he'd ask, and this is him asking
+  // the deposit: the one moment the money has to actually exist
+  if (typeof _barDepositDue === "function" && _barDepositDue()) { _barDeposit(); }
   if (typeof _tanFavourDue === "function" && _tanFavourDue()) { _tanFavour(); return; }
   // procurement: a name on a list was free, the cleaning contract is not
   if (typeof _synDue === "function" && _synDue()) { _synAsk(); return; }
@@ -2969,7 +2971,7 @@ const _COMPLETE_VERBS = [
   "photo", "gallery", "photos", "call", "share", "follow", "shower", "withdraw", "cheers", "tao rai", "borrow", "repay", "hire", "pet", "feed", "rename", "dance", "sing", "swim",
   "smell", "listen", "diagnose", "get tested", "clinic", "apologize", "quests", "accept", "abandon", "contact",
   "contacts", "who", "who am i", "identity", "blackbook", "message", "check messages", "send", "score", "standing", "wait", "again",
-  "request", "hint", "help", "save", "load", "undo", "restart", "quit", "reset", "end", "logout",
+  "request", "hint", "books", "help", "save", "load", "undo", "restart", "quit", "reset", "end", "logout",
 ];
 
 // ── Context chips: the fourth surface ────────────────────────────────────────
@@ -3607,6 +3609,7 @@ function doCommand(input) {
       else _doContact(arg.replace(/^(with |for )/, ""));
       break;
     case "send": case "transfer": case "wire": _doSendMoney(arg); break;
+    case "books": case "takings": case "accounts": _doBooks(); break;
     case "quests": case "quest": case "adventures": case "journal": _doQuests(); break;
     case "accept": _doAccept(arg); break;
     case "abandon": _doAbandon(arg); break;
