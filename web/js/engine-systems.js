@@ -1477,7 +1477,8 @@ function _questWhere(at) {
     const room = _npcRoom(at);
     if (room === G.room || _npcsHere().includes(at)) return ""; // she's right here
     const r = ROOMS[room];
-    return r ? ` ${NPCS[at].name} is at ${_barName(room)}, over in ${r.region}.` : "";
+    return r ? _fmt(" {who} is at {v}, over in {r}.",
+      { who: NPCS[at].name, v: _barName(room), r: r.region }) : "";
   }
   if (PATRONS[at]) {
     // A patron giver moves too — a shuttled regular (Glam: home bar early, walked
@@ -1486,12 +1487,17 @@ function _questWhere(at) {
     const room = _patronRoom(at);
     if (!room || room === G.room || _patronsHere().includes(at)) return "";
     const r = ROOMS[room];
-    return r ? ` ${PATRONS[at].name} is at ${_barName(room)}, over in ${r.region}.` : "";
+    return r ? _fmt(" {who} is at {v}, over in {r}.",
+      { who: PATRONS[at].name, v: _barName(room), r: r.region }) : "";
   }
   if (ROOMS[at]) {
     if (at === G.room) return "";
     const vn = _barName(at); // some venue names already lead with "The" (The Orchid Room)
-    return ` That's ${/^the\b/i.test(vn) ? vn : "the " + vn}, in ${ROOMS[at].region}.`;
+    // the article is a FORK, not a slot: English needs one where the name lacks it,
+    // German drops it before a proper venue name (no gender to guess at).
+    return /^the\b/i.test(vn)
+      ? _fmt(" That's {v}, in {r}.", { v: vn, r: ROOMS[at].region })
+      : _fmt(" That's the {v}, in {r}.", { v: vn, r: ROOMS[at].region });
   }
   return "";
 }
@@ -1639,7 +1645,7 @@ function _doQuests() {
   if (G.stage === "act1") {
     _say("▶ The Last Baht Bus — find your wallet, get back to room 412 in Naklua.", "win");
     for (const [f, label] of _ACT1_MILESTONES) {
-      _say(`  ${_flag(f) ? "✓" : "·"} ${label}`, "dim");
+      _say(_fmt("  {mark} {label}", { mark: _flag(f) ? "✓" : "·", label: _L(label) }), "dim");
     }
     shown++;
   } else if (_flag("act1Done") && G.mode !== "soi6") {
