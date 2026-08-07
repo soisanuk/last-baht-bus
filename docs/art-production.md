@@ -149,9 +149,17 @@ state in between.
 
 ## Order I'd do it in
 
-1. Thumbnail track in `portrait_gen` (192 px WebP), for the 72 already generated.
-2. Point both games' small-format displays at `thumb/`, keeping full-size only
+1. **Extension-agnostic lookup first** (`.webp` → `.png`) in `scene.js` and
+   `term.js`, plus the two tests. Nothing changes visually, but every later step
+   becomes incremental instead of a flag day.
+2. Thumbnail track in `portrait_gen` (**384 px** WebP), for the 72 already generated.
+3. Point both games' small-format displays at `thumb/`, keeping full-size only
    for the gallery path.
-3. Add the portraits budget to `art.test.js`.
-4. Decide the `.git` question — and do it before the migration finishes, not
+4. Add the portraits budget to `portraits.test.js` (≤ 250 KB once thumbs exist).
+5. Convert scene art to WebP under the same 400 KB budget — it's the second
+   curve and it's growing fastest.
+6. Decide the `.git` question — and do it before the migration finishes, not
    after.
+
+Step 1 is deliberately first: it's the only one that unblocks the others, and
+it's the cheapest thing in the list.

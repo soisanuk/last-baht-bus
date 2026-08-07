@@ -127,6 +127,31 @@ s2 before s3 is deliberate: prove the loop in text where it's cheap to change,
 and only then spend on pixels. The same discipline that kept LBB's engine
 DOM-free is what makes this possible at all.
 
+## The drop-in is built (2026-08-08)
+
+Week → night → week, closed end to end across both codebases. Second Road hands
+over, LBB plays an actual night, the baton comes back, the macro game carries on.
+
+**It did not need the event layer**, which this plan assumed it would. The baton
+round-trips, so what a night *changed* is legible without anything describing
+what *happened*. The event layer moves from prerequisite to enrichment — and the
+drop-in ships with no LBB refactor.
+
+**The boundary that finding leaves is real.** Second Road can see ฿9,000 left
+your pocket; it cannot see whether you drank it, were robbed, or woke at a crash
+spot having never got home. My first draft of the telling asserted the first, and
+the truth was the third — LBB gave the owner a rough wake for staying at his own
+bar until dawn, exactly as designed. So the telling now says *what* changed and
+never *why*, and that gap is precisely what an event layer would buy.
+
+**It also exposed a flaw in the baton contract I wrote yesterday.** "Dawn only"
+assumed a dawn exists. LBB's clock is continuous — the command that ends a night
+begins the next — so `nightTurn === 0` is a value the game passes through rather
+than rests at, and a consumer that played a night to its end was refused for
+being "mid-night" one turn into a night it hadn't played. `batonReady()` now
+accepts the first couple of turns, with the reasoning in the comment; the
+mid-night refusal is unchanged.
+
 ## What the assets already give us
 
 Counted, not estimated:
