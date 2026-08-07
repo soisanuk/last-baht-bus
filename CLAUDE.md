@@ -2,6 +2,24 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Repo ownership (agreed 2026-08-08)
+
+**This repo is the one you work in.** Two sibling efforts are owned by other agents:
+
+- **`~/projects/second-road`** — the macro/2D companion game. Another agent owns
+  `src/`, `web/`, `tools/` and `HANDOFF.md` there, and treats this repo as
+  **read-only upstream**, consumed through its `npm run sync`. **Do not edit that
+  repo.** `tools/gen-world-export.mjs` lives *here* and is ours; if Second Road
+  needs the export shape, the baton fields or the art conventions to change, that
+  is **requested through the user, not made across the boundary.**
+- **`web/portraits/`, `scripts/gen-portraits.py`, the thumbnail track** — the art
+  agent's. Consumer wiring (`_avatarSrc`, `web/js/portrait-thumbs.js`) is ours.
+
+**Use targeted `git add <paths>`, never `git add -A`.** Other agents work in this
+same checkout; a blanket add on 2026-08-08 swept 72 of the art agent's in-flight
+files into an unrelated commit and pushed it. Check `git status` for untracked
+work that isn't yours before committing.
+
 ## Commands
 
 No build step, no lint, no npm install for the app — plain HTML/CSS/JS served as-is. The only exception is the browser E2E below, which is dev-only tooling; the app itself never needs a build or install.
