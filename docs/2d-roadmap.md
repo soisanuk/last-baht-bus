@@ -188,6 +188,19 @@ start. Do it **lazily**:
   is presentation, arrival fires the `_do*`; ticks stay on actions (rule 6).
   A second game's worth of craft — decide with v0 data, not enthusiasm.
 
+- **The macro game** (`docs/macro-game.md`) — **added 2026-08-07, and on current
+  thinking the recommended answer.** The 2D game isn't a conversion of LBB at
+  all; it's the *macro* game (multi-bar, weeks and seasons), a separate codebase
+  reading LBB's save as a baton. 2D is bad at what LBB's night is good at — a
+  hundred turns of prose texture, with an unbounded art budget — and good at
+  exactly what a macro view needs: a map, a roster, a calendar, books. And the
+  assets are already paid for: `ROOM_GEO` is 176 rooms with real lat/lon that
+  only `gen-map.mjs` currently reads, plus 277 portraits and the room/region art.
+  In LBB those are decoration; in a macro game they're the interface. Reuse is
+  **data and assets, never the engine** — no parser, no night loop, no turn
+  clock. On this reading **LBB never converts**, which removes the standing risk
+  that a 2D stage destabilises a working text game.
+
 ## Invariants (restated, because every stage is tempted to break one)
 
 1. Game logic never enters scene.js/term.js/main.js; presentation never enters `G`.

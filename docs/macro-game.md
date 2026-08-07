@@ -136,6 +136,74 @@ So the macro game, the second bar, and the Darkside faction are **one piece of
 work**, not three — and the macro game is the only one of the three that needs a
 second codebase.
 
+## The macro game IS the 2D game
+
+Added after the note above, and it resolves a fork that had been stuck.
+
+`docs/2d-roadmap.md` ends at **v3: visual novel ⊕ top-down walkable**, and both
+of those are *conversions of LBB*. There's a third answer, and it's better than
+either: **the 2D game is the macro game.** Not a re-skin of the night — a
+different game, at a different altitude, reading the same save.
+
+### Why the fit is unusually good
+
+**2D is bad at exactly what LBB's night is good at.** The night's pleasure is
+prose texture — a hundred turns of one specific evening, and the art budget to
+render that is unbounded because every beat is a new picture. A macro view is
+the opposite: a map, a roster, a calendar, a set of books. Those are things a
+screen genuinely does better than a paragraph.
+
+**The assets already built serve a macro game better than they serve a converted
+LBB.** This is the strongest argument and it's already paid for:
+
+| Already built | In LBB it is | In a macro game it is |
+| --- | --- | --- |
+| `ROOM_GEO` — **176 rooms with real lat/lon** | used only by `tools/gen-map.mjs` | *the map* |
+| **277 portraits**, 259 NPCs | an emoji swap on the `Here:` line | the staff roster, with faces |
+| Room + region art (pipeline shipped) | a decorative panel above the terminal | venue tiles you manage |
+| `world.js` declarative canon | the source of truth for a text game | the source of truth for both |
+
+A hundred and seventy-six geolocated venues and two hundred and seventy-seven
+character portraits is a large fraction of a management game's art, sitting in
+the repo, under-used.
+
+### The reuse boundary: data yes, engine no
+
+Worth stating precisely, because "reuse a lot of LBB" hides a sharp line.
+
+**Reuse:** `world.js` (rooms, NPCs, bars, quests, geography), `ROOM_GEO`, the
+portraits, the room/region art, the save format, and the canon docs.
+
+**Do not reuse:** the parser, the night loop, `_tick`, the modal gates, the
+turn clock. A macro game doesn't parse typed commands or run 100-turn evenings;
+inheriting that engine would be inheriting the thing that doesn't scale, which
+is the whole reason the macro game exists.
+
+So the coupling is **declarative data + assets**, which is the cheapest kind —
+and this repo already has the pattern for it. The trainer vendors five files
+into LBB with a banner, a `sync-vendored.mjs`, and a `--check` drift detector.
+Same mechanism, pointed the other way: `world.js` and the art vendored *out* of
+LBB into the macro game, with drift checked in CI on both sides.
+
+### What this does to the 2D roadmap
+
+- **v0 (scene panel)** — shipped, and stays. It was always worth it on its own.
+- **v1 (hotspots)** — still fine, still small, but no longer on the path to
+  anything bigger. Do it if it improves LBB on a phone; don't do it as a step
+  toward 2D.
+- **v2 (the event layer)** — *changes value.* It is no longer the prerequisite
+  for 2D, because the macro game consumes the **save**, not an event stream. It
+  stays the prerequisite for multiplayer, and it becomes the thing you'd need if
+  the baton ever goes *bidirectional* — the macro game handing a decisive night
+  back to LBB to be played. Which is the strongest version of all this, and the
+  hardest.
+- **v3 (the fork)** — the third option, and on this reading the recommended one.
+  LBB never converts. It stays a text game, permanently, and is better for it.
+
+That last point is the real prize: this resolves the long-standing tension where
+every 2D stage risked destabilising a working text game. It doesn't have to. The
+2D game is somewhere else, and LBB's job is to be the best possible night.
+
 ## Open questions
 
 - Does the macro game render nights at all, or only weeks? (Football Manager
