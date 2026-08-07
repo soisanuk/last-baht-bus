@@ -117,7 +117,7 @@ This is the first task and it costs a day. Nothing else starts until it's done.
 | | | gate |
 | --- | --- | --- |
 | **s0** | Four week-summaries as prose. Go/no-go. **DONE 2026-08-07 → GO** (`docs/second-road-weeks.md`) | — |
-| **s1** | Repo, save-baton read/write, a round-trip test on both sides. **LBB half DONE 2026-08-07** (`exportBaton`/`importBaton`/`batonReady`, `tests/js/baton.test.js`); Second Road half pending its repo | s0 passes |
+| **s1** | Repo, save-baton read/write, a round-trip test on both sides. **DONE 2026-08-08** — both halves plus an end-to-end cross-repo handoff test | s0 passes |
 | **s2** | One bar, one season, no UI beyond text. The loop proven headless. | s1 |
 | **s3** | The map (`ROOM_GEO`) + roster (portraits). The first real 2D. | s2 |
 | **s4** | Second bar, delegation, the trust mechanic. The actual game. | s3 |
@@ -223,8 +223,20 @@ export. In order:
 Until 1 and 2 exist, any shortcut taken on the Second Road side — reading
 `world.js` directly, hand-copying data — becomes the thing that rots.
 
-**Still owed:** the mirror of `baton.test.js` on the Second Road side. The
-coupling is half-tested until both exist.
+**s1 is complete (2026-08-08).** `~/projects/second-road` now has:
+
+- `HANDOFF.md` — the contract, and the only operational dependency between them
+- `src/baton.mjs` + `test/baton.test.mjs` — the mirror half (6 tests)
+- `tools/sync-vendored.mjs` — pulls `docs/world-export.json` into `vendor/`,
+  with `--check` drift detection for CI
+- **`test/handoff.test.mjs` — the end-to-end one.** Boots the real LBB engine in
+  a vm, plays it to bar ownership, hands the baton over, runs three weeks, hands
+  it back, and checks LBB accepts it. Both sides passing proves nothing about the
+  pair; this is the only test that runs a real character through the real
+  handoff. Proven by bumping `BATON_VERSION` on one side alone.
+
+**Next: s2** — one bar, one season, headless text. Prove the loop where it's
+cheap to change, before spending anything on pixels.
 
 **Next: the Second Road repo.** Needs a location decision (sibling to
 `last-baht-bus`, same origin as the trainer is the cheap answer).
