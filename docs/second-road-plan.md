@@ -117,7 +117,7 @@ This is the first task and it costs a day. Nothing else starts until it's done.
 | | | gate |
 | --- | --- | --- |
 | **s0** | Four week-summaries as prose. Go/no-go. **DONE 2026-08-07 → GO** (`docs/second-road-weeks.md`) | — |
-| **s1** | Repo, save-baton read/write, a round-trip test on both sides. | s0 passes |
+| **s1** | Repo, save-baton read/write, a round-trip test on both sides. **LBB half DONE 2026-08-07** (`exportBaton`/`importBaton`/`batonReady`, `tests/js/baton.test.js`); Second Road half pending its repo | s0 passes |
 | **s2** | One bar, one season, no UI beyond text. The loop proven headless. | s1 |
 | **s3** | The map (`ROOM_GEO`) + roster (portraits). The first real 2D. | s2 |
 | **s4** | Second bar, delegation, the trust mechanic. The actual game. | s3 |
@@ -173,4 +173,30 @@ tension — it borrows a bad thing in order to be readable. If every good week n
 a flat note, the game will read as relentlessly grim. **A good week has to be
 allowed to just be good sometimes**, and that's a design rule, not a prose note.
 
-**Next: s1** — repo, save-baton read/write, round-trip test on both sides.
+**s1, LBB half: done 2026-08-07.** `exportBaton()` / `importBaton()` /
+`batonReady()` in engine-core.js, guarded by `tests/js/baton.test.js` (7 tests).
+
+The contract, so Second Road can be built against it:
+
+- **`BATON_VERSION = 1`.** Mismatched versions are *refused*, not guessed at —
+  cross-repo coupling rots silently unless it breaks loudly.
+- **Dawn only.** `batonReady()` refuses while `nightTurn > 0` or any modal gate
+  is open. A baton can never be handed over mid-question.
+- **What crosses**: day, player, flags, quests, bar, syn, faction, rep, money,
+  bank, hotel, happy, phone, dog, thaiSeen, itemLoc, rng, and `soc.drinks` (the
+  bonds — the macro game's real resource).
+- **What doesn't**: hunger, thirst, battery, drunk, hurt, room, nightTurn and
+  every pending gate. Those describe a body in a night, and a macro turn hasn't
+  got one. They're dropped on export and zeroed on import.
+- **Tolerant by construction.** Import merges onto a fresh `newGame()` skeleton,
+  so a field Second Road has never heard of keeps today's default instead of
+  becoming `undefined` — the same reason the save format tolerates being older
+  than the code. This is what stops the coupling needing a migration every time
+  either game grows a field.
+
+**Still to do in s1:** the Second Road repo, and the mirror of `baton.test.js`
+on its side. The coupling is only half-tested until both exist — that was
+condition 2 of the recommendation and it stands.
+
+**Next: the Second Road repo.** Needs a location decision (sibling to
+`last-baht-bus`, same origin as the trainer is the cheap answer).

@@ -295,6 +295,76 @@ function newGame() {
   return G;
 }
 
+// ── The baton: handing the character to Second Road and back ────────────────
+// Second Road (docs/second-road-plan.md) is the macro companion — weeks and
+// seasons, multiple venues — in a separate codebase. The two games share one
+// character, and the rule that keeps their clocks from diverging is that the
+// save is a BATON: held by exactly one game at a time, handed over at dawn.
+// Divergence isn't caused by two clocks, it's caused by two concurrent writers.
+//
+// This is deliberately NOT serializeGame(). A full save carries a body in a
+// night — hunger, battery, drunk, the pending modal gates, the turn clock — and
+// a macro turn has none of those. Handing them over would be handing over state
+// nobody on the other side can honour. So the baton is an explicit subset, and
+// the ephemera are dropped rather than trusted.
+const BATON_VERSION = 1;
+
+// what crosses: the character, and the world's memory of them
+const BATON_FIELDS = [
+  "day", "vacation", "stage", "mode",
+  "player", "flags", "quests", "known", "talked",
+  "bar", "syn", "faction", "rep", "repDay",
+  "money", "bank", "loan", "hotel", "hotelDebt",
+  "happy", "bestHappy", "jaded", "sabaiSabai",
+  "phone", "dog", "thaiSeen", "itemLoc",
+  "rng",              // determinism has to survive the handoff or replay dies
+  "act1Best", "act1Tries",
+];
+// bonds are the macro game's real resource — who your people are. The rest of
+// `soc` is per-night bookkeeping (bells, heat, refusals) and stays behind.
+const BATON_SOC_FIELDS = ["drinks", "bfBar", "bfStrikes"];
+
+// A baton may only change hands at dawn: the night resolved, the books settled,
+// no modal mid-question. _endNight is already that seam.
+function batonReady() {
+  if (!G) return { ok: false, why: "no game" };
+  if (G.nightTurn > 0) return { ok: false, why: "mid-night — finish the night first" };
+  for (const gate of ["pendingChoice", "pendingEnc", "pendingBf", "pendingSoapy",
+                      "pendingFare", "game"]) {
+    if (G[gate]) return { ok: false, why: "something is waiting on an answer (" + gate + ")" };
+  }
+  return { ok: true };
+}
+
+function exportBaton() {
+  const r = batonReady();
+  if (!r.ok) return null;
+  const out = { v: BATON_VERSION };
+  for (const k of BATON_FIELDS) if (G[k] !== undefined) out[k] = G[k];
+  out.soc = {};
+  for (const k of BATON_SOC_FIELDS) if (G.soc && G.soc[k] !== undefined) out.soc[k] = G.soc[k];
+  return out;
+}
+
+// Coming back the other way. Merges onto a fresh skeleton exactly like
+// deserializeGame, so a field Second Road has never heard of keeps today's
+// default rather than becoming undefined — the same reason the save format
+// tolerates being older than the code.
+function importBaton(b) {
+  if (!b || typeof b !== "object") return { ok: false, why: "not a baton" };
+  if (b.v !== BATON_VERSION) return { ok: false, why: "baton version " + b.v + ", expected " + BATON_VERSION };
+  newGame();
+  for (const k of BATON_FIELDS) if (b[k] !== undefined) {
+    const isObj = v => v && typeof v === "object" && !Array.isArray(v);
+    G[k] = (isObj(b[k]) && isObj(G[k])) ? { ...G[k], ...b[k] } : b[k];
+  }
+  if (b.soc) for (const k of BATON_SOC_FIELDS) if (b.soc[k] !== undefined) G.soc[k] = b.soc[k];
+  // a body arrives fresh: the macro game ran weeks, not a night
+  G.nightTurn = 0;
+  G.pendingChoice = null; G.pendingEnc = null; G.game = null;
+  return { ok: true };
+}
+
 function serializeGame() { return JSON.stringify(G); }
 // Restoring a save merges it over a fresh newGame() skeleton, so a field (or a
 // sub-key of soc/phone/itemLoc/…) added AFTER the save was written simply keeps
