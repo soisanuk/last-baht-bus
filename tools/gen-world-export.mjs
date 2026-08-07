@@ -22,7 +22,7 @@
 //   node tools/gen-world-export.mjs            # write docs/world-export.json
 //   node tools/gen-world-export.mjs --check    # exit 1 if the file is stale
 //   node tools/gen-world-export.mjs --stdout   # print, write nothing
-import { readFileSync, writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync, readdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import vm from "node:vm";
 
@@ -78,6 +78,21 @@ export function buildExport() {
     }
   }
 
+  // The portrait index. Second Road shouldn't have to walk a directory it
+  // doesn't own, and listing them here means a missing or orphaned face shows up
+  // as a diff in the sync test rather than as a broken image months later.
+  // Sorted, so the file stays diff-stable.
+  const dir = fileURLToPath(new URL("web/portraits", root));
+  const portraits = readdirSync(dir)
+    .filter(f => f.endsWith(".png"))
+    .map(f => f.slice(0, -4))
+    .sort();
+  let frames = [];
+  try {
+    frames = readdirSync(fileURLToPath(new URL("web/portraits/pics", root)))
+      .filter(f => f.endsWith(".png")).map(f => f.slice(0, -4)).sort();
+  } catch { /* the pics/ subfolder is optional */ }
+
   return {
     v: EXPORT_VERSION,
     // Display names are English today. Second Road may localise them later; the
@@ -89,9 +104,13 @@ export function buildExport() {
       geolocated: Object.values(venues).filter(v => v.geo).length,
       people: Object.keys(people).length,
       patrons: Object.keys(patrons).length,
+      portraits: portraits.length,
     },
     canonBars: typeof CANON_BARS !== "undefined" ? [...CANON_BARS] : [],
     venues, people, patrons,
+    // art/<id>.png relative to LBB's web/portraits/; `frames` are the distinct
+    // photo frames under pics/ (see LBB's gallery system)
+    portraits, frames,
   };
 }
 
@@ -127,6 +146,7 @@ if (isMain) {
     const e = buildExport();
     console.log(`docs/world-export.json — v${e.v}: ${e.counts.venues} venues ` +
       `(${e.counts.geolocated} geolocated), ${e.counts.people} people, ` +
-      `${e.counts.patrons} patrons, ${e.canonBars.length} canon bars`);
+      `${e.counts.patrons} patrons, ${e.counts.portraits} portraits, ` +
+      `${e.canonBars.length} canon bars`);
   }
 }
