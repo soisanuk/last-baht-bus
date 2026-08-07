@@ -109,6 +109,7 @@ test("gossip chain flags connect: every required flag is set somewhere", () => {
     "glamTruth", // set by PATRON dialogue (Glam's lucid flash), which this scan doesn't cover
     "knowMikkel", // set by PATRON dialogue (Mikkel's intro), same blind spot as glamTruth
     "hasDog",    // set by the adoption action (FEED DOG), not dialogue
+    "expatLife", // set by _goExpat — gates the bar-owning chain to the endless stage
   ]); // set by engine actions (read/wai/give/enter), not NPC dialogue
   for (const npc of Object.values(NPCS)) {
     for (const d of npc.dialogue) {
