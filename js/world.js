@@ -54,6 +54,22 @@ const BAR_COSTS    = 3000;     // wages, supply, rent, the lot
 const BAR_PRESENT  = 800;      // you behind your own rail sells drinks
 const BAR_FRICTION = 0.08;     // each refused procurement job adds this to costs
 const LOW_SEASON   = 0.55;     // takings multiplier when the town empties
+
+// ── The presence dilemma ────────────────────────────────────────────────────
+// The bar's real job is not to be a business game next to the night game. It's
+// to put a PRICE on the night — the thing the player actually came for. Every
+// evening is the same question: stand behind your own rail, or go out and have
+// the night you moved here for. Both are real, neither is sustainable, and that
+// tension is the whole design.
+//
+// Working pays properly and steadies the staff, but the night out is where
+// สนุก, the encounters and the relationships live — and the hedonic treadmill
+// means a player who only ever works stops gaining happiness at all. A player
+// who never works watches the takings drift and the girls quietly leave.
+const WORK_TAKINGS = 1.35;     // your own rail, your own room
+const AWAY_TAKINGS = 0.72;     // Bert is good, but Bert is not the owner
+const WORK_SANUK   = 2;        // the satisfaction of a night's decent trade
+const WORK_DRIFT   = 6;        // nights away in a row before the staff feel it
 // The ATM: draw pocket cash from your account (G.bank) at any `atm:true` room.
 const ATM_FEE = 300;         // foreign-card fee per withdrawal (charged to the account)
 const ATM_DAILY_CAP = 20000; // most you can pull in a day (principal, fees don't count)
@@ -7096,6 +7112,100 @@ const QUESTS = {
     reward: { money: 0, happy: 10 },
   },
 };
+
+// ── Nights behind your own rail ─────────────────────────────────────────────
+// Working isn't a flat trade of happiness for money — that would make the whole
+// decision arithmetic. Some nights behind your own bar are genuinely the best
+// nights you have: two-week millionaires on the bell every hour, a staff
+// birthday that didn't go stupid, the one high-season night your regulars all
+// turn up at once and everything simply works. Those are the exceptions, and
+// they're offset by the other exceptions — a shakedown, a drunk who turns, a
+// girl who doesn't come in.
+//
+// Most nights are neither, which is what makes the other two land.
+//
+// `when(G)` gates an event; `weight` is relative. money/happy are the tail.
+// THIS is where faction standing finally does something: police attention is
+// weighted by how far outside the arrangement you've stayed. Inside, it simply
+// doesn't happen — that is what being inside IS.
+const WORK_NIGHTS = [
+  // ── the good ones ────────────────────────────────────────────────────────
+  {
+    id: "millionaires", weight: 5, happy: 4, money: 4000,
+    text: "Two lads three days into a two-week holiday and a bonus they haven't " +
+      "told their wives about find your bell at nine o'clock and ring it roughly " +
+      "hourly until one. The girls are laughing at them, not with them, and they " +
+      "are having the time of their lives and do not care. The till sings. Bert " +
+      "works the whole night with the expression of a man watching weather come " +
+      "in off the sea.",
+  },
+  {
+    id: "allin", weight: 4, happy: 5, when: G => !_lowSeason(),
+    text: "Every regular you have is in tonight. Not arranged, not a promotion — " +
+      "they simply all came, the way a room sometimes decides to be full. Two of " +
+      "them are arguing about a football match from 1998. Somebody's put the " +
+      "wrong music on and nobody has asked for it to be changed. This is the " +
+      "night people mean when they say they want to own a bar, and you get maybe " +
+      "six of them a year.",
+  },
+  {
+    id: "birthday", weight: 4, happy: 4, money: -2500,
+    text: "It's one of the girls' birthdays, which means a cake from the market, " +
+      "a crate on the house, and a speaker turned up past the point Bert " +
+      "approves of. It costs you a couple of thousand baht and nothing stupid " +
+      "happens, which is the whole trick of a staff party. She cries a bit. " +
+      "Somebody's mother is on a video call for twenty minutes.",
+  },
+  {
+    id: "footy", weight: 4, happy: 3, money: 2200,
+    text: "A match nobody expected to matter goes to the last ten minutes with " +
+      "the room split down the middle, and the bar makes more in that half hour " +
+      "than it did all Tuesday. Two men who were shouting at each other buy each " +
+      "other beers afterwards, which is the entire case for football.",
+  },
+  // ── the bad ones ─────────────────────────────────────────────────────────
+  {
+    // the faction system, finally doing something. Inside the arrangement this
+    // simply does not happen — that is what being inside IS.
+    id: "police", weight: 0, happy: -3, money: -3000,
+    when: G => (G.syn && G.syn.friction >= 2) && _faction("syndicate") < 2,
+    // tuned down from 3+2f: at the old weight it was 40% of all events and
+    // crowded the good nights out entirely, which flattened the texture. Being
+    // inspected should DEFINE life outside the arrangement, not be the only
+    // thing in it.
+    weightFn: G => 1 + (G.syn.friction || 0),
+    text: "Two officers come in at eleven, entirely polite, and go through the " +
+      "licence, the staff list, the fire exit and the hours. Nothing is wrong. " +
+      "Nothing is ever quite wrong. It takes ninety minutes on a Friday, the " +
+      "room empties around them, and at the end there is a figure that is not " +
+      "written down anywhere and is not negotiable and is not, in fairness, " +
+      "very large. You pay it. Bert doesn't look at you while you do.",
+  },
+  {
+    id: "violent", weight: 3, happy: -3,
+    text: "A big lad who has been fine all week goes off at eleven over nothing " +
+      "anybody can reconstruct afterwards. A stool goes. One of the girls gets " +
+      "an elbow in the face getting out of the way, which is the part you will " +
+      "think about later, not the stool. He's out in under a minute — the soi " +
+      "handles it the way the soi handles it — and the room is quiet for an hour " +
+      "and then, unnervingly, completely normal.",
+  },
+  {
+    id: "noshow", weight: 3, happy: -2,
+    text: "One of the girls doesn't come in and doesn't answer her phone. Nobody " +
+      "will say anything about it, which tells you it isn't an emergency and is " +
+      "somebody's boyfriend. You cover her section yourself, badly, and she is " +
+      "in tomorrow as though nothing happened, and you decide — twice — not to " +
+      "raise it.",
+  },
+  {
+    id: "runner", weight: 2, happy: -1, money: -1800,
+    text: "A table of six runs a tab all evening and then simply isn't there. " +
+      "Bert saw it coming twenty minutes out and still couldn't stop it without " +
+      "making a scene in front of forty customers, which is exactly what they " +
+      "were counting on.",
+  },
+];
 
 // ── Procurement: how work actually gets given out ───────────────────────────
 // Once you own a bar, every improvement to it is a procurement decision, and
