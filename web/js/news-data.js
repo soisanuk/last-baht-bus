@@ -8,9 +8,9 @@ var NEWS_FEED = [
     "d": "04 Aug 2026"
   },
   {
-    "t": "Language barrier leaves Chinese tourist stranded in Pattaya",
+    "t": "Jordanian tourist finds friendly solution after Pattaya shop dispute",
     "s": "Pattaya Mail",
-    "d": "05 Aug 2026"
+    "d": "06 Aug 2026"
   },
   {
     "t": "Foreign man caught on CCTV stealing phone in Pattaya café",
@@ -18,29 +18,34 @@ var NEWS_FEED = [
     "d": "05 Aug 2026"
   },
   {
-    "t": "Pattaya an undying city expanding beyond expectations amid an influx of people",
+    "t": "Pattaya expat life in 2026: Paradise or Challenge?",
     "s": "Pattaya Mail",
     "d": "06 Aug 2026"
   },
   {
-    "t": "Pattaya installs 20 LED streetlights after resident concerns",
+    "t": "Pattaya keeps Jomtien Beach open to all, not private business",
     "s": "Pattaya Mail",
-    "d": "05 Aug 2026"
+    "d": "06 Aug 2026"
   },
   {
-    "t": "Swaying car draws Pattaya police attention, leads to Glock seizure and arrest",
+    "t": "Pattaya hill injured dog rescued after public plea for help",
     "s": "Pattaya Mail",
-    "d": "05 Aug 2026"
+    "d": "06 Aug 2026"
   },
   {
-    "t": "Pattaya and Sattahip residents roll the dice under dark rain clouds",
+    "t": "Pattaya Police arrest pair linked to 50 water meter thefts",
     "s": "Pattaya Mail",
-    "d": "05 Aug 2026"
+    "d": "06 Aug 2026"
   },
   {
-    "t": "MTV’s The Challenge Season 42 showcases Bangkok and Pattaya to global audiences",
+    "t": "Pattaya welcomes the world with smoother walkways and brighter streets",
     "s": "Pattaya Mail",
-    "d": "05 Aug 2026"
+    "d": "06 Aug 2026"
+  },
+  {
+    "t": "Leader of Myanmar’s military-backed government seeks political legitimacy in Thailand visit",
+    "s": "AP News",
+    "d": "06 Aug 2026"
   },
   {
     "t": "Myanmar leader breaks diplomatic isolation on first official visit to Thailand since coup",
@@ -48,40 +53,35 @@ var NEWS_FEED = [
     "d": "06 Aug 2026"
   },
   {
-    "t": "Body of popular Thai YouTuber Hlun Solo returns home",
+    "t": "Myanmar's Min Aung Hlaing visits Thailand in quest for legitimacy",
+    "s": "Reuters",
+    "d": "05 Aug 2026"
+  },
+  {
+    "t": "Irish man dies in Thailand",
+    "s": "RTE.ie",
+    "d": "06 Aug 2026"
+  },
+  {
+    "t": "Israeli mother and daughter brutally attacked in Thailand: ‘He asked where we were from, then beat us’",
+    "s": "Ynetnews",
+    "d": "06 Aug 2026"
+  },
+  {
+    "t": "Thailand to adopt checked baggage opening without owners present",
     "s": "Bangkok Post",
-    "d": "06 Aug 2026"
-  },
-  {
-    "t": "Everything you need to decide, and do, before relocating to Thailand in 2026",
-    "s": "Thaiger",
-    "d": "06 Aug 2026"
-  },
-  {
-    "t": "Woman’s mid-flight horror with passenger",
-    "s": "News.com.au",
-    "d": "06 Aug 2026"
-  },
-  {
-    "t": "Lightning bolt strikes football field in Thailand, killing a player during a match",
-    "s": "WION",
-    "d": "06 Aug 2026"
-  },
-  {
-    "t": "Lightning strike kills Thai footballer, 24, during match in Thailand",
-    "s": "mothership.sg",
     "d": "06 Aug 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-08-06","USD":33.07,"AUD":23.28,"GBP":44.52,"EUR":38.17};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-06","temp":27,"humid":91,"code":95,"hi":31,"rain":98};
+var WX_NOW = {"date":"2026-08-07","temp":27,"humid":88,"code":51,"hi":31,"rain":92};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-08-01","first":"932479","last2":"69","front3":["413","672"],"back3":["039","154"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4269,"date":"2026-08-06","baht":66750};
+var GOLD = {"usd":4245,"date":"2026-08-07","baht":66400};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":64381,"thb":2128841};
+var BTC = {"usd":64263,"thb":2128414};
