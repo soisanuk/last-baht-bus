@@ -106,6 +106,7 @@
 <line x1="332.9" y1="805.9" x2="457.6" y2="673.0" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="332.9" y1="805.9" x2="243.8" y2="811.4" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="332.9" y1="805.9" x2="623.7" y2="623.1" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
+<line x1="332.9" y1="805.9" x2="250.0" y2="929.2" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="311.3" y1="1122.0" x2="302.1" y2="1061.7" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="302.1" y1="1061.7" x2="348.3" y2="946.1" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="348.3" y1="946.1" x2="250.0" y2="929.2" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
@@ -119,13 +120,13 @@
 <line x1="533.8" y1="626.3" x2="457.6" y2="673.0" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="533.8" y1="626.3" x2="643.9" y2="534.6" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="533.8" y1="626.3" x2="623.7" y2="623.1" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
-<line x1="533.8" y1="626.3" x2="736.8" y2="500.1" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="533.8" y1="626.3" x2="543.8" y2="635.9" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="533.8" y1="626.3" x2="543.8" y2="641.4" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="643.9" y1="534.6" x2="729.3" y2="370.1" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="643.9" y1="534.6" x2="632.6" y2="534.6" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="643.9" y1="534.6" x2="694.2" y2="536.6" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="643.9" y1="534.6" x2="651.2" y2="545.2" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
+<line x1="643.9" y1="534.6" x2="736.0" y2="495.3" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="729.3" y1="370.1" x2="747.9" y2="374.6" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="729.3" y1="370.1" x2="851.0" y2="163.0" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="729.3" y1="370.1" x2="701.2" y2="363.0" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
@@ -143,10 +144,13 @@
 <line x1="656.1" y1="602.5" x2="682.0" y2="585.8" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="656.1" y1="602.5" x2="622.9" y2="585.6" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="757.6" y1="517.1" x2="776.8" y2="492.4" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
-<line x1="757.6" y1="517.1" x2="750.6" y2="514.6" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
+<line x1="757.6" y1="517.1" x2="736.0" y2="495.3" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="757.6" y1="517.1" x2="764.6" y2="519.3" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
+<line x1="757.6" y1="517.1" x2="750.6" y2="514.6" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="776.8" y1="492.4" x2="643.9" y2="534.6" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
+<line x1="776.8" y1="492.4" x2="813.8" y2="390.9" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="776.8" y1="492.4" x2="831.6" y2="506.3" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
+<line x1="813.8" y1="390.9" x2="801.1" y2="387.8" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="730.3" y1="569.2" x2="656.1" y2="602.5" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="730.3" y1="569.2" x2="784.1" y2="582.1" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="730.3" y1="569.2" x2="731.4" y2="563.9" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
@@ -182,8 +186,8 @@
 <line x1="730.6" y1="646.3" x2="729.0" y2="651.0" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="730.6" y1="646.3" x2="725.7" y2="654.6" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="682.0" y1="683.6" x2="601.5" y2="723.1" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
-<line x1="682.0" y1="683.6" x2="660.7" y2="697.2" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
-<line x1="682.0" y1="683.6" x2="659.9" y2="691.9" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
+<line x1="682.0" y1="683.6" x2="689.3" y2="683.2" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
+<line x1="682.0" y1="683.6" x2="685.2" y2="686.6" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="601.5" y1="723.1" x2="578.1" y2="738.0" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="767.9" y1="593.5" x2="759.8" y2="593.9" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="759.8" y1="593.9" x2="760.3" y2="590.0" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
@@ -228,15 +232,12 @@
 <line x1="682.0" y1="585.8" x2="683.6" y2="581.3" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="682.0" y1="585.8" x2="682.5" y2="590.6" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="750.6" y1="624.1" x2="752.2" y2="619.6" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
-<line x1="750.6" y1="624.1" x2="751.1" y2="628.8" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="665.0" y1="607.6" x2="693.3" y2="624.3" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
-<line x1="665.0" y1="607.6" x2="656.4" y2="605.9" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="665.0" y1="607.6" x2="654.7" y2="598.2" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="693.3" y1="624.3" x2="721.7" y2="641.0" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="693.3" y1="624.3" x2="694.4" y2="620.0" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="693.3" y1="624.3" x2="692.5" y2="628.6" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="721.7" y1="641.0" x2="723.3" y2="636.7" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
-<line x1="721.7" y1="641.0" x2="679.3" y2="639.6" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <circle cx="291.9" cy="1287.5" r="2.6" fill="#e8c46a" opacity="0.8"/>
 <text x="300.9" y="1281.5" font-size="15" fill="#e8c46a" text-anchor="start" opacity="0.95">Jomtien Beach</text>
 <circle cx="264.3" cy="1266.9" r="2.6" fill="#e8c46a" opacity="0.8"/>
@@ -348,6 +349,8 @@
 <circle cx="722.8" cy="577.4" r="9" fill="none" stroke="#7a8aa8" opacity="0.35"/>
 <circle cx="622.9" cy="585.6" r="5" fill="#7a8aa8" opacity="0.95"><title>Mike's Mall</title></circle>
 <circle cx="622.9" cy="585.6" r="9" fill="none" stroke="#7a8aa8" opacity="0.35"/>
+<circle cx="813.8" cy="390.9" r="2.6" fill="#7a8aa8" opacity="0.8"/>
+<circle cx="736.0" cy="495.3" r="2.6" fill="#00e5ff" opacity="0.8"/>
 <circle cx="730.3" cy="569.2" r="2.6" fill="#c46ae8" opacity="0.8"/>
 <text x="720.3" y="583.2" font-size="15" fill="#c46ae8" text-anchor="end" opacity="0.95">Myth Night</text>
 <circle cx="731.4" cy="563.9" r="2.6" fill="#c46ae8" opacity="0.8"/>
@@ -410,8 +413,8 @@
 <circle cx="737.6" cy="642.4" r="9" fill="none" stroke="#ff6a9a" opacity="0.35"/>
 <circle cx="733.0" cy="639.8" r="5" fill="#ff6a9a" opacity="0.95"><title>Rock Factory</title></circle>
 <circle cx="733.0" cy="639.8" r="9" fill="none" stroke="#ff6a9a" opacity="0.35"/>
-<circle cx="660.7" cy="697.2" r="5" fill="#ff6a9a" opacity="0.95"><title>Silk Rose Bar</title></circle>
-<circle cx="660.7" cy="697.2" r="9" fill="none" stroke="#ff6a9a" opacity="0.35"/>
+<circle cx="689.3" cy="683.2" r="5" fill="#ff6a9a" opacity="0.95"><title>Silk Rose Bar</title></circle>
+<circle cx="689.3" cy="683.2" r="9" fill="none" stroke="#ff6a9a" opacity="0.35"/>
 <circle cx="578.1" cy="738.0" r="5" fill="#ff6a9a" opacity="0.95"><title>Jasmine Garden Bar</title></circle>
 <circle cx="578.1" cy="738.0" r="9" fill="none" stroke="#ff6a9a" opacity="0.35"/>
 <circle cx="767.9" cy="593.5" r="2.6" fill="#44dd88" opacity="0.8"/>
@@ -499,8 +502,8 @@
 <circle cx="750.6" cy="514.6" r="9" fill="none" stroke="#7a8aa8" opacity="0.35"/>
 <circle cx="764.6" cy="519.3" r="5" fill="#7a8aa8" opacity="0.95"><title>Poseidon Massage</title></circle>
 <circle cx="764.6" cy="519.3" r="9" fill="none" stroke="#7a8aa8" opacity="0.35"/>
-<circle cx="659.9" cy="691.9" r="5" fill="#ff6a9a" opacity="0.95"><title>Golden Touch Massage</title></circle>
-<circle cx="659.9" cy="691.9" r="9" fill="none" stroke="#ff6a9a" opacity="0.35"/>
+<circle cx="685.2" cy="686.6" r="5" fill="#ff6a9a" opacity="0.95"><title>Golden Touch Massage</title></circle>
+<circle cx="685.2" cy="686.6" r="9" fill="none" stroke="#ff6a9a" opacity="0.35"/>
 <circle cx="282.1" cy="1263.9" r="5" fill="#e8c46a" opacity="0.95"><title>Jomtien Sabai Massage</title></circle>
 <circle cx="282.1" cy="1263.9" r="9" fill="none" stroke="#e8c46a" opacity="0.35"/>
 <circle cx="651.2" cy="545.2" r="5" fill="#00e5ff" opacity="0.95"><title>Cherry Oil Massage</title></circle>
