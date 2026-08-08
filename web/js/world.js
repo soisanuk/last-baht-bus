@@ -1150,7 +1150,8 @@ const ROOMS = {
       "NEON PARADISE A-GO-GO still strobes on the west side. CLUB MIRAGE shimmers opposite. " +
       "The touts with the laminated menus are still here. A dark side-alley slinks off " +
       "between them.",
-    exits: { n: "ws_gate", s: "ws_south", w: "neon_paradise", e: "club_mirage", in: "neon_paradise", out: "ws_gate", alley: "ws_alley" },
+    exits: { n: "ws_gate", s: "ws_south", w: "neon_paradise", e: "club_mirage", in: "neon_paradise", out: "ws_gate", alley: "ws_alley",
+             diamond: "soi_diamond" },
   },
   ws_alley: {
     name: "Walking Street Side-Alley",
@@ -1228,6 +1229,67 @@ const ROOMS = {
       "Somebody photographs the pier, gets it wrong, and tries again.",
     ],
     exits: { n: "ws_south" },
+  },
+  // Soi Diamond runs off Walking Street to Second Road — 153 m of it, and two of
+  // the loudest rooms on the coast.
+  soi_diamond: {
+    motosai: true,
+    name: "Soi Diamond",
+    region: "Walking Street",
+    desc: "A short soi off the main strip, and louder than the main strip, which takes " +
+      "doing. Two doors face each other across eight metres of wet concrete and " +
+      "spend the night trying to out-decibel one another: THE WINDMILL on one side, " +
+      "KATOEY'S R US on the other, both with their own doorman, their own flyer " +
+      "girl, and their own idea of what a good time looks like. Between them the " +
+      "soi is a corridor of noise you have to walk down sideways when it is busy. " +
+      "It comes out on Second Road at the far end, if you get that far.",
+    revisit: [
+      "The two doors are still shouting at each other across the soi. Neither is winning.",
+      "A flyer girl presses something into your hand without breaking off her " +
+        "conversation with the flyer girl from the other side.",
+      "Somebody comes out of one door, thinks about it, and goes in the other.",
+      "The bass from both sides meets in the middle of the soi and cancels into mush.",
+    ],
+    exits: { n: "ws_north", in: "windmill", out: "ws_north" },
+    venues: ["windmill", "katoeys"],
+  },
+  windmill: {
+    name: "The Windmill",
+    region: "Walking Street",
+    bar: "The Windmill", barType: "gogo",
+    pool: false,
+    desc: "The house that decided restraint was somebody else's problem. Three tiers of " +
+      "stage, a lighting rig with more ambition than the budget behind it, and a " +
+      "show that escalates all night on a schedule the regulars can recite. Nobody " +
+      "here is pretending it is a bar with dancing in it. The drinks are dear, the " +
+      "front row is a commitment, and the whole room runs on the understanding that " +
+      "you knew exactly what this was when you came down the steps.",
+    revisit: [
+      "Back into the Windmill. Whatever is happening on the middle tier has a crowd.",
+      "The lighting rig attempts something beyond it and gets away with it anyway.",
+      "A cheer goes up from the front row for reasons you are two beats behind on.",
+      "The Windmill, doing what the Windmill does, at volume.",
+    ],
+    exits: { out: "soi_diamond" },
+  },
+  katoeys: {
+    name: "Katoey's R Us",
+    region: "Walking Street",
+    bar: "Katoey's R Us", barType: "gogo",
+    desc: "Six feet of everything, all of it deliberate. The house is katoey and says " +
+      "so on the sign, which is the point — nobody here is passing, or trying to, " +
+      "and the room is funnier and sharper for it. The heels are higher than " +
+      "anywhere on the street, the lip-sync is better than it has any need to be, " +
+      "and the front-of-house patter would empty a comedy club. Punters arrive by " +
+      "three routes: they know, they suspect, or they are about to find out, and " +
+      "the staff can tell which from the door.",
+    revisit: [
+      "Back into Katoey's. Somebody on stage is doing Whitney and doing her justice.",
+      "A punter two stools down is being taken apart, fondly, in two languages.",
+      "The heels come past at eye level and somebody at the rail applauds.",
+      "Katoey's R Us, running at a pitch the rest of the soi cannot reach.",
+    ],
+    exits: { out: "soi_diamond" },
   },
   crystal_palace: {
     name: "Crystal Palace A-Go-Go",
@@ -3920,6 +3982,61 @@ const NPCS = {
   // player, a gracious pass where SHE reads YOU and declines (agency intact — see
   // _ladyboyGate). Written as full people, never a gag. At the flagship it's on
   // brand: "White Dish love a full menu."
+  pancake: {
+    name: "Pancake", th: "แพนเค้ก", emoji: "💋", ladyboy: true, personality: "charmer",
+    room: "katoeys",
+    desc: "The one on the flyer, and she knows it. Six foot two before the heels, a " +
+      "waist that took surgery and discipline in that order, and a face assembled " +
+      "with the precision of someone who has been getting it exactly right since " +
+      "she was fifteen. She works the front of house because nobody sells the room " +
+      "better — she can read a man' nerve from the doorway and pitch herself " +
+      "accordingly, warm or wicked, in about a second and a half.",
+    dialogue: [
+      { text: "\"Sawatdee kha!\" — the flourish is the joke and the joke is the welcome. " +
+          "\"You look nervous. Everybody nervous, first time. Is fine! We very friendly " +
+          "here. TOO friendly, some people say.\" She laughs, delighted with herself, " +
+          "and steers you at a stool.",
+        th: "สวัสดีค่ะ", rom: "sawatdee kha" },
+      { topic: "show", text: "\"Nine o'clock, eleven, one. Eleven is the good one — that' " +
+          "when Baitoey does her Whitney and the whole room forget to drink.\" A beat. " +
+          "\"I go on at one. Different energy. You stay, you see.\"" },
+      { topic: "here", text: "\"Sign say what it say. Nobody confused, nobody upset, nobody " +
+          "find out later and make problem.\" She spreads her hands, rings catching the " +
+          "light. \"Other bars, the girl worry all night. Here? No worry. Is the best job " +
+          "on the street and I not swap it.\"" },
+      { bond: 2,
+        text: "She sits down properly, which she does not do for everyone, and for a " +
+          "moment the volume drops out of her. \"Fifteen years I do this. Started when a " +
+          "katoey get one job or the other job, and I was lucky, I get this one.\" She " +
+          "looks out at the room, fond and unsentimental. \"Now the young ones come in " +
+          "and think the loud is the point. The loud is the DOOR. What is inside is that " +
+          "everybody in here get to stop explaining themselves for one night.\"" },
+    ],
+  },
+  baitoey: {
+    name: "Baitoey", th: "ใบเตย", emoji: "🎤", ladyboy: true, personality: "dreamer",
+    room: "katoeys",
+    desc: "Long, lean and built for the stage, with an actual voice under the lip-sync " +
+      "and a habit of using it when the room has thinned out enough to deserve it. " +
+      "Gold everything tonight — hoops, chain, a dress that is mostly intention. " +
+      "Between shows she sits at the end of the rail with her heels off, entirely " +
+      "unglamorous, eating som tam out of a bag.",
+    dialogue: [
+      { text: "She gives you the up-and-down and decides you are harmless. \"You want the " +
+          "big show or the small show? Big show is eleven. Small show—\" she nods at the " +
+          "stool beside her \"—is now, and is free, and is mostly me complaining about " +
+          "my feet.\"",
+        th: "มาแล้วเหรอ", rom: "ma laeo ler" },
+      { topic: "sing", text: "\"Everybody lip-sync. Is faster, is safer, the sound man he " +
+          "prefer.\" She shrugs one shoulder. \"Sometimes late, two, three o'clock, nobody " +
+          "left but the regulars — then I sing for real. Nobody clap. Is nicer that way.\"" },
+      { bond: 2,
+        text: "\"My mother know what I do. Took her four years to say the word out loud, " +
+          "and then she say it in front of the whole village, at a funeral, very calm, " +
+          "like daring somebody.\" Baitoey laughs, but her eyes have gone somewhere. " +
+          "\"Nobody said nothing. She still tell that story. I let her.\"" },
+    ],
+  },
   bebe: {
     name: "Bebe", th: "บีบี", emoji: "💅", ladyboy: true, hatesSmoke: true,
     room: "pink_lotus",
@@ -8848,6 +8965,7 @@ const CANON_HOSTESSES = [
 // (Ringing the bell a couple of times has been known to soften the rules.)
 
 const NPC_ROLES = {
+  pancake: "hostess", baitoey: "hostess",
   lek: "hostess", noi: "hostess", ping: "hostess", aom: "hostess",
   kai: "hostess", nook: "hostess", dew: "hostess",
   kat: "hostess", may: "hostess", dear: "hostess",
@@ -9058,6 +9176,7 @@ function _buildHostess(name, th, room) {
 // [name, Thai nickname, room]. Distribution: go-gos busiest, beer/Soi 6/club
 // modest, expat & live-music bars light — Queen Vic is a pub, so none.
 const _FILLER_HOSTESSES = [
+  ["Naree","นารี","windmill"], ["Sasi","ศศิ","windmill"], ["Yada","ญาดา","windmill"],
   ["Dao","ดาว","tequila_queen"], ["Mook","มุก","tequila_queen"], ["Ice","ไอซ์","tequila_queen"], ["Praew","แพรว","tequila_queen"],
   ["Fah","ฟ้า","neon_paradise"], ["View","วิว","neon_paradise"], ["Sara","ซาร่า","neon_paradise"],
   ["Bow","โบว์","club_mirage"], ["Nam","น้ำ","club_mirage"], ["Yui","ยุ้ย","club_mirage"],
@@ -9261,6 +9380,7 @@ function _buildCashier(name, th, room) {
 // Candy Bars are absent here) and one cashier per bar. Distribution mirrors the
 // hostesses': every hostess venue gets both; the Queen Vic pub gets neither.
 const _FILLER_MAMAS = [
+  ["Wanida","วนิดา","windmill"], ["Alisa","อลิสา","katoeys"],
   ["Pen","เพ็ญ","blue_dog"], ["Muay","หมวย","rock_factory"], ["Lamai","ละมัย","stinky_bar"],
   ["Jeab","เจี๊ยบ","neon_paradise"], ["Da","ดา","club_mirage"], ["Rin","ริน","crystal_palace"],
   ["Kob","กบ","paradise_nights"], ["Koi","ก้อย","midnight_sun"], ["Ratana","รัตนา","lucky_tiger"],
@@ -9271,6 +9391,7 @@ const _FILLER_MAMAS = [
   
 ];
 const _FILLER_CASHIERS = [
+  ["Nubnab","นับหนับ","windmill"], ["Farida","ฟาริดา","katoeys"],
   ["Golf","กอล์ฟ","tequila_queen"], ["Air","แอร์","blue_dog"], ["Apple","แอปเปิ้ล","rock_factory"],
   ["Cake","เค้ก","stinky_bar"], ["Care","แคร์","candy_bar_2"], ["Cartoon","การ์ตูน","neon_paradise"],
   ["Earn","เอิร์น","club_mirage"], ["Eye","อาย","crystal_palace"], ["Fai","ฝ้าย","paradise_nights"],
@@ -9713,6 +9834,9 @@ const ROOM_GEO = {
   ws_gate:          [12.92745, 100.87469],
   thai_massage:     [12.92731, 100.87496],
   ws_north:         [12.92616, 100.87269],
+  katoeys:           [12.92614, 100.87397],
+  windmill:          [12.92598, 100.8736],
+  soi_diamond:       [12.92606, 100.87379],
   ws_alley:         [12.92645, 100.87255],
   ws_south:         [12.92508, 100.87018],
   cheap_charlies_jt: [12.8968, 100.87118],
