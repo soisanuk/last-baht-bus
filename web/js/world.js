@@ -9082,6 +9082,31 @@ const POPULAR_GIRLS = ["fon", "gift", "noi", "pim"];
 // pinned district by district against OSM, and the decimal count is the marker
 // of which have had their pass. Don't "tidy" a 5dp district back to 4.
 //
+//   The Darkside — DONE 2026-08-08. Colloquially it is EVERYTHING EAST OF
+//   SUKHUMVIT; that is the whole definition, and it is why the highway crossing
+//   matters more than any single venue out there.
+//   Following Thep Prasit east off Thappraya:
+//     Thepprasit x Sukhumvit   12.909106/100.896045
+//     Khao Talo x Sukhumvit    12.910043/100.896200
+//   It is a STAGGERED crossroads — Khao Talo leaves 105 m NORTH of where
+//   Thepprasit arrives, so they are not one junction. Khao Talo Rd then runs
+//   2.7 km east. Sukhumvit is tagged highway=trunk with NO ref, so a search for
+//   ref="3" finds nothing; that cost a lookup.
+//
+//   The bar strip is INFERRED, and the distinction matters. The real-world
+//   anchors are the Black Swan (west end) and the New Secret (east) — OSM has
+//   NEITHER by name. What it does map is a dense run of bars from AJ's at
+//   100.9053 to the Mini Bar at 100.9112, about 640 m, and the strip is laid
+//   along that. If either anchor is ever mapped, re-pin from it, not from this.
+//
+//   Lake Mabprachan is pinned to the LAKESIDE VENUE CLUSTER (Ice Star / River
+//   Tree / My Friends / Pat's Bar, ~12.93306/100.96684) rather than the middle
+//   of the water, because the room is the restaurant strip — "lakeside
+//   restaurants, families eat grilled fish under string lights" — not the lake.
+//   Hemingways Lakeside is the real anchor there and is also absent from OSM.
+//   Its exit audits at ~66°: the lake really is ENE and the bar mat calls it
+//   north. Honest compression, same class as Walking Street's `s`. Left alone.
+//
 //   Jomtien — DONE 2026-08-08, the last survey segment. The "double rectangle"
 //   turns out to be a real rectangle: all four corners meet at 0 m, and opposite
 //   sides agree within 3% (west 459 m / east 474 m, north 400 m / south 409 m).
@@ -9392,14 +9417,14 @@ const ROOM_GEO = {
   metro_garden:     [12.9302, 100.8858],
   pit_stop:         [12.9301, 100.8861],
   // The Darkside
-  sukhumvit_crossing: [12.9100, 100.8975],
-  khao_talo_strip:  [12.9078, 100.9090],
-  shamrock:         [12.9076, 100.9082],  // the dark end of the strip
-  water_buffalo:    [12.9078, 100.9092],
-  firefly_bar:      [12.9077, 100.9086],
-  night_heron:      [12.9079, 100.9098],
-  mama_yai:         [12.9066, 100.9114],
-  khao_talo:        [12.9073, 100.9113],
-  khao_talo_bar:    [12.9071, 100.9118],
-  lake_mabprachan:  [12.9300, 100.9560],
+  sukhumvit_crossing: [12.91004, 100.89620],
+  khao_talo_strip:  [12.90782, 100.90693],
+  shamrock:         [12.90802, 100.90665],  // the dark end of the strip
+  water_buffalo:    [12.90813, 100.90699],
+  firefly_bar:      [12.90764, 100.90706],
+  night_heron:      [12.90764, 100.90754],
+  mama_yai:         [12.90759, 100.90958],
+  khao_talo:        [12.90779, 100.90975],
+  khao_talo_bar:    [12.90797, 100.90995],
+  lake_mabprachan:  [12.93306, 100.96684],
 };
