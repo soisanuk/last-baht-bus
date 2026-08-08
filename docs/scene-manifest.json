@@ -2,14 +2,14 @@
   "generated": "2026-08-08",
   "note": "Every room in the game + its region, for the scene-art pipeline (docs/art-pipeline-spec.md). Derived from web/js/world.js — regenerate with scripts/gen-scene-manifest.mjs, do not hand-edit. `kind` is a generator heuristic for prompt-template selection, not game canon. `regionSlug` is produced by the same regex as web/js/scene.js `_sceneArt()`; art files are web/art/rooms/<id>.png with web/art/regions/<slug>.png as the fallback.",
   "counts": {
-    "rooms": 194,
+    "rooms": 195,
     "regions": 15,
     "byKind": {
       "street": 70,
       "massage": 17,
       "beer": 49,
       "shop": 2,
-      "beach": 9,
+      "beach": 10,
       "interior": 3,
       "gogo": 11,
       "viewpoint": 2,
@@ -82,6 +82,7 @@
         "dongtan_beach",
         "dongtan_beach_m",
         "dongtan_beach_n",
+        "dongtan_beach_s",
         "dongtan_rd_m",
         "dongtan_rd_s",
         "jomtien_2nd",
@@ -785,7 +786,7 @@
     },
     {
       "id": "dongtan_beach",
-      "name": "Dongtan Beach (South)",
+      "name": "Dongtan Beach (Jomtien End)",
       "bar": null,
       "barType": null,
       "region": "Jomtien",
@@ -818,6 +819,18 @@
       "dark": true,
       "people": [],
       "desc": "The north tip of Dongtan Beach, where the sand runs out against the black shoulder of Pratumnak Hill. Quiet, unlit, the sea working away below. The sand runs south back down the shore; a beach-access path climbs to Dongtan Beach Road to the east."
+    },
+    {
+      "id": "dongtan_beach_s",
+      "name": "Dongtan Beach (South)",
+      "bar": null,
+      "barType": null,
+      "region": "Jomtien",
+      "regionSlug": "jomtien",
+      "kind": "beach",
+      "dark": true,
+      "people": [],
+      "desc": "Dongtan proper begins here, and the difference is immediate: the beach chairs thin out, the lights of Jomtien fall behind, and the sand widens into the dark. The surf is the loudest thing for a hundred metres. A short access path climbs east to Dongtan Beach Road; the sand runs south back toward the Jomtien end and north up the shore."
     },
     {
       "id": "dongtan_rd_m",
