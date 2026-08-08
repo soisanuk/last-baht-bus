@@ -2,10 +2,10 @@
   "generated": "2026-08-08",
   "note": "Every room in the game + its region, for the scene-art pipeline (docs/art-pipeline-spec.md). Derived from web/js/world.js — regenerate with scripts/gen-scene-manifest.mjs, do not hand-edit. `kind` is a generator heuristic for prompt-template selection, not game canon. `regionSlug` is produced by the same regex as web/js/scene.js `_sceneArt()`; art files are web/art/rooms/<id>.png with web/art/regions/<slug>.png as the fallback.",
   "counts": {
-    "rooms": 208,
+    "rooms": 211,
     "regions": 15,
     "byKind": {
-      "street": 83,
+      "street": 86,
       "massage": 17,
       "beer": 49,
       "shop": 2,
@@ -201,8 +201,8 @@
       ],
       "sampleDescs": [
         "Where the Main Strip's neon finally gives out and the road tips upward: the last few late-night noodle carts, then condo walls and the hill proper. The strip is back down to the south; the mouth of the Supertown drag alley opens to the west; the road climbs on north.",
-        "The main hill road between Jomtien and Pattaya proper — condos behind walls, sleeping soi dogs, and long stretches where the streetlights have given up. The Buddha Hill viewpoint is up a path to the west; Walking Street is on north.",
-        "The top of Dongtan Beach Road, where it bends inland and up onto the Pratumnak crest. The sand is a black rumour to the west; Pratumnak Hill Road climbs away east over the top."
+        "The top of Dongtan Beach Road, where it bends inland and up onto the Pratumnak crest. The sand is a black rumour to the west; Pratumnak Hill Road climbs away east over the top.",
+        "The saddle over the top of Pratumnak Hill, linking the two roads that climb it — the Thappraya side to the east, the Dongtan Beach side to the west. Walls, viewpoints you can't make out in the dark, and the sea breathing somewhere below on both sides."
       ]
     },
     {
@@ -215,8 +215,10 @@
         "pattaya_klang",
         "poseidon_soapy",
         "second_rd_c",
+        "second_rd_diamond",
         "second_rd_diana",
         "second_rd_honey",
+        "second_rd_india",
         "second_rd_myth",
         "second_rd_n",
         "second_rd_s",
@@ -267,6 +269,7 @@
         "buakhao_myth",
         "buakhao_n",
         "buakhao_oil",
+        "buakhao_pt",
         "buakhao_s",
         "buakhao_tt",
         "candy_bar",
@@ -394,8 +397,8 @@
       ],
       "sampleDescs": [
         "A short soi off the main strip, and louder than the main strip, which takes doing. Two doors face each other across eight metres of wet concrete and spend the night trying to out-decibel one another: THE WINDMILL on one side, KATOEY'S R US on the other, both with their own doorman, their own flyer girl, and their own idea of what a good time looks like. Between them the soi is a corridor of noise you have to walk down sideways when it is busy. It comes out on Second Road at the far end, if you get that far.",
-        "Neon canyon, but the neon mix has changed. Bollywood bass competes with Thai pop from somewhere inside Little India's encroachment from the east — restaurant signs in Hindi above what used to be go-go bars, the smell of curry drifting across the touts. NEON PARADISE A-GO-GO still strobes on the west side. CLUB MIRAGE shimmers opposite. The touts with the laminated menus are still here. A dark side-alley slinks off between them.",
-        "The junction at the bottom of everything. South Pattaya Road comes down from the east and meets Second Road here, a hundred metres short of the Walking Street arch, and at two in the morning it is the busiest crossroads in the city — every songthaew in the south end circling it, piwins stacked three deep on the corner, and a slow river of people who have finished with the strip and not yet decided what happens next. Pratumnak Hill goes up and away to the south. Somebody is selling grilled squid to a queue.\n\nThis is THE songthaew stop, and which corner you stand on is the whole decision: the south-west kerb is where the Jomtien buses pull in, and the north-east one picks up for the loop — up Second Road, round the Dolphin, and back down the seafront. Stand on the wrong corner and you will get where you are going eventually, the long way, for the same fifteen baht."
+        "The junction at the bottom of everything. South Pattaya Road comes down from the east and meets Second Road here, a hundred metres short of the Walking Street arch, and at two in the morning it is the busiest crossroads in the city — every songthaew in the south end circling it, piwins stacked three deep on the corner, and a slow river of people who have finished with the strip and not yet decided what happens next. Pratumnak Hill goes up and away to the south. Somebody is selling grilled squid to a queue.\n\nThis is THE songthaew stop, and which corner you stand on is the whole decision: the south-west kerb is where the Jomtien buses pull in, and the north-east one picks up for the loop — up Second Road, round the Dolphin, and back down the seafront. Stand on the wrong corner and you will get where you are going eventually, the long way, for the same fifteen baht.",
+        "Neon canyon, but the neon mix has changed. Bollywood bass competes with Thai pop from somewhere inside Little India's encroachment from the east — restaurant signs in Hindi above what used to be go-go bars, the smell of curry drifting across the touts. NEON PARADISE A-GO-GO still strobes on the west side. CLUB MIRAGE shimmers opposite. The touts with the laminated menus are still here. A dark side-alley slinks off between them."
       ]
     }
   ],
@@ -1847,6 +1850,20 @@
       "desc": "Mid-Second-Road: baht buses in convoy, pharmacies, and the constant churn between the mall's back doors to the west and the fairy-lit mouth of MYTH NIGHT market to the east."
     },
     {
+      "id": "second_rd_diamond",
+      "name": "Second Road (Soi Diamond)",
+      "bar": null,
+      "barType": null,
+      "region": "Second Road",
+      "regionSlug": "second-road",
+      "kind": "street",
+      "dark": false,
+      "people": [
+        "Diamond"
+      ],
+      "desc": "Second Road where Soi Diamond comes in — the same Soi Diamond that opens onto Walking Street at its far end, which makes this the back door to the strip and the way the people who work there actually arrive. Girls come up it in ones and twos with helmets under their arms, an hour before anyone is meant to see them. North is the big Pattaya Tai crossroads; south the road runs down toward the hill."
+    },
+    {
       "id": "second_rd_diana",
       "name": "Second Road (Soi Diana)",
       "bar": null,
@@ -1869,6 +1886,20 @@
       "dark": false,
       "people": [],
       "desc": "Soi Honey opens east off Second Road here — a short bright soi that runs through to Buakhao, and quiet enough at this end that you can hear the bars at the other. Second Road does what it always does around it: four lanes, no gaps, and a pavement everybody shares with the parked bikes."
+    },
+    {
+      "id": "second_rd_india",
+      "name": "Second Road (Pratumnak end)",
+      "bar": null,
+      "barType": null,
+      "region": "Second Road",
+      "regionSlug": "second-road",
+      "kind": "street",
+      "dark": false,
+      "people": [
+        "Diamond"
+      ],
+      "desc": "The long haul of Second Road between Soi Diamond and the hill, and the expats have a name for this stretch they don't say kindly. What is actually wrong with it is the pavement: there isn't one worth the word — broken kerb, parked bikes nose-in, a shop's worth of stock set out across it — so everybody walks in the road, and here everybody is a great many people at once. Tour groups come through six and eight at a time, three abreast, friends hand in hand the way friends are across most of the world and farang reliably misread, moving at the speed of the conversation they are having. The bikes stack up behind them, fold around, and lean on the horn; the piwins have views, at volume, in Thai. Tailor shops down both sides, a currency booth beating the bank, and a tandoor going somewhere out of sight that smells better than anything on Beach Road."
     },
     {
       "id": "second_rd_myth",
@@ -1904,7 +1935,7 @@
       "kind": "street",
       "dark": false,
       "people": [],
-      "desc": "The working road running parallel between Beach Road and Soi Buakhao — less neon, more motorbikes, the town with its makeup half off. It climbs south onto the north shoulder of Pratumnak Hill, toward Jomtien beyond."
+      "desc": "The working road running parallel between Beach Road and Soi Buakhao — less neon, more motorbikes, the town with its makeup half off. South it runs down to the Pattaya Tai crossroads and the hill beyond; Buakhao is a block east, but not from here — the sois between are somebody's back wall."
     },
     {
       "id": "second_rd_soi6",
@@ -2280,6 +2311,18 @@
       "desc": "One of a hundred pink-lit shopfronts on Buakhao, indistinguishable from its neighbours except that this one caught your eye. Girls in shorts on the step, a beaded curtain, air-con leaking cold onto the pavement, and the inevitable little sticker on the mirror inside. The oil is warm and the questions are few."
     },
     {
+      "id": "buakhao_pt",
+      "name": "Soi Buakhao (Pattaya Tai)",
+      "bar": null,
+      "barType": null,
+      "region": "Soi Buakhao",
+      "regionSlug": "soi-buakhao",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "The foot of Soi Buakhao, where it ends on South Pattaya Road and the bar strip stops dead. Four lanes of through-traffic, a piwin stand working the corner, and the particular flatness of a junction nobody drinks at. West along Pattaya Tai takes you past Tukcom — four floors of phone counters and repair booths, dark and shuttered at this hour — and on to Second Road. North is the soi and everything that happens on it."
+    },
+    {
       "id": "buakhao_s",
       "name": "Soi Buakhao (South)",
       "bar": null,
@@ -2289,7 +2332,7 @@
       "kind": "street",
       "dark": false,
       "people": [],
-      "desc": "The bottom of the soi, where Buakhao runs out of bars and hands you to Second Road. The neon thins, the pavement widens, and the noise arrives from behind you rather than around you. A motosai stand waits by the corner with its engines ticking, because this is where people finally admit they are going home."
+      "desc": "The bottom of the soi, where Buakhao runs out of bars and hands you down to South Pattaya Road. The neon thins, the pavement widens, and the noise arrives from behind you rather than around you. A motosai stand waits by the corner with its engines ticking, because this is where people finally admit they are going home."
     },
     {
       "id": "buakhao_tt",

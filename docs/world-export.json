@@ -22,13 +22,13 @@
   "Blue Dog"
  ],
  "counts": {
-  "geolocated": 208,
+  "geolocated": 211,
   "patrons": 18,
   "people": 268,
   "portraits": 286,
   "renders": 72,
   "thumbs": 72,
-  "venues": 208
+  "venues": 211
  },
  "frames": [
   "baimon_pic1",
@@ -3199,6 +3199,14 @@
    "name": "Golden Touch Massage",
    "region": "Soi Buakhao"
   },
+  "buakhao_pt": {
+   "geo": [
+    12.92403,
+    100.87906
+   ],
+   "name": "Soi Buakhao (Pattaya Tai)",
+   "region": "Soi Buakhao"
+  },
   "buakhao_s": {
    "geo": [
     12.9249,
@@ -4361,6 +4369,14 @@
    "name": "Second Road (Central)",
    "region": "Second Road"
   },
+  "second_rd_diamond": {
+   "geo": [
+    12.92537,
+    100.87396
+   ],
+   "name": "Second Road (Soi Diamond)",
+   "region": "Second Road"
+  },
   "second_rd_diana": {
    "geo": [
     12.93104,
@@ -4376,6 +4392,14 @@
     100.883
    ],
    "name": "Second Road (Soi Honey)",
+   "region": "Second Road"
+  },
+  "second_rd_india": {
+   "geo": [
+    12.92303,
+    100.87202
+   ],
+   "name": "Second Road (Pratumnak end)",
    "region": "Second Road"
   },
   "second_rd_myth": {
