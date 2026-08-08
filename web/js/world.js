@@ -1507,7 +1507,24 @@ const ROOMS = {
       "Bikes, bikes, a gap, then more bikes. You could wait all night for a real one.",
       "Somebody comes out of Tree Town walking carefully and smiling at nothing.",
     ],
-    exits: { n: "buakhao_myth", s: "buakhao_n", w: "tt_entrance" },
+    exits: { n: "buakhao_myth", s: "buakhao_lk", w: "tt_entrance" },
+  },
+  buakhao_lk: {
+    motosai: true,
+    name: "Soi Buakhao (Metro Alley)",
+    region: "Soi Buakhao",
+    desc: "The mouth of LK Metro, and you can hear it before you reach it — three lanes " +
+      "of go-go bleeding into the soi through a gap barely wide enough for two people " +
+      "and a motorbike, which is what is usually in it. Soi Honey comes out a few doors " +
+      "north. The traffic here does not so much move as take turns, and the pavement " +
+      "has given up and become part of the road.",
+    revisit: [
+      "The noise from the alley mouth arrives before you do, as usual.",
+      "A motorbike comes out of LK Metro without looking. Nothing happens. It never does.",
+      "Two girls in going-out clothes cut through from Soi Honey, already late.",
+      "The gap swallows a group of six and returns none of them.",
+    ],
+    exits: { n: "buakhao_tt", s: "buakhao_n", w: "lk_main", honey: "soi_honey_e" },
   },
   buakhao_n: {
     name: "Soi Buakhao (North)",
@@ -1529,9 +1546,9 @@ const ROOMS = {
         "rooms named, like half of Pattaya, after the hotel it grew up around. The arrow knows " +
         "exactly what it's selling. It just won't say so out loud.",
     },
-    exits: { n: "buakhao_tt", s: "buakhao_market", e: "lucky_tiger",
+    exits: { n: "buakhao_lk", s: "buakhao_market", e: "lucky_tiger",
              in: "rock_factory", alley: "lk_entrance", hotel: "metropole_room", diana: "diana_e",
-             honey: "soi_honey_e", candy: "candy_bar", charlie: "cheap_charlies" },
+             candy: "candy_bar", charlie: "cheap_charlies" },
   },
   buakhao_market: {
     atm: true,
@@ -2092,19 +2109,19 @@ const ROOMS = {
         "doing honest work — only the motorbikes thread through, and only the purposeful ride " +
         "them. Two signs, both true, neither telling all of it.",
     },
-    exits: { out: "buakhao_n", e: "lk_main" },
+    exits: { out: "buakhao_lk", n: "lk_bend" },
   },
   lk_main: {
     atm: true,
     name: "LK Metro (Main Alley)",
     region: "LK Metro",
-    desc: "The first leg of the L: bars packed shoulder to shoulder, neon on both sides, " +
+    desc: "The long leg of the L, and the one everybody means by LK Metro: bars packed shoulder to shoulder, neon on both sides, " +
       "sound bleeding from KINKY Go-Go to the north and SLUTTY Go-Go to the south until " +
       "they're indistinguishable. Good energy — dense, close, the kind of loud that's a " +
       "decision rather than an accident. A motorbike idles past carrying a girl in full " +
       "sequins at a speed that's technically legal. THE OFFSIDE SPORTS BAR breaks the neon " +
       "with the cold blue wash of a dozen screens. The alley bends east at the far end.",
-    exits: { w: "lk_entrance", n: "kinky", s: "slutty", e: "lk_bend", in: "kinky", pub: "lk_sports" },
+    exits: { w: "lk_bend", e: "buakhao_lk", n: "kinky", s: "slutty", in: "kinky", pub: "lk_sports" },
   },
   lk_sports: {
     name: "The Offside Sports Bar",
@@ -2127,8 +2144,8 @@ const ROOMS = {
       "Two open-front beer bars, THE METRO BEER GARDEN and THE PIT STOP, catch the ones " +
       "who've had enough go-go for one night. Less overwhelming than Walking Street; more " +
       "like something you discovered.",
-    exits: { w: "lk_main", s: "las_vegas", in: "las_vegas", diana: "diana_e",
-             n: "metro_garden", e: "pit_stop" },
+    exits: { s: "lk_entrance", e: "lk_main", in: "las_vegas", diana: "diana_e",
+             n: "metro_garden", pit: "pit_stop", vegas: "las_vegas" },
   },
   metro_garden: {
     name: "The Metro Beer Garden",
@@ -2554,7 +2571,7 @@ const ROOMS = {
       "and laundries. Two more beer bars face each other across the narrow strip, close enough " +
       "that the girls of one heckle the customers of the other. It smells of grilled chicken, " +
       "spilled Chang, and somebody's jasmine.",
-    exits: { w: "soi_honey_w", s: "buakhao_n", n: "queen_bee", in: "buzz_inn" },
+    exits: { w: "soi_honey_w", e: "buakhao_lk", n: "queen_bee", in: "buzz_inn" },
   },
   honey_soapy: {
     name: "Honeycomb Massage",
@@ -10018,6 +10035,7 @@ const ROOM_GEO = {
   container_8:      [12.93234, 100.88463],
   reload_bar:       [12.93227, 100.88483],
   // Soi Buakhao
+  buakhao_lk:       [12.92994, 100.88554],
   buakhao_n:        [12.92881, 100.88480],
   diana_oil:         [12.93077, 100.88184],
   myth_massage:      [12.93184, 100.88701],
@@ -10037,11 +10055,11 @@ const ROOM_GEO = {
   jasmine_garden:   [12.92414, 100.87915],
   // Soi Honey (Soi 11, between Second Rd and Buakhao)
   soi_honey_w:      [12.93189, 100.88300],
-  soi_honey_e:      [12.92994, 100.88554],
+  soi_honey_e:      [12.93023, 100.88516],
   honey_soapy:      [12.93165, 100.88302],
   honey_trap:       [12.93212, 100.88306],
-  queen_bee:        [12.93017, 100.88560],
-  buzz_inn:         [12.92970, 100.88556],
+  queen_bee:        [12.93046, 100.88519],
+  buzz_inn:         [12.93000, 100.88513],
   // Soi Diana (the big go-go soi; Second Rd ↔ Buakhao, past LK Metro)
   diana_w:          [12.93078, 100.88237],
   diana_mid:        [12.92993, 100.88342],
@@ -10067,15 +10085,15 @@ const ROOM_GEO = {
   lucky_charm:      [12.93104, 100.88516],
   moonshine_bar:    [12.93098, 100.88558],
   // LK Metro (the L-shaped soi off Buakhao)
-  lk_entrance:      [12.92940, 100.88410],
-  lk_main:          [12.92959, 100.88464],
-  kinky:            [12.92979, 100.88457],
-  slutty:           [12.92934, 100.88468],
-  lk_bend:          [12.92952, 100.88507],
-  las_vegas:        [12.92930, 100.88523],
-  lk_sports:        [12.92941, 100.88472],
-  metro_garden:     [12.92974, 100.88512],
-  pit_stop:         [12.92967, 100.88531],
+  lk_entrance:      [12.92918, 100.88432],
+  lk_main:          [12.92957, 100.885],
+  kinky:            [12.92968, 100.88498],
+  slutty:           [12.92946, 100.88503],
+  lk_bend:          [12.9296, 100.88445],
+  las_vegas:        [12.9295, 100.88441],
+  lk_sports:        [12.9295, 100.88489],
+  metro_garden:     [12.9297, 100.88448],
+  pit_stop:         [12.92966, 100.88434],
   // The Darkside
   sukhumvit_crossing: [12.91004, 100.89620],
   khao_talo_strip:  [12.90782, 100.90693],
