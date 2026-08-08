@@ -9082,6 +9082,16 @@ const POPULAR_GIRLS = ["fon", "gift", "noi", "pim"];
 // pinned district by district against OSM, and the decimal count is the marker
 // of which have had their pass. Don't "tidy" a 5dp district back to 4.
 //
+//   Soi Honey — DONE 2026-08-08, the district I missed on the first sweep.
+//   It is "Soi Honey (Pattaya Sai Song 11)" in OSM and it is the next soi NORTH
+//   of Soi Diana, not south — searching a bbox below Diana finds nothing, which
+//   is exactly the mistake made here first. 349 m:
+//     W (Second Rd) 12.931886/100.883004   E (Buakhao) 12.929939/100.885542
+//   Its west exit to second_rd_s cleared on placement. `soi_honey_e —e→
+//   buakhao_s` still flags at 137, and it is the SAME under-noding story: Soi
+//   Honey meets Buakhao 125 m from buakhao_n and 620 m from buakhao_s, so the
+//   exit points at the wrong node. Add it to the Buakhao node list.
+//
 //   Tree Town, Soi Myth Night, KISS — surveyed 2026-08-08, closing the sweep.
 //     Kiss Food & Drinks 2  12.930868/100.882050  — Second Rd x Soi Diana, and
 //         it lands 20 m from corner 4, confirming that junction independently
@@ -9510,12 +9520,12 @@ const ROOM_GEO = {
   buakhao_s:        [12.92430, 100.87934],
   jasmine_garden:   [12.92414, 100.87915],
   // Soi Honey (Soi 11, between Second Rd and Buakhao)
-  soi_honey_w:      [12.9255, 100.8778],
-  soi_honey_e:      [12.9238, 100.8786],
-  honey_soapy:      [12.9250, 100.8780],
-  honey_trap:       [12.9260, 100.8776],
-  queen_bee:        [12.9242, 100.8790],
-  buzz_inn:         [12.9232, 100.8784],
+  soi_honey_w:      [12.93189, 100.88300],
+  soi_honey_e:      [12.92994, 100.88554],
+  honey_soapy:      [12.93165, 100.88302],
+  honey_trap:       [12.93212, 100.88306],
+  queen_bee:        [12.93017, 100.88560],
+  buzz_inn:         [12.92970, 100.88556],
   // Soi Diana (the big go-go soi; Second Rd ↔ Buakhao, past LK Metro)
   diana_w:          [12.93104, 100.88204],
   diana_mid:        [12.92993, 100.88342],
