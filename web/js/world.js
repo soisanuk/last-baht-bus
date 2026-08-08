@@ -9101,13 +9101,25 @@ const POPULAR_GIRLS = ["fon", "gift", "noi", "pim"];
 //   744 m to 949 m and skews everything placed by fraction-along-the-street.
 //   Between the two points it is near-straight: 744 m of arc on a 737 m chord.
 //
-//   AND IT KEEPS GOING, which is the route for the Pratumnak segment: Sai Nueng
-//   runs 203 m past Bali Hai to 12.924855/100.866694, where Chalermphrakiat
-//   Road picks up at 0 m and climbs 245 m south to 12.922943/100.867838, on up
-//   the hill. The bar mat map compresses that whole run — strip, tail and climb
-//   — into a single `ws_gate —w→ pratumnak_rd`, which is why that exit audits
-//   at 72°. Compression is the bar mat map doing its job; just know the real
-//   route before pinning anything at the Pratumnak end.
+//   AND IT KEEPS GOING — the route to Pratumnak, anchored end to end. Sai Nueng
+//   runs 203 m past Bali Hai to ★ 12.924855/100.866694, the junction with THIRD
+//   ROAD. Turn left there (coming from Walking Street) and Third Road runs
+//   892 m southeast, meeting Pra Tumnak Road at 0 m (12.920679/100.870065) and
+//   Thappraya Road at 0 m (12.921010/100.872156). Big Buddha sits 258 m off it.
+//
+//   NAMING TRAP, and it cost two failed lookups: OSM files Third Road under its
+//   royal official name, CHALERMPHRAKIAT ROAD. Google says "Pattaya 3rd Rd".
+//   Same road. Searching สายสาม finds nothing — the numbered sois and roads use
+//   the DIGIT (พัทยาสาย 3), not the word. Expect this on any Thai road that has
+//   been royally renamed; look for the official name before concluding a road
+//   is missing from OSM.
+//
+//   Big Buddha is Wat Khao Phra Bat, 12.920396/100.866772 — `buddha_hill` is
+//   pinned there, and `pratumnak_rd` to the Third Rd × Pra Tumnak junction.
+//   With both endpoints real, `ws_gate —w→ pratumnak_rd` audits at 56°, down
+//   from 72°, even though it still compresses the strip, the tail past the pier,
+//   Third Road and the climb into ONE exit. That is the bar mat map earning its
+//   keep: a punter really does think "west from the gate, up to Pratumnak".
 //   The two stretch rooms had their names BACKWARDS — the middle one was called
 //   South and the far one North, on a street that runs south from the gate. Ids
 //   encoded it too, so both were swapped rather than just the labels; fixing
@@ -9199,7 +9211,7 @@ const ROOM_GEO = {
   jomtien_2nd_m:    [12.8892, 100.8752],
   jomtien_beach_rd_n: [12.8954, 100.8689],
   // Pratumnak
-  pratumnak_rd:     [12.9105, 100.8690],
+  pratumnak_rd:     [12.92068, 100.87007],
   thappraya_ext_s:  [12.8998, 100.8700],
   thappraya_ext_m:  [12.9020, 100.8698],
   thappraya_ext_n:  [12.9042, 100.8694],
@@ -9207,7 +9219,7 @@ const ROOM_GEO = {
   dongtan_rd_n:     [12.9036, 100.8648],
   dongtan_rd_m:     [12.9008, 100.8650],
   dongtan_rd_s:     [12.8984, 100.8652],
-  buddha_hill:      [12.9142, 100.8618],
+  buddha_hill:      [12.9204, 100.86677],
   // Walking Street (the gate is the north end; "ws_south" is the DEEP end)
   ws_gate:          [12.92745, 100.87469],
   thai_massage:     [12.92731, 100.87496],
