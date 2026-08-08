@@ -1,8 +1,16 @@
 # The map expansion — content spec
 
-Written 2026-08-08, after the survey finished. Everything here is **bar-mat and
-content work**: new rooms, new exits, new prose. None of it is survey. Mario said
-**"wait a bit more"** before starting, so this is the spec, not a task list.
+Written 2026-08-08 after the survey finished; **BUILT the same day.** Everything
+below is done unless marked otherwise. Kept as the record of what was decided and
+why, because the reasoning is worth more than the checklist.
+
+**Final shape:** 177 → 194 rooms, 4 → 26 piwin stands, 268 NPCs, audit 23 → 11
+flags with **nothing over 120°**. Soi Buakhao 3 → 16 rooms.
+
+**Still open, both optional and both Mario's call:** a room at the 3rd Rd × Sai
+Nueng junction (coordinates banked), and the four extra POIs in §2 —
+Thepprasit Market, Terminal 21, and the daytime attractions that were judged the
+wrong shape for a night game.
 
 Coordinates for everything below are already banked in the `ROOM_GEO` header of
 `web/js/world.js`.
