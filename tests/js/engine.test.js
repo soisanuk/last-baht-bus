@@ -3489,9 +3489,9 @@ test("the massage row spreads across town: generic parlors work like the flagshi
 });
 
 test("Soi Honey: reachable off Second Road, three beer bars, one rotating mama", () => {
-  // the soi hangs off the Soi Diana junction node — its real Second Road mouth is
-  // 12.931886, level with that node, not down at second_rd_s
-  assert.equal(ROOMS.second_rd_diana.exits.honey, "soi_honey_w");
+  // the soi has its OWN Second Road junction now: Diana, then Honey, then Myth
+  // Night, then Central, which is the order they come in on the ground
+  assert.equal(ROOMS.second_rd_honey.exits.e, "soi_honey_w");
   assert.equal(ROOMS.second_rd_s.exits.e, "buakhao_s", "the old cross-street still connects directly");
   for (const id of ["honey_trap", "queen_bee", "buzz_inn"]) {
     assert.equal(ROOMS[id].barType, "beer", `${id} is a beer bar`);
@@ -5657,9 +5657,9 @@ test("scripted happy-ending playthrough", () => {
     "out", "candy", "ask candy about wallet",        // Candy: som tam errand
     "out", "s", "s", "w", "talk to bank",            // Bank: helmet favour
     // north up Buakhao to the Tree Town arch, then west into the maze
-    // (the soi gained a room at the LK Metro / Soi Honey mouth, so it is one
-    //  block further than it was)
-    "e", "n", "n", "n", "n", "w",                    // the arch
+    // (Soi Buakhao has separate junctions for Soi Diana, LK Metro and Soi Honey
+    //  now, so the arch is three blocks north of Candy Bar rather than one)
+    "e", "n", "n", "n", "n", "n", "w",               // the arch
     "w", "w", "in",                                  // Starlight Bar
     "give helmet to pim", "ask pim about oy",        // pin part: lucky 9
     "out", "e", "in", "ask nong about oy",           // pin part: number 71
