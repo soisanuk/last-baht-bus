@@ -9082,6 +9082,38 @@ const POPULAR_GIRLS = ["fon", "gift", "noi", "pim"];
 // pinned district by district against OSM, and the decimal count is the marker
 // of which have had their pass. Don't "tidy" a 5dp district back to 4.
 //
+//   Tree Town, Soi Myth Night, KISS — surveyed 2026-08-08, closing the sweep.
+//     Kiss Food & Drinks 2  12.930868/100.882050  — Second Rd x Soi Diana, and
+//         it lands 20 m from corner 4, confirming that junction independently
+//     Tree Town (market)    12.931438/100.885545  — Soi Buakhao, N of Diana
+//     Tree Town foodcourt   12.930904/100.885816
+//     Soi Myth Night        12.932742/100.884791  — the west continuation of
+//         Soi Made In Thailand (Night Plaza 12.932548/100.884683), running to
+//         Second Road just south of Central Mall
+//     French Kiss (in TT)   12.931610/100.885189
+//
+//   WHAT THE WHOLE SWEEP CONCLUDES. Placing these at truth pushed the audit from
+//   17 flags to 23, and the rise is the finding rather than a regression: nearly
+//   every remaining flag now names a MISSING NODE rather than a bad coordinate.
+//   The audit has become the specification for the bar-mat work.
+//
+//   SOI BUAKHAO IS THE BIG ONE. It has three nodes and needs about five. Real
+//   junctions along it, north to south: Pattaya Klang 12.935939/100.888539,
+//   Soi Made In Thailand / Myth Night ~12.9325, Tree Town ~12.9314, Soi Diana
+//   12.928811/100.884802, then the southern end. Today `buakhao_n` is asked to
+//   be the Klang junction (pattaya_klang), the Myth Night junction (myth_night)
+//   AND the Diana junction (diana_e, lk_entrance, metropole_room) — points
+//   spread over 800 m. Those three flags are one request.
+//
+//   SECOND ROAD needs a node at Soi Diana's latitude (~12.9310). `second_rd_c`
+//   must stay level with Central Mall for its own west exit, so `diana_w —w→
+//   second_rd_c` and `soi_honey_w —w→ second_rd_s` cannot both be satisfied by
+//   any coordinate.
+//
+//   Tree Town's internal maze keeps one flag (`tt_deep —n→ tt_back`, 74). Its
+//   lanes genuinely loop back on themselves — it is described in-game as a maze
+//   — and that is the grid doing its best on a shape that has no clean axis.
+//
 //   The LK Metro / Soi Diana junction — surveyed 2026-08-08 from a close-up.
 //     Cindy Bar    12.928568/100.884735   — the real-world Candy Bar
 //     LK Metropole 12.929594/100.884643   — the L-shaped alley wraps it
@@ -9454,18 +9486,18 @@ const ROOM_GEO = {
   poseidon_soapy:   [12.93528, 100.88606],
   pattaya_klang:    [12.93665, 100.88651],
   // Myth Night
-  myth_night:       [12.92880, 100.88250],
-  candy_bar_2:      [12.92904, 100.88276],
-  myth_stage:       [12.92911, 100.88254],
-  amp_room:         [12.92918, 100.88233],
-  feedback_bar:     [12.92916, 100.88272],
-  encore_bar:       [12.92900, 100.88241],
-  soundcheck_bar:   [12.92932, 100.88259],
-  myth_rows:        [12.92849, 100.88246],
-  craft_cargo:      [12.92856, 100.88228],
-  the_growler:      [12.92846, 100.88263],
-  container_8:      [12.92837, 100.88233],
-  reload_bar:       [12.92829, 100.88256],
+  myth_night:       [12.93274, 100.88479],
+  candy_bar_2:      [12.93298, 100.88507],
+  myth_stage:       [12.93301, 100.88483],
+  amp_room:         [12.93309, 100.88464],
+  feedback_bar:     [12.93307, 100.88503],
+  encore_bar:       [12.93292, 100.88472],
+  soundcheck_bar:   [12.93321, 100.88490],
+  myth_rows:        [12.93247, 100.88475],
+  craft_cargo:      [12.93252, 100.88457],
+  the_growler:      [12.93249, 100.88490],
+  container_8:      [12.93234, 100.88463],
+  reload_bar:       [12.93227, 100.88483],
   // Soi Buakhao
   buakhao_n:        [12.92881, 100.88480],
   metropole_room:   [12.92974, 100.88485],
@@ -9488,26 +9520,26 @@ const ROOM_GEO = {
   diana_w:          [12.93104, 100.88204],
   diana_mid:        [12.92993, 100.88342],
   diana_e:          [12.92908, 100.88447],
-  kiss:             [12.93085, 100.88213],
+  kiss:             [12.93087, 100.88205],
   dollhouse:        [12.93126, 100.88199],
   sapphire:         [12.93015, 100.88346],
   sundowner:        [12.92971, 100.88339],
   cricketers:       [12.92930, 100.88453],
   areca_room:       [12.92915, 100.88290],
   // Tree Town (real: the Buakhao/Klang corner)
-  tt_entrance:      [12.9330, 100.8852],
-  tt_lane_1:        [12.9331, 100.8857],
-  tt_lane_2:        [12.9332, 100.8862],
-  tt_back:          [12.9330, 100.8865],
-  tt_deep:          [12.9327, 100.8867],
-  gold_rush:        [12.9333, 100.8857],
-  starlight_bar:    [12.9334, 100.8862],
-  rainbow_girls:    [12.9326, 100.8871],
-  oy_office:        [12.9325, 100.8873],
-  tt_lane_3:        [12.9326, 100.8863],
-  rabbit_hole:      [12.9325, 100.8861],
-  lucky_charm:      [12.9324, 100.8864],
-  moonshine_bar:    [12.9327, 100.8862],
+  tt_entrance:      [12.93152, 100.88518],
+  tt_lane_1:        [12.93150, 100.88548],
+  tt_lane_2:        [12.93148, 100.88578],
+  tt_back:          [12.93130, 100.88602],
+  tt_deep:          [12.93122, 100.88630],
+  gold_rush:        [12.93170, 100.88550],
+  starlight_bar:    [12.93168, 100.88580],
+  rainbow_girls:    [12.93118, 100.88652],
+  oy_office:        [12.93113, 100.88671],
+  tt_lane_3:        [12.93108, 100.88598],
+  rabbit_hole:      [12.93103, 100.88583],
+  lucky_charm:      [12.93104, 100.88616],
+  moonshine_bar:    [12.93117, 100.88580],
   // LK Metro (the L-shaped soi off Buakhao)
   lk_entrance:      [12.92940, 100.88410],
   lk_main:          [12.92959, 100.88464],
