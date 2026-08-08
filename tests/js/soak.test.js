@@ -116,7 +116,7 @@ const DE_CEILINGS = [
   // quests. Authored quest prose is guarded by scripted playthroughs instead
   // (tests/js/barchain.test.js).
   // 312 → 429 → 399, same story as vacation.
-  { mode: "expat", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 383 },
+  { mode: "expat", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 365 },
 ];
 
 for (const { mode, seeds, nights, ceiling } of DE_CEILINGS) {

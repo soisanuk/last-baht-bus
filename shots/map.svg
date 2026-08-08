@@ -213,7 +213,6 @@
 <line x1="736.0" y1="631.4" x2="721.2" y2="630.8" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="736.0" y1="631.4" x2="735.5" y2="629.2" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="736.0" y1="631.4" x2="736.8" y2="633.5" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
-<line x1="721.2" y1="630.8" x2="721.7" y2="641.0" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="721.2" y1="630.8" x2="722.0" y2="628.8" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="721.2" y1="630.8" x2="718.2" y2="629.6" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="721.2" y1="630.8" x2="720.1" y2="632.8" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
@@ -243,6 +242,7 @@
 <line x1="693.3" y1="624.3" x2="694.4" y2="620.0" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="693.3" y1="624.3" x2="692.5" y2="628.6" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="721.7" y1="641.0" x2="723.3" y2="636.7" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
+<line x1="721.7" y1="641.0" x2="717.6" y2="639.0" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <circle cx="291.9" cy="1287.5" r="2.6" fill="#e8c46a" opacity="0.8"/>
 <text x="300.9" y="1281.5" font-size="15" fill="#e8c46a" text-anchor="start" opacity="0.95">Jomtien Beach</text>
 <circle cx="264.3" cy="1266.9" r="2.6" fill="#e8c46a" opacity="0.8"/>

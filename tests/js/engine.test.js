@@ -3510,8 +3510,9 @@ test("Soi Diana: threads Second Rd to Buakhao past LK Metro, four beer bars, KIS
   assert.equal(ROOMS.diana_mid.exits.e, "diana_e");
   assert.equal(ROOMS.diana_e.exits.e, "buakhao_n");
   // the far arm of the LK Metro L opens onto the soi
-  assert.equal(ROOMS.diana_e.exits.lk, "lk_bend");
-  assert.equal(ROOMS.lk_bend.exits.diana, "diana_e");
+  // the alley opens onto Soi Diana at its ENTRANCE; the bend is a block further in
+  assert.equal(ROOMS.diana_e.exits.lk, "lk_entrance");
+  assert.equal(ROOMS.lk_entrance.exits.out, "diana_e", "…and back out the same mouth");
   // four populated bars — all beer (the go-go action is inside LK Metro, not on the soi)
   const bars = ["dollhouse", "sapphire", "sundowner", "cricketers"];
   assert.deepEqual(bars.map(b => ROOMS[b].barType), ["beer", "beer", "beer", "beer"]);
