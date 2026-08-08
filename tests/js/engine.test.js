@@ -1296,7 +1296,7 @@ test("reload mid-rain: the room description re-announces the downpour", () => {
 // "Exits: w, e" never said a bar was behind those directions — the room now
 // names the bars you can walk into, with the direction and the ENTER verb.
 test("describeRoom names the bars you can step into", () => {
-  state().room = "buakhao_market";
+  state().room = "buakhao_n";
   out = []; _describeRoom(true);
   assert.match(lastOut(), /Step inside:.*Candy Bar/, "names the bar you can walk into");
   assert.match(lastOut(), /ENTER <name>/, "teaches the ENTER verb");
@@ -2162,11 +2162,11 @@ test("hands off the mamasan; twice gets you walked out of all of LK Metro", () =
 });
 
 test("a ban holds until the security shift changes", () => {
-  state().room = "buakhao_market";
+  state().room = "buakhao_n";
   state().soc.banned.candy_bar = 0;
   state().turns = 5;
   run("enter candy");
-  assert.equal(state().room, "buakhao_market");
+  assert.equal(state().room, "buakhao_n");
   assert.match(lastOut(), /Not tonight/i);
   state().turns = 45;
   run("enter candy");
@@ -3489,8 +3489,9 @@ test("the massage row spreads across town: generic parlors work like the flagshi
 });
 
 test("Soi Honey: reachable off Second Road, three beer bars, one rotating mama", () => {
-  // the soi hangs off second_rd_s via the `honey` exit, direct 2nd↔Buakhao intact
-  assert.equal(ROOMS.second_rd_s.exits.honey, "soi_honey_w");
+  // the soi hangs off the Soi Diana junction node — its real Second Road mouth is
+  // 12.931886, level with that node, not down at second_rd_s
+  assert.equal(ROOMS.second_rd_diana.exits.honey, "soi_honey_w");
   assert.equal(ROOMS.second_rd_s.exits.e, "buakhao_s", "the old cross-street still connects directly");
   for (const id of ["honey_trap", "queen_bee", "buzz_inn"]) {
     assert.equal(ROOMS[id].barType, "beer", `${id} is a beer bar`);
@@ -5148,7 +5149,7 @@ test("public drunkenness summons the boy in brown; manners halve the damage", ()
 });
 
 test("a mamasan in line of sight can rescue you from the shakedown", () => {
-  state().room = "buakhao_market"; // Candy Bar is adjacent
+  state().room = "buakhao_n"; // Candy Bar is adjacent (the Soi Diana junction)
   state().money = 1000;
   state().soc.mamaTreat.candy_bar = true;
   state().rng = 3; // first _rand() < 0.7 → rescue fires
@@ -5637,22 +5638,26 @@ test("scripted happy-ending playthrough", () => {
     "s", "light off", "s",                     // back down the sand
     "s", "sell bottles",                       // to Auntie Nok at the Soi 7 beach end
     "n", "e", "n", "ride bus to beach road", "pay 15",  // up to the bus stop, ride out
-    // Act 2 — the gossip chain (Second Road now sits between Beach Rd and Buakhao)
-    "e", "e", "n", "in", "talk to candy",            // Candy: Mot did it
-    "out", "n", "e", "talk to lek",                  // Lek: Oy has it (in=Rock Factory now, e=Lucky Tiger)
-    "out", "s", "in", "ask candy about wallet",      // Candy: som tam errand
-    "out", "s", "w", "w", "talk to bank",            // Bank: helmet favour
-    // LK Metro
-    "e", "e", "e", "e", "e", "in",                   // Starlight Bar
+    // Act 2 — the gossip chain. Soi Buakhao is five rooms now (Klang, Made in
+    // Thailand, the Tree Town arch, North, the old market block, South), Candy
+    // Bar sits on the Soi Diana junction where the real Cindy Bar stands, and
+    // Tree Town is entered heading WEST off the soi, which is where it is.
+    "e", "e", "n", "n", "candy", "talk to candy",    // Candy: Mot did it
+    "out", "e", "talk to lek",                       // Lek at Lucky Tiger, east off the junction
+    "out", "candy", "ask candy about wallet",        // Candy: som tam errand
+    "out", "s", "s", "w", "talk to bank",            // Bank: helmet favour
+    // north up Buakhao to the Tree Town arch, then west into the maze
+    "e", "n", "n", "n", "w",                         // the arch
+    "w", "w", "in",                                  // Starlight Bar
     "give helmet to pim", "ask pim about oy",        // pin part: lucky 9
-    "out", "w", "in", "ask nong about oy",           // pin part: number 71
-    "out", "e",
-    "light on", "e", "e", "light off",               // dark corner → Rainbow Girls
+    "out", "e", "in", "ask nong about oy",           // pin part: number 71
+    "out", "w",
+    "light on", "w", "w", "light off",               // dark corner → Rainbow Girls
     "give som tam to ploy",                          // door trick
     "ask dj about sabai sabai",                      // security sings
     "go office", "enter ๗๑๙",                        // the safe
     // Home — one growl-turn in the dark corner is survivable; save the battery
-    "out", "out", "w", "w", "w", "w",
+    "out", "out", "e", "e", "e", "e",
     "motosai to naklua",
     "n", "light on", "n",
   );

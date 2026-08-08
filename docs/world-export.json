@@ -22,13 +22,13 @@
   "Blue Dog"
  ],
  "counts": {
-  "geolocated": 177,
+  "geolocated": 184,
   "patrons": 18,
   "people": 259,
   "portraits": 277,
   "renders": 72,
   "thumbs": 72,
-  "venues": 177
+  "venues": 184
  },
  "frames": [
   "baimon_pic1",
@@ -3010,12 +3010,29 @@
    "name": "Blue Dog",
    "region": "Beach Road"
   },
+  "buakhao_klang": {
+   "geo": [
+    12.93594,
+    100.88854
+   ],
+   "name": "Soi Buakhao (Klang End)",
+   "region": "Soi Buakhao",
+   "seven": true
+  },
   "buakhao_market": {
    "geo": [
-    12.92629,
-    100.88197
+    12.92691,
+    100.883
    ],
    "name": "Buakhao Market",
+   "region": "Soi Buakhao"
+  },
+  "buakhao_myth": {
+   "geo": [
+    12.93208,
+    100.88678
+   ],
+   "name": "Soi Buakhao (Made in Thailand)",
    "region": "Soi Buakhao"
   },
   "buakhao_n": {
@@ -3038,10 +3055,18 @@
   },
   "buakhao_s": {
    "geo": [
-    12.9243,
-    100.87934
+    12.9249,
+    100.88002
    ],
    "name": "Soi Buakhao (South)",
+   "region": "Soi Buakhao"
+  },
+  "buakhao_tt": {
+   "geo": [
+    12.93146,
+    100.88646
+   ],
+   "name": "Soi Buakhao (Tree Town Arch)",
    "region": "Soi Buakhao"
   },
   "buddha_hill": {
@@ -3187,10 +3212,19 @@
    "name": "Soi Diana (middle)",
    "region": "Soi Diana"
   },
+  "diana_oil": {
+   "bar": "Bamboo Oil Massage",
+   "geo": [
+    12.93077,
+    100.88184
+   ],
+   "name": "Bamboo Oil Massage",
+   "region": "Second Road"
+  },
   "diana_w": {
    "geo": [
-    12.93104,
-    100.88204
+    12.93078,
+    100.88237
    ],
    "name": "Soi Diana (Second Road end)",
    "region": "Soi Diana"
@@ -3306,8 +3340,8 @@
    "bar": "Gold Rush Lounge",
    "barType": "beer",
    "geo": [
-    12.9317,
-    100.8855
+    12.93168,
+    100.8859
    ],
    "name": "Gold Rush Lounge",
    "region": "Tree Town"
@@ -3575,6 +3609,15 @@
    "name": "Kitten Corner",
    "region": "Soi 6"
   },
+  "klang_massage": {
+   "bar": "Klang Corner Massage",
+   "geo": [
+    12.93567,
+    100.88832
+   ],
+   "name": "Klang Corner Massage",
+   "region": "Soi Buakhao"
+  },
   "lake_mabprachan": {
    "geo": [
     12.93306,
@@ -3651,7 +3694,7 @@
    "barType": "beer",
    "geo": [
     12.93104,
-    100.88616
+    100.88516
    ],
    "name": "Lucky Charm Bar",
    "pool": true,
@@ -3711,8 +3754,8 @@
    "bar": "Moonshine Bar",
    "barType": "beer",
    "geo": [
-    12.93117,
-    100.8858
+    12.93098,
+    100.88558
    ],
    "name": "Moonshine Bar",
    "region": "Tree Town"
@@ -3726,6 +3769,15 @@
    ],
    "name": "The Mooring",
    "region": "Naklua"
+  },
+  "myth_massage": {
+   "bar": "Plaza Thai Massage",
+   "geo": [
+    12.93184,
+    100.88701
+   ],
+   "name": "Plaza Thai Massage",
+   "region": "Soi Buakhao"
   },
   "myth_night": {
    "geo": [
@@ -3837,8 +3889,8 @@
   },
   "oy_office": {
    "geo": [
-    12.93113,
-    100.88671
+    12.9311,
+    100.88464
    ],
    "name": "Madam Oy's Office",
    "region": "Tree Town"
@@ -3973,8 +4025,8 @@
    "bar": "The Rabbit Hole",
    "barType": "beer",
    "geo": [
-    12.93103,
-    100.88583
+    12.93102,
+    100.88522
    ],
    "name": "The Rabbit Hole",
    "region": "Tree Town"
@@ -3983,8 +4035,8 @@
    "bar": "Rainbow Girls Bar",
    "barType": "gogo",
    "geo": [
-    12.93118,
-    100.88652
+    12.93114,
+    100.88482
    ],
    "name": "Rainbow Girls Bar",
    "region": "Tree Town"
@@ -4067,6 +4119,15 @@
    ],
    "name": "Second Road (Central)",
    "region": "Second Road"
+  },
+  "second_rd_diana": {
+   "geo": [
+    12.93104,
+    100.88204
+   ],
+   "name": "Second Road (Soi Diana)",
+   "region": "Second Road",
+   "seven": true
   },
   "second_rd_n": {
    "geo": [
@@ -4205,8 +4266,8 @@
    "bar": "Starlight Bar",
    "barType": "beer",
    "geo": [
-    12.93168,
-    100.8858
+    12.93166,
+    100.8856
    ],
    "name": "Starlight Bar",
    "region": "Tree Town"
@@ -4397,24 +4458,24 @@
   },
   "tt_back": {
    "geo": [
-    12.9313,
-    100.88602
+    12.93128,
+    100.88535
    ],
    "name": "Tree Town (Back Lane)",
    "region": "Tree Town"
   },
   "tt_deep": {
    "geo": [
-    12.93122,
-    100.8863
+    12.93118,
+    100.88508
    ],
    "name": "Tree Town (Deep Corner)",
    "region": "Tree Town"
   },
   "tt_entrance": {
    "geo": [
-    12.93152,
-    100.88518
+    12.9315,
+    100.88618
    ],
    "name": "Tree Town (Entrance Arch)",
    "region": "Tree Town",
@@ -4422,24 +4483,24 @@
   },
   "tt_lane_1": {
    "geo": [
-    12.9315,
-    100.88548
+    12.93148,
+    100.88588
    ],
    "name": "Tree Town (Inner Lane)",
    "region": "Tree Town"
   },
   "tt_lane_2": {
    "geo": [
-    12.93148,
-    100.88578
+    12.93146,
+    100.88558
    ],
    "name": "Tree Town (Cross Lane)",
    "region": "Tree Town"
   },
   "tt_lane_3": {
    "geo": [
-    12.93108,
-    100.88598
+    12.93106,
+    100.88536
    ],
    "name": "Tree Town (Far Lane)",
    "region": "Tree Town"
