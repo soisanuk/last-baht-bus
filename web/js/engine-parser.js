@@ -1446,7 +1446,7 @@ function _doBuy(arg) {
     _addHappy(1);
     return;
   }
-  if (FOOD_STALLS[G.room] && /food|eat|toastie|mango|som tam|somtam|chicken|kebab|rice|snack/.test(arg)) {
+  if (FOOD_STALLS[G.room] && /food|eat|toastie|mango|som tam|somtam|chicken|kebab|rice|snack|crocodile|croc|skewer/.test(arg)) {
     const f = FOOD_STALLS[G.room];
     if (G.money < f.price) { _say(`฿${f.price}, and you're short. The smell alone is worth half that, and free.`); return; }
     G.money -= f.price;

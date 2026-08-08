@@ -1286,8 +1286,8 @@ const ROOMS = {
     region: "Second Road",
     desc: "Mid-Second-Road: baht buses in convoy, pharmacies, and the constant churn of " +
       "a four-lane road that never quite stops. Soi 9 comes in from the beach side, " +
-      "quiet and daytime-ish next to all this; the mall's service road is a block " +
-      "south and MYTH NIGHT market is further down again.",
+      "quiet and daytime-ish next to all this; the mall's Second Road entrance and " +
+      "its run of food stalls is a block south, and MYTH NIGHT market further down again.",
     exits: { s: "second_rd_mall", n: "second_rd_soi8", soi9: "pattaya_soi_9" },
   },
   // Second Road's Soi Diana mouth. Until now the whole road was three rooms and
@@ -1461,16 +1461,23 @@ const ROOMS = {
     busStop: "secondrd",
     name: "Second Road (Central Mall)",
     region: "Second Road",
-    desc: "The back of the mall, which is a different building from the front: no glass, no " +
-      "brand names, just a service road, a taxi rank, and seven storeys of blank wall with " +
-      "the extractor fans going. This is where the staff come out to eat and where the " +
-      "songthaews idle for the air-conditioned crowd. Everything the front of the mall is " +
-      "pretending about, the back is not.",
+    desc: "The mall's other face, and it is not a back door — CENTRAL MALL's signage runs " +
+      "the full height of this side too, with its own entrance, its own escalators moving " +
+      "behind the glass, and its own doorman. What the Beach Road front does not have is " +
+      "the pavement: food stalls nose to tail the whole length of it, grilled pork and som " +
+      "tam and fruit on ice, set up directly under the brand names. Mall staff, office " +
+      "workers, and a steady trickle of people who have just walked out of an " +
+      "air-conditioned food court and wanted the real thing thirty seconds later.\n\n" +
+      "One stall stops everybody. A whole crocodile turns slowly on a spit over " +
+      "charcoal, jaws wired shut, the length of a man — and the woman working it has " +
+      "long since stopped looking up at the phones. She sells it by the skewer, and it " +
+      "sells, and the people photographing it are almost never the people eating it.",
     revisit: [
-      "Extractor fans, a taxi rank, and staff on their break eating properly.",
-      "A songthaew waits for the mall to close and disgorge somebody worth the fare.",
-      "Blank wall, service door, and the smell of a food court's back end.",
-      "The unglamorous side of seven storeys of glass. Nobody photographs this bit.",
+      "The crocodile turns. Two people photograph it. Neither of them buys anything.",
+      "Somebody comes out of the mall with a shopping bag and straight into a stall queue.",
+      "Charcoal smoke drifting up a glass frontage. Nobody inside appears to mind.",
+      "Signage four storeys high, and a som tam cart doing better business underneath.",
+      "Somebody finally asks the crocodile woman a question. She answers without looking up.",
     ],
     exits: { n: "second_rd_c", s: "second_rd_myth", w: "central_mall" },
   },
