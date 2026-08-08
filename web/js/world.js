@@ -721,19 +721,17 @@ const ROOMS = {
       "stools and laundry steam; out here it is the seafront doing its evening thing " +
       "— joggers who have misjudged the hour, a man selling roasted chestnuts nobody " +
       "buys, and the long slow crawl of songthaews with their benches half full. " +
-      "Central Pattaya Road crosses a hundred metres north, which is why the traffic " +
-      "here never quite clears — Central Pattaya Road comes down to the sea a " +
-      "hundred metres north, and its traffic is still deciding things by the time " +
-      "it reaches you. Soi 7 runs inland here and Soi 8 a block south; the two are " +
-      "close enough that people take the wrong one and only notice when the noise " +
-      "fails to arrive.",
+      "Central Pattaya Road comes down to the sea a hundred metres north, and its " +
+      "traffic is still deciding things by the time it reaches you. Soi 7 runs " +
+      "inland here; Soi 8 comes down to the front a block south, and on a still " +
+      "night you can hear which of the two has the bars.",
     revisit: [
       "The chestnut man has moved four metres and changed nothing.",
       "A songthaew slows, reads you, and rolls on unconvinced.",
       "Somebody jogs past in the wrong clothes at the wrong hour, entirely content.",
       "The sea does its thing on the other side of the railing, unbothered.",
     ],
-    exits: { n: "beach_rd_klang", s: "beach_rd_soi9", e: "pattaya_soi_7", soi8: "pattaya_soi_8" },
+    exits: { n: "beach_rd_klang", s: "beach_rd_soi8", e: "pattaya_soi_7" },
   },
   pattaya_soi_8: {
     name: "Soi 8",
@@ -750,7 +748,7 @@ const ROOMS = {
       "Somebody wanders up from the beach end and stops dead where the noise runs out.",
       "Two beers, two stools, one conversation that has clearly been going for hours.",
     ],
-    exits: { w: "beach_rd_soi7", e: "second_rd_n" },
+    exits: { w: "beach_rd_soi8", e: "second_rd_soi8" },
   },
   beach_rd_soi9: {
     busStop: "beachrd",
@@ -767,7 +765,7 @@ const ROOMS = {
       "Two officers stand under the light doing nothing in particular, at length.",
       "The quietest stretch of Beach Road, and everybody knows exactly why.",
     ],
-    exits: { n: "beach_rd_soi7", s: "beach_rd_c", e: "pattaya_soi_9", police: "police_station" },
+    exits: { n: "beach_rd_soi8", s: "beach_rd_c", e: "pattaya_soi_9", police: "police_station" },
   },
   pattaya_soi_9: {
     name: "Soi 9",
@@ -824,6 +822,42 @@ const ROOMS = {
       "Four roads' worth of traffic, folding into each other and out again.",
     ],
     exits: { s: "beach_rd_n", n: "naklua_rd", second: "second_rd_soi6" },
+  },
+  beach_rd_soi8: {
+    busStop: "beachrd",
+    motosai: true,
+    name: "Beach Road (Soi 8)",
+    region: "Beach Road",
+    desc: "The Soi 8 corner, and you hear it before you reach it. The soi comes out here " +
+      "with its bar end first — open fronts, four sound systems, the noise rolling " +
+      "down the last thirty metres and out over the railing to a sea that has no " +
+      "opinion. North along the front toward Soi 7 the bars face the water instead of " +
+      "the road, which is a different kind of evening: same beer, quieter, and you " +
+      "watch the gulf go black rather than watch the traffic.",
+    revisit: [
+      "The noise comes down the soi in a wave, hits the railing, and gives up.",
+      "Somebody stops dead at the corner, deciding between the sea and the sound.",
+      "A songthaew slows for the corner, reads nobody, and carries on south.",
+      "Bar light one way, black water the other, and the road running between them.",
+    ],
+    exits: { n: "beach_rd_soi7", s: "beach_rd_soi9", e: "pattaya_soi_8" },
+  },
+  second_rd_soi8: {
+    busStop: "secondrd",
+    name: "Second Road (Soi 8)",
+    region: "Beach Road",
+    desc: "Where Soi 8 gives out onto Second Road, and it gives out quietly — this is the " +
+      "wrong end of it, the end where the bars have already turned into guesthouses " +
+      "and a tailor. Four lanes of traffic go past without slowing. People who come " +
+      "out of the soi here are usually leaving; people going in tend to have been told " +
+      "which end to start at, and they walk.",
+    revisit: [
+      "Traffic, and the mouth of a soi that sounds better a hundred metres in.",
+      "Two farang come out squinting at a phone, turn round, and go back in.",
+      "The noise from the beach end arrives thin and secondhand.",
+      "Nobody hails anything. The traffic keeps not stopping.",
+    ],
+    exits: { w: "pattaya_soi_8", n: "second_rd_n", s: "second_rd_c" },
   },
   promenade: {
     name: "Beach Promenade",
@@ -1027,7 +1061,7 @@ const ROOMS = {
     desc: "Mid-Second-Road: baht buses in convoy, pharmacies, and the constant churn " +
       "between the mall's back doors to the west and the fairy-lit mouth of MYTH " +
       "NIGHT market to the east.",
-    exits: { s: "second_rd_myth", n: "second_rd_n", w: "central_mall", diana: "diana_w",
+    exits: { s: "second_rd_myth", n: "second_rd_soi8", w: "central_mall", diana: "diana_w",
              soi9: "pattaya_soi_9" },
   },
   // Second Road's Soi Diana mouth. Until now the whole road was three rooms and
@@ -1075,11 +1109,11 @@ const ROOMS = {
     region: "Second Road",
     desc: "Soi 7 comes out here and carries on east; the seafront is fifteen minutes " +
       "down it, or four with a piwin. Central Pattaya Road crosses just ahead, cutting " +
-      "the whole town into north and south. Soi 8 comes out a block south, quieter " +
-      "than anything else on this stretch. This block is a massage row: SMILE MASSAGE winks pink " +
+      "the whole town into north and south. Soi 8 comes out a block south — this " +
+      "end of it is quiet, whatever the other end is doing. This block is a massage row: SMILE MASSAGE winks pink " +
       "from the west side, and opposite, four floors of blue neon spell POSEIDON MASSAGE " +
       "over a doorman and a fish tank.",
-    exits: { s: "second_rd_c", n: "pattaya_klang", w: "pattaya_soi_7", e: "poseidon_soapy",
+    exits: { s: "second_rd_soi8", n: "pattaya_klang", w: "pattaya_soi_7", e: "poseidon_soapy",
              spa: "smile_massage", soi8: "pattaya_soi_8" },
   },
   pattaya_klang: { motosai: true, busStop: "secondrd",
@@ -10138,6 +10172,7 @@ const ROOM_GEO = {
   beach_rd_klang:   [12.93791, 100.88339],
   beach_rd_soi9:    [12.93598, 100.88247],
   pattaya_soi_9:    [12.93515, 100.88377],
+  beach_rd_soi8:    [12.93655, 100.88277],
   pattaya_soi_8:    [12.93573, 100.88413],
   beachrd_oil:      [12.93396, 100.88186],
   tequila_queen:    [12.93164, 100.87946],
@@ -10186,6 +10221,7 @@ const ROOM_GEO = {
   second_thai:      [12.93014, 100.88107],
   second_rd_c:      [12.93431, 100.88506],
   second_rd_n:      [12.93539, 100.88580],
+  second_rd_soi8:   [12.93491, 100.88548],
   pattaya_soi_7:    [12.93650, 100.88460],
   smile_massage:    [12.93552, 100.88554],
   poseidon_soapy:   [12.93528, 100.88606],

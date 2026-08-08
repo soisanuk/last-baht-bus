@@ -2,10 +2,10 @@
   "generated": "2026-08-08",
   "note": "Every room in the game + its region, for the scene-art pipeline (docs/art-pipeline-spec.md). Derived from web/js/world.js — regenerate with scripts/gen-scene-manifest.mjs, do not hand-edit. `kind` is a generator heuristic for prompt-template selection, not game canon. `regionSlug` is produced by the same regex as web/js/scene.js `_sceneArt()`; art files are web/art/rooms/<id>.png with web/art/regions/<slug>.png as the fallback.",
   "counts": {
-    "rooms": 206,
+    "rooms": 208,
     "regions": 15,
     "byKind": {
-      "street": 81,
+      "street": 83,
       "massage": 17,
       "beer": 49,
       "shop": 2,
@@ -35,6 +35,7 @@
         "beach_rd_n",
         "beach_rd_s",
         "beach_rd_soi7",
+        "beach_rd_soi8",
         "beach_rd_soi9",
         "beachrd_oil",
         "beachthai_massage",
@@ -47,6 +48,7 @@
         "pattaya_soi_9",
         "police_station",
         "promenade",
+        "second_rd_soi8",
         "short_time_motel",
         "stinky_bar",
         "tequila_queen"
@@ -181,7 +183,7 @@
       ],
       "sampleDescs": [
         "North of the Dolphin roundabout the volume drops by half: seafood restaurants, temples, long-stay hotels. Up ahead, the SABAI PALMS HOTEL sign glows over its soi — half the letters out, so it reads 'SA AI PA MS', which the long-stay guests consider part of the charm. The soi itself is dark as a power cut. East, a quiet BAR CORNER of expat beer bars glows low; a SPA ROW of massage and soapland fronts runs off the other way.",
-        "The top of the town, where four roads give up arguing and go round in a circle instead. The dolphins are in the middle of it — a concrete pod of them mid-leap, floodlit, permanently about to enter water that is two hundred metres west. TERMINAL 21 sits on the corner pretending to be an airport, its departure boards lit all night for a terminal nobody flies from. Beach Road runs south along the sea, Second Road south into town, Naklua Road north-east toward the quieter money, and the songthaews go round and round because this is where the loop turns.",
+        "The top of the town, where four roads give up arguing and go round in a circle instead. The dolphins are in the middle of it — a concrete pod of them mid-leap, floodlit, permanently about to enter water that is two hundred metres west. Terminal 21 sits on the corner pretending to be an airport, its departure boards lit all night for a terminal nobody flies from. Beach Road runs south along the sea, Second Road south into town, Naklua Road north-east toward the quieter money, and the songthaews go round and round because this is where the loop turns.",
         "A pocket of low-key expat beer bars off the main road, the kind that open at four and know every customer's pour by five. No neon war up here — just fairy lights, a sea breeze off the old fishing harbour, and the clack of a single pool table. THE ANCHOR BAR, DOLPHIN BAR, and THE MOORING share the corner and most of the regulars."
       ]
     },
@@ -224,7 +226,7 @@
       ],
       "sampleDescs": [
         "The mouth of Soi Diana, and Second Road doing what Second Road does: four lanes of baht buses running nose to tail, a permanent shoal of motorbikes in the gutter lane, and pavement so narrow that walking it is a negotiation. The go-go neon starts about twenty metres up the soi and doesn't stop until Buakhao. On this corner: a 7-Eleven with a cash machine, a knot of piwins who have claimed the shade of its sign, and a girl on the back of a bike checking her lipstick in a wing mirror at a red light.",
-        "Soi 7 comes out here and carries on east; the seafront is fifteen minutes down it, or four with a piwin. Central Pattaya Road crosses just ahead, cutting the whole town into north and south. Soi 8 comes out a block south, quieter than anything else on this stretch. This block is a massage row: SMILE MASSAGE winks pink from the west side, and opposite, four floors of blue neon spell POSEIDON MASSAGE over a doorman and a fish tank.",
+        "Soi 7 comes out here and carries on east; the seafront is fifteen minutes down it, or four with a piwin. Central Pattaya Road crosses just ahead, cutting the whole town into north and south. Soi 8 comes out a block south — this end of it is quiet, whatever the other end is doing. This block is a massage row: SMILE MASSAGE winks pink from the west side, and opposite, four floors of blue neon spell POSEIDON MASSAGE over a doorman and a fish tank.",
         "Mid-Second-Road: baht buses in convoy, pharmacies, and the constant churn between the mall's back doors to the west and the fairy-lit mouth of MYTH NIGHT market to the east."
       ]
     },
@@ -458,7 +460,19 @@
       "kind": "street",
       "dark": false,
       "people": [],
-      "desc": "Where Soi 7 comes down to the sea. The soi runs inland behind you, all beer stools and laundry steam; out here it is the seafront doing its evening thing — joggers who have misjudged the hour, a man selling roasted chestnuts nobody buys, and the long slow crawl of songthaews with their benches half full. Central Pattaya Road crosses a hundred metres north, which is why the traffic here never quite clears — Central Pattaya Road comes down to the sea a hundred metres north, and its traffic is still deciding things by the time it reaches you. Soi 7 runs inland here and Soi 8 a block south; the two are close enough that people take the wrong one and only notice when the noise fails to arrive."
+      "desc": "Where Soi 7 comes down to the sea. The soi runs inland behind you, all beer stools and laundry steam; out here it is the seafront doing its evening thing — joggers who have misjudged the hour, a man selling roasted chestnuts nobody buys, and the long slow crawl of songthaews with their benches half full. Central Pattaya Road comes down to the sea a hundred metres north, and its traffic is still deciding things by the time it reaches you. Soi 7 runs inland here; Soi 8 comes down to the front a block south, and on a still night you can hear which of the two has the bars."
+    },
+    {
+      "id": "beach_rd_soi8",
+      "name": "Beach Road (Soi 8)",
+      "bar": null,
+      "barType": null,
+      "region": "Beach Road",
+      "regionSlug": "beach-road",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "The Soi 8 corner, and you hear it before you reach it. The soi comes out here with its bar end first — open fronts, four sound systems, the noise rolling down the last thirty metres and out over the railing to a sea that has no opinion. North along the front toward Soi 7 the bars face the water instead of the road, which is a different kind of evening: same beer, quieter, and you watch the gulf go black rather than watch the traffic."
     },
     {
       "id": "beach_rd_soi9",
@@ -615,6 +629,18 @@
       "dark": false,
       "people": [],
       "desc": "The paved walk between road and sand. Couples, joggers who've made bad choices, and ladies standing in the lamplight with nowhere in particular to be. The bins are full of collectable glass, if a man were desperate."
+    },
+    {
+      "id": "second_rd_soi8",
+      "name": "Second Road (Soi 8)",
+      "bar": null,
+      "barType": null,
+      "region": "Beach Road",
+      "regionSlug": "beach-road",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "Where Soi 8 gives out onto Second Road, and it gives out quietly — this is the wrong end of it, the end where the bars have already turned into guesthouses and a tailor. Four lanes of traffic go past without slowing. People who come out of the soi here are usually leaving; people going in tend to have been told which end to start at, and they walk."
     },
     {
       "id": "short_time_motel",
@@ -1517,7 +1543,7 @@
       "kind": "street",
       "dark": false,
       "people": [],
-      "desc": "The top of the town, where four roads give up arguing and go round in a circle instead. The dolphins are in the middle of it — a concrete pod of them mid-leap, floodlit, permanently about to enter water that is two hundred metres west. TERMINAL 21 sits on the corner pretending to be an airport, its departure boards lit all night for a terminal nobody flies from. Beach Road runs south along the sea, Second Road south into town, Naklua Road north-east toward the quieter money, and the songthaews go round and round because this is where the loop turns."
+      "desc": "The top of the town, where four roads give up arguing and go round in a circle instead. The dolphins are in the middle of it — a concrete pod of them mid-leap, floodlit, permanently about to enter water that is two hundred metres west. Terminal 21 sits on the corner pretending to be an airport, its departure boards lit all night for a terminal nobody flies from. Beach Road runs south along the sea, Second Road south into town, Naklua Road north-east toward the quieter money, and the songthaews go round and round because this is where the loop turns."
     },
     {
       "id": "dolphin_bar",
@@ -1866,7 +1892,7 @@
       "kind": "street",
       "dark": false,
       "people": [],
-      "desc": "Soi 7 comes out here and carries on east; the seafront is fifteen minutes down it, or four with a piwin. Central Pattaya Road crosses just ahead, cutting the whole town into north and south. Soi 8 comes out a block south, quieter than anything else on this stretch. This block is a massage row: SMILE MASSAGE winks pink from the west side, and opposite, four floors of blue neon spell POSEIDON MASSAGE over a doorman and a fish tank."
+      "desc": "Soi 7 comes out here and carries on east; the seafront is fifteen minutes down it, or four with a piwin. Central Pattaya Road crosses just ahead, cutting the whole town into north and south. Soi 8 comes out a block south — this end of it is quiet, whatever the other end is doing. This block is a massage row: SMILE MASSAGE winks pink from the west side, and opposite, four floors of blue neon spell POSEIDON MASSAGE over a doorman and a fish tank."
     },
     {
       "id": "second_rd_s",
