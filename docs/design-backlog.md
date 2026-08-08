@@ -273,3 +273,55 @@ if this ever wants a face.
 
 Pairs with: the Regular/bond tiers, `_conquestHappy`'s jading, `_hasSponsor`,
 and the "parallel realities" bucket in the long-term-play notes.
+
+## The four chapters (2026-08-09) — SHELVED, and the same system as the black square
+
+A 26-year arc through the town, 2000 to now, in four stages. Shelved with the
+black square because they are one phenomenon seen from two ends: the square
+only works because five men see it at once, and that is this note's Chapter 2.
+
+**Ch.1, analog.** Before smartphones the girlfriend experience was flawless —
+and the reason is materialist, not moral. Managing five sponsors from a pocket
+was structurally impossible, so a girl who found a client she liked anchored to
+him. Not nicer people; fewer channels. Everything else here follows from
+bandwidth, and the game currently says none of it.
+
+**Ch.2, the digital awakening.** Parallel management arrives, the flawless GFE
+dies, and the excuses become famous. The farang response is a bruised ego and a
+serious plan to never come back.
+
+**Ch.3, buying the network.** The interesting one, and the extractable one. He
+stops being a victim and invests in the only real intelligence service in town:
+the motorbike taxis, the condo security guards, the mamasans. Beers and tips
+and watching. What he buys is not sex, it is *sight* — the boyfriends waiting at
+the end of a shift, the Thai karaoke bars, the hierarchies between different
+nationalities of workers.
+
+**Ch.4, the trader.** He optimises companionship like a portfolio, leaves the
+Western brain at baggage claim, expects no loyalty, and the drama stops
+touching him.
+
+### What to build, and what to argue with
+
+**NIGEL IS ALREADY CHAPTER 2 AND DOES NOT KNOW IT.** He carries a `1998` topic
+and a desc that has him comparing every bar to a better one. This note names
+what happened to him — he reached the bruised-ego stage and stopped there.
+Giving him that self-knowledge (or conspicuously withholding it) is a free
+upgrade to a character who exists, and better than a thirteenth veteran on a
+bench that already holds twelve.
+
+**CH.3 IS A MECHANIC THE GAME LACKS: an information layer.** TIP, BUY MAN DRINK
+and `_repGain` exist; nothing converts them into knowing things. The
+infrastructure — piwins, guards, mamasans — sees everything and tells nobody,
+and that is purchasable in exactly the currency the game already models. It
+also retro-fits onto the amulet chain: the piwin who reads the amulet and will
+not say more would say more, to a man who had bought him a beer.
+
+**CH.4 IS THE CHARACTER'S SELF-JUSTIFICATION, AND THE ENGINE ALREADY DISAGREES.**
+`_conquestHappy`/`G.jaded` make churn buy 2 less สนุก each time to a floor of
+−4, while a bonded regular stays rewarding — the mechanics assert that the
+high-frequency path is a plateau dressed as enlightenment. Do NOT write Ch.4 as
+arrival. Write the man: someone who made peace by removing the part of himself
+that could be hurt, and calls that winning. Poignant, not triumphant — and it
+keeps the house rule that the game never grades the player's choices, because
+it is his conclusion in his voice, not the narrator's.
