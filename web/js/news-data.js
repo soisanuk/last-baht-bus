@@ -28,7 +28,7 @@ var NEWS_FEED = [
     "d": "07 Aug 2026"
   },
   {
-    "t": "Young tiger tracked after fatal ranger attack at Thailand wildlife sanctuary",
+    "t": "Tokyo massage parlor operator faces six years over Thai child exploitation",
     "s": "Pattaya Mail",
     "d": "07 Aug 2026"
   },
@@ -38,9 +38,9 @@ var NEWS_FEED = [
     "d": "07 Aug 2026"
   },
   {
-    "t": "Tokyo massage parlor operator faces six years over Thai child exploitation",
+    "t": "Injured dog saved after urgent plea sparks rescue on Pattaya hill",
     "s": "Pattaya Mail",
-    "d": "07 Aug 2026"
+    "d": "06 Aug 2026"
   },
   {
     "t": "Live updates: Teen gunman dead after killing teachers in Thailand’s worst school shooting in years",
@@ -48,35 +48,35 @@ var NEWS_FEED = [
     "d": "07 Aug 2026"
   },
   {
-    "t": "Teen kills classmates, teachers, and his grandparents in Thai gun rampage, police say",
+    "t": "12-year-old student among those killed in Thailand’s deadliest school shooting in years",
     "s": "CNN",
     "d": "07 Aug 2026"
   },
   {
-    "t": "Irish man found dead in Thailand",
-    "s": "The Irish Times",
-    "d": "07 Aug 2026"
+    "t": "Thailand seal top spot after making Myanmar pay the penalty",
+    "s": "ESPN",
+    "d": "08 Aug 2026"
   },
   {
-    "t": "British men accused of trafficking teens to Thailand as drug couriers, court told",
-    "s": "Yahoo News Canada",
+    "t": "Trump defends Pete Hegseth and school shooting leaves multiple dead in Thailand: Morning Rundown",
+    "s": "NBC News",
     "d": "07 Aug 2026"
   },
   {
     "t": "Trilateral Highway Project Gets Boost After Myanmar-Thailand Bilateral Talks",
-    "s": "ndtv.com",
+    "s": "NDTV",
     "d": "07 Aug 2026"
   },
   {
-    "t": "Israeli mother and daughter brutally attacked in Thailand: ‘He asked where we were from, then beat us’",
-    "s": "Ynetnews",
-    "d": "06 Aug 2026"
+    "t": "Thailand: Several killed in school shooting",
+    "s": "dw.com",
+    "d": "07 Aug 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-08-07","USD":33.06,"AUD":23.27,"GBP":44.46,"EUR":38.12};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-08","temp":27,"humid":93,"code":3,"hi":31,"rain":84};
+var WX_NOW = {"date":"2026-08-09","temp":28,"humid":80,"code":3,"hi":30,"rain":61};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
@@ -84,4 +84,4 @@ var LOTTO = {"date":"2026-08-01","first":"932479","last2":"69","front3":["413","
 // XAU, plus Thai baht-weight gold (96.5%)
 var GOLD = {"usd":4343,"date":"2026-08-08","baht":67900};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":64973,"thb":2137623};
+var BTC = {"usd":64998,"thb":2138449};
