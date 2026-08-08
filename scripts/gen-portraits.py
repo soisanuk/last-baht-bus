@@ -401,6 +401,14 @@ CHARS = {
     "phil":     dict(skin=PALE, hair="combover", hc=C(0x7a6a58), shirt=C(0xd8d8e0),
                      vest=C(0x707888), mouth="neutral", bg=BG_BAR),
     "gavin":    dict(skin=PALE, hair="short", hc=C(0x8a8a90), shirt=C(0xf0f0f0), collar=True, mouth="smile", bg=BG_BAR),
+    # --- the Pratumnak clubs (The Doghouse / Succubus) ---
+    # Bill: thirties, English, pressed short-sleeve shirt, cuffs turned once.
+    # Young for the room he runs and deliberately unremarkable-looking.
+    "bill":     dict(skin=PALE, hair="short", hc=C(0x6a5240), shirt=C(0xe8eef4), collar=True,
+                     mouth="neutral", bg=BG_BAR),
+    # Bob: 76, American, reading glasses pushed up on a bald head, behind his own bar.
+    "bob":      dict(skin=TAN, hair="balding", hc=C(0xd8d8dc), shirt=C(0x4a6a58), collar=True,
+                     mouth="smile", acc=["mustache", "glasses"], bg=BG_BAR),
     "doug":     dict(skin=TAN, hair="combover", hc=GREY, shirt=C(0x8a3a3a), collar=True, mouth="stern", bg=BG_BAR),
     # ── Origin archetypes (the seven "who are you?" NPCs on Soi 6) ──
     "doyle":    dict(skin=TAN, hair="short", hc=GREY, shirt=C(0x6a7078), collar=True, mouth="stern", bg=BG_BAR),
@@ -442,8 +450,21 @@ CHARS = {
                      mouth="neutral", acc=["earrings", "chain"], earc=GOLD),
     "ampai":    lady(skin=THAI, hair="chignon", hc=BLACK, shirt=C(0x5a1030), bg=BG_BAR,
                      mouth="neutral", acc=["earrings", "chain"], earc=GOLD),
+    # Kinnaree: fifties, hair up, reading glasses on a chain, runs the floor and the till.
+    "kinnaree": lady(skin=THAI, hair="chignon", hc=GRBLK, shirt=C(0x2a4a5a), bg=BG_BAR,
+                     mouth="smile", acc=["glasses", "earrings", "chain"], earc=GOLD),
     # --- filler hostesses (generic Isan girls; procedurally varied) ---
     "dao":      lady(skin=THAI, hair="ponytail", hc=DKBRN, shirt=C(0xf05a30), bg=BG_GOGO, mouth="grin", acc=["earrings", "chain"], earc=YELN),
+    # --- the two Pratumnak clubs (gents rooms: dressier, darker palette) ---
+    "sunee":    lady(skin=THAI, hair="chignon", hc=BLACK, shirt=C(0x3a1a3a), bg=BG_BAR, mouth="neutral", acc=["earrings", "chain"], earc=GOLD),
+    "tukky":    lady(skin=THAI, hair="bob", hc=GRBLK, shirt=C(0x2a3a5a), bg=BG_BAR, mouth="smile", acc=["earrings"], earc=SILVER),
+    "tar":      lady(skin=THAI, hair="long", hc=BLACK, shirt=C(0x5a1a3a), bg=BG_BAR, mouth="smile", acc=["earrings", "chain"], earc=GOLD),
+    "gof":      lady(skin=THAI, hair="ponytail", hc=DKBRN, shirt=C(0x1a3a4a), bg=BG_BAR, mouth="grin", acc=["earrings"], earc=SILVER),
+    "wassana":  lady(skin=THAI, hair="long", hc=GRBLK, shirt=C(0x4a2a5a), bg=BG_BAR, mouth="neutral", acc=["earrings", "chain"], earc=GOLD),
+    "noot":     lady(skin=THAI, hair="bob", hc=BLACK, shirt=C(0x2a4a3a), bg=BG_BAR, mouth="smile", acc=["earrings"], earc=GOLD),
+    "sroy":     lady(skin=THAI, hair="chignon", hc=DKBRN, shirt=C(0x5a3a1a), bg=BG_BAR, mouth="smile", acc=["earrings", "chain"], earc=SILVER),
+    "chom":     lady(skin=THAI, hair="long", hc=BLACK, shirt=C(0x3a2a4a), bg=BG_BAR, mouth="grin", acc=["earrings"], earc=GOLD),
+    "pranee":   lady(skin=THAI, hair="ponytail", hc=GRBLK, shirt=C(0x1a2a4a), bg=BG_BAR, mouth="neutral", acc=["earrings", "chain"], earc=GOLD),
     "mook":     lady(skin=THAI, hair="sleek", hc=DKBRN, shirt=C(0x00e5ff), bg=BG_GOGO, mouth="grin", acc=["earrings", "chain"], earc=PINKN),
     "ice":      lady(skin=THAI, hair="pigtails", hc=BLACK, shirt=C(0xb090e0), bg=BG_GOGO, mouth="neutral", acc=["earrings"], earc=CYAN),
     "praew":    lady(skin=THAI, hair="pigtails", hc=BLACK, shirt=C(0xe86a9a), bg=BG_GOGO, mouth="grin", acc=["earrings", "nosering"], earc=GOLD),

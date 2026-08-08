@@ -1,12 +1,12 @@
 {
-  "generated": "2026-08-03",
+  "generated": "2026-08-08",
   "note": "Distinct, hand-authored characters with a portrait (excludes the 181 generic `filler` NPCs). Derived from web/js/world.js — regenerate with scripts/gen-portrait-manifest.mjs, do not hand-edit. `sex`/`venueKind` are generator heuristics for portrait archetype selection, not game canon.",
   "counts": {
-    "total": 121,
+    "total": 126,
     "byRole": {
       "story": 30,
-      "mamasan": 22,
-      "hostess": 39,
+      "mamasan": 24,
+      "hostess": 42,
       "cashier": 12,
       "patron": 18
     }
@@ -65,6 +65,37 @@
         "manager"
       ],
       "desc": "The Stinky's manager — American, sixty-something, forearms like dock rope, a Singha that never empties and never seems to get him drunk. Candy's man, and once the manager of her bars; now he runs the Stinky for its ailing owner and, quietly, works at being his own man out from under her shadow. Twenty-two years on Beach Road, most of them within nine feet of that pool table."
+    },
+    {
+      "id": "bill",
+      "name": "Bill",
+      "source": "NPCS",
+      "role": "story",
+      "sex": "m",
+      "venueKind": "gents",
+      "emoji": "🎩",
+      "th": null,
+      "room": "doghouse",
+      "tags": [
+        "bars",
+        "manager"
+      ],
+      "desc": "Thirty-odd, English, in a pressed short-sleeve shirt with the cuffs turned once — younger than everyone he manages and entirely unbothered by it. He runs the Samson brothers' three quiet clubs on a rota, which means he is here one night in three and knows exactly what happened on the other two. Watches the room the way a man watches a kettle."
+    },
+    {
+      "id": "bob",
+      "name": "Bob",
+      "source": "NPCS",
+      "role": "story",
+      "sex": "m",
+      "venueKind": "gents",
+      "emoji": "🎖️",
+      "th": null,
+      "room": "succubus",
+      "tags": [
+        "manager"
+      ],
+      "desc": "Seventy-six, American, behind his own bar on a stool worn to the shape of him. Reading glasses pushed up, a coffee going cold next to a beer he is not drinking, and forearms that were clearly once something. He first saw this coast in 1971, on seven days' leave, when it was a fishing village with a few huts rented to servicemen. He has been back more or less ever since."
     },
     {
       "id": "dj_beer",
@@ -145,19 +176,6 @@
       "desc": "Scouse, fifty-three, twenty-two years an electrician and then a letter and a cheque with more noughts than he's ever seen at once. First time abroad that isn't Spain, first time in his life with no shift in the morning, and it's gone to his head like sunshine. Buys rounds for strangers. Means every word. Hasn't yet met the version of this town that isn't his friend."
     },
     {
-      "id": "mala",
-      "name": "Miss Mala",
-      "source": "NPCS",
-      "role": "story",
-      "sex": "f",
-      "venueKind": null,
-      "emoji": "🦚",
-      "th": "มาลา",
-      "room": "peacock_cabaret",
-      "tags": [],
-      "desc": "The Peacock's compère and its mama both — a kathoey of a certain age and total command, in a headdress that arrived by its own truck. Twenty years on this stage; she has watched a hundred nervous farang husbands walk in braced and walk out fans."
-    },
-    {
       "id": "mot",
       "name": "Mot",
       "source": "NPCS",
@@ -179,7 +197,7 @@
       "venueKind": null,
       "emoji": "🧵",
       "th": "นิด",
-      "room": "buakhao_market",
+      "room": "night_bazaar",
       "tags": [],
       "desc": "Mid-thirties, upcountry-neat, working the fabric stalls with the practised eye of a woman who buys to sell. Two checked laundry bags of folded cotton already at her feet. Something in the way she reads the market — which vendors she wais, which she doesn't — says she worked a soi like this once, and left it on her own terms."
     },
@@ -192,7 +210,7 @@
       "venueKind": null,
       "emoji": "🥭",
       "th": "น้อยหน่า",
-      "room": "soi7_beach_end",
+      "room": "jomtien_soi_7_beach_end",
       "tags": [],
       "desc": "A drinks-cart vendor with a cooler of everything and opinions to match. A hand-lettered sign on the cart offers ฿5 per returned bottle."
     },
@@ -223,19 +241,6 @@
         "masseuse"
       ],
       "desc": "Fifty-odd, iron thumbs, reading glasses on a beaded chain. Pensri has run the front of this shop twenty years and can tell where you hurt before you sit down."
-    },
-    {
-      "id": "petch",
-      "name": "Petch",
-      "source": "NPCS",
-      "role": "story",
-      "sex": "f",
-      "venueKind": null,
-      "emoji": "💎",
-      "th": "เพชร",
-      "room": "peacock_cabaret",
-      "tags": [],
-      "desc": "The Peacock's young star, all cheekbones and ambition, between numbers and still catching her breath. She lip-syncs better than the record and knows it, and she is saving for a face the big-city stages will fight over."
     },
     {
       "id": "pete",
@@ -508,6 +513,19 @@
       "desc": "The madam of Soi Honey — sixties, gold everywhere, a voice like a till drawer. She owns all three beer bars on the lane and works them one night at a time, so the girls never quite know which bar mama is watching."
     },
     {
+      "id": "kinnaree",
+      "name": "Kinnaree",
+      "source": "NPCS",
+      "role": "mamasan",
+      "sex": "f",
+      "venueKind": "gents",
+      "emoji": "👑",
+      "th": null,
+      "room": "succubus",
+      "tags": [],
+      "desc": "The mamasan, and the owner's wife, and by a distance the most organised person in the building — fifties, hair up, reading glasses on a chain, a till roll in one hand. She named nothing after herself; her husband did that, and she has been quietly embarrassed about it since 1996. Runs a floor where nothing is ever explained twice."
+    },
+    {
       "id": "lawan",
       "name": "Lawan",
       "source": "NPCS",
@@ -521,6 +539,19 @@
         "bars"
       ],
       "desc": "The grande dame of Soi Diana — a former Crystal Palace headliner who hung up the heels and parlayed twenty years on the stage into four beer bars on the busiest drinking soi in town. Silk, jade, a gaze that prices you before you've sat down. She works a different one of her houses each night, and the girls behave accordingly."
+    },
+    {
+      "id": "mala",
+      "name": "Miss Mala",
+      "source": "NPCS",
+      "role": "mamasan",
+      "sex": "f",
+      "venueKind": null,
+      "emoji": "🦚",
+      "th": "มาลา",
+      "room": "peacock_cabaret",
+      "tags": [],
+      "desc": "The Peacock's compère and its mama both — a kathoey of a certain age and total command, in a headdress that arrived by its own truck. Twenty years on this stage; she has watched a hundred nervous farang husbands walk in braced and walk out fans."
     },
     {
       "id": "malai",
@@ -733,6 +764,19 @@
       "room": "kitten_corner",
       "tags": [],
       "desc": "Pretty in the soft, unstudied way that stops men mid-sentence, with a smile she gives away too easily for this business. New enough that the job hasn't finished teaching her its lessons yet."
+    },
+    {
+      "id": "baitoey",
+      "name": "Baitoey",
+      "source": "NPCS",
+      "role": "hostess",
+      "sex": "f",
+      "venueKind": "gogo",
+      "emoji": "🎤",
+      "th": "ใบเตย",
+      "room": "katoeys",
+      "tags": [],
+      "desc": "Long, lean and built for the stage, with an actual voice under the lip-sync and a habit of using it when the room has thinned out enough to deserve it. Gold everything tonight — hoops, chain, a dress that is mostly intention. Between shows she sits at the end of the rail with her heels off, entirely unglamorous, eating som tam out of a bag."
     },
     {
       "id": "bebe",
@@ -1088,6 +1132,32 @@
       "room": "golden_dragon",
       "tags": [],
       "desc": "Twenty-two and delighted about all of it — the music, the lights, the free drinks, the men who think she is magic. She is having the best night of her life. Again."
+    },
+    {
+      "id": "pancake",
+      "name": "Pancake",
+      "source": "NPCS",
+      "role": "hostess",
+      "sex": "f",
+      "venueKind": "gogo",
+      "emoji": "💋",
+      "th": "แพนเค้ก",
+      "room": "katoeys",
+      "tags": [],
+      "desc": "The one on the flyer, and she knows it. Six foot two before the heels, a waist that took surgery and discipline in that order, and a face assembled with the precision of someone who has been getting it exactly right since she was fifteen. She works the front of house because nobody sells the room better — she can read a man's nerve from the doorway and pitch herself accordingly, warm or wicked, in about a second and a half."
+    },
+    {
+      "id": "petch",
+      "name": "Petch",
+      "source": "NPCS",
+      "role": "hostess",
+      "sex": "f",
+      "venueKind": null,
+      "emoji": "💎",
+      "th": "เพชร",
+      "room": "peacock_cabaret",
+      "tags": [],
+      "desc": "The Peacock's young star, all cheekbones and ambition, between numbers and still catching her breath. She lip-syncs better than the record and knows it, and she is saving for a face the big-city stages will fight over."
     },
     {
       "id": "pia",

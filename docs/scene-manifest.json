@@ -2,10 +2,10 @@
   "generated": "2026-08-08",
   "note": "Every room in the game + its region, for the scene-art pipeline (docs/art-pipeline-spec.md). Derived from web/js/world.js — regenerate with scripts/gen-scene-manifest.mjs, do not hand-edit. `kind` is a generator heuristic for prompt-template selection, not game canon. `regionSlug` is produced by the same regex as web/js/scene.js `_sceneArt()`; art files are web/art/rooms/<id>.png with web/art/regions/<slug>.png as the fallback.",
   "counts": {
-    "rooms": 212,
+    "rooms": 215,
     "regions": 15,
     "byKind": {
-      "street": 87,
+      "street": 88,
       "massage": 17,
       "beer": 49,
       "shop": 2,
@@ -18,7 +18,7 @@
       "pub": 3,
       "soapy": 3,
       "hotel_room": 4,
-      "gents": 3,
+      "gents": 5,
       "soi6": 7,
       "hostbar": 1,
       "cabaret": 1,
@@ -192,18 +192,21 @@
       "name": "Pratumnak",
       "roomIds": [
         "buddha_hill",
+        "doghouse",
         "dongtan_rd_n",
+        "pratumnak_clubs",
         "pratumnak_hill_rd",
         "pratumnak_rd",
         "pratumnak_soi5",
+        "succubus",
         "thappraya_ext_m",
         "thappraya_ext_n",
         "thappraya_ext_s"
       ],
       "sampleDescs": [
+        "Halfway up, the walls stop being condominiums and start being something else. Two doors on this stretch, neither of them advertising: THE DOGHOUSE, down a ramp into the basement of a villa somebody remade for the purpose, its sign a small lit rectangle you would take for a dentist; and across the road SUCCUBUS, behind a hedge, with a porch light and a bell. No barkers, no flyer girls, nobody outside at all. Cars come up, cars go down, and the men who use these rooms park where they cannot be read from the road.",
         "Where the Main Strip's neon finally gives out and the road tips upward: the last few late-night noodle carts, then condo walls and the hill proper. The strip is back down to the south; the mouth of the Supertown drag alley opens to the west; the road climbs on north.",
-        "Where Soi 5 leaves the hill road and starts down toward the sea. Nothing up here is for you: condo walls with broken glass set into the top, a security box with a man asleep in it, and gates with intercoms that answer in Thai or not at all. The road tips west from here and keeps tipping — you can feel the gradient in your calves before you can see it. Between two walls there is one gap, and through it the whole bay, black and enormous, with Jomtien's lights strung along the far edge of it.",
-        "The main hill road between Jomtien and Pattaya proper — condos behind walls, sleeping soi dogs, and long stretches where the streetlights have given up. The Buddha Hill viewpoint is up a path to the west; Walking Street is on north."
+        "Where Soi 5 leaves the hill road and starts down toward the sea. Nothing up here is for you: condo walls with broken glass set into the top, a security box with a man asleep in it, and gates with intercoms that answer in Thai or not at all. The road tips west from here and keeps tipping — you can feel the gradient in your calves before you can see it. Between two walls there is one gap, and through it the whole bay, black and enormous, with Jomtien's lights strung along the far edge of it. East, further up, two of the walls have doors in them."
       ]
     },
     {
@@ -1703,6 +1706,25 @@
       "desc": "The big golden Buddha watches the bay with infinite patience. Below, the whole curve of Pattaya glitters — Walking Street burning neon-pink at the south end. Someone has left an offering of marigolds and a small bottle of red Fanta."
     },
     {
+      "id": "doghouse",
+      "name": "The Doghouse",
+      "bar": "The Doghouse",
+      "barType": "gents",
+      "region": "Pratumnak",
+      "regionSlug": "pratumnak",
+      "kind": "gents",
+      "dark": false,
+      "people": [
+        "Bill",
+        "Gof",
+        "Sunee",
+        "Tar",
+        "Tukky",
+        "Wassana"
+      ],
+      "desc": "Down the ramp and through a door heavier than it looks, into the basement of a villa: no windows anywhere, which is the whole design, and cold enough that your shirt goes stiff. Low leather, low light, a bar along the back with optics lit from beneath, and a dozen ladies who do not get up when you come in — they look, they decide, and one of them arrives. The Samson brothers' first room this side of Thappraya, and you can see the money in the joinery. Bill runs it, and Bill runs it properly."
+    },
+    {
       "id": "dongtan_rd_n",
       "name": "Dongtan Beach Road (North)",
       "bar": null,
@@ -1712,7 +1734,19 @@
       "kind": "street",
       "dark": true,
       "people": [],
-      "desc": "The top of Dongtan Beach Road, where it bends inland and starts up onto Pratumnak. The sand is a black rumour to the west; east the road climbs to the Soi 5 turn and, past that, the crest."
+      "desc": "The top of Dongtan Beach Road, where it bends inland and starts up onto Pratumnak. The sand is a black rumour to the west; east the road climbs to the Soi 5 turn and, past that, the crest. On the bend a 7-ELEVEN throws the only real light for half a kilometre — cold air, a cash machine, and two lads on a scooter parked across the front eating toasties. Everyone going up the hill or down it stops here, because there is nothing either way for a long time."
+    },
+    {
+      "id": "pratumnak_clubs",
+      "name": "Pratumnak Hill Road (the clubs)",
+      "bar": null,
+      "barType": null,
+      "region": "Pratumnak",
+      "regionSlug": "pratumnak",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "Halfway up, the walls stop being condominiums and start being something else. Two doors on this stretch, neither of them advertising: THE DOGHOUSE, down a ramp into the basement of a villa somebody remade for the purpose, its sign a small lit rectangle you would take for a dentist; and across the road SUCCUBUS, behind a hedge, with a porch light and a bell. No barkers, no flyer girls, nobody outside at all. Cars come up, cars go down, and the men who use these rooms park where they cannot be read from the road."
     },
     {
       "id": "pratumnak_hill_rd",
@@ -1748,7 +1782,26 @@
       "kind": "street",
       "dark": false,
       "people": [],
-      "desc": "Where Soi 5 leaves the hill road and starts down toward the sea. Nothing up here is for you: condo walls with broken glass set into the top, a security box with a man asleep in it, and gates with intercoms that answer in Thai or not at all. The road tips west from here and keeps tipping — you can feel the gradient in your calves before you can see it. Between two walls there is one gap, and through it the whole bay, black and enormous, with Jomtien's lights strung along the far edge of it."
+      "desc": "Where Soi 5 leaves the hill road and starts down toward the sea. Nothing up here is for you: condo walls with broken glass set into the top, a security box with a man asleep in it, and gates with intercoms that answer in Thai or not at all. The road tips west from here and keeps tipping — you can feel the gradient in your calves before you can see it. Between two walls there is one gap, and through it the whole bay, black and enormous, with Jomtien's lights strung along the far edge of it. East, further up, two of the walls have doors in them."
+    },
+    {
+      "id": "succubus",
+      "name": "Succubus",
+      "bar": "Succubus",
+      "barType": "gents",
+      "region": "Pratumnak",
+      "regionSlug": "pratumnak",
+      "kind": "gents",
+      "dark": false,
+      "people": [
+        "Bob",
+        "Chom",
+        "Kinnaree",
+        "Noot",
+        "Pranee",
+        "Sroy"
+      ],
+      "desc": "Past the hedge, up a porch, and into a front room somebody has been improving for twenty years: dark wood, a proper bar with a brass rail, a ceiling fan turning under the aircon because the owner likes the look of it, and framed photographs going all the way back — the same coast with nothing on it. Nobody's chain owns this one. Bob is behind the bar most nights and his wife runs the floor, and between them they have never once had to explain the house rules twice."
     },
     {
       "id": "thappraya_ext_m",
@@ -2900,6 +2953,7 @@
       "dark": false,
       "people": [
         "Ampai",
+        "Bill",
         "Min",
         "Tim"
       ],
@@ -2932,6 +2986,7 @@
       "dark": false,
       "people": [
         "Ampai",
+        "Bill",
         "June",
         "Milk"
       ],

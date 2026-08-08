@@ -22,13 +22,13 @@
   "Blue Dog"
  ],
  "counts": {
-  "geolocated": 212,
+  "geolocated": 215,
   "patrons": 18,
-  "people": 268,
-  "portraits": 286,
+  "people": 280,
+  "portraits": 298,
   "renders": 72,
   "thumbs": 72,
-  "venues": 212
+  "venues": 215
  },
  "frames": [
   "baimon_pic1",
@@ -425,6 +425,27 @@
    "room": "water_buffalo",
    "th": "เบสท์"
   },
+  "bill": {
+   "bars": [
+    "the_boardroom",
+    "velvet_club",
+    "doghouse"
+   ],
+   "desc": "Thirty-odd, English, in a pressed short-sleeve shirt with the cuffs turned once — younger than everyone he manages and entirely unbothered by it. He runs the Samson brothers' three quiet clubs on a rota, which means he is here one night in three and knows exactly what happened on the other two. Watches the room the way a man watches a kettle.",
+   "emoji": "🎩",
+   "manager": true,
+   "name": "Bill",
+   "personality": "dry",
+   "room": "doghouse"
+  },
+  "bob": {
+   "desc": "Seventy-six, American, behind his own bar on a stool worn to the shape of him. Reading glasses pushed up, a coffee going cold next to a beer he is not drinking, and forearms that were clearly once something. He first saw this coast in 1971, on seven days' leave, when it was a fishing village with a few huts rented to servicemen. He has been back more or less ever since.",
+   "emoji": "🎖️",
+   "manager": true,
+   "name": "Bob",
+   "personality": "warm",
+   "room": "succubus"
+  },
   "boom": {
    "desc": "Older than the go-go average, and unhurried about it — one of the Crystal Palace A-Go-Go girls, from Udon Thani. Google Translate is open before you finish the sentence.",
    "emoji": "🌼",
@@ -561,6 +582,15 @@
    "role": "hostess",
    "room": "crystal_palace",
    "th": "เชอรี่"
+  },
+  "chom": {
+   "desc": "Older than the go-go average, and unhurried about it — one of the Succubus girls, from Surin. Google Translate is open before you finish the sentence.",
+   "emoji": "🌼",
+   "filler": true,
+   "name": "Chom",
+   "role": "hostess",
+   "room": "succubus",
+   "th": "ชม"
   },
   "chompoo": {
    "desc": "The one on the little stage who dances like she's bored of being the most interesting person in the room, because she is. Cheekbones, a dancer's line, and an amused, appraising calm that reads a man in a glance and prices him in the next. Drops a German word now and then like she's forgotten you might not follow.",
@@ -839,6 +869,15 @@
    "role": "cashier",
    "room": "lucky_tiger",
    "th": "กิ่ง"
+  },
+  "gof": {
+   "desc": "Baby-faced, chewing gum, thumbing her phone under the bar — one of the The Doghouse girls, from Khon Kaen. She types more than she talks — and laughs at both.",
+   "emoji": "🌻",
+   "filler": true,
+   "name": "Gof",
+   "role": "hostess",
+   "room": "doghouse",
+   "th": "กอฟ"
   },
   "golf": {
    "desc": "Headset on one ear, {{phone}} in one hand, the till in perfect order — the cashier at Tequila Queen A-Go-Go, from Loei.",
@@ -1159,6 +1198,13 @@
    "role": "hostess",
    "room": "blue_dog",
    "th": "ขิง"
+  },
+  "kinnaree": {
+   "desc": "The mamasan, and the owner's wife, and by a distance the most organised person in the building — fifties, hair up, reading glasses on a chain, a till roll in one hand. She named nothing after herself; her husband did that, and she has been quietly embarrassed about it since 1996. Runs a floor where nothing is ever explained twice.",
+   "emoji": "👑",
+   "name": "Kinnaree",
+   "role": "mamasan",
+   "room": "succubus"
   },
   "kluay": {
    "desc": "Pretty and profoundly unbothered, one of Wilai's front-stool pair, mostly here in body. She'll take the drink. She will not be chasing it.",
@@ -1689,6 +1735,15 @@
    "room": "jasmine_garden",
    "th": "นุ่น"
   },
+  "noot": {
+   "desc": "Headset on one ear, {{phone}} in one hand, the till in perfect order — the cashier at Succubus, from Khon Kaen.",
+   "emoji": "🧾",
+   "filler": true,
+   "name": "Noot",
+   "role": "cashier",
+   "room": "succubus",
+   "th": "นุช"
+  },
   "nott": {
    "desc": "The Adonis Club's papasan — forties, immaculate, a silk shirt open one button past advisable and a smile that has closed a thousand deals. He runs his boys like a talent agent and reads a room's wallet before its face.",
    "emoji": "🕴️",
@@ -1982,6 +2037,15 @@
    "room": "kitten_corner",
    "th": "แพรวา"
   },
+  "pranee": {
+   "desc": "Round-faced and quick to laugh — one of the Succubus girls, from Mukdahan. She types more than she talks — and laughs at both.",
+   "emoji": "🌸",
+   "filler": true,
+   "name": "Pranee",
+   "role": "hostess",
+   "room": "succubus",
+   "th": "ปราณี"
+  },
   "preaw": {
    "desc": "Saeng's niece, brisk and unsentimental behind the Ruby Kiss till, running the money while Wilai runs the window — the two halves of the operation that never need to discuss it.",
    "emoji": "🧾",
@@ -2220,6 +2284,15 @@
    "room": "bay_watch",
    "th": "โสภา"
   },
+  "sroy": {
+   "desc": "Long hair, longer eyelashes, a practised pout — one of the Succubus girls, from Maha Sarakham. The {{phone}} never leaves her hand.",
+   "emoji": "💫",
+   "filler": true,
+   "name": "Sroy",
+   "role": "hostess",
+   "room": "succubus",
+   "th": "สร้อย"
+  },
   "sumalee": {
    "bars": [
     "lucky7",
@@ -2233,6 +2306,15 @@
    "role": "mamasan",
    "room": "lucky7",
    "th": "สุมาลี"
+  },
+  "sunee": {
+   "desc": "Warm to your face, ice at the till, and fluent in both — the mamasan of The Doghouse, from Khon Kaen. She started on the stage at seventeen and owns three of these stools now.",
+   "emoji": "👑",
+   "filler": true,
+   "name": "Sunee",
+   "role": "mamasan",
+   "room": "doghouse",
+   "th": "สุนีย์"
   },
   "taan": {
    "desc": "Small and sharp, and misses nothing — one of the Gold Rush Lounge girls, from Yasothon. Google Translate is open before you finish the sentence.",
@@ -2267,6 +2349,15 @@
    "role": "cashier",
    "room": "mama_yai",
    "th": "แตงโม"
+  },
+  "tar": {
+   "desc": "Older than the go-go average, and unhurried about it — one of the The Doghouse girls, from Chaiyaphum. Google Translate is open before you finish the sentence.",
+   "emoji": "🌼",
+   "filler": true,
+   "name": "Tar",
+   "role": "hostess",
+   "room": "doghouse",
+   "th": "ตาล"
   },
   "tarn": {
    "desc": "Long hair, longer eyelashes, a practised pout — one of the Sapphire Bar girls, from Maha Sarakham. The {{phone}} never leaves her hand.",
@@ -2351,6 +2442,15 @@
    "room": "night_heron",
    "th": "ตุ่ย"
   },
+  "tukky": {
+   "desc": "Headset on one ear, {{phone}} in one hand, the till in perfect order — the cashier at The Doghouse, from Khon Kaen.",
+   "emoji": "🧾",
+   "filler": true,
+   "name": "Tukky",
+   "role": "cashier",
+   "room": "doghouse",
+   "th": "ตุ๊กกี้"
+  },
   "tukta": {
    "desc": "A crooked, disarming grin — one of the Slutty Go-Go girls, from Buriram. She types more than she talks — and laughs at both.",
    "emoji": "💐",
@@ -2427,6 +2527,15 @@
    "role": "hostess",
    "room": "mama_yai",
    "th": "วันเพ็ญ"
+  },
+  "wassana": {
+   "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of the The Doghouse girls, from Loei. She types more than she talks — and laughs at both.",
+   "emoji": "🌺",
+   "filler": true,
+   "name": "Wassana",
+   "role": "hostess",
+   "room": "doghouse",
+   "th": "วาสนา"
   },
   "wayne": {
    "desc": "Australian, forty-five, a Gold Coast tan and a shirt with the top three buttons making a decision. Made real money in earthmoving back home and has decided, with the total confidence of a man who's never been conned, that a Soi 6 bar is 'basically the same game, mate — plant, cashflow, location.' The girls have his order memorised. So has the till.",
@@ -2569,6 +2678,8 @@
   "benz",
   "bert",
   "best",
+  "bill",
+  "bob",
   "boom",
   "bow",
   "bpaeng",
@@ -2584,6 +2695,7 @@
   "cartoon",
   "chaba",
   "cherry",
+  "chom",
   "chompoo",
   "chuck",
   "da",
@@ -2624,6 +2736,7 @@
   "gina",
   "ging",
   "glam",
+  "gof",
   "golf",
   "goong",
   "grace",
@@ -2662,6 +2775,7 @@
   "kesinee",
   "kesorn",
   "khing",
+  "kinnaree",
   "kluay",
   "kob",
   "koi",
@@ -2726,6 +2840,7 @@
   "nong",
   "nook",
   "noon",
+  "noot",
   "nott",
   "nu",
   "nubnab",
@@ -2761,6 +2876,7 @@
   "prae",
   "praew",
   "praewa",
+  "pranee",
   "preaw",
   "prik",
   "proud",
@@ -2793,12 +2909,15 @@
   "somsak",
   "somsri",
   "sopha",
+  "sroy",
   "sumalee",
+  "sunee",
   "superman",
   "taan",
   "tabtim",
   "tan",
   "tangmo",
+  "tar",
   "tarn",
   "terry",
   "tik",
@@ -2809,6 +2928,7 @@
   "toom",
   "toon",
   "tui",
+  "tukky",
   "tukta",
   "view",
   "wa",
@@ -2818,6 +2938,7 @@
   "wandee",
   "wanida",
   "wanpen",
+  "wassana",
   "wayne",
   "wilai",
   "wimon",
@@ -3401,6 +3522,16 @@
    "name": "Soi Diana (Second Road end)",
    "region": "Soi Diana"
   },
+  "doghouse": {
+   "bar": "The Doghouse",
+   "barType": "gents",
+   "geo": [
+    12.91333,
+    100.8643
+   ],
+   "name": "The Doghouse",
+   "region": "Pratumnak"
+  },
   "dollhouse": {
    "bar": "The Dollhouse",
    "barType": "beer",
@@ -3475,7 +3606,8 @@
     100.85815
    ],
    "name": "Dongtan Beach Road (North)",
-   "region": "Pratumnak"
+   "region": "Pratumnak",
+   "seven": true
   },
   "dongtan_rd_s": {
    "geo": [
@@ -4218,6 +4350,14 @@
    "name": "Poseidon Massage",
    "region": "Second Road"
   },
+  "pratumnak_clubs": {
+   "geo": [
+    12.91339,
+    100.86442
+   ],
+   "name": "Pratumnak Hill Road (the clubs)",
+   "region": "Pratumnak"
+  },
   "pratumnak_hill_rd": {
    "geo": [
     12.9144,
@@ -4596,6 +4736,16 @@
    "name": "The Stinky Pinky",
    "pool": true,
    "region": "Beach Road"
+  },
+  "succubus": {
+   "bar": "Succubus",
+   "barType": "gents",
+   "geo": [
+    12.91347,
+    100.86455
+   ],
+   "name": "Succubus",
+   "region": "Pratumnak"
   },
   "sukhumvit_crossing": {
    "geo": [

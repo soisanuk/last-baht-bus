@@ -596,14 +596,73 @@ const ROOMS = {
       "all. The road tips west from here and keeps tipping — you can feel the gradient " +
       "in your calves before you can see it. Between two walls there is one gap, and " +
       "through it the whole bay, black and enormous, with Jomtien's lights strung along " +
-      "the far edge of it.",
+      "the far edge of it. East, further up, two of the walls have doors in them.",
     revisit: [
       "Wall, wall, gate, wall. Somebody's air-conditioning unit dripping.",
       "A dog barks behind a gate, thinks better of it, and settles.",
       "The gap between the walls, the bay, and Jomtien laid out along the far side.",
       "Downhill from here. Your knees register it before you do.",
     ],
-    exits: { e: "pratumnak_hill_rd", w: "dongtan_rd_n" },
+    exits: { e: "pratumnak_clubs", w: "dongtan_rd_n" },
+  },
+  pratumnak_clubs: {
+    name: "Pratumnak Hill Road (the clubs)",
+    region: "Pratumnak",
+    // NOT dark, unlike the rest of this hill: two lit premises on one short
+    // stretch is the whole reason the stretch exists. (A dark room prints the
+    // darkness line instead of its desc, so it cannot carry a revisit pool.)
+    desc: "Halfway up, the walls stop being condominiums and start being something else. Two " +
+      "doors on this stretch, neither of them advertising: THE DOGHOUSE, down a ramp into " +
+      "the basement of a villa somebody remade for the purpose, its sign a small lit " +
+      "rectangle you would take for a dentist; and across the road SUCCUBUS, behind a " +
+      "hedge, with a porch light and a bell. No barkers, no flyer girls, nobody outside at " +
+      "all. Cars come up, cars go down, and the men who use these rooms park where they " +
+      "cannot be read from the road.",
+    revisit: [
+      "Two lit doors and a lot of wall. Nobody outside either of them, as usual.",
+      "A car comes up the hill, slows for a gate that isn't a gate, and carries on.",
+      "The Doghouse ramp, the Succubus hedge, and the hill breathing between them.",
+      "Quiet enough up here to hear the aircon plant behind the wall.",
+    ],
+    exits: { w: "pratumnak_soi5", e: "pratumnak_hill_rd" },
+    venues: ["doghouse", "succubus"],
+  },
+  doghouse: {
+    name: "The Doghouse",
+    bar: "The Doghouse", barType: "gents", outlet: true,
+    region: "Pratumnak",
+    desc: "Down the ramp and through a door heavier than it looks, into the basement of a " +
+      "villa: no windows anywhere, which is the whole design, and cold enough that your " +
+      "shirt goes stiff. Low leather, low light, a bar along the back with optics lit from " +
+      "beneath, and ladies who do not get up when you come in — they look, they " +
+      "decide, and one of them arrives. The Samson brothers' first room this side of " +
+      "Thappraya, and you can see the money in the joinery. Bill runs it, and Bill runs " +
+      "it properly.",
+    revisit: [
+      "Down the ramp again. The door shuts and the hill stops existing.",
+      "No windows, no clocks, no way to tell what o'clock it is out there. As intended.",
+      "The Doghouse takes you back — cold air, low leather, and somebody already deciding.",
+      "The optics glow up from under the bottles. Somebody laughs quietly at the far end.",
+    ],
+    exits: { out: "pratumnak_clubs" },
+  },
+  succubus: {
+    name: "Succubus",
+    bar: "Succubus", barType: "gents", outlet: true,
+    region: "Pratumnak",
+    desc: "Past the hedge, up a porch, and into a front room somebody has been improving for " +
+      "twenty years: dark wood, a proper bar with a brass rail, a ceiling fan turning under " +
+      "the aircon because the owner likes the look of it, and framed photographs going all " +
+      "the way back — the same coast with nothing on it. Nobody's chain owns this one. Bob " +
+      "is behind the bar most nights and his wife runs the floor, and between them they " +
+      "have never once had to explain the house rules twice.",
+    revisit: [
+      "Back through the hedge. The fan turns, the photographs watch, the ice bucket refills.",
+      "Succubus again — brass rail, dark wood, and somebody's whole life on the walls.",
+      "The porch light, the door, and the temperature dropping fifteen degrees at the step.",
+      "Somebody at the bar is telling Bob something and Bob is not hurrying him.",
+    ],
+    exits: { out: "pratumnak_clubs" },
   },
   pratumnak_hill_rd: {
     name: "Pratumnak Hill Road (crest)",
@@ -612,15 +671,19 @@ const ROOMS = {
     desc: "The saddle over the top of Pratumnak Hill, linking the two roads that climb it — the " +
       "Thappraya side to the east, the Dongtan Beach side to the west. Walls, viewpoints you can't " +
       "make out in the dark, and the sea breathing somewhere below on both sides.",
-    exits: { e: "thappraya_ext_n", w: "pratumnak_soi5", n: "pratumnak_rd" },
+    exits: { e: "thappraya_ext_n", w: "pratumnak_clubs", n: "pratumnak_rd" },
   },
   dongtan_rd_n: {
     name: "Dongtan Beach Road (North)",
     region: "Pratumnak",
     dark: true,
+    seven: true, atm: true,
     desc: "The top of Dongtan Beach Road, where it bends inland and starts up onto Pratumnak. " +
       "The sand is a black rumour to the west; east the road climbs to the Soi 5 turn and, " +
-      "past that, the crest.",
+      "past that, the crest. On the bend a 7-ELEVEN throws the only real light for half a " +
+      "kilometre — cold air, a cash machine, and two lads on a scooter parked across the " +
+      "front eating toasties. Everyone going up the hill or down it stops here, because " +
+      "there is nothing either way for a long time.",
     exits: { s: "dongtan_rd_m", e: "pratumnak_soi5", w: "dongtan_beach_n" },
   },
   dongtan_beach_s: {
@@ -6406,6 +6469,143 @@ const NPCS = {
           "The envelope after the temple, the boys never knew.\"" },
     ],
   },
+  // Bill answers a question Wimon's dialogue asked and never resolved: she draws a
+  // line between her side of the Samson business and "the quiet clubs, different
+  // manager". This is that manager. Three rooms on a bars[] rotation, so the
+  // Doghouse reads as the brothers' expansion off the Thappraya strip rather than
+  // a fourth identical box.
+  bill: {
+    name: "Bill", emoji: "🎩", personality: "dry",
+    room: "doghouse", bars: ["the_boardroom", "velvet_club", "doghouse"],
+    manager: true, // hired help, like Bert — NOT in NPC_ROLES, so lady-logic ignores him
+    desc: "Thirty-odd, English, in a pressed short-sleeve shirt with the cuffs turned once — " +
+      "younger than everyone he manages and entirely unbothered by it. He runs the Samson " +
+      "brothers' three quiet clubs on a rota, which means he is here one night in three " +
+      "and knows exactly what happened on the other two. Watches the room the way a man " +
+      "watches a kettle.",
+    dialogue: [
+      { text: "\"Evening.\" A nod, and a beer mat placed in front of you before you have " +
+          "decided anything. \"Bill. I run this one, and the two on Thappraya, which is " +
+          "why I look tired.\" The smile is quick and real. \"Cold in here, isn't it. " +
+          "That's deliberate. Nobody will bother you until you want bothering.\"" },
+      { topic: "will", text: "\"Bill.\" Pleasant, immediate, and with the flatness of a " +
+          "man who has said it four thousand times. \"Not Will. Bill.\" He lets that sit " +
+          "for exactly one beat, then the smile comes back. \"My father was a Will. We " +
+          "did not get on. What are you drinking?\"",
+        short: "\"Bill,\" he says, without looking up. \"Still Bill.\"" },
+      { topic: "samson", text: "\"The brothers own it, I run it.\" He squares a mat that " +
+          "did not need squaring. \"Best owners I've had, and I've had some. They pay on " +
+          "the day, they fix what I tell them is broken, and they have never once asked " +
+          "me to do something I'd have to think about afterwards.\" A shrug. \"You hear " +
+          "things about owners out here. I hear them too. Not these.\"" },
+      { topic: "doghouse", text: "\"This one's the newest, and it's mine from the paint " +
+          "up.\" A flicker of something that isn't quite pride. \"Basement of a villa. No " +
+          "windows — which sounds grim until you understand nobody who comes up this hill " +
+          "wants a window. Half my regulars live within a kilometre. The other half drive " +
+          "past three closer bars to get here.\"",
+        short: "\"Newest of the three, and the only one I got to build. No windows, by design.\"" },
+      { topic: "succubus", text: "\"Bob's place.\" No edge at all. \"People expect me to " +
+          "be rude about it and I'm not going to be. He was up here twenty years before " +
+          "the brothers had a baht, he built it himself, and his missus runs a better " +
+          "floor than mine.\" He considers. \"Different trade, really. They get the ones " +
+          "who want to talk. I get the ones who don't.\"" },
+      { topic: "girls", text: "\"They're staff, and I treat them like staff — rota, wages, " +
+          "somebody covers you if your kid's ill.\" He says it like it's dull, which is " +
+          "the point. \"You'll find nobody here works a room hard. If a lady sits with " +
+          "you it's because she chose your table over the other eleven, and I'd take that " +
+          "as the compliment it is.\"" },
+      { text: "\"Mm.\" Bill glances at the door, then back. \"Ask me a proper question " +
+          "and I'll give you a proper answer.\"" },
+    ],
+  },
+  // Bob came out on R&R and never really left — which is not backstory, it is
+  // literally why the town exists. Vietnam ended in 1975, so he cannot be younger
+  // than his mid-seventies; he is 76 and the arithmetic has to keep working.
+  bob: {
+    name: "Bob", emoji: "🎖️", personality: "warm",
+    room: "succubus",
+    manager: true, // owner-operator, but the same mechanic: he is staff, not a lady
+    desc: "Seventy-six, American, behind his own bar on a stool worn to the shape of him. " +
+      "Reading glasses pushed up, a coffee going cold next to a beer he is not drinking, " +
+      "and forearms that were clearly once something. He first saw this coast in 1971, " +
+      "on seven days' leave, when it was a fishing village with a few huts rented to " +
+      "servicemen. He has been back more or less ever since.",
+    dialogue: [
+      { text: "\"Well, hello.\" Bob puts the glasses down and comes off the stool to shake " +
+          "your hand, which nobody in this town does. \"Bob. This is mine and hers, mostly " +
+          "hers. Sit up here if you want company or over there if you don't — both are " +
+          "fine and neither one offends me.\" He is already reaching for a glass." },
+      { topic: "kinnaree", text: "\"That's my wife.\" He says it the way other men say " +
+          "their own name. \"Thirty-one years in March. She runs the floor, she runs the " +
+          "money, and she runs me — in that order and on merit.\" He glances across the " +
+          "room and doesn't hurry the glance. \"Bar's named for her. She thinks that's " +
+          "vulgar. She's probably right.\"" },
+      { topic: "vietnam", text: "A small nod, unsurprised — he has the look of a man who " +
+          "gets asked. \"Seventy-one and seventy-two. I was a mechanic; I fixed things " +
+          "that other people broke, and I was luckier than a lot of better men.\" That is " +
+          "the whole of it, delivered evenly, and he moves on without being asked to. " +
+          "\"Came here on R&R. Seven days. Sand, a few huts, one bar with a generator.\" " +
+          "He looks at his own room. \"You are standing in what that turned into.\"",
+        short: "\"Seventy-one and seventy-two, mechanic, luckier than better men. Came here on leave.\"" },
+      { topic: "pattaya", text: "\"I've watched it four times over.\" He counts it off " +
+          "without drama. \"Fishing village. R&R town. Then the boom, and everybody who " +
+          "could pour a beer got rich. Now this — the money's bigger and it belongs to " +
+          "further away.\" He shrugs. \"People tell me it's ruined. They've been telling " +
+          "me that since 1974. It just keeps being somewhere people come.\"" },
+      { topic: "succubus", text: "\"Built it in ninety-six, on the wrong side of the hill, " +
+          "which everyone told me was the mistake.\" A dry look. \"Turns out discretion " +
+          "has an address. We don't chase anybody, we don't run a tab you didn't agree " +
+          "to, and the price on the board is the price. Thirty years of that and you " +
+          "don't need a barker.\"" },
+      { topic: "bill", text: "\"The young Englishman up the road? He's all right.\" Genuine, " +
+          "and slightly amused. \"Came over the first week to introduce himself, which he " +
+          "did not have to do. Ran a tight room from day one.\" A beat. \"Don't call him " +
+          "Will. I did it once. Learned something about the English.\"" },
+      { topic: "doghouse", text: "\"Company money, and it shows — you could do surgery in " +
+          "there.\" No resentment in it. \"They'll take some of my trade and they're " +
+          "welcome to it. There's a kind of fella who wants a basement with no clocks, " +
+          "and a kind who wants somebody to remember his name. Not usually the same " +
+          "fella.\"" },
+      { text: "Bob turns his coffee cup a quarter-turn and waits, entirely content to. " +
+          "\"Go on.\"" },
+    ],
+  },
+  kinnaree: {
+    name: "Kinnaree", emoji: "👑",
+    room: "succubus",
+    desc: "The mamasan, and the owner's wife, and by a distance the most organised person " +
+      "in the building — fifties, hair up, reading glasses on a chain, a till roll in one " +
+      "hand. She named nothing after herself; her husband did that, and she has been " +
+      "quietly embarrassed about it since 1996. Runs a floor where nothing is ever " +
+      "explained twice.",
+    dialogue: [
+      { text: "\"Sawatdee kha.\" A small precise wai, and she is already reading you the " +
+          "way she reads the till roll. \"You sit where you like. Somebody come to you — " +
+          "nobody bother you before that, na. That is the rule here.\" A brief, real " +
+          "smile. \"My husband will talk your ear off. That is also the rule.\"" },
+      { topic: "bob", text: "\"He is a good man and a terrible businessman, so I do the " +
+          "money.\" Fond and completely unsentimental. \"Thirty-one year. He never learn " +
+          "Thai past the menu, he never remember which girl is which, but every one of " +
+          "them come to him when something is wrong at home.\" She shrugs. \"So. He is " +
+          "good at the part I am not.\"" },
+      { topic: "succubus", text: "\"He name it, not me.\" A look that has been giving that " +
+          "look for thirty years. \"I say — Bob, this is a demon that come in the night " +
+          "and take everything from a man. He say, yes, exactly, that is the joke.\" A " +
+          "very small laugh. \"Farang humour. Anyway, the sign is expensive. It stays.\"",
+        short: "\"He name it, not me. The sign is expensive, so it stays.\"" },
+      { topic: "girls", text: "\"Every girl here I know — the family, the trouble, who is " +
+          "sending how much home.\" Businesslike, no warmth lost in it. " +
+          "\"Here, nobody push. A lady sit with you because she want the company or she " +
+          "want the drink, and either one is honest. If somebody push you, you tell me " +
+          "and she is not here next week.\"" },
+      { topic: "doghouse", text: "\"New. Very cold, very dark, very...\" she searches for " +
+          "the word and picks a careful one \"...professional.\" A pause. \"The English " +
+          "boy come and introduce himself, and bring flowers for me, which is correct and " +
+          "which nobody teach him. So — they are fine. Competition is fine. Twenty year " +
+          "we have this hill to ourself and honestly it was a little boring.\"" },
+      { text: "\"Mm?\" Kinnaree does not stop counting. \"Ask me the real one, na.\"" },
+    ],
+  },
   ampai: {
     name: "Ampai", th: "อำไพ", emoji: "👑",
     room: "the_boardroom", bars: ["the_boardroom", "velvet_club"],
@@ -9359,6 +9559,7 @@ const CANON_HOSTESSES = [
 // (Ringing the bell a couple of times has been known to soften the rules.)
 
 const NPC_ROLES = {
+  kinnaree: "mamasan",
   pancake: "hostess", baitoey: "hostess",
   lek: "hostess", noi: "hostess", ping: "hostess", aom: "hostess",
   kai: "hostess", nook: "hostess", dew: "hostess",
@@ -9625,6 +9826,8 @@ const _FILLER_HOSTESSES = [
   ["Pinky","พิงกี้","cheeky_monkey"], ["Mona","โมนา","cheeky_monkey"],
   ["Gina","จีน่า","the_office"], ["Bpaeng","แป้ง","the_office"],
   ["Tim","ทิม","the_boardroom"], ["Min","มิน","the_boardroom"],
+  ["Tar","ตาล","doghouse"], ["Gof","กอฟ","doghouse"], ["Wassana","วาสนา","doghouse"],
+  ["Sroy","สร้อย","succubus"], ["Chom","ชม","succubus"], ["Pranee","ปราณี","succubus"],
   ["Milk","มิ้ลค์","velvet_club"], ["June","จูน","velvet_club"],
 ];
 
@@ -9775,6 +9978,7 @@ function _buildCashier(name, th, room) {
 // hostesses': every hostess venue gets both; the Queen Vic pub gets neither.
 const _FILLER_MAMAS = [
   ["Wanida","วนิดา","windmill"], ["Alisa","อลิสา","katoeys"],
+  ["Sunee","สุนีย์","doghouse"],
   ["Pen","เพ็ญ","blue_dog"], ["Muay","หมวย","rock_factory"], ["Lamai","ละมัย","stinky_bar"],
   ["Jeab","เจี๊ยบ","neon_paradise"], ["Da","ดา","club_mirage"], ["Rin","ริน","crystal_palace"],
   ["Kob","กบ","paradise_nights"], ["Koi","ก้อย","midnight_sun"], ["Ratana","รัตนา","lucky_tiger"],
@@ -9786,6 +9990,7 @@ const _FILLER_MAMAS = [
 ];
 const _FILLER_CASHIERS = [
   ["Nubnab","นับหนับ","windmill"], ["Farida","ฟาริดา","katoeys"],
+  ["Tukky","ตุ๊กกี้","doghouse"], ["Noot","นุช","succubus"],
   ["Golf","กอล์ฟ","tequila_queen"], ["Air","แอร์","blue_dog"], ["Apple","แอปเปิ้ล","rock_factory"],
   ["Cake","เค้ก","stinky_bar"], ["Care","แคร์","candy_bar_2"], ["Cartoon","การ์ตูน","neon_paradise"],
   ["Earn","เอิร์น","club_mirage"], ["Eye","อาย","crystal_palace"], ["Fai","ฝ้าย","paradise_nights"],
@@ -10237,6 +10442,9 @@ const ROOM_GEO = {
   thappraya_ext_m:  [12.90765, 100.86893],
   thappraya_ext_n:  [12.91354, 100.87064],
   pratumnak_soi5:   [12.91238, 100.86183],
+  pratumnak_clubs:  [12.91339, 100.86442],
+  doghouse:         [12.91333, 100.86430],
+  succubus:         [12.91347, 100.86455],
   pratumnak_hill_rd:[12.91440, 100.86700],
   dongtan_rd_n:     [12.90923, 100.85815],
   dongtan_rd_m:     [12.90586, 100.86098],

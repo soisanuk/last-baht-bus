@@ -128,7 +128,11 @@ const DE_CEILINGS = [
   // 355 → 324 on the Pratumnak Soi 5 turn. FELL, and not because anything got
   // translated — a node on the hill route redistributes where the walk spends
   // its steps. Tightened rather than left slack.
-  { mode: "vacation", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 324 },
+  // 324 → 333 for the two Pratumnak gentleman's clubs. Real debt, not
+  // reachability: two venues and three authored characters is a lot of new
+  // English. --delta reported 45 records. Off the Act One path (act1 held at
+  // 132), so they join the ranked backlog.
+  { mode: "vacation", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 333 },
   // act1 is the do-or-die opening — the wallet chain, the fail/reset screens, the
   // hint whispers. NEITHER other mode reaches it: soi6 force-sets act1Done, and
   // so does the soak's own vacation setup. It was unguarded until 2026-08-07, and
