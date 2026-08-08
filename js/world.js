@@ -322,7 +322,7 @@ const ROOMS = {
     exits: { w: "thappraya_w", e: "thappraya_e", n: "supertown_alley" },
     venues: ["hyper", "cheeky_monkey", "velvet_club"],
   },
-  thappraya_e: {
+  thappraya_e: { motosai: true,
     name: "Thappraya Rd — Main Strip (Second Road end)",
     region: "Thappraya",
     seven: true,
@@ -362,7 +362,7 @@ const ROOMS = {
       "<host> — all of it, whoever you are.)",
     exits: { out: "supertown_alley" },
   },
-  supertown_elbow: {
+  supertown_elbow: { motosai: true,
     name: "Supertown Complex (the elbow)",
     region: "Thappraya",
     desc: "The elbow of the L, where the alley turns and the drag bars cluster — the stage end. One " +
@@ -533,7 +533,7 @@ const ROOMS = {
   },
 
   // ─── Pratumnak Hill ───
-  pratumnak_rd: {
+  pratumnak_rd: { motosai: true,
     name: "Pratumnak Hill Road (to Pattaya)",
     region: "Pratumnak",
     dark: true,
@@ -899,7 +899,7 @@ const ROOMS = {
       "over a doorman and a fish tank.",
     exits: { s: "second_rd_c", n: "pattaya_klang", w: "smile_massage", e: "poseidon_soapy" },
   },
-  pattaya_klang: {
+  pattaya_klang: { motosai: true,
     name: "Central Pattaya Road (Pattaya Klang)",
     region: "Second Road",
     desc: "The big east-west artery, bisecting Beach Road, Second Road, and Soi Buakhao " +
@@ -909,7 +909,7 @@ const ROOMS = {
   },
 
   // ─── Myth Night ───
-  myth_night: {
+  myth_night: { motosai: true,
     name: "Myth Night Market",
     region: "Myth Night",
     liveMusic: true,
@@ -1026,7 +1026,7 @@ const ROOMS = {
   },
 
   // ─── Walking Street ───
-  ws_gate: {
+  ws_gate: { motosai: true,
     name: "Walking Street Gate",
     region: "Walking Street",
     seven: true,
@@ -1249,7 +1249,7 @@ const ROOMS = {
   },
 
   // ─── Tree Town ───
-  tt_entrance: {
+  tt_entrance: { motosai: true,
     atm: true,
     name: "Tree Town (Entrance Arch)",
     region: "Tree Town",
@@ -1389,7 +1389,7 @@ const ROOMS = {
   },
 
   // ─── Soi 6 ───
-  soi6_street: {
+  soi6_street: { motosai: true,
     name: "Soi 6 (West End)",
     atm: true,
     region: "Soi 6",
@@ -1685,7 +1685,7 @@ const ROOMS = {
   },
 
   // ─── LK Metro ───
-  lk_entrance: {
+  lk_entrance: { motosai: true,
     name: "LK Metro (Entrance)",
     region: "LK Metro",
     desc: "The alley mouth off Soi Buakhao — easy to walk past if you don't know it's there. " +
@@ -1725,7 +1725,7 @@ const ROOMS = {
       "if the match lets you.",
     exits: { out: "lk_main" },
   },
-  lk_bend: {
+  lk_bend: { motosai: true,
     name: "LK Metro (Corner)",
     region: "LK Metro",
     desc: "The corner where the alley turns south. LAS VEGAS GO-GO burns at the end of " +
@@ -1796,7 +1796,7 @@ const ROOMS = {
     motosai: true,
     exits: { e: "khao_talo_strip" },
   },
-  khao_talo: {
+  khao_talo: { motosai: true,
     name: "Soi Khao Talo",
     region: "Darkside",
     seven: true,
@@ -1932,7 +1932,7 @@ const ROOMS = {
   },
 
   // ─── Naklua ───
-  naklua_rd: {
+  naklua_rd: { motosai: true,
     name: "Naklua Road",
     atm: true,
     region: "Naklua",
@@ -2153,7 +2153,7 @@ const ROOMS = {
       "massage hums to the south, and the loudest of the beer bars is just north.",
     exits: { w: "second_rd_s", e: "soi_honey_e", n: "honey_trap", s: "honey_soapy" },
   },
-  soi_honey_e: {
+  soi_honey_e: { motosai: true,
     name: "Soi Honey (east end)",
     region: "Soi Honey",
     desc: "The Buakhao end of Soi Honey, where the lane spits you back out among the pharmacies " +
@@ -2204,7 +2204,7 @@ const ROOMS = {
   // Threads past the far arm of the LK Metro "L". KISS marks its Second Road
   // mouth; Areca Lodge sits along it; it spills out onto Buakhao at the 7-Eleven
   // corner, two doors up from Candy Bar.
-  diana_w: {
+  diana_w: { motosai: true,
     name: "Soi Diana (Second Road end)",
     region: "Soi Diana",
     desc: "The Second Road mouth of Soi Diana, a long strip of open-fronted beer bars one block " +
