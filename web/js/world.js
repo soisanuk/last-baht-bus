@@ -343,7 +343,8 @@ const ROOMS = {
       "throws a guitar solo out its open front — the freelancers' favourite, and loud about it. " +
       "Another 7-Eleven glows across the intersection. One last beer bar and a massage shop see out " +
       "the strip before the traffic of Second Road takes over.",
-    exits: { w: "thappraya_mid", e: "jomtien_2nd_n", up: "thappraya_ext_s" },
+    exits: { w: "thappraya_mid", e: "jomtien_2nd_n", n: "thappraya_ext_s",
+             up: "thappraya_ext_s" },
     venues: ["take_care_me", "the_office", "thappraya_massage"],
   },
   supertown_alley: {
@@ -1062,7 +1063,7 @@ const ROOMS = {
     desc: "Mid-Second-Road: baht buses in convoy, pharmacies, and the constant churn " +
       "between the mall's back doors to the west and the fairy-lit mouth of MYTH " +
       "NIGHT market to the east.",
-    exits: { s: "second_rd_myth", n: "second_rd_soi8", w: "central_mall", diana: "diana_w",
+    exits: { s: "second_rd_myth", n: "second_rd_soi8", w: "central_mall",
              soi9: "pattaya_soi_9" },
   },
   // Second Road's Soi Diana mouth. Until now the whole road was three rooms and
@@ -1115,7 +1116,7 @@ const ROOMS = {
       "from the west side, and opposite, four floors of blue neon spell POSEIDON MASSAGE " +
       "over a doorman and a fish tank.",
     exits: { s: "second_rd_soi8", n: "pattaya_klang", w: "pattaya_soi_7", e: "poseidon_soapy",
-             spa: "smile_massage", soi8: "pattaya_soi_8" },
+             spa: "smile_massage" },
   },
   pattaya_klang: { motosai: true, busStop: "secondrd",
     name: "Central Pattaya Road (Pattaya Klang)",

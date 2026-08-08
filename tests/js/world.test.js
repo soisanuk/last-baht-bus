@@ -238,3 +238,36 @@ test("no character name is silently written all-caps in their OWN room's desc (k
     }
   }
 });
+
+// ── no one-way street-scale exits ───────────────────────────────────────────
+// When a soi gets its own junction room, the pre-junction shortcut into it has
+// to go, and twice in one day it didn't: second_rd_n kept a `soi8:` into Soi 8
+// after second_rd_soi8 existed, and second_rd_c kept a `diana:` into Soi Diana
+// from 489 m away. Both were one-way — you entered the soi from the wrong
+// block and came back out somewhere else entirely — and both were INVISIBLE on
+// the KML, because gen-kml only draws cardinal exits. Nothing caught them.
+//
+// The rule: if two GEOLOCATED rooms are a street apart (>150 m) and one links
+// to the other, the other must link back somehow — by any exit name, in either
+// direction. Doors into venues (in/out) are exempt, and so is anything under
+// 150 m, which is a doorway rather than a street.
+//
+// This does NOT require reciprocal COMPASS words. Tree Town's Back Lane is
+// deliberately non-reciprocal (see the ROOM_GEO header) and passes, because a
+// way back exists even though it isn't the mirrored direction.
+test("no one-way street-scale exit: a soi's old bypass must die when it gets a junction", () => {
+  const m = (a, b) => Math.hypot((b[0] - a[0]) * 111320, (b[1] - a[1]) * 108501);
+  const oneWay = [];
+  for (const [id, r] of Object.entries(ROOMS)) {
+    if (!ROOM_GEO[id]) continue;
+    for (const [dir, to] of Object.entries(r.exits || {})) {
+      if (!ROOM_GEO[to] || dir === "in" || dir === "out") continue;
+      if (m(ROOM_GEO[id], ROOM_GEO[to]) < 150) continue;
+      if (Object.values(ROOMS[to].exits || {}).includes(id)) continue;
+      oneWay.push(`${id} -${dir}-> ${to} (${m(ROOM_GEO[id], ROOM_GEO[to]).toFixed(0)}m, no way back)`);
+    }
+  }
+  assert.deepEqual(oneWay, [],
+    "a street-scale exit with no return — usually a shortcut left behind when the " +
+    "destination got its own junction room:\n  " + oneWay.join("\n  "));
+});

@@ -3510,8 +3510,13 @@ test("Soi Honey: reachable off Second Road, three beer bars, one rotating mama",
 });
 
 test("Soi Diana: threads Second Rd to Buakhao past LK Metro, four beer bars, KISS, Areca", () => {
-  // through-soi: Second Rd (diana key) → the three segments → Buakhao's 7/11 corner
-  assert.equal(ROOMS.second_rd_c.exits.diana, "diana_w");
+  // through-soi: Second Rd → the three segments → Buakhao's 7/11 corner.
+  // The soi hangs off its OWN Second Road junction (46 m away), not off
+  // second_rd_c via a `diana:` key from 489 m up the road — that was the
+  // pre-junction shortcut, it never had a way back, and it outlived the
+  // junction that replaced it. See the one-way-exit invariant in world.test.js.
+  assert.equal(ROOMS.second_rd_diana.exits.e, "diana_w");
+  assert.equal(ROOMS.second_rd_c.exits.diana, undefined, "the old bypass is gone");
   assert.equal(ROOMS.diana_w.exits.e, "diana_mid");
   assert.equal(ROOMS.diana_mid.exits.e, "diana_e");
   assert.equal(ROOMS.diana_e.exits.e, "buakhao_n");
