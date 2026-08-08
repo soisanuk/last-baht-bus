@@ -22,13 +22,13 @@
   "Blue Dog"
  ],
  "counts": {
-  "geolocated": 195,
+  "geolocated": 196,
   "patrons": 18,
   "people": 268,
   "portraits": 286,
   "renders": 72,
   "thumbs": 72,
-  "venues": 195
+  "venues": 196
  },
  "frames": [
   "baimon_pic1",
@@ -4082,6 +4082,14 @@
    ],
    "name": "Soi 7",
    "region": "Beach Road"
+  },
+  "pattaya_tai": {
+   "geo": [
+    12.92633,
+    100.87546
+   ],
+   "name": "South Pattaya Road (Pattaya Tai)",
+   "region": "Walking Street"
   },
   "peacock_cabaret": {
    "bar": "The Peacock Cabaret",

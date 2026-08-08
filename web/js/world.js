@@ -553,7 +553,7 @@ const ROOMS = {
     desc: "The main hill road between Jomtien and Pattaya proper — condos behind walls, " +
       "sleeping soi dogs, and long stretches where the streetlights have given up. " +
       "The Buddha Hill viewpoint is up a path to the west; Walking Street is on north.",
-    exits: { n: "ws_gate", w: "buddha_hill", e: "second_rd_s",
+    exits: { n: "pattaya_tai", w: "buddha_hill", e: "second_rd_s",
              soi5: "pratumnak_hill_rd" },
   },
 
@@ -905,7 +905,7 @@ const ROOMS = {
     desc: "The working road running parallel between Beach Road and Soi Buakhao — less " +
       "neon, more motorbikes, the town with its makeup half off. It climbs south " +
       "onto the north shoulder of Pratumnak Hill, toward Jomtien beyond.",
-    exits: { w: "beach_rd_s", e: "buakhao_s", n: "second_rd_diana", s: "pratumnak_rd", spa: "second_thai" },
+    exits: { w: "beach_rd_s", e: "buakhao_s", n: "second_rd_diana", s: "pattaya_tai", spa: "second_thai" },
   },
   second_rd_c: {
     name: "Second Road (Central)",
@@ -1191,7 +1191,7 @@ const ROOMS = {
       "is not visible from the gate, but you'll feel it by the time you reach the other end. " +
       "Just east, RUEAN SABAI THAI MASSAGE has a row of foot chairs out for the walking " +
       "wounded.",
-    exits: { s: "ws_north", n: "beach_rd_s", w: "pratumnak_rd", e: "thai_massage" },
+    exits: { s: "ws_north", n: "beach_rd_s", e: "pattaya_tai", spa: "thai_massage" },
   },
   ws_north: {
     atm: true,
@@ -1343,6 +1343,25 @@ const ROOMS = {
       "Katoey's R Us, running at a pitch the rest of the soi cannot reach.",
     ],
     exits: { out: "soi_diamond" },
+  },
+  pattaya_tai: {
+    motosai: true,
+    name: "South Pattaya Road (Pattaya Tai)",
+    region: "Walking Street",
+    desc: "The junction at the bottom of everything. South Pattaya Road comes down from " +
+      "the east and meets Second Road here, a hundred metres short of the Walking " +
+      "Street arch, and at two in the morning it is the busiest crossroads in the " +
+      "city — every songthaew in the south end circling it, piwins stacked three " +
+      "deep on the corner, and a slow river of people who have finished with the " +
+      "strip and not yet decided what happens next. Pratumnak Hill goes up and away " +
+      "to the south. Somebody is selling grilled squid to a queue.",
+    revisit: [
+      "The crossroads does its thing: everybody moving, nobody quite leaving.",
+      "A songthaew crawls the junction with its driver leaning out, naming prices.",
+      "The squid man has a queue. The squid man always has a queue.",
+      "Two piwins settle an argument about whose fare you are before you have spoken.",
+    ],
+    exits: { w: "ws_gate", e: "second_rd_s", s: "pratumnak_rd" },
   },
   crystal_palace: {
     name: "Crystal Palace A-Go-Go",
@@ -9896,6 +9915,7 @@ const ROOM_GEO = {
   buddha_hill:      [12.9204, 100.86677],
   // Walking Street (the gate is the north end; "ws_south" is the DEEP end)
   ws_gate:          [12.92745, 100.87469],
+  pattaya_tai:      [12.92633, 100.87546],
   thai_massage:     [12.92731, 100.87496],
   ws_north:         [12.92616, 100.87269],
   katoeys:           [12.92614, 100.87397],
