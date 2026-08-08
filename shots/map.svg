@@ -103,7 +103,7 @@
 <line x1="271.6" y1="1203.6" x2="282.1" y2="1196.4" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="282.1" y1="1196.4" x2="311.3" y2="1122.0" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="249.5" y1="1237.4" x2="166.0" y2="1165.2" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
-<line x1="332.9" y1="805.9" x2="457.6" y2="673.0" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
+<line x1="332.9" y1="805.9" x2="478.4" y2="695.0" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="332.9" y1="805.9" x2="243.8" y2="811.4" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="332.9" y1="805.9" x2="623.7" y2="623.1" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="332.9" y1="805.9" x2="250.0" y2="929.2" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
@@ -136,6 +136,7 @@
 <line x1="677.1" y1="505.4" x2="729.3" y2="370.1" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="623.7" y1="623.1" x2="601.5" y2="723.1" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="623.7" y1="623.1" x2="656.1" y2="602.5" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
+<line x1="623.7" y1="623.1" x2="478.4" y2="695.0" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="623.7" y1="623.1" x2="629.9" y2="620.2" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="737.6" y1="538.3" x2="656.1" y2="602.5" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="737.6" y1="538.3" x2="757.6" y2="517.1" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
@@ -164,6 +165,7 @@
 <line x1="729.3" y1="574.5" x2="726.0" y2="577.0" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="729.3" y1="574.5" x2="731.4" y2="578.4" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="457.6" y1="673.0" x2="403.6" y2="698.3" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
+<line x1="457.6" y1="673.0" x2="478.4" y2="695.0" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="457.6" y1="673.0" x2="464.9" y2="675.8" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="403.6" y1="698.3" x2="335.9" y2="719.5" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="403.6" y1="698.3" x2="396.6" y2="698.3" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
@@ -390,6 +392,7 @@
 <circle cx="428.2" cy="701.9" r="9" fill="none" stroke="#ff1493" opacity="0.35"/>
 <circle cx="438.2" cy="698.7" r="5" fill="#ff1493" opacity="0.95"><title>Katoey's R Us</title></circle>
 <circle cx="438.2" cy="698.7" r="9" fill="none" stroke="#ff1493" opacity="0.35"/>
+<circle cx="478.4" cy="695.0" r="2.6" fill="#ff1493" opacity="0.8"/>
 <circle cx="328.8" cy="719.5" r="5" fill="#ff1493" opacity="0.95"><title>Crystal Palace A-Go-Go</title></circle>
 <circle cx="328.8" cy="719.5" r="9" fill="none" stroke="#ff1493" opacity="0.35"/>
 <circle cx="342.9" cy="719.5" r="5" fill="#ff1493" opacity="0.95"><title>Paradise Nights Club</title></circle>

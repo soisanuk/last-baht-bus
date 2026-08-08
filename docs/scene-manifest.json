@@ -2,10 +2,10 @@
   "generated": "2026-08-08",
   "note": "Every room in the game + its region, for the scene-art pipeline (docs/art-pipeline-spec.md). Derived from web/js/world.js — regenerate with scripts/gen-scene-manifest.mjs, do not hand-edit. `kind` is a generator heuristic for prompt-template selection, not game canon. `regionSlug` is produced by the same regex as web/js/scene.js `_sceneArt()`; art files are web/art/rooms/<id>.png with web/art/regions/<slug>.png as the fallback.",
   "counts": {
-    "rooms": 195,
+    "rooms": 196,
     "regions": 15,
     "byKind": {
-      "street": 70,
+      "street": 71,
       "massage": 17,
       "beer": 49,
       "shop": 2,
@@ -371,6 +371,7 @@
         "midnight_sun",
         "neon_paradise",
         "paradise_nights",
+        "pattaya_tai",
         "soi_diamond",
         "thai_massage",
         "windmill",
@@ -3039,6 +3040,18 @@
         "Ping"
       ],
       "desc": "Velvet rope, wristbands, drinks that cost like a departure lounge. The floor heaves — tourists, freelancers working the margins, bar girls two hours past their shift in trainers and someone else's jacket. Ping is everywhere at once. The bass physically shortens the room."
+    },
+    {
+      "id": "pattaya_tai",
+      "name": "South Pattaya Road (Pattaya Tai)",
+      "bar": null,
+      "barType": null,
+      "region": "Walking Street",
+      "regionSlug": "walking-street",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "The junction at the bottom of everything. South Pattaya Road comes down from the east and meets Second Road here, a hundred metres short of the Walking Street arch, and at two in the morning it is the busiest crossroads in the city — every songthaew in the south end circling it, piwins stacked three deep on the corner, and a slow river of people who have finished with the strip and not yet decided what happens next. Pratumnak Hill goes up and away to the south. Somebody is selling grilled squid to a queue."
     },
     {
       "id": "soi_diamond",
