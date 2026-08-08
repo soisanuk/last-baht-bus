@@ -879,7 +879,7 @@ const ROOMS = {
     desc: "The working road running parallel between Beach Road and Soi Buakhao — less " +
       "neon, more motorbikes, the town with its makeup half off. It climbs south " +
       "onto the north shoulder of Pratumnak Hill, toward Jomtien beyond.",
-    exits: { w: "beach_rd_s", e: "buakhao_s", n: "second_rd_c", s: "pratumnak_rd", spa: "second_thai", honey: "soi_honey_w" },
+    exits: { w: "beach_rd_s", e: "buakhao_s", n: "second_rd_diana", s: "pratumnak_rd", spa: "second_thai" },
   },
   second_rd_c: {
     name: "Second Road (Central)",
@@ -887,7 +887,44 @@ const ROOMS = {
     desc: "Mid-Second-Road: baht buses in convoy, pharmacies, and the constant churn " +
       "between the mall's back doors to the west and the fairy-lit mouth of MYTH " +
       "NIGHT market to the east.",
-    exits: { s: "second_rd_s", n: "second_rd_n", w: "central_mall", e: "myth_night", diana: "diana_w" },
+    exits: { s: "second_rd_diana", n: "second_rd_n", w: "central_mall", diana: "diana_w" },
+  },
+  // Second Road's Soi Diana mouth. Until now the whole road was three rooms and
+  // this junction had none, which left Soi Diana, Soi Honey and Myth Night all
+  // pointing at whichever node happened to be nearest. It is also the first
+  // 7-Eleven ON Second Road — the only nightlife spine that had neither shop
+  // nor cash machine anywhere along it.
+  second_rd_diana: {
+    motosai: true,
+    seven: true,
+    atm: true,
+    name: "Second Road (Soi Diana)",
+    region: "Second Road",
+    desc: "The mouth of Soi Diana, and Second Road doing what Second Road does: four " +
+      "lanes of baht buses running nose to tail, a permanent shoal of motorbikes in " +
+      "the gutter lane, and pavement so narrow that walking it is a negotiation. " +
+      "The go-go neon starts about twenty metres up the soi and doesn't stop until " +
+      "Buakhao. On this corner: a 7-Eleven with a cash machine, a knot of piwins " +
+      "who have claimed the shade of its sign, and a girl on the back of a bike " +
+      "checking her lipstick in a wing mirror at a red light.",
+    revisit: [
+      "The lights change. Nothing much happens, then everything does at once.",
+      "A baht bus pulls in, three people get off, eleven decide not to get on.",
+      "Somebody's just bought a toastie and is eating it leaning on the 7-Eleven " +
+        "window, watching the soi like it's television.",
+      "Two piwins argue amiably about a fare neither of them is being offered.",
+    ],
+    exits: { n: "second_rd_c", s: "second_rd_s", e: "diana_w", spa: "diana_oil", honey: "soi_honey_w" },
+  },
+  diana_oil: {
+    name: "Bamboo Oil Massage",
+    bar: "Bamboo Oil Massage",
+    region: "Second Road",
+    massage: "oil",
+    desc: "Pink strip light, a beaded curtain, and three girls on plastic stools out " +
+      "front who greet every passing farang with the same unhurried hello. Inside " +
+      "it is cold, dim and clean, and the traffic on Second Road becomes a rumour.",
+    exits: { out: "second_rd_diana" },
   },
   second_rd_n: {
     name: "Second Road (North)",
@@ -905,7 +942,7 @@ const ROOMS = {
     desc: "The big east-west artery, bisecting Beach Road, Second Road, and Soi Buakhao " +
       "in one straight shot from the sea to Sukhumvit. Baht buses, banks, gold shops, " +
       "and a river of traffic that never quite jams and never quite flows.",
-    exits: { w: "beach_rd_n", s: "second_rd_n", e: "buakhao_n" },
+    exits: { w: "beach_rd_c", s: "second_rd_n", e: "buakhao_klang" },
   },
 
   // ─── Myth Night ───
@@ -919,7 +956,7 @@ const ROOMS = {
       "double Chang prices. CANDY BAR 2's rose-pink sign is unmistakably the same " +
       "pink as the original. North, a LIVE-STAGE YARD throws sound over the roofs; " +
       "south, the CONTAINER ROWS glow like a docked ship someone plugged in.",
-    exits: { w: "second_rd_c", e: "buakhao_n", in: "candy_bar_2", n: "myth_stage", s: "myth_rows" },
+    exits: { w: "second_rd_diana", e: "buakhao_myth", in: "candy_bar_2", n: "myth_stage", s: "myth_rows" },
   },
   myth_stage: {
     name: "Myth Night — Live-Stage Yard",
@@ -1146,6 +1183,97 @@ const ROOMS = {
   },
 
   // ─── Soi Buakhao ───
+  // Soi Buakhao runs Pattaya Klang down to Pattaya Tai, and for years the game
+  // had three rooms for the whole of it. These two open the northern half, where
+  // the real junctions are: Klang at the top, then Soi Made In Thailand where
+  // Myth Night runs west and the Tree Town arch stands east.
+  buakhao_klang: {
+    motosai: true,
+    seven: true,
+    atm: true,
+    name: "Soi Buakhao (Klang End)",
+    region: "Soi Buakhao",
+    desc: "Where the soi gives up and hands you to Central Pattaya Road. The traffic " +
+      "arrives here to die: two baht buses nose to tail with nowhere to go, a third " +
+      "wedged across the mouth of the junction while its driver leans out and " +
+      "negotiates with nobody in particular. The motorbikes don't wait. They come " +
+      "through the gaps in a steady braided stream — a girl side-saddle in six-inch " +
+      "heels holding her hair down with one hand, a punter on the back of another " +
+      "with his knees out like a man being carried to somewhere he didn't choose. " +
+      "A 7-Eleven throws cold white light across the whole slow mess, and the piwins " +
+      "at the corner watch it the way farmers watch weather.",
+    revisit: [
+      "The junction has rearranged itself and changed nothing. Different buses, " +
+        "same standstill; the bikes still find the holes.",
+      "A baht bus driver has switched his engine off, which on Buakhao is a kind of " +
+        "surrender. The bikes stream past him on both sides.",
+      "Somebody's horn goes and goes and achieves precisely what horns achieve here.",
+      "Two piwins are eating noodles off the seat of a parked bike, unhurried, " +
+        "watching the traffic fail to move.",
+    ],
+    exits: { n: "pattaya_klang", s: "buakhao_myth", spa: "klang_massage" },
+  },
+  buakhao_myth: {
+    motosai: true,
+    name: "Soi Buakhao (Made in Thailand)",
+    region: "Soi Buakhao",
+    desc: "The middle of the artery, and the busiest crossing on it. Soi Made In " +
+      "Thailand opens west — the night plaza, and past it the lane becomes Soi Myth " +
+      "Night and runs on to Second Road. East, the TREE TOWN arch is doing its " +
+      "fairy-lit best to look like an entrance to somewhere. Between the two, the " +
+      "soi itself is barely moving: a baht bus at walking pace with four people " +
+      "hanging off the back step, motorbikes threading the gap between it and the " +
+      "parked cars, and everyone on the pavement stepping around a plastic table " +
+      "that has been there long enough to count as architecture.",
+    revisit: [
+      "A bike goes through the gap between the baht bus and the kerb with maybe a " +
+        "hand's width to spare, and nobody watching thinks anything of it.",
+      "The plastic table has acquired two more chairs and a card game.",
+      "Somebody's shopping bag splits at the arch. The soi flows round it.",
+      "A baht bus stops dead to let a girl off, and forty people behind it wait.",
+    ],
+    exits: { n: "buakhao_klang", s: "buakhao_tt", w: "myth_night", spa: "myth_massage" },
+  },
+  klang_massage: {
+    name: "Klang Corner Massage",
+    bar: "Klang Corner Massage",
+    region: "Soi Buakhao",
+    massage: "thai",
+    desc: "A narrow shopfront wedged between a laundry and a shuttered {{phone}} repair " +
+      "stall, close enough to the junction that the traffic noise comes through the " +
+      "wall. Four mats, a fan on a stand, and a lady who has been doing this for " +
+      "twenty years and can tell from your walk which shoulder is the problem.",
+    exits: { out: "buakhao_klang" },
+  },
+  myth_massage: {
+    name: "Plaza Thai Massage",
+    bar: "Plaza Thai Massage",
+    region: "Soi Buakhao",
+    massage: "thai",
+    desc: "Right on the corner of the plaza, doors open to the soi so the whole " +
+      "street can watch a row of farang being folded in half. Nobody minds. There " +
+      "is a hand-lettered price list, a stack of loose cotton trousers, and a kettle " +
+      "that never quite goes off the boil.",
+    exits: { out: "buakhao_myth" },
+  },
+  buakhao_tt: {
+    motosai: true,
+    name: "Soi Buakhao (Tree Town Arch)",
+    region: "Soi Buakhao",
+    desc: "The TREE TOWN arch stands west off the soi, strung with fairy lights and " +
+      "swallowing tourists at a steady rate. Out here the traffic has thickened to " +
+      "a crawl — a baht bus stopped dead with its back step crowded, another behind " +
+      "it, and the bikes going round the pair of them on whichever side has opened " +
+      "up. Two girls on the back of one wave at somebody they know outside the arch. " +
+      "The pavement is a single file of people going the other way.",
+    revisit: [
+      "The arch has swallowed another four, and returned three of somebody else’s.",
+      "A baht bus has given up entirely. Its driver is having a cigarette on the step.",
+      "Bikes, bikes, a gap, then more bikes. You could wait all night for a real one.",
+      "Somebody comes out of Tree Town walking carefully and smiling at nothing.",
+    ],
+    exits: { n: "buakhao_myth", s: "buakhao_n", w: "tt_entrance" },
+  },
   buakhao_n: {
     name: "Soi Buakhao (North)",
     region: "Soi Buakhao",
@@ -1155,16 +1283,19 @@ const ROOMS = {
       "'Hotel California' and somehow getting away with it. LUCKY TIGER BAR is just east. " +
       "The market sprawl is south. A small handwritten LK METRO arrow on a wall points " +
       "down an alley — easy to miss, worth finding. Soi Diana opens off the 7-Eleven on " +
-      "the corner here, its go-go neon running away west; two doors south toward the " +
-      "market, Candy Bar's rose-pink sign is close enough to read.",
+      "the corner here, its go-go neon running away west. A few doors down the quiet " +
+      "side, CANDY BAR's rose-pink sign keeps its own hours — far enough off the main " +
+      "drag that the soi forgets about it until about three in the morning, which is " +
+      "roughly when it fills up.",
     reads: {
       sign: "The LK METRO arrow: black marker on a scrap of board wired to the wall, pointing " +
         "down an alley that promises nothing. LK Metro — three lanes of go-go and short-time " +
         "rooms named, like half of Pattaya, after the hotel it grew up around. The arrow knows " +
         "exactly what it's selling. It just won't say so out loud.",
     },
-    exits: { w: "myth_night", n: "pattaya_klang", s: "buakhao_market", e: "lucky_tiger",
-             in: "rock_factory", alley: "lk_entrance", hotel: "metropole_room", diana: "diana_e" },
+    exits: { n: "buakhao_tt", s: "buakhao_market", e: "lucky_tiger",
+             in: "rock_factory", alley: "lk_entrance", hotel: "metropole_room", diana: "diana_e",
+             honey: "soi_honey_e", candy: "candy_bar" },
   },
   buakhao_market: {
     atm: true,
@@ -1172,9 +1303,9 @@ const ROOMS = {
     region: "Soi Buakhao",
     desc: "Tarps, fans, fruit pyramids, and a man forever restacking ice crates behind a " +
       "som tam cart. The smell of papaya salad could pull you here from two sois away. " +
-      "CANDY BAR's rose-pink sign glows just south; SILK ROSE and JASMINE GARDEN share " +
-      "the block east.",
-    exits: { n: "buakhao_n", s: "buakhao_s", w: "candy_bar", e: "silk_rose", in: "candy_bar", spa: "buakhao_oil" },
+      "SILK ROSE shares the block east, and a pink-lit shopfront a few doors down " +
+      "promises the oil is warm.",
+    exits: { n: "buakhao_n", s: "buakhao_s", e: "silk_rose", spa: "buakhao_oil" },
   },
   buakhao_s: {
     name: "Soi Buakhao (South)",
@@ -1183,7 +1314,7 @@ const ROOMS = {
       "pavement. The Tree Town arch is east — a complex that eats tourists and spits out " +
       "poorer, happier ones. A motosai stand waits by the corner, engines ticking.",
     motosai: true,
-    exits: { n: "buakhao_market", w: "second_rd_s", e: "tt_entrance", s: "jasmine_garden", in: "jasmine_garden", honey: "soi_honey_e" },
+    exits: { n: "buakhao_market", w: "second_rd_s", s: "jasmine_garden", in: "jasmine_garden" },
   },
   candy_bar: {
     name: "Candy Bar",
@@ -1200,7 +1331,7 @@ const ROOMS = {
       "The rose-pink light folds back around you. Nothing here is ever out of place — the boss's standards hold whether or not the boss is on the floor tonight.",
       "You duck back into Candy's — same corner, same shine, the same small empire humming along without a wasted motion.",
     ],
-    exits: { out: "buakhao_market" },
+    exits: { out: "buakhao_n" },
   },
   lucky_tiger: {
     name: "Lucky Tiger Bar",
@@ -1258,7 +1389,7 @@ const ROOMS = {
       "Painted directions in Thai point into the tangle. Shared security lounges by the " +
       "arch on plastic stools — bounce out of one bar here and you've bounced out of all of them.",
     sign: "maze_entrance",
-    exits: { w: "buakhao_s", in: "tt_lane_1", e: "tt_lane_1" },
+    exits: { e: "buakhao_tt", in: "tt_lane_1", w: "tt_lane_1" },
   },
   tt_lane_1: {
     name: "Tree Town (Inner Lane)",
@@ -1267,7 +1398,7 @@ const ROOMS = {
       "glitters to the north. Painted Thai arrows on the wall offer guidance to those " +
       "who can read them.",
     sign: "maze_1",
-    exits: { w: "tt_entrance", n: "gold_rush", e: "tt_lane_2", s: "tt_back", in: "gold_rush" },
+    exits: { e: "tt_entrance", n: "gold_rush", w: "tt_lane_2", s: "tt_back", in: "gold_rush" },
   },
   tt_lane_2: {
     name: "Tree Town (Cross Lane)",
@@ -1276,7 +1407,7 @@ const ROOMS = {
       "it was designed to confuse. STARLIGHT BAR's blue sign fizzes at the north corner. " +
       "Thai arrows point in three directions, contradicting each other with quiet confidence.",
     sign: "maze_2",
-    exits: { w: "tt_lane_1", n: "starlight_bar", e: "tt_deep", s: "tt_back", in: "starlight_bar" },
+    exits: { e: "tt_lane_1", n: "starlight_bar", w: "tt_deep", s: "tt_back", in: "starlight_bar" },
   },
   tt_back: {
     name: "Tree Town (Back Lane)",
@@ -1286,7 +1417,7 @@ const ROOMS = {
       "routines. Without light, every exit feels like the same wrong one. South, past " +
       "the bins, a FAR LANE of cheap bars nobody photographs leaks a little warm light.",
     sign: "maze_3",
-    exits: { n: "tt_lane_1", w: "tt_lane_2", e: "tt_deep", s: "tt_lane_3" },
+    exits: { n: "tt_lane_1", e: "tt_lane_2", w: "tt_deep", s: "tt_lane_3" },
   },
   tt_lane_3: {
     name: "Tree Town (Far Lane)",
@@ -1295,7 +1426,7 @@ const ROOMS = {
       "neon budget with it: three little bars under one sagging string of bulbs. THE RABBIT " +
       "HOLE, LUCKY CHARM BAR, and MOONSHINE BAR trade the regulars who ran out of maze. " +
       "Friendlier than it has any right to be down here.",
-    exits: { n: "tt_back", in: "rabbit_hole", e: "lucky_charm", w: "moonshine_bar" },
+    exits: { n: "tt_back", in: "rabbit_hole", w: "lucky_charm", e: "moonshine_bar" },
   },
   rabbit_hole: {
     name: "The Rabbit Hole",
@@ -1331,7 +1462,7 @@ const ROOMS = {
     desc: "The deepest corner of the maze, where the neon gives out entirely. One big " +
       "sign burns at the end of the lane: RAINBOW GIRLS BAR, every letter a different colour.",
     sign: "maze_4",
-    exits: { w: "tt_lane_2", n: "tt_back", e: "rainbow_girls", in: "rainbow_girls" },
+    exits: { e: "tt_lane_2", n: "tt_back", w: "rainbow_girls", in: "rainbow_girls" },
   },
   gold_rush: {
     name: "Gold Rush Lounge",
@@ -2151,7 +2282,7 @@ const ROOMS = {
       "Soi 11, everyone else calls it Soi Honey, after the soapland whose blue glow owns the " +
       "west end. Beer bars string fairy lights and Filipino covers across the lane; a soapy " +
       "massage hums to the south, and the loudest of the beer bars is just north.",
-    exits: { w: "second_rd_s", e: "soi_honey_e", n: "honey_trap", s: "honey_soapy" },
+    exits: { w: "second_rd_diana", e: "soi_honey_e", n: "honey_trap", s: "honey_soapy" },
   },
   soi_honey_e: { motosai: true,
     name: "Soi Honey (east end)",
@@ -2160,7 +2291,7 @@ const ROOMS = {
       "and laundries. Two more beer bars face each other across the narrow strip, close enough " +
       "that the girls of one heckle the customers of the other. It smells of grilled chicken, " +
       "spilled Chang, and somebody's jasmine.",
-    exits: { w: "soi_honey_w", e: "buakhao_s", n: "queen_bee", s: "buzz_inn" },
+    exits: { w: "soi_honey_w", e: "buakhao_n", n: "queen_bee", s: "buzz_inn" },
   },
   honey_soapy: {
     name: "Honeycomb Massage",
@@ -2211,7 +2342,7 @@ const ROOMS = {
       "south of Soi Honey. On the south corner, the open-air KISS restaurant does brisk trade under " +
       "its fairy lights — everyone in Pattaya gives directions off it. East, the soi runs away into " +
       "warm light and eighty different sound systems; the first beer bar's girls are already waving.",
-    exits: { w: "second_rd_c", e: "diana_mid", s: "kiss", n: "dollhouse" },
+    exits: { w: "second_rd_diana", e: "diana_mid", s: "kiss", n: "dollhouse" },
   },
   diana_mid: {
     name: "Soi Diana (middle)",
@@ -9546,14 +9677,21 @@ const ROOM_GEO = {
   reload_bar:       [12.93227, 100.88483],
   // Soi Buakhao
   buakhao_n:        [12.92881, 100.88480],
+  diana_oil:         [12.93077, 100.88184],
+  myth_massage:      [12.93184, 100.88701],
+  klang_massage:     [12.93567, 100.88832],
+  second_rd_diana:   [12.93104, 100.88204],
+  buakhao_myth:      [12.93208, 100.88678],
+  buakhao_tt:       [12.93146, 100.88646],
+  buakhao_klang:     [12.93594, 100.88854],
   metropole_room:   [12.92974, 100.88485],
   rock_factory:     [12.92914, 100.88489],
   lucky_tiger:      [12.92901, 100.88506],
-  buakhao_market:   [12.92629, 100.88197],
+  buakhao_market:   [12.92691, 100.88300],
   candy_bar:        [12.92857, 100.88474],
   silk_rose:        [12.92622, 100.88221],
   buakhao_oil:      [12.92649, 100.88218],
-  buakhao_s:        [12.92430, 100.87934],
+  buakhao_s:        [12.92490, 100.88002],
   jasmine_garden:   [12.92414, 100.87915],
   // Soi Honey (Soi 11, between Second Rd and Buakhao)
   soi_honey_w:      [12.93189, 100.88300],
@@ -9563,7 +9701,7 @@ const ROOM_GEO = {
   queen_bee:        [12.93017, 100.88560],
   buzz_inn:         [12.92970, 100.88556],
   // Soi Diana (the big go-go soi; Second Rd ↔ Buakhao, past LK Metro)
-  diana_w:          [12.93104, 100.88204],
+  diana_w:          [12.93078, 100.88237],
   diana_mid:        [12.92993, 100.88342],
   diana_e:          [12.92908, 100.88447],
   kiss:             [12.93087, 100.88205],
@@ -9573,19 +9711,19 @@ const ROOM_GEO = {
   cricketers:       [12.92930, 100.88453],
   areca_room:       [12.92915, 100.88290],
   // Tree Town (real: the Buakhao/Klang corner)
-  tt_entrance:      [12.93152, 100.88518],
-  tt_lane_1:        [12.93150, 100.88548],
-  tt_lane_2:        [12.93148, 100.88578],
-  tt_back:          [12.93130, 100.88602],
-  tt_deep:          [12.93122, 100.88630],
-  gold_rush:        [12.93170, 100.88550],
-  starlight_bar:    [12.93168, 100.88580],
-  rainbow_girls:    [12.93118, 100.88652],
-  oy_office:        [12.93113, 100.88671],
-  tt_lane_3:        [12.93108, 100.88598],
-  rabbit_hole:      [12.93103, 100.88583],
-  lucky_charm:      [12.93104, 100.88616],
-  moonshine_bar:    [12.93117, 100.88580],
+  tt_entrance:      [12.93150, 100.88618],
+  tt_lane_1:        [12.93148, 100.88588],
+  tt_lane_2:        [12.93146, 100.88558],
+  tt_back:          [12.93128, 100.88535],
+  tt_deep:          [12.93118, 100.88508],
+  gold_rush:        [12.93168, 100.88590],
+  starlight_bar:    [12.93166, 100.88560],
+  rainbow_girls:    [12.93114, 100.88482],
+  oy_office:        [12.93110, 100.88464],
+  tt_lane_3:        [12.93106, 100.88536],
+  rabbit_hole:      [12.93102, 100.88522],
+  lucky_charm:      [12.93104, 100.88516],
+  moonshine_bar:    [12.93098, 100.88558],
   // LK Metro (the L-shaped soi off Buakhao)
   lk_entrance:      [12.92940, 100.88410],
   lk_main:          [12.92959, 100.88464],
