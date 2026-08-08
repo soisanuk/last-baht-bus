@@ -914,7 +914,8 @@ const ROOMS = {
         "window, watching the soi like it's television.",
       "Two piwins argue amiably about a fare neither of them is being offered.",
     ],
-    exits: { n: "second_rd_c", s: "second_rd_s", e: "diana_w", spa: "diana_oil", honey: "soi_honey_w" },
+    exits: { n: "second_rd_c", s: "second_rd_s", e: "diana_w", spa: "diana_oil", honey: "soi_honey_w",
+             mall: "mikes_mall" },
   },
   diana_oil: {
     name: "Bamboo Oil Massage",
@@ -945,6 +946,56 @@ const ROOMS = {
     exits: { w: "beach_rd_c", s: "second_rd_n", e: "buakhao_klang" },
   },
 
+  // ─── Shopping (Second Road) ───
+  // The Night Bazaar is where the Soi Buakhao cloth traders went when Tree Town
+  // took the old market's trade. Nit moved with them, which is why she is here
+  // and not on Buakhao any more.
+  night_bazaar: {
+    name: "Pattaya Night Bazaar",
+    bar: "Pattaya Night Bazaar",
+    region: "Second Road",
+    desc: "Aisle after aisle of the same forty things, and somehow you still slow " +
+      "down. Elephant-print trousers, wooden frogs that croak when you run a stick " +
+      "down their spine, {{phone}} cases, fake football shirts, and CHANG SINGLETS in " +
+      "every size from optimistic to honest — the unofficial uniform of a certain " +
+      "kind of holiday. Nobody quotes a first price they expect to get. Deeper in, " +
+      "past the food court and its smell of frying garlic, the aisles turn quieter " +
+      "and become cloth: bolts of it stacked to the roof, and the traders who moved " +
+      "here from the Buakhao market when Tree Town took the trade.",
+    revisit: [
+      "A vendor holds a Chang singlet against your chest without breaking " +
+        "conversation with the woman on the next stall.",
+      "Somewhere near the food court a wooden frog is being demonstrated, at length.",
+      "The same forty things. You slow down anyway.",
+      "Two Russian teenagers are haggling hard over something that costs less than " +
+        "their bus fare here, and enjoying it enormously.",
+    ],
+    exits: { out: "myth_night" },
+  },
+  // Down-market by design, and the food court upstairs is where the fixed-income
+  // expats eat — the same men the girls call cheap charlies, seen from the other side.
+  mikes_mall: {
+    name: "Mike's Mall",
+    bar: "Mike's Mall",
+    region: "Second Road",
+    desc: "Four floors of strip-lit shopping for people counting it. Luggage, {{phone}} " +
+      "repair, tailors who will do you a suit by Thursday, and a whole floor of " +
+      "swimwear that has been there since before the swimwear was fashionable the " +
+      "first time. The lift works most days. Up on the top floor is the food court: " +
+      "laminated photo menus, a fifty-baht plate that is honestly enough food, and " +
+      "a long table of men in their sixties and seventies who have been coming here " +
+      "since it opened. Pension day is the busy one. They know each other's names, " +
+      "and roughly what everyone's monthly is, and neither is ever mentioned.",
+    revisit: [
+      "The lift is out again. Everybody takes it in their stride and the stairs.",
+      "Somebody at the long table upstairs is explaining the exchange rate to " +
+        "somebody who already knows it.",
+      "A tailor catches your eye through his doorway and does not press it.",
+      "The food court smells, permanently and not unpleasantly, of frying garlic.",
+    ],
+    exits: { out: "second_rd_diana" },
+  },
+
   // ─── Myth Night ───
   myth_night: { motosai: true,
     name: "Myth Night Market",
@@ -956,7 +1007,8 @@ const ROOMS = {
       "double Chang prices. CANDY BAR 2's rose-pink sign is unmistakably the same " +
       "pink as the original. North, a LIVE-STAGE YARD throws sound over the roofs; " +
       "south, the CONTAINER ROWS glow like a docked ship someone plugged in.",
-    exits: { w: "second_rd_diana", e: "buakhao_myth", in: "candy_bar_2", n: "myth_stage", s: "myth_rows" },
+    exits: { w: "second_rd_diana", e: "buakhao_myth", in: "candy_bar_2", n: "myth_stage", s: "myth_rows",
+             bazaar: "night_bazaar" },
   },
   myth_stage: {
     name: "Myth Night — Live-Stage Yard",
@@ -1299,12 +1351,14 @@ const ROOMS = {
   },
   buakhao_market: {
     atm: true,
-    name: "Buakhao Market",
+    name: "Soi Buakhao (Old Market)",
     region: "Soi Buakhao",
-    desc: "Tarps, fans, fruit pyramids, and a man forever restacking ice crates behind a " +
-      "som tam cart. The smell of papaya salad could pull you here from two sois away. " +
-      "SILK ROSE shares the block east, and a pink-lit shopfront a few doors down " +
-      "promises the oil is warm.",
+    desc: "The block everyone still calls the market, though the market went years ago — " +
+      "Tree Town took the trade and the tarps came down. What is left is the shape " +
+      "of it: shophouse fronts too wide for what they sell now, a som tam cart " +
+      "holding the corner out of sheer stubbornness, and a smell of papaya salad " +
+      "that could still pull you here from two sois away. SILK ROSE shares the block " +
+      "east, and a pink-lit shopfront a few doors down promises the oil is warm.",
     exits: { n: "buakhao_n", s: "buakhao_s", e: "silk_rose", spa: "buakhao_oil" },
   },
   buakhao_s: {
@@ -6577,7 +6631,7 @@ const NPCS = {
 
   nit: {
     name: "Nit", th: "นิด", emoji: "🧵",
-    room: "buakhao_market",
+    room: "night_bazaar",
     desc: "Mid-thirties, upcountry-neat, working the fabric stalls with the practised " +
       "eye of a woman who buys to sell. Two checked laundry bags of folded cotton " +
       "already at her feet. Something in the way she reads the market — which vendors " +
@@ -9664,6 +9718,8 @@ const ROOM_GEO = {
   pattaya_klang:    [12.93665, 100.88651],
   // Myth Night
   myth_night:       [12.93274, 100.88479],
+  mikes_mall:        [12.9319, 100.88081],
+  night_bazaar:      [12.93232, 100.88451],
   candy_bar_2:      [12.93298, 100.88507],
   myth_stage:       [12.93301, 100.88483],
   amp_room:         [12.93309, 100.88464],

@@ -6833,7 +6833,7 @@ test("ask <who> <topic> works without the 'about' connective (the tapped shape)"
 test("the Phil triangle: read the phone, then tell him or warn her — not both ways", () => {
   state().pendingEnc = null; state().lastSaleng = 99999; state().lastPeddler = 99999;
   // the confrontation is gated on having seen the screenshots
-  state().room = "buakhao_market";
+  state().room = "night_bazaar";  // Nit moved with the cloth trade
   run("ask nit about somchai");
   assert.ok(!state().flags.warnedNit, "no warning before the phone");
   state().room = "stinky_bar";
@@ -6842,7 +6842,7 @@ test("the Phil triangle: read the phone, then tell him or warn her — not both 
   assert.ok(state().flags.readPhilPhone, "the screenshots land");
   assert.match(lastOut(), /สมชาย/, "the thread is in Thai");
   // branch: warn Nit first
-  state().room = "buakhao_market";
+  state().room = "night_bazaar";
   out = [];
   run("ask nit about somchai");
   assert.ok(state().flags.warnedNit, "she knows you know");
@@ -6861,7 +6861,7 @@ test("the Phil triangle: read the phone, then tell him or warn her — not both 
   run("ask bert about phil");
   assert.match(lastOut(), /hard thing/);
   // Nit's post-truth state line replaces the confrontation forever
-  state().room = "buakhao_market";
+  state().room = "night_bazaar";
   out = [];
   run("talk to nit");
   assert.match(lastOut(), /choosing cotton/, "she goes back to what she knows");

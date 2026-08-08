@@ -2,10 +2,10 @@
   "generated": "2026-08-08",
   "note": "Every room in the game + its region, for the scene-art pipeline (docs/art-pipeline-spec.md). Derived from web/js/world.js — regenerate with scripts/gen-scene-manifest.mjs, do not hand-edit. `kind` is a generator heuristic for prompt-template selection, not game canon. `regionSlug` is produced by the same regex as web/js/scene.js `_sceneArt()`; art files are web/art/rooms/<id>.png with web/art/regions/<slug>.png as the fallback.",
   "counts": {
-    "rooms": 184,
+    "rooms": 186,
     "regions": 15,
     "byKind": {
-      "street": 64,
+      "street": 66,
       "massage": 17,
       "beer": 49,
       "shop": 2,
@@ -199,6 +199,8 @@
       "name": "Second Road",
       "roomIds": [
         "diana_oil",
+        "mikes_mall",
+        "night_bazaar",
         "pattaya_klang",
         "poseidon_soapy",
         "second_rd_c",
@@ -263,7 +265,7 @@
       "sampleDescs": [
         "The expat artery: pharmacies, laundry, bars, repeat. ROCK FACTORY's two-storey stage looms on the corner — currently doing what every band in Thailand does to 'Hotel California' and somehow getting away with it. LUCKY TIGER BAR is just east. The market sprawl is south. A small handwritten LK METRO arrow on a wall points down an alley — easy to miss, worth finding. Soi Diana opens off the 7-Eleven on the corner here, its go-go neon running away west. A few doors down the quiet side, CANDY BAR's rose-pink sign keeps its own hours — far enough off the main drag that the soi forgets about it until about three in the morning, which is roughly when it fills up.",
         "Where the soi gives up and hands you to Central Pattaya Road. The traffic arrives here to die: two baht buses nose to tail with nowhere to go, a third wedged across the mouth of the junction while its driver leans out and negotiates with nobody in particular. The motorbikes don't wait. They come through the gaps in a steady braided stream — a girl side-saddle in six-inch heels holding her hair down with one hand, a punter on the back of another with his knees out like a man being carried to somewhere he didn't choose. A 7-Eleven throws cold white light across the whole slow mess, and the piwins at the corner watch it the way farmers watch weather.",
-        "Tarps, fans, fruit pyramids, and a man forever restacking ice crates behind a som tam cart. The smell of papaya salad could pull you here from two sois away. SILK ROSE shares the block east, and a pink-lit shopfront a few doors down promises the oil is warm."
+        "The block everyone still calls the market, though the market went years ago — Tree Town took the trade and the tarps came down. What is left is the shape of it: shophouse fronts too wide for what they sell now, a som tam cart holding the corner out of sheer stubbornness, and a smell of papaya salad that could still pull you here from two sois away. SILK ROSE shares the block east, and a pink-lit shopfront a few doors down promises the oil is warm."
       ]
     },
     {
@@ -1627,6 +1629,32 @@
       "desc": "Pink strip light, a beaded curtain, and three girls on plastic stools out front who greet every passing farang with the same unhurried hello. Inside it is cold, dim and clean, and the traffic on Second Road becomes a rumour."
     },
     {
+      "id": "mikes_mall",
+      "name": "Mike's Mall",
+      "bar": "Mike's Mall",
+      "barType": null,
+      "region": "Second Road",
+      "regionSlug": "second-road",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "Four floors of strip-lit shopping for people counting it. Luggage, {{phone}} repair, tailors who will do you a suit by Thursday, and a whole floor of swimwear that has been there since before the swimwear was fashionable the first time. The lift works most days. Up on the top floor is the food court: laminated photo menus, a fifty-baht plate that is honestly enough food, and a long table of men in their sixties and seventies who have been coming here since it opened. Pension day is the busy one. They know each other's names, and roughly what everyone's monthly is, and neither is ever mentioned."
+    },
+    {
+      "id": "night_bazaar",
+      "name": "Pattaya Night Bazaar",
+      "bar": "Pattaya Night Bazaar",
+      "barType": null,
+      "region": "Second Road",
+      "regionSlug": "second-road",
+      "kind": "street",
+      "dark": false,
+      "people": [
+        "Nit"
+      ],
+      "desc": "Aisle after aisle of the same forty things, and somehow you still slow down. Elephant-print trousers, wooden frogs that croak when you run a stick down their spine, {{phone}} cases, fake football shirts, and CHANG SINGLETS in every size from optimistic to honest — the unofficial uniform of a certain kind of holiday. Nobody quotes a first price they expect to get. Deeper in, past the food court and its smell of frying garlic, the aisles turn quieter and become cloth: bolts of it stacked to the roof, and the traders who moved here from the Buakhao market when Tree Town took the trade."
+    },
+    {
       "id": "pattaya_klang",
       "name": "Central Pattaya Road (Pattaya Klang)",
       "bar": null,
@@ -1991,17 +2019,15 @@
     },
     {
       "id": "buakhao_market",
-      "name": "Buakhao Market",
+      "name": "Soi Buakhao (Old Market)",
       "bar": null,
       "barType": null,
       "region": "Soi Buakhao",
       "regionSlug": "soi-buakhao",
       "kind": "street",
       "dark": false,
-      "people": [
-        "Nit"
-      ],
-      "desc": "Tarps, fans, fruit pyramids, and a man forever restacking ice crates behind a som tam cart. The smell of papaya salad could pull you here from two sois away. SILK ROSE shares the block east, and a pink-lit shopfront a few doors down promises the oil is warm."
+      "people": [],
+      "desc": "The block everyone still calls the market, though the market went years ago — Tree Town took the trade and the tarps came down. What is left is the shape of it: shophouse fronts too wide for what they sell now, a som tam cart holding the corner out of sheer stubbornness, and a smell of papaya salad that could still pull you here from two sois away. SILK ROSE shares the block east, and a pink-lit shopfront a few doors down promises the oil is warm."
     },
     {
       "id": "buakhao_myth",

@@ -141,6 +141,7 @@
 <line x1="656.1" y1="602.5" x2="665.0" y2="607.6" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="656.1" y1="602.5" x2="650.7" y2="607.8" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="656.1" y1="602.5" x2="682.0" y2="585.8" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
+<line x1="656.1" y1="602.5" x2="622.9" y2="585.6" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="757.6" y1="517.1" x2="776.8" y2="492.4" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="757.6" y1="517.1" x2="750.6" y2="514.6" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="757.6" y1="517.1" x2="764.6" y2="519.3" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
@@ -150,6 +151,7 @@
 <line x1="730.3" y1="569.2" x2="784.1" y2="582.1" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="730.3" y1="569.2" x2="731.4" y2="563.9" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="730.3" y1="569.2" x2="729.3" y2="574.5" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
+<line x1="730.3" y1="569.2" x2="722.8" y2="577.4" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="731.4" y1="563.9" x2="736.8" y2="562.7" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="731.4" y1="563.9" x2="728.4" y2="565.6" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="731.4" y1="563.9" x2="733.3" y2="559.9" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
@@ -337,6 +339,10 @@
 <circle cx="757.6" cy="517.1" r="2.6" fill="#7a8aa8" opacity="0.8"/>
 <circle cx="776.8" cy="492.4" r="2.6" fill="#7a8aa8" opacity="0.8"/>
 <text x="785.8" y="486.4" font-size="15" fill="#7a8aa8" text-anchor="start" opacity="0.95">Pattaya Klang</text>
+<circle cx="722.8" cy="577.4" r="5" fill="#7a8aa8" opacity="0.95"><title>Pattaya Night Bazaar</title></circle>
+<circle cx="722.8" cy="577.4" r="9" fill="none" stroke="#7a8aa8" opacity="0.35"/>
+<circle cx="622.9" cy="585.6" r="5" fill="#7a8aa8" opacity="0.95"><title>Mike's Mall</title></circle>
+<circle cx="622.9" cy="585.6" r="9" fill="none" stroke="#7a8aa8" opacity="0.35"/>
 <circle cx="730.3" cy="569.2" r="2.6" fill="#c46ae8" opacity="0.8"/>
 <text x="720.3" y="583.2" font-size="15" fill="#c46ae8" text-anchor="end" opacity="0.95">Myth Night</text>
 <circle cx="731.4" cy="563.9" r="2.6" fill="#c46ae8" opacity="0.8"/>
