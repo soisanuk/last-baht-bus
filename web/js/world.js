@@ -9082,6 +9082,14 @@ const POPULAR_GIRLS = ["fon", "gift", "noi", "pim"];
 // pinned district by district against OSM, and the decimal count is the marker
 // of which have had their pass. Don't "tidy" a 5dp district back to 4.
 //
+//   CANON CORRECTION (Mario, 2026-08-08): there is NO Soi Buakhao market any
+//   more — Tree Town replaced it years ago. The `buakhao_market` room needs
+//   repurposing and its NPC rehoming (Mike's Mall is the suggested new home once
+//   that room exists). Candy Bar also MOVES to Cindy Bar's real spot at the Soi
+//   Diana junction; she is semi-famous as an after-hours place, on account of
+//   the out-of-the-way location and the brown envelopes that keep the police
+//   away. Both are bar-mat/content work, not survey.
+//
 //   Supertown = the JOMTIEN COMPLEX (Jomtien Walking Street), 12.900415/
 //   100.867802 — 118 m north of the Thappraya strip, which is exactly what
 //   `thappraya_mid —n→ supertown_alley` claims. It has TWO doors on purpose:
