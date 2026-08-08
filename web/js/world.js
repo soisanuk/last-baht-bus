@@ -9088,6 +9088,15 @@ const POPULAR_GIRLS = ["fon", "gift", "noi", "pim"];
 //   7 m stub at the arch. 737 m: the gate at 12.927447/100.874687 down to
 //   Bali Hai pier at 12.924602/100.868548, the traditional end of the strip.
 //   Bali Hai has NO ROOM yet; the coordinate is banked here for when it gets one.
+//   SOI DIAMOND, likewise banked: it leaves Walking Street at
+//   12.926559/100.873403 — exactly on the strip, 170 m down from the gate, 23%
+//   of the way — and runs 153 m southeast to 12.925409/100.874182, which is
+//   ~30 m off Second Road. Two go-gos are planned along it. Note it is NOT the
+//   game's existing "Soi Diana" (diana_w/_mid/_e), a different street.
+//   When bounding this strip, BOUND IT: Pattaya Sai Nueng continues past both
+//   the gate and Bali Hai, and letting it run inflates the arc from 744 m to
+//   949 m and skews every placement along it. Between those two points the
+//   street is near-straight (744 m arc on a 737 m chord).
 //   The two stretch rooms had their names BACKWARDS — the middle one was called
 //   South and the far one North, on a street that runs south from the gate. Ids
 //   encoded it too, so both were swapped rather than just the labels; fixing
@@ -9191,14 +9200,14 @@ const ROOM_GEO = {
   // Walking Street (the gate is the north end; "ws_south" is the DEEP end)
   ws_gate:          [12.92745, 100.87469],
   thai_massage:     [12.92731, 100.87496],
-  ws_north:         [12.92645, 100.87254],
-  ws_alley:         [12.92674, 100.87241],
-  ws_south:         [12.92531, 100.87008],
-  neon_paradise:    [12.92645, 100.87228],
-  club_mirage:      [12.92645, 100.87280],
-  crystal_palace:   [12.92531, 100.86982],
-  paradise_nights:  [12.92531, 100.87034],
-  midnight_sun:     [12.92490, 100.86978],
+  ws_north:         [12.92616, 100.87269],
+  ws_alley:         [12.92645, 100.87255],
+  ws_south:         [12.92508, 100.87018],
+  neon_paradise:    [12.92616, 100.87243],
+  club_mirage:      [12.92616, 100.87294],
+  crystal_palace:   [12.92508, 100.86992],
+  paradise_nights:  [12.92508, 100.87044],
+  midnight_sun:     [12.92467, 100.86987],
   // Beach Road
   beach_rd_s:       [12.92983, 100.87751],
   papaya_massage:   [12.92934, 100.87788],
