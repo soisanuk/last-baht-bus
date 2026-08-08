@@ -22,13 +22,13 @@
   "Blue Dog"
  ],
  "counts": {
-  "geolocated": 204,
+  "geolocated": 205,
   "patrons": 18,
   "people": 268,
   "portraits": 286,
   "renders": 72,
   "thumbs": 72,
-  "venues": 204
+  "venues": 205
  },
  "frames": [
   "baimon_pic1",
@@ -3054,6 +3054,14 @@
    "name": "Beach Road Central",
    "region": "Beach Road",
    "seven": true
+  },
+  "beach_rd_klang": {
+   "geo": [
+    12.93791,
+    100.88339
+   ],
+   "name": "Beach Road (Pattaya Klang)",
+   "region": "Beach Road"
   },
   "beach_rd_n": {
    "geo": [
