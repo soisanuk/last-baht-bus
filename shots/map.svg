@@ -111,7 +111,8 @@
 <line x1="311.3" y1="1122.0" x2="302.1" y2="1061.7" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="302.1" y1="1061.7" x2="348.3" y2="946.1" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="348.3" y1="946.1" x2="250.0" y2="929.2" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
-<line x1="250.0" y1="929.2" x2="11.1" y2="1030.7" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
+<line x1="110.4" y1="968.9" x2="250.0" y2="929.2" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
+<line x1="110.4" y1="968.9" x2="11.1" y2="1030.7" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="11.1" y1="1030.7" x2="87.5" y2="1096.9" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="11.1" y1="1030.7" x2="-2.4" y2="1038.5" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="152.5" y1="1173.0" x2="74.0" y2="1104.7" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
@@ -325,6 +326,7 @@
 <circle cx="311.3" cy="1122.0" r="2.6" fill="#8a6ae8" opacity="0.8"/>
 <circle cx="302.1" cy="1061.7" r="2.6" fill="#8a6ae8" opacity="0.8"/>
 <circle cx="348.3" cy="946.1" r="2.6" fill="#8a6ae8" opacity="0.8"/>
+<circle cx="110.4" cy="968.9" r="2.6" fill="#8a6ae8" opacity="0.8"/>
 <circle cx="250.0" cy="929.2" r="2.6" fill="#8a6ae8" opacity="0.8"/>
 <circle cx="11.1" cy="1030.7" r="2.6" fill="#8a6ae8" opacity="0.8"/>
 <circle cx="152.5" cy="1173.0" r="2.6" fill="#e8c46a" opacity="0.8"/>

@@ -2,10 +2,10 @@
   "generated": "2026-08-08",
   "note": "Every room in the game + its region, for the scene-art pipeline (docs/art-pipeline-spec.md). Derived from web/js/world.js — regenerate with scripts/gen-scene-manifest.mjs, do not hand-edit. `kind` is a generator heuristic for prompt-template selection, not game canon. `regionSlug` is produced by the same regex as web/js/scene.js `_sceneArt()`; art files are web/art/rooms/<id>.png with web/art/regions/<slug>.png as the fallback.",
   "counts": {
-    "rooms": 211,
+    "rooms": 212,
     "regions": 15,
     "byKind": {
-      "street": 86,
+      "street": 87,
       "massage": 17,
       "beer": 49,
       "shop": 2,
@@ -195,14 +195,15 @@
         "dongtan_rd_n",
         "pratumnak_hill_rd",
         "pratumnak_rd",
+        "pratumnak_soi5",
         "thappraya_ext_m",
         "thappraya_ext_n",
         "thappraya_ext_s"
       ],
       "sampleDescs": [
         "Where the Main Strip's neon finally gives out and the road tips upward: the last few late-night noodle carts, then condo walls and the hill proper. The strip is back down to the south; the mouth of the Supertown drag alley opens to the west; the road climbs on north.",
-        "The top of Dongtan Beach Road, where it bends inland and up onto the Pratumnak crest. The sand is a black rumour to the west; Pratumnak Hill Road climbs away east over the top.",
-        "The saddle over the top of Pratumnak Hill, linking the two roads that climb it — the Thappraya side to the east, the Dongtan Beach side to the west. Walls, viewpoints you can't make out in the dark, and the sea breathing somewhere below on both sides."
+        "Where Soi 5 leaves the hill road and starts down toward the sea. Nothing up here is for you: condo walls with broken glass set into the top, a security box with a man asleep in it, and gates with intercoms that answer in Thai or not at all. The road tips west from here and keeps tipping — you can feel the gradient in your calves before you can see it. Between two walls there is one gap, and through it the whole bay, black and enormous, with Jomtien's lights strung along the far edge of it.",
+        "The main hill road between Jomtien and Pattaya proper — condos behind walls, sleeping soi dogs, and long stretches where the streetlights have given up. The Buddha Hill viewpoint is up a path to the west; Walking Street is on north."
       ]
     },
     {
@@ -229,7 +230,7 @@
       "sampleDescs": [
         "The mouth of Soi Diana, and Second Road doing what Second Road does: four lanes of baht buses running nose to tail, a permanent shoal of motorbikes in the gutter lane, and pavement so narrow that walking it is a negotiation. The go-go neon starts about twenty metres up the soi and doesn't stop until Buakhao. On this corner: a 7-Eleven with a cash machine, a knot of piwins who have claimed the shade of its sign, and a girl on the back of a bike checking her lipstick in a wing mirror at a red light.",
         "Soi 7 comes out here and carries on east; the seafront is fifteen minutes down it, or four with a piwin. Central Pattaya Road crosses just ahead, cutting the whole town into north and south. Soi 8 comes out a block south — this end of it is quiet, whatever the other end is doing. This block is a massage row: SMILE MASSAGE winks pink from the west side, and opposite, four floors of blue neon spell POSEIDON MASSAGE over a doorman and a fish tank.",
-        "Mid-Second-Road: baht buses in convoy, pharmacies, and the constant churn between the mall's back doors to the west and the fairy-lit mouth of MYTH NIGHT market to the east."
+        "The big east-west artery, bisecting Beach Road, Second Road, and Soi Buakhao in one straight shot from the sea to Sukhumvit. Baht buses, banks, gold shops, and a river of traffic that never quite jams and never quite flows."
       ]
     },
     {
@@ -1711,7 +1712,7 @@
       "kind": "street",
       "dark": true,
       "people": [],
-      "desc": "The top of Dongtan Beach Road, where it bends inland and up onto the Pratumnak crest. The sand is a black rumour to the west; Pratumnak Hill Road climbs away east over the top."
+      "desc": "The top of Dongtan Beach Road, where it bends inland and starts up onto Pratumnak. The sand is a black rumour to the west; east the road climbs to the Soi 5 turn and, past that, the crest."
     },
     {
       "id": "pratumnak_hill_rd",
@@ -1736,6 +1737,18 @@
       "dark": true,
       "people": [],
       "desc": "The main hill road between Jomtien and Pattaya proper — condos behind walls, sleeping soi dogs, and long stretches where the streetlights have given up. The Buddha Hill viewpoint is up a path to the west; Walking Street is on north."
+    },
+    {
+      "id": "pratumnak_soi5",
+      "name": "Pratumnak Soi 5",
+      "bar": null,
+      "barType": null,
+      "region": "Pratumnak",
+      "regionSlug": "pratumnak",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "Where Soi 5 leaves the hill road and starts down toward the sea. Nothing up here is for you: condo walls with broken glass set into the top, a security box with a man asleep in it, and gates with intercoms that answer in Thai or not at all. The road tips west from here and keeps tipping — you can feel the gradient in your calves before you can see it. Between two walls there is one gap, and through it the whole bay, black and enormous, with Jomtien's lights strung along the far edge of it."
     },
     {
       "id": "thappraya_ext_m",
@@ -2320,7 +2333,7 @@
       "kind": "street",
       "dark": false,
       "people": [],
-      "desc": "The foot of Soi Buakhao, where it ends on South Pattaya Road and the bar strip stops dead. Four lanes of through-traffic, a piwin stand working the corner, and the particular flatness of a junction nobody drinks at. West along Pattaya Tai takes you past Tukcom — four floors of phone counters and repair booths, dark and shuttered at this hour — and on to Second Road. North is the soi and everything that happens on it."
+      "desc": "The foot of Soi Buakhao, where it ends on South Pattaya Road and the bar strip stops dead. Four lanes of through-traffic, a piwin stand working the corner, and the particular flatness of a junction nobody drinks at. West along Pattaya Tai takes you past Tukcom — four floors of {{phone}} counters and repair booths, dark and shuttered at this hour — and on to Second Road. North is the soi and everything that happens on it."
     },
     {
       "id": "buakhao_s",
@@ -3122,7 +3135,7 @@
       "kind": "street",
       "dark": false,
       "people": [],
-      "desc": "Walking Street runs out of neon and hands you to the water. The pier goes out into the dark on concrete legs, the Koh Larn boats tied up for the night with their awnings rolled, and the bay doing that thing where it looks enormous and completely quiet a hundred metres from the loudest street in Thailand. Behind you the strip is still going. In front of you a row of songthaews wait with their engines off and their drivers asleep across the benches, and the piwins have the good corner by the ramp because the piwins always have the good corner."
+      "desc": "Walking Street runs out of neon and hands you to the water. The pier goes out into the dark on concrete legs, the Koh Larn boats tied up for the night with their awnings rolled, and the bay doing that thing where it looks enormous and completely quiet a hundred metres from the loudest street in Thailand. Behind you the strip is still going. In front of you a row of songthaews wait with their engines off and their drivers asleep across the benches, and the piwins have the good corner by the ramp because the piwins always have the good corner. South the road starts climbing Pratumnak almost at once — no pavement, no lighting worth the name, and the hill between here and Jomtien."
     },
     {
       "id": "club_mirage",

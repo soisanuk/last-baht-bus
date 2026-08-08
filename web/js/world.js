@@ -587,6 +587,24 @@ const ROOMS = {
       "west across the crest toward the Dongtan side. Quiet, dark, and a long way from a lady drink.",
     exits: { s: "thappraya_ext_m", w: "pratumnak_hill_rd" },
   },
+  pratumnak_soi5: {
+    name: "Pratumnak Soi 5",
+    region: "Pratumnak",
+    desc: "Where Soi 5 leaves the hill road and starts down toward the sea. Nothing up " +
+      "here is for you: condo walls with broken glass set into the top, a security box " +
+      "with a man asleep in it, and gates with intercoms that answer in Thai or not at " +
+      "all. The road tips west from here and keeps tipping — you can feel the gradient " +
+      "in your calves before you can see it. Between two walls there is one gap, and " +
+      "through it the whole bay, black and enormous, with Jomtien's lights strung along " +
+      "the far edge of it.",
+    revisit: [
+      "Wall, wall, gate, wall. Somebody's air-conditioning unit dripping.",
+      "A dog barks behind a gate, thinks better of it, and settles.",
+      "The gap between the walls, the bay, and Jomtien laid out along the far side.",
+      "Downhill from here. Your knees register it before you do.",
+    ],
+    exits: { e: "pratumnak_hill_rd", w: "dongtan_rd_n" },
+  },
   pratumnak_hill_rd: {
     name: "Pratumnak Hill Road (crest)",
     region: "Pratumnak",
@@ -594,15 +612,16 @@ const ROOMS = {
     desc: "The saddle over the top of Pratumnak Hill, linking the two roads that climb it — the " +
       "Thappraya side to the east, the Dongtan Beach side to the west. Walls, viewpoints you can't " +
       "make out in the dark, and the sea breathing somewhere below on both sides.",
-    exits: { e: "thappraya_ext_n", w: "dongtan_rd_n", n: "pratumnak_rd" },
+    exits: { e: "thappraya_ext_n", w: "pratumnak_soi5", n: "pratumnak_rd" },
   },
   dongtan_rd_n: {
     name: "Dongtan Beach Road (North)",
     region: "Pratumnak",
     dark: true,
-    desc: "The top of Dongtan Beach Road, where it bends inland and up onto the Pratumnak crest. " +
-      "The sand is a black rumour to the west; Pratumnak Hill Road climbs away east over the top.",
-    exits: { s: "dongtan_rd_m", e: "pratumnak_hill_rd", w: "dongtan_beach_n" },
+    desc: "The top of Dongtan Beach Road, where it bends inland and starts up onto Pratumnak. " +
+      "The sand is a black rumour to the west; east the road climbs to the Soi 5 turn and, " +
+      "past that, the crest.",
+    exits: { s: "dongtan_rd_m", e: "pratumnak_soi5", w: "dongtan_beach_n" },
   },
   dongtan_beach_s: {
     name: "Dongtan Beach (South)",
@@ -10217,6 +10236,7 @@ const ROOM_GEO = {
   thappraya_ext_s:  [12.90458, 100.86927],
   thappraya_ext_m:  [12.90765, 100.86893],
   thappraya_ext_n:  [12.91354, 100.87064],
+  pratumnak_soi5:   [12.91238, 100.86183],
   pratumnak_hill_rd:[12.91440, 100.86700],
   dongtan_rd_n:     [12.90923, 100.85815],
   dongtan_rd_m:     [12.90586, 100.86098],

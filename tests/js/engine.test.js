@@ -3593,11 +3593,19 @@ test("Thappraya Main Strip: reached east off the beach road, the mix of venues, 
   // the Pratumnak north extension: two roads climb the hill and join at the crest,
   // walkable as a loop back down the Dongtan sand and east onto the beach road / strip
   // (thappraya_e up → … → dongtan_rd_s → s → jomtien_beach_rd_n → e → thappraya_w)
+  // the hill link carries BOTH a cardinal and `up`: 351° is 9° off due north,
+  // so n is honest and — unlike a named exit — actually draws on the KML, which
+  // is how this link came to look missing in the first place. `up` stays
+  // because it is the better word for a climb.
   assert.equal(ROOMS.thappraya_e.exits.up, "thappraya_ext_s");
+  assert.equal(ROOMS.thappraya_e.exits.n, "thappraya_ext_s");
   assert.equal(ROOMS.thappraya_ext_s.exits.n, "thappraya_ext_m");
   assert.equal(ROOMS.thappraya_ext_m.exits.n, "thappraya_ext_n");
   assert.equal(ROOMS.thappraya_ext_n.exits.w, "pratumnak_hill_rd");
-  assert.equal(ROOMS.pratumnak_hill_rd.exits.w, "dongtan_rd_n", "the crest links both north ends");
+  // the crest reaches Dongtan Beach Road through the Soi 5 turn, not in one
+  // 1,119 m stride across a junction that is really there
+  assert.equal(ROOMS.pratumnak_hill_rd.exits.w, "pratumnak_soi5");
+  assert.equal(ROOMS.pratumnak_soi5.exits.w, "dongtan_rd_n", "the crest links both north ends");
   assert.equal(ROOMS.dongtan_rd_n.exits.s, "dongtan_rd_m");
   assert.equal(ROOMS.dongtan_rd_m.exits.s, "dongtan_rd_s");
   // the road lane runs road-to-road all the way down; you reach the sand by

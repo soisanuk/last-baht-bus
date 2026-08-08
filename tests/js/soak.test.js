@@ -125,7 +125,10 @@ const DE_CEILINGS = [
   // desc I edited). The rest is the pier ceasing to be a dead end — Walking
   // Street now has an on-ramp to Pratumnak, so the walk reaches the hill and
   // the Jomtien side from the strip instead of only from Second Road.
-  { mode: "vacation", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 355 },
+  // 355 → 324 on the Pratumnak Soi 5 turn. FELL, and not because anything got
+  // translated — a node on the hill route redistributes where the walk spends
+  // its steps. Tightened rather than left slack.
+  { mode: "vacation", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 324 },
   // act1 is the do-or-die opening — the wallet chain, the fail/reset screens, the
   // hint whispers. NEITHER other mode reaches it: soi6 force-sets act1Done, and
   // so does the soak's own vacation setup. It was unguarded until 2026-08-07, and
@@ -160,7 +163,7 @@ const DE_CEILINGS = [
   // 312 → 429 → 399, same story as vacation. 430 → 421 on the Dolphin roundabout
   // — tightened rather than left slack, since a ratchet that only ever loosens
   // stops being one. 421 → 428 for the three new south-end rooms.
-  { mode: "expat", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 428 },
+  { mode: "expat", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 419 },
 ];
 
 for (const { mode, seeds, nights, ceiling } of DE_CEILINGS) {

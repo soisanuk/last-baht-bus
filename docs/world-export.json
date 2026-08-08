@@ -22,13 +22,13 @@
   "Blue Dog"
  ],
  "counts": {
-  "geolocated": 211,
+  "geolocated": 212,
   "patrons": 18,
   "people": 268,
   "portraits": 286,
   "renders": 72,
   "thumbs": 72,
-  "venues": 211
+  "venues": 212
  },
  "frames": [
   "baimon_pic1",
@@ -4232,6 +4232,14 @@
     100.87007
    ],
    "name": "Pratumnak Hill Road (to Pattaya)",
+   "region": "Pratumnak"
+  },
+  "pratumnak_soi5": {
+   "geo": [
+    12.91238,
+    100.86183
+   ],
+   "name": "Pratumnak Soi 5",
    "region": "Pratumnak"
   },
   "promenade": {
