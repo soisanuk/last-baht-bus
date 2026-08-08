@@ -2,10 +2,10 @@
   "generated": "2026-08-08",
   "note": "Every room in the game + its region, for the scene-art pipeline (docs/art-pipeline-spec.md). Derived from web/js/world.js — regenerate with scripts/gen-scene-manifest.mjs, do not hand-edit. `kind` is a generator heuristic for prompt-template selection, not game canon. `regionSlug` is produced by the same regex as web/js/scene.js `_sceneArt()`; art files are web/art/rooms/<id>.png with web/art/regions/<slug>.png as the fallback.",
   "counts": {
-    "rooms": 224,
+    "rooms": 225,
     "regions": 15,
     "byKind": {
-      "street": 93,
+      "street": 94,
       "massage": 17,
       "beer": 53,
       "shop": 2,
@@ -37,6 +37,7 @@
         "beach_rd_soi7",
         "beach_rd_soi8",
         "beach_rd_soi9",
+        "beach_rd_top",
         "beachrd_oil",
         "beachthai_massage",
         "blue_dog",
@@ -501,6 +502,18 @@
       "dark": false,
       "people": [],
       "desc": "The Soi 9 corner, and the least rowdy hundred metres on the whole seafront for an obvious reason: PATTAYA CENTRAL POLICE STATION occupies the north-east corner, lit all night, with a row of pickups nosed in against the kerb. Central Mall's bulk sits to the south-east. People walk a little straighter past here and nobody sells you anything at all."
+    },
+    {
+      "id": "beach_rd_top",
+      "name": "Beach Road (the north corner)",
+      "bar": null,
+      "barType": null,
+      "region": "Beach Road",
+      "regionSlug": "beach-road",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "Where Beach Road stops coming down off the roundabout and turns to run the length of the bay. The sand starts along here, behind a low wall and the last of the trees, and from this corner you can see the whole sweep south, the road and the beach side by side for two kilometres until the neon starts. It is the quiet end. Joggers, a few couples on the wall, an ice-cream cart that shuts before anything interesting happens, and no bars at all."
     },
     {
       "id": "beachrd_oil",

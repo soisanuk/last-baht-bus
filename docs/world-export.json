@@ -22,13 +22,13 @@
   "Blue Dog"
  ],
  "counts": {
-  "geolocated": 224,
+  "geolocated": 225,
   "patrons": 18,
   "people": 297,
   "portraits": 315,
   "renders": 72,
   "thumbs": 72,
-  "venues": 224
+  "venues": 225
  },
  "frames": [
   "baimon_pic1",
@@ -3707,6 +3707,14 @@
     100.88247
    ],
    "name": "Beach Road (Soi 9)",
+   "region": "Beach Road"
+  },
+  "beach_rd_top": {
+   "geo": [
+    12.94923,
+    100.88455
+   ],
+   "name": "Beach Road (the north corner)",
    "region": "Beach Road"
   },
   "beach_turn_massage": {

@@ -1044,7 +1044,7 @@ const ROOMS = {
       "A bus full of tourists takes the roundabout twice, deliberating.",
       "Four roads' worth of traffic, folding into each other and out again.",
     ],
-    exits: { s: "beach_rd_n", n: "naklua_rd", second: "second_rd_soi6" },
+    exits: { s: "beach_rd_top", n: "naklua_rd", second: "second_rd_soi6" },
   },
   beach_rd_soi8: {
     busStop: "beachrd",
@@ -1082,6 +1082,25 @@ const ROOMS = {
     ],
     exits: { w: "pattaya_soi_8", n: "second_rd_n", s: "second_rd_c" },
   },
+  beach_rd_top: {
+    busStop: "beachrd",
+    motosai: true,
+    name: "Beach Road (the north corner)",
+    region: "Beach Road",
+    desc: "Where Beach Road stops coming down off the roundabout and turns to run the " +
+      "length of the bay. The sand starts along here, behind a low wall and the last of " +
+      "the trees, and from this corner you can see the whole sweep " +
+      "south, the road and the beach side by side for two kilometres until the neon " +
+      "starts. It is the quiet end. Joggers, a few couples on the wall, an ice-cream " +
+      "cart that shuts before anything interesting happens, and no bars at all.",
+    revisit: [
+      "The corner, the trees, and the bay opening up all the way south.",
+      "Somebody on the sea wall with a coffee, watching nothing in particular.",
+      "The ice-cream cart is packing up. It always seems to be packing up.",
+      "Quiet enough here to hear the water. Two kilometres down, it will not be.",
+    ],
+    exits: { n: "dolphin", s: "beach_rd_n" },
+  },
   promenade: {
     name: "Beach Promenade",
     region: "Beach Road",
@@ -1114,7 +1133,7 @@ const ROOMS = {
       "The foot of the soi, the cartoon skunk and the Blue Dog holding their corners, the bay going gold across the traffic. A baht bus slows, hopeful; you let it pass.",
       "Back to the junction, the neon fuse of Soi 6 lit and waiting east, the water and the last of the light off west past the road.",
     ],
-    exits: { s: "beach_rd_klang", e: "soi6_street", n: "dolphin", w: "north_beach" },
+    exits: { s: "beach_rd_klang", e: "soi6_street", n: "beach_rd_top", w: "north_beach" },
     venues: ["stinky_bar", "blue_dog"],
   },
   sunset_rail: {
@@ -10903,6 +10922,7 @@ const ROOM_GEO = {
   promenade:        [12.93450, 100.88117],
   central_mall:     [12.93440, 100.88345],
   police_station:   [12.93599, 100.88282],
+  beach_rd_top:     [12.94923, 100.88455],
   beach_rd_n:       [12.94288, 100.88475],
   stinky_bar:       [12.94275, 100.88459],
   blue_dog:         [12.94309, 100.88471],

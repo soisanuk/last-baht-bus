@@ -135,7 +135,8 @@ const DE_CEILINGS = [
   // 333 → 322 for the six lower-Soi-5 venues. FELL despite a lot of new English,
   // because more rooms means the walk spreads thinner over them. Tightened.
   // 322 → 285 → 279 for the Central Mall junction and the crocodile. Fell; tightened.
-  { mode: "vacation", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 279 },
+  { mode: "vacation", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 289 },  // +10: the Beach Road corner is 5 new lines and a node the
+  // walk fans out from at the top of the seafront
   // act1 is the do-or-die opening — the wallet chain, the fail/reset screens, the
   // hint whispers. NEITHER other mode reaches it: soi6 force-sets act1Done, and
   // so does the soak's own vacation setup. It was unguarded until 2026-08-07, and
@@ -176,7 +177,7 @@ const DE_CEILINGS = [
   // stops being one. 421 → 428 for the three new south-end rooms.
   // 419 → 451, a big move for one room: splitting second_rd_c's two jobs gives
   // the walk another node to fan out from in the middle of Second Road.
-  { mode: "expat", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 441 },
+  { mode: "expat", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 456 },
 ];
 
 for (const { mode, seeds, nights, ceiling } of DE_CEILINGS) {
