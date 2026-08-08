@@ -2,10 +2,10 @@
   "generated": "2026-08-08",
   "note": "Every room in the game + its region, for the scene-art pipeline (docs/art-pipeline-spec.md). Derived from web/js/world.js — regenerate with scripts/gen-scene-manifest.mjs, do not hand-edit. `kind` is a generator heuristic for prompt-template selection, not game canon. `regionSlug` is produced by the same regex as web/js/scene.js `_sceneArt()`; art files are web/art/rooms/<id>.png with web/art/regions/<slug>.png as the fallback.",
   "counts": {
-    "rooms": 200,
+    "rooms": 201,
     "regions": 15,
     "byKind": {
-      "street": 75,
+      "street": 76,
       "massage": 17,
       "beer": 49,
       "shop": 2,
@@ -33,6 +33,7 @@
         "beach_rd_c",
         "beach_rd_n",
         "beach_rd_s",
+        "beach_rd_soi7",
         "beachrd_oil",
         "beachthai_massage",
         "blue_dog",
@@ -218,7 +219,7 @@
       ],
       "sampleDescs": [
         "The mouth of Soi Diana, and Second Road doing what Second Road does: four lanes of baht buses running nose to tail, a permanent shoal of motorbikes in the gutter lane, and pavement so narrow that walking it is a negotiation. The go-go neon starts about twenty metres up the soi and doesn't stop until Buakhao. On this corner: a 7-Eleven with a cash machine, a knot of piwins who have claimed the shade of its sign, and a girl on the back of a bike checking her lipstick in a wing mirror at a red light.",
-        "The north stretch, where Second Road angles toward the Dolphin roundabout. Central Pattaya Road — Pattaya Klang — crosses just ahead, cutting the whole town into north and south. This block is a massage row: SMILE MASSAGE winks pink from the west side, and opposite, four floors of blue neon spell POSEIDON MASSAGE over a doorman and a fish tank.",
+        "Soi 7 comes out here and carries on east; the seafront is fifteen minutes down it, or four with a piwin. Central Pattaya Road crosses just ahead, cutting the whole town into north and south. This block is a massage row: SMILE MASSAGE winks pink from the west side, and opposite, four floors of blue neon spell POSEIDON MASSAGE over a doorman and a fish tank.",
         "The working road running parallel between Beach Road and Soi Buakhao — less neon, more motorbikes, the town with its makeup half off. It climbs south onto the north shoulder of Pratumnak Hill, toward Jomtien beyond."
       ]
     },
@@ -429,6 +430,18 @@
         "Bank"
       ],
       "desc": "The south end of Beach Road, where the palms wear fairy lights and the baht buses bunch up like beads. The Walking Street arch blazes to the south. A motosai stand idles on the corner, drivers watching the street like sleepy hawks."
+    },
+    {
+      "id": "beach_rd_soi7",
+      "name": "Beach Road (Soi 7)",
+      "bar": null,
+      "barType": null,
+      "region": "Beach Road",
+      "regionSlug": "beach-road",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "Where Soi 7 comes down to the sea. The soi runs inland behind you, all beer stools and laundry steam; out here it is the seafront doing its evening thing — joggers who have misjudged the hour, a man selling roasted chestnuts nobody buys, and the long slow crawl of songthaews with their benches half full. Central Pattaya Road crosses a hundred metres north, which is why the traffic here never quite clears."
     },
     {
       "id": "beachrd_oil",
@@ -1782,7 +1795,7 @@
     },
     {
       "id": "second_rd_n",
-      "name": "Second Road (North)",
+      "name": "Second Road (Soi 7)",
       "bar": null,
       "barType": null,
       "region": "Second Road",
@@ -1790,7 +1803,7 @@
       "kind": "street",
       "dark": false,
       "people": [],
-      "desc": "The north stretch, where Second Road angles toward the Dolphin roundabout. Central Pattaya Road — Pattaya Klang — crosses just ahead, cutting the whole town into north and south. This block is a massage row: SMILE MASSAGE winks pink from the west side, and opposite, four floors of blue neon spell POSEIDON MASSAGE over a doorman and a fish tank."
+      "desc": "Soi 7 comes out here and carries on east; the seafront is fifteen minutes down it, or four with a piwin. Central Pattaya Road crosses just ahead, cutting the whole town into north and south. This block is a massage row: SMILE MASSAGE winks pink from the west side, and opposite, four floors of blue neon spell POSEIDON MASSAGE over a doorman and a fish tank."
     },
     {
       "id": "second_rd_s",
