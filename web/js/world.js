@@ -9079,6 +9079,19 @@ const PATRONS = {
         "been Beach Road. If it happens to you, go back and tell the mamasan — " +
         "she'll make it right. Not out of kindness. Bad girls are bad business.\"",
         short: "\"Settle ST or LT before money moves, ask early, and if she runs — tell the mamasan.\"" },
+      { topic: "phones",
+        text: "\"You want the year it went? I can give you the year.\" He can, and he does, " +
+          "and it is not the year anything happened to this town. \"Two thousand and nine, " +
+          "ten, thereabouts. When they all got the phones.\" The lager comes down on the " +
+          "mat. \"Before that, son, a girl had to PICK. Understand? She'd pick you out of " +
+          "the bar on the Monday and that was it, she was yours the fortnight — every " +
+          "night, no messing, no mystery, no vanishing off at eleven because her sister's " +
+          "locked out.\" He is entirely accurate and one inch from the point, and he does " +
+          "not turn his head. \"Now she's sat in front of you doing four of us out of her " +
+          "handbag. Germany at breakfast, you at nine, some poor sod in Stockholm at " +
+          "midnight.\" A wounded pull. \"It's not the same girls any more. Something went " +
+          "out of them.\"",
+        short: "\"Two thousand and nine, when they got the phones. Before that a girl had to pick. Something went out of them.\"" },
       { topic: "sponsor", text: "\"Ah. The one behind the till who won't come out to play.\" He " +
         "nods slow, an old campaigner reading the ground. \"Kept girl, son. Some fella back home — " +
         "Germany, Australia, wherever — wires her every month to stay off the floor. She'll show you " +

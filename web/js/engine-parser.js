@@ -887,6 +887,7 @@ function _doTalkBody(arg, topic) {
 // regex to match wins, so specific sits above general.
 const _CONVO_TOPIC_RULES = [
   [/where.*(from|grew up|born)|whereabout|your country|back home|where.*\blive/, "home"],
+  [/smartphone|\bphones\b|the phones|\bline app\b|social media/,                   "1998"],
   [/for a living|line of work|what.*you do\b|what.*you did/,                     "job"],
   [/marri(ed|age)|the missus|other half|settle down/,                            "wife"],
   [/\bkids?\b|children|your folks|your parents/,                                 "family"],
