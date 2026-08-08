@@ -6,7 +6,9 @@
   "description": "The Last Baht Bus — a Pattaya text adventure",
   "scripts": {
     "test": "node --test",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "map:kml": "node tools/gen-kml.mjs",
+    "map:audit": "node tools/gen-map.mjs --audit"
   },
   "devDependencies": {
     "@playwright/test": "^1.61.1"
