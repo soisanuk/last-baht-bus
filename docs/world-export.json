@@ -22,13 +22,13 @@
   "Blue Dog"
  ],
  "counts": {
-  "geolocated": 201,
+  "geolocated": 202,
   "patrons": 18,
   "people": 268,
   "portraits": 286,
   "renders": 72,
   "thumbs": 72,
-  "venues": 201
+  "venues": 202
  },
  "frames": [
   "baimon_pic1",
@@ -4105,6 +4105,14 @@
     100.8846
    ],
    "name": "Soi 7",
+   "region": "Beach Road"
+  },
+  "pattaya_soi_8": {
+   "geo": [
+    12.93573,
+    100.88413
+   ],
+   "name": "Soi 8",
    "region": "Beach Road"
   },
   "pattaya_tai": {
