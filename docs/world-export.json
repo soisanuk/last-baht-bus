@@ -22,13 +22,13 @@
   "Blue Dog"
  ],
  "counts": {
-  "geolocated": 189,
+  "geolocated": 192,
   "patrons": 18,
-  "people": 259,
-  "portraits": 277,
+  "people": 268,
+  "portraits": 286,
   "renders": 72,
   "thumbs": 72,
-  "venues": 189
+  "venues": 192
  },
  "frames": [
   "baimon_pic1",
@@ -228,6 +228,15 @@
    "room": "blue_dog",
    "th": "แอร์"
   },
+  "alisa": {
+   "desc": "Elegant, weathered, and plainly the last word on everything in the room — the mamasan of Katoey's R Us, from Yasothon. She started on the stage at seventeen and owns three of these stools now.",
+   "emoji": "👑",
+   "filler": true,
+   "name": "Alisa",
+   "role": "mamasan",
+   "room": "katoeys",
+   "th": "อลิสา"
+  },
   "ampai": {
    "bars": [
     "the_boardroom",
@@ -315,6 +324,15 @@
    "role": "cashier",
    "room": "kitten_corner",
    "th": "ใบหม่อน"
+  },
+  "baitoey": {
+   "desc": "Long, lean and built for the stage, with an actual voice under the lip-sync and a habit of using it when the room has thinned out enough to deserve it. Gold everything tonight — hoops, chain, a dress that is mostly intention. Between shows she sits at the end of the rail with her heels off, entirely unglamorous, eating som tam out of a bag.",
+   "emoji": "🎤",
+   "name": "Baitoey",
+   "personality": "dreamer",
+   "role": "hostess",
+   "room": "katoeys",
+   "th": "ใบเตย"
   },
   "bam": {
    "desc": "Baby-faced, chewing gum, thumbing her phone under the bar — one of the Rock Factory girls, from {{Nong Khai}}. She types more than she talks — and laughs at both.",
@@ -702,6 +720,15 @@
    "role": "hostess",
    "room": "kinky",
    "th": "แฟง"
+  },
+  "farida": {
+   "desc": "Quiet and quick, the still point the whole loud room pays into — the cashier at Katoey's R Us, from Kalasin.",
+   "emoji": "🧾",
+   "filler": true,
+   "name": "Farida",
+   "role": "cashier",
+   "room": "katoeys",
+   "th": "ฟาริดา"
   },
   "fasai": {
    "desc": "Small and sharp, and misses nothing — one of the Sapphire Bar girls, from Sakon Nakhon. Google Translate is open before you finish the sentence.",
@@ -1528,6 +1555,15 @@
    "room": "kitten_corner",
    "th": "นางฟ้า"
   },
+  "naree": {
+   "desc": "A crooked, disarming grin — one of the The Windmill girls, from Amnat Charoen. She types more than she talks — and laughs at both.",
+   "emoji": "💐",
+   "filler": true,
+   "name": "Naree",
+   "role": "hostess",
+   "room": "windmill",
+   "th": "นารี"
+  },
   "near": {
    "desc": "Tall and quiet, watching the door — one of the The Metro Beer Garden girls, from {{Nong Bua Lamphu}}. The {{phone}} never leaves her hand.",
    "emoji": "💕",
@@ -1668,6 +1704,15 @@
    "room": "bay_watch",
    "th": "หนู"
   },
+  "nubnab": {
+   "desc": "Black polo, a lanyard of too many keys, a calculator she never needs — the cashier at The Windmill, from {{Nong Bua Lamphu}}.",
+   "emoji": "🧾",
+   "filler": true,
+   "name": "Nubnab",
+   "role": "cashier",
+   "room": "windmill",
+   "th": "นับหนับ"
+  },
   "numfon": {
    "desc": "The Shady Lady's cashier, comfortable and unbothered, running an honest till at an honest bar — the numbers are small, the trouble is smaller, and that suits her exactly.",
    "emoji": "🧾",
@@ -1728,6 +1773,15 @@
    "role": "mamasan",
    "room": "rainbow_girls",
    "th": "ออย"
+  },
+  "pancake": {
+   "desc": "The one on the flyer, and she knows it. Six foot two before the heels, a waist that took surgery and discipline in that order, and a face assembled with the precision of someone who has been getting it exactly right since she was fifteen. She works the front of house because nobody sells the room better — she can read a man' nerve from the doorway and pitch herself accordingly, warm or wicked, in about a second and a half.",
+   "emoji": "💋",
+   "name": "Pancake",
+   "personality": "charmer",
+   "role": "hostess",
+   "room": "katoeys",
+   "th": "แพนเค้ก"
   },
   "pang": {
    "desc": "Bored until you try a word of Thai, then radiant — one of the Rainbow Girls Bar girls, from Ubon. The {{phone}} never leaves her hand.",
@@ -2091,6 +2145,15 @@
    "room": "neon_paradise",
    "th": "ซาร่า"
   },
+  "sasi": {
+   "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of the The Windmill girls, from Sisaket. Google Translate is open before you finish the sentence.",
+   "emoji": "🌺",
+   "filler": true,
+   "name": "Sasi",
+   "role": "hostess",
+   "room": "windmill",
+   "th": "ศศิ"
+  },
   "security": {
    "desc": "Three large men arranged around the room like load-bearing furniture. One watches the door marked ห้ามเข้า specifically. They are polite, immovable, and backed by every piwin within three sois.",
    "emoji": "🦍",
@@ -2347,6 +2410,15 @@
    "room": "water_buffalo",
    "th": "วันดี"
   },
+  "wanida": {
+   "desc": "Elegant, weathered, and plainly the last word on everything in the room — the mamasan of The Windmill, from Sakon Nakhon. She came up from the rice fields and never once looked back.",
+   "emoji": "👑",
+   "filler": true,
+   "name": "Wanida",
+   "role": "mamasan",
+   "room": "windmill",
+   "th": "วนิดา"
+  },
   "wanpen": {
    "desc": "A gold tooth, a sharper tongue, and drink arithmetic you can watch happening — one of the Mama Yai's girls, from Udon Thani. Google Translate is open before you finish the sentence.",
    "emoji": "💐",
@@ -2391,6 +2463,15 @@
    "name": "Win",
    "room": "adonis_club",
    "th": "วิน"
+  },
+  "yada": {
+   "desc": "A crooked, disarming grin — one of the The Windmill girls, from Buriram. She types more than she talks — and laughs at both.",
+   "emoji": "💐",
+   "filler": true,
+   "name": "Yada",
+   "role": "hostess",
+   "room": "windmill",
+   "th": "ญาดา"
   },
   "yai": {
    "desc": "The Yai in Mama Yai's — sixty-ish, an apron over a buffalo-print blouse, a ladle in one hand and the whole soi's memory in the other. She feeds you before she reads you, and by the time the som tam lands she has done both.",
@@ -2464,6 +2545,7 @@
   "aek",
   "aim",
   "air",
+  "alisa",
   "ampai",
   "angela",
   "ann",
@@ -2475,6 +2557,7 @@
   "aum",
   "aump",
   "baimon",
+  "baitoey",
   "bam",
   "bank",
   "barry",
@@ -2525,6 +2608,7 @@
   "fahsai",
   "fai",
   "fang",
+  "farida",
   "fasai",
   "fergie",
   "fern",
@@ -2625,6 +2709,7 @@
   "namwan",
   "nan",
   "nangfah",
+  "naree",
   "near",
   "nee",
   "nice",
@@ -2643,6 +2728,7 @@
   "noon",
   "nott",
   "nu",
+  "nubnab",
   "numfon",
   "nut",
   "oat",
@@ -2650,6 +2736,7 @@
   "orm",
   "orn",
   "oy",
+  "pancake",
   "pang",
   "pao",
   "pat",
@@ -2696,6 +2783,7 @@
   "sai",
   "saifon",
   "sara",
+  "sasi",
   "security",
   "som",
   "somchith",
@@ -2728,11 +2816,13 @@
   "waew",
   "wan",
   "wandee",
+  "wanida",
   "wanpen",
   "wayne",
   "wilai",
   "wimon",
   "win",
+  "yada",
   "yai",
   "yaya",
   "ying",
@@ -3569,6 +3659,16 @@
    "name": "Jomtien Sabai Massage",
    "region": "Jomtien"
   },
+  "katoeys": {
+   "bar": "Katoey's R Us",
+   "barType": "gogo",
+   "geo": [
+    12.92614,
+    100.87397
+   ],
+   "name": "Katoey's R Us",
+   "region": "Walking Street"
+  },
   "khao_talo": {
    "geo": [
     12.90779,
@@ -4272,6 +4372,14 @@
    "region": "Soi 6",
    "seven": true
   },
+  "soi_diamond": {
+   "geo": [
+    12.92606,
+    100.87379
+   ],
+   "name": "Soi Diamond",
+   "region": "Walking Street"
+  },
   "soi_honey_e": {
    "geo": [
     12.92994,
@@ -4570,6 +4678,16 @@
    "name": "The Water Buffalo",
    "pool": true,
    "region": "Darkside"
+  },
+  "windmill": {
+   "bar": "The Windmill",
+   "barType": "gogo",
+   "geo": [
+    12.92598,
+    100.8736
+   ],
+   "name": "The Windmill",
+   "region": "Walking Street"
   },
   "ws_alley": {
    "geo": [

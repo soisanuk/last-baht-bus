@@ -163,6 +163,7 @@
 <line x1="403.6" y1="698.3" x2="335.9" y2="719.5" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="403.6" y1="698.3" x2="396.6" y2="698.3" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="403.6" y1="698.3" x2="410.4" y2="698.3" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
+<line x1="403.6" y1="698.3" x2="433.3" y2="700.3" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="399.9" y1="692.6" x2="403.6" y2="698.3" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="335.9" y1="719.5" x2="328.8" y2="719.5" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="335.9" y1="719.5" x2="342.9" y2="719.5" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
@@ -379,6 +380,11 @@
 <circle cx="410.4" cy="698.3" r="5" fill="#ff1493" opacity="0.95"><title>Club Mirage</title></circle>
 <circle cx="410.4" cy="698.3" r="9" fill="none" stroke="#ff1493" opacity="0.35"/>
 <circle cx="291.9" cy="729.0" r="2.6" fill="#ff1493" opacity="0.8"/>
+<circle cx="433.3" cy="700.3" r="2.6" fill="#ff1493" opacity="0.8"/>
+<circle cx="428.2" cy="701.9" r="5" fill="#ff1493" opacity="0.95"><title>The Windmill</title></circle>
+<circle cx="428.2" cy="701.9" r="9" fill="none" stroke="#ff1493" opacity="0.35"/>
+<circle cx="438.2" cy="698.7" r="5" fill="#ff1493" opacity="0.95"><title>Katoey's R Us</title></circle>
+<circle cx="438.2" cy="698.7" r="9" fill="none" stroke="#ff1493" opacity="0.35"/>
 <circle cx="328.8" cy="719.5" r="5" fill="#ff1493" opacity="0.95"><title>Crystal Palace A-Go-Go</title></circle>
 <circle cx="328.8" cy="719.5" r="9" fill="none" stroke="#ff1493" opacity="0.35"/>
 <circle cx="342.9" cy="719.5" r="5" fill="#ff1493" opacity="0.95"><title>Paradise Nights Club</title></circle>

@@ -2,16 +2,16 @@
   "generated": "2026-08-08",
   "note": "Every room in the game + its region, for the scene-art pipeline (docs/art-pipeline-spec.md). Derived from web/js/world.js — regenerate with scripts/gen-scene-manifest.mjs, do not hand-edit. `kind` is a generator heuristic for prompt-template selection, not game canon. `regionSlug` is produced by the same regex as web/js/scene.js `_sceneArt()`; art files are web/art/rooms/<id>.png with web/art/regions/<slug>.png as the fallback.",
   "counts": {
-    "rooms": 189,
+    "rooms": 192,
     "regions": 15,
     "byKind": {
-      "street": 67,
+      "street": 68,
       "massage": 17,
       "beer": 49,
       "shop": 2,
       "beach": 9,
       "interior": 3,
-      "gogo": 9,
+      "gogo": 11,
       "viewpoint": 2,
       "food": 4,
       "market": 4,
@@ -364,19 +364,22 @@
         "bali_hai",
         "club_mirage",
         "crystal_palace",
+        "katoeys",
         "midnight_sun",
         "neon_paradise",
         "paradise_nights",
+        "soi_diamond",
         "thai_massage",
+        "windmill",
         "ws_alley",
         "ws_gate",
         "ws_north",
         "ws_south"
       ],
       "sampleDescs": [
+        "A short soi off the main strip, and louder than the main strip, which takes doing. Two doors face each other across eight metres of wet concrete and spend the night trying to out-decibel one another: THE WINDMILL on one side, KATOEY'S R US on the other, both with their own doorman, their own flyer girl, and their own idea of what a good time looks like. Between them the soi is a corridor of noise you have to walk down sideways when it is busy. It comes out on Second Road at the far end, if you get that far.",
         "Neon canyon, but the neon mix has changed. Bollywood bass competes with Thai pop from somewhere inside Little India's encroachment from the east — restaurant signs in Hindi above what used to be go-go bars, the smell of curry drifting across the touts. NEON PARADISE A-GO-GO still strobes on the west side. CLUB MIRAGE shimmers opposite. The touts with the laminated menus are still here. A dark side-alley slinks off between them.",
-        "The arch is still there — WALKING STREET PATTAYA, buzzing and flickering, famous enough that people photograph it before they've seen what's behind it. The strip runs south. It used to be louder. The gap between what this street was and what it is now is not visible from the gate, but you'll feel it by the time you reach the other end. Just east, RUEAN SABAI THAI MASSAGE has a row of foot chairs out for the walking wounded.",
-        "Walking Street runs out of neon and hands you to the water. The pier goes out into the dark on concrete legs, the Koh Larn boats tied up for the night with their awnings rolled, and the bay doing that thing where it looks enormous and completely quiet a hundred metres from the loudest street in Thailand. Behind you the strip is still going. In front of you a row of songthaews wait with their engines off and their drivers asleep across the benches, and the piwins have the good corner by the ramp because the piwins always have the good corner."
+        "The arch is still there — WALKING STREET PATTAYA, buzzing and flickering, famous enough that people photograph it before they've seen what's behind it. The strip runs south. It used to be louder. The gap between what this street was and what it is now is not visible from the gate, but you'll feel it by the time you reach the other end. Just east, RUEAN SABAI THAI MASSAGE has a row of foot chairs out for the walking wounded."
       ]
     }
   ],
@@ -2923,6 +2926,23 @@
       "desc": "Rhinestones on everything that holds still. The DJ booth rules a wall of subs; the cashier's cage glitters like a shrine. On the back wall, a faded poster of numbered dancers from a different decade — No. 71 circled in red marker, much later, by someone who knew what they were looking at. Crystal Palace is older than most of the girls in it, and carries itself accordingly."
     },
     {
+      "id": "katoeys",
+      "name": "Katoey's R Us",
+      "bar": "Katoey's R Us",
+      "barType": "gogo",
+      "region": "Walking Street",
+      "regionSlug": "walking-street",
+      "kind": "gogo",
+      "dark": false,
+      "people": [
+        "Alisa",
+        "Baitoey",
+        "Farida",
+        "Pancake"
+      ],
+      "desc": "Six feet of everything, all of it deliberate. The house is katoey and says so on the sign, which is the point — nobody here is passing, or trying to, and the room is funnier and sharper for it. The heels are higher than anywhere on the street, the lip-sync is better than it has any need to be, and the front-of-house patter would empty a comedy club. Punters arrive by three routes: they know, they suspect, or they are about to find out, and the staff can tell which from the door."
+    },
+    {
       "id": "midnight_sun",
       "name": "Midnight Sun Bar",
       "bar": "Midnight Sun Bar",
@@ -2980,6 +3000,18 @@
       "desc": "Velvet rope, wristbands, drinks that cost like a departure lounge. The floor heaves — tourists, freelancers working the margins, bar girls two hours past their shift in trainers and someone else's jacket. Ping is everywhere at once. The bass physically shortens the room."
     },
     {
+      "id": "soi_diamond",
+      "name": "Soi Diamond",
+      "bar": null,
+      "barType": null,
+      "region": "Walking Street",
+      "regionSlug": "walking-street",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "A short soi off the main strip, and louder than the main strip, which takes doing. Two doors face each other across eight metres of wet concrete and spend the night trying to out-decibel one another: THE WINDMILL on one side, KATOEY'S R US on the other, both with their own doorman, their own flyer girl, and their own idea of what a good time looks like. Between them the soi is a corridor of noise you have to walk down sideways when it is busy. It comes out on Second Road at the far end, if you get that far."
+    },
+    {
       "id": "thai_massage",
       "name": "Ruean Sabai Thai Massage",
       "bar": "Ruean Sabai Thai Massage",
@@ -2992,6 +3024,24 @@
         "Pensri"
       ],
       "desc": "A clean, bright shopfront a step off the Walking Street gate: a row of reclining chairs facing the street, a laminated price list on the wall — foot 250, Thai 300, oil 350, aloe for the sunburned — and the good sharp smell of tiger balm. The ladies wear matching polo shirts and wais, are mostly old enough to be your aunt, and mean every knuckle of it. Pensri runs the front. No short shorts, no barker, no nonsense — the one honest kind of massage in a town that sells nine."
+    },
+    {
+      "id": "windmill",
+      "name": "The Windmill",
+      "bar": "The Windmill",
+      "barType": "gogo",
+      "region": "Walking Street",
+      "regionSlug": "walking-street",
+      "kind": "gogo",
+      "dark": false,
+      "people": [
+        "Naree",
+        "Nubnab",
+        "Sasi",
+        "Wanida",
+        "Yada"
+      ],
+      "desc": "The house that decided restraint was somebody else's problem. Three tiers of stage, a lighting rig with more ambition than the budget behind it, and a show that escalates all night on a schedule the regulars can recite. Nobody here is pretending it is a bar with dancing in it. The drinks are dear, the front row is a commitment, and the whole room runs on the understanding that you knew exactly what this was when you came down the steps."
     },
     {
       "id": "ws_alley",

@@ -76,23 +76,27 @@ test("regression: Act One WAIT across dawn can't loop the same-day reset forever
 // tighter), vacation and expat rose (the open map walks wider). All four
 // verified stable over three consecutive runs.
 const DE_CEILINGS = [
-  // was 149 — tightened, 38 points of slack was hiding regression
-  { mode: "soi6", seeds: [1, 2, 3], nights: 2, ceiling: 111 },
+  // 149 → 111 → 94. The last drop was a BUG FIX, not translation: a motosai
+  // could ride out of the fenced pocket, so the walk was reaching town prose it
+  // should never have seen. Fixing the fence took 17 lines off this number.
+  { mode: "soi6", seeds: [1, 2, 3], nights: 2, ceiling: 94 },
   // vacation runs longer (4 nights × 5 seeds) because Act One occupies the first
   // two and the sandbox prose only starts after it. Verified stable across five
   // consecutive runs; ~240ms.
-  // was 309 — rose 82 on reachability alone (0 new prose)
-  { mode: "vacation", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 391 },
+  // 309 → 391 → 274. It rose when the map got more connected and FELL hard once
+  // the expansion settled, because the new rooms give the walk more places to be
+  // and it spends fewer of its steps re-treading untranslated town prose.
+  { mode: "vacation", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 274 },
   // act1 is the do-or-die opening — the wallet chain, the fail/reset screens, the
   // hint whispers. NEITHER other mode reaches it: soi6 force-sets act1Done, and
   // so does the soak's own vacation setup. It was unguarded until 2026-08-07, and
   // it could not be guarded before that either: _act1Fail's newGame() re-seeds
   // G.rng from Math.random, so five identical runs gave 156/144/143/152/143.
   // soak.mjs now pins a deterministic successor seed on reset.
-  // was 131, then 124. Nudged to 125 mid-expansion: the map is growing and the
-  // random walk keeps finding one more room. --delta confirmed none of the new
-  // leaks are new prose. Re-baseline all four once the expansion settles.
-  { mode: "act1", seeds: [1, 2, 3, 4, 5], nights: 3, ceiling: 125 },
+  // 131 → 124 → 125 → 147. This one ROSE and it is honest: Act One's route now
+  // runs through five more Soi Buakhao rooms, and their prose has no de entries
+  // yet. Real new English on the critical path — see docs/i18n-de-gaps.md.
+  { mode: "act1", seeds: [1, 2, 3, 4, 5], nights: 3, ceiling: 147 },
   // expat: the endless stage, unreachable from the other modes (soi6 and the
   // soak's own vacation setup both force act1Done and stop there). Added with
   // the bar-owning chain.
@@ -103,8 +107,8 @@ const DE_CEILINGS = [
   // travel → a specific ASK at each step. A five-seed expat run offers zero
   // quests. Authored quest prose is guarded by scripted playthroughs instead
   // (tests/js/barchain.test.js).
-  // was 312 — rose 117 on reachability alone (0 new prose)
-  { mode: "expat", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 429 },
+  // 312 → 429 → 399, same story as vacation.
+  { mode: "expat", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 399 },
 ];
 
 for (const { mode, seeds, nights, ceiling } of DE_CEILINGS) {

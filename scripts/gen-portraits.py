@@ -314,6 +314,29 @@ CHARS = {
                      mouth="neutral"),
     "joy":      lady(skin=THAI, hair="pigtails", hc=BLACK, shirt=YELN, bg=BG_BAR,
                      mouth="grin", blush=True),
+    # Katoey's R Us (Soi Diamond) — the house is katoey and says so on the sign,
+    # so these are FLAMBOYANT, not passing: the highest heels on the street and
+    # the loudest glamour in the game. Everything dialled past Bebe, who was the
+    # previous ceiling — hot pink and gold, full jewellery, big lip, wide grin.
+    "pancake":  lady(skin=THAI, hair="sleek", hc=BLACK, shirt=C(0xff1f8f), bg=BG_GOGO,
+                     acc=["earrings", "chain", "bracelets"], earc=GOLD,
+                     mouth="grin", mouthc=C(0xf01050), blush=True),
+    "baitoey":  lady(skin=THAI, hair="long", hc=BLACK, shirt=C(0xffc020), bg=BG_GOGO,
+                     acc=["earrings", "chain", "flower"], earc=GOLD,
+                     mouth="grin", mouthc=C(0xe01860), blush=True),
+    # the mamasan of a katoey house is katoey too, and runs the room in gold
+    "alisa":    lady(skin=THAI, hair="chignon", hc=BLACK, shirt=C(0x8a10a0), bg=BG_GOGO,
+                     acc=["earrings", "chain", "bracelets"], earc=GOLD,
+                     mouth="smile", mouthc=C(0xd02060)),
+    "farida":   lady(skin=THAI, hair="sleek", hc=BLACK, shirt=C(0x2a1840), bg=BG_GOGO,
+                     acc=["earrings", "glasses"], mouth="neutral"),
+    # The Windmill (Soi Diamond) — a loud straight go-go, ordinary glamour
+    "naree":    lady(skin=THAI, hair="long", hc=BLACK, shirt=C(0xd02040), bg=BG_GOGO),
+    "sasi":     lady(skin=THAI, hair="bob", hc=DKBRN, shirt=C(0x30a0c0), bg=BG_GOGO, blush=True),
+    "yada":     lady(skin=THAI2, hair="sleek", hc=BLACK, shirt=C(0xe0a020), bg=BG_GOGO, mouth="grin"),
+    "wanida":   lady(skin=THAI, hair="bun", hc=GRBLK, shirt=C(0x303048), bg=BG_GOGO, mouth="neutral"),
+    "nubnab":   lady(skin=THAI, hair="ponytail", hc=BLACK, shirt=C(0x1e2a5a), bg=BG_GOGO,
+                     acc=["earrings"], mouth="neutral"),
     # ladyboy hostesses (WDG bars): Bebe = glamour dialled up, Noon = soft, passes
     "bebe":     lady(skin=THAI, hair="sleek", hc=BLACK, shirt=C(0xe01060), bg=BG_BAR,
                      acc=["earrings", "chain"], mouth="grin"),
