@@ -3,17 +3,37 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
+    "t": "Pattaya bay tightens rules for tour boats over safety concerns",
+    "s": "Khaosod English",
+    "d": "08 Aug 2026"
+  },
+  {
+    "t": "Beauty isn’t enough Pattaya bar workers raise their game",
+    "s": "Pattaya Mail",
+    "d": "07 Aug 2026"
+  },
+  {
     "t": "Foreign man caught on CCTV stealing phone in Pattaya café",
     "s": "Thaiger",
     "d": "05 Aug 2026"
   },
   {
-    "t": "Injured dog saved after urgent plea sparks rescue on Pattaya hill",
+    "t": "Chonburi tire inferno raises pollution fears, students evacuated",
     "s": "Pattaya Mail",
-    "d": "06 Aug 2026"
+    "d": "07 Aug 2026"
   },
   {
-    "t": "Crime shadows Pattaya, but foreign tourists say the city remains worth visiting",
+    "t": "Vietnam overtakes Thailand as ASEAN’s second-largest aviation market",
+    "s": "Pattaya Mail",
+    "d": "07 Aug 2026"
+  },
+  {
+    "t": "Young tiger tracked after fatal ranger attack at Thailand wildlife sanctuary",
+    "s": "Pattaya Mail",
+    "d": "07 Aug 2026"
+  },
+  {
+    "t": "Injured dog saved after urgent plea sparks rescue on Pattaya hill",
     "s": "Pattaya Mail",
     "d": "06 Aug 2026"
   },
@@ -23,60 +43,40 @@ var NEWS_FEED = [
     "d": "06 Aug 2026"
   },
   {
-    "t": "Pattaya welcomes the world with smoother walkways and brighter streets",
-    "s": "Pattaya Mail",
-    "d": "06 Aug 2026"
-  },
-  {
-    "t": "Jordanian tourist finds friendly solution after Pattaya shop dispute",
-    "s": "Pattaya Mail",
-    "d": "06 Aug 2026"
-  },
-  {
-    "t": "Pattaya pharmacy offers cash reward and free Botox to catch burglars",
-    "s": "Pattaya Mail",
-    "d": "06 Aug 2026"
-  },
-  {
-    "t": "Pattaya ‘Safe House’ extortion case rocks city, singer arrested, two wanted",
-    "s": "Pattaya Mail",
-    "d": "06 Aug 2026"
-  },
-  {
-    "t": "7 killed and more than 20 injured in Thailand school shooting",
-    "s": "The Washington Post",
+    "t": "Live updates: Teen gunman dead after killing teachers in Thailand’s worst school shooting in years",
+    "s": "CNN",
     "d": "07 Aug 2026"
   },
   {
-    "t": "Thailand looks to Siam Silica to propel it to top Asean semiconductor player",
-    "s": "South China Morning Post",
-    "d": "08 Aug 2026"
-  },
-  {
-    "t": "What to Know About Thailand's Deadliest School Shooting in Years",
-    "s": "Time Magazine",
+    "t": "Teen kills classmates, teachers, and his grandparents in Thai gun rampage, police say",
+    "s": "CNN",
     "d": "07 Aug 2026"
   },
   {
-    "t": "At least five killed in Thailand school shooting, police say",
-    "s": "Al Jazeera",
+    "t": "Trump defends Pete Hegseth and school shooting leaves multiple dead in Thailand: Morning Rundown",
+    "s": "NBC News",
     "d": "07 Aug 2026"
   },
   {
-    "t": "Thailand shooting: Seven killed as teen opens fire at home and school near Bangkok",
-    "s": "BBC",
+    "t": "British men accused of trafficking teens to Thailand as drug couriers, court told",
+    "s": "Yahoo",
     "d": "07 Aug 2026"
   },
   {
-    "t": "Student kills at least 7 people at a high school and a home outside Bangkok, officials say",
-    "s": "AP News",
+    "t": "Trilateral Highway Project Gets Boost After Myanmar-Thailand Bilateral Talks",
+    "s": "NDTV",
+    "d": "07 Aug 2026"
+  },
+  {
+    "t": "Trump revives birthright citizenship fight; Deadly school shooting rocks Thailand",
+    "s": "Straight Arrow",
     "d": "07 Aug 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-08-07","USD":33.06,"AUD":23.27,"GBP":44.46,"EUR":38.12};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-08","temp":29,"humid":79,"code":3,"hi":30,"rain":84};
+var WX_NOW = {"date":"2026-08-08","temp":30,"humid":73,"code":3,"hi":31,"rain":85};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
@@ -84,4 +84,4 @@ var LOTTO = {"date":"2026-08-01","first":"932479","last2":"69","front3":["413","
 // XAU, plus Thai baht-weight gold (96.5%)
 var GOLD = {"usd":4343,"date":"2026-08-08","baht":67900};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":64867,"thb":2134146};
+var BTC = {"usd":64968,"thb":2137098};
