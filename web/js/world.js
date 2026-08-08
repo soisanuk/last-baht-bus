@@ -9082,6 +9082,13 @@ const POPULAR_GIRLS = ["fon", "gift", "noi", "pim"];
 // pinned district by district against OSM, and the decimal count is the marker
 // of which have had their pass. Don't "tidy" a 5dp district back to 4.
 //
+//   THE EXPANSION SPEC LIVES IN docs/map-expansion.md — new rooms, piwin
+//   stands, 7-Elevens, the Buakhao-market repurpose and the exit fixes, with
+//   Mario's content brief for each. Coordinates for everything in it are banked
+//   in this header. Biggest single item: only FOUR motosai stands exist and
+//   ELEVEN districts have none, which makes those districts dead ends after the
+//   last baht bus.
+//
 //   CANON CORRECTION (Mario, 2026-08-08): there is NO Soi Buakhao market any
 //   more — Tree Town replaced it years ago. The `buakhao_market` room needs
 //   repurposing and its NPC rehoming (Mike's Mall is the suggested new home once
