@@ -123,20 +123,23 @@
 <line x1="533.8" y1="626.3" x2="623.7" y2="623.1" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="533.8" y1="626.3" x2="543.8" y2="635.9" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="533.8" y1="626.3" x2="543.8" y2="641.4" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
-<line x1="643.9" y1="534.6" x2="683.9" y2="482.6" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
+<line x1="643.9" y1="534.6" x2="667.7" y2="505.6" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="643.9" y1="534.6" x2="632.6" y2="534.6" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="643.9" y1="534.6" x2="694.2" y2="536.6" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="643.9" y1="534.6" x2="651.2" y2="545.2" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="683.9" y1="482.6" x2="729.3" y2="370.1" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
+<line x1="683.9" y1="482.6" x2="667.7" y2="505.6" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="683.9" y1="482.6" x2="725.2" y2="495.3" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="683.9" y1="482.6" x2="712.5" y2="510.5" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="712.5" y1="510.5" x2="757.6" y2="517.1" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
+<line x1="667.7" y1="505.6" x2="702.8" y2="521.8" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
+<line x1="667.7" y1="505.6" x2="677.1" y2="505.4" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
+<line x1="702.8" y1="521.8" x2="737.6" y2="538.3" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="729.3" y1="370.1" x2="747.9" y2="374.6" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="729.3" y1="370.1" x2="851.0" y2="163.0" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="729.3" y1="370.1" x2="701.2" y2="363.0" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="694.2" y1="536.6" x2="737.6" y2="538.3" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="694.2" y1="536.6" x2="677.1" y2="505.4" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
-<line x1="677.1" y1="505.4" x2="729.3" y2="370.1" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="623.7" y1="623.1" x2="601.5" y2="723.1" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="623.7" y1="623.1" x2="656.1" y2="602.5" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="623.7" y1="623.1" x2="478.4" y2="695.0" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
@@ -332,6 +335,8 @@
 <circle cx="586.4" cy="590.8" r="9" fill="none" stroke="#00e5ff" opacity="0.35"/>
 <circle cx="683.9" cy="482.6" r="2.6" fill="#00e5ff" opacity="0.8"/>
 <circle cx="712.5" cy="510.5" r="2.6" fill="#00e5ff" opacity="0.8"/>
+<circle cx="667.7" cy="505.6" r="2.6" fill="#00e5ff" opacity="0.8"/>
+<circle cx="702.8" cy="521.8" r="2.6" fill="#00e5ff" opacity="0.8"/>
 <circle cx="632.6" cy="534.6" r="2.6" fill="#00e5ff" opacity="0.8"/>
 <circle cx="729.3" cy="370.1" r="2.6" fill="#00e5ff" opacity="0.8"/>
 <text x="738.3" y="364.1" font-size="15" fill="#00e5ff" text-anchor="start" opacity="0.95">Beach Rd N</text>
