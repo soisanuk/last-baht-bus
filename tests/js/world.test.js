@@ -271,3 +271,39 @@ test("no one-way street-scale exit: a soi's old bypass must die when it gets a j
     "a street-scale exit with no return — usually a shortcut left behind when the " +
     "destination got its own junction room:\n  " + oneWay.join("\n  "));
 });
+
+// ── no filler row may silently vanish ───────────────────────────────────────
+// A filler girl's id was her nickname lowercased, so reusing a nickname did not
+// error — the later row overwrote the earlier one and that girl silently MOVED
+// bars. Five did (Club Mirage, Candy Bar 2, Las Vegas, Jasmine Garden) before
+// anyone noticed, and nothing in the suite objected.
+//
+// _fillerId now scopes a taken nickname to <room>_<name>, so duplicates are
+// legal and Thailand can have as many girls called Bow as it likes. This asserts
+// the rows and the roster stay in step: every row produces its own NPC, at its
+// own room. The failure it guards is silent data loss, which is why it counts
+// rather than spot-checks.
+test("every filler row produces its own NPC at its own bar — none is overwritten", () => {
+  const rows = [
+    ..._FILLER_HOSTESSES.map(r => [...r, "hostess"]),
+    ..._FILLER_MAMAS.map(r => [...r, "mamasan"]),
+    ..._FILLER_CASHIERS.map(r => [...r, "cashier"]),
+  ];
+  // (name, room) must be unique — the same girl twice in one bar IS a typo
+  const seen = new Map(), dupes = [];
+  for (const [name, , room] of rows) {
+    const k = name + "@" + room;
+    if (seen.has(k)) dupes.push(k); else seen.set(k, true);
+  }
+  assert.deepEqual(dupes, [], "the same filler name twice in one bar:\n  " + dupes.join("\n  "));
+
+  const filler = Object.entries(NPCS).filter(([, n]) => n.filler);
+  assert.equal(filler.length, rows.length,
+    `${rows.length} filler rows produced ${filler.length} NPCs — a row was overwritten`);
+
+  for (const [name, , room, role] of rows) {
+    const hit = filler.filter(([, n]) => n.name === name && n.room === room);
+    assert.equal(hit.length, 1, `${name} @ ${room} should appear exactly once`);
+    assert.equal(NPC_ROLES[hit[0][0]], role, `${name} @ ${room} keeps her role`);
+  }
+});

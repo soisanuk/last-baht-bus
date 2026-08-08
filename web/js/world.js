@@ -9705,8 +9705,7 @@ function _c4Depth(id) {
   return 6;                                  // everyone else on the floor
 }
 
-function _buildHostess(name, th, room) {
-  const id = name.toLowerCase();
+function _buildHostess(name, th, room, id = name.toLowerCase()) {
   const bar = _barName(room) || "the bar";
   const idx = (arr, salt) => arr[_hh(id, salt) % arr.length];
   const from = idx(_H_FROM, 3);
@@ -9773,7 +9772,7 @@ function _buildHostess(name, th, room) {
     name, th, emoji, room, filler: true,
     ...(green ? { c4: 2 } : {}),
     ...(selfies ? { selfies } : {}),
-    desc: `${look} — one of the ${bar} girls, from ${from}. ${phone}`,
+    desc: `${look} — one of ${bar}'s girls, from ${from}. ${phone}`,
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", text: idx(GREET, 23), short: idx(GREET_SHORT, 29),
         asks: idx(ASK, 47) },
@@ -9844,13 +9843,31 @@ const _FILLER_HOSTESSES = [
   ["Gina","จีน่า","the_office"], ["Bpaeng","แป้ง","the_office"],
   ["Tim","ทิม","the_boardroom"], ["Min","มิน","the_boardroom"],
   ["Tar","ตาล","doghouse"], ["Gof","กอฟ","doghouse"], ["Wassana","วาสนา","doghouse"],
+  ["Bow","โบว์","doghouse"], // a SECOND Bow (Club Mirage has one) — see _fillerId
   ["Sroy","สร้อย","succubus"], ["Chom","ชม","succubus"], ["Pranee","ปราณี","succubus"],
   ["Milk","มิ้ลค์","velvet_club"], ["June","จูน","velvet_club"],
 ];
 
+// A filler girl's id used to be just her nickname lowercased, which quietly made
+// every Thai nickname single-use across the whole town — and reusing one did not
+// error, it OVERWROTE: the later row won and the earlier girl silently moved bars.
+// Five of them relocated out of Club Mirage, Candy Bar 2, Las Vegas and Jasmine
+// Garden that way before anyone noticed.
+//
+// That scarcity was invented by the code, not by Thailand — the country is full of
+// girls called Bow and Fern and Ploy, and two bars each having one is MORE true,
+// not less. So the bare nickname is still the id when it is free, and a taken one
+// falls back to <room>_<name>. Existing ids are untouched (no portrait renames, no
+// save breakage), and because _buildHostess hashes the ID to pick her hometown,
+// look and story, the second Bow gets a different life for free.
+function _fillerId(name, room) {
+  const bare = name.toLowerCase();
+  return NPCS[bare] ? room + "_" + bare : bare;
+}
+
 for (const [name, th, room] of _FILLER_HOSTESSES) {
-  const id = name.toLowerCase();
-  NPCS[id] = _buildHostess(name, th, room);
+  const id = _fillerId(name, room);
+  NPCS[id] = _buildHostess(name, th, room, id);
   NPC_ROLES[id] = "hostess";
 }
 
@@ -9903,8 +9920,7 @@ const _C_LOOK = [
   "Sleeve of faded tattoos and an abacus brain — the least-fooled soul in here",
 ];
 
-function _buildMama(name, th, room) {
-  const id = name.toLowerCase();
+function _buildMama(name, th, room, id = name.toLowerCase()) {
   const bar = _barName(room) || "the bar";
   const idx = (arr, salt) => arr[_hh(id, salt) % arr.length];
   const from = idx(_H_FROM, 3);
@@ -9949,8 +9965,7 @@ function _buildMama(name, th, room) {
   };
 }
 
-function _buildCashier(name, th, room) {
-  const id = name.toLowerCase();
+function _buildCashier(name, th, room, id = name.toLowerCase()) {
   const bar = _barName(room) || "the bar";
   const idx = (arr, salt) => arr[_hh(id, salt) % arr.length];
   const from = idx(_H_FROM, 3);
@@ -10021,13 +10036,13 @@ const _FILLER_CASHIERS = [
 ];
 
 for (const [name, th, room] of _FILLER_MAMAS) {
-  const id = name.toLowerCase();
-  NPCS[id] = _buildMama(name, th, room);
+  const id = _fillerId(name, room);
+  NPCS[id] = _buildMama(name, th, room, id);
   NPC_ROLES[id] = "mamasan";
 }
 for (const [name, th, room] of _FILLER_CASHIERS) {
-  const id = name.toLowerCase();
-  NPCS[id] = _buildCashier(name, th, room);
+  const id = _fillerId(name, room);
+  NPCS[id] = _buildCashier(name, th, room, id);
   NPC_ROLES[id] = "cashier";
 }
 

@@ -465,6 +465,7 @@ CHARS = {
     "sroy":     lady(skin=THAI, hair="chignon", hc=DKBRN, shirt=C(0x5a3a1a), bg=BG_BAR, mouth="smile", acc=["earrings", "chain"], earc=SILVER),
     "chom":     lady(skin=THAI, hair="long", hc=BLACK, shirt=C(0x3a2a4a), bg=BG_BAR, mouth="grin", acc=["earrings"], earc=GOLD),
     "pranee":   lady(skin=THAI, hair="ponytail", hc=GRBLK, shirt=C(0x1a2a4a), bg=BG_BAR, mouth="neutral", acc=["earrings", "chain"], earc=GOLD),
+    "doghouse_bow": lady(skin=THAI, hair="long", hc=DKBRN, shirt=C(0x4a1a2a), bg=BG_BAR, mouth="smile", acc=["earrings"], earc=GOLD),
     "mook":     lady(skin=THAI, hair="sleek", hc=DKBRN, shirt=C(0x00e5ff), bg=BG_GOGO, mouth="grin", acc=["earrings", "chain"], earc=PINKN),
     "ice":      lady(skin=THAI, hair="pigtails", hc=BLACK, shirt=C(0xb090e0), bg=BG_GOGO, mouth="neutral", acc=["earrings"], earc=CYAN),
     "praew":    lady(skin=THAI, hair="pigtails", hc=BLACK, shirt=C(0xe86a9a), bg=BG_GOGO, mouth="grin", acc=["earrings", "nosering"], earc=GOLD),

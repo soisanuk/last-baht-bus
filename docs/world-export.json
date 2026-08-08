@@ -24,8 +24,8 @@
  "counts": {
   "geolocated": 215,
   "patrons": 18,
-  "people": 280,
-  "portraits": 298,
+  "people": 281,
+  "portraits": 299,
   "renders": 72,
   "thumbs": 72,
   "venues": 215
@@ -250,7 +250,7 @@
    "th": "อำไพ"
   },
   "ann": {
-   "desc": "New enough to still look a little nervous — one of the Midnight Sun Bar girls, from Kalasin. The {{phone}} never leaves her hand.",
+   "desc": "New enough to still look a little nervous — one of Midnight Sun Bar's girls, from Kalasin. The {{phone}} never leaves her hand.",
    "emoji": "🌸",
    "filler": true,
    "name": "Ann",
@@ -259,7 +259,7 @@
    "th": "แอน"
   },
   "aof": {
-   "desc": "Sleepy-eyed and entirely unbothered — one of the Crystal Palace A-Go-Go girls, from Loei. She types more than she talks — and laughs at both.",
+   "desc": "Sleepy-eyed and entirely unbothered — one of Crystal Palace A-Go-Go's girls, from Loei. She types more than she talks — and laughs at both.",
    "emoji": "🍒",
    "filler": true,
    "name": "Aof",
@@ -268,7 +268,7 @@
    "th": "อ๊อฟ"
   },
   "aoi": {
-   "desc": "A crooked, disarming grin — one of the Hyper A Go-Go girls, from Amnat Charoen. She types more than she talks — and laughs at both.",
+   "desc": "A crooked, disarming grin — one of Hyper A Go-Go's girls, from Amnat Charoen. She types more than she talks — and laughs at both.",
    "emoji": "💐",
    "filler": true,
    "name": "Aoi",
@@ -309,7 +309,7 @@
    "th": "อุ้ม"
   },
   "aump": {
-   "desc": "Older than the go-go average, and unhurried about it — one of the The Rabbit Hole girls, from Udon Thani. Google Translate is open before you finish the sentence.",
+   "desc": "Older than the go-go average, and unhurried about it — one of The Rabbit Hole's girls, from Udon Thani. Google Translate is open before you finish the sentence.",
    "emoji": "🌼",
    "filler": true,
    "name": "Aump",
@@ -335,7 +335,7 @@
    "th": "ใบเตย"
   },
   "bam": {
-   "desc": "Baby-faced, chewing gum, thumbing her phone under the bar — one of the Rock Factory girls, from {{Nong Khai}}. She types more than she talks — and laughs at both.",
+   "desc": "Baby-faced, chewing gum, thumbing her phone under the bar — one of Rock Factory's girls, from {{Nong Khai}}. She types more than she talks — and laughs at both.",
    "emoji": "🌻",
    "filler": true,
    "name": "Bam",
@@ -358,7 +358,7 @@
    "th": "แบร์รี่"
   },
   "beam": {
-   "desc": "Older than the go-go average, and unhurried about it — one of the Crystal Palace A-Go-Go girls, from Udon Thani. Google Translate is open before you finish the sentence.",
+   "desc": "Older than the go-go average, and unhurried about it — one of Crystal Palace A-Go-Go's girls, from Udon Thani. Google Translate is open before you finish the sentence.",
    "emoji": "🌼",
    "filler": true,
    "name": "Beam",
@@ -383,7 +383,7 @@
    "th": "ผึ้ง"
   },
   "bella": {
-   "desc": "Tall and quiet, watching the door — one of the Lucky Charm Bar girls, from {{Nong Bua Lamphu}}. The {{phone}} never leaves her hand.",
+   "desc": "Tall and quiet, watching the door — one of Lucky Charm Bar's girls, from {{Nong Bua Lamphu}}. The {{phone}} never leaves her hand.",
    "emoji": "💕",
    "filler": true,
    "name": "Bella",
@@ -447,7 +447,7 @@
    "room": "succubus"
   },
   "boom": {
-   "desc": "Older than the go-go average, and unhurried about it — one of the Crystal Palace A-Go-Go girls, from Udon Thani. Google Translate is open before you finish the sentence.",
+   "desc": "Older than the go-go average, and unhurried about it — one of Crystal Palace A-Go-Go's girls, from Udon Thani. Google Translate is open before you finish the sentence.",
    "emoji": "🌼",
    "filler": true,
    "name": "Boom",
@@ -456,7 +456,7 @@
    "th": "บูม"
   },
   "bow": {
-   "desc": "Baby-faced, chewing gum, thumbing her phone under the bar — one of the Club Mirage girls, from Khon Kaen. She types more than she talks — and laughs at both.",
+   "desc": "Baby-faced, chewing gum, thumbing her phone under the bar — one of Club Mirage's girls, from Khon Kaen. She types more than she talks — and laughs at both.",
    "emoji": "🌻",
    "filler": true,
    "name": "Bow",
@@ -465,7 +465,7 @@
    "th": "โบว์"
   },
   "bpaeng": {
-   "desc": "New enough to still look a little nervous — one of the The Office Bar girls, from Maha Sarakham. The {{phone}} never leaves her hand.",
+   "desc": "New enough to still look a little nervous — one of The Office Bar's girls, from Maha Sarakham. The {{phone}} never leaves her hand.",
    "emoji": "🌼",
    "filler": true,
    "name": "Bpaeng",
@@ -474,7 +474,7 @@
    "th": "แป้ง"
   },
   "bpom": {
-   "desc": "Baby-faced, chewing gum, thumbing her phone under the bar — one of the Lucky 7 Bar girls, from {{Nong Khai}}. She types more than she talks — and laughs at both.",
+   "desc": "Baby-faced, chewing gum, thumbing her phone under the bar — one of Lucky 7 Bar's girls, from {{Nong Khai}}. She types more than she talks — and laughs at both.",
    "emoji": "🌻",
    "filler": true,
    "name": "Bpom",
@@ -483,7 +483,7 @@
    "th": "บอม"
   },
   "bright": {
-   "desc": "Small and sharp, and misses nothing — one of the The Cricketers girls, from Sakon Nakhon. Google Translate is open before you finish the sentence.",
+   "desc": "Small and sharp, and misses nothing — one of The Cricketers's girls, from Sakon Nakhon. Google Translate is open before you finish the sentence.",
    "emoji": "🍒",
    "filler": true,
    "name": "Bright",
@@ -492,7 +492,7 @@
    "th": "ไบรท์"
   },
   "bua": {
-   "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of the Candy Bar girls, from Sisaket. Google Translate is open before you finish the sentence.",
+   "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of Candy Bar's girls, from Sisaket. Google Translate is open before you finish the sentence.",
    "emoji": "🌺",
    "filler": true,
    "name": "Bua",
@@ -501,7 +501,7 @@
    "th": "บัว"
   },
   "bum": {
-   "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of the The Dollhouse girls, from Sakon Nakhon. Google Translate is open before you finish the sentence.",
+   "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of The Dollhouse's girls, from Sakon Nakhon. Google Translate is open before you finish the sentence.",
    "emoji": "🌺",
    "filler": true,
    "name": "Bum",
@@ -510,7 +510,7 @@
    "th": "บุ๋ม"
   },
   "bunny": {
-   "desc": "Baby-faced, chewing gum, thumbing her phone under the bar — one of the Dolphin Bar girls, from {{Nong Khai}}. She types more than she talks — and laughs at both.",
+   "desc": "Baby-faced, chewing gum, thumbing her phone under the bar — one of Dolphin Bar's girls, from {{Nong Khai}}. She types more than she talks — and laughs at both.",
    "emoji": "🌻",
    "filler": true,
    "name": "Bunny",
@@ -575,7 +575,7 @@
    "th": "ชบา"
   },
   "cherry": {
-   "desc": "A crooked, disarming grin — one of the Crystal Palace A-Go-Go girls, from Mukdahan. She types more than she talks — and laughs at both.",
+   "desc": "A crooked, disarming grin — one of Crystal Palace A-Go-Go's girls, from Mukdahan. She types more than she talks — and laughs at both.",
    "emoji": "💫",
    "filler": true,
    "name": "Cherry",
@@ -584,7 +584,7 @@
    "th": "เชอรี่"
   },
   "chom": {
-   "desc": "Older than the go-go average, and unhurried about it — one of the Succubus girls, from Surin. Google Translate is open before you finish the sentence.",
+   "desc": "Older than the go-go average, and unhurried about it — one of Succubus's girls, from Surin. Google Translate is open before you finish the sentence.",
    "emoji": "🌼",
    "filler": true,
    "name": "Chom",
@@ -619,7 +619,7 @@
    "th": "แดง"
   },
   "dao": {
-   "desc": "Tall and quiet, watching the door — one of the Tequila Queen A-Go-Go girls, from Ubon. The {{phone}} never leaves her hand.",
+   "desc": "Tall and quiet, watching the door — one of Tequila Queen A-Go-Go's girls, from Ubon. The {{phone}} never leaves her hand.",
    "emoji": "💕",
    "filler": true,
    "name": "Dao",
@@ -658,8 +658,17 @@
    "room": "rainbow_girls",
    "th": "ดีเจเบียร์"
   },
+  "doghouse_bow": {
+   "desc": "New enough to still look a little nervous — one of The Doghouse's girls, from Udon Thani. The {{phone}} never leaves her hand.",
+   "emoji": "🌙",
+   "filler": true,
+   "name": "Bow",
+   "role": "hostess",
+   "room": "doghouse",
+   "th": "โบว์"
+  },
   "dokmai": {
-   "desc": "Twenty seasons of soi behind her eyes and a laugh that got louder every one — one of the The Night Heron girls, from Buriram. She types more than she talks — and laughs at both.",
+   "desc": "Twenty seasons of soi behind her eyes and a laugh that got louder every one — one of The Night Heron's girls, from Buriram. She types more than she talks — and laughs at both.",
    "emoji": "💫",
    "filler": true,
    "name": "Dokmai",
@@ -681,7 +690,7 @@
    "th": "ดอยล์"
   },
   "duan": {
-   "desc": "Pouring out here since the lake road was dirt; minds her regulars like livestock — one of the Firefly Bar girls, from {{Nong Khai}}. She types more than she talks — and laughs at both.",
+   "desc": "Pouring out here since the lake road was dirt; minds her regulars like livestock — one of Firefly Bar's girls, from {{Nong Khai}}. She types more than she talks — and laughs at both.",
    "emoji": "🍒",
    "filler": true,
    "name": "Duan",
@@ -690,7 +699,7 @@
    "th": "เดือน"
   },
   "duang": {
-   "desc": "New enough to still look a little nervous — one of the The Sandbar girls, from Maha Sarakham. The {{phone}} never leaves her hand.",
+   "desc": "New enough to still look a little nervous — one of The Sandbar's girls, from Maha Sarakham. The {{phone}} never leaves her hand.",
    "emoji": "🌸",
    "filler": true,
    "name": "Duang",
@@ -717,7 +726,7 @@
    "th": "อาย"
   },
   "fah": {
-   "desc": "Older than the go-go average, and unhurried about it — one of the Neon Paradise A-Go-Go girls, from Chaiyaphum. Google Translate is open before you finish the sentence.",
+   "desc": "Older than the go-go average, and unhurried about it — one of Neon Paradise A-Go-Go's girls, from Chaiyaphum. Google Translate is open before you finish the sentence.",
    "emoji": "🌼",
    "filler": true,
    "name": "Fah",
@@ -743,7 +752,7 @@
    "th": "ฝ้าย"
   },
   "fang": {
-   "desc": "Baby-faced, chewing gum, thumbing her phone under the bar — one of the KINKY Go-Go girls, from Loei. She types more than she talks — and laughs at both.",
+   "desc": "Baby-faced, chewing gum, thumbing her phone under the bar — one of KINKY Go-Go's girls, from Loei. She types more than she talks — and laughs at both.",
    "emoji": "🌻",
    "filler": true,
    "name": "Fang",
@@ -761,7 +770,7 @@
    "th": "ฟาริดา"
   },
   "fasai": {
-   "desc": "Small and sharp, and misses nothing — one of the Sapphire Bar girls, from Sakon Nakhon. Google Translate is open before you finish the sentence.",
+   "desc": "Small and sharp, and misses nothing — one of Sapphire Bar's girls, from Sakon Nakhon. Google Translate is open before you finish the sentence.",
    "emoji": "✨",
    "filler": true,
    "name": "Fasai",
@@ -770,7 +779,7 @@
    "th": "ฟ้าใส"
   },
   "fern": {
-   "desc": "Round-faced and quick to laugh — one of the Candy Bar 2 girls, from Mukdahan. She types more than she talks — and laughs at both.",
+   "desc": "Round-faced and quick to laugh — one of Candy Bar 2's girls, from Mukdahan. She types more than she talks — and laughs at both.",
    "emoji": "🌙",
    "filler": true,
    "name": "Fern",
@@ -787,7 +796,7 @@
    "th": "ฝน"
   },
   "gaem": {
-   "desc": "Bored until you try a word of Thai, then radiant — one of the Buzz Inn girls, from Nakhon Phanom. The {{phone}} never leaves her hand.",
+   "desc": "Bored until you try a word of Thai, then radiant — one of Buzz Inn's girls, from Nakhon Phanom. The {{phone}} never leaves her hand.",
    "emoji": "🌷",
    "filler": true,
    "name": "Gaem",
@@ -818,7 +827,7 @@
    "room": "golden_dragon"
   },
   "gib": {
-   "desc": "Small and sharp, and misses nothing — one of the KINKY Go-Go girls, from Yasothon. Google Translate is open before you finish the sentence.",
+   "desc": "Small and sharp, and misses nothing — one of KINKY Go-Go's girls, from Yasothon. Google Translate is open before you finish the sentence.",
    "emoji": "✨",
    "filler": true,
    "name": "Gib",
@@ -835,7 +844,7 @@
    "th": "กิ๊ฟ"
   },
   "gig": {
-   "desc": "New enough to still look a little nervous — one of the Arrow Bar girls, from Maha Sarakham. The {{phone}} never leaves her hand.",
+   "desc": "New enough to still look a little nervous — one of Arrow Bar's girls, from Maha Sarakham. The {{phone}} never leaves her hand.",
    "emoji": "🌸",
    "filler": true,
    "name": "Gig",
@@ -844,7 +853,7 @@
    "th": "กิ๊ก"
   },
   "gigi": {
-   "desc": "Tall and quiet, watching the door — one of the Las Vegas Go-Go girls, from {{Nong Bua Lamphu}}. The {{phone}} never leaves her hand.",
+   "desc": "Tall and quiet, watching the door — one of Las Vegas Go-Go's girls, from {{Nong Bua Lamphu}}. The {{phone}} never leaves her hand.",
    "emoji": "💕",
    "filler": true,
    "name": "Gigi",
@@ -853,7 +862,7 @@
    "th": "กีกี้"
   },
   "gina": {
-   "desc": "A crooked, disarming grin — one of the The Office Bar girls, from Mukdahan. She types more than she talks — and laughs at both.",
+   "desc": "A crooked, disarming grin — one of The Office Bar's girls, from Mukdahan. She types more than she talks — and laughs at both.",
    "emoji": "💐",
    "filler": true,
    "name": "Gina",
@@ -871,7 +880,7 @@
    "th": "กิ่ง"
   },
   "gof": {
-   "desc": "Baby-faced, chewing gum, thumbing her phone under the bar — one of the The Doghouse girls, from Khon Kaen. She types more than she talks — and laughs at both.",
+   "desc": "Baby-faced, chewing gum, thumbing her phone under the bar — one of The Doghouse's girls, from Khon Kaen. She types more than she talks — and laughs at both.",
    "emoji": "🌻",
    "filler": true,
    "name": "Gof",
@@ -889,7 +898,7 @@
    "th": "กอล์ฟ"
   },
   "goong": {
-   "desc": "Sleepy-eyed and entirely unbothered — one of the Honey Trap Bar girls, from Khon Kaen. She types more than she talks — and laughs at both.",
+   "desc": "Sleepy-eyed and entirely unbothered — one of Honey Trap Bar's girls, from Khon Kaen. She types more than she talks — and laughs at both.",
    "emoji": "🍒",
    "filler": true,
    "name": "Goong",
@@ -907,7 +916,7 @@
    "th": "เกรซ"
   },
   "guitar": {
-   "desc": "Small and sharp, and misses nothing — one of the The Rabbit Hole girls, from Sakon Nakhon. Google Translate is open before you finish the sentence.",
+   "desc": "Small and sharp, and misses nothing — one of The Rabbit Hole's girls, from Sakon Nakhon. Google Translate is open before you finish the sentence.",
    "emoji": "🍒",
    "filler": true,
    "name": "Guitar",
@@ -933,7 +942,7 @@
    "th": "ห่อง"
   },
   "ice": {
-   "desc": "Long hair, longer eyelashes, a practised pout — one of the Tequila Queen A-Go-Go girls, from Roi Et. The {{phone}} never leaves her hand.",
+   "desc": "Long hair, longer eyelashes, a practised pout — one of Tequila Queen A-Go-Go's girls, from Roi Et. The {{phone}} never leaves her hand.",
    "emoji": "💫",
    "filler": true,
    "name": "Ice",
@@ -942,7 +951,7 @@
    "th": "ไอซ์"
   },
   "ing": {
-   "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of the Blue Dog girls, from Sisaket. Google Translate is open before you finish the sentence.",
+   "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of Blue Dog's girls, from Sisaket. Google Translate is open before you finish the sentence.",
    "emoji": "🌺",
    "filler": true,
    "name": "Ing",
@@ -960,7 +969,7 @@
    "th": "จ๊ะ"
   },
   "jaja": {
-   "desc": "Sleepy-eyed and entirely unbothered — one of the The Mooring girls, from Loei. She types more than she talks — and laughs at both.",
+   "desc": "Sleepy-eyed and entirely unbothered — one of The Mooring's girls, from Loei. She types more than she talks — and laughs at both.",
    "emoji": "🍒",
    "filler": true,
    "name": "Jaja",
@@ -969,7 +978,7 @@
    "th": "จาจา"
   },
   "jampa": {
-   "desc": "A veteran's easy patience — she will out-sit, out-drink, and out-earn the room — one of the The Night Heron girls, from Maha Sarakham. The {{phone}} never leaves her hand.",
+   "desc": "A veteran's easy patience — she will out-sit, out-drink, and out-earn the room — one of The Night Heron's girls, from Maha Sarakham. The {{phone}} never leaves her hand.",
    "emoji": "💫",
    "filler": true,
    "name": "Jampa",
@@ -1012,7 +1021,7 @@
    "th": "เจนนี่"
   },
   "jiab": {
-   "desc": "Baby-faced, chewing gum, thumbing her phone under the bar — one of the Honey Trap Bar girls, from {{Nong Khai}}. She types more than she talks — and laughs at both.",
+   "desc": "Baby-faced, chewing gum, thumbing her phone under the bar — one of Honey Trap Bar's girls, from {{Nong Khai}}. She types more than she talks — and laughs at both.",
    "emoji": "🌻",
    "filler": true,
    "name": "Jiab",
@@ -1021,7 +1030,7 @@
    "th": "เจี๊ยบ"
   },
   "jib": {
-   "desc": "Tiny and loud, all elbows and energy — one of the The Growler girls, from Chaiyaphum. Google Translate is open before you finish the sentence.",
+   "desc": "Tiny and loud, all elbows and energy — one of The Growler's girls, from Chaiyaphum. Google Translate is open before you finish the sentence.",
    "emoji": "🦋",
    "filler": true,
    "name": "Jib",
@@ -1030,7 +1039,7 @@
    "th": "จิ๊บ"
   },
   "jinda": {
-   "desc": "Bored until you try a word of Thai, then radiant — one of the The Orchid Club girls, from {{Nong Bua Lamphu}}. The {{phone}} never leaves her hand.",
+   "desc": "Bored until you try a word of Thai, then radiant — one of The Orchid Club's girls, from {{Nong Bua Lamphu}}. The {{phone}} never leaves her hand.",
    "emoji": "🌷",
    "filler": true,
    "name": "Jinda",
@@ -1065,7 +1074,7 @@
    "th": "จอย"
   },
   "ju": {
-   "desc": "Round-faced and quick to laugh — one of the The Amp Room girls, from Buriram. She types more than she talks — and laughs at both.",
+   "desc": "Round-faced and quick to laugh — one of The Amp Room's girls, from Buriram. She types more than she talks — and laughs at both.",
    "emoji": "🌙",
    "filler": true,
    "name": "Ju",
@@ -1074,7 +1083,7 @@
    "th": "จู"
   },
   "jum": {
-   "desc": "Tall and quiet, watching the door — one of the Slutty Go-Go girls, from {{Nong Bua Lamphu}}. The {{phone}} never leaves her hand.",
+   "desc": "Tall and quiet, watching the door — one of Slutty Go-Go's girls, from {{Nong Bua Lamphu}}. The {{phone}} never leaves her hand.",
    "emoji": "💕",
    "filler": true,
    "name": "Jum",
@@ -1091,7 +1100,7 @@
    "th": "จัน"
   },
   "june": {
-   "desc": "Bored until you try a word of Thai, then radiant — one of the The Velvet Club girls, from Nakhon Phanom. The {{phone}} never leaves her hand.",
+   "desc": "Bored until you try a word of Thai, then radiant — one of The Velvet Club's girls, from Nakhon Phanom. The {{phone}} never leaves her hand.",
    "emoji": "🌷",
    "filler": true,
    "name": "June",
@@ -1100,7 +1109,7 @@
    "th": "จูน"
   },
   "kade": {
-   "desc": "Older than the go-go average, and unhurried about it — one of the Arrow Bar girls, from Chaiyaphum. Google Translate is open before you finish the sentence.",
+   "desc": "Older than the go-go average, and unhurried about it — one of Arrow Bar's girls, from Chaiyaphum. Google Translate is open before you finish the sentence.",
    "emoji": "🌼",
    "filler": true,
    "name": "Kade",
@@ -1109,7 +1118,7 @@
    "th": "เกด"
   },
   "kaew": {
-   "desc": "Baby-faced, chewing gum, thumbing her phone under the bar — one of the Paradise Nights Club girls, from {{Nong Khai}}. She types more than she talks — and laughs at both.",
+   "desc": "Baby-faced, chewing gum, thumbing her phone under the bar — one of Paradise Nights Club's girls, from {{Nong Khai}}. She types more than she talks — and laughs at both.",
    "emoji": "🌻",
    "filler": true,
    "name": "Kaew",
@@ -1191,7 +1200,7 @@
    "th": "เกสร"
   },
   "khing": {
-   "desc": "Round-faced and quick to laugh — one of the Blue Dog girls, from Buriram. She types more than she talks — and laughs at both.",
+   "desc": "Round-faced and quick to laugh — one of Blue Dog's girls, from Buriram. She types more than she talks — and laughs at both.",
    "emoji": "🌙",
    "filler": true,
    "name": "Khing",
@@ -1249,7 +1258,7 @@
    "th": "ขวัญ"
   },
   "kwang": {
-   "desc": "Tall and quiet, watching the door — one of the Rock Factory girls, from {{Nong Bua Lamphu}}. The {{phone}} never leaves her hand.",
+   "desc": "Tall and quiet, watching the door — one of Rock Factory's girls, from {{Nong Bua Lamphu}}. The {{phone}} never leaves her hand.",
    "emoji": "💕",
    "filler": true,
    "name": "Kwang",
@@ -1289,7 +1298,7 @@
    "th": "เล็ก"
   },
   "lin": {
-   "desc": "A veteran's easy patience — she will out-sit, out-drink, and out-earn the room — one of the The Water Buffalo girls, from Roi Et. The {{phone}} never leaves her hand.",
+   "desc": "A veteran's easy patience — she will out-sit, out-drink, and out-earn the room — one of The Water Buffalo's girls, from Roi Et. The {{phone}} never leaves her hand.",
    "emoji": "🌸",
    "filler": true,
    "name": "Lin",
@@ -1298,7 +1307,7 @@
    "th": "หลิน"
   },
   "lukkade": {
-   "desc": "Round-faced and quick to laugh — one of the The Cricketers girls, from Roi Et. The {{phone}} never leaves her hand.",
+   "desc": "Round-faced and quick to laugh — one of The Cricketers's girls, from Roi Et. The {{phone}} never leaves her hand.",
    "emoji": "🌙",
    "filler": true,
    "name": "Lukkade",
@@ -1314,7 +1323,7 @@
    "th": "แม็คก้า"
   },
   "mai": {
-   "desc": "New enough to still look a little nervous — one of the Candy Bar 2 girls, from Kalasin. The {{phone}} never leaves her hand.",
+   "desc": "New enough to still look a little nervous — one of Candy Bar 2's girls, from Kalasin. The {{phone}} never leaves her hand.",
    "emoji": "🌸",
    "filler": true,
    "name": "Mai",
@@ -1356,7 +1365,7 @@
    "th": "มะลิลา"
   },
   "mam": {
-   "desc": "Older than the go-go average, and unhurried about it — one of the Craft & Cargo girls, from Chaiyaphum. Google Translate is open before you finish the sentence.",
+   "desc": "Older than the go-go average, and unhurried about it — one of Craft & Cargo's girls, from Chaiyaphum. Google Translate is open before you finish the sentence.",
    "emoji": "🌼",
    "filler": true,
    "name": "Mam",
@@ -1365,7 +1374,7 @@
    "th": "แหม่ม"
   },
   "manow": {
-   "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of the The Stinky Pinky girls, from Sakon Nakhon. Google Translate is open before you finish the sentence.",
+   "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of The Stinky Pinky's girls, from Sakon Nakhon. Google Translate is open before you finish the sentence.",
    "emoji": "🌺",
    "filler": true,
    "name": "Manow",
@@ -1382,7 +1391,7 @@
    "th": "เมย์"
   },
   "meaw": {
-   "desc": "Small and sharp, and misses nothing — one of the Paradise Nights Club girls, from Sisaket. Google Translate is open before you finish the sentence.",
+   "desc": "Small and sharp, and misses nothing — one of Paradise Nights Club's girls, from Sisaket. Google Translate is open before you finish the sentence.",
    "emoji": "✨",
    "filler": true,
    "name": "Meaw",
@@ -1391,7 +1400,7 @@
    "th": "เหมียว"
   },
   "meen": {
-   "desc": "A crooked, disarming grin — one of the The Hive girls, from Mukdahan. She types more than she talks — and laughs at both.",
+   "desc": "A crooked, disarming grin — one of The Hive's girls, from Mukdahan. She types more than she talks — and laughs at both.",
    "emoji": "💐",
    "filler": true,
    "name": "Meen",
@@ -1400,7 +1409,7 @@
    "th": "มีน"
   },
   "mek": {
-   "desc": "Long hair, longer eyelashes, a practised pout — one of the Moonshine Bar girls, from Kalasin. The {{phone}} never leaves her hand.",
+   "desc": "Long hair, longer eyelashes, a practised pout — one of Moonshine Bar's girls, from Kalasin. The {{phone}} never leaves her hand.",
    "emoji": "💫",
    "filler": true,
    "name": "Mek",
@@ -1426,7 +1435,7 @@
    "th": "เมอร์เซเดส"
   },
   "mild": {
-   "desc": "Tall and quiet, watching the door — one of the Starlight Bar girls, from Nakhon Phanom. The {{phone}} never leaves her hand.",
+   "desc": "Tall and quiet, watching the door — one of Starlight Bar's girls, from Nakhon Phanom. The {{phone}} never leaves her hand.",
    "emoji": "💕",
    "filler": true,
    "name": "Mild",
@@ -1435,7 +1444,7 @@
    "th": "มายด์"
   },
   "milin": {
-   "desc": "Older than the go-go average, and unhurried about it — one of the The Pit Stop girls, from Chaiyaphum. Google Translate is open before you finish the sentence.",
+   "desc": "Older than the go-go average, and unhurried about it — one of The Pit Stop's girls, from Chaiyaphum. Google Translate is open before you finish the sentence.",
    "emoji": "🌼",
    "filler": true,
    "name": "Milin",
@@ -1444,7 +1453,7 @@
    "th": "มิลิน"
   },
   "milk": {
-   "desc": "Older than the go-go average, and unhurried about it — one of the The Velvet Club girls, from Udon Thani. Google Translate is open before you finish the sentence.",
+   "desc": "Older than the go-go average, and unhurried about it — one of The Velvet Club's girls, from Udon Thani. Google Translate is open before you finish the sentence.",
    "emoji": "🌼",
    "filler": true,
    "name": "Milk",
@@ -1453,7 +1462,7 @@
    "th": "มิ้ลค์"
   },
   "min": {
-   "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of the The Boardroom girls, from Yasothon. Google Translate is open before you finish the sentence.",
+   "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of The Boardroom's girls, from Yasothon. Google Translate is open before you finish the sentence.",
    "emoji": "🌺",
    "filler": true,
    "name": "Min",
@@ -1479,7 +1488,7 @@
    "th": "มล"
   },
   "mona": {
-   "desc": "A crooked, disarming grin — one of the Cheeky Monkey Bar girls, from Buriram. She types more than she talks — and laughs at both.",
+   "desc": "A crooked, disarming grin — one of Cheeky Monkey Bar's girls, from Buriram. She types more than she talks — and laughs at both.",
    "emoji": "💐",
    "filler": true,
    "name": "Mona",
@@ -1488,7 +1497,7 @@
    "th": "โมนา"
   },
   "mook": {
-   "desc": "Small and sharp, and misses nothing — one of the Tequila Queen A-Go-Go girls, from Yasothon. Google Translate is open before you finish the sentence.",
+   "desc": "Small and sharp, and misses nothing — one of Tequila Queen A-Go-Go's girls, from Yasothon. Google Translate is open before you finish the sentence.",
    "emoji": "✨",
    "filler": true,
    "name": "Mook",
@@ -1497,7 +1506,7 @@
    "th": "มุก"
   },
   "mookda": {
-   "desc": "Round-faced and quick to laugh — one of the The Sandbar girls, from Amnat Charoen. She types more than she talks — and laughs at both.",
+   "desc": "Round-faced and quick to laugh — one of The Sandbar's girls, from Amnat Charoen. She types more than she talks — and laughs at both.",
    "emoji": "🌸",
    "filler": true,
    "name": "Mookda",
@@ -1522,7 +1531,7 @@
    "th": "หมวย"
   },
   "nam": {
-   "desc": "Baby-faced, chewing gum, thumbing her phone under the bar — one of the Club Mirage girls, from Khon Kaen. She types more than she talks — and laughs at both.",
+   "desc": "Baby-faced, chewing gum, thumbing her phone under the bar — one of Club Mirage's girls, from Khon Kaen. She types more than she talks — and laughs at both.",
    "emoji": "🌻",
    "filler": true,
    "name": "Nam",
@@ -1531,7 +1540,7 @@
    "th": "น้ำ"
   },
   "namfon": {
-   "desc": "New enough to still look a little nervous — one of the The Anchor Bar girls, from Maha Sarakham. The {{phone}} never leaves her hand.",
+   "desc": "New enough to still look a little nervous — one of The Anchor Bar's girls, from Maha Sarakham. The {{phone}} never leaves her hand.",
    "emoji": "🌼",
    "filler": true,
    "name": "Namfon",
@@ -1540,7 +1549,7 @@
    "th": "น้ำฝน"
   },
   "namo": {
-   "desc": "A crooked, disarming grin — one of the Sea Breeze Bar girls, from Amnat Charoen. She types more than she talks — and laughs at both.",
+   "desc": "A crooked, disarming grin — one of Sea Breeze Bar's girls, from Amnat Charoen. She types more than she talks — and laughs at both.",
    "emoji": "💐",
    "filler": true,
    "name": "Namo",
@@ -1549,7 +1558,7 @@
    "th": "นะโม"
   },
   "namphueng": {
-   "desc": "Tiny and loud, all elbows and energy — one of the Buzz Inn girls, from Surin. She types more than she talks — and laughs at both.",
+   "desc": "Tiny and loud, all elbows and energy — one of Buzz Inn's girls, from Surin. She types more than she talks — and laughs at both.",
    "emoji": "💐",
    "filler": true,
    "name": "Namphueng",
@@ -1558,7 +1567,7 @@
    "th": "น้ำผึ้ง"
   },
   "namtan": {
-   "desc": "A veteran's easy patience — she will out-sit, out-drink, and out-earn the room — one of the Daeng's Place girls, from Roi Et. The {{phone}} never leaves her hand.",
+   "desc": "A veteran's easy patience — she will out-sit, out-drink, and out-earn the room — one of Daeng's Place's girls, from Roi Et. The {{phone}} never leaves her hand.",
    "emoji": "🌼",
    "filler": true,
    "name": "Namtan",
@@ -1567,7 +1576,7 @@
    "th": "น้ำตาล"
   },
   "namtip": {
-   "desc": "Tiny and loud, all elbows and energy — one of the Lucky Charm Bar girls, from Udon Thani. Google Translate is open before you finish the sentence.",
+   "desc": "Tiny and loud, all elbows and energy — one of Lucky Charm Bar's girls, from Udon Thani. Google Translate is open before you finish the sentence.",
    "emoji": "💐",
    "filler": true,
    "name": "Namtip",
@@ -1576,7 +1585,7 @@
    "th": "น้ำทิพย์"
   },
   "namwan": {
-   "desc": "Bored until you try a word of Thai, then radiant — one of the Las Vegas Go-Go girls, from Ubon. The {{phone}} never leaves her hand.",
+   "desc": "Bored until you try a word of Thai, then radiant — one of Las Vegas Go-Go's girls, from Ubon. The {{phone}} never leaves her hand.",
    "emoji": "✨",
    "filler": true,
    "name": "Namwan",
@@ -1585,7 +1594,7 @@
    "th": "น้ำหวาน"
   },
   "nan": {
-   "desc": "Long hair, longer eyelashes, a practised pout — one of the Candy Bar girls, from Roi Et. The {{phone}} never leaves her hand.",
+   "desc": "Long hair, longer eyelashes, a practised pout — one of Candy Bar's girls, from Roi Et. The {{phone}} never leaves her hand.",
    "emoji": "💫",
    "filler": true,
    "name": "Nan",
@@ -1602,7 +1611,7 @@
    "th": "นางฟ้า"
   },
   "naree": {
-   "desc": "A crooked, disarming grin — one of the The Windmill girls, from Amnat Charoen. She types more than she talks — and laughs at both.",
+   "desc": "A crooked, disarming grin — one of The Windmill's girls, from Amnat Charoen. She types more than she talks — and laughs at both.",
    "emoji": "💐",
    "filler": true,
    "name": "Naree",
@@ -1611,7 +1620,7 @@
    "th": "นารี"
   },
   "near": {
-   "desc": "Tall and quiet, watching the door — one of the The Metro Beer Garden girls, from {{Nong Bua Lamphu}}. The {{phone}} never leaves her hand.",
+   "desc": "Tall and quiet, watching the door — one of The Metro Beer Garden's girls, from {{Nong Bua Lamphu}}. The {{phone}} never leaves her hand.",
    "emoji": "💕",
    "filler": true,
    "name": "Near",
@@ -1628,7 +1637,7 @@
    "th": "หนี่"
   },
   "nice": {
-   "desc": "A crooked, disarming grin — one of the KINKY Go-Go girls, from Buriram. She types more than she talks — and laughs at both.",
+   "desc": "A crooked, disarming grin — one of KINKY Go-Go's girls, from Buriram. She types more than she talks — and laughs at both.",
    "emoji": "💐",
    "filler": true,
    "name": "Nice",
@@ -1637,7 +1646,7 @@
    "th": "ไนซ์"
   },
   "nid": {
-   "desc": "Older than the go-go average, and unhurried about it — one of the Silk Rose Bar girls, from Surin. Google Translate is open before you finish the sentence.",
+   "desc": "Older than the go-go average, and unhurried about it — one of Silk Rose Bar's girls, from Surin. Google Translate is open before you finish the sentence.",
    "emoji": "🌼",
    "filler": true,
    "name": "Nid",
@@ -1646,7 +1655,7 @@
    "th": "นิด"
   },
   "nim": {
-   "desc": "Somebody's mother, twice over, and nobody's fool ever — one of the The Water Buffalo girls, from Sakon Nakhon. Google Translate is open before you finish the sentence.",
+   "desc": "Somebody's mother, twice over, and nobody's fool ever — one of The Water Buffalo's girls, from Sakon Nakhon. Google Translate is open before you finish the sentence.",
    "emoji": "🌺",
    "filler": true,
    "name": "Nim",
@@ -1678,7 +1687,7 @@
    "th": "นิด"
   },
   "nittaya": {
-   "desc": "Tall and quiet, watching the door — one of the Coconut Bar girls, from Yasothon. The {{phone}} never leaves her hand.",
+   "desc": "Tall and quiet, watching the door — one of Coconut Bar's girls, from Yasothon. The {{phone}} never leaves her hand.",
    "emoji": "💕",
    "filler": true,
    "name": "Nittaya",
@@ -1687,7 +1696,7 @@
    "th": "นิตยา"
   },
   "noey": {
-   "desc": "Long hair, longer eyelashes, a practised pout — one of the Hyper A Go-Go girls, from Roi Et. The {{phone}} never leaves her hand.",
+   "desc": "Long hair, longer eyelashes, a practised pout — one of Hyper A Go-Go's girls, from Roi Et. The {{phone}} never leaves her hand.",
    "emoji": "💫",
    "filler": true,
    "name": "Noey",
@@ -1727,7 +1736,7 @@
    "th": "นุ้ก"
   },
   "noon": {
-   "desc": "Baby-faced, chewing gum, thumbing her phone under the bar — one of the Jasmine Garden Bar girls, from Loei. She types more than she talks — and laughs at both.",
+   "desc": "Baby-faced, chewing gum, thumbing her phone under the bar — one of Jasmine Garden Bar's girls, from Loei. She types more than she talks — and laughs at both.",
    "emoji": "🌻",
    "filler": true,
    "name": "Noon",
@@ -1777,7 +1786,7 @@
    "th": "น้ำฝน"
   },
   "nut": {
-   "desc": "Round-faced and quick to laugh — one of the Midnight Sun Bar girls, from Amnat Charoen. She types more than she talks — and laughs at both.",
+   "desc": "Round-faced and quick to laugh — one of Midnight Sun Bar's girls, from Amnat Charoen. She types more than she talks — and laughs at both.",
    "emoji": "🌙",
    "filler": true,
    "name": "Nut",
@@ -1786,7 +1795,7 @@
    "th": "นัท"
   },
   "oat": {
-   "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of the Lucky Tiger Bar girls, from Sakon Nakhon. Google Translate is open before you finish the sentence.",
+   "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of Lucky Tiger Bar's girls, from Sakon Nakhon. Google Translate is open before you finish the sentence.",
    "emoji": "🌺",
    "filler": true,
    "name": "Oat",
@@ -1795,7 +1804,7 @@
    "th": "โอ๊ต"
   },
   "ohm": {
-   "desc": "Small and sharp, and misses nothing — one of the The Dollhouse girls, from Yasothon. Google Translate is open before you finish the sentence.",
+   "desc": "Small and sharp, and misses nothing — one of The Dollhouse's girls, from Yasothon. Google Translate is open before you finish the sentence.",
    "emoji": "✨",
    "filler": true,
    "name": "Ohm",
@@ -1813,7 +1822,7 @@
    "th": "อ้อม"
   },
   "orn": {
-   "desc": "Long hair, longer eyelashes, a practised pout — one of the Las Vegas Go-Go girls, from Maha Sarakham. The {{phone}} never leaves her hand.",
+   "desc": "Long hair, longer eyelashes, a practised pout — one of Las Vegas Go-Go's girls, from Maha Sarakham. The {{phone}} never leaves her hand.",
    "emoji": "💫",
    "filler": true,
    "name": "Orn",
@@ -1839,7 +1848,7 @@
    "th": "แพนเค้ก"
   },
   "pang": {
-   "desc": "Bored until you try a word of Thai, then radiant — one of the Rainbow Girls Bar girls, from Ubon. The {{phone}} never leaves her hand.",
+   "desc": "Bored until you try a word of Thai, then radiant — one of Rainbow Girls Bar's girls, from Ubon. The {{phone}} never leaves her hand.",
    "emoji": "🌷",
    "filler": true,
    "name": "Pang",
@@ -1848,7 +1857,7 @@
    "th": "แป้ง"
   },
   "pao": {
-   "desc": "Tall and quiet, watching the door — one of the Sundowner Bar girls, from {{Nong Bua Lamphu}}. The {{phone}} never leaves her hand.",
+   "desc": "Tall and quiet, watching the door — one of Sundowner Bar's girls, from {{Nong Bua Lamphu}}. The {{phone}} never leaves her hand.",
    "emoji": "💕",
    "filler": true,
    "name": "Pao",
@@ -1857,7 +1866,7 @@
    "th": "เป้า"
   },
   "pat": {
-   "desc": "A crooked, disarming grin — one of the Feedback Bar girls, from Buriram. She types more than she talks — and laughs at both.",
+   "desc": "A crooked, disarming grin — one of Feedback Bar's girls, from Buriram. She types more than she talks — and laughs at both.",
    "emoji": "💐",
    "filler": true,
    "name": "Pat",
@@ -1866,7 +1875,7 @@
    "th": "แพท"
   },
   "pear": {
-   "desc": "Sleepy-eyed and entirely unbothered — one of the The Orchid Club girls, from Khon Kaen. She types more than she talks — and laughs at both.",
+   "desc": "Sleepy-eyed and entirely unbothered — one of The Orchid Club's girls, from Khon Kaen. She types more than she talks — and laughs at both.",
    "emoji": "🍒",
    "filler": true,
    "name": "Pear",
@@ -1945,7 +1954,7 @@
    "th": "ปิง"
   },
   "pinky": {
-   "desc": "Tiny and loud, all elbows and energy — one of the Cheeky Monkey Bar girls, from Chaiyaphum. Google Translate is open before you finish the sentence.",
+   "desc": "Tiny and loud, all elbows and energy — one of Cheeky Monkey Bar's girls, from Chaiyaphum. Google Translate is open before you finish the sentence.",
    "emoji": "🦋",
    "filler": true,
    "name": "Pinky",
@@ -1963,7 +1972,7 @@
    "th": "เปิ้ล"
   },
   "ploen": {
-   "desc": "Bored until you try a word of Thai, then radiant — one of the Rainbow Girls Bar girls, from Ubon. The {{phone}} never leaves her hand.",
+   "desc": "Bored until you try a word of Thai, then radiant — one of Rainbow Girls Bar's girls, from Ubon. The {{phone}} never leaves her hand.",
    "emoji": "🌷",
    "filler": true,
    "name": "Ploen",
@@ -1980,7 +1989,7 @@
    "th": "พลอย"
   },
   "poom": {
-   "desc": "Long hair, longer eyelashes, a practised pout — one of the Sundowner Bar girls, from Maha Sarakham. The {{phone}} never leaves her hand.",
+   "desc": "Long hair, longer eyelashes, a practised pout — one of Sundowner Bar's girls, from Maha Sarakham. The {{phone}} never leaves her hand.",
    "emoji": "💫",
    "filler": true,
    "name": "Poom",
@@ -1989,7 +1998,7 @@
    "th": "ภูมิ"
   },
   "pop": {
-   "desc": "New enough to still look a little nervous — one of the Slutty Go-Go girls, from Roi Et. The {{phone}} never leaves her hand.",
+   "desc": "New enough to still look a little nervous — one of Slutty Go-Go's girls, from Roi Et. The {{phone}} never leaves her hand.",
    "emoji": "🌸",
    "filler": true,
    "name": "Pop",
@@ -2012,7 +2021,7 @@
    "th": "พอย"
   },
   "prae": {
-   "desc": "Sleepy-eyed and entirely unbothered — one of the Jasmine Garden Bar girls, from {{Nong Khai}}. She types more than she talks — and laughs at both.",
+   "desc": "Sleepy-eyed and entirely unbothered — one of Jasmine Garden Bar's girls, from {{Nong Khai}}. She types more than she talks — and laughs at both.",
    "emoji": "🍒",
    "filler": true,
    "name": "Prae",
@@ -2021,7 +2030,7 @@
    "th": "แพร"
   },
   "praew": {
-   "desc": "Older than the go-go average, and unhurried about it — one of the Tequila Queen A-Go-Go girls, from Chaiyaphum. Google Translate is open before you finish the sentence.",
+   "desc": "Older than the go-go average, and unhurried about it — one of Tequila Queen A-Go-Go's girls, from Chaiyaphum. Google Translate is open before you finish the sentence.",
    "emoji": "🌼",
    "filler": true,
    "name": "Praew",
@@ -2038,7 +2047,7 @@
    "th": "แพรวา"
   },
   "pranee": {
-   "desc": "Round-faced and quick to laugh — one of the Succubus girls, from Mukdahan. She types more than she talks — and laughs at both.",
+   "desc": "Round-faced and quick to laugh — one of Succubus's girls, from Mukdahan. She types more than she talks — and laughs at both.",
    "emoji": "🌸",
    "filler": true,
    "name": "Pranee",
@@ -2055,7 +2064,7 @@
    "th": "แพรว"
   },
   "prik": {
-   "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of the Moonshine Bar girls, from Yasothon. Google Translate is open before you finish the sentence.",
+   "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of Moonshine Bar's girls, from Yasothon. Google Translate is open before you finish the sentence.",
    "emoji": "🌺",
    "filler": true,
    "name": "Prik",
@@ -2064,7 +2073,7 @@
    "th": "พริก"
   },
   "proud": {
-   "desc": "Bored until you try a word of Thai, then radiant — one of the Lucky 7 Bar girls, from Nakhon Phanom. The {{phone}} never leaves her hand.",
+   "desc": "Bored until you try a word of Thai, then radiant — one of Lucky 7 Bar's girls, from Nakhon Phanom. The {{phone}} never leaves her hand.",
    "emoji": "🌷",
    "filler": true,
    "name": "Proud",
@@ -2073,7 +2082,7 @@
    "th": "พราว"
   },
   "pui": {
-   "desc": "Sleepy-eyed and entirely unbothered — one of the Starlight Bar girls, from Khon Kaen. She types more than she talks — and laughs at both.",
+   "desc": "Sleepy-eyed and entirely unbothered — one of Starlight Bar's girls, from Khon Kaen. She types more than she talks — and laughs at both.",
    "emoji": "🍒",
    "filler": true,
    "name": "Pui",
@@ -2090,7 +2099,7 @@
    "th": "ปุ๊กกี้"
   },
   "pun": {
-   "desc": "Older than the go-go average, and unhurried about it — one of the Encore girls, from Surin. Google Translate is open before you finish the sentence.",
+   "desc": "Older than the go-go average, and unhurried about it — one of Encore's girls, from Surin. Google Translate is open before you finish the sentence.",
    "emoji": "🌼",
    "filler": true,
    "name": "Pun",
@@ -2116,7 +2125,7 @@
    "th": "รัตนา"
   },
   "ratchada": {
-   "desc": "Tall and quiet, watching the door — one of the Coconut Bar girls, from Yasothon. The {{phone}} never leaves her hand.",
+   "desc": "Tall and quiet, watching the door — one of Coconut Bar's girls, from Yasothon. The {{phone}} never leaves her hand.",
    "emoji": "🌺",
    "filler": true,
    "name": "Ratchada",
@@ -2166,7 +2175,7 @@
    "th": "รอย"
   },
   "rung": {
-   "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of the Lucky Tiger Bar girls, from Sisaket. Google Translate is open before you finish the sentence.",
+   "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of Lucky Tiger Bar's girls, from Sisaket. Google Translate is open before you finish the sentence.",
    "emoji": "🌺",
    "filler": true,
    "name": "Rung",
@@ -2183,7 +2192,7 @@
    "th": "แสง"
   },
   "sai": {
-   "desc": "Long hair, longer eyelashes, a practised pout — one of the Rainbow Girls Bar girls, from Maha Sarakham. The {{phone}} never leaves her hand.",
+   "desc": "Long hair, longer eyelashes, a practised pout — one of Rainbow Girls Bar's girls, from Maha Sarakham. The {{phone}} never leaves her hand.",
    "emoji": "💫",
    "filler": true,
    "name": "Sai",
@@ -2192,7 +2201,7 @@
    "th": "ทราย"
   },
   "saifon": {
-   "desc": "Somebody's mother, twice over, and nobody's fool ever — one of the Firefly Bar girls, from Yasothon. Google Translate is open before you finish the sentence.",
+   "desc": "Somebody's mother, twice over, and nobody's fool ever — one of Firefly Bar's girls, from Yasothon. Google Translate is open before you finish the sentence.",
    "emoji": "🍒",
    "filler": true,
    "name": "Saifon",
@@ -2201,7 +2210,7 @@
    "th": "สายฝน"
   },
   "sara": {
-   "desc": "Tiny and loud, all elbows and energy — one of the Neon Paradise A-Go-Go girls, from Udon Thani. Google Translate is open before you finish the sentence.",
+   "desc": "Tiny and loud, all elbows and energy — one of Neon Paradise A-Go-Go's girls, from Udon Thani. Google Translate is open before you finish the sentence.",
    "emoji": "🦋",
    "filler": true,
    "name": "Sara",
@@ -2210,7 +2219,7 @@
    "th": "ซาร่า"
   },
   "sasi": {
-   "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of the The Windmill girls, from Sisaket. Google Translate is open before you finish the sentence.",
+   "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of The Windmill's girls, from Sisaket. Google Translate is open before you finish the sentence.",
    "emoji": "🌺",
    "filler": true,
    "name": "Sasi",
@@ -2226,7 +2235,7 @@
    "th": "รปภ."
   },
   "som": {
-   "desc": "New enough to still look a little nervous — one of the Soundcheck Bar girls, from Roi Et. The {{phone}} never leaves her hand.",
+   "desc": "New enough to still look a little nervous — one of Soundcheck Bar's girls, from Roi Et. The {{phone}} never leaves her hand.",
    "emoji": "🌸",
    "filler": true,
    "name": "Som",
@@ -2259,7 +2268,7 @@
    "th": "โซโม่"
   },
   "somruedee": {
-   "desc": "A crooked, disarming grin — one of the Sea Breeze Bar girls, from Buriram. She types more than she talks — and laughs at both.",
+   "desc": "A crooked, disarming grin — one of Sea Breeze Bar's girls, from Buriram. She types more than she talks — and laughs at both.",
    "emoji": "💐",
    "filler": true,
    "name": "Somruedee",
@@ -2285,7 +2294,7 @@
    "th": "โสภา"
   },
   "sroy": {
-   "desc": "Long hair, longer eyelashes, a practised pout — one of the Succubus girls, from Maha Sarakham. The {{phone}} never leaves her hand.",
+   "desc": "Long hair, longer eyelashes, a practised pout — one of Succubus's girls, from Maha Sarakham. The {{phone}} never leaves her hand.",
    "emoji": "💫",
    "filler": true,
    "name": "Sroy",
@@ -2317,7 +2326,7 @@
    "th": "สุนีย์"
   },
   "taan": {
-   "desc": "Small and sharp, and misses nothing — one of the Gold Rush Lounge girls, from Yasothon. Google Translate is open before you finish the sentence.",
+   "desc": "Small and sharp, and misses nothing — one of Gold Rush Lounge's girls, from Yasothon. Google Translate is open before you finish the sentence.",
    "emoji": "✨",
    "filler": true,
    "name": "Taan",
@@ -2351,7 +2360,7 @@
    "th": "แตงโม"
   },
   "tar": {
-   "desc": "Older than the go-go average, and unhurried about it — one of the The Doghouse girls, from Chaiyaphum. Google Translate is open before you finish the sentence.",
+   "desc": "Older than the go-go average, and unhurried about it — one of The Doghouse's girls, from Chaiyaphum. Google Translate is open before you finish the sentence.",
    "emoji": "🌼",
    "filler": true,
    "name": "Tar",
@@ -2360,7 +2369,7 @@
    "th": "ตาล"
   },
   "tarn": {
-   "desc": "Long hair, longer eyelashes, a practised pout — one of the Sapphire Bar girls, from Maha Sarakham. The {{phone}} never leaves her hand.",
+   "desc": "Long hair, longer eyelashes, a practised pout — one of Sapphire Bar's girls, from Maha Sarakham. The {{phone}} never leaves her hand.",
    "emoji": "💫",
    "filler": true,
    "name": "Tarn",
@@ -2375,7 +2384,7 @@
    "room": "queen_vic"
   },
   "tik": {
-   "desc": "Baby-faced, chewing gum, thumbing her phone under the bar — one of the Gold Rush Lounge girls, from Khon Kaen. She types more than she talks — and laughs at both.",
+   "desc": "Baby-faced, chewing gum, thumbing her phone under the bar — one of Gold Rush Lounge's girls, from Khon Kaen. She types more than she talks — and laughs at both.",
    "emoji": "🌻",
    "filler": true,
    "name": "Tik",
@@ -2384,7 +2393,7 @@
    "th": "ติ๊ก"
   },
   "tim": {
-   "desc": "Small and sharp, and misses nothing — one of the The Boardroom girls, from Sisaket. Google Translate is open before you finish the sentence.",
+   "desc": "Small and sharp, and misses nothing — one of The Boardroom's girls, from Sisaket. Google Translate is open before you finish the sentence.",
    "emoji": "✨",
    "filler": true,
    "name": "Tim",
@@ -2393,7 +2402,7 @@
    "th": "ทิม"
   },
   "toey": {
-   "desc": "New enough to still look a little nervous — one of the Rainbow Girls Bar girls, from Kalasin. The {{phone}} never leaves her hand.",
+   "desc": "New enough to still look a little nervous — one of Rainbow Girls Bar's girls, from Kalasin. The {{phone}} never leaves her hand.",
    "emoji": "🌸",
    "filler": true,
    "name": "Toey",
@@ -2410,7 +2419,7 @@
    "th": "ต้อย"
   },
   "ton": {
-   "desc": "A crooked, disarming grin — one of the Silk Rose Bar girls, from Mukdahan. She types more than she talks — and laughs at both.",
+   "desc": "A crooked, disarming grin — one of Silk Rose Bar's girls, from Mukdahan. She types more than she talks — and laughs at both.",
    "emoji": "💐",
    "filler": true,
    "name": "Ton",
@@ -2425,7 +2434,7 @@
    "room": "poseidon_soapy"
   },
   "toon": {
-   "desc": "Sleepy-eyed and entirely unbothered — one of the Container 8 girls, from Khon Kaen. She types more than she talks — and laughs at both.",
+   "desc": "Sleepy-eyed and entirely unbothered — one of Container 8's girls, from Khon Kaen. She types more than she talks — and laughs at both.",
    "emoji": "🍒",
    "filler": true,
    "name": "Toon",
@@ -2452,7 +2461,7 @@
    "th": "ตุ๊กกี้"
   },
   "tukta": {
-   "desc": "A crooked, disarming grin — one of the Slutty Go-Go girls, from Buriram. She types more than she talks — and laughs at both.",
+   "desc": "A crooked, disarming grin — one of Slutty Go-Go's girls, from Buriram. She types more than she talks — and laughs at both.",
    "emoji": "💐",
    "filler": true,
    "name": "Tukta",
@@ -2461,7 +2470,7 @@
    "th": "ตุ๊กตา"
   },
   "view": {
-   "desc": "Long hair, longer eyelashes, a practised pout — one of the Neon Paradise A-Go-Go girls, from Roi Et. The {{phone}} never leaves her hand.",
+   "desc": "Long hair, longer eyelashes, a practised pout — one of Neon Paradise A-Go-Go's girls, from Roi Et. The {{phone}} never leaves her hand.",
    "emoji": "💫",
    "filler": true,
    "name": "View",
@@ -2470,7 +2479,7 @@
    "th": "วิว"
   },
   "wa": {
-   "desc": "Small and sharp, and misses nothing — one of the Silk Rose Bar girls, from Yasothon. Google Translate is open before you finish the sentence.",
+   "desc": "Small and sharp, and misses nothing — one of Silk Rose Bar's girls, from Yasothon. Google Translate is open before you finish the sentence.",
    "emoji": "✨",
    "filler": true,
    "name": "Wa",
@@ -2520,7 +2529,7 @@
    "th": "วนิดา"
   },
   "wanpen": {
-   "desc": "A gold tooth, a sharper tongue, and drink arithmetic you can watch happening — one of the Mama Yai's girls, from Udon Thani. Google Translate is open before you finish the sentence.",
+   "desc": "A gold tooth, a sharper tongue, and drink arithmetic you can watch happening — one of Mama Yai's's girls, from Udon Thani. Google Translate is open before you finish the sentence.",
    "emoji": "💐",
    "filler": true,
    "name": "Wanpen",
@@ -2529,7 +2538,7 @@
    "th": "วันเพ็ญ"
   },
   "wassana": {
-   "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of the The Doghouse girls, from Loei. She types more than she talks — and laughs at both.",
+   "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of The Doghouse's girls, from Loei. She types more than she talks — and laughs at both.",
    "emoji": "🌺",
    "filler": true,
    "name": "Wassana",
@@ -2574,7 +2583,7 @@
    "th": "วิน"
   },
   "yada": {
-   "desc": "A crooked, disarming grin — one of the The Windmill girls, from Buriram. She types more than she talks — and laughs at both.",
+   "desc": "A crooked, disarming grin — one of The Windmill's girls, from Buriram. She types more than she talks — and laughs at both.",
    "emoji": "💐",
    "filler": true,
    "name": "Yada",
@@ -2591,7 +2600,7 @@
    "th": "ใหญ่"
   },
   "yaya": {
-   "desc": "Baby-faced, chewing gum, thumbing her phone under the bar — one of the Reload Bar girls, from {{Nong Khai}}. She types more than she talks — and laughs at both.",
+   "desc": "Baby-faced, chewing gum, thumbing her phone under the bar — one of Reload Bar's girls, from {{Nong Khai}}. She types more than she talks — and laughs at both.",
    "emoji": "🌻",
    "filler": true,
    "name": "Yaya",
@@ -2600,7 +2609,7 @@
    "th": "ยาย่า"
   },
   "ying": {
-   "desc": "Twenty seasons of soi behind her eyes and a laugh that got louder every one — one of the Daeng's Place girls, from Amnat Charoen. She types more than she talks — and laughs at both.",
+   "desc": "Twenty seasons of soi behind her eyes and a laugh that got louder every one — one of Daeng's Place's girls, from Amnat Charoen. She types more than she talks — and laughs at both.",
    "emoji": "💐",
    "filler": true,
    "name": "Ying",
@@ -2609,7 +2618,7 @@
    "th": "หญิง"
   },
   "yok": {
-   "desc": "Older than the go-go average, and unhurried about it — one of the The Hive girls, from Surin. Google Translate is open before you finish the sentence.",
+   "desc": "Older than the go-go average, and unhurried about it — one of The Hive's girls, from Surin. Google Translate is open before you finish the sentence.",
    "emoji": "🌼",
    "filler": true,
    "name": "Yok",
@@ -2618,7 +2627,7 @@
    "th": "หยก"
   },
   "yui": {
-   "desc": "Round-faced and quick to laugh — one of the Club Mirage girls, from Mukdahan. She types more than she talks — and laughs at both.",
+   "desc": "Round-faced and quick to laugh — one of Club Mirage's girls, from Mukdahan. She types more than she talks — and laughs at both.",
    "emoji": "🌙",
    "filler": true,
    "name": "Yui",
@@ -2708,6 +2717,7 @@
   "dew",
   "diamond",
   "dj_beer",
+  "doghouse_bow",
   "dokmai",
   "doug",
   "doyle",
