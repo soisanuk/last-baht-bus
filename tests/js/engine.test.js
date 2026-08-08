@@ -3558,7 +3558,11 @@ test("Thappraya Main Strip: reached east off the beach road, the mix of venues, 
   assert.equal(ROOMS.jomtien_beach_rd_n.exits.e, "thappraya_w", "beach road bends east into the strip");
   assert.ok(!ROOMS.dongtan_beach.exits.up, "no up-climb off the sand");
   assert.equal(ROOMS.dongtan_beach.exits.e, "jomtien_beach_rd_n", "the overlap sand steps east onto its parallel road");
-  assert.equal(ROOMS.dongtan_beach.exits.n, "dongtan_beach_m", "the sand runs on north up the Dongtan shore");
+  // the sand and the road are PARALLEL lanes, one node each, and dongtan_rd_s had
+  // no partner — so dongtan_beach_s went in between, and the sand steps to it
+  assert.equal(ROOMS.dongtan_beach.exits.n, "dongtan_beach_s", "the sand runs on north up the Dongtan shore");
+  assert.equal(ROOMS.dongtan_beach_s.exits.e, "dongtan_rd_s", "…and every sand node has its road opposite");
+  assert.equal(ROOMS.jomtien_beach_rd_n.exits.n, "dongtan_rd_s", "the ROAD lane runs road-to-road, not onto the sand");
   assert.equal(ROOMS.thappraya_w.exits.e, "thappraya_mid");
   assert.equal(ROOMS.thappraya_mid.exits.e, "thappraya_e");
   assert.ok(ROOMS.thappraya_w.seven && ROOMS.thappraya_e.seven, "a 7-Eleven at each end");
@@ -3576,7 +3580,7 @@ test("Thappraya Main Strip: reached east off the beach road, the mix of venues, 
     ROOMS.supertown_elbow.venues.includes("peacock_cabaret"), "the host bar and cabaret front the alley");
   // the Pratumnak north extension: two roads climb the hill and join at the crest,
   // walkable as a loop back down the Dongtan sand and east onto the beach road / strip
-  // (thappraya_e up → … → dongtan_rd_s → dongtan_beach → e → jomtien_beach_rd_n → e → thappraya_w)
+  // (thappraya_e up → … → dongtan_rd_s → s → jomtien_beach_rd_n → e → thappraya_w)
   assert.equal(ROOMS.thappraya_e.exits.up, "thappraya_ext_s");
   assert.equal(ROOMS.thappraya_ext_s.exits.n, "thappraya_ext_m");
   assert.equal(ROOMS.thappraya_ext_m.exits.n, "thappraya_ext_n");
@@ -3584,7 +3588,10 @@ test("Thappraya Main Strip: reached east off the beach road, the mix of venues, 
   assert.equal(ROOMS.pratumnak_hill_rd.exits.w, "dongtan_rd_n", "the crest links both north ends");
   assert.equal(ROOMS.dongtan_rd_n.exits.s, "dongtan_rd_m");
   assert.equal(ROOMS.dongtan_rd_m.exits.s, "dongtan_rd_s");
-  assert.equal(ROOMS.dongtan_rd_s.exits.s, "dongtan_beach", "Dongtan Beach Road drops back onto the sand");
+  // the road lane runs road-to-road all the way down; you reach the sand by
+  // stepping WEST off it, the way every other pair on this shore works
+  assert.equal(ROOMS.dongtan_rd_s.exits.s, "jomtien_beach_rd_n", "the road lane continues onto Jomtien Beach Road");
+  assert.equal(ROOMS.dongtan_rd_s.exits.w, "dongtan_beach_s", "…and the sand is a step west, not a step south");
   assert.notEqual(ROOMS.pratumnak_hill_rd.name, ROOMS.pratumnak_rd.name, "the two Pratumnak roads read distinctly");
   // the venue mix
   assert.equal(ROOMS.hyper.barType, "gogo");

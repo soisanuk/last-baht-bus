@@ -22,13 +22,13 @@
   "Blue Dog"
  ],
  "counts": {
-  "geolocated": 194,
+  "geolocated": 195,
   "patrons": 18,
   "people": 268,
   "portraits": 286,
   "renders": 72,
   "thumbs": 72,
-  "venues": 194
+  "venues": 195
  },
  "frames": [
   "baimon_pic1",
@@ -3370,7 +3370,7 @@
     12.89826,
     100.86651
    ],
-   "name": "Dongtan Beach (South)",
+   "name": "Dongtan Beach (Jomtien End)",
    "region": "Jomtien"
   },
   "dongtan_beach_m": {
@@ -3387,6 +3387,14 @@
     100.85765
    ],
    "name": "Dongtan Beach (North)",
+   "region": "Jomtien"
+  },
+  "dongtan_beach_s": {
+   "geo": [
+    12.90198,
+    100.86339
+   ],
+   "name": "Dongtan Beach (South)",
    "region": "Jomtien"
   },
   "dongtan_rd_m": {

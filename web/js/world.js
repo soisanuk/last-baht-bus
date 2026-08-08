@@ -123,7 +123,7 @@ const ROOMS = {
     exits: { n: "jomtien_beach", e: "jomtien_soi_7_m" },
   },
   dongtan_beach: {
-    name: "Dongtan Beach (South)",
+    name: "Dongtan Beach (Jomtien End)",
     region: "Jomtien",
     dark: true,
     desc: "The quieter stretch north of Jomtien proper — by day rainbow flags and beach " +
@@ -131,7 +131,7 @@ const ROOMS = {
       "surf. This is where the two beaches meet: south the sand runs back down to Jomtien, north " +
       "it carries on up the darker Dongtan shore. Inland to the east the beach road reaches its " +
       "north end, where it bends into the neon of the Thappraya Main Strip.",
-    exits: { s: "jomtien_beach_m", e: "jomtien_beach_rd_n", n: "dongtan_beach_m" },
+    exits: { s: "jomtien_beach_m", e: "jomtien_beach_rd_n", n: "dongtan_beach_s" },
   },
   jomtien_beach_rd: {
     name: "Jomtien Beach Road (Baht Bus Stop)",
@@ -542,7 +542,7 @@ const ROOMS = {
       "Here it bends east into the neon of the Thappraya Main Strip; a hill road runs on north " +
       "into the dark toward Pratumnak and, eventually, Pattaya. The bus stop and the Jomtien " +
       "lights are back to the south, the Dongtan sand off to the west.",
-    exits: { s: "jomtien_beach_rd", e: "thappraya_w", w: "dongtan_beach" },
+    exits: { s: "jomtien_beach_rd", n: "dongtan_rd_s", e: "thappraya_w", w: "dongtan_beach" },
   },
 
   // ─── Pratumnak Hill ───
@@ -603,6 +603,17 @@ const ROOMS = {
       "The sand is a black rumour to the west; Pratumnak Hill Road climbs away east over the top.",
     exits: { s: "dongtan_rd_m", e: "pratumnak_hill_rd", w: "dongtan_beach_n" },
   },
+  dongtan_beach_s: {
+    name: "Dongtan Beach (South)",
+    region: "Jomtien",
+    dark: true,
+    desc: "Dongtan proper begins here, and the difference is immediate: the beach chairs " +
+      "thin out, the lights of Jomtien fall behind, and the sand widens into the dark. " +
+      "The surf is the loudest thing for a hundred metres. A short access path climbs " +
+      "east to Dongtan Beach Road; the sand runs south back toward the Jomtien end and " +
+      "north up the shore.",
+    exits: { s: "dongtan_beach", n: "dongtan_beach_m", e: "dongtan_rd_s" },
+  },
   dongtan_beach_m: {
     name: "Dongtan Beach (Middle)",
     region: "Jomtien",
@@ -610,7 +621,7 @@ const ROOMS = {
     desc: "A dark reach of Dongtan sand, well off the Jomtien lights: the surf close and loud, a " +
       "few couples' silhouettes. The sand runs south back toward Jomtien and north on up the " +
       "shore; a beach-access path cuts up to Dongtan Beach Road to the east.",
-    exits: { s: "dongtan_beach", n: "dongtan_beach_n", e: "dongtan_rd_m" },
+    exits: { s: "dongtan_beach_s", n: "dongtan_beach_n", e: "dongtan_rd_m" },
   },
   dongtan_beach_n: {
     name: "Dongtan Beach (North)",
@@ -636,7 +647,7 @@ const ROOMS = {
     desc: "The south end of Dongtan Beach Road, where it peels off the top of Jomtien's beach: " +
       "rainbow flags by day, a mellow gay-friendly stretch, cocktail shacks winding down. Dongtan " +
       "Beach is back to the south; the road runs on north up the coast.",
-    exits: { s: "dongtan_beach", n: "dongtan_rd_m" },
+    exits: { s: "jomtien_beach_rd_n", n: "dongtan_rd_m", w: "dongtan_beach_s" },
   },
   buddha_hill: {
     name: "Buddha Hill Viewpoint",
@@ -9866,6 +9877,7 @@ const ROOM_GEO = {
   jomtien_7eleven:  [12.89584, 100.86965],
   jomtien_beach_m:  [12.89720, 100.86753],
   jomtien_soi_7_beach_end:   [12.89537, 100.86949],
+  dongtan_beach_s:  [12.90198, 100.86339],
   dongtan_beach_m:  [12.90546, 100.86048],
   dongtan_beach_n:  [12.90883, 100.85765],
   jomtien_beach_rd_s: [12.89568, 100.86989],
