@@ -722,16 +722,18 @@ const ROOMS = {
       "— joggers who have misjudged the hour, a man selling roasted chestnuts nobody " +
       "buys, and the long slow crawl of songthaews with their benches half full. " +
       "Central Pattaya Road crosses a hundred metres north, which is why the traffic " +
-      "here never quite clears. Soi 7 runs inland here and Soi 8 a block south; " +
-      "the two are close enough that people take the wrong one and only notice " +
-      "when the noise fails to arrive.",
+      "here never quite clears — Central Pattaya Road comes down to the sea a " +
+      "hundred metres north, and its traffic is still deciding things by the time " +
+      "it reaches you. Soi 7 runs inland here and Soi 8 a block south; the two are " +
+      "close enough that people take the wrong one and only notice when the noise " +
+      "fails to arrive.",
     revisit: [
       "The chestnut man has moved four metres and changed nothing.",
       "A songthaew slows, reads you, and rolls on unconvinced.",
       "Somebody jogs past in the wrong clothes at the wrong hour, entirely content.",
       "The sea does its thing on the other side of the railing, unbothered.",
     ],
-    exits: { n: "beach_rd_n", s: "beach_rd_soi9", e: "pattaya_soi_7", soi8: "pattaya_soi_8" },
+    exits: { n: "beach_rd_klang", s: "beach_rd_soi9", e: "pattaya_soi_7", soi8: "pattaya_soi_8" },
   },
   pattaya_soi_8: {
     name: "Soi 8",
@@ -783,6 +785,25 @@ const ROOMS = {
     ],
     exits: { w: "beach_rd_soi9", e: "second_rd_c" },
   },
+  beach_rd_klang: {
+    busStop: "beachrd",
+    motosai: true,
+    name: "Beach Road (Pattaya Klang)",
+    region: "Beach Road",
+    desc: "Where Central Pattaya Road runs out of town and hits the sea. It is one of " +
+      "the three roads that cut Pattaya into pieces, and this is the end of it: a " +
+      "wide junction, a lot of traffic deciding what to do next, and the beach " +
+      "railing beyond. Baht buses turn here in numbers. Soi 7 comes down a hundred " +
+      "metres south, which is close enough that the two junctions bleed into one " +
+      "long slow crawl at the wrong hour.",
+    revisit: [
+      "Songthaews turning, songthaews waiting, songthaews going nowhere in particular.",
+      "The traffic sorts itself out and immediately unsorts itself.",
+      "Somebody crosses four lanes with the unbothered timing of long practice.",
+      "The sea is right there, past the railing, minding its own business.",
+    ],
+    exits: { n: "beach_rd_n", s: "beach_rd_soi7", e: "pattaya_klang" },
+  },
   promenade: {
     name: "Beach Promenade",
     region: "Beach Road",
@@ -815,7 +836,7 @@ const ROOMS = {
       "The foot of the soi, the cartoon skunk and the Blue Dog holding their corners, the bay going gold across the traffic. A baht bus slows, hopeful; you let it pass.",
       "Back to the junction, the neon fuse of Soi 6 lit and waiting east, the water and the last of the light off west past the road.",
     ],
-    exits: { s: "beach_rd_soi7", e: "soi6_street", n: "naklua_rd", w: "north_beach" },
+    exits: { s: "beach_rd_klang", e: "soi6_street", n: "naklua_rd", w: "north_beach" },
     venues: ["stinky_bar", "blue_dog"],
   },
   sunset_rail: {
@@ -1046,7 +1067,7 @@ const ROOMS = {
     desc: "The big east-west artery, bisecting Beach Road, Second Road, and Soi Buakhao " +
       "in one straight shot from the sea to Sukhumvit. Baht buses, banks, gold shops, " +
       "and a river of traffic that never quite jams and never quite flows.",
-    exits: { w: "beach_rd_soi7", n: "second_rd_soi6", s: "second_rd_n", e: "buakhao_klang" },
+    exits: { w: "beach_rd_klang", n: "second_rd_soi6", s: "second_rd_n", e: "buakhao_klang" },
   },
 
   // ─── Shopping (Second Road) ───
@@ -10093,6 +10114,7 @@ const ROOM_GEO = {
   short_time_motel: [12.93626, 100.88503],
   beach_rd_c:       [12.93450, 100.88159],
   beach_rd_soi7:    [12.93715, 100.88307],
+  beach_rd_klang:   [12.93791, 100.88339],
   beach_rd_soi9:    [12.93598, 100.88247],
   pattaya_soi_9:    [12.93515, 100.88377],
   pattaya_soi_8:    [12.93573, 100.88413],

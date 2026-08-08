@@ -2,10 +2,10 @@
   "generated": "2026-08-08",
   "note": "Every room in the game + its region, for the scene-art pipeline (docs/art-pipeline-spec.md). Derived from web/js/world.js — regenerate with scripts/gen-scene-manifest.mjs, do not hand-edit. `kind` is a generator heuristic for prompt-template selection, not game canon. `regionSlug` is produced by the same regex as web/js/scene.js `_sceneArt()`; art files are web/art/rooms/<id>.png with web/art/regions/<slug>.png as the fallback.",
   "counts": {
-    "rooms": 204,
+    "rooms": 205,
     "regions": 15,
     "byKind": {
-      "street": 79,
+      "street": 80,
       "massage": 17,
       "beer": 49,
       "shop": 2,
@@ -31,6 +31,7 @@
       "name": "Beach Road",
       "roomIds": [
         "beach_rd_c",
+        "beach_rd_klang",
         "beach_rd_n",
         "beach_rd_s",
         "beach_rd_soi7",
@@ -409,6 +410,18 @@
       "desc": "Mid-Beach-Road: tour groups, tailor touts, and the sea breathing in the dark beyond the promenade. The glass cliff of CENTRAL mall rises a block inland, and just south of it TEQUILA QUEEN's ancient neon señorita kicks her leg, as she has since before you were born."
     },
     {
+      "id": "beach_rd_klang",
+      "name": "Beach Road (Pattaya Klang)",
+      "bar": null,
+      "barType": null,
+      "region": "Beach Road",
+      "regionSlug": "beach-road",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "Where Central Pattaya Road runs out of town and hits the sea. It is one of the three roads that cut Pattaya into pieces, and this is the end of it: a wide junction, a lot of traffic deciding what to do next, and the beach railing beyond. Baht buses turn here in numbers. Soi 7 comes down a hundred metres south, which is close enough that the two junctions bleed into one long slow crawl at the wrong hour."
+    },
+    {
       "id": "beach_rd_n",
       "name": "Beach Road (foot of Soi 6)",
       "bar": null,
@@ -444,7 +457,7 @@
       "kind": "street",
       "dark": false,
       "people": [],
-      "desc": "Where Soi 7 comes down to the sea. The soi runs inland behind you, all beer stools and laundry steam; out here it is the seafront doing its evening thing — joggers who have misjudged the hour, a man selling roasted chestnuts nobody buys, and the long slow crawl of songthaews with their benches half full. Central Pattaya Road crosses a hundred metres north, which is why the traffic here never quite clears. Soi 7 runs inland here and Soi 8 a block south; the two are close enough that people take the wrong one and only notice when the noise fails to arrive."
+      "desc": "Where Soi 7 comes down to the sea. The soi runs inland behind you, all beer stools and laundry steam; out here it is the seafront doing its evening thing — joggers who have misjudged the hour, a man selling roasted chestnuts nobody buys, and the long slow crawl of songthaews with their benches half full. Central Pattaya Road crosses a hundred metres north, which is why the traffic here never quite clears — Central Pattaya Road comes down to the sea a hundred metres north, and its traffic is still deciding things by the time it reaches you. Soi 7 runs inland here and Soi 8 a block south; the two are close enough that people take the wrong one and only notice when the noise fails to arrive."
     },
     {
       "id": "beach_rd_soi9",
