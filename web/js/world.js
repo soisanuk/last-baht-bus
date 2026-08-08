@@ -6478,6 +6478,23 @@ const NPCS = {
     name: "Bill", emoji: "🎩", personality: "dry",
     room: "doghouse", bars: ["the_boardroom", "velvet_club", "doghouse"],
     manager: true, // hired help, like Bert — NOT in NPC_ROLES, so lady-logic ignores him
+    // His own house-shot pool (see _MGR_SHOT / _managerWelcome). The generic
+    // lines say "bud", which is fine from Bert and Bob and impossible from a
+    // thirty-year-old Englishman running a cold room properly.
+    shot: [
+      "{n} puts a shot in front of you, square in the middle of a fresh mat. “House does " +
+        "the first one. It's not a compliment, everyone gets it.” The smile says it is " +
+        "slightly a compliment.",
+      "“Right.” A shot appears, poured with the care of a man who counts stock. “That one's " +
+        "the house. Chok dee. Mind the cold — it creeps up on people and then the stairs " +
+        "happen.”",
+      "{n} pours, slides, and does not drink his own. “First is on me. I'd join you but " +
+        "I've two more rooms to be blamed for tonight.”",
+      "The shot arrives before you've settled. “Welcome to the Doghouse,” says {n}, entirely " +
+        "deadpan. “Which I'd like on record was named before I got here.”",
+      "“Go on then.” {n} sets one down and steps back to survey the room out of habit. " +
+        "“House pours the first. Anything after that and we're doing business.”",
+    ],
     desc: "Thirty-odd, English, in a pressed short-sleeve shirt with the cuffs turned once — " +
       "younger than everyone he manages and entirely unbothered by it. He runs the Samson " +
       "brothers' three quiet clubs on a rota, which means he is here one night in three " +

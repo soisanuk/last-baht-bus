@@ -224,6 +224,27 @@ function _managerHere() {
 }
 // The house welcome: a free shot, once per bar per night (sandbox only — the
 // tutorial stays dry). You're expected to reciprocate with a man drink.
+//
+// This was one fixed string, which was wrong twice: it repeats (once per bar
+// per night, across every bar with a manager), so the pools rule applies; and
+// it put "bud" in every manager's mouth, which is right for Bert and Bob and
+// absurd from a thirty-year-old Englishman. So — a shared pool, plus an
+// optional per-manager `shot` pool on the NPCS entry for anyone whose voice the
+// generic lines don't fit. {n} is the manager's name.
+const _MGR_SHOT = [
+  "{n} slides a shot down the bar before you've even sat: “House rule, bud — first one's " +
+    "on me. Chok dee.” It goes down like a warm handshake.",
+  "A shot arrives that you did not order. {n} is already looking elsewhere. “House pours " +
+    "the first one. Don't get excited, everybody gets it.”",
+  "{n} pours two, drinks one, and slides the other over. “To whatever brought you up the " +
+    "road.” The glass is on the bar again before you've finished swallowing.",
+  "“New face.” {n} sets a shot in front of you with two fingers. “First one's the house's. " +
+    "After that we're strangers again.” He's grinning when he says it.",
+  "The shot lands before the greeting does. “Chok dee,” says {n}, already turning back to " +
+    "the till. “That one's mine. The rest are yours.”",
+  "{n} nods at the stool, then at the shot he has just put on it. “Sit. Drink that. Then " +
+    "tell me what you actually want.”",
+];
 function _managerWelcome() {
   if (!_flag("act1Done") || G.over) return;
   const id = _managerHere();
@@ -233,9 +254,9 @@ function _managerWelcome() {
   G.soc.mgrShot[G.room] = true;
   G.soc.drunk++;
   _addHappy(1);
-  _say(`${NPCS[id].name} slides a shot down the bar before you've even sat: “House rule, ` +
-    "bud — first one's on me. Chok dee.” It goes down like a warm handshake. (Stand him a " +
-    "BUY MAN DRINK when you've been bending his ear.)", "win");
+  const pool = (NPCS[id].shot && NPCS[id].shot.length) ? NPCS[id].shot : _MGR_SHOT;
+  _say(_fmt(_pickVary(pool, "mgrshot:" + id), { n: NPCS[id].name }) +
+    " (Stand him a BUY MAN DRINK when you've been bending his ear.)", "win");
 }
 
 function _closingTick() {

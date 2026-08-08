@@ -45,7 +45,8 @@ const add = (group, ref, speaker, text) => {
 
 // ── world.js reflection ─────────────────────────────────────────────────────
 const PROSE_KEYS = new Set(["text", "short", "desc", "intro", "hint", "pick", "tan",
-  "revisit", "q", "cap", "caption", "label", "win", "lose", "offer", "reply"]);
+  "revisit", "q", "cap", "caption", "label", "win", "lose", "offer", "reply",
+  "shot"]); // shot: a manager's own house-welcome pool (see _managerWelcome)
 function walk(group, ref, speaker, node) {
   if (typeof node === "string") return; // only keyed strings collect (see below)
   if (Array.isArray(node)) { node.forEach((v, i) => walk(group, `${ref}[${i}]`, speaker, v)); return; }
@@ -55,10 +56,18 @@ function walk(group, ref, speaker, node) {
         // keyed prose, or any long stray string a schema grew since this list
         if (PROSE_KEYS.has(k) || v.length >= 80) add(group, `${ref}.${k}`, speaker, v);
       } else if (Array.isArray(v)) {
+        // The `|| s.length >= 80` mirrors the scalar branch above, and it is
+        // load-bearing: without it an ARRAY of prose under a key nobody added
+        // to PROSE_KEYS vanishes from the corpus silently. That is exactly what
+        // happened to Bill's `shot` pool — five authored lines, invisible to
+        // --delta, which is the one thing this tool exists to prevent.
         if (PROSE_KEYS.has(k)) v.forEach((s, i) =>
           typeof s === "string" ? add(group, `${ref}.${k}[${i}]`, speaker, s)
             : walk(group, `${ref}.${k}[${i}]`, speaker, s));
-        else v.forEach((s, i) => walk(group, `${ref}.${k}[${i}]`, speaker, s));
+        else v.forEach((s, i) =>
+          typeof s === "string"
+            ? (s.length >= 80 && add(group, `${ref}.${k}[${i}]`, speaker, s))
+            : walk(group, `${ref}.${k}[${i}]`, speaker, s));
       } else if (v && typeof v === "object") walk(group, `${ref}.${k}`, speaker, v);
     }
   }

@@ -3299,12 +3299,25 @@ test("the bar manager: welcome shot, man drink, monopolise nudge — and NOT a l
   // arriving is a free house shot, once per bar per night
   state().room = "beach_rd_s"; state().visited.stinky_bar = true;
   _arriveAt("stinky_bar");
-  assert.match(lastOut(), /House rule.*first one's on me/s, "the welcome shot");
+  // assert against the POOL, not one line — this used to match a fixed
+  // "House rule … first one's on me", which is precisely the coupling that
+  // breaks the moment the line is varied (and it had to be varied: the generic
+  // copy said "bud" in every manager's mouth, English ones included)
+  const shotFired = () => _MGR_SHOT.some(l => lastOut().includes(_fmt(l, { n: "Bert" })));
+  assert.ok(shotFired(), "the welcome shot");
   const drunkAfter = state().soc.drunk;
   out = [];
   _arriveAt("stinky_bar");
-  assert.doesNotMatch(lastOut(), /House rule/, "only one welcome shot a night");
+  assert.ok(!shotFired(), "only one welcome shot a night");
   assert.equal(state().soc.drunk, drunkAfter, "and no second free drunk tick");
+  // a manager with his own `shot` pool uses it INSTEAD of the shared one — Bill
+  // is thirty, English, and would never say "bud"
+  out = []; state().room = "pratumnak_clubs"; state().visited.doghouse = true;
+  _arriveAt("doghouse");
+  assert.ok(NPCS.bill.shot.some(l => lastOut().includes(_fmt(l, { n: "Bill" }))),
+    "Bill pours from his own pool");
+  assert.ok(!_MGR_SHOT.some(l => lastOut().includes(_fmt(l, { n: "Bill" }))),
+    "…and not from the generic one");
   // leaning on his time earns a nudge for a man drink
   state().room = "stinky_bar"; out = [];
   run("talk to bert", "ask bert about candy", "ask bert about owner");
