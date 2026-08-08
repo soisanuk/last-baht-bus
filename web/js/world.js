@@ -9082,6 +9082,22 @@ const POPULAR_GIRLS = ["fon", "gift", "noi", "pim"];
 // pinned district by district against OSM, and the decimal count is the marker
 // of which have had their pass. Don't "tidy" a 5dp district back to 4.
 //
+//   Naklua + the Dolphin roundabout — DONE 2026-08-08, closing the loop.
+//   ★ THE DOLPHIN ROUNDABOUT ~12.95095/100.88750. Four roads converge there and
+//   the pairwise gaps are 13-29 m, which is the roundabout's own diameter, not
+//   error: Beach Rd, Second Rd, Naklua Rd and North Pattaya Rd all terminate on
+//   it. Naklua Road then runs NE; going SW puts you back on Beach Road.
+//   Naklua's rooms are laid by arc length up the real Naklua Road from there —
+//   naklua_rd at 320 m, hotel_soi (Sabai Palms) at 1150 m. Zero flags, including
+//   naklua_massage —n→ lotus_oil which had been auditing at 124.
+//
+//   ★ SOI 6 x SECOND ROAD 12.941817/100.887880 — Soi 6's east end sits ON Second
+//   Road at 0 m. BUT THE GRAPH DOES NOT KNOW IT: `soi6_deep` has a single exit,
+//   `w`, so in-game Soi 6 is a cul-de-sac you can only leave the way you came.
+//   Harmless in soi6 mode (SOI6_ROOMS fences it anyway), but in the full game the
+//   east end should open onto Second Road, and the real junction is banked here
+//   for when it does. Bar-mat work: adding that exit changes what players walk.
+//
 //   The Pattaya Klang corridor — DONE 2026-08-08. North up Sukhumvit from
 //   Thepprasit to Central Pattaya Road, then west to the sea. All at 0 m:
 //     Sukhumvit x Pattaya Klang   12.931784/100.900511
@@ -9356,18 +9372,18 @@ const ROOM_GEO = {
   cherry_pop:       [12.94184, 100.88736],
   ruby_kiss:        [12.94205, 100.88765],
   // Naklua
-  naklua_rd:        [12.9530, 100.8885],
-  orchid_club:      [12.9524, 100.8876],
-  hotel_soi:        [12.9565, 100.8898],
-  hotel_room:       [12.9567, 100.8900],
-  naklua_bars:      [12.9528, 100.8890],
-  anchor_bar:       [12.9527, 100.8892],
-  dolphin_bar:      [12.9530, 100.8891],
-  mooring_bar:      [12.9525, 100.8892],
-  naklua_massage:   [12.9533, 100.8882],
-  naklua_thai:      [12.9535, 100.8880],
-  lotus_oil:        [12.9531, 100.8879],
-  emperor_soapy:    [12.9536, 100.8883],
+  naklua_rd:        [12.95343, 100.88926],
+  orchid_club:      [12.95327, 100.88884],
+  hotel_soi:        [12.95958, 100.89365],
+  hotel_room:       [12.95978, 100.89377],
+  naklua_bars:      [12.95331, 100.88967],
+  anchor_bar:       [12.95320, 100.88982],
+  dolphin_bar:      [12.95349, 100.88971],
+  mooring_bar:      [12.95304, 100.88985],
+  naklua_massage:   [12.95380, 100.88908],
+  naklua_thai:      [12.95392, 100.88891],
+  lotus_oil:        [12.95407, 100.88904],
+  emperor_soapy:    [12.95396, 100.88930],
   // Second Road
   second_rd_s:      [12.92999, 100.88084],
   second_thai:      [12.93014, 100.88107],

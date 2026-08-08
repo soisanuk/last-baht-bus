@@ -2913,8 +2913,8 @@
    "bar": "The Anchor Bar",
    "barType": "beer",
    "geo": [
-    12.9527,
-    100.8892
+    12.9532,
+    100.88982
    ],
    "name": "The Anchor Bar",
    "pool": true,
@@ -3209,8 +3209,8 @@
    "bar": "Dolphin Bar",
    "barType": "beer",
    "geo": [
-    12.953,
-    100.8891
+    12.95349,
+    100.88971
    ],
    "name": "Dolphin Bar",
    "region": "Naklua"
@@ -3266,8 +3266,8 @@
   "emperor_soapy": {
    "bar": "The Emperor Massage",
    "geo": [
-    12.9536,
-    100.8883
+    12.95396,
+    100.8893
    ],
    "name": "The Emperor Massage",
    "region": "Naklua"
@@ -3343,16 +3343,16 @@
   },
   "hotel_room": {
    "geo": [
-    12.9567,
-    100.89
+    12.95978,
+    100.89377
    ],
    "name": "Your Room — Sabai Palms Hotel",
    "region": "Naklua"
   },
   "hotel_soi": {
    "geo": [
-    12.9565,
-    100.8898
+    12.95958,
+    100.89365
    ],
    "name": "Sabai Palms Soi (Naklua)",
    "region": "Naklua"
@@ -3630,8 +3630,8 @@
   "lotus_oil": {
    "bar": "Lotus Oil Massage",
    "geo": [
-    12.9531,
-    100.8879
+    12.95407,
+    100.88904
    ],
    "name": "Lotus Oil Massage",
    "region": "Naklua"
@@ -3721,8 +3721,8 @@
    "bar": "The Mooring",
    "barType": "beer",
    "geo": [
-    12.9525,
-    100.8892
+    12.95304,
+    100.88985
    ],
    "name": "The Mooring",
    "region": "Naklua"
@@ -3755,24 +3755,24 @@
   },
   "naklua_bars": {
    "geo": [
-    12.9528,
-    100.889
+    12.95331,
+    100.88967
    ],
    "name": "Naklua (Bar Corner)",
    "region": "Naklua"
   },
   "naklua_massage": {
    "geo": [
-    12.9533,
-    100.8882
+    12.9538,
+    100.88908
    ],
    "name": "Naklua (Spa Row)",
    "region": "Naklua"
   },
   "naklua_rd": {
    "geo": [
-    12.953,
-    100.8885
+    12.95343,
+    100.88926
    ],
    "name": "Naklua Road",
    "region": "Naklua",
@@ -3781,8 +3781,8 @@
   "naklua_thai": {
    "bar": "Naklua Traditional Massage",
    "geo": [
-    12.9535,
-    100.888
+    12.95392,
+    100.88891
    ],
    "name": "Naklua Traditional Massage",
    "region": "Naklua"
@@ -3819,8 +3819,8 @@
    "bar": "The Orchid Club",
    "barType": "gents",
    "geo": [
-    12.9524,
-    100.8876
+    12.95327,
+    100.88884
    ],
    "name": "The Orchid Club",
    "region": "Naklua"
