@@ -9114,6 +9114,24 @@ const POPULAR_GIRLS = ["fon", "gift", "noi", "pim"];
 //   been royally renamed; look for the official name before concluding a road
 //   is missing from OSM.
 //
+//   PRATUMNAK HILL ROAD is Pra Tumnak Road, and here is the whole of it, traced
+//   from Third Road south. Every junction touches at 0 m:
+//     ① × Third Rd           12.920506/100.869949
+//     ② passes Big Buddha    12.919734/100.867854   (138 m off — it goes AROUND)
+//     ③ × Pratumnak Soi 5    12.914395/100.867004   (Phra Tamnak 5 in OSM)
+//     ④ × Thappraya Rd       12.911490/100.869325
+//     ⑤ Thappraya × Third Rd 12.921158/100.872165   — and the loop closes.
+//
+//   THE CONNECTOR GAP, measured. Soi 5's east end meets Pra Tumnak Road at 0 m
+//   and Thappraya Road at 392 m — they do NOT touch. But `pratumnak_hill_rd`
+//   (the crest room, which loosely IS Soi 5) carries `e → thappraya_ext_n`,
+//   asserting a link that does not exist on the ground. Reaching Thappraya from
+//   Soi 5 really means going via Pra Tumnak Road. Left alone deliberately: that
+//   is BAR-MAT work — it needs a connector room, which is new content and a real
+//   game change — and it is the one place in this district where survey and bar
+//   mat stop being separable. Don't quietly bend the crest's coordinates to make
+//   the exit look plausible; the exit is what's wrong.
+//
 //   Big Buddha is Wat Khao Phra Bat, 12.920396/100.866772 — `buddha_hill` is
 //   pinned there, and `pratumnak_rd` to the Third Rd × Pra Tumnak junction.
 //   With both endpoints real, `ws_gate —w→ pratumnak_rd` audits at 56°, down
