@@ -22,13 +22,13 @@
   "Blue Dog"
  ],
  "counts": {
-  "geolocated": 200,
+  "geolocated": 201,
   "patrons": 18,
   "people": 268,
   "portraits": 286,
   "renders": 72,
   "thumbs": 72,
-  "venues": 200
+  "venues": 201
  },
  "frames": [
   "baimon_pic1",
@@ -3071,6 +3071,14 @@
    "name": "Beach Road South",
    "region": "Beach Road"
   },
+  "beach_rd_soi7": {
+   "geo": [
+    12.93715,
+    100.88307
+   ],
+   "name": "Beach Road (Soi 7)",
+   "region": "Beach Road"
+  },
   "beach_turn_massage": {
    "bar": "Beach Turn Oil Massage",
    "geo": [
@@ -4094,7 +4102,7 @@
   "pattaya_soi_7": {
    "geo": [
     12.9365,
-    100.885
+    100.8846
    ],
    "name": "Soi 7",
    "region": "Beach Road"
@@ -4335,7 +4343,7 @@
     12.93539,
     100.8858
    ],
-   "name": "Second Road (North)",
+   "name": "Second Road (Soi 7)",
    "region": "Second Road"
   },
   "second_rd_s": {
