@@ -9082,6 +9082,19 @@ const POPULAR_GIRLS = ["fon", "gift", "noi", "pim"];
 // pinned district by district against OSM, and the decimal count is the marker
 // of which have had their pass. Don't "tidy" a 5dp district back to 4.
 //
+//   Pratumnak crest + Dongtan Beach Rd — DONE 2026-08-08. THE SURVEY IS NOW
+//   COMPLETE: all 177 rooms carry 5-decimal surveyed coordinates.
+//   Soi Phra Tam Nak 5 is the crest — from the Pratumnak coast at
+//   12.909228/100.858152 east to 12.914395/100.867004, where it meets Pratumnak
+//   Hill Road, which then runs SOUTH into Thappraya at 12.911490/100.869325.
+//   `pratumnak_hill_rd` sits at that eastern junction and the whole
+//   thappraya_ext / dongtan_rd chain audits clean.
+//   Dongtan Beach Rd now runs its real length — from the Jomtien corner up to
+//   Soi 5's west end, ~1.5 km, rather than the 520 m the derived pass gave it.
+//   Two flags remain here and they are SUPERTOWN, which has two doors: it hangs
+//   off thappraya_mid AND thappraya_ext_s, so one of those cannot be a true
+//   compass word. That is the complex being an elbow, not a coordinate error.
+//
 //   Soi Honey — DONE 2026-08-08, the district I missed on the first sweep.
 //   It is "Soi Honey (Pattaya Sai Song 11)" in OSM and it is the next soi NORTH
 //   of Soi Diana, not south — searching a bbox below Diana finds nothing, which
@@ -9416,21 +9429,21 @@ const ROOM_GEO = {
   jomtien_7eleven:  [12.89584, 100.86965],
   jomtien_beach_m:  [12.89720, 100.86753],
   jomtien_soi_7_beach_end:   [12.89537, 100.86949],
-  dongtan_beach_m:  [12.90023, 100.86461],
-  dongtan_beach_n:  [12.90168, 100.86322],
+  dongtan_beach_m:  [12.90546, 100.86048],
+  dongtan_beach_n:  [12.90883, 100.85765],
   jomtien_beach_rd_s: [12.89568, 100.86989],
   jomtien_soi_7_m:          [12.89679, 100.87139],
   jomtien_2nd_m:    [12.89943, 100.87137],
   jomtien_beach_rd_n: [12.89870, 100.86698],
   // Pratumnak
   pratumnak_rd:     [12.92068, 100.87007],
-  thappraya_ext_s:  [12.8998, 100.8700],
-  thappraya_ext_m:  [12.9020, 100.8698],
-  thappraya_ext_n:  [12.9042, 100.8694],
-  pratumnak_hill_rd:[12.9046, 100.8672],
-  dongtan_rd_n:     [12.90211, 100.86368],
-  dongtan_rd_m:     [12.90067, 100.86508],
-  dongtan_rd_s:     [12.89955, 100.86616],
+  thappraya_ext_s:  [12.90458, 100.86927],
+  thappraya_ext_m:  [12.90765, 100.86893],
+  thappraya_ext_n:  [12.91354, 100.87064],
+  pratumnak_hill_rd:[12.91440, 100.86700],
+  dongtan_rd_n:     [12.90923, 100.85815],
+  dongtan_rd_m:     [12.90586, 100.86098],
+  dongtan_rd_s:     [12.90238, 100.86389],
   buddha_hill:      [12.9204, 100.86677],
   // Walking Street (the gate is the north end; "ws_south" is the DEEP end)
   ws_gate:          [12.92745, 100.87469],

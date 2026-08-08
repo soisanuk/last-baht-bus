@@ -3225,40 +3225,40 @@
   },
   "dongtan_beach_m": {
    "geo": [
-    12.90023,
-    100.86461
+    12.90546,
+    100.86048
    ],
    "name": "Dongtan Beach (Middle)",
    "region": "Jomtien"
   },
   "dongtan_beach_n": {
    "geo": [
-    12.90168,
-    100.86322
+    12.90883,
+    100.85765
    ],
    "name": "Dongtan Beach (North)",
    "region": "Jomtien"
   },
   "dongtan_rd_m": {
    "geo": [
-    12.90067,
-    100.86508
+    12.90586,
+    100.86098
    ],
    "name": "Dongtan Beach Road (Middle)",
    "region": "Jomtien"
   },
   "dongtan_rd_n": {
    "geo": [
-    12.90211,
-    100.86368
+    12.90923,
+    100.85815
    ],
    "name": "Dongtan Beach Road (North)",
    "region": "Pratumnak"
   },
   "dongtan_rd_s": {
    "geo": [
-    12.89955,
-    100.86616
+    12.90238,
+    100.86389
    ],
    "name": "Dongtan Beach Road (South)",
    "region": "Jomtien"
@@ -3919,8 +3919,8 @@
   },
   "pratumnak_hill_rd": {
    "geo": [
-    12.9046,
-    100.8672
+    12.9144,
+    100.867
    ],
    "name": "Pratumnak Hill Road (crest)",
    "region": "Pratumnak"
@@ -4317,24 +4317,24 @@
   },
   "thappraya_ext_m": {
    "geo": [
-    12.902,
-    100.8698
+    12.90765,
+    100.86893
    ],
    "name": "Thappraya Road — Hill (middle)",
    "region": "Pratumnak"
   },
   "thappraya_ext_n": {
    "geo": [
-    12.9042,
-    100.8694
+    12.91354,
+    100.87064
    ],
    "name": "Thappraya Road — Hilltop",
    "region": "Pratumnak"
   },
   "thappraya_ext_s": {
    "geo": [
-    12.8998,
-    100.87
+    12.90458,
+    100.86927
    ],
    "name": "Thappraya Road — Hill (lower)",
    "region": "Pratumnak"
