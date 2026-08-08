@@ -2,10 +2,10 @@
   "generated": "2026-08-08",
   "note": "Every room in the game + its region, for the scene-art pipeline (docs/art-pipeline-spec.md). Derived from web/js/world.js — regenerate with scripts/gen-scene-manifest.mjs, do not hand-edit. `kind` is a generator heuristic for prompt-template selection, not game canon. `regionSlug` is produced by the same regex as web/js/scene.js `_sceneArt()`; art files are web/art/rooms/<id>.png with web/art/regions/<slug>.png as the fallback.",
   "counts": {
-    "rooms": 205,
+    "rooms": 206,
     "regions": 15,
     "byKind": {
-      "street": 80,
+      "street": 81,
       "massage": 17,
       "beer": 49,
       "shop": 2,
@@ -166,6 +166,7 @@
       "name": "Naklua",
       "roomIds": [
         "anchor_bar",
+        "dolphin",
         "dolphin_bar",
         "emperor_soapy",
         "hotel_room",
@@ -180,8 +181,8 @@
       ],
       "sampleDescs": [
         "North of the Dolphin roundabout the volume drops by half: seafood restaurants, temples, long-stay hotels. Up ahead, the SABAI PALMS HOTEL sign glows over its soi — half the letters out, so it reads 'SA AI PA MS', which the long-stay guests consider part of the charm. The soi itself is dark as a power cut. East, a quiet BAR CORNER of expat beer bars glows low; a SPA ROW of massage and soapland fronts runs off the other way.",
-        "A pocket of low-key expat beer bars off the main road, the kind that open at four and know every customer's pour by five. No neon war up here — just fairy lights, a sea breeze off the old fishing harbour, and the clack of a single pool table. THE ANCHOR BAR, DOLPHIN BAR, and THE MOORING share the corner and most of the regulars.",
-        "The quieter, older end of the trade: no shorts on the step, just tall blue-lit soapland towers and clean traditional shopfronts side by side. NAKLUA TRADITIONAL MASSAGE glows honest white; LOTUS OIL MASSAGE leaks pink and cold air; and the EMPEROR looms four floors over the lot, a fish tank behind one-way glass."
+        "The top of the town, where four roads give up arguing and go round in a circle instead. The dolphins are in the middle of it — a concrete pod of them mid-leap, floodlit, permanently about to enter water that is two hundred metres west. TERMINAL 21 sits on the corner pretending to be an airport, its departure boards lit all night for a terminal nobody flies from. Beach Road runs south along the sea, Second Road south into town, Naklua Road north-east toward the quieter money, and the songthaews go round and round because this is where the loop turns.",
+        "A pocket of low-key expat beer bars off the main road, the kind that open at four and know every customer's pour by five. No neon war up here — just fairy lights, a sea breeze off the old fishing harbour, and the clack of a single pool table. THE ANCHOR BAR, DOLPHIN BAR, and THE MOORING share the corner and most of the regulars."
       ]
     },
     {
@@ -1505,6 +1506,18 @@
         "Namfon"
       ],
       "desc": "A nautical-junk beer bar — a real ship's wheel on the wall, glass floats in a net, a barometer nobody trusts. The long-stay crowd holds the stools like moorings. Namfon pours a cold one before you've picked a seat."
+    },
+    {
+      "id": "dolphin",
+      "name": "Dolphin Roundabout",
+      "bar": null,
+      "barType": null,
+      "region": "Naklua",
+      "regionSlug": "naklua",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "The top of the town, where four roads give up arguing and go round in a circle instead. The dolphins are in the middle of it — a concrete pod of them mid-leap, floodlit, permanently about to enter water that is two hundred metres west. TERMINAL 21 sits on the corner pretending to be an airport, its departure boards lit all night for a terminal nobody flies from. Beach Road runs south along the sea, Second Road south into town, Naklua Road north-east toward the quieter money, and the songthaews go round and round because this is where the loop turns."
     },
     {
       "id": "dolphin_bar",

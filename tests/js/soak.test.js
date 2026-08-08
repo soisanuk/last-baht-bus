@@ -75,6 +75,12 @@ test("regression: Act One WAIT across dawn can't loop the same-day reset forever
 // prose-corpus --delta: 0 records. soi6 and act1 FELL (the fenced pocket walks
 // tighter), vacation and expat rose (the open map walks wider). All four
 // verified stable over three consecutive runs.
+//
+// Re-baselined again 2026-08-08 for the Dolphin roundabout — see the vacation
+// entry below, which is the worked example of how to tell a map change from a
+// prose regression. soi6 and act1 did not move at all: soi6 is fenced out of
+// Naklua, and act1 walks through the new room but its five lines shipped with
+// German, so the two effects cancelled to exactly zero.
 const DE_CEILINGS = [
   // 149 → 111 → 94. The last drop was a BUG FIX, not translation: a motosai
   // could ride out of the fenced pocket, so the walk was reaching town prose it
@@ -90,7 +96,24 @@ const DE_CEILINGS = [
   // connects the hill road to Walking Street, and Pattaya Soi 7 exists — three
   // new ways through, so the walk reaches further into untranslated town. All
   // reachability; --delta accounts for the new prose separately.
-  { mode: "vacation", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 250 },
+  //
+  // 250 → 317 on the Dolphin roundabout, and this one is worth reading, because
+  // the obvious diagnosis was wrong TWICE. The new leaks are the Orchid, Mort at
+  // the Queen Vic, the Soi Diamond go-gos — central Pattaya, nowhere near Naklua,
+  // so it is not prose around the new room. Nor is it pure sampling churn from
+  // the RNG diverging: measured symmetrically at 20 seeds, the reachable-leak set
+  // goes 624 → 688 (32 lost, 96 gained), so the walk really does get further.
+  //
+  // The cause is that the roundabout is a stop on BOTH bus lines — the network's
+  // first two-line interchange — so a wandering player can now cross the town by
+  // songthaew instead of only riding out and back. A pathfinding change, not a
+  // prose change; --delta was 5 records, all of them the new room, all translated.
+  //
+  // The lesson for the next person to hit this: five seeds is a SAMPLE, not a
+  // census (20 seeds see 688 lines where 5 see 317). A jump in this number is not
+  // evidence of new debt, and a fall is not evidence of progress. Only --delta
+  // measures debt. This ceiling measures where the walk goes.
+  { mode: "vacation", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 317 },
   // act1 is the do-or-die opening — the wallet chain, the fail/reset screens, the
   // hint whispers. NEITHER other mode reaches it: soi6 force-sets act1Done, and
   // so does the soak's own vacation setup. It was unguarded until 2026-08-07, and
@@ -115,8 +138,10 @@ const DE_CEILINGS = [
   // travel → a specific ASK at each step. A five-seed expat run offers zero
   // quests. Authored quest prose is guarded by scripted playthroughs instead
   // (tests/js/barchain.test.js).
-  // 312 → 429 → 399, same story as vacation.
-  { mode: "expat", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 430 },
+  // 312 → 429 → 399, same story as vacation. 430 → 421 on the Dolphin roundabout
+  // — tightened rather than left slack, since a ratchet that only ever loosens
+  // stops being one.
+  { mode: "expat", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 421 },
 ];
 
 for (const { mode, seeds, nights, ceiling } of DE_CEILINGS) {
