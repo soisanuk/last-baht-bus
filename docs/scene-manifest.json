@@ -267,7 +267,7 @@
         "silk_rose"
       ],
       "sampleDescs": [
-        "The expat artery: pharmacies, laundry, bars, repeat. ROCK FACTORY's two-storey stage looms on the corner — currently doing what every band in Thailand does to 'Hotel California' and somehow getting away with it. LUCKY TIGER BAR is just east. The market sprawl is south. A small handwritten LK METRO arrow on a wall points down an alley — easy to miss, worth finding. Soi Diana opens off the 7-Eleven on the corner here, its go-go neon running away west. A few doors down the quiet side, CANDY BAR's rose-pink sign keeps its own hours — far enough off the main drag that the soi forgets about it until about three in the morning, which is roughly when it fills up.",
+        "The expat artery: pharmacies, laundry, bars, repeat. ROCK FACTORY's two-storey stage looms on the corner — currently doing what every band in Thailand does to 'Hotel California' and somehow getting away with it. LUCKY TIGER BAR is just east. South is the old market block, which has not been a market since Tree Town took the trade. A small handwritten LK METRO arrow on a wall points down an alley — easy to miss, worth finding. Soi Diana opens off the 7-Eleven on the corner here, its go-go neon running away west. A few doors down the quiet side, CANDY BAR's rose-pink sign keeps its own hours — far enough off the main drag that the soi forgets about it until about three in the morning, which is roughly when it fills up.",
         "Where the soi gives up and hands you to Central Pattaya Road. The traffic arrives here to die: two baht buses nose to tail with nowhere to go, a third wedged across the mouth of the junction while its driver leans out and negotiates with nobody in particular. The motorbikes don't wait. They come through the gaps in a steady braided stream — a girl side-saddle in six-inch heels holding her hair down with one hand, a punter on the back of another with his knees out like a man being carried to somewhere he didn't choose. A 7-Eleven throws cold white light across the whole slow mess, and the piwins at the corner watch it the way farmers watch weather.",
         "The block everyone still calls the market, though the market went years ago — Tree Town took the trade and the tarps came down. What is left is the shape of it: shophouse fronts too wide for what they sell now, a som tam cart holding the corner out of sheer stubbornness, and a smell of papaya salad that could still pull you here from two sois away. SILK ROSE shares the block east, and a pink-lit shopfront a few doors down promises the oil is warm."
       ]
@@ -2085,7 +2085,7 @@
       "kind": "street",
       "dark": false,
       "people": [],
-      "desc": "The middle of the artery, and the busiest crossing on it. Soi Made In Thailand opens west — the night plaza, and past it the lane becomes Soi Myth Night and runs on to Second Road. East, the TREE TOWN arch is doing its fairy-lit best to look like an entrance to somewhere. Between the two, the soi itself is barely moving: a baht bus at walking pace with four people hanging off the back step, motorbikes threading the gap between it and the parked cars, and everyone on the pavement stepping around a plastic table that has been there long enough to count as architecture."
+      "desc": "The middle of the artery, and the busiest crossing on it. Soi Made In Thailand opens west — the night plaza, and past it the lane becomes Soi Myth Night and runs on to Second Road. The TREE TOWN arch is a block south, doing fairy-lit best to look like an entrance to somewhere. Between the two, the soi itself is barely moving: a baht bus at walking pace with four people hanging off the back step, motorbikes threading the gap between it and the parked cars, and everyone on the pavement stepping around a plastic table that has been there long enough to count as architecture."
     },
     {
       "id": "buakhao_n",
@@ -2097,7 +2097,7 @@
       "kind": "street",
       "dark": false,
       "people": [],
-      "desc": "The expat artery: pharmacies, laundry, bars, repeat. ROCK FACTORY's two-storey stage looms on the corner — currently doing what every band in Thailand does to 'Hotel California' and somehow getting away with it. LUCKY TIGER BAR is just east. The market sprawl is south. A small handwritten LK METRO arrow on a wall points down an alley — easy to miss, worth finding. Soi Diana opens off the 7-Eleven on the corner here, its go-go neon running away west. A few doors down the quiet side, CANDY BAR's rose-pink sign keeps its own hours — far enough off the main drag that the soi forgets about it until about three in the morning, which is roughly when it fills up."
+      "desc": "The expat artery: pharmacies, laundry, bars, repeat. ROCK FACTORY's two-storey stage looms on the corner — currently doing what every band in Thailand does to 'Hotel California' and somehow getting away with it. LUCKY TIGER BAR is just east. South is the old market block, which has not been a market since Tree Town took the trade. A small handwritten LK METRO arrow on a wall points down an alley — easy to miss, worth finding. Soi Diana opens off the 7-Eleven on the corner here, its go-go neon running away west. A few doors down the quiet side, CANDY BAR's rose-pink sign keeps its own hours — far enough off the main drag that the soi forgets about it until about three in the morning, which is roughly when it fills up."
     },
     {
       "id": "buakhao_oil",
@@ -2121,7 +2121,7 @@
       "kind": "street",
       "dark": false,
       "people": [],
-      "desc": "The south end, where Tree Town's fairy-lit maze of mini-bars spills onto the pavement. The Tree Town arch is east — a complex that eats tourists and spits out poorer, happier ones. A motosai stand waits by the corner, engines ticking."
+      "desc": "The bottom of the soi, where Buakhao runs out of bars and hands you to Second Road. The neon thins, the pavement widens, and the noise arrives from behind you rather than around you. A motosai stand waits by the corner with its engines ticking, because this is where people finally admit they are going home."
     },
     {
       "id": "buakhao_tt",

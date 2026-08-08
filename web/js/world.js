@@ -1413,7 +1413,7 @@ const ROOMS = {
     region: "Soi Buakhao",
     desc: "The middle of the artery, and the busiest crossing on it. Soi Made In " +
       "Thailand opens west — the night plaza, and past it the lane becomes Soi Myth " +
-      "Night and runs on to Second Road. East, the TREE TOWN arch is doing its " +
+      "Night and runs on to Second Road. The TREE TOWN arch is a block south, doing " +
       "fairy-lit best to look like an entrance to somewhere. Between the two, the " +
       "soi itself is barely moving: a baht bus at walking pace with four people " +
       "hanging off the back step, motorbikes threading the gap between it and the " +
@@ -1475,7 +1475,8 @@ const ROOMS = {
     desc: "The expat artery: pharmacies, laundry, bars, repeat. ROCK FACTORY's two-storey " +
       "stage looms on the corner — currently doing what every band in Thailand does to " +
       "'Hotel California' and somehow getting away with it. LUCKY TIGER BAR is just east. " +
-      "The market sprawl is south. A small handwritten LK METRO arrow on a wall points " +
+      "South is the old market block, which has not been a market since Tree Town took " +
+      "the trade. A small handwritten LK METRO arrow on a wall points " +
       "down an alley — easy to miss, worth finding. Soi Diana opens off the 7-Eleven on " +
       "the corner here, its go-go neon running away west. A few doors down the quiet " +
       "side, CANDY BAR's rose-pink sign keeps its own hours — far enough off the main " +
@@ -1506,9 +1507,16 @@ const ROOMS = {
   buakhao_s: {
     name: "Soi Buakhao (South)",
     region: "Soi Buakhao",
-    desc: "The south end, where Tree Town's fairy-lit maze of mini-bars spills onto the " +
-      "pavement. The Tree Town arch is east — a complex that eats tourists and spits out " +
-      "poorer, happier ones. A motosai stand waits by the corner, engines ticking.",
+    desc: "The bottom of the soi, where Buakhao runs out of bars and hands you to Second " +
+      "Road. The neon thins, the pavement widens, and the noise arrives from behind you " +
+      "rather than around you. A motosai stand waits by the corner with its engines " +
+      "ticking, because this is where people finally admit they are going home.",
+    revisit: [
+      "Quieter down here. You can hear individual motorbikes again.",
+      "A piwin looks up hopefully, then goes back to his phone.",
+      "Somebody walks past going north, still fresh, an hour behind you.",
+      "The last of the bar noise, arriving from behind and thinning as it comes.",
+    ],
     motosai: true,
     exits: { n: "buakhao_market", w: "second_rd_s", s: "jasmine_garden", in: "jasmine_garden" },
   },
@@ -2972,7 +2980,7 @@ const NPCS = {
         text: "\"Welcome to Candy Bar! First time? No — wait.\" She studies you. \"You look like a man with a story and no wallet to put it in. Sit. Talk to Candy.\"",
         short: "\"Sit down, tilac. Talk to Candy — everybody's problems come to Candy.\"" },
       { topic: "wallet", req: ["knowOyHasIt"],
-        text: "\"Oy has it? Then it's safe — safer than in your pocket, clearly. But Oy… ai, she make you work for it. Take her som tam from the market cart — extra spicy, tell them 'Candy's order'. Give it to Ploy her cashier, and doors open.\" She waves at the cart across the soi.", sets: ["somTamAccepted"], gives: "som_tam",
+        text: "\"Oy has it? Then it's safe — safer than in your pocket, clearly. But Oy… ai, she make you work for it. Take her som tam from the market cart — extra spicy, tell them 'Candy's order'. Give it to Ploy her cashier, and doors open.\" She tips her chin down the soi, toward the old market block where the som tam cart still holds its corner.", sets: ["somTamAccepted"], gives: "som_tam",
         short: "\"Oy has your wallet. Take her extra-spicy som tam — 'Candy's order' — and give it to Ploy, her cashier.\"" },
       { topic: "wallet", notFlags: ["knowWasHere"],
         text: "\"Lost wallet? Mmm. And what makes you think Candy knows something?\" She polishes a glass, watching you. \"Show me you were even here last night and maybe my memory improve.\" (Perhaps something in your pockets proves it.)" },
@@ -4033,7 +4041,7 @@ const NPCS = {
       "waist that took surgery and discipline in that order, and a face assembled " +
       "with the precision of someone who has been getting it exactly right since " +
       "she was fifteen. She works the front of house because nobody sells the room " +
-      "better — she can read a man' nerve from the doorway and pitch herself " +
+      "better — she can read a man's nerve from the doorway and pitch herself " +
       "accordingly, warm or wicked, in about a second and a half.",
     dialogue: [
       { text: "\"Sawatdee kha!\" — the flourish is the joke and the joke is the welcome. " +
@@ -4041,7 +4049,7 @@ const NPCS = {
           "here. TOO friendly, some people say.\" She laughs, delighted with herself, " +
           "and steers you at a stool.",
         th: "สวัสดีค่ะ", rom: "sawatdee kha" },
-      { topic: "show", text: "\"Nine o'clock, eleven, one. Eleven is the good one — that' " +
+      { topic: "show", text: "\"Nine o'clock, eleven, one. Eleven is the good one — that's " +
           "when Baitoey does her Whitney and the whole room forget to drink.\" A beat. " +
           "\"I go on at one. Different energy. You stay, you see.\"" },
       { topic: "here", text: "\"Sign say what it say. Nobody confused, nobody upset, nobody " +
