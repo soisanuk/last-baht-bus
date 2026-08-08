@@ -3056,8 +3056,8 @@
    "bar": "Buzz Inn",
    "barType": "beer",
    "geo": [
-    12.9232,
-    100.8784
+    12.9297,
+    100.88556
    ],
    "name": "Buzz Inn",
    "region": "Soi Honey"
@@ -3325,8 +3325,8 @@
   "honey_soapy": {
    "bar": "Honeycomb Massage",
    "geo": [
-    12.925,
-    100.878
+    12.93165,
+    100.88302
    ],
    "name": "Honeycomb Massage",
    "region": "Soi Honey"
@@ -3335,8 +3335,8 @@
    "bar": "Honey Trap Bar",
    "barType": "beer",
    "geo": [
-    12.926,
-    100.8776
+    12.93212,
+    100.88306
    ],
    "name": "Honey Trap Bar",
    "region": "Soi Honey"
@@ -3945,8 +3945,8 @@
    "bar": "The Hive",
    "barType": "beer",
    "geo": [
-    12.9242,
-    100.879
+    12.93017,
+    100.8856
    ],
    "name": "The Hive",
    "region": "Soi Honey"
@@ -4168,16 +4168,16 @@
   },
   "soi_honey_e": {
    "geo": [
-    12.9238,
-    100.8786
+    12.92994,
+    100.88554
    ],
    "name": "Soi Honey (east end)",
    "region": "Soi Honey"
   },
   "soi_honey_w": {
    "geo": [
-    12.9255,
-    100.8778
+    12.93189,
+    100.883
    ],
    "name": "Soi Honey (west end)",
    "region": "Soi Honey"
