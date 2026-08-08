@@ -213,3 +213,63 @@ Cheap enough to repeat per release: `node tools/soak.mjs --seed N --nights 3
 Nothing left unbuilt in the review strategy. Remaining work is features —
 bar-owning is the headline — plus the German localization gap, which every new
 line widens (a de-mode transcript still shows English seams).
+
+---
+
+## The black square (2026-08-09) — SHELVED, for later consideration
+
+A phone event, and a candidate for the strongest single mechanic in the
+relationship layer. Not built; written down so it survives.
+
+**The claim.** Every girl the player gets close to has an entire emotional life
+he is not in, and is not a participant in. The bond system currently models
+attention as a scalar that only ever goes up with investment. This does not.
+
+**The scene.** A contact's profile picture goes solid black. In the Thai
+messaging culture the game already writes, that is the nuclear broadcast —
+mourning, "dead inside", a silent scream. It is aimed at one specific person,
+and the player is not that person. He is one of the several foreign men who see
+it, assume they are the subject, and panic in parallel across three time zones.
+The man it IS aimed at is a Thai lad her own age with an ordinary job who has
+not read her messages since lunchtime. He never appears. He is never named.
+That he is offstage is the entire point.
+
+**Why it should be a SYSTEM, not a scripted beat.** Fire it on whoever the
+player's highest-bond contact happens to be, once a vacation. Scripting it onto
+one authored girl makes it a story about her; leaving it general makes it true
+of everyone, which is the actual claim.
+
+**The mechanic that carries it, and it is one line.** In this game money always
+moves something — favour, bond, standing, somebody's evening. During the black
+square it moves NOTHING. `MESSAGE` goes unread. `CALL` rings out. `SEND` is
+accepted in silence and produces no favour, no bond, no acknowledgement. Not a
+refusal, not a scene — the baht leaves and the world does not register it. That
+is the exact inverse of the barfine economy the player has run all game, and it
+needs no new subsystem to express.
+
+**The resolution is casual and secondhand**, in the register the amulet uses:
+next night she is at her bar as normal and deflects; another hostess, asked,
+treats it as unremarkable — she fights with her boyfriend, every month the
+same. The devastation is that to everyone else it is Tuesday.
+
+**The register, which is the whole risk.** This must never read as a gotcha
+that punishes the player for caring — no moral grading, per the house rule. The
+line to hold: her grief is real, and you are not invited to it. Not "you were a
+mug", but "you were not the subject". The narration never comments; the silence
+does the work.
+
+**The deliberate cost, flagged rather than discovered.** It fires on the
+HIGHEST bond, so it lands hardest on the player who did the thing the game
+otherwise rewards. That is defensible — it is true, and the hedonic treadmill
+already argues breadth is hollow — but it would be the first mechanic here that
+takes something away from depth. Decide that on purpose.
+
+**Name collisions, checked.** `bank` is taken (the authored piwin at Beach Road
+South, the Act One helmet favour) and must not be reused for the boyfriend —
+who should stay nameless regardless. `nam` is taken by a filler hostess at Club
+Mirage whose hash-generated desc already reads "thumbing her phone under the
+bar… she types more than she talks", which is an accident worth keeping in mind
+if this ever wants a face.
+
+Pairs with: the Regular/bond tiers, `_conquestHappy`'s jading, `_hasSponsor`,
+and the "parallel realities" bucket in the long-term-play notes.
