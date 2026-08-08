@@ -553,7 +553,7 @@ const ROOMS = {
     desc: "The main hill road between Jomtien and Pattaya proper — condos behind walls, " +
       "sleeping soi dogs, and long stretches where the streetlights have given up. " +
       "The Buddha Hill viewpoint is up a path to the west; Walking Street is on north.",
-    exits: { n: "pattaya_tai", w: "buddha_hill", e: "second_rd_s",
+    exits: { n: "second_rd_india", w: "buddha_hill",
              soi5: "pratumnak_hill_rd" },
   },
 
@@ -1050,9 +1050,10 @@ const ROOMS = {
     name: "Second Road (South)",
     region: "Second Road",
     desc: "The working road running parallel between Beach Road and Soi Buakhao — less " +
-      "neon, more motorbikes, the town with its makeup half off. It climbs south " +
-      "onto the north shoulder of Pratumnak Hill, toward Jomtien beyond.",
-    exits: { w: "beach_rd_s", e: "buakhao_s", n: "second_rd_diana", s: "pattaya_tai", spa: "second_thai" },
+      "neon, more motorbikes, the town with its makeup half off. South it runs down to " +
+      "the Pattaya Tai crossroads and the hill beyond; Buakhao is a block east, but " +
+      "not from here — the sois between are somebody's back wall.",
+    exits: { w: "beach_rd_s", n: "second_rd_diana", s: "pattaya_tai", spa: "second_thai" },
   },
   second_rd_c: {
     busStop: "secondrd",
@@ -1489,7 +1490,7 @@ const ROOMS = {
       "Somebody comes out of one door, thinks about it, and goes in the other.",
       "The bass from both sides meets in the middle of the soi and cancels into mush.",
     ],
-    exits: { w: "ws_north", in: "windmill", out: "ws_north" },
+    exits: { w: "ws_north", s: "second_rd_diamond", in: "windmill", out: "ws_north" },
     venues: ["windmill", "katoeys"],
   },
   windmill: {
@@ -1553,7 +1554,65 @@ const ROOMS = {
       "The squid man has a queue. The squid man always has a queue.",
       "Two piwins settle an argument about whose fare you are before you have spoken.",
     ],
-    exits: { w: "ws_gate", e: "second_rd_s", s: "pratumnak_rd" },
+    exits: { w: "ws_gate", n: "second_rd_s", e: "buakhao_pt", s: "second_rd_diamond" },
+  },
+  buakhao_pt: {
+    motosai: true,
+    name: "Soi Buakhao (Pattaya Tai)",
+    region: "Soi Buakhao",
+    desc: "The foot of Soi Buakhao, where it ends on South Pattaya Road and the bar strip " +
+      "stops dead. Four lanes of through-traffic, a piwin stand working the corner, and " +
+      "the particular flatness of a junction nobody drinks at. West along Pattaya Tai " +
+      "takes you past Tukcom — four floors of {{phone}} counters and repair booths, dark " +
+      "and shuttered at this hour — and on to Second Road. North is the soi and " +
+      "everything that happens on it.",
+    revisit: [
+      "Through-traffic, and the soi's noise starting a hundred metres north.",
+      "A piwin looks up, reads you as someone going somewhere, and waits.",
+      "Tukcom's frontage sits dark down the road, all shutters and dead signage.",
+      "Nobody lingers on this corner. It isn't a corner for lingering on.",
+    ],
+    exits: { n: "buakhao_s", w: "pattaya_tai" },
+  },
+  second_rd_diamond: {
+    motosai: true,
+    name: "Second Road (Soi Diamond)",
+    region: "Second Road",
+    desc: "Second Road where Soi Diamond comes in — the same Soi Diamond that opens onto " +
+      "Walking Street at its far end, which makes this the back door to the strip and " +
+      "the way the people who work there actually arrive. Girls come up it in ones and " +
+      "twos with helmets under their arms, an hour before anyone is meant to see them. " +
+      "North is the big Pattaya Tai crossroads; south the road runs down toward the hill.",
+    revisit: [
+      "Two girls come up the soi in street clothes, unhurried, off the clock.",
+      "The strip is four hundred metres that way and you cannot hear a thing of it.",
+      "A motosai turns into the soi without slowing, because he has done it all night.",
+      "Traffic north, the dark of the hill road south, and the soi mouth between.",
+    ],
+    exits: { n: "pattaya_tai", s: "second_rd_india", diamond: "soi_diamond" },
+  },
+  second_rd_india: {
+    name: "Second Road (Pratumnak end)",
+    region: "Second Road",
+    desc: "The long haul of Second Road between Soi Diamond and the hill, and the expats " +
+      "have a name for this stretch they don't say kindly. What is actually wrong with " +
+      "it is the pavement: there isn't one worth the word — broken kerb, parked bikes " +
+      "nose-in, a shop's worth of stock set out across it — so everybody walks in the " +
+      "road, and here everybody is a great many people at once. Tour groups come " +
+      "through six and eight at a time, three abreast, friends hand in hand the way " +
+      "friends are across most of the world and farang reliably misread, moving at the " +
+      "speed of the conversation they are having. The bikes stack up behind them, fold " +
+      "around, and lean on the horn; the piwins have views, at volume, in Thai. " +
+      "Tailor shops down both sides, a currency booth beating the bank, and a tandoor " +
+      "going somewhere out of sight that smells better than anything on Beach Road.",
+    revisit: [
+      "A rank of walkers eight across, at conversation pace. The bikes fold around them.",
+      "Somebody leans on a horn for four unbroken seconds. Nothing whatsoever changes.",
+      "You step down into the road as well, because there is nowhere else to step.",
+      "Tandoor smoke out of a doorway, and a queue of bikes behind a slow group.",
+      "A tailor gets as far as \"sir\" before the crowd carries you out of his range.",
+    ],
+    exits: { n: "second_rd_diamond", s: "pratumnak_rd" },
   },
   crystal_palace: {
     name: "Crystal Palace A-Go-Go",
@@ -1761,10 +1820,10 @@ const ROOMS = {
   buakhao_s: {
     name: "Soi Buakhao (South)",
     region: "Soi Buakhao",
-    desc: "The bottom of the soi, where Buakhao runs out of bars and hands you to Second " +
-      "Road. The neon thins, the pavement widens, and the noise arrives from behind you " +
-      "rather than around you. A motosai stand waits by the corner with its engines " +
-      "ticking, because this is where people finally admit they are going home.",
+    desc: "The bottom of the soi, where Buakhao runs out of bars and hands you down to " +
+      "South Pattaya Road. The neon thins, the pavement widens, and the noise arrives " +
+      "from behind you rather than around you. A motosai stand waits by the corner with " +
+      "its engines ticking, because this is where people finally admit they are going home.",
     revisit: [
       "Quieter down here. You can hear individual motorbikes again.",
       "A piwin looks up hopefully, then goes back to his phone.",
@@ -1772,7 +1831,7 @@ const ROOMS = {
       "The last of the bar noise, arriving from behind and thinning as it comes.",
     ],
     motosai: true,
-    exits: { n: "buakhao_market", w: "second_rd_s", s: "jasmine_garden", in: "jasmine_garden" },
+    exits: { n: "buakhao_market", s: "buakhao_pt", in: "jasmine_garden" },
   },
   candy_bar: {
     name: "Candy Bar",
@@ -10218,6 +10277,8 @@ const ROOM_GEO = {
   emperor_soapy:    [12.95396, 100.88930],
   // Second Road
   second_rd_s:      [12.92999, 100.88084],
+  second_rd_diamond:[12.92537, 100.87396],
+  second_rd_india:  [12.92303, 100.87202],
   second_thai:      [12.93014, 100.88107],
   second_rd_c:      [12.93431, 100.88506],
   second_rd_n:      [12.93539, 100.88580],
@@ -10263,6 +10324,7 @@ const ROOM_GEO = {
   silk_rose:        [12.92693, 100.88327],
   buakhao_oil:      [12.92676, 100.88312],
   buakhao_s:        [12.92490, 100.88002],
+  buakhao_pt:       [12.92403, 100.87906],
   jasmine_garden:   [12.92414, 100.87915],
   // Soi Honey (Soi 11, between Second Rd and Buakhao)
   soi_honey_w:      [12.93165, 100.88331],

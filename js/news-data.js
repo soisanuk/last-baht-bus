@@ -33,14 +33,14 @@ var NEWS_FEED = [
     "d": "07 Aug 2026"
   },
   {
-    "t": "Injured dog saved after urgent plea sparks rescue on Pattaya hill",
+    "t": "Sriracha student drowns after friends’ sea outing turns tragic",
     "s": "Pattaya Mail",
-    "d": "06 Aug 2026"
+    "d": "07 Aug 2026"
   },
   {
-    "t": "Pattaya Police arrest pair linked to 50 water meter thefts",
+    "t": "Tokyo massage parlor operator faces six years over Thai child exploitation",
     "s": "Pattaya Mail",
-    "d": "06 Aug 2026"
+    "d": "07 Aug 2026"
   },
   {
     "t": "Live updates: Teen gunman dead after killing teachers in Thailand’s worst school shooting in years",
@@ -53,30 +53,30 @@ var NEWS_FEED = [
     "d": "07 Aug 2026"
   },
   {
-    "t": "Trump defends Pete Hegseth and school shooting leaves multiple dead in Thailand: Morning Rundown",
-    "s": "NBC News",
+    "t": "Irish man found dead in Thailand",
+    "s": "The Irish Times",
     "d": "07 Aug 2026"
   },
   {
     "t": "British men accused of trafficking teens to Thailand as drug couriers, court told",
-    "s": "Yahoo",
+    "s": "Yahoo News Canada",
     "d": "07 Aug 2026"
   },
   {
     "t": "Trilateral Highway Project Gets Boost After Myanmar-Thailand Bilateral Talks",
-    "s": "NDTV",
+    "s": "ndtv.com",
     "d": "07 Aug 2026"
   },
   {
-    "t": "Trump revives birthright citizenship fight; Deadly school shooting rocks Thailand",
-    "s": "Straight Arrow",
-    "d": "07 Aug 2026"
+    "t": "Israeli mother and daughter brutally attacked in Thailand: ‘He asked where we were from, then beat us’",
+    "s": "Ynetnews",
+    "d": "06 Aug 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-08-07","USD":33.06,"AUD":23.27,"GBP":44.46,"EUR":38.12};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-08","temp":30,"humid":73,"code":3,"hi":31,"rain":85};
+var WX_NOW = {"date":"2026-08-08","temp":27,"humid":93,"code":3,"hi":31,"rain":84};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
@@ -84,4 +84,4 @@ var LOTTO = {"date":"2026-08-01","first":"932479","last2":"69","front3":["413","
 // XAU, plus Thai baht-weight gold (96.5%)
 var GOLD = {"usd":4343,"date":"2026-08-08","baht":67900};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":64968,"thb":2137098};
+var BTC = {"usd":64973,"thb":2137623};
