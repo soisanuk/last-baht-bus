@@ -21,10 +21,15 @@
 // or earth.google.com — imports the whole thing. For My Maps use --flat, which
 // collapses everything into three layers: streets, venues, exits.
 //
-//   node tools/gen-kml.mjs             # docs/pattaya.kml, foldered by region
-//   node tools/gen-kml.mjs --flat      # docs/pattaya-flat.kml, 3 layers
+//   npm run map:kml                    # both files
+//   npm run map:kml -- --copy          # both, plus a copy in ~/Downloads
+//   node tools/gen-kml.mjs --flat      # just docs/pattaya-flat.kml
+//   node tools/gen-kml.mjs --foldered  # just docs/pattaya.kml
+//   node tools/gen-kml.mjs --copy <dir># copy somewhere other than ~/Downloads
 //   node tools/gen-kml.mjs --stdout    # print it
-import { readFileSync, writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync, copyFileSync } from "node:fs";
+import { homedir } from "node:os";
+import { join, basename } from "node:path";
 import { fileURLToPath } from "node:url";
 import vm from "node:vm";
 
@@ -54,7 +59,7 @@ const styles = `
   <Style id="warn"><LineStyle><color>e600a5ff</color><width>4</width></LineStyle></Style>
   <Style id="bad"><LineStyle><color>ff0000ff</color><width>5</width></LineStyle></Style>`;
 
-function build() {
+function build(flat) {
   const byRegion = {};
   for (const [id, r] of Object.entries(ROOMS)) {
     if (!ROOM_GEO[id]) continue;
@@ -68,7 +73,6 @@ function build() {
 ${styles}
 `;
 
-  const flat = process.argv.includes("--flat");
   if (flat) {
     // My Maps: streets and venues as two layers, region moved into each pin
     for (const kind of ["road", "venue"]) {
@@ -133,12 +137,43 @@ ${styles}
   return { kml: out, counts, rooms: seen.size };
 }
 
-const { kml, counts } = build();
-if (process.argv.includes("--stdout")) process.stdout.write(kml);
-else {
-  const name = process.argv.includes("--flat") ? "docs/pattaya-flat.kml" : "docs/pattaya.kml";
-  const path = fileURLToPath(new URL(name, root));
-  writeFileSync(path, kml);
-  console.log(`${name} — ${Object.keys(ROOMS).length} rooms, ` +
-    `exit lines: ${counts.ok} clean / ${counts.warn} amber / ${counts.bad} red`);
+// ── CLI ──────────────────────────────────────────────────────────────────────
+// A bare run writes BOTH files, because they are two renderings of one map and
+// letting them drift means the Earth view and the My Maps view disagree about
+// the town. --flat / --foldered narrow it to one; --stdout prints instead of
+// writing. --copy lands a copy wherever you actually open them from.
+const argv = process.argv.slice(2);
+const has = f => argv.includes(f);
+const copyArg = argv.findIndex(a => a === "--copy" || a.startsWith("--copy="));
+
+const VARIANTS = [
+  { flat: false, name: "docs/pattaya.kml",      note: "foldered by region — Google Earth" },
+  { flat: true,  name: "docs/pattaya-flat.kml", note: "3 layers — Google My Maps (caps at 10)" },
+];
+// narrow only if asked; otherwise both
+const want = has("--flat") ? [VARIANTS[1]]
+  : has("--foldered") ? [VARIANTS[0]]
+  : VARIANTS;
+
+if (has("--stdout")) {
+  process.stdout.write(build(has("--flat")).kml);
+} else {
+  let dest = null;
+  if (copyArg !== -1) {
+    const inline = argv[copyArg].split("=")[1];
+    dest = inline || argv[copyArg + 1] || null;
+    if (!dest || dest.startsWith("--")) dest = join(homedir(), "Downloads");
+    dest = dest.replace(/^~(?=$|\/)/, homedir());
+  }
+  for (const v of want) {
+    const { kml, counts } = build(v.flat);
+    writeFileSync(fileURLToPath(new URL(v.name, root)), kml);
+    let line = `${v.name} — ${Object.keys(ROOMS).length} rooms, ` +
+      `exit lines: ${counts.ok} clean / ${counts.warn} amber / ${counts.bad} red`;
+    if (dest) {
+      copyFileSync(fileURLToPath(new URL(v.name, root)), join(dest, basename(v.name)));
+      line += `  → ${dest}`;
+    }
+    console.log(line);
+  }
 }
