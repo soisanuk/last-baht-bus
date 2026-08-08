@@ -900,6 +900,7 @@ const ROOMS = {
 
   // ─── Second Road ───
   second_rd_s: {
+    busStop: "secondrd",
     name: "Second Road (South)",
     region: "Second Road",
     desc: "The working road running parallel between Beach Road and Soi Buakhao — less " +
@@ -908,6 +909,7 @@ const ROOMS = {
     exits: { w: "beach_rd_s", e: "buakhao_s", n: "second_rd_diana", s: "pattaya_tai", spa: "second_thai" },
   },
   second_rd_c: {
+    busStop: "secondrd",
     name: "Second Road (Central)",
     region: "Second Road",
     desc: "Mid-Second-Road: baht buses in convoy, pharmacies, and the constant churn " +
@@ -921,6 +923,7 @@ const ROOMS = {
   // 7-Eleven ON Second Road — the only nightlife spine that had neither shop
   // nor cash machine anywhere along it.
   second_rd_diana: {
+    busStop: "secondrd",
     motosai: true,
     seven: true,
     atm: true,
@@ -954,6 +957,7 @@ const ROOMS = {
     exits: { out: "second_rd_diana" },
   },
   second_rd_n: {
+    busStop: "secondrd",
     name: "Second Road (North)",
     region: "Second Road",
     desc: "The north stretch, where Second Road angles toward the Dolphin roundabout. " +
@@ -964,7 +968,7 @@ const ROOMS = {
     exits: { s: "second_rd_c", n: "pattaya_klang", w: "pattaya_soi_7", e: "poseidon_soapy",
              spa: "smile_massage" },
   },
-  pattaya_klang: { motosai: true,
+  pattaya_klang: { motosai: true, busStop: "secondrd",
     name: "Central Pattaya Road (Pattaya Klang)",
     region: "Second Road",
     desc: "The big east-west artery, bisecting Beach Road, Second Road, and Soi Buakhao " +
@@ -1026,6 +1030,7 @@ const ROOMS = {
   // Second Road at the foot of Soi 6 — the junction is real and exact, and until
   // now the road simply stopped short of it, so Soi 6 dead-ended.
   second_rd_soi6: {
+    busStop: "secondrd",
     motosai: true,
     name: "Second Road (Soi 6)",
     region: "Second Road",
@@ -1346,6 +1351,7 @@ const ROOMS = {
   },
   pattaya_tai: {
     motosai: true,
+    busStop: "loop",
     name: "South Pattaya Road (Pattaya Tai)",
     region: "Walking Street",
     desc: "The junction at the bottom of everything. South Pattaya Road comes down from " +
@@ -1354,7 +1360,12 @@ const ROOMS = {
       "city — every songthaew in the south end circling it, piwins stacked three " +
       "deep on the corner, and a slow river of people who have finished with the " +
       "strip and not yet decided what happens next. Pratumnak Hill goes up and away " +
-      "to the south. Somebody is selling grilled squid to a queue.",
+      "to the south. Somebody is selling grilled squid to a queue.\n\nThis is THE " +
+      "songthaew stop, and which corner you stand on is the whole decision: the " +
+      "south-west kerb is where the Jomtien buses pull in, and the north-east one " +
+      "picks up for the loop — up Second Road, round the Dolphin, and back down the " +
+      "seafront. Stand on the wrong corner and you will get where you are going " +
+      "eventually, the long way, for the same fifteen baht.",
     revisit: [
       "The crossroads does its thing: everybody moving, nobody quite leaving.",
       "A songthaew crawls the junction with its driver leaning out, naming prices.",
@@ -7038,8 +7049,14 @@ const NPCS = {
 // ── Bus lines (ordered stops; ride costs BUS_FARE per trip) ────────────────
 
 const BUS_LINES = {
-  jomtien: ["jomtien_beach_rd", "beach_rd_s"],
-  beachrd: ["bali_hai", "beach_rd_s", "beach_rd_c", "beach_rd_n", "naklua_rd"],
+  // south off the junction's SW corner, down to Jomtien
+  jomtien:  ["pattaya_tai", "beach_rd_s", "jomtien_beach_rd"],
+  // north off its NE corner, up Second Road to the Dolphin roundabout
+  secondrd: ["pattaya_tai", "second_rd_s", "second_rd_diana", "second_rd_c",
+             "second_rd_n", "pattaya_klang", "second_rd_soi6", "naklua_rd"],
+  // and back down the seafront — naklua_rd and pattaya_tai are on both, which is
+  // what closes the circuit and lets you ride the whole loop from either end
+  beachrd:  ["naklua_rd", "beach_rd_n", "beach_rd_c", "beach_rd_s", "bali_hai", "pattaya_tai"],
 };
 
 // ── Motosai destinations (from any stand) ──────────────────────────────────
