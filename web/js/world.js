@@ -9082,6 +9082,31 @@ const POPULAR_GIRLS = ["fon", "gift", "noi", "pim"];
 // pinned district by district against OSM, and the decimal count is the marker
 // of which have had their pass. Don't "tidy" a 5dp district back to 4.
 //
+//   Jomtien — DONE 2026-08-08, the last survey segment. The "double rectangle"
+//   turns out to be a real rectangle: all four corners meet at 0 m, and opposite
+//   sides agree within 3% (west 459 m / east 474 m, north 400 m / south 409 m).
+//     NW  beach rd × Thappraya   12.898695/100.866979
+//     NE  Second Rd × Thappraya  12.900968/100.869847
+//     SW  beach rd × Soi 7       12.895679/100.869888
+//     SE  Second Rd × Soi 7      12.897898/100.872898
+//   The whole block had been sitting ~1 km south of that. Ring rooms now land
+//   0–23 m from their real road.
+//
+//   WALK EACH SIDE IN LOOP ORDER, ending ON the shared corner, with the next
+//   side starting a little way along it. Laying every side from its own start
+//   instead put the two rooms at a corner on different spurs, so the exit
+//   between them pointed across the angle rather than along a side — seven
+//   corner exits flagged at 80–100°. Same layout, reordered: zero.
+//   The rectangle is rotated ~51° from the compass, so sides audit at 37–44°.
+//   That is the grid working, not error: see the 45° floor above.
+//
+//   DERIVED, NOT SURVEYED: Dongtan. Its beach road carries no name in OSM
+//   (Jomtien Sai Nueng starts AT the Thappraya corner and runs south), so those
+//   five rooms continue the coast line north of the corner instead of tracing a
+//   real way. Sand and road are paired at equal distances up the coast — pairing
+//   them at different distances is what flagged dongtan_beach_m —e→ dongtan_rd_m
+//   at 118°, and it was my arithmetic, not the map.
+//
 //   Walking Street — DONE 2026-08-08. In OSM it carries Beach Road's own name
 //   (ถนนพัทยาสายหนึ่ง) tagged highway=pedestrian, because it IS Beach Road,
 //   pedestrianised — searching for a way named "Walking Street" finds only a
@@ -9185,58 +9210,58 @@ const POPULAR_GIRLS = ["fon", "gift", "noi", "pim"];
 // the CHECK that they meet, not the source.
 const ROOM_GEO = {
   // Jomtien
-  jomtien_beach:    [12.8890, 100.8688],
-  dongtan_beach:    [12.8960, 100.8655],
-  jomtien_beach_rd: [12.8893, 100.8718],
-  jomtien_thai:     [12.8890, 100.8724],
+  jomtien_beach:    [12.89615, 100.86855],
+  dongtan_beach:    [12.89826, 100.86651],
+  jomtien_beach_rd: [12.89719, 100.86843],
+  jomtien_thai:     [12.89735, 100.86819],
   // Soi 7 (Jomtien Beach Rd → Second Rd) and its Second-Road cluster
-  jomtien_soi_7_w:          [12.8896, 100.8728],
-  jomtien_soi_7_e:          [12.8899, 100.8738],
-  jomtien_2nd:      [12.8901, 100.8748],
-  soi_rompho:       [12.8905, 100.8756],
-  kiss_jomtien:     [12.8911, 100.8756],
-  jomtien_2nd_n:    [12.8944, 100.8728],
-  lucky7:           [12.8899, 100.8726],
-  seabreeze:        [12.8892, 100.8730],
-  coconut:          [12.8903, 100.8736],
-  sandbar:          [12.8896, 100.8741],
-  jomtien_soi_7_oil:         [12.8890, 100.8726],
-  jomtien_soi_7_thai:        [12.8905, 100.8739],
+  jomtien_soi_7_w:          [12.89595, 100.87025],
+  jomtien_soi_7_e:          [12.89763, 100.87254],
+  jomtien_2nd:      [12.89790, 100.87290],
+  soi_rompho:       [12.89806, 100.87266],
+  kiss_jomtien:     [12.89960, 100.87113],
+  jomtien_2nd_n:    [12.90060, 100.87021],
+  lucky7:           [12.89611, 100.87001],
+  seabreeze:        [12.89596, 100.87049],
+  coconut:          [12.89779, 100.87230],
+  sandbar:          [12.89765, 100.87278],
+  jomtien_soi_7_oil:         [12.89582, 100.87001],
+  jomtien_soi_7_thai:        [12.89751, 100.87230],
   // Thappraya Road / Jomtien Main Strip (Dongtan → Second Rd)
-  thappraya_w:      [12.8968, 100.8668],
-  thappraya_mid:    [12.8972, 100.8685],
-  thappraya_e:      [12.8975, 100.8702],
-  supertown_alley:  [12.8978, 100.8688],
-  supertown_elbow:  [12.8982, 100.8698],
-  peacock_cabaret:  [12.8983, 100.8700],
-  adonis_club:      [12.8977, 100.8686],
-  arrow_bar:        [12.8971, 100.8666],
-  the_boardroom:    [12.8965, 100.8670],
-  beach_turn_massage:[12.8964, 100.8664],
-  cheeky_monkey:    [12.8975, 100.8683],
-  hyper:            [12.8969, 100.8687],
-  velvet_club:      [12.8970, 100.8690],
-  take_care_me:     [12.8978, 100.8700],
-  the_office:       [12.8972, 100.8704],
-  thappraya_massage:[12.8973, 100.8706],
-  jomtien_7eleven:  [12.8880, 100.8724],
-  jomtien_beach_m:  [12.8918, 100.8688],
-  jomtien_soi_7_beach_end:   [12.8872, 100.8698],
-  dongtan_beach_m:  [12.8985, 100.8632],
-  dongtan_beach_n:  [12.9015, 100.8628],
-  jomtien_beach_rd_s: [12.8876, 100.8722],
-  jomtien_soi_7_m:          [12.8878, 100.8735],
-  jomtien_2nd_m:    [12.8892, 100.8752],
-  jomtien_beach_rd_n: [12.8954, 100.8689],
+  thappraya_w:      [12.89897, 100.86732],
+  thappraya_mid:    [12.89983, 100.86841],
+  thappraya_e:      [12.90097, 100.86985],
+  supertown_alley:  [12.90033, 100.86851],
+  supertown_elbow:  [12.90051, 100.86893],
+  peacock_cabaret:  [12.90065, 100.86913],
+  adonis_club:      [12.90044, 100.86828],
+  arrow_bar:        [12.89913, 100.86708],
+  the_boardroom:    [12.89899, 100.86756],
+  beach_turn_massage:[12.89884, 100.86708],
+  cheeky_monkey:    [12.89985, 100.86865],
+  hyper:            [12.89999, 100.86817],
+  velvet_club:      [12.89970, 100.86817],
+  take_care_me:     [12.90113, 100.86961],
+  the_office:       [12.90099, 100.87009],
+  thappraya_massage:[12.90084, 100.86961],
+  jomtien_7eleven:  [12.89584, 100.86965],
+  jomtien_beach_m:  [12.89720, 100.86753],
+  jomtien_soi_7_beach_end:   [12.89537, 100.86949],
+  dongtan_beach_m:  [12.90023, 100.86461],
+  dongtan_beach_n:  [12.90168, 100.86322],
+  jomtien_beach_rd_s: [12.89568, 100.86989],
+  jomtien_soi_7_m:          [12.89679, 100.87139],
+  jomtien_2nd_m:    [12.89943, 100.87137],
+  jomtien_beach_rd_n: [12.89870, 100.86698],
   // Pratumnak
   pratumnak_rd:     [12.92068, 100.87007],
   thappraya_ext_s:  [12.8998, 100.8700],
   thappraya_ext_m:  [12.9020, 100.8698],
   thappraya_ext_n:  [12.9042, 100.8694],
   pratumnak_hill_rd:[12.9046, 100.8672],
-  dongtan_rd_n:     [12.9036, 100.8648],
-  dongtan_rd_m:     [12.9008, 100.8650],
-  dongtan_rd_s:     [12.8984, 100.8652],
+  dongtan_rd_n:     [12.90211, 100.86368],
+  dongtan_rd_m:     [12.90067, 100.86508],
+  dongtan_rd_s:     [12.89955, 100.86616],
   buddha_hill:      [12.9204, 100.86677],
   // Walking Street (the gate is the north end; "ws_south" is the DEEP end)
   ws_gate:          [12.92745, 100.87469],

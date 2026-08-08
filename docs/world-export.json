@@ -2892,8 +2892,8 @@
   "adonis_club": {
    "bar": "The Adonis Club",
    "geo": [
-    12.8977,
-    100.8686
+    12.90044,
+    100.86828
    ],
    "name": "The Adonis Club",
    "region": "Thappraya"
@@ -2932,8 +2932,8 @@
    "bar": "Arrow Bar",
    "barType": "beer",
    "geo": [
-    12.8971,
-    100.8666
+    12.89913,
+    100.86708
    ],
    "name": "Arrow Bar",
    "region": "Thappraya"
@@ -2976,8 +2976,8 @@
   "beach_turn_massage": {
    "bar": "Beach Turn Oil Massage",
    "geo": [
-    12.8964,
-    100.8664
+    12.89884,
+    100.86708
    ],
    "name": "Beach Turn Oil Massage",
    "region": "Thappraya"
@@ -3095,8 +3095,8 @@
    "bar": "Cheeky Monkey Bar",
    "barType": "beer",
    "geo": [
-    12.8975,
-    100.8683
+    12.89985,
+    100.86865
    ],
    "name": "Cheeky Monkey Bar",
    "region": "Thappraya"
@@ -3125,8 +3125,8 @@
    "bar": "Coconut Bar",
    "barType": "beer",
    "geo": [
-    12.8903,
-    100.8736
+    12.89779,
+    100.8723
    ],
    "name": "Coconut Bar",
    "region": "Jomtien"
@@ -3217,48 +3217,48 @@
   },
   "dongtan_beach": {
    "geo": [
-    12.896,
-    100.8655
+    12.89826,
+    100.86651
    ],
    "name": "Dongtan Beach (South)",
    "region": "Jomtien"
   },
   "dongtan_beach_m": {
    "geo": [
-    12.8985,
-    100.8632
+    12.90023,
+    100.86461
    ],
    "name": "Dongtan Beach (Middle)",
    "region": "Jomtien"
   },
   "dongtan_beach_n": {
    "geo": [
-    12.9015,
-    100.8628
+    12.90168,
+    100.86322
    ],
    "name": "Dongtan Beach (North)",
    "region": "Jomtien"
   },
   "dongtan_rd_m": {
    "geo": [
-    12.9008,
-    100.865
+    12.90067,
+    100.86508
    ],
    "name": "Dongtan Beach Road (Middle)",
    "region": "Jomtien"
   },
   "dongtan_rd_n": {
    "geo": [
-    12.9036,
-    100.8648
+    12.90211,
+    100.86368
    ],
    "name": "Dongtan Beach Road (North)",
    "region": "Pratumnak"
   },
   "dongtan_rd_s": {
    "geo": [
-    12.8984,
-    100.8652
+    12.89955,
+    100.86616
    ],
    "name": "Dongtan Beach Road (South)",
    "region": "Jomtien"
@@ -3361,8 +3361,8 @@
    "bar": "Hyper A Go-Go",
    "barType": "gogo",
    "geo": [
-    12.8969,
-    100.8687
+    12.89999,
+    100.86817
    ],
    "name": "Hyper A Go-Go",
    "region": "Thappraya"
@@ -3379,8 +3379,8 @@
   },
   "jomtien_2nd": {
    "geo": [
-    12.8901,
-    100.8748
+    12.8979,
+    100.8729
    ],
    "name": "Jomtien Second Road (South)",
    "region": "Jomtien",
@@ -3388,88 +3388,88 @@
   },
   "jomtien_2nd_m": {
    "geo": [
-    12.8892,
-    100.8752
+    12.89943,
+    100.87137
    ],
    "name": "Jomtien Second Road (Middle)",
    "region": "Jomtien"
   },
   "jomtien_2nd_n": {
    "geo": [
-    12.8944,
-    100.8728
+    12.9006,
+    100.87021
    ],
    "name": "Jomtien Second Road (North)",
    "region": "Jomtien"
   },
   "jomtien_7eleven": {
    "geo": [
-    12.888,
-    100.8724
+    12.89584,
+    100.86965
    ],
    "name": "7-Eleven (Jomtien)",
    "region": "Jomtien"
   },
   "jomtien_beach": {
    "geo": [
-    12.889,
-    100.8688
+    12.89615,
+    100.86855
    ],
    "name": "Jomtien Beach (South)",
    "region": "Jomtien"
   },
   "jomtien_beach_m": {
    "geo": [
-    12.8918,
-    100.8688
+    12.8972,
+    100.86753
    ],
    "name": "Jomtien Beach (North)",
    "region": "Jomtien"
   },
   "jomtien_beach_rd": {
    "geo": [
-    12.8893,
-    100.8718
+    12.89719,
+    100.86843
    ],
    "name": "Jomtien Beach Road (Baht Bus Stop)",
    "region": "Jomtien"
   },
   "jomtien_beach_rd_n": {
    "geo": [
-    12.8954,
-    100.8689
+    12.8987,
+    100.86698
    ],
    "name": "Jomtien Beach Road (North)",
    "region": "Jomtien"
   },
   "jomtien_beach_rd_s": {
    "geo": [
-    12.8876,
-    100.8722
+    12.89568,
+    100.86989
    ],
    "name": "Jomtien Beach Road (South)",
    "region": "Jomtien"
   },
   "jomtien_soi_7_beach_end": {
    "geo": [
-    12.8872,
-    100.8698
+    12.89537,
+    100.86949
    ],
    "name": "Jomtien Soi 7 Beach End",
    "region": "Jomtien"
   },
   "jomtien_soi_7_e": {
    "geo": [
-    12.8899,
-    100.8738
+    12.89763,
+    100.87254
    ],
    "name": "Jomtien Soi 7 (East / Second Road end)",
    "region": "Jomtien"
   },
   "jomtien_soi_7_m": {
    "geo": [
-    12.8878,
-    100.8735
+    12.89679,
+    100.87139
    ],
    "name": "Jomtien Soi 7 (Middle)",
    "region": "Jomtien"
@@ -3477,8 +3477,8 @@
   "jomtien_soi_7_oil": {
    "bar": "Sunset Oil Massage",
    "geo": [
-    12.889,
-    100.8726
+    12.89582,
+    100.87001
    ],
    "name": "Sunset Oil Massage",
    "region": "Jomtien"
@@ -3486,16 +3486,16 @@
   "jomtien_soi_7_thai": {
    "bar": "Soi 7 Thai Massage",
    "geo": [
-    12.8905,
-    100.8739
+    12.89751,
+    100.8723
    ],
    "name": "Jomtien Soi 7 Thai Massage",
    "region": "Jomtien"
   },
   "jomtien_soi_7_w": {
    "geo": [
-    12.8896,
-    100.8728
+    12.89595,
+    100.87025
    ],
    "name": "Jomtien Soi 7 (West / beach end)",
    "region": "Jomtien"
@@ -3503,8 +3503,8 @@
   "jomtien_thai": {
    "bar": "Jomtien Sabai Massage",
    "geo": [
-    12.889,
-    100.8724
+    12.89735,
+    100.86819
    ],
    "name": "Jomtien Sabai Massage",
    "region": "Jomtien"
@@ -3559,8 +3559,8 @@
   "kiss_jomtien": {
    "bar": "KISS Jomtien",
    "geo": [
-    12.8911,
-    100.8756
+    12.8996,
+    100.87113
    ],
    "name": "KISS Jomtien",
    "region": "Jomtien"
@@ -3640,8 +3640,8 @@
    "bar": "Lucky 7 Bar",
    "barType": "beer",
    "geo": [
-    12.8899,
-    100.8726
+    12.89611,
+    100.87001
    ],
    "name": "Lucky 7 Bar",
    "region": "Jomtien"
@@ -3873,8 +3873,8 @@
   "peacock_cabaret": {
    "bar": "The Peacock Cabaret",
    "geo": [
-    12.8983,
-    100.87
+    12.90065,
+    100.86913
    ],
    "liveMusic": true,
    "name": "The Peacock Cabaret",
@@ -4024,8 +4024,8 @@
    "bar": "The Sandbar",
    "barType": "beer",
    "geo": [
-    12.8896,
-    100.8741
+    12.89765,
+    100.87278
    ],
    "name": "The Sandbar",
    "region": "Jomtien"
@@ -4054,8 +4054,8 @@
    "bar": "Sea Breeze Bar",
    "barType": "beer",
    "geo": [
-    12.8892,
-    100.873
+    12.89596,
+    100.87049
    ],
    "name": "Sea Breeze Bar",
    "region": "Jomtien"
@@ -4185,8 +4185,8 @@
   "soi_rompho": {
    "bar": "Rompho Market",
    "geo": [
-    12.8905,
-    100.8756
+    12.89806,
+    100.87266
    ],
    "name": "Rompho Market",
    "region": "Jomtien"
@@ -4263,16 +4263,16 @@
   },
   "supertown_alley": {
    "geo": [
-    12.8978,
-    100.8688
+    12.90033,
+    100.86851
    ],
    "name": "Supertown Complex (alley)",
    "region": "Thappraya"
   },
   "supertown_elbow": {
    "geo": [
-    12.8982,
-    100.8698
+    12.90051,
+    100.86893
    ],
    "name": "Supertown Complex (the elbow)",
    "region": "Thappraya"
@@ -4281,8 +4281,8 @@
    "bar": "Take Care Me",
    "barType": "pub",
    "geo": [
-    12.8978,
-    100.87
+    12.90113,
+    100.86961
    ],
    "name": "Take Care Me",
    "region": "Thappraya"
@@ -4308,8 +4308,8 @@
   },
   "thappraya_e": {
    "geo": [
-    12.8975,
-    100.8702
+    12.90097,
+    100.86985
    ],
    "name": "Thappraya Rd — Main Strip (Second Road end)",
    "region": "Thappraya",
@@ -4342,24 +4342,24 @@
   "thappraya_massage": {
    "bar": "Thappraya Thai Massage",
    "geo": [
-    12.8973,
-    100.8706
+    12.90084,
+    100.86961
    ],
    "name": "Thappraya Thai Massage",
    "region": "Thappraya"
   },
   "thappraya_mid": {
    "geo": [
-    12.8972,
-    100.8685
+    12.89983,
+    100.86841
    ],
    "name": "Thappraya Rd — Main Strip (middle)",
    "region": "Thappraya"
   },
   "thappraya_w": {
    "geo": [
-    12.8968,
-    100.8668
+    12.89897,
+    100.86732
    ],
    "name": "Thappraya Rd — Main Strip (west)",
    "region": "Thappraya",
@@ -4369,8 +4369,8 @@
    "bar": "The Boardroom",
    "barType": "gents",
    "geo": [
-    12.8965,
-    100.867
+    12.89899,
+    100.86756
    ],
    "name": "The Boardroom",
    "region": "Thappraya"
@@ -4389,8 +4389,8 @@
    "bar": "The Office Bar",
    "barType": "beer",
    "geo": [
-    12.8972,
-    100.8704
+    12.90099,
+    100.87009
    ],
    "name": "The Office Bar",
    "region": "Thappraya"
@@ -4448,8 +4448,8 @@
    "bar": "The Velvet Club",
    "barType": "gents",
    "geo": [
-    12.897,
-    100.869
+    12.8997,
+    100.86817
    ],
    "name": "The Velvet Club",
    "region": "Thappraya"
