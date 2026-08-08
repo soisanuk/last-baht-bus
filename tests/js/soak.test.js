@@ -58,19 +58,39 @@ test("regression: Act One WAIT across dawn can't loop the same-day reset forever
 // hotels, the Darkside, everything the challenge never reaches. Until 2026-08-07
 // only Soi 6 was ratcheted, so every de batch tightened a guard on the path
 // FEWER players walk while the main path could regress unseen.
+//
+// A CEILING CAN MOVE BECAUSE THE MAP CHANGED, NOT THE PROSE. These count UNIQUE
+// untranslated lines a random walk reaches, so anything that alters where the
+// walk goes — new rooms, new exits, a new motosai stand — changes the number
+// without a word of English being written. Before re-baselining, run
+// `node tools/prose-corpus.mjs --delta`. If it reports 0 records, no new prose
+// exists and the movement is REACHABILITY: more (or less) of the existing
+// English is now findable. That is still a real change to the German
+// experience, so it belongs in docs/i18n-de-gaps.md — but it is not the
+// "someone added English without a de entry" failure this guard is named for,
+// and bumping the number without checking is how a ratchet turns into a
+// rubber stamp.
+//
+// Re-baselined 2026-08-08 after 14 piwin stands landed at nightlife junctions.
+// prose-corpus --delta: 0 records. soi6 and act1 FELL (the fenced pocket walks
+// tighter), vacation and expat rose (the open map walks wider). All four
+// verified stable over three consecutive runs.
 const DE_CEILINGS = [
-  { mode: "soi6", seeds: [1, 2, 3], nights: 2, ceiling: 149 },
+  // was 149 — tightened, 38 points of slack was hiding regression
+  { mode: "soi6", seeds: [1, 2, 3], nights: 2, ceiling: 111 },
   // vacation runs longer (4 nights × 5 seeds) because Act One occupies the first
   // two and the sandbox prose only starts after it. Verified stable across five
   // consecutive runs; ~240ms.
-  { mode: "vacation", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 309 },
+  // was 309 — rose 82 on reachability alone (0 new prose)
+  { mode: "vacation", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 391 },
   // act1 is the do-or-die opening — the wallet chain, the fail/reset screens, the
   // hint whispers. NEITHER other mode reaches it: soi6 force-sets act1Done, and
   // so does the soak's own vacation setup. It was unguarded until 2026-08-07, and
   // it could not be guarded before that either: _act1Fail's newGame() re-seeds
   // G.rng from Math.random, so five identical runs gave 156/144/143/152/143.
   // soak.mjs now pins a deterministic successor seed on reset.
-  { mode: "act1", seeds: [1, 2, 3, 4, 5], nights: 3, ceiling: 131 },
+  // was 131 — tightened
+  { mode: "act1", seeds: [1, 2, 3, 4, 5], nights: 3, ceiling: 124 },
   // expat: the endless stage, unreachable from the other modes (soi6 and the
   // soak's own vacation setup both force act1Done and stop there). Added with
   // the bar-owning chain.
@@ -81,7 +101,8 @@ const DE_CEILINGS = [
   // travel → a specific ASK at each step. A five-seed expat run offers zero
   // quests. Authored quest prose is guarded by scripted playthroughs instead
   // (tests/js/barchain.test.js).
-  { mode: "expat", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 312 },
+  // was 312 — rose 117 on reachability alone (0 new prose)
+  { mode: "expat", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 429 },
 ];
 
 for (const { mode, seeds, nights, ceiling } of DE_CEILINGS) {
