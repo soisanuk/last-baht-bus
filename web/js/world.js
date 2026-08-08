@@ -915,7 +915,7 @@ const ROOMS = {
     desc: "Mid-Second-Road: baht buses in convoy, pharmacies, and the constant churn " +
       "between the mall's back doors to the west and the fairy-lit mouth of MYTH " +
       "NIGHT market to the east.",
-    exits: { s: "second_rd_diana", n: "second_rd_n", w: "central_mall", diana: "diana_w" },
+    exits: { s: "second_rd_myth", n: "second_rd_n", w: "central_mall", diana: "diana_w" },
   },
   // Second Road's Soi Diana mouth. Until now the whole road was three rooms and
   // this junction had none, which left Soi Diana, Soi Honey and Myth Night all
@@ -943,7 +943,7 @@ const ROOMS = {
         "window, watching the soi like it's television.",
       "Two piwins argue amiably about a fare neither of them is being offered.",
     ],
-    exits: { n: "second_rd_c", s: "second_rd_s", e: "diana_w", spa: "diana_oil", honey: "soi_honey_w",
+    exits: { n: "second_rd_honey", s: "second_rd_s", e: "diana_w", spa: "diana_oil",
              mall: "mikes_mall" },
   },
   diana_oil: {
@@ -1067,6 +1067,39 @@ const ROOMS = {
     exits: { w: "beach_rd_c", e: "second_rd_n", in: "short_time_motel" },
   },
 
+  second_rd_honey: {
+    busStop: "secondrd",
+    name: "Second Road (Soi Honey)",
+    region: "Second Road",
+    desc: "Soi Honey opens east off Second Road here — a short bright soi that runs " +
+      "through to Buakhao, and quiet enough at this end that you can hear the bars " +
+      "at the other. Second Road does what it always does around it: four lanes, no " +
+      "gaps, and a pavement everybody shares with the parked bikes.",
+    revisit: [
+      "The mouth of Soi Honey does steady, unhurried trade in people cutting through.",
+      "A songthaew slows on spec, sees nobody moving, and carries on.",
+      "Somebody is having a long {{phone}} call against the wall of the corner shop.",
+      "A bike mounts the pavement to get round the queue, and nobody reacts.",
+    ],
+    exits: { s: "second_rd_diana", n: "second_rd_myth", e: "soi_honey_w" },
+  },
+  second_rd_myth: {
+    busStop: "secondrd",
+    name: "Second Road (Soi Myth Night)",
+    region: "Second Road",
+    desc: "The Soi Myth Night mouth, and you can tell it from a hundred metres by the " +
+      "smell — grilled everything, drifting out of the lane on the back of a bassline. " +
+      "The soi runs east to the night market and on to Buakhao. Out here it is just " +
+      "Second Road, four lanes of it, but the corner has a queue for something.",
+    revisit: [
+      "The smell arrives before you do. It always does.",
+      "The corner queue is for something. You cannot see what, and neither can they.",
+      "Bass from up the soi, arriving in bits between the traffic.",
+      "Two girls come out of the lane eating something on a stick, in no hurry at all.",
+    ],
+    exits: { s: "second_rd_honey", n: "second_rd_c", e: "myth_night" },
+  },
+
   // ─── Myth Night ───
   myth_night: { motosai: true,
     name: "Myth Night Market",
@@ -1078,7 +1111,7 @@ const ROOMS = {
       "double Chang prices. CANDY BAR 2's rose-pink sign is unmistakably the same " +
       "pink as the original. North, a LIVE-STAGE YARD throws sound over the roofs; " +
       "south, the CONTAINER ROWS glow like a docked ship someone plugged in.",
-    exits: { w: "second_rd_diana", e: "buakhao_myth", in: "candy_bar_2", n: "myth_stage", s: "myth_rows",
+    exits: { w: "second_rd_myth", e: "buakhao_myth", in: "candy_bar_2", n: "myth_stage", s: "myth_rows",
              bazaar: "night_bazaar" },
   },
   myth_stage: {
@@ -1507,7 +1540,22 @@ const ROOMS = {
       "Bikes, bikes, a gap, then more bikes. You could wait all night for a real one.",
       "Somebody comes out of Tree Town walking carefully and smiling at nothing.",
     ],
-    exits: { n: "buakhao_myth", s: "buakhao_lk", w: "tt_entrance" },
+    exits: { n: "buakhao_myth", s: "buakhao_honey", w: "tt_entrance" },
+  },
+  buakhao_honey: {
+    name: "Soi Buakhao (Soi Honey)",
+    region: "Soi Buakhao",
+    desc: "Soi Honey comes out here, narrow and pink-lit, and for about ten metres the " +
+      "noise of it competes with the soi's own. The Metro mouth is a few doors south, " +
+      "which makes this stretch of pavement a permanent bottleneck: two alleys emptying " +
+      "into one road, everybody crossing to the other side to get round everybody else.",
+    revisit: [
+      "Two alleys' worth of people trying to occupy one pavement, as usual.",
+      "Somebody comes out of Soi Honey at a clip and has to stop dead for the traffic.",
+      "The bottleneck resolves itself, briefly, then doesn't.",
+      "A motorbike noses out of the soi, waits, gives up, waits again.",
+    ],
+    exits: { n: "buakhao_tt", s: "buakhao_lk", w: "soi_honey_e" },
   },
   buakhao_lk: {
     motosai: true,
@@ -1524,10 +1572,10 @@ const ROOMS = {
       "Two girls in going-out clothes cut through from Soi Honey, already late.",
       "The gap swallows a group of six and returns none of them.",
     ],
-    exits: { n: "buakhao_tt", s: "buakhao_n", w: "lk_main", honey: "soi_honey_e" },
+    exits: { n: "buakhao_honey", s: "buakhao_n", w: "lk_main" },
   },
   buakhao_n: {
-    name: "Soi Buakhao (North)",
+    name: "Soi Buakhao (Soi Diana)",
     region: "Soi Buakhao",
     seven: true,
     desc: "The expat artery: pharmacies, laundry, bars, repeat. ROCK FACTORY's two-storey " +
@@ -2562,7 +2610,7 @@ const ROOMS = {
       "Soi 11, everyone else calls it Soi Honey, after the soapland whose blue glow owns the " +
       "west end. Beer bars string fairy lights and Filipino covers across the lane; a soapy " +
       "massage hums to the south, and the loudest of the beer bars is just north.",
-    exits: { w: "second_rd_diana", e: "soi_honey_e", n: "honey_trap", s: "honey_soapy" },
+    exits: { w: "second_rd_honey", e: "soi_honey_e", n: "honey_trap", s: "honey_soapy" },
   },
   soi_honey_e: { motosai: true,
     name: "Soi Honey (east end)",
@@ -2571,7 +2619,7 @@ const ROOMS = {
       "and laundries. Two more beer bars face each other across the narrow strip, close enough " +
       "that the girls of one heckle the customers of the other. It smells of grilled chicken, " +
       "spilled Chang, and somebody's jasmine.",
-    exits: { w: "soi_honey_w", e: "buakhao_lk", n: "queen_bee", in: "buzz_inn" },
+    exits: { w: "soi_honey_w", e: "buakhao_honey", n: "queen_bee", in: "buzz_inn" },
   },
   honey_soapy: {
     name: "Honeycomb Massage",
@@ -7069,7 +7117,8 @@ const BUS_LINES = {
   // south off the junction's SW corner, down to Jomtien
   jomtien:  ["pattaya_tai", "beach_rd_s", "jomtien_beach_rd"],
   // north off its NE corner, up Second Road to the Dolphin roundabout
-  secondrd: ["pattaya_tai", "second_rd_s", "second_rd_diana", "second_rd_c",
+  secondrd: ["pattaya_tai", "second_rd_s", "second_rd_diana", "second_rd_honey",
+             "second_rd_myth", "second_rd_c",
              "second_rd_n", "pattaya_klang", "second_rd_soi6", "naklua_rd"],
   // and back down the seafront — naklua_rd and pattaya_tai are on both, which is
   // what closes the circuit and lets you ride the whole loop from either end
@@ -10035,12 +10084,15 @@ const ROOM_GEO = {
   container_8:      [12.93234, 100.88463],
   reload_bar:       [12.93227, 100.88483],
   // Soi Buakhao
-  buakhao_lk:       [12.92994, 100.88554],
+  buakhao_lk:       [12.92962, 100.88533],
   buakhao_n:        [12.92881, 100.88480],
   diana_oil:         [12.93077, 100.88184],
   myth_massage:      [12.93184, 100.88701],
   klang_massage:     [12.93567, 100.88832],
   second_rd_diana:   [12.93104, 100.88204],
+  second_rd_myth:    [12.93257, 100.88377],
+  second_rd_honey:   [12.93189, 100.883],
+  buakhao_honey:     [12.92994, 100.88554],
   buakhao_myth:      [12.93208, 100.88678],
   buakhao_tt:       [12.93146, 100.88646],
   buakhao_klang:     [12.93594, 100.88854],
@@ -10054,10 +10106,10 @@ const ROOM_GEO = {
   buakhao_s:        [12.92490, 100.88002],
   jasmine_garden:   [12.92414, 100.87915],
   // Soi Honey (Soi 11, between Second Rd and Buakhao)
-  soi_honey_w:      [12.93189, 100.88300],
+  soi_honey_w:      [12.93165, 100.88331],
   soi_honey_e:      [12.93023, 100.88516],
-  honey_soapy:      [12.93165, 100.88302],
-  honey_trap:       [12.93212, 100.88306],
+  honey_soapy:      [12.93142, 100.88328],
+  honey_trap:       [12.93188, 100.88334],
   queen_bee:        [12.93046, 100.88519],
   buzz_inn:         [12.93000, 100.88513],
   // Soi Diana (the big go-go soi; Second Rd ↔ Buakhao, past LK Metro)

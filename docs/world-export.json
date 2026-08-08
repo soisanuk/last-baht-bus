@@ -22,13 +22,13 @@
   "Blue Dog"
  ],
  "counts": {
-  "geolocated": 197,
+  "geolocated": 200,
   "patrons": 18,
   "people": 268,
   "portraits": 286,
   "renders": 72,
   "thumbs": 72,
-  "venues": 197
+  "venues": 200
  },
  "frames": [
   "baimon_pic1",
@@ -3108,6 +3108,14 @@
    "name": "Blue Dog",
    "region": "Beach Road"
   },
+  "buakhao_honey": {
+   "geo": [
+    12.92994,
+    100.88554
+   ],
+   "name": "Soi Buakhao (Soi Honey)",
+   "region": "Soi Buakhao"
+  },
   "buakhao_klang": {
    "geo": [
     12.93594,
@@ -3119,8 +3127,8 @@
   },
   "buakhao_lk": {
    "geo": [
-    12.92994,
-    100.88554
+    12.92962,
+    100.88533
    ],
    "name": "Soi Buakhao (Metro Alley)",
    "region": "Soi Buakhao"
@@ -3146,7 +3154,7 @@
     12.92881,
     100.8848
    ],
-   "name": "Soi Buakhao (North)",
+   "name": "Soi Buakhao (Soi Diana)",
    "region": "Soi Buakhao",
    "seven": true
   },
@@ -3491,8 +3499,8 @@
   "honey_soapy": {
    "bar": "Honeycomb Massage",
    "geo": [
-    12.93165,
-    100.88302
+    12.93142,
+    100.88328
    ],
    "name": "Honeycomb Massage",
    "region": "Soi Honey"
@@ -3501,8 +3509,8 @@
    "bar": "Honey Trap Bar",
    "barType": "beer",
    "geo": [
-    12.93212,
-    100.88306
+    12.93188,
+    100.88334
    ],
    "name": "Honey Trap Bar",
    "region": "Soi Honey"
@@ -4306,6 +4314,22 @@
    "region": "Second Road",
    "seven": true
   },
+  "second_rd_honey": {
+   "geo": [
+    12.93189,
+    100.883
+   ],
+   "name": "Second Road (Soi Honey)",
+   "region": "Second Road"
+  },
+  "second_rd_myth": {
+   "geo": [
+    12.93257,
+    100.88377
+   ],
+   "name": "Second Road (Soi Myth Night)",
+   "region": "Second Road"
+  },
   "second_rd_n": {
    "geo": [
     12.93539,
@@ -4430,8 +4454,8 @@
   },
   "soi_honey_w": {
    "geo": [
-    12.93189,
-    100.883
+    12.93165,
+    100.88331
    ],
    "name": "Soi Honey (west end)",
    "region": "Soi Honey"

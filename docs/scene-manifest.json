@@ -2,10 +2,10 @@
   "generated": "2026-08-08",
   "note": "Every room in the game + its region, for the scene-art pipeline (docs/art-pipeline-spec.md). Derived from web/js/world.js — regenerate with scripts/gen-scene-manifest.mjs, do not hand-edit. `kind` is a generator heuristic for prompt-template selection, not game canon. `regionSlug` is produced by the same regex as web/js/scene.js `_sceneArt()`; art files are web/art/rooms/<id>.png with web/art/regions/<slug>.png as the fallback.",
   "counts": {
-    "rooms": 197,
+    "rooms": 200,
     "regions": 15,
     "byKind": {
-      "street": 72,
+      "street": 75,
       "massage": 17,
       "beer": 49,
       "shop": 2,
@@ -208,6 +208,8 @@
         "poseidon_soapy",
         "second_rd_c",
         "second_rd_diana",
+        "second_rd_honey",
+        "second_rd_myth",
         "second_rd_n",
         "second_rd_s",
         "second_rd_soi6",
@@ -250,6 +252,7 @@
       "slug": "soi-buakhao",
       "name": "Soi Buakhao",
       "roomIds": [
+        "buakhao_honey",
         "buakhao_klang",
         "buakhao_lk",
         "buakhao_market",
@@ -271,7 +274,7 @@
       "sampleDescs": [
         "The expat artery: pharmacies, laundry, bars, repeat. ROCK FACTORY's two-storey stage looms on the corner — currently doing what every band in Thailand does to 'Hotel California' and somehow getting away with it. LUCKY TIGER BAR is just east. South is the old market block, which has not been a market since Tree Town took the trade. A small handwritten LK METRO arrow on a wall points down an alley — easy to miss, worth finding. Soi Diana opens off the 7-Eleven on the corner here, its go-go neon running away west. A few doors down the quiet side, CANDY BAR's rose-pink sign keeps its own hours — far enough off the main drag that the soi forgets about it until about three in the morning, which is roughly when it fills up.",
         "Where the soi gives up and hands you to Central Pattaya Road. The traffic arrives here to die: two baht buses nose to tail with nowhere to go, a third wedged across the mouth of the junction while its driver leans out and negotiates with nobody in particular. The motorbikes don't wait. They come through the gaps in a steady braided stream — a girl side-saddle in six-inch heels holding her hair down with one hand, a punter on the back of another with his knees out like a man being carried to somewhere he didn't choose. A 7-Eleven throws cold white light across the whole slow mess, and the piwins at the corner watch it the way farmers watch weather.",
-        "The mouth of LK Metro, and you can hear it before you reach it — three lanes of go-go bleeding into the soi through a gap barely wide enough for two people and a motorbike, which is what is usually in it. Soi Honey comes out a few doors north. The traffic here does not so much move as take turns, and the pavement has given up and become part of the road."
+        "The block everyone still calls the market, though the market went years ago — Tree Town took the trade and the tarps came down. What is left is the shape of it: shophouse fronts too wide for what they sell now, a som tam cart holding the corner out of sheer stubbornness, and a smell of papaya salad that could still pull you here from two sois away. SILK ROSE shares the block east, and a pink-lit shopfront a few doors down promises the oil is warm."
       ]
     },
     {
@@ -1754,6 +1757,30 @@
       "desc": "The mouth of Soi Diana, and Second Road doing what Second Road does: four lanes of baht buses running nose to tail, a permanent shoal of motorbikes in the gutter lane, and pavement so narrow that walking it is a negotiation. The go-go neon starts about twenty metres up the soi and doesn't stop until Buakhao. On this corner: a 7-Eleven with a cash machine, a knot of piwins who have claimed the shade of its sign, and a girl on the back of a bike checking her lipstick in a wing mirror at a red light."
     },
     {
+      "id": "second_rd_honey",
+      "name": "Second Road (Soi Honey)",
+      "bar": null,
+      "barType": null,
+      "region": "Second Road",
+      "regionSlug": "second-road",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "Soi Honey opens east off Second Road here — a short bright soi that runs through to Buakhao, and quiet enough at this end that you can hear the bars at the other. Second Road does what it always does around it: four lanes, no gaps, and a pavement everybody shares with the parked bikes."
+    },
+    {
+      "id": "second_rd_myth",
+      "name": "Second Road (Soi Myth Night)",
+      "bar": null,
+      "barType": null,
+      "region": "Second Road",
+      "regionSlug": "second-road",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "The Soi Myth Night mouth, and you can tell it from a hundred metres by the smell — grilled everything, drifting out of the lane on the back of a bassline. The soi runs east to the night market and on to Buakhao. Out here it is just Second Road, four lanes of it, but the corner has a queue for something."
+    },
+    {
       "id": "second_rd_n",
       "name": "Second Road (North)",
       "bar": null,
@@ -2067,6 +2094,18 @@
       "desc": "A beer bar in the quiet middle of Soi 6, deliberately set back under a low awning and a stand of potted palms — shade, in both senses. A long rail faces the soi so the regulars can watch the parade go past without being in it. Pukky pours without being asked and misses nothing that happens on the pavement."
     },
     {
+      "id": "buakhao_honey",
+      "name": "Soi Buakhao (Soi Honey)",
+      "bar": null,
+      "barType": null,
+      "region": "Soi Buakhao",
+      "regionSlug": "soi-buakhao",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "Soi Honey comes out here, narrow and pink-lit, and for about ten metres the noise of it competes with the soi's own. The Metro mouth is a few doors south, which makes this stretch of pavement a permanent bottleneck: two alleys emptying into one road, everybody crossing to the other side to get round everybody else."
+    },
+    {
       "id": "buakhao_klang",
       "name": "Soi Buakhao (Klang End)",
       "bar": null,
@@ -2116,7 +2155,7 @@
     },
     {
       "id": "buakhao_n",
-      "name": "Soi Buakhao (North)",
+      "name": "Soi Buakhao (Soi Diana)",
       "bar": null,
       "barType": null,
       "region": "Soi Buakhao",
