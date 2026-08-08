@@ -2,10 +2,10 @@
   "generated": "2026-08-08",
   "note": "Every room in the game + its region, for the scene-art pipeline (docs/art-pipeline-spec.md). Derived from web/js/world.js — regenerate with scripts/gen-scene-manifest.mjs, do not hand-edit. `kind` is a generator heuristic for prompt-template selection, not game canon. `regionSlug` is produced by the same regex as web/js/scene.js `_sceneArt()`; art files are web/art/rooms/<id>.png with web/art/regions/<slug>.png as the fallback.",
   "counts": {
-    "rooms": 227,
+    "rooms": 230,
     "regions": 15,
     "byKind": {
-      "beach": 12,
+      "beach": 15,
       "street": 94,
       "massage": 17,
       "beer": 53,
@@ -104,6 +104,9 @@
         "jomtien_beach_rd",
         "jomtien_beach_rd_n",
         "jomtien_beach_rd_s",
+        "jomtien_beach_s1",
+        "jomtien_beach_s2",
+        "jomtien_beach_s3",
         "jomtien_soi_7_beach_end",
         "jomtien_soi_7_e",
         "jomtien_soi_7_m",
@@ -1115,6 +1118,42 @@
       "dark": false,
       "people": [],
       "desc": "The south end of the beach road, where it meets the mouth of Soi 7. A 7-Eleven glows on the corner, its air-con bleeding into the street; Soi 7's beer bars and massage shops run inland to the east, the bus stop is back to the north, and the sand and the sea lie west."
+    },
+    {
+      "id": "jomtien_beach_s1",
+      "name": "Jomtien Beach (past the works)",
+      "bar": null,
+      "barType": null,
+      "region": "Jomtien",
+      "regionSlug": "jomtien",
+      "kind": "beach",
+      "dark": true,
+      "people": [],
+      "desc": "South of Soi 7 the beach road simply stops. Steel hoarding runs the length of the frontage, the carriageway behind it is opened up to the pipes, and a line of cones funnels everything inland up the soi — which is why nobody comes down here any more, and why the sand beside it has gone quiet in a way Jomtien sand never is. A digger sits with its arm folded down for the night. The beach carries on south past all of it, because a beach does not care about a road."
+    },
+    {
+      "id": "jomtien_beach_s2",
+      "name": "Jomtien Beach (the unraked stretch)",
+      "bar": null,
+      "barType": null,
+      "region": "Jomtien",
+      "regionSlug": "jomtien",
+      "kind": "beach",
+      "dark": true,
+      "people": [],
+      "desc": "Nobody rakes this. You can tell instantly — the sand has the tide's own arrangement on it, a long crooked line of weed and bottle caps and one flip-flop, and your feet keep finding the ridges the water left. No loungers, no umbrella poles, no cool boxes, nobody at all. It is the first place all night where nothing whatsoever is being sold to you, and the effect is stranger than it should be."
+    },
+    {
+      "id": "jomtien_beach_s3",
+      "name": "Jomtien Beach (the far end)",
+      "bar": null,
+      "barType": null,
+      "region": "Jomtien",
+      "regionSlug": "jomtien",
+      "kind": "beach",
+      "dark": true,
+      "people": [],
+      "desc": "As far as walking gets you. A stand of casuarinas leans off the dune with the wind's shape set into them, and under the nearest one somebody long ago put a spirit house — weathered grey, one corner gone, the little figures inside still facing out to sea. There are no offerings on it. There is no rubbish either, which takes some explaining on a beach nobody sweeps. Behind you the lights of Jomtien are a low orange smear a long way north."
     },
     {
       "id": "jomtien_soi_7_beach_end",

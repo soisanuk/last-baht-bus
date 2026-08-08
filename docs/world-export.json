@@ -22,13 +22,13 @@
   "Blue Dog"
  ],
  "counts": {
-  "geolocated": 227,
+  "geolocated": 230,
   "patrons": 18,
   "people": 297,
   "portraits": 315,
   "renders": 72,
   "thumbs": 72,
-  "venues": 227
+  "venues": 230
  },
  "frames": [
   "baimon_pic1",
@@ -4329,6 +4329,30 @@
     100.86989
    ],
    "name": "Jomtien Beach Road (South)",
+   "region": "Jomtien"
+  },
+  "jomtien_beach_s1": {
+   "geo": [
+    12.89408,
+    100.87077
+   ],
+   "name": "Jomtien Beach (past the works)",
+   "region": "Jomtien"
+  },
+  "jomtien_beach_s2": {
+   "geo": [
+    12.89279,
+    100.87205
+   ],
+   "name": "Jomtien Beach (the unraked stretch)",
+   "region": "Jomtien"
+  },
+  "jomtien_beach_s3": {
+   "geo": [
+    12.8915,
+    100.87333
+   ],
+   "name": "Jomtien Beach (the far end)",
    "region": "Jomtien"
   },
   "jomtien_soi_7_beach_end": {

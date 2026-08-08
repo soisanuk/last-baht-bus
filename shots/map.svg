@@ -85,6 +85,7 @@
 <line x1="264.3" y1="1266.9" x2="236.8" y2="1246.1" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="264.3" y1="1266.9" x2="288.6" y2="1267.1" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="317.2" y1="1302.8" x2="368.5" y2="1274.9" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
+<line x1="317.2" y1="1302.8" x2="351.8" y2="1328.1" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="236.8" y1="1246.1" x2="249.5" y2="1237.4" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="236.8" y1="1246.1" x2="152.5" y2="1173.0" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="288.6" y1="1267.1" x2="249.5" y2="1237.4" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
@@ -153,6 +154,8 @@
 <line x1="723.9" y1="245.4" x2="682.0" y2="249.9" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="682.0" y1="249.9" x2="701.2" y2="363.0" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="652.3" y1="471.8" x2="701.2" y2="363.0" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
+<line x1="351.8" y1="1328.1" x2="386.4" y2="1353.4" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
+<line x1="386.4" y1="1353.4" x2="420.9" y2="1378.8" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="729.3" y1="370.1" x2="747.9" y2="374.6" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="729.3" y1="370.1" x2="701.2" y2="363.0" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="694.2" y1="536.6" x2="727.9" y2="546.4" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
@@ -381,6 +384,9 @@
 <circle cx="723.9" cy="245.4" r="2.6" fill="#00e5ff" opacity="0.8"/>
 <circle cx="682.0" cy="249.9" r="2.6" fill="#00e5ff" opacity="0.8"/>
 <circle cx="652.3" cy="471.8" r="2.6" fill="#00e5ff" opacity="0.8"/>
+<circle cx="351.8" cy="1328.1" r="2.6" fill="#e8c46a" opacity="0.8"/>
+<circle cx="386.4" cy="1353.4" r="2.6" fill="#e8c46a" opacity="0.8"/>
+<circle cx="420.9" cy="1378.8" r="2.6" fill="#e8c46a" opacity="0.8"/>
 <circle cx="632.6" cy="534.6" r="2.6" fill="#00e5ff" opacity="0.8"/>
 <circle cx="729.3" cy="370.1" r="2.6" fill="#00e5ff" opacity="0.8"/>
 <text x="738.3" y="364.1" font-size="15" fill="#00e5ff" text-anchor="start" opacity="0.95">Beach Rd N</text>

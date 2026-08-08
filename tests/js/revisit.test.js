@@ -66,6 +66,13 @@ test("every revisit room shows brief on return, full on first visit and LOOK", (
   for (const id of REVISIT_ROOMS) {
     const { desc, revisit } = ROOMS[id];
     G.visited = {}; G.room = id;              // unvisited
+    // A DARK room prints the darkness line instead of its desc, so this used to
+    // be unsatisfiable for one — which is why not one of the six unlit beach
+    // rooms had a pool: the rule was reading as "dark rooms may not have
+    // repeatable prose", which is not a rule anybody chose. Darkness is a
+    // presentation state, orthogonal to whether the room's prose rotates, so
+    // the light goes on and the pool is tested on its merits.
+    G.lightOn = true; G.battery = 100;
     out = []; _describeRoom(true);            // first arrival
     assert.ok(out.join("\n").includes(desc), `${id}: first visit is full desc`);
     out = []; _describeRoom(true);            // re-arrival

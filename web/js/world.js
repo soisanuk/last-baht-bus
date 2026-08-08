@@ -120,7 +120,7 @@ const ROOMS = {
     desc: "Where Soi 7 finally gives out onto the sand: a scrap of hard-packed beach, a couple of " +
       "upturned boats, and Auntie Nok's drinks cart parked in the lee of a sea almond tree, cooler " +
       "humming. The beach opens north; Soi 7 runs back inland to the east.",
-    exits: { n: "jomtien_beach", e: "jomtien_soi_7_m" },
+    exits: { n: "jomtien_beach", e: "jomtien_soi_7_m", s: "jomtien_beach_s1" },
   },
   dongtan_beach: {
     name: "Dongtan Beach (Jomtien End)",
@@ -1135,6 +1135,59 @@ const ROOMS = {
       "The jet-skis are pulled up and padlocked. In the morning they will be a menace again.",
     ],
     exits: { e: "beach_rd_klang", n: "north_beach" },
+  },
+  jomtien_beach_s1: {
+    name: "Jomtien Beach (past the works)",
+    region: "Jomtien",
+    dark: true,
+    desc: "South of Soi 7 the beach road simply stops. Steel hoarding runs the length of " +
+      "the frontage, the carriageway behind it is opened up to the pipes, and a line of " +
+      "cones funnels everything inland up the soi — which is why nobody comes down here " +
+      "any more, and why the sand beside it has gone quiet in a way Jomtien sand never " +
+      "is. A digger sits with its arm folded down for the night. The beach carries on " +
+      "south past all of it, because a beach does not care about a road.",
+    revisit: [
+      "The hoarding, the cones, the digger with its arm down. Nothing has moved.",
+      "You can hear the traffic taking the detour, one street inland and grumbling.",
+      "Sand on this side, a dug-up road on the other, and nobody on either.",
+      "The works go on for as far as the lights do, which is not far.",
+    ],
+    exits: { n: "jomtien_soi_7_beach_end", s: "jomtien_beach_s2" },
+  },
+  jomtien_beach_s2: {
+    name: "Jomtien Beach (the unraked stretch)",
+    region: "Jomtien",
+    dark: true,
+    desc: "Nobody rakes this. You can tell instantly — the sand has the tide's own " +
+      "arrangement on it, a long crooked line of weed and bottle caps and one flip-flop, " +
+      "and your feet keep finding the ridges the water left. No loungers, no umbrella " +
+      "poles, no cool boxes, nobody at all. It is the first place all night where nothing " +
+      "whatsoever is being sold to you, and the effect is stranger than it should be.",
+    revisit: [
+      "The tide line, the flip-flop, and your own footprints going back the way you came.",
+      "Nothing is being sold to you here, and you keep noticing it.",
+      "Ridged sand underfoot, unraked since the last high water.",
+      "Dark, and quiet enough that the water is the loudest thing in Jomtien.",
+    ],
+    exits: { n: "jomtien_beach_s1", s: "jomtien_beach_s3" },
+  },
+  jomtien_beach_s3: {
+    name: "Jomtien Beach (the far end)",
+    region: "Jomtien",
+    dark: true,
+    desc: "As far as walking gets you. A stand of casuarinas leans off the dune with the " +
+      "wind's shape set into them, and under the nearest one somebody long ago put a " +
+      "spirit house — weathered grey, one corner gone, the little figures inside still " +
+      "facing out to sea. There are no offerings on it. There is no rubbish either, " +
+      "which takes some explaining on a beach nobody sweeps. Behind you the lights of " +
+      "Jomtien are a low orange smear a long way north.",
+    revisit: [
+      "The spirit house, the leaning trees, and the sea doing what it does.",
+      "No offerings, no rubbish. Somebody still comes here, or nobody ever has.",
+      "The little figures face out to sea, as they have through everything.",
+      "The end of the walkable sand. Jomtien is an orange smear behind you.",
+    ],
+    exits: { n: "jomtien_beach_s2" },
   },
   promenade: {
     name: "Beach Promenade",
@@ -3347,6 +3400,28 @@ const ITEMS = {
     portable: true, location: "inventory",
     desc: "Half a packet of Mama noodles, chicken flavour. Dry. Technically food. " +
       "A soi dog would commit crimes for this.",
+  },
+  // Planted for the Thai-ability bonus quest (docs/thai-quest-design.md), which
+  // is not built yet — this is the hook, findable by anyone who walks to the end
+  // of a beach with nothing on it.
+  //
+  // The inscription is WORN, not merely foreign, and that is deliberate. The
+  // design note's whole threat model is that any Thai the game DISPLAYS can be
+  // read by Google Lens in a second, so an amulet you could photograph would be
+  // solved before it was a puzzle. Nobody can read this one off the object —
+  // which makes the eventual quest about finding somebody who knows what it
+  // says, not about optical character recognition.
+  amulet: {
+    name: "a Buddha amulet",
+    aliases: ["amulet", "buddha", "pendant", "medallion"],
+    portable: true,
+    location: "jomtien_beach_s3",
+    desc: "Small, oval, and heavier than it looks — old clay in a scratched gold case, on " +
+      "a broken cord. The Buddha on the front is worn nearly featureless by however many " +
+      "years of somebody's shirt. On the back there is writing: a line of Thai pressed " +
+      "into the clay while it was soft, and rubbed down since until it is more of a " +
+      "rhythm than a set of letters. You can tell it says something. You cannot tell " +
+      "what, and neither, you suspect, could most people.",
   },
   bottle1: {
     name: "empty Chang bottle", aliases: ["bottle", "chang bottle", "glass"],
@@ -10893,6 +10968,9 @@ const ROOM_GEO = {
   jomtien_7eleven:  [12.89584, 100.86965],
   jomtien_beach_m:  [12.89720, 100.86753],
   jomtien_soi_7_beach_end:   [12.89537, 100.86949],
+  jomtien_beach_s1: [12.89408, 100.87077],
+  jomtien_beach_s2: [12.89279, 100.87205],
+  jomtien_beach_s3: [12.89150, 100.87333],
   dongtan_beach_s:  [12.90198, 100.86339],
   dongtan_beach_m:  [12.90546, 100.86048],
   dongtan_beach_n:  [12.90883, 100.85765],
