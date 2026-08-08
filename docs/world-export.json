@@ -2902,8 +2902,8 @@
    "bar": "The Amp Room",
    "barType": "beer",
    "geo": [
-    12.92918,
-    100.88233
+    12.93309,
+    100.88464
    ],
    "liveMusic": true,
    "name": "The Amp Room",
@@ -3076,8 +3076,8 @@
    "bar": "Candy Bar 2",
    "barType": "beer",
    "geo": [
-    12.92904,
-    100.88276
+    12.93298,
+    100.88507
    ],
    "liveMusic": true,
    "name": "Candy Bar 2",
@@ -3135,8 +3135,8 @@
    "bar": "Container 8",
    "barType": "beer",
    "geo": [
-    12.92837,
-    100.88233
+    12.93234,
+    100.88463
    ],
    "name": "Container 8",
    "region": "Myth Night"
@@ -3145,8 +3145,8 @@
    "bar": "Craft & Cargo",
    "barType": "beer",
    "geo": [
-    12.92856,
-    100.88228
+    12.93252,
+    100.88457
    ],
    "name": "Craft & Cargo",
    "region": "Myth Night"
@@ -3276,8 +3276,8 @@
    "bar": "Encore",
    "barType": "beer",
    "geo": [
-    12.929,
-    100.88241
+    12.93292,
+    100.88472
    ],
    "name": "Encore",
    "region": "Myth Night"
@@ -3286,8 +3286,8 @@
    "bar": "Feedback Bar",
    "barType": "beer",
    "geo": [
-    12.92916,
-    100.88272
+    12.93307,
+    100.88503
    ],
    "name": "Feedback Bar",
    "region": "Myth Night"
@@ -3306,8 +3306,8 @@
    "bar": "Gold Rush Lounge",
    "barType": "beer",
    "geo": [
-    12.9333,
-    100.8857
+    12.9317,
+    100.8855
    ],
    "name": "Gold Rush Lounge",
    "region": "Tree Town"
@@ -3550,8 +3550,8 @@
   "kiss": {
    "bar": "KISS Restaurant",
    "geo": [
-    12.93085,
-    100.88213
+    12.93087,
+    100.88205
    ],
    "name": "KISS Restaurant",
    "region": "Soi Diana"
@@ -3650,8 +3650,8 @@
    "bar": "Lucky Charm Bar",
    "barType": "beer",
    "geo": [
-    12.9324,
-    100.8864
+    12.93104,
+    100.88616
    ],
    "name": "Lucky Charm Bar",
    "pool": true,
@@ -3711,8 +3711,8 @@
    "bar": "Moonshine Bar",
    "barType": "beer",
    "geo": [
-    12.9327,
-    100.8862
+    12.93117,
+    100.8858
    ],
    "name": "Moonshine Bar",
    "region": "Tree Town"
@@ -3729,8 +3729,8 @@
   },
   "myth_night": {
    "geo": [
-    12.9288,
-    100.8825
+    12.93274,
+    100.88479
    ],
    "liveMusic": true,
    "name": "Myth Night Market",
@@ -3738,16 +3738,16 @@
   },
   "myth_rows": {
    "geo": [
-    12.92849,
-    100.88246
+    12.93247,
+    100.88475
    ],
    "name": "Myth Night — Container Rows",
    "region": "Myth Night"
   },
   "myth_stage": {
    "geo": [
-    12.92911,
-    100.88254
+    12.93301,
+    100.88483
    ],
    "liveMusic": true,
    "name": "Myth Night — Live-Stage Yard",
@@ -3837,8 +3837,8 @@
   },
   "oy_office": {
    "geo": [
-    12.9325,
-    100.8873
+    12.93113,
+    100.88671
    ],
    "name": "Madam Oy's Office",
    "region": "Tree Town"
@@ -3973,8 +3973,8 @@
    "bar": "The Rabbit Hole",
    "barType": "beer",
    "geo": [
-    12.9325,
-    100.8861
+    12.93103,
+    100.88583
    ],
    "name": "The Rabbit Hole",
    "region": "Tree Town"
@@ -3983,8 +3983,8 @@
    "bar": "Rainbow Girls Bar",
    "barType": "gogo",
    "geo": [
-    12.9326,
-    100.8871
+    12.93118,
+    100.88652
    ],
    "name": "Rainbow Girls Bar",
    "region": "Tree Town"
@@ -3993,8 +3993,8 @@
    "bar": "Reload Bar",
    "barType": "beer",
    "geo": [
-    12.92829,
-    100.88256
+    12.93227,
+    100.88483
    ],
    "name": "Reload Bar",
    "region": "Myth Night"
@@ -4195,8 +4195,8 @@
    "bar": "Soundcheck Bar",
    "barType": "beer",
    "geo": [
-    12.92932,
-    100.88259
+    12.93321,
+    100.8849
    ],
    "name": "Soundcheck Bar",
    "region": "Myth Night"
@@ -4205,8 +4205,8 @@
    "bar": "Starlight Bar",
    "barType": "beer",
    "geo": [
-    12.9334,
-    100.8862
+    12.93168,
+    100.8858
    ],
    "name": "Starlight Bar",
    "region": "Tree Town"
@@ -4379,8 +4379,8 @@
    "bar": "The Growler",
    "barType": "beer",
    "geo": [
-    12.92846,
-    100.88263
+    12.93249,
+    100.8849
    ],
    "name": "The Growler",
    "region": "Myth Night"
@@ -4397,24 +4397,24 @@
   },
   "tt_back": {
    "geo": [
-    12.933,
-    100.8865
+    12.9313,
+    100.88602
    ],
    "name": "Tree Town (Back Lane)",
    "region": "Tree Town"
   },
   "tt_deep": {
    "geo": [
-    12.9327,
-    100.8867
+    12.93122,
+    100.8863
    ],
    "name": "Tree Town (Deep Corner)",
    "region": "Tree Town"
   },
   "tt_entrance": {
    "geo": [
-    12.933,
-    100.8852
+    12.93152,
+    100.88518
    ],
    "name": "Tree Town (Entrance Arch)",
    "region": "Tree Town",
@@ -4422,24 +4422,24 @@
   },
   "tt_lane_1": {
    "geo": [
-    12.9331,
-    100.8857
+    12.9315,
+    100.88548
    ],
    "name": "Tree Town (Inner Lane)",
    "region": "Tree Town"
   },
   "tt_lane_2": {
    "geo": [
-    12.9332,
-    100.8862
+    12.93148,
+    100.88578
    ],
    "name": "Tree Town (Cross Lane)",
    "region": "Tree Town"
   },
   "tt_lane_3": {
    "geo": [
-    12.9326,
-    100.8863
+    12.93108,
+    100.88598
    ],
    "name": "Tree Town (Far Lane)",
    "region": "Tree Town"
