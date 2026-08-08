@@ -2902,8 +2902,8 @@
    "bar": "The Amp Room",
    "barType": "beer",
    "geo": [
-    12.93558,
-    100.88663
+    12.92918,
+    100.88233
    ],
    "liveMusic": true,
    "name": "The Amp Room",
@@ -2922,8 +2922,8 @@
   },
   "areca_room": {
    "geo": [
-    12.92886,
-    100.88442
+    12.92915,
+    100.8829
    ],
    "name": "Your Room — Areca Lodge",
    "region": "Soi Diana"
@@ -3012,16 +3012,16 @@
   },
   "buakhao_market": {
    "geo": [
-    12.93282,
-    100.88715
+    12.92629,
+    100.88197
    ],
    "name": "Buakhao Market",
    "region": "Soi Buakhao"
   },
   "buakhao_n": {
    "geo": [
-    12.93594,
-    100.88854
+    12.92881,
+    100.8848
    ],
    "name": "Soi Buakhao (North)",
    "region": "Soi Buakhao",
@@ -3030,16 +3030,16 @@
   "buakhao_oil": {
    "bar": "Golden Touch Massage",
    "geo": [
-    12.93302,
-    100.88736
+    12.92649,
+    100.88218
    ],
    "name": "Golden Touch Massage",
    "region": "Soi Buakhao"
   },
   "buakhao_s": {
    "geo": [
-    12.92994,
-    100.88554
+    12.9243,
+    100.87934
    ],
    "name": "Soi Buakhao (South)",
    "region": "Soi Buakhao"
@@ -3066,8 +3066,8 @@
    "bar": "Candy Bar",
    "barType": "beer",
    "geo": [
-    12.93293,
-    100.88692
+    12.92857,
+    100.88474
    ],
    "name": "Candy Bar",
    "region": "Soi Buakhao"
@@ -3076,8 +3076,8 @@
    "bar": "Candy Bar 2",
    "barType": "beer",
    "geo": [
-    12.93545,
-    100.88708
+    12.92904,
+    100.88276
    ],
    "liveMusic": true,
    "name": "Candy Bar 2",
@@ -3135,8 +3135,8 @@
    "bar": "Container 8",
    "barType": "beer",
    "geo": [
-    12.93477,
-    100.88663
+    12.92837,
+    100.88233
    ],
    "name": "Container 8",
    "region": "Myth Night"
@@ -3145,8 +3145,8 @@
    "bar": "Craft & Cargo",
    "barType": "beer",
    "geo": [
-    12.93496,
-    100.88658
+    12.92856,
+    100.88228
    ],
    "name": "Craft & Cargo",
    "region": "Myth Night"
@@ -3276,8 +3276,8 @@
    "bar": "Encore",
    "barType": "beer",
    "geo": [
-    12.9354,
-    100.88671
+    12.929,
+    100.88241
    ],
    "name": "Encore",
    "region": "Myth Night"
@@ -3286,8 +3286,8 @@
    "bar": "Feedback Bar",
    "barType": "beer",
    "geo": [
-    12.93556,
-    100.88702
+    12.92916,
+    100.88272
    ],
    "name": "Feedback Bar",
    "region": "Myth Night"
@@ -3371,8 +3371,8 @@
    "bar": "Jasmine Garden Bar",
    "barType": "beer",
    "geo": [
-    12.92978,
-    100.88536
+    12.92414,
+    100.87915
    ],
    "name": "Jasmine Garden Bar",
    "region": "Soi Buakhao"
@@ -3541,8 +3541,8 @@
    "bar": "KINKY Go-Go",
    "barType": "gogo",
    "geo": [
-    12.93,
-    100.88454
+    12.92979,
+    100.88457
    ],
    "name": "KINKY Go-Go",
    "region": "LK Metro"
@@ -3587,32 +3587,32 @@
    "bar": "Las Vegas Go-Go",
    "barType": "gogo",
    "geo": [
-    12.92988,
-    100.88542
+    12.9293,
+    100.88523
    ],
    "name": "Las Vegas Go-Go",
    "region": "LK Metro"
   },
   "lk_bend": {
    "geo": [
-    12.9301,
-    100.88525
+    12.92952,
+    100.88507
    ],
    "name": "LK Metro (Corner)",
    "region": "LK Metro"
   },
   "lk_entrance": {
    "geo": [
-    12.92949,
-    100.88393
+    12.9294,
+    100.8841
    ],
    "name": "LK Metro (Entrance)",
    "region": "LK Metro"
   },
   "lk_main": {
    "geo": [
-    12.9298,
-    100.8846
+    12.92959,
+    100.88464
    ],
    "name": "LK Metro (Main Alley)",
    "region": "LK Metro"
@@ -3621,8 +3621,8 @@
    "bar": "The Offside Sports Bar",
    "barType": "pub",
    "geo": [
-    12.92964,
-    100.88467
+    12.92941,
+    100.88472
    ],
    "name": "The Offside Sports Bar",
    "region": "LK Metro"
@@ -3661,8 +3661,8 @@
    "bar": "Lucky Tiger Bar",
    "barType": "beer",
    "geo": [
-    12.93585,
-    100.88882
+    12.92901,
+    100.88506
    ],
    "liveMusic": true,
    "name": "Lucky Tiger Bar",
@@ -3682,16 +3682,16 @@
    "bar": "The Metro Beer Garden",
    "barType": "beer",
    "geo": [
-    12.93032,
-    100.88531
+    12.92974,
+    100.88512
    ],
    "name": "The Metro Beer Garden",
    "region": "LK Metro"
   },
   "metropole_room": {
    "geo": [
-    12.93607,
-    100.88891
+    12.92974,
+    100.88485
    ],
    "name": "Your Room — LK Metropole",
    "region": "Soi Buakhao"
@@ -3729,8 +3729,8 @@
   },
   "myth_night": {
    "geo": [
-    12.9352,
-    100.8868
+    12.9288,
+    100.8825
    ],
    "liveMusic": true,
    "name": "Myth Night Market",
@@ -3738,16 +3738,16 @@
   },
   "myth_rows": {
    "geo": [
-    12.93489,
-    100.88676
+    12.92849,
+    100.88246
    ],
    "name": "Myth Night — Container Rows",
    "region": "Myth Night"
   },
   "myth_stage": {
    "geo": [
-    12.93551,
-    100.88684
+    12.92911,
+    100.88254
    ],
    "liveMusic": true,
    "name": "Myth Night — Live-Stage Yard",
@@ -3894,8 +3894,8 @@
    "bar": "The Pit Stop",
    "barType": "beer",
    "geo": [
-    12.93024,
-    100.88549
+    12.92967,
+    100.88531
    ],
    "name": "The Pit Stop",
    "region": "LK Metro"
@@ -3993,8 +3993,8 @@
    "bar": "Reload Bar",
    "barType": "beer",
    "geo": [
-    12.93469,
-    100.88686
+    12.92829,
+    100.88256
    ],
    "name": "Reload Bar",
    "region": "Myth Night"
@@ -4003,8 +4003,8 @@
    "bar": "Rock Factory",
    "barType": "beer",
    "geo": [
-    12.93621,
-    100.88865
+    12.92914,
+    100.88489
    ],
    "liveMusic": true,
    "name": "Rock Factory",
@@ -4115,8 +4115,8 @@
    "bar": "Silk Rose Bar",
    "barType": "beer",
    "geo": [
-    12.93275,
-    100.88739
+    12.92622,
+    100.88221
    ],
    "name": "Silk Rose Bar",
    "region": "Soi Buakhao"
@@ -4125,8 +4125,8 @@
    "bar": "Slutty Go-Go",
    "barType": "gogo",
    "geo": [
-    12.92956,
-    100.88464
+    12.92934,
+    100.88468
    ],
    "name": "Slutty Go-Go",
    "region": "LK Metro"
@@ -4195,8 +4195,8 @@
    "bar": "Soundcheck Bar",
    "barType": "beer",
    "geo": [
-    12.93572,
-    100.88691
+    12.92932,
+    100.88259
    ],
    "name": "Soundcheck Bar",
    "region": "Myth Night"
@@ -4379,8 +4379,8 @@
    "bar": "The Growler",
    "barType": "beer",
    "geo": [
-    12.93493,
-    100.88693
+    12.92846,
+    100.88263
    ],
    "name": "The Growler",
    "region": "Myth Night"

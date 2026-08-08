@@ -9082,6 +9082,36 @@ const POPULAR_GIRLS = ["fon", "gift", "noi", "pim"];
 // pinned district by district against OSM, and the decimal count is the marker
 // of which have had their pass. Don't "tidy" a 5dp district back to 4.
 //
+//   The LK Metro / Soi Diana junction — surveyed 2026-08-08 from a close-up.
+//     Cindy Bar    12.928568/100.884735   — the real-world Candy Bar
+//     LK Metropole 12.929594/100.884643   — the L-shaped alley wraps it
+//     Areca Lodge  12.929152/100.882903
+//
+//   These three pin `buakhao_n` to the SOI DIANA junction, because lk_entrance
+//   and metropole_room hang off it and LK Metropole is here, not at the Klang
+//   end. An earlier pass had put buakhao_n at the Klang junction, which audited
+//   better and was wrong about the ground.
+//
+//   BUAKHAO_N IS OVER-CONSTRAINED, and no coordinate fixes it. It must be the
+//   Klang junction (for `pattaya_klang —e→`) AND the Diana junction (for
+//   diana_e, lk_entrance, metropole_room) — 800 m apart. SOI BUAKHAO NEEDS A
+//   FOURTH NODE at its Klang end. Until then `pattaya_klang —e→ buakhao_n`
+//   flags at 102, and that flag is the request.
+//
+//   TWO VENUES ARE ATTACHED TO THE WRONG NODE, both left alone as bar-mat work:
+//   - `candy_bar` hangs off buakhao_market, but Cindy Bar is at the DIANA
+//     junction, 400 m north. Do NOT quietly re-hang it: Candy's `bars` rotation
+//     and the Act One wallet chain both depend on where she is, so moving her is
+//     a gameplay change, not a tidy-up.
+//   - `areca_room` hangs off diana_e (the Buakhao end), but Areca Lodge is a
+//     THIRD of the way along from the Second Road end. `diana_e —s→ areca_room`
+//     flags at 93 as a result.
+//
+//   Placing these at truth took the map from 17 flags to 21. That is the right
+//   trade: the four new ones are long compressions that name a missing node,
+//   while the alternative was three real buildings drawn hundreds of metres from
+//   where they stand.
+//
 //   The Buakhao / Soi Diana block — DONE 2026-08-08. Four corners, all 0 m,
 //   clockwise from upper left:
 //     1. Second Rd x Pattaya Klang   12.936653/100.886508
@@ -9424,29 +9454,29 @@ const ROOM_GEO = {
   poseidon_soapy:   [12.93528, 100.88606],
   pattaya_klang:    [12.93665, 100.88651],
   // Myth Night
-  myth_night:       [12.93520, 100.88680],
-  candy_bar_2:      [12.93545, 100.88708],
-  myth_stage:       [12.93551, 100.88684],
-  amp_room:         [12.93558, 100.88663],
-  feedback_bar:     [12.93556, 100.88702],
-  encore_bar:       [12.93540, 100.88671],
-  soundcheck_bar:   [12.93572, 100.88691],
-  myth_rows:        [12.93489, 100.88676],
-  craft_cargo:      [12.93496, 100.88658],
-  the_growler:      [12.93493, 100.88693],
-  container_8:      [12.93477, 100.88663],
-  reload_bar:       [12.93469, 100.88686],
+  myth_night:       [12.92880, 100.88250],
+  candy_bar_2:      [12.92904, 100.88276],
+  myth_stage:       [12.92911, 100.88254],
+  amp_room:         [12.92918, 100.88233],
+  feedback_bar:     [12.92916, 100.88272],
+  encore_bar:       [12.92900, 100.88241],
+  soundcheck_bar:   [12.92932, 100.88259],
+  myth_rows:        [12.92849, 100.88246],
+  craft_cargo:      [12.92856, 100.88228],
+  the_growler:      [12.92846, 100.88263],
+  container_8:      [12.92837, 100.88233],
+  reload_bar:       [12.92829, 100.88256],
   // Soi Buakhao
-  buakhao_n:        [12.93594, 100.88854],
-  metropole_room:   [12.93607, 100.88891],
-  rock_factory:     [12.93621, 100.88865],
-  lucky_tiger:      [12.93585, 100.88882],
-  buakhao_market:   [12.93282, 100.88715],
-  candy_bar:        [12.93293, 100.88692],
-  silk_rose:        [12.93275, 100.88739],
-  buakhao_oil:      [12.93302, 100.88736],
-  buakhao_s:        [12.92994, 100.88554],
-  jasmine_garden:   [12.92978, 100.88536],
+  buakhao_n:        [12.92881, 100.88480],
+  metropole_room:   [12.92974, 100.88485],
+  rock_factory:     [12.92914, 100.88489],
+  lucky_tiger:      [12.92901, 100.88506],
+  buakhao_market:   [12.92629, 100.88197],
+  candy_bar:        [12.92857, 100.88474],
+  silk_rose:        [12.92622, 100.88221],
+  buakhao_oil:      [12.92649, 100.88218],
+  buakhao_s:        [12.92430, 100.87934],
+  jasmine_garden:   [12.92414, 100.87915],
   // Soi Honey (Soi 11, between Second Rd and Buakhao)
   soi_honey_w:      [12.9255, 100.8778],
   soi_honey_e:      [12.9238, 100.8786],
@@ -9463,7 +9493,7 @@ const ROOM_GEO = {
   sapphire:         [12.93015, 100.88346],
   sundowner:        [12.92971, 100.88339],
   cricketers:       [12.92930, 100.88453],
-  areca_room:       [12.92886, 100.88442],
+  areca_room:       [12.92915, 100.88290],
   // Tree Town (real: the Buakhao/Klang corner)
   tt_entrance:      [12.9330, 100.8852],
   tt_lane_1:        [12.9331, 100.8857],
@@ -9479,15 +9509,15 @@ const ROOM_GEO = {
   lucky_charm:      [12.9324, 100.8864],
   moonshine_bar:    [12.9327, 100.8862],
   // LK Metro (the L-shaped soi off Buakhao)
-  lk_entrance:      [12.92949, 100.88393],
-  lk_main:          [12.92980, 100.88460],
-  kinky:            [12.93000, 100.88454],
-  slutty:           [12.92956, 100.88464],
-  lk_bend:          [12.93010, 100.88525],
-  las_vegas:        [12.92988, 100.88542],
-  lk_sports:        [12.92964, 100.88467],
-  metro_garden:     [12.93032, 100.88531],
-  pit_stop:         [12.93024, 100.88549],
+  lk_entrance:      [12.92940, 100.88410],
+  lk_main:          [12.92959, 100.88464],
+  kinky:            [12.92979, 100.88457],
+  slutty:           [12.92934, 100.88468],
+  lk_bend:          [12.92952, 100.88507],
+  las_vegas:        [12.92930, 100.88523],
+  lk_sports:        [12.92941, 100.88472],
+  metro_garden:     [12.92974, 100.88512],
+  pit_stop:         [12.92967, 100.88531],
   // The Darkside
   sukhumvit_crossing: [12.91004, 100.89620],
   khao_talo_strip:  [12.90782, 100.90693],
