@@ -693,7 +693,7 @@ const ROOMS = {
       "just south of it TEQUILA QUEEN's ancient neon señorita kicks her leg, as she " +
       "has since before you were born.",
     busStop: "beachrd",
-    exits: { s: "beach_rd_s", n: "beach_rd_soi7", w: "promenade", e: "central_mall", in: "tequila_queen", spa: "beachrd_oil" },
+    exits: { s: "beach_rd_s", n: "beach_rd_soi9", w: "promenade", e: "central_mall", in: "tequila_queen", spa: "beachrd_oil" },
   },
   tequila_queen: {
     name: "Tequila Queen A-Go-Go",
@@ -731,24 +731,57 @@ const ROOMS = {
       "Somebody jogs past in the wrong clothes at the wrong hour, entirely content.",
       "The sea does its thing on the other side of the railing, unbothered.",
     ],
-    exits: { n: "beach_rd_n", s: "beach_rd_c", e: "pattaya_soi_7", soi8: "pattaya_soi_8" },
+    exits: { n: "beach_rd_n", s: "beach_rd_soi9", e: "pattaya_soi_7", soi8: "pattaya_soi_8" },
   },
   pattaya_soi_8: {
     name: "Soi 8",
     region: "Beach Road",
-    desc: "One soi south of Soi 7 and a different proposition entirely: guesthouses, a " +
-      "couple of quiet bars with three stools each, a tailor, and a laundry doing the " +
-      "week's washing for half the street. There are no touts. Nobody calls out. " +
-      "People who stay on Soi 8 tend to have been coming for years and to like it " +
-      "precisely because nothing happens on it, and the walk to where everything does " +
-      "is four minutes either way.",
+    desc: "One soi south of Soi 7 and a different proposition entirely. The beach end is " +
+      "solid bars — open fronts shoulder to shoulder, stools out to the kerb, four " +
+      "sound systems inside thirty metres and every one of them winning something. " +
+      "It thins as you go inland: the bars give way to guesthouses and a tailor about " +
+      "halfway along, and by the Second Road end it could be any street in Thailand. " +
+      "Everyone stands at the wrong end at least once.",
     revisit: [
-      "Quiet, still. Somebody's television through an open window.",
-      "The laundry has the whole pavement hung with somebody's shirts.",
-      "A man in a doorway nods at you like you live here too.",
-      "Two stools, two beers, one conversation that has clearly been going for hours.",
+      "Four sound systems, thirty metres, no winner. The beach end is doing its thing.",
+      "A girl leans off her stool to say something to the girl on the next stool's stool.",
+      "Somebody wanders up from the beach end and stops dead where the noise runs out.",
+      "Two beers, two stools, one conversation that has clearly been going for hours.",
     ],
     exits: { w: "beach_rd_soi7", e: "second_rd_n" },
+  },
+  beach_rd_soi9: {
+    busStop: "beachrd",
+    name: "Beach Road (Soi 9)",
+    region: "Beach Road",
+    desc: "The Soi 9 corner, and the least rowdy hundred metres on the whole seafront " +
+      "for an obvious reason: PATTAYA CENTRAL POLICE STATION occupies the north-east " +
+      "corner, lit all night, with a row of pickups nosed in against the kerb. " +
+      "Central Mall's bulk sits to the south-east. People walk a little straighter " +
+      "past here and nobody sells you anything at all.",
+    revisit: [
+      "A pickup pulls out of the station yard and turns south without hurrying.",
+      "Nobody has tried to sell you anything for a hundred metres. It is unsettling.",
+      "Two officers stand under the light doing nothing in particular, at length.",
+      "The quietest stretch of Beach Road, and everybody knows exactly why.",
+    ],
+    exits: { n: "beach_rd_soi7", s: "beach_rd_c", e: "pattaya_soi_9", police: "police_station" },
+  },
+  pattaya_soi_9: {
+    name: "Soi 9",
+    region: "Beach Road",
+    desc: "A short working soi between the police station and the back of Central Mall, " +
+      "and it behaves accordingly: motorbike repair, a print shop, somewhere doing " +
+      "visa paperwork with a queue of resigned farang outside, and a noodle place that " +
+      "is very good and knows it. The bars are two sois north. Nothing here is open " +
+      "at three in the morning and nothing here needs to be.",
+    revisit: [
+      "The visa shop's queue has not moved. It never appears to.",
+      "Someone is arguing with a mechanic about a scooter, amiably, in two languages.",
+      "The noodle place has a queue too, and that one moves.",
+      "Daytime business on a night street. It feels like the wrong hour to be here.",
+    ],
+    exits: { w: "beach_rd_soi9", e: "second_rd_c" },
   },
   promenade: {
     name: "Beach Promenade",
@@ -932,7 +965,7 @@ const ROOMS = {
       "unhurried patience of a man who has seen every possible farang. A wall of " +
       "confiscated selfie sticks. Sitting between the mall and the Beach Road bars, " +
       "it catches whatever the tide washes up. Best visited voluntarily.",
-    exits: { s: "central_mall", n: "beach_rd_n" },
+    exits: { s: "central_mall", w: "beach_rd_soi9" },
   },
 
   // ─── Second Road ───
@@ -952,7 +985,8 @@ const ROOMS = {
     desc: "Mid-Second-Road: baht buses in convoy, pharmacies, and the constant churn " +
       "between the mall's back doors to the west and the fairy-lit mouth of MYTH " +
       "NIGHT market to the east.",
-    exits: { s: "second_rd_myth", n: "second_rd_n", w: "central_mall", diana: "diana_w" },
+    exits: { s: "second_rd_myth", n: "second_rd_n", w: "central_mall", diana: "diana_w",
+             soi9: "pattaya_soi_9" },
   },
   // Second Road's Soi Diana mouth. Until now the whole road was three rooms and
   // this junction had none, which left Soi Diana, Soi Honey and Myth Night all
@@ -1090,17 +1124,17 @@ const ROOMS = {
     motosai: true,
     name: "Soi 7",
     region: "Beach Road",
-    desc: "One of the numbered sois running inland off the beach, and busier than its " +
-      "number suggests. Beer bars down one side with their stools out on the " +
-      "pavement, a laundry, two minimarts facing each other in a war of attrition, " +
-      "and short-time places behind roll-down shutters that go up around nine. " +
-      "The soi runs from Beach Road through to Second Road; people cut down it all " +
-      "night on the way to somewhere else, and a fair few stop.",
+    desc: "Quieter than its neighbours, and people who know the sois use it for exactly " +
+      "that: guesthouses, a laundry, two minimarts facing each other in a war of " +
+      "attrition, and a few small bars that shut when their last customer leaves " +
+      "rather than when the clock says. It runs Beach Road to Second Road like the " +
+      "rest of them, but nobody calls out as you pass, and the noise from Soi 8 " +
+      "arrives one block late and secondhand.",
     revisit: [
-      "The shutters are up on both sides now. Somebody is hosing the pavement anyway.",
+      "Somebody is hosing the pavement outside a guesthouse, unhurried.",
       "The two minimarts continue their war. Neither is winning.",
       "A couple come out of a doorway not quite together and separate at the corner.",
-      "Bar stools, laundry steam, and a steady trickle of people cutting through.",
+      "Laundry steam, a television somewhere, and Soi 8 going off one block over.",
     ],
     exits: { w: "beach_rd_soi7", e: "second_rd_n", in: "short_time_motel" },
   },
@@ -10059,6 +10093,8 @@ const ROOM_GEO = {
   short_time_motel: [12.93626, 100.88503],
   beach_rd_c:       [12.93450, 100.88159],
   beach_rd_soi7:    [12.93715, 100.88307],
+  beach_rd_soi9:    [12.93598, 100.88247],
+  pattaya_soi_9:    [12.93515, 100.88377],
   pattaya_soi_8:    [12.93573, 100.88413],
   beachrd_oil:      [12.93396, 100.88186],
   tequila_queen:    [12.93164, 100.87946],

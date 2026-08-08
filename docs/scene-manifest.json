@@ -2,10 +2,10 @@
   "generated": "2026-08-08",
   "note": "Every room in the game + its region, for the scene-art pipeline (docs/art-pipeline-spec.md). Derived from web/js/world.js — regenerate with scripts/gen-scene-manifest.mjs, do not hand-edit. `kind` is a generator heuristic for prompt-template selection, not game canon. `regionSlug` is produced by the same regex as web/js/scene.js `_sceneArt()`; art files are web/art/rooms/<id>.png with web/art/regions/<slug>.png as the fallback.",
   "counts": {
-    "rooms": 202,
+    "rooms": 204,
     "regions": 15,
     "byKind": {
-      "street": 77,
+      "street": 79,
       "massage": 17,
       "beer": 49,
       "shop": 2,
@@ -34,6 +34,7 @@
         "beach_rd_n",
         "beach_rd_s",
         "beach_rd_soi7",
+        "beach_rd_soi9",
         "beachrd_oil",
         "beachthai_massage",
         "blue_dog",
@@ -42,6 +43,7 @@
         "papaya_massage",
         "pattaya_soi_7",
         "pattaya_soi_8",
+        "pattaya_soi_9",
         "police_station",
         "promenade",
         "short_time_motel",
@@ -221,7 +223,7 @@
       "sampleDescs": [
         "The mouth of Soi Diana, and Second Road doing what Second Road does: four lanes of baht buses running nose to tail, a permanent shoal of motorbikes in the gutter lane, and pavement so narrow that walking it is a negotiation. The go-go neon starts about twenty metres up the soi and doesn't stop until Buakhao. On this corner: a 7-Eleven with a cash machine, a knot of piwins who have claimed the shade of its sign, and a girl on the back of a bike checking her lipstick in a wing mirror at a red light.",
         "Soi 7 comes out here and carries on east; the seafront is fifteen minutes down it, or four with a piwin. Central Pattaya Road crosses just ahead, cutting the whole town into north and south. Soi 8 comes out a block south, quieter than anything else on this stretch. This block is a massage row: SMILE MASSAGE winks pink from the west side, and opposite, four floors of blue neon spell POSEIDON MASSAGE over a doorman and a fish tank.",
-        "The working road running parallel between Beach Road and Soi Buakhao — less neon, more motorbikes, the town with its makeup half off. It climbs south onto the north shoulder of Pratumnak Hill, toward Jomtien beyond."
+        "Mid-Second-Road: baht buses in convoy, pharmacies, and the constant churn between the mall's back doors to the west and the fairy-lit mouth of MYTH NIGHT market to the east."
       ]
     },
     {
@@ -445,6 +447,18 @@
       "desc": "Where Soi 7 comes down to the sea. The soi runs inland behind you, all beer stools and laundry steam; out here it is the seafront doing its evening thing — joggers who have misjudged the hour, a man selling roasted chestnuts nobody buys, and the long slow crawl of songthaews with their benches half full. Central Pattaya Road crosses a hundred metres north, which is why the traffic here never quite clears. Soi 7 runs inland here and Soi 8 a block south; the two are close enough that people take the wrong one and only notice when the noise fails to arrive."
     },
     {
+      "id": "beach_rd_soi9",
+      "name": "Beach Road (Soi 9)",
+      "bar": null,
+      "barType": null,
+      "region": "Beach Road",
+      "regionSlug": "beach-road",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "The Soi 9 corner, and the least rowdy hundred metres on the whole seafront for an obvious reason: PATTAYA CENTRAL POLICE STATION occupies the north-east corner, lit all night, with a row of pickups nosed in against the kerb. Central Mall's bulk sits to the south-east. People walk a little straighter past here and nobody sells you anything at all."
+    },
+    {
       "id": "beachrd_oil",
       "name": "Cherry Oil Massage",
       "bar": "Cherry Oil Massage",
@@ -535,10 +549,8 @@
       "regionSlug": "beach-road",
       "kind": "street",
       "dark": false,
-      "people": [
-        "Beer"
-      ],
-      "desc": "One of the numbered sois running inland off the beach, and busier than its number suggests. Beer bars down one side with their stools out on the pavement, a laundry, two minimarts facing each other in a war of attrition, and short-time places behind roll-down shutters that go up around nine. The soi runs from Beach Road through to Second Road; people cut down it all night on the way to somewhere else, and a fair few stop."
+      "people": [],
+      "desc": "Quieter than its neighbours, and people who know the sois use it for exactly that: guesthouses, a laundry, two minimarts facing each other in a war of attrition, and a few small bars that shut when their last customer leaves rather than when the clock says. It runs Beach Road to Second Road like the rest of them, but nobody calls out as you pass, and the noise from Soi 8 arrives one block late and secondhand."
     },
     {
       "id": "pattaya_soi_8",
@@ -550,7 +562,19 @@
       "kind": "street",
       "dark": false,
       "people": [],
-      "desc": "One soi south of Soi 7 and a different proposition entirely: guesthouses, a couple of quiet bars with three stools each, a tailor, and a laundry doing the week's washing for half the street. There are no touts. Nobody calls out. People who stay on Soi 8 tend to have been coming for years and to like it precisely because nothing happens on it, and the walk to where everything does is four minutes either way."
+      "desc": "One soi south of Soi 7 and a different proposition entirely. The beach end is solid bars — open fronts shoulder to shoulder, stools out to the kerb, four sound systems inside thirty metres and every one of them winning something. It thins as you go inland: the bars give way to guesthouses and a tailor about halfway along, and by the Second Road end it could be any street in Thailand. Everyone stands at the wrong end at least once."
+    },
+    {
+      "id": "pattaya_soi_9",
+      "name": "Soi 9",
+      "bar": null,
+      "barType": null,
+      "region": "Beach Road",
+      "regionSlug": "beach-road",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "A short working soi between the police station and the back of Central Mall, and it behaves accordingly: motorbike repair, a print shop, somewhere doing visa paperwork with a queue of resigned farang outside, and a noodle place that is very good and knows it. The bars are two sois north. Nothing here is open at three in the morning and nothing here needs to be."
     },
     {
       "id": "police_station",
