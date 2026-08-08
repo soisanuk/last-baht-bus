@@ -4,7 +4,7 @@
 var NEWS_FEED = [
   {
     "t": "Foreign man caught on CCTV stealing phone in Pattaya café",
-    "s": "thethaiger.com",
+    "s": "Thaiger",
     "d": "05 Aug 2026"
   },
   {
@@ -13,7 +13,7 @@ var NEWS_FEED = [
     "d": "06 Aug 2026"
   },
   {
-    "t": "Pattaya takes back beach parking spaces from illegal occupiers",
+    "t": "Crime shadows Pattaya, but foreign tourists say the city remains worth visiting",
     "s": "Pattaya Mail",
     "d": "06 Aug 2026"
   },
@@ -23,7 +23,7 @@ var NEWS_FEED = [
     "d": "06 Aug 2026"
   },
   {
-    "t": "Koh Samui builds foreign eyes and ears network against tourism crime",
+    "t": "Pattaya welcomes the world with smoother walkways and brighter streets",
     "s": "Pattaya Mail",
     "d": "06 Aug 2026"
   },
@@ -33,12 +33,12 @@ var NEWS_FEED = [
     "d": "06 Aug 2026"
   },
   {
-    "t": "Pattaya expat life in 2026: Paradise or Challenge?",
+    "t": "Pattaya pharmacy offers cash reward and free Botox to catch burglars",
     "s": "Pattaya Mail",
     "d": "06 Aug 2026"
   },
   {
-    "t": "Pattaya pharmacy offers cash reward and free Botox to catch burglars",
+    "t": "Pattaya ‘Safe House’ extortion case rocks city, singer arrested, two wanted",
     "s": "Pattaya Mail",
     "d": "06 Aug 2026"
   },
@@ -48,9 +48,9 @@ var NEWS_FEED = [
     "d": "07 Aug 2026"
   },
   {
-    "t": "Trump revives birthright citizenship fight; Deadly school shooting rocks Thailand",
-    "s": "san.com",
-    "d": "07 Aug 2026"
+    "t": "Thailand looks to Siam Silica to propel it to top Asean semiconductor player",
+    "s": "South China Morning Post",
+    "d": "08 Aug 2026"
   },
   {
     "t": "What to Know About Thailand's Deadliest School Shooting in Years",
@@ -59,29 +59,29 @@ var NEWS_FEED = [
   },
   {
     "t": "At least five killed in Thailand school shooting, police say",
-    "s": "aljazeera.com",
+    "s": "Al Jazeera",
     "d": "07 Aug 2026"
   },
   {
-    "t": "Thailand high school shooting leaves 5 dead after teen suspect kills his grandparents, officials say",
-    "s": "CBS News",
+    "t": "Thailand shooting: Seven killed as teen opens fire at home and school near Bangkok",
+    "s": "BBC",
     "d": "07 Aug 2026"
   },
   {
-    "t": "Thailand shooting incidents in recent years",
-    "s": "Reuters",
+    "t": "Student kills at least 7 people at a high school and a home outside Bangkok, officials say",
+    "s": "AP News",
     "d": "07 Aug 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-08-07","USD":33.06,"AUD":23.27,"GBP":44.46,"EUR":38.12};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-08","temp":28,"humid":78,"code":3,"hi":31,"rain":74};
+var WX_NOW = {"date":"2026-08-08","temp":29,"humid":79,"code":3,"hi":30,"rain":84};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-08-01","first":"932479","last2":"69","front3":["413","672"],"back3":["039","154"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4345,"date":"2026-08-07","baht":67950};
+var GOLD = {"usd":4343,"date":"2026-08-08","baht":67900};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":64800,"thb":2136651};
+var BTC = {"usd":64867,"thb":2134146};
