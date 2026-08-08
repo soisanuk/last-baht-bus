@@ -9093,10 +9093,21 @@ const POPULAR_GIRLS = ["fon", "gift", "noi", "pim"];
 //   of the way — and runs 153 m southeast to 12.925409/100.874182, which is
 //   ~30 m off Second Road. Two go-gos are planned along it. Note it is NOT the
 //   game's existing "Soi Diana" (diana_w/_mid/_e), a different street.
-//   When bounding this strip, BOUND IT: Pattaya Sai Nueng continues past both
-//   the gate and Bali Hai, and letting it run inflates the arc from 744 m to
-//   949 m and skews every placement along it. Between those two points the
-//   street is near-straight (744 m arc on a 737 m chord).
+//   "WALKING STREET" IS NOT A ROAD NAME. It's what the strip between the gate
+//   and Bali Hai is called; the road is Pattaya Sai Nueng ("First Road") and it
+//   runs straight through. Beach Road and Walking Street are THE SAME ROAD,
+//   named by stretch — which is why OSM files them under one name, and why an
+//   unbounded filter runs out of both ends. Bound it, or the arc inflates from
+//   744 m to 949 m and skews everything placed by fraction-along-the-street.
+//   Between the two points it is near-straight: 744 m of arc on a 737 m chord.
+//
+//   AND IT KEEPS GOING, which is the route for the Pratumnak segment: Sai Nueng
+//   runs 203 m past Bali Hai to 12.924855/100.866694, where Chalermphrakiat
+//   Road picks up at 0 m and climbs 245 m south to 12.922943/100.867838, on up
+//   the hill. The bar mat map compresses that whole run — strip, tail and climb
+//   — into a single `ws_gate —w→ pratumnak_rd`, which is why that exit audits
+//   at 72°. Compression is the bar mat map doing its job; just know the real
+//   route before pinning anything at the Pratumnak end.
 //   The two stretch rooms had their names BACKWARDS — the middle one was called
 //   South and the far one North, on a street that runs south from the gate. Ids
 //   encoded it too, so both were swapped rather than just the labels; fixing
