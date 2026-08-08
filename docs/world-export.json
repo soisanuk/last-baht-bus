@@ -22,13 +22,13 @@
   "Blue Dog"
  ],
  "counts": {
-  "geolocated": 225,
+  "geolocated": 227,
   "patrons": 18,
   "people": 297,
   "portraits": 315,
   "renders": 72,
   "thumbs": 72,
-  "venues": 225
+  "venues": 227
  },
  "frames": [
   "baimon_pic1",
@@ -3652,6 +3652,14 @@
    "name": "Front Row Bar",
    "region": "Soi 6"
   },
+  "beach_north_end": {
+   "geo": [
+    12.949,
+    100.883
+   ],
+   "name": "Pattaya Beach (north end)",
+   "region": "Beach Road"
+  },
   "beach_rd_c": {
    "geo": [
     12.9345,
@@ -3875,6 +3883,14 @@
    "liveMusic": true,
    "name": "Candy Bar 2",
    "region": "Myth Night"
+  },
+  "central_beach": {
+   "geo": [
+    12.9377,
+    100.8819
+   ],
+   "name": "Pattaya Beach (central)",
+   "region": "Beach Road"
   },
   "central_mall": {
    "geo": [
@@ -4735,7 +4751,7 @@
     12.94324,
     100.88371
    ],
-   "name": "North Pattaya Beach",
+   "name": "Pattaya Beach (Soi 6)",
    "region": "Beach Road"
   },
   "orchid_club": {

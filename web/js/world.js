@@ -1023,7 +1023,7 @@ const ROOMS = {
       "Somebody crosses four lanes with the unbothered timing of long practice.",
       "The sea is right there, past the railing, minding its own business.",
     ],
-    exits: { n: "beach_rd_n", s: "beach_rd_soi7", e: "pattaya_klang" },
+    exits: { n: "beach_rd_n", s: "beach_rd_soi7", e: "pattaya_klang", w: "central_beach" },
   },
   dolphin: {
     busStop: "beachrd",
@@ -1099,7 +1099,42 @@ const ROOMS = {
       "The ice-cream cart is packing up. It always seems to be packing up.",
       "Quiet enough here to hear the water. Two kilometres down, it will not be.",
     ],
-    exits: { n: "dolphin", s: "beach_rd_n" },
+    exits: { n: "dolphin", s: "beach_rd_n", w: "beach_north_end" },
+  },
+  beach_north_end: {
+    name: "Pattaya Beach (north end)",
+    region: "Beach Road",
+    desc: "The top of the sand, where the bay runs out and the trees come down almost to " +
+      "the water. This is the end nobody works: no deckchair men, no jet-skis, no " +
+      "flyer girls, because there is nothing up here to sell to. Thai families with " +
+      "mats and carrier bags of food, a couple of kids in the shallows well after they " +
+      "should be, and somebody's grandmother asleep in a folding chair facing the wrong " +
+      "way. South, the sand goes on for two kilometres and gets steadily less like this.",
+    revisit: [
+      "Mats, carrier bags, and a small child being called out of the water again.",
+      "The trees come down nearly to the water here, and the dark under them is total.",
+      "Somebody's grandmother has not moved, and is facing resolutely inland.",
+      "Quiet sand. The neon is a rumour two kilometres south.",
+    ],
+    exits: { e: "beach_rd_top", s: "north_beach" },
+  },
+  central_beach: {
+    name: "Pattaya Beach (central)",
+    region: "Beach Road",
+    desc: "The working stretch, opposite where Central Pattaya Road comes down. By day " +
+      "this is rank after rank of loungers and umbrellas; by now it is rank after rank " +
+      "of them folded and chained together in stacks, which somehow takes up more beach " +
+      "than when they were open. The jet-ski men have gone home to whatever they do " +
+      "there. A last vendor works the seawall with a cool box and no real hope, and " +
+      "further along the sand a few people are sitting on it in ones and twos, facing " +
+      "the water, not obviously waiting for anything.",
+    revisit: [
+      "Stacked loungers, chained in threes, taking up more room folded than open.",
+      "A cool-box vendor works the wall without much conviction and does not stop.",
+      "People sitting on the sand in ones and twos, facing out. Nobody talks.",
+      "The jet-skis are pulled up and padlocked. In the morning they will be a menace again.",
+    ],
+    exits: { e: "beach_rd_klang", n: "north_beach" },
   },
   promenade: {
     name: "Beach Promenade",
@@ -1221,7 +1256,7 @@ const ROOMS = {
     exits: { out: "beach_rd_n" },
   },
   north_beach: {
-    name: "North Pattaya Beach",
+    name: "Pattaya Beach (Soi 6)",
     region: "Beach Road",
     desc: "The open sand across Beach Road from the foot of Soi 6, quiet after the soi's wall " +
       "of noise — just the hiss of the little waves and, back east across the road, the neon " +
@@ -1240,7 +1275,7 @@ const ROOMS = {
       "A soi dog trots the tideline with an air of ownership, pausing to bark down a wave that had it coming. The night is his; you're just passing through it.",
       "The palms rattle dry overhead. Somewhere up the dark beach the coconut-bar women murmur to each other and wait, and the surf keeps the time for all of you.",
     ],
-    exits: { e: "beach_rd_n" },
+    exits: { e: "beach_rd_n", n: "beach_north_end", s: "central_beach" },
   },
   stinky_bar: {
     name: "The Stinky Pinky",
@@ -10926,7 +10961,9 @@ const ROOM_GEO = {
   beach_rd_n:       [12.94288, 100.88475],
   stinky_bar:       [12.94275, 100.88459],
   blue_dog:         [12.94309, 100.88471],
+  beach_north_end:  [12.94900, 100.88300],
   north_beach:      [12.94324, 100.88371],
+  central_beach:    [12.93770, 100.88190],
   // Soi 6 (Soi Yodsak) — runs inland east off Beach Road: west end, middle, east end
   soi6_street:      [12.94265, 100.88544],
   pink_lotus:       [12.94285, 100.88530],

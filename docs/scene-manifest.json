@@ -2,14 +2,14 @@
   "generated": "2026-08-08",
   "note": "Every room in the game + its region, for the scene-art pipeline (docs/art-pipeline-spec.md). Derived from web/js/world.js — regenerate with scripts/gen-scene-manifest.mjs, do not hand-edit. `kind` is a generator heuristic for prompt-template selection, not game canon. `regionSlug` is produced by the same regex as web/js/scene.js `_sceneArt()`; art files are web/art/rooms/<id>.png with web/art/regions/<slug>.png as the fallback.",
   "counts": {
-    "rooms": 225,
+    "rooms": 227,
     "regions": 15,
     "byKind": {
+      "beach": 12,
       "street": 94,
       "massage": 17,
       "beer": 53,
       "shop": 2,
-      "beach": 10,
       "interior": 3,
       "gogo": 11,
       "viewpoint": 2,
@@ -30,6 +30,7 @@
       "slug": "beach-road",
       "name": "Beach Road",
       "roomIds": [
+        "beach_north_end",
         "beach_rd_c",
         "beach_rd_klang",
         "beach_rd_n",
@@ -41,6 +42,7 @@
         "beachrd_oil",
         "beachthai_massage",
         "blue_dog",
+        "central_beach",
         "central_mall",
         "north_beach",
         "papaya_massage",
@@ -418,6 +420,18 @@
   ],
   "rooms": [
     {
+      "id": "beach_north_end",
+      "name": "Pattaya Beach (north end)",
+      "bar": null,
+      "barType": null,
+      "region": "Beach Road",
+      "regionSlug": "beach-road",
+      "kind": "beach",
+      "dark": false,
+      "people": [],
+      "desc": "The top of the sand, where the bay runs out and the trees come down almost to the water. This is the end nobody works: no deckchair men, no jet-skis, no flyer girls, because there is nothing up here to sell to. Thai families with mats and carrier bags of food, a couple of kids in the shallows well after they should be, and somebody's grandmother asleep in a folding chair facing the wrong way. South, the sand goes on for two kilometres and gets steadily less like this."
+    },
+    {
       "id": "beach_rd_c",
       "name": "Beach Road Central",
       "bar": null,
@@ -560,6 +574,18 @@
       "desc": "An open-air beer bar holding the beach-side corner at the foot of Soi 6 — no walls, no door, just a tin roof, a long rail, and a line of plastic chairs facing out across Beach Road to the bay. The Stinky Pinky glowers back from the opposite corner over the mouth of the soi. At the Blue Dog the view IS the entertainment: the evening police checkpoint down the road to the south, the sunset out over the water and the sand, and then whatever the junction decides to do about it. Half the regulars found the place ducking in off a helmetless motorbike. (WATCH POLICE · WATCH SUNSET.)"
     },
     {
+      "id": "central_beach",
+      "name": "Pattaya Beach (central)",
+      "bar": null,
+      "barType": null,
+      "region": "Beach Road",
+      "regionSlug": "beach-road",
+      "kind": "beach",
+      "dark": false,
+      "people": [],
+      "desc": "The working stretch, opposite where Central Pattaya Road comes down. By day this is rank after rank of loungers and umbrellas; by now it is rank after rank of them folded and chained together in stacks, which somehow takes up more beach than when they were open. The jet-ski men have gone home to whatever they do there. A last vendor works the seawall with a cool box and no real hope, and further along the sand a few people are sitting on it in ones and twos, facing the water, not obviously waiting for anything."
+    },
+    {
       "id": "central_mall",
       "name": "Central Mall (Beach Road front)",
       "bar": null,
@@ -573,7 +599,7 @@
     },
     {
       "id": "north_beach",
-      "name": "North Pattaya Beach",
+      "name": "Pattaya Beach (Soi 6)",
       "bar": null,
       "barType": null,
       "region": "Beach Road",
