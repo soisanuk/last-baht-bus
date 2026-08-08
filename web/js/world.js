@@ -9082,6 +9082,31 @@ const POPULAR_GIRLS = ["fon", "gift", "noi", "pim"];
 // pinned district by district against OSM, and the decimal count is the marker
 // of which have had their pass. Don't "tidy" a 5dp district back to 4.
 //
+//   The Pattaya Klang corridor — DONE 2026-08-08. North up Sukhumvit from
+//   Thepprasit to Central Pattaya Road, then west to the sea. All at 0 m:
+//     Sukhumvit x Pattaya Klang   12.931784/100.900511
+//     Second Rd x Pattaya Klang   12.936653/100.886508
+//     Beach Rd  x Pattaya Klang   12.937908/100.883387
+//   Pattaya Klang spans 1.98 km, highway to sea.
+//
+//   Second Road's rooms are placed LEVEL WITH THE NEIGHBOUR EACH ONE'S w/e EXIT
+//   NAMES, not at even spacing: second_rd_c level with Central Mall, second_rd_s
+//   level with beach_rd_s. Spacing them evenly first put both several hundred
+//   metres south of the thing they point at, which flagged their west exits at
+//   124-127 degrees. Derive from the neighbour, not from the tape measure.
+//
+//   THIS PASS MADE THE AUDIT NOISIER, on purpose. Second Road moved ~450 m east
+//   onto its real line, and six districts hang off it — Buakhao, Myth Night,
+//   Soi Diana, Soi Honey, LK Metro, Tree Town — all still un-surveyed and all
+//   now visibly on the wrong side. Those ~7 flags are the truth becoming
+//   visible, not damage: the old agreement was two errors pointing the same way.
+//
+//   Worth fixing when the bar mat is next opened: `pattaya_klang —w→ beach_rd_n`
+//   audits at 75 degrees because it lands at the SOI 6 foot, 560 m north of
+//   where Central Pattaya Road actually meets Beach Road. Re-pointing it at
+//   beach_rd_c would audit at ~24. That is an exit change, so it is bar-mat
+//   work, not survey.
+//
 //   The Darkside — DONE 2026-08-08. Colloquially it is EVERYTHING EAST OF
 //   SUKHUMVIT; that is the whole definition, and it is why the highway crossing
 //   matters more than any single venue out there.
@@ -9344,13 +9369,13 @@ const ROOM_GEO = {
   lotus_oil:        [12.9531, 100.8879],
   emperor_soapy:    [12.9536, 100.8883],
   // Second Road
-  second_rd_s:      [12.9268, 100.8768],
-  second_thai:      [12.9272, 100.8774],
-  second_rd_c:      [12.9330, 100.8795],
-  second_rd_n:      [12.9345, 100.8805],
-  smile_massage:    [12.9346, 100.8799],
-  poseidon_soapy:   [12.9347, 100.8812],
-  pattaya_klang:    [12.9362, 100.8815],
+  second_rd_s:      [12.92999, 100.88084],
+  second_thai:      [12.93014, 100.88107],
+  second_rd_c:      [12.93431, 100.88506],
+  second_rd_n:      [12.93539, 100.88580],
+  smile_massage:    [12.93552, 100.88554],
+  poseidon_soapy:   [12.93528, 100.88606],
+  pattaya_klang:    [12.93665, 100.88651],
   // Myth Night
   myth_night:       [12.9322, 100.8822],
   candy_bar_2:      [12.9324, 100.8824],
