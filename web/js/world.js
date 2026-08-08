@@ -10122,16 +10122,32 @@ const POPULAR_GIRLS = ["fon", "gift", "noi", "pim"];
 //   original the Tahitian Queen, 12.931642/100.879457. Order down the road is
 //   PK, Soi 7, Soi 8, Soi 9, Central Mall — worth stating because the sois do
 //   NOT simply run north to south past Klang.
-//   Deliberately left flagged: `beach_rd_s —w→ short_time_motel` audits at 139°.
-//   West of Beach Road is the SEA, so the motel can't go where its compass word
-//   says; it now sits where a short-time place actually would, midway along
-//   Pattaya's Soi 7 between Beach Road and Second Road. The exit stays wrong
-//   because the graph hangs it off beach_rd_s, 700 m south — and it can't be
-//   re-hung until a Pattaya Soi 7 room EXISTS. That's bar-mat work. Better a
-//   loud flag than a coordinate bent to quiet it.
-//   NOT YET PINNED (no room exists): Mike Shopping Mall 12.931899/100.880812,
-//   and Pattaya's own Soi 7 (Beach Rd end 12.937147/100.883067, Second Rd end
-//   ~12.935370/100.886989) — the street the motel now stands on.
+//   (RESOLVED 2026-08-08: the motel's 139° flag, Mike's Mall and Pattaya's own
+//   Soi 7 all had entries here as outstanding. Soi 7 now exists, the motel hangs
+//   off it where a short-time place actually would, and the mall is pinned.)
+//
+//   ── THE REMAINING 9 AUDIT FLAGS ARE ALL DELIBERATE ───────────────────────
+//   Checked exhaustively 2026-08-09, and the earlier gloss on them — "the 45°
+//   floor, a four-direction grid can't do diagonals" — was WRONG. Every one is
+//   a labelling choice, not a geometric limit: each sits 65–73° off its
+//   DECLARED direction but only 17–25° off its NEAREST cardinal, so the grid
+//   could say all of them accurately and we have chosen otherwise. Adding
+//   intermediate nodes cannot help either — a node on a straight line inherits
+//   its bearing, and checked against the OSM polylines none of these roads
+//   bends enough to stair-step around.
+//
+//     Walking Street ×4 (bali_hai→ws_south, ws_north↔ws_south, ws_alley→ws_north)
+//       The strip runs ENE–WSW, 24° off due east-west. The game calls its ends
+//       North and South, and the ROOM NAMES say so. Relabelling to e/w would
+//       green the audit and make the strip read wrong. Bar-mat beats survey.
+//     khao_talo ↔ lake_mabprachan ×2
+//       6.8 km out to the lake, declared n/s, really ENE/WSW. The long-standing
+//       "lake is north, into the dark" call.
+//     Tree Town ×3 (tt_deep→tt_back, tt_back↔tt_lane_1)
+//       The Back Lane is AUTHORED to disorient — its own desc is "without
+//       light, every exit feels like the same wrong one" — and four of its
+//       cardinal exits are deliberately non-reciprocal. Do not "fix" these;
+//       the prose is the spec.
 //
 //   Soi 6 + its Beach Road foot — DONE 2026-08-08, the first pass and the
 //   center of truth. Laid along the real ซอยพัทยา 6: 359 m, west end
