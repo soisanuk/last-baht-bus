@@ -111,6 +111,11 @@ test("gossip chain flags connect: every required flag is set somewhere", () => {
     "hasDog",    // set by the adoption action (FEED DOG), not dialogue
     "expatLife", // set by _goExpat — gates the bar-owning chain to the endless stage
     "barPaid",   // set by _barDeposit (the money has to actually exist), not dialogue
+    // the beach amulet — all engine-set, none of them dialogue
+    "amuletSeen",     // a piwin read it (_amuletNotice)
+    "nokSawAmulet",   // Nok clocked it on arrival (_nokAmulet)
+    "amuletReturned", // handed back (_nokTakeAmulet)
+    "owlAmulet",      // the column printed its one-shot letter (_doColumn)
   ]); // set by engine actions (read/wai/give/enter), not NPC dialogue
   for (const npc of Object.values(NPCS)) {
     for (const d of npc.dialogue) {

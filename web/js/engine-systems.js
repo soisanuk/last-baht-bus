@@ -3854,6 +3854,27 @@ const _OWL_LEADS = [
   "A reader tries to name the thing that isn't quite love. Four years, the same lady, fifteen visits — a customer still, and yet more than a customer; she remembers everything he likes and throws her whole self into the hours. Watching her ride off into the Jomtien sun, money and all, he feels something real. Not love, he insists — 'a kind of in-the-moment love.' I know exactly what he means, and so, quietly, does half this coast. The transaction and the tenderness are not enemies here. That's the part they'll never get back home.",
   "A reader files a long-time night under 'remind me never again': he books a lovely girl overnight and gets — a girl. Thirty minutes of her life story before bed, tears over a father and a sister and a child he can't keep straight, a sulk when HE talks too much, a cold shoulder in the night, no morning cuddle. 'She acts like a five-year girlfriend, not the one-day girlfriend you want.' Precisely, squire. Short time sells you the fantasy; long time delivers the person — the whole weeping, needing, remembering person. Most men don't want a girlfriend. They want the FEELING of one, for an hour, credits rolled before the third act. Know which you're buying.",
 ];
+// The Owl's answer to the amulet, printed once and never again. Written as the
+// column would carry it: a reader's letter, third-hand, and a reply that
+// explains the three things a farang cannot see — what an untended-looking
+// shrine actually means, why the clay is unworn inside a worn case, and why she
+// could not possibly have told him. Mort's register stays dry; he is a
+// columnist, not a chorus.
+const _OWL_AMULET = [
+  "'Found an amulet on the sand right down the far end past the works, where nobody goes. " +
+    "Wore it a week. Gave it to the drinks-cart lady when she asked for it, and she barely " +
+    "said thank you. Did I do something wrong?'",
+  "You did the only right thing available to you, squire, and got the only thanks that was " +
+    "hers to give. Three things you could not have known. A spirit house with no offerings " +
+    "AND no rubbish is not neglected — it is kept; somebody carries the leavings away, " +
+    "because food left out brings dogs. An amulet whose case is worn to nothing while the " +
+    "clay inside is sharp was not worn for years — it was made afterwards. And she said " +
+    "nothing because saying it would have made you a man who needed comforting, and she " +
+    "had a shrine to tidy. I have written that story eleven times in forty years and never " +
+    "once printed it. This is the twelfth, and I have printed nothing you could use to find " +
+    "her.",
+];
+
 const _OWL_LETTERS = [
   ["A Thai wife writes: 'Met my farang on Beach Road in '89. Two children, a finance degree this year, maybe law school. Mixed marriage is hard and culture harder — but marriage is the START of the bumpy ride, not the happy ending.'",
    "I am happy for you, madam. Alas, you are in the minority."],
@@ -3929,7 +3950,15 @@ function _doColumn() {
   _say("── THE NITE OWL ── Mort's weekly hoot, still going, out of spite ──", "win");
   _say(_owlPick(_OWL_LEADS, 1));
   _say("• " + _owlPick(_OWL_LISTINGS, 7), "dim");
-  const [letter, reply] = _owlPick(_OWL_LETTERS, 13);
+  // one-shot: if the amulet went back and the Owl has not had his say yet, he
+  // gets it this issue instead of a pooled letter
+  let letter, reply;
+  if (_flag("amuletReturned") && !_flag("owlAmulet")) {
+    _setFlag("owlAmulet");
+    [letter, reply] = _OWL_AMULET;
+  } else {
+    [letter, reply] = _owlPick(_OWL_LETTERS, 13);
+  }
   // The pool holds two authored styles: a bare quote ("'Which is the honest
   // soi?'") that needs an attribution, and a letter that introduces its own
   // writer ("A Thai wife writes: …"). A blanket prefix doubled the latter —

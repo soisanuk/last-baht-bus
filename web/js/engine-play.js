@@ -213,6 +213,85 @@ function _lastBusWarn() {
     { fare: BUS_FARE }), "alert");
 }
 
+// ── The amulet: what the town makes of it ────────────────────────────────────
+// Two notices, and the restraint is the design. The piwin is the ONLY reliable
+// one, because motorbike-taxi men genuinely all wear amulets — the job kills
+// people — and they read each other's. He can tell it is neither shop-bought
+// nor temple issue, and that is all he will say.
+//
+// Deliberately NOT a trail of breadcrumbs. A second reaction would turn the
+// mystery into a checklist ("quest active"), so there is one notice, once ever,
+// and after that the player is holding a fact and no instructions. The only
+// other thing they know is where they found it — so going back to that beach
+// has to be their own deduction, which is the whole point, because Nok is
+// twenty-odd hops from anywhere they live and nobody wanders past her.
+const _AMULET_PIWIN = [
+  "The piwin takes your fare, then stops — he has seen the amulet. He leans in without " +
+    "asking, turns it over on its cord with two fingers, and looks at the back for a long " +
+    "moment. Then he lets go of it. “Not from shop,” he says. “Not from temple also.” He " +
+    "hands you your change and does not explain, and does not quite look at you again.",
+  "Your change comes back slower than it should. The piwin is looking at your chest — at " +
+    "the amulet — and when he sees you notice he taps his own, under his shirt, the way a " +
+    "man shows you his union card. Then he turns yours over, reads the back, and puts it " +
+    "down flat against you again. “Where you get?” Nothing in the question is casual.",
+  "He clocks it while you are still counting out the fare, and the easy patter stops. A " +
+    "long look, a thumb across the worn back of it, and a short breath through the nose. " +
+    "“This one, somebody make it,” the piwin says. “Not buy. Make.” He kicks the bike over " +
+    "before you can ask what the difference is.",
+];
+function _amuletNotice() {
+  if (!G.amuletWorn || _flag("amuletSeen") || _flag("amuletReturned")) return;
+  if (!_room().motosai) return;
+  _setFlag("amuletSeen");
+  _say(_pickVary(_AMULET_PIWIN, "amuletpiwin"), "alert");
+}
+
+// Nok, and the door that closes politely.
+//
+// She does not explain, and that is the point rather than a gap. A woman
+// tidying a shrine for a drowned boy does not explain it to a farang who has
+// just taken the amulet off it — explaining would make him someone who has to
+// be consoled, and she has a shrine to tidy. Her thank-you is COMPLETE. The
+// player simply cannot read it, which is this game's oldest move: nobody hands
+// over what actually matters and you never get a briefing.
+//
+// The reading comes later and elsewhere, from Mort, who has watched this coast
+// for fifty years and writes it down. Some players will never go and ask, and
+// will carry an unexplained snub for the rest of the game. That is a correct
+// outcome, not a missed one.
+const _NOK_AMULET = [
+  "Auntie Nok looks up from her phone with the bottle-price face on, and then she does " +
+    "not. She has seen it. She puts the phone down — actually down, screen to the cart — " +
+    "and holds out her hand, palm up, and waits.",
+  "She is halfway through telling you the price of a Leo when she stops. Her eyes go to " +
+    "the amulet and stay there, and the whole cheerful machinery of the cart switches off. " +
+    "She holds out her hand and does not say anything at all.",
+];
+function _nokAmulet() {
+  if (!G.amuletWorn || _flag("amuletReturned")) return;
+  if (G.room !== _npcRoom("nok")) return;
+  if (_flag("nokSawAmulet")) return;
+  _setFlag("nokSawAmulet");
+  _say(_pickVary(_NOK_AMULET, "nokamulet"), "alert");
+  _say("(She wants it. GIVE AMULET TO NOK — or don't.)", "dim");
+}
+// Handing it back. No reward, no warmth, no quest journal tick — she says thank
+// you correctly and goes back to work, and the player is left holding nothing
+// and no explanation.
+function _nokTakeAmulet() {
+  G.itemLoc.amulet = null;
+  G.amuletWorn = false;
+  _setFlag("amuletReturned");
+  _say("She takes it off you the moment it is off your neck, closes her hand round it, " +
+    "and says “Thank you, kha.” Twice. The second one is quieter and is not for you.\n\n" +
+    "Then she picks the phone back up. The cooler hums. A boy comes for a bag of ice and " +
+    "she serves him, and the price of a Leo is what it was, and the evening carries on " +
+    "exactly as it was going to. She does not mention it again, that night or any other.",
+    "win");
+  _addHappy(3);
+  _repGain();
+}
+
 // ── The bar manager ──────────────────────────────────────────────────────────
 // A distinct NPC type (marked `manager:true` on the NPCS entry, deliberately NOT
 // in NPC_ROLES so lady-logic — barfine/lady-drink/tip/contact — ignores him).

@@ -138,3 +138,72 @@ test("hill chain: Bill will not make the offer himself, and says why", () => {
   assert.match(why, /Say it to him like it's yours/, "…and hands it to you");
   assert.notEqual(G.quests.hill_order, "done", "talking to Bill does not resolve it");
 });
+
+// ── the beach amulet ────────────────────────────────────────────────────────
+// Found at the end of three rooms of sand with nothing on them, and the whole
+// chain is built so the game never tells you what to do with it.
+//
+// What these protect, in order of how easy it is to wreck by being helpful:
+//
+//   1. WEARING IT COSTS SOMETHING. The cord came off it perished, so putting it
+//      on takes a trip and twenty baht. If that ever becomes automatic on
+//      pickup, the deliberate act — "this is mine now" — is gone.
+//   2. EXACTLY ONE NOTICE. A piwin reads it, once ever, and says nothing
+//      useful. A second reactor would turn a mystery into a quest marker.
+//   3. NOK EXPLAINS NOTHING. Her thank-you is complete and unreadable. If a
+//      future edit has her open up, the entire point collapses — the reading
+//      belongs to Mort, later, elsewhere, and only if the player goes to get it.
+test("amulet: it cannot be worn until the cord is replaced", () => {
+  onTheHill();
+  G.itemLoc.amulet = "inventory";
+  const no = say("wear amulet");
+  assert.match(no, /cord/i, "it tells you why not");
+  assert.equal(G.amuletWorn, false);
+
+  G.room = "jomtien_7eleven";
+  say("buy cord");
+  assert.equal(G.itemLoc.cord, "inventory", "a 7-Eleven sells one");
+  say("wear amulet");
+  assert.equal(G.amuletWorn, true, "now it goes on");
+  assert.equal(G.itemLoc.cord, null, "and the cord is used up");
+});
+
+test("amulet: one piwin notice, once ever, and it explains nothing", () => {
+  onTheHill();
+  G.itemLoc.amulet = "inventory"; G.itemLoc.cord = "inventory"; say("wear amulet");
+  out = []; G.room = "beach_rd_n"; _arriveAt("dolphin");
+  const first = out.join("\n");
+  assert.ok(_AMULET_PIWIN.some(l => first.includes(l)), "a piwin reads it");
+  assert.doesNotMatch(first, /shrine|drown|memorial|widow|son\b/i,
+    "…and gives away nothing — the mystery is the point");
+  out = []; _arriveAt("beach_rd_n"); _arriveAt("dolphin");
+  assert.ok(!_AMULET_PIWIN.some(l => out.join("\n").includes(l)), "and never again");
+});
+
+test("amulet: Nok takes it back and explains NOTHING; Mort explains, later", () => {
+  onTheHill();
+  G.itemLoc.amulet = "inventory"; G.itemLoc.cord = "inventory"; say("wear amulet");
+  out = []; G.room = "jomtien_beach"; _arriveAt("jomtien_soi_7_beach_end");
+  assert.ok(_NOK_AMULET.some(l => out.join("\n").includes(l)), "she sees it");
+
+  const gave = say("give amulet to nok");
+  assert.match(gave, /Thank you/, "she thanks you");
+  assert.doesNotMatch(gave, /shrine|drown|son\b|nephew|husband/i,
+    "she does not explain, and must never start");
+  assert.ok(_flag("amuletReturned"));
+  assert.equal(G.amuletWorn, false);
+
+  // the reading is Mort's, and only if you go and ask
+  G.room = "queen_vic";
+  const mort = say("ask mort about amulet");
+  assert.match(mort, /shrine/i, "he supplies what she could not");
+});
+
+test("amulet: the column prints the Owl's answer once, then goes back to the pool", () => {
+  onTheHill();
+  _setFlag("amuletReturned");
+  const first = say("column");
+  assert.ok(first.includes(_OWL_AMULET[1]), "the one-shot letter runs");
+  const second = say("column");
+  assert.ok(!second.includes(_OWL_AMULET[1]), "and not a second time");
+});

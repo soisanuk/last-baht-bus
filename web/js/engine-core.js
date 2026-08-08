@@ -255,6 +255,7 @@ function newGame() {
     fridgeDay: 0,        // day the in-room minibar was last restocked (lazy; see _fridgeStock)
     fridgeWater: 2,      // free bottles of water left in the room fridge today (housekeeping refills 2/day)
     jaded: 0,            // the hedonic treadmill: conquests this window; each barfine/ST buys less สนุก, cools 1/day
+    amuletWorn: false,   // the beach amulet is round your neck (needs a cord first — see _doWear)
     lastBusWarned: false, // the nightly last-baht-bus heads-up fires once per night
     bestHappy: 0,
     act1Best: 0,         // furthest point down the opening critical path ever reached; survives the do-or-die Act One reset

@@ -16,6 +16,7 @@ const LADY_DRINK = 150;  // canon
 const BEER_PRICE = 80;   // your own big Chang, bar price
 const BELL_PRICE = 300;  // ring it and the round is on you
 const BRA_PRICE = 200;   // the mamasan's drawer novelty; makes fondling "interesting"
+const CORD_PRICE = 20;   // black nylon off a 7-Eleven counter; what an amulet hangs on
 const BAND_ROUND = 400;  // buying the band a round (≈ bell to the mama; girls prefer the real bell)
 const WINGMAN_TURNS = 15;// how long a friendly wing-woman's good word lasts
 const CHARGER_PRICE = 59;
@@ -3455,6 +3456,14 @@ const ITEMS = {
   // solved before it was a puzzle. Nobody can read this one off the object —
   // which makes the eventual quest about finding somebody who knows what it
   // says, not about optical character recognition.
+  cord: {
+    name: "a nylon cord",
+    aliases: ["cord", "string", "lace", "necklace"],
+    portable: true,
+    location: null,
+    desc: "Twenty baht of black nylon cord off a 7-Eleven counter display, sold for exactly " +
+      "this and nothing else. Half the men in this country are wearing one.",
+  },
   amulet: {
     name: "a Buddha amulet",
     aliases: ["amulet", "buddha", "pendant", "medallion"],
@@ -8989,6 +8998,18 @@ const PATRONS = {
         "the mind goes to soup.\" He clicks the pen. \"So I watch, I write it down, and " +
         "I don't give a hoot who minds. READ THE COLUMN if you like — it's mostly true.\"",
         short: "\"I write the Nite Owl. READ THE COLUMN — mostly true. Keeps me sane.\"" },
+      { topic: "amulet", req: ["amuletReturned"],
+        text: "\"The one off the far end of the beach.\" Mort does not ask how you know he " +
+          "knows; he has been sitting in this window for twenty years. He clicks the biro " +
+          "twice. \"You gave it back and got about four words for it, and you have been " +
+          "chewing on that ever since.\" A dry look over the horn-rims. \"Son, that was the " +
+          "whole conversation. She thanked you, she meant it, and she was not going to " +
+          "stand on a beach explaining her family to a tourist — because the moment she " +
+          "does, you are a man who needs looking after, and she has got a shrine to sweep " +
+          "and forty bottles of Leo on ice.\" He turns back to the soi. \"You wanted the " +
+          "scene where she cries and you carry it home with you. You got the real one. " +
+          "Take the win.\"",
+        short: "\"You got the real conversation, not the one you wanted. Take the win.\"" },
       { topic: "column", text: "\"Forty years of the same story, squire, and it never " +
         "gets old because the punters keep arriving new. A reader letter, a bar listing, " +
         "a joke, and whatever the street taught me that week. I don't moralise — I report " +

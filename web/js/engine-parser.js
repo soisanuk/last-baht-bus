@@ -313,6 +313,8 @@ function _arriveAt(to) {
   }
   _repArrival(); // your street name precedes you at a stranger bar (notable tiers only)
   _managerWelcome(); // a bar manager stands you the house's first shot (once/bar/night)
+  _amuletNotice();   // a piwin reads the amulet you are wearing (once ever)
+  _nokAmulet();      // Auntie Nok sees what you are wearing
   // the partnerTan route comes due: he said he'd ask, and this is him asking
   // the deposit: the one moment the money has to actually exist
   if (typeof _barDepositDue === "function" && _barDepositDue()) { _barDeposit(); }
@@ -702,6 +704,42 @@ function _doExamine(arg) {
   if (_roomRead(arg) || arg.includes("sign")) return _doRead(arg);
   _say("Nothing special about that — or it isn't here.");
 }
+
+// ── WEAR ─────────────────────────────────────────────────────────────────────
+// Only the amulet is wearable, and deliberately not straight away: it came off
+// the sand on a snapped cord, so putting it on costs a trip to a 7-Eleven and
+// twenty baht. That is the whole design of the step — wearing it has to be a
+// DECISION ("this is mine now"), not a state that arrives with the pickup.
+function _doWear(arg) {
+  const a = String(arg || "").trim().toLowerCase();
+  if (!a) { _say("Wear what?"); return; }
+  if (!/amulet|buddha|pendant|medallion/.test(a)) {
+    // a plausible verb never dead-ends — see the Zork ledger in CLAUDE.md
+    _say(_pickVary(_WEAR_NO, "wearno"));
+    return;
+  }
+  if (!(G.itemLoc.amulet === "inventory")) { _say("You aren't carrying it."); return; }
+  if (G.amuletWorn) { _say("It's already round your neck."); return; }
+  if (!(G.itemLoc.cord === "inventory")) {
+    _say("The cord it came on is snapped — perished through, probably years ago in the " +
+      "sand. It'll take a new one, and a new one is the sort of thing a 7-Eleven sells " +
+      "off the counter for about twenty baht. (BUY CORD.)");
+    return;
+  }
+  G.itemLoc.cord = null;
+  G.amuletWorn = true;
+  _say("You thread the new cord through and put it on. The clay sits cool against your " +
+    "chest for a second and then stops being noticeable, the way these things do. " +
+    "Somewhere between picking it up off the sand and this, it stopped being something " +
+    "you found and started being something you wear.", "win");
+  _addHappy(1);
+}
+const _WEAR_NO = [
+  "Not really a wearing sort of thing.",
+  "You hold it up, consider it, and put it back. No.",
+  "That isn't going round your neck and you know it.",
+  "You could. You are not going to.",
+];
 
 function _doRead(arg) {
   if (/news|paper/.test(arg)) return _doPaper();
@@ -1217,6 +1255,11 @@ function _doGive(itemWord, npcWord) {
   // bottle-ish give (incl. the natural plural "bottles", which the strict item
   // matcher below misses) straight to the sale, which handles the empty case
   if (npc === "nok" && /bottle|glass/.test(itemWord)) return _doSellBottles();
+  // handing the amulet back — she has already asked for it without asking
+  if (npc === "nok" && /amulet|buddha|pendant|medallion/.test(itemWord)) {
+    if (G.itemLoc.amulet !== "inventory") { _say("You aren't carrying it."); return; }
+    return _nokTakeAmulet();
+  }
   const id = _inv().find(i => ITEMS[i].name.toLowerCase().includes(itemWord) ||
     ITEMS[i].aliases.some(a => a.includes(itemWord)));
   if (!id) { _say(_pickVary(_NOT_CARRYING, "notcarry")); return; }
@@ -1436,6 +1479,20 @@ function _doBuy(arg) {
     G.money -= price;
     G.thirst = Math.max(0, G.thirst - 45);
     _say(_fmt("{line} (฿{m} left.)", { line: _L(_pickVary(_WATER_LINES, "water")), m: G.money }));
+    return;
+  }
+  // seven:true marks a street with a 7-Eleven on it; the walk-in branches are
+  // shop:true rooms. A cord is a counter-display item, so both sell it.
+  if ((r.seven || r.shop) && /\bcord\b|\blace\b|\bstring\b|necklace/.test(arg)) {
+    if ((G.itemLoc.cord === "inventory")) { _say("You already have one, and one is plenty."); return; }
+    if (G.money < CORD_PRICE) {
+      _say(_fmt("The cord is ฿{p}. You have ฿{m}.", { p: CORD_PRICE, m: G.money })); return;
+    }
+    G.money -= CORD_PRICE;
+    G.itemLoc.cord = "inventory";
+    _say(_fmt("฿{p} for a black nylon cord off the counter display — the girl rings it up " +
+      "without a flicker, because half the men in this country are wearing one. (฿{m} left.)",
+      { p: CORD_PRICE, m: G.money }));
     return;
   }
   if (r.seven && /toastie|cheese|sandwich|food|snack/.test(arg) && !FOOD_STALLS[G.room]) {
@@ -2976,6 +3033,7 @@ const _HELP_SOI6 = `Common commands:
 // rules, not even vocabulary. Easter-egg verbs are deliberately absent.
 
 const _COMPLETE_VERBS = [
+  "wear",
   "look", "examine", "take", "drop", "inventory", "go", "enter", "talk to",
   "ask", "give", "buy", "sell bottles", "pay", "wai", "say", "ride bus to",
   "motosai to", "travel", "light", "charge phone", "read", "use", "open", "play",
@@ -3637,6 +3695,7 @@ function doCommand(input) {
     case "clinic": case "tested": case "screening": _doClinic(); break;
     case "drop": _doDrop(arg); break;
     case "i": case "inv": case "inventory": _doInventory(); break;
+    case "wear": case "put on": _doWear(arg); break;
     case "read": _doRead(arg); break;
     case "talk": case "chat": {
       if (/\bband\b|\bmusicians?\b|\bguitar|\bbass|\bdrummer|\bvocalist|\bsinger/.test(arg) && _bandHere()) {
