@@ -3864,8 +3864,8 @@
   },
   "pattaya_klang": {
    "geo": [
-    12.9362,
-    100.8815
+    12.93665,
+    100.88651
    ],
    "name": "Central Pattaya Road (Pattaya Klang)",
    "region": "Second Road"
@@ -3911,8 +3911,8 @@
   "poseidon_soapy": {
    "bar": "Poseidon Massage",
    "geo": [
-    12.9347,
-    100.8812
+    12.93528,
+    100.88606
    ],
    "name": "Poseidon Massage",
    "region": "Second Road"
@@ -4062,24 +4062,24 @@
   },
   "second_rd_c": {
    "geo": [
-    12.933,
-    100.8795
+    12.93431,
+    100.88506
    ],
    "name": "Second Road (Central)",
    "region": "Second Road"
   },
   "second_rd_n": {
    "geo": [
-    12.9345,
-    100.8805
+    12.93539,
+    100.8858
    ],
    "name": "Second Road (North)",
    "region": "Second Road"
   },
   "second_rd_s": {
    "geo": [
-    12.9268,
-    100.8768
+    12.92999,
+    100.88084
    ],
    "name": "Second Road (South)",
    "region": "Second Road"
@@ -4087,8 +4087,8 @@
   "second_thai": {
    "bar": "Second Road Traditional Massage",
    "geo": [
-    12.9272,
-    100.8774
+    12.93014,
+    100.88107
    ],
    "name": "Second Road Traditional Massage",
    "region": "Second Road"
@@ -4134,8 +4134,8 @@
   "smile_massage": {
    "bar": "Smile Massage",
    "geo": [
-    12.9346,
-    100.8799
+    12.93552,
+    100.88554
    ],
    "name": "Smile Massage",
    "region": "Second Road"
