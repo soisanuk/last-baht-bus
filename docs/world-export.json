@@ -57,7 +57,8 @@
    "emoji": "🎧",
    "home": "queen_vic",
    "name": "Angela",
-   "nat": "American"
+   "nat": "American",
+   "pronoun": "she"
   },
   "chuck": {
    "desc": "Sunburn over sunburn, a polo shirt with a plumbing-company logo, and the unmistakable glow of a man who believes he is winning. Day four of two weeks. There is usually a drink in front of him that he will tell you was free.",
@@ -65,7 +66,8 @@
    "home": "tequila_queen",
    "hops": true,
    "name": "Chuck",
-   "nat": "American"
+   "nat": "American",
+   "pronoun": "he"
   },
   "danny": {
    "avoids": [
@@ -77,7 +79,8 @@
    "home": "club_mirage",
    "hops": true,
    "name": "Danny",
-   "nat": "Canadian"
+   "nat": "Canadian",
+   "pronoun": "he"
   },
   "dave": {
    "desc": "Fifty-five, neat polo, shandy in front of him going flat. He drinks less than anyone in whatever bar he's in and looks at the door more. His phone sits face-up: a long list of names, a lot of them greyed out.",
@@ -85,7 +88,8 @@
    "home": "stinky_bar",
    "hops": true,
    "name": "Dave",
-   "nat": "British"
+   "nat": "British",
+   "pronoun": "he"
   },
   "david": {
    "days": [
@@ -96,7 +100,8 @@
    "emoji": "🇨🇦",
    "home": "stinky_bar",
    "name": "David",
-   "nat": "Canadian"
+   "nat": "Canadian",
+   "pronoun": "he"
   },
   "drew": {
    "desc": "Fifty-three, Navy posture that never demobbed, a Marlboro going and its successor already tapped out of the pack. In front of him: Jack and Coke, no lemon — an arrangement he supervises like a treaty. The eyes do a room-sweep every few minutes, out of training rather than interest.",
@@ -104,7 +109,8 @@
    "home": "stinky_bar",
    "hops": true,
    "name": "Drew",
-   "nat": "American"
+   "nat": "American",
+   "pronoun": "he"
   },
   "fergie": {
    "avoids": [
@@ -117,28 +123,32 @@
    "home": "gold_rush",
    "hops": true,
    "name": "Fergie",
-   "nat": "Northern Irish"
+   "nat": "Northern Irish",
+   "pronoun": "he"
   },
   "glam": {
    "desc": "Somewhere north of seventy-five and dressed like it's 1983 in a Munich discotheque: a silk shirt open one button too far, and a wild halo of sparse blonde hair caught somewhere between Einstein and a glam rocker on his third encore. Frail now, and — the whole strip agrees, gently — not entirely present. His companion, an older lady-boy who speaks only to the mama, wheels him in on a lovingly modified saleng, and most nights has him escorted across to Hyper once the music starts.",
    "emoji": "🎸",
    "home": "cheeky_monkey",
    "name": "Glam",
-   "nat": "German"
+   "nat": "German",
+   "pronoun": "he"
   },
   "helmut": {
    "desc": "Sixty-one, pressed short-sleeve shirt, glasses polished to optical-lab standard. He occupies the third stool from the left as if allocated it by the state. One Chang, one glass, one coaster, all aligned.",
    "emoji": "🔧",
    "home": "silk_rose",
    "name": "Helmut",
-   "nat": "German"
+   "nat": "German",
+   "pronoun": "he"
   },
   "josey": {
    "desc": "Thirty-two, Australian, shoulders that still remember lane ropes, in gym wear that is clearly working clothes rather than costume. She has a regular table by the stage with sightlines on the drummer, a {{phone}} on a small tripod she mostly ignores, and the settled ease of someone who is exactly where she decided to be.",
    "emoji": "🏋️",
    "home": "rock_factory",
    "name": "Josey",
-   "nat": "Australian"
+   "nat": "Australian",
+   "pronoun": "she"
   },
   "mikkel": {
    "desc": "Twenty-four, backpacker tan, friendship bracelets to the elbow, and the incandescent certainty of a man eleven days into the love of his life. He shows people his phone a lot. There is a girl on the lock screen.",
@@ -146,14 +156,16 @@
    "home": "neon_paradise",
    "hops": true,
    "name": "Mikkel",
-   "nat": "Danish"
+   "nat": "Danish",
+   "pronoun": "he"
   },
   "mort": {
    "desc": "Seventy-four, horn-rimmed glasses and a Hawaiian shirt at war with itself, a spiral notebook and a biro he clicks while he watches the soi. He has been on this coast longer than most of the bars, and he is writing all of it down whether it likes it or not.",
    "emoji": "🦉",
    "home": "queen_vic",
    "name": "Mort",
-   "nat": "American"
+   "nat": "American",
+   "pronoun": "he"
   },
   "nigel": {
    "desc": "Sixty-eight, sun-spotted, a Chang vest gone grey at the seams. He has the fixed forward stare of a man permanently addressing an audience of 1998. Whatever bar he's in, he looks like he's comparing it to a better one.",
@@ -161,7 +173,8 @@
    "home": "lucky_tiger",
    "hops": true,
    "name": "Nigel",
-   "nat": "British"
+   "nat": "British",
+   "pronoun": "he"
   },
   "randy": {
    "desc": "Six-foot-four and built like the loads he used to carry, with hands that make the Chang bottle look like a miniature. Fifty-four, Alabama drawl, and a permanently mild expression of a man who still can't quite believe where he wakes up. There is usually at least one hostess using him as furniture.",
@@ -169,7 +182,8 @@
    "home": "jasmine_garden",
    "hops": true,
    "name": "Randy",
-   "nat": "American"
+   "nat": "American",
+   "pronoun": "he"
   },
   "reginald": {
    "desc": "Sixty and annoyingly aware that he doesn't look it: linen shirt with exactly the right number of buttons open, a tan that took discipline, silver hair with a part you could draw a property line down. He holds a glass like a man who used to be paid to make rooms enjoy themselves — because he was. Wherever he stands becomes, gradually, the centre.",
@@ -177,28 +191,32 @@
    "home": "las_vegas",
    "hops": true,
    "name": "Reginald",
-   "nat": "British"
+   "nat": "British",
+   "pronoun": "he"
   },
   "ron": {
    "desc": "Sixty-six, Wollongong, a faded steel-town singlet and thongs that have worn a groove in this soi. He has the settled bulk of a man who stopped moving fifteen years ago and rates it his finest decision.",
    "emoji": "🦘",
    "home": "mama_yai",
    "name": "Ron",
-   "nat": "Australian"
+   "nat": "Australian",
+   "pronoun": "he"
   },
   "somsak": {
    "desc": "Forty-seven, hotel-maintenance polo, the end seat at the Blue Dog rail with the best line on both the sunset and the checkpoint. He drinks one big Leo very slowly and misses absolutely nothing on the road.",
    "emoji": "🌇",
    "home": "blue_dog",
    "name": "Somsak",
-   "nat": "Thai"
+   "nat": "Thai",
+   "pronoun": "he"
   },
   "superman": {
    "desc": "Sixty-two, in tonight's Superman shirt — the S faded from a hundred washes, stretched over a chest that carries three stents and a story. He sits angled to the bay, not the bar. Sometimes, mid-sentence, he goes perfectly still for a few seconds — like a video buffering — then carries on from the exact word he stopped at.",
    "emoji": "🦸",
    "home": "blue_dog",
    "name": "Superman",
-   "nat": "American"
+   "nat": "American",
+   "pronoun": "he"
   }
  },
  "people": {
@@ -206,6 +224,7 @@
    "desc": "The cashier, planted behind the till like she grew there — cropped hair, oversized bar polo, a silver ring through one nostril and a biro tucked behind her ear. Tom through and through: she runs the money, calls the floor, and misses nothing across the whole open front of the bar.",
    "emoji": "⚡",
    "name": "Aek",
+   "pronoun": "she",
    "role": "cashier",
    "room": "midnight_sun",
    "th": "เอก"
@@ -215,6 +234,7 @@
    "emoji": "🧾",
    "filler": true,
    "name": "Aim",
+   "pronoun": "she",
    "role": "cashier",
    "room": "firefly_bar",
    "th": "เอม"
@@ -224,6 +244,7 @@
    "emoji": "🧾",
    "filler": true,
    "name": "Air",
+   "pronoun": "she",
    "role": "cashier",
    "room": "blue_dog",
    "th": "แอร์"
@@ -233,6 +254,7 @@
    "emoji": "👑",
    "filler": true,
    "name": "Alisa",
+   "pronoun": "she",
    "role": "mamasan",
    "room": "katoeys",
    "th": "อลิสา"
@@ -245,6 +267,7 @@
    "desc": "The madame of the strip's two gentleman's clubs — silk, low voice, immaculate, the kind of calm that costs a fortune to be near. She sells the quiet more than the girls, and she knows every regular's business and says none of it.",
    "emoji": "👑",
    "name": "Ampai",
+   "pronoun": "she",
    "role": "mamasan",
    "room": "the_boardroom",
    "th": "อำไพ"
@@ -254,6 +277,7 @@
    "emoji": "🌸",
    "filler": true,
    "name": "Ann",
+   "pronoun": "she",
    "role": "hostess",
    "room": "midnight_sun",
    "th": "แอน"
@@ -263,6 +287,7 @@
    "emoji": "🍒",
    "filler": true,
    "name": "Aof",
+   "pronoun": "she",
    "role": "hostess",
    "room": "crystal_palace",
    "th": "อ๊อฟ"
@@ -272,6 +297,7 @@
    "emoji": "💐",
    "filler": true,
    "name": "Aoi",
+   "pronoun": "she",
    "role": "hostess",
    "room": "hyper",
    "th": "อ้อย"
@@ -280,6 +306,7 @@
    "desc": "Mysterious, sharp eyes, a slow smile that arrives about four seconds after whatever caused it. She materialised beside you rather than walked.",
    "emoji": "🌙",
    "name": "Aom",
+   "pronoun": "she",
    "role": "hostess",
    "room": "club_mirage",
    "th": "อ้อม"
@@ -289,6 +316,7 @@
    "emoji": "🧾",
    "filler": true,
    "name": "Apple",
+   "pronoun": "she",
    "role": "cashier",
    "room": "rock_factory",
    "th": "แอปเปิ้ล"
@@ -297,6 +325,7 @@
    "desc": "Host number 4: broad, easy, a footballer's build and a salesman's warmth. He leans in close and makes you feel chosen, which is precisely the product. The tan line of a wedding-adjacent ring is on the wrong finger.",
    "emoji": "💪",
    "name": "Arm",
+   "pronoun": "he",
    "room": "adonis_club",
    "th": "อาร์ม"
   },
@@ -304,6 +333,7 @@
    "desc": "Pretty in the soft, unstudied way that stops men mid-sentence, with a smile she gives away too easily for this business. New enough that the job hasn't finished teaching her its lessons yet.",
    "emoji": "🌷",
    "name": "Aum",
+   "pronoun": "she",
    "role": "hostess",
    "room": "kitten_corner",
    "th": "อุ้ม"
@@ -313,6 +343,7 @@
    "emoji": "🌼",
    "filler": true,
    "name": "Aump",
+   "pronoun": "she",
    "role": "hostess",
    "room": "rabbit_hole",
    "th": "อั้ม"
@@ -321,6 +352,7 @@
    "desc": "Soft-spoken, careful with the money and with herself, a photo of a couple propped by the till in a glittery case. Kesinee gave her the cashier seat as a kindness — off the floor, where the sponsor's money keeps her.",
    "emoji": "🧾",
    "name": "Baimon",
+   "pronoun": "she",
    "role": "cashier",
    "room": "kitten_corner",
    "th": "ใบหม่อน"
@@ -330,6 +362,7 @@
    "emoji": "🎤",
    "name": "Baitoey",
    "personality": "dreamer",
+   "pronoun": "she",
    "role": "hostess",
    "room": "katoeys",
    "th": "ใบเตย"
@@ -339,6 +372,7 @@
    "emoji": "🌻",
    "filler": true,
    "name": "Bam",
+   "pronoun": "she",
    "role": "hostess",
    "room": "rock_factory",
    "th": "บาม"
@@ -347,6 +381,7 @@
    "desc": "A motosai driver in an orange vest, boots up on his handlebars, watching the street with professional calm. The other drivers at the stand defer to him.",
    "emoji": "🏍️",
    "name": "Bank",
+   "pronoun": "he",
    "room": "beach_rd_s",
    "th": "แบงค์"
   },
@@ -354,6 +389,7 @@
    "desc": "English, fifty, here on the eleventh 'golf trip' of a marriage that politely doesn't ask. Packed the clubs, means to play, will not play. Zero shame and boundless goodwill; knows half the girls on this soi by name and all of them by drink order. The most honest dishonest man in Pattaya — lies only to his wife, and even then only about the golf.",
    "emoji": "⛳",
    "name": "Barry",
+   "pronoun": "he",
    "room": "ruby_kiss",
    "th": "แบร์รี่"
   },
@@ -362,6 +398,7 @@
    "emoji": "🌼",
    "filler": true,
    "name": "Beam",
+   "pronoun": "she",
    "role": "hostess",
    "room": "crystal_palace",
    "th": "บีม"
@@ -370,6 +407,7 @@
    "desc": "Six feet of engineered glamour in heels that make it seven, sharper-tongued than the whole bar and twice as funny. Ladyboy, and not hiding it for a second — the confidence is the whole act, and the act is magnificent. A ยาดม inhaler is never further than her reach, in case a smoker wanders in and dares to light up.",
    "emoji": "💅",
    "name": "Bebe",
+   "pronoun": "she",
    "role": "hostess",
    "room": "pink_lotus",
    "th": "บีบี"
@@ -378,6 +416,7 @@
    "desc": "Candy Bar 2's floor boss — early twenties, quick everywhere at once, wearing the same rose-pink polo as the original bar. Candy's niece, though nobody says it and everybody knows it. The smile is the family franchise.",
    "emoji": "🐝",
    "name": "Bee",
+   "pronoun": "she",
    "role": "hostess",
    "room": "candy_bar_2",
    "th": "ผึ้ง"
@@ -387,6 +426,7 @@
    "emoji": "💕",
    "filler": true,
    "name": "Bella",
+   "pronoun": "she",
    "role": "hostess",
    "room": "lucky_charm",
    "th": "เบลล่า"
@@ -395,6 +435,7 @@
    "desc": "Sweet, soft-eyed, always in the middle of a small catastrophe — a sick relative, a broken thing, a bill with today's date. She holds your hand when she tells you, and she is often, genuinely, not lying.",
    "emoji": "🥺",
    "name": "Belle",
+   "pronoun": "she",
    "role": "hostess",
    "room": "pink_lotus",
    "th": "เบล"
@@ -403,6 +444,7 @@
    "desc": "Genuinely stunning and entirely aware of it, angling for the light and the mirror more than for you. There is a screen between you at all times, and you are not the one she's looking at on it.",
    "emoji": "🤳",
    "name": "Benz",
+   "pronoun": "she",
    "role": "hostess",
    "room": "ruby_kiss",
    "th": "เบนซ์"
@@ -413,6 +455,7 @@
    "manager": true,
    "name": "Bert",
    "personality": "blunt",
+   "pronoun": "he",
    "room": "stinky_bar",
    "th": "เบิร์ต"
   },
@@ -421,6 +464,7 @@
    "emoji": "🧾",
    "filler": true,
    "name": "Best",
+   "pronoun": "she",
    "role": "cashier",
    "room": "water_buffalo",
    "th": "เบสท์"
@@ -436,6 +480,7 @@
    "manager": true,
    "name": "Bill",
    "personality": "dry",
+   "pronoun": "he",
    "room": "doghouse"
   },
   "bob": {
@@ -444,6 +489,7 @@
    "manager": true,
    "name": "Bob",
    "personality": "warm",
+   "pronoun": "he",
    "room": "succubus"
   },
   "boom": {
@@ -451,6 +497,7 @@
    "emoji": "🌼",
    "filler": true,
    "name": "Boom",
+   "pronoun": "she",
    "role": "hostess",
    "room": "crystal_palace",
    "th": "บูม"
@@ -460,6 +507,7 @@
    "emoji": "🌻",
    "filler": true,
    "name": "Bow",
+   "pronoun": "she",
    "role": "hostess",
    "room": "club_mirage",
    "th": "โบว์"
@@ -469,6 +517,7 @@
    "emoji": "🌼",
    "filler": true,
    "name": "Bpaeng",
+   "pronoun": "she",
    "role": "hostess",
    "room": "the_office",
    "th": "แป้ง"
@@ -478,6 +527,7 @@
    "emoji": "🌻",
    "filler": true,
    "name": "Bpom",
+   "pronoun": "she",
    "role": "hostess",
    "room": "lucky7",
    "th": "บอม"
@@ -487,6 +537,7 @@
    "emoji": "🍒",
    "filler": true,
    "name": "Bright",
+   "pronoun": "she",
    "role": "hostess",
    "room": "cricketers",
    "th": "ไบรท์"
@@ -496,6 +547,7 @@
    "emoji": "🌺",
    "filler": true,
    "name": "Bua",
+   "pronoun": "she",
    "role": "hostess",
    "room": "candy_bar",
    "th": "บัว"
@@ -505,6 +557,7 @@
    "emoji": "🌺",
    "filler": true,
    "name": "Bum",
+   "pronoun": "she",
    "role": "hostess",
    "room": "dollhouse",
    "th": "บุ๋ม"
@@ -514,6 +567,7 @@
    "emoji": "🌻",
    "filler": true,
    "name": "Bunny",
+   "pronoun": "she",
    "role": "hostess",
    "room": "dolphin_bar",
    "th": "บันนี่"
@@ -522,6 +576,7 @@
    "desc": "The Shady Lady's mamasan, running a beer bar the slow honest way — no bottle-service hustle, no bank of go-go tricks, just cold beer, decent girls, and a chair you're welcome to keep all night.",
    "emoji": "👑",
    "name": "Bussaba",
+   "pronoun": "she",
    "role": "mamasan",
    "room": "sunset_rail",
    "th": "บุษบา"
@@ -531,6 +586,7 @@
    "emoji": "🧾",
    "filler": true,
    "name": "Cake",
+   "pronoun": "she",
    "role": "cashier",
    "room": "stinky_bar",
    "th": "เค้ก"
@@ -544,6 +600,7 @@
    "emoji": "🌹",
    "name": "Candy",
    "personality": "charmer",
+   "pronoun": "she",
    "role": "mamasan",
    "room": "candy_bar",
    "th": "แคนดี้"
@@ -553,6 +610,7 @@
    "emoji": "🧾",
    "filler": true,
    "name": "Care",
+   "pronoun": "she",
    "role": "cashier",
    "room": "candy_bar_2",
    "th": "แคร์"
@@ -562,6 +620,7 @@
    "emoji": "🧾",
    "filler": true,
    "name": "Cartoon",
+   "pronoun": "she",
    "role": "cashier",
    "room": "neon_paradise",
    "th": "การ์ตูน"
@@ -570,6 +629,7 @@
    "desc": "Loud, glorious, and pouring — for you, for herself, for the room. At Cherry Pop she's the party's engine, right up until she's its wreckage.",
    "emoji": "🌺",
    "name": "Chaba",
+   "pronoun": "she",
    "role": "hostess",
    "room": "cherry_pop",
    "th": "ชบา"
@@ -579,6 +639,7 @@
    "emoji": "💫",
    "filler": true,
    "name": "Cherry",
+   "pronoun": "she",
    "role": "hostess",
    "room": "crystal_palace",
    "th": "เชอรี่"
@@ -588,6 +649,7 @@
    "emoji": "🌼",
    "filler": true,
    "name": "Chom",
+   "pronoun": "she",
    "role": "hostess",
    "room": "succubus",
    "th": "ชม"
@@ -596,6 +658,7 @@
    "desc": "The one on the little stage who dances like she's bored of being the most interesting person in the room, because she is. Cheekbones, a dancer's line, and an amused, appraising calm that reads a man in a glance and prices him in the next. Drops a German word now and then like she's forgotten you might not follow.",
    "emoji": "🦋",
    "name": "Chompoo",
+   "pronoun": "she",
    "role": "hostess",
    "room": "ruby_kiss",
    "th": "ชมพู่"
@@ -605,6 +668,7 @@
    "emoji": "👑",
    "filler": true,
    "name": "Da",
+   "pronoun": "she",
    "role": "mamasan",
    "room": "club_mirage",
    "th": "ดา"
@@ -614,6 +678,7 @@
    "emoji": "🌶️",
    "name": "Daeng",
    "personality": "blunt",
+   "pronoun": "she",
    "role": "mamasan",
    "room": "khao_talo_bar",
    "th": "แดง"
@@ -623,6 +688,7 @@
    "emoji": "💕",
    "filler": true,
    "name": "Dao",
+   "pronoun": "she",
    "role": "hostess",
    "room": "tequila_queen",
    "th": "ดาว"
@@ -631,6 +697,7 @@
    "desc": "Sweet and a half-beat slow, laughing a little after everyone else because she's still catching up. Nobody at this bar has a bad word for her, which tells you everything.",
    "emoji": "🐣",
    "name": "Dear",
+   "pronoun": "she",
    "role": "hostess",
    "room": "sunset_dreams",
    "th": "เดียร์"
@@ -639,6 +706,7 @@
    "desc": "A half-step behind the room all night, warm and unfocused, a drink she didn't order already in her hand. The other girls keep an eye on her and finish her sentences. Nobody says the word out loud.",
    "emoji": "🥃",
    "name": "Dew",
+   "pronoun": "she",
    "role": "hostess",
    "room": "golden_dragon",
    "th": "ดิว"
@@ -647,6 +715,7 @@
    "desc": "The mamasan of Hyper A Go-Go — six feet of poise in heels, cheekbones you could open letters with, and a katoey's hard-won certainty that she is the most finished thing in any room. She ran the floor here when it was a dump and stayed to run it now the Samson brothers have made it shine. Nothing on this stage happens that Diamond didn't allow.",
    "emoji": "💎",
    "name": "Diamond",
+   "pronoun": "she",
    "role": "mamasan",
    "room": "hyper",
    "th": "ไดมอนด์"
@@ -655,6 +724,7 @@
    "desc": "The DJ, headphones half-on, nodding to something only partially related to what's playing. His booth is a fortress of stickers and Red Bull cans.",
    "emoji": "🎧",
    "name": "DJ Beer",
+   "pronoun": "he",
    "room": "rainbow_girls",
    "th": "ดีเจเบียร์"
   },
@@ -663,6 +733,7 @@
    "emoji": "🌙",
    "filler": true,
    "name": "Bow",
+   "pronoun": "she",
    "role": "hostess",
    "room": "doghouse",
    "th": "โบว์"
@@ -672,6 +743,7 @@
    "emoji": "💫",
    "filler": true,
    "name": "Dokmai",
+   "pronoun": "she",
    "role": "hostess",
    "room": "night_heron",
    "th": "ดอกไม้"
@@ -680,12 +752,14 @@
    "desc": "Canadian, sixties, a golf tan gone patchy, nursing a rum-and-coke he makes last an hour. Two years ago he wired his retirement into 'the portfolio' — units in White Dish bars, guaranteed returns, a glossy PDF with a leaping logo. He has been drinking that decision at the Stinky ever since. Bert runs him a tab he mostly settles.",
    "emoji": "🥃",
    "name": "Doug",
+   "pronoun": "he",
    "room": "stinky_bar"
   },
   "doyle": {
    "desc": "American, sixty, built like a retired middleweight gone comfortable. Twenty-six years working homicide in a city he won't name, then a private ticket — \"cheating husbands don't try to kill you; I like boring now.\" Drinks soda water and watches the door, out of a habit he's given up pretending is retired. Came to price Thailand for good; found a job following him.",
    "emoji": "🕵️",
    "name": "Doyle",
+   "pronoun": "he",
    "room": "queen_vic",
    "th": "ดอยล์"
   },
@@ -694,6 +768,7 @@
    "emoji": "🍒",
    "filler": true,
    "name": "Duan",
+   "pronoun": "she",
    "role": "hostess",
    "room": "firefly_bar",
    "th": "เดือน"
@@ -703,6 +778,7 @@
    "emoji": "🌸",
    "filler": true,
    "name": "Duang",
+   "pronoun": "she",
    "role": "hostess",
    "room": "sandbar",
    "th": "ดวง"
@@ -712,6 +788,7 @@
    "emoji": "🧾",
    "filler": true,
    "name": "Earn",
+   "pronoun": "she",
    "role": "cashier",
    "room": "club_mirage",
    "th": "เอิร์น"
@@ -721,6 +798,7 @@
    "emoji": "🧾",
    "filler": true,
    "name": "Eye",
+   "pronoun": "she",
    "role": "cashier",
    "room": "crystal_palace",
    "th": "อาย"
@@ -730,6 +808,7 @@
    "emoji": "🌼",
    "filler": true,
    "name": "Fah",
+   "pronoun": "she",
    "role": "hostess",
    "room": "neon_paradise",
    "th": "ฟ้า"
@@ -738,6 +817,7 @@
    "desc": "The one still point in Cherry Pop's chaos — a tom in a snapback, arms folded behind the till, watching the party she is emphatically not part of with the patience of a designated driver.",
    "emoji": "🧾",
    "name": "Fahsai",
+   "pronoun": "she",
    "role": "cashier",
    "room": "cherry_pop",
    "th": "ฟ้าใส"
@@ -747,6 +827,7 @@
    "emoji": "🧾",
    "filler": true,
    "name": "Fai",
+   "pronoun": "she",
    "role": "cashier",
    "room": "paradise_nights",
    "th": "ฝ้าย"
@@ -756,6 +837,7 @@
    "emoji": "🌻",
    "filler": true,
    "name": "Fang",
+   "pronoun": "she",
    "role": "hostess",
    "room": "kinky",
    "th": "แฟง"
@@ -765,6 +847,7 @@
    "emoji": "🧾",
    "filler": true,
    "name": "Farida",
+   "pronoun": "she",
    "role": "cashier",
    "room": "katoeys",
    "th": "ฟาริดา"
@@ -774,6 +857,7 @@
    "emoji": "✨",
    "filler": true,
    "name": "Fasai",
+   "pronoun": "she",
    "role": "hostess",
    "room": "sapphire",
    "th": "ฟ้าใส"
@@ -783,6 +867,7 @@
    "emoji": "🌙",
    "filler": true,
    "name": "Fern",
+   "pronoun": "she",
    "role": "hostess",
    "room": "candy_bar_2",
    "th": "เฟิร์น"
@@ -791,6 +876,7 @@
    "desc": "Shy, half-hiding behind the plants she obviously waters herself. She brightens the instant anyone tries even one word of Thai.",
    "emoji": "🌺",
    "name": "Fon",
+   "pronoun": "she",
    "role": "hostess",
    "room": "jasmine_garden",
    "th": "ฝน"
@@ -800,6 +886,7 @@
    "emoji": "🌷",
    "filler": true,
    "name": "Gaem",
+   "pronoun": "she",
    "role": "hostess",
    "room": "buzz_inn",
    "th": "แก้ม"
@@ -809,6 +896,7 @@
    "emoji": "🧾",
    "filler": true,
    "name": "Gam",
+   "pronoun": "she",
    "role": "cashier",
    "room": "candy_bar",
    "th": "แก้ม"
@@ -817,6 +905,7 @@
    "desc": "A sun-cured expat of indeterminate decade walking an elderly golden retriever. He has the serene look of a man whose 7-Eleven receipts are all groceries now.",
    "emoji": "🎣",
    "name": "Lake Gary",
+   "pronoun": "he",
    "room": "lake_mabprachan",
    "th": "แกรี่"
   },
@@ -824,6 +913,7 @@
    "desc": "Fifties, a golf shirt with a discreet logo, a lager he barely touches and a way of looking at a bar like a spreadsheet. He calls himself an 'area consultant.' Everyone else calls him the White Dish man. He is unfailingly pleasant, which is the unsettling part.",
    "emoji": "🍽️",
    "name": "Gavin",
+   "pronoun": "he",
    "room": "golden_dragon"
   },
   "gib": {
@@ -831,6 +921,7 @@
    "emoji": "✨",
    "filler": true,
    "name": "Gib",
+   "pronoun": "she",
    "role": "hostess",
    "room": "kinky",
    "th": "กิ๊บ"
@@ -839,6 +930,7 @@
    "desc": "Confident, perfect makeup, running the floor of Crystal Palace with the crisp authority of a duty-free manager.",
    "emoji": "💎",
    "name": "Gift",
+   "pronoun": "she",
    "role": "hostess",
    "room": "crystal_palace",
    "th": "กิ๊ฟ"
@@ -848,6 +940,7 @@
    "emoji": "🌸",
    "filler": true,
    "name": "Gig",
+   "pronoun": "she",
    "role": "hostess",
    "room": "arrow_bar",
    "th": "กิ๊ก"
@@ -857,6 +950,7 @@
    "emoji": "💕",
    "filler": true,
    "name": "Gigi",
+   "pronoun": "she",
    "role": "hostess",
    "room": "las_vegas",
    "th": "กีกี้"
@@ -866,6 +960,7 @@
    "emoji": "💐",
    "filler": true,
    "name": "Gina",
+   "pronoun": "she",
    "role": "hostess",
    "room": "the_office",
    "th": "จีน่า"
@@ -875,6 +970,7 @@
    "emoji": "🧾",
    "filler": true,
    "name": "Ging",
+   "pronoun": "she",
    "role": "cashier",
    "room": "lucky_tiger",
    "th": "กิ่ง"
@@ -884,6 +980,7 @@
    "emoji": "🌻",
    "filler": true,
    "name": "Gof",
+   "pronoun": "she",
    "role": "hostess",
    "room": "doghouse",
    "th": "กอฟ"
@@ -893,6 +990,7 @@
    "emoji": "🧾",
    "filler": true,
    "name": "Golf",
+   "pronoun": "she",
    "role": "cashier",
    "room": "tequila_queen",
    "th": "กอล์ฟ"
@@ -902,6 +1000,7 @@
    "emoji": "🍒",
    "filler": true,
    "name": "Goong",
+   "pronoun": "she",
    "role": "hostess",
    "room": "honey_trap",
    "th": "กุ้ง"
@@ -911,6 +1010,7 @@
    "emoji": "🧾",
    "filler": true,
    "name": "Grace",
+   "pronoun": "she",
    "role": "cashier",
    "room": "silk_rose",
    "th": "เกรซ"
@@ -920,6 +1020,7 @@
    "emoji": "🍒",
    "filler": true,
    "name": "Guitar",
+   "pronoun": "she",
    "role": "hostess",
    "room": "rabbit_hole",
    "th": "กีตาร์"
@@ -928,6 +1029,7 @@
    "desc": "Malila's younger sister and the Verandah's cashier, cut from the same easygoing cloth — she runs the till the way the bar runs everything, slowly and kindly, and always has a bowl of peanuts within reach.",
    "emoji": "🧾",
    "name": "Haad",
+   "pronoun": "she",
    "role": "cashier",
    "room": "sandy_toes",
    "th": "หาด"
@@ -937,6 +1039,7 @@
    "emoji": "🧾",
    "filler": true,
    "name": "Hong",
+   "pronoun": "she",
    "role": "cashier",
    "room": "jasmine_garden",
    "th": "ห่อง"
@@ -946,6 +1049,7 @@
    "emoji": "💫",
    "filler": true,
    "name": "Ice",
+   "pronoun": "she",
    "role": "hostess",
    "room": "tequila_queen",
    "th": "ไอซ์"
@@ -955,6 +1059,7 @@
    "emoji": "🌺",
    "filler": true,
    "name": "Ing",
+   "pronoun": "she",
    "role": "hostess",
    "room": "blue_dog",
    "th": "อิง"
@@ -964,6 +1069,7 @@
    "emoji": "🧾",
    "filler": true,
    "name": "Jah",
+   "pronoun": "she",
    "role": "cashier",
    "room": "gold_rush",
    "th": "จ๊ะ"
@@ -973,6 +1079,7 @@
    "emoji": "🍒",
    "filler": true,
    "name": "Jaja",
+   "pronoun": "she",
    "role": "hostess",
    "room": "mooring_bar",
    "th": "จาจา"
@@ -982,6 +1089,7 @@
    "emoji": "💫",
    "filler": true,
    "name": "Jampa",
+   "pronoun": "she",
    "role": "hostess",
    "room": "night_heron",
    "th": "จำปา"
@@ -990,6 +1098,7 @@
    "desc": "A hostess at Las Vegas, sitting on the end of the bar with her legs crossed and a cocktail she's been nursing since before you arrived. She has the relaxed energy of someone who has already decided tonight will be fine.",
    "emoji": "⭐",
    "name": "Jane",
+   "pronoun": "she",
    "role": "hostess",
    "room": "las_vegas",
    "th": "เจน"
@@ -999,6 +1108,7 @@
    "emoji": "👑",
    "filler": true,
    "name": "Jeab",
+   "pronoun": "she",
    "role": "mamasan",
    "room": "neon_paradise",
    "th": "เจี๊ยบ"
@@ -1008,6 +1118,7 @@
    "emoji": "🧾",
    "filler": true,
    "name": "Jeed",
+   "pronoun": "she",
    "role": "cashier",
    "room": "starlight_bar",
    "th": "จี๊ด"
@@ -1016,6 +1127,7 @@
    "desc": "Neat, quick with the till, a promise ring she touches when she's thinking. She took the cashier seat on purpose — off the floor, off the market, kept clean for the man in Germany who sends the money.",
    "emoji": "🧾",
    "name": "Jenny",
+   "pronoun": "she",
    "role": "cashier",
    "room": "pink_lotus",
    "th": "เจนนี่"
@@ -1025,6 +1137,7 @@
    "emoji": "🌻",
    "filler": true,
    "name": "Jiab",
+   "pronoun": "she",
    "role": "hostess",
    "room": "honey_trap",
    "th": "เจี๊ยบ"
@@ -1034,6 +1147,7 @@
    "emoji": "🦋",
    "filler": true,
    "name": "Jib",
+   "pronoun": "she",
    "role": "hostess",
    "room": "the_growler",
    "th": "จิ๊บ"
@@ -1043,6 +1157,7 @@
    "emoji": "🌷",
    "filler": true,
    "name": "Jinda",
+   "pronoun": "she",
    "role": "hostess",
    "room": "orchid_club",
    "th": "จินดา"
@@ -1052,6 +1167,7 @@
    "emoji": "👑",
    "filler": true,
    "name": "Jom",
+   "pronoun": "she",
    "role": "mamasan",
    "room": "starlight_bar",
    "th": "จอม"
@@ -1060,6 +1176,7 @@
    "desc": "Short hair, men's watch, a handshake instead of a wai, running Golden Dragon's till like a foreman. A tom, and entirely uninterested in being anything else for your benefit.",
    "emoji": "🧾",
    "name": "Joon",
+   "pronoun": "she",
    "role": "cashier",
    "room": "golden_dragon",
    "th": "จูน"
@@ -1069,6 +1186,7 @@
    "emoji": "💕",
    "name": "Joy",
    "personality": "joker",
+   "pronoun": "she",
    "role": "hostess",
    "room": "pink_lotus",
    "th": "จอย"
@@ -1078,6 +1196,7 @@
    "emoji": "🌙",
    "filler": true,
    "name": "Ju",
+   "pronoun": "she",
    "role": "hostess",
    "room": "amp_room",
    "th": "จู"
@@ -1087,6 +1206,7 @@
    "emoji": "💕",
    "filler": true,
    "name": "Jum",
+   "pronoun": "she",
    "role": "hostess",
    "room": "slutty",
    "th": "จุ๋ม"
@@ -1095,6 +1215,7 @@
    "desc": "Malai's daughter, home from a Bangkok college for the season and minding her mother's till — polite, sharp, and quietly counting the months until she never has to do this again.",
    "emoji": "🧾",
    "name": "Jun",
+   "pronoun": "she",
    "role": "cashier",
    "room": "sunset_dreams",
    "th": "จัน"
@@ -1104,6 +1225,7 @@
    "emoji": "🌷",
    "filler": true,
    "name": "June",
+   "pronoun": "she",
    "role": "hostess",
    "room": "velvet_club",
    "th": "จูน"
@@ -1113,6 +1235,7 @@
    "emoji": "🌼",
    "filler": true,
    "name": "Kade",
+   "pronoun": "she",
    "role": "hostess",
    "room": "arrow_bar",
    "th": "เกด"
@@ -1122,6 +1245,7 @@
    "emoji": "🌻",
    "filler": true,
    "name": "Kaew",
+   "pronoun": "she",
    "role": "hostess",
    "room": "paradise_nights",
    "th": "แก้ว"
@@ -1130,6 +1254,7 @@
    "desc": "Warmer than the room and faster than the room — your name inside a minute, both her hands around yours inside two. It is a very good act. She is very good at it.",
    "emoji": "💅",
    "name": "Kai",
+   "pronoun": "she",
    "role": "hostess",
    "room": "golden_dragon",
    "th": "ไก่"
@@ -1139,6 +1264,7 @@
    "emoji": "🧾",
    "filler": true,
    "name": "Kaimook",
+   "pronoun": "she",
    "role": "cashier",
    "room": "slutty",
    "th": "ไข่มุก"
@@ -1148,6 +1274,7 @@
    "emoji": "🧾",
    "filler": true,
    "name": "Kanom",
+   "pronoun": "she",
    "role": "cashier",
    "room": "las_vegas",
    "th": "ขนม"
@@ -1157,6 +1284,7 @@
    "emoji": "🧾",
    "filler": true,
    "name": "Kanya",
+   "pronoun": "she",
    "role": "cashier",
    "room": "orchid_club",
    "th": "กัญญา"
@@ -1165,6 +1293,7 @@
    "desc": "The loudest laugh in the bar at nine, and by midnight the one the others are steering away from the edge of things. Great fun for exactly ninety minutes.",
    "emoji": "🍸",
    "name": "Kat",
+   "pronoun": "she",
    "role": "hostess",
    "room": "sunset_dreams",
    "th": "แคท"
@@ -1174,6 +1303,7 @@
    "emoji": "🧾",
    "filler": true,
    "name": "Keng",
+   "pronoun": "she",
    "role": "cashier",
    "room": "khao_talo_bar",
    "th": "เก่ง"
@@ -1182,6 +1312,7 @@
    "desc": "The Kitten Corner's mama-san — twenty years on this soi, gold at the wrist, a gaze that prices you before you sit. She ran this bar back when it was hers to run; now there's a logo on the menu and a target on the till, and she is very careful who she says that to.",
    "emoji": "🐱",
    "name": "Kesinee",
+   "pronoun": "she",
    "role": "mamasan",
    "room": "kitten_corner",
    "th": "เกสินี"
@@ -1195,6 +1326,7 @@
    "desc": "The madam of Soi Honey — sixties, gold everywhere, a voice like a till drawer. She owns all three beer bars on the lane and works them one night at a time, so the girls never quite know which bar mama is watching.",
    "emoji": "👑",
    "name": "Kesorn",
+   "pronoun": "she",
    "role": "mamasan",
    "room": "honey_trap",
    "th": "เกสร"
@@ -1204,6 +1336,7 @@
    "emoji": "🌙",
    "filler": true,
    "name": "Khing",
+   "pronoun": "she",
    "role": "hostess",
    "room": "blue_dog",
    "th": "ขิง"
@@ -1213,6 +1346,7 @@
    "emoji": "🦋",
    "filler": true,
    "name": "Kaew",
+   "pronoun": "she",
    "role": "hostess",
    "room": "kingfisher",
    "th": "แก้ว"
@@ -1222,6 +1356,7 @@
    "emoji": "🧾",
    "filler": true,
    "name": "Noey",
+   "pronoun": "she",
    "role": "cashier",
    "room": "kingfisher",
    "th": "เนย"
@@ -1231,6 +1366,7 @@
    "emoji": "🌷",
    "filler": true,
    "name": "Praew",
+   "pronoun": "she",
    "role": "hostess",
    "room": "kingfisher",
    "th": "แพรว"
@@ -1240,6 +1376,7 @@
    "emoji": "👑",
    "filler": true,
    "name": "Somsri",
+   "pronoun": "she",
    "role": "mamasan",
    "room": "kingfisher",
    "th": "สมศรี"
@@ -1248,6 +1385,7 @@
    "desc": "The mamasan, and the owner's wife, and by a distance the most organised person in the building — fifties, hair up, reading glasses on a chain, a till roll in one hand. She named nothing after herself; her husband did that, and she has been quietly embarrassed about it since 1996. Runs a floor where nothing is ever explained twice.",
    "emoji": "👑",
    "name": "Kinnaree",
+   "pronoun": "she",
    "role": "mamasan",
    "room": "succubus"
   },
@@ -1255,6 +1393,7 @@
    "desc": "Pretty and profoundly unbothered, one of Wilai's front-stool pair, mostly here in body. She'll take the drink. She will not be chasing it.",
    "emoji": "🍌",
    "name": "Kluay",
+   "pronoun": "she",
    "role": "hostess",
    "room": "ruby_kiss",
    "th": "กล้วย"
@@ -1264,6 +1403,7 @@
    "emoji": "👑",
    "filler": true,
    "name": "Kob",
+   "pronoun": "she",
    "role": "mamasan",
    "room": "paradise_nights",
    "th": "กบ"
@@ -1273,6 +1413,7 @@
    "emoji": "👑",
    "filler": true,
    "name": "Koi",
+   "pronoun": "she",
    "role": "mamasan",
    "room": "midnight_sun",
    "th": "ก้อย"
@@ -1281,6 +1422,7 @@
    "desc": "Late thirties and entirely unbothered by it — quick-eyed, a laugh like a dropped tray, a beer already sliding toward you. Mama Yai's right hand: she pours, she counts, she misses nothing, and she heard your story before you sat down.",
    "emoji": "🐿️",
    "name": "Kratae",
+   "pronoun": "she",
    "role": "hostess",
    "room": "mama_yai",
    "th": "กระแต"
@@ -1289,6 +1431,7 @@
    "desc": "Gentle, soft-voiced, folding paper napkins into birds while the soi roars outside.",
    "emoji": "🦋",
    "name": "Kwan",
+   "pronoun": "she",
    "role": "hostess",
    "room": "sunset_dreams",
    "th": "ขวัญ"
@@ -1298,6 +1441,7 @@
    "emoji": "💕",
    "filler": true,
    "name": "Kwang",
+   "pronoun": "she",
    "role": "hostess",
    "room": "rock_factory",
    "th": "กวาง"
@@ -1307,6 +1451,7 @@
    "emoji": "👑",
    "filler": true,
    "name": "Lamai",
+   "pronoun": "she",
    "role": "mamasan",
    "room": "stinky_bar",
    "th": "ละมัย"
@@ -1321,6 +1466,7 @@
    "desc": "The grande dame of Soi Diana — a former Crystal Palace headliner who hung up the heels and parlayed twenty years on the stage into four beer bars on the busiest drinking soi in town. Silk, jade, a gaze that prices you before you've sat down. She works a different one of her houses each night, and the girls behave accordingly.",
    "emoji": "👑",
    "name": "Lawan",
+   "pronoun": "she",
    "role": "mamasan",
    "room": "dollhouse",
    "th": "ลาวัลย์"
@@ -1329,6 +1475,7 @@
    "desc": "Petite, bright smile, glittery earrings catching the bar lights. She's beating two customers at pool simultaneously.",
    "emoji": "💃",
    "name": "Lek",
+   "pronoun": "she",
    "role": "hostess",
    "room": "lucky_tiger",
    "th": "เล็ก"
@@ -1338,6 +1485,7 @@
    "emoji": "🌸",
    "filler": true,
    "name": "Lin",
+   "pronoun": "she",
    "role": "hostess",
    "room": "water_buffalo",
    "th": "หลิน"
@@ -1347,6 +1495,7 @@
    "emoji": "🌙",
    "filler": true,
    "name": "Lukkade",
+   "pronoun": "she",
    "role": "hostess",
    "room": "cricketers",
    "th": "ลูกเกด"
@@ -1355,6 +1504,7 @@
    "desc": "Scouse, fifty-three, twenty-two years an electrician and then a letter and a cheque with more noughts than he's ever seen at once. First time abroad that isn't Spain, first time in his life with no shift in the morning, and it's gone to his head like sunshine. Buys rounds for strangers. Means every word. Hasn't yet met the version of this town that isn't his friend.",
    "emoji": "⚡",
    "name": "Macca",
+   "pronoun": "he",
    "room": "sunset_dreams",
    "th": "แม็คก้า"
   },
@@ -1363,6 +1513,7 @@
    "emoji": "🌸",
    "filler": true,
    "name": "Mai",
+   "pronoun": "she",
    "role": "hostess",
    "room": "candy_bar_2",
    "th": "ใหม่"
@@ -1372,6 +1523,7 @@
    "emoji": "🦚",
    "name": "Miss Mala",
    "personality": "charmer",
+   "pronoun": "she",
    "role": "mamasan",
    "room": "peacock_cabaret",
    "th": "มาลา"
@@ -1380,6 +1532,7 @@
    "desc": "Soft-spoken and grandmotherly, Sunset Dreams' mamasan pours you tea and asks after your health, and somewhere in the warmth your wallet opens without a sound. The gentlest operator on the soi.",
    "emoji": "👑",
    "name": "Malai",
+   "pronoun": "she",
    "role": "mamasan",
    "room": "sunset_dreams",
    "th": "มาลัย"
@@ -1388,6 +1541,7 @@
    "desc": "The cashier — cropped hair, black polo, a lanyard with what looks like seventeen keys. She runs the KINKY till with the detached authority of someone who's counted more money than you've seen and found it unremarkable.",
    "emoji": "⚡",
    "name": "Malee",
+   "pronoun": "she",
    "role": "cashier",
    "room": "kinky",
    "th": "มาลี"
@@ -1396,6 +1550,7 @@
    "desc": "The Verandah's mamasan, who runs the most easygoing bar on Soi 6 like a long Sunday lunch — Nina feeds the customers, Malila makes sure everyone's alright, and the money, such as it is, sees to itself.",
    "emoji": "👑",
    "name": "Malila",
+   "pronoun": "she",
    "role": "mamasan",
    "room": "sandy_toes",
    "th": "มะลิลา"
@@ -1405,6 +1560,7 @@
    "emoji": "🌼",
    "filler": true,
    "name": "Mam",
+   "pronoun": "she",
    "role": "hostess",
    "room": "craft_cargo",
    "th": "แหม่ม"
@@ -1414,6 +1570,7 @@
    "emoji": "🌺",
    "filler": true,
    "name": "Manow",
+   "pronoun": "she",
    "role": "hostess",
    "room": "stinky_bar",
    "th": "มะนาว"
@@ -1422,6 +1579,7 @@
    "desc": "Soft, unhurried, genuinely pleased to see you — no angle you can find, because there isn't one. Exactly as nice as she seems, which on this soi is its own kind of rare.",
    "emoji": "🌼",
    "name": "May",
+   "pronoun": "she",
    "role": "hostess",
    "room": "sunset_dreams",
    "th": "เมย์"
@@ -1431,6 +1589,7 @@
    "emoji": "✨",
    "filler": true,
    "name": "Meaw",
+   "pronoun": "she",
    "role": "hostess",
    "room": "paradise_nights",
    "th": "เหมียว"
@@ -1440,6 +1599,7 @@
    "emoji": "💐",
    "filler": true,
    "name": "Meen",
+   "pronoun": "she",
    "role": "hostess",
    "room": "queen_bee",
    "th": "มีน"
@@ -1449,6 +1609,7 @@
    "emoji": "💫",
    "filler": true,
    "name": "Mek",
+   "pronoun": "she",
    "role": "hostess",
    "room": "moonshine_bar",
    "th": "เมฆ"
@@ -1457,6 +1618,7 @@
    "desc": "The Tequila Queen's mamasan — silver-streaked chignon, reading glasses on a gold chain, and a stage presence undimmed since she headlined this same room in another century. The dancers call her 'Khun Mae'. So do some customers.",
    "emoji": "👵",
    "name": "Mamasan Mem",
+   "pronoun": "she",
    "role": "mamasan",
    "room": "tequila_queen",
    "th": "เม้ม"
@@ -1466,6 +1628,7 @@
    "emoji": "❄️",
    "name": "Mercedes",
    "personality": "operator",
+   "pronoun": "she",
    "role": "hostess",
    "room": "cherry_pop",
    "th": "เมอร์เซเดส"
@@ -1475,6 +1638,7 @@
    "emoji": "💕",
    "filler": true,
    "name": "Mild",
+   "pronoun": "she",
    "role": "hostess",
    "room": "starlight_bar",
    "th": "มายด์"
@@ -1484,6 +1648,7 @@
    "emoji": "🌼",
    "filler": true,
    "name": "Milin",
+   "pronoun": "she",
    "role": "hostess",
    "room": "pit_stop",
    "th": "มิลิน"
@@ -1493,6 +1658,7 @@
    "emoji": "🌼",
    "filler": true,
    "name": "Milk",
+   "pronoun": "she",
    "role": "hostess",
    "room": "velvet_club",
    "th": "มิ้ลค์"
@@ -1502,6 +1668,7 @@
    "emoji": "🌺",
    "filler": true,
    "name": "Min",
+   "pronoun": "she",
    "role": "hostess",
    "room": "the_boardroom",
    "th": "มิน"
@@ -1510,6 +1677,7 @@
    "desc": "Small and careful, a dancer's economy to every movement — the girl from a certain Danish backpacker's lock screen, though she has no idea she's on it. Twenty-two, and older than that in the ways that pay the rent.",
    "emoji": "💗",
    "name": "Mind",
+   "pronoun": "she",
    "role": "hostess",
    "room": "neon_paradise",
    "th": "มายด์"
@@ -1519,6 +1687,7 @@
    "emoji": "🧾",
    "filler": true,
    "name": "Mon",
+   "pronoun": "she",
    "role": "cashier",
    "room": "night_heron",
    "th": "มล"
@@ -1528,6 +1697,7 @@
    "emoji": "💐",
    "filler": true,
    "name": "Mona",
+   "pronoun": "she",
    "role": "hostess",
    "room": "cheeky_monkey",
    "th": "โมนา"
@@ -1537,6 +1707,7 @@
    "emoji": "✨",
    "filler": true,
    "name": "Mook",
+   "pronoun": "she",
    "role": "hostess",
    "room": "tequila_queen",
    "th": "มุก"
@@ -1546,6 +1717,7 @@
    "emoji": "🌸",
    "filler": true,
    "name": "Mookda",
+   "pronoun": "she",
    "role": "hostess",
    "room": "sandbar",
    "th": "มุกดา"
@@ -1554,6 +1726,7 @@
    "desc": "A skinny kid in a fake Barça shirt, materialising from behind the kegs only after word got around that you're not the swinging type. Quick eyes, quicker feet.",
    "emoji": "🐜",
    "name": "Mot",
+   "pronoun": "he",
    "room": "ws_alley",
    "th": "มด"
   },
@@ -1562,6 +1735,7 @@
    "emoji": "👑",
    "filler": true,
    "name": "Muay",
+   "pronoun": "she",
    "role": "mamasan",
    "room": "rock_factory",
    "th": "หมวย"
@@ -1571,6 +1745,7 @@
    "emoji": "🌻",
    "filler": true,
    "name": "Nam",
+   "pronoun": "she",
    "role": "hostess",
    "room": "club_mirage",
    "th": "น้ำ"
@@ -1580,6 +1755,7 @@
    "emoji": "🌼",
    "filler": true,
    "name": "Namfon",
+   "pronoun": "she",
    "role": "hostess",
    "room": "anchor_bar",
    "th": "น้ำฝน"
@@ -1589,6 +1765,7 @@
    "emoji": "💐",
    "filler": true,
    "name": "Namo",
+   "pronoun": "she",
    "role": "hostess",
    "room": "seabreeze",
    "th": "นะโม"
@@ -1598,6 +1775,7 @@
    "emoji": "💐",
    "filler": true,
    "name": "Namphueng",
+   "pronoun": "she",
    "role": "hostess",
    "room": "buzz_inn",
    "th": "น้ำผึ้ง"
@@ -1607,6 +1785,7 @@
    "emoji": "🌼",
    "filler": true,
    "name": "Namtan",
+   "pronoun": "she",
    "role": "hostess",
    "room": "khao_talo_bar",
    "th": "น้ำตาล"
@@ -1616,6 +1795,7 @@
    "emoji": "💐",
    "filler": true,
    "name": "Namtip",
+   "pronoun": "she",
    "role": "hostess",
    "room": "lucky_charm",
    "th": "น้ำทิพย์"
@@ -1625,6 +1805,7 @@
    "emoji": "✨",
    "filler": true,
    "name": "Namwan",
+   "pronoun": "she",
    "role": "hostess",
    "room": "las_vegas",
    "th": "น้ำหวาน"
@@ -1634,6 +1815,7 @@
    "emoji": "💫",
    "filler": true,
    "name": "Nan",
+   "pronoun": "she",
    "role": "hostess",
    "room": "candy_bar",
    "th": "แนน"
@@ -1642,6 +1824,7 @@
    "desc": "Composed in a way the room isn't, watching more than she performs. There's a textbook in her bag under the going-out clothes, and she'd rather you didn't make a thing of it.",
    "emoji": "⭐",
    "name": "Nangfah",
+   "pronoun": "she",
    "role": "hostess",
    "room": "kitten_corner",
    "th": "นางฟ้า"
@@ -1651,6 +1834,7 @@
    "emoji": "💐",
    "filler": true,
    "name": "Naree",
+   "pronoun": "she",
    "role": "hostess",
    "room": "windmill",
    "th": "นารี"
@@ -1660,6 +1844,7 @@
    "emoji": "💕",
    "filler": true,
    "name": "Near",
+   "pronoun": "she",
    "role": "hostess",
    "room": "metro_garden",
    "th": "เนียร์"
@@ -1668,6 +1853,7 @@
    "desc": "The flagship's mamasan: still, precise, a tablet where another mama keeps a smile. She runs Pink Lotus like the asset it is on White Dish's books, and she priced you before you sat down.",
    "emoji": "👑",
    "name": "Nee",
+   "pronoun": "she",
    "role": "mamasan",
    "room": "pink_lotus",
    "th": "หนี่"
@@ -1677,6 +1863,7 @@
    "emoji": "💐",
    "filler": true,
    "name": "Nice",
+   "pronoun": "she",
    "role": "hostess",
    "room": "kinky",
    "th": "ไนซ์"
@@ -1686,6 +1873,7 @@
    "emoji": "🌼",
    "filler": true,
    "name": "Nid",
+   "pronoun": "she",
    "role": "hostess",
    "room": "silk_rose",
    "th": "นิด"
@@ -1695,6 +1883,7 @@
    "emoji": "🌺",
    "filler": true,
    "name": "Nim",
+   "pronoun": "she",
    "role": "hostess",
    "room": "water_buffalo",
    "th": "นิ่ม"
@@ -1703,6 +1892,7 @@
    "desc": "A little older than the rail usually runs, and she mothers the whole bar — the young girls, the drunk regulars, and, within about four minutes, you. You'll have eaten something before you leave.",
    "emoji": "🍲",
    "name": "Nina",
+   "pronoun": "she",
    "role": "hostess",
    "room": "sandy_toes",
    "th": "นีน่า"
@@ -1711,6 +1901,7 @@
    "desc": "A dancer who watches the room the way the mamasan does — the best English on the stage and a calculator behind her eyes. She smiles like she has already worked out your monthly salary and rounded it down.",
    "emoji": "💵",
    "name": "Nira",
+   "pronoun": "she",
    "role": "hostess",
    "room": "neon_paradise",
    "th": "นิรา"
@@ -1719,6 +1910,7 @@
    "desc": "Mid-thirties, upcountry-neat, working the fabric stalls with the practised eye of a woman who buys to sell. Two checked laundry bags of folded cotton already at her feet. Something in the way she reads the market — which vendors she wais, which she doesn't — says she worked a soi like this once, and left it on her own terms.",
    "emoji": "🧵",
    "name": "Nit",
+   "pronoun": "she",
    "room": "night_bazaar",
    "th": "นิด"
   },
@@ -1727,6 +1919,7 @@
    "emoji": "💕",
    "filler": true,
    "name": "Nittaya",
+   "pronoun": "she",
    "role": "hostess",
    "room": "coconut",
    "th": "นิตยา"
@@ -1736,6 +1929,7 @@
    "emoji": "💫",
    "filler": true,
    "name": "Noey",
+   "pronoun": "she",
    "role": "hostess",
    "room": "hyper",
    "th": "เนย"
@@ -1744,6 +1938,7 @@
    "desc": "Tall, long dark hair, a knowing look that suggests she's already guessed why you're here and finds it funny.",
    "emoji": "🌸",
    "name": "Noi",
+   "pronoun": "she",
    "role": "hostess",
    "room": "neon_paradise",
    "th": "น้อย"
@@ -1752,6 +1947,7 @@
    "desc": "A drinks-cart vendor with a cooler of everything and opinions to match. A hand-lettered sign on the cart offers ฿5 per returned bottle.",
    "emoji": "🥭",
    "name": "Auntie Nok",
+   "pronoun": "she",
    "room": "jomtien_soi_7_beach_end",
    "th": "น้อยหน่า"
   },
@@ -1759,6 +1955,7 @@
    "desc": "Sweet, visibly new — first week on the soi — checking her phone between customers and startling whenever the door opens.",
    "emoji": "🌸",
    "name": "Nong",
+   "pronoun": "she",
    "role": "hostess",
    "room": "gold_rush",
    "th": "น้อง"
@@ -1767,6 +1964,7 @@
    "desc": "Twenty-two and delighted about all of it — the music, the lights, the free drinks, the men who think she is magic. She is having the best night of her life. Again.",
    "emoji": "🍒",
    "name": "Nook",
+   "pronoun": "she",
    "role": "hostess",
    "room": "golden_dragon",
    "th": "นุ้ก"
@@ -1776,6 +1974,7 @@
    "emoji": "🌻",
    "filler": true,
    "name": "Noon",
+   "pronoun": "she",
    "role": "hostess",
    "room": "jasmine_garden",
    "th": "นุ่น"
@@ -1785,6 +1984,7 @@
    "emoji": "🧾",
    "filler": true,
    "name": "Noot",
+   "pronoun": "she",
    "role": "cashier",
    "room": "succubus",
    "th": "นุช"
@@ -1793,6 +1993,7 @@
    "desc": "The Adonis Club's papasan — forties, immaculate, a silk shirt open one button past advisable and a smile that has closed a thousand deals. He runs his boys like a talent agent and reads a room's wallet before its face.",
    "emoji": "🕴️",
    "name": "Nott",
+   "pronoun": "he",
    "room": "adonis_club",
    "th": "นนท์"
   },
@@ -1800,6 +2001,7 @@
    "desc": "Front Row's cashier, a tom in a footy shirt matching Somo's, the two of them running the bar like a five-a-side team — one on the beer, one on the money, both shouting at the ref.",
    "emoji": "🧾",
    "name": "Nu",
+   "pronoun": "she",
    "role": "cashier",
    "room": "bay_watch",
    "th": "หนู"
@@ -1809,6 +2011,7 @@
    "emoji": "🧾",
    "filler": true,
    "name": "Nubnab",
+   "pronoun": "she",
    "role": "cashier",
    "room": "windmill",
    "th": "นับหนับ"
@@ -1817,6 +2020,7 @@
    "desc": "The Shady Lady's cashier, comfortable and unbothered, running an honest till at an honest bar — the numbers are small, the trouble is smaller, and that suits her exactly.",
    "emoji": "🧾",
    "name": "Numfon",
+   "pronoun": "she",
    "role": "cashier",
    "room": "sunset_rail",
    "th": "น้ำฝน"
@@ -1826,6 +2030,7 @@
    "emoji": "🌙",
    "filler": true,
    "name": "Nut",
+   "pronoun": "she",
    "role": "hostess",
    "room": "midnight_sun",
    "th": "นัท"
@@ -1835,6 +2040,7 @@
    "emoji": "🌺",
    "filler": true,
    "name": "Oat",
+   "pronoun": "she",
    "role": "hostess",
    "room": "lucky_tiger",
    "th": "โอ๊ต"
@@ -1844,6 +2050,7 @@
    "emoji": "✨",
    "filler": true,
    "name": "Ohm",
+   "pronoun": "she",
    "role": "hostess",
    "room": "dollhouse",
    "th": "โอม"
@@ -1853,6 +2060,7 @@
    "emoji": "👑",
    "filler": true,
    "name": "Orm",
+   "pronoun": "she",
    "role": "mamasan",
    "room": "gold_rush",
    "th": "อ้อม"
@@ -1862,6 +2070,7 @@
    "emoji": "💫",
    "filler": true,
    "name": "Orn",
+   "pronoun": "she",
    "role": "hostess",
    "room": "las_vegas",
    "th": "อร"
@@ -1870,6 +2079,7 @@
    "desc": "The Mamasan. Undefeated since 2009. She surveys her flagship from the end of the bar with the stillness of someone who owns the building, two more like it, and three condos. You have the sudden feeling your posture is being graded.",
    "emoji": "👑",
    "name": "Madam Oy",
+   "pronoun": "she",
    "role": "mamasan",
    "room": "rainbow_girls",
    "th": "ออย"
@@ -1879,6 +2089,7 @@
    "emoji": "💋",
    "name": "Pancake",
    "personality": "charmer",
+   "pronoun": "she",
    "role": "hostess",
    "room": "katoeys",
    "th": "แพนเค้ก"
@@ -1888,6 +2099,7 @@
    "emoji": "🌷",
    "filler": true,
    "name": "Pang",
+   "pronoun": "she",
    "role": "hostess",
    "room": "rainbow_girls",
    "th": "แป้ง"
@@ -1897,6 +2109,7 @@
    "emoji": "💕",
    "filler": true,
    "name": "Pao",
+   "pronoun": "she",
    "role": "hostess",
    "room": "sundowner",
    "th": "เป้า"
@@ -1906,6 +2119,7 @@
    "emoji": "💐",
    "filler": true,
    "name": "Pat",
+   "pronoun": "she",
    "role": "hostess",
    "room": "feedback_bar",
    "th": "แพท"
@@ -1915,6 +2129,7 @@
    "emoji": "🍒",
    "filler": true,
    "name": "Pear",
+   "pronoun": "she",
    "role": "hostess",
    "room": "orchid_club",
    "th": "แพร์"
@@ -1924,6 +2139,7 @@
    "emoji": "👑",
    "filler": true,
    "name": "Pen",
+   "pronoun": "she",
    "role": "mamasan",
    "room": "blue_dog",
    "th": "เพ็ญ"
@@ -1932,6 +2148,7 @@
    "desc": "Fifty-odd, iron thumbs, reading glasses on a beaded chain. Pensri has run the front of this shop twenty years and can tell where you hurt before you sit down.",
    "emoji": "💆",
    "name": "Pensri",
+   "pronoun": "she",
    "room": "thai_massage"
   },
   "petch": {
@@ -1939,6 +2156,7 @@
    "emoji": "💎",
    "name": "Petch",
    "personality": "joker",
+   "pronoun": "she",
    "role": "hostess",
    "room": "peacock_cabaret",
    "th": "เพชร"
@@ -1947,6 +2165,7 @@
    "desc": "English, fifties, the kind of grey you go when you've stopped sleeping properly. Sits where he can see who comes in, drinks slow, gives nothing. Calls himself Pete, and it's a good enough name. Whatever he left behind, he left it fast and he left it whole — Pattaya never asks for references, which is the entire reason he's on this stool and not another.",
    "emoji": "🚬",
    "name": "Pete",
+   "pronoun": "he",
    "room": "sandy_toes",
    "th": "พีท"
   },
@@ -1954,6 +2173,7 @@
    "desc": "Golden Dragon's mamasan since before White Dish bought the paper — and she stayed on when they did, because the numbers didn't care who owned them, and neither, in the end, does she.",
    "emoji": "👑",
    "name": "Peung",
+   "pronoun": "she",
    "role": "mamasan",
    "room": "golden_dragon",
    "th": "ผึ้ง"
@@ -1962,6 +2182,7 @@
    "desc": "Mid-fifties, a fleece vest in the Pattaya heat, {{phone}} face-down on the bar in the specific way of a man waiting for a message he wants and dreads in equal measure. Bristol accent. He has the look of someone who has been coming here for long enough that 'holiday romance' stopped fitting years ago.",
    "emoji": "📱",
    "name": "Phil",
+   "pronoun": "he",
    "room": "stinky_bar",
    "th": "ฟิล"
   },
@@ -1969,6 +2190,7 @@
    "desc": "Deadpan and unbothered, ten years behind the Golden Dragon's bar and the unofficial keeper of its dead jukebox's memory. She has heard every line and rates them out of ten, silently, and you will never know your score.",
    "emoji": "🐉",
    "name": "Pia",
+   "pronoun": "she",
    "role": "hostess",
    "room": "golden_dragon",
    "th": "เปีย"
@@ -1977,6 +2199,7 @@
    "desc": "Five years behind this bar and never once paid for her own drink. She looks you over like a customs officer with a sense of humour.",
    "emoji": "💋",
    "name": "Pim",
+   "pronoun": "she",
    "role": "hostess",
    "room": "starlight_bar",
    "th": "พิม"
@@ -1985,6 +2208,7 @@
    "desc": "Cheerful, sparkly top throwing glitter across the wall, never stops smiling even when shouting drink orders over the bass.",
    "emoji": "✨",
    "name": "Ping",
+   "pronoun": "she",
    "role": "hostess",
    "room": "paradise_nights",
    "th": "ปิง"
@@ -1994,6 +2218,7 @@
    "emoji": "🦋",
    "filler": true,
    "name": "Pinky",
+   "pronoun": "she",
    "role": "hostess",
    "room": "cheeky_monkey",
    "th": "พิงกี้"
@@ -2003,6 +2228,7 @@
    "emoji": "👑",
    "filler": true,
    "name": "Ple",
+   "pronoun": "she",
    "role": "mamasan",
    "room": "jasmine_garden",
    "th": "เปิ้ล"
@@ -2012,6 +2238,7 @@
    "emoji": "🌷",
    "filler": true,
    "name": "Ploen",
+   "pronoun": "she",
    "role": "hostess",
    "room": "rainbow_girls",
    "th": "เพลิน"
@@ -2020,6 +2247,7 @@
    "desc": "The cashier, in a cage of fairy lights, counting money with impossible speed. Former dancer's posture; engagement ring worn on a chain. Her boyfriend doesn't love her working here, so the cage suits everyone.",
    "emoji": "💐",
    "name": "Ploy",
+   "pronoun": "she",
    "role": "cashier",
    "room": "rainbow_girls",
    "th": "พลอย"
@@ -2029,6 +2257,7 @@
    "emoji": "💫",
    "filler": true,
    "name": "Poom",
+   "pronoun": "she",
    "role": "hostess",
    "room": "sundowner",
    "th": "ภูมิ"
@@ -2038,6 +2267,7 @@
    "emoji": "🌸",
    "filler": true,
    "name": "Pop",
+   "pronoun": "she",
    "role": "hostess",
    "room": "slutty",
    "th": "ป๊อป"
@@ -2046,12 +2276,14 @@
    "desc": "Late thirties dressed for late twenties: a linen shirt one button too honest, a watch that wants to be noticed, sunglasses on indoors at midnight. He films himself more than he talks and talks more than he listens. Up close, the empire is just a man who has never once been told no by anyone he pays.",
    "emoji": "🕶️",
    "name": "Ryan Powers",
+   "pronoun": "he",
    "room": "orchid_room"
   },
   "poy": {
    "desc": "Softly spoken and glamorously done up, and decent enough to say it at hello — she would rather tell you straight than be anyone's surprise. Tired of the two reactions, hoping for a third.",
    "emoji": "🌸",
    "name": "Poy",
+   "pronoun": "she",
    "role": "hostess",
    "room": "golden_dragon",
    "th": "พอย"
@@ -2061,6 +2293,7 @@
    "emoji": "🍒",
    "filler": true,
    "name": "Prae",
+   "pronoun": "she",
    "role": "hostess",
    "room": "jasmine_garden",
    "th": "แพร"
@@ -2070,6 +2303,7 @@
    "emoji": "🌼",
    "filler": true,
    "name": "Praew",
+   "pronoun": "she",
    "role": "hostess",
    "room": "tequila_queen",
    "th": "แพรว"
@@ -2078,6 +2312,7 @@
    "desc": "Pretty and a little far away, like part of her is always on the bus back to a village you'll never see. Kind to you, and not quite here.",
    "emoji": "🌷",
    "name": "Praewa",
+   "pronoun": "she",
    "role": "hostess",
    "room": "kitten_corner",
    "th": "แพรวา"
@@ -2087,6 +2322,7 @@
    "emoji": "🌸",
    "filler": true,
    "name": "Pranee",
+   "pronoun": "she",
    "role": "hostess",
    "room": "succubus",
    "th": "ปราณี"
@@ -2095,6 +2331,7 @@
    "desc": "Saeng's niece, brisk and unsentimental behind the Ruby Kiss till, running the money while Wilai runs the window — the two halves of the operation that never need to discuss it.",
    "emoji": "🧾",
    "name": "Preaw",
+   "pronoun": "she",
    "role": "cashier",
    "room": "ruby_kiss",
    "th": "แพรว"
@@ -2104,6 +2341,7 @@
    "emoji": "🌺",
    "filler": true,
    "name": "Prik",
+   "pronoun": "she",
    "role": "hostess",
    "room": "moonshine_bar",
    "th": "พริก"
@@ -2113,6 +2351,7 @@
    "emoji": "🌷",
    "filler": true,
    "name": "Proud",
+   "pronoun": "she",
    "role": "hostess",
    "room": "lucky7",
    "th": "พราว"
@@ -2122,6 +2361,7 @@
    "emoji": "🍒",
    "filler": true,
    "name": "Pui",
+   "pronoun": "she",
    "role": "hostess",
    "room": "starlight_bar",
    "th": "ปุ้ย"
@@ -2130,6 +2370,7 @@
    "desc": "Easy and unhurried behind the Shady Lady's rail — the kind of company that feels like a night off rather than a transaction. No hurry in her, and no hustle either.",
    "emoji": "🌻",
    "name": "Pukky",
+   "pronoun": "she",
    "role": "hostess",
    "room": "sunset_rail",
    "th": "ปุ๊กกี้"
@@ -2139,6 +2380,7 @@
    "emoji": "🌼",
    "filler": true,
    "name": "Pun",
+   "pronoun": "she",
    "role": "hostess",
    "room": "encore_bar",
    "th": "ปั้น"
@@ -2147,6 +2389,7 @@
    "desc": "Beautiful and burning a little too bright, all the way in from the first minute. Her eyes flick to {{your phone}} when it lights, to the girl who walks past, and back to you, fast. Lovely. A live wire.",
    "emoji": "🔥",
    "name": "Puu",
+   "pronoun": "she",
    "role": "hostess",
    "room": "pink_lotus",
    "th": "ปู"
@@ -2156,6 +2399,7 @@
    "emoji": "👑",
    "filler": true,
    "name": "Ratana",
+   "pronoun": "she",
    "role": "mamasan",
    "room": "lucky_tiger",
    "th": "รัตนา"
@@ -2165,6 +2409,7 @@
    "emoji": "🌺",
    "filler": true,
    "name": "Ratchada",
+   "pronoun": "she",
    "role": "hostess",
    "room": "coconut",
    "th": "รัชฎา"
@@ -2174,6 +2419,7 @@
    "emoji": "👑",
    "filler": true,
    "name": "Ratree",
+   "pronoun": "she",
    "role": "mamasan",
    "room": "las_vegas",
    "th": "ราตรี"
@@ -2183,6 +2429,7 @@
    "emoji": "👑",
    "filler": true,
    "name": "Rin",
+   "pronoun": "she",
    "role": "mamasan",
    "room": "crystal_palace",
    "th": "ริน"
@@ -2191,6 +2438,7 @@
    "desc": "English, forty-eight, married a Buriram girl for nine years and buried the marriage a year ago, not unkindly on either side. Speaks passable Isan-accented Thai, knows the family system from the inside, and watches the bar's whole performance with the fond, tired eye of a man who's seen the machinery from backstage. Not here to be fooled. Here because where else would he be.",
    "emoji": "💍",
    "name": "Rob",
+   "pronoun": "he",
    "room": "kitten_corner",
    "th": "ร็อบ"
   },
@@ -2198,6 +2446,7 @@
    "desc": "The madame of the Orchid Club — fifties, immaculate, a silk blouse and a voice you have to lean in to hear. She runs the quietest, coldest, most expensive room in Naklua, and she knows the name of every regular's wife.",
    "emoji": "🌷",
    "name": "Rose",
+   "pronoun": "she",
    "role": "mamasan",
    "room": "orchid_club",
    "th": "โรส"
@@ -2207,6 +2456,7 @@
    "emoji": "🍺",
    "name": "Roy",
    "personality": "whiteknight",
+   "pronoun": "he",
    "room": "cherry_pop",
    "th": "รอย"
   },
@@ -2215,6 +2465,7 @@
    "emoji": "🌺",
    "filler": true,
    "name": "Rung",
+   "pronoun": "she",
    "role": "hostess",
    "room": "lucky_tiger",
    "th": "รุ้ง"
@@ -2223,6 +2474,7 @@
    "desc": "Ruby Kiss's mamasan, content to sit back while Wilai works the window — because a mama who's found a girl that good knows to stay out of her light and just count.",
    "emoji": "👑",
    "name": "Saeng",
+   "pronoun": "she",
    "role": "mamasan",
    "room": "ruby_kiss",
    "th": "แสง"
@@ -2232,6 +2484,7 @@
    "emoji": "💫",
    "filler": true,
    "name": "Sai",
+   "pronoun": "she",
    "role": "hostess",
    "room": "rainbow_girls",
    "th": "ทราย"
@@ -2241,6 +2494,7 @@
    "emoji": "🍒",
    "filler": true,
    "name": "Saifon",
+   "pronoun": "she",
    "role": "hostess",
    "room": "firefly_bar",
    "th": "สายฝน"
@@ -2250,6 +2504,7 @@
    "emoji": "🦋",
    "filler": true,
    "name": "Sara",
+   "pronoun": "she",
    "role": "hostess",
    "room": "neon_paradise",
    "th": "ซาร่า"
@@ -2259,6 +2514,7 @@
    "emoji": "🌺",
    "filler": true,
    "name": "Sasi",
+   "pronoun": "she",
    "role": "hostess",
    "room": "windmill",
    "th": "ศศิ"
@@ -2267,6 +2523,7 @@
    "desc": "Three large men arranged around the room like load-bearing furniture. One watches the door marked ห้ามเข้า specifically. They are polite, immovable, and backed by every piwin within three sois.",
    "emoji": "🦍",
    "name": "security",
+   "pronoun": "they",
    "room": "rainbow_girls",
    "th": "รปภ."
   },
@@ -2275,6 +2532,7 @@
    "emoji": "🌸",
    "filler": true,
    "name": "Som",
+   "pronoun": "she",
    "role": "hostess",
    "room": "soundcheck_bar",
    "th": "ส้ม"
@@ -2283,6 +2541,7 @@
    "desc": "Sixty-something, a weathered face that holds a permanent quiet warmth, the thermos of coffee always close. He keeps the keys, keeps the counter, keeps everything running on this shift without any fuss. The girls coming through treat him like a favourite uncle.",
    "emoji": "🔑",
    "name": "Somchith",
+   "pronoun": "he",
    "room": "short_time_motel",
    "th": "สมชิต"
   },
@@ -2291,6 +2550,7 @@
    "emoji": "👑",
    "filler": true,
    "name": "Somjai",
+   "pronoun": "she",
    "role": "mamasan",
    "room": "firefly_bar",
    "th": "สมใจ"
@@ -2299,6 +2559,7 @@
    "desc": "In a Liverpool shirt and zero makeup, arguing offside with two regulars and winning. More one-of-the-lads than hostess, and she'll tell you so before you get the wrong idea.",
    "emoji": "⚽",
    "name": "Somo",
+   "pronoun": "she",
    "role": "hostess",
    "room": "bay_watch",
    "th": "โซโม่"
@@ -2308,6 +2569,7 @@
    "emoji": "💐",
    "filler": true,
    "name": "Somruedee",
+   "pronoun": "she",
    "role": "hostess",
    "room": "seabreeze",
    "th": "สมฤดี"
@@ -2317,6 +2579,7 @@
    "emoji": "👑",
    "filler": true,
    "name": "Somsri",
+   "pronoun": "she",
    "role": "mamasan",
    "room": "kinky",
    "th": "สมศรี"
@@ -2325,6 +2588,7 @@
    "desc": "Front Row's mamasan, who put the big screens in herself and knows the league table better than half the punters. Runs a football bar for football people, and keeps the drama outside.",
    "emoji": "👑",
    "name": "Sopha",
+   "pronoun": "she",
    "role": "mamasan",
    "room": "bay_watch",
    "th": "โสภา"
@@ -2334,6 +2598,7 @@
    "emoji": "💫",
    "filler": true,
    "name": "Sroy",
+   "pronoun": "she",
    "role": "hostess",
    "room": "succubus",
    "th": "สร้อย"
@@ -2348,6 +2613,7 @@
    "desc": "The matriarch of Soi 7 — thirty years in Jomtien, four little beer bars, and not one gram of hurry. Where the Buakhao mamas price you like a market, Sumalee just wants everyone fed, watered, and coming back next season. She works a different bar each night, mostly to keep the girls honest and the regulars guessing.",
    "emoji": "👑",
    "name": "Sumalee",
+   "pronoun": "she",
    "role": "mamasan",
    "room": "lucky7",
    "th": "สุมาลี"
@@ -2357,6 +2623,7 @@
    "emoji": "👑",
    "filler": true,
    "name": "Sunee",
+   "pronoun": "she",
    "role": "mamasan",
    "room": "doghouse",
    "th": "สุนีย์"
@@ -2366,6 +2633,7 @@
    "emoji": "✨",
    "filler": true,
    "name": "Taan",
+   "pronoun": "she",
    "role": "hostess",
    "room": "gold_rush",
    "th": "ตาล"
@@ -2374,6 +2642,7 @@
    "desc": "Round-cheeked and permanently pleased, a half-step behind every joke and laughing at it anyway, on faith. Sweetest girl in the bar, and the bar knows it.",
    "emoji": "🍉",
    "name": "Tabtim",
+   "pronoun": "she",
    "role": "hostess",
    "room": "cherry_pop",
    "th": "ทับทิม"
@@ -2383,6 +2652,7 @@
    "emoji": "🚕",
    "name": "Tan",
    "personality": "operator",
+   "pronoun": "he",
    "room": "soi6_street",
    "th": "ต้น"
   },
@@ -2391,6 +2661,7 @@
    "emoji": "🧾",
    "filler": true,
    "name": "Tangmo",
+   "pronoun": "she",
    "role": "cashier",
    "room": "mama_yai",
    "th": "แตงโม"
@@ -2400,6 +2671,7 @@
    "emoji": "🌼",
    "filler": true,
    "name": "Tar",
+   "pronoun": "she",
    "role": "hostess",
    "room": "doghouse",
    "th": "ตาล"
@@ -2409,6 +2681,7 @@
    "emoji": "💫",
    "filler": true,
    "name": "Tarn",
+   "pronoun": "she",
    "role": "hostess",
    "room": "sapphire",
    "th": "ธาร"
@@ -2417,6 +2690,7 @@
    "desc": "Bald, red-faced, Chang vest, fifteen years of Pattaya compressed into a permanent corner-stool residency. He rents the same balcony room every high season. He was here before White Dish. He will tell you about it. He tells it well.",
    "emoji": "🍺",
    "name": "Terry",
+   "pronoun": "he",
    "room": "queen_vic"
   },
   "the_gecko_duan": {
@@ -2424,6 +2698,7 @@
    "emoji": "🍒",
    "filler": true,
    "name": "Duan",
+   "pronoun": "she",
    "role": "hostess",
    "room": "the_gecko",
    "th": "เดือน"
@@ -2433,6 +2708,7 @@
    "emoji": "🧾",
    "filler": true,
    "name": "Ple",
+   "pronoun": "she",
    "role": "cashier",
    "room": "the_gecko",
    "th": "เปิ้ล"
@@ -2442,6 +2718,7 @@
    "emoji": "👑",
    "filler": true,
    "name": "Somjai",
+   "pronoun": "she",
    "role": "mamasan",
    "room": "the_gecko",
    "th": "สมใจ"
@@ -2451,6 +2728,7 @@
    "emoji": "🌼",
    "filler": true,
    "name": "Yok",
+   "pronoun": "she",
    "role": "hostess",
    "room": "the_gecko",
    "th": "หยก"
@@ -2460,6 +2738,7 @@
    "emoji": "💕",
    "filler": true,
    "name": "Fah",
+   "pronoun": "she",
    "role": "hostess",
    "room": "the_terrace",
    "th": "ฟ้า"
@@ -2469,6 +2748,7 @@
    "emoji": "🧾",
    "filler": true,
    "name": "Kade",
+   "pronoun": "she",
    "role": "cashier",
    "room": "the_terrace",
    "th": "เกด"
@@ -2478,6 +2758,7 @@
    "emoji": "🌻",
    "filler": true,
    "name": "Namtip",
+   "pronoun": "she",
    "role": "hostess",
    "room": "the_terrace",
    "th": "น้ำทิพย์"
@@ -2487,6 +2768,7 @@
    "emoji": "👑",
    "filler": true,
    "name": "Wandee",
+   "pronoun": "she",
    "role": "mamasan",
    "room": "the_terrace",
    "th": "วันดี"
@@ -2496,6 +2778,7 @@
    "emoji": "🌻",
    "filler": true,
    "name": "Tik",
+   "pronoun": "she",
    "role": "hostess",
    "room": "gold_rush",
    "th": "ติ๊ก"
@@ -2505,6 +2788,7 @@
    "emoji": "✨",
    "filler": true,
    "name": "Tim",
+   "pronoun": "she",
    "role": "hostess",
    "room": "the_boardroom",
    "th": "ทิม"
@@ -2514,6 +2798,7 @@
    "emoji": "🌸",
    "filler": true,
    "name": "Toey",
+   "pronoun": "she",
    "role": "hostess",
    "room": "rainbow_girls",
    "th": "เตย"
@@ -2522,6 +2807,7 @@
    "desc": "Cherry Pop's mamasan — loud enough to run a loud bar, sharp enough behind it to run the numbers while the party roars. She sells fun by the bottle, and business is very good.",
    "emoji": "👑",
    "name": "Toi",
+   "pronoun": "she",
    "role": "mamasan",
    "room": "cherry_pop",
    "th": "ต้อย"
@@ -2531,6 +2817,7 @@
    "emoji": "💐",
    "filler": true,
    "name": "Ton",
+   "pronoun": "she",
    "role": "hostess",
    "room": "silk_rose",
    "th": "ต้น"
@@ -2539,6 +2826,7 @@
    "desc": "Broad, brisk, unbothered. Toom runs the Poseidon floor from a little desk by the glass, and has explained the menu ten thousand times.",
    "emoji": "🛁",
    "name": "Toom",
+   "pronoun": "she",
    "room": "poseidon_soapy"
   },
   "toon": {
@@ -2546,6 +2834,7 @@
    "emoji": "🍒",
    "filler": true,
    "name": "Toon",
+   "pronoun": "she",
    "role": "hostess",
    "room": "container_8",
    "th": "ตูน"
@@ -2555,6 +2844,7 @@
    "emoji": "👑",
    "filler": true,
    "name": "Tui",
+   "pronoun": "she",
    "role": "mamasan",
    "room": "night_heron",
    "th": "ตุ่ย"
@@ -2564,6 +2854,7 @@
    "emoji": "🧾",
    "filler": true,
    "name": "Tukky",
+   "pronoun": "she",
    "role": "cashier",
    "room": "doghouse",
    "th": "ตุ๊กกี้"
@@ -2573,6 +2864,7 @@
    "emoji": "💐",
    "filler": true,
    "name": "Tukta",
+   "pronoun": "she",
    "role": "hostess",
    "room": "slutty",
    "th": "ตุ๊กตา"
@@ -2582,6 +2874,7 @@
    "emoji": "🌻",
    "filler": true,
    "name": "Jinda",
+   "pronoun": "she",
    "role": "hostess",
    "room": "two_stools",
    "th": "จินดา"
@@ -2591,6 +2884,7 @@
    "emoji": "🌺",
    "filler": true,
    "name": "Meaw",
+   "pronoun": "she",
    "role": "hostess",
    "room": "two_stools",
    "th": "แมว"
@@ -2600,6 +2894,7 @@
    "emoji": "🧾",
    "filler": true,
    "name": "Orm",
+   "pronoun": "she",
    "role": "cashier",
    "room": "two_stools",
    "th": "ออม"
@@ -2609,6 +2904,7 @@
    "emoji": "👑",
    "filler": true,
    "name": "Ratree",
+   "pronoun": "she",
    "role": "mamasan",
    "room": "two_stools",
    "th": "ราตรี"
@@ -2618,6 +2914,7 @@
    "emoji": "💫",
    "filler": true,
    "name": "View",
+   "pronoun": "she",
    "role": "hostess",
    "room": "neon_paradise",
    "th": "วิว"
@@ -2627,6 +2924,7 @@
    "emoji": "✨",
    "filler": true,
    "name": "Wa",
+   "pronoun": "she",
    "role": "hostess",
    "room": "silk_rose",
    "th": "หว้า"
@@ -2635,6 +2933,7 @@
    "desc": "Young, round-cheeked, shy until she isn't. Waan works the oil room at Smile and has decided, for reasons of her own, that she likes you.",
    "emoji": "💗",
    "name": "Waan",
+   "pronoun": "she",
    "room": "smile_massage"
   },
   "waew": {
@@ -2642,6 +2941,7 @@
    "emoji": "👑",
    "filler": true,
    "name": "Waew",
+   "pronoun": "she",
    "role": "mamasan",
    "room": "silk_rose",
    "th": "แวว"
@@ -2650,6 +2950,7 @@
    "desc": "The mamasan of Slutty: compact, efficient, wearing a headset that may or may not be connected to anything. She's been on LK Metro since before it was worth being on, and carries that seniority in every glance.",
    "emoji": "💫",
    "name": "Wan",
+   "pronoun": "she",
    "role": "mamasan",
    "room": "slutty",
    "th": "วัน"
@@ -2659,6 +2960,7 @@
    "emoji": "👑",
    "filler": true,
    "name": "Wandee",
+   "pronoun": "she",
    "role": "mamasan",
    "room": "water_buffalo",
    "th": "วันดี"
@@ -2668,6 +2970,7 @@
    "emoji": "👑",
    "filler": true,
    "name": "Wanida",
+   "pronoun": "she",
    "role": "mamasan",
    "room": "windmill",
    "th": "วนิดา"
@@ -2677,6 +2980,7 @@
    "emoji": "💐",
    "filler": true,
    "name": "Wanpen",
+   "pronoun": "she",
    "role": "hostess",
    "room": "mama_yai",
    "th": "วันเพ็ญ"
@@ -2686,6 +2990,7 @@
    "emoji": "🌺",
    "filler": true,
    "name": "Wassana",
+   "pronoun": "she",
    "role": "hostess",
    "room": "doghouse",
    "th": "วาสนา"
@@ -2694,6 +2999,7 @@
    "desc": "Australian, forty-five, a Gold Coast tan and a shirt with the top three buttons making a decision. Made real money in earthmoving back home and has decided, with the total confidence of a man who's never been conned, that a Soi 6 bar is 'basically the same game, mate — plant, cashflow, location.' The girls have his order memorised. So has the till.",
    "emoji": "🕶️",
    "name": "Wayne",
+   "pronoun": "he",
    "room": "golden_dragon",
    "th": "เวย์น"
   },
@@ -2702,6 +3008,7 @@
    "emoji": "💋",
    "name": "Wilai",
    "personality": "charmer",
+   "pronoun": "she",
    "role": "hostess",
    "room": "ruby_kiss",
    "th": "วิไล"
@@ -2715,6 +3022,7 @@
    "desc": "The mamasan who runs the Samson brothers' three beer bars on the strip — fifties, brisk, a {{phone}} in each hand and an eye on every tab. She works a different bar each night and somehow knows exactly what happened at the other two.",
    "emoji": "👑",
    "name": "Wimon",
+   "pronoun": "she",
    "role": "mamasan",
    "room": "arrow_bar",
    "th": "วิมล"
@@ -2723,6 +3031,7 @@
    "desc": "Host number 9: slighter than Arm, prettier, quieter, with a stillness the loud ones don't have. He watches you a beat longer than the job strictly requires, and means a little more of it than he should.",
    "emoji": "✨",
    "name": "Win",
+   "pronoun": "he",
    "room": "adonis_club",
    "th": "วิน"
   },
@@ -2731,6 +3040,7 @@
    "emoji": "💐",
    "filler": true,
    "name": "Yada",
+   "pronoun": "she",
    "role": "hostess",
    "room": "windmill",
    "th": "ญาดา"
@@ -2739,6 +3049,7 @@
    "desc": "The Yai in Mama Yai's — sixty-ish, an apron over a buffalo-print blouse, a ladle in one hand and the whole soi's memory in the other. She feeds you before she reads you, and by the time the som tam lands she has done both.",
    "emoji": "🍲",
    "name": "Mama Yai",
+   "pronoun": "she",
    "role": "mamasan",
    "room": "mama_yai",
    "th": "ใหญ่"
@@ -2748,6 +3059,7 @@
    "emoji": "🌻",
    "filler": true,
    "name": "Yaya",
+   "pronoun": "she",
    "role": "hostess",
    "room": "reload_bar",
    "th": "ยาย่า"
@@ -2757,6 +3069,7 @@
    "emoji": "💐",
    "filler": true,
    "name": "Ying",
+   "pronoun": "she",
    "role": "hostess",
    "room": "khao_talo_bar",
    "th": "หญิง"
@@ -2766,6 +3079,7 @@
    "emoji": "🌼",
    "filler": true,
    "name": "Yok",
+   "pronoun": "she",
    "role": "hostess",
    "room": "queen_bee",
    "th": "หยก"
@@ -2775,6 +3089,7 @@
    "emoji": "🌙",
    "filler": true,
    "name": "Yui",
+   "pronoun": "she",
    "role": "hostess",
    "room": "club_mirage",
    "th": "ยุ้ย"
@@ -3268,7 +3583,7 @@
   "wayne",
   "wilai"
  ],
- "v": 1,
+ "v": 2,
  "venues": {
   "adonis_club": {
    "bar": "The Adonis Club",

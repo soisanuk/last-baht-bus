@@ -307,3 +307,40 @@ test("every filler row produces its own NPC at its own bar — none is overwritt
     assert.equal(NPC_ROLES[hit[0][0]], role, `${name} @ ${room} keeps her role`);
   }
 });
+
+// ── every character has a pronoun, and it agrees with their own prose ───────
+// Added for the Second Road agent (2026-08-09): the export publishes `pronoun`
+// so neither game has to infer one. Their report prose called a male manager
+// "she" for six weeks, which is the failure this prevents.
+//
+// Two assertions, and the second is the one that will actually catch things.
+// Completeness is easy to satisfy; AGREEMENT is what rots, because a desc gets
+// rewritten and the field silently stops matching. So the field is checked
+// against the character's own description, which is where the game says what
+// it thinks they are.
+//
+// Note what is deliberately NOT asserted: any link between pronoun and role.
+// The cast includes kathoey characters and a tom cashier, the writing has
+// always used "she" for them, and the field reports the prose rather than
+// imposing a rule about who may be what.
+test("every NPC and patron resolves a pronoun, and it matches their own desc", () => {
+  const all = [...Object.entries(NPCS), ...Object.entries(PATRONS)];
+  const unresolved = all.filter(([id]) => !_pronoun(id)).map(([id]) => id);
+  assert.deepEqual(unresolved, [],
+    "no pronoun and no lady-role default — add an explicit `pronoun` to:\n  " +
+    unresolved.join("\n  "));
+
+  const HE = /\b(he|him|his)\b/gi, SHE = /\b(she|her|hers)\b/gi;
+  const disagree = [];
+  for (const [id, c] of all) {
+    const p = _pronoun(id);
+    if (p === "they") continue;                       // "security" is three men
+    const h = (String(c.desc || "").match(HE) || []).length;
+    const s = (String(c.desc || "").match(SHE) || []).length;
+    if (h === 0 && s === 0) continue;                 // desc names no pronoun
+    const says = h > s ? "he" : s > h ? "she" : null;
+    if (says && says !== p) disagree.push(`${id}: field "${p}" but desc reads "${says}"`);
+  }
+  assert.deepEqual(disagree, [],
+    "a pronoun contradicts the character's own description:\n  " + disagree.join("\n  "));
+});

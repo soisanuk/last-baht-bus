@@ -3456,6 +3456,7 @@ const NPCS = {
 
   nok: {
     name: "Auntie Nok", th: "น้อยหน่า", emoji: "🥭",
+    pronoun: "she",
     room: "jomtien_soi_7_beach_end",
     desc: "A drinks-cart vendor with a cooler of everything and opinions to match. " +
       "A hand-lettered sign on the cart offers ฿5 per returned bottle.",
@@ -3479,6 +3480,7 @@ const NPCS = {
 
   bank: {
     name: "Bank", th: "แบงค์", emoji: "🏍️",
+    pronoun: "he",
     room: "beach_rd_s",
     desc: "A motosai driver in an orange vest, boots up on his handlebars, watching the " +
       "street with professional calm. The other drivers at the stand defer to him.",
@@ -5334,6 +5336,7 @@ const NPCS = {
   },
   gavin: {
     name: "Gavin", emoji: "🍽️",
+    pronoun: "he",
     title: "a golf-shirted man appraising the bar like a spreadsheet",
     room: "golden_dragon",
     desc: "Fifties, a golf shirt with a discreet logo, a lager he barely touches and a way of looking " +
@@ -5396,6 +5399,7 @@ const NPCS = {
 
   powers: {
     name: "Ryan Powers", emoji: "🕶️",
+    pronoun: "he",
     room: "orchid_room",
     desc: "Late thirties dressed for late twenties: a linen shirt one button too honest, a watch " +
       "that wants to be noticed, sunglasses on indoors at midnight. He films himself more than he " +
@@ -5464,6 +5468,7 @@ const NPCS = {
   // that recontextualise your airport driver on replay. Breadcrumb, never the name.
   doyle: {
     name: "Doyle", th: "ดอยล์", emoji: "🕵️",
+    pronoun: "he",
     room: "queen_vic",
     origin: "pi",
     title: "a watchful older farang nursing a soda water",
@@ -5551,6 +5556,7 @@ const NPCS = {
   // works. Never names the partner.
   wayne: {
     name: "Wayne", th: "เวย์น", emoji: "🕶️",
+    pronoun: "he",
     room: "golden_dragon",
     origin: "business",
     title: "a sunburnt farang holding court with a bottle service he didn't need to buy",
@@ -5641,6 +5647,7 @@ const NPCS = {
   // nobody could say why. On replay: the driver has been the power for a generation.
   roy: {
     name: "Roy", th: "รอย", emoji: "🍺", personality: "whiteknight",
+    pronoun: "he",
     room: "cherry_pop",
     origin: "pension",
     title: "a lean old regular in a faded bar-crawl polo, watching the door like he owns the stool",
@@ -5696,6 +5703,7 @@ const NPCS = {
   // on replay. His quest is honest counsel about a payout going out too fast.
   macca: {
     name: "Macca", th: "แม็คก้า", emoji: "⚡",
+    pronoun: "he",
     room: "sunset_dreams",
     origin: "redundancy",
     title: "a beaming fella in a red football shirt standing everyone a round",
@@ -5751,6 +5759,7 @@ const NPCS = {
   // human ask to keep that name quiet.
   pete: {
     name: "Pete", th: "พีท", emoji: "🚬",
+    pronoun: "he",
     room: "sandy_toes",
     origin: "running",
     title: "a careful man at the dark end of the bar who sits facing the door",
@@ -5802,6 +5811,7 @@ const NPCS = {
   // wants word carried — the president/MC thread, not Tan.
   rob: {
     name: "Rob", th: "ร็อบ", emoji: "💍",
+    pronoun: "he",
     room: "kitten_corner",
     origin: "married",
     title: "a calm farang who watches the girls work with no hunger in it at all",
@@ -5853,6 +5863,7 @@ const NPCS = {
   // table on a boozy walk-through and has no idea what he's holding.
   barry: {
     name: "Barry", th: "แบร์รี่", emoji: "⛳",
+    pronoun: "he",
     room: "ruby_kiss",
     origin: "monger",
     title: "a delighted, sunburnt man in golf gear who has plainly not been near a golf course",
@@ -5913,6 +5924,7 @@ const NPCS = {
   // spider. Known from the intro (you rode in with him), so he shows as "Tan".
   tan: {
     name: "Tan", th: "ต้น", emoji: "🚕", personality: "operator",
+    pronoun: "he",
     room: "soi6_street",
     desc: "Your airport driver, leaning on a plain grey sedan at the mouth of the soi as though he never " +
       "drove off — mid-thirties, neat, a polo shirt you would forget the instant you looked away. Six years " +
@@ -6050,6 +6062,7 @@ const NPCS = {
 
   doug: {
     name: "Doug", emoji: "🥃",
+    pronoun: "he",
     room: "stinky_bar",
     desc: "Canadian, sixties, a golf tan gone patchy, nursing a rum-and-coke he makes last an hour. Two " +
       "years ago he wired his retirement into 'the portfolio' — units in White Dish bars, guaranteed " +
@@ -6092,6 +6105,7 @@ const NPCS = {
 
   terry: {
     name: "Terry", emoji: "🍺",
+    pronoun: "he",
     room: "queen_vic",
     desc: "Bald, red-faced, Chang vest, fifteen years of Pattaya compressed into a permanent " +
       "corner-stool residency. He rents the same balcony room every high season. He was here " +
@@ -6395,6 +6409,7 @@ const NPCS = {
   // lady-drink logic ignore them; the MASSAGE / SOAPY verbs carry the trade) ──
   pensri: {
     name: "Pensri", emoji: "💆", masseuse: true,
+    pronoun: "she",
     room: "thai_massage",
     desc: "Fifty-odd, iron thumbs, reading glasses on a beaded chain. Pensri has run the " +
       "front of this shop twenty years and can tell where you hurt before you sit down.",
@@ -6415,6 +6430,7 @@ const NPCS = {
   },
   waan: {
     name: "Waan", emoji: "💗", masseuse: true,
+    pronoun: "she",
     room: "smile_massage",
     desc: "Young, round-cheeked, shy until she isn't. Waan works the oil room at Smile and " +
       "has decided, for reasons of her own, that she likes you.",
@@ -6437,6 +6453,7 @@ const NPCS = {
   },
   toom: {
     name: "Toom", emoji: "🛁", soapyBoss: true,
+    pronoun: "she",
     room: "poseidon_soapy",
     desc: "Broad, brisk, unbothered. Toom runs the Poseidon floor from a little desk by the " +
       "glass, and has explained the menu ten thousand times.",
@@ -6616,6 +6633,7 @@ const NPCS = {
   // a fourth identical box.
   bill: {
     name: "Bill", emoji: "🎩", personality: "dry",
+    pronoun: "he",
     room: "doghouse", bars: ["the_boardroom", "velvet_club", "doghouse"],
     manager: true, // hired help, like Bert — NOT in NPC_ROLES, so lady-logic ignores him
     // His own house-shot pool (see _MGR_SHOT / _managerWelcome). The generic
@@ -6705,6 +6723,7 @@ const NPCS = {
   // than his mid-seventies; he is 76 and the arithmetic has to keep working.
   bob: {
     name: "Bob", emoji: "🎖️", personality: "warm",
+    pronoun: "he",
     room: "succubus",
     manager: true, // owner-operator, but the same mechanic: he is staff, not a lady
     desc: "Seventy-six, American, behind his own bar on a stool worn to the shape of him. " +
@@ -6986,6 +7005,7 @@ const NPCS = {
 
   nott: {
     name: "Nott", th: "นนท์", emoji: "🕴️",
+    pronoun: "he",
     room: "adonis_club",
     desc: "The Adonis Club's papasan — forties, immaculate, a silk shirt open one button past " +
       "advisable and a smile that has closed a thousand deals. He runs his boys like a talent " +
@@ -7017,6 +7037,7 @@ const NPCS = {
   },
   arm: {
     name: "Arm", th: "อาร์ม", emoji: "💪",
+    pronoun: "he",
     room: "adonis_club",
     desc: "Host number 4: broad, easy, a footballer's build and a salesman's warmth. He leans in close " +
       "and makes you feel chosen, which is precisely the product. The tan line of a wedding-adjacent ring " +
@@ -7039,6 +7060,7 @@ const NPCS = {
   },
   win: {
     name: "Win", th: "วิน", emoji: "✨",
+    pronoun: "he",
     room: "adonis_club",
     desc: "Host number 9: slighter than Arm, prettier, quieter, with a stillness the loud ones don't have. " +
       "He watches you a beat longer than the job strictly requires, and means a little more of it than he should.",
@@ -7099,6 +7121,7 @@ const NPCS = {
 
   dj_beer: {
     name: "DJ Beer", th: "ดีเจเบียร์", emoji: "🎧",
+    pronoun: "he",
     room: "rainbow_girls",
     desc: "The DJ, headphones half-on, nodding to something only partially related to " +
       "what's playing. His booth is a fortress of stickers and Red Bull cans.",
@@ -7114,6 +7137,7 @@ const NPCS = {
 
   security: {
     name: "security", th: "รปภ.", emoji: "🦍",
+    pronoun: "they",
     room: "rainbow_girls",
     desc: "Three large men arranged around the room like load-bearing furniture. One " +
       "watches the door marked ห้ามเข้า specifically. They are polite, immovable, and " +
@@ -7194,6 +7218,7 @@ const NPCS = {
 
   somchith: {
     name: "Somchith", th: "สมชิต", emoji: "🔑",
+    pronoun: "he",
     room: "short_time_motel",
     desc: "Sixty-something, a weathered face that holds a permanent quiet warmth, the " +
       "thermos of coffee always close. He keeps the keys, keeps the counter, keeps " +
@@ -7247,6 +7272,7 @@ const NPCS = {
 
   bert: {
     name: "Bert", th: "เบิร์ต", emoji: "🎱", personality: "blunt",
+    pronoun: "he",
     room: "stinky_bar",
     manager: true, // the bar-manager NPC type (see _managerHere/_buyManDrink); NOT in NPC_ROLES, so girl-logic ignores him
     desc: "The Stinky's manager — American, sixty-something, forearms like dock rope, a " +
@@ -7573,6 +7599,7 @@ const NPCS = {
 
   phil: {
     name: "Phil", th: "ฟิล", emoji: "📱",
+    pronoun: "he",
     room: "stinky_bar",
     desc: "Mid-fifties, a fleece vest in the Pattaya heat, {{phone}} face-down on the bar " +
       "in the specific way of a man waiting for a message he wants and dreads in equal " +
@@ -7623,6 +7650,7 @@ const NPCS = {
 
   nit: {
     name: "Nit", th: "นิด", emoji: "🧵",
+    pronoun: "she",
     room: "night_bazaar",
     desc: "Mid-thirties, upcountry-neat, working the fabric stalls with the practised " +
       "eye of a woman who buys to sell. Two checked laundry bags of folded cotton " +
@@ -7737,6 +7765,7 @@ const NPCS = {
 
   gary: {
     name: "Lake Gary", th: "แกรี่", emoji: "🎣",
+    pronoun: "he",
     room: "lake_mabprachan",
     desc: "A sun-cured expat of indeterminate decade walking an elderly golden retriever. " +
       "He has the serene look of a man whose 7-Eleven receipts are all groceries now.",
@@ -7761,6 +7790,7 @@ const NPCS = {
 
   mot: {
     name: "Mot", th: "มด", emoji: "🐜",
+    pronoun: "he",
     room: "ws_alley",
     desc: "A skinny kid in a fake Barça shirt, materialising from behind the kegs only " +
       "after word got around that you're not the swinging type. Quick eyes, quicker feet.",
@@ -8621,6 +8651,7 @@ const PATRONS = {
 
   glam: {
     name: "Glam", emoji: "🎸", age: 77, nat: "German",
+    pronoun: "he",
     home: "cheeky_monkey", hops: false, shuttle: { after: 4, to: "hyper" }, protected: true,
     desc: "Somewhere north of seventy-five and dressed like it's 1983 in a Munich discotheque: a silk " +
       "shirt open one button too far, and a wild halo of sparse blonde hair caught somewhere between " +
@@ -8673,6 +8704,7 @@ const PATRONS = {
 
   fergie: {
     name: "Fergie", emoji: "🥃", age: 58, nat: "Northern Irish",
+    pronoun: "he",
     home: "gold_rush", hops: true, haunts: ["Soi Buakhao", "Tree Town"],
     avoids: ["candy_bar", "candy_bar_2", "stinky_bar"], rage: ["bert", "candy", "stinky"],
     desc: "Short, bald, and boiled red — the nose of a man who has met a great deal of liquor and " +
@@ -8713,6 +8745,7 @@ const PATRONS = {
 
   ron: {
     name: "Ron", emoji: "🦘", age: 66, nat: "Australian",
+    pronoun: "he",
     home: "mama_yai", hops: false,
     desc: "Sixty-six, Wollongong, a faded steel-town singlet and thongs that have " +
       "worn a groove in this soi. He has the settled bulk of a man who stopped " +
@@ -8744,6 +8777,7 @@ const PATRONS = {
 
   mort: {
     name: "Mort", emoji: "🦉", age: 74, nat: "American",
+    pronoun: "he",
     home: "queen_vic", hops: false,
     desc: "Seventy-four, horn-rimmed glasses and a Hawaiian shirt at war with itself, a " +
       "spiral notebook and a biro he clicks while he watches the soi. He has been on this " +
@@ -8785,6 +8819,7 @@ const PATRONS = {
 
   nigel: {
     name: "Nigel", emoji: "🍻", age: 68, nat: "British",
+    pronoun: "he",
     home: "lucky_tiger", hops: true,
     desc: "Sixty-eight, sun-spotted, a Chang vest gone grey at the seams. He has " +
       "the fixed forward stare of a man permanently addressing an audience of " +
@@ -8838,6 +8873,7 @@ const PATRONS = {
 
   chuck: {
     name: "Chuck", emoji: "🤠", age: 58, nat: "American",
+    pronoun: "he",
     home: "tequila_queen", hops: true,
     desc: "Sunburn over sunburn, a polo shirt with a plumbing-company logo, and the " +
       "unmistakable glow of a man who believes he is winning. Day four of two weeks. " +
@@ -8871,6 +8907,7 @@ const PATRONS = {
 
   dave: {
     name: "Dave", emoji: "📋", age: 55, nat: "British",
+    pronoun: "he",
     home: "stinky_bar", hops: true,
     desc: "Fifty-five, neat polo, shandy in front of him going flat. He drinks less " +
       "than anyone in whatever bar he's in and looks at the door more. His phone " +
@@ -8906,6 +8943,7 @@ const PATRONS = {
 
   helmut: {
     name: "Helmut", emoji: "🔧", age: 61, nat: "German",
+    pronoun: "he",
     home: "silk_rose", hops: false,
     desc: "Sixty-one, pressed short-sleeve shirt, glasses polished to optical-lab " +
       "standard. He occupies the third stool from the left as if allocated it by " +
@@ -8940,6 +8978,7 @@ const PATRONS = {
 
   somsak: {
     name: "Somsak", emoji: "🌇", age: 47, nat: "Thai",
+    pronoun: "he",
     home: "blue_dog", hops: false,
     desc: "Forty-seven, hotel-maintenance polo, the end seat at the Blue Dog rail " +
       "with the best line on both the sunset and the checkpoint. He drinks one " +
@@ -8976,6 +9015,7 @@ const PATRONS = {
 
   randy: {
     name: "Randy", emoji: "🐻", age: 54, nat: "American",
+    pronoun: "he",
     home: "jasmine_garden", hops: true,
     desc: "Six-foot-four and built like the loads he used to carry, with hands that " +
       "make the Chang bottle look like a miniature. Fifty-four, Alabama drawl, and " +
@@ -9046,6 +9086,7 @@ const PATRONS = {
 
   drew: {
     name: "Drew", emoji: "🚬", age: 53, nat: "American",
+    pronoun: "he",
     home: "stinky_bar", hops: true,
     desc: "Fifty-three, Navy posture that never demobbed, a Marlboro going and its " +
       "successor already tapped out of the pack. In front of him: Jack and Coke, " +
@@ -9113,6 +9154,7 @@ const PATRONS = {
 
   david: {
     name: "David", emoji: "🇨🇦", age: 52, nat: "Canadian",
+    pronoun: "he",
     home: "stinky_bar", hops: false, days: [1, 5], // teacher's days off: Mon & Fri
     desc: "Fifty-two, ball cap gone soft with washing, the delighted open face of a " +
       "golden retriever that learned English. One beer in front of him, nursed " +
@@ -9182,6 +9224,7 @@ const PATRONS = {
 
   superman: {
     name: "Superman", emoji: "🦸", age: 62, nat: "American",
+    pronoun: "he",
     home: "blue_dog", hops: false,
     desc: "Sixty-two, in tonight's Superman shirt — the S faded from a hundred " +
       "washes, stretched over a chest that carries three stents and a story. He " +
@@ -9239,6 +9282,7 @@ const PATRONS = {
 
   angela: {
     name: "Angela", emoji: "🎧", age: 47, nat: "American",
+    pronoun: "she",
     home: "queen_vic", hops: false,
     desc: "Forty-seven, unkempt shoulder-length hair gone grey, a faded flannel shirt " +
       "tied at the waist in a climate that argues against it. On the bar next to " +
@@ -9341,6 +9385,7 @@ const PATRONS = {
 
   danny: {
     name: "Danny", emoji: "💪", age: 50, nat: "Canadian",
+    pronoun: "he",
     home: "club_mirage", hops: true,
     avoids: ["stinky_bar", "las_vegas"], // the map of his debts, drawn in bars
     desc: "Fifty, but built like a rendering of forty — tank top, veins, a full " +
@@ -9408,6 +9453,7 @@ const PATRONS = {
 
   josey: {
     name: "Josey", emoji: "🏋️", age: 32, nat: "Australian",
+    pronoun: "she",
     home: "rock_factory", hops: false,
     desc: "Thirty-two, Australian, shoulders that still remember lane ropes, in " +
       "gym wear that is clearly working clothes rather than costume. She has a " +
@@ -9465,6 +9511,7 @@ const PATRONS = {
 
   reginald: {
     name: "Reginald", emoji: "🥂", age: 60, nat: "British",
+    pronoun: "he",
     home: "las_vegas", hops: true,
     desc: "Sixty and annoyingly aware that he doesn't look it: linen shirt with " +
       "exactly the right number of buttons open, a tan that took discipline, " +
@@ -9525,6 +9572,7 @@ const PATRONS = {
 
   mikkel: {
     name: "Mikkel", emoji: "🎒", age: 24, nat: "Danish",
+    pronoun: "he",
     home: "neon_paradise", hops: true,
     desc: "Twenty-four, backpacker tan, friendship bracelets to the elbow, and the " +
       "incandescent certainty of a man eleven days into the love of his life. He " +
@@ -10137,6 +10185,29 @@ const _FILLER_HOSTESSES = [
 // PNG and fails loudly. (A test that recomputes expected ids from the tables
 // CANNOT catch this — it derives its expectation from the thing it is checking
 // and passes on any ordering. One was written, and deleted for that reason.)
+// ── pronouns ────────────────────────────────────────────────────────────────
+// Requested by the Second Road agent (2026-08-09) via Mario, which is the
+// protocol: the export is this repo's, so the field is added here rather than
+// worked around there. Their report prose called a male manager "she" for six
+// weeks, and both games were writing around the gap.
+//
+// It reports PRONOUNS, not gender, and it reports what the game's own prose
+// already says rather than imposing a taxonomy — which matters here, because
+// the cast includes kathoey characters (Diamond, Alisa, Mala, Petch) and a tom
+// cashier (Aek), and the writing has always used "she" for all of them. The
+// role default therefore lands correctly on them with no special case.
+//
+// Resolution: an explicit `pronoun` on the entry wins; otherwise the three
+// lady-roles default to "she". Anything else must be explicit — world.test
+// fails on a character who resolves to nothing, so a new manager or patron
+// cannot slip through and be guessed at.
+const _SHE_ROLES = new Set(["hostess", "mamasan", "cashier"]);
+function _pronoun(id) {
+  const c = NPCS[id] || (typeof PATRONS !== "undefined" && PATRONS[id]);
+  if (!c) return undefined;
+  return c.pronoun || (_SHE_ROLES.has(NPC_ROLES[id]) ? "she" : undefined);
+}
+
 function _fillerId(name, room) {
   const bare = name.toLowerCase();
   return NPCS[bare] ? room + "_" + bare : bare;

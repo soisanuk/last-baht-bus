@@ -32,7 +32,11 @@ const src = p => readFileSync(fileURLToPath(new URL(p, root)), "utf8");
 // the established LBB tool pattern: load the real sources in a vm
 for (const f of ["thai.js", "world.js"]) vm.runInThisContext(src(`web/js/${f}`), { filename: f });
 
-export const EXPORT_VERSION = 1;
+// v2 (2026-08-09): every person and patron now carries `pronoun`. Requested by
+// the Second Road agent — their report prose called a male manager "she" for six
+// weeks and both games were writing around the gap. Additive, so a v1 consumer
+// keeps working; the bump is the signal that there is something new to read.
+export const EXPORT_VERSION = 2;
 
 export function buildExport() {
   const venues = {};
@@ -56,7 +60,7 @@ export function buildExport() {
   // they are; what they SAY is a night-scale concern and stays in LBB.
   const people = {};
   for (const [id, n] of Object.entries(NPCS)) {
-    const p = { name: n.name, room: n.room };
+    const p = { name: n.name, room: n.room, pronoun: _pronoun(id) };
     if (n.th) p.th = n.th;
     if (n.emoji) p.emoji = n.emoji;
     if (n.bars) p.bars = n.bars;              // owners work alternate nights
@@ -71,7 +75,7 @@ export function buildExport() {
   const patrons = {};
   if (typeof PATRONS !== "undefined") {
     for (const [id, p] of Object.entries(PATRONS)) {
-      const q = { name: p.name, home: p.home };
+      const q = { name: p.name, home: p.home, pronoun: _pronoun(id) };
       if (p.emoji) q.emoji = p.emoji;
       if (p.nat) q.nat = p.nat;
       if (p.hops) q.hops = p.hops;
