@@ -128,9 +128,9 @@
         "slutty"
       ],
       "sampleDescs": [
-        "The corner where the alley turns south. LAS VEGAS GO-GO burns at the end of the second leg — the signage outspends everything else in sight. The crowd thins slightly here: the regulars who know the place, the girls finishing a shift on the back of a motorbike, a few tourists who followed the sound far enough to find it. Two open-front beer bars, THE METRO BEER GARDEN and THE PIT STOP, catch the ones who've had enough go-go for one night. Less overwhelming than Walking Street; more like something you discovered.",
-        "The long leg of the L, and the one everybody means by LK Metro: bars packed shoulder to shoulder, neon on both sides, sound bleeding from KINKY Go-Go to the north and SLUTTY Go-Go to the south until they're indistinguishable. Good energy — dense, close, the kind of loud that's a decision rather than an accident. A motorbike idles past carrying a girl in full sequins at a speed that's technically legal. THE OFFSIDE SPORTS BAR breaks the neon with the cold blue wash of a dozen screens. The alley bends east at the far end.",
-        "The alley mouth off Soi Buakhao — easy to walk past if you don't know it's there. A handwritten sign on the wall says LK METRO with an arrow, named for the hotel invisible from here. Ten metres in, the alley bends and opens up and suddenly you're somewhere. The no-entry sign for four-wheelers is doing its job: the only vehicles threading through are motorbikes, and the only people on them are very purposeful about where they're going."
+        "The corner, where the alley stops climbing and turns east. LAS VEGAS GO-GO burns at the turn — the signage outspends everything else in sight. The crowd thins slightly here: the regulars who know the place, the girls finishing a shift on the back of a motorbike, a few tourists who followed the sound far enough to find it. Two open-front beer bars, THE METRO BEER GARDEN and THE PIT STOP, catch the ones who've had enough go-go for one night. Less overwhelming than Walking Street; more like something you discovered.",
+        "The long leg of the L, and the one everybody means by LK Metro: bars packed shoulder to shoulder, neon on both sides, sound bleeding from KINKY Go-Go to the north and SLUTTY Go-Go to the south until they're indistinguishable. Good energy — dense, close, the kind of loud that's a decision rather than an accident. A motorbike idles past carrying a girl in full sequins at a speed that's technically legal. THE OFFSIDE SPORTS BAR breaks the neon with the cold blue wash of a dozen screens. Ahead the neon runs out and the alley spills onto Soi Buakhao; the corner is behind you.",
+        "The alley mouth off Soi Diana — easy to walk past if you don't know it's there. A handwritten sign on the wall says LK METRO with an arrow, named for the hotel invisible from here. Ten metres in it opens up and suddenly you're somewhere: the alley runs north to a corner, turns east, and comes out on Soi Buakhao at the far end. The no-entry sign for four-wheelers is doing its job: the only vehicles threading through are motorbikes, and the only people on them are very purposeful about where they're going."
       ]
     },
     {
@@ -1176,7 +1176,7 @@
       "kind": "street",
       "dark": false,
       "people": [],
-      "desc": "The corner where the alley turns south. LAS VEGAS GO-GO burns at the end of the second leg — the signage outspends everything else in sight. The crowd thins slightly here: the regulars who know the place, the girls finishing a shift on the back of a motorbike, a few tourists who followed the sound far enough to find it. Two open-front beer bars, THE METRO BEER GARDEN and THE PIT STOP, catch the ones who've had enough go-go for one night. Less overwhelming than Walking Street; more like something you discovered."
+      "desc": "The corner, where the alley stops climbing and turns east. LAS VEGAS GO-GO burns at the turn — the signage outspends everything else in sight. The crowd thins slightly here: the regulars who know the place, the girls finishing a shift on the back of a motorbike, a few tourists who followed the sound far enough to find it. Two open-front beer bars, THE METRO BEER GARDEN and THE PIT STOP, catch the ones who've had enough go-go for one night. Less overwhelming than Walking Street; more like something you discovered."
     },
     {
       "id": "lk_entrance",
@@ -1188,7 +1188,7 @@
       "kind": "street",
       "dark": false,
       "people": [],
-      "desc": "The alley mouth off Soi Buakhao — easy to walk past if you don't know it's there. A handwritten sign on the wall says LK METRO with an arrow, named for the hotel invisible from here. Ten metres in, the alley bends and opens up and suddenly you're somewhere. The no-entry sign for four-wheelers is doing its job: the only vehicles threading through are motorbikes, and the only people on them are very purposeful about where they're going."
+      "desc": "The alley mouth off Soi Diana — easy to walk past if you don't know it's there. A handwritten sign on the wall says LK METRO with an arrow, named for the hotel invisible from here. Ten metres in it opens up and suddenly you're somewhere: the alley runs north to a corner, turns east, and comes out on Soi Buakhao at the far end. The no-entry sign for four-wheelers is doing its job: the only vehicles threading through are motorbikes, and the only people on them are very purposeful about where they're going."
     },
     {
       "id": "lk_main",
@@ -1200,7 +1200,7 @@
       "kind": "street",
       "dark": false,
       "people": [],
-      "desc": "The long leg of the L, and the one everybody means by LK Metro: bars packed shoulder to shoulder, neon on both sides, sound bleeding from KINKY Go-Go to the north and SLUTTY Go-Go to the south until they're indistinguishable. Good energy — dense, close, the kind of loud that's a decision rather than an accident. A motorbike idles past carrying a girl in full sequins at a speed that's technically legal. THE OFFSIDE SPORTS BAR breaks the neon with the cold blue wash of a dozen screens. The alley bends east at the far end."
+      "desc": "The long leg of the L, and the one everybody means by LK Metro: bars packed shoulder to shoulder, neon on both sides, sound bleeding from KINKY Go-Go to the north and SLUTTY Go-Go to the south until they're indistinguishable. Good energy — dense, close, the kind of loud that's a decision rather than an accident. A motorbike idles past carrying a girl in full sequins at a speed that's technically legal. THE OFFSIDE SPORTS BAR breaks the neon with the cold blue wash of a dozen screens. Ahead the neon runs out and the alley spills onto Soi Buakhao; the corner is behind you."
     },
     {
       "id": "lk_sports",

@@ -2097,10 +2097,10 @@ const ROOMS = {
   lk_entrance: { motosai: true,
     name: "LK Metro (Entrance)",
     region: "LK Metro",
-    desc: "The alley mouth off Soi Buakhao — easy to walk past if you don't know it's there. " +
+    desc: "The alley mouth off Soi Diana — easy to walk past if you don't know it's there. " +
       "A handwritten sign on the wall says LK METRO with an arrow, named for the hotel " +
-      "invisible from here. Ten metres in, the alley bends and opens up and suddenly you're " +
-      "somewhere. The no-entry sign for four-wheelers is doing its job: the only vehicles " +
+      "invisible from here. Ten metres in it opens up and suddenly you're somewhere: the alley runs " +
+      "north to a corner, turns east, and comes out on Soi Buakhao at the far end. The no-entry sign for four-wheelers is doing its job: the only vehicles " +
       "threading through are motorbikes, and the only people on them are very purposeful " +
       "about where they're going.",
     reads: {
@@ -2109,7 +2109,7 @@ const ROOMS = {
         "doing honest work — only the motorbikes thread through, and only the purposeful ride " +
         "them. Two signs, both true, neither telling all of it.",
     },
-    exits: { out: "buakhao_lk", n: "lk_bend" },
+    exits: { out: "diana_e", n: "lk_bend" },
   },
   lk_main: {
     atm: true,
@@ -2120,7 +2120,8 @@ const ROOMS = {
       "they're indistinguishable. Good energy — dense, close, the kind of loud that's a " +
       "decision rather than an accident. A motorbike idles past carrying a girl in full " +
       "sequins at a speed that's technically legal. THE OFFSIDE SPORTS BAR breaks the neon " +
-      "with the cold blue wash of a dozen screens. The alley bends east at the far end.",
+      "with the cold blue wash of a dozen screens. Ahead the neon runs out and the alley spills " +
+      "onto Soi Buakhao; the corner is behind you.",
     exits: { w: "lk_bend", e: "buakhao_lk", n: "kinky", s: "slutty", in: "kinky", pub: "lk_sports" },
   },
   lk_sports: {
@@ -2137,14 +2138,13 @@ const ROOMS = {
   lk_bend: { motosai: true,
     name: "LK Metro (Corner)",
     region: "LK Metro",
-    desc: "The corner where the alley turns south. LAS VEGAS GO-GO burns at the end of " +
-      "the second leg — the signage outspends everything else in sight. The crowd thins " +
+    desc: "The corner, where the alley stops climbing and turns east. LAS VEGAS GO-GO burns at the turn — the signage outspends everything else in sight. The crowd thins " +
       "slightly here: the regulars who know the place, the girls finishing a shift on the " +
       "back of a motorbike, a few tourists who followed the sound far enough to find it. " +
       "Two open-front beer bars, THE METRO BEER GARDEN and THE PIT STOP, catch the ones " +
       "who've had enough go-go for one night. Less overwhelming than Walking Street; more " +
       "like something you discovered.",
-    exits: { s: "lk_entrance", e: "lk_main", in: "las_vegas", diana: "diana_e",
+    exits: { s: "lk_entrance", e: "lk_main", in: "las_vegas",
              n: "metro_garden", pit: "pit_stop", vegas: "las_vegas" },
   },
   metro_garden: {
@@ -2640,7 +2640,7 @@ const ROOMS = {
       "mouth is up on Buakhao proper); the Areca Lodge's lit driveway is on the other. Ahead, the " +
       "soi spills onto Soi Buakhao by the 7-Eleven on the corner — Candy Bar's rose-pink sign " +
       "glows just two doors south of it.",
-    exits: { w: "diana_mid", e: "buakhao_n", n: "cricketers", lk: "lk_bend" },
+    exits: { w: "diana_mid", e: "buakhao_n", n: "cricketers", lk: "lk_entrance" },
   },
   kiss: {
     name: "KISS Restaurant",
