@@ -9082,6 +9082,37 @@ const POPULAR_GIRLS = ["fon", "gift", "noi", "pim"];
 // pinned district by district against OSM, and the decimal count is the marker
 // of which have had their pass. Don't "tidy" a 5dp district back to 4.
 //
+//   The Buakhao / Soi Diana block — DONE 2026-08-08. Four corners, all 0 m,
+//   clockwise from upper left:
+//     1. Second Rd x Pattaya Klang   12.936653/100.886508
+//     2. Pattaya Klang x Buakhao     12.935939/100.888539
+//     3. Buakhao x Soi Diana         12.928811/100.884802
+//     4. Soi Diana x Second Rd       12.931045/100.882042
+//   Sides N 234 m, E 886 m, S 388 m, W 787 m — a quadrilateral, not a rectangle.
+//
+//   NAMES: Soi Diana is "Soi Diana (Pattaya Sai Song 13)" in OSM. SOI BUAKHAO IS
+//   SPLIT ACROSS TWO NAMES — "Soi Kasem Suwan 13" for the northern run and "Soi
+//   Buakhao (Pattaya Tai 22)" for the south; their ends match to six decimals, so
+//   concatenate them or you survey half a street.
+//
+//   THE RULE THIS BLOCK TEACHES: Second Road and Soi Buakhao are PARALLEL, ~400 m
+//   apart. Every east-west link between them only works if both ends sit at the
+//   SAME LATITUDE. Placing Buakhao's nodes by distance-along-the-road instead
+//   left each w/e exit pointing diagonally and flagged five of them at 99-143.
+//   Pairing each Buakhao node to the latitude of the Second Road node its exit
+//   NAMES cleared all five. Same lesson as the Second Road pass: derive from the
+//   neighbour, not the tape measure.
+//   LK Metro is at its real cached position; its link to buakhao_n is `out`,
+//   which the audit does not check, so truth was free there.
+//
+//   TWO BAR-MAT DEFECTS EXPOSED, left alone because they are exit changes:
+//   - `diana_w —w→ second_rd_c` audits at 132. Soi Diana meets Second Road 380 m
+//     SOUTH of Central Mall, and second_rd_c has to stay level with the mall for
+//     its own west exit to work. No coordinate satisfies both; the graph needs a
+//     Second Road node at Diana's latitude.
+//   - `buakhao_n —n→ pattaya_klang` audits at 70. Both sit ON Pattaya Klang Road,
+//     220 m apart east-west, so the exit should be `w`, not `n`.
+//
 //   Naklua + the Dolphin roundabout — DONE 2026-08-08, closing the loop.
 //   ★ THE DOLPHIN ROUNDABOUT ~12.95095/100.88750. Four roads converge there and
 //   the pairwise gaps are 13-29 m, which is the roundabout's own diameter, not
@@ -9393,29 +9424,29 @@ const ROOM_GEO = {
   poseidon_soapy:   [12.93528, 100.88606],
   pattaya_klang:    [12.93665, 100.88651],
   // Myth Night
-  myth_night:       [12.9322, 100.8822],
-  candy_bar_2:      [12.9324, 100.8824],
-  myth_stage:       [12.9326, 100.8823],
-  amp_room:         [12.9327, 100.8821],
-  feedback_bar:     [12.9328, 100.8824],
-  encore_bar:       [12.9325, 100.8820],
-  soundcheck_bar:   [12.9329, 100.8823],
-  myth_rows:        [12.9318, 100.8821],
-  craft_cargo:      [12.9317, 100.8819],
-  the_growler:      [12.9316, 100.8823],
-  container_8:      [12.9319, 100.8818],
-  reload_bar:       [12.9315, 100.8822],
+  myth_night:       [12.93520, 100.88680],
+  candy_bar_2:      [12.93545, 100.88708],
+  myth_stage:       [12.93551, 100.88684],
+  amp_room:         [12.93558, 100.88663],
+  feedback_bar:     [12.93556, 100.88702],
+  encore_bar:       [12.93540, 100.88671],
+  soundcheck_bar:   [12.93572, 100.88691],
+  myth_rows:        [12.93489, 100.88676],
+  craft_cargo:      [12.93496, 100.88658],
+  the_growler:      [12.93493, 100.88693],
+  container_8:      [12.93477, 100.88663],
+  reload_bar:       [12.93469, 100.88686],
   // Soi Buakhao
-  buakhao_n:        [12.9315, 100.8848],
-  metropole_room:   [12.9308, 100.8853],
-  rock_factory:     [12.9318, 100.8845],
-  lucky_tiger:      [12.9312, 100.8852],
-  buakhao_market:   [12.9262, 100.8820],
-  candy_bar:        [12.9264, 100.8814],
-  silk_rose:        [12.9260, 100.8826],
-  buakhao_oil:      [12.9260, 100.8832],
-  buakhao_s:        [12.9218, 100.8795],
-  jasmine_garden:   [12.9214, 100.8797],
+  buakhao_n:        [12.93594, 100.88854],
+  metropole_room:   [12.93607, 100.88891],
+  rock_factory:     [12.93621, 100.88865],
+  lucky_tiger:      [12.93585, 100.88882],
+  buakhao_market:   [12.93282, 100.88715],
+  candy_bar:        [12.93293, 100.88692],
+  silk_rose:        [12.93275, 100.88739],
+  buakhao_oil:      [12.93302, 100.88736],
+  buakhao_s:        [12.92994, 100.88554],
+  jasmine_garden:   [12.92978, 100.88536],
   // Soi Honey (Soi 11, between Second Rd and Buakhao)
   soi_honey_w:      [12.9255, 100.8778],
   soi_honey_e:      [12.9238, 100.8786],
@@ -9424,15 +9455,15 @@ const ROOM_GEO = {
   queen_bee:        [12.9242, 100.8790],
   buzz_inn:         [12.9232, 100.8784],
   // Soi Diana (the big go-go soi; Second Rd ↔ Buakhao, past LK Metro)
-  diana_w:          [12.9325, 100.8805],
-  diana_mid:        [12.9320, 100.8822],
-  diana_e:          [12.9316, 100.8840],
-  kiss:             [12.9322, 100.8802],
-  dollhouse:        [12.9328, 100.8806],
-  sapphire:         [12.9323, 100.8823],
-  sundowner:        [12.9317, 100.8821],
-  cricketers:       [12.9319, 100.8842],
-  areca_room:       [12.9312, 100.8840],
+  diana_w:          [12.93104, 100.88204],
+  diana_mid:        [12.92993, 100.88342],
+  diana_e:          [12.92908, 100.88447],
+  kiss:             [12.93085, 100.88213],
+  dollhouse:        [12.93126, 100.88199],
+  sapphire:         [12.93015, 100.88346],
+  sundowner:        [12.92971, 100.88339],
+  cricketers:       [12.92930, 100.88453],
+  areca_room:       [12.92886, 100.88442],
   // Tree Town (real: the Buakhao/Klang corner)
   tt_entrance:      [12.9330, 100.8852],
   tt_lane_1:        [12.9331, 100.8857],
@@ -9448,15 +9479,15 @@ const ROOM_GEO = {
   lucky_charm:      [12.9324, 100.8864],
   moonshine_bar:    [12.9327, 100.8862],
   // LK Metro (the L-shaped soi off Buakhao)
-  lk_entrance:      [12.9297, 100.8845],
-  lk_main:          [12.9298, 100.8852],
-  kinky:            [12.9300, 100.8851],
-  slutty:           [12.9296, 100.8853],
-  lk_bend:          [12.9300, 100.8858],
-  las_vegas:        [12.9298, 100.8860],
-  lk_sports:        [12.9297, 100.8853],
-  metro_garden:     [12.9302, 100.8858],
-  pit_stop:         [12.9301, 100.8861],
+  lk_entrance:      [12.92949, 100.88393],
+  lk_main:          [12.92980, 100.88460],
+  kinky:            [12.93000, 100.88454],
+  slutty:           [12.92956, 100.88464],
+  lk_bend:          [12.93010, 100.88525],
+  las_vegas:        [12.92988, 100.88542],
+  lk_sports:        [12.92964, 100.88467],
+  metro_garden:     [12.93032, 100.88531],
+  pit_stop:         [12.93024, 100.88549],
   // The Darkside
   sukhumvit_crossing: [12.91004, 100.89620],
   khao_talo_strip:  [12.90782, 100.90693],
