@@ -134,7 +134,8 @@ const DE_CEILINGS = [
   // 132), so they join the ranked backlog.
   // 333 → 322 for the six lower-Soi-5 venues. FELL despite a lot of new English,
   // because more rooms means the walk spreads thinner over them. Tightened.
-  { mode: "vacation", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 322 },
+  // 322 → 285 for the Central Mall junction. Fell; tightened.
+  { mode: "vacation", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 285 },
   // act1 is the do-or-die opening — the wallet chain, the fail/reset screens, the
   // hint whispers. NEITHER other mode reaches it: soi6 force-sets act1Done, and
   // so does the soak's own vacation setup. It was unguarded until 2026-08-07, and
@@ -155,7 +156,11 @@ const DE_CEILINGS = [
   // and never nears the hill. It is that a player CAN now wander off the south
   // end of Walking Street and onto a dark hill road during the do-or-die night,
   // which is a real road and a real way to lose the night.
-  { mode: "act1", seeds: [1, 2, 3, 4, 5], nights: 3, ceiling: 132 },
+  // 132 → 135. Five new English lines exist (the mall's service road) and the
+  // Act One walk can wander past them — but the CRITICAL path does not: the
+  // wallet route goes up Second Road and cuts through Soi Diana, well north of
+  // the mall. So backlog, same call as the Soi 5 venues.
+  { mode: "act1", seeds: [1, 2, 3, 4, 5], nights: 3, ceiling: 135 },
   // expat: the endless stage, unreachable from the other modes (soi6 and the
   // soak's own vacation setup both force act1Done and stop there). Added with
   // the bar-owning chain.
@@ -169,7 +174,9 @@ const DE_CEILINGS = [
   // 312 → 429 → 399, same story as vacation. 430 → 421 on the Dolphin roundabout
   // — tightened rather than left slack, since a ratchet that only ever loosens
   // stops being one. 421 → 428 for the three new south-end rooms.
-  { mode: "expat", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 419 },
+  // 419 → 451, a big move for one room: splitting second_rd_c's two jobs gives
+  // the walk another node to fan out from in the middle of Second Road.
+  { mode: "expat", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 451 },
 ];
 
 for (const { mode, seeds, nights, ceiling } of DE_CEILINGS) {

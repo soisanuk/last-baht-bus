@@ -22,13 +22,13 @@
   "Blue Dog"
  ],
  "counts": {
-  "geolocated": 223,
+  "geolocated": 224,
   "patrons": 18,
   "people": 297,
   "portraits": 315,
   "renders": 72,
   "thumbs": 72,
-  "venues": 223
+  "venues": 224
  },
  "frames": [
   "baimon_pic1",
@@ -5078,6 +5078,14 @@
     100.87202
    ],
    "name": "Second Road (Pratumnak end)",
+   "region": "Second Road"
+  },
+  "second_rd_mall": {
+   "geo": [
+    12.9339,
+    100.8847
+   ],
+   "name": "Second Road (Central Mall)",
    "region": "Second Road"
   },
   "second_rd_myth": {

@@ -2,10 +2,10 @@
   "generated": "2026-08-08",
   "note": "Every room in the game + its region, for the scene-art pipeline (docs/art-pipeline-spec.md). Derived from web/js/world.js — regenerate with scripts/gen-scene-manifest.mjs, do not hand-edit. `kind` is a generator heuristic for prompt-template selection, not game canon. `regionSlug` is produced by the same regex as web/js/scene.js `_sceneArt()`; art files are web/art/rooms/<id>.png with web/art/regions/<slug>.png as the fallback.",
   "counts": {
-    "rooms": 223,
+    "rooms": 224,
     "regions": 15,
     "byKind": {
-      "street": 92,
+      "street": 93,
       "massage": 17,
       "beer": 53,
       "shop": 2,
@@ -231,6 +231,7 @@
         "second_rd_diana",
         "second_rd_honey",
         "second_rd_india",
+        "second_rd_mall",
         "second_rd_myth",
         "second_rd_n",
         "second_rd_s",
@@ -555,7 +556,7 @@
       "kind": "shop",
       "dark": false,
       "people": [],
-      "desc": "The air-conditioned mothership: seven storeys of glass, brand names, and farang families who have no idea what this town does after dinner. Free outlets by the food court, arctic air, and security guards who wai. Beach Road glitters west; Second Road runs behind the mall to the east; the police station squats to the north like a paperweight."
+      "desc": "The air-conditioned mothership: seven storeys of glass, brand names, and farang families who have no idea what this town does after dinner. Free outlets by the food court, arctic air, and security guards who wai. Beach Road glitters west; Second Road runs behind the mall to the east. The police station squats a couple of blocks north like a paperweight — round on the Beach Road side, not through here; nobody walks out of Central Festival into a charge desk."
     },
     {
       "id": "north_beach",
@@ -2038,7 +2039,7 @@
       "kind": "street",
       "dark": false,
       "people": [],
-      "desc": "Mid-Second-Road: baht buses in convoy, pharmacies, and the constant churn between the mall's back doors to the west and the fairy-lit mouth of MYTH NIGHT market to the east."
+      "desc": "Mid-Second-Road: baht buses in convoy, pharmacies, and the constant churn of a four-lane road that never quite stops. Soi 9 comes in from the beach side, quiet and daytime-ish next to all this; the mall's service road is a block south and MYTH NIGHT market is further down again."
     },
     {
       "id": "second_rd_diamond",
@@ -2091,6 +2092,18 @@
         "Diamond"
       ],
       "desc": "The long haul of Second Road between Soi Diamond and the hill, and the expats have a name for this stretch they don't say kindly. What is actually wrong with it is the pavement: there isn't one worth the word — broken kerb, parked bikes nose-in, a shop's worth of stock set out across it — so everybody walks in the road, and here everybody is a great many people at once. Tour groups come through six and eight at a time, three abreast, friends hand in hand the way friends are across most of the world and farang reliably misread, moving at the speed of the conversation they are having. The bikes stack up behind them, fold around, and lean on the horn; the piwins have views, at volume, in Thai. Tailor shops down both sides, a currency booth beating the bank, and a tandoor going somewhere out of sight that smells better than anything on Beach Road."
+    },
+    {
+      "id": "second_rd_mall",
+      "name": "Second Road (Central Mall)",
+      "bar": null,
+      "barType": null,
+      "region": "Second Road",
+      "regionSlug": "second-road",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "The back of the mall, which is a different building from the front: no glass, no brand names, just a service road, a taxi rank, and seven storeys of blank wall with the extractor fans going. This is where the staff come out to eat and where the songthaews idle for the air-conditioned crowd. Everything the front of the mall is pretending about, the back is not."
     },
     {
       "id": "second_rd_myth",

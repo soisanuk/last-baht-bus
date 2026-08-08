@@ -1253,9 +1253,11 @@ const ROOMS = {
     desc: "The air-conditioned mothership: seven storeys of glass, brand names, and " +
       "farang families who have no idea what this town does after dinner. Free " +
       "outlets by the food court, arctic air, and security guards who wai. Beach " +
-      "Road glitters west; Second Road runs behind the mall to the east; the " +
-      "police station squats to the north like a paperweight.",
-    exits: { w: "beach_rd_c", e: "second_rd_c", n: "police_station" },
+      "Road glitters west; Second Road runs behind the mall to the east. The " +
+      "police station squats a couple of blocks north like a paperweight — round " +
+      "on the Beach Road side, not through here; nobody walks out of Central " +
+      "Festival into a charge desk.",
+    exits: { w: "beach_rd_c", e: "second_rd_mall" },
   },
   police_station: {
     name: "Pattaya Central Police Station",
@@ -1264,7 +1266,7 @@ const ROOMS = {
       "unhurried patience of a man who has seen every possible farang. A wall of " +
       "confiscated selfie sticks. Sitting between the mall and the Beach Road bars, " +
       "it catches whatever the tide washes up. Best visited voluntarily.",
-    exits: { s: "central_mall", w: "beach_rd_soi9" },
+    exits: { w: "beach_rd_soi9" },
   },
 
   // ─── Second Road ───
@@ -1282,11 +1284,11 @@ const ROOMS = {
     busStop: "secondrd",
     name: "Second Road (Central)",
     region: "Second Road",
-    desc: "Mid-Second-Road: baht buses in convoy, pharmacies, and the constant churn " +
-      "between the mall's back doors to the west and the fairy-lit mouth of MYTH " +
-      "NIGHT market to the east.",
-    exits: { s: "second_rd_myth", n: "second_rd_soi8", w: "central_mall",
-             soi9: "pattaya_soi_9" },
+    desc: "Mid-Second-Road: baht buses in convoy, pharmacies, and the constant churn of " +
+      "a four-lane road that never quite stops. Soi 9 comes in from the beach side, " +
+      "quiet and daytime-ish next to all this; the mall's service road is a block " +
+      "south and MYTH NIGHT market is further down again.",
+    exits: { s: "second_rd_mall", n: "second_rd_soi8", soi9: "pattaya_soi_9" },
   },
   // Second Road's Soi Diana mouth. Until now the whole road was three rooms and
   // this junction had none, which left Soi Diana, Soi Honey and Myth Night all
@@ -1455,6 +1457,23 @@ const ROOMS = {
     ],
     exits: { s: "second_rd_diana", n: "second_rd_myth", e: "soi_honey_w" },
   },
+  second_rd_mall: {
+    busStop: "secondrd",
+    name: "Second Road (Central Mall)",
+    region: "Second Road",
+    desc: "The back of the mall, which is a different building from the front: no glass, no " +
+      "brand names, just a service road, a taxi rank, and seven storeys of blank wall with " +
+      "the extractor fans going. This is where the staff come out to eat and where the " +
+      "songthaews idle for the air-conditioned crowd. Everything the front of the mall is " +
+      "pretending about, the back is not.",
+    revisit: [
+      "Extractor fans, a taxi rank, and staff on their break eating properly.",
+      "A songthaew waits for the mall to close and disgorge somebody worth the fare.",
+      "Blank wall, service door, and the smell of a food court's back end.",
+      "The unglamorous side of seven storeys of glass. Nobody photographs this bit.",
+    ],
+    exits: { n: "second_rd_c", s: "second_rd_myth", w: "central_mall" },
+  },
   second_rd_myth: {
     busStop: "secondrd",
     name: "Second Road (Soi Myth Night)",
@@ -1469,7 +1488,7 @@ const ROOMS = {
       "Bass from up the soi, arriving in bits between the traffic.",
       "Two girls come out of the lane eating something on a stick, in no hurry at all.",
     ],
-    exits: { s: "second_rd_honey", n: "second_rd_c", e: "myth_night" },
+    exits: { s: "second_rd_honey", n: "second_rd_mall", e: "myth_night" },
   },
 
   // ─── Myth Night ───
@@ -10920,6 +10939,7 @@ const ROOM_GEO = {
   second_rd_india:  [12.92303, 100.87202],
   second_thai:      [12.93014, 100.88107],
   second_rd_c:      [12.93431, 100.88506],
+  second_rd_mall:   [12.93390, 100.88470],
   second_rd_n:      [12.93539, 100.88580],
   second_rd_soi8:   [12.93491, 100.88548],
   pattaya_soi_7:    [12.93650, 100.88460],
