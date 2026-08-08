@@ -22,13 +22,13 @@
   "Blue Dog"
  ],
  "counts": {
-  "geolocated": 186,
+  "geolocated": 189,
   "patrons": 18,
   "people": 259,
   "portraits": 277,
   "renders": 72,
   "thumbs": 72,
-  "venues": 186
+  "venues": 189
  },
  "frames": [
   "baimon_pic1",
@@ -2938,6 +2938,14 @@
    "name": "Arrow Bar",
    "region": "Thappraya"
   },
+  "bali_hai": {
+   "geo": [
+    12.9246,
+    100.86855
+   ],
+   "name": "Bali Hai Pier",
+   "region": "Walking Street"
+  },
   "bay_watch": {
    "bar": "Front Row Bar",
    "barType": "beer",
@@ -3115,6 +3123,24 @@
    ],
    "name": "Central Mall (Beach Road front)",
    "region": "Beach Road"
+  },
+  "cheap_charlies": {
+   "bar": "Cheap Charlie's",
+   "geo": [
+    12.92839,
+    100.88462
+   ],
+   "name": "Cheap Charlie's",
+   "region": "Soi Buakhao"
+  },
+  "cheap_charlies_jt": {
+   "bar": "Cheap Charlie's (Jomtien)",
+   "geo": [
+    12.8968,
+    100.87118
+   ],
+   "name": "Cheap Charlie's (Jomtien)",
+   "region": "Jomtien"
   },
   "cheeky_monkey": {
    "bar": "Cheeky Monkey Bar",
@@ -3569,7 +3595,8 @@
     100.90693
    ],
    "name": "Soi Khao Talo (the strip)",
-   "region": "Darkside"
+   "region": "Darkside",
+   "seven": true
   },
   "kinky": {
    "bar": "KINKY Go-Go",
