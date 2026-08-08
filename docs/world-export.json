@@ -3115,8 +3115,8 @@
    "bar": "Club Mirage",
    "barType": "gogo",
    "geo": [
-    12.92645,
-    100.8728
+    12.92616,
+    100.87294
    ],
    "name": "Club Mirage",
    "region": "Walking Street"
@@ -3165,8 +3165,8 @@
    "bar": "Crystal Palace A-Go-Go",
    "barType": "gogo",
    "geo": [
-    12.92531,
-    100.86982
+    12.92508,
+    100.86992
    ],
    "name": "Crystal Palace A-Go-Go",
    "region": "Walking Street"
@@ -3700,8 +3700,8 @@
    "bar": "Midnight Sun Bar",
    "barType": "beer",
    "geo": [
-    12.9249,
-    100.86978
+    12.92467,
+    100.86987
    ],
    "name": "Midnight Sun Bar",
    "pool": true,
@@ -3791,8 +3791,8 @@
    "bar": "Neon Paradise A-Go-Go",
    "barType": "gogo",
    "geo": [
-    12.92645,
-    100.87228
+    12.92616,
+    100.87243
    ],
    "name": "Neon Paradise A-Go-Go",
    "region": "Walking Street"
@@ -3856,8 +3856,8 @@
    "bar": "Paradise Nights Club",
    "barType": "club",
    "geo": [
-    12.92531,
-    100.87034
+    12.92508,
+    100.87044
    ],
    "name": "Paradise Nights Club",
    "region": "Walking Street"
@@ -4467,8 +4467,8 @@
   },
   "ws_alley": {
    "geo": [
-    12.92674,
-    100.87241
+    12.92645,
+    100.87255
    ],
    "name": "Walking Street Side-Alley",
    "region": "Walking Street"
@@ -4484,16 +4484,16 @@
   },
   "ws_north": {
    "geo": [
-    12.92645,
-    100.87254
+    12.92616,
+    100.87269
    ],
    "name": "Walking Street (North)",
    "region": "Walking Street"
   },
   "ws_south": {
    "geo": [
-    12.92531,
-    100.87008
+    12.92508,
+    100.87018
    ],
    "name": "Walking Street (South)",
    "region": "Walking Street"
