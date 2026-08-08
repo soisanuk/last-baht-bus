@@ -542,7 +542,7 @@ const ROOMS = {
       "Here it bends east into the neon of the Thappraya Main Strip; a hill road runs on north " +
       "into the dark toward Pratumnak and, eventually, Pattaya. The bus stop and the Jomtien " +
       "lights are back to the south, the Dongtan sand off to the west.",
-    exits: { s: "jomtien_beach_rd", e: "thappraya_w", n: "pratumnak_rd", w: "dongtan_beach" },
+    exits: { s: "jomtien_beach_rd", e: "thappraya_w", w: "dongtan_beach" },
   },
 
   // ─── Pratumnak Hill ───
@@ -553,7 +553,7 @@ const ROOMS = {
     desc: "The main hill road between Jomtien and Pattaya proper — condos behind walls, " +
       "sleeping soi dogs, and long stretches where the streetlights have given up. " +
       "The Buddha Hill viewpoint is up a path to the west; Walking Street is on north.",
-    exits: { s: "jomtien_beach_rd_n", n: "ws_gate", w: "buddha_hill", e: "second_rd_s",
+    exits: { n: "ws_gate", w: "buddha_hill", e: "second_rd_s",
              soi5: "pratumnak_hill_rd" },
   },
 
