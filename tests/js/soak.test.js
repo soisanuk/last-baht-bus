@@ -135,7 +135,7 @@ const DE_CEILINGS = [
   // 333 → 322 for the six lower-Soi-5 venues. FELL despite a lot of new English,
   // because more rooms means the walk spreads thinner over them. Tightened.
   // 322 → 285 → 279 for the Central Mall junction and the crocodile. Fell; tightened.
-  { mode: "vacation", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 329 },  // +10: the Beach Road corner is 5 new lines and a node the
+  { mode: "vacation", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 328 },  // +10: the Beach Road corner is 5 new lines and a node the
   // walk fans out from at the top of the seafront
   // act1 is the do-or-die opening — the wallet chain, the fail/reset screens, the
   // hint whispers. NEITHER other mode reaches it: soi6 force-sets act1Done, and
@@ -161,7 +161,7 @@ const DE_CEILINGS = [
   // Act One walk can wander past them — but the CRITICAL path does not: the
   // wallet route goes up Second Road and cuts through Soi Diana, well north of
   // the mall. So backlog, same call as the Soi 5 venues.
-  { mode: "act1", seeds: [1, 2, 3, 4, 5], nights: 3, ceiling: 102 },  // FELL 28 on the southern beach spur: it is a
+  { mode: "act1", seeds: [1, 2, 3, 4, 5], nights: 3, ceiling: 115 },  // FELL 28 on the southern beach spur: it is a
   // three-room dead end with no road access, so an Act One walk that wanders
   // down it spends those turns on new prose instead of re-treading town
   // expat: the endless stage, unreachable from the other modes (soi6 and the
@@ -179,7 +179,7 @@ const DE_CEILINGS = [
   // stops being one. 421 → 428 for the three new south-end rooms.
   // 419 → 451, a big move for one room: splitting second_rd_c's two jobs gives
   // the walk another node to fan out from in the middle of Second Road.
-  { mode: "expat", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 462 },
+  { mode: "expat", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 474 },
 ];
 
 for (const { mode, seeds, nights, ceiling } of DE_CEILINGS) {

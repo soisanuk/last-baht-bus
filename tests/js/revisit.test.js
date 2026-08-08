@@ -41,11 +41,18 @@ test("hyper has its own revisit pool", () => {
 });
 
 test("rooms without a revisit pool are unchanged — full desc every time", () => {
-  G.room = "jomtien_beach"; // visited:true at init, and no revisit pool
-  assert.ok(!ROOMS.jomtien_beach.revisit);
+  // Picked dynamically rather than named. This used to hard-code jomtien_beach
+  // as the pool-less exemplar, and rotted the moment that room got a pool —
+  // an assertion about "rooms like X" should not break when X stops being like
+  // X. Any lit, pool-less room proves the same thing.
+  const id = Object.keys(ROOMS).find(k =>
+    !ROOMS[k].revisit && !ROOMS[k].dark && typeof ROOMS[k].desc === "string" &&
+    ROOMS[k].desc.length > 80);
+  assert.ok(id, "there is at least one room without a pool");
+  G.room = id;
   out = []; _describeRoom(true);
-  out = []; _describeRoom(true); // re-arrival still full
-  assert.match(out.join("\n"), /Soft sand|loungers|sunset/, "still the full desc");
+  out = []; _describeRoom(true);            // re-arrival still full
+  assert.ok(out.join("\n").includes(ROOMS[id].desc), `${id}: still the full desc`);
 });
 
 // The rollout covers every go-go plus the named-NPC / quest-hub bars. Guard the

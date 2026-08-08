@@ -104,6 +104,13 @@ const ROOMS = {
       "in front of the small one, both watching the water. The beach road glows to the east; the " +
       "sand runs north up the shore and narrows south toward the Soi 7 end, where a drinks cart " +
       "is parked. Your face was in this sand until about a minute ago.",
+    revisit: [
+      "The cats have not moved. The big one checks you, decides, and looks back at the water.",
+      "Somebody's flip-flops sit neatly by a lounger, ownership unclear, hours old.",
+      "The last of the light has gone out of the sea. The loungers stay folded.",
+      "Sand still warm through your soles. It will not be for much longer.",
+      "A dog trots the tide line with somewhere to be, and does not look up.",
+    ],
     exits: { e: "jomtien_beach_rd_s", n: "jomtien_beach_m", s: "jomtien_soi_7_beach_end" },
   },
   jomtien_beach_m: {
@@ -112,6 +119,13 @@ const ROOMS = {
     desc: "The north end of Jomtien Beach: raked sand, stacked loungers under folded umbrellas, " +
       "the surf hissing to the west and the beach road's bus stop lit up to the east. The sand " +
       "runs south back toward the Soi 7 end and north to where Dongtan's quieter stretch begins.",
+    revisit: [
+      "Raked sand, stacked umbrellas, and the bus stop glowing away to the east.",
+      "The surf arrives, considers the raked sand, and takes a little of it back.",
+      "Somebody is swimming out there in the dark, which seems ambitious.",
+      "The lounger stacks throw long shadows the length of the beach.",
+      "Quiet up this end. The noise is all behind you and to the south.",
+    ],
     exits: { s: "jomtien_beach", n: "dongtan_beach", e: "jomtien_beach_rd" },
   },
   jomtien_soi_7_beach_end: {
@@ -120,6 +134,12 @@ const ROOMS = {
     desc: "Where Soi 7 finally gives out onto the sand: a scrap of hard-packed beach, a couple of " +
       "upturned boats, and Auntie Nok's drinks cart parked in the lee of a sea almond tree, cooler " +
       "humming. The beach opens north; Soi 7 runs back inland to the east.",
+    revisit: [
+      "Auntie Nok's cooler hums. The upturned boats have not moved in years.",
+      "Hard-packed sand underfoot, and the sea almond dropping something onto the cart roof.",
+      "The soi's fairy lights end exactly where the sand starts, as if agreed.",
+      "Nok looks up, clocks that you are not buying, and goes back to her phone.",
+    ],
     exits: { n: "jomtien_beach", e: "jomtien_soi_7_m", s: "jomtien_beach_s1" },
   },
   dongtan_beach: {
@@ -131,6 +151,12 @@ const ROOMS = {
       "surf. This is where the two beaches meet: south the sand runs back down to Jomtien, north " +
       "it carries on up the darker Dongtan shore. Inland to the east the beach road reaches its " +
       "north end, where it bends into the neon of the Thappraya Main Strip.",
+    revisit: [
+      "Shapes and shadows and the surf. By day this is all rainbow flags; by now it is sand.",
+      "The join between two beaches, and in the dark you cannot tell where it happens.",
+      "Somebody's beach chair, left out, filling slowly with wind-blown sand.",
+      "The Jomtien lights stop somewhere behind you. Ahead there is just more dark.",
+    ],
     exits: { s: "jomtien_beach_m", e: "jomtien_beach_rd_n", n: "dongtan_beach_s" },
   },
   jomtien_beach_rd: {
@@ -835,6 +861,12 @@ const ROOMS = {
       "The surf is the loudest thing for a hundred metres. A short access path climbs " +
       "east to Dongtan Beach Road; the sand runs south back toward the Jomtien end and " +
       "north up the shore.",
+    revisit: [
+      "The chairs have thinned to nothing. The sand widens and the dark widens with it.",
+      "Surf, and the sound of your own feet, and very little else for a hundred metres.",
+      "The lights of Jomtien sit low behind you now, more glow than lights.",
+      "The access path is a paler smudge going up the bank to the east.",
+    ],
     exits: { s: "dongtan_beach", n: "dongtan_beach_m", e: "dongtan_rd_s" },
   },
   dongtan_beach_m: {
@@ -844,6 +876,12 @@ const ROOMS = {
     desc: "A dark reach of Dongtan sand, well off the Jomtien lights: the surf close and loud, a " +
       "few couples' silhouettes. The sand runs south back toward Jomtien and north on up the " +
       "shore; a beach-access path cuts up to Dongtan Beach Road to the east.",
+    revisit: [
+      "Two silhouettes down the sand, close together, entirely uninterested in you.",
+      "The surf is close and loud here, and there is nothing else at all.",
+      "Far enough out that the town is a rumour in both directions.",
+      "Somebody has built something out of sand and the tide is halfway through it.",
+    ],
     exits: { s: "dongtan_beach_s", n: "dongtan_beach_n", e: "dongtan_rd_m" },
   },
   dongtan_beach_n: {
@@ -853,6 +891,12 @@ const ROOMS = {
     desc: "The north tip of Dongtan Beach, where the sand runs out against the black shoulder of " +
       "Pratumnak Hill. Quiet, unlit, the sea working away below. The sand runs south back down the " +
       "shore; a beach-access path climbs to Dongtan Beach Road to the east.",
+    revisit: [
+      "The hill's black shoulder ends the beach. The sea works away underneath it.",
+      "The sand runs out here and there is nowhere further to walk.",
+      "Unlit, and quiet enough to hear the water moving stones somewhere below.",
+      "The path up to the road is the only way on from here, and it is steep.",
+    ],
     exits: { s: "dongtan_beach_m", e: "dongtan_rd_n" },
   },
   dongtan_rd_m: {
