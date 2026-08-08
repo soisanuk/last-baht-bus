@@ -9082,6 +9082,14 @@ const POPULAR_GIRLS = ["fon", "gift", "noi", "pim"];
 // pinned district by district against OSM, and the decimal count is the marker
 // of which have had their pass. Don't "tidy" a 5dp district back to 4.
 //
+//   Supertown = the JOMTIEN COMPLEX (Jomtien Walking Street), 12.900415/
+//   100.867802 — 118 m north of the Thappraya strip, which is exactly what
+//   `thappraya_mid —n→ supertown_alley` claims. It has TWO doors on purpose:
+//   the Jomtien strip to the south and Thappraya heading north.
+//   Its remaining flag is a BAR-MAT defect, not a coordinate one:
+//   `thappraya_ext_s —w→ supertown_elbow` audits at 74 because the hill room is
+//   NORTH of the complex, not east of it. That exit wants to be `s`.
+//
 //   Pratumnak crest + Dongtan Beach Rd — DONE 2026-08-08. THE SURVEY IS NOW
 //   COMPLETE: all 177 rooms carry 5-decimal surveyed coordinates.
 //   Soi Phra Tam Nak 5 is the crest — from the Pratumnak coast at
@@ -9413,10 +9421,10 @@ const ROOM_GEO = {
   thappraya_w:      [12.89897, 100.86732],
   thappraya_mid:    [12.89983, 100.86841],
   thappraya_e:      [12.90097, 100.86985],
-  supertown_alley:  [12.90033, 100.86851],
-  supertown_elbow:  [12.90051, 100.86893],
-  peacock_cabaret:  [12.90065, 100.86913],
-  adonis_club:      [12.90044, 100.86828],
+  supertown_alley:  [12.90042, 100.86780],
+  supertown_elbow:  [12.90079, 100.86819],
+  peacock_cabaret:  [12.90094, 100.86835],
+  adonis_club:      [12.90054, 100.86756],
   arrow_bar:        [12.89913, 100.86708],
   the_boardroom:    [12.89899, 100.86756],
   beach_turn_massage:[12.89884, 100.86708],
