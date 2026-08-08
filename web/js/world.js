@@ -6666,6 +6666,31 @@ const NPCS = {
           "the brothers had a baht, he built it himself, and his missus runs a better " +
           "floor than mine.\" He considers. \"Different trade, really. They get the ones " +
           "who want to talk. I get the ones who don't.\"" },
+      { topic: "ice", chip: false, sets: ["knowIceMan"],
+        text: "\"Ice.\" Bill puts down the mat he was squaring, because this is a real " +
+          "question. \"Right. Boonchu — old boy, ancient pickup, been running ice up this " +
+          "hill since before any of us. He's stopped doing the singles. Not sulking, " +
+          "nothing happened. He's seventy-one and the hill's killing the truck, so he " +
+          "keeps the runs that are worth the diesel.\" A shrug that is not indifference. " +
+          "\"We're on a standing order — two drops a week for the three rooms, invoiced " +
+          "to the brothers. That's worth his while. Two cases for a front room on the " +
+          "corner isn't, and he'd never say so to Bob's face, so he just... stopped " +
+          "coming. Bob'll have worked out something worse than that by now.\"",
+        short: "\"Boonchu, seventy-one, dying truck. He kept the runs worth the diesel and dropped the singles.\"" },
+      { topic: "order", chip: false, req: ["knowIceMan"],
+        text: "\"I can fix it this afternoon,\" Bill says, and then does not immediately " +
+          "fix it. \"Two more cases on our standing order. Boonchu's already coming up, " +
+          "it's the same stop, and on the invoice it's a rounding error the brothers will " +
+          "never look at twice.\" He turns the glass in his hand. \"Here's my problem. If " +
+          "I walk over and offer it, I'm not a neighbour any more — I'm the Samson " +
+          "brothers doing Bob a favour, and Bob has been thirty years not owing anybody. " +
+          "He'd say no, politely, and then we'd both have to live across a road from " +
+          "having had that conversation.\" He looks at you properly. \"You, though. You " +
+          "could have had the idea yourself. Say it to him like it's yours.\"",
+        short: "\"Two cases on our order. Same stop, same truck. Say it to him like it's your idea.\"" },
+      { topic: "boonchu", text: "\"Boonchu's fine. Everybody worries about Boonchu and " +
+          "Boonchu is fine.\" A dry look. \"He's got four sons and a house in Nong Prue. " +
+          "He drives the ice because sitting down bores him.\"" },
       { topic: "girls", text: "\"They're staff, and I treat them like staff — rota, wages, " +
           "somebody covers you if your kid's ill.\" He says it like it's dull, which is " +
           "the point. \"You'll find nobody here works a room hard. If a lady sits with " +
@@ -6704,6 +6729,48 @@ const NPCS = {
           "\"Came here on R&R. Seven days. Sand, a few huts, one bar with a generator.\" " +
           "He looks at his own room. \"You are standing in what that turned into.\"",
         short: "\"Seventy-one and seventy-two, mechanic, luckier than better men. Came here on leave.\"" },
+      { topic: "ice", text: "\"Ah.\" Bob looks at the cool box like it has let him down " +
+          "personally. \"Boonchu stopped coming. Three weeks. No call, no note.\" He says " +
+          "it lightly and it is not light. \"Now I'm buying bags off the 7-Eleven at the " +
+          "bottom of the hill, two at a time, in a taxi, like a man having a party.\" A " +
+          "beat. \"Thirty years he came up that hill. I keep thinking I did something.\"",
+        short: "\"Still no Boonchu. Still buying bags off the 7-Eleven like a man having a party.\"" },
+      { topic: "order", chip: false, req: ["knowIceMan"], sets: ["iceSettled"],
+        fx: (st, G) => { _align("samson", 1); _align("indie", 1); },
+        text: "You put it to him — two cases, same truck, same stop, nothing to sign. " +
+          "Bob is quiet for long enough that you wonder. \"...That's yours, is it.\" It is " +
+          "not really a question, and he does not push it. He looks across the road at a " +
+          "basement with no windows in it, and something in his face settles.\n\n" +
+          "\"Tell the young man,\" he says at last, \"that I said thank you, and that I " +
+          "know exactly whose idea it was.\" He puts a glass down in front of you and " +
+          "fills it without being asked. \"Thirty years I have not owed anybody on this " +
+          "hill. Turns out I minded that more than I thought, and I minded it in the " +
+          "wrong direction.\" Kinnaree, across the room, does not look up, and is " +
+          "smiling.",
+        short: "\"The ice is sorted. Tell the young man thank you, and that I know whose idea it was.\"" },
+      { topic: "photograph", chip: false, req: ["iceSettled"], notFlags: ["photoBetSettled"],
+        when: (st, G) => !(G.visited && G.visited.bali_hai),
+        text: "Bob reaches behind the bar and takes down a frame — the coast in 1971, " +
+          "grey water and a lot of nothing, and at the edge one low building with a pole " +
+          "beside it. \"That's the bar with the generator. Only building for a mile.\" He " +
+          "sets it on the counter. \"Thirty years she's told me it's where the pier " +
+          "office is now, and thirty years I've said no, it's further round.\" He taps " +
+          "the glass. \"Go and stand down at Bali Hai and LOOK at it. Then come back and " +
+          "tell me which of us has been right since 1996.\"" },
+      { topic: "photograph", chip: false, req: ["iceSettled"], sets: ["photoBetSettled"],
+        when: (st, G) => !!(G.visited && G.visited.bali_hai),
+        text: "You tell him what is down there: the pier, the boat ramp, a concrete apron " +
+          "and the songthaew rank — and that whatever was in the photograph is under one " +
+          "of them, because there is nothing left standing on that whole curve of the bay.\n\n" +
+          "Bob takes this in, nods slowly, and calls across the room in the flat voice of " +
+          "a man conceding a point on a technicality: \"Neither of us.\"\n\n" +
+          "\"NEITHER of us,\" Kinnaree agrees, from the till, delighted. \"Thirty year, " +
+          "and it is a car park.\" Bob puts the frame back on its nail, straightens it, " +
+          "and looks at it a moment longer than he needs to. \"Best bar I ever drank in,\" " +
+          "he says. \"Warm beer, sand floor, one fan. You'd have hated it.\"",
+        short: "\"Neither of us,\" Bob says, and puts the frame back on its nail." },
+      { topic: "boonchu", text: "\"The ice man. Thirty years.\" Bob shakes his head. " +
+          "\"Never once been in for a drink. I've asked. He says he's working.\"" },
       { topic: "pattaya", text: "\"I've watched it four times over.\" He counts it off " +
           "without drama. \"Fishing village. R&R town. Then the boom, and everybody who " +
           "could pour a beer got rich. Now this — the money's bigger and it belongs to " +
@@ -6750,6 +6817,15 @@ const NPCS = {
           "and take everything from a man. He say, yes, exactly, that is the joke.\" A " +
           "very small laugh. \"Farang humour. Anyway, the sign is expensive. It stays.\"",
         short: "\"He name it, not me. The sign is expensive, so it stays.\"" },
+      { topic: "photograph", text: "\"The old picture?\" Kinnaree does not look up from " +
+          "the till, but her mouth moves. \"It is where the pier office is. I have said " +
+          "this for thirty year. He say no, further round.\" The pen keeps moving. \"He " +
+          "is wrong, and one day somebody go and look, and then I have thirty year of " +
+          "being right all at once.\"" },
+      { topic: "ice", text: "\"Aiyo, the ice.\" A short unimpressed breath. \"He take a " +
+          "TAXI to the 7-Eleven. Seventy-six year old, two bag of ice, in a taxi.\" She " +
+          "puts the pen down, which is serious. \"He will not ask the boy across the " +
+          "road. Farang men, na. Everything is a mountain.\"" },
       { topic: "girls", text: "\"Every girl here I know — the family, the trouble, who is " +
           "sending how much home.\" Businesslike, no warmth lost in it. " +
           "\"Here, nobody push. A lady sit with you because she want the company or she " +
@@ -7952,6 +8028,51 @@ const ENCOUNTERS = {
 // quest ids that must be done first.
 
 const QUESTS = {
+  // ── Pratumnak: Bill and Bob ───────────────────────────────────────────────
+  // The hill is the only place in town where two factions sit thirty metres
+  // apart and are CIVIL about it, and all three of these already had their
+  // groundwork laid without meaning to: Bill went over and introduced himself
+  // his first week, Kinnaree noted he brought flowers, and Bob is generous
+  // about a competitor who is taking his trade. So the chain is not a rivalry.
+  // It is two men being decent across a road, and the player carrying the one
+  // sentence neither of them can say to the other.
+  //
+  // Faction doctrine holds throughout (docs/factions-thai.md): nothing here
+  // pushes an alignment, declining costs nothing, and the one deed that moves
+  // standing moves BOTH sides up — because it genuinely helps both.
+  hill_ice: {
+    name: "The Ice Man",
+    giver: "bob",
+    desc: "Bob's ice stopped coming up the hill three weeks ago and he will not ask " +
+      "anyone why. Bill's bars are still getting theirs. Find out what changed " +
+      "(ASK BILL ABOUT ICE).",
+    deps: [],
+    at: "bill",
+    doneFlag: "knowIceMan",
+    reward: { money: 0, happy: 4 },
+  },
+  hill_order: {
+    name: "A Name on the Order",
+    giver: "bill",
+    desc: "Bill can fix Bob's ice with one phone call — but it cannot come from him, " +
+      "and he will explain why. Put it to Bob as your own idea (ASK BOB ABOUT THE ORDER).",
+    deps: ["hill_ice"],
+    at: "bob",
+    doneFlag: "iceSettled",
+    reward: { money: 0, happy: 6 },
+  },
+  hill_photo: {
+    name: "The Bet on the Wall",
+    giver: "bob",
+    desc: "There is a photograph behind the Succubus bar from 1971, and Bob and Kinnaree " +
+      "have been arguing about which building is in it for thirty years. Go and stand " +
+      "where it was taken, down at the pier, then come back and tell him " +
+      "(ASK BOB ABOUT THE PHOTOGRAPH).",
+    deps: ["hill_order"],
+    at: "bali_hai",
+    doneFlag: "photoBetSettled",
+    reward: { money: 0, happy: 8 },
+  },
   white_dish: {
     name: "The White Dish Offer",
     giver: "bert",
