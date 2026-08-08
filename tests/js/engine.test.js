@@ -3567,8 +3567,10 @@ test("Thappraya Main Strip: reached east off the beach road, the mix of venues, 
   assert.equal(ROOMS.thappraya_mid.exits.n, "supertown_alley", "mouth on the strip's north side");
   assert.equal(ROOMS.supertown_alley.exits.s, "thappraya_mid", "…and back");
   assert.equal(ROOMS.supertown_alley.exits.e, "supertown_elbow");
-  assert.equal(ROOMS.supertown_elbow.exits.e, "thappraya_ext_s", "elbow onto the north extension");
-  assert.equal(ROOMS.thappraya_ext_s.exits.w, "supertown_elbow", "…and back");
+  // the hill room is NORTH of the complex, not east of it — Supertown sits at the
+  // bend where Thappraya turns to climb, so the elbow goes up, not across
+  assert.equal(ROOMS.supertown_elbow.exits.n, "thappraya_ext_s", "elbow onto the north extension");
+  assert.equal(ROOMS.thappraya_ext_s.exits.s, "supertown_elbow", "…and back");
   assert.ok(!ROOMS.supertown_elbow.bar && !ROOMS.supertown_alley.barType, "the alley/elbow are pass-through, not bars");
   assert.ok(ROOMS.supertown_alley.venues.includes("adonis_club") &&
     ROOMS.supertown_elbow.venues.includes("peacock_cabaret"), "the host bar and cabaret front the alley");

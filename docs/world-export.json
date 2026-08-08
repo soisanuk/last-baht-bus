@@ -22,13 +22,13 @@
   "Blue Dog"
  ],
  "counts": {
-  "geolocated": 192,
+  "geolocated": 194,
   "patrons": 18,
   "people": 268,
   "portraits": 286,
   "renders": 72,
   "thumbs": 72,
-  "venues": 192
+  "venues": 194
  },
  "frames": [
   "baimon_pic1",
@@ -3145,8 +3145,8 @@
   "buakhao_oil": {
    "bar": "Golden Touch Massage",
    "geo": [
-    12.92649,
-    100.88218
+    12.92676,
+    100.88312
    ],
    "name": "Golden Touch Massage",
    "region": "Soi Buakhao"
@@ -4067,6 +4067,14 @@
    "name": "Central Pattaya Road (Pattaya Klang)",
    "region": "Second Road"
   },
+  "pattaya_soi_7": {
+   "geo": [
+    12.9365,
+    100.885
+   ],
+   "name": "Soi 7",
+   "region": "Beach Road"
+  },
   "peacock_cabaret": {
    "bar": "The Peacock Cabaret",
    "geo": [
@@ -4290,6 +4298,14 @@
    "name": "Second Road (South)",
    "region": "Second Road"
   },
+  "second_rd_soi6": {
+   "geo": [
+    12.94182,
+    100.88788
+   ],
+   "name": "Second Road (Soi 6)",
+   "region": "Second Road"
+  },
   "second_thai": {
    "bar": "Second Road Traditional Massage",
    "geo": [
@@ -4321,8 +4337,8 @@
    "bar": "Silk Rose Bar",
    "barType": "beer",
    "geo": [
-    12.92622,
-    100.88221
+    12.92693,
+    100.88327
    ],
    "name": "Silk Rose Bar",
    "region": "Soi Buakhao"

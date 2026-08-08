@@ -383,7 +383,7 @@ const ROOMS = {
       "boys and a scatter of curious farang filing in under a poster of a sequinned goddess mid-lip-sync. " +
       "The bass thumps through the wall. The alley carries on east and out onto the foot of the Thappraya " +
       "hill road, where the strip's neon finally gives out.",
-    exits: { w: "supertown_alley", e: "thappraya_ext_s" },
+    exits: { w: "supertown_alley", n: "thappraya_ext_s" },
     venues: ["peacock_cabaret"],
   },
   peacock_cabaret: {
@@ -553,7 +553,8 @@ const ROOMS = {
     desc: "The main hill road between Jomtien and Pattaya proper — condos behind walls, " +
       "sleeping soi dogs, and long stretches where the streetlights have given up. " +
       "The Buddha Hill viewpoint is up a path to the west; Walking Street is on north.",
-    exits: { s: "jomtien_beach_rd_n", n: "ws_gate", w: "buddha_hill", e: "second_rd_s" },
+    exits: { s: "jomtien_beach_rd_n", n: "ws_gate", w: "buddha_hill", e: "second_rd_s",
+             soi5: "pratumnak_hill_rd" },
   },
 
   // ── Pratumnak north extension: the loop over the hill ────────────────────────
@@ -567,7 +568,7 @@ const ROOMS = {
     desc: "Where the Main Strip's neon finally gives out and the road tips upward: the last few " +
       "late-night noodle carts, then condo walls and the hill proper. The strip is back down to " +
       "the south; the mouth of the Supertown drag alley opens to the west; the road climbs on north.",
-    exits: { down: "thappraya_e", n: "thappraya_ext_m", w: "supertown_elbow" },
+    exits: { down: "thappraya_e", n: "thappraya_ext_m", s: "supertown_elbow" },
   },
   thappraya_ext_m: {
     name: "Thappraya Road — Hill (middle)",
@@ -592,7 +593,7 @@ const ROOMS = {
     desc: "The saddle over the top of Pratumnak Hill, linking the two roads that climb it — the " +
       "Thappraya side to the east, the Dongtan Beach side to the west. Walls, viewpoints you can't " +
       "make out in the dark, and the sea breathing somewhere below on both sides.",
-    exits: { e: "thappraya_ext_n", w: "dongtan_rd_n" },
+    exits: { e: "thappraya_ext_n", w: "dongtan_rd_n", n: "pratumnak_rd" },
   },
   dongtan_rd_n: {
     name: "Dongtan Beach Road (North)",
@@ -656,7 +657,7 @@ const ROOMS = {
       "stand idles on the corner, drivers watching the street like sleepy hawks.",
     busStop: "beachrd",
     motosai: true,
-    exits: { s: "ws_gate", n: "beach_rd_c", e: "second_rd_s", w: "short_time_motel", spa: "papaya_massage", spa2: "beachthai_massage" },
+    exits: { s: "ws_gate", n: "beach_rd_c", e: "second_rd_s", spa: "papaya_massage", spa2: "beachthai_massage" },
   },
 
   short_time_motel: {
@@ -669,7 +670,7 @@ const ROOMS = {
       "keys on a nail. Two plastic stools. An older Thai man sits behind the " +
       "counter, a thermos of coffee at his elbow, watching the alley with the " +
       "patient stillness of someone who has long stopped being surprised by anything.",
-    exits: { out: "beach_rd_s" },
+    exits: { out: "pattaya_soi_7" },
   },
   beach_rd_c: {
     name: "Beach Road Central",
@@ -681,7 +682,8 @@ const ROOMS = {
       "just south of it TEQUILA QUEEN's ancient neon señorita kicks her leg, as she " +
       "has since before you were born.",
     busStop: "beachrd",
-    exits: { s: "beach_rd_s", n: "beach_rd_n", w: "promenade", e: "central_mall", in: "tequila_queen", spa: "beachrd_oil" },
+    exits: { s: "beach_rd_s", n: "beach_rd_n", w: "promenade", e: "central_mall", in: "tequila_queen", spa: "beachrd_oil",
+             soi7: "pattaya_soi_7" },
   },
   tequila_queen: {
     name: "Tequila Queen A-Go-Go",
@@ -948,7 +950,8 @@ const ROOMS = {
       "town into north and south. This block is a massage row: SMILE MASSAGE winks pink " +
       "from the west side, and opposite, four floors of blue neon spell POSEIDON MASSAGE " +
       "over a doorman and a fish tank.",
-    exits: { s: "second_rd_c", n: "pattaya_klang", w: "smile_massage", e: "poseidon_soapy" },
+    exits: { s: "second_rd_c", n: "pattaya_klang", w: "pattaya_soi_7", e: "poseidon_soapy",
+             spa: "smile_massage" },
   },
   pattaya_klang: { motosai: true,
     name: "Central Pattaya Road (Pattaya Klang)",
@@ -956,7 +959,7 @@ const ROOMS = {
     desc: "The big east-west artery, bisecting Beach Road, Second Road, and Soi Buakhao " +
       "in one straight shot from the sea to Sukhumvit. Baht buses, banks, gold shops, " +
       "and a river of traffic that never quite jams and never quite flows.",
-    exits: { w: "beach_rd_c", s: "second_rd_n", e: "buakhao_klang" },
+    exits: { w: "beach_rd_c", n: "second_rd_soi6", s: "second_rd_n", e: "buakhao_klang" },
   },
 
   // ─── Shopping (Second Road) ───
@@ -1007,6 +1010,45 @@ const ROOMS = {
       "The food court smells, permanently and not unpleasantly, of frying garlic.",
     ],
     exits: { out: "second_rd_diana" },
+  },
+
+  // Second Road at the foot of Soi 6 — the junction is real and exact, and until
+  // now the road simply stopped short of it, so Soi 6 dead-ended.
+  second_rd_soi6: {
+    motosai: true,
+    name: "Second Road (Soi 6)",
+    region: "Second Road",
+    desc: "Second Road where Soi 6 runs into it, and the contrast does the work: " +
+      "behind you a corridor of shouting neon, out here four lanes of traffic that " +
+      "could not care less. Girls come out of the soi's mouth in ones and twos to " +
+      "buy something from the stall on the corner and go straight back in. A " +
+      "songthaew slows, reads the pavement, decides against it, and rolls on.",
+    revisit: [
+      "Somebody comes out of Soi 6 at speed, thinks better of it, and goes back in.",
+      "The corner stall does steady business in cigarettes and cold water.",
+      "Traffic, traffic, and the soi behind you making its noise into it.",
+      "A girl in going-out clothes waits to cross, gives up, and walks the long way.",
+    ],
+    exits: { w: "soi6_deep", s: "pattaya_klang" },
+  },
+
+  pattaya_soi_7: {
+    motosai: true,
+    name: "Soi 7",
+    region: "Beach Road",
+    desc: "One of the numbered sois running inland off the beach, and busier than its " +
+      "number suggests. Beer bars down one side with their stools out on the " +
+      "pavement, a laundry, two minimarts facing each other in a war of attrition, " +
+      "and short-time places behind roll-down shutters that go up around nine. " +
+      "The soi runs from Beach Road through to Second Road; people cut down it all " +
+      "night on the way to somewhere else, and a fair few stop.",
+    revisit: [
+      "The shutters are up on both sides now. Somebody is hosing the pavement anyway.",
+      "The two minimarts continue their war. Neither is winning.",
+      "A couple come out of a doorway not quite together and separate at the corner.",
+      "Bar stools, laundry steam, and a steady trickle of people cutting through.",
+    ],
+    exits: { w: "beach_rd_c", e: "second_rd_n", in: "short_time_motel" },
   },
 
   // ─── Myth Night ───
@@ -1250,7 +1292,7 @@ const ROOMS = {
       "Somebody comes out of one door, thinks about it, and goes in the other.",
       "The bass from both sides meets in the middle of the soi and cancels into mush.",
     ],
-    exits: { n: "ws_north", in: "windmill", out: "ws_north" },
+    exits: { w: "ws_north", in: "windmill", out: "ws_north" },
     venues: ["windmill", "katoeys"],
   },
   windmill: {
@@ -1363,7 +1405,7 @@ const ROOMS = {
       "Two piwins are eating noodles off the seat of a parked bike, unhurried, " +
         "watching the traffic fail to move.",
     ],
-    exits: { n: "pattaya_klang", s: "buakhao_myth", spa: "klang_massage" },
+    exits: { w: "pattaya_klang", s: "buakhao_myth", spa: "klang_massage" },
   },
   buakhao_myth: {
     motosai: true,
@@ -1843,6 +1885,7 @@ const ROOMS = {
     venues: ["queen_vic", "sunset_rail", "bay_watch", "sandy_toes"],
   },
   soi6_deep: {
+    // the soi's real east end: it meets Second Road here, 0 m
     name: "Soi 6 (East End)",
     region: "Soi 6",
     seven: true,
@@ -1862,7 +1905,7 @@ const ROOMS = {
       "The deep soi again. Kitten, Cherry, Ruby — three fronts, three staircases, three sets of hands already reaching. You are, once more, the entire economy walking past.",
       "Back to where the soi runs out toward Second Road, neon stacked to the roofline, a girl on your sleeve saying the quiet part first and loud: \"Come upstairs, tilac. Why we pretend?\"",
     ],
-    exits: { w: "soi6_mid" },
+    exits: { w: "soi6_mid", e: "second_rd_soi6" },
     venues: ["kitten_corner", "cherry_pop", "ruby_kiss"],
   },
   kitten_corner: {
@@ -2462,7 +2505,7 @@ const ROOMS = {
       "and laundries. Two more beer bars face each other across the narrow strip, close enough " +
       "that the girls of one heckle the customers of the other. It smells of grilled chicken, " +
       "spilled Chang, and somebody's jasmine.",
-    exits: { w: "soi_honey_w", e: "buakhao_n", n: "queen_bee", s: "buzz_inn" },
+    exits: { w: "soi_honey_w", s: "buakhao_n", n: "queen_bee", in: "buzz_inn" },
   },
   honey_soapy: {
     name: "Honeycomb Massage",
@@ -2513,7 +2556,7 @@ const ROOMS = {
       "south of Soi Honey. On the south corner, the open-air KISS restaurant does brisk trade under " +
       "its fairy lights — everyone in Pattaya gives directions off it. East, the soi runs away into " +
       "warm light and eighty different sound systems; the first beer bar's girls are already waving.",
-    exits: { w: "second_rd_diana", e: "diana_mid", s: "kiss", n: "dollhouse" },
+    exits: { w: "second_rd_diana", e: "diana_mid", in: "kiss", n: "dollhouse" },
   },
   diana_mid: {
     name: "Soi Diana (middle)",
@@ -2522,7 +2565,7 @@ const ROOMS = {
       "working the narrow strip between, a hundred fairy-lit stools and a lady on every one. A side " +
       "door of the LK Metro complex breathes cold air and go-go bass from further east — but that's " +
       "the complex; the soi itself keeps it simple. Somewhere a bell rings and a whole bar cheers.",
-    exits: { w: "diana_w", e: "diana_e", n: "sapphire", s: "sundowner" },
+    exits: { w: "diana_w", e: "diana_e", n: "sapphire", s: "sundowner", hotel: "areca_room" },
   },
   diana_e: {
     name: "Soi Diana (Buakhao end)",
@@ -2531,7 +2574,7 @@ const ROOMS = {
       "mouth is up on Buakhao proper); the Areca Lodge's lit driveway is on the other. Ahead, the " +
       "soi spills onto Soi Buakhao by the 7-Eleven on the corner — Candy Bar's rose-pink sign " +
       "glows just two doors south of it.",
-    exits: { w: "diana_mid", e: "buakhao_n", n: "cricketers", s: "areca_room", lk: "lk_bend" },
+    exits: { w: "diana_mid", e: "buakhao_n", n: "cricketers", lk: "lk_bend" },
   },
   kiss: {
     name: "KISS Restaurant",
@@ -2594,7 +2637,7 @@ const ROOMS = {
         "house creed. Down the margin, the week's fixtures and the sacred words: 'ALL GAMES, ALL " +
         "DAY, PROPER GRAVY.'",
     },
-    exits: { out: "diana_e" },
+    exits: { out: "diana_mid" },
   },
   papaya_massage: {
     name: "Papaya Massage",
@@ -2623,6 +2666,7 @@ const ROOMS = {
     exits: { out: "beach_rd_s" },
   },
   areca_room: {
+    // the Areca fronts the middle of Soi Diana, not its Buakhao end
     name: "Your Room — Areca Lodge",
     region: "Soi Diana",
     outlet: true,
@@ -2630,7 +2674,7 @@ const ROOMS = {
       "actually works, a kettle, and a window over the garden pool where a few long-stay couples " +
       "are doing slow lengths. Comfortable, central, unremarkable in the best way — the whole soi's " +
       "racket is thirty seconds out the door, and none of it follows you in.",
-    exits: { out: "diana_e" },
+    exits: { out: "diana_mid" },
   },
   hotel_room: {
     name: "Your Room — Sabai Palms Hotel",
@@ -9896,9 +9940,11 @@ const ROOM_GEO = {
   second_thai:      [12.93014, 100.88107],
   second_rd_c:      [12.93431, 100.88506],
   second_rd_n:      [12.93539, 100.88580],
+  pattaya_soi_7:    [12.93650, 100.88500],
   smile_massage:    [12.93552, 100.88554],
   poseidon_soapy:   [12.93528, 100.88606],
   pattaya_klang:    [12.93665, 100.88651],
+  second_rd_soi6:   [12.94182, 100.88788],
   // Myth Night
   myth_night:       [12.93274, 100.88479],
   mikes_mall:        [12.9319, 100.88081],
@@ -9928,8 +9974,8 @@ const ROOM_GEO = {
   lucky_tiger:      [12.92901, 100.88506],
   buakhao_market:   [12.92691, 100.88300],
   candy_bar:        [12.92857, 100.88474],
-  silk_rose:        [12.92622, 100.88221],
-  buakhao_oil:      [12.92649, 100.88218],
+  silk_rose:        [12.92693, 100.88327],
+  buakhao_oil:      [12.92676, 100.88312],
   buakhao_s:        [12.92490, 100.88002],
   jasmine_garden:   [12.92414, 100.87915],
   // Soi Honey (Soi 11, between Second Rd and Buakhao)

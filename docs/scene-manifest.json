@@ -2,10 +2,10 @@
   "generated": "2026-08-08",
   "note": "Every room in the game + its region, for the scene-art pipeline (docs/art-pipeline-spec.md). Derived from web/js/world.js — regenerate with scripts/gen-scene-manifest.mjs, do not hand-edit. `kind` is a generator heuristic for prompt-template selection, not game canon. `regionSlug` is produced by the same regex as web/js/scene.js `_sceneArt()`; art files are web/art/rooms/<id>.png with web/art/regions/<slug>.png as the fallback.",
   "counts": {
-    "rooms": 192,
+    "rooms": 194,
     "regions": 15,
     "byKind": {
-      "street": 68,
+      "street": 70,
       "massage": 17,
       "beer": 49,
       "shop": 2,
@@ -39,6 +39,7 @@
         "central_mall",
         "north_beach",
         "papaya_massage",
+        "pattaya_soi_7",
         "police_station",
         "promenade",
         "short_time_motel",
@@ -208,13 +209,14 @@
         "second_rd_diana",
         "second_rd_n",
         "second_rd_s",
+        "second_rd_soi6",
         "second_thai",
         "smile_massage"
       ],
       "sampleDescs": [
         "The mouth of Soi Diana, and Second Road doing what Second Road does: four lanes of baht buses running nose to tail, a permanent shoal of motorbikes in the gutter lane, and pavement so narrow that walking it is a negotiation. The go-go neon starts about twenty metres up the soi and doesn't stop until Buakhao. On this corner: a 7-Eleven with a cash machine, a knot of piwins who have claimed the shade of its sign, and a girl on the back of a bike checking her lipstick in a wing mirror at a red light.",
-        "The working road running parallel between Beach Road and Soi Buakhao — less neon, more motorbikes, the town with its makeup half off. It climbs south onto the north shoulder of Pratumnak Hill, toward Jomtien beyond.",
-        "Mid-Second-Road: baht buses in convoy, pharmacies, and the constant churn between the mall's back doors to the west and the fairy-lit mouth of MYTH NIGHT market to the east."
+        "The north stretch, where Second Road angles toward the Dolphin roundabout. Central Pattaya Road — Pattaya Klang — crosses just ahead, cutting the whole town into north and south. This block is a massage row: SMILE MASSAGE winks pink from the west side, and opposite, four floors of blue neon spell POSEIDON MASSAGE over a doorman and a fish tank.",
+        "The working road running parallel between Beach Road and Soi Buakhao — less neon, more motorbikes, the town with its makeup half off. It climbs south onto the north shoulder of Pratumnak Hill, toward Jomtien beyond."
       ]
     },
     {
@@ -238,8 +240,8 @@
         "sunset_rail"
       ],
       "sampleDescs": [
-        "The west end of the soi, and it hits you the moment you step in — a wall of bars at volume, each trying to drown the next in bass and shouted Thai pop. No stages, no dark rooms: just open-air fronts at street level thrown wide to the pavement, and the ladies working them, spilling out in sequins and very little else to reel in anything that walks. \"HANDSOME MAN!\" \"Hey! WHERE YOU GO!\" You are grabbed by the wrist. You are grabbed by the other wrist. Someone significantly shorter than you attempts to climb onto your back. A couple of the girls have armed themselves with foam pool noodles and swat anyone who dares walk past without stopping. PINK LOTUS LOUNGE, GOLDEN DRAGON BAR, and SUNSET DREAMS LOUNGE are the main combatants here. East, the soi opens into a quieter middle stretch before the racket picks up again at the far end.",
         "The east end of the soi, past the quieter middle, where the bars run on toward Second Road and the volume comes roaring back. KITTEN CORNER, CHERRY POP BAR, and RUBY KISS BAR trade wrist-grabs down this stretch — same open ground-floor fronts, same three-colour neon, same staircases behind the bar the menu doesn't mention, and the same foam pool noodles that find your ribs if you try to walk on by.",
+        "The west end of the soi, and it hits you the moment you step in — a wall of bars at volume, each trying to drown the next in bass and shouted Thai pop. No stages, no dark rooms: just open-air fronts at street level thrown wide to the pavement, and the ladies working them, spilling out in sequins and very little else to reel in anything that walks. \"HANDSOME MAN!\" \"Hey! WHERE YOU GO!\" You are grabbed by the wrist. You are grabbed by the other wrist. Someone significantly shorter than you attempts to climb onto your back. A couple of the girls have armed themselves with foam pool noodles and swat anyone who dares walk past without stopping. PINK LOTUS LOUNGE, GOLDEN DRAGON BAR, and SUNSET DREAMS LOUNGE are the main combatants here. East, the soi opens into a quieter middle stretch before the racket picks up again at the far end.",
         "The middle of Soi 6, where the wall of noise thins to something you can hear yourself think over. The hard-selling open fronts of the west end give way to a run of easygoing beer bars whose whole business is letting you sit and watch the parade rather than be dragged into it. The pullers here are lazier, or wiser — they leave the grabbing to the loud ends and pick up the men who wander through wanting a cold one and a ringside seat. THE SHADY LADY, FRONT ROW BAR, and THE VERANDAH line the quiet stretch, and the QUEEN VIC INN — real aircon, real wood, a dartboard — anchors it, the one place on the soi that isn't shouting. West, the racket starts up again; east, it's worse."
       ]
     },
@@ -285,8 +287,8 @@
         "sundowner"
       ],
       "sampleDescs": [
-        "The Buakhao end of Soi Diana. The LK Metro alley opens off to one side (its other mouth is up on Buakhao proper); the Areca Lodge's lit driveway is on the other. Ahead, the soi spills onto Soi Buakhao by the 7-Eleven on the corner — Candy Bar's rose-pink sign glows just two doors south of it.",
         "The thick of Soi Diana: open beer bars shoulder to shoulder down both sides, barkers working the narrow strip between, a hundred fairy-lit stools and a lady on every one. A side door of the LK Metro complex breathes cold air and go-go bass from further east — but that's the complex; the soi itself keeps it simple. Somewhere a bell rings and a whole bar cheers.",
+        "The Buakhao end of Soi Diana. The LK Metro alley opens off to one side (its other mouth is up on Buakhao proper); the Areca Lodge's lit driveway is on the other. Ahead, the soi spills onto Soi Buakhao by the 7-Eleven on the corner — Candy Bar's rose-pink sign glows just two doors south of it.",
         "The Second Road mouth of Soi Diana, a long strip of open-fronted beer bars one block south of Soi Honey. On the south corner, the open-air KISS restaurant does brisk trade under its fairy lights — everyone in Pattaya gives directions off it. East, the soi runs away into warm light and eighty different sound systems; the first beer bar's girls are already waving."
       ]
     },
@@ -503,6 +505,20 @@
       "dark": false,
       "people": [],
       "desc": "Just south of KISS, where Soi Diana's noise gives way to the Beach Road breeze — a pink-lit oil shop with the usual girls on the usual stools and the usual small sticker on the mirror. The sea air almost makes it feel wholesome. Almost."
+    },
+    {
+      "id": "pattaya_soi_7",
+      "name": "Soi 7",
+      "bar": null,
+      "barType": null,
+      "region": "Beach Road",
+      "regionSlug": "beach-road",
+      "kind": "street",
+      "dark": false,
+      "people": [
+        "Beer"
+      ],
+      "desc": "One of the numbered sois running inland off the beach, and busier than its number suggests. Beer bars down one side with their stools out on the pavement, a laundry, two minimarts facing each other in a war of attrition, and short-time places behind roll-down shutters that go up around nine. The soi runs from Beach Road through to Second Road; people cut down it all night on the way to somewhere else, and a fair few stop."
     },
     {
       "id": "police_station",
@@ -1745,6 +1761,18 @@
       "dark": false,
       "people": [],
       "desc": "The working road running parallel between Beach Road and Soi Buakhao — less neon, more motorbikes, the town with its makeup half off. It climbs south onto the north shoulder of Pratumnak Hill, toward Jomtien beyond."
+    },
+    {
+      "id": "second_rd_soi6",
+      "name": "Second Road (Soi 6)",
+      "bar": null,
+      "barType": null,
+      "region": "Second Road",
+      "regionSlug": "second-road",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "Second Road where Soi 6 runs into it, and the contrast does the work: behind you a corridor of shouting neon, out here four lanes of traffic that could not care less. Girls come out of the soi's mouth in ones and twos to buy something from the stall on the corner and go straight back in. A songthaew slows, reads the pavement, decides against it, and rolls on."
     },
     {
       "id": "second_thai",

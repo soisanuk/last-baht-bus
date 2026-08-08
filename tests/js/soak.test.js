@@ -86,7 +86,11 @@ const DE_CEILINGS = [
   // 309 → 391 → 274. It rose when the map got more connected and FELL hard once
   // the expansion settled, because the new rooms give the walk more places to be
   // and it spends fewer of its steps re-treading untranslated town prose.
-  { mode: "vacation", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 274 },
+  // 274 → 338 across the exit-fix pass. Soi 6 opens onto Second Road, Soi 5
+  // connects the hill road to Walking Street, and Pattaya Soi 7 exists — three
+  // new ways through, so the walk reaches further into untranslated town. All
+  // reachability; --delta accounts for the new prose separately.
+  { mode: "vacation", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 338 },
   // act1 is the do-or-die opening — the wallet chain, the fail/reset screens, the
   // hint whispers. NEITHER other mode reaches it: soi6 force-sets act1Done, and
   // so does the soak's own vacation setup. It was unguarded until 2026-08-07, and
@@ -96,7 +100,7 @@ const DE_CEILINGS = [
   // 131 → 124 → 125 → 147. This one ROSE and it is honest: Act One's route now
   // runs through five more Soi Buakhao rooms, and their prose has no de entries
   // yet. Real new English on the critical path — see docs/i18n-de-gaps.md.
-  { mode: "act1", seeds: [1, 2, 3, 4, 5], nights: 3, ceiling: 147 },
+  { mode: "act1", seeds: [1, 2, 3, 4, 5], nights: 3, ceiling: 146 },
   // expat: the endless stage, unreachable from the other modes (soi6 and the
   // soak's own vacation setup both force act1Done and stop there). Added with
   // the bar-owning chain.
@@ -108,7 +112,7 @@ const DE_CEILINGS = [
   // quests. Authored quest prose is guarded by scripted playthroughs instead
   // (tests/js/barchain.test.js).
   // 312 → 429 → 399, same story as vacation.
-  { mode: "expat", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 399 },
+  { mode: "expat", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 412 },
 ];
 
 for (const { mode, seeds, nights, ceiling } of DE_CEILINGS) {
