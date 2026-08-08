@@ -22,13 +22,13 @@
   "Blue Dog"
  ],
  "counts": {
-  "geolocated": 206,
+  "geolocated": 208,
   "patrons": 18,
   "people": 268,
   "portraits": 286,
   "renders": 72,
   "thumbs": 72,
-  "venues": 206
+  "venues": 208
  },
  "frames": [
   "baimon_pic1",
@@ -3087,6 +3087,14 @@
    "name": "Beach Road (Soi 7)",
    "region": "Beach Road"
   },
+  "beach_rd_soi8": {
+   "geo": [
+    12.93655,
+    100.88277
+   ],
+   "name": "Beach Road (Soi 8)",
+   "region": "Beach Road"
+  },
   "beach_rd_soi9": {
    "geo": [
     12.93598,
@@ -4401,6 +4409,14 @@
    ],
    "name": "Second Road (Soi 6)",
    "region": "Second Road"
+  },
+  "second_rd_soi8": {
+   "geo": [
+    12.93491,
+    100.88548
+   ],
+   "name": "Second Road (Soi 8)",
+   "region": "Beach Road"
   },
   "second_thai": {
    "bar": "Second Road Traditional Massage",
