@@ -22,13 +22,13 @@
   "Blue Dog"
  ],
  "counts": {
-  "geolocated": 215,
+  "geolocated": 223,
   "patrons": 18,
-  "people": 281,
-  "portraits": 299,
+  "people": 297,
+  "portraits": 315,
   "renders": 72,
   "thumbs": 72,
-  "venues": 215
+  "venues": 223
  },
  "frames": [
   "baimon_pic1",
@@ -1208,6 +1208,42 @@
    "room": "blue_dog",
    "th": "ขิง"
   },
+  "kingfisher_kaew": {
+   "desc": "A crooked, disarming grin — one of The Kingfisher's girls, from Surin. She types more than she talks — and laughs at both.",
+   "emoji": "🦋",
+   "filler": true,
+   "name": "Kaew",
+   "role": "hostess",
+   "room": "kingfisher",
+   "th": "แก้ว"
+  },
+  "kingfisher_noey": {
+   "desc": "A note-counting machine at her elbow and a faster one behind her eyes — the cashier at The Kingfisher, from Khon Kaen.",
+   "emoji": "🧾",
+   "filler": true,
+   "name": "Noey",
+   "role": "cashier",
+   "room": "kingfisher",
+   "th": "เนย"
+  },
+  "kingfisher_praew": {
+   "desc": "Sleepy-eyed and entirely unbothered — one of The Kingfisher's girls, from Ubon. Google Translate is open before you finish the sentence.",
+   "emoji": "🌷",
+   "filler": true,
+   "name": "Praew",
+   "role": "hostess",
+   "room": "kingfisher",
+   "th": "แพรว"
+  },
+  "kingfisher_somsri": {
+   "desc": "Elegant, weathered, and plainly the last word on everything in the room — the mamasan of The Kingfisher, from Ubon. She started on the stage at seventeen and owns three of these stools now.",
+   "emoji": "👑",
+   "filler": true,
+   "name": "Somsri",
+   "role": "mamasan",
+   "room": "kingfisher",
+   "th": "สมศรี"
+  },
   "kinnaree": {
    "desc": "The mamasan, and the owner's wife, and by a distance the most organised person in the building — fifties, hair up, reading glasses on a chain, a till roll in one hand. She named nothing after herself; her husband did that, and she has been quietly embarrassed about it since 1996. Runs a floor where nothing is ever explained twice.",
    "emoji": "👑",
@@ -2383,6 +2419,78 @@
    "name": "Terry",
    "room": "queen_vic"
   },
+  "the_gecko_duan": {
+   "desc": "Sleepy-eyed and entirely unbothered — one of The Gecko's girls, from Yasothon. She types more than she talks — and laughs at both.",
+   "emoji": "🍒",
+   "filler": true,
+   "name": "Duan",
+   "role": "hostess",
+   "room": "the_gecko",
+   "th": "เดือน"
+  },
+  "the_gecko_ple": {
+   "desc": "Quiet and quick, the still point the whole loud room pays into — the cashier at The Gecko, from Buriram.",
+   "emoji": "🧾",
+   "filler": true,
+   "name": "Ple",
+   "role": "cashier",
+   "room": "the_gecko",
+   "th": "เปิ้ล"
+  },
+  "the_gecko_somjai": {
+   "desc": "Rings on every finger and a voice that cuts the music when she wants it — the mamasan of The Gecko, from Kalasin. She married a farang, buried the marriage, and kept the house.",
+   "emoji": "👑",
+   "filler": true,
+   "name": "Somjai",
+   "role": "mamasan",
+   "room": "the_gecko",
+   "th": "สมใจ"
+  },
+  "the_gecko_yok": {
+   "desc": "New enough to still look a little nervous — one of The Gecko's girls, from Buriram. Google Translate is open before you finish the sentence.",
+   "emoji": "🌼",
+   "filler": true,
+   "name": "Yok",
+   "role": "hostess",
+   "room": "the_gecko",
+   "th": "หยก"
+  },
+  "the_terrace_fah": {
+   "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of The Terrace's girls, from Nakhon Phanom. The {{phone}} never leaves her hand.",
+   "emoji": "💕",
+   "filler": true,
+   "name": "Fah",
+   "role": "hostess",
+   "room": "the_terrace",
+   "th": "ฟ้า"
+  },
+  "the_terrace_kade": {
+   "desc": "Sleeve of faded tattoos and an abacus brain — the least-fooled soul in here — the cashier at The Terrace, from Loei.",
+   "emoji": "🧾",
+   "filler": true,
+   "name": "Kade",
+   "role": "cashier",
+   "room": "the_terrace",
+   "th": "เกด"
+  },
+  "the_terrace_namtip": {
+   "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of The Terrace's girls, from Nakhon Phanom. Google Translate is open before you finish the sentence.",
+   "emoji": "🌻",
+   "filler": true,
+   "name": "Namtip",
+   "role": "hostess",
+   "room": "the_terrace",
+   "th": "น้ำทิพย์"
+  },
+  "the_terrace_wandee": {
+   "desc": "Half-moon glasses down her nose, appraising you over the top of them — the mamasan of The Terrace, from Kalasin. She has run this floor longer than most of the girls have been alive.",
+   "emoji": "👑",
+   "filler": true,
+   "name": "Wandee",
+   "role": "mamasan",
+   "room": "the_terrace",
+   "th": "วันดี"
+  },
   "tik": {
    "desc": "Baby-faced, chewing gum, thumbing her phone under the bar — one of Gold Rush Lounge's girls, from Khon Kaen. She types more than she talks — and laughs at both.",
    "emoji": "🌻",
@@ -2468,6 +2576,42 @@
    "role": "hostess",
    "room": "slutty",
    "th": "ตุ๊กตา"
+  },
+  "two_stools_jinda": {
+   "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of Two Stools Bar's girls, from {{Nong Khai}}. The {{phone}} never leaves her hand.",
+   "emoji": "🌻",
+   "filler": true,
+   "name": "Jinda",
+   "role": "hostess",
+   "room": "two_stools",
+   "th": "จินดา"
+  },
+  "two_stools_meaw": {
+   "desc": "Baby-faced, chewing gum, thumbing her phone under the bar — one of Two Stools Bar's girls, from Sakon Nakhon. She types more than she talks — and laughs at both.",
+   "emoji": "🌺",
+   "filler": true,
+   "name": "Meaw",
+   "role": "hostess",
+   "room": "two_stools",
+   "th": "แมว"
+  },
+  "two_stools_orm": {
+   "desc": "A note-counting machine at her elbow and a faster one behind her eyes — the cashier at Two Stools Bar, from Loei.",
+   "emoji": "🧾",
+   "filler": true,
+   "name": "Orm",
+   "role": "cashier",
+   "room": "two_stools",
+   "th": "ออม"
+  },
+  "two_stools_ratree": {
+   "desc": "Half-moon glasses down her nose, appraising you over the top of them — the mamasan of Two Stools Bar, from Mukdahan. She has run this floor longer than most of the girls have been alive.",
+   "emoji": "👑",
+   "filler": true,
+   "name": "Ratree",
+   "role": "mamasan",
+   "room": "two_stools",
+   "th": "ราตรี"
   },
   "view": {
    "desc": "Long hair, longer eyelashes, a practised pout — one of Neon Paradise A-Go-Go's girls, from Roi Et. The {{phone}} never leaves her hand.",
@@ -2785,6 +2929,10 @@
   "kesinee",
   "kesorn",
   "khing",
+  "kingfisher_kaew",
+  "kingfisher_noey",
+  "kingfisher_praew",
+  "kingfisher_somsri",
   "kinnaree",
   "kluay",
   "kob",
@@ -2930,6 +3078,14 @@
   "tar",
   "tarn",
   "terry",
+  "the_gecko_duan",
+  "the_gecko_ple",
+  "the_gecko_somjai",
+  "the_gecko_yok",
+  "the_terrace_fah",
+  "the_terrace_kade",
+  "the_terrace_namtip",
+  "the_terrace_wandee",
   "tik",
   "tim",
   "toey",
@@ -2940,6 +3096,10 @@
   "tui",
   "tukky",
   "tukta",
+  "two_stools_jinda",
+  "two_stools_meaw",
+  "two_stools_orm",
+  "two_stools_ratree",
   "view",
   "wa",
   "waan",
@@ -3686,6 +3846,24 @@
    "name": "Golden Dragon Bar",
    "region": "Soi 6"
   },
+  "half_moon_massage": {
+   "bar": "Half Moon Massage",
+   "geo": [
+    12.91142,
+    100.86072
+   ],
+   "name": "Half Moon Massage",
+   "region": "Pratumnak"
+  },
+  "hillside_massage": {
+   "bar": "Hillside Massage",
+   "geo": [
+    12.91037,
+    100.85949
+   ],
+   "name": "Hillside Massage",
+   "region": "Pratumnak"
+  },
   "honey_soapy": {
    "bar": "Honeycomb Massage",
    "geo": [
@@ -3911,6 +4089,17 @@
    "name": "Soi Khao Talo (the strip)",
    "region": "Darkside",
    "seven": true
+  },
+  "kingfisher": {
+   "bar": "The Kingfisher",
+   "barType": "beer",
+   "geo": [
+    12.91127,
+    100.86068
+   ],
+   "name": "The Kingfisher",
+   "pool": true,
+   "region": "Pratumnak"
   },
   "kinky": {
    "bar": "KINKY Go-Go",
@@ -4390,6 +4579,22 @@
     100.86183
    ],
    "name": "Pratumnak Soi 5",
+   "region": "Pratumnak"
+  },
+  "pratumnak_soi5_b": {
+   "geo": [
+    12.91028,
+    100.85937
+   ],
+   "name": "Pratumnak Soi 5 (bottom)",
+   "region": "Pratumnak"
+  },
+  "pratumnak_soi5_m": {
+   "geo": [
+    12.91133,
+    100.8606
+   ],
+   "name": "Pratumnak Soi 5 (middle)",
    "region": "Pratumnak"
   },
   "promenade": {
@@ -4909,6 +5114,16 @@
    "name": "The Boardroom",
    "region": "Thappraya"
   },
+  "the_gecko": {
+   "bar": "The Gecko",
+   "barType": "beer",
+   "geo": [
+    12.91022,
+    100.85945
+   ],
+   "name": "The Gecko",
+   "region": "Pratumnak"
+  },
   "the_growler": {
    "bar": "The Growler",
    "barType": "beer",
@@ -4928,6 +5143,16 @@
    ],
    "name": "The Office Bar",
    "region": "Thappraya"
+  },
+  "the_terrace": {
+   "bar": "The Terrace",
+   "barType": "beer",
+   "geo": [
+    12.91139,
+    100.8605
+   ],
+   "name": "The Terrace",
+   "region": "Pratumnak"
   },
   "tt_back": {
    "geo": [
@@ -4977,6 +5202,16 @@
    ],
    "name": "Tree Town (Far Lane)",
    "region": "Tree Town"
+  },
+  "two_stools": {
+   "bar": "Two Stools Bar",
+   "barType": "beer",
+   "geo": [
+    12.91034,
+    100.85928
+   ],
+   "name": "Two Stools Bar",
+   "region": "Pratumnak"
   },
   "velvet_club": {
    "bar": "The Velvet Club",

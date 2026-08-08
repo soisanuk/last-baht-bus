@@ -437,7 +437,7 @@ const ROOMS = {
     name: "The Office Bar",
     bar: "The Office Bar", barType: "beer", darts: true,
     region: "Thappraya",
-    desc: "The other Samson beer bar, down the Second Road end — the joke's on the sign, so a man can " +
+    desc: "A Samson house at the Second Road end of the strip — the joke's on the sign, so a man can " +
       "honestly say he's 'at the office.' Dartboard, a telly showing football nobody watches, and the " +
       "easy end-of-strip pace before Second Road takes over. (PLAY DARTS.)",
     revisit: [
@@ -596,14 +596,154 @@ const ROOMS = {
       "all. The road tips west from here and keeps tipping — you can feel the gradient " +
       "in your calves before you can see it. Between two walls there is one gap, and " +
       "through it the whole bay, black and enormous, with Jomtien's lights strung along " +
-      "the far edge of it. East, further up, two of the walls have doors in them.",
+      "the far edge of it. East, further up, two of the walls have doors in them; west " +
+      "and down, the first bar lights start where the gradient eases.",
     revisit: [
       "Wall, wall, gate, wall. Somebody's air-conditioning unit dripping.",
       "A dog barks behind a gate, thinks better of it, and settles.",
       "The gap between the walls, the bay, and Jomtien laid out along the far side.",
       "Downhill from here. Your knees register it before you do.",
     ],
-    exits: { e: "pratumnak_clubs", w: "dongtan_rd_n" },
+    exits: { e: "pratumnak_clubs", w: "pratumnak_soi5_m" },
+  },
+  pratumnak_soi5_m: {
+    name: "Pratumnak Soi 5 (middle)",
+    region: "Pratumnak",
+    desc: "The gradient eases and the walls give way to the first bars — open-air, all of " +
+      "them, because up here the evening does the air-conditioning for free. THE TERRACE " +
+      "and THE KINGFISHER hold this block, and both are visibly better kept than a hill " +
+      "bar needs to be: matched stools, a roof that has been re-thatched this year, ice " +
+      "that arrives before you ask. The Samson brothers own the pair, and the difference " +
+      "shows from across the road. Next door, HALF MOON MASSAGE has its shutters up and " +
+      "two ladies on the step.",
+    revisit: [
+      "Two rails of fairy lights and a hill breeze doing the work of an aircon unit.",
+      "Somebody laughs at the Terrace. Somebody at the Kingfisher laughs back.",
+      "The massage ladies on the step consider you, without much urgency.",
+      "Open fronts, cold ice, and the sea a long way down through a gap in the wall.",
+    ],
+    exits: { e: "pratumnak_soi5", w: "pratumnak_soi5_b" },
+    venues: ["the_terrace", "kingfisher", "half_moon_massage"],
+  },
+  pratumnak_soi5_b: {
+    name: "Pratumnak Soi 5 (bottom)",
+    region: "Pratumnak",
+    desc: "The last stretch before the beach road, and the tone drops a grade: TWO STOOLS " +
+      "BAR is exactly as advertised and has been since somebody painted the sign by hand, " +
+      "and THE GECKO next to it runs on one strip light, a cool box and a lady who owns " +
+      "the place outright. Both open to the road, both cheaper than anything up the hill, " +
+      "and both entirely comfortable about it. HILLSIDE MASSAGE occupies the last shopfront " +
+      "before the corner. You can hear Dongtan from here.",
+    revisit: [
+      "One strip light, one cool box, and a conversation that has been going for hours.",
+      "The hand-painted sign at Two Stools has had another coat since you last looked.",
+      "Somebody's radio, the surf a street away, and nobody selling you anything.",
+      "Cheap and unbothered, and the beach road glowing at the bottom of the slope.",
+    ],
+    exits: { e: "pratumnak_soi5_m", w: "dongtan_rd_n" },
+    venues: ["two_stools", "the_gecko", "hillside_massage"],
+  },
+  the_terrace: {
+    name: "The Terrace",
+    bar: "The Terrace", barType: "beer",
+    region: "Pratumnak",
+    desc: "Open on three sides to the hill, with the good half of the view: a long teak rail, " +
+      "stools that all match, and a thatched roof somebody actually maintains. The Samson " +
+      "brothers bought it two seasons ago and spent money where it shows least and matters " +
+      "most — the ice, the glassware, the fact that the beer is genuinely cold. The girls " +
+      "are unhurried because the trade up here is regulars, and regulars do not need working.",
+    revisit: [
+      "Back onto the Terrace. The rail, the breeze, and a cold one landing without ceremony.",
+      "Somebody has taken the good corner. There is another good corner; there always is.",
+      "Matched stools, proper glasses, and the hill going quietly dark past the rail.",
+      "The Terrace again — the kind of easy that costs an owner money to maintain.",
+    ],
+    exits: { out: "pratumnak_soi5_m" },
+  },
+  kingfisher: {
+    name: "The Kingfisher",
+    bar: "The Kingfisher", barType: "beer",
+    region: "Pratumnak",
+    desc: "The Terrace's sister bar and its opposite in temperament: same owners, same money " +
+      "spent, but this one has the pool table, the speaker that gets used, and the staff who " +
+      "will absolutely take your bet. Open-fronted onto the soi with a painted bird over the " +
+      "bar that nobody can identify. Loud by Pratumnak standards, which is to say you can " +
+      "still hear the person next to you.",
+    revisit: [
+      "The Kingfisher takes you back, at volume. Somebody is losing at pool, cheerfully.",
+      "The painted bird over the bar remains unidentifiable. Opinions are offered.",
+      "Cold beer, warm noise, and the hill absorbing all of it ten metres out.",
+      "Back in. The speaker is doing something the eighties would recognise.",
+    ],
+    pool: true,
+    exits: { out: "pratumnak_soi5_m" },
+  },
+  two_stools: {
+    name: "Two Stools Bar",
+    bar: "Two Stools Bar", barType: "beer",
+    region: "Pratumnak",
+    desc: "There are eleven stools. The name is a joke that stopped being a joke around the " +
+      "time the sign faded, and nobody is going to repaint it now. Open to the road, one " +
+      "fan, a cool box, a fridge that hums like it is thinking about it, and prices that " +
+      "have moved twice this decade. The lady who runs it has run it a long time and treats " +
+      "the whole business as a way of having company in the evenings, which it is.",
+    revisit: [
+      "Two Stools again, and still eleven of them. Nobody has ever explained it.",
+      "The fridge hums, thinks about it, and carries on. Somebody tops up your glass.",
+      "Cheap, open to the road, and comfortable in a way that cannot be bought.",
+      "Back on a stool. The fan turns. The evening does not require anything of you.",
+    ],
+    exits: { out: "pratumnak_soi5_b" },
+  },
+  the_gecko: {
+    name: "The Gecko",
+    bar: "The Gecko", barType: "beer",
+    region: "Pratumnak",
+    desc: "One strip light, four stools, a cool box, and an actual gecko somewhere in the " +
+      "roof that the owner refers to by name and has never caught. She owns the place " +
+      "outright — no rent, no partner, no brothers — and says so about once an hour. Open " +
+      "to the road because there is no front to close. The cheapest beer on the hill and " +
+      "the best conversation on it, in that order or the other one.",
+    revisit: [
+      "The strip light, the cool box, and the gecko not being caught again.",
+      "Four stools. Two occupied. The owner counts this a good night and she is right.",
+      "Back at the Gecko, where the beer is cheapest and nobody is working an angle.",
+      "Somebody up in the roof clicks twice. The owner points at it, vindicated.",
+    ],
+    exits: { out: "pratumnak_soi5_b" },
+  },
+  half_moon_massage: {
+    name: "Half Moon Massage",
+    bar: "Half Moon Massage",
+    region: "Pratumnak",
+    desc: "A clean two-room shop with a laminated list on the wall — foot, Thai, oil, aloe " +
+      "for the sunburned — and the sharp green smell of balm. The ladies are middle-aged " +
+      "and mean it; the sticker on the mirror is the small one. Half the hill's condo " +
+      "residents come here weekly and are on first-name terms with a specific pair of hands.",
+    revisit: [
+      "Balm, cool tile, and somebody being folded in half two feet away.",
+      "The laminated list has not changed price since it was laminated.",
+      "A lady looks up, works out which of your shoulders is the bad one, and is right.",
+      "Somebody's condo keys on the counter, and a pair of sandals lined up under a chair.",
+    ],
+    exits: { out: "pratumnak_soi5_m" },
+  },
+  hillside_massage: {
+    name: "Hillside Massage",
+    bar: "Hillside Massage",
+    region: "Pratumnak",
+    desc: "The last shopfront before the corner, and the more relaxed of the hill's two: " +
+      "plastic chairs out front, a television on low, and whoever is not working asleep in " +
+      "one of the recliners. Foot massage on the pavement while you watch the road go by is " +
+      "the house speciality, and at this end of the soi the road going by is two scooters " +
+      "and a dog.",
+    revisit: [
+      "A television on low, a lady asleep in a recliner, and the road doing nothing.",
+      "Plastic chairs, a bucket of warm water, and the corner glowing past the shopfront.",
+      "Somebody waves you at a chair without getting up. It is that kind of establishment.",
+      "Two scooters and a dog go past. That is the whole of the traffic report.",
+    ],
+    exits: { out: "pratumnak_soi5_b" },
   },
   pratumnak_clubs: {
     name: "Pratumnak Hill Road (the clubs)",
@@ -635,9 +775,9 @@ const ROOMS = {
       "villa: no windows anywhere, which is the whole design, and cold enough that your " +
       "shirt goes stiff. Low leather, low light, a bar along the back with optics lit from " +
       "beneath, and ladies who do not get up when you come in — they look, they " +
-      "decide, and one of them arrives. The Samson brothers' first room this side of " +
-      "Thappraya, and you can see the money in the joinery. Bill runs it, and Bill runs " +
-      "it properly.",
+      "decide, and one of them arrives. The newest of the Samson brothers' rooms, and the " +
+      "only one they built rather than bought — you can see the money in the joinery. " +
+      "Bill runs it, and Bill runs it properly.",
     revisit: [
       "Down the ramp again. The door shuts and the hill stops existing.",
       "No windows, no clocks, no way to tell what o'clock it is out there. As intended.",
@@ -684,7 +824,7 @@ const ROOMS = {
       "kilometre — cold air, a cash machine, and two lads on a scooter parked across the " +
       "front eating toasties. Everyone going up the hill or down it stops here, because " +
       "there is nothing either way for a long time.",
-    exits: { s: "dongtan_rd_m", e: "pratumnak_soi5", w: "dongtan_beach_n" },
+    exits: { s: "dongtan_rd_m", e: "pratumnak_soi5_b", w: "dongtan_beach_n" },
   },
   dongtan_beach_s: {
     name: "Dongtan Beach (South)",
@@ -9846,6 +9986,11 @@ const _FILLER_HOSTESSES = [
   ["Bow","โบว์","doghouse"], // a SECOND Bow (Club Mirage has one) — see _fillerId
   ["Sroy","สร้อย","succubus"], ["Chom","ชม","succubus"], ["Pranee","ปราณี","succubus"],
   ["Milk","มิ้ลค์","velvet_club"], ["June","จูน","velvet_club"],
+  // appended, never inserted — see _fillerId
+  ["Fah","ฟ้า","the_terrace"], ["Namtip","น้ำทิพย์","the_terrace"],
+  ["Praew","แพรว","kingfisher"], ["Kaew","แก้ว","kingfisher"],
+  ["Meaw","แมว","two_stools"], ["Jinda","จินดา","two_stools"],
+  ["Duan","เดือน","the_gecko"], ["Yok","หยก","the_gecko"],
 ];
 
 // A filler girl's id used to be just her nickname lowercased, which quietly made
@@ -9860,6 +10005,17 @@ const _FILLER_HOSTESSES = [
 // falls back to <room>_<name>. Existing ids are untouched (no portrait renames, no
 // save breakage), and because _buildHostess hashes the ID to pick her hometown,
 // look and story, the second Bow gets a different life for free.
+// ORDER MATTERS, and it bit immediately: the bare id goes to whichever row the
+// loop reaches FIRST, so a duplicate INSERTED above an existing row steals her
+// id — and with it her portrait, since portraits are keyed on the id. Four
+// mamasans (Water Buffalo, KINKY, Las Vegas, Firefly) were silently re-keyed
+// that way within minutes of this landing. New rows go at the END of the table.
+//
+// The guard is portraits.test.js, and it is a real one rather than a convention:
+// portraits are committed per id, so a stolen id leaves the original with no
+// PNG and fails loudly. (A test that recomputes expected ids from the tables
+// CANNOT catch this — it derives its expectation from the thing it is checking
+// and passes on any ordering. One was written, and deleted for that reason.)
 function _fillerId(name, room) {
   const bare = name.toLowerCase();
   return NPCS[bare] ? room + "_" + bare : bare;
@@ -10019,6 +10175,8 @@ const _FILLER_MAMAS = [
   ["Wandee","วันดี","water_buffalo"], ["Somjai","สมใจ","firefly_bar"],
   ["Tui","ตุ่ย","night_heron"],
   
+  ["Wandee","วันดี","the_terrace"], ["Somsri","สมศรี","kingfisher"],
+  ["Ratree","ราตรี","two_stools"], ["Somjai","สมใจ","the_gecko"],
 ];
 const _FILLER_CASHIERS = [
   ["Nubnab","นับหนับ","windmill"], ["Farida","ฟาริดา","katoeys"],
@@ -10033,6 +10191,8 @@ const _FILLER_CASHIERS = [
   ["Kanya","กัญญา","orchid_club"],
   ["Mon","มล","night_heron"],
   
+  ["Kade","เกด","the_terrace"], ["Noey","เนย","kingfisher"],
+  ["Orm","ออม","two_stools"], ["Ple","เปิ้ล","the_gecko"],
 ];
 
 for (const [name, th, room] of _FILLER_MAMAS) {
@@ -10474,6 +10634,14 @@ const ROOM_GEO = {
   thappraya_ext_m:  [12.90765, 100.86893],
   thappraya_ext_n:  [12.91354, 100.87064],
   pratumnak_soi5:   [12.91238, 100.86183],
+  pratumnak_soi5_m: [12.91133, 100.86060],
+  the_terrace:      [12.91139, 100.86050],
+  kingfisher:       [12.91127, 100.86068],
+  half_moon_massage:[12.91142, 100.86072],
+  pratumnak_soi5_b: [12.91028, 100.85937],
+  two_stools:       [12.91034, 100.85928],
+  the_gecko:        [12.91022, 100.85945],
+  hillside_massage: [12.91037, 100.85949],
   pratumnak_clubs:  [12.91339, 100.86442],
   doghouse:         [12.91333, 100.86430],
   succubus:         [12.91347, 100.86455],

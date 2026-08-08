@@ -2,12 +2,12 @@
   "generated": "2026-08-08",
   "note": "Every room in the game + its region, for the scene-art pipeline (docs/art-pipeline-spec.md). Derived from web/js/world.js — regenerate with scripts/gen-scene-manifest.mjs, do not hand-edit. `kind` is a generator heuristic for prompt-template selection, not game canon. `regionSlug` is produced by the same regex as web/js/scene.js `_sceneArt()`; art files are web/art/rooms/<id>.png with web/art/regions/<slug>.png as the fallback.",
   "counts": {
-    "rooms": 215,
+    "rooms": 223,
     "regions": 15,
     "byKind": {
-      "street": 88,
+      "street": 92,
       "massage": 17,
-      "beer": 49,
+      "beer": 53,
       "shop": 2,
       "beach": 10,
       "interior": 3,
@@ -194,19 +194,27 @@
         "buddha_hill",
         "doghouse",
         "dongtan_rd_n",
+        "half_moon_massage",
+        "hillside_massage",
+        "kingfisher",
         "pratumnak_clubs",
         "pratumnak_hill_rd",
         "pratumnak_rd",
         "pratumnak_soi5",
+        "pratumnak_soi5_b",
+        "pratumnak_soi5_m",
         "succubus",
         "thappraya_ext_m",
         "thappraya_ext_n",
-        "thappraya_ext_s"
+        "thappraya_ext_s",
+        "the_gecko",
+        "the_terrace",
+        "two_stools"
       ],
       "sampleDescs": [
         "Halfway up, the walls stop being condominiums and start being something else. Two doors on this stretch, neither of them advertising: THE DOGHOUSE, down a ramp into the basement of a villa somebody remade for the purpose, its sign a small lit rectangle you would take for a dentist; and across the road SUCCUBUS, behind a hedge, with a porch light and a bell. No barkers, no flyer girls, nobody outside at all. Cars come up, cars go down, and the men who use these rooms park where they cannot be read from the road.",
-        "Where the Main Strip's neon finally gives out and the road tips upward: the last few late-night noodle carts, then condo walls and the hill proper. The strip is back down to the south; the mouth of the Supertown drag alley opens to the west; the road climbs on north.",
-        "Where Soi 5 leaves the hill road and starts down toward the sea. Nothing up here is for you: condo walls with broken glass set into the top, a security box with a man asleep in it, and gates with intercoms that answer in Thai or not at all. The road tips west from here and keeps tipping — you can feel the gradient in your calves before you can see it. Between two walls there is one gap, and through it the whole bay, black and enormous, with Jomtien's lights strung along the far edge of it. East, further up, two of the walls have doors in them."
+        "The last stretch before the beach road, and the tone drops a grade: TWO STOOLS BAR is exactly as advertised and has been since somebody painted the sign by hand, and THE GECKO next to it runs on one strip light, a cool box and a lady who owns the place outright. Both open to the road, both cheaper than anything up the hill, and both entirely comfortable about it. HILLSIDE MASSAGE occupies the last shopfront before the corner. You can hear Dongtan from here.",
+        "The gradient eases and the walls give way to the first bars — open-air, all of them, because up here the evening does the air-conditioning for free. THE TERRACE and THE KINGFISHER hold this block, and both are visibly better kept than a hill bar needs to be: matched stools, a roof that has been re-thatched this year, ice that arrives before you ask. The Samson brothers own the pair, and the difference shows from across the road. Next door, HALF MOON MASSAGE has its shutters up and two ladies on the step."
       ]
     },
     {
@@ -1716,13 +1724,14 @@
       "dark": false,
       "people": [
         "Bill",
+        "Bow",
         "Gof",
         "Sunee",
         "Tar",
         "Tukky",
         "Wassana"
       ],
-      "desc": "Down the ramp and through a door heavier than it looks, into the basement of a villa: no windows anywhere, which is the whole design, and cold enough that your shirt goes stiff. Low leather, low light, a bar along the back with optics lit from beneath, and a dozen ladies who do not get up when you come in — they look, they decide, and one of them arrives. The Samson brothers' first room this side of Thappraya, and you can see the money in the joinery. Bill runs it, and Bill runs it properly."
+      "desc": "Down the ramp and through a door heavier than it looks, into the basement of a villa: no windows anywhere, which is the whole design, and cold enough that your shirt goes stiff. Low leather, low light, a bar along the back with optics lit from beneath, and ladies who do not get up when you come in — they look, they decide, and one of them arrives. The newest of the Samson brothers' rooms, and the only one they built rather than bought — you can see the money in the joinery. Bill runs it, and Bill runs it properly."
     },
     {
       "id": "dongtan_rd_n",
@@ -1735,6 +1744,47 @@
       "dark": true,
       "people": [],
       "desc": "The top of Dongtan Beach Road, where it bends inland and starts up onto Pratumnak. The sand is a black rumour to the west; east the road climbs to the Soi 5 turn and, past that, the crest. On the bend a 7-ELEVEN throws the only real light for half a kilometre — cold air, a cash machine, and two lads on a scooter parked across the front eating toasties. Everyone going up the hill or down it stops here, because there is nothing either way for a long time."
+    },
+    {
+      "id": "half_moon_massage",
+      "name": "Half Moon Massage",
+      "bar": "Half Moon Massage",
+      "barType": null,
+      "region": "Pratumnak",
+      "regionSlug": "pratumnak",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "A clean two-room shop with a laminated list on the wall — foot, Thai, oil, aloe for the sunburned — and the sharp green smell of balm. The ladies are middle-aged and mean it; the sticker on the mirror is the small one. Half the hill's condo residents come here weekly and are on first-name terms with a specific pair of hands."
+    },
+    {
+      "id": "hillside_massage",
+      "name": "Hillside Massage",
+      "bar": "Hillside Massage",
+      "barType": null,
+      "region": "Pratumnak",
+      "regionSlug": "pratumnak",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "The last shopfront before the corner, and the more relaxed of the hill's two: plastic chairs out front, a television on low, and whoever is not working asleep in one of the recliners. Foot massage on the pavement while you watch the road go by is the house speciality, and at this end of the soi the road going by is two scooters and a dog."
+    },
+    {
+      "id": "kingfisher",
+      "name": "The Kingfisher",
+      "bar": "The Kingfisher",
+      "barType": "beer",
+      "region": "Pratumnak",
+      "regionSlug": "pratumnak",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Kaew",
+        "Noey",
+        "Praew",
+        "Somsri"
+      ],
+      "desc": "The Terrace's sister bar and its opposite in temperament: same owners, same money spent, but this one has the pool table, the speaker that gets used, and the staff who will absolutely take your bet. Open-fronted onto the soi with a painted bird over the bar that nobody can identify. Loud by Pratumnak standards, which is to say you can still hear the person next to you."
     },
     {
       "id": "pratumnak_clubs",
@@ -1782,7 +1832,31 @@
       "kind": "street",
       "dark": false,
       "people": [],
-      "desc": "Where Soi 5 leaves the hill road and starts down toward the sea. Nothing up here is for you: condo walls with broken glass set into the top, a security box with a man asleep in it, and gates with intercoms that answer in Thai or not at all. The road tips west from here and keeps tipping — you can feel the gradient in your calves before you can see it. Between two walls there is one gap, and through it the whole bay, black and enormous, with Jomtien's lights strung along the far edge of it. East, further up, two of the walls have doors in them."
+      "desc": "Where Soi 5 leaves the hill road and starts down toward the sea. Nothing up here is for you: condo walls with broken glass set into the top, a security box with a man asleep in it, and gates with intercoms that answer in Thai or not at all. The road tips west from here and keeps tipping — you can feel the gradient in your calves before you can see it. Between two walls there is one gap, and through it the whole bay, black and enormous, with Jomtien's lights strung along the far edge of it. East, further up, two of the walls have doors in them; west and down, the first bar lights start where the gradient eases."
+    },
+    {
+      "id": "pratumnak_soi5_b",
+      "name": "Pratumnak Soi 5 (bottom)",
+      "bar": null,
+      "barType": null,
+      "region": "Pratumnak",
+      "regionSlug": "pratumnak",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "The last stretch before the beach road, and the tone drops a grade: TWO STOOLS BAR is exactly as advertised and has been since somebody painted the sign by hand, and THE GECKO next to it runs on one strip light, a cool box and a lady who owns the place outright. Both open to the road, both cheaper than anything up the hill, and both entirely comfortable about it. HILLSIDE MASSAGE occupies the last shopfront before the corner. You can hear Dongtan from here."
+    },
+    {
+      "id": "pratumnak_soi5_m",
+      "name": "Pratumnak Soi 5 (middle)",
+      "bar": null,
+      "barType": null,
+      "region": "Pratumnak",
+      "regionSlug": "pratumnak",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "The gradient eases and the walls give way to the first bars — open-air, all of them, because up here the evening does the air-conditioning for free. THE TERRACE and THE KINGFISHER hold this block, and both are visibly better kept than a hill bar needs to be: matched stools, a roof that has been re-thatched this year, ice that arrives before you ask. The Samson brothers own the pair, and the difference shows from across the road. Next door, HALF MOON MASSAGE has its shutters up and two ladies on the step."
     },
     {
       "id": "succubus",
@@ -1838,6 +1912,57 @@
       "dark": false,
       "people": [],
       "desc": "Where the Main Strip's neon finally gives out and the road tips upward: the last few late-night noodle carts, then condo walls and the hill proper. The strip is back down to the south; the mouth of the Supertown drag alley opens to the west; the road climbs on north."
+    },
+    {
+      "id": "the_gecko",
+      "name": "The Gecko",
+      "bar": "The Gecko",
+      "barType": "beer",
+      "region": "Pratumnak",
+      "regionSlug": "pratumnak",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Duan",
+        "Ple",
+        "Somjai",
+        "Yok"
+      ],
+      "desc": "One strip light, four stools, a cool box, and an actual gecko somewhere in the roof that the owner refers to by name and has never caught. She owns the place outright — no rent, no partner, no brothers — and says so about once an hour. Open to the road because there is no front to close. The cheapest beer on the hill and the best conversation on it, in that order or the other one."
+    },
+    {
+      "id": "the_terrace",
+      "name": "The Terrace",
+      "bar": "The Terrace",
+      "barType": "beer",
+      "region": "Pratumnak",
+      "regionSlug": "pratumnak",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Fah",
+        "Kade",
+        "Namtip",
+        "Wandee"
+      ],
+      "desc": "Open on three sides to the hill, with the good half of the view: a long teak rail, stools that all match, and a thatched roof somebody actually maintains. The Samson brothers bought it two seasons ago and spent money where it shows least and matters most — the ice, the glassware, the fact that the beer is genuinely cold. The girls are unhurried because the trade up here is regulars, and regulars do not need working."
+    },
+    {
+      "id": "two_stools",
+      "name": "Two Stools Bar",
+      "bar": "Two Stools Bar",
+      "barType": "beer",
+      "region": "Pratumnak",
+      "regionSlug": "pratumnak",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Jinda",
+        "Meaw",
+        "Orm",
+        "Ratree"
+      ],
+      "desc": "There are eleven stools. The name is a joke that stopped being a joke around the time the sign faded, and nobody is going to repaint it now. Open to the road, one fan, a cool box, a fridge that hums like it is thinking about it, and prices that have moved twice this decade. The lady who runs it has run it a long time and treats the whole business as a way of having company in the evenings, which it is."
     },
     {
       "id": "diana_oil",
@@ -2973,7 +3098,7 @@
         "Gina",
         "Wimon"
       ],
-      "desc": "The other Samson beer bar, down the Second Road end — the joke's on the sign, so a man can honestly say he's 'at the office.' Dartboard, a telly showing football nobody watches, and the easy end-of-strip pace before Second Road takes over. (PLAY DARTS.)"
+      "desc": "A Samson house at the Second Road end of the strip — the joke's on the sign, so a man can honestly say he's 'at the office.' Dartboard, a telly showing football nobody watches, and the easy end-of-strip pace before Second Road takes over. (PLAY DARTS.)"
     },
     {
       "id": "velvet_club",

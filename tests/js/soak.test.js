@@ -132,7 +132,9 @@ const DE_CEILINGS = [
   // reachability: two venues and three authored characters is a lot of new
   // English. --delta reported 45 records. Off the Act One path (act1 held at
   // 132), so they join the ranked backlog.
-  { mode: "vacation", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 333 },
+  // 333 → 322 for the six lower-Soi-5 venues. FELL despite a lot of new English,
+  // because more rooms means the walk spreads thinner over them. Tightened.
+  { mode: "vacation", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 322 },
   // act1 is the do-or-die opening — the wallet chain, the fail/reset screens, the
   // hint whispers. NEITHER other mode reaches it: soi6 force-sets act1Done, and
   // so does the soak's own vacation setup. It was unguarded until 2026-08-07, and

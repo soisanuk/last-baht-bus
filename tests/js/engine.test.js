@@ -3619,7 +3619,11 @@ test("Thappraya Main Strip: reached east off the beach road, the mix of venues, 
   // 1,119 m stride across a junction that is really there
   assert.equal(ROOMS.pratumnak_hill_rd.exits.w, "pratumnak_clubs");
   assert.equal(ROOMS.pratumnak_clubs.exits.w, "pratumnak_soi5");
-  assert.equal(ROOMS.pratumnak_soi5.exits.w, "dongtan_rd_n", "the crest links both north ends");
+  // the lower half of Soi 5 is two blocks of open-air bars now, so the crest
+  // reaches Dongtan Beach Road through them rather than in one 532 m stride
+  assert.equal(ROOMS.pratumnak_soi5.exits.w, "pratumnak_soi5_m");
+  assert.equal(ROOMS.pratumnak_soi5_m.exits.w, "pratumnak_soi5_b");
+  assert.equal(ROOMS.pratumnak_soi5_b.exits.w, "dongtan_rd_n", "the crest links both north ends");
   assert.equal(ROOMS.dongtan_rd_n.exits.s, "dongtan_rd_m");
   assert.equal(ROOMS.dongtan_rd_m.exits.s, "dongtan_rd_s");
   // the road lane runs road-to-road all the way down; you reach the sand by

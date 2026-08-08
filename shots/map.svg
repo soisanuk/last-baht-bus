@@ -112,7 +112,9 @@
 <line x1="302.1" y1="1061.7" x2="348.3" y2="946.1" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="348.3" y1="946.1" x2="250.0" y2="929.2" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="110.4" y1="968.9" x2="180.3" y2="949.0" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
-<line x1="110.4" y1="968.9" x2="11.1" y2="1030.7" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
+<line x1="110.4" y1="968.9" x2="77.2" y2="989.5" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
+<line x1="77.2" y1="989.5" x2="44.0" y2="1010.1" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
+<line x1="44.0" y1="1010.1" x2="11.1" y2="1030.7" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="180.3" y1="949.0" x2="250.0" y2="929.2" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="11.1" y1="1030.7" x2="87.5" y2="1096.9" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="11.1" y1="1030.7" x2="-2.4" y2="1038.5" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
@@ -328,6 +330,20 @@
 <circle cx="302.1" cy="1061.7" r="2.6" fill="#8a6ae8" opacity="0.8"/>
 <circle cx="348.3" cy="946.1" r="2.6" fill="#8a6ae8" opacity="0.8"/>
 <circle cx="110.4" cy="968.9" r="2.6" fill="#8a6ae8" opacity="0.8"/>
+<circle cx="77.2" cy="989.5" r="2.6" fill="#8a6ae8" opacity="0.8"/>
+<circle cx="44.0" cy="1010.1" r="2.6" fill="#8a6ae8" opacity="0.8"/>
+<circle cx="74.5" cy="988.3" r="5" fill="#8a6ae8" opacity="0.95"><title>The Terrace</title></circle>
+<circle cx="74.5" cy="988.3" r="9" fill="none" stroke="#8a6ae8" opacity="0.35"/>
+<circle cx="79.4" cy="990.6" r="5" fill="#8a6ae8" opacity="0.95"><title>The Kingfisher</title></circle>
+<circle cx="79.4" cy="990.6" r="9" fill="none" stroke="#8a6ae8" opacity="0.35"/>
+<circle cx="41.6" cy="1008.9" r="5" fill="#8a6ae8" opacity="0.95"><title>Two Stools Bar</title></circle>
+<circle cx="41.6" cy="1008.9" r="9" fill="none" stroke="#8a6ae8" opacity="0.35"/>
+<circle cx="46.2" cy="1011.3" r="5" fill="#8a6ae8" opacity="0.95"><title>The Gecko</title></circle>
+<circle cx="46.2" cy="1011.3" r="9" fill="none" stroke="#8a6ae8" opacity="0.35"/>
+<circle cx="80.4" cy="987.7" r="5" fill="#8a6ae8" opacity="0.95"><title>Half Moon Massage</title></circle>
+<circle cx="80.4" cy="987.7" r="9" fill="none" stroke="#8a6ae8" opacity="0.35"/>
+<circle cx="47.2" cy="1008.3" r="5" fill="#8a6ae8" opacity="0.95"><title>Hillside Massage</title></circle>
+<circle cx="47.2" cy="1008.3" r="9" fill="none" stroke="#8a6ae8" opacity="0.35"/>
 <circle cx="180.3" cy="949.0" r="2.6" fill="#8a6ae8" opacity="0.8"/>
 <circle cx="177.1" cy="950.2" r="5" fill="#8a6ae8" opacity="0.95"><title>The Doghouse</title></circle>
 <circle cx="177.1" cy="950.2" r="9" fill="none" stroke="#8a6ae8" opacity="0.35"/>
