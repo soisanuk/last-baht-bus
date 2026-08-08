@@ -22,13 +22,13 @@
   "Blue Dog"
  ],
  "counts": {
-  "geolocated": 196,
+  "geolocated": 197,
   "patrons": 18,
   "people": 268,
   "portraits": 286,
   "renders": 72,
   "thumbs": 72,
-  "venues": 196
+  "venues": 197
  },
  "frames": [
   "baimon_pic1",
@@ -3117,6 +3117,14 @@
    "region": "Soi Buakhao",
    "seven": true
   },
+  "buakhao_lk": {
+   "geo": [
+    12.92994,
+    100.88554
+   ],
+   "name": "Soi Buakhao (Metro Alley)",
+   "region": "Soi Buakhao"
+  },
   "buakhao_market": {
    "geo": [
     12.92691,
@@ -3179,8 +3187,8 @@
    "bar": "Buzz Inn",
    "barType": "beer",
    "geo": [
-    12.9297,
-    100.88556
+    12.93,
+    100.88513
    ],
    "name": "Buzz Inn",
    "region": "Soi Honey"
@@ -3710,8 +3718,8 @@
    "bar": "KINKY Go-Go",
    "barType": "gogo",
    "geo": [
-    12.92979,
-    100.88457
+    12.92968,
+    100.88498
    ],
    "name": "KINKY Go-Go",
    "region": "LK Metro"
@@ -3765,32 +3773,32 @@
    "bar": "Las Vegas Go-Go",
    "barType": "gogo",
    "geo": [
-    12.9293,
-    100.88523
+    12.9295,
+    100.88441
    ],
    "name": "Las Vegas Go-Go",
    "region": "LK Metro"
   },
   "lk_bend": {
    "geo": [
-    12.92952,
-    100.88507
+    12.9296,
+    100.88445
    ],
    "name": "LK Metro (Corner)",
    "region": "LK Metro"
   },
   "lk_entrance": {
    "geo": [
-    12.9294,
-    100.8841
+    12.92918,
+    100.88432
    ],
    "name": "LK Metro (Entrance)",
    "region": "LK Metro"
   },
   "lk_main": {
    "geo": [
-    12.92959,
-    100.88464
+    12.92957,
+    100.885
    ],
    "name": "LK Metro (Main Alley)",
    "region": "LK Metro"
@@ -3799,8 +3807,8 @@
    "bar": "The Offside Sports Bar",
    "barType": "pub",
    "geo": [
-    12.92941,
-    100.88472
+    12.9295,
+    100.88489
    ],
    "name": "The Offside Sports Bar",
    "region": "LK Metro"
@@ -3860,8 +3868,8 @@
    "bar": "The Metro Beer Garden",
    "barType": "beer",
    "geo": [
-    12.92974,
-    100.88512
+    12.9297,
+    100.88448
    ],
    "name": "The Metro Beer Garden",
    "region": "LK Metro"
@@ -4115,8 +4123,8 @@
    "bar": "The Pit Stop",
    "barType": "beer",
    "geo": [
-    12.92967,
-    100.88531
+    12.92966,
+    100.88434
    ],
    "name": "The Pit Stop",
    "region": "LK Metro"
@@ -4166,8 +4174,8 @@
    "bar": "The Hive",
    "barType": "beer",
    "geo": [
-    12.93017,
-    100.8856
+    12.93046,
+    100.88519
    ],
    "name": "The Hive",
    "region": "Soi Honey"
@@ -4363,8 +4371,8 @@
    "bar": "Slutty Go-Go",
    "barType": "gogo",
    "geo": [
-    12.92934,
-    100.88468
+    12.92946,
+    100.88503
    ],
    "name": "Slutty Go-Go",
    "region": "LK Metro"
@@ -4414,8 +4422,8 @@
   },
   "soi_honey_e": {
    "geo": [
-    12.92994,
-    100.88554
+    12.93023,
+    100.88516
    ],
    "name": "Soi Honey (east end)",
    "region": "Soi Honey"

@@ -5656,7 +5656,9 @@ test("scripted happy-ending playthrough", () => {
     "out", "candy", "ask candy about wallet",        // Candy: som tam errand
     "out", "s", "s", "w", "talk to bank",            // Bank: helmet favour
     // north up Buakhao to the Tree Town arch, then west into the maze
-    "e", "n", "n", "n", "w",                         // the arch
+    // (the soi gained a room at the LK Metro / Soi Honey mouth, so it is one
+    //  block further than it was)
+    "e", "n", "n", "n", "n", "w",                    // the arch
     "w", "w", "in",                                  // Starlight Bar
     "give helmet to pim", "ask pim about oy",        // pin part: lucky 9
     "out", "e", "in", "ask nong about oy",           // pin part: number 71

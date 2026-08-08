@@ -2,10 +2,10 @@
   "generated": "2026-08-08",
   "note": "Every room in the game + its region, for the scene-art pipeline (docs/art-pipeline-spec.md). Derived from web/js/world.js — regenerate with scripts/gen-scene-manifest.mjs, do not hand-edit. `kind` is a generator heuristic for prompt-template selection, not game canon. `regionSlug` is produced by the same regex as web/js/scene.js `_sceneArt()`; art files are web/art/rooms/<id>.png with web/art/regions/<slug>.png as the fallback.",
   "counts": {
-    "rooms": 196,
+    "rooms": 197,
     "regions": 15,
     "byKind": {
-      "street": 71,
+      "street": 72,
       "massage": 17,
       "beer": 49,
       "shop": 2,
@@ -129,7 +129,7 @@
       ],
       "sampleDescs": [
         "The corner where the alley turns south. LAS VEGAS GO-GO burns at the end of the second leg — the signage outspends everything else in sight. The crowd thins slightly here: the regulars who know the place, the girls finishing a shift on the back of a motorbike, a few tourists who followed the sound far enough to find it. Two open-front beer bars, THE METRO BEER GARDEN and THE PIT STOP, catch the ones who've had enough go-go for one night. Less overwhelming than Walking Street; more like something you discovered.",
-        "The first leg of the L: bars packed shoulder to shoulder, neon on both sides, sound bleeding from KINKY Go-Go to the north and SLUTTY Go-Go to the south until they're indistinguishable. Good energy — dense, close, the kind of loud that's a decision rather than an accident. A motorbike idles past carrying a girl in full sequins at a speed that's technically legal. THE OFFSIDE SPORTS BAR breaks the neon with the cold blue wash of a dozen screens. The alley bends east at the far end.",
+        "The long leg of the L, and the one everybody means by LK Metro: bars packed shoulder to shoulder, neon on both sides, sound bleeding from KINKY Go-Go to the north and SLUTTY Go-Go to the south until they're indistinguishable. Good energy — dense, close, the kind of loud that's a decision rather than an accident. A motorbike idles past carrying a girl in full sequins at a speed that's technically legal. THE OFFSIDE SPORTS BAR breaks the neon with the cold blue wash of a dozen screens. The alley bends east at the far end.",
         "The alley mouth off Soi Buakhao — easy to walk past if you don't know it's there. A handwritten sign on the wall says LK METRO with an arrow, named for the hotel invisible from here. Ten metres in, the alley bends and opens up and suddenly you're somewhere. The no-entry sign for four-wheelers is doing its job: the only vehicles threading through are motorbikes, and the only people on them are very purposeful about where they're going."
       ]
     },
@@ -251,6 +251,7 @@
       "name": "Soi Buakhao",
       "roomIds": [
         "buakhao_klang",
+        "buakhao_lk",
         "buakhao_market",
         "buakhao_myth",
         "buakhao_n",
@@ -270,7 +271,7 @@
       "sampleDescs": [
         "The expat artery: pharmacies, laundry, bars, repeat. ROCK FACTORY's two-storey stage looms on the corner — currently doing what every band in Thailand does to 'Hotel California' and somehow getting away with it. LUCKY TIGER BAR is just east. South is the old market block, which has not been a market since Tree Town took the trade. A small handwritten LK METRO arrow on a wall points down an alley — easy to miss, worth finding. Soi Diana opens off the 7-Eleven on the corner here, its go-go neon running away west. A few doors down the quiet side, CANDY BAR's rose-pink sign keeps its own hours — far enough off the main drag that the soi forgets about it until about three in the morning, which is roughly when it fills up.",
         "Where the soi gives up and hands you to Central Pattaya Road. The traffic arrives here to die: two baht buses nose to tail with nowhere to go, a third wedged across the mouth of the junction while its driver leans out and negotiates with nobody in particular. The motorbikes don't wait. They come through the gaps in a steady braided stream — a girl side-saddle in six-inch heels holding her hair down with one hand, a punter on the back of another with his knees out like a man being carried to somewhere he didn't choose. A 7-Eleven throws cold white light across the whole slow mess, and the piwins at the corner watch it the way farmers watch weather.",
-        "The block everyone still calls the market, though the market went years ago — Tree Town took the trade and the tarps came down. What is left is the shape of it: shophouse fronts too wide for what they sell now, a som tam cart holding the corner out of sheer stubbornness, and a smell of papaya salad that could still pull you here from two sois away. SILK ROSE shares the block east, and a pink-lit shopfront a few doors down promises the oil is warm."
+        "The mouth of LK Metro, and you can hear it before you reach it — three lanes of go-go bleeding into the soi through a gap barely wide enough for two people and a motorbike, which is what is usually in it. Soi Honey comes out a few doors north. The traffic here does not so much move as take turns, and the pavement has given up and become part of the road."
       ]
     },
     {
@@ -1199,7 +1200,7 @@
       "kind": "street",
       "dark": false,
       "people": [],
-      "desc": "The first leg of the L: bars packed shoulder to shoulder, neon on both sides, sound bleeding from KINKY Go-Go to the north and SLUTTY Go-Go to the south until they're indistinguishable. Good energy — dense, close, the kind of loud that's a decision rather than an accident. A motorbike idles past carrying a girl in full sequins at a speed that's technically legal. THE OFFSIDE SPORTS BAR breaks the neon with the cold blue wash of a dozen screens. The alley bends east at the far end."
+      "desc": "The long leg of the L, and the one everybody means by LK Metro: bars packed shoulder to shoulder, neon on both sides, sound bleeding from KINKY Go-Go to the north and SLUTTY Go-Go to the south until they're indistinguishable. Good energy — dense, close, the kind of loud that's a decision rather than an accident. A motorbike idles past carrying a girl in full sequins at a speed that's technically legal. THE OFFSIDE SPORTS BAR breaks the neon with the cold blue wash of a dozen screens. The alley bends east at the far end."
     },
     {
       "id": "lk_sports",
@@ -2076,6 +2077,18 @@
       "dark": false,
       "people": [],
       "desc": "Where the soi gives up and hands you to Central Pattaya Road. The traffic arrives here to die: two baht buses nose to tail with nowhere to go, a third wedged across the mouth of the junction while its driver leans out and negotiates with nobody in particular. The motorbikes don't wait. They come through the gaps in a steady braided stream — a girl side-saddle in six-inch heels holding her hair down with one hand, a punter on the back of another with his knees out like a man being carried to somewhere he didn't choose. A 7-Eleven throws cold white light across the whole slow mess, and the piwins at the corner watch it the way farmers watch weather."
+    },
+    {
+      "id": "buakhao_lk",
+      "name": "Soi Buakhao (Metro Alley)",
+      "bar": null,
+      "barType": null,
+      "region": "Soi Buakhao",
+      "regionSlug": "soi-buakhao",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "The mouth of LK Metro, and you can hear it before you reach it — three lanes of go-go bleeding into the soi through a gap barely wide enough for two people and a motorbike, which is what is usually in it. Soi Honey comes out a few doors north. The traffic here does not so much move as take turns, and the pavement has given up and become part of the road."
     },
     {
       "id": "buakhao_market",
