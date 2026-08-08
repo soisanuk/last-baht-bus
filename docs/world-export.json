@@ -3296,8 +3296,8 @@
    "bar": "Firefly Bar",
    "barType": "beer",
    "geo": [
-    12.9077,
-    100.9086
+    12.90764,
+    100.90706
    ],
    "name": "Firefly Bar",
    "region": "Darkside"
@@ -3511,8 +3511,8 @@
   },
   "khao_talo": {
    "geo": [
-    12.9073,
-    100.9113
+    12.90779,
+    100.90975
    ],
    "name": "Soi Khao Talo",
    "region": "Darkside",
@@ -3522,8 +3522,8 @@
    "bar": "Daeng's Place",
    "barType": "beer",
    "geo": [
-    12.9071,
-    100.9118
+    12.90797,
+    100.90995
    ],
    "name": "Daeng's Place (Khao Talo)",
    "pool": true,
@@ -3531,8 +3531,8 @@
   },
   "khao_talo_strip": {
    "geo": [
-    12.9078,
-    100.909
+    12.90782,
+    100.90693
    ],
    "name": "Soi Khao Talo (the strip)",
    "region": "Darkside"
@@ -3577,8 +3577,8 @@
   },
   "lake_mabprachan": {
    "geo": [
-    12.93,
-    100.956
+    12.93306,
+    100.96684
    ],
    "name": "Lake Mabprachan",
    "region": "Darkside"
@@ -3672,8 +3672,8 @@
    "bar": "Mama Yai's",
    "barType": "beer",
    "geo": [
-    12.9066,
-    100.9114
+    12.90759,
+    100.90958
    ],
    "name": "Mama Yai's",
    "region": "Darkside"
@@ -3801,8 +3801,8 @@
    "bar": "The Night Heron",
    "barType": "beer",
    "geo": [
-    12.9079,
-    100.9098
+    12.90764,
+    100.90754
    ],
    "name": "The Night Heron",
    "region": "Darkside"
@@ -4097,8 +4097,8 @@
    "bar": "The Shamrock",
    "closed": true,
    "geo": [
-    12.9076,
-    100.9082
+    12.90802,
+    100.90665
    ],
    "name": "The Shamrock (closed)",
    "region": "Darkside"
@@ -4225,8 +4225,8 @@
   },
   "sukhumvit_crossing": {
    "geo": [
-    12.91,
-    100.8975
+    12.91004,
+    100.8962
    ],
    "name": "Sukhumvit Crossing",
    "region": "Darkside"
@@ -4458,8 +4458,8 @@
    "bar": "The Water Buffalo",
    "barType": "beer",
    "geo": [
-    12.9078,
-    100.9092
+    12.90813,
+    100.90699
    ],
    "name": "The Water Buffalo",
    "pool": true,
