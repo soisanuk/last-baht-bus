@@ -264,8 +264,11 @@ function _doGo(dirWord) {
 // invitations, street encounters. Everything that happens because you're
 // suddenly *here*, however you got here.
 function _arriveAt(to) {
-  // Soi 6 challenge mode fences you into the soi + its beach — the single choke
-  // point for walking, fast-travel, and motosai (the bus is refused in _doRideBus).
+  // Soi 6 challenge mode fences you into the soi + its beach — the choke point for
+  // walking and fast-travel. MOTOSAI is refused separately in _doMotosai, because
+  // both of its arrival paths set G.room directly and never reach here; the bus is
+  // refused in _doRideBus. Three exits, three gates — if you add a fourth way to
+  // move, gate it too.
   if (G.mode === "soi6" && !SOI6_ROOMS.has(to)) { _say(_pickVary(_SOI6_BOUND, "soi6bound")); return; }
   // The Orchid Room is White Dish's members-only back room — the velvet rope only
   // lifts for a friend of the group (Gavin's "doors open for our friends"). Do the
@@ -1692,6 +1695,16 @@ function _doMotosai(arg) {
     return;
   }
   const d = MOTOSAI_DESTS[destKey];
+  // Soi 6 mode is fenced to the pocket, and _arriveAt is where that is enforced —
+  // but the two arrival paths below set G.room DIRECTLY, so a motosai walked
+  // straight through the fence. It never showed until a stand landed inside the
+  // pocket; the moment one did, the daily challenge could be ridden out of.
+  // Refuse here rather than in _arriveAt, so the fare is never taken for a ride
+  // that doesn't happen.
+  if (G.mode === "soi6" && !SOI6_ROOMS.has(d.room)) {
+    _say(_pickVary(_SOI6_BOUND, "soi6bound"));
+    return;
+  }
   let price = d.price;
   if (_flag("helmetDelivered") && price === MOTOSAI_TOWN) {
     price = 20;

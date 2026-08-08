@@ -22,13 +22,13 @@
   "Blue Dog"
  ],
  "counts": {
-  "geolocated": 184,
+  "geolocated": 186,
   "patrons": 18,
   "people": 259,
   "portraits": 277,
   "renders": 72,
   "thumbs": 72,
-  "venues": 184
+  "venues": 186
  },
  "frames": [
   "baimon_pic1",
@@ -1592,7 +1592,7 @@
    "desc": "Mid-thirties, upcountry-neat, working the fabric stalls with the practised eye of a woman who buys to sell. Two checked laundry bags of folded cotton already at her feet. Something in the way she reads the market — which vendors she wais, which she doesn't — says she worked a soi like this once, and left it on her own terms.",
    "emoji": "🧵",
    "name": "Nit",
-   "room": "buakhao_market",
+   "room": "night_bazaar",
    "th": "นิด"
   },
   "nittaya": {
@@ -3024,7 +3024,7 @@
     12.92691,
     100.883
    ],
-   "name": "Buakhao Market",
+   "name": "Soi Buakhao (Old Market)",
    "region": "Soi Buakhao"
   },
   "buakhao_myth": {
@@ -3750,6 +3750,15 @@
    "pool": true,
    "region": "Walking Street"
   },
+  "mikes_mall": {
+   "bar": "Mike's Mall",
+   "geo": [
+    12.9319,
+    100.88081
+   ],
+   "name": "Mike's Mall",
+   "region": "Second Road"
+  },
   "moonshine_bar": {
    "bar": "Moonshine Bar",
    "barType": "beer",
@@ -3848,6 +3857,15 @@
    ],
    "name": "Neon Paradise A-Go-Go",
    "region": "Walking Street"
+  },
+  "night_bazaar": {
+   "bar": "Pattaya Night Bazaar",
+   "geo": [
+    12.93232,
+    100.88451
+   ],
+   "name": "Pattaya Night Bazaar",
+   "region": "Second Road"
   },
   "night_heron": {
    "bar": "The Night Heron",
