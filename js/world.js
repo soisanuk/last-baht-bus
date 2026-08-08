@@ -722,14 +722,33 @@ const ROOMS = {
       "— joggers who have misjudged the hour, a man selling roasted chestnuts nobody " +
       "buys, and the long slow crawl of songthaews with their benches half full. " +
       "Central Pattaya Road crosses a hundred metres north, which is why the traffic " +
-      "here never quite clears.",
+      "here never quite clears. Soi 7 runs inland here and Soi 8 a block south; " +
+      "the two are close enough that people take the wrong one and only notice " +
+      "when the noise fails to arrive.",
     revisit: [
       "The chestnut man has moved four metres and changed nothing.",
       "A songthaew slows, reads you, and rolls on unconvinced.",
       "Somebody jogs past in the wrong clothes at the wrong hour, entirely content.",
       "The sea does its thing on the other side of the railing, unbothered.",
     ],
-    exits: { n: "beach_rd_n", s: "beach_rd_c", e: "pattaya_soi_7" },
+    exits: { n: "beach_rd_n", s: "beach_rd_c", e: "pattaya_soi_7", soi8: "pattaya_soi_8" },
+  },
+  pattaya_soi_8: {
+    name: "Soi 8",
+    region: "Beach Road",
+    desc: "One soi south of Soi 7 and a different proposition entirely: guesthouses, a " +
+      "couple of quiet bars with three stools each, a tailor, and a laundry doing the " +
+      "week's washing for half the street. There are no touts. Nobody calls out. " +
+      "People who stay on Soi 8 tend to have been coming for years and to like it " +
+      "precisely because nothing happens on it, and the walk to where everything does " +
+      "is four minutes either way.",
+    revisit: [
+      "Quiet, still. Somebody's television through an open window.",
+      "The laundry has the whole pavement hung with somebody's shirts.",
+      "A man in a doorway nods at you like you live here too.",
+      "Two stools, two beers, one conversation that has clearly been going for hours.",
+    ],
+    exits: { w: "beach_rd_soi7", e: "second_rd_n" },
   },
   promenade: {
     name: "Beach Promenade",
@@ -980,11 +999,12 @@ const ROOMS = {
     region: "Second Road",
     desc: "Soi 7 comes out here and carries on east; the seafront is fifteen minutes " +
       "down it, or four with a piwin. Central Pattaya Road crosses just ahead, cutting " +
-      "the whole town into north and south. This block is a massage row: SMILE MASSAGE winks pink " +
+      "the whole town into north and south. Soi 8 comes out a block south, quieter " +
+      "than anything else on this stretch. This block is a massage row: SMILE MASSAGE winks pink " +
       "from the west side, and opposite, four floors of blue neon spell POSEIDON MASSAGE " +
       "over a doorman and a fish tank.",
     exits: { s: "second_rd_c", n: "pattaya_klang", w: "pattaya_soi_7", e: "poseidon_soapy",
-             spa: "smile_massage" },
+             spa: "smile_massage", soi8: "pattaya_soi_8" },
   },
   pattaya_klang: { motosai: true, busStop: "secondrd",
     name: "Central Pattaya Road (Pattaya Klang)",
@@ -10039,6 +10059,7 @@ const ROOM_GEO = {
   short_time_motel: [12.93626, 100.88503],
   beach_rd_c:       [12.93450, 100.88159],
   beach_rd_soi7:    [12.93715, 100.88307],
+  pattaya_soi_8:    [12.93573, 100.88413],
   beachrd_oil:      [12.93396, 100.88186],
   tequila_queen:    [12.93164, 100.87946],
   promenade:        [12.93450, 100.88117],
