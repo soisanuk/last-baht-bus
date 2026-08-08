@@ -104,7 +104,7 @@ const DE_CEILINGS = [
   // on the German backlog. Act One's route now
   // runs through five more Soi Buakhao rooms, and their prose has no de entries
   // yet. Real new English on the critical path — see docs/i18n-de-gaps.md.
-  { mode: "act1", seeds: [1, 2, 3, 4, 5], nights: 3, ceiling: 137 },
+  { mode: "act1", seeds: [1, 2, 3, 4, 5], nights: 3, ceiling: 142 },
   // expat: the endless stage, unreachable from the other modes (soi6 and the
   // soak's own vacation setup both force act1Done and stop there). Added with
   // the bar-owning chain.
@@ -116,7 +116,7 @@ const DE_CEILINGS = [
   // quests. Authored quest prose is guarded by scripted playthroughs instead
   // (tests/js/barchain.test.js).
   // 312 → 429 → 399, same story as vacation.
-  { mode: "expat", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 405 },
+  { mode: "expat", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 395 },
 ];
 
 for (const { mode, seeds, nights, ceiling } of DE_CEILINGS) {
