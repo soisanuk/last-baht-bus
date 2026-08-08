@@ -804,6 +804,27 @@ const ROOMS = {
     ],
     exits: { n: "beach_rd_n", s: "beach_rd_soi7", e: "pattaya_klang" },
   },
+  dolphin: {
+    busStop: "beachrd",
+    motosai: true,
+    name: "Dolphin Roundabout",
+    region: "Naklua",
+    desc: "The top of the town, where four roads give up arguing and go round in a " +
+      "circle instead. The dolphins are in the middle of it — a concrete pod of them " +
+      "mid-leap, floodlit, permanently about to enter water that is two hundred metres " +
+      "west. Terminal 21 sits on the corner pretending to be an airport, its departure " +
+      "boards lit all night for a terminal nobody flies from. Beach Road runs south " +
+      "along the sea, Second Road south into town, Naklua Road north-east toward the " +
+      "quieter money, and the songthaews go round and round because this is where the " +
+      "loop turns.",
+    revisit: [
+      "Round go the songthaews. The dolphins remain mid-leap.",
+      "Terminal 21's boards announce destinations to a car park.",
+      "A bus full of tourists takes the roundabout twice, deliberating.",
+      "Four roads' worth of traffic, folding into each other and out again.",
+    ],
+    exits: { s: "beach_rd_n", n: "naklua_rd", second: "second_rd_soi6" },
+  },
   promenade: {
     name: "Beach Promenade",
     region: "Beach Road",
@@ -836,7 +857,7 @@ const ROOMS = {
       "The foot of the soi, the cartoon skunk and the Blue Dog holding their corners, the bay going gold across the traffic. A baht bus slows, hopeful; you let it pass.",
       "Back to the junction, the neon fuse of Soi 6 lit and waiting east, the water and the last of the light off west past the road.",
     ],
-    exits: { s: "beach_rd_klang", e: "soi6_street", n: "naklua_rd", w: "north_beach" },
+    exits: { s: "beach_rd_klang", e: "soi6_street", n: "dolphin", w: "north_beach" },
     venues: ["stinky_bar", "blue_dog"],
   },
   sunset_rail: {
@@ -1138,7 +1159,7 @@ const ROOMS = {
       "Traffic, traffic, and the soi behind you making its noise into it.",
       "A girl in going-out clothes waits to cross, gives up, and walks the long way.",
     ],
-    exits: { w: "soi6_deep", s: "pattaya_klang" },
+    exits: { w: "soi6_deep", s: "pattaya_klang", n: "dolphin" },
   },
 
   pattaya_soi_7: {
@@ -2496,7 +2517,7 @@ const ROOMS = {
       "East, a quiet BAR CORNER of expat beer bars glows low; a SPA ROW of massage " +
       "and soapland fronts runs off the other way.",
     busStop: "beachrd",
-    exits: { s: "beach_rd_n", n: "hotel_soi", w: "orchid_club", e: "naklua_bars", spa: "naklua_massage" },
+    exits: { s: "dolphin", n: "hotel_soi", w: "orchid_club", e: "naklua_bars", spa: "naklua_massage" },
   },
   naklua_bars: {
     name: "Naklua (Bar Corner)",
@@ -7212,10 +7233,10 @@ const BUS_LINES = {
   // north off its NE corner, up Second Road to the Dolphin roundabout
   secondrd: ["pattaya_tai", "second_rd_s", "second_rd_diana", "second_rd_honey",
              "second_rd_myth", "second_rd_c",
-             "second_rd_n", "pattaya_klang", "second_rd_soi6", "naklua_rd"],
+             "second_rd_n", "pattaya_klang", "second_rd_soi6", "dolphin", "naklua_rd"],
   // and back down the seafront — naklua_rd and pattaya_tai are on both, which is
   // what closes the circuit and lets you ride the whole loop from either end
-  beachrd:  ["naklua_rd", "beach_rd_n", "beach_rd_c", "beach_rd_s", "bali_hai", "pattaya_tai"],
+  beachrd:  ["naklua_rd", "dolphin", "beach_rd_n", "beach_rd_c", "beach_rd_s", "bali_hai", "pattaya_tai"],
 };
 
 // ── Motosai destinations (from any stand) ──────────────────────────────────
@@ -10144,6 +10165,10 @@ const ROOM_GEO = {
   cherry_pop:       [12.94184, 100.88736],
   ruby_kiss:        [12.94205, 100.88765],
   // Naklua
+  // The Dolphin roundabout. Beach Rd, Second Rd, Naklua Rd and North Pattaya Rd all
+  // terminate on it within 13-29 m of each other — that spread is its diameter, not
+  // error. Its centre is the mean of the four road-ends.
+  dolphin:          [12.95095, 100.88750],
   naklua_rd:        [12.95343, 100.88926],
   orchid_club:      [12.95327, 100.88884],
   hotel_soi:        [12.95958, 100.89365],

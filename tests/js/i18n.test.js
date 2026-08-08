@@ -418,8 +418,15 @@ const _DIR_EN = { north: /\bnorth(?!ern\b)\w*/gi, south: /\bsouth(?!ern\b)\w*/gi
                   east: /\beast\w*/gi, west: /\bwest\w*/gi };
 // German carries the same four as Nord-/Süd-/Ost-/West- stems, in any compound
 // (Nordende, nach Süden, im Osten, Westseite). Matching the stem covers them all.
+//
+// Except the intercardinals, which is why the lookbehinds are here: English
+// hyphenates "north-east", so BOTH halves sit on a word boundary and score one
+// north and one east — but German fuses it to "Nordosten", where \bOst cannot
+// see the east at all. Without this the check silently under-counts every
+// compound direction, which is the exact class of slip it exists to catch.
 const _DIR_DE = { north: /\bNord\w*|\bnördlich\w*/g, south: /\bSüd\w*|\bsüdlich\w*/g,
-                  east: /\bOst\w*|\böstlich\w*/g, west: /\bWest\w*|\bwestlich\w*/g };
+                  east: /\bOst\w*|\böstlich\w*|(?<=\b(?:Nord|Süd))ost\w*/g,
+                  west: /\bWest\w*|\bwestlich\w*|(?<=\b(?:Nord|Süd))west\w*/g };
 
 test("compass directions survive translation — a flipped direction is a navigation bug", () => {
   const bad = [];

@@ -1331,6 +1331,19 @@ const _CATALOGS = {
     "Salt, yesterday's sunscreen, grilled squid from a cart you can't see. Underneath it all, the sea — patient.":
       "Salz, die Sonnencreme von gestern, gegrillter Tintenfisch von einem Wagen, den du nicht sehen kannst. Unter allem das Meer — geduldig.",
 
+    // ── the Dolphin roundabout (on the Act One walk home, so it gets German
+    //    at birth rather than joining docs/i18n-de-gaps.md) ──────────────────
+    "The top of the town, where four roads give up arguing and go round in a circle instead. The dolphins are in the middle of it — a concrete pod of them mid-leap, floodlit, permanently about to enter water that is two hundred metres west. Terminal 21 sits on the corner pretending to be an airport, its departure boards lit all night for a terminal nobody flies from. Beach Road runs south along the sea, Second Road south into town, Naklua Road north-east toward the quieter money, and the songthaews go round and round because this is where the loop turns.":
+      "Das obere Ende der Stadt, wo vier Straßen aufhören zu streiten und stattdessen im Kreis fahren. Die Delfine stehen mittendrin — eine Betonschule mitten im Sprung, angestrahlt, für immer kurz davor, in Wasser einzutauchen, das zweihundert Meter weiter westlich liegt. An der Ecke gibt Terminal 21 den Flughafen, die Abflugtafeln leuchten die ganze Nacht für ein Terminal, von dem keiner fliegt. Die Beach Road läuft nach Süden am Meer entlang, die Second Road nach Süden in die Stadt, die Naklua Road nach Nordosten Richtung des ruhigeren Geldes, und die Songthaews drehen ihre Runden, weil hier die Schleife wendet.",
+    "Round go the songthaews. The dolphins remain mid-leap.":
+      "Die Songthaews drehen ihre Runden. Die Delfine bleiben im Sprung.",
+    "Terminal 21's boards announce destinations to a car park.":
+      "Die Tafeln von Terminal 21 verkünden Reiseziele an einen Parkplatz.",
+    "A bus full of tourists takes the roundabout twice, deliberating.":
+      "Ein Bus voller Touristen nimmt den Kreisel zweimal, unschlüssig.",
+    "Four roads' worth of traffic, folding into each other and out again.":
+      "Der Verkehr von vier Straßen, ineinander gefaltet und wieder auseinander.",
+
     "Last call — the mamasan taps her watch: about half an hour to closing. This place shuts at midnight, so if you mean to take a lady home tonight, now is the moment to BARFINE. After the shutters come down it's the street.":
       "Letzte Runde — die Mamasan tippt auf ihre Uhr: noch etwa eine halbe Stunde bis Feierabend. Der Laden macht um Mitternacht zu, wenn du also heute Nacht eine Lady mitnehmen willst, ist jetzt der Moment für BARFINE. Wenn die Rollläden unten sind, bleibt nur noch die Straße.",
   },

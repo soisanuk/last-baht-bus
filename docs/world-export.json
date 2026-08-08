@@ -22,13 +22,13 @@
   "Blue Dog"
  ],
  "counts": {
-  "geolocated": 205,
+  "geolocated": 206,
   "patrons": 18,
   "people": 268,
   "portraits": 286,
   "renders": 72,
   "thumbs": 72,
-  "venues": 205
+  "venues": 206
  },
  "frames": [
   "baimon_pic1",
@@ -3394,6 +3394,14 @@
    ],
    "name": "The Dollhouse",
    "region": "Soi Diana"
+  },
+  "dolphin": {
+   "geo": [
+    12.95095,
+    100.8875
+   ],
+   "name": "Dolphin Roundabout",
+   "region": "Naklua"
   },
   "dolphin_bar": {
    "bar": "Dolphin Bar",
