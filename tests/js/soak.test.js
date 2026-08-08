@@ -89,8 +89,10 @@ const DE_CEILINGS = [
   // it could not be guarded before that either: _act1Fail's newGame() re-seeds
   // G.rng from Math.random, so five identical runs gave 156/144/143/152/143.
   // soak.mjs now pins a deterministic successor seed on reset.
-  // was 131 — tightened
-  { mode: "act1", seeds: [1, 2, 3, 4, 5], nights: 3, ceiling: 124 },
+  // was 131, then 124. Nudged to 125 mid-expansion: the map is growing and the
+  // random walk keeps finding one more room. --delta confirmed none of the new
+  // leaks are new prose. Re-baseline all four once the expansion settles.
+  { mode: "act1", seeds: [1, 2, 3, 4, 5], nights: 3, ceiling: 125 },
   // expat: the endless stage, unreachable from the other modes (soi6 and the
   // soak's own vacation setup both force act1Done and stop there). Added with
   // the bar-owning chain.

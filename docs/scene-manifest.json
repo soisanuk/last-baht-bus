@@ -2,10 +2,10 @@
   "generated": "2026-08-08",
   "note": "Every room in the game + its region, for the scene-art pipeline (docs/art-pipeline-spec.md). Derived from web/js/world.js — regenerate with scripts/gen-scene-manifest.mjs, do not hand-edit. `kind` is a generator heuristic for prompt-template selection, not game canon. `regionSlug` is produced by the same regex as web/js/scene.js `_sceneArt()`; art files are web/art/rooms/<id>.png with web/art/regions/<slug>.png as the fallback.",
   "counts": {
-    "rooms": 186,
+    "rooms": 189,
     "regions": 15,
     "byKind": {
-      "street": 66,
+      "street": 67,
       "massage": 17,
       "beer": 49,
       "shop": 2,
@@ -13,7 +13,7 @@
       "interior": 3,
       "gogo": 9,
       "viewpoint": 2,
-      "food": 2,
+      "food": 4,
       "market": 4,
       "pub": 3,
       "soapy": 3,
@@ -67,8 +67,8 @@
         "water_buffalo"
       ],
       "sampleDescs": [
-        "A long, plain soi of beer bars with no neon budget and no need for one. The ladies here are older, the customers older still, and every bar knows every customer's pour. It's seedier than town and more honest about it. One bar's doorway glows warmer than the rest, and from the south side MAMA YAI'S sends out charcoal smoke and the smell of som tam being argued about.",
         "The working stretch of the soi: a dozen open-front bars shoulder to shoulder under one long tin roof, fairy lights doing the job neon does in town at a tenth of the wattage. Ladies call the odds from bamboo rails, a pool table clacks somewhere, and every third stool holds an expat who has been on it since the flood. THE WATER BUFFALO and FIREFLY BAR glow closest; the soi runs on east toward Daeng's end. At the dark end, a padded door with no sign worth reading — THE NIGHT HERON, if you know to ask — and beside it a dead Irish pub, THE SHAMROCK on its sun-bleached sign, shutters down for good.",
+        "A long, plain soi of beer bars with no neon budget and no need for one. The ladies here are older, the customers older still, and every bar knows every customer's pour. It's seedier than town and more honest about it. One bar's doorway glows warmer than the rest, and from the south side MAMA YAI'S sends out charcoal smoke and the smell of som tam being argued about.",
         "A dead pub at the dark end of the strip. The shamrock over the door has lost most of its green and all of its bulbs, and somebody long ago screwed a sheet of ply over the serving hatch and then, apparently, thought better of finishing the job. Inside it still smells faintly of beer and strongly of dust. The stools are stacked. There is a darts board with three darts still in it, and a fixtures list for a season that finished years ago. It is not derelict, which is the strange part — somebody swept it once, after the end, turned the taps off properly and squared the tables, and then locked the door and did not come back."
       ]
     },
@@ -76,6 +76,7 @@
       "slug": "jomtien",
       "name": "Jomtien",
       "roomIds": [
+        "cheap_charlies_jt",
         "coconut",
         "dongtan_beach",
         "dongtan_beach_m",
@@ -254,6 +255,7 @@
         "buakhao_s",
         "buakhao_tt",
         "candy_bar",
+        "cheap_charlies",
         "jasmine_garden",
         "klang_massage",
         "lucky_tiger",
@@ -359,6 +361,7 @@
       "slug": "walking-street",
       "name": "Walking Street",
       "roomIds": [
+        "bali_hai",
         "club_mirage",
         "crystal_palace",
         "midnight_sun",
@@ -373,7 +376,7 @@
       "sampleDescs": [
         "Neon canyon, but the neon mix has changed. Bollywood bass competes with Thai pop from somewhere inside Little India's encroachment from the east — restaurant signs in Hindi above what used to be go-go bars, the smell of curry drifting across the touts. NEON PARADISE A-GO-GO still strobes on the west side. CLUB MIRAGE shimmers opposite. The touts with the laminated menus are still here. A dark side-alley slinks off between them.",
         "The arch is still there — WALKING STREET PATTAYA, buzzing and flickering, famous enough that people photograph it before they've seen what's behind it. The strip runs south. It used to be louder. The gap between what this street was and what it is now is not visible from the gate, but you'll feel it by the time you reach the other end. Just east, RUEAN SABAI THAI MASSAGE has a row of foot chairs out for the walking wounded.",
-        "The deep end of the strip, where the go-gos that survived COVID hold their ground through stubbornness and reputation. CRYSTAL PALACE A-GO-GO at the west, PARADISE NIGHTS CLUB beside it. MIDNIGHT SUN BAR glows a quieter yellow at the south end — beer bar, conversation levels, the kind of place you end up after you've stopped trying. Late enough, the whole strip fills with barfined ladies and their friends en route to the clubs."
+        "Walking Street runs out of neon and hands you to the water. The pier goes out into the dark on concrete legs, the Koh Larn boats tied up for the night with their awnings rolled, and the bay doing that thing where it looks enormous and completely quiet a hundred metres from the loudest street in Thailand. Behind you the strip is still going. In front of you a row of songthaews wait with their engines off and their drivers asleep across the benches, and the piwins have the good corner by the ramp because the piwins always have the good corner."
       ]
     }
   ],
@@ -734,6 +737,18 @@
       "desc": "A Darkside sports bar built like its namesake: wide, unhurried, and impossible to move once settled. Three screens run three different football matches; the pool table is the soi's court of appeal. The beer is ten baht cheaper than town and the regulars will tell you that number before they tell you their names."
     },
     {
+      "id": "cheap_charlies_jt",
+      "name": "Cheap Charlie's (Jomtien)",
+      "bar": "Cheap Charlie's (Jomtien)",
+      "barType": null,
+      "region": "Jomtien",
+      "regionSlug": "jomtien",
+      "kind": "food",
+      "dark": false,
+      "people": [],
+      "desc": "The second one, and the newer regulars swear it is better — more room, a fan that works, and a woman on the wok who does not stop from six until the rice runs out. The board is the same board. The prices are the same prices. The Buakhao lot will tell you it is not the same, and mean it."
+    },
+    {
       "id": "coconut",
       "name": "Coconut Bar",
       "bar": "Coconut Bar",
@@ -957,7 +972,7 @@
       "kind": "street",
       "dark": false,
       "people": [],
-      "desc": "The middle of Soi 7, where the beer bars thin to guesthouses and a lone som tam cart doing quiet business. The soi runs west toward the sea and the beach road, and east toward the Second Road roar."
+      "desc": "The middle of Soi 7, where the beer bars thin to guesthouses and a lone som tam cart doing quiet business. CHEAP CHARLIE'S has the corner unit — the Jomtien branch, and the newer regulars swear by it. The soi runs west toward the sea and the beach road, and east toward the Second Road roar."
     },
     {
       "id": "jomtien_soi_7_oil",
@@ -2107,6 +2122,18 @@
       "desc": "A rose-pink corner bar, spotless, with a bell over the till and a wall of photos going back decades — same bar, same smile, different haircuts. Run like a harbourmaster's deck, nothing out of place. There's a power outlet under the counter, for customers the boss likes."
     },
     {
+      "id": "cheap_charlies",
+      "name": "Cheap Charlie's",
+      "bar": "Cheap Charlie's",
+      "barType": null,
+      "region": "Soi Buakhao",
+      "regionSlug": "soi-buakhao",
+      "kind": "food",
+      "dark": false,
+      "people": [],
+      "desc": "Six stools, a chest freezer, a laminated board of numbered dishes and a chalked one underneath it that says WHATEVER SHE MADE TODAY. Forty baht gets you fed; sixty gets you fed properly. Half the men in here have been eating at this counter since before the branch in Jomtien existed, and they will tell you so. The original, they say, with the particular pride of people who found something cheap before it was famous for being cheap."
+    },
+    {
       "id": "jasmine_garden",
       "name": "Jasmine Garden Bar",
       "bar": "Jasmine Garden Bar",
@@ -2842,6 +2869,18 @@
       "dark": false,
       "people": [],
       "desc": "The cheap seats of the maze, behind the kitchens where the rent drops and the neon budget with it: three little bars under one sagging string of bulbs. THE RABBIT HOLE, LUCKY CHARM BAR, and MOONSHINE BAR trade the regulars who ran out of maze. Friendlier than it has any right to be down here."
+    },
+    {
+      "id": "bali_hai",
+      "name": "Bali Hai Pier",
+      "bar": null,
+      "barType": null,
+      "region": "Walking Street",
+      "regionSlug": "walking-street",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "Walking Street runs out of neon and hands you to the water. The pier goes out into the dark on concrete legs, the Koh Larn boats tied up for the night with their awnings rolled, and the bay doing that thing where it looks enormous and completely quiet a hundred metres from the loudest street in Thailand. Behind you the strip is still going. In front of you a row of songthaews wait with their engines off and their drivers asleep across the benches, and the piwins have the good corner by the ramp because the piwins always have the good corner."
     },
     {
       "id": "club_mirage",

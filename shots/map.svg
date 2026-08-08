@@ -167,6 +167,7 @@
 <line x1="335.9" y1="719.5" x2="328.8" y2="719.5" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="335.9" y1="719.5" x2="342.9" y2="719.5" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="335.9" y1="719.5" x2="327.5" y2="727.6" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
+<line x1="335.9" y1="719.5" x2="291.9" y2="729.0" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="831.6" y1="506.3" x2="784.1" y2="582.1" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="831.6" y1="506.3" x2="825.6" y2="511.6" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="784.1" y1="582.1" x2="775.4" y2="594.3" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
@@ -178,6 +179,7 @@
 <line x1="730.6" y1="646.3" x2="721.7" y2="641.0" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="730.6" y1="646.3" x2="750.6" y2="624.1" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="730.6" y1="646.3" x2="729.0" y2="651.0" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
+<line x1="730.6" y1="646.3" x2="725.7" y2="654.6" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="682.0" y1="683.6" x2="601.5" y2="723.1" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="682.0" y1="683.6" x2="660.7" y2="697.2" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
 <line x1="682.0" y1="683.6" x2="659.9" y2="691.9" stroke="#ff2fb0" stroke-width="1.4" opacity="0.5"/>
@@ -245,6 +247,8 @@
 <circle cx="402.8" cy="1250.0" r="9" fill="none" stroke="#e8c46a" opacity="0.35"/>
 <circle cx="337.8" cy="1291.4" r="2.6" fill="#e8c46a" opacity="0.8"/>
 <circle cx="368.5" cy="1274.9" r="2.6" fill="#e8c46a" opacity="0.8"/>
+<circle cx="362.9" cy="1274.7" r="5" fill="#e8c46a" opacity="0.95"><title>Cheap Charlie's (Jomtien)</title></circle>
+<circle cx="362.9" cy="1274.7" r="9" fill="none" stroke="#e8c46a" opacity="0.35"/>
 <circle cx="399.6" cy="1258.4" r="2.6" fill="#e8c46a" opacity="0.8"/>
 <circle cx="409.3" cy="1253.1" r="2.6" fill="#e8c46a" opacity="0.8"/>
 <circle cx="361.5" cy="1219.7" r="5" fill="#e8c46a" opacity="0.95"><title>KISS Jomtien</title></circle>
@@ -374,6 +378,7 @@
 <circle cx="396.6" cy="698.3" r="9" fill="none" stroke="#ff1493" opacity="0.35"/>
 <circle cx="410.4" cy="698.3" r="5" fill="#ff1493" opacity="0.95"><title>Club Mirage</title></circle>
 <circle cx="410.4" cy="698.3" r="9" fill="none" stroke="#ff1493" opacity="0.35"/>
+<circle cx="291.9" cy="729.0" r="2.6" fill="#ff1493" opacity="0.8"/>
 <circle cx="328.8" cy="719.5" r="5" fill="#ff1493" opacity="0.95"><title>Crystal Palace A-Go-Go</title></circle>
 <circle cx="328.8" cy="719.5" r="9" fill="none" stroke="#ff1493" opacity="0.35"/>
 <circle cx="342.9" cy="719.5" r="5" fill="#ff1493" opacity="0.95"><title>Paradise Nights Club</title></circle>
@@ -393,6 +398,8 @@
 <circle cx="601.5" cy="723.1" r="2.6" fill="#ff6a9a" opacity="0.8"/>
 <circle cx="729.0" cy="651.0" r="5" fill="#ff6a9a" opacity="0.95"><title>Candy Bar</title></circle>
 <circle cx="729.0" cy="651.0" r="9" fill="none" stroke="#ff6a9a" opacity="0.35"/>
+<circle cx="725.7" cy="654.6" r="5" fill="#ff6a9a" opacity="0.95"><title>Cheap Charlie's</title></circle>
+<circle cx="725.7" cy="654.6" r="9" fill="none" stroke="#ff6a9a" opacity="0.35"/>
 <circle cx="737.6" cy="642.4" r="5" fill="#ff6a9a" opacity="0.95"><title>Lucky Tiger Bar</title></circle>
 <circle cx="737.6" cy="642.4" r="9" fill="none" stroke="#ff6a9a" opacity="0.35"/>
 <circle cx="733.0" cy="639.8" r="5" fill="#ff6a9a" opacity="0.95"><title>Rock Factory</title></circle>

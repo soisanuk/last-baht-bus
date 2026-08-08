@@ -182,9 +182,22 @@ const ROOMS = {
     name: "Jomtien Soi 7 (Middle)",
     region: "Jomtien",
     desc: "The middle of Soi 7, where the beer bars thin to guesthouses and a lone som tam cart " +
-      "doing quiet business. The soi runs west toward the sea and the beach road, and east toward " +
-      "the Second Road roar.",
+      "doing quiet business. CHEAP CHARLIE'S has the corner unit — the Jomtien branch, and the " +
+      "newer regulars swear by it. The soi runs west toward the sea and the beach road, and east " +
+      "toward the Second Road roar.",
+    venues: ["cheap_charlies_jt"],
     exits: { w: "jomtien_soi_7_w", e: "jomtien_soi_7_e", s: "jomtien_soi_7_beach_end" },
+  },
+  cheap_charlies_jt: {
+    name: "Cheap Charlie's (Jomtien)",
+    bar: "Cheap Charlie's (Jomtien)",
+    region: "Jomtien",
+    food: true,
+    desc: "The second one, and the newer regulars swear it is better — more room, a " +
+      "fan that works, and a woman on the wok who does not stop from six until the " +
+      "rice runs out. The board is the same board. The prices are the same prices. " +
+      "The Buakhao lot will tell you it is not the same, and mean it.",
+    exits: { out: "jomtien_soi_7_m" },
   },
   jomtien_soi_7_e: {
     name: "Jomtien Soi 7 (East / Second Road end)",
@@ -1156,7 +1169,8 @@ const ROOMS = {
       "beer bar, conversation levels, the kind of place you end up after you've stopped " +
       "trying. Late enough, the whole strip fills with barfined ladies and their friends " +
       "en route to the clubs.",
-    exits: { n: "ws_north", w: "crystal_palace", e: "paradise_nights", s: "midnight_sun" },
+    exits: { n: "ws_north", w: "crystal_palace", e: "paradise_nights", s: "midnight_sun",
+             pier: "bali_hai" },
   },
   neon_paradise: {
     name: "Neon Paradise A-Go-Go",
@@ -1190,6 +1204,30 @@ const ROOMS = {
       "Club Mirage again. Somewhere in the fog Aom is already noting your return; you won't see her cross the floor.",
     ],
     exits: { out: "ws_north" },
+  },
+  // The end of the strip and the end of the night for most people: songthaews,
+  // piwins, and the Koh Larn boats. It is a HUB, which is the point — everyone
+  // leaves from here, so everyone passes through.
+  bali_hai: {
+    motosai: true,
+    busStop: "beachrd",
+    name: "Bali Hai Pier",
+    region: "Walking Street",
+    desc: "Walking Street runs out of neon and hands you to the water. The pier goes " +
+      "out into the dark on concrete legs, the Koh Larn boats tied up for the night " +
+      "with their awnings rolled, and the bay doing that thing where it looks " +
+      "enormous and completely quiet a hundred metres from the loudest street in " +
+      "Thailand. Behind you the strip is still going. In front of you a row of " +
+      "songthaews wait with their engines off and their drivers asleep across the " +
+      "benches, and the piwins have the good corner by the ramp because the piwins " +
+      "always have the good corner.",
+    revisit: [
+      "A songthaew fills, doesn't quite fill, waits. Somebody always wants one more.",
+      "Out on the water a boat's rigging knocks against its mast, unhurried.",
+      "Two piwins are asleep on their bikes in a way that looks impossible and isn't.",
+      "Somebody photographs the pier, gets it wrong, and tries again.",
+    ],
+    exits: { n: "ws_south" },
   },
   crystal_palace: {
     name: "Crystal Palace A-Go-Go",
@@ -1347,7 +1385,7 @@ const ROOMS = {
     },
     exits: { n: "buakhao_tt", s: "buakhao_market", e: "lucky_tiger",
              in: "rock_factory", alley: "lk_entrance", hotel: "metropole_room", diana: "diana_e",
-             honey: "soi_honey_e", candy: "candy_bar" },
+             honey: "soi_honey_e", candy: "candy_bar", charlie: "cheap_charlies" },
   },
   buakhao_market: {
     atm: true,
@@ -1385,6 +1423,21 @@ const ROOMS = {
       "The rose-pink light folds back around you. Nothing here is ever out of place — the boss's standards hold whether or not the boss is on the floor tonight.",
       "You duck back into Candy's — same corner, same shine, the same small empire humming along without a wasted motion.",
     ],
+    exits: { out: "buakhao_n" },
+  },
+  // The FIRST one. There is a branch on Jomtien Soi 7 now, but this is the shop
+  // that gave the rest of the coast a phrase for a certain kind of man.
+  cheap_charlies: {
+    name: "Cheap Charlie's",
+    bar: "Cheap Charlie's",
+    region: "Soi Buakhao",
+    food: true,
+    desc: "Six stools, a chest freezer, a laminated board of numbered dishes and a " +
+      "chalked one underneath it that says WHATEVER SHE MADE TODAY. Forty baht gets " +
+      "you fed; sixty gets you fed properly. Half the men in here have been eating " +
+      "at this counter since before the branch in Jomtien existed, and they will " +
+      "tell you so. The original, they say, with the particular pride of people who " +
+      "found something cheap before it was famous for being cheap.",
     exits: { out: "buakhao_n" },
   },
   lucky_tiger: {
@@ -2042,6 +2095,8 @@ const ROOMS = {
     exits: { out: "khao_talo" },
   },
   khao_talo_strip: {
+    seven: true,
+    atm: true,
     name: "Soi Khao Talo (the strip)",
     region: "Darkside",
     desc: "The working stretch of the soi: a dozen open-front bars shoulder to " +
@@ -6785,7 +6840,7 @@ const NPCS = {
 
 const BUS_LINES = {
   jomtien: ["jomtien_beach_rd", "beach_rd_s"],
-  beachrd: ["beach_rd_s", "beach_rd_c", "beach_rd_n", "naklua_rd"],
+  beachrd: ["bali_hai", "beach_rd_s", "beach_rd_c", "beach_rd_n", "naklua_rd"],
 };
 
 // ── Motosai destinations (from any stand) ──────────────────────────────────
@@ -6793,8 +6848,9 @@ const BUS_LINES = {
 const MOTOSAI_DESTS = {
   "walking street": { room: "ws_gate", price: MOTOSAI_TOWN },
   "beach road":     { room: "beach_rd_c", price: MOTOSAI_TOWN },
-  "soi buakhao":    { room: "buakhao_market", price: MOTOSAI_TOWN },
-  "tree town":      { room: "buakhao_s", price: MOTOSAI_TOWN },
+  "soi buakhao":    { room: "buakhao_n", price: MOTOSAI_TOWN },
+  "tree town":      { room: "buakhao_tt", price: MOTOSAI_TOWN },
+  "bali hai":       { room: "bali_hai", price: MOTOSAI_TOWN },
   "lk metro":       { room: "lk_entrance", price: MOTOSAI_TOWN },
   "soi 6":          { room: "soi6_street", price: MOTOSAI_TOWN },
   "jomtien":        { room: "jomtien_beach_rd", price: MOTOSAI_TOWN },
@@ -9659,6 +9715,9 @@ const ROOM_GEO = {
   ws_north:         [12.92616, 100.87269],
   ws_alley:         [12.92645, 100.87255],
   ws_south:         [12.92508, 100.87018],
+  cheap_charlies_jt: [12.8968, 100.87118],
+  cheap_charlies:    [12.92839, 100.88462],
+  bali_hai:          [12.9246, 100.86855],
   neon_paradise:    [12.92616, 100.87243],
   club_mirage:      [12.92616, 100.87294],
   crystal_palace:   [12.92508, 100.86992],
