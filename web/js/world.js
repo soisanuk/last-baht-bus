@@ -554,7 +554,7 @@ const ROOMS = {
       "sleeping soi dogs, and long stretches where the streetlights have given up. " +
       "The Buddha Hill viewpoint is up a path to the west; Walking Street is on north.",
     exits: { n: "second_rd_india", w: "buddha_hill",
-             soi5: "pratumnak_hill_rd" },
+             soi5: "pratumnak_hill_rd", pier: "bali_hai" },
   },
 
   // ── Pratumnak north extension: the loop over the hill ────────────────────────
@@ -1461,14 +1461,16 @@ const ROOMS = {
       "Thailand. Behind you the strip is still going. In front of you a row of " +
       "songthaews wait with their engines off and their drivers asleep across the " +
       "benches, and the piwins have the good corner by the ramp because the piwins " +
-      "always have the good corner.",
+      "always have the good corner. South the road starts climbing Pratumnak " +
+      "almost at once — no pavement, no lighting worth the name, and the hill " +
+      "between here and Jomtien.",
     revisit: [
       "A songthaew fills, doesn't quite fill, waits. Somebody always wants one more.",
       "Out on the water a boat's rigging knocks against its mast, unhurried.",
       "Two piwins are asleep on their bikes in a way that looks impossible and isn't.",
       "Somebody photographs the pier, gets it wrong, and tries again.",
     ],
-    exits: { n: "ws_south" },
+    exits: { n: "ws_south", s: "pratumnak_rd" },
   },
   // Soi Diamond runs off Walking Street to Second Road — 153 m of it, and two of
   // the loudest rooms on the coast.

@@ -121,7 +121,11 @@ const DE_CEILINGS = [
   // are NOT on the Act One path — act1 held at 126, which is the evidence — so
   // they go on the ranked backlog in docs/i18n-de-gaps.md rather than being
   // translated at birth the way the Dolphin's five lines were.
-  { mode: "vacation", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 344 },
+  // 344 → 355 on wiring Bali Hai to the hill road. --delta: 1 record (the one
+  // desc I edited). The rest is the pier ceasing to be a dead end — Walking
+  // Street now has an on-ramp to Pratumnak, so the walk reaches the hill and
+  // the Jomtien side from the strip instead of only from Second Road.
+  { mode: "vacation", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 355 },
   // act1 is the do-or-die opening — the wallet chain, the fail/reset screens, the
   // hint whispers. NEITHER other mode reaches it: soi6 force-sets act1Done, and
   // so does the soak's own vacation setup. It was unguarded until 2026-08-07, and
@@ -135,7 +139,14 @@ const DE_CEILINGS = [
   // on the German backlog. Act One's route now
   // runs through five more Soi Buakhao rooms, and their prose has no de entries
   // yet. Real new English on the critical path — see docs/i18n-de-gaps.md.
-  { mode: "act1", seeds: [1, 2, 3, 4, 5], nights: 3, ceiling: 126 },
+  // 126 → 132 on the Bali Hai ⟷ hill road link, and this is the first thing all
+  // week to move act1 at all — every other map change left it at exactly 126,
+  // which is what told us those rooms were off the critical path. This one
+  // isn't a critical-path change either: the wallet run goes north to Naklua
+  // and never nears the hill. It is that a player CAN now wander off the south
+  // end of Walking Street and onto a dark hill road during the do-or-die night,
+  // which is a real road and a real way to lose the night.
+  { mode: "act1", seeds: [1, 2, 3, 4, 5], nights: 3, ceiling: 132 },
   // expat: the endless stage, unreachable from the other modes (soi6 and the
   // soak's own vacation setup both force act1Done and stop there). Added with
   // the bar-owning chain.
