@@ -3492,7 +3492,13 @@ test("Soi Honey: reachable off Second Road, three beer bars, one rotating mama",
   // the soi has its OWN Second Road junction now: Diana, then Honey, then Myth
   // Night, then Central, which is the order they come in on the ground
   assert.equal(ROOMS.second_rd_honey.exits.e, "soi_honey_w");
-  assert.equal(ROOMS.second_rd_s.exits.e, "buakhao_s", "the old cross-street still connects directly");
+  // Soi Buakhao has NO direct link to Second Road, at this end or any other —
+  // it is a long soi and you leave it by one of its cross-sois (Klang, Diana,
+  // LK, Honey) or off its foot at Pattaya Tai. The old second_rd_s ⟷ buakhao_s
+  // exit was one hop standing in for that whole leg, and the map's last >90°
+  // lie (99°) into the bargain.
+  assert.equal(ROOMS.second_rd_s.exits.e, undefined, "no phantom cross-street to Buakhao");
+  assert.equal(ROOMS.buakhao_s.exits.w, undefined, "and not from the other side either");
   for (const id of ["honey_trap", "queen_bee", "buzz_inn"]) {
     assert.equal(ROOMS[id].barType, "beer", `${id} is a beer bar`);
     const girls = Object.keys(NPCS).filter(n => NPC_ROLES[n] === "hostess" && _npcRoom(n) === id);
@@ -5652,14 +5658,24 @@ test("scripted happy-ending playthrough", () => {
     // Thailand, the Tree Town arch, North, the old market block, South), Candy
     // Bar sits on the Soi Diana junction where the real Cindy Bar stands, and
     // Tree Town is entered heading WEST off the soi, which is where it is.
-    "e", "e", "n", "n", "candy", "talk to candy",    // Candy: Mot did it
+    // up Second Road and cut inland through Soi Diana, which is how you reach
+    // Candy Bar now that Buakhao's phantom cross-street to Second Road is gone.
+    // This is also just where the bar is: Candy sits on the Buakhao ⟷ Soi Diana
+    // junction, so arriving out of Soi Diana is the front door, not a detour.
+    "e", "n", "e", "e", "e", "e", "candy", "talk to candy",   // Candy: Mot did it
     "out", "e", "talk to lek",                       // Lek at Lucky Tiger, east off the junction
     "out", "candy", "ask candy about wallet",        // Candy: som tam errand
-    "out", "s", "s", "w", "talk to bank",            // Bank: helmet favour
+    // There used to be a "Bank: helmet favour" leg here — south down Buakhao,
+    // "w" onto the old cross-street, "talk to bank", "e" straight back. It was
+    // dead the whole time: Bank works beach_rd_s and that leg never left Soi
+    // Buakhao, so the talk reached nobody and the two moves cancelled. Deleting
+    // the fictional exit only made it visible. Dropped rather than repaired —
+    // the helmet is demonstrably not on the critical path, since act1Done is
+    // reached without it, and a real Bank detour is 8 hops on a timed night.
     // north up Buakhao to the Tree Town arch, then west into the maze
     // (Soi Buakhao has separate junctions for Soi Diana, LK Metro and Soi Honey
     //  now, so the arch is three blocks north of Candy Bar rather than one)
-    "e", "n", "n", "n", "n", "n", "w",               // the arch
+    "out", "n", "n", "n", "w",                       // the arch
     "w", "w", "in",                                  // Starlight Bar
     "give helmet to pim", "ask pim about oy",        // pin part: lucky 9
     "out", "e", "in", "ask nong about oy",           // pin part: number 71

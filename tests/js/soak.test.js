@@ -113,7 +113,15 @@ const DE_CEILINGS = [
   // census (20 seeds see 688 lines where 5 see 317). A jump in this number is not
   // evidence of new debt, and a fall is not evidence of progress. Only --delta
   // measures debt. This ceiling measures where the walk goes.
-  { mode: "vacation", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 317 },
+  //
+  // 317 → 344 on the south-end rework, and unlike the Dolphin move this one IS
+  // partly real debt: three new rooms (Soi Buakhao's Pattaya Tai foot, the Soi
+  // Diamond junction, the Pratumnak-end stretch) shipped with 17 lines of
+  // English and no de entries. --delta reported exactly those 18 records. They
+  // are NOT on the Act One path — act1 held at 126, which is the evidence — so
+  // they go on the ranked backlog in docs/i18n-de-gaps.md rather than being
+  // translated at birth the way the Dolphin's five lines were.
+  { mode: "vacation", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 344 },
   // act1 is the do-or-die opening — the wallet chain, the fail/reset screens, the
   // hint whispers. NEITHER other mode reaches it: soi6 force-sets act1Done, and
   // so does the soak's own vacation setup. It was unguarded until 2026-08-07, and
@@ -140,8 +148,8 @@ const DE_CEILINGS = [
   // (tests/js/barchain.test.js).
   // 312 → 429 → 399, same story as vacation. 430 → 421 on the Dolphin roundabout
   // — tightened rather than left slack, since a ratchet that only ever loosens
-  // stops being one.
-  { mode: "expat", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 421 },
+  // stops being one. 421 → 428 for the three new south-end rooms.
+  { mode: "expat", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 428 },
 ];
 
 for (const { mode, seeds, nights, ceiling } of DE_CEILINGS) {
