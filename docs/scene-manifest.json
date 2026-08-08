@@ -2,11 +2,11 @@
   "generated": "2026-08-08",
   "note": "Every room in the game + its region, for the scene-art pipeline (docs/art-pipeline-spec.md). Derived from web/js/world.js — regenerate with scripts/gen-scene-manifest.mjs, do not hand-edit. `kind` is a generator heuristic for prompt-template selection, not game canon. `regionSlug` is produced by the same regex as web/js/scene.js `_sceneArt()`; art files are web/art/rooms/<id>.png with web/art/regions/<slug>.png as the fallback.",
   "counts": {
-    "rooms": 177,
+    "rooms": 184,
     "regions": 15,
     "byKind": {
-      "street": 60,
-      "massage": 14,
+      "street": 64,
+      "massage": 17,
       "beer": 49,
       "shop": 2,
       "beach": 9,
@@ -198,18 +198,20 @@
       "slug": "second-road",
       "name": "Second Road",
       "roomIds": [
+        "diana_oil",
         "pattaya_klang",
         "poseidon_soapy",
         "second_rd_c",
+        "second_rd_diana",
         "second_rd_n",
         "second_rd_s",
         "second_thai",
         "smile_massage"
       ],
       "sampleDescs": [
+        "The mouth of Soi Diana, and Second Road doing what Second Road does: four lanes of baht buses running nose to tail, a permanent shoal of motorbikes in the gutter lane, and pavement so narrow that walking it is a negotiation. The go-go neon starts about twenty metres up the soi and doesn't stop until Buakhao. On this corner: a 7-Eleven with a cash machine, a knot of piwins who have claimed the shade of its sign, and a girl on the back of a bike checking her lipstick in a wing mirror at a red light.",
         "The working road running parallel between Beach Road and Soi Buakhao — less neon, more motorbikes, the town with its makeup half off. It climbs south onto the north shoulder of Pratumnak Hill, toward Jomtien beyond.",
-        "Mid-Second-Road: baht buses in convoy, pharmacies, and the constant churn between the mall's back doors to the west and the fairy-lit mouth of MYTH NIGHT market to the east.",
-        "The north stretch, where Second Road angles toward the Dolphin roundabout. Central Pattaya Road — Pattaya Klang — crosses just ahead, cutting the whole town into north and south. This block is a massage row: SMILE MASSAGE winks pink from the west side, and opposite, four floors of blue neon spell POSEIDON MASSAGE over a doorman and a fish tank."
+        "Mid-Second-Road: baht buses in convoy, pharmacies, and the constant churn between the mall's back doors to the west and the fairy-lit mouth of MYTH NIGHT market to the east."
       ]
     },
     {
@@ -242,21 +244,26 @@
       "slug": "soi-buakhao",
       "name": "Soi Buakhao",
       "roomIds": [
+        "buakhao_klang",
         "buakhao_market",
+        "buakhao_myth",
         "buakhao_n",
         "buakhao_oil",
         "buakhao_s",
+        "buakhao_tt",
         "candy_bar",
         "jasmine_garden",
+        "klang_massage",
         "lucky_tiger",
         "metropole_room",
+        "myth_massage",
         "rock_factory",
         "silk_rose"
       ],
       "sampleDescs": [
-        "The expat artery: pharmacies, laundry, bars, repeat. ROCK FACTORY's two-storey stage looms on the corner — currently doing what every band in Thailand does to 'Hotel California' and somehow getting away with it. LUCKY TIGER BAR is just east. The market sprawl is south. A small handwritten LK METRO arrow on a wall points down an alley — easy to miss, worth finding. Soi Diana opens off the 7-Eleven on the corner here, its go-go neon running away west; two doors south toward the market, Candy Bar's rose-pink sign is close enough to read.",
-        "Tarps, fans, fruit pyramids, and a man forever restacking ice crates behind a som tam cart. The smell of papaya salad could pull you here from two sois away. CANDY BAR's rose-pink sign glows just south; SILK ROSE and JASMINE GARDEN share the block east.",
-        "The south end, where Tree Town's fairy-lit maze of mini-bars spills onto the pavement. The Tree Town arch is east — a complex that eats tourists and spits out poorer, happier ones. A motosai stand waits by the corner, engines ticking."
+        "The expat artery: pharmacies, laundry, bars, repeat. ROCK FACTORY's two-storey stage looms on the corner — currently doing what every band in Thailand does to 'Hotel California' and somehow getting away with it. LUCKY TIGER BAR is just east. The market sprawl is south. A small handwritten LK METRO arrow on a wall points down an alley — easy to miss, worth finding. Soi Diana opens off the 7-Eleven on the corner here, its go-go neon running away west. A few doors down the quiet side, CANDY BAR's rose-pink sign keeps its own hours — far enough off the main drag that the soi forgets about it until about three in the morning, which is roughly when it fills up.",
+        "Where the soi gives up and hands you to Central Pattaya Road. The traffic arrives here to die: two baht buses nose to tail with nowhere to go, a third wedged across the mouth of the junction while its driver leans out and negotiates with nobody in particular. The motorbikes don't wait. They come through the gaps in a steady braided stream — a girl side-saddle in six-inch heels holding her hair down with one hand, a punter on the back of another with his knees out like a man being carried to somewhere he didn't choose. A 7-Eleven throws cold white light across the whole slow mess, and the piwins at the corner watch it the way farmers watch weather.",
+        "Tarps, fans, fruit pyramids, and a man forever restacking ice crates behind a som tam cart. The smell of papaya salad could pull you here from two sois away. SILK ROSE shares the block east, and a pink-lit shopfront a few doors down promises the oil is warm."
       ]
     },
     {
@@ -1608,6 +1615,18 @@
       "desc": "Where the Main Strip's neon finally gives out and the road tips upward: the last few late-night noodle carts, then condo walls and the hill proper. The strip is back down to the south; the mouth of the Supertown drag alley opens to the west; the road climbs on north."
     },
     {
+      "id": "diana_oil",
+      "name": "Bamboo Oil Massage",
+      "bar": "Bamboo Oil Massage",
+      "barType": null,
+      "region": "Second Road",
+      "regionSlug": "second-road",
+      "kind": "massage",
+      "dark": false,
+      "people": [],
+      "desc": "Pink strip light, a beaded curtain, and three girls on plastic stools out front who greet every passing farang with the same unhurried hello. Inside it is cold, dim and clean, and the traffic on Second Road becomes a rumour."
+    },
+    {
       "id": "pattaya_klang",
       "name": "Central Pattaya Road (Pattaya Klang)",
       "bar": null,
@@ -1644,6 +1663,18 @@
       "dark": false,
       "people": [],
       "desc": "Mid-Second-Road: baht buses in convoy, pharmacies, and the constant churn between the mall's back doors to the west and the fairy-lit mouth of MYTH NIGHT market to the east."
+    },
+    {
+      "id": "second_rd_diana",
+      "name": "Second Road (Soi Diana)",
+      "bar": null,
+      "barType": null,
+      "region": "Second Road",
+      "regionSlug": "second-road",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "The mouth of Soi Diana, and Second Road doing what Second Road does: four lanes of baht buses running nose to tail, a permanent shoal of motorbikes in the gutter lane, and pavement so narrow that walking it is a negotiation. The go-go neon starts about twenty metres up the soi and doesn't stop until Buakhao. On this corner: a 7-Eleven with a cash machine, a knot of piwins who have claimed the shade of its sign, and a girl on the back of a bike checking her lipstick in a wing mirror at a red light."
     },
     {
       "id": "second_rd_n",
@@ -1947,6 +1978,18 @@
       "desc": "A beer bar in the quiet middle of Soi 6, deliberately set back under a low awning and a stand of potted palms — shade, in both senses. A long rail faces the soi so the regulars can watch the parade go past without being in it. Pukky pours without being asked and misses nothing that happens on the pavement."
     },
     {
+      "id": "buakhao_klang",
+      "name": "Soi Buakhao (Klang End)",
+      "bar": null,
+      "barType": null,
+      "region": "Soi Buakhao",
+      "regionSlug": "soi-buakhao",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "Where the soi gives up and hands you to Central Pattaya Road. The traffic arrives here to die: two baht buses nose to tail with nowhere to go, a third wedged across the mouth of the junction while its driver leans out and negotiates with nobody in particular. The motorbikes don't wait. They come through the gaps in a steady braided stream — a girl side-saddle in six-inch heels holding her hair down with one hand, a punter on the back of another with his knees out like a man being carried to somewhere he didn't choose. A 7-Eleven throws cold white light across the whole slow mess, and the piwins at the corner watch it the way farmers watch weather."
+    },
+    {
       "id": "buakhao_market",
       "name": "Buakhao Market",
       "bar": null,
@@ -1958,7 +2001,19 @@
       "people": [
         "Nit"
       ],
-      "desc": "Tarps, fans, fruit pyramids, and a man forever restacking ice crates behind a som tam cart. The smell of papaya salad could pull you here from two sois away. CANDY BAR's rose-pink sign glows just south; SILK ROSE and JASMINE GARDEN share the block east."
+      "desc": "Tarps, fans, fruit pyramids, and a man forever restacking ice crates behind a som tam cart. The smell of papaya salad could pull you here from two sois away. SILK ROSE shares the block east, and a pink-lit shopfront a few doors down promises the oil is warm."
+    },
+    {
+      "id": "buakhao_myth",
+      "name": "Soi Buakhao (Made in Thailand)",
+      "bar": null,
+      "barType": null,
+      "region": "Soi Buakhao",
+      "regionSlug": "soi-buakhao",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "The middle of the artery, and the busiest crossing on it. Soi Made In Thailand opens west — the night plaza, and past it the lane becomes Soi Myth Night and runs on to Second Road. East, the TREE TOWN arch is doing its fairy-lit best to look like an entrance to somewhere. Between the two, the soi itself is barely moving: a baht bus at walking pace with four people hanging off the back step, motorbikes threading the gap between it and the parked cars, and everyone on the pavement stepping around a plastic table that has been there long enough to count as architecture."
     },
     {
       "id": "buakhao_n",
@@ -1969,10 +2024,8 @@
       "regionSlug": "soi-buakhao",
       "kind": "street",
       "dark": false,
-      "people": [
-        "Candy"
-      ],
-      "desc": "The expat artery: pharmacies, laundry, bars, repeat. ROCK FACTORY's two-storey stage looms on the corner — currently doing what every band in Thailand does to 'Hotel California' and somehow getting away with it. LUCKY TIGER BAR is just east. The market sprawl is south. A small handwritten LK METRO arrow on a wall points down an alley — easy to miss, worth finding. Soi Diana opens off the 7-Eleven on the corner here, its go-go neon running away west; two doors south toward the market, Candy Bar's rose-pink sign is close enough to read."
+      "people": [],
+      "desc": "The expat artery: pharmacies, laundry, bars, repeat. ROCK FACTORY's two-storey stage looms on the corner — currently doing what every band in Thailand does to 'Hotel California' and somehow getting away with it. LUCKY TIGER BAR is just east. The market sprawl is south. A small handwritten LK METRO arrow on a wall points down an alley — easy to miss, worth finding. Soi Diana opens off the 7-Eleven on the corner here, its go-go neon running away west. A few doors down the quiet side, CANDY BAR's rose-pink sign keeps its own hours — far enough off the main drag that the soi forgets about it until about three in the morning, which is roughly when it fills up."
     },
     {
       "id": "buakhao_oil",
@@ -1997,6 +2050,18 @@
       "dark": false,
       "people": [],
       "desc": "The south end, where Tree Town's fairy-lit maze of mini-bars spills onto the pavement. The Tree Town arch is east — a complex that eats tourists and spits out poorer, happier ones. A motosai stand waits by the corner, engines ticking."
+    },
+    {
+      "id": "buakhao_tt",
+      "name": "Soi Buakhao (Tree Town Arch)",
+      "bar": null,
+      "barType": null,
+      "region": "Soi Buakhao",
+      "regionSlug": "soi-buakhao",
+      "kind": "street",
+      "dark": false,
+      "people": [],
+      "desc": "The TREE TOWN arch stands west off the soi, strung with fairy lights and swallowing tourists at a steady rate. Out here the traffic has thickened to a crawl — a baht bus stopped dead with its back step crowded, another behind it, and the bikes going round the pair of them on whichever side has opened up. Two girls on the back of one wave at somebody they know outside the arch. The pavement is a single file of people going the other way."
     },
     {
       "id": "candy_bar",
@@ -2035,6 +2100,18 @@
       "desc": "Plants everywhere — real ones, thriving, which tells you someone here shows up in daylight too. Jasmine garlands over the spirit house out front."
     },
     {
+      "id": "klang_massage",
+      "name": "Klang Corner Massage",
+      "bar": "Klang Corner Massage",
+      "barType": null,
+      "region": "Soi Buakhao",
+      "regionSlug": "soi-buakhao",
+      "kind": "massage",
+      "dark": false,
+      "people": [],
+      "desc": "A narrow shopfront wedged between a laundry and a shuttered {{phone}} repair stall, close enough to the junction that the traffic noise comes through the wall. Four mats, a fan on a stand, and a lady who has been doing this for twenty years and can tell from your walk which shoulder is the problem."
+    },
+    {
       "id": "lucky_tiger",
       "name": "Lucky Tiger Bar",
       "bar": "Lucky Tiger Bar",
@@ -2064,6 +2141,18 @@
       "dark": false,
       "people": [],
       "desc": "A proper tower room at the LK Metropole: blackout curtains, aircon set to walk-in fridge, a shower with municipal water pressure. From the window, the LK Metro alley glows directly below like a lit fuse. The lift goes down to the lobby on Soi Buakhao — and the fire stairs, the bellboy mentions with a wink, come out in the alley itself."
+    },
+    {
+      "id": "myth_massage",
+      "name": "Plaza Thai Massage",
+      "bar": "Plaza Thai Massage",
+      "barType": null,
+      "region": "Soi Buakhao",
+      "regionSlug": "soi-buakhao",
+      "kind": "massage",
+      "dark": false,
+      "people": [],
+      "desc": "Right on the corner of the plaza, doors open to the soi so the whole street can watch a row of farang being folded in half. Nobody minds. There is a hand-lettered price list, a stack of loose cotton trousers, and a kettle that never quite goes off the boil."
     },
     {
       "id": "rock_factory",
