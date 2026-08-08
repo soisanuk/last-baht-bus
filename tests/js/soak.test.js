@@ -90,7 +90,7 @@ const DE_CEILINGS = [
   // connects the hill road to Walking Street, and Pattaya Soi 7 exists — three
   // new ways through, so the walk reaches further into untranslated town. All
   // reachability; --delta accounts for the new prose separately.
-  { mode: "vacation", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 308 },
+  { mode: "vacation", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 315 },
   // act1 is the do-or-die opening — the wallet chain, the fail/reset screens, the
   // hint whispers. NEITHER other mode reaches it: soi6 force-sets act1Done, and
   // so does the soak's own vacation setup. It was unguarded until 2026-08-07, and
@@ -116,7 +116,7 @@ const DE_CEILINGS = [
   // quests. Authored quest prose is guarded by scripted playthroughs instead
   // (tests/js/barchain.test.js).
   // 312 → 429 → 399, same story as vacation.
-  { mode: "expat", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 407 },
+  { mode: "expat", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 408 },
 ];
 
 for (const { mode, seeds, nights, ceiling } of DE_CEILINGS) {

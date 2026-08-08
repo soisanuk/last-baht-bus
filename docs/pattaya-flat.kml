@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2"><Document>
   <name>The Last Baht Bus — Pattaya</name>
-  <description>201 rooms on real coordinates. Exit lines are coloured by how far each compass word sits from the true bearing: green under 45 degrees (a four-direction grid cannot do better on a diagonal), amber to 60, red beyond.</description>
+  <description>202 rooms on real coordinates. Exit lines are coloured by how far each compass word sits from the true bearing: green under 45 degrees (a four-direction grid cannot do better on a diagonal), amber to 60, red beyond.</description>
 
   <Style id="road"><IconStyle><scale>0.9</scale><color>ff00d7ff</color>
     <Icon><href>http://maps.google.com/mapfiles/kml/shapes/road_shield3.png</href></Icon></IconStyle></Style>
@@ -15,6 +15,7 @@
     <Placemark><name>Short-Time Motel</name><styleUrl>#road</styleUrl><description><![CDATA[<b>short_time_motel</b><br/>Beach Road]]></description><Point><coordinates>100.88503,12.93626,0</coordinates></Point></Placemark>
     <Placemark><name>Beach Road Central</name><styleUrl>#road</styleUrl><description><![CDATA[<b>beach_rd_c</b><br/>Beach Road]]></description><Point><coordinates>100.88159,12.9345,0</coordinates></Point></Placemark>
     <Placemark><name>Beach Road (Soi 7)</name><styleUrl>#road</styleUrl><description><![CDATA[<b>beach_rd_soi7</b><br/>Beach Road]]></description><Point><coordinates>100.88307,12.93715,0</coordinates></Point></Placemark>
+    <Placemark><name>Soi 8</name><styleUrl>#road</styleUrl><description><![CDATA[<b>pattaya_soi_8</b><br/>Beach Road]]></description><Point><coordinates>100.88413,12.93573,0</coordinates></Point></Placemark>
     <Placemark><name>Beach Promenade</name><styleUrl>#road</styleUrl><description><![CDATA[<b>promenade</b><br/>Beach Road]]></description><Point><coordinates>100.88117,12.9345,0</coordinates></Point></Placemark>
     <Placemark><name>Beach Road (foot of Soi 6)</name><styleUrl>#road</styleUrl><description><![CDATA[<b>beach_rd_n</b><br/>Beach Road]]></description><Point><coordinates>100.88475,12.94288,0</coordinates></Point></Placemark>
     <Placemark><name>North Pattaya Beach</name><styleUrl>#road</styleUrl><description><![CDATA[<b>north_beach</b><br/>Beach Road]]></description><Point><coordinates>100.88371,12.94324,0</coordinates></Point></Placemark>
@@ -215,7 +216,7 @@
     <Placemark><name>Midnight Sun Bar</name><styleUrl>#venue</styleUrl><description><![CDATA[<b>midnight_sun</b><br/>Walking Street]]></description><Point><coordinates>100.86987,12.92467,0</coordinates></Point></Placemark>
     <Placemark><name>Ruean Sabai Thai Massage</name><styleUrl>#venue</styleUrl><description><![CDATA[<b>thai_massage</b><br/>Walking Street]]></description><Point><coordinates>100.87496,12.92731,0</coordinates></Point></Placemark>
   </Folder>
-  <Folder><name>Exits — the bar mat map (214 clean · 24 amber · 11 red)</name>
+  <Folder><name>Exits — the bar mat map (215 clean · 25 amber · 11 red)</name>
     <Placemark><name>jomtien_beach —e→ jomtien_beach_rd_s</name><styleUrl>#ok</styleUrl><description><![CDATA[declared <b>e</b>, real bearing 110°, off by 20°]]></description><LineString><tessellate>1</tessellate><coordinates>100.86855,12.89615,0 100.86989,12.89568,0</coordinates></LineString></Placemark>
     <Placemark><name>jomtien_beach —n→ jomtien_beach_m</name><styleUrl>#ok</styleUrl><description><![CDATA[declared <b>n</b>, real bearing 317°, off by 43°]]></description><LineString><tessellate>1</tessellate><coordinates>100.86855,12.89615,0 100.86753,12.8972,0</coordinates></LineString></Placemark>
     <Placemark><name>jomtien_beach —s→ jomtien_soi_7_beach_end</name><styleUrl>#warn</styleUrl><description><![CDATA[declared <b>s</b>, real bearing 130°, off by 50°]]></description><LineString><tessellate>1</tessellate><coordinates>100.86855,12.89615,0 100.86949,12.89537,0</coordinates></LineString></Placemark>
@@ -301,6 +302,8 @@
     <Placemark><name>beach_rd_soi7 —n→ beach_rd_n</name><styleUrl>#ok</styleUrl><description><![CDATA[declared <b>n</b>, real bearing 16°, off by 16°]]></description><LineString><tessellate>1</tessellate><coordinates>100.88307,12.93715,0 100.88475,12.94288,0</coordinates></LineString></Placemark>
     <Placemark><name>beach_rd_soi7 —s→ beach_rd_c</name><styleUrl>#ok</styleUrl><description><![CDATA[declared <b>s</b>, real bearing 209°, off by 29°]]></description><LineString><tessellate>1</tessellate><coordinates>100.88307,12.93715,0 100.88159,12.9345,0</coordinates></LineString></Placemark>
     <Placemark><name>beach_rd_soi7 —e→ pattaya_soi_7</name><styleUrl>#ok</styleUrl><description><![CDATA[declared <b>e</b>, real bearing 114°, off by 24°]]></description><LineString><tessellate>1</tessellate><coordinates>100.88307,12.93715,0 100.8846,12.9365,0</coordinates></LineString></Placemark>
+    <Placemark><name>pattaya_soi_8 —w→ beach_rd_soi7</name><styleUrl>#warn</styleUrl><description><![CDATA[declared <b>w</b>, real bearing 324°, off by 54°]]></description><LineString><tessellate>1</tessellate><coordinates>100.88413,12.93573,0 100.88307,12.93715,0</coordinates></LineString></Placemark>
+    <Placemark><name>pattaya_soi_8 —e→ second_rd_n</name><styleUrl>#ok</styleUrl><description><![CDATA[declared <b>e</b>, real bearing 102°, off by 12°]]></description><LineString><tessellate>1</tessellate><coordinates>100.88413,12.93573,0 100.8858,12.93539,0</coordinates></LineString></Placemark>
     <Placemark><name>promenade —e→ beach_rd_c</name><styleUrl>#ok</styleUrl><description><![CDATA[declared <b>e</b>, real bearing 90°, off by 0°]]></description><LineString><tessellate>1</tessellate><coordinates>100.88117,12.9345,0 100.88159,12.9345,0</coordinates></LineString></Placemark>
     <Placemark><name>beach_rd_n —s→ beach_rd_soi7</name><styleUrl>#ok</styleUrl><description><![CDATA[declared <b>s</b>, real bearing 196°, off by 16°]]></description><LineString><tessellate>1</tessellate><coordinates>100.88475,12.94288,0 100.88307,12.93715,0</coordinates></LineString></Placemark>
     <Placemark><name>beach_rd_n —e→ soi6_street</name><styleUrl>#ok</styleUrl><description><![CDATA[declared <b>e</b>, real bearing 109°, off by 19°]]></description><LineString><tessellate>1</tessellate><coordinates>100.88475,12.94288,0 100.88544,12.94265,0</coordinates></LineString></Placemark>
