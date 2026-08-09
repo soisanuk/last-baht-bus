@@ -165,6 +165,13 @@ test("fields Second Road has never heard of keep today's defaults", () => {
 // day one.
 test("HANDOVER is a real verb, and hands over a real baton", () => {
   livedIn();
+  // doCommand ticks, and a tick can arm an encounter — which legitimately makes
+  // batonReady() refuse. That flaked this test roughly one run in four, and the
+  // flake was worth having: it was the frontend exporting AFTER dispatch, so a
+  // real handover could print and then silently write no file. Fixed in main.js
+  // by grabbing the baton first; silenced here so the test measures the verb.
+  for (const k in ENCOUNTERS) G.encDone[k] = true;
+  G.pendingEnc = null;
   out = []; doCommand("handover");
   const said = out.join("\n");
   assert.match(said, /HANDING OVER/, "the verb exists and reaches the handler");

@@ -159,8 +159,14 @@ function _dispatch(cmd) {
   // SHARE below.
   if (v === "handover" || v === "baton") {
     _prevSnap = serializeGame();
-    doCommand(cmd);                       // the engine prints, and rules
+    // Grab the baton BEFORE dispatch. doCommand ticks, and a tick can arm an
+    // encounter — which makes batonReady() refuse, so exporting afterwards
+    // returned null and the file silently never wrote while the engine had
+    // already printed "HANDING OVER". Same ordering as SHARE below, and for the
+    // same reason: the engine's output should land after the frontend has
+    // already got what it needs.
     const b = (typeof exportBaton === "function") ? exportBaton() : null;
+    doCommand(cmd);                       // the engine prints, and rules
     if (b) {
       try {
         const name = `baht-bus-baton-day${b.day || 0}.json`;

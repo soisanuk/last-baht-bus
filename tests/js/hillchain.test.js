@@ -207,3 +207,61 @@ test("amulet: the column prints the Owl's answer once, then goes back to the poo
   const second = say("column");
   assert.ok(!second.includes(_OWL_AMULET[1]), "and not a second time");
 });
+
+// ── the piwins: buying sight ────────────────────────────────────────────────
+// The motorbike-taxi men are at 35 stands and were scenery — TALK TO PIWIN
+// answered "nobody here goes by that" while the room description said one was
+// sitting right there. A pseudo-NPC rather than 35 filler entries, because that
+// would be 35 portraits against an art budget already under strain, and because
+// a piwin is a role before he is a person.
+//
+// What these hold:
+//   1. He will NOT tell a stranger. That is the point, not an obstacle — the
+//      value of knowing things here is not saying them, and a beer changes it.
+//   2. The answer is honest about staleness. A hopper gets "I took him there
+//      two hours ago, where he is now I don't know" — never a live marker.
+//   3. He is looked up GLOBALLY. _findNpc is room-scoped, which is correct for
+//      talking to someone and exactly wrong here: the whole service is people
+//      who are not in front of you.
+test("piwin: he sees everything and tells strangers nothing", () => {
+  onTheHill();
+  G.room = "dolphin"; G.known = { candy: true };
+  const cold = say("ask piwin about candy");
+  assert.match(cold, /I know everybody/, "he deflects");
+  assert.doesNotMatch(cold, /Candy Bar/, "…and gives up no location");
+});
+
+test("piwin: a beer buys sight, and the answer knows how stale it is", () => {
+  onTheHill();
+  G.room = "dolphin"; G.known = { candy: true, nigel: true };
+  say("buy piwin a beer");
+
+  // a fixed NPC: definite, because she is where she is all night
+  const fixed = say("ask piwin about candy");
+  assert.match(fixed, /Candy Bar/, "he places her");
+  // a hopper: he reports the DROP, with the time and the caveat in his own voice
+  const hopper = say("ask piwin about nigel");
+  assert.match(hopper, /hour ago/, "he timestamps it");
+  assert.match(hopper, /don't know/i, "…and does not pretend to know where he is now");
+});
+
+test("piwin: the stand is not a bar, and he is not everywhere", () => {
+  onTheHill();
+  G.room = "north_beach";                      // no motosai
+  assert.match(say("talk to piwin"), /No stand here/);
+  assert.match(say("buy piwin a beer"), /No stand here/);
+});
+
+test("piwin: greased, he finishes the sentence he cut off about the amulet", () => {
+  onTheHill();
+  G.itemLoc.amulet = "inventory"; G.itemLoc.cord = "inventory"; say("wear amulet");
+  G.room = "dolphin"; say("buy piwin a beer");
+  out = []; G.room = "beach_rd_n"; _arriveAt("dolphin");
+  assert.match(out.join("\n"), /auntie/i, "a man he knows gets the second half");
+
+  // and a stranger still does not
+  onTheHill();
+  G.itemLoc.amulet = "inventory"; G.itemLoc.cord = "inventory"; say("wear amulet");
+  out = []; G.room = "beach_rd_n"; _arriveAt("dolphin");
+  assert.doesNotMatch(out.join("\n"), /auntie/i, "a stranger gets the shrug");
+});

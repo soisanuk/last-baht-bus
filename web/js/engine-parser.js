@@ -852,6 +852,11 @@ function _doTalk(arg, topic) {
 }
 function _doTalkBody(arg, topic) {
   arg = (arg || "").trim();
+  // the piwin at a stand is a real person in the fiction and not an NPCS entry
+  if (/^(piwin|motosai|driver|bike ?boy|taxi)$/i.test(arg)) {
+    if (!_piwinHere()) { _say("No stand here — the bikes are on the corners."); return; }
+    return topic ? _piwinAbout(topic) : _piwinTalk();
+  }
   // Pronoun / bare target → the person already in play (scope resolution). A
   // patron antecedent routes straight to _patronTalk; an NPC id flows on as the
   // "name" (findNpc matches an exact id). Ambiguous/none falls through to the
@@ -1478,6 +1483,13 @@ function _standRegular(id) {
 
 function _doBuy(arg) {
   const r = _room();
+  // BUY PIWIN A BEER. First, because a stand is not a bar and every branch
+  // below assumes one — the beer path was answering "this calls for a bar stool".
+  if (/\b(piwin|motosai|driver)\b/.test(arg)) {
+    if (!_piwinHere()) { _say("No stand here — the bikes are on the corners."); return; }
+    _piwinBeer();
+    return;
+  }
   // Host bar: "buy drink for <host>" / "buy <host> a drink" runs on the host
   // track, not the (female-coded) lady-drink path — and your own beer is
   // served here too (no barType, so the normal beer path won't fire), at the
@@ -3030,6 +3042,7 @@ const _HELP = `Common commands:
   PET CATS (Jomtien beach) · FEED DOG (a friendship you cannot undo) · PET DOG · NAME DOG <name>
   LIGHT ON / LIGHT OFF · CHARGE PHONE
   SCORE (happiness & progress) · UNDO · RESTART   (the night autosaves itself)
+  BUY PIWIN A BEER · ASK PIWIN ABOUT <person>   (the men at the stands see everything)
   HANDOVER (send this character to the macro game, at dawn) · RESUME (take one back)
   QUIT / END / LOGOUT (sign off; your night is saved) · RESET (wipe the save — asks first)`;
 
@@ -3078,6 +3091,7 @@ const _HELP_SOI6 = `Common commands:
 // rules, not even vocabulary. Easter-egg verbs are deliberately absent.
 
 const _COMPLETE_VERBS = [
+  "buy piwin a beer",
   "handover", "resume",
   "wear",
   "look", "examine", "take", "drop", "inventory", "go", "enter", "talk to",

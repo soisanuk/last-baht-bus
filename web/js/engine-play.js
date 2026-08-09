@@ -213,6 +213,122 @@ function _lastBusWarn() {
     { fare: BUS_FARE }), "alert");
 }
 
+// ── The piwins, and buying sight ─────────────────────────────────────────────
+// The motorbike-taxi men are the only people in this town who see all of it.
+// They are at 35 stands and they were, until now, scenery: `motosai: true` on a
+// room, a line of prose, and TALK TO PIWIN answering "nobody here goes by that"
+// while the description said one was sitting right there.
+//
+// Deliberately a pseudo-NPC rather than 35 filler entries. Real NPCs would get
+// the three surfaces for free, but they would also cost 35 portraits against an
+// art budget already heading somewhere uncomfortable — and a piwin is a ROLE
+// before he is a person. He is a person too, though, so each stand's man is
+// hash-stable: the same fellow every time you come back to that corner.
+//
+// What you buy from him is not a ride. It is SIGHT. He knows who he dropped
+// where and when, and he will not tell a stranger, because the whole value of
+// knowing things in this town is not saying them. A beer changes that, and the
+// second beer changes it more. Nothing here is a quest marker: he answers about
+// people, honestly, with the staleness built into the answer — he tells you
+// where he TOOK her and what time, not where she is now, because he does not
+// know that either.
+const _PIWIN_NAMES = ["Wit", "Chai", "Nueng", "Somphon", "Tui", "Beer", "Koi", "Chart"];
+function _piwinHere() { return !!(_room() && _room().motosai) && !_isDarkHere(); }
+function _piwinName() { return _PIWIN_NAMES[_hh(G.room, 11) % _PIWIN_NAMES.length]; }
+function _grease() { G.soc.grease = G.soc.grease || {}; return G.soc.grease[G.room] || 0; }
+function _addGrease(n) {
+  G.soc.grease = G.soc.grease || {};
+  G.soc.grease[G.room] = (G.soc.grease[G.room] || 0) + n;
+}
+
+const _PIWIN_HELLO = [
+  "The piwin looks up from his phone, reads you as somebody not going anywhere, and " +
+    "goes back to it. Not rude. Just accurate.",
+  "He tips his chin at you and says nothing. The orange vest is folded on the seat " +
+    "behind him and the engine is cold; he is off, more or less, and you are not a fare.",
+  "\"Go where?\" He is already half off the seat. When it turns out you are not going " +
+    "anywhere he settles back without any sign of disappointment.",
+];
+const _PIWIN_WARM = [
+  "\"Ah, you again.\" He shifts along the bench to make a space that was already there.",
+  "He raises the beer you bought him an inch, which on this bench is a whole greeting.",
+  "\"Sit, sit.\" Room is made. The phone goes face-down, which is the actual courtesy.",
+];
+function _piwinTalk() {
+  const g = _grease();
+  _say(_pickVary(g > 0 ? _PIWIN_WARM : _PIWIN_HELLO, "piwintalk"));
+  if (g === 0) {
+    _say("(These men see the whole town and tell nobody. BUY PIWIN A BEER — then ask him " +
+      "about somebody.)", "dim");
+  }
+}
+
+const PIWIN_BEER = 60;   // a stand beer, off the cart, cheaper than a bar
+function _piwinBeer() {
+  if (G.money < PIWIN_BEER) {
+    _say(_fmt("A beer off the cart is ฿{p}. You have ฿{m}.", { p: PIWIN_BEER, m: G.money }));
+    return;
+  }
+  G.money -= PIWIN_BEER;
+  _addGrease(1);
+  const g = _grease();
+  _say(_fmt(g === 1
+    ? "You put a cold one in his hand. He looks at it, then at you, and the transaction " +
+      "he had you filed under quietly changes category. \"Chok dee.\" He does not thank " +
+      "you in words and the beer is gone in three pulls. (฿{m} left.)"
+    : "Another one. He takes it as a matter of course now, which is the point — you are " +
+      "no longer a man buying a piwin a beer, you are a man who buys him a beer. " +
+      "(฿{m} left.)", { m: G.money }), "win");
+  _repGain();
+}
+
+// What he'll tell you about somebody. Gated on the beer, honest about staleness,
+// and never a marker: a hopper's answer is where he DROPPED her and when.
+function _piwinAbout(who) {
+  const g = _grease();
+  // _findNpc/_findPatron are ROOM-scoped, which is right for "talk to X" and
+  // exactly wrong here: you ask a piwin about people who are not in front of
+  // you. That is the entire service.
+  const w = String(who || "").trim().toLowerCase();
+  const byName = src => Object.keys(src).find(k =>
+    k === w || String(src[k].name || "").toLowerCase() === w ||
+    String(src[k].name || "").toLowerCase().split(" ").pop() === w);
+  const id = byName(NPCS) || byName(PATRONS);
+  if (!id) { _say("\"Who?\" He shrugs, entirely unbothered. \"Don't know this one.\""); return; }
+  const label = (NPCS[id] || PATRONS[id]).name;
+  if (!(G.known && G.known[id])) {
+    _say("\"Mm.\" He does not know the name either, or does not care to. \"Lot of people.\"");
+    return;
+  }
+  if (g === 0) {
+    _say(_fmt("\"{n}?\" He looks at you for a moment longer than the question needs, and " +
+      "then back at his phone. \"Sure. I know everybody.\" That is the whole answer, and " +
+      "it is a complete sentence.", { n: label }));
+    _say("(He isn't being difficult. You just haven't bought him anything.)", "dim");
+    return;
+  }
+  // _npcRoom assumes an NPCS entry and reads .bars off it — a patron id throws.
+  // Route by which table the id actually came from.
+  const room = NPCS[id] ? _npcRoom(id) : _patronRoom(id);
+  const where = room ? (_barName(room) || (ROOMS[room] && ROOMS[room].name)) : null;
+  if (!where) { _say(_fmt("\"{n}. Not tonight, I think. Not seen.\"", { n: label })); return; }
+  const hopper = !!(PATRONS[id] && PATRONS[id].hops);
+  if (hopper) {
+    _say(_fmt("He thinks, and it is a real think — he is going through his own evening. " +
+      "\"{n}. I take him {w}, maybe two hour ago.\" A shrug that is not indifference but " +
+      "accuracy. \"Where he is NOW, I don't know. Man like that, he move.\"",
+      { n: label, w: where }));
+  } else {
+    _say(_fmt("\"{n}.\" No hesitation at all. \"{w}. Every night this week.\" He says it " +
+      "the way you would give somebody the time.", { n: label, w: where }));
+  }
+  if (g >= 2) {
+    _say("He adds something else, unprompted, because two beers is a different " +
+      "relationship from one: \"You want, I take you. No charge. You buy me beer, I " +
+      "don't take your money also — is not how it works.\"", "dim");
+  }
+}
+
 // ── The amulet: what the town makes of it ────────────────────────────────────
 // Two notices, and the restraint is the design. The piwin is the ONLY reliable
 // one, because motorbike-taxi men genuinely all wear amulets — the job kills
@@ -244,6 +360,15 @@ function _amuletNotice() {
   if (!_room().motosai) return;
   _setFlag("amuletSeen");
   _say(_pickVary(_AMULET_PIWIN, "amuletpiwin"), "alert");
+  // …and if you have ever bought this man a beer, he says the second thing. He
+  // would not tell a stranger, which was always the reason he stopped talking —
+  // not mystery for its own sake, just the ordinary rule that knowing things is
+  // worth nothing once you have said them.
+  if (_grease() > 0) {
+    _say("Then, because it is you: \"My auntie have one like this.\" He holds two " +
+      "fingers a small distance apart, meaning small, or meaning quiet. \"Not for wear. " +
+      "For remember somebody.\" He kicks the bike over. \"Anyway. Where you go?\"", "dim");
+  }
 }
 
 // Nok, and the door that closes politely.
