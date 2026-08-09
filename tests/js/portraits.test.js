@@ -15,9 +15,14 @@ for (const f of ["thai.js", "world.js"]) {
 const dir = path.join(root, "web", "portraits");
 const PNG_SIG = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
 
-test("every NPC and patron has a portrait PNG", () => {
+// A character is covered by EITHER a pixel-art PNG here or a WebP thumb — the
+// generated masters live in ../portrait_gen, not in web/ (see the size guard
+// below), so for a rendered face the thumb IS the shipped art.
+test("every NPC and patron has a face", () => {
   const ids = [...Object.keys(NPCS), ...Object.keys(PATRONS)];
-  const missing = ids.filter(id => !fs.existsSync(path.join(dir, id + ".png")));
+  const missing = ids.filter(id =>
+    !fs.existsSync(path.join(dir, id + ".png")) &&
+    !fs.existsSync(path.join(dir, "thumb", id + ".webp")));
   assert.deepEqual(missing, [], "run scripts/gen-portraits.py after adding characters");
 });
 
@@ -104,20 +109,20 @@ test("thumbnails are real WebP, inside budget, and none are orphaned", () => {
   }
 });
 
-// NOTE on the full-size budget: docs/art-production.md proposes ≤250 KB for
-// `portraits/`. That CANNOT apply while the full-size renders are still
-// committed — all 72 are 1.2-1.67 MB, and the gallery path genuinely wants that
-// detail. The ≤250 KB rule only becomes enforceable if the renders move out of
-// the repo (the doc's middle `.git` option). Until then this ceiling just stops
-// the existing files drifting further upward.
-test("full-size renders don't grow", () => {
-  const RENDER_MAX = 2 * 1024 * 1024;
-  for (const f of fs.readdirSync(dir)) {
-    if (!f.endsWith(".png")) continue;
-    const size = fs.statSync(path.join(dir, f)).size;
-    assert.ok(size <= RENDER_MAX,
-      `${f} is ${(size / 1e6).toFixed(2)} MB — ceiling is 2 MB (see docs/art-production.md)`);
-  }
+// The masters do not live here. They are 1.5 MB each, no consumer ever requests
+// one (term.js prefers the thumb whenever `_THUMBS` has the id), and `web/` is
+// what pages.yml publishes — so 84 of them were shipping with every deploy for
+// nothing. They now sit in ../portrait_gen beside the other generation inputs.
+// This guard is what stops them drifting back: anything big in web/portraits is
+// a master that escaped. (portraits/pics/ is deliberately exempt — those frames
+// are displayed full-size in the phone gallery.)
+test("no full-size masters in web/portraits", () => {
+  const MASTER_MIN = 100 * 1024;
+  const strays = fs.readdirSync(dir)
+    .filter(f => f.endsWith(".png"))
+    .filter(f => fs.statSync(path.join(dir, f)).size > MASTER_MIN);
+  assert.deepEqual(strays, [],
+    "masters belong in ../portrait_gen — only thumbs and pixel art ship (docs/art-production.md)");
 });
 
 test("the generator's cast list matches the world", () => {

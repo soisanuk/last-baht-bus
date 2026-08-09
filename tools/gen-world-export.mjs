@@ -112,16 +112,40 @@ export function buildExport() {
   // Sorted, so the file stays diff-stable.
   const dir = fileURLToPath(new URL("web/portraits", root));
   const files = readdirSync(dir).filter(f => f.endsWith(".png")).sort();
-  const portraits = files.map(f => f.slice(0, -4));
+  // A face counts as present if it has EITHER a pixel-art PNG here or a WebP
+  // thumb — same reason `renders` is derived from the thumb track below: the
+  // masters live in ../portrait_gen, so a rendered character has no PNG here at
+  // all and listing only files would report 84 faces as missing.
+  const portraits = [...new Set([
+    ...files.map(f => f.slice(0, -4)),
+    ...(() => { try {
+      return readdirSync(fileURLToPath(new URL("web/portraits/thumb", root)))
+        .filter(f => f.endsWith(".webp")).map(f => f.slice(0, -5));
+    } catch { return []; } })(),
+  ])].sort();
   // WHICH TRACK each face is on. The cast is mid-migration: 24×24-grid pixel art
   // (~400 bytes, square) alongside generated renders (832×1088, 3:4, head in the
   // upper third). A consumer cannot tell them apart without fetching and
   // measuring, and they need DIFFERENT CROPS — a square-art crop at 16% from the
   // top clips a pixel bust's chin, and a render shown square loses the face.
   // Second Road hit exactly this. So the boundary reports it.
-  const renders = files
-    .filter(f => statSync(`${dir}/${f}`).size > 100 * 1024)
-    .map(f => f.slice(0, -4));
+  // Derived from the THUMB TRACK, not from file size in web/portraits. The
+  // masters live in ../portrait_gen now (they were never requested — every
+  // consumer prefers the thumb — so 117 MB of them shipped with each deploy for
+  // nothing). Sizing off `web/` would therefore report ZERO renders the moment
+  // they moved, `_THUMBS` is baked from this list, and every face would fall
+  // through to a master that isn't there. The union keeps it correct either way:
+  // a render counts if it has a thumb OR is still a big file here.
+  const thumbIds = (() => {
+    try {
+      return readdirSync(fileURLToPath(new URL("web/portraits/thumb", root)))
+        .filter(f => f.endsWith(".webp")).map(f => f.slice(0, -5));
+    } catch { return []; }
+  })();
+  const renders = [...new Set([
+    ...thumbIds,
+    ...files.filter(f => statSync(`${dir}/${f}`).size > 100 * 1024).map(f => f.slice(0, -4)),
+  ])].sort();
   // Which renders have a 384px WebP thumbnail. Consumers use this to decide
   // whether to TRY the thumb chain at all — coverage is incremental, and a
   // consumer that guesses eats a 404 per portrait that hasn't got one. That's
