@@ -22,13 +22,13 @@
   "Blue Dog"
  ],
  "counts": {
-  "geolocated": 230,
+  "geolocated": 234,
   "patrons": 18,
-  "people": 297,
-  "portraits": 315,
+  "people": 313,
+  "portraits": 331,
   "renders": 84,
   "thumbs": 84,
-  "venues": 230
+  "venues": 234
  },
  "frames": [
   "baimon_pic1",
@@ -538,6 +538,46 @@
    "role": "hostess",
    "room": "lucky7",
    "th": "บอม"
+  },
+  "breakwater_jib": {
+   "desc": "Tall and quiet, watching the door — one of The Breakwater's girls, from Yasothon. The {{phone}} never leaves her hand.",
+   "emoji": "🌻",
+   "filler": true,
+   "name": "Jib",
+   "pronoun": "she",
+   "role": "hostess",
+   "room": "breakwater",
+   "th": "จิ๊บ"
+  },
+  "breakwater_kade": {
+   "desc": "Fingers flying over a calculator app, eyes never leaving the cash — the cashier at The Breakwater, from {{Nong Bua Lamphu}}.",
+   "emoji": "🧾",
+   "filler": true,
+   "name": "Kade",
+   "pronoun": "she",
+   "role": "cashier",
+   "room": "breakwater",
+   "th": "เกด"
+  },
+  "breakwater_mook": {
+   "desc": "Older than the go-go average, and unhurried about it — one of The Breakwater's girls, from Maha Sarakham. Google Translate is open before you finish the sentence.",
+   "emoji": "🌸",
+   "filler": true,
+   "name": "Mook",
+   "pronoun": "she",
+   "role": "hostess",
+   "room": "breakwater",
+   "th": "มุก"
+  },
+  "breakwater_mookda": {
+   "desc": "Older, sharper, and entirely done being impressed by farang — the mamasan of The Breakwater, from Khon Kaen. She buried a husband, raised two kids, and built a concrete house on lady drinks.",
+   "emoji": "👑",
+   "filler": true,
+   "name": "Mookda",
+   "pronoun": "she",
+   "role": "mamasan",
+   "room": "breakwater",
+   "th": "มุกดา"
   },
   "bright": {
    "desc": "Small and sharp, and misses nothing — one of The Cricketers's girls, from Sakon Nakhon. Google Translate is open before you finish the sentence.",
@@ -1689,6 +1729,16 @@
    "room": "neon_paradise",
    "th": "มายด์"
   },
+  "mint": {
+   "desc": "Bored until you try a word of Thai, then radiant — one of The Bucket's girls, from {{Nong Bua Lamphu}}. The {{phone}} never leaves her hand.",
+   "emoji": "🌷",
+   "filler": true,
+   "name": "Mint",
+   "pronoun": "she",
+   "role": "hostess",
+   "room": "the_bucket",
+   "th": "มิ้นท์"
+  },
   "mon": {
    "desc": "Sleeve of faded tattoos and an abacus brain — the least-fooled soul in here — the cashier at The Night Heron, from Sakon Nakhon.",
    "emoji": "🧾",
@@ -1864,6 +1914,46 @@
    "role": "mamasan",
    "room": "pink_lotus",
    "th": "หนี่"
+  },
+  "neon_palm_bee": {
+   "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of Neon Palm's girls, from Sisaket. She types more than she talks — and laughs at both.",
+   "emoji": "🌻",
+   "filler": true,
+   "name": "Bee",
+   "pronoun": "she",
+   "role": "hostess",
+   "room": "neon_palm",
+   "th": "บี"
+  },
+  "neon_palm_nittaya": {
+   "desc": "A former headliner's posture and a gaze like a cash register — the mamasan of Neon Palm, from Sisaket. She buried a husband, raised two kids, and built a concrete house on lady drinks.",
+   "emoji": "👑",
+   "filler": true,
+   "name": "Nittaya",
+   "pronoun": "she",
+   "role": "mamasan",
+   "room": "neon_palm",
+   "th": "นิตยา"
+  },
+  "neon_palm_noey": {
+   "desc": "Reading glasses, a receipt spike, and no patience for a disputed tab — the cashier at Neon Palm, from Udon Thani.",
+   "emoji": "🧾",
+   "filler": true,
+   "name": "Noey",
+   "pronoun": "she",
+   "role": "cashier",
+   "room": "neon_palm",
+   "th": "เนย"
+  },
+  "neon_palm_toey": {
+   "desc": "Round-faced and quick to laugh — one of Neon Palm's girls, from Surin. She types more than she talks — and laughs at both.",
+   "emoji": "🌙",
+   "filler": true,
+   "name": "Toey",
+   "pronoun": "she",
+   "role": "hostess",
+   "room": "neon_palm",
+   "th": "เต้ย"
   },
   "nice": {
    "desc": "A crooked, disarming grin — one of KINKY Go-Go's girls, from Buriram. She types more than she talks — and laughs at both.",
@@ -2526,6 +2616,46 @@
    "room": "windmill",
    "th": "ศศิ"
   },
+  "sea_wall_duang": {
+   "desc": "Broad, motherly, and entirely able to have you removed by smiling — the mamasan of The Sea Wall, from Yasothon. She buried a husband, raised two kids, and built a concrete house on lady drinks.",
+   "emoji": "👑",
+   "filler": true,
+   "name": "Duang",
+   "pronoun": "she",
+   "role": "mamasan",
+   "room": "sea_wall",
+   "th": "ดวง"
+  },
+  "sea_wall_fon": {
+   "desc": "Tall and quiet, watching the door — one of The Sea Wall's girls, from Sakon Nakhon. The {{phone}} never leaves her hand.",
+   "emoji": "💕",
+   "filler": true,
+   "name": "Fon",
+   "pronoun": "she",
+   "role": "hostess",
+   "room": "sea_wall",
+   "th": "ฝน"
+  },
+  "sea_wall_gig": {
+   "desc": "Black polo, a lanyard of too many keys, a calculator she never needs — the cashier at The Sea Wall, from Yasothon.",
+   "emoji": "🧾",
+   "filler": true,
+   "name": "Gig",
+   "pronoun": "she",
+   "role": "cashier",
+   "room": "sea_wall",
+   "th": "กิ๊ก"
+  },
+  "sea_wall_kwang": {
+   "desc": "A crooked, disarming grin — one of The Sea Wall's girls, from Chaiyaphum. The {{phone}} never leaves her hand.",
+   "emoji": "💐",
+   "filler": true,
+   "name": "Kwang",
+   "pronoun": "she",
+   "role": "hostess",
+   "room": "sea_wall",
+   "th": "กวาง"
+  },
   "security": {
    "desc": "Three large men arranged around the room like load-bearing furniture. One watches the door marked ห้ามเข้า specifically. They are polite, immovable, and backed by every piwin within three sois.",
    "emoji": "🦍",
@@ -2699,6 +2829,36 @@
    "name": "Terry",
    "pronoun": "he",
    "room": "queen_vic"
+  },
+  "the_bucket_fai": {
+   "desc": "In a cage of fairy lights, counting notes faster than the eye follows — the cashier at The Bucket, from Surin.",
+   "emoji": "🧾",
+   "filler": true,
+   "name": "Fai",
+   "pronoun": "she",
+   "role": "cashier",
+   "room": "the_bucket",
+   "th": "ฝ้าย"
+  },
+  "the_bucket_pang": {
+   "desc": "Round-faced and quick to laugh — one of The Bucket's girls, from Kalasin. Google Translate is open before you finish the sentence.",
+   "emoji": "🌼",
+   "filler": true,
+   "name": "Pang",
+   "pronoun": "she",
+   "role": "hostess",
+   "room": "the_bucket",
+   "th": "แป้ง"
+  },
+  "the_bucket_ratchada": {
+   "desc": "Rings on every finger and a voice that cuts the music when she wants it — the mamasan of The Bucket, from Roi Et. She married a farang, buried the marriage, and kept the house.",
+   "emoji": "👑",
+   "filler": true,
+   "name": "Ratchada",
+   "pronoun": "she",
+   "role": "mamasan",
+   "room": "the_bucket",
+   "th": "รัชดา"
   },
   "the_gecko_duan": {
    "desc": "Sleepy-eyed and entirely unbothered — one of The Gecko's girls, from Yasothon. She types more than she talks — and laughs at both.",
@@ -3159,6 +3319,10 @@
   "bow",
   "bpaeng",
   "bpom",
+  "breakwater_jib",
+  "breakwater_kade",
+  "breakwater_mook",
+  "breakwater_mookda",
   "bright",
   "bua",
   "bum",
@@ -3287,6 +3451,7 @@
   "milk",
   "min",
   "mind",
+  "mint",
   "mon",
   "mona",
   "mook",
@@ -3306,6 +3471,10 @@
   "naree",
   "near",
   "nee",
+  "neon_palm_bee",
+  "neon_palm_nittaya",
+  "neon_palm_noey",
+  "neon_palm_toey",
   "nice",
   "nid",
   "nigel",
@@ -3380,6 +3549,10 @@
   "saifon",
   "sara",
   "sasi",
+  "sea_wall_duang",
+  "sea_wall_fon",
+  "sea_wall_gig",
+  "sea_wall_kwang",
   "security",
   "som",
   "somchith",
@@ -3400,6 +3573,9 @@
   "tar",
   "tarn",
   "terry",
+  "the_bucket_fai",
+  "the_bucket_pang",
+  "the_bucket_ratchada",
   "the_gecko_duan",
   "the_gecko_ple",
   "the_gecko_somjai",
@@ -3792,6 +3968,17 @@
     100.88471
    ],
    "name": "Blue Dog",
+   "region": "Beach Road"
+  },
+  "breakwater": {
+   "bar": "The Breakwater",
+   "barType": "beer",
+   "geo": [
+    12.93662,
+    100.88252
+   ],
+   "name": "The Breakwater",
+   "pool": true,
    "region": "Beach Road"
   },
   "buakhao_honey": {
@@ -4775,6 +4962,17 @@
    "name": "Naklua Traditional Massage",
    "region": "Naklua"
   },
+  "neon_palm": {
+   "bar": "Neon Palm",
+   "barType": "beer",
+   "estimated": true,
+   "geo": [
+    12.9364,
+    100.883
+   ],
+   "name": "Neon Palm",
+   "region": "Beach Road"
+  },
   "neon_paradise": {
    "bar": "Neon Paradise A-Go-Go",
    "barType": "gogo",
@@ -5112,6 +5310,16 @@
    ],
    "name": "Sapphire Bar",
    "region": "Soi Diana"
+  },
+  "sea_wall": {
+   "bar": "The Sea Wall",
+   "barType": "beer",
+   "geo": [
+    12.93676,
+    100.88258
+   ],
+   "name": "The Sea Wall",
+   "region": "Beach Road"
   },
   "seabreeze": {
    "bar": "Sea Breeze Bar",
@@ -5521,6 +5729,16 @@
    ],
    "name": "The Boardroom",
    "region": "Thappraya"
+  },
+  "the_bucket": {
+   "bar": "The Bucket",
+   "barType": "beer",
+   "geo": [
+    12.93628,
+    100.88308
+   ],
+   "name": "The Bucket",
+   "region": "Beach Road"
   },
   "the_gecko": {
    "bar": "The Gecko",

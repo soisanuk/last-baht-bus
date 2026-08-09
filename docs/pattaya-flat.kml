@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2"><Document>
   <name>The Last Baht Bus — Pattaya</name>
-  <description>230 rooms on real coordinates. Exit lines are coloured by how far each compass word sits from the true bearing: green under 45 degrees (a four-direction grid cannot do better on a diagonal), amber to 60, red beyond.</description>
+  <description>234 rooms on real coordinates. Exit lines are coloured by how far each compass word sits from the true bearing: green under 45 degrees (a four-direction grid cannot do better on a diagonal), amber to 60, red beyond.</description>
 
   <Style id="road"><IconStyle><scale>0.9</scale><color>ff00d7ff</color>
     <Icon><href>http://maps.google.com/mapfiles/kml/shapes/road_shield3.png</href></Icon></IconStyle></Style>
@@ -132,6 +132,10 @@
   </Folder>
   <Folder><name>Venues</name>
     <Placemark><name>Tequila Queen A-Go-Go</name><styleUrl>#venue</styleUrl><description><![CDATA[<b>tequila_queen</b><br/>Beach Road]]></description><Point><coordinates>100.87946,12.93164,0</coordinates></Point></Placemark>
+    <Placemark><name>The Sea Wall</name><styleUrl>#venue</styleUrl><description><![CDATA[<b>sea_wall</b><br/>Beach Road]]></description><Point><coordinates>100.88258,12.93676,0</coordinates></Point></Placemark>
+    <Placemark><name>The Breakwater</name><styleUrl>#venue</styleUrl><description><![CDATA[<b>breakwater</b><br/>Beach Road]]></description><Point><coordinates>100.88252,12.93662,0</coordinates></Point></Placemark>
+    <Placemark><name>Neon Palm</name><styleUrl>#venue</styleUrl><description><![CDATA[<b>neon_palm</b><br/>Beach Road]]></description><Point><coordinates>100.883,12.9364,0</coordinates></Point></Placemark>
+    <Placemark><name>The Bucket</name><styleUrl>#venue</styleUrl><description><![CDATA[<b>the_bucket</b><br/>Beach Road]]></description><Point><coordinates>100.88308,12.93628,0</coordinates></Point></Placemark>
     <Placemark><name>Blue Dog</name><styleUrl>#venue</styleUrl><description><![CDATA[<b>blue_dog</b><br/>Beach Road]]></description><Point><coordinates>100.88471,12.94309,0</coordinates></Point></Placemark>
     <Placemark><name>The Stinky Pinky</name><styleUrl>#venue</styleUrl><description><![CDATA[<b>stinky_bar</b><br/>Beach Road]]></description><Point><coordinates>100.88459,12.94275,0</coordinates></Point></Placemark>
     <Placemark><name>Cherry Oil Massage</name><styleUrl>#venue</styleUrl><description><![CDATA[<b>beachrd_oil</b><br/>Beach Road]]></description><Point><coordinates>100.88186,12.93396,0</coordinates></Point></Placemark>

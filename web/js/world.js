@@ -1017,6 +1017,7 @@ const ROOMS = {
       "Two beers, two stools, one conversation that has clearly been going for hours.",
     ],
     exits: { w: "beach_rd_soi8", e: "second_rd_soi8" },
+    venues: ["neon_palm", "the_bucket"],
   },
   beach_rd_soi9: {
     busStop: "beachrd",
@@ -1109,6 +1110,7 @@ const ROOMS = {
       "Bar light one way, black water the other, and the road running between them.",
     ],
     exits: { n: "beach_rd_soi7", s: "beach_rd_soi9", e: "pattaya_soi_8" },
+    venues: ["sea_wall", "breakwater"],
   },
   second_rd_soi8: {
     busStop: "secondrd",
@@ -1233,6 +1235,76 @@ const ROOMS = {
       "The end of the walkable sand. Jomtien is an orange smear behind you.",
     ],
     exits: { n: "jomtien_beach_s2" },
+  },
+  sea_wall: {
+    name: "The Sea Wall",
+    bar: "The Sea Wall", barType: "beer",
+    region: "Beach Road",
+    desc: "One of the handful of bars on the SEA side of Beach Road, which changes " +
+      "everything about it: you sit with the traffic at your back and the whole gulf in " +
+      "front, and the bar is a long counter with the stools facing outward because " +
+      "nobody comes here to look at the optics. Older crowd, mostly. Nobody shouts. The " +
+      "girls sit with you facing the same way and point things out — a squid boat's " +
+      "lights, the ferry, weather coming.",
+    revisit: [
+      "Stools facing the water, backs to the road. It reorganises an evening.",
+      "Somebody points out a squid boat and everybody looks, including the staff.",
+      "The traffic is behind you and stays there. The gulf does the talking.",
+      "A quiet rail, a cold bottle, and two kilometres of dark water.",
+    ],
+    exits: { out: "beach_rd_soi8" },
+  },
+  breakwater: {
+    name: "The Breakwater",
+    bar: "The Breakwater", barType: "beer",
+    region: "Beach Road",
+    desc: "Next door to the Sea Wall and a few degrees livelier — same view, more of a " +
+      "bar about it: a pool table with a permanent list to one corner, a dartboard, and " +
+      "a crew of regulars who have watched this stretch of water for years and have " +
+      "opinions about all of it. When the wind comes off the sea the fairy lights swing " +
+      "and everybody pretends not to notice.",
+    revisit: [
+      "The pool table still lists. Everybody still plays the slope rather than fights it.",
+      "Fairy lights swinging in the sea wind, and nobody remarking on it.",
+      "The regulars are discussing the weather with more authority than the forecast.",
+      "Back at the Breakwater — same water, slightly more noise about it.",
+    ],
+    pool: true, darts: true,
+    exits: { out: "beach_rd_soi8" },
+  },
+  neon_palm: {
+    name: "Neon Palm",
+    bar: "Neon Palm", barType: "beer",
+    region: "Beach Road",
+    desc: "First of the Soi 8 beach-end bars and the loudest of them, which on this " +
+      "thirty metres is a real contest. Open the full width of the shopfront, a plastic " +
+      "palm strung with LED rope that changes colour whether you want it to or not, and " +
+      "a sound system aimed squarely at the bar across the way. The girls are young and " +
+      "the pace is quick. Nothing subtle happens here and nothing is meant to.",
+    revisit: [
+      "The plastic palm cycles through a colour nobody has a name for.",
+      "The sound system wins a round against the bar opposite, briefly.",
+      "Quick, loud, and entirely unbothered about it. Back in.",
+      "Somebody's order is shouted twice and arrives right the first time.",
+    ],
+    exits: { out: "pattaya_soi_8" },
+  },
+  the_bucket: {
+    name: "The Bucket",
+    bar: "The Bucket", barType: "beer",
+    region: "Beach Road",
+    desc: "Directly opposite the Neon Palm and locked in a sound war with it that " +
+      "neither has ever won. Named for what it sells: a sand bucket of ice, a bottle of " +
+      "something, and enough straws for a table. The clientele skews a decade younger " +
+      "than anywhere else on this beach, and the staff have the specific patience of " +
+      "people who work where the customers are having a better night than they are.",
+    revisit: [
+      "A bucket goes past at shoulder height with four straws in it.",
+      "The sound war continues. Neither side has ever won and neither will.",
+      "Young crowd, loud room, and the staff moving through it unhurried.",
+      "Back into the Bucket, where the measure of an evening is literal.",
+    ],
+    exits: { out: "pattaya_soi_8" },
   },
   promenade: {
     name: "Beach Promenade",
@@ -10393,6 +10465,10 @@ const _FILLER_HOSTESSES = [
   ["Praew","แพรว","kingfisher"], ["Kaew","แก้ว","kingfisher"],
   ["Meaw","แมว","two_stools"], ["Jinda","จินดา","two_stools"],
   ["Duan","เดือน","the_gecko"], ["Yok","หยก","the_gecko"],
+  ["Fon","ฝน","sea_wall"], ["Kwang","กวาง","sea_wall"],
+  ["Mook","มุก","breakwater"], ["Jib","จิ๊บ","breakwater"],
+  ["Bee","บี","neon_palm"], ["Toey","เต้ย","neon_palm"],
+  ["Pang","แป้ง","the_bucket"], ["Mint","มิ้นท์","the_bucket"],
 ];
 
 // A filler girl's id used to be just her nickname lowercased, which quietly made
@@ -10602,6 +10678,8 @@ const _FILLER_MAMAS = [
   
   ["Wandee","วันดี","the_terrace"], ["Somsri","สมศรี","kingfisher"],
   ["Ratree","ราตรี","two_stools"], ["Somjai","สมใจ","the_gecko"],
+  ["Duang","ดวง","sea_wall"], ["Mookda","มุกดา","breakwater"],
+  ["Nittaya","นิตยา","neon_palm"], ["Ratchada","รัชดา","the_bucket"],
 ];
 const _FILLER_CASHIERS = [
   ["Nubnab","นับหนับ","windmill"], ["Farida","ฟาริดา","katoeys"],
@@ -10618,6 +10696,8 @@ const _FILLER_CASHIERS = [
   
   ["Kade","เกด","the_terrace"], ["Noey","เนย","kingfisher"],
   ["Orm","ออม","two_stools"], ["Ple","เปิ้ล","the_gecko"],
+  ["Gig","กิ๊ก","sea_wall"], ["Kade","เกด","breakwater"],
+  ["Noey","เนย","neon_palm"], ["Fai","ฝ้าย","the_bucket"],
 ];
 
 for (const [name, th, room] of _FILLER_MAMAS) {
@@ -11107,6 +11187,10 @@ const ROOM_GEO = {
   beach_rd_soi9:    [12.93598, 100.88247],
   pattaya_soi_9:    [12.93515, 100.88377],
   beach_rd_soi8:    [12.93655, 100.88277],
+  sea_wall:         [12.93676, 100.88258],
+  breakwater:       [12.93662, 100.88252],
+  neon_palm:        [12.93640, 100.88300],
+  the_bucket:       [12.93628, 100.88308],
   pattaya_soi_8:    [12.93573, 100.88413],
   beachrd_oil:      [12.93396, 100.88186],
   tequila_queen:    [12.93164, 100.87946],

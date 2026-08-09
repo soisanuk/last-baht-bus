@@ -1,14 +1,14 @@
 {
-  "generated": "2026-08-08",
+  "generated": "2026-08-09",
   "note": "Every room in the game + its region, for the scene-art pipeline (docs/art-pipeline-spec.md). Derived from web/js/world.js — regenerate with scripts/gen-scene-manifest.mjs, do not hand-edit. `kind` is a generator heuristic for prompt-template selection, not game canon. `regionSlug` is produced by the same regex as web/js/scene.js `_sceneArt()`; art files are web/art/rooms/<id>.png with web/art/regions/<slug>.png as the fallback.",
   "counts": {
-    "rooms": 230,
+    "rooms": 234,
     "regions": 15,
     "byKind": {
       "beach": 15,
       "street": 94,
       "massage": 17,
-      "beer": 53,
+      "beer": 57,
       "shop": 2,
       "interior": 3,
       "gogo": 11,
@@ -42,8 +42,10 @@
         "beachrd_oil",
         "beachthai_massage",
         "blue_dog",
+        "breakwater",
         "central_beach",
         "central_mall",
+        "neon_palm",
         "north_beach",
         "papaya_massage",
         "pattaya_soi_7",
@@ -51,15 +53,17 @@
         "pattaya_soi_9",
         "police_station",
         "promenade",
+        "sea_wall",
         "second_rd_soi8",
         "short_time_motel",
         "stinky_bar",
-        "tequila_queen"
+        "tequila_queen",
+        "the_bucket"
       ],
       "sampleDescs": [
         "Where Soi 6 meets Beach Road. The soi runs inland to the east — short, loud, and lit like a runway. Across Beach Road to the west lies the open sand and the bay; the Dolphin roundabout and Naklua are a couple of kilometres north up the road, out of sight. Two bars hold the corners of the junction and stare each other down: THE STINKY PINKY's sign — a cartoon skunk hoisting a Chang — buzzes over its open front on one side, and across the mouth of the soi the BLUE DOG's rail faces the water. From either corner you can still catch the sun going down over the bay. From about five, the police run a checkpoint on Beach Road just south of the junction, waving over helmetless farang for a paperwork stop and an on-the-spot fine — more than a few of the two bars' regulars first came in off the road ducking exactly that. Blue songthaews — the baht buses — rattle past on the Beach Road run, headlights strung north toward the Dolphin and south into the rest of the neon city.",
-        "Mid-Beach-Road: tour groups, tailor touts, and the sea breathing in the dark beyond the promenade. The glass cliff of CENTRAL mall rises a block inland, and just south of it TEQUILA QUEEN's ancient neon señorita kicks her leg, as she has since before you were born.",
-        "The south end of Beach Road, where the palms wear fairy lights and the baht buses bunch up like beads. The Walking Street arch blazes to the south. A motosai stand idles on the corner, drivers watching the street like sleepy hawks."
+        "The Soi 8 corner, and you hear it before you reach it. The soi comes out here with its bar end first — open fronts, four sound systems, the noise rolling down the last thirty metres and out over the railing to a sea that has no opinion. North along the front toward Soi 7 the bars face the water instead of the road, which is a different kind of evening: same beer, quieter, and you watch the gulf go black rather than watch the traffic.",
+        "Mid-Beach-Road: tour groups, tailor touts, and the sea breathing in the dark beyond the promenade. The glass cliff of CENTRAL mall rises a block inland, and just south of it TEQUILA QUEEN's ancient neon señorita kicks her leg, as she has since before you were born."
       ]
     },
     {
@@ -577,6 +581,23 @@
       "desc": "An open-air beer bar holding the beach-side corner at the foot of Soi 6 — no walls, no door, just a tin roof, a long rail, and a line of plastic chairs facing out across Beach Road to the bay. The Stinky Pinky glowers back from the opposite corner over the mouth of the soi. At the Blue Dog the view IS the entertainment: the evening police checkpoint down the road to the south, the sunset out over the water and the sand, and then whatever the junction decides to do about it. Half the regulars found the place ducking in off a helmetless motorbike. (WATCH POLICE · WATCH SUNSET.)"
     },
     {
+      "id": "breakwater",
+      "name": "The Breakwater",
+      "bar": "The Breakwater",
+      "barType": "beer",
+      "region": "Beach Road",
+      "regionSlug": "beach-road",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Jib",
+        "Kade",
+        "Mook",
+        "Mookda"
+      ],
+      "desc": "Next door to the Sea Wall and a few degrees livelier — same view, more of a bar about it: a pool table with a permanent list to one corner, a dartboard, and a crew of regulars who have watched this stretch of water for years and have opinions about all of it. When the wind comes off the sea the fairy lights swing and everybody pretends not to notice."
+    },
+    {
       "id": "central_beach",
       "name": "Pattaya Beach (central)",
       "bar": null,
@@ -599,6 +620,23 @@
       "dark": false,
       "people": [],
       "desc": "The air-conditioned mothership: seven storeys of glass, brand names, and farang families who have no idea what this town does after dinner. Free outlets by the food court, arctic air, and security guards who wai. Beach Road glitters west; Second Road runs behind the mall to the east. The police station squats a couple of blocks north like a paperweight — round on the Beach Road side, not through here; nobody walks out of Central Festival into a charge desk."
+    },
+    {
+      "id": "neon_palm",
+      "name": "Neon Palm",
+      "bar": "Neon Palm",
+      "barType": "beer",
+      "region": "Beach Road",
+      "regionSlug": "beach-road",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Bee",
+        "Nittaya",
+        "Noey",
+        "Toey"
+      ],
+      "desc": "First of the Soi 8 beach-end bars and the loudest of them, which on this thirty metres is a real contest. Open the full width of the shopfront, a plastic palm strung with LED rope that changes colour whether you want it to or not, and a sound system aimed squarely at the bar across the way. The girls are young and the pace is quick. Nothing subtle happens here and nothing is meant to."
     },
     {
       "id": "north_beach",
@@ -689,6 +727,23 @@
       "desc": "The paved walk between road and sand. Couples, joggers who've made bad choices, and ladies standing in the lamplight with nowhere in particular to be. The bins are full of collectable glass, if a man were desperate."
     },
     {
+      "id": "sea_wall",
+      "name": "The Sea Wall",
+      "bar": "The Sea Wall",
+      "barType": "beer",
+      "region": "Beach Road",
+      "regionSlug": "beach-road",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Duang",
+        "Fon",
+        "Gig",
+        "Kwang"
+      ],
+      "desc": "One of the handful of bars on the SEA side of Beach Road, which changes everything about it: you sit with the traffic at your back and the whole gulf in front, and the bar is a long counter with the stools facing outward because nobody comes here to look at the optics. Older crowd, mostly. Nobody shouts. The girls sit with you facing the same way and point things out — a squid boat's lights, the ferry, weather coming."
+    },
+    {
       "id": "second_rd_soi8",
       "name": "Second Road (Soi 8)",
       "bar": null,
@@ -756,6 +811,23 @@
         "Praew"
       ],
       "desc": "The oldest go-go in Pattaya, and proudly unrestored: red velvet gone bald in patches, a mirror ball missing a continent of tiles, and dancers with seniority no mamasan would dare question. What the ladies concede in years they repay in showmanship, and the regulars wouldn't trade one of them for the whole of Walking Street. Mem runs the floor like a national institution, because it is one."
+    },
+    {
+      "id": "the_bucket",
+      "name": "The Bucket",
+      "bar": "The Bucket",
+      "barType": "beer",
+      "region": "Beach Road",
+      "regionSlug": "beach-road",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Fai",
+        "Mint",
+        "Pang",
+        "Ratchada"
+      ],
+      "desc": "Directly opposite the Neon Palm and locked in a sound war with it that neither has ever won. Named for what it sells: a sand bucket of ice, a bottle of something, and enough straws for a table. The clientele skews a decade younger than anywhere else on this beach, and the staff have the specific patience of people who work where the customers are having a better night than they are."
     },
     {
       "id": "firefly_bar",
