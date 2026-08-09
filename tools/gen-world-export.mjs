@@ -36,7 +36,18 @@ for (const f of ["thai.js", "world.js"]) vm.runInThisContext(src(`web/js/${f}`),
 // the Second Road agent — their report prose called a male manager "she" for six
 // weeks and both games were writing around the gap. Additive, so a v1 consumer
 // keeps working; the bump is the signal that there is something new to read.
-export const EXPORT_VERSION = 2;
+// v3 (2026-08-09): the export describes itself. Prompted by the Second Road
+// agent, and the catch is about process rather than data — I handed them a
+// caveat and told them to read the reasoning in web/js/world.js, which is the
+// one file their contract forbids them to open. A caveat only the people who
+// cannot see it are able to act on is not a caveat.
+//
+// So anything that BINDS a consumer now travels with the data: `notes` carries
+// field semantics and live caveats, and the first real one is `estimated`.
+// Six coordinates are georeferenced off screenshots rather than OSM, and until
+// now the only way to know which was to count decimal places in someone else's
+// file.
+export const EXPORT_VERSION = 3;
 
 export function buildExport() {
   const venues = {};
@@ -52,7 +63,16 @@ export function buildExport() {
     // that can reopen it needs this as data rather than parsing "(closed)" out
     // of a display name, which is how it first reached Second Road's prose.
     if (r.closed) v.closed = true;
-    if (geo) v.geo = [geo[0], geo[1]];        // real lat/lon — this is the map
+    if (geo) {
+      v.geo = [geo[0], geo[1]];               // real lat/lon — this is the map
+      // Surveyed coordinates are pinned to OSM and good to ~5 decimals. A
+      // handful are eyeballed off a map screenshot and are good to about a
+      // block. A consumer laying these out should know which is which without
+      // having to infer it from significant figures.
+      const dp = Math.max(String(geo[0]).split(".")[1]?.length || 0,
+                          String(geo[1]).split(".")[1]?.length || 0);
+      if (dp < 5) v.estimated = true;
+    }
     venues[id] = v;
   }
 
@@ -139,6 +159,30 @@ export function buildExport() {
 
   return {
     v: EXPORT_VERSION,
+    // Written FOR the consumer, and deliberately here rather than in LBB
+    // source: a consumer bound by a caveat has to be able to read it.
+    notes: {
+      contract: "Generated from web/js/world.js by tools/gen-world-export.mjs. " +
+        "Never hand-edit, and never read LBB source to understand this file — " +
+        "if something you need is missing from here, that is a bug in the export " +
+        "and worth asking about.",
+      geo: "Real lat/lon. `estimated: true` on a venue means the position was " +
+        "georeferenced off a map screenshot rather than pinned to OSM: good to " +
+        "roughly a block, not to a doorway. Everything without the flag is " +
+        "surveyed. Fine for laying out a map; do not use an estimated pin for " +
+        "anything that needs to be metre-accurate.",
+      exits: "NOT exported, by design. The room graph is a bar-mat map — " +
+        "topological and cardinal-only — and it does not survive contact with " +
+        "real coordinates, so exposing it would invite a consumer to draw " +
+        "something false. If you ever need adjacency, ask; it should be exported " +
+        "as adjacency and not as compass words.",
+      pronoun: "he | she | they, on every person and patron. Reports the " +
+        "pronoun LBB's own prose uses, not a gender: the cast includes kathoey " +
+        "characters and a tom cashier and the writing has always used 'she' for " +
+        "them. Safe to render directly; no fallback needed.",
+      playable: "Room-id sets that gate a mode. `soi6` is the daily-challenge " +
+        "pocket — a player in that mode cannot leave it.",
+    },
     // Display names are English today. Second Road may localise them later; the
     // shape allows a `de` sibling per entry without a version bump, which is the
     // whole reason to say so here rather than discover it later.

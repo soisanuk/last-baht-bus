@@ -51,6 +51,13 @@
   "wilai_pic4"
  ],
  "lang": "en",
+ "notes": {
+  "contract": "Generated from web/js/world.js by tools/gen-world-export.mjs. Never hand-edit, and never read LBB source to understand this file — if something you need is missing from here, that is a bug in the export and worth asking about.",
+  "exits": "NOT exported, by design. The room graph is a bar-mat map — topological and cardinal-only — and it does not survive contact with real coordinates, so exposing it would invite a consumer to draw something false. If you ever need adjacency, ask; it should be exported as adjacency and not as compass words.",
+  "geo": "Real lat/lon. `estimated: true` on a venue means the position was georeferenced off a map screenshot rather than pinned to OSM: good to roughly a block, not to a doorway. Everything without the flag is surveyed. Fine for laying out a map; do not use an estimated pin for anything that needs to be metre-accurate.",
+  "playable": "Room-id sets that gate a mode. `soi6` is the daily-challenge pocket — a player in that mode cannot leave it.",
+  "pronoun": "he | she | they, on every person and patron. Reports the pronoun LBB's own prose uses, not a gender: the cast includes kathoey characters and a tom cashier and the writing has always used 'she' for them. Safe to render directly; no fallback needed."
+ },
  "patrons": {
   "angela": {
    "desc": "Forty-seven, unkempt shoulder-length hair gone grey, a faded flannel shirt tied at the waist in a climate that argues against it. On the bar next to her Singha: an actual Discman, its foam headphones held together with electrical tape. She has the corner seat with the window view of Soi 6 — the chaos observed from the calm side of the glass.",
@@ -3583,7 +3590,7 @@
   "wayne",
   "wilai"
  ],
- "v": 2,
+ "v": 3,
  "venues": {
   "adonis_club": {
    "bar": "The Adonis Club",
@@ -3653,6 +3660,7 @@
    "region": "Soi 6"
   },
   "beach_north_end": {
+   "estimated": true,
    "geo": [
     12.949,
     100.883
@@ -3885,6 +3893,7 @@
    "region": "Myth Night"
   },
   "central_beach": {
+   "estimated": true,
    "geo": [
     12.9377,
     100.8819
@@ -4259,6 +4268,7 @@
    "region": "Soi Buakhao"
   },
   "jomtien_2nd": {
+   "estimated": true,
    "geo": [
     12.8979,
     100.8729
@@ -4834,6 +4844,7 @@
    "region": "Second Road"
   },
   "pattaya_soi_7": {
+   "estimated": true,
    "geo": [
     12.9365,
     100.8846
@@ -4921,6 +4932,7 @@
    "region": "Pratumnak"
   },
   "pratumnak_hill_rd": {
+   "estimated": true,
    "geo": [
     12.9144,
     100.867
@@ -5129,6 +5141,7 @@
    "region": "Second Road"
   },
   "second_rd_mall": {
+   "estimated": true,
    "geo": [
     12.9339,
     100.8847

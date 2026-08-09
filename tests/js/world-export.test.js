@@ -160,3 +160,42 @@ test("display names are marked English, so localisation can be added without a v
   // someone discovering it the hard way after Second Road has shipped
   assert.equal(e.venues.stinky_bar.de, undefined);
 });
+
+// ── the export explains itself, because its readers cannot read us ──────────
+// The Second Road agent's contract forbids reading LBB source; they consume
+// this file and nothing else. So when I handed them a caveat and pointed at the
+// reasoning in web/js/world.js, the only people able to act on it were the ones
+// not allowed to see it. Anything that BINDS a consumer has to travel with the
+// data.
+//
+// This asserts the notes block exists and stays honest — specifically that the
+// two claims a consumer would act on are still true of the payload, rather than
+// prose that drifted away from it.
+test("the export carries its own caveats, and they match the data", () => {
+  const e = buildExport();
+  assert.ok(e.notes && typeof e.notes === "object", "there is a notes block");
+  for (const k of ["contract", "geo", "exits", "pronoun"])
+    assert.ok(typeof e.notes[k] === "string" && e.notes[k].length > 40,
+      `notes.${k} says something useful`);
+
+  // the geo note promises an `estimated` flag — it has to actually be there,
+  // and only on the coarse pins
+  const est = Object.entries(e.venues).filter(([, v]) => v.estimated);
+  assert.ok(est.length > 0, "the estimated flag is in use, as the note claims");
+  for (const [id, v] of est) {
+    const dp = Math.max(String(v.geo[0]).split(".")[1]?.length || 0,
+                        String(v.geo[1]).split(".")[1]?.length || 0);
+    assert.ok(dp < 5, `${id}: flagged estimated, so it should be a coarse pin`);
+  }
+  for (const [id, v] of Object.entries(e.venues)) {
+    if (v.estimated || !v.geo) continue;
+    const dp = Math.max(String(v.geo[0]).split(".")[1]?.length || 0,
+                        String(v.geo[1]).split(".")[1]?.length || 0);
+    assert.ok(dp >= 5, `${id}: coarse pin but not flagged — the note would be lying`);
+  }
+
+  // the exits note promises they are absent. If a future edit exports them,
+  // the note becomes false and this fails rather than the consumer finding out.
+  for (const v of Object.values(e.venues))
+    assert.equal(v.exits, undefined, "exits stay out, as the note says");
+});
