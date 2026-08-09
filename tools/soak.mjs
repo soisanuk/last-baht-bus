@@ -16,6 +16,20 @@
 // from the second round-trip (save-compat deliberately unions skeleton defaults
 // in, so serialize∘deserialize is not identity — but must be idempotent after).
 //
+// COVERAGE IS REPORTED BECAUSE IT IS LOW, and "failures 0" reads like a
+// stronger claim than it is. One six-night run stands in 11-16% of the rooms;
+// the union of 32 runs across all four modes reaches 68%, leaving 74 rooms no
+// soak has ever entered. The blind spot has two shapes: outlying districts the
+// walker's centre of gravity never reaches (Pratumnak, Tree Town, Myth Night,
+// the Darkside), and VENUES — 52 of those 74 are rooms you have to go inside,
+// so even on a street the walker walks, it stays on the street.
+//
+// Deliberately NOT fixed by making the walker explore harder. Every de ceiling
+// in tests/js/soak.test.js is calibrated against the current movement policy,
+// so changing it would re-roll all four and destroy the one measurement that
+// tracks the German gap. The honest move is to print the number and let a
+// reader discount the result accordingly.
+//
 // Debugging a finding: SOAK_TRACE=1 prints each command pre/post; SOAK_PIN=<file>
 // persists {phase, cmd, save} before every step, so a kill -9 mid-hang leaves a
 // perfect synchronous repro (deserialize the save, run the cmd). stats.slow
@@ -210,6 +224,7 @@ export function runSoak(opts = {}) {
   const maxMs = opts.maxMs ?? 90_000;
   const t0 = Date.now();
   const failures = [], warns = [], transcript = [];
+  const seen = new Set();          // rooms this run actually stood in
   const stats = { commands: 0, nights: 0, vacations: 0, understoodMisses: 0, truncated: false };
   let hintQueue = [], hintRoom = null, lastDay = G.day, lastTurns = G.turns,
     cmdsThisNight = 0, forcedWaits = 0, spins = 0, modalStreak = 0;
@@ -343,11 +358,14 @@ export function runSoak(opts = {}) {
         G.rng = ((seed * 48271 * (stats.resets + 1)) % 2147483646) + 1;
       }
     }
+    if (G.room) seen.add(G.room);
     lastTurns = G.turns;
     if (G.pendingChoice === "vacation_end") stats.vacations++;
   }
 
-  return { seed, mode, stats, failures, warns, transcript };
+  stats.roomsSeen = seen.size;
+  stats.roomsTotal = Object.keys(ROOMS).length;
+  return { seed, mode, stats, failures, warns, transcript, seen };
 }
 
 // ── CLI ──────────────────────────────────────────────────────────────────────
@@ -372,8 +390,10 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     }
     const w = {};
     for (const x of r.warns) w[x.kind] = (w[x.kind] || 0) + 1;
+    const cov = Math.round(100 * r.stats.roomsSeen / r.stats.roomsTotal);
     console.log(`seed ${seed} [${mode}]: ${r.stats.commands} cmds, ${r.stats.nights} nights, ` +
-      `${r.stats.vacations} vacation-ends, warns ${JSON.stringify(w)}, failures ${r.failures.length}`);
+      `${r.stats.vacations} vacation-ends, warns ${JSON.stringify(w)}, failures ${r.failures.length}, ` +
+      `rooms ${r.stats.roomsSeen}/${r.stats.roomsTotal} (${cov}%)`);
     for (const x of r.warns.slice(0, 8))
       console.log("  WARN " + x.kind + ": " + (x.line || (`'${x.cmd}'` + (x.room ? " in " + x.room : ""))));
     for (const f of r.failures) {
