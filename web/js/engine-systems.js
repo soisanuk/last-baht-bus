@@ -1183,8 +1183,9 @@ function _doMassage(arg) {
       return;
     }
     if (G.money < MASSAGE_LEGIT) {
-      _say(`A proper hour is ฿${MASSAGE_LEGIT}; you have ฿${G.money}. ${name} waves you to ` +
-        "come back with the fare — she isn't going anywhere.");
+      _say(_fmt("A proper hour is ฿{p}; you have ฿{m}. {n} waves you to come back with " +
+        "the fare — she isn't going anywhere.",
+        { p: MASSAGE_LEGIT, m: G.money, n: name }));
       return;
     }
     G.money -= MASSAGE_LEGIT;
@@ -1207,7 +1208,8 @@ function _doMassage(arg) {
   // ── Oil shop: the base rub, then the warmth-gated "special" ──
   if (wantsSpecial) { _massageSpecial(she, name); return; }
   if (G.money < MASSAGE_OIL) {
-    _say(`The oil massage is ฿${MASSAGE_OIL}; you have ฿${G.money}. ${name} pouts, forgives you instantly.`);
+    _say(_fmt("The oil massage is ฿{p}; you have ฿{m}. {n} pouts, forgives you instantly.",
+      { p: MASSAGE_OIL, m: G.money, n: name }));
     return;
   }
   G.money -= MASSAGE_OIL;
@@ -1431,12 +1433,13 @@ function _act1Fail(reason) {
   const gotWallet = _flag("hasWallet");
   _say("═══════════════════════════════════", "alert");
   _say(_ACT1_FAIL_LEDE[reason] || _ACT1_FAIL_LEDE.dawn, "alert");
-  _say(`THE NIGHT BEAT YOU HOME. You got ${reached} of ${total} steps down the road ` +
-    `back to room 412` +
-    (gotWallet ? " — wallet in hand, just not the hours left to spend it" : "") + ".", "alert");
-  if (reached > prevBest) _say(`★ Furthest yet: ${reached}/${total}. The next run starts ` +
-    "cold — but you know the way a little better now.", "win");
-  else if (prevBest) _say(`(Your best is still ${prevBest}/${total}. Beat it.)`, "dim");
+  _say(_fmt("THE NIGHT BEAT YOU HOME. You got {r} of {t} steps down the road back to " +
+    "room 412{w}.", { r: reached, t: total,
+      w: gotWallet ? " — wallet in hand, just not the hours left to spend it" : "" }), "alert");
+  if (reached > prevBest) _say(_fmt("★ Furthest yet: {r}/{t}. The next run starts cold — " +
+    "but you know the way a little better now.", { r: reached, t: total }), "win");
+  else if (prevBest) _say(_fmt("(Your best is still {b}/{t}. Beat it.)",
+    { b: prevBest, t: total }), "dim");
   if (tries === 1) _say("(One thing the beating buys you: from here on, the soi will " +
     "whisper. Type HINT when you're stuck.)", "dim");
   _say("Dawn wipes the slate. Same beach, same day two, same empty pockets — go again.", "room");
@@ -1544,8 +1547,9 @@ function _doHint() {
   }
   const reached = _act1Progress(), total = _ACT1_MILESTONES.length;
   const next = _ACT1_HINTS.find(([f]) => !_flag(f));
-  _say(`The soi whispers — you're ${reached}/${total} of the way home. ` + (next ? next[1] :
-    "Everything's in hand. Now just get to room 412 in Naklua before dawn takes the night."), "win");
+  _say(_fmt("The soi whispers — you're {r}/{t} of the way home. ", { r: reached, t: total }) +
+    (next ? next[1] :
+      "Everything's in hand. Now just get to room 412 in Naklua before dawn takes the night."), "win");
 }
 
 function _questAvailable(qid) {

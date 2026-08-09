@@ -1344,6 +1344,102 @@ const _CATALOGS = {
     "Four roads' worth of traffic, folding into each other and out again.":
       "Der Verkehr von vier Straßen, ineinander gefaltet und wieder auseinander.",
 
+    // ── de-sweep batch 7 (2026-08-09): the ACT ONE path ─────────────────────
+    // The walk every player takes, and the last part of the game still in
+    // English. Ranked by how often a five-seed act1 soak actually hits them.
+    // The five templated ones came from converting `${}` interpolation to _fmt
+    // first — with a literal amount baked in, every price minted its own
+    // catalog key and the line could never be translated at all.
+
+    // the hint whisper + the fail screen — the opening's own voice
+    "The soi whispers — you're {r}/{t} of the way home. ":
+      "Die Soi flüstert — du bist {r}/{t} des Wegs nach Hause. ",
+    "THE NIGHT BEAT YOU HOME. You got {r} of {t} steps down the road back to room 412{w}.":
+      "DIE NACHT WAR SCHNELLER ALS DU. Du hast {r} von {t} Schritten auf dem Weg zurück zu Zimmer 412 geschafft{w}.",
+    " — wallet in hand, just not the hours left to spend it":
+      " — die Brieftasche in der Hand, nur nicht mehr die Stunden, sie auszugeben",
+    "★ Furthest yet: {r}/{t}. The next run starts cold — but you know the way a little better now.":
+      "★ Bisher am weitesten: {r}/{t}. Der nächste Versuch fängt bei null an — aber du kennst den Weg jetzt ein bisschen besser.",
+    "(Your best is still {b}/{t}. Beat it.)":
+      "(Dein Bestwert steht weiter bei {b}/{t}. Schlag ihn.)",
+    "No hints your first night, tilac — the town is yours to read. But it remembers a face: miss home by dawn and you start over, and the second run… the soi begins to whisper.":
+      "Keine Tipps in deiner ersten Nacht, tilac — die Stadt darfst du selbst lesen. Aber sie merkt sich Gesichter: schaffst du es bis zum Morgengrauen nicht nach Hause, fängst du von vorn an — und beim zweiten Lauf… fängt die Soi an zu flüstern.",
+
+    // ── the ambient furniture the opening walks past all night ──────────────
+    // Commands and <placeholders> stay English verbatim — the _HELP_SOI6
+    // convention above. Only the prose around them turns.
+    "(TRAVEL <place>. Walking pace — no shortcuts through the clock.)":
+      "(TRAVEL <place>. Zu Fuß — die Uhr lässt sich nicht abkürzen.)",
+    "A motosai stand is here. (MOTOSAI TO <place>)":
+      "Hier steht ein Motosai-Stand. (MOTOSAI TO <place>)",
+    "A baht bus can be caught here. (RIDE BUS TO <place>)":
+      "Hier hält der Baht-Bus. (RIDE BUS TO <place>)",
+    "An ATM stands against the wall. (WITHDRAW <amount> · CHECK BALANCE)":
+      "An der Wand steht ein Geldautomat. (WITHDRAW <amount> · CHECK BALANCE)",
+    "A 7-Eleven glows across the way (BUY TOASTIE · BUY WATER · BUY CHARGER · BUY CONDOM).":
+      "Gegenüber leuchtet ein 7-Eleven (BUY TOASTIE · BUY WATER · BUY CHARGER · BUY CONDOM).",
+    "A Connect 4 frame and a Jackpot dice box sit within reach (PLAY …).":
+      "Ein Vier-gewinnt-Brett und ein Jackpot-Würfelbecher stehen in Reichweite (PLAY …).",
+    // NB "Play what? PLAY CONNECT 4 · …" and "(-1 สนุก — you're parched)" are
+    // COMPOSED at runtime (_playOptions builds the first, the happy-delta
+    // template the second), so they are not catalog keys and cannot be
+    // translated until they go through _fmt. Both are high-hit. Left for the
+    // next batch, which should start by templating them.
+
+    // the body, which nags constantly and in English
+    "(Your throat is sandpaper. Drink something — ideally water.)":
+      "(Deine Kehle ist Schmirgelpapier. Trink was — am besten Wasser.)",
+    "(Dizzy. The neon is doing things it shouldn't. WATER.)":
+      "(Schwindelig. Das Neon macht Sachen, die es nicht sollte. WATER.)",
+    "Nothing to drink out here but the humidity. Find a bar stool, or a 7-Eleven fridge (BUY WATER).":
+      "Hier draußen gibt es nichts zu trinken außer der Luftfeuchtigkeit. Such dir einen Barhocker oder einen 7-Eleven-Kühlschrank (BUY WATER).",
+    "Nothing edible on you. The street sells everything.":
+      "Nichts Essbares dabei. Die Straße verkauft alles.",
+    "No messages. The phone judges you gently.":
+      "Keine Nachrichten. Das Handy verurteilt dich sanft.",
+
+    // the two massage shops the opening actually passes
+    "Reclining chairs, tiger balm, a price list on the wall. (MASSAGE — foot, Thai, or oil, the one honest kind in town.)":
+      "Liegesessel, Tigerbalsam, eine Preisliste an der Wand. (MASSAGE — Fuß, Thai oder Öl, die eine ehrliche Sorte in dieser Stadt.)",
+    "Curtained cubicles, a wall of mirrors, a small NO SEX sticker nobody quite believes. (MASSAGE — then SPECIAL, up to you.)":
+      "Kabinen mit Vorhängen, eine Spiegelwand, ein kleiner NO SEX-Aufkleber, den niemand so recht glaubt. (MASSAGE — dann SPECIAL, wie du magst.)",
+
+    // dawn, and the reset
+    "Dawn wipes the slate. Same beach, same day two, same empty pockets — go again.":
+      "Der Morgen wischt die Tafel sauber. Gleicher Strand, gleicher zweiter Tag, gleiche leere Taschen — noch mal.",
+
+    // the soi dog — the opening's one real teeth-and-claws threat
+    "Something shifts in the dark nearby. A low growl. You are likely to be bitten by a soi dog.":
+      "Irgendwas bewegt sich in der Dunkelheit. Ein tiefes Knurren. Du wirst hier wahrscheinlich von einem Soi-Hund gebissen.",
+
+    // the massage refusals — templated, so one entry covers every price
+    "A proper hour is ฿{p}; you have ฿{m}. {n} waves you to come back with the fare — she isn't going anywhere.":
+      "Eine richtige Stunde kostet ฿{p}; du hast ฿{m}. {n} winkt dich weg — komm wieder, wenn du das Geld hast; sie geht nirgendwohin.",
+    "The oil massage is ฿{p}; you have ฿{m}. {n} pouts, forgives you instantly.":
+      "Die Ölmassage kostet ฿{p}; du hast ฿{m}. {n} schmollt und verzeiht dir augenblicklich.",
+
+    // the rooms the opening walks through
+    "A breezy open front on the beach road, ceiling fans turning, a rack of aloe gel by the till for the day's crop of sunburned farang. Foot chairs face the sea, the ladies wear a tidy uniform, and the only oil on offer goes on your shoulders. After a day frying on Dongtan, this is the kindest ฿300 in Jomtien.":
+      "Eine luftige offene Front an der Strandstraße, Deckenventilatoren drehen sich, ein Ständer mit Aloe-Gel an der Kasse für die verbrannten Farang des Tages. Die Fußpflegestühle zeigen aufs Meer, die Damen tragen eine ordentliche Uniform, und das einzige Öl, das es hier gibt, kommt auf deine Schultern. Nach einem Tag Braten am Dongtan sind das die freundlichsten ฿300 in Jomtien.",
+    "The cold blast of air-con and the doorbell jingle of civilisation. Shelves of toasties, Mama noodles, and {{phone}} accessories. There's a power outlet by the window.":
+      "Der kalte Schwall Klimaanlage und das Türglöckchen der Zivilisation. Regale mit Toasties, Mama-Nudeln und {{phone}}-Zubehör. Am Fenster gibt es eine Steckdose.",
+    "The bus-stop bench sits empty — the last songthaew of the night is long gone.":
+      "Die Bank an der Haltestelle ist leer — der letzte Songthaew der Nacht ist längst weg.",
+
+    // the sand, walked up and down all night for bottles
+    "The last of the light has gone out of the sea. The loungers stay folded.":
+      "Das letzte Licht ist aus dem Meer verschwunden. Die Liegen bleiben zusammengeklappt.",
+    "The cats have not moved. The big one checks you, decides, and looks back at the water.":
+      "Die Katzen haben sich nicht bewegt. Die Große mustert dich, entscheidet sich, und schaut wieder aufs Wasser.",
+    "A dog trots the tide line with somewhere to be, and does not look up.":
+      "Ein Hund trabt die Flutlinie entlang, hat ein Ziel, und schaut nicht hoch.",
+    "Sand still warm through your soles. It will not be for much longer.":
+      "Der Sand ist durch die Sohlen noch warm. Nicht mehr lange.",
+    "Somebody's flip-flops sit neatly by a lounger, ownership unclear, hours old.":
+      "Jemandes Flip-Flops stehen ordentlich neben einer Liege, Besitzverhältnisse unklar, seit Stunden.",
+
+    // dawn, and the food you live on
+
     "Last call — the mamasan taps her watch: about half an hour to closing. This place shuts at midnight, so if you mean to take a lady home tonight, now is the moment to BARFINE. After the shutters come down it's the street.":
       "Letzte Runde — die Mamasan tippt auf ihre Uhr: noch etwa eine halbe Stunde bis Feierabend. Der Laden macht um Mitternacht zu, wenn du also heute Nacht eine Lady mitnehmen willst, ist jetzt der Moment für BARFINE. Wenn die Rollläden unten sind, bleibt nur noch die Straße.",
   },
