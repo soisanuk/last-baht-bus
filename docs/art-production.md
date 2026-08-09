@@ -183,3 +183,67 @@ state in between.
 
 Step 1 is deliberately first: it's the only one that unblocks the others, and
 it's the cheapest thing in the list.
+
+---
+
+## The masters are in the served directory (2026-08-09)
+
+Measured while answering "shouldn't the portraits just be PNGs or something not
+so big?" — and the answer turned out to be that they ARE PNGs, that this is the
+problem rather than the fix, and that the expensive ones are not being displayed
+at all.
+
+| track | count | size | each |
+|---|---|---|---|
+| full renders, PNG | 84 | **117 MB** | 1.5 MB |
+| thumbs, WebP | 84 | **1.3 MB** | 20 KB |
+| pixel placeholders, PNG | 231 | 924 KB | 4 KB |
+| `pics/` photo frames | — | 25 MB | — |
+| **`web/portraits` total** | | **144 MB** | |
+
+**The thumb track already wins, 90×.** Bert is 1.5 MB as a PNG and 20 KB as a
+WebP, and `_portraitSrc` prefers the thumb whenever one exists. term.js says so
+in its own comment: *"keep the full render for nothing at all — 14 KB against
+1.44 MB."*
+
+So for all 84 rendered characters, **the game never requests the 1.5 MB file.**
+
+### Which makes this a location problem, not a format problem
+
+`web/` is what `.github/workflows/pages.yml` publishes to gh-pages. So 117 MB of
+never-requested masters ship with every deploy. Steps 1–4 above already solved
+the *format* question and it worked; nobody then asked what the originals were
+still doing in the served tree.
+
+Masters belong in `../portrait_gen`, beside `characters.py` and `gen_pics.sh`,
+where every other generation input already lives.
+
+**`web/portraits` 144 MB → 26 MB**, and the same off the deploy.
+
+### The check that makes it safe
+
+The fallback chain is `thumb → full → remove`, so a master whose thumb is
+missing is the only thing standing between a character and no face. Any move has
+to be driven off `_THUMBS` rather than off a glob.
+
+Checked 2026-08-09: **all 84 masters have a thumb, and zero are unbacked** — so
+today the safe set is the whole set. That will not stay true the moment the art
+agent renders a face before its thumb, which is the normal order of work. Re-run
+the check at the time; do not trust this paragraph.
+
+### What this does NOT fix
+
+`.git` is 261 MB and moving files forward reclaims none of it — the blobs are
+already committed. That is still §6's open question (history rewrite, or accept
+it), and it gets more expensive every day the current pipeline runs. Worth
+noting the ordering: **the .git decision should be made BEFORE the remaining
+~200 characters are rendered**, because that is when the cost of rewriting is
+lowest and the cost of not rewriting is highest.
+
+### Ownership
+
+`web/portraits/` and the thumbnail track are the art agent's; this is a proposal
+to them, not a change to make from this side. The consumer wiring (`_avatarSrc`,
+`portrait-thumbs.js`, `_portraitSrc`) is ours and needs no change at all — the
+fallback already handles a missing master, which is precisely why the move is
+cheap.
