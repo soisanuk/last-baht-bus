@@ -172,6 +172,11 @@ test("HANDOVER is a real verb, and hands over a real baton", () => {
   // by grabbing the baton first; silenced here so the test measures the verb.
   for (const k in ENCOUNTERS) G.encDone[k] = true;
   G.pendingEnc = null;
+  // …and the two COOLDOWN-gated interruptions, which encDone does not cover:
+  // the peddler and the police run off G.lastPeddler/G.lastPolice, not the
+  // ENCOUNTERS table. Missing them flaked this ~12% of runs. Same idiom as
+  // engine.test.js.
+  G.lastPeddler = 99999; G.lastPolice = 99999;
   out = []; doCommand("handover");
   const said = out.join("\n");
   assert.match(said, /HANDING OVER/, "the verb exists and reaches the handler");

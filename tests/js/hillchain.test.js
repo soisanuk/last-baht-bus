@@ -49,6 +49,11 @@ function onTheHill() {
   G.money = 4000;
   for (const k in ENCOUNTERS) G.encDone[k] = true;
   G.pendingEnc = null;
+  // …and the two COOLDOWN-gated interruptions, which encDone does not cover:
+  // the peddler and the police run off G.lastPeddler/G.lastPolice, not the
+  // ENCOUNTERS table. Missing them flaked this ~12% of runs. Same idiom as
+  // engine.test.js.
+  G.lastPeddler = 99999; G.lastPolice = 99999;
   G.salengCart = null;
 }
 const say = cmd => { out = []; doCommand(cmd); return out.join("\n"); };
