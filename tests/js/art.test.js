@@ -111,8 +111,16 @@ test("filler art is not referenced by the game", () => {
 });
 
 test("the scene manifest is in sync with world.js", () => {
+  // NOT conditional. This used to `return` when the file was missing, on the
+  // reasoning that absence meant a fresh clone — but the manifest is COMMITTED,
+  // so a fresh clone HAS it and absence means somebody deleted it. The skip
+  // could only ever hide a real fault. Flagged by the art agent, who hit the
+  // neighbouring version of this: a manifest that is stale rather than absent,
+  // which the deepEqual below does catch.
   const p = path.join(root, "docs", "scene-manifest.json");
-  if (!fs.existsSync(p)) return; // generated artifact — absence is a fresh clone, not a failure
+  assert.ok(fs.existsSync(p),
+    "docs/scene-manifest.json is missing — it is committed, so this is a deletion. " +
+    "Run: node scripts/gen-scene-manifest.mjs");
   const m = JSON.parse(fs.readFileSync(p, "utf8"));
   assert.deepEqual(m.rooms.map(r => r.id).sort(), Object.keys(ROOMS).sort(),
     "run: node scripts/gen-scene-manifest.mjs");

@@ -6915,6 +6915,7 @@ const NPCS = {
   // a fourth identical box.
   bill: {
     name: "Bill", emoji: "🎩", personality: "dry",
+    look: "Thirty-odd Englishman, short brown hair, pressed white short-sleeve shirt, cuffs turned once, clean-shaven.",
     pronoun: "he",
     room: "doghouse", bars: ["the_boardroom", "velvet_club", "doghouse"],
     manager: true, // hired help, like Bert — NOT in NPC_ROLES, so lady-logic ignores him
@@ -7005,6 +7006,7 @@ const NPCS = {
   // than his mid-seventies; he is 76 and the arithmetic has to keep working.
   bob: {
     name: "Bob", emoji: "🎖️", personality: "warm",
+    look: "American man of seventy-six, bald with white at the sides, moustache, reading glasses pushed up, green collared shirt.",
     pronoun: "he",
     room: "succubus",
     manager: true, // owner-operator, but the same mechanic: he is staff, not a lady
@@ -7097,6 +7099,7 @@ const NPCS = {
   },
   kinnaree: {
     name: "Kinnaree", emoji: "👑",
+    look: "Thai woman in her fifties, hair up in a bun, reading glasses on a beaded chain, dark blue blouse.",
     room: "succubus",
     desc: "The mamasan, and the owner's wife, and by a distance the most organised person " +
       "in the building — fifties, hair up, reading glasses on a chain, a till roll in one " +

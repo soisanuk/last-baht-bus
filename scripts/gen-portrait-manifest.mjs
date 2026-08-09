@@ -70,6 +70,23 @@ const chars = [];
 // _buildHostess, so each is stable and distinct without anything hand-authored.
 const filler = [];
 
+// `look` is the PORTRAIT PROMPT: appearance only, front-loaded, short — written
+// FOR the model rather than for the player. portrait_gen condenses `desc` to its
+// first sentence capped at 20 words, and prose does not front-load faces: 65 of
+// 126 authored characters have a first sentence longer than that, so the model
+// was handed a severed fragment. Kinnaree's cut at "fifties, hair"; Bob's
+// reading glasses sat in sentence two and never arrived at all.
+//
+// Where `look` exists, use it verbatim and DO NOT condense. Where it does not,
+// `lookNeeded` marks a character whose desc will be severed — the work-list for
+// writing them, on the LBB side. Filler is exempt: its descs are generated from
+// a template that front-loads the look already.
+const lookFields = c => {
+  if (c.look) return { look: c.look };
+  const first = String(c.desc || "").split(/(?<=[.!?])\s/)[0].split(/\s+/).filter(Boolean);
+  return first.length > 20 ? { lookNeeded: true } : {};
+};
+
 for (const id of Object.keys(NPCS)) {
   const n = NPCS[id];
   if (n.filler) {
@@ -88,6 +105,7 @@ for (const id of Object.keys(NPCS)) {
   chars.push({
     id, name: n.name, source: "NPCS", role,
     sex: deriveSex(id, n.desc) || (FEMALE_ROLES.has(role) ? "f" : null),
+    ...lookFields(n),
     venueKind: venueKind(n.room),
     emoji: n.emoji, th: n.th || null, room: n.room, tags, desc: n.desc,
   });
@@ -99,6 +117,7 @@ for (const id of Object.keys(PATRONS)) {
   if (p.shuttle) tags.push("shuttle");
   chars.push({
     id, name: p.name, source: "PATRONS", role: "patron",
+    ...lookFields(p),
     sex: deriveSex(id, p.desc), venueKind: venueKind(p.home),
     emoji: p.emoji, th: null, room: p.home, age: p.age, nat: p.nat, tags, desc: p.desc,
   });
