@@ -40,3 +40,14 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./web
+          # Publish as a single orphan commit instead of appending. gh-pages had
+          # accumulated ~64 MB of portrait masters across its deploy history —
+          # the same blobs main just shed, kept alive on the other branch.
+          #
+          # A history rewrite was the wrong tool there: the remote had nine
+          # deploys a local backup didn't, so force-pushing a rewritten copy
+          # would have destroyed real deployment history to save space on a
+          # branch that is REGENERATED FROM main ON EVERY PUSH. Its history has
+          # no information main does not already hold, so the cheap fix is to
+          # stop keeping one.
+          force_orphan: true

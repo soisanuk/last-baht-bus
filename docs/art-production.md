@@ -247,3 +247,52 @@ to them, not a change to make from this side. The consumer wiring (`_avatarSrc`,
 `portrait-thumbs.js`, `_portraitSrc`) is ours and needs no change at all — the
 fallback already handles a missing master, which is precisely why the move is
 cheap.
+
+## After the rewrite: three things that are still true (2026-08-10)
+
+The masters moved and `main`'s history was rewritten to drop the blobs. Three
+consequences that outlive the operation, recorded because each one is the sort
+of thing that gets rediscovered painfully.
+
+### 1. `gh-pages` still holds ~64 MB, and a rewrite was the WRONG tool there
+
+The deploy branch had accumulated its own copies of the masters across its
+history — the same blobs `main` just shed, kept alive on the other branch.
+
+It was not rewritten, and should not be. The remote had **nine deploys a local
+backup did not**, so force-pushing a rewritten copy would have destroyed real
+deployment history to save space on a branch that is **regenerated from `main`
+on every push**. Its history holds no information `main` does not.
+
+So the fix is to stop keeping a history at all: `force_orphan: true` on the
+`peaceiris/actions-gh-pages` step, which publishes a single fresh commit each
+time. Landed in `.github/workflows/pages.yml`. The 64 MB goes on the next
+deploy, with no destructive operation anywhere.
+
+The general lesson: **before rewriting a branch, ask whether it is derived.** A
+derived branch should be regenerated, never rewritten — and check the remote
+against your backup first, because "my copy" is not the same as "the copy".
+
+### 2. GitHub will not shrink when you do
+
+Rewriting locally and force-pushing does not reclaim server-side storage. The
+old objects stay until GitHub's own gc runs, and unreferenced blobs can linger
+indefinitely — a support request may be needed to purge them properly.
+
+So the repo-size graph will lie for a while. Do not treat a flat number as
+evidence the operation failed, and do not repeat the operation trying to make
+it move.
+
+### 3. Every existing checkout is now incompatible — `git pull` will NOT fix it
+
+Rewritten history means new hashes for every commit. Anyone holding a clone —
+**the art agent working in this same checkout, and Second Road's `npm run
+sync`** — has a divergent history that no pull, merge or rebase resolves
+sanely.
+
+They must **re-clone**. Anyone with uncommitted work should copy it out as
+files first, re-clone, and re-apply — not stash it, because the stash lives in
+the old object graph.
+
+This is the cost that is easy to forget when the space saving is the visible
+part, and it is paid by people who were not in the room.
