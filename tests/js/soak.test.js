@@ -196,3 +196,40 @@ for (const { mode, seeds, nights, ceiling } of DE_CEILINGS) {
       `a de entry — see docs/i18n-de-gaps.md. Sample: ${[...uniq][0]?.slice(0, 90)}`);
   });
 }
+
+// ── the blind spot gets soaked too ──────────────────────────────────────────
+// The walker's centre of gravity leaves most of the map unentered: one run
+// stands in 11-16% of the rooms, and the union of every seeded run across all
+// four modes reaches 68%. Which means the invariant suite has never once
+// entered Pratumnak, Tree Town, Myth Night or the Darkside — districts a month
+// old — and "failures 0" was silent about all of them.
+//
+// Fixed by STARTING somewhere rather than by making the walker roam, because
+// every de ceiling above is calibrated against the current movement policy and
+// changing it would re-roll all four. --start is additive: the default walk is
+// untouched, and seeding runs inside the blind spot lifts union coverage from
+// 63% to 89%. What remains is mostly gated by design (oy_office needs the door
+// trick, orchid_room needs WDG standing) — a random walker SHOULD NOT reach
+// those.
+//
+// Two seeds per district, kept small so this stays cheap; the wide sweep (156
+// runs) is a manual pass, and this is the regression guard for it.
+const BLIND_SPOT_STARTS = [
+  "pratumnak_clubs",    // the two gentleman's clubs
+  "pratumnak_soi5_m",   // the Samson beer bars
+  "jomtien_beach_s2",   // the dead-end sand spur
+  "tt_entrance",        // Tree Town's maze
+  "myth_night",         // the night market
+  "khao_talo_strip",    // the Darkside
+];
+for (const start of BLIND_SPOT_STARTS) {
+  test(`soak: invariants hold starting inside ${start} — the walk never gets here on its own`, () => {
+    for (const seed of [1, 2]) {
+      const r = runSoak({ seed, nights: 3, mode: "expat", start, maxMs: 20_000 });
+      assert.deepEqual(r.failures, [],
+        `${start} seed ${seed}: ` + JSON.stringify(r.failures[0] || {}));
+      const real = r.warns.filter(w => w.kind !== "langleak");
+      assert.deepEqual(real, [], `${start} seed ${seed} warned: ` + JSON.stringify(real[0] || {}));
+    }
+  });
+}

@@ -4,6 +4,7 @@
 //
 //   node tools/soak.mjs --nights 50 --seed 7 --mode vacation
 //   node tools/soak.mjs --mode soi6 --nights 20 --transcript /tmp/soak.txt
+//   node tools/soak.mjs --start pratumnak_clubs   # begin inside a blind spot
 //
 // Modes: vacation (sandbox past Act One, encounters LIVE) · soi6 (the challenge
 // week, intro answered by policy) · expat (the endless stage; the only mode that
@@ -220,6 +221,16 @@ export function runSoak(opts = {}) {
   // Seed the GAME dice AFTER mode setup — startSoi6Mode() runs its own newGame(),
   // which re-seeds G.rng from Math.random and silently broke soi6 determinism.
   G.rng = (seed * 48271 % 2147483646) + 1;
+  // --start <room>: drop the walker somewhere specific. Purely ADDITIVE — the
+  // default is unchanged, so every de ceiling stays calibrated against the same
+  // walk. This exists because the walker's centre of gravity leaves 74 rooms
+  // unentered by any run, so the only way to soak an outlying district (or a
+  // block of new venues) is to begin inside it.
+  if (opts.start) {
+    if (!ROOMS[opts.start]) throw new Error("--start: no such room " + opts.start);
+    G.room = opts.start;
+    G.visited[opts.start] = true;
+  }
 
   const maxMs = opts.maxMs ?? 90_000;
   const t0 = Date.now();
@@ -383,7 +394,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   let anyFail = false;
 
   for (const seed of seeds) {
-    const r = runSoak({ seed, nights, mode, lang });
+    const r = runSoak({ seed, nights, mode, lang, start: arg("start", null) });
     for (const x of r.warns) if (x.kind === "langleak" || x.kind === "defmt") {
       const key = (x.kind === "defmt" ? "⚠ {unfilled} " : "") + x.line.slice(0, 400);
       leakTally.set(key, (leakTally.get(key) || 0) + 1);
