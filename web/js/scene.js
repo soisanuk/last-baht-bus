@@ -49,20 +49,36 @@ function _updateScene() {
   } catch (e) { box.hidden = true; }
 }
 
-// Room backdrop: art/rooms/<id>.png → art/regions/<slug>.png → row hides.
-// No art ships with v0 — the whole chain 404s and the row stays empty by design.
+// Room backdrop, most specific first, hiding the row if nothing exists:
+//   art/rooms/<id>.webp → .png → art/regions/<slug>.webp → .png → row hides.
+//
+// EXTENSION-AGNOSTIC ON PURPOSE (docs/art-production.md step 1). Scene art is
+// currently all PNG at ~360 KB a file, against a 400 KB budget and 234 rooms —
+// call it 85 MB at full coverage, in web/, deployed. WebP is the fix, and the
+// portrait track already proved it wins by roughly 90x.
+//
+// Trying both extensions is what makes that migration incremental: a room can
+// switch to WebP the day its file is generated, with no flag day, no manifest
+// change and no coordination. It costs one extra 404 per room that has not
+// migrated yet — cheap, and it shrinks to zero as the conversion lands.
 function _sceneArt() {
   const div = document.createElement("div");
   div.id = "scene-art";
   const img = document.createElement("img");
   const slug = s => String(s || "").toLowerCase().replace(/[^a-z0-9]+/g, "-");
-  let triedRegion = false;
+  const chain = [
+    "art/rooms/" + G.room + ".webp",
+    "art/rooms/" + G.room + ".png",
+    "art/regions/" + slug(_room().region) + ".webp",
+    "art/regions/" + slug(_room().region) + ".png",
+  ];
+  let step = 0;
   img.onerror = () => {
-    if (!triedRegion) { triedRegion = true; img.src = "art/regions/" + slug(_room().region) + ".png"; }
+    if (++step < chain.length) img.src = chain[step];
     else div.remove();
   };
   if (typeof _attachHotspots === "function") _attachHotspots(div, img, G.room); // v1 hotspots (no-op unless gated on)
-  img.src = "art/rooms/" + G.room + ".png";
+  img.src = chain[0];
   div.appendChild(img);
   // ambient overlays — only meaningful over art; harmless when the row removes itself
   if (G.rain > 0) div.appendChild(_ov("overlay-rain"));

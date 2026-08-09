@@ -176,8 +176,13 @@ state in between.
    (LBB `_avatarSrc`, Second Road `portraitUrl`); full-size kept for the gallery.
 4. ~~Add a ≤ 250 KB portraits budget~~ — **not enforceable; see §3.** The thumb
    budget (≤ 60 KB) and a 2 MB drift ceiling landed instead.
-5. Convert scene art to WebP under the same 400 KB budget — it's the second
-   curve and it's growing fastest.
+5. ~~Convert scene art to WebP~~ — **unblocked 2026-08-10.** `_sceneArt()` now
+   tries `.webp` before `.png` at every step, and `art.test.js` accepts either
+   by magic bytes. The conversion itself is the art agent's, and it can land
+   one file at a time: drop the `.webp` in and delete the `.png`.
+   Measured on the largest file in the repo (`kitten_corner`, 400 KB, right
+   against the budget): `cwebp -q 82` gives **96 KB, a 76% saving**. Across
+   234 rooms that is **~22 MB instead of ~85 MB**.
 6. Decide the `.git` question — and do it before the migration finishes, not
    after.
 

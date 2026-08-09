@@ -15,6 +15,15 @@ for (const f of ["thai.js", "world.js"]) {
 const artDir = path.join(root, "web", "art");
 const PNG_SIG = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
 const MAX_BYTES = 400 * 1024; // the spec's per-file budget — ~180 files in the repo
+// WebP is a RIFF container: "RIFF" ....(4-byte size).... "WEBP".
+const isWebp = b => b.length > 12 && b.slice(0, 4).toString() === "RIFF" &&
+                                     b.slice(8, 12).toString() === "WEBP";
+const isPng = b => b.slice(0, 8).equals(PNG_SIG);
+// Both extensions are live: scene.js tries .webp before .png at each step of the
+// fallback chain, so the PNG→WebP conversion can land one file at a time
+// (docs/art-production.md step 1). A room's id is its basename either way.
+const ART_EXT = /\.(webp|png)$/;
+const baseOf = f => f.replace(ART_EXT, "");
 
 // VERBATIM from web/js/scene.js `_sceneArt()` and scripts/gen-scene-manifest.mjs.
 const slug = s => String(s || "").toLowerCase().replace(/[^a-z0-9]+/g, "-");
@@ -35,28 +44,35 @@ test("scene.js's slug regex is still the one the manifest generator copies", () 
 
 test("no orphaned room art", () => {
   for (const f of list("rooms")) {
-    assert.ok(f.endsWith(".png"), "art/rooms/" + f + " is not a .png (the fallback chain hardcodes .png)");
-    assert.ok(ROOMS[f.replace(/\.png$/, "")], "art/rooms/" + f + " matches no room id");
+    assert.ok(ART_EXT.test(f), "art/rooms/" + f + " is neither .webp nor .png");
+    assert.ok(ROOMS[baseOf(f)], "art/rooms/" + f + " matches no room id");
   }
 });
 
 test("no orphaned region art", () => {
   const slugs = new Set(Object.values(ROOMS).map(r => slug(r.region)));
   for (const f of list("regions")) {
-    assert.ok(f.endsWith(".png"), "art/regions/" + f + " is not a .png");
-    assert.ok(slugs.has(f.replace(/\.png$/, "")), "art/regions/" + f + " matches no live region slug");
+    assert.ok(ART_EXT.test(f), "art/regions/" + f + " is neither .webp nor .png");
+    assert.ok(slugs.has(baseOf(f)), "art/regions/" + f + " matches no live region slug");
   }
 });
 
-test("art files are real PNGs and inside the size budget", () => {
+test("art files are real PNGs or WebPs, and inside the size budget", () => {
   // filler/ is held to format + budget but NOT to a naming rule: it's an unwired
   // library (see the stray-entries test below), so there's nothing to orphan
   // against until something references it.
+  //
+  // The budget is per-file and format-blind on purpose. WebP will come in far
+  // under it — that is the point of converting — but the ceiling is there to
+  // stop any ONE image being enormous, not to enforce a format. The total is
+  // what actually matters and it has its own test below.
   for (const sub of ["rooms", "regions", "filler"]) {
     for (const f of list(sub)) {
-      if (!f.endsWith(".png")) continue;   // filler/ carries a README
+      if (!ART_EXT.test(f)) continue;      // filler/ carries a README
       const p = path.join(artDir, sub, f);
-      assert.ok(fs.readFileSync(p).subarray(0, 8).equals(PNG_SIG), sub + "/" + f + " is not a valid PNG");
+      const buf = fs.readFileSync(p);
+      assert.ok(f.endsWith(".webp") ? isWebp(buf) : isPng(buf),
+        sub + "/" + f + " does not match its extension (truncated? wrong format?)");
       const kb = fs.statSync(p).size / 1024;
       assert.ok(kb <= MAX_BYTES / 1024, `${sub}/${f} is ${kb.toFixed(0)} KB — budget is 400 KB (run pngquant)`);
     }
