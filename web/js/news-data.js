@@ -3,48 +3,48 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
-    "t": "Pattaya bay tightens rules for tour boats over safety concerns",
-    "s": "Khaosod English",
-    "d": "08 Aug 2026"
+    "t": "The Riviera Malibu Residences on track for year-end completion as major construction milestone reached",
+    "s": "Pattaya Mail",
+    "d": "07 Aug 2026"
   },
   {
-    "t": "How long-term expats make the most of Thailand’s low season",
+    "t": "Pattaya pickup gets unwanted four-meter snake as passenger",
     "s": "Pattaya Mail",
     "d": "09 Aug 2026"
   },
   {
-    "t": "Beauty isn’t enough Pattaya bar workers raise their game",
+    "t": "Pattaya’s nightlife becomes a global race for customers and workers",
     "s": "Pattaya Mail",
-    "d": "07 Aug 2026"
+    "d": "09 Aug 2026"
   },
   {
-    "t": "Chonburi tire inferno raises pollution fears, students evacuated",
+    "t": "Pattaya closes Koh Larn viewpoint road after tourist death",
     "s": "Pattaya Mail",
-    "d": "07 Aug 2026"
+    "d": "09 Aug 2026"
   },
   {
-    "t": "Vietnam overtakes Thailand as ASEAN’s second-largest aviation market",
+    "t": "Five injured after SUV collides head-on with pickup near Pattaya railway crossing",
     "s": "Pattaya Mail",
-    "d": "07 Aug 2026"
+    "d": "09 Aug 2026"
   },
   {
-    "t": "Tokyo massage parlor operator faces six years over Thai child exploitation",
+    "t": "Pattaya Beach parking rules bite, wheels locked and tickets issued",
     "s": "Pattaya Mail",
-    "d": "07 Aug 2026"
+    "d": "08 Aug 2026"
   },
   {
-    "t": "Sriracha student drowns after friends’ sea outing turns tragic",
+    "t": "Where is my human? Frightened dog found alone in Pattaya",
     "s": "Pattaya Mail",
-    "d": "07 Aug 2026"
+    "d": "09 Aug 2026"
   },
   {
-    "t": "School shooting suspect’s grandparents found dead in home search",
+    "t": "Pattaya prepares International Film Festival with UNESCO Creative City ambitions",
     "s": "Pattaya Mail",
-    "d": "07 Aug 2026"
+    "d": "08 Aug 2026"
   },
   {
-    "t": "Student kills at least 5 at Thai school after fatally shooting his grandparents",
-    "s": "nbcnews.com",
+    "t": "12-year-old girl among those killed in Thailand’s deadliest school shooting in years",
+    "s": "CNN",
     "d": "07 Aug 2026"
   },
   {
@@ -53,35 +53,35 @@ var NEWS_FEED = [
     "d": "07 Aug 2026"
   },
   {
+    "t": "Thailand school shooting toll rises to nine after 12-year-old dies, police say",
+    "s": "The Guardian",
+    "d": "09 Aug 2026"
+  },
+  {
+    "t": "12-year-old girl dies following Thailand shooting, bringing victim death toll to at least 8",
+    "s": "CBC",
+    "d": "09 Aug 2026"
+  },
+  {
+    "t": "What to Know About Thailand's Deadliest School Shooting in Years",
+    "s": "Time Magazine",
+    "d": "07 Aug 2026"
+  },
+  {
     "t": "As Thailand Gets Known for Mass Shootings, Fresh Pledges to Fix Gun Laws",
     "s": "The New York Times",
-    "d": "08 Aug 2026"
-  },
-  {
-    "t": "Death toll in Thailand school shooting rises to at least 8 after girl dies from injuries",
-    "s": "CBS News",
-    "d": "08 Aug 2026"
-  },
-  {
-    "t": "Student kills at least 7 people at a high school and a home outside Bangkok, officials say",
-    "s": "AP News",
-    "d": "08 Aug 2026"
-  },
-  {
-    "t": "Families retrieve bodies after a 14-year-old killed at least 7 in Thai school shooting",
-    "s": "nbcnews.com",
     "d": "08 Aug 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-08-07","USD":33.06,"AUD":23.27,"GBP":44.46,"EUR":38.12};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-09","temp":28,"humid":80,"code":3,"hi":30,"rain":54};
+var WX_NOW = {"date":"2026-08-10","temp":28,"humid":83,"code":3,"hi":30,"rain":72};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-08-01","first":"932479","last2":"69","front3":["413","672"],"back3":["039","154"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4343,"date":"2026-08-09","baht":67900};
+var GOLD = {"usd":4342,"date":"2026-08-09","baht":67900};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":64799,"thb":2131546};
+var BTC = {"usd":64972,"thb":2138164};
