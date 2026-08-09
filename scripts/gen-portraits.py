@@ -768,13 +768,41 @@ def contact_sheet(path, cols=9, scale=4, gap=2):
         f.write(out)
     print(path, f"({len(ids)} portraits, {cols}x{rows})")
 
+# A character with a generated SDXL render is DONE — its pixel bust is a
+# placeholder for art that now exists, and rewriting it is pure loss. The
+# renders live in ../portrait_gen/masters (they were moved out of web/ because
+# no consumer requests them), and their thumbs are the shipped art, so the tell
+# is the thumb: web/portraits/thumb/<id>.webp exists => skip <id>.
+#
+# This used to overwrite all 315 every run. Restoring the clobbered renders
+# depended on somebody noticing in `git status` before committing — three near
+# misses in one day. --force brings the old behaviour back if it's ever wanted.
+def _already_rendered(here):
+    thumbs = os.path.join(here, "web", "portraits", "thumb")
+    try:
+        return {f[:-5] for f in os.listdir(thumbs) if f.endswith(".webp")}
+    except OSError:
+        return set()
+
+
 def main():
     here = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     outdir = os.path.join(here, "web", "portraits")
     os.makedirs(outdir, exist_ok=True)
+    force = "--force" in sys.argv
+    done = set() if force else _already_rendered(here)
+    only = [a for a in sys.argv[1:] if not a.startswith("-")]
+    wrote = skipped = 0
     for cid, spec in CHARS.items():
+        if only and cid not in only:
+            continue
+        if cid in done:
+            skipped += 1
+            continue
         write_png(os.path.join(outdir, cid + ".png"), draw(spec), SCALE)
-    print(f"wrote {len(CHARS)} portraits to {outdir}")
+        wrote += 1
+    print(f"wrote {wrote} portraits to {outdir}"
+          + (f" — skipped {skipped} that already have a render (--force to overwrite)" if skipped else ""))
     if "--sheet" in sys.argv:
         contact_sheet(sys.argv[sys.argv.index("--sheet") + 1])
 
