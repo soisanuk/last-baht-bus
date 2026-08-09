@@ -143,6 +143,70 @@ function _dispatch(cmd) {
     return;
   }
 
+  // ── THE BATON ────────────────────────────────────────────────────────────
+  // Hand this character to the macro game and take it back. exportBaton and
+  // importBaton have been in engine-core since the contract was agreed with
+  // NOTHING calling them — no verb, no button, no storage path — so a baton
+  // had nowhere to go and the only thing that ever completed the round trip
+  // was a vm test. This is the entry point.
+  //
+  // It travels as a FILE, because the two games are not same-origin and cannot
+  // share localStorage. If they are ever hosted together, a shared key beats
+  // this and should replace it.
+  //
+  // Split the usual way: the engine ruled on whether the handover is legal and
+  // printed what is in it, and the frontend writes the bytes. Same division as
+  // SHARE below.
+  if (v === "handover" || v === "baton") {
+    _prevSnap = serializeGame();
+    doCommand(cmd);                       // the engine prints, and rules
+    const b = (typeof exportBaton === "function") ? exportBaton() : null;
+    if (b) {
+      try {
+        const name = `baht-bus-baton-day${b.day || 0}.json`;
+        const url = URL.createObjectURL(
+          new Blob([JSON.stringify(b, null, 1)], { type: "application/json" }));
+        const a = document.createElement("a");
+        a.href = url; a.download = name; a.click();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+        _term.print(`(Saved as ${name} — hand that file to the other game.)`, "dim");
+      } catch (e) {
+        _term.print("(Couldn't write the file — your browser blocked the download.)", "alert");
+      }
+    }
+    _autosave();
+    return;
+  }
+  // Taking one back. A file picker is the one thing the engine genuinely cannot
+  // do, so this never reaches doCommand on a wired frontend.
+  if (v === "resume") {
+    const inp = document.createElement("input");
+    inp.type = "file"; inp.accept = "application/json,.json";
+    inp.onchange = () => {
+      const f = inp.files && inp.files[0];
+      if (!f) return;
+      const rd = new FileReader();
+      rd.onload = () => {
+        let parsed;
+        try { parsed = JSON.parse(rd.result); }
+        catch { _term.print("(That isn't a baton — it isn't even JSON.)", "alert"); return; }
+        _prevSnap = serializeGame();      // so UNDO can walk back out of it
+        const r = importBaton(parsed);
+        if (!r.ok) { _term.print(`(Not a baton this game can take: ${r.why}.)`, "alert"); return; }
+        _term.print("── CHARACTER TAKEN BACK ──", "win");
+        _describeRoom(true);
+        if (typeof _renderResume === "function") _renderResume();
+        _autosave();
+        _audioForRoom(G.room, G.flags);
+        _updateFabs();
+      };
+      rd.readAsText(f);
+    };
+    inp.click();
+    _term.print("(Pick the baton file the other game gave you.)", "dim");
+    return;
+  }
+
   // SHARE: the engine prints the week card; the frontend also drops it on the
   // clipboard (presentation concern — the engine stays clipboard-free). Copy is
   // attempted before dispatch so the "(copied)" note lands after the card.

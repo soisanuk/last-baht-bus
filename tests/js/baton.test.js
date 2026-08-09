@@ -153,3 +153,43 @@ test("fields Second Road has never heard of keep today's defaults", () => {
   assert.equal(G.bar.owed, 0);
   assert.equal(G.day, b.day, "…and everything the baton DID carry still lands");
 });
+
+// ── the entry point ─────────────────────────────────────────────────────────
+// exportBaton and importBaton sat in engine-core with NOTHING calling them from
+// the moment the contract was agreed until 2026-08-09 — no verb, no button, no
+// storage path. Every test above passed the whole time, because they call the
+// functions directly. The round trip worked and was unreachable, and only
+// Second Road noticing that a handed-over baton had nowhere to go surfaced it.
+//
+// So: guard the entry point, not just the machinery. These would have failed on
+// day one.
+test("HANDOVER is a real verb, and hands over a real baton", () => {
+  livedIn();
+  out = []; doCommand("handover");
+  const said = out.join("\n");
+  assert.match(said, /HANDING OVER/, "the verb exists and reaches the handler");
+  assert.match(said, new RegExp(`Day ${G.day}\\b`), "…and says what is being handed over");
+  // the frontend writes the file; the engine's job is to rule and to describe
+  assert.ok(exportBaton(), "and the baton itself is available to the caller");
+});
+
+test("HANDOVER refuses mid-night, in words a player can act on", () => {
+  livedIn();
+  G.nightTurn = 40;
+  out = []; doCommand("handover");
+  const said = out.join("\n");
+  assert.match(said, /Not now/, "refused");
+  assert.match(said, /finish the night/i, "…and told what to do about it");
+  assert.doesNotMatch(said, /HANDING OVER/, "nothing was handed over");
+});
+
+test("RESUME explains itself rather than dead-ending", () => {
+  // It is a file picker, which is frontend-only, so main.js intercepts it. The
+  // engine case exists purely so a headless or older build does not answer a
+  // plausible verb with "I didn't understand that" — the house rule.
+  livedIn();
+  out = []; doCommand("resume");
+  const said = out.join("\n");
+  assert.match(said, /baton/i, "it says what the verb is for");
+  assert.doesNotMatch(said, /didn't understand|blinks at you/i, "and is not a dead end");
+});

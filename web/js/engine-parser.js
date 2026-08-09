@@ -705,6 +705,49 @@ function _doExamine(arg) {
   _say("Nothing special about that — or it isn't here.");
 }
 
+// ── HANDOVER ─────────────────────────────────────────────────────────────────
+// The baton: hand this character to the macro game (Second Road) and take it
+// back later. exportBaton/importBaton have existed in engine-core since the
+// contract was agreed, with NOTHING calling them — no verb, no button, no
+// storage path — so a baton had nowhere to go and the only thing that ever
+// completed the round trip was a vm test. Second Road's side is built; this is
+// the entry point that closes the loop.
+//
+// Split the usual way: the engine decides whether the handover is legal and
+// says what is in it, and main.js writes the file. Same division as SHARE,
+// where the engine prints the card and the frontend does the clipboard.
+function _doHandover() {
+  const r = batonReady();
+  if (!r.ok) {
+    _say("Not now. " + r.why.charAt(0).toUpperCase() + r.why.slice(1) + ".", "alert");
+    _say("A handover happens at dawn, between nights. Finish the night you're in " +
+      "and try again.", "dim");
+    return;
+  }
+  const b = exportBaton();
+  _say("── HANDING OVER ──", "win");
+  _say(_fmt("Day {d} · ฿{m} in your pocket, ฿{bank} banked · สนุก {h}" +
+    "{bar}.", {
+      d: G.day, m: G.money, bank: G.bank, h: G.happy,
+      bar: G.flags && G.flags.barOpen ? " · your bar is open" : "",
+    }));
+  _say("Everything that makes this person who they are travels with them: what " +
+    "they know, who they know, what they owe, and who owes them. The night itself " +
+    "does not — a body arrives fresh.", "dim");
+  _say("(Your save here is untouched. Bring the same character back with RESUME.)", "dim");
+  return b;
+}
+
+// RESUME is entirely a frontend affair — it has to open a file picker, which
+// the engine cannot and should not do. main.js intercepts it. This case exists
+// so the verb explains itself rather than dead-ending in "I didn't understand
+// that" on a headless build or an older frontend.
+function _doResume() {
+  _say("RESUME takes a character back from the macro game — it opens a file picker " +
+    "for the baton you were handed.", "dim");
+  _say("Nothing happened: this build has no file picker wired to it.", "alert");
+}
+
 // ── WEAR ─────────────────────────────────────────────────────────────────────
 // Only the amulet is wearable, and deliberately not straight away: it came off
 // the sand on a snapped cord, so putting it on costs a trip to a 7-Eleven and
@@ -2987,6 +3030,7 @@ const _HELP = `Common commands:
   PET CATS (Jomtien beach) · FEED DOG (a friendship you cannot undo) · PET DOG · NAME DOG <name>
   LIGHT ON / LIGHT OFF · CHARGE PHONE
   SCORE (happiness & progress) · UNDO · RESTART   (the night autosaves itself)
+  HANDOVER (send this character to the macro game, at dawn) · RESUME (take one back)
   QUIT / END / LOGOUT (sign off; your night is saved) · RESET (wipe the save — asks first)`;
 
 // Soi 6 Challenge is a confined mode — one street, one week, no baht bus off it.
@@ -3034,6 +3078,7 @@ const _HELP_SOI6 = `Common commands:
 // rules, not even vocabulary. Easter-egg verbs are deliberately absent.
 
 const _COMPLETE_VERBS = [
+  "handover", "resume",
   "wear",
   "look", "examine", "take", "drop", "inventory", "go", "enter", "talk to",
   "ask", "give", "buy", "sell bottles", "pay", "wai", "say", "ride bus to",
@@ -3696,6 +3741,8 @@ function doCommand(input) {
     case "clinic": case "tested": case "screening": _doClinic(); break;
     case "drop": _doDrop(arg); break;
     case "i": case "inv": case "inventory": _doInventory(); break;
+    case "handover": case "baton": _doHandover(); break;
+    case "resume": _doResume(); break;
     case "wear": case "put on": _doWear(arg); break;
     case "read": _doRead(arg); break;
     case "talk": case "chat": {
