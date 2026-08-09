@@ -5,11 +5,16 @@
 // the model as a severed fragment. This prints the exact string, so the answer
 // is visible at writing time instead of after a bad render.
 //
-//   node tools/portrait-prompt.cjs bob        one character
-//   node tools/portrait-prompt.cjs --needed   every character missing a `look`
-const fs = require("fs"), vm = require("vm");
+//   node tools/portrait-prompt.mjs bob        one character
+//   node tools/portrait-prompt.mjs --needed   every character missing a `look`
+import fs from "node:fs";
+import vm from "node:vm";
+import { fileURLToPath } from "node:url";
+import { dirname } from "node:path";
+
+const HERE = dirname(fileURLToPath(import.meta.url));
 for (const f of ["thai", "world"])
-  vm.runInThisContext(fs.readFileSync(__dirname + "/../web/js/" + f + ".js", "utf8"), { filename: f });
+  vm.runInThisContext(fs.readFileSync(HERE + "/../web/js/" + f + ".js", "utf8"), { filename: f });
 
 const cond = d => String(d || "").split(/(?<=[.!?])\s/)[0].split(/\s+/).filter(Boolean);
 const all = { ...NPCS, ...PATRONS };
