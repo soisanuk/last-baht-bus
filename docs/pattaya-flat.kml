@@ -132,8 +132,8 @@
   </Folder>
   <Folder><name>Venues</name>
     <Placemark><name>Tequila Queen A-Go-Go</name><styleUrl>#venue</styleUrl><description><![CDATA[<b>tequila_queen</b><br/>Beach Road]]></description><Point><coordinates>100.87946,12.93164,0</coordinates></Point></Placemark>
-    <Placemark><name>The Sea Wall</name><styleUrl>#venue</styleUrl><description><![CDATA[<b>sea_wall</b><br/>Beach Road]]></description><Point><coordinates>100.88258,12.93676,0</coordinates></Point></Placemark>
-    <Placemark><name>The Breakwater</name><styleUrl>#venue</styleUrl><description><![CDATA[<b>breakwater</b><br/>Beach Road]]></description><Point><coordinates>100.88252,12.93662,0</coordinates></Point></Placemark>
+    <Placemark><name>The Sea Wall</name><styleUrl>#venue</styleUrl><description><![CDATA[<b>sea_wall</b><br/>Beach Road]]></description><Point><coordinates>100.88293,12.93676,0</coordinates></Point></Placemark>
+    <Placemark><name>The Breakwater</name><styleUrl>#venue</styleUrl><description><![CDATA[<b>breakwater</b><br/>Beach Road]]></description><Point><coordinates>100.88297,12.93662,0</coordinates></Point></Placemark>
     <Placemark><name>Neon Palm</name><styleUrl>#venue</styleUrl><description><![CDATA[<b>neon_palm</b><br/>Beach Road]]></description><Point><coordinates>100.883,12.9364,0</coordinates></Point></Placemark>
     <Placemark><name>The Bucket</name><styleUrl>#venue</styleUrl><description><![CDATA[<b>the_bucket</b><br/>Beach Road]]></description><Point><coordinates>100.88308,12.93628,0</coordinates></Point></Placemark>
     <Placemark><name>Blue Dog</name><styleUrl>#venue</styleUrl><description><![CDATA[<b>blue_dog</b><br/>Beach Road]]></description><Point><coordinates>100.88471,12.94309,0</coordinates></Point></Placemark>

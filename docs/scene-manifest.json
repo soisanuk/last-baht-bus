@@ -62,7 +62,7 @@
       ],
       "sampleDescs": [
         "Where Soi 6 meets Beach Road. The soi runs inland to the east — short, loud, and lit like a runway. Across Beach Road to the west lies the open sand and the bay; the Dolphin roundabout and Naklua are a couple of kilometres north up the road, out of sight. Two bars hold the corners of the junction and stare each other down: THE STINKY PINKY's sign — a cartoon skunk hoisting a Chang — buzzes over its open front on one side, and across the mouth of the soi the BLUE DOG's rail faces the water. From either corner you can still catch the sun going down over the bay. From about five, the police run a checkpoint on Beach Road just south of the junction, waving over helmetless farang for a paperwork stop and an on-the-spot fine — more than a few of the two bars' regulars first came in off the road ducking exactly that. Blue songthaews — the baht buses — rattle past on the Beach Road run, headlights strung north toward the Dolphin and south into the rest of the neon city.",
-        "The Soi 8 corner, and you hear it before you reach it. The soi comes out here with its bar end first — open fronts, four sound systems, the noise rolling down the last thirty metres and out over the railing to a sea that has no opinion. North along the front toward Soi 7 the bars face the water instead of the road, which is a different kind of evening: same beer, quieter, and you watch the gulf go black rather than watch the traffic.",
+        "The Soi 8 corner, and you hear it before you reach it. The soi comes out here with its bar end first — open fronts, four sound systems, the noise rolling down the last thirty metres and out over the railing to a sea that has no opinion. North along the front toward Soi 7 the bars are all on this side of the road with their fronts open to the west, so you drink facing the gulf and the gulf is on the far side of four lanes. Different kind of evening: same beer, quieter, and a view you have to look through the traffic to get.",
         "Mid-Beach-Road: tour groups, tailor touts, and the sea breathing in the dark beyond the promenade. The glass cliff of CENTRAL mall rises a block inland, and just south of it TEQUILA QUEEN's ancient neon señorita kicks her leg, as she has since before you were born."
       ]
     },
@@ -510,7 +510,7 @@
       "kind": "street",
       "dark": false,
       "people": [],
-      "desc": "The Soi 8 corner, and you hear it before you reach it. The soi comes out here with its bar end first — open fronts, four sound systems, the noise rolling down the last thirty metres and out over the railing to a sea that has no opinion. North along the front toward Soi 7 the bars face the water instead of the road, which is a different kind of evening: same beer, quieter, and you watch the gulf go black rather than watch the traffic."
+      "desc": "The Soi 8 corner, and you hear it before you reach it. The soi comes out here with its bar end first — open fronts, four sound systems, the noise rolling down the last thirty metres and out over the railing to a sea that has no opinion. North along the front toward Soi 7 the bars are all on this side of the road with their fronts open to the west, so you drink facing the gulf and the gulf is on the far side of four lanes. Different kind of evening: same beer, quieter, and a view you have to look through the traffic to get."
     },
     {
       "id": "beach_rd_soi9",
@@ -595,7 +595,7 @@
         "Mook",
         "Mookda"
       ],
-      "desc": "Next door to the Sea Wall and a few degrees livelier — same view, more of a bar about it: a pool table with a permanent list to one corner, a dartboard, and a crew of regulars who have watched this stretch of water for years and have opinions about all of it. When the wind comes off the sea the fairy lights swing and everybody pretends not to notice."
+      "desc": "Next door to the Sea Wall and a few degrees livelier — same sea over the same traffic, more of a bar about it: a pool table with a permanent list to one corner, a dartboard, and a crew of regulars who have watched this stretch of water across this stretch of road for years and have opinions about both. When the wind comes off the sea the fairy lights swing and everybody pretends not to notice."
     },
     {
       "id": "central_beach",
@@ -741,7 +741,7 @@
         "Gig",
         "Kwang"
       ],
-      "desc": "One of the handful of bars on the SEA side of Beach Road, which changes everything about it: you sit with the traffic at your back and the whole gulf in front, and the bar is a long counter with the stools facing outward because nobody comes here to look at the optics. Older crowd, mostly. Nobody shouts. The girls sit with you facing the same way and point things out — a squid boat's lights, the ferry, weather coming."
+      "desc": "Across the road from the sand, with every stool on the front rail turned to face it — which means every stool also faces four lanes of Beach Road, and that is the arrangement you are accepting. Between the songthaews you get the whole gulf going dark, and the regulars stopped seeing the traffic years ago. Older crowd. Nobody shouts. The girls sit beside you facing the same way and point things out — a squid boat's lights, the ferry, weather coming in."
     },
     {
       "id": "second_rd_soi8",

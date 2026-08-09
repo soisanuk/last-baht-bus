@@ -1100,9 +1100,10 @@ const ROOMS = {
     desc: "The Soi 8 corner, and you hear it before you reach it. The soi comes out here " +
       "with its bar end first — open fronts, four sound systems, the noise rolling " +
       "down the last thirty metres and out over the railing to a sea that has no " +
-      "opinion. North along the front toward Soi 7 the bars face the water instead of " +
-      "the road, which is a different kind of evening: same beer, quieter, and you " +
-      "watch the gulf go black rather than watch the traffic.",
+      "opinion. North along the front toward Soi 7 the bars are all on this side of the " +
+      "road with their fronts open to the west, so you drink facing the gulf and the " +
+      "gulf is on the far side of four lanes. Different kind of evening: same beer, " +
+      "quieter, and a view you have to look through the traffic to get.",
     revisit: [
       "The noise comes down the soi in a wave, hits the railing, and gives up.",
       "Somebody stops dead at the corner, deciding between the sea and the sound.",
@@ -1240,17 +1241,17 @@ const ROOMS = {
     name: "The Sea Wall",
     bar: "The Sea Wall", barType: "beer",
     region: "Beach Road",
-    desc: "One of the handful of bars on the SEA side of Beach Road, which changes " +
-      "everything about it: you sit with the traffic at your back and the whole gulf in " +
-      "front, and the bar is a long counter with the stools facing outward because " +
-      "nobody comes here to look at the optics. Older crowd, mostly. Nobody shouts. The " +
-      "girls sit with you facing the same way and point things out — a squid boat's " +
-      "lights, the ferry, weather coming.",
+    desc: "Across the road from the sand, with every stool on the front rail turned to " +
+      "face it — which means every stool also faces four lanes of Beach Road, and that " +
+      "is the arrangement you are accepting. Between the songthaews you get the whole " +
+      "gulf going dark, and the regulars stopped seeing the traffic years ago. Older " +
+      "crowd. Nobody shouts. The girls sit beside you facing the same way and point " +
+      "things out — a squid boat's lights, the ferry, weather coming in.",
     revisit: [
-      "Stools facing the water, backs to the road. It reorganises an evening.",
+      "Every stool on the rail pointed west, and four lanes of traffic in the way.",
       "Somebody points out a squid boat and everybody looks, including the staff.",
-      "The traffic is behind you and stays there. The gulf does the talking.",
-      "A quiet rail, a cold bottle, and two kilometres of dark water.",
+      "A songthaew stops dead in the view. Nobody at the rail reacts at all.",
+      "A quiet rail, a cold bottle, and the gulf going dark past the headlights.",
     ],
     exits: { out: "beach_rd_soi8" },
   },
@@ -1258,11 +1259,12 @@ const ROOMS = {
     name: "The Breakwater",
     bar: "The Breakwater", barType: "beer",
     region: "Beach Road",
-    desc: "Next door to the Sea Wall and a few degrees livelier — same view, more of a " +
-      "bar about it: a pool table with a permanent list to one corner, a dartboard, and " +
-      "a crew of regulars who have watched this stretch of water for years and have " +
-      "opinions about all of it. When the wind comes off the sea the fairy lights swing " +
-      "and everybody pretends not to notice.",
+    desc: "Next door to the Sea Wall and a few degrees livelier — same sea over the same " +
+      "traffic, more of a bar about it: a pool table with a permanent list to one " +
+      "corner, a dartboard, and a crew of regulars who have watched this stretch of " +
+      "water across this stretch of road for years and have opinions about both. When " +
+      "the wind comes off the sea the fairy lights swing and everybody pretends not to " +
+      "notice.",
     revisit: [
       "The pool table still lists. Everybody still plays the slope rather than fights it.",
       "Fairy lights swinging in the sea wind, and nobody remarking on it.",
@@ -11187,8 +11189,8 @@ const ROOM_GEO = {
   beach_rd_soi9:    [12.93598, 100.88247],
   pattaya_soi_9:    [12.93515, 100.88377],
   beach_rd_soi8:    [12.93655, 100.88277],
-  sea_wall:         [12.93676, 100.88258],
-  breakwater:       [12.93662, 100.88252],
+  sea_wall:         [12.93676, 100.88293],
+  breakwater:       [12.93662, 100.88297],
   neon_palm:        [12.93640, 100.88300],
   the_bucket:       [12.93628, 100.88308],
   pattaya_soi_8:    [12.93573, 100.88413],
