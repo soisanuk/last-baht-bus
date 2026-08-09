@@ -16,11 +16,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
   agent's. Consumer wiring (`_avatarSrc`, `web/js/portrait-thumbs.js`) is ours.
 
 **`scripts/gen-portraits.py` REGENERATES EVERY PORTRAIT.** Running it rewrites all
-~286 PNGs as pixel art, which silently clobbers the art agent's 72 full-size SDXL
+~315 PNGs as pixel art, which silently clobbers the art agent's full-size SDXL
 renders. After adding a CHARS spec and running it, restore theirs immediately:
 `git status --porcelain web/portraits/ | awk '$1=="M"{print $2}' | xargs git checkout --`
-— that leaves only your new `??` files. Check `find web/portraits -maxdepth 1 -size +100k | wc -l`
-still reports 72 before committing.
+— that leaves only your new `??` files. Verify with
+`find web/portraits -maxdepth 1 -size +100k | wc -l` — **take that count BEFORE
+you run the generator and check it is unchanged after**, rather than against a
+number written here. The render track grows whenever the art agent ships (72 on
+2026-08-08, 84 by the next morning), so a hard-coded figure goes stale and the
+next person reads a healthy tree as a disaster.
 
 **Use targeted `git add <paths>`, never `git add -A`.** Other agents work in this
 same checkout; a blanket add on 2026-08-08 swept 72 of the art agent's in-flight
