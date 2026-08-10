@@ -2573,24 +2573,30 @@ test("_npcActions is the single source of a character's tap affordances (by role
   const full = id => _npcActions(id, true);
   // everyone gets the safe basics
   for (const id of ["candy", "arm", "mala", "bert"]) {
-    assert.deepEqual(short(id).slice(0, 3), ["talk", "examine", "photo"]);
+    assert.deepEqual(short(id).slice(0, 2), ["talk", "examine"]);
+    // PHOTO is off the card on purpose — on a character menu the word reads as
+    // "show me a bigger picture of her" rather than "take one" (playtest).
+    assert.ok(!short(id).includes("photo"), `${id}: photo stays off the character card`);
   }
   // a hostess: the full female economy on the long-press wheel
   const lek = Object.keys(NPC_ROLES).find(id => NPC_ROLES[id] === "hostess");
-  assert.deepEqual(full(lek), ["talk", "examine", "photo", "buyher", "flirt", "tip", "contact", "barfine"]);
+  // BARFINE takes the slot PHOTO left, but in the FULL menu only — it spends four
+  // figures and ends the night, so it must never be a single mis-tap away
+  assert.deepEqual(full(lek), ["talk", "examine", "buyher", "barfine", "flirt", "tip", "contact"]);
+  assert.ok(!short(lek).includes("barfine"), "and never on the quick card");
   // cashier: buy-drink + tip/contact (the sponsor-cashier arc), no flirt; barfine only once flipped
   const cash = Object.keys(NPC_ROLES).find(id => NPC_ROLES[id] === "cashier" && !_sponsorFlipped(id));
-  assert.deepEqual(full(cash), ["talk", "examine", "photo", "buyher", "tip", "contact"]);
+  assert.deepEqual(full(cash), ["talk", "examine", "buyher", "tip", "contact"]);
   // host bar (gender-flipped): buyhim + hire
-  assert.deepEqual(full("arm"), ["talk", "examine", "photo", "buyhim", "hire"]);
+  assert.deepEqual(full("arm"), ["talk", "examine", "buyhim", "hire"]);
   // cabaret performer: the courtship rails, no barfine — the theatre keeps no ledger
-  assert.deepEqual(full("mala"), ["talk", "examine", "photo", "buyher", "flirt", "tip", "contact"]);
-  assert.deepEqual(full("petch"), ["talk", "examine", "photo", "buyher", "flirt", "tip", "contact"]);
+  assert.deepEqual(full("mala"), ["talk", "examine", "buyher", "flirt", "tip", "contact"]);
+  assert.deepEqual(full("petch"), ["talk", "examine", "buyher", "flirt", "tip", "contact"]);
   // a plain NPC (manager, unroled): a polite wai in the full wheel
-  assert.deepEqual(full("bert"), ["talk", "examine", "photo", "wai"]);
+  assert.deepEqual(full("bert"), ["talk", "examine", "wai"]);
   // a patron (not an NPC at all) and an unknown id: just the basics, no crash
-  assert.deepEqual(full("glam"), ["talk", "examine", "photo"]);
-  assert.deepEqual(full("nobody_here_xyz"), ["talk", "examine", "photo"]);
+  assert.deepEqual(full("glam"), ["talk", "examine"]);
+  assert.deepEqual(full("nobody_here_xyz"), ["talk", "examine"]);
 });
 
 test("Act One is do-or-die: dawn without room 412 hard-resets to the beach", () => {

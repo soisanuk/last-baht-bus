@@ -252,14 +252,24 @@ function _npcActions(id, full) {
   const role = isNpc && typeof NPC_ROLES !== "undefined" ? NPC_ROLES[id] : null;
   const isHost = isNpc && _HOSTS.includes(id);
   const isPerformer = isNpc && typeof _CABARET_PERFORMERS !== "undefined" && _CABARET_PERFORMERS.includes(id);
-  const acts = ["talk", "examine", "photo"];
+  // PHOTO is off the card deliberately (playtest, 2026-08-11): on a character
+  // menu it reads as "show me a bigger picture of her", not "take one" — a
+  // tester tapped it expecting the portrait to enlarge and got the mamasan
+  // confiscating his camera. The verb is untouched (typed, autocomplete, HELP,
+  // and the gallery rows still enlarge on tap); it just stops advertising
+  // itself in the one place its name is ambiguous.
+  const acts = ["talk", "examine"];
   if (role) acts.push("buyher");             // hostess/cashier/mamasan economy
   else if (isHost) acts.push("buyhim");      // host bar, gender-flipped
+
   if (full) {
     // cabaret performers: the courtship rails (drinks/flirt/tip/contact) with
     // no barfine — the theatre keeps no ledger (_doBarfine's peacock branch)
     if (isPerformer) acts.push("flirt", "tip", "contact");
-    else if (role === "hostess") acts.push("flirt", "tip", "contact", "barfine");
+    // BARFINE stays on the long-press only, never the quick tap: it spends four
+    // figures and ends the night, and term.test guards that deliberately. It
+    // takes the slot PHOTO left in the FULL menu, which is where it belongs.
+    else if (role === "hostess") acts.push("barfine", "flirt", "tip", "contact");
     else if (role === "cashier") {           // the sponsor-cashier arc's verbs (were typed-only)
       acts.push("tip", "contact");
       if (typeof _sponsorFlipped === "function" && _sponsorFlipped(id)) acts.push("barfine");

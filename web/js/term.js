@@ -378,7 +378,7 @@ const _term = (() => {
         wai:     l => ({ t: "wai",             c: "wai " + l,          go: true }),
         follow:  l => ({ t: "eat with him",    c: "follow " + l,       go: true }),
       };
-      const keys = typeof _npcActions === "function" ? _npcActions(npc || pat, full) : ["talk", "examine", "photo"];
+      const keys = typeof _npcActions === "function" ? _npcActions(npc || pat, full) : ["talk", "examine"];
       for (const key of keys) { const m = _NPC_ACT[key]; if (m) a.push(m(lo)); }
     } catch (e) { /* engine not booted: no actions */ }
     return a;
