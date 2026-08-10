@@ -5,8 +5,8 @@
     "rooms": 234,
     "regions": 15,
     "byKind": {
-      "beach": 15,
-      "street": 92,
+      "beach": 14,
+      "street": 93,
       "massage": 19,
       "beer": 57,
       "shop": 2,
@@ -1306,7 +1306,7 @@
       "barType": null,
       "region": "Jomtien",
       "regionSlug": "jomtien",
-      "kind": "beach",
+      "kind": "street",
       "dark": false,
       "people": [],
       "desc": "The beach end of Soi 7, off the south end of the beach road: a mellow strip of open-front beer bars strung with fairy lights, a couple of massage shops, and the easy Jomtien pace — older expats, cold beer, nobody in a hurry. The soi runs east, deeper inland toward Second Road; the sea breeze follows you a little way in."

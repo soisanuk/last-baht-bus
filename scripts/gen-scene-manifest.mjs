@@ -48,6 +48,8 @@ const KIND_OVERRIDE = {
   soi_rompho: "market",           // grilled everything, fruit pyramids, plastic stools
   soi_7_w: "street",              // "Soi 7 (West / beach end)" — a soi AT the beach,
                                   // not sand; the name heuristic reads it wrong
+  jomtien_soi_7_w: "street",      // same misfire, Jomtien's twin: "Soi 7 Beach End"
+                                  // is "a mellow strip of open-front beer bars"
 };
 
 // The framing a scene prompt needs. `barType` when the room is a bar; otherwise
