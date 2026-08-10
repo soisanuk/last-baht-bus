@@ -15,19 +15,31 @@ const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "..")
 // one room that has its own PNG (the room leg) and one that has none but whose
 // region does (the fallback leg). Naming rooms here goes stale every time an art
 // batch lands — this can't. Returns nulls when there's no art at all.
+// Extension-agnostic, like the chain it exercises: a room's art may be .webp or
+// .png and migrates one file at a time (docs/art-production.md). Keyed on the
+// STEM, so a room that has migrated still counts as covered — key on the
+// filename and a freshly converted room reads as artless, and then the fallback
+// leg asserts a region shot for a room the panel correctly serves its own art.
 function pickSubjects() {
   const art = sub => {
     const d = path.join(ROOT, "web", "art", sub);
-    return fs.existsSync(d) ? new Set(fs.readdirSync(d).filter(f => f.endsWith(".png"))) : new Set();
+    if (!fs.existsSync(d)) return new Set();
+    return new Set(fs.readdirSync(d)
+      .filter(f => /\.(webp|png)$/.test(f))
+      .map(f => f.replace(/\.(webp|png)$/, "")));
   };
   const rooms = art("rooms"), regions = art("regions");
   const manifest = path.join(ROOT, "docs", "scene-manifest.json");
   if (!fs.existsSync(manifest)) return { withArt: null, artless: null };
   const all = JSON.parse(fs.readFileSync(manifest, "utf8")).rooms;
 
-  const withArtId = [...rooms][0]?.replace(/\.png$/, "");
-  const withArt = all.find(r => r.id === withArtId) || null;
-  const artless = all.find(r => !rooms.has(r.id + ".png") && regions.has(r.regionSlug + ".png")) || null;
+  // Prefer a migrated room for the room leg: while both extensions are in play
+  // the webp path is the one with no coverage anywhere else, and it's where the
+  // whole batch is heading. Falls back to any covered room before migration.
+  const webpRooms = new Set([...rooms].filter(id =>
+    fs.existsSync(path.join(ROOT, "web", "art", "rooms", id + ".webp"))));
+  const withArt = all.find(r => webpRooms.has(r.id)) || all.find(r => rooms.has(r.id)) || null;
+  const artless = all.find(r => !rooms.has(r.id) && regions.has(r.regionSlug)) || null;
   return { withArt, artless };
 }
 
@@ -82,13 +94,28 @@ test("scene backdrops resolve: room art, then region fallback", async ({ page })
   // the visual layer defaults OFF (TOGGLE_V0, main.js) — throw the switch first
   await page.evaluate(() => { localStorage.setItem("lbb_v0_on", "1"); _updateScene(); });
 
+  // Wait for the chain to SETTLE, don't decode() the first candidate. Each miss
+  // is a 404 that fires onerror and advances src, so at the instant the panel
+  // renders the img is pointed at art/rooms/<id>.webp — which, for every asset
+  // still on PNG, does not exist. Decoding right there rejects and reads as "no
+  // art" when the .png two steps along would have loaded fine. Settled means the
+  // row removed itself (nothing matched) or a candidate has real pixels.
   const art = async room => {
     await page.evaluate(r => { G.room = r; _updateScene(); }, room);
     return await page.evaluate(async () => {
-      const img = document.querySelector("#scene-art img");
-      if (!img) return null;                       // the row removed itself: no art
-      try { await img.decode(); } catch { return null; }
-      return { src: img.currentSrc.split("/").slice(-2).join("/"), w: img.naturalWidth };
+      const done = () => {
+        const img = document.querySelector("#scene-art img");
+        if (!img) return { gone: true };            // the row removed itself: no art
+        return img.naturalWidth > 0
+          ? { src: img.currentSrc.split("/").slice(-2).join("/"), w: img.naturalWidth }
+          : null;                                   // still walking the chain
+      };
+      for (let i = 0; i < 100; i++) {               // ~5s, generous for file://
+        const r = done();
+        if (r) return r.gone ? null : r;
+        await new Promise(res => setTimeout(res, 50));
+      }
+      return null;
     });
   };
 
@@ -98,15 +125,17 @@ test("scene backdrops resolve: room art, then region fallback", async ({ page })
   const { withArt, artless } = pickSubjects();
   test.skip(!withArt && !artless, "no scene art generated yet");
 
+  // Either extension satisfies the leg — which one is a migration detail, and
+  // pinning it here would fail the day a room is converted.
   if (withArt) {
     const room = await art(withArt.id);
-    expect(room.src).toBe(`rooms/${withArt.id}.png`);
+    expect(room?.src).toMatch(new RegExp(`^rooms/${withArt.id}\\.(webp|png)$`));
     expect(room.w).toBeGreaterThan(0);
   }
   if (artless) {
     const region = await art(artless.id);
     // the slug the generator writes — this is the leg that catches slug drift
-    expect(region.src).toBe(`regions/${artless.regionSlug}.png`);
+    expect(region?.src).toMatch(new RegExp(`^regions/${artless.regionSlug}\\.(webp|png)$`));
     expect(region.w).toBeGreaterThan(0);
   }
 });
