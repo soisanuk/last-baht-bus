@@ -114,9 +114,15 @@ function _attachHotspots(div, img, roomId) {
   if (!hsOn && !authorOn) return;
 
   const key = "rooms/" + roomId;
+  // Either extension — the room's OWN art, never the region fallback. This was
+  // pinned to .png and went dead the moment the batch converted to WebP: the
+  // chain above became extension-agnostic and this sibling check did not, so
+  // every hotspot in the game silently stopped rendering.
   const isRealRoomImg = () => {
-    try { return !!img.currentSrc && img.currentSrc.endsWith("/" + key + ".png"); }
-    catch (e) { return false; }
+    try {
+      const src = img.currentSrc || "";
+      return src.endsWith("/" + key + ".webp") || src.endsWith("/" + key + ".png");
+    } catch (e) { return false; }
   };
 
   const render = () => {

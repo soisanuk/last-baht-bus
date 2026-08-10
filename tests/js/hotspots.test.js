@@ -100,3 +100,19 @@ test("every cmd is a promise the parser keeps in its own room — never the last
     }
   }
 });
+
+// The runtime gate that decides a hotspot may render at all. It lives in
+// scene.js and is a SIBLING of the fallback chain: the chain went
+// extension-agnostic for the WebP migration and this check stayed pinned to
+// .png, so the day the batch converted, every hotspot in the game stopped
+// rendering — silently, because hotspots are off by default and the vm suite
+// can't see the DOM. The e2e caught it three commits later; this catches it at
+// the source. Asserted against scene.js's text, like the slug-regex test in
+// art.test.js, because there is no way to reach the closure from here.
+test("scene.js's own-art check accepts both extensions, not just .png", () => {
+  const src = fs.readFileSync(path.join(root, "web", "js", "scene.js"), "utf8");
+  const fn = src.slice(src.indexOf("const isRealRoomImg"), src.indexOf("const render ="));
+  assert.ok(fn, "isRealRoomImg has moved or been renamed — re-point this guard");
+  assert.match(fn, /\.webp/, "isRealRoomImg no longer accepts .webp — hotspots die on converted art");
+  assert.match(fn, /\.png/, "isRealRoomImg no longer accepts .png — hotspots die on unconverted art");
+});
