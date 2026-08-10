@@ -1018,6 +1018,7 @@
       "regionSlug": "jomtien",
       "kind": "beach",
       "dark": true,
+      "darkLight": null,
       "people": [],
       "desc": "The quieter stretch north of Jomtien proper — by day rainbow flags and beach chairs, the gay end of the sand; right now it's shapes and shadows and the hiss of surf. This is where the two beaches meet: south the sand runs back down to Jomtien, north it carries on up the darker Dongtan shore. Inland to the east the beach road reaches its north end, where it bends into the neon of the Thappraya Main Strip."
     },
@@ -1030,6 +1031,7 @@
       "regionSlug": "jomtien",
       "kind": "beach",
       "dark": true,
+      "darkLight": null,
       "people": [],
       "desc": "A dark reach of Dongtan sand, well off the Jomtien lights: the surf close and loud, a few couples' silhouettes. The sand runs south back toward Jomtien and north on up the shore; a beach-access path cuts up to Dongtan Beach Road to the east."
     },
@@ -1042,6 +1044,7 @@
       "regionSlug": "jomtien",
       "kind": "beach",
       "dark": true,
+      "darkLight": null,
       "people": [],
       "desc": "The north tip of Dongtan Beach, where the sand runs out against the black shoulder of Pratumnak Hill. Quiet, unlit, the sea working away below. The sand runs south back down the shore; a beach-access path climbs to Dongtan Beach Road to the east."
     },
@@ -1054,6 +1057,7 @@
       "regionSlug": "jomtien",
       "kind": "beach",
       "dark": true,
+      "darkLight": null,
       "people": [],
       "desc": "Dongtan proper begins here, and the difference is immediate: the beach chairs thin out, the lights of Jomtien fall behind, and the sand widens into the dark. The surf is the loudest thing for a hundred metres. A short access path climbs east to Dongtan Beach Road; the sand runs south back toward the Jomtien end and north up the shore."
     },
@@ -1066,6 +1070,7 @@
       "regionSlug": "jomtien",
       "kind": "street",
       "dark": true,
+      "darkLight": null,
       "people": [],
       "desc": "The middle of Dongtan Beach Road: quiet condos, a shuttered café or two, beach-access paths down to the sand between them. The road runs south back toward Jomtien and north up toward the hill."
     },
@@ -1200,6 +1205,7 @@
       "regionSlug": "jomtien",
       "kind": "beach",
       "dark": true,
+      "darkLight": null,
       "people": [],
       "desc": "South of Soi 7 the beach road simply stops. Steel hoarding runs the length of the frontage, the carriageway behind it is opened up to the pipes, and a line of cones funnels everything inland up the soi — which is why nobody comes down here any more, and why the sand beside it has gone quiet in a way Jomtien sand never is. A digger sits with its arm folded down for the night. The beach carries on south past all of it, because a beach does not care about a road."
     },
@@ -1212,6 +1218,7 @@
       "regionSlug": "jomtien",
       "kind": "beach",
       "dark": true,
+      "darkLight": null,
       "people": [],
       "desc": "Nobody rakes this. You can tell instantly — the sand has the tide's own arrangement on it, a long crooked line of weed and bottle caps and one flip-flop, and your feet keep finding the ridges the water left. No loungers, no umbrella poles, no cool boxes, nobody at all. It is the first place all night where nothing whatsoever is being sold to you, and the effect is stranger than it should be."
     },
@@ -1224,6 +1231,7 @@
       "regionSlug": "jomtien",
       "kind": "beach",
       "dark": true,
+      "darkLight": null,
       "people": [],
       "desc": "As far as walking gets you. A stand of casuarinas leans off the dune with the wind's shape set into them, and under the nearest one somebody long ago put a spirit house — weathered grey, one corner gone, the little figures inside still facing out to sea. There are no offerings on it. There is no rubbish either, which takes some explaining on a beach nobody sweeps. Behind you the lights of Jomtien are a low orange smear a long way north."
     },
@@ -1758,6 +1766,7 @@
       "regionSlug": "naklua",
       "kind": "street",
       "dark": true,
+      "darkLight": null,
       "people": [],
       "desc": "The Sabai Palms' soi. No streetlights — the municipality has been 'fixing' them since March. Two actual palms flank the lobby entrance somewhere down there, and past them, a bed with your name on it."
     },
@@ -1861,6 +1870,7 @@
       "regionSlug": "pratumnak",
       "kind": "viewpoint",
       "dark": true,
+      "darkLight": "the whole curve of the bay glittering far below, Walking Street neon-pink at the south end",
       "people": [],
       "desc": "The big golden Buddha watches the bay with infinite patience. Below, the whole curve of Pattaya glitters — Walking Street burning neon-pink at the south end. Someone has left an offering of marigolds and a small bottle of red Fanta."
     },
@@ -1893,6 +1903,7 @@
       "regionSlug": "pratumnak",
       "kind": "street",
       "dark": true,
+      "darkLight": "a 7-Eleven on the bend throwing the only real light",
       "people": [],
       "desc": "The top of Dongtan Beach Road, where it bends inland and starts up onto Pratumnak. The sand is a black rumour to the west; east the road climbs to the Soi 5 turn and, past that, the crest. On the bend a 7-ELEVEN throws the only real light for half a kilometre — cold air, a cash machine, and two lads on a scooter parked across the front eating toasties. Everyone going up the hill or down it stops here, because there is nothing either way for a long time."
     },
@@ -1958,6 +1969,7 @@
       "regionSlug": "pratumnak",
       "kind": "street",
       "dark": true,
+      "darkLight": null,
       "people": [],
       "desc": "The saddle over the top of Pratumnak Hill, linking the two roads that climb it — the Thappraya side to the east, the Dongtan Beach side to the west. Walls, viewpoints you can't make out in the dark, and the sea breathing somewhere below on both sides."
     },
@@ -1970,6 +1982,7 @@
       "regionSlug": "pratumnak",
       "kind": "street",
       "dark": true,
+      "darkLight": null,
       "people": [],
       "desc": "The main hill road between Jomtien and Pattaya proper — condos behind walls, sleeping soi dogs, and long stretches where the streetlights have given up. The Buddha Hill viewpoint is up a path to the west; Walking Street is on north."
     },
@@ -2037,6 +2050,7 @@
       "regionSlug": "pratumnak",
       "kind": "street",
       "dark": true,
+      "darkLight": null,
       "people": [],
       "desc": "Mid-climb on the eastern shoulder of Pratumnak: gated condos, a sleeping soi dog or three, the streetlights getting shy. The lights of Jomtien spread out below to the south."
     },
@@ -2049,6 +2063,7 @@
       "regionSlug": "pratumnak",
       "kind": "street",
       "dark": true,
+      "darkLight": null,
       "people": [],
       "desc": "The top of the eastern climb, where the road levels and Pratumnak Hill Road cuts away west across the crest toward the Dongtan side. Quiet, dark, and a long way from a lady drink."
     },
@@ -3405,6 +3420,7 @@
       "regionSlug": "tree-town",
       "kind": "street",
       "dark": true,
+      "darkLight": "warm light leaking from a far lane of cheap bars, past the bins",
       "people": [],
       "desc": "The maze's unlit armpit: kitchen doors, a mop graveyard, and rats with routines. Without light, every exit feels like the same wrong one. South, past the bins, a FAR LANE of cheap bars nobody photographs leaks a little warm light."
     },
@@ -3417,6 +3433,7 @@
       "regionSlug": "tree-town",
       "kind": "street",
       "dark": true,
+      "darkLight": "one big multicoloured bar sign burning at the end of the lane, the only light there is",
       "people": [],
       "desc": "The deepest corner of the maze, where the neon gives out entirely. One big sign burns at the end of the lane: RAINBOW GIRLS BAR, every letter a different colour."
     },
@@ -3659,6 +3676,7 @@
       "regionSlug": "walking-street",
       "kind": "street",
       "dark": true,
+      "darkLight": "spill from kitchen doors and a bare bulb over stacked kegs — a working service alley, not an empty road",
       "people": [
         "Mot"
       ],

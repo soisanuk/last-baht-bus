@@ -126,3 +126,29 @@ test("the scene manifest is in sync with world.js", () => {
     "run: node scripts/gen-scene-manifest.mjs");
   for (const r of m.rooms) assert.equal(r.regionSlug, slug(ROOMS[r.id].region), r.id + " region drifted");
 });
+
+// DARK_LIGHT in the manifest generator names, per room, what is burning in an
+// otherwise pitch-black scene. It's authored because `dark` is an ENGINE flag —
+// "you need the torch", not "nothing is open" — and the art side reading it as
+// deserted would render Tree Town's deep corner as an empty road when the one
+// bar sign at the end of the lane IS the picture. A stale key here is silent:
+// the room just quietly loses its light, which is exactly the failure the table
+// exists to prevent.
+test("every authored dark-room light source names a room that is actually dark", () => {
+  const man = JSON.parse(fs.readFileSync(path.join(root, "docs", "scene-manifest.json"), "utf8"));
+  const byId = new Map(man.rooms.map(r => [r.id, r]));
+  const lit = man.rooms.filter(r => r.darkLight);
+
+  const bad = lit.filter(r => !r.dark).map(r => r.id);
+  assert.deepEqual(bad, [], "darkLight on a room that isn't dark: " + bad.join(", "));
+
+  // the field is dark-only: a lit room must not carry the key at all
+  const stray = man.rooms.filter(r => !r.dark && "darkLight" in r).map(r => r.id);
+  assert.deepEqual(stray, [], "darkLight present on a lit room: " + stray.join(", "));
+
+  assert.ok(lit.length > 0, "no dark room has an authored light source — did DARK_LIGHT lose its keys?");
+  for (const r of lit)
+    assert.ok(r.darkLight.length > 20,
+      `${r.id}: darkLight must describe the light well enough to prompt with, got "${r.darkLight}"`);
+  assert.ok(byId.size === man.rooms.length, "duplicate room ids in the manifest");
+});

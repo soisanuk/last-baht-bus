@@ -96,6 +96,24 @@ function peopleIn(id, r) {
   return [...here].sort();
 }
 
+// `dark` is an ENGINE flag: it means the player can't see without the torch —
+// it forces the flashlight, arms the soi-dog streak, hides the exits. It does
+// NOT mean deserted, and the art pipeline can't safely read it as "nothing open,
+// nobody about": Tree Town's deep corner is pitch black with one multicoloured
+// bar sign burning at the end of it, which is the entire image of the room.
+//
+// So the light source is AUTHORED, not inferred — same doctrine as a character's
+// `look`. A dark room listed here has something burning in frame and must not be
+// rendered as an empty unlit road; a dark room absent from this table genuinely
+// is one. Add a room here the moment its prose puts a light in the picture.
+const DARK_LIGHT = {
+  ws_alley:     "spill from kitchen doors and a bare bulb over stacked kegs — a working service alley, not an empty road",
+  tt_back:      "warm light leaking from a far lane of cheap bars, past the bins",
+  tt_deep:      "one big multicoloured bar sign burning at the end of the lane, the only light there is",
+  dongtan_rd_n: "a 7-Eleven on the bend throwing the only real light",
+  buddha_hill:  "the whole curve of the bay glittering far below, Walking Street neon-pink at the south end",
+};
+
 const rooms = [];
 for (const id of Object.keys(ROOMS)) {
   const r = ROOMS[id];
@@ -108,6 +126,8 @@ for (const id of Object.keys(ROOMS)) {
     regionSlug: slug(r.region),
     kind: kindOf(id, r),
     dark: !!r.dark,
+    // only meaningful when dark: what is lit, or null for genuinely deserted
+    darkLight: r.dark ? (DARK_LIGHT[id] || null) : undefined,
     people: peopleIn(id, r),
     desc: r.desc,
   });
