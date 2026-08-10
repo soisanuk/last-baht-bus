@@ -123,3 +123,39 @@ test("the flashlight sits under E and still toggles", async ({ page }) => {
   expect(Math.abs(box.x - east.x), "same column as E").toBeLessThanOrEqual(2);
   expect(box.y, "the row below it").toBeGreaterThan(east.y);
 });
+
+test("an ATM street folds its four chips into one, and the menu still types the commands", async ({ page }) => {
+  // Folded in term.js, like the compass chips: the ENGINE still offers all four,
+  // so a frontend with no menus keeps every option as its own button.
+  await bootIntoGame(page, INDEX_URL);
+  const atmRoom = await page.evaluate(() => {
+    const id = Object.keys(ROOMS).find(k => ROOMS[k].atm && !ROOMS[k].bar);
+    if (id) { G.room = id; G.visited[id] = true; }
+    return id || null;
+  });
+  test.skip(!atmRoom, "no street ATM in the world");
+  await page.fill("#term-in", "look");
+  await page.press("#term-in", "Enter");
+
+  const cmds = () => page.evaluate(() =>
+    [...document.querySelectorAll("#chips .chip")].map(b => b.dataset.cmd));
+  const shown = await cmds();
+  expect(shown, "one ATM chip, not four").toContain("__atm");
+  expect(shown.filter(c => /^withdraw |^check balance$/.test(c)),
+    "the four are folded away").toEqual([]);
+
+  // …but the engine still hands them over, unchanged
+  const fromEngine = await page.evaluate(() => _chipSet().map(c => c.cmd));
+  expect(fromEngine).toContain("withdraw 5000");
+  expect(fromEngine).toContain("check balance");
+
+  // pressing it offers them, and picking one types the real command
+  await page.locator('#chips .chip[data-cmd="__atm"]').click();
+  await expect(page.locator("#flyout")).toBeVisible();
+  const rows = await page.evaluate(() =>
+    [...document.querySelectorAll("#flyout button")].map(b => b.textContent.trim()));
+  expect(rows.length).toBe(4);
+
+  await page.locator("#flyout button").last().click();   // balance
+  await expect(page.locator("#term-out .t-echo").last()).toContainText(/^❯ check balance$/);
+});

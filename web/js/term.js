@@ -624,6 +624,29 @@ const _term = (() => {
   // draws one would otherwise lose its only tap route to a cardinal exit. The
   // engine keeps offering all of them; this view drops what it already shows.
   // (It also keeps the soak honest — it reads _chipSet directly.)
+  // The street ATM offers four chips — ฿1k, ฿5k, ฿10k, balance — which is a
+  // third of the bar spent on one machine you use a few times a night. Collapse
+  // them into one ATM chip that opens the same four on a press.
+  //
+  // Same split as the compass: the ENGINE still offers all four (a frontend
+  // with no menus keeps every option as its own button); this view folds them
+  // because it has somewhere to put them. The commands are untouched, so the
+  // typed path and the transcript read identically either way.
+  const _ATM_CMDS = ["withdraw 1000", "withdraw 5000", "withdraw 10000", "check balance"];
+  function _foldAtmChips(chips) {
+    const atm = chips.filter(c => _ATM_CMDS.indexOf(String(c.cmd || "")) >= 0);
+    if (atm.length < 2) return chips;              // nothing worth folding
+    const out = [];
+    let placed = false;
+    for (const c of chips) {
+      if (_ATM_CMDS.indexOf(String(c.cmd || "")) < 0) { out.push(c); continue; }
+      if (placed) continue;                        // the rest fold into the first
+      placed = true;
+      out.push({ cmd: "__atm", label: "ATM", menu: atm });
+    }
+    return out;
+  }
+
   function _dropCompassChips(chips) {
     let up = false;
     try { up = typeof _navHere === "function" && !!_navHere(); } catch (e) {}
@@ -632,19 +655,29 @@ const _term = (() => {
     return chips.filter(c => !CARD[String(c.cmd || "").trim().toLowerCase()]);
   }
 
+  function _renderChipMenu(set, cmd) {
+    const c = set.find(x => x.cmd === cmd);
+    return (c && c.menu) || [];
+  }
+
   function _renderChips(custom) {
     const box = document.getElementById("chips");
     if (!box) return;
     let set = custom;
     if (!set) { try { set = typeof _chipSet === "function" ? _chipSet() : []; } catch (e) { set = []; } }
-    if (!custom) set = _dropCompassChips(set);   // the wheel already shows those
+    if (!custom) set = _foldAtmChips(_dropCompassChips(set)); // wheel + ATM folding
     box.innerHTML = "";
     for (const { cmd, label } of set) {
       const b = document.createElement("button");
       b.className = "chip";
       b.dataset.cmd = cmd;
       b.textContent = _L(label || cmd); // German display label; the cmd submitted stays English
-      b.addEventListener("click", () => {
+      b.addEventListener("click", ev => {
+        // stop the click here: the document-level "clicked outside, close the
+        // flyout" listener would otherwise fire on the very click that opened
+        // this menu and shut it on the way up. (The compass takes the same
+        // problem from the other end, with an #nav-fab exemption.)
+        if (cmd === "__atm") { ev.stopPropagation(); _openListMenu(b, _renderChipMenu(set, cmd)); return; }
         if (cmd.endsWith(" ")) { _input.value = cmd; _input.focus(); _refreshSuggest(); }
         else { _input.value = cmd; submit(_onCmd); }
       });
