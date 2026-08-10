@@ -49,3 +49,24 @@ test("a wall of output starts at the top of the view, not the end", async ({ pag
   });
   expect(below, "a wall leaves unread text below the fold").toBeGreaterThan(20);
 });
+
+test("output that merely tips past the viewport still pins to the bottom", async ({ page }) => {
+  // The anchor is for WALLS, not for anything that overflows by a line. Two
+  // commands in a row behaving differently because one printed a paragraph more
+  // is what made this feel like the scrollback moved on its own.
+  await bootIntoGame(page, INDEX_URL);
+  await page.fill("#term-in", "look");
+  await page.press("#term-in", "Enter");
+  const fresh = await page.evaluate(() => {
+    const out = document.getElementById("term-out");
+    const es = out.querySelectorAll(".t-echo");
+    const last = es[es.length - 1];
+    const top = out.scrollTop + (last.getBoundingClientRect().top - out.getBoundingClientRect().top);
+    return { newH: out.scrollHeight - top, view: out.clientHeight,
+             gap: out.scrollHeight - out.clientHeight - out.scrollTop };
+  });
+  // only meaningful while LOOK is under the wall threshold — assert the rule it lands on
+  if (fresh.newH < fresh.view * 1.5) {
+    expect(fresh.gap, "sub-wall output stays pinned to the bottom").toBeLessThanOrEqual(2);
+  }
+});

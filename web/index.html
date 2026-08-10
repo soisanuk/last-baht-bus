@@ -699,8 +699,14 @@
 
 /* ── v0 scene panel (presentation only; scene.js owns the DOM) ── */
 #scene { border-bottom: 1px solid #241145; }
-#scene-art { position: relative; }
-#scene-art img { display: block; width: 100%; max-height: 210px; object-fit: cover; }
+/* The art row RESERVES its height instead of growing into it. scene.js rebuilds
+   this panel every command with a fresh <img>, so with max-height the row was
+   0px at render and ~210px once the file loaded — a reflow that landed AFTER
+   submit() had already decided where to scroll, which is what made the
+   scrollback feel like it drifted under you. The row still removes itself
+   entirely when a room has no art (that's a clean, synchronous collapse). */
+#scene-art { position: relative; height: 210px; }
+#scene-art img { display: block; width: 100%; height: 100%; object-fit: cover; }
 #scene-art .overlay-rain { position: absolute; inset: 0; pointer-events: none;
   background: repeating-linear-gradient(115deg, transparent 0 7px, #9fc4ff22 7px 9px); }
 #scene-art .overlay-dark { position: absolute; inset: 0; pointer-events: none;

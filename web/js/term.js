@@ -519,12 +519,21 @@ const _term = (() => {
   // reply that doesn't fill the viewport can't be scrolled that far, so it
   // settles at the bottom exactly as before, with the previous exchange still
   // in view above it.
+  // Anchoring EVERY overflow was worse than the problem it fixed. Output that
+  // merely tipped past the viewport got the same jump as a night ending, so two
+  // commands in a row could behave completely differently depending on how much
+  // the game happened to print — which reads as the scrollback moving on its
+  // own. The anchor is now reserved for output that is unambiguously a wall.
+  const WALL_SCREENS = 1.5;
   function _scrollToNew(anchor) {
     if (!_out) return;
     const bottom = _out.scrollHeight - _out.clientHeight;
     if (!anchor || !anchor.isConnected) { _out.scrollTop = bottom; return; } // trimmed away
     const delta = anchor.getBoundingClientRect().top - _out.getBoundingClientRect().top;
-    _out.scrollTop = Math.min(_out.scrollTop + delta, bottom);
+    const top = _out.scrollTop + delta;      // the scrollTop that puts the echo at the top
+    const fresh = _out.scrollHeight - top;   // everything printed this turn
+    if (fresh < _out.clientHeight * WALL_SCREENS) { _out.scrollTop = bottom; return; }
+    _out.scrollTop = Math.min(top, bottom);
   }
 
   function _candidates(base) {
