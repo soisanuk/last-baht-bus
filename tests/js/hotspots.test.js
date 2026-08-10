@@ -43,8 +43,12 @@ test("every key is rooms/<a real ROOMS id> with matching bespoke art on disk", (
     assert.match(key, /^rooms\//, `${key}: not a "rooms/" key`);
     const id = key.slice("rooms/".length);
     assert.ok(ROOMS[id], `${key}: matches no ROOMS id — a renamed/removed room`);
-    assert.ok(fs.existsSync(path.join(artDir, id + ".png")),
-      `${key}: no web/art/rooms/${id}.png — a re-rendered-away image (orphan doctrine)`);
+    // Either extension: the art migrated PNG -> WebP one file at a time
+    // (docs/art-production.md), and scene.js tries .webp before .png. Pinning
+    // .png here broke the day queen_vic converted — same class as e69d8ca.
+    assert.ok(fs.existsSync(path.join(artDir, id + ".webp")) ||
+              fs.existsSync(path.join(artDir, id + ".png")),
+      `${key}: no web/art/rooms/${id}.(webp|png) — a re-rendered-away image (orphan doctrine)`);
   }
 });
 
