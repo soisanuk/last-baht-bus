@@ -1717,6 +1717,64 @@ function _questTick() {
   }
 }
 
+// ── Tan's manifest: the hub as a soft guide ─────────────────────────────────
+// He drove all seven of them in from the airport, so he is the one character who
+// can place the whole cast. Authored as a fixed recital it named five men you
+// had never met — a wall of strangers, and a spoiler. Generated, it does the
+// job the arc actually wants: the ones you KNOW get his read on them; the ones
+// you don't get a place and a habit, which is a direction to walk in without
+// ever being a quest marker. Re-ask after meeting someone and it has moved on.
+const _TAN_READ = {
+  doyle:  "the detective, who thinks nobody can see him working",
+  wayne:  "the Australian with the bar he should not buy",
+  roy:    "the old one who remembers too much and minds it less than he says",
+  macca:  "the one who got paid off and is spending it at exactly the wrong speed",
+  pete:   "the quiet one, who booked under a name that is not his",
+  rob:    "the married one, who is not married any more and has not told his mother",
+  barry:  "the golfer who has never once found the course",
+};
+const _TAN_WHERE = {
+  doyle:  "an Englishman who sits where he can watch a door — the pub up in Naklua",
+  wayne:  "a loud Australian with a folder of paperwork, down the Golden Dragon",
+  roy:    "an old fellow on the same stool every night, Cherry Pop, since before you were coming here",
+  macca:  "a man buying rounds he cannot afford, Sunset Dreams way",
+  pete:   "a very quiet one at the Sandy Toes, corner stool, back to the wall",
+  rob:    "a fellow at the Kitten Corner who looks like he is waiting for a phone call",
+  barry:  "a man in golf clothes at the Ruby Kiss who has not played golf",
+};
+
+function _tanOthers() {
+  const cast = ["doyle", "wayne", "roy", "macca", "pete", "rob", "barry"]
+    .filter(id => NPCS[id] && _npcActive(id));            // the one you ARE is not out there
+  const met = cast.filter(id => G.known && G.known[id] && (G.talked && G.talked[id]));
+  const rest = cast.filter(id => met.indexOf(id) < 0);
+
+  // Too early: he doesn't hand a stranger the passenger list.
+  if (!met.length) {
+    _say("“The others?” Tan lets that sit a moment, and does not pick it up. " +
+      "“You have been here two days, my friend. Meet somebody first — then ask me who they are, " +
+      "and I will tell you, because I will already know.”");
+    return true;
+  }
+
+  _say("“The others.” The grin arrives. “I drove every one of them in from the airport, my friend. " +
+    "One at a time, telling me everything before we reached Second Road. You want to know a town, " +
+    "you don't ask the mayor — you ask the driver. The driver is the one man they forget is in the room.”");
+  _say("He counts them off like a manifest, because that is precisely what he is doing: " +
+    met.map(id => NPCS[id].name + ", " + _TAN_READ[id]).join("; ") + ".", "win");
+
+  if (rest.length) {
+    const pick = rest.slice(0, 2).map(id => _TAN_WHERE[id]);
+    _say("“And you have not met all of them yet.” He taps the wheel, unhurried. “There is " +
+      pick.join(", and ") + ". They are not hiding. They are only sitting still.”");
+  } else {
+    _say("“That is all of them,” he says, and something in it is almost fond. " +
+      "“The whole soi came to town in my back seat. Now you have met the lot — which makes you " +
+      "the only one of them who knows the others exist.”", "win");
+  }
+  return true;
+}
+
 // ── The phone: contacts, messages, the banking app ──────────────────────────
 // CONTACT a girl in her own bar (favor ≥ 2) to swap numbers. Contacts text
 // you unprompted — sweet nothings, bar invites, the occasional money story.

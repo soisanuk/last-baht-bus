@@ -2688,9 +2688,21 @@ test("Tan the driver: known from the intro, a hub whose knowingness escalates wi
   state().room = "soi6_street"; state().player.origin = "pi"; // you're the detective, so he's driven the others
   out = []; run("ask tan about others");
   assert.doesNotMatch(lastOut(), /back seat|manifest/i, "he won't list them before you've met them");
+  // KNOWING a name is not MEETING the man — a name printing in a room's roster
+  // marks G.known, which is how a playtester got the full passenger list having
+  // actually sat down with exactly one of them. It takes a conversation now.
   state().known.wayne = true; state().known.roy = true;
   out = []; run("ask tan about others");
+  assert.doesNotMatch(lastOut(), /back seat|drove every one/i,
+    "seeing a name on a roster doesn't count as having met him");
+  state().talked.wayne = [0]; state().talked.roy = [0];
+  out = []; run("ask tan about others");
   assert.match(lastOut(), /back seat|drove every one|ask the driver/i, "now he owns up to driving them all");
+  // he names the two you've met, and points at the ones you haven't — the hub
+  // works as an indirect guide to the rest of the cast, never as a quest marker
+  assert.match(lastOut(), /Wayne|Roy/, "he names the men you actually sat with");
+  assert.doesNotMatch(lastOut(), /\bPete\b|\bBarry\b/, "and doesn't spoil the ones you haven't");
+  assert.match(lastOut(), /not met all of them|sitting still/i, "he points at the rest by place and habit");
 
   // the good-table topic: a smooth deflection until you've circled the quiet man
   // enough — and the chip palette must NOT advertise it before the fiction has

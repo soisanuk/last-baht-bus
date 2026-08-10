@@ -1053,6 +1053,17 @@ function _doTalk(arg, topic) {
   // surface the player's response options in the prose, every conversational turn
   if (_convoActive()) _convoPrompt(_convoActive());
 }
+// Is the person you're talking to right now holding this topic? Used to let a
+// bare word lose to a verb everywhere EXCEPT mid-conversation with someone who
+// has something to say about it.
+function _convoTopicHere(topic) {
+  const id = G.convo;
+  if (!id || !NPCS[id]) return false;
+  if (!_npcsHere().includes(id)) return false;
+  const d = _pickDialogue(id, topic);
+  return !!(d && d.topic === topic);
+}
+
 function _doTalkBody(arg, topic) {
   arg = (arg || "").trim();
   // the piwin at a stand is a real person in the fiction and not an NPCS entry
@@ -1098,6 +1109,12 @@ function _doTalkBody(arg, topic) {
   // This makes typed "ask jenny about boyfriend" resolve on the first ask (boyfriend
   // → sponsor) without stealing literal keys. _pickDialogue returns the topicless
   // greeting on a miss, so `!d.topic` is the miss signal.
+  // Tan's roll-call of "the others" is generated, not authored: it names the
+  // ones you have actually sat down with and points obliquely at the ones you
+  // haven't, which makes the hub a soft guide to the rest of the cast instead
+  // of a wall of names. It cannot be a dialogue `fx` — those fire on first
+  // delivery only, so the list would freeze on the night you first asked.
+  if (npc === "tan" && _convoTopic(topic || "") === "others" && _tanOthers()) return;
   let d = _pickDialogue(npc, topic || null);
   if (topic && (!d || !d.topic)) {
     const norm = _convoTopic(topic);
@@ -4157,7 +4174,15 @@ function doCommand(input) {
     case "hire": case "off": _doHire(arg); break;
     case "pet": case "stroke": _doPet(arg); break;
     case "feed": _doFeedDog(arg); break;
-    case "name": case "rename": _doNameDog(arg); break;
+    // NAME is the dog verb, but it is also a live TOPIC on a man whose whole
+    // secret is his name — and a playtester following Pete's own "(ASK PETE
+    // ABOUT THE NAME)" typed the bare word and was told he hasn't got a dog.
+    // A verb outranks a bare topic by design (see the topic-routing note), so
+    // this yields only when the verb has nothing to do: no dog, no argument,
+    // and the partner you are mid-conversation with has that very topic.
+    case "name": case "rename":
+      if (!arg && !G.dog && _convoTopicHere("name")) { _doTalkBody("", "name"); break; }
+      _doNameDog(arg); break;
     case "haggle": case "bargain":
       _say("Nobody's quoting you a price right now. Save it for the man with the " +
         "display board of watches.");
