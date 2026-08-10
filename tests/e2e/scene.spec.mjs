@@ -48,8 +48,15 @@ test("scene panel renders, tracks movement, and exit taps submit typed commands"
   page.on("pageerror", e => pageErrors.push(e.message));
   await bootIntoGame(page, INDEX_URL);
 
-  // OFF by default — the visual layer waits for its hidden verb
+  // ON by default now — the art track caught up with the rooms, so the backdrop
+  // is the game's normal face and TOGGLE_V0 is the switch that turns it OFF.
+  await expect(page.locator("#scene")).toBeVisible();
+  await page.fill("#term-in", "toggle_v0");
+  await page.press("#term-in", "Enter");
+  await expect(page.locator("#term-out")).toContainText("v0 scene panel: OFF");
   await expect(page.locator("#scene")).toBeHidden();
+  // and back on — the first toggle of a fresh browser must not be a no-op,
+  // which it would be if the flip didn't know this key's default
   await page.fill("#term-in", "toggle_v0");
   await page.press("#term-in", "Enter");
   await expect(page.locator("#term-out")).toContainText("v0 scene panel: ON");
@@ -91,7 +98,8 @@ test("scene panel renders, tracks movement, and exit taps submit typed commands"
 // is a shipping state, not a bug (see docs/art-pipeline-spec.md).
 test("scene backdrops resolve: room art, then region fallback", async ({ page }) => {
   await bootIntoGame(page, INDEX_URL);
-  // the visual layer defaults OFF (TOGGLE_V0, main.js) — throw the switch first
+  // v0 is on by default now; pin it anyway so this spec never depends on the
+  // other one's toggling having left it in a particular state
   await page.evaluate(() => { localStorage.setItem("lbb_v0_on", "1"); _updateScene(); });
 
   // Wait for the chain to SETTLE, don't decode() the first candidate. Each miss

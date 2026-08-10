@@ -30,33 +30,38 @@ test("right-click on a keyword opens the FULL wheel, not the quick menu", async 
 
   // A keyword with a single action fires instead of opening a wheel, and
   // #flyout is built lazily, so walk the npc keywords until one opens.
-  const cands = await page.evaluate(() =>
-    [...document.querySelectorAll("#term-out .kw")]
-      .filter(e => e.dataset.k === "npc" && e.getBoundingClientRect().width > 0)
-      .map(e => { const b = e.getBoundingClientRect();
-                  return { x: b.x + b.width / 2, y: b.y + b.height / 2 }; }));
-  expect(cands.length, "the room printed some tappable people").toBeGreaterThan(0);
+  //
+  // Locators, NOT raw coordinates: with the v0 scene panel on by default the
+  // transcript is pushed down the page, and a rect measured before scrolling
+  // put the click on the panel instead of the word. Playwright scrolls a
+  // locator into view for us, which is the whole reason to prefer it.
+  const kws = page.locator("#term-out .kw[data-k='npc']");
+  const n = await kws.count();
+  expect(n, "the room printed some tappable people").toBeGreaterThan(0);
 
-  let full = null;
-  for (const t of cands) {
-    await page.mouse.click(t.x, t.y, { button: "right" });
-    await page.waitForTimeout(200);
+  let full = null, usedIdx = -1;
+  for (let i = 0; i < n; i++) {
+    await kws.nth(i).click({ button: "right" });
+    await page.waitForTimeout(150);
     full = await page.evaluate(() => {
       const w = document.getElementById("flyout");
       if (!w || getComputedStyle(w).display === "none") return null;
       const b = [...w.querySelectorAll("button")].map(e => e.textContent.trim());
       return b.length ? b : null;
     });
-    if (full) break;
+    // a one-row flyout is not a wheel — some keywords carry a single action and
+    // would make the richer-than-quick comparison below meaningless
+    if (full && full.length > 1) { usedIdx = i; break; }
+    full = null;
   }
   expect(full, "right-click should open the action wheel on some NPC").not.toBeNull();
 
   // the full menu is strictly richer than the quick one — that's what makes it
   // the desktop equivalent of the hold, rather than just another way to tap
-  const quickLen = await page.evaluate(() => {
-    const el = [...document.querySelectorAll("#term-out .kw")].find(e => e.dataset.k === "npc");
-    return _npcActions ? _npcActions(el.dataset.v, false).length : null;
-  });
+  const quickLen = await page.evaluate(i => {
+    const el = [...document.querySelectorAll("#term-out .kw[data-k='npc']")][i];
+    return el && typeof _npcActions === "function" ? _npcActions(el.dataset.v, false).length : null;
+  }, usedIdx);
   if (quickLen != null) expect(full.length).toBeGreaterThan(quickLen);
 
   expect(pageErrors).toEqual([]);

@@ -24,7 +24,35 @@ function _showStartMenu() {
   if (!ov) { engineIntro(); _autosave(); _term.renderChips(); return; } // safety net
   document.getElementById("start-menu").hidden = false;
   document.getElementById("start-intro").hidden = true;
+  _applyFullGate();
   ov.hidden = false;
+}
+
+// Reflect the TOGGLE FULL pref onto the splash button. Called at boot and
+// whenever the start menu is shown, so the unlock survives a reload.
+function _applyFullGate() {
+  const btn = document.querySelector('#start-menu .start-mode[data-mode="full"]');
+  if (!btn) return;
+  let on = false;
+  try { on = localStorage.getItem("lbb_full_on") === "1"; } catch (e) {}
+  btn.disabled = !on;
+  const desc = btn.querySelector(".start-mode-desc");
+  if (desc) desc.textContent = on
+    ? "The whole coast — Jomtien to Naklua, lost wallet and all. Day two of seven."
+    : "The whole coast — Jomtien to Naklua, lost wallet and all. Coming soon.";
+}
+
+// THE FULL GAME: the seven-day vacation, opening on the beach with no wallet.
+// startSoi6Mode has its own setup; this is just the ordinary game, which is
+// what engineIntro() has always started.
+function _startFull() {
+  const ov = document.getElementById("start-overlay");
+  if (ov) ov.hidden = true;
+  newGame();
+  engineIntro();
+  _autosave();
+  _term.renderChips();
+  _audioForRoom(G.room, G.flags);
 }
 
 function _startGame(daily) { // START / TODAY'S SOI on the Soi 6 intro panel
@@ -96,13 +124,36 @@ function _dispatch(cmd) {
   const tog = v.match(/^toggle[_ ]?v([01])$/);
   if (tog) {
     const key = "lbb_v" + tog[1] + "_on";
+    // Each switch has its OWN default, so "what is it now" can't be one
+    // expression: v0 (the scene panel) is on unless explicitly "0"; v1
+    // (hotspots) is off unless explicitly "1". Flipping reads the effective
+    // state first, or the first TOGGLE_V0 of a fresh browser would "turn on"
+    // a panel that was already showing.
     let on = false;
     try {
-      on = localStorage.getItem(key) !== "1";
+      const cur = tog[1] === "0" ? localStorage.getItem(key) !== "0"
+                                 : localStorage.getItem(key) === "1";
+      on = !cur;
       localStorage.setItem(key, on ? "1" : "0");
     } catch (e) {}
     _term.print(`▦ v${tog[1]} ${tog[1] === "0" ? "scene panel" : "hotspots"}: ${on ? "ON" : "OFF"}`, "dim");
     if (typeof _updateScene === "function") _updateScene();
+    return;
+  }
+
+  // TOGGLE FULL — unlocks THE FULL GAME on the splash. The full coast is built
+  // and playable, but it is not what a new player should be handed first, so
+  // the button ships disabled and this is the key to it. Same unsurfaced
+  // treatment as the other toggles: no autocomplete, no HELP, not a cheat.
+  if (/^toggle[_ ]?full$/.test(v)) {
+    let on = false;
+    try {
+      on = localStorage.getItem("lbb_full_on") !== "1";
+      localStorage.setItem("lbb_full_on", on ? "1" : "0");
+    } catch (e) {}
+    _applyFullGate();
+    _term.print(`▦ THE FULL GAME on the start menu: ${on ? "UNLOCKED" : "locked"}` +
+      (on ? " — RESET (or finish this night) to see the menu." : ""), "dim");
     return;
   }
 
@@ -248,9 +299,13 @@ document.addEventListener("DOMContentLoaded", () => {
   // start-menu wiring: pick a mode → intro panel → START
   document.querySelectorAll("#start-menu .start-mode[data-mode]").forEach(b =>
     b.addEventListener("click", () => {
+      // the Soi 6 intro panel is Soi-6-specific ("SOI 6 · ONE WEEK"), so the
+      // full game must not be routed through it
+      if (b.dataset.mode === "full") { _startFull(); return; }
       document.getElementById("start-menu").hidden = true;
       document.getElementById("start-intro").hidden = false;
     }));
+  _applyFullGate();
   document.getElementById("start-back").addEventListener("click", () => {
     document.getElementById("start-intro").hidden = true;
     document.getElementById("start-menu").hidden = false;

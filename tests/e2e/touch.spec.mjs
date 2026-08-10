@@ -72,15 +72,19 @@ test.describe("touch device", () => {
     await page.press("#term-in", "Enter");
     await expect(page.locator("#term-out .kw[data-k='npc']").first()).toBeVisible();
 
-    const cands = await page.evaluate(() =>
-      [...document.querySelectorAll("#term-out .kw")]
-        .filter(e => e.dataset.k === "npc" && e.getBoundingClientRect().width > 0)
-        .map(e => { const b = e.getBoundingClientRect();
-                    return { x: b.x + b.width / 2, y: b.y + b.height / 2 }; }));
+    // Hover the LOCATOR, then hold — do not measure a rect and click at it.
+    // With the v0 scene panel on by default the transcript sits lower on the
+    // page, so a coordinate captured before scrolling can land on the panel
+    // instead of the word; that made this test flaky at about 1 in 4 the day
+    // v0 was switched on. locator.hover() scrolls into view and positions the
+    // mouse, and the press below is still a real 700ms hold.
+    const kws = page.locator("#term-out .kw[data-k='npc']");
+    const n = await kws.count();
+    expect(n, "the room printed some tappable people").toBeGreaterThan(0);
 
     let rows = null;
-    for (const t of cands) {
-      await page.mouse.move(t.x, t.y);
+    for (let i = 0; i < n; i++) {
+      await kws.nth(i).hover();
       await page.mouse.down();
       await page.waitForTimeout(700);          // term.js opens the wheel at 500ms
       await page.mouse.up();
