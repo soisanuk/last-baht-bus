@@ -704,8 +704,209 @@ function _doExamine(arg) {
     return;
   }
   if (_roomRead(arg) || arg.includes("sign")) return _doRead(arg);
-  _say("Nothing special about that — or it isn't here.");
+  if (_doScenery(arg)) return;
+  _say(_pickVary(_NO_SUCH_THING, "xnothing"));
 }
+
+// ── Scenery: EXAMINE as a reward, not a dead end ─────────────────────────────
+// The parser honours the Zork ledger (XYZZY, DIAGNOSE, SMELL, LISTEN) and in
+// that lineage EXAMINE is the verb that pays you for being curious. Ours paid
+// out for the 29 things in ITEMS and answered everything else — the sea, the
+// ceiling, your own hands — with one flat "Nothing special about that", which
+// is the dead end the house rule exists to prevent.
+//
+// Keyed on the noun and resolved by CONTEXT, so the same word answers
+// differently on the sand, in a bar, and on a street. Two of them are doors
+// rather than jokes: the bell and the ceiling are live mechanics that a curious
+// player has, until now, had no way to discover by poking at the room.
+function _sceneryCtx() {
+  const r = _room();
+  if (r.bar) return "bar";
+  if (/beach|promenade/i.test(r.name) && !/\b(road|rd)\b/i.test(r.name)) return "sand";
+  return "street";
+}
+
+function _doScenery(arg) {
+  const e = _SCENERY.find(s => s.m.test(arg));
+  if (!e) return false;
+  const ctx = _sceneryCtx();
+  const pool = e.lines[ctx] || e.lines.any;
+  if (!pool) return false;
+  _say(_pickVary(pool, "scn_" + e.key + "_" + ctx));
+  return true;
+}
+
+
+const _NO_SUCH_THING = [
+  "Nothing special about that — or it isn't here.",
+  "You look. The soi declines to elaborate.",
+  "Whatever that is, it isn't here, and it isn't interesting anyway.",
+  "Not here. Or not a thing. The night is unclear on the distinction.",
+];
+
+const _SCENERY = [
+  { key: "me", m: /\b(me|myself|my ?self|my body)\b/, lines: { any: [
+    "Sunburn on the tops of your feet in the shape of your sandals, a shirt that was fresh " +
+      "four hours ago, and an expression you would describe as game. (DIAGNOSE for the honest version.)",
+    "A man on holiday, doing holiday at the intensity of a job. The forearms are going brown " +
+      "and nothing else is. (DIAGNOSE if you want numbers.)",
+    "You take stock. Everything is broadly where you left it, which at this hour is a win. " +
+      "(DIAGNOSE for the unflattering detail.)",
+    "Upright, solvent-ish, and pointed in a direction. Three out of three. (DIAGNOSE.)",
+  ] } },
+
+  { key: "hands", m: /\b(hands?|fingers?)\b/, lines: { any: [
+    "Steady enough. There is a stamp on the back of one that you have no memory of receiving " +
+      "and cannot read.",
+    "Two of them, still. Somebody's biro number is fading off the left one into the creases.",
+    "Warm, slightly sticky, faintly of lime. You decide not to reconstruct the sequence of " +
+      "events that produced that.",
+  ] } },
+
+  { key: "sky", m: /\b(sky|stars?|moon|clouds?)\b/, lines: {
+    sand: [
+      "Off the sand you can actually see it — not many stars, the town sees to that, but " +
+        "enough, and a moon doing its work over a black Gulf.",
+      "Big and low and warm, with the Gulf breathing under it. Two stars are winning against " +
+        "the neon. The rest have conceded.",
+      "Clear enough to notice, which on a beach at night is the whole offer.",
+    ],
+    any: [
+      "Above the signs there is a strip of it, orange-brown, the colour a town this bright " +
+        "makes at night. No stars. Nobody here is looking up anyway.",
+      "You look up and get cabling — a black knot of it, sagging between poles, carrying " +
+        "everything anyone on this street has ever said to anyone.",
+      "Somewhere up past the signage the actual sky continues, on its own time, unwatched.",
+    ],
+  } },
+
+  { key: "sea", m: /\b(sea|ocean|gulf|waves?|surf|water)\b/, lines: {
+    sand: [
+      "Black, close, and busy. It arrives, considers the sand, and withdraws, and has been " +
+        "doing that for a very long time without needing anybody to watch.",
+      "The Gulf, doing the same thing it did last night. Warm as a bath and about as ambitious.",
+      "Out there somewhere a light is moving very slowly — a fishing boat, or a tanker, or " +
+        "somebody else's much larger evening.",
+    ],
+    bar: [
+      "From in here? Nothing. A wall, a shelf of bottles, and the sea two hundred metres " +
+        "away being comprehensively ignored by everybody in the room, including you.",
+    ],
+    street: [
+      "You can smell it and you can hear it under the traffic, and between the buildings you " +
+        "get one grey slice of it. Everybody on this road has decided that will do.",
+      "It is over there, behind the parked bikes and the signage and the general commerce. " +
+        "It has been over there all week.",
+    ],
+  } },
+
+  { key: "ground", m: /\b(ground|floor|road|pavement|street|tarmac|sand)\b/, lines: {
+    sand: [
+      "Warm on top, cool an inch down, and printed with the whole day's traffic — sandals, " +
+        "dog, somebody who was barefoot and in a hurry.",
+      "Sand, still holding the afternoon's heat, with a bottle cap and a lolly stick in it.",
+    ],
+    bar: [
+      "Swept, mopped, and losing anyway: the tacky patch by the rail is older than the " +
+        "current management.",
+      "Tile, going up at one corner, with a bar mat over the worst of it. Somebody's flip-flop " +
+        "is under the stool and its owner is still here.",
+    ],
+    street: [
+      "Concrete slabs of four different vintages, a drain grate you would not want to be " +
+        "wearing heels near, and a strip of tarmac patched in a colour that never matched.",
+      "Dry, dusty, warm through your soles. In the morning a woman will sweep this stretch " +
+        "and by evening it will look exactly like this again.",
+    ],
+  } },
+
+  { key: "crowd", m: /\b(crowd|people|punters?|tourists?|everyone|farangs?)\b/, lines: {
+    bar: [
+      "Half a dozen men at various points along the arc between arriving and being poured " +
+        "into a taxi, and the staff tracking every one of them without appearing to look.",
+      "The rail: a man telling a story he has told here before, two more being polite about " +
+        "it, and a girl who has heard it four times doing a very good job.",
+    ],
+    any: [
+      "Everybody is going somewhere with total confidence and no urgency. Some of them have " +
+        "been going there since Tuesday.",
+      "Couples, groups of lads, one family who took a wrong turn out of the hotel and are " +
+        "handling it with enormous poise.",
+      "A moving census: two-week men going brown, resident men going grey, and the women who " +
+        "have been working this street since before either category arrived.",
+    ],
+  } },
+
+  { key: "money", m: /\b(money|cash|baht|notes?|change)\b/, lines: { any: [
+    "You count it without taking it out of your pocket, which is a skill this town teaches " +
+      "in about three days. (You know the number. It's on the screen.)",
+    "Purple ones are the ones to worry about. You have some. You will have fewer.",
+    "A fold of notes gone soft at the edges from being counted in the dark.",
+  ] } },
+
+  { key: "stool", m: /\b(stools?|chairs?|seats?|rail)\b/, lines: {
+    bar: [
+      "Chrome legs, vinyl top, one leg shimmed with a folded beer mat. It is the correct " +
+        "height for this bar and no other.",
+      "Worn shiny in the middle by ten thousand identical evenings. Yours now, until it isn't.",
+      "There is a stool with your name on it in the sense that nobody else wants it either.",
+    ],
+    any: [
+      "Plastic, stackable, and out on the pavement because the pavement is where the trade is.",
+    ],
+  } },
+
+  { key: "mirror", m: /\b(mirrors?)\b/, lines: {
+    bar: [
+      "Behind the bottles, and doing the room a favour with the lighting. You look better in " +
+        "it than you have any right to, which is the entire design brief.",
+      "Smeared at hand height, spotless above it, and reflecting the back of somebody's head " +
+        "at an angle that means they can see you looking.",
+      "A strip of it behind the optics, and in it a man on holiday, holding a beer, at an " +
+        "hour when people at home are asleep. He seems fine about it.",
+    ],
+  } },
+
+  { key: "ceiling", m: /\b(ceilings?|roof|rafters?)\b/, lines: {
+    bar: [
+      "Low, and studded with the evidence: nipple covers, thrown and stuck, in a constellation " +
+        "going back years. Some have names biro'd on. (THROW COVER, if you want a star.)",
+      "Fans, fairy lights, and a scatter of pasties stuck up there by previous management of " +
+        "the evening. It is a scoreboard nobody officially keeps. (THROW COVER.)",
+      "Corrugated, painted, and decorated with things that were briefly items of clothing. " +
+        "The oldest ones are grey with dust. (THROW COVER.)",
+    ],
+    any: [
+      "Open air, cables, and whatever the building next door is doing with its guttering.",
+    ],
+  } },
+
+  { key: "bell", m: /\b(bells?)\b/, lines: {
+    bar: [
+      "Brass, mounted over the rail, rope hanging within easy reach of a man making a decision " +
+        "he will price up later. Ringing it buys the house a round and the room will let you " +
+        "know how it feels about you afterwards. (RING BELL.)",
+      "The bell. Polished where hands have taken it, and hung deliberately at the height of a " +
+        "good idea. (RING BELL.)",
+      "It hangs there being an option. That is its whole job, and it is extremely good at it. " +
+        "(RING BELL.)",
+    ],
+  } },
+
+  { key: "bikes", m: /\b(bikes?|motorbikes?|scooters?|traffic|taxis?)\b/, lines: {
+    street: [
+      "Parked three deep and angled in by a system everybody understands and nobody wrote " +
+        "down. Two are running with nobody on them.",
+      "A rank of them and a knot of drivers in numbered vests playing on their phones, none of " +
+        "whom will look up until you want something, at which point all of them will.",
+      "Baht buses going past at the speed of a man who wants to be waved at, and a scooter " +
+        "carrying a family of four and a case of water.",
+    ],
+    any: [
+      "Somewhere out front there's the usual rank. In here it's somebody else's problem.",
+    ],
+  } },
+];
 
 // ── HANDOVER ─────────────────────────────────────────────────────────────────
 // The baton: hand this character to the macro game (Second Road) and take it
