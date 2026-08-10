@@ -721,6 +721,11 @@ function _doExamine(arg) {
 // player has, until now, had no way to discover by poking at the room.
 function _sceneryCtx() {
   const r = _room();
+  // The Queen Vic is the one bar with no hostesses at all (CLAUDE.md: the pub
+  // gets no mamasan, cashier or floor girls), so the go-go furniture is a lie
+  // in it — EXAMINE CEILING promised the pasties game and THROW COVER answered
+  // "this room is short one dancer" on the very next turn. Its own context.
+  if (r.barType === "pub") return "pub";
   if (r.bar) return "bar";
   if (/beach|promenade/i.test(r.name) && !/\b(road|rd)\b/i.test(r.name)) return "sand";
   return "street";
@@ -730,7 +735,9 @@ function _doScenery(arg) {
   const e = _SCENERY.find(s => s.m.test(arg));
   if (!e) return false;
   const ctx = _sceneryCtx();
-  const pool = e.lines[ctx] || e.lines.any;
+  // a pub is still a bar for everything the two genuinely share (the stool, the
+  // mirror, the floor) — it only needs its own line where the trade differs
+  const pool = e.lines[ctx] || (ctx === "pub" && e.lines.bar) || e.lines.any;
   if (!pool) return false;
   _say(_pickVary(pool, "scn_" + e.key + "_" + ctx));
   return true;
@@ -868,6 +875,15 @@ const _SCENERY = [
   } },
 
   { key: "ceiling", m: /\b(ceilings?|roof|rafters?)\b/, lines: {
+    pub: [
+      "Dark beams, horse brasses, and a Union Jack that has been up there long enough " +
+        "to be the same colour as the beams. Nothing has ever been thrown at this ceiling " +
+        "and nothing ever will be.",
+      "Low, dark, and hung with the sort of tat an English pub accumulates whether anybody " +
+        "wants it or not: brasses, a bugle, and a framed shirt nobody can identify any more.",
+      "Beams and a slow fan, and up in the corner a dartboard scoreboard chalked with a " +
+        "game that finished some time before you were born.",
+    ],
     bar: [
       "Low, and studded with the evidence: nipple covers, thrown and stuck, in a constellation " +
         "going back years. Some have names biro'd on. (THROW COVER, if you want a star.)",

@@ -102,6 +102,19 @@ test("EXAMINE on scenery never dead-ends, and answers differently by context", (
   assert.match(x("stinky_bar", "examine bell"), /RING BELL/,
     "the bell should point at its own mechanic");
 
+  // A hint must not promise a verb the room refuses. EXAMINE CEILING in the
+  // Queen Vic offered the pasties game and THROW COVER answered "this room is
+  // short one dancer" on the very next turn — the pub is the one bar with no
+  // hostesses at all, so the go-go furniture is a lie in it (playtest).
+  const pubCeiling = x("queen_vic", "examine ceiling");
+  assert.doesNotMatch(pubCeiling, /THROW COVER|pasties|nipple/i,
+    "the pub must not advertise the ceiling game it can't run");
+  assert.match(pubCeiling, /beams|brasses|dartboard/i, "it gets its own furniture instead");
+  assert.match(x("stinky_bar", "examine ceiling"), /THROW COVER/,
+    "a bar with hostesses still offers it");
+  // a pub is still a bar for what the two genuinely share
+  assert.doesNotMatch(x("queen_vic", "examine stool"), dead, "shared furniture falls back to the bar lines");
+
   // and genuine nonsense still gets the honest refusal
   assert.match(x("beach_rd_c", "examine helicopter"), dead);
 });
