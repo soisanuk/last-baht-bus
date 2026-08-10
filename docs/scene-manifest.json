@@ -3421,6 +3421,7 @@
       "kind": "street",
       "dark": true,
       "darkLight": "warm light leaking from a far lane of cheap bars, past the bins",
+      "narrow": true,
       "people": [],
       "desc": "The maze's unlit armpit: kitchen doors, a mop graveyard, and rats with routines. Without light, every exit feels like the same wrong one. South, past the bins, a FAR LANE of cheap bars nobody photographs leaks a little warm light."
     },
@@ -3434,6 +3435,7 @@
       "kind": "street",
       "dark": true,
       "darkLight": "one big multicoloured bar sign burning at the end of the lane, the only light there is",
+      "narrow": true,
       "people": [],
       "desc": "The deepest corner of the maze, where the neon gives out entirely. One big sign burns at the end of the lane: RAINBOW GIRLS BAR, every letter a different colour."
     },
@@ -3458,6 +3460,7 @@
       "regionSlug": "tree-town",
       "kind": "street",
       "dark": false,
+      "narrow": true,
       "people": [],
       "desc": "Bars stacked shoulder to shoulder, neon bleeding into neon. GOLD RUSH LOUNGE glitters to the north. Painted Thai arrows on the wall offer guidance to those who can read them."
     },
@@ -3470,6 +3473,7 @@
       "regionSlug": "tree-town",
       "kind": "street",
       "dark": false,
+      "narrow": true,
       "people": [],
       "desc": "A junction where the lanes cross and the signage starts to feel personal — like it was designed to confuse. STARLIGHT BAR's blue sign fizzes at the north corner. Thai arrows point in three directions, contradicting each other with quiet confidence."
     },
@@ -3482,6 +3486,7 @@
       "regionSlug": "tree-town",
       "kind": "street",
       "dark": false,
+      "narrow": true,
       "people": [],
       "desc": "The cheap seats of the maze, behind the kitchens where the rent drops and the neon budget with it: three little bars under one sagging string of bulbs. THE RABBIT HOLE, LUCKY CHARM BAR, and MOONSHINE BAR trade the regulars who ran out of maze. Friendlier than it has any right to be down here."
     },
@@ -3632,6 +3637,7 @@
       "regionSlug": "walking-street",
       "kind": "street",
       "dark": false,
+      "narrow": true,
       "people": [],
       "desc": "A short soi off the main strip, and louder than the main strip, which takes doing. Two doors face each other across eight metres of wet concrete and spend the night trying to out-decibel one another: THE WINDMILL on one side, KATOEY'S R US on the other, both with their own doorman, their own flyer girl, and their own idea of what a good time looks like. Between them the soi is a corridor of noise you have to walk down sideways when it is busy. It comes out on Second Road at the far end, if you get that far."
     },
@@ -3677,6 +3683,7 @@
       "kind": "street",
       "dark": true,
       "darkLight": "spill from kitchen doors and a bare bulb over stacked kegs — a working service alley, not an empty road",
+      "narrow": true,
       "people": [
         "Mot"
       ],

@@ -114,6 +114,21 @@ const DARK_LIGHT = {
   buddha_hill:  "the whole curve of the bay glittering far below, Walking Street neon-pink at the south end",
 };
 
+// Wide thoroughfare or tight lane? `kind: "street"` covers both, and the art
+// side can only see the kind — which is why the Walking Street side-alley
+// ("kitchen steam, stacked kegs, a motorbike with no plates") rendered as a
+// forty-person neon boulevard: it got the same head as the main drag, and a
+// generic head beats a specific desc every time.
+//
+// Authored, like `darkLight`. Absent means an ordinary open street. Only
+// meaningful for outdoor kinds — a bar interior's width is the kind's business.
+const NARROW = new Set([
+  "ws_alley",                                        // service alley behind the strip
+  "tt_lane_1", "tt_lane_2", "tt_lane_3",             // Tree Town IS a pocket maze —
+  "tt_back", "tt_deep",                              // no lane in it is a boulevard
+  "soi_diamond",                                     // a short soi off the main strip
+]);
+
 const rooms = [];
 for (const id of Object.keys(ROOMS)) {
   const r = ROOMS[id];
@@ -128,6 +143,7 @@ for (const id of Object.keys(ROOMS)) {
     dark: !!r.dark,
     // only meaningful when dark: what is lit, or null for genuinely deserted
     darkLight: r.dark ? (DARK_LIGHT[id] || null) : undefined,
+    narrow: NARROW.has(id) || undefined,   // absent = an ordinary open street
     people: peopleIn(id, r),
     desc: r.desc,
   });

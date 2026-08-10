@@ -152,3 +152,20 @@ test("every authored dark-room light source names a room that is actually dark",
       `${r.id}: darkLight must describe the light well enough to prompt with, got "${r.darkLight}"`);
   assert.ok(byId.size === man.rooms.length, "duplicate room ids in the manifest");
 });
+
+// `narrow` marks a tight lane that must not be framed as a boulevard. Only
+// meaningful outdoors, and only where the room really is enclosed — a stale
+// entry would quietly squeeze a main road, which is as wrong as the bug it fixes.
+test("narrow marks outdoor rooms only, and never a bar interior", () => {
+  const man = JSON.parse(fs.readFileSync(path.join(root, "docs", "scene-manifest.json"), "utf8"));
+  const narrow = man.rooms.filter(r => r.narrow);
+  assert.ok(narrow.length > 0, "no room marked narrow — did the NARROW set lose its ids?");
+
+  const OUTDOOR = new Set(["street", "market", "beach", "viewpoint", "soi6"]);
+  const indoors = narrow.filter(r => !OUTDOOR.has(r.kind)).map(r => `${r.id} (${r.kind})`);
+  assert.deepEqual(indoors, [],
+    "narrow is an outdoor framing hint; these are interiors: " + indoors.join(", "));
+
+  const stray = man.rooms.filter(r => "narrow" in r && r.narrow !== true).map(r => r.id);
+  assert.deepEqual(stray, [], "narrow must be true or absent, never false: " + stray.join(", "));
+});
