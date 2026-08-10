@@ -68,3 +68,25 @@ test("the flashlight button toggles the torch and reflects its state", async ({ 
   }).toPass();
   await expect(light).toHaveClass(lit0 ? /^(?!.*\bon\b).*$/ : /\bon\b/);
 });
+
+test("the chip bar drops the cardinals the compass already shows — and only then", async ({ page }) => {
+  // Filtered in term.js, NOT in _chipSet(): the engine keeps offering every
+  // exit, because a served or 2D frontend that draws no compass would
+  // otherwise lose its only tap route to a cardinal. This asserts the split.
+  await bootIntoGame(page, INDEX_URL);
+  const chipCmds = () => page.evaluate(() =>
+    [...document.querySelectorAll("#chips .chip")].map(b => b.dataset.cmd));
+
+  await goTo(page, "soi6_mid");                    // outdoors: compass is up
+  await expect(page.locator("#nav-fab")).toBeVisible();
+  const street = await chipCmds();
+  expect(street.filter(c => ["n", "s", "e", "w"].includes(c)),
+    "cardinals are on the wheel, not doubled in the chips").toEqual([]);
+  // the engine still offers them — the view is what dropped them
+  const fromEngine = await page.evaluate(() => _chipSet().map(c => c.cmd));
+  expect(fromEngine).toContain("e");
+
+  await goTo(page, "hotel_room");                  // indoors: no compass
+  await expect(page.locator("#nav-fab")).toBeHidden();
+  expect(await chipCmds(), "with no wheel, the chip is the only tap route").toContain("s");
+});

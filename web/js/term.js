@@ -577,11 +577,27 @@ const _term = (() => {
   // engine's _chipSet() each turn, so the buttons match where you are. Pass a
   // custom [{cmd,label}] to override (the boot continue-prompt does). A cmd ending
   // in a space prefills and waits for an object; a bare cmd submits immediately.
+  // The four cardinals live on the street compass (the fab wheel above), so
+  // showing them as chips too spends four slots on buttons already under the
+  // player's thumb. Filtered HERE and not in _chipSet(), which is engine-side:
+  // the compass is a term.js affordance, and a served or 2D frontend that never
+  // draws one would otherwise lose its only tap route to a cardinal exit. The
+  // engine keeps offering all of them; this view drops what it already shows.
+  // (It also keeps the soak honest — it reads _chipSet directly.)
+  function _dropCompassChips(chips) {
+    let up = false;
+    try { up = typeof _navHere === "function" && !!_navHere(); } catch (e) {}
+    if (!up) return chips;
+    const CARD = { n: 1, s: 1, e: 1, w: 1 };
+    return chips.filter(c => !CARD[String(c.cmd || "").trim().toLowerCase()]);
+  }
+
   function _renderChips(custom) {
     const box = document.getElementById("chips");
     if (!box) return;
     let set = custom;
     if (!set) { try { set = typeof _chipSet === "function" ? _chipSet() : []; } catch (e) { set = []; } }
+    if (!custom) set = _dropCompassChips(set);   // the wheel already shows those
     box.innerHTML = "";
     for (const { cmd, label } of set) {
       const b = document.createElement("button");
