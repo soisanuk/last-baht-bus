@@ -105,3 +105,21 @@ test("EXAMINE on scenery never dead-ends, and answers differently by context", (
   // and genuine nonsense still gets the honest refusal
   assert.match(x("beach_rd_c", "examine helicopter"), dead);
 });
+
+// A quest's `desc` is the ACTIVE-quest instruction: its parenthesised command
+// usually only fires once the quest is accepted. Printing it at OFFER time put
+// two commands on screen and the specific-looking one was the wrong one — a
+// playtester followed "(ASK PETE ABOUT THE NAME)" verbatim, got a shutter
+// coming down, and reasonably read that as broken. ACCEPT is the only live
+// command at offer time.
+test("a quest OFFER prints no command but ACCEPT", () => {
+  const q = QUESTS.quiet_one;
+  assert.match(q.desc, /\(ASK PETE ABOUT THE NAME\)/, "fixture moved — re-point this test");
+  const pitch = _questPitch(q.desc);
+  assert.doesNotMatch(pitch, /\(/, "the offer pitch still carries a parenthesised command");
+  assert.match(pitch, /sitting on something heavy/, "the pitch kept the actual sentence");
+  assert.doesNotMatch(pitch, /\s\./, "punctuation left dangling where the hint was cut");
+
+  // and the full desc is still what an ACTIVE quest shows, hint and all
+  assert.match(q.desc, /ASK PETE/);
+});

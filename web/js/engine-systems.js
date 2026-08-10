@@ -1585,6 +1585,17 @@ function _questAvailable(qid) {
 }
 
 // Called after a giver's dialogue lands: surface any offer they have.
+// The offer-time form of a quest desc: same sentence, minus the parenthesised
+// command, because that command is for after you accept. Trailing punctuation
+// is tidied so "…hear it (ASK PETE ABOUT THE NAME)." doesn't become "…hear it ."
+function _questPitch(desc) {
+  return String(desc || "")
+    .replace(/\s*\([A-Z0-9][^)]*\)\s*/g, " ")
+    .replace(/\s+([.,;:!?])/g, "$1")
+    .replace(/\s{2,}/g, " ")
+    .trim();
+}
+
 function _questOffer(npcId) {
   // Don't pile a job offer on top of a question the giver just put to you — let
   // the player answer first (it reads as one overwhelming turn otherwise, and it's
@@ -1594,8 +1605,15 @@ function _questOffer(npcId) {
     if (q.giver !== npcId || !_questAvailable(qid)) continue;
     if (G.quests[qid] === "offered") continue; // already on the table — surface the giver's NEXT job instead
     G.quests[qid] = "offered";
+    // A quest's `desc` is the ACTIVE-quest instruction and its tappable command
+    // usually only works once you've accepted — Pete's "(ASK PETE ABOUT THE
+    // NAME)" gets you a shutter coming down until quiet_one is active. Printing
+    // it at OFFER time put two commands on screen, of which the specific-looking
+    // one was the wrong one, and a playtester did exactly what it said and got
+    // brushed off. So strip the hint here; ACCEPT is the only live command at
+    // this point, and QUESTS/HINT print the desc in full once it is.
     _say(_fmt("✦ {who} has a job for you: “{name}” — {desc}",
-      { who: NPCS[npcId].name, name: _L(q.name), desc: _L(q.desc) }), "win");
+      { who: NPCS[npcId].name, name: _L(q.name), desc: _questPitch(_L(q.desc)) }), "win");
     _say(`(ACCEPT ${qid.toUpperCase()} to take it on.)`, "dim");
     return; // one offer at a time keeps the bar chatter sane
   }
