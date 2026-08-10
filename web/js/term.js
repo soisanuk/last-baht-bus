@@ -541,6 +541,36 @@ const _term = (() => {
       try { unread = typeof _unreadCount === "function" ? _unreadCount() : 0; } catch (e) {}
       msg.classList.toggle("show", unread > 0);
     }
+    _updateNavFab();
+  }
+
+  // The street compass: N/E/S/W plus a flashlight in the middle, in the same
+  // stack slot as the bell (the bell shows inside a venue, this outside one, so
+  // they never collide). Which arrows are live comes from the engine's
+  // _navDirs() — term.js renders the wheel and must not know the map (rail 1).
+  // Dead directions are DIMMED rather than removed, so the rose keeps its shape
+  // and your thumb learns one position per direction.
+  function _updateNavFab() {
+    const nav = document.getElementById("nav-fab");
+    if (!nav) return;
+    let show = false, dirs = [], lit = false;
+    try {
+      show = typeof _navHere === "function" && !!_navHere();
+      dirs = show && typeof _navDirs === "function" ? _navDirs() : [];
+      lit = typeof G !== "undefined" && !!G && !!G.lightOn;
+    } catch (e) { show = false; }
+    nav.classList.toggle("show", show);
+    if (!show) return;
+    for (const b of nav.querySelectorAll("button[data-nav]")) {
+      const d = b.dataset.nav;
+      if (d === "light") {
+        b.classList.toggle("on", lit);
+        b.title = lit ? "Turn the flashlight off" : "Turn the flashlight on";
+        continue;
+      }
+      b.disabled = dirs.indexOf(d) < 0;
+      b.title = b.disabled ? "No way through that side" : "Go " + d.toUpperCase();
+    }
   }
 
   // Context chips (the fourth surface): rebuild the quick-command bar from the
@@ -581,6 +611,20 @@ const _term = (() => {
     if (typeof _updateScene === "function") _updateScene(); // v0 scene panel
     _renderChips(); // …and re-match the quick-command chips to the new context
     _scrollToNew(anchor); // read from the top of what just arrived, not the end
+  }
+
+  function _wireNavFab() {
+    const nav = document.getElementById("nav-fab");
+    if (!nav) return;
+    nav.addEventListener("click", e => {
+      const b = e.target.closest("button[data-nav]");
+      if (!b || b.disabled) return;
+      const d = b.dataset.nav;
+      if (!_onCmd) return;
+      const lit = typeof G !== "undefined" && G && G.lightOn;
+      _input.value = d === "light" ? (lit ? "light off" : "light on") : "go " + d;
+      submit(_onCmd);   // a tap IS a typed command (tap-echo invariant)
+    });
   }
 
   function init(onCommand) {
@@ -677,6 +721,7 @@ const _term = (() => {
     });
 
     _input.focus();
+    _wireNavFab();
     _updateFabs(); // in case we boot straight into a bar / with unread texts (restored save)
     if (typeof _updateScene === "function") _updateScene(); // v0 scene panel
     _renderChips(); // first paint of the context chips (main.js re-renders post-boot)

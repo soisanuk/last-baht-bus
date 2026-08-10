@@ -247,6 +247,36 @@ const _HOSTS = ["arm", "win"];
 // always-safe subset. Works for any character id: a patron (not in NPCS) or an
 // unroled NPC gets the plain talk/examine/photo set. Rendering (labels, command
 // strings, her/him) stays in the frontend; this returns only the SET.
+// ── The street compass ──────────────────────────────────────────────────────
+// Which of the four cardinals you can actually walk from here, and whether a
+// compass is worth showing at all. Engine-side on purpose: term.js renders the
+// wheel but must not know the map (rail 1). A bar has only `out`, so the
+// compass stays out of venues — which is also how it can share the fab slot
+// with the bell without either having to know about the other.
+const _NAV_DIRS = ["n", "e", "s", "w"];
+
+function _navDirs() {
+  const ex = (_room() && _room().exits) || {};
+  return _NAV_DIRS.filter(d => !!ex[d]);
+}
+
+// Show the compass outdoors — anywhere with a cardinal to take. Deliberately
+// NOT "every room with exits": an interior's `out` is already one tap away in
+// the scene panel and the chip bar, and a wheel with one live arrow and three
+// dead ones reads as broken.
+function _navHere() {
+  // _sheltered() is the game's existing "indoors" test (rain uses it to decide
+  // what counts as diving inside), so reuse it rather than inventing a second
+  // definition that can drift from it. It misses the hotel rooms — they are
+  // neither bar nor shop — and they are exactly the case that motivated this:
+  // hotel_room lists BOTH `out` and `s` to the same soi, so a naive test lit
+  // one arrow and greyed three, which reads as a broken compass.
+  const r = _room();
+  if (!r || (typeof _sheltered === "function" && _sheltered(G.room))) return false;
+  if (/^Your Room/.test(r.name || "")) return false;
+  return _navDirs().length > 0;
+}
+
 function _npcActions(id, full) {
   const isNpc = !!(typeof NPCS !== "undefined" && NPCS[id]);
   const role = isNpc && typeof NPC_ROLES !== "undefined" ? NPC_ROLES[id] : null;

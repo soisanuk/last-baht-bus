@@ -94,6 +94,34 @@
     100% { box-shadow: 0 0 7px 1px #ff149377, 0 0 0 0 #ff149300; }
   }
   @media (prefers-reduced-motion: reduce) { #bell-fab, #msg-fab { animation: none; } }
+  /* The street compass. Same stack slot as the bell — the bell shows inside a
+     venue and this shows outside one, so they are never both up. No pulse: the
+     bell is a prompt ("you could ring me"), this is furniture. */
+  #nav-fab {
+    display: none;
+    grid-template-columns: repeat(3, 34px);
+    grid-template-rows: repeat(3, 34px);
+    gap: 3px;
+  }
+  #nav-fab.show { display: grid; }
+  #nav-fab button {
+    border-radius: 9px;
+    border: 1px solid #ff149366;
+    background: radial-gradient(circle at 50% 38%, #2a0040, #100019);
+    color: var(--pink);
+    font: 700 .82rem/1 inherit;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    padding: 0;
+  }
+  #nav-fab button:disabled { opacity: .22; cursor: default; }
+  #nav-fab button:not(:disabled):active { background: #46006b; transform: scale(0.92); }
+  #nav-fab [data-nav="n"] { grid-area: 1 / 2; }
+  #nav-fab [data-nav="w"] { grid-area: 2 / 1; }
+  #nav-fab [data-nav="light"] { grid-area: 2 / 2; font-size: 1rem; border-color: #ff149333; }
+  #nav-fab [data-nav="light"].on { color: var(--yellow); border-color: #ffd70099; box-shadow: 0 0 9px #ffd70055; }
+  #nav-fab [data-nav="e"] { grid-area: 2 / 3; }
+  #nav-fab [data-nav="s"] { grid-area: 3 / 2; }
   header {
     padding: .55rem 1rem .45rem;
     border-bottom: 1px solid #ff149340;
@@ -748,6 +776,13 @@
   <div id="fab-stack">
     <button id="bell-fab" title="Ring the bell" aria-label="Ring the bell">🔔</button>
     <button id="msg-fab" title="Read your messages" aria-label="Read your messages">💬</button>
+    <div id="nav-fab" role="group" aria-label="Compass">
+      <button data-nav="n" aria-label="Go north">N</button>
+      <button data-nav="w" aria-label="Go west">W</button>
+      <button data-nav="light" aria-label="Toggle the flashlight">🔦</button>
+      <button data-nav="e" aria-label="Go east">E</button>
+      <button data-nav="s" aria-label="Go south">S</button>
+    </div>
   </div>
 </div>
 <a id="ad" href="https://soisanuk.github.io/" target="_blank" rel="noopener">
