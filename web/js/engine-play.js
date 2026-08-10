@@ -2616,6 +2616,91 @@ function _cinderellaCoda() {
   G.codaSeen++;
 }
 
+// ── The debrief ─────────────────────────────────────────────────────────────
+// A bad night ends in prose, and prose is deliberately not a rules explanation:
+// you black out, you wake somewhere, and the meters that did it were never on
+// screen. That is fine as fiction and useless as feedback — a player who cannot
+// see WHY has no way to play differently tomorrow.
+//
+// So a bad ending gets a short mechanical debrief: what ended the night, the
+// number behind it, and the one thing that prevents it. Register matters here.
+// This is the GAME talking, like DIAGNOSE or the Act One fail screen — never a
+// character. The house ethic is that nobody in the fiction warns you (the
+// veteran-mirror doctrine, docs); a rules panel is not the fiction.
+//
+// Deliberately NOT pooled. Prose that repeats gets variants; information that
+// repeats should read the same every time, or the player cannot tell whether
+// something changed.
+const _DEBRIEF = {
+  collapse: () => ({
+    what: G.thirst >= G.hunger ? "Thirst put you down." : "Hunger put you down.",
+    why: "Hunger and thirst climb every turn and end the night at 100. " +
+      "You hit " + Math.max(G.hunger, G.thirst) + ".",
+    next: "Water is ฿10 at any 7-Eleven and drops thirst by 45 — the cheapest " +
+      "insurance in the game. DIAGNOSE shows both meters any time.",
+  }),
+  blackout: () => ({
+    what: "You drank past the point where the night keeps going.",
+    why: "Every drink is one unit; nine ends the evening on the spot. " +
+      "You do not get a warning at eight.",
+    next: "You sober one unit per 20 turns, so pacing works. Water, food and " +
+      "time between rounds all buy you drinks later.",
+  }),
+  hurt: () => ({
+    what: "You took one knock too many and finished the night in hospital.",
+    why: "Injuries stack; the third one ends the night wherever you are.",
+    next: "Trouble comes from the same places twice — a soi dog in the dark, " +
+      "a shakedown you argue with, a bar you have been thrown out of. " +
+      "The flashlight and a polite wai are both cheaper than the third knock.",
+  }),
+  accident: () => ({
+    what: "The motorbike found the one bit of gravel it was looking for.",
+    why: "A late-hours motosai ride is the one journey in the game that can " +
+      "hurt you, and drink makes it likelier.",
+    next: "The baht bus is ฿" + BUS_FARE + " and cannot crash you — but it stops running at " +
+      "02:00. TIME tells you whether the last one has gone.",
+  }),
+  robbed: () => ({
+    what: "You went with a freelancer and woke up lighter.",
+    why: "No bar, no mamasan, no recourse — that is the whole trade-off of a " +
+      "freelancer over a barfine, and it is the price when the roll goes badly.",
+    next: "A bar girl comes with a bar behind her: if something goes wrong, " +
+      "COMPLAIN to the mamasan actually works. The Metropole safe keeps your " +
+      "valuables out of it either way.",
+  }),
+  bfscam: () => ({
+    what: "The barfine was a game, and you were the mark.",
+    why: "Agreeing to terms you have not heard is the newbie mistake the soi is " +
+      "built around — PAY or YES with no number said out loud is an open contract.",
+    next: "Settle it before money moves: SHORT TIME or LONG TIME names the deal, " +
+      "and TAO RAI asks the price. Afterwards, COMPLAIN at her bar is real recourse.",
+  }),
+  // Dawn in your OWN ROOM is not a bad night — same reason code, opposite
+  // outcome (see the `wouldRough` test below: being home exempts you). Saying
+  // "you were still on the street" to a man who went to bed would be the exact
+  // defect this file keeps catching elsewhere, so it returns nothing.
+  dawn: () => (_flag("act1Done") && G.room === _hotelRoomId()) ? null : ({
+    what: "The night ran out with you still on the street.",
+    why: "A night is " + NIGHT_TURNS + " turns and ends at 04:00 wherever you " +
+      "are. Not making it home costs you the cash in your pocket.",
+    next: "SLEEP in your own room ends the night on your terms and keeps it. " +
+      "The last baht bus goes at 02:00 (TIME says); after that it is a motosai " +
+      "at a premium or a long dark walk.",
+  }),
+};
+_DEBRIEF.bfscam2 = _DEBRIEF.bfscam;
+
+function _nightDebrief(reason) {
+  const make = _DEBRIEF[reason];
+  if (!make) return;                       // sleep, barfine — those went fine
+  const d = make();
+  if (!d) return;                          // the reason fired, but it went fine
+  _say("── WHAT HAPPENED ──", "alert");
+  _say(d.what, "alert");
+  _say(d.why, "dim");
+  _say("Next time: " + d.next, "dim");
+}
+
 function _endNight(reason) {
   // Idempotency: a mid-command multi-tick (WAIT through dawn) or a collapse on the
   // last night could re-enter here after the week's already ended — don't run the
@@ -2762,6 +2847,10 @@ function _endNight(reason) {
       break;
     }
   }
+  // The debrief goes HERE — after the ending's own prose, before the morning —
+  // so it is the first thing in a long night-end rather than the last, and the
+  // wall-anchored scroll (term.js) lands the player on it.
+  _nightDebrief(reason);
   G.day++;
   G.jaded = Math.max(0, G.jaded - 1); // a day cools the treadmill one notch
   if (G.stage !== "expat" && G.day > 7) { _endVacation(); return; }

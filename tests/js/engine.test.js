@@ -7149,3 +7149,49 @@ test("the breadcrumb prints after a command, infers movement, and explicit wins"
   _flushTrace(state().room);
   assert.equal(lastOut(), "", "silent when nothing happened");
 });
+
+// A bad night ends in prose, and prose is deliberately not a rules explanation:
+// you black out, you wake somewhere, and the meters that did it were never on
+// screen. The debrief is the game (not a character) saying what ended the night
+// and what prevents it — the one place straight advice belongs, because it is
+// mechanics rather than fiction.
+test("a bad night ends with a debrief; a good one doesn't", () => {
+  const ended = reason => {
+    newGame();
+    state().stage = "vacation"; state().flags.act1Done = true;
+    state().room = "beach_rd_c";
+    out = [];
+    _endNight(reason);
+    return out.join("\n");
+  };
+
+  for (const r of ["collapse", "blackout", "hurt", "accident", "robbed", "bfscam", "dawn"]) {
+    const said = ended(r);
+    assert.match(said, /WHAT HAPPENED/, `${r}: no debrief`);
+    assert.match(said, /Next time:/, `${r}: no prevention line`);
+  }
+  // the endings that are not failures stay quiet
+  for (const r of ["sleep", "barfine"]) {
+    assert.doesNotMatch(ended(r), /WHAT HAPPENED/, `${r}: shouldn't be debriefed`);
+  }
+
+  // dawn is the same reason code with two opposite outcomes: on the street it's
+  // a rough wake, in your own bed it's just morning. Telling a man who went to
+  // bed that he was "still on the street" is the defect class this repo keeps
+  // catching, so the at-home case returns nothing at all.
+  newGame();
+  state().stage = "vacation"; state().flags.act1Done = true;
+  state().room = _hotelRoomId();
+  out = [];
+  _endNight("dawn");
+  assert.doesNotMatch(out.join("\n"), /WHAT HAPPENED/, "dawn at home is not a bad night");
+
+  // and the numbers are real, not decoration
+  newGame();
+  state().stage = "vacation"; state().flags.act1Done = true;
+  state().room = "beach_rd_c"; state().thirst = 100; state().hunger = 40;
+  out = [];
+  _endNight("collapse");
+  assert.match(out.join("\n"), /Thirst put you down/, "names the meter that actually did it");
+  assert.match(out.join("\n"), /You hit 100/, "quotes the real value");
+});
