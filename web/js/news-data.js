@@ -4,7 +4,7 @@
 var NEWS_FEED = [
   {
     "t": "Putting the spotlight on an open secret",
-    "s": "bangkokpost.com",
+    "s": "Bangkok Post",
     "d": "09 Aug 2026"
   },
   {
@@ -13,12 +13,12 @@ var NEWS_FEED = [
     "d": "09 Aug 2026"
   },
   {
-    "t": "Pattaya pickup gets unwanted four-meter snake as passenger",
-    "s": "Pattaya Mail",
-    "d": "09 Aug 2026"
+    "t": "Mystery oil spill blankets Koh Larn’s coastline",
+    "s": "Thaiger",
+    "d": "10 Aug 2026"
   },
   {
-    "t": "Five injured after SUV collides head-on with pickup near Pattaya railway crossing",
+    "t": "Pattaya pickup gets unwanted four-meter snake as passenger",
     "s": "Pattaya Mail",
     "d": "09 Aug 2026"
   },
@@ -38,7 +38,7 @@ var NEWS_FEED = [
     "d": "08 Aug 2026"
   },
   {
-    "t": "Pattaya closes Koh Larn viewpoint road after tourist death",
+    "t": "Five injured after SUV collides head-on with pickup near Pattaya railway crossing",
     "s": "Pattaya Mail",
     "d": "09 Aug 2026"
   },
@@ -53,35 +53,35 @@ var NEWS_FEED = [
     "d": "07 Aug 2026"
   },
   {
-    "t": "Thailand school shooting toll rises to nine after 12-year-old dies, police say",
-    "s": "The Guardian",
-    "d": "09 Aug 2026"
+    "t": "Accused Thai school shooter had watched violent content online, police say",
+    "s": "CNN",
+    "d": "10 Aug 2026"
+  },
+  {
+    "t": "12-year-old girl dies after Thailand school shooting, bringing death toll to at least 8",
+    "s": "PBS",
+    "d": "08 Aug 2026"
   },
   {
     "t": "What to Know About Thailand's Deadliest School Shooting in Years",
-    "s": "time.com",
+    "s": "Time Magazine",
     "d": "07 Aug 2026"
   },
   {
     "t": "As Thailand Gets Known for Mass Shootings, Fresh Pledges to Fix Gun Laws",
     "s": "The New York Times",
     "d": "08 Aug 2026"
-  },
-  {
-    "t": "12-year-old girl dies following Thailand shooting, bringing victim death toll to at least 8",
-    "s": "CBC",
-    "d": "09 Aug 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-08-07","USD":33.06,"AUD":23.27,"GBP":44.46,"EUR":38.12};
+var FX_RATES = {"date":"10 Aug 2026","USD":33.02,"AUD":23.31,"GBP":44.52,"EUR":38.15};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-10","temp":30,"humid":74,"code":51,"hi":31,"rain":90};
+var WX_NOW = {"date":"2026-08-10","temp":30,"humid":72,"code":51,"hi":31,"rain":98};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-08-01","first":"932479","last2":"69","front3":["413","672"],"back3":["039","154"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4330,"date":"2026-08-10","baht":67700};
+var GOLD = {"usd":4357,"date":"2026-08-10","baht":68050};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":64946,"thb":2143867};
+var BTC = {"usd":65214,"thb":2150296};
