@@ -8336,6 +8336,64 @@ const ENCOUNTERS = {
       "does not quite let go.",
     hint: "(ACCEPT it · TAO RAI — ask the price and pay it · REFUSE)",
   },
+
+  // ── The districts that had nobody in them ──────────────────────────────
+  // Every encounter above fires on the central strip — Beach Road, Walking
+  // Street, Buakhao, Soi 6 — so Pratumnak, Myth Night and Tree Town had a
+  // backdrop and a bar list and no street life at all. These five give each
+  // one a crowd of its own, and none of them wants your money: the hill is
+  // residents, the market is twenty-somethings, the maze is people who took
+  // a wrong turn. Money is the wrong verb in all five, same as the tourists.
+  condofarang: {
+    // NOT pratumnak_soi5: the top of the soi is condo walls and a sleeping
+    // security guard, and this man is standing outside a bar.
+    rooms: ["pratumnak_soi5_m", "pratumnak_soi5_b"],
+    interactive: true, nightly: true,
+    intro: "A man rises off a plastic chair outside the bar with the air of somebody who has been " +
+      "waiting all evening for a face that hasn't heard it yet. Condo T-shirt, flip-flops, mid-sixties, " +
+      "three beers past needing permission. “You're up the hill, then. Staying? No — you've got the walk " +
+      "of a man who's staying two weeks.” He does not wait to find out. “Let me tell you what they've " +
+      "done to the water pressure since the new block went up.”",
+    hint: "(LISTEN · or make your excuses and WALK ON)",
+  },
+  jogger: {
+    rooms: ["pratumnak_clubs", "thappraya_ext_s", "pratumnak_soi5"],
+    interactive: true, nightly: true,
+    intro: "Somebody is running up the hill. Properly running — head torch, calf sleeves, a watch he " +
+      "keeps glancing at — past the condo walls and the parked bikes and one unmarked door, at two in " +
+      "the morning, uphill. He clocks you, raises a hand without breaking stride, and says, at the " +
+      "volume of a man with earphones in, “SEVEN PERCENT GRADE, MATE. LOVELY.”",
+    hint: "(WAVE back · JOIN him, briefly · or let him GO)",
+  },
+  influencer: {
+    rooms: ["myth_night", "myth_stage", "myth_rows"],
+    interactive: true, nightly: true,
+    intro: "A ring light on a stick swings round and paints you white. Behind it a girl in an oversized " +
+      "shirt is halfway through a piece to camera, one hand doing the little rolling gesture that means " +
+      "keep going, and her friend is holding a paper fan up to catch the light off the containers. You " +
+      "have walked directly through the shot. The friend lowers the fan. Nobody is angry; they are " +
+      "waiting to see what you do, which is worse.",
+    hint: "(SORRY, and duck out · POSE, and commit · or WALK ON)",
+  },
+  craftbeer: {
+    rooms: ["myth_night", "myth_rows"],
+    interactive: true, nightly: true,
+    intro: "“Excuse me — you are from where?” A young Thai bloke has a paddle of four small glasses and " +
+      "the expression of a man who has been waiting for a qualified opinion. “I make this one at my " +
+      "house. Mango, but not sweet mango — dry. Everybody here say it taste like medicine.” He turns the " +
+      "paddle so the dark one faces you. “I think they are wrong.”",
+    hint: "(TASTE it · or DECLINE, politely)",
+  },
+  maze: {
+    rooms: ["tt_entrance", "tt_lane_1", "tt_lane_2", "tt_lane_3"],
+    interactive: true, nightly: true,
+    intro: "A man comes round the corner at the pace of somebody who has been round it before. Sunburn, " +
+      "a lanyard from a hotel on the other side of town, one flip-flop wearing visibly faster than the " +
+      "other. “Mate. Mate. The one with the fish tank. Big fish tank, out the front.” He looks at the " +
+      "lane behind you, then the lane behind himself, and something goes out of him. “I've come past " +
+      "the same mop twice.”",
+    hint: "(HELP him look · or leave him to it and WALK ON)",
+  },
 };
 
 // ── Quests (adventures) ─────────────────────────────────────────────────────

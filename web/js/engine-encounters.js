@@ -1078,7 +1078,209 @@ const _ENC = {
   clubpickup(input) { return _clubpickup(input); },
   freegift(input) { return _freegift(input); },
   nightride(input) { return _nightRide(input); }, // the magic-mystery-tour night (engine-systems.js)
+
+  // ── The district five ──────────────────────────────────────────────────
+  // Nobody here is working. Offering money is the wrong verb and lands the
+  // same way it does with the tourists — these are residents, kids from the
+  // market, and a man who took a wrong turn. Nobody warns you about anything
+  // either: the hill's expert subject is water pressure.
+  condofarang(input) {
+    if (_encMoney(input)) {
+      _say("You reach for your wallet. He watches the hand, and the whole evening " +
+        "goes out of his face. “I've got a pension, son.” He sits back down on the " +
+        "plastic chair and turns it a few degrees away from you, which on this hill " +
+        "is a door closing.");
+      _addHappy(-1);
+      return;
+    }
+    if (/listen|nod|yes|sure|ok|stay|sit|go on|tell|hear|drink/.test(input)) {
+      _say(_pickVary(_CONDO_LISTEN, "condo"));
+      _addHappy(2);
+      return;
+    }
+    _say("You make the noise people make and keep walking. He is still talking as " +
+      "you go — not at you now, just talking, the way a tap left on is still a tap. " +
+      "Behind you the plastic chair takes his weight again.");
+  },
+
+  jogger(input) {
+    if (/join|run|jog|race|with him|chase|follow|try/.test(input)) {
+      G.thirst = Math.min(100, G.thirst + 8);
+      _say("You go with him. For eleven seconds you are an athlete, and the eleventh " +
+        "is where the beer makes its case. He slows to your pace without comment, " +
+        "which is worse than if he'd laughed, sees you to the top of the rise, and " +
+        "says “GOOD MAN” at the volume of the earphones before pulling away up the " +
+        "dark. Your heart is somewhere behind your ears.", "win");
+      _addHappy(2);
+      return;
+    }
+    if (/wave|nod|hi|hello|greet|hand|shout|back|yes|thumb/.test(input)) {
+      _say(_pickVary(_JOGGER_WAVE, "jog"));
+      _addHappy(1);
+      return;
+    }
+    _say("You let him go. The head torch swings up the hill, small and then smaller, " +
+      "past the last of the neon and into the part of the road where the streetlights " +
+      "gave up years ago. Somewhere up there, apparently, is the point.");
+  },
+
+  influencer(input) {
+    if (_encMoney(input)) {
+      _say("You offer money, on the theory that you have ruined something. The girl " +
+        "behind the light says “no no no” with real alarm and actual embarrassment, " +
+        "and her friend laughs at you both. It was a video about noodles.");
+      _addHappy(-1);
+      return;
+    }
+    if (/pose|wave|dance|smile|camera|ham|commit|yes|join|in it|peace/.test(input)) {
+      _say(_pickVary(_INFLU_POSE, "influ"));
+      _addHappy(2);
+      return;
+    }
+    if (/sorry|apolog|duck|excuse|move|out of|khor/.test(input)) {
+      _say("You duck, apologising, at the exact wrong height. Behind the light the " +
+        "girl says “no, no — good, good!” and keeps rolling, because a confused " +
+        "farang folding himself in half is better than whatever she had. Her friend " +
+        "raises the fan again. You are, without consenting to it, content.");
+      _addHappy(1);
+      return;
+    }
+    _say("You walk on out of the light. The piece to camera resumes behind you " +
+      "mid-sentence, in the tone of somebody who has had worse takes ruined by less.");
+  },
+
+  craftbeer(input) {
+    if (_encMoney(input)) {
+      _say("You go for your wallet and he physically moves the paddle out of reach. " +
+        "“No, no — not selling! I want to KNOW.” He looks genuinely wounded, which " +
+        "is a lot to have done to a man before midnight.");
+      _addHappy(-1);
+      return;
+    }
+    if (/taste|try|drink|sip|yes|sure|ok|go on|dark|mango/.test(input)) {
+      G.soc.drunk += 1;
+      _say(_pickVary(_CRAFT_TASTE, "craft"));
+      _addHappy(2);
+      return;
+    }
+    _say("You decline as kindly as it can be done. He takes it entirely well — " +
+      "“okay, okay, no problem” — and turns the paddle to the next person along the " +
+      "rail before you have finished the sentence. The dark one still faces outward.");
+  },
+
+  maze(input) {
+    if (_encMoney(input)) {
+      _say("You offer him money, which briefly makes him the least lost man in the " +
+        "lane. “I don't want your — mate, I want the FISH TANK.”");
+      _addHappy(-1);
+      return;
+    }
+    if (/help|look|find|yes|sure|come|together|follow|show|point|search/.test(input)) {
+      _say(_pickVary(_MAZE_HELP, "maze"));
+      _addHappy(2);
+      return;
+    }
+    _say("You leave him to it. He nods like a man being told something he already " +
+      "knew, squares up to the wrong lane, and goes down it anyway.");
+  },
 };
+
+// Money is the wrong verb in all five of the district encounters — the shared
+// test, so the insult reads the same whichever one you try it on.
+function _encMoney(input) {
+  return /money|baht|pay|buy|wallet|note|tip|cash|give him|give her|฿/.test(input);
+}
+
+const _CONDO_LISTEN = [
+  "You stay. It is eleven minutes on the water pressure, four on a drainage " +
+    "culvert, and a closing statement about a balcony view that was sold to him " +
+    "in 2011 and is now the side of somebody else's building. Not one word of it " +
+    "is advice. At the end he reaches into the bag under the chair and puts a " +
+    "cold beer in your hand without being asked, says “right,” and goes home.",
+  "You stay, and he is off: the block's committee, the man who parks across the " +
+    "ramp, the year the hill had two bars and a shop. He never once tells you how " +
+    "to live here. When he runs out he seems mildly surprised, pulls a cold beer " +
+    "out of the bag by his ankle, presses it on you, and walks up the soi with " +
+    "the careful straightness of a man counting kerbs.",
+  "You stay. Somewhere around the eighth minute you stop hearing the words and " +
+    "start hearing the thing underneath, which is that nobody has asked him " +
+    "anything since Tuesday. He gets to the end of the drainage. Then he takes a " +
+    "beer out of his bag, cold, and gives it to you like it settles something.",
+  "You stay, and get the full tour: the pressure, the culvert, the building that " +
+    "ate the view, and a long detour about a dog that used to sit outside the " +
+    "shop. He does not warn you about a single thing. Then he hands you a cold " +
+    "beer from the bag, tells you the walk down is steeper than it looks, and goes.",
+];
+
+const _JOGGER_WAVE = [
+  "You raise a hand back. “LOVELY EVENING FOR IT,” he bellows, up a road of " +
+    "sleeping condo blocks, and is gone round the bend still climbing.",
+  "You wave. He gives you a thumbs-up of enormous sincerity and shouts “KEEP " +
+    "GOING” at a man standing entirely still on a hill at two in the morning, " +
+    "then takes the gradient like it owes him.",
+  "You wave back. He returns it with both hands, briefly running like a man " +
+    "surrendering, shouts something about the view from the top, and pounds on up " +
+    "past the unmarked doors without once looking at them.",
+  "You lift a hand. He nods the deep, satisfied nod of somebody who has found a " +
+    "colleague, calls “SEE YOU AT THE TOP” — you will not be at the top — and " +
+    "carries the head torch away up the dark.",
+];
+
+const _INFLU_POSE = [
+  "You commit. Whatever you do with your arms, the girl behind the light shrieks " +
+    "with delight and keeps rolling; her friend fans harder for the drama. “One " +
+    "more, one more!” There is a second take. You are better in the second take.",
+  "You go for it. She swings the light to keep you in it, saying something fast " +
+    "and pleased to camera that you catch three words of, one of which is farang " +
+    "and one of which is definitely about your shirt. The friend gives you a " +
+    "solemn thumbs-up from behind the fan.",
+  "You pose. It is a terrible pose. She loves it — “yes! yes! again!” — and the " +
+    "two of them make you do it twice more, adjusting the light each time like " +
+    "this is a production, which by the third take it is.",
+  "You lean in and give it everything. She films you the way you film a monkey " +
+    "that has taken a hat, narrating happily throughout, and at the end holds the " +
+    "phone up so you can watch fourteen seconds of yourself being, unmistakably, " +
+    "a man having a nice time.",
+];
+
+const _CRAFT_TASTE = [
+  "You take the dark one. It is dry, and it does taste faintly of medicine, and " +
+    "underneath that it tastes like mango skin and something toasted. You tell " +
+    "him so. He puts the paddle down on the rail with both hands, like it has " +
+    "become heavy. “Yes. YES. The skin. Everybody say the fruit, nobody say the " +
+    "skin.” You have made his week and you did not have to lie to do it.",
+  "You take the dark one and hold it long enough to be honest about. Dry, a bit " +
+    "medicinal, and then a late sweetness that arrives after you have swallowed. " +
+    "When you say the last part he points at you with the whole paddle: “AFTER! " +
+    "It come after! My brother cannot taste it.”",
+  "You try it. It is not very good and it is extremely interesting, and you " +
+    "manage to say both. He nods through the first half without offence and lights " +
+    "up at the second. “Interesting is okay. Interesting I can fix. Next time you " +
+    "come, is better.” It is not clear he knows you are here for a week.",
+  "You drink. Somewhere behind the dryness there is a whole afternoon of somebody " +
+    "boiling fruit in a kitchen with the fan on. You say it tastes like effort. He " +
+    "thinks about that, decides he likes it, and makes you say it again for his " +
+    "friend, who does not speak English and agrees anyway.",
+];
+
+const _MAZE_HELP = [
+  "You help. Between you, you cover the same three lanes twice, disagree " +
+    "confidently about which way the arch is, and find a mop that one of you " +
+    "recognises. The bar with the fish tank does not appear. He shakes your hand " +
+    "like you found it.",
+  "You take a lane each and meet back at the same crossing, both certain the " +
+    "other went the wrong way. On the third pass a girl on a stool takes pity, " +
+    "points without getting up, and it turns out to be behind you both, and to " +
+    "have no fish tank at all. He accepts this like a man accepting a verdict.",
+  "You go with him. He talks the whole way — the hotel, the flight, the fish " +
+    "tank, which is beginning to sound less like a bar and more like something he " +
+    "dreamed — and when you finally find a tank, it is a tank of actual fish " +
+    "outside a restaurant, and neither of you says anything for a moment.",
+  "You help him look, and the maze does what it does: the lane you want is the " +
+    "one you have already been down, twice, in the dark, past the bins. You find " +
+    "it eventually. He buys nothing, thanks you twice, and goes in alone with the " +
+    "air of a man completing something.",
+];
 
 // "Nothing is free": a 'free' blessed amulet is a bun-khun contract. TAO RAI (ask
 // the price, pay a small tip) closes the account before it opens; ACCEPT signs it,
