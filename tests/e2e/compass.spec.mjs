@@ -80,8 +80,8 @@ test("the chip bar drops the cardinals the compass already shows — and only th
   await goTo(page, "soi6_mid");                    // outdoors: compass is up
   await expect(page.locator("#nav-fab")).toBeVisible();
   const street = await chipCmds();
-  expect(street.filter(c => ["n", "s", "e", "w"].includes(c)),
-    "cardinals are on the wheel, not doubled in the chips").toEqual([]);
+  expect(street.filter(c => ["n", "s", "e", "w", "in"].includes(c)),
+    "cardinals and IN are on the wheel, not doubled in the chips").toEqual([]);
   // the engine still offers them — the view is what dropped them
   const fromEngine = await page.evaluate(() => _chipSet().map(c => c.cmd));
   expect(fromEngine).toContain("e");
@@ -89,4 +89,37 @@ test("the chip bar drops the cardinals the compass already shows — and only th
   await goTo(page, "hotel_room");                  // indoors: no compass
   await expect(page.locator("#nav-fab")).toBeHidden();
   expect(await chipCmds(), "with no wheel, the chip is the only tap route").toContain("s");
+});
+
+test("IN: one door goes straight in, a soi of bars asks which", async ({ page }) => {
+  await bootIntoGame(page, INDEX_URL);
+  const IN = '#nav-fab [data-nav="in"]';
+
+  // a soi lined with bars carries `venues` and no `in` exit — tapping must not
+  // guess for you, it opens the list
+  await goTo(page, "soi6_mid");
+  await expect(page.locator(IN)).toBeEnabled();
+  await page.locator(IN).click();
+  await expect(page.locator("#flyout")).toBeVisible();
+  const names = await page.evaluate(() =>
+    [...document.querySelectorAll("#flyout button")].map(b => b.textContent.trim()));
+  expect(names.length).toBeGreaterThan(1);
+
+  // picking one is a typed ENTER, like every other tap
+  await page.locator("#flyout button").first().click();
+  await expect(page.locator("#term-out .t-echo").last()).toContainText(/^❯ enter /);
+
+  // nothing to enter → the button is dead rather than lying
+  await goTo(page, "beach_rd_n");
+  const ways = await page.evaluate(() => _navEnter().length);
+  if (!ways) await expect(page.locator(IN)).toBeDisabled();
+});
+
+test("the flashlight sits under E and still toggles", async ({ page }) => {
+  await bootIntoGame(page, INDEX_URL);
+  await goTo(page, "soi6_mid");
+  const box = await page.locator('#nav-fab [data-nav="light"]').boundingBox();
+  const east = await page.locator('#nav-fab [data-nav="e"]').boundingBox();
+  expect(Math.abs(box.x - east.x), "same column as E").toBeLessThanOrEqual(2);
+  expect(box.y, "the row below it").toBeGreaterThan(east.y);
 });

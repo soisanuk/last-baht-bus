@@ -443,6 +443,37 @@ const _term = (() => {
     _fly.style.top = y + "px";
   }
 
+  // The character wheel's DOM, opened against an arbitrary element and fed a
+  // plain [{cmd,label}] — the compass's IN needs a picker and there is no
+  // keyword to hang _openFly on. Same #flyout id, so it inherits the styling
+  // and _closeFly still closes it.
+  function _openListMenu(anchorEl, items) {
+    _closeFly();
+    if (!items || !items.length) return;
+    _fly = document.createElement("div");
+    _fly.id = "flyout";
+    for (const it of items) {
+      const b = document.createElement("button");
+      b.textContent = _L(it.label);
+      b.addEventListener("click", e => {
+        e.stopPropagation();
+        _closeFly();
+        if (!_onCmd) return;
+        _input.value = it.cmd;
+        submit(_onCmd);           // a tap IS a typed command
+      });
+      _fly.appendChild(b);
+    }
+    document.body.appendChild(_fly);
+    const r = anchorEl.getBoundingClientRect();
+    const fw = _fly.offsetWidth, fh = _fly.offsetHeight;
+    let x = Math.min(r.left, window.innerWidth - fw - 8);
+    let y = r.bottom + 6;
+    if (y + fh > window.innerHeight - 8) y = Math.max(8, r.top - fh - 6);
+    _fly.style.left = Math.max(8, x) + "px";
+    _fly.style.top = y + "px";
+  }
+
   // A long night is thousands of commands; every line is a DOM node that never
   // left the scrollback, so memory (and layout cost) grew without bound. Keep a
   // generous window of recent lines and drop the oldest — plenty of history to
@@ -568,6 +599,15 @@ const _term = (() => {
         b.title = lit ? "Turn the flashlight off" : "Turn the flashlight on";
         continue;
       }
+      if (d === "in") {
+        let ways = [];
+        try { ways = typeof _navEnter === "function" ? _navEnter() : []; } catch (e) {}
+        b.disabled = !ways.length;
+        b.title = !ways.length ? "Nothing to go into here"
+          : ways.length === 1 ? "Into " + ways[0].label
+          : "Hold for the " + ways.length + " places you can go into";
+        continue;
+      }
       b.disabled = dirs.indexOf(d) < 0;
       b.title = b.disabled ? "No way through that side" : "Go " + d.toUpperCase();
     }
@@ -577,7 +617,7 @@ const _term = (() => {
   // engine's _chipSet() each turn, so the buttons match where you are. Pass a
   // custom [{cmd,label}] to override (the boot continue-prompt does). A cmd ending
   // in a space prefills and waits for an object; a bare cmd submits immediately.
-  // The four cardinals live on the street compass (the fab wheel above), so
+  // The four cardinals AND `in` live on the street compass (the fab wheel), so
   // showing them as chips too spends four slots on buttons already under the
   // player's thumb. Filtered HERE and not in _chipSet(), which is engine-side:
   // the compass is a term.js affordance, and a served or 2D frontend that never
@@ -588,7 +628,7 @@ const _term = (() => {
     let up = false;
     try { up = typeof _navHere === "function" && !!_navHere(); } catch (e) {}
     if (!up) return chips;
-    const CARD = { n: 1, s: 1, e: 1, w: 1 };
+    const CARD = { n: 1, s: 1, e: 1, w: 1, in: 1 };
     return chips.filter(c => !CARD[String(c.cmd || "").trim().toLowerCase()]);
   }
 
@@ -632,11 +672,42 @@ const _term = (() => {
   function _wireNavFab() {
     const nav = document.getElementById("nav-fab");
     if (!nav) return;
+    // IN is the one button with two behaviours, so it needs the same press
+    // vocabulary the keywords use: tap to go, hold (or right-click) to pick.
+    let inTimer = null, inHeld = false;
+    const ways = () => { try { return typeof _navEnter === "function" ? _navEnter() : []; } catch (e) { return []; } };
+    const pick = b => { const w = ways(); if (w.length) _openListMenu(b, w); };
+
+    nav.addEventListener("pointerdown", e => {
+      const b = e.target.closest('button[data-nav="in"]');
+      if (!b || b.disabled) return;
+      inHeld = false;
+      clearTimeout(inTimer);
+      inTimer = setTimeout(() => { inHeld = true; pick(b); }, 500);
+    });
+    nav.addEventListener("pointerup", () => clearTimeout(inTimer));
+    nav.addEventListener("pointercancel", () => clearTimeout(inTimer));
+    nav.addEventListener("contextmenu", e => {
+      const b = e.target.closest('button[data-nav="in"]');
+      if (!b || b.disabled) return;
+      e.preventDefault();
+      pick(b);
+    });
+
     nav.addEventListener("click", e => {
       const b = e.target.closest("button[data-nav]");
       if (!b || b.disabled) return;
       const d = b.dataset.nav;
       if (!_onCmd) return;
+      if (d === "in") {
+        if (inHeld) { inHeld = false; return; }   // the hold already opened the list
+        const w = ways();
+        if (!w.length) return;
+        if (w.length > 1) { pick(b); return; }    // a soi of bars: ask which
+        _input.value = w[0].cmd;                  // one door: just go in
+        submit(_onCmd);
+        return;
+      }
       const lit = typeof G !== "undefined" && G && G.lightOn;
       _input.value = d === "light" ? (lit ? "light off" : "light on") : "go " + d;
       submit(_onCmd);   // a tap IS a typed command (tap-echo invariant)
@@ -733,7 +804,10 @@ const _term = (() => {
     });
     // tapping anywhere else dismisses the wheel
     document.addEventListener("click", e => {
-      if (_fly && !_fly.contains(e.target) && !e.target.closest(".kw")) _closeFly();
+      // #nav-fab opens its own picker (the compass IN button), and the click
+      // that opens it bubbles to here — without this it closed on the way up.
+      if (_fly && !_fly.contains(e.target) && !e.target.closest(".kw") &&
+          !e.target.closest("#nav-fab")) _closeFly();
     });
 
     _input.focus();

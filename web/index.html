@@ -118,7 +118,8 @@
   #nav-fab button:not(:disabled):active { background: #46006b; transform: scale(0.92); }
   #nav-fab [data-nav="n"] { grid-area: 1 / 2; }
   #nav-fab [data-nav="w"] { grid-area: 2 / 1; }
-  #nav-fab [data-nav="light"] { grid-area: 2 / 2; font-size: 1rem; border-color: #ff149333; }
+  #nav-fab [data-nav="in"] { grid-area: 2 / 2; font-size: .74rem; border-color: #ff149344; }
+  #nav-fab [data-nav="light"] { grid-area: 3 / 3; font-size: 1rem; border-color: #ff149333; }
   #nav-fab [data-nav="light"].on { color: var(--yellow); border-color: #ffd70099; box-shadow: 0 0 9px #ffd70055; }
   #nav-fab [data-nav="e"] { grid-area: 2 / 3; }
   #nav-fab [data-nav="s"] { grid-area: 3 / 2; }
@@ -779,9 +780,10 @@
     <div id="nav-fab" role="group" aria-label="Compass">
       <button data-nav="n" aria-label="Go north">N</button>
       <button data-nav="w" aria-label="Go west">W</button>
-      <button data-nav="light" aria-label="Toggle the flashlight">🔦</button>
+      <button data-nav="in" aria-label="Go inside — hold for the list">IN</button>
       <button data-nav="e" aria-label="Go east">E</button>
       <button data-nav="s" aria-label="Go south">S</button>
+      <button data-nav="light" aria-label="Toggle the flashlight">🔦</button>
     </div>
   </div>
 </div>

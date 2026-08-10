@@ -260,6 +260,28 @@ function _navDirs() {
   return _NAV_DIRS.filter(d => !!ex[d]);
 }
 
+// What you can step INTO from here, as ready-made commands. Two shapes exist in
+// the world data and the player shouldn't have to know which is which: a room
+// with one door carries `in: <room>`, a soi lined with bars carries `venues: []`
+// and no `in` at all. Both come back as {cmd,label} so the compass's middle
+// button can offer either without term.js reading the map (rail 1).
+function _navEnter() {
+  const r = _room();
+  if (!r) return [];
+  const out = [];
+  if (r.exits && r.exits.in) {
+    const nm = (typeof _barName === "function" && _barName(r.exits.in)) ||
+      (ROOMS[r.exits.in] && ROOMS[r.exits.in].name) || "inside";
+    out.push({ cmd: "in", label: nm });
+  }
+  for (const id of r.venues || []) {
+    const nm = (typeof _barName === "function" && _barName(id)) ||
+      (ROOMS[id] && ROOMS[id].name) || null;
+    if (nm) out.push({ cmd: "enter " + nm.toLowerCase(), label: nm.replace(/\s*\(.*\)$/, "") });
+  }
+  return out;
+}
+
 // Show the compass outdoors — anywhere with a cardinal to take. Deliberately
 // NOT "every room with exits": an interior's `out` is already one tap away in
 // the scene panel and the chip bar, and a wheel with one live arrow and three
