@@ -8,7 +8,12 @@ var NEWS_FEED = [
     "d": "09 Aug 2026"
   },
   {
-    "t": "Too old to retire, too broke to stop Pattaya’s night workers",
+    "t": "Pattaya suspends six staff over alleged tourist money demand",
+    "s": "Khaosod English",
+    "d": "10 Aug 2026"
+  },
+  {
+    "t": "Pattaya pickup gets unwanted four-meter snake as passenger",
     "s": "Pattaya Mail",
     "d": "09 Aug 2026"
   },
@@ -18,27 +23,22 @@ var NEWS_FEED = [
     "d": "10 Aug 2026"
   },
   {
-    "t": "Pattaya pickup gets unwanted four-meter snake as passenger",
-    "s": "Pattaya Mail",
-    "d": "09 Aug 2026"
-  },
-  {
-    "t": "Indonesia challenges Thailand for Toyota’s regional production hub",
-    "s": "Pattaya Mail",
-    "d": "09 Aug 2026"
-  },
-  {
-    "t": "Pattaya’s nightlife becomes a global race for customers and workers",
-    "s": "Pattaya Mail",
-    "d": "09 Aug 2026"
-  },
-  {
-    "t": "Thai egg prices rise 20 satang, farm-gate rate reaches 4 baht",
-    "s": "Pattaya Mail",
-    "d": "08 Aug 2026"
-  },
-  {
     "t": "Five injured after SUV collides head-on with pickup near Pattaya railway crossing",
+    "s": "Pattaya Mail",
+    "d": "09 Aug 2026"
+  },
+  {
+    "t": "Driver feels heat on skin, jumps clear before crashed EV bursts into flames",
+    "s": "Pattaya Mail",
+    "d": "09 Aug 2026"
+  },
+  {
+    "t": "Pattaya closes Koh Larn viewpoint road after tourist death",
+    "s": "Pattaya Mail",
+    "d": "09 Aug 2026"
+  },
+  {
+    "t": "Too old to retire, too broke to stop Pattaya’s night workers",
     "s": "Pattaya Mail",
     "d": "09 Aug 2026"
   },
@@ -48,40 +48,40 @@ var NEWS_FEED = [
     "d": "07 Aug 2026"
   },
   {
-    "t": "Live updates: Teen gunman dead after killing teachers in Thailand’s worst school shooting in years",
-    "s": "CNN",
-    "d": "07 Aug 2026"
-  },
-  {
-    "t": "Accused Thai school shooter had watched violent content online, police say",
-    "s": "CNN",
+    "t": "Gunman kills Thai local official at work as country reels from school shooting",
+    "s": "NBC News",
     "d": "10 Aug 2026"
   },
   {
-    "t": "12-year-old girl dies after Thailand school shooting, bringing death toll to at least 8",
-    "s": "PBS",
-    "d": "08 Aug 2026"
-  },
-  {
-    "t": "What to Know About Thailand's Deadliest School Shooting in Years",
-    "s": "Time Magazine",
+    "t": "Video shows alleged teen school shooter in Thailand",
+    "s": "CNN",
     "d": "07 Aug 2026"
   },
   {
-    "t": "As Thailand Gets Known for Mass Shootings, Fresh Pledges to Fix Gun Laws",
-    "s": "The New York Times",
-    "d": "08 Aug 2026"
+    "t": "Former MP opens fire in Thailand’s second shooting within days",
+    "s": "Al Jazeera",
+    "d": "10 Aug 2026"
+  },
+  {
+    "t": "A former Thai lawmaker arrested after a shooting at a government office kills 1",
+    "s": "AP News",
+    "d": "10 Aug 2026"
+  },
+  {
+    "t": "Thailand rocked by second shooting tragedy in three days",
+    "s": "ABC News & Headlines – Australian Broadcasting Corporation",
+    "d": "10 Aug 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"10 Aug 2026","USD":33.02,"AUD":23.31,"GBP":44.52,"EUR":38.15};
+var FX_RATES = {"date":"2026-08-07","USD":33.06,"AUD":23.27,"GBP":44.46,"EUR":38.12};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-10","temp":30,"humid":72,"code":51,"hi":31,"rain":98};
+var WX_NOW = {"date":"2026-08-10","temp":28,"humid":80,"code":3,"hi":30,"rain":98};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-08-01","first":"932479","last2":"69","front3":["413","672"],"back3":["039","154"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4357,"date":"2026-08-10","baht":68050};
+var GOLD = {"usd":4337,"date":"2026-08-10","baht":67800};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":65214,"thb":2150296};
+var BTC = {"usd":64602,"thb":2135386};
