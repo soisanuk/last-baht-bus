@@ -474,6 +474,26 @@ const _term = (() => {
     div.textContent = "❯ " + cmd;
     _out.appendChild(div);
     _trimScroll();
+    return div;   // submit() anchors the scroll to it — see _scrollToNew
+  }
+
+  // Where to leave the view after a command. Pinning to the BOTTOM is right for
+  // a one-line reply and wrong for a wall: a night ending prints the barfine,
+  // the wake-up, the rent, the hangover and the new room description at once,
+  // and jumping to the end scrolls the line you were reading off the top of the
+  // screen. The IF convention is the opposite — put the START of the new text
+  // at the top and read down.
+  //
+  // One expression does both, because the clamp IS the short-output case: a
+  // reply that doesn't fill the viewport can't be scrolled that far, so it
+  // settles at the bottom exactly as before, with the previous exchange still
+  // in view above it.
+  function _scrollToNew(anchor) {
+    if (!_out) return;
+    const bottom = _out.scrollHeight - _out.clientHeight;
+    if (!anchor || !anchor.isConnected) { _out.scrollTop = bottom; return; } // trimmed away
+    const delta = anchor.getBoundingClientRect().top - _out.getBoundingClientRect().top;
+    _out.scrollTop = Math.min(_out.scrollTop + delta, bottom);
   }
 
   function _candidates(base) {
@@ -549,7 +569,7 @@ const _term = (() => {
   function submit(onCommand) {
     const cmd = _input.value.trim();
     if (!cmd) return;
-    echo(cmd);
+    const anchor = echo(cmd);
     _history.push(cmd);
     _histIdx = _history.length;
     _input.value = "";
@@ -560,7 +580,7 @@ const _term = (() => {
     _updateFabs(); // the room/inbox may have changed — show/hide the bell & message glyphs
     if (typeof _updateScene === "function") _updateScene(); // v0 scene panel
     _renderChips(); // …and re-match the quick-command chips to the new context
-    _out.scrollTop = _out.scrollHeight;
+    _scrollToNew(anchor); // read from the top of what just arrived, not the end
   }
 
   function init(onCommand) {
