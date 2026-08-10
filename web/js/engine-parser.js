@@ -3264,6 +3264,8 @@ const _HELP = `Common commands:
   SCORE (happiness & progress) · UNDO · RESTART   (the night autosaves itself)
   BUY PIWIN A BEER · ASK PIWIN ABOUT <person>   (the men at the stands see everything)
   HANDOVER (send this character to the macro game, at dawn) · RESUME (take one back)
+  Highlighted words are tappable: tap for the quick menu, RIGHT-CLICK (or press and hold)
+    for the full one — a person's ask-topics, and the actions a single tap shouldn't fire
   QUIT / END / LOGOUT (sign off; your night is saved) · RESET (wipe the save — asks first)`;
 
 // Soi 6 Challenge is a confined mode — one street, one week, no baht bus off it.
@@ -3301,6 +3303,8 @@ const _HELP_SOI6 = `Common commands:
   SCORE (happiness & progress) · SHARE (your week card — one emoji a night, copy & compare)
   UNDO · RESTART   (the night autosaves itself)
   PLAY AGAIN (once the week's up — another seven days on the soi)
+  Highlighted words are tappable: tap for the quick menu, RIGHT-CLICK (or press and hold)
+    for the full one — a person's ask-topics, and the actions a single tap shouldn't fire
   QUIT / END / LOGOUT (sign off; your night is saved) · RESET (wipe the save — asks first)`;
 
 // ── Autocomplete ─────────────────────────────────────────────────────────────

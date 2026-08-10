@@ -169,7 +169,14 @@ const DE_CEILINGS = [
   // Act One walk can wander past them — but the CRITICAL path does not: the
   // wallet route goes up Second Road and cuts through Soi Diana, well north of
   // the mall. So backlog, same call as the Soi 5 venues.
-  { mode: "act1", seeds: [1, 2, 3, 4, 5], nights: 3, ceiling: 104 },  // de batch 7: the first act1 drop from actual
+  { mode: "act1", seeds: [1, 2, 3, 4, 5], nights: 3, ceiling: 105 },  // de batch 7: the first act1 drop from actual
+  // +1 (act1 104→105, expat 455→456): the HELP screen gained a line telling
+  // desktop players that RIGHT-CLICK opens the full wheel. The SOI6 help is
+  // translated and absorbed it; the FULL help has never had a de entry at all,
+  // so it leaks wholesale and is one line longer now. Pre-existing gap, on the
+  // ranked backlog in docs/i18n-de-gaps.md — not worth 30 lines of unreviewed
+  // German shipped as a side effect of a UI fix.
+
   // TRANSLATION rather than a map change — 115 → 104  // FELL 28 on the southern beach spur: it is a
   // three-room dead end with no road access, so an Act One walk that wanders
   // down it spends those turns on new prose instead of re-treading town
@@ -188,7 +195,7 @@ const DE_CEILINGS = [
   // stops being one. 421 → 428 for the three new south-end rooms.
   // 419 → 451, a big move for one room: splitting second_rd_c's two jobs gives
   // the walk another node to fan out from in the middle of Second Road.
-  { mode: "expat", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 455 },
+  { mode: "expat", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 456 },
 ];
 
 for (const { mode, seeds, nights, ceiling } of DE_CEILINGS) {
