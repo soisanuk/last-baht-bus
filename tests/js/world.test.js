@@ -349,3 +349,29 @@ test("every NPC and patron resolves a pronoun, and it matches their own desc", (
   assert.deepEqual(disagree, [],
     "a pronoun contradicts the character's own description:\n  " + disagree.join("\n  "));
 });
+
+// A venue that CALLS itself a massage shop must be one mechanically. Half Moon
+// and Hillside on Pratumnak shipped with the name, the bar entry and the prose
+// but no `massage` flag, so MASSAGE in either answered "No massage bench here"
+// while standing under the sign. The art pipeline found it — they typed as
+// `street` and were about to be rendered as roads — which is the wrong place
+// for it to surface, and the tempting fix (a name heuristic in the manifest
+// generator) would have made the art right and left the shop broken, quietly,
+// forever. So the check belongs here, against the world.
+test("a room named for massage carries the flag that makes MASSAGE work", () => {
+  const missing = [];
+  for (const [id, r] of Object.entries(ROOMS)) {
+    if (!r.bar || !/\bmassage\b/i.test(r.bar)) continue;   // street rows aren't shops
+    if (r.massage || r.soapy) continue;
+    missing.push(`${id} ("${r.bar}")`);
+  }
+  assert.deepEqual(missing, [],
+    "these rooms advertise massage but have neither `massage: \"legit\"|\"oil\"` nor " +
+    "`soapy: true`, so the verb refuses inside the shop:\n  " + missing.join("\n  "));
+
+  // and the flag's value has to be one the handler branches on
+  const bad = Object.entries(ROOMS)
+    .filter(([, r]) => r.massage && !["legit", "oil"].includes(r.massage))
+    .map(([id, r]) => `${id}: massage=${JSON.stringify(r.massage)}`);
+  assert.deepEqual(bad, [], "unknown massage kind (_doMassage handles legit and oil):\n  " + bad.join("\n  "));
+});

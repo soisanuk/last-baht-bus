@@ -1,13 +1,13 @@
 {
-  "generated": "2026-08-09",
+  "generated": "2026-08-10",
   "note": "Every room in the game + its region, for the scene-art pipeline (docs/art-pipeline-spec.md). Derived from web/js/world.js — regenerate with scripts/gen-scene-manifest.mjs, do not hand-edit. `kind` is a generator heuristic for prompt-template selection, not game canon. `regionSlug` is produced by the same regex as web/js/scene.js `_sceneArt()`; art files are web/art/rooms/<id>.png with web/art/regions/<slug>.png as the fallback.",
   "counts": {
     "rooms": 234,
     "regions": 15,
     "byKind": {
       "beach": 15,
-      "street": 94,
-      "massage": 17,
+      "street": 92,
+      "massage": 19,
       "beer": 57,
       "shop": 2,
       "interior": 3,
@@ -1903,7 +1903,7 @@
       "barType": null,
       "region": "Pratumnak",
       "regionSlug": "pratumnak",
-      "kind": "street",
+      "kind": "massage",
       "dark": false,
       "people": [],
       "desc": "A clean two-room shop with a laminated list on the wall — foot, Thai, oil, aloe for the sunburned — and the sharp green smell of balm. The ladies are middle-aged and mean it; the sticker on the mirror is the small one. Half the hill's condo residents come here weekly and are on first-name terms with a specific pair of hands."
@@ -1915,7 +1915,7 @@
       "barType": null,
       "region": "Pratumnak",
       "regionSlug": "pratumnak",
-      "kind": "street",
+      "kind": "massage",
       "dark": false,
       "people": [],
       "desc": "The last shopfront before the corner, and the more relaxed of the hill's two: plastic chairs out front, a television on low, and whoever is not working asleep in one of the recliners. Foot massage on the pavement while you watch the road go by is the house speciality, and at this end of the soi the road going by is two scooters and a dog."

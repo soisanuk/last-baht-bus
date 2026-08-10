@@ -742,6 +742,7 @@ const ROOMS = {
   half_moon_massage: {
     name: "Half Moon Massage",
     bar: "Half Moon Massage",
+    massage: "legit",
     region: "Pratumnak",
     desc: "A clean two-room shop with a laminated list on the wall — foot, Thai, oil, aloe " +
       "for the sunburned — and the sharp green smell of balm. The ladies are middle-aged " +
@@ -758,6 +759,7 @@ const ROOMS = {
   hillside_massage: {
     name: "Hillside Massage",
     bar: "Hillside Massage",
+    massage: "legit",
     region: "Pratumnak",
     desc: "The last shopfront before the corner, and the more relaxed of the hill's two: " +
       "plastic chairs out front, a television on low, and whoever is not working asleep in " +
@@ -2190,7 +2192,7 @@ const ROOMS = {
     name: "Klang Corner Massage",
     bar: "Klang Corner Massage",
     region: "Soi Buakhao",
-    massage: "thai",
+    massage: "legit",
     desc: "A narrow shopfront wedged between a laundry and a shuttered {{phone}} repair " +
       "stall, close enough to the junction that the traffic noise comes through the " +
       "wall. Four mats, a fan on a stand, and a lady who has been doing this for " +
@@ -2201,7 +2203,7 @@ const ROOMS = {
     name: "Plaza Thai Massage",
     bar: "Plaza Thai Massage",
     region: "Soi Buakhao",
-    massage: "thai",
+    massage: "legit",
     desc: "Right on the corner of the plaza, doors open to the soi so the whole " +
       "street can watch a row of farang being folded in half. Nobody minds. There " +
       "is a hand-lettered price list, a stack of loose cotton trousers, and a kettle " +
