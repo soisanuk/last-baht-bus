@@ -3117,54 +3117,47 @@ test("every origin quest completes on ASK and pays its reward via _questTick", (
     run(`ask ${q.giver} about ${q.topic}`);
     assert.ok(_flag(q.done), `${q.qid}: the ASK set ${q.done}`);
     assert.equal(state().quests[q.qid], "done", `${q.qid}: _questTick closed it same-turn`);
-    assert.match(lastOut(), /QUEST COMPLETE/, `${q.qid}: the completion banner printed`);
+    // NO banner: these are vignettes, and the ✦ QUEST COMPLETE chrome is what
+    // made a two-turn scene read as a task the player had somehow finished
+    // without understanding it (playtest, 2026-08-11).
+    assert.doesNotMatch(lastOut(), /QUEST COMPLETE/, `${q.qid}: a vignette shouldn't print the quest banner`);
     const reward = QUESTS[q.qid].reward.money || 0;
     assert.equal(state().money, money0 + reward, `${q.qid}: paid its ฿${reward} reward`);
   }
 });
 
-test("a giver's job offer waits for you to answer their question, not the same turn", () => {
-  // Doyle greets, asks 'girls, money, or getting-away?', AND used to dump the job
-  // in the same turn — overwhelming, and unclear which to respond to. The offer now
-  // holds until the question is resolved.
-  state().stage = "vacation"; state().flags.act1Done = true;
-  state().player.origin = "pension"; // not PI, so Doyle is active
-  state().room = "queen_vic";
-  _npcState("doyle").trust = 1;
-  out = []; run("talk doyle");
-  assert.ok(state().convoQ && state().convoQ.id === "doyle", "he's put a question to you");
-  assert.doesNotMatch(lastOut(), /has a job for you/i, "no job offer while the question hangs");
-  assert.notEqual(state().quests.orchid_recon, "offered", "and the quest isn't marked offered yet");
-  // answer him, then the next talk surfaces the job
-  run("the getting-away");
-  out = []; run("talk doyle");
-  assert.match(lastOut(), /has a job for you|ACCEPT ORCHID_RECON/i, "now the job comes");
-  assert.equal(state().quests.orchid_recon, "offered");
-});
-
-test("an origin quest is offered on TALK once trust is earned, and ACCEPT activates it", () => {
-  // Roy's is the cleanest: trust 1, no deps, no preconditions.
+test("an origin scene never offers itself as a job — it opens silently on TALK", () => {
+  // Was: "a giver's job offer waits for you to answer their question" and "an
+  // origin quest is offered on TALK once trust is earned, and ACCEPT activates
+  // it". Both encoded the chrome we've just removed. The origin seven are
+  // VIGNETTES now: the man whose life you didn't pick, telling you the thing he
+  // tells nobody. No ✦ offer, no ACCEPT, no journal row — the giver just starts
+  // talking to you properly once he knows you a little.
   state().stage = "vacation"; state().flags.act1Done = true;
   state().player.origin = "pi"; // not pension, so Roy is active
   state().room = _npcRoom("roy");
 
-  // a near-stranger gets no personal job — the gate lives at the availability layer
+  // a near-stranger still gets nothing: the trust gate is the return visit
   _npcState("roy").trust = 0;
-  assert.equal(_questAvailable("old_days"), false, "a cold giver's job isn't available");
-  out = []; run("accept old_days");
-  assert.notEqual(state().quests.old_days, "active", "and you can't shortcut it with a bare ACCEPT");
-
-  // earn his trust and the job surfaces on the next talk
-  _npcState("roy").trust = 1;
-  assert.ok(_questAvailable("old_days"), "known enough now, it's on the table");
-  out = []; run("talk roy");   // his greeting first puts a getting-to-know-you question to you
-  state().convoQ = null;       // (answering it is covered elsewhere) — resolved, so the job can land
+  assert.equal(_questAvailable("old_days"), false, "a cold giver opens nothing");
   out = []; run("talk roy");
-  assert.match(lastOut(), /has a job for you|ACCEPT OLD_DAYS/i, "now he offers it");
-  assert.equal(state().quests.old_days, "offered");
-  out = []; run("accept old days");
-  assert.equal(state().quests.old_days, "active", "ACCEPT takes it on");
-  assert.match(lastOut(), /Quest accepted/i);
+  assert.doesNotMatch(lastOut(), /has a job for you|ACCEPT/i, "and no chrome on a first meeting");
+  assert.ok(!state().quests.old_days, "nothing on the books yet");
+
+  // trust is earned by coming back — every origin scene now needs a second
+  // conversation at least (trust: 2 across all seven)
+  assert.equal(QUESTS.old_days.trust, 2, "an origin scene takes more than one hello");
+  _npcState("roy").trust = 2;
+  assert.ok(_questAvailable("old_days"), "known enough now");
+  out = []; run("talk roy");
+  state().convoQ = null;       // his getting-to-know-you question, answered elsewhere
+  out = []; run("talk roy");
+  assert.doesNotMatch(lastOut(), /has a job for you|ACCEPT OLD_DAYS/i, "still never announced as a job");
+  assert.equal(state().quests.old_days, "active", "it just quietly opened");
+
+  // and it stays out of the player's job list and out of HINT
+  out = []; run("quests");
+  assert.doesNotMatch(out.join("\n"), /old days/i, "a vignette is not an adventure on the books");
 });
 
 test("_introMatch resolves a taxi-intro answer by number, exact id/label, and substring", () => {

@@ -8503,9 +8503,10 @@ const QUESTS = {
   // Orchid (G.visited.orchid_room, gated by the report node's `when`). The reveal
   // is the syndicate seed; the reward's small — the real payoff is the thread.
   orchid_recon: {
+    vignette: true,   // an origin scene, not a job — no offer, no ACCEPT, no journal row
     name: "The President's Table",
     giver: "doyle",
-    trust: 1, // he reads you first — a sightline test — before handing over a job
+    trust: 2, // he reads you first — a sightline test — before handing over a job
     desc: "Get eyes on the Orchid Room's good table — the back room off the Pink Lotus — and see who " +
       "really holds it, then tell Doyle (ASK DOYLE ABOUT THE TABLE).",
     deps: [],
@@ -8518,9 +8519,10 @@ const QUESTS = {
   // Gavin's pitch or been inside the Orchid — the warn node's `when`). Reward is
   // pure สนุก: you saved a man's life savings and got a Sang Som for it.
   nominee_deal: {
+    vignette: true,   // an origin scene, not a job — no offer, no ACCEPT, no journal row
     name: "The Silent Partner",
     giver: "wayne",
-    trust: 1,
+    trust: 2,
     desc: "Wayne's about to sign as the farang face of a bar he'll never really own. Once you've seen how " +
       "White Dish works, set him straight (ASK WAYNE ABOUT THE PARTNER).",
     deps: [],
@@ -8532,9 +8534,10 @@ const QUESTS = {
   // quiet man at the good table a generation ago. Pure dialogue; sitting still is
   // the whole mechanic.
   old_days: {
+    vignette: true,   // an origin scene, not a job — no offer, no ACCEPT, no journal row
     name: "The Old Days",
     giver: "roy",
-    trust: 1,
+    trust: 2,
     desc: "Buy Roy's time and let the old soi come back to him — the bars before the brands, and the " +
       "ghosts still propping the place up (ASK ROY ABOUT THE OLD DAYS).",
     deps: [],
@@ -8545,9 +8548,10 @@ const QUESTS = {
   // Origin quest (the redundancy): honest counsel to a good man burning his payout
   // too fast. No money reward — the point is that you were straight with him.
   easy_come: {
+    vignette: true,   // an origin scene, not a job — no offer, no ACCEPT, no journal row
     name: "Easy Come",
     giver: "macca",
-    trust: 1,
+    trust: 2,
     desc: "Macca's redundancy is going out faster than he'll admit. Give him the honest maths (ASK MACCA " +
       "ABOUT THE PAYOUT).",
     deps: [],
@@ -8558,6 +8562,7 @@ const QUESTS = {
   // Origin quest (the running): earn enough trust that Pete says the thing eating
   // him — the driver who knew his real name — and keep it quiet for him.
   quiet_one: {
+    vignette: true,   // an origin scene, not a job — no offer, no ACCEPT, no journal row
     name: "A Quiet One",
     giver: "pete",
     trust: 2, // he gives nothing to a near-stranger; this one you earn
@@ -8570,6 +8575,7 @@ const QUESTS = {
   // Origin quest (the returner): carry a careful family word into a room Rob can't
   // be seen in — the Orchid MC thread.
   her_brother: {
+    vignette: true,   // an origin scene, not a job — no offer, no ACCEPT, no journal row
     name: "Her Brother",
     giver: "rob",
     trust: 2,
@@ -8584,9 +8590,10 @@ const QUESTS = {
   // photo of the quiet man. Completes once you know why that matters (been in the
   // Orchid or done Doyle's recon).
   wrong_shot: {
+    vignette: true,   // an origin scene, not a job — no offer, no ACCEPT, no journal row
     name: "The Wrong Photo",
     giver: "barry",
-    trust: 1,
+    trust: 2,
     desc: "Somewhere in Barry's eleven years of trophy snaps is one he shouldn't have. Get a proper look " +
       "once you know what you're looking at (ASK BARRY ABOUT THE PHOTO).",
     deps: [],

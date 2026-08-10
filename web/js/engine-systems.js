@@ -1520,7 +1520,10 @@ function _doHint() {
   if (_flag("act1Done")) {
     // Sandbox: reuse the "next actionable step" idea for the quest journal —
     // point at one active quest (with where to go), else nudge an offer.
-    const active = Object.keys(QUESTS).filter(q => G.quests[q] === "active");
+    // vignettes are excluded here too — HINT points at the next JOB, and an
+    // origin scene is not one (it would also outrank real work forever,
+    // since it stays "active" until you happen to ask the right topic).
+    const active = Object.keys(QUESTS).filter(q => G.quests[q] === "active" && !QUESTS[q].vignette);
     if (active.length) {
       const q = QUESTS[active[0]];
       _say(_fmt("On the books: {name} — {desc}{where}",
@@ -1603,6 +1606,14 @@ function _questOffer(npcId) {
   if (G.convoQ) return;
   for (const [qid, q] of Object.entries(QUESTS)) {
     if (q.giver !== npcId || !_questAvailable(qid)) continue;
+    // A VIGNETTE is not a job. The seven origin scenes — the man whose life you
+    // didn't pick, telling you the thing he tells nobody — were wearing the full
+    // quest chrome: a ✦ job offer, an ACCEPT, a journal row and a QUEST
+    // COMPLETE, for what is two turns of talk. A playtester finished one and
+    // said "I'm not even sure what that was about", which is what happens when
+    // the frame promises a task and the content delivers a scene. So they open
+    // silently the first time you get the giver talking, and end as a beat.
+    if (q.vignette) { if (!G.quests[qid]) G.quests[qid] = "active"; continue; }
     if (G.quests[qid] === "offered") continue; // already on the table — surface the giver's NEXT job instead
     G.quests[qid] = "offered";
     // A quest's `desc` is the ACTIVE-quest instruction and its tappable command
@@ -1675,7 +1686,7 @@ function _doQuests() {
     _say(`✓ The Last Baht Bus — Act One, scored ${G.score}`, "dim");
     shown++;
   }
-  const rows = Object.entries(QUESTS).filter(([qid]) => G.quests[qid]);
+  const rows = Object.entries(QUESTS).filter(([qid, q]) => G.quests[qid] && !q.vignette);
   for (const [qid, q] of rows) {
     const st = G.quests[qid];
     if (st === "active") { _say(_fmt("▶ {name} — {desc}{where}",
@@ -1696,7 +1707,7 @@ function _questTick() {
   for (const [qid, q] of Object.entries(QUESTS)) {
     if (G.quests[qid] !== "active" || !_flag(q.doneFlag)) continue;
     G.quests[qid] = "done";
-    _say(`✦ QUEST COMPLETE: ${q.name}`, "win");
+    if (!q.vignette) _say(`✦ QUEST COMPLETE: ${q.name}`, "win");
     if (q.reward.money) {
       G.money += q.reward.money;
       _say(`(+฿${q.reward.money} — ฿${G.money} in pocket.)`, "dim");

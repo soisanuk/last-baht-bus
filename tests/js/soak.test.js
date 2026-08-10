@@ -85,7 +85,11 @@ const DE_CEILINGS = [
   // 149 → 111 → 94. The last drop was a BUG FIX, not translation: a motosai
   // could ride out of the fenced pocket, so the walk was reaching town prose it
   // should never have seen. Fixing the fence took 17 lines off this number.
-  { mode: "soi6", seeds: [1, 2, 3], nights: 2, ceiling: 94 },
+  { mode: "soi6", seeds: [1, 2, 3], nights: 2, ceiling: 107 },
+  // 94 → 107: the origin seven became vignettes, so the soi6 walk now REACHES
+  // their scenes instead of stopping at an ACCEPT it never types. More English
+  // seen, none added — the leak was always there, behind a gate the soak couldn't open.
+
   // vacation runs longer (4 nights × 5 seeds) because Act One occupies the first
   // two and the sandbox prose only starts after it. Verified stable across five
   // consecutive runs; ~240ms.
