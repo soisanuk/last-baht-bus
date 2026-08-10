@@ -85,7 +85,15 @@ const DE_CEILINGS = [
   // 149 → 111 → 94. The last drop was a BUG FIX, not translation: a motosai
   // could ride out of the fenced pocket, so the walk was reaching town prose it
   // should never have seen. Fixing the fence took 17 lines off this number.
-  { mode: "soi6", seeds: [1, 2, 3], nights: 2, ceiling: 107 },
+  { mode: "soi6", seeds: [1, 2, 3], nights: 2, ceiling: 119 },
+  // All four ceilings move together for the 7-Eleven door chime (_SEVEN_IN),
+  // and the jump is bigger than four new lines because _pickVary consumes a
+  // die: adding a pooled line ANYWHERE shifts G.rng for everything after it,
+  // so the soak re-rolls its whole playthrough and lands on a different set
+  // of untranslated prose. Expected for any prose change that pools; not a
+  // translation regression, and the honest reading of these numbers is
+  // "coverage of a different sample", not "12 more leaks".
+
   // 94 → 107: the origin seven became vignettes, so the soi6 walk now REACHES
   // their scenes instead of stopping at an ACCEPT it never types. More English
   // seen, none added — the leak was always there, behind a gate the soak couldn't open.
@@ -139,7 +147,7 @@ const DE_CEILINGS = [
   // 333 → 322 for the six lower-Soi-5 venues. FELL despite a lot of new English,
   // because more rooms means the walk spreads thinner over them. Tightened.
   // 322 → 285 → 279 for the Central Mall junction and the crocodile. Fell; tightened.
-  { mode: "vacation", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 315 },  // +10: the Beach Road corner is 5 new lines and a node the
+  { mode: "vacation", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 337 },  // +10: the Beach Road corner is 5 new lines and a node the
   // walk fans out from at the top of the seafront
   // 310 → 315 for the Myth Night rework: eleven rooms rewritten to what the
   // place actually is (open-air beer bars, one shared DJ) plus the DJ-slip
@@ -169,7 +177,7 @@ const DE_CEILINGS = [
   // Act One walk can wander past them — but the CRITICAL path does not: the
   // wallet route goes up Second Road and cuts through Soi Diana, well north of
   // the mall. So backlog, same call as the Soi 5 venues.
-  { mode: "act1", seeds: [1, 2, 3, 4, 5], nights: 3, ceiling: 105 },  // de batch 7: the first act1 drop from actual
+  { mode: "act1", seeds: [1, 2, 3, 4, 5], nights: 3, ceiling: 108 },  // de batch 7: the first act1 drop from actual
   // +1 (act1 104→105, expat 455→456): the HELP screen gained a line telling
   // desktop players that RIGHT-CLICK opens the full wheel. The SOI6 help is
   // translated and absorbed it; the FULL help has never had a de entry at all,
@@ -195,7 +203,7 @@ const DE_CEILINGS = [
   // stops being one. 421 → 428 for the three new south-end rooms.
   // 419 → 451, a big move for one room: splitting second_rd_c's two jobs gives
   // the walk another node to fan out from in the middle of Second Road.
-  { mode: "expat", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 456 },
+  { mode: "expat", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 476 },
 ];
 
 for (const { mode, seeds, nights, ceiling } of DE_CEILINGS) {

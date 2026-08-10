@@ -270,6 +270,8 @@ function newGame() {
     bar: { cash: 0, owed: 0, arrears: 0, months: 0, lastMonthDay: 0, nights: 0, best: 0 },
     atmToday: 0,         // principal withdrawn today (resets when atmDay rolls over)
     lastPolice: -99,     // turn of the last boy-in-brown shakedown
+    sevenAt: null,       // the 7-Eleven street you're currently standing inside
+                         // (see _sevenIn) — cleared when you leave the room
     lastPeddler: -99,    // turn of the last bar-stool peddler visit
     lastSaleng: -99,     // turn of the last saleng (ซาเล้ง) mobile-cart visit
     salengCart: null,    // current saleng cart type ("food"|"shoes"|"lingerie"|"snacks")

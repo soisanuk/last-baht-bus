@@ -128,6 +128,33 @@ const _BEER_LINES = [
 // KISS all night. Caller appends the "(฿X left.)" receipt; STALL_EAT follows a
 // "฿X buys <name>." opener that carries the data, so its lines stay posture-neutral
 // (they have to fit both a plastic stool at KISS and eating on your feet at a cart).
+// Stepping into the 7-Eleven. `seven: true` marks a STREET room with a store on
+// it — one per district, deliberately not 15 more rooms to walk in and out of
+// for a thirty-second errand. But nothing narrated the doorway, so a cold water
+// simply appeared on the pavement, and some lines gave the game away by
+// mentioning a doorbell you had never gone through ("the doorbell jingles in
+// celebration" on the charger). Playtest: "it feels weird that you can buy
+// stuff without actually entering the store."
+//
+// So the first purchase of a visit walks you in, and the rest read as you
+// already being inside. Cleared on arrival (_arriveAt), so leaving and coming
+// back rings you in again.
+const _SEVEN_IN = [
+  "You step in under the aircon and the door goes dong-ding — that two-note chime, the " +
+    "same one in every branch in the country, playing you in like a small national anthem.",
+  "Dong-ding. The cold hits you like a wall and the light is bright enough for surgery.",
+  "In through the glass door, dong-ding, out of the heat and into a room that smells of " +
+    "floor cleaner and hot toasties.",
+  "The door chimes you in. Somebody behind the counter says sawatdee without looking up, " +
+    "and the aircon takes the night off your shoulders.",
+];
+
+function _sevenIn() {
+  if (!_room().seven || G.sevenAt === G.room) return;
+  G.sevenAt = G.room;
+  _say(_pickVary(_SEVEN_IN, "sevenin"), "dim");
+}
+
 const _WATER_LINES = [
   "A cold bottle of water, gone in one go. Civilisation.",
   "Ice-cold plastic, sweating in your hand; half of it's gone before you lower the bottle.",
@@ -300,6 +327,7 @@ function _arriveAt(to) {
     if (G.soc.patronBusy[to] === undefined) G.soc.patronBusy[to] = _rand() < 0.4;
   }
   G.room = to;
+  G.sevenAt = null;   // back on the pavement — the next buy walks you in again
   _describeRoom(true);
   _lightNotice(); // walking in with the torch burning gets you clocked
   // walked in during the final half hour — the courtesy warning, and a barfine nudge
@@ -1751,6 +1779,7 @@ function _doBuy(arg) {
     if (G.money < CHARGER_PRICE) { _say(`The charger is ฿${CHARGER_PRICE}. You have ฿${G.money}. The cashier's sympathy is genuine but unhelpful.`); return; }
     G.money -= CHARGER_PRICE;
     G.itemLoc.charger = "inventory";
+    _sevenIn();
     _say(`One USB charger, ฿${CHARGER_PRICE}. The doorbell jingles in celebration. (฿${G.money} left.)`);
     return;
   }
@@ -1759,6 +1788,7 @@ function _doBuy(arg) {
     if (G.money < CONDOM_PRICE) { _say(_fmt("A pack is ฿{p}. You have ฿{m}. The cashier slides it back with a knowing look.", { p: CONDOM_PRICE, m: G.money })); return; }
     G.money -= CONDOM_PRICE;
     G.condoms += CONDOM_PACK;
+    _sevenIn();
     _say(`A pack of ${CONDOM_PACK}, ฿${CONDOM_PRICE} — the most ordinary purchase in this town, rung up without a flicker. ` +
       `(You're carrying ${G.condoms}. ฿${G.money} left.)`);
     return;
@@ -1770,6 +1800,7 @@ function _doBuy(arg) {
     if (G.money < price) { _say(_fmt("฿{p} for a cold bottle, and you don't have it. Grim.", { p: price })); return; }
     G.money -= price;
     G.thirst = Math.max(0, G.thirst - 45);
+    _sevenIn();
     _say(_fmt("{line} (฿{m} left.)", { line: _L(_pickVary(_WATER_LINES, "water")), m: G.money }));
     return;
   }
@@ -1782,6 +1813,7 @@ function _doBuy(arg) {
     }
     G.money -= CORD_PRICE;
     G.itemLoc.cord = "inventory";
+    _sevenIn();
     _say(_fmt("฿{p} for a black nylon cord off the counter display — the girl rings it up " +
       "without a flicker, because half the men in this country are wearing one. (฿{m} left.)",
       { p: CORD_PRICE, m: G.money }));
@@ -1791,6 +1823,7 @@ function _doBuy(arg) {
     if (G.money < 35) { _say(_fmt("The toastie is ฿{p}. You have ฿{m}. The doorbell jingles in sympathy.", { p: 35, m: G.money })); return; }
     G.money -= 35;
     G.hunger = Math.max(0, G.hunger - 40);
+    _sevenIn();
     _say(_fmt("{line} (฿{m} left.)", { line: _L(_pickVary(_TOASTIE_LINES, "toastie")), m: G.money }));
     _addHappy(1);
     return;
