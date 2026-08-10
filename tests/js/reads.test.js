@@ -28,10 +28,10 @@ test("EXAMINE also surfaces a readable fixture (not just READ)", () => {
   assert.match(out.join("\n"), /PIES|PROPER GRAVY|CHIPS WITH EVERYTHING/);
 });
 
-test("aliases resolve — READ BOARD / CHALKBOARD / TAPS all hit the tap board", () => {
-  for (const word of ["board", "chalkboard", "taps"]) {
+test("aliases resolve — READ BOARD / CLIPBOARD / REQUESTS all hit the DJ request sheet", () => {
+  for (const word of ["board", "clipboard", "requests"]) {
     G.room = "feedback_bar"; out = []; doCommand("read " + word);
-    assert.match(out.join("\n"), /BUFFALO TEARS|tap board/, `read ${word}`);
+    assert.match(out.join("\n"), /ONE SONG ONE SLIP|request sheet/, `read ${word}`);
   }
 });
 

@@ -644,7 +644,9 @@ function _doInventory() {
 // separate `sign`/SIGNS path (a room with a real Thai sign won't set reads.sign).
 const _READ_NOUNS = {
   menu: ["card", "menus", "price list", "prices", "price board"],
-  board: ["chalkboard", "blackboard", "taps", "tap list", "specials"],
+  // the one `reads.board` in the game is Myth Night's DJ request sheet — the
+  // tap-list aliases went with the craft-beer bars that never existed there
+  board: ["chalkboard", "blackboard", "clipboard", "slip", "request", "requests", "request sheet"],
   poster: ["flyer"],
   sign: ["notice", "placard"],
   jukebox: ["juke"],

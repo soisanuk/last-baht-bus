@@ -1190,7 +1190,7 @@
    "th": "เจี๊ยบ"
   },
   "jib": {
-   "desc": "Tiny and loud, all elbows and energy — one of The Growler's girls, from Chaiyaphum. Google Translate is open before you finish the sentence.",
+   "desc": "Tiny and loud, all elbows and energy — one of Coco Bar's girls, from Chaiyaphum. Google Translate is open before you finish the sentence.",
    "emoji": "🦋",
    "filler": true,
    "name": "Jib",
@@ -1603,7 +1603,7 @@
    "th": "มะลิลา"
   },
   "mam": {
-   "desc": "Older than the go-go average, and unhurried about it — one of Craft & Cargo's girls, from Chaiyaphum. Google Translate is open before you finish the sentence.",
+   "desc": "Older than the go-go average, and unhurried about it — one of Number One Bar's girls, from Chaiyaphum. Google Translate is open before you finish the sentence.",
    "emoji": "🌼",
    "filler": true,
    "name": "Mam",
@@ -2212,7 +2212,7 @@
    "th": "เป้า"
   },
   "pat": {
-   "desc": "A crooked, disarming grin — one of Feedback Bar's girls, from Buriram. She types more than she talks — and laughs at both.",
+   "desc": "A crooked, disarming grin — one of Chok Dee Bar's girls, from Buriram. She types more than she talks — and laughs at both.",
    "emoji": "💐",
    "filler": true,
    "name": "Pat",
@@ -2473,7 +2473,7 @@
    "th": "ปุ๊กกี้"
   },
   "pun": {
-   "desc": "Older than the go-go average, and unhurried about it — one of Encore's girls, from Surin. Google Translate is open before you finish the sentence.",
+   "desc": "Older than the go-go average, and unhurried about it — one of Sawasdee Bar's girls, from Surin. Google Translate is open before you finish the sentence.",
    "emoji": "🌼",
    "filler": true,
    "name": "Pun",
@@ -2665,7 +2665,7 @@
    "th": "รปภ."
   },
   "som": {
-   "desc": "New enough to still look a little nervous — one of Soundcheck Bar's girls, from Roi Et. The {{phone}} never leaves her hand.",
+   "desc": "New enough to still look a little nervous — one of Butterfly Bar's girls, from Roi Et. The {{phone}} never leaves her hand.",
    "emoji": "🌸",
    "filler": true,
    "name": "Som",
@@ -2997,7 +2997,7 @@
    "room": "poseidon_soapy"
   },
   "toon": {
-   "desc": "Sleepy-eyed and entirely unbothered — one of Container 8's girls, from Khon Kaen. She types more than she talks — and laughs at both.",
+   "desc": "Sleepy-eyed and entirely unbothered — one of Venus Bar's girls, from Khon Kaen. She types more than she talks — and laughs at both.",
    "emoji": "🍒",
    "filler": true,
    "name": "Toon",
@@ -3222,7 +3222,7 @@
    "th": "ใหญ่"
   },
   "yaya": {
-   "desc": "Baby-faced, chewing gum, thumbing her phone under the bar — one of Reload Bar's girls, from {{Nong Khai}}. She types more than she talks — and laughs at both.",
+   "desc": "Baby-faced, chewing gum, thumbing her phone under the bar — one of Sunflower Bar's girls, from {{Nong Khai}}. She types more than she talks — and laughs at both.",
    "emoji": "🌻",
    "filler": true,
    "name": "Yaya",
@@ -4185,23 +4185,23 @@
    "region": "Jomtien"
   },
   "container_8": {
-   "bar": "Container 8",
+   "bar": "Venus Bar",
    "barType": "beer",
    "geo": [
     12.93234,
     100.88463
    ],
-   "name": "Container 8",
+   "name": "Venus Bar",
    "region": "Myth Night"
   },
   "craft_cargo": {
-   "bar": "Craft & Cargo",
+   "bar": "Number One Bar",
    "barType": "beer",
    "geo": [
     12.93252,
     100.88457
    ],
-   "name": "Craft & Cargo",
+   "name": "Number One Bar",
    "region": "Myth Night"
   },
   "cricketers": {
@@ -4362,23 +4362,23 @@
    "region": "Naklua"
   },
   "encore_bar": {
-   "bar": "Encore",
+   "bar": "Sawasdee Bar",
    "barType": "beer",
    "geo": [
     12.93292,
     100.88472
    ],
-   "name": "Encore",
+   "name": "Sawasdee Bar",
    "region": "Myth Night"
   },
   "feedback_bar": {
-   "bar": "Feedback Bar",
+   "bar": "Chok Dee Bar",
    "barType": "beer",
    "geo": [
     12.93307,
     100.88503
    ],
-   "name": "Feedback Bar",
+   "name": "Chok Dee Bar",
    "region": "Myth Night"
   },
   "firefly_bar": {
@@ -4922,7 +4922,7 @@
     12.93247,
     100.88475
    ],
-   "name": "Myth Night — Container Rows",
+   "name": "Myth Night — The Third Row",
    "region": "Myth Night"
   },
   "myth_stage": {
@@ -4931,7 +4931,7 @@
     100.88483
    ],
    "liveMusic": true,
-   "name": "Myth Night — Live-Stage Yard",
+   "name": "Myth Night — The Covered Rows",
    "region": "Myth Night"
   },
   "naklua_bars": {
@@ -5257,13 +5257,13 @@
    "region": "Tree Town"
   },
   "reload_bar": {
-   "bar": "Reload Bar",
+   "bar": "Sunflower Bar",
    "barType": "beer",
    "geo": [
     12.93227,
     100.88483
    ],
-   "name": "Reload Bar",
+   "name": "Sunflower Bar",
    "region": "Myth Night"
   },
   "rock_factory": {
@@ -5543,13 +5543,13 @@
    "region": "Jomtien"
   },
   "soundcheck_bar": {
-   "bar": "Soundcheck Bar",
+   "bar": "Butterfly Bar",
    "barType": "beer",
    "geo": [
     12.93321,
     100.8849
    ],
-   "name": "Soundcheck Bar",
+   "name": "Butterfly Bar",
    "region": "Myth Night"
   },
   "starlight_bar": {
@@ -5757,13 +5757,13 @@
    "region": "Pratumnak"
   },
   "the_growler": {
-   "bar": "The Growler",
+   "bar": "Coco Bar",
    "barType": "beer",
    "geo": [
     12.93249,
     100.8849
    ],
-   "name": "The Growler",
+   "name": "Coco Bar",
    "region": "Myth Night"
   },
   "the_office": {

@@ -1731,105 +1731,125 @@ const ROOMS = {
     name: "Myth Night Market",
     region: "Myth Night",
     liveMusic: true,
-    desc: "The newest bar complex in town: shipping-container bars, festoon lights, and " +
-      "live-music stages wedged between Soi Buakhao and Second Road, directly across " +
-      "from Central's glow. Young crowd, shared security in grey polos, craft beer at " +
-      "double Chang prices. CANDY BAR 2's rose-pink sign is unmistakably the same " +
-      "pink as the original. North, a LIVE-STAGE YARD throws sound over the roofs; " +
-      "south, the CONTAINER ROWS glow like a docked ship someone plugged in.",
+    desc: "The newest bar complex in town, strung along the small road that runs from Second " +
+      "Road east to the Made in Thailand mouth of Buakhao. Open-air beer bars, rows of them, and " +
+      "every one is a variation on the same bar: the same cooler, the same stools out to the kerb, " +
+      "the same fairy lights, the same girls who may or may not be going anywhere with anybody " +
+      "tonight. One DJ plays for the whole complex and every bar in it hears him. North, two " +
+      "covered rows face each other across a walking path; south, across the road, a third row " +
+      "runs the same trade with less roof. CANDY BAR 2's rose-pink sign is unmistakably the same " +
+      "pink as the original.",
+
     exits: { w: "second_rd_myth", e: "buakhao_myth", in: "candy_bar_2", n: "myth_stage", s: "myth_rows",
              bazaar: "night_bazaar" },
   },
   myth_stage: {
-    name: "Myth Night — Live-Stage Yard",
+    name: "Myth Night — The Covered Rows",
     region: "Myth Night",
     liveMusic: true,
-    desc: "A gravel yard walled in by container bars, all facing a corrugated stage where " +
-      "a covers band murders a Carabao song to a delighted crowd. THE AMP ROOM, FEEDBACK " +
-      "BAR, ENCORE, and SOUNDCHECK BAR ring the yard, each with its own tap wall and its " +
-      "own idea of how loud is too loud.",
+    desc: "Two rows of bars facing each other under one long roof, with a walking path up the " +
+      "middle wide enough for two people and used by four. Every bar along it is the same bar with " +
+      "a different name over the till — same cooler, same stools, same laminated list — so the " +
+      "girls work the aisle rather than the street, leaning out as you pass and calling you back " +
+      "when you don't stop. A couple of them are katoey bars and make no particular announcement " +
+      "of it. THE AMP ROOM holds the far end, where the complex keeps its live music, and the " +
+      "bathrooms everybody shares are behind it.",
+
     exits: { s: "myth_night", in: "amp_room", e: "feedback_bar", w: "encore_bar", n: "soundcheck_bar" },
   },
   amp_room: {
     name: "The Amp Room",
     region: "Myth Night",
     bar: "The Amp Room", barType: "beer", liveMusic: true, outlet: true,
-    desc: "Speaker cabinets stacked to the ceiling, half of them decorative, all of them " +
-      "sticky. The beer is cold, the bass is a full-body experience, and Ju has to lean " +
-      "in close to take your order — which is, of course, the point.",
+    desc: "The far end of the covered rows, and the only stage in the complex: speaker cabinets " +
+      "stacked to the roof, half of them decorative, all of them sticky. The beer is cold, the " +
+      "bass is a full-body experience, and Ju has to lean in close to take your order — which " +
+      "is, of course, the point.",
+
     exits: { out: "myth_stage" },
   },
   feedback_bar: {
-    name: "Feedback Bar",
+    name: "Chok Dee Bar",
     region: "Myth Night",
-    bar: "Feedback Bar", barType: "beer",
-    desc: "A container split down the long side, one wall a chalkboard of craft taps nobody " +
-      "in here can pronounce. Pat pours a flight of four and lines them up like a dare. (READ BOARD.)",
+    bar: "Chok Dee Bar", barType: "beer",
+    desc: "Third along the covered row and indistinguishable from its neighbours until you sit " +
+      "down, which is when Pat starts talking. The request slip for the complex DJ lives on a " +
+      "clipboard by the till, and she has firm opinions about what you put on it. (READ BOARD.)",
     reads: {
-      board: "The tap board, four colours of marker and no restraint: 'MEKONG DELTA' RICE " +
-        "LAGER · MANGO-STICKY-RICE SOUR · a 12% imperial stout called 'BUFFALO TEARS' · and a " +
-        "hazy IPA named, inevitably, 'SAME SAME BUT HOPPIER'. Prices climb with the ABV; the " +
-        "stout costs more than a barfine. At the bottom, chalked small: 'if you can read this, " +
-        "have one more.'",
+      board: "Tonight's request sheet, biro on a laminated grid, one DJ for the whole complex " +
+        "and every bar fighting for him. Someone has written 'HOTEL CALIFORNIA' three times in " +
+        "three hands. Below it: 'sweet caroline — asked already, twice', a Thai luk thung title " +
+        "nobody has crossed out, and 'anything, please, not hotel california'. The bottom line " +
+        "is management's, in marker: 'ONE SONG ONE SLIP. DJ CANNOT SEE YOU WAVING.'",
     },
+
     exits: { out: "myth_stage" },
   },
   encore_bar: {
-    name: "Encore",
+    name: "Sawasdee Bar",
     region: "Myth Night",
-    bar: "Encore", barType: "beer",
-    desc: "The after-the-band bar: fairy lights, low stools, a battered acoustic guitar on " +
-      "a hook that everyone threatens to play and nobody does. Pun keeps the tab and the peace.",
+    bar: "Sawasdee Bar", barType: "beer",
+    desc: "Fairy lights, low stools, and a battered acoustic guitar on a hook that everyone " +
+      "threatens to play and nobody does. Pun keeps the tab and the peace, in that order.",
+
     exits: { out: "myth_stage" },
   },
   soundcheck_bar: {
-    name: "Soundcheck Bar",
+    name: "Butterfly Bar",
     region: "Myth Night",
-    bar: "Soundcheck Bar", barType: "beer",
-    desc: "Closest to the stage and proud of it — you order in the gaps between songs or not " +
-      "at all. Som mouths the prices and holds up fingers, a whole transaction in mime.",
+    bar: "Butterfly Bar", barType: "beer",
+    desc: "Nearest the music end, so you order in the gaps between songs or not at all. Som " +
+      "mouths the prices and holds up fingers, a whole transaction conducted in mime.",
+
     exits: { out: "myth_stage" },
   },
   myth_rows: {
-    name: "Myth Night — Container Rows",
+    name: "Myth Night — The Third Row",
     region: "Myth Night",
-    desc: "Two facing rows of shipping containers cut open into bars, festoon lights strung " +
-      "between them like rigging. Quieter than the stage yard, a degree cooler, the crowd a " +
-      "little older. CRAFT & CARGO, THE GROWLER, CONTAINER 8, and RELOAD BAR trade pours " +
-      "down the line.",
+    desc: "Across the small road from the covered pair, the third row does the same trade with " +
+      "less roof over it: open fronts, plastic stools out to the kerb, a strip of tarmac doing " +
+      "duty as a terrace. The DJ arrives a half-beat late from the other side and nobody minds. " +
+      "A few baht cheaper and a degree quieter, and the staff know exactly which of those two " +
+      "facts brought you across.",
+
     exits: { n: "myth_night", in: "craft_cargo", e: "the_growler", w: "container_8", s: "reload_bar" },
   },
   craft_cargo: {
-    name: "Craft & Cargo",
+    name: "Number One Bar",
     region: "Myth Night",
-    bar: "Craft & Cargo", barType: "beer", outlet: true,
-    desc: "A shipping container with the doors thrown wide, kegs where the freight used to " +
-      "ride, and a blackboard of guest taps chalked in three colours. Mam runs the taps with " +
-      "the calm of someone who has poured through every kind of night.",
+    bar: "Number One Bar", barType: "beer", outlet: true,
+    desc: "First bar in the third row, named with the confidence of whoever got here first. Mam " +
+      "runs it with the calm of a woman who has poured through every kind of night, and keeps " +
+      "the coldest cooler on this side of the road.",
+
     exits: { out: "myth_rows" },
   },
   the_growler: {
-    name: "The Growler",
+    name: "Coco Bar",
     region: "Myth Night",
-    bar: "The Growler", barType: "beer",
-    desc: "Named for the take-home jugs on the back shelf, half of them dusty. A good stool, " +
-      "a cheap pour, and Jib behind the bar who remembers your drink before your name.",
+    bar: "Coco Bar", barType: "beer",
+    desc: "A good stool, a cheap pour, and Jib behind the bar who remembers your drink before " +
+      "your name. On the back shelf, half a dozen dusty jars of something homemade that nobody " +
+      "has ever ordered.",
+
     exits: { out: "myth_rows" },
   },
   container_8: {
-    name: "Container 8",
+    name: "Venus Bar",
     region: "Myth Night",
-    bar: "Container 8", barType: "beer",
-    desc: "Literally the eighth container in the row, the number stencilled in freight paint " +
-      "and adopted as a name. Toon keeps a jar of chilli-lime peanuts on the bar as bait.",
+    bar: "Venus Bar", barType: "beer",
+    desc: "Eighth along the row, and the number outlasted whatever the sign said before it. Toon " +
+      "keeps a jar of chilli-lime peanuts on the bar as bait, and it works on everybody.",
+
     exits: { out: "myth_rows" },
   },
   reload_bar: {
-    name: "Reload Bar",
+    name: "Sunflower Bar",
     region: "Myth Night",
-    bar: "Reload Bar", barType: "beer",
-    desc: "The last container before the wall, where the crowd washes up to steady itself " +
-      "before another lap of the market. Yaya works the rail, quick with a coaster and a joke.",
+    bar: "Sunflower Bar", barType: "beer",
+    desc: "The last bar in the row before the wall, where the crowd washes up to steady itself " +
+      "before another lap. Yaya works the rail, quick with a coaster and quicker with a joke.",
+
     exits: { out: "myth_rows" },
   },
   candy_bar_2: {
@@ -8375,14 +8395,15 @@ const ENCOUNTERS = {
       "waiting to see what you do, which is worse.",
     hint: "(SORRY, and duck out · POSE, and commit · or WALK ON)",
   },
-  craftbeer: {
-    rooms: ["myth_night", "myth_rows"],
+  djslip: {
+    rooms: ["myth_night", "myth_stage", "myth_rows"],
     interactive: true, nightly: true,
-    intro: "“Excuse me — you are from where?” A young Thai bloke has a paddle of four small glasses and " +
-      "the expression of a man who has been waiting for a qualified opinion. “I make this one at my " +
-      "house. Mango, but not sweet mango — dry. Everybody here say it taste like medicine.” He turns the " +
-      "paddle so the dark one faces you. “I think they are wrong.”",
-    hint: "(TASTE it · or DECLINE, politely)",
+    intro: "A girl leans out of the row with a biro and a request slip held like evidence. “You " +
+      "help me, na. My bar already use — one bar, one song, and the boss he use it for Hotel " +
+      "California.” The disgust is total and, given the sheet by the till, entirely earned. “You " +
+      "write for me. He cannot say no to farang.” She has already picked the song. She wrote it " +
+      "down before she came over.",
+    hint: "(SIGN it for her · or DECLINE)",
   },
   maze: {
     rooms: ["tt_entrance", "tt_lane_1", "tt_lane_2", "tt_lane_3"],

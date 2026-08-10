@@ -1149,23 +1149,22 @@ const _ENC = {
       "mid-sentence, in the tone of somebody who has had worse takes ruined by less.");
   },
 
-  craftbeer(input) {
+  djslip(input) {
     if (_encMoney(input)) {
-      _say("You go for your wallet and he physically moves the paddle out of reach. " +
-        "“No, no — not selling! I want to KNOW.” He looks genuinely wounded, which " +
-        "is a lot to have done to a man before midnight.");
+      _say("You offer her money, which is not the currency in play and she is briefly baffled " +
+        "by it. “No! Not money. The SLIP.” She waves the biro at you like a woman explaining " +
+        "something to a slow child, which, at this moment, she is.");
       _addHappy(-1);
       return;
     }
-    if (/taste|try|drink|sip|yes|sure|ok|go on|dark|mango/.test(input)) {
-      G.soc.drunk += 1;
-      _say(_pickVary(_CRAFT_TASTE, "craft"));
+    if (/sign|write|yes|sure|ok|help|slip|do it|request|song|put/.test(input)) {
+      _say(_pickVary(_DJ_SLIP, "djslip"));
       _addHappy(2);
       return;
     }
-    _say("You decline as kindly as it can be done. He takes it entirely well — " +
-      "“okay, okay, no problem” — and turns the paddle to the next person along the " +
-      "rail before you have finished the sentence. The dark one still faces outward.");
+    _say("You hand the biro back. She takes it with enormous grace and no hard feelings at " +
+      "all, and is two bars along the row inside ten seconds, holding the slip up to somebody " +
+      "else. The system has been beaten before and will be again.");
   },
 
   maze(input) {
@@ -1243,24 +1242,20 @@ const _INFLU_POSE = [
     "a man having a nice time.",
 ];
 
-const _CRAFT_TASTE = [
-  "You take the dark one. It is dry, and it does taste faintly of medicine, and " +
-    "underneath that it tastes like mango skin and something toasted. You tell " +
-    "him so. He puts the paddle down on the rail with both hands, like it has " +
-    "become heavy. “Yes. YES. The skin. Everybody say the fruit, nobody say the " +
-    "skin.” You have made his week and you did not have to lie to do it.",
-  "You take the dark one and hold it long enough to be honest about. Dry, a bit " +
-    "medicinal, and then a late sweetness that arrives after you have swallowed. " +
-    "When you say the last part he points at you with the whole paddle: “AFTER! " +
-    "It come after! My brother cannot taste it.”",
-  "You try it. It is not very good and it is extremely interesting, and you " +
-    "manage to say both. He nods through the first half without offence and lights " +
-    "up at the second. “Interesting is okay. Interesting I can fix. Next time you " +
-    "come, is better.” It is not clear he knows you are here for a week.",
-  "You drink. Somewhere behind the dryness there is a whole afternoon of somebody " +
-    "boiling fruit in a kitchen with the fan on. You say it tastes like effort. He " +
-    "thinks about that, decides he likes it, and makes you say it again for his " +
-    "friend, who does not speak English and agrees anyway.",
+const _DJ_SLIP = [
+  "You sign. Four minutes later a luk thung intro comes over the whole complex — every bar, " +
+    "both covered rows and the third one across the road — and a shriek goes up from one " +
+    "specific stool. She points at you from forty feet away with both hands, twice, in case " +
+    "you missed it the first time.",
+  "You write it down and she reads it back over your shoulder, correcting your spelling of a " +
+    "word you have never seen. When it plays, three girls along the row turn round at once, and " +
+    "she accepts the credit with the modesty of a woman who did all the work.",
+  "You sign for her. It gets played. It is not, in your honest opinion, a better song than " +
+    "Hotel California, and you will be taking that to the grave, because for three and a half " +
+    "minutes her entire row is singing and the boss is pretending not to know why.",
+  "You sign. She takes the slip back at a dead run, delivers it, and returns to explain that " +
+    "the DJ owes her cousin a favour, which is why this was always going to work and why she " +
+    "needed a farang's handwriting on it and not her own.",
 ];
 
 const _MAZE_HELP = [

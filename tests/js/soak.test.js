@@ -135,8 +135,12 @@ const DE_CEILINGS = [
   // 333 → 322 for the six lower-Soi-5 venues. FELL despite a lot of new English,
   // because more rooms means the walk spreads thinner over them. Tightened.
   // 322 → 285 → 279 for the Central Mall junction and the crocodile. Fell; tightened.
-  { mode: "vacation", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 310 },  // +10: the Beach Road corner is 5 new lines and a node the
+  { mode: "vacation", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 315 },  // +10: the Beach Road corner is 5 new lines and a node the
   // walk fans out from at the top of the seafront
+  // 310 → 315 for the Myth Night rework: eleven rooms rewritten to what the
+  // place actually is (open-air beer bars, one shared DJ) plus the DJ-slip
+  // encounter. Only +5 because it REPLACED English rather than adding much —
+  // the craft-beer bars it displaced were already leaking.
   // act1 is the do-or-die opening — the wallet chain, the fail/reset screens, the
   // hint whispers. NEITHER other mode reaches it: soi6 force-sets act1Done, and
   // so does the soak's own vacation setup. It was unguarded until 2026-08-07, and
