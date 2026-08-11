@@ -70,3 +70,21 @@ test("when the DJ plays Sabai Sabai, the soundtrack is the song", () => {
   assert.equal(_trackForRoom("rainbow_girls"), _GOGO_SET); // a go-go, normally
   assert.equal(_trackForRoom("rainbow_girls", { sabaiPlaying: true }), "soi");
 });
+
+// The dog's voice. Synthesized like the surf — filtered noise plus oscillators
+// through the SFX bus, no samples — so it can be asserted structurally here
+// even though the AudioContext never gets constructed in this suite.
+test("growl and snarl exist as one-shot SFX and are built, not sampled", () => {
+  const src = readFileSync(fileURLToPath(new URL("../../web/js/audio.js", import.meta.url)), "utf8");
+  assert.match(src, /name === "growl"/, "sfx() dispatches a growl");
+  assert.match(src, /name === "snarl"/, "sfx() dispatches a snarl");
+  assert.match(src, /function _growl\(/);
+  assert.match(src, /function _snarl\(/);
+  // a growl is a BUZZ, not a low tone: amplitude modulation is the whole trick
+  const growl = src.slice(src.indexOf("function _growl("), src.indexOf("function _snarl("));
+  assert.match(growl, /createOscillator/, "has a voice");
+  assert.match(growl, /am\.gain/, "amplitude-modulated — a plain low tone is a fridge");
+  assert.match(growl, /sawtooth/, "harmonics, not a sine");
+  assert.match(growl, /_sfxBus/, "goes to the SFX bus, so it mutes with the rest");
+  assert.doesNotMatch(src, /\.mp3|\.wav|\.ogg/, "no samples anywhere in the audio layer");
+});

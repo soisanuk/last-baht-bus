@@ -69,6 +69,85 @@ const _audio = (() => {
     s.start(t0); s.stop(t0 + 0.13);
   }
 
+  // ── The dog ────────────────────────────────────────────────────────────────
+  // Same toolkit as the surf: filtered noise and oscillators, no samples. A
+  // growl is not a low tone — it's a BUZZ, the chest rumble amplitude-modulated
+  // at about 30 Hz, which is why a plain sine at 70 Hz sounds like a fridge and
+  // this doesn't. Two slightly detuned saws beat against each other so it never
+  // settles into a machine note, a bandpass stands in for the throat, and a
+  // little noise rides on top as breath.
+  function _growl(t0, opt) {
+    const o = opt || {};
+    const dur = o.dur || 0.95, f0 = o.f0 || 76, f1 = o.f1 || f0;
+    const bright = o.bright || 600, peak = o.peak || 0.38;
+    const amRate = o.amRate || 28, attack = o.attack || 0.12;
+    _ensureNoiseBuf();
+
+    const out = _actx.createGain();
+    out.gain.setValueAtTime(0.0001, t0);
+    out.gain.exponentialRampToValueAtTime(peak, t0 + attack);
+    out.gain.setValueAtTime(peak, t0 + dur * 0.66);
+    out.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    out.connect(_sfxBus);
+
+    // the rrrrr — modulate depth, never fully closing, or it chops into pulses
+    const am = _actx.createGain();
+    am.gain.setValueAtTime(0.55, t0);
+    const lfo = _actx.createOscillator();
+    lfo.type = "sine";
+    lfo.frequency.setValueAtTime(amRate, t0);
+    lfo.frequency.linearRampToValueAtTime(amRate * 1.25, t0 + dur);
+    const depth = _actx.createGain();
+    depth.gain.value = 0.42;
+    lfo.connect(depth); depth.connect(am.gain);
+    am.connect(out);
+    lfo.start(t0); lfo.stop(t0 + dur + 0.02);
+
+    const throat = _actx.createBiquadFilter();
+    throat.type = "bandpass";
+    throat.frequency.setValueAtTime(bright, t0);
+    throat.frequency.linearRampToValueAtTime(bright * (o.open || 1), t0 + dur);
+    throat.Q.value = 1.4;
+    throat.connect(am);
+
+    for (const det of [1, 1.013]) {          // the beating is the animal in it
+      const osc = _actx.createOscillator();
+      osc.type = "sawtooth";
+      osc.frequency.setValueAtTime(f0 * det, t0);
+      osc.frequency.linearRampToValueAtTime(f1 * det, t0 + dur);
+      const g = _actx.createGain(); g.gain.value = 0.5;
+      osc.connect(g); g.connect(throat);
+      osc.start(t0); osc.stop(t0 + dur + 0.02);
+    }
+
+    const s = _actx.createBufferSource();
+    s.buffer = _noiseBuf;
+    const nf = _actx.createBiquadFilter();
+    nf.type = "bandpass"; nf.frequency.value = bright * 2.2; nf.Q.value = 0.7;
+    const ng = _actx.createGain();
+    ng.gain.value = o.breath == null ? 0.09 : o.breath;
+    s.connect(nf); nf.connect(ng); ng.connect(am);
+    s.start(t0); s.stop(t0 + dur);
+  }
+
+  // A snarl is a growl that has made up its mind: teeth first (a bright noise
+  // transient — the lip coming off them), then a shorter, higher, rising growl.
+  function _snarl(t0) {
+    _ensureNoiseBuf();
+    const s = _actx.createBufferSource();
+    s.buffer = _noiseBuf;
+    const f = _actx.createBiquadFilter();
+    f.type = "highpass"; f.frequency.value = 1800;
+    const g = _actx.createGain();
+    g.gain.setValueAtTime(0.42, t0);
+    g.gain.exponentialRampToValueAtTime(0.001, t0 + 0.09);
+    s.connect(f); f.connect(g); g.connect(_sfxBus);
+    s.start(t0); s.stop(t0 + 0.11);
+
+    _growl(t0 + 0.02, { dur: 0.52, f0: 98, f1: 156, bright: 940, open: 1.5,
+                        peak: 0.50, amRate: 38, attack: 0.035, breath: 0.17 });
+  }
+
   function _note(freq, t0, dur, type, vol) {
     const o = _actx.createOscillator();
     const g = _actx.createGain();
@@ -377,10 +456,14 @@ const _audio = (() => {
     // One-shot effects. "bell" is the bar bell — two quick swings, a real clang.
     sfx(name) {
       if (!_ctx()) return;
+      const t = _actx.currentTime + 0.02;
       if (name === "bell") {
-        const t = _actx.currentTime + 0.02;
         _clang(t);
         _clang(t + 0.17); // the second swing — clang-CLANG
+      } else if (name === "growl") {
+        _growl(t);        // the warning: he has seen something and you have not
+      } else if (name === "snarl") {
+        _snarl(t);        // the decision
       }
     },
     stop() { _musicStop(); _ambStop(); },

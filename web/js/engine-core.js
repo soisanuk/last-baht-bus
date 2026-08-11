@@ -1390,6 +1390,7 @@ function _tick() {
       if (G.darkStreak === 0) {
         _say(_dogN("A growl starts somewhere in the dark ahead — and Sai Krok answers it, " +
           "once, low, without breaking stride. Silence. The dark has done the maths."), "dim");
+        _engineSfx("growl");   // the prose says he answers it; let him
       }
       G.darkStreak = 1; // held, never escalates
       return;
@@ -1398,11 +1399,13 @@ function _tick() {
     if (G.darkStreak === 1) {
       _say("Something shifts in the dark nearby. A low growl. You are likely to be " +
         "bitten by a soi dog.", "alert");
+      _engineSfx("growl");   // theirs, not yours — the warning you get instead of a dog
     } else if (G.darkStreak >= 2) {
       const food = ["noodles", "moo_ping"].find(id => _inv().includes(id));
       if (food) {
         G.itemLoc[food] = null;
         G.darkStreak = 0;
+        _engineSfx("snarl");   // it lunges here too — the food just buys the ending
         _say(`A soi dog lunges out of the dark! You hurl the ${ITEMS[food].name} on ` +
           "pure instinct. It catches it mid-air with terrifying grace and trots " +
           "off. Goodbye, dinner.", "alert");
@@ -1413,6 +1416,7 @@ function _tick() {
         const exit = Object.values(_room().exits).find(to => !ROOMS[to].dark) ||
           Object.values(_room().exits)[0];
         G.room = exit;
+        _engineSfx("snarl");   // it has stopped warning you
         _say("A soi dog bites you! You flee blindly, shedding " +
           (bitten ? `฿${bitten} in dropped coins` : "what remains of your dignity") +
           ", and fetch up somewhere lit.", "alert");
