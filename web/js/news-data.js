@@ -23,14 +23,14 @@ var NEWS_FEED = [
     "d": "11 Aug 2026"
   },
   {
-    "t": "Driver feels heat on skin, jumps clear before crashed EV bursts into flames",
+    "t": "Pattaya’s nightlife becomes a global race for customers and workers",
     "s": "Pattaya Mail",
     "d": "09 Aug 2026"
   },
   {
-    "t": "Pattaya closes Koh Larn viewpoint road after tourist death",
-    "s": "Pattaya Mail",
-    "d": "09 Aug 2026"
+    "t": "Black oil-like slick washes ashore at Jomtien Beach",
+    "s": "Khaosod English",
+    "d": "10 Aug 2026"
   },
   {
     "t": "Dad seeks answers over son's killing",
@@ -38,13 +38,23 @@ var NEWS_FEED = [
     "d": "10 Aug 2026"
   },
   {
-    "t": "Pattaya pickup gets unwanted four-meter snake as passenger",
-    "s": "Pattaya Mail",
-    "d": "09 Aug 2026"
+    "t": "6 Pattaya officials suspended for collecting unofficial fines from foreigners",
+    "s": "Thaiger",
+    "d": "11 Aug 2026"
   },
   {
     "t": "Former MP allegedly kills official at government building in Thailand's second shooting in days",
     "s": "BBC",
+    "d": "10 Aug 2026"
+  },
+  {
+    "t": "Thailand rocked by second shooting tragedy in three days",
+    "s": "ABC News & Headlines – Australian Broadcasting Corporation",
+    "d": "10 Aug 2026"
+  },
+  {
+    "t": "A former Thai lawmaker arrested after a shooting at a government office kills 1",
+    "s": "AP News",
     "d": "10 Aug 2026"
   },
   {
@@ -58,30 +68,20 @@ var NEWS_FEED = [
     "d": "11 Aug 2026"
   },
   {
-    "t": "BoT targets cash buyers of property",
-    "s": "Bangkok Post",
-    "d": "10 Aug 2026"
-  },
-  {
-    "t": "New species of mountain horned dragon identified in Thailand's high-altitude forests",
-    "s": "Phys.org",
-    "d": "10 Aug 2026"
-  },
-  {
-    "t": "Former MP opens fire in Thailand’s second shooting within days",
-    "s": "Al Jazeera",
-    "d": "10 Aug 2026"
+    "t": "Woman Arrested for Smuggling Two Suitcases Stuffed With Over $690K Worth of Cannabis From Thailand",
+    "s": "Yahoo",
+    "d": "11 Aug 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-08-10","USD":33.01,"AUD":23.32,"GBP":44.58,"EUR":38.14};
+var FX_RATES = {"date":"2026-08-11","USD":33.1,"AUD":23.39,"GBP":44.68,"EUR":38.2};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-11","temp":28,"humid":80,"code":3,"hi":30,"rain":89};
+var WX_NOW = {"date":"2026-08-12","temp":28,"humid":84,"code":3,"hi":31,"rain":55};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-08-01","first":"932479","last2":"69","front3":["413","672"],"back3":["039","154"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4402,"date":"2026-08-11","baht":68750};
+var GOLD = {"usd":4364,"date":"2026-08-11","baht":68300};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":64123,"thb":2122434};
+var BTC = {"usd":63248,"thb":2097229};
