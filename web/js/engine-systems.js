@@ -4342,6 +4342,16 @@ function _checkAct1() {
   _say("★ ACT ONE COMPLETE: THE LAST BAHT BUS ★", "win");
   for (const l of lines) _say(l, "dim");
   _say(`ACT ONE SCORE: ${score}`, "win");
+  // The polite route skips three milestones outright — you never need the door
+  // trick or either half of the safe code if you wai the mamasan and simply
+  // ask. That is the intended best answer and it should not read as having
+  // missed something; but the player should know there WAS another way in,
+  // because that is content he has not seen and a reason to come back.
+  if (_flag("oyGaveWallet") && _act1Progress() < _ACT1_MILESTONES.length) {
+    _say("(Being polite is one way of solving a problem. There was another way into that " +
+      "office tonight — a door, a song, and a number the soi would have told you if you had " +
+      "asked the right four people. It is still there.)", "dim");
+  }
   _addHappy(Math.max(5, Math.round(score / 4)));
   _setFlag("act1Done"); // stage advances
   G.stage = "vacation";
