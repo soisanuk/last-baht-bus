@@ -950,8 +950,10 @@ const _CATALOGS = {
       "Auf den hinteren Hockern die üblichen verwitterten Gesichter — schon vor dir da, nach dir noch da, und heute Nacht nicht auf der Suche nach jemand Neuem.",
     "Down the far end, a knot of regulars are welded to the bar, deep in an argument only they follow — part of the furniture, not the cast.":
       "Ganz hinten ist eine Traube Stammgäste mit dem Tresen verschweißt, tief in einem Wortgefecht, dem nur sie folgen — Teil des Mobiliars, nicht der Besetzung.",
-    "No adventures on the books. The givers are out there — talk to people.":
-      "Nichts im Auftragsbuch. Die Auftraggeber sind da draußen — sprich mit den Leuten.",
+    "Nothing on the books, and nobody's asked you for anything. Talk to people — the jobs in this town come out of conversations, not noticeboards.":
+      "Nichts im Auftragsbuch, und niemand hat dich um etwas gebeten. Sprich mit den Leuten — die Jobs in dieser Stadt entstehen aus Gesprächen, nicht an schwarzen Brettern.",
+    "Nothing on the books. What's open:":
+      "Nichts im Auftragsbuch. Was offensteht:",
     "You dance between the stools. A hostess joins you instantly and without inquiry — enthusiasm is the house style — and for eight bars of luk thung you are the floor show.":
       "Du tanzt zwischen den Hockern. Sofort und ungefragt tanzt eine Hostess mit — Begeisterung ist der Hausstil — und für acht Takte Luk Thung bist du die Showeinlage.",
     "{{Ice}} settling in buckets, Connect Four counters clacking, and the chorus of “HELLO WELCOME” as somebody richer walks past outside.":
@@ -1074,8 +1076,10 @@ const _CATALOGS = {
       "Du hast schon welche. Der Fahrer zuckt mit den Schultern und behält das Wechselgeld als Gebühr für deine Unentschlossenheit. Kleiner Scherz — ฿{p} zurück.",
 
     // journal / black book, when there is nothing in them yet
-    "The wallet's yours and the opening's behind you — out here there are no wrong answers, only better nights. Nothing on the books: the givers are out there, so TALK to people. (QUESTS lists jobs, WHO your black book, MAP the lay of the land.)":
-      "Die Brieftasche gehört wieder dir und der Anfang liegt hinter dir — hier draußen gibt es keine falschen Antworten, nur bessere Nächte. Nichts im Auftragsbuch: Die Auftraggeber sind da draußen, also TALK mit den Leuten. (QUESTS listet die Jobs, WHO dein schwarzes Buch, MAP die Gegend.)",
+    "The wallet's yours and the opening's behind you — out here there are no wrong answers, only better nights.":
+      "Die Brieftasche gehört wieder dir und der Anfang liegt hinter dir — hier draußen gibt es keine falschen Antworten, nur bessere Nächte.",
+    "(QUESTS lists jobs, WHO your black book, MAP the lay of the land.)":
+      "(QUESTS listet die Jobs, WHO dein schwarzes Buch, MAP die Gegend.)",
     "The black book's empty. You earn names the honest way out here — CONTACT a lady in her own bar once she likes you, and she goes in the book.":
       "Das schwarze Buch ist leer. Namen verdient man sich hier draußen auf die ehrliche Tour — CONTACT eine Lady in ihrer eigenen Bar, sobald sie dich mag, und sie landet im Buch.",
 

@@ -3291,7 +3291,10 @@ test("sandbox HINT nudges an offer, then falls back when the books are empty", (
   state().quests.league = undefined;
   out = [];
   run("hint");
-  assert.match(lastOut(), /givers are out there|TALK to people/i, "nothing on the books → go find one");
+  // the empty-books fallback names LIVE LEADS now rather than saying "talk to
+  // people" — see _leads(). With a bare sandbox state there are no threads to
+  // name, so it lands on the honest no-leads line.
+  assert.match(out.join("\n"), /What's open:|Talk to people/i, "nothing on the books → go find one");
 });
 
 test("the quest journal shows the same live location as HINT", () => {
@@ -6526,7 +6529,7 @@ test("act one cannot be abandoned; finished, it shows as done", () => {
   out = [];
   run("quests");
   assert.match(lastOut(), /✓ The Last Baht Bus — Act One, scored 80/);
-  assert.match(lastOut(), /givers are out there/);
+  assert.match(out.join("\n"), /What's open:|Talk to people/i);
 });
 
 // ── Autocomplete ───────────────────────────────────────────────────────────
@@ -7346,4 +7349,40 @@ test("Tan calls a lost first-timer at the halfway mark", () => {
   run("call tan");
   state().nightTurn = 60; out = []; run("look");
   assert.doesNotMatch(out.join("\n"), /phone goes off/, "one lift a night, either direction");
+});
+
+// Live leads. Measured on day three: QUESTS, HINT and SCORE all answered "what
+// should I do now?" with the same sentence — "the givers are out there, talk to
+// people." True, and useless. The threads all existed; the game had just never
+// named them.
+test("with nothing on the books, the game names what's actually open", () => {
+  newGame();
+  state().stage = "vacation"; state().flags.act1Done = true; state().day = 3;
+  state().known = { bert: true };
+  state().soc.drinks = { lek: 3 };
+  state().visited = { beach_rd_c: true };
+  state().room = "beach_rd_c";
+
+  out = []; run("quests");
+  const said = out.join("\n");
+  assert.match(said, /What's open:/);
+  assert.match(said, /Bert has something going/, "a man you have MET with work going");
+  assert.match(said, /The Stinky Pinky/, "and where he actually is");
+  assert.match(said, /Lek remembers you/, "the girl who is warmest to you");
+  assert.match(said, /not set foot in/, "and somewhere you have never been");
+
+  // a stranger's job is a spoiler, not a lead — only people you've met
+  newGame();
+  state().stage = "vacation"; state().flags.act1Done = true;
+  state().known = {}; state().soc.drinks = {}; state().room = "beach_rd_c";
+  out = []; run("quests");
+  assert.doesNotMatch(out.join("\n"), /Bert has something going/,
+    "you have not met him — naming him would be a spoiler");
+
+  // HINT uses the same surface, so the two can never drift apart
+  newGame();
+  state().stage = "vacation"; state().flags.act1Done = true;
+  state().known = { bert: true }; state().room = "beach_rd_c";
+  out = []; run("hint");
+  assert.match(out.join("\n"), /What's open:|Talk to people/);
 });

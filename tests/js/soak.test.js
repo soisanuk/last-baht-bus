@@ -85,7 +85,11 @@ const DE_CEILINGS = [
   // 149 → 111 → 94. The last drop was a BUG FIX, not translation: a motosai
   // could ride out of the fenced pocket, so the walk was reaching town prose it
   // should never have seen. Fixing the fence took 17 lines off this number.
-  { mode: "soi6", seeds: [1, 2, 3], nights: 2, ceiling: 132 },
+  { mode: "soi6", seeds: [1, 2, 3], nights: 2, ceiling: 138 },
+  // +6/+2/+15 for live leads. The three lead lines are TEMPLATED (_fmt), so
+  // each leaks once as a pattern rather than once per giver/girl/district —
+  // which is why expat, with the most world state to draw on, moves most.
+
   // +3 each for the bad-night debrief (_DEBRIEF): three lines per failed
   // ending, and the soak fails a lot of nights. Straight +3 rather than a
   // re-roll this time — the debrief prints no pooled line, so it consumes
@@ -152,7 +156,7 @@ const DE_CEILINGS = [
   // 333 → 322 for the six lower-Soi-5 venues. FELL despite a lot of new English,
   // because more rooms means the walk spreads thinner over them. Tightened.
   // 322 → 285 → 279 for the Central Mall junction and the crocodile. Fell; tightened.
-  { mode: "vacation", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 340 },  // +10: the Beach Road corner is 5 new lines and a node the
+  { mode: "vacation", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 342 },  // +10: the Beach Road corner is 5 new lines and a node the
   // walk fans out from at the top of the seafront
   // 310 → 315 for the Myth Night rework: eleven rooms rewritten to what the
   // place actually is (open-air beer bars, one shared DJ) plus the DJ-slip
@@ -218,7 +222,7 @@ const DE_CEILINGS = [
   // stops being one. 421 → 428 for the three new south-end rooms.
   // 419 → 451, a big move for one room: splitting second_rd_c's two jobs gives
   // the walk another node to fan out from in the middle of Second Road.
-  { mode: "expat", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 512 },
+  { mode: "expat", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 527 },
   // 480 → 509 for the first-job hail, and the size of that is the point: the
   // hail fires _questOffer, so a soak that had NEVER been offered a quest now
   // gets one and walks into the quest desc, the journal and HINT behind it.

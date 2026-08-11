@@ -1600,9 +1600,10 @@ function _doHint() {
       { giver, name: _L(q.name), id: offered[0].toUpperCase() }), "win");
       return;
     }
-    _say("The wallet's yours and the opening's behind you — out here there are no wrong answers, " +
-      "only better nights. Nothing on the books: the givers are out there, so TALK to people. " +
-      "(QUESTS lists jobs, WHO your black book, MAP the lay of the land.)", "dim");
+    _say("The wallet's yours and the opening's behind you — out here there are no wrong " +
+      "answers, only better nights.", "dim");
+    _sayLeads(true);
+    _say("(QUESTS lists jobs, WHO your black book, MAP the lay of the land.)", "dim");
     return;
   }
   if ((G.act1Tries || 0) < 1) {
@@ -1770,6 +1771,70 @@ function _doAbandon(arg) {
     { name: _L(q.name) }), "dim");
 }
 
+// ── Live leads ──────────────────────────────────────────────────────────────
+// Measured on day three of a vacation: QUESTS, HINT and SCORE all answer the
+// question "what should I do now?" with the same sentence — "the givers are out
+// there, talk to people." True, and useless. It is the night-one discoverability
+// wall again, except across the whole map with no hail to rescue you.
+//
+// So when nothing is on the books, say what is actually open, drawn from world
+// state rather than from a list: a man you have MET who has work going, a girl
+// who is warmer to you than the rest, a district you have not walked into yet.
+// No new content — the threads all exist, and the game has simply never named
+// them.
+function _leads() {
+  const out = [];
+
+  // 1. someone you know, with a job going. Only people you have actually met:
+  //    naming a stranger is a spoiler, not a lead.
+  for (const [qid, q] of Object.entries(QUESTS)) {
+    if (q.vignette || G.quests[qid] || !q.giver) continue;
+    if (!G.known || !G.known[q.giver] || !NPCS[q.giver]) continue;
+    if (!_questAvailable(qid)) continue;
+    const where = _questWhere(q.giver);
+    out.push(_fmt("{who} has something going — worth another word.{where}",
+      { who: NPCS[q.giver].name, where: where ? " " + where.trim() : "" }));
+    break;
+  }
+
+  // 2. the girl who is warmest to you. The relationship layer is the deepest
+  //    thing in here and the easiest to forget you have started.
+  let best = null, bestN = 0;
+  for (const [id, n] of Object.entries(G.soc.drinks || {})) {
+    if (n > bestN && NPCS[id] && _npcRoom(id)) { best = id; bestN = n; }
+  }
+  if (best && bestN >= 2) {
+    const bar = _barName(_npcRoom(best));
+    out.push(_fmt("{who} remembers you{bar}. That goes somewhere, if you keep turning up.",
+      { who: NPCS[best].name, bar: bar ? " at " + bar : "" }));
+  }
+
+  // 3. somewhere you have never set foot. The map is most of the game and a
+  //    player who found one soi on night one will happily die on it all week.
+  const seen = {}, all = {};
+  for (const [id, r] of Object.entries(ROOMS)) {
+    all[r.region] = true;
+    if (G.visited && G.visited[id]) seen[r.region] = true;
+  }
+  const unseen = Object.keys(all).filter(rg => !seen[rg] && rg !== "Myth Night");
+  if (unseen.length) {
+    out.push(_fmt("You have not set foot in {where} yet. It is a bus ride and a different town.",
+      { where: unseen[Math.floor(_hh("leads" + G.day, 7) % unseen.length)] }));
+  }
+  return out;
+}
+
+function _sayLeads(dim) {
+  const l = _leads();
+  if (!l.length) {
+    _say("Nothing on the books, and nobody's asked you for anything. Talk to people — " +
+      "the jobs in this town come out of conversations, not noticeboards.", dim ? "dim" : "room");
+    return;
+  }
+  _say("Nothing on the books. What's open:", dim ? "dim" : "win");
+  for (const line of l) _say("  · " + line, "dim");
+}
+
 function _doQuests() {
   let shown = 0;
   if (G.stage === "act1") {
@@ -1792,9 +1857,9 @@ function _doQuests() {
       { name: _L(q.name), id: qid.toUpperCase() }), "dim"); shown++; }
     else if (st === "done") { _say(`✓ ${q.name}`, "dim"); shown++; }
   }
-  if (!shown) _say("No adventures on the books. The givers are out there — talk to people.");
+  if (!shown) _sayLeads(false);
   else if (!rows.some(([qid]) => G.quests[qid] === "active") && G.stage !== "act1") {
-    _say("(The givers are out there — talk to people.)", "dim");
+    _sayLeads(true);
   }
 }
 
