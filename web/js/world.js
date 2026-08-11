@@ -2348,6 +2348,12 @@ const ROOMS = {
       "The rose-pink light folds back around you. Nothing here is ever out of place — the boss's standards hold whether or not the boss is on the floor tonight.",
       "You duck back into Candy's — same corner, same shine, the same small empire humming along without a wasted motion.",
     ],
+    reads: {
+      photos: "Decades of the same corner, four deep along the wall. The bar barely changes " +
+        "— the bell, the pink, the stools — and the haircuts date every frame to the year. " +
+        "Candy is in most of them and gets younger as you go left. In the oldest, she is " +
+        "behind somebody ELSE's bar, in somebody else's uniform, not yet running anything.",
+    },
     exits: { out: "buakhao_n" },
   },
   // The FIRST one. There is a branch on Jomtien Soi 7 now, but this is the shop

@@ -680,6 +680,7 @@ const _READ_NOUNS = {
   // tap-list aliases went with the craft-beer bars that never existed there
   board: ["chalkboard", "blackboard", "clipboard", "slip", "request", "requests", "request sheet"],
   poster: ["flyer"],
+  photos: ["photo", "photograph", "photographs", "pictures", "wall of photos"],
   sign: ["notice", "placard"],
   jukebox: ["juke"],
   crane: ["cranes", "origami", "napkin", "napkins"],
@@ -794,24 +795,35 @@ const _COMPLEX_SHRINE = {
     "bar in here — the same reason the ban is: one ground, one landlord, whatever the signage says.",
 };
 
+// The shelf every bar has: shrine, garland, water, the king beside it. What is
+// NOT here any more is the photograph of a dead farang owner — it was in two of
+// three pooled lines, which quietly gave every bar in Pattaya a dead foreigner.
+// Mario, on seeing it twice: "the farang photo in particular is odd to have
+// consistent across different bars." Correct. A memorial is the most specific
+// object in a room and it was the most generic line in the game.
+//
+// It belongs in _SHRINE_OWNER below — authored per bar, where the canon has
+// somebody to remember. Same doctrine as darkLight and narrow: generic default,
+// authored exceptions.
 const _SHRINE_BAR = [
   "High on the back wall behind the rail: a small shelf-shrine, a garland going brown, a " +
-    "glass of water. Beside it and slightly higher, a portrait of the king. And beside THAT, " +
-    "a photograph of a farang — sixties, sunburnt, holding a beer at this bar, taken at some " +
-    "point when it was his.",
-  "The shelf above the optics: incense stubs, a fresh jasmine garland, a little water. The " +
-    "king's portrait hangs beside it. Nobody at the rail could tell you much about the third " +
-    "photograph, except the year, and that he used to stand where the cashier stands.",
+    "glass of water. Beside it and slightly higher, a portrait of the king. Somebody puts " +
+    "fresh flowers up there before the shutters go up, every day, and nobody mentions it.",
+  "The shelf above the optics: incense stubs, a fresh jasmine garland, a little water, and " +
+    "the king's portrait hung beside it rather than in it. It is the tidiest thing in the bar " +
+    "by a distance.",
   "Behind the bottles, up where the smoke goes: a shrine shelf, a garland, a water glass " +
-    "changed today. The king is beside it. So is a farang in a photograph, and if you ask, " +
-    "you get a shrug and a date, and it turns out that is the whole memorial.",
+    "changed today. The king is beside it. Whatever else slides in here, that does not.",
 ];
 
-// The Queen Vic is a pub with an INN over it — rooms, a front desk, laundry —
-// and like every licensed premises in the country it is run day-to-day by Thai
-// staff, because a foreigner legally cannot do most of this work. So its shrine
-// is kept properly. The joke is the setting, not neglect: horse brasses,
-// dartboard, and a spirit house getting fresh water every morning.
+// Bars with somebody to remember. Only where the canon actually has a farang
+// who is gone — an invented dead owner in every bar is worse than none.
+const _SHRINE_OWNER = {
+  queen_vic: " Beside the king, in a black frame: a heavy Englishman behind this same bar, " +
+    "in a shirt that dates him. Nobody currently drinking here can tell you more than the " +
+    "year, and the year is on the frame.",
+};
+
 const _SHRINE_PUB = [
   "High on the back wall between a horse brass and a framed pub sign: a shrine shelf, a fresh " +
     "garland, a water glass changed this morning. The king's portrait hangs beside it. However " +
@@ -1006,8 +1018,8 @@ const _SCENERY = [
       // The Queen Vic is the one bar with no Thai staff at all, and it shows:
       // the shelf is there, because the premises came with one, and nobody
       // whose job it is has changed the water in a while.
-      if (ctx === "pub") return _pickVary(_SHRINE_PUB, "scn_shrine_pub");
-      if (ctx === "bar") return _pickVary(_SHRINE_BAR, "scn_shrine_bar");
+      if (ctx === "pub") return _pickVary(_SHRINE_PUB, "scn_shrine_pub") + (_SHRINE_OWNER[G.room] || "");
+      if (ctx === "bar") return _pickVary(_SHRINE_BAR, "scn_shrine_bar") + (_SHRINE_OWNER[G.room] || "");
       const c = _COMPLEX_SHRINE[G.room];
       if (c) return c;
       return _pickVary(_SHRINE_STREET, "scn_shrine_street");
