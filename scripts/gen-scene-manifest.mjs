@@ -36,10 +36,11 @@ const slug = s => String(s || "").toLowerCase().replace(/[^a-z0-9]+/g, "-");
 // Rooms the flag heuristic below can't read: landmarks, complexes, and the
 // handful of non-bar interiors. Kept small on purpose — everything else derives.
 const KIND_OVERRIDE = {
-  central_mall: "shop",           // seven storeys of air-conditioned glass
+  central_mall: "mall",           // seven storeys of air-conditioned glass — NOT a
+                                  // convenience store, which "shop" rendered it as
   police_station: "interior",
   oy_office: "interior",          // ledgers, shrine shelf, the floor-bolted safe
-  short_time_motel: "interior",
+  short_time_motel: "motel",      // an alley door with no sign, not an office
   buddha_hill: "viewpoint",
   lake_mabprachan: "viewpoint",
   myth_night: "market",           // shipping-container bar complex

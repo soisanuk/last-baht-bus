@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-10",
+  "generated": "2026-08-11",
   "note": "Every room in the game + its region, for the scene-art pipeline (docs/art-pipeline-spec.md). Derived from web/js/world.js — regenerate with scripts/gen-scene-manifest.mjs, do not hand-edit. `kind` is a generator heuristic for prompt-template selection, not game canon. `regionSlug` is produced by the same regex as web/js/scene.js `_sceneArt()`; art files are web/art/rooms/<id>.png with web/art/regions/<slug>.png as the fallback.",
   "counts": {
     "rooms": 234,
@@ -9,11 +9,13 @@
       "street": 93,
       "massage": 19,
       "beer": 57,
-      "shop": 2,
-      "interior": 3,
+      "mall": 1,
+      "interior": 2,
+      "motel": 1,
       "gogo": 11,
       "viewpoint": 2,
       "food": 4,
+      "shop": 1,
       "market": 4,
       "pub": 3,
       "soapy": 3,
@@ -616,7 +618,7 @@
       "barType": null,
       "region": "Beach Road",
       "regionSlug": "beach-road",
-      "kind": "shop",
+      "kind": "mall",
       "dark": false,
       "people": [],
       "desc": "The air-conditioned mothership: seven storeys of glass, brand names, and farang families who have no idea what this town does after dinner. Free outlets by the food court, arctic air, and security guards who wai. Beach Road glitters west; Second Road runs behind the mall to the east. The police station squats a couple of blocks north like a paperweight — round on the Beach Road side, not through here; nobody walks out of Central Festival into a charge desk."
@@ -762,7 +764,7 @@
       "barType": null,
       "region": "Beach Road",
       "regionSlug": "beach-road",
-      "kind": "interior",
+      "kind": "motel",
       "dark": false,
       "people": [
         "Somchith"
