@@ -2351,8 +2351,11 @@ const ROOMS = {
     reads: {
       photos: "Decades of the same corner, four deep along the wall. The bar barely changes " +
         "— the bell, the pink, the stools — and the haircuts date every frame to the year. " +
-        "Candy is in most of them and gets younger as you go left. In the oldest, she is " +
-        "behind somebody ELSE's bar, in somebody else's uniform, not yet running anything.",
+        "Candy is in most of them and gets younger as you go left. In the oldest she is " +
+        "twenty, in somebody else's uniform, behind somebody else's bar \u2014 an open front " +
+        "on a street of open fronts, three colours of neon, a stool by the road. Soi 6. She " +
+        "made the money there that bought this corner, and she has never once pretended " +
+        "otherwise.",
     },
     exits: { out: "buakhao_n" },
   },
