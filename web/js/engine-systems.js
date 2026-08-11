@@ -2057,10 +2057,45 @@ function _tanCall() {
       "anywhere on it. Enjoy the falling.\" Click.");
     return;
   }
+  // ACT ONE. Measured, this is the opening's real difficulty: the beach is 19
+  // turns from Candy Bar, Candy Bar 9 from Oy, Oy 13 from your own door — over
+  // forty percent of a hundred-turn night spent walking, before any of the
+  // actual puzzle, and a first-timer walks it room by room in the wrong order
+  // and then eats a full reset. He is not failing the mystery. He is failing
+  // the bus timetable.
+  //
+  // So Tan drives, and holds both of his positions at once: he will not find
+  // the wallet for you — "first night is on you" stands — and he will not leave
+  // a man he drove in from the airport sitting on a beach with no shoes either.
+  // Once. Free, because he never takes money. He tells you nothing.
   if (!_flag("act1Done")) {
-    _say("\"First night is on you, my friend — I told you at the airport. Find the " +
-      "wallet. THEN we talk about rides.\" Click. He knew about the wallet before " +
-      "you said a word. Of course he did.");
+    if (G.phone.tanAct1) {
+      _say("\"Twice?\" A short laugh with something fond under it. \"My friend, I drive you " +
+        "one time tonight. The rest is legs.\" Click.");
+      return;
+    }
+    if (ROOMS[G.room] && ROOMS[G.room].region !== "Jomtien") {
+      _say("\"You are already in town.\" A pause while he works out whether you know that. " +
+        "\"Walk, my friend. It is four minutes and you will see something.\" Click.");
+      return;
+    }
+    G.phone.tanAct1 = true;
+    _say("You tell him where you are. There is a silence exactly long enough to be a man " +
+      "deciding something. \"Do not move.\"", "win");
+    _say("Six minutes, and the grey sedan comes down the beach road without hurrying. He " +
+      "does not ask what happened. He looks at your bare feet, at the sand on your shirt, " +
+      "and says nothing at all about either \u2014 which is somehow worse than the joke you " +
+      "were braced for.", "win");
+    _say("\"The wallet is yours to find,\" he says, pulling out. \"I told you at the airport, " +
+      "first night is on you, and I mean it. But I am not going to sit at home knowing you " +
+      "are walking Second Road with no shoes.\" He turns the aircon up. \"This part is not " +
+      "the game. The game starts when you get out.\"");
+    G.room = "buakhao_n";
+    G.darkStreak = 0;
+    _say("He puts you down on Soi Buakhao at the Diana end, points once up the soi without " +
+      "saying at what, and is gone before you have finished thanking him. No money changes " +
+      "hands. He would not have taken it and you have not got any.", "win");
+    _describeRoom(true);
     return;
   }
   if (G.room === _hotelRoomId()) { _say(_pickVary(_TAN_HOME_LINES, "tanhome")); return; }

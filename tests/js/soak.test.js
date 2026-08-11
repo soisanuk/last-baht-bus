@@ -182,7 +182,11 @@ const DE_CEILINGS = [
   // Act One walk can wander past them — but the CRITICAL path does not: the
   // wallet route goes up Second Road and cuts through Soi Diana, well north of
   // the mall. So backlog, same call as the Soi 5 venues.
-  { mode: "act1", seeds: [1, 2, 3, 4, 5], nights: 3, ceiling: 111 },  // de batch 7: the first act1 drop from actual
+  { mode: "act1", seeds: [1, 2, 3, 4, 5], nights: 3, ceiling: 121 },  // de batch 7: the first act1 drop from actual
+  // 111 → 121: Tan's Act One ride. act1 only, and the same good-news shape as
+  // the quest hail — the soak now gets driven into TOWN on the opening night
+  // instead of dying on the beach road, so it reaches prose the walk could not.
+
   // +1 (act1 104→105, expat 455→456): the HELP screen gained a line telling
   // desktop players that RIGHT-CLICK opens the full wheel. The SOI6 help is
   // translated and absorbed it; the FULL help has never had a de entry at all,

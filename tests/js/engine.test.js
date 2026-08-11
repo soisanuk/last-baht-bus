@@ -7263,3 +7263,33 @@ test("a giver hails a player who has never had a quest, and only that once", () 
   assert.equal(out.join("\n"), "", "you've had a job — you know how this works");
   assert.ok(!state().questHailed, "and it doesn't burn the one-shot declining");
 });
+
+// Tan's Act One ride. Measured, the opening's real difficulty is the map, not
+// the mystery: beach → Candy Bar is 19 turns, Candy Bar → Oy 9, Oy → your own
+// door 13. Over 40% of a 100-turn night walking, before any of the puzzle, and
+// a first-timer walks it in the wrong order and eats a full reset for it.
+test("CALL TAN in Act One drives you into town — once, free, telling you nothing", () => {
+  newGame();
+  state().phone.contacts = { tan: true };
+  state().room = "jomtien_beach";
+  const money0 = state().money, t0 = state().nightTurn;
+
+  out = []; run("call tan");
+  assert.equal(state().room, "buakhao_n", "he puts you down at the Diana end of Buakhao");
+  assert.ok(state().nightTurn - t0 <= 2, "the whole ride costs about a turn, not nineteen");
+  assert.equal(state().money, money0, "he has never taken money and you haven't got any");
+  assert.match(out.join("\n"), /wallet is yours to find/, "he still won't solve it for you");
+
+  // once a night, and he says so
+  out = []; run("call tan");
+  assert.match(out.join("\n"), /one time tonight|The rest is legs/i);
+  assert.equal(state().room, "buakhao_n", "and doesn't move you again");
+
+  // and he won't ferry you around town you're already standing in
+  newGame();
+  state().phone.contacts = { tan: true };
+  state().room = "buakhao_n"; out = [];
+  run("call tan");
+  assert.match(out.join("\n"), /already in town/);
+  assert.ok(!state().phone.tanAct1, "declining doesn't burn the one ride");
+});
