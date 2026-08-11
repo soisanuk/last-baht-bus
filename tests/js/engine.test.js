@@ -7231,3 +7231,35 @@ test("the newbie nudges fire once, in order, and only where the advice works", (
   out = []; _newbieNudge();
   assert.equal(out.join("\n"), "", "both are once ever");
 });
+
+// The first job finds you — once, ever. _questOffer only fires at the end of
+// TALKing to a giver, which assumes the player already knows that talking to
+// people until something surfaces is what this game is. Measured: inside the
+// Soi 6 pocket exactly ONE real quest is reachable by a new character, and it
+// waits behind a conversation he has no reason to start.
+test("a giver hails a player who has never had a quest, and only that once", () => {
+  newGame();
+  state().stage = "vacation"; state().flags.act1Done = true;
+  state().quests = {}; state().questHailed = false;
+  const bar = _npcRoom("bert");
+
+  state().room = bar; out = [];
+  _questHail();
+  const said = out.join("\n");
+  assert.match(said, /has a job for you/, "the giver opens with it");
+  assert.match(said, /ACCEPT/, "and the live command follows");
+  assert.ok(state().questHailed, "the one-shot is spent");
+
+  // never again, even standing in front of a giver with work going
+  out = []; _questHail();
+  assert.equal(out.join("\n"), "", "once ever, not once a night");
+
+  // and a player who already has quest history is never hailed at all
+  newGame();
+  state().stage = "vacation"; state().flags.act1Done = true;
+  state().quests = { league: "done" }; state().questHailed = false;
+  state().room = bar; out = [];
+  _questHail();
+  assert.equal(out.join("\n"), "", "you've had a job — you know how this works");
+  assert.ok(!state().questHailed, "and it doesn't burn the one-shot declining");
+});

@@ -329,6 +329,7 @@ function _arriveAt(to) {
   G.room = to;
   if (typeof _fonPour === "function") _fonPour();   // Wednesday, first hour, her bar only
   if (typeof _newbieNudge === "function") _newbieNudge();   // once ever: a number, then the bell
+  if (typeof _questHail === "function") _questHail();       // once ever: the first job finds you
   G.sevenAt = null;   // back on the pavement — the next buy walks you in again
   _describeRoom(true);
   _lightNotice(); // walking in with the torch burning gets you clocked

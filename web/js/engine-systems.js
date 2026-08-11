@@ -1661,6 +1661,41 @@ function _questPitch(desc) {
     .trim();
 }
 
+// ── The first job finds YOU ──────────────────────────────────────────────────
+// _questOffer only fires at the end of TALKing to a giver, which assumes the
+// player already knows that talking to people until something surfaces is what
+// this game is. A first-timer does not. Measured: inside the Soi 6 pocket
+// exactly ONE real quest is reachable by a new character (Bert's league night —
+// trust 0, no deps, no flags), and it waits behind a conversation he has no
+// reason to start.
+//
+// So the FIRST one comes to him. On arrival, if a giver here has a job going
+// and the player has never had a quest in his life, the giver calls him over
+// and the normal offer follows. Self-disabling the moment `G.quests` has
+// anything in it at all — after your first job, you are expected to know how
+// this works, and nobody hails you again for the rest of the game.
+const _QUEST_HAIL = [
+  "{who} lifts his chin at you from behind the rail. \u201cOi. You. Got a minute, or are you " +
+    "just here to drink?\u201d",
+  "\u201cHere \u2014 before you sit down.\u201d {who} has the look of a man who has been waiting " +
+    "for somebody to walk in who isn't a regular.",
+  "{who} catches your eye and jerks his head, the universal come-here of a man with something " +
+    "he wants doing and nobody obvious to do it.",
+];
+
+function _questHail() {
+  if (G.questHailed) return;                       // once ever, not once a night
+  if (Object.keys(G.quests || {}).length) return;  // you've had a job — you know the drill
+  for (const [qid, q] of Object.entries(QUESTS)) {
+    if (q.vignette || !q.giver || !_questAvailable(qid)) continue;
+    if (_npcRoom(q.giver) !== G.room || !NPCS[q.giver]) continue;
+    G.questHailed = true;
+    _say(_fmt(_pickVary(_QUEST_HAIL, "qhail"), { who: NPCS[q.giver].name }), "win");
+    _questOffer(q.giver);
+    return;
+  }
+}
+
 function _questOffer(npcId) {
   // Don't pile a job offer on top of a question the giver just put to you — let
   // the player answer first (it reads as one overwhelming turn otherwise, and it's

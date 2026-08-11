@@ -208,7 +208,18 @@ const DE_CEILINGS = [
   // stops being one. 421 → 428 for the three new south-end rooms.
   // 419 → 451, a big move for one room: splitting second_rd_c's two jobs gives
   // the walk another node to fan out from in the middle of Second Road.
-  { mode: "expat", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 480 },
+  { mode: "expat", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 509 },
+  // 480 → 509 for the first-job hail, and the size of that is the point: the
+  // hail fires _questOffer, so a soak that had NEVER been offered a quest now
+  // gets one and walks into the quest desc, the journal and HINT behind it.
+  // Twenty-nine lines of prose that were always there and always unreachable —
+  // coverage of a new sample, not twenty-nine new leaks. Which is also the
+  // clearest possible evidence that the hail does what it was built to do.
+
+  // +3: the first-job hail (_QUEST_HAIL). Expat only, because that is the mode
+  // whose walk reaches a giver with no quests on the books — and the whole point
+  // is that it fires once per character, so it can only ever leak its own pool.
+
   // +1: the Queen Vic's Thai staff (Nuch, Aoy, Gaew). Only expat moves, because
   // that is the mode whose walk actually reaches the pub often enough to talk to
   // them. The shrine prose is EXAMINE-only, which the soak never types.
