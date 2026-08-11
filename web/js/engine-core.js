@@ -1340,6 +1340,7 @@ function _tick() {
   if ((G.hunger >= 80 || G.thirst >= 80) && G.nightTurn % 10 === 0) {
     _addHappy(-1, G.thirst >= G.hunger ? "you're parched" : "you're starving");
   }
+  if (typeof _tanRescue === "function") _tanRescue();   // the fixer finds a lost first-timer
   if (G.hunger >= 100 || G.thirst >= 100) { _endNight("collapse"); return; }
   if (G.nightTurn >= NIGHT_TURNS) { _endNight("dawn"); return; }
   // rainy season: when the bake says storm, the sky sometimes proves it.

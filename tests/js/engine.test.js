@@ -7293,3 +7293,57 @@ test("CALL TAN in Act One drives you into town — once, free, telling you nothi
   assert.match(out.join("\n"), /already in town/);
   assert.ok(!state().phone.tanAct1, "declining doesn't burn the one ride");
 });
+
+// Act One ends on the WALLET, not on getting to bed. A man who has just got his
+// wallet back goes out; he does not walk thirteen turns home across town. That
+// last leg was 13 of the 33-turn minimum run — nearly half of it, after the
+// puzzle was already solved.
+test("Act One completes the moment the wallet is in hand, wherever you are", () => {
+  newGame();
+  state().player = { origin: "monger", personality: "joker", orientation: "straight", said: {} };
+  state().room = "rainbow_girls";
+  state().flags.knowMot = true; state().flags.knowOyHasIt = true;
+  out = []; run("wai oy"); run("ask oy about wallet");
+  assert.ok(_flag("hasWallet"), "she hands it over to a polite man");
+  assert.ok(_flag("act1Done"), "and that IS the end of the opening");
+  assert.notEqual(state().room, "hotel_room", "you did not have to go home for it");
+  assert.match(out.join("\n"), /ACT ONE COMPLETE/);
+  assert.equal(state().stage, "vacation");
+
+  // the emergency stash is in the room safe, so it waits in the room
+  assert.ok(!_flag("roomSafeOpened"), "not collected in an LK Metro bar");
+  const before = state().money;
+  state().room = _hotelRoomId();
+  _roomSafeBeat();
+  assert.ok(_flag("roomSafeOpened"));
+  assert.equal(state().money, before + SAFE_CASH, "collected when you get there");
+  out = []; _roomSafeBeat();
+  assert.equal(out.join("\n"), "", "and only once");
+});
+
+// Halfway through the opening night, a first-timer who hasn't found Candy and
+// hasn't thought to use the card in his pocket gets the offer he didn't know to
+// ask for — the fixer comes to him.
+test("Tan calls a lost first-timer at the halfway mark", () => {
+  newGame();
+  state().phone.contacts = { tan: true };
+  state().room = "jomtien_beach"; state().nightTurn = 49;
+  out = []; run("look");
+  assert.equal(state().room, "buakhao_n", "he drops you at the Diana end");
+  assert.match(out.join("\n"), /Go find Candy/, "and points you at the one person who knows");
+
+  // not if you already found her
+  newGame();
+  state().phone.contacts = { tan: true };
+  state().room = "jomtien_beach"; state().nightTurn = 60; state().flags.knowMot = true;
+  out = []; run("look");
+  assert.equal(state().room, "jomtien_beach", "you're not lost — no rescue");
+
+  // and it shares the one ride with the outgoing call
+  newGame();
+  state().phone.contacts = { tan: true };
+  state().room = "jomtien_beach";
+  run("call tan");
+  state().nightTurn = 60; out = []; run("look");
+  assert.doesNotMatch(out.join("\n"), /phone goes off/, "one lift a night, either direction");
+});

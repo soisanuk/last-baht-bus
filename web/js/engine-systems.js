@@ -2047,6 +2047,39 @@ const _TAN_RIDE_LINES = [
     "a suspiciously long time for him. \"You call exactly when you said you would need " +
     "to, and not before. A man who knows what a favour costs. Very rare in this town.\"",
 ];
+// Tan calls YOU. Halfway through the opening night, if you still have not found
+// Candy and have not thought to use the card in your pocket, the phone rings.
+//
+// Mario's design, and the reason it is better than the version where you must
+// know to call: a first-timer who is lost does not know that being driven is an
+// option, so the option has to come and find him. It fires on the same one-shot
+// as the outgoing ride — take the lift either way, there is only one of them.
+//
+// He does not rescue the quest, only the geography: Buakhao at the Diana end,
+// "go find Candy", gone.
+function _tanRescue() {
+  if (_flag("act1Done") || G.mode === "soi6") return;
+  if (G.phone.tanAct1) return;                  // he has already driven you once
+  if (G.nightTurn < 50) return;                 // halfway through the night
+  if (_flag("knowMot")) return;                 // you found Candy on your own
+  if (G.battery <= 0) return;                   // the phone is the whole mechanism
+  if (!G.phone.contacts || !G.phone.contacts.tan) return;
+  G.phone.tanAct1 = true;
+  G.battery = Math.max(0, G.battery - 1);
+  _say("Your phone goes off in your pocket, which is a surprise, because almost nobody " +
+    "has the number. \u201cMy friend.\u201d Tan does not say how he knows. \u201cIt is " +
+    "half past midnight and you are not where a man looking for his wallet would be.\u201d", "alert");
+  _say("He is already close. The grey sedan pulls in without being told where, and the door " +
+    "opens on aircon and quiet, and he does not make a single joke about the state of you.", "win");
+  G.room = "buakhao_n";
+  G.darkStreak = 0;
+  _say("He puts you down on Soi Buakhao at the Diana end, leans across to the open window, " +
+    "and says it like a man giving directions to a bus stop: \u201cGo find Candy.\u201d " +
+    "Then he is gone, and you are standing in the middle of the loudest soi in Pattaya with " +
+    "no more excuses and rather less night than you started with.", "win");
+  _describeRoom(true);
+}
+
 function _tanCall() {
   if (G.battery <= 0) { _say("Dead phone. The town's most reliable excuse."); return; }
   G.battery = Math.max(0, G.battery - 1);
@@ -4252,8 +4285,32 @@ function _doEat(arg) {
 // Reaching Room 412 with the wallet completes the intro quest — scored, and
 // converted into a happiness head start. The night does NOT end.
 
+// The opening ends when you have the WALLET, not when you have gone to bed.
+// Mario's call and he is right: the objective a player actually feels is
+// getting his wallet back, and a man who has just got it back does not walk
+// thirteen turns home across town, he goes out. Measured, that last leg was
+// 13 of the 33-turn minimum run — nearly half of it, spent after the puzzle
+// was already solved.
+//
+// The room safe stays a room thing (see _roomSafeBeat): it is in your room, so
+// you collect it when you get there, whenever that is.
+// The emergency stash is in the room safe, and the room safe is in the room.
+// It used to be part of the Act One screen because that screen fired at your
+// bed; now the screen fires wherever you are standing when the wallet turns up,
+// so the money waits for you like the safe always did.
+function _roomSafeBeat() {
+  if (!_flag("act1Done") || _flag("roomSafeOpened")) return;
+  if (G.room !== _hotelRoomId()) return;
+  _setFlag("roomSafeOpened");
+  G.money += SAFE_CASH;
+  _say(`Your own room, and the key card works. The safe in the wardrobe opens on the ` +
+    `second try: passport, return ticket \u2014 and the emergency stash you very nearly ` +
+    `forgot you packed. \u0e3f${SAFE_CASH}. (\u0e3f${G.money} in pocket. The vacation is ` +
+    "officially back on.)", "win");
+}
+
 function _checkAct1() {
-  if (G.room !== "hotel_room" || _flag("act1Done")) return;
+  if (!_flag("hasWallet") || _flag("act1Done")) return;
   _setFlag("act1Done");
   let score = 0;
   const lines = [];
@@ -4277,25 +4334,22 @@ function _checkAct1() {
   G.score = score;
 
   _say("═══════════════════════════════════", "win");
-  _say("Room 412. You bolt the door, fall onto the terrible bed, and hold your " +
-    "wallet up to the ceiling light like a trophy. Outside, Pattaya keeps roaring " +
-    "without you — the bars, the buses, the whole neon machine. Somewhere out " +
-    "there Candy is polishing a glass, Bank is leaning on his bike, and Madam Oy " +
-    "is counting money that is, for once, not yours.", "win");
+  _say("You get somewhere with light and check it properly, the way a man checks a " +
+    "wallet he did not expect to see again: cards, key card, the cash. It is all " +
+    "there, or near enough. Around you Pattaya carries on exactly as it was — the " +
+    "bars, the buses, the whole neon machine, entirely indifferent to the best " +
+    "thing that has happened to you all week.", "win");
   _say("★ ACT ONE COMPLETE: THE LAST BAHT BUS ★", "win");
   for (const l of lines) _say(l, "dim");
   _say(`ACT ONE SCORE: ${score}`, "win");
   _addHappy(Math.max(5, Math.round(score / 4)));
-  G.money += SAFE_CASH;
-  _say(`The room safe opens on the second try. Passport, return ticket — and the ` +
-    `emergency stash you very nearly forgot: ฿${SAFE_CASH}. (฿${G.money} in ` +
-    "pocket. The vacation is officially back on.)", "win");
   _setFlag("act1Done"); // stage advances
   G.stage = "vacation";
   _say("");
-  _say("You could sleep. But the shower works, the wallet is fat enough, and " +
-    "through the window the whole electric city is just getting started — and for " +
-    "the first time tonight, nobody in it has anything of yours.", "room");
+  _say("You could go back to the hotel and lie down. Nobody would blame you. But " +
+    "the key card is in your hand for the first time tonight, the city is only " +
+    "just getting started, and for the first time since you woke up on that sand " +
+    "nobody out here has anything of yours.", "room");
   _say(`★ THE VACATION IS YOURS — ${8 - G.day} night${8 - G.day === 1 ? "" : "s"} ` +
     "left. Goal: สบายสบาย — get happy. ★", "win");
   _say("(SCORE tracks happiness, the clock, and your body. Eat, drink water, " +

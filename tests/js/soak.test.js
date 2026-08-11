@@ -85,7 +85,7 @@ const DE_CEILINGS = [
   // 149 → 111 → 94. The last drop was a BUG FIX, not translation: a motosai
   // could ride out of the fenced pocket, so the walk was reaching town prose it
   // should never have seen. Fixing the fence took 17 lines off this number.
-  { mode: "soi6", seeds: [1, 2, 3], nights: 2, ceiling: 122 },
+  { mode: "soi6", seeds: [1, 2, 3], nights: 2, ceiling: 132 },
   // +3 each for the bad-night debrief (_DEBRIEF): three lines per failed
   // ending, and the soak fails a lot of nights. Straight +3 rather than a
   // re-roll this time — the debrief prints no pooled line, so it consumes
@@ -182,7 +182,13 @@ const DE_CEILINGS = [
   // Act One walk can wander past them — but the CRITICAL path does not: the
   // wallet route goes up Second Road and cuts through Soi Diana, well north of
   // the mall. So backlog, same call as the Soi 5 venues.
-  { mode: "act1", seeds: [1, 2, 3, 4, 5], nights: 3, ceiling: 121 },  // de batch 7: the first act1 drop from actual
+  { mode: "act1", seeds: [1, 2, 3, 4, 5], nights: 3, ceiling: 143 },  // de batch 7: the first act1 drop from actual
+  // act1 121 → 143 is the big one and it is the whole point of the change: Act
+  // One now COMPLETES on the wallet instead of on reaching room 412, so a soak
+  // that used to die on the walk home finishes the opening and spends the rest
+  // of the night in the sandbox it could never previously reach. soi6 and expat
+  // move for Tan's rescue call. New coverage, not new leaks.
+
   // 111 → 121: Tan's Act One ride. act1 only, and the same good-news shape as
   // the quest hail — the soak now gets driven into TOWN on the opening night
   // instead of dying on the beach road, so it reaches prose the walk could not.
@@ -212,7 +218,7 @@ const DE_CEILINGS = [
   // stops being one. 421 → 428 for the three new south-end rooms.
   // 419 → 451, a big move for one room: splitting second_rd_c's two jobs gives
   // the walk another node to fan out from in the middle of Second Road.
-  { mode: "expat", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 509 },
+  { mode: "expat", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 512 },
   // 480 → 509 for the first-job hail, and the size of that is the point: the
   // hail fires _questOffer, so a soak that had NEVER been offered a quest now
   // gets one and walks into the quest desc, the journal and HINT behind it.
