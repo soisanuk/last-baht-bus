@@ -5174,6 +5174,35 @@ const NPCS = {
     desc: "Shy, half-hiding behind the plants she obviously waters herself. She brightens " +
       "the instant anyone tries even one word of Thai.",
     dialogue: [
+      // She already waters the plants and already says the jasmine is for the
+      // spirit house — this is that thread pulled. Asking is the whole beat:
+      // most farang never do, and the curiosity is worth more to her than the
+      // answer is to you, which is why it pays bond rather than a flag.
+      { topic: "shrine",
+        fx: (st, G) => { _addBond("fon", 1); st.trust = Math.min(5, (st.trust || 0) + 1); },
+        text: "She lights up so fast it is almost embarrassing. \u201cYou want know? Really?\u201d " +
+          "Her {{phone}} comes out, then goes away again \u2014 she decides to try it herself. " +
+          "\u201cIs \u0e28\u0e32\u0e25\u0e1e\u0e23\u0e30\u0e20\u0e39\u0e21\u0e34. Spirit house. Before the bar, the land already have\u2014\u201d " +
+          "she searches, gives up on the word, and points at the ground instead. " +
+          "\u201cSomebody. Long time, before building. So we give him place to stay, up high, " +
+          "and every day water, flower, sometimes the red Fanta.\u201d She shrugs, entirely " +
+          "unembarrassed. \u201cHe was here first, na. Is polite.\u201d",
+        short: "\u201cSomebody was here before the building. We give him a place to stay.\u201d" },
+      { topic: "shrine", bond: 2,
+        text: "\u201cYou ask me before about the \u0e28\u0e32\u0e25.\u201d She is pleased you came back to it. " +
+          "\u201cThe one outside \u2014 that one for all the bar here, everybody use, not only us. " +
+          "The small one\u2014\u201d she tips her chin at the shelf behind the rail \u201cthat one " +
+          "just for the bar. Different.\u201d A beat, and the English runs out ahead of her. " +
+          "\u201cOne is the ground. One is the shop. Sorry, my English\u2014\u201d She is not " +
+          "sorry, and she should not be; it took you four sentences to understand it.",
+        short: "\u201cOne is the ground. One is the shop.\u201d" },
+      { topic: "luck",
+        text: "\u201cLuck? \u0e40\u0e2e\u0e07! Heng!\u201d She says it like a small firework. \u201cFirst customer of " +
+          "the night, that one important \u2014 \u0e40\u0e1b\u0e34\u0e14\u0e1a\u0e34\u0e25, open the bill. If the first " +
+          "one good, all night good. If first one\u2014\u201d a face \u201c\u0e0b\u0e27\u0e22. Suay. Bad luck, " +
+          "not beautiful \u2014 careful, farang always say wrong one!\u201d She laughs at you " +
+          "pre-emptively for a mistake you had not yet made.",
+        short: "\u201c\u0e40\u0e2e\u0e07! And \u0e0b\u0e27\u0e22 is the bad one \u2014 not the beautiful one.\u201d" },
       { req: ["greetedFon"], th: "พูดไทยเก่ง", rom: "phuut thai keng",
         text: "\"Your Thai so good!\" (It was one word.) She emerges from the ferns entirely. \"The jasmine is for the spirit house. You want to know anything about this soi, ask me — quietly.\"",
         short: "\"Ask me anything about this soi — quietly.\"" },

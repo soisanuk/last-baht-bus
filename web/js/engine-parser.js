@@ -765,12 +765,65 @@ function _doScenery(arg) {
   const ctx = _sceneryCtx();
   // a pub is still a bar for everything the two genuinely share (the stool, the
   // mirror, the floor) — it only needs its own line where the trade differs
+  if (e.fn) { const line = e.fn(ctx); if (!line) return false; _say(line); return true; }
   const pool = e.lines[ctx] || (ctx === "pub" && e.lines.bar) || e.lines.any;
   if (!pool) return false;
   _say(_pickVary(pool, "scn_" + e.key + "_" + ctx));
   return true;
 }
 
+
+// One shrine per COMPLEX, not per bar — authored, because "is this a complex"
+// is not a thing the room data says. Each is the shared one for every bar
+// trading on that ground.
+const _COMPLEX_SHRINE = {
+  myth_night: "On the corner where the small road meets the complex, one spirit house on a " +
+    "single post, at about eye level. Not one per bar — one for the whole place, because it " +
+    "belongs to the ground and the ground is one plot however many people are trading on it. " +
+    "Today's water is fresh. So are the marigolds. Somebody does this before the shutters go up.",
+  tt_entrance: "Just inside the arch, a spirit house on a post, and beneath it a lower one on " +
+    "four legs shaped like a little Thai house. Two shrines, two different tenants: the one up " +
+    "high came with the shrine, the one down low was here before the maze was. Every bar in " +
+    "Tree Town uses both, and the building's shadow has been carefully kept off them.",
+  lk_entrance: "A spirit house at the mouth of the complex, garlanded, with three sticks of " +
+    "incense burnt down to stubs and a bottle of red Fanta with a straw in it. Shared by every " +
+    "bar in here — the same reason the ban is: one ground, one landlord, whatever the signage says.",
+};
+
+const _SHRINE_BAR = [
+  "High on the back wall behind the rail: a small shelf-shrine, a garland going brown, a " +
+    "glass of water. Beside it and slightly higher, a portrait of the king. And beside THAT, " +
+    "a photograph of a farang — sixties, sunburnt, holding a beer at this bar, taken at some " +
+    "point when it was his.",
+  "The shelf above the optics: incense stubs, a fresh jasmine garland, a little water. The " +
+    "king's portrait hangs beside it. Nobody at the rail could tell you much about the third " +
+    "photograph, except the year, and that he used to stand where the cashier stands.",
+  "Behind the bottles, up where the smoke goes: a shrine shelf, a garland, a water glass " +
+    "changed today. The king is beside it. So is a farang in a photograph, and if you ask, " +
+    "you get a shrug and a date, and it turns out that is the whole memorial.",
+];
+
+// The Queen Vic is a pub with an INN over it — rooms, a front desk, laundry —
+// and like every licensed premises in the country it is run day-to-day by Thai
+// staff, because a foreigner legally cannot do most of this work. So its shrine
+// is kept properly. The joke is the setting, not neglect: horse brasses,
+// dartboard, and a spirit house getting fresh water every morning.
+const _SHRINE_PUB = [
+  "High on the back wall between a horse brass and a framed pub sign: a shrine shelf, a fresh " +
+    "garland, a water glass changed this morning. The king's portrait hangs beside it. However " +
+    "English the panelling is, somebody Thai opens this building every day, and it shows here first.",
+  "Above the optics, sharing a wall with a dartboard and a photograph of a football team: the " +
+    "shrine, properly kept — incense, flowers, water. The rooms upstairs need making up whether " +
+    "or not the pub downstairs is pretending to be in Bermondsey.",
+  "The shelf over the till, garlanded, with a bottle of red Fanta and a straw in it, three feet " +
+    "from a brass plaque about warm beer. Nobody finds this incongruous except you.",
+];
+
+const _SHRINE_STREET = [
+  "Not out here. The spirit houses sit where a business sits — outside the complexes, and " +
+    "high on the back wall inside the bars themselves.",
+  "Nothing on this stretch. They belong to premises, and this is just road.",
+];
 
 const _NO_SUCH_THING = [
   "Nothing special about that — or it isn't here.",
@@ -936,6 +989,25 @@ const _SCENERY = [
         "(RING BELL.)",
     ],
   } },
+
+  // Two shrines, two jobs (docs: the luck-ritual notes). OUTSIDE, a complex
+  // keeps ONE spirit house for every bar trading on the ground — because it
+  // belongs to the ground, and the ground is one property however many
+  // operators are on it. INSIDE, each bar keeps its own shelf behind the rail,
+  // with the king's portrait beside it and sometimes a photograph of a farang
+  // who used to own the place. Deliberately EXAMINE-only: it is a thing worth
+  // noticing, not a thing worth announcing at every door.
+  { key: "shrine", m: /\b(shrines?|spirit house|spirit-house|altar|joss)\b/,
+    fn: (ctx) => {
+      // The Queen Vic is the one bar with no Thai staff at all, and it shows:
+      // the shelf is there, because the premises came with one, and nobody
+      // whose job it is has changed the water in a while.
+      if (ctx === "pub") return _pickVary(_SHRINE_PUB, "scn_shrine_pub");
+      if (ctx === "bar") return _pickVary(_SHRINE_BAR, "scn_shrine_bar");
+      const c = _COMPLEX_SHRINE[G.room];
+      if (c) return c;
+      return _pickVary(_SHRINE_STREET, "scn_shrine_street");
+    } },
 
   { key: "bikes", m: /\b(bikes?|motorbikes?|scooters?|traffic|taxis?)\b/, lines: {
     street: [
