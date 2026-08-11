@@ -2066,7 +2066,7 @@ function _tanCall() {
   //
   // So Tan drives, and holds both of his positions at once: he will not find
   // the wallet for you — "first night is on you" stands — and he will not leave
-  // a man he drove in from the airport sitting on a beach with no shoes either.
+  // a man he drove in from the airport sitting on a beach with empty pockets either.
   // Once. Free, because he never takes money. He tells you nothing.
   if (!_flag("act1Done")) {
     if (G.phone.tanAct1) {
@@ -2083,12 +2083,12 @@ function _tanCall() {
     _say("You tell him where you are. There is a silence exactly long enough to be a man " +
       "deciding something. \"Do not move.\"", "win");
     _say("Six minutes, and the grey sedan comes down the beach road without hurrying. He " +
-      "does not ask what happened. He looks at your bare feet, at the sand on your shirt, " +
-      "and says nothing at all about either \u2014 which is somehow worse than the joke you " +
-      "were braced for.", "win");
+      "does not ask what happened. He takes in the sand on your shirt and the sand in your " +
+      "shoes and says nothing at all about either \u2014 which is somehow worse than the joke " +
+      "you were braced for.", "win");
     _say("\"The wallet is yours to find,\" he says, pulling out. \"I told you at the airport, " +
       "first night is on you, and I mean it. But I am not going to sit at home knowing you " +
-      "are walking Second Road with no shoes.\" He turns the aircon up. \"This part is not " +
+      "are walking Second Road with nothing in your pockets.\" He turns the aircon up. \"This part is not " +
       "the game. The game starts when you get out.\"");
     G.room = "buakhao_n";
     G.darkStreak = 0;
