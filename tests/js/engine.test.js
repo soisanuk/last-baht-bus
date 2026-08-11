@@ -2643,10 +2643,8 @@ test("the taxi intro picks who you are (origin/personality/orientation), then op
   engineIntro();
   assert.equal(state().pendingChoice, "intro", "the ride in gates the game");
   assert.match(lastOut(), /Tan/, "Tan is driving");
-  assert.match(lastOut(), /what do you think in|English/i, "he settles your language first");
-  run("1");                                   // English
-  assert.equal(state().player.lang, "en", "language recorded");
-  assert.match(lastOut(), /homicide detective/, "then the origins are offered");
+  // the language step is out while German is a frozen POC — origins come first
+  assert.match(lastOut(), /homicide detective/, "the origins are offered first");
   run("4");                                   // the detective
   assert.match(lastOut(), /ask questions for a living/, "Tan reads you back");
   run("3");                                   // blunt
@@ -2686,7 +2684,7 @@ test("all seven origin archetypes are NPCs on Soi 6, each deactivated by its own
 test("Tan the driver: known from the intro, a hub whose knowingness escalates with the clues you gather", () => {
   // you rode in with him — he's a findable NPC at the soi mouth, no stranger
   state().player.origin = null; out = [];
-  startSoi6Mode(); run("1"); run("7"); run("1"); run("1");   // English / monger / charmer / straight
+  startSoi6Mode(); run("7"); run("1"); run("1");   // monger / charmer / straight (no language step)
   assert.ok(state().known.tan, "you know Tan after the taxi ride");
   assert.equal(_npcRoom("tan"), "soi6_street", "he's at the mouth of Soi 6");
 
@@ -2752,7 +2750,7 @@ test("the Orchid reveal: Tan at the good table — armed by the near-confirmatio
 
 test("phone-Tan: the intro puts his card in your phone; the Soi 6 week needs no ride", () => {
   state().player.origin = null; out = [];
-  startSoi6Mode(); run("1"); run("7"); run("1"); run("1");   // English / monger / charmer / straight
+  startSoi6Mode(); run("7"); run("1"); run("1");   // monger / charmer / straight (no language step)
   assert.ok(state().phone.contacts.tan, "the airport card is your first contact");
   out = []; run("call tan");
   assert.match(lastOut(), /one soi|enjoy the falling/i, "one-soi week: he declines gracefully");

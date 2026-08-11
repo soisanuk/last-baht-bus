@@ -1011,7 +1011,7 @@ const _CATALOGS = {
     // translation verbatim; German word order may move them, which is fine. ──
     "A big bottle is ฿{p} here. You have ฿{m}. The cashier's calculator stays in the drawer.":
       "Eine große Flasche kostet hier ฿{p}. Du hast ฿{m}. Der Taschenrechner der Kassiererin bleibt in der Schublade.",
-    "Lady drinks are ฿{p}. You have ฿{m}. The maths is not on your side.":
+    "Lady drinks are ฿{p}. You have ฿{m}. The math is not on your side.":
       "Lady Drinks kosten ฿{p}. Du hast ฿{m}. Die Rechnung geht nicht auf.",
     "฿{p} for a cold bottle, and you don't have it. Grim.":
       "฿{p} für eine kalte Flasche, und das hast du nicht. Bitter.",

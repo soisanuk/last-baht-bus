@@ -29,49 +29,41 @@ test("_L: default en is a passthrough; a de catalog hit translates; a de miss fa
     "an un-catalogued string falls back to English (partial coverage still runs)");
 });
 
-test("the taxi intro asks language first, in English", () => {
+// The language STEP is out of the taxi intro while German is a frozen POC — a
+// choice that delivers 11% coverage is worse than no choice. The machinery is
+// untouched and still tested below: _L, the catalog, and G.player.lang all work
+// exactly as before; nothing offers to set it in-game any more.
+test("the intro no longer offers a language, and opens on who-you-are", () => {
   _taxiIntro("beach");
   assert.equal(state().pendingChoice, "intro");
-  assert.equal(state().introStep, 0, "language is step 0");
+  assert.equal(state().introStep, 0);
   const o = lastOut();
-  assert.match(o, /what do you think in/i, "Tan asks your language, in English");
-  assert.match(o, /1\) English/, "and English is the first option");
-  assert.match(o, /2\) Deutsch/, "with Deutsch offered");
+  assert.doesNotMatch(o, /what do you think in|Deutsch/i, "no language step");
+  assert.match(o, /what's the story back home/i, "step 0 is the origin question");
 });
 
-test("picking Deutsch renders the rest of the intro in German", () => {
+test("the German machinery still works when lang is set directly", () => {
   _taxiIntro("beach");
+  state().player.lang = "de";
   out = [];
-  run("2");                              // Deutsch
-  assert.equal(state().player.lang, "de", "language recorded on G.player");
-  const o = lastOut();
-  assert.match(o, /Ab hier in deiner Sprache/, "Tan acknowledges the switch, in German");
-  assert.match(o, /Was ist deins\?/, "the origin question is German");
-  assert.match(o, /Mordkommission/, "the origin options are German");
-  assert.match(o, /\(Wähl eine Zahl\.\)/, "the number prompt is German");
-  assert.doesNotMatch(o, /Pick a number|homicide detective/, "no English leaks into the German turn");
+  run("4");                              // the PI, in German
+  assert.match(lastOut(), /Mordkommission|Wähl eine Zahl/,
+    "_L still renders the catalog — only the in-game chooser is gone");
 });
 
-test("picking English keeps the intro English (the fallback path is a no-op)", () => {
-  _taxiIntro("beach");
-  out = [];
-  run("1");                              // English
-  assert.equal(state().player.lang, "en");
-  const o = lastOut();
-  assert.match(o, /story back home|homicide detective/i, "still English");
-  assert.doesNotMatch(o, /Mordkommission|Wähl eine Zahl/, "no German when English is chosen");
-});
 
 test("a German intro flows straight into a German beach opening", () => {
   _taxiIntro("beach");
-  run("2");        // Deutsch
+  state().player.lang = "de";   // the in-game chooser is gone; the machinery is not
   run("4");        // detective
   run("3");        // blunt
   out = [];
   run("2");        // open-minded — completes the intro, opens the beach
   assert.equal(state().pendingChoice, null, "the intro closed");
   const o = lastOut();
-  assert.match(o, /Portemonnaie/, "Tan's drop-off is German");
+  // the full-game drop-off was rewritten (he sets you down at the Sabai Palms in
+  // Naklua, not on Soi 6) and the new lines have no de entries yet — German is
+  // frozen, so this asserts the OPENING is localised, not the new bridge prose
   assert.match(o, /Tag zwei deiner Woche|Deine Brieftasche ist WEG/, "the beach opening is German");
   assert.match(o, /Du hast ฿0\./, "the ฿0 line is localised, ฿ kept");
   assert.match(o, /INVENTORY/, "command tokens stay English (they're the real commands)");
@@ -80,8 +72,8 @@ test("a German intro flows straight into a German beach opening", () => {
 test("the Soi 6 challenge opening renders in German", () => {
   state().player = null;
   startSoi6Mode();
+  state().player.lang = "de";   // set directly — see the note on the intro step
   out = [];
-  run("2");        // Deutsch
   run("7"); run("1"); run("1");   // monger / charmer / straight — completes, opens the soi
   const o = lastOut();
   assert.match(o, /die lautesten hundert Meter Thailands/, "the Soi 6 framing is German");

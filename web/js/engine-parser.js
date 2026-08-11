@@ -1957,7 +1957,7 @@ function _doBuy(arg) {
     const girlsHere = _npcsHere().filter(id => NPC_ROLES[id]);
     const id = nameW ? _findNpc(nameW) : girlsHere[0];
     if (!id || !NPC_ROLES[id]) { _say(nameW ? "She's not working this bar." : "Nobody here to buy one for."); return; }
-    if (G.money < LADY_DRINK) { _say(_fmt("Lady drinks are ฿{p}. You have ฿{m}. The maths is not on your side.", { p: LADY_DRINK, m: G.money })); return; }
+    if (G.money < LADY_DRINK) { _say(_fmt("Lady drinks are ฿{p}. You have ฿{m}. The math is not on your side.", { p: LADY_DRINK, m: G.money })); return; }
     // she's already sitting with someone: a polite decline first, then — if you insist —
     // she takes it and her customer starts to turn.
     if (_girlBusy(id)) {
@@ -4595,9 +4595,12 @@ function _beachOpening(withTitle) {
 // from the airport (a pendingChoice modal: origin → personality → orientation),
 // then drops you on Soi 6 and the day-two beach opening follows. Picks land in
 // G.player and persist across resets (set once — see _act1Fail / RESTART).
+// The language step is OUT while German is a frozen proof of concept (see
+// docs/i18n-de-gaps.md): offering a choice that delivers 11% coverage is worse
+// than not offering it. The machinery — LANGUAGES, G.player.lang, _L, the
+// catalog — is all still here and untouched; this is one table entry away from
+// coming back the day the translation is real.
 const _INTRO_STEPS = [
-  { field: "lang", table: () => LANGUAGES,
-    q: "\"First, so I know how to talk to you—\" a tap of the temple, eyes still on the road. \"—what do you think in? I'll set the rest of the ride to match.\"" },
   { field: "origin", table: () => ORIGINS,
     q: "\"So — what's the story back home?\" A glance in the mirror. \"Everybody on this drive is leaving something behind. What's yours?\"" },
   { field: "personality", table: () => PERSONALITIES,
@@ -4657,11 +4660,29 @@ function _introAnswer(input) {
   G.pendingChoice = null; G.introStep = null;
   (G.known = G.known || {}).tan = true; // you rode in with him — he's no stranger (a findable NPC at the soi mouth)
   G.phone.contacts.tan = true; // the card IS his number — your first local contact, and the promise is real (see _tanCall)
-  _say("\"Okay. I got you.\" Tan swings off Second Road and the neon of Soi 6 " +
-    "swallows the windscreen. He drops you at the mouth of the soi, presses a cold " +
-    "water you didn't ask for into your hand, and taps the card already in your " +
-    "pocket. \"First night is on you, my friend. Do me one favour—\" the grin again " +
-    "\"—try to keep your wallet.\"");
+  // Where he actually drops you depends on where you are staying, which is not
+  // the same place in the two modes. This line used to say Soi 6 for both, so
+  // the full game was set down on the wrong side of town, told its hotel was in
+  // Naklua, and then woke up on a beach in Jomtien — three locations, no thread.
+  if (G.introAfter === "soi6") {
+    _say("\"Okay. I got you.\" Tan swings off Second Road and the neon of Soi 6 " +
+      "swallows the windscreen. He drops you at the mouth of the soi, presses a cold " +
+      "water you didn't ask for into your hand, and taps the card already in your " +
+      "pocket. \"First night is on you, my friend. Do me one favour—\" the grin again " +
+      "\"—try to keep your wallet.\"");
+  } else {
+    _say("\"Okay. I got you.\" The motorway gives way to Sukhumvit, Sukhumvit to " +
+      "Naklua, and the noise falls off the town like a coat. Tan pulls up at the Sabai " +
+      "Palms, hands your bag to a boy who has appeared from nowhere, and taps the card " +
+      "already in your pocket. \"First night is on you, my friend. Do me one favour—\" " +
+      "the grin \"—try to keep your wallet.\"");
+    _say("");
+    _say("You do not keep your wallet.", "alert");
+    _say("What you keep of the next nine hours is this: a shower, a shirt, a baht bus " +
+      "south with strangers who became friends, somewhere with a bell, somewhere with a " +
+      "pool table, a receipt you do not remember asking for, and a very long stretch of " +
+      "sand that seemed like a good idea at the time.", "room");
+  }
   _say("(The card has a number. Your phone has the number. CALL TAN — any hour, he " +
     "says, and he means it.)", "dim");
   _say("");

@@ -2193,19 +2193,21 @@ function _tanCall() {
     G.phone.tanAct1 = true;
     _say("You tell him where you are. There is a silence exactly long enough to be a man " +
       "deciding something. \"Do not move.\"", "win");
-    _say("Six minutes, and the grey sedan comes down the beach road without hurrying. He " +
-      "does not ask what happened. He takes in the sand on your shirt and the sand in your " +
-      "shoes and says nothing at all about either \u2014 which is somehow worse than the joke " +
-      "you were braced for.", "win");
+    _say("It takes him the best part of half an hour \u2014 he is coming from the other end of " +
+      "town and the traffic on Thappraya does not care who you are \u2014 and then the grey " +
+      "sedan comes down the beach road without hurrying. He does not ask what happened. He " +
+      "takes in the sand on your shirt and the sand in your hair and says nothing at all " +
+      "about either, which is somehow worse than the joke you were braced for.", "win");
     _say("\"The wallet is yours to find,\" he says, pulling out. \"I told you at the airport, " +
       "first night is on you, and I mean it. But I am not going to sit at home knowing you " +
       "are walking over that hill in the dark with a dying phone.\" He turns the aircon up. \"This part is not " +
       "the game. The game starts when you get out.\"");
     G.room = "buakhao_n";
     G.darkStreak = 0;
-    _say("He puts you down on Soi Buakhao at the Diana end, points once up the soi without " +
-      "saying at what, and is gone before you have finished thanking him. No money changes " +
-      "hands. He would not have taken it and you have not got any.", "win");
+    _say("He puts you down on Soi Buakhao at the Diana end, points once DOWN the soi \u2014 " +
+      "toward a rose-pink sign a few doors along the quiet side \u2014 and is gone before you " +
+      "have finished thanking him. No money changes hands. He would not have taken it and " +
+      "you have not got any.", "win");
     _describeRoom(true);
     return;
   }

@@ -3833,7 +3833,7 @@ const NPCS = {
     // the original, odd days at Candy Bar 2). _npcRoom resolves tonight's room;
     // `room` above stays as her home/default for anything that wants a fixed peg.
     bars: ["candy_bar", "candy_bar_2"],
-    look: "Thai woman of about fifty, hair up, gold at the ears and throat, sharp eyes, well-cut dark blouse.",
+    look: "Thai woman of thirty-eight, striking, hair up, gold at the ears and throat, sharp eyes, well-cut dark dress.",
     desc: "The mamasan of Candy Bar — sharp as a razor, warm as a Chang on a hot night, " +
       "and on the soi longer than most expats have had passports. She clocked you the " +
       "second you walked in.",
