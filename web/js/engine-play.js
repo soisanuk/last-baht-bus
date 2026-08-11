@@ -735,7 +735,44 @@ function _weekday() { return WEEKDAYS[G.day % 7]; }
 // clock becomes the server's, and these are the only seams to re-plumb.
 function _quizDay() { return G.day % 7 === 4; }
 
-// Fon's opening pour. WEDNESDAY, and only in the first hour of the evening —
+// ── The first night ─────────────────────────────────────────────────────────
+// A punter knows what to do in Pattaya. What he does not know is what this GAME
+// rewards, and the opening currently hands him a street and the word สบายสบาย.
+// Measured: 21 quests exist and a player who does not already know the quest
+// system reaches none of them, so night one is "walk into a bar, buy a drink"
+// and nothing escalates.
+//
+// Two nudges, once EVER each, dim, and only inside a bar where they are true.
+// Not a tutorial and not a quest — one concrete thing to want, and one pointer
+// at the best button in the game.
+//
+//  1. a number. CONTACT is achievable in twenty minutes, it is exactly what
+//     this audience came for, and it opens the whole phone/bond layer.
+//  2. the bell. ฿300 and the room detonates — the single best moment the game
+//     has, and nothing has ever told a new player it is there.
+function _newbieNudge() {
+  if (!_inBar() || G.soc.drunk >= 6) return;
+  // …and only where the advice is TRUE. The Queen Vic is a pub with no
+  // hostesses at all, so "buy a lady a drink, then CONTACT her" is a promise
+  // its own room cannot keep — which is the defect this repo keeps catching.
+  const ladies = _npcsHere().filter(id => NPC_ROLES[id] === "hostess");
+  if (!ladies.length) return;
+  if (!_flag("tipNumber")) {
+    _setFlag("tipNumber");
+    _say("(A thought, since you're here: nobody's number is in your phone yet. Buy a lady a " +
+      "drink or two until she's warm to you, then CONTACT her — that's how the rest of this " +
+      "week gets interesting.)", "dim");
+    return;                                   // one at a time; the bell keeps
+  }
+  if (!_flag("tipBell") && G.money >= BELL_PRICE * 2) {
+    _setFlag("tipBell");
+    _say(_fmt("(There's a bell over the rail. \u0e3f{p} rings it and buys the whole bar a round " +
+      "\u2014 every lady in the room learns your name in about four seconds. It is the most " +
+      "money you can spend here on being liked. RING BELL.)", { p: BELL_PRICE }), "dim");
+  }
+}
+
+// Fon's opening pour.// Fon's opening pour. WEDNESDAY, and only in the first hour of the evening —
 // a calendar check like the quiz, not a die roll, so it is a thing a player can
 // learn and come back for rather than a thing that happens at random.
 //

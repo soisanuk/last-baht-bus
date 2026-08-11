@@ -7195,3 +7195,39 @@ test("a bad night ends with a debrief; a good one doesn't", () => {
   assert.match(out.join("\n"), /Thirst put you down/, "names the meter that actually did it");
   assert.match(out.join("\n"), /You hit 100/, "quotes the real value");
 });
+
+// The first-night nudges. A punter knows what to do in Pattaya; what he does
+// not know is what this GAME rewards, and a measured player who doesn't already
+// understand the quest system reaches none of the 21 quests on night one. These
+// are two dim lines, once EVER each, and only where they are true.
+test("the newbie nudges fire once, in order, and only where the advice works", () => {
+  newGame();
+  state().stage = "vacation"; state().flags.act1Done = true; state().money = 5000;
+
+  // a pub with no hostesses cannot deliver "buy a lady a drink, then CONTACT her"
+  state().room = "queen_vic"; out = [];
+  _newbieNudge();
+  assert.doesNotMatch(out.join("\n"), /nobody's number|bell over the rail/,
+    "the Queen Vic has no hostesses — the advice would be a promise it can't keep");
+  assert.ok(!_flag("tipNumber"), "and it doesn't burn the one-shot either");
+
+  // a bar with staff: the number first, because it opens the phone/bond layer
+  const bar = Object.keys(ROOMS).find(id => {
+    if (ROOMS[id].barType !== "beer") return false;
+    state().room = id;
+    return _npcsHere().some(n => NPC_ROLES[n] === "hostess");
+  });
+  state().room = bar; out = [];
+  _newbieNudge();
+  assert.match(out.join("\n"), /nobody's number/, "the first tip is the number");
+  assert.doesNotMatch(out.join("\n"), /bell over the rail/, "one at a time");
+
+  // the bell comes next visit, not the same breath
+  out = []; _newbieNudge();
+  assert.match(out.join("\n"), /bell over the rail/, "the bell is the second tip");
+  assert.match(out.join("\n"), new RegExp("฿" + BELL_PRICE), "and it quotes the real price");
+
+  // and never again
+  out = []; _newbieNudge();
+  assert.equal(out.join("\n"), "", "both are once ever");
+});
