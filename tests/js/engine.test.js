@@ -7386,3 +7386,32 @@ test("with nothing on the books, the game names what's actually open", () => {
   out = []; run("hint");
   assert.match(out.join("\n"), /What's open:|Talk to people/);
 });
+
+// Collections get a denominator. All three existed and all three were
+// invisible: the gallery had no total, the black book had no total, and the
+// Thai you'd been shown was only ever visible in the trainer. A number with a
+// denominator is a goal; a number on its own is trivia.
+test("the collections show what's left, measured against people you've MET", () => {
+  newGame();
+  state().stage = "vacation"; state().flags.act1Done = true;
+  state().known = { lek: true, candy: true, bert: true, nong: true, fon: true };
+  state().phone.photos = [{ id: "lek", turn: 1 }, { id: "candy", turn: 2 }];
+  state().phone.contacts = { lek: true };
+
+  out = []; run("gallery");
+  assert.match(out.join("\n"), /2 of the 5 faces you've met/,
+    "the denominator is who you've met, not the 334-strong cast");
+
+  out = []; run("who");
+  assert.match(out.join("\n"), /1 number — out of 5 ladies|out of \d+ ladies/,
+    "the black book counts against ladies you know");
+
+  out = []; run("score");
+  assert.match(out.join("\n"), /met 5 · 2 faces in the gallery · 1 number/,
+    "and SCORE carries all three on the one screen a player checks");
+
+  // everyone photographed reads as done, not as a shortfall
+  state().phone.photos = ["lek", "candy", "bert", "nong", "fon"].map((id, i) => ({ id, turn: i }));
+  out = []; run("gallery");
+  assert.match(out.join("\n"), /everyone you've met is in here/);
+});

@@ -2008,6 +2008,14 @@ function _doBlackbook() {
       ? " — asked you over tonight" : "";
     _say(`${mark[t]} ${n.emoji || ""} ${n.name} — ${bar} · ${label[t]}${invited}`, t >= 2 ? "" : "dim");
   }
+  // Same denominator doctrine as the gallery: ladies you have actually met, not
+  // the 283 on the payroll. It grows as you get out more, so the ratio is a
+  // reason to walk somewhere rather than a scolding.
+  const knownLadies = Object.keys(G.known || {}).filter(id => NPC_ROLES[id] && NPCS[id]).length;
+  if (knownLadies > ids.length) {
+    _say(_fmt("({n} number{s} \u2014 out of {k} ladies you have actually met.)",
+      { n: ids.length, s: ids.length === 1 ? "" : "s", k: knownLadies }), "dim");
+  }
   _say("(A bond cools a notch a night — tend the ones you mean to keep. MESSAGE / SEND / CONTACT.)", "dim");
 }
 

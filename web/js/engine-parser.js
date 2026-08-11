@@ -2383,6 +2383,22 @@ function _doScore() {
   if (_flag("act1Done") && G.mode !== "soi6") _say(`✓ ACT ONE COMPLETE — scored ${G.score}` +
     (G.vacation > 1 ? ` · vacation #${G.vacation}` : ""), "dim");
   if (_unreadCount()) _say(_fmt("📱 {c} unread message{s} (CHECK MESSAGES)", { c: _unreadCount(), s: _unreadCount() > 1 ? "s" : "" }), "win");
+  // The three collections, on the one screen a player checks to see how he is
+  // doing. They already existed and were each invisible: the gallery had no
+  // total, the black book had no total, and the Thai you have been shown was
+  // only ever visible in the trainer. A number with a denominator is a goal; a
+  // number on its own is trivia.
+  if (_flag("act1Done")) {
+    const met = Object.keys(G.known || {}).filter(id => NPCS[id] || PATRONS[id]).length;
+    const faces = new Set(_photoList().map(p => p.id)).size;
+    const nums = Object.keys(G.phone.contacts || {}).filter(id => G.phone.contacts[id] && NPC_ROLES[id]).length;
+    const thai = (G.thaiSeen || []).length;
+    if (met || faces || nums || thai) {
+      _say(_fmt("met {m} · {f} face{fs} in the gallery · {n} number{ns} · {t} Thai word{ts} picked up",
+        { m: met, f: faces, fs: faces === 1 ? "" : "s", n: nums, ns: nums === 1 ? "" : "s",
+          t: thai, ts: thai === 1 ? "" : "s" }), "dim");
+    }
+  }
   const active = Object.entries(QUESTS).filter(([qid]) => G.quests[qid] === "active");
   for (const [, q] of active) _say(_fmt("▶ {name}", { name: _L(q.name) }), "dim");
   // Faction standing — only surfaces once you've actually taken a side; a player
@@ -3084,7 +3100,17 @@ function _doGallery() {
     const detail = p.cap ? `«${p.cap}»` : _photoWhere(p.id);
     return `${n.emoji} ${n.name}${detail ? " — " + detail : ""}`;
   });
+  // A denominator turns a list into a collection. NOT the 334-strong cast —
+  // "3 of 334" reads as hopeless and most of them you will never meet. The
+  // honest number is people you HAVE met, which is also the one that grows as
+  // you explore, so the ratio pushes outward instead of down.
+  const met = Object.keys(G.known || {}).filter(id => NPCS[id] || PATRONS[id]).length;
+  const have = new Set(photos.map(p => p.id)).size;
+  const tail = met > have
+    ? `  (${have} of the ${met} faces you've met — the rest haven't been asked.)`
+    : `  (${have} of ${met} — everyone you've met is in here.)`;
   _say(`Gallery — ${rows.length} photo${rows.length > 1 ? "s" : ""}:\n` + rows.join("\n"), "room");
+  _say(tail, "dim");
 }
 
 function _doCall(arg) {
