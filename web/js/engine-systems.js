@@ -2066,7 +2066,9 @@ function _tanCall() {
   //
   // So Tan drives, and holds both of his positions at once: he will not find
   // the wallet for you — "first night is on you" stands — and he will not leave
-  // a man he drove in from the airport sitting on a beach with empty pockets either.
+  // a man he drove in from the airport walking it. The route is real and it is
+  // eighteen moves: Jomtien Beach Road, Thappraya, then OVER Pratumnak — four
+  // dark rooms with the soi-dog streak live, on a phone that starts at 13%.
   // Once. Free, because he never takes money. He tells you nothing.
   if (!_flag("act1Done")) {
     if (G.phone.tanAct1) {
@@ -2088,7 +2090,7 @@ function _tanCall() {
       "you were braced for.", "win");
     _say("\"The wallet is yours to find,\" he says, pulling out. \"I told you at the airport, " +
       "first night is on you, and I mean it. But I am not going to sit at home knowing you " +
-      "are walking Second Road with nothing in your pockets.\" He turns the aircon up. \"This part is not " +
+      "are walking over that hill in the dark with a dying phone.\" He turns the aircon up. \"This part is not " +
       "the game. The game starts when you get out.\"");
     G.room = "buakhao_n";
     G.darkStreak = 0;
