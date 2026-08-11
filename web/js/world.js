@@ -3810,6 +3810,7 @@ const NPCS = {
     // the original, odd days at Candy Bar 2). _npcRoom resolves tonight's room;
     // `room` above stays as her home/default for anything that wants a fixed peg.
     bars: ["candy_bar", "candy_bar_2"],
+    look: "Thai woman of about fifty, hair up, gold at the ears and throat, sharp eyes, well-cut dark blouse.",
     desc: "The mamasan of Candy Bar — sharp as a razor, warm as a Chang on a hot night, " +
       "and on the soi longer than most expats have had passports. She clocked you the " +
       "second you walked in.",
@@ -3913,6 +3914,7 @@ const NPCS = {
   mind: {
     name: "Mind", th: "มายด์", emoji: "💗",
     room: "neon_paradise",
+    look: "Thai woman of twenty-two, small and slight, long dark hair, dancer's posture, simple strappy top.",
     desc: "Small and careful, a dancer's economy to every movement — the girl from a certain " +
       "Danish backpacker's lock screen, though she has no idea she's on it. Twenty-two, and " +
       "older than that in the ways that pay the rent.",
@@ -3960,6 +3962,7 @@ const NPCS = {
   aek: {
     name: "Aek", th: "เอก", emoji: "⚡",
     room: "midnight_sun",
+    look: "Thai tom of thirty, cropped hair, oversized bar polo, silver nose ring, biro behind one ear.",
     desc: "The cashier, planted behind the till like she grew there — cropped hair, " +
       "oversized bar polo, a silver ring through one nostril and a biro tucked behind " +
       "her ear. Tom through and through: she runs the money, calls the floor, and misses " +
@@ -4079,6 +4082,7 @@ const NPCS = {
   belle: {
     name: "Belle", th: "เบล", emoji: "🥺", type: "moneypit",
     room: "pink_lotus",
+    look: "Thai woman of twenty-five, soft round face, big dark eyes, long hair loose, pastel bar dress.",
     desc: "Sweet, soft-eyed, always in the middle of a small catastrophe — a sick relative, a broken thing, a " +
       "bill with today's date. She holds your hand when she tells you, and she is often, genuinely, not lying.",
     dialogue: [
@@ -4104,6 +4108,7 @@ const NPCS = {
   praewa: {
     name: "Praewa", th: "แพรวา", emoji: "🌷",
     room: "kitten_corner",
+    look: "Thai woman of twenty-four, pretty and unmade-up, hair tied back, faraway expression, plain bar top.",
     desc: "Pretty and a little far away, like part of her is always on the bus back to a village you'll never " +
       "see. Kind to you, and not quite here.",
     dialogue: [
@@ -4194,6 +4199,7 @@ const NPCS = {
   pukky: {
     name: "Pukky", th: "ปุ๊กกี้", emoji: "🌻",
     room: "sunset_rail",
+    look: "Thai woman of twenty-eight, relaxed open face, hair in a loose knot, denim shorts and bar tee.",
     desc: "Easy and unhurried behind the Shady Lady's rail — the kind of company that feels like a night off " +
       "rather than a transaction. No hurry in her, and no hustle either.",
     dialogue: [
@@ -4240,6 +4246,7 @@ const NPCS = {
   nina: {
     name: "Nina", th: "นีน่า", emoji: "🍲",
     room: "sandy_toes",
+    look: "Thai woman of about forty, warm broad face, short practical hair, apron over a bar polo.",
     desc: "A little older than the rail usually runs, and she mothers the whole bar — the young girls, the " +
       "drunk regulars, and, within about four minutes, you. You'll have eaten something before you leave.",
     dialogue: [
@@ -4327,6 +4334,7 @@ const NPCS = {
   peung: {
     name: "Peung", th: "ผึ้ง", emoji: "👑", type: "operator",
     room: "golden_dragon",
+    look: "Thai woman of fifty-five, steel-grey hair pinned up, reading glasses on a chain, dark blouse.",
     desc: "Golden Dragon's mamasan since before White Dish bought the paper — and she stayed on when they did, " +
       "because the numbers didn't care who owned them, and neither, in the end, does she.",
     dialogue: [
@@ -4393,6 +4401,7 @@ const NPCS = {
   malai: {
     name: "Malai", th: "มาลัย", emoji: "👑", type: "operator",
     room: "sunset_dreams",
+    look: "Thai woman of sixty, grandmotherly, soft white-streaked bun, gentle smile, patterned silk blouse.",
     desc: "Soft-spoken and grandmotherly, Sunset Dreams' mamasan pours you tea and asks after your health, and " +
       "somewhere in the warmth your wallet opens without a sound. The gentlest operator on the soi.",
     dialogue: [
@@ -4440,6 +4449,7 @@ const NPCS = {
   toi: {
     name: "Toi", th: "ต้อย", emoji: "👑", type: "operator",
     room: "cherry_pop",
+    look: "Thai woman of forty-five, big laugh lines, dyed-red hair, loud earrings, bright bar shirt.",
     desc: "Cherry Pop's mamasan — loud enough to run a loud bar, sharp enough behind it to run the numbers " +
       "while the party roars. She sells fun by the bottle, and business is very good.",
     dialogue: [
@@ -4498,6 +4508,7 @@ const NPCS = {
   saeng: {
     name: "Saeng", th: "แสง", emoji: "👑", type: "operator",
     room: "ruby_kiss",
+    look: "Thai woman of forty-eight, calm watchful face, hair scraped back, plain dark blouse, arms folded.",
     desc: "Ruby Kiss's mamasan, content to sit back while Wilai works the window — because a mama who's found a " +
       "girl that good knows to stay out of her light and just count.",
     dialogue: [
@@ -4544,6 +4555,7 @@ const NPCS = {
   bussaba: {
     name: "Bussaba", th: "บุษบา", emoji: "👑",
     room: "sunset_rail",
+    look: "Thai woman of fifty, plain and unhurried, short greying hair, no jewellery, faded bar polo.",
     desc: "The Shady Lady's mamasan, running a beer bar the slow honest way — no bottle-service hustle, no " +
       "bank of go-go tricks, just cold beer, decent girls, and a chair you're welcome to keep all night.",
     dialogue: [
@@ -4615,6 +4627,7 @@ const NPCS = {
   malila: {
     name: "Malila", th: "มะลิลา", emoji: "👑",
     room: "sandy_toes",
+    look: "Thai woman of fifty-two, comfortable and smiling, hair in a clip, loose floral shirt.",
     desc: "The Verandah's mamasan, who runs the most easygoing bar on Soi 6 like a long Sunday lunch — Nina " +
       "feeds the customers, Malila makes sure everyone's alright, and the money, such as it is, sees to itself.",
     dialogue: [
@@ -4722,6 +4735,7 @@ const NPCS = {
   jun: {
     name: "Jun", th: "จัน", emoji: "🧾", type: "kin",
     room: "sunset_dreams",
+    look: "Thai woman of twenty, neat college look, straight dark hair, round glasses, tidy plain blouse.",
     desc: "Malai's daughter, home from a Bangkok college for the season and minding her mother's till — polite, " +
       "sharp, and quietly counting the months until she never has to do this again.",
     dialogue: [
@@ -4742,6 +4756,7 @@ const NPCS = {
   baimon: {
     name: "Baimon", th: "ใบหม่อน", emoji: "🧾", type: "sponsor",
     room: "kitten_corner",
+    look: "Thai woman of twenty-six, quiet careful face, hair in a low ponytail, modest buttoned top.",
     desc: "Soft-spoken, careful with the money and with herself, a photo of a couple propped by the till in a " +
       "glittery case. Kesinee gave her the cashier seat as a kindness — off the floor, where the sponsor's money keeps her.",
     // The "loosening" drip toward outbidding Dave (SPONSOR_FLIP ฿15k) — softer than
@@ -4780,6 +4795,7 @@ const NPCS = {
   fahsai: {
     name: "Fahsai", th: "ฟ้าใส", emoji: "🧾", orientation: "gay",
     room: "cherry_pop",
+    look: "Thai tom of twenty-seven, snapback cap, cropped hair, arms folded, loose black tee.",
     desc: "The one still point in Cherry Pop's chaos — a tom in a snapback, arms folded behind the till, " +
       "watching the party she is emphatically not part of with the patience of a designated driver.",
     dialogue: [
@@ -4801,6 +4817,7 @@ const NPCS = {
   preaw: {
     name: "Preaw", th: "แพรว", emoji: "🧾", type: "kin",
     room: "ruby_kiss",
+    look: "Thai woman of thirty, brisk and neat, hair in a tight ponytail, plain dark polo, no jewellery.",
     desc: "Saeng's niece, brisk and unsentimental behind the Ruby Kiss till, running the money while Wilai runs " +
       "the window — the two halves of the operation that never need to discuss it.",
     dialogue: [
@@ -4821,6 +4838,7 @@ const NPCS = {
   numfon: {
     name: "Numfon", th: "น้ำฝน", emoji: "🧾",
     room: "sunset_rail",
+    look: "Thai woman of thirty-five, comfortable build, easy face, hair clipped up, faded bar tee.",
     desc: "The Shady Lady's cashier, comfortable and unbothered, running an honest till at an honest bar — the " +
       "numbers are small, the trouble is smaller, and that suits her exactly.",
     dialogue: [
@@ -4838,6 +4856,7 @@ const NPCS = {
   nu: {
     name: "Nu", th: "หนู", emoji: "🧾", orientation: "gay",
     room: "bay_watch",
+    look: "Thai tom of twenty-eight, cropped hair, red football shirt, whistle-lanyard, grinning.",
     desc: "Front Row's cashier, a tom in a footy shirt matching Somo's, the two of them running the bar like a " +
       "five-a-side team — one on the beer, one on the money, both shouting at the ref.",
     dialogue: [
@@ -4859,6 +4878,7 @@ const NPCS = {
   haad: {
     name: "Haad", th: "หาด", emoji: "🧾", type: "kin",
     room: "sandy_toes",
+    look: "Thai woman of forty-five, round kind face, hair in a clip, loose floral shirt, bowl of peanuts.",
     desc: "Malila's younger sister and the Verandah's cashier, cut from the same easygoing cloth — she runs the " +
       "till the way the bar runs everything, slowly and kindly, and always has a bowl of peanuts within reach.",
     dialogue: [
@@ -4912,6 +4932,7 @@ const NPCS = {
   baitoey: {
     name: "Baitoey", th: "ใบเตย", emoji: "🎤", ladyboy: true, personality: "dreamer",
     room: "katoeys",
+    look: "Thai ladyboy of thirty, tall and lean, gold hoops and chain, glittering gold stage dress.",
     desc: "Long, lean and built for the stage, with an actual voice under the lip-sync " +
       "and a habit of using it when the room has thinned out enough to deserve it. " +
       "Gold everything tonight — hoops, chain, a dress that is mostly intention. " +
@@ -4982,6 +5003,7 @@ const NPCS = {
   poy: {
     name: "Poy", th: "พอย", emoji: "🌸", ladyboy: true,
     room: "golden_dragon",
+    look: "Thai ladyboy of twenty-seven, softly made-up, long straight hair, quiet elegant dress.",
     desc: "Softly spoken and glamorously done up, and decent enough to say it at hello — she would rather tell " +
       "you straight than be anyone's surprise. Tired of the two reactions, hoping for a third.",
     dialogue: [
@@ -5039,6 +5061,7 @@ const NPCS = {
   chompoo: {
     name: "Chompoo", th: "ชมพู่", emoji: "🦋", ladyboy: true,
     room: "ruby_kiss",
+    look: "Thai ladyboy of twenty-five, high cheekbones, dancer's build, cool amused expression, stage bikini.",
     desc: "The one on the little stage who dances like she's bored of being the most interesting person in the " +
       "room, because she is. Cheekbones, a dancer's line, and an amused, appraising calm that reads a man in a " +
       "glance and prices him in the next. Drops a German word now and then like she's forgotten you might not follow.",
@@ -5103,6 +5126,7 @@ const NPCS = {
   aum: {
     name: "Aum", th: "อุ้ม", emoji: "🌷",
     room: "kitten_corner",
+    look: "Thai woman of twenty-three, soft unstudied prettiness, hair loose over one shoulder, simple bar dress.",
     desc: "Pretty in the soft, unstudied way that stops men mid-sentence, with a smile she gives away too " +
       "easily for this business. New enough that the job hasn't finished teaching her its lessons yet.",
     dialogue: [
@@ -5221,6 +5245,7 @@ const NPCS = {
   kat: {
     name: "Kat", th: "แคท", emoji: "🍸", type: "drunk",
     room: "sunset_dreams",
+    look: "Thai woman of twenty-six, wide laughing mouth, glittery top, hair everywhere, drink in hand.",
     desc: "The loudest laugh in the bar at nine, and by midnight the one the others are steering away from " +
       "the edge of things. Great fun for exactly ninety minutes.",
     dialogue: [
@@ -5355,6 +5380,7 @@ const NPCS = {
   kai: {
     name: "Kai", th: "ไก่", emoji: "💅", type: "operator",
     room: "golden_dragon",
+    look: "Thai woman of twenty-five, bright quick smile, hair long and glossy, close-fitting bar dress.",
     desc: "Warmer than the room and faster than the room — your name inside a minute, both her hands around " +
       "yours inside two. It is a very good act. She is very good at it.",
     dialogue: [
@@ -5388,6 +5414,7 @@ const NPCS = {
   nook: {
     name: "Nook", th: "นุ้ก", emoji: "🍒", type: "party",
     room: "golden_dragon",
+    look: "Thai woman of twenty-two, delighted open face, hair in high pigtails, sparkly cropped top.",
     desc: "Twenty-two and delighted about all of it — the music, the lights, the free drinks, the men who " +
       "think she is magic. She is having the best night of her life. Again.",
     dialogue: [
@@ -5437,6 +5464,7 @@ const NPCS = {
   wilai: {
     name: "Wilai", th: "วิไล", emoji: "💋", personality: "charmer",
     room: "ruby_kiss",
+    look: "Thai woman of twenty-nine, bold red lipstick, hair piled up, tight bar top, perched on a stool.",
     desc: "The ringleader of the Ruby Kiss front stools, lipstick on the rim of every glass by " +
       "design, quick enough to sell you a drink and roast you for buying it in the same breath.",
     // The front-stool showwoman runs a LINE photo-drip like she runs the window:
@@ -5537,6 +5565,7 @@ const NPCS = {
   kesinee: {
     name: "Kesinee", th: "เกสินี", emoji: "🐱",
     room: "kitten_corner",
+    look: "Thai woman of about fifty, gold at the wrist, hair immaculate, appraising gaze, tailored dark dress.",
     desc: "The Kitten Corner's mama-san — twenty years on this soi, gold at the wrist, a gaze that " +
       "prices you before you sit. She ran this bar back when it was hers to run; now there's a logo on " +
       "the menu and a target on the till, and she is very careful who she says that to.",
@@ -5643,6 +5672,7 @@ const NPCS = {
     pronoun: "he",
     title: "a golf-shirted man appraising the bar like a spreadsheet",
     room: "golden_dragon",
+    look: "British man in his fifties, thinning fair hair, discreet-logo golf shirt, mild pleasant face.",
     desc: "Fifties, a golf shirt with a discreet logo, a lager he barely touches and a way of looking " +
       "at a bar like a spreadsheet. He calls himself an 'area consultant.' Everyone else calls him the " +
       "White Dish man. He is unfailingly pleasant, which is the unsettling part.",
@@ -5705,6 +5735,7 @@ const NPCS = {
     name: "Ryan Powers", emoji: "🕶️",
     pronoun: "he",
     room: "orchid_room",
+    look: "British man of thirty-eight dressed younger, linen shirt open, big watch, sunglasses indoors.",
     desc: "Late thirties dressed for late twenties: a linen shirt one button too honest, a watch " +
       "that wants to be noticed, sunglasses on indoors at midnight. He films himself more than he " +
       "talks and talks more than he listens. Up close, the empire is just a man who has never once " +
@@ -6011,6 +6042,7 @@ const NPCS = {
     room: "sunset_dreams",
     origin: "redundancy",
     title: "a beaming fella in a red football shirt standing everyone a round",
+    look: "English man of fifty-three, Liverpool build, sunburnt, close-cropped greying hair, football shirt.",
     desc: "Scouse, fifty-three, twenty-two years an electrician and then a letter and a cheque with more " +
       "noughts than he's ever seen at once. First time abroad that isn't Spain, first time in his life with " +
       "no shift in the morning, and it's gone to his head like sunshine. Buys rounds for strangers. Means " +
@@ -6119,6 +6151,7 @@ const NPCS = {
     room: "kitten_corner",
     origin: "married",
     title: "a calm farang who watches the girls work with no hunger in it at all",
+    look: "English man of forty-eight, weathered, greying stubble, plain polo shirt, watchful and still.",
     desc: "English, forty-eight, married a Buriram girl for nine years and buried the marriage a year ago, " +
       "not unkindly on either side. Speaks passable Isan-accented Thai, knows the family system from the " +
       "inside, and watches the bar's whole performance with the fond, tired eye of a man who's seen the " +
@@ -6230,6 +6263,7 @@ const NPCS = {
     name: "Tan", th: "ต้น", emoji: "🚕", personality: "operator",
     pronoun: "he",
     room: "soi6_street",
+    look: "Thai man of thirty-five, neat and forgettable, short black hair, plain grey polo shirt.",
     desc: "Your airport driver, leaning on a plain grey sedan at the mouth of the soi as though he never " +
       "drove off — mid-thirties, neat, a polo shirt you would forget the instant you looked away. Six years " +
       "in Ohio for a film degree that paid nothing and taught him everything about how a shot is framed. " +
@@ -6485,6 +6519,7 @@ const NPCS = {
   jane: {
     name: "Jane", th: "เจน", emoji: "⭐",
     room: "las_vegas",
+    look: "Thai woman of twenty-eight, legs crossed on a barstool, hair down, cocktail in hand, unhurried.",
     desc: "A hostess at Las Vegas, sitting on the end of the bar with her legs crossed and " +
       "a cocktail she's been nursing since before you arrived. She has the relaxed energy " +
       "of someone who has already decided tonight will be fine.",
@@ -6506,6 +6541,7 @@ const NPCS = {
     room: "gold_rush",
     c4: 2, // first week on the soi — the one Connect 4 table a human can beat
 
+    look: "Thai woman of nineteen, visibly new, hair in a simple ponytail, plain bar dress, phone in hand.",
     desc: "Sweet, visibly new — first week on the soi — checking her phone between " +
       "customers and startling whenever the door opens.",
     dialogue: [
@@ -6530,6 +6566,7 @@ const NPCS = {
   mercedes: {
     name: "Mercedes", th: "เมอร์เซเดส", emoji: "❄️", personality: "operator",
     room: "cherry_pop",
+    look: "Thai woman of thirty-two, composed, straight dark hair, minimal make-up, plain dark top.",
     desc: "A little older than the other girls here and a great deal less " +
       "nervous — she moves like someone who has already seen the worst a room can " +
       "do to a person. Her English is good, with a flat European edge the soi " +
@@ -6621,6 +6658,7 @@ const NPCS = {
   yai: {
     name: "Mama Yai", th: "ใหญ่", emoji: "🍲",
     room: "mama_yai",
+    look: "Thai woman of sixty, apron over a buffalo-print blouse, grey hair tied back, ladle in hand.",
     desc: "The Yai in Mama Yai's — sixty-ish, an apron over a buffalo-print blouse, " +
       "a ladle in one hand and the whole soi's memory in the other. She feeds you " +
       "before she reads you, and by the time the som tam lands she has done both.",
@@ -6654,6 +6692,7 @@ const NPCS = {
   kratae: {
     name: "Kratae", th: "กระแต", emoji: "🐿️",
     room: "mama_yai",
+    look: "Thai woman of thirty-eight, quick-eyed and grinning, hair clipped up, food-stall apron.",
     desc: "Late thirties and entirely unbothered by it — quick-eyed, a laugh like a " +
       "dropped tray, a beer already sliding toward you. Mama Yai's right hand: she " +
       "pours, she counts, she misses nothing, and she heard your story before you " +
@@ -6682,6 +6721,7 @@ const NPCS = {
   rose: {
     name: "Rose", th: "โรส", emoji: "🌷",
     room: "orchid_club",
+    look: "Thai woman of fifty-five, immaculate, silk blouse, hair sculpted, pearls, cool composed face.",
     desc: "The madame of the Orchid Club — fifties, immaculate, a silk blouse and a " +
       "voice you have to lean in to hear. She runs the quietest, coldest, most " +
       "expensive room in Naklua, and she knows the name of every regular's wife.",
@@ -6798,6 +6838,7 @@ const NPCS = {
   lawan: {
     name: "Lawan", th: "ลาวัลย์", emoji: "👑",
     room: "dollhouse", bars: ["dollhouse", "sapphire", "sundowner", "cricketers"],
+    look: "Thai woman of fifty, silk and jade, dancer's posture still, hair up, steady appraising gaze.",
     desc: "The grande dame of Soi Diana — a former Crystal Palace headliner who hung up the heels " +
       "and parlayed twenty years on the stage into four beer bars on the busiest drinking soi in " +
       "town. Silk, jade, a gaze that prices you before you've sat down. She works a different one " +
@@ -6841,6 +6882,7 @@ const NPCS = {
   diamond: {
     name: "Diamond", th: "ไดมอนด์", emoji: "💎",
     room: "hyper",
+    look: "Thai ladyboy of forty, six feet in heels, sharp cheekbones, sleek dark gown, total poise.",
     desc: "The mamasan of Hyper A Go-Go — six feet of poise in heels, cheekbones you could open " +
       "letters with, and a katoey's hard-won certainty that she is the most finished thing in any " +
       "room. She ran the floor here when it was a dump and stayed to run it now the Samson brothers " +
@@ -6899,6 +6941,7 @@ const NPCS = {
   wimon: {
     name: "Wimon", th: "วิมล", emoji: "👑",
     room: "arrow_bar", bars: ["arrow_bar", "cheeky_monkey", "the_office"],
+    look: "Thai woman of fifty-five, brisk, short practical hair, reading glasses, phone in each hand.",
     desc: "The mamasan who runs the Samson brothers' three beer bars on the strip — fifties, brisk, a " +
       "{{phone}} in each hand and an eye on every tab. She works a different bar each night and somehow " +
       "knows exactly what happened at the other two.",
@@ -7168,6 +7211,7 @@ const NPCS = {
   ampai: {
     name: "Ampai", th: "อำไพ", emoji: "👑",
     room: "the_boardroom", bars: ["the_boardroom", "velvet_club"],
+    look: "Thai woman of fifty, silk blouse, understated gold, hair immaculate, very still and calm.",
     desc: "The madame of the strip's two gentleman's clubs — silk, low voice, immaculate, the kind of " +
       "calm that costs a fortune to be near. She sells the quiet more than the girls, and she knows " +
       "every regular's business and says none of it.",
@@ -7186,6 +7230,7 @@ const NPCS = {
   nira: {
     name: "Nira", th: "นิรา", emoji: "💵",
     room: "neon_paradise",
+    look: "Thai woman of twenty-seven, watchful eyes, glossy dark hair, stage bikini, measuring smile.",
     desc: "A dancer who watches the room the way the mamasan does — the best English on the stage and a " +
       "calculator behind her eyes. She smiles like she has already worked out your monthly salary and " +
       "rounded it down.",
@@ -7219,6 +7264,7 @@ const NPCS = {
   mala: {
     name: "Miss Mala", th: "มาลา", emoji: "🦚", ladyboy: true, personality: "charmer",
     room: "peacock_cabaret",
+    look: "Thai ladyboy of fifty, enormous feathered headdress, heavy stage make-up, sequinned gown.",
     desc: "The Peacock's compère and its mama both — a kathoey of a certain age and total command, " +
       "in a headdress that arrived by its own truck. Twenty years on this stage; she has watched a " +
       "hundred nervous farang husbands walk in braced and walk out fans.",
@@ -7314,6 +7360,7 @@ const NPCS = {
     name: "Nott", th: "นนท์", emoji: "🕴️",
     pronoun: "he",
     room: "adonis_club",
+    look: "Thai man of forty-five, immaculate, silk shirt open at the collar, groomed, easy smile.",
     desc: "The Adonis Club's papasan — forties, immaculate, a silk shirt open one button past " +
       "advisable and a smile that has closed a thousand deals. He runs his boys like a talent " +
       "agent and reads a room's wallet before its face.",
@@ -7582,6 +7629,7 @@ const NPCS = {
     pronoun: "he",
     room: "stinky_bar",
     manager: true, // the bar-manager NPC type (see _managerHere/_buyManDrink); NOT in NPC_ROLES, so girl-logic ignores him
+    look: "American man of sixty-five, heavy forearms, grey crew cut, faded polo, bottle of Singha.",
     desc: "The Stinky's manager — American, sixty-something, forearms like dock rope, a " +
       "Singha that never empties and never seems to get him drunk. Candy's man, and " +
       "once the manager of her bars; now he runs the Stinky for its ailing owner and, " +
@@ -7908,6 +7956,7 @@ const NPCS = {
     name: "Phil", th: "ฟิล", emoji: "📱",
     pronoun: "he",
     room: "stinky_bar",
+    look: "English man of fifty-five, thinning hair, fleece body-warmer despite the heat, anxious face.",
     desc: "Mid-fifties, a fleece vest in the Pattaya heat, {{phone}} face-down on the bar " +
       "in the specific way of a man waiting for a message he wants and dreads in equal " +
       "measure. Bristol accent. He has the look of someone who has been coming here " +
@@ -8016,6 +8065,7 @@ const NPCS = {
   bee: {
     name: "Bee", th: "ผึ้ง", emoji: "🐝",
     room: "candy_bar_2",
+    look: "Thai woman of twenty-two, quick and bright, rose-pink bar polo, hair in a high ponytail.",
     desc: "Candy Bar 2's floor boss — early twenties, quick everywhere at once, wearing " +
       "the same rose-pink polo as the original bar. Candy's niece, though nobody " +
       "says it and everybody knows it. The smile is the family franchise.",
@@ -8044,6 +8094,7 @@ const NPCS = {
   mem: {
     name: "Mamasan Mem", th: "เม้ม", emoji: "👵",
     room: "tequila_queen",
+    look: "Thai woman of sixty, silver-streaked chignon, reading glasses on a gold chain, stage poise.",
     desc: "The Tequila Queen's mamasan — silver-streaked chignon, reading glasses on a " +
       "gold chain, and a stage presence undimmed since she headlined this same room " +
       "in another century. The dancers call her 'Khun Mae'. So do some customers.",
@@ -8099,6 +8150,7 @@ const NPCS = {
     name: "Mot", th: "มด", emoji: "🐜",
     pronoun: "he",
     room: "ws_alley",
+    look: "Thai boy of fourteen, skinny, fake Barcelona shirt, shorts, flip-flops, quick watchful eyes.",
     desc: "A skinny kid in a fake Barça shirt, materialising from behind the kegs only " +
       "after word got around that you're not the swinging type. Quick eyes, quicker feet.",
     dialogue: [
@@ -9026,6 +9078,7 @@ const PATRONS = {
     name: "Glam", emoji: "🎸", age: 77, nat: "German",
     pronoun: "he",
     home: "cheeky_monkey", hops: false, shuttle: { after: 4, to: "hyper" }, protected: true,
+    look: "German man of seventy-seven, wild sparse blonde hair, silk shirt open at the chest, tanned.",
     desc: "Somewhere north of seventy-five and dressed like it's 1983 in a Munich discotheque: a silk " +
       "shirt open one button too far, and a wild halo of sparse blonde hair caught somewhere between " +
       "Einstein and a glam rocker on his third encore. Frail now, and — the whole strip agrees, gently " +
@@ -9080,6 +9133,7 @@ const PATRONS = {
     pronoun: "he",
     home: "gold_rush", hops: true, haunts: ["Soi Buakhao", "Tree Town"],
     avoids: ["candy_bar", "candy_bar_2", "stinky_bar"], rage: ["bert", "candy", "stinky"],
+    look: "Northern Irish man of fifty-eight, short, bald, sunburnt red, boxer's nose, cauliflower ears.",
     desc: "Short, bald, and boiled red — the nose of a man who has met a great deal of liquor and " +
       "won none of the arguments, and two cauliflower ears that agree. Late fifties, Northern Irish, a " +
       "retired tradesman of some sort, though which sort changes with the tide. Guarded stone-cold " +
@@ -9152,6 +9206,7 @@ const PATRONS = {
     name: "Mort", emoji: "🦉", age: 74, nat: "American",
     pronoun: "he",
     home: "queen_vic", hops: false,
+    look: "American man of seventy-four, horn-rimmed glasses, clashing Hawaiian shirt, spiral notebook.",
     desc: "Seventy-four, horn-rimmed glasses and a Hawaiian shirt at war with itself, a " +
       "spiral notebook and a biro he clicks while he watches the soi. He has been on this " +
       "coast longer than most of the bars, and he is writing all of it down whether it " +
@@ -9273,6 +9328,7 @@ const PATRONS = {
     name: "Chuck", emoji: "🤠", age: 58, nat: "American",
     pronoun: "he",
     home: "tequila_queen", hops: true,
+    look: "American man of fifty-eight, sunburnt scalp and arms, plumbing-company polo, grinning.",
     desc: "Sunburn over sunburn, a polo shirt with a plumbing-company logo, and the " +
       "unmistakable glow of a man who believes he is winning. Day four of two weeks. " +
       "There is usually a drink in front of him that he will tell you was free.",
@@ -9378,6 +9434,7 @@ const PATRONS = {
     name: "Somsak", emoji: "🌇", age: 47, nat: "Thai",
     pronoun: "he",
     home: "blue_dog", hops: false,
+    look: "Thai man of forty-seven, lean, hotel-maintenance polo, weathered face, bottle of Leo.",
     desc: "Forty-seven, hotel-maintenance polo, the end seat at the Blue Dog rail " +
       "with the best line on both the sunset and the checkpoint. He drinks one " +
       "big Leo very slowly and misses absolutely nothing on the road.",
@@ -9415,6 +9472,7 @@ const PATRONS = {
     name: "Randy", emoji: "🐻", age: 54, nat: "American",
     pronoun: "he",
     home: "jasmine_garden", hops: true,
+    look: "American man of fifty-four, six-foot-four, huge hands, grey buzz cut, mild expression.",
     desc: "Six-foot-four and built like the loads he used to carry, with hands that " +
       "make the Chang bottle look like a miniature. Fifty-four, Alabama drawl, and " +
       "a permanently mild expression of a man who still can't quite believe where " +
@@ -9624,6 +9682,7 @@ const PATRONS = {
     name: "Superman", emoji: "🦸", age: 62, nat: "American",
     pronoun: "he",
     home: "blue_dog", hops: false,
+    look: "American man of sixty-two, faded Superman t-shirt over a heavy chest, grey stubble.",
     desc: "Sixty-two, in tonight's Superman shirt — the S faded from a hundred " +
       "washes, stretched over a chest that carries three stents and a story. He " +
       "sits angled to the bay, not the bar. Sometimes, mid-sentence, he goes " +
@@ -9682,6 +9741,7 @@ const PATRONS = {
     name: "Angela", emoji: "🎧", age: 47, nat: "American",
     pronoun: "she",
     home: "queen_vic", hops: false,
+    look: "American woman of forty-seven, greying shoulder-length hair, faded flannel shirt tied at the waist.",
     desc: "Forty-seven, unkempt shoulder-length hair gone grey, a faded flannel shirt " +
       "tied at the waist in a climate that argues against it. On the bar next to " +
       "her Singha: an actual Discman, its foam headphones held together with " +
@@ -9786,6 +9846,7 @@ const PATRONS = {
     pronoun: "he",
     home: "club_mirage", hops: true,
     avoids: ["stinky_bar", "las_vegas"], // the map of his debts, drawn in bars
+    look: "Canadian man of fifty, gym-built, black tank top, full tattoo sleeve, shaved head.",
     desc: "Fifty, but built like a rendering of forty — tank top, veins, a full " +
       "sleeve of tattoos that reads like a rap sheet of previous personalities. " +
       "He is always mid-conversation with somebody about an opportunity, and " +
@@ -9911,6 +9972,7 @@ const PATRONS = {
     name: "Reginald", emoji: "🥂", age: 60, nat: "British",
     pronoun: "he",
     home: "las_vegas", hops: true,
+    look: "British man of sixty, silver hair sharply parted, deep tan, crisp open-necked linen shirt.",
     desc: "Sixty and annoyingly aware that he doesn't look it: linen shirt with " +
       "exactly the right number of buttons open, a tan that took discipline, " +
       "silver hair with a part you could draw a property line down. He holds a " +
@@ -9972,6 +10034,7 @@ const PATRONS = {
     name: "Mikkel", emoji: "🎒", age: 24, nat: "Danish",
     pronoun: "he",
     home: "neon_paradise", hops: true,
+    look: "Danish man of twenty-four, backpacker tan, shaggy fair hair, friendship bracelets to the elbow.",
     desc: "Twenty-four, backpacker tan, friendship bracelets to the elbow, and the " +
       "incandescent certainty of a man eleven days into the love of his life. He " +
       "shows people his phone a lot. There is a girl on the lock screen.",
