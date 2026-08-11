@@ -17,6 +17,7 @@ const BEER_PRICE = 80;   // your own big Chang, bar price
 const BELL_PRICE = 300;  // ring it and the round is on you
 const BRA_PRICE = 200;   // the mamasan's drawer novelty; makes fondling "interesting"
 const CORD_PRICE = 20;   // black nylon off a 7-Eleven counter; what an amulet hangs on
+const TAXI_DEBT = 12000; // what Nira is owed in the cousin's name — see QUESTS.taxi_debt
 const BAND_ROUND = 400;  // buying the band a round (≈ bell to the mama; girls prefer the real bell)
 const WINGMAN_TURNS = 15;// how long a friendly wing-woman's good word lasts
 const CHARGER_PRICE = 59;
@@ -3789,6 +3790,28 @@ const NPCS = {
     desc: "A motosai driver in an orange vest, boots up on his handlebars, watching the " +
       "street with professional calm. The other drivers at the stand defer to him.",
     dialogue: [
+      { topic: "debt", chip: false,
+        when: (st, G) => _flag("helmetDelivered") && !_flag("debtSettled"),
+        text: "The professional calm goes off him like a coat. \u201cMy friend. I ask you something, " +
+          "and you say no, is okay, we still same-same.\u201d He takes his boots off the handlebars, " +
+          "which you have not seen him do. \u201cMy cousin, he borrow money. From Nira \u2014 Neon " +
+          "Paradise, the one with the smile.\u201d A pause. \u201cHe cannot pay. Her cousins already " +
+          "come ask the neighbours where he sleep. That is how it start.\u201d He looks up the road, " +
+          "not at you. \u201cEverybody on this street, I stand next to them. Nobody stand next to me. " +
+          "You go talk to her? Just talk. You are farang, she will hear it different.\u201d",
+        short: "\u201cNira. My cousin. Just talk to her, na.\u201d" },
+      { topic: "debt", chip: false, when: (st, G) => _flag("debtSettled") && _flag("debtTruth"),
+        text: "\u201cIt is finish, they tell me.\u201d He is quiet for a second longer than a man who " +
+          "is only relieved. \u201cAnd you go see Pim.\u201d Not a question. \u201cShe tell you " +
+          "what it was for?\u201d He nods slowly at the road. \u201cMy mother. Two year now. Pim say " +
+          "her savings.\u201d He breathes out. \u201cI am a driver, my friend. I move people all day " +
+          "and I did not see the one thing moving in my own house.\u201d",
+        short: "\u201cMy mother. Two year. And she call it savings.\u201d" },
+      { topic: "debt", chip: false, when: (st, G) => _flag("debtSettled"),
+        text: "\u201cFinish?\u201d He looks at you a long moment, then laughs once and puts his boots " +
+          "back on the handlebars, which is Bank for thank you. \u201cOkay. Okay! You ride free with " +
+          "me now, boss. Always. Do not tell the other drivers.\u201d",
+        short: "\u201cYou ride free with me now, boss.\u201d" },
       { req: ["helmetDelivered"], th: "โอเคเลย", rom: "okay loei",
         text: "\"My man! Pim say thank you. You need ride anywhere — special price. And listen: you have problem with anyone on this street, you stand next to Bank, okay?\"",
         short: "\"Need a ride, boss? Special price for you. Trouble on the street — stand by Bank.\"" },
@@ -6270,6 +6293,17 @@ const NPCS = {
       "\"I drive and I fix,\" he says, and both are true, and neither is the whole of it. The most forgettable " +
       "man on Soi 6 — which, on Soi 6, is its own kind of power.",
     dialogue: [
+      { topic: "debt", chip: false,
+        when: (st, G) => !_flag("debtSettled") && _flag("act1Done"),
+        sets: ["debtSettled", "owesTan"],
+        text: "\u201cBank.\u201d Tan says the name the way you would read a familiar road sign. " +
+          "\u201cOrange vest, Beach Road south, boots on the handlebars.\u201d He takes out his " +
+          "phone, looks at it, and does not dial. \u201cAnd Nira. Okay.\u201d That is all. No figure " +
+          "is mentioned, then or ever. \u201cIt is done, my friend. Do not send her money \u2014 " +
+          "you will insult two people at once.\u201d He puts it away and finally looks at " +
+          "you, and the smile is the ordinary one, which is somehow worse. \u201cNow you have asked " +
+          "me for something. Good. It is better this way \u2014 before, you were only a passenger.\u201d",
+        short: "\u201cIt is done. And now you have asked me for something.\u201d" },
       // Post-reveal greeting: he knows you saw him at the good table, and the
       // relationship recalibrates without a word of it being said out loud.
       { when: (st, G) => _flag("tanRevealed"),
@@ -7235,6 +7269,50 @@ const NPCS = {
       "calculator behind her eyes. She smiles like she has already worked out your monthly salary and " +
       "rounded it down.",
     dialogue: [
+      // KNOWING why the debt exists is the strongest lever in the game and costs
+      // no baht: Nira does business with the truth, and a debt taken for a
+      // dying woman prices differently to a debt taken for a good time.
+      { topic: "debt", chip: false,
+        when: (st, G) => _flag("debtTruth") && !_flag("debtSettled"),
+        sets: ["debtSettled"],
+        text: "\u201cThe driver's cousin.\u201d The calculator behind her eyes does not move. Then you " +
+          "say the name Pim, and it does. \u201cAh.\u201d She sets the glass down. \u201cShe come to " +
+          "me in the cousin's name. I did not ask why \u2014 not my business, and she pay every month " +
+          "until she cannot.\u201d A long look at nothing. \u201cFor a mother, and she let the boy " +
+          "think it is savings.\u201d She takes a breath and writes something small in the book. " +
+          "\u201cIt is closed. Tell nobody I do this, or every farang in Pattaya want a dying " +
+          "mother.\u201d",
+        short: "\u201cIt is closed. Tell nobody, na.\u201d" },
+      // Standing, not cash. She trades on being known to deal fairly, so a man
+      // the soi speaks well of can spend that instead of money.
+      { topic: "debt", chip: false,
+        when: (st, G) => !_flag("debtSettled") && _repTier() >= 1,
+        sets: ["debtSettled"],
+        text: "\u201cYou come for the driver.\u201d She looks at you for a while, and what she is " +
+          "reading is not your wallet. \u201cPeople talk about you, you know this? Bar ladies talk " +
+          "more than anybody and they say you are\u2014\u201d she picks the word carefully " +
+          "\u201c\u2014not trouble.\u201d She turns a page. \u201cSo. I move it to your name, no " +
+          "interest, pay when you pay. And if you never pay, then I know something about you also, " +
+          "and that is worth twelve thousand to me too.\u201d The smile arrives. \u201cGood " +
+          "business either way.\u201d",
+        short: "\u201cYour name, no interest. Good business either way.\u201d" },
+      // Cash. The dull answer, and the only one available to a stranger.
+      { topic: "debt", chip: false,
+        when: (st, G) => !_flag("debtSettled") && G.money >= TAXI_DEBT,
+        sets: ["debtSettled"],
+        fx: (st, G) => { G.money -= TAXI_DEBT; },
+        text: "\u201cTwelve thousand.\u201d No preamble, no discount, and no interest in why you are " +
+          "asking. She counts it twice because she counts everything twice, then draws one line " +
+          "through one name in a book that has a great many names in it. \u201cFinish. Tell the " +
+          "driver his cousin is lucky in his friends.\u201d She is already looking past you at the " +
+          "door. \u201cYou want to borrow, you know where I sit.\u201d",
+        short: "\u201cFinish. Twelve thousand.\u201d" },
+      { topic: "debt", chip: false, when: (st, G) => !_flag("debtSettled"),
+        text: "\u201cTwelve thousand,\u201d she says, and waits, and the waiting is the whole " +
+          "sentence. When nothing lands on the bar she goes back to her book. \u201cCome back with " +
+          "it, or come back with something else. I am not in a hurry \u2014 it grows while I sit " +
+          "here.\u201d",
+        short: "\u201cTwelve thousand. It grows while I sit here.\u201d" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Sit, sit. You look like a man who reads the menu before he orders — I like that.\" " +
           "Nira's English is easy, almost accentless, and her attention is total in a way that costs " +
@@ -7439,6 +7517,17 @@ const NPCS = {
     desc: "Five years behind this bar and never once paid for her own drink. She looks " +
       "you over like a customs officer with a sense of humour.",
     dialogue: [
+      { topic: "debt", chip: false, when: (st, G) => !_flag("debtTruth"),
+        sets: ["debtTruth"],
+        text: "\u201cHis cousin.\u201d She says it flatly, polishing a glass that is already dry, and " +
+          "five years of knowing everybody's everything arrives in her face all at once. \u201cOkay. " +
+          "You are going to know anyway, you are that kind.\u201d She puts the glass down. \u201cThe " +
+          "cousin is a name. I borrow it \u2014 his name, Nira's money \u2014 two year ago, for " +
+          "Bank's mother. The hospital want it that week or they do not do the operation that week.\u201d " +
+          "A small shrug that costs her something. \u201cI tell Bank it is my savings. He believe me " +
+          "because he want to.\u201d She looks straight at you for the first time. \u201cIf you fix " +
+          "it, fix it. But he does not need to carry this one as well.\u201d",
+        short: "\u201cThe cousin is a name. The money was for his mother.\u201d" },
       { req: ["hasHelmet"], notFlags: ["helmetDelivered"], th: "อ้าว", rom: "aow",
         text: "\"My helmet! That man—\" she softens for exactly one frame \"—okay, Bank is sweet. Sometimes.\" She spins the helmet onto the back shelf. \"You did him a favour, so: one answer free. Choose the question well, darling.\"",
         sets: ["helmetDelivered"],
@@ -8476,6 +8565,26 @@ const ENCOUNTERS = {
 // quest ids that must be done first.
 
 const QUESTS = {
+  // The one quest with four different right answers. `doneFlag` is what makes
+  // that free: the quest watches for `debtSettled` and does not care which of
+  // Nira's three nodes or Tan's one set it — no branching, no quest-specific
+  // code, exactly the design the schema is for.
+  //
+  // Gated on `helmetDelivered`, so the man asking has already been helped once:
+  // Bank's own line is "you have problem with anyone on this street, you stand
+  // next to Bank", and the quest is that sentence turned around.
+  taxi_debt: {
+    name: "A Favour Back",
+    giver: "bank",
+    reqFlags: ["helmetDelivered"],
+    deps: [],
+    at: "nira",
+    desc: "Bank's cousin owes Nira and her cousins are asking around. Go and talk to her " +
+      "(ASK NIRA ABOUT THE DEBT) — money is only one of the ways this ends.",
+    doneFlag: "debtSettled",
+    reward: { money: 0, happy: 5 },
+  },
+
   // ── Pratumnak: Bill and Bob ───────────────────────────────────────────────
   // The hill is the only place in town where two factions sit thirty metres
   // apart and are CIVIL about it, and all three of these already had their
