@@ -346,6 +346,12 @@ CHARS = {
                      blush=True, mouth="smile"),
     "fon":      lady(skin=THAI, hair="bob", hc=DKBRN, shirt=C(0x3a8a4a), bg=BG_BAR,
                      acc=["earrings", "flower"], blush=True),
+    # The Queen Vic's Thai staff — a pub with an inn over it is run by somebody,
+    # and it is not the two Englishmen on the stools.
+    "nuch":     lady(skin=THAI, hair="bun", hc=GREY, shirt=C(0xd8d8e0), collar=True,
+                     acc=["glasses"], bg=BG_BAR),
+    "aoy":      lady(skin=THAI, hair="pony", hc=BLACK, shirt=WHITE, bg=BG_BAR),
+    "gaew":     lady(skin=THAI, hair="bob", hc=BLACK, shirt=C(0x2a4a8a), bg=BG_BAR),
     "gift":     lady(skin=THAI, hair="sleek", hc=BLACK, shirt=WHITE),
     "kwan":     lady(skin=THAI, hair="long", hc=DKBRN, shirt=C(0xb090e0), bg=BG_BAR),
     "pia":      lady(skin=THAI, hair="bob", hc=BLACK, shirt=C(0xc89030), bg=BG_BAR, mouth="neutral"),

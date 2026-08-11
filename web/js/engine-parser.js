@@ -327,6 +327,7 @@ function _arriveAt(to) {
     if (G.soc.patronBusy[to] === undefined) G.soc.patronBusy[to] = _rand() < 0.4;
   }
   G.room = to;
+  if (typeof _fonPour === "function") _fonPour();   // Wednesday, first hour, her bar only
   G.sevenAt = null;   // back on the pavement — the next buy walks you in again
   _describeRoom(true);
   _lightNotice(); // walking in with the torch burning gets you clocked

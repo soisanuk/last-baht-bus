@@ -208,7 +208,11 @@ const DE_CEILINGS = [
   // stops being one. 421 → 428 for the three new south-end rooms.
   // 419 → 451, a big move for one room: splitting second_rd_c's two jobs gives
   // the walk another node to fan out from in the middle of Second Road.
-  { mode: "expat", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 479 },
+  { mode: "expat", seeds: [1, 2, 3, 4, 5], nights: 4, ceiling: 480 },
+  // +1: the Queen Vic's Thai staff (Nuch, Aoy, Gaew). Only expat moves, because
+  // that is the mode whose walk actually reaches the pub often enough to talk to
+  // them. The shrine prose is EXAMINE-only, which the soak never types.
+
 ];
 
 for (const { mode, seeds, nights, ceiling } of DE_CEILINGS) {

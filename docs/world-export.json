@@ -24,8 +24,8 @@
  "counts": {
   "geolocated": 234,
   "patrons": 18,
-  "people": 313,
-  "portraits": 331,
+  "people": 316,
+  "portraits": 334,
   "renders": 87,
   "thumbs": 87,
   "venues": 234
@@ -317,6 +317,14 @@
    "role": "hostess",
    "room": "club_mirage",
    "th": "อ้อม"
+  },
+  "aoy": {
+   "desc": "One of the two who work the floor — orders, plates, the roast on a Sunday. She carries three pints in one hand and has never once been asked to sit down with anybody, which is the whole difference between this room and the rest of the soi.",
+   "emoji": "🍽️",
+   "name": "Aoy",
+   "pronoun": "she",
+   "room": "queen_vic",
+   "th": "อ้อย"
   },
   "apple": {
    "desc": "Black polo, a lanyard of too many keys, a calculator she never needs — the cashier at Rock Factory, from Nakhon Phanom.",
@@ -937,6 +945,14 @@
    "role": "hostess",
    "room": "buzz_inn",
    "th": "แก้ม"
+  },
+  "gaew": {
+   "desc": "The other half of the floor, and the faster half. She has the dartboard's scoring in her head, knows every regular's drink, and settles arguments about the football by stating the result flatly and walking off.",
+   "emoji": "🍻",
+   "name": "Gaew",
+   "pronoun": "she",
+   "room": "queen_vic",
+   "th": "แก้ว"
   },
   "gam": {
    "desc": "Neat bun, neat ledger, an engagement ring worn on a chain — the cashier at Candy Bar, from Surin.",
@@ -2112,6 +2128,14 @@
    "role": "cashier",
    "room": "windmill",
    "th": "นับหนับ"
+  },
+  "nuch": {
+   "desc": "Behind the till and the room keys both — the Vic is a pub downstairs and an inn upstairs, and Nuch runs the paperwork of both. Fifteen years of it. She knows which regulars are good for a tab and which rooms have the fan that rattles.",
+   "emoji": "🧾",
+   "name": "Nuch",
+   "pronoun": "she",
+   "room": "queen_vic",
+   "th": "นุช"
   },
   "numfon": {
    "desc": "The Shady Lady's cashier, comfortable and unbothered, running an honest till at an honest bar — the numbers are small, the trouble is smaller, and that suits her exactly.",
@@ -3296,6 +3320,7 @@
   "aof",
   "aoi",
   "aom",
+  "aoy",
   "apple",
   "arm",
   "aum",
@@ -3366,6 +3391,7 @@
   "fern",
   "fon",
   "gaem",
+  "gaew",
   "gam",
   "gary",
   "gavin",
@@ -3493,6 +3519,7 @@
   "nott",
   "nu",
   "nubnab",
+  "nuch",
   "numfon",
   "nut",
   "oat",

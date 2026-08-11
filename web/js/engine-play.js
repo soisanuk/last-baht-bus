@@ -735,6 +735,31 @@ function _weekday() { return WEEKDAYS[G.day % 7]; }
 // clock becomes the server's, and these are the only seams to re-plumb.
 function _quizDay() { return G.day % 7 === 4; }
 
+// Fon's opening pour. WEDNESDAY, and only in the first hour of the evening —
+// a calendar check like the quiz, not a die roll, so it is a thing a player can
+// learn and come back for rather than a thing that happens at random.
+//
+// Deliberately ONCE A WEEK and nowhere else. The luck notes are explicit that
+// this is folk practice and not liturgy, so staging it nightly at every bar
+// would be both wrong and exactly the ambient nagging Mario warned against. One
+// girl, one bar, one evening: if you are standing in the Jasmine Garden early
+// on a Wednesday you see it, and otherwise you hear about it from her.
+function _fonPourDay() { return G.day % 7 === 3; }
+
+function _fonPour() {
+  if (G.room !== "jasmine_garden" || !_fonPourDay()) return;
+  if (G.nightTurn >= 10) return;                 // the first hour only — this is opening
+  if (G.soc.fonPour === G.day) return;           // once, however many times you come back
+  if (!_npcsHere().includes("fon")) return;
+  G.soc.fonPour = G.day;
+  _say("Fon comes out from behind the ferns with a bottle of something clear and cheap and " +
+    "does not see you. At the edge where the bar's tiles stop and the soi begins she crouches, " +
+    "and pours a thin circle of it onto the concrete \u2014 unhurried, not performing, lips " +
+    "moving over something too quiet to catch. Then she stands, wais once at the spirit house, " +
+    "and goes back in for the ice. The whole thing takes eleven seconds.", "win");
+  _say("(She has not noticed you watching. You could ASK FON ABOUT THE SHRINE.)", "dim");
+}
+
 function _isQuizWindow() {
   return _quizDay() && G.nightTurn >= 20 && G.nightTurn < 40;
 }

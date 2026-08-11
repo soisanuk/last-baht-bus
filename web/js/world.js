@@ -5853,6 +5853,74 @@ const NPCS = {
   // in Thailand. His recon quest resolves toward the OTHER man at the good table —
   // the soft-spoken Thai everyone defers to (the syndicate seed), described in terms
   // that recontextualise your airport driver on replay. Breadcrumb, never the name.
+  // The Queen Vic's Thai staff. A licensed premises here is run day to day by
+  // Thai employees — a foreigner legally cannot do most of this work — and the
+  // Vic is a pub with an INN over it, so there is a front desk and rooms as
+  // well as a rail. All three are DELIBERATELY absent from NPC_ROLES, the same
+  // way Bert is: no role means every piece of lady-logic (barfine, lady drink,
+  // tip, contact) ignores them entirely. They are staff, not the trade — which
+  // is exactly what the Vic is, and why it has never had hostesses.
+  nuch: {
+    name: "Nuch", th: "\u0e19\u0e38\u0e0a", emoji: "\ud83e\uddfe",
+    pronoun: "she",
+    room: "queen_vic",
+    look: "Thai woman of forty-five, reading glasses pushed up, neat blouse, ledger and room keys.",
+    desc: "Behind the till and the room keys both \u2014 the Vic is a pub downstairs and an inn " +
+      "upstairs, and Nuch runs the paperwork of both. Fifteen years of it. She knows which " +
+      "regulars are good for a tab and which rooms have the fan that rattles.",
+    dialogue: [
+      { text: "\u201cRoom or a pint?\u201d She says it without looking up, then does look up, and the " +
+        "second look is the one that decides things. \u201cWe have both. One is cheaper.\u201d" },
+      { topic: "rooms",
+        text: "\u201cSix room upstairs. Balcony one is the good one \u2014 everybody want that one, " +
+          "so everybody ask me nice.\u201d She taps the ledger. \u201cQuiet house. The bar close, " +
+          "the guest sleep. Not like some place.\u201d",
+        short: "\u201cSix rooms. The balcony one is the good one.\u201d" },
+      { topic: "shrine",
+        text: "\u201cI do it. Every morning, before the ice come.\u201d She says it the way you would " +
+          "say you lock up. \u201cThe farang here, they think it is decoration.\u201d A small dry " +
+          "look over the glasses. \u201cIt is not decoration. It is the building.\u201d",
+        short: "\u201cI do it every morning. It is not decoration \u2014 it is the building.\u201d" },
+    ],
+  },
+  aoy: {
+    name: "Aoy", th: "\u0e2d\u0e49\u0e2d\u0e22", emoji: "\ud83c\udf7d\ufe0f",
+    pronoun: "she",
+    room: "queen_vic",
+    look: "Thai woman of twenty-six, hair tied back, black apron over a white shirt, tray in hand.",
+    desc: "One of the two who work the floor \u2014 orders, plates, the roast on a Sunday. She " +
+      "carries three pints in one hand and has never once been asked to sit down with anybody, " +
+      "which is the whole difference between this room and the rest of the soi.",
+    dialogue: [
+      { text: "\u201cYou eat?\u201d She has the order pad out before you answer. \u201cKitchen open " +
+        "till eleven. After that only crisp.\u201d" },
+      { topic: "work",
+        text: "\u201cIs a good job.\u201d She says it flatly, the way you would about a job. " +
+          "\u201cSame hour every day, same money every month, and nobody ask me anything except " +
+          "what I have for the table.\u201d She shrugs the tray. \u201cMy sister work Soi 6. She " +
+          "make more. She is more tired.\u201d",
+        short: "\u201cSame hours, same money, nobody asks me anything. My sister makes more.\u201d" },
+    ],
+  },
+  gaew: {
+    name: "Gaew", th: "\u0e41\u0e01\u0e49\u0e27", emoji: "\ud83c\udf7b",
+    pronoun: "she",
+    room: "queen_vic",
+    look: "Thai woman of thirty, short practical hair, apron, pen behind her ear, quick on her feet.",
+    desc: "The other half of the floor, and the faster half. She has the dartboard's scoring in " +
+      "her head, knows every regular's drink, and settles arguments about the football by " +
+      "stating the result flatly and walking off.",
+    dialogue: [
+      { text: "\u201cSame again?\u201d She is already halfway to the taps. It is not really a question " +
+        "and she is not really wrong." },
+      { topic: "darts",
+        text: "\u201cThey think I do not know the game.\u201d She writes a score on the board without " +
+          "checking it. \u201cEight year I chalk for these men. I know the game better than " +
+          "three of them.\u201d A pause. \u201cNot Doyle. Doyle can play.\u201d",
+        short: "\u201cEight years chalking for them. I know it better than three of them.\u201d" },
+    ],
+  },
+
   doyle: {
     name: "Doyle", th: "ดอยล์", emoji: "🕵️",
     pronoun: "he",
