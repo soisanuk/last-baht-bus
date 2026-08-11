@@ -1818,7 +1818,10 @@ function _leads() {
   }
   const unseen = Object.keys(all).filter(rg => !seen[rg] && rg !== "Myth Night");
   if (unseen.length) {
-    out.push(_fmt("You have not set foot in {where} yet. It is a bus ride and a different town.",
+    // No claim about how you'd get there: some of these are a walk, some a bus,
+    // and the lead shouldn't guess. What IS reliably true is that the districts
+    // do not look like each other.
+    out.push(_fmt("You have not set foot in {where} yet, and it looks nothing like this stretch.",
       { where: unseen[Math.floor(_hh("leads" + G.day, 7) % unseen.length)] }));
   }
   return out;
