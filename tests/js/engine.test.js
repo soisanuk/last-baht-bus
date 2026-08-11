@@ -7415,3 +7415,37 @@ test("the collections show what's left, measured against people you've MET", () 
   out = []; run("gallery");
   assert.match(out.join("\n"), /everyone you've met is in here/);
 });
+
+// The morning ledger. A bad night has been legible since the WHAT HAPPENED
+// debrief; a good one wasn't — you slept, the rent came off, and nothing said
+// what the night had been. Failure explained itself and success didn't.
+test("the morning says what last night was, as deltas", () => {
+  newGame();
+  state().stage = "vacation"; state().flags.act1Done = true; state().day = 3;
+  state().happy = 12; state().money = 5000;
+  state().known = { lek: true }; state().phone.contacts = {};
+  _nightSnapshot();
+
+  // …a night happens…
+  state().happy = 18; state().money = 3200;
+  state().known.candy = true; state().known.bee = true;
+  state().phone.contacts = { lek: true };
+  state().day = 4;
+
+  out = []; _morningLedger();
+  const said = out.join("\n");
+  assert.match(said, /\+6 สนุก/, "happiness delta");
+  assert.match(said, /spent ฿1,800/, "money delta, formatted");
+  assert.match(said, /met 2/, "people met");
+  assert.match(said, /1 new number/);
+  assert.match(said, /4 nights left/, "and the shape of the week");
+
+  // a night where nothing measurable happened is not scolded
+  _nightSnapshot();
+  out = []; _morningLedger();
+  assert.match(out.join("\n"), /A quiet one/);
+
+  // and it only fires once per morning
+  out = []; _morningLedger();
+  assert.equal(out.join("\n"), "", "the snapshot is consumed");
+});

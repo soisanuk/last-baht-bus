@@ -2752,6 +2752,56 @@ const _DEBRIEF = {
 };
 _DEBRIEF.bfscam2 = _DEBRIEF.bfscam;
 
+// ── The morning ledger ──────────────────────────────────────────────────────
+// A BAD night has been legible since the WHAT HAPPENED debrief landed. A good
+// one was not: you slept, the rent came off, the day divider printed, and
+// nothing anywhere said what the night had actually been. Failure explained
+// itself and success did not, which is backwards for a game trying to make you
+// want another one.
+//
+// This is the joint between the two surfaces built alongside it — live leads
+// answer "what do I do tonight", the collection denominators answer "what am I
+// collecting", and neither answers "how did last night go, and what does that
+// leave me". That is the moment a player decides whether to keep going.
+//
+// Everything here is a DELTA against a snapshot taken as the night ends, so it
+// costs no new state beyond one small object.
+function _nightSnapshot() {
+  G.lastNight = {
+    happy: G.happy,
+    money: G.money,
+    known: Object.keys(G.known || {}).length,
+    nums: Object.keys(G.phone.contacts || {}).filter(id => G.phone.contacts[id] && NPC_ROLES[id]).length,
+    faces: new Set((_photoList() || []).map(p => p.id)).size,
+  };
+}
+
+function _morningLedger() {
+  const b = G.lastNight;
+  if (!b) return;
+  G.lastNight = null;
+  const bits = [];
+  const dh = G.happy - b.happy;
+  if (dh) bits.push((dh > 0 ? "+" : "") + dh + " \u0e2a\u0e19\u0e38\u0e01");
+  const spent = b.money - G.money;
+  if (spent > 0) bits.push("spent \u0e3f" + spent.toLocaleString());
+  const dk = Object.keys(G.known || {}).length - b.known;
+  if (dk > 0) bits.push("met " + dk);
+  const dn = Object.keys(G.phone.contacts || {}).filter(id => G.phone.contacts[id] && NPC_ROLES[id]).length - b.nums;
+  if (dn > 0) bits.push(dn + " new number" + (dn > 1 ? "s" : ""));
+  const df = new Set((_photoList() || []).map(p => p.id)).size - b.faces;
+  if (df > 0) bits.push(df + " new face" + (df > 1 ? "s" : "") + " in the gallery");
+
+  if (!bits.length) {
+    _say("(A quiet one. It happens, and the week is long enough to carry a few.)", "dim");
+  } else {
+    _say("Last night: " + bits.join(" · "), "dim");
+  }
+  _say(_fmt("\u0e2a\u0e19\u0e38\u0e01 {h} — {label}{left}",
+    { h: G.happy, label: _happyLevel(G.happy),
+      left: G.stage === "expat" ? "" : " \u00b7 " + (8 - G.day) + " night" + (8 - G.day === 1 ? "" : "s") + " left" }), "dim");
+}
+
 function _nightDebrief(reason) {
   const make = _DEBRIEF[reason];
   if (!make) return;                       // sleep, barfine — those went fine
@@ -2913,6 +2963,7 @@ function _endNight(reason) {
   // so it is the first thing in a long night-end rather than the last, and the
   // wall-anchored scroll (term.js) lands the player on it.
   _nightDebrief(reason);
+  _nightSnapshot();   // the morning ledger reads deltas against this
   G.day++;
   G.jaded = Math.max(0, G.jaded - 1); // a day cools the treadmill one notch
   if (G.stage !== "expat" && G.day > 7) { _endVacation(); return; }
@@ -3001,6 +3052,7 @@ function _endNight(reason) {
     "surface mid-afternoon, and by the time you're human again the sun is " +
     "sliding into the gulf and the neon is waking up ──",
     { d: G.day, home: G.stage === "expat" ? _L(" · PATTAYA, HOME") : _L(" of 7") }), "win");
+  _morningLedger();
   if (hangover >= 4) _say("(The hangover is a physical presence with opinions. Water. Food. Mercy.)", "alert");
   if (wouldRough && !rough && _dogEgg() === "rescue") {
     // NOT "the last baht bus" — this fires only on nights you failed to get home,
