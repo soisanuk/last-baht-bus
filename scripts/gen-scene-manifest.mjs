@@ -47,6 +47,11 @@ const KIND_OVERRIDE = {
   myth_stage: "market",
   myth_rows: "market",
   soi_rompho: "market",           // grilled everything, fruit pyramids, plastic stools
+  // A stage and a band, not a dartboard: the `pub`/`beer` templates were
+  // describing the Queen Vic at three venues built around live music.
+  take_care_me: "livemusic",   // "a proper stage, a tight Filipino band"
+  rock_factory: "livemusic",   // two-storey live-music bar, sound hits you at the gate
+  amp_room: "livemusic",       // "the only stage in the complex"
   soi_7_w: "street",              // "Soi 7 (West / beach end)" — a soi AT the beach,
                                   // not sand; the name heuristic reads it wrong
   jomtien_soi_7_w: "street",      // same misfire, Jomtien's twin: "Soi 7 Beach End"

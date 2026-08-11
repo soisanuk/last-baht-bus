@@ -49,12 +49,17 @@ if (!existsSync(MANIFEST)) {
 }
 const { rooms } = JSON.parse(readFileSync(MANIFEST, "utf8"));
 
-// The fallback chain, resolved on disk.
+// The fallback chain, resolved on disk. Extension-agnostic and webp-first, in
+// that order, exactly like scene.js walks it — pinned to .png this reported a
+// fully-rendered region as "16 none", which is the worst possible failure for a
+// review tool: it says the work isn't there when it is.
 function art(r) {
-  const room = join(ART, "rooms", r.id + ".png");
-  if (existsSync(room)) return { src: room, via: "room" };
-  const reg = join(ART, "regions", r.regionSlug + ".png");
-  if (existsSync(reg)) return { src: reg, via: "region" };
+  for (const [dir, key, via] of [["rooms", r.id, "room"], ["regions", r.regionSlug, "region"]]) {
+    for (const ext of [".webp", ".png"]) {
+      const p = join(ART, dir, key + ext);
+      if (existsSync(p)) return { src: p, via };
+    }
+  }
   return { src: null, via: "none" };
 }
 

@@ -8,7 +8,7 @@
       "beach": 14,
       "street": 93,
       "massage": 19,
-      "beer": 57,
+      "beer": 55,
       "mall": 1,
       "interior": 2,
       "motel": 1,
@@ -17,7 +17,8 @@
       "food": 4,
       "shop": 1,
       "market": 4,
-      "pub": 3,
+      "pub": 2,
+      "livemusic": 3,
       "soapy": 3,
       "hotel_room": 4,
       "gents": 5,
@@ -1536,7 +1537,7 @@
       "barType": "beer",
       "region": "Myth Night",
       "regionSlug": "myth-night",
-      "kind": "beer",
+      "kind": "livemusic",
       "dark": false,
       "people": [
         "Ju"
@@ -2827,7 +2828,7 @@
       "barType": "beer",
       "region": "Soi Buakhao",
       "regionSlug": "soi-buakhao",
-      "kind": "beer",
+      "kind": "livemusic",
       "dark": false,
       "people": [
         "Apple",
@@ -3194,7 +3195,7 @@
       "barType": "pub",
       "region": "Thappraya",
       "regionSlug": "thappraya",
-      "kind": "pub",
+      "kind": "livemusic",
       "dark": false,
       "people": [],
       "desc": "A live-music rock pub at the top of Second Road end of the strip — a proper stage, a tight Filipino band murdering and resurrecting the classics, and a crowd three deep at the rail. No house girls work it, but the freelancers love it: they come for the music, the cold beer, and the chance to pick a man who came for the same. Loud, sweaty, and the best room on the strip."
