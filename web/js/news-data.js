@@ -9,18 +9,18 @@ var NEWS_FEED = [
   },
   {
     "t": "Pattaya suspends six staff over alleged tourist money demand",
-    "s": "khaosodenglish.com",
+    "s": "Khaosod English",
     "d": "10 Aug 2026"
   },
   {
-    "t": "Pattaya pickup gets unwanted four-meter snake as passenger",
-    "s": "Pattaya Mail",
-    "d": "09 Aug 2026"
+    "t": "Chinese family protests after son dies in fatal stabbing in Pattaya",
+    "s": "thethaiger.com",
+    "d": "11 Aug 2026"
   },
   {
-    "t": "Mystery oil spill blankets Koh Larn’s coastline",
-    "s": "Thaiger",
-    "d": "10 Aug 2026"
+    "t": "Thai destinations rank in Asia’s top five among European travellers",
+    "s": "Nation Thailand",
+    "d": "11 Aug 2026"
   },
   {
     "t": "Five injured after SUV collides head-on with pickup near Pattaya railway crossing",
@@ -38,9 +38,9 @@ var NEWS_FEED = [
     "d": "09 Aug 2026"
   },
   {
-    "t": "Pattaya bay tightens rules for tour boats over safety concerns",
-    "s": "khaosodenglish.com",
-    "d": "08 Aug 2026"
+    "t": "Pattaya pickup gets unwanted four-meter snake as passenger",
+    "s": "Pattaya Mail",
+    "d": "09 Aug 2026"
   },
   {
     "t": "Former MP allegedly kills official at government building in Thailand's second shooting in days",
@@ -48,40 +48,40 @@ var NEWS_FEED = [
     "d": "10 Aug 2026"
   },
   {
-    "t": "Death toll rises in Thailand school shooting",
-    "s": "ABC News - Breaking News, Latest News and Videos",
-    "d": "07 Aug 2026"
+    "t": "Thailand school shooting toll rises to nine after 12-year-old dies, police say",
+    "s": "The Guardian",
+    "d": "09 Aug 2026"
   },
   {
-    "t": "Dad seeks answers over son's killing",
-    "s": "Bangkok Post",
+    "t": "Thailand Preparing to Use Military Ties as Leverage in US Talks",
+    "s": "Bloomberg.com",
     "d": "11 Aug 2026"
   },
   {
-    "t": "Foreign business crackdown uncovers bribery claims",
-    "s": "Bangkok Post",
-    "d": "11 Aug 2026"
-  },
-  {
-    "t": "Gunman kills Thai local official at work as country reels from school shooting",
-    "s": "NBC News",
+    "t": "New species of mountain horned dragon identified in Thailand's high-altitude forests",
+    "s": "Phys.org",
     "d": "10 Aug 2026"
   },
   {
     "t": "Former MP opens fire in Thailand’s second shooting within days",
     "s": "Al Jazeera",
     "d": "10 Aug 2026"
+  },
+  {
+    "t": "Gunman kills Thai local official at work as country reels from school shooting",
+    "s": "NBC News",
+    "d": "10 Aug 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-08-10","USD":33.01,"AUD":23.32,"GBP":44.58,"EUR":38.14};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-11","temp":28,"humid":85,"code":53,"hi":30,"rain":88};
+var WX_NOW = {"date":"2026-08-11","temp":30,"humid":73,"code":3,"hi":30,"rain":75};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-08-01","first":"932479","last2":"69","front3":["413","672"],"back3":["039","154"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4429,"date":"2026-08-11","baht":69150};
+var GOLD = {"usd":4362,"date":"2026-08-11","baht":68100};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":64004,"thb":2113622};
+var BTC = {"usd":63936,"thb":2118887};
