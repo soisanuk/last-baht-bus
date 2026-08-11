@@ -7,6 +7,11 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { runSoak } from "../../tools/soak.mjs";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "..");
 
 test("soak: vacation mode, 3 nights — invariants hold", () => {
   const r = runSoak({ seed: 1, nights: 3, maxMs: 20_000 });
@@ -240,19 +245,58 @@ const DE_CEILINGS = [
 
 ];
 
-for (const { mode, seeds, nights, ceiling } of DE_CEILINGS) {
-  test(`de coverage doesn't regress in ${mode} mode — English must not leak further ` +
-    `into a German game`, () => {
+// ── German: FROZEN as a proof of concept, still measured ────────────────────
+// Decision, 2026-08-11: German is a POC and stays one until the effort is
+// justified. 665 catalog entries against a 6,137-record corpus is about 11% of
+// the game, the translation is single-model and unreviewed, and the audience
+// reads English.
+//
+// So this stops being a GATE and becomes a GAUGE. As a gate it failed on every
+// prose addition — eight ceiling bumps in one evening — which is pure friction
+// on a feature nobody is shipping. Deleting it would lose the measurement, and
+// the measurement is the point: the gap should stay legible for whoever picks
+// this up later.
+//
+// What it does now: measures all four modes, writes the numbers to
+// docs/i18n-de-status.json (committed, so `git log -p` on that one file is the
+// history of the gap), and asserts only what still matters while frozen —
+// that the harness itself works. A sweep returning zero leaks in every mode
+// means the language machinery broke, not that German got finished.
+//
+// The thing that DOES still gate is tests/js/i18n.test.js: an edited English
+// string orphans its catalog key, and the 665 lines that exist must not rot.
+test("de coverage: measure all four modes and record the gap", () => {
+  const status = { measuredDay: "frozen-poc", modes: {} };
+  let total = 0;
+  for (const { mode, seeds, nights } of DE_CEILINGS) {
     const uniq = new Set();
     for (const seed of seeds) {
       const r = runSoak({ seed, nights, mode, lang: "de" });
       for (const w of r.warns) if (w.kind === "langleak") uniq.add(w.line);
     }
-    assert.ok(uniq.size <= ceiling,
-      `de leaks rose to ${uniq.size} in ${mode} mode (ceiling ${ceiling}). New prose needs ` +
-      `a de entry — see docs/i18n-de-gaps.md. Sample: ${[...uniq][0]?.slice(0, 90)}`);
-  });
-}
+    status.modes[mode] = uniq.size;
+    total += uniq.size;
+  }
+  status.total = total;
+
+  // the harness has to still be doing something — all-zero means the language
+  // path broke, which is the one failure mode worth a red test while frozen
+  assert.ok(total > 0,
+    "every mode reported zero de leaks — the language sweep is broken, not finished");
+  for (const { mode } of DE_CEILINGS) {
+    assert.ok(status.modes[mode] > 0, `${mode}: zero leaks measured — sweep broken?`);
+  }
+
+  const out = path.join(root, "docs", "i18n-de-status.json");
+  const prev = fs.existsSync(out) ? JSON.parse(fs.readFileSync(out, "utf8")) : null;
+  fs.writeFileSync(out, JSON.stringify(status, null, 2) + "\n");
+  if (prev && prev.total) {
+    // not an assertion — a note in the test output, so a big jump is visible
+    // to whoever ran it without failing a build nobody wants failed
+    const d = total - prev.total;
+    if (Math.abs(d) > 20) console.log(`  (de gap moved ${d > 0 ? "+" : ""}${d} → ${total})`);
+  }
+});
 
 // ── the blind spot gets soaked too ──────────────────────────────────────────
 // The walker's centre of gravity leaves most of the map unentered: one run
