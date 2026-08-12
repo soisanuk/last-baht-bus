@@ -7482,3 +7482,30 @@ test("the daily joke: one a day, stoppable, and the sender has a name", () => {
   state().day = 2; _dailyJoke();
   assert.equal(state().phone.inbox.length, 0, "not during Act One");
 });
+
+// He invited you for a beer over text. If you turn up and he greets you as a
+// stranger, the invitation was a lie the game told.
+test("Mort knows you answered his text when you walk in", () => {
+  newGame();
+  state().stage = "vacation"; state().flags.act1Done = true; state().day = 3;
+  _dailyJoke(); run("reply");
+  state().room = "queen_vic"; out = [];
+  run("talk to mort");
+  assert.match(out.join("\n"), /one in forty/, "he places you on sight");
+  assert.ok(_flag("mortMet"), "and it's spent — the next talk is normal");
+
+  // a stranger still gets the stranger's greeting
+  newGame();
+  state().stage = "vacation"; state().flags.act1Done = true;
+  state().room = "queen_vic"; out = [];
+  run("talk to mort");
+  assert.doesNotMatch(out.join("\n"), /one in forty/);
+
+  // and telling him to STOP is not the same as replying
+  newGame();
+  state().stage = "vacation"; state().flags.act1Done = true; state().day = 3;
+  _dailyJoke(); run("stop");
+  state().room = "queen_vic"; out = [];
+  run("talk to mort");
+  assert.doesNotMatch(out.join("\n"), /one in forty/, "you told him to stop; he did");
+});

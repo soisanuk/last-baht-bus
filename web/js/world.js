@@ -9427,6 +9427,26 @@ const PATRONS = {
       "coast longer than most of the bars, and he is writing all of it down whether it " +
       "likes it or not.",
     dialogue: [
+      // He invited you for a beer over text. If you turn up and he greets you as
+      // a stranger, the invitation was a lie the game told — so this sits FIRST
+      // and wins the greeting for as long as it is the newest thing between you.
+      { when: (st, G) => _flag("jokeWho") && !_flag("mortMet"),
+        sets: ["mortMet"],
+        fx: (st, G) => { st.trust = Math.min(5, (st.trust || 0) + 1); },
+        text: "He is already looking at the door when you come through it, and he places you " +
+          "before you have said anything. \u201cThe one in forty.\u201d The notebook closes on " +
+          "the biro. \u201cSit down, I said I would buy and I am a man of my word about beer " +
+          "if nothing else.\u201d He signals two without asking what you drink. \u201cMort. " +
+          "You already know that, you have had my material all week.\u201d",
+        short: "\u201cThe one in forty. Sit down \u2014 I said I would buy.\u201d" },
+      { topic: "jokes", when: (st, G) => _flag("jokeWho"),
+        text: "\u201cThe texts? Forty years of writing to people who never write back, and it " +
+          "turns out I could not stop.\u201d He taps the notebook. \u201cThe column takes one " +
+          "joke a week. I write nine. The other eight have to go somewhere or they rot, so " +
+          "they go to whoever gave me a number in a bar and forgot.\u201d A shrug that is not " +
+          "quite as light as he means it. \u201cA man my age either has a routine or he has " +
+          "nothing at all going on. Mine sends jokes to strangers at nine every evening.\u201d",
+        short: "\u201cThe column takes one a week. I write nine. The rest go to strangers.\u201d" },
       { text: "\"Mort.\" He finishes the line before he looks up. \"I write the Nite " +
         "Owl — the back-page column, the one your granddad read on the toilet. Retired " +
         "twice, un-retired twice; a man needs a deadline or the days run together and " +
