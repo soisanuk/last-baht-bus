@@ -390,6 +390,15 @@ same seam-awareness the CLAUDE.md online/2D rules already demand: no browser or
 wall-clock APIs in the core, all nondeterminism through an injected rng, state
 serialisable. LBB is the first host; keep the second one buildable.
 
+**The Bangkok follow-on is a content-pack** in the sense `docs/settings-reuse.md`
+defines — the same reusable engine as the Itaewon and Honch nightlife siblings, but
+in the *genre-shift* effort band (it reuses Layer 1 fully and only selected Layer 3,
+since the nightlife economy mostly doesn't transfer). That makes it **the case the
+pack interface should be designed against**, not deferred to: the hardest reuse case
+reveals the true engine/content boundary. This CLI simulator is the first pack-
+component built to that boundary; Rabbit is the narrative bridge, and engine reuse
+and canon continuity are independent axes (see `docs/settings-reuse.md`).
+
 ## Open decisions
 
 - **Where CCIB heat comes from.** Botched-heist-only (simple) vs. accrued from *how*

@@ -186,6 +186,37 @@ and every ad-hoc `barType` check formalized is a down-payment on Itaewon and the
 also exactly what the online / shared-world and 2D rules already push toward — three
 future-facing goals, one refactor.
 
+## Three content-packs, not two — and design the boundary against the hardest one
+
+**The Bangkok cyberpunk follow-on (`docs/rabbit-arc.md`) is a third content-pack on this same
+engine**, and adding it to the picture is what makes the content-pack refactor pay for itself
+three times over. But it sits in a **different effort band** from the nightlife siblings, and
+the difference is the whole point:
+
+| Target | Band | What it reuses |
+|---|---|---|
+| Itaewon, the Honch | *same-genre sibling* | L1 fully, L2 retuned, **most of L3** — nightlife dynamics map (barfine, treadmill, hostess register, venue tiers) |
+| Bangkok cyberpunk | *genre shift* | L1 fully, most of L2, **only selected L3** (the CLI sim, modal-gate framework, encounters skeleton) — the nightlife-specific economy mostly does NOT come along |
+
+So Bangkok reuses *less* of Layer 3 than Itaewon does — and that makes it the case the pack
+interface must be **designed against, not deferred to.** Draw the engine/content boundary to
+fit Itaewon (which shares nightlife DNA) and you will be tempted to leave barfines, venue
+class, the hedonic treadmill on the *engine* side because they look structural. Then a
+cyberpunk heist game shows up wanting none of them and the boundary has to move again. **The
+hardest reuse case reveals the true L1/L3 line:** a boundary that satisfies both a cyberpunk
+game and a nightlife sim is genuinely setting-agnostic; one that only satisfies nightlife
+siblings has merely baked Pattaya in one layer up. If the Bangkok follow-on is real, it is the
+target to design the interface *against*.
+
+Two things already point the right way. **The Rabbit-arc CLI simulator is the first
+pack-component built to that boundary** — pure, data-driven, no LBB nouns, reusable in Bangkok
+verbatim; the job is to widen that discipline from one component to the whole domain layer.
+And **Rabbit is the narrative bridge** between the packs, which surfaces a useful property of
+the model: packs share the *engine* and may also share *canon* (a character carrying Pattaya →
+Bangkok) while remaining separate content. **Engine reuse and story continuity are independent
+axes** — a pack can reuse the machine without sharing canon, or share canon without the player
+noticing the machine is the same.
+
 ## Decision log
 
 | Date | Decision |
@@ -194,5 +225,6 @@ future-facing goals, one refactor.
 | 2026-07-20 | Itaewon signature hook = credit-card-debt → loan-shark (rescue-from-debt), vs Pattaya's family-remittance. Booking out of scope; 90s/2000s guardrail. |
 | 2026-07-20 | The Honch = most relationship-forward (no on-premise transactional tier; off-shift meetup). Six-axis analysis deferred pending Mario's walk-through. |
 | 2026-08-13 | **Ported the note into the repo** (`docs/settings-reuse.md`) after finding it stranded in the thaicab memory silo — the invisibility was the direct cause of engine-prose drift. Reconciled with the Rabbit-arc portability work and the current (grown) line-counts. |
+| 2026-08-13 | The **Bangkok cyberpunk follow-on is a third content-pack** — a genre-shift, not a same-genre sibling, so it reuses less of L3. Therefore the pack interface should be **designed against Bangkok (the hardest case)**, not Itaewon: the hardest reuse case reveals the true L1/L3 line. Engine reuse and story continuity are independent axes (Rabbit bridges the canon; the engine is shared regardless). |
 | open | The Layer-1-extraction / content-pack refactor — the shared down-payment on reuse, online, and 2D. Not started. |
 | open | The Honch six-axis analysis (Mario to walk through). |
