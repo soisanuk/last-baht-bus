@@ -52,7 +52,13 @@ test("the export says which art track each portrait is on", () => {
   const e = buildExport();
   assert.ok(Array.isArray(e.renders));
   assert.ok(e.renders.length > 0, "some of the cast has been through the art pipeline");
-  assert.ok(e.renders.length < e.portraits.length, "and some of it is still pixel art");
+  // This used to assert renders < portraits — "and some of it is still pixel
+  // art" — which was a fact about the migration being half done, not a property
+  // of the export, and it failed the moment the last placeholder was replaced.
+  // What the boundary owes a consumer is that the two lists AGREE: every render
+  // is a portrait, and the count never exceeds the cast.
+  assert.ok(e.renders.length <= e.portraits.length,
+    "a render that isn't in the portrait index means the two lists have drifted");
   for (const id of e.renders) {
     assert.ok(e.portraits.includes(id), `${id} is a render but not a portrait`);
   }
