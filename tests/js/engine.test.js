@@ -7447,3 +7447,38 @@ test("the morning says what last night was, as deltas", () => {
   out = []; _morningLedger();
   assert.equal(out.join("\n"), "", "the snapshot is consumed");
 });
+
+// The unknown number. One joke a day; let them run, STOP them, or REPLY — and
+// the reply is the interesting one, because the number belongs to Mort, who is
+// already the in-fiction author of the Nite Owl column.
+test("the daily joke: one a day, stoppable, and the sender has a name", () => {
+  newGame();
+  state().stage = "vacation"; state().flags.act1Done = true; state().day = 3;
+
+  _dailyJoke();
+  assert.equal(state().phone.inbox.length, 1, "one text");
+  assert.match(state().phone.inbox[0].fromName, /^\+66/, "from a number, not a contact");
+  assert.match(state().phone.inbox[0].text, /REPLY, or STOP/, "the first one says what you can do");
+  _dailyJoke();
+  assert.equal(state().phone.inbox.length, 1, "and only one a day");
+
+  // REPLY names him and makes him known
+  out = []; run("reply");
+  assert.match(out.join("\n"), /Mort/, "the sender introduces himself");
+  assert.ok(state().known.mort, "and is a known character from here on");
+  assert.ok(_flag("jokeWho"));
+
+  // STOP ends it, and it stays ended
+  newGame();
+  state().stage = "vacation"; state().flags.act1Done = true; state().day = 3;
+  _dailyJoke();
+  out = []; run("stop");
+  assert.ok(_flag("jokeStop"));
+  state().day = 4; _dailyJoke();
+  assert.equal(state().phone.inbox.length, 1, "no more after STOP");
+
+  // and nothing arrives during the opening — the wallet comes first
+  newGame();
+  state().day = 2; _dailyJoke();
+  assert.equal(state().phone.inbox.length, 0, "not during Act One");
+});

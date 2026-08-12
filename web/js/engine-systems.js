@@ -2501,6 +2501,90 @@ function _advancePicDeal() {
   _say("(📱 She's sent something. CHECK MESSAGES.)", "dim");
 }
 
+// ── The unknown number ──────────────────────────────────────────────────────
+// Once a day somebody you have never given your number to texts you a joke.
+// You can let them keep coming, you can STOP them, or you can REPLY — and the
+// reply is the interesting one, because the number belongs to Mort.
+//
+// That is not a coincidence dressed as one: Mort is already the in-fiction
+// author of the Nite Owl column, already carries the spiral notebook, and the
+// game already has _OWL_JOKES as "the universe's own canon" in his voice. A
+// seventy-four-year-old columnist mass-texting gags to strangers to find out
+// which ones land is the most Mort thing available, and it costs no new canon.
+//
+// Register: bar jokes, not filth. PG-13 house rule — the punchline is the
+// town, never the anatomy.
+const _JOKE_TEXTS = [
+  "Q: How many farang does it take to change a lightbulb? A: None. He’s been " +
+    "meaning to ask the girlfriend’s brother about it since November.",
+  "Q: What’s the difference between a two-week millionaire and a bar bill? " +
+    "A: The bar bill knows exactly when it’s finished.",
+  "A man tells his lady he’s going home tomorrow. She cries for eleven " +
+    "minutes. He books another week. She stops crying at exactly the same second the " +
+    "booking confirmation arrives. Nobody has ever explained this.",
+  "Q: Why does the piwin always know where you’ve been? A: Because he took " +
+    "you there, boss.",
+  "A tourist asks the mamasan if the girls are friendly. She says: for you, " +
+    "very friendly. He says how friendly. She says: how much friendly you want?",
+  "Q: What do you call a farang who has learned three words of Thai? " +
+    "A: Engaged.",
+  "Sign in a Soi 6 bar: NO SEX IN THE TOILET. Sign under it, smaller: " +
+    "PLEASE USE THE ROOM UPSTAIRS, IS ONLY 600.",
+  "Q: How do you make a small fortune running a bar in Pattaya? " +
+    "A: Arrive with a large one.",
+  "He said he came for the temples. Nine years later he can name four " +
+    "hundred girls and no temples.",
+  "Q: What’s the most expensive drink on Walking Street? " +
+    "A: The one you buy at 4 a.m. because you don’t want the night to be over.",
+];
+
+function _dailyJoke() {
+  if (!_flag("act1Done") || G.battery <= 0) return;
+  if (_flag("jokeStop")) return;                 // he took the hint
+  if (G.phone.jokeDay === G.day) return;         // one a day, like a vitamin
+  G.phone.jokeDay = G.day;
+  const n = (G.phone.jokeN = (G.phone.jokeN || 0) + 1);
+  const body = _JOKE_TEXTS[_hh("joke" + G.vacation + "_" + n, 41) % _JOKE_TEXTS.length]
+    .replace(/^Unknown: /, "");
+  G.phone.inbox.push({
+    from: "unknown", fromName: "+66 8" + (_hh("num" + G.vacation, 17) % 9) + " ••• ••••",
+    text: body + (n === 1 ? "  (You have no idea who this is. REPLY, or STOP them.)" : ""),
+    read: false,
+  });
+}
+
+// STOP / UNSUBSCRIBE — he is old, not rude. One text and it is over.
+function _doJokeStop() {
+  if (_flag("jokeStop")) { _say("You already told him. He took it well, which was worse."); return; }
+  if (!G.phone.jokeN) { _say("Nobody's texting you anything you'd want stopped."); return; }
+  _setFlag("jokeStop");
+  _say("You text back STOP.", "dim");
+  _say("The reply is instant: “Understood. Sorry to have bothered you — genuinely. " +
+    "You’d be amazed how many just never answer at all.” Nothing after that. The " +
+    "phone is quiet in a way it was not before.", "alert");
+}
+
+// REPLY — the number has a man on the end of it, and he is delighted.
+function _doJokeReply() {
+  if (!G.phone.jokeN) { _say("Reply to what? Nobody's sent you anything."); return; }
+  if (_flag("jokeStop")) { _say("You told him to stop. He stopped. That's the sort of man he is."); return; }
+  if (_flag("jokeWho")) {
+    _say("“Ha! Still reading them. Good man. Come and find me — Queen Vic, most nights, " +
+      "the end stool with the notebook.”", "thai");
+    return;
+  }
+  _setFlag("jokeWho");
+  (G.known = G.known || {}).mort = true;
+  _say("You text back. The typing dots start immediately, which tells you something " +
+    "about how the sender's evening is going.", "dim");
+  _say("“Somebody answered! Do you know how rare that is?” A pause. “Mort. I write the " +
+    "column — the OWL, back page, been running longer than most of these bars. I test " +
+    "the jokes on the numbers I collect. Most people never reply, some tell me to stop, " +
+    "and about one in forty writes back.” Another pause. “You’re one in forty. Come and " +
+    "have a beer, Queen Vic. I’ll buy — I’ve a use for a man who answers his phone.”", "thai");
+  _say("(Mort. Queen Vic, most nights, end stool. COLUMN reads what he actually prints.)", "dim");
+}
+
 function _maybeIncomingText() {
   if (G.battery <= 0 || G.game || G.pendingEnc) return;
   // ladies only: the unprompted-text machinery (invites, scam-asks, selfies) is

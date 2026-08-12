@@ -331,6 +331,7 @@ function _arriveAt(to) {
   if (typeof _newbieNudge === "function") _newbieNudge();   // once ever: a number, then the bell
   if (typeof _questHail === "function") _questHail();       // once ever: the first job finds you
   if (typeof _roomSafeBeat === "function") _roomSafeBeat();  // the stash, whenever you get to your room
+  if (typeof _dailyJoke === "function") _dailyJoke();        // the unknown number, once a day
   G.sevenAt = null;   // back on the pavement — the next buy walks you in again
   _describeRoom(true);
   _lightNotice(); // walking in with the torch burning gets you clocked
@@ -3478,6 +3479,7 @@ const _HELP_SOI6 = `Common commands:
 // rules, not even vocabulary. Easter-egg verbs are deliberately absent.
 
 const _COMPLETE_VERBS = [
+  "reply", "unsubscribe",
   "buy piwin a beer",
   "handover", "resume",
   "wear",
@@ -4316,6 +4318,8 @@ function doCommand(input) {
     case "map": _doMap(); break;
     case "photo": case "selfie": case "photograph": case "snap": _doPhoto(arg); break;
     case "gallery": case "photos": case "album": _doGallery(); break;
+    case "stop": case "unsubscribe": _doJokeStop(); break;
+    case "reply": _doJokeReply(); break;
     case "call": case "dial": _doCall(arg); break;
     case "share": _doShare(); break;
     case "follow": _doFollow(arg); break;
