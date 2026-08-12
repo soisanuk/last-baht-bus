@@ -7509,3 +7509,36 @@ test("Mort knows you answered his text when you walk in", () => {
   run("talk to mort");
   assert.doesNotMatch(out.join("\n"), /one in forty/, "you told him to stop; he did");
 });
+
+// The Glam saga is the best chain in the game and the easiest to never find:
+// its giver is a mamasan on a three-bar rota and its subject is a patron in a
+// bar you may never enter. Mort points at it — in character, and without
+// spoiling it, because he genuinely does not know.
+test("Mort points a player at Glam, after he's introduced himself, and never spoils it", () => {
+  newGame();
+  state().stage = "vacation"; state().flags.act1Done = true;
+  state().room = "queen_vic";
+
+  out = []; run("talk to mort");
+  assert.doesNotMatch(out.join("\n"), /Cheeky Monkey/,
+    "a stranger doesn't open with 'do something for an old man'");
+  assert.match(out.join("\n"), /Mort/, "he introduces himself first");
+
+  out = []; run("talk to mort"); run("talk to mort");
+  assert.match(out.join("\n"), /Cheeky Monkey|Glam/, "then the lead comes");
+  assert.ok(_flag("mortGlam"), "once");
+
+  // he does NOT know about Diamond — that reveal is hers to make, at the end of
+  // four quests, and nothing here may pre-empt it
+  out = []; run("ask mort about glam");
+  const said = out.join("\n");
+  assert.doesNotMatch(said, /daughter|Diamond|kathoey|katoey/i,
+    "Mort has a shape that doesn't add up, not the answer");
+  assert.match(said, /why he sits THERE|does not spend his last years/,
+    "what he has is the question, which is the right amount");
+
+  // and once you know, he lets it go rather than printing it
+  state().flags.diamondTruth = true;
+  out = []; run("ask mort about glam");
+  assert.match(out.join("\n"), /does not go in the column/);
+});

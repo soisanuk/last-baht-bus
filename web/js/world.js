@@ -9427,6 +9427,21 @@ const PATRONS = {
       "coast longer than most of the bars, and he is writing all of it down whether it " +
       "likes it or not.",
     dialogue: [
+      { topic: "glam", when: (st, G) => !_flag("diamondTruth"),
+        text: "\u201cHere\u2019s what bothers me.\u201d The biro stops. \u201cA man with that much " +
+          "money does not spend his last years on a plastic stool on the Buakhao strip. He has a " +
+          "house somewhere. He has people.\u201d He shrugs, and it is not a comfortable shrug. " +
+          "\u201cAnd yet every night, that bar. Not the next one along, not the one with the " +
+          "aircon. That one.\u201d A long look at nothing. \u201cAsk him about the tour, he\u2019ll " +
+          "talk till closing. Ask him why he sits THERE and he changes the subject so smoothly " +
+          "you don\u2019t notice for an hour.\u201d",
+        short: "\u201cWhy that bar? Ask him and he changes the subject beautifully.\u201d" },
+      { topic: "glam", when: (st, G) => _flag("diamondTruth"),
+        text: "You tell him as much as is yours to tell, which is not much. Mort listens without " +
+          "writing anything down, which from him is a kind of ceremony. \u201cFour years I sat " +
+          "twenty feet from that and called it a dead end.\u201d He caps the biro. \u201cIt does " +
+          "not go in the column. Some things are just a man wanting to be near his kid.\u201d",
+        short: "\u201cIt does not go in the column.\u201d" },
       // He invited you for a beer over text. If you turn up and he greets you as
       // a stranger, the invitation was a lie the game told — so this sits FIRST
       // and wins the greeting for as long as it is the newest thing between you.
@@ -9439,6 +9454,30 @@ const PATRONS = {
           "if nothing else.\u201d He signals two without asking what you drink. \u201cMort. " +
           "You already know that, you have had my material all week.\u201d",
         short: "\u201cThe one in forty. Sit down \u2014 I said I would buy.\u201d" },
+      // The Glam saga (oldrocker → keys → quietmoney → family) is the best chain
+      // in the game and the easiest to never find: its giver is a mamasan on a
+      // three-bar rota and its subject is a patron in a bar you may never enter.
+      // So Mort points at it — in character, because a columnist who cannot get
+      // a story out of a man for four years WOULD hand it to somebody else.
+      //
+      // He must not spoil it. He does not know about Diamond; nobody does until
+      // she decides you have earned it, and that decision is the whole chain.
+      // What he has is a shape that does not add up, which is the right amount.
+      // …and NOT on the first hello. A man who has not introduced himself does not
+      // open with "do something for an old man"; he tells you who he is, and the
+      // lead comes the next time you sit down. Gated on having heard him once.
+      { when: (st, G) => !G.quests.oldrocker && !_flag("glamHeard") && !_flag("mortGlam") &&
+          // patrons keep their own book (G.patronTalk.talked), NOT G.talked —
+          // and it resets daily, which is fine: the lead is once-ever anyway
+          !!(G.patronTalk && G.patronTalk.talked && G.patronTalk.talked.mort),
+        sets: ["mortGlam"],
+        text: "He taps the biro twice and looks at you properly for the first time. \u201cSince " +
+          "you\u2019re here \u2014 do something for an old man. There\u2019s a German drinks at " +
+          "the Cheeky Monkey. Seventy-odd, silk shirt, hair like a dandelion in a wind tunnel. " +
+          "Glam, they call him.\u201d He turns the notebook round; the page is mostly crossings-" +
+          "out. \u201cFour years I\u2019ve tried to get his story and four years he\u2019s given " +
+          "me the same nine anecdotes about a tour in \u201978. Charming. Useless.\u201d",
+        short: "\u201cThe German at the Cheeky Monkey. Glam. Four years and nine anecdotes.\u201d" },
       { topic: "jokes", when: (st, G) => _flag("jokeWho"),
         text: "\u201cThe texts? Forty years of writing to people who never write back, and it " +
           "turns out I could not stop.\u201d He taps the notebook. \u201cThe column takes one " +
