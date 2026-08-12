@@ -720,6 +720,9 @@ function _doExamine(arg) {
       "(SLEEP to turn in and end the night.)");
     return;
   }
+  // A go-go's poster is generated (which girl depends on the bar and the trip),
+  // so it is handled here rather than as a static room `reads` entry.
+  if (/\b(poster|flyer|promo)\b/.test(arg) && _hasPoster()) { _doPoster(); return; }
   const npc = _findNpc(arg);
   if (npc) { _say(NPCS[npc].desc); return; }
   const pat = _findPatron(arg);
@@ -3765,6 +3768,9 @@ function engineComplete(input) {
     pool = (G.room === "police_station" || G.tonicOwed > 0 || G.curseOwed > 0)
       ? ["report", ..._COMPLETE_VERBS] : _COMPLETE_VERBS;
     if (G.bfIncident) pool = ["complain", ...pool];
+    // POSTER only where there is one — the same conditional treatment REPORT
+    // gets, so the list never offers a verb that would answer "no poster here".
+    if (_hasPoster()) pool = ["poster", ...pool];
   }
   const seen = new Set();
   const out = [];
@@ -4114,6 +4120,12 @@ function doCommand(input) {
     case "look": case "l":
       if (arg) _doExamine(arg); // "look at candy" = "examine candy"
       else _describeRoom(true);
+      break;
+    // A bare POSTER, because the room prints a tappable (POSTER) hint and a hint
+    // that doesn't parse is exactly the undelivered promise the lint hunts for.
+    case "poster": case "flyer":
+      if (_hasPoster()) _doPoster();
+      else _say("No poster in here worth the name.");
       break;
     case "examine": case "x": case "inspect": case "search": _doExamine(arg); break;
     case "check":

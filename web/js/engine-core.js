@@ -1197,6 +1197,9 @@ function _describeRoom(full, forceFull) {
       (isBar ? " (DANCE · SING · REQUEST <song> · TIP BAND · BUY ROUND FOR BAND)" :
                " (DANCE · SING · REQUEST <song> · TIP BAND)"), "dim");
   }
+  if (typeof _hasPoster === "function" && _hasPoster()) {
+    _say("A promo poster of one of the girls hangs by the door. (POSTER)", "dim");
+  }
   if (_salengHere()) { // a parked cart re-announces itself so a reload isn't blind to it
     const c = _SALENG_CARTS[G.salengCart];
     _say(c.here + " " + c.hint, "dim");

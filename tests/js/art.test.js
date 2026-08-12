@@ -79,11 +79,11 @@ test("art files are real PNGs or WebPs, and inside the size budget", () => {
   }
 });
 
-test("web/art holds nothing but rooms/, regions/, filler/ and a README", () => {
+test("web/art holds nothing but rooms/, regions/, filler/, posters/ and a README", () => {
   if (!fs.existsSync(artDir)) return;
   const stray = fs.readdirSync(artDir)
     .filter(f => !f.startsWith("."))
-    .filter(f => !["rooms", "regions", "filler"].includes(f) && !/^README/i.test(f));
+    .filter(f => !["rooms", "regions", "filler", "posters"].includes(f) && !/^README/i.test(f));
   assert.deepEqual(stray, [], "unexpected entries in web/art/");
 });
 

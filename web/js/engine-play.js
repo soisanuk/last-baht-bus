@@ -803,6 +803,66 @@ function _isQuizWindow() {
 
 // Deterministic three bars for this particular Thursday (no _rand: reading
 // the schedule must never advance the dice).
+// ── The bar's own poster ────────────────────────────────────────────────────
+// Go-gos advertise with a promo poster of one of their own girls, and the game
+// already said so before the art existed: Crystal Palace's description has "a
+// faded poster of numbered dancers from a different decade" on its back wall.
+// So the poster is a CLAIM the world can check — the woman on it works here,
+// and you can go and find her at the rail.
+//
+// Which girl is a pure hash of (room, vacation), not `_rand()`: a poster is a
+// printed object, so it must not change when you walk out and back in, and
+// reading one must not advance the dice (same rule as _quizBars).
+const _POSTER_LINES = [
+  n => `The promo poster by the door: ${n}, lit like a film premiere and about ` +
+       `two sizes more confident than anyone actually is at 9pm.`,
+  n => `A poster in a scratched perspex frame — ${n}, chin up, the bar's name ` +
+       `somewhere behind her in letters the printer clearly enjoyed.`,
+  n => `${n} on the wall by the stairs, sun-bleached down one side where the ` +
+       `door's been propped open every night for years.`,
+  n => `The poster: ${n}, photographed on a better night than tonight, which ` +
+       `is the entire art form.`,
+  n => `A curling poster of ${n}, one corner gone, the tape older than the tape ` +
+       `holding the corner before it.`,
+];
+// She is HERE, and that is the point of the whole thing.
+const _POSTER_PRESENT = [
+  n => `${n} is on the rail tonight, ten feet away and considerably more real.`,
+  n => `${n} is working. The poster flatters her; she does not appear to need it.`,
+  n => `${n} catches you reading it and gives you the look of someone who has ` +
+       `watched a great many men read it.`,
+];
+
+// The poster girls are the filler hostesses — the authored characters have
+// their own faces and their own stories, and a bar advertises with staff, not
+// with its mamasan.
+function _posterGirls(room) {
+  return Object.keys(NPCS).filter(id => {
+    const n = NPCS[id];
+    return n.filler && NPC_ROLES[id] === "hostess" && _npcRoom(id) === room;
+  }).sort();
+}
+function _posterGirl(room) {
+  const pool = _posterGirls(room);
+  if (!pool.length) return null;
+  let h = G.vacation * 7919 + 31 * room.length + 12345;
+  for (let i = 0; i < room.length; i++) h = (h * 48271 + room.charCodeAt(i)) % 2147483647;
+  return pool[h % pool.length];
+}
+function _hasPoster() { return _room().barType === "gogo" && !!_posterGirl(G.room); }
+
+function _doPoster() {
+  const id = _posterGirl(G.room);
+  if (!id) { _say("No poster in here worth the name."); return; }
+  const n = NPCS[id].name;
+  _say(_pickVary(_POSTER_LINES, "poster")(n));
+  // The frontend swaps this prefix for the real poster image (term.js
+  // _addAvatars), exactly like a gallery row.
+  _say("Poster — " + n, "dim");
+  if (_npcsHere().includes(id)) _say(_pickVary(_POSTER_PRESENT, "posterHere")(n), "dim");
+  G.known[id] = true;   // you have read her name off a poster; you know it now
+}
+
 function _quizBars() {
   let h = G.vacation * 7919 + G.day * 104729 + 12345;
   const pool = [...QUIZ_BARS];

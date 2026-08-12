@@ -244,10 +244,13 @@ const _term = (() => {
   }
 
   function _addAvatars(div, text) {
-    if (!/^(Here: |Gallery — |📷 )/.test(text)) return;
+    if (!/^(Here: |Gallery — |📷 |Poster — )/.test(text)) return;
     // Gallery rows and texted selfies are the COLLECTION — their photos enlarge on
     // tap. The "Here:" avatars (staff + patrons) are just presence markers, inert.
-    const enlargeable = /^(Gallery — |📷 )/.test(text);
+    // A bar's promo poster enlarges too: it is a thing you walked over to look at,
+    // and at 20px it would be a smudge of neon.
+    const enlargeable = /^(Gallery — |📷 |Poster — )/.test(text);
+    const isPoster = /^Poster — /.test(text);
     for (const kw of div.querySelectorAll('.kw[data-k="npc"], .kw[data-k="patron"]')) {
       const id = _portraitId(kw.dataset.k, kw.dataset.v);
       if (!id) continue;
@@ -256,7 +259,12 @@ const _term = (() => {
         prev.nodeValue = prev.nodeValue.replace(/[^\s,]+\s*$/, "");
       }
       const pic = _picFor(id, _capAfter(kw));
-      const av = pic
+      // A poster is its own artefact, not her portrait — art/posters/<id>.webp.
+      // Falls back to her face if the bar has no poster art, same as everywhere
+      // else here: missing art degrades, it never breaks.
+      const av = isPoster
+        ? _avatarSrc("art/posters/" + id + ".webp", "kw-av", "portraits/thumb/" + id + ".webp")
+        : pic
         ? _avatarSrc("portraits/pics/" + pic + ".png", "kw-av", "portraits/" + id + ".png")
         : _avatar(id, "kw-av");
       if (enlargeable) {
