@@ -115,6 +115,7 @@ test("gossip chain flags connect: every required flag is set somewhere", () => {
     "amuletSeen",     // a piwin read it (_amuletNotice)
     "nokSawAmulet",   // Nok clocked it on arrival (_nokAmulet)
     "amuletReturned", // handed back (_nokTakeAmulet)
+    "owlBox15",  // the Nite Owl's personals cipher was solved (_owlBox15Answer) — docs/ctf.md
     "owlAmulet",      // the column printed its one-shot letter (_doColumn)
   ]); // set by engine actions (read/wai/give/enter), not NPC dialogue
   for (const npc of Object.values(NPCS)) {

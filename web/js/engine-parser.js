@@ -3925,6 +3925,15 @@ function doCommand(input) {
     return;
   }
 
+  // Box 15 answered — the Nite Owl's personals cipher (docs/ctf.md). Same
+  // unsurfaced treatment as the code above (no autocomplete, no wheel, no HELP,
+  // no decoration) and the same shape: any state, no turn.
+  //
+  // Deliberately NOT behind CHEATS_ENABLED. That switch grants advantages and is
+  // meant to ship false; this grants a line of prose and a trophy, and gating it
+  // there would quietly retire the puzzle the moment the game is released.
+  if (/^(i )?counted the hoots[.!]?$/.test(lower)) { _owlBox15Answer(); return; }
+
   // the taxi ride owns input until you've said who you are
   if (G.pendingChoice === "intro") { _introAnswer(lower); return; }
 
@@ -4715,6 +4724,8 @@ function _doWhoAmI() {
   const find = (t, id) => (t.find(e => e.id === id) || {}).label || "?";
   _say(`You are: ${find(ORIGINS, G.player.origin)} · ${find(PERSONALITIES, G.player.personality)} · ${find(ORIENTATIONS, G.player.orientation)}.`, "win");
   if (_flag("act1Done")) _say(`On the soi, you're ${_REP_LABELS[_repTier()]}. (STANDING for more.)`, "dim");
+  // the one line in the game that has to be earned from outside the game
+  if (_flag("owlBox15")) _say("You are also the person who answered Box 15.", "win");
 }
 
 // REP / STANDING / REPUTATION — where the soi has you. A single town-wide read,

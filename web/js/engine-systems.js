@@ -4361,6 +4361,29 @@ const _OWL_LISTINGS = [
   "CANDY BAR (Soi Buakhao), the mamasan's own — sharp as a razor, warm as a Chang on a hot night. She'll price your wallet before you sit and your story before you tell it. Buy her a drink; it's cheaper than the alternative.",
   "QUEEN VIC (Soi 6): the one air-conditioned pub on the wildest soi in the world, where the residents watch the circus from across the street and mourn the days before the paper changed hands. Cold beer, warm company, no illusions.",
 ];
+// Box 15 — the standing classified, and the game's hidden puzzle (docs/ctf.md).
+//
+// Three deliberate departures from house style, all forced by what this is:
+//   1. NOT pooled and NOT _owlPick'd. Every other line in the column varies;
+//      this one must be identical in every issue for every player forever, or
+//      solvers cannot compare notes and a solution cannot be verified. A paid
+//      classified running unchanged for years is also exactly what a real one
+//      does, so the fiction covers the exception.
+//   2. {{…}} around the ciphertext — it is data, not prose. Nothing in it should
+//      ever become a tappable keyword if a future filler girl is named ACHAL.
+//   3. No _rand(), so it consumes no dice and the soak transcripts are unmoved.
+//
+// The key is HOOT: four letters, printed at the foot of every column since the
+// game shipped, and the ad says so if you read it as an instruction rather than
+// as an old man being arch. Solution and full chain: docs/ctf.md.
+const _OWL_BOX15 = [
+  "• PERSONALS, Box 15 — Gentleman of long residence, technical disposition, " +
+  "seeks correspondent of the same. I have signed off with the same four letters " +
+  "in every issue I have ever written and not one of you has asked me why. " +
+  "Discretion assured. Reply in kind:",
+  "{{ACHAL GCECS FMLZZ MOSCP SMCNJ CIGAS RMOSV HVHG}}",
+];
+
 function _owlPick(arr, salt) {
   let h = salt >>> 0;
   for (const ch of String(G.day) + ":" + String(G.vacation)) h = (h * 31 + ch.charCodeAt(0)) % 100003;
@@ -4388,7 +4411,37 @@ function _doColumn() {
   _say(/^['"“]/.test(letter) ? "• A reader writes: " + letter : "• " + letter);
   _say("  OWL: " + reply);
   _say("• " + _owlPick(_OWL_JOKES, 29), "dim");
+  _say(_OWL_BOX15[0], "dim");
+  _say("  " + _OWL_BOX15[1], "dim");
   _say("BUT, I DON'T GIVE A HOOT!", "win");
+}
+
+// The payoff for decoding Box 15. Grants nothing mechanical on purpose — no
+// money, no สนุก, no favor — because it can be typed in any state (mid-jackpot,
+// mid-encounter) and a puzzle reward that moved the economy would have to care
+// about that. It is a trophy: a flag string to post, and one line in WHO AM I
+// that nothing else in the game can put there.
+function _owlBox15Answer() {
+  const first = !_flag("owlBox15");
+  if (first) _setFlag("owlBox15");
+  if (typeof _patronRoom === "function" && _patronRoom("mort") === G.room) {
+    // answered to his face, which is the version he'd want. Lands on his own
+    // established line — forty years of writing to people who never write back
+    // — because that loneliness is what Box 15 has been for all along.
+    _say("The biro stops mid-click. Mort looks at you over the horn-rims for rather " +
+      "longer than he looks at anything.", "win");
+    _say("\"Box fifteen.\" He does not write it down. \"Forty years of putting words in " +
+      "front of people who never write back. Four letters at the foot of every issue, " +
+      "just to see if anybody was reading properly.\" The notebook closes. \"Somebody " +
+      "was reading properly.\"", "win");
+  } else if (first) {
+    _say("Somewhere across town, an old man reading his own column out loud to nobody " +
+      "stops mid-sentence.", "win");
+    _say("Box 15 has been answered. Forty years of asking, and somebody counted.", "win");
+  } else {
+    _say("Box 15 stays answered. He is still telling people about it.", "win");
+  }
+  _say("sanuk{the_owl_gave_a_hoot_after_all}", "win");
 }
 
 // ── Food and water ───────────────────────────────────────────────────────────

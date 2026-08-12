@@ -76,3 +76,15 @@ test("real (non-word) character names still chip everywhere", () => {
 });
 
 function state() { return G; } // vm globals share this realm
+
+test("Box 15's ciphertext renders verbatim and taps nothing", () => {
+  // A solver transcribes this string by hand. If decorate() ever wrapped part of
+  // it — a future all-caps name, a stray paren rule — the visible text would gain
+  // markup and the puzzle would become unsolvable for the person who copied it.
+  newGame();
+  const html = _term.decorate("  " + _OWL_BOX15[1]);
+  assert.equal(chips("  " + _OWL_BOX15[1]).length, 0, "the ciphertext sprouted a tappable word");
+  assert.ok(!/\{\{|\}\}/.test(html), "the {{…}} markup leaked into the rendered page");
+  assert.match(html, /ACHAL GCECS FMLZZ MOSCP SMCNJ CIGAS RMOSV HVHG/,
+    "the letter groups must survive decoration byte-for-byte");
+});

@@ -7542,3 +7542,110 @@ test("Mort points a player at Glam, after he's introduced himself, and never spo
   out = []; run("ask mort about glam");
   assert.match(out.join("\n"), /does not go in the column/);
 });
+
+// ── The Nite Owl's Box 15 (docs/ctf.md) ──────────────────────────────────────
+// A puzzle hidden for security-minded players. These tests exist because the
+// content is INERT to the game — nothing calls it, no quest gates on it, and no
+// playthrough touches it — so ordinary coverage would never notice it rotting.
+// A "tidy-up" that regenerates the ciphertext, renames the phrase, or pools the
+// ad would break a live puzzle silently and only strangers would find out.
+
+// The same Vigenère any solver reaches for. Independent of the game code on
+// purpose: if the engine ever grew its own cipher helper, testing the ad
+// against that helper would only prove it is self-consistent.
+function _vigenere(txt, key, dir) {
+  const A = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  let ki = 0;
+  return [...txt.toUpperCase()].map(c => {
+    const i = A.indexOf(c);
+    if (i < 0) return c;
+    const k = A.indexOf(key[ki++ % key.length]);
+    return A[(i + dir * k + 26) % 26];
+  }).join("");
+}
+
+test("Box 15 decodes with the key the column prints in every issue", () => {
+  const ct = _OWL_BOX15[1].replace(/[^A-Z]/g, "");
+  assert.equal(_vigenere(ct, "HOOT", -1),
+    "TOTHESOLVERTELLTHEOWLYOUCOUNTEDTHEHOOTS",
+    "the ad no longer decodes — regenerate the puzzle deliberately or not at all");
+});
+
+test("the ad names its own key, and the key is on the page", () => {
+  // "the same four letters in every issue" is the whole clue; HOOT is 4 letters
+  // and _doColumn's signoff is fixed, so the hint stays true.
+  assert.match(_OWL_BOX15[0], /four letters/);
+  assert.equal("HOOT".length, 4);
+  out = []; G.stage = "vacation"; _doColumn();
+  const col = lastOut();
+  assert.match(col, /HOOT/, "the key must still be printed in the column it unlocks");
+  assert.ok(col.includes(_OWL_BOX15[1]), "and the ciphertext must actually run in the issue");
+});
+
+test("the ad is identical in every issue, for every player, forever", () => {
+  // determinism is not a style preference here: solvers compare notes, and a
+  // ciphertext that varied by day or by seed would make the puzzle unsharable
+  const issues = new Set();
+  for (const day of [1, 2, 3, 4, 5, 6, 7]) {
+    for (const vac of [0, 1, 2]) {
+      out = []; G.day = day; G.vacation = vac; G.stage = "vacation";
+      _doColumn();
+      issues.add(lastOut().split("\n").find(l => l.includes("Box 15")));
+    }
+  }
+  assert.equal(issues.size, 1, "Box 15 drifted between issues");
+});
+
+test("the decoded instruction is a command the game actually answers", () => {
+  // the plaintext tells you to TELL THE OWL YOU COUNTED THE HOOTS — if that
+  // phrase ever stops being accepted, the puzzle dead-ends at the last step
+  out = [];
+  run("i counted the hoots");
+  assert.match(lastOut(), /sanuk\{/, "the solution phrase no longer pays out");
+  assert.equal(_flag("owlBox15"), true);
+  for (const variant of ["counted the hoots", "I Counted The Hoots."]) {
+    out = []; run(variant);
+    assert.match(lastOut(), /sanuk\{/, `solvers will type "${variant}"`);
+  }
+});
+
+test("solving it costs no turn and grants no advantage", () => {
+  // it is typeable in any state, including mid-game-modal, so it must not move
+  // the economy or the clock
+  const t = G.turns, money = G.money, happy = G.happy;
+  run("i counted the hoots");
+  assert.equal(G.turns, t, "the puzzle answer burned a turn");
+  assert.equal(G.money, money);
+  assert.equal(G.happy, happy);
+});
+
+test("the puzzle survives cheats being switched off for release", () => {
+  // CHEATS_ENABLED is meant to ship false; the Box 15 answer must not ride on it
+  const was = CHEATS_ENABLED;
+  try {
+    CHEATS_ENABLED = false;
+    out = []; run("i counted the hoots");
+    assert.match(lastOut(), /sanuk\{/, "shipping with cheats off would retire the puzzle");
+  } finally { CHEATS_ENABLED = was; }
+});
+
+test("the solution phrase is never suggested by any surface", () => {
+  // the opposite of the three-surfaces rule, on purpose: a secret that
+  // autocompletes is not a secret. Same treatment as twoweekmillionaire.
+  for (const stub of ["i c", "counted", "count", "hoot", "i counted the"]) {
+    const c = engineComplete(stub) || [];
+    assert.ok(!c.some(s => /hoot/i.test(String(s))),
+      `autocomplete leaked the answer on "${stub}"`);
+  }
+  out = []; run("help");
+  assert.ok(!/hoots/i.test(lastOut()), "HELP leaked the answer");
+});
+
+test("WHO AM I carries the trophy, and only after it is earned", () => {
+  G.player.origin = "monger"; G.player.personality = "joker"; G.player.orientation = "straight";
+  out = []; run("who am i");
+  assert.ok(!/Box 15/.test(lastOut()), "the trophy showed up unearned");
+  run("i counted the hoots");
+  out = []; run("who am i");
+  assert.match(lastOut(), /Box 15/);
+});
