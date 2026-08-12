@@ -2866,8 +2866,15 @@ const ROOMS = {
       "invisible from here. Ten metres in it opens up and suddenly you're somewhere: the alley runs " +
       "north to a corner, turns east, and comes out on Soi Buakhao at the far end. The no-entry sign for four-wheelers is doing its job: the only vehicles " +
       "threading through are motorbikes, and the only people on them are very purposeful " +
-      "about where they're going.",
+      "about where they're going. A film poster has been sun-bleached onto the wall by the " +
+      "corner, so old the green has gone the colour of weak tea.",
     reads: {
+      poster: "Twenty-odd years of Pattaya sun have taken the film down to two figures in " +
+        "long coats and sunglasses, and a rain of green characters gone almost white. " +
+        "Nobody has been able to read the title in a decade. What is NOT twenty years old " +
+        "is the QR sticker somebody has pressed onto the bottom corner — square, matte, " +
+        "corners still down, no bar name on it and no price, which makes it the only " +
+        "advertisement on this street that is not selling anything. (EXAMINE QR.)",
       sign: "The LK METRO sign and its arrow, hand-marked on board, pointing into the bend that " +
         "hides the whole warren beyond. Beside it, a battered NO ENTRY plate for four-wheelers, " +
         "doing honest work — only the motorbikes thread through, and only the purposeful ride " +

@@ -179,6 +179,21 @@
                   font-family: "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
                   font-size: clamp(.45rem, 1.95vw, .8rem); line-height: 1.25; }
   .t-line.t-map::-webkit-scrollbar { height: 4px; }
+  /* The QR sticker (EXAMINE QR at the LK Metro mouth). Three things here are
+     load-bearing rather than decorative, because this block has to survive being
+     photographed off a screen by a phone:
+       - black on WHITE, always. The terminal is neon on black, and a light-on-dark
+         QR is inverted; plenty of scanners refuse those outright.
+       - line-height 1, so the half-block glyphs tile with no leading between rows.
+         Any gap becomes a white stripe through every module row.
+       - padding supplies extra quiet zone on top of the 4 modules in the text.
+     41 columns, so it fits a phone at a readable size without scrolling. */
+  .t-line.t-qr { background: #fff; color: #000; white-space: pre; word-break: normal;
+                 display: inline-block; padding: 10px 12px; border-radius: 3px;
+                 margin: .5rem 0; overflow-x: auto;
+                 font-family: "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+                 font-size: clamp(.5rem, 2.1vw, .82rem); line-height: 1;
+                 text-shadow: none; }
   .t-alert { color: var(--red); text-shadow: 0 0 10px #ff335550; }
   /* action breadcrumb ("· You asked Nok about beer") — a quiet post-command
      anchor so a long scroll doesn't lose who/where you just acted. */

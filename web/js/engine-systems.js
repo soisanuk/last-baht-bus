@@ -4384,6 +4384,41 @@ const _OWL_BOX15 = [
   "{{ACHAL GCECS FMLZZ MOSCP SMCNJ CIGAS RMOSV HVHG}}",
 ];
 
+
+// ── The QR sticker at the LK Metro mouth (docs/ctf.md) ───────────────────────
+// The CTF's secondary pointer, for a player who never thinks to try
+// /.well-known/. A real, scannable QR: EXAMINE POSTER at lk_entrance finds the
+// sticker, EXAMINE QR prints this.
+//
+// BAKED, never encoded at runtime — the game has no build step and no deps, so
+// tools/gen-qr.mjs generates this offline and round-trips it (it decodes the
+// printed characters back to the URL, so a rendering bug cannot ship). Re-run
+// that tool if _QR_TARGET ever changes; do not hand-edit the block.
+const _QR_TARGET = "https://soisanuk.github.io/last-baht-bus/.well-known/security.txt";
+const _QR_STICKER = [
+  "                                         ",
+  "                                         ",
+  "    █▀▀▀▀▀█ ▄ █ ▀ █▄█ ▀▀█▄▄▀  █▀▀▀▀▀█    ",
+  "    █ ███ █ ▄▄▄ █▄▄▀ ▄ ▀█▀▄█▄ █ ███ █    ",
+  "    █ ▀▀▀ █ ▄█ ▄▄▀▀▄▀▀▀▀▀█ ▀▀ █ ▀▀▀ █    ",
+  "    ▀▀▀▀▀▀▀ ▀▄█▄▀ █ ▀ █▄█▄█▄▀ ▀▀▀▀▀▀▀    ",
+  "    ██▀▀▀ ▀██▀▄▀▄█ ▀██▄█ ▄██▀▀▄▀ ▀▄█▄    ",
+  "     █ ▀▀ ▀▀▄ ▀ ▄▀▀██ ▄▄█▄▄ ▄▄█  ▀▄▀     ",
+  "    █ ▄█▀ ▀▀ █▀ ▀▀█▀████ ▄██▀ ▄ ▀▀ ▄▄    ",
+  "    ▄ ▀█▄▄▀██ ▀█▀ ▀▀▀  ▄▀█▀▄▀▀█▀█ ▄▀     ",
+  "    ▄█ ▀▄▀▀   ▄▀▄██▀▄█▄▄█  ██▀▄▀▀▄ █▄    ",
+  "    ▀   █ ▀███▄ ▄  ██▀▀ ███▄██▄▄ ▀▄▀     ",
+  "    ▄▄  ▀ ▀ █▄▀ ▀▀█▀▄█▄▄█▄▀▄▀▀▄▀▀▄ █▄    ",
+  "    █  ▀█▀▀ ▀███▀ ▀▀▀▀▄▄ ▄   ▄▀▄▀█▄▀     ",
+  "    ▀ ▀▀  ▀▀▄▄▀▀▄▄ ▀██▄▄▄▄▀▄█▀▀▀█▀▄ █    ",
+  "    █▀▀▀▀▀█ ▀██ ▄█▀▀█▀  ██▄██ ▀ ██▄█     ",
+  "    █ ███ █ █▀█ ▀ ▀  ▀ █  ▀ ██▀▀█▄       ",
+  "    █ ▀▀▀ █ █ ██▀ ▄▀▄▀  ▄█   █▀  █▄▀     ",
+  "    ▀▀▀▀▀▀▀ ▀▀ ▀     ▀  ▀ ▀▀▀  ▀▀  ▀     ",
+  "                                         ",
+  "                                         ",
+].join("\n");
+
 function _owlPick(arr, salt) {
   let h = salt >>> 0;
   for (const ch of String(G.day) + ":" + String(G.vacation)) h = (h * 31 + ch.charCodeAt(0)) % 100003;
@@ -4414,6 +4449,18 @@ function _doColumn() {
   _say(_OWL_BOX15[0], "dim");
   _say("  " + _OWL_BOX15[1], "dim");
   _say("BUT, I DON'T GIVE A HOOT!", "win");
+}
+
+// EXAMINE QR at the LK Metro mouth. Printed with its own "qr" class because it
+// has to come out black-on-white with square-ish modules whatever theme the
+// player is in — the terminal is neon on black, and an inverted QR is one most
+// scanners simply refuse. The class is presentation (index.html), the payload
+// is data (_QR_STICKER); the engine just says which is which.
+function _doQrSticker() {
+  _say("You get your phone up to it. It's a sticker, printed not drawn, and newer " +
+    "than anything else on this wall — the corners are still stuck down.");
+  _say(_QR_STICKER, "qr");
+  _say("Underneath, in biro, somebody has drawn a small rabbit.", "dim");
 }
 
 // The payoff for decoding Box 15. Grants nothing mechanical on purpose — no

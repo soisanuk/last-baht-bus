@@ -53,6 +53,55 @@ cannot depend on source obscurity.
 Vigenère solver cracks a 4-letter key instantly. The *challenge* is the discovery
 chain, not the maths, and that is the honest shape for this length.
 
+### The secondary pointer: the QR at the LK Metro mouth
+
+`security.txt` only works on a player who thinks to check `/.well-known/`. The
+in-game pointer catches everyone else, and it is a two-step that mirrors the
+puzzle's own shape:
+
+1. `lk_entrance`'s description now carries **a sun-bleached film poster** on the
+   corner wall. The description says no more than that — deliberately, because
+   room prose feeds the scene-art generator through `docs/scene-manifest.json`,
+   and "QR code" in an art prompt would produce exactly the unreadable garbage
+   text the art rules forbid.
+2. **`EXAMINE POSTER`** reveals it as *The Matrix*, twenty-odd years of sun, and
+   the one thing on the wall that is newer than everything else: a QR sticker
+   with no bar name and no price on it — *the only advertisement on this street
+   that is not selling anything.*
+3. **`EXAMINE QR`** prints a real, scannable QR encoding
+   `https://soisanuk.github.io/last-baht-bus/.well-known/security.txt`, and
+   underneath it, in biro, somebody has drawn a small rabbit.
+
+The rabbit is the whole joke and the entire signal: a QR stuck on a Matrix
+poster is *follow the white rabbit*, drawn rather than quoted.
+
+**It is baked, never encoded at runtime.** The game has no build step and no
+dependencies, so `tools/gen-qr.mjs` (dev-only, needs `npm i qrcode jsqr` in a
+scratch dir) generates the block offline and **round-trips it** — it parses the
+exact characters the game will print back into a bitmap and decodes *that*, so a
+rendering bug cannot ship. Re-run it only if `_QR_TARGET` changes.
+
+Rendering facts that are load-bearing rather than cosmetic, all in the `.t-qr`
+class:
+
+| Choice | Why |
+|---|---|
+| Black on **white**, always | The terminal is neon on black. A light-on-dark QR is inverted and many scanners refuse it outright. It also reads as a paper sticker, which is what it is. |
+| **Half-block** glyphs (`█▀▄`) | One text row carries two module rows, so 33 modules + quiet zone fits **41 columns × 21 rows** — narrow enough for a phone. Full blocks would be twice as wide and twice as tall. |
+| `line-height: 1` | Any leading opens a white stripe between every pair of module rows and the code stops scanning. |
+| ECC level **L** | Read off a clean screen, not a greasy bar wall; every level up costs modules, which costs columns. |
+
+Verified end to end: the rendered element was screenshotted at desktop and at
+390px phone width, and **both screenshots decode back to the target URL**.
+`tests/e2e/qr.spec.mjs` guards what the vm suite structurally cannot see — the
+text surviving the DOM byte-for-byte, computed luminance (light field, dark
+modules), `white-space: pre`, line-height equal to font-size, and no horizontal
+overflow on a 390px viewport.
+
+One knock-on fix: the go-go `POSTER` verb answered a bare `POSTER` with *"No
+poster in here worth the name"*, which became a lie in a room that visibly has
+one. It now falls through to `EXAMINE POSTER` so room `reads` answer first.
+
 ### Three deliberate rule-breaks, and why
 
 | Rule | Break | Reason |
@@ -127,5 +176,6 @@ in the metrics design note, and the most obviously personal — see
 | 2026-08-13 | Stage 1 shipped: security.txt tell → Box 15 Vigenère → typed phrase → flag + `WHO AM I` trophy. Difficulty target one hour, met by making discovery the work and the crypto trivial. |
 | 2026-08-13 | Answer phrase ungated by `CHEATS_ENABLED`, because that switch ships `false`. |
 | 2026-08-13 | Stage 2 (wrong number) deferred, gated on security probes typed at the prompt. |
+| 2026-08-13 | Secondary in-game pointer added: the QR sticker on the Matrix poster at the LK Metro mouth, baked (never runtime-encoded) and verified by decoding the rendered screenshot at desktop and phone width. |
 | open | Canonical domain-root security.txt on the personal server. |
 | open | Whether the probe detector reports anything. |

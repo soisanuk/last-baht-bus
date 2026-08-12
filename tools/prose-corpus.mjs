@@ -40,6 +40,10 @@ const add = (group, ref, speaker, text) => {
   // pure-Thai runs are the trainer's jurisdiction (the coverage test), not prose review
   const thai = (t.match(/[฀-๿]/g) || []).length;
   if (thai > t.length / 2) return;
+  // Glyph art is data, not prose: the QR sticker's block characters (docs/ctf.md)
+  // and any ASCII art that follows it are strings with no words in them. Nothing
+  // a reviewer can review, and 21 rows of them would bury a real delta.
+  if (!/\p{L}/u.test(t)) return;
   records.push({ group, ref, speaker: speaker || null, text: t });
 };
 
@@ -119,7 +123,11 @@ for (const f of ["engine-core.js", "engine-encounters.js", "engine-play.js",
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
     if (pool) {
-      if (/^[\]}];/.test(line)) { pool = null; idx = 0; continue; }
+      // Close on ANY column-0 bracket, not just `];` — `_QR_STICKER` ends with
+      // `].join("\n");` and under the old `];`-only rule the block never closed,
+      // so every function after it was filed under the pool name. Same failure
+      // the _QUEER_ROOMS note below describes, reached from the other direction.
+      if (/^[\]}]/.test(line)) { pool = null; idx = 0; continue; }
     } else {
       const pm = line.match(POOL_RE);
       if (pm) {

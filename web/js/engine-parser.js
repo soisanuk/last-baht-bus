@@ -723,6 +723,12 @@ function _doExamine(arg) {
   // A go-go's poster is generated (which girl depends on the bar and the trip),
   // so it is handled here rather than as a static room `reads` entry.
   if (/\b(poster|flyer|promo)\b/.test(arg) && _hasPoster()) { _doPoster(); return; }
+  // The sticker on the film poster at the LK Metro mouth (docs/ctf.md). Its own
+  // branch rather than a `reads` entry because the QR needs a display class, and
+  // `reads` prints unclassed prose.
+  if (G.room === "lk_entrance" && /\b(qr|qr ?code|sticker|rabbit)\b/.test(arg)) {
+    _doQrSticker(); return;
+  }
   const npc = _findNpc(arg);
   if (npc) { _say(NPCS[npc].desc); return; }
   const pat = _findPatron(arg);
@@ -4124,8 +4130,12 @@ function doCommand(input) {
     // A bare POSTER, because the room prints a tappable (POSTER) hint and a hint
     // that doesn't parse is exactly the undelivered promise the lint hunts for.
     case "poster": case "flyer":
+      // Fall through to EXAMINE rather than denying flatly: a room can have a
+      // poster that isn't a go-go's promo girl (the sun-bleached film poster at
+      // the LK Metro mouth is a `reads` entry), and "No poster in here" would be
+      // a lie told in a room that visibly has one.
       if (_hasPoster()) _doPoster();
-      else _say("No poster in here worth the name.");
+      else _doExamine("poster");
       break;
     case "examine": case "x": case "inspect": case "search": _doExamine(arg); break;
     case "check":
