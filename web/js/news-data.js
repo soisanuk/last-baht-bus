@@ -43,45 +43,45 @@ var NEWS_FEED = [
     "d": "28 Jun 2026"
   },
   {
-    "t": "Former MP allegedly kills official at government building in Thailand's second shooting in days",
-    "s": "BBC",
-    "d": "10 Aug 2026"
-  },
-  {
     "t": "Thailand suspends gun licences as teen shooter and grandparents he killed are cremated",
-    "s": "theguardian.com",
+    "s": "The Guardian",
     "d": "12 Aug 2026"
   },
   {
-    "t": "Thailand Preparing to Use Military Ties as Leverage in US Talks",
-    "s": "Bloomberg.com",
+    "t": "Thailand Halts New Gun Permits Days After Mass Shooting at a School",
+    "s": "The New York Times",
+    "d": "12 Aug 2026"
+  },
+  {
+    "t": "At a temple in Thailand, parents mourn a 12-year-old mass shooting victim, and a father pleads for forgiveness",
+    "s": "The Guardian",
     "d": "11 Aug 2026"
   },
   {
-    "t": "Chinese woman missing in Thailand after accepting ride from stranger, embassy confirms",
-    "s": "The Standard (HK)",
-    "d": "11 Aug 2026"
-  },
-  {
-    "t": "Lisa sparks dating rumors with actor dubbed 'Thailand's Cha Eun-woo' amid Arnault breakup speculation",
-    "s": "The Korea Times",
+    "t": "Thailand Reaffirms US Military Cooperation Amid Trade Talks",
+    "s": "bloomberg.com",
     "d": "12 Aug 2026"
   },
   {
-    "t": "Thailand's $3 government bonds attract retail investors",
-    "s": "asia.nikkei.com",
+    "t": "Through the Lens: Thailand school shooting leaves 9 dead, including gunman",
+    "s": "Nikkei Asia",
     "d": "12 Aug 2026"
+  },
+  {
+    "t": "What to Know About Thailand's Deadliest School Shooting in Years",
+    "s": "Time Magazine",
+    "d": "07 Aug 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-08-11","USD":33.1,"AUD":23.39,"GBP":44.68,"EUR":38.2};
+var FX_RATES = {"date":"2026-08-12","USD":33.06,"AUD":23.38,"GBP":44.72,"EUR":38.17};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-12","temp":29,"humid":79,"code":3,"hi":31,"rain":94};
+var WX_NOW = {"date":"2026-08-13","temp":28,"humid":76,"code":2,"hi":31,"rain":58};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-08-01","first":"932479","last2":"69","front3":["413","672"],"back3":["039","154"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4418,"date":"2026-08-12","baht":69150};
+var GOLD = {"usd":4419,"date":"2026-08-12","baht":69100};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":63928,"thb":2113472};
+var BTC = {"usd":63368,"thb":2098104};
