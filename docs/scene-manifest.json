@@ -2,13 +2,13 @@
   "generated": "2026-08-12",
   "note": "Every room in the game + its region, for the scene-art pipeline (docs/art-pipeline-spec.md). Derived from web/js/world.js — regenerate with scripts/gen-scene-manifest.mjs, do not hand-edit. `kind` is a generator heuristic for prompt-template selection, not game canon. `regionSlug` is produced by the same regex as web/js/scene.js `_sceneArt()`; art files are web/art/rooms/<id>.png with web/art/regions/<slug>.png as the fallback.",
   "counts": {
-    "rooms": 234,
+    "rooms": 235,
     "regions": 15,
     "byKind": {
       "beach": 14,
       "street": 93,
       "massage": 19,
-      "beer": 55,
+      "beer": 56,
       "mall": 1,
       "interior": 2,
       "motel": 1,
@@ -192,12 +192,13 @@
         "naklua_massage",
         "naklua_rd",
         "naklua_thai",
-        "orchid_club"
+        "orchid_club",
+        "white_rabbit"
       ],
       "sampleDescs": [
         "North of the Dolphin roundabout the volume drops by half: seafood restaurants, temples, long-stay hotels. Up ahead, the SABAI PALMS HOTEL sign glows over its soi — half the letters out, so it reads 'SA AI PA MS', which the long-stay guests consider part of the charm. The soi itself is dark as a power cut. East, a quiet BAR CORNER of expat beer bars glows low; a SPA ROW of massage and soapland fronts runs off the other way.",
         "The top of the town, where four roads give up arguing and go round in a circle instead. The dolphins are in the middle of it — a concrete pod of them mid-leap, floodlit, permanently about to enter water that is two hundred metres west. Terminal 21 sits on the corner pretending to be an airport, its departure boards lit all night for a terminal nobody flies from. Beach Road runs south along the sea, Second Road south into town, Naklua Road north-east toward the quieter money, and the songthaews go round and round because this is where the loop turns.",
-        "A pocket of low-key expat beer bars off the main road, the kind that open at four and know every customer's pour by five. No neon war up here — just fairy lights, a sea breeze off the old fishing harbour, and the clack of a single pool table. THE ANCHOR BAR, DOLPHIN BAR, and THE MOORING share the corner and most of the regulars."
+        "A pocket of low-key expat beer bars off the main road, the kind that open at four and know every customer's pour by five. No neon war up here — just fairy lights, a sea breeze off the old fishing harbour, and the clack of a single pool table. THE ANCHOR BAR, DOLPHIN BAR, and THE MOORING share the corner and most of the regulars. Further east, where the fairy lights give out and the lane goes dark, one more sign buzzes on its own current: THE WHITE RABBIT, which shares neither."
       ]
     },
     {
@@ -1809,7 +1810,7 @@
       "kind": "street",
       "dark": false,
       "people": [],
-      "desc": "A pocket of low-key expat beer bars off the main road, the kind that open at four and know every customer's pour by five. No neon war up here — just fairy lights, a sea breeze off the old fishing harbour, and the clack of a single pool table. THE ANCHOR BAR, DOLPHIN BAR, and THE MOORING share the corner and most of the regulars."
+      "desc": "A pocket of low-key expat beer bars off the main road, the kind that open at four and know every customer's pour by five. No neon war up here — just fairy lights, a sea breeze off the old fishing harbour, and the clack of a single pool table. THE ANCHOR BAR, DOLPHIN BAR, and THE MOORING share the corner and most of the regulars. Further east, where the fairy lights give out and the lane goes dark, one more sign buzzes on its own current: THE WHITE RABBIT, which shares neither."
     },
     {
       "id": "naklua_massage",
@@ -1863,6 +1864,18 @@
         "Rose"
       ],
       "desc": "A repurposed villa behind a high wall and an unmarked door — no neon, no barker, just a brass bell and one orchid in the porch. Inside it is cold enough to hang meat, lit low and gold, with deep leather couches whose curtains draw around them, and ladies in not very much already crossing the floor toward you. It opens at noon, for the men who need somewhere to be that isn't home; by dark the same faces hold the same seats. Tourists never find it. That is the entire point."
+    },
+    {
+      "id": "white_rabbit",
+      "name": "The White Rabbit",
+      "bar": "The White Rabbit",
+      "barType": "beer",
+      "region": "Naklua",
+      "regionSlug": "naklua",
+      "kind": "beer",
+      "dark": false,
+      "people": [],
+      "desc": "Down where the corner's fairy lights give out, a beer bar that is trying much harder than the three behind it and landing softer. A hand-painted white rabbit tumbles down a hole of green ones-and-zeroes above the bar; the effect wants to be clever and reads as a man who saw a film once. The beer is a note cheaper than it should be this far out — the only lever the place has to drag a punter past the Mooring — and a tip jar by the till is somehow fuller than the room can explain. Everything is a shade too new: the paint, the stools, the confidence."
     },
     {
       "id": "buddha_hill",

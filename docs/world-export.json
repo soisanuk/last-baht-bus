@@ -22,13 +22,13 @@
   "Blue Dog"
  ],
  "counts": {
-  "geolocated": 234,
+  "geolocated": 235,
   "patrons": 18,
   "people": 316,
   "portraits": 334,
   "renders": 334,
   "thumbs": 334,
-  "venues": 234
+  "venues": 235
  },
  "frames": [
   "baimon_pic1",
@@ -6386,6 +6386,16 @@
    "name": "The Water Buffalo",
    "pool": true,
    "region": "Darkside"
+  },
+  "white_rabbit": {
+   "bar": "The White Rabbit",
+   "barType": "beer",
+   "geo": [
+    12.95318,
+    100.89012
+   ],
+   "name": "The White Rabbit",
+   "region": "Naklua"
   },
   "windmill": {
    "bar": "The Windmill",

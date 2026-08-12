@@ -95,12 +95,113 @@ whole thing without a line of exposition.
 
 ## The bar: the White Rabbit (Naklua)
 
-A beer bar in Naklua. The district already has three (Anchor, Dolphin, Mooring)
-plus the Orchid Club, so a fourth beer bar sits naturally on the existing grid.
-`barType: "beer"`. Add via the `lbb-add-npc` conventions (room + bar display name +
-staff roles + a mamasan/cashier/hostesses so the role mechanics have someone to hang
-on). Staff canon: they stay because he overpays. One authored hostess who is openly
-counting the days is the sad-grace-note.
+A beer bar in Naklua, down where the corner's fairy lights give out — placed apart
+from the mellow trio (Anchor, Dolphin, Mooring) on purpose, the marginal bar nobody
+walks to, because that is where an exile could afford to land. `barType: "beer"`,
+hung off `naklua_bars` by an `e` exit. Trying much harder than its neighbours and
+landing softer: a hand-painted white rabbit tumbling down a hole of green ones-and-
+zeroes (a man who saw a film once), beer a note too cheap, and a tip jar fuller than
+the room can explain — the last being the only visible trace of the European trade
+that keeps the lights on (below).
+
+## The ensemble — a bar of WDG's castoffs
+
+**The keystone: everyone at the White Rabbit ran afoul of White Dish.** Rabbit lost
+his Soi 6 bar to them; Nuan and both hostesses are former Soi 6 girls the rollup spat
+out. The White Rabbit is not just Eddy's sad bar — it is **where the machine's
+rejects washed up**, out in Naklua where WDG doesn't bother to look. That thread ties
+the whole staff into one unit, hands the revenge arc a ready-made crew with real
+grievances and real intel, and is exactly why CCIB/WDG attention would land hard on
+this particular bar later. It also reframes the bar: a refuge, not a joke.
+
+**The second keystone: the staff are one Laotian family.** Nuan, Ampha, Pooky and
+Jinny are all Lao and all kin — Nuan the matriarch, the other three her (distant)
+relations — and the kinship is *how they are all here*: when the rollup pushed them
+off Soi 6, Nuan landed the mama's job and pulled her family in behind her rather than
+let them scatter into random massage parlours. This is exactly how these bars staff
+up in life (kinship and hometown ties, not a jobs board), and it transforms the
+ownership trap below from "an employee has leverage" into something sharper: **Rabbit
+is a lone farang who thinks he runs a bar that is actually a Lao family's operation**,
+every role filled by Nuan's kin, all of them answering to her. His hard-won year of
+clarity is just enough to *see* that he is surrounded and not enough to change it —
+the cruelest version of his whole life's lesson, now domestic and daily. The player,
+too, walks in as a lone farang being sized up by the whole clan.
+
+**The ownership trap — Rabbit does not control his own bar.** He *thinks* he does. In
+fact the nominee-company structure means he is one phone call from being removed, and
+the people who can make that call work for him. This is the engine of the whole
+staff dynamic and the seed of a future quest: Rabbit is a landlord who is really a
+tenant, and the only reason he is still standing is that he is worth more kept than
+removed — the illicit European contacts and the high-tipping trade they bring (the
+Tier 3 black-market thread is *Rabbit's contacts*). The day that trade is worth less
+than the hassle of him, the call gets made. Until the wake-up incident a year ago he
+thought he was the big man in charge. Now he knows exactly whose bar it is, and can
+do nothing about it — which is half of why he wants out from under and dreams of the
+WDG score.
+
+### Nuan — mamasan, and the real power in the room
+
+Laotian, 42, a former Soi 6 girl and still drop-dead gorgeous. **Morally flexible**
+by necessity — you do not run a bar of castoffs on the edge of the nominee world by
+being fastidious. One of the *first* hostesses Rabbit hired at his old Soi 6 bar,
+which is why he thought he could trust her, which is the mistake. Her own work permit
+and visa are **tied into the same nominee-company mess** as the bar, so she is bound
+into the structure deeply enough to pull its threads: she is **one phone call from
+removing Rabbit from the picture**, and both of them know it. She has started
+**giving herself pay rises** he cannot refuse — a live financial wound, and a future
+quest hook (can the player help him claw it back, or does helping her tighten the
+noose?). She is not a villain; she is a survivor who ended up holding the cards and
+is playing them, and the tragedy is that she and Rabbit are the same kind of person
+who trusted the wrong structure.
+
+**The romance vector (novel, needs design).** Nuan takes a *romantic* liking to the
+**player** — no clear reason (looks like an ex? bored on the edge of Naklua?). This
+is unlike anything the relationship system currently models: she is **management, not
+a barfinable hostess**, so the existing bond/barfine machinery does not apply. It is
+its own thing and needs a design pass before it is mechanised — *what does a
+mamasan's genuine interest in the player DO?* (leverage in the Rabbit quest? a
+protection buff at the bar? a complication with her own precarious status? all
+three?). **Tier 0 treats it as characterisation only** — she is simply warmer to the
+player than to anyone, and reads it as something she can't quite explain — never an
+invitation a verb has to deliver.
+
+### Ampha — the cashier who is not what she looks like
+
+Nuan's young kinswoman, Lao, whom everyone reads as **naive and innocent — and that
+is the cover.** She is a threat in her own quiet way. (Note: being Lao, she is *not*
+the Thai nominee name — an earlier guess, killed by the family's nationality; the
+real nominee, if the paperwork ever matters, is someone off-screen, and Nuan's
+leverage runs through her *entanglement* in the structure, not through holding it.)
+So Ampha's threat is something else, left a hook rather than spelled out: the family's
+actual brain and bookkeeper, the one who truly understands the money and the
+structure and only *plays* the sweet innocent — the quiet one who sees everything and
+misses nothing. Write her Tier-0 surface as genuinely sweet with one beat that
+doesn't sit right, and leave the reveal for later.
+
+### Pooky & Jinny — the hostesses who carry the thread
+
+Older former Soi 6 girls who ran afoul of WDG — the human face of the keystone. Their
+grievances are the emotional fuel of the revenge arc and, later, a source of intel on
+how WDG actually runs. Written with the prose-voice rule ([[lbb-prose-voice-girls]]):
+women with real histories and real anger, not victims-as-scenery. Aged past the green
+Soi 6 tier by design.
+
+### The threat web, in one line
+
+Rabbit owns the bar on paper; Nuan and her family actually run it, and her
+entanglement in the nominee structure is the thread she can pull to remove him;
+Rabbit survives only by being worth more — via the European trade — than the cost of
+removing him. Every relationship in the bar is a pressure on that balance, and the
+player walks into the middle of it — a lone farang, like Rabbit, being read by the
+whole clan.
+
+**Tier 0 vs. later.** Tier 0 *establishes the five characters* — surface, the
+WDG-castoff thread present in the prose, the threats and the romance seeded as
+characterisation. **Deferred, and spec'd as future work:** Nuan's leverage and the
+pay-rise drain as a *playable* pressure; the romance vector's mechanic; the Ampha
+reveal; the European-trade / black-market thread (Tier 3). Prose-promise discipline
+holds throughout: in Tier 0 the threats and the interest are *feelings and
+foreshadowing*, never a door a verb must open.
 
 ## The tiers
 
@@ -315,6 +416,9 @@ serialisable. LBB is the first host; keep the second one buildable.
 | 2026-08-13 | The inversion: crypto was never the jugular, the *suay* is; Rabbit can't see it. Canon-correct per factions doc. |
 | 2026-08-13 | CCIB named and never portrayed badly ("quietly, unhurriedly competent"); involved no matter what; the variable is who takes the heat — Rabbit (slips it, never jailed), you (sloppy play), or WDG (the elegant win). |
 | 2026-08-13 | Firewall: Rabbit fronts the CTF but the CTF never depends on Rabbit and no quest gates on the cipher. |
+| 2026-08-13 | The White Rabbit staff are an AUTHORED ensemble, not filler, unified by one keystone: everyone here is a WDG castoff (Rabbit lost his bar to them; Nuan + hostesses are ex-Soi-6). The bar is a refuge and the revenge crew. |
+| 2026-08-13 | Ownership trap: Rabbit doesn't control his own bar — the nominee structure means mamasan Nuan (Lao, 42, ex-Soi-6, first hire he trusted) is one call from removing him, is giving herself pay rises, and he survives only by the European trade he brings. Ampha the "innocent" cashier is the likely Thai nominee name (a threat in cover). Pay-rise drain + leverage = future quest. |
+| 2026-08-13 | Nuan takes a romantic liking to the PLAYER — a novel vector (she's management, not a barfinable hostess, so bond/barfine machinery doesn't apply). Tier 0 = characterisation only; the mechanic needs its own design pass. |
 | open | CCIB heat: scripted landing vs. computed from play. |
 | open | Betrayal fork in v1 (tentative yes). |
 | open | Operator-path reward (flavour-only vs. nothing extra). |

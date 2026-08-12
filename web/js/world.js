@@ -3134,8 +3134,10 @@ const ROOMS = {
     desc: "A pocket of low-key expat beer bars off the main road, the kind that open at four " +
       "and know every customer's pour by five. No neon war up here — just fairy lights, a " +
       "sea breeze off the old fishing harbour, and the clack of a single pool table. THE " +
-      "ANCHOR BAR, DOLPHIN BAR, and THE MOORING share the corner and most of the regulars.",
-    exits: { w: "naklua_rd", in: "anchor_bar", n: "dolphin_bar", s: "mooring_bar" },
+      "ANCHOR BAR, DOLPHIN BAR, and THE MOORING share the corner and most of the regulars. " +
+      "Further east, where the fairy lights give out and the lane goes dark, one more sign " +
+      "buzzes on its own current: THE WHITE RABBIT, which shares neither.",
+    exits: { w: "naklua_rd", in: "anchor_bar", n: "dolphin_bar", s: "mooring_bar", e: "white_rabbit" },
   },
   anchor_bar: {
     name: "The Anchor Bar",
@@ -3162,6 +3164,19 @@ const ROOMS = {
     desc: "The last light before the dark soi, a single-container bar where the harbour smell " +
       "wins over the beer. Jaja works the rail and remembers birthdays she has no business " +
       "remembering.",
+    exits: { out: "naklua_bars" },
+  },
+  white_rabbit: {
+    name: "The White Rabbit",
+    region: "Naklua",
+    bar: "The White Rabbit", barType: "beer", outlet: true,
+    desc: "Down where the corner's fairy lights give out, a beer bar that is trying much harder " +
+      "than the three behind it and landing softer. A hand-painted white rabbit tumbles down a " +
+      "hole of green ones-and-zeroes above the bar; the effect wants to be clever and reads as a " +
+      "man who saw a film once. The beer is a note cheaper than it should be this far out — the " +
+      "only lever the place has to drag a punter past the Mooring — and a tip jar by the till is " +
+      "somehow fuller than the room can explain. Everything is a shade too new: the paint, the " +
+      "stools, the confidence.",
     exits: { out: "naklua_bars" },
   },
   naklua_massage: {
@@ -11670,6 +11685,7 @@ const ROOM_GEO = {
   anchor_bar:       [12.95320, 100.88982],
   dolphin_bar:      [12.95349, 100.88971],
   mooring_bar:      [12.95304, 100.88985],
+  white_rabbit:     [12.95318, 100.89012],
   naklua_massage:   [12.95380, 100.88908],
   naklua_thai:      [12.95392, 100.88891],
   lotus_oil:        [12.95407, 100.88904],
