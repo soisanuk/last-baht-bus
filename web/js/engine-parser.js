@@ -1331,6 +1331,17 @@ const _CONVO_TOPIC_RULES = [
   [/this country|living here|life (out )?here|being here/,                       "thailand"],
   [/the ladies|working girls/,                                                   "girls"],
   [/love life|relationship|\bdating\b|you single|got a girl/,                    "girlfriend"],
+  // The White Rabbit (Naklua) — Fast Eddy and his Lao family (docs/rabbit-arc.md)
+  // NB: not \bryan\b / \bpowers\b — doug owns the "ryan" topic and bert "ryan powers".
+  [/white dish|\bwdg\b|the rollup|soi ?6 bar/,                                   "wdg"],
+  [/\bvegas\b|\bbitcoin\b|\bcrypto\b|the wallet|the coin|tumbl(e|ed|ing)/,       "vegas"],
+  [/\bsober\b|don'?t (you )?drink|the wagon|drinking|year off|the incident/,     "sober"],
+  [/the handle|your handle|nickname|real name|\bhacker\b/,                       "rabbit"],
+  [/white rabbit|this bar|this place|your bar|the nominee|the books|the ledger|the accounts/, "bar"],
+  [/the boss|\beddy\b|the owner/,                                                "eddy"],
+  [/\bnuan\b|the mamasan|your mama\b/,                                           "mama"],
+  [/you like me|why.*(nice|warm|like me)|into me|interested in me|flirt/,        "likeyou"],
+  [/\bcousins?\b|relatives|all related|one family|your people/,                  "family"],
 ];
 
 function _convoTopic(s) {

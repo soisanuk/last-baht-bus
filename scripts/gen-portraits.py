@@ -407,6 +407,15 @@ CHARS = {
     "phil":     dict(skin=PALE, hair="combover", hc=C(0x7a6a58), shirt=C(0xd8d8e0),
                      vest=C(0x707888), mouth="neutral", bg=BG_BAR),
     "gavin":    dict(skin=PALE, hair="short", hc=C(0x8a8a90), shirt=C(0xf0f0f0), collar=True, mouth="smile", bg=BG_BAR),
+    # --- The White Rabbit (Naklua): Fast Eddy + his Lao family (docs/rabbit-arc.md).
+    # Interim pixel busts; the rat-tail-from-a-socket-tattoo is a nape feature the
+    # bust can't show, so it lives in the `look:` brief for the SDXL render instead.
+    "fast_eddy": dict(skin=TAN, hair="balding", hc=GREY, shirt=C(0x181820),
+                      acc=["sunglasses", "earrings"], earc=GOLD, mouth="grin", bg=BG_BAR),
+    "nuan":     lady(skin=THAI, hair="long", hc=BLACK, shirt=C(0x8a1030), bg=BG_BAR, mouth="smile", acc=["earrings", "chain"], earc=GOLD),
+    "ampha":    lady(skin=THAI, hair="bun", hc=BLACK, shirt=C(0x6a6a78), bg=BG_BAR, mouth="neutral", acc=["earrings"], earc=SILVER),
+    "champa":   lady(skin=THAI2, hair="long", hc=GRBLK, shirt=C(0x9a2a3a), bg=BG_BAR, mouth="smile", acc=["earrings", "flower"], earc=GOLD),
+    "boua":     lady(skin=THAI, hair="bun", hc=GRBLK, shirt=C(0x3a4a5a), bg=BG_BAR, mouth="neutral", acc=["earrings", "glasses", "glasschain"], earc=SILVER, framec=SILVER),
     # --- the Pratumnak clubs (The Doghouse / Succubus) ---
     # Bill: thirties, English, pressed short-sleeve shirt, cuffs turned once.
     # Young for the room he runs and deliberately unremarkable-looking.

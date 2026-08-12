@@ -2,12 +2,12 @@
   "generated": "2026-08-12",
   "note": "Distinct, hand-authored characters with a portrait (excludes the 181 generic `filler` NPCs). Derived from web/js/world.js — regenerate with scripts/gen-portrait-manifest.mjs, do not hand-edit. `sex`/`venueKind` are generator heuristics for portrait archetype selection, not game canon.",
   "counts": {
-    "total": 129,
+    "total": 134,
     "byRole": {
-      "story": 33,
-      "mamasan": 24,
-      "hostess": 42,
-      "cashier": 12,
+      "story": 34,
+      "mamasan": 25,
+      "hostess": 44,
+      "cashier": 13,
       "patron": 18
     },
     "filler": 205
@@ -153,6 +153,22 @@
       "room": "queen_vic",
       "tags": [],
       "desc": "American, sixty, built like a retired middleweight gone comfortable. Twenty-six years working homicide in a city he won't name, then a private ticket — \"cheating husbands don't try to kill you; I like boring now.\" Drinks soda water and watches the door, out of a habit he's given up pretending is retired. Came to price Thailand for good; found a job following him."
+    },
+    {
+      "id": "fast_eddy",
+      "name": "Fast Eddy",
+      "source": "NPCS",
+      "role": "story",
+      "sex": "m",
+      "look": "American man, fifties, overweight, bald but for a thin grey rat-tail, gold hoop earring, wraparound shades pushed up, black tee.",
+      "venueKind": "beer",
+      "emoji": "🕶️",
+      "th": null,
+      "room": "white_rabbit",
+      "tags": [
+        "manager"
+      ],
+      "desc": "The owner, and he will have told you so inside a minute. American, the wrong side of fifty and of two hundred pounds, in a black tee that has given up. Bald — except for a thin grey rat-tail that grows, you look twice to be sure, out of a tattooed socket inked at the nape, so that his one concession to hair is also, in his own mind, a cable he is jacked into. A gold hoop in one ear aiming for pirate and landing nearer uncle; wraparound shades parked on a scalp that lost its argument with the sun years ago; nose hair he has made his peace with. Everything about him is a man who was, once, briefly, exactly as sharp as he still thinks he is — and who has lately begun to suspect it."
     },
     {
       "id": "gaew",
@@ -671,6 +687,20 @@
       "desc": "The flagship's mamasan: still, precise, a tablet where another mama keeps a smile. She runs Pink Lotus like the asset it is on White Dish's books, and she priced you before you sat down."
     },
     {
+      "id": "nuan",
+      "name": "Nuan",
+      "source": "NPCS",
+      "role": "mamasan",
+      "sex": "f",
+      "look": "Laotian woman, 42, striking, long black hair, gold at the wrist and ears, deep-red silk blouse, unhurried dark eyes.",
+      "venueKind": "beer",
+      "emoji": "👑",
+      "th": null,
+      "room": "white_rabbit",
+      "tags": [],
+      "desc": "The mamasan, and — you clock it inside a minute — the actual weather in the room. Laotian, forty-two, and still the kind of beautiful that quietly reorganises a man's evening: long black hair, gold at the wrist, a deep-red blouse and a stillness that costs years to learn. She runs Eddy's floor the way a good editor runs a paper — nothing happens on it she did not allow. When her eyes settle on you they stay a half-beat past business, and she does not trouble to hide that she has decided she likes the look of you."
+    },
+    {
       "id": "oy",
       "name": "Madam Oy",
       "source": "NPCS",
@@ -906,6 +936,20 @@
       "desc": "Genuinely stunning and entirely aware of it, angling for the light and the mirror more than for you. There is a screen between you at all times, and you are not the one she's looking at on it."
     },
     {
+      "id": "boua",
+      "name": "Boua",
+      "source": "NPCS",
+      "role": "hostess",
+      "sex": "f",
+      "look": "Laotian woman, forty, quieter, hair pulled back, reading glasses on a chain, plain blouse, careful watchful hands.",
+      "venueKind": "beer",
+      "emoji": "💃",
+      "th": null,
+      "room": "white_rabbit",
+      "tags": [],
+      "desc": "The other hostess, and the quiet one — forty, hair pulled back, a pair of reading glasses on a chain that she uses for her phone and her lottery numbers. Where Champa performs, Boua watches. She did the same Soi 6 years and came out of them with less noise and more caution, and she has the specific, unsentimental kindness of a woman who long ago decided exactly how much of herself the job gets and keeps the rest locked at home."
+    },
+    {
       "id": "chaba",
       "name": "Chaba",
       "source": "NPCS",
@@ -917,6 +961,20 @@
       "room": "cherry_pop",
       "tags": [],
       "desc": "Loud, glorious, and pouring — for you, for herself, for the room. At Cherry Pop she's the party's engine, right up until she's its wreckage."
+    },
+    {
+      "id": "champa",
+      "name": "Champa",
+      "source": "NPCS",
+      "role": "hostess",
+      "sex": "f",
+      "look": "Laotian woman, late thirties, handsome not cute, long dark hair with a frangipani behind one ear, worn red dress, knowing smile.",
+      "venueKind": "beer",
+      "emoji": "💃",
+      "th": null,
+      "room": "white_rabbit",
+      "tags": [],
+      "desc": "One of the two hostesses, and old enough now that the word feels generous — late thirties, handsome rather than cute, a frangipani behind one ear because the bar is named for a flower of sorts and somebody should mean it. She has the easy, unhurried warmth of a woman who did her ten years on Soi 6, learned every angle, and is genuinely relieved not to be running them any more. She names her price in drinks and gives her opinions away."
     },
     {
       "id": "chompoo",
@@ -1392,6 +1450,20 @@
       "room": "midnight_sun",
       "tags": [],
       "desc": "The cashier, planted behind the till like she grew there — cropped hair, oversized bar polo, a silver ring through one nostril and a biro tucked behind her ear. Tom through and through: she runs the money, calls the floor, and misses nothing across the whole open front of the bar."
+    },
+    {
+      "id": "ampha",
+      "name": "Ampha",
+      "source": "NPCS",
+      "role": "cashier",
+      "sex": "f",
+      "look": "Laotian woman, mid-twenties, neat, hair in a low bun, plain cardigan over a bar polo, calculator and ledgers, quiet steady eyes.",
+      "venueKind": "beer",
+      "emoji": "🧾",
+      "th": null,
+      "room": "white_rabbit",
+      "tags": [],
+      "desc": "The cashier, and everyone's favourite theory of the room: the sweet one, the innocent one, Nuan's little cousin who counts the till and blushes at the customers. Mid-twenties, hair in a neat bun, a cardigan over the bar polo even in the heat. She smiles when smiled at and adds up faster than the calculator she pretends to need. It is only later, and only if you're paying attention, that you notice her eyes finish reading a man about four seconds before her face admits she was looking."
     },
     {
       "id": "baimon",

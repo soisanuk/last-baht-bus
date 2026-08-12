@@ -24,8 +24,8 @@
  "counts": {
   "geolocated": 235,
   "patrons": 18,
-  "people": 316,
-  "portraits": 334,
+  "people": 321,
+  "portraits": 339,
   "renders": 334,
   "thumbs": 334,
   "venues": 235
@@ -279,6 +279,14 @@
    "room": "the_boardroom",
    "th": "อำไพ"
   },
+  "ampha": {
+   "desc": "The cashier, and everyone's favourite theory of the room: the sweet one, the innocent one, Nuan's little cousin who counts the till and blushes at the customers. Mid-twenties, hair in a neat bun, a cardigan over the bar polo even in the heat. She smiles when smiled at and adds up faster than the calculator she pretends to need. It is only later, and only if you're paying attention, that you notice her eyes finish reading a man about four seconds before her face admits she was looking.",
+   "emoji": "🧾",
+   "name": "Ampha",
+   "pronoun": "she",
+   "role": "cashier",
+   "room": "white_rabbit"
+  },
   "ann": {
    "desc": "New enough to still look a little nervous — one of Midnight Sun Bar's girls, from Kalasin. The {{phone}} never leaves her hand.",
    "emoji": "🌸",
@@ -517,6 +525,14 @@
    "room": "crystal_palace",
    "th": "บูม"
   },
+  "boua": {
+   "desc": "The other hostess, and the quiet one — forty, hair pulled back, a pair of reading glasses on a chain that she uses for her phone and her lottery numbers. Where Champa performs, Boua watches. She did the same Soi 6 years and came out of them with less noise and more caution, and she has the specific, unsentimental kindness of a woman who long ago decided exactly how much of herself the job gets and keeps the rest locked at home.",
+   "emoji": "💃",
+   "name": "Boua",
+   "pronoun": "she",
+   "role": "hostess",
+   "room": "white_rabbit"
+  },
   "bow": {
    "desc": "Baby-faced, chewing gum, thumbing her phone under the bar — one of Club Mirage's girls, from Khon Kaen. She types more than she talks — and laughs at both.",
    "emoji": "🌻",
@@ -688,6 +704,14 @@
    "role": "hostess",
    "room": "cherry_pop",
    "th": "ชบา"
+  },
+  "champa": {
+   "desc": "One of the two hostesses, and old enough now that the word feels generous — late thirties, handsome rather than cute, a frangipani behind one ear because the bar is named for a flower of sorts and somebody should mean it. She has the easy, unhurried warmth of a woman who did her ten years on Soi 6, learned every angle, and is genuinely relieved not to be running them any more. She names her price in drinks and gives her opinions away.",
+   "emoji": "💃",
+   "name": "Champa",
+   "pronoun": "she",
+   "role": "hostess",
+   "room": "white_rabbit"
   },
   "cherry": {
    "desc": "A crooked, disarming grin — one of Crystal Palace A-Go-Go's girls, from Mukdahan. She types more than she talks — and laughs at both.",
@@ -916,6 +940,14 @@
    "role": "hostess",
    "room": "sapphire",
    "th": "ฟ้าใส"
+  },
+  "fast_eddy": {
+   "desc": "The owner, and he will have told you so inside a minute. American, the wrong side of fifty and of two hundred pounds, in a black tee that has given up. Bald — except for a thin grey rat-tail that grows, you look twice to be sure, out of a tattooed socket inked at the nape, so that his one concession to hair is also, in his own mind, a cable he is jacked into. A gold hoop in one ear aiming for pirate and landing nearer uncle; wraparound shades parked on a scalp that lost its argument with the sun years ago; nose hair he has made his peace with. Everything about him is a man who was, once, briefly, exactly as sharp as he still thinks he is — and who has lately begun to suspect it.",
+   "emoji": "🕶️",
+   "manager": true,
+   "name": "Fast Eddy",
+   "pronoun": "he",
+   "room": "white_rabbit"
   },
   "fern": {
    "desc": "Round-faced and quick to laugh — one of Candy Bar 2's girls, from Mukdahan. She types more than she talks — and laughs at both.",
@@ -2119,6 +2151,14 @@
    "room": "bay_watch",
    "th": "หนู"
   },
+  "nuan": {
+   "desc": "The mamasan, and — you clock it inside a minute — the actual weather in the room. Laotian, forty-two, and still the kind of beautiful that quietly reorganises a man's evening: long black hair, gold at the wrist, a deep-red blouse and a stillness that costs years to learn. She runs Eddy's floor the way a good editor runs a paper — nothing happens on it she did not allow. When her eyes settle on you they stay a half-beat past business, and she does not trouble to hide that she has decided she likes the look of you.",
+   "emoji": "👑",
+   "name": "Nuan",
+   "pronoun": "she",
+   "role": "mamasan",
+   "room": "white_rabbit"
+  },
   "nubnab": {
    "desc": "Black polo, a lanyard of too many keys, a calculator she never needs — the cashier at The Windmill, from {{Nong Bua Lamphu}}.",
    "emoji": "🧾",
@@ -3315,6 +3355,7 @@
   "air",
   "alisa",
   "ampai",
+  "ampha",
   "angela",
   "ann",
   "aof",
@@ -3341,6 +3382,7 @@
   "bill",
   "bob",
   "boom",
+  "boua",
   "bow",
   "bpaeng",
   "bpom",
@@ -3358,6 +3400,7 @@
   "care",
   "cartoon",
   "chaba",
+  "champa",
   "cherry",
   "chom",
   "chompoo",
@@ -3387,6 +3430,7 @@
   "fang",
   "farida",
   "fasai",
+  "fast_eddy",
   "fergie",
   "fern",
   "fon",
@@ -3518,6 +3562,7 @@
   "noot",
   "nott",
   "nu",
+  "nuan",
   "nubnab",
   "nuch",
   "numfon",

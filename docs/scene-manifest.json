@@ -1874,7 +1874,13 @@
       "regionSlug": "naklua",
       "kind": "beer",
       "dark": false,
-      "people": [],
+      "people": [
+        "Ampha",
+        "Boua",
+        "Champa",
+        "Fast Eddy",
+        "Nuan"
+      ],
       "desc": "Down where the corner's fairy lights give out, a beer bar that is trying much harder than the three behind it and landing softer. A hand-painted white rabbit tumbles down a hole of green ones-and-zeroes above the bar; the effect wants to be clever and reads as a man who saw a film once. The beer is a note cheaper than it should be this far out — the only lever the place has to drag a punter past the Mooring — and a tip jar by the till is somehow fuller than the room can explain. Everything is a shade too new: the paint, the stools, the confidence."
     },
     {

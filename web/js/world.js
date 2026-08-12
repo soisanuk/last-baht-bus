@@ -7841,6 +7841,230 @@ const NPCS = {
     ],
   },
 
+  // ── The White Rabbit (Naklua) — Fast Eddy and his Lao family ──────────────────
+  // Design + canon: docs/rabbit-arc.md. Two keystones: everyone here is a White
+  // Dish castoff, and the staff are one Laotian family (Nuan the matriarch). Rabbit
+  // owns the bar on paper; Nuan actually runs it and is a phone call from removing
+  // him. Tier 0 = characters + seeded threads as foreshadowing; the mechanics
+  // (the romance vector, Nuan's leverage/pay-rise, the Ampha reveal, the heist)
+  // are deferred. No node here promises a verb the game doesn't yet deliver.
+  fast_eddy: {
+    name: "Fast Eddy", emoji: "🕶️", manager: true, pronoun: "he",
+    room: "white_rabbit",
+    look: "American man, fifties, overweight, bald but for a thin grey rat-tail, gold hoop earring, wraparound shades pushed up, black tee.",
+    desc: "The owner, and he will have told you so inside a minute. American, the wrong " +
+      "side of fifty and of two hundred pounds, in a black tee that has given up. Bald — " +
+      "except for a thin grey rat-tail that grows, you look twice to be sure, out of a " +
+      "tattooed socket inked at the nape, so that his one concession to hair is also, in " +
+      "his own mind, a cable he is jacked into. A gold hoop in one ear aiming for pirate " +
+      "and landing nearer uncle; wraparound shades parked on a scalp that lost its " +
+      "argument with the sun years ago; nose hair he has made his peace with. Everything " +
+      "about him is a man who was, once, briefly, exactly as sharp as he still thinks he " +
+      "is — and who has lately begun to suspect it.",
+    shot: [
+      "Fast Eddy sets a shot in front of you and a soda water in front of himself. “House " +
+        "pours the first one, friend — that's the rule. I don't, these days. You go ahead.” " +
+        "The lime in his glass is the only thing in it doing any work.",
+      "A shot lands that you didn't order. Eddy clinks it with a can of Coke Zero and does " +
+        "not drink. “First one's on the Rabbit. I'm a year off the stuff — don't ask — but " +
+        "don't let me slow you down. Chok dee.”",
+      "“New face.” Eddy pushes a shot over with two fingers and lifts his own glass of plain " +
+        "soda a polite inch. “On me. I stay dry now. You don't have to.” He watches, just a " +
+        "beat, to see whether you clock that his glass isn't playing.",
+      "Eddy pours you one and himself nothing. “Owner's privilege — first drink's free. " +
+        "Mine's the soda; I had my share and about four other people's.” The grin says it's " +
+        "fine. The care he takes not to look at your glass says it mostly is.",
+    ],
+    dialogue: [
+      { text: "“Fast Eddy.” He says it like it should land, and waits half a beat to see if " +
+          "it does. “My place — the White Rabbit. You get it? Down the hole, other side of " +
+          "the glass.” He taps the painted rabbit without looking at it. “Coldest, cheapest " +
+          "beer in Naklua, and I don't ask a man why he's up here instead of down there. Sit. " +
+          "Tell me nothing. I love that.”",
+        short: "“Fast Eddy. My place. Sit, tell me nothing — I love that.”" },
+      { topic: "vegas", text: "“Vegas, oh-six. Coffee shop off the Strip.” He settles in; this " +
+          "is the one he likes. “Some whale leaves his laptop open — wallet file just sitting " +
+          "there, forty grand in coin nobody's watching yet. I tumbled it through three " +
+          "exchanges before his latte went cold. Cashed out clean, walked away from a " +
+          "government paycheck, bought a bar and a whole new life.” The grin holds a second " +
+          "too long. “Smartest thing I ever did. Everybody keeps telling me it was luck. " +
+          "Everybody can get bent.”",
+        short: "“Vegas oh-six — a wallet somebody left open. Best thing I ever did. Luck, they say. Bent, I say.”" },
+      { topic: "wdg", text: "“White Dish.” The warmth goes out of it. “I had a bar on Soi 6 — a " +
+          "good one, mine, paid for in Vegas money. Then the suit shows up, all handshakes and " +
+          "PowerPoint, and somehow the rent's a problem, the license is a problem, the girls " +
+          "get walked across the road one by one, and I'm selling at forty cents on the dollar " +
+          "to the only buyer left. Which was them.” He turns his soda glass a slow quarter. " +
+          "“Ryan Powers. Never raised his voice at me once. Didn't have to. One day somebody's " +
+          "going to open that whole operation up like a cheap padlock, and I would give a great " +
+          "deal to be in the room.”",
+        short: "“White Dish took my Soi 6 bar at forty cents. Powers never raised his voice. Someone'll crack them open one day — I want to watch.”" },
+      { topic: "rabbit", text: "“The bar? Down-the-hole, through-the-glass, all that. Cute, " +
+          "right.” A pause; he decides how much to hand you. “Used to be a handle, if you go " +
+          "back far enough. Long time since anybody said it to my face and meant me.” He does " +
+          "not say it. “Leave it in the tunnel where it lives.”",
+        short: "“It was a handle once. Long time since anybody meant me by it.”" },
+      { topic: "sober", text: "“Year and a bit. In a bar. I know.” He turns the soda without " +
+          "drinking it. “Something happened — no, you don't get that one, nobody does — and I " +
+          "woke up in a version of my life I did not order. So now I pour and I don't drink and " +
+          "I count the days like a man with something left to protect.” The performance drops " +
+          "for exactly one sentence: “Turns out the smartest guy in the room and the drunkest " +
+          "guy in the room were the same guy, and he loses.” Then it's back. “Anyway. Your " +
+          "glass is empty. Mine's meant to be.”",
+        short: "“Year and a bit sober. Something happened I don't hand out. Smartest guy and drunkest guy were the same guy. He lost.”" },
+      { topic: "mama", text: "“Nuan runs my floor. Best mamasan in Naklua and she'll tell you I " +
+          "said so.” Beat. “Hired her first, back on Soi 6, when I still thought I could tell " +
+          "who to trust.” The grin thins. “We go back. She's near enough family now. You want " +
+          "the bar to like you, you make Nuan like you — and lucky you, that part seems to be " +
+          "handling itself.”",
+        short: "“Nuan runs my floor — first girl I ever hired. Make her like you and the bar likes you. Seems handled.”" },
+      { topic: "bar", text: "“The White Rabbit's mine. On paper and everything.” He says 'on " +
+          "paper' like a man testing a sore tooth. “All legal, don't worry about it. Company " +
+          "structure, local partner, the whole — you know how it works out here. It works. " +
+          "Mostly.” He rallies. “Point is, it's mine, the beer's cold, and the crowd I pull " +
+          "tips like the money's on fire. That last part keeps the lights on, so I don't ask " +
+          "where the crowd's from either.”",
+        short: "“Mine, on paper. Company structure, local partner — you know how it works out here. My crowd tips like it's on fire. I don't ask.”" },
+    ],
+  },
+  nuan: {
+    name: "Nuan", emoji: "👑",
+    room: "white_rabbit",
+    look: "Laotian woman, 42, striking, long black hair, gold at the wrist and ears, deep-red silk blouse, unhurried dark eyes.",
+    desc: "The mamasan, and — you clock it inside a minute — the actual weather in the room. " +
+      "Laotian, forty-two, and still the kind of beautiful that quietly reorganises a man's " +
+      "evening: long black hair, gold at the wrist, a deep-red blouse and a stillness that " +
+      "costs years to learn. She runs Eddy's floor the way a good editor runs a paper — " +
+      "nothing happens on it she did not allow. When her eyes settle on you they stay a " +
+      "half-beat past business, and she does not trouble to hide that she has decided she " +
+      "likes the look of you.",
+    dialogue: [
+      { text: "“Welcome to the Rabbit.” She looks you over, unhurried, and whatever she " +
+          "concludes she keeps. “Sit where you like. The beer is cold, the girls are kind, and " +
+          "the boss” — the smallest smile — “is harmless. I am Nuan. I will remember you now.” " +
+          "She says it like a fact rather than a courtesy, and she is warmer to you than two " +
+          "minutes strictly earn.",
+        short: "“Sit where you like. I am Nuan. I will remember you now.”" },
+      { topic: "home", text: "“Lao. From Savannakhet, by the river.” She says it without the " +
+          "small apology some reach for. “All of us here are Lao — me, the cashier, my two " +
+          "girls. Same family, more or less; out here that is how a bar gets staffed. You do " +
+          "not hire strangers when your own people need the work.” A beat. “And we needed the " +
+          "work.”",
+        short: "“Lao, from Savannakhet. All of us here are family — that's how a bar gets staffed out here.”" },
+      { topic: "wdg", text: "“You want the sad story? We all worked Soi 6 — all of us — back " +
+          "when it was still ours to work.” Her voice doesn't rise; it flattens, which is " +
+          "worse. “Then the company came, the bars changed hands, and one by one the older " +
+          "girls were — let go is the polite word. So we came up here, to the last bar that " +
+          "would have us, and we made it work. Eddy thinks he saved us.” The smile again, " +
+          "cooler. “It is kinder to let him think it.”",
+        short: "“We all worked Soi 6 till the company pushed the older girls out. Eddy thinks he saved us. Kinder to let him.”" },
+      { topic: "eddy", text: "“The boss.” She lets a silence sit under it. “He is not a bad " +
+          "man. He is a loud man who was lucky once and has spent twenty years sure the luck " +
+          "was skill. I have known him a long time — I was the first girl he hired, when he " +
+          "still had the Soi 6 bar and more mouth than sense.” She squares a coaster that did " +
+          "not need it. “He signs the papers. He believes that means he decides. It is not my " +
+          "job to correct him, and it is very much not yours.”",
+        short: "“He was lucky once and calls it skill. He signs the papers and thinks that means he decides. Don't correct him.”" },
+      { topic: "likeyou", text: "“Why am I nice to you.” She considers it as though it had been " +
+          "bothering her too. “I don't know yet. You have a face I have seen before, maybe — on " +
+          "a better man, or a worse one.” The dark eyes hold. “Or I am forty-two on the edge of " +
+          "Naklua, bored to the back teeth, and you walked in. Does the reason change what you " +
+          "do about it?” She lets that sit, then moves off to the till before you can decide it " +
+          "was a real question.",
+        short: "“Why am I nice to you? A face I've seen on a better man. Or I'm bored on the edge of Naklua. Does the reason change what you do about it?”" },
+    ],
+  },
+  ampha: {
+    name: "Ampha", emoji: "🧾",
+    room: "white_rabbit",
+    look: "Laotian woman, mid-twenties, neat, hair in a low bun, plain cardigan over a bar polo, calculator and ledgers, quiet steady eyes.",
+    desc: "The cashier, and everyone's favourite theory of the room: the sweet one, the " +
+      "innocent one, Nuan's little cousin who counts the till and blushes at the customers. " +
+      "Mid-twenties, hair in a neat bun, a cardigan over the bar polo even in the heat. She " +
+      "smiles when smiled at and adds up faster than the calculator she pretends to need. It " +
+      "is only later, and only if you're paying attention, that you notice her eyes finish " +
+      "reading a man about four seconds before her face admits she was looking.",
+    dialogue: [
+      { text: "“Hello, welcome kha.” A small, real smile, quickly put away, and she's back to " +
+          "her ledger. “I am Ampha — I only do the money, so I am the boring one. Auntie Nuan " +
+          "looks after everything else.” She says 'boring' like a line she has found useful.",
+        short: "“I am Ampha. I only do the money, the boring one. Auntie Nuan looks after the rest.”" },
+      { topic: "family", text: "“Nuan is my aunt — not close aunt, but you know, family is " +
+          "family, more when you are far from home.” She lines up a stack of notes and taps it " +
+          "square. “She brought us all up from Soi 6 when the trouble came. Champa and Boua are " +
+          "cousins also. It is nice, to work with family. Nobody steals from you.” A tiny pause " +
+          "on that last word, gone before you're sure it was there.",
+        short: "“Nuan is my aunt — she brought us all up from Soi 6. Champa, Boua, cousins too. Nice to work with family. Nobody steals from you.”" },
+      { topic: "bar", text: "“The books?” She closes the ledger — not fast, just closed. “They " +
+          "are fine. Everything is fine. Mr Eddy does not really read them, and Auntie says " +
+          "that is best for his blood pressure.” The smile is perfect. “I keep them very " +
+          "careful. Somebody should know where every baht is, na? In case anyone ever asks.”",
+        short: "“The books are fine. Mr Eddy doesn't read them. I keep them careful — somebody should know where every baht is. In case anyone asks.”" },
+    ],
+  },
+  champa: {
+    name: "Champa", emoji: "💃",
+    room: "white_rabbit",
+    look: "Laotian woman, late thirties, handsome not cute, long dark hair with a frangipani behind one ear, worn red dress, knowing smile.",
+    desc: "One of the two hostesses, and old enough now that the word feels generous — late " +
+      "thirties, handsome rather than cute, a frangipani behind one ear because the bar is " +
+      "named for a flower of sorts and somebody should mean it. She has the easy, unhurried " +
+      "warmth of a woman who did her ten years on Soi 6, learned every angle, and is " +
+      "genuinely relieved not to be running them any more. She names her price in drinks and " +
+      "gives her opinions away.",
+    dialogue: [
+      { text: "“Ooh, new one. Sit, sit.” Champa pats the stool beside her like an old friend, " +
+          "which by the end of one drink she will be. “I am Champa — the flower, yes, like the " +
+          "bar, ha. You buy me a drink, I tell you the truth about everything. Cheaper than the " +
+          "young ones and I actually talk to you.”",
+        short: "“I am Champa — the flower, like the bar. Buy me a drink, I tell you the truth about everything.”" },
+      { topic: "wdg", text: "“Soi 6, twelve years. I was good, too — the wall by the door, that " +
+          "was me.” She says it without much weight, an old ache walked off long ago. “Then the " +
+          "company bought my bar and put in girls half my age with none of my mileage, and one " +
+          "day the mama just — does not put me on the schedule. No fight, no shouting. You are " +
+          "simply not on the paper any more.” She shrugs, and the shrug is the whole story. " +
+          "“Nuan called. Nuan always calls. That is why I am alive, and some of the other girls " +
+          "from my bar are not doing so well.”",
+        short: "“Twelve years on Soi 6, then the company left me off the schedule. No fight — just gone. Nuan called. Nuan always calls.”" },
+      { topic: "eddy", text: "“The boss?” She laughs, not unkindly. “Oh, he is a clown. But he " +
+          "is our clown, and he pays double what anyone out here pays — which is the only " +
+          "reason a girl my age has a stool at all. So when he tells the big Vegas story for " +
+          "the thousandth time, we all laugh in the right place.” She leans in. “He needs us " +
+          "to. You did not hear that from me.”",
+        short: "“A clown, but our clown, and he pays double — only reason a girl my age has a stool. So we laugh in the right places. He needs us to.”" },
+    ],
+  },
+  boua: {
+    name: "Boua", emoji: "💃",
+    room: "white_rabbit",
+    look: "Laotian woman, forty, quieter, hair pulled back, reading glasses on a chain, plain blouse, careful watchful hands.",
+    desc: "The other hostess, and the quiet one — forty, hair pulled back, a pair of reading " +
+      "glasses on a chain that she uses for her phone and her lottery numbers. Where Champa " +
+      "performs, Boua watches. She did the same Soi 6 years and came out of them with less " +
+      "noise and more caution, and she has the specific, unsentimental kindness of a woman " +
+      "who long ago decided exactly how much of herself the job gets and keeps the rest " +
+      "locked at home.",
+    dialogue: [
+      { text: "“Hello.” Boua looks up from her phone, takes your measure in one calm pass, and " +
+          "offers a small nod rather than a performance. “I am Boua. Champa will talk your ear " +
+          "off — sit with her if you want the show. Sit with me if you want it quiet.” It is " +
+          "not unfriendly. It is a real choice, honestly offered.",
+        short: "“I am Boua. Champa for the show, me for the quiet. Your choice.”" },
+      { topic: "wdg", text: "“Soi 6, yes. A long time.” She doesn't reach for the story the way " +
+          "Champa does. “When White Dish came, the smart move was to see it early and go quiet. " +
+          "I saw it early.” She turns her phone face-down. “I don't hate them. Hating a company " +
+          "is like hating the rain. But I remember every girl they put on the street pretending " +
+          "it was her own idea, and I keep the names. Old habit. You never know when a list is " +
+          "worth something.”",
+        short: "“Saw White Dish coming and went quiet. I don't hate them — like hating rain. But I keep the names. You never know when a list is worth something.”" },
+      { topic: "family", text: "“Nuan, Ampha, Champa, me — all Lao, all one family if you go " +
+          "back far enough.” She says it plainly. “It is not sentiment. A woman alone out here " +
+          "is prey. Four women who are family are a wall. Nuan understood that before the rest " +
+          "of us, which is why Nuan is the mama and not me.”",
+        short: "“All Lao, all family. Not sentiment — a woman alone is prey, four who are family are a wall. Nuan understood first.”" },
+    ],
+  },
+
   bert: {
     name: "Bert", th: "เบิร์ต", emoji: "🎱", personality: "blunt",
     pronoun: "he",
@@ -10642,6 +10866,8 @@ const CANON_HOSTESSES = [
 // (Ringing the bell a couple of times has been known to soften the rules.)
 
 const NPC_ROLES = {
+  // The White Rabbit's Lao family (Fast Eddy is manager:true, deliberately not here)
+  nuan: "mamasan", ampha: "cashier", champa: "hostess", boua: "hostess",
   kinnaree: "mamasan",
   pancake: "hostess", baitoey: "hostess",
   lek: "hostess", noi: "hostess", ping: "hostess", aom: "hostess",
