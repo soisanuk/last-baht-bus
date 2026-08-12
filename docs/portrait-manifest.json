@@ -1,10 +1,10 @@
 {
-  "generated": "2026-08-11",
+  "generated": "2026-08-12",
   "note": "Distinct, hand-authored characters with a portrait (excludes the 181 generic `filler` NPCs). Derived from web/js/world.js — regenerate with scripts/gen-portrait-manifest.mjs, do not hand-edit. `sex`/`venueKind` are generator heuristics for portrait archetype selection, not game canon.",
   "counts": {
-    "total": 126,
+    "total": 129,
     "byRole": {
-      "story": 30,
+      "story": 33,
       "mamasan": 24,
       "hostess": 42,
       "cashier": 12,
@@ -13,6 +13,20 @@
     "filler": 205
   },
   "characters": [
+    {
+      "id": "aoy",
+      "name": "Aoy",
+      "source": "NPCS",
+      "role": "story",
+      "sex": "f",
+      "look": "Thai woman of twenty-six, hair tied back, black apron over a white shirt, tray in hand.",
+      "venueKind": "pub",
+      "emoji": "🍽️",
+      "th": "อ้อย",
+      "room": "queen_vic",
+      "tags": [],
+      "desc": "One of the two who work the floor — orders, plates, the roast on a Sunday. She carries three pints in one hand and has never once been asked to sit down with anybody, which is the whole difference between this room and the rest of the soi."
+    },
     {
       "id": "arm",
       "name": "Arm",
@@ -141,6 +155,20 @@
       "desc": "American, sixty, built like a retired middleweight gone comfortable. Twenty-six years working homicide in a city he won't name, then a private ticket — \"cheating husbands don't try to kill you; I like boring now.\" Drinks soda water and watches the door, out of a habit he's given up pretending is retired. Came to price Thailand for good; found a job following him."
     },
     {
+      "id": "gaew",
+      "name": "Gaew",
+      "source": "NPCS",
+      "role": "story",
+      "sex": "f",
+      "look": "Thai woman of thirty, short practical hair, apron, pen behind her ear, quick on her feet.",
+      "venueKind": "pub",
+      "emoji": "🍻",
+      "th": "แก้ว",
+      "room": "queen_vic",
+      "tags": [],
+      "desc": "The other half of the floor, and the faster half. She has the dartboard's scoring in her head, knows every regular's drink, and settles arguments about the football by stating the result flatly and walking off."
+    },
+    {
       "id": "gary",
       "name": "Lake Gary",
       "source": "NPCS",
@@ -234,6 +262,20 @@
       "room": "adonis_club",
       "tags": [],
       "desc": "The Adonis Club's papasan — forties, immaculate, a silk shirt open one button past advisable and a smile that has closed a thousand deals. He runs his boys like a talent agent and reads a room's wallet before its face."
+    },
+    {
+      "id": "nuch",
+      "name": "Nuch",
+      "source": "NPCS",
+      "role": "story",
+      "sex": "f",
+      "look": "Thai woman of forty-five, reading glasses pushed up, neat blouse, ledger and room keys.",
+      "venueKind": "pub",
+      "emoji": "🧾",
+      "th": "นุช",
+      "room": "queen_vic",
+      "tags": [],
+      "desc": "Behind the till and the room keys both — the Vic is a pub downstairs and an inn upstairs, and Nuch runs the paperwork of both. Fifteen years of it. She knows which regulars are good for a tab and which rooms have the fan that rattles."
     },
     {
       "id": "pensri",
@@ -463,7 +505,7 @@
       "source": "NPCS",
       "role": "mamasan",
       "sex": "f",
-      "look": "Thai woman of about fifty, hair up, gold at the ears and throat, sharp eyes, well-cut dark blouse.",
+      "look": "Thai woman of thirty-eight, striking, hair up, gold at the ears and throat, sharp eyes, well-cut dark dress.",
       "venueKind": "beer",
       "emoji": "🌹",
       "th": "แคนดี้",
