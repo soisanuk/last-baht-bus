@@ -3,9 +3,9 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
-    "t": "Putting the spotlight on an open secret",
-    "s": "Bangkok Post",
-    "d": "09 Aug 2026"
+    "t": "‘So brutally cruel’: Suspected serial killer gang rattles Thailand",
+    "s": "SMH.com.au",
+    "d": "12 Aug 2026"
   },
   {
     "t": "Pattaya Unveils the \"Wave Bridge\" at Bali Hai Pier: A New Landmark for a MICE City",
@@ -23,18 +23,13 @@ var NEWS_FEED = [
     "d": "11 Aug 2026"
   },
   {
-    "t": "Pattaya’s nightlife becomes a global race for customers and workers",
-    "s": "Pattaya Mail",
-    "d": "09 Aug 2026"
-  },
-  {
-    "t": "Black oil-like slick washes ashore at Jomtien Beach",
-    "s": "Khaosod English",
+    "t": "Dad seeks answers over son's killing",
+    "s": "Bangkok Post",
     "d": "10 Aug 2026"
   },
   {
-    "t": "Dad seeks answers over son's killing",
-    "s": "Bangkok Post",
+    "t": "Mystery oil spill blankets Koh Larn’s coastline",
+    "s": "Thaiger",
     "d": "10 Aug 2026"
   },
   {
@@ -43,24 +38,19 @@ var NEWS_FEED = [
     "d": "11 Aug 2026"
   },
   {
+    "t": "Australian man charged with murder after dead girl found in suitcase in Thailand",
+    "s": "BBC",
+    "d": "28 Jun 2026"
+  },
+  {
     "t": "Former MP allegedly kills official at government building in Thailand's second shooting in days",
     "s": "BBC",
     "d": "10 Aug 2026"
   },
   {
-    "t": "Thailand rocked by second shooting tragedy in three days",
-    "s": "ABC News & Headlines – Australian Broadcasting Corporation",
-    "d": "10 Aug 2026"
-  },
-  {
-    "t": "A former Thai lawmaker arrested after a shooting at a government office kills 1",
-    "s": "AP News",
-    "d": "10 Aug 2026"
-  },
-  {
-    "t": "At a temple in Thailand, parents mourn a 12-year-old mass shooting victim, and a father pleads for forgiveness",
-    "s": "The Guardian",
-    "d": "11 Aug 2026"
+    "t": "Thailand suspends gun licences as teen shooter and grandparents he killed are cremated",
+    "s": "theguardian.com",
+    "d": "12 Aug 2026"
   },
   {
     "t": "Thailand Preparing to Use Military Ties as Leverage in US Talks",
@@ -68,20 +58,30 @@ var NEWS_FEED = [
     "d": "11 Aug 2026"
   },
   {
-    "t": "Woman Arrested for Smuggling Two Suitcases Stuffed With Over $690K Worth of Cannabis From Thailand",
-    "s": "Yahoo",
+    "t": "Chinese woman missing in Thailand after accepting ride from stranger, embassy confirms",
+    "s": "The Standard (HK)",
     "d": "11 Aug 2026"
+  },
+  {
+    "t": "Lisa sparks dating rumors with actor dubbed 'Thailand's Cha Eun-woo' amid Arnault breakup speculation",
+    "s": "The Korea Times",
+    "d": "12 Aug 2026"
+  },
+  {
+    "t": "Thailand's $3 government bonds attract retail investors",
+    "s": "asia.nikkei.com",
+    "d": "12 Aug 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-08-11","USD":33.1,"AUD":23.39,"GBP":44.68,"EUR":38.2};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-12","temp":28,"humid":84,"code":3,"hi":31,"rain":55};
+var WX_NOW = {"date":"2026-08-12","temp":29,"humid":79,"code":3,"hi":31,"rain":94};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-08-01","first":"932479","last2":"69","front3":["413","672"],"back3":["039","154"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4364,"date":"2026-08-11","baht":68300};
+var GOLD = {"usd":4418,"date":"2026-08-12","baht":69150};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":63248,"thb":2097229};
+var BTC = {"usd":63928,"thb":2113472};
