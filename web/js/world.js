@@ -3110,20 +3110,21 @@ const ROOMS = {
     desc: "Still water, lakeside restaurants, retired expats walking retired soi dogs. " +
       "Families eat grilled fish under string lights. It's so peaceful your ears ring. " +
       "Nobody here has been pickpocketed since the nineties. THE BOATHOUSE, the quiet " +
-      "restaurant on the deck, is open for the fish.",
+      "restaurant across the road, is open for the fish.",
     exits: { s: "khao_talo", in: "lake_bar", w: "lake_beer" },
   },
   lake_bar: {
     name: "The Boathouse",
     region: "Darkside",
     bar: "The Boathouse", barType: "pub", food: true,
-    desc: "A wooden deck built out over the still water at the quiet end of the lake, strung " +
-      "with fairy lights and the smell of fish on the grill. Expat families and retired " +
-      "couples work through big Chang bottles and whole grilled fish while the reservoir goes " +
-      "pink and then black behind them. It is the most respectable room for miles — no neon, " +
-      "no touts, no trouble — which is exactly why a certain kind of woman ends up working the " +
-      "till here rather than anywhere brighter. The register sits by the door, a small shrine " +
-      "and a framed photo of a young man beside it.",
+    desc: "Across the road from the water at the quiet end of the lake, wooden tables under a " +
+      "big open-sided sala, strung with fairy lights and the smell of fish on the grill, and a " +
+      "clear view of the reservoir over the way. Expat families and retired couples work " +
+      "through big Chang bottles and whole grilled fish while, across the road, the water goes " +
+      "pink and then black. It is the most respectable room for miles — no neon, no touts, no " +
+      "trouble — which is exactly why a certain kind of woman ends up working the till here " +
+      "rather than anywhere brighter. The register sits by the door, a small shrine and a " +
+      "framed photo of a young man beside it.",
     exits: { out: "lake_mabprachan", w: "lake_beer" },
   },
   lake_beer: {
@@ -3131,12 +3132,13 @@ const ROOMS = {
     region: "Darkside",
     bar: "The Sundowner", barType: "beer", pool: true,
     desc: "Next door to the Boathouse but a notch louder and a notch looser: an open-air beer " +
-      "bar right on the water's edge, a dozen stools, a fridge of Chang and Leo, and a pool " +
-      "table with a felt like a tired lawn. Semi-respectable, and content with it — the girls " +
-      "here worked Pattaya proper once and decided the money wasn't worth the hours or the " +
-      "hustle. Now they pour slow beers for slow regulars, mostly older men who come for the " +
-      "quiet and the lake and a familiar face, and everybody involved seems relieved about the " +
-      "arrangement. The sunset over the reservoir does most of the marketing.",
+      "bar on the ring road, the reservoir just across the way, a dozen stools, a fridge of " +
+      "Chang and Leo, and a pool table with a felt like a tired lawn. Semi-respectable, and " +
+      "content with it — the girls here worked Pattaya proper once and decided the money " +
+      "wasn't worth the hours or the hustle. Now they pour slow beers for slow regulars, " +
+      "mostly older men who come for the quiet and the lake view and a familiar face, and " +
+      "everybody involved seems relieved about the arrangement. The sunset over the water does " +
+      "most of the marketing.",
     exits: { out: "lake_mabprachan", e: "lake_bar" },
   },
 
@@ -8112,10 +8114,10 @@ const NPCS = {
     dialogue: [
       { text: "The woman at the register looks up and gives you the smooth, complete smile of " +
           "someone who has welcomed ten thousand strangers and meant it with none of them and " +
-          "all of them at once. “Good evening. A table by the water? The fish tonight is very " +
+          "all of them at once. “Good evening. A table with the view? The fish tonight is very " +
           "good.” Her English is easy and precise, worn smooth somewhere she doesn't mention. " +
-          "“Sit anywhere you like. I'll send someone over.”",
-        short: "“Good evening. A table by the water? Sit anywhere — I'll send someone over.”" },
+          "“Sit anywhere you like — the front tables have the view. I'll send someone over.”",
+        short: "“Good evening. A table with the view? Sit anywhere — I'll send someone over.”" },
       { topic: "nont", text: "Something in her composure shifts — warmer and more guarded at " +
           "once. “You know my Nont?” A glance at the framed photo by the register, quickly " +
           "checked. “He is a good boy. Too clever for his own good, always — took every machine " +
