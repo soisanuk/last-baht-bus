@@ -2372,8 +2372,9 @@ function _doPhoneScreen() {
       const h = _headline();
       if (h && !seen.has(h.t)) { seen.add(h.t); _say(`📰 ${h.t}`, "thai"); }
     }
-    _say("(READ PAPER or WATCH TV for the rest.)", "dim");
+    _say("(READ PAPER for the rest, or WATCH TV.)", "dim");
   }
+  _say("🦉 The Nite Owl's weekly newsletter sits unread in your inbox — OWL.", "dim");
 }
 
 // Adopt a soi dog and the Soi Dog Foundation somehow has your number by the next
@@ -2578,11 +2579,12 @@ function _doJokeReply() {
   _say("You text back. The typing dots start immediately, which tells you something " +
     "about how the sender's evening is going.", "dim");
   _say("“Somebody answered! Do you know how rare that is?” A pause. “Mort. I write the " +
-    "column — the OWL, back page, been running longer than most of these bars. I test " +
-    "the jokes on the numbers I collect. Most people never reply, some tell me to stop, " +
-    "and about one in forty writes back.” Another pause. “You’re one in forty. Come and " +
-    "have a beer, Queen Vic. I’ll buy — I’ve a use for a man who answers his phone.”", "thai");
-  _say("(Mort. Queen Vic, most nights, end stool. COLUMN reads what he actually prints.)", "dim");
+    "column — the OWL. Used to be the back page; now it lands in your inbox, been going " +
+    "longer than most of these bars. I test the jokes on the numbers I collect. Most people " +
+    "never reply, some tell me to stop, and about one in forty writes back.” Another pause. " +
+    "“You’re one in forty. Come and have a beer, Queen Vic. I’ll buy — I’ve a use for a man " +
+    "who answers his phone.”", "thai");
+  _say("(Mort. Queen Vic, most nights, end stool. OWL pulls up this week's issue.)", "dim");
 }
 
 function _maybeIncomingText() {
@@ -4252,21 +4254,29 @@ function _doTv() {
   }
 }
 
+// Nobody props a folded broadsheet in a bar any more — the news lives on the
+// phone. READ PAPER thumbs it there (battery-gated), and the only print left is
+// the 7-Eleven rack and the Queen Vic's soft stack for the older hands.
 function _doPaper() {
-  if (!_room().seven && !_inBar()) {
-    _say("No paper to hand. The 7-Elevens keep a rack; every bar has yesterday's " +
-      "copy going soft on the counter.");
+  const at7 = !!_room().seven, atQV = G.room === "queen_vic", onPhone = !at7 && !atQV;
+  if (onPhone && G.battery <= 0) {
+    _say("The news lives on a screen these days, and yours is a black mirror. A 7-Eleven " +
+      "sells chargers and still racks a few print copies; the Queen Vic keeps yesterday's " +
+      "for the older hands.");
     return;
   }
   const feed = _newsFeed();
   if (!feed.length) {
-    _say("The rack holds a crossword someone's already ruined and a property " +
+    _say("Nothing doing — a crossword someone's already ruined and a property " +
       "supplement nobody has ever read. The news, as ever, is the street.");
     return;
   }
-  _say(_room().seven ?
+  _say(onPhone ?
+    "You thumb the news on your phone, the way everyone reads it now:" :
+    at7 ?
     "You skim the rack by the till, cold air on your neck:" :
-    "Yesterday's paper, soft with humidity and beer rings, still mostly true:");
+    "The Queen Vic still keeps a paper for the regulars — yesterday's, soft with " +
+    "humidity and beer rings, still mostly true:");
   const seen = new Set();
   for (let i = 0; i < 6 && seen.size < 3; i++) {
     const h = _headline();
@@ -4278,8 +4288,8 @@ function _doPaper() {
   if (au && au.baht) _say(`Below them, gold at ฿${au.baht.toLocaleString("en-US")} ` +
     "the baht-weight — the number every mamasan reads first.", "dim");
   const wx = _wxLine();
-  if (wx) _say(`The weather box promises ${wx} — printed on paper already ` +
-    "gone soft agreeing with it.", "dim");
+  if (wx) _say(`The weather box promises ${wx} — which the sky will ignore ` +
+    "on its own schedule.", "dim");
   const fb = _footyLine();
   if (fb) _say(`Back page — ${fb}.`, "dim");
   const lt = _lotto();
@@ -4411,6 +4421,10 @@ const _OWL_LISTINGS = [
   "THE ORCHID CLUB (Naklua) is NOT holding an event, has never held one, and would thank the press not to notice it exists. Discretion, gentlemen. Mai pen rai.",
   "CANDY BAR (Soi Buakhao), the mamasan's own — sharp as a razor, warm as a Chang on a hot night. She'll price your wallet before you sit and your story before you tell it. Buy her a drink; it's cheaper than the alternative.",
   "QUEEN VIC (Soi 6): the one air-conditioned pub on the wildest soi in the world, where the residents watch the circus from across the street and mourn the days before the paper changed hands. Cold beer, warm company, no illusions.",
+  "THE LAST BAHT BUS rattles off to the depot around two, and the ฿" + BUS_FARE + " ride home goes with it. After that it's the piwin's small-hours rate — quoted in a Thai you suddenly can't follow — or shank's pony past the soi dogs. Break for a main road before the wheels stop turning. The Owl has walked it. The Owl does not recommend it.",
+  "DONGTAN & SOI 7 (Jomtien) — the coast for men who've stopped auditioning. The Sandbar, the Lucky 7, a warm beer and a cool argument about the football, and not one soul will grab your sleeve. A third cheaper and a mile quieter. Come when the loud end has worn you thin; you'll wonder why you fought it.",
+  "BUDDHA HILL (Pratumnak) at dusk — climb past the treadmill of the soi to the big gold Buddha, the whole bay laid out and cooling below. No cover, no bar bill, no bell; the one view on this coast that asks nothing back. The Owl files his best columns up there. Or claims to.",
+  "THE HAIR-TONIC MAN and the curse-remover two pitches down both work Beach Road on a commission drawn from your own gullibility. Ask the price BEFORE you follow anyone down a side soi; if the number swells at the shop door, the police station takes reports — and a cut. Mai pen rai is not a payment plan.",
 ];
 // Box 15 — the standing classified, and the game's hidden puzzle (docs/ctf.md).
 //
@@ -4475,7 +4489,28 @@ function _owlPick(arr, salt) {
   for (const ch of String(G.day) + ":" + String(G.vacation)) h = (h * 31 + ch.charCodeAt(0)) % 100003;
   return arr[h % arr.length];
 }
+// The Nite Owl went digital years back — it lands as an email newsletter now,
+// read on the phone (battery-gated, like anything on the phone). The one holdout
+// is the Queen Vic, the Owl's home base (he's a patron there, not the guvnor),
+// where the pub still runs off a few hard copies for its columnist: read there it
+// needs no battery. Box 15 — the CTF anchor — rides in the body either way, so it
+// survives whichever form the issue takes.
 function _doColumn() {
+  if (G.room === "queen_vic") {
+    _say("The Queen Vic still runs off a few hard copies for the regulars — the last bar in " +
+      "town that bothers, and the Owl's home patch. A thin stack by the till, going soft, " +
+      "this week's:", "dim");
+  } else {
+    if (G.battery <= 0) {
+      _say("The Owl's an email newsletter these days — Mort folded the print run, kept the " +
+        "opinions — and your phone's a black mirror. Charge it, or grab a hard copy at the " +
+        "Queen Vic, where he holds court.");
+      return;
+    }
+    _say("You pull up the Nite Owl in your inbox. Mort took it online years back, grousing the " +
+      "whole way — 'the paper died, squire, not me' — and it still lands every week, unasked, " +
+      "in the mail of anyone who ever stood him a beer:", "dim");
+  }
   _say("── THE NITE OWL ── Mort's weekly hoot, still going, out of spite ──", "win");
   _say(_owlPick(_OWL_LEADS, 1));
   _say("• " + _owlPick(_OWL_LISTINGS, 7), "dim");

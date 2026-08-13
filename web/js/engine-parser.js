@@ -3428,7 +3428,8 @@ const _HELP = `Common commands:
   WAI [person] · SAY <thai phrase> [TO <person>]
   RIDE BUS TO <place> · MOTOSAI TO <place> · PAY <amount>
   BUY <thing> · SELL BOTTLES · READ <thing> · READ SIGN
-  WATCH TV (bars & your hotel room) · READ PAPER (bars & 7-Elevens) — the day's real headlines
+  WATCH TV (bars & your hotel room) · READ PAPER (on your phone) — the day's real headlines
+  OWL / COLUMN — the Nite Owl newsletter in your inbox (a hard copy still at the Queen Vic)
   WATCH POLICE · WATCH SUNSET (Blue Dog & Stinky Pinky, early evening — the junction show)
   WATCH SOI · BALCONY (your balcony above, the Queen Vic window below, or the quiet middle of the soi — watch the parade, don't join it)
   WATCH DRAG (The Peacock Cabaret, Supertown/Jomtien — tip the queens)
@@ -3477,7 +3478,7 @@ const _HELP_SOI6 = `Common commands:
   N/S/E/W · IN/OUT · ENTER <place> · TRAVEL <bar> (fast-hop to any bar you've seen)
   TALK TO <person> · ASK <person> ABOUT <topic> · GIVE <thing> TO <person>
   WAI [person] · SAY <thai phrase> [TO <person>]
-  WATCH TV · READ PAPER — the day's real headlines · WEATHER · SCORES · LOTTERY
+  WATCH TV · READ PAPER — the day's real headlines · OWL — the Nite Owl newsletter · WEATHER · SCORES · LOTTERY
   WATCH SUNSET (Blue Dog & Stinky Pinky, early evening — the junction show)
   WATCH SOI · BALCONY (your balcony above, the Queen Vic window below, or the quiet middle of the soi — watch, don't join)
   PLAY CONNECT 4 · PLAY JACKPOT [bet] · PLAY POOL   (in the beer bars)
@@ -3520,7 +3521,7 @@ const _COMPLETE_VERBS = [
   "ask", "give", "buy", "sell bottles", "pay", "wai", "say", "ride bus to",
   "motosai to", "travel", "light", "charge phone", "read", "use", "open", "play",
   "flirt", "kiss", "spank", "fondle", "ring bell", "barfine", "massage", "special", "soapy", "meet", "eat", "drink",
-  "sleep", "tv", "column", "watch", "watch soi", "balcony", "weather", "scores", "lottery", "map", "time", "tip", "wave", "phone",
+  "sleep", "tv", "column", "owl", "watch", "watch soi", "balcony", "weather", "scores", "lottery", "map", "time", "tip", "wave", "phone",
   "photo", "gallery", "photos", "call", "share", "follow", "shower", "withdraw", "cheers", "tao rai", "borrow", "repay", "hire", "pet", "feed", "rename", "dance", "sing", "swim",
   "smell", "listen", "diagnose", "get tested", "clinic", "apologize", "quests", "accept", "abandon", "contact",
   "contacts", "who", "who am i", "identity", "blackbook", "message", "check messages", "send", "score", "standing", "wait", "again",
