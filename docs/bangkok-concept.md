@@ -93,6 +93,52 @@ speaks freely to the farang; an operator speaks freely to the Thai). Fluent in b
 you hear both sides of every scam. Fresh, no LBB analog, rooted in the real *luk khrueng*
 experience of belonging everywhere and fully nowhere. This is the core loop's engine.
 
+## The LBB origin — his younger self is a cameo NPC
+
+Retroactively planted into LBB as a minor NPC (his younger self), so the protagonist is
+**canon before his own game exists** — same hidden-seed doctrine as Tan's hub role. His
+significance is invisible in LBB; only a Bangkok build would ever reveal who he becomes.
+
+**Name.** Thai nickname **Nont** (what the Thai world — and this doc — call him); Western name
+**Alex**, his American father's, for the farang side. He offers a farang "Alex" and lets Tan
+and his mother call him Nont — a live demonstration of the code-switch he'll later run on.
+
+**Backstory.** *Luk khrueng.* Mother worked Soi 6, met an American punter who stayed, bought her
+a villa on the **Darkside** and paid for the lakeside international school (fictionalised —
+"Ashcombe International," not the real one near Mabprachan). The father **left** when Nont was a
+teenager — an abandonment, not a death, so it leaves resentment and a living American ghost
+rather than clean grief. Mother too proud to go back to the bars, now a cashier at a Mabprachan
+lakeside bar-restaurant, still in the villa. Nont dropped out and started earning.
+
+**The role that connects him to both men (the key design solve).** He was the **bilingual runner
+and tech-kid for Rabbit's Soi 6 bar** — the translator, the till, the wifi/CCTV/POS/Facebook-page
+guy, the gofer a farang bar can rarely find. That one job connected him to *both*: Rabbit (boss →
+mentor, who taught him computers and then the illegal side and walked him toward the wrong
+people), and **Tan** (the fixer every Soi 6 bar depends on — the kid placed the calls and
+translated between his farang boss and the Thai fixer). Being the bridge between Rabbit's world
+and Tan's world was literally his teenage job — the **origin of the exact ability that defines the
+Bangkok protagonist.**
+
+**The two relationships, exact.**
+- **Rabbit:** boss → mentor → the man who taught him the craft and the crime. But Nont was sharp
+  enough — quietly steered by Tan — to see Rabbit going down and step off before it took him too.
+  He kept the skills and left the self-destruction. (Present-day sober Rabbit carries guilt about
+  the kid he pointed the wrong way — an unbuilt thread for the LBB Rabbit NPC.)
+- **Tan:** the counterweight. Placed the young Nont somewhere he could earn without ending on a
+  police corkboard, steered him off Rabbit's path, and never named it or took a baht — the
+  **unpriced obligation** that is Tan's whole currency. Nont owes Tan a favour with no figure on
+  it and knows it. (That debt is a ready-made Bangkok hook: Tan calls it in.)
+
+**Present day (LBB).** Rabbit's Soi 6 bar is gone, so Nont is a **freelance hustler** — phone
+unlocking, gray-market tech, small angles, morally ambiguous, independent, outgrowing the town. A
+young NPC the player meets at the Buakhao market; his only future-seed is a flat "I'm not doing
+this forever," never a word about Bangkok. His signature future mechanic (code-switching) is
+planted in his identity dialogue: *"you'd be amazed what people say in front of the one they've
+decided isn't really listening."*
+
+**Deferred (noted, not built):** the mother as a Mabprachan lakeside-bar cashier NPC (needs a
+lakeside bar room); the Rabbit-side guilt thread; Nont's future hacker handle.
+
 ## What carries from LBB, and what doesn't
 
 - **Engine (Layer 1):** verbatim — parser, room graph, clock, rng, save, encounters/quest/

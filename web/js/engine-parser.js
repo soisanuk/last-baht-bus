@@ -1342,6 +1342,11 @@ const _CONVO_TOPIC_RULES = [
   [/\bnuan\b|the mamasan|your mama\b/,                                           "mama"],
   [/you like me|why.*(nice|warm|like me)|into me|interested in me|flirt/,        "likeyou"],
   [/\bcousins?\b|relatives|all related|one family|your people/,                  "family"],
+  // Nont (Buakhao market — docs/bangkok-concept.md)
+  [/\brabbit\b/,                                                                 "rabbit"],
+  [/\bmom\b|\bmum\b|mother|\bschool\b|dropped? out/,                             "family"],
+  [/\bhustle\b|computers?|\btech\b|hacking|unlock/,                              "job"],
+  [/\bnont\b|\balex\b|two names|half thai|luk ?khrueng|mixed|farang or thai/,    "name"],
 ];
 
 function _convoTopic(s) {

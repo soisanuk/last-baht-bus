@@ -8065,6 +8065,75 @@ const NPCS = {
     ],
   },
 
+  // ── Nont (Buakhao market) — a franchise seed, invisible on purpose ───────────
+  // The younger self of a future game's protagonist (docs/bangkok-concept.md).
+  // luk khrueng, ex-tech-kid of Rabbit's old Soi 6 bar → connected to BOTH Rabbit
+  // (mentor/crime) and Tan (fixer/protector), which is the origin of the bridge
+  // he becomes. Hidden-seed doctrine like Tan's hub role: never signposted; his
+  // only future-tell is "not doing this forever." Roleless (no NPC_ROLES), like
+  // Bank the piwin. The code-switch mechanic is planted in his "name" node.
+  nont: {
+    name: "Nont", emoji: "📱", pronoun: "he",
+    room: "buakhao_market",
+    look: "Mixed Thai-Western man, early twenties, lean, close-cropped hair, cheap gold chain, phone in hand, faded tee, quick eyes.",
+    desc: "A kid — early twenties, maybe less — behind a folding table of {{phone}} cases and " +
+      "chargers, though that is plainly not where the money is. Lean, close-cropped, a cheap " +
+      "gold chain and a faded band tee, and the specific quick-eyed calm of someone who read " +
+      "the room before you finished entering it. Half Thai, half something paler, and entirely " +
+      "at home on this pavement. There's a {{phone}} open in front of him with the back off and " +
+      "something delicate held in tweezers, and he doesn't stop working it while he talks.",
+    dialogue: [
+      { text: "The kid glances up, clocks you as farang in about half a second, and switches to " +
+          "easy, unaccented English. “Need something? Phone unlocked, screen fixed, a Thai SIM " +
+          "that isn't in your name — whatever.” A grin that's friendly and doesn't quite reach " +
+          "the eyes. “Alex. Well — Nont, but Alex is easier for you. Everybody down here's got " +
+          "two names. What do you need?”",
+        short: "“Alex — Nont, whatever's easier. Phone unlocked, SIM not in your name, whatever you need.”" },
+      { topic: "rabbit", text: "“Rabbit.” A small pause, weighing how much to hand you. “Yeah. " +
+          "Knew him better than most. Old farang, had a bar on the 6 when I was a kid — I ran his " +
+          "till, fixed his wifi, translated when the Thai side of things got complicated. He " +
+          "taught me the rest. Computers first, then the other stuff.” He sets the tweezers down. " +
+          "“Smart guy. Was. Then he wasn't, and anybody standing next to him was going down with " +
+          "him — so I stopped standing next to him. Nothing personal. He'd have done the same at " +
+          "my age. Probably did.”",
+        short: "“Rabbit taught me everything — computers, then the other stuff. Then he started going down, so I stepped back. Nothing personal.”" },
+      { topic: "tan", text: "“Tan.” Something in his posture straightens; he doesn't grin at this " +
+          "one. “You know Tan? Then you know you don't really know Tan.” He turns a tiny screw " +
+          "over in his fingers. “When I was fifteen and running wild off Rabbit's bar, somebody " +
+          "made sure I had a way to earn that wasn't going to end with my photo on a police " +
+          "corkboard. Never said it was him. Never says anything. But it was him.” A beat. “He's " +
+          "never asked me for a single baht. One day he'll ask me for something, and it won't be " +
+          "baht, and I'll do it — because you don't say no to the man who kept you out of the " +
+          "hole. That's just how it works with Tan.”",
+        short: "“Tan kept me out of the hole at fifteen. Never asked for a baht. One day he'll ask for something else, and I'll do it.”" },
+      { topic: "family", text: "“My mum's out at the lake — Mabprachan. Cashier at one of the " +
+          "bar-restaurants now.” He says it flat, daring you to make it sad. “She worked the 6 " +
+          "back in the day, met my dad, he bought her a villa on the Darkside and paid for me to " +
+          "go to the fancy international school by the lake. Then one day he's just… not paying " +
+          "for anything. Gone back to wherever.” A shrug. “Mum's too proud to go back to the bar " +
+          "and too old for it anyway. So the fancy school stopped and I started earning. Somebody " +
+          "had to.” The grin returns, harder. “Turns out I'm better at earning than I ever was at " +
+          "algebra.”",
+        short: "“Mum's a cashier at the lake now — worked the 6, met my dad, he left. School stopped, I started earning. Somebody had to.”" },
+      { topic: "job", text: "“What do I do?” He nods at the guts of the {{phone}}. “Whatever pays and " +
+          "mostly doesn't hurt anybody who didn't have it coming. Unlock {{phones}}, flip devices, " +
+          "fix what's broken, move a little of what shouldn't be moved. I'm good with anything " +
+          "that's got a chip in it — always was, no idea where it comes from, God's little joke.” " +
+          "He looks at you evenly. “No college. No money for it, no time for it. This is the " +
+          "college.” A small, real smile. “I'm not going to be fixing tourists' cracked screens " +
+          "on Buakhao forever, though. That much I know.”",
+        short: "“Whatever pays and mostly doesn't hurt anybody undeserving. I'm good with anything with a chip in it. This is my college.”" },
+      { topic: "name", text: "“Alex or Nont?” He seems to enjoy the question. “Depends who's " +
+          "asking. Farang get Alex — my dad's name for me, back when he was around to use it. " +
+          "Thai get Nont. Same kid, different door.” He taps his own chest. “Half and half, right " +
+          "down the middle, which means everybody decides I'm the other thing. To the farang I'm " +
+          "the local you trust a little less; to the Thai I'm the farang you trust a little more. " +
+          "I let them both think it.” The grin, quieter now. “You'd be amazed what people say in " +
+          "front of the one they've decided isn't really listening.”",
+        short: "“Alex for farang, Nont for Thai. Same kid, different door. Everybody thinks I'm the other thing — and talks in front of me like I'm not listening.”" },
+    ],
+  },
+
   bert: {
     name: "Bert", th: "เบิร์ต", emoji: "🎱", personality: "blunt",
     pronoun: "he",

@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-12",
+  "generated": "2026-08-13",
   "note": "Every room in the game + its region, for the scene-art pipeline (docs/art-pipeline-spec.md). Derived from web/js/world.js — regenerate with scripts/gen-scene-manifest.mjs, do not hand-edit. `kind` is a generator heuristic for prompt-template selection, not game canon. `regionSlug` is produced by the same regex as web/js/scene.js `_sceneArt()`; art files are web/art/rooms/<id>.png with web/art/regions/<slug>.png as the fallback.",
   "counts": {
     "rooms": 235,
@@ -2665,7 +2665,9 @@
       "regionSlug": "soi-buakhao",
       "kind": "street",
       "dark": false,
-      "people": [],
+      "people": [
+        "Nont"
+      ],
       "desc": "The block everyone still calls the market, though the market went years ago — Tree Town took the trade and the tarps came down. What is left is the shape of it: shophouse fronts too wide for what they sell now, a som tam cart holding the corner out of sheer stubbornness, and a smell of papaya salad that could still pull you here from two sois away. SILK ROSE shares the block east, and a pink-lit shopfront a few doors down promises the oil is warm."
     },
     {

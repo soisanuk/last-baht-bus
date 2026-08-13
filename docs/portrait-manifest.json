@@ -1,10 +1,10 @@
 {
-  "generated": "2026-08-12",
+  "generated": "2026-08-13",
   "note": "Distinct, hand-authored characters with a portrait (excludes the 181 generic `filler` NPCs). Derived from web/js/world.js — regenerate with scripts/gen-portrait-manifest.mjs, do not hand-edit. `sex`/`venueKind` are generator heuristics for portrait archetype selection, not game canon.",
   "counts": {
-    "total": 134,
+    "total": 135,
     "byRole": {
-      "story": 34,
+      "story": 35,
       "mamasan": 25,
       "hostess": 44,
       "cashier": 13,
@@ -264,6 +264,20 @@
       "room": "jomtien_soi_7_beach_end",
       "tags": [],
       "desc": "A drinks-cart vendor with a cooler of everything and opinions to match. A hand-lettered sign on the cart offers ฿5 per returned bottle."
+    },
+    {
+      "id": "nont",
+      "name": "Nont",
+      "source": "NPCS",
+      "role": "story",
+      "sex": "m",
+      "look": "Mixed Thai-Western man, early twenties, lean, close-cropped hair, cheap gold chain, phone in hand, faded tee, quick eyes.",
+      "venueKind": null,
+      "emoji": "📱",
+      "th": null,
+      "room": "buakhao_market",
+      "tags": [],
+      "desc": "A kid — early twenties, maybe less — behind a folding table of {{phone}} cases and chargers, though that is plainly not where the money is. Lean, close-cropped, a cheap gold chain and a faded band tee, and the specific quick-eyed calm of someone who read the room before you finished entering it. Half Thai, half something paler, and entirely at home on this pavement. There's a {{phone}} open in front of him with the back off and something delicate held in tweezers, and he doesn't stop working it while he talks."
     },
     {
       "id": "nott",

@@ -24,8 +24,8 @@
  "counts": {
   "geolocated": 235,
   "patrons": 18,
-  "people": 321,
-  "portraits": 339,
+  "people": 322,
+  "portraits": 340,
   "renders": 334,
   "thumbs": 334,
   "venues": 235
@@ -2105,6 +2105,13 @@
    "room": "gold_rush",
    "th": "น้อง"
   },
+  "nont": {
+   "desc": "A kid — early twenties, maybe less — behind a folding table of {{phone}} cases and chargers, though that is plainly not where the money is. Lean, close-cropped, a cheap gold chain and a faded band tee, and the specific quick-eyed calm of someone who read the room before you finished entering it. Half Thai, half something paler, and entirely at home on this pavement. There's a {{phone}} open in front of him with the back off and something delicate held in tweezers, and he doesn't stop working it while he talks.",
+   "emoji": "📱",
+   "name": "Nont",
+   "pronoun": "he",
+   "room": "buakhao_market"
+  },
   "nook": {
    "desc": "Twenty-two and delighted about all of it — the music, the lights, the free drinks, the men who think she is magic. She is having the best night of her life. Again.",
    "emoji": "🍒",
@@ -3557,6 +3564,7 @@
   "noi",
   "nok",
   "nong",
+  "nont",
   "nook",
   "noon",
   "noot",

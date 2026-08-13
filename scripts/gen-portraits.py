@@ -416,6 +416,8 @@ CHARS = {
     "ampha":    lady(skin=THAI, hair="bun", hc=BLACK, shirt=C(0x6a6a78), bg=BG_BAR, mouth="neutral", acc=["earrings"], earc=SILVER),
     "champa":   lady(skin=THAI2, hair="long", hc=GRBLK, shirt=C(0x9a2a3a), bg=BG_BAR, mouth="smile", acc=["earrings", "flower"], earc=GOLD),
     "boua":     lady(skin=THAI, hair="bun", hc=GRBLK, shirt=C(0x3a4a5a), bg=BG_BAR, mouth="neutral", acc=["earrings", "glasses", "glasschain"], earc=SILVER, framec=SILVER),
+    # Nont — luk khrueng freelance hustler at the Buakhao market (docs/bangkok-concept.md)
+    "nont":     dict(skin=TAN, hair="buzz", hc=C(0x151515), shirt=C(0x263042), acc=["chain"], mouth="neutral", bg=BG_BAR),
     # --- the Pratumnak clubs (The Doghouse / Succubus) ---
     # Bill: thirties, English, pressed short-sleeve shirt, cuffs turned once.
     # Young for the room he runs and deliberately unremarkable-looking.
