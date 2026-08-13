@@ -3,14 +3,9 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
-    "t": "‘So brutally cruel’: Suspected serial killer gang rattles Thailand",
-    "s": "SMH.com.au",
-    "d": "12 Aug 2026"
-  },
-  {
-    "t": "Pattaya Unveils the \"Wave Bridge\" at Bali Hai Pier: A New Landmark for a MICE City",
-    "s": "Nation Thailand",
-    "d": "11 Aug 2026"
+    "t": "Dad seeks answers over son's killing",
+    "s": "Bangkok Post",
+    "d": "10 Aug 2026"
   },
   {
     "t": "Pattaya suspends six staff over alleged tourist money demand",
@@ -18,19 +13,14 @@ var NEWS_FEED = [
     "d": "10 Aug 2026"
   },
   {
-    "t": "Chinese family protests after son dies in fatal stabbing in Pattaya",
-    "s": "Thaiger",
+    "t": "Thai destinations rank in Asia’s top five among European travellers",
+    "s": "Nation Thailand",
     "d": "11 Aug 2026"
   },
   {
-    "t": "Dad seeks answers over son's killing",
-    "s": "Bangkok Post",
-    "d": "10 Aug 2026"
-  },
-  {
-    "t": "Mystery oil spill blankets Koh Larn’s coastline",
+    "t": "Chinese family protests after son dies in fatal stabbing in Pattaya",
     "s": "Thaiger",
-    "d": "10 Aug 2026"
+    "d": "11 Aug 2026"
   },
   {
     "t": "6 Pattaya officials suspended for collecting unofficial fines from foreigners",
@@ -38,50 +28,60 @@ var NEWS_FEED = [
     "d": "11 Aug 2026"
   },
   {
+    "t": "Mystery oil spill blankets Koh Larn’s coastline",
+    "s": "Thaiger",
+    "d": "10 Aug 2026"
+  },
+  {
     "t": "Australian man charged with murder after dead girl found in suitcase in Thailand",
     "s": "BBC",
     "d": "28 Jun 2026"
   },
   {
-    "t": "Thailand suspends gun licences as teen shooter and grandparents he killed are cremated",
-    "s": "The Guardian",
+    "t": "Russian siblings dead, suspects confess",
+    "s": "Bangkok Post",
+    "d": "31 Jul 2026"
+  },
+  {
+    "t": "Thailand tightens gun controls after deadly school shooting",
+    "s": "CNN",
     "d": "12 Aug 2026"
   },
   {
-    "t": "Thailand Halts New Gun Permits Days After Mass Shooting at a School",
-    "s": "The New York Times",
-    "d": "12 Aug 2026"
-  },
-  {
-    "t": "At a temple in Thailand, parents mourn a 12-year-old mass shooting victim, and a father pleads for forgiveness",
-    "s": "The Guardian",
+    "t": "Thailand Preparing to Use Military Ties as Leverage in US Talks",
+    "s": "Bloomberg.com",
     "d": "11 Aug 2026"
   },
   {
-    "t": "Thailand Reaffirms US Military Cooperation Amid Trade Talks",
-    "s": "bloomberg.com",
+    "t": "‘So brutally cruel’: Suspected serial killer gang rattles Thailand",
+    "s": "SMH.com.au",
     "d": "12 Aug 2026"
   },
   {
-    "t": "Through the Lens: Thailand school shooting leaves 9 dead, including gunman",
-    "s": "Nikkei Asia",
+    "t": "Lisa sparks dating rumors with actor dubbed 'Thailand's Cha Eun-woo' amid Arnault breakup speculation",
+    "s": "The Korea Times",
     "d": "12 Aug 2026"
   },
   {
-    "t": "What to Know About Thailand's Deadliest School Shooting in Years",
-    "s": "Time Magazine",
-    "d": "07 Aug 2026"
+    "t": "'Would have meant the world': Fans disappointed, scalpers resell sold-out Singapore-Thailand football tickets",
+    "s": "CNA",
+    "d": "13 Aug 2026"
+  },
+  {
+    "t": "Chinese H-6 Strategic Bomber Arrives in Thailand for Joint Exercises - Reports",
+    "s": "militarywatchmagazine.com",
+    "d": "12 Aug 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-08-12","USD":33.06,"AUD":23.38,"GBP":44.72,"EUR":38.17};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-13","temp":28,"humid":76,"code":2,"hi":31,"rain":58};
+var WX_NOW = {"date":"2026-08-13","temp":30,"humid":74,"code":3,"hi":30,"rain":69};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-08-01","first":"932479","last2":"69","front3":["413","672"],"back3":["039","154"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4419,"date":"2026-08-12","baht":69100};
+var GOLD = {"usd":4409,"date":"2026-08-13","baht":68950};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":63368,"thb":2098104};
+var BTC = {"usd":63427,"thb":2099513};
