@@ -4497,6 +4497,7 @@ const FOOD_STALLS = {
   jomtien_7eleven: { name: "a toastie, pressed while you wait", price: 35, hunger: 40, thirst: 0 },
   jomtien_beach_rd: { name: "a cold mango from Auntie Nok, salt and chilli on the side", price: 30, hunger: 25, thirst: 15 },
   buakhao_market: { name: "som tam from the cart, extra everything", price: 50, hunger: 55, thirst: -10 },
+  lake_bar: { name: "a whole grilled lake fish, salt-crusted, som tam on the side", price: 180, hunger: 65, thirst: 5 },
   naklua_rd: { name: "grilled chicken and sticky rice off a smoky cart", price: 60, hunger: 60, thirst: 0 },
   ws_gate: { name: "a late-night kebab of negotiable provenance", price: 89, hunger: 45, thirst: 0 },
   kiss: { name: "a proper plate off the mile-long menu at KISS — pad kaprao, or a burger if the soul needs it", price: 120, hunger: 70, thirst: 10 },

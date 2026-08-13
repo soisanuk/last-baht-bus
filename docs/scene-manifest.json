@@ -2,7 +2,7 @@
   "generated": "2026-08-13",
   "note": "Every room in the game + its region, for the scene-art pipeline (docs/art-pipeline-spec.md). Derived from web/js/world.js — regenerate with scripts/gen-scene-manifest.mjs, do not hand-edit. `kind` is a generator heuristic for prompt-template selection, not game canon. `regionSlug` is produced by the same regex as web/js/scene.js `_sceneArt()`; art files are web/art/rooms/<id>.png with web/art/regions/<slug>.png as the fallback.",
   "counts": {
-    "rooms": 235,
+    "rooms": 236,
     "regions": 15,
     "byKind": {
       "beach": 14,
@@ -13,11 +13,11 @@
       "interior": 2,
       "motel": 1,
       "gogo": 11,
+      "pub": 3,
       "viewpoint": 2,
       "food": 4,
       "shop": 1,
       "market": 4,
-      "pub": 2,
       "livemusic": 3,
       "soapy": 3,
       "hotel_room": 4,
@@ -77,6 +77,7 @@
         "khao_talo",
         "khao_talo_bar",
         "khao_talo_strip",
+        "lake_bar",
         "lake_mabprachan",
         "mama_yai",
         "night_heron",
@@ -894,6 +895,20 @@
       "desc": "The working stretch of the soi: a dozen open-front bars shoulder to shoulder under one long tin roof, fairy lights doing the job neon does in town at a tenth of the wattage. Ladies call the odds from bamboo rails, a pool table clacks somewhere, and every third stool holds an expat who has been on it since the flood. THE WATER BUFFALO and FIREFLY BAR glow closest; the soi runs on east toward Daeng's end. At the dark end, a padded door with no sign worth reading — THE NIGHT HERON, if you know to ask — and beside it a dead Irish pub, THE SHAMROCK on its sun-bleached sign, shutters down for good."
     },
     {
+      "id": "lake_bar",
+      "name": "The Boathouse",
+      "bar": "The Boathouse",
+      "barType": "pub",
+      "region": "Darkside",
+      "regionSlug": "darkside",
+      "kind": "pub",
+      "dark": false,
+      "people": [
+        "Duangjai"
+      ],
+      "desc": "A wooden deck built out over the still water at the quiet end of the lake, strung with fairy lights and the smell of fish on the grill. Expat families and retired couples work through big Chang bottles and whole grilled fish while the reservoir goes pink and then black behind them. It is the most respectable room for miles — no neon, no touts, no trouble — which is exactly why a certain kind of woman ends up working the till here rather than anywhere brighter. The register sits by the door, a small shrine and a framed photo of a young man beside it."
+    },
+    {
       "id": "lake_mabprachan",
       "name": "Lake Mabprachan",
       "bar": null,
@@ -905,7 +920,7 @@
       "people": [
         "Lake Gary"
       ],
-      "desc": "Still water, lakeside restaurants, retired expats walking retired soi dogs. Families eat grilled fish under string lights. It's so peaceful your ears ring. Nobody here has been pickpocketed since the nineties."
+      "desc": "Still water, lakeside restaurants, retired expats walking retired soi dogs. Families eat grilled fish under string lights. It's so peaceful your ears ring. Nobody here has been pickpocketed since the nineties. THE BOATHOUSE, the quiet restaurant on the deck, is open for the fish."
     },
     {
       "id": "mama_yai",

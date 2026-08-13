@@ -22,13 +22,13 @@
   "Blue Dog"
  ],
  "counts": {
-  "geolocated": 235,
+  "geolocated": 236,
   "patrons": 18,
-  "people": 322,
-  "portraits": 340,
+  "people": 323,
+  "portraits": 341,
   "renders": 334,
   "thumbs": 334,
-  "venues": 235
+  "venues": 236
  },
  "frames": [
   "baimon_pic1",
@@ -861,6 +861,13 @@
    "role": "hostess",
    "room": "sandbar",
    "th": "ดวง"
+  },
+  "duangjai": {
+   "desc": "The woman at the till is somewhere near fifty and carries it well — hair up and going handsomely grey, reading glasses on a chain, a blouse ironed with real intent. She runs the register with the unshowy precision of someone who has counted a lot of other people's money in a lot of harder rooms, and she is unfailingly, deliberately correct with everyone. You would never place her as anything but respectable, which is entirely the point, and took some doing.",
+   "emoji": "🧾",
+   "name": "Duangjai",
+   "pronoun": "she",
+   "room": "lake_bar"
   },
   "earn": {
    "desc": "Black polo, a lanyard of too many keys, a calculator she never needs — the cashier at Club Mirage, from {{Nong Bua Lamphu}}.",
@@ -3429,6 +3436,7 @@
   "drew",
   "duan",
   "duang",
+  "duangjai",
   "earn",
   "eye",
   "fah",
@@ -5311,6 +5319,16 @@
    ],
    "name": "Klang Corner Massage",
    "region": "Soi Buakhao"
+  },
+  "lake_bar": {
+   "bar": "The Boathouse",
+   "barType": "pub",
+   "geo": [
+    12.93288,
+    100.96712
+   ],
+   "name": "The Boathouse",
+   "region": "Darkside"
   },
   "lake_mabprachan": {
    "geo": [

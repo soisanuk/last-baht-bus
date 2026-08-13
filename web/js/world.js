@@ -3109,8 +3109,22 @@ const ROOMS = {
     region: "Darkside",
     desc: "Still water, lakeside restaurants, retired expats walking retired soi dogs. " +
       "Families eat grilled fish under string lights. It's so peaceful your ears ring. " +
-      "Nobody here has been pickpocketed since the nineties.",
-    exits: { s: "khao_talo" },
+      "Nobody here has been pickpocketed since the nineties. THE BOATHOUSE, the quiet " +
+      "restaurant on the deck, is open for the fish.",
+    exits: { s: "khao_talo", in: "lake_bar" },
+  },
+  lake_bar: {
+    name: "The Boathouse",
+    region: "Darkside",
+    bar: "The Boathouse", barType: "pub", food: true,
+    desc: "A wooden deck built out over the still water at the quiet end of the lake, strung " +
+      "with fairy lights and the smell of fish on the grill. Expat families and retired " +
+      "couples work through big Chang bottles and whole grilled fish while the reservoir goes " +
+      "pink and then black behind them. It is the most respectable room for miles — no neon, " +
+      "no touts, no trouble — which is exactly why a certain kind of woman ends up working the " +
+      "till here rather than anywhere brighter. The register sits by the door, a small shrine " +
+      "and a framed photo of a young man beside it.",
+    exits: { out: "lake_mabprachan" },
   },
 
   // ─── Naklua ───
@@ -8065,6 +8079,59 @@ const NPCS = {
     ],
   },
 
+  // ── Duangjai (The Boathouse, Mabprachan) — Nont's mother ─────────────────────
+  // Roleless cashier like the Queen Vic's Thai staff (not in NPC_ROLES): a
+  // respectable lakeside restaurant is deliberately NOT a hostess venue, which is
+  // the whole point of where she chose to land. Ex-Soi-6, out with her dignity,
+  // holds it together. Her dialogue is consistent with Nont's `family` node
+  // (docs/bangkok-concept.md); ASK HER about "nont" literal-matches her son node
+  // even though "nont" aliases to Nont's own identity elsewhere (literal-first).
+  duangjai: {
+    name: "Duangjai", emoji: "🧾", pronoun: "she",
+    room: "lake_bar",
+    look: "Thai woman, late forties, handsome, hair up going grey, reading glasses on a chain, neat blouse, gold at the ears.",
+    desc: "The woman at the till is somewhere near fifty and carries it well — hair up and " +
+      "going handsomely grey, reading glasses on a chain, a blouse ironed with real intent. " +
+      "She runs the register with the unshowy precision of someone who has counted a lot of " +
+      "other people's money in a lot of harder rooms, and she is unfailingly, deliberately " +
+      "correct with everyone. You would never place her as anything but respectable, which is " +
+      "entirely the point, and took some doing.",
+    dialogue: [
+      { text: "The woman at the register looks up and gives you the smooth, complete smile of " +
+          "someone who has welcomed ten thousand strangers and meant it with none of them and " +
+          "all of them at once. “Good evening. A table by the water? The fish tonight is very " +
+          "good.” Her English is easy and precise, worn smooth somewhere she doesn't mention. " +
+          "“Sit anywhere you like. I'll send someone over.”",
+        short: "“Good evening. A table by the water? Sit anywhere — I'll send someone over.”" },
+      { topic: "nont", text: "Something in her composure shifts — warmer and more guarded at " +
+          "once. “You know my Nont?” A glance at the framed photo by the register, quickly " +
+          "checked. “He is a good boy. Too clever for his own good, always — took every machine " +
+          "in the house apart before he was ten, and he never once put the school fees to as " +
+          "much use as he put a broken {{phone}}.” The smile thins. “He runs around town doing " +
+          "I-don't-ask-what, and he sends me money I didn't ask for, and he thinks I don't know " +
+          "where a boy like that ends up if he isn't careful.” She squares a stack of menus. " +
+          "“He's careful. He had to learn young. That part I do blame myself for.”",
+        short: "“My Nont? A good boy, too clever for his own good. He sends me money I didn't ask for and thinks I don't worry. He's careful — he had to learn young.”" },
+      { topic: "father", text: "The temperature drops a precise degree. “Nont's father.” She " +
+          "says it like a closed account. “He was here a long time, and then he was not, and he " +
+          "paid for a great deal while he was and nothing at all after.” A small, level shrug. " +
+          "“He bought me the house, so I have the house. He is somewhere with a different family, " +
+          "or a different bar, and I wish him whatever he wishes himself.” She meets your eye, " +
+          "perfectly pleasant. “That is all I have to say about Nont's father, and I have said " +
+          "it more graciously than he has earned. Was there anything else?”",
+        short: "“Nont's father was here, then he wasn't. He bought the house, so I have the house. That is all I have to say about him.”" },
+      { topic: "job", text: "“Why here?” She considers the question as if it deserves one, which " +
+          "not everyone gives it. “Because it is quiet, and it is honest, and nobody who comes to " +
+          "eat fish by a lake needs anything from me but the bill.” A precise beat. “I worked in " +
+          "louder places once. A long time ago, before Nont. I was good at it — which is not the " +
+          "same as wanting to go back to it, and I am too old for it besides, and too proud, " +
+          "which my son will tell you is my worst quality.” The smile returns, entirely composed. " +
+          "“Here I count the money and I go home to my own house. That is a very good life for a " +
+          "woman who started where I started. Don't let anyone tell you it isn't.”",
+        short: "“Here is quiet and honest, and nobody needs anything from me but the bill. I worked louder places once. This is a good life. Don't let anyone tell you it isn't.”" },
+    ],
+  },
+
   // ── Nont (Buakhao market) — a franchise seed, invisible on purpose ───────────
   // The younger self of a future game's protagonist (docs/bangkok-concept.md).
   // luk khrueng, ex-tech-kid of Rabbit's old Soi 6 bar → connected to BOTH Rabbit
@@ -12089,4 +12156,5 @@ const ROOM_GEO = {
   khao_talo:        [12.90779, 100.90975],
   khao_talo_bar:    [12.90797, 100.90995],
   lake_mabprachan:  [12.93306, 100.96684],
+  lake_bar:         [12.93288, 100.96712],
 };

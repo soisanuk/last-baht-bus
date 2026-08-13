@@ -418,6 +418,8 @@ CHARS = {
     "boua":     lady(skin=THAI, hair="bun", hc=GRBLK, shirt=C(0x3a4a5a), bg=BG_BAR, mouth="neutral", acc=["earrings", "glasses", "glasschain"], earc=SILVER, framec=SILVER),
     # Nont — luk khrueng freelance hustler at the Buakhao market (docs/bangkok-concept.md)
     "nont":     dict(skin=TAN, hair="buzz", hc=C(0x151515), shirt=C(0x263042), acc=["chain"], mouth="neutral", bg=BG_BAR),
+    # Duangjai — Nont's mother, dignified ex-Soi-6 cashier at The Boathouse (Mabprachan)
+    "duangjai": lady(skin=THAI, hair="bun", hc=GRBLK, shirt=C(0x5a3a5a), bg=BG_BAR, mouth="neutral", acc=["earrings", "glasses", "glasschain"], earc=GOLD, framec=GOLD),
     # --- the Pratumnak clubs (The Doghouse / Succubus) ---
     # Bill: thirties, English, pressed short-sleeve shirt, cuffs turned once.
     # Young for the room he runs and deliberately unremarkable-looking.

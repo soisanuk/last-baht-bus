@@ -2,9 +2,9 @@
   "generated": "2026-08-13",
   "note": "Distinct, hand-authored characters with a portrait (excludes the 181 generic `filler` NPCs). Derived from web/js/world.js — regenerate with scripts/gen-portrait-manifest.mjs, do not hand-edit. `sex`/`venueKind` are generator heuristics for portrait archetype selection, not game canon.",
   "counts": {
-    "total": 135,
+    "total": 136,
     "byRole": {
-      "story": 35,
+      "story": 36,
       "mamasan": 25,
       "hostess": 44,
       "cashier": 13,
@@ -153,6 +153,20 @@
       "room": "queen_vic",
       "tags": [],
       "desc": "American, sixty, built like a retired middleweight gone comfortable. Twenty-six years working homicide in a city he won't name, then a private ticket — \"cheating husbands don't try to kill you; I like boring now.\" Drinks soda water and watches the door, out of a habit he's given up pretending is retired. Came to price Thailand for good; found a job following him."
+    },
+    {
+      "id": "duangjai",
+      "name": "Duangjai",
+      "source": "NPCS",
+      "role": "story",
+      "sex": "f",
+      "look": "Thai woman, late forties, handsome, hair up going grey, reading glasses on a chain, neat blouse, gold at the ears.",
+      "venueKind": "pub",
+      "emoji": "🧾",
+      "th": null,
+      "room": "lake_bar",
+      "tags": [],
+      "desc": "The woman at the till is somewhere near fifty and carries it well — hair up and going handsomely grey, reading glasses on a chain, a blouse ironed with real intent. She runs the register with the unshowy precision of someone who has counted a lot of other people's money in a lot of harder rooms, and she is unfailingly, deliberately correct with everyone. You would never place her as anything but respectable, which is entirely the point, and took some doing."
     },
     {
       "id": "fast_eddy",

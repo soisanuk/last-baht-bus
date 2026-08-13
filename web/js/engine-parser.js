@@ -1347,6 +1347,9 @@ const _CONVO_TOPIC_RULES = [
   [/\bmom\b|\bmum\b|mother|\bschool\b|dropped? out/,                             "family"],
   [/\bhustle\b|computers?|\btech\b|hacking|unlock/,                              "job"],
   [/\bnont\b|\balex\b|two names|half thai|luk ?khrueng|mixed|farang or thai/,    "name"],
+  // Duangjai (The Boathouse) — Nont's mother. "nont" literal-matches her son node.
+  [/\bson\b|your boy|your kid/,                                                  "nont"],
+  [/\bfather\b|\bhusband\b|his dad|the dad/,                                     "father"],
 ];
 
 function _convoTopic(s) {
