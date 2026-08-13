@@ -22,13 +22,13 @@
   "Blue Dog"
  ],
  "counts": {
-  "geolocated": 236,
+  "geolocated": 237,
   "patrons": 18,
-  "people": 323,
-  "portraits": 341,
+  "people": 327,
+  "portraits": 345,
   "renders": 334,
   "thumbs": 334,
-  "venues": 236
+  "venues": 237
  },
  "frames": [
   "baimon_pic1",
@@ -524,6 +524,16 @@
    "role": "hostess",
    "room": "crystal_palace",
    "th": "บูม"
+  },
+  "boonsri": {
+   "desc": "Older, sharper, and entirely done being impressed by farang — the mamasan of The Sundowner, from Khon Kaen. She has watched the soi flood, burn, and rebuild, and outlasted all three.",
+   "emoji": "👑",
+   "filler": true,
+   "name": "Boonsri",
+   "pronoun": "she",
+   "role": "mamasan",
+   "room": "lake_beer",
+   "th": "บุญศรี"
   },
   "boua": {
    "desc": "The other hostess, and the quiet one — forty, hair pulled back, a pair of reading glasses on a chain that she uses for her phone and her lottery numbers. Where Champa performs, Boua watches. She did the same Soi 6 years and came out of them with less noise and more caution, and she has the specific, unsentimental kindness of a woman who long ago decided exactly how much of herself the job gets and keeps the rest locked at home.",
@@ -1548,6 +1558,16 @@
    "room": "rock_factory",
    "th": "กวาง"
   },
+  "kwanjai": {
+   "desc": "A gold tooth, a sharper tongue, and drink arithmetic you can watch happening — one of The Sundowner's girls, from Surin. Google Translate is open before you finish the sentence.",
+   "emoji": "🌸",
+   "filler": true,
+   "name": "Kwanjai",
+   "pronoun": "she",
+   "role": "hostess",
+   "room": "lake_beer",
+   "th": "ขวัญใจ"
+  },
   "lamai": {
    "desc": "Elegant, weathered, and plainly the last word on everything in the room — the mamasan of The Stinky Pinky, from Sakon Nakhon. She came up from the rice fields and never once looked back.",
    "emoji": "👑",
@@ -1940,6 +1960,16 @@
    "role": "hostess",
    "room": "kitten_corner",
    "th": "นางฟ้า"
+  },
+  "napa": {
+   "desc": "Black polo, a lanyard of too many keys, a calculator she never needs — the cashier at The Sundowner, from Ubon.",
+   "emoji": "🧾",
+   "filler": true,
+   "name": "Napa",
+   "pronoun": "she",
+   "role": "cashier",
+   "room": "lake_beer",
+   "th": "นภา"
   },
   "naree": {
    "desc": "A crooked, disarming grin — one of The Windmill's girls, from Amnat Charoen. She types more than she talks — and laughs at both.",
@@ -2598,6 +2628,16 @@
    "role": "mamasan",
    "room": "las_vegas",
    "th": "ราตรี"
+  },
+  "ratsamee": {
+   "desc": "Pouring out here since the lake road was dirt; minds her regulars like livestock — one of The Sundowner's girls, from Ubon. She types more than she talks — and laughs at both.",
+   "emoji": "🌷",
+   "filler": true,
+   "name": "Ratsamee",
+   "pronoun": "she",
+   "role": "hostess",
+   "room": "lake_beer",
+   "th": "รัศมี"
   },
   "rin": {
    "desc": "Rings on every finger and a voice that cuts the music when she wants it — the mamasan of Crystal Palace A-Go-Go, from Kalasin. She danced this same street before you were her problem.",
@@ -3396,6 +3436,7 @@
   "bill",
   "bob",
   "boom",
+  "boonsri",
   "boua",
   "bow",
   "bpaeng",
@@ -3511,6 +3552,7 @@
   "kratae",
   "kwan",
   "kwang",
+  "kwanjai",
   "lamai",
   "lawan",
   "lek",
@@ -3553,6 +3595,7 @@
   "namwan",
   "nan",
   "nangfah",
+  "napa",
   "naree",
   "near",
   "nee",
@@ -3625,6 +3668,7 @@
   "ratana",
   "ratchada",
   "ratree",
+  "ratsamee",
   "reginald",
   "rin",
   "rob",
@@ -5328,6 +5372,17 @@
     100.96712
    ],
    "name": "The Boathouse",
+   "region": "Darkside"
+  },
+  "lake_beer": {
+   "bar": "The Sundowner",
+   "barType": "beer",
+   "geo": [
+    12.93294,
+    100.96698
+   ],
+   "name": "The Sundowner",
+   "pool": true,
    "region": "Darkside"
   },
   "lake_mabprachan": {

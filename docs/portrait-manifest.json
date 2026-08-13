@@ -10,7 +10,7 @@
       "cashier": 13,
       "patron": 18
     },
-    "filler": 205
+    "filler": 209
   },
   "characters": [
     {
@@ -1929,6 +1929,34 @@
     }
   ],
   "filler": [
+    {
+      "id": "ratsamee",
+      "name": "Ratsamee",
+      "source": "NPCS",
+      "role": "hostess",
+      "filler": true,
+      "sex": "f",
+      "venueKind": "beer",
+      "emoji": "🌷",
+      "th": "รัศมี",
+      "room": "lake_beer",
+      "tags": [],
+      "desc": "Pouring out here since the lake road was dirt; minds her regulars like livestock — one of The Sundowner's girls, from Ubon. She types more than she talks — and laughs at both."
+    },
+    {
+      "id": "kwanjai",
+      "name": "Kwanjai",
+      "source": "NPCS",
+      "role": "hostess",
+      "filler": true,
+      "sex": "f",
+      "venueKind": "beer",
+      "emoji": "🌸",
+      "th": "ขวัญใจ",
+      "room": "lake_beer",
+      "tags": [],
+      "desc": "A gold tooth, a sharper tongue, and drink arithmetic you can watch happening — one of The Sundowner's girls, from Surin. Google Translate is open before you finish the sentence."
+    },
     {
       "id": "naree",
       "name": "Naree",
@@ -3904,6 +3932,20 @@
       "desc": "Bored until you try a word of Thai, then radiant — one of The Bucket's girls, from {{Nong Bua Lamphu}}. The {{phone}} never leaves her hand."
     },
     {
+      "id": "boonsri",
+      "name": "Boonsri",
+      "source": "NPCS",
+      "role": "mamasan",
+      "filler": true,
+      "sex": "f",
+      "venueKind": "beer",
+      "emoji": "👑",
+      "th": "บุญศรี",
+      "room": "lake_beer",
+      "tags": [],
+      "desc": "Older, sharper, and entirely done being impressed by farang — the mamasan of The Sundowner, from Khon Kaen. She has watched the soi flood, burn, and rebuild, and outlasted all three."
+    },
+    {
       "id": "wanida",
       "name": "Wanida",
       "source": "NPCS",
@@ -4308,6 +4350,20 @@
       "room": "the_bucket",
       "tags": [],
       "desc": "Rings on every finger and a voice that cuts the music when she wants it — the mamasan of The Bucket, from Roi Et. She married a farang, buried the marriage, and kept the house."
+    },
+    {
+      "id": "napa",
+      "name": "Napa",
+      "source": "NPCS",
+      "role": "cashier",
+      "filler": true,
+      "sex": "f",
+      "venueKind": "beer",
+      "emoji": "🧾",
+      "th": "นภา",
+      "room": "lake_beer",
+      "tags": [],
+      "desc": "Black polo, a lanyard of too many keys, a calculator she never needs — the cashier at The Sundowner, from Ubon."
     },
     {
       "id": "nubnab",

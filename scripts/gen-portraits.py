@@ -420,6 +420,11 @@ CHARS = {
     "nont":     dict(skin=TAN, hair="buzz", hc=C(0x151515), shirt=C(0x263042), acc=["chain"], mouth="neutral", bg=BG_BAR),
     # Duangjai — Nont's mother, dignified ex-Soi-6 cashier at The Boathouse (Mabprachan)
     "duangjai": lady(skin=THAI, hair="bun", hc=GRBLK, shirt=C(0x5a3a5a), bg=BG_BAR, mouth="neutral", acc=["earrings", "glasses", "glasschain"], earc=GOLD, framec=GOLD),
+    # The Sundowner (lakeside semi-respectable beer bar) — older girls who left Pattaya proper
+    "boonsri":  lady(skin=THAI, hair="bun", hc=GREY, shirt=C(0x3a5a4a), bg=BG_BAR, mouth="smile", acc=["earrings", "chain"], earc=GOLD),
+    "napa":     lady(skin=THAI, hair="chignon", hc=GRBLK, shirt=C(0x2a3a5a), bg=BG_BAR, mouth="neutral", acc=["earrings", "glasses"], earc=SILVER, framec=SILVER),
+    "ratsamee": lady(skin=THAI2, hair="long", hc=GRBLK, shirt=C(0x5a2a3a), bg=BG_BAR, mouth="smile", acc=["earrings", "chain"], earc=GOLD),
+    "kwanjai":  lady(skin=THAI, hair="bob", hc=GRBLK, shirt=C(0x2a4a5a), bg=BG_BAR, mouth="smile", acc=["earrings"], earc=GOLD),
     # --- the Pratumnak clubs (The Doghouse / Succubus) ---
     # Bill: thirties, English, pressed short-sleeve shirt, cuffs turned once.
     # Young for the room he runs and deliberately unremarkable-looking.

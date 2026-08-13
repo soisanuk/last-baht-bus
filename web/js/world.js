@@ -3111,7 +3111,7 @@ const ROOMS = {
       "Families eat grilled fish under string lights. It's so peaceful your ears ring. " +
       "Nobody here has been pickpocketed since the nineties. THE BOATHOUSE, the quiet " +
       "restaurant on the deck, is open for the fish.",
-    exits: { s: "khao_talo", in: "lake_bar" },
+    exits: { s: "khao_talo", in: "lake_bar", w: "lake_beer" },
   },
   lake_bar: {
     name: "The Boathouse",
@@ -3124,7 +3124,20 @@ const ROOMS = {
       "no touts, no trouble — which is exactly why a certain kind of woman ends up working the " +
       "till here rather than anywhere brighter. The register sits by the door, a small shrine " +
       "and a framed photo of a young man beside it.",
-    exits: { out: "lake_mabprachan" },
+    exits: { out: "lake_mabprachan", w: "lake_beer" },
+  },
+  lake_beer: {
+    name: "The Sundowner",
+    region: "Darkside",
+    bar: "The Sundowner", barType: "beer", pool: true,
+    desc: "Next door to the Boathouse but a notch louder and a notch looser: an open-air beer " +
+      "bar right on the water's edge, a dozen stools, a fridge of Chang and Leo, and a pool " +
+      "table with a felt like a tired lawn. Semi-respectable, and content with it — the girls " +
+      "here worked Pattaya proper once and decided the money wasn't worth the hours or the " +
+      "hustle. Now they pour slow beers for slow regulars, mostly older men who come for the " +
+      "quiet and the lake and a familiar face, and everybody involved seems relieved about the " +
+      "arrangement. The sunset over the reservoir does most of the marketing.",
+    exits: { out: "lake_mabprachan", e: "lake_bar" },
   },
 
   // ─── Naklua ───
@@ -11215,6 +11228,7 @@ function _buildHostess(name, th, room, id = name.toLowerCase()) {
 // [name, Thai nickname, room]. Distribution: go-gos busiest, beer/Soi 6/club
 // modest, expat & live-music bars light — Queen Vic is a pub, so none.
 const _FILLER_HOSTESSES = [
+  ["Ratsamee","รัศมี","lake_beer"], ["Kwanjai","ขวัญใจ","lake_beer"],
   ["Naree","นารี","windmill"], ["Sasi","ศศิ","windmill"], ["Yada","ญาดา","windmill"],
   ["Dao","ดาว","tequila_queen"], ["Mook","มุก","tequila_queen"], ["Ice","ไอซ์","tequila_queen"], ["Praew","แพรว","tequila_queen"],
   ["Fah","ฟ้า","neon_paradise"], ["View","วิว","neon_paradise"], ["Sara","ซาร่า","neon_paradise"],
@@ -11480,6 +11494,7 @@ function _buildCashier(name, th, room, id = name.toLowerCase()) {
 // Candy Bars are absent here) and one cashier per bar. Distribution mirrors the
 // hostesses': every hostess venue gets both; the Queen Vic pub gets neither.
 const _FILLER_MAMAS = [
+  ["Boonsri","บุญศรี","lake_beer"],
   ["Wanida","วนิดา","windmill"], ["Alisa","อลิสา","katoeys"],
   ["Sunee","สุนีย์","doghouse"],
   ["Pen","เพ็ญ","blue_dog"], ["Muay","หมวย","rock_factory"], ["Lamai","ละมัย","stinky_bar"],
@@ -11496,6 +11511,7 @@ const _FILLER_MAMAS = [
   ["Nittaya","นิตยา","neon_palm"], ["Ratchada","รัชดา","the_bucket"],
 ];
 const _FILLER_CASHIERS = [
+  ["Napa","นภา","lake_beer"],
   ["Nubnab","นับหนับ","windmill"], ["Farida","ฟาริดา","katoeys"],
   ["Tukky","ตุ๊กกี้","doghouse"], ["Noot","นุช","succubus"],
   ["Golf","กอล์ฟ","tequila_queen"], ["Air","แอร์","blue_dog"], ["Apple","แอปเปิ้ล","rock_factory"],
@@ -12157,4 +12173,5 @@ const ROOM_GEO = {
   khao_talo_bar:    [12.90797, 100.90995],
   lake_mabprachan:  [12.93306, 100.96684],
   lake_bar:         [12.93288, 100.96712],
+  lake_beer:        [12.93294, 100.96698],
 };

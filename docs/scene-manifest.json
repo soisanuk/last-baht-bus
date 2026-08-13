@@ -2,13 +2,13 @@
   "generated": "2026-08-13",
   "note": "Every room in the game + its region, for the scene-art pipeline (docs/art-pipeline-spec.md). Derived from web/js/world.js — regenerate with scripts/gen-scene-manifest.mjs, do not hand-edit. `kind` is a generator heuristic for prompt-template selection, not game canon. `regionSlug` is produced by the same regex as web/js/scene.js `_sceneArt()`; art files are web/art/rooms/<id>.png with web/art/regions/<slug>.png as the fallback.",
   "counts": {
-    "rooms": 236,
+    "rooms": 237,
     "regions": 15,
     "byKind": {
       "beach": 14,
       "street": 93,
       "massage": 19,
-      "beer": 56,
+      "beer": 57,
       "mall": 1,
       "interior": 2,
       "motel": 1,
@@ -78,6 +78,7 @@
         "khao_talo_bar",
         "khao_talo_strip",
         "lake_bar",
+        "lake_beer",
         "lake_mabprachan",
         "mama_yai",
         "night_heron",
@@ -907,6 +908,23 @@
         "Duangjai"
       ],
       "desc": "A wooden deck built out over the still water at the quiet end of the lake, strung with fairy lights and the smell of fish on the grill. Expat families and retired couples work through big Chang bottles and whole grilled fish while the reservoir goes pink and then black behind them. It is the most respectable room for miles — no neon, no touts, no trouble — which is exactly why a certain kind of woman ends up working the till here rather than anywhere brighter. The register sits by the door, a small shrine and a framed photo of a young man beside it."
+    },
+    {
+      "id": "lake_beer",
+      "name": "The Sundowner",
+      "bar": "The Sundowner",
+      "barType": "beer",
+      "region": "Darkside",
+      "regionSlug": "darkside",
+      "kind": "beer",
+      "dark": false,
+      "people": [
+        "Boonsri",
+        "Kwanjai",
+        "Napa",
+        "Ratsamee"
+      ],
+      "desc": "Next door to the Boathouse but a notch louder and a notch looser: an open-air beer bar right on the water's edge, a dozen stools, a fridge of Chang and Leo, and a pool table with a felt like a tired lawn. Semi-respectable, and content with it — the girls here worked Pattaya proper once and decided the money wasn't worth the hours or the hustle. Now they pour slow beers for slow regulars, mostly older men who come for the quiet and the lake and a familiar face, and everybody involved seems relieved about the arrangement. The sunset over the reservoir does most of the marketing."
     },
     {
       "id": "lake_mabprachan",
