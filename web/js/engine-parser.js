@@ -4360,6 +4360,8 @@ function doCommand(input) {
         _doWatchParade();
       else if (G.room === "peacock_cabaret" && (!arg || /drag|show|cabaret|revue|queen|stage|dance|petch|mala/.test(arg)))
         _doWatchDrag();
+      else if (G.room === "buddha_hill" && (!arg || /bay|view|sunset|sea|sun|buddha|city|coast|below|hill|water/.test(arg)))
+        _doWatchBuddha();
       else if (!arg || /tv|news|television/.test(arg)) _doTv();
       else _say("You watch. It watches back. Pattaya.");
       break;

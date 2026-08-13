@@ -185,6 +185,7 @@ function newGame() {
     qvDay: 0,            // last day the Queen Vic balcony paid its happy point
     dragDay: 0,          // last day the Peacock Cabaret drag revue paid its happy point
     catDay: 0,           // last day the Jomtien beach cats paid theirs
+    buddhaDay: 0,        // last day you took the quiet at the Buddha Hill viewpoint
     rep: 0,              // the soi's collective read on you (−20..+20); slow to build, quick to lose
     repDay: null,        // last day a good deed banked its +1 (the shared daily gain cap)
     dog: null,           // the accidentally-adopted soi dog: { since: day, name? } once you've fed him

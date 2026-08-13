@@ -926,7 +926,8 @@ const ROOMS = {
     dark: true,
     desc: "The big golden Buddha watches the bay with infinite patience. Below, the whole " +
       "curve of Pattaya glitters — Walking Street burning neon-pink at the south end. " +
-      "Someone has left an offering of marigolds and a small bottle of red Fanta.",
+      "Someone has left an offering of marigolds and a small bottle of red Fanta. It is the " +
+      "one quiet place for miles, and the view is the whole reason to climb. (WATCH THE BAY.)",
     exits: { e: "pratumnak_rd" },
   },
 

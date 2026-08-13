@@ -3131,6 +3131,52 @@ const _PUB_SOI_SCENES = [
 // _addHappy already prints "(+1 สนุก)", so the caller's line must NOT repeat
 // it — spotted in a soak transcript, where the two landed back to back and read
 // like a double award. The kind of defect only sequence shows.
+// Buddha Hill (docs/map-coverage.md) — Pratumnak's standing pull, and deliberately
+// NOT a spectator point: WATCH SOI and the Blue Dog are watching the parade and share
+// the one-a-night budget (G.blueDogDay). This is the opposite — contemplation, the one
+// calm beat above the treadmill — so it gets its own daily budget like the beach cats
+// (G.buddhaDay) and pays NON-jading _addHappy. A genuine step out of the hustle, once a
+// day, for a real climb. _addHappy prints its own สนุก line; don't repeat it.
+const _BUDDHA_LINES = [
+  "You sit on the low wall by the Buddha and let the bay do the talking. Down there a hundred " +
+    "thousand people are chasing the night; up here there's just the warm wind, the incense, and " +
+    "the long gold curve of a coast that was beautiful before any of it and will be after. " +
+    "Something in your chest unknots a notch.",
+  "A temple cat threads the railing. Two Thai kids photograph the Buddha and the bay and go. You " +
+    "stay, watching the light change over the water and the neon come up as the sky goes down. " +
+    "Nobody up here wants anything from you — it's almost unnerving how badly you needed that.",
+  "The offerings at the Buddha's feet are today's: marigolds, a red Fanta, a folded note. You add " +
+    "nothing and take nothing, just stand in the quiet with the whole shining mess of Pattaya laid " +
+    "small and harmless below, and for a few minutes the treadmill lets go of your ankle.",
+  "You watch a baht bus crawl the coast road far below, no bigger than a beetle, ferrying " +
+    "somebody's night somewhere. From up here it's all lights and motion, pretty and pointless and " +
+    "quietly magnificent. You breathe out. The Buddha does not comment. That's rather the appeal.",
+];
+const _BUDDHA_AGAIN = [
+  "You've had your quiet for today; sit any longer and it stops being peace and starts being " +
+    "hiding. You leave the Buddha to it.",
+  "The bay's still there and the Buddha's still patient, but you've already taken your minute " +
+    "today. Twice in a day is greedy. Back down you go.",
+  "You've already had the view today, and it doesn't get truer the second time. You let it be.",
+];
+function _doWatchBuddha() {
+  if (G.buddhaDay === G.day) { _say(_pickVary(_BUDDHA_AGAIN, "buddha_again")); return; }
+  G.buddhaDay = G.day;
+  if (!_flag("sawBuddhaHill")) {
+    _setFlag("sawBuddhaHill");
+    _say("You climb the last of the steps and the noise just… stops. The big golden Buddha sits " +
+      "with the patience of something that has watched this bay fill with neon and will watch it " +
+      "empty again, and below him the whole coast lays itself out — the beach, the pier, Walking " +
+      "Street a pink smear at the far end, the entire roaring machine shrunk to a thing you could " +
+      "cover with a thumb. Up here you can hear yourself think, which after the soi is either a " +
+      "relief or a problem, depending on the thoughts. You stand a while. The city keeps roaring, " +
+      "faithfully, without you. It's the first time all trip you haven't been counting something.", "win");
+  } else {
+    _say(_pickVary(_BUDDHA_LINES, "buddha"), "win");
+  }
+  _addHappy(2);
+}
+
 function _soiSpectateHappy(msg) {
   if (G.blueDogDay !== G.day) {
     G.blueDogDay = G.day;
