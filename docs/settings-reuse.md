@@ -179,9 +179,10 @@ read as continuous with this note rather than separate:
   band of the effort model above (keep the machine, write everything else). Itaewon / the
   Honch are the *cheaper* same-genre band.
 
-**The high-leverage move remains what the note said in July:** before a second fork, extract
-Layer 1 into an `engine/` boundary, put the domain systems behind a content-pack interface,
-and make **venue class** a first-class property. Every prose literal pulled out of the engine
+**The high-leverage move remains what the note said in July** — and it now has a concrete
+staged plan in **`docs/content-pack-refactor.md`**: before a second fork, extract Layer 1 into
+an `engine/` boundary, put the domain systems behind a content-pack interface, and make
+**venue class** a first-class property. Every prose literal pulled out of the engine
 and every ad-hoc `barType` check formalized is a down-payment on Itaewon and the Honch. It is
 also exactly what the online / shared-world and 2D rules already push toward — three
 future-facing goals, one refactor.
