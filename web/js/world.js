@@ -3840,6 +3840,18 @@ const NPCS = {
         short: "\"Bus north up the beach road; bar ladies east on Soi Seven.\"" },
       { topic: "cat", text: "\"The gray sisters, by the loungers? Mine — well, nobody's, but I feed them, morning and night, ten year now. Big One and Little One. You watch the big one: she never eat before the little one eat. Not one time in ten year.\" Auntie Nok's whole face goes soft. \"They my security, na. Nobody sleep rough on MY beach the cats don't tell me first. Better than police. Cheaper than police, hahaha.\"",
         short: "\"The gray sisters — I feed them ten year. Big One never eats before Little One. My security.\"" },
+      // The Quiet Side quest (docs/map-coverage.md): Nok is the beach grapevine Sumalee
+      // sends you to; her node sets the intel flag. chip:false — quest-directed.
+      { topic: "regular", sets: ["heardGordon"], chip: false,
+        text: "\"Big Gordon?\" Nok stops fanning herself. \"Aiyah. You ask for Sumalee, yes? " +
+          "She worry, that one, even when she don't say.\" She lowers her voice, though there is no " +
+          "one on the sand but the cats. \"Gordon come every cool season, fifteen year, buy water " +
+          "from me every morning — bad Thai, good heart. This year another regular tell me: Gordon " +
+          "go in his sleep, back in England, summertime. Old, quiet, no pain. His daughter find a " +
+          "photo of this beach by his bed.\" She looks out at the flat evening water. \"He love it " +
+          "here more than there, I think. Many of them do, and cannot say it. Tell Sumalee. She do " +
+          "it right — she always do.\"",
+        short: "\"Gordon — fifteen seasons, then he went in his sleep back in England this summer. A photo of this beach by his bed. Tell Sumalee.\"" },
     ],
   },
 
@@ -7056,6 +7068,29 @@ const NPCS = {
       "fed, watered, and coming back next season. She works a different bar each night, mostly to " +
       "keep the girls honest and the regulars guessing.",
     dialogue: [
+      // The Quiet Side quest (docs/map-coverage.md): completion node first (req the
+      // intel), directions node second — same first-match ordering pattern. chip:false.
+      { topic: "offer", req: ["heardGordon"], sets: ["quietSideDone"], chip: false,
+        text: "You tell her what Nok heard — that Gordon went in his sleep back in England " +
+          "over the summer, old and quiet, a photo of this beach still on his wall. Sumalee is " +
+          "silent a moment, then nods once, the way you close a ledger you always knew you would " +
+          "close. “Good. Not good — but good to know.” She takes a stick of incense " +
+          "from the shrine behind the bar and lights it. “Fifteen season, he never once made " +
+          "trouble. That is a whole life, on the quiet side. I put his picture up small, by the " +
+          "King. Nobody will ask who it is, and I will know.” She presses some notes into your " +
+          "hand. “For your trouble — and for coming back to tell me instead of forgetting. " +
+          "That is the Jomtien way. You are welcome on my soi any season.”",
+        short: "Sumalee lights incense for Gordon and puts his photo up small, by the King's. “Fifteen seasons, never once made trouble. A whole life, on the quiet side.”" },
+      { topic: "offer", chip: false,
+        text: "“A small thing.” She says it the way she says everything, no hurry. “You " +
+          "know Gordon? No — before your time. English, big soft fellow, came to Soi 7 every " +
+          "cool season for, oh, fifteen year. Same stool, same Leo, same seat for the football. This " +
+          "year, no Gordon.” A flicker of something under the calm. “Nobody call, nobody " +
+          "write. On the quiet side we do not make a drama — but we do not just forget a man, " +
+          "either.” She nods toward the beach. “Auntie Nok on the sand hears everything " +
+          "before I do. Ask her about the regular who stopped coming, then tell me. I would like to " +
+          "know how to think about it.”",
+        short: "“An old regular, Gordon — fifteen seasons, then this year nothing. Ask Auntie Nok about the regular who stopped coming, then tell me.”" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Welcome to Soi 7, the quiet side of the party.\" Sumalee waves at the strip of " +
           "fairy lights. \"Four bar, all mine, all easy — Lucky 7, Sea Breeze, Coconut, Sandbar. No " +
@@ -9101,6 +9136,23 @@ const QUESTS = {
     at: "pim",
     doneFlag: "oyJobDone",
     reward: { money: 2000, happy: 6 },
+  },
+  // Jomtien's first pull (docs/map-coverage.md) — the biggest dead zone gets a soul,
+  // not just a pointer. A quiet elegy in Sumalee's own register ("Jomtien is for the
+  // ones who already know the game — long-stay, retire"): an old regular didn't come
+  // back this season. Routes the matriarch → Nok on the sand → back, and resolves on
+  // the shrine (a deceased farang's photo by the King's is canon, per the shrine
+  // system). Gordon is referenced, never an NPC — no new face, no undelivered ASK.
+  quietside: {
+    name: "The Quiet Side",
+    giver: "sumalee",
+    desc: "Sumalee misses an old regular who didn't come back this season. ASK NOK ABOUT THE " +
+      "REGULAR, then bring it back to her (ASK SUMALEE ABOUT THE OFFER).",
+    deps: [],
+    reqFlags: ["act1Done"],
+    at: "nok",
+    doneFlag: "quietSideDone",
+    reward: { money: 1500, happy: 7 },
   },
   // The one quest with four different right answers. `doneFlag` is what makes
   // that free: the quest watches for `debtSettled` and does not care which of

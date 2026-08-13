@@ -77,5 +77,5 @@ Everything else is the rim, and it splits into two problems that want **opposite
 | 2026-08-13 | Darkside lake | Duangjai + The Boathouse + The Sundowner built; "look in on my boy" quest hooked | content built, quest spec'd |
 | 2026-08-13 | Tree Town | **The Safe-Cracker** — Madam Oy sandbox quest (giver oy → Pim at the Starlight → report to Oy, ฿2000). Re-engages the Act One antagonist; seeds a debt-buying-in-the-maze thread. | **shipped** |
 | open | Naklua | small pre-Rabbit-arc hook | not started |
-| open | Jomtien | anchor character + calm-beach identity mechanic (biggest dead zone) | not started |
+| 2026-08-13 | Jomtien | **The Quiet Side** — Sumalee (Soi 7 matriarch) → Nok on the sand → back; a quiet elegy for a fifteen-season regular who died old at home, remembered on the bar shrine. Gives the biggest dead zone a soul + a pull. | **shipped (partial)** — 32 rooms is still over-built; a standing calm-beach draw and/or room-thinning remain open |
 | open | Pratumnak | hill-chain extension + Buddha Hill viewpoint draw | not started |

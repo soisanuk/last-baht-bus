@@ -1350,6 +1350,8 @@ const _CONVO_TOPIC_RULES = [
   // Duangjai (The Boathouse) — Nont's mother. "nont" literal-matches her son node.
   [/\bson\b|your boy|your kid/,                                                  "nont"],
   [/\bfather\b|\bhusband\b|his dad|the dad/,                                     "father"],
+  // Nok — the Jomtien regular who stopped coming (The Quiet Side, docs/map-coverage.md)
+  [/\bgordon\b|the regular|who stopped/,                                         "regular"],
 ];
 
 function _convoTopic(s) {
