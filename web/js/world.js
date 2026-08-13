@@ -3910,6 +3910,16 @@ const NPCS = {
       "and on the soi longer than most expats have had passports. She clocked you the " +
       "second you walked in.",
     dialogue: [
+      // An Introduction quest (docs/map-coverage.md): Candy vouches you into Rose's
+      // discreet Orchid Club out in Naklua. chip:false — the quest drives it.
+      { topic: "rose", chip: false,
+        text: "“You want to know a place most people never find?” Candy weighs you a moment, then " +
+          "decides. “Rose. The Orchid Club, out in Naklua — behind a wall, no sign, aircon like a " +
+          "morgue and about as quiet. Old friend of mine, from before either of us ran anything.” " +
+          "She writes nothing down; there is nothing to write. “You don't find the Orchid, tilac. " +
+          "You get sent. So I am sending you — go and tell Rose that Candy vouches. And mind your " +
+          "manners, na: Rose forgets nothing and forgives less.”",
+        short: "“Rose's Orchid Club, Naklua — behind a wall, no sign. Old friend of mine. You don't find it, you get sent. Tell her Candy vouches.”" },
       { req: ["somTamAccepted"], notFlags: ["somTamDelivered"],
         text: "\"Som tam not deliver itself, tilac. Rainbow Girls Bar, LK Metro, deep corner — give it to PLOY at the cashier cage. Wai first. She melt.\"" },
       { req: ["knowWasHere"], notFlags: ["knowMot"], th: "จำได้สิ", rom: "jam dai si",
@@ -6929,6 +6939,18 @@ const NPCS = {
       "voice you have to lean in to hear. She runs the quietest, coldest, most " +
       "expensive room in Naklua, and she knows the name of every regular's wife.",
     dialogue: [
+      // An Introduction quest (docs/map-coverage.md): present Candy's vouch → welcomed in.
+      // chip:false; ungated (harmless without an active quest — the flag only matters
+      // when the quest is watching for it).
+      { topic: "candy", sets: ["orchidVouched"], chip: false,
+        text: "You mention Candy, and something recalibrates behind Rose's eyes — not warmth " +
+          "exactly, but a latch lifting. “Candy sent you.” She looks at you again, properly this " +
+          "time, the way you would re-read a letter. “She does not send me many. Two, three a " +
+          "year, and never a fool.” A cool nod. “Then you are half-trusted, which here is a great " +
+          "deal — most men buy their way to a quarter and think they have bought the room. Sit " +
+          "where you like. Be discreet, be kind to my ladies, and the Orchid is open to you.” The " +
+          "smallest pause. “Tell Candy she still owes me a lunch.”",
+        short: "“Candy sent you? She never sends a fool. Then you are half-trusted — more than most men can buy. The Orchid is open to you.”" },
       { th: "เชิญค่ะ", rom: "choen kha",
         text: "\"Welcome to the Orchid. Come in from the heat.\" The door sighs shut " +
           "and the temperature drops ten degrees. \"You sit; the girls come to you " +
@@ -9153,6 +9175,22 @@ const QUESTS = {
     at: "nok",
     doneFlag: "quietSideDone",
     reward: { money: 1500, happy: 7 },
+  },
+  // Naklua's pull (docs/map-coverage.md), deliberately NOT the White Rabbit — that
+  // bar is the CTF stage-2 discovery and stays unfindable by normal play. Instead it
+  // reveals the OTHER discreet Naklua venue: Rose's Orchid Club, a members-ish gents
+  // room you "don't find, you get sent." Candy vouches you in — relationship-as-key,
+  // a different flavour from Jomtien's elegy. Completes on presenting the vouch to Rose.
+  orchid_intro: {
+    name: "An Introduction",
+    giver: "candy",
+    desc: "Candy is vouching you into a discreet club — the kind of place you don't find, you " +
+      "get sent. Go and tell Rose that Candy sent you (ASK ROSE ABOUT CANDY).",
+    deps: [],
+    reqFlags: ["act1Done"],
+    at: "rose",
+    doneFlag: "orchidVouched",
+    reward: { money: 1000, happy: 6 },
   },
   // The one quest with four different right answers. `doneFlag` is what makes
   // that free: the quest watches for `debtSettled` and does not care which of

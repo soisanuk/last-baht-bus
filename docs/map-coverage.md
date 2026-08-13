@@ -76,6 +76,6 @@ Everything else is the rim, and it splits into two problems that want **opposite
 |---|---|---|---|
 | 2026-08-13 | Darkside lake | Duangjai + The Boathouse + The Sundowner built; "look in on my boy" quest hooked | content built, quest spec'd |
 | 2026-08-13 | Tree Town | **The Safe-Cracker** — Madam Oy sandbox quest (giver oy → Pim at the Starlight → report to Oy, ฿2000). Re-engages the Act One antagonist; seeds a debt-buying-in-the-maze thread. | **shipped** |
-| open | Naklua | small pre-Rabbit-arc hook | not started |
+| 2026-08-13 | Naklua | **An Introduction** — Candy vouches you into Rose's discreet Orchid Club (relationship-as-key). Deliberately NOT the White Rabbit, which stays the CTF stage-2 discovery. | **shipped** |
 | 2026-08-13 | Jomtien | **The Quiet Side** quest (Sumalee → Nok → back; the Gordon elegy) + **populated** the four Soi 7 bars with the quiet-side crowd it always implied: patrons **Roger** (knew Gordon — quest-aware), **Dieter**, **Gerald** (Dongtan), **Sandra**. 0 patrons → 4. | **shipped** — the bars now have regulars; the empty beach segments are calm-by-design; room-thinning still optional |
 | open | Pratumnak | hill-chain extension + Buddha Hill viewpoint draw | not started |
