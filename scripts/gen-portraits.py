@@ -416,6 +416,8 @@ CHARS = {
     "ampha":    lady(skin=THAI, hair="bun", hc=BLACK, shirt=C(0x6a6a78), bg=BG_BAR, mouth="neutral", acc=["earrings"], earc=SILVER),
     "champa":   lady(skin=THAI2, hair="long", hc=GRBLK, shirt=C(0x9a2a3a), bg=BG_BAR, mouth="smile", acc=["earrings", "flower"], earc=GOLD),
     "boua":     lady(skin=THAI, hair="bun", hc=GRBLK, shirt=C(0x3a4a5a), bg=BG_BAR, mouth="neutral", acc=["earrings", "glasses", "glasschain"], earc=SILVER, framec=SILVER),
+    # Thomas — the grieving widower on the Jomtien seawall (the ghost of Jomtien)
+    "thomas":   dict(skin=RED, hair="balding", hc=C(0xe8e8e8), shirt=C(0x4a5a6a), collar=True, mouth="neutral", bg=BG_BAR),
     # Nont — luk khrueng freelance hustler at the Buakhao market (docs/bangkok-concept.md)
     "nont":     dict(skin=TAN, hair="buzz", hc=C(0x151515), shirt=C(0x263042), acc=["chain"], mouth="neutral", bg=BG_BAR),
     # Jomtien's quiet-side regulars (docs/map-coverage.md) — long-stay expat patrons

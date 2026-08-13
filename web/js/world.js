@@ -8221,6 +8221,68 @@ const NPCS = {
     ],
   },
 
+  // ── Thomas, the ghost of Jomtien (jomtien_beach_s3) ──────────────────────────
+  // Adapted from a canon essay into original game prose (never committed raw — the
+  // anonymization doctrine). He is the answer to the room's own standing mystery:
+  // s3's desc asks who keeps the spot clean and comes to the far end nobody sweeps.
+  // Thomas does. A grief piece in the Gordon-elegy register — understated, the ache
+  // in the second coffee he sets out and never drinks. Handle with restraint; he is
+  // not here for company, and the power is what he doesn't say. Jomtien = the beach
+  // of memory (pairs with Sumalee/Gordon and the quiet-side crowd).
+  thomas: {
+    name: "Thomas", emoji: "☕", pronoun: "he",
+    room: "jomtien_beach_s3",
+    look: "Farang man of seventy, lean and weathered, thin white hair, sun-dark skin, sweat-soaked polo, an iced coffee in each hand.",
+    desc: "Seventy, and lean the way only a man who walks ten kilometres a day in this heat gets " +
+      "lean. His polo shirt is soaked through and he does not seem to feel it. He sits on the low " +
+      "seawall under the casuarina with an iced coffee in his hand and a second one set on the " +
+      "concrete beside him — unopened, its ice long gone to water in the heat. He is looking at " +
+      "the sea, and he is a very long way away. The motorbike-taxi men up the road think he has " +
+      "lost his mind. They are wrong, but you can see why they'd think it.",
+    dialogue: [
+      { text: "He glances up, registers you as a farang and not a nuisance, and goes back to the " +
+          "sea. “Evening.” A pause you could park a car in. “Good spot, this. Quiet. You'll not " +
+          "find quieter.” He does not offer his name and does not ask for yours. The second coffee " +
+          "sweats on the wall between you, and he does not mention it — and neither, you sense, " +
+          "should you. Not yet.",
+        short: "“Evening. Good spot, this. Quiet.” He goes back to the sea, and does not mention the second coffee." },
+      { topic: "walk", text: "“The walk?” He almost smiles. “Ten kilometres, there and back, every " +
+          "afternoon, in the worst of the heat. Mad, the bike lads reckon. Maybe they're right.” He " +
+          "turns the cold cup slowly in his hands. “Doctor says it's good for the heart. It isn't, " +
+          "particularly. But a man needs a reason to leave the room and put one foot down and then " +
+          "the other, and this is mine. You keep to the path, the path keeps you.” He looks north " +
+          "up the long empty sand. “Twenty years I walked it. I'm not about to stop now, just " +
+          "because it got harder.”",
+        short: "“Ten kilometres, there and back, every afternoon. Twenty years I walked it. Not stopping now it got harder.”" },
+      { topic: "coffee", text: "For a moment you think he won't answer. Then he looks at the second " +
+          "cup, the ice long since water, and something in his face gives way an inch. “That one's " +
+          "not mine.” He says it the way you'd state the weather. “Two large iced, every day, twenty " +
+          "years. I buy hers, I set it there, I drink mine, we watch the sea.” A breath. “She never " +
+          "liked the walk. But she liked this part — the sitting, the coffee, the sun going down.” " +
+          "He does not touch the second cup. “I don't drink it. That was never what it was for.”",
+        short: "“That one's not mine. Two large iced, every day, twenty years — I buy hers, set it there, drink mine. I don't drink it. That was never what it was for.”" },
+      { topic: "wife", text: "“Som.” He says the name carefully, like something that might spill if " +
+          "he's not level with it. “Thirty years married. She thought I was a lunatic for walking " +
+          "in the heat, and she was right, and she came anyway — every day, dragging her feet under " +
+          "a parasol, complaining beautifully the whole way. 'Thai people only walk if the " +
+          "motorbike is broken,' she used to tell me.” The ghost of a smile. “Three years now. Went " +
+          "fast, at the end. A mercy, they say, as if that is a thing that helps.” He looks to the " +
+          "water. “People think I come here to be sad. I come here because for one hour, walking " +
+          "that path with her coffee waiting at the end of it, she isn't gone. She's just up ahead, " +
+          "or a step behind, telling me I'm mad. And she's right. And I would give anything to hear " +
+          "it one more time.”",
+        short: "“Som. Thirty years. Three now since she went. I come here because for one hour she isn't gone — just a step behind, telling me I'm mad.”" },
+      { topic: "vendor", text: "A cart squeaks past along the promenade, trailing the smell of " +
+          "roasted coconut and pandan. Thomas watches the old vendor go, hunched over the handles. " +
+          "“That fellow. Older than she ever got to be, and here he is, still pushing the cart.” " +
+          "There is no bitterness in it, only the arithmetic. “She bought sticky rice off him every " +
+          "single day. Twenty baht, a laugh, a banana leaf.” He shakes his head slowly. “You spend " +
+          "a while wondering how that's fair. Then you stop — because it isn't a question with an " +
+          "answer, and the wondering was eating the walk.”",
+        short: "“That vendor — older than she ever got, still pushing his cart. She bought off him every day. You wonder how it's fair, then you stop.”" },
+    ],
+  },
+
   // ── Nont (Buakhao market) — a franchise seed, invisible on purpose ───────────
   // The younger self of a future game's protagonist (docs/bangkok-concept.md).
   // luk khrueng, ex-tech-kid of Rabbit's old Soi 6 bar → connected to BOTH Rabbit

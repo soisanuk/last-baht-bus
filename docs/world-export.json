@@ -24,8 +24,8 @@
  "counts": {
   "geolocated": 237,
   "patrons": 22,
-  "people": 327,
-  "portraits": 349,
+  "people": 328,
+  "portraits": 350,
   "renders": 345,
   "thumbs": 345,
   "venues": 237
@@ -3092,6 +3092,13 @@
    "room": "the_terrace",
    "th": "วันดี"
   },
+  "thomas": {
+   "desc": "Seventy, and lean the way only a man who walks ten kilometres a day in this heat gets lean. His polo shirt is soaked through and he does not seem to feel it. He sits on the low seawall under the casuarina with an iced coffee in his hand and a second one set on the concrete beside him — unopened, its ice long gone to water in the heat. He is looking at the sea, and he is a very long way away. The motorbike-taxi men up the road think he has lost his mind. They are wrong, but you can see why they'd think it.",
+   "emoji": "☕",
+   "name": "Thomas",
+   "pronoun": "he",
+   "room": "jomtien_beach_s3"
+  },
   "tik": {
    "desc": "Baby-faced, chewing gum, thumbing her phone under the bar — one of Gold Rush Lounge's girls, from Khon Kaen. She types more than she talks — and laughs at both.",
    "emoji": "🌻",
@@ -3754,6 +3761,7 @@
   "the_terrace_kade",
   "the_terrace_namtip",
   "the_terrace_wandee",
+  "thomas",
   "tik",
   "tim",
   "toey",

@@ -1270,7 +1270,9 @@
       "kind": "beach",
       "dark": true,
       "darkLight": null,
-      "people": [],
+      "people": [
+        "Thomas"
+      ],
       "desc": "As far as walking gets you. A stand of casuarinas leans off the dune with the wind's shape set into them, and under the nearest one somebody long ago put a spirit house — weathered grey, one corner gone, the little figures inside still facing out to sea. There are no offerings on it. There is no rubbish either, which takes some explaining on a beach nobody sweeps. Behind you the lights of Jomtien are a low orange smear a long way north."
     },
     {
