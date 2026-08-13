@@ -9772,6 +9772,127 @@ const QUIZ_POOL = [
 // `short` for terse repeats.
 const PATRONS = {
 
+  // ── Jomtien's quiet-side regulars (docs/map-coverage.md) ─────────────────────
+  // Populating the biggest dead zone with the crowd it always implied — the
+  // long-stay, settled, retired set at Sumalee's four Soi 7 bars. The other half
+  // of The Quiet Side quest: it mourned Gordon, the regular who stopped coming;
+  // these are the ones who didn't. Roger knew him (the tie), and his Gordon node
+  // is quest-aware. Homed across the four bars so each has a regular nightly.
+  roger: {
+    name: "Roger", emoji: "⚽", age: 67, nat: "British", pronoun: "he",
+    home: "lucky7", hops: true,
+    look: "British man of sixty-seven, balding, reading glasses on a string, soft blue football shirt, contented.",
+    desc: "Sixty-seven, an Everton shirt gone soft with washing, reading glasses on a string, and " +
+      "the settled contentment of a man who has been told precisely where he may and may not " +
+      "smoke. He retired to Jomtien eighteen years ago, married Lek from the fruit stall, and " +
+      "escapes to Soi 7 for the football and the company of men who also have a Lek at home.",
+    dialogue: [
+      { text: "“Alright.” Roger shifts along a stool he doesn't need to. “Sit down, son, you're " +
+          "blocking the telly. Roger. Been here since — oh, before you were shaving. What's the score, " +
+          "what's the news, and don't you dare tell Lek I had the third one.”",
+        short: "“Roger. Been here eighteen years. Sit down, son, you're blocking the telly.”" },
+      { topic: "jomtien", text: "“Why Jomtien? Because Pattaya's for the young and the daft, and " +
+          "I'm neither any more.” He counts it off. “Beach is quiet, beer's cheap, the wife's happy, " +
+          "and if I drop dead the ambulance can actually get down the soi. You don't want the go-go at " +
+          "my age, son. You want a fan, a fixture, and somewhere nobody's trying to sell you anything.”",
+        short: "“Pattaya's for the young and daft. Here it's quiet, cheap, nobody's selling you anything. That'll be you one day.”" },
+      { topic: "gordon", when: (st, G) => _flag("quietSideDone"), text: "“Gordon.” The smile goes gentle. “So now " +
+          "we know. Went in his sleep, lucky sod, more than most of us'll get.” He nods along the bar. " +
+          "“Sumalee put his picture up — small, by the King, you'd not know to look. Fifteen year he sat " +
+          "that stool, right where you are, football and a Leo and never a cross word.” He lifts his " +
+          "glass an inch. “To Gordon. Miss the daft article.”",
+        short: "“So now we know about Gordon — went in his sleep. Sumalee put his picture up by the King. To Gordon.”" },
+      { topic: "gordon", when: (st, G) => !_flag("quietSideDone"), text: "“Gordon? Didn't come back this cool " +
+          "season, and that's not like him — fifteen year, never missed one.” A frown. “Sumalee's " +
+          "fretting, though she'd walk into the sea before she'd say so. I keep hoping the daft sod's " +
+          "just found somewhere warmer and forgot to write. You hear anything, you tell her, not me.”",
+        short: "“Gordon didn't come back this season — fifteen year, never missed. Sumalee's fretting. You hear anything, tell her.”" },
+    ],
+  },
+  dieter: {
+    name: "Dieter", emoji: "🍺", age: 71, nat: "German", pronoun: "he",
+    home: "seabreeze", hops: false,
+    look: "German man of seventy-one, silver hair, very clean glasses, pressed pale short-sleeve shirt, precise.",
+    desc: "Seventy-one, a pressed short-sleeve shirt, a beer mat squared to the table edge, and twenty " +
+      "years of Jomtien behind a pair of very clean glasses. He drinks precisely two Chang a night, no " +
+      "more, and can quote you the price of everything on this soi across three different decades.",
+    dialogue: [
+      { text: "“Guten Abend.” Dieter does not move his beer mat. “You may sit. I am Dieter. Twenty " +
+          "years here — I remember when this soi was sand and one bar and the beer was fifteen baht, and " +
+          "now the beer is” — he taps the menu — “well. You see. Everything changes and gets more " +
+          "expensive and nobody asks the Germans.”",
+        short: "“Dieter. Twenty years here. When this soi was sand and one bar. Everything changes, nobody asks the Germans.”" },
+      { topic: "jomtien", text: "“Jomtien is correct for a pensioner. Quiet, orderly, the hospital is " +
+          "good, the flight to Frankfurt is direct.” He aligns the mat again. “Pattaya I go maybe twice " +
+          "a year, for the paperwork, and I come home tired and poorer. Here I know the price of my beer " +
+          "and the name of the lady who pours it. At my age this is enough. More than enough. It is " +
+          "comfortable.”",
+        short: "“Jomtien is correct for a pensioner: quiet, orderly, the hospital good. I know the price of my beer and the lady who pours it. Enough.”" },
+      { topic: "money", text: "“The pension is the pension — it does not grow. But the baht, it moves.” " +
+          "A precise sigh. “When I came, one euro was fifty baht. Now?” He does not say the number; it " +
+          "offends him. “So I drink two beer, not three, and I do not complain, because complaining is " +
+          "also not free. This is why the Germans last out here and the English” — the smallest dry look " +
+          "toward Roger's usual stool — “do not.”",
+        short: "“The pension doesn't grow, the baht moves. So I drink two beer, not three, and don't complain. This is why the Germans last.”" },
+    ],
+  },
+  gerald: {
+    name: "Gerald", emoji: "🥂", age: 64, nat: "British", pronoun: "he",
+    home: "sandbar", hops: true,
+    look: "British man of sixty-four, silver hair, good tan, cream linen shirt, gin in hand, dapper.",
+    desc: "Sixty-four, linen and a good tan, a gin-and-slimline in front of him and a paperback face-down " +
+      "beside it. He has held the same sunbed on Dongtan for eleven years and knows every piece of gossip " +
+      "that has ever crossed it. Camp as a row of tents and rather better company than most of the soi, " +
+      "and the last man on this beach you should underestimate.",
+    dialogue: [
+      { text: "“Hello, you.” Gerald looks you over with frank, friendly appraisal and finds you " +
+          "adequate. “Gerald. Don't fret, darling, you're not my type — too much drama in the young, and " +
+          "I've quite retired from drama.” He pats the next stool. “Sit. Tell me something I don't know, " +
+          "which after eleven years on that beach is a genuine challenge.”",
+        short: "“Gerald. You're not my type, darling — too much drama in the young. Sit, tell me something I don't know.”" },
+      { topic: "dongtan", text: "“Dongtan is the civilised end — our end, since you're asking, and even " +
+          "if you're not.” A sip. “Same sunbed eleven years, same boy brings my towel, same gossip with " +
+          "the trimmings changed. It isn't exciting, and that, dear heart, is the entire point. I did " +
+          "exciting. Exciting is exhausting and it never once remembers your birthday.”",
+        short: "“Dongtan's the civilised end. Same sunbed eleven years. Not exciting — that's the point. I did exciting; it never remembers your birthday.”" },
+      { topic: "jomtien", text: "“Why here and not Pattaya? Because Pattaya tries too hard and Jomtien " +
+          "has stopped trying, and at a certain age you find you prefer the company that's stopped trying.” " +
+          "He turns the paperback face-up and back down, a small tell. “Also nobody here cares who I am or " +
+          "was, which after a whole life of people caring rather a lot is the closest thing to a holiday " +
+          "I've had.”",
+        short: "“Pattaya tries too hard; Jomtien's stopped trying. I prefer the company that's stopped trying. And nobody here cares who I was.”" },
+    ],
+  },
+  sandra: {
+    name: "Sandra", emoji: "🍷", age: 59, nat: "British", pronoun: "she",
+    home: "coconut", hops: false,
+    look: "British woman of fifty-nine, sensible grey bob, glass of white wine, watchful, unhurried.",
+    desc: "Fifty-nine, a sensible bob going gracefully grey, a glass of white going slowly warm, and the " +
+      "unhurried gaze of a woman who moved here alone eight years ago and has regretted precisely none of " +
+      "it. She runs some small quiet thing on a laptop, watches Soi 7 the way you'd watch a nature " +
+      "documentary, and misses absolutely nothing.",
+    dialogue: [
+      { text: "“Well, hello.” Sandra marks her place with one finger. “Sandra. Yes, on my own; yes, " +
+          "by choice; and no, it isn't sad — you'd be amazed how often I have to run through all three.” " +
+          "A dry smile. “Sit down. I've watched this soi for eight years. I can tell you who everyone is, " +
+          "and which of them is lying about it.”",
+        short: "“Sandra. On my own, by choice, and no it isn't sad. Eight years watching this soi — I know who everyone is and who's lying.”" },
+      { topic: "jomtien", text: "“I came out on my own at fifty-one, which everyone at home treated as a " +
+          "nervous breakdown with a suntan.” She sips. “But a woman alone in Jomtien is invisible in the " +
+          "nicest possible way — nobody is selling to you, nobody is marrying you, you are simply left to " +
+          "get on with it. A little flat, a little income, a very big balcony. The best decision I have " +
+          "never once had to explain to anyone.”",
+        short: "“Came out alone at fifty-one — everyone called it a breakdown with a suntan. A woman alone here is invisible in the nicest way. Best decision I never explained.”" },
+      { topic: "soi", text: "“What do I see? Everything, darling — that's the whole joy of the corner " +
+          "table.” She nods minutely down the strip. “The new girls learning the ropes, the old boys " +
+          "pretending they aren't lonely, the couples who'll last and the ones who won't, and Sumalee " +
+          "keeping the entire thing turning without ever appearing to move. Better than anything on the " +
+          "telly, and it changes cast every season. I shall be very cross when I die and it carries on " +
+          "without me.”",
+        short: "“Everything — that's the joy of the corner table. New girls, lonely old boys, Sumalee turning it all. Better than telly, new cast every season.”" },
+    ],
+  },
+
   glam: {
     name: "Glam", emoji: "🎸", age: 77, nat: "German",
     pronoun: "he",
@@ -10834,6 +10955,10 @@ const PATRONS = {
 // until you meet them (talk / photo / someone names them) and the name takes over.
 // Assigned as a batch so the PATRONS entries stay lean. See _patronLabel.
 const _PATRON_TITLES = {
+  roger:    "a contented, henpecked English long-stayer",
+  dieter:   "a precise German pensioner of two decades",
+  gerald:   "a witty, linen-clad Dongtan regular",
+  sandra:   "a sharp Englishwoman at the corner table",
   glam:     "an ancient German in disco-era finery",
   fergie:   "a red-faced, bald Ulsterman",
   ron:      "a leathery Aussie in a faded singlet",

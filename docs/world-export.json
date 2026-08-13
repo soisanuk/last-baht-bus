@@ -23,9 +23,9 @@
  ],
  "counts": {
   "geolocated": 237,
-  "patrons": 18,
+  "patrons": 22,
   "people": 327,
-  "portraits": 345,
+  "portraits": 349,
   "renders": 345,
   "thumbs": 345,
   "venues": 237
@@ -110,6 +110,14 @@
    "nat": "Canadian",
    "pronoun": "he"
   },
+  "dieter": {
+   "desc": "Seventy-one, a pressed short-sleeve shirt, a beer mat squared to the table edge, and twenty years of Jomtien behind a pair of very clean glasses. He drinks precisely two Chang a night, no more, and can quote you the price of everything on this soi across three different decades.",
+   "emoji": "🍺",
+   "home": "seabreeze",
+   "name": "Dieter",
+   "nat": "German",
+   "pronoun": "he"
+  },
   "drew": {
    "desc": "Fifty-three, Navy posture that never demobbed, a Marlboro going and its successor already tapped out of the pack. In front of him: Jack and Coke, no lemon — an arrangement he supervises like a treaty. The eyes do a room-sweep every few minutes, out of training rather than interest.",
    "emoji": "🚬",
@@ -131,6 +139,15 @@
    "hops": true,
    "name": "Fergie",
    "nat": "Northern Irish",
+   "pronoun": "he"
+  },
+  "gerald": {
+   "desc": "Sixty-four, linen and a good tan, a gin-and-slimline in front of him and a paperback face-down beside it. He has held the same sunbed on Dongtan for eleven years and knows every piece of gossip that has ever crossed it. Camp as a row of tents and rather better company than most of the soi, and the last man on this beach you should underestimate.",
+   "emoji": "🥂",
+   "home": "sandbar",
+   "hops": true,
+   "name": "Gerald",
+   "nat": "British",
    "pronoun": "he"
   },
   "glam": {
@@ -201,6 +218,15 @@
    "nat": "British",
    "pronoun": "he"
   },
+  "roger": {
+   "desc": "Sixty-seven, an Everton shirt gone soft with washing, reading glasses on a string, and the settled contentment of a man who has been told precisely where he may and may not smoke. He retired to Jomtien eighteen years ago, married Lek from the fruit stall, and escapes to Soi 7 for the football and the company of men who also have a Lek at home.",
+   "emoji": "⚽",
+   "home": "lucky7",
+   "hops": true,
+   "name": "Roger",
+   "nat": "British",
+   "pronoun": "he"
+  },
   "ron": {
    "desc": "Sixty-six, Wollongong, a faded steel-town singlet and thongs that have worn a groove in this soi. He has the settled bulk of a man who stopped moving fifteen years ago and rates it his finest decision.",
    "emoji": "🦘",
@@ -208,6 +234,14 @@
    "name": "Ron",
    "nat": "Australian",
    "pronoun": "he"
+  },
+  "sandra": {
+   "desc": "Fifty-nine, a sensible bob going gracefully grey, a glass of white going slowly warm, and the unhurried gaze of a woman who moved here alone eight years ago and has regretted precisely none of it. She runs some small quiet thing on a laptop, watches Soi 7 the way you'd watch a nature documentary, and misses absolutely nothing.",
+   "emoji": "🍷",
+   "home": "coconut",
+   "name": "Sandra",
+   "nat": "British",
+   "pronoun": "she"
   },
   "somsak": {
    "desc": "Forty-seven, hotel-maintenance polo, the end seat at the Blue Dog rail with the best line on both the sunset and the checkpoint. He drinks one big Leo very slowly and misses absolutely nothing on the road.",
@@ -3469,6 +3503,7 @@
   "dear",
   "dew",
   "diamond",
+  "dieter",
   "dj_beer",
   "doghouse_bow",
   "dokmai",
@@ -3495,6 +3530,7 @@
   "gam",
   "gary",
   "gavin",
+  "gerald",
   "gib",
   "gift",
   "gig",
@@ -3672,6 +3708,7 @@
   "reginald",
   "rin",
   "rob",
+  "roger",
   "ron",
   "rose",
   "roy",
@@ -3679,6 +3716,7 @@
   "saeng",
   "sai",
   "saifon",
+  "sandra",
   "sara",
   "sasi",
   "sea_wall_duang",

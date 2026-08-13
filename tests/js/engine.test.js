@@ -2196,13 +2196,14 @@ test("ringing the bell costs ฿300, clears heat, and lifts every outcome", () =
 });
 
 test("the anonymous bar-bore (no named regular here): sober tips, drunk rambling, bell-glow", () => {
-  state().room = "seabreeze"; // a bar with no named regular — the archetype fills in
+  state().room = "anchor_bar"; // a bar with no named regular — the archetype fills in
+  // (seabreeze got Dieter when Jomtien was populated; anchor_bar stays anonymous all week)
   run("talk to patron");
   assert.match(lastOut(), /mamasan|cashiers/i);
   state().soc.drunk = 4;
   run("talk to patron");
   assert.match(lastOut(), /stool away/i);
-  state().soc.bellAt.seabreeze = state().turns;
+  state().soc.bellAt.anchor_bar = state().turns;
   run("talk to patron");
   assert.match(lastOut(), /THAT'S the fella/i);
   assert.equal(state().soc.drunk, 5, "he bought you one back");
@@ -6424,7 +6425,7 @@ test("the bar's regular has a fixed allegiance, and a win buys the rail a round"
     { d: "2026-07-07", done: true, h: "Alpha", hs: 2, as: 0, a: "Beta" },
   ] };
   try {
-    state().room = "seabreeze"; // no named regular — the anonymous football bore fills in
+    state().room = "anchor_bar"; // no named regular — the anonymous football bore fills in
     const team = _barTeam();
     assert.ok(["Alpha", "Beta"].includes(team));
     assert.equal(_barTeam(), team, "allegiance never wavers");

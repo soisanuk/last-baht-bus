@@ -2,13 +2,13 @@
   "generated": "2026-08-13",
   "note": "Distinct, hand-authored characters with a portrait (excludes the 181 generic `filler` NPCs). Derived from web/js/world.js — regenerate with scripts/gen-portrait-manifest.mjs, do not hand-edit. `sex`/`venueKind` are generator heuristics for portrait archetype selection, not game canon.",
   "counts": {
-    "total": 136,
+    "total": 140,
     "byRole": {
       "story": 36,
       "mamasan": 25,
       "hostess": 44,
       "cashier": 13,
-      "patron": 18
+      "patron": 22
     },
     "filler": 209
   },
@@ -1722,6 +1722,22 @@
       "desc": "Fifty-two, ball cap gone soft with washing, the delighted open face of a golden retriever that learned English. One beer in front of him, nursed with the skill of a man who has budgeted exactly four. He is either talking, about to talk, or dancing."
     },
     {
+      "id": "dieter",
+      "name": "Dieter",
+      "source": "PATRONS",
+      "role": "patron",
+      "look": "German man of seventy-one, silver hair, very clean glasses, pressed pale short-sleeve shirt, precise.",
+      "sex": "m",
+      "venueKind": "beer",
+      "emoji": "🍺",
+      "th": null,
+      "room": "seabreeze",
+      "age": 71,
+      "nat": "German",
+      "tags": [],
+      "desc": "Seventy-one, a pressed short-sleeve shirt, a beer mat squared to the table edge, and twenty years of Jomtien behind a pair of very clean glasses. He drinks precisely two Chang a night, no more, and can quote you the price of everything on this soi across three different decades."
+    },
+    {
       "id": "drew",
       "name": "Drew",
       "source": "PATRONS",
@@ -1751,6 +1767,22 @@
       "nat": "Northern Irish",
       "tags": [],
       "desc": "Short, bald, and boiled red — the nose of a man who has met a great deal of liquor and won none of the arguments, and two cauliflower ears that agree. Late fifties, Northern Irish, a retired tradesman of some sort, though which sort changes with the tide. Guarded stone-cold sober, a magnificent liar three drinks in, and — on the nights he's had a smoke as well — a nasty piece of work best left entirely alone. Banned from Bert's and Candy's bars, and not sorry about it."
+    },
+    {
+      "id": "gerald",
+      "name": "Gerald",
+      "source": "PATRONS",
+      "role": "patron",
+      "look": "British man of sixty-four, silver hair, good tan, cream linen shirt, gin in hand, dapper.",
+      "sex": "m",
+      "venueKind": "beer",
+      "emoji": "🥂",
+      "th": null,
+      "room": "sandbar",
+      "age": 64,
+      "nat": "British",
+      "tags": [],
+      "desc": "Sixty-four, linen and a good tan, a gin-and-slimline in front of him and a paperback face-down beside it. He has held the same sunbed on Dongtan for eleven years and knows every piece of gossip that has ever crossed it. Camp as a row of tents and rather better company than most of the soi, and the last man on this beach you should underestimate."
     },
     {
       "id": "glam",
@@ -1881,6 +1913,22 @@
       "desc": "Sixty and annoyingly aware that he doesn't look it: linen shirt with exactly the right number of buttons open, a tan that took discipline, silver hair with a part you could draw a property line down. He holds a glass like a man who used to be paid to make rooms enjoy themselves — because he was. Wherever he stands becomes, gradually, the centre."
     },
     {
+      "id": "roger",
+      "name": "Roger",
+      "source": "PATRONS",
+      "role": "patron",
+      "look": "British man of sixty-seven, balding, reading glasses on a string, soft blue football shirt, contented.",
+      "sex": "m",
+      "venueKind": "beer",
+      "emoji": "⚽",
+      "th": null,
+      "room": "lucky7",
+      "age": 67,
+      "nat": "British",
+      "tags": [],
+      "desc": "Sixty-seven, an Everton shirt gone soft with washing, reading glasses on a string, and the settled contentment of a man who has been told precisely where he may and may not smoke. He retired to Jomtien eighteen years ago, married Lek from the fruit stall, and escapes to Soi 7 for the football and the company of men who also have a Lek at home."
+    },
+    {
       "id": "ron",
       "name": "Ron",
       "source": "PATRONS",
@@ -1894,6 +1942,22 @@
       "nat": "Australian",
       "tags": [],
       "desc": "Sixty-six, Wollongong, a faded steel-town singlet and thongs that have worn a groove in this soi. He has the settled bulk of a man who stopped moving fifteen years ago and rates it his finest decision."
+    },
+    {
+      "id": "sandra",
+      "name": "Sandra",
+      "source": "PATRONS",
+      "role": "patron",
+      "look": "British woman of fifty-nine, sensible grey bob, glass of white wine, watchful, unhurried.",
+      "sex": "f",
+      "venueKind": "beer",
+      "emoji": "🍷",
+      "th": null,
+      "room": "coconut",
+      "age": 59,
+      "nat": "British",
+      "tags": [],
+      "desc": "Fifty-nine, a sensible bob going gracefully grey, a glass of white going slowly warm, and the unhurried gaze of a woman who moved here alone eight years ago and has regretted precisely none of it. She runs some small quiet thing on a laptop, watches Soi 7 the way you'd watch a nature documentary, and misses absolutely nothing."
     },
     {
       "id": "somsak",

@@ -418,6 +418,11 @@ CHARS = {
     "boua":     lady(skin=THAI, hair="bun", hc=GRBLK, shirt=C(0x3a4a5a), bg=BG_BAR, mouth="neutral", acc=["earrings", "glasses", "glasschain"], earc=SILVER, framec=SILVER),
     # Nont — luk khrueng freelance hustler at the Buakhao market (docs/bangkok-concept.md)
     "nont":     dict(skin=TAN, hair="buzz", hc=C(0x151515), shirt=C(0x263042), acc=["chain"], mouth="neutral", bg=BG_BAR),
+    # Jomtien's quiet-side regulars (docs/map-coverage.md) — long-stay expat patrons
+    "roger":    dict(skin=RED, hair="balding", hc=GREY, shirt=C(0x2a4a8a), acc=["glasses"], framec=C(0x303040), mouth="smile", bg=BG_BAR),
+    "dieter":   dict(skin=PALE, hair="short", hc=SILVER, shirt=C(0xd8d8e0), collar=True, acc=["glasses"], framec=SILVER, mouth="neutral", bg=BG_BAR),
+    "gerald":   dict(skin=TAN, hair="short", hc=SILVER, shirt=C(0xf0ece0), collar=True, mouth="smile", bg=BG_BAR),
+    "sandra":   lady(skin=PALE, hair="bob", hc=GREY, shirt=C(0x6a3a5a), bg=BG_BAR, mouth="smile", acc=["earrings"], earc=SILVER),
     # Duangjai — Nont's mother, dignified ex-Soi-6 cashier at The Boathouse (Mabprachan)
     "duangjai": lady(skin=THAI, hair="bun", hc=GRBLK, shirt=C(0x5a3a5a), bg=BG_BAR, mouth="neutral", acc=["earrings", "glasses", "glasschain"], earc=GOLD, framec=GOLD),
     # The Sundowner (lakeside semi-respectable beer bar) — older girls who left Pattaya proper
