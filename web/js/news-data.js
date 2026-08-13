@@ -13,11 +13,6 @@ var NEWS_FEED = [
     "d": "10 Aug 2026"
   },
   {
-    "t": "Thai destinations rank in Asia’s top five among European travellers",
-    "s": "Nation Thailand",
-    "d": "11 Aug 2026"
-  },
-  {
     "t": "Chinese family protests after son dies in fatal stabbing in Pattaya",
     "s": "Thaiger",
     "d": "11 Aug 2026"
@@ -43,8 +38,18 @@ var NEWS_FEED = [
     "d": "31 Jul 2026"
   },
   {
-    "t": "Thailand tightens gun controls after deadly school shooting",
-    "s": "CNN",
+    "t": "International Thailand Chon Buri Pattaya-Na Kluea Rd, Na Kluea, Bang Lamung, Chon Buri 20150, THA",
+    "s": "Realtor.com",
+    "d": "09 Aug 2026"
+  },
+  {
+    "t": "Thailand Halts New Gun Permits Days After Mass Shooting at a School",
+    "s": "The New York Times",
+    "d": "12 Aug 2026"
+  },
+  {
+    "t": "‘So brutally cruel’: Suspected serial killer gang rattles Thailand",
+    "s": "SMH.com.au",
     "d": "12 Aug 2026"
   },
   {
@@ -53,35 +58,30 @@ var NEWS_FEED = [
     "d": "11 Aug 2026"
   },
   {
-    "t": "‘So brutally cruel’: Suspected serial killer gang rattles Thailand",
-    "s": "SMH.com.au",
-    "d": "12 Aug 2026"
-  },
-  {
-    "t": "Lisa sparks dating rumors with actor dubbed 'Thailand's Cha Eun-woo' amid Arnault breakup speculation",
-    "s": "The Korea Times",
-    "d": "12 Aug 2026"
-  },
-  {
-    "t": "'Would have meant the world': Fans disappointed, scalpers resell sold-out Singapore-Thailand football tickets",
-    "s": "CNA",
+    "t": "German tourist dies after being swept out to sea in Thailand's Phuket",
+    "s": "Yahoo",
     "d": "13 Aug 2026"
   },
   {
-    "t": "Chinese H-6 Strategic Bomber Arrives in Thailand for Joint Exercises - Reports",
-    "s": "militarywatchmagazine.com",
+    "t": "Lisa sparks dating rumors with actor dubbed 'Thailand's Cha Eun-woo' amid Arnault breakup speculation",
+    "s": "koreatimes.co.kr",
     "d": "12 Aug 2026"
+  },
+  {
+    "t": "Thailand captain Sarach Yooyen's Midas touch at the ASEAN Championship",
+    "s": "ESPN",
+    "d": "13 Aug 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-08-12","USD":33.06,"AUD":23.38,"GBP":44.72,"EUR":38.17};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-13","temp":30,"humid":74,"code":3,"hi":30,"rain":69};
+var WX_NOW = {"date":"2026-08-13","temp":31,"humid":69,"code":3,"hi":31,"rain":69};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-08-01","first":"932479","last2":"69","front3":["413","672"],"back3":["039","154"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4409,"date":"2026-08-13","baht":68950};
+var GOLD = {"usd":4375,"date":"2026-08-13","baht":68400};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":63427,"thb":2099513};
+var BTC = {"usd":63798,"thb":2113770};
