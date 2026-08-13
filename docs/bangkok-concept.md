@@ -136,8 +136,38 @@ this forever," never a word about Bangkok. His signature future mechanic (code-s
 planted in his identity dialogue: *"you'd be amazed what people say in front of the one they've
 decided isn't really listening."*
 
-**Deferred (noted, not built):** the mother as a Mabprachan lakeside-bar cashier NPC (needs a
-lakeside bar room); the Rabbit-side guilt thread; Nont's future hacker handle.
+**Deferred (noted, not built):** the Rabbit-side guilt thread; Nont's future hacker handle.
+(The mother — **Duangjai** — is now built, cashier at **The Boathouse**, `lake_bar`; the beer
+bar next door is **The Sundowner**, `lake_beer`.)
+
+### Quest hook — "a reason to visit the lake" (deferred, spec-first)
+
+The lake cluster (viewpoint · Boathouse · Sundowner · Duangjai · Nont's mother) has no quest
+pulling the player out there yet. The intended one foreshadows Nont's future — **under one
+hard constraint that shapes the whole design: foreshadow WITHOUT signposting.** Nont's value is
+the hidden seed; the quest must never gesture at Bangkok, the city, or "this kid's going places."
+It has to be a complete, satisfying Pattaya quest on its own terms, whose sequel meaning is pure
+dramatic irony — it lands only in retrospect, only for a player who's seen the follow-on. **The
+test:** would this quest be worth doing if Bangkok never gets made? If it only "works" because
+you know the future, it's signposting; cut it.
+
+**Foreshadow through capability and trajectory, never exposition.** Show what Nont can *do* and
+show he's *leaving* — never name where he's going.
+
+Leading shape — **"Look in on my boy," given by Duangjai** (so the giver is out at the lake, the
+reason to go). A mother's errand: she's worried (*"he sends me money I didn't ask for and thinks
+I don't know where a boy like that ends up"*), asks the player to check on Nont or carry
+something to him — which stitches the lake to the Buakhao market. The player then *witnesses* the
+seed, self-contained: his **capability** (the code-switch live, a bit of gray-market cleverness —
+the rich version is a mechanic the player actually does, a **CLI-sim-lite** precursor to the
+Bangkok module; the cheap version is just watching him work); **Tan's hand** (a glimpse, never
+explained, that someone keeps this kid safe — the unpriced favour); and his **drift** (the
+resolution is that you *can't* fix his trajectory — you report back, ease his mother a degree
+because he really is careful, and that's the quiet honest ending). The emotional spine is the
+mother's fear, which keeps the quest real with every trace of sequel meaning stripped out.
+
+doneFlag design as usual (observe the world, don't own it). Build only after it's specced against
+the no-signpost test above.
 
 ## What carries from LBB, and what doesn't
 
