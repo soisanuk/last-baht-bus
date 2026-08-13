@@ -7695,6 +7695,13 @@ const NPCS = {
         short: "\"Whatever lock Oy owns has a nine — เก้า — in it. That was your free answer.\"" },
       { topic: "oy", notFlags: ["helmetDelivered"],
         text: "\"Madam Oy? Mmm. Information about the Mamasan is premium shelf, darling.\" She taps the lady-drink menu meaningfully: ฿" + LADY_DRINK + "." },
+      // The Safe-Cracker quest (docs/map-coverage.md): the whispers Oy sends you for.
+      // Ungated + chip:false — it reads as quest-directed (nobody asks about "the
+      // whispers" cold), and setting the flag early is harmless (it does nothing
+      // until Oy's completion node and an active quest both agree).
+      { topic: "whispers", sets: ["heardWhispers"], chip: false,
+        text: "\"The whispers.\" She stops polishing the glass, which from Pim is a full stop. \"For Oy, or for yourself? For Oy.\" A dry look. \"Somebody has been buying up the girls' debts. Quiet, cash, no name on it. And a girl who owes the wrong person does not work for the bar any more — she works for whoever holds the paper, and she just happens to stand behind the bar.\" She sets the glass down. \"Tell Oy it is new money, not an old face. Tell her to watch the ones who pay off a girl's debt like it is a kindness. That is the whisper, darling. Mind how you carry it.\"",
+        short: "\"Somebody's quietly buying up the girls' debts — new money, no name. Tell Oy to watch the ones paying debts off like a kindness.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Well well. You have the look of a man on a quest.\" She rests her chin on her hand. \"Starlight Bar: honest pours, dishonest company. What do you want to know and what's it worth?\"",
         short: "\"What do you want to know, darling — and what's it worth?\"" },
@@ -7762,6 +7769,15 @@ const NPCS = {
         short: "Oy hands your wallet back. \"A polite one. Take it — and buy Mot's dinner.\"" },
       { req: ["knowOyHasIt"], topic: "wallet",
         text: "\"A wallet?\" The temperature drops two degrees. \"Many wallets in Pattaya, khun farang. Mine are in a safe.\" She turns away — but slowly, like a door left ajar. (Manners might open it. A proper wai.)" },
+      // The Safe-Cracker quest (docs/map-coverage.md): completion node first (req the
+      // intel), then the directions node — same first-match-wins ordering as the
+      // wallet pair above. chip:false so the quest, not a dangling chip, drives it.
+      { topic: "offer", req: ["heardWhispers"], sets: ["oyJobDone"], chip: false,
+        text: "\"So.\" She does not ask whether Pim talked; Pim always talks to the right person. You tell her — the quiet money, the bought debts, the girls who will do what they are told. Oy listens without a flicker, which is worse than any reaction. \"New money. Not old faces.\" She repeats it like a note to herself, then a banknote is in your hand before you saw it move. \"You did a thing for me and told me the truth about it. That is rarer up here than you would think. Go. If I need the farang who opens things again, I will find you — I found you the first time.\"",
+        short: "Oy takes the whisper without a flicker. \"New money, not old faces.\" She pays, and files you away for later." },
+      { topic: "offer", chip: false,
+        text: "\"A job.\" It is not a question and not quite an offer; it is a fact she is allowing you to be useful to. \"Somebody has my girls in a mood, and a girl in a mood counts wrong and smiles late and costs me money. The maze tells things to Pim before it tells me — five years at the Starlight, misses nothing. Ask her what the whispers are, then bring them back here.\" A beat, and something that on another face would be a smile. \"You are good at getting into places you should not be. So. Get into this one.\"",
+        short: "\"Ask Pim at the Starlight what the whispers are, then bring them back to me. You're good at getting into places.\"" },
       { th: "เชิญค่ะ", rom: "choen kha",
         text: "\"Welcome to Rainbow Girls.\" Four words, and somehow you feel both invited and inventoried. \"Drink, or business?\"",
         short: "\"Drink, or business?\"" },
@@ -9068,6 +9084,24 @@ const ENCOUNTERS = {
 // quest ids that must be done first.
 
 const QUESTS = {
+  // Tree Town's first sandbox pull (docs/map-coverage.md). Oy is the Act One
+  // antagonist — she held your wallet — and you never see her again; this brings
+  // players back to the maze by turning the antagonist into an employer. The hook
+  // is the callback (you got a wallet back off her, which almost nobody does), and
+  // the objective stays inside Tree Town: get the whispers from Pim at the
+  // Starlight, report to Oy. doneFlag observes the world as usual.
+  safecracker: {
+    name: "The Safe-Cracker",
+    giver: "oy",
+    desc: "Madam Oy has a job for the farang who got a wallet back off her. Find out what has " +
+      "her girls jumpy — ASK PIM ABOUT THE WHISPERS, then take it back to her (ASK OY ABOUT " +
+      "THE OFFER).",
+    deps: [],
+    reqFlags: ["act1Done"],
+    at: "pim",
+    doneFlag: "oyJobDone",
+    reward: { money: 2000, happy: 6 },
+  },
   // The one quest with four different right answers. `doneFlag` is what makes
   // that free: the quest watches for `debtSettled` and does not care which of
   // Nira's three nodes or Tan's one set it — no branching, no quest-specific

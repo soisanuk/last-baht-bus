@@ -106,6 +106,7 @@ test("room signs reference real sign entries", () => {
 test("gossip chain flags connect: every required flag is set somewhere", () => {
   const settable = new Set(["knowWasHere", "waiedOy", "waiedPloy", "greetedFon",
     "hasWallet", "gotBusFare", "somTamDelivered", "officeOpen",
+    "act1Done",  // engine-set by _checkAct1 — gates sandbox-only quests (The Safe-Cracker)
     "glamTruth", // set by PATRON dialogue (Glam's lucid flash), which this scan doesn't cover
     "knowMikkel", // set by PATRON dialogue (Mikkel's intro), same blind spot as glamTruth
     "hasDog",    // set by the adoption action (FEED DOG), not dialogue

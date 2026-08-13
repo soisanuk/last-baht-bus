@@ -75,7 +75,7 @@ Everything else is the rim, and it splits into two problems that want **opposite
 | Date | Pocket | Fix | Status |
 |---|---|---|---|
 | 2026-08-13 | Darkside lake | Duangjai + The Boathouse + The Sundowner built; "look in on my boy" quest hooked | content built, quest spec'd |
-| 2026-08-13 | Tree Town | Madam Oy sandbox quest (the first coverage fix) | building |
+| 2026-08-13 | Tree Town | **The Safe-Cracker** — Madam Oy sandbox quest (giver oy → Pim at the Starlight → report to Oy, ฿2000). Re-engages the Act One antagonist; seeds a debt-buying-in-the-maze thread. | **shipped** |
 | open | Naklua | small pre-Rabbit-arc hook | not started |
 | open | Jomtien | anchor character + calm-beach identity mechanic (biggest dead zone) | not started |
 | open | Pratumnak | hill-chain extension + Buddha Hill viewpoint draw | not started |
