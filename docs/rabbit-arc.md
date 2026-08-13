@@ -274,7 +274,8 @@ Two hard constraints:
 
 ### The CLI simulator is a PORTABLE MODULE (architectural rule)
 
-Mario sees a follow-on game taking shape — cyberpunk, Bangkok or elsewhere — and
+Mario sees a follow-on game taking shape — cyberpunk, Bangkok (concept grounded in
+`docs/bangkok-concept.md`) — and
 wants the mechanics portable, the CLI simulator especially. **So it is built to the
 `games.js` doctrine, not woven into the engine:**
 
