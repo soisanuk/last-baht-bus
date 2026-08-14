@@ -1672,6 +1672,19 @@ function _doSocial(kind, targetWord) {
   // not a pickup room — the girls are the power players', and you're here on business
   if (G.room === "orchid_room") { _say(_pickVary(_ORCHID_NOTOUCH, "orchidno"), "alert"); return; }
   const w = (targetWord || "").replace(/^with /, "").trim();
+  // A social verb aimed at an animal gets shut down flat, not a location miss —
+  // "they're not here" read like it would work if he WERE (playtest, 2026-08-15).
+  // One guard covers flirt/kiss/spank/fondle; PET stays the wholesome verb.
+  const animal = (typeof _isDogWord === "function" && _isDogWord(w)) ||
+    /\b(cats?|kittens?|big one|little one)\b/i.test(w);
+  if (animal) {
+    _say(kind === "flirt"
+      ? "He's a dog. He likes you fine already — that's what the tail is for. (PET him, if you must.)"
+      : "No. Firmly, completely, no — and the look you get from the nearest " +
+        "bystander suggests you should hear how that sounded. Animals get PET, " +
+        "fed, and left in peace. That is the whole menu.", "alert");
+    return;
+  }
   const here = _npcsHere();
   // Pronoun/default resolution: "flirt with her" → whoever you're dealing with;
   // bare "flirt" → the conversation partner, or the sole girl in scope.
