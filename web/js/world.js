@@ -1230,9 +1230,17 @@ const ROOMS = {
     desc: "As far as walking gets you. A stand of casuarinas leans off the dune with the " +
       "wind's shape set into them, and under the nearest one somebody long ago put a " +
       "spirit house — weathered grey, one corner gone, the little figures inside still " +
-      "facing out to sea. There are no offerings on it. There is no rubbish either, " +
+      "facing out to sea. There are no offerings on the shrine. There is no rubbish either, " +
       "which takes some explaining on a beach nobody sweeps. Behind you the lights of " +
       "Jomtien are a low orange smear a long way north.",
+    reads: {
+      shrine: "A closer look: a spirit house on a low post, weathered grey and salt-scoured, one " +
+        "corner broken clean off. The little figures inside — a guardian, his servants, a stone " +
+        "elephant — face out to sea rather than inland, which is not how these are usually set and " +
+        "does not look like a mistake. No incense, no marigolds, no offering of any kind — and yet " +
+        "not a scrap of litter, on a beach nobody sweeps. Somebody tends it. They just don't leave " +
+        "anything.",
+    },
     revisit: [
       "The spirit house, the leaning trees, and the sea doing what it does.",
       "No offerings, no rubbish. Somebody still comes here, or nobody ever has.",
@@ -3627,6 +3635,8 @@ const ITEMS = {
     aliases: ["amulet", "buddha", "pendant", "medallion"],
     portable: true,
     location: "jomtien_beach_s3",
+    sight: "Half-buried in the sand at the foot of the spirit house, on a broken cord, a small " +
+      "Buddha amulet — not set on the shrine, exactly. Left there, or lost, or given back. (TAKE AMULET)",
     desc: "Small, oval, and heavier than it looks — old clay in a scratched gold case, on " +
       "a broken cord. The Buddha on the front is worn nearly featureless by however many " +
       "years of somebody's shirt. On the back there is writing: a line of Thai pressed " +
@@ -8231,7 +8241,7 @@ const NPCS = {
   // of memory (pairs with Sumalee/Gordon and the quiet-side crowd).
   thomas: {
     name: "Thomas", emoji: "☕", pronoun: "he",
-    room: "jomtien_beach_s3",
+    room: "dongtan_beach_n",
     look: "Farang man of seventy, lean and weathered, thin white hair, sun-dark skin, sweat-soaked polo, an iced coffee in each hand.",
     desc: "Seventy, and lean the way only a man who walks ten kilometres a day in this heat gets " +
       "lean. His polo shirt is soaked through and he does not seem to feel it. He sits on the low " +
@@ -8250,8 +8260,8 @@ const NPCS = {
           "afternoon, in the worst of the heat. Mad, the bike lads reckon. Maybe they're right.” He " +
           "turns the cold cup slowly in his hands. “Doctor says it's good for the heart. It isn't, " +
           "particularly. But a man needs a reason to leave the room and put one foot down and then " +
-          "the other, and this is mine. You keep to the path, the path keeps you.” He looks north " +
-          "up the long empty sand. “Twenty years I walked it. I'm not about to stop now, just " +
+          "the other, and this is mine. You keep to the path, the path keeps you.” He looks south " +
+          "down the long empty sand. “Twenty years I walked it. I'm not about to stop now, just " +
           "because it got harder.”",
         short: "“Ten kilometres, there and back, every afternoon. Twenty years I walked it. Not stopping now it got harder.”" },
       { topic: "coffee", text: "For a moment you think he won't answer. Then he looks at the second " +

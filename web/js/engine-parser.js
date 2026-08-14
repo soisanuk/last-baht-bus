@@ -589,7 +589,7 @@ function _doTake(arg) {
   // TAKE WATER in your room pulls a free bottle from the minibar (not an item —
   // it goes straight down, like a bought one, and cuts thirst).
   if (/water|\bnam\b/.test(arg) && _isHotelRoom(G.room)) { _takeFridgeWater(); return; }
-  if (_isDarkHere()) { _say("You grope around in the dark and find nothing but regret."); return; }
+  if (_isDarkHere()) { _say("You grope around in the dark and find nothing but regret. (LIGHT ON)"); return; }
   const id = _findItem(arg, "room");
   if (!id) { _say("You don't see that here."); return; }
   const it = ITEMS[id];
@@ -687,6 +687,9 @@ const _READ_NOUNS = {
   crane: ["cranes", "origami", "napkin", "napkins"],
   cherries: ["cherry"],
   card: ["show times", "showtimes", "show-times"],
+  // A room may author its own shrine (the beach spirit house at jomtien_beach_s3);
+  // bars with no `reads.shrine` still fall through to _doScenery's bar-shrine prose.
+  shrine: ["spirit house", "spirit-house", "spirithouse"],
 };
 function _roomRead(arg) {
   const reads = _room().reads;
@@ -699,6 +702,14 @@ function _roomRead(arg) {
 
 function _doExamine(arg) {
   if (!arg) return _describeRoom(true, true); // LOOK always gives the full desc
+  // EXAMINE PHONE opens the home screen (battery, flashlight, messages, weather,
+  // headlines), not the flat item blurb — only "phone"/"mobile", so torch/light
+  // fall through to the LIGHT machinery. The phone lights its own screen, so it
+  // reads in the dark.
+  if (/\b(phone|mobile)\b/.test(arg) && _inv().includes("phone")) { _doPhoneScreen(); return; }
+  // Everything past here is a close LOOK, and you can't look closely in the dark —
+  // point at the fix rather than describing what you plainly cannot see.
+  if (_isDarkHere()) { _say("It's too dark to make anything out. (LIGHT ON, if you want a proper look.)"); return; }
   if (G.dog && (/\b(dog|sai krok)\b/.test(arg) ||
       (G.dog.name && arg.includes(G.dog.name.toLowerCase())))) {
     _say(_dogN(`Sai Krok: a Pattaya-special soi dog with one clipped ear and the settled ` +
@@ -709,10 +720,6 @@ function _doExamine(arg) {
        "at your heel, reading the street.")));
     return;
   }
-  // EXAMINE PHONE opens the home screen (battery, flashlight, messages, weather,
-  // headlines), not the flat item blurb — but only "phone"/"mobile", so the
-  // flashlight aliases (torch/light) still fall through to the LIGHT machinery.
-  if (/\b(phone|mobile)\b/.test(arg) && _inv().includes("phone")) { _doPhoneScreen(); return; }
   if (/\b(fridge|refrigerator|mini.?bar)\b/.test(arg)) { _doFridge(); return; }
   if (/\bbed\b/.test(arg) && _isHotelRoom(G.room)) {
     _say("A firm double under a thin batik cover, the pillows veterans of a thousand " +
@@ -1800,7 +1807,9 @@ function _doSellBottles() {
   for (const b of bottles) G.itemLoc[b] = null;
   const paid = bottles.length * 5;
   G.money += paid;
-  _say(`Auntie Nok counts the glass, nods, and presses coins into your hand: ฿${paid}. ` +
+  // ฿5 and ฿10 are a single coin; ฿15+ takes two or more.
+  const coinWord = (paid === 5 || paid === 10) ? "a coin" : "coins";
+  _say(`Auntie Nok counts the glass, nods, and presses ${coinWord} into your hand: ฿${paid}. ` +
     `(You have ฿${G.money}.)`);
   if (G.money >= BUS_FARE && !_flag("gotBusFare")) {
     _setFlag("gotBusFare");

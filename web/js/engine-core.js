@@ -1073,7 +1073,14 @@ function _describeRoom(full, forceFull) {
   // Opt-in per room via `revisit`; LOOK and boot/restore force the full desc.
   if (full) _say(!firstTime && !forceFull && r.revisit ? _pickVary(r.revisit, "rv:" + G.room) : r.desc);
   const items = Object.keys(G.itemLoc).filter(id => _here(id));
-  if (items.length) _say(_L("You can see: ") + items.map(id => _L(ITEMS[id].name)).join(", ") + ".");
+  if (items.length) {
+    // An item may carry a `sight:` line that places it in the scene ("...at the
+    // foot of the spirit house") instead of the bare name-list — for things where
+    // WHERE it lies is part of the room. Items without one fall into the list.
+    const placed = items.filter(id => ITEMS[id].sight), listed = items.filter(id => !ITEMS[id].sight);
+    placed.forEach(id => _say(_L(ITEMS[id].sight)));
+    if (listed.length) _say(_L("You can see: ") + listed.map(id => _L(ITEMS[id].name)).join(", ") + ".");
+  }
   const npcs = _npcsHere();
   const pats = _patronsHere();
   // One presence line for everyone actually in the room — staff and patrons in the

@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-13",
+  "generated": "2026-08-14",
   "note": "Every room in the game + its region, for the scene-art pipeline (docs/art-pipeline-spec.md). Derived from web/js/world.js — regenerate with scripts/gen-scene-manifest.mjs, do not hand-edit. `kind` is a generator heuristic for prompt-template selection, not game canon. `regionSlug` is produced by the same regex as web/js/scene.js `_sceneArt()`; art files are web/art/rooms/<id>.png with web/art/regions/<slug>.png as the fallback.",
   "counts": {
     "rooms": 237,
@@ -312,7 +312,7 @@
         "silk_rose"
       ],
       "sampleDescs": [
-        "The expat artery: pharmacies, laundry, bars, repeat. ROCK FACTORY's two-storey stage looms on the corner — currently doing what every band in Thailand does to 'Hotel California' and somehow getting away with it. LUCKY TIGER BAR is just east. South is the old market block, which has not been a market since Tree Town took the trade. A small handwritten LK METRO arrow on a wall points down an alley — easy to miss, worth finding. Soi Diana opens off the 7-Eleven on the corner here, its go-go neon running away west. A few doors down the quiet side, CANDY BAR's rose-pink sign keeps its own hours — far enough off the main drag that the soi forgets about it until about three in the morning, which is roughly when it fills up.",
+        "The expat artery: pharmacies, laundry, bars, repeat. ROCK FACTORY's two-storey stage looms on the corner — currently doing what every band in Thailand does to 'Hotel California' and somehow getting away with it. LUCKY TIGER BAR is just east. South is the old market block, which has not been a market since Tree Town took the trade. A small handwritten LK METRO arrow on a wall points down an alley — easy to miss, worth finding. Soi Diana opens off the 7-Eleven on the corner here, its go-go neon running away west. A few doors down the quiet side, CANDY BAR's rose-pink sign keeps its own hours — far enough off the main drag that the soi forgets about it until about three in the morning, which is roughly when it fills up. If you're after the mamasan, that's her door (ENTER CANDY BAR).",
         "Where the soi gives up and hands you to Central Pattaya Road. The traffic arrives here to die: two baht buses nose to tail with nowhere to go, a third wedged across the mouth of the junction while its driver leans out and negotiates with nobody in particular. The motorbikes don't wait. They come through the gaps in a steady braided stream — a girl side-saddle in six-inch heels holding her hair down with one hand, a punter on the back of another with his knees out like a man being carried to somewhere he didn't choose. A 7-Eleven throws cold white light across the whole slow mess, and the piwins at the corner watch it the way farmers watch weather.",
         "The block everyone still calls the market, though the market went years ago — Tree Town took the trade and the tarps came down. What is left is the shape of it: shophouse fronts too wide for what they sell now, a som tam cart holding the corner out of sheer stubbornness, and a smell of papaya salad that could still pull you here from two sois away. SILK ROSE shares the block east, and a pink-lit shopfront a few doors down promises the oil is warm."
       ]
@@ -1083,7 +1083,9 @@
       "kind": "beach",
       "dark": true,
       "darkLight": null,
-      "people": [],
+      "people": [
+        "Thomas"
+      ],
       "desc": "The north tip of Dongtan Beach, where the sand runs out against the black shoulder of Pratumnak Hill. Quiet, unlit, the sea working away below. The sand runs south back down the shore; a beach-access path climbs to Dongtan Beach Road to the east."
     },
     {
@@ -1270,9 +1272,7 @@
       "kind": "beach",
       "dark": true,
       "darkLight": null,
-      "people": [
-        "Thomas"
-      ],
+      "people": [],
       "desc": "As far as walking gets you. A stand of casuarinas leans off the dune with the wind's shape set into them, and under the nearest one somebody long ago put a spirit house — weathered grey, one corner gone, the little figures inside still facing out to sea. There are no offerings on it. There is no rubbish either, which takes some explaining on a beach nobody sweeps. Behind you the lights of Jomtien are a low orange smear a long way north."
     },
     {
@@ -2731,7 +2731,7 @@
       "kind": "street",
       "dark": false,
       "people": [],
-      "desc": "The expat artery: pharmacies, laundry, bars, repeat. ROCK FACTORY's two-storey stage looms on the corner — currently doing what every band in Thailand does to 'Hotel California' and somehow getting away with it. LUCKY TIGER BAR is just east. South is the old market block, which has not been a market since Tree Town took the trade. A small handwritten LK METRO arrow on a wall points down an alley — easy to miss, worth finding. Soi Diana opens off the 7-Eleven on the corner here, its go-go neon running away west. A few doors down the quiet side, CANDY BAR's rose-pink sign keeps its own hours — far enough off the main drag that the soi forgets about it until about three in the morning, which is roughly when it fills up."
+      "desc": "The expat artery: pharmacies, laundry, bars, repeat. ROCK FACTORY's two-storey stage looms on the corner — currently doing what every band in Thailand does to 'Hotel California' and somehow getting away with it. LUCKY TIGER BAR is just east. South is the old market block, which has not been a market since Tree Town took the trade. A small handwritten LK METRO arrow on a wall points down an alley — easy to miss, worth finding. Soi Diana opens off the 7-Eleven on the corner here, its go-go neon running away west. A few doors down the quiet side, CANDY BAR's rose-pink sign keeps its own hours — far enough off the main drag that the soi forgets about it until about three in the morning, which is roughly when it fills up. If you're after the mamasan, that's her door (ENTER CANDY BAR)."
     },
     {
       "id": "buakhao_oil",
