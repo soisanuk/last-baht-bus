@@ -447,6 +447,15 @@
     background: var(--panel); border: 1px solid var(--pink); border-radius: 14px;
     padding: 1.5rem 1.3rem 1.6rem; box-shadow: 0 0 44px #ff149355, inset 0 0 40px #00000066;
   }
+  /* The splash marquee (web/art/posters/splash.webp — the Pattaya City hill
+     sign over the bay, go-go girl beneath; generated in ../portrait_gen).
+     onerror removes it, so missing art is never a bug — same doctrine as the
+     scene panel. */
+  #start-art {
+    display: block; width: 100%; border-radius: 10px;
+    border: 1px solid #ff149333; margin: 0 0 1rem;
+    box-shadow: 0 0 24px #ff149322;
+  }
   .start-card h1 { color: var(--yellow); font-size: 1.5rem; letter-spacing: .06em; margin: 0 0 .2rem; text-shadow: 0 0 14px #ffe60055; }
   .start-sub { color: var(--violet); font-size: .78rem; margin: 0 0 1.2rem; }
   .start-mode {
@@ -843,6 +852,8 @@
     <div id="start-menu">
       <h1>THE LAST BAHT BUS</h1>
       <p class="start-sub">a Pattaya misadventure · Soi Sanuk universe</p>
+      <img id="start-art" src="art/posters/splash.webp" alt=""
+           onerror="this.remove()">
       <button class="start-mode" data-mode="soi6">
         <span class="start-mode-title">SOI 6 CHALLENGE ★</span>
         <span class="start-mode-desc">One week, one street. ฿100,000 and a hard head — max out your สนุก.</span>
