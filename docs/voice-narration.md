@@ -47,7 +47,7 @@ Thai phrases, `speak` hook at `main.js`). English prose is unvoiced. So this is 
 
 Voice is one answer to "hard to read on a phone," but not the first or cheapest:
 
-- **A text-size control** is the most direct fix and the highest-leverage one — it helps
+- **A text-size control** — **SHIPPED 2026-08-15**: the Aa FAB + typed FONT cycle body font-size 15/17/19/21px, persisted in localStorage (lbb_font_px), scaling only the prose/input while the rem-based chrome stays put (tests/e2e/font.spec.mjs). The rest of this bullet was the original case: it is the most direct fix and the highest-leverage one — it helps
   *every* older player immediately, needs no voice, no network, no build cost of note, and
   never touches the writing. This should probably come **before** any TTS work.
 - **`aria-live` on `#term-out`** so an older player's own phone screen reader (VoiceOver /

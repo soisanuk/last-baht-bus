@@ -94,6 +94,24 @@
     100% { box-shadow: 0 0 7px 1px #ff149377, 0 0 0 0 #ff149300; }
   }
   @media (prefers-reduced-motion: reduce) { #bell-fab, #msg-fab { animation: none; } }
+  /* Text size (the reading-glasses button). Always on — furniture, not a prompt,
+     so no pulse. It scales BODY font-size only: the prose and the input inherit
+     it, while the chrome (header, fabs, chips, the ASCII map, the QR) is rem-
+     based off the html root and never moves. Pref: localStorage lbb_font_px. */
+  #font-fab {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    border: 1px solid #ff149366;
+    background: radial-gradient(circle at 50% 38%, #2a0040, #100019);
+    color: var(--pink);
+    font-size: 1.05rem;
+    font-weight: 700;
+    line-height: 1;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    opacity: .8;
+  }
+  #font-fab:active { background: #46006b; transform: scale(0.94); }
   /* The street compass. Same stack slot as the bell — the bell shows inside a
      venue and this shows outside one, so they are never both up. No pulse: the
      bell is a prompt ("you could ring me"), this is furniture. */
@@ -797,6 +815,7 @@
   <button id="term-send" title="Send" aria-label="Send command">➤</button>
   </div>
   <div id="fab-stack">
+    <button id="font-fab" title="Text size" aria-label="Text size">Aa</button>
     <button id="bell-fab" title="Ring the bell" aria-label="Ring the bell">🔔</button>
     <button id="msg-fab" title="Read your messages" aria-label="Read your messages">💬</button>
     <div id="nav-fab" role="group" aria-label="Compass">

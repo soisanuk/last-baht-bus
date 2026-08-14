@@ -30,6 +30,37 @@ function _showStartMenu() {
 
 // Reflect the TOGGLE FULL pref onto the splash button. Called at boot and
 // whenever the start menu is shown, so the unlock survives a reload.
+// ── Text size (phone readability for older eyes — docs/voice-narration.md's
+// first lever). Presentation only: scales BODY font-size, which the terminal
+// prose and the input inherit while every rem-based piece of chrome (header,
+// fabs, chips, the ASCII bar-mat map, the QR) stays put. The pref lives here
+// in localStorage, never in G — saves, determinism and the vm suite can't
+// see it, and gameplay is untouched by design.
+const _FONT_STEPS = [
+  { px: 15, name: "standard" },
+  { px: 17, name: "large" },
+  { px: 19, name: "larger" },
+  { px: 21, name: "largest" },
+];
+function _fontStep() {
+  let px = 15;
+  try { px = parseInt(localStorage.getItem("lbb_font_px"), 10) || 15; } catch (e) {}
+  const i = _FONT_STEPS.findIndex(f => f.px === px);
+  return i >= 0 ? i : 0;
+}
+function _applyFontSize() {
+  const f = _FONT_STEPS[_fontStep()];
+  document.body.style.fontSize = f.px === 15 ? "" : f.px + "px";
+  const btn = document.getElementById("font-fab");
+  if (btn) btn.title = "Text size: " + f.name;
+}
+function _cycleFontSize() {
+  const next = _FONT_STEPS[(_fontStep() + 1) % _FONT_STEPS.length];
+  try { localStorage.setItem("lbb_font_px", String(next.px)); } catch (e) {}
+  _applyFontSize();
+  _term.print("▦ Text size: " + next.name + ".", "dim");
+}
+
 function _applyFullGate() {
   const btn = document.querySelector('#start-menu .start-mode[data-mode="full"]');
   if (!btn) return;
@@ -156,6 +187,11 @@ function _dispatch(cmd) {
       (on ? " — RESET (or finish this night) to see the menu." : ""), "dim");
     return;
   }
+
+  // FONT / TEXT SIZE cycles the reading size — same unsurfaced treatment as the
+  // display toggles (no autocomplete, no HELP): the Aa button is the surface,
+  // this is the keyboard path.
+  if (/^(font( size)?|text ?size)$/.test(v)) { _cycleFontSize(); return; }
 
   // RESET wipes the save — a destructive one-way door, so it takes a confirmation.
   if (_awaitingReset) {
@@ -288,6 +324,9 @@ document.addEventListener("DOMContentLoaded", () => {
     name => _audio.sfx(name)
   );
   _term.init(_dispatch);
+
+  _applyFontSize();
+  document.getElementById("font-fab").addEventListener("click", () => _cycleFontSize());
 
   const muteBtn = document.getElementById("mute-btn");
   muteBtn.textContent = _audio.muted() ? "🔇" : "🔊";
