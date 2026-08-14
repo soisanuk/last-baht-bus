@@ -785,14 +785,15 @@
     😘 The girls speak two languages. You barely speak one. <b>Learn Thai →</b>
   </a>
   <div id="scene" hidden></div>
-  <div id="term-out"></div>
+  <div id="term-out" role="log" aria-live="polite" aria-atomic="false" aria-label="Game text"></div>
   <!-- context chips are rendered per-turn by term.js _renderChips() from the engine's _chipSet() -->
   <div id="chips"></div>
   <div id="term-suggest"></div>
   <div id="input-row">
     <span class="prompt">❯</span>
     <input id="term-in" type="text" autocomplete="off" autocapitalize="off"
-           autocorrect="off" spellcheck="false" placeholder="what do you do?">
+           autocorrect="off" spellcheck="false" placeholder="what do you do?"
+           aria-label="Type a command">
   <button id="term-send" title="Send" aria-label="Send command">➤</button>
   </div>
   <div id="fab-stack">

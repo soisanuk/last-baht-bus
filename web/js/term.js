@@ -499,7 +499,10 @@ const _term = (() => {
     // The ASCII bar-mat map is monospace art — skip decorate() so bar-name kw
     // spans can't shift a glyph and break the alignment (see .t-map CSS: no-wrap,
     // horizontal-scroll, font shrinks to fit narrow screens).
-    if (cls === "map") div.textContent = text;
+    // The ASCII bar-mat map is monospace art — a screen reader spelling it out
+    // glyph-by-glyph is noise, and the compass buttons + the Exits line already
+    // carry proper labels, so keep it out of the live-region announcement.
+    if (cls === "map") { div.textContent = text; div.setAttribute("aria-hidden", "true"); }
     else div.innerHTML = decorate(text);
     _addAvatars(div, text);
     _out.appendChild(div);
