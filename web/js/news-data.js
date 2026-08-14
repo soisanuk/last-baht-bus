@@ -3,27 +3,27 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
+    "t": "Gruesome discovery days after young siblings go missing in Thailand’s notorious ‘Sin City’",
+    "s": "New York Post",
+    "d": "13 Aug 2026"
+  },
+  {
+    "t": "6 Pattaya officials suspended for collecting unofficial fines from foreigners",
+    "s": "thethaiger.com",
+    "d": "11 Aug 2026"
+  },
+  {
     "t": "Dad seeks answers over son's killing",
     "s": "Bangkok Post",
     "d": "10 Aug 2026"
   },
   {
-    "t": "Pattaya suspends six staff over alleged tourist money demand",
-    "s": "Khaosod English",
-    "d": "10 Aug 2026"
-  },
-  {
     "t": "Thai destinations rank in Asia’s top five among European travellers",
-    "s": "Nation Thailand",
+    "s": "nationthailand.com",
     "d": "11 Aug 2026"
   },
   {
     "t": "Chinese family protests after son dies in fatal stabbing in Pattaya",
-    "s": "thethaiger.com",
-    "d": "11 Aug 2026"
-  },
-  {
-    "t": "6 Pattaya officials suspended for collecting unofficial fines from foreigners",
     "s": "thethaiger.com",
     "d": "11 Aug 2026"
   },
@@ -38,9 +38,9 @@ var NEWS_FEED = [
     "d": "09 Aug 2026"
   },
   {
-    "t": "Rental unit in Pattaya · ★New · 1 bedroom · 1 bed · 1 bath",
-    "s": "Airbnb",
-    "d": "11 Aug 2026"
+    "t": "‘So brutally cruel’: Suspected serial killer gang rattles Thailand",
+    "s": "SMH.com.au",
+    "d": "12 Aug 2026"
   },
   {
     "t": "Thailand tightens gun controls after deadly school shooting",
@@ -48,19 +48,9 @@ var NEWS_FEED = [
     "d": "12 Aug 2026"
   },
   {
-    "t": "Thailand's $3 government bonds attract retail investors",
-    "s": "Nikkei Asia",
-    "d": "12 Aug 2026"
-  },
-  {
-    "t": "Thailand's second-quarter growth seen slowing sharply as weak consumption weighs",
-    "s": "Reuters",
+    "t": "Australian teen golfer Jessica Bang dies in Thailand",
+    "s": "abc.net.au",
     "d": "13 Aug 2026"
-  },
-  {
-    "t": "Lisa sparks dating rumors with actor dubbed 'Thailand's Cha Eun-woo' amid Arnault breakup speculation",
-    "s": "The Korea Times",
-    "d": "12 Aug 2026"
   },
   {
     "t": "Thailand stun unbeaten Poland to reach Girls’ U17 World Championship quarterfinals",
@@ -68,20 +58,30 @@ var NEWS_FEED = [
     "d": "13 Aug 2026"
   },
   {
-    "t": "Korean drug and fraud fugitive arrested in Phuket",
+    "t": "Thailand's second-quarter growth seen slowing sharply as weak consumption weighs",
+    "s": "Reuters",
+    "d": "13 Aug 2026"
+  },
+  {
+    "t": "Thailand seizes more assets of Chinese tycoon Chen Zhi",
     "s": "Bangkok Post",
     "d": "13 Aug 2026"
+  },
+  {
+    "t": "Lisa sparks dating rumors with actor dubbed 'Thailand's Cha Eun-woo' amid Arnault breakup speculation",
+    "s": "koreatimes.co.kr",
+    "d": "12 Aug 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-08-13","USD":33.13,"AUD":23.36,"GBP":44.7,"EUR":38.21};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-14","temp":28,"humid":79,"code":3,"hi":31,"rain":76};
+var WX_NOW = {"date":"2026-08-14","temp":30,"humid":76,"code":3,"hi":31,"rain":75};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-08-01","first":"932479","last2":"69","front3":["413","672"],"back3":["039","154"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4349,"date":"2026-08-13","baht":68150};
+var GOLD = {"usd":4321,"date":"2026-08-14","baht":67700};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":63359,"thb":2103446};
+var BTC = {"usd":63461,"thb":2107539};
