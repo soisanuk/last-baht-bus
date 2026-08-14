@@ -2933,6 +2933,73 @@ function _loopPos(roomId) {
 // Where the trucks WAIT until full — board here and the queue is the system.
 const _BUS_WAITING = new Set(["pattaya_tai", "dolphin"]);
 
+// ── Riding the loop for its own sake ─────────────────────────────────────────
+// Canon (Mario): some punters ride the circuit purely for the pleasure of it —
+// hanging off the back rail for the breeze and the view. And occasionally the
+// truck comes with a hazard: an old lonely expat who rides the loop as a way
+// to trap tourists in conversation. Same man every time. There is no escape
+// until your stop, which is the whole point of his system.
+const _LOOP_RIDE = [
+  "You take the back step, hook an arm round the rail, and let the town do the work: " +
+    "neon smearing past, the breeze finally winning against the heat, girls on a scooter " +
+    "pacing the truck for half a block just to shout something friendly and peel away.",
+  "Benches full, nobody talking, everybody watching — the truck is a moving balcony and " +
+    "the whole one-way town files past it in order: the sois firing, the sea flashing " +
+    "between buildings, the Dolphin turning you loose down the other side.",
+  "Hanging off the back rail with the wind in your shirt, you understand the fifteen-baht " +
+    "secret: this is the best ride in Pattaya and it is not close. A tourist gets on, " +
+    "clocks you grinning at nothing, and by the Dolphin he is grinning at nothing too.",
+  "The loop, ridden for no reason, which turns out to be the best reason. Second Road's " +
+    "shophouse glow, the turn at the top where Terminal 21 pretends to be an airport, " +
+    "then the long float down the seafront with the bay breathing alongside.",
+  "You ride the whole circuit with your chin on the rail like a dog with its head out " +
+    "the window, and arrive back where you started having gone nowhere and seen " +
+    "everything. The driver doesn't even look surprised. You are not his first.",
+];
+const _LOOP_EXPAT = [
+  "You've barely taken the bench when he leans across — old boy, faded polo, carrier " +
+    "bag of nothing in particular — and opens with \"First time in Pattaya?\" like a " +
+    "chess move. It is not his first game. You are trapped until your stop and he knows " +
+    "it: by the Dolphin you know his knee history, his ex-wife's village, and what this " +
+    "town was before, quote, they ruined it.",
+  "The old boy is aboard again, and this time you watch him work: a young couple board " +
+    "at Central and he has them inside four seconds — \"You want to know the REAL " +
+    "Pattaya?\" They do not. They will hear it anyway, the whole slow lap of it, and " +
+    "get off two stops early, which is the standard escape and he takes no offence.",
+  "\"Now your baht bus,\" he says, settling in with the contentment of a man who has " +
+    "engineered this exact captive audience, \"was five baht when I came. FIVE.\" The " +
+    "loop rolls on. The number does not change and neither does he, and somewhere past " +
+    "the Dolphin you realise the fare history of Chonburi province is now permanently " +
+    "installed in your head.",
+  "He's there on the front bench, waiting the way an angler waits, and you make the " +
+    "mistake of eye contact. The next twenty minutes are his: the exchange rate in " +
+    "'ninety-seven, the bar he nearly bought, the wife in Udon he doesn't mention " +
+    "twice. Under it all, unsaid and audible, the actual message: nobody else listens.",
+  "Tonight he doesn't hunt. He just sits with his carrier bag as the town wheels past, " +
+    "and for one strange stretch of seafront the two of you ride in silence like old " +
+    "colleagues. At your stop he says, \"Same time tomorrow,\" as if you'd agreed to " +
+    "something. In a way you can't name, you have.",
+];
+function _rideLoop() {
+  // The whole circuit, ~forty minutes of town: paid in real ticks, TRAVEL-style
+  const startDay = G.day, g0 = G;
+  for (let i = 0; i < 5; i++) {
+    _tick();
+    if (G !== g0 || G.day !== startDay || G.over) return; // the night ended mid-lap
+    if (G.pendingEnc || G.game) break;                    // something found you anyway
+  }
+  const expat = _rand() < 0.34;
+  _say(expat ? _pickVary(_LOOP_EXPAT, "loopexpat") : _pickVary(_LOOP_RIDE, "loopride"));
+  if (G.loopDay !== G.day) {
+    G.loopDay = G.day;
+    _addHappy(2); // non-jading — the spectator family (WATCH SOI, the cats, the hill)
+  }
+  G.pendingFare = { kind: "bus", price: BUS_FARE, dest: G.room };
+  _say(`Back where you flagged it, one whole town later. The driver leans out: “${thaiBaht(BUS_FARE)}”`, "thai");
+  _engineSpeak(thaiBaht(BUS_FARE));
+  _say(`(${thaiNumRoman(BUS_FARE)} … the ride's over, the fare isn't. PAY <amount>.)`, "dim");
+}
+
 function _doRideBus(arg) {
   const r = _room();
   // Order matters: "no route here" (indoors/off-road) and the curfew both
@@ -2976,6 +3043,20 @@ function _doRideBus(arg) {
   const lines = _busLinesFor(G.room);
   const reachable = [...new Set(lines.flatMap(l => BUS_LINES[l]))].filter(s => s !== G.room);
   const w = (arg || "").toLowerCase();
+  if (/\bloop\b|\bround trip\b|\bjoyride\b/.test(w)) {
+    if (!(lines.includes("beachrd") || lines.includes("secondrd"))) {
+      _say("This line runs out and back, not round — the loop is the town circuit. " +
+        "Ride in to the Pattaya Tai junction and pick it up there.");
+      return;
+    }
+    if (G.money < BUS_FARE) {
+      _say(`The loop costs what any ride costs — ฿${BUS_FARE} — and you have ฿${G.money}. ` +
+        "The breeze, tragically, is not self-financing.");
+      return;
+    }
+    _rideLoop();
+    return;
+  }
   const dest = reachable.find(s =>
     ROOMS[s].name.toLowerCase().includes(w) || ROOMS[s].region.toLowerCase().includes(w));
   if (!w || !dest) {
@@ -2983,6 +3064,8 @@ function _doRideBus(arg) {
       ? "The truck at the head of the rank waits, benches filling. He'll drop you: "
       : "You put an arm out; a blue truck swerves in. He'll drop you: ") +
       reachable.map(s => ROOMS[s].name).join(" · "), "dim");
+    if (lines.includes("beachrd") || lines.includes("secondrd"))
+      _say("(Or stay on and RIDE THE LOOP — the whole circuit, just for the breeze.)", "dim");
     return;
   }
   if (G.money < BUS_FARE) {
@@ -4271,7 +4354,7 @@ const _HELP = `Common commands:
   N/S/E/W · IN/OUT · ENTER <place>
   TALK TO <person> · ASK <person> ABOUT <topic> · GIVE <thing> TO <person>
   WAI [person] · SAY <thai phrase> [TO <person>]
-  RIDE BUS TO <place> · MOTOSAI TO <place> · PAY <amount>
+  RIDE BUS TO <place> · RIDE THE LOOP (the whole circuit, for the breeze) · MOTOSAI TO <place> · PAY <amount>
   BUY <thing> · SELL BOTTLES · READ <thing> · READ SIGN
   WATCH TV (bars & your hotel room) · READ PAPER (on your phone) — the day's real headlines
   OWL / COLUMN — the Nite Owl newsletter in your inbox (a hard copy still at the Queen Vic)
@@ -4363,7 +4446,7 @@ const _COMPLETE_VERBS = [
   "handover", "resume",
   "wear",
   "look", "examine", "take", "drop", "inventory", "go", "enter", "talk to",
-  "ask", "give", "buy", "sell bottles", "pay", "wai", "say", "ride bus to",
+  "ask", "give", "buy", "sell bottles", "pay", "wai", "say", "ride bus to", "ride the loop",
   "motosai to", "travel", "light", "charge phone", "read", "use", "open", "play",
   "flirt", "kiss", "spank", "fondle", "ring bell", "barfine", "massage", "special", "soapy", "meet", "eat", "drink",
   "sleep", "tv", "column", "owl", "watch", "watch soi", "balcony", "weather", "scores", "lottery", "map", "time", "tip", "wave", "phone",
@@ -5105,6 +5188,7 @@ function doCommand(input) {
       _doApologize(); break;
     case "ride": case "catch":
       if (arg.startsWith("bus")) _doRideBus(arg.replace(/^bus\s*/, ""));
+      else if (/\bloop\b/.test(arg)) _doRideBus("loop"); // RIDE THE LOOP — the joyride
       else if (arg.startsWith("motosai") || arg.startsWith("moto") || arg.startsWith("bike"))
         _doMotosai(arg.replace(/^\S+\s*/, ""));
       else _say("Ride what — the bus or a motosai?");
