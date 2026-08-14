@@ -4441,6 +4441,53 @@ const _OWL_LISTINGS = [
 // The key is HOOT: four letters, printed at the foot of every column since the
 // game shipped, and the ad says so if you read it as an instruction rather than
 // as an old man being arch. Solution and full chain: docs/ctf.md.
+// The noticer's reward: EXAMINE a distinctive fixture (an authored `reads:` —
+// logged in G.examined by _roomRead) and the Owl may run a letter about that
+// exact object. The player is never named; the coincidence is the wink. Letters
+// exist only for these flagship fixtures — the map grows with the canon.
+const _OWL_NOTICED = {
+  "tequila_queen.mirror ball": ["A reader asks after the Tequila Queen's mirror ball, specifically the dark " +
+    "patch where the tiles are gone, and whether management might finally fix it.",
+    "Fix it? Squire, that dark patch has seniority over half the dancers. It sweeps the room " +
+    "like weather, everyone drinks under it, and I am told on good authority it has a name. " +
+    "Some things in this town are broken in the exact shape of themselves. Leave them be."],
+  "the_gecko.gecko": ["A reader reports being introduced, by name, to a gecko he never saw, in a bar " +
+    "the size of a wardrobe on Pratumnak, and wants to know if he was being had.",
+    "You were not. Somchai is real, salaried in insects, and has outlasted two owners and a " +
+    "lease dispute. Plenty of staff on this coast you'll never see either. He clicks twice " +
+    "for regulars. You were being welcomed."],
+  "anchor_bar.wheel": ["A reader writes that he has now heard four different stories about which boat " +
+    "the Anchor's ship's wheel came off, told by four different regulars, all eyewitnesses.",
+    "All four are true, chief. That is what a good fixture is FOR. The wheel came off exactly " +
+    "one boat, and I know which, and I am taking it to the crematorium with me. Buy the " +
+    "storyteller a beer and stop auditing."],
+  "stinky_bar.skunk": ["A reader confesses he has grown fond of the cartoon skunk over the Stinky " +
+    "Pinky and wonders what that says about him.",
+    "It says you've been here about three nights. The skunk is the finest sign on Beach Road " +
+    "precisely because it is terrible — it promises nothing, delivers exactly that, and " +
+    "buzzes while doing it. Fondness for it is the first symptom of residency. There is no cure."],
+  "short_time_motel.keys": ["A reader was struck by the ring of numbered keys on a nail at a certain " +
+    "motel, and the old man who never once looks at them, and asks how he keeps track.",
+    "Forty years of practice and nothing else to think about, squire. That nail is the most " +
+    "accurate booking system in the province. The chains and their key cards should come " +
+    "and take notes — quietly, and not after midnight, when the register is full."],
+  "second_rd_mall.crocodile": ["A reader photographed the crocodile on the spit outside the mall and asks, " +
+    "reasonably, who eats it.",
+    "Thais, by the skewer, at a fair price. The farang photograph it and buy a toastie. The " +
+    "crocodile, I am told, finds both responses acceptable. It is the best-adjusted party " +
+    "on that pavement and it has been dead since Tuesday."],
+  "white_rabbit.jar": ["A reader up in Naklua noticed a tip jar rather fuller than the bar around it " +
+    "and asks the Owl what he makes of that.",
+    "I make of it what I make of every miracle in this town: somebody is paying for something, " +
+    "and it is not the beer. The Owl does not investigate miracles north of the Dolphin. " +
+    "Neither, if you are wise, do you."],
+  "kingfisher.bird": ["A reader on Pratumnak demands to know, once and for all, what species of bird " +
+    "is painted over the Kingfisher's bar.",
+    "I consulted a book, squire, and the book asked me to stop. It has a kingfisher's blue, a " +
+    "myna's attitude, a duck's undercarriage and a heron's neck, and the painter was working " +
+    "from love, not ornithology. It is a Kingfisher. Species: local."],
+};
+
 const _OWL_BOX15 = [
   "• PERSONALS, Box 15 — Gentleman of long residence, technical disposition, " +
   "seeks correspondent of the same. I have signed off with the same four letters " +
@@ -4517,9 +4564,15 @@ function _doColumn() {
   // one-shot: if the amulet went back and the Owl has not had his say yet, he
   // gets it this issue instead of a pooled letter
   let letter, reply;
+  const noticed = Object.keys(G.examined || {}).filter(k => _OWL_NOTICED[k]);
   if (_flag("amuletReturned") && !_flag("owlAmulet")) {
     _setFlag("owlAmulet");
     [letter, reply] = _OWL_AMULET;
+  } else if (noticed.length && _owlPick([0, 1], 43)) {
+    // the noticer slot: a letter about a fixture YOU actually examined — the
+    // player is never named, the coincidence is the wink. Day-stable like the
+    // rest of the issue (hash, no dice), alternating with the ordinary pool.
+    [letter, reply] = _OWL_NOTICED[_owlPick(noticed, 47)];
   } else {
     [letter, reply] = _owlPick(_OWL_LETTERS, 13);
   }

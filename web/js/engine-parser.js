@@ -719,12 +719,41 @@ const _READ_NOUNS = {
   recliner: ["lounger"],
   door: ["forbidden door"],
   "mirror ball": ["disco ball", "mirrorball"],
+  table: ["good table", "best table"],
+  notebook: ["spiral notebook", "biro"],
+  hatch: ["serving hatch", "ply", "plywood"],
 };
-function _roomRead(arg) {
+// A reads value is a plain string, or an ARRAY of gated nodes {req, notFlags,
+// text, sets?, reveal?} resolved first-match like dialogue — so a close look can
+// change once you know things (the Orchid's good table pre/post the recon), and
+// exactly one fixture in the game can give something up (reveal: itemId places
+// the hidden item in the room; TAKE does the rest). Side effects are idempotent
+// on purpose: _doExamine truthy-checks _roomRead before _doRead resolves it again.
+function _resolveRead(val) {
+  if (typeof val === "string") return { text: val };
+  if (!Array.isArray(val)) return null;
+  for (const e of val) {
+    if (e.req && !e.req.every(f => _flag(f))) continue;
+    if (e.notFlags && e.notFlags.some(f => _flag(f))) continue;
+    return e;
+  }
+  return null;
+}
+function _roomRead(arg, peek) {
   const reads = _room().reads;
   if (!reads) return null;
   for (const [key, aliases] of Object.entries(_READ_NOUNS)) {
-    if (reads[key] && (arg.includes(key) || aliases.some(a => arg.includes(a)))) return reads[key];
+    if (reads[key] && (arg.includes(key) || aliases.some(a => arg.includes(a)))) {
+      const e = _resolveRead(reads[key]);
+      if (!e) return null;
+      if (!peek) {   // _doExamine truthy-checks first — effects only on the real read
+        if (e.sets) for (const f of e.sets) _setFlag(f);
+        if (e.reveal && G.itemLoc[e.reveal] == null) G.itemLoc[e.reveal] = G.room;
+        // the noticer's book: every distinctive fixture you have actually looked at
+        (G.examined = G.examined || {})[G.room + "." + key] = 1;
+      }
+      return e.text;
+    }
   }
   return null;
 }
@@ -765,8 +794,23 @@ function _doExamine(arg) {
   if (G.room === "lk_entrance" && /\b(qr|qr ?code|sticker|rabbit)\b/.test(arg)) {
     _doQrSticker(); return;
   }
+  // An authored fixture beats look-resolution — EXAMINE NOTEBOOK should read the
+  // notebook, not resolve to the owlish old-timer scribbling in it. Peek only;
+  // the effects fire in _doRead below.
+  if (_roomRead(arg, true)) return _doRead(arg);
   const npc = _findNpc(arg);
-  if (npc) { _say(NPCS[npc].desc); return; }
+  if (npc) {
+    _say(NPCS[npc].desc);
+    // The Regular, visible: a bonded lady's close-up warms by tier. Only the
+    // drinks ledger feeds _bondTier, so this can only ever fire for the girls
+    // (and mamasans/cashiers) you've actually courted — strangers, managers and
+    // patrons read exactly as before.
+    const role = NPC_ROLES[npc];
+    if ((role === "hostess" || role === "mamasan" || role === "cashier") && _bondTier(npc) >= 1) {
+      _say(_pickVary(_BOND_LOOK[_bondTier(npc)], "xbond" + npc), "dim");
+    }
+    return;
+  }
   const pat = _findPatron(arg);
   if (pat) {
     const p = PATRONS[pat];
@@ -782,7 +826,7 @@ function _doExamine(arg) {
       "closing-time optimism. Chalk and a scoreboard hang beside it. (PLAY DARTS.)");
     return;
   }
-  if (_roomRead(arg) || arg.includes("sign")) return _doRead(arg);
+  if (_roomRead(arg, true) || arg.includes("sign")) return _doRead(arg);
   if (_doScenery(arg)) return;
   _say(_pickVary(_NO_SUCH_THING, "xnothing"));
 }
@@ -887,6 +931,43 @@ const _SHRINE_STREET = [
   "Nothing on this stretch. They belong to premises, and this is just road.",
 ];
 
+// What a bonded girl looks like when YOU look — the tier overlay _doExamine
+// appends under her desc. Authorial narration (register-free), pooled per tier.
+const _BOND_LOOK = {
+  1: [
+    "She catches you looking and doesn't mind. You've bought enough drinks to be a face " +
+      "now — the smile you get has your name somewhere in it, even if she'd have to check " +
+      "her phone for the spelling.",
+    "You know things about her the walk-ins don't: which laugh is work and which one " +
+      "escapes, where she stashes her phone, how she takes her som tam. Small things. " +
+      "They add up at a rate nobody warns you about.",
+    "A face to her now, not a wallet — she'd clock you from the street and wave. It's not " +
+      "nothing. On this soi it's actually quite a lot.",
+  ],
+  2: [
+    "Looking at her now you see the things she doesn't perform: the tiredness she parks " +
+      "when a customer sits down, the real laugh she saves, the glance she sends you when " +
+      "another table gets loud — you, specifically, as if you'd both already discussed it.",
+    "You're her regular and it shows in what she no longer bothers to hide — the yawn, " +
+      "the phone, the opinion. The performance was for strangers. You've been quietly " +
+      "moved to a different list.",
+    "Somewhere in the last few nights she stopped selling to you. What's left when the " +
+      "selling stops is a person leaning on a rail, and you know her, and that is a " +
+      "stranger thing to have bought with lady drinks than anyone admits.",
+  ],
+  3: [
+    "She looks back at you the way you look at her, and neither of you performs anything. " +
+      "The bar, the drinks ledger, the whole apparatus — it's still there, but between the " +
+      "two of you it has gone quiet, like a radio in another room.",
+    "Hers now, is what the other girls' glances say, and they're not wrong. What you see " +
+      "when you look is someone who has decided about you — and on this soi a woman who " +
+      "has decided is a different creature entirely from one who is deciding.",
+    "You know the face under the makeup and the voice under the Tinglish and the girl " +
+      "under the girl. She lets you know it, which is the actual gift — everything else " +
+      "on this soi can be bought, and that can only be given.",
+  ],
+};
+
 const _NO_SUCH_THING = [
   "Nothing special about that — or it isn't here.",
   "You look. The soi declines to elaborate.",
@@ -895,15 +976,25 @@ const _NO_SUCH_THING = [
 ];
 
 const _SCENERY = [
-  { key: "me", m: /\b(me|myself|my ?self|my body)\b/, lines: { any: [
-    "Sunburn on the tops of your feet in the shape of your sandals, a shirt that was fresh " +
-      "four hours ago, and an expression you would describe as game. (DIAGNOSE for the honest version.)",
-    "A man on holiday, doing holiday at the intensity of a job. The forearms are going brown " +
-      "and nothing else is. (DIAGNOSE if you want numbers.)",
-    "You take stock. Everything is broadly where you left it, which at this hour is a win. " +
-      "(DIAGNOSE for the unflattering detail.)",
-    "Upright, solvent-ish, and pointed in a direction. Three out of three. (DIAGNOSE.)",
-  ] } },
+  { key: "me", m: /\b(me|myself|my ?self|my body)\b/, fn: () => {
+    const base = _pickVary([
+      "Sunburn on the tops of your feet in the shape of your sandals, a shirt that was fresh " +
+        "four hours ago, and an expression you would describe as game. (DIAGNOSE for the honest version.)",
+      "A man on holiday, doing holiday at the intensity of a job. The forearms are going brown " +
+        "and nothing else is. (DIAGNOSE if you want numbers.)",
+      "You take stock. Everything is broadly where you left it, which at this hour is a win. " +
+        "(DIAGNOSE for the unflattering detail.)",
+      "Upright, solvent-ish, and pointed in a direction. Three out of three. (DIAGNOSE.)",
+    ], "scn_me");
+    // one honest clause when the numbers say so — worst condition wins
+    if (G.hurt >= 2) return base + " Also: you are moving like furniture being carried, " +
+      "and strangers have started offering you their seat. That is not a good sign.";
+    if (G.drunk >= 6) return base + " Although the evidence — the lean, the generous " +
+      "focus, the affection for everyone — suggests the survey was conducted drunk.";
+    if (G.jaded >= 4) return base + " And behind the eyes, if you're honest, that flat " +
+      "coin-counting stare the long-termers get. The soi is winning. It always does.";
+    return base;
+  } },
 
   { key: "hands", m: /\b(hands?|fingers?)\b/, lines: { any: [
     "Steady enough. There is a stamp on the back of one that you have no memory of receiving " +
@@ -1041,8 +1132,21 @@ const _SCENERY = [
     ],
   } },
 
-  { key: "bell", m: /\b(bells?)\b/, lines: {
-    bar: [
+  { key: "bell", m: /\b(bells?)\b/, fn: (ctx) => {
+    // While the glow holds, the bell is not an option, it's an event you caused.
+    if ((ctx === "bar" || ctx === "pub") && typeof _bellActive === "function" &&
+        _bellActive(G.room)) {
+      const n = (G.soc.bells && G.soc.bells[G.room]) || 1;
+      return n >= 3 ?
+        "The bell still swings on its rope. Three rings deep, the brass might as well be " +
+          "glowing — the room is yours, the girls are yours, and the only law left in here " +
+          "is your own judgement, which rang the thing three times. (RING BELL, if you dare.)" :
+        "The bell hangs there freshly swung, and the room is still vibrating at your " +
+          "frequency — every glass in the house came off that rope. It would ring again. " +
+          "It wants to. (RING BELL.)";
+    }
+    if (ctx !== "bar" && ctx !== "pub") return null;
+    return _pickVary([
       "Brass, mounted over the rail, rope hanging within easy reach of a man making a decision " +
         "he will price up later. Ringing it buys the house a round and the room will let you " +
         "know how it feels about you afterwards. (RING BELL.)",
@@ -1050,7 +1154,7 @@ const _SCENERY = [
         "good idea. (RING BELL.)",
       "It hangs there being an option. That is its whole job, and it is extremely good at it. " +
         "(RING BELL.)",
-    ],
+    ], "scn_bell_bar");
   } },
 
   // Two shrines, two jobs (docs: the luck-ritual notes). OUTSIDE, a complex
@@ -1535,6 +1639,30 @@ const _SCENERY = [
 
   // ── batch 3 (the singleton skim) ───────────────────────────────────────────
 
+  // The staircase is THE Soi 6 mechanic in architectural form — the prose names
+  // it constantly ("three staircases the menus don't mention") and until now the
+  // curiosity verb pretended not to understand. Venue decides what stairs mean.
+  { key: "staircase", m: /\bstaircases?\b|\bstairs\b|\bstairway\b/, fn: () => {
+    const r = _room();
+    if (r.barType === "soi6") return "The staircase behind the bar, going up. No sign, " +
+      "no menu entry, no explanation — and none needed, because it is the entire " +
+      "business model rendered in concrete. The girls watch you notice it. Noticing it " +
+      "is a known first step.";
+    if (r.barType === "gogo") return "Stairs to the short-time rooms, behind a curtain " +
+      "the DJ booth politely doesn't light. Everyone in the building knows where they " +
+      "go. The stagecraft is in never quite saying so.";
+    if (r.barType === "gents") return "A staircase with carpet on it — carpet, in this " +
+      "climate — which tells you the rooms above are part of the offer, not an " +
+      "afterthought. The club's whole pitch is that nothing here needs to be furtive.";
+    if (G.room === "queen_vic") return "The staircase behind the bar leads up to the " +
+      "guest rooms — actual lodging, actually slept in, which on this soi makes it the " +
+      "most eccentric staircase in a hundred metres. (UP, if you're staying.)";
+    if (r.bar) return "No stairs in here worth the name — this is a one-storey " +
+      "operation, and everything it sells happens at ground level.";
+    return null;
+  } },
+
+
   { key: "cage", m: /\bcashier'?s? cage\b|\bcage\b/, lines: {
     bar: [
       "The cashier's cage — strung with fairy lights, glittering like a shrine, and " +
@@ -1568,10 +1696,17 @@ const _SCENERY = [
 
   // The evening checkpoint is a mechanic where it's watchable — hint it there.
   { key: "checkpoint", m: /\bcheckpoints?\b/, fn: () => {
-    if (["beach_rd_n", "stinky_bar", "blue_dog"].includes(G.room))
-      return "The evening checkpoint, working the road south of the junction: cones, a " +
-        "table, helmetless farang waved over for a paperwork stop and an on-the-spot " +
-        "fine. The bars' front rows treat it as live theatre, which it is. (WATCH POLICE)";
+    if (["beach_rd_n", "stinky_bar", "blue_dog"].includes(G.room)) {
+      // Same 18:00-19:00 window as WATCH POLICE (_shakedownOn) — after that the
+      // cones go in the truck and the answer should say so, not lie about it.
+      if (G.nightTurn < 10)
+        return "The evening checkpoint, working the road south of the junction: cones, a " +
+          "table, helmetless farang waved over for a paperwork stop and an on-the-spot " +
+          "fine. The bars' front rows treat it as live theatre, which it is. (WATCH POLICE)";
+      return "The checkpoint's packed up for the night — cones in the truck, table folded, " +
+        "the road running unexamined. The first hour of the evening is the harvest; after " +
+        "that the officers have somewhere better to be, and so does everyone they'd catch.";
+    }
     return "No checkpoint on this stretch tonight — the police prefer the junctions, " +
       "where the catch is better.";
   } },
@@ -1606,6 +1741,21 @@ const _SCENERY = [
       "No machine in here — the till only works in one direction. The street ATMs have " +
         "the other one covered.",
     ],
+  } },
+
+  // Prose only — reads G.rain / the bake's _wxRainy, consumes no dice, moves
+  // nothing (the weather->mechanics door stays the one sanctioned downpour path).
+  { key: "rain", m: /\brain\b|\bdownpour\b|\bstorm\b/, fn: () => {
+    if (G.rain > 0) return "It is not falling so much as arriving — a white roar off the " +
+      "gulf that has turned the street into a river with lighting. The awnings are " +
+      "drumming, the girls are shrieking happily under them, and nobody sane is walking " +
+      "anywhere until it stops. Which it will. All at once, like a tap.";
+    if (typeof _wxRainy === "function" && _wxRainy()) return "Not raining — yet. But the " +
+      "air has that pressed-down weight, the geckos have gone quiet, and the street " +
+      "vendors are already glancing at their tarps. Everyone on this coast can smell it " +
+      "coming an hour out. You're starting to.";
+    return "No rain in the sky and none coming that anyone's tarps believe in. In the " +
+      "dry season the rain is a rumour the town tells to sell you a roof seat.";
   } },
 
   { key: "kettle", m: /\bkettles?\b|\bthermos\b/, lines: {

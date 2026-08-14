@@ -199,6 +199,7 @@ function newGame() {
     hospitalVisits: 0,   // morning-after hospital scenes seen — rotates the prose so repeats vary
     codaSeen: 0,         // dawn "her baht bus home" codas seen — rotates the prose so repeats vary
     known: {},           // charId → true once their name has printed (ask-topic gate)
+    examined: {},        // "room.readKey" → 1 — distinctive fixtures you've looked at (the Owl's noticer slot)
     visited: { jomtien_beach: true }, // roomId → true once stood in (fast-travel gate)
     talked: {},          // npcId → [dialogue indices already delivered] (terse repeats)
     npc: {},             // per-character conversation state: id → {trust,mood,dstate,know} (see _npcState)

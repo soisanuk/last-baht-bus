@@ -53,7 +53,14 @@ test("every readable-fixture room's prose actually invites the read", () => {
   assert.ok(withReads.length >= 6, "the sweep backed several rooms");
   for (const [id, r] of withReads) {
     const nouns = Object.keys(r.reads);
-    assert.ok(nouns.every(n => typeof r.reads[n] === "string" && r.reads[n].trim()), `${id}: non-empty flavor`);
+    // A reads value is a string, or an array of gated nodes {req?, notFlags?,
+    // text, sets?, reveal?} — first match wins (see _resolveRead). Every node
+    // needs text, and the LAST node must be ungated so the fixture always answers.
+    const wellFormed = v => (typeof v === "string" && v.trim()) ||
+      (Array.isArray(v) && v.length &&
+        v.every(e => typeof e.text === "string" && e.text.trim()) &&
+        !v[v.length - 1].req && !v[v.length - 1].notFlags);
+    assert.ok(nouns.every(n => wellFormed(r.reads[n])), `${id}: non-empty flavor`);
     // The room's prose should reference at least one of its read nouns. Prose =
     // desc + revisit (both surfaces invite), and a noun counts via its
     // _READ_NOUNS aliases too — "framed photographs" invites reads.photos

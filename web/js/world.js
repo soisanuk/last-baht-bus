@@ -2785,6 +2785,21 @@ const ROOMS = {
       "table in the room, a soft-spoken Thai man in an unremarkable shirt whom everyone, the " +
       "MC president included, is very careful to defer to. On a raised banquette at the back, " +
       "filming himself over all of it, is Ryan Powers — actually, improbably, down tonight.",
+    reads: {
+      table: [
+        { req: ["orchidReported"],
+          text: "The good table, and now you can't unsee it: the quiet Thai man, the " +
+            "envelopes that arrive and do not open here, the way Powers performs AT the " +
+            "table and never quite FOR it. This isn't WDG's power seat. It's their tribute " +
+            "desk — the rent a foreign rollup pays to be tolerated, collected weekly with " +
+            "perfect manners. Everyone in the room knows except the man paying." },
+        { text: "The best table in the room, back corner, sightlines to the door — a " +
+          "quiet Thai man in an unremarkable shirt, unbothered by the noise, visited all " +
+          "night by men who lean in respectfully and leave without sitting. Envelopes " +
+          "come and go with the drinks. It reads like business. Whose business, and what " +
+          "kind, the room is far too loud to say." },
+      ],
+    },
     revisit: [
       "Back into the Orchid Room and the strobe and the noise and the skin, the members' club Powers keeps calling classy while it proves him wrong in every direction at once.",
       "The Orchid takes you back into its expensive bacchanal — the high rollers, the MC patches, the quiet Thai man at the good table, and Powers on his banquette narrating himself to his own phone.",
@@ -2970,8 +2985,23 @@ const ROOMS = {
       "anchors the quiet middle stretch of Soi 6 with the righteous calm of a man who has seen " +
       "it all and ordered another pint — the one place on the soi that isn't shouting. Through " +
       "the window, the soi performs — the show without the sweat (WATCH SOI). Terry holds down the corner stool with a beer and the settled " +
-      "air of a man who has watched it all twice. A staircase behind the bar leads " +
-      "UP to the guest rooms.",
+      "air of a man who has watched it all twice. At the far end, most nights, Mort's " +
+      "spiral notebook lies open beside his beer — as much a fixture as the dartboard. " +
+      "A staircase behind the bar leads UP to the guest rooms.",
+    reads: {
+      notebook: [
+        { req: ["jokeWho"],
+          text: "Mort's spiral notebook, half an arm's length away and utterly private. " +
+            "Somewhere in there, you now know, is a page of phone numbers with a tally " +
+            "beside each — the joke ledger — and against one of them, yours, a tick: the " +
+            "one in forty who answered. You are in the material now. There is no way back " +
+            "out of the material." },
+        { text: "A spiral notebook under an old man's forearm, angled away from every " +
+          "sightline in the pub with the unconscious skill of forty years of writing " +
+          "things people would rather he didn't. The biro clicks. The page turns. " +
+          "Whatever the soi did tonight, it's in there." },
+      ],
+    },
     revisit: [
       "Back into the Queen Vic — real aircon, real wood, the dartboard, and the soi safely on the far side of the glass.",
       "The pub folds you back into its calm. Terry lifts his beer from the corner stool without quite looking up.",
@@ -3188,10 +3218,32 @@ const ROOMS = {
       "somebody swept it once, after the end, turned the taps off properly and " +
       "squared the tables, and then locked the door and did not come back.",
     reads: {
-      board: "Three darts still in the treble bed, thrown by somebody who meant to come " +
-        "back for the next leg. Beside it the fixtures list, biro on a brewery poster: " +
-        "half the season ticked off, the other half waiting for a Tuesday that never " +
-        "came. Nobody has taken it down. Taking it down would be admitting something.",
+      board: [
+        { req: ["seanStory"],
+          text: "The fixtures list again — and now it has a name on it. Sean ticked " +
+            "those legs off, bought the next round, flew home for an operation and " +
+            "never saw the second half of the season. Daeng's version is the true one " +
+            "and the kind one, and standing here you can add the part she left out: a " +
+            "bar with no partner has no cushion, and no one to hold a door open while " +
+            "its owner fights for his life somewhere colder." },
+        { text: "Three darts still in the treble bed, thrown by somebody who meant to " +
+          "come back for the next leg. Beside it the fixtures list, biro on a brewery " +
+          "poster: half the season ticked off, the other half waiting for a Tuesday " +
+          "that never came. Nobody has taken it down. Taking it down would be " +
+          "admitting something." },
+      ],
+      hatch: [
+        { req: ["hatchPried"],
+          text: "The ply hangs open where you left it. The hatch shelf behind it is " +
+            "empty now except for dust and the outline where the key ring sat for " +
+            "years, waiting for somebody curious enough to look." },
+        { text: "The sheet of ply over the serving hatch, screwed down at three corners " +
+          "and thought-better-of at the fourth. You work a hand in and lift — it swings " +
+          "up easier than it should, someone's half-finished job — and there on the " +
+          "hatch shelf, under a decade of dust: a brass key on a cork fob, the kind a " +
+          "landlord leaves for the next tenant there is never going to be.",
+          sets: ["hatchPried"], reveal: "shamrock_key" },
+      ],
     },
     revisit: [
       "The Shamrock, still shut, still swept. The darts are still in the board.",
@@ -3421,10 +3473,19 @@ const ROOMS = {
         "to a man describing The Matrix in a bar. Somebody spent real hours on it, and " +
         "believed in it the whole time, and somehow that is the most Eddy thing in the " +
         "building.",
-      jar: "The tip jar by the till is fuller than the room can explain — proper notes, " +
-        "folded, not the shrapnel a half-empty beer bar earns. Either the crowd that " +
-        "drinks here tips like sailors, or money enters this jar by some door other than " +
-        "gratitude. Nobody behind the bar seems curious, which is its own data point.",
+      jar: [
+        { req: ["owlBox15"],
+          text: "The tip jar, fuller than the room can explain — and having pulled the " +
+            "thread you pulled, you look at it differently now. A bar that doesn't need " +
+            "its bar to make money keeps a jar like this the way a magician keeps a " +
+            "deck: for the look of the thing. You are starting to read this whole room " +
+            "like a config file, and it is starting to read back." },
+        { text: "The tip jar by the till is fuller than the room can explain — proper " +
+          "notes, folded, not the shrapnel a half-empty beer bar earns. Either the crowd " +
+          "that drinks here tips like sailors, or money enters this jar by some door " +
+          "other than gratitude. Nobody behind the bar seems curious, which is its own " +
+          "data point." },
+      ],
     },
     exits: { out: "naklua_bars" },
   },
@@ -3858,6 +3919,16 @@ const ITEMS = {
     location: null,
     desc: "Twenty baht of black nylon cord off a 7-Eleven counter display, sold for exactly " +
       "this and nothing else. Half the men in this country are wearing one.",
+  },
+  shamrock_key: {
+    name: "a brass key on a cork fob",
+    aliases: ["brass key", "key", "fob", "shamrock key"],
+    portable: true,
+    location: null, // hidden — the Shamrock's serving hatch gives it up (reads.hatch)
+    desc: "A worn brass door key on a cork fob, SHAMROCK in faded marker on one side and " +
+      "a Khao Talo phone number on the other — a landlord's spare, left where a landlord " +
+      "leaves one. Khun Rattana owns the ground under that bar, Daeng says, and never " +
+      "sells. But a key in your pocket is a question that hasn't been asked yet.",
   },
   amulet: {
     name: "a Buddha amulet",
@@ -8109,7 +8180,7 @@ const NPCS = {
         // second-bar hook once you already run one — the pressure out this way
         // would come from local Thai interests, which is its own arc.
         topic: "shamrock", chip: false,
-        req: ["expatLife", "barOpen"],
+        req: ["expatLife", "barOpen"], sets: ["seanStory"],
         text: "\"So. You have a bar now.\" Daeng says it to the till, not to you, " +
           "and there is no particular warmth in it — but she says it, which from " +
           "Daeng is a toast.\n\n\"Then I tell you something, for later.\" She " +

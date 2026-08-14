@@ -33,7 +33,11 @@ test("common-word filler names never chip in prose viewed from elsewhere", () =>
   for (const r of Object.values(ROOMS)) {
     if (r.desc) prose.push(r.desc);
     if (r.revisit) for (const s of r.revisit) prose.push(s); // brief-on-revisit pools
-    if (r.reads) for (const s of Object.values(r.reads)) prose.push(s); // readable-fixture flavor
+    // readable-fixture flavor — a value is a string or an array of gated nodes {text}
+    if (r.reads) for (const v of Object.values(r.reads)) {
+      if (typeof v === "string") prose.push(v);
+      else if (Array.isArray(v)) for (const e of v) if (e.text) prose.push(e.text);
+    }
   }
   for (const n of Object.values(NPCS)) for (const d of n.dialogue) {
     if (d.text) prose.push(d.text);
