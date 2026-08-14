@@ -175,6 +175,7 @@ const ROOMS = {
     venues: ["jomtien_thai"],
   },
   jomtien_beach_rd_s: {
+    busStop: "jomtien", // on the route — hail-anywhere, no formal stop (2026-08-15 canon)
     name: "Jomtien Beach Road (South)",
     region: "Jomtien",
     desc: "The south end of the beach road, where it meets the mouth of Soi 7. A 7-Eleven glows on " +
@@ -357,6 +358,7 @@ const ROOMS = {
 
   // ── Thappraya Road (the Jomtien "Main Strip") — Dongtan Beach ↔ Second Road ──
   thappraya_w: {
+    busStop: "jomtien", // on the route — hail-anywhere, no formal stop (2026-08-15 canon)
     name: "Thappraya Rd — Main Strip (west)",
     region: "Thappraya",
     seven: true,
@@ -368,6 +370,7 @@ const ROOMS = {
     venues: ["arrow_bar", "the_boardroom", "beach_turn_massage"],
   },
   thappraya_mid: {
+    busStop: "jomtien", // on the route — hail-anywhere, no formal stop (2026-08-15 canon)
     name: "Thappraya Rd — Main Strip (middle)",
     region: "Thappraya",
     desc: "The thick of the strip: beer bars and their fairy lights, and on the south side HYPER " +
@@ -379,6 +382,7 @@ const ROOMS = {
     venues: ["hyper", "cheeky_monkey", "velvet_club"],
   },
   thappraya_e: { motosai: true,
+    busStop: "jomtien", // on the route — hail-anywhere, no formal stop (2026-08-15 canon)
     name: "Thappraya Rd — Main Strip (Second Road end)",
     region: "Thappraya",
     seven: true,
@@ -586,6 +590,7 @@ const ROOMS = {
     exits: { out: "jomtien_beach_rd_s" },
   },
   jomtien_beach_rd_n: {
+    busStop: "jomtien", // on the route — hail-anywhere, no formal stop (2026-08-15 canon)
     name: "Jomtien Beach Road (North)",
     region: "Jomtien",
     desc: "The north end of the beach road, quieter and darker, the sea sighing away to the west. " +
@@ -613,6 +618,7 @@ const ROOMS = {
   // Pratumnak Hill Road, so the whole hill walks as a loop back to the strip.
   // (Separate from pratumnak_rd above, the main road on to Walking Street.)
   thappraya_ext_s: {
+    busStop: "jomtien", // on the route — hail-anywhere, no formal stop (2026-08-15 canon)
     name: "Thappraya Road — Hill (lower)",
     region: "Pratumnak",
     desc: "Where the Main Strip's neon finally gives out and the road tips upward: the last few " +
@@ -621,6 +627,7 @@ const ROOMS = {
     exits: { down: "thappraya_e", n: "thappraya_ext_m", s: "supertown_elbow" },
   },
   thappraya_ext_m: {
+    busStop: "jomtien", // on the route — hail-anywhere, no formal stop (2026-08-15 canon)
     name: "Thappraya Road — Hill (middle)",
     region: "Pratumnak",
     dark: true,
@@ -629,6 +636,7 @@ const ROOMS = {
     exits: { s: "thappraya_ext_s", n: "thappraya_ext_n" },
   },
   thappraya_ext_n: {
+    busStop: "jomtien", // on the route — hail-anywhere, no formal stop (2026-08-15 canon)
     name: "Thappraya Road — Hilltop",
     region: "Pratumnak",
     dark: true,
@@ -1137,7 +1145,8 @@ const ROOMS = {
       "boards lit all night for a terminal nobody flies from. Beach Road runs south " +
       "along the sea, Second Road south into town, Naklua Road north-east toward the " +
       "quieter money, and the songthaews go round and round because this is where the " +
-      "loop turns.",
+      "loop turns. Across from Terminal 21, a rank of blue trucks fills bench by " +
+      "bench for the run south — the drivers don't budge until the benches do.",
     revisit: [
       "Round go the songthaews. The dolphins remain mid-leap.",
       "Terminal 21's boards announce destinations to a car park.",
@@ -2153,10 +2162,11 @@ const ROOMS = {
       "strip and not yet decided what happens next. Pratumnak Hill goes up and away " +
       "to the south. Somebody is selling grilled squid to a queue.\n\nThis is THE " +
       "songthaew stop, and which corner you stand on is the whole decision: the " +
-      "south-west kerb is where the Jomtien buses pull in, and the north-east one " +
-      "picks up for the loop — up Second Road, round the Dolphin, and back down the " +
-      "seafront. Stand on the wrong corner and you will get where you are going " +
-      "eventually, the long way, for the same fifteen baht.",
+      "north-west corner is filling for the run north — up Second Road toward " +
+      "Terminal 21 — and the south-east corner is filling for Jomtien, and neither " +
+      "truck moves until its benches are full. The whole town runs one-way, " +
+      "counter-clockwise, so stand on the wrong corner and you will get where you " +
+      "are going eventually, the long way round, for the same fifteen baht.",
     revisit: [
       "The crossroads does its thing: everybody moving, nobody quite leaving.",
       "A songthaew crawls the junction with its driver leaning out, naming prices.",
@@ -2184,6 +2194,7 @@ const ROOMS = {
     exits: { n: "buakhao_s", w: "pattaya_tai" },
   },
   second_rd_diamond: {
+    busStop: "secondrd", // on the route — hail-anywhere, no formal stop (2026-08-15 canon)
     motosai: true,
     name: "Second Road (Soi Diamond)",
     region: "Second Road",
@@ -2201,6 +2212,7 @@ const ROOMS = {
     exits: { n: "pattaya_tai", s: "second_rd_india", diamond: "soi_diamond" },
   },
   second_rd_india: {
+    busStop: "secondrd", // on the route — hail-anywhere, no formal stop (2026-08-15 canon)
     name: "Second Road (Pratumnak end)",
     region: "Second Road",
     desc: "The long haul of Second Road between Soi Diamond and the hill, and the expats " +

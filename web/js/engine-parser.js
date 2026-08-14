@@ -2905,12 +2905,43 @@ function _doBuy(arg) {
   _say("Not for sale here.");
 }
 
+// Hail-anywhere (2026-08-15 canon): baht buses have no stops — any room on a
+// route (busStop carries the LINE NAME) can flag one down. The town circuit is
+// one-way counter-clockwise (Second Rd north, Beach Rd south), and beachrd +
+// secondrd are ONE service, so being on either reaches the whole loop — riding
+// "against" the flow just means the long way round for the same fare.
+function _busLinesFor(roomId) {
+  const r = ROOMS[roomId] || {};
+  const ls = Object.keys(BUS_LINES).filter(l =>
+    BUS_LINES[l].includes(roomId) || r.busStop === l);
+  if (ls.includes("beachrd") !== ls.includes("secondrd")) {
+    ls.push(ls.includes("beachrd") ? "secondrd" : "beachrd");
+  }
+  return ls;
+}
+// The circuit in travel order (counter-clockwise). Feeder rooms not listed
+// borrow the junction's position; used for the long-way-round narration only.
+const _LOOP_CCW = ["pattaya_tai", "second_rd_s", "second_rd_diana", "second_rd_honey",
+  "second_rd_myth", "second_rd_mall", "second_rd_c", "second_rd_soi8", "second_rd_n",
+  "pattaya_klang", "second_rd_soi6", "dolphin", "naklua_rd", "beach_rd_top",
+  "beach_rd_n", "beach_rd_klang", "beach_rd_soi7", "beach_rd_soi8", "beach_rd_soi9",
+  "beach_rd_c", "beach_rd_s", "bali_hai"];
+function _loopPos(roomId) {
+  const i = _LOOP_CCW.indexOf(roomId);
+  return i >= 0 ? i : _LOOP_CCW.indexOf("pattaya_tai");
+}
+// Where the trucks WAIT until full — board here and the queue is the system.
+const _BUS_WAITING = new Set(["pattaya_tai", "dolphin", "bali_hai"]);
+
 function _doRideBus(arg) {
   const r = _room();
-  // Order matters: "no stop here" (indoors) and the curfew both describe the
-  // real situation, so they come before the soi6-mode refusal — otherwise BUS
-  // typed indoors or after 02:00 would narrate a songthaew slowing where none is.
-  if (!r.busStop) { _say("No bus stop here. Look for one on the main roads."); return; }
+  // Order matters: "no route here" (indoors/off-road) and the curfew both
+  // describe the real situation, so they come before the soi6-mode refusal.
+  if (!_busLinesFor(G.room).length) {
+    _say("No blue trucks come down here — they keep to the main roads. The seafront, " +
+      "Second Road, Thappraya, or one of the big junctions.");
+    return;
+  }
   if (G.rain > 0) {
     _say("Headlights crawl past behind the wall of water, but no songthaew is " +
       "stopping — the drivers can't tell a fare from a lamppost in this.");
@@ -2919,7 +2950,7 @@ function _doRideBus(arg) {
   if (G.nightTurn >= LAST_BUS_TURN) {
     // Only advertise MOTOSAI where there's actually a stand (beach_rd_c/_n, naklua_rd
     // and the soi6 pocket have none — it's the two feet from here).
-    _say("You stand at the stop with your arm half-raised, and nothing comes. Nothing " +
+    _say("You stand at the roadside with your arm half-raised, and nothing comes. Nothing " +
       "is coming. The last songthaew of the night made its run and rattled off to the " +
       "depot a while back — this is the last-baht-bus hour, and you're on the wrong " +
       "side of it. " + (r.motosai
@@ -2933,13 +2964,15 @@ function _doRideBus(arg) {
       "aren't yours this week — one day the whole city, but not this trip.");
     return;
   }
-  const lines = Object.entries(BUS_LINES).filter(([, stops]) => stops.includes(G.room));
-  const reachable = [...new Set(lines.flatMap(([, stops]) => stops))].filter(s => s !== G.room);
+  const lines = _busLinesFor(G.room);
+  const reachable = [...new Set(lines.flatMap(l => BUS_LINES[l]))].filter(s => s !== G.room);
   const w = (arg || "").toLowerCase();
   const dest = reachable.find(s =>
     ROOMS[s].name.toLowerCase().includes(w) || ROOMS[s].region.toLowerCase().includes(w));
   if (!w || !dest) {
-    _say("The driver waits. Stops from here: " +
+    _say((_BUS_WAITING.has(G.room)
+      ? "The truck at the head of the rank waits, benches filling. He'll drop you: "
+      : "You put an arm out; a blue truck swerves in. He'll drop you: ") +
       reachable.map(s => ROOMS[s].name).join(" · "), "dim");
     return;
   }
@@ -2949,8 +2982,33 @@ function _doRideBus(arg) {
     return;
   }
   G.pendingFare = { kind: "bus", price: BUS_FARE, dest };
-  _say("The blue songthaew rattles along the seafront, wind through the rails, the " +
-    "town sliding past in smears of neon…");
+  // Boarding: at a waiting area the queue is the system; mid-route he swerves in.
+  if (_BUS_WAITING.has(G.room)) {
+    _say("You climb onto the truck at the head of the rank and take a bench. It does " +
+      "not move. It fills, one passenger at a time, at the pace of a town with no " +
+      "timetable — and then, benches full, it pulls out all at once.");
+  }
+  // The one-way circuit: if your destination is "behind" you, the ride is the
+  // whole loop — same fare, more town. Only the loop lines carry direction.
+  const onLoop = lines.includes("beachrd") || lines.includes("secondrd");
+  const destOnLoop = BUS_LINES.beachrd.includes(dest) || BUS_LINES.secondrd.includes(dest);
+  const N = _LOOP_CCW.length;
+  const ahead = onLoop && destOnLoop ? (_loopPos(dest) - _loopPos(G.room) + N) % N : 0;
+  if (onLoop && destOnLoop && ahead > N * 0.6) {
+    // which half of the circuit you board on decides what "the long way" looks like
+    const northbound = _loopPos(G.room) < _LOOP_CCW.indexOf("dolphin");
+    _say("The driver doesn't turn round, because nothing in this town turns round — " +
+      "one-way, counter-clockwise, no exceptions. So you ride the loop the long way: " +
+      (northbound
+        ? "up Second Road with the northbound crowd, round the Dolphin, and back down " +
+          "the seafront with the sea strobing between the buildings, "
+        : "down the seafront with the sea on your right, round the Bali Hai corner at " +
+          "Pattaya Tai, and back up Second Road with the northbound crowd, ") +
+      "the whole lit length of the town for the same coin…");
+  } else {
+    _say("The blue songthaew rattles along with the flow of the one-way town, wind " +
+      "through the rails, the streets sliding past in smears of neon…");
+  }
   _say(`You hop off. The driver leans out and says: “${thaiBaht(BUS_FARE)}”`, "thai");
   _engineSpeak(thaiBaht(BUS_FARE));
   _say(`(${thaiNumRoman(BUS_FARE)} … he wants paying. PAY <amount>.)`, "dim");
@@ -3741,13 +3799,16 @@ function _doTip(arg) {
 }
 
 function _doWave(arg) {
-  if (/bus/.test(arg) || (!arg && _room().busStop)) {
-    // only if a bus will actually come — else _doRideBus's refusal (no stop here /
+  if (/bus/.test(arg) || (!arg && _busLinesFor(G.room).length)) {
+    // only if a bus will actually come — else _doRideBus's refusal (off-route /
     // curfew / rain / soi6 routes-aren't-yours) would follow a "swerves in within
     // four seconds" that contradicts it. WAVE BUS indoors is the common trap.
-    if (_room().busStop && G.nightTurn < LAST_BUS_TURN && !G.rain && G.mode !== "soi6")
-      _say("You put an arm out at road height. A blue songthaew swerves in within " +
-        "four seconds — they can smell an undecided farang at three hundred metres.");
+    if (_busLinesFor(G.room).length && G.nightTurn < LAST_BUS_TURN && !G.rain && G.mode !== "soi6")
+      _say(_BUS_WAITING.has(G.room)
+        ? "No waving needed here — the rank IS the system. The front truck's benches " +
+          "are filling; when they're full, it goes."
+        : "You put an arm out at road height. A blue songthaew swerves in within " +
+          "four seconds — they can smell an undecided farang at three hundred metres.");
     _doRideBus("");
     return;
   }

@@ -6194,7 +6194,7 @@ test("wave hails the bus; map draws the town", () => {
   run("e", "n"); // up the beach road to the baht bus stop
   assert.ok(ROOMS[state().room].busStop);
   run("wave");
-  assert.match(lastOut(), /Stops from here/);
+  assert.match(lastOut(), /He'll drop you/); // hail-anywhere: drop points, not stops
   out = [];
   run("map");
   assert.match(lastOut(), /BUAKHAO/);
