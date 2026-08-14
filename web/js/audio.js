@@ -218,15 +218,75 @@ const _audio = (() => {
       bass: [38, 34, 31, 33],
       prog: [[74, 77, 81], [70, 74, 77], [67, 70, 74], [69, 73, 76]],
     },
-    // Pattaya Pattaya (พัทยา พัทยา) — C major folk-rock, the beach-road roll
+    // The Last Baht Bus — ORIGINAL, the title theme. I–V–vi–IV in C
+    // (C G Am F: THE pop progression), because the ride home should sound
+    // like every song you half-remember from the night. Retires the invented
+    // Pattaya Pattaya placeholder — this one never claims to be anything else.
     bus: {
-      bpm: 114, lead: "square", leadVol: 0.14, hat: true, bassEvery: 2,
-      bass: [36, 29, 33, 31],
+      bpm: 116, lead: "triangle", leadVol: 0.16, hat: true, bassEvery: 2,
+      bass: [36, 31, 33, 29, 36, 31, 29, 31],   // C G Am F · C G F G
       melody: [
-        67,67,69,67, 64,null,62,null,
-        60,null,62,64, 65,null,67,null,
-        69,null,67,65, 64,null,62,null,
-        64,62,60,null, 62,64,67,null,
+        67,null,64,null, 72,null,null,71,   // C: sol mi do' — ti left hanging
+        71,null,67,null, 62,null,null,null, // G: answered down to re
+        69,null,72,null, 76,null,74,72,     // Am: the lift — la do' mi' re' do'
+        72,71,69,null, 65,null,null,null,   // F: eased back down
+        67,null,64,null, 72,null,null,71,   // C: again
+        71,null,67,null, 74,null,72,71,     // G: the higher answer
+        69,null,72,null, 69,67,65,64,       // F: falling toward home
+        62,null,64,null, 67,65,64,62,       // G: idling — the bus rolls on
+      ],
+    },
+
+    // ── The originals: written for this game, filling what the covers
+    // library lacks. Every cover above is minor-key; these are the major-key
+    // side of the night. Progressions are common property — the melodies are
+    // ours.
+
+    // Last Call — the one the house band ends the night on. I–V–vi–IV in G,
+    // re-struck held notes, the arms-around-strangers chorus. The songbook's
+    // one anthem: 8 covers and not a single major key among them.
+    lastcall: {
+      bpm: 128, lead: "square", leadVol: 0.13, hat: true, bassEvery: 1,
+      bass: [31, 26, 28, 36, 31, 26, 28, 36],   // G D Em C ×2
+      melody: [
+        74,74,null,71, 74,null,76,null,   // G: the shout — re-struck D'
+        78,null,76,null, 74,null,76,null, // D: F#' E' D' E'
+        76,76,null,74, 76,null,79,null,   // Em: reaching G'
+        74,null,72,null, 71,null,72,74,   // C: stepping down, turning
+        71,71,null,67, 71,null,74,null,   // G: the low phrase
+        78,78,null,76, 74,null,76,null,   // D
+        79,null,78,76, 78,null,76,74,     // Em: the peak, falling
+        72,72,74,null, 71,null,69,67,     // C: down to sol — loop to the shout
+      ],
+    },
+    // Slow Dance — the gents clubs' velvet-couch record. I–vi–IV–V in C:
+    // the 50s prom loop (Stand By Me's chassis, nobody's melody). Sparse on
+    // purpose — at this register the rests are the slow dance.
+    slowdance: {
+      bpm: 104, lead: "triangle", leadVol: 0.15, hat: false, bassEvery: 2,
+      bass: [36, 33, 29, 31],               // C Am F G
+      melody: [
+        64,null,null,67, null,null,72,null,  // C: mi… sol… do'
+        71,null,69,null, null,null,64,null,  // Am: ti la … mi
+        65,null,69,null, 72,null,74,null,    // F: fa la do' re'
+        71,null,67,null, 62,null,null,null,  // G: ti sol re
+      ],
+    },
+    // Chiwit — phleng phuea chiwit shape (Thai songs-for-life folk rock, the
+    // Carabao idiom, original tune): I–IV–V in D, driving pentatonic riff.
+    // What a Darkside bar actually has on: Thai rock, not the farang songbook.
+    chiwit: {
+      bpm: 138, lead: "square", leadVol: 0.13, hat: true, bassEvery: 1,
+      bass: [38, 38, 31, 33, 38, 31, 33, 38],   // D D G A · D G A D
+      melody: [
+        74,null,71,69, 71,null,69,66,     // D: the riff
+        69,null,66,64, 66,null,64,62,     // D: answered low
+        62,64,66,67, 69,null,71,69,       // G: the run up
+        69,66,69,null, 71,69,66,64,       // A: circling
+        74,null,71,69, 71,null,69,66,     // D: riff again
+        66,67,69,null, 74,null,71,69,     // G: higher
+        66,null,64,null, 64,66,69,71,     // A: gathering
+        74,74,null,69, 74,null,null,null, // D: planted
       ],
     },
 
@@ -482,7 +542,8 @@ const _audio = (() => {
 // beaches, roads, markets, the hotel, the dark hill — the town is ambient
 // noise the player imagines, not a soundtrack. Special case: when the DJ
 // actually plays Sabai Sabai in Rainbow Girls, the soundtrack becomes the
-// song itself. ("bus" survives as the title/continue-prompt theme.)
+// song itself. ("bus" is the title/continue-prompt theme — the original
+// Last Baht Bus tune, not a venue track.)
 const _STREET_TRACKS = {
   "Walking Street": "street",
   "LK Metro": "soi6",
@@ -493,7 +554,16 @@ const _STREET_TRACKS = {
 // and the pub get the house band's songbook (Sabai Sabai stays in rotation —
 // the local hit always comes back around). No Wonderwall. House rule.
 const _GOGO_SET = ["soi6", "careless", "whatislove", "billiejean", "takeonme", "axelf"];
-const _BAND_SET = ["soi", "zombie", "prayer", "countdown", "takeonme"];
+const _BAND_SET = ["soi", "zombie", "prayer", "lastcall", "countdown", "takeonme"];
+// The Orchid and its kind: a curtained AC villa is not a pub-rock room. The
+// slow doo-wop original plus the one cover that already lives at that tempo.
+const _GENTS_SET = ["slowdance", "careless"];
+// Darkside bars: the crowd is local and the band is Thai — songs-for-life
+// first, Sabai Sabai always, and the two covers every Thai rock band plays
+// anyway. The farang songbook stays in town. Covers the lakeside pair too,
+// which is exactly right: the Boathouse's families get Thai music, not Bon
+// Jovi.
+const _DARK_SET = ["chiwit", "soi", "zombie", "prayer"];
 
 // Regions within earshot of the sea: streets here get the surf ambience
 // instead of silence. (Naklua stays quiet — the hotel soi faces inland.)
@@ -508,6 +578,8 @@ function _trackForRoom(roomId, flags) {
   const room = ROOMS[roomId];
   if (!room) return null;
   if (room.barType) {
+    if (room.barType === "gents") return _GENTS_SET;
+    if (room.region === "Darkside") return _DARK_SET;
     return room.barType === "gogo" || room.barType === "soi6" ? _GOGO_SET : _BAND_SET;
   }
   if (_STREET_TRACKS[room.region]) return _STREET_TRACKS[room.region];

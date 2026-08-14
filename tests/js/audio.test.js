@@ -32,17 +32,26 @@ test("neon streets carry music, the seafront carries surf, the rest stays silent
   }
 });
 
-test("every bar spins a set list: dance crate for go-gos, songbook for the rest", () => {
+test("every bar spins the right set: dance crate, songbook, velvet couch, or Thai rock", () => {
   for (const [id, room] of Object.entries(ROOMS)) {
     if (!room.barType) continue;
-    const want = room.barType === "gogo" || room.barType === "soi6" ? _GOGO_SET : _BAND_SET;
-    assert.equal(_trackForRoom(id), want, `${id} (${room.barType})`);
+    const want =
+      room.barType === "gents" ? _GENTS_SET :
+      room.region === "Darkside" ? _DARK_SET :
+      room.barType === "gogo" || room.barType === "soi6" ? _GOGO_SET : _BAND_SET;
+    assert.equal(_trackForRoom(id), want, `${id} (${room.barType}, ${room.region})`);
+  }
+  // the routing is only interesting if each branch actually fires
+  const hit = new Set(Object.entries(ROOMS).filter(([, r]) => r.barType)
+    .map(([id]) => _trackForRoom(id)));
+  for (const set of [_GOGO_SET, _BAND_SET, _GENTS_SET, _DARK_SET]) {
+    assert.ok(hit.has(set), "a set list no venue plays is dead code");
   }
 });
 
 test("the set lists only contain songs the sequencer actually knows", () => {
   const known = _audio.tracks();
-  for (const name of [..._GOGO_SET, ..._BAND_SET]) {
+  for (const name of [..._GOGO_SET, ..._BAND_SET, ..._GENTS_SET, ..._DARK_SET]) {
     assert.ok(known.includes(name), `${name} missing from TRACKS`);
   }
   // the covers have sane melodies: multiples of 8 steps, notes in MIDI range
@@ -64,6 +73,18 @@ test("the doubled-grid covers are slowed to sit in the same tempo band as the re
   for (const n of ["takeonme", "whatislove", "axelf", "countdown"]) {
     assert.ok(_audio.tempo(n) < 190, `${n} still racing at ${_audio.tempo(n).toFixed(0)}`);
   }
+});
+
+test("the originals answer the four-chords review: the songbook has its major keys", () => {
+  // The covers library is minor-key throughout — the review found no anthem,
+  // no slow dance, no Thai rock beyond Sabai Sabai. These four are the fix;
+  // losing one from its set would quietly reopen the gap.
+  assert.ok(_BAND_SET.includes("lastcall"), "the band set keeps its anthem");
+  assert.ok(_GENTS_SET.includes("slowdance"), "the gents keep their slow dance");
+  assert.equal(_DARK_SET[0], "chiwit", "Darkside opens Thai — the order is the point");
+  // and the title theme is the game's own song, at a title-screen amble
+  const t = _audio.tempo("bus");
+  assert.ok(t > 80 && t < 100, `title theme ambles, got ${t.toFixed(0)}`);
 });
 
 test("when the DJ plays Sabai Sabai, the soundtrack is the song", () => {
