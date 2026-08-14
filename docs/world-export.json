@@ -5554,6 +5554,7 @@
    ],
    "liveMusic": true,
    "name": "Lucky Tiger Bar",
+   "pool": true,
    "region": "Soi Buakhao"
   },
   "mama_yai": {

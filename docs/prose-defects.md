@@ -226,7 +226,22 @@ For anyone — human or model — writing prose in this repo:
    moved.
 4. **Novel prose gets a delta review.** `--delta` after any prose change; it is
    sized to what you touched.
-5. **None of this replaces playing it.** Both bugs in this document were caught
-   by a human reading prose against a world they held in their head. Tiers 0–2
-   exist to keep that human's attention scarce and expensive — not to replace
-   them.
+5. **An object in the prose is an EXAMINE promise.** The recurring form: a room
+   desc advertises a distinctive thing (the wall of photos, the spirit house,
+   the pool table with a lean) and the curiosity verb answers with the
+   brush-off. Found three times by the player before it got a harness —
+   per-string review can't see it because the promise lives in world.js and the
+   delivery lives in the parser. Now scannable: `node tools/examine-audit.mjs`
+   harvests the nouns each room's prose mentions and actually plays
+   `EXAMINE <noun>` standing in the room. Fix by breadth: a noun dead in many
+   rooms is one context-aware `_SCENERY` entry (the 2026-08-14 batch: table,
+   till, drink, queue, pool table, view, doorman, fan/aircon, counter, sound
+   system, cool box, stage, curtain, baht bus, cat, numbers — ~215 dead-ends
+   cleared); a distinctive one-room object is a `reads:` entry or an ITEMS
+   record; a mention nothing can honour gets softened. The audit also catches
+   the inverse — prose advertising a mechanic the room lacks (Lucky Tiger's
+   pool table existed in the desc for weeks before `pool: true` did).
+6. **None of this replaces playing it.** Every bug in this document was caught
+   by a human reading prose against a world they held in their head. The tiers
+   and audits exist to keep that human's attention scarce and expensive — not
+   to replace them.

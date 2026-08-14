@@ -958,7 +958,8 @@ const _SCENERY = [
     ],
   } },
 
-  { key: "money", m: /\b(money|cash|baht|notes?|change)\b/, lines: { any: [
+  // \bbaht\b(?!\s*bus) — "baht bus" belongs to the bus entry below, not the wallet
+  { key: "money", m: /\b(money|cash|notes?|change)\b|\bbaht\b(?!\s*bus)/, lines: { any: [
     "You count it without taking it out of your pocket, which is a skill this town teaches " +
       "in about three days. (You know the number. It's on the screen.)",
     "Purple ones are the ones to worry about. You have some. You will have fewer.",
@@ -1054,6 +1055,246 @@ const _SCENERY = [
     any: [
       "Somewhere out front there's the usual rank. In here it's somebody else's problem.",
     ],
+  } },
+
+  // ── the 2026-08-14 examine-audit batch ─────────────────────────────────────
+  // tools/examine-audit.mjs played EXAMINE against every noun the room prose
+  // advertises and found the genre's furniture dead-ending by the dozen —
+  // tables in 16 rooms, the till in 12, the queue in 8. One context-aware entry
+  // per noun clears a whole row. Same doctrine as the rest of the table:
+  // EXAMINE pays out for curiosity, and a voiced refusal beats the brush-off.
+
+  // BEFORE the generic table entry — _doScenery takes the first regex match,
+  // and "pool table" contains "table".
+  { key: "pooltable", m: /\bpool table\b|\bfelt\b|\bcues?\b|\bbaize\b/, fn: (ctx) => {
+    if (_room().pool) return "The table holds the middle of the room the way an altar " +
+      "holds a church. Decent felt, straight-ish cues, and chalk that lives on the rail " +
+      "light. (PLAY POOL)";
+    if (ctx === "bar" || ctx === "pub") return "No table in here — this is a drinking " +
+      "bar. The nearest felt is a soi away, and the ladies there sharked their rent out " +
+      "of better players than you.";
+    if (ctx === "street") return "The clack you can hear is coming from inside one of " +
+      "the bars — a break, a pause, and the little cheer that means somebody's money moved.";
+    return null;
+  } },
+
+  { key: "table", m: /\btables?\b/, lines: {
+    bar: [
+      "Ring-stained, wiped in the shape the rag naturally travels, one leg shimmed with a " +
+        "folded coaster. It has heard more honest conversation than most embassies.",
+      "A bar table in the standard state: two coasters, one ashtray, somebody's change " +
+        "drying in a puddle of its own making.",
+      "Sticky in the specific way that means cleaned often and succeeding never. The " +
+        "surface of choice for every deal this town has ever shaken hands on.",
+    ],
+    any: [
+      "Plastic, stackable, currently load-bearing. The whole coast runs on furniture " +
+        "exactly this ready to be abandoned in a downpour.",
+      "A table doing table work. Out here that mostly means holding somebody's som tam " +
+        "and hearing somebody's life story.",
+    ],
+  } },
+
+  { key: "till", m: /\btills?\b|\bcash ?register\b/, lines: {
+    bar: [
+      "The till sits where the till sits — behind the rail, under the shrine, inside the " +
+        "cashier's exact field of vision. It opens for her and closes for everyone.",
+      "An old drawer-clanker with a laminated price list taped beside it and the night's " +
+        "arithmetic living entirely in the head of the woman guarding it.",
+      "You look at the till. The cashier looks at you. The two events are not unrelated.",
+    ],
+    any: [
+      "No till out here — money on this stretch moves hand to hand, folded small.",
+    ],
+  } },
+
+  { key: "drink", m: /\b(beer|beers|drinks?|bottles?|glass|chang|leo|singha)\b/, lines: {
+    bar: [
+      "Yours is where you left it, sweating its label loose. The rule of the coast: never " +
+        "measure the night in empties. The staff already are.",
+      "Cold enough, cheap enough, half gone. Somewhere behind the rail a fresh one is " +
+        "already being uncapped on spec.",
+      "The bottle's gone warm at the shoulders and cold at the heart, same as everybody.",
+    ],
+    any: [
+      "You're between drinks — a state this town regards as temporary and slightly " +
+        "alarming, like standing in a doorway.",
+    ],
+  } },
+
+  { key: "queue", m: /\bqueues?\b|\bline of people\b/, lines: {
+    street: [
+      "The queue has the patience of people who know the thing they're queueing for isn't " +
+        "going anywhere and neither are they.",
+      "Farang sunburn, Thai umbrellas, one man asleep standing up. The queue moves the way " +
+        "the town moves: suddenly, then not at all.",
+      "You study the queue. The queue studies nothing. It has reached a higher state.",
+    ],
+    any: [
+      "No queue in here — this is a sit-down operation. The queueing happens outside, in " +
+        "the heat, where it builds character.",
+    ],
+  } },
+
+  // fn so the one summit gets its due — everywhere else picks from ctx pools.
+  { key: "view", m: /\b(view|vista|bay|panorama|lookout|overlook)\b/, fn: (ctx) => {
+    if (G.room === "buddha_hill") return "From up here it stops being scenery and " +
+      "becomes geography — the whole bay at once, the town reduced to a glitter along " +
+      "its rim, the sea doing the real work in the dark. (WATCH THE BAY)";
+    const pools = {
+      sand: [
+        "The bay does its evening trick — fishing boats becoming lights, lights becoming " +
+          "stars, the horizon giving up the distinction.",
+        "A long curve of dark water with the town burning at one end of it. People pay " +
+          "rooftop-bar prices for exactly this, minus the sand in their shoes.",
+      ],
+      street: [
+        "Between the buildings you get slices of it — a wedge of sea here, a run of neon " +
+          "there. The town sells the view by the sliver and keeps the whole for the birds.",
+        "The best view on this stretch is the street itself, which knows it, and performs.",
+      ],
+      bar: [
+        "The view from a bar stool is the bar — which, give it its due, is the show most " +
+          "people actually came for.",
+      ],
+    };
+    const pool = pools[ctx] || (ctx === "pub" && pools.bar);
+    return pool ? _pickVary(pool, "scn_view_" + ctx) : null;
+  } },
+
+  { key: "doorman", m: /\b(doorman|doormen|bouncers?)\b/, lines: {
+    bar: [
+      "Big, calm, and paid to be exactly this bored. His job is ninety-nine nights of " +
+        "nothing and one night of everything, and he dresses for the one.",
+      "He clocks you, files you under harmless, and goes back to watching the street with " +
+        "the patience of a man who is the door.",
+    ],
+    street: [
+      "Every lit doorway on this stretch has one — arms folded, feet planted, doing the " +
+        "arithmetic on everybody who slows down.",
+      "The doormen along here all know each other. It's the same shift, the same street, " +
+        "the same forty faces going past on a loop.",
+    ],
+  } },
+
+  { key: "climate", m: /\bfans?\b|\bair ?con(ditioner|ditioning)?\b|\bac unit\b/, lines: {
+    bar: [
+      "The fan does its slow police-search of the room, finding nothing, agreeing to look " +
+        "again. The cold spots are known territory and the regulars are sitting in them.",
+      "Somewhere a compressor is fighting the tropics to a draw, and the draw is why " +
+        "everybody's in here.",
+      "It moves the heat around with an air of accomplishment. Moving it is not removing " +
+        "it, but nobody has told the fan.",
+    ],
+    any: [
+      "Out here the climate control is the sea breeze, when it can be bothered, and the " +
+        "shade, where somebody hasn't already claimed it.",
+    ],
+  } },
+
+  { key: "counter", m: /\bcounters?\b/, lines: {
+    bar: [
+      "Wiped smooth by years of forearms. The territory behind it is sovereign and the " +
+        "treaty is: your money crosses, you don't.",
+    ],
+    any: [
+      "A counter is a border, and this one has the usual customs post: a price list, a " +
+        "calculator turned to face you, and somebody who has seen every trick you haven't " +
+        "thought of yet.",
+      "Formica, mostly clean, manned by somebody who could make change in three currencies " +
+        "asleep.",
+    ],
+  } },
+
+  { key: "sound", m: /\bsound ?system\b|\bspeakers?\b|\bsubwoofer\b|\bsound\s?desk\b|\bsystem\b/, lines: {
+    bar: [
+      "Stacked speakers with the grilles dented in, run at the volume where music stops " +
+        "being heard and starts being weather.",
+      "The system is worth more than the furniture and it shows — the bass arrives in " +
+        "your chest a half-second before the song reaches your ears.",
+    ],
+    any: [
+      "The sound out here is the town's own mix — traffic under bass under somebody's " +
+        "karaoke, mastered by nobody, playing forever.",
+    ],
+  } },
+
+  { key: "cooler", m: /\bcool ?box(es)?\b|\bcoolers?\b|\bice ?box(es)?\b|\bice bucket\b/, lines: {
+    bar: [
+      "The cool box holds the real inventory — ice to the brim and bottles racked in it " +
+        "like artillery. A girl tops it from a sack without being asked. The night is long " +
+        "and the ice knows.",
+      "Scuffed, sat on, opened every forty seconds. The most important object in the bar " +
+        "and priced accordingly at nothing.",
+    ],
+    any: [
+      "A cool box on a strap — the whole shop. Somebody carried the price of a beer down " +
+        "this beach so you wouldn't have to walk. That's the economy, working.",
+    ],
+  } },
+
+  { key: "stage", m: /\bstages?\b|\bpodium\b|\bcatwalk\b/, lines: {
+    bar: [
+      "Raised, mirrored, lit from angles that flatter. Empty, it looks like furniture. " +
+        "Occupied, it is the entire reason the room is shaped the way it is.",
+      "The stage takes the light and gives back the night's argument: that everything " +
+        "else — the till, the ice, the rent — is just infrastructure for this.",
+    ],
+    any: [
+      "No stage out here, unless you count the street, which performs nightly and never " +
+        "takes a bow.",
+    ],
+  } },
+
+  { key: "curtain", m: /\bcurtains?\b/, lines: {
+    any: [
+      "The curtain is doing the most important job in the building: being a wall that " +
+        "forgives. What's behind it is between the curtain and its conscience.",
+      "Thin, floral, drawn. A curtain in this town is not a decoration, it's a treaty.",
+    ],
+  } },
+
+  { key: "bus", m: /\bbaht ?bus(es)?\b|\bsongthaews?\b|\bbus(es)? ?stop\b|\bbus(es)?\b/, lines: {
+    street: [
+      "Blue, slow, and circling — the town's bloodstream. One is always thirty seconds " +
+        "away until the exact moment you need one. (WAVE to hail it.)",
+      "A songthaew grumbles past, bench seats half full of strangers pretending not to " +
+        "study each other. Cheapest theatre in Thailand. (WAVE)",
+    ],
+    any: [
+      "No bus is coming through here. The blue trucks keep to the real roads — flag one " +
+        "there when you're ready to move.",
+    ],
+  } },
+
+  { key: "cat", m: /\bcats?\b|\bkittens?\b/, lines: {
+    bar: [
+      "A bar cat, asleep on the one stool nobody ever seems to claim. It opens one eye, " +
+        "prices you, and closes it. You are not worth the second eye.",
+      "It lives here the way the mamasan lives here: it was here before you, it will be " +
+        "here after you, and the arrangement is not up for discussion.",
+    ],
+    any: [
+      "A soi cat gives you the long unhurried blink of an animal that owns real estate on " +
+        "this street and knows sunburn when it sees it.",
+      "It sits in the exact centre of the pavement, washing a paw, making the entire " +
+        "street route around it. Correctly.",
+    ],
+  } },
+
+  // "A number" means three different things by venue — a go-go's badge, a
+  // soapy's disc, Soi 6's quoted price — so answer by room, else fall through.
+  { key: "numbers", m: /\bnumbers?\b|\bbadges?\b/, fn: () => {
+    if (_room().barType === "gogo") return "Every dancer wears one — a plastic disc on " +
+      "the bikini hip, because the music is too loud for names and the mamasan's ledger " +
+      "runs on digits. You don't point at a girl here. You quote her.";
+    if (_room().barType === "soi6") return "The number here isn't worn, it's said — " +
+      "leaned in close, matter-of-fact, the price and the promise in one breath. Soi 6 " +
+      "doesn't do menus. It does arithmetic, early.";
+    if (/soapy/.test(G.room)) return "The numbered discs are the whole catalogue system — " +
+      "quoted, noted, fetched. Somewhere between a deli counter and a dream, and nobody " +
+      "in the building finds that strange any more.";
+    return null;
   } },
 ];
 

@@ -2386,7 +2386,9 @@ const ROOMS = {
   lucky_tiger: {
     name: "Lucky Tiger Bar",
     region: "Soi Buakhao",
-    bar: "Lucky Tiger Bar", barType: "beer", liveMusic: true,
+    // pool: the desc has always advertised "a pool table with a lean you could
+    // ski off" — the examine-audit caught the mechanic not honouring the prose.
+    bar: "Lucky Tiger Bar", barType: "beer", liveMusic: true, pool: true,
     desc: "Tiger stripes on the bar top, a golden waving cat with dead batteries, and a " +
       "pool table with a lean you could ski off. Loud, friendly, dangerous to wallets " +
       "in the normal, voluntary way.",
