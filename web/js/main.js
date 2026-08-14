@@ -67,15 +67,14 @@ function _cycleFontSize() {
 // point each load, sequential wrap, one strike every 10s while the overlay is
 // up. A file that fails to load self-heals out of the deck, so this list
 // drifting behind the art directory costs a missing rotation slot, never a bug.
-// CURATED to the neon photoreal register (2026-08-15): 14 of the 36 posters
-// came back in a flat vintage-mural style (aof, beam, boom, cherry, dao, fah,
-// gift, ice, mook, noi, orn, praew, sara, view) — a different visual language
-// that jars on the splash. They stay in the game's poster feature; they're
-// just out of this rotation until rerolled. Contact-sheet review, Mario's call.
+// Full deck restored 2026-08-15: the 14 vintage-register posters were rerolled
+// into the neon pin-up register by the art track ("The poster deck speaks one
+// register") and contact-sheet checked — one visual language, all 36 rotate.
 const _SPLASH_DECK = ["splash",
-  "aoi", "aom", "bow", "fang", "gib", "gigi", "jum", "nam", "namwan", "naree",
-  "nice", "noey", "pancake", "pang", "ploen", "pop", "sai", "sasi", "toey",
-  "tukta", "yada", "yui"];
+  "aof", "aoi", "aom", "beam", "boom", "bow", "cherry", "dao", "fah", "fang",
+  "gib", "gift", "gigi", "ice", "jum", "mook", "nam", "namwan", "naree", "nice",
+  "noey", "noi", "orn", "pancake", "pang", "ploen", "pop", "praew", "sai",
+  "sara", "sasi", "toey", "tukta", "view", "yada", "yui"];
 function _splashInit() {
   const wrap = document.getElementById("start-art-wrap");
   const overlay = document.getElementById("start-overlay");
