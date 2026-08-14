@@ -4591,12 +4591,15 @@ function _chipSet() {
   if (r.seven) add("buy ", "7-Eleven…");
   if (FOOD_STALLS[G.room]) add("buy food");
 
-  // Cardinals (and IN) live on the compass fab now — duplicating them here just
-  // crowded the bar (playtest #15). OUT/UP/DOWN stay, labelled with the venue
-  // they lead to when it has one ("Queen Vic", not a bare DOWN — playtest #3).
-  for (const k of ["out", "up", "down"]) if (r.exits && r.exits[k]) {
+  // The ENGINE offers every exit — dropping the compass-duplicated cardinals is
+  // term.js's job (it filters n/s/e/w/in only while the compass fab is visible),
+  // so a served or 2D frontend that draws no compass keeps its tap route, and
+  // indoor rooms (no compass) keep theirs. Asserted by tests/e2e/compass.spec.
+  // OUT/UP/DOWN wear the venue they lead to ("Queen Vic", not a bare DOWN —
+  // playtest #3).
+  for (const k of ["n", "s", "e", "w", "in", "out", "up", "down"]) if (r.exits && r.exits[k]) {
     const dest = ROOMS[r.exits[k]];
-    const v = dest && (dest.bar || (dest.barType && dest.name));
+    const v = ["out", "up", "down"].includes(k) && dest && (dest.bar || (dest.barType && dest.name));
     add(k, v ? String(v).replace(/\s*\(.*\)$/, "") : k.toUpperCase());
   }
   if (G.room === "qv_room") add("balcony"); // the room's own verb (playtest #2/#4)

@@ -56,9 +56,9 @@ test("a street room offers its real exits and no bar verbs", () => {
   G.room = street;
   const r = ROOMS[street];
   const c = cmds();
-  // cardinals + IN moved to the compass fab (playtest #15); OUT/UP/DOWN stay
-  for (const k of ["n", "s", "e", "w", "in"]) if (r.exits[k]) assert.ok(!c.includes(k), `${k} left to the compass`);
-  for (const k of ["out", "up", "down"]) if (r.exits[k]) assert.ok(c.includes(k), `exit ${k} chipped`);
+  // the ENGINE offers every exit — term.js filters the compass-duplicated
+  // cardinals view-side (tests/e2e/compass.spec asserts the split)
+  for (const k of ["n", "s", "e", "w", "in", "out"]) if (r.exits[k]) assert.ok(c.includes(k), `exit ${k} chipped`);
   assert.ok(!c.includes("flirt "), "no flirt on the street");
   assert.ok(c.includes("look") && c.includes("i") && c.includes("help"), "utilities always present");
 });
