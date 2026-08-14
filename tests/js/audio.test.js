@@ -112,6 +112,16 @@ test("the originals answer the four-chords review: the songbook has its major ke
   assert.ok(_BAND_SET.includes("lastcall"), "the band set keeps its anthem");
   assert.ok(_GENTS_SET.includes("slowdance"), "the gents keep their slow dance");
   assert.equal(_DARK_SET[0], "chiwit", "Darkside opens Thai — the order is the point");
+  // second wave: the forms the library lacked, each pinned to the set that
+  // needed it — losing one quietly reopens a thin rotation
+  assert.ok(_GENTS_SET.includes("afterhours"), "the lounge keeps its slow blues");
+  assert.ok(_BAND_SET.includes("twostep") && _BAND_SET.includes("shuffle"),
+    "the songbook keeps its country and its boogie");
+  assert.ok(_DARK_SET.includes("molam"), "the Darkside keeps Isan's own music");
+  // and no rotation is thin: two songs repeat after ~4 plays
+  for (const set of [_GOGO_SET, _BAND_SET, _GENTS_SET, _DARK_SET]) {
+    assert.ok(set.length >= 3, "a rotation under 3 songs audibly loops");
+  }
   // and the title theme is the game's own song, at a title-screen amble
   const t = _audio.tempo("bus");
   assert.ok(t > 80 && t < 100, `title theme ambles, got ${t.toFixed(0)}`);

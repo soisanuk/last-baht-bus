@@ -272,6 +272,81 @@ const _audio = (() => {
         71,null,67,null, 62,null,null,null,  // G: ti sol re
       ],
     },
+    // After Hours — slow 12-bar blues in C, the form the library had nowhere:
+    // the lounge record for the hour when nobody is performing anything.
+    // The 12-bar is common property older than copyright itself.
+    afterhours: {
+      bpm: 100, lead: "triangle", leadVol: 0.14, hat: false, bassEvery: 2,
+      bass: [36, 36, 36, 36, 29, 29, 36, 36, 31, 29, 36, 31],   // C×4 F F C C G F C G
+      melody: [
+        67,null,70,null, 72,null,null,null,   // C: sol te do' — asked slowly
+        72,70,67,null, 65,null,null,null,     // C: answered down
+        null,null,63,65, 66,65,63,60,         // C: the blues run, blue third
+        60,null,null,null, null,null,67,70,   // C: rest… pickup
+        72,null,75,null, 72,null,70,null,     // F: up to the blue seventh
+        70,null,67,null, 65,null,63,null,     // F: easing off
+        60,null,63,null, 65,66,67,null,       // C: the climb through the box
+        70,null,67,null, null,null,null,null, // C: hanging
+        74,null,72,null, 70,null,67,null,     // G: the turnaround starts
+        65,null,66,null, 65,null,63,null,     // F: chromatic worry
+        60,null,null,63, 65,null,66,67,       // C: gathering
+        70,null,67,65, 63,null,60,null,       // G: and back to the top
+      ],
+    },
+    // Two-Step — country I–IV–V in G, the homesick half of every expat
+    // songbook: the one that empties the pool table and fills the rail.
+    twostep: {
+      bpm: 120, lead: "square", leadVol: 0.12, hat: true, bassEvery: 1,
+      bass: [31, 31, 36, 31, 26, 36, 31, 26],   // G G C G · D C G D
+      melody: [
+        62,64,67,null, 71,null,69,67,     // G: the twang pickup
+        69,null,67,64, 62,null,null,null, // G: settled
+        64,67,72,null, 76,null,74,72,     // C: opened up
+        71,null,67,null, null,null,62,64, // G: turning
+        66,null,69,null, 74,null,72,69,   // D: the high lonesome bit
+        72,null,76,74, 72,null,69,67,     // C: coming down
+        67,71,74,null, 71,null,67,null,   // G: the chorus shape
+        66,64,62,null, 64,66,64,62,       // D: walk back to the top
+      ],
+    },
+    // Shuffle — 12-bar boogie in A, uptempo. Every house band's set has one;
+    // now the game's does. Sawtooth for the grit.
+    shuffle: {
+      bpm: 132, lead: "sawtooth", leadVol: 0.10, hat: true, bassEvery: 1,
+      bass: [33, 33, 33, 33, 38, 38, 33, 33, 28, 38, 33, 28],   // A×4 D D A A E D A E
+      melody: [
+        69,null,72,74, 75,74,72,69,       // A: THE riff
+        69,null,72,74, 75,74,72,69,       // A: again — it's a riff
+        76,null,74,72, 69,null,67,null,   // A: answered
+        69,72,74,76, 79,null,76,74,       // A: climbing out
+        74,null,72,null, 74,75,74,72,     // D: the riff up a box
+        69,null,72,74, 75,74,72,69,       // D: home shape over IV
+        69,null,72,74, 75,74,72,69,       // A: riff
+        76,74,72,null, 69,null,72,null,   // A: breathing
+        76,null,79,null, 76,null,74,null, // E: the shout
+        74,null,75,74, 72,null,69,null,   // D: worried note
+        69,72,74,75, 76,null,79,null,     // A: one more climb
+        81,79,76,74, 72,null,69,null,     // E: turnaround from the top
+      ],
+    },
+    // Molam — the phin riff, A minor pentatonic over an i–VII bounce.
+    // The most Isan music there is, which makes it the most honest track in
+    // the game: the workforce is from Isan, and on the Darkside the night
+    // runs on the crowd's own music, not the customers'.
+    molam: {
+      bpm: 144, lead: "square", leadVol: 0.13, hat: true, bassEvery: 1,
+      bass: [33, 33, 31, 33, 33, 31, 28, 33],   // Am Am G Am · Am G E Am
+      melody: [
+        69,72,69,67, 69,null,72,74,       // Am: the phin figure
+        76,74,72,74, 72,69,67,69,         // Am: rolling
+        67,74,72,74, 67,74,72,74,         // G: the hammered drone
+        69,72,74,76, 74,72,69,null,       // Am: up and back
+        81,null,79,76, 79,76,74,72,       // Am: the high call
+        74,72,74,null, 72,74,67,null,     // G: answering
+        76,null,74,72, 69,null,72,null,   // E: leaning home
+        69,67,69,72, 69,null,null,null,   // Am: landed
+      ],
+    },
     // Chiwit — phleng phuea chiwit shape (Thai songs-for-life folk rock, the
     // Carabao idiom, original tune): I–IV–V in D, driving pentatonic riff.
     // What a Darkside bar actually has on: Thai rock, not the farang songbook.
@@ -654,16 +729,16 @@ const _STREET_TRACKS = {
 // and the pub get the house band's songbook (Sabai Sabai stays in rotation —
 // the local hit always comes back around). No Wonderwall. House rule.
 const _GOGO_SET = ["soi6", "careless", "whatislove", "billiejean", "takeonme", "axelf"];
-const _BAND_SET = ["soi", "zombie", "prayer", "lastcall", "countdown", "takeonme"];
+const _BAND_SET = ["soi", "zombie", "prayer", "lastcall", "twostep", "shuffle", "countdown", "takeonme"];
 // The Orchid and its kind: a curtained AC villa is not a pub-rock room. The
 // slow doo-wop original plus the one cover that already lives at that tempo.
-const _GENTS_SET = ["slowdance", "careless"];
+const _GENTS_SET = ["slowdance", "afterhours", "careless"];
 // Darkside bars: the crowd is local and the band is Thai — songs-for-life
 // first, Sabai Sabai always, and the two covers every Thai rock band plays
 // anyway. The farang songbook stays in town. Covers the lakeside pair too,
 // which is exactly right: the Boathouse's families get Thai music, not Bon
 // Jovi.
-const _DARK_SET = ["chiwit", "soi", "zombie", "prayer"];
+const _DARK_SET = ["chiwit", "molam", "soi", "zombie", "prayer"];
 
 // Regions within earshot of the sea: streets here get the surf ambience
 // instead of silence. Interiors lose the sea to walls and air conditioning.
