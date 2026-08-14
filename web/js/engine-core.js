@@ -1099,6 +1099,16 @@ function _describeRoom(full, forceFull) {
     placed.forEach(id => _say(_L(ITEMS[id].sight)));
     if (listed.length) _say(_L("You can see: ") + listed.map(id => _L(ITEMS[id].name)).join(", ") + ".");
   }
+  // The coconut bar (north_beach): its ladies are an encounter, not roster NPCs,
+  // so LOOK never listed them and a player couldn't tell they were approachable
+  // (playtest, 2026-08-15). State-aware: working until the night's encounter is
+  // spent, empty stools after.
+  if (G.room === "north_beach") {
+    _say(G.encDone && G.encDone.freelancer
+      ? "The freelance stools under the palms sit empty now — the night's trade has moved on."
+      : "Under the coconut palms, the freelance stools are working — a cigarette ember, " +
+        "a low laugh, eyes reading the sand for a walk-up. (TALK TO THE LADIES, if you like.)", "dim");
+  }
   const npcs = _npcsHere();
   const pats = _patronsHere();
   // One presence line for everyone actually in the room — staff and patrons in the

@@ -4583,6 +4583,8 @@ function _chipSet() {
   } else if (_npcsHere().length || _patronsHere().length) {
     add("talk to ", "talk…");
   }
+  if (G.room === "north_beach" && !(G.encDone && G.encDone.freelancer) && !G.pendingEnc)
+    add("talk to the ladies", "the ladies");
 
   // One chip that opens the rack (the "buy " prefill fans out in autocomplete,
   // ATM-style) instead of three fixed purchases crowding the bar (playtest #14).

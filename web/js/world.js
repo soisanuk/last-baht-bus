@@ -9309,7 +9309,7 @@ const ENCOUNTERS = {
       "am also free.” A beat, then, nodding down the rail at a friend pretending " +
       "not to listen: “Ning also free. VERY boring night, na.”",
     hint: "(Company is ฿700. Ning makes it ฿1400 — cheaper than a bar, but no " +
-      "mamasan means nobody to complain to if it goes wrong. YES / NO.)",
+      "mamasan means nobody to complain to if it goes wrong. YES her · BOTH of them · NO.)",
   },
   noodle: {
     rooms: ["soi6_street", "soi6_deep"],
