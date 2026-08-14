@@ -225,6 +225,11 @@ const ROOMS = {
       "fan that works, and a woman on the wok who does not stop from six until the " +
       "rice runs out. The board is the same board. The prices are the same prices. " +
       "The Buakhao lot will tell you it is not the same, and mean it.",
+    reads: {
+      board: "The board is the same board — same fourteen dishes, same decade-old photos, " +
+        "same chalk line underneath. They photocopied the menu when they opened this " +
+        "branch, and the Buakhao lot have never forgiven the photocopier.",
+    },
     exits: { out: "jomtien_soi_7_m" },
   },
   jomtien_soi_7_e: {
@@ -300,6 +305,11 @@ const ROOMS = {
     desc: "Stools that catch the wind straight off the beach, a battered guitar somebody strums " +
       "between customers, and the most relaxed hostesses in Jomtien. Nobody hard-sells here; the " +
       "beer is cold and the evening goes where it goes.",
+    reads: {
+      guitar: "The house guitar — sun-faded, sand in the soundhole, tuned to something " +
+        "approximate and strummed between customers by whoever's nearest. It has three songs " +
+        "in it and the sea takes the blame for the rest.",
+    },
     exits: { out: "jomtien_soi_7_w" },
   },
   coconut: {
@@ -309,6 +319,11 @@ const ROOMS = {
     desc: "Thatch over the bar, coconut shells for ashtrays, and a blender that hasn't stopped " +
       "since 2016. A little louder than its neighbours, a little younger — the closest Soi 7 gets " +
       "to a party, which is not very, which is the point.",
+    reads: {
+      blender: "The blender is the bar's engine and sounds like it — a workhorse with a " +
+        "cracked jug and a motor that has outlived three owners' plans to replace it. It has " +
+        "not stopped since 2016. Nobody remembers switching it on.",
+    },
     exits: { out: "jomtien_soi_7_e" },
   },
   sandbar: {
@@ -438,6 +453,12 @@ const ROOMS = {
       "bullseye painted over the counter, a Connect 4 frame, and a row of hostesses who've clearly " +
       "done the maths on where the foot traffic enters the soi. First bar most punters hit; many " +
       "don't get past it.",
+    reads: {
+      bullseye: "The bullseye is painted dead centre over the counter, rings slightly off " +
+        "true, and it isn't decoration — it's a thesis. The girls here did the maths on " +
+        "where the foot traffic enters the soi, and the paint says so: this is the target, " +
+        "you walked into it, and everyone is very pleased to see you.",
+    },
     revisit: [
       "Back into Arrow Bar — the bullseye over the counter, the Connect 4 frame, the hostesses who read foot traffic for a living.",
       "The first bar on the soi takes you back. Plenty of punters never get past it; tonight, again, neither did you.",
@@ -697,6 +718,12 @@ const ROOMS = {
       "will absolutely take your bet. Open-fronted onto the soi with a painted bird over the " +
       "bar that nobody can identify. Loud by Pratumnak standards, which is to say you can " +
       "still hear the person next to you.",
+    reads: {
+      bird: "You give the painted bird a proper look. Blue where a kingfisher is blue, but " +
+        "the beak is wrong, the tail is somebody else's, and the feet belong to a duck. The " +
+        "regulars' best theory is that the painter was working from a description given over " +
+        "the phone. Nobody would dream of fixing it.",
+    },
     revisit: [
       "The Kingfisher takes you back, at volume. Somebody is losing at pool, cheerfully.",
       "The painted bird over the bar remains unidentifiable. Opinions are offered.",
@@ -732,6 +759,11 @@ const ROOMS = {
       "outright — no rent, no partner, no brothers — and says so about once an hour. Open " +
       "to the road because there is no front to close. The cheapest beer on the hill and " +
       "the best conversation on it, in that order or the other one.",
+    reads: {
+      gecko: "You look up. Two clicks from the dark of the roof answer you. The owner calls " +
+        "him Somchai, insists he is staff, and has never once managed to lay eyes on him — " +
+        "the longest-serving employee in the soi, on the best terms of anyone with the boss.",
+    },
     revisit: [
       "The strip light, the cool box, and the gecko not being caught again.",
       "Four stools. Two occupied. The owner counts this a good night and she is right.",
@@ -826,6 +858,12 @@ const ROOMS = {
       "the way back — the same coast with nothing on it. Nobody's chain owns this one. Bob " +
       "is behind the bar most nights and his wife runs the floor, and between them they " +
       "have never once had to explain the house rules twice.",
+    reads: {
+      photos: "The framed photographs run back along the wall in order: the same coast, " +
+        "decade by decade, with less on it each frame you go back — bars to shophouses to " +
+        "casuarinas to, in the oldest frame, nothing at all: sand, sea, one long-tail " +
+        "boat. Bob hung them in sequence and offers no commentary. None is needed.",
+    },
     revisit: [
       "Back through the hedge. The fan turns, the photographs watch, the ice bucket refills.",
       "Succubus again — brass rail, dark wood, and somebody's whole life on the walls.",
@@ -953,6 +991,12 @@ const ROOMS = {
       "keys on a nail. Two plastic stools. An older Thai man sits behind the " +
       "counter, a thermos of coffee at his elbow, watching the alley with the " +
       "patient stillness of someone who has long stopped being surprised by anything.",
+    reads: {
+      keys: "A ring of numbered keys on a nail, each fob worn smooth. No computer, no " +
+        "ledger anyone can see — the old man knows which rooms are turning and which are " +
+        "done, the way a stationmaster knows his trains. The nail has held that ring longer " +
+        "than most marriages in this town.",
+    },
     exits: { out: "pattaya_soi_7" },
   },
   beach_rd_c: {
@@ -976,6 +1020,12 @@ const ROOMS = {
       "no mamasan would dare question. What the ladies concede in years they repay in " +
       "showmanship, and the regulars wouldn't trade one of them for the whole of " +
       "Walking Street. Mem runs the floor like a national institution, because it is one.",
+    reads: {
+      "mirror ball": "The mirror ball is missing a continent of tiles and throws its light " +
+        "accordingly — a starfield with a dark patch that sweeps the room like weather. " +
+        "Management could re-tile it for a few hundred baht. The regulars would riot. The " +
+        "dark patch has a name, allegedly, but nobody will tell you until you've earned it.",
+    },
     revisit: [
       "Back into Tequila Queen — bald red velvet, a mirror ball short a continent of tiles, and dancers who answer to no mamasan but time.",
       "The oldest go-go in town takes you back: proudly unrestored, and prouder still of the women who've held its floor for years.",
@@ -1312,6 +1362,12 @@ const ROOMS = {
       "something, and enough straws for a table. The clientele skews a decade younger " +
       "than anywhere else on this beach, and the staff have the specific patience of " +
       "people who work where the customers are having a better night than they are.",
+    reads: {
+      bucket: "The house product, mid-assembly along the bar: a child's sand bucket, a " +
+        "bottle upended into ice, a fistful of straws like a losing hand of pick-up-sticks. " +
+        "Engineering-wise it is a delivery system for regret. Commercially it is genius — " +
+        "nobody has ever bought one alone.",
+    },
     revisit: [
       "A bucket goes past at shoulder height with four straws in it.",
       "The sound war continues. Neither side has ever won and neither will.",
@@ -1344,6 +1400,11 @@ const ROOMS = {
       "rattle past on the Beach Road run, headlights strung north toward the Dolphin and south " +
       "into the rest of the neon city.",
     busStop: "beachrd",
+    reads: {
+      skunk: "From the junction you get the Stinky Pinky's sign at full wattage: a cartoon " +
+        "skunk hoisting a Chang, buzzing gently, visible from the sand. As landmarks go it " +
+        "is unlovely, unmissable, and — by about the third night — unexpectedly dear.",
+    },
     revisit: [
       "Back to the foot of Soi 6, the soi blazing inland east, the bay open across the road west, the Stinky Pinky and the Blue Dog eyeing each other across the junction.",
       "The mouth of Soi 6 again — the skunk sign buzzing one corner, the Blue Dog's rail facing the water on the other, and the sun thinking about going down over the bay.",
@@ -1473,6 +1534,16 @@ const ROOMS = {
       "front you can watch the evening checkpoint work the road to the south — half of Bert's " +
       "regulars ducked in here to dodge it once and never left — and the sun go down over the " +
       "bay between shots. (WATCH POLICE · WATCH SUNSET.)",
+    reads: {
+      skunk: "The sign's cartoon skunk hoists his Chang over the junction, tail up, grin " +
+        "fixed, buzzing on a transformer that should have been replaced years ago. Bert " +
+        "claims the previous owner won the artwork in a bet. The skunk has outlasted the " +
+        "bet, the artist, and very nearly the bar.",
+      trophies: "League trophies crowd the back bar three deep — killer pool, darts, one " +
+        "cup for a football tournament nobody can place. The engraving stops mid-decade, " +
+        "which is not when the winning stopped; it's when the engraver's shop closed. The " +
+        "winning is continuous. Ask Bert. Or don't, if you have somewhere to be.",
+    },
     revisit: [
       "Back into the Stinky Pinky — lime and cue chalk in defiance of the name, trophies crowding the back bar, the table brushed like a green.",
       "The pool bar takes you back. Bert holds the end stool with a bottomless Singha and an opinion on your break already loading.",
@@ -1605,6 +1676,12 @@ const ROOMS = {
       "past the food court and its smell of frying garlic, the aisles turn quieter " +
       "and become cloth: bolts of it stacked to the roof, and the traders who moved " +
       "here from the Buakhao market when Tree Town took the trade.",
+    reads: {
+      frog: "The wooden frogs sit in ranks by size, spines ridged, and the stallholder " +
+        "demonstrates without being asked: a stick down the back and the thing croaks, " +
+        "convincingly, every time. Nobody needs one. Thousands go home in luggage every " +
+        "high season, croaking through customs the world over.",
+    },
     revisit: [
       "A vendor holds a Chang singlet against your chest without breaking " +
         "conversation with the woman on the next stall.",
@@ -1710,6 +1787,12 @@ const ROOMS = {
       "charcoal, jaws wired shut, the length of a man — and the woman working it has " +
       "long since stopped looking up at the phones. She sells it by the skewer, and it " +
       "sells, and the people photographing it are almost never the people eating it.",
+    reads: {
+      crocodile: "The crocodile turns on its spit with its jaws wired shut, glazed and " +
+        "patient, the length of a man. She sells it by the skewer. The queue is Thai, the " +
+        "photographers are farang, and the two groups have politely agreed to find each " +
+        "other ridiculous.",
+    },
     revisit: [
       "The crocodile turns. Two people photograph it. Neither of them buys anything.",
       "Somebody comes out of the mall with a shopping bag and straight into a stall queue.",
@@ -1802,6 +1885,11 @@ const ROOMS = {
     desc: "Fairy lights, low stools, and a battered acoustic guitar on a hook that everyone " +
       "threatens to play and nobody does. Pun keeps the tab and the peace, in that order.",
 
+    reads: {
+      guitar: "A battered acoustic on a wall hook, one string dead, the varnish worn to bare " +
+        "wood where a forearm rests. Everyone who drinks here has threatened to play it. The " +
+        "hook is the bar's most reliable act of public safety.",
+    },
     exits: { out: "myth_stage" },
   },
   soundcheck_bar: {
@@ -1842,6 +1930,12 @@ const ROOMS = {
       "your name. On the back shelf, half a dozen dusty jars of something homemade that nobody " +
       "has ever ordered.",
 
+    reads: {
+      shelf: "Half a dozen dusty jars of something homemade on the back shelf — fruit at " +
+        "the bottom, spirit on top, labels in a hand nobody current can read. Nobody has " +
+        "ever ordered one. They came with the bar, like the wiring, and each owner has " +
+        "quietly decided the same thing: some inventory is structural.",
+    },
     exits: { out: "myth_rows" },
   },
   container_8: {
@@ -1851,6 +1945,12 @@ const ROOMS = {
     desc: "Eighth along the row, and the number outlasted whatever the sign said before it. Toon " +
       "keeps a jar of chilli-lime peanuts on the bar as bait, and it works on everybody.",
 
+    reads: {
+      jar: "Toon's jar of chilli-lime peanuts, parked exactly where a hand rests between " +
+        "sips. Bait, and everyone knows it's bait, and it works anyway — one handful and " +
+        "your mouth needs a beer, and the beer needs company. The jar has paid for itself " +
+        "ten thousand times.",
+    },
     exits: { out: "myth_rows" },
   },
   reload_bar: {
@@ -2132,6 +2232,12 @@ const ROOMS = {
       "numbered dancers from a different decade — No. 71 circled in red marker, much later, " +
       "by someone who knew what they were looking at. Crystal Palace is older than most of " +
       "the girls in it, and carries itself accordingly.",
+    reads: {
+      poster: "The faded poster: dancers in numbered order, feathered and rhinestoned, a " +
+        "lineup from a different decade. Nobody in it works here now. One of them, the " +
+        "regulars will tell you quietly, owns the place — and looking from the poster to " +
+        "the office door, you can believe it.",
+    },
     revisit: [
       "Back into Crystal Palace — rhinestones on everything that holds still, the cashier's cage glittering like a shrine.",
       "The old go-go takes you back: subs you feel in the floor, and that carried-lightly dignity of a room older than its dancers.",
@@ -2324,6 +2430,12 @@ const ROOMS = {
       "holding the corner out of sheer stubbornness, and a smell of papaya salad " +
       "that could still pull you here from two sois away. SILK ROSE shares the block " +
       "east, and a pink-lit shopfront a few doors down promises the oil is warm.",
+    reads: {
+      market: "You can still read the market in the bones of the block: shophouse fronts " +
+        "built wide for stalls that aren't there, iron rings in the concrete where the " +
+        "tarp ropes tied off, a gutter worn smooth by decades of morning wash-downs. The " +
+        "som tam cart on the corner is the last stall standing, and it isn't leaving.",
+    },
     exits: { n: "buakhao_n", s: "buakhao_s", e: "silk_rose", spa: "buakhao_oil" },
   },
   buakhao_s: {
@@ -2381,6 +2493,12 @@ const ROOMS = {
       "at this counter since before the branch in Jomtien existed, and they will " +
       "tell you so. The original, they say, with the particular pride of people who " +
       "found something cheap before it was famous for being cheap.",
+    reads: {
+      board: "The laminated board: dishes 1 through 14, photographed a decade ago under " +
+        "lighting that has aged worse than the food. Below it, the chalked one — WHATEVER " +
+        "SHE MADE TODAY — which the regulars order by pointing at the kitchen. It has " +
+        "never once been a mistake.",
+    },
     exits: { out: "buakhao_n" },
   },
   lucky_tiger: {
@@ -2496,6 +2614,12 @@ const ROOMS = {
     desc: "Horseshoes, four-leaf clovers, a lottery-number shrine, and a pool table with a " +
       "lucky rip in the felt. Namtip and Bella will read your palm for a lady drink and " +
       "predict, every time, that you buy another.",
+    reads: {
+      horseshoe: "Horseshoes over the door and along the beams — some iron, some plastic, " +
+        "one drawn in marker where a real one fell and was never replaced. Below them the " +
+        "four-leaf clovers, the lottery-number shrine, the whole apparatus of luck, " +
+        "maintained with the seriousness other bars reserve for the till.",
+    },
     exits: { out: "tt_lane_3" },
   },
   moonshine_bar: {
@@ -2505,6 +2629,12 @@ const ROOMS = {
     desc: "A jars-on-the-shelf hillbilly theme done on a Pattaya budget — fairy lights in " +
       "mason jars, a banjo nobody plays, ya dong in an unlabelled bottle for the brave. Prik " +
       "and Mek run the rail and dare you to try the house infusion.",
+    reads: {
+      jar: "The mason jars hold the house infusions: ya dong in half a dozen ambers and " +
+        "browns, roots and bark and one jar with something coiled in it that Prik will only " +
+        "call 'vitamin'. The unlabelled bottle is the strong one. The banjo on the wall is " +
+        "for after the unlabelled bottle.",
+    },
     exits: { out: "tt_lane_3" },
   },
   tt_deep: {
@@ -2554,6 +2684,12 @@ const ROOMS = {
       "behind the bar — guarded by security who look extremely employed. " +
       "Somewhere behind that door is an office, and in that office is a safe.",
     sign: "office_door",
+    reads: {
+      door: "ห้ามเข้า — NO ENTRY — on a door that is otherwise trying not to be noticed. " +
+        "Behind it, by reputation: an office. In the office, by the same reputation: a " +
+        "safe. The security man near it has the relaxed stillness of somebody guarding a " +
+        "thing that has never once been threatened, which is its own kind of advertisement.",
+    },
     revisit: [
       "Back into Rainbow Girls — the best-run go-go in the maze, a DJ with actual taste, the cashier's cage strung with fairy lights.",
       "Madam Oy's flagship takes you back: tight, bright, and behind the bar that guarded door nobody invites you through.",
@@ -2568,6 +2704,16 @@ const ROOMS = {
     desc: "Ledgers squared to the desk edge, a shrine shelf with fresh marigolds, framed " +
       "photos: a farm gate in Isaan, a young dancer with a number pinned to her hip, " +
       "three condo lobbies. Bolted to the floor: a steel safe with a Thai-numeral keypad.",
+    reads: {
+      shelf: "The shrine shelf is the one thing in the office that isn't filed: fresh " +
+        "marigolds, water changed today, the incense stubs cleared before they can pile. " +
+        "Whatever Oy squares with the world across that desk, this shelf is where she " +
+        "squares the rest of it, daily, before anyone else is awake.",
+      photos: "The framed photos read left to right like a ledger: a farm gate in Isaan; a " +
+        "young dancer with a number pinned to her hip; three condo lobbies, each grander " +
+        "than the last. No captions, no gaps, no apologies. It is a career told the way Oy " +
+        "tells everything — completely, and only to those who bother to look.",
+    },
     exits: { out: "rainbow_girls" },
   },
 
@@ -2659,6 +2805,11 @@ const ROOMS = {
       "updated it and nobody has complained. Pia keeps the bar — and the dead " +
       "jukebox's memory — with a flat, unbothered calm.",
     reads: {
+      dragon: "The gold dragon over the bar was hand-painted by someone's cousin, and it " +
+        "shows — the proportions are enthusiastic, one eye is larger than the other, and " +
+        "the overall effect is less imperial guardian than large friendly dog in a dragon " +
+        "suit. It has presided over a decade of this room's sins without judging any of " +
+        "them, which may be why nobody has ever repainted it.",
       jukebox: "The jukebox slumps in the corner, unplugged since 2019, buttons gummy with old " +
         "fingerprints and a folded beer mat wedged under one leg. It plays nothing now but the " +
         "part it plays best: dead. (PLAY JUKEBOX if you must.)",
@@ -2855,6 +3006,11 @@ const ROOMS = {
       "you there. A flatscreen on the wall and a mini-fridge in the corner — two free " +
       "waters a day, housekeeping's one kindness — round out the luxuries. " +
       "(SLEEP to turn in and end the night · WATCH TV · OPEN FRIDGE · or step onto the BALCONY.)",
+    reads: {
+      recliner: "The balcony recliner has taken the shape of every guest before you and " +
+        "reached an accommodation with all of them. It faces the soi at exactly the angle " +
+        "of a man who wants to see everything and join nothing. (WATCH SOI)",
+    },
     revisit: [
       "Back up to your balcony room over the Queen Vic — the fan turning its opinions over, Soi 6 still howling up over the rail two floors down.",
       "The room again: wood floors, the recliner on the balcony, the soi throwing its light and its bass up the wall like a fish tank with the volume left on.",
@@ -2945,6 +3101,12 @@ const ROOMS = {
     desc: "One container-width of bar with a motorsport theme it can't quite afford — a " +
       "cardboard cutout of a pit crew, a checkered valance, a shelf of dusty toy cars. " +
       "Milin waves you onto a stool like she's flagging you into the pits.",
+    reads: {
+      shelf: "The shelf of toy cars, dusted but never touched: die-cast racers in faded " +
+        "liveries, arranged on the grid in an order that must mean something to somebody. " +
+        "Milin says they belong to the owner, and the owner is never here, and the cars " +
+        "never move. The chequered valance below them hangs exactly level.",
+    },
     exits: { out: "lk_bend" },
   },
   kinky: {
@@ -3025,6 +3187,12 @@ const ROOMS = {
       "finished years ago. It is not derelict, which is the strange part — " +
       "somebody swept it once, after the end, turned the taps off properly and " +
       "squared the tables, and then locked the door and did not come back.",
+    reads: {
+      board: "Three darts still in the treble bed, thrown by somebody who meant to come " +
+        "back for the next leg. Beside it the fixtures list, biro on a brewery poster: " +
+        "half the season ticked off, the other half waiting for a Tuesday that never " +
+        "came. Nobody has taken it down. Taking it down would be admitting something.",
+    },
     revisit: [
       "The Shamrock, still shut, still swept. The darts are still in the board.",
       "Dust, stacked stools, and a fixtures list nobody took down.",
@@ -3045,6 +3213,12 @@ const ROOMS = {
     desc: "A beer bar with a ceiling fan, a shrine over the till, and photos of Walking " +
       "Street's glory days behind the bar — including one of a dancer mid-spin that " +
       "you'd swear is the woman now pouring your drink. There's an outlet by the cooler.",
+    reads: {
+      photos: "Walking Street's glory days, framed behind the bar: crowds you can smell " +
+        "the baby oil off, neon that has since been renamed twice, and one shot of a " +
+        "dancer mid-spin, all sequins and certainty. You look from the photo to the woman " +
+        "pouring your drink and back. She lets you look. She does not help you decide.",
+    },
     exits: { out: "khao_talo" },
   },
   khao_talo_strip: {
@@ -3100,6 +3274,12 @@ const ROOMS = {
       "the clock, which should tell you something, and the ladies watch your " +
       "spending with the warm professional attention of women who know exactly " +
       "what the bolt on that door is for.",
+    reads: {
+      clock: "An ordinary wall clock, and the most-watched object in the room. Before " +
+        "midnight it is just the time. As it climbs toward twelve the glances get shorter " +
+        "and more frequent, the way passengers watch a departure board — because when it " +
+        "lands, the bolt goes across, and everyone still inside has chosen to be.",
+    },
     exits: { out: "khao_talo_strip" },
   },
   mama_yai: {
@@ -3136,6 +3316,12 @@ const ROOMS = {
       "trouble — which is exactly why a certain kind of woman ends up working the till here " +
       "rather than anywhere brighter. The register sits by the door, a small shrine and a " +
       "framed photo of a young man beside it.",
+    reads: {
+      photos: "By the register, a small shrine and a framed photo of a young man — taken " +
+        "years ago by the border of the frame's fading, fresh marigolds beside it today. " +
+        "Duangjai doesn't explain it and the room's manners are that nobody asks. Whatever " +
+        "it is, it is tended daily, and it is why the Boathouse closes early.",
+    },
     exits: { out: "lake_mabprachan", w: "lake_beer" },
   },
   lake_beer: {
@@ -3166,6 +3352,12 @@ const ROOMS = {
       "East, a quiet BAR CORNER of expat beer bars glows low; a SPA ROW of massage " +
       "and soapland fronts runs off the other way.",
     busStop: "beachrd",
+    reads: {
+      sign: "The SABAI PALMS sign, up close: half its letters dark, so the soi announces " +
+        "SA AI PA MS to the night in confident neon. Maintenance was promised, the " +
+        "long-stay guests petitioned AGAINST it, and management — reading the room " +
+        "correctly for once — left the dead letters dead. It's not broken. It's an address.",
+    },
     exits: { s: "dolphin", n: "hotel_soi", w: "orchid_club", e: "naklua_bars", spa: "naklua_massage" },
   },
   naklua_bars: {
@@ -3186,6 +3378,12 @@ const ROOMS = {
     desc: "A nautical-junk beer bar — a real ship's wheel on the wall, glass floats in a net, " +
       "a barometer nobody trusts. The long-stay crowd holds the stools like moorings. Namfon " +
       "pours a cold one before you've picked a seat.",
+    reads: {
+      wheel: "The ship's wheel is real — teak, brass hub, decades of hands worn into the " +
+        "spokes. Where the rest of the nautical junk came from a job lot, the wheel came " +
+        "from a boat, and whichever regular you ask tells a different story about which " +
+        "boat, all of them good, none of them compatible.",
+    },
     exits: { out: "naklua_bars" },
   },
   dolphin_bar: {
@@ -3217,6 +3415,17 @@ const ROOMS = {
       "only lever the place has to drag a punter past the Mooring — and a tip jar by the till is " +
       "somehow fuller than the room can explain. Everything is a shade too new: the paint, the " +
       "stools, the confidence.",
+    reads: {
+      rabbit: "The hand-painted rabbit tumbles down its hole of green ones-and-zeroes, " +
+        "brushstroke pixels raining around it. It wants to be The Matrix and lands closer " +
+        "to a man describing The Matrix in a bar. Somebody spent real hours on it, and " +
+        "believed in it the whole time, and somehow that is the most Eddy thing in the " +
+        "building.",
+      jar: "The tip jar by the till is fuller than the room can explain — proper notes, " +
+        "folded, not the shrapnel a half-empty beer bar earns. Either the crowd that " +
+        "drinks here tips like sailors, or money enters this jar by some door other than " +
+        "gratitude. Nobody behind the bar seems curious, which is its own data point.",
+    },
     exits: { out: "naklua_bars" },
   },
   naklua_massage: {
@@ -3378,6 +3587,12 @@ const ROOMS = {
       "who runs it like a small clinic. Traditional Thai and oil, done properly and firmly, " +
       "no funny business — the sort of place the long-stay expats come to get their backs put " +
       "right after a night that went wrong.",
+    reads: {
+      certificate: "The certificate is real — a massage-school diploma, gold frame, the " +
+        "proprietress's name in careful Thai script, a seal from an institution in Bangkok. " +
+        "It is the only decoration in the shop and it is hung dead level. In this town that " +
+        "combination tells you everything.",
+    },
     exits: { out: "second_rd_s" },
   },
   // ── Soi Honey (the map calls it Soi 11) — cuts between Second Rd and Buakhao ──
@@ -3426,6 +3641,12 @@ const ROOMS = {
     desc: "Yellow-and-black everything, a plywood bee the size of a scooter over the bar, and a " +
       "sound system punching well above the venue's weight. Smaller and friendlier than the " +
       "Honey Trap across the way, which the two bars settle nightly by volume.",
+    reads: {
+      bee: "The bee is plywood, scooter-sized, hand-cut and hand-painted, and bolted over " +
+        "the bar at an angle that suggests either flight or structural fatigue. Somebody " +
+        "loved making it. The bar is named after it, or it after the bar — accounts differ " +
+        "by drink.",
+    },
     exits: { out: "soi_honey_e" },
   },
   buzz_inn: {
@@ -3494,6 +3715,12 @@ const ROOMS = {
     desc: "A big open-fronted beer bar, all fairy lights and cane stools, its counter wrapped in a " +
       "horseshoe so the girls can reach every seat. No stage, no pole — just cold Chang, a Connect 4 " +
       "frame, and a dozen hostesses who treat every farang who slows down as a long-lost friend.",
+    reads: {
+      horseshoe: "The counter's horseshoe wrap is the whole business plan in carpentry: no " +
+        "seat more than an arm's reach from a girl, no girl more than an arm's reach from " +
+        "the ice. Somebody thought hard about this once, and every night since has proved " +
+        "them right.",
+    },
     exits: { out: "diana_w" },
   },
   sapphire: {

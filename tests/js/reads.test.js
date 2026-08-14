@@ -54,8 +54,16 @@ test("every readable-fixture room's prose actually invites the read", () => {
   for (const [id, r] of withReads) {
     const nouns = Object.keys(r.reads);
     assert.ok(nouns.every(n => typeof r.reads[n] === "string" && r.reads[n].trim()), `${id}: non-empty flavor`);
-    // the room desc (or its own reads) should reference at least one of the nouns
-    assert.ok(nouns.some(n => new RegExp(n, "i").test(r.desc)), `${id}: desc mentions the ${nouns.join("/")}`);
+    // The room's prose should reference at least one of its read nouns. Prose =
+    // desc + revisit (both surfaces invite), and a noun counts via its
+    // _READ_NOUNS aliases too — "framed photographs" invites reads.photos
+    // because EXAMINE PHOTOGRAPHS resolves through the alias table.
+    const prose = [r.desc, ...(r.revisit || [])].join(" ");
+    const invites = n => [n, ...(_READ_NOUNS[n] || [])]
+      .some(a => new RegExp(a.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i").test(prose)) ||
+      // the singular of a plural key ("photos" → "photo") still names the thing
+      (n.endsWith("s") && new RegExp(n.slice(0, -1), "i").test(prose));
+    assert.ok(nouns.some(invites), `${id}: prose mentions the ${nouns.join("/")}`);
   }
 });
 

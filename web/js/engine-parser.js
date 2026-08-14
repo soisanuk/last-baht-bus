@@ -690,6 +690,35 @@ const _READ_NOUNS = {
   // A room may author its own shrine (the beach spirit house at jomtien_beach_s3);
   // bars with no `reads.shrine` still fall through to _doScenery's bar-shrine prose.
   shrine: ["spirit house", "spirit-house", "spirithouse"],
+  // 2026-08-14 examine-audit: distinctive one-room objects (the Night Heron's
+  // clock, The Bucket's bucket, the dead market) opt in via reads; rooms
+  // without the key fall through to scenery/brush-off as before.
+  clock: ["wall clock"],
+  bucket: ["sand bucket", "ice bucket"],
+  market: ["old market", "market block"],
+  // The singleton-tail pass: distinctive one-room props. A key here does nothing
+  // until a room's `reads:` opts in, so generic words are safe to register.
+  shelf: ["back shelf", "shrine shelf"],
+  gecko: ["lizard"],
+  guitar: ["acoustic"],
+  bee: ["plywood bee"],
+  bird: ["painted bird"],
+  dragon: ["gold dragon"],
+  blender: [],
+  jar: ["jars", "tip jar", "mason jars"],
+  wheel: ["ship's wheel", "ships wheel", "barometer", "floats"],
+  horseshoe: ["horseshoes", "clover", "clovers"],
+  bullseye: ["bulls-eye", "bulls eye"],
+  trophies: ["trophy", "trophy shelf"],
+  skunk: ["cartoon skunk"],
+  rabbit: ["white rabbit", "neon rabbit"],
+  frog: ["frogs", "wooden frog"],
+  certificate: ["diploma"],
+  crocodile: ["croc", "spit"],
+  keys: ["numbered keys", "ring of keys"],
+  recliner: ["lounger"],
+  door: ["forbidden door"],
+  "mirror ball": ["disco ball", "mirrorball"],
 };
 function _roomRead(arg) {
   const reads = _room().reads;
@@ -1043,7 +1072,7 @@ const _SCENERY = [
       return _pickVary(_SHRINE_STREET, "scn_shrine_street");
     } },
 
-  { key: "bikes", m: /\b(bikes?|motorbikes?|scooters?|traffic|taxis?)\b/, lines: {
+  { key: "bikes", m: /\b(bikes?|motorbikes?|scooters?|traffic|taxis?|piwins?|motosais?)\b/, lines: {
     street: [
       "Parked three deep and angled in by a system everybody understands and nobody wrote " +
         "down. Two are running with nobody on them.",
@@ -1219,7 +1248,7 @@ const _SCENERY = [
     ],
   } },
 
-  { key: "cooler", m: /\bcool ?box(es)?\b|\bcoolers?\b|\bice ?box(es)?\b|\bice bucket\b/, lines: {
+  { key: "cooler", m: /\bcool ?box(es)?\b|\bcoolers?\b|\bice ?box(es)?\b|\bice bucket\b|\bice\b|\bfreezer\b/, lines: {
     bar: [
       "The cool box holds the real inventory — ice to the brim and bottles racked in it " +
         "like artillery. A girl tops it from a sack without being asked. The night is long " +
@@ -1282,9 +1311,351 @@ const _SCENERY = [
     ],
   } },
 
+  // ── batch 2 (the singleton-tail pass, same day) ────────────────────────────
+
+  // Real sockets are room data (`outlet`/`seven`) — answer with the hint where
+  // one exists, a voiced refusal in bars that guard theirs, silence elsewhere.
+  { key: "outlet", m: /\b(power )?outlets?\b|\bsockets?\b|\bplug\b/, fn: (ctx) => {
+    if (_room().outlet || _room().seven) return "A working socket, which in this town is " +
+      "not furniture, it's hospitality. (CHARGE PHONE)";
+    if (ctx === "bar" || ctx === "pub") return "There'll be a socket behind the bar " +
+      "somewhere, but it belongs to the fridge and the fairy lights, and the staff decide " +
+      "who joins that queue.";
+    return null;
+  } },
+
+  { key: "menu", m: /\bmenus?\b|\bprice ?lists?\b/, fn: (ctx) => {
+    if (/soapy/.test(G.room)) return "Laminated, tiered, and mercifully numeric — the " +
+      "menu does the talking so nobody in the lobby has to. The prices climb by floor.";
+    if (ctx === "bar" || ctx === "pub") return _pickVary([
+      "Laminated, sun-faded, sauce-spotted. The prices are best read as opening positions.",
+      "One page, two columns, and the lady-drink line doing the heavy lifting for the " +
+        "whole document.",
+      "The menu is mostly a formality — everyone here orders the same three things, and " +
+        "the kitchen knows which before you do.",
+    ], "scn_menu_bar");
+    return null;
+  } },
+
+  { key: "football", m: /\bfootball\b|\bthe match\b|\bpremier league\b/, lines: {
+    bar: [
+      "Up on the corner telly, mostly unwatched until it suddenly, loudly, isn't. " +
+        "(SCORES for the day's results.)",
+      "The football murmurs away above the optics — the one broadcast this coast never " +
+        "turns off, in case somebody's team is playing. Somebody's team is always playing. " +
+        "(SCORES)",
+    ],
+    any: [
+      "No screen out here — the football happens indoors, and you'll hear the goals " +
+        "from the street.",
+    ],
+  } },
+
+  { key: "tailor", m: /\btailors?\b/, lines: {
+    street: [
+      "A tailor's window: mannequins in suits nobody has worn since the fitting, and a " +
+        "man in the doorway who can tell your measurements — and your resistance level — " +
+        "at forty paces. \"Sir! Suit! Best quality!\"",
+      "Bolts of cloth, a curled poster of a farang in a blazer from 1994, and a promise " +
+        "of anything by Thursday. The suits are real. Thursday is negotiable.",
+    ],
+    any: [
+      "No tailor in here — but give the strip outside a minute and one will find you.",
+    ],
+  } },
+
+  { key: "laundry", m: /\blaund(ry|erette)\b|\bwash.?kilo\b/, lines: {
+    street: [
+      "Wash-by-the-kilo: sacks of the town's shirts in cheerful jumbles, a scale, a " +
+        "ticket book, and somebody's gran folding with the speed of a card dealer.",
+      "The laundry hums and steams. Forty baht a kilo and everything comes back smelling " +
+        "faintly of a flower that doesn't grow anywhere.",
+    ],
+    any: [
+      "The laundry situation is a problem for daylight hours, and this isn't one.",
+    ],
+  } },
+
+  { key: "trees", m: /\btrees?\b|\bcasuarinas?\b|\bpalms?\b/, lines: {
+    sand: [
+      "Casuarinas mostly, leaning the way the wind spent years teaching them, holding the " +
+        "dune together and the shade where it lands.",
+      "The trees take the sea wind first so the beach doesn't have to. They've made their " +
+        "peace with the arrangement — you can see it in the lean.",
+    ],
+    street: [
+      "The town's trees survive in gaps — a rain tree the pavement was poured around, " +
+        "palms in concrete collars, all of them wearing at least one staple from an old " +
+        "poster.",
+    ],
+    any: [
+      "Greenery out here is wherever the concrete forgot to finish.",
+    ],
+  } },
+
+  { key: "shade", m: /\bshade\b|\bawnings?\b/, lines: {
+    street: [
+      "Shade is real estate on this coast, and it is fully let — piwins under the sign, " +
+        "a dog under the cart, a girl under the awning with the good breeze.",
+      "The awnings do the real municipal work here. Every strip of shadow has a tenant " +
+        "and the tenancy is enforced.",
+    ],
+    any: [
+      "In here the aircon does what the shade does outside, at a price somebody is " +
+        "quietly passing on to you.",
+    ],
+  } },
+
+  { key: "railing", m: /\brailings?\b|\bsea ?wall\b|\bbalustrade\b/, lines: {
+    sand: [
+      "The rail between the town and the sand — leaned on by generations of elbows, " +
+        "warm from the day long after dark, holding up more life stories than the bars do.",
+    ],
+    street: [
+      "The promenade railing runs the whole front, polished at elbow height and rusting " +
+        "everywhere else. People come to it to look at the sea and end up looking at " +
+        "their phones, but the rail doesn't mind. It has time.",
+    ],
+    any: [
+      "No sea rail in here — the only thing to lean on is the bar, which was built for it.",
+    ],
+  } },
+
+  // One object, three rooms: the Dolphin Roundabout and the Tree Town arch each
+  // get a single authored answer keyed to where you're standing.
+  { key: "roundabout", m: /\broundabouts?\b|\bdolphin statue\b/, fn: () => {
+    if (["dolphin", "dolphin_bar", "beach_rd_top", "naklua_rd"].includes(G.room))
+      return "The Dolphin Roundabout — leaping concrete dolphins, repainted every few " +
+        "years in a blue the sea has never once been, marking where Beach Road gives up " +
+        "and Naklua begins. Traffic circles it with the confidence of people who have " +
+        "stopped believing in rules and started believing in momentum.";
+    return "No roundabout on this stretch — the traffic here prefers its chaos linear.";
+  } },
+
+  { key: "arch", m: /\barch(way)?\b/, fn: () => {
+    if (["tt_entrance", "buakhao_tt", "buakhao_myth"].includes(G.room))
+      return "The TREE TOWN arch: neon and fairy lights over a gap between shophouses, " +
+        "doing its level best to look like the entrance to somewhere instead of the exit " +
+        "from your money. It works. It has always worked.";
+    return null;
+  } },
+
+  { key: "streetfood", m: /\bsom ?tam\b|\bmoo ?ping\b|\bskewers?\b|\bgrill(ed)?\b|\bnoodle stall\b|\bnoodle carts?\b|\btandoor\b|\bkhanom\b/, lines: {
+    street: [
+      "Charcoal smoke, fish sauce, lime — the smell that runs this town's actual economy. " +
+        "The carts feed the girls, the piwins, and any farang smart enough to point at " +
+        "what the locals are having. (BUY FOOD)",
+      "A grill going full tilt, skewers turning, a mortar thumping out som tam somewhere " +
+        "behind it. Twenty metres of pavement doing more honest trade than the whole soi.",
+    ],
+    bar: [
+      "The bar doesn't do food, but the smell of somebody's grill drifts in anyway, " +
+        "patient as a creditor. You'll deal with it on the way out.",
+    ],
+    any: [
+      "Nothing cooking right here — follow the charcoal smell and you'll hit a cart " +
+        "before you hit a decision.",
+    ],
+  } },
+
+  { key: "foodcourt", m: /\bfood ?court\b/, lines: {
+    any: [
+      "Laminated photo menus, numbered stalls, arctic air, and fifty-baht plates that " +
+        "shame every tourist menu on the strip. The town's best-kept open secret, kept " +
+        "mostly by farang never looking up from Beach Road.",
+    ],
+  } },
+
+  { key: "cart", m: /\bcarts?\b|\bvendor'?s? cart\b/, lines: {
+    street: [
+      "A vendor's cart — glass box, gas bottle, one wheel with opinions — carrying a " +
+        "whole livelihood at walking pace. It'll be at the same corner tomorrow, and the " +
+        "day after, and the year after that.",
+    ],
+    sand: [
+      "A drinks cart parked where the sand meets the shade: cooler, folding stool, " +
+        "twenty years of the same pitch. The beach runs on these.",
+    ],
+    any: [
+      "No cart in here — the carts keep to the street, where the living is.",
+    ],
+  } },
+
+  { key: "oilshop", m: /\bwarm oil\b|\bmassage oil\b|\boil\b/, fn: () => {
+    if (/massage|oil|soapy|thai$/.test(G.room)) return "The oil is the trade's one " +
+      "honest promise: warmed, scented, applied with professional indifference or " +
+      "professional interest depending entirely on which shop and which sticker.";
+    return null;
+  } },
+
+  { key: "lobby", m: /\blobb(y|ies)\b/, fn: () => {
+    if (/soapy/.test(G.room)) return "Fake marble, real chlorine, jasmine somewhere " +
+      "under it, and lighting calibrated to flatter everyone equally — the lobby is the " +
+      "airlock between the street and the arrangement, and it takes its job seriously.";
+    if (_isHotelRoom(G.room)) return "The lobby is a lift ride away — fake orchids, " +
+      "real aircon, and a night clerk who has seen every hour you could possibly come " +
+      "home at, and judges none of them out loud.";
+    return null;
+  } },
+
+  { key: "fishtank", m: /\bfish ?tank\b|\baquarium\b/, fn: () => {
+    // the soapies' street frontage shows the lobby tank to the pavement
+    if (["second_rd_n", "naklua_massage"].includes(G.room)) return "Through the soapy's " +
+      "glass front you can see the lobby fish tank doing its work — real fish, real " +
+      "castle, a small honest aquarium advertising a large dishonest one.";
+    if (/soapy/.test(G.room)) return "There are two tanks in the building. This one has " +
+      "actual fish, circling their castle with no idea what an honest living they're " +
+      "doing. Nobody looks at it twice, which may be the point.";
+    return null;
+  } },
+
+  { key: "desk", m: /\bdesks?\b/, fn: () => {
+    if (/soapy/.test(G.room)) return "A small desk holding a laminated menu, a phone, " +
+      "and the manageress — the entire administration of the building, running at the " +
+      "unhurried speed of somebody whose product sells itself.";
+    return null;
+  } },
+
+  { key: "poster", m: /\bposters?\b/, lines: {
+    any: [
+      "Sun-curled, taped at the corners, advertising a night that has already happened. " +
+        "Nobody takes posters down in this town — they just layer, like sediment.",
+      "The poster promises more than the venue will deliver, in brighter colours than " +
+        "the venue owns. This is understood by all parties.",
+    ],
+  } },
+
+  // The mirror sticker is massage-shop canon — the small print of the whole trade.
+  { key: "sticker", m: /\bstickers?\b/, fn: () => {
+    if (/massage|oil|thai$/.test(G.room)) return "The sticker on the mirror — small, " +
+      "peeling, doing more regulatory work than any sign in the building. Which sticker " +
+      "a shop has, and how small it is, tells you everything the pink light doesn't.";
+    return null;
+  } },
+
+  // ── batch 3 (the singleton skim) ───────────────────────────────────────────
+
+  { key: "cage", m: /\bcashier'?s? cage\b|\bcage\b/, lines: {
+    bar: [
+      "The cashier's cage — strung with fairy lights, glittering like a shrine, and " +
+        "exactly as decorative as a bank vault. Every baht in the building passes through " +
+        "it, and the woman inside has never once lost count.",
+    ],
+    any: [
+      "No cage out here. The money moves hand to hand, which is its own kind of honesty.",
+    ],
+  } },
+
+  { key: "boats", m: /\bsquid boats?\b|\bboats?\b|\bferry\b/, lines: {
+    sand: [
+      "Out past the swimmers' limit, the squid boats hang their green lamps over the " +
+        "water — a second, more sensible town, doing a night shift that actually produces " +
+        "something.",
+      "A couple of hulls pulled up past the tideline, awnings rolled, ropes coiled by " +
+        "somebody who has done it ten thousand times. The bay works days; the bars work " +
+        "nights; the sand holds both coats.",
+    ],
+    street: [
+      "You can see the squid-boat lamps between the buildings if you catch the right " +
+        "gap — a string of green stars lying on the horizon, entirely indifferent to the " +
+        "neon competing from this side.",
+    ],
+    bar: [
+      "From here the boats are just lights on the black — green for squid, white for " +
+        "the ferry, and the regulars can tell you which is which without turning round.",
+    ],
+  } },
+
+  // The evening checkpoint is a mechanic where it's watchable — hint it there.
+  { key: "checkpoint", m: /\bcheckpoints?\b/, fn: () => {
+    if (["beach_rd_n", "stinky_bar", "blue_dog"].includes(G.room))
+      return "The evening checkpoint, working the road south of the junction: cones, a " +
+        "table, helmetless farang waved over for a paperwork stop and an on-the-spot " +
+        "fine. The bars' front rows treat it as live theatre, which it is. (WATCH POLICE)";
+    return "No checkpoint on this stretch tonight — the police prefer the junctions, " +
+      "where the catch is better.";
+  } },
+
+  { key: "rope", m: /\bvelvet rope\b|\bwristbands?\b/, lines: {
+    any: [
+      "The velvet rope is doing what velvet ropes do everywhere: converting a doorway " +
+        "into a judgement. It has no opinion of you personally. That's the doorman's job.",
+      "A rope, some brass posts, and the oldest trick in nightlife — nothing makes a " +
+        "room desirable like making it briefly difficult.",
+    ],
+  } },
+
+  { key: "booth", m: /\bcurrency booth\b|\bexchange booth\b|\bmoney ?changer\b/, lines: {
+    street: [
+      "The currency booth's rate board glows green — a number honest enough to beat the " +
+        "banks and precise enough to remind you somebody is still making money on it.",
+    ],
+    any: [
+      "No exchange in here — the only rate on offer is the bar's, and it is not posted.",
+    ],
+  } },
+
+  { key: "atm", m: /\bcash machines?\b|\batm\b/, lines: {
+    street: [
+      "A glowing box that dispenses regret in ฿1000 notes, plus the fee. It has a queue " +
+        "at midnight and a guard's chair nobody sits in. (WITHDRAW, if you must.)",
+      "The ATM's screen glow is the coldest light on the street. Every man in this town " +
+        "has stood in front of one at 1 a.m. doing arithmetic he already regrets. (WITHDRAW)",
+    ],
+    any: [
+      "No machine in here — the till only works in one direction. The street ATMs have " +
+        "the other one covered.",
+    ],
+  } },
+
+  { key: "kettle", m: /\bkettles?\b|\bthermos\b/, lines: {
+    any: [
+      "A kettle, mid-career, never quite off the boil. Where there is a kettle there is " +
+        "somebody's actual life being lived behind the trade, and it is none of your business.",
+    ],
+  } },
+
+  // Mabprachan: the lake cluster's one shared view.
+  { key: "lake", m: /\blake\b|\breservoir\b/, fn: () => {
+    if (["lake_bar", "lake_beer", "firefly_bar", "lake_mabprachan"].includes(G.room))
+      return "Mabprachan lies flat and dark across the road, holding the last of the " +
+        "light the way water does long after the sky has given it up. No neon, no bass — " +
+        "just insects, a dog somewhere, and the town a rumour over the trees. The expats " +
+        "out here call it the lake and mean it the way you'd mean a friend.";
+    return null;
+  } },
+
+  { key: "fairylights", m: /\bfairy lights?\b|\bstring lights?\b|\bled rope\b/, lines: {
+    bar: [
+      "Fairy lights by the metre — the soi's load-bearing decoration. Half the strings " +
+        "have a dead bulb somewhere and none of them have ever been taken down, only " +
+        "added to.",
+      "The wiring is a handshake agreement with physics, but the effect is the effect: " +
+        "any bar, anywhere, becomes somewhere you might stay for one more.",
+    ],
+    any: [
+      "Strings of them sag between poles and shopfronts, doing the job neon does at a " +
+        "tenth of the wattage and twice the charm.",
+    ],
+  } },
+
+  { key: "tv", m: /\btelly\b|\btv\b|\btelevision\b|\bscreens?\b/, lines: {
+    bar: [
+      "The corner telly, on with the sound down, the way bar tellies live. Football, " +
+        "muay thai, the news nobody reads out loud. (WATCH TV)",
+      "A screen doing its quiet work above the optics — mostly ignored, until the whole " +
+        "room turns to it at once, and then it's the most important object in Thailand. " +
+        "(WATCH TV)",
+    ],
+    any: [
+      "A television murmurs from somewhere inside a shophouse — the sound of somebody's " +
+        "ordinary evening, carrying out into everyone else's extraordinary one.",
+    ],
+  } },
+
   // "A number" means three different things by venue — a go-go's badge, a
   // soapy's disc, Soi 6's quoted price — so answer by room, else fall through.
-  { key: "numbers", m: /\bnumbers?\b|\bbadges?\b/, fn: () => {
+  { key: "numbers", m: /\bnumbers?\b|\bbadges?\b|\bfishbowl\b|\bdiscs?\b/, fn: () => {
     if (_room().barType === "gogo") return "Every dancer wears one — a plastic disc on " +
       "the bikini hip, because the music is too loud for names and the mamasan's ledger " +
       "runs on digits. You don't point at a girl here. You quote her.";
@@ -1294,6 +1665,9 @@ const _SCENERY = [
     if (/soapy/.test(G.room)) return "The numbered discs are the whole catalogue system — " +
       "quoted, noted, fetched. Somewhere between a deli counter and a dream, and nobody " +
       "in the building finds that strange any more.";
+    if (_room().barType === "hostbar") return "The hosts sit in numbered order along the " +
+      "bench — same system as everywhere else on this coast, aimed the other way. The " +
+      "arithmetic doesn't care who's buying.";
     return null;
   } },
 ];

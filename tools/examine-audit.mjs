@@ -68,6 +68,7 @@ const FUNCTION_WORDS = new Set([
   "already", "also", "just", "only", "even", "ever", "never", "always", "again",
   "once", "twice", "too", "very", "quite", "rather", "enough", "yet", "now",
   "that's", "it's", "he's", "she's", "there's", "what's", "who's",
+  "the", "an",
   // bare adjectives & quantities (fine inside "little figures"; noise alone)
   "cold", "warm", "hot", "long", "short", "same", "new", "old", "good", "bad",
   "big", "small", "little", "high", "low", "real", "whole", "own", "next", "last",
@@ -129,6 +130,22 @@ const STOP = new Set([
   "uniform", "uniforms", "heels", "shorts", "vest", "bikini", "sarong", "polo",
   // verbs the phrase regex catches as second words standing alone
   "turn", "turns", "pull", "pulls", "press", "wait", "watch", "pass",
+  // 2026-08-14 triage of the 211 multi-room rows: abstractions, metaphors,
+  // adjectives and geography verified non-objects against their source lines
+  "step", "steps", "rumour", "rumours", "foot", "feet", "complex", "line",
+  "lines", "length", "knot", "pair", "conversation", "green", "seafront",
+  "shopfront", "shopfronts", "arrangement", "loudest", "hip", "hips", "thigh",
+  "thighs", "purr", "churn", "elbow", "elbows", "crew", "joke", "jokes", "gap",
+  "gaps", "breathing", "eating", "safely", "free", "everybody", "pink",
+  "transaction", "transactions", "confidence", "group", "groups", "pitch",
+  "smear", "hiss", "easy", "hurry", "exact", "scatter", "straight", "relaxed",
+  "neighbours", "younger", "instead", "original", "living", "paint", "simmer",
+  "playing", "choice", "choices", "whisper", "whispers", "purpose", "outright",
+  "slope", "opposite", "sunburned", "arrives", "climbs", "loop", "river",
+  "parade", "party", "gold", "office", "go-go", "go-gos", "fog", "solo",
+  "lip-sync", "slow", "suit", "suits", "unit", "open-air", "open-front",
+  "put", "lit", "toward", "asleep", "court", "mall", "board", "clock",
+  "bucket", "market", "pool", "tam", "grip", "lean", "wave", "waves",
 ]);
 
 function harvest(text) {
