@@ -24,11 +24,41 @@ test("neon streets carry music, the seafront carries surf, the rest stays silent
     "beach_rd_s", "beach_rd_c", "beach_rd_n", "promenade"]) {
     assert.equal(_trackForRoom(id), "surf", `${id} should hear the sea`);
   }
-  // silence: inland roads, markets, complexes' lanes, hotel, dark hill
-  for (const id of ["second_rd_c", "buakhao_market", "buakhao_n", "myth_night",
-    "tt_lane_1", "pratumnak_rd", "hotel_room", "police_station",
-    "lake_mabprachan", "naklua_rd", "central_mall", "short_time_motel"]) {
+  // true silence is now only the non-bar interiors: your bed, the cop shop,
+  // the mall's AC, the motel, the treatment rooms
+  for (const id of ["hotel_room", "qv_room", "metropole_room", "police_station",
+    "central_mall", "short_time_motel", "klang_massage", "naklua_thai"]) {
     assert.equal(_trackForRoom(id), null, `${id} should be silent`);
+  }
+});
+
+test("the walk to the bar is a gradient: town, then the bass through the wall", () => {
+  // ordinary lit streets: the town itself (rumble, insects, a passing bike)
+  for (const id of ["second_rd_c", "naklua_rd", "night_bazaar",
+    "sukhumvit_crossing", "lake_mabprachan"]) {
+    assert.equal(_trackForRoom(id), "town", `${id} should sound like the town`);
+  }
+  // bar-lined streets leak the LOCAL set — walking in resolves the thump
+  // into the song it always was
+  for (const id of ["buakhao_n", "buakhao_market", "diana_mid", "soi_honey_w",
+    "myth_rows", "myth_night"]) {
+    assert.equal(_trackForRoom(id).leak, _BAND_SET, `${id} should leak the songbook`);
+  }
+  for (const id of ["tt_lane_1", "tt_entrance"]) {
+    assert.equal(_trackForRoom(id).leak, _GOGO_SET, `${id} should leak the go-go crate`);
+  }
+  // Oy's office sits behind her own go-go; the bass through that wall is hers
+  assert.equal(_trackForRoom("oy_office").leak, _GOGO_SET);
+  // dark rooms lose the traffic: insects only, wherever the dark is — and the
+  // Walking Street service alley comes off the full synthwave it used to play
+  for (const id of ["tt_deep", "tt_back", "ws_alley", "hotel_soi", "dongtan_rd_n",
+    "buddha_hill", "pratumnak_rd"]) {
+    assert.equal(_trackForRoom(id), "night", `${id} should be insects in the dark`);
+  }
+  // ...except by the sea: a dark beach is still a beach, and the surf doesn't
+  // stop at nightfall — dark defers to the water everywhere on the shore
+  for (const id of ["dongtan_beach", "jomtien_beach_s2", "dongtan_rd_m"]) {
+    assert.equal(_trackForRoom(id), "surf", `${id}: the sea outlasts the dark`);
   }
 });
 

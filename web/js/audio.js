@@ -148,7 +148,7 @@ const _audio = (() => {
                         peak: 0.50, amRate: 38, attack: 0.035, breath: 0.17 });
   }
 
-  function _note(freq, t0, dur, type, vol) {
+  function _note(freq, t0, dur, type, vol, dest) {
     const o = _actx.createOscillator();
     const g = _actx.createGain();
     o.type = type;
@@ -156,7 +156,7 @@ const _audio = (() => {
     g.gain.setValueAtTime(vol, t0);
     g.gain.exponentialRampToValueAtTime(0.001, t0 + dur);
     o.connect(g);
-    g.connect(_musBus);
+    g.connect(dest || _musBus);
     o.start(t0);
     o.stop(t0 + dur + 0.02);
   }
@@ -396,12 +396,32 @@ const _audio = (() => {
   // source of truth, shared by the scheduler and the tempo() probe.
   const _effBpm = t => t.bpm * 0.75 * (t.slow || 1);
 
+  // The leak: the local set heard through a wall. Bass only, through a heavy
+  // lowpass — no melody, no hat, no octave pop (150 Hz keeps none of it). The
+  // set still advances underneath, so stepping inside resolves the thump you
+  // were hearing into the song it always was.
+  let _leakMode = false, _leakLPNode = null;
+  function _leakLP() {
+    if (!_leakLPNode) {
+      _leakLPNode = _actx.createBiquadFilter();
+      _leakLPNode.type = "lowpass";
+      _leakLPNode.frequency.value = 150;
+      _leakLPNode.connect(_musBus);
+    }
+    return _leakLPNode;
+  }
+
   function _schedule() {
     while (_nextT < _actx.currentTime + 0.18) {
       const t = _track, spb = 30 / _effBpm(t);
       const bar = Math.floor(_step / 8) % t.bass.length;
       const pos = _step % 8;
       const root = t.bass[bar];
+      if (_leakMode) {
+        if (pos % t.bassEvery === 0) {
+          _note(_f(root), _nextT, spb * 0.9, "triangle", 0.55, _leakLP());
+        }
+      } else {
       if (pos % t.bassEvery === 0) {
         _note(_f(pos % 4 === 2 ? root + 12 : root), _nextT, spb * 0.9, "triangle", 0.45);
       }
@@ -413,6 +433,7 @@ const _audio = (() => {
         _note(_f(chord[_step % chord.length]), _nextT, spb * 0.8, t.lead, t.leadVol);
       }
       if (t.hat && pos % 2 === 1) _noise(_nextT, 0.03, 0.10, 7000);
+      }
       _step++;
       // playlist mode: after two full passes the DJ reaches for the next one
       if (_playlist && _step >= 2 * _trackLen(t)) {
@@ -429,26 +450,29 @@ const _audio = (() => {
     if (_timer) { clearInterval(_timer); _timer = null; }
     _track = _trackName = null;
     _playlist = _plKey = null;
+    _leakMode = false;
   }
 
   // Ambience: a looping noise bed with slow, irregular swells — the sea
   // arriving and withdrawing. The filter opens at each crest (the hiss of
   // the break) and settles back to a low rumble between waves.
-  let _amb = null, _ambTimer = null, _ambName = null;
+  let _amb = null, _ambTimers = [], _ambName = null;
 
   function _ambStop() {
-    if (_ambTimer) { clearTimeout(_ambTimer); _ambTimer = null; }
+    for (const t of _ambTimers) clearTimeout(t);
+    _ambTimers = [];
     if (_amb) { try { _amb.src.stop(); } catch (e) {} _amb = null; }
     _ambName = null;
   }
 
   function _ambience(name) {
     if (!_ctx()) return;
-    if (_ambName === name && _amb) return;
+    if (_ambName === name && (_amb || _ambTimers.length)) return;
     _musicStop();
     _ambStop();
     _ambName = name;
     _ensureNoiseBuf();
+    if (name !== "surf") { _townBed(name === "town"); return; }
     const src = _actx.createBufferSource();
     src.buffer = _noiseBuf;
     src.loop = true;
@@ -476,9 +500,67 @@ const _audio = (() => {
       _amb.f.frequency.setValueAtTime(400, t);
       _amb.f.frequency.linearRampToValueAtTime(900 + Math.random() * 400, t + up);
       _amb.f.frequency.linearRampToValueAtTime(400, t + up + down);
-      _ambTimer = setTimeout(swell, (up + down) * 1000 + 800 + Math.random() * 2500);
+      _ambTimers.push(setTimeout(swell, (up + down) * 1000 + 800 + Math.random() * 2500));
     };
     swell();
+  }
+
+  // The town at night, synthesized like the surf — no samples. Two layers:
+  // night insects (short high-passed ticks in irregular clusters — the chirp
+  // is the gap, not the tone) and, on lit streets, a low traffic rumble with
+  // the odd motorbike passing. Dark rooms get the insects alone: losing the
+  // rumble is what reads as "quieter", and the dark should feel it.
+  function _townBed(traffic) {
+    const bedName = _ambName;
+    if (traffic) {
+      const src = _actx.createBufferSource();
+      src.buffer = _noiseBuf;
+      src.loop = true;
+      const f = _actx.createBiquadFilter();
+      f.type = "lowpass";
+      f.frequency.value = 120;
+      const g = _actx.createGain();
+      g.gain.value = 0.05;
+      src.connect(f); f.connect(g); g.connect(_musBus);
+      src.start();
+      _amb = { src, f, g };
+    }
+    const chirp = () => {
+      if (_ambName !== bedName) return;
+      let t = _actx.currentTime + 0.05;
+      const n = 3 + Math.floor(Math.random() * 4);
+      for (let i = 0; i < n; i++) {
+        _noise(t, 0.025, traffic ? 0.05 : 0.07, 5200 + Math.random() * 900);
+        t += 0.07 + Math.random() * 0.05;
+      }
+      _ambTimers.push(setTimeout(chirp, 500 + Math.random() * 1900));
+    };
+    chirp();
+    if (traffic) {
+      const bike = () => {
+        if (_ambName !== bedName) return;
+        const t0 = _actx.currentTime + 0.05;
+        const up = 0.9 + Math.random() * 0.6, down = 1.2 + Math.random() * 0.8;
+        const src = _actx.createBufferSource();
+        src.buffer = _noiseBuf;
+        src.loop = true;
+        const f = _actx.createBiquadFilter();
+        f.type = "bandpass";
+        f.Q.value = 2;
+        f.frequency.setValueAtTime(250, t0);
+        f.frequency.linearRampToValueAtTime(850, t0 + up);       // approaching
+        f.frequency.linearRampToValueAtTime(180, t0 + up + down); // gone past
+        const g = _actx.createGain();
+        g.gain.setValueAtTime(0.001, t0);
+        g.gain.linearRampToValueAtTime(0.09, t0 + up);
+        g.gain.exponentialRampToValueAtTime(0.001, t0 + up + down);
+        src.connect(f); f.connect(g); g.connect(_musBus);
+        src.start(t0);
+        src.stop(t0 + up + down + 0.1);
+        _ambTimers.push(setTimeout(bike, 9000 + Math.random() * 13000));
+      };
+      _ambTimers.push(setTimeout(bike, 2500 + Math.random() * 6000));
+    }
   }
 
   return {
@@ -501,6 +583,24 @@ const _audio = (() => {
       if (_plKey === key && _timer) return;
       _ambStop();
       _musicStop();
+      _playlist = names;
+      _plKey = key;
+      _plIdx = _hashStr(key) % names.length;
+      _track = TRACKS[names[_plIdx]];
+      _trackName = names[_plIdx];
+      _step = 0;
+      _nextT = _actx.currentTime + 0.05;
+      _timer = setInterval(_schedule, 60);
+    },
+    // The set heard through the wall: playlist machinery, bass only, lowpassed.
+    // Keyed per REGION by the caller, so walking along the soi never restarts
+    // the thump — it just keeps coming from whichever bar is nearest.
+    leak(names, key) {
+      if (!names.length || !_ctx()) return;
+      if (_plKey === key && _timer && _leakMode) return;
+      _ambStop();
+      _musicStop();
+      _leakMode = true;
       _playlist = names;
       _plKey = key;
       _plIdx = _hashStr(key) % names.length;
@@ -566,10 +666,39 @@ const _GENTS_SET = ["slowdance", "careless"];
 const _DARK_SET = ["chiwit", "soi", "zombie", "prayer"];
 
 // Regions within earshot of the sea: streets here get the surf ambience
-// instead of silence. (Naklua stays quiet — the hotel soi faces inland.)
-// Interiors lose the sea to walls and air conditioning.
+// instead of silence. Interiors lose the sea to walls and air conditioning.
 const _SURF_REGIONS = new Set(["Jomtien", "Beach Road"]);
 const _SURF_INTERIORS = new Set(["central_mall", "police_station", "short_time_motel"]);
+
+// Between the songs and the silence, two street tiers — so the walk toward a
+// bar is a gradient: surf → insects → distant bass → the song itself.
+//
+// Bar-lined regions LEAK: you hear the bass of the local set through the
+// walls before you ever pick a door. It is genuinely the region's set list,
+// so stepping inside resolves the thump into the song it always was. Which
+// crate leaks is the region's dominant trade — Tree Town's maze centres on
+// its go-gos, the rest are beer-bar streets.
+const _LEAK_REGIONS = {
+  "Soi Buakhao": { leak: _BAND_SET },
+  "Soi Diana":   { leak: _BAND_SET },
+  "Soi Honey":   { leak: _BAND_SET },
+  "Myth Night":  { leak: _BAND_SET },
+  "Tree Town":   { leak: _GOGO_SET },
+};
+
+// Ordinary lit streets get the town itself: traffic rumble, night insects,
+// a motorbike passing. (Dark rooms get "night" instead — insects only,
+// which is what makes the dark read as quieter.)
+const _TOWN_REGIONS = new Set(["Second Road", "Thappraya", "Naklua", "Pratumnak", "Darkside"]);
+
+// Interiors that are not bars: treatment rooms, kitchens, shops, your bed.
+// The street tiers stop at these doors. (Madam Oy's office is deliberately
+// NOT here — it sits behind her own go-go, and the bass through that wall
+// is hers.)
+function _roomIndoors(roomId, room) {
+  return !!(room.massage || room.soapy || room.food || room.shop || room.hostBar ||
+    /^Your Room/.test(room.name || "") || _SURF_INTERIORS.has(roomId));
+}
 
 // Pure track choice — a track name, a set list array, "surf" for the sea,
 // or null for silence. The testable half of the system.
@@ -582,15 +711,30 @@ function _trackForRoom(roomId, flags) {
     if (room.region === "Darkside") return _DARK_SET;
     return room.barType === "gogo" || room.barType === "soi6" ? _GOGO_SET : _BAND_SET;
   }
+  // your bed is yours — the Queen Vic room would otherwise inherit the
+  // Soi 6 street track through the balcony
+  if (/^Your Room/.test(room.name || "")) return null;
+  // the dark is quieter, wherever it is — this also takes the Walking Street
+  // service alley off the full synthwave it absurdly used to play. One
+  // exception, written by the map itself: every dark room on the Jomtien
+  // shore is a beach or a shore road, and the sea does not stop being
+  // audible in the dark. Dark yields to surf; everything else goes quiet.
+  if (room.dark && !(_SURF_REGIONS.has(room.region) && !_SURF_INTERIORS.has(roomId))) {
+    return "night";
+  }
   if (_STREET_TRACKS[room.region]) return _STREET_TRACKS[room.region];
+  const lk = _LEAK_REGIONS[room.region];
+  if (lk && !_roomIndoors(roomId, room)) return lk;
   if (_SURF_REGIONS.has(room.region) && !_SURF_INTERIORS.has(roomId)) return "surf";
+  if (_TOWN_REGIONS.has(room.region) && !_roomIndoors(roomId, room)) return "town";
   return null;
 }
 
 function _audioForRoom(roomId, flags) {
   const track = _trackForRoom(roomId, flags);
   if (Array.isArray(track)) _audio.playlist(track, roomId);
-  else if (track === "surf") _audio.ambience("surf");
+  else if (track && track.leak) _audio.leak(track.leak, "leak:" + (ROOMS[roomId] || {}).region);
+  else if (track === "surf" || track === "town" || track === "night") _audio.ambience(track);
   else if (track) _audio.music(track);
   else _audio.stop();
 }
