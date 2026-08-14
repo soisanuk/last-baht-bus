@@ -365,6 +365,117 @@ const _audio = (() => {
       ],
     },
 
+    // Neon Rain — eurodance stab hook, G minor i–VI–VII on the doubled grid
+    // (8ths as 16ths, same trick as whatislove). The go-go crate's first
+    // original: until now the DJs owned nothing they spun.
+    neonrain: {
+      bpm: 240, slow: 0.7, lead: "square", leadVol: 0.12, hat: true, bassEvery: 2,
+      bass: [31, 31, 27, 29],               // Gm Gm Eb F
+      melody: [
+        74,74,null,74, null,72,74,null,     // the stab
+        74,74,null,74, null,74,75,74,       // stab, pushed
+        75,null,72,null, 70,null,72,74,     // over Eb, darker
+        72,null,70,69, 70,null,67,null,     // F resolving down
+      ],
+    },
+    // Night Drive — italo-flavoured, Am F C G: vi–IV–I–V, the "sensitive"
+    // rotation of the axis. The four-chords loop wearing sunglasses at 2am.
+    nightdrive: {
+      bpm: 126, lead: "square", leadVol: 0.13, hat: true, bassEvery: 1,
+      bass: [33, 29, 36, 31],               // Am F C G
+      melody: [
+        76,null,74,72, 74,null,72,71,       // Am: circling down
+        72,null,69,null, 71,72,74,null,     // F: lifting
+        76,null,79,76, 74,null,72,null,     // C: the top
+        71,74,71,null, 69,71,72,74,         // G: rolling back up
+      ],
+    },
+    // City Pop — bright Thai-pop shape, E major I–vi–IV–V. The DJs play Thai
+    // dance-pop between the farang hits; now the crate can too.
+    citypop: {
+      bpm: 118, lead: "triangle", leadVol: 0.15, hat: true, bassEvery: 1,
+      bass: [28, 37, 33, 35],               // E C#m A B
+      melody: [
+        68,71,76,null, 75,null,73,71,       // E: the bright hook
+        73,null,71,68, 69,null,71,null,     // C#m: shaded
+        69,73,76,null, 73,null,71,69,       // A: open
+        68,null,66,68, 71,null,75,null,     // B: leading home
+      ],
+    },
+    // Chrome — synthwave, E minor i–VI–VII–v. A sibling for Walking Street's
+    // "street" that lives in the go-go crate instead.
+    chrome: {
+      bpm: 124, lead: "sawtooth", leadVol: 0.11, hat: true, bassEvery: 1,
+      bass: [28, 36, 26, 35],               // Em C D Bm
+      melody: [
+        76,null,null,74, 76,null,79,null,   // Em: held and lifted
+        76,74,72,null, 71,null,72,74,       // C: falling through
+        74,null,71,null, 69,null,71,72,     // D
+        71,null,66,null, 67,69,71,74,       // Bm: climbing out
+      ],
+    },
+    // Island — reggae skank in G, I–IV–I–V, every note on the offbeat.
+    // No beach-town band survives without one.
+    island: {
+      bpm: 116, lead: "triangle", leadVol: 0.15, hat: true, bassEvery: 2,
+      bass: [31, 36, 31, 26],               // G C G D
+      melody: [
+        null,71,null,71, null,74,null,72,   // the skank
+        null,72,null,72, null,76,null,74,
+        null,71,null,74, null,71,null,67,
+        null,69,null,69, null,71,72,74,
+      ],
+    },
+    // Surf Rock — E minor, machine-gun tremolo picking on the grid.
+    // i–VII–VI–v, wet spring reverb implied.
+    surfrock: {
+      bpm: 150, lead: "sawtooth", leadVol: 0.11, hat: true, bassEvery: 1,
+      bass: [28, 26, 36, 35],               // Em D C Bm
+      melody: [
+        76,76,76,76, 74,76,74,72,           // the tremolo run
+        74,74,74,74, 72,74,71,69,
+        72,72,72,72, 71,72,74,76,
+        71,71,74,71, 76,74,72,71,
+      ],
+    },
+    // Night Owl — soul groove in C, I–iii–IV–V, warm and unhurried.
+    // The set the band plays while the night decides what it is yet.
+    nightowl: {
+      bpm: 112, lead: "triangle", leadVol: 0.16, hat: true, bassEvery: 2,
+      bass: [36, 28, 29, 31],               // C Em F G
+      melody: [
+        67,null,64,67, 69,null,72,null,     // C: easing in
+        71,null,67,null, 64,null,67,69,     // Em
+        69,null,65,69, 72,null,74,72,       // F: reaching
+        71,69,67,null, 62,64,67,null,       // G: rolling round
+      ],
+    },
+    // Bossa — ii–V–I–vi in C, sparse and syncopated. The lounge's third
+    // record: slow dance, slow blues, and now the one with the shrug in it.
+    bossa: {
+      bpm: 116, lead: "triangle", leadVol: 0.13, hat: false, bassEvery: 2,
+      bass: [38, 31, 36, 33],               // Dm G C Am
+      melody: [
+        65,null,null,69, null,74,null,72,   // Dm: off the beat
+        null,71,null,67, 74,null,71,null,   // G
+        72,null,76,null, null,71,null,69,   // C: the sigh
+        69,null,72,null, 71,69,67,64,       // Am: stepping down
+      ],
+    },
+    // Luk Thung — molam's crooning sibling: D major pentatonic ballad,
+    // I–vi–IV–V, ornamented like a singer bending the ends of lines.
+    // Darkside-only, same reasoning as molam: the crowd's own music.
+    lukthung: {
+      bpm: 104, lead: "triangle", leadVol: 0.17, hat: false, bassEvery: 2,
+      bass: [38, 35, 31, 33],               // D Bm G A
+      melody: [
+        69,null,71,69, 66,null,64,66,       // D: the croon
+        64,66,69,null, 71,null,69,66,       // Bm: turned over
+        71,69,66,64, 62,null,64,66,         // G: falling gently
+        64,null,66,64, 62,64,66,69,         // A: the bend back up
+      ],
+    },
+
     // ── The covers library: what the house bands and go-go DJs actually play.
     // Chiptune approximations of the 80s/90s songbook — melodies transcribed
     // by ear onto the 8th-note grid, close enough to grin at.
@@ -728,17 +839,17 @@ const _STREET_TRACKS = {
 // The set lists. Go-gos and Soi 6 bars run the synth/dance crate; beer bars
 // and the pub get the house band's songbook (Sabai Sabai stays in rotation —
 // the local hit always comes back around). No Wonderwall. House rule.
-const _GOGO_SET = ["soi6", "careless", "whatislove", "billiejean", "takeonme", "axelf"];
-const _BAND_SET = ["soi", "zombie", "prayer", "lastcall", "twostep", "shuffle", "countdown", "takeonme"];
+const _GOGO_SET = ["soi6", "neonrain", "careless", "whatislove", "nightdrive", "billiejean", "takeonme", "citypop", "axelf", "chrome"];
+const _BAND_SET = ["soi", "zombie", "island", "prayer", "lastcall", "twostep", "nightowl", "shuffle", "surfrock", "countdown", "takeonme"];
 // The Orchid and its kind: a curtained AC villa is not a pub-rock room. The
 // slow doo-wop original plus the one cover that already lives at that tempo.
-const _GENTS_SET = ["slowdance", "afterhours", "careless"];
+const _GENTS_SET = ["slowdance", "afterhours", "bossa", "careless"];
 // Darkside bars: the crowd is local and the band is Thai — songs-for-life
 // first, Sabai Sabai always, and the two covers every Thai rock band plays
 // anyway. The farang songbook stays in town. Covers the lakeside pair too,
 // which is exactly right: the Boathouse's families get Thai music, not Bon
 // Jovi.
-const _DARK_SET = ["chiwit", "molam", "soi", "zombie", "prayer"];
+const _DARK_SET = ["chiwit", "molam", "lukthung", "soi", "zombie", "prayer"];
 
 // Regions within earshot of the sea: streets here get the surf ambience
 // instead of silence. Interiors lose the sea to walls and air conditioning.

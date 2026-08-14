@@ -118,6 +118,13 @@ test("the originals answer the four-chords review: the songbook has its major ke
   assert.ok(_BAND_SET.includes("twostep") && _BAND_SET.includes("shuffle"),
     "the songbook keeps its country and its boogie");
   assert.ok(_DARK_SET.includes("molam"), "the Darkside keeps Isan's own music");
+  // third wave: the go-go crate's FIRST originals — before these the DJs
+  // owned nothing they spun
+  for (const t of ["neonrain", "nightdrive", "citypop", "chrome"]) {
+    assert.ok(_GOGO_SET.includes(t), `the crate keeps ${t}`);
+  }
+  assert.ok(_DARK_SET.includes("lukthung"), "molam keeps its crooning sibling");
+  assert.ok(_GENTS_SET.includes("bossa"), "the lounge keeps its bossa");
   // and no rotation is thin: two songs repeat after ~4 plays
   for (const set of [_GOGO_SET, _BAND_SET, _GENTS_SET, _DARK_SET]) {
     assert.ok(set.length >= 3, "a rotation under 3 songs audibly loops");
