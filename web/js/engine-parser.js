@@ -3002,8 +3002,9 @@ function _doRideBus(arg) {
       (northbound
         ? "up Second Road with the northbound crowd, round the Dolphin, and back down " +
           "the seafront with the sea strobing between the buildings, "
-        : "down the seafront with the sea on your right, round the Bali Hai corner at " +
-          "Pattaya Tai, and back up Second Road with the northbound crowd, ") +
+        : "down the seafront with the sea on your right until Beach Road gives out at " +
+          "the Walking Street gate, round past Bali Hai, up Pattaya Tai to the junction, " +
+          "and back up Second Road with the northbound crowd, ") +
       "the whole lit length of the town for the same coin…");
   } else {
     _say("The blue songthaew rattles along with the flow of the one-way town, wind " +
