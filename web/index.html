@@ -447,14 +447,40 @@
     background: var(--panel); border: 1px solid var(--pink); border-radius: 14px;
     padding: 1.5rem 1.3rem 1.6rem; box-shadow: 0 0 44px #ff149355, inset 0 0 40px #00000066;
   }
-  /* The splash marquee (web/art/posters/splash.webp — the Pattaya City hill
-     sign over the bay, go-go girl beneath; generated in ../portrait_gen).
-     onerror removes it, so missing art is never a bug — same doctrine as the
-     scene panel. */
-  #start-art {
-    display: block; width: 100%; border-radius: 10px;
+  /* The splash marquee: a carousel of the go-go pin-up posters (art/posters/),
+     random start, one every 10s, cycling the whole deck. The incoming image
+     STRIKES like a neon tube — flicker, chromatic fringe, hold — because this
+     is that kind of town. Two stacked layers; main.js drives the deck (a
+     missing file self-heals out of it, and the commissioned splash.webp joins
+     the rotation automatically if it ever ships). Decorative: aria-hidden. */
+  #start-art-wrap {
+    position: relative; height: 250px; border-radius: 10px; overflow: hidden;
     border: 1px solid #ff149333; margin: 0 0 1rem;
-    box-shadow: 0 0 24px #ff149322;
+    box-shadow: 0 0 24px #ff149322; background: #0a0012;
+  }
+  #start-art-wrap:empty { display: none; }
+  #start-art-wrap img {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; object-position: 50% 22%;
+    opacity: 0;
+  }
+  #start-art-wrap img.lit {
+    opacity: 1; z-index: 2;
+    animation: neon-strike .85s linear;
+  }
+  #start-art-wrap img.dim { opacity: 1; z-index: 1; } /* old layer holds beneath */
+  @keyframes neon-strike {
+    0%   { opacity: 0; }
+    8%   { opacity: .9; filter: drop-shadow(3px 0 0 #ff1493) drop-shadow(-3px 0 0 #00e5ff) saturate(3); }
+    14%  { opacity: .1; filter: none; }
+    26%  { opacity: 1;  filter: drop-shadow(2px 0 0 #ff149388) drop-shadow(-2px 0 0 #00e5ff88); }
+    34%  { opacity: .35; filter: none; }
+    46%  { opacity: 1;  filter: drop-shadow(1px 0 0 #ff149355) drop-shadow(-1px 0 0 #00e5ff55) brightness(1.25); }
+    60%  { opacity: .85; }
+    100% { opacity: 1;  filter: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #start-art-wrap img.lit { animation: none; transition: opacity .6s; }
   }
   .start-card h1 { color: var(--yellow); font-size: 1.5rem; letter-spacing: .06em; margin: 0 0 .2rem; text-shadow: 0 0 14px #ffe60055; }
   .start-sub { color: var(--violet); font-size: .78rem; margin: 0 0 1.2rem; }
@@ -852,8 +878,7 @@
     <div id="start-menu">
       <h1>THE LAST BAHT BUS</h1>
       <p class="start-sub">a Pattaya misadventure · Soi Sanuk universe</p>
-      <img id="start-art" src="art/posters/splash.webp" alt=""
-           onerror="this.remove()">
+      <div id="start-art-wrap" aria-hidden="true"><img alt=""><img alt=""></div>
       <button class="start-mode" data-mode="soi6">
         <span class="start-mode-title">SOI 6 CHALLENGE ★</span>
         <span class="start-mode-desc">One week, one street. ฿100,000 and a hard head — max out your สนุก.</span>

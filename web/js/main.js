@@ -61,6 +61,48 @@ function _cycleFontSize() {
   _term.print("▦ Text size: " + next.name + ".", "dim");
 }
 
+// ── The splash marquee: the poster deck on a 10-second neon rotation ─────────
+// Every pin-up poster the art track has shipped (plus the commissioned
+// splash.webp vista, which joins the deck the day it exists). Random starting
+// point each load, sequential wrap, one strike every 10s while the overlay is
+// up. A file that fails to load self-heals out of the deck, so this list
+// drifting behind the art directory costs a missing rotation slot, never a bug.
+const _SPLASH_DECK = ["splash",
+  "aof", "aoi", "aom", "beam", "boom", "bow", "cherry", "dao", "fah", "fang",
+  "gib", "gift", "gigi", "ice", "jum", "mook", "nam", "namwan", "naree", "nice",
+  "noey", "noi", "orn", "pancake", "pang", "ploen", "pop", "praew", "sai",
+  "sara", "sasi", "toey", "tukta", "view", "yada", "yui"];
+function _splashInit() {
+  const wrap = document.getElementById("start-art-wrap");
+  const overlay = document.getElementById("start-overlay");
+  if (!wrap || !overlay) return;
+  const layers = wrap.querySelectorAll("img");
+  const deck = [..._SPLASH_DECK];
+  let i = Math.floor(Math.random() * deck.length);
+  let front = 0; // which layer is on top
+  function swap(url) {
+    const inc = layers[1 - front], out = layers[front];
+    inc.src = url;
+    inc.classList.remove("lit", "dim");
+    void inc.offsetWidth;              // restart the strike animation
+    out.classList.remove("lit"); out.classList.add("dim");
+    inc.classList.add("lit");
+    front = 1 - front;
+  }
+  function advance(step, tries) {
+    if (!deck.length) { wrap.remove(); return; }
+    if ((tries || 0) >= deck.length) { wrap.remove(); return; }
+    i = (i + step + deck.length) % deck.length;
+    const id = deck[i];
+    const pre = new Image();
+    pre.onload = () => swap(pre.src);
+    pre.onerror = () => { deck.splice(i, 1); if (i >= deck.length) i = 0; advance(0, (tries || 0) + 1); };
+    pre.src = "art/posters/" + id + ".webp";
+  }
+  advance(0, 0);
+  setInterval(() => { if (!overlay.hidden) advance(1, 0); }, 10000);
+}
+
 function _applyFullGate() {
   const btn = document.querySelector('#start-menu .start-mode[data-mode="full"]');
   if (!btn) return;
@@ -327,6 +369,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   _applyFontSize();
   document.getElementById("font-fab").addEventListener("click", () => _cycleFontSize());
+  _splashInit();
 
   const muteBtn = document.getElementById("mute-btn");
   muteBtn.textContent = _audio.muted() ? "🔇" : "🔊";
