@@ -1980,6 +1980,21 @@ function _convoTopicHere(topic) {
 
 function _doTalkBody(arg, topic) {
   arg = (arg || "").trim();
+  // The coconut bar (north_beach): the freelance ladies are the room's whole
+  // point and the prose names them, so TALK must reach them (playtest #16) —
+  // approaching deliberately arms the same freelancer encounter that otherwise
+  // arms by chance on the eligible streets. Once a night, like the encounter.
+  if (G.room === "north_beach" && /lad(y|ies)|girls?|freelancers?|women|coconut/i.test(arg)) {
+    if (G.pendingEnc) { _say("One thing at a time."); return; }
+    if (G.encDone.freelancer) {
+      _say("The stools under the palms have emptied for the night — whoever was " +
+        "working the dark sand has found her walk-up or called it. The cigarette " +
+        "embers are somebody else's now.");
+      return;
+    }
+    _startEnc("freelancer");
+    return;
+  }
   // the piwin at a stand is a real person in the fiction and not an NPCS entry
   if (/^(piwin|motosai|driver|bike ?boy|taxi)$/i.test(arg)) {
     if (!_piwinHere()) { _say("No stand here — the bikes are on the corners."); return; }
@@ -2140,7 +2155,10 @@ function _convoTopic(s) {
 // A topic key as a chip label: Title Case the words ("queen vic" → "Queen Vic",
 // "90s" stays "90s"). The chip's cmd is the bare topic — the conversation is
 // live when these show, so it resolves straight through _convoResolve.
-function _topicLabel(t) { return t.replace(/\b\w/g, c => c.toUpperCase()); }
+// A few canonical topic keys read cryptic as bare chips ("Sponsor" on the
+// COLUMNIST is about the kept girls, not his own) — label those by meaning.
+const _TOPIC_LABELS = { sponsor: "the kept girls" };
+function _topicLabel(t) { return _TOPIC_LABELS[t] || t.replace(/\b\w/g, c => c.toUpperCase()); }
 
 // When the partner has asked YOU something (G.convoQ), your plain reply lands
 // here: it's remembered (globally in G.player.said, and per-partner in st.heard
@@ -4543,7 +4561,7 @@ function _chipSet() {
       add("flirt", "flirt");
       add("buy drink for " + _convoName(partner).split(" ")[0].toLowerCase(), "buy drink");
     }
-    add("bye", "leave");
+    add("bye", "say goodbye"); // "leave" read as walking out of the bar (playtest #9)
     return chips;
   }
 
@@ -4566,10 +4584,20 @@ function _chipSet() {
     add("talk to ", "talk…");
   }
 
-  if (r.seven) { add("buy water"); add("buy condom"); add("buy toastie"); }
+  // One chip that opens the rack (the "buy " prefill fans out in autocomplete,
+  // ATM-style) instead of three fixed purchases crowding the bar (playtest #14).
+  if (r.seven) add("buy ", "7-Eleven…");
   if (FOOD_STALLS[G.room]) add("buy food");
 
-  for (const k of ["n", "s", "e", "w", "in", "out", "up", "down"]) if (r.exits && r.exits[k]) add(k, k.toUpperCase());
+  // Cardinals (and IN) live on the compass fab now — duplicating them here just
+  // crowded the bar (playtest #15). OUT/UP/DOWN stay, labelled with the venue
+  // they lead to when it has one ("Queen Vic", not a bare DOWN — playtest #3).
+  for (const k of ["out", "up", "down"]) if (r.exits && r.exits[k]) {
+    const dest = ROOMS[r.exits[k]];
+    const v = dest && (dest.bar || (dest.barType && dest.name));
+    add(k, v ? String(v).replace(/\s*\(.*\)$/, "") : k.toUpperCase());
+  }
+  if (G.room === "qv_room") add("balcony"); // the room's own verb (playtest #2/#4)
   for (const id of (r.venues || [])) {
     const label = (ROOMS[id].bar || ROOMS[id].name).replace(/\s*\(.*\)$/, "");
     add("enter " + label.toLowerCase(), label);
@@ -4662,6 +4690,13 @@ function _completePool(verb, ctx) {
         ..._travelDests().map(id => _barName(id).toLowerCase())];
     case "travel": case "goto":
       return _travelDests().map(id => _barName(id).toLowerCase());
+    case "leave": case "exit":
+      // In a conversation LEAVE ends it (same as BYE); in a venue it walks you
+      // out (playtest #10/#11). Anywhere else, the plausible-verb rule answers.
+      if (typeof _convoActive === "function" && _convoActive()) { doCommand("bye"); break; }
+      if (_room().exits && _room().exits.out) { _doGo("out"); break; }
+      _say("Leave to where? Pick a direction — or OUT of a venue.");
+      break;
     case "ride": case "catch": case "bus": {
       if (!_room().busStop) return [];
       const lines = Object.entries(BUS_LINES).filter(([, st]) => st.includes(G.room));
@@ -5186,6 +5221,13 @@ function doCommand(input) {
     }
     case "apologize": case "apologise": case "apology": case "sorry":
       _doApologize(); break;
+    case "leave": case "exit":
+      // In a conversation LEAVE ends it (same as BYE); in a venue it walks you
+      // out (playtest #10/#11). Anywhere else, the plausible-verb rule answers.
+      if (typeof _convoActive === "function" && _convoActive()) { doCommand("bye"); break; }
+      if (_room().exits && _room().exits.out) { _doGo("out"); break; }
+      _say("Leave to where? Pick a direction — or OUT of a venue.");
+      break;
     case "ride": case "catch":
       if (arg.startsWith("bus")) _doRideBus(arg.replace(/^bus\s*/, ""));
       else if (/\bloop\b/.test(arg)) _doRideBus("loop"); // RIDE THE LOOP — the joyride

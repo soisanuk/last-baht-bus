@@ -2052,11 +2052,28 @@ function _doContact(arg) {
   }
 }
 
+const _MORT_TEXT_REPLIES = [
+  "Reply comes in under a minute: “Noted, squire. If it's usable it goes in the column. " +
+    "If it's libellous it goes in the good notebook.”",
+  "The typing dots run long for a man his age. “I'm on deadline. Which is to say I am " +
+    "watching the soi and calling it work. Come by the Vic, the stool's cold.”",
+  "“You texted an old columnist voluntarily. One in forty, like I said. Whatever it " +
+    "was, tell it to me over a beer — my thumbs are for jokes, not conversation.”",
+  "A joke comes straight back: “Q: Why does the columnist answer texts at this hour? " +
+    "A: Deadline's the only wife who never went home to Udon.”",
+];
 function _doMessage(arg) {
   if (_phoneDead()) return;
   const w = arg.toLowerCase().replace(/^(to )/, "");
   // the fixer texts like a fixer — no charm loop, no bond arithmetic
   if (w === "tan" && G.phone.contacts.tan) { _tanText(); return; }
+  // the columnist texts like a columnist — you have his number the moment you
+  // replied to the joke (playtest #7: the girl-refusal read wrong for Mort)
+  if (w === "mort" && _flag("jokeWho")) {
+    G.battery = Math.max(0, G.battery - 1);
+    _say(_pickVary(_MORT_TEXT_REPLIES, "morttext"));
+    return;
+  }
   const id = Object.keys(G.phone.contacts).find(c =>
     c === w || NPCS[c].name.toLowerCase().includes(w.split(" ")[0]));
   if (!id) { _say(w ? "No such number in your phone. (CONTACT a girl in her bar first.)" : "Message whom?"); return; }
@@ -2543,6 +2560,10 @@ function _dailyJoke() {
   if (!_flag("act1Done") || G.battery <= 0) return;
   if (_flag("jokeStop")) return;                 // he took the hint
   if (G.phone.jokeDay === G.day) return;         // one a day, like a vitamin
+  // Not while you're in the room with him — a man texting gags to a stranger
+  // he can see reads wrong (playtest #6). Tomorrow's joke waits for tomorrow;
+  // tonight's just waits for you to leave the pub.
+  if (G.room === "queen_vic") return;
   G.phone.jokeDay = G.day;
   const n = (G.phone.jokeN = (G.phone.jokeN || 0) + 1);
   const body = _JOKE_TEXTS[_hh("joke" + G.vacation + "_" + n, 41) % _JOKE_TEXTS.length]

@@ -9301,7 +9301,7 @@ const ENCOUNTERS = {
     hint: "(YES would be the traditional answer.)",
   },
   freelancer: {
-    rooms: ["beach_rd_s", "beach_rd_c", "beach_rd_n", "promenade", "buakhao_n"],
+    rooms: ["beach_rd_s", "beach_rd_c", "beach_rd_n", "promenade", "buakhao_n", "north_beach"],
     interactive: true, nightly: true, // resets every night — Beach Road and band-night Buakhao restock
     th: "ไปไหนคะ", rom: "pai nai kha?",
     intro: "She's leaning on the promenade rail where the lamplight is kindest — no " +
@@ -10459,7 +10459,7 @@ const PATRONS = {
     dialogue: [
       { topic: "glam", when: (st, G) => !_flag("diamondTruth"),
         text: "\u201cHere\u2019s what bothers me.\u201d The biro stops. \u201cA man with that much " +
-          "money does not spend his last years on a plastic stool on the Buakhao strip. He has a " +
+          "money does not spend his last years on a plastic stool on the Jomtien strip. He has a " +
           "house somewhere. He has people.\u201d He shrugs, and it is not a comfortable shrug. " +
           "\u201cAnd yet every night, that bar. Not the next one along, not the one with the " +
           "aircon. That one.\u201d A long look at nothing. \u201cAsk him about the tour, he\u2019ll " +
@@ -10496,18 +10496,23 @@ const PATRONS = {
       // …and NOT on the first hello. A man who has not introduced himself does not
       // open with "do something for an old man"; he tells you who he is, and the
       // lead comes the next time you sit down. Gated on having heard him once.
-      { when: (st, G) => !G.quests.oldrocker && !_flag("glamHeard") && !_flag("mortGlam") &&
+      // Not offered in soi6 mode: the whole saga lives down in Jomtien and the
+      // challenge can't leave the street — a lead you can't follow is a broken
+      // promise (playtest flag #5, 2026-08-15).
+      { when: (st, G) => G.mode !== "soi6" &&
+          !G.quests.oldrocker && !_flag("glamHeard") && !_flag("mortGlam") &&
           // patrons keep their own book (G.patronTalk.talked), NOT G.talked —
           // and it resets daily, which is fine: the lead is once-ever anyway
           !!(G.patronTalk && G.patronTalk.talked && G.patronTalk.talked.mort),
         sets: ["mortGlam"],
         text: "He taps the biro twice and looks at you properly for the first time. \u201cSince " +
           "you\u2019re here \u2014 do something for an old man. There\u2019s a German drinks at " +
-          "the Cheeky Monkey. Seventy-odd, silk shirt, hair like a dandelion in a wind tunnel. " +
+          "the Cheeky Monkey \u2014 down in Jomtien, the Thappraya strip. Seventy-odd, silk " +
+          "shirt, hair like a dandelion in a wind tunnel. " +
           "Glam, they call him.\u201d He turns the notebook round; the page is mostly crossings-" +
           "out. \u201cFour years I\u2019ve tried to get his story and four years he\u2019s given " +
           "me the same nine anecdotes about a tour in \u201978. Charming. Useless.\u201d",
-        short: "\u201cThe German at the Cheeky Monkey. Glam. Four years and nine anecdotes.\u201d" },
+        short: "\u201cThe German at the Cheeky Monkey, on the Jomtien strip. Glam. Four years and nine anecdotes.\u201d" },
       { topic: "jokes", when: (st, G) => _flag("jokeWho"),
         text: "\u201cThe texts? Forty years of writing to people who never write back, and it " +
           "turns out I could not stop.\u201d He taps the notebook. \u201cThe column takes one " +

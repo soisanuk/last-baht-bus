@@ -39,11 +39,12 @@ test("a girl bar offers flirt / buy drink / barfine / beer", () => {
   assert.ok(c.includes("buy beer"));
 });
 
-test("a 7-Eleven offers water, condom, toastie", () => {
+test("a 7-Eleven offers the rack via the buy-prefill chip", () => {
+  // one "7-Eleven…" chip that prefills "buy " (autocomplete fans out the goods,
+  // ATM-style) replaced the three fixed purchase chips — playtest #14
   const seven = Object.keys(ROOMS).find(id => ROOMS[id].seven);
   G.room = seven;
-  const c = cmds();
-  assert.ok(c.includes("buy water") && c.includes("buy condom") && c.includes("buy toastie"));
+  assert.ok(cmds().includes("buy "), "the buy-prefill chip is offered");
 });
 
 test("a street room offers its real exits and no bar verbs", () => {
@@ -55,7 +56,9 @@ test("a street room offers its real exits and no bar verbs", () => {
   G.room = street;
   const r = ROOMS[street];
   const c = cmds();
-  for (const k of ["n", "s", "e", "w", "in", "out"]) if (r.exits[k]) assert.ok(c.includes(k), `exit ${k} chipped`);
+  // cardinals + IN moved to the compass fab (playtest #15); OUT/UP/DOWN stay
+  for (const k of ["n", "s", "e", "w", "in"]) if (r.exits[k]) assert.ok(!c.includes(k), `${k} left to the compass`);
+  for (const k of ["out", "up", "down"]) if (r.exits[k]) assert.ok(c.includes(k), `exit ${k} chipped`);
   assert.ok(!c.includes("flirt "), "no flirt on the street");
   assert.ok(c.includes("look") && c.includes("i") && c.includes("help"), "utilities always present");
 });

@@ -169,8 +169,7 @@ const _CATALOGS = {
     // room + navigation chips
     "look": "Umsehen", "map": "Karte", "help": "Hilfe", "inv": "Taschen",
     "buy beer": "Bier kaufen", "play": "Spielen", "light": "Licht", "bus": "Bus",
-    "buy water": "Wasser kaufen", "buy condom": "Kondom kaufen",
-    "buy toastie": "Toastie kaufen", "buy food": "Essen kaufen",
+    "buy water": "Wasser kaufen", "buy food": "Essen kaufen",
     "balance": "Kontostand", "stay put": "Bleiben", "quit": "Beenden",
     // directions (label only; the n/s/e/w/… command stays English)
     "E": "O", "IN": "REIN", "OUT": "RAUS", "UP": "HOCH", "DOWN": "RUNTER",

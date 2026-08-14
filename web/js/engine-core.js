@@ -989,9 +989,25 @@ function _deliver(npcId, d) {
   const repeat = seen.includes(idx);
   const flavor = !d.gives && !(d.sets && d.sets.length);
   const terse = repeat && (!!d.short || flavor);
+  const firstEver = !repeat && seen.length === 0;
   if (!repeat) seen.push(idx);
   if (d.th && !terse) { _say(`${n.emoji} ${n.name}: “${d.th}” (${d.rom})`, "thai"); _engineSpeak(d.th); }
   _say(_fillSaid(terse ? (d.short || _askAgain(npcId)) : d.text));
+  // Courted before you ever talked (drinks first, introductions after — a
+  // legitimate Pattaya order of operations): the authored greeting reads
+  // tone-deaf if it pretends the ledger is blank, so acknowledge it under the
+  // intro rather than rewriting every intro (playtest #12).
+  if (firstEver && (G.soc.drinks[npcId] || 0) >= 2 &&
+      ["hostess", "cashier", "mamasan"].includes(NPC_ROLES[npcId])) {
+    _say(_pickVary([
+      "(The introduction is a formality — the lady drinks got there first, and " +
+        "the smile she says it with is already yours.)",
+      "(She says it like a first hello, but her hand finds your arm with the " +
+        "ease of a woman whose ledger already has your name in it.)",
+      "(First names, at last — several drinks after the drinks made them " +
+        "unnecessary. Both of you enjoy the ceremony anyway.)",
+    ], "courtfirst"), "dim");
+  }
   for (const f of d.sets || []) _setFlag(f);
   if (d.gives && G.itemLoc[d.gives] === null) {
     G.itemLoc[d.gives] = "inventory";
