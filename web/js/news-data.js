@@ -8,6 +8,11 @@ var NEWS_FEED = [
     "d": "13 Aug 2026"
   },
   {
+    "t": "Pattaya crackdown finds 17 Cambodian beggars, including babies",
+    "s": "Khaosod English",
+    "d": "14 Aug 2026"
+  },
+  {
     "t": "Pattaya bar owner calls police over Aussie’s unpaid 32,540 baht bill",
     "s": "Thaiger",
     "d": "14 Aug 2026"
@@ -23,19 +28,24 @@ var NEWS_FEED = [
     "d": "11 Aug 2026"
   },
   {
+    "t": "Chinese scam boss arrested in Pattaya over alleged money laundering network",
+    "s": "Khaosod English",
+    "d": "14 Aug 2026"
+  },
+  {
+    "t": "Thai-British teenager reports classmate after firecracker attack at home",
+    "s": "Thaiger",
+    "d": "14 Aug 2026"
+  },
+  {
     "t": "6 Pattaya officials suspended for collecting unofficial fines from foreigners",
     "s": "Thaiger",
     "d": "11 Aug 2026"
   },
   {
-    "t": "Chinese family protests after son dies in fatal stabbing in Pattaya",
-    "s": "Thaiger",
-    "d": "11 Aug 2026"
-  },
-  {
-    "t": "Australian man charged with murder after dead girl found in suitcase in Thailand",
-    "s": "bbc.com",
-    "d": "28 Jun 2026"
+    "t": "Thailand Halts New Gun Permits Days After Mass Shooting at a School",
+    "s": "The New York Times",
+    "d": "12 Aug 2026"
   },
   {
     "t": "Gruesome discovery days after young siblings go missing in Thailand’s notorious ‘Sin City’",
@@ -43,9 +53,9 @@ var NEWS_FEED = [
     "d": "13 Aug 2026"
   },
   {
-    "t": "Thailand tightens gun controls after deadly school shooting",
-    "s": "CNN",
-    "d": "12 Aug 2026"
+    "t": "Rising Australian golfer Bang dies of brain haemorrhage in Thailand aged 18",
+    "s": "Al Jazeera",
+    "d": "14 Aug 2026"
   },
   {
     "t": "Australian teen golfer Jessica Bang dies in Thailand",
@@ -53,35 +63,25 @@ var NEWS_FEED = [
     "d": "13 Aug 2026"
   },
   {
-    "t": "Thailand stun unbeaten Poland to reach Girls’ U17 World Championship quarterfinals",
-    "s": "Volleyball World",
-    "d": "13 Aug 2026"
+    "t": "Australian teen golfing prodigy dies after brain haemorrhage",
+    "s": "Nine.com.au",
+    "d": "12 Aug 2026"
   },
   {
-    "t": "Thailand's second-quarter growth seen slowing sharply as weak consumption weighs",
-    "s": "Reuters",
-    "d": "13 Aug 2026"
-  },
-  {
-    "t": "J-10C fighter jet takes on latest overseas deployment as China-Thailand joint air force exercise officially begins",
-    "s": "Global Times",
-    "d": "13 Aug 2026"
-  },
-  {
-    "t": "Thailand seizes more assets of Chinese tycoon Chen Zhi",
-    "s": "Bangkok Post",
-    "d": "13 Aug 2026"
+    "t": "Thailand attack suspect released on bail after brutal assault on Israeli mother and daughter",
+    "s": "Ynetnews",
+    "d": "14 Aug 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-08-13","USD":33.13,"AUD":23.36,"GBP":44.7,"EUR":38.21};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-14","temp":31,"humid":69,"code":3,"hi":31,"rain":59};
+var WX_NOW = {"date":"2026-08-14","temp":30,"humid":72,"code":2,"hi":31,"rain":71};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-08-01","first":"932479","last2":"69","front3":["413","672"],"back3":["039","154"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4321,"date":"2026-08-14","baht":67700};
+var GOLD = {"usd":4395,"date":"2026-08-14","baht":68850};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":62974,"thb":2090062};
+var BTC = {"usd":62620,"thb":2072619};
