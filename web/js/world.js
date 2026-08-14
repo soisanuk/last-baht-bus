@@ -2067,7 +2067,7 @@ const ROOMS = {
   // leaves from here, so everyone passes through.
   bali_hai: {
     motosai: true,
-    busStop: "beachrd",
+    // no busStop: the pier trucks are charters, not the loop (2026-08-15 canon)
     name: "Bali Hai Pier",
     region: "Walking Street",
     desc: "Walking Street runs out of neon and hands you to the water. The pier goes " +
@@ -9223,7 +9223,10 @@ const BUS_LINES = {
              "second_rd_n", "pattaya_klang", "second_rd_soi6", "dolphin", "naklua_rd"],
   // and back down the seafront — naklua_rd and pattaya_tai are on both, which is
   // what closes the circuit and lets you ride the whole loop from either end
-  beachrd:  ["naklua_rd", "dolphin", "beach_rd_n", "beach_rd_c", "beach_rd_s", "bali_hai", "pattaya_tai"],
+  // NOTE: Bali Hai Pier is NOT on any route — the trucks parked at the pier are
+  // for HIRE (point-to-point charter, name a price), not the ฿15 loop. The
+  // circulating truck turns left at the WS gate and never reaches the pier.
+  beachrd:  ["naklua_rd", "dolphin", "beach_rd_n", "beach_rd_c", "beach_rd_s", "pattaya_tai"],
 };
 
 // ── Motosai destinations (from any stand) ──────────────────────────────────

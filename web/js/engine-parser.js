@@ -2925,18 +2925,27 @@ const _LOOP_CCW = ["pattaya_tai", "second_rd_s", "second_rd_diana", "second_rd_h
   "second_rd_myth", "second_rd_mall", "second_rd_c", "second_rd_soi8", "second_rd_n",
   "pattaya_klang", "second_rd_soi6", "dolphin", "naklua_rd", "beach_rd_top",
   "beach_rd_n", "beach_rd_klang", "beach_rd_soi7", "beach_rd_soi8", "beach_rd_soi9",
-  "beach_rd_c", "beach_rd_s", "bali_hai"];
+  "beach_rd_c", "beach_rd_s"];
 function _loopPos(roomId) {
   const i = _LOOP_CCW.indexOf(roomId);
   return i >= 0 ? i : _LOOP_CCW.indexOf("pattaya_tai");
 }
 // Where the trucks WAIT until full — board here and the queue is the system.
-const _BUS_WAITING = new Set(["pattaya_tai", "dolphin", "bali_hai"]);
+const _BUS_WAITING = new Set(["pattaya_tai", "dolphin"]);
 
 function _doRideBus(arg) {
   const r = _room();
   // Order matters: "no route here" (indoors/off-road) and the curfew both
   // describe the real situation, so they come before the soi6-mode refusal.
+  if (G.room === "bali_hai") {
+    // Trucks everywhere, none of them the loop: the pier rank is for HIRE.
+    _say("The songthaews at the pier aren't running the loop — they're for hire, " +
+      `point-to-point, and the ฿${BUS_FARE} bench-seat rules don't apply: you'd be chartering ` +
+      "the whole truck, and the driver will name a number that knows where you're " +
+      "standing. The circulating buses turn at the junction — walk up toward Pattaya " +
+      "Tai and flag one there. (Or MOTOSAI.)");
+    return;
+  }
   if (!_busLinesFor(G.room).length) {
     _say("No blue trucks come down here — they keep to the main roads. The seafront, " +
       "Second Road, Thappraya, or one of the big junctions.");
