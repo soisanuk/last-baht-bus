@@ -18,16 +18,6 @@ var NEWS_FEED = [
     "d": "14 Aug 2026"
   },
   {
-    "t": "Dad seeks answers over son's killing",
-    "s": "Bangkok Post",
-    "d": "10 Aug 2026"
-  },
-  {
-    "t": "Thai destinations rank in Asia’s top five among European travellers",
-    "s": "Nation Thailand",
-    "d": "11 Aug 2026"
-  },
-  {
     "t": "Chinese scam boss arrested in Pattaya over alleged money laundering network",
     "s": "Khaosod English",
     "d": "14 Aug 2026"
@@ -38,19 +28,29 @@ var NEWS_FEED = [
     "d": "14 Aug 2026"
   },
   {
-    "t": "6 Pattaya officials suspended for collecting unofficial fines from foreigners",
-    "s": "Thaiger",
-    "d": "11 Aug 2026"
-  },
-  {
-    "t": "Thailand Halts New Gun Permits Days After Mass Shooting at a School",
-    "s": "The New York Times",
-    "d": "12 Aug 2026"
+    "t": "Australian man charged with murder after dead girl found in suitcase in Thailand",
+    "s": "BBC",
+    "d": "28 Jun 2026"
   },
   {
     "t": "Gruesome discovery days after young siblings go missing in Thailand’s notorious ‘Sin City’",
     "s": "New York Post",
     "d": "13 Aug 2026"
+  },
+  {
+    "t": "Thappraya, Pattaya Tai, Pattaya, Chon Buri, 20150 Thailand, Pattaya, Changwat Chon Buri Apartment for Sale",
+    "s": "Realtor.com",
+    "d": "08 Aug 2026"
+  },
+  {
+    "t": "Thailand shooting: Teen kills at least seven and injures more than 30, PM says",
+    "s": "BBC",
+    "d": "06 Aug 2026"
+  },
+  {
+    "t": "Rising golf star dead at 18 after brain hemorrhage while playing tournament in Thailand",
+    "s": "Fox News",
+    "d": "14 Aug 2026"
   },
   {
     "t": "Rising Australian golfer Bang dies of brain haemorrhage in Thailand aged 18",
@@ -63,25 +63,25 @@ var NEWS_FEED = [
     "d": "13 Aug 2026"
   },
   {
-    "t": "Australian teen golfing prodigy dies after brain haemorrhage",
-    "s": "Nine.com.au",
-    "d": "12 Aug 2026"
+    "t": "Industrialized Steel Construction: Lessons From a Naval Foundry in Thailand",
+    "s": "ArchDaily",
+    "d": "14 Aug 2026"
   },
   {
-    "t": "Thailand attack suspect released on bail after brutal assault on Israeli mother and daughter",
-    "s": "Ynetnews",
+    "t": "Drug dealer who escaped prison for Thailand jailed",
+    "s": "nz.news.yahoo.com",
     "d": "14 Aug 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-08-13","USD":33.13,"AUD":23.36,"GBP":44.7,"EUR":38.21};
+var FX_RATES = {"date":"2026-08-14","USD":33.12,"AUD":23.46,"GBP":44.84,"EUR":38.31};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-14","temp":30,"humid":72,"code":2,"hi":31,"rain":71};
+var WX_NOW = {"date":"2026-08-15","temp":28,"humid":80,"code":3,"hi":30,"rain":84};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-08-01","first":"932479","last2":"69","front3":["413","672"],"back3":["039","154"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4395,"date":"2026-08-14","baht":68850};
+var GOLD = {"usd":4378,"date":"2026-08-14","baht":68550};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":62620,"thb":2072619};
+var BTC = {"usd":62798,"thb":2082463};
