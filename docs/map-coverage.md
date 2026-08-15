@@ -75,6 +75,7 @@ Everything else is the rim, and it splits into two problems that want **opposite
 | Date | Pocket | Fix | Status |
 |---|---|---|---|
 | 2026-08-13 | Darkside lake | Duangjai + The Boathouse + The Sundowner built; "look in on my boy" quest hooked | content built, quest spec'd |
+| 2026-08-15 | Darkside lake | **Look In on My Boy** (`lake_errand`) — Duangjai's tiffin errand to Nont at the Buakhao market and back; story-gated on asking about her son. The lake's pull, and the last open row of this audit. | **shipped** |
 | 2026-08-13 | Tree Town | **The Safe-Cracker** — Madam Oy sandbox quest (giver oy → Pim at the Starlight → report to Oy, ฿2000). Re-engages the Act One antagonist; seeds a debt-buying-in-the-maze thread. | **shipped** |
 | 2026-08-13 | Naklua | **An Introduction** — Candy vouches you into Rose's discreet Orchid Club (relationship-as-key). Deliberately NOT the White Rabbit, which stays the CTF stage-2 discovery. | **shipped** |
 | 2026-08-13 | Jomtien | **The Quiet Side** quest (Sumalee → Nok → back; the Gordon elegy) + **populated** the four Soi 7 bars with the quiet-side crowd it always implied: patrons **Roger** (knew Gordon — quest-aware), **Dieter**, **Gerald** (Dongtan), **Sandra**. 0 patrons → 4. | **shipped** — the bars now have regulars; the empty beach segments are calm-by-design; room-thinning still optional |

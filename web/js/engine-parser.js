@@ -2496,6 +2496,16 @@ function _doGive(itemWord, npcWord) {
     _setFlag("helmetDelivered");
     return;
   }
+  if (id === "tiffin" && npc === "nont") {
+    // "Look in on my boy": the hand-off is the witness beat (world.js, nont.tiffin)
+    G.itemLoc.tiffin = null;
+    _setFlag("tiffinDelivered");
+    const d = _pickDialogue("nont", "tiffin");
+    if (d) _deliver("nont", d);
+    _say("(He dropped a Thai SIM in the empty tiffin — his thanks. Now back to the lake: " +
+      "ASK DUANGJAI ABOUT THE OFFER.)", "dim");
+    return;
+  }
   if (id === "som_tam" && npc === "ploy") {
     G.itemLoc.som_tam = null;
     _setFlag("somTamDelivered");

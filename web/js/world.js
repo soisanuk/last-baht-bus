@@ -3932,6 +3932,16 @@ const ITEMS = {
     desc: "Twenty baht of black nylon cord off a 7-Eleven counter display, sold for exactly " +
       "this and nothing else. Half the men in this country are wearing one.",
   },
+  tiffin: {
+    name: "a tiffin of Duangjai's fish",
+    aliases: ["tiffin", "fish", "lunchbox", "food", "duangjai's fish", "the fish"],
+    portable: true,
+    location: null, // handed over by Duangjai on ACCEPT (quest lake_errand)
+    desc: "A three-tier steel tiffin, the clasp worn bright: grilled fish from the Boathouse " +
+      "kitchen, rice, a knot of herbs, and — wedged in the lid because she couldn't help " +
+      "herself — a folded ฿500 note. Still faintly warm. It smells like a kitchen someone " +
+      "cooked in on purpose.",
+  },
   shamrock_key: {
     name: "a brass key on a cork fob",
     aliases: ["brass key", "key", "fob", "shamrock key"],
@@ -8514,7 +8524,7 @@ const NPCS = {
           "good.” Her English is easy and precise, worn smooth somewhere she doesn't mention. " +
           "“Sit anywhere you like — the front tables have the view. I'll send someone over.”",
         short: "“Good evening. A table with the view? Sit anywhere — I'll send someone over.”" },
-      { topic: "nont", text: "Something in her composure shifts — warmer and more guarded at " +
+      { topic: "nont", sets: ["duangjaiNont"], text: "Something in her composure shifts — warmer and more guarded at " +
           "once. “You know my Nont?” A glance at the framed photo by the register, quickly " +
           "checked. “He is a good boy. Too clever for his own good, always — took every machine " +
           "in the house apart before he was ten, and he never once put the school fees to as " +
@@ -8540,6 +8550,43 @@ const NPCS = {
           "“Here I count the money and I go home to my own house. That is a very good life for a " +
           "woman who started where I started. Don't let anyone tell you it isn't.”",
         short: "“Here is quiet and honest, and nobody needs anything from me but the bill. I worked louder places once. This is a good life. Don't let anyone tell you it isn't.”" },
+      // ── "Look in on my boy" (quest lake_errand). The whole design constraint
+      // (docs/bangkok-concept.md): a complete Pattaya quest, a mother's errand —
+      // NEVER a gesture at where the boy is headed. She fears; you witness that
+      // he's careful; you can't fix his trajectory; that is the honest ending.
+      // ORDER MATTERS — _pickDialogue takes the first match: done → report → instructions.
+      { topic: "offer", chip: false, req: ["lakeErrandDone"],
+        text: "“He's well? Good.” It's all she'll ask, and she asks it every time, and you " +
+          "understand that this is now a standing arrangement between you and this woman: " +
+          "you are the one who has seen him. “Sit. The view's free.”",
+        short: "“He's well? Good. Sit.”" },      { topic: "offer", chip: false, req: ["tiffinDelivered"], notFlags: ["lakeErrandDone"],
+        sets: ["lakeErrandDone"],
+        text: "You tell her what you saw: the table, the phones, the boy doing three things " +
+          "at once and all of them well. That he ate standing up. That he read you before you " +
+          "reached the table, and that somebody with sense keeps an eye on him — you " +
+          "couldn't say who. That he is careful. That he is, in fact, extremely careful.\n\n" +
+          "She listens to all of it without touching the register, which from Duangjai is " +
+          "stillness. “Careful,” she repeats. Something in the shoulders comes down a " +
+          "degree — one degree, no more, and you understand that one degree is all a mother " +
+          "gets and she will take it. “He was careful at ten. He shouldn't have had to be.” " +
+          "She puts the glasses back on. “Thank you for going. Most men would have eaten the " +
+          "fish.” A pause. “Did he keep the five hundred?” You say he tried to send it back " +
+          "with you. For the first time she laughs — short, surprised, entirely real. “Then he " +
+          "is still my son. Sit. Tonight the fish is on the house, and I don't want to hear " +
+          "about it.”",
+        short: "“Careful. He was careful at ten. He shouldn't have had to be. — Sit. The fish is on the house.”" },
+      { topic: "offer", chip: false, req: ["act1Done"], notFlags: ["lakeErrandDone", "tiffinDelivered"],
+        when: (st, G) => !!(G.quests && G.quests.lake_errand && G.quests.lake_errand.state !== "done"),
+        text: "She has it ready before you finish asking — a steel tiffin from under the " +
+          "counter, three tiers, the clasp worn bright. “He won't come out here. Too busy, he " +
+          "says, which means too proud, which he gets from me.” She sets it on the register " +
+          "between you like a contract. “Fish, rice, the herbs he likes. Take it to him at " +
+          "the market on Buakhao — the folding table, you can't miss him, he'll be doing " +
+          "three things at once.” The glasses come off. “And look at him for me. Not " +
+          "at what he says. At him. Then come back and tell me what you saw — the truth, " +
+          "please, I have had enough of the other kind from men.”",
+        short: "“The tiffin — take it to Nont at the Buakhao market, then come back and tell me what you saw. The truth.”" },
+
     ],
   },
 
@@ -8671,6 +8718,33 @@ const NPCS = {
           "I let them both think it.” The grin, quieter now. “You'd be amazed what people say in " +
           "front of the one they've decided isn't really listening.”",
         short: "“Alex for farang, Nont for Thai. Same kid, different door. Everybody thinks I'm the other thing — and talks in front of me like I'm not listening.”" },
+      // The witness beat of "Look in on my boy" (delivered by GIVE TIFFIN, not
+      // TALK — _doGive routes it). Three things and only three, all present-
+      // tense Pattaya: capability (the code-switch, the SIM), Tan's hand (a
+      // glimpse, never explained), drift (he isn't staying at this table).
+      // Nothing about where he's going. The test: it has to be worth reading
+      // if the sequel is never made.
+      { topic: "tiffin", chip: false, req: ["tiffinDelivered"],
+        text: "He knows what it is before you've set it down — the clasp, the smell — and " +
+          "for one unguarded second he's about twelve. Then the grin. “She sent FOOD. " +
+          "Across the whole town. Of course she did.” He pops the lid, finds the ฿500 " +
+          "folded in it, and closes his eyes briefly. “And that. Every time.” He tries " +
+          "to hand it back to you to carry to her; you decline; he shrugs it into a " +
+          "drawer with the air of a man losing an argument he has lost many times.\n\n" +
+          "Then he eats — standing, fast, one hand — and works while he does it. A " +
+          "customer arrives and Nont goes from unaccented English to a Thai you can't " +
+          "follow to a third register that's mostly gesture, and back, without seeming to " +
+          "notice he's doing it. Two phones get fixed in the time it takes him to finish " +
+          "the rice. Halfway through, a motorbike slows at the kerb — a Thai man in a plain " +
+          "shirt, engine running — and Nont looks up, nods once, and the bike moves on. " +
+          "It doesn't come back. He doesn't explain it and you don't ask.\n\n" +
+          "“Tell her I ate it,” he says, wiping his hands. “Tell her I'm careful. She " +
+          "knows, but tell her.” He digs a Thai SIM out of the drawer, still in its blister, " +
+          "and drops it in the empty tiffin. “For the trouble. Not in your name — don't " +
+          "ask, that's the point of it.” He looks around the market once, the way you'd look " +
+          "around a room you'd already decided to leave. “I'm not going to be at this " +
+          "table forever, you know. But she doesn't need to hear that part from you.”",
+        short: "“Tell her I ate it. Tell her I'm careful. — And she doesn't need to hear the rest from you.”" },
     ],
   },
 
@@ -9553,6 +9627,28 @@ const QUESTS = {
   // back this season. Routes the matriarch → Nok on the sand → back, and resolves on
   // the shrine (a deceased farang's photo by the King's is canon, per the shrine
   // system). Gordon is referenced, never an NPC — no new face, no undelivered ASK.
+  // "Look in on my boy" — the lake cluster's pull. A mother's errand, complete on
+  // its own terms; the constraint that shapes it lives in docs/bangkok-concept.md
+  // (foreshadow through capability and trajectory, never exposition — nothing in
+  // this quest may gesture at where Nont is headed). No money reward: a mother's
+  // thanks is not a wage; the fish is on the house instead.
+  lake_errand: {
+    name: "Look In on My Boy",
+    giver: "duangjai",
+    // Story-gated, not trust-gated: she asks BECAUSE you asked about her son
+    // (ASK DUANGJAI ABOUT NONT sets duangjaiNont) — no ask, no errand. Trust
+    // would be a soft wall here: she has no asks: and isn't a hostess, so the
+    // usual levers (answering her, flirting) don't exist for her.
+    desc: "Duangjai wants someone to look in on her son. Carry her tiffin to Nont at the " +
+      "Buakhao market (GIVE TIFFIN TO NONT), then come back and tell her what you saw " +
+      "(ASK DUANGJAI ABOUT THE OFFER).",
+    deps: [],
+    reqFlags: ["act1Done", "duangjaiNont"],
+    at: "nont",
+    item: "tiffin",
+    doneFlag: "lakeErrandDone",
+    reward: { money: 0, happy: 6 },
+  },
   quietside: {
     name: "The Quiet Side",
     giver: "sumalee",

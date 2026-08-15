@@ -140,7 +140,22 @@ decided isn't really listening."*
 (The mother — **Duangjai** — is now built, cashier at **The Boathouse**, `lake_bar`; the beer
 bar next door is **The Sundowner**, `lake_beer`.)
 
-### Quest hook — "a reason to visit the lake" (deferred, spec-first)
+### Quest hook — "a reason to visit the lake" (BUILT 2026-08-15 as `lake_errand`)
+
+**Built as spec'd, spec kept below as the design record.** `QUESTS.lake_errand` "Look In on
+My Boy": Duangjai (lake_bar) → story-gated on `ASK DUANGJAI ABOUT NONT` (her `nont` node sets
+`duangjaiNont`; no trust gate — she asks *because* you asked, and she has no other trust
+levers) → ACCEPT hands you the **tiffin** (item) → `GIVE TIFFIN TO NONT` at buakhao_market
+delivers the witness node (`nont.tiffin`, routed by `_doGive`, sets `tiffinDelivered`) →
+`ASK DUANGJAI ABOUT THE OFFER` reports back, sets `lakeErrandDone`, +6 happy, ฿0 (a mother's
+thanks isn't a wage — the fish is on the house). The witness node carries exactly the three
+sanctioned beats — **capability** (the live code-switch, two phones fixed mid-rice, the Thai
+SIM "not in your name"), **Tan's hand** (a plain-shirted man on a bike slows, Nont nods once,
+it moves on — never explained), **drift** ("I'm not going to be at this table forever… she
+doesn't need to hear that part from you") — and nothing else. Passes the test: it is a
+complete mother's errand with no Bangkok in it. The rich CLI-sim-lite version stays deferred.
+
+#### Original spec (retained)
 
 The lake cluster (viewpoint · Boathouse · Sundowner · Duangjai · Nont's mother) has no quest
 pulling the player out there yet. The intended one foreshadows Nont's future — **under one
