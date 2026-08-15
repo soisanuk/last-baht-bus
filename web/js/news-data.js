@@ -3,8 +3,8 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
-    "t": "Sister’s body found stacked on top of brother",
-    "s": "News.com.au",
+    "t": "Gruesome discovery days after young siblings go missing in Thailand’s notorious ‘Sin City’",
+    "s": "New York Post",
     "d": "13 Aug 2026"
   },
   {
@@ -33,14 +33,19 @@ var NEWS_FEED = [
     "d": "28 Jun 2026"
   },
   {
-    "t": "Gruesome discovery days after young siblings go missing in Thailand’s notorious ‘Sin City’",
-    "s": "New York Post",
-    "d": "13 Aug 2026"
-  },
-  {
     "t": "Thappraya, Pattaya Tai, Pattaya, Chon Buri, 20150 Thailand, Pattaya, Changwat Chon Buri Apartment for Sale",
     "s": "Realtor.com",
     "d": "08 Aug 2026"
+  },
+  {
+    "t": "‘So brutally cruel’: Suspected serial killer gang rattles Thailand",
+    "s": "SMH.com.au",
+    "d": "12 Aug 2026"
+  },
+  {
+    "t": "Sister’s body found stacked on top of brother",
+    "s": "News.com.au",
+    "d": "13 Aug 2026"
   },
   {
     "t": "Thailand shooting: Teen kills at least seven and injures more than 30, PM says",
@@ -48,19 +53,14 @@ var NEWS_FEED = [
     "d": "06 Aug 2026"
   },
   {
-    "t": "Rising golf star dead at 18 after brain hemorrhage while playing tournament in Thailand",
-    "s": "Fox News",
+    "t": "Pro golfer Jessica Bang, 18, dies while preparing for tournament in Thailand",
+    "s": "CBS News",
     "d": "14 Aug 2026"
   },
   {
-    "t": "Rising Australian golfer Bang dies of brain haemorrhage in Thailand aged 18",
-    "s": "Al Jazeera",
+    "t": "Thailand coach Anthony Hudson to put Ilhan Fandi friendship aside for ASEAN Championship duel with Singapore",
+    "s": "ESPN",
     "d": "14 Aug 2026"
-  },
-  {
-    "t": "Australian teen golfer Jessica Bang dies in Thailand",
-    "s": "ABC News & Headlines – Australian Broadcasting Corporation",
-    "d": "13 Aug 2026"
   },
   {
     "t": "Industrialized Steel Construction: Lessons From a Naval Foundry in Thailand",
@@ -68,20 +68,20 @@ var NEWS_FEED = [
     "d": "14 Aug 2026"
   },
   {
-    "t": "Drug dealer who escaped prison for Thailand jailed",
-    "s": "nz.news.yahoo.com",
+    "t": "Thailand attack suspect released on bail after brutal assault on Israeli mother and daughter",
+    "s": "Ynetnews",
     "d": "14 Aug 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-08-14","USD":33.12,"AUD":23.46,"GBP":44.84,"EUR":38.31};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-15","temp":28,"humid":80,"code":3,"hi":30,"rain":84};
+var WX_NOW = {"date":"2026-08-15","temp":30,"humid":75,"code":3,"hi":31,"rain":84};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-08-01","first":"932479","last2":"69","front3":["413","672"],"back3":["039","154"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4378,"date":"2026-08-14","baht":68550};
+var GOLD = {"usd":4378,"date":"2026-08-15","baht":68550};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":62798,"thb":2082463};
+var BTC = {"usd":62971,"thb":2087032};
