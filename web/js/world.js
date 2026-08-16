@@ -8500,6 +8500,25 @@ const NPCS = {
     ],
   },
 
+  // ── Sao — the Bangkok weekender (the reverse-savior arc; canon essay 2026-08-15) ──
+  // She IS the bkktourist encounter's woman: met outside the bars, good English
+  // with a British edge, pays for her own coffee, "family business in Bangkok".
+  // She exists as an NPC only so the phone works (contact, texts) — offmap:true
+  // keeps her out of every room. Everything she does happens by text and in one
+  // off-map scene (_bkkDinner, engine-systems.js). Expat-only, once per game.
+  sao: {
+    name: "Sao", th: "สาว", emoji: "🧳", pronoun: "she", offmap: true,
+    room: "second_rd_c", // placeholder for the every-NPC-has-a-room invariant; never present
+    look: "Thai woman of twenty-six, good sneakers, a Bangkok-boutique dress, no bar behind her.",
+    desc: "The Bangkok weekender — good sneakers, a boutique dress, English with a slight " +
+      "British edge, and a {{phone}} she checks against the crowd. Not working, not selling, " +
+      "not from here. You met her outside the bars, which is the whole point of her.",
+    dialogue: [
+      { text: "She isn't here — she's a Bangkok girl, and Bangkok is a text away, not a soi " +
+        "away. (MESSAGE SAO, if you have her number.)",
+        short: "Not here — Bangkok. Text her." },
+    ],
+  },
   // ── Duangjai (The Boathouse, Mabprachan) — Nont's mother ─────────────────────
   // Roleless cashier like the Queen Vic's Thai staff (not in NPC_ROLES): a
   // respectable lakeside restaurant is deliberately NOT a hostess venue, which is

@@ -656,6 +656,18 @@ const _ENC = {
         "voice shrieks her name — the friend, at last — and she's gone with a real " +
         "smile and a “bye khaaa~”. You spent nothing and somehow feel richer.", "win");
       _addHappy(2);
+      // The reverse-savior arc (expat only, once per game): the resident who has
+      // had months to build the habit is the man the essay is about. She leaves
+      // her number — HERS to offer, you never asked — and the rest happens by
+      // text on a realistic clock (_bkkArcTick, engine-systems.js).
+      if (_flag("expatLife") && !_flag("bkkArcDone") && !G.phone.contacts.sao) {
+        G.phone.contacts.sao = true;
+        (G.known = G.known || {}).sao = true;
+        G.bkk = { met: G.day, stage: 1 };
+        _say("At the last second she turns back. “Sao. Give me your phone—” she types " +
+          "her number in herself, fast, and hands it back. “Next time I'm down. Coffee. " +
+          "I know a place that isn't awful.” And she's gone.", "dim");
+      }
       return;
     }
     _say("You give her a nod and let her be. Her friend arrives moments later in a " +

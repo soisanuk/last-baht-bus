@@ -2945,6 +2945,11 @@ function _endNight(reason) {
       _addHappy(-8);
       G.crashInjury = true; // wake tomorrow banged up (applied after the new-day reset)
       break;
+    case "bkkdinner":
+      _say("The van brings you back at one in the morning through a town that has been " +
+        "loud without you. Boy says goodnight in English. You tip him too much, which " +
+        "he accepts with the exact expression his employer used on the bill.", "dim");
+      break;
     case "barfine":
       _say("The rest is nobody's business but the soi's: a shared plate of khao " +
         "man gai at 3 a.m., the beach road with nobody on it, laughing at " +

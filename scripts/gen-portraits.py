@@ -425,6 +425,8 @@ CHARS = {
     "dieter":   dict(skin=PALE, hair="short", hc=SILVER, shirt=C(0xd8d8e0), collar=True, acc=["glasses"], framec=SILVER, mouth="neutral", bg=BG_BAR),
     "gerald":   dict(skin=TAN, hair="short", hc=SILVER, shirt=C(0xf0ece0), collar=True, mouth="smile", bg=BG_BAR),
     "sandra":   lady(skin=PALE, hair="bob", hc=GREY, shirt=C(0x6a3a5a), bg=BG_BAR, mouth="smile", acc=["earrings"], earc=SILVER),
+    # Sao — the Bangkok weekender (the reverse-savior arc): good sneakers, boutique dress, no bar behind her
+    "sao":      lady(skin=THAI, hair="long", hc=BLACK, shirt=C(0x2a2a3a), bg=BG_STREET, mouth="smile", acc=["earrings"], earc=GOLD),
     # Duangjai — Nont's mother, dignified ex-Soi-6 cashier at The Boathouse (Mabprachan)
     "duangjai": lady(skin=THAI, hair="bun", hc=GRBLK, shirt=C(0x5a3a5a), bg=BG_BAR, mouth="neutral", acc=["earrings", "glasses", "glasschain"], earc=GOLD, framec=GOLD),
     # The Sundowner (lakeside semi-respectable beer bar) — older girls who left Pattaya proper

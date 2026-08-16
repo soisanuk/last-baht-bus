@@ -2556,6 +2556,132 @@ const _JOKE_TEXTS = [
     "A: The one you buy at 4 a.m. because you don’t want the night to be over.",
 ];
 
+// ── The reverse savior: Sao, and the dinner in Sathorn ───────────────────────
+// Canon essay (2026-08-15): the farang savior complex Pattaya spends years
+// feeding, and its collapse when the girl he met OUTSIDE the bars turns out to
+// be hi-so. Expat-only (the resident is the man it's about; the two-week man
+// never learns), once per game, on a REALISTIC clock: she has a life in
+// Bangkok, so weeks pass between beats and the player has time to build the
+// noodle-cart picture. G.bkk = { met, stage } — 1: number given, 2: coffee
+// text sent, 3: invitation sent, 4: dinner offered (pendingChoice), done.
+// Nothing mechanical happens on the collapse: the payoff is the room, read.
+function _bkkArcTick() {
+  const b = G.bkk;
+  if (!b || _flag("bkkArcDone") || G.battery <= 0 || !_flag("expatLife")) return;
+  const since = G.day - b.met;
+  // 2a: the coffee text — 3-5 nights on, day-stable per game
+  if (b.stage === 1 && since >= 3 + (_hh("bkk1" + G.vacation, 11) % 3)) {
+    b.stage = 2; b.coffee = G.day;
+    _pushMsg("sao", "Hey. Back in BKK, drowning in work. Down again in a couple of weeks — " +
+      "that coffee? There's a place on Second Road that does actual flat whites. My " +
+      "treat, I owe you for the wait-with-me. 😊");
+    _say("(📱 Your phone buzzes — Sao. CHECK MESSAGES.)", "dim");
+    return;
+  }
+  // 2b: the invitation — 7-10 nights after the coffee text
+  if (b.stage === 2 && G.day - b.coffee >= 7 + (_hh("bkk2" + G.vacation, 13) % 4)) {
+    b.stage = 3; b.invite = G.day;
+    _pushMsg("sao", "Ok this is a bit forward but — Saturday, dinner in Bangkok, with the " +
+      "family? Dad's curious about the farang who didn't try to buy me a drink. Don't " +
+      "panic, it's just dinner. Car will pick you up at your hotel at four. Say yes. 🙏");
+    _say("(📱 Your phone buzzes — Sao. CHECK MESSAGES.)", "dim");
+    return;
+  }
+  // 3: the car is outside — the next night, at your hotel, before you go out
+  if (b.stage === 3 && G.day > b.invite && _isHotelRoom(G.room) && !G.pendingChoice) {
+    b.stage = 4;
+    G.pendingChoice = "bkkdinner";
+    _bkkDinnerPrompt();
+  }
+}
+function _bkkDinnerPrompt() {
+  _say("Your phone: “Car's outside. Grey Alphard, driver's called Boy. See you at " +
+    "seven! 🚗” — and outside, sure enough, a grey van idles under the porch light " +
+    "with the patience of something that is paid by the day.", "alert");
+  _say("(GO to Bangkok · DECLINE and stay on the soi)", "dim");
+}
+function _bkkDecline() {
+  G.pendingChoice = null;
+  _setFlag("bkkArcDone");
+  _say("You text a sorry-something-came-up. Three dots for a long time. Then: “No " +
+    "worries at all! Another time 😊” — and you know, the way you know a door has " +
+    "closed in another room, that there won't be one. The van pulls away with no " +
+    "hurry at all. It was never really waiting for you.", "dim");
+}
+function _bkkGo() {
+  G.pendingChoice = null;
+  _setFlag("bkkArcDone");
+  const wk = _pers("whiteknight");
+  _say("The van's aircon is set to museum. Two hours of motorway, the driver silent " +
+    "and impeccable, and then Sathorn: towers, a hotel lobby the size of a bus " +
+    "station, and a lift that goes up without you feeling it. Not a street stall. " +
+    "A private room of a Chinese restaurant — thick carpet that eats your footsteps, " +
+    "cold as a bank, a heavy round table with a glass lazy susan, and Sao, in " +
+    "something simple that cost more than it looks, saying “You CAME” like it's " +
+    "a small victory.");
+  _say("The door opens and her father walks in. Tailored polo, the calm of a man who " +
+    "gives instructions for a living, and on his wrist a Rolex that is — you look " +
+    "twice — the real thing. Not awe, when he looks at you. Polite, clinical " +
+    "interest. A waiter sets a bottle of Blue Label on the table and the father " +
+    "waves him off and pours your glass himself, over ice, a splash, exactly right.");
+  _say("The lazy susan turns: lobster, abalone, things that cost more than your " +
+    "month's rent in Jomtien. You try to hold your end up. " +
+    (wk
+      ? "You find yourself talking about Pattaya, about what you've SEEN there — the " +
+        "girls, the families they send money to, the men who don't help and the ones " +
+        "who do — and you hear yourself say, to this table, that you've always tried " +
+        "to be one of the ones who helps. It sounds noble in Jomtien. In this room it " +
+        "sounds like a man describing the pond he is king of."
+      : "You talk about the online work, the plans, how much you love Thailand — the " +
+        "pitch that lands so cleanly in the bars off Beach Road, delivered here with " +
+        "the alpha volume slightly up."));
+  _say("The father listens to all of it, carefully, smiling warmly. He takes a sip of " +
+    "the Blue Label. “That is very nice,” he says. “It is good for a young man to " +
+    "have a little hobby, so he doesn't get bored.”", "alert");
+  _say("Hobby. The word goes off like a gunshot and nobody but you hears it. Sao " +
+    "laughs at something her father says next — sweetly, fondly, a daughter's laugh " +
+    "— and you look at her wrist and see, for the first time, that the bracelet you " +
+    "took for costume jewellery is Cartier, and always was.");
+  _say("The bill comes in a black leather folder. Your hand goes to your wallet on " +
+    "instinct — the Pattaya reflex, the one that shows the room your standing — and " +
+    "her father, mid-story about a golf trip to Japan, doesn't so much as glance at " +
+    "the numbers: he sets a black metal card on the folder and keeps talking.");
+  _say("(Reach for it anyway, or let it go. GRAB · LET)", "dim");
+  G.pendingChoice = "bkkbill";
+}
+function _bkkBill(grab) {
+  G.pendingChoice = null;
+  if (grab) {
+    _say("You reach for it anyway — a farang gesture, loud in the quiet room. The " +
+      "father lifts one hand a centimetre off the tablecloth, and it is over. Not " +
+      "unkind. Simply not a question. Sao's eyes flick to you and away. Nobody says " +
+      "anything, which is worse than anything they could have said.", "alert");
+    _repHit(1);
+    _addHappy(-2);
+  } else {
+    _say("You let it go, and thank him, and mean it — the only move in the room that " +
+      "was yours to make well. He nods, once. It costs you nothing, and it is the one " +
+      "thing you did all evening that a man at that table would have done.");
+    _repGain();
+  }
+  _say("In the lift going down you understand, with the clarity of cold air, your " +
+    "place in the real hierarchy of this country — the one the tourist never sees. " +
+    "You weren't the savior. You weren't pulling anyone out of anything. To this " +
+    "family you were their educated daughter's amusing, slightly poor, exotic " +
+    "friend — a nice boy she practises her English on. Nobody said so. Nobody had to.");
+  _say("Pattaya spends years teaching a man that money buys anything here. Bangkok " +
+    "takes one dinner to remind him whose money it is.", "win");
+  if (_pers("whiteknight")) {
+    // +2 so it survives the night's own -1 cooling: the mark is meant to last a
+    // day past the dinner. Insight, not the treadmill — "the useful kind."
+    G.jaded = (G.jaded || 0) + 2;
+    _say("(You came as the one who helps. You leave knowing what that looked like from " +
+      "the other side of the table. A notch more jaded — the useful kind.)", "dim");
+  }
+  _addHappy(1); // the honest kind: you saw something true
+  _endNight("bkkdinner");
+}
+
 function _dailyJoke() {
   if (!_flag("act1Done") || G.battery <= 0) return;
   if (_flag("jokeStop")) return;                 // he took the hint

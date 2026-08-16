@@ -480,6 +480,7 @@ function _npcRoom(id) {
 // Before the intro (no origin picked) everyone is active, so old saves are unchanged.
 function _npcActive(id) {
   const n = NPCS[id];
+  if (n && n.offmap) return false; // exists for the phone, never stands in a room (Sao — Bangkok)
   return !(n && n.origin && G.player && n.origin === G.player.origin);
 }
 

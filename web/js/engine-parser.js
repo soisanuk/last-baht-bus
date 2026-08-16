@@ -332,6 +332,7 @@ function _arriveAt(to) {
   if (typeof _questHail === "function") _questHail();       // once ever: the first job finds you
   if (typeof _roomSafeBeat === "function") _roomSafeBeat();  // the stash, whenever you get to your room
   if (typeof _dailyJoke === "function") _dailyJoke();        // the unknown number, once a day
+  if (typeof _bkkArcTick === "function") _bkkArcTick();      // Sao's texts, on a Bangkok clock
   G.sevenAt = null;   // back on the pavement — the next buy walks you in again
   _describeRoom(true);
   _lightNotice(); // walking in with the torch burning gets you clocked
@@ -4507,6 +4508,8 @@ function _chipSet() {
   if (G.pendingChoice === "tanfavour") {
     add("yes"); add("no"); add("ask", "ask what it's for"); return chips;
   }
+  if (G.pendingChoice === "bkkdinner") { add("go", "go to Bangkok"); add("decline", "decline"); return chips; }
+  if (G.pendingChoice === "bkkbill") { add("let", "let it go"); add("grab", "reach for it"); return chips; }
   if (G.pendingChoice === "synjob") {
     const j = typeof _synJobById === "function" ? _synJobById(G.synJob) : null;
     add("yes"); add("no"); add("ask", j ? j.whoLabel : "ask about it"); return chips;
@@ -4762,6 +4765,8 @@ function engineComplete(input) {
   let pool;
   if (G.pendingChoice === "vacation_end") pool = G.mode === "soi6" ? ["play again"] : ["new vacation", "move to pattaya"];
   else if (G.pendingChoice === "tanfavour") pool = ["yes", "no", "ask"];
+  else if (G.pendingChoice === "bkkdinner") pool = ["go", "decline"];
+  else if (G.pendingChoice === "bkkbill") pool = ["let", "grab"];
   else if (G.pendingChoice === "synjob") pool = ["yes", "no", "ask"];
   else if (G.pendingChoice === "checkout") {
     pool = [...Object.keys(_HOTELS).filter(k => k !== G.hotel)
@@ -4854,6 +4859,8 @@ function _renderResume() {
   if (G.pendingChoice === "vacation_end") { _vacationEndPrompt(); return; }
   if (G.pendingChoice === "checkout") { _checkoutPrompt(); return; }
   if (G.pendingChoice === "tanfavour") { _tanFavourPrompt(); return; }
+  if (G.pendingChoice === "bkkdinner") { _bkkDinnerPrompt(); return; }
+  if (G.pendingChoice === "bkkbill") { _say("The bill sits in its black folder, his card on top. (GRAB · LET)", "dim"); return; }
   if (G.pendingChoice === "synjob") { _synPrompt(); return; }
   if (G.game) { _renderGame(); return; }
   if (G.pendingEnc) { _renderEncounter(); return; }
@@ -4974,6 +4981,22 @@ function doCommand(input) {
     if (/^(n|no|refuse|decline|nope|never)/.test(lower)) { _synNo(); return; }
     _say("Tan waits, entirely comfortable. It was not really a question.", "dim");
     _synPrompt();
+    return;
+  }
+
+  // The grey Alphard under the porch light — Sao's dinner (the reverse-savior arc)
+  if (G.pendingChoice === "bkkdinner") {
+    if (/^(go|yes|y|ok|okay|sure|come|get in|bangkok)/.test(lower)) { _bkkGo(); return; }
+    if (/^(decline|no|n|stay|sorry|not tonight|cancel)/.test(lower)) { _bkkDecline(); return; }
+    _say("The grey Alphard idles under the porch light; Sao's driver checks the time. " +
+      "Nobody is in a hurry but you.", "dim");
+    _bkkDinnerPrompt();
+    return;
+  }
+  if (G.pendingChoice === "bkkbill") {
+    if (/^(grab|reach|pay|take|wallet|insist|let me)/.test(lower)) { _bkkBill(true); return; }
+    if (/^(let|leave|thank|no|allow|fine|ok|okay)/.test(lower)) { _bkkBill(false); return; }
+    _say("The folder sits between his card and your hand. (GRAB · LET)", "dim");
     return;
   }
 

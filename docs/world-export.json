@@ -24,8 +24,8 @@
  "counts": {
   "geolocated": 237,
   "patrons": 22,
-  "people": 328,
-  "portraits": 350,
+  "people": 329,
+  "portraits": 351,
   "renders": 350,
   "thumbs": 350,
   "venues": 237
@@ -2748,6 +2748,14 @@
    "room": "firefly_bar",
    "th": "สายฝน"
   },
+  "sao": {
+   "desc": "The Bangkok weekender — good sneakers, a boutique dress, English with a slight British edge, and a {{phone}} she checks against the crowd. Not working, not selling, not from here. You met her outside the bars, which is the whole point of her.",
+   "emoji": "🧳",
+   "name": "Sao",
+   "pronoun": "she",
+   "room": "second_rd_c",
+   "th": "สาว"
+  },
   "sara": {
    "desc": "Tiny and loud, all elbows and energy — one of Neon Paradise A-Go-Go's girls, from Udon Thani. Google Translate is open before you finish the sentence.",
    "emoji": "🦋",
@@ -3724,6 +3732,7 @@
   "sai",
   "saifon",
   "sandra",
+  "sao",
   "sara",
   "sasi",
   "sea_wall_duang",
