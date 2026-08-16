@@ -4782,6 +4782,67 @@ function _owlBox15Answer() {
   _say("sanuk{the_owl_gave_a_hoot_after_all}", "win");
 }
 
+// ── CTF stage 2: the wrong number (docs/ctf.md) ──────────────────────────────
+// The gate is the good part: it arms only when somebody types an OBVIOUS
+// security probe at the game prompt — nobody does that by accident, and the
+// person it's for announces themselves in the first five minutes. The parser
+// answers with the ordinary brush-off (the cover); this just arms a delayed text.
+//
+// The text is a canon-accurate Thai scam SMS from an IN-WORLD brand (never a
+// real bank/carrier — White Dish doctrine) carrying a link to Mario's own
+// domain, blacksite.org. That domain is where the un-greppable half of the
+// puzzle lives: the site itself just redirects (a taken-down scam page, to a
+// clicker), and the real clue is a DNS TXT record — which is what a security
+// pro checks and a normal player never will. The TXT hands back the in-game
+// close: a phrase to say at the White Rabbit, which is how the bar the map
+// never points at is meant to be found. Second flag; trophy in WHO AM I.
+//
+// Same three rule-breaks as Box 15, same reasons (docs/ctf.md): fixed strings,
+// on no surface, NOT gated by CHEATS_ENABLED (it grants nothing — trophy only).
+const _PROBE_RE = /'\s*or\s+1\s*=\s*1|union\s+select|<script[\s>]|javascript:|onerror\s*=|\.\.\/\.\.\/|\/etc\/passwd|cmd\.exe|\/bin\/sh|\$\{jndi:|\$\{\w+:|%00|\bnmap\b|\bsqlmap\b|\bnikto\b|\bmetasploit\b|;\s*(?:ls|cat|id|whoami|uname)\b|\|\s*(?:ls|cat|id|whoami)\b|^\s*(?:whoami|sudo|curl|wget|nc|bash|sh)\b|\|\s*(?:sh|bash)\b|robots\.txt|\.git\/|\.env\b|wp-admin|phpmyadmin|(.)\1{79,}/i;
+function _isProbe(raw) { return _PROBE_RE.test(raw); }
+function _probeSeen() {
+  // arm once per game; the text needs a working phone and a sandbox player
+  if (_flag("probeArmed") || _flag("wrongNumberSent")) return;
+  _setFlag("probeArmed");
+  G.probeAt = G.turns;
+}
+function _wrongNumberTick() {
+  if (!_flag("probeArmed") || _flag("wrongNumberSent")) return;
+  if (!_flag("act1Done") || G.battery <= 0 || G.pendingEnc || G.game) return;
+  if (G.turns - (G.probeAt || 0) < 8 + (_hh("wn" + G.vacation, 19) % 8)) return; // 8-15 turns later
+  _setFlag("wrongNumberSent");
+  G.phone.inbox.push({
+    from: "unknown",
+    fromName: "+66 6" + (_hh("wnnum" + G.vacation, 23) % 9) + " ••• ••••",
+    text: "[SanukPay] Your parcel could not be delivered — customs fee ฿19 unpaid. " +
+      "Confirm your details within 24h to avoid return: blacksite.org  Ref: WR-0x1E",
+    read: false,
+  });
+  _say("(📱 Your phone buzzes — an unknown number. CHECK MESSAGES.)", "dim");
+}
+// The close: the phrase the TXT record hands back, said at the White Rabbit.
+function _whiteRabbitAnswer() {
+  const first = !_flag("ctfRabbit");
+  if (G.room !== "white_rabbit") {
+    _say("You say it to the street. The street, correctly, ignores you. Wrong room — " +
+      "there is exactly one bar in this town where those words mean anything.", "dim");
+    return;
+  }
+  if (first) _setFlag("ctfRabbit");
+  _say("Eddy stops wiping the glass. He doesn't put it down; he just stops.", "win");
+  _say("\"Huh.\" A long look, the vanity gone out of it for once. \"That number's been " +
+    "dead three years. The domain's been dead longer. And you walked in here off a TXT " +
+    "record.\" He sets the glass down at last. \"Most people who find this bar find it " +
+    "'cause a piwin got lost. You found it 'cause you knew what to look for and " +
+    "where nobody would think to.\" The grin comes back, but a different one — the one " +
+    "under the one he wears. \"Sit. First one's on the house. Second one you'll pay " +
+    "for, because I'm not stupid, whatever the sign says.\"", "win");
+  if (first) _say("Down the rabbit hole. There is no back up.", "win");
+  else _say("He's told everybody. Everybody has stopped listening. He hasn't stopped telling.", "win");
+  _say("sanuk{the_number_was_dead_the_rabbit_was_not}", "win");
+}
+
 // ── Food and water ───────────────────────────────────────────────────────────
 
 const FOOD_STALLS = {

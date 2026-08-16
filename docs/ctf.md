@@ -4,7 +4,7 @@
 nobody can maintain is a puzzle that breaks silently — but anyone who wants to
 solve the thing should stop reading now.
 
-Written 2026-08-13. Stage 1 shipped; stage 2 designed, not built.
+Written 2026-08-13. Stage 1 shipped 2026-08-13; stage 2 shipped 2026-08-15 (game side — the DNS TXT is Mario's to set, see below).
 
 ## Why it exists
 
@@ -142,32 +142,84 @@ unsolvable for whoever copied it.
   domain will not. The fix, when wanted, is a copy at the root of the personal
   web server.
 
-## Stage 2 — the wrong number (DESIGNED, NOT BUILT)
+## Stage 2 — the wrong number (SHIPPED 2026-08-15)
 
-**The gate is the good part:** it arms when the player types an *obvious security
-probe* at the game prompt — `' OR 1=1--`, `<script>alert(1)</script>`,
-`../../../etc/passwd`, `${jndi:ldap://…}`, `%00`, a long `A`×500. Nobody types
-those by accident. A normal player never sees this content exist; the person it
-is for announces themselves in the first five minutes.
+**The chain:**
 
-The parser currently answers those with the ordinary "I didn't understand that",
-which is the correct cover. On a hit, arm a delayed text from an unknown number —
-precedented machinery, since the daily joke drip already texts from one.
+1. **The gate.** The player types an *obvious security probe* at the game prompt
+   — `' OR 1=1--`, `<script>`, `../../../etc/passwd`, `${jndi:`, `%00`, `A`×80,
+   `nmap`/`sqlmap`/`nikto`, `; ls`, `| sh`, `whoami`/`sudo`/`curl` at the start,
+   `robots.txt`, `.git/`, `.env`, `wp-admin`… (`_PROBE_RE`, engine-systems.js).
+   Nobody types those by accident, and the person it's for announces themselves
+   in the first five minutes. **Read off the TRUE raw input**, before `_norm`
+   strips the quotes and braces that make a probe a probe (that was the first
+   bug). The parser then falls through to the ordinary *"That one didn't parse"*
+   — **the cover IS the answer.** Arms `probeArmed` once per game.
+2. **The wrong number.** 8–15 turns later (`_wrongNumberTick`, in `_tick` beside
+   `_maybeIncomingText`; needs `act1Done` + battery), a text from an unknown
+   `+66 6x ••• ••••`, in canon-accurate Thai-scam register from an **in-world
+   brand** — `[SanukPay] Your parcel could not be delivered — customs fee ฿19
+   unpaid… blacksite.org  Ref: WR-0x1E`. To everyone else it reads as flavour
+   (the game already runs mama-sick asks and the tonic fleece). Never a real
+   bank/carrier — a test asserts it.
+3. **The domain is where the un-greppable half lives.** `blacksite.org` is
+   Mario's. **The site itself redirects** (today: to the White Rabbit's Google
+   Maps pin) — so a normal clicker sees a scam page that's been taken down, and
+   a solver who follows the redirect gets a coordinate with no explanation. The
+   real clue is the **DNS TXT record**, which is what a security pro checks and
+   a normal player never will. `dig TXT blacksite.org`.
+4. **The close.** The TXT hands back a phrase. Said **at the White Rabbit** (and
+   nowhere else — the wrong room gets *"the street, correctly, ignores you"*),
+   Eddy stops wiping the glass: *"That number's been dead three years. The
+   domain's been dead longer. And you walked in here off a TXT record."*
+5. **Flag:** `sanuk{the_number_was_dead_the_rabbit_was_not}`. **Trophy:**
+   `G.flags.ctfRabbit`, one more line in `WHO AM I`.
 
-**Content rules, non-negotiable:**
+This is how the White Rabbit is *meant* to be found: no quest points at it (the
+Naklua pull is deliberately the Orchid intro), no map hint — the bar the town
+never mentions is the reward for pulling the thread. And it's the front door to
+the Rabbit heist arc (`docs/rabbit-arc.md`).
 
-- **In-world brand only.** Never an imitation of a real bank, carrier, or service.
-  Same doctrine as White Dish: structural pattern, no real names.
-- The link resolves to **Mario's own domain**, which is where the un-greppable
-  part of the chain lives (a static path and DNS TXT are both available).
-- The payload is fiction end to end. A Thai scam SMS is canon-accurate — the game
-  already runs mama-sick asks, the tonic fleece, and barfine scams — so it reads
-  as flavour to everyone else.
+### What Mario sets (not in the repo — that's the point)
 
-**Open:** whether stage 2 ends in a second flag or hands back something in-game;
-and whether the probe-detector logs (it would be the single most interesting row
-in the metrics design note, and the most obviously personal — see
-`docs/metrics-design.md`).
+**DNS TXT on `blacksite.org`** — proposed record, one line:
+
+```
+sanuk-ctf: The number was dead. The rabbit was not. Find the bar the map never mentions, north of the Dolphin, and tell the man behind it: I FOLLOWED THE WHITE RABBIT
+```
+
+Wording is Mario's call; the game only cares that the solver arrives at the
+White Rabbit and types **`I FOLLOWED THE WHITE RABBIT`** (also accepted without
+the "I", trailing punctuation fine). *"North of the Dolphin"* is enough of a
+pointer without naming the bar outright — the redirect's Maps pin is the
+belt to that brace.
+
+Keep the redirect: a scam link that lands somewhere real-but-baffling is better
+cover than a 404, and the pin is a second path to the same room.
+
+### Difficulty and shape
+
+Longer than stage 1 by design — a player has to (a) think to probe a text
+adventure, (b) recognise the scam text as *not* flavour, (c) know to `dig` a
+domain rather than click it, (d) walk to Naklua and find a bar no quest points
+at. Each step is the security-pro reflex, none is the general player's.
+
+### The tests defend (engine.test.js, "stage 2:" block)
+
+The gate's **precision both ways** — a probe list that must arm, an
+ordinary-play list that must NOT (a false positive would ambush a normal player;
+that list includes `cat`, `ls`, `select a girl`, `union jack`, `she said sh`);
+the cover holds (brush-off, no leak); the text comes **later**, names the
+domain, carries the in-world brand and no real one; the phrase pays only at
+`white_rabbit`, burns no turn, moves no money/happy; the trophy prints;
+survives `CHEATS_ENABLED = false`; no autocomplete leak.
+
+**Same three rule-breaks as Box 15, same reasons:** fixed strings (solvers
+compare notes), on no surface, not gated by `CHEATS_ENABLED`.
+
+**Still open:** whether the probe detector should report anything (it would be
+the single most interesting row in `docs/metrics-design.md`, and the most
+obviously personal). Today it logs nothing.
 
 ## Decision log
 
@@ -178,4 +230,5 @@ in the metrics design note, and the most obviously personal — see
 | 2026-08-13 | Stage 2 (wrong number) deferred, gated on security probes typed at the prompt. |
 | 2026-08-13 | Secondary in-game pointer added: the QR sticker on the Matrix poster at the LK Metro mouth, baked (never runtime-encoded) and verified by decoding the rendered screenshot at desktop and phone width. |
 | open | Canonical domain-root security.txt on the personal server. |
+| 2026-08-15 | Stage 2 shipped (game side): probe gate on true raw input → 8–15-turn SanukPay scam text naming blacksite.org → DNS TXT (Mario's) → phrase at the White Rabbit → second flag + trophy. TXT-only for now; the site keeps its Maps-pin redirect as cover and a second path. |
 | open | Whether the probe detector reports anything. |

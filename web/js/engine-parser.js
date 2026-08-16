@@ -4924,6 +4924,11 @@ const _GERMAN_QUIP = {
 
 function doCommand(input) {
   if (!G) newGame();
+  // CTF stage 2 gate (docs/ctf.md): an obvious security probe — read off the
+  // TRUE raw input, before _norm strips the quotes and braces that make it one
+  // — arms the wrong-number text and then falls through to the ordinary
+  // brush-off. The cover IS the answer.
+  if (typeof _isProbe === "function" && typeof input === "string" && _isProbe(input)) _probeSeen();
   const raw = _norm(input);
   if (!raw) return;
   const lower = raw.toLowerCase();
@@ -4955,6 +4960,7 @@ function doCommand(input) {
   // meant to ship false; this grants a line of prose and a trophy, and gating it
   // there would quietly retire the puzzle the moment the game is released.
   if (/^(i )?counted the hoots[.!]?$/.test(lower)) { _owlBox15Answer(); return; }
+  if (/^(i )?followed the white rabbit[.!]?$/.test(lower)) { _whiteRabbitAnswer(); return; }
 
   // the taxi ride owns input until you've said who you are
   if (G.pendingChoice === "intro") { _introAnswer(lower); return; }
@@ -5784,6 +5790,7 @@ function _doWhoAmI() {
   if (_flag("act1Done")) _say(`On the soi, you're ${_REP_LABELS[_repTier()]}. (STANDING for more.)`, "dim");
   // the one line in the game that has to be earned from outside the game
   if (_flag("owlBox15")) _say("You are also the person who answered Box 15.", "win");
+  if (_flag("ctfRabbit")) _say("And the one who followed the white rabbit — off a dead number, down a live record.", "win");
 }
 
 // REP / STANDING / REPUTATION — where the soi has you. A single town-wide read,

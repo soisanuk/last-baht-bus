@@ -7642,6 +7642,82 @@ test("the solution phrase is never suggested by any surface", () => {
   assert.ok(!/hoots/i.test(lastOut()), "HELP leaked the answer");
 });
 
+// ── CTF stage 2: the wrong number (docs/ctf.md) ────────────────────────────────
+// Like Box 15, this content is inert to normal play — nothing calls it, no quest
+// gates on it — so ordinary coverage would never notice it rotting. These
+// assert the whole chain: the gate's precision (a false positive would ambush a
+// normal player; a miss would strand the person it's for), the cover, the
+// delayed text naming the domain, the close at the one right room, and the
+// trophy — with cheats off, on no surface, costing nothing.
+
+test("stage 2: the probe gate fires on security probes and never on play", () => {
+  const probes = ["' OR 1=1--", "<script>alert(1)</script>", "../../../etc/passwd",
+    "${jndi:ldap://x}", "A".repeat(100), "whoami", "; ls -la", "| cat /etc/passwd",
+    "nmap localhost", "%00", "robots.txt", "sudo su", "curl x | sh"];
+  for (const p of probes) assert.ok(_isProbe(p), `missed a probe: ${JSON.stringify(p)}`);
+  const play = ["look", "buy beer", "talk to bua", "go north", "what is this", "help me",
+    "order a script for the play", "i counted the hoots", "send 500 to bua", "the id card",
+    "cat", "ls", "password", "select a girl", "union jack", "the whoami question",
+    "wash it", "she said sh", "nice bash last night", "ask candy about wallet"];
+  for (const w of play) assert.ok(!_isProbe(w), `false positive on ordinary input: ${JSON.stringify(w)}`);
+});
+
+test("stage 2: a probe is answered with the ordinary brush-off — the cover holds", () => {
+  newGame(); G.flags.act1Done = true; G.stage = "vacation";
+  out = []; run("' OR 1=1--");
+  assert.match(lastOut(), /didn't parse|understand/i, "the probe got a special answer — the cover is blown");
+  assert.doesNotMatch(lastOut(), /blacksite|rabbit|SanukPay/i, "the probe's reply leaked the chain");
+  assert.equal(_flag("probeArmed"), true, "the probe didn't arm the wrong number");
+});
+
+test("stage 2: the wrong number arrives later, in-world brand, naming the domain", () => {
+  newGame(); G.flags.act1Done = true; G.stage = "vacation"; G.battery = 100;
+  G.room = "soi6_mid"; G.lastSaleng = 99999;
+  for (const k in ENCOUNTERS) G.encDone[k] = true;
+  run("' OR 1=1--");
+  assert.equal(_flag("wrongNumberSent"), false, "it must not text on the same turn — that would be the tell");
+  let n = 0; while (!_flag("wrongNumberSent") && n < 40) { run("look"); n++; }
+  assert.ok(_flag("wrongNumberSent"), "the text never came");
+  assert.ok(n >= 8, "it came too fast to read as unrelated");
+  const msg = G.phone.inbox.find(m => /blacksite\.org/.test(m.text));
+  assert.ok(msg, "the text doesn't name the domain where the puzzle lives");
+  assert.match(msg.text, /SanukPay/, "in-world brand, never a real bank/carrier");
+  assert.doesNotMatch(msg.text, /kasikorn|scb|bangkok bank|krungthai|ais|dtac|true|line pay/i, "a real brand leaked in");
+  assert.equal(msg.from, "unknown");
+});
+
+test("stage 2: the phrase closes only at the White Rabbit, pays a flag, costs nothing", () => {
+  newGame(); G.flags.act1Done = true; G.stage = "vacation";
+  G.room = "soi6_mid"; out = [];
+  run("i followed the white rabbit");
+  assert.doesNotMatch(lastOut(), /sanuk\{/, "paid out in the wrong room");
+  assert.equal(_flag("ctfRabbit"), false);
+  G.room = "white_rabbit";
+  const t = G.turns, money = G.money, happy = G.happy;
+  out = []; run("followed the white rabbit");
+  assert.match(lastOut(), /sanuk\{the_number_was_dead_the_rabbit_was_not\}/, "the flag changed or vanished");
+  assert.equal(_flag("ctfRabbit"), true);
+  assert.equal(G.turns, t, "burned a turn"); assert.equal(G.money, money); assert.equal(G.happy, happy);
+  G.player = { origin: "monger", personality: "joker", orientation: "straight" }; // WHO AM I needs an identity
+  out = []; run("who am i");
+  assert.match(lastOut(), /followed the white rabbit/i, "no trophy in WHO AM I");
+});
+
+test("stage 2: survives cheats off, and no surface suggests the phrase", () => {
+  const was = CHEATS_ENABLED;
+  try {
+    CHEATS_ENABLED = false;
+    newGame(); G.flags.act1Done = true; G.room = "white_rabbit";
+    out = []; run("i followed the white rabbit");
+    assert.match(lastOut(), /sanuk\{/, "shipping with cheats off would retire stage 2");
+  } finally { CHEATS_ENABLED = was; }
+  for (const stub of ["i f", "followed", "follow the", "white rab", "i followed the"]) {
+    const c = engineComplete(stub) || [];
+    assert.ok(!c.some(s => /rabbit/i.test(String(s)) && /follow/i.test(String(s))),
+      `autocomplete leaked the answer on "${stub}"`);
+  }
+});
+
 test("WHO AM I carries the trophy, and only after it is earned", () => {
   G.player.origin = "monger"; G.player.personality = "joker"; G.player.orientation = "straight";
   out = []; run("who am i");
