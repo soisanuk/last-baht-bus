@@ -168,12 +168,29 @@ unsolvable for whoever copied it.
    a solver who follows the redirect gets a coordinate with no explanation. The
    real clue is the **DNS TXT record**, which is what a security pro checks and
    a normal player never will. `dig TXT blacksite.org`.
-4. **The close.** The TXT hands back a phrase. Said **at the White Rabbit** (and
-   nowhere else — the wrong room gets *"the street, correctly, ignores you"*),
-   Eddy stops wiping the glass: *"That number's been dead three years. The
-   domain's been dead longer. And you walked in here off a TXT record."*
-5. **Flag:** `sanuk{the_number_was_dead_the_rabbit_was_not}`. **Trophy:**
-   `G.flags.ctfRabbit`, one more line in `WHO AM I`.
+4. **The close.** The TXT hands back a phrase — **`KNOCK, KNOCK FARANG`** — said
+   **at the White Rabbit** (and nowhere else — the wrong room gets *"the street,
+   correctly, ignores you"*). Eddy stops wiping the glass: *"That number's been
+   dead three years. The domain's been dead longer. And you walked in here off a
+   TXT record."*
+5. **Flag:** `sanuk{3d190498fc4a2399ed773457}` — **derived**, not stored: the first
+   24 hex of `SHA-256("rabbit:" + normalised phrase)`. **Trophy:** `G.flags.ctfRabbit`,
+   one more line in `WHO AM I`.
+
+**How the phrase is protected in a fully-public source (the founding rule,
+finally honoured for stage 2):** the engine holds only
+`_RABBIT_KNOCK_SHA = SHA-256("knock knock farang")` (the phrase lowercased,
+punctuation stripped, whitespace collapsed — `_knockNorm`), and every prompt
+input is hashed and compared. **The phrase appears nowhere in the repo except
+this answer-key doc and the tests.** Grepping the source yields a hex string;
+the flag can't be printed without the phrase because it is computed from it.
+`_sha256` is a ~40-line pure-JS FIPS 180-4 implementation (sync, dependency-
+free, no browser APIs — the vm can run it; verified against the `abc` test
+vector). FNV-1a was rejected: 32 bits is a lunch break to brute against a short
+phrase. A 3-word phrase is still brute-forceable *in principle* — but so is
+Box 15's 4-letter key; the doctrine has always been that **the challenge is the
+discovery chain, not the maths**, and the hash closes the one shortcut that
+actually mattered: `grep`.
 
 This is how the White Rabbit is *meant* to be found: no quest points at it (the
 Naklua pull is deliberately the Orchid intro), no map hint — the bar the town
@@ -182,17 +199,20 @@ the Rabbit heist arc (`docs/rabbit-arc.md`).
 
 ### What Mario sets (not in the repo — that's the point)
 
-**DNS TXT on `blacksite.org`** — proposed record, one line:
+**DNS TXT on `blacksite.org`** — the phrase is Mario's: **`KNOCK, KNOCK FARANG`**.
+Proposed record, one line:
 
 ```
-sanuk-ctf: The number was dead. The rabbit was not. Find the bar the map never mentions, north of the Dolphin, and tell the man behind it: I FOLLOWED THE WHITE RABBIT
+sanuk-ctf: The number was dead. The rabbit was not. Find the bar the map never mentions, north of the Dolphin, and knock: KNOCK, KNOCK FARANG
 ```
 
-Wording is Mario's call; the game only cares that the solver arrives at the
-White Rabbit and types **`I FOLLOWED THE WHITE RABBIT`** (also accepted without
-the "I", trailing punctuation fine). *"North of the Dolphin"* is enough of a
-pointer without naming the bar outright — the redirect's Maps pin is the
-belt to that brace.
+Wording around it is Mario's call; the game only cares that the solver arrives
+at the White Rabbit and types the phrase (case-insensitive, punctuation and
+spacing forgiven — `_knockNorm`). *"North of the Dolphin"* is enough of a
+pointer without naming the bar outright — the redirect's Maps pin is the belt to
+that brace. **If the phrase ever changes, recompute `_RABBIT_KNOCK_SHA`** with the
+game's own function (`node tools/probe.mjs 'console.log(_sha256(_knockNorm("…")))'`)
+and update the flag in this doc + the tests.
 
 Keep the redirect: a scam link that lands somewhere real-but-baffling is better
 cover than a 404, and the pin is a second path to the same room.

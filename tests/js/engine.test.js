@@ -7686,16 +7686,34 @@ test("stage 2: the wrong number arrives later, in-world brand, naming the domain
   assert.equal(msg.from, "unknown");
 });
 
-test("stage 2: the phrase closes only at the White Rabbit, pays a flag, costs nothing", () => {
+test("stage 2: the knock is hash-gated — phrase absent from source, flag derived", () => {
+  // The answer key lives HERE and in docs/ctf.md, never in web/js. Assert the
+  // engine's stored hash still matches the phrase (a retyped hash or a changed
+  // normaliser would strand every solver silently), that no engine file carries
+  // the phrase in plaintext, and that _sha256 is real (FIPS test vector).
+  const PHRASE = "KNOCK, KNOCK FARANG";
+  assert.equal(_sha256("abc"), "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad", "_sha256 is not SHA-256");
+  assert.equal(_sha256(_knockNorm(PHRASE)), _RABBIT_KNOCK_SHA, "the stored hash no longer matches the phrase");
+  for (const v of [PHRASE, "knock knock farang", "  Knock,   knock  farang!!", "KNOCK KNOCK FARANG."])
+    assert.ok(_isRabbitKnock(v), `normalisation rejects "${v}"`);
+  assert.ok(!_isRabbitKnock("knock knock"), "a partial knock must not open the door");
+  assert.ok(!_isRabbitKnock("i followed the white rabbit"), "the old phrase is retired");
+  for (const f of ["engine-core.js", "engine-encounters.js", "engine-play.js", "engine-systems.js", "engine-parser.js", "world.js", "main.js", "term.js"]) {
+    const src = readFileSync(fileURLToPath(new URL(`../../web/js/${f}`, import.meta.url)), "utf8");
+    assert.ok(!/knock,?\s*knock\s*farang/i.test(src), `${f} carries the phrase in plaintext — that's a grep, not a puzzle`);
+  }
+});
+
+test("stage 2: the knock closes only at the White Rabbit, pays a flag, costs nothing", () => {
   newGame(); G.flags.act1Done = true; G.stage = "vacation";
   G.room = "soi6_mid"; out = [];
-  run("i followed the white rabbit");
+  run("knock, knock farang");
   assert.doesNotMatch(lastOut(), /sanuk\{/, "paid out in the wrong room");
   assert.equal(_flag("ctfRabbit"), false);
   G.room = "white_rabbit";
   const t = G.turns, money = G.money, happy = G.happy;
-  out = []; run("followed the white rabbit");
-  assert.match(lastOut(), /sanuk\{the_number_was_dead_the_rabbit_was_not\}/, "the flag changed or vanished");
+  out = []; run("KNOCK, KNOCK FARANG");
+  assert.match(lastOut(), /sanuk\{3d190498fc4a2399ed773457\}/, "the derived flag changed — recompute docs/ctf.md if the phrase did");
   assert.equal(_flag("ctfRabbit"), true);
   assert.equal(G.turns, t, "burned a turn"); assert.equal(G.money, money); assert.equal(G.happy, happy);
   G.player = { origin: "monger", personality: "joker", orientation: "straight" }; // WHO AM I needs an identity
@@ -7703,18 +7721,17 @@ test("stage 2: the phrase closes only at the White Rabbit, pays a flag, costs no
   assert.match(lastOut(), /followed the white rabbit/i, "no trophy in WHO AM I");
 });
 
-test("stage 2: survives cheats off, and no surface suggests the phrase", () => {
+test("stage 2: survives cheats off, and no surface suggests the knock", () => {
   const was = CHEATS_ENABLED;
   try {
     CHEATS_ENABLED = false;
     newGame(); G.flags.act1Done = true; G.room = "white_rabbit";
-    out = []; run("i followed the white rabbit");
+    out = []; run("knock, knock farang");
     assert.match(lastOut(), /sanuk\{/, "shipping with cheats off would retire stage 2");
   } finally { CHEATS_ENABLED = was; }
-  for (const stub of ["i f", "followed", "follow the", "white rab", "i followed the"]) {
+  for (const stub of ["k", "kn", "knock", "knock,", "knock knock", "knock, knock f"]) {
     const c = engineComplete(stub) || [];
-    assert.ok(!c.some(s => /rabbit/i.test(String(s)) && /follow/i.test(String(s))),
-      `autocomplete leaked the answer on "${stub}"`);
+    assert.ok(!c.some(s => /farang/i.test(String(s))), `autocomplete leaked the knock on "${stub}"`);
   }
 });
 

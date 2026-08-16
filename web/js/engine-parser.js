@@ -4960,7 +4960,8 @@ function doCommand(input) {
   // meant to ship false; this grants a line of prose and a trophy, and gating it
   // there would quietly retire the puzzle the moment the game is released.
   if (/^(i )?counted the hoots[.!]?$/.test(lower)) { _owlBox15Answer(); return; }
-  if (/^(i )?followed the white rabbit[.!]?$/.test(lower)) { _whiteRabbitAnswer(); return; }
+  // CTF stage 2's close: hash-checked, the phrase is NOT in the source (docs/ctf.md)
+  if (typeof _isRabbitKnock === "function" && _isRabbitKnock(lower)) { _whiteRabbitAnswer(lower); return; }
 
   // the taxi ride owns input until you've said who you are
   if (G.pendingChoice === "intro") { _introAnswer(lower); return; }
