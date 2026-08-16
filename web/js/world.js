@@ -3431,8 +3431,9 @@ const ROOMS = {
       "and know every customer's pour by five. No neon war up here — just fairy lights, a " +
       "sea breeze off the old fishing harbour, and the clack of a single pool table. THE " +
       "ANCHOR BAR, DOLPHIN BAR, and THE MOORING share the corner and most of the regulars. " +
-      "Further east, where the fairy lights give out and the lane goes dark, one more sign " +
-      "buzzes on its own current: THE WHITE RABBIT, which shares neither.",
+      "Further east — the map calls this lane Naklua Soi 31, nobody who drinks here does — " +
+      "where the fairy lights give out and the lane goes dark, one more sign buzzes on its " +
+      "own current: THE WHITE RABBIT, which shares neither.",
     exits: { w: "naklua_rd", in: "anchor_bar", n: "dolphin_bar", s: "mooring_bar", e: "white_rabbit" },
   },
   anchor_bar: {

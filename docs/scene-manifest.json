@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-14",
+  "generated": "2026-08-16",
   "note": "Every room in the game + its region, for the scene-art pipeline (docs/art-pipeline-spec.md). Derived from web/js/world.js — regenerate with scripts/gen-scene-manifest.mjs, do not hand-edit. `kind` is a generator heuristic for prompt-template selection, not game canon. `regionSlug` is produced by the same regex as web/js/scene.js `_sceneArt()`; art files are web/art/rooms/<id>.png with web/art/regions/<slug>.png as the fallback.",
   "counts": {
     "rooms": 237,
@@ -131,8 +131,8 @@
       ],
       "sampleDescs": [
         "The middle of the beach road and the heart of it: a knot of people waiting where the blue songthaews swing around, a sun-bleached sign listing the loop into Pattaya, a lone motosai driver dozing on his bike. Streetlights, seafood smoke, the sea just west across the sand. The beach road runs north toward the Thappraya climb and south past the 7-Eleven toward the mouth of Soi 7.",
-        "The Soi 7 corner on Jomtien's Second Road, traffic hissing both ways. A 7-Eleven holds down the corner, bright as an operating theatre. Straight across the road sprawls Rompho Market. Soi 7 runs back west toward the beach; Second Road runs north up the strip.",
-        "The south end of the beach road, where it meets the mouth of Soi 7. A 7-Eleven glows on the corner, its air-con bleeding into the street; Soi 7's beer bars and massage shops run inland to the east, the bus stop is back to the north, and the sand and the sea lie west."
+        "The south end of the beach road, where it meets the mouth of Soi 7. A 7-Eleven glows on the corner, its air-con bleeding into the street; Soi 7's beer bars and massage shops run inland to the east, the bus stop is back to the north, and the sand and the sea lie west.",
+        "The Soi 7 corner on Jomtien's Second Road, traffic hissing both ways. A 7-Eleven holds down the corner, bright as an operating theatre. Straight across the road sprawls Rompho Market. Soi 7 runs back west toward the beach; Second Road runs north up the strip."
       ]
     },
     {
@@ -199,8 +199,8 @@
       ],
       "sampleDescs": [
         "North of the Dolphin roundabout the volume drops by half: seafood restaurants, temples, long-stay hotels. Up ahead, the SABAI PALMS HOTEL sign glows over its soi — half the letters out, so it reads 'SA AI PA MS', which the long-stay guests consider part of the charm. The soi itself is dark as a power cut. East, a quiet BAR CORNER of expat beer bars glows low; a SPA ROW of massage and soapland fronts runs off the other way.",
-        "The top of the town, where four roads give up arguing and go round in a circle instead. The dolphins are in the middle of it — a concrete pod of them mid-leap, floodlit, permanently about to enter water that is two hundred metres west. Terminal 21 sits on the corner pretending to be an airport, its departure boards lit all night for a terminal nobody flies from. Beach Road runs south along the sea, Second Road south into town, Naklua Road north-east toward the quieter money, and the songthaews go round and round because this is where the loop turns.",
-        "A pocket of low-key expat beer bars off the main road, the kind that open at four and know every customer's pour by five. No neon war up here — just fairy lights, a sea breeze off the old fishing harbour, and the clack of a single pool table. THE ANCHOR BAR, DOLPHIN BAR, and THE MOORING share the corner and most of the regulars. Further east, where the fairy lights give out and the lane goes dark, one more sign buzzes on its own current: THE WHITE RABBIT, which shares neither."
+        "The top of the town, where four roads give up arguing and go round in a circle instead. The dolphins are in the middle of it — a concrete pod of them mid-leap, floodlit, permanently about to enter water that is two hundred metres west. Terminal 21 sits on the corner pretending to be an airport, its departure boards lit all night for a terminal nobody flies from. Beach Road runs south along the sea, Second Road south into town, Naklua Road north-east toward the quieter money, and the songthaews go round and round because this is where the loop turns. Across from Terminal 21, a rank of blue trucks fills bench by bench for the run south — the drivers don't budge until the benches do.",
+        "A pocket of low-key expat beer bars off the main road, the kind that open at four and know every customer's pour by five. No neon war up here — just fairy lights, a sea breeze off the old fishing harbour, and the clack of a single pool table. THE ANCHOR BAR, DOLPHIN BAR, and THE MOORING share the corner and most of the regulars. Further east — the map calls this lane Naklua Soi 31, nobody who drinks here does — where the fairy lights give out and the lane goes dark, one more sign buzzes on its own current: THE WHITE RABBIT, which shares neither."
       ]
     },
     {
@@ -426,7 +426,7 @@
       ],
       "sampleDescs": [
         "A short soi off the main strip, and louder than the main strip, which takes doing. Two doors face each other across eight metres of wet concrete and spend the night trying to out-decibel one another: THE WINDMILL on one side, KATOEY'S R US on the other, both with their own doorman, their own flyer girl, and their own idea of what a good time looks like. Between them the soi is a corridor of noise you have to walk down sideways when it is busy. It comes out on Second Road at the far end, if you get that far.",
-        "The junction at the bottom of everything. South Pattaya Road comes down from the east and meets Second Road here, a hundred metres short of the Walking Street arch, and at two in the morning it is the busiest crossroads in the city — every songthaew in the south end circling it, piwins stacked three deep on the corner, and a slow river of people who have finished with the strip and not yet decided what happens next. Pratumnak Hill goes up and away to the south. Somebody is selling grilled squid to a queue.\n\nThis is THE songthaew stop, and which corner you stand on is the whole decision: the south-west kerb is where the Jomtien buses pull in, and the north-east one picks up for the loop — up Second Road, round the Dolphin, and back down the seafront. Stand on the wrong corner and you will get where you are going eventually, the long way, for the same fifteen baht.",
+        "The junction at the bottom of everything. South Pattaya Road comes down from the east and meets Second Road here, a hundred metres short of the Walking Street arch, and at two in the morning it is the busiest crossroads in the city — every songthaew in the south end circling it, piwins stacked three deep on the corner, and a slow river of people who have finished with the strip and not yet decided what happens next. Pratumnak Hill goes up and away to the south. Somebody is selling grilled squid to a queue.\n\nThis is THE songthaew stop, and which corner you stand on is the whole decision: the north-west corner is filling for the run north — up Second Road toward Terminal 21 — and the south-east corner is filling for Jomtien, and neither truck moves until its benches are full. The whole town runs one-way, counter-clockwise, so stand on the wrong corner and you will get where you are going eventually, the long way round, for the same fifteen baht.",
         "Neon canyon, but the neon mix has changed. Bollywood bass competes with Thai pop from somewhere inside Little India's encroachment from the east — restaurant signs in Hindi above what used to be go-go bars, the smell of curry drifting across the touts. NEON PARADISE A-GO-GO still strobes on the west side. CLUB MIRAGE shimmers opposite. The touts with the laminated menus are still here. A dark side-alley slinks off between them."
       ]
     }
@@ -1760,7 +1760,7 @@
       "kind": "street",
       "dark": false,
       "people": [],
-      "desc": "The top of the town, where four roads give up arguing and go round in a circle instead. The dolphins are in the middle of it — a concrete pod of them mid-leap, floodlit, permanently about to enter water that is two hundred metres west. Terminal 21 sits on the corner pretending to be an airport, its departure boards lit all night for a terminal nobody flies from. Beach Road runs south along the sea, Second Road south into town, Naklua Road north-east toward the quieter money, and the songthaews go round and round because this is where the loop turns."
+      "desc": "The top of the town, where four roads give up arguing and go round in a circle instead. The dolphins are in the middle of it — a concrete pod of them mid-leap, floodlit, permanently about to enter water that is two hundred metres west. Terminal 21 sits on the corner pretending to be an airport, its departure boards lit all night for a terminal nobody flies from. Beach Road runs south along the sea, Second Road south into town, Naklua Road north-east toward the quieter money, and the songthaews go round and round because this is where the loop turns. Across from Terminal 21, a rank of blue trucks fills bench by bench for the run south — the drivers don't budge until the benches do."
     },
     {
       "id": "dolphin_bar",
@@ -1849,7 +1849,7 @@
       "kind": "street",
       "dark": false,
       "people": [],
-      "desc": "A pocket of low-key expat beer bars off the main road, the kind that open at four and know every customer's pour by five. No neon war up here — just fairy lights, a sea breeze off the old fishing harbour, and the clack of a single pool table. THE ANCHOR BAR, DOLPHIN BAR, and THE MOORING share the corner and most of the regulars. Further east, where the fairy lights give out and the lane goes dark, one more sign buzzes on its own current: THE WHITE RABBIT, which shares neither."
+      "desc": "A pocket of low-key expat beer bars off the main road, the kind that open at four and know every customer's pour by five. No neon war up here — just fairy lights, a sea breeze off the old fishing harbour, and the clack of a single pool table. THE ANCHOR BAR, DOLPHIN BAR, and THE MOORING share the corner and most of the regulars. Further east — the map calls this lane Naklua Soi 31, nobody who drinks here does — where the fairy lights give out and the lane goes dark, one more sign buzzes on its own current: THE WHITE RABBIT, which shares neither."
     },
     {
       "id": "naklua_massage",
@@ -2264,7 +2264,9 @@
       "regionSlug": "second-road",
       "kind": "street",
       "dark": false,
-      "people": [],
+      "people": [
+        "Sao"
+      ],
       "desc": "Mid-Second-Road: baht buses in convoy, pharmacies, and the constant churn of a four-lane road that never quite stops. Soi 9 comes in from the beach side, quiet and daytime-ish next to all this; the mall's Second Road entrance and its run of food stalls is a block south, and MYTH NIGHT market further down again."
     },
     {
@@ -2534,7 +2536,7 @@
         "Nuch",
         "Terry"
       ],
-      "desc": "Actual air conditioning. Actual wood panelling. A dartboard. The Queen Vic Inn anchors the quiet middle stretch of Soi 6 with the righteous calm of a man who has seen it all and ordered another pint — the one place on the soi that isn't shouting. Through the window, the soi performs — the show without the sweat (WATCH SOI). Terry holds down the corner stool with a beer and the settled air of a man who has watched it all twice. A staircase behind the bar leads UP to the guest rooms."
+      "desc": "Actual air conditioning. Actual wood panelling. A dartboard. The Queen Vic Inn anchors the quiet middle stretch of Soi 6 with the righteous calm of a man who has seen it all and ordered another pint — the one place on the soi that isn't shouting. Through the window, the soi performs — the show without the sweat (WATCH SOI). Terry holds down the corner stool with a beer and the settled air of a man who has watched it all twice. At the far end, most nights, Mort's spiral notebook lies open beside his beer — as much a fixture as the dartboard. A staircase behind the bar leads UP to the guest rooms."
     },
     {
       "id": "qv_room",
@@ -3692,7 +3694,7 @@
       "kind": "street",
       "dark": false,
       "people": [],
-      "desc": "The junction at the bottom of everything. South Pattaya Road comes down from the east and meets Second Road here, a hundred metres short of the Walking Street arch, and at two in the morning it is the busiest crossroads in the city — every songthaew in the south end circling it, piwins stacked three deep on the corner, and a slow river of people who have finished with the strip and not yet decided what happens next. Pratumnak Hill goes up and away to the south. Somebody is selling grilled squid to a queue.\n\nThis is THE songthaew stop, and which corner you stand on is the whole decision: the south-west kerb is where the Jomtien buses pull in, and the north-east one picks up for the loop — up Second Road, round the Dolphin, and back down the seafront. Stand on the wrong corner and you will get where you are going eventually, the long way, for the same fifteen baht."
+      "desc": "The junction at the bottom of everything. South Pattaya Road comes down from the east and meets Second Road here, a hundred metres short of the Walking Street arch, and at two in the morning it is the busiest crossroads in the city — every songthaew in the south end circling it, piwins stacked three deep on the corner, and a slow river of people who have finished with the strip and not yet decided what happens next. Pratumnak Hill goes up and away to the south. Somebody is selling grilled squid to a queue.\n\nThis is THE songthaew stop, and which corner you stand on is the whole decision: the north-west corner is filling for the run north — up Second Road toward Terminal 21 — and the south-east corner is filling for Jomtien, and neither truck moves until its benches are full. The whole town runs one-way, counter-clockwise, so stand on the wrong corner and you will get where you are going eventually, the long way round, for the same fifteen baht."
     },
     {
       "id": "soi_diamond",
