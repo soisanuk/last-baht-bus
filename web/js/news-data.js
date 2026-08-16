@@ -14,7 +14,7 @@ var NEWS_FEED = [
   },
   {
     "t": "13 hour bender by Australian at Pattaya’s Soi Bua Khao bar ends in dispute over 32,540 baht unpaid bill",
-    "s": "Thai Examiner",
+    "s": "thaiexaminer.com",
     "d": "15 Aug 2026"
   },
   {
@@ -43,12 +43,12 @@ var NEWS_FEED = [
     "d": "28 Jun 2026"
   },
   {
-    "t": "Family stranded at sea for 16 hours after jet ski capsized in Thailand",
+    "t": "Family rescued after 16 hours floating on jet ski off Thailand",
     "s": "BBC",
     "d": "15 Aug 2026"
   },
   {
-    "t": "Family rescued after 16 hours floating on jet ski off Thailand",
+    "t": "Family stranded at sea for 16 hours after jet ski capsized in Thailand",
     "s": "BBC",
     "d": "15 Aug 2026"
   },
@@ -58,8 +58,8 @@ var NEWS_FEED = [
     "d": "15 Aug 2026"
   },
   {
-    "t": "Israeli man found dead in Bangkok hotel",
-    "s": "The Jerusalem Post",
+    "t": "Ilhan Fandi gives Singapore lifeline but Thailand still huge obstacle to overcome in ASEAN Championship semifinals",
+    "s": "africa.espn.com",
     "d": "15 Aug 2026"
   },
   {
@@ -69,14 +69,14 @@ var NEWS_FEED = [
   },
   {
     "t": "Rising Australian golfer Bang dies of brain haemorrhage in Thailand aged 18",
-    "s": "aljazeera.com",
+    "s": "Al Jazeera",
     "d": "14 Aug 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-08-14","USD":33.12,"AUD":23.46,"GBP":44.84,"EUR":38.31};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-16","temp":30,"humid":74,"code":3,"hi":32,"rain":73};
+var WX_NOW = {"date":"2026-08-17","temp":28,"humid":80,"code":3,"hi":32,"rain":49};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
@@ -84,4 +84,4 @@ var LOTTO = {"date":"2026-08-16","first":"004615","last2":"53","front3":["429","
 // XAU, plus Thai baht-weight gold (96.5%)
 var GOLD = {"usd":4378,"date":"2026-08-16","baht":68550};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":62964,"thb":2069152};
+var BTC = {"usd":63091,"thb":2068407};
