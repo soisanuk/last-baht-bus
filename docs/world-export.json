@@ -23,9 +23,9 @@
  ],
  "counts": {
   "geolocated": 237,
-  "patrons": 22,
+  "patrons": 23,
   "people": 329,
-  "portraits": 351,
+  "portraits": 352,
   "renders": 350,
   "thumbs": 350,
   "venues": 237
@@ -74,6 +74,14 @@
    "hops": true,
    "name": "Chuck",
    "nat": "American",
+   "pronoun": "he"
+  },
+  "colin": {
+   "desc": "Fifty-eight, tanned to leather, close-cropped grey, and a linen shirt that cost more than it needed to — the uniform of a man who once believed he'd figured the place out. A flat white sits at his elbow going cold; he orders them out of habit and rarely drinks them. He looks at the view the way you'd look at a photograph of somewhere you used to live.",
+   "emoji": "☕",
+   "home": "the_terrace",
+   "name": "Colin",
+   "nat": "British",
    "pronoun": "he"
   },
   "danny": {
@@ -3509,6 +3517,7 @@
   "chom",
   "chompoo",
   "chuck",
+  "colin",
   "da",
   "daeng",
   "danny",

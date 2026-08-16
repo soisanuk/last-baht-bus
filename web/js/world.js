@@ -10434,6 +10434,72 @@ const PATRONS = {
         short: "“Everything — that's the joy of the corner table. New girls, lonely old boys, Sumalee turning it all. Better than telly, new cast every season.”" },
     ],
   },
+  // Colin — the reverse-savior essay's patron who lived it (canon 2026-08-15).
+  // A hilltop regular who once had a Sathorn dinner and came down the hill a
+  // different size. Register rules: no villain (the father was warm — that's
+  // the knife), nobody says "toy" (Colin implies it and won't finish the
+  // sentence), and he tells it AGAINST himself, which is what makes him
+  // company rather than a warning. He is the "she paid for the lattes" line.
+  colin: {
+    name: "Colin", emoji: "☕", age: 58, nat: "British", pronoun: "he",
+    home: "the_terrace", hops: false,
+    look: "British man of fifty-eight, tanned, close-cropped grey, good linen shirt, a flat white going cold at his elbow.",
+    desc: "Fifty-eight, tanned to leather, close-cropped grey, and a linen shirt that cost " +
+      "more than it needed to — the uniform of a man who once believed he'd figured the " +
+      "place out. A flat white sits at his elbow going cold; he orders them out of habit " +
+      "and rarely drinks them. He looks at the view the way you'd look at a photograph of " +
+      "somewhere you used to live.",
+    dialogue: [
+      { text: "\"Colin.\" A dry handshake and a nod at the stool beside him, which he clearly " +
+        "considers his to offer. \"Been up here nine years. Ran an online thing, then a " +
+        "smaller online thing, now mostly this.\" He gestures at the rail, the bay, the " +
+        "town glittering below. \"Best seat in the province for watching people make the " +
+        "mistakes you already made. Sit. The beer's actually cold; that's the Samsons.\"",
+        short: "\"Colin. Nine years up here. Best seat in the province for watching people make your mistakes.\"" },
+      { topic: "lattes",
+        text: "\"The lattes.\" He turns the cold cup a quarter-turn on the rail. \"There was " +
+          "a girl. Not from the bars — that was the whole point of her, I thought. Good " +
+          "English, laughed at the right bits, and every single time, she paid for the " +
+          "coffee. Wouldn't let me. I read that as pride.\" A short laugh with no bottom in " +
+          "it. \"It wasn't pride, squire. It was arithmetic. A woman who won't let you pay " +
+          "for a forty-baht coffee is not sizing you up as a provider. She's just — being " +
+          "nice to you. I should have known from the lattes. Everybody should. Nobody does.\"",
+        short: "\"She always paid for the coffee. I read it as pride. It was arithmetic. I should have known from the lattes.\"" },
+      { topic: "dinner",
+        text: "\"Sathorn.\" He says the district like it's a diagnosis. \"She invited me up to " +
+          "meet the family. I pictured a shophouse — you do, after enough time down there. " +
+          "Private room, thick carpet, her father pouring the Blue Label himself.\" He " +
+          "drinks a bit of the cold coffee, makes a face, drinks it anyway. \"I did the " +
+          "speech. You know the speech. Plans, the online business, how much I love the " +
+          "country. He listened to every word — properly listened, warmly — and then he " +
+          "said it was very nice for a young man to have a little hobby.\" A pause. \"Hobby. " +
+          "I've built two companies. Small ones. He wasn't wrong, though. That's what I " +
+          "couldn't get past for about a year. He wasn't wrong.\"",
+        short: "\"Sathorn. Her father poured the Blue Label himself, listened to my whole speech, and said it was nice for a young man to have a hobby. He wasn't wrong.\"" },
+      { topic: "bill",
+        text: "\"The bill came in one of those leather folders and I reached for it. Reflex — " +
+          "nine years of being the man who pays. He put a black card on it without looking, " +
+          "mid-sentence about golf in Japan, and my hand just… stopped over the table like " +
+          "it had forgotten what hands are for.\" He looks at his own hand on the rail. " +
+          "\"And she laughed at something he said — fond, you know, a daughter's laugh — and " +
+          "I looked at her wrist and the bracelet I'd had down as market tat was Cartier. " +
+          "Had been the whole time. I'd been looking at it for four months.\" He shakes his " +
+          "head. \"Nobody was unkind to me. Not once, not for a second. That's how you " +
+          "know. Warm as the whisky.\"",
+        short: "\"I reached for the bill. He put a black card on it without looking. Nobody was unkind to me once. That's how you know.\"" },
+      { topic: "her",
+        text: "\"Do I miss her? Wrong question, and I'll tell you why for free.\" He finally " +
+          "pushes the cold cup away. \"You can only miss somebody you actually had. What I " +
+          "had was a very good idea of myself, with her in it — the man who'd found the one " +
+          "outside the bars, the man who'd got it right. That's what went in the lift. She " +
+          "was lovely. She's still lovely, somewhere in Sathorn, being lovely to somebody " +
+          "her father doesn't have to be polite to.\" He signals for a beer, and it comes " +
+          "cold. \"I'm not bitter, squire. I'm calibrated. This town spends years telling a " +
+          "man money buys anything. Bangkok took one dinner to tell me whose money it is. " +
+          "Cheapest lesson I ever bought — I didn't even pay for it.\"",
+        short: "\"Wrong question. You can only miss what you had, and what I had was a very good idea of myself. I'm not bitter — I'm calibrated.\"" },
+    ],
+  },
 
   glam: {
     name: "Glam", emoji: "🎸", age: 77, nat: "German",
@@ -11506,6 +11572,7 @@ const _PATRON_TITLES = {
   dieter:   "a precise German pensioner of two decades",
   gerald:   "a witty, linen-clad Dongtan regular",
   sandra:   "a sharp Englishwoman at the corner table",
+  colin:    "a tanned Englishman with a cold flat white at his elbow",
   glam:     "an ancient German in disco-era finery",
   fergie:   "a red-faced, bald Ulsterman",
   ron:      "a leathery Aussie in a faded singlet",
