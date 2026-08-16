@@ -237,9 +237,38 @@ survives `CHEATS_ENABLED = false`; no autocomplete leak.
 **Same three rule-breaks as Box 15, same reasons:** fixed strings (solvers
 compare notes), on no surface, not gated by `CHEATS_ENABLED`.
 
-**Still open:** whether the probe detector should report anything (it would be
-the single most interesting row in `docs/metrics-design.md`, and the most
-obviously personal). Today it logs nothing.
+### The probe detector reports nothing — decided, not deferred (2026-08-17)
+
+Ruled out on purpose. It would be the single most interesting row in
+`docs/metrics-design.md` and that is exactly why it is the wrong one to build:
+it fingerprints a *person's profession* from their keystrokes, silently, on the
+first night — the most surveillance-shaped datum the game could collect, in a
+project whose metrics ethic rejected GA4 for putting a cookie banner in front of
+the taxi intro. The gate's contract is fair as it stands: *your probe, my scam
+SMS* — the player announces themselves and the game answers **in fiction**. A
+beacon would change that trade without telling them, and the person it fires on
+is precisely the person who will read the source afterwards and find it. So the
+detector's only output is the wrong-number text. If first-party metrics ever
+exist, this row goes in last or never (the note's own ordering).
+
+### Input safety (audited 2026-08-17 — why the gate is pure observation)
+
+The prompt is **structurally inert**: no `eval`/`Function`/string-timer/
+`document.write`, no `location`/`window.open`/`fetch` from input anywhere in
+game code; the parser is regex + string compares over a closed verb table, so
+there is no interpreter for input to escape into. The one `innerHTML` sink that
+matters (`term.js` `print` → `decorate`) runs `_escapeHtml` on the **whole**
+string before any `<b class="kw">` wrapping; the player's own line is echoed via
+`textContent`; the one place player text *persists and re-renders* (the dog's
+name) is additionally stripped, capped at 24 chars, and still flows through the
+escape. Verified in a real headless DOM against `<script>`, `<img onerror>`,
+`<svg onload>`, and the authored `{{…}}` hatch: nothing executes, no element is
+created, zero dialogs, zero page errors. There is nothing behind the prompt to
+reach — static files, no server, no cookies of value; a tampered `lbb_save` can
+only break its owner's game. Two seams to re-audit if a server ever exists: the
+`{{…}}` convention (safe today because it is stripped *after* escaping — it must
+never become a trusted-HTML path), and the vendored wordcard/suggest sinks that
+`innerHTML` template strings from trainer-authored data.
 
 ## Decision log
 
@@ -251,4 +280,4 @@ obviously personal). Today it logs nothing.
 | 2026-08-13 | Secondary in-game pointer added: the QR sticker on the Matrix poster at the LK Metro mouth, baked (never runtime-encoded) and verified by decoding the rendered screenshot at desktop and phone width. |
 | open | Canonical domain-root security.txt on the personal server. |
 | 2026-08-15 | Stage 2 shipped (game side): probe gate on true raw input → 8–15-turn SanukPay scam text naming blacksite.org → DNS TXT (Mario's) → phrase at the White Rabbit → second flag + trophy. TXT-only for now; the site keeps its Maps-pin redirect as cover and a second path. |
-| open | Whether the probe detector reports anything. |
+| 2026-08-17 | Probe detector reports NOTHING — decided. Its only output is the in-fiction text; a beacon would be the most surveillance-shaped row in the game and break the fair trade the gate makes. Input path audited inert (see above). |

@@ -63,6 +63,11 @@ const _term = (() => {
     // "talk to tan" / "talk to golf", which the modal rejects. Render it plain.
     if (typeof G !== "undefined" && G && G.pendingChoice === "intro")
       return _escapeHtml(text).replace(/\{\{([\s\S]*?)\}\}/g, "$1");
+    // SECURITY INVARIANT: escape the WHOLE string first, wrap known tokens
+    // after. Everything below operates on already-escaped text, which is why
+    // player input (dog names, answers) and the authored {{…}} hatch can never
+    // inject markup. Do not add a "trusted HTML" path here — audited 2026-08-17,
+    // docs/ctf.md "Input safety".
     let html = _escapeHtml(text);
     // exits line: every token is a direction you can walk
     if (/^Exits: /.test(text)) {

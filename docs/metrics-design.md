@@ -152,3 +152,12 @@ one more table.
 | 2026-08-13 | Transport settled: `sendBeacon` + `text/plain` + boring path + https. Client half buildable now; receiver waits on the server's stack. |
 | open | Persistent vs. per-session identity (leaning persistent, separate localStorage key). |
 | open | Whether parser-miss whitelisting is generous enough to be useful. |
+
+## The probe-detector row: excluded (2026-08-17)
+
+The CTF stage-2 gate (`docs/ctf.md`) can tell when a security professional is at
+the prompt. It **does not report it**, and this doc should not grow a row for it:
+it is the most identifying, most surveillance-shaped datum the game could send,
+and the ethic here rejected GA4 for far less. If this project ever collects
+first-party metrics, that row goes in last or never. Recorded so nobody
+rediscovers it as "the interesting one."
