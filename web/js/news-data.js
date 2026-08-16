@@ -14,18 +14,18 @@ var NEWS_FEED = [
   },
   {
     "t": "13 hour bender by Australian at Pattaya’s Soi Bua Khao bar ends in dispute over 32,540 baht unpaid bill",
-    "s": "Thai Examiner",
+    "s": "thaiexaminer.com",
     "d": "15 Aug 2026"
+  },
+  {
+    "t": "Cambodian hacks fellow national in Pattaya, claims wrong target",
+    "s": "Thaiger",
+    "d": "16 Aug 2026"
   },
   {
     "t": "Thai-British teenager reports classmate after firecracker attack at home",
     "s": "Thaiger",
     "d": "14 Aug 2026"
-  },
-  {
-    "t": "Four missing foreign divers found safe off Samae San",
-    "s": "Thaiger",
-    "d": "15 Aug 2026"
   },
   {
     "t": "Pattaya bar owner calls police over Aussie’s unpaid 32,540 baht bill",
@@ -43,40 +43,40 @@ var NEWS_FEED = [
     "d": "14 Aug 2026"
   },
   {
-    "t": "Family stranded at sea for 16 hours after jet ski capsized in Thailand",
-    "s": "BBC",
-    "d": "15 Aug 2026"
-  },
-  {
     "t": "Family rescued after 16 hours floating on jet ski off Thailand",
     "s": "BBC",
     "d": "15 Aug 2026"
   },
   {
+    "t": "Family stranded at sea for 16 hours after jet ski capsized in Thailand",
+    "s": "BBC",
+    "d": "15 Aug 2026"
+  },
+  {
     "t": "Father and 2 young sons on capsized jet ski rescued after 16 hours stranded off Thai island",
-    "s": "cbsnews.com",
+    "s": "CBS News",
     "d": "15 Aug 2026"
   },
   {
-    "t": "Thailand beat Singapore 3-1 in first leg of ASEAN football championship semi-finals",
-    "s": "CNA",
-    "d": "15 Aug 2026"
+    "t": "Pro golfer Jessica Bang, 18, dies while preparing for tournament in Thailand",
+    "s": "CBS News",
+    "d": "14 Aug 2026"
   },
   {
-    "t": "Ex-drug kingpin pardoned",
-    "s": "Bangkok Post",
-    "d": "16 Aug 2026"
+    "t": "Rising Australian golfer Bang dies of brain haemorrhage in Thailand aged 18",
+    "s": "Al Jazeera",
+    "d": "14 Aug 2026"
   },
   {
-    "t": "Kingdom seeks relief from US tariffs; military leverage denied",
-    "s": "Bangkok Post",
-    "d": "16 Aug 2026"
+    "t": "Rising golf star dead at 18 after brain hemorrhage while playing tournament in Thailand",
+    "s": "Fox News",
+    "d": "14 Aug 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-08-14","USD":33.12,"AUD":23.46,"GBP":44.84,"EUR":38.31};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-16","temp":29,"humid":77,"code":3,"hi":31,"rain":71};
+var WX_NOW = {"date":"2026-08-16","temp":29,"humid":79,"code":95,"hi":31,"rain":73};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
@@ -84,4 +84,4 @@ var LOTTO = {"date":"2026-08-01","first":"932479","last2":"69","front3":["413","
 // XAU, plus Thai baht-weight gold (96.5%)
 var GOLD = {"usd":4378,"date":"2026-08-16","baht":68550};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":62999,"thb":2087982};
+var BTC = {"usd":63017,"thb":2088580};
