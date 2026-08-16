@@ -682,7 +682,7 @@ const _READ_NOUNS = {
   // tap-list aliases went with the craft-beer bars that never existed there
   board: ["chalkboard", "blackboard", "clipboard", "slip", "request", "requests", "request sheet"],
   poster: ["flyer"],
-  photos: ["photo", "photograph", "photographs", "pictures", "wall of photos"],
+  photos: ["photo", "photograph", "photographs", "picture", "pictures", "wall of photos", "frame", "portrait"],
   sign: ["notice", "placard"],
   jukebox: ["juke"],
   crane: ["cranes", "origami", "napkin", "napkins"],

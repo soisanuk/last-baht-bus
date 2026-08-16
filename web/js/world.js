@@ -296,7 +296,19 @@ const ROOMS = {
     region: "Jomtien",
     desc: "The soi's namesake: a friendly open-front beer bar with sevens painted on everything, " +
       "a Connect 4 frame, and a knot of regulars who've been coming since before the fairy lights. " +
-      "The girls know every one of them by their drink.",
+      "The girls know every one of them by their drink." +
+      " Behind the bar, the King's portrait keeps its own quiet corner among the sevens, and the wall around it is where the photos go.",
+    reads: {
+      photos: [
+        { req: ["quietSideDone"],
+          text: "Beside the King's portrait — small, lower, where you'd never know to look — " +
+            "a new frame: a heavyset Englishman on the end stool with a Leo and a grin, the " +
+            "photo Sumalee put up when the news came. Fifteen seasons on that stool. Nobody " +
+            "has said a word about it and nobody sits there before ten." },
+        { text: "The King's portrait, high and to the side, and around it the sevens — painted, " +
+          "stencilled, one in fairy lights. Nothing else on the wall yet." },
+      ],
+    },
     exits: { out: "jomtien_soi_7_w" },
   },
   seabreeze: {
