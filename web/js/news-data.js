@@ -14,13 +14,18 @@ var NEWS_FEED = [
   },
   {
     "t": "13 hour bender by Australian at Pattaya’s Soi Bua Khao bar ends in dispute over 32,540 baht unpaid bill",
-    "s": "thaiexaminer.com",
+    "s": "Thai Examiner",
     "d": "15 Aug 2026"
   },
   {
     "t": "Cambodian hacks fellow national in Pattaya, claims wrong target",
     "s": "Thaiger",
     "d": "16 Aug 2026"
+  },
+  {
+    "t": "Four missing foreign divers found safe off Samae San",
+    "s": "Thaiger",
+    "d": "15 Aug 2026"
   },
   {
     "t": "Thai-British teenager reports classmate after firecracker attack at home",
@@ -38,17 +43,12 @@ var NEWS_FEED = [
     "d": "28 Jun 2026"
   },
   {
-    "t": "16/5 Pattaya Green Ville, Nong Prue, Bang Lamung, Chon Buri, 20150 Thailand",
-    "s": "Realtor.com",
-    "d": "14 Aug 2026"
-  },
-  {
-    "t": "Family rescued after 16 hours floating on jet ski off Thailand",
+    "t": "Family stranded at sea for 16 hours after jet ski capsized in Thailand",
     "s": "BBC",
     "d": "15 Aug 2026"
   },
   {
-    "t": "Family stranded at sea for 16 hours after jet ski capsized in Thailand",
+    "t": "Family rescued after 16 hours floating on jet ski off Thailand",
     "s": "BBC",
     "d": "15 Aug 2026"
   },
@@ -58,30 +58,30 @@ var NEWS_FEED = [
     "d": "15 Aug 2026"
   },
   {
+    "t": "Israeli man found dead in Bangkok hotel",
+    "s": "The Jerusalem Post",
+    "d": "15 Aug 2026"
+  },
+  {
     "t": "Pro golfer Jessica Bang, 18, dies while preparing for tournament in Thailand",
     "s": "CBS News",
     "d": "14 Aug 2026"
   },
   {
     "t": "Rising Australian golfer Bang dies of brain haemorrhage in Thailand aged 18",
-    "s": "Al Jazeera",
-    "d": "14 Aug 2026"
-  },
-  {
-    "t": "Rising golf star dead at 18 after brain hemorrhage while playing tournament in Thailand",
-    "s": "Fox News",
+    "s": "aljazeera.com",
     "d": "14 Aug 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-08-14","USD":33.12,"AUD":23.46,"GBP":44.84,"EUR":38.31};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-16","temp":29,"humid":79,"code":95,"hi":31,"rain":73};
+var WX_NOW = {"date":"2026-08-16","temp":30,"humid":74,"code":3,"hi":32,"rain":73};
 // the bar TV's one true channel
 var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
 // GLO draw — the girls' retirement plan
-var LOTTO = {"date":"2026-08-01","first":"932479","last2":"69","front3":["413","672"],"back3":["039","154"]};
+var LOTTO = {"date":"2026-08-16","first":"004615","last2":"53","front3":["429","731"],"back3":["094","937"]};
 // XAU, plus Thai baht-weight gold (96.5%)
 var GOLD = {"usd":4378,"date":"2026-08-16","baht":68550};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":63017,"thb":2088580};
+var BTC = {"usd":62964,"thb":2069152};
