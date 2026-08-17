@@ -67,19 +67,19 @@ function _cycleFontSize() {
 // point each load, sequential wrap, one strike every 10s while the overlay is
 // up. A file that fails to load self-heals out of the deck, so this list
 // drifting behind the art directory costs a missing rotation slot, never a bug.
-// Curated to ONE rendering REGISTER (Mario, 2026-08-17): the photoreal-painterly
-// posters — soft airbrush, realistic skin, bokeh, no hard outlines — matching
-// the in-world portrait art. This is a DIFFERENT axis from the framing fix that
-// preceded it: a poster can be full-body and still belong (jum), or bust and
-// not (the flat cel/illustration register — hard outlines, flat colour fills,
-// graphic-poster look — reads as a second art style regardless of crop). The
-// 18 flat ones (aof beam boom cherry dao fah fang gift ice mook nice noi orn
-// praew sara toey view yada) are out of rotation pending reroll into this
-// register (full-body composition kept, render changed); they stay in the
-// in-game poster feature meanwhile.
+// The whole poster set, now ONE rendering register (Mario, 2026-08-17): all
+// photoreal-painterly — soft airbrush, realistic skin, bokeh, no hard outlines —
+// matching the in-world portrait art. The 18 that were the flat cel/illustration
+// register (aof beam boom cherry dao fah fang gift ice mook nice noi orn praew
+// sara toey view yada) were rerolled INTO the photoreal register, full-body
+// composition kept (art agent, LBB dc96c27; root cause was gen_posters.py
+// painting a "poster" graphic, now fixed). Verified the whole deck reads as one
+// register against gib/aoi/nam. Splash opens; the 36 girls follow.
 const _SPLASH_DECK = ["splash",
-  "aoi", "aom", "bow", "gib", "gigi", "jum", "nam", "namwan", "naree", "noey",
-  "pancake", "pang", "ploen", "pop", "sai", "sasi", "tukta", "yui"];
+  "aof", "aoi", "aom", "beam", "boom", "bow", "cherry", "dao", "fah", "fang",
+  "gib", "gift", "gigi", "ice", "jum", "mook", "nam", "namwan", "naree", "nice",
+  "noey", "noi", "orn", "pancake", "pang", "ploen", "pop", "praew", "sai",
+  "sara", "sasi", "toey", "tukta", "view", "yada", "yui"];
 function _splashInit() {
   const wrap = document.getElementById("start-art-wrap");
   const overlay = document.getElementById("start-overlay");
