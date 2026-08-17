@@ -67,15 +67,17 @@ function _cycleFontSize() {
 // point each load, sequential wrap, one strike every 10s while the overlay is
 // up. A file that fails to load self-heals out of the deck, so this list
 // drifting behind the art directory costs a missing rotation slot, never a bug.
-// CURATED to ONE register (Mario, 2026-08-17, judged at the carousel's actual
-// 440x250 cover-crop, not thumbnails): the photoreal-painted portraits. The
-// full-body flat-illustration pin-ups (aof beam boom cherry dao fah fang gift
-// ice jum nam nice orn pang sara toey view — a second register the rerolls
-// came back in) are out of rotation until re-rolled to match; yada is out for
-// the parasol-hat artefact. They all stay in the in-game poster feature.
+// The whole poster set — busts AND full-body pin-ups (Mario's call, 2026-08-17:
+// keep full-body, fix the carousel). The register "mix" was never palette, it
+// was FRAMING: the carousel's cover-crop beheaded full-figure posters. Fixed on
+// the CSS side (#start-art-wrap object-position 50% 8%, top-biased), verified at
+// the true 440x250 crop to keep every one of these 37 heads in frame. So no
+// curation is needed — the deck is every poster.
 const _SPLASH_DECK = ["splash",
-  "aoi", "aom", "bow", "gib", "gigi", "mook", "namwan", "naree", "noey",
-  "pancake", "ploen", "pop", "praew", "sai", "sasi", "tukta", "yui"];
+  "aof", "aoi", "aom", "beam", "boom", "bow", "cherry", "dao", "fah", "fang",
+  "gib", "gift", "gigi", "ice", "jum", "mook", "nam", "namwan", "naree", "nice",
+  "noey", "noi", "orn", "pancake", "pang", "ploen", "pop", "praew", "sai",
+  "sara", "sasi", "toey", "tukta", "view", "yada", "yui"];
 function _splashInit() {
   const wrap = document.getElementById("start-art-wrap");
   const overlay = document.getElementById("start-overlay");

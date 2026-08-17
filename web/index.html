@@ -461,7 +461,11 @@
   #start-art-wrap:empty { display: none; }
   #start-art-wrap img {
     position: absolute; inset: 0; width: 100%; height: 100%;
-    object-fit: cover; object-position: 50% 22%;
+    /* 8% not 22%: the crop is a horizontal band of a tall poster, so a
+       bust-tuned centre beheaded the full-body pin-ups. Top-biased to 8%
+       keeps every poster's head in frame (heads sit in the top ~15%),
+       verified at this exact 440x250 crop across the whole deck. */
+    object-fit: cover; object-position: 50% 8%;
     opacity: 0;
   }
   #start-art-wrap img.lit {
