@@ -4,13 +4,23 @@
 var NEWS_FEED = [
   {
     "t": "'Wanted' Chinese fraudster arrested in Pattaya",
-    "s": "Bangkok Post",
+    "s": "bangkokpost.com",
     "d": "16 Aug 2026"
   },
   {
-    "t": "Cambodian hacks fellow national in Pattaya, claims wrong target",
+    "t": "'Better than Pan Masala ads’, Govinda showcases iconic dance moves at Pattaya club amid Sunita Ahuja feud",
+    "s": "The Times of India",
+    "d": "17 Aug 2026"
+  },
+  {
+    "t": "Pattaya homeless man attack leaves foreign tourist with broken tooth",
     "s": "Thaiger",
-    "d": "16 Aug 2026"
+    "d": "17 Aug 2026"
+  },
+  {
+    "t": "Govinda's Dance in Pattaya Captivates Fans as Speculation Surrounds Rani Swarnkar's Whereabouts",
+    "s": "zoomtventertainment.com",
+    "d": "17 Aug 2026"
   },
   {
     "t": "Chinese scam boss arrested in Pattaya over alleged money laundering network",
@@ -18,28 +28,18 @@ var NEWS_FEED = [
     "d": "14 Aug 2026"
   },
   {
+    "t": "Cambodian hacks fellow national in Pattaya, claims wrong target",
+    "s": "Thaiger",
+    "d": "16 Aug 2026"
+  },
+  {
+    "t": "Four missing foreign divers found safe off Samae San",
+    "s": "Thaiger",
+    "d": "15 Aug 2026"
+  },
+  {
     "t": "Pattaya bar owner calls police over Aussie’s unpaid 32,540 baht bill",
     "s": "Thaiger",
-    "d": "14 Aug 2026"
-  },
-  {
-    "t": "Thai-British teenager reports classmate after firecracker attack at home",
-    "s": "Thaiger",
-    "d": "14 Aug 2026"
-  },
-  {
-    "t": "Chinese fraudster arrested in Pattaya",
-    "s": "Bangkok Post",
-    "d": "17 Aug 2026"
-  },
-  {
-    "t": "Australian man charged with murder after dead girl found in suitcase in Thailand",
-    "s": "BBC",
-    "d": "28 Jun 2026"
-  },
-  {
-    "t": "16/5 Pattaya Green Ville, Nong Prue, Bang Lamung, Chon Buri, 20150 Thailand, Bang Lamung, Changwat Chon Buri House for Sale",
-    "s": "Realtor.com",
     "d": "14 Aug 2026"
   },
   {
@@ -48,19 +48,14 @@ var NEWS_FEED = [
     "d": "16 Aug 2026"
   },
   {
-    "t": "Moment family rescued after 16 hours floating on jet ski off Thailand",
-    "s": "BBC",
-    "d": "15 Aug 2026"
-  },
-  {
     "t": "Family stranded at sea for 16 hours after jet ski capsized in Thailand",
     "s": "BBC",
     "d": "15 Aug 2026"
   },
   {
-    "t": "Dad and Sons, Ages 5 and 7, Stranded at Sea for 16 Hours Overnight After Jet Ski Capsized",
-    "s": "people.com",
-    "d": "16 Aug 2026"
+    "t": "In Bangkok's gun district, traders say Thai crackdown misses the mark",
+    "s": "Reuters",
+    "d": "17 Aug 2026"
   },
   {
     "t": "Pro golfer Jessica Bang, 18, dies while preparing for tournament in Thailand",
@@ -68,20 +63,25 @@ var NEWS_FEED = [
     "d": "14 Aug 2026"
   },
   {
-    "t": "Thailand finding more than one way to win at the ASEAN Championship",
-    "s": "ESPN",
-    "d": "15 Aug 2026"
+    "t": "Jessica Bang, rising 18-year-old rookie golfer, dies in Thailand",
+    "s": "KHON2",
+    "d": "14 Aug 2026"
+  },
+  {
+    "t": "Rising Australian golfer Bang dies of brain haemorrhage in Thailand aged 18",
+    "s": "Al Jazeera",
+    "d": "14 Aug 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-08-14","USD":33.12,"AUD":23.46,"GBP":44.84,"EUR":38.31};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-17","temp":31,"humid":68,"code":1,"hi":31,"rain":57};
+var WX_NOW = {"date":"2026-08-17","temp":29,"humid":77,"code":3,"hi":32,"rain":57};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-08-21","done":false,"h":"Arsenal","hs":0,"a":"Coventry","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-08-16","first":"004615","last2":"53","front3":["429","731"],"back3":["094","937"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4398,"date":"2026-08-17","baht":68900};
+var GOLD = {"usd":4385,"date":"2026-08-17","baht":68700};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":63532,"thb":2095900};
+var BTC = {"usd":63462,"thb":2096900};
