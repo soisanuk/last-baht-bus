@@ -3,19 +3,9 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
-    "t": "Gruesome discovery days after young siblings go missing in Thailand’s notorious ‘Sin City’",
-    "s": "New York Post",
-    "d": "13 Aug 2026"
-  },
-  {
-    "t": "Chinese scam boss arrested in Pattaya over alleged money laundering network",
-    "s": "Khaosod English",
-    "d": "14 Aug 2026"
-  },
-  {
-    "t": "13 hour bender by Australian at Pattaya’s Soi Bua Khao bar ends in dispute over 32,540 baht unpaid bill",
-    "s": "thaiexaminer.com",
-    "d": "15 Aug 2026"
+    "t": "'Wanted' Chinese fraudster arrested in Pattaya",
+    "s": "Bangkok Post",
+    "d": "16 Aug 2026"
   },
   {
     "t": "Cambodian hacks fellow national in Pattaya, claims wrong target",
@@ -23,13 +13,8 @@ var NEWS_FEED = [
     "d": "16 Aug 2026"
   },
   {
-    "t": "Four missing foreign divers found safe off Samae San",
-    "s": "Thaiger",
-    "d": "15 Aug 2026"
-  },
-  {
-    "t": "Thai-British teenager reports classmate after firecracker attack at home",
-    "s": "Thaiger",
+    "t": "Chinese scam boss arrested in Pattaya over alleged money laundering network",
+    "s": "Khaosod English",
     "d": "14 Aug 2026"
   },
   {
@@ -38,12 +23,32 @@ var NEWS_FEED = [
     "d": "14 Aug 2026"
   },
   {
+    "t": "Thai-British teenager reports classmate after firecracker attack at home",
+    "s": "Thaiger",
+    "d": "14 Aug 2026"
+  },
+  {
+    "t": "Chinese fraudster arrested in Pattaya",
+    "s": "Bangkok Post",
+    "d": "17 Aug 2026"
+  },
+  {
     "t": "Australian man charged with murder after dead girl found in suitcase in Thailand",
     "s": "BBC",
     "d": "28 Jun 2026"
   },
   {
-    "t": "Family rescued after 16 hours floating on jet ski off Thailand",
+    "t": "16/5 Pattaya Green Ville, Nong Prue, Bang Lamung, Chon Buri, 20150 Thailand, Bang Lamung, Changwat Chon Buri House for Sale",
+    "s": "Realtor.com",
+    "d": "14 Aug 2026"
+  },
+  {
+    "t": "Thailand has a gun problem - 10 million of them",
+    "s": "BBC",
+    "d": "16 Aug 2026"
+  },
+  {
+    "t": "Moment family rescued after 16 hours floating on jet ski off Thailand",
     "s": "BBC",
     "d": "15 Aug 2026"
   },
@@ -53,14 +58,9 @@ var NEWS_FEED = [
     "d": "15 Aug 2026"
   },
   {
-    "t": "Father and 2 young sons on capsized jet ski rescued after 16 hours stranded off Thai island",
-    "s": "CBS News",
-    "d": "15 Aug 2026"
-  },
-  {
-    "t": "Ilhan Fandi gives Singapore lifeline but Thailand still huge obstacle to overcome in ASEAN Championship semifinals",
-    "s": "africa.espn.com",
-    "d": "15 Aug 2026"
+    "t": "Dad and Sons, Ages 5 and 7, Stranded at Sea for 16 Hours Overnight After Jet Ski Capsized",
+    "s": "people.com",
+    "d": "16 Aug 2026"
   },
   {
     "t": "Pro golfer Jessica Bang, 18, dies while preparing for tournament in Thailand",
@@ -68,20 +68,20 @@ var NEWS_FEED = [
     "d": "14 Aug 2026"
   },
   {
-    "t": "Rising Australian golfer Bang dies of brain haemorrhage in Thailand aged 18",
-    "s": "Al Jazeera",
-    "d": "14 Aug 2026"
+    "t": "Thailand finding more than one way to win at the ASEAN Championship",
+    "s": "ESPN",
+    "d": "15 Aug 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-08-14","USD":33.12,"AUD":23.46,"GBP":44.84,"EUR":38.31};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-17","temp":28,"humid":80,"code":3,"hi":32,"rain":49};
+var WX_NOW = {"date":"2026-08-17","temp":31,"humid":68,"code":1,"hi":31,"rain":57};
 // the bar TV's one true channel
-var FOOTY = {"league":"World Cup","games":[{"d":"2026-07-19","done":true,"h":"Spain","hs":1,"a":"Argentina","as":0}]};
+var FOOTY = {"league":"Premier League","games":[{"d":"2026-08-21","done":false,"h":"Arsenal","hs":0,"a":"Coventry","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-08-16","first":"004615","last2":"53","front3":["429","731"],"back3":["094","937"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4378,"date":"2026-08-16","baht":68550};
+var GOLD = {"usd":4398,"date":"2026-08-17","baht":68900};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":63091,"thb":2068407};
+var BTC = {"usd":63532,"thb":2095900};
