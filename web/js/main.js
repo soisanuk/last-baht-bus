@@ -83,30 +83,46 @@ function _splashInit() {
   const overlay = document.getElementById("start-overlay");
   if (!wrap || !overlay) return;
   const layers = wrap.querySelectorAll("img");
-  const deck = [..._SPLASH_DECK];
-  let i = Math.floor(Math.random() * deck.length);
+  // The Pattaya-sign vista opens every load (branded first impression), shown
+  // whole — it's landscape (1344x768 ≈ the frame's ratio), so it wears the
+  // ".vista" class = object-fit:contain, no crop. After a 30s hold it hands off
+  // to the girl carousel: the 36 portraits, random start, a new one every 10s,
+  // cover-cropped top-biased. The splash never returns to the rotation.
+  const girls = _SPLASH_DECK.filter(id => id !== "splash");
+  let i = Math.floor(Math.random() * girls.length);
   let front = 0; // which layer is on top
-  function swap(url) {
+  function swap(url, vista) {
     const inc = layers[1 - front], out = layers[front];
     inc.src = url;
     inc.classList.remove("lit", "dim");
+    inc.classList.toggle("vista", !!vista); // uncropped for the splash, cropped for girls
     void inc.offsetWidth;              // restart the strike animation
     out.classList.remove("lit"); out.classList.add("dim");
     inc.classList.add("lit");
     front = 1 - front;
   }
   function advance(step, tries) {
-    if (!deck.length) { wrap.remove(); return; }
-    if ((tries || 0) >= deck.length) { wrap.remove(); return; }
-    i = (i + step + deck.length) % deck.length;
-    const id = deck[i];
+    if (!girls.length) { wrap.remove(); return; }
+    if ((tries || 0) >= girls.length) { wrap.remove(); return; }
+    i = (i + step + girls.length) % girls.length;
+    const id = girls[i];
     const pre = new Image();
-    pre.onload = () => swap(pre.src);
-    pre.onerror = () => { deck.splice(i, 1); if (i >= deck.length) i = 0; advance(0, (tries || 0) + 1); };
+    pre.onload = () => swap(pre.src, false);
+    pre.onerror = () => { girls.splice(i, 1); if (i >= girls.length) i = 0; advance(0, (tries || 0) + 1); };
     pre.src = "art/posters/" + id + ".webp";
   }
-  advance(0, 0);
-  setInterval(() => { if (!overlay.hidden) advance(1, 0); }, 10000);
+  let carouselOn = false;
+  function startCarousel() {
+    if (carouselOn) return;
+    carouselOn = true;
+    advance(0, 0); // the first girl
+    setInterval(() => { if (!overlay.hidden) advance(1, 0); }, 10000);
+  }
+  // open on the splash, uncropped; hand off to the carousel after 30s
+  const pre = new Image();
+  pre.onload = () => { swap(pre.src, true); setTimeout(startCarousel, 30000); };
+  pre.onerror = startCarousel; // no splash art → straight to the girls
+  pre.src = "art/posters/splash.webp";
 }
 
 function _applyFullGate() {
