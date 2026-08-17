@@ -67,14 +67,15 @@ function _cycleFontSize() {
 // point each load, sequential wrap, one strike every 10s while the overlay is
 // up. A file that fails to load self-heals out of the deck, so this list
 // drifting behind the art directory costs a missing rotation slot, never a bug.
-// Full deck restored 2026-08-15: the 14 vintage-register posters were rerolled
-// into the neon pin-up register by the art track ("The poster deck speaks one
-// register") and contact-sheet checked — one visual language, all 36 rotate.
+// CURATED to ONE register (Mario, 2026-08-17, judged at the carousel's actual
+// 440x250 cover-crop, not thumbnails): the photoreal-painted portraits. The
+// full-body flat-illustration pin-ups (aof beam boom cherry dao fah fang gift
+// ice jum nam nice orn pang sara toey view — a second register the rerolls
+// came back in) are out of rotation until re-rolled to match; yada is out for
+// the parasol-hat artefact. They all stay in the in-game poster feature.
 const _SPLASH_DECK = ["splash",
-  "aof", "aoi", "aom", "beam", "boom", "bow", "cherry", "dao", "fah", "fang",
-  "gib", "gift", "gigi", "ice", "jum", "mook", "nam", "namwan", "naree", "nice",
-  "noey", "noi", "orn", "pancake", "pang", "ploen", "pop", "praew", "sai",
-  "sara", "sasi", "toey", "tukta", "view", "yada", "yui"];
+  "aoi", "aom", "bow", "gib", "gigi", "mook", "namwan", "naree", "noey",
+  "pancake", "ploen", "pop", "praew", "sai", "sasi", "tukta", "yui"];
 function _splashInit() {
   const wrap = document.getElementById("start-art-wrap");
   const overlay = document.getElementById("start-overlay");
@@ -423,8 +424,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const startMusic = () => {
     document.removeEventListener("pointerdown", startMusic);
     document.removeEventListener("keydown", startMusic);
-    if (!_awaitingContinue) _audioForRoom(G.room, G.flags);
-    else _audio.music("bus"); // title music while the prompt waits
+    // The splash (start menu) and the continue-prompt are both "not in the
+    // game yet": title theme, not the room. Without the overlay check a fresh
+    // boot's first click played jomtien_beach's surf under the start menu
+    // (playtest, 2026-08-17). _startGame/_dispatch swap to the room track.
+    const ov = document.getElementById("start-overlay");
+    const onSplash = ov && !ov.hidden;
+    if (!_awaitingContinue && !onSplash) _audioForRoom(G.room, G.flags);
+    else _audio.music("bus"); // title music while the prompt / splash waits
   };
   document.addEventListener("pointerdown", startMusic);
   document.addEventListener("keydown", startMusic);
