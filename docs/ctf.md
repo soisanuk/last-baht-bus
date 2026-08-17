@@ -270,6 +270,24 @@ only break its owner's game. Two seams to re-audit if a server ever exists: the
 never become a trusted-HTML path), and the vendored wordcard/suggest sinks that
 `innerHTML` template strings from trainer-authored data.
 
+**CSS-injection surface (checked 2026-08-17 against PortSwigger's "CSS — the
+bomb inside your inbox").** That attack class needs the victim to render
+HTML/CSS it did not author (webmail rendering a sender's email); LBB never does.
+The only interpolation into a `style=` context (the scene HUD meters) uses a
+fixed colour palette and a `0–100`-clamped numeric percent — no data, no input;
+the wordcard `innerHTML` templates run every value through `_wcEsc` over
+game-authored Thai vocab; `data-v` holds only matched game-entity names from
+already-escaped text; there is no fetch/WebSocket/EventSource, so nothing remote
+renders. So attribute-selector token exfiltration, `:has()`/`:checked`
+keyloggers, and CSSOM-mutation sandbox escapes all require an ingress we don't
+have. **Where it WILL apply is the hosted/shared-world phase**: the moment a
+second player's text (name, chat, a note left in a room) is rendered into your
+DOM, you are a webmail client rendering a stranger's content, and escaping is
+necessary but NOT sufficient — CSS attribute selectors leak secrets with zero
+JS. The doctrine there must stay **plain-text only, no player-authored
+HTML/CSS ever**; if rich text is ever wanted, it goes in a **sandboxed iframe**
+(the article's own top mitigation), never behind a bigger allowlist.
+
 ## Decision log
 
 | Date | Decision |
