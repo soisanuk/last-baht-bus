@@ -4,7 +4,7 @@
 var NEWS_FEED = [
   {
     "t": "'Wanted' Chinese fraudster arrested in Pattaya",
-    "s": "bangkokpost.com",
+    "s": "Bangkok Post",
     "d": "16 Aug 2026"
   },
   {
@@ -38,7 +38,7 @@ var NEWS_FEED = [
     "d": "15 Aug 2026"
   },
   {
-    "t": "Pattaya bar owner calls police over Aussie’s unpaid 32,540 baht bill",
+    "t": "Thai-British teenager reports classmate after firecracker attack at home",
     "s": "Thaiger",
     "d": "14 Aug 2026"
   },
@@ -48,13 +48,18 @@ var NEWS_FEED = [
     "d": "16 Aug 2026"
   },
   {
-    "t": "Family stranded at sea for 16 hours after jet ski capsized in Thailand",
+    "t": "Moment family rescued after 16 hours floating on jet ski off Thailand",
     "s": "BBC",
     "d": "15 Aug 2026"
   },
   {
-    "t": "In Bangkok's gun district, traders say Thai crackdown misses the mark",
-    "s": "Reuters",
+    "t": "Thai SELECT Presents \"Soul of Thai Cuisine,\" Celebrating Thailand's Regional Culinary Traditions",
+    "s": "Yahoo Finance",
+    "d": "17 Aug 2026"
+  },
+  {
+    "t": "Get a suit tailored in Thailand right here in the USA",
+    "s": "Deseret News",
     "d": "17 Aug 2026"
   },
   {
@@ -63,25 +68,20 @@ var NEWS_FEED = [
     "d": "14 Aug 2026"
   },
   {
-    "t": "Jessica Bang, rising 18-year-old rookie golfer, dies in Thailand",
-    "s": "KHON2",
-    "d": "14 Aug 2026"
-  },
-  {
-    "t": "Rising Australian golfer Bang dies of brain haemorrhage in Thailand aged 18",
-    "s": "Al Jazeera",
-    "d": "14 Aug 2026"
+    "t": "In Bangkok's gun district, traders say Thai crackdown misses the mark",
+    "s": "Reuters",
+    "d": "17 Aug 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-08-14","USD":33.12,"AUD":23.46,"GBP":44.84,"EUR":38.31};
+var FX_RATES = {"date":"2026-08-17","USD":33.03,"AUD":23.53,"GBP":44.78,"EUR":38.28};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-17","temp":29,"humid":77,"code":3,"hi":32,"rain":57};
+var WX_NOW = {"date":"2026-08-18","temp":29,"humid":77,"code":3,"hi":31,"rain":65};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-08-21","done":false,"h":"Arsenal","hs":0,"a":"Coventry","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-08-16","first":"004615","last2":"53","front3":["429","731"],"back3":["094","937"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4385,"date":"2026-08-17","baht":68700};
+var GOLD = {"usd":4408,"date":"2026-08-17","baht":68850};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":63462,"thb":2096900};
+var BTC = {"usd":64397,"thb":2128803};
