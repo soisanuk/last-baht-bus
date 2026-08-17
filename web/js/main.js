@@ -67,17 +67,19 @@ function _cycleFontSize() {
 // point each load, sequential wrap, one strike every 10s while the overlay is
 // up. A file that fails to load self-heals out of the deck, so this list
 // drifting behind the art directory costs a missing rotation slot, never a bug.
-// The whole poster set — busts AND full-body pin-ups (Mario's call, 2026-08-17:
-// keep full-body, fix the carousel). The register "mix" was never palette, it
-// was FRAMING: the carousel's cover-crop beheaded full-figure posters. Fixed on
-// the CSS side (#start-art-wrap object-position 50% 8%, top-biased), verified at
-// the true 440x250 crop to keep every one of these 37 heads in frame. So no
-// curation is needed — the deck is every poster.
+// Curated to ONE rendering REGISTER (Mario, 2026-08-17): the photoreal-painterly
+// posters — soft airbrush, realistic skin, bokeh, no hard outlines — matching
+// the in-world portrait art. This is a DIFFERENT axis from the framing fix that
+// preceded it: a poster can be full-body and still belong (jum), or bust and
+// not (the flat cel/illustration register — hard outlines, flat colour fills,
+// graphic-poster look — reads as a second art style regardless of crop). The
+// 18 flat ones (aof beam boom cherry dao fah fang gift ice mook nice noi orn
+// praew sara toey view yada) are out of rotation pending reroll into this
+// register (full-body composition kept, render changed); they stay in the
+// in-game poster feature meanwhile.
 const _SPLASH_DECK = ["splash",
-  "aof", "aoi", "aom", "beam", "boom", "bow", "cherry", "dao", "fah", "fang",
-  "gib", "gift", "gigi", "ice", "jum", "mook", "nam", "namwan", "naree", "nice",
-  "noey", "noi", "orn", "pancake", "pang", "ploen", "pop", "praew", "sai",
-  "sara", "sasi", "toey", "tukta", "view", "yada", "yui"];
+  "aoi", "aom", "bow", "gib", "gigi", "jum", "nam", "namwan", "naree", "noey",
+  "pancake", "pang", "ploen", "pop", "sai", "sasi", "tukta", "yui"];
 function _splashInit() {
   const wrap = document.getElementById("start-art-wrap");
   const overlay = document.getElementById("start-overlay");
