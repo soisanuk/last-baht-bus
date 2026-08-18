@@ -28,9 +28,9 @@ var NEWS_FEED = [
     "d": "18 Aug 2026"
   },
   {
-    "t": "Australian man charged with murder after dead girl found in suitcase in Thailand",
-    "s": "BBC",
-    "d": "28 Jun 2026"
+    "t": "Australian tourist disputes 32,540-baht bar bill after 13-hour Pattaya bender",
+    "s": "The Drinks Business",
+    "d": "18 Aug 2026"
   },
   {
     "t": "16/5 Pattaya Green Ville, Nong Prue, Bang Lamung, Chon Buri, 20150 Thailand, Bang Lamung, Changwat Chon Buri House for Sale",
@@ -38,9 +38,9 @@ var NEWS_FEED = [
     "d": "14 Aug 2026"
   },
   {
-    "t": "Chinese scam boss arrested in Pattaya over alleged money laundering network",
-    "s": "Khaosod English",
-    "d": "14 Aug 2026"
+    "t": "Chinese fraudster arrested in Pattaya",
+    "s": "Bangkok Post",
+    "d": "17 Aug 2026"
   },
   {
     "t": "Thailand has a gun problem - 10 million of them",
@@ -48,40 +48,40 @@ var NEWS_FEED = [
     "d": "16 Aug 2026"
   },
   {
-    "t": "'I had to climb over school fence to escape': Thai students recount shooting after teen kills seven",
-    "s": "BBC",
-    "d": "06 Aug 2026"
-  },
-  {
-    "t": "ZF Thailand Expands Support for Off-Highway Fleet Operators with ZF PowerFluid Gold 1",
-    "s": "Yahoo Finance Singapore",
+    "t": "World Gym Launches Presales for Its First Thailand Club",
+    "s": "Yahoo Finance UK",
     "d": "18 Aug 2026"
   },
   {
-    "t": "In Bangkok's gun district, traders say Thai crackdown misses the mark",
-    "s": "Reuters",
-    "d": "17 Aug 2026"
-  },
-  {
     "t": "Thailand coach Anthony Hudson plays down confrontation with Singapore counterpart Gavin Lee",
-    "s": "ESPN",
+    "s": "espn.com",
     "d": "17 Aug 2026"
   },
   {
     "t": "Get a suit tailored in Thailand right here in the USA",
     "s": "Deseret News",
     "d": "17 Aug 2026"
+  },
+  {
+    "t": "Draya Michele Oozes Sex Appeal On Vacation in Thailand",
+    "s": "tmz.com",
+    "d": "17 Aug 2026"
+  },
+  {
+    "t": "Thailand Revises Factory Gauge After US Transshipment Concerns",
+    "s": "Bloomberg.com",
+    "d": "17 Aug 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-08-17","USD":33.03,"AUD":23.53,"GBP":44.78,"EUR":38.28};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-18","temp":31,"humid":67,"code":3,"hi":31,"rain":100};
+var WX_NOW = {"date":"2026-08-18","temp":29,"humid":81,"code":3,"hi":32,"rain":100};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-08-21","done":false,"h":"Arsenal","hs":0,"a":"Coventry","as":0},{"d":"2026-08-22","done":false,"h":"Hull","hs":0,"a":"Man United","as":0},{"d":"2026-08-22","done":false,"h":"Everton","hs":0,"a":"C Palace","as":0},{"d":"2026-08-22","done":false,"h":"Ipswich","hs":0,"a":"Sunderland","as":0},{"d":"2026-08-22","done":false,"h":"Nottm Forest","hs":0,"a":"Leeds","as":0},{"d":"2026-08-22","done":false,"h":"Brentford","hs":0,"a":"Spurs","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-08-16","first":"004615","last2":"53","front3":["429","731"],"back3":["094","937"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4400,"date":"2026-08-18","baht":68750};
+var GOLD = {"usd":4395,"date":"2026-08-18","baht":68650};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":64263,"thb":2125421};
+var BTC = {"usd":64125,"thb":2119400};
