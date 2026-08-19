@@ -14,22 +14,27 @@ var NEWS_FEED = [
   },
   {
     "t": "Aussie accused in Pattaya teen suitcase murder case nears trial",
-    "s": "Thaiger",
+    "s": "thethaiger.com",
     "d": "19 Aug 2026"
   },
   {
     "t": "Pattaya homeless man attack leaves foreign tourist with broken tooth",
-    "s": "Thaiger",
+    "s": "thethaiger.com",
     "d": "17 Aug 2026"
-  },
-  {
-    "t": "Cambodian hacks fellow national in Pattaya, claims wrong target",
-    "s": "Thaiger",
-    "d": "16 Aug 2026"
   },
   {
     "t": "Thai teen found in suitcase died from suffocation, police reveal",
     "s": "BBC",
+    "d": "19 Aug 2026"
+  },
+  {
+    "t": "Bangkok Hotel Rates Have Already Doubled for IMF Week; Tomorrowland Pushes Pattaya Up 105%",
+    "s": "Tech Times",
+    "d": "19 Aug 2026"
+  },
+  {
+    "t": "Thai teen in Pattaya suitcase murder died of suffocation: police",
+    "s": "Macau Business",
     "d": "19 Aug 2026"
   },
   {
@@ -38,24 +43,14 @@ var NEWS_FEED = [
     "d": "19 Aug 2026"
   },
   {
-    "t": "16/5 Pattaya Green Ville, Nong Prue, Bang Lamung, Chon Buri, 20150 Thailand, Bang Lamung, Changwat Chon Buri House for Sale",
-    "s": "Realtor.com",
-    "d": "14 Aug 2026"
-  },
-  {
     "t": "Harrowing video shows selfie-taking tourists being washed away near Thailand hotspot",
     "s": "New York Post",
     "d": "18 Aug 2026"
   },
   {
-    "t": "'I had to climb over school fence to escape': Thai students recount shooting after teen kills seven",
+    "t": "Thailand shooting: Teen kills at least seven and injures more than 30, PM says",
     "s": "BBC",
     "d": "06 Aug 2026"
-  },
-  {
-    "t": "Singapore believed they could beat Thailand and they did, which is why ASEAN Championship exit isn't in vain",
-    "s": "ESPN",
-    "d": "18 Aug 2026"
   },
   {
     "t": "Thailand seeks new path to end deadly southern insurgency, negotiator says",
@@ -63,25 +58,30 @@ var NEWS_FEED = [
     "d": "19 Aug 2026"
   },
   {
-    "t": "Video Thailand tourists swept away by raging flood waters",
-    "s": "ABC News - Breaking News, Latest News and Videos",
+    "t": "Thailand issues arrest warrants for 20 Israelis in sweeping Koh Samui business crackdown",
+    "s": "The Jerusalem Post",
     "d": "19 Aug 2026"
   },
   {
-    "t": "Thailand's Nan Province hit by floods",
-    "s": "Yahoo",
+    "t": "Singapore believed they could beat Thailand and they did, which is why ASEAN Championship exit isn't in vain",
+    "s": "ESPN",
+    "d": "18 Aug 2026"
+  },
+  {
+    "t": "Video Thailand tourists swept away by raging flood waters",
+    "s": "ABC News - Breaking News, Latest News and Videos",
     "d": "19 Aug 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-08-18","USD":33.06,"AUD":23.51,"GBP":44.72,"EUR":38.27};
+var FX_RATES = {"date":"2026-08-19","USD":33.07,"AUD":23.4,"GBP":44.82,"EUR":38.37};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-19","temp":27,"humid":89,"code":3,"hi":33,"rain":96};
+var WX_NOW = {"date":"2026-08-20","temp":27,"humid":88,"code":3,"hi":29,"rain":76};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-08-21","done":false,"h":"Arsenal","hs":0,"a":"Coventry","as":0},{"d":"2026-08-22","done":false,"h":"Hull","hs":0,"a":"Man United","as":0},{"d":"2026-08-22","done":false,"h":"Everton","hs":0,"a":"C Palace","as":0},{"d":"2026-08-22","done":false,"h":"Ipswich","hs":0,"a":"Sunderland","as":0},{"d":"2026-08-22","done":false,"h":"Nottm Forest","hs":0,"a":"Leeds","as":0},{"d":"2026-08-22","done":false,"h":"Brentford","hs":0,"a":"Spurs","as":0},{"d":"2026-08-23","done":false,"h":"Brighton","hs":0,"a":"Aston Villa","as":0},{"d":"2026-08-23","done":false,"h":"Man City","hs":0,"a":"Bournemouth","as":0},{"d":"2026-08-23","done":false,"h":"Newcastle","hs":0,"a":"Liverpool","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-08-16","first":"004615","last2":"53","front3":["429","731"],"back3":["094","937"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4428,"date":"2026-08-19","baht":69250};
+var GOLD = {"usd":4493,"date":"2026-08-19","baht":70250};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":64760,"thb":2132908};
+var BTC = {"usd":68382,"thb":2247352};
