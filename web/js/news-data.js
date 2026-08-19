@@ -9,7 +9,7 @@ var NEWS_FEED = [
   },
   {
     "t": "Pattaya homeless man attack leaves foreign tourist with broken tooth",
-    "s": "Thaiger",
+    "s": "thethaiger.com",
     "d": "17 Aug 2026"
   },
   {
@@ -19,17 +19,17 @@ var NEWS_FEED = [
   },
   {
     "t": "Cambodian hacks fellow national in Pattaya, claims wrong target",
-    "s": "Thaiger",
+    "s": "thethaiger.com",
     "d": "16 Aug 2026"
   },
   {
     "t": "Thailand video news | Bangkok tightens alcohol sales rules for minors and intoxicated customers, Foreign tourist loses tooth in unprovoked P",
-    "s": "Thaiger",
+    "s": "thethaiger.com",
     "d": "18 Aug 2026"
   },
   {
     "t": "Australian tourist disputes 32,540-baht bar bill after 13-hour Pattaya bender",
-    "s": "The Drinks Business",
+    "s": "thedrinksbusiness.com",
     "d": "18 Aug 2026"
   },
   {
@@ -48,18 +48,18 @@ var NEWS_FEED = [
     "d": "16 Aug 2026"
   },
   {
-    "t": "'I had to climb over school fence to escape': Thai students recount shooting after teen kills seven",
-    "s": "BBC",
-    "d": "06 Aug 2026"
-  },
-  {
-    "t": "Balance the key to Singapore's ASEAN Championship comeback quest against Thailand",
-    "s": "ESPN",
-    "d": "17 Aug 2026"
-  },
-  {
     "t": "Harrowing video shows selfie-taking tourists being washed away near Thailand hotspot",
     "s": "New York Post",
+    "d": "18 Aug 2026"
+  },
+  {
+    "t": "Singapore believed they could beat Thailand and they did, which is why ASEAN Championship exit isn't in vain",
+    "s": "ESPN",
+    "d": "18 Aug 2026"
+  },
+  {
+    "t": "Thailand tourists swept away by raging flood waters",
+    "s": "Yahoo",
     "d": "18 Aug 2026"
   },
   {
@@ -68,20 +68,20 @@ var NEWS_FEED = [
     "d": "17 Aug 2026"
   },
   {
-    "t": "Millions of guns, repeated shootings: Thailand confronts limits of firearm control",
-    "s": "CNA",
+    "t": "Draya Michele Oozes Sex Appeal On Vacation in Thailand",
+    "s": "tmz.com",
     "d": "17 Aug 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-08-18","USD":33.06,"AUD":23.51,"GBP":44.72,"EUR":38.27};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-19","temp":28,"humid":78,"code":3,"hi":31,"rain":59};
+var WX_NOW = {"date":"2026-08-19","temp":29,"humid":75,"code":3,"hi":32,"rain":59};
 // the bar TV's one true channel
-var FOOTY = {"league":"Premier League","games":[{"d":"2026-08-21","done":false,"h":"Arsenal","hs":0,"a":"Coventry","as":0},{"d":"2026-08-22","done":false,"h":"Hull","hs":0,"a":"Man United","as":0},{"d":"2026-08-22","done":false,"h":"Everton","hs":0,"a":"C Palace","as":0},{"d":"2026-08-22","done":false,"h":"Ipswich","hs":0,"a":"Sunderland","as":0},{"d":"2026-08-22","done":false,"h":"Nottm Forest","hs":0,"a":"Leeds","as":0},{"d":"2026-08-22","done":false,"h":"Brentford","hs":0,"a":"Spurs","as":0}]};
+var FOOTY = {"league":"Premier League","games":[{"d":"2026-08-21","done":false,"h":"Arsenal","hs":0,"a":"Coventry","as":0},{"d":"2026-08-22","done":false,"h":"Hull","hs":0,"a":"Man United","as":0},{"d":"2026-08-22","done":false,"h":"Everton","hs":0,"a":"C Palace","as":0},{"d":"2026-08-22","done":false,"h":"Ipswich","hs":0,"a":"Sunderland","as":0},{"d":"2026-08-22","done":false,"h":"Nottm Forest","hs":0,"a":"Leeds","as":0},{"d":"2026-08-22","done":false,"h":"Brentford","hs":0,"a":"Spurs","as":0},{"d":"2026-08-23","done":false,"h":"Brighton","hs":0,"a":"Aston Villa","as":0},{"d":"2026-08-23","done":false,"h":"Man City","hs":0,"a":"Bournemouth","as":0},{"d":"2026-08-23","done":false,"h":"Newcastle","hs":0,"a":"Liverpool","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-08-16","first":"004615","last2":"53","front3":["429","731"],"back3":["094","937"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4356,"date":"2026-08-18","baht":68100};
+var GOLD = {"usd":4355,"date":"2026-08-19","baht":68100};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":64742,"thb":2143592};
+var BTC = {"usd":64363,"thb":2133029};
