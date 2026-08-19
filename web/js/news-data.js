@@ -3,14 +3,14 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
-    "t": "'Better than Pan Masala ads’, Govinda showcases iconic dance moves at Pattaya club amid Sunita Ahuja feud",
-    "s": "timesofindia.indiatimes.com",
-    "d": "17 Aug 2026"
-  },
-  {
     "t": "Australian tourist disputes 32,540-baht bar bill after 13-hour Pattaya bender",
     "s": "The Drinks Business",
     "d": "18 Aug 2026"
+  },
+  {
+    "t": "'Better than Pan Masala ads’, Govinda showcases iconic dance moves at Pattaya club amid Sunita Ahuja feud",
+    "s": "The Times of India",
+    "d": "17 Aug 2026"
   },
   {
     "t": "Aussie accused in Pattaya teen suitcase murder case nears trial",
@@ -28,24 +28,24 @@ var NEWS_FEED = [
     "d": "16 Aug 2026"
   },
   {
-    "t": "Thailand video news | Bangkok tightens alcohol sales rules for minors and intoxicated customers, Foreign tourist loses tooth in unprovoked P",
-    "s": "Thaiger",
-    "d": "18 Aug 2026"
+    "t": "Thai teen found in suitcase died from suffocation, police reveal",
+    "s": "BBC",
+    "d": "19 Aug 2026"
   },
   {
-    "t": "Kim Johansen Obituary (1953 - 2026) - Pattaya, CA - San Francisco Chronicle",
-    "s": "Legacy obituary",
-    "d": "18 Aug 2026"
+    "t": "A New Side of Pattaya: How Events Are Transforming Thailand’s Seaside City",
+    "s": "Breaking Travel News",
+    "d": "19 Aug 2026"
   },
   {
     "t": "16/5 Pattaya Green Ville, Nong Prue, Bang Lamung, Chon Buri, 20150 Thailand, Bang Lamung, Changwat Chon Buri House for Sale",
-    "s": "realtor.com",
+    "s": "Realtor.com",
     "d": "14 Aug 2026"
   },
   {
-    "t": "Thailand has a gun problem - 10 million of them",
-    "s": "BBC",
-    "d": "16 Aug 2026"
+    "t": "Harrowing video shows selfie-taking tourists being washed away near Thailand hotspot",
+    "s": "New York Post",
+    "d": "18 Aug 2026"
   },
   {
     "t": "'I had to climb over school fence to escape': Thai students recount shooting after teen kills seven",
@@ -58,30 +58,30 @@ var NEWS_FEED = [
     "d": "18 Aug 2026"
   },
   {
+    "t": "Thailand seeks new path to end deadly southern insurgency, negotiator says",
+    "s": "Reuters",
+    "d": "19 Aug 2026"
+  },
+  {
     "t": "Video Thailand tourists swept away by raging flood waters",
     "s": "ABC News - Breaking News, Latest News and Videos",
     "d": "19 Aug 2026"
   },
   {
-    "t": "Cambodia: From Scam Empire to Security State",
-    "s": "The Diplomat – Asia",
-    "d": "18 Aug 2026"
-  },
-  {
-    "t": "Thailand Seeks New Path to End Deadly Southern Insurgency, Negotiator Says",
-    "s": "U.S. News & World Report",
+    "t": "Thailand's Nan Province hit by floods",
+    "s": "Yahoo",
     "d": "19 Aug 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-08-18","USD":33.06,"AUD":23.51,"GBP":44.72,"EUR":38.27};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-19","temp":31,"humid":64,"code":3,"hi":31,"rain":82};
+var WX_NOW = {"date":"2026-08-19","temp":27,"humid":89,"code":3,"hi":33,"rain":96};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-08-21","done":false,"h":"Arsenal","hs":0,"a":"Coventry","as":0},{"d":"2026-08-22","done":false,"h":"Hull","hs":0,"a":"Man United","as":0},{"d":"2026-08-22","done":false,"h":"Everton","hs":0,"a":"C Palace","as":0},{"d":"2026-08-22","done":false,"h":"Ipswich","hs":0,"a":"Sunderland","as":0},{"d":"2026-08-22","done":false,"h":"Nottm Forest","hs":0,"a":"Leeds","as":0},{"d":"2026-08-22","done":false,"h":"Brentford","hs":0,"a":"Spurs","as":0},{"d":"2026-08-23","done":false,"h":"Brighton","hs":0,"a":"Aston Villa","as":0},{"d":"2026-08-23","done":false,"h":"Man City","hs":0,"a":"Bournemouth","as":0},{"d":"2026-08-23","done":false,"h":"Newcastle","hs":0,"a":"Liverpool","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-08-16","first":"004615","last2":"53","front3":["429","731"],"back3":["094","937"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4352,"date":"2026-08-19","baht":68050};
+var GOLD = {"usd":4428,"date":"2026-08-19","baht":69250};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":64266,"thb":2127188};
+var BTC = {"usd":64760,"thb":2132908};
