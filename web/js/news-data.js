@@ -4,22 +4,17 @@
 var NEWS_FEED = [
   {
     "t": "Bangkok Hotel Rates Have Already Doubled for IMF Week; Tomorrowland Pushes Pattaya Up 105%",
-    "s": "Tech Times",
+    "s": "techtimes.com",
     "d": "19 Aug 2026"
   },
   {
     "t": "Thai teen found in suitcase died from suffocation, police reveal",
-    "s": "bbc.com",
+    "s": "BBC",
     "d": "19 Aug 2026"
   },
   {
     "t": "Pattaya Marathon transforms Pattaya into vibrant tourist hub",
     "s": "Travel Daily Media",
-    "d": "19 Aug 2026"
-  },
-  {
-    "t": "A New Side of Pattaya: How Events Are Transforming Thailand’s Seaside City",
-    "s": "Breaking Travel News",
     "d": "19 Aug 2026"
   },
   {
@@ -33,24 +28,34 @@ var NEWS_FEED = [
     "d": "14 Aug 2026"
   },
   {
-    "t": "How a Thai teen's night at a Pattaya beach ended in death",
-    "s": "Reuters",
-    "d": "29 Jun 2026"
-  },
-  {
     "t": "Australian tourist disputes 32,540-baht bar bill after 13-hour Pattaya bender",
     "s": "thedrinksbusiness.com",
     "d": "18 Aug 2026"
   },
   {
-    "t": "Thailand-based Hyrox coach Leroy Saunders dies",
-    "s": "The Straits Times",
+    "t": "A New Side of Pattaya: How Events Are Transforming Thailand’s Seaside City",
+    "s": "Breaking Travel News",
     "d": "19 Aug 2026"
   },
   {
+    "t": "How a Thai teen's night at a Pattaya beach ended in death",
+    "s": "Reuters",
+    "d": "29 Jun 2026"
+  },
+  {
+    "t": "Harrowing video shows selfie-taking tourists being washed away near Thailand hotspot",
+    "s": "New York Post",
+    "d": "18 Aug 2026"
+  },
+  {
     "t": "Thailand shooting: Teen kills at least seven and injures more than 30, PM says",
-    "s": "bbc.com",
+    "s": "BBC",
     "d": "06 Aug 2026"
+  },
+  {
+    "t": "False posts claiming fresh anti-government protests in Thailand share old clips",
+    "s": "Yahoo",
+    "d": "20 Aug 2026"
   },
   {
     "t": "Thailand issues arrest warrants for 20 Israelis in sweeping Koh Samui business crackdown",
@@ -64,24 +69,19 @@ var NEWS_FEED = [
   },
   {
     "t": "Singapore believed they could beat Thailand and they did, which is why ASEAN Championship exit isn't in vain",
-    "s": "ESPN",
+    "s": "global.espn.com",
     "d": "18 Aug 2026"
-  },
-  {
-    "t": "Video Thailand tourists swept away by raging flood waters",
-    "s": "abcnews.com",
-    "d": "19 Aug 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-08-19","USD":33.07,"AUD":23.4,"GBP":44.82,"EUR":38.37};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-20","temp":27,"humid":88,"code":51,"hi":28,"rain":98};
+var WX_NOW = {"date":"2026-08-20","temp":29,"humid":76,"code":51,"hi":30,"rain":91};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-08-21","done":false,"h":"Arsenal","hs":0,"a":"Coventry","as":0},{"d":"2026-08-22","done":false,"h":"Hull","hs":0,"a":"Man United","as":0},{"d":"2026-08-22","done":false,"h":"Everton","hs":0,"a":"C Palace","as":0},{"d":"2026-08-22","done":false,"h":"Ipswich","hs":0,"a":"Sunderland","as":0},{"d":"2026-08-22","done":false,"h":"Nottm Forest","hs":0,"a":"Leeds","as":0},{"d":"2026-08-22","done":false,"h":"Brentford","hs":0,"a":"Spurs","as":0},{"d":"2026-08-23","done":false,"h":"Brighton","hs":0,"a":"Aston Villa","as":0},{"d":"2026-08-23","done":false,"h":"Man City","hs":0,"a":"Bournemouth","as":0},{"d":"2026-08-23","done":false,"h":"Newcastle","hs":0,"a":"Liverpool","as":0},{"d":"2026-08-24","done":false,"h":"Fulham","hs":0,"a":"Chelsea","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-08-16","first":"004615","last2":"53","front3":["429","731"],"back3":["094","937"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4491,"date":"2026-08-20","baht":70250};
+var GOLD = {"usd":4489,"date":"2026-08-20","baht":70200};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":69774,"thb":2290451};
+var BTC = {"usd":69766,"thb":2290791};
