@@ -13,9 +13,9 @@ var NEWS_FEED = [
     "d": "19 Aug 2026"
   },
   {
-    "t": "Pattaya Marathon transforms Pattaya into vibrant tourist hub",
-    "s": "Travel Daily Media",
-    "d": "19 Aug 2026"
+    "t": "Australian tourist disputes 32,540-baht bar bill after 13-hour Pattaya bender",
+    "s": "The Drinks Business",
+    "d": "18 Aug 2026"
   },
   {
     "t": "16/5 Pattaya Green Ville, Nong Prue, Bang Lamung, Chon Buri, 20150 Thailand, Bang Lamung, Changwat Chon Buri House for Sale",
@@ -23,19 +23,9 @@ var NEWS_FEED = [
     "d": "14 Aug 2026"
   },
   {
-    "t": "Australian tourist disputes 32,540-baht bar bill after 13-hour Pattaya bender",
-    "s": "The Drinks Business",
-    "d": "18 Aug 2026"
-  },
-  {
-    "t": "5-year-old Indian girl battles life-threatening sepsis after tiger scratch in Pattaya during ‘photo-ops’ | India News",
-    "s": "Hindustan Times",
-    "d": "20 Aug 2026"
-  },
-  {
-    "t": "Students injured by swarming bees",
-    "s": "Bangkok Post",
-    "d": "20 Aug 2026"
+    "t": "Pattaya Marathon transforms Pattaya into vibrant tourist hub",
+    "s": "Travel Daily Media",
+    "d": "19 Aug 2026"
   },
   {
     "t": "A New Side of Pattaya: How Events Are Transforming Thailand’s Seaside City",
@@ -43,9 +33,19 @@ var NEWS_FEED = [
     "d": "19 Aug 2026"
   },
   {
-    "t": "Harrowing video shows selfie-taking tourists being washed away near Thailand hotspot",
-    "s": "New York Post",
-    "d": "18 Aug 2026"
+    "t": "How a Thai teen's night at a Pattaya beach ended in death",
+    "s": "Reuters",
+    "d": "29 Jun 2026"
+  },
+  {
+    "t": "5-year-old Indian girl battles life-threatening sepsis after tiger scratch in Pattaya during ‘photo-ops’ | India News",
+    "s": "Hindustan Times",
+    "d": "20 Aug 2026"
+  },
+  {
+    "t": "After I graduated from college in the US, I moved abroad to Thailand. It's nothing like I expected.",
+    "s": "Business Insider",
+    "d": "20 Aug 2026"
   },
   {
     "t": "Thailand shooting: Teen kills at least seven and injures more than 30, PM says",
@@ -53,14 +53,14 @@ var NEWS_FEED = [
     "d": "06 Aug 2026"
   },
   {
-    "t": "Singapore believed they could beat Thailand and they did, which is why ASEAN Championship exit isn't in vain",
-    "s": "ESPN",
-    "d": "18 Aug 2026"
-  },
-  {
     "t": "Thailand issues arrest warrants for 20 Israelis in sweeping Koh Samui business crackdown",
     "s": "The Jerusalem Post",
     "d": "19 Aug 2026"
+  },
+  {
+    "t": "Singapore believed they could beat Thailand and they did, which is why ASEAN Championship exit isn't in vain",
+    "s": "ESPN",
+    "d": "18 Aug 2026"
   },
   {
     "t": "Thailand seeks new path to end deadly southern insurgency, negotiator says",
@@ -74,9 +74,9 @@ var NEWS_FEED = [
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-08-19","USD":33.07,"AUD":23.4,"GBP":44.82,"EUR":38.37};
+var FX_RATES = {"date":"2026-08-20","USD":32.92,"AUD":23.39,"GBP":44.84,"EUR":38.45};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-20","temp":27,"humid":85,"code":3,"hi":30,"rain":92};
+var WX_NOW = {"date":"2026-08-21","temp":27,"humid":82,"code":3,"hi":30,"rain":78};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-08-21","done":false,"h":"Arsenal","hs":0,"a":"Coventry","as":0},{"d":"2026-08-22","done":false,"h":"Hull","hs":0,"a":"Man United","as":0},{"d":"2026-08-22","done":false,"h":"Everton","hs":0,"a":"C Palace","as":0},{"d":"2026-08-22","done":false,"h":"Ipswich","hs":0,"a":"Sunderland","as":0},{"d":"2026-08-22","done":false,"h":"Nottm Forest","hs":0,"a":"Leeds","as":0},{"d":"2026-08-22","done":false,"h":"Brentford","hs":0,"a":"Spurs","as":0},{"d":"2026-08-23","done":false,"h":"Brighton","hs":0,"a":"Aston Villa","as":0},{"d":"2026-08-23","done":false,"h":"Man City","hs":0,"a":"Bournemouth","as":0},{"d":"2026-08-23","done":false,"h":"Newcastle","hs":0,"a":"Liverpool","as":0},{"d":"2026-08-24","done":false,"h":"Fulham","hs":0,"a":"Chelsea","as":0}]};
 // GLO draw — the girls' retirement plan
@@ -84,4 +84,4 @@ var LOTTO = {"date":"2026-08-16","first":"004615","last2":"53","front3":["429","
 // XAU, plus Thai baht-weight gold (96.5%)
 var GOLD = {"usd":4475,"date":"2026-08-20","baht":70000};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":72011,"thb":2365187};
+var BTC = {"usd":72467,"thb":2381344};
