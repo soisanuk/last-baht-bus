@@ -7116,12 +7116,46 @@ const NPCS = {
 
     look: "Thai woman of nineteen, visibly new, hair in a simple ponytail, plain bar dress, phone in hand.",
     desc: "Sweet, visibly new — first week on the soi — checking her phone between " +
-      "customers and startling whenever the door opens.",
+      "customers and startling whenever the door opens. A thin gold RING turns and " +
+      "turns on her finger, and her eyes keep going back to the screen.",
+    // Courtship arc (Alan playtest, 2026-08-17: the relationship system's flagship
+    // girl was a one-line wall). Bond-gated the Mercedes way; the deeper "family"
+    // node (bond 2, the child) is ordered BEFORE the shallower one so first-match
+    // gives the fuller truth once you're a regular. Shy Isan-new-girl register.
     dialogue: [
       { topic: "oy", th: "อย่าบอกนะ", rom: "yaa bok na",
         text: "\"Mamasan Oy? She— she scary. But fair! She pay for my mother's hospital, you know. Don't tell her I said.\" She glances at the faded poster on the wall. \"That her, when she dance. Number seventy-one. She keep the number for everything — locker, motorbike plate, everything.\"",
         sets: ["pinPart71"],
         short: "\"That's Oy at seventy-one — she keeps that number for everything. Locker, plate, every lock.\"" },
+      { topic: "name", text: "\"Nong? Is just— everybody call me Nong. Mean 'little one', " +
+        "little sister. My real name too long for farang, my old boss say.\" A tiny, testing " +
+        "smile. \"You can say the real one if you want. Nobody here ever ask before.\"",
+        short: "\"Nong — 'little sister'. Nobody here asked the real one before.\"" },
+      { topic: "home",
+        text: "\"I from Nong Khai — up by the river; Laos is right across the water from my auntie roof. " +
+        "Is quiet there. Buffalo, the temple, my grandma.\" She brightens, then dims by the " +
+        "same amount. \"Everybody leave, though. No work up home. Everybody come down to here.\"",
+        short: "\"Nong Khai, up on the river — quiet. But no work, so everybody comes down here.\"" },
+      { topic: "plan", bond: 1,
+        text: "\"Two year,\" she says, fast, like she has counted it many times. \"Two year, " +
+        "I save enough, open little shop in Nong Khai — som tam, cold drink, by the school. " +
+        "Then I go home for good.\" She turns the ring. \"Everybody here say two year. I know. " +
+        "But I really going to do, na. You see.\"",
+        short: "\"Two years, then a little som-tam shop back home. Everybody says two years. I mean it.\"" },
+      { topic: "family", bond: 2,
+        text: "\"...You are kind, so I tell you. I have a boy. Two year old. My mother keep " +
+        "him, up home.\" She turns {{the phone}} face-down, for once. \"That is why I come here. " +
+        "Not for gold paint, not for— for this. For him.\" The brave smile is gone; what is " +
+        "under it is just a tired girl who misses her son. \"He call me 'mama' on the video " +
+        "and after I have to go in the toilet a little. Don't tell the other girls. They " +
+        "think I am nineteen with no trouble.\"",
+        short: "\"I have a boy — two years old, my mother keeps him up home. He's why I'm here. Don't tell the others.\"" },
+      { topic: "family", bond: 1, th: "แม่", rom: "mae",
+        text: "\"My mother sick — the kidney. Is why Mamasan Oy... you know.\" A careful glance " +
+        "at the poster. \"I send home every month, more if is good week. My father, he...\" A " +
+        "small shrug that closes a door. \"Just my mother and my grandma now. And—\" She stops. " +
+        "\"Is enough about me. You want another drink?\"",
+        short: "\"I send home every month for my mother's kidney. Just her and grandma now. And—\" She stops." },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"W-welcome to Gold Rush! First week— I mean, MY first week. The gold is paint. I'm not supposed to say that. Please don't tell.\"",
         short: "\"W-welcome to Gold Rush! Please — don't tell anyone about the paint.\"" },
