@@ -7593,6 +7593,23 @@ test("the Act One reset carries identity and NOTHING conversational", () => {
   assert.equal(G.act1Tries, 1, "the attempt count survives (it unlocks HINT)");
 });
 
+test("SHOW answers for every item shape, and DROP ALL keeps your pockets", () => {
+  // SHOW <item> TO <npc> crashed for every non-receipt item (the fix passed the
+  // whole arg as _doGive's itemWord; veteran playtest 2026-08-17, the session's
+  // only pageerror). And DROP ALL substring-matched "all" into "w-ALL-et".
+  startSoi6Mode(); G.flags.act1Done = true;
+  G.room = _npcRoom("noi") || G.room;
+  for (const c of ["show phone to noi", "show wallet to noi", "show me the money"]) {
+    out = []; assert.doesNotThrow(() => run(c), c);
+    assert.ok(lastOut().length > 0, `"${c}" printed nothing (the silent-crash shape)`);
+  }
+  const before = Object.entries(G.itemLoc).filter(([, l]) => l === "inventory").map(([i]) => i);
+  out = []; run("drop all");
+  const after = Object.entries(G.itemLoc).filter(([, l]) => l === "inventory").map(([i]) => i);
+  assert.deepEqual(after, before, "DROP ALL moved something out of the pockets");
+  assert.match(lastOut(), /decline/i, "and it answers in voice");
+});
+
 test("the quest journal never prints an un-earned clue's content", () => {
   // The information-flow class: the milestone LABEL is the safe PIN. Functional
   // tests asked "does the checklist render"; this one asks what it reveals.

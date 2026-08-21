@@ -664,6 +664,15 @@ function _takeFridgeWater() {
 }
 
 function _doDrop(arg) {
+  // DROP ALL used to drop... your wallet, and only your wallet: substring
+  // matching found "all" inside "w-ALL-et" (veteran playtest, 2026-08-17 —
+  // "comedy-grade data loss"). ALL gets a voiced refusal; a Pattaya pocket
+  // is not a Zork trophy case.
+  if (/^(all|everything)$/.test(arg)) {
+    _say("Everything, on the floor of a Pattaya bar? The pockets decline as one. " +
+      "One thing at a time, and think hard about the wallet.");
+    return;
+  }
   const id = _inv().find(i => ITEMS[i].name.toLowerCase().includes(arg) ||
     ITEMS[i].aliases.some(a => a.includes(arg)));
   if (!id) { _say(_pickVary(_NOT_CARRYING, "notcarry")); return; }
@@ -5505,12 +5514,16 @@ function doCommand(input) {
     case "show": {
       // "Show me you were even here last night" — SHOW must not be eaten as an
       // ASK topic (desktop playtest, 2026-08-17). The receipt IS the proof beat;
-      // anything else routes through GIVE, whose refusals are voiced.
-      const m = (arg || "").match(/^(.*?)\s+to\s+(\S+)/);
-      const what = m ? m[1] : (arg || "");
-      if (/receipt/.test(what) && G.itemLoc.receipt === "inventory") { _doRead("receipt"); break; }
-      if (arg) { _doGive(arg); break; }
-      _say("Show what, to whom? (SHOW <thing> TO <someone>)");
+      // anything else routes through GIVE, whose refusals are voiced. Parse the
+      // same shape GIVE does ("to" is already stripped by the filler filter:
+      // "<item words> <person>") — the first version passed the WHOLE string as
+      // _doGive's itemWord and crashed on npcWord.toLowerCase() (veteran
+      // playtest, 2026-08-17: the session's only pageerror).
+      if (/receipt/.test(arg || "") && G.itemLoc.receipt === "inventory") { _doRead("receipt"); break; }
+      const sw = (arg || "").split(" ").filter(Boolean);
+      if (sw.length >= 2) _doGive(sw.slice(0, -1).join(" ").trim(), sw[sw.length - 1]);
+      else if (sw.length === 1) _doGive(sw[0], "");
+      else _say("Show what, to whom? (SHOW <thing> TO <someone>)");
       break;
     }
     case "throw": case "toss": case "chuck": case "fling":
