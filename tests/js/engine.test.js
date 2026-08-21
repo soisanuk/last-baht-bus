@@ -7593,6 +7593,30 @@ test("the Act One reset carries identity and NOTHING conversational", () => {
   assert.equal(G.act1Tries, 1, "the attempt count survives (it unlocks HINT)");
 });
 
+test("polite natural-language and Zork verbs stay voiced, and a question isn't an answer", () => {
+  // Alan (widower, polite sentences) + the veteran (Zork ledger): the audience
+  // types full courtesies and classic IF verbs; the house rule is no plausible
+  // input dead-ends in didn't-parse. Also: a question BACK to her must not be
+  // captured as her question's answer (it stored a "?" sentence as identity).
+  startSoi6Mode(); G.flags.act1Done = true;
+  const HUH = /didn't understand|didn't parse|soi blinks|no idea what/i;
+  G.room = _npcRoom("noi") || G.room;
+  for (const c of ["thank you", "i love you", "did you eat yet", "can i walk you home",
+                   "touch it", "taste beer", "tell noi about mot", "verbose", "restore",
+                   "move table", "close door", "good evening"]) {
+    out = []; run(c);
+    assert.doesNotMatch(lastOut(), HUH, `"${c}" dead-ended in the parse fallback`);
+    assert.ok(lastOut().length > 0, `"${c}" printed nothing`);
+  }
+  // "i" alone is still inventory
+  out = []; run("i");
+  assert.match(lastOut(), /carrying|฿/i, "bare I still lists inventory");
+  // a question back to a pending asker is not stored as the answer
+  G.convo = "noi"; G.convoQ = { id: "noi", key: "home" };
+  run("what is your name");
+  assert.equal((G.player.said || {}).home, undefined, "a question was captured as an identity answer");
+});
+
 test("SHOW answers for every item shape, and DROP ALL keeps your pockets", () => {
   // SHOW <item> TO <npc> crashed for every non-receipt item (the fix passed the
   // whole arg as _doGive's itemWord; veteran playtest 2026-08-17, the session's

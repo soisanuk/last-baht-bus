@@ -2378,12 +2378,19 @@ function _convoResolve(lower) {
       _convoPrompt(G.convoQ.id);
       return true;
     }
-    const changingSubject =
+    // A QUESTION back to her ("what is your name", "where are you from") is not
+    // an answer to HER question — capturing it stored a question mark of a
+    // sentence as the player's identity and grapevine-checked it forever (Alan
+    // playtest, 2026-08-17). Let it lapse the pending Q and fall through to ASK.
+    const isQuestion = /\?$/.test(lower.trim()) ||
+      /^(what|where|who|whom|how|why|when|which|whats|whos|hows)\b/.test(bare) ||
+      /^(do|does|did|are|is|was|were|can|could|will|would|have|has)\s+(you|u|she|they)\b/.test(bare);
+    const changingSubject = isQuestion ||
       /^(goodbye|bye|cheerio|laters?|later|see ?ya|ciao)$/.test(bare) ||
       _findNpc(bare) || _findPatron(bare) ||
       _partnerHasTopic(G.convoQ.id, _convoTopic(lower));
     if (!changingSubject) return _convoAnswer(lower);
-    G.convoQ = null; // dodged — fall through to normal handling
+    G.convoQ = null; // dodged (or a question back) — fall through to normal handling
   }
   // 1) Leave-taking ends an active conversation.
   if (_convoActive() &&
@@ -4487,7 +4494,54 @@ function _doTaoRai() {
     "you just haven't been shown the price yet. Ask it, pay it, close the account, walk on clean.", "dim");
 }
 
+// Natural-language courtesies a polite first-timer will type in full. Voiced,
+// flavour-only; routed only as the very last resort (see the switch default).
+// A partner-aware branch first: with someone in front of you, "thank you" /
+// "did you eat" / a compliment go to HER, warmly, not to the void.
+function _politePhrase(t) {
+  const partner = typeof _convoActive === "function" && _convoActive();
+  const to = partner ? _convoName(partner) : null;
+  if (/\b(thank you|thanks|thank u|khob khun|cheers mate)\b/.test(t)) {
+    _say(to ? `"Mai pen rai," ${to} says — no worries, the most Thai reply there is — and means it.`
+      : "Manners cost nothing and buy plenty on this soi. Somebody nearby dips a wai back on reflex.");
+    return true;
+  }
+  if (/\b(i love you|marry me|be my girlfriend|will you marry)\b/.test(t)) {
+    _say(to ? `${to} laughs, not unkindly, and pats your hand. "You drink two beer and love everybody, tilac. Talk to me tomorrow, we see." The soi has heard it ten thousand times and kept every one.`
+      : "You say it to the night. The night, which has been proposed to by better men than you and outlived them all, keeps walking.");
+    return true;
+  }
+  if (/\b(did you eat|have you eaten|kin khao|you eat yet|eaten yet)\b/.test(t)) {
+    _say(to ? `"Kin laew," ${to} says — ate already — the way everyone here says hello. "You? You too thin, farang." It is the warmest thing anyone will ask you all night.`
+      : "\"Kin khao reu yang?\" — have you eaten? — is how this country says it cares. There's a food cart within thirty feet; there always is. (EAT)");
+    return true;
+  }
+  if (/(lovely|beautiful|pretty|gorgeous|nice) (smile|eyes|dress)|you (are |look )?(so )?(lovely|beautiful|pretty|gorgeous)/.test(t)) {
+    if (to) { _doSocial("flirt"); return true; }
+    _say("A fine sentiment with nobody in front of you to receive it. Save it for the rail. (FLIRT WITH <someone>.)");
+    return true;
+  }
+  if (/\b(walk you home|walk you back|see you home|take you home)\b/.test(t)) {
+    _say(to ? `${to}'s eyes do a quick, practised sum — sweet, but this isn't how it works here, and she likes you too much to pretend. "Barfine, tilac. Ask the mama. Then anywhere you like." (BARFINE ${(_convoName(partner)||"").toUpperCase()})`
+      : "A gentleman's instinct, and the wrong town for it unasked. If you mean it, it has a name here: BARFINE — squared with the mamasan, not on the pavement.");
+    return true;
+  }
+  if (/^(hi|hey|hiya|good evening|good morning|evening|morning)\b/.test(t)) {
+    _say(to ? `"${/morning/.test(t) ? "Arun sawat" : "Sawat dee"} kha," ${to} answers, hand rising to a wai.`
+      : "\"HELLO WELCOME!\" a doorway fires back before you've finished — pure muscle memory. The soi is nothing if not friendly.");
+    return true;
+  }
+  return false;
+}
+
 const _MISC_VERBS = {
+  touch: "You reach out and touch it. Warm, real, faintly sticky — this whole town is faintly sticky. You learn nothing you couldn't see.",
+  taste: "You are NOT tasting that. Some Infocom instincts do not travel to Pattaya; trust the one telling you to stop.",
+  tell: "Telling isn't the verb here — this town runs on ASKING. ASK <someone> ABOUT <it>, and mind who's in earshot.",
+  verbose: "It's already all here, tilac — the soi hides nothing and explains less. (LOOK for the room, EXAMINE for the thing.)",
+  restore: "The night restores itself after every command — there's no load screen on a life. To take back your last move, use UNDO.",
+  move: "You can't shift it, and you don't need to. Try a direction (N/S/E/W), or GO somewhere worth going.",
+  close: "Leave it. Nothing here wants closing — this is a town that runs with the doors open and the shutters up until dawn.",
   jump: "You jump. The pavement, a lifelong connoisseur of falling farangs, scores it a four.",
   climb: "The only climb worth doing here is Pratumnak Hill, and there's a road to the top with a view waiting on it.",
   throw: "You weigh it and mime the arc — and every piwin on the corner looks up at once, like meerkats. You put it down.",
@@ -5342,7 +5396,13 @@ function doCommand(input) {
       break;
     case "clinic": case "tested": case "screening": _doClinic(); break;
     case "drop": _doDrop(arg); break;
-    case "i": case "inv": case "inventory": _doInventory(); break;
+    case "inv": case "inventory": _doInventory(); break;
+    case "i":
+      if (!arg) { _doInventory(); break; }
+      // "i love you", "i want a beer" — not an inventory request; let the
+      // polite-phrase / conversation layers have it (Alan playtest 2026-08-17)
+      if (_politePhrase(lower) || _convoResolve(lower)) break;
+      _say(_pickVary(_HUH, "huh"), "dim"); return;
     case "handover": case "baton": _doHandover(); break;
     case "resume": _doResume(); break;
     case "wear": case "put on": _doWear(arg); break;
@@ -5543,6 +5603,11 @@ function doCommand(input) {
     case "jump": case "climb": case "push": case "pull":
     case "knock": case "shout": case "yell":
       _say(_MISC_VERBS[v === "yell" ? "shout" : v]); break;
+    case "touch": case "feel": case "taste": case "lick": case "tell":
+    case "verbose": case "brief": case "restore": case "load": case "move":
+    case "close": case "shut":
+      _say(_MISC_VERBS[{ feel: "touch", lick: "taste", brief: "verbose", load: "restore", shut: "close" }[v] || v]);
+      break;
     case "balcony": case "rail":
       if (G.room === "qv_room") _doWatchSoi();
       else _say("No balcony here. Yours is the one over the Queen Vic — head UP to your room and WATCH SOI from the rail.");
@@ -5630,6 +5695,12 @@ function doCommand(input) {
       // conversation layer: a bare name opens a chat; while one's live, a bare
       // topic or "bye" resolves against the partner. Reached only after every
       // real verb/direction missed, so it never shadows them (see _convoResolve).
+      // Natural-language politeness FIRST (before the conversation layer's
+      // greedy topic fallback claims it as an ask): this game's audience types
+      // full sentences, and a courtesy to the partner should get the warm reply,
+      // not her topicless node (Alan playtest, 2026-08-17). The patterns are
+      // specific enough not to shadow a real topic.
+      if (_politePhrase(lower)) break;
       if (_convoResolve(lower)) break;
       _say(_pickVary(_HUH, "huh"), "dim");
       return; // no tick for parse errors
