@@ -7546,6 +7546,67 @@ test("Mort points a player at Glam, after he's introduced himself, and never spo
   assert.match(out.join("\n"), /does not go in the column/);
 });
 
+// ── Playtest hardening (2026-08-17): the classes the blind runs exposed ───────
+
+test("every venue opens to its own printed name from its own doorstep", () => {
+  // The apostrophe class: ENTER CHEAP CHARLIE'S fell through to TRAVEL's "you
+  // only know the way…" because the matcher was tested with one friendly name.
+  // Enumerate the DATA axis: every venue, entered by the exact name the street
+  // prints. Entry may be refused in voice (a gated club, a shut door) — what it
+  // must never do is fall through to the travel handler or didn't-parse.
+  startSoi6Mode(); G.flags.act1Done = true; G.stage = "vacation"; G.mode = null;
+  for (const k in ENCOUNTERS) G.encDone[k] = true;
+  let tried = 0;
+  for (const [rid, room] of Object.entries(ROOMS)) {
+    const doors = [];
+    for (const v of room.venues || []) doors.push(v);
+    for (const to of Object.values(room.exits || {})) {
+      if (ROOMS[to] && ROOMS[to].bar) doors.push(to);
+    }
+    for (const vid of new Set(doors)) {
+      const label = ROOMS[vid].bar || ROOMS[vid].name;
+      G.room = rid; G.nightTurn = 5; G.rain = 0; G.pendingEnc = null; G.game = null;
+      out = []; run("enter " + label.toLowerCase());
+      const said = lastOut() || "";
+      assert.doesNotMatch(said, /only know the way to bars and hotels/,
+        `"enter ${label}" from ${rid} fell through to TRAVEL`);
+      assert.doesNotMatch(said, /didn't parse|didn't understand/i,
+        `"enter ${label}" from ${rid} didn't parse`);
+      tried++;
+    }
+  }
+  assert.ok(tried > 80, `only ${tried} doorways exercised — enumeration regressed?`);
+});
+
+test("the Act One reset carries identity and NOTHING conversational", () => {
+  // The piggyback class: G.player.said rode the identity carry-over, so an NPC
+  // grapevine-scolded you over an answer from a night that never happened. The
+  // carry list is an ALLOWLIST — anything new on G.player must opt in here.
+  newGame();
+  G.player = { origin: "monger", personality: "joker", orientation: "straight",
+    said: { home: "leeds" }, heard: { home: true } };
+  G.pendingChoice = null; G.stage = "act1";
+  _act1Fail("dawn");
+  assert.equal(G.player.origin, "monger", "identity must survive the reset");
+  assert.equal(G.player.personality, "joker");
+  assert.deepEqual(G.player.said, {}, "what you TOLD people must not survive — dawn wipes the slate");
+  assert.equal(G.act1Tries, 1, "the attempt count survives (it unlocks HINT)");
+});
+
+test("the quest journal never prints an un-earned clue's content", () => {
+  // The information-flow class: the milestone LABEL is the safe PIN. Functional
+  // tests asked "does the checklist render"; this one asks what it reveals.
+  newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight" };
+  G.pendingChoice = null; G.stage = "act1";
+  out = []; run("quests");
+  const journal = out.join("\n");
+  assert.doesNotMatch(journal, /number 71|lucky 9/, "the journal leaked the safe PIN on turn one");
+  assert.match(journal, /Clue: \(something you haven't found yet\)/, "the mask line shows instead");
+  G.flags.pinPart71 = true;
+  out = []; run("quests");
+  assert.match(out.join("\n"), /number 71/, "an EARNED clue prints in full");
+});
+
 // ── The Nite Owl's Box 15 (docs/ctf.md) ──────────────────────────────────────
 // A puzzle hidden for security-minded players. These tests exist because the
 // content is INERT to the game — nothing calls it, no quest gates on it, and no

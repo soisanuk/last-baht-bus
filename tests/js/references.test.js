@@ -12,6 +12,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { execFileSync } from "node:child_process";
+import vm from "node:vm";
 
 const SRC = p => readFileSync(fileURLToPath(new URL(p, import.meta.url)), "utf8");
 const world = SRC("../../web/js/world.js");
@@ -49,6 +50,65 @@ test("every venue-shaped name in prose is a real venue", () => {
     }
   }
   assert.deepEqual(bad, [], "prose names a venue that doesn't exist (rename orphan?)");
+});
+
+test("a venue placed in a district by prose is actually IN that district", () => {
+  // The containment lint the 2026-08-17 playtest proved was missing: every clue
+  // in the wallet quest said Rainbow Girls was at LK Metro while the room said
+  // region: "Tree Town" — and it passed every existing check, because the venue
+  // existed, the district existed, and all four wrong claims AGREED with each
+  // other. Existence and consistency were linted; the RELATION never was. This
+  // joins prose claims against the world graph: a real venue name with a real
+  // district name in its close context must name the venue's own region —
+  // unless the true region also appears (a "moved from X to Y" is honest).
+  const load = f => vm.runInThisContext(SRC("../../web/js/" + f));
+  // vm top-level consts land in the global LEXICAL scope — bare identifier, not
+  // globalThis (the documented gotcha).
+  if (typeof ROOMS === "undefined") { load("thai.js"); load("world.js"); }
+  const R = ROOMS;
+  const venueRegion = new Map();
+  for (const room of Object.values(R)) {
+    if (room.bar && room.region) venueRegion.set(room.bar, room.region);
+  }
+  const regions = [...new Set(Object.values(R).map(r => r.region).filter(Boolean))];
+  const WIN = 90; // chars of context either side that count as "a claim about it"
+  // Cross-references the fiction makes on purpose (each verified true by hand,
+  // 2026-08-17): "Second Road" near Rompho/Soi 7 is the JOMTIEN second road
+  // (local usage, not the Pattaya region); the Blue Dog sits ON Beach Road at
+  // the foot/mouth of Soi 6; soi6_deep honestly says the soi runs on TOWARD
+  // Second Road; the Adonis Club's "Supertown, Jomtien" is the colloquial name
+  // for the complex off Thappraya.
+  const OK = new Set([
+    'npc.sumalee.dialogue[3].text: "Rompho Market" placed in "Second Road" (is Jomtien)',
+    'room.soi_rompho.desc: "Rompho Market" placed in "Second Road" (is Jomtien)',
+    'room.jomtien_2nd.desc: "Rompho Market" placed in "Second Road" (is Jomtien)',
+    'room.beach_rd_n.revisit[1]: "Blue Dog" placed in "Soi 6" (is Beach Road)',
+    'room.stinky_bar.desc: "Blue Dog" placed in "Soi 6" (is Beach Road)',
+    'room.soi6_deep.revisit[0]: "Kitten Corner" placed in "Second Road" (is Soi 6)',
+    'engine-systems.js:_doHire[0]: "The Adonis Club" placed in "Jomtien" (is Thappraya)',
+  ]);
+  const bad = [];
+  for (const rec of records) {
+    for (const [venue, region] of venueRegion) {
+      let idx = rec.text.indexOf(venue);
+      while (idx !== -1) {
+        const ctx = rec.text.slice(Math.max(0, idx - WIN), idx + venue.length + WIN);
+        for (const other of regions) {
+          if (other === region) continue;
+          if (venue.includes(other)) continue;          // "Tree Town Bar"-style self-hits
+          if (!ctx.includes(other)) continue;
+          if (ctx.includes(region)) continue;           // the truth is present too
+          // a region name that is part of a DIFFERENT venue's name in the same
+          // breath ("Soi 6" inside "Soi 6 challenge") still counts — that's the
+          // defect. Only the OK list excuses a hit.
+          const key = `${rec.ref}: "${venue}" placed in "${other}" (is ${region})`;
+          if (!OK.has(key)) bad.push(key);
+        }
+        idx = rec.text.indexOf(venue, idx + 1);
+      }
+    }
+  }
+  assert.deepEqual(bad, [], "prose puts a venue in the wrong district — the Rainbow Girls class");
 });
 
 test("every character named in an instruction is somebody you can address", () => {

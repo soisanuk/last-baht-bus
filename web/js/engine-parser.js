@@ -523,7 +523,14 @@ function _doTravel(arg) {
 // so "cheap charlies" must match "Cheap Charlie's" — normalize BOTH sides.
 // (Playtest 2026-08-17: the room's own "(ENTER <name>)" hint failed on exactly
 // this bar and fell through to TRAVEL's "you only know the way to…".)
-function _pnm(s) { return (s || "").toLowerCase().replace(/['\u2019]/g, ""); }
+// Also collapse articles: doCommand strips "a/an/the" as filler, so the typed
+// side of "Hyper A Go-Go" arrives as "hyper go-go" — the NAME side must shed
+// its articles too or the venue is unenterable by its own printed name
+// (caught by the enumerate-every-doorway test, 2026-08-17).
+function _pnm(s) {
+  return (s || "").toLowerCase().replace(/['\u2019]/g, "")
+    .replace(/\b(?:a|an|the)\b/g, " ").replace(/\s+/g, " ").trim();
+}
 
 function _doEnter(arg) {
   const r = _room();
