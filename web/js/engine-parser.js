@@ -455,7 +455,7 @@ function _doTravel(arg) {
   // "Queen Vic Inn" (the pub) resolves to "Your Room — Queen Vic Inn" and walks you
   // upstairs. (The later !dest branch keeps this for the never-found case.)
   const _here0 = _room();
-  if ((_here0.bar && _here0.bar.toLowerCase().includes(w)) || _here0.name.toLowerCase().includes(w)) {
+  if ((_here0.bar && _pnm(_here0.bar).includes(_pnm(w))) || _pnm(_here0.name).includes(_pnm(w))) {
     _say("You're standing in it."); return;
   }
   const home = _hotelRoomId();
@@ -469,20 +469,20 @@ function _doTravel(arg) {
     for (const id of dests) {
       if (id === home) continue;
       const r = ROOMS[id];
-      if ((r.bar && r.bar.toLowerCase().includes(w)) ||
-          r.name.toLowerCase().includes(w)) { dest = id; break; }
+      if ((r.bar && _pnm(r.bar).includes(_pnm(w))) ||
+          _pnm(r.name).includes(_pnm(w))) { dest = id; break; }
     }
   }
   // Finally the hotel's own name (so "travel sabai palms" works) — after venues,
   // so a same-named pub isn't shadowed by the hotel you happen to sleep in.
-  if (!dest && _HOTELS[G.hotel].name.toLowerCase().includes(w)) dest = home;
+  if (!dest && _pnm(_HOTELS[G.hotel].name).includes(_pnm(w))) dest = home;
   // "travel home" while standing in your room: the keyword branch resolves before
   // the standing-in-it check can, so catch the zero-hop self-trip here.
   if (dest === G.room) { _say("You're standing in it."); return; }
   if (!dest) {
     const here = _room();
-    if ((here.bar && here.bar.toLowerCase().includes(w)) ||
-        here.name.toLowerCase().includes(w)) {
+    if ((here.bar && _pnm(here.bar).includes(_pnm(w))) ||
+        _pnm(here.name).includes(_pnm(w))) {
       _say("You're standing in it.");
       return;
     }
@@ -519,6 +519,12 @@ function _doTravel(arg) {
   _arriveAt(dest);
 }
 
+// Venue-name comparison, apostrophe-proof: _norm strips quotes from typed input,
+// so "cheap charlies" must match "Cheap Charlie's" — normalize BOTH sides.
+// (Playtest 2026-08-17: the room's own "(ENTER <name>)" hint failed on exactly
+// this bar and fell through to TRAVEL's "you only know the way to…".)
+function _pnm(s) { return (s || "").toLowerCase().replace(/['\u2019]/g, ""); }
+
 function _doEnter(arg) {
   const r = _room();
   // digits → the safe
@@ -541,7 +547,7 @@ function _doEnter(arg) {
   if (r.venues) {
     for (const id of r.venues) {
       const v = ROOMS[id];
-      if ([v.bar, v.name].filter(Boolean).some(s => s.toLowerCase().includes(w))) {
+      if ([v.bar, v.name].filter(Boolean).some(s => _pnm(s).includes(_pnm(w)))) {
         G.enteredVia = G.room;
         return _arriveAt(id);
       }
@@ -550,8 +556,8 @@ function _doEnter(arg) {
   // legacy (un-migrated districts): a named bar still sits on a compass exit
   for (const [dir, to] of Object.entries(r.exits)) {
     const target = ROOMS[to];
-    if (target.bar && target.bar.toLowerCase().includes(w)) return _doGo(dir);
-    if (target.name.toLowerCase().includes(w)) return _doGo(dir);
+    if (target.bar && _pnm(target.bar).includes(_pnm(w))) return _doGo(dir);
+    if (_pnm(target.name).includes(_pnm(w))) return _doGo(dir);
   }
   _doTravel(w); // not adjacent — maybe it's somewhere you know the way to
 }
@@ -3955,13 +3961,14 @@ const _MAP = `                    NAKLUA ─ Sabai Palms Hotel
        ~       │       │      │   (Khao Talo · the lake · motosai out)
        ~  BEACH RD C   │   MYTH NIGHT
        ~    │ (Tequila Queen)  │
-       ~    │         SECOND  BUAKHAO N ═ LK METRO
-       ~ CENTRAL Mall  RD C   │  (Metropole up the alley)
-      ~     │ (police) │      │
+       ~    │         SECOND  TREE TOWN (the fairy-lit maze)
+       ~    │          RD C   │
+       ~ CENTRAL Mall  │      BUAKHAO N ═ LK METRO
+      ~     │ (police) │      │  (Metropole up the alley)
       ~     │          │   BUAKHAO MARKET
       ~     │          │      │
-      ~  BEACH RD S ─ SECOND RD S ─ BUAKHAO S ─ TREE TOWN
-      ~     │              │        (the fairy-lit maze)
+      ~  BEACH RD S ─ SECOND RD S ─ BUAKHAO S
+      ~     │              │
      ~   WALKING ST     PRATUMNAK ─ Big Buddha
      ~    (the gate, then the deep)
     ~ ~ ~ ~ ~ ~ ~ ~ ~ ~  JOMTIEN ~ the beach where it all began`;
@@ -4004,12 +4011,12 @@ const _PHOTO_DUP = [
   (nm) => `You've got ${nm} already, but one more never hurt a gallery.`,
 ];
 const _PHOTO_GOGO_NO = [
-  `A hand closes over your lens before the shutter does. « No photo. No video. House rule, tilac. » The phone goes back in your pocket.`,
-  `The mamasan is at your elbow before the screen even lights. « No camera, na. » Not a request. You put it away.`,
+  `A hand closes over your lens before the shutter does. “No photo. No video. House rule, tilac.” The phone goes back in your pocket.`,
+  `The mamasan is at your elbow before the screen even lights. “No camera, na.” Not a request. You put it away.`,
 ];
 const _PHOTO_GOGO_YES = [
   (nm) => `${nm} palms your phone under the rail, out of the mamasan's sightline, and pulls you in cheek-to-cheek. One quick frame, then it's back in your pocket. (GALLERY)`,
-  (nm) => `« Only you, na. Don't show nobody. » ${nm} angles the phone low, throws a quick pout, and the shutter's done before anyone looks up. (GALLERY)`,
+  (nm) => `“Only you, na. Don't show nobody.” ${nm} angles the phone low, throws a quick pout, and the shutter's done before anyone looks up. (GALLERY)`,
 ];
 
 function _photoWhere(id) {

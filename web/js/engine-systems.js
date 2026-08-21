@@ -1510,7 +1510,14 @@ function _act1Fail(reason) {
   newGame();
   G.act1Best = best;      // the record…
   G.act1Tries = tries;    // …and the attempt count survive the reset (unlocking HINT)
-  if (identity && identity.origin) G.player = identity;
+  if (identity && identity.origin) {
+    G.player = identity;
+    // Identity survives; CONVERSATION MEMORY doesn't — "Dawn wipes the slate"
+    // must include what you told people, or an NPC re-asks her question and then
+    // grapevine-scolds you for answering it differently than in a night that
+    // canonically never happened (mobile playtest, 2026-08-17).
+    G.player.said = {}; G.player.heard = {};
+  }
   engineIntro();
 }
 
@@ -1526,7 +1533,7 @@ const _ACT1_HINTS = [
     "your heels. TALK to her about the wallet — a lady drink speeds the story along."],
   ["knowOyHasIt", "Mot fences everything he lifts to one buyer. Lek at Lucky Tiger saw him flash " +
     "cash this morning — ASK LEK where your wallet ended up."],
-  ["hasWallet", "It's in Madam Oy's safe at Rainbow Girls, LK Metro. Oy respects manners: WAI her " +
+  ["hasWallet", "It's in Madam Oy's safe at Rainbow Girls, deep in the Tree Town maze off Buakhao's north end. Oy respects manners: WAI her " +
     "properly, then ask about the wallet — a polite man, she may just hand it back. (The hard way " +
     "in: slip into her office when DJ Beer plays 'Sabai Sabai', and crack the safe — her old " +
     "dancer's number was 71, and she puts a lucky 9 on the end of every code. Candy, Ploy, Pim and " +
@@ -1675,13 +1682,16 @@ function _questPitch(desc) {
 // and the normal offer follows. Self-disabling the moment `G.quests` has
 // anything in it at all — after your first job, you are expected to know how
 // this works, and nobody hails you again for the rest of the game.
+// Pronoun-free on purpose: the giver may be Candy or Bert alike, and the pool
+// once hard-coded "his chin… of a man" — which misgendered every mamasan who
+// offered a job (both playtests, 2026-08-17).
 const _QUEST_HAIL = [
-  "{who} lifts his chin at you from behind the rail. \u201cOi. You. Got a minute, or are you " +
+  "{who} looks up from the rail and picks you out. \u201cOi. You. Got a minute, or are you " +
     "just here to drink?\u201d",
-  "\u201cHere \u2014 before you sit down.\u201d {who} has the look of a man who has been waiting " +
-    "for somebody to walk in who isn't a regular.",
-  "{who} catches your eye and jerks his head, the universal come-here of a man with something " +
-    "he wants doing and nobody obvious to do it.",
+  "\u201cHere \u2014 before you sit down.\u201d {who} has the look of somebody who has been " +
+    "waiting all night for a face that isn't a regular's.",
+  "{who} catches your eye and tips a head toward the quiet end of the bar \u2014 the " +
+    "universal come-here of somebody with a job and nobody obvious to do it.",
 ];
 
 function _questHail() {
@@ -1843,7 +1853,10 @@ function _doQuests() {
   if (G.stage === "act1") {
     _say("▶ The Last Baht Bus — find your wallet, get back to room 412 in Naklua.", "win");
     for (const [f, label] of _ACT1_MILESTONES) {
-      _say(_fmt("  {mark} {label}", { mark: _flag(f) ? "✓" : "·", label: _L(label) }), "dim");
+      // A clue's LABEL is the clue (the safe digits) — mask it until it's earned,
+      // or the journal spoils the PIN on turn one (mobile playtest, 2026-08-17).
+      const shownLabel = (!_flag(f) && /^Clue:/.test(label)) ? "Clue: (something you haven't found yet)" : label;
+      _say(_fmt("  {mark} {label}", { mark: _flag(f) ? "✓" : "·", label: _L(shownLabel) }), "dim");
     }
     shown++;
   } else if (_flag("act1Done") && G.mode !== "soi6") {
@@ -2159,9 +2172,11 @@ function _tanRescue() {
   if (!G.phone.contacts || !G.phone.contacts.tan) return;
   G.phone.tanAct1 = true;
   G.battery = Math.max(0, G.battery - 1);
+  // Clock-aware, not "half past midnight": the rescue can fire from ~23:00 and a
+  // hard-coded time contradicted TIME one command later (mobile playtest 2026-08-17).
   _say("Your phone goes off in your pocket, which is a surprise, because almost nobody " +
     "has the number. \u201cMy friend.\u201d Tan does not say how he knows. \u201cIt is " +
-    "half past midnight and you are not where a man looking for his wallet would be.\u201d", "alert");
+    _clockStr() + " and you are not where a man looking for his wallet would be.\u201d", "alert");
   _say("He is already close. The grey sedan pulls in without being told where, and the door " +
     "opens on aircon and quiet, and he does not make a single joke about the state of you.", "win");
   G.room = "buakhao_n";
@@ -2404,9 +2419,11 @@ function _soidogTick() {
   if (G.day > G.dog.since || (cappedLastDay && G.day === G.dog.since)) {
     _setFlag("soidogTexted");
     _pushMsg("soidog",
+      // Diegetic SMS, no URL: the Shamrock scene carries the game's ONE real-world
+      // link (canon rule) — this text keeps the warmth and loses the fourth wall.
       "Word on the soi says you've adopted one of Pattaya's own — khob khun, khun jai dee! " +
-      "🐕 The rest of them still need jabs, food, and a vet who works for smiles. Pay it " +
-      "forward for the dogs still on the street: https://www.soidog.org/content/make-donation 🙏",
+      "🐕 The rest of them still need jabs, food, and a vet who works for smiles. Give a " +
+      "thought to the ones still on the street tonight 🙏",
       0, "Soi Dog Foundation");
     _say("(📱 Your phone buzzes — a text from the Soi Dog Foundation. CHECK MESSAGES.)", "dim");
   }
@@ -2913,6 +2930,18 @@ function _wxRainy() {
 function _sayDrizzle() {
   const alt = G.turns % 2 === 0; // variant by parity — no dice for flavor
   if (_inBar()) {
+    // Enclosed venues (the gents villas, anywhere aircon-shut) have no street-side
+    // stools to rescue — the open-front drill read wrong inside the Orchid
+    // (mobile playtest 2026-08-17). They get the rain as sound, not chore.
+    const enclosed = _room().barType === "gents";
+    if (enclosed) {
+      _say(alt ?
+        "Rain arrives on the roof, politely muffled — in here it is somebody " +
+        "else's problem, which is much of what the room charges for." :
+        "A change in the air, and the sound of rain starting somewhere beyond " +
+        "the aircon. One of the girls glances up; nobody moves.", "dim");
+      return;
+    }
     _say(alt ?
       "A few fat drops hit the awning, then a few more. Without a word, two of " +
       "the girls slip out and bring the street-side barstools in, stacking them " +

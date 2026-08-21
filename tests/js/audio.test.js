@@ -51,7 +51,10 @@ test("the walk to the bar is a gradient: town, then the bass through the wall", 
   assert.equal(_trackForRoom("oy_office").leak, _GOGO_SET);
   // dark rooms lose the traffic: insects only, wherever the dark is — and the
   // Walking Street service alley comes off the full synthwave it used to play
-  for (const id of ["tt_deep", "tt_back", "ws_alley", "hotel_soi", "dongtan_rd_n",
+  // dongtan_rd_n went lit 2026-08-17 (its 7-Eleven is "the only real light for half a km");
+  // pratumnak_hill_rd is the still-dark town-region stretch standing in for it
+  // (dongtan_rd_m is dark too but Jomtien-region, where dark yields to surf).
+  for (const id of ["tt_deep", "tt_back", "ws_alley", "hotel_soi", "pratumnak_hill_rd",
     "buddha_hill", "pratumnak_rd"]) {
     assert.equal(_trackForRoom(id), "night", `${id} should be insects in the dark`);
   }

@@ -904,7 +904,9 @@ const ROOMS = {
   dongtan_rd_n: {
     name: "Dongtan Beach Road (North)",
     region: "Pratumnak",
-    dark: true,
+    // NOT dark: its own desc gives the 7-Eleven "the only real light for half a
+    // kilometre" — a lit corner with an ATM can't also growl soi-dog darkness
+    // (mobile playtest 2026-08-17). The stretches either side stay dark.
     seven: true, atm: true,
     desc: "The top of Dongtan Beach Road, where it bends inland and starts up onto Pratumnak. " +
       "The sand is a black rumour to the west; east the road climbs to the Soi 5 turn and, " +
@@ -2168,7 +2170,7 @@ const ROOMS = {
     region: "Walking Street",
     desc: "The junction at the bottom of everything. South Pattaya Road comes down from " +
       "the east and meets Second Road here, a hundred metres short of the Walking " +
-      "Street arch, and at two in the morning it is the busiest crossroads in the " +
+      "Street arch, and come two in the morning it will be the busiest crossroads in the " +
       "city — every songthaew in the south end circling it, piwins stacked three " +
       "deep on the corner, and a slow river of people who have finished with the " +
       "strip and not yet decided what happens next. Pratumnak Hill goes up and away " +
@@ -4267,14 +4269,19 @@ const NPCS = {
           "manners, na: Rose forgets nothing and forgives less.”",
         short: "“Rose's Orchid Club, Naklua — behind a wall, no sign. Old friend of mine. You don't find it, you get sent. Tell her Candy vouches.”" },
       { req: ["somTamAccepted"], notFlags: ["somTamDelivered"],
-        text: "\"Som tam not deliver itself, tilac. Rainbow Girls Bar, LK Metro, deep corner — give it to PLOY at the cashier cage. Wai first. She melt.\"" },
+        text: "\"Som tam not deliver itself, tilac. Rainbow Girls Bar, deep in the Tree Town maze — give it to PLOY at the cashier cage. Wai first. She melt.\"" },
       { req: ["knowWasHere"], notFlags: ["knowMot"], th: "จำได้สิ", rom: "jam dai si",
         text: "\"Of course I remember you! Three a.m., singing, buying Mama noodles next door. You leave with big group toward LK Metro — and Mot follow you out. Little pickpocket, work the drunk ones.\" She narrows her eyes. \"Ask Lek at Lucky Tiger. She see Mot this morning. OR—\" she smiles sweetly \"—buy me lady drink and I tell you everything faster.\"",
         sets: ["knowMot"],
         short: "\"Mot followed you toward LK Metro. Ask Lek at Lucky Tiger — she saw him this morning.\"" },
-      { th: "สวัสดีค่ะที่รัก", rom: "sawatdee kha tilac",
+      { topic: "wallet", req: ["knowMot"], notFlags: ["knowOyHasIt"],
+        text: "\"Wallet? Candy told you everything Candy knows, tilac \u2014 Mot follow you out, Lek at Lucky Tiger see him this morning. Go squeeze HER. My part is done.\"",
+        short: "\"Mot. Lucky Tiger. Ask Lek \u2014 my part is done.\"" },
+      { notFlags: ["knowWasHere"], th: "สวัสดีค่ะที่รัก", rom: "sawatdee kha tilac",
         text: "\"Welcome to Candy Bar! First time? No — wait.\" She studies you. \"You look like a man with a story and no wallet to put it in. Sit. Talk to Candy.\"",
         short: "\"Sit down, tilac. Talk to Candy — everybody's problems come to Candy.\"" },
+      { text: "\"Back again, tilac.\" Candy counts the room without moving her eyes. \"You know the house now \u2014 sit, drink, don't be boring.\"",
+        short: "\"Back again, tilac. Sit, drink, don't be boring.\"" },
       { topic: "wallet", req: ["knowOyHasIt"],
         text: "\"Oy has it? Then it's safe — safer than in your pocket, clearly. But Oy… ai, she make you work for it. Take her som tam from the market cart — extra spicy, tell them 'Candy's order'. Give it to Ploy her cashier, and doors open.\" She tips her chin down the soi, toward the old market block where the som tam cart still holds its corner.", sets: ["somTamAccepted"], gives: "som_tam",
         short: "\"Oy has your wallet. Take her extra-spicy som tam — 'Candy's order' — and give it to Ploy, her cashier.\"" },
@@ -4340,13 +4347,13 @@ const NPCS = {
     ],
     dialogue: [
       { req: ["knowMot"], notFlags: ["knowOyHasIt"], th: "อุ๊ยจริงหรอ", rom: "ui jing ro",
-        text: "\"Mot?! That little— okay okay. This morning he come here all big smile, buy whisky-cola, PAY CASH. Say he 'do business' with Madam Oy at Rainbow Girls. Business!\" She snorts. \"Your wallet in Oy's safe by lunchtime, guarantee.\"",
+        text: "\"Mot?! That little— okay okay. This morning he come here all big smile, buy whisky-cola, PAY CASH. Say he 'do business' with Madam Oy at Rainbow Girls — Tree Town maze, top of Buakhao. Business!\" She snorts. \"Your wallet in Oy's safe by lunchtime, guarantee.\"",
         sets: ["knowOyHasIt"],
-        short: "\"Mot sold your wallet to Madam Oy at Rainbow Girls. In her safe by now, guarantee.\"" },
+        short: "\"Mot sold your wallet to Madam Oy at Rainbow Girls, in Tree Town. In her safe by now, guarantee.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Hello handsome! You play pool? No? Good — you look like you lose enough already tonight.\" The earrings flash as she laughs.",
         short: "\"Hello handsome! You play pool, or you just hiding from your night?\"" },
-      { topic: "oy", text: "\"Madam Oy? Big boss of LK Metro. Undefeated at Connect 4 since two thousand nine. Do NOT play her.\"" },
+      { topic: "oy", text: "\"Madam Oy? Big boss. Her place is Rainbow Girls — deep in Tree Town, the maze up the top of this road. Undefeated at Connect 4 since two thousand nine. Do NOT play her.\"" },
     ],
   },
 
@@ -5650,7 +5657,7 @@ const NPCS = {
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Crystal Palace, welcome. Drinks menu, no touching, and whatever you heard about the fishbowl, it's a myth.\" A wink calibrated to the milligram.",
         short: "\"Drinks menu, no touching. What can I get you?\"" },
-      { topic: "oy", text: "\"Madam Oy danced HERE, you know. Before my time — number seventy-something, they say she was the best on the street. Now she owns half of LK Metro and all of its secrets.\"" },
+      { topic: "oy", text: "\"Madam Oy danced HERE, you know. Before my time — number seventy-something, they say she was the best on the street. Now she runs Rainbow Girls over in the Tree Town maze, and owns half of Buakhao's secrets besides.\"" },
       { topic: "door", text: "She glances toward the entrance — the heavy door, currently " +
         "shut, with nothing visible through it from the street. \"You know why that " +
         "door is closed?\" She doesn't wait. \"Because the moment you can see inside " +
@@ -9410,7 +9417,7 @@ const ENCOUNTERS = {
     rooms: ["beach_rd_s", "beach_rd_c", "beach_rd_n", "promenade", "buakhao_n", "north_beach"],
     interactive: true, nightly: true, // resets every night — Beach Road and band-night Buakhao restock
     th: "ไปไหนคะ", rom: "pai nai kha?",
-    intro: "She's leaning on the promenade rail where the lamplight is kindest — no " +
+    intro: "She's leaning where the lamplight is kindest — no " +
       "bar, no mamasan, freelance and unhurried. “Going where, hansum? Tonight I " +
       "am also free.” A beat, then, nodding down the rail at a friend pretending " +
       "not to listen: “Ning also free. VERY boring night, na.”",

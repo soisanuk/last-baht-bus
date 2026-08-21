@@ -5122,7 +5122,9 @@ test("adopting the soi dog gets you a Soi Dog Foundation donation text the next 
   assert.match(lastOut(), /phone buzzes/i, "the Foundation texts the next day");
   out = []; run("check messages");
   assert.match(lastOut(), /Soi Dog Foundation:/, "rendered under the Foundation's name, not an NPC's");
-  assert.match(lastOut(), /soidog\.org\/content\/make-donation/, "with the donation link from the dog quest");
+  assert.match(lastOut(), /jabs, food/, "the Foundation's ask, in its own voice");
+  assert.doesNotMatch(lastOut(), /https?:\/\//,
+    "URL-free — the Shamrock scene keeps the game's ONE real-world link");
   // once only
   state().day = 3; out = []; run("look");
   assert.doesNotMatch(lastOut(), /phone buzzes/i, "fires exactly once");

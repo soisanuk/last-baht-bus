@@ -619,7 +619,17 @@ function _npcState(id) {
 // READ goes through _convoActive, which re-checks the partner is still in the
 // room — so walking away, them leaving, or a barfine silently ends it. The
 // parser layer that consumes this lives in engine-parser.js.
-function _convoStart(id) { if (id) { G.convo = id; G.itNpc = id; if (G.known) G.known[id] = true; } } // talking to someone IS meeting them → you learn the name
+function _convoStart(id) {
+  if (!id) return;
+  // Switching partners LAPSES a pending question from the old one — the doc'd
+  // "changes the subject" rule, enforced at the switch itself. Without this the
+  // old asker's numbered answer prompt kept re-printing under the new partner's
+  // turns while a typed digit routed to the new partner (mobile playtest,
+  // 2026-08-17, Bpom's question haunting Roger's conversation).
+  if (G.convoQ && G.convoQ.id !== id) G.convoQ = null;
+  G.convo = id; G.itNpc = id;
+  if (G.known) G.known[id] = true; // talking to someone IS meeting them → you learn the name
+}
 function _convoName(id) {
   return (NPCS[id] && NPCS[id].name) || (PATRONS[id] && PATRONS[id].name) || id;
 }
@@ -1012,7 +1022,8 @@ function _deliver(npcId, d) {
   for (const f of d.sets || []) _setFlag(f);
   if (d.gives && G.itemLoc[d.gives] === null) {
     G.itemLoc[d.gives] = "inventory";
-    _say(`(You now have the ${ITEMS[d.gives].name}.)`, "dim");
+    // article-aware: "your wallet" must not become "the your wallet"
+    _say(`(You now have ${/^(your|the|a|an)\b/i.test(ITEMS[d.gives].name) ? "" : "the "}${ITEMS[d.gives].name}.)`, "dim");
     if (d.gives === "wallet") {
       G.money += WALLET_CASH;
       _say(`(Most of the cash is still in it — ฿${WALLET_CASH} back in play.)`, "dim");

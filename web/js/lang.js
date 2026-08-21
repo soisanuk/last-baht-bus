@@ -1299,8 +1299,8 @@ const _CATALOGS = {
     // and calls _L on msg.text. (Same trap as batch 3; the dead-key test caught
     // it both times.) The donation URL is the game's one fourth-wall line — it
     // stays verbatim.
-    "Word on the soi says you've adopted one of Pattaya's own — khob khun, khun jai dee! 🐕 The rest of them still need jabs, food, and a vet who works for smiles. Pay it forward for the dogs still on the street: https://www.soidog.org/content/make-donation 🙏":
-      "Auf der Soi heißt es, du hast einem von Pattayas Straßenhunden ein Zuhause gegeben — khob khun, khun jai dee! 🐕 Die anderen brauchen weiterhin Impfungen, Futter und einen Tierarzt, der für ein Lächeln arbeitet. Gib das Glück weiter — an die Hunde, die noch auf der Straße sind: https://www.soidog.org/content/make-donation 🙏",
+    "Word on the soi says you've adopted one of Pattaya's own — khob khun, khun jai dee! 🐕 The rest of them still need jabs, food, and a vet who works for smiles. Give a thought to the ones still on the street tonight 🙏":
+      "Auf der Soi heißt es, du hast einem von Pattayas Straßenhunden ein Zuhause gegeben — khob khun, khun jai dee! 🐕 Die anderen brauchen weiterhin Impfungen, Futter und einen Tierarzt, der für ein Lächeln arbeitet. Denk heute Nacht an die, die noch auf der Straße sind 🙏",
 
     // Act One, before the wallet is back
     "Your bank card was in the wallet — and the wallet is the whole problem. No card, no cash. Solve that first.":
