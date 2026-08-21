@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node --test)",
+      "Bash(npm test)",
+      "Bash(npm run test:e2e)",
+      "mcp__ccd_session_mgmt__search_session_transcripts",
+      "mcp__ccd_session_mgmt__list_sessions",
+      "mcp__Claude_Browser__read_console_messages",
+      "mcp__Claude_Browser__tabs_context"
+    ]
+  }
+}
