@@ -24,7 +24,11 @@ const _term = (() => {
   // Filler-girl names that are also everyday words — decorate only where she
   // stands, never in prose that merely uses the word ("Best seat", "Sang Som",
   // "Near the end"). Same treatment as the lowercase anonymous staff below.
-  const _WORD_NAME_NPCS = new Set(["Best", "Proud", "Near", "Nice", "Hong", "Som"]);
+  // "Pinky" is a word inside the bar name "Stinky Pinky" — the filler hostess of
+  // that name was shedding a tap from every "Stinky Pinky" in prose (skimmer
+  // playtest, 2026-08-17). Like the others here, she now decorates only where
+  // she stands (Cheeky Monkey), never in the venue name.
+  const _WORD_NAME_NPCS = new Set(["Best", "Proud", "Near", "Nice", "Hong", "Som", "Pinky"]);
   function _kwIndex() {
     const kind = new Map(); // display name → npc | patron | bar | item
     try {

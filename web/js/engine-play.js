@@ -2390,8 +2390,9 @@ function _addHappy(n, why) {
 
 const NIGHT_TURNS = 100;
 
-function _clockStr() {
-  const h = (18 + Math.floor(G.nightTurn / 10)) % 24;
+function _clockStr(turn) {
+  const t = turn == null ? G.nightTurn : turn;
+  const h = (18 + Math.floor(t / 10)) % 24;
   return `${String(h).padStart(2, "0")}:00`;
 }
 

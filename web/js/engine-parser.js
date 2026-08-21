@@ -27,6 +27,15 @@ const _LADY_DRINK_LINES = [
   n => _fmt("{n}'s glass runs dry the way a meter does; ฿{p} restarts it.", { n, p: LADY_DRINK }),
   n => _fmt("The waitress doesn't even ask — {n}'s drink, ฿{p}, straight onto your tab.", { n, p: LADY_DRINK }),
 ];
+// At regular+ bond the transactional lines ("a smile calibrated to ฿150", "the
+// way a meter does") contradict the courtship the player has built — she's not
+// metering YOU any more (Alan playtest, 2026-08-17). A warm sub-pool for her.
+const _LADY_DRINK_WARM = [
+  n => _fmt("{n}'s usual arrives before you've asked — she caught your eye, the waitress caught hers. ฿{p}, and she holds the toast a beat longer than the tab explains.", { n, p: LADY_DRINK }),
+  n => _fmt("You get {n} a drink; she bumps your glass, says \u201csame-same as always,\u201d and the ฿{p} feels beside the point, which is new.", { n, p: LADY_DRINK }),
+  n => _fmt("Another for {n} \u2014 ฿{p} \u2014 but she drinks half and pushes the rest back to share, which no meter has ever done.", { n, p: LADY_DRINK }),
+  n => _fmt("{n} lets the drink sit. \u201cYou don\u2019t have to keep buy, na,\u201d she says, and means it, which costs her ฿{p} she\u2019d rather have than have you think she\u2019s counting.", { n, p: LADY_DRINK }),
+];
 // A lazy girl (type:"lazy") takes the drink and gives you the minimum back — the
 // favor rarely sticks (the "you spend, get little" punishment). Not unkind, just
 // not working for it; a savvy player reads it and stops paying.
@@ -725,7 +734,7 @@ const _READ_NOUNS = {
   board: ["chalkboard", "blackboard", "clipboard", "slip", "request", "requests", "request sheet"],
   poster: ["flyer"],
   photos: ["photo", "photograph", "photographs", "picture", "pictures", "wall of photos", "frame", "portrait"],
-  sign: ["notice", "placard"],
+  sign: ["notice", "placard", "arrows", "arrow", "signage"],
   jukebox: ["juke"],
   crane: ["cranes", "origami", "napkin", "napkins"],
   cherries: ["cherry"],
@@ -869,7 +878,7 @@ function _doExamine(arg) {
       "closing-time optimism. Chalk and a scoreboard hang beside it. (PLAY DARTS.)");
     return;
   }
-  if (_roomRead(arg, true) || arg.includes("sign")) return _doRead(arg);
+  if (_roomRead(arg, true) || /\bsign|signage|arrows?\b/.test(arg)) return _doRead(arg);
   if (_doScenery(arg)) return;
   _say(_pickVary(_NO_SUCH_THING, "xnothing"));
 }
@@ -1997,7 +2006,7 @@ function _doRead(arg) {
 
   const flavor = _roomRead(arg);
   if (flavor) { _say(flavor); return; }
-  if (arg.includes("sign")) {
+  if (/\bsign|signage|arrows?\b/.test(arg)) {
     const s = _room().sign && SIGNS[_room().sign];
     if (!s) {
       // Auntie Nok's hand-lettered cart sign — the ฿5/bottle offer her blurb
@@ -2898,10 +2907,22 @@ function _doBuy(arg) {
   }
   if (arg.includes("lady drink") || arg.includes("ladydrink") || arg.includes("drink")) {
     if (!_socialVenue()) { _say("Buy a drink where drinks are sold, tilac."); return; }
-    const nameW = arg.replace(/\blady\b|\bdrinks?\b|\bfor\b/g, " ").trim();
+    // strip round-count words too — "buy ploy ANOTHER drink" left "ploy another"
+    // and _findNpc missed her (Gaz playtest, 2026-08-17)
+    const nameW = arg.replace(/\blady\b|\bdrinks?\b|\bfor\b|\banother\b|\bmore\b|\bagain\b|\bsame\b/g, " ").replace(/\s+/g, " ").trim();
     const girlsHere = _npcsHere().filter(id => NPC_ROLES[id]);
     const id = nameW ? _findNpc(nameW) : girlsHere[0];
-    if (!id || !NPC_ROLES[id]) { _say(nameW ? "She's not working this bar." : "Nobody here to buy one for."); return; }
+    if (!id || !NPC_ROLES[id]) {
+      // A resolvable MALE / manager / patron isn't "she" — point at the right verb
+      // instead of "She's not working this bar" (skimmer + Gaz: "buy drink for tan")
+      const who = nameW && (_findNpc(nameW) || _findPatron(nameW));
+      if (who && who !== id) {
+        _say(`${_npcLabel ? (NPCS[who] ? _npcLabel(who) : _patronLabel(who)) : "He"} doesn't do lady drinks — that's the ladies' racket. For a bloke, it's BUY MAN DRINK (the fella behind the bar).`);
+      } else if (nameW) {
+        _say("She's not working this bar — nobody here by that name. (Buy a drink for one of the girls on the rail, or BUY MAN DRINK.)");
+      } else _say("Nobody here to buy one for.");
+      return;
+    }
     if (G.money < LADY_DRINK) { _say(_fmt("Lady drinks are ฿{p}. You have ฿{m}. The math is not on your side.", { p: LADY_DRINK, m: G.money })); return; }
     // she's already sitting with someone: a polite decline first, then — if you insist —
     // she takes it and her customer starts to turn.
@@ -2922,7 +2943,10 @@ function _doBuy(arg) {
     // (only lazy girls consume the extra die, so nothing else's determinism moves.)
     const _lazy = NPCS[id].type === "lazy";
     if (!_lazy || _rand() < 0.4) _addBond(id, 1);
-    _say(_fmt("{line} (฿{m} left.)", { line: _pickVary(_lazy ? _LAZY_DRINK_LINES : _LADY_DRINK_LINES, _lazy ? "lazydrink" : "ladydrink")(NPCS[id].name), m: G.money }));
+    const _warm = !_lazy && _bondTier(id) >= 2;
+    const _pool = _lazy ? _LAZY_DRINK_LINES : _warm ? _LADY_DRINK_WARM : _LADY_DRINK_LINES;
+    const _pk = _lazy ? "lazydrink" : _warm ? "warmdrink" : "ladydrink";
+    _say(_fmt("{line} (฿{m} left.)", { line: _pickVary(_pool, _pk)(NPCS[id].name), m: G.money }));
     _addHappy(1);
     if (Object.keys(G.soc.drinks).length >= 4 && !G.soc.butterflyTeased) {
       G.soc.butterflyTeased = true;
@@ -3962,8 +3986,11 @@ function _doWait(arg) {
     if (G.pendingEnc || G.game) { _say(`(${_clockStr()} — so much for waiting.)`, "dim"); return; }
     if (G.phone.inbox.length > inbox0) { _say(`(${_clockStr()} — your phone interrupts.)`, "dim"); return; }
   }
+  // +1: the loop stops at target-1, and doCommand's bottom-of-loop tick will
+  // land us on target — show THAT clock, not the pre-tick one (WAIT UNTIL 20:00
+  // printed "19:00"; two personas, 2026-08-17).
   _say(_fmt("You let the night idle past — ice melting, songs turning over, the street " +
-    "rearranging itself. {t}.", { t: _clockStr() }));
+    "rearranging itself. {t}.", { t: _clockStr(G.nightTurn + 1) }));
 }
 
 // The Peacock Cabaret's performers — in NPC_ROLES for the courtship rails

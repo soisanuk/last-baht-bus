@@ -820,12 +820,18 @@ function _bfResolve(kind) {
     G.rideSeq = { id, fine: price, spent: 0, stops: 0, sanuk: 0, seen: [] };
     G.offstage = true; // off the tourist map on her bike — the origin bar's saleng/ambient isn't your scene
     G.pendingEnc = "nightride";
-    _encPrompt(
-      [(price ? `฿${price} to the mamasan, and ` : "") +
-        `${name} takes your hand — but instead of the taxi rank she wheels a scuffed Honda ` +
+    const ridden = !!G.rideEverTaken;
+    const offer = ridden
+      ? `${name} takes your hand — and there's the scuffed Click again, already off its stand. ` +
+        `"Not hotel yet," she says, mock-stern, reading the hope on your face. "I know, I know ` +
+        `— you want the same night again. Cannot step in same river, na. But come — tonight is ` +
+        `its own." She pats the seat.`
+      : `${name} takes your hand — but instead of the taxi rank she wheels a scuffed Honda ` +
         `Click off its stand, thumbs it awake, and pats the seat behind her. "Tonight I not ` +
         `want hotel yet. Come — I show you MY Pattaya, the real one. Hold me tight, na, I ` +
-        `drive little bit crazy." (฿${G.money} left.)`, "win"],
+        `drive little bit crazy."`;
+    _encPrompt(
+      [(price ? `฿${price} to the mamasan, and ` : "") + offer + ` (฿${G.money} left.)`, "win"],
       [`(RIDE with her into the night · or JUST the hotel — up to you.)`, "dim"]);
     return;
   }
@@ -1003,6 +1009,7 @@ function _nightRide(input) {
   const go = /\b(ride|yes|on|more|another|sure|ok|okay|go|keep|again|deeper|why not|lets?|come|drive)\b/.test(input) &&
     !/\bno\b|hotel|home|enough|call|done|bed|sleep|stop|tired|late|finish/.test(input);
   if (!go) return _endRide(seq, "choice");
+  G.rideEverTaken = true; // you actually rode — a future offer reframes, never repeats verbatim
   if (G.money < RIDE_MIN_CASH && seq.stops > 0) return _endRide(seq, "broke");
   // a random stop
   const venue = _pickRideVenue(seq.seen);
@@ -3114,9 +3121,19 @@ function _doWeather() {
     `${wx.rain}% chance of rain. Tomorrow's forecast is also Pattaya.`);
 }
 
+// Real baked headlines occasionally include genuinely grim news (a dead teenager
+// in a suitcase surfaced in the phone during a comedy playthrough — Alan, 2026-08-17).
+// Filter the darkest keywords from the in-fiction surfaces: this is a nightlife
+// romp, not a wire service. Flavour only, so dropping a few is free.
+const _GRIM_RE = /\b(dead|death|died|kill(?:ed|ing)?|murder|suicide|rape|body|bodies|corpse|suffocat|abus|molest|overdose|fatal|massacre|hang(?:ed|ing)|drown|stab|shot|shoot)\b/i;
+function _newsClean() {
+  return _newsFeed().filter(h => !_GRIM_RE.test(h.t + " " + (h.s || "")));
+}
 function _headline() {
-  const feed = _newsFeed();
-  return feed.length ? feed[Math.floor(_rand() * feed.length)] : null;
+  const feed = _newsClean();
+  const all = _newsFeed();
+  const use = feed.length ? feed : all; // if a whole bake is grim, better a headline than none
+  return use.length ? use[Math.floor(_rand() * use.length)] : null;
 }
 
 function _sayHeadline(h) {
