@@ -13,9 +13,9 @@ var NEWS_FEED = [
     "d": "21 Aug 2026"
   },
   {
-    "t": "Students injured by swarming bees",
-    "s": "Bangkok Post",
-    "d": "20 Aug 2026"
+    "t": "Australian tourist disputes 32,540-baht bar bill after 13-hour Pattaya bender",
+    "s": "The Drinks Business",
+    "d": "18 Aug 2026"
   },
   {
     "t": "Pattaya homeowner issues warning after CCTV catches clothes thief",
@@ -24,11 +24,6 @@ var NEWS_FEED = [
   },
   {
     "t": "Pattaya rescuers save German man from capsized sailboat",
-    "s": "Thaiger",
-    "d": "21 Aug 2026"
-  },
-  {
-    "t": "Thailand video news | Giant bee swarm injures 17 near Pattaya government complex, Bangkok places eighth among world’s most attractive touris",
     "s": "Thaiger",
     "d": "21 Aug 2026"
   },
@@ -43,8 +38,13 @@ var NEWS_FEED = [
     "d": "19 Aug 2026"
   },
   {
-    "t": "Miss Universe Thailand 2026 Contestants Turn Iconic Thai Food Into National Costumes",
-    "s": "8days.sg",
+    "t": "The Whitehouse Condotel, Pattaya 13, Pattaya Klang, Pattaya, Chon Buri, 20150 Thailand, Pattaya, Changwat Chon Buri Apartment for Sale - Rea",
+    "s": "Realtor.com",
+    "d": "18 Aug 2026"
+  },
+  {
+    "t": "​A Preliminary Case for Thailand Entering Its Second Lost Decade",
+    "s": "Khaosod English",
     "d": "20 Aug 2026"
   },
   {
@@ -58,14 +58,14 @@ var NEWS_FEED = [
     "d": "19 Aug 2026"
   },
   {
-    "t": "Singapore believed they could beat Thailand and they did, which is why ASEAN Championship exit isn't in vain",
-    "s": "ESPN",
-    "d": "18 Aug 2026"
-  },
-  {
     "t": "After I graduated from college in the US, I moved abroad to Thailand. It's nothing like I expected.",
     "s": "Business Insider",
     "d": "20 Aug 2026"
+  },
+  {
+    "t": "Singapore believed they could beat Thailand and they did, which is why ASEAN Championship exit isn't in vain",
+    "s": "ESPN",
+    "d": "18 Aug 2026"
   },
   {
     "t": "PLA Air Force trains with Belarus, Thailand, Egypt in three regions, displaying strategic reach beyond homeland defense: expert - Global Tim",
@@ -74,14 +74,14 @@ var NEWS_FEED = [
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-08-20","USD":32.92,"AUD":23.39,"GBP":44.84,"EUR":38.45};
+var FX_RATES = {"date":"2026-08-21","USD":32.68,"AUD":23.42,"GBP":44.62,"EUR":38.23};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-21","temp":27,"humid":86,"code":3,"hi":32,"rain":84};
+var WX_NOW = {"date":"2026-08-22","temp":28,"humid":82,"code":3,"hi":30,"rain":87};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-08-21","done":false,"h":"Arsenal","hs":0,"a":"Coventry","as":0},{"d":"2026-08-22","done":false,"h":"Hull","hs":0,"a":"Man United","as":0},{"d":"2026-08-22","done":false,"h":"Everton","hs":0,"a":"C Palace","as":0},{"d":"2026-08-22","done":false,"h":"Ipswich","hs":0,"a":"Sunderland","as":0},{"d":"2026-08-22","done":false,"h":"Nottm Forest","hs":0,"a":"Leeds","as":0},{"d":"2026-08-22","done":false,"h":"Brentford","hs":0,"a":"Spurs","as":0},{"d":"2026-08-23","done":false,"h":"Brighton","hs":0,"a":"Aston Villa","as":0},{"d":"2026-08-23","done":false,"h":"Man City","hs":0,"a":"Bournemouth","as":0},{"d":"2026-08-23","done":false,"h":"Newcastle","hs":0,"a":"Liverpool","as":0},{"d":"2026-08-24","done":false,"h":"Fulham","hs":0,"a":"Chelsea","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-08-16","first":"004615","last2":"53","front3":["429","731"],"back3":["094","937"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4584,"date":"2026-08-21","baht":71350};
+var GOLD = {"usd":4626,"date":"2026-08-21","baht":71500};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":77262,"thb":2523582};
+var BTC = {"usd":76803,"thb":2506857};
