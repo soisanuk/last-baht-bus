@@ -131,7 +131,7 @@ const ROOMS = {
     exits: { s: "jomtien_beach", n: "dongtan_beach", e: "jomtien_beach_rd" },
   },
   jomtien_soi_7_beach_end: {
-    name: "Jomtien Soi 7 Beach End",
+    name: "Soi 7 Sands (Auntie Nok's pitch)",
     region: "Jomtien",
     desc: "Where Soi 7 finally gives out onto the sand: a scrap of hard-packed beach, a couple of " +
       "upturned boats, and Auntie Nok's drinks cart parked in the lee of a sea almond tree, cooler " +
@@ -173,6 +173,13 @@ const ROOMS = {
       "toward the mouth of Soi 7.",
     exits: { w: "jomtien_beach_m", n: "jomtien_beach_rd_n", s: "jomtien_beach_rd_s" },
     venues: ["jomtien_thai"],
+    reads: {
+      sign: "Sun has eaten most of it, but the bones survive: JOMTIEN \u2192 THAPPRAYA " +
+        "\u2192 PATTAYA TAI \u2192 WALKING ST GATE \u2192 SECOND RD \u2192 DOLPHIN, " +
+        "\u0E1A\u0E32\u0E17 (baht) smudged next to a repainted fare. One loop, one " +
+        "direction, hail it anywhere along the way \u2014 the sign is older than the " +
+        "fare and newer than the route. (WAVE, then PAY when you hop off.)",
+    },
   },
   jomtien_beach_rd_s: {
     busStop: "jomtien", // on the route — hail-anywhere, no formal stop (2026-08-15 canon)
@@ -198,7 +205,7 @@ const ROOMS = {
 
   // ── Soi 7 (Jomtien) — runs inland from Jomtien Beach Road to Second Road ──
   jomtien_soi_7_w: {
-    name: "Jomtien Soi 7 (West / beach end)",
+    name: "Jomtien Soi 7 (West)",
     region: "Jomtien",
     desc: "The beach end of Soi 7, off the south end of the beach road: a mellow strip of " +
       "open-front beer bars strung with fairy lights, a couple of massage shops, and the easy " +

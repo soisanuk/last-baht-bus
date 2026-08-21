@@ -160,15 +160,33 @@ const _term = (() => {
   // removes the <img>, so the game never depends on a portrait existing.
   let _portIdx = null;
   function _portraitId(k, v) {
+    // Display names can COLLIDE (two hostesses both named Toey — rainbow_girls
+    // and neon_palm). A flat map let the last one win everywhere, so the wrong
+    // woman's face fronted the flyout and her poster path 404'd (mobile
+    // playtest, 2026-08-17). Keep every candidate and prefer the one standing
+    // in THIS room; fall back to the first otherwise.
     try {
       if (!_portIdx) {
         _portIdx = new Map();
-        for (const [id, n] of Object.entries(NPCS)) _portIdx.set("npc:" + n.name, id);
+        const put = (key, id) => {
+          const arr = _portIdx.get(key) || [];
+          arr.push(id); _portIdx.set(key, arr);
+        };
+        for (const [id, n] of Object.entries(NPCS)) put("npc:" + n.name, id);
         if (typeof PATRONS !== "undefined") {
-          for (const [id, p] of Object.entries(PATRONS)) _portIdx.set("patron:" + p.name, id);
+          for (const [id, p] of Object.entries(PATRONS)) put("patron:" + p.name, id);
         }
       }
-      return _portIdx.get(k + ":" + v) || null;
+      const cands = _portIdx.get(k + ":" + v);
+      if (!cands || !cands.length) return null;
+      if (cands.length > 1 && typeof G !== "undefined" && G) {
+        const here = cands.find(id =>
+          (NPCS[id] && typeof _npcRoom === "function" && _npcRoom(id) === G.room) ||
+          (typeof PATRONS !== "undefined" && PATRONS[id] &&
+           typeof _patronRoom === "function" && _patronRoom(id) === G.room));
+        if (here) return here;
+      }
+      return cands[0];
     } catch (e) { return null; }
   }
 

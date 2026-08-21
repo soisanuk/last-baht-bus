@@ -598,7 +598,21 @@ function _doTake(arg) {
   if (/water|\bnam\b/.test(arg) && _isHotelRoom(G.room)) { _takeFridgeWater(); return; }
   if (_isDarkHere()) { _say("You grope around in the dark and find nothing but regret. (LIGHT ON)"); return; }
   const id = _findItem(arg, "room");
-  if (!id) { _say("You don't see that here."); return; }
+  if (!id) {
+    // a fixture the room ADVERTISES (a reads: noun, e.g. the Queen Vic dartboard)
+    // exists — it just isn't luggage. Denying it's here reads as a bug.
+    const _advertised = (() => {
+      try {
+        const esc = arg.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        return new RegExp("\\b" + esc + "s?\\b", "i").test(stripMarkup(_room().desc || ""));
+      } catch (e) { return false; }
+    })();
+    if ((typeof _roomRead === "function" && _roomRead(arg, true)) || _advertised) {
+      _say("That's fixtures, not luggage. It stays; the bar would notice.");
+      return;
+    }
+    _say("You don't see that here."); return;
+  }
   const it = ITEMS[id];
   if (!it.portable) { _say(it.name === "marigold offering" ?
     "Taking a shrine offering? With YOUR luck tonight?" :
@@ -1256,6 +1270,14 @@ const _SCENERY = [
         "already being uncapped on spec.",
       "The bottle's gone warm at the shoulders and cold at the heart, same as everybody.",
     ],
+    sand: [
+      "Empties, is it? The tideline keeps a few — under the loungers, wedged by the " +
+        "spirit house, wherever a night ended. The intact ones are worth five baht " +
+        "each to Auntie Nok, and three of them are a bus fare.",
+      "You scan the sand with a scavenger's eye. Most of what glitters is crushed, " +
+        "but a whole bottle turns up for whoever walks far enough — the beach's " +
+        "one honest economy.",
+    ],
     any: [
       "You're between drinks — a state this town regards as temporary and slightly " +
         "alarming, like standing in a doorway.",
@@ -1649,6 +1671,39 @@ const _SCENERY = [
   // The staircase is THE Soi 6 mechanic in architectural form — the prose names
   // it constantly ("three staircases the menus don't mention") and until now the
   // curiosity verb pretended not to understand. Venue decides what stairs mean.
+  { key: "tancard", m: /\b(?:business )?card\b/, fn: () => {
+    // the taxi intro plants it ("taps the card already in your pocket") and the
+    // hint says it has a number — it must survive EXAMINE (desktop playtest)
+    if (G.phone && G.phone.contacts && G.phone.contacts.tan)
+      return "A plain card, creased from the pocket: TAN — TRANSPORT · AIRPORT · " +
+        "ANYTHING, a Thai mobile number, and nothing else. No surname, no company. " +
+        "The confidence of a man whose number is enough. (CALL TAN)";
+    return "No card on you worth reading.";
+  } },
+
+  { key: "flipflops", m: /\bflip[- ]?flops?\b|\bsandals?\b|\bthongs\b/, lines: {
+    sand: [
+      "Somebody's flip-flops, parked neatly by a lounger with the confidence of a " +
+        "man who expected to come straight back. Hours ago, by the sand drifted " +
+        "into them. The sea says nothing.",
+      "Abandoned footwear, the beach's most reliable crop. This pair waits with " +
+        "more patience than its owner ever had.",
+    ],
+    any: [
+      "No footwear worth studying here — and on this coast, that's saying something.",
+    ],
+  } },
+
+  { key: "condoms", m: /\bcondoms?\b|\brubbers?\b|\bjohnn(?:y|ies)\b/, fn: () => {
+    // carried as a counter (G.condoms), not an ITEMS record, so the generic
+    // shrug used to answer a pocket item (desktop playtest 2026-08-17)
+    if (G.condoms > 0) return `A pocket pack, ${G.condoms} left — 7-Eleven's finest, ` +
+      "riding next to your phone like a very small insurance policy. The clinic " +
+      "hands out stickers; this is the grown-up version.";
+    return "You're not carrying any — which is either fine or famous last words. " +
+      "Any 7-Eleven has them by the till, and the till girl has seen everything.";
+  } },
+
   { key: "staircase", m: /\bstaircases?\b|\bstairs\b|\bstairway\b/, fn: () => {
     const r = _room();
     if (r.barType === "soi6") return "The staircase behind the bar, going up. No sign, " +
@@ -1666,6 +1721,12 @@ const _SCENERY = [
       "most eccentric staircase in a hundred metres. (UP, if you're staying.)";
     if (r.bar) return "No stairs in here worth the name — this is a one-storey " +
       "operation, and everything it sells happens at ground level.";
+    // the Soi 6 STREET advertises "the same staircases behind the bar" — answer
+    // from the pavement too, not only from inside (mobile playtest 2026-08-17)
+    if (r.region === "Soi 6") return "From the street you can just see them — through " +
+      "each doorway, past each rail, the same staircase going up at the back. " +
+      "Thirty bars, one floor plan, one business model. You'd have to step " +
+      "inside to learn any more, which is of course the idea.";
     return null;
   } },
 
@@ -3706,6 +3767,34 @@ function _doDance() {
   }
 }
 
+const _SIT_LINES = {
+  bar: [
+    "You take a stool. It receives you the way this town receives everyone — no questions, a coaster down before you've settled.",
+    "You sit. The rail is cool, the fan finds you, and somewhere a fresh coaster arrives like a dealt card.",
+    "You park yourself at the rail. Nobody looks up, which is its own kind of welcome.",
+    "The stool wobbles once, introduces itself, and holds. You're in.",
+  ],
+  beach: [
+    "You sit on the sand, which is free, and watch the sea, which is also free. The town will correct this imbalance the moment you stand up.",
+    "You drop onto the sand. The Gulf carries on with its one long exhale.",
+  ],
+  street: [
+    "You perch on the kerb a moment. A motosai slows hopefully, reads you, moves on.",
+    "You find a ledge and sit. The soi flows around you without comment — you are now furniture, which in Pattaya is a respectable career.",
+  ],
+};
+const _TOILET_LINES = {
+  bar: [
+    "Out the back, past the ice buckets — the universal geography. The gents is small, honest, and someone has hung an aggressively optimistic air freshener. You return a new man.",
+    "The hongnam is where hongnams always are: past the fridge, mind the step. A hostess points without being asked, without looking up.",
+    "Back past the pool cues, a door with a cartoon gentleman on it. It does the job. The soap is a rumour, but there's a hose.",
+  ],
+  street: [
+    "Not on the soi, sunshine. Every bar on this street has a gents and the price of admission is a beer — the system works because everyone honours it.",
+    "The soi has rules and this is the first one. Duck into a bar; buy something; everybody wins.",
+  ],
+};
+
 function _doSing() {
   if (_inBar() && _bandHere()) {
     _say("You add your voice. The band adjusts — subtly, professionally — and you're on " +
@@ -3814,7 +3903,8 @@ function _hourToTurn(h) { // 24h clock → nightTurn; the game lives 18:00–04:
 function _doWait(arg) {
   if (!arg) { _say("You wait. Pattaya doesn't."); return; }
   let target = null;
-  const until = arg.match(/^(?:until |till |for )?(?:(\d+)|midnight)\s*(am|pm)?$/);
+  // accept 20:00 too — the game prints times that way (mobile playtest 2026-08-17)
+  const until = arg.match(/^(?:until |till |for )?(?:(\d+)(?::\d\d)?|midnight)\s*(am|pm)?$/);
   if (/midnight/.test(arg)) target = _hourToTurn(0);
   else if (until && until[1]) {
     let h = parseInt(until[1], 10);
@@ -4723,9 +4813,13 @@ function _completePool(verb, ctx) {
       _say("Leave to where? Pick a direction — or OUT of a venue.");
       break;
     case "ride": case "catch": case "bus": {
-      if (!_room().busStop) return [];
-      const lines = Object.entries(BUS_LINES).filter(([, st]) => st.includes(G.room));
-      return [...new Set(lines.flatMap(([, st]) => st))]
+      // _busLinesFor, not st.includes(G.room): hail-anywhere means a room can be
+      // ON a route without being in its stop list — from such a room the old
+      // filter returned [] and the (RIDE BUS TO <place>) prefill offered nothing
+      // (mobile playtest 2026-08-17).
+      const lines = _busLinesFor(G.room);
+      if (!lines.length) return [];
+      return [...new Set(lines.flatMap(l => BUS_LINES[l]))]
         .filter(s => s !== G.room).map(s => ROOMS[s].name.toLowerCase());
     }
     case "motosai": case "moto": case "taxi": return Object.keys(MOTOSAI_DESTS);
@@ -5060,6 +5154,15 @@ function doCommand(input) {
   // (The saleng is deliberately NOT an encounter — it's a passive room fixture,
   // see _salengTick — so it never lands here and never eats a command.)
   if (G.pendingEnc && v !== "restart") {
+    // Pure OBSERVATION verbs re-show the moment instead of being spent as your
+    // reaction: LOOK once accepted a tout's offer, which read as the game
+    // deciding for you (desktop playtest, 2026-08-17 — 4 hits). Navigation and
+    // everything else still counts as your snap answer (walking off IS one).
+    if (/^(look|l|examine|x|inventory|i|inv|time|diagnose|score|help)$/.test(v) && !arg) {
+      if (typeof _renderEncounter === "function") _renderEncounter();
+      else _say("(The moment is still waiting on you.)", "dim");
+      return;
+    }
     const enc = G.pendingEnc;
     G.pendingEnc = null;
     _ENC[enc](lower);
@@ -5164,7 +5267,10 @@ function doCommand(input) {
     case "midnight": _doWait("until midnight"); break; // the help hint, tapped
     case "enter": _doEnter(arg); break;
     case "look": case "l":
-      if (arg) _doExamine(arg); // "look at candy" = "examine candy"
+      // strip the preposition: "look for bottles" / "look at candy" both examine
+      // the noun ("for bottles" used to reach the scenery matcher verbatim and
+      // draw the between-drinks joke — desktop playtest 2026-08-17)
+      if (arg) _doExamine(arg.replace(/^(?:for|at)\s+(?:the\s+)?/, ""));
       else _describeRoom(true);
       break;
     // A bare POSTER, because the room prints a tappable (POSTER) hint and a hint
@@ -5361,6 +5467,45 @@ function doCommand(input) {
     case "swim": _doSwim(); break;
     case "dance": _doDance(); break;
     case "sing": _doSing(); break;
+    case "sit": case "sit down": {
+      // The soi invites it constantly ("Sit. Talk to Candy.") — it must never
+      // dead-end in didn't-parse (both playtests, 2026-08-17). Flavor only.
+      if (_inBar()) _say(_pickVary(_SIT_LINES.bar, "sitbar"));
+      else if (/beach/i.test(_room().name)) _say(_pickVary(_SIT_LINES.beach, "sitbeach"));
+      else _say(_pickVary(_SIT_LINES.street, "sitstreet"));
+      break;
+    }
+    case "toilet": case "loo": case "wc": case "restroom": case "bathroom":
+    case "pee": case "piss": case "urinate": {
+      // A beer-bar sim for gentlemen of a certain age: this WILL be typed.
+      if (_inBar()) _say(_pickVary(_TOILET_LINES.bar, "wc"));
+      else if (_room().seven) _say("The 7-Eleven's is staff-only and the staff know every trick in the book. There'll be a bar along presently — buy a beer, use the gents; that's the social contract.");
+      else _say(_pickVary(_TOILET_LINES.street, "wc"));
+      break;
+    }
+    case "where": {
+      // "where is rainbow girls", typed mid-hunt, deserves better than didn't-parse.
+      const q = (arg || "").replace(/^(?:is|are)\s+(?:the\s+)?/, "").trim();
+      if (!q) { _say("Wherever you are, that's where you are. (MAP for the town, TRAVEL for the places you know.)"); break; }
+      const known = _travelDests().find(id => {
+        const r2 = ROOMS[id];
+        return (r2.bar && _pnm(r2.bar).includes(_pnm(q))) || _pnm(r2.name).includes(_pnm(q));
+      });
+      if (known) { _say(`${_barName(known)} — you know the way. (TRAVEL ${(_barName(known) || "").toUpperCase()})`); break; }
+      _say("You'd have to ask around — the bar ladies know where everything is, and half of why. (ASK <someone> ABOUT <place>, or MAP.)");
+      break;
+    }
+    case "show": {
+      // "Show me you were even here last night" — SHOW must not be eaten as an
+      // ASK topic (desktop playtest, 2026-08-17). The receipt IS the proof beat;
+      // anything else routes through GIVE, whose refusals are voiced.
+      const m = (arg || "").match(/^(.*?)\s+to\s+(\S+)/);
+      const what = m ? m[1] : (arg || "");
+      if (/receipt/.test(what) && G.itemLoc.receipt === "inventory") { _doRead("receipt"); break; }
+      if (arg) { _doGive(arg); break; }
+      _say("Show what, to whom? (SHOW <thing> TO <someone>)");
+      break;
+    }
     case "throw": case "toss": case "chuck": case "fling":
       // THROW DARTS at a board starts the 501 game; THROW COVER / PASTIE [AT <name>]
       // is the ceiling game; anything else keeps the old flavor refusal.

@@ -112,6 +112,10 @@
     padding: .15rem .4rem;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
+    /* 44px floor: the accessibility control was the smallest target on the
+       screen (35x25 at 390px — mobile playtest 2026-08-17), for the exact
+       audience that needs it most */
+    min-width: 44px; min-height: 40px;
   }
   #font-fab:active { background: #46006b; }
   /* The street compass. Same stack slot as the bell — the bell shows inside a

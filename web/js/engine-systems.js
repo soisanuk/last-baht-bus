@@ -3449,8 +3449,8 @@ function _doPet(arg) {
       "She always has.", "win");
   }
   G.catDay = G.day;
-  _addHappy(1);
-  _say("(The best two locals on the beach. +1 สนุก.)", "dim");
+  _addHappy(1); // _addHappy prints its own (+1 สนุก) — don't repeat it in the flavor line
+  _say("(The best two locals on the beach.)", "dim");
 }
 
 // ── Sai Krok, the accidentally-adopted soi dog ──────────────────────────────

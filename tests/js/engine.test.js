@@ -6481,7 +6481,7 @@ test("look at <thing> aliases to examine; bare look still describes the room", (
   assert.match(lastOut(), /vendor/i);
   out = [];
   run("look");
-  assert.match(lastOut(), /Soi 7 Beach End/);
+  assert.match(lastOut(), /Soi 7 Sands/);
 });
 
 test("contacts lists the phonebook with bar and favor glow", () => {
@@ -6855,7 +6855,7 @@ test("the 'elsewhere' line says 'around here', not 'this bar', when you're not i
   state().room = "jomtien_beach";
   out = [];
   run("talk to auntie nok");
-  assert.match(lastOut(), /Auntie Nok isn't around here tonight — try Jomtien Soi 7 Beach End/);
+  assert.match(lastOut(), /Auntie Nok isn't around here tonight — try Soi 7 Sands/);
   assert.doesNotMatch(lastOut(), /this bar/, "no bar where there is no bar");
 });
 
