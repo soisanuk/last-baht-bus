@@ -92,3 +92,15 @@ test("Box 15's ciphertext renders verbatim and taps nothing", () => {
   assert.match(html, /ACHAL GCECS FMLZZ MOSCP SMCNJ CIGAS RMOSV HVHG/,
     "the letter groups must survive decoration byte-for-byte");
 });
+
+test("a 2+-cap NPC name inside parenthesized prose doesn't shred its own tag", () => {
+  // decorate wrapped "DJ Beer" into a data-v="DJ Beer" tag, then the ALL-CAPS-
+  // in-parens cmd pass re-matched "DJ" inside the attribute and split the tag,
+  // leaking `">` as visible text (Alan playtest, 2026-08-17).
+  const html = _term.decorate("(slip into her office when DJ Beer plays Sabai Sabai)");
+  const opens = (html.match(/<b /g) || []).length;
+  const closes = (html.match(/<\/b>/g) || []).length;
+  assert.equal(opens, closes, "tag count balanced — no split tag");
+  const visible = html.replace(/<[^>]+>/g, ""); // strip all tags → what the reader sees
+  assert.doesNotMatch(visible, /"&gt;|"&lt;|"\>/, "no attribute fragment leaked into visible text");
+});

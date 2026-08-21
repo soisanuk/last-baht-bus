@@ -339,8 +339,13 @@ function _arriveAt(to) {
   // walked in during the final half hour — the courtesy warning, and a barfine nudge
   if (_flag("act1Done") && _closesMidnight(to) && G.nightTurn >= 55 && G.nightTurn < 60 &&
       !(G.soc.lockIn && G.soc.lockIn[to])) _lastCall(to);
-  // a girl you've built something with greets you by name (once per bar a night)
-  if (ROOMS[to].barType && !(G.soc.greeted && G.soc.greeted[to])) {
+  // a girl you've built something with greets you by name (once per bar a night).
+  // An invite being honoured THIS arrival is its own, bigger recognition scene —
+  // both fired back to back ("lights up like payday" twice in a row, Alan
+  // playtest 2026-08-17), so the invite consumes the greeting slot.
+  const _invHere = G.phone.invite && G.phone.invite.day === G.day &&
+    _npcRoom(G.phone.invite.id) === to;
+  if (ROOMS[to].barType && !(G.soc.greeted && G.soc.greeted[to]) && !_invHere) {
     const her = _npcsHere().filter(n => NPC_ROLES[n] === "hostess")
       .sort((a, b) => _bondTier(b) - _bondTier(a))[0];
     if (her && _bondTier(her) >= 1) { (G.soc.greeted = G.soc.greeted || {})[to] = true; _relGreeting(her); }
@@ -385,10 +390,11 @@ function _arriveAt(to) {
   if (inv && inv.day === G.day && _npcRoom(inv.id) === G.room) {
     G.phone.invite = null;
     _addBond(inv.id, 1);
-    _say(`${NPCS[inv.id].name} spots you from across the room and lights up like ` +
-      "payday — the kept seat is produced, a cold towel appears, and for one whole " +
-      "minute you are the only customer who has ever existed. Showing up counts " +
-      "double in this town.", "win");
+    (G.soc.greeted = G.soc.greeted || {})[G.room] = true; // this IS tonight's greeting
+    _say(`${NPCS[inv.id].name} spots you from across the room and her whole evening ` +
+      "visibly reorganises itself around your arrival — the kept seat is produced, a " +
+      "cold towel appears, and for one whole minute you are the only customer who has " +
+      "ever existed. Showing up counts double in this town.", "win");
     _addHappy(2);
   }
   _maybeEncounter();

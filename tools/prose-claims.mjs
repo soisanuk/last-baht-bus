@@ -161,13 +161,18 @@ const INVITE = /\b(come with me|follow me|come,? I know|let me show you|come see
 const AFFORDANCE_OK = new Map([
   // a barker shouting about you to a rival bar — not addressed to the player
   ["room.soi6_street.revisit[5]", "third-party speech, not an invitation to you"],
-  // the contact-invite system: G.phone.invite, honoured in _doGo when you show up
-  ["engine-systems.js:_maybeIncomingText[2]", "delivered by the invite system (_doGo checks G.phone.invite)"],
 ]);
+// Ref PREFIXES whose every invite line is delivered by a real system — keyed by
+// prefix, not [index], so adding/rewording a sibling line can't shift a brittle
+// index off its excuse. The contact-invite texts are all honoured by
+// G.phone.invite in _doGo when you show up at her bar.
+const AFFORDANCE_OK_PREFIX = [
+  "engine-systems.js:_maybeIncomingText",
+];
 function affordanceFindings() {
   return records.filter(r => INVITE.test(r.text))
     .filter(r => !/\([^)]*[A-Z]{2,}[^)]*\)/.test(r.text))   // no command hint at all
-    .filter(r => !AFFORDANCE_OK.has(r.ref))
+    .filter(r => !AFFORDANCE_OK.has(r.ref) && !AFFORDANCE_OK_PREFIX.some(p => r.ref.startsWith(p)))
     .map(r => ({ kind: "affordance", ref: r.ref,
       line: (r.text.match(new RegExp(`[^."]*(?:${INVITE.source})[^."]*`, "i")) || [""])[0].trim() }));
 }

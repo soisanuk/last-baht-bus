@@ -101,10 +101,18 @@ const _term = (() => {
     }
     // ALL-CAPS command hints inside parentheses: (WATCH POLICE · or NO)
     // <placeholders> may sit mid-pattern (SEND <amount> TO <name>) — the whole
-    // phrase is one open kw, never orphan TO/FOR fragments
+    // phrase is one open kw, never orphan TO/FOR fragments.
+    // FIRST shield already-emitted <b class="kw"> tags: an NPC like "DJ Beer"
+    // wrapped in the entity pass put "DJ" inside a data-v="…" attribute, and this
+    // pass's [A-Z]{2,} matched it and split the tag, leaking `">` as visible text
+    // (Alan playtest, 2026-08-17). Any 2+-cap name in parenthesized prose hit it.
+    const _tags = [];
+    html = html.replace(/<b class="kw"[^>]*>[\s\S]*?<\/b>/g, t =>
+      `\u0001${_tags.push(t) - 1}\u0001`);
     html = html.replace(/\(([^()]*)\)/g, (m, inner) =>
       "(" + inner.replace(/([A-Z]{2,}(?:[ -][A-Z0-9]{2,}|\s&lt;[a-z…0-9 |]+&gt;)*)/g,
         c => _wrap("cmd", c)) + ")");
+    if (_tags.length) html = html.replace(/\u0001(\d+)\u0001/g, (_m, i) => _tags[+i]);
     // Quiz answer lines: while a quiz is live, the leading "1./2./3." is a
     // tappable pick. A bare digit is never a cmd hint anywhere else, so gate
     // on G.game — otherwise numbered prose would sprout dead taps.

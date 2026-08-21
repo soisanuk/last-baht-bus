@@ -2334,7 +2334,14 @@ function _bondTalk(id) {
 // you've built a bond with (regular+, `id` passed) gives a +2 bonus and does NOT
 // advance jaded — depth is the correct road, breadth is the treadmill.
 function _conquestHappy(base, id) {
-  const bonded = id && _bondTier(id) >= 2;
+  // The tier is read PRE-accrual when the barfine path stashed it: the honest-LT
+  // bond pay (+3/+6) lands before _endNight runs this, so a standard 4-drink
+  // courtship hit 4+3=7 = tier 2 and the treadmill NEVER engaged for the
+  // binge-a-night pattern it exists to price (Gaz playtest, 2026-08-17).
+  const tier = (id && id === G.lastBfId && G.lastBfPreTier != null)
+    ? G.lastBfPreTier : (id ? _bondTier(id) : 0);
+  G.lastBfPreTier = null;
+  const bonded = id && tier >= 2;
   const net = Math.max(base + (bonded ? 2 : 0) - 2 * G.jaded, -4);
   _addHappy(net); // _addHappy no-ops on 0, so a wash prints nothing
   if (bonded) {
@@ -3041,7 +3048,6 @@ function _endNight(reason) {
   // so it is the first thing in a long night-end rather than the last, and the
   // wall-anchored scroll (term.js) lands the player on it.
   _nightDebrief(reason);
-  _nightSnapshot();   // the morning ledger reads deltas against this
   G.day++;
   G.jaded = Math.max(0, G.jaded - 1); // a day cools the treadmill one notch
   if (G.stage !== "expat" && G.day > 7) { _endVacation(); return; }
@@ -3131,6 +3137,11 @@ function _endNight(reason) {
     "sliding into the gulf and the neon is waking up ──",
     { d: G.day, home: G.stage === "expat" ? _L(" · PATTAYA, HOME") : _L(" of 7") }), "win");
   _morningLedger();
+  // The NEXT morning's baseline is taken HERE, at wake — not at night end. Taken
+  // at _endNight, the deltas only spanned the sleep (i.e. the rent), so every
+  // morning read "Last night: spent ฿400" no matter what the evening cost (two
+  // personas hit it independently, 2026-08-17). Wake-to-wake covers the night.
+  _nightSnapshot();
   if (hangover >= 4) _say("(The hangover is a physical presence with opinions. Water. Food. Mercy.)", "alert");
   if (wouldRough && !rough && _dogEgg() === "rescue") {
     // NOT "the last baht bus" — this fires only on nights you failed to get home,

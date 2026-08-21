@@ -481,6 +481,13 @@ function _doBarfine(arg) {
   // girls need less coaxing and won't turn a friend of Bert's down. The mirror
   // of the WDG-stooge freeze-out above.
   const bertAlly = G.room === "stinky_bar" && (_faction("indie") > 0 || _faction("wdg") < 0);
+  // HARD day-level refusals pre-empt the favor gate: a kept girl with her
+  // sponsor in town (or a mama-held draw) was NEVER coming tonight, but the
+  // favor gate spoke first — so a punter courted her ~฿1,050 deep before the
+  // one reason that was always true was allowed to surface (Gaz playtest,
+  // 2026-08-17). Truth before tariff.
+  if (!bertAlly && _isDraw(id) && G.nightTurn < 60) { _bfRefusalSay(id, { kind: "draw" }); return; }
+  if (!bertAlly && _sponsorInTown(id) && !_sponsorFamilyDay(id)) { _bfRefusalSay(id, { kind: "sponsor" }); return; }
   if (_favor(id) < (bertAlly ? 1 : bt === "soi6" ? 2 : 4)) {
     _say(bt === "soi6" ?
       `${name} laughs, not unkindly: “Lady drink first, na. One or three.” Even ` +
@@ -837,6 +844,7 @@ function _bfResolve(kind) {
       `decided something. You wanted a one-day girlfriend; you got a five-year one. (฿${G.money} left.)`, "");
     _say("(Long time is like that — you paid for the fantasy and she handed you the reality. " +
       "But you know her now, really know her. Some men call that the good part.)", "dim");
+    G.lastBfPreTier = _bondTier(id); // the treadmill reads the tier SHE EARNED BEFORE tonight
     _addBond(id, 6); // you saw the real her — the bond jumps
     G.lastBfBase = 4;                               // …and the escape didn't escape: less สนุก
     G.lastBfChaste = true;                          // "you fall asleep before the sex" — no STD/condom coda
@@ -850,6 +858,7 @@ function _bfResolve(kind) {
     `${name} vanishes and reappears out of uniform — jeans, clean shirt, ordinary ` +
     `and lovely — and takes your arm like you're the one being rented.` +
     (price ? ` (฿${G.money} left.)` : ""), "win");
+  G.lastBfPreTier = _bondTier(id); // pre-accrual tier for the treadmill (see _conquestHappy)
   _addBond(id, 3); // a whole night together deepens the bond
   _endNight("barfine");
 }
@@ -1512,6 +1521,11 @@ function _act1Fail(reason) {
   G.act1Tries = tries;    // …and the attempt count survive the reset (unlocking HINT)
   if (identity && identity.origin) {
     G.player = identity;
+    // The card is canonically still in your pocket — the intro PROMISED "CALL
+    // TAN — any hour" and a reset run answered "Call who?" (veteran playtest,
+    // 2026-08-17). His number and name ride the reset with your identity.
+    G.phone.contacts.tan = true;
+    G.known.tan = true;
     // Identity survives; CONVERSATION MEMORY doesn't — "Dawn wipes the slate"
     // must include what you told people, or an NPC re-asks her question and then
     // grapevine-scolds you for answering it differently than in a night that
@@ -2762,8 +2776,13 @@ function _maybeIncomingText() {
   const maxT = Math.max(0, ...contacts.map(_bondTier));
   if (_rand() >= 0.06 + 0.02 * maxT) return;   // regulars miss you, so they text more
   // weight the pick toward the girls you've built something with
+  // Presence check: a girl you are LOOKING AT does not text that she misses you
+  // — Nong texted "i keep you seat every night, you no come i sad" from the next
+  // stool (Alan playtest, 2026-08-17). Girls in the room sit the round out.
+  const away = contacts.filter(c => _npcRoom(c) !== G.room);
+  if (!away.length) return;
   const pool = [];
-  for (const c of contacts) for (let i = 0; i <= _bondTier(c); i++) pool.push(c);
+  for (const c of away) for (let i = 0; i <= _bondTier(c); i++) pool.push(c);
   const id = pool[Math.floor(_rand() * pool.length)];
   const buzz = () => _say("(📱 Your phone buzzes — CHECK MESSAGES.)", "dim");
   // the pics-hustle girl opens her drip the first time she texts, then nudges
@@ -2783,7 +2802,7 @@ function _maybeIncomingText() {
     if (roll < 0.45) { G.phone.invite = { id, day: G.day };
       _pushMsg(id, `when you come see me?? 🥺 i keep you seat every night, you no come i sad 💔`); }
     else _pushMsg(id, ["i dream about you last night na 💭❤️", "you go other bar?? 😤 i see you i KNOW 👀",
-      "miss you so much cannot sleep 😢", "my farang 🥰 when you come back thailand? i wait"][Math.floor(_rand() * 4)]);
+      "miss you so much cannot sleep 😢", "my farang 🥰 you still in pattaya na? no go home yet, i not finish with you 555"][Math.floor(_rand() * 4)]);
   } else if (t >= 2) { // regular: invites and warmth, a little needy
     if (roll < 0.45) { G.phone.invite = { id, day: G.day };
       _pushMsg(id, `bar quiet tonight 😴 you come see ${name}?? i keep you seat 💺💕`); }

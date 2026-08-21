@@ -141,6 +141,10 @@ function _salengMatchItem(input) {
 function _salengTick() {
   if (!G) return;
   if (G.offstage) return; // you're away (e.g. off on a short-time) — the bar's cart isn't your scene right now
+  // A modal is framing the moment (vacation-end epilogue, checkout, an intro) —
+  // a lingerie cart pitch interleaving with the airport goodbye read as a bug
+  // (Gaz playtest, 2026-08-17). Carts hold until the modal clears.
+  if (G.pendingChoice) return;
   if (G.salengCart && G.turns >= G.salengUntil) { // its time is up — it moves on
     const here = G.salengRoom === G.room;
     G.salengCart = null; G.salengRoom = null; G.salengUntil = 0;

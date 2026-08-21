@@ -1425,6 +1425,15 @@ function _tick() {
   // any time before it moves on. All of that lives in _salengTick (encounters).
   _salengTick();
   _closingTick(); // midnight: gents/Soi 6/Darkside give last call, then bolt or shutter
+  // Quiz capture was only checked on ARRIVAL, so the obvious punter move —
+  // settle in early with a pint — missed the quiz entirely even after TIME
+  // advertised it (Gaz playtest, 2026-08-17). If the window opens while you're
+  // already sitting in a quiz bar, the microphone finds you at your stool.
+  if (typeof _quizHere === "function" && !G.game && !G.pendingEnc && !G.pendingChoice && _quizHere()) {
+    _say("The chalkboard goes up, the microphone crackles, and the room turns as one " +
+      "— you were here first, so you're playing.", "win");
+    _startQuiz();
+  }
   _lastBusWarn();  // ~01:30: heads-up that the last ฿15 ride home is about to leave
   _maybeIncomingText();
   if (typeof _wrongNumberTick === "function") _wrongNumberTick(); // CTF stage 2 (docs/ctf.md), only if a probe armed it
