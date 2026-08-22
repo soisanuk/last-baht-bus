@@ -3,18 +3,18 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
-    "t": "Thai teen found in suitcase died from suffocation, police reveal",
-    "s": "BBC",
-    "d": "19 Aug 2026"
-  },
-  {
-    "t": "Raids in Pattaya on Friday led by two ministers targeting Israeli business networks and legal advisors",
-    "s": "Thai Examiner",
-    "d": "21 Aug 2026"
+    "t": "Nominee raids extend to three sites in Pattaya",
+    "s": "Bangkok Post",
+    "d": "22 Aug 2026"
   },
   {
     "t": "Is buying a condo in Pattaya still worth it in 2026?",
     "s": "Thaiger",
+    "d": "21 Aug 2026"
+  },
+  {
+    "t": "Raids in Pattaya on Friday led by two ministers targeting Israeli business networks and legal advisors",
+    "s": "Thai Examiner",
     "d": "21 Aug 2026"
   },
   {
@@ -38,14 +38,14 @@ var NEWS_FEED = [
     "d": "21 Aug 2026"
   },
   {
-    "t": "Aussie accused in Pattaya teen suitcase murder case nears trial",
-    "s": "Thaiger",
+    "t": "Thai teen found in suitcase died from suffocation, police reveal",
+    "s": "BBC",
     "d": "19 Aug 2026"
   },
   {
-    "t": "Defending champions Thailand start Asian title defense on the right foot",
-    "s": "Volleyball World",
-    "d": "21 Aug 2026"
+    "t": "World’s 2nd most powerful military draws Africa’s strongest closer as it stages drills with Thailand and Belarus",
+    "s": "Business Insider Africa",
+    "d": "22 Aug 2026"
   },
   {
     "t": "Thailand shooting: Teen kills at least seven and injures more than 30, PM says",
@@ -58,30 +58,30 @@ var NEWS_FEED = [
     "d": "21 Aug 2026"
   },
   {
-    "t": "After I graduated from college in the US, I moved abroad to Thailand. It's nothing like I expected.",
-    "s": "Business Insider",
-    "d": "20 Aug 2026"
-  },
-  {
-    "t": "Just for Fun: These Miss Universe Thailand Costumes Are a Feast for the Eyes—And You Won’t Be Able to Stop Looking at Them",
-    "s": "Reader's Digest",
+    "t": "ASEAN HYUNDAI CUP™ 2026 FINAL 1ST LEG: THAILAND 0-2 VIETNAM",
+    "s": "ASEAN United FC",
     "d": "22 Aug 2026"
   },
   {
-    "t": "Thailand homeowner captures 13-foot python blamed for missing cats — then she planned a lottery bet",
-    "s": "Yahoo",
-    "d": "20 Aug 2026"
+    "t": "Goals and Highlights for Thailand 0-2 Vietnam in 2026 ASEAN Hyundai Cup Match",
+    "s": "VAVEL.com",
+    "d": "22 Aug 2026"
+  },
+  {
+    "t": "Defending champions Thailand start Asian title defense on the right foot",
+    "s": "Volleyball World",
+    "d": "21 Aug 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-08-21","USD":32.68,"AUD":23.42,"GBP":44.62,"EUR":38.23};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-22","temp":28,"humid":81,"code":3,"hi":31,"rain":98};
+var WX_NOW = {"date":"2026-08-23","temp":28,"humid":82,"code":3,"hi":30,"rain":80};
 // the bar TV's one true channel
-var FOOTY = {"league":"Premier League","games":[{"d":"2026-08-21","done":true,"h":"Arsenal","hs":3,"a":"Coventry","as":0},{"d":"2026-08-22","done":false,"h":"Hull","hs":2,"a":"Man United","as":0},{"d":"2026-08-22","done":false,"h":"Everton","hs":0,"a":"C Palace","as":0},{"d":"2026-08-22","done":false,"h":"Ipswich","hs":0,"a":"Sunderland","as":0},{"d":"2026-08-22","done":false,"h":"Nottm Forest","hs":0,"a":"Leeds","as":0},{"d":"2026-08-22","done":false,"h":"Brentford","hs":0,"a":"Spurs","as":0},{"d":"2026-08-23","done":false,"h":"Brighton","hs":0,"a":"Aston Villa","as":0},{"d":"2026-08-23","done":false,"h":"Man City","hs":0,"a":"Bournemouth","as":0},{"d":"2026-08-23","done":false,"h":"Newcastle","hs":0,"a":"Liverpool","as":0},{"d":"2026-08-24","done":false,"h":"Fulham","hs":0,"a":"Chelsea","as":0}]};
+var FOOTY = {"league":"Premier League","games":[{"d":"2026-08-21","done":true,"h":"Arsenal","hs":3,"a":"Coventry","as":0},{"d":"2026-08-22","done":true,"h":"Hull","hs":2,"a":"Man United","as":0},{"d":"2026-08-22","done":true,"h":"Everton","hs":2,"a":"C Palace","as":0},{"d":"2026-08-22","done":true,"h":"Ipswich","hs":2,"a":"Sunderland","as":1},{"d":"2026-08-22","done":true,"h":"Nottm Forest","hs":0,"a":"Leeds","as":1},{"d":"2026-08-22","done":false,"h":"Brentford","hs":2,"a":"Spurs","as":0},{"d":"2026-08-23","done":false,"h":"Brighton","hs":0,"a":"Aston Villa","as":0},{"d":"2026-08-23","done":false,"h":"Man City","hs":0,"a":"Bournemouth","as":0},{"d":"2026-08-23","done":false,"h":"Newcastle","hs":0,"a":"Liverpool","as":0},{"d":"2026-08-24","done":false,"h":"Fulham","hs":0,"a":"Chelsea","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-08-16","first":"004615","last2":"53","front3":["429","731"],"back3":["094","937"]};
 // XAU, plus Thai baht-weight gold (96.5%)
 var GOLD = {"usd":4604,"date":"2026-08-22","baht":71150};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":77308,"thb":2522581};
+var BTC = {"usd":77193,"thb":2518829};
