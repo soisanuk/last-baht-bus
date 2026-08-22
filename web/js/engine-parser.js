@@ -2602,6 +2602,11 @@ function _sayDirectedReact(key, id, name) {
   _addHappy(1);
 }
 
+const _GIVE_GIFT_LINES = [
+  (n, g) => `${n} unwraps ${g}, and the professional smile drops for a real one — nobody buys the girl a PRESENT, only drinks. "For me? Why?" She doesn't wait for an answer; she just holds it a moment longer than she needs to.`,
+  (n, g) => `${n} turns ${g} over in her hands, works out it's really hers, and gives you a look that's recalculating the whole evening. "You are different, na." Whether that's true or just good manners, the bond is real either way.`,
+  (n, g) => `"Aww, tilac." ${n} accepts ${g} with both hands and a wai, and tucks it away somewhere safe rather than showing it off — the tell that it landed.`,
+];
 const _GIVE_FOOD_LINES = [
   (n, f) => `${n} lights up — "For me?? Aroi!" — and eats ${f} right there, sharing the last bite back to you off the fork. Feeding someone means something here, and she knows you know it.`,
   (n, f) => `${n} takes ${f} with both hands and a small wai. "You think of me. Nobody buy the girl FOOD, only drink." She eats slowly, watching you, recalculating something.`,
@@ -2716,8 +2721,12 @@ function _doGive(itemWord, npcWord) {
       "presses thank-you money into your hand over your objections. Family rules.", "win");
     return;
   }
-  const SALENG_GIFTS = ["saleng_sandals", "saleng_heels", "saleng_lingerie"];
-  if (SALENG_GIFTS.includes(id) && NPC_ROLES[npc]) {
+  // kind:"gift" — a bought present raises fondness with a working girl. The saleng
+  // three carry bespoke role-aware prose (below); any other gift item falls to a
+  // generic pool. No throttle: gifts cost real money, so they can't be farmed
+  // (unlike the free food/condom fondness). (Design 2026-08-17: generalised from
+  // the hardcoded saleng list.)
+  if (ITEMS[id].kind === "gift" && NPC_ROLES[npc]) {
     G.itemLoc[id] = null;
     _addBond(npc, 1);
     const name = NPCS[npc].name;
@@ -2755,7 +2764,8 @@ function _doGive(itemWord, npcWord) {
       },
     };
     const role = NPC_ROLES[npc] === "mamasan" ? "mamasan" : "hostess";
-    _say(GIFT_TEXT[id][role], "win");
+    _say((GIFT_TEXT[id] && GIFT_TEXT[id][role]) ||
+      _pickVary(_GIVE_GIFT_LINES, "givegift")(NPCS[npc].name, ITEMS[id].name), "win");
     _addHappy(1);
     _maybeSelfBarfine(npc);
     return;

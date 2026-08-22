@@ -4061,6 +4061,7 @@ const ITEMS = {
   fake_rolex: {
     name: "genuine Rolex (allegedly)", aliases: ["rolex", "watch", "fake rolex"],
     portable: true, location: null,
+    kind: "gift", // a present raises fondness when given to a working girl (GIVE)
     desc: "A 'Rolex' of tremendous confidence and negligible mass. The second hand " +
       "moves in a way Rolex engineers would describe as 'jazz'. It has already " +
       "started a conversation at every bar you've worn it to.",
@@ -4068,6 +4069,7 @@ const ITEMS = {
   shades: {
     name: "designer sunglasses", aliases: ["sunglasses", "shades", "glasses"],
     portable: true, location: null,
+    kind: "gift", // a present raises fondness when given to a working girl (GIVE)
     desc: "RayBens. The B is doing a lot of work. Worn at night, indoors, they say " +
       "either 'international man of mystery' or 'hungover' — both true.",
   },
@@ -4135,18 +4137,21 @@ const ITEMS = {
   saleng_sandals: {
     name: "saleng sandals", aliases: ["sandals", "shoes", "flats", "saleng sandals"],
     portable: true, location: null,
+    kind: "gift", // a present raises fondness when given to a working girl (GIVE)
     desc: "Sequinned sandals from a saleng cart, carried in a thin plastic bag. " +
       "Sized for a Thai woman's foot. They are not for you — but you know who they are for.",
   },
   saleng_heels: {
     name: "saleng heels", aliases: ["heels", "platform heels", "shoes", "saleng heels"],
     portable: true, location: null,
+    kind: "gift", // a present raises fondness when given to a working girl (GIVE)
     desc: "Platform heels from the saleng cart, still in the carry bag. " +
       "Someone is going to look very good in these. You are not that someone.",
   },
   saleng_lingerie: {
     name: "saleng lingerie", aliases: ["lingerie", "bra", "underwear", "lace", "slip", "saleng lingerie"],
     portable: true, location: null,
+    kind: "gift", // a present raises fondness when given to a working girl (GIVE)
     desc: "A bag of lingerie from the saleng cart — lace, silk-adjacent, " +
       "the kind of purchase that requires a recipient to make sense.",
   },

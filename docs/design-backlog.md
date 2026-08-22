@@ -347,9 +347,14 @@ that systems react to by category. Live uses so far:
 
 **Where `kind` should grow next** (each currently does ad-hoc id/regex matching
 that a `kind` would clean up): the EAT path (`kind:"food"` is the natural gate),
-the saleng price/nutrition matcher (`_salengMatchItem`), EXAMINE scenery vs
-inventory, and any future "gift that raises bond" (flowers, jewellery → a
-`kind:"gift"` generalising the saleng-gift branch). Add a kind when a feature
-needs it; don't pre-classify speculatively. This is the same "promote an ad-hoc
+the saleng price/nutrition matcher (`_salengMatchItem`), and EXAMINE scenery vs
+inventory. Add a kind when a feature needs it; don't pre-classify speculatively.
+
+**`kind:"gift"` (built 2026-08-17)** generalised the hardcoded saleng-gift list:
+any gift item raises a working girl's fondness (+1 bond, unthrottled — gifts
+cost money, so no farm risk, unlike free food/condoms). The saleng three keep
+their bespoke role-aware prose; other gift items (shades, the "genuine Rolex
+(allegedly)") use a generic pool. A new romantic gift — flowers from a seller, a
+market bracelet — now needs only `kind:"gift"` + optional bespoke `GIFT_TEXT`. This is the same "promote an ad-hoc
 check to a first-class class" down-payment CLAUDE.md calls for on the
 reuse/2D/online axes.

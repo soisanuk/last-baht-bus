@@ -7624,6 +7624,12 @@ test("GIVE reacts by item kind: food and condoms warm a working girl, once a nig
   G.itemLoc.som_tam = "inventory";
   out = []; run("give som tam to " + nm);
   assert.equal(G.itemLoc.som_tam, "inventory", "an earmarked quest bite was spent as a casual gift");
+  // kind:"gift" — a bought present warms her (unthrottled: it cost money). A
+  // saleng gift keeps bespoke prose; a generic gift item (shades) uses the pool.
+  G.itemLoc.shades = "inventory"; const b3 = G.soc.drinks[g] || 0;
+  out = []; run("give shades to " + nm);
+  assert.equal(G.itemLoc.shades, null, "a gift wasn't consumed");
+  assert.equal((G.soc.drinks[g] || 0) - b3, 1, "a gift didn't raise fondness");
 });
 
 test("quest/clue items warn on drop and a dropped one surfaces in QUESTS", () => {
