@@ -2730,6 +2730,7 @@ function _doGive(itemWord, npcWord) {
     _maybeSelfBarfine(npc);
     return;
   }
+  _traceCancel(); // she declined it — no "you gave" breadcrumb for a gift that bounced
   _say(`${NPCS[npc].name} waves it away with a smile.`);
 }
 

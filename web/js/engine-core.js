@@ -83,6 +83,7 @@ let _pendingTrace = null;
 function _trace(verb, target, extra) {
   _pendingTrace = { verb, target: target || "", extra: extra || "" };
 }
+function _traceCancel() { _pendingTrace = null; } // a refused action leaves no breadcrumb
 const _TRACE_VERBS = {
   talk: "talked to", ask: "asked", give: "gave", go: "went to",
   flirt: "flirted with", kiss: "kissed", spank: "spanked", fondle: "fondled",
@@ -96,7 +97,7 @@ function _traceLine(t) {
   if (t.verb === "ask")
     return `· You asked ${target}${extra ? ` about ${extra}` : ""}`.trimEnd();
   if (t.verb === "give")
-    return `· You gave ${target}${extra ? ` the ${extra}` : ""}`.trimEnd();
+    return `· You gave ${target}${extra ? (/^(a|an|the|your|his|her|their)\b/i.test(extra) ? ` ${extra}` : ` the ${extra}`) : ""}`.trimEnd();
   const v = _TRACE_VERBS[t.verb] || t.verb;
   return `· You ${v}${target ? ` ${target}` : ""}`.trimEnd();
 }

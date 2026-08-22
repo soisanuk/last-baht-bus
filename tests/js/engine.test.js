@@ -7121,6 +7121,9 @@ test("action breadcrumb (_traceLine) formats each verb shape", () => {
   assert.equal(_traceLine({ verb: "ask", target: "Nok", extra: "beer" }), "· You asked Nok about beer");
   assert.equal(_traceLine({ verb: "ask", target: "Nok", extra: "" }), "· You asked Nok");
   assert.equal(_traceLine({ verb: "give", target: "Pim", extra: "helmet" }), "· You gave Pim the helmet");
+  // article-aware: item names carry their own article — no "gave the a tiffin" (2026-08-17)
+  assert.equal(_traceLine({ verb: "give", target: "Nont", extra: "a tiffin of fish" }), "· You gave Nont a tiffin of fish");
+  assert.equal(_traceLine({ verb: "give", target: "Oy", extra: "your wallet" }), "· You gave Oy your wallet");
   assert.equal(_traceLine({ verb: "flirt", target: "Fon" }), "· You flirted with Fon");
   assert.equal(_traceLine({ verb: "kiss", target: "Fon" }), "· You kissed Fon");
   assert.equal(_traceLine({ verb: "go", target: "Soi 6" }), "· You went to Soi 6");
