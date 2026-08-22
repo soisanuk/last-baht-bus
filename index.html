@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#05001a">
+<link rel="icon" href="favicon.png" type="image/png" sizes="32x32">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<title>The Last Baht Bus — a Pattaya misadventure</title>
+<!-- The clacks overhead: names kept moving through the towers, never logged,
+     turned around at the end of the line. Pratchett for the tradition itself;
+     Trink because the Nite Owl column in this game is his — forty years of
+     Bangkok nightlife wisdom, signed off with a hoot he never gave. -->
+<meta http-equiv="X-Clacks-Overhead" content="GNU Terry Pratchett, GNU Bernard Trink">
+<style>
+  :root {
+    --bg: #05001a;
+    --panel: #0d0015;
+    --text: #e8c0d8;
+    --bright: #ffcce8;
+    --pink: #ff1493;
+    --cyan: #00e5ff;
+    --violet: #bf5fff;
+    --yellow: #ffe600;
+    --green: #00ff7f;
+    --red: #ff3355;
+  }
+  /* Thai script reads ~25% smaller than Latin at equal size (the x-height
+     pays for stacked vowels and tone marks), so glyphs in the Thai range get
+     their own face at 133%. unicode-range keeps Latin out; the local() list
+     covers macOS/iOS (Thonburi), Android (Noto), Windows (Leelawadee/Tahoma).
+     Browsers without size-adjust just render Thai at normal size. */
+  @font-face {
+    font-family: "Thai XL";
+    src: local("Thonburi"), local("Noto Sans Thai"), local("Leelawadee UI"), local("Tahoma");
+    size-adjust: 133%;
+    unicode-range: U+0E00-0E7F;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Thai XL", "SF Mono", "Cascadia Mono", Menlo, Consolas, "Noto Sans Thai", monospace;
+    font-size: 15px;
+    line-height: 1.55;
+    display: flex;
+    justify-content: center;
+  }
+  #shell {
+    width: 100%;
+    max-width: 820px;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) 0 env(safe-area-inset-left);
+  }
+  /* Floating action buttons, top-right: the bar bell (tap-to-ring, shown in bars
+     via _inBar) and the message glyph (shown when texts are unread, via
+     _unreadCount). term.js toggles each button's .show independently. A flex
+     column so they stack with no gap and either can appear alone — a text on the
+     street shows the message glyph in the top slot, a bar shows the bell, and a
+     text at the bar shows both. */
+  #fab-stack {
+    position: absolute;
+    right: 14px;
+    top: calc(env(safe-area-inset-top) + 5.6rem);
+    z-index: 40;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-end;
+  }
+  #bell-fab, #msg-fab {
+    display: none;
+    width: 54px; height: 54px;
+    border-radius: 50%;
+    border: 1px solid #ff1493aa;
+    background: radial-gradient(circle at 50% 38%, #33004d, #12001e);
+    color: var(--pink);
+    font-size: 1.6rem;
+    line-height: 1;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    animation: fab-pulse 1.9s ease-out infinite;
+  }
+  #bell-fab.show, #msg-fab.show { display: block; }
+  #bell-fab:active, #msg-fab:active { background: #46006b; transform: scale(0.94); }
+  @keyframes fab-pulse {
+    0%   { box-shadow: 0 0 7px 1px #ff149377, 0 0 0 0 #ff149366; }
+    70%  { box-shadow: 0 0 11px 2px #ff149377, 0 0 0 13px #ff149300; }
+    100% { box-shadow: 0 0 7px 1px #ff149377, 0 0 0 0 #ff149300; }
+  }
+  @media (prefers-reduced-motion: reduce) { #bell-fab, #msg-fab { animation: none; } }
+  /* Text size (the reading-glasses button) — the mute button's mirror twin,
+     top-LEFT of the header. It scales BODY font-size only: the prose and the
+     input inherit it, while the chrome (header, fabs, chips, the ASCII map,
+     the QR) is rem-based off the html root and never moves. Pref: localStorage
+     lbb_font_px. */
+  #font-fab {
+    position: absolute;
+    left: .7rem;
+    top: .55rem;
+    /* above the start overlay (z 100) so a reader who needs big text can hit Aa
+       BEFORE reading the splash — the overlay used to eat the tap (Alan, the
+       widower who needs large text, 2026-08-17) */
+    z-index: 101;
+    background: none;
+    border: 1px solid #ff149340;
+    border-radius: 8px;
+    color: var(--pink);
+    font-size: 1rem;
+    font-weight: 700;
+    padding: .15rem .4rem;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    /* 44px floor: the accessibility control was the smallest target on the
+       screen (35x25 at 390px — mobile playtest 2026-08-17), for the exact
+       audience that needs it most */
+    min-width: 44px; min-height: 40px;
+  }
+  #font-fab:active { background: #46006b; }
+  /* The street compass. Same stack slot as the bell — the bell shows inside a
+     venue and this shows outside one, so they are never both up. No pulse: the
+     bell is a prompt ("you could ring me"), this is furniture. */
+  #nav-fab {
+    display: none;
+    grid-template-columns: repeat(3, 34px);
+    grid-template-rows: repeat(3, 34px);
+    gap: 3px;
+  }
+  #nav-fab.show { display: grid; }
+  #nav-fab button {
+    border-radius: 9px;
+    border: 1px solid #ff149366;
+    background: radial-gradient(circle at 50% 38%, #2a0040, #100019);
+    color: var(--pink);
+    font: 700 .82rem/1 inherit;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    padding: 0;
+  }
+  #nav-fab button:disabled { opacity: .22; cursor: default; }
+  #nav-fab button:not(:disabled):active { background: #46006b; transform: scale(0.92); }
+  #nav-fab [data-nav="n"] { grid-area: 1 / 2; }
+  #nav-fab [data-nav="w"] { grid-area: 2 / 1; }
+  #nav-fab [data-nav="in"] { grid-area: 2 / 2; font-size: .74rem; border-color: #ff149344; }
+  #nav-fab [data-nav="light"] { grid-area: 3 / 3; font-size: 1rem; border-color: #ff149333; }
+  #nav-fab [data-nav="light"].on { color: var(--yellow); border-color: #ffd70099; box-shadow: 0 0 9px #ffd70055; }
+  #nav-fab [data-nav="e"] { grid-area: 2 / 3; }
+  #nav-fab [data-nav="s"] { grid-area: 3 / 2; }
+  header {
+    padding: .55rem 1rem .45rem;
+    border-bottom: 1px solid #ff149340;
+    text-align: center;
+    flex-shrink: 0;
+    position: relative;
+  }
+  #mute-btn {
+    position: absolute;
+    right: .7rem;
+    top: .55rem;
+    background: none;
+    border: 1px solid #ff149340;
+    border-radius: 8px;
+    font-size: 1rem;
+    padding: .15rem .4rem;
+    cursor: pointer;
+  }
+  header .title {
+    color: var(--yellow);
+    font-weight: bold;
+    letter-spacing: .14em;
+    text-shadow: 0 0 14px #ffe60080, 0 0 34px #ffe60030;
+  }
+  header .sub {
+    color: var(--violet);
+    font-size: .72rem;
+    letter-spacing: .1em;
+  }
+  #term-out {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem 1.1rem 1.4rem;
+    scrollbar-width: thin;
+    scrollbar-color: #ff149350 transparent;
+  }
+  .t-line { margin: .12rem 0; white-space: pre-wrap; word-break: break-word; }
+  .t-line + .t-line.t-room { margin-top: .8rem; }
+  .t-echo  { color: var(--pink); margin-top: .7rem; }
+  .t-room  { color: var(--yellow); font-weight: bold;
+             text-shadow: 0 0 12px #ffe60060; }
+  .t-thai  { color: var(--cyan); text-shadow: 0 0 10px #00e5ff50; }
+  /* pre-formatted Thai blocks (the 7-Eleven receipt) whose dot-leader columns
+     assume even glyph widths: opt them OUT of the 133% "Thai XL" face so the
+     columns line up the way they did before the trainer-font bump. */
+  .t-receipt { color: var(--cyan); text-shadow: 0 0 10px #00e5ff50;
+               font-family: "SF Mono", "Cascadia Mono", Menlo, Consolas, "Noto Sans Thai", monospace; }
+  .t-dim   { color: var(--violet); font-size: .88em; }
+  /* The ASCII bar-mat map (MAP): monospace art that must NOT wrap. Opt out of the
+     Thai XL face, keep it on one pre-formatted block, and shrink the font on narrow
+     screens so ~68 columns fit a phone; overflow-x is the safety net past that. */
+  .t-line.t-map { color: var(--violet); white-space: pre; word-break: normal;
+                  overflow-x: auto; -webkit-overflow-scrolling: touch;
+                  font-family: "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+                  font-size: clamp(.45rem, 1.95vw, .8rem); line-height: 1.25; }
+  .t-line.t-map::-webkit-scrollbar { height: 4px; }
+  /* The QR sticker (EXAMINE QR at the LK Metro mouth). Three things here are
+     load-bearing rather than decorative, because this block has to survive being
+     photographed off a screen by a phone:
+       - black on WHITE, always. The terminal is neon on black, and a light-on-dark
+         QR is inverted; plenty of scanners refuse those outright.
+       - line-height 1, so the half-block glyphs tile with no leading between rows.
+         Any gap becomes a white stripe through every module row.
+       - padding supplies extra quiet zone on top of the 4 modules in the text.
+     41 columns, so it fits a phone at a readable size without scrolling. */
+  .t-line.t-qr { background: #fff; color: #000; white-space: pre; word-break: normal;
+                 display: inline-block; padding: 10px 12px; border-radius: 3px;
+                 margin: .5rem 0; overflow-x: auto;
+                 font-family: "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+                 font-size: clamp(.5rem, 2.1vw, .82rem); line-height: 1;
+                 text-shadow: none; }
+  .t-alert { color: var(--red); text-shadow: 0 0 10px #ff335550; }
+  /* action breadcrumb ("· You asked Nok about beer") — a quiet post-command
+     anchor so a long scroll doesn't lose who/where you just acted. */
+  .t-trace { color: var(--violet); font-size: .8em; opacity: .72;
+             margin-top: .3rem; letter-spacing: .01em; }
+  .t-trace .kw { color: #d9c2f2; font-weight: 600; }
+  /* actionable words — names, items, exits, command hints. Bold and a shade
+     brighter than their line; tap for quick actions, hold for the full list. */
+  .kw { font-weight: 700; color: var(--bright); cursor: pointer;
+        -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
+  .kw:hover { text-decoration: underline dotted; }
+  .t-dim .kw { color: #d9c2f2; }
+  .t-alert .kw, .t-win .kw, .t-room .kw, .t-thai .kw { color: inherit; }
+  /* tappable Thai: dotted underline says "the dictionary is one tap away" */
+  .kw[data-k="thai"] { text-decoration: underline dotted; text-underline-offset: 4px;
+                       text-decoration-color: #00e5ff70; }
+  /* pixel-art portraits: inline avatars on the Here:/rail lines and a
+     header bust on a character's flyout wheel */
+  .kw-av { width: 20px; height: 20px; image-rendering: pixelated;
+           vertical-align: -4px; margin-right: 4px; border-radius: 4px;
+           border: 1px solid #ff149340; }
+  .fly-head { display: flex; flex-direction: column; align-items: center;
+              gap: .4rem; padding: .5rem .7rem .5rem;
+              border-bottom: 1px solid #ff149330; margin-bottom: 2px;
+              color: var(--yellow); font-weight: 700; text-align: center; }
+  /* the character-card portrait: sized so a realistic/painterly render is worth
+     looking at. object-fit cover handles square busts and taller portraits alike;
+     smooth rendering (not pixelated) suits photographic/painterly art — pixel
+     busts read a little soft at this size until they're replaced. */
+  .fly-portrait { width: 140px; height: 140px; object-fit: cover;
+            object-position: center 22%; image-rendering: auto;
+            border-radius: 8px; border: 1px solid #ff149360;
+            box-shadow: 0 0 12px #ff149330; display: block; }
+  /* the flyout wheel */
+  #flyout {
+    position: fixed; z-index: 50;
+    display: flex; flex-direction: column; gap: 2px;
+    background: var(--panel);
+    border: 1px solid var(--pink);
+    border-radius: 10px;
+    box-shadow: 0 0 18px #ff149360, 0 4px 24px #000c;
+    padding: .3rem;
+    max-width: min(78vw, 320px);
+  }
+  #flyout button {
+    background: none; border: none; text-align: left;
+    font: inherit; color: var(--bright);
+    padding: .45rem .7rem; min-height: 44px;   /* was 40 — the thumb minimum */
+    border-radius: 7px; cursor: pointer; white-space: nowrap;
+    overflow: hidden; text-overflow: ellipsis;
+  }
+  #flyout button:hover, #flyout button:active {
+    background: #ff149322; color: #fff;
+  }
+  .t-win   { color: var(--yellow); font-weight: bold;
+             text-shadow: 0 0 16px #ffe60090, 0 0 40px #ffe60040; }
+  #chips {
+    display: flex;
+    gap: .4rem;
+    overflow-x: auto;
+    padding: .45rem .8rem;
+    border-top: 1px solid #ff149330;
+    flex-shrink: 0;
+    scrollbar-width: none;
+  }
+  #chips::-webkit-scrollbar { display: none; }
+  .chip {
+    flex-shrink: 0;
+    background: #12001e;
+    color: var(--cyan);
+    border: 1px solid #00e5ff50;
+    border-radius: 14px;
+    font: inherit;
+    font-size: .78rem;
+    padding: .22rem .7rem;
+    cursor: pointer;
+  }
+  .chip:active { background: #1e0030; }
+  #term-suggest {
+    display: none;
+    gap: .4rem;
+    overflow-x: auto;
+    padding: .3rem .9rem;
+    background: var(--panel);
+    border-top: 1px solid #ff149320;
+    scrollbar-width: none;
+    flex-shrink: 0;
+  }
+  #term-suggest::-webkit-scrollbar { display: none; }
+  #term-suggest span {
+    color: #e8c0d8;
+    background: #1a0028;
+    border: 1px solid #ff149330;
+    border-radius: 4px;
+    padding: .1rem .5rem;
+    white-space: nowrap;
+    cursor: pointer;
+    font-size: .85em;
+  }
+  #term-suggest span:active { background: #2a0040; }
+  #input-row {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .55rem .9rem calc(.55rem + env(safe-area-inset-bottom));
+    border-top: 1px solid #ff149340;
+    background: var(--panel);
+    flex-shrink: 0;
+  }
+  #input-row .prompt {
+    color: var(--pink);
+    text-shadow: 0 0 10px #ff149380;
+    font-weight: bold;
+  }
+  #term-in {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--bright);
+    font: inherit;
+    caret-color: var(--pink);
+  }
+  #term-send {
+    flex-shrink: 0;
+    background: #12001e;
+    color: var(--pink);
+    border: 1px solid #ff149360;
+    border-radius: 10px;
+    font: inherit;
+    font-size: 1rem;
+    min-width: 44px;
+    min-height: 44px;   /* was 38 — 44 is the HIG/Material minimum for a thumb */
+    cursor: pointer;
+    text-shadow: 0 0 8px #ff149380;
+  }
+  #term-send:active { background: #2a0040; }
+
+  /* Touch sizing. Gated on (pointer: coarse) rather than a width breakpoint —
+     the question is whether a FINGER is the input device, not how wide the
+     screen is: a narrow desktop window still has a mouse, a big tablet doesn't.
+     Mobile play-test measured chips at 28px tall; 44px is the thumb minimum.
+     Costs ~16px of scrollback, which measured at 70% of the viewport. */
+  @media (pointer: coarse) {
+    .chip {
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+    }
+  }
+  @media (min-width: 700px) {
+    #shell { border-left: 1px solid #ff149330; border-right: 1px solid #ff149330; }
+  }
+
+  /* ── The advert: a neon bar-sign for the trainer ──────────────────────── */
+  #ad {
+    display: none;
+    position: fixed;
+    right: 1.2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 172px;
+    padding: .9rem .8rem;
+    text-align: center;
+    text-decoration: none;
+    background: #0d0015;
+    border: 2px dashed #ff1493;
+    border-radius: 10px;
+    box-shadow: 0 0 22px #ff149335, inset 0 0 22px #ff149315;
+    animation: ad-flicker 7s infinite;
+  }
+  #ad .ad-hey {
+    color: var(--yellow);
+    font-weight: bold;
+    letter-spacing: .1em;
+    font-size: .82rem;
+    text-shadow: 0 0 12px #ffe60090;
+  }
+  #ad .ad-line {
+    color: var(--text);
+    font-size: .74rem;
+    margin: .5rem 0;
+    line-height: 1.5;
+  }
+  #ad .ad-cta {
+    display: inline-block;
+    color: var(--cyan);
+    border: 1px solid #00e5ff70;
+    border-radius: 12px;
+    padding: .2rem .7rem;
+    font-size: .78rem;
+    font-weight: bold;
+    text-shadow: 0 0 10px #00e5ff70;
+  }
+  #ad .ad-sub { color: var(--violet); font-size: .62rem; margin-top: .45rem; }
+  #ad:hover { box-shadow: 0 0 34px #ff149360, inset 0 0 26px #ff149325; }
+  @keyframes ad-flicker {
+    0%, 100% { opacity: 1; }
+    92% { opacity: 1; }
+    93% { opacity: .35; }
+    94% { opacity: 1; }
+    96% { opacity: .6; }
+    97% { opacity: 1; }
+  }
+  /* only where there's real gutter beside the 820px shell */
+  @media (min-width: 1220px) { #ad { display: block; } }
+
+  /* narrow screens: one cheeky line under the header instead */
+  #ad-mini {
+    display: block;
+    text-align: center;
+    font-size: .68rem;
+    color: var(--violet);
+    text-decoration: none;
+    padding: .25rem .5rem;
+    border-bottom: 1px solid #ff149320;
+    flex-shrink: 0;
+  }
+  #ad-mini b { color: var(--cyan); }
+  @media (min-width: 1220px) { #ad-mini { display: none; } }
+
+  /* ── Start menu / mode-select overlay ─────────────────────────────────── */
+  #start-overlay {
+    position: fixed; inset: 0; z-index: 100; padding: 1.2rem; overflow-y: auto;
+    display: flex; align-items: center; justify-content: center;
+    background: radial-gradient(120% 120% at 50% 0%, #1a0033 0%, #05001a 72%);
+  }
+  #start-overlay[hidden] { display: none; }
+  .start-card {
+    width: 100%; max-width: 440px; text-align: center;
+    background: var(--panel); border: 1px solid var(--pink); border-radius: 14px;
+    padding: 1.5rem 1.3rem 1.6rem; box-shadow: 0 0 44px #ff149355, inset 0 0 40px #00000066;
+  }
+  /* The splash marquee: a carousel of the go-go pin-up posters (art/posters/),
+     random start, one every 10s, cycling the whole deck. The incoming image
+     STRIKES like a neon tube — flicker, chromatic fringe, hold — because this
+     is that kind of town. Two stacked layers; main.js drives the deck (a
+     missing file self-heals out of it, and the commissioned splash.webp joins
+     the rotation automatically if it ever ships). Decorative: aria-hidden. */
+  #start-art-wrap {
+    position: relative; height: 250px; border-radius: 10px; overflow: hidden;
+    border: 1px solid #ff149333; margin: 0 0 1rem;
+    box-shadow: 0 0 24px #ff149322; background: #0a0012;
+  }
+  #start-art-wrap:empty { display: none; }
+  #start-art-wrap img {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    /* 8% not 22%: the crop is a horizontal band of a tall poster, so a
+       bust-tuned centre beheaded the full-body pin-ups. Top-biased to 8%
+       keeps every poster's head in frame (heads sit in the top ~15%),
+       verified at this exact 440x250 crop across the whole deck. */
+    object-fit: cover; object-position: 50% 8%;
+    opacity: 0;
+  }
+  /* the opening Pattaya-sign vista: landscape, shown whole, never cropped */
+  #start-art-wrap img.vista { object-fit: contain; object-position: 50% 50%; }
+  #start-art-wrap img.lit {
+    opacity: 1; z-index: 2;
+    animation: neon-strike .85s linear;
+  }
+  #start-art-wrap img.dim { opacity: 1; z-index: 1; } /* old layer holds beneath */
+  @keyframes neon-strike {
+    0%   { opacity: 0; }
+    8%   { opacity: .9; filter: drop-shadow(3px 0 0 #ff1493) drop-shadow(-3px 0 0 #00e5ff) saturate(3); }
+    14%  { opacity: .1; filter: none; }
+    26%  { opacity: 1;  filter: drop-shadow(2px 0 0 #ff149388) drop-shadow(-2px 0 0 #00e5ff88); }
+    34%  { opacity: .35; filter: none; }
+    46%  { opacity: 1;  filter: drop-shadow(1px 0 0 #ff149355) drop-shadow(-1px 0 0 #00e5ff55) brightness(1.25); }
+    60%  { opacity: .85; }
+    100% { opacity: 1;  filter: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #start-art-wrap img.lit { animation: none; transition: opacity .6s; }
+  }
+  .start-card h1 { color: var(--yellow); font-size: 1.5rem; letter-spacing: .06em; margin: 0 0 .2rem; text-shadow: 0 0 14px #ffe60055; }
+  .start-sub { color: var(--violet); font-size: .78rem; margin: 0 0 1.2rem; }
+  .start-mode {
+    display: block; width: 100%; text-align: left; cursor: pointer; font-family: inherit;
+    background: #14001f; border: 1px solid #ff149355; border-radius: 10px;
+    padding: .8rem .95rem; margin: .55rem 0; color: var(--bright); transition: all .15s;
+  }
+  .start-mode:hover:not([disabled]) { border-color: var(--pink); background: #1e0030; box-shadow: 0 0 16px #ff149344; }
+  .start-mode[disabled] { opacity: .45; cursor: not-allowed; }
+  .start-mode-title { display: block; color: var(--pink); font-weight: 700; letter-spacing: .04em; }
+  .start-mode[disabled] .start-mode-title { color: #8a6a90; }
+  .start-mode-desc { display: block; font-size: .74rem; color: var(--text); margin-top: .25rem; line-height: 1.35; }
+  #start-intro { text-align: left; }
+  #start-intro h2 { color: var(--yellow); font-size: 1.15rem; text-align: center; margin: 0 0 .85rem; letter-spacing: .04em; }
+  #start-intro ul { list-style: none; padding: 0; margin: 0 0 1.1rem; }
+  #start-intro li { color: var(--text); font-size: .82rem; padding: .3rem 0 .3rem 1.4rem; position: relative; line-height: 1.4; }
+  #start-intro li::before { content: "▸"; color: var(--pink); position: absolute; left: .25rem; }
+  #start-intro li b { color: var(--bright); }
+  #start-intro li.start-goal, #start-intro li.start-goal b { color: var(--yellow); font-weight: 700; }
+  .start-actions { display: flex; gap: .6rem; align-items: center; }
+  .start-actions button { font-family: inherit; cursor: pointer; border-radius: 20px; padding: .55rem 1.1rem; font-size: .9rem; transition: all .15s; }
+  #start-back { background: none; border: 1px solid #ff149355; color: var(--text); }
+  #start-back:hover { border-color: var(--pink); color: var(--bright); }
+  #start-go { flex: 1; background: var(--pink); border: 1px solid var(--pink); color: #05001a; font-weight: 700; box-shadow: 0 0 16px #ff149366; }
+  #start-go:hover { box-shadow: 0 0 26px #ff1493aa; }
+  #start-daily { flex: 1; background: none; border: 1px solid var(--yellow); color: var(--yellow); font-weight: 700; box-shadow: 0 0 12px #ffd70033; }
+  #start-daily:hover { box-shadow: 0 0 22px #ffd70077; }
+
+  /* ── vendored word-card modal (source of truth: trainer index.html) ──── */
+  /* the trainer's palette names, same neon values */
+  :root {
+    --gold: #ff1493; --saffron: #ffe600; --deep-saffron: #bf5fff;
+    --royal-blue: #4169e1; --jade: #00cc66; --parchment: #e8c0d8;
+    --surface: #16032b; --border: #43155e; --dim: #a487b8;
+  }
+.divider-accent {
+  border: none;
+  border-top: 1px solid var(--royal-blue);
+  margin: 0.4rem 0;
+}
+.example-block {
+  background: linear-gradient(90deg, rgba(244,196,48,0.06) 0%, #1e1208 30%);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--saffron);
+  border-radius: 6px;
+  padding: 0.7rem 1rem;
+  margin: 0.5rem 0 0.3rem;
+}
+.example-thai {
+  font-family: 'Noto Sans Thai', 'Leelawadee UI', serif;
+  font-size: 1.45rem;
+  line-height: 1.9;
+  color: var(--text);
+  margin-bottom: 0.25rem;
+}
+.example-thai .highlight {
+  color: var(--gold);
+  font-weight: bold;
+  text-decoration: underline;
+  text-decoration-color: var(--deep-saffron);
+  text-underline-offset: 3px;
+}
+.example-rtgs {
+  font-size: 0.82rem;
+  color: var(--dim);
+  margin-bottom: 0.2rem;
+  font-style: italic;
+}
+.example-rtgs .highlight { color: var(--saffron); font-style: normal; }
+.example-en {
+  font-size: 0.85rem;
+  color: var(--parchment);
+}
+.example-speak {
+  float: right;
+  margin: -0.1rem -0.3rem 0 0.5rem;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--dim);
+  font-size: 1rem;
+  line-height: 1;
+  padding: 0.18rem 0.4rem;
+  cursor: pointer;
+  transition: color 0.12s, border-color 0.12s;
+}
+.example-speak:hover { color: var(--gold); border-color: var(--gold); }
+.example-speak.speaking { color: var(--saffron); border-color: var(--saffron); }
+
+/* ── Word hover tokens ───────────────────────────────────────────────────── */
+.w-token {
+  cursor: pointer;
+  border-radius: 2px;
+  transition: background 0.1s, color 0.1s;
+  padding: 0 1px;
+}
+.w-token:hover {
+  background: rgba(212, 175, 54, 0.18);
+  color: var(--saffron);
+}
+#wc-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  align-items: center;
+  justify-content: center;
+}
+#wc-overlay.open { display: flex; }
+/* Photo lightbox — tap a gallery photo / texted selfie to view it full-size */
+#pic-overlay {
+  display: none; position: fixed; inset: 0; z-index: 10001;
+  align-items: center; justify-content: center;
+  background: rgba(4, 0, 10, .9); cursor: zoom-out; padding: 20px;
+}
+#pic-overlay.open { display: flex; }
+#pic-overlay img {
+  max-width: 92vw; max-height: 84vh; border-radius: 10px;
+  border: 1px solid #ff149355; box-shadow: 0 0 44px #ff149366;
+  image-rendering: pixelated;
+}
+#pic-overlay .pic-cap {
+  position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%);
+  color: #ecd7ff; font: 13px/1.4 "SF Mono", Menlo, monospace;
+  background: #1a0a2a; padding: 5px 12px;
+  border-radius: 8px; max-width: 90vw; text-align: center;
+}
+/* Each stacked card sits in its own full-screen layer */
+.wc-layer {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.72);
+}
+.wc-layer:not(:last-child) { pointer-events: none; }
+.wc-card {
+  background: var(--surface);
+  border: 2px solid var(--gold);
+  border-radius: 8px;
+  padding: 1.8rem 2rem 1.4rem;
+  max-width: 480px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  pointer-events: all;
+}
+.wc-close {
+  position: absolute;
+  top: 0.6rem; right: 0.8rem;
+  background: none; border: none;
+  color: var(--dim); font-size: 1.3rem;
+  cursor: pointer; line-height: 1;
+}
+.wc-close:hover { color: var(--text); }
+.wc-back {
+  background: none; border: none;
+  color: var(--saffron); font-size: 0.88rem;
+  cursor: pointer; padding: 0;
+  margin-bottom: 0.8rem;
+  display: none;
+}
+.wc-back:hover { color: var(--gold); }
+.wc-thai {
+  font-family: 'Noto Sans Thai', serif;
+  font-size: 5rem;
+  color: var(--gold);
+  line-height: 1.3;
+  vertical-align: middle;
+}
+.wc-rtgs {
+  text-align: center;
+  color: var(--dim);
+  font-style: italic;
+  font-size: 1rem;
+  margin-bottom: 0.15rem;
+}
+.wc-en {
+  text-align: center;
+  font-size: 1.05rem;
+  color: var(--parchment);
+  margin-bottom: 0.6rem;
+}
+.wc-example { margin-top: 0.4rem; }
+
+/* ── Word decomposition ──────────────────────────────────────────────────── */
+.wc-decomp {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  margin: 0.6rem 0 0.2rem;
+  padding: 0.5rem 0.4rem;
+  background: rgba(0,0,0,0.25);
+  border-radius: 6px;
+}
+.decomp-cluster {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+}
+.decomp-char {
+  font-family: 'Noto Sans Thai', serif;
+  font-size: 1.8rem;
+  line-height: 1;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0.25rem 0.4rem;
+  cursor: default;
+  transition: border-color 0.1s, color 0.1s;
+  min-width: 2.4rem;
+  text-align: center;
+  pointer-events: all;
+}
+.decomp-char.is-cons  { border-color: var(--jade); }
+.decomp-char.is-vowel { border-color: var(--royal-blue); }
+.decomp-char.is-tone  { border-color: var(--saffron); }
+.decomp-char.is-other { border-color: var(--border); color: var(--dim); }
+.decomp-char:hover    { border-color: var(--gold) !important; color: var(--gold); }
+.decomp-label {
+  font-size: 0.62rem;
+  color: var(--dim);
+  text-align: center;
+  max-width: 3.5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#script-tooltip {
+  position: fixed;
+  z-index: 20000;
+  pointer-events: none;
+  background: #2a1c08;
+  border: 1px solid var(--saffron);
+  border-radius: 6px;
+  padding: 0.5rem 0.8rem;
+  max-width: 240px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.7);
+  display: none;
+  font-size: 0.82rem;
+  line-height: 1.6;
+}
+#script-tooltip .st-char {
+  font-family: 'Noto Sans Thai', serif;
+  font-size: 2rem;
+  color: var(--saffron);
+  font-weight: bold;
+  display: block;
+  text-align: center;
+  line-height: 1.2;
+}
+#script-tooltip .st-row { color: var(--parchment); }
+#script-tooltip .st-row span { color: var(--dim); font-style: italic; }
+
+/* ── Tooltip ─────────────────────────────────────────────────────────────── */
+#word-tooltip {
+  position: fixed;
+  z-index: 9999;
+  pointer-events: none;
+  background: #2a1c08;
+  border: 1px solid var(--gold);
+  border-radius: 5px;
+  padding: 0.4rem 0.7rem;
+  max-width: 220px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.6);
+  display: none;
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+#word-tooltip .tt-thai {
+  font-family: 'Noto Sans Thai', 'Leelawadee UI', serif;
+  font-size: 1.3rem;
+  color: var(--saffron);
+  font-weight: bold;
+}
+#word-tooltip .tt-rtgs { color: var(--dim); font-style: italic; }
+#word-tooltip .tt-en   { color: var(--parchment); }
+
+/* ── Tone Drill ──────────────────────────────────────────────────────────── */
+
+/* ── v0 scene panel (presentation only; scene.js owns the DOM) ── */
+#scene { border-bottom: 1px solid #241145; }
+/* The art row RESERVES its height instead of growing into it. scene.js rebuilds
+   this panel every command with a fresh <img>, so with max-height the row was
+   0px at render and ~210px once the file loaded — a reflow that landed AFTER
+   submit() had already decided where to scroll, which is what made the
+   scrollback feel like it drifted under you. The row still removes itself
+   entirely when a room has no art (that's a clean, synchronous collapse). */
+#scene-art { position: relative; height: 210px; }
+#scene-art img { display: block; width: 100%; height: 100%; object-fit: cover; }
+#scene-art .overlay-rain { position: absolute; inset: 0; pointer-events: none;
+  background: repeating-linear-gradient(115deg, transparent 0 7px, #9fc4ff22 7px 9px); }
+#scene-art .overlay-dark { position: absolute; inset: 0; pointer-events: none;
+  background: #05001aa8; }
+#scene-art .overlay-bell { position: absolute; inset: 0; pointer-events: none;
+  box-shadow: inset 0 0 34px 10px #ffb84d55; }
+#scene-cast { display: flex; gap: 10px; padding: 10px 12px 6px; overflow-x: auto; }
+#scene-cast .bust { flex: 0 0 auto; width: 56px; text-align: center; cursor: pointer;
+  background: none; border: none; padding: 0; font: inherit; }
+#scene-cast .bust img { width: 52px; height: 52px; object-fit: cover; border-radius: 9px;
+  border: 1px solid #ff149366; background: #140a2e; }
+/* the bust also carries .kw (term.js's flyout-dismiss check spares .kw only) —
+   neutralise .kw's typographic styling, keep only its behavioural role */
+#scene-cast .bust { font-weight: normal; }
+#scene-cast .bust:hover { text-decoration: none; }
+#scene-cast .bust span { display: block; font-size: 9px; color: #9a86b8; margin-top: 3px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#scene-hud { display: flex; align-items: center; gap: 7px; padding: 7px 14px;
+  font-size: 11px; color: var(--text); }
+#scene-hud b { color: var(--green); }
+#scene-hud .sep { color: #9a86b8; }
+#scene-hud .grow { flex: 1; }
+#scene-hud .m { display: flex; align-items: center; gap: 3px; font-size: 10px; }
+#scene-hud .bar { display: inline-block; width: 22px; height: 5px; background: #1c0f3a;
+  border-radius: 3px; overflow: hidden; }
+#scene-hud .bar i { display: block; height: 100%; }
+#scene-exits { display: flex; gap: 8px; padding: 2px 12px 11px; overflow-x: auto; }
+#scene-exits button { flex: 0 0 auto; font: inherit; font-size: 11px; color: var(--cyan);
+  background: #0a0530; border: 1px solid #00e5ff55; border-radius: 7px; padding: 4px 14px;
+  cursor: pointer; }
+/* top-LEFT on purpose: the fab-stack (bell/message) owns the panel's top-right
+   band, and a collapsed panel's "▸ scene" was hiding behind the bell */
+#scene-toggle { position: absolute; top: 6px; left: 8px; z-index: 5; font: inherit;
+  font-size: 11px; color: #9a86b8; background: #05001ad9; border: 1px solid #24114588;
+  border-radius: 5px; padding: 1px 8px; cursor: pointer; }
+#scene.collapsed #scene-art, #scene.collapsed #scene-cast { display: none; }
+/* folded: the toggle lives in the HUD row, not floating over it */
+#scene-toggle.inline { position: static; margin-right: 2px; flex: 0 0 auto; align-self: center; }
+/* folded on a phone: the HUD row is the panel's top band, where the bell/message
+   FABs float — keep the meters clear of them */
+@media (max-width: 767px) {
+  #scene.collapsed #scene-hud, #scene #scene-hud { padding-right: 72px; } /* the bell/msg FABs own the top-right band */
+}
+@media (pointer: coarse) {
+  #scene-toggle { min-height: 30px; padding: 3px 12px; font-size: 12px; }
+}
+
+/* ── v1 hotspots (presentation only; scene.js/scene-hotspots.js own the data) ── */
+.hotspot { position: absolute; background: none; border: 1px solid transparent;
+  border-radius: 8px; cursor: pointer; padding: 0; }
+.hotspot:hover, .hotspot:focus-visible { border-color: #00e5ff88;
+  box-shadow: 0 0 12px #00e5ff33 inset; }
+.hotspot .hs-label { position: absolute; left: 50%; bottom: 100%;
+  transform: translateX(-50%); margin-bottom: 4px; padding: 1px 8px;
+  font-size: 10px; color: var(--cyan); background: #05001ad9;
+  border: 1px solid #00e5ff44; border-radius: 5px; white-space: nowrap;
+  opacity: 0; pointer-events: none; transition: opacity .15s; }
+.hotspot:hover .hs-label, .hotspot:focus-visible .hs-label,
+#scene-art.hs-pulse .hotspot { opacity: 1; }
+#scene-art.hs-pulse .hotspot { border-color: #00e5ff66; }
+</style>
+</head>
+<body>
+<div id="shell">
+  <header>
+  <button id="font-fab" title="Text size" aria-label="Text size">Aa</button>
+    <button id="mute-btn" title="Toggle music">🔊</button>
+    <div class="title">THE LAST BAHT BUS</div>
+    <div class="sub">a Pattaya misadventure · ❖ Soi Sanuk ❖</div>
+  </header>
+  <a id="ad-mini" href="https://soisanuk.github.io/" target="_blank" rel="noopener">
+    😘 The girls speak two languages. You barely speak one. <b>Learn Thai →</b>
+  </a>
+  <div id="scene" hidden></div>
+  <div id="term-out" role="log" aria-live="polite" aria-atomic="false" aria-label="Game text"></div>
+  <!-- context chips are rendered per-turn by term.js _renderChips() from the engine's _chipSet() -->
+  <div id="chips"></div>
+  <div id="term-suggest"></div>
+  <div id="input-row">
+    <span class="prompt">❯</span>
+    <input id="term-in" type="text" autocomplete="off" autocapitalize="off"
+           autocorrect="off" spellcheck="false" placeholder="what do you do?"
+           aria-label="Type a command">
+  <button id="term-send" title="Send" aria-label="Send command">➤</button>
+  </div>
+  <div id="fab-stack">
+    <button id="bell-fab" title="Ring the bell" aria-label="Ring the bell">🔔</button>
+    <button id="msg-fab" title="Read your messages" aria-label="Read your messages">💬</button>
+    <div id="nav-fab" role="group" aria-label="Compass">
+      <button data-nav="n" aria-label="Go north">N</button>
+      <button data-nav="w" aria-label="Go west">W</button>
+      <button data-nav="in" aria-label="Go inside — hold for the list">IN</button>
+      <button data-nav="e" aria-label="Go east">E</button>
+      <button data-nav="s" aria-label="Go south">S</button>
+      <button data-nav="light" aria-label="Toggle the flashlight">🔦</button>
+    </div>
+  </div>
+</div>
+<a id="ad" href="https://soisanuk.github.io/" target="_blank" rel="noopener">
+  <div class="ad-hey">HEY HANDSOME 😘</div>
+  <div class="ad-line">The girls speak two languages.<br>You barely speak one.<br>
+    Candy notices these things.</div>
+  <span class="ad-cta">LEARN THAI →</span>
+  <div class="ad-sub">SOI SANUK trainer · free · no signup<br>❖ PATTAYA EDITION ❖</div>
+</a>
+<!-- start menu / mode select (wired in main.js) -->
+<div id="start-overlay" hidden>
+  <div class="start-card">
+    <div id="start-menu">
+      <h1>THE LAST BAHT BUS</h1>
+      <p class="start-sub">a Pattaya misadventure · Soi Sanuk universe</p>
+      <div id="start-art-wrap" aria-hidden="true"><img alt=""><img alt=""></div>
+      <button class="start-mode" data-mode="soi6">
+        <span class="start-mode-title">SOI 6 CHALLENGE ★</span>
+        <span class="start-mode-desc">One week, one street. ฿100,000 and a hard head — max out your สนุก.</span>
+      </button>
+      <button class="start-mode" data-mode="full" disabled>
+        <span class="start-mode-title">THE FULL GAME</span>
+        <span class="start-mode-desc">The whole coast — Jomtien to Naklua, lost wallet and all. Coming soon.</span>
+      </button>
+    </div>
+    <div id="start-intro" hidden>
+      <h2>SOI 6 · ONE WEEK</h2>
+      <ul>
+        <li>Seven nights based at the <b>Queen Vic Inn</b>, right on the soi.</li>
+        <li>You're <b>not leaving Soi 6</b> — the rest of Pattaya keeps for the full game.</li>
+        <li><b>฿100,000</b> for the week in the bank; <b>฿1,000</b> in your pocket to start.</li>
+        <li>Draw the rest at the <b>street ATM</b> — ฿300 a pull, ฿20,000 a day.</li>
+        <li class="start-goal">Goal: <b>สบายสบาย</b> — get happy, max out the week. ★</li>
+        <li><b>TODAY'S SOI</b> deals everyone who plays it today the same week —
+          finish, <b>SHARE</b> your card, compare. <b>START</b> rolls a week of your own.</li>
+      </ul>
+      <div class="start-actions">
+        <button id="start-back">← Back</button>
+        <button id="start-daily">TODAY'S SOI 📅</button>
+        <button id="start-go">START ★</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- vendored word-card modal mounts (see wordcard.js) -->
+<div id="wc-overlay"></div>
+<div id="pic-overlay"></div>
+<div id="script-tooltip"></div>
+<div id="word-tooltip">
+  <div class="tt-thai" id="tt-thai"></div>
+  <div class="tt-rtgs" id="tt-rtgs"></div>
+  <div class="tt-en"   id="tt-en"></div>
+</div>
+
+<script src="js/thai.js"></script>
+<script src="js/news-data.js"></script>
+<script src="js/world.js"></script>
+<script src="js/games.js"></script>
+<script src="js/lang.js"></script>
+<script src="js/engine-core.js"></script>
+<script src="js/engine-encounters.js"></script>
+<script src="js/engine-play.js"></script>
+<script src="js/engine-systems.js"></script>
+<script src="js/engine-parser.js"></script>
+<script src="js/tts.js"></script>
+<script src="js/audio.js"></script>
+<!-- vendored from the trainer: the shared Thai word-card stack -->
+<script src="js/data.js"></script>
+<script src="js/examples.js"></script>
+<script src="js/tokeniser.js"></script>
+<script src="js/thai-script.js"></script>
+<script src="js/wordcard.js"></script>
+<script src="js/portrait-thumbs.js"></script>
+<script src="js/term.js"></script>
+<script src="js/scene-hotspots.js"></script>
+<script src="js/scene.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
