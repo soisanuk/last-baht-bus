@@ -15,7 +15,9 @@ for (const f of ["thai.js", "world.js", "games.js", "engine-core.js", "engine-en
 }
 let out = [];
 engineInit(t => out.push(t), null, () => {});
-beforeEach(() => { out = []; newGame(); });
+// the full five-beat ritual — the "hey babe" call, the lawn on the lock screen — is
+// the golfer's (origin monger); every other origin gets the shorter alone scrub
+beforeEach(() => { out = []; newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight" }; });
 
 test("the scrub plays the full ritual: rule line, five beats, a spoken call", () => {
   // structural, not keyword-based — every pool has varied vocabulary by design,
@@ -39,6 +41,15 @@ test("flying home runs the scrub before the return, only on _newVacation", () =>
   const text = out.join("\n");
   assert.match(text, /illusion holds|scrub is complete|double life/i, "the departure ritual ran");
   assert.match(text, /VACATION 2|seatbelt|grey sky/i, "then the reset + the return");
+});
+
+test("a man with nobody to lie to gets the alone scrub — no wife, no call, no lock-screen lawn", () => {
+  G.player.origin = "running"; G.vacation = 1; out = [];
+  _suvarnabhumiScrub();
+  const text = out.join("\n");
+  assert.doesNotMatch(text, /babe|She believes|double life|lock screen/i);
+  assert.match(text, /nobody to|Nobody checks|No lock screen|no one to say it to/i);
+  assert.equal(out.length, 5, "rule, open, physical, alone, close");
 });
 
 test("the scrub pools are stocked for multi-trip variety", () => {

@@ -418,6 +418,12 @@ const _ENC = {
   flower(input) {
     const id = G.flowerFor; G.flowerFor = null;
     const her = (id && NPCS[id] && NPCS[id].name) || "her";
+    // not an answer to the child at all (a tip, a talk, a walk): the pitch lapses
+    // quietly and the command runs — see the pendingEnc gate's passthrough
+    if (!/buy|yes|rose|flower|sure|ok|please|one|for|no|wave|leave|later|pass|shake|sorry/.test(input)) {
+      _say("The mother reads your attention elsewhere, nods, and steers the child on to the next stool.", "dim");
+      return "passthrough";
+    }
     if (/buy|yes|rose|flower|sure|ok|please|one|for/.test(input) && !/no|wave|leave|later|pass/.test(input)) {
       if (G.money < ROSE_PRICE) {
         _say(`You pat your pockets and come up short of even ${ROSE_PRICE} baht. The mother ` +

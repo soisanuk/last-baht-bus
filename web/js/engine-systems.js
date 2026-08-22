@@ -594,7 +594,7 @@ function _bfRefusalSay(id, r) {
       "baht moves: “Cannot tonight, tilac. Lady time, jing jing.” The honest " +
       "ones tell you BEFORE the fine is paid. Remember that.",
     temple: `${name} makes an apologetic temple of her own hands: “Cannot, na. ` +
-      "I go temple in morning, make merit with my mama. Buddha first, boom " +
+      "I go temple in morning, make merit for my family. Buddha first, boom " +
       "boom later.” It has the ring of complete truth.",
     draw: `${name} says yes with her whole face — but the mamasan is already at her ` +
       "shoulder, all smiles and steel: “This one very popular, she bring me many " +
@@ -1023,7 +1023,7 @@ function _nightRide(input) {
   if (G.money < RIDE_MIN_CASH && seq.stops > 0) return _endRide(seq, "broke");
   // a random stop
   const venue = _pickRideVenue(seq.seen);
-  seq.seen.push(venue.key); if (seq.seen.length > 3) seq.seen.shift(); // no immediate venue repeats
+  seq.seen.push(venue.key); // _pickRideVenue avoids anything already seen this ride while the pool lasts
   let hi = Math.floor(_rand() * _RIDE_HOP.length);
   if (hi === seq.lastHop) hi = (hi + 1) % _RIDE_HOP.length; // and no back-to-back identical ride line
   seq.lastHop = hi;
@@ -2209,6 +2209,12 @@ function _doMessage(arg) {
   G.phone.msgCd[id] = G.day;
   _addBond(id, 1); // charm counts toward favor
   _say(`You send ${NPCS[id].name} something short and sweet with one emoji too many.`);
+  if (_npcRoom(id) === G.room && _npcsHere().includes(id)) {
+    // she is three stools away — "come see me tonight" read absurd (playtest 2026-08-22)
+    _pushMsg(id, ["555 you text me?? i am HERE na 🙈", "tilac… look up 😂", "you shy? i sit RIGHT here 555 💕"][Math.floor(_rand() * 3)]);
+    _say("(📱 Her phone buzzes in her hand. She reads it, looks up at you, and laughs. CHECK MESSAGES.)", "dim");
+    return;
+  }
   _pushMsg(id, ["555+ you funny", "miss you na 🥺", "come see me tonight!!",
     "work boring... you come make sanuk"][Math.floor(_rand() * 4)]);
   _say("(📱 She replies almost instantly. CHECK MESSAGES.)", "dim");
@@ -3097,13 +3103,13 @@ function _maybeIncomingText() {
   } else if (t >= 2) { // regular: invites and warmth, a little needy
     if (roll < 0.45) { G.phone.invite = { id, day: G.day };
       _pushMsg(id, `bar quiet tonight 😴 you come see ${name}?? i keep you seat 💺💕`); }
-    else if (roll < 0.6) _pushMsg(id, "mama of me sick need medicine 300 🥺 you help little bit na?");
+    else if (roll < 0.6) _pushMsg(id, "family of me sick need medicine 300 🥺 you help little bit na?");
     else _pushMsg(id, ["thinking of you na 💭", "you eat already?? 🍚", "sabai dee mai 😊",
       "last night SO funny 5555"][Math.floor(_rand() * 4)]);
   } else { // a name and a number: the classic mix, scam-ask heavy
     if (roll < 0.3) { G.phone.invite = { id, day: G.day };
       _pushMsg(id, `bar quiet tonight 😴 you come see ${name}?? i keep you seat 💺💕`); }
-    else if (roll < 0.65) _pushMsg(id, ["mama of me sick, need buy medicine 300 baht 🥺 you help?",
+    else if (roll < 0.65) _pushMsg(id, ["somebody in family sick, need buy medicine 300 baht 🥺 you help?",
       "phone of me break!! need 500 for fix... you good heart na 🙏",
       "buffalo of family very sick 😭😭 200 baht help little bit?"][Math.floor(_rand() * 3)]);
     else if (roll < 0.9) _pushMsg(id, ["thinking of you na 💭", "you eat already?? 🍚", "sabai dee mai 😊",

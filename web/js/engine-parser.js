@@ -364,7 +364,27 @@ function _arriveAt(to) {
   // playtest 2026-08-17), so the invite consumes the greeting slot.
   const _invHere = G.phone.invite && G.phone.invite.day === G.day &&
     _npcRoom(G.phone.invite.id) === to;
-  if (ROOMS[to].barType && !(G.soc.greeted && G.soc.greeted[to]) && !_invHere) {
+  // A month later, she still knows the face: the one-girl playtest (2026-08-22)
+  // came back to "a name and a number" after five nights, three LTs and the ride.
+  // Once per girl per vacation — a beat and a small head start, not the old ledger.
+  const back = G.prevBond && _npcsHere().find(n => NPC_ROLES[n] === "hostess" &&
+    G.prevBond[n] >= 2 && !(G.returned && G.returned[n]));
+  if (back && ROOMS[to].barType) {
+    (G.returned = G.returned || {})[back] = true;
+    (G.soc.greeted = G.soc.greeted || {})[to] = true;
+    _addBond(back, G.prevBond[back] >= 3 ? 4 : 2);
+    _say(_pickVary([
+      `${NPCS[back].name} looks up, and it takes her a second — then the whole face changes. ` +
+        `"You come BACK!" She is round the rail before the mamasan can say anything, both hands on ` +
+        `your arm, checking you're real. "I think maybe you forget. I think maybe everybody forget."`,
+      `A stool scrapes. ${NPCS[back].name} has seen you from the far end and is not pretending ` +
+        `otherwise. "Ohhh. Tilac. You COME." She says it twice more on the way over, and your seat ` +
+        `— it is still, somehow, your seat — is wiped without a word.`,
+      `${NPCS[back].name} stops with a tray in her hands. "You." Not the bar voice. "How long you ` +
+        `gone? One month? More?" She knows exactly how long. "I keep your seat one week, then I ` +
+        `stop keep. Now I keep again, na."`,
+    ], "returnGreet"), "win");
+  } else if (ROOMS[to].barType && !(G.soc.greeted && G.soc.greeted[to]) && !_invHere) {
     const her = _npcsHere().filter(n => NPC_ROLES[n] === "hostess")
       .sort((a, b) => _bondTier(b) - _bondTier(a))[0];
     if (her && _bondTier(her) >= 1) { (G.soc.greeted = G.soc.greeted || {})[to] = true; _relGreeting(her); }
@@ -2239,6 +2259,9 @@ function _doTalkBody(arg, topic) {
   }
   _convoStart(npc); // this NPC is now the active conversation partner (bare topics aim here)
   _trace(topic ? "ask" : "talk", NPCS[npc].name, topic || ""); // breadcrumb
+  // remember the last day you sat with her AFTER this turn's lines (so "yesterday"
+  // claims read the previous visit, not this one) — see _bondTalk
+  const _seenAfter = NPC_ROLES[npc] ? npc : null;
   // Try the literal topic first (so a node keyed on a word that's ALSO a synonym —
   // Mercedes's "german" backstory vs the german→language rule — keeps its literal
   // match), then fall back to the synonym-normalised key when nothing literal hit.
@@ -2265,7 +2288,9 @@ function _doTalkBody(arg, topic) {
   // that just fired). Hand-authored NPCs speak their own bond: lines instead.
   if (!topic && NPCS[npc].filler && NPC_ROLES[npc] === "hostess" &&
       _bondTier(npc) >= 2 && !(d && d.bond)) {
-    _bondTalk(npc); _questOffer(npc); return;
+    _bondTalk(npc); _questOffer(npc);
+    (G.seenDay = G.seenDay || {})[npc] = G.day;
+    return;
   }
   if (!d) {
     _say(topic ? `${NPCS[npc].name} doesn't have much to say about that.` :
@@ -2288,6 +2313,7 @@ function _doTalkBody(arg, topic) {
   _deliver(npc, d);
   if (NPCS[npc].manager) _managerChatTick(npc);
   _questOffer(npc);
+  if (_seenAfter) (G.seenDay = G.seenDay || {})[_seenAfter] = G.day;
 }
 
 // ── Conversation layer ───────────────────────────────────────────────────────
@@ -3121,7 +3147,7 @@ function _doBuy(arg) {
       { p: CORD_PRICE, m: G.money }));
     return;
   }
-  if (r.seven && /toastie|cheese|sandwich|food|snack/.test(arg) && !FOOD_STALLS[G.room]) {
+  if (r.seven && (/toastie|cheese|sandwich/.test(arg) || (/food|snack/.test(arg) && !FOOD_STALLS[G.room]))) {
     if (G.money < 35) { _say(_fmt("The toastie is ฿{p}. You have ฿{m}. The doorbell jingles in sympathy.", { p: 35, m: G.money })); return; }
     G.money -= 35;
     G.hunger = Math.max(0, G.hunger - 40);
@@ -5141,11 +5167,13 @@ function _chipSet() {
   //      an encounter routes ANY command to its resolver as the snap
   //      reaction, so the room chips stay live there.
   if (G.pendingBf) {
-    add("short time", `short time ฿${G.pendingBf.st}`);
-    add("long time", `long time ฿${G.pendingBf.lt}`);
+    const waived = G.pendingBf.id && typeof _bondTier === "function" && _bondTier(G.pendingBf.id) >= 3;
+    add("short time", waived ? "short time (no fine)" : `short time ฿${G.pendingBf.st}`);
+    add("long time", waived ? "long time (no fine)" : `long time ฿${G.pendingBf.lt}`);
     add("no", "no, thanks");
     return chips;
   }
+  if (G.pendingEnc === "nightride") { add("ride on"); add("call it a night"); return chips; }
   if (G.pendingSoapy) {
     for (const t of _SOAPY_TIERS) add(String(t.num), `${t.num} · ฿${t.price}`);
     add("no", "no, thanks");
@@ -5698,7 +5726,10 @@ function doCommand(input) {
     }
     const enc = G.pendingEnc;
     G.pendingEnc = null;
-    _ENC[enc](lower);
+    // a soft pitch (the rose seller) may decline to spend an unrelated command:
+    // it lapses, and the command the player actually typed runs (playtest 2026-08-22:
+    // "tip rung 100" became a wave-off and the tip never happened)
+    if (_ENC[enc](lower) === "passthrough") { doCommand(raw); return; }
     _tick();
     _checkAct1();
     return;

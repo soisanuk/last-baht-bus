@@ -446,3 +446,95 @@ test("a lapsed question can be asked again next time the node lands", () => {
   assert.equal(G.convoQ, null);
   assert.ok(!_npcState("bert").know["asked_why"], "the ask is un-spent — the next node that carries it asks again");
 });
+
+// ── round seven: the one-girl man (Tomas) ──
+test("a regular's 'yesterday you no come' only fires when you didn't come", () => {
+  const girl = Object.keys(NPCS).find(id => NPCS[id].filler && NPC_ROLES[id] === "hostess" && NPCS[id].room === "lucky_tiger");
+  G.room = "lucky_tiger"; G.soc.drinks[girl] = 8; // regular tier
+  G.seenDay = { [girl]: G.day - 1 };               // you were with her last night
+  for (let i = 0; i < 12; i++) { out = []; _bondTalk(girl); assert.doesNotMatch(text(), /Yesterday you no come/); }
+  G.seenDay = { [girl]: G.day - 3 }; let hit = false;
+  for (let i = 0; i < 30; i++) { out = []; _bondTalk(girl); if (/Yesterday you no come/.test(text())) hit = true; }
+  assert.ok(hit, "…and can when you've been away");
+  // talking to her records the day
+  doCommand("talk to " + NPCS[girl].name.toLowerCase());
+  assert.equal(G.seenDay[girl], G.day);
+});
+
+test("her texts and refusals don't name a mama her own story put elsewhere", () => {
+  const src = readFileSync(fileURLToPath(new URL("../../web/js/engine-systems.js", import.meta.url)), "utf8");
+  assert.doesNotMatch(src, /mama of me sick need medicine|mama of me sick, need buy/);
+  assert.doesNotMatch(src, /make merit with my mama/);
+});
+
+test("she remembers you across vacations — once, with a head start, not the old ledger", () => {
+  const girl = Object.keys(NPCS).find(id => NPCS[id].filler && NPC_ROLES[id] === "hostess" && NPCS[id].room === "lucky_tiger");
+  G.soc.drinks[girl] = 8;
+  G.day = 7; G.room = "hotel_room";
+  _newVacation();
+  assert.equal(G.prevBond[girl], 2);
+  assert.equal(G.soc.drinks[girl] || 0, 0, "the ledger did reset");
+  G.room = "buakhao_n"; out = [];
+  _arriveAt("lucky_tiger");
+  assert.match(text(), /You come BACK|You COME|Now I keep again/);
+  assert.ok(G.soc.drinks[girl] >= 2, "a small head start");
+  out = []; G.room = "buakhao_n"; _arriveAt("lucky_tiger");
+  assert.doesNotMatch(text(), /You come BACK|You COME|Now I keep again/, "once per vacation");
+});
+
+test("Lek's wallet topic ticks the milestone the HINT points at", () => {
+  newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight" };
+  _setFlag("knowMot"); G.room = _npcRoom("lek");
+  doCommand("ask lek about wallet");
+  assert.ok(_flag("knowOyHasIt"));
+  assert.doesNotMatch(text(), /Same-same I tell you/);
+});
+
+test("the rose seller lapses on an unrelated command instead of eating it", () => {
+  G.room = "lucky_tiger";
+  const girl = _npcsHere().find(id => NPC_ROLES[id] === "hostess");
+  G.soc.drinks[girl] = 2; G.convo = girl; G.flowerFor = girl; G.pendingEnc = "flower"; G.flowerDay = G.day;
+  const m = G.money; out = [];
+  doCommand(`tip ${NPCS[girl].name.toLowerCase()} 100`);
+  assert.equal(G.pendingEnc, null);
+  assert.equal(G.money, m - 100, "the tip actually happened");
+  assert.match(text(), /steers the child on/);
+  G.flowerFor = girl; G.pendingEnc = "flower"; out = [];
+  doCommand("no thanks");
+  assert.match(text(), /lift a palm/);
+});
+
+test("chips: a waived fine shows no number; the night ride has RIDE ON / call it", () => {
+  const girl = Object.keys(NPCS).find(id => NPCS[id].filler && NPC_ROLES[id] === "hostess" && NPCS[id].room === "lucky_tiger");
+  G.soc.drinks[girl] = 14; G.pendingBf = { st: 600, lt: 1050, id: girl };
+  const c = _chipSet().map(x => x.label).join(" | ");
+  assert.match(c, /no fine/); assert.doesNotMatch(c, /฿600|฿1050/);
+  G.pendingBf = null; G.pendingEnc = "nightride";
+  assert.match(_chipSet().map(x => x.cmd).join(" | "), /ride on/);
+  G.pendingEnc = null;
+});
+
+test("MESSAGE her while she's three stools away; the quiz ignores digits inside commands; a toastie is a toastie", () => {
+  const girl = _npcsHere.call(null) && Object.keys(NPCS).find(id => NPCS[id].filler && NPC_ROLES[id] === "hostess" && NPCS[id].room === "lucky_tiger");
+  G.room = "lucky_tiger"; G.phone.contacts[girl] = true; G.battery = 80; out = [];
+  doCommand("message " + NPCS[girl].name.toLowerCase());
+  assert.match(G.phone.inbox.map(x => x.text).join("\n"), /i am HERE|look up|RIGHT here/);
+  // the quiz
+  G.room = _quizBars()[0]; G.day = 4; G.nightTurn = 25;
+  G.game = { type: "quiz", qs: [0, 1, 2, 3, 4], at: 0, right: 0, bar: G.room };
+  out = []; _quizInput("tip rung 100");
+  assert.match(text(), /1, 2, or 3/);
+  assert.equal(G.game.at, 0);
+  G.game = null;
+  // the toastie
+  G.room = "naklua_rd"; G.money = 500; out = [];
+  doCommand("buy toastie");
+  assert.doesNotMatch(text(), /grilled chicken/);
+  assert.ok(_TOASTIE_LINES.some(s => text().includes(s)));
+});
+
+test("a night ride never repeats a venue while the pool lasts; the 6 a.m. coda is any girl's", () => {
+  const seen = [];
+  for (let i = 0; i < _RIDE_VENUES.length - 1; i++) { const v = _pickRideVenue(seen); assert.ok(!seen.includes(v.key)); seen.push(v.key); }
+  assert.ok(_CODA_DECON.every(s => !/mile-long|untouchable VIP/.test(s)));
+});

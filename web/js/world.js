@@ -4461,10 +4461,10 @@ const NPCS = {
         short: "\"Hello handsome! You play pool, or you just hiding from your night?\"" },
       // the re-readable gist once the story has moved past her greeting (playtest
       // 2026-08-22: ASK LEK ABOUT MOT / WALLET fell to "Hello handsome")
-      { topic: "wallet", req: ["knowMot"],
-        text: "\"Mot? Same-same I tell you — he sell your wallet to Madam Oy, Rainbow Girls, " +
-          "top of Tree Town. In her safe by now, guarantee.\" She flicks a nail at the " +
-          "door. \"Go. Be polite to her. Polite works better than clever, with Oy.\"",
+      { topic: "wallet", req: ["knowMot"], sets: ["knowOyHasIt"],
+        text: "\"Mot? He sell your wallet to Madam Oy — Rainbow Girls, top of Tree Town. In her " +
+          "safe by now, guarantee.\" She flicks a nail at the door. \"Go. Be polite to her. " +
+          "Polite works better than clever, with Oy.\"",
         short: "\"Mot sold your wallet to Madam Oy at Rainbow Girls, Tree Town. Go — and be polite to her.\"" },
       { topic: "oy", text: "\"Madam Oy? Big boss. Her place is Rainbow Girls — deep in Tree Town, the maze up the top of this road. Undefeated at Connect 4 since two thousand nine. Do NOT play her.\"" },
     ],

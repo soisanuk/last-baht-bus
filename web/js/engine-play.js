@@ -911,8 +911,8 @@ function _quizInput(input) {
   const g = G.game;
   const item = QUIZ_POOL[g.qs[g.at]];
   let pick = null;
-  const m = input.match(/[1-3]/);
-  if (m) pick = +m[0] - 1;
+  const m = input.trim().match(/^(?:answer\s*)?([1-3])$/i); // a bare digit — not "tip rung 100" (playtest 2026-08-22)
+  if (m) pick = +m[1] - 1;
   else {
     const idx = item.opts.findIndex(o => o.toLowerCase().includes(input.trim()));
     if (idx >= 0 && input.trim().length > 1) pick = idx;
@@ -2350,7 +2350,12 @@ const _BOND_TALK = {
 };
 function _bondTalk(id) {
   const t = _bondTier(id) >= 3 ? 3 : 2;
-  const pool = _BOND_TALK[t];
+  let pool = _BOND_TALK[t];
+  // "Yesterday you no come, I look look" is a claim — she said it to a man who had
+  // spent the previous night WITH her (one-girl playtest 2026-08-22). G.seenDay
+  // records the last day you sat with her; skip that variant if it was yesterday.
+  const last = (G.seenDay || {})[id];
+  if (t === 2 && last != null && last >= G.day - 1) pool = pool.filter((_, i) => i !== 0);
   _say(pool[Math.floor(_rand() * pool.length)](NPCS[id].name), t >= 3 ? "win" : "");
 }
 
@@ -2750,9 +2755,9 @@ const _CODA_DECON = [
     "careful into a tote so it survives another night, the heels kicked off blistered feet, a wet " +
     "wipe dragging the red mouth and the smoky eyes down the sink until they're gone.",
   "Out of the bag comes the real uniform — a faded cartoon t-shirt gone soft with washing, grey " +
-    "sweatpants, fifty-baht rubber flip-flops. The mile-long legs go back to being a tired " +
-    "27-year-old's; the untouchable VIP disappears with the makeup, down a drain, in a hotel that " +
-    "will forget her by checkout.",
+    "sweatpants, fifty-baht rubber flip-flops. The bar-light version of her goes back to being a " +
+    "tired twenty-something's; whoever she was at the rail disappears with the makeup, down a " +
+    "drain, in a hotel that will forget her by checkout.",
   "She scrubs it all off — the lipstick, the eyeshadow, the whole performance — and what's left " +
     "in the mirror under the hard light is just a woman with dark circles who wants, more than " +
     "anything she was offered tonight, to sleep.",
@@ -3370,14 +3375,39 @@ const _SCRUB_CLOSE = [
     "filed and locked. Pattaya keeps the truth the way it keeps everyone's — cheaply, and forever.",
 ];
 
+// The man with nobody to perform for: the widower, the divorced returner, the
+// detective, the investor, the redundancy. The "hey babe" call and the lawn on
+// the lock screen belong to ONE origin — the golfer with the APAC team — and
+// were telling a widower he was cheating on a wife (one-girl playtest 2026-08-22).
+const _SCRUB_ALONE = [
+  "The phone stays dark, which is its own kind of performance: no call to take in the other " +
+    "voice, nobody waiting to be told about golf. You delete the photos anyway, out of a habit " +
+    "that belongs to other men, and then stop, and leave the last one.",
+  "There is nobody to ring. You notice that in Duty-Free, standing in front of the perfume that " +
+    "says sorry without saying why, with no one to say it to — and put it back, and buy a coffee, " +
+    "and sit with the week a minute longer than the other men at the gate are allowed to.",
+  "No lock screen to swap. Nobody checks it. You scroll the week once — the rail, the neon, the " +
+    "face that kept your seat — and keep all of it, because there is no reason on earth not to.",
+];
+const _SCRUB_CLOSE_ALONE = [
+  "Boarding call. You walk the jet bridge the same man who walked in, carrying the week instead of " +
+    "hiding it, and behind you the city closes over the space where you stood without a ripple.",
+  "The performance, such as it is, is simply not to need one. In a month the seatbelt sign will ping " +
+    "off over the gulf again and the soi will have kept your stool, or not, and you'll find out which.",
+];
 function _suvarnabhumiScrub() {
   const v = G.vacation;
   _say("═══════════════════════════════════", "dim");
   _say(_SCRUB_OPEN[v % _SCRUB_OPEN.length], "room");
   _say(_SCRUB_PHYSICAL[Math.floor(_rand() * _SCRUB_PHYSICAL.length)]);
-  _say(_SCRUB_DIGITAL[Math.floor(_rand() * _SCRUB_DIGITAL.length)]);
-  _say(_SCRUB_CALL[Math.floor(_rand() * _SCRUB_CALL.length)]);
-  _say(_SCRUB_CLOSE[v % _SCRUB_CLOSE.length], "dim");
+  if (typeof _isOrigin === "function" && _isOrigin("monger")) {
+    _say(_SCRUB_DIGITAL[Math.floor(_rand() * _SCRUB_DIGITAL.length)]);
+    _say(_SCRUB_CALL[Math.floor(_rand() * _SCRUB_CALL.length)]);
+    _say(_SCRUB_CLOSE[v % _SCRUB_CLOSE.length], "dim");
+  } else {
+    _say(_SCRUB_ALONE[v % _SCRUB_ALONE.length]);
+    _say(_SCRUB_CLOSE_ALONE[v % _SCRUB_CLOSE_ALONE.length], "dim");
+  }
 }
 
 function _newVacation() {
@@ -3402,6 +3432,14 @@ function _newVacation() {
   G.loan = null;   // …but Nira's cousins do not forget; a month away writes it off all the same (for now)
   G.jaded = 0;     // a fresh trip, fresh enthusiasm — the treadmill resets
   G.rep = 0; G.repDay = null; // a month away and the soi's memory of your antics is a clean slate (expat keeps its rep — you live there)
+  // The bond ledger resets per vacation by design — but a regular+ girl does not
+  // forget a face in a month. Keep the peak tiers so her bar can greet you once.
+  G.prevBond = {};
+  for (const id of Object.keys(G.soc.drinks || {})) {
+    const t = typeof _bondTier === "function" ? _bondTier(id) : 0;
+    if (t >= 2) G.prevBond[id] = t;
+  }
+  G.returned = {};
   G.soc = { drinks: {}, mamaTreat: {}, bellAt: {}, bells: {}, heat: {},
     banned: {}, patronBusy: {}, patronMiffed: {}, bra: {}, drunk: 0 };
   G.itemLoc.phone = "inventory";
