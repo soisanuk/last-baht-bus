@@ -793,6 +793,11 @@ function _patronTalk(id, topic) {
   let d = null;
   for (const e of p.dialogue) {
     if (topic ? e.topic !== topic && !(e.topic && topic.includes(e.topic)) : e.topic) continue;
+    // full parity with _pickDialogue: the documented contract is that patron
+    // entries share the NPC schema, but req/notFlags were silently ignored here
+    // — a bkkArcDone-gated node fired for everyone (caught 2026-08-22)
+    if ((e.req || []).some(f => !_flag(f))) continue;
+    if ((e.notFlags || []).some(f => _flag(f))) continue;
     if (e.when && !e.when(st, G)) continue; // state-machine condition: skip nodes whose state gate fails
     d = e;
     break;

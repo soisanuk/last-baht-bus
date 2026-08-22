@@ -8682,6 +8682,16 @@ const NPCS = {
           "where a boy like that ends up if he isn't careful.” She squares a stack of menus. " +
           "“He's careful. He had to learn young. That part I do blame myself for.”",
         short: "“My Nont? A good boy, too clever for his own good. He sends me money I didn't ask for and thinks I don't worry. He's careful — he had to learn young.”" },
+      { topic: "girls", req: ["tiffinDelivered"],
+        text: "\"The girls in town now?\" She looks past you at the water while the till " +
+          "rests. \"Somewhere on some soi tonight there is a girl with a baby up-country and " +
+          "a mother minding him, sending home everything and telling the customers she is " +
+          "nineteen with no trouble.\" The glasses come off, get polished, go back on. \"I " +
+          "am not guessing. That was my stool once.\" A small, level smile. \"It can come out " +
+          "all right, you know. It came out me. But nobody could have told me that at the " +
+          "time, and I would not have believed them — so if you meet her, don't tell her " +
+          "anything. Buy her supper. That, she can use.\"",
+        short: "\"There's always a girl sending everything home, saying she's nineteen with no trouble. That was my stool once. Buy her supper — don't tell her anything.\"" },
       { topic: "father", text: "The temperature drops a precise degree. “Nont's father.” She " +
           "says it like a closed account. “He was here a long time, and then he was not, and he " +
           "paid for a great deal while he was and nothing at all after.” A small, level shrug. " +
@@ -9075,6 +9085,16 @@ const NPCS = {
           "like one thing in this town that's his and not hers. The Stinky's it. That's the whole of it, bud.\"",
         short: "\"My lady and my old boss both. Love her to death — but I'd like one thing here that's mine, not hers.\"",
         fx: (st) => { st.trust = Math.min(5, st.trust + 1); st.mood = "open"; } },
+      { topic: "shamrock", req: ["seanStory"],
+        text: "\"The Shamrock, out Khao Talo.\" Bert racks the balls slower than the balls " +
+          "need. \"Knew Sean to nod at. League night, twice a year, his lot came through the door loud.\" " +
+          "He sets the cue down. \"You want to know the difference between his bar and this " +
+          "one? My Yank's been sick in Ohio three years and this place is still standing, " +
+          "because when he got on the plane there was a me behind the rail. Sean got on his " +
+          "plane and there was nobody.\" He shrugs, not unkindly. \"That's the whole obituary, " +
+          "bud. A bar's not walls. It's whoever's still there at four a.m. counting the till " +
+          "honest.\"",
+        short: "\"My Yank had a me behind the rail. Sean had nobody. That's the whole obituary.\"" },
       { topic: "owner", text: "\"Real owner's a Yank, older than me even, " +
         "and his ticker's packing up — that's why I'm behind this bar and not Candy's. Good " +
         "man. Wanted somebody he trusted keeping the lights on while the doctors do their " +
@@ -10594,6 +10614,16 @@ const PATRONS = {
           "for a forty-baht coffee is not sizing you up as a provider. She's just — being " +
           "nice to you. I should have known from the lattes. Everybody should. Nobody does.\"",
         short: "\"She always paid for the coffee. I read it as pride. It was arithmetic. I should have known from the lattes.\"" },
+      { topic: "dinner", req: ["bkkArcDone"],
+        text: "You start to ask about the dinner and he holds up a hand — reading something " +
+          "in your face before you've said it. \"You've had one.\" Not a question. He turns " +
+          "the cold flat white a quarter-turn, studying you like a man checking a mirror for " +
+          "his own scar. \"Sathorn? Private room?\" You nod. \"Did he pour it himself?\" You " +
+          "nod. Colin exhales through his nose, almost a laugh. \"Then you know. Nobody can " +
+          "tell you and everybody who knows can tell THAT you know.\" He signals for two " +
+          "beers without asking. \"Cheapest club in the world, this one. The dues are just—\" " +
+          "he taps his own chest, once. \"Well. You've paid them.\"",
+        short: "\"You've had one. The dinner.\" He orders two beers. \"You've paid the dues.\"" },
       { topic: "dinner",
         text: "\"Sathorn.\" He says the district like it's a diagnosis. \"She invited me up to " +
           "meet the family. I pictured a shophouse — you do, after enough time down there. " +
