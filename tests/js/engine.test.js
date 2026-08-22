@@ -6399,11 +6399,13 @@ test("light rain is atmosphere only: vignettes, dialogue, zero mechanics", () =>
     state().turns = 100; // even parity
     _sayDrizzle();
     assert.match(lastOut(), /roll the canvas rain guards/);
-    // bar vignette: the barstools come in (both variants mention them)
+    // bar vignette: the stool drill with patrons about, or (2026-08-22) the
+    // empty-room monsoon register when nobody's at the rail — either is valid
     state().room = "candy_bar";
     state().turns = 101;
     _sayDrizzle();
-    assert.match(lastOut(), /barstools/i);
+    assert.ok(/barstools/i.test(lastOut()) || _RAIN_EMPTY_BAR.some(v => lastOut().includes(v.slice(0, 40))),
+      "the bar rain vignette is neither the stool drill nor the empty-room register");
     // it fires from ticks on a rainy bake, and never trips the downpour trap
     out = [];
     state().room = "buakhao_s";

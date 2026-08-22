@@ -2981,9 +2981,34 @@ function _wxRainy() {
   return !!wx && ((wx.code >= 51 && wx.code <= 82) || wx.code >= 95 || wx.rain >= 50);
 }
 
+// The empty-bar monsoon register: rain hammering a room with nobody in it. The
+// rule from the canon essay: low season has NO drama — the emptiness is the event.
+const _RAIN_EMPTY_BAR = [
+  "The rain owns the roof and the room belongs to nobody. The pool table is under its " +
+    "cover; two of the girls share a thin blanket on the corner sofa, faces lit blue by " +
+    "their phones; the speaker plays a DJ mix to an audience of stacked stools.",
+  "The girl nearest the door has pulled her bare feet up onto the plastic stool, chin " +
+    "on her knees, watching the street flood. Nobody has bought anything in an hour and " +
+    "nobody has said anything either. The rain is doing all the talking.",
+  "Somebody's soi dog has claimed the doorway step, shaking itself into a tight wet " +
+    "ball — a temporary truce with humanity, ratified without a word. The girls let it " +
+    "lie. In this weather everything gets to come in off the street except money.",
+  "The neon runs its colours into the puddle at the threshold. Behind the rail the " +
+    "cashier counts a drawer that doesn't need counting, twice, because the counting " +
+    "is something to do. The rain does not care whose rent is due.",
+];
+
 function _sayDrizzle() {
   const alt = G.turns % 2 === 0; // variant by parity — no dice for flavor
   if (_inBar()) {
+    // LOW SEASON'S OTHER REGISTER (monsoon-purgatory canon, 2026-08-22): when the
+    // rain has the room to itself — no patrons at the rail — the drill prose is
+    // wrong; the event is the emptiness. Atmosphere only, no drama by rule.
+    const dead = typeof _patronsHere === "function" && !_patronsHere().length;
+    if (dead && _room().barType === "beer") {
+      _say(_pickVary(_RAIN_EMPTY_BAR, "rainempty"), "dim");
+      return;
+    }
     // Enclosed venues (the gents villas, anywhere aircon-shut) have no street-side
     // stools to rescue — the open-front drill read wrong inside the Orchid
     // (mobile playtest 2026-08-17). They get the rain as sound, not chore.
@@ -4547,6 +4572,13 @@ function _doPaper() {
 // (shared-world-safe like _quizBars), so it rotates daily and reads the same for
 // everyone that day. Pure flavor — gates nothing.
 const _OWL_LEADS = [
+  "It is low season, squire, and the tourist board would like you to know the beaches " +
+    "are uncrowded. Here is what uncrowded means from the other side of the rail: the " +
+    "rain stops the customers but it does not stop a single meter in this town — the " +
+    "rent meter, the loan meter back up-country, the little brother's school-fee meter. " +
+    "The girls sit out the flood under thin blankets doing arithmetic you would not " +
+    "wish on an accountant. Next time a barkeep looks pleased to see you in September, " +
+    "understand that the pleasure is real.",
   "A reader mourns that Pattaya 'lost its soul in 1998.' It didn't, squire. In 1998 the baht was fifty to the dollar and you had a full head of hair. The city is doing precisely what it always did — adapting faster than you can. The town never grew a conscience. You just grew old.",
   "Newcomers keep asking why she wants money if she loves them. Wrong question. Liang du — to feed and care for — IS the love here, not a substitute for it. The man who says 'I love you' and won't pay the rent is, in the local accounting, useless. Learn the word before you learn her name.",
   "A gentleman panics: his lady had ฿180,000 last month and ฿5,000 this week. She isn't robbing you, chief. Money here is a river, not a reservoir — it flows through and does its job. Ask where it went and you may as well ask where the wind went.",
@@ -4595,6 +4627,16 @@ const _OWL_AMULET = [
 ];
 
 const _OWL_LETTERS = [
+  ["A hostess writes (translated from the Thai by her cashier, who added commentary " +
+    "your columnist has removed): 'My friend tell me raise my price, everybody raise " +
+    "now, know your worth. I raise. My one customer of the week say did I think this " +
+    "is Dubai, and block. Now friend is asleep and I am hungry. What is my worth, Owl?'",
+   "Your worth, little sister, is not the number and never was — but the STREET sets " +
+    "the number, and the street does not read motivational posts. Your friend gave " +
+    "you advice she will never have to pay for; that is the cheapest thing on this " +
+    "soi and the most expensive to accept. Go back to your old price and eat. The " +
+    "Owl has held his rate card at these premises for forty years, and it has kept " +
+    "him fed if not rich."],
   ["A Thai wife writes: 'Met my farang on Beach Road in '89. Two children, a finance degree this year, maybe law school. Mixed marriage is hard and culture harder — but marriage is the START of the bumpy ride, not the happy ending.'",
    "I am happy for you, madam. Alas, you are in the minority."],
   ["'Relocating to Pattaya for work — what monthly income is normal living?'",

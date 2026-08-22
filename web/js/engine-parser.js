@@ -2796,6 +2796,23 @@ function _doGive(itemWord, npcWord) {
   // fondness, once per girl per night. Keepsafe/earmarked food skips this and
   // falls to the safe wave below, so a quest bite isn't spent as a gift.
   if (ITEMS[id].kind === "food" && !ITEMS[id].keepsafe && NPC_ROLES[npc]) {
+    // The 26-baht night (monsoon-purgatory canon): on the rainy night she told
+    // you the price story, food is the som-tam-in-silence doctrine made
+    // playable — care is supper, not advice. Once; non-jading; bigger bond.
+    if (npc === "lek" && _flag("heardPriceStory") && !_flag("fed26") &&
+        (G.rain > 0 || (typeof _wxRainy === "function" && _wxRainy()))) {
+      _setFlag("fed26");
+      G.itemLoc[id] = null;
+      _addBond(npc, 2);
+      _addHappy(2);
+      _say(`You don't say anything. You just set ${ITEMS[id].name} down in front of her ` +
+        "on the rail, next to her face-down phone. Lek looks at it, then at you, and " +
+        "doesn't say thank you either — which is how you know it landed. She eats " +
+        "slowly, watching the rain, and somewhere in the middle of it her shoulders " +
+        "come down from around her ears. The flood keeps moving past the step. The " +
+        "meters keep ticking. But not tonight's, not all of them.", "win");
+      return;
+    }
     G.itemLoc[id] = null;
     const fed = (G.soc.fed = G.soc.fed || {});
     let warmed = "";

@@ -4380,6 +4380,11 @@ const NPCS = {
     room: "lucky_tiger",
     desc: "Petite, bright smile, glittery earrings catching the bar lights. She's beating " +
       "two customers at pool simultaneously.",
+    // The 3,000-baht illusion (monsoon-purgatory canon, 2026-08-22) — a
+    // stumbled-into beat per the 2026-08-22 doctrine: rain-gated, bond-gated,
+    // told once, flat not tearful, advertised nowhere. The pool-shark bravado
+    // is the point: this is the girl underneath it, on the night the street
+    // is empty. Her advisor sleeps behind her, unpriced.
     selfies: [
       { cap: "new earring ✨ shiny like me 555", pic: "lek_sel1" },
       { cap: "somtam so spicy 🥵🌶️ i cry 555", pic: "lek_sel2" },
@@ -4387,6 +4392,20 @@ const NPCS = {
       { cap: "bar quiet 😴 you come play?? 💕", pic: "lek_sel4" },
     ],
     dialogue: [
+      { bond: 1, when: (st, G) => (G.rain > 0 || (typeof _wxRainy === "function" && _wxRainy())),
+        notFlags: ["heardPriceStory"], sets: ["heardPriceStory"],
+        text: "No pool tonight. Lek is on the plastic stool by the door, knees up, watching " +
+          "the flood carry a plastic bag past the step, and she starts talking without the " +
+          "hello — flat, like reading a receipt. \"Two year my price same-same. Everybody " +
+          "know. Fair.\" She turns {{her phone}} so you can see a chat: her message, a reply " +
+          "one minute later, then the grey nothing where a contact used to be. \"My friend " +
+          "say — everybody charge double now, know your worth, don't be cheap village girl. " +
+          "So I say the big number.\" A nod at the sofa, where a girl sleeps wrapped in a " +
+          "towel, vape on her chest rising and falling. \"He say, did I think this is Dubai. " +
+          "Then block. My one customer this week.\" She puts {{the phone}} face-down. \"My " +
+          "friend sleep good. Advice is free, na — for HER.\" The rain hits the roof. She " +
+          "hasn't eaten since two o'clock; you can hear it from here.",
+        short: "\"I said the big number. He said, did I think this is Dubai. Then block.\" The friend sleeps on. \"Advice is free — for her.\"" },
       { req: ["knowMot"], notFlags: ["knowOyHasIt"], th: "อุ๊ยจริงหรอ", rom: "ui jing ro",
         text: "\"Mot?! That little— okay okay. This morning he come here all big smile, buy whisky-cola, PAY CASH. Say he 'do business' with Madam Oy at Rainbow Girls — Tree Town maze, top of Buakhao. Business!\" She snorts. \"Your wallet in Oy's safe by lunchtime, guarantee.\"",
         sets: ["knowOyHasIt"],
