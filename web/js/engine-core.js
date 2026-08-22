@@ -212,6 +212,7 @@ function newGame() {
     faction: { wdg: 0, samson: 0, indie: 0, syndicate: 0 }, // standing with the powers (see _align) — only moves when you ACT, never for declining
     itemLoc: Object.fromEntries(
       Object.entries(ITEMS).map(([id, it]) => [id, it.location])),
+    dropped: {},         // keepsafe item ids the player DROPPED (vs spawned) — QUESTS surfaces these
     safeTries: 0,
     pendingFare: null,   // { kind:"bus"|"moto", price, dest } awaiting `pay`
     pendingBf: null,     // { id, st, lt, room } — barfine negotiation awaiting ST/LT/NO

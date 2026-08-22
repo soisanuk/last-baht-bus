@@ -3925,6 +3925,7 @@ const ITEMS = {
   receipt: {
     name: "7-Eleven receipt", aliases: ["receipt", "paper"],
     portable: true, location: "inventory",
+    keepsafe: true, // quest/clue — DROP warns, and a dropped one shows in QUESTS
     desc: "A crumpled 7-Eleven receipt from your pocket. The print is in Thai.",
     readTh: "เซเว่นอีเลฟเว่น สาขาซอยบัวขาว 03:12\nมาม่า ×2 ... ๑๒ บาท\nชาเขียว ... ๒๐ บาท",
     readEn: "7-Eleven, SOI BUAKHAO branch, 03:12 — Mama noodles ×2, green tea. " +
@@ -3958,6 +3959,7 @@ const ITEMS = {
     name: "a tiffin of Duangjai's fish",
     aliases: ["tiffin", "fish", "lunchbox", "food", "duangjai's fish", "the fish"],
     portable: true,
+    keepsafe: true, // quest/clue — DROP warns, and a dropped one shows in QUESTS
     location: null, // handed over by Duangjai on ACCEPT (quest lake_errand)
     desc: "A three-tier steel tiffin, the clasp worn bright: grilled fish from the Boathouse " +
       "kitchen, rice, a knot of herbs, and — wedged in the lid because she couldn't help " +
@@ -3968,6 +3970,7 @@ const ITEMS = {
     name: "a brass key on a cork fob",
     aliases: ["brass key", "key", "fob", "shamrock key"],
     portable: true,
+    keepsafe: true, // quest/clue — DROP warns, and a dropped one shows in QUESTS
     location: null, // hidden — the Shamrock's serving hatch gives it up (reads.hatch)
     desc: "A worn brass door key on a cork fob, SHAMROCK in faded marker on one side and " +
       "a Khao Talo phone number on the other — a landlord's spare, left where a landlord " +
@@ -3978,6 +3981,7 @@ const ITEMS = {
     name: "a Buddha amulet",
     aliases: ["amulet", "buddha", "pendant", "medallion"],
     portable: true,
+    keepsafe: true, // quest/clue — DROP warns, and a dropped one shows in QUESTS
     location: "jomtien_beach_s3",
     sight: "Half-buried in the sand at the foot of the spirit house, on a broken cord, a small " +
       "Buddha amulet — not set on the shrine, exactly. Left there, or lost, or given back. (TAKE AMULET)",
@@ -4011,24 +4015,28 @@ const ITEMS = {
   helmet: {
     name: "spare helmet", aliases: ["helmet"],
     portable: true, location: null, // given by Bank
+    keepsafe: true, // quest/clue — DROP warns, and a dropped one shows in QUESTS
     desc: "Bank's spare helmet — hot pink, with a Rainbow Girls Bar sticker on the side. " +
       "He wants it delivered to Pim at the Starlight Bar.",
   },
   som_tam: {
     name: "som tam (extra spicy)", aliases: ["som tam", "somtam", "papaya salad", "salad", "food"],
     portable: true, location: null, // given by Candy
+    keepsafe: true, // quest/clue — DROP warns, and a dropped one shows in QUESTS
     desc: "A takeaway box of som tam poo plara, spicy enough to be classed as a weapon. " +
       "Candy's peace offering for Ploy, the cashier at Rainbow Girls.",
   },
   sang_som: {
     name: "bottle of Sang Som", aliases: ["sang som", "sangsom", "rum", "bottle of rum"],
     portable: true, location: null, // Candy hands it over for the sister-bar run
+    keepsafe: true, // quest/clue — DROP warns, and a dropped one shows in QUESTS
     desc: "A boxed bottle of Sang Som with a rose-pink ribbon and a card in Candy's " +
       "handwriting: 'เปิดร้านใหม่ สู้ๆ นะ' — for the opening shelf at Candy Bar 2.",
   },
   foreman_keys: {
     name: "ring of site keys", aliases: ["keys", "site keys", "foreman keys", "ring of keys"],
     portable: true, location: null, // Wimon hands them over for the shrine run
+    keepsafe: true, // quest/clue — DROP warns, and a dropped one shows in QUESTS
     desc: "A heavy ring of brass site keys, every one oiled and worn — the locks of Hyper " +
       "A Go-Go as they were the day the hoarding came down. Kept polished by a widow's " +
       "thumb for years.",
@@ -4036,6 +4044,7 @@ const ITEMS = {
   revue_flyer: {
     name: "Peacock revue flyer", aliases: ["flyer", "revue flyer", "peacock flyer"],
     portable: true, location: null, // Miss Mala hands it over for the scout run
+    keepsafe: true, // quest/clue — DROP warns, and a dropped one shows in QUESTS
     desc: "A glossy flyer for the Peacock Cabaret's revue: Petch mid-lip-sync in a gown " +
       "made of light, Miss Mala's headdress filling the top corner like weather. On the " +
       "back, in careful biro: 'for the Alcazar man — M.'",
@@ -4043,6 +4052,7 @@ const ITEMS = {
   brass_tag: {
     name: "brass dog tag", aliases: ["tag", "brass tag", "dog tag", "seamus"],
     portable: true, location: null, // worked free of the Shamrock's shutter hasp
+    keepsafe: true, // quest/clue — DROP warns, and a dropped one shows in QUESTS
     desc: "A brass dog tag gone green with four rainy seasons: SEAMUS — THE SHAMROCK — " +
       "GOOD BOY. The pub is shuttered and Paddy is long gone home, but somebody once " +
       "paid to have GOOD BOY engraved in brass, and they were right.",
@@ -4110,6 +4120,7 @@ const ITEMS = {
   wallet: {
     name: "your wallet", aliases: ["wallet"],
     portable: true, location: null, // inside the safe
+    keepsafe: true, // quest/clue — DROP warns, and a dropped one shows in QUESTS
     desc: "Your wallet! Cards, hotel key card, and — miraculously — most of the cash. " +
       "Tucked inside: a note in careful English: 'Farang — you buy Mot's dinner tonight. " +
       "Be more careful. — Oy'.",

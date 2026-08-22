@@ -7593,6 +7593,30 @@ test("the Act One reset carries identity and NOTHING conversational", () => {
   assert.equal(G.act1Tries, 1, "the attempt count survives (it unlocks HINT)");
 });
 
+test("quest/clue items warn on drop and a dropped one surfaces in QUESTS", () => {
+  // Design ask (2026-08-17): a set-down quest item shouldn't be a silent trap.
+  startSoi6Mode(); G.flags.act1Done = true; G.stage = "vacation";
+  G.player = { origin: "monger", personality: "joker", orientation: "straight" };
+  G.room = "soi6_mid"; G.itemLoc.tiffin = "inventory"; G.dropped = {};
+  // plain DROP is refused with a warning; the item stays carried
+  out = []; run("drop tiffin");
+  assert.match(lastOut(), /ANYWAY/, "no confirm hint on a keepsafe drop");
+  assert.equal(G.itemLoc.tiffin, "inventory", "keepsafe item dropped without confirming");
+  // DROP … ANYWAY overrides
+  out = []; run("drop tiffin anyway");
+  assert.equal(G.itemLoc.tiffin, "soi6_mid", "the ANYWAY override didn't drop it");
+  assert.ok(G.dropped.tiffin, "the drop wasn't recorded for the journal");
+  // QUESTS names where it is
+  out = []; run("quests");
+  assert.match(lastOut(), /left a tiffin.*soi 6|left a tiffin/i, "QUESTS doesn't surface the dropped item");
+  // a keepsafe item at its SPAWN (never carried) must NOT show
+  assert.doesNotMatch(lastOut(), /amulet/i, "a spawned (never-dropped) keepsafe item leaked into QUESTS");
+  // picking it back up clears the reminder
+  G.room = "soi6_mid"; run("take tiffin");
+  out = []; run("quests");
+  assert.doesNotMatch(lastOut(), /left a tiffin/i, "re-taking didn't clear the QUESTS reminder");
+});
+
 test("polite natural-language and Zork verbs stay voiced, and a question isn't an answer", () => {
   // Alan (widower, polite sentences) + the veteran (Zork ledger): the audience
   // types full courtesies and classic IF verbs; the house rule is no plausible

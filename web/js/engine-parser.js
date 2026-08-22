@@ -649,6 +649,7 @@ function _doTake(arg) {
     "Taking a shrine offering? With YOUR luck tonight?" :
     "That's staying where it is."); return; }
   G.itemLoc[id] = "inventory";
+  if (G.dropped) delete G.dropped[id]; // no longer on a floor
   _say(`Taken: ${it.name}.`);
 }
 
@@ -697,8 +698,10 @@ function _doDrop(arg) {
       "One thing at a time, and think hard about the wallet.");
     return;
   }
-  const id = _inv().find(i => ITEMS[i].name.toLowerCase().includes(arg) ||
-    ITEMS[i].aliases.some(a => a.includes(arg)));
+  const forced = /\b(anyway|really|force|for real|yes)\b/.test(arg);
+  const target = arg.replace(/\b(anyway|really|force|for real|yes)\b/g, " ").replace(/\s+/g, " ").trim();
+  const id = _inv().find(i => ITEMS[i].name.toLowerCase().includes(target) ||
+    ITEMS[i].aliases.some(a => a.includes(target)));
   if (!id) { _say(_pickVary(_NOT_CARRYING, "notcarry")); return; }
   if (id === "masseuse_note") {
     const nm = G.offShift ? G.offShift.name : "her";
@@ -706,8 +709,23 @@ function _doDrop(arg) {
     _say(`You bin ${nm}'s number — a beer mat in a wastebasket somewhere on the soi. Some roads you don't walk.`);
     return;
   }
+  // A quest/clue item is not litter — dropping one can strand a job (or, for the
+  // wallet, the whole night). Strong warning + a confirm gate; DROP <it> ANYWAY
+  // overrides. And wherever it lands, QUESTS shows you where (see _doQuests) so
+  // it's never truly lost — the anti-softlock rule, applied to your own pockets.
+  if (ITEMS[id].keepsafe && !forced) {
+    const w = id === "wallet"
+      ? "Your WALLET? The one thing this entire night is about? Put it down on a bar " +
+        "floor and you are playing tonight twice."
+      : `${ITEMS[id].name} is tied to a job you're carrying — set it down and you'll be ` +
+        "walking back for it, or worse.";
+    _say(w + ` (DROP ${(ITEMS[id].aliases[0] || arg).toUpperCase()} ANYWAY if you're sure.)`, "alert");
+    return;
+  }
   G.itemLoc[id] = G.room;
-  _say(`Dropped: ${ITEMS[id].name}.`);
+  if (ITEMS[id].keepsafe) (G.dropped = G.dropped || {})[id] = true; // QUESTS tracks it
+  _say(`Dropped: ${ITEMS[id].name}.` +
+    (ITEMS[id].keepsafe ? " (It's on the floor here — QUESTS will remind you where.)" : ""));
 }
 
 // The masseuse's number reads dynamically (it names whoever wrote it), so READ

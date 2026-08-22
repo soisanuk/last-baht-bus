@@ -1903,6 +1903,20 @@ function _doQuests() {
       { name: _L(q.name), id: qid.toUpperCase() }), "dim"); shown++; }
     else if (st === "done") { _say(`✓ ${q.name}`, "dim"); shown++; }
   }
+  // Dropped quest/clue items are tied back to the journal so a set-down never
+  // becomes a silent loss (design ask, 2026-08-17): show each keepsafe item
+  // that's lying on a room floor, and where. _barName renders a venue; unknown
+  // ids fall back to the room's name.
+  const _placeName = rid => (typeof _barName === "function" && _barName(rid)) ||
+    (ROOMS[rid] && ROOMS[rid].name) || "somewhere back there";
+  for (const [iid, it] of Object.entries(ITEMS)) {
+    if (!it.keepsafe || !(G.dropped && G.dropped[iid])) continue; // player-dropped only, not spawned
+    const loc = G.itemLoc[iid];
+    if (loc && loc !== "inventory" && ROOMS[loc]) {
+      _say(`⚠ You left ${it.name} at ${_placeName(loc)} — go back for it before you need it.`, "alert");
+      shown++;
+    }
+  }
   if (!shown) _sayLeads(false);
   else if (!rows.some(([qid]) => G.quests[qid] === "active") && G.stage !== "act1") {
     _sayLeads(true);
