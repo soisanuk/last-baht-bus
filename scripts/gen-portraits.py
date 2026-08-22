@@ -425,6 +425,8 @@ CHARS = {
     "dieter":   dict(skin=PALE, hair="short", hc=SILVER, shirt=C(0xd8d8e0), collar=True, acc=["glasses"], framec=SILVER, mouth="neutral", bg=BG_BAR),
     "gerald":   dict(skin=TAN, hair="short", hc=SILVER, shirt=C(0xf0ece0), collar=True, mouth="smile", bg=BG_BAR),
     "sandra":   lady(skin=PALE, hair="bob", hc=GREY, shirt=C(0x6a3a5a), bg=BG_BAR, mouth="smile", acc=["earrings"], earc=SILVER),
+    # Priew — the hospital mirage: the clinic girl with the laughing eyes (cat t-shirt)
+    "priew":      lady(skin=THAI, hair="long", hc=BLACK, shirt=C(0xd8d0c0), mouth="smile", bg=BG_STREET),
     # Colin — the reverse-savior essay's man who lived it, hilltop regular at The Terrace
     "colin":    dict(skin=TAN, hair="short", hc=GREY, shirt=C(0xe8e0d0), collar=True, mouth="neutral", bg=BG_BAR),
     # Sao — the Bangkok weekender (the reverse-savior arc): good sneakers, boutique dress, no bar behind her

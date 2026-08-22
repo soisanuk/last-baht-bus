@@ -8655,6 +8655,28 @@ const NPCS = {
   // She exists as an NPC only so the phone works (contact, texts) — offmap:true
   // keeps her out of every room. Everything she does happens by text and in one
   // off-map scene (_bkkDinner, engine-systems.js). Expat-only, once per game.
+  // The hospital mirage (canon 2026-08-22, panel three of the meeting-her-
+  // outside triptych): the "normal girl" from the clinic waiting room who was
+  // inside the economy all along. offmap like Sao — she exists as two scenes
+  // (the waiting room after GET TESTED; a go-go rotation nights later) and a
+  // LINE contact. NOBODY LIES in this arc: "evening shift at a restaurant,
+  // every day until late" is true in every particular, and she smiles the same
+  // smile in both worlds because it is the same her. Stumbled-into by
+  // construction — no journal, no hint; a player who never gets tested and
+  // never enters a go-go never learns the arc exists, which is correct.
+  priew: {
+    name: "Priew", th: "เปรี้ยว", emoji: "🐱", pronoun: "she",
+    room: "second_rd_c", // placeholder — offmap: never present in a room
+    offmap: true,
+    look: "Thai woman, twenties, deep calm laughing eyes, elephant pants, a faded sequined cat t-shirt pressed immaculate.",
+    desc: "The girl from the clinic waiting room — you'd know the eyes anywhere, which " +
+      "turns out to be the whole story.",
+    dialogue: [
+      { text: "\"You get your medicine na?\" The eyes do the smiling. \"Lunch sometime. " +
+        "Only lunch — I work evening, every day until late.\" Every word of it true.",
+        short: "\"Only lunch — I work evening, every day until late.\" Every word of it true." },
+    ],
+  },
   sao: {
     name: "Sao", th: "สาว", emoji: "🧳", pronoun: "she", offmap: true,
     room: "second_rd_c", // placeholder for the every-NPC-has-a-room invariant; never present

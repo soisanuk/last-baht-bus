@@ -2131,6 +2131,18 @@ function _doMessage(arg) {
   if (w === "tan" && G.phone.contacts.tan) { _tanText(); return; }
   // the columnist texts like a columnist — you have his number the moment you
   // replied to the joke (playtest #7: the girl-refusal read wrong for Mort)
+  // the clinic girl texts like herself — the same in both worlds (hospital mirage)
+  if (w === "priew" && G.phone.contacts.priew) {
+    G.battery = Math.max(0, G.battery - 1);
+    _say(_flag("priewRevealed")
+      ? "The reply comes fast, warm, entirely unembarrassed: \"you see me last night na 😊 " +
+        "lunch still ok? i tell you first day — evening i work. you know now 555\" And that " +
+        "is the whole of it: she never lied, and she is not going to start apologising for " +
+        "your imagination."
+      : "\"555 the eye man! ankle better na. lunch some day — only lunch, i work evening, " +
+        "every day until late 😊\" Cheerful, unhurried, exactly what she said at the clinic.");
+    return;
+  }
   if (w === "mort" && _flag("jokeWho")) {
     G.battery = Math.max(0, G.battery - 1);
     _say(_pickVary(_MORT_TEXT_REPLIES, "morttext"));
@@ -4572,6 +4584,12 @@ function _doPaper() {
 // (shared-world-safe like _quizBars), so it rotates daily and reads the same for
 // everyone that day. Pure flavor — gates nothing.
 const _OWL_LEADS = [
+  "A reader writes that he has found a NORMAL girl, squire — met her at the " +
+    "dentist, or the bank, or the immigration queue, somewhere daylight and " +
+    "respectable, and she has a normal job. The Owl wishes him joy and offers " +
+    "one piece of arithmetic: half this town works evenings. The mirage was " +
+    "never where she works. The mirage is the word 'normal' — there are only " +
+    "people, squire, each with an economy, and yours is showing.",
   "It is low season, squire, and the tourist board would like you to know the beaches " +
     "are uncrowded. Here is what uncrowded means from the other side of the rail: the " +
     "rain stops the customers but it does not stop a single meter in this town — the " +

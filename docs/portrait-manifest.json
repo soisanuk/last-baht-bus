@@ -1,10 +1,10 @@
 {
-  "generated": "2026-08-16",
+  "generated": "2026-08-22",
   "note": "Distinct, hand-authored characters with a portrait (excludes the 181 generic `filler` NPCs). Derived from web/js/world.js — regenerate with scripts/gen-portrait-manifest.mjs, do not hand-edit. `sex`/`venueKind` are generator heuristics for portrait archetype selection, not game canon.",
   "counts": {
-    "total": 143,
+    "total": 144,
     "byRole": {
-      "story": 38,
+      "story": 39,
       "mamasan": 25,
       "hostess": 44,
       "cashier": 13,
@@ -376,6 +376,20 @@
       "room": "orchid_room",
       "tags": [],
       "desc": "Late thirties dressed for late twenties: a linen shirt one button too honest, a watch that wants to be noticed, sunglasses on indoors at midnight. He films himself more than he talks and talks more than he listens. Up close, the empire is just a man who has never once been told no by anyone he pays."
+    },
+    {
+      "id": "priew",
+      "name": "Priew",
+      "source": "NPCS",
+      "role": "story",
+      "sex": "f",
+      "look": "Thai woman, twenties, deep calm laughing eyes, elephant pants, a faded sequined cat t-shirt pressed immaculate.",
+      "venueKind": null,
+      "emoji": "🐱",
+      "th": "เปรี้ยว",
+      "room": "second_rd_c",
+      "tags": [],
+      "desc": "The girl from the clinic waiting room — you'd know the eyes anywhere, which turns out to be the whole story."
     },
     {
       "id": "rob",
@@ -1317,7 +1331,7 @@
       "tags": [
         "c4"
       ],
-      "desc": "Sweet, visibly new — first week on the soi — checking her phone between customers and startling whenever the door opens."
+      "desc": "Sweet, visibly new — first week on the soi — checking her phone between customers and startling whenever the door opens. A thin gold RING turns and turns on her finger, and her eyes keep going back to the screen."
     },
     {
       "id": "nook",

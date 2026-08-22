@@ -370,6 +370,7 @@ function _arriveAt(to) {
   }
   _repArrival(); // your street name precedes you at a stranger bar (notable tiers only)
   _managerWelcome(); // a bar manager stands you the house's first shot (once/bar/night)
+  if (typeof _priewReveal === "function") _priewReveal(); // the hospital mirage, scene two (once ever)
   _amuletNotice();   // a piwin reads the amulet you are wearing (once ever)
   _nokAmulet();      // Auntie Nok sees what you are wearing
   // the partnerTan route comes due: he said he'd ask, and this is him asking
@@ -3772,6 +3773,58 @@ function _doClinic() {
     _say(_pickVary(_CLINIC_CLEAN, "clinicclean"), "dim");
     _addHappy(1);
   }
+  _priewMeet(); // the waiting room has one more thing in it, once (hospital-mirage arc)
+}
+
+// ── The hospital mirage, scene one (canon 2026-08-22) ────────────────────────
+// The clinic's twenty-minute wait is where you meet her: mask, eyes, the ankle,
+// the lunch-only line — true in every particular. Once ever; sandbox only.
+function _priewMeet() {
+  if (_flag("metPriew") || !_flag("act1Done")) return;
+  _setFlag("metPriew");
+  G.priewDay = G.day;
+  G.phone.contacts.priew = true;
+  G.known.priew = true;
+  _say("The waiting room does its slow business around you — a grandmother with a " +
+    "numbered ticket, a ceiling fan, the smell of antiseptic and wet umbrellas. " +
+    "Across the aisle, a girl in a surgical mask: cheap elephant pants, a faded " +
+    "sequined cat t-shirt somehow pressed immaculate, and above the mask a pair of " +
+    "eyes — deep, calm, laughing at something, possibly the fan.", "win");
+  _say("Twisted her ankle, she says, when you trade small talk about the rain — the " +
+    "scooter, the flooded soi, everyone's story this month. You mention lunch, some " +
+    "day, the little place with the view. \"Why not,\" the eyes say, and the phone " +
+    "comes out for LINE before you've finished the sentence. \"But only lunch. I " +
+    "work evening shift at a restaurant — every day, until late.\" The nurse calls " +
+    "her number. She hops, once, entirely gracefully, and is gone.", "win");
+  _say("(PRIEW is in your phone now. A normal girl, with a normal job. All you had to " +
+    "do was go to the clinic.)", "dim");
+}
+
+// Scene two: the first go-go you enter, two or more nights later. The rotation
+// changes. Nobody lies here either — that's the entire point.
+function _priewReveal() {
+  if (!_flag("metPriew") || _flag("priewRevealed")) return;
+  if (G.day < (G.priewDay || 0) + 2) return;
+  if (_room().barType !== "gogo") return;
+  _setFlag("priewRevealed");
+  _say("The music shifts. The rotation changes. And in the stage lights, in towering " +
+    "platform heels, a girl steps up whose face you know before you can say from " +
+    "where — and then the eyes find you through the strobes, deep and calm and " +
+    "laughing, and they smile at you EXACTLY the way they did across a clinic " +
+    "aisle, over a surgical mask, in another life entirely. Priew. Evening shift. " +
+    "Every day, until late. She never said restaurant of what.", "alert");
+  const her = _npcsHere().find(n => NPC_ROLES[n] === "hostess");
+  if (her) {
+    _say(`${NPCS[her].name} follows your frozen stare with professional interest. ` +
+      "\"You know her? You want her? She have customer already — but I can tell " +
+      "her come to you after.\"", "dim");
+  }
+  _say("Priew works the song to its end, steps down without hurry, walks past your " +
+    "table close enough to touch — and slides onto the lap of a large Korean " +
+    "tourist by the far rail, laughing at something he didn't say yet. Nothing " +
+    "she told you was untrue. The mirage was never her job. It was the word " +
+    "you put in front of 'girl'.", "alert");
+  _addHappy(-2);
 }
 
 function _doViolence(arg) {

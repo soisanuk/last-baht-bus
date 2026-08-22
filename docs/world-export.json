@@ -24,8 +24,8 @@
  "counts": {
   "geolocated": 237,
   "patrons": 23,
-  "people": 329,
-  "portraits": 352,
+  "people": 330,
+  "portraits": 353,
   "renders": 352,
   "thumbs": 352,
   "venues": 237
@@ -2583,6 +2583,14 @@
    "room": "ruby_kiss",
    "th": "แพรว"
   },
+  "priew": {
+   "desc": "The girl from the clinic waiting room — you'd know the eyes anywhere, which turns out to be the whole story.",
+   "emoji": "🐱",
+   "name": "Priew",
+   "pronoun": "she",
+   "room": "second_rd_c",
+   "th": "เปรี้ยว"
+  },
   "prik": {
    "desc": "Gold everywhere — earrings, chain, {{phone}} case — one of Moonshine Bar's girls, from Yasothon. Google Translate is open before you finish the sentence.",
    "emoji": "🌺",
@@ -3718,6 +3726,7 @@
   "praewa",
   "pranee",
   "preaw",
+  "priew",
   "prik",
   "proud",
   "pui",
