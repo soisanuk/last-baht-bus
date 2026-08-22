@@ -351,6 +351,7 @@ function _arriveAt(to) {
   if (typeof _roomSafeBeat === "function") _roomSafeBeat();  // the stash, whenever you get to your room
   if (typeof _dailyJoke === "function") _dailyJoke();        // the unknown number, once a day
   if (typeof _bkkArcTick === "function") _bkkArcTick();      // Sao's texts, on a Bangkok clock
+  if (typeof _chamTick === "function") _chamTick();          // the barista's apron selfies, and the slip
   G.sevenAt = null;   // back on the pavement — the next buy walks you in again
   _describeRoom(true);
   _lightNotice(); // walking in with the torch burning gets you clocked
@@ -2183,6 +2184,10 @@ function _doTalkBody(arg, topic) {
   // of a wall of names. It cannot be a dialogue `fx` — those fire on first
   // delivery only, so the list would freeze on the night you first asked.
   if (npc === "tan" && _convoTopic(topic || "") === "others" && _tanOthers()) return;
+  // the civilian at the table: "how much" is not a topic she answers, it's the
+  // scene (chameleon economy) — no dialogue node, so the wheel never advertises it
+  if (npc === "cream" && topic && (topic === "price" || _convoTopic(topic) === "price") &&
+      typeof _chamAsk === "function") { _chamAsk(); return; }
   let d = _pickDialogue(npc, topic || null);
   if (topic && (!d || !d.topic)) {
     const norm = _convoTopic(topic);
@@ -2285,6 +2290,9 @@ const _CONVO_TOPIC_RULES = [
   [/\bdark ?side\b|east pattaya|over the highway|across (the )?(highway|sukhumvit)|the lake\b|\bneil\b/, "darkside"],
   [/the lads\b|town lads|the chorus|old boys|the veterans|sports bar|your mates/,  "mates"],
   [/\bdaughter\b|your girl\b|the kid\b|your kid\b/,                             "daughter"],
+  // Cream (the chameleon economy) — the inevitable question, however it's dressed
+  [/how much|take you|come with me|go with me|your price|my hotel|my room|short ?time|long ?time|\bbarfine\b|pay you/, "price"],
+  [/your job|what.*you do|\bbarista\b|coffee shop|the shop|the apron|\bwork\b/,      "job"],
 ];
 
 function _convoTopic(s) {
@@ -4939,6 +4947,11 @@ function _chipSet() {
   }
   if (G.pendingChoice === "bkkdinner") { add("go", "go to Bangkok"); add("decline", "decline"); return chips; }
   if (G.pendingChoice === "bkkbill") { add("let", "let it go"); add("grab", "reach for it"); return chips; }
+  if (G.pendingChoice === "cham") { add("go", "go with her"); add("not tonight"); return chips; }
+  if (G.pendingChoice === "chamgift") {
+    if (_pers("whiteknight")) add("gift " + CHAM_GIFT, "gift ฿" + CHAM_GIFT);
+    add("gift ", "gift…"); add("nothing"); return chips;
+  }
   if (G.pendingChoice === "synjob") {
     const j = typeof _synJobById === "function" ? _synJobById(G.synJob) : null;
     add("yes"); add("no"); add("ask", j ? j.whoLabel : "ask about it"); return chips;
@@ -5200,6 +5213,8 @@ function engineComplete(input) {
   else if (G.pendingChoice === "tanfavour") pool = ["yes", "no", "ask"];
   else if (G.pendingChoice === "bkkdinner") pool = ["go", "decline"];
   else if (G.pendingChoice === "bkkbill") pool = ["let", "grab"];
+  else if (G.pendingChoice === "cham") pool = ["go", "not tonight"];
+  else if (G.pendingChoice === "chamgift") pool = ["gift ", "nothing"];
   else if (G.pendingChoice === "synjob") pool = ["yes", "no", "ask"];
   else if (G.pendingChoice === "checkout") {
     pool = [...Object.keys(_HOTELS).filter(k => k !== G.hotel)
@@ -5294,6 +5309,8 @@ function _renderResume() {
   if (G.pendingChoice === "tanfavour") { _tanFavourPrompt(); return; }
   if (G.pendingChoice === "bkkdinner") { _bkkDinnerPrompt(); return; }
   if (G.pendingChoice === "bkkbill") { _say("The bill sits in its black folder, his card on top. (GRAB · LET)", "dim"); return; }
+  if (G.pendingChoice === "cham") { _chamPrompt(); return; }
+  if (G.pendingChoice === "chamgift") { _chamGiftPrompt(); return; }
   if (G.pendingChoice === "synjob") { _synPrompt(); return; }
   if (G.game) { _renderGame(); return; }
   if (G.pendingEnc) { _renderEncounter(); return; }
@@ -5431,6 +5448,23 @@ function doCommand(input) {
     _say("The grey Alphard idles under the porch light; Sao's driver checks the time. " +
       "Nobody is in a hurry but you.", "dim");
     _bkkDinnerPrompt();
+    return;
+  }
+  // Cream gathering her bag at the Metro Beer Garden (the chameleon economy)
+  if (G.pendingChoice === "cham") {
+    if (/^(go|yes|y|ok|okay|sure|come|with her|let'?s go|hotel)/.test(lower)) { _chamGo(); return; }
+    if (/^(not tonight|no|n|stay|sorry|decline|another time|cancel)/.test(lower)) { _chamDecline(); return; }
+    _say("She has her bag on her shoulder and is waiting, not quite looking at you.", "dim");
+    _chamPrompt();
+    return;
+  }
+  // the morning after: her bus is at ten to eight, and she has asked for nothing
+  if (G.pendingChoice === "chamgift") {
+    const m = lower.match(/^(?:gift|give|tip|send|pay)?\s*(?:her\s*)?(?:฿|b)?(\d[\d,]*)/);
+    if (m) { _chamGift(parseInt(m[1].replace(/,/g, ""), 10) || 0); return; }
+    if (/^(nothing|no|none|zero|keep|goodbye|bye|let her go|don'?t)/.test(lower)) { _chamGift(0); return; }
+    _say("She is by the door with the little bag, waiting a second longer than leaving takes.", "dim");
+    _chamGiftPrompt();
     return;
   }
   if (G.pendingChoice === "bkkbill") {

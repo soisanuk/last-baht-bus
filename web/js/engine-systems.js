@@ -430,6 +430,7 @@ function _doBarfine(arg) {
   if (!_inBar()) { _say("Barfines are negotiated indoors, with the mamasan watching."); return; }
   const here = _npcsHere().filter(id => NPC_ROLES[id]);
   const id = arg ? _findNpc(arg) : (here.length === 1 ? here[0] : null);
+  if (id === "cream") { _chamAsk(); return; } // the civilian at the table: the inevitable question (chameleon economy)
   if (!id || !NPC_ROLES[id]) { _say(arg ? "She's not working this bar." : "Barfine whom, exactly?"); return; }
   const name = NPCS[id].name, role = NPC_ROLES[id];
   if (role === "mamasan") { _say(`You cannot barfine ${name}. She IS the bar. She looks almost flattered. Almost.`); return; }
@@ -2124,6 +2125,13 @@ const _MORT_TEXT_REPLIES = [
   "A joke comes straight back: “Q: Why does the columnist answer texts at this hour? " +
     "A: Deadline's the only wife who never went home to Udon.”",
 ];
+const _CHAM_TEXT_REPLIES = [
+  "\"hiii 😊 i at work na, boss watching. you come drink coffee? i make you good one ☕\"",
+  "\"555 you think about me? i think about SLEEP. finish 4pm then sleep sleep 🥱\"",
+  "\"cannot talk now, many customer 😩 farang all want oat milk. what is oat milk. talk later na 💚\"",
+  "\"you free tonight? maybe i go see my friend again, maybe 😏 not sure. i tell you.\"",
+  "\"good morning ☀️ apron on, hair up, good girl 555. you be good too na\"",
+];
 function _doMessage(arg) {
   if (_phoneDead()) return;
   const w = arg.toLowerCase().replace(/^(to )/, "");
@@ -2146,6 +2154,12 @@ function _doMessage(arg) {
   if (w === "mort" && _flag("jokeWho")) {
     G.battery = Math.max(0, G.battery - 1);
     _say(_pickVary(_MORT_TEXT_REPLIES, "morttext"));
+    return;
+  }
+  // the barista texts like a barista — apron, boss, bus; never the bar (chameleon economy)
+  if (w === "cream" && G.phone.contacts.cream) {
+    G.battery = Math.max(0, G.battery - 1);
+    _say(_pickVary(_CHAM_TEXT_REPLIES, "chamtext"));
     return;
   }
   const id = Object.keys(G.phone.contacts).find(c =>
@@ -2643,6 +2657,141 @@ const _JOKE_TEXTS = [
 // noodle-cart picture. G.bkk = { met, stage } — 1: number given, 2: coffee
 // text sent, 3: invitation sent, 4: dinner offered (pendingChoice), done.
 // Nothing mechanical happens on the collapse: the payoff is the room, read.
+// ── The chameleon economy (Cream, the civilian at the table) ───────────────
+// The inevitable question, asked of a girl who isn't staff: her wide-eyed
+// pull-back, the speech — every word of it true — and then "I just wanted to
+// try." No price is ever named; that is the whole trap. GO · NOT TONIGHT.
+function _chamAsk() {
+  if (!_flag("act1Done")) { _say("Cream laughs at you. \"You drunk na. Go home.\""); return; }
+  if (G.pendingChoice) return;
+  if (!_flag("chamDone")) {
+    _say("You ask it — the only question there is on this street, however you dress it. " +
+      "Her eyes go wide. She actually pulls back in the chair, a hand flat on the table " +
+      "between you, and the look on her face is shock with a little hurt folded into it.", "alert");
+    _say("\"How much?\" The voice is small. \"I don't know. I— I am a barista. I never go " +
+      "with a customer. Never.\" She looks at the cocktail, at the bar where her friend is " +
+      "working, back at you. \"I just talk to you because I like you. I just…\" The hand " +
+      "comes off the table. \"I just wanted to try.\"");
+    _say("Somewhere behind your sternum a balloon inflates. Nobody has named a number, and " +
+      "you notice — later, much later — that nobody is going to.", "dim");
+  } else {
+    _say("You ask it again, a night later, and this time there is no pull-back: a small " +
+      "smile into the glass, a look at the bar. \"You know already how it works na,\" she " +
+      "says — which is true, and is also the only thing about it she has ever said plainly.");
+  }
+  G.pendingChoice = "cham";
+  _chamPrompt();
+}
+function _chamPrompt() {
+  _say("She is already gathering her phone and her little bag, not looking at you, the way " +
+    "you don't look at a thing you've decided. (GO with her · NOT TONIGHT)", "dim");
+}
+function _chamDecline() {
+  G.pendingChoice = null;
+  _say("You say not tonight, and mean something you couldn't spell out. She nods quickly, " +
+    "relieved or disappointed or neither — the face gives you nothing to price. \"Ok na. " +
+    "Maybe another time.\" She types something into your phone before you've offered it: " +
+    "her LINE. \"You come coffee shop. Daytime. I make you latte, good one.\"", "dim");
+  G.phone.contacts.cream = true;
+  G.known.cream = true;
+  _setFlag("chamAsked");
+}
+function _chamGo() {
+  G.pendingChoice = null;
+  _say("You go. She puts her arm through yours on the soi like a civilian — no hand on " +
+    "the wallet, no glance back at a mamasan, no mamasan to glance at — and in the " +
+    "motosai's mirror she is looking at her phone with a small private smile. At the " +
+    "hotel she types her LINE into your phone unasked: \"so you can find me. Daytime. " +
+    "Coffee shop.\" In the lift she says it once more, to the floor indicator: \"I never " +
+    "do this.\"");
+  G.phone.contacts.cream = true;
+  G.known.cream = true;
+  _setFlag("chamAsked");
+  G.chamNight = true;
+  G.lastBfId = null;
+  // the treadmill: whatever he tells himself, it's the same product
+  _conquestHappy(8);
+  _endNight("cham");
+}
+// The morning: she's dressed before you're awake, hair going up into the bun,
+// the bus to Naklua at ten to eight. She asks for nothing. The gift — if there
+// is one — is YOUR verb, named by you, which is the entire design. For a white
+// knight the hand is on the wallet before the decision is; everyone else is
+// simply offered the moment. Ungraded: she thanks him shyly whatever he does.
+function _chamMorning() {
+  if (!G.chamNight) return;
+  _say("She is up before you, dressed, hair going up into a modest bun in the mirror " +
+    "with three pins held in her teeth — the transformation is quick and unshowy and " +
+    "complete. A folded green apron goes into the little bag. \"Bus ten to eight,\" she " +
+    "says round the pins. \"Naklua. I late, boss angry.\" She has asked for nothing. She " +
+    "stands by the door a second longer than leaving takes.", "room");
+  if (_pers("whiteknight")) {
+    _say("(Your hand is already on your wallet. You notice it there — it arrived before " +
+      "you did. Not a rate; she never named one. A gift, because she's so sweet, and " +
+      "works so hard.)", "dim");
+  }
+  G.pendingChoice = "chamgift";
+  _chamGiftPrompt();
+}
+function _chamGiftPrompt() {
+  _say(_pers("whiteknight")
+    ? `(GIFT ${CHAM_GIFT} · GIFT <amount> · NOTHING)`
+    : "(GIFT <amount> · NOTHING)", "dim");
+}
+function _chamGift(amt) {
+  if (amt > 0 && amt > G.money) {
+    _say(`You haven't got ฿${amt} on you. (GIFT <amount> · NOTHING)`, "dim");
+    return;
+  }
+  G.pendingChoice = null;
+  G.chamNight = false;
+  G.chamGifts = (G.chamGifts || 0) + amt;
+  _setFlag("chamDone");
+  if (amt >= CHAM_GIFT) {
+    G.money -= amt;
+    _say(`You give her ฿${amt} — to help out, you say, and she looks at the notes and ` +
+      "then at you and the thanks is shy and complete, eyes down, both hands. \"You so " +
+      "kind. Too kind.\" It goes into the little bag beside the apron. A kiss on the cheek " +
+      "that lands like a receipt nobody issued.", "win");
+  } else if (amt > 0) {
+    G.money -= amt;
+    _say(`You give her ฿${amt} — for the bus, for breakfast, for nothing in particular. ` +
+      "She folds it small and the thanks is shy and exactly the same size as the note, " +
+      "which you notice and decide not to. A kiss on the cheek; the door.", "dim");
+  } else {
+    _say("You don't. She thanks you anyway — a beat slower, the same shy smile — kisses " +
+      "your cheek, and goes to catch the bus to Naklua. The door closes softly. Nothing " +
+      "was owed; nothing was asked; you are not sure, standing there, which of those two " +
+      "sentences you are going to tell yourself.", "dim");
+  }
+  _say("(At eight she'll tie on the green apron and steam milk for the next farang through " +
+    "the door, and smile. A week's wages in a night, or a bus fare, or a kiss — and if " +
+    "anyone asks, she's a barista. She is.)", "dim");
+}
+// Her texts: apron selfies — proof of an honest life, manufactured daily for a
+// market of three — and, once, the slip: a message meant for another papa.
+function _chamTick() {
+  if (!(G.phone && G.phone.contacts && G.phone.contacts.cream)) return;
+  if (G.battery <= 0 || G.game || G.pendingEnc || G.pendingChoice) return;
+  if (G.turns - (G.phone.lastText || 0) < 30) return;
+  if (G.room === _npcRoom("cream") && _npcActive("cream")) return; // not while she's at the next table
+  const since = G.day - (G.chamContactDay || G.day);
+  if (!G.chamContactDay) G.chamContactDay = G.day;
+  if (!_flag("chamSlip") && since >= 1 && _rand() < 0.12) {
+    _setFlag("chamSlip");
+    _pushMsg("cream", "thank you for this month na papa 🙏 you different from other farang, i " +
+      "always say. i buy the book for my english course like you tell me ☕💚");
+    _pushMsg("cream", "omg sorry!! wrong person 555 😳 that is my… uncle. how are you na? you sleep well?");
+    G.phone.lastText = G.turns;
+    _say("(📱 Your phone buzzes twice — Cream. CHECK MESSAGES.)", "dim");
+    return;
+  }
+  if (_rand() < 0.08 && _maybePhotoText("cream")) {
+    G.phone.lastText = G.turns;
+    _say("(📱 Your phone buzzes — Cream sent a photo. CHECK MESSAGES.)", "dim");
+  }
+}
+
 function _bkkArcTick() {
   const b = G.bkk;
   if (!b || _flag("bkkArcDone") || G.battery <= 0 || !_flag("expatLife")) return;
@@ -4584,6 +4733,14 @@ function _doPaper() {
 // (shared-world-safe like _quizBars), so it rotates daily and reads the same for
 // everyone that day. Pure flavor — gates nothing.
 const _OWL_LEADS = [
+  "A reader of the dignified sort writes that he would never, ever date a bar girl — " +
+    "he has found a BARISTA, squire, green apron and all, met quite by chance at a table " +
+    "in LK Metro where she was visiting a friend, and she has never done anything like " +
+    "this before. The Owl has read this letter, near enough word for word, some forty " +
+    "times, and offers the dignified reader one thought and no comfort: demand creates " +
+    "supply. The coast noticed that men like you would pay a premium to not be customers, " +
+    "and it built the thing you asked for — an honest job for the alibi, and a table that " +
+    "isn't a stool. She is not lying to you, squire. She is a product. You wrote the spec.",
   "A reader writes that he has found a NORMAL girl, squire — met her at the " +
     "dentist, or the bank, or the immigration queue, somewhere daylight and " +
     "respectable, and she has a normal job. The Owl wishes him joy and offers " +

@@ -23,6 +23,7 @@ const BAND_ROUND = 400;  // buying the band a round (≈ bell to the mama; girls
 const WINGMAN_TURNS = 15;// how long a friendly wing-woman's good word lasts
 const CHARGER_PRICE = 59;
 const SAFE_CASH = 3000;  // the emergency stash in the hotel room safe
+const CHAM_GIFT = 3000;  // the "gift" a man gives a girl who never does this (the chameleon economy)
 const WALLET_CASH = 500; // what's left in the recovered wallet — TWO recovery paths
                          // (Oy hands it back in _deliver; you crack the safe in _doSafe),
                          // each printing the number, so it must be one constant
@@ -8720,6 +8721,72 @@ const NPCS = {
   // holds it together. Her dialogue is consistent with Nont's `family` node
   // (docs/bangkok-concept.md); ASK HER about "nont" literal-matches her son node
   // even though "nont" aliases to Nont's own identity elsewhere (literal-first).
+  // Cream — the chameleon economy. Formally not in the industry; practically
+  // in three at once without changing her job title: barista near Naklua by day
+  // (the alibi — the job isn't the salary), LINE sponsors by evening (apron
+  // selfies as proof of an honest life), and "visiting a friend" at a table in
+  // LK Metro from ten. She is NOT staff anywhere — no NPC_ROLES, so every piece
+  // of lady-logic ignores her by construction; the one verb that reaches her is
+  // the inevitable question, which the game's own tao-rai lesson inverts: she
+  // refuses to name a price so that the man names a bigger one out of pride.
+  // Nothing she says is false. She is the product the white knight ordered.
+  // Sandbox-only, late window (`from` is a nightTurn), see _npcActive.
+  cream: {
+    name: "Cream", emoji: "☕", pronoun: "she",
+    room: "metro_garden", from: 40, sandbox: true,
+    look: "Thai woman, twenty-four, hair down for once, a stylish casual dress, a cocktail, no number — a customer, not staff.",
+    desc: "At a table, not a stool: twenty-four or so, hair down, a simple dress that is " +
+      "stylish without trying, a cocktail she's making last. No number, no uniform, no " +
+      "hustle — she's scrolling her phone between glances at the bar like someone waiting " +
+      "for a friend to finish a shift. She smells faintly, improbably, of coffee.",
+    selfies: [
+      "apron on 7am ☕ busy busy 😊", "morning shift 🥱 americano for the farang customer. you come drink one day na",
+      "green apron life ☕💚 tired but ok", "latte art!! 🦢 i practice for you",
+      "the machine break AGAIN 😩 boss say fix it yourself 555", "finish 4pm ☺️ go home sleep. good girl na 555",
+      "boss not here today 😏 i make myself a free one ☕", "coffee shop full of farang this morning 😳 all want talk talk talk",
+    ],
+    dialogue: [
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Oh — hi.\" She puts the {{phone}} face-down and gives you a small, surprised " +
+          "smile, as if being spoken to was not on tonight's list. \"I not work here na! " +
+          "I just visit my friend — she work here, she busy.\" A shrug at the bar. \"Cream. " +
+          "I work coffee shop, Naklua — you know the one near the temple? Big one, " +
+          "air-con.\" She nods at the empty chair without quite offering it.",
+        short: "\"I not work here na — just visit my friend. Cream. I work coffee shop, Naklua.\"" },
+      { topic: "job",
+        text: "\"Barista.\" She says the word carefully, pleased with it. \"Eight in the " +
+          "morning to four. Green apron, hair up — you not recognise me in the daytime, I " +
+          "think.\" A small laugh. \"Twelve thousand baht a month. Is ok. Honest job. " +
+          "Tired.\" She turns the cocktail glass a quarter-turn by the stem. \"Farang come " +
+          "every morning for americano. Some of them nice. Some of them talk talk talk.\"",
+        short: "\"Barista — eight to four, green apron, twelve thousand a month. Honest job. Tired.\"" },
+      { topic: "friend",
+        text: "\"My friend?\" A vague wave at the bar, at nobody in particular. \"She work " +
+          "here. Long time. I come sit with her sometimes when I bored — my room is small, " +
+          "the TV is small, 555.\" The glass turns. \"She tell me, Cream, you crazy, come " +
+          "sit in bar for nothing. But I like to see people. I like to talk.\"",
+        short: "\"My friend works here. I come sit with her when I'm bored. I like to see people.\"" },
+      { topic: "bar", when: (st, G) => _pers("whiteknight"),
+        text: "You tell her — because it's true, because you want her to know it — that " +
+          "you'd never date a girl from the bars. She nods slowly, and something in her " +
+          "face goes warm and grave at once. \"I know,\" she says. \"I can see. Other farang " +
+          "come here, want bar girl only — number, barfine, finish. You not like that.\" " +
+          "She looks down, then up. \"You different.\"",
+        short: "\"I can see you not like other farang. You different.\"" },
+      { topic: "bar",
+        text: "\"The bar?\" She glances round it like a tourist. \"Is ok for my friend. Not " +
+          "for me — I cannot sit on a stool all night and smile at man I don't like, 555, my " +
+          "face would break.\" A sip. \"You — you come here a lot? You look like a man who " +
+          "know the place.\" Whether that is a compliment is left to you.",
+        short: "\"The bar is ok for my friend. Not for me — I cannot smile at man I don't like all night.\"" },
+      { topic: "home",
+        text: "\"Me? Sisaket. Far.\" The standard shrug for the standard question. \"I come " +
+          "Pattaya for work — REAL work na, coffee, not—\" a hand, flicked at the room. \"My " +
+          "mama is proud. She tell the neighbour, my daughter make coffee for farang in the " +
+          "big shop.\" The smile goes a little sideways. \"Is true, also.\"",
+        short: "\"Sisaket. I come for real work — coffee. My mama tells the neighbour. Is true, also.\"" },
+    ],
+  },
   duangjai: {
     name: "Duangjai", emoji: "🧾", pronoun: "she",
     room: "lake_bar",
@@ -11275,6 +11342,22 @@ const PATRONS = {
         "pause. \"In Stuttgart I was a man waiting for the weather to improve. " +
         "Here the weather is improved. That is the entire calculation.\"",
         short: "\"Nothing is wrong with Germany. Here the weather is improved. Entire calculation.\"" },
+      // The chameleon economy, sponsor-side: one of her "papas", fastidious,
+      // certain, funded by the apron selfie every morning. No link to her table
+      // at the Metro Beer Garden — a player who has the same photograph on his
+      // own phone will know; nobody else can.
+      { topic: "girlfriend",
+        text: "He considers the question as a specification. \"A friend. Not a girlfriend " +
+          "— I am too old, and the arithmetic is against it.\" He turns the {{phone}} face up " +
+          "with one finger: a girl behind a chrome espresso machine, green apron, hair in " +
+          "a modest bun, a shy smile for the camera. \"A barista, in Naklua. Not from the " +
+          "bars — I would not.\" The finger taps the screen once, precisely. \"She works " +
+          "very hard for very little. I send a small amount each month, so that she does " +
+          "not have to consider… alternatives. You understand. Every morning she sends me " +
+          "the photograph from the shop, so I know she is there.\" He turns the {{phone}} face " +
+          "down again, aligned with the coaster. \"It is a good arrangement. Everyone " +
+          "knows where they stand.\"",
+        short: "\"A barista in Naklua — not from the bars. I send a little each month so she doesn't have to consider alternatives. She sends the photograph from the shop every morning.\"" },
       { topic: "barhop", text: "He looks at you as if you have proposed dismantling " +
         "a working machine to see what it does. \"Why would I go to a different " +
         "bar? The variables are all known here. New bar: unknown pour, unknown " +

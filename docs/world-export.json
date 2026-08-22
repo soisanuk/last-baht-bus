@@ -24,8 +24,8 @@
  "counts": {
   "geolocated": 237,
   "patrons": 24,
-  "people": 330,
-  "portraits": 354,
+  "people": 331,
+  "portraits": 355,
   "renders": 352,
   "thumbs": 352,
   "venues": 237
@@ -801,6 +801,13 @@
    "role": "hostess",
    "room": "ruby_kiss",
    "th": "ชมพู่"
+  },
+  "cream": {
+   "desc": "At a table, not a stool: twenty-four or so, hair down, a simple dress that is stylish without trying, a cocktail she's making last. No number, no uniform, no hustle — she's scrolling her phone between glances at the bar like someone waiting for a friend to finish a shift. She smells faintly, improbably, of coffee.",
+   "emoji": "☕",
+   "name": "Cream",
+   "pronoun": "she",
+   "room": "metro_garden"
   },
   "da": {
    "desc": "Rings on every finger and a voice that cuts the music when she wants it — the mamasan of Club Mirage, from Maha Sarakham. She married a farang, buried the marriage, and kept the house.",
@@ -3534,6 +3541,7 @@
   "chompoo",
   "chuck",
   "colin",
+  "cream",
   "da",
   "daeng",
   "danny",

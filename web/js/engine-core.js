@@ -485,6 +485,9 @@ function _npcRoom(id) {
 function _npcActive(id) {
   const n = NPCS[id];
   if (n && n.offmap) return false; // exists for the phone, never stands in a room (Sao — Bangkok)
+  // a late-window civilian (Cream at her friend's bar from ten): `from` is a nightTurn
+  if (n && n.from != null && G.nightTurn < n.from) return false;
+  if (n && n.sandbox && !_flag("act1Done")) return false; // not part of the opening quest's street
   return !(n && n.origin && G.player && n.origin === G.player.origin);
 }
 
@@ -961,6 +964,7 @@ function _elsewhereLine(word) {
     return id === w || nm.toLowerCase() === w || nm.toLowerCase().split(" ").pop() === w;
   });
   if (nid) {
+    if (!_npcActive(nid)) return `${NPCS[nid].name} isn't around right now.`; // not in at this hour / not here at all
     const cur = _npcRoom(nid);
     // Point the player to her only when she's at one of HER OWN bars (a
     // multi-bar owner alternating nights). If she's somewhere else — an invited

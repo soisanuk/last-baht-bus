@@ -3025,6 +3025,13 @@ function _endNight(reason) {
       _addHappy(-8);
       G.crashInjury = true; // wake tomorrow banged up (applied after the new-day reset)
       break;
+    case "cham":
+      _say("The rest happens in a hotel room like any other, and is unlike anything, and " +
+        "you know even while it's happening that you'll never be able to say which. She " +
+        "falls asleep with her phone under the pillow. You lie there a long time feeling " +
+        "like a man who has won something nobody else in this town even knew was on " +
+        "offer.", "win");
+      break;
     case "bkkdinner":
       _say("The van brings you back at one in the morning through a town that has been " +
         "loud without you. Boy says goodnight in English. You tip him too much, which " +
@@ -3240,6 +3247,7 @@ function _endNight(reason) {
   if (typeof _barSettle === "function") _barSettle();  // your own bar's night, and the old man's month
   _stdMorningTick();                  // an untreated infection makes itself known each morning
   _describeRoom(true);
+  if (typeof _chamMorning === "function") _chamMorning(); // the barista's bus is at ten to eight (chameleon economy)
 }
 
 function _endVacation() {
