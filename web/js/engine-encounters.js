@@ -8,7 +8,7 @@
 // reaction — doCommand routes it to the matching _ENC resolver.
 
 const ENC_COOLDOWN = 12; // min turns between encounters
-const ENC_CHANCE = 0.3;  // roll per eligible arrival
+const ENC_CHANCE = 0.2;  // roll per eligible arrival (dialled 0.3->0.2, ~a third fewer, 2026-08-22)
 
 // Print an interactive encounter's prompt AND stash it on G, so restoring a
 // save (or UNDO) mid-encounter can redraw it. Without this the load shows only
