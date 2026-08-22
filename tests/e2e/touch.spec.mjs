@@ -144,3 +144,32 @@ test.describe("mouse device", () => {
 // Left as-is on purpose: the inline prose keywords (.kw, ~15-18px). They're the
 // most-tapped thing in the game, but 44px line boxes would wreck the reading
 // rhythm of a game that is entirely reading. A real tradeoff, not an oversight.
+
+// The scene panel on a phone: it boots FOLDED (art + cast hidden, HUD + exits
+// kept), the fold is labelled and tappable, and the choice persists. Measured
+// 2026-08-22 on 390×844: the open panel left the transcript 38% of the screen.
+test.describe("phone scene panel", () => {
+  test.use(IPHONE);
+
+  test("boots folded with a labelled toggle; opening it sticks", async ({ page }) => {
+    await bootIntoGame(page, INDEX_URL);
+    await page.fill("#term-in", "look");
+    await page.press("#term-in", "Enter");
+    await expect(page.locator("#scene")).toHaveClass(/collapsed/);
+    await expect(page.locator("#scene-art")).toHaveCount(0);
+    const tog = page.locator("#scene-toggle");
+    await expect(tog).toHaveText(/scene/);
+    const h = await tog.evaluate(e => e.getBoundingClientRect().height);
+    expect(Math.round(h), "toggle tall enough for a thumb").toBeGreaterThanOrEqual(30);
+    // the transcript owns most of the screen when folded
+    const share = await page.evaluate(() => {
+      const b = document.getElementById("term-out").getBoundingClientRect();
+      return (Math.min(innerHeight, b.bottom) - Math.max(0, b.top)) / innerHeight;
+    });
+    expect(share, "transcript share of the viewport when folded").toBeGreaterThan(0.5);
+    await tog.click();
+    await expect(page.locator("#scene")).not.toHaveClass(/collapsed/);
+    await expect(page.locator("#scene-art img")).toBeVisible();
+    expect(await page.evaluate(() => localStorage.getItem("lbb_scene_off"))).toBe("0");
+  });
+});

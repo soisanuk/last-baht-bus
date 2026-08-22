@@ -827,6 +827,11 @@
   font-size: 11px; color: #9a86b8; background: #05001ad9; border: 1px solid #24114588;
   border-radius: 5px; padding: 1px 8px; cursor: pointer; }
 #scene.collapsed #scene-art, #scene.collapsed #scene-cast { display: none; }
+/* folded: the toggle lives in the HUD row, not floating over it */
+#scene-toggle.inline { position: static; margin-right: 2px; flex: 0 0 auto; align-self: center; }
+@media (pointer: coarse) {
+  #scene-toggle { min-height: 30px; padding: 3px 12px; font-size: 12px; }
+}
 
 /* ── v1 hotspots (presentation only; scene.js/scene-hotspots.js own the data) ── */
 .hotspot { position: absolute; background: none; border: 1px solid transparent;

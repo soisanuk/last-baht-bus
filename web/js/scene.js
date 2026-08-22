@@ -28,27 +28,65 @@ function _updateScene() {
       box.hidden = true; return;
     }
     box.hidden = false;
-    const off = (() => { try { return localStorage.getItem("lbb_scene_off") === "1"; }
-      catch (e) { return false; } })();
+    // Collapsed = art + cast hidden, HUD + exits kept. An explicit pref wins;
+    // with none, a PHONE boots collapsed — measured on a 390×844 viewport the
+    // open panel left the transcript 38% of the screen (~6 lines), and six
+    // blind rounds never found the fold (2026-08-22). Desktop stays open.
+    const off = (() => {
+      try {
+        const pref = localStorage.getItem("lbb_scene_off");
+        if (pref === "1") return true;
+        if (pref === "0") return false;
+      } catch (e) { /* no storage: fall through */ }
+      return _sceneNarrow();
+    })();
     box.classList.toggle("collapsed", off);
     box.innerHTML = "";
     box.style.position = "relative";
 
-    // collapse toggle (display pref only)
+    // collapse toggle (display pref only) — labelled both ways so it can be found
     const tog = document.createElement("button");
     tog.id = "scene-toggle";
-    tog.textContent = off ? "▸ scene" : "▾";
+    tog.textContent = off ? "▸ scene" : "▾ hide scene";
+    tog.title = off ? "show the room art and the cast" : "fold the panel away — more room for the story";
     tog.addEventListener("click", () => {
       try { localStorage.setItem("lbb_scene_off", off ? "0" : "1"); } catch (e) {}
       _updateScene();
     });
-    box.appendChild(tog);
 
-    box.appendChild(_sceneArt());
-    box.appendChild(_sceneCast());
+    if (!off) {
+      box.appendChild(tog); // floats top-left over the art
+      box.appendChild(_sceneArt());
+      box.appendChild(_sceneCast());
+    }
     box.appendChild(_sceneHud());
-    box.appendChild(_sceneExits());
+    const exits = _sceneExits();
+    if (off) {
+      // folded: the toggle is the first "button" on the exits rail (which already
+      // scrolls sideways) instead of floating over the HUD — the HUD can't widen
+      tog.classList.add("inline");
+      exits.insertBefore(tog, exits.firstChild);
+    }
+    box.appendChild(exits);
+    // One-time tip the first time the panel renders folded by default (phones):
+    // six blind rounds never found the fold, so say it once. A display pref,
+    // never game state; printed through the terminal like any presentation line.
+    if (off && typeof _term !== "undefined" && _term && _term.print) {
+      try {
+        if (!localStorage.getItem("lbb_scene_tip")) {
+          localStorage.setItem("lbb_scene_tip", "1");
+          _term.print("(The scene panel is folded to leave room for the story — tap ▸ scene above to open it, ▾ to fold it again.)", "dim");
+        }
+      } catch (e) { /* no storage: no tip */ }
+    }
   } catch (e) { box.hidden = true; }
+}
+
+// A phone-width screen (the same cut as the layout's narrow breakpoint). Width,
+// not pointer — a phone in a desktop browser's device mode should fold the same.
+function _sceneNarrow() {
+  try { return window.matchMedia && window.matchMedia("(max-width: 767px)").matches; }
+  catch (e) { return false; }
 }
 
 // Room backdrop, most specific first, hiding the row if nothing exists:
