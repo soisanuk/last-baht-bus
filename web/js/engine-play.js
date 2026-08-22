@@ -117,7 +117,7 @@ function _doPlay(arg) {
   // "8" alone used to mean 8-ball — so PLAY CONNECT 4 80 started POOL (gambler playtest 2026-08-22)
   if (/\bpool\b|\b8[- ]?ball\b|billiard|snooker/.test(w)) return _startPool();
   const opts = _playOptions();
-  if (opts.length) _say("Play what? " + opts.map(o => "PLAY " + o.toUpperCase()).join(" · ") + ".", "dim");
+  if (opts.length) _say("Play what? " + opts.map(o => "(PLAY " + o.toUpperCase() + ")").join(" · "), "dim");
   else _say("Nothing to play here — the beer bars keep Connect 4 and Jackpot within reach.", "dim");
 }
 

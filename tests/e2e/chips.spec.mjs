@@ -35,9 +35,17 @@ test("chips render on boot, re-render by context, and clicks act", async ({ page
   const flirt = page.locator('#chips .chip', { hasText: /^flirt…$/ });
   await expect(flirt).toBeVisible();
 
-  // A "…" chip prefills the input and waits for an object (no submit).
+  // A "…" chip FANS OUT into a tap menu of the objects in scope — the ATM pattern,
+  // generalised (thumbs-only playtest 2026-08-22: a prefill is a dead end on a phone).
   await flirt.click();
-  await expect(page.locator("#term-in")).toHaveValue("flirt ");
+  const menu = page.locator("#flyout button");
+  await expect(menu.first()).toBeVisible();
+  const names = await menu.allTextContents();
+  expect(names.length).toBeGreaterThan(0);
+  // picking one submits it as a typed command
+  await menu.first().click();
+  await expect(page.locator("#flyout")).toHaveCount(0);
+  await expect(page.locator("#term-out")).toContainText(/flirt/i);
 
   // Mid-minigame, the chips collapse to the game's own moves + quit.
   await page.evaluate(() => { G.game = { type: "c4", board: c4New() }; _term.renderChips(); });

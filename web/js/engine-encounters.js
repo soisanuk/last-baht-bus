@@ -165,7 +165,7 @@ function _flowerTick() {
       `holds the rose up toward you, then tips her head at ${her}, then back at you — ` +
       `the whole pitch, no words, rehearsed a thousand times. ` +
       (typeof thaiBaht === "function" ? thaiBaht(ROSE_PRICE) : "฿" + ROSE_PRICE) + `.`, "alert"],
-    [`(BUY the rose for ${her} · or wave them gently on.)`, "dim"]);
+    [`(BUY the rose for ${her}) · or (WAVE) them gently on.`, "dim"]);
 }
 
 function _salengTick() {

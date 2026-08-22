@@ -688,6 +688,20 @@ const _term = (() => {
   // because it has somewhere to put them. The commands are untouched, so the
   // typed path and the transcript read identically either way.
   const _ATM_CMDS = ["withdraw 1000", "withdraw 5000", "withdraw 10000", "check balance"];
+  // A chip whose cmd ends in a space is a PREFILL — it fills the input and waits
+  // for typing, which on a phone is a dead end (thumbs-only playtest 2026-08-22:
+  // three of a bar's six verbs were unreachable). Fan it out into a tap menu from
+  // the engine's own completion pool — the same source the keyboard's autocomplete
+  // uses, so the two surfaces can never disagree. Empty pool → the old prefill.
+  function _prefillMenu(cmd) {
+    let opts = [];
+    try { opts = (typeof engineComplete === "function" ? engineComplete(cmd) : []) || []; } catch (e) { opts = []; }
+    return opts.slice(0, 12).map(o => {
+      const full = /\s$/.test(cmd) ? cmd + o : cmd + " " + o;
+      // a completion that is itself a prefix ("lady drink for") keeps the keyboard path
+      return { cmd: full, label: o };
+    });
+  }
   function _foldAtmChips(chips) {
     const atm = chips.filter(c => _ATM_CMDS.indexOf(String(c.cmd || "")) >= 0);
     if (atm.length < 2) return chips;              // nothing worth folding
@@ -733,7 +747,11 @@ const _term = (() => {
         // this menu and shut it on the way up. (The compass takes the same
         // problem from the other end, with an #nav-fab exemption.)
         if (cmd === "__atm") { ev.stopPropagation(); _openListMenu(b, _renderChipMenu(set, cmd)); return; }
-        if (cmd.endsWith(" ")) { _input.value = cmd; _input.focus(); _refreshSuggest(); }
+        if (cmd.endsWith(" ")) {
+          const menu = _prefillMenu(cmd);
+          if (menu.length) { ev.stopPropagation(); _openListMenu(b, menu); return; }
+          _input.value = cmd; _input.focus(); _refreshSuggest();
+        }
         else { _input.value = cmd; submit(_onCmd); }
       });
       box.appendChild(b);

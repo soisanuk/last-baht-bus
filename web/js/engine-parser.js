@@ -2611,7 +2611,11 @@ function _convoResolve(lower) {
     const t = _convoTopic(lower);
     const words = bare.split(/\s+/).filter(Boolean).length;
     if (words <= 2 || _partnerHasTopic(id, t) || _partnerHasTopic(id, bare)) {
-      _doTalk(_convoName(id), t); return true;
+      // pass the RAW words: _doTalkBody tries the literal topic first and falls
+      // back to the synonym map itself. Normalising here killed every topic chip
+      // whose key is also a synonym input — Terry's "white dish" became "wdg" and
+      // missed his own node (thumbs-only playtest 2026-08-22).
+      _doTalk(_convoName(id), bare); return true;
     }
   }
   return false;
@@ -4979,7 +4983,8 @@ function _doAtmVerb() {
     return;
   }
   _doBalance();
-  _say(`(WITHDRAW 1000 · 5000 · 10000 — ฿${ATM_FEE} fee, ฿${ATM_DAILY_CAP.toLocaleString("en-US")}/day.)`, "dim");
+  _say(`(WITHDRAW 1000) · (WITHDRAW 5000) · (WITHDRAW 10000) — ฿${ATM_FEE} fee, ` +
+    `฿${ATM_DAILY_CAP.toLocaleString("en-US")}/day.`, "dim");
 }
 
 // Filing a police report — right now only the hair-tonic shop shakedown has a
@@ -5147,8 +5152,10 @@ const _HELP = `Common commands:
   SCORE (happiness & progress) · UNDO · RESTART   (the night autosaves itself)
   BUY PIWIN A BEER · ASK PIWIN ABOUT <person>   (the men at the stands see everything)
   HANDOVER (send this character to the macro game, at dawn) · RESUME (take one back)
-  Highlighted words are tappable: tap for the quick menu, RIGHT-CLICK (or press and hold)
-    for the full one — a person's ask-topics, and the actions a single tap shouldn't fire
+  On a phone: the (INFO) chip opens QUESTS, HINT, TIME, WHO and the rest, and every
+    "…" chip fans out into a menu — this list needs no typing to use
+  Highlighted words in the story are tappable: tap for the quick menu, RIGHT-CLICK (or
+    press and hold) for the full one — a person's ask-topics, and the actions a tap shouldn't fire
   QUIT / END / LOGOUT (sign off; your night is saved) · RESET (wipe the save — asks first)`;
 
 // Soi 6 Challenge is a confined mode — one street, one week, no baht bus off it.
@@ -5186,8 +5193,10 @@ const _HELP_SOI6 = `Common commands:
   SCORE (happiness & progress) · SHARE (your week card — one emoji a night, copy & compare)
   UNDO · RESTART   (the night autosaves itself)
   PLAY AGAIN (once the week's up — another seven days on the soi)
-  Highlighted words are tappable: tap for the quick menu, RIGHT-CLICK (or press and hold)
-    for the full one — a person's ask-topics, and the actions a single tap shouldn't fire
+  On a phone: the (INFO) chip opens QUESTS, HINT, TIME, WHO and the rest, and every
+    "…" chip fans out into a menu — this list needs no typing to use
+  Highlighted words in the story are tappable: tap for the quick menu, RIGHT-CLICK (or
+    press and hold) for the full one — a person's ask-topics, and the actions a tap shouldn't fire
   QUIT / END / LOGOUT (sign off; your night is saved) · RESET (wipe the save — asks first)`;
 
 // ── Autocomplete ─────────────────────────────────────────────────────────────
@@ -5207,7 +5216,7 @@ const _COMPLETE_VERBS = [
   "motosai to", "travel", "light", "charge phone", "read", "use", "open", "play",
   "flirt", "kiss", "spank", "fondle", "ring bell", "barfine", "massage", "special", "soapy", "meet", "eat", "drink",
   "sleep", "tv", "column", "owl", "watch", "watch soi", "balcony", "weather", "scores", "lottery", "map", "time", "tip", "wave", "phone",
-  "photo", "gallery", "photos", "call", "share", "follow", "shower", "withdraw", "cheers", "tao rai", "borrow", "repay", "hire", "pet", "feed", "rename", "dance", "sing", "swim",
+  "photo", "gallery", "photos", "info", "call", "share", "follow", "shower", "withdraw", "cheers", "tao rai", "borrow", "repay", "hire", "pet", "feed", "rename", "dance", "sing", "swim",
   "smell", "listen", "diagnose", "get tested", "clinic", "apologize", "quests", "accept", "abandon", "contact",
   "contacts", "who", "who am i", "identity", "blackbook", "message", "check messages", "send", "score", "standing", "wait", "again",
   "request", "hint", "books", "work", "help", "save", "load", "undo", "restart", "quit", "reset", "end", "logout",
@@ -5324,10 +5333,13 @@ function _chipSet() {
     add("compliment", "compliment");
     add("joke", "joke");
     if (_npcState(partner).trust >= 3) add("tease", "tease"); // banter unlocks once you're close
-    if (NPCS[partner] && NPC_ROLES[partner] === "hostess") {
-      add("flirt", "flirt");
-      add("buy drink for " + _convoName(partner).split(" ")[0].toLowerCase(), "buy drink");
-    }
+    const _first = _convoName(partner).split(" ")[0].toLowerCase();
+    if (NPCS[partner] && NPC_ROLES[partner] === "hostess") add("flirt", "flirt");
+    // every working role takes a lady drink, and a patron/manager takes a beer —
+    // the chip bar hid the actual loop behind a wheel a thumb may never find
+    // (thumbs-only playtest 2026-08-22: ~12 turns with a mamasan and no drink chip)
+    if (NPCS[partner] && NPC_ROLES[partner]) add("buy drink for " + _first, "buy drink");
+    else if (_inBar()) add("buy drink for " + _first, "stand a beer");
     add("bye", "say goodbye"); // "leave" read as walking out of the bar (playtest #9)
     return chips;
   }
@@ -5336,6 +5348,11 @@ function _chipSet() {
   const r = _room();
   if (_isDarkHere()) add("light");
   add("look");
+  if (G.room === _hotelRoomId() && _flag("act1Done")) add("sleep", "sleep — end the night");
+  // The readout verbs live only in HELP, which is itself untappable — a thumb
+  // player could not reach QUESTS/HINT/TIME/WHO/GALLERY at all (thumbs-only
+  // playtest 2026-08-22). One chip, fanned out like the ATM.
+  if (_flag("act1Done") || G.stage === "act1") add("__info ", "info…");
 
   if (_inBar()) {
     const girls = _npcsHere().filter(id => NPC_ROLES[id] === "hostess" || NPC_ROLES[id] === "mamasan");
@@ -5533,6 +5550,12 @@ function engineComplete(input) {
       .map(k => _HOTELS[k].name.toLowerCase()), "stay"];
   } else if (G.pendingBf) pool = ["short time", "long time", "no"];
   else if (G.pendingSoapy) pool = [..._SOAPY_TIERS.map(t => String(t.num)), "star", "super star", "model", "no"];
+  else if (raw === "__info " || raw === "__info") {
+    pool = ["quests", "hint", "time", "who", "contacts", "gallery", "standing", "diagnose", "score", "map", "help"];
+    if (G.mode === "soi6") pool.push("share");
+    if (G.stage === "expat") pool.push("books");
+    return pool; // a menu, not a completion: no prefix filtering
+  }
   else if (G.game && !ctx.length) pool = _gameVerbs();
   else if (ctx.length) pool = _completePool(ctx[0], ctx);
   // REPORT only makes sense at the station (surfaced there, first), or anywhere
@@ -6203,6 +6226,18 @@ function doCommand(input) {
         : "You let fly at the night in general. A piwin glances over, unimpressed; a hostess laughs, " +
           "not at the joke. This town has heard better, louder, and from men who tipped more.", "alert");
       if (at) _addHeat(1);
+      break;
+    }
+    case "info": case "readouts": case "status": {
+      // the readout index — a phone's route to the verbs that live only in HELP
+      // (thumbs-only playtest 2026-08-22). Every entry is a parenthesised CAPS
+      // hint, so each one taps; the info… chip fans out the same list.
+      _say("What you can check, any time:", "dim");
+      _say("  (QUESTS) what's on the books · (HINT) the next step · (TIME) the clock and tonight's prices", "dim");
+      _say("  (WHO) your black book · (CONTACTS) the phone · (GALLERY) your photos · (STANDING) how the soi reads you", "dim");
+      _say("  (DIAGNOSE) the body · (SCORE) สนุก · (MAP) the lay of the land · (INVENTORY) your pockets" +
+        (G.stage === "expat" ? " · (BOOKS) the bar's night" : "") +
+        (G.mode === "soi6" ? " · (SHARE) your week card" : ""), "dim");
       break;
     }
     case "beg": case "panhandle": case "cadge": {

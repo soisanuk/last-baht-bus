@@ -3160,7 +3160,7 @@ function _maybeIncomingText() {
   } else if (t >= 2) { // regular: invites and warmth, a little needy
     if (roll < 0.45) { G.phone.invite = { id, day: G.day };
       _pushMsg(id, `bar quiet tonight 😴 you come see ${name}?? i keep you seat 💺💕`); }
-    else if (roll < 0.6) _pushMsg(id, "family of me sick need medicine 300 🥺 you help little bit na?");
+    else if (roll < 0.6) _pushMsg(id, `family of me sick need medicine 300 🥺 you help little bit na? (SEND 300 TO ${NPCS[id].name.toUpperCase()})`);
     else _pushMsg(id, _CHATTER[Math.floor(_rand() * _CHATTER.length)]);
   } else { // a name and a number: the classic mix, scam-ask heavy
     if (roll < 0.3) { G.phone.invite = { id, day: G.day };
