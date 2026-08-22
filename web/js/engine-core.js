@@ -679,12 +679,17 @@ function _convoInterrupt() { if (G.convo) _convoEnd(true); }
 function _convoChoices(remembered) {
   const id = _convoActive();
   if (id == null) return [];
-  const idx = G.convoIdx != null ? G.convoIdx : (remembered && G.convoChoiceMemo ? G.convoChoiceMemo[id] : null);
-  if (idx == null) return [];
   const arr = ((NPCS[id] || PATRONS[id] || {}).dialogue) || [];
-  const d = arr[idx];
+  let idx = G.convoIdx;
+  let d = idx != null ? arr[idx] : null;
+  // the live node carries no choices (an intervening ask): fall back to the last
+  // node that did, so a printed label still fires (completionist playtest 2026-08-22)
+  if ((!d || !d.choices) && remembered && G.convoChoiceMemo && G.convoChoiceMemo[id] != null) {
+    idx = G.convoChoiceMemo[id]; d = arr[idx];
+  }
   if (!d || !d.choices) return [];
   const st = _npcState(id);
+  if (remembered === "raw") return d.choices.slice(); // every label the node ever printed, gate or no gate
   return d.choices.filter(c => !c.when || c.when(st, G));
 }
 
@@ -1314,7 +1319,9 @@ function _describeRoom(full, forceFull) {
   // Buildings fronting this block: entered by name or a tap, not by a compass
   // point (a busy soi can front 4–6 of them, and a door isn't a block away —
   // it's right here). "Exits" is roads only now; the venues list is the doors.
-  const venues = _venuesHere(r);
+  let venues = _venuesHere(r);
+  // the Orchid is somewhere you get SENT, not somewhere you find — keep it off the door list until you have been
+  if (!_flag("orchidVouched") && !_flag("orchidReported")) venues = venues.filter(id => id !== "orchid_club");
   // …but not in your own hotel room, whose single DOWN/OUT is the venue the
   // exit-scan fallback would otherwise re-list as "Step inside: <the bar below>".
   if (venues.length && G.room !== _hotelRoomId()) {

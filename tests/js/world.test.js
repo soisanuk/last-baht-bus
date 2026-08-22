@@ -111,6 +111,7 @@ test("gossip chain flags connect: every required flag is set somewhere", () => {
     "keysDelivered",   // engine-set by _doGive (foreman_keys → diamond) — Wimon's letterbox reads it
     "shamrockVisited", // engine-set by _dogShamrock (arriving on the strip with the dog) — Bert's afterword reads it
     "hatchPried",      // set by the Shamrock's reads: hatch node (sets/reveal) — Bert's key node reads it
+    "beeBanked",       // engine-set by _doSendMoney (SEND 100 TO BEE) — Bee's investor ack reads it
     "glamTruth", // set by PATRON dialogue (Glam's lucid flash), which this scan doesn't cover
     "knowMikkel", // set by PATRON dialogue (Mikkel's intro), same blind spot as glamTruth
     "hasDog",    // set by the adoption action (FEED DOG), not dialogue
@@ -186,7 +187,7 @@ test("every quest is well-formed: giver, deps, item, and at all resolve", () => 
     assert.ok(NPCS[q.giver], `${qid}: giver ${q.giver} is not an NPC`);
     for (const d of q.deps) assert.ok(QUESTS[d], `${qid}: dep ${d} is not a quest`);
     if (q.item) assert.ok(ITEMS[q.item], `${qid}: item ${q.item} missing`);
-    if (q.at) assert.ok(NPCS[q.at] || PATRONS[q.at] || ROOMS[q.at], `${qid}: at ${q.at} resolves to nothing`);
+    if (q.at) assert.ok(typeof q.at === "function" || NPCS[q.at] || PATRONS[q.at] || ROOMS[q.at], `${qid}: at ${q.at} resolves to nothing`); // a function `at` follows the step (resolved live by _qAt)
     if (q.reqFlags) assert.ok(Array.isArray(q.reqFlags) && q.reqFlags.every(f => typeof f === "string"),
       `${qid}: reqFlags must be an array of flag names`);
     assert.ok(q.doneFlag && q.reward, `${qid}: needs doneFlag and reward`);

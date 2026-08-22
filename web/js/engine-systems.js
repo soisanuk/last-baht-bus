@@ -1648,7 +1648,7 @@ function _doHint() {
     if (active.length) {
       const q = QUESTS[active[0]];
       _say(_fmt("On the books: {name} — {desc}{where}",
-        { name: _L(q.name), desc: _L(_qDesc(q)), where: _questWhere(q.at === q.giver ? _qGiver(q) : q.at) }), "win");
+        { name: _L(q.name), desc: _L(_qDesc(q)), where: _questWhere(_qAt(q) === q.giver ? _qGiver(q) : _qAt(q)) }), "win");
       return;
     }
     // the nudge never points at an alignment errand — "never push" is the doctrine,
@@ -1698,6 +1698,7 @@ function _qGiver(q) {
   if (q && q.giverIfSelf && q.giver && NPCS[q.giver] && !_npcActive(q.giver)) return q.giverIfSelf;
   return q ? q.giver : null;
 }
+function _qAt(q) { return typeof q.at === "function" ? q.at(G) : q.at; }
 function _qDesc(q) {
   return (q.descIfSelf && _qGiver(q) !== q.giver) ? q.descIfSelf : q.desc;
 }
@@ -1792,6 +1793,8 @@ function _questOffer(npcId) {
   // the player answer first (it reads as one overwhelming turn otherwise, and it's
   // unclear which thing to respond to). The offer surfaces next time you talk.
   if (G.convoQ) return;
+  // a man who won't give you a stool won't give you his bar (completionist playtest 2026-08-22)
+  if (npcId === "bert" && typeof _faction === "function" && _faction("wdg") > 0) return;
   for (const [qid, q] of Object.entries(QUESTS)) {
     if (_qGiver(q) !== npcId || !_questAvailable(qid)) continue;
     // A VIGNETTE is not a job. The seven origin scenes — the man whose life you
@@ -1950,7 +1953,7 @@ function _doQuests() {
   for (const [qid, q] of rows) {
     const st = G.quests[qid];
     if (st === "active") { _say(_fmt("▶ {name} — {desc}{where}",
-      { name: _L(q.name), desc: _L(_qDesc(q)), where: _questWhere(q.at === q.giver ? _qGiver(q) : q.at) }), "win"); shown++; }
+      { name: _L(q.name), desc: _L(_qDesc(q)), where: _questWhere(_qAt(q) === q.giver ? _qGiver(q) : _qAt(q)) }), "win"); shown++; }
     else if (st === "offered") { _say(_fmt("✦ On offer: {name} (ACCEPT {id})",
       { name: _L(q.name), id: qid.toUpperCase() }), "dim"); shown++; }
     else if (st === "done") { _say(`✓ ${q.name}`, "dim"); shown++; }
@@ -2023,6 +2026,28 @@ function _tanWhere(id) {
   return (_TAN_WHERE[id] || "someone, somewhere on the soi").replace("{bar}", _barName(_npcRoom(id)) || "a bar on the soi");
 }
 
+// ASK TAN ABOUT <someone>: he promised "meet somebody, then ask me who they are"
+// and answered "that one I don't know" for everyone off the manifest (completionist
+// playtest 2026-08-22). The seven get his read (_TAN_READ); anyone else gets a
+// driver's placing — where they drink, how long, and no secrets.
+function _tanAbout(topic) {
+  const t = String(topic || "").toLowerCase().trim();
+  const id = Object.keys(NPCS).find(i => NPCS[i].name.toLowerCase() === t || i === t ||
+      NPCS[i].name.toLowerCase().split(" ").pop() === t) ||
+    Object.keys(PATRONS).find(i => PATRONS[i].name.toLowerCase() === t || i === t);
+  if (!id || id === "tan") return false;
+  if (_TAN_READ[id]) {
+    if (!(G.known && G.known[id])) { _say("“Meet him first, my friend. Then I tell you who he is — and I will already know.”"); return true; }
+    _say(`“${NPCS[id].name}.” The grin. “${_TAN_READ[id]}.”`);
+    return true;
+  }
+  const n = NPCS[id] || PATRONS[id];
+  const room = NPCS[id] ? _npcRoom(id) : _patronRoom(id);
+  const where = room && _barName(room) ? _barName(room) : null;
+  const she = n.pronoun === "she" || (NPCS[id] && NPC_ROLES[id]);
+  _say(`“${n.name}?” Tan considers the mirror. “${where ? where + ". " : ""}${she ? "She" : "He"} ${PATRONS[id] ? "drinks there most nights — " + (PATRONS[id].nat || "") + ", " + (PATRONS[id].age || "") + ", you know the type" : NPCS[id] && NPC_ROLES[id] ? "works the rail there. Sends money home, same as all of them" : "is somebody the soi knows"}.” A shrug at the road. “I drive everybody, my friend. I do not drive their secrets.”`);
+  return true;
+}
 function _tanOthers() {
   const cast = ["doyle", "wayne", "roy", "macca", "pete", "rob", "barry"]
     .filter(id => NPCS[id] && _npcActive(id));            // the one you ARE is not out there
@@ -2032,7 +2057,7 @@ function _tanOthers() {
   // Too early: he doesn't hand a stranger the passenger list.
   if (!met.length) {
     _say("“The others?” Tan lets that sit a moment, and does not pick it up. " +
-      "“You have been here two days, my friend. Meet somebody first — then ask me who they are, " +
+      `“You have been here ${G.day - 1 <= 1 ? "one day" : (G.day - 1) + " days"}, my friend. Meet somebody first — then ask me who they are, ` +
       "and I will tell you, because I will already know.”");
     return true;
   }
@@ -4756,6 +4781,7 @@ function _dogShamrock() {
   _say("(Real dogs sit on real steps like that one, all over Thailand. The Soi Dog " +
     "Foundation sterilises, vaccinates, patches up, and rehomes them — " +
     "https://www.soidog.org/content/make-donation if this one earned a tip.)", "dim");
+  _questTick(); // the quest completes in the same breath as the scene, not one LOOK later (completionist playtest 2026-08-22)
 }
 
 // In the open-air beer bars the dog is a social asset: everyone likes a dog

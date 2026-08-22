@@ -574,7 +574,7 @@ function _c4TierDown(d) { return d >= 8 ? 6 : d >= 6 ? 2 : 1; }
 function _c4Input(input) {
   const g = G.game;
   const m = input.match(/[1-7]/);
-  if (!m) { _gameBoard(); _say("Not a move — tap a column 1-7, or Q to quit.", "dim"); return; }
+  if (!m) { _gameBoard(); _say("Not a move — tap a column 1-7, or Q to quit.", "dim"); return false; } // not a move: no tick
   if (c4Drop(g.board, +m[0] - 1, 1) < 0) { _say("That column is full to the brim."); return; }
   if (c4Win(g.board) === 1) {
     _say(c4Render(g.board));
@@ -940,7 +940,7 @@ function _quizInput(input) {
     const idx = item.opts.findIndex(o => o.toLowerCase().includes(input.trim()));
     if (idx >= 0 && input.trim().length > 1) pick = idx;
   }
-  if (pick === null) { _gameBoard(); _say("1, 2, or 3 — the microphone is patient, the bar less so.", "dim"); return; }
+  if (pick === null) { _gameBoard(); _say("1, 2, or 3 — the microphone is patient, the bar less so.", "dim"); return false; } // not an answer: no tick
   if (pick === item.a) {
     g.right++;
     _say(`“${item.opts[item.a]}” — CORRECT! The bar cheers like you cured something.`);
@@ -1038,7 +1038,7 @@ function _kpInput(input) {
   const g = G.game;
   const kind = /power|smash/.test(input) ? "power" :
     /shot|pot|cut|hit|play|safe/.test(input) ? "shot" : null;
-  if (!kind) { _gameBoard(); _say("SHOT or POWER — the table is waiting.", "dim"); return; }
+  if (!kind) { _gameBoard(); _say("SHOT or POWER — the table is waiting.", "dim"); return false; } // not a move: no tick
   const you = kpShot(g.kp, _rand, kind === "power" ? 0.45 : 0.6);
   if (you.potted) {
     _say(kind === "power" ?
@@ -1059,7 +1059,7 @@ function _kpInput(input) {
     if (winner && winner.name === "You") {
       _setFlag("wonLeague");
       _endGame(true, g.stake, `Last cue standing. The pot — ฿${g.stake} — is pushed ` +
-        "across the felt with due ceremony, and the owner rings the bell himself. " +
+        "across the felt with due ceremony, and the man behind the bar rings the bell himself. " +
         "League night belongs to you.");
     } else {
       _endGame(false, 0, `${winner ? winner.name : "The table"} takes the pot. You take ` +
@@ -1309,12 +1309,12 @@ function _gameQuit() {
 
 function _gameInput(input) {
   switch (G.game.type) {
-    case "c4": _c4Input(input); break;
-    case "jp": _jpInput(input); break;
-    case "pool": _poolInput(input); break;
-    case "kp": _kpInput(input); break;
-    case "quiz": _quizInput(input); break;
-    case "darts": _dartsInput(input); break;
+    case "c4": return _c4Input(input);
+    case "jp": return _jpInput(input);
+    case "pool": return _poolInput(input);
+    case "kp": return _kpInput(input);
+    case "quiz": return _quizInput(input);
+    case "darts": return _dartsInput(input);
   }
 }
 

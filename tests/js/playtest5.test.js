@@ -889,3 +889,92 @@ test("review: the Darkside league draws its own roster; the inbox is hard-capped
   for (let i = 0; i < 200; i++) _pushMsg("lek", "unread " + i); // never read
   assert.ok(G.phone.inbox.length <= 80);
 });
+
+// ── round ten: the completionist (Priya) ──
+test("a printed verbal-action hint parses after an intervening ask (the chips moved on, the label didn't)", () => {
+  G.room = _npcRoom("kesinee"); doCommand("talk to kesinee");
+  if (G.convoChoiceMemo && G.convoChoiceMemo.kesinee != null) {
+    doCommand("ask kesinee about kittens");
+    out = []; doCommand("tell her bert sent you");
+    assert.doesNotMatch(text(), /Telling isn't the verb/);
+  }
+});
+
+test("ASK TAN ABOUT <someone> places them: the manifest men get his read, anyone else a driver's placing", () => {
+  G.room = _npcRoom("tan"); doCommand("talk to tan");
+  G.known.candy = true; out = [];
+  doCommand("ask tan about candy");
+  assert.doesNotMatch(text(), /That one I don't know|Not my story/);
+  assert.match(text(), /Candy|Candy Bar/);
+  G.known.wayne = true; out = [];
+  doCommand("ask tan about wayne");
+  assert.match(text(), /Wayne/);
+  assert.match(text(), new RegExp(_TAN_READ.wayne.slice(0, 20).replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
+  out = []; doCommand("talk to tan");
+  assert.doesNotMatch(text(), /here two days/);
+});
+
+test("Bert's grudge gates his offers; the Safe-Cracker's where-clause follows the step; Oy stops talking about a wallet she gave back", () => {
+  _align("wdg", 2); G.room = "stinky_bar"; out = [];
+  _questOffer("bert");
+  assert.doesNotMatch(text(), /has a job for you/);
+  assert.equal(typeof QUESTS.safecracker.at, "function");
+  assert.equal(QUESTS.safecracker.at(G), "pim");
+  _setFlag("heardWhispers");
+  assert.equal(QUESTS.safecracker.at(G), "oy");
+  G.quests.safecracker = "active"; G.room = "buakhao_n"; out = [];
+  _doHint();
+  assert.match(text(), /Oy/); assert.doesNotMatch(text(), /Pim is at/);
+  newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight" };
+  _setFlag("knowOyHasIt"); _setFlag("oyGaveWallet"); _setFlag("hasWallet"); G.room = _npcRoom("oy");
+  doCommand("talk to oy"); out = [];
+  doCommand("ask oy about wallet");
+  assert.doesNotMatch(text(), /Many wallets in Pattaya/);
+});
+
+test("a non-move in killer pool / Connect 4 / the quiz costs no turn", () => {
+  G.room = "candy_bar"; G.money = 500;
+  doCommand("play connect 4"); const nt = G.nightTurn;
+  doCommand("out"); doCommand("sleep"); doCommand("n");
+  assert.equal(G.nightTurn, nt);
+  assert.equal(G.game && G.game.type, "c4");
+  doCommand("quit");
+});
+
+test("Candy's Mot reveal answers ASK ABOUT WALLET; the Shamrock quest completes in the same breath; Gavin pays in person; Bee remembers her investor", () => {
+  newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight" };
+  _setFlag("knowWasHere"); G.room = _npcRoom("candy"); out = [];
+  doCommand("ask candy about wallet");
+  assert.ok(_flag("knowMot"));
+  assert.match(text(), /Mot/);
+  // the Shamrock
+  sandbox(); G.dog = { since: 1, name: "Biscuit" }; _setFlag("hasDog");
+  G.quests.shamrock = "active"; G.room = "khao_talo"; out = [];
+  doCommand("w");
+  assert.equal(G.quests.shamrock, "done", "done on arrival, not one LOOK later");
+  // Gavin
+  sandbox(); _setFlag("wdgFlipTried"); G.quests.wdg_flip = "active"; const m = G.money;
+  _questTick();
+  assert.equal(G.money, m, "the errand's fee isn't paid at Bert's counter");
+  G.room = _npcRoom("gavin"); out = [];
+  doCommand("talk to gavin");
+  assert.equal(G.money, m + 2000, "Gavin pays, in person, once");
+  out = []; doCommand("talk to gavin"); assert.equal(G.money, m + 2000);
+  // Bee
+  _setFlag("beeBanked"); G.room = _npcRoom("bee"); out = [];
+  doCommand("talk to bee");
+  assert.match(text(), /INVESTOR|investor/);
+});
+
+test("Wayne and Bert answer 'bar'; the Orchid isn't on Naklua's door list until you've been sent", () => {
+  G.room = _npcRoom("wayne"); doCommand("talk to wayne"); out = [];
+  doCommand("ask wayne about bar"); assert.match(text(), /Turnkey|signing Friday|sign Friday/);
+  _setFlag("barPremises"); G.room = "stinky_bar"; doCommand("talk to bert"); out = [];
+  doCommand("ask bert about the bar"); assert.match(text(), /Twelve stools/);
+  G.room = "naklua_rd"; out = [];
+  _describeRoom(true, true);
+  assert.doesNotMatch(text(), /Step inside:.*Orchid/);
+  _setFlag("orchidVouched"); out = [];
+  _describeRoom(true, true);
+  assert.match(text(), /Step inside:.*Orchid/);
+});

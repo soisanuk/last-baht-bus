@@ -2280,6 +2280,7 @@ function _doTalkBody(arg, topic) {
   // of a wall of names. It cannot be a dialogue `fx` — those fire on first
   // delivery only, so the list would freeze on the night you first asked.
   if (npc === "tan" && _convoTopic(topic || "") === "others" && _tanOthers()) return;
+  if (npc === "tan" && topic && typeof _tanAbout === "function" && _tanAbout(topic)) return; // "meet somebody, then ask me who they are" — honoured
   // the civilian at the table: "how much" is not a topic she answers, it's the
   // scene (chameleon economy) — no dialogue node, so the wheel never advertises it
   if (npc === "cream" && topic && (topic === "price" || _convoTopic(topic) === "price") &&
@@ -2519,7 +2520,7 @@ function _convoPickChoice(bare, exactOnly) {
   const id = _convoActive();
   if (!id) return false;
   let choices = _convoChoices();
-  if (!choices.length && !exactOnly) choices = _convoChoices(true); // the last offered set (a hint still on screen)
+  if (!choices.length) choices = _convoChoices(true); // the last offered set (a hint still on screen) — exact or loose
   if (!choices.length) return false;
   // Normalize away apostrophes/punctuation so a typed "tell him youre in" still
   // matches the label "Tell him you're in" — authors get natural labels, players
@@ -2529,7 +2530,14 @@ function _convoPickChoice(bare, exactOnly) {
   let c = /^[1-9]$/.test(bare) ? choices[+bare - 1] : null;
   if (!c) c = choices.find(x => nm(x.label) === nb);
   if (!c && !exactOnly && nb.length >= 3) c = choices.find(x => nm(x.label).includes(nb));
-  if (!c) return false;
+  if (!c) {
+    // the label was printed but its moment has passed (a trust-gated choice after an
+    // ask that earned the trust): say so, rather than hand "tell her Bert sent you"
+    // to the TELL verb (completionist playtest 2026-08-22)
+    const stale = _convoChoices("raw").find(x => nm(x.label) === nb);
+    if (stale) { _say(`(That moment's passed — ${_convoName(id)} is past needing it now.)`, "dim"); return true; }
+    return false;
+  }
   _runChoice(id, c);
   return true;
 }
@@ -5877,8 +5885,7 @@ function doCommand(input) {
     if (/^(time|clock)$/.test(lower)) { _doTime(); return; }
     if (/^(i|inv|inventory)$/.test(lower)) { _doInventory(); return; }
     if (/^(look|l|board)$/.test(lower)) { if (typeof _renderGame === "function") _renderGame(); return; }
-    _gameInput(lower);
-    _tick();
+    if (_gameInput(lower) !== false) _tick(); // "not a move" is free (completionist playtest: eight swallowed commands cost the last bus)
     return;
   }
 

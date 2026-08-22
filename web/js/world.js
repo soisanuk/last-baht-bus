@@ -3287,7 +3287,7 @@ const ROOMS = {
         { text: "The sheet of ply over the serving hatch, screwed down at three corners " +
           "and thought-better-of at the fourth. You work a hand in and lift — it swings " +
           "up easier than it should, someone's half-finished job — and there on the " +
-          "hatch shelf, under a decade of dust: a brass key on a cork fob, the kind a " +
+          "hatch shelf, under a decade of dust: a brass key on a cork fob (TAKE KEY), the kind a " +
           "landlord leaves for the next tenant there is never going to be.",
           sets: ["hatchPried"], reveal: "shamrock_key" },
       ],
@@ -4343,6 +4343,17 @@ const NPCS = {
       "and on the soi longer than most expats have had passports. She clocked you the " +
       "second you walked in.",
     dialogue: [
+      // the receipt SHOWN, the question ASKED: the Mot reveal answers ASK ABOUT WALLET
+      // too, not only a bare TALK (completionist playtest 2026-08-22)
+      { topic: "wallet", req: ["knowWasHere"], notFlags: ["knowMot"], sets: ["knowMot"],
+        text: "\"Your wallet? Listen.\" She taps the receipt. \"Three a.m. you leave with big group toward " +
+          "LK Metro — and Mot follow you out. Little pickpocket, work the drunk ones. Go ask Lek at " +
+          "the Lucky Tiger what he did with it; she see him every night.\"",
+        short: "\"Mot followed you out — the pickpocket. Ask Lek at the Lucky Tiger what he did with it.\"" },
+      { topic: "bee",
+        text: "\"Bee? My Sang Som girl at Myth Night — the one with the plans.\" A fond eye-roll. \"She " +
+          "think every farang is an investor. Sometimes one is. Go and see; she pour a better shot than me.\"",
+        short: "\"Bee — my Sang Som girl at Myth Night. She thinks every farang is an investor.\"" },
       // Bert's "quiet piece of this place": asked, she says exactly as much as she means to
       { topic: "lek",
         text: "\"Lek? Lucky Tiger, the pool table — she sees everything that walks up this soi and " +
@@ -4384,7 +4395,7 @@ const NPCS = {
         short: "\"Sit down, tilac. Talk to Candy — everybody's problems come to Candy.\"" },
       { text: "\"Back again, tilac.\" Candy counts the room without moving her eyes. \"You know the house now \u2014 sit, drink, don't be boring.\"",
         short: "\"Back again, tilac. Sit, drink, don't be boring.\"" },
-      { topic: "wallet", req: ["knowOyHasIt"],
+      { topic: "wallet", req: ["knowOyHasIt"], notFlags: ["oyGaveWallet"],
         text: "\"Oy has it? Then it's safe — safer than in your pocket, clearly. But Oy… ai, she make you work for it. Take her som tam from the market cart — extra spicy, tell them 'Candy's order'. Give it to Ploy her cashier, and doors open.\" She tips her chin down the soi, toward the old market block where the som tam cart still holds its corner.", sets: ["somTamAccepted"], gives: "som_tam",
         short: "\"Oy has your wallet. Take her extra-spicy som tam — 'Candy's order' — and give it to Ploy, her cashier.\"" },
       { topic: "wallet", notFlags: ["knowWasHere"],
@@ -6327,6 +6338,15 @@ const NPCS = {
       "at a bar like a spreadsheet. He calls himself an 'area consultant.' Everyone else calls him the " +
       "White Dish man. He is unfailingly pleasant, which is the unsettling part.",
     dialogue: [
+      // Gavin's Errand paid out at the Stinky the moment Bert refused — a courier's fee at the
+      // wrong counter (completionist playtest 2026-08-22). It lands here, from Gavin, once.
+      { req: ["wdgFlipTried"], notFlags: ["gavinPaid"], sets: ["gavinPaid"],
+        fx: (st, G) => { G.money += 2000; },
+        text: "\"You had the word with him, then.\" Gavin doesn't ask how it went; the answer is on " +
+          "your face and he has read faces for a living. \"Didn't think he'd bite. Doesn't matter — " +
+          "the ask was the job.\" An envelope slides across, flat. \"Two thousand, as said. White Dish " +
+          "looks after its friends.\" (+฿2000.)",
+        short: "\"The ask was the job. Two thousand, as said.\" (He has already paid you.)" },
       { when: (st, G) => _faction("wdg") > 0,
         text: "\"There's my man.\" The handshake runs a half-beat longer this time, warmer — an investment " +
           "acknowledged. \"Bert being Bert about it, I hear. No matter. You did the asking, and White Dish " +
@@ -6618,6 +6638,11 @@ const NPCS = {
       "a man who's never been conned, that a Soi 6 bar is 'basically the same game, mate — plant, cashflow, " +
       "location.' The girls have his order memorised. So has the till.",
     dialogue: [
+      { topic: "bar",
+        text: "\"The bar? Turnkey, up the soi — forty stools, a licence, a Thai partner already lined " +
+          "up, and I sign Friday.\" He says it the way a man says he's marrying. \"Ask me about the DEAL, " +
+          "ask me about the PARTNER. Better: buy me a beer and ask me both.\"",
+        short: "\"Turnkey, up the soi, signing Friday. Ask me about the DEAL or the PARTNER.\"" },
       { text: "\"Mate! Siddown, siddown — oi, one for my friend here.\" A bottle of Sang Som and a fresh glass " +
           "arrive before you can decline. Wayne is three ahead of you and delighted about everything. \"Wayne. " +
           "Earthmoving, twenty years, sold the lot. Now I'm gettin' INTO something out here — proper business, " +
@@ -8412,7 +8437,7 @@ const NPCS = {
         text: "\"Good manners.\" She looks at you a long moment — the farm gate in Isaan, the dancer with the number on her hip, all of it somewhere behind those eyes. \"Mot brought me a wallet. I bought it so it would not go in the sea, and to see what kind of man come looking.\" She produces it from behind the bar like a magician bored of the trick. \"A polite one. Ha. Take it. Buy Mot's dinner — he eats because tourists are careless, and that is not entirely his fault.\"",
         sets: ["oyGaveWallet", "hasWallet"], gives: "wallet",
         short: "Oy hands your wallet back. \"A polite one. Take it — and buy Mot's dinner.\"" },
-      { req: ["knowOyHasIt"], topic: "wallet",
+      { notFlags: ["oyGaveWallet"], req: ["knowOyHasIt"], topic: "wallet",
         text: "\"A wallet?\" The temperature drops two degrees. \"Many wallets in Pattaya, khun farang. Mine are in a safe.\" She turns away — but slowly, like a door left ajar. (Manners might open it. A proper wai.)" },
       // The Safe-Cracker quest (docs/map-coverage.md): completion node first (req the
       // intel), then the directions node — same first-match-wins ordering as the
@@ -9133,6 +9158,12 @@ const NPCS = {
       "quietly, works at being his own man out from under her shadow. Twenty-two years " +
       "on Beach Road, most of them within nine feet of that pool table.",
     dialogue: [
+      { topic: "bar", req: ["barPremises"],
+        text: "\"This bar?\" Bert looks round it like a man checking his pockets. \"Twelve stools, a " +
+          "fridge that hums, the old man's name on the lease and mine on the till. He'll carry you — " +
+          "I told you that. The rest is whose name goes on it, and that's the bit nobody here can " +
+          "sign for you.\"",
+        short: "\"Twelve stools and a humming fridge. The old man carries you; the name on it is the hard part.\"" },
       // after the Shamrock has spoken: the man who sent you there can talk about it
       { topic: "shamrock", req: ["shamrockVisited"],
         text: "\"Found it, then. Found HIM.\" Bert doesn't look up from the glass he's drying. \"Sean's " +
@@ -9589,6 +9620,12 @@ const NPCS = {
       "the same rose-pink polo as the original bar. Candy's niece, though nobody " +
       "says it and everybody knows it. The smile is the family franchise.",
     dialogue: [
+      // her first investor, afterwards (completionist playtest 2026-08-22: "no ack")
+      { req: ["beeBanked"],
+        text: "\"INVESTOR!\" Bee points at you across the rail like you're a winning number. \"Hundred " +
+          "baht of LUCK — I put it in the tin with the elephant. When I have my bar, you drink free one " +
+          "night. One. I write it down.\" She does, on a beer mat, in Thai, and pins it behind the bottles.",
+        short: "\"My investor! One free night when I have my bar — I write it down.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Welcome to Candy Bar TWO!\" — the number lands with enormous pride. " +
         "\"Auntie— ah, KHUN Candy teach me everything. You her customer? Then you " +
@@ -10012,7 +10049,7 @@ const QUESTS = {
       "THE OFFER).",
     deps: [],
     reqFlags: ["act1Done"],
-    at: "pim",
+    at: (G) => _flag("heardWhispers") ? "oy" : "pim", // the where-clause follows the step (completionist playtest 2026-08-22)
     doneFlag: "oyJobDone",
     reward: { money: 2000, happy: 6 },
   },
@@ -10153,6 +10190,7 @@ const QUESTS = {
     name: "Gavin's Errand",
     giver: "gavin",
     noNudge: true, // an alignment errand: HINT never recommends it (never push)
+    // the ฿2000 is paid by Gavin in person (his wdgFlipTried node), not at Bert's counter
     // Gavin's counter to Bert's job: the WDG side of the same fork. Purely opt-in —
     // decline it and nothing happens; even accept it and you can still walk away.
     // Alignment only lands if you actually carry the pitch to Bert (ASK BERT ABOUT
@@ -10164,7 +10202,7 @@ const QUESTS = {
     deps: [],
     at: "bert",
     doneFlag: "wdgFlipTried",
-    reward: { money: 2000, happy: 0 }, // WDG pays for the errand; the real price is your standing
+    reward: { money: 0, happy: 0 }, // WDG pays for the errand; the real price is your standing
   },
   // Origin quest (the detective): recon the Orchid Room's good table for Doyle.
   // Completes by ASK DOYLE ABOUT THE TABLE once you've actually been inside the
