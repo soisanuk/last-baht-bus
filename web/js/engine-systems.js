@@ -2295,6 +2295,8 @@ function _tanRescue() {
     _clockStr() + " and you are not where a man looking for his wallet would be.\u201d", "alert");
   _say("He is already close. The grey sedan pulls in without being told where, and the door " +
     "opens on aircon and quiet, and he does not make a single joke about the state of you.", "win");
+  if (typeof _abandonGame === "function") _abandonGame("Tan's sedan");
+  G.pendingEnc = null;
   G.room = "buakhao_n";
   G.darkStreak = 0;
   if (G.dog) _say(_dogN("Sai Krok goes in the back like a dog who has been in sedans before, and " +
@@ -2352,6 +2354,8 @@ function _tanCall() {
       "first night is on you, and I mean it. But I am not going to sit at home knowing you " +
       "are walking over that hill in the dark with a dying phone.\" He turns the aircon up. \"This part is not " +
       "the game. The game starts when you get out.\"");
+    if (typeof _abandonGame === "function") _abandonGame("Tan's sedan");
+    G.pendingEnc = null;
     G.room = "buakhao_n";
     G.darkStreak = 0;
     if (G.dog) _say(_dogN("Sai Krok rides the back seat with his nose to the aircon vent. Tan " +

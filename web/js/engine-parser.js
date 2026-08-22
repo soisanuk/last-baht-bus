@@ -2299,6 +2299,8 @@ function _doTalkBody(arg, topic) {
   }
   // A topic that found no node: say so in her voice. Falling through to the
   // greeting spent its repeat path on a question never asked (playtests 2026-08-22).
+  if (topic && !d.topic && /\bquiz\b|trivia/.test(topic)) { _say(_quizTalk()); return; }
+  if (topic && !d.topic && /\bdarts?\b/.test(topic)) { _say(_dartsTalk()); return; }
   if (topic && !d.topic && G.dog && (/\bdogs?\b|sai ?krok|\bpuppy\b|\bpaddy\b/.test(topic) || _isDogWord(topic))) {
     _say(_dogTalk(npc)); // the dog at your heel is a subject everyone has
     return;
@@ -5702,6 +5704,11 @@ function doCommand(input) {
   // a live bar game captures every command until it ends (QUIT concedes)
   if (G.game) {
     if (lower === "q" || /^(quit|resign|concede|forfeit|leave)/.test(lower)) { _gameQuit(); _tick(); return; }
+    // checking the clock, the board, or your pockets mid-game is free — it was
+    // swallowed as "not a move" AND charged a turn (gambler playtest 2026-08-22)
+    if (/^(time|clock)$/.test(lower)) { _doTime(); return; }
+    if (/^(i|inv|inventory)$/.test(lower)) { _doInventory(); return; }
+    if (/^(look|l|board)$/.test(lower)) { if (typeof _renderGame === "function") _renderGame(); return; }
     _gameInput(lower);
     _tick();
     return;
@@ -5998,6 +6005,30 @@ function doCommand(input) {
       break;
     case "press": case "type": case "code": _doEnter(arg); break;
     case "play": case "challenge": _doPlay(arg); break;
+    // the gambler's vocabulary (2026-08-22): REMATCH / DOUBLE replay the last game
+    // here; BET / WAGER <n> [ON <game>] is PLAY with a stake; stray shot-words
+    // with no game on the table get a pointer instead of the conversation layer
+    case "rematch": case "double": {
+      const lg = G.lastGame;
+      if (!lg) { _say("Nothing to rematch yet — PLAY something first. (PLAY CONNECT 4 · PLAY JACKPOT · PLAY POOL)", "dim"); break; }
+      if (lg.room !== G.room) { _say(`The last game was ${_barName(lg.room) ? "at " + _barName(lg.room) : "elsewhere"} — this bar has its own board. (PLAY …)`, "dim"); break; }
+      const stake = v === "double" ? Math.max(lg.stake * 2, 10) : lg.stake;
+      const word = { c4: "connect 4", jp: "jackpot", pool: "pool", kp: "killer", darts: "darts", quiz: "quiz" }[lg.type] || "connect 4";
+      if (lg.type === "quiz") { _say("The quiz doesn't do rematches — one round per bar per night.", "dim"); break; }
+      _say(v === "double" ? `(Double or nothing: ฿${stake} on the next one.)` : "(Same again.)", "dim");
+      _doPlay(word + " " + stake); break;
+    }
+    case "bet": case "wager": case "stake": case "gamble": {
+      const n = (arg.match(/\d+/) || [])[0];
+      const game = (arg.match(/\b(connect ?4|connect four|jackpot|dice|pool|killer|darts)\b/) || [])[1];
+      if (game) { _doPlay(game + (n ? " " + n : "")); break; }
+      if (n && G.lastGame && G.lastGame.room === G.room) { doCommand("rematch"); break; }
+      _say("Bet on what? The bars take a stake at the board, not the bar. (PLAY CONNECT 4 <stake> · PLAY JACKPOT <bet> · PLAY POOL · PLAY DARTS)", "dim");
+      break;
+    }
+    case "shot": case "power": case "safety": case "flip":
+      if (!G.game) { _say("No game on the table — PLAY first.", "dim"); break; }
+      _gameInput(lower); break;
     case "flirt": _doSocial("flirt", arg); break;
     case "compliment": case "praise": _doTalkAct("compliment", arg); break;
     case "joke": case "quip": case "banter": _doTalkAct("joke", arg); break;

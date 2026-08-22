@@ -538,3 +538,79 @@ test("a night ride never repeats a venue while the pool lasts; the 6 a.m. coda i
   for (let i = 0; i < _RIDE_VENUES.length - 1; i++) { const v = _pickRideVenue(seen); assert.ok(!seen.includes(v.key)); seen.push(v.key); }
   assert.ok(_CODA_DECON.every(s => !/mile-long|untouchable VIP/.test(s)));
 });
+
+// ── round seven: the action junkie (Danny Boy) ──
+test("Tan's sedan ends any game on the table; killer pool is tappable", () => {
+  newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight" }; // Act One: Tan drives you in from Jomtien
+  G.room = "coconut"; G.money = 500; G.nightTurn = 50;
+  doCommand("play connect 4");
+  assert.equal(G.game && G.game.type, "c4");
+  G.phone.contacts.tan = true; G.battery = 50; out = [];
+  _tanCall();
+  assert.equal(G.game, null, "the game died with the stool");
+  assert.match(text(), /dies with the stool/);
+  assert.equal(G.room, "buakhao_n");
+  G.game = { type: "kp", kp: {}, stake: 100 };
+  assert.deepEqual(_gameVerbs(), ["shot", "power", "quit"]);
+  G.game = null;
+});
+
+test("the Jackpot cap says so; PLAY CONNECT 4 WITH <mamasan> honours the opponent; a short stake is announced", () => {
+  G.room = "candy_bar"; G.money = 1000; out = [];
+  doCommand("play jackpot 500");
+  assert.match(text(), /House max on the Jackpot is ฿100/);
+  assert.equal(G.game.stake, 100);
+  G.game = null; out = [];
+  const mama = _npcsHere().find(id => NPC_ROLES[id] === "mamasan");
+  doCommand("play connect 4 with " + NPCS[mama].name.toLowerCase());
+  assert.equal(G.game.oppId, mama, "the shark takes the frame when asked");
+  G.game = null; G.money = 5; out = [];
+  doCommand("play connect 4");
+  assert.match(text(), /Short stake/);
+  G.game = null;
+});
+
+test("REMATCH / DOUBLE / BET are the gambler's verbs; LOOK/TIME mid-game are free; a stray SHOT is pointed", () => {
+  G.room = "candy_bar"; G.money = 1000;
+  out = []; doCommand("shot"); assert.match(text(), /No game on the table/);
+  out = []; doCommand("bet 50"); assert.match(text(), /Bet on what/);
+  doCommand("play connect 4 40");
+  const nt = G.nightTurn;
+  doCommand("time"); doCommand("look"); doCommand("inventory");
+  assert.equal(G.nightTurn, nt, "checking the clock/board/pockets costs nothing");
+  assert.equal(G.game && G.game.type, "c4", "…and doesn't end the game");
+  doCommand("quit");
+  assert.ok(G.lastGame && G.lastGame.type === "c4" && G.lastGame.stake === 40);
+  out = []; doCommand("double");
+  assert.match(text(), /Double or nothing: ฿80/);
+  assert.equal(G.game && G.game.stake, 80);
+  doCommand("quit"); out = [];
+  doCommand("bet 30 on jackpot");
+  assert.equal(G.game && G.game.type, "jp"); assert.equal(G.game.stake, 30);
+  doCommand("quit");
+});
+
+test("quiz questions don't repeat within a night; QUIZ and DARTS are topics anyone answers", () => {
+  G.day = 4; G.nightTurn = 25; G.room = _quizBars()[0];
+  _startQuiz(); const first = [...G.game.qs]; G.game = null;
+  G.room = _quizBars()[1];
+  _startQuiz(); const second = G.game.qs; G.game = null;
+  assert.ok(first.every(q => !second.includes(q)), "no question twice in one night");
+  G.day = 5; G.room = _npcRoom("candy"); doCommand("talk to candy"); out = [];
+  doCommand("ask candy about quiz");
+  assert.match(text(), /Thursday|Quiz/);
+  out = []; doCommand("ask candy about darts");
+  assert.match(text(), /board|Board/);
+  G.room = "queen_vic"; out = [];
+  doCommand("ask mort about the quiz");
+  assert.match(text(), /Quiz|quiz/);
+  assert.doesNotMatch(text(), /Search me|Not one I know/);
+});
+
+test("the Connect 4 loss is a pool; the seated quiz entry is one line", () => {
+  assert.ok(_C4_LOSS.length >= 3);
+  G.day = 4; G.nightTurn = 25; G.room = _quizBars()[0]; out = [];
+  _startQuiz(true);
+  assert.doesNotMatch(text(), /Too late/);
+  G.game = null;
+});

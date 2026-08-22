@@ -800,6 +800,8 @@ function _patronTalk(id, topic, _retried) {
   // some regulars have a sore subject that turns them belligerent (Fergie: Bert,
   // Candy, their bars). On his nasty nights it turns into a swing.
   if (topic && p.rage && p.rage.some(k => topic.includes(k))) { _patronRage(id); return; }
+  if (topic && /\bquiz\b|trivia/.test(topic) && !p.dialogue.some(e => e.topic === "quiz")) { _say(_quizTalk()); return; }
+  if (topic && /\bdarts?\b/.test(topic) && !p.dialogue.some(e => e.topic === "darts")) { _say(_dartsTalk()); return; }
   // the dog at your heel is a subject everyone at the rail has (dog-person playtest 2026-08-22)
   if (topic && G.dog && (/\bdogs?\b|sai ?krok|\bpuppy\b/.test(topic) || _isDogWord(topic)) &&
       !p.dialogue.some(e => e.topic === "dog")) {
@@ -1105,6 +1107,20 @@ function _dogTalk(npcId) {
   }
   const pool = _thaiVoice(npcId) ? _DOG_TALK_TH : _DOG_TALK_EN;
   return _dogN(pool[Math.floor(_rand() * pool.length)](NPCS[npcId].name));
+}
+// "ask <anyone> about quiz / darts": TIME knew, nobody else did (gambler playtest
+// 2026-08-22). One honest line, register-neutral, computed from the schedule.
+function _quizTalk() {
+  const bars = (typeof _quizBars === "function") ? _quizBars().map(b => _barName(b)).filter(Boolean) : [];
+  if (typeof _quizDay === "function" && _quizDay()) {
+    return `“Quiz? Tonight, na — eight till ten.” A thumb over the shoulder at the soi. “${bars.join(", ")}. Five questions, prize on the board. You clever? Go.”`;
+  }
+  return "“Quiz night is Thursday — eight o'clock, three bars, prize money. Which bars, you ask on the day. Check the TIME, everybody know.”";
+}
+function _dartsTalk() {
+  if (_room().darts) return "“Darts? Board's on the wall. Chalk's on the string. PLAY DARTS, if you think you can.”";
+  const where = Object.keys(ROOMS).filter(r => ROOMS[r].darts).map(r => _barName(r)).filter(Boolean).slice(0, 5);
+  return `“Not here — no board.” A shrug at the town. “${where.join(", ")} keep one. Ask for the chalk.”`;
 }
 function _topicMiss(npcId) {
   const n = NPCS[npcId];
@@ -1579,7 +1595,7 @@ function _tick() {
   if (typeof _quizHere === "function" && !G.game && !G.pendingEnc && !G.pendingChoice && _quizHere()) {
     _say("The chalkboard goes up, the microphone crackles, and the room turns as one " +
       "— you were here first, so you're playing.", "win");
-    _startQuiz();
+    _startQuiz(true);
   }
   _lastBusWarn();  // ~01:30: heads-up that the last ฿15 ride home is about to leave
   _maybeIncomingText();

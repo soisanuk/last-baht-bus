@@ -829,6 +829,9 @@
 #scene.collapsed #scene-art, #scene.collapsed #scene-cast { display: none; }
 /* folded: the toggle lives in the HUD row, not floating over it */
 #scene-toggle.inline { position: static; margin-right: 2px; flex: 0 0 auto; align-self: center; }
+/* folded on a phone: the HUD row is the panel's top band, where the bell/message
+   FABs float — keep the meters clear of them */
+@media (max-width: 767px) { #scene.collapsed #scene-hud { padding-right: 64px; } }
 @media (pointer: coarse) {
   #scene-toggle { min-height: 30px; padding: 3px 12px; font-size: 12px; }
 }

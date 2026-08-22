@@ -23,10 +23,18 @@ function _ucfirst(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; }
 // Who takes the seat across the table: a canon girl if one's here, else any
 // of the bar's staff (the filler cast plays too). Returns { id, name } — id
 // null only in a staffless room; her Connect 4 depth comes from _c4Depth(id).
-function _gameHostess() {
+function _gameHostess(pref) {
   const here = _npcsHere();
+  // "PLAY CONNECT 4 WITH RATANA": an opponent named and present takes the frame
+  // (the mamasan IS the shark tier — gambler playtest 2026-08-22 asked for her and got Lek)
+  if (pref) {
+    const p = here.find(n => NPC_ROLES[n] && NPCS[n].name.toLowerCase() === pref) ||
+      here.find(n => NPC_ROLES[n] && NPCS[n].name.toLowerCase().startsWith(pref));
+    if (p) return { id: p, name: NPCS[p].name };
+  }
   const id = here.find(n => CANON_HOSTESSES.includes(n)) ||
     here.find(n => NPC_ROLES[n]) || null;
+  if (pref && id) _say(`(Nobody here answers to "${pref}" for a game — ${NPCS[id].name} has the frame tonight.)`, "dim");
   return { id, name: id ? NPCS[id].name : "the hostess on shift" };
 }
 
@@ -34,6 +42,7 @@ function _gameHostess() {
 // Broke players play "for sanuk" — no baht either way, pride still on the line.
 function _takeStake(want) {
   const stake = Math.min(want, G.money);
+  if (stake > 0 && stake < want) _say(`(Short stake — she takes what's there: ฿${stake} against the table's ฿${want}.)`, "dim");
   G.money -= stake;
   return stake;
 }
@@ -75,6 +84,7 @@ function _gameVerbs() {
     case "c4": return ["drop", "1", "2", "3", "4", "5", "6", "7", "q", "quit"];
     case "jp": return ["flip", ..._jpChoices(), "quit"];
     case "pool": case "killer": return ["shot", "power", "safety", "quit"];
+    case "kp": return ["shot", "power", "quit"]; // the league game (type "kp") — SHOT/POWER only
     case "darts": return ["big", "steady", "finish", "quit"];
     case "quiz": return ["1", "2", "3", "quit"];
   }
@@ -99,11 +109,13 @@ function _doPlay(arg) {
   if (w.includes("jackpot") || w.includes("dice")) return _startJackpot(w);
   if (w.includes("killer") || w.includes("league")) return _startKiller();
   if (w.includes("dart")) return _startDarts();
-  if (w.includes("pool") || w.includes("8") || w.includes("billiard")) return _startPool();
-  if (w.includes("connect") || w.includes("four") || w.includes("4")) {
+  if (w.includes("connect") || w.includes("four") || /\b4\b/.test(w)) {
     const m = w.match(/\b(\d{2,5})\b/); // a trailing stake: PLAY CONNECT 4 100
-    return _startC4(m ? +m[1] : undefined);
+    const vs = (w.match(/\b(?:with|vs|against)\s+([a-z]+)/) || [])[1];
+    return _startC4(m ? +m[1] : undefined, vs);
   }
+  // "8" alone used to mean 8-ball — so PLAY CONNECT 4 80 started POOL (gambler playtest 2026-08-22)
+  if (/\bpool\b|\b8[- ]?ball\b|billiard|snooker/.test(w)) return _startPool();
   const opts = _playOptions();
   if (opts.length) _say("Play what? " + opts.map(o => "PLAY " + o.toUpperCase()).join(" · ") + ".", "dim");
   else _say("Nothing to play here — the beer bars keep Connect 4 and Jackpot within reach.", "dim");
@@ -111,9 +123,9 @@ function _doPlay(arg) {
 
 // ─ Connect 4 ─
 
-function _startC4(want) {
+function _startC4(want, vs) {
   if (!_barGamesHere()) { _say("No Connect 4 board here — every beer bar keeps one within arm's reach."); return; }
-  const { id, name } = _gameHostess();
+  const { id, name } = _gameHostess(vs);
   const depth = _c4Depth(id);
   const stake = _takeStake(want || C4_STAKE);
   G.game = { type: "c4", board: c4New(), opp: name, oppId: id, depth, stake };
@@ -587,8 +599,7 @@ function _c4Input(input) {
   c4Drop(g.board, ai, 2);
   _say(c4Render(g.board));
   if (c4Win(g.board) === 2) {
-    _endGame(false, 0, `${g.opp} drops column ${ai + 1} without breaking eye contact. ` +
-      "Four in a row. She was three moves ahead the whole time, and you both know it." +
+    _endGame(false, 0, _pickVary(_C4_LOSS, "c4loss")(g.opp, ai + 1) +
       (g.stake ? ` Your ฿${g.stake} joins the till.` : ""));
     return;
   }
@@ -604,7 +615,9 @@ function _c4Input(input) {
 function _startJackpot(w) {
   if (!_barGamesHere()) { _say("No Jackpot box here — beer bars keep the dice cup by the till."); return; }
   const betM = w.match(/\d+/);
-  const want = Math.max(JP_MIN, Math.min(JP_MAX, betM ? parseInt(betM[0], 10) : JP_DEFAULT));
+  const asked = betM ? parseInt(betM[0], 10) : JP_DEFAULT;
+  const want = Math.max(JP_MIN, Math.min(JP_MAX, asked));
+  if (asked > JP_MAX) _say(`(House max on the Jackpot is ฿${JP_MAX} — the rest stays in your pocket.)`, "dim");
   const opp = _gameHostess().name; // jackpot is dice — no skill tier to carry
   const stake = _takeStake(want);
   // First game ever (flags.jpLearned unset): the hostess walks you through it —
@@ -639,7 +652,7 @@ function _jpTeach(g, moves) {
   if (moves.length === 2 && !g.taught.choice) {
     g.taught.choice = true;
     _say(_fmt("{n} leans in. \"Two ways here, na. Flip the two dice numbers — or " +
-      "flip their sum, one tile. Never both. Whatever's still standing at the end " +
+      "flip their sum, one tile. Never both — though if one of the pair is already down, the other on its own is fine. Whatever's still standing at the end " +
       "is your score, and low wins. You choose.\"", { n: g.opp }));
   } else if (moves.length === 1 && !g.taught.single) {
     g.taught.single = true;
@@ -885,15 +898,22 @@ function _quizHere() {
   return _isQuizWindow() && _quizBars().includes(G.room) && !G.quizPlayed[G.room];
 }
 
-function _startQuiz() {
+function _startQuiz(seated) {
   G.quizPlayed[G.room] = true;
   // five questions, drawn without repeats
-  const pool = [...Array(QUIZ_POOL.length).keys()];
+  // no question twice in one night — three bars run it, and Q1 at Candy Bar came
+  // back as Q4 at the Lucky Tiger (gambler playtest 2026-08-22)
+  if (!G.quizSeen || G.quizSeen.day !== G.day) G.quizSeen = { day: G.day, qs: [] };
+  let pool = [...Array(QUIZ_POOL.length).keys()].filter(i => !G.quizSeen.qs.includes(i));
+  if (pool.length < 5) pool = [...Array(QUIZ_POOL.length).keys()];
   const qs = [];
   for (let i = 0; i < 5; i++) qs.push(pool.splice(Math.floor(_rand() * pool.length), 1)[0]);
+  G.quizSeen.qs.push(...qs);
   G.game = { type: "quiz", qs, at: 0, right: 0 };
-  _say("Too late — the microphone has already found you. “A NEW TEAM, ladies and " +
-    "gentlemen!” Quiz night: five questions, the bar as your audience, prizes on " +
+  _say((seated
+    ? "“A NEW TEAM, ladies and gentlemen!” "
+    : "Too late — the microphone has already found you. “A NEW TEAM, ladies and gentlemen!” ") +
+    "Quiz night: five questions, the bar as your audience, prizes on " +
     "the board. A hostess hands you a pencil you will not need and a beer mat " +
     "you will.", "win");
   _say("(Answer 1, 2, or 3. QUIT slinks back out to the street.)", "dim");
@@ -1023,8 +1043,8 @@ function _kpInput(input) {
   // the table plays around to you
   while (!kpOver(g.kp) && g.kp.turn !== 0) {
     const r = kpShot(g.kp, _rand);
-    if (r.out) _say(`${r.player.name} misses and is OUT. A moment of silence; the moment ends.`, "dim");
-    else if (!r.potted) _say(`${r.player.name} rattles it — a life gone.`, "dim");
+    if (r.out) _say(`${_ucfirst(r.player.name)} misses and is OUT. A moment of silence; the moment ends.`, "dim");
+    else if (!r.potted) _say(`${_ucfirst(r.player.name)} rattles it — a life gone.`, "dim");
   }
   if (kpOver(g.kp)) {
     const winner = kpAlive(g.kp)[0];
@@ -1071,7 +1091,7 @@ function _poolOppTurn(g) {
     return;
   }
   _say(potted === 0 ? `${g.oppName} rattles the jaws and swears softly. Your table.` :
-    `${g.oppName} pots ${potted}, then runs out of angle. Your table.`);
+    `${_ucfirst(g.oppName)} pots ${potted}, then runs out of angle. Your table.`);
   _poolStatus(g);
 }
 
@@ -1240,6 +1260,7 @@ function _dartsInput(input) {
 // won: true / false / null (push). payout is added to money (escrow already taken).
 function _endGame(won, payout, text) {
   G.money += payout;
+  if (G.game) G.lastGame = { type: G.game.type, stake: G.game.stake || 0, room: G.room }; // REMATCH / DOUBLE
   G.game = null;
   _say(text, won === false ? "alert" : "win");
   if (won === true && payout) _say(`(฿${G.money} in pocket.)`, "dim");
@@ -1247,7 +1268,23 @@ function _endGame(won, payout, text) {
   else if (won === false) _addHappy(-1);
 }
 
+// A game can't follow you out of the bar: Tan's sedan moved a live Connect 4 to
+// Soi Buakhao and it kept running (gambler playtest 2026-08-22). The stake stays.
+function _abandonGame(why) {
+  if (!G.game) return;
+  const g = G.game;
+  G.game = null;
+  _say(`(${why} — the ${g.type === "c4" ? "Connect 4" : g.type === "jp" ? "Jackpot" : g.type === "quiz" ? "quiz" : "game"} dies with the stool you left` +
+    (g.stake ? `; the ฿${g.stake} stays with the house` : "") + ".)", "dim");
+}
+const _C4_LOSS = [
+  (o, c) => `${o} drops column ${c} without breaking eye contact. Four in a row. She was three moves ahead the whole time, and you both know it.`,
+  (o, c) => `Column ${c}, and ${o} doesn't even look at the board — she's looking at you. Four. "Again?" she says, which is not a question about the game.`,
+  (o, c) => `${o} taps column ${c} home and the rail makes the small noise a rail makes. Four in a row; you never saw the second threat, and she never let on there was one.`,
+  (o, c) => `A counter drops into column ${c} like a coin into a till. ${o} says nothing. Four in a row says it for her.`,
+];
 function _gameQuit() {
+  if (G.game) G.lastGame = { type: G.game.type, stake: G.game.stake || 0, room: G.room }; // REMATCH / DOUBLE after a concede too
   const g = G.game;
   G.game = null;
   if (g.type === "quiz") {
