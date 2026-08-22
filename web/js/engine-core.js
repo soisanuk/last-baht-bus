@@ -652,7 +652,10 @@ function _convoActive() {
   if (!id) return null;
   const here = (NPCS[id] && _npcRoom(id) === G.room) ||
                (PATRONS[id] && _patronsHere().includes(id));
-  if (!here) { G.convo = null; G.convoQ = null; return null; } // partner gone → conversation (and any pending question) over
+  if (!here) { // partner gone → conversation over; the question isn't spent, she can ask again
+    if (G.convoQ) { const ost = _npcState(G.convoQ.id); if (ost && ost.know) delete ost.know["asked_" + G.convoQ.key]; }
+    G.convo = null; G.convoQ = null; return null;
+  }
   return id;
 }
 function _convoEnd(quiet) {
@@ -673,11 +676,13 @@ function _convoInterrupt() { if (G.convo) _convoEnd(true); }
 // node index (G.convoIdx), never the choice objects (they carry fx functions).
 // Schema: { label, text?, when?, sets?, fx?, topic? } — picking one applies its
 // effects and prints text, then either jumps to `topic` or clears (see _runChoice).
-function _convoChoices() {
+function _convoChoices(remembered) {
   const id = _convoActive();
-  if (id == null || G.convoIdx == null) return [];
+  if (id == null) return [];
+  const idx = G.convoIdx != null ? G.convoIdx : (remembered && G.convoChoiceMemo ? G.convoChoiceMemo[id] : null);
+  if (idx == null) return [];
   const arr = ((NPCS[id] || PATRONS[id] || {}).dialogue) || [];
-  const d = arr[G.convoIdx];
+  const d = arr[idx];
   if (!d || !d.choices) return [];
   const st = _npcState(id);
   return d.choices.filter(c => !c.when || c.when(st, G));
@@ -1187,6 +1192,7 @@ function _deliver(npcId, d) {
   if (st.dstate === "stranger") { st.dstate = "met"; st.trust = Math.min(5, st.trust + 1); }
   // this node is now the live one — its `choices` (if any) become the action-choices
   G.convoIdx = G.convo === npcId ? idx : G.convoIdx;
+  if (d.choices && d.choices.length) (G.convoChoiceMemo = G.convoChoiceMemo || {})[npcId] = idx; // typed labels outlive the next ask (27-night playtest)
   _convoAsk(npcId, d, st);                     // …and the partner may put a question back to you
 }
 
@@ -1347,9 +1353,15 @@ function _describeRoom(full, forceFull) {
     // only (never a hotel room — he can't climb to your balcony), and never
     // during Act One's tight opening
     G.dogNudgeDay = G.day;
-    _say("A soi dog with one clipped ear falls in beside you for half a block, matching " +
-      "your pace with off-duty professionalism, then peels away at the soi mouth with " +
-      "one look back. (FEED DOG, if you'd like that to go differently.)", "dim");
+    _say(_pickVary([
+      "A soi dog with one clipped ear falls in beside you for half a block, matching " +
+        "your pace with off-duty professionalism, then peels away at the soi mouth with " +
+        "one look back. (FEED DOG, if you'd like that to go differently.)",
+      "The clipped-ear dog is at the soi mouth again, sitting like a man waiting for a bus. He " +
+        "watches you pass with no expectation whatsoever, which is somehow worse. (FEED DOG, if you like.)",
+      "Nose down, one ear up, the clipped-ear dog checks the gutter ahead of you, finds nothing, " +
+        "and glances back as if you might be the something. (FEED DOG — or don't; he's heard it before.)",
+    ], "dognudge"), "dim");
   }
   // CAPS so the hints tap: the open kw prefills "ride bus to " and the
   // destination list rides the suggest bar — the whole fare is keyboard-free.
@@ -1530,7 +1542,7 @@ function _repTier() {                          // −2..+2, drives effects + the
 }
 const _REP_LABELS = {
   "-2": "trouble — a name that walks into the bar a step ahead of you",
-  "-1": "a bit of a cheap charlie, and not shy about it",
+  "-1": "a bit of a liability — the soi has stories, and not the fond kind",
   "0": "nobody in particular yet — the soi hasn't made up its mind",
   "1": "a good sort, the kind the mamas nod to",
   "2": "a proper face on the soi — known, and mostly liked",

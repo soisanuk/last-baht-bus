@@ -866,6 +866,7 @@ function _bfResolve(kind) {
     _say("(Long time is like that — you paid for the fantasy and she handed you the reality. " +
       "But you know her now, really know her. Some men call that the good part.)", "dim");
     G.lastBfPreTier = _bondTier(id); // the treadmill reads the tier SHE EARNED BEFORE tonight
+    G.lastBfHonest = true;           // the ending's coda is the quiet one, not khao man gai at 3 a.m.
     _addBond(id, 6); // you saw the real her — the bond jumps
     G.lastBfBase = 4;                               // …and the escape didn't escape: less สนุก
     G.lastBfChaste = true;                          // "you fall asleep before the sex" — no STD/condom coda
@@ -1652,6 +1653,16 @@ function _doHint() {
     }
     // the nudge never points at an alignment errand — "never push" is the doctrine,
     // and HINT was recommending Gavin's WDG job three nights running (expat playtest)
+    // the bar chain's one hidden step: bar_premises done, bar_licence not yet
+    // reachable — the answer is a man you have to get to KNOW (27-night playtest
+    // 2026-08-22: four weeks of "Signin' Friday" and nothing pointed at Wayne)
+    if (G.quests.bar_premises === "done" && !G.quests.bar_licence && _flag("expatLife")) {
+      const w = _qGiver(QUESTS.bar_licence);
+      const nm = NPCS[w] ? NPCS[w].name : "Wayne";
+      _say(`Bert told you to find out what a farang can actually sign. The man who knows is ${nm}` +
+        (w === "wayne" ? " — the loud Australian with the folder at the Golden Dragon, about to sign the wrong thing. Sit with him. Answer what he asks. He tells the straight version to a man he trusts, and to nobody else." : " — sit with him and ask about the LICENCE."), "win");
+      return;
+    }
     const offered = Object.keys(QUESTS).filter(q => G.quests[q] === "offered" && !QUESTS[q].noNudge);
     if (offered.length) {
       const q = QUESTS[offered[0]];
@@ -2055,7 +2066,14 @@ function _phoneDead() {
   return false;
 }
 
+const _CHATTER = ["thinking of you na 💭", "you eat already?? 🍚", "sabai dee mai 😊", "last night SO funny 5555",
+  "bar quiet 😴 boss angry at everybody", "i see a dog look like you today 555 🐕", "my friend ask who is the farang always smiling. i say mine 😏",
+  "rain rain rain ☔ nobody come", "you sleep?? it 9pm only, old man 555", "mama call, she say hello to you (she dont know you 555)"];
 function _pushMsg(from, text, gives, fromName, photo) {
+  // the same line twice running from the same sender reads as a bug (27-night playtest)
+  const last = [...G.phone.inbox].reverse().find(m => m.from === from);
+  if (text && last && last.text === text && !gives && !photo) text = _CHATTER[(G.turns + G.day) % _CHATTER.length];
+  if (G.phone.inbox.length > 80) G.phone.inbox = G.phone.inbox.filter(m => !m.read).concat(G.phone.inbox.filter(m => m.read).slice(-40)); // the phone forgets old read texts
   // fromName carries a display name for senders that aren't NPCs (e.g. the Soi
   // Dog Foundation broadcast); NPC texts leave it null and render by NPCS name.
   // photo (a caption string) marks a texted selfie — rendered with her portrait
@@ -3115,16 +3133,14 @@ function _maybeIncomingText() {
     if (roll < 0.45) { G.phone.invite = { id, day: G.day };
       _pushMsg(id, `bar quiet tonight 😴 you come see ${name}?? i keep you seat 💺💕`); }
     else if (roll < 0.6) _pushMsg(id, "family of me sick need medicine 300 🥺 you help little bit na?");
-    else _pushMsg(id, ["thinking of you na 💭", "you eat already?? 🍚", "sabai dee mai 😊",
-      "last night SO funny 5555"][Math.floor(_rand() * 4)]);
+    else _pushMsg(id, _CHATTER[Math.floor(_rand() * _CHATTER.length)]);
   } else { // a name and a number: the classic mix, scam-ask heavy
     if (roll < 0.3) { G.phone.invite = { id, day: G.day };
       _pushMsg(id, `bar quiet tonight 😴 you come see ${name}?? i keep you seat 💺💕`); }
     else if (roll < 0.65) _pushMsg(id, ["somebody in family sick, need buy medicine 300 baht 🥺 you help?",
       "phone of me break!! need 500 for fix... you good heart na 🙏",
       "buffalo of family very sick 😭😭 200 baht help little bit?"][Math.floor(_rand() * 3)]);
-    else if (roll < 0.9) _pushMsg(id, ["thinking of you na 💭", "you eat already?? 🍚", "sabai dee mai 😊",
-      "last night SO funny 5555"][Math.floor(_rand() * 4)]);
+    else if (roll < 0.9) _pushMsg(id, _CHATTER[Math.floor(_rand() * _CHATTER.length)]);
     else _pushMsg(id, "lucky day!! I win lottery small small 🎉 send you luck money", 50);
   }
   _say("(📱 Your phone buzzes — CHECK MESSAGES.)", "dim");
@@ -3271,15 +3287,33 @@ const _RAIN_EMPTY_BAR = [
     "is something to do. The rain does not care whose rent is due.",
 ];
 
+const _DRIZZLE_BAR = [
+  "A few fat drops hit the awning, then a few more. Without a word, two of " +
+    "the girls slip out and bring the street-side barstools in, stacking them " +
+    "dry — a drill they could run asleep. The mamasan glances at the sky, " +
+    "unimpressed. The music doesn't miss a beat.",
+  "Light rain starts ticking on the roof. The hostess nearest the door " +
+    "leans out, palm up, and delivers the verdict — “nit noi.” Nothing. She " +
+    "goes back to her phone. The barstools come in anyway. The barstools " +
+    "always come in.",
+  "Rain on the tin, soft and then less soft. Somebody turns the music up one " +
+    "notch to cover it, which is the whole of the bar's weather policy.",
+  "The awning starts to drum. A girl reaches out without looking and drags the " +
+    "sandwich board in by one corner, mid-sentence, mid-laugh — the soi's reflexes " +
+    "are older than she is.",
+];
 function _sayDrizzle() {
   const alt = G.turns % 2 === 0; // variant by parity — no dice for flavor
   if (_inBar()) {
     // LOW SEASON'S OTHER REGISTER (monsoon-purgatory canon, 2026-08-22): when the
     // rain has the room to itself — no patrons at the rail — the drill prose is
     // wrong; the event is the emptiness. Atmosphere only, no drama by rule.
-    const dead = typeof _patronsHere === "function" && !_patronsHere().length;
+    const dead = typeof _patronsHere === "function" && !_patronsHere().length &&
+      !(typeof _barSpendTonight === "function" && _barSpendTonight(G.room)); // you just bought a round: not dead
     if (dead && _room().barType === "beer") {
-      _say(_pickVary(_RAIN_EMPTY_BAR, "rainempty"), "dim");
+      const staff = _npcsHere().filter(n => NPC_ROLES[n] === "hostess").length;
+      const pool = _RAIN_EMPTY_BAR.filter(s => (_room().pool || !/pool table/.test(s)) && (staff >= 2 || !/two of the girls/.test(s)));
+      _say(_pickVary(pool.length ? pool : _RAIN_EMPTY_BAR, "rainempty"), "dim");
       return;
     }
     // Enclosed venues (the gents villas, anywhere aircon-shut) have no street-side
@@ -3294,15 +3328,7 @@ function _sayDrizzle() {
         "the aircon. One of the girls glances up; nobody moves.", "dim");
       return;
     }
-    _say(alt ?
-      "A few fat drops hit the awning, then a few more. Without a word, two of " +
-      "the girls slip out and bring the street-side barstools in, stacking them " +
-      "dry — a drill they could run asleep. The mamasan glances at the sky, " +
-      "unimpressed. The music doesn't miss a beat." :
-      "Light rain starts ticking on the roof. The hostess nearest the door " +
-      "leans out, palm up, and delivers the verdict — “nit noi.” Nothing. She " +
-      "goes back to her phone. The barstools come in anyway. The barstools " +
-      "always come in.", "dim");
+    _say(_DRIZZLE_BAR[(G.day * 7 + Math.floor(G.turns / 15)) % _DRIZZLE_BAR.length], "dim");
   } else {
     // no dice for weather flavour: the variant is a function of the day and
     // the turn, not _rand() — and no baht bus on the Darkside, where the songthaews
@@ -5510,6 +5536,7 @@ function _roomSafeBeat() {
   if (!_flag("act1Done") || _flag("roomSafeOpened")) return;
   if (G.room !== _hotelRoomId()) return;
   _setFlag("roomSafeOpened");
+  G.act1SafeDue = false;
   G.money += SAFE_CASH;
   _say(`Your own room, and the key card works. The safe in the wardrobe opens on the ` +
     `second try: passport, return ticket \u2014 and the emergency stash you very nearly ` +
@@ -5520,6 +5547,7 @@ function _roomSafeBeat() {
 function _checkAct1() {
   if (!_flag("hasWallet") || _flag("act1Done")) return;
   _setFlag("act1Done");
+  G.act1SafeDue = true; // the room safe owes you the stash — paid on your first time IN the room, walked or respawned
   let score = 0;
   const lines = [];
   score += 50;

@@ -2311,7 +2311,7 @@ function _doTalkBody(arg, topic) {
     _say(_dogTalk(npc)); // the dog at your heel is a subject everyone has
     return;
   }
-  if (topic && !d.topic && (G.talked[npc] || []).includes(NPCS[npc].dialogue.indexOf(d))) {
+  if (topic && !d.topic && (G.talked[npc] || []).length) {
     // she HAS that story but its gate hasn't opened: a "not yet", not a "not mine"
     const gated = NPCS[npc].dialogue.some(e => e.topic && (e.topic === topic || topic.includes(e.topic)));
     _say(gated ? _topicLocked(npc) : _topicMiss(npc));
@@ -2518,7 +2518,8 @@ function _runChoice(id, c) {
 function _convoPickChoice(bare, exactOnly) {
   const id = _convoActive();
   if (!id) return false;
-  const choices = _convoChoices();
+  let choices = _convoChoices();
+  if (!choices.length && !exactOnly) choices = _convoChoices(true); // the last offered set (a hint still on screen)
   if (!choices.length) return false;
   // Normalize away apostrophes/punctuation so a typed "tell him youre in" still
   // matches the label "Tell him you're in" — authors get natural labels, players
@@ -3119,6 +3120,10 @@ function _doBuy(arg) {
   // BUY PIWIN A BEER. First, because a stand is not a bar and every branch
   // below assumes one — the beer path was answering "this calls for a bar stool".
   if (/\bcoffee\b/.test(arg) && /\btan\b/.test(arg) && _npcsHere().includes("tan")) { _doTalk("tan", "coffee"); return; }
+  if (/\b(all|everyone|everybody|every ?girl|the girls|the room|the bar)\b/.test(arg) && /drink|round/.test(arg) && _inBar()) {
+    _say("One at a time — a lady drink is a conversation, not a round. (BUY DRINK FOR <name>; the BELL buys the room.)", "dim");
+    return;
+  }
   if (/7.?eleven|seven.?eleven|\b7-11\b/.test(arg) && _room().seven) { // "enter 7-eleven": the shop is in the room, not a room
     _say("You step into the 7-Eleven — the doorbell, the aircon, the glow. (BUY TOASTIE · BUY WATER · BUY CHARGER · BUY CONDOM · CHARGE PHONE)", "dim");
     return;
@@ -4082,9 +4087,16 @@ function _doViolence(arg) {
       "motosai stand. There is no version of this where you win, and several " +
       "where you swim home. The idea evaporates.");
   } else {
-    _say("You know how this plays out: the motosai stand empties before your " +
-      "first swing lands, and it does not empty in your favour. In Pattaya " +
-      "the street polices itself. The urge passes, as urges here should.");
+    _say(_pickVary([
+      "You know how this plays out: the motosai stand empties before your " +
+        "first swing lands, and it does not empty in your favour. In Pattaya " +
+        "the street polices itself. The urge passes, as urges here should.",
+      "Your hands think about it. Then they think about the piwins on the corner, who have " +
+        "been watching since before you decided, and who have a prior claim on every fight " +
+        "on this soi. The idea sits down and orders a water.",
+      "Nobody here fights a farang; they just wait for him to finish, then explain the " +
+        "price. You've seen the explanation. The swing stays where it is.",
+    ], "violence"));
   }
 }
 
@@ -4697,6 +4709,10 @@ function _doPhoto(arg) {
     }
     // an unrecognised word ("sunset", "bar") falls through to a scene shot
   }
+  if (_inBar() && /gogo|soi6/.test(_room().barType || "")) {
+    _say(_pickVary(_PHOTO_GOGO_NO, "photono"), "alert"); // the house rule holds for the room, not just a named girl
+    return;
+  }
   G.battery--;
   if (_inBar()) {
     _say("The word “photo” assembles every hostess in the bar around you in " +
@@ -4884,6 +4900,11 @@ function _atmParse(arg) {
 }
 
 function _doWithdraw(arg) {
+  const _m0 = G.money;
+  _doWithdrawInner(arg);
+  if (G.money > _m0) G.atmTotal = (G.atmTotal || 0) + (G.money - _m0); // the morning ledger nets ATM cash out
+}
+function _doWithdrawInner(arg) {
   if (!_flag("hasWallet")) {
     _say("Your bank card was in the wallet — and the wallet is the whole problem. " +
       "No card, no cash. Solve that first.");
@@ -5251,6 +5272,22 @@ function _chipSet() {
     return chips;
   }
   if (G.pendingEnc === "nightride") { add("ride on"); add("call it a night"); return chips; }
+  if (G.pendingEnc && Array.isArray(G.encPrompt)) {
+    // the answers an encounter printed in CAPS inside parens become its chips
+    // (liability playtest 2026-08-22: the freelancer's "YES her · BOTH · NO" had none)
+    const txt = G.encPrompt.map(l => l[0]).join(" ");
+    const seen = new Set();
+    for (const grp of txt.match(/\(([^)]*)\)/g) || []) {
+      for (const part of grp.slice(1, -1).split(/·|\/|\bor\b/)) {
+        const m = part.match(/\b([A-Z][A-Z0-9']{1,}(?: [A-Z][A-Z0-9']{1,})*)\b/); // the CAPS run, wherever it sits in the clause
+        if (!m) continue;
+        const word = m[1].trim().toLowerCase().replace(/\s+/g, " ");
+        if (word.length < 2 || seen.has(word) || /^(enter|help lists|hint)$/.test(word)) continue;
+        seen.add(word); add(word);
+      }
+    }
+    if (chips.length) return chips;
+  }
   if (G.pendingSoapy) {
     for (const t of _SOAPY_TIERS) add(String(t.num), `${t.num} · ฿${t.price}`);
     add("no", "no, thanks");
@@ -5548,6 +5585,26 @@ function _norm(s) {
     .replace(/^(please |can you |go )/i, m => m.toLowerCase() === "go " ? "go " : "");
 }
 
+// The answer words of the SOFT encounters (see the pendingEnc gate): anything
+// else that is a real command passes through with the pitch declined.
+const _ENC_SOFT = {
+  peddler:    /haggle|bargain|cheap|discount|too much|lower|tao ?rai|how much|watch|rolex|glass|shade|sun|vit|pill|buy|yes|\bno\b|not interested|wave|pass/,
+  noodle:     /yes|yeah|ok|okay|sure|come|fine|why not|\bgo\b|her|deal|\bno\b|pass|wave|walk/,
+  freelancer: /both|two|friend|ning|threesome|them|yes|ok|sure|company|come|deal|her|why not|\bno\b|pass|wave|walk|thanks/,
+  coconutbar: /both|two|friend|muk|threesome|them|yes|yeah|ok|sure|company|come|deal|her|why not|how much|price|\bno\b|pass|walk/,
+  booking:    /yes|ok|sure|book|come|deal|why not|send her|yeah|\bno\b|sleep|turn in|pass|not tonight|stay|send/,
+  maze:       /help|look|find|yes|sure|come|together|follow|show|point|search|money|baht|pay|\bno\b|walk|leave|on/,
+  jogger:     /join|run|yes|sure|\bno\b|pass|wave|keep|walk|listen/,
+  influencer: /pose|photo|yes|sure|\bno\b|pass|wave|walk|help|hold/,
+  djslip:     /sign|yes|sure|decline|\bno\b|pass|refuse|ok/,
+  freegift:   /take|yes|accept|thanks|refuse|\bno\b|pass|wave|keep/,
+  katoey:     /flirt|kiss|snog|fondle|grope|spank|charm|wink|lean|\bno\b|push|hand|back off|wave|step/,
+};
+// A real top-level command word (not a bare answer): used only to decide whether
+// a soft encounter should let the line through.
+function _isRealCommand(v) {
+  return /^(go|n|s|e|w|ne|nw|se|sw|in|out|up|down|enter|travel|goto|ride|motosai|bus|buy|drink|eat|talk|ask|tell|tip|give|quests|journal|watch|light|check|message|send|look|l|examine|x|wait|sleep|map|time|hint|who|blackbook|contacts|phone|photo|play|rematch|sell|feed|pet|wai|dance|sing|order|read|inventory|i|inv|diagnose|score|call|follow|shower|withdraw|atm|balance|borrow|repay|work|books|complain|report|column|owl|paper|tv|scores|lottery|weather|standing|rep|gallery|share|charge|barfine|flirt|kiss|spank|fondle|contact|number|meet|name|rename|accept|abandon|drop|take|get|open|close|use|search|smell|listen|pray|swim|throw|stand|ring|bell|help|checkout|toggle|undo|restart|reset|again|g|hug|good|stay|heel|whistle|come|bet|wager|beg)$/.test(v);
+}
 let _lastCmd = ""; // for AGAIN/G — deliberately not serialized; repeats die with the session
 let _prevCmd = ""; // the one before it (the SLEEP-on-waking guard: two SLEEPs in a row means it)
 
@@ -5839,6 +5896,18 @@ function doCommand(input) {
     }
     const enc = G.pendingEnc;
     G.pendingEnc = null;
+    // Soft pitches (a peddler, a noodle girl, a freelancer, the booking app, the
+    // lost tourist) don't get to SPEND an unrelated command: a real verb that isn't
+    // an answer resolves the pitch as a decline AND runs (27-night playtest: five
+    // nights of QUESTS / BUY DRINK / TALK eaten as "no"). Hard encounters (police,
+    // the tonic shop, the curse ritual, the barfine games) keep the snap rule.
+    const softAnswer = _ENC_SOFT[enc];
+    if (softAnswer && !softAnswer.test(lower) && _isRealCommand(v)) {
+      _ENC[enc]("no");
+      _say("(The moment passed without an answer; you carried on.)", "dim");
+      doCommand(raw);
+      return;
+    }
     // a soft pitch (the rose seller) may decline to spend an unrelated command:
     // it lapses, and the command the player actually typed runs (playtest 2026-08-22:
     // "tip rung 100" became a wave-off and the tip never happened)
@@ -6114,6 +6183,16 @@ function doCommand(input) {
     // the gambler's vocabulary (2026-08-22): REMATCH / DOUBLE replay the last game
     // here; BET / WAGER <n> [ON <game>] is PLAY with a stake; stray shot-words
     // with no game on the table get a pointer instead of the conversation layer
+    case "swear": case "curse": case "insult": case "abuse": case "shout": case "yell": {
+      const at = arg ? _findNpc(arg) : null;
+      _say(at
+        ? `You say it. ${NPCS[at].name} hears the tone, not the words, and the room goes the particular ` +
+          "kind of quiet that costs money. Pattaya does not do shouting — it does consequences, later, quietly."
+        : "You let fly at the night in general. A piwin glances over, unimpressed; a hostess laughs, " +
+          "not at the joke. This town has heard better, louder, and from men who tipped more.", "alert");
+      if (at) _addHeat(1);
+      break;
+    }
     case "beg": case "panhandle": case "cadge": {
       // the broke man's most-typed verb (broke playtest 2026-08-22): voiced, and
       // pointed at the real ways back — never a handout

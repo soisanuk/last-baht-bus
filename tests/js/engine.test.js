@@ -5817,7 +5817,7 @@ test("violence is answered by the street, not the parser — and moves no state"
   assert.ok(!state().soc.heat.candy_bar, "flavor only — no heat");
   state().room = "buakhao_s";
   run("attack tout");
-  assert.match(lastOut(), /street polices itself/);
+  assert.match(lastOut(), /street polices itself|orders a water|The swing stays/); // a pool now (liability playtest 2026-08-22)
 });
 
 test("easter eggs: the hollow voice made it to Pattaya", () => {

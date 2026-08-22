@@ -252,7 +252,7 @@ function _maybeEncounter() {
         "power pole and takes up station directly in your weaving path, thumbs in " +
         "his belt. “You drink too much, my friend.” A statement, not a question. " +
         "“Have fine. Five hundred baht.”", "alert"],
-      ["(He has all night. You, visibly, do not.)", "dim"]);
+      ["(He has all night. You, visibly, do not. PAY the fine · WAI and apologise · or ARGUE.)", "dim"]);
     return;
   }
   if (G.turns - G.lastEnc < ENC_COOLDOWN) return;
@@ -452,6 +452,11 @@ const _ENC = {
   },
   selfbf(input) {
     const name = NPCS[G.selfBfId] ? NPCS[G.selfBfId].name : "She";
+    if (!/yes|yeah|sure|ok|of course|why not|please|no|not tonight|sorry|pass|later|maybe/.test(input)) {
+      // a tip, a drink, a walk: the offer lapses without a verdict and the command runs
+      _say(`${name} reads the moment going past — a small smile, no harm done — and lets it. The offer's still in the room if you want it.`, "dim");
+      return "passthrough";
+    }
     G.selfBfId = null;
     if (/yes|yeah|sure|ok|of course|why not|please/.test(input)) {
       _say(`${name} settles her own fee with the till — a professional formality, ` +
@@ -500,6 +505,13 @@ const _ENC = {
         "“Fine paid. No problem now. Sawatdee khrap.” The brown uniform strolls on, " +
         `scanning the crowd for the next swaying farang. (฿${G.money} left.)`, "alert");
       _addHappy(-2);
+    } else if (!/argue|no|refuse|won.t|what for|why|rubbish|bullshit|off|leave me|piss/.test(input)) {
+      // a direction, a LOOK, a stray verb: he doesn't take it as an argument — he waits
+      // (the liability playtest's "s" cost ฿1000 and −4 สนุก he never chose)
+      G.pendingEnc = "police";
+      _say("You try to step round him. He steps too — not fast, not rough, just there. " +
+        "“Fine first, my friend.” (PAY · WAI · or ARGUE.)", "alert");
+      return;
     } else {
       const f = Math.min(1000, G.money);
       G.money -= f;
@@ -652,6 +664,8 @@ const _ENC = {
       _say(`฿${price} settles it — no ledger, no mamasan, the commission all hers. ` +
         flavor + "She takes your arm; the promenade approves.", "win");
     }
+    // (the BOTH path's +7 is the threesome PREMIUM on top of the LT night's own
+    // conquest credit in _endNight — by design, not a double pay)
     _endNight("barfine");
   },
 

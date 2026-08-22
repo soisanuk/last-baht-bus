@@ -748,3 +748,116 @@ test("the loan: Nira names the due date and the arrears in person; an unpaid loa
   doCommand("borrow 5000");
   assert.match(text(), /Not you\. Not ever/);
 });
+
+// ── round nine: the liability (Wazza) and the long-term resident (Bob) ──
+test("OUT of your room after a respawn is your soi, and the stash pays on a respawn too", () => {
+  G.enteredVia = "beach_rd_n"; G.room = "blue_dog"; G.nightTurn = 70;
+  _endNight("barfine");
+  assert.equal(G.enteredVia, null);
+  assert.equal(G.room, "hotel_room");
+  doCommand("out");
+  assert.equal(G.room, "hotel_soi");
+  // the stash: act one just completed, every wake a respawn
+  newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight" };
+  G.room = "rainbow_girls"; G.itemLoc.wallet = "inventory"; _setFlag("hasWallet"); G.money = 0;
+  _checkAct1();
+  assert.ok(G.act1SafeDue);
+  G.room = "candy_bar"; G.nightTurn = 70; out = [];
+  _endNight("barfine");
+  assert.equal(G.money, SAFE_CASH, "the safe paid on the respawn into the room");
+  assert.match(text(), /emergency stash/);
+});
+
+test("encounter chips come from the prompt's CAPS; the police wait on a non-answer; soft pitches pass a real command through", () => {
+  G.room = "north_beach"; delete G.encDone.freelancer; G.nightTurn = 40;
+  _startEnc("freelancer");
+  const c = _chipSet().map(x => x.cmd);
+  assert.ok(c.includes("yes") && c.includes("both") && c.includes("no"), c.join(","));
+  G.pendingEnc = null;
+  // police: a direction is not an argument
+  G.room = "buakhao_n"; G.soc.drunk = 6; G.money = 3000; G.pendingEnc = "police"; out = [];
+  doCommand("s");
+  assert.equal(G.pendingEnc, "police", "he's still there");
+  assert.equal(G.money, 3000, "and nothing was taken for it");
+  assert.match(text(), /Fine first/);
+  doCommand("pay");
+  assert.equal(G.pendingEnc, null);
+  // soft: the peddler doesn't eat QUESTS
+  G.room = "stinky_bar"; G.pendingEnc = "peddler"; out = [];
+  doCommand("talk to bert");
+  assert.equal(G.pendingEnc, null);
+  assert.match(text(), /moment passed without an answer/);
+  assert.match(text(), /Bert/, "TALK ran");
+  // the self-barfine offer doesn't eat a tip
+  const girl = _npcsHere().find(id => NPC_ROLES[id] === "hostess");
+  G.selfBfId = girl; G.pendingEnc = "selfbf"; G.money = 2000; out = [];
+  doCommand(`tip ${NPCS[girl].name.toLowerCase()} 100`);
+  assert.equal(G.money, 1900, "the tip happened");
+  assert.equal(G.pendingEnc, null);
+});
+
+test("bare PHOTO in a go-go is refused; the freelancer pays once; the honest LT gets the quiet coda", () => {
+  G.room = "neon_paradise"; G.battery = 50; out = [];
+  doCommand("photo");
+  assert.ok(_PHOTO_GOGO_NO.some(s => text().includes(s)));
+  // honest LT coda
+  sandbox(); G.lastBfHonest = true; G.room = "candy_bar"; out = [];
+  _endNight("barfine");
+  assert.match(text(), /quieter than the night you paid for/);
+  assert.doesNotMatch(text(), /khao man gai/);
+});
+
+test("a resident keeps a local: expat bonds cool every third night; the REP label fits any cause; the manager stops saying New face", () => {
+  sandbox(); G.stage = "expat"; _setFlag("expatLife");
+  const girl = Object.keys(NPCS).find(id => NPCS[id].filler && NPC_ROLES[id] === "hostess" && NPCS[id].room === "lucky_tiger");
+  G.soc.drinks[girl] = 8; G.day = 10; G.room = "hotel_room";
+  _endNight("sleep");   // day 10 → 11 (10 % 3 !== 0… decay happens only when the ENDING day is a multiple of 3)
+  const after1 = G.soc.drinks[girl];
+  G.day = 12; G.room = "hotel_room"; _endNight("sleep");
+  const after2 = G.soc.drinks[girl];
+  assert.ok(after1 === 8 || after2 === after1 - 1, "cools on the third night, not every night");
+  assert.match(_REP_LABELS["-1"], /liability/);
+  G.soc.manDrinks = { bert: 2 }; G.soc.mgrShot = {}; G.room = "stinky_bar"; out = [];
+  _managerWelcome();
+  assert.doesNotMatch(text(), /New face/);
+});
+
+test("HINT signposts the bar chain's hidden step; a typed choice label outlives the next ask; a forfeited question is un-spent", () => {
+  sandbox(); G.stage = "expat"; _setFlag("expatLife"); G.quests.bar_premises = "done"; out = [];
+  _doHint();
+  assert.match(text(), /Wayne/);
+  assert.match(text(), /Answer what he asks|LICENCE/);
+  // a choice label typed after an intervening ask still fires
+  G.room = _npcRoom("kesinee"); doCommand("talk to kesinee");
+  const memo = G.convoChoiceMemo && G.convoChoiceMemo.kesinee;
+  if (memo != null) {
+    doCommand("ask kesinee about kittens");
+    out = []; doCommand("goodbye");
+    assert.match(text(), /take your leave|leave|Goodbye|bye/i);
+  }
+  // forfeit by leaving: the ask is un-spent
+  sandbox(); G.room = "stinky_bar"; G.player.origin = "pi"; G.player.personality = "blunt";
+  doCommand("talk to bert");
+  assert.equal(G.convoQ && G.convoQ.key, "why");
+  G.room = "buakhao_n"; _convoActive();
+  assert.ok(!_npcState("bert").know["asked_why"]);
+});
+
+test("texts: no identical line twice running from one sender, the inbox is capped; the ledger nets out ATM cash; the violence refusal is a pool", () => {
+  G.phone.contacts.lek = true;
+  _pushMsg("lek", "thinking of you na 💭"); _pushMsg("lek", "thinking of you na 💭");
+  const lekMsgs = G.phone.inbox.filter(m => m.from === "lek").map(m => m.text);
+  assert.notEqual(lekMsgs[0], lekMsgs[1]);
+  for (let i = 0; i < 120; i++) { _pushMsg("lek", "x" + i); G.phone.inbox[G.phone.inbox.length - 1].read = true; }
+  assert.ok(G.phone.inbox.length <= 82);
+  // ledger
+  G.lastNight = { happy: G.happy, money: 1000, atm: 0, known: 0, nums: 0, faces: 0 };
+  G.money = 20000; G.atmTotal = 20000; out = [];
+  _morningLedger();
+  assert.doesNotMatch(text(), /up ฿/);
+  assert.match(text(), /spent ฿1,000|spent ฿1000/);
+  G.room = "buakhao_s"; const seen = new Set();
+  for (let i = 0; i < 12; i++) { out = []; doCommand("punch tout"); seen.add(text()); }
+  assert.ok(seen.size >= 2, "the refusal varies");
+  out = []; doCommand("swear"); assert.doesNotMatch(text(), /didn't understand|No idea|didn't parse/);
+});

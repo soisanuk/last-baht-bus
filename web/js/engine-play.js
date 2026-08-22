@@ -477,7 +477,10 @@ function _managerWelcome() {
   G.soc.mgrShot[G.room] = true;
   G.soc.drunk++;
   _addHappy(1);
-  const pool = (NPCS[id].shot && NPCS[id].shot.length) ? NPCS[id].shot : _MGR_SHOT;
+  let pool = (NPCS[id].shot && NPCS[id].shot.length) ? NPCS[id].shot : _MGR_SHOT;
+  // "New face" on a fifth visit read as amnesia (27-night playtest 2026-08-22)
+  if ((G.soc.manDrinks && G.soc.manDrinks[id]) || (G.known && G.known[id])) pool = pool.filter(s => !/New face/.test(s));
+  if (!pool.length) pool = _MGR_SHOT.filter(s => !/New face/.test(s));
   _say(_fmt(_pickVary(pool, "mgrshot:" + id), { n: NPCS[id].name }) +
     " (Stand him a BUY MAN DRINK when you've been bending his ear.)", "win");
 }
@@ -984,6 +987,10 @@ const KP_FIELD = [
   ["Bank's cousin Gop", 0.55], ["Big Kev", 0.6], ["a silent Finn", 0.65],
   ["Daeng's nephew", 0.5], ["a piwin still in his vest", 0.6],
 ];
+const KP_FIELD_DARK = [ // the Darkside league has its own regulars (27-night playtest: the same five at Daeng's and the Stinky)
+  ["Daeng's nephew", 0.5], ["a retired Dutch dredger", 0.6], ["Mama Yai's husband", 0.55],
+  ["the Water Buffalo's Tuesday man", 0.65], ["a lad off the lake boats", 0.5],
+];
 
 function _leagueTonight() { return G.day % 3 === 0; }
 function _isBandNight() { return G.day % 7 === 5 || G.day % 7 === 6; } // Fri or Sat
@@ -1012,7 +1019,7 @@ function _startKiller() {
   const field = [];
   const used = new Set();
   while (field.length < 4) {
-    const i = Math.floor(_rand() * KP_FIELD.length);
+    const i = Math.floor(_rand() * (_room().region === "Darkside" ? KP_FIELD_DARK : KP_FIELD).length);
     if (!used.has(i)) { used.add(i); field.push(KP_FIELD[i]); }
   }
   const names = ["You", ...field.map(f => f[0])];
@@ -2922,6 +2929,7 @@ function _nightSnapshot() {
   G.lastNight = {
     happy: G.happy,
     money: G.money,
+    atm: G.atmTotal || 0,
     known: Object.keys(G.known || {}).length,
     nums: Object.keys(G.phone.contacts || {}).filter(id => G.phone.contacts[id] && NPC_ROLES[id]).length,
     faces: new Set((_photoList() || []).map(p => p.id)).size,
@@ -2935,7 +2943,8 @@ function _morningLedger() {
   const bits = [];
   const dh = G.happy - b.happy;
   if (dh) bits.push((dh > 0 ? "+" : "") + dh + " \u0e2a\u0e19\u0e38\u0e01");
-  const spent = b.money - G.money;
+  const drawn = (G.atmTotal || 0) - (b.atm || 0); // ATM cash isn't "income" (27-night playtest: "up ฿18,880")
+  const spent = b.money + drawn - G.money;
   if (spent > 0) bits.push("spent \u0e3f" + spent.toLocaleString());
   else if (spent < 0) bits.push("up \u0e3f" + (-spent).toLocaleString() + " on the night");
   const dk = Object.keys(G.known || {}).length - b.known;
@@ -3090,10 +3099,15 @@ function _endNight(reason) {
         "he accepts with the exact expression his employer used on the bill.", "dim");
       break;
     case "barfine":
-      _say("The rest is nobody's business but the soi's: a shared plate of khao " +
-        "man gai at 3 a.m., the beach road with nobody on it, laughing at " +
-        "nothing. What happens in Pattaya has already forgotten your name by " +
-        "morning, fondly.", "win");
+      _say(G.lastBfHonest
+        ? "The rest is quieter than the night you paid for: the fan, her breathing, the " +
+          "street going on without you. What happens in Pattaya has already forgotten your " +
+          "name by morning — not unkindly."
+        : "The rest is nobody's business but the soi's: a shared plate of khao " +
+          "man gai at 3 a.m., the beach road with nobody on it, laughing at " +
+          "nothing. What happens in Pattaya has already forgotten your name by " +
+          "morning, fondly.", "win");
+      G.lastBfHonest = false;
       if (_flag("act1Done") && G.stage !== "act1" && G.hotel === "sabai" && G.money >= 300) {
         G.money -= 300;
         _say("(Under the Sabai Palms' one working porch light, the night clerk " +
@@ -3200,7 +3214,10 @@ function _endNight(reason) {
   G.lastBfId = null;   // clear the LT-ending bond hook
   G.lastBfBase = 10;   // and its สนุก base (reality-LT drops it to 4 for one night)
   // bonds cool a notch a night; tend them or lose them — unless a loyal dog (Hachiko) holds them
-  if (_dogEgg() !== "loyal") for (const id in G.soc.drinks) _addBond(id, -1);
+  // a resident who comes by every few nights must be able to KEEP a local (27-night
+  // playtest 2026-08-22: both contacts strangers by day 35) — expat bonds cool a
+  // notch every third night, vacation bonds nightly as before
+  if (_dogEgg() !== "loyal" && (G.stage !== "expat" || G.day % 3 === 0)) for (const id in G.soc.drinks) _addBond(id, -1);
   G.soc.patronBusy = {};
   G.soc.patronMiffed = {};
   G.soc.apologized = {}; // a new shift will hear you out afresh
@@ -3237,6 +3254,7 @@ function _endNight(reason) {
     // …unless a soi dog is sitting on them. Nobody negotiates with Sai Krok.
   } else if (_flag("act1Done")) {
     G.room = _hotelRoomId(); G.battery = 100;
+    G.enteredVia = null; // a venue's door-memory must not send OUT of your room across town (liability playtest 2026-08-22)
   } else {
     G.room = "jomtien_beach"; G.battery = Math.max(G.battery, 20);
   }
@@ -3299,7 +3317,11 @@ function _endNight(reason) {
   if (typeof _barSettle === "function") _barSettle();  // your own bar's night, and the old man's month
   _stdMorningTick();                  // an untreated infection makes itself known each morning
   G.wakeTurn = G.turns;               // the SLEEP-on-waking guard reads this (engine-parser "sleep")
+  G.enteredVia = null;
   _describeRoom(true);
+  // the emergency stash is in the room safe — a player whose every wake is a
+  // barfine/blackout respawn never WALKED in, and the safe's own text claimed he had
+  if (G.act1SafeDue && typeof _roomSafeBeat === "function" && G.room === _hotelRoomId()) _roomSafeBeat();
   if (typeof _chamMorning === "function") _chamMorning(); // the barista's bus is at ten to eight (chameleon economy)
 }
 
@@ -3521,7 +3543,7 @@ function _goExpat() {
   _say("You don't board. It's remarkably little paperwork, in the end: a visa " +
     "run, a long-stay rate on room 412 negotiated over exactly one bottle of " +
     "Sang Som with the night clerk, and your savings wired over — " +
-    `฿${EXPAT_SAVINGS}, blinking on an ATM screen like a dare. The soi absorbs ` +
+    `฿${EXPAT_SAVINGS}, in your pocket by the time the clerk finishes his cigarette. The soi absorbs ` +
     "the news without comment. Candy just sets out your glass.", "win");
   _say("★ EXPAT MODE — no flights, no clock on the week. The city is yours to " +
     "figure out. (They say the smart ones end up owning a bar…) ★", "win");
