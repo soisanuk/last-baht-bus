@@ -24,11 +24,14 @@ your last call, under a one-line status header
 (`── [room · day · nightTurn · ฿ · สนุก · ENC/CHOICE/GAME flags] ──`). Batch
 5–15 commands per call, read the delta, decide in persona, repeat.
 
-**`--fresh` for a clean boot.** The daemon reuses one browser, so `start` can
-inherit a stale autosave from an earlier session (both round-three testers hit
-this — the game resumed mid-Act-One instead of the splash). Pass `--fresh` on
-`start` to wipe localStorage before the game boots, guaranteeing the splash →
-intro → opening flow. Omit it to deliberately exercise the continue-prompt /
+**`--fresh` for a clean boot.** State lives in the daemon's browser: a `stop` /
+`start` cycle always boots clean, but `start` against a daemon that is STILL
+RUNNING for the same `--dir` reconnects to it — and inherits whatever night it
+was in (both round-three testers hit this: the game resumed mid-Act-One
+instead of the splash). `start --fresh` covers both cases: a new daemon wipes
+localStorage once before the first boot; a live daemon is reset in place
+(storage wiped, page reloaded), so the splash → intro → opening flow is
+guaranteed either way. Omit it to deliberately exercise the continue-prompt /
 autosave path, which is itself worth testing.
 
 **The full game is gated on the splash** ("THE FULL GAME — Coming soon", button
@@ -53,9 +56,10 @@ the end, every entry is a finding) · `raw "<js>"` (escape hatch) · `stop`.
 The daemon holds one persistent headless browser. **State lives and dies with
 the daemon**: the browser context is in-memory, so localStorage (the autosave,
 `lbb_full_on`, font prefs) does NOT survive a `stop`/`start` cycle — a restart
-boots fresh. Within one daemon's lifetime the autosave persists across
-`navigate` reloads, which is how to flip a localStorage gate: set it via `raw`,
-then reload with `raw "location.reload()"` — do NOT stop/start for that.
+boots fresh. Within one daemon's lifetime the autosave persists across page
+reloads (`raw "location.reload()"` — there is no separate reload verb), which is
+how to flip a localStorage gate: set it via `raw`, then reload — do NOT
+stop/start for that.
 
 ## Token discipline (why this file exists)
 

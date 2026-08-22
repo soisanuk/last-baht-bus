@@ -180,6 +180,19 @@ if (verb === "serve") {
       const all = await page.evaluate(() => window.__ptLines || []);
       return { lines: all.slice(from || 0), total: all.length };
     },
+    // `start --fresh` against a LIVE daemon: wipe the page's storage and reload, so
+    // the documented "clean boot" holds whether or not a daemon already exists
+    // (harness review 2026-08-22: it used to print "daemon already running" and
+    // leave the stale session in place).
+    async fresh() {
+      await page.evaluate(() => { try { localStorage.clear(); sessionStorage.clear(); } catch (e) {} });
+      // keep the once-per-daemon wipe marker out of the way so the init script
+      // doesn't re-wipe on every later reload
+      await page.addInitScript(() => { try { sessionStorage.setItem("__ptFresh", "1"); } catch (e) {} });
+      await page.reload();
+      await page.waitForTimeout(800);
+      return { fresh: true };
+    },
     async stop() { setTimeout(() => process.exit(0), 200); return { bye: true }; },
   };
 
@@ -200,8 +213,20 @@ if (verb === "serve") {
   });
 } else if (verb === "start") {
   if (existsSync(portFile)) {
-    try { await call("state"); console.log("daemon already running"); process.exit(0); }
-    catch { rmSync(portFile); }
+    let live = false;
+    try { await call("state"); live = true; } catch { rmSync(portFile); }
+    if (live) {
+      if (args.includes("--fresh")) {
+        // a live daemon + --fresh = reset it in place (storage wiped, page reloaded)
+        await call("fresh");
+        writeFileSync(path.join(dir, "cursor"), "0");
+        console.log("daemon already running — reset to a clean boot (--fresh)");
+        console.log(await delta());
+      } else {
+        console.log("daemon already running (state kept; use `start --fresh` to reset it, or `stop` first)");
+      }
+      process.exit(0);
+    }
   }
   const child = spawn(process.execPath,
     [fileURLToPath(import.meta.url), "serve", "--dir", dir,
