@@ -7596,6 +7596,36 @@ test("the Act One reset carries identity and NOTHING conversational", () => {
   assert.equal(G.act1Tries, 1, "the attempt count survives (it unlocks HINT)");
 });
 
+test("GIVE reacts by item kind: food and condoms warm a working girl, once a night", () => {
+  // Design (2026-08-17): GIVE reacts to an item's `kind`, not a growing (item,npc)
+  // switch. Food = care on this soi (+bond); condoms = practical + funny (+bond);
+  // both once per girl per night; earmarked quest food still waves away safely.
+  startSoi6Mode(); G.flags.act1Done = true;
+  const room = Object.keys(ROOMS).find(r => ROOMS[r].barType &&
+    Object.keys(NPC_ROLES).some(x => NPC_ROLES[x] === "hostess" && _npcRoom(x) === r));
+  G.room = room;
+  const g = Object.keys(NPC_ROLES).find(x => NPC_ROLES[x] === "hostess" && _npcRoom(x) === room);
+  const nm = NPCS[g].name.toLowerCase();
+  // food: consumed, +1 bond
+  G.itemLoc.moo_ping = "inventory"; const b0 = G.soc.drinks[g] || 0;
+  out = []; run("give moo ping to " + nm);
+  assert.equal(G.itemLoc.moo_ping, null, "food not consumed on gift");
+  assert.equal((G.soc.drinks[g] || 0) - b0, 1, "food gift didn't warm her");
+  // second food same night: no extra bond (throttle)
+  G.itemLoc.noodles = "inventory"; const b1 = G.soc.drinks[g] || 0;
+  run("give noodles to " + nm);
+  assert.equal((G.soc.drinks[g] || 0) - b1, 0, "food fondness farmable within a night");
+  // condoms (a counter, not an item): taken, +1 bond, amusing
+  G.condoms = 5; const b2 = G.soc.drinks[g] || 0;
+  out = []; run("give condom to " + nm);
+  assert.ok(G.condoms < 5, "condoms not taken");
+  assert.equal((G.soc.drinks[g] || 0) - b2, 1, "condom gift didn't warm her");
+  // earmarked quest food (som_tam) to a non-target girl waves away, kept
+  G.itemLoc.som_tam = "inventory";
+  out = []; run("give som tam to " + nm);
+  assert.equal(G.itemLoc.som_tam, "inventory", "an earmarked quest bite was spent as a casual gift");
+});
+
 test("quest/clue items warn on drop and a dropped one surfaces in QUESTS", () => {
   // Design ask (2026-08-17): a set-down quest item shouldn't be a silent trap.
   startSoi6Mode(); G.flags.act1Done = true; G.stage = "vacation";

@@ -325,3 +325,31 @@ arrival. Write the man: someone who made peace by removing the part of himself
 that could be hurt, and calls that winning. Poignant, not triumphant — and it
 keeps the house rule that the game never grades the player's choices, because
 it is his conclusion in his voice, not the narrator's.
+
+## Item `kind` — the item-classification seam (started 2026-08-17)
+
+The GIVE verb was a growing hardcoded switch of `(item, npc)` special cases plus
+a generic wave. Rather than a new "object registry" (ITEMS in world.js already
+IS the registry), the extensible move is a lightweight **`kind` field** on ITEMS
+that systems react to by category. Live uses so far:
+
+- **`keepsafe: true`** — quest/clue items (wallet, tiffin, receipt, the delivery
+  items, the tokens). DROP warns + confirms and a dropped one surfaces in QUESTS
+  with its location; GIVE to the wrong person waves away safely.
+- **`kind: "food"`** (noodles, moo_ping) — GIVE to a working girl is accepted
+  warmly and warms her a notch (feeding is care on this soi — the som-tam canon),
+  once per girl per night (`G.soc.fed`). Keepsafe food (Duangjai's tiffin, the
+  Ploy som tam) is earmarked and skips this, so a quest bite can't be spent as a
+  casual gift.
+- **Condoms** are a `G.condoms` counter, not an ITEM — GIVE catches the words
+  directly: practical + funny to a working girl, +1 bond once/night
+  (`G.soc.gaveCondom`).
+
+**Where `kind` should grow next** (each currently does ad-hoc id/regex matching
+that a `kind` would clean up): the EAT path (`kind:"food"` is the natural gate),
+the saleng price/nutrition matcher (`_salengMatchItem`), EXAMINE scenery vs
+inventory, and any future "gift that raises bond" (flowers, jewellery → a
+`kind:"gift"` generalising the saleng-gift branch). Add a kind when a feature
+needs it; don't pre-classify speculatively. This is the same "promote an ad-hoc
+check to a first-class class" down-payment CLAUDE.md calls for on the
+reuse/2D/online axes.

@@ -3934,6 +3934,7 @@ const ITEMS = {
   noodles: {
     name: "packet of Mama noodles", aliases: ["mama", "noodles", "packet"],
     portable: true, location: "inventory",
+    kind: "food", // a hostess gladly accepts a bite — feeding is care (GIVE)
     desc: "Half a packet of Mama noodles, chicken flavour. Dry. Technically food. " +
       "A soi dog would commit crimes for this.",
   },
@@ -4079,6 +4080,7 @@ const ITEMS = {
   moo_ping: {
     name: "moo ping skewer", aliases: ["moo ping", "mooping", "skewer", "pork", "food"],
     portable: true, location: null, // pressed on you by a sentimental bargirl
+    kind: "food", // a hostess gladly accepts a bite — feeding is care (GIVE)
     desc: "A grilled pork skewer, still warm, glistening with the good marinade. " +
       "Technically dinner. A soi dog would trade its entire territory for this.",
   },

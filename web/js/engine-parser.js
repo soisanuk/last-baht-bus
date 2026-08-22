@@ -2602,6 +2602,16 @@ function _sayDirectedReact(key, id, name) {
   _addHappy(1);
 }
 
+const _GIVE_FOOD_LINES = [
+  (n, f) => `${n} lights up — "For me?? Aroi!" — and eats ${f} right there, sharing the last bite back to you off the fork. Feeding someone means something here, and she knows you know it.`,
+  (n, f) => `${n} takes ${f} with both hands and a small wai. "You think of me. Nobody buy the girl FOOD, only drink." She eats slowly, watching you, recalculating something.`,
+  (n, f) => `"You eat already? No? We share." ${n} splits ${f} in half without asking and pushes the bigger piece at you. The bar's oldest courtship, and the realest.`,
+];
+const _GIVE_CONDOM_LINES = [
+  (n, k) => `${n} looks at the ${k === 1 ? "one" : k} you're holding out, then bursts out laughing. "TILAC. So romantic!" She pockets ${k === 1 ? "it" : "them"} anyway — "Cannot have too many, this job" — and you're both grinning.`,
+  (n, k) => `${n} accepts the ${k === 1 ? "packet" : "packets"} with a mock-solemn nod and a wicked grin. "Practical man. Mama always say, marry the practical one." ${k === 1 ? "It goes" : "They go"} straight in her bag.`,
+  (n, k) => `"Ooh, gentleman!" ${n} palms ${k === 1 ? "it" : "them"} away smooth as a card trick, not embarrassed for a second — it's work kit, and thoughtful is thoughtful. "You save me a 7-Eleven trip, na."`,
+];
 const _GIVE_EMPTY_LINES = [
   n => `${n} looks at the empty bottle, then at you, then laughs. "For me? Aww. You keep — take to Auntie Nok, she give you five baht. Then you buy ME real drink, na."`,
   n => `${n} does not take the empty. "Tilac. Is empty. You want give me something, is a full one, or..." She taps the lady-drink menu and grins.`,
@@ -2622,6 +2632,20 @@ function _doGive(itemWord, npcWord) {
   }
   const npc = _findNpc(npcWord);
   if (!npc) { _say(_pickVary(_NOT_HERE, "nothere")); return; }
+  // Condoms are a pocket counter (G.condoms), not an ITEMS record — catch the
+  // give here. To a working girl it's practical AND funny (they're work kit);
+  // she takes a couple and warms a notch. Once per girl per night.
+  if (/\bcondoms?\b|\brubbers?\b|\bjohnn(?:y|ies)\b|\bprotection\b/.test(itemWord)) {
+    if (!NPC_ROLES[npc]) { _say(`${NPCS[npc].name} declines, with feeling.`); return; }
+    if (!G.condoms) { _say("You're out — nothing to hand over. (7-Eleven by the till.)"); return; }
+    const took = Math.min(G.condoms, 2);
+    G.condoms -= took;
+    const fed = (G.soc.gaveCondom = G.soc.gaveCondom || {});
+    let warmed = "";
+    if (!fed[npc]) { fed[npc] = true; _addBond(npc, 1); warmed = " She likes a man who thinks ahead."; }
+    _say(_pickVary(_GIVE_CONDOM_LINES, "givecondom")(NPCS[npc].name, took) + warmed);
+    return;
+  }
   // giving your empties to the vendor who buys them IS selling them — route any
   // bottle-ish give (incl. the natural plural "bottles", which the strict item
   // matcher below misses) straight to the sale, which handles the empty case
@@ -2734,6 +2758,18 @@ function _doGive(itemWord, npcWord) {
     _say(GIFT_TEXT[id][role], "win");
     _addHappy(1);
     _maybeSelfBarfine(npc);
+    return;
+  }
+  // Food, freely given to a working girl: she gladly takes it, and feeding
+  // someone is care on this soi (the som-tam-not-words canon) — a notch of
+  // fondness, once per girl per night. Keepsafe/earmarked food skips this and
+  // falls to the safe wave below, so a quest bite isn't spent as a gift.
+  if (ITEMS[id].kind === "food" && !ITEMS[id].keepsafe && NPC_ROLES[npc]) {
+    G.itemLoc[id] = null;
+    const fed = (G.soc.fed = G.soc.fed || {});
+    let warmed = "";
+    if (!fed[npc]) { fed[npc] = true; _addBond(npc, 1); warmed = " She won't forget it — small things count for more than drinks out here."; }
+    _say(_pickVary(_GIVE_FOOD_LINES, "givefood")(NPCS[npc].name, ITEMS[id].name) + warmed);
     return;
   }
   _traceCancel(); // she declined it — no "you gave" breadcrumb for a gift that bounced

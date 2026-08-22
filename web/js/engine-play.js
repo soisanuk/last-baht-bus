@@ -3075,6 +3075,8 @@ function _endNight(reason) {
   G.soc.mgrChat = {};  // and forgets last night's bar-leaning (manDrinks goodwill persists)
   G.lastBusWarned = false; // and the last-baht-bus heads-up fires once each night
   G.soc.greeted = {};  // a fresh night — she greets you anew
+  G.soc.fed = {};      // fed-a-girl fondness is once per girl per night
+  G.soc.gaveCondom = {}; // as is the (amusing) condom fondness
   G.lastBfId = null;   // clear the LT-ending bond hook
   G.lastBfBase = 10;   // and its สนุก base (reality-LT drops it to 4 for one night)
   // bonds cool a notch a night; tend them or lose them — unless a loyal dog (Hachiko) holds them
