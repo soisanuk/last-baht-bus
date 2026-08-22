@@ -760,7 +760,7 @@ const _READ_NOUNS = {
   // tap-list aliases went with the craft-beer bars that never existed there
   board: ["chalkboard", "blackboard", "clipboard", "slip", "request", "requests", "request sheet"],
   poster: ["flyer"],
-  photos: ["photo", "photograph", "photographs", "picture", "pictures", "wall of photos", "frame", "portrait"],
+  photos: ["photo", "photograph", "photographs", "picture", "pictures", "wall of photos", "portrait"],
   sign: ["notice", "placard", "arrows", "arrow", "signage"],
   jukebox: ["juke"],
   crane: ["cranes", "origami", "napkin", "napkins"],
@@ -1055,6 +1055,14 @@ const _NO_SUCH_THING = [
 ];
 
 const _SCENERY = [
+  { key: "bargame", m: /\bconnect ?4\b|\bconnect four\b|\bjackpot\b|\bdice box\b|\bshut the box\b|\bgame ?frame\b/, fn: () => {
+    // the room prose advertises "a Connect 4 frame and a Jackpot dice box" — give
+    // them a look rather than a dead-end (fiddler playtest 2026-08-22)
+    if (!_room().barType) return "Nothing to play here — that's a bar thing.";
+    return "The bar-games corner: a scuffed Connect 4 frame with the counters gone " +
+      "cloudy from a thousand hands, and a shut-the-box dice tray beside it. The house " +
+      "will happily take a small stake off you at either. (PLAY CONNECT 4 · PLAY JACKPOT.)";
+  } },
   { key: "me", m: /\b(me|myself|my ?self|my body)\b/, fn: () => {
     const base = _pickVary([
       "Sunburn on the tops of your feet in the shape of your sandals, a shirt that was fresh " +
@@ -5576,13 +5584,21 @@ function doCommand(input) {
       break;
     }
     case "give": case "hand": case "deliver": {
-      // "to" is stripped from arg by the filler filter, so the shape is
-      // "<item words> <person>" — last word is the recipient, and _doGive's
-      // _findNpc validates it. (This used to be a hardcoded name whitelist that
-      // silently broke GIVE for every newly added NPC — never again.)
-      const gw = arg.split(" ");
-      if (gw.length >= 2) _doGive(gw.slice(0, -1).join(" ").trim(), gw[gw.length - 1]);
-      else _say("Give what to whom? (GIVE <thing> TO <person>)");
+      // "to" is stripped by the filler filter, so the shape is "<item> <person>".
+      // Recipients can be TWO words (Auntie Nok, Madam Oy), so a last-word-only
+      // split mangled the item ("give receipt to auntie nok" -> item "receipt
+      // auntie") and reported a false "not carrying" (fiddler playtest 2026-08-22).
+      // Match the recipient GREEDILY from the end: the longest trailing run that
+      // resolves to an NPC/patron wins; the rest is the item.
+      const gw = arg.split(" ").filter(Boolean);
+      if (gw.length < 2) { _say("Give what to whom? (GIVE <thing> TO <person>)"); break; }
+      let split = gw.length - 1; // fallback: last word is the recipient
+      for (let k = Math.min(3, gw.length - 1); k >= 1; k--) {
+        const cand = gw.slice(gw.length - k).join(" ");
+        if (_findNpc(cand) || (typeof _findPatron === "function" && _findPatron(cand)) ||
+            /^(dog|sai|krok)$/.test(cand)) { split = gw.length - k; break; }
+      }
+      _doGive(gw.slice(0, split).join(" ").trim(), gw.slice(split).join(" ").trim());
       break;
     }
     case "sell": _doSellBottles(); break;

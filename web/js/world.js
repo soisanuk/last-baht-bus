@@ -3921,6 +3921,7 @@ const ITEMS = {
   phone: {
     name: "phone", aliases: ["mobile", "flashlight", "torch", "light"],
     portable: true, location: "inventory",
+    keepsafe: true, // every system rides the phone — DROP warns, and a dropped one shows in QUESTS
     desc: "Your phone. Battery anxiety made object. The flashlight works — for now.",
   },
   receipt: {
@@ -4707,6 +4708,32 @@ const NPCS = {
       { topic: "money", text: "\"I make less than the go-go girl, sure.\" A comfortable shrug. \"But I sleep at " +
         "night, I don't do the games, nobody scam nobody. Slow money, clean money. I send home a little less, I " +
         "keep my—\" she taps her chest \"—this. Fair trade, for me.\"" },
+      // Courtship arc (playtest 2026-08-22: the flagship Soi-6 beer-bar girl had
+      // fewer personal topics than a filler hostess). Bond-gated, in her calm,
+      // no-hustle register — the deeper "home" node (bond 2) is ordered before the
+      // shallower one so first-match warms with the relationship.
+      { topic: "name", text: "\"Pukky? Is a nickname — everybody Thai have one, the real name too " +
+        "formal for every day.\" A small smile. \"Mean nothing special. Chubby baby, my mother say. " +
+        "I was not chubby long, but the name stay. You? What they call you when you were small?\"",
+        short: "\"Pukky's just a baby nickname — 'chubby'. It stuck. What did they call YOU small?\"" },
+      { topic: "family", bond: 1,
+        text: "\"Ubon, out east — Isan, rice country. My mother, my two sister, all still there.\" She says " +
+          "it easily, no sad music on it. \"I send home every month, is normal. My sister at university now — " +
+          "first one in the family. That is me, that money. I am quite proud, actually.\"",
+        short: "\"Ubon, Isan — mother and two sisters. I put my sister through university. Proud of that.\"" },
+      { topic: "home", bond: 2,
+        text: "\"You want the true one? Okay.\" She sets the bar rag down, which she does not do for small talk. " +
+          "\"I was married. Thai man, Ubon. Good for two year, then the drink, then the other thing.\" A flat, " +
+          "unbitter beat. \"No children — lucky, everybody say, and they are right, but it did not feel lucky " +
+          "then. I come Pattaya to start over, not to find a farang. That part—\" a glance at you, wry \"—that " +
+          "part was not the plan. Still deciding if it is a good surprise.\"",
+        short: "\"The true one: I was married in Ubon. It ended badly. I came here to start over, not to find a farang — you weren't the plan.\"" },
+      { topic: "plan",
+        text: "\"Plan is no big plan, and that is the plan.\" She laughs at her own line. \"Little money saved, " +
+          "little bar of my own one day maybe — not a farang bar, a Thai one, for the workers, cheap and clean. " +
+          "Or maybe I go home when my sister finish school and she look after ME for a change. Either is fine. I " +
+          "am not in a hurry, you notice this about me yet.\"",
+        short: "\"No big plan — a little Thai bar of my own maybe, or home when my sister graduates. I'm not in a hurry.\"" },
     ],
   },
   // Somo (Front Row, beer) — the tomboy: football, no makeup, one of the lads. No romance

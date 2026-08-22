@@ -1131,19 +1131,24 @@ function _doComplain() {
     inc.kind === "wsparty" ? "the three-girl Walking Street benefit night" :
     "the lady-time reveal, timed to the second the fine hit the ledger";
   if (strikes >= 2) {
+    const purse = inc.fine > 0
+      ? "counting your refund out of her OWN purse note by note"
+      : "wai-ing an apology she clearly means — there was no fine to give back, she'd waived it herself";
+    const tail = inc.fine > 0 ? `(฿${inc.fine} back — ฿${G.money}.)`
+      : "(No baht to refund — she'd squared the fine herself — but the second strike is on the record now.)";
     _say(`You lay it out — ${detail}. ${mn}'s face does not change, which is how ` +
       `you know it's serious. One syllable across the room and ${gn} is standing ` +
-      "in front of you, wai-ing low, counting your refund out of her OWN purse " +
-      `note by note while the whole bar studies its drinks. “Second time,” ${mn} ` +
-      "says to nobody in particular, in English, so it travels. The girls near " +
-      `the door make space around ${gn} the way people do around someone whose ` +
-      `stool is already empty. (฿${inc.fine} back — ฿${G.money}.)`, "win");
+      `in front of you, ${purse}, while the whole bar studies its drinks. “Second ` +
+      `time,” ${mn} says to nobody in particular, in English, so it travels. The ` +
+      `girls near the door make space around ${gn} the way people do around someone ` +
+      `whose stool is already empty. ${tail}`, "win");
   } else {
+    const line = inc.fine > 0
+      ? `The refund appears from the till without ceremony. “Not morality, tilac. Business.” (฿${inc.fine} back — ฿${G.money}.)`
+      : "There's nothing in the till to give back — you never paid, she'd waived the fine — but the note goes in the book all the same. “Not morality, tilac. Business.” (No baht changed hands; the wrong is logged.)";
     _say(`You lay it out — ${detail}. ${mn} listens with the stillness of a ` +
       "woman doing damage arithmetic: one unhappy farang tells ten, and “bad " +
-      "girls” talk empties a bar faster than a raid. The refund appears from " +
-      `the till without ceremony. “Not morality, tilac. Business.” (฿${inc.fine} ` +
-      `back — ฿${G.money}.)`, "win");
+      `girls” talk empties a bar faster than a raid. ${line}`, "win");
   }
   const rel = _npcsHere().find(n => n !== inc.id && NPC_ROLES[n] === "hostess" &&
     (POPULAR_GIRLS.includes(n) || NPCS[n].c4 === 2));

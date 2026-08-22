@@ -2894,6 +2894,58 @@ function _nightDebrief(reason) {
   _say("Next time: " + d.next, "dim");
 }
 
+const _SCAM_RUNNER = [
+  gn => "Dinner is lovely. She is lovely. Then, over the last of the khao " +
+    `man gai, her phone lights up and ${gn}'s whole face changes: “Mama! ` +
+    "Emergency! My friend—” The story arrives pre-assembled and she with " +
+    "it, already standing, already sorry, already gone. Much later you " +
+    "hear — the soi always tells you eventually — that she was back on " +
+    "her stool inside the hour. Or maybe it was Beach Road.",
+  gn => `${gn} is warm all the way to the room door, and then the phone rings — ` +
+    "it always rings — and it is always the sister, the landlord, the baby, the " +
+    "bike. “Five minute, tilac, I come back, promise promise.” The five minutes " +
+    "are the last you will see of her. The taxi she takes is one you paid for.",
+  gn => "Somewhere between the second beer and the key card, the emergency lands: " +
+    `${gn} reads the screen, stricken, and is already gathering her things. It is ` +
+    "flawless work — you find yourself comforting HER on the way out — and it is " +
+    "only on the walk home, alone, that the timing starts to look rehearsed. It was.",
+  gn => `${gn} excuses herself to the bathroom with her handbag, which is the tell ` +
+    "you will learn to read by next trip. A polite wait, then a longer one, then the " +
+    "cashier's careful non-eye-contact that tells you the bathroom has a second door " +
+    "and she has known where it is for years.",
+];
+const _SCAM_MAO = [
+  gn => `${gn} matches you drink for drink all night, glorious company, ` +
+    "right up until the room door closes and she becomes, instantly and " +
+    "completely, the drunkest woman in Thailand. “Mao mak mak, tilac. " +
+    "Cannot boom boom.” She is asleep in seconds, diagonal, snoring " +
+    "delicately. At dawn she is gone with the light, fresh as laundry.",
+  gn => `The moment the door shuts, ${gn}'s careful sway becomes a full list to ` +
+    "port. “So sleepy, tilac, sorry sorry.” She is horizontal and unconscious " +
+    "before you have your shoes off, a masterclass in a woman who has done this " +
+    "exactly as many times as it took to perfect. You sleep beside a stranger and " +
+    "wake beside nobody.",
+  gn => `${gn} orders one more “for the room” on the way up and drinks yours too, ` +
+    "and by the time the aircon kicks in she is a dead weight of giggles and then " +
+    "just dead weight. “Tomorrow, na. Tomorrow for sure.” Tomorrow does not, in the " +
+    "event, come.",
+];
+const _SCAM_LEAVE = [
+  gn => "The main event is everything advertised. Then, before the ceiling " +
+    `fan has finished its applause, ${gn} is up, dressed, and kissing ` +
+    "your cheek: “I go back bar, na? Mama need me.” Some men mind. " +
+    "Standing in the doorway watching her go, you decide — mostly — not " +
+    "to be one of them.",
+  gn => `Afterward ${gn} is already reaching for her dress, phone in the other ` +
+    "hand, thumbs going. “Busy night, tilac — mama text me twice.” A kiss aimed " +
+    "roughly at your cheek and she is gone before the tab has cooled, back to the " +
+    "rail where the night is still selling.",
+  gn => `${gn} stays exactly as long as the arithmetic requires and not one minute ` +
+    "more — a warm, brisk, entirely professional goodbye, and the door clicks, and " +
+    "the room is suddenly very quiet and very much yours alone. You paid for the " +
+    "long time. You got the short one. Nobody lied; nobody quite told the truth either.",
+];
+
 function _endNight(reason) {
   // Idempotency: a mid-command multi-tick (WAIT through dawn) or a collapse on the
   // last night could re-enter here after the week's already ended — don't run the
@@ -2978,26 +3030,13 @@ function _endNight(reason) {
       const inc = G.bfIncident || { kind: "runner", room: G.room, id: null };
       const gn = inc.id ? NPCS[inc.id].name : "She";
       if (inc.kind === "runner") {
-        _say("Dinner is lovely. She is lovely. Then, over the last of the khao " +
-          `man gai, her phone lights up and ${gn}'s whole face changes: “Mama! ` +
-          "Emergency! My friend—” The story arrives pre-assembled and she with " +
-          "it, already standing, already sorry, already gone. Much later you " +
-          "hear — the soi always tells you eventually — that she was back on " +
-          "her stool inside the hour. Or maybe it was Beach Road.", "alert");
+        _say(_pickVary(_SCAM_RUNNER, "scamRunner")(gn), "alert");
         _addHappy(2);
       } else if (inc.kind === "mao") {
-        _say(`${gn} matches you drink for drink all night, glorious company, ` +
-          "right up until the room door closes and she becomes, instantly and " +
-          "completely, the drunkest woman in Thailand. “Mao mak mak, tilac. " +
-          "Cannot boom boom.” She is asleep in seconds, diagonal, snoring " +
-          "delicately. At dawn she is gone with the light, fresh as laundry.", "alert");
+        _say(_pickVary(_SCAM_MAO, "scamMao")(gn), "alert");
         _addHappy(3);
       } else { // leaveAfter
-        _say("The main event is everything advertised. Then, before the ceiling " +
-          `fan has finished its applause, ${gn} is up, dressed, and kissing ` +
-          "your cheek: “I go back bar, na? Mama need me.” Some men mind. " +
-          "Standing in the doorway watching her go, you decide — mostly — not " +
-          "to be one of them.", "dim");
+        _say(_pickVary(_SCAM_LEAVE, "scamLeave")(gn), "dim");
         _addHappy(6);
       }
       if (inc.room && inc.kind !== "leaveAfter") {

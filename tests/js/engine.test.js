@@ -4612,9 +4612,11 @@ test("the open contract: an operator inflates it, an honest girl writes it fair"
 });
 
 test("the LT games: runner, mao, leaveAfter — prose, incident, reduced สนุก", () => {
-  const kinds = [[2, "runner", /back on her stool|Beach Road/i],
-    [5, "mao", /mao mak mak/i], [8, "leaveAfter", /I go back bar/i]];
-  for (const [seed, kind, rx] of kinds) {
+  // scam prose is POOLED (per the house rule) — assert the printed line is one of
+  // the kind's pool variants, not a single fixed string (playtest 2026-08-22 found
+  // the old fixed strings repeating verbatim). Pools: _SCAM_RUNNER/_MAO/_LEAVE.
+  const pools = { runner: _SCAM_RUNNER, mao: _SCAM_MAO, leaveAfter: _SCAM_LEAVE };
+  for (const [seed, kind] of [[2, "runner"], [5, "mao"], [8, "leaveAfter"]]) {
     newGame(); state().lastSaleng = 99999;
     state().flags.act1Done = true; state().flags.hasWallet = true;
     state().room = "candy_bar"; state().money = 5000; state().nightTurn = 40;
@@ -4623,7 +4625,9 @@ test("the LT games: runner, mao, leaveAfter — prose, incident, reduced สน�
     state().rng = seed;
     out = [];
     _bfResolve("lt");
-    assert.match(lastOut(), rx, kind);
+    const gn = NPCS.bua.name;
+    assert.ok(pools[kind].some(f => lastOut().includes(f(gn))),
+      kind + " prose didn't come from its pool");
     assert.equal(state().bfIncident && state().bfIncident.kind, kind);
     assert.equal(state().day, 3, kind + " still ends the night");
     if (kind !== "leaveAfter") assert.match(lastOut(), /COMPLAIN at Candy Bar/i);
