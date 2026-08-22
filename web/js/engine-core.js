@@ -214,6 +214,8 @@ function newGame() {
     itemLoc: Object.fromEntries(
       Object.entries(ITEMS).map(([id, it]) => [id, it.location])),
     dropped: {},         // keepsafe item ids the player DROPPED (vs spawned) — QUESTS surfaces these
+    flowerDay: 0,        // day the flower-seller last worked you (once/night)
+    flowerFor: null,     // who the offered rose is for
     safeTries: 0,
     pendingFare: null,   // { kind:"bus"|"moto", price, dest } awaiting `pay`
     pendingBf: null,     // { id, st, lt, room } — barfine negotiation awaiting ST/LT/NO
@@ -1430,6 +1432,7 @@ function _tick() {
   // it parks at the bar for a while, the girls swarm it, and the player may buy
   // any time before it moves on. All of that lives in _salengTick (encounters).
   _salengTick();
+  if (typeof _flowerTick === "function") _flowerTick(); // open-air-bar flower seller (once/night, when courting a girl)
   _closingTick(); // midnight: gents/Soi 6/Darkside give last call, then bolt or shutter
   // Quiz capture was only checked on ARRIVAL, so the obvious punter move —
   // settle in early with a pint — missed the quiz entirely even after TIME

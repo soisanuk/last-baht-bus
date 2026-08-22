@@ -7596,6 +7596,32 @@ test("the Act One reset carries identity and NOTHING conversational", () => {
   assert.equal(G.act1Tries, 1, "the attempt count survives (it unlocks HINT)");
 });
 
+test("the flower seller works open-air bars only, and the rose gifts your date", () => {
+  startSoi6Mode(); G.flags.act1Done = true; G.stage = "vacation";
+  const beerRoom = Object.keys(ROOMS).find(r => ROOMS[r].barType === "beer" &&
+    Object.keys(NPC_ROLES).some(x => NPC_ROLES[x] === "hostess" && _npcRoom(x) === r));
+  const g = Object.keys(NPC_ROLES).find(x => NPC_ROLES[x] === "hostess" && _npcRoom(x) === beerRoom);
+  G.room = beerRoom; G.convo = g; G.soc.drinks = { [g]: 2 }; G.money = 5000;
+  // it fires when you're courting a girl at an open-air bar
+  let fired = false;
+  for (let i = 0; i < 300 && !fired; i++) { G.flowerDay = 0; G.pendingEnc = null; _flowerTick(); if (G.pendingEnc === "flower") fired = true; }
+  assert.ok(fired, "the flower seller never came to an open-air bar");
+  const bond0 = G.soc.drinks[g];
+  out = []; run("buy rose");
+  assert.equal(G.itemLoc.rose, null, "the rose wasn't given (should be consumed to her)");
+  assert.ok(G.soc.drinks[g] > bond0, "the gifted rose didn't warm her");
+  // it does NOT work in an enclosed go-go
+  const gogo = Object.keys(ROOMS).find(r => ROOMS[r].barType === "gogo" &&
+    Object.keys(NPC_ROLES).some(x => NPC_ROLES[x] === "hostess" && _npcRoom(x) === r));
+  if (gogo) {
+    const g2 = Object.keys(NPC_ROLES).find(x => NPC_ROLES[x] === "hostess" && _npcRoom(x) === gogo);
+    G.room = gogo; G.convo = g2; G.soc.drinks = { [g2]: 2 };
+    let f2 = false;
+    for (let i = 0; i < 300; i++) { G.flowerDay = 0; G.pendingEnc = null; _flowerTick(); if (G.pendingEnc === "flower") f2 = true; }
+    assert.ok(!f2, "the flower seller wrongly worked an enclosed go-go");
+  }
+});
+
 test("GIVE reacts by item kind: food and condoms warm a working girl, once a night", () => {
   // Design (2026-08-17): GIVE reacts to an item's `kind`, not a growing (item,npc)
   // switch. Food = care on this soi (+bond); condoms = practical + funny (+bond);

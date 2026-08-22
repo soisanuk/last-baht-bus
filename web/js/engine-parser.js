@@ -2731,6 +2731,15 @@ function _doGive(itemWord, npcWord) {
     _addBond(npc, 1);
     const name = NPCS[npc].name;
     const GIFT_TEXT = {
+      rose: {
+        hostess: `${name} takes the rose and does the math on it instantly — cheap flower, ` +
+          `kid's bucket, bought on the spot — and it lands anyway, because you thought to. ` +
+          `She tucks it behind her ear and leaves it there the rest of the night. "Farang ` +
+          `romantic," she says, like it's a diagnosis she doesn't mind.`,
+        mamasan: `${name} accepts the rose with a raised eyebrow and a slow smile — she has ` +
+          `been given every gesture this soi has, twice, and still gives you points for the ` +
+          `flower. It goes in the little vase by the till, where the good ones go.`,
+      },
       saleng_sandals: {
         hostess: `${name} opens the bag, holds up one sandal, turns it sole-up, and grins. ` +
           `She tries them on right here. They fit. She gives you a look that says she's ` +

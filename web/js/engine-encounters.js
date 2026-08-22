@@ -138,6 +138,36 @@ function _salengMatchItem(input) {
 
 // Called once per _tick: retire an expired cart, let the girls play with a live
 // one (~20%), or roll a new cart up to the bar the player is in.
+// The flower seller and her daughter — a real open-air-bar fixture, not a street
+// encounter (so it rides its own tick, like the saleng cart, not _maybeEncounter).
+// She works you only when you're plainly sitting WITH a girl you've been buying
+// for, at an open-front bar (never an enclosed go-go/gents/cabaret), and the kid
+// offers a rose to give to whoever you're talking to. Once per night.
+function _flowerTick() {
+  if (!G || G.over || G.pendingEnc || G.game || G.pendingChoice) return;
+  if (!_flag("act1Done")) return;                 // sandbox flavour, not the wallet night
+  if (!_inBar()) return;
+  const open = _room().barType === "beer" || G.room === "lake_bar"; // open-front only
+  if (!open) return;
+  const partner = typeof _convoActive === "function" && _convoActive();
+  if (!partner || !NPC_ROLES[partner]) return;    // must be sitting with a working girl/ladyboy
+  if (!(G.soc.drinks && G.soc.drinks[partner] > 0)) return; // and actually courting her
+  if (G.flowerDay === G.day) return;              // once a night
+  if (_rand() >= 0.12) return;
+  G.flowerDay = G.day;
+  G.flowerFor = partner;
+  G.pendingEnc = "flower";
+  const her = NPCS[partner].name;
+  _encPrompt(
+    ["A woman drifts up to the rail with a plastic bucket of roses and, half-hidden " +
+      "in her skirt, a girl of maybe seven, sleepy-eyed, clutching a single wrapped " +
+      `bloom in both hands. The mother says nothing; she doesn't have to. The child ` +
+      `holds the rose up toward you, then tips her head at ${her}, then back at you — ` +
+      `the whole pitch, no words, rehearsed a thousand times. ` +
+      (typeof thaiBaht === "function" ? thaiBaht(ROSE_PRICE) : "฿" + ROSE_PRICE) + `.`, "alert"],
+    [`(BUY the rose for ${her} · or wave them gently on.)`, "dim"]);
+}
+
 function _salengTick() {
   if (!G) return;
   if (G.offstage) return; // you're away (e.g. off on a short-time) — the bar's cart isn't your scene right now
@@ -385,6 +415,35 @@ const _NOODLE_BOP = [
 ];
 
 const _ENC = {
+  flower(input) {
+    const id = G.flowerFor; G.flowerFor = null;
+    const her = (id && NPCS[id] && NPCS[id].name) || "her";
+    if (/buy|yes|rose|flower|sure|ok|please|one|for/.test(input) && !/no|wave|leave|later|pass/.test(input)) {
+      if (G.money < ROSE_PRICE) {
+        _say(`You pat your pockets and come up short of even ${ROSE_PRICE} baht. The mother ` +
+          "reads it in a glance — no judgement, she's seen every wallet — gathers the child " +
+          "and drifts to the next bar. The kid looks back once.");
+        return;
+      }
+      G.money -= ROSE_PRICE;
+      _say(`The child's whole face changes — a real grin, not a pitch — as the ${ROSE_PRICE} baht ` +
+        "goes to her mother and the rose comes to you. Mother wais, and they move off down the " +
+        "rail already working the next stool.", "win");
+      // route through the gift system so bond + the rose's own prose fire, and it's
+      // consumed as given (kind:"gift"); she's present, so _doGive resolves her
+      if (id && _npcsHere && _npcsHere().includes(id)) {
+        G.itemLoc.rose = "inventory";
+        _doGive("rose", NPCS[id].name.toLowerCase());
+      } else {
+        G.itemLoc.rose = "inventory";
+        _say("(You're holding the rose — GIVE ROSE TO <someone> when the moment's right.)", "dim");
+      }
+      return;
+    }
+    _say(`You lift a palm — not tonight. The mother nods, unoffended, but the little girl gives ` +
+      `you the practised, devastating disappointed face she has clearly been coached on before ` +
+      `steering her to the next bar. You are, briefly, the villain of a seven-year-old's evening.`);
+  },
   selfbf(input) {
     const name = NPCS[G.selfBfId] ? NPCS[G.selfBfId].name : "She";
     G.selfBfId = null;

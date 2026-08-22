@@ -16,6 +16,7 @@ const LADY_DRINK = 150;  // canon
 const BEER_PRICE = 80;   // your own big Chang, bar price
 const BELL_PRICE = 300;  // ring it and the round is on you
 const BRA_PRICE = 200;   // the mamasan's drawer novelty; makes fondling "interesting"
+const ROSE_PRICE = 100;  // the flower-seller's daughter's single rose (a gift for whoever you're with)
 const CORD_PRICE = 20;   // black nylon off a 7-Eleven counter; what an amulet hangs on
 const TAXI_DEBT = 12000; // what Nira is owed in the cousin's name — see QUESTS.taxi_debt
 const BAND_ROUND = 400;  // buying the band a round (≈ bell to the mama; girls prefer the real bell)
@@ -4085,6 +4086,14 @@ const ITEMS = {
     kind: "food", // a hostess gladly accepts a bite — feeding is care (GIVE)
     desc: "A grilled pork skewer, still warm, glistening with the good marinade. " +
       "Technically dinner. A soi dog would trade its entire territory for this.",
+  },
+  rose: {
+    name: "a single red rose", aliases: ["rose", "flower", "red rose"],
+    portable: true, location: null, // from the flower-seller's daughter (flower encounter)
+    kind: "gift", // meant for whoever you're sitting with
+    desc: "A single red rose, cellophane-wrapped, one leaf browning — carried bar to " +
+      "bar in a plastic bucket by a kid who should be asleep. It costs almost nothing " +
+      "and means more than its price to the right person.",
   },
   hair_tonic: {
     name: "bottle of hair tonic", aliases: ["tonic", "hair tonic", "bottle of tonic"],
