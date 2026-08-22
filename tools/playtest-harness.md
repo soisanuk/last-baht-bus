@@ -31,6 +31,18 @@ this — the game resumed mid-Act-One instead of the splash). Pass `--fresh` on
 intro → opening flow. Omit it to deliberately exercise the continue-prompt /
 autosave path, which is itself worth testing.
 
+**The full game is gated on the splash** ("THE FULL GAME — Coming soon", button
+disabled). To play it, type the hidden toggle as a command once — `cmd --dir $D
+"toggle full"` — then restart the game from the splash (RESET, or `raw
+"location.reload()"`); the button is live from then on for the daemon's life.
+`--fresh` wipes localStorage once per daemon (not on every reload), so the
+toggle survives the reload that applies it.
+
+**Where ask-topics live:** NOT on the flyout wheel (it carries verbs only). TALK
+TO <name> opens the conversation and the topic list appears on the **chip bar** —
+read it with `state` (the `chips` array). Typed `ask <name> about <topic>` works
+for any topic, listed or not; a miss now gets a voiced "not my story" line.
+
 Verbs: `cmd <inputs...>` (typed through the real input) · `tap <text>` (chip /
 decorated keyword / any button) · `wheel <word> [n]` (right-click flyout: list
 actions, or pick the nth) · `fab bell|msg|font|mute|n|s|e|w|in|light` ·

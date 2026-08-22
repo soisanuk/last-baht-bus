@@ -596,6 +596,14 @@ function _doEnter(arg) {
 }
 
 function _doSafe(num) {
+  if (_isHotelRoom(G.room)) {
+    _say(_flag("act1Done")
+      ? "Your own room safe, the size of a shoebox: passport, the spare card, a folded " +
+        "receipt. The emergency stash went into your pocket the night you finally got " +
+        "home, and nothing in here has been worth a keypad since."
+      : "A hotel room safe, the size of a shoebox. Not yours yet — nothing in this room is, until you've got your wallet back.");
+    return;
+  }
   if (G.room !== "oy_office") { _say("There's no keypad here."); return; }
   if (_flag("hasWallet")) { _say("The safe hangs open and empty. You've pushed your luck far enough."); return; }
   if (num === SAFE_PIN) {
@@ -791,7 +799,8 @@ const _READ_NOUNS = {
   dragon: ["gold dragon"],
   blender: [],
   jar: ["jars", "tip jar", "mason jars"],
-  wheel: ["ship's wheel", "ships wheel", "barometer", "floats"],
+  wheel: ["ship's wheel", "ships wheel", "floats"], // barometer got its own Anchor entry (playtest 2026-08-22)
+  barometer: ["glass", "brass barometer"],
   horseshoe: ["horseshoes", "clover", "clovers"],
   bullseye: ["bulls-eye", "bulls eye"],
   trophies: ["trophy", "trophy shelf"],
@@ -2148,6 +2157,13 @@ function _doTalkBody(arg, topic) {
     const a = _resolveActor(arg, _addressable());
     if (a) { if (PATRONS[a]) { _patronTalk(a, topic); return; } arg = a; }
   }
+  if (!arg) {
+    // bare TALK with nobody in play: name the room, don't shrug "nobody by that name"
+    const here = [..._npcsHere().map(n => _npcLabel(n)), ..._patronsHere().map(p => PATRONS[p].name)];
+    _say(here.length ? "Talk to whom? Here: " + here.join(", ") + "."
+      : "Nobody here to talk to but yourself, and you've heard all that before.");
+    return;
+  }
   const npc = _findNpc(arg);
   if (!npc) {
     // The Orchid Room's corner-table untouchables: described, never approachable.
@@ -2203,6 +2219,13 @@ function _doTalkBody(arg, topic) {
   if (!d) {
     _say(topic ? `${NPCS[npc].name} doesn't have much to say about that.` :
       `${NPCS[npc].name} smiles politely.`);
+    return;
+  }
+  // A topic that found no node: say so in her voice. Falling through to the
+  // greeting spent its repeat path on a question never asked (playtests 2026-08-22).
+  if (topic && !d.topic && (G.talked[npc] || []).includes(NPCS[npc].dialogue.indexOf(d))) {
+    _say(_topicMiss(npc));
+    _questOffer(npc);
     return;
   }
   _deliver(npc, d);
@@ -2436,6 +2459,7 @@ function _convoResolve(lower) {
     const reps = _askReplies(G.convoQ.key);
     if (reps.length && /^[1-9]$/.test(bare)) {
       if (reps[+bare - 1]) return _convoAnswer(reps[+bare - 1]);
+      G.convoQ.shown = false; // a misfire earns the cue again
       _convoPrompt(G.convoQ.id);
       return true;
     }
@@ -2495,6 +2519,10 @@ function _convoPrompt(id) {
     // A question is on the table. The chip bar carries your own-voice replies
     // (see _askReplies); the prose numbers them so a typed "2" works too, and
     // free text stays the headline option — it's the whole point of the loop.
+    // Printed ONCE per question — it re-printed under every turn (five times in
+    // a row, playtest 2026-08-22); the chips keep carrying it after that.
+    if (G.convoQ.shown) return;
+    G.convoQ.shown = true;
     const reps = _askReplies(G.convoQ.key);
     if (reps.length) {
       _say(`(${_convoName(id)} put that to you. Answer in your own words — or:)`, "dim");
@@ -2519,7 +2547,7 @@ function _doWai(arg) {
   const npcs = _npcsHere();
   const target = arg ? _findNpc(arg) : (npcs.length === 1 ? npcs[0] : null);
   if (!target) {
-    if (!npcs.length) { _say("You wai the empty street. A passing soi dog looks moved."); return; }
+    if (!npcs.length) { _say(`You wai the empty ${/beach/.test(G.room) && !/_rd|beach_rd/.test(G.room) ? "sand" : "street"}. A passing soi dog looks moved.`); return; }
     _say("You press your palms together and wai the room in general. Approving nods.");
     for (const id of npcs) _waiEffect(id);
     return;
@@ -2871,6 +2899,14 @@ function _buyManDrink(id) {
   G.soc.manDrinks[id] = (G.soc.manDrinks[id] || 0) + 1;
   if (G.soc.mgrChat) G.soc.mgrChat[id] = 0; // debt squared
   _addHappy(2); _repGain(); // standing the manager a drink is exactly the sort of thing that gets around well
+  if (NPCS[id].dry) {
+    // a sober manager (Fast Eddy): the gesture lands, the glass is soda water
+    _say(`“Now you're speaking the language.” ${name} rings it up, pours himself a soda ` +
+      `water with a wedge of lime, and chinks it against yours without a flicker — the ` +
+      `gesture is the thing, the glass is nobody's business. ฿${BEER_PRICE} well spent: a ` +
+      `manager who likes you is the best friend a farang has out here. (฿${G.money} left.)`, "win");
+    return;
+  }
   _say(`“Now you're speaking the language.” ${name} pours himself a proper one and ` +
     `chinks it against yours. ฿${BEER_PRICE} well spent — a manager who likes you is the ` +
     `best friend a farang has out here. (฿${G.money} left.)`, "win");
@@ -2911,6 +2947,7 @@ function _regularName(id) {
 // Pronoun-free on purpose: the role-less rail crowd is male today, but nothing
 // enforces that — keep the prose safe for whoever takes the stool next.
 function _standRegular(id) {
+  if (id === "cream" && typeof _chamDrink === "function") { _chamDrink(); return; } // a civilian, not a rail regular
   if (G.money < BEER_PRICE) {
     _say(`A bottle for ${id ? _regularName(id) : "the regular"} runs ฿${BEER_PRICE}; you have ฿${G.money}.`);
     return;
@@ -2977,7 +3014,7 @@ function _doBuy(arg) {
     return;
   }
   if (/water|nam plao/.test(arg)) {
-    const canBuy = r.shop || r.seven || _inBar() || FOOD_STALLS[G.room];
+    const canBuy = r.shop || r.seven || r.water || _inBar() || FOOD_STALLS[G.room]; // r.water: a drinks cart in the desc
     if (!canBuy) { _say("No water for sale here. 7-Elevens, bars, and the street carts all have it."); return; }
     const price = _inBar() ? 20 : 10;
     if (G.money < price) { _say(_fmt("฿{p} for a cold bottle, and you don't have it. Grim.", { p: price })); return; }
@@ -3224,6 +3261,12 @@ function _doBuy(arg) {
   // no bar stocks — checked after the bar goods so shared words (bra/drink) still
   // resolve to the bar. The cart lingers; buying doesn't send it away.
   if (_salengHere() && _salengMatchItem(arg)) { _salengBuy(arg); return; }
+  // a dish named off the menu card, where there's a kitchen: BUY PAD THAI is BUY FOOD
+  if ((FOOD_STALLS[G.room] || r.food) &&
+      /\b(pad|rice|khao|noodle|tam|soup|curry|fish|chicken|pork|beef|prawn|plate|dish|meal|dinner|lunch|supper|breakfast|fry|burger|pie|toastie|special)\b/.test(arg)) {
+    _doBuy("food");
+    return;
+  }
   _say("Not for sale here.");
 }
 
@@ -3382,9 +3425,14 @@ function _doRideBus(arg) {
   // strip parens/punct both sides: the drop-list PRINTS "Second Road (Soi Myth
   // Night)" and typing it back verbatim must match (critic playtest 2026-08-22)
   const _bn = x => x.toLowerCase().replace(/[()]/g, " ").replace(/\s+/g, " ").trim();
+  // every word the player typed must appear in the stop's name — "second road myth
+  // night" reaches "Second Road (Soi Myth Night)" without the player guessing "soi"
+  const toks = _bn(w).split(" ").filter(Boolean);
   const dest = reachable.find(s =>
-    _bn(ROOMS[s].name).includes(_bn(w)) || ROOMS[s].region.toLowerCase().includes(_bn(w)));
+    (toks.length && toks.every(t => _bn(ROOMS[s].name).includes(t))) ||
+    (w && ROOMS[s].region.toLowerCase().includes(_bn(w))));
   if (!w || !dest) {
+    G.busAskTurn = G.turns; // a bare stop name on the next line answers this list
     _say((_BUS_WAITING.has(G.room)
       ? "The truck at the head of the rank waits, benches filling. He'll drop you: "
       : "You put an arm out; a blue truck swerves in. He'll drop you: ") +
@@ -3441,11 +3489,16 @@ function _doMotosai(arg) {
     return;
   }
   if (!r.motosai) { _say("No motosai stand here."); return; }
-  const w = (arg || "").toLowerCase();
+  let w = (arg || "").toLowerCase();
+  // "hotel" / "home" / "my room": the piwin knows where you sleep — the nearest
+  // stand to your hotel's street (playtest 2026-08-22: "motosai to hotel" shrugged)
+  if (/\b(hotel|home|my room|the room)\b/.test(w) && _flag("act1Done")) {
+    w = { sabai: "naklua", queenvic: "soi 6", metropole: "soi buakhao" }[G.hotel] || w;
+  }
   const destKey = Object.keys(MOTOSAI_DESTS).find(k => w.includes(k) || k.includes(w));
   if (!w || !destKey) {
     _say("The piwin raises an eyebrow: where to? (" +
-      Object.keys(MOTOSAI_DESTS).join(" · ") + ")", "dim");
+      Object.keys(MOTOSAI_DESTS).join(" · ") + " · hotel)", "dim");
     return;
   }
   const d = MOTOSAI_DESTS[destKey];
@@ -3460,6 +3513,9 @@ function _doMotosai(arg) {
     return;
   }
   let price = d.price;
+  // the Darkside fare is the Darkside fare in BOTH directions — the table keys on
+  // the destination, so the long leg back across the highway was the town rate
+  if (_room().region === "Darkside" && ROOMS[d.room] && ROOMS[d.room].region !== "Darkside") price = MOTOSAI_FAR;
   if (_flag("helmetDelivered") && price === MOTOSAI_TOWN) {
     price = 20;
   }
@@ -3653,7 +3709,7 @@ function _gogoLightWarn() {
 
 function _doCharge() {
   if (!_inv().includes("charger")) { _say("You need a charger. 7-Elevens sell them."); return; }
-  if (!_room().outlet) { _say("No outlet here. 7-Eleven has one; so do a couple of friendly bars."); return; }
+  if (!_room().outlet && !_room().seven) { _say("No outlet here. 7-Eleven has one; so do a couple of friendly bars."); return; }
   if (G.battery >= 100) { _say("Already full. A rare feeling of complete adequacy."); return; }
   G.battery = 100;
   G.lightOn = false;
@@ -4008,7 +4064,8 @@ function _doListen() {
 }
 
 function _doSwim() {
-  if (!["jomtien_beach", "dongtan_beach"].includes(G.room)) {
+  const onSand = /beach/.test(G.room) && !/_rd\b|beach_rd|_road/.test(G.room) && !ROOMS[G.room].bar;
+  if (!onSand) {
     _say("The nearest swimmable water is a hotel pool you are not a guest of.");
     return;
   }
@@ -4765,6 +4822,11 @@ function _doTaoRai() {
 function _politePhrase(t) {
   const partner = typeof _convoActive === "function" && _convoActive();
   const to = partner ? _convoName(partner) : null;
+  // a bare NO / NOTHING with nothing on the table — voiced, not "didn't parse"
+  if (/^(no|nope|nah|nothing|never ?mind|nvm)$/.test(t) && !G.convoQ) {
+    _say(to ? `${to} shrugs. Suit yourself.` : "Noted. Nobody had asked, but noted.", "dim");
+    return true;
+  }
   if (/\b(thank you|thanks|thank u|khob khun|cheers mate)\b/.test(t)) {
     _say(to ? `"Mai pen rai," ${to} says — no worries, the most Thai reply there is — and means it.`
       : "Manners cost nothing and buy plenty on this soi. Somebody nearby dips a wai back on reflex.");
@@ -5255,6 +5317,7 @@ function _norm(s) {
 }
 
 let _lastCmd = ""; // for AGAIN/G — deliberately not serialized; repeats die with the session
+let _prevCmd = ""; // the one before it (the SLEEP-on-waking guard: two SLEEPs in a row means it)
 
 // ── Modal prompts + the resume redraw ──────────────────────────────────────
 // doCommand routes every input through a chain of modal states, each of which
@@ -5524,7 +5587,11 @@ function doCommand(input) {
     // reaction: LOOK once accepted a tout's offer, which read as the game
     // deciding for you (desktop playtest, 2026-08-17 — 4 hits). Navigation and
     // everything else still counts as your snap answer (walking off IS one).
-    if (/^(look|l|examine|x|inventory|i|inv|time|diagnose|score|help|quests|journal)$/.test(v) && !arg) {
+    // …except when the encounter's own hint offers HELP as the answer (the Tree
+    // Town maze: "(HELP him look)") — then HELP is the reaction, not a manual.
+    const _encHint = (typeof ENCOUNTERS !== "undefined" && ENCOUNTERS[G.pendingEnc] && ENCOUNTERS[G.pendingEnc].hint) || "";
+    if (/^(look|l|examine|x|inventory|i|inv|time|diagnose|score|help|quests|journal)$/.test(v) && !arg &&
+        !(v === "help" && /\bHELP\b/.test(_encHint))) {
       if (typeof _renderEncounter === "function") _renderEncounter();
       else _say("(The moment is still waiting on you.)", "dim");
       return;
@@ -5581,7 +5648,7 @@ function doCommand(input) {
     doCommand(_lastCmd);
     return;
   }
-  _lastCmd = raw;
+  _prevCmd = _lastCmd; _lastCmd = raw;
 
   // Standing at the keypad, a bare number IS a command — nobody types "enter"
   // at a safe. Every modal gate (intro picks, quiz answers, game moves, canned
@@ -5792,7 +5859,8 @@ function doCommand(input) {
       else _say("Be more specific.");
       break;
     case "open":
-      if (arg.includes("safe")) _say("The keypad wants three digits: ENTER <digits> — Thai numerals work too.");
+      if (arg.includes("safe") && _isHotelRoom(G.room)) _doSafe();   // your own room safe (it answers in _doSafe)
+      else if (arg.includes("safe")) _say("The keypad wants three digits: ENTER <digits> — Thai numerals work too.");
       else if (/fridge|refrigerator|mini.?bar/.test(arg)) _doFridge();
       else _say("It doesn't open that way.");
       break;
@@ -5815,6 +5883,15 @@ function doCommand(input) {
     case "checkout": case "check-out": _doCheckout(); break;
     case "sleep": case "bed": case "crash":
       if (!_flag("act1Done")) _say("Sleep where? The beach already had you once tonight. Get the wallet, get the room.");
+      // a SLEEP tapped right after waking burns the whole night with no warning
+      // (mobile playtest 2026-08-22) — once per evening, the bed asks if you mean it
+      else if (G.room === _hotelRoomId() && G.nightTurn < 10 && G.sleepWarnDay !== G.day &&
+               G.wakeTurn != null && G.turns - G.wakeTurn <= 1 && !/^(sleep|bed|crash)\b/i.test(_prevCmd)) {
+        G.sleepWarnDay = G.day;
+        _say(`It's ${_clockStr()} — the neon's barely warm. Sleep now and the whole night goes with it. ` +
+          "(SLEEP again if you mean it, or go OUT.)", "dim");
+        return;
+      }
       else if (G.room === _hotelRoomId()) { _endNight("sleep"); return; }
       // one flight below your own bed (the pub under the Queen Vic, a lobby):
       // turning in should just walk you up, not scold you for being close.
@@ -5939,6 +6016,7 @@ function doCommand(input) {
     case "map": _doMap(); break;
     case "photo": case "selfie": case "photograph": case "snap": _doPhoto(arg); break;
     case "gallery": case "photos": case "album": _doGallery(); break;
+    case "menu": _doRead("menu"); break; // the laminated card, by its own name
     case "stop": case "unsubscribe": _doJokeStop(); break;
     case "reply": _doJokeReply(); break;
     case "call": case "dial": _doCall(arg); break;
@@ -6004,6 +6082,18 @@ function doCommand(input) {
       // full sentences, and a courtesy to the partner should get the warm reply,
       // not her topicless node (Alan playtest, 2026-08-17). The patterns are
       // specific enough not to shadow a real topic.
+      // a stop typed straight off the drop-list the bus just printed (mobile
+      // playtest 2026-08-22: "second road (soi diana)" → didn't parse)
+      if (G.busAskTurn != null && G.turns - G.busAskTurn <= 2 && typeof _busLinesFor === "function" &&
+          _busLinesFor(G.room).length) {
+        const stops = [...new Set(_busLinesFor(G.room).flatMap(l => BUS_LINES[l]))];
+        const bn = x => x.toLowerCase().replace(/[()]/g, " ").replace(/\s+/g, " ").trim();
+        const toks = bn(lower).split(" ").filter(Boolean);
+        if (toks.length && stops.some(s => toks.every(tk => bn(ROOMS[s].name).includes(tk)))) {
+          doCommand("ride bus to " + lower);
+          return;
+        }
+      }
       if (_politePhrase(lower)) break;
       if (_convoResolve(lower)) break;
       _say(_pickVary(_HUH, "huh"), "dim");

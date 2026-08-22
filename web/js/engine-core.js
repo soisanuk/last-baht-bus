@@ -633,7 +633,11 @@ function _convoStart(id) {
   // old asker's numbered answer prompt kept re-printing under the new partner's
   // turns while a typed digit routed to the new partner (mobile playtest,
   // 2026-08-17, Bpom's question haunting Roger's conversation).
-  if (G.convoQ && G.convoQ.id !== id) G.convoQ = null;
+  if (G.convoQ && G.convoQ.id !== id) {
+    const who = _convoName(G.convoQ.id);
+    G.convoQ = null;
+    _say(`(${who}'s question goes unanswered — you've turned to ${_convoName(id)}.)`, "dim");
+  }
   G.convo = id; G.itNpc = id;
   if (G.known) G.known[id] = true; // talking to someone IS meeting them → you learn the name
 }
@@ -812,7 +816,12 @@ function _patronTalk(id, topic, _retried) {
       // his darkside node the same way "ask jenny about boyfriend" reaches
       // sponsor. One retry only, so a rule cycle can't recurse.
       const norm = !_retried && typeof _convoTopic === "function" ? _convoTopic(topic) : topic;
-      _patronTalk(id, norm !== topic ? norm : null, true);
+      if (norm !== topic) { _patronTalk(id, norm, true); return; }
+      // first contact still gets his greeting in full; after that a real miss
+      // says so — re-delivering the greeting's short ("You again.") read as a
+      // man refusing to talk (playtests 2026-08-22)
+      if (!(G.patronMet && G.patronMet[id])) { _patronTalk(id, null, true); return; }
+      _say(_PATRON_MISS[Math.floor(_rand() * _PATRON_MISS.length)](p.name));
       return;
     }
     _say(`${p.name} has said his piece for now.`);
@@ -820,8 +829,13 @@ function _patronTalk(id, topic, _retried) {
   }
   const idx = p.dialogue.indexOf(d);
   const seen = G.patronTalk.talked[id] || (G.patronTalk.talked[id] = []);
-  const repeat = seen.includes(idx);
+  // the intro is met-once, not met-nightly: a resident who drinks with Mort every
+  // evening shouldn't get the full "I write the Nite Owl…" each day (playtest
+  // 2026-08-22). G.patronMet persists where the daily seen-book resets.
+  G.patronMet = G.patronMet || {};
+  const repeat = seen.includes(idx) || (!d.topic && !!G.patronMet[id]);
   if (!repeat) seen.push(idx);
+  if (!d.topic) G.patronMet[id] = true;
   // Same consistency as the NPCs: a repeat is the `short` gist, or a grizzled-
   // regular brush-off, so you never get the whole war story twice. Patron
   // dialogue is mostly pure flavour, but entries may carry `sets` (quest wiring
@@ -862,6 +876,11 @@ function _patronRage(id) {
 
 // The rail regular's version of "you asked me that" — a male-expat grumble to
 // the NPCs' fond soi brush-off (_askAgain).
+const _PATRON_MISS = [
+  n => `${n} shrugs. “Not one I know anything about, mate. Try the bloke who was there.”`,
+  n => `“Search me,” ${n} says, and goes back to his glass. “Ask me something I've actually got an opinion on.”`,
+  n => `${n} turns a hand over on the bar: nothing in it. “Couldn't tell you. Not my story.”`,
+];
 const _PATRON_AGAIN = [
   n => `${n} gives you a flat look over the Chang. “Already told you that one, mate.”`,
   n => `“You asked me that,” ${n} says. “Memory like a goldfish. Get a round in and I might go again.”`,
@@ -971,6 +990,10 @@ function _elsewhereLine(word) {
     // visit elsewhere, once that exists — don't reveal it; just say she's out.
     const own = NPCS[nid].bars ? NPCS[nid].bars.includes(cur) : true;
     if (own && _barName(cur)) {
+      // her bar has shut for the night: don't send the player to a padlock
+      if (typeof _closedNow === "function" && _closedNow(cur)) {
+        return `${NPCS[nid].name} ${notHere} — ${_barName(cur)} has shut for the night. Tomorrow.`;
+      }
       return `${NPCS[nid].name} ${notHere} tonight — try ${_barName(cur)}.`;
     }
     return `${NPCS[nid].name} isn't here right now.`;
@@ -1004,8 +1027,47 @@ const _ASK_AGAIN = [
   n => `“Same-same,” ${n} says. “You already ask me this. We talk something new, or you talk to the wall.”`,
   n => `${n} gives you the look reserved for farang who repeat themselves. “Told you already, tilac.”`,
 ];
+// The English-register twin: a farang regular (Lake Gary, Bert, Eddy, the
+// origin archetypes) saying "you asked me that" in Tinglish read as a bug in
+// two blind playtests (2026-08-22). Thai-voiced = the staff roles and filler.
+const _ASK_AGAIN_EN = [
+  n => `“You asked me that one,” ${n} says. “Same answer. Memory like a sieve, this town.”`,
+  n => `${n} gives you a look. “We've done that one. Ask me something I haven't answered.”`,
+  n => `“Already told you,” ${n} says, not unkindly. “Buy a round and I'll pretend it's new.”`,
+];
+function _thaiVoice(id) {
+  const n = NPCS[id];
+  if (!n) return true;
+  if (NPC_ROLES[id] || n.filler || n.masseuse || n.ladyboy) return true;
+  if (typeof _HOSTS !== "undefined" && _HOSTS.includes(id)) return true;
+  return false;
+}
 function _askAgain(npcId) {
-  return _ASK_AGAIN[Math.floor(_rand() * _ASK_AGAIN.length)](NPCS[npcId].name);
+  const pool = _thaiVoice(npcId) ? _ASK_AGAIN : _ASK_AGAIN_EN;
+  return pool[Math.floor(_rand() * pool.length)](NPCS[npcId].name);
+}
+// An unknown topic is NOT a repeat: before this, a miss fell through to the
+// topicless greeting, whose repeat path then told the player "you asked me
+// that already" about a question they had never asked (both blind playtests,
+// 2026-08-22). Voiced by register; the greeting stays unspent.
+const _TOPIC_MISS_TH = [
+  n => `${n} tilts her head. “That one I don't know, na. Ask me something else.”`,
+  n => `“Hm?” ${n} laughs it off. “I don't know about that. You ask the wrong girl.”`,
+  n => `${n} shrugs, easy. “Not my story, that. Ask me something I know.”`,
+];
+const _TOPIC_MISS_EN = [
+  n => `${n} shakes his head. “Can't help you there. Not my department.”`,
+  n => `“That one's above my pay grade,” ${n} says. “Ask me something I'd actually know.”`,
+  n => `${n} turns a hand over: nothing in it. “No idea, mate. Try somebody who was there.”`,
+];
+function _topicMiss(npcId) {
+  const n = NPCS[npcId];
+  const she = n.pronoun === "she" || NPC_ROLES[npcId] || n.filler;
+  const pool = _thaiVoice(npcId) ? _TOPIC_MISS_TH : _TOPIC_MISS_EN;
+  let line = pool[Math.floor(_rand() * pool.length)](n.name);
+  if (!she && pool === _TOPIC_MISS_TH) line = line.replace("her head", "his head").replace("the wrong girl", "the wrong man");
+  if (she && pool === _TOPIC_MISS_EN) line = line.replace("shakes his head", "shakes her head");
+  return line;
 }
 
 function _deliver(npcId, d) {
@@ -1122,7 +1184,10 @@ function _describeRoom(full, forceFull) {
   // brief-on-revisit (IF verbose/brief): a rotating ambient line instead of the
   // full desc when you're just walking back through a place you've already read.
   // Opt-in per room via `revisit`; LOOK and boot/restore force the full desc.
-  if (full) _say(!firstTime && !forceFull && r.revisit ? _pickVary(r.revisit, "rv:" + G.room) : r.desc);
+  // a street can carry a post-midnight paint (`lateDesc`): the Khao Talo prose
+  // kept advertising Mama Yai's charcoal smoke after the shutters (playtest 2026-08-22)
+  const late = r.lateDesc && typeof _closesMidnight === "function" && G.nightTurn >= 60;
+  if (full) _say(late ? r.lateDesc : (!firstTime && !forceFull && r.revisit ? _pickVary(r.revisit, "rv:" + G.room) : r.desc));
   const items = Object.keys(G.itemLoc).filter(id => _here(id));
   if (items.length) {
     // An item may carry a `sight:` line that places it in the scene ("...at the

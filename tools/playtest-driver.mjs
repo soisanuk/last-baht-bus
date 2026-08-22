@@ -73,7 +73,14 @@ if (verb === "serve") {
   // sharing this daemon's browser (both round-three testers hit this). Opt-in, so
   // the default still exercises the real continue-prompt/autosave path.
   if (args.includes("--fresh")) {
-    await page.addInitScript(() => { try { localStorage.clear(); } catch (e) {} });
+    // once per daemon, not on every navigation — an init script re-runs on reload,
+    // which wiped any localStorage gate a tester set (lbb_full_on) the moment
+    // they reloaded to apply it (round-five testers, 2026-08-22)
+    await page.addInitScript(() => {
+      try {
+        if (!sessionStorage.getItem("__ptFresh")) { localStorage.clear(); sessionStorage.setItem("__ptFresh", "1"); }
+      } catch (e) {}
+    });
   }
   // the prune-proof transcript ledger, reinstalled on every navigation
   await page.addInitScript(() => {

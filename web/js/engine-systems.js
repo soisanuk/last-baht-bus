@@ -1518,6 +1518,10 @@ const _ACT1_FAIL_LEDE = {
     "fold up on the pavement, a long dark town short of room 412.",
   blackout: "Somewhere the film simply stops. When it restarts it's morning, " +
     "you're on the sand, and 412 is exactly as far away as it was at sunset.",
+  hurt: "One knock too many. A ward, a drip, a nurse who has seen your kind of night " +
+    "before — and by the time they let you go, room 412 is a day you never finished.",
+  accident: "The road took the decision out of your hands: a ward ceiling, a drip, and " +
+    "room 412 exactly as far away as it was when the bike went over.",
 };
 function _act1Fail(reason) {
   const reached = _act1Progress(), total = _ACT1_MILESTONES.length;
@@ -2040,7 +2044,7 @@ function _doContacts() {
     const n = NPCS[id];
     // _npcRoom, not n.room: an owner on her alternate-night bar (Candy) should
     // list at TONIGHT's bar, or the number points you at an empty room.
-    const bar = _barName(_npcRoom(id)) || "around";
+    const bar = n.offmap ? "LINE only" : (_barName(_npcRoom(id)) || "around"); // Sao, Priew: no bar to point at
     const drinks = G.soc.drinks[id] || 0;
     const glow = drinks >= 6 ? " ❤" : drinks >= 3 ? " ✦" : "";
     _say(`  ${n.emoji} ${n.name} — ${bar}${glow}`, "dim");
@@ -2095,6 +2099,7 @@ function _doContact(arg) {
       "good evening. (CALL TAN)", "win");
     return;
   }
+  if (id === "cream") { _chamContact(); return; } // the civilian at the table (chameleon economy)
   if (!NPC_ROLES[id]) { _say(`${NPCS[id].name} keeps that number for family and better customers.`); return; }
   if (G.phone.contacts[id]) { _say(`You already have ${NPCS[id].name}'s number. She knows you know.`); return; }
   if (_phoneDead()) return;
@@ -2376,12 +2381,36 @@ function _doSendMoney(arg) {
     _say("(📱 CHECK MESSAGES.)", "dim");
     return;
   }
+  // Sao sends it back — a woman who wouldn't let you buy the coffee is not taking a transfer
+  if (id === "sao") {
+    _say(_fmt("฿{a} goes out — and comes back inside the minute, with a text.", { a: amt }));
+    _pushMsg("sao", "Ha. No. 😄 Coffee's on me, remember? Keep it for the soi.");
+    _say("(📱 CHECK MESSAGES.)", "dim");
+    return;
+  }
   G.money -= amt;
   (G.soc.given = G.soc.given || {})[id] = (G.soc.given[id] || 0) + amt; // toward a sponsor flip
   G.battery = Math.max(0, G.battery - 1);
   const bump = amt >= 500 ? 3 : amt >= 100 ? 2 : 1;
   _addBond(id, bump);
   _say(_fmt("฿{a} crosses town in one green blink. (฿{m} left.)", { a: amt, m: G.money }));
+  // the girls who aren't in the bar economy answer in their own voices, not the
+  // hostess patter (mobile playtest 2026-08-22: Priew got "tonight I take care YOU")
+  if (id === "priew") {
+    _pushMsg("priew", _flag("priewRevealed")
+      ? "you send me money?? 😳 you know now where i work and you still send. you good man or crazy man 555 🙏 lunch is on me then"
+      : "why you send?? 😳 i not need na, i have job. ok… i keep it for lunch. then I buy YOU lunch 555 🙏");
+    _say("(📱 A reply lands before you've pocketed the phone.)", "dim");
+    return;
+  }
+  if (id === "cream") {
+    G.chamGifts = (G.chamGifts || 0) + amt;
+    _pushMsg("cream", amt >= 500
+      ? "omg 😳 thank you!! for what?? …ok. i buy the book for my english course ☕💚 you too kind na"
+      : "555 thank you na ☕ i buy coffee with it. MY coffee, from MY shop, free anyway 😏");
+    _say("(📱 A reply lands before you've pocketed the phone.)", "dim");
+    return;
+  }
   // paying into an active pics-drip: enough unlocks the next shot, short of it teases
   const deal = G.phone.picDeal;
   if (deal && !deal.done && deal.id === id && deal.idx != null) {
@@ -2681,6 +2710,38 @@ function _chamAsk() {
   }
   G.pendingChoice = "cham";
   _chamPrompt();
+}
+// The civilian's verbs: she is not staff, so the lady-drink / flirt / contact
+// machinery must not answer for her (blind playtest 2026-08-22: BUY DRINK FOR
+// CREAM poured the patron war-story, FLIRT got "not that way, mate").
+function _chamDrink() {
+  if (G.money < BEER_PRICE) { _say(`A drink for Cream runs ฿${BEER_PRICE}, and you're short. She waves it off: "Next time na."`); return; }
+  G.money -= BEER_PRICE;
+  G.soc.chamDrinks = (G.soc.chamDrinks || 0) + 1;
+  _say(_pickVary([
+    `She puts a hand up — "No no, I have—" — looks at her glass, which is mostly ice, and lets you. ` +
+      `"Ok. One." A cocktail arrives that nobody calls a lady drink, because it isn't one. (฿${G.money} left.)`,
+    `"You don't have to—" she says, and then, when it comes, "…ok, thank you na," and clinks it against ` +
+      `yours with a small conspiratorial face, like two people getting away with something. (฿${G.money} left.)`,
+    `She lets you, after the correct amount of not letting you. No bell, no ledger, no mamasan ` +
+      `counting — just a drink, bought for a girl at a table, like anywhere. (฿${G.money} left.)`,
+  ], "chamdrink"));
+  _addHappy(1);
+}
+function _chamFlirt() {
+  _say(_pickVary([
+    "She laughs, looks down, looks up through her hair. \"You flirt me? Ooh.\" Pleased, and not " +
+      "hiding it, and not doing anything with it either — which is exactly the thing.",
+    "A shy sideways smile into the cocktail. \"You very smooth na. I think you say this to the bar " +
+      "girl too.\" She is teasing you. She is enjoying it.",
+    "\"Ohh — no, stop,\" she says, and doesn't mean stop, and her ears go pink, which no bar girl's do.",
+  ], "chamflirt"));
+  _addHappy(1);
+}
+function _chamContact() {
+  if (G.phone.contacts.cream) { _say("You have Cream's LINE — she typed it in herself. (MESSAGE CREAM)"); return; }
+  _say("\"My LINE?\" She tilts her head. \"For what — coffee?\" She laughs, and doesn't say no, and " +
+    "doesn't give it either. \"Maybe later na. If you nice.\"");
 }
 function _chamPrompt() {
   _say("She is already gathering her phone and her little bag, not looking at you, the way " +
@@ -3192,17 +3253,39 @@ function _sayDrizzle() {
       "goes back to her phone. The barstools come in anyway. The barstools " +
       "always come in.", "dim");
   } else {
-    _say(alt ?
-      "A soft rain drifts in off the Gulf. Up the road a baht bus pulls over " +
-      "mid-route and the driver hops out, unhurried, to roll the canvas rain " +
-      "guards down the sides — the passengers clip the last one themselves, a " +
-      "crew that has clearly done this before. It pulls away trailing spray." :
-      "Light rain, barely worth the name. The pavement goes glossy and the neon " +
-      "doubles itself in it. Umbrellas appear from nowhere — the vendors sell " +
-      "them mid-shower, naturally — and the town carries on at exactly the same " +
-      "speed, slightly shinier.", "dim");
+    // no dice for weather flavour: the variant is a function of the day and
+    // the turn, not _rand() — and no baht bus on the Darkside, where the songthaews
+    // don't run (desktop playtest 2026-08-22)
+    const dark = _room().region === "Darkside";
+    const pool = dark ? _DRIZZLE_DARK : _DRIZZLE_STREET;
+    _say(pool[(G.day * 7 + Math.floor(G.turns / 15)) % pool.length], "dim");
   }
 }
+const _DRIZZLE_STREET = [
+  "A soft rain drifts in off the Gulf. Up the road a baht bus pulls over " +
+    "mid-route and the driver hops out, unhurried, to roll the canvas rain " +
+    "guards down the sides — the passengers clip the last one themselves, a " +
+    "crew that has clearly done this before. It pulls away trailing spray.",
+  "Light rain, barely worth the name. The pavement goes glossy and the neon " +
+    "doubles itself in it. Umbrellas appear from nowhere — the vendors sell " +
+    "them mid-shower, naturally — and the town carries on at exactly the same " +
+    "speed, slightly shinier.",
+  "A fine rain, more mist than weather. A piwin tucks his bike under an awning " +
+    "and lights a cigarette with the patience of a man who is paid by the fare, " +
+    "not the hour. Two girls share one umbrella and one phone between three bars.",
+  "Drizzle, warm as breath. The soi smells suddenly of wet concrete and grilled " +
+    "squid. Nobody hurries; hurrying in this town is what the rain is for.",
+];
+const _DRIZZLE_DARK = [
+  "A soft rain comes across the lake and the road. A motosai pulls in under a " +
+    "bar's tin roof and the piwin and the mamasan exchange the whole weather " +
+    "forecast in one look. Out here nobody runs for it.",
+  "Light rain on tin roofs, which is the loudest thing on the Darkside. The " +
+    "fairy lights smear. A dog relocates one metre to the left and considers " +
+    "the matter closed.",
+  "Drizzle over the soi, and the smell of wet earth under the charcoal — out here " +
+    "the rain still lands on ground, not pavement. Somebody turns the TV up one notch.",
+];
 
 function _sheltered(id) {
   const r = ROOMS[id];
@@ -5231,6 +5314,7 @@ function _whiteRabbitAnswer(input) {
 
 const FOOD_STALLS = {
   jomtien_7eleven: { name: "a toastie, pressed while you wait", price: 35, hunger: 40, thirst: 0 },
+  mikes_mall: { name: "the fifty-baht plate from the top-floor food court, honestly enough food", price: 50, hunger: 55, thirst: 0 },
   jomtien_beach_rd: { name: "a cold mango from Auntie Nok, salt and chilli on the side", price: 30, hunger: 25, thirst: 15 },
   buakhao_market: { name: "som tam from the cart, extra everything", price: 50, hunger: 55, thirst: -10 },
   lake_bar: { name: "a whole grilled lake fish, salt-crusted, som tam on the side", price: 180, hunger: 65, thirst: 5 },
@@ -5267,6 +5351,7 @@ function _doEat(arg) {
   const inv = _inv().filter(i => _EDIBLE[i] !== undefined);
   const id = arg ? inv.find(i => ITEMS[i].name.toLowerCase().includes(arg) ||
     ITEMS[i].aliases.some(a => a.includes(arg))) : inv[0];
+  if (!id && (FOOD_STALLS[G.room] || _room().food)) { _doBuy("food"); return; } // a kitchen: EAT means order
   if (!id) { _say(arg ? "You're not carrying that, or it isn't food." : "Nothing edible on you. The street sells everything."); return; }
   if (id === "som_tam" && _flag("somTamAccepted") && !_flag("somTamDelivered")) {
     _say("It's Ploy's som tam. You eat Ploy's som tam. It is magnificent, and you " +

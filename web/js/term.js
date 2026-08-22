@@ -743,6 +743,7 @@ const _term = (() => {
   function submit(onCommand) {
     const cmd = _input.value.trim();
     if (!cmd) return;
+    _closeFly(); // a wheel left open over the transcript outlives the moment it was for (mobile playtest 2026-08-22)
     const anchor = echo(cmd);
     _history.push(cmd);
     _histIdx = _history.length;

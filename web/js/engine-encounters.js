@@ -1128,8 +1128,11 @@ const _ENC = {
     const yes = /yes|ok|sure|book|come|deal|why not|send her|yeah/.test(input) &&
       !/\bno\b|sleep|turn in|pass|not tonight/.test(input);
     if (!yes) {
-      _say("You put the phone face-down. Tomorrow's problem, or nobody's. The " +
-        "ceiling fan turns; you're asleep before you've finished deciding.");
+      _say(_isHotelRoom(G.room)
+        ? "You put the phone face-down. Tomorrow's problem, or nobody's. The " +
+          "ceiling fan turns; you're asleep before you've finished deciding."
+        : "You put the phone face-down in your pocket and keep walking. Tomorrow's " +
+          "problem, or nobody's — the night has other things in it.");
       return;
     }
     if (G.money < BOOK_PRICE) {

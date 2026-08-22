@@ -1,0 +1,269 @@
+// Round-five blind playtests (2026-08-22, two Fable personas — "Graham the
+// Settler" on desktop, "Marcus who'd never" on mobile). Each test pins one
+// finding so it can't come back.
+import { test, beforeEach } from "node:test";
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import vm from "node:vm";
+
+for (const f of ["thai.js", "world.js", "games.js", "engine-core.js", "engine-encounters.js",
+  "engine-play.js", "engine-systems.js", "engine-parser.js"]) {
+  vm.runInThisContext(
+    readFileSync(fileURLToPath(new URL(`../../web/js/${f}`, import.meta.url)), "utf8"),
+    { filename: f });
+}
+let out = [];
+engineInit(t => out.push(String(t)), null, () => {});
+const text = () => out.join("\n");
+
+function sandbox(pers = "joker") {
+  newGame();
+  G.player = { origin: "monger", personality: pers, orientation: "straight" };
+  G.stage = "vacation";
+  _setFlag("act1Done"); _setFlag("hasWallet");
+  Object.keys(ENCOUNTERS).forEach(k => { G.encDone[k] = true; });
+  G.lastSaleng = 99999; G.lastPeddler = 99999;
+  G.money = 5000;
+  out = [];
+}
+beforeEach(() => sandbox());
+
+// ── the conversation layer ──
+test("an unknown topic is not a repeat: Lake Gary gets his greeting once, then a voiced miss in his own register", () => {
+  G.room = "lake_mabprachan";
+  doCommand("ask gary about clams");            // first contact: the greeting, as ever
+  assert.match(text(), /Twenty-two years here/);
+  out = [];
+  doCommand("ask gary about visa");             // a miss, now that he's said hello
+  assert.doesNotMatch(text(), /you ask me that already|Farang memory|tilac|Aiyah/);
+  assert.match(text(), /Not my department|above my pay grade|No idea, mate/);
+  out = [];
+  doCommand("ask gary about sabai");            // a real topic still answers
+  assert.match(text(), /Now you are here/);
+});
+
+test("a hostess's miss stays in her register; a true repeat keeps the Tinglish brush-off", () => {
+  G.room = "candy_bar";
+  const girl = _npcsHere().find(id => NPC_ROLES[id] === "hostess");
+  doCommand("talk to " + NPCS[girl].name.toLowerCase()); out = [];
+  doCommand(`ask ${NPCS[girl].name.toLowerCase()} about cryptocurrency`);
+  assert.match(text(), /I don't know|wrong girl|Not my story|Ask me something/);
+  assert.doesNotMatch(text(), /pay grade|No idea, mate/);
+});
+
+test("patrons: the intro is met-once (not nightly), and a topic miss is a shrug, not 'You again'", () => {
+  G.room = "queen_vic";
+  doCommand("talk to angela");
+  assert.match(text(), /Angela/);
+  const first = text();
+  out = [];
+  doCommand("ask angela about discman");
+  assert.doesNotMatch(text(), /You again/);
+  assert.match(text(), /Not one I know|Search me|Couldn't tell you/);
+  // a new day: the daily seen-book resets, but she doesn't re-introduce herself in full
+  G.day += 1; out = [];
+  doCommand("talk to angela");
+  assert.notEqual(text(), first);
+  assert.ok(text().length < first.length, "the gist, not the whole first meeting again");
+});
+
+test("a pending question lapses OUT LOUD when you turn to someone else, and the cue prints once", () => {
+  G.room = "stinky_bar";
+  G.player.origin = "pi"; G.player.personality = "blunt";
+  doCommand("talk to bert");
+  assert.equal(G.convoQ && G.convoQ.key, "why");
+  const cues = () => (text().match(/put that to you/g) || []).length;
+  assert.equal(cues(), 1);
+  doCommand("look");                               // another turn — no re-print
+  assert.equal(cues(), 1);
+  out = [];
+  doCommand("talk to dave");                       // switch partners
+  assert.match(text(), /Bert's question goes unanswered/);
+  assert.equal(G.convoQ, null);
+});
+
+// ── characters ──
+test("Fast Eddy stays dry: BUY MAN DRINK pours him a soda water", () => {
+  G.room = "white_rabbit";
+  doCommand("buy man drink");
+  assert.match(text(), /soda water/);
+  assert.doesNotMatch(text(), /proper one|for the road/);
+});
+
+test("Cream answers her own verbs — a civilian, not the rail and not the roster", () => {
+  G.room = "metro_garden"; G.nightTurn = 45;
+  doCommand("buy drink for cream");
+  assert.doesNotMatch(text(), /Walking Street in 2004|sacrament/);
+  assert.match(text(), /lets you|thank you na/);
+  out = [];
+  doCommand("flirt with cream");
+  assert.doesNotMatch(text(), /mate|Wrong tree/);
+  assert.match(text(), /pink|smooth|flirt me/);
+  out = [];
+  doCommand("contact cream");
+  assert.doesNotMatch(text(), /family and better customers/);
+  assert.match(text(), /Maybe later/);
+});
+
+// ── encounters ──
+test("the Tree Town maze: bare HELP is the reaction the hint promised, not a re-render", () => {
+  G.room = "tt_lane_1";
+  delete G.encDone.maze;
+  _startEnc("maze");
+  assert.equal(G.pendingEnc, "maze");
+  out = [];
+  doCommand("help");
+  assert.equal(G.pendingEnc, null, "HELP answered the moment");
+  assert.ok(_MAZE_HELP.some(s => text().includes(s)));
+});
+
+test("the booking app's NO reads where you are — no ceiling fan on Naklua Road", () => {
+  G.room = "naklua_rd";
+  delete G.encDone.booking; G.nightTurn = 45;
+  _startEnc("booking");
+  assert.equal(G.pendingEnc, "booking");
+  out = [];
+  doCommand("no");
+  assert.doesNotMatch(text(), /ceiling fan|asleep before/);
+  assert.match(text(), /keep walking/);
+});
+
+// ── the clock and transport ──
+test("the last-bus warning counts the minutes it actually has left", () => {
+  G.room = "beach_rd_c"; G.nightTurn = 78; G.lastBusWarned = false;
+  _lastBusWarn();
+  assert.match(text(), /12 minutes/);
+  assert.doesNotMatch(text(), /half an hour/);
+});
+
+test("motosai: the Darkside fare applies both ways, Second Road has stands, and HOTEL is a destination", () => {
+  assert.ok(ROOMS.second_rd_c.motosai && ROOMS.second_rd_mall.motosai);
+  G.room = "khao_talo"; G.nightTurn = 30;
+  const m = G.money;
+  doCommand("motosai to naklua");
+  assert.equal(G.room, "naklua_rd");
+  assert.equal(m - G.money, MOTOSAI_FAR, "back across the highway costs the Darkside rate");
+  sandbox(); G.room = "second_rd_c"; G.nightTurn = 30;
+  doCommand("motosai to hotel");
+  assert.equal(G.room, MOTOSAI_DESTS.naklua.room, "the piwin knows where you sleep");
+});
+
+test("the bus: a stop typed without the 'soi', and a bare stop name straight off the drop-list", () => {
+  G.room = "second_rd_c"; G.nightTurn = 30;
+  doCommand("ride bus to second road myth night");
+  assert.ok(G.pendingFare && G.pendingFare.kind === "bus", "token match reaches 'Second Road (Soi Myth Night)'");
+  sandbox(); G.room = "second_rd_c"; G.nightTurn = 30;
+  doCommand("ride bus");
+  assert.match(text(), /He'll drop you/);
+  out = [];
+  doCommand("second road (soi diana)");
+  assert.ok(G.pendingFare && G.pendingFare.kind === "bus", "the bare stop answers the list");
+});
+
+test("SLEEP tapped on waking asks once; SLEEP again (or a sleep after a sleep) goes through", () => {
+  G.room = "hotel_room"; G.nightTurn = 50;
+  doCommand("sleep");                    // ends the night → wake, G.wakeTurn set
+  const d = G.day;
+  out = [];
+  doCommand("look"); doCommand("sleep");  // wake + one command, then sleep: guard fires
+  assert.equal(G.day, d);
+  assert.match(text(), /SLEEP again if you mean it/);
+  doCommand("sleep");
+  assert.equal(G.day, d + 1, "the second SLEEP is meant");
+});
+
+test("in the opening quest a hospital night is a do-or-die fail like dawn, not a calendar day", () => {
+  newGame();
+  G.player = { origin: "monger", personality: "joker", orientation: "straight" };
+  G.day = 2; G.room = "tt_lane_1";
+  out = [];
+  _endNight("hurt");
+  assert.equal(G.day, 2, "reset, not advanced");
+  assert.match(text(), /THE NIGHT BEAT YOU HOME/);
+  assert.match(text(), /ward|drip/);
+});
+
+// ── claims the mechanics now honour ──
+test("EAT / MENU / BUY <dish> at a kitchen all reach the food; water sells where a cart is described", () => {
+  G.room = "kiss"; out = [];
+  Object.keys(_EDIBLE).forEach(i => { if (G.itemLoc[i] === "inventory") G.itemLoc[i] = null; }); // nothing in the pockets
+  doCommand("menu");
+  assert.doesNotMatch(text(), /didn't parse|No idea/);
+  out = []; const m = G.money;
+  doCommand("eat");
+  assert.ok(G.money < m, "EAT at a restaurant orders");
+  out = []; const m2 = G.money;
+  doCommand("buy pad thai");
+  assert.ok(G.money < m2, "a dish off the card is BUY FOOD");
+  G.room = "central_beach"; out = []; const m3 = G.money;
+  doCommand("buy water");
+  assert.ok(G.money < m3, "the cool box sells water");
+});
+
+test("swim off any sand, charge at the 7-Eleven window, and your own room safe answers", () => {
+  G.room = "central_beach"; G.soc.drunk = 0; out = [];
+  doCommand("swim");
+  assert.match(text(), /wade in|bathwater/);
+  G.room = "jomtien_2nd"; G.itemLoc.charger = "inventory"; G.battery = 40; out = [];
+  doCommand("charge phone");
+  assert.equal(G.battery, 100);
+  G.room = "hotel_room"; out = [];
+  doCommand("open safe");
+  assert.match(text(), /Your own room safe/);
+  assert.doesNotMatch(text(), /keypad wants/);
+});
+
+test("bare TALK names the room; bare NO is voiced; a wai on the sand is a wai on the sand", () => {
+  G.room = "queen_vic"; out = [];
+  doCommand("talk");
+  assert.match(text(), /Talk to whom\? Here:/);
+  out = [];
+  doCommand("no");
+  assert.doesNotMatch(text(), /didn't parse|didn't understand/);
+  G.room = "central_beach"; out = [];
+  doCommand("wai family");
+  assert.match(text(), /empty sand/);
+});
+
+test("the phone: offmap girls list as LINE only, and answer SEND in their own voices", () => {
+  G.phone.contacts.priew = true; G.phone.contacts.sao = true; G.phone.contacts.cream = true;
+  doCommand("contacts");
+  assert.match(text(), /Priew — LINE only/);
+  out = []; const m = G.money;
+  doCommand("send 500 to priew");
+  assert.doesNotMatch(text(), /take care YOU/);
+  const msgs = () => G.phone.inbox.map(x => x.text).join("\n");
+  assert.match(msgs(), /i keep it for lunch|lunch is on me/);
+  doCommand("send 500 to sao");
+  assert.equal(G.money, m - 500, "Sao's comes back — only Priew's left the account");
+  assert.match(msgs(), /Coffee's on me/);
+  doCommand("send 500 to cream");
+  assert.match(msgs(), /english course/);
+});
+
+test("weather flavour: a Darkside drizzle has no baht bus, and the pools are deeper than two", () => {
+  assert.ok(_DRIZZLE_STREET.length >= 4 && _DRIZZLE_DARK.length >= 3);
+  assert.ok(_DRIZZLE_DARK.every(s => !/baht bus/.test(s)));
+});
+
+test("Khao Talo after the shutters stops advertising the charcoal; a shut bar isn't offered as a destination", () => {
+  G.room = "khao_talo"; G.nightTurn = 70; out = [];
+  _describeRoom(true);
+  assert.match(text(), /after the shutters/);
+  assert.doesNotMatch(text(), /sends out charcoal smoke/);
+  G.known.daeng = true; G.room = "khao_talo";
+  const line = _elsewhereLine("daeng");
+  assert.match(line, /shut for the night/);
+});
+
+test("PLAY CONNECT 4 100 puts ฿100 on the table; the Anchor's barometer reads", () => {
+  G.room = "candy_bar"; G.money = 500; out = [];
+  doCommand("play connect 4 100");
+  assert.equal(G.game && G.game.stake, 100);
+  G.game = null;
+  G.room = "anchor_bar"; out = [];
+  doCommand("examine barometer");
+  assert.match(text(), /CHANGE since/);
+  assert.doesNotMatch(text(), /ship's wheel is real/);
+});

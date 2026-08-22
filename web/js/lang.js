@@ -1293,8 +1293,10 @@ const _CATALOGS = {
     "A growl starts somewhere in the dark ahead — and Sai Krok answers it, once, low, without breaking stride. Silence. The dark has done the maths.":
       "Irgendwo vorn im Dunkeln hebt ein Knurren an — und Sai Krok antwortet, einmal, tief, ohne aus dem Tritt zu geraten. Stille. Das Dunkel hat nachgerechnet.",
     // templated first (the fare is BUS_FARE) — otherwise de needs one entry per price
-    "Somewhere a songthaew driver checks his watch and turns the truck toward the depot. The last baht bus makes its final run at two — call it half an hour off. Get to a main road for the ฿{fare} ride home, or the small hours belong to the piwins and their prices. This is the hour the whole night has been counting down to.":
-      "Irgendwo schaut ein Songthaew-Fahrer auf die Uhr und lenkt den Pick-up Richtung Depot. Der letzte Baht-Bus fährt um zwei — sagen wir, in einer halben Stunde. Ab auf eine Hauptstraße, wenn du die ฿{fare}-Fahrt heim willst, sonst gehören die frühen Morgenstunden den Piwins und ihren Preisen. Das ist die Stunde, auf die die ganze Nacht heruntergezählt hat.",
+    "half an hour": "einer halben Stunde",
+    "{n} minutes": "{n} Minuten",
+    "Somewhere a songthaew driver checks his watch and turns the truck toward the depot. The last baht bus makes its final run at two — call it {mins} off. Get to a main road for the ฿{fare} ride home, or the small hours belong to the piwins and their prices. This is the hour the whole night has been counting down to.":
+      "Irgendwo schaut ein Songthaew-Fahrer auf die Uhr und lenkt den Pick-up Richtung Depot. Der letzte Baht-Bus fährt um zwei — sagen wir, in {mins}. Ab auf eine Hauptstraße, wenn du die ฿{fare}-Fahrt heim willst, sonst gehören die frühen Morgenstunden den Piwins und ihren Preisen. Das ist die Stunde, auf die die ganze Nacht heruntergezählt hat.",
     // the RAW message body — _readMessages composes the "📱 Sender: “…”" wrapper
     // and calls _L on msg.text. (Same trap as batch 3; the dead-key test caught
     // it both times.) The donation URL is the game's one fourth-wall line — it

@@ -100,7 +100,7 @@ const SAFE_PIN = 719;    // ๗๑๙ — stage number 71 + lucky 9
 const ROOMS = {
 
   // ─── Jomtien ───
-  jomtien_beach: {
+  jomtien_beach: { water: true,
     name: "Jomtien Beach (South)",
     region: "Jomtien",
     desc: "Soft sand, folded-up loungers, and the last smear of sunset dying over the sea. " +
@@ -132,7 +132,7 @@ const ROOMS = {
     ],
     exits: { s: "jomtien_beach", n: "dongtan_beach", e: "jomtien_beach_rd" },
   },
-  jomtien_soi_7_beach_end: {
+  jomtien_soi_7_beach_end: { water: true,
     name: "Soi 7 Sands (Auntie Nok's pitch)",
     region: "Jomtien",
     desc: "Where Soi 7 finally gives out onto the sand: a scrap of hard-packed beach, a couple of " +
@@ -703,7 +703,7 @@ const ROOMS = {
     exits: { e: "pratumnak_soi5", w: "pratumnak_soi5_b" },
     venues: ["the_terrace", "kingfisher", "half_moon_massage"],
   },
-  pratumnak_soi5_b: {
+  pratumnak_soi5_b: { water: true,
     name: "Pratumnak Soi 5 (bottom)",
     region: "Pratumnak",
     desc: "The last stretch before the beach road, and the tone drops a grade: TWO STOOLS " +
@@ -1252,7 +1252,7 @@ const ROOMS = {
     ],
     exits: { e: "beach_rd_top", s: "north_beach" },
   },
-  central_beach: {
+  central_beach: { water: true,
     name: "Pattaya Beach (central)",
     region: "Beach Road",
     desc: "The working stretch, opposite where Central Pattaya Road comes down. By day " +
@@ -1611,7 +1611,7 @@ const ROOMS = {
   },
 
   // ─── Second Road ───
-  second_rd_s: {
+  second_rd_s: { motosai: true,
     busStop: "secondrd",
     name: "Second Road (South)",
     region: "Second Road",
@@ -1621,7 +1621,7 @@ const ROOMS = {
       "not from here — the sois between are somebody's back wall.",
     exits: { w: "beach_rd_s", n: "second_rd_diana", s: "pattaya_tai", spa: "second_thai" },
   },
-  second_rd_c: {
+  second_rd_c: { motosai: true,
     busStop: "secondrd",
     name: "Second Road (Central)",
     region: "Second Road",
@@ -1670,7 +1670,7 @@ const ROOMS = {
       "it is cold, dim and clean, and the traffic on Second Road becomes a rumour.",
     exits: { out: "second_rd_diana" },
   },
-  second_rd_n: {
+  second_rd_n: { motosai: true,
     busStop: "secondrd",
     name: "Second Road (Soi 7)",
     region: "Second Road",
@@ -1726,7 +1726,7 @@ const ROOMS = {
   },
   // Down-market by design, and the food court upstairs is where the fixed-income
   // expats eat — the same men the girls call cheap charlies, seen from the other side.
-  mikes_mall: {
+  mikes_mall: { water: true,
     name: "Mike's Mall",
     bar: "Mike's Mall",
     region: "Second Road",
@@ -1804,7 +1804,7 @@ const ROOMS = {
     ],
     exits: { s: "second_rd_diana", n: "second_rd_myth", e: "soi_honey_w" },
   },
-  second_rd_mall: {
+  second_rd_mall: { motosai: true,
     busStop: "secondrd",
     name: "Second Road (Central Mall)",
     region: "Second Road",
@@ -3223,6 +3223,10 @@ const ROOMS = {
       "customer's pour. It's seedier than town and more honest about it. One bar's " +
       "doorway glows warmer than the rest, and from the south side MAMA YAI'S " +
       "sends out charcoal smoke and the smell of som tam being argued about.",
+    lateDesc: "Soi Khao Talo after the shutters: the fairy lights off, the bamboo rails " +
+      "bare, chairs up on tables behind the grilles. MAMA YAI'S charcoal is banked to " +
+      "grey and the soi smells of wet ash and dog. A last motosai idles at the corner " +
+      "for whoever's still out here, which is you.",
     exits: { w: "khao_talo_strip", n: "lake_mabprachan", in: "khao_talo_bar", e: "khao_talo_bar", s: "mama_yai" },
   },
   // The dead Shamrock. Daeng points at it — "come ask me again when your bar
@@ -3490,6 +3494,9 @@ const ROOMS = {
       "a barometer nobody trusts. The long-stay crowd holds the stools like moorings. Namfon " +
       "pours a cold one before you've picked a seat.",
     reads: {
+      barometer: "The barometer nobody trusts: brass, salt-pitted, its needle parked on " +
+        "CHANGE since roughly the nineties. Tap the glass and it doesn't move. Namfon says " +
+        "it was right once, the night of the big flood, and has been resting on that ever since.",
       wheel: "The ship's wheel is real — teak, brass hub, decades of hands worn into the " +
         "spokes. Where the rest of the nautical junk came from a job lot, the wheel came " +
         "from a boat, and whichever regular you ask tells a different story about which " +
@@ -8457,6 +8464,7 @@ const NPCS = {
   // (the romance vector, Nuan's leverage/pay-rise, the Ampha reveal, the heist)
   // are deferred. No node here promises a verb the game doesn't yet deliver.
   fast_eddy: {
+    dry: true, // a year and a bit sober — a man drink is a soda water, never "a proper one"
     name: "Fast Eddy", emoji: "🕶️", manager: true, pronoun: "he",
     room: "white_rabbit",
     look: "American man, fifties, overweight, bald but for a thin grey rat-tail, gold hoop earring, wraparound shades pushed up, black tee.",

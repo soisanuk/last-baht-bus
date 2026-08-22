@@ -100,7 +100,10 @@ function _doPlay(arg) {
   if (w.includes("killer") || w.includes("league")) return _startKiller();
   if (w.includes("dart")) return _startDarts();
   if (w.includes("pool") || w.includes("8") || w.includes("billiard")) return _startPool();
-  if (w.includes("connect") || w.includes("four") || w.includes("4")) return _startC4();
+  if (w.includes("connect") || w.includes("four") || w.includes("4")) {
+    const m = w.match(/\b(\d{2,5})\b/); // a trailing stake: PLAY CONNECT 4 100
+    return _startC4(m ? +m[1] : undefined);
+  }
   const opts = _playOptions();
   if (opts.length) _say("Play what? " + opts.map(o => "PLAY " + o.toUpperCase()).join(" · ") + ".", "dim");
   else _say("Nothing to play here — the beer bars keep Connect 4 and Jackpot within reach.", "dim");
@@ -108,11 +111,11 @@ function _doPlay(arg) {
 
 // ─ Connect 4 ─
 
-function _startC4() {
+function _startC4(want) {
   if (!_barGamesHere()) { _say("No Connect 4 board here — every beer bar keeps one within arm's reach."); return; }
   const { id, name } = _gameHostess();
   const depth = _c4Depth(id);
-  const stake = _takeStake(C4_STAKE);
+  const stake = _takeStake(want || C4_STAKE);
   G.game = { type: "c4", board: c4New(), opp: name, oppId: id, depth, stake };
   // the intro telegraphs the tier — read your opponent before you bet
   if (depth >= 8) {
@@ -206,11 +209,12 @@ function _lastBusWarn() {
   if (G.nightTurn < LAST_BUS_TURN - 5 || G.nightTurn >= LAST_BUS_TURN) return;
   if (G.room === _hotelRoomId()) return; // already home — no race left to run
   G.lastBusWarned = true;
+  const mins = Math.max(5, (LAST_BUS_TURN - G.nightTurn) * 6);
   _say(_fmt("Somewhere a songthaew driver checks his watch and turns the truck toward the " +
-    "depot. The last baht bus makes its final run at two — call it half an hour off. " +
+    "depot. The last baht bus makes its final run at two — call it {mins} off. " +
     "Get to a main road for the ฿{fare} ride home, or the small hours belong to the piwins " +
     "and their prices. This is the hour the whole night has been counting down to.",
-    { fare: BUS_FARE }), "alert");
+    { fare: BUS_FARE, mins: mins >= 25 ? _L("half an hour") : _fmt(_L("{n} minutes"), { n: mins }) }), "alert");
 }
 
 // ── The piwins, and buying sight ─────────────────────────────────────────────
@@ -1556,6 +1560,7 @@ const _FLIRT_HOSTILE = [
   n => _fmt("\"You WHAT?\" {n} sets the glass down very deliberately. That is not a look you flirt through. Leave it.", { n }),
 ];
 function _flirtUnwelcome(id, name) {
+  if (id === "cream" && typeof _chamFlirt === "function") { _chamFlirt(); return; } // the civilian at the table
   const o = NPCS[id] && NPCS[id].orientation;
   let pool, hostile = false;
   if (o === "gay") pool = _FLIRT_WRONGTEAM;
@@ -2975,7 +2980,7 @@ function _endNight(reason) {
   // night ends — run to dawn, or drop from thirst/drink — and it's a HARD FAIL
   // that RESETS the game, not the sandbox's soft rough-wake. Only a progress
   // high-water mark survives (see _act1Fail).
-  if (!_flag("act1Done") && (reason === "dawn" || reason === "collapse" || reason === "blackout")) {
+  if (!_flag("act1Done") && ["dawn", "collapse", "blackout", "hurt", "accident"].includes(reason)) {
     _act1Fail(reason);
     return;
   }
@@ -3246,6 +3251,7 @@ function _endNight(reason) {
   _loanNightRoll();                   // Nira's loan compounds and her cousins escalate if you're late
   if (typeof _barSettle === "function") _barSettle();  // your own bar's night, and the old man's month
   _stdMorningTick();                  // an untreated infection makes itself known each morning
+  G.wakeTurn = G.turns;               // the SLEEP-on-waking guard reads this (engine-parser "sleep")
   _describeRoom(true);
   if (typeof _chamMorning === "function") _chamMorning(); // the barista's bus is at ten to eight (chameleon economy)
 }

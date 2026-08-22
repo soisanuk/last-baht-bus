@@ -34,6 +34,7 @@ test("every visit explains why you're there and where you are", () => {
 });
 
 test("the hurt ending routes to the free hospital — insurance, no ฿500 bill", () => {
+  _setFlag("act1Done"); // in the opening quest a hospital night is a do-or-die fail instead
   G.money = 1500;
   const before = G.money;
   _endNight("hurt");
