@@ -2602,6 +2602,12 @@ function _sayDirectedReact(key, id, name) {
   _addHappy(1);
 }
 
+const _GIVE_EMPTY_LINES = [
+  n => `${n} looks at the empty bottle, then at you, then laughs. "For me? Aww. You keep — take to Auntie Nok, she give you five baht. Then you buy ME real drink, na."`,
+  n => `${n} does not take the empty. "Tilac. Is empty. You want give me something, is a full one, or..." She taps the lady-drink menu and grins.`,
+  n => `${n} holds up both hands, delighted and appalled. "I not the recycle lady! That five baht at Nok cart. Bring me the five baht, hahaha."`,
+  n => `${n} accepts the empty with elaborate two-handed grace, sets it back in your hand exactly as gravely, and says nothing at all. Point made.`,
+];
 function _doGive(itemWord, npcWord) {
   // "give noodles to dog" — the dog isn't an NPC; feeding is its own path
   // (answers to the defaults and to whatever he's been renamed)
@@ -2731,6 +2737,12 @@ function _doGive(itemWord, npcWord) {
     return;
   }
   _traceCancel(); // she declined it — no "you gave" breadcrumb for a gift that bounced
+  // Handing a working girl your empties is its own small comedy — and the empties
+  // are worth ฿5 to Auntie Nok, so she points you there rather than a flat wave.
+  if (/bottle|glass/.test(itemWord) && NPC_ROLES[npc]) {
+    _say(_pickVary(_GIVE_EMPTY_LINES, "giveempty")(NPCS[npc].name));
+    return;
+  }
   _say(`${NPCS[npc].name} waves it away with a smile.`);
 }
 
