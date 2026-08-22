@@ -2281,6 +2281,10 @@ const _CONVO_TOPIC_RULES = [
   [/khanom|the cart|sticky rice|coconut vendor|snack cart|the vendor/,          "vendor"],
   // Nok — the Jomtien regular who stopped coming (The Quiet Side, docs/map-coverage.md)
   [/\bgordon\b|the regular|who stopped/,                                         "regular"],
+  // Neil / Nigel — the Darkside counterweight and the grapevine that tells it wrong
+  [/\bdark ?side\b|east pattaya|over the highway|across (the )?(highway|sukhumvit)|the lake\b|\bneil\b/, "darkside"],
+  [/the lads\b|town lads|the chorus|old boys|the veterans|sports bar|your mates/,  "mates"],
+  [/\bdaughter\b|your girl\b|the kid\b|your kid\b/,                             "daughter"],
 ];
 
 function _convoTopic(s) {

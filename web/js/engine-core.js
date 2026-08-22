@@ -782,7 +782,7 @@ function _align(name, delta) {
   G.faction[name] = Math.max(-5, Math.min(5, (G.faction[name] || 0) + delta));
 }
 
-function _patronTalk(id, topic) {
+function _patronTalk(id, topic, _retried) {
   if (G.patronTalk.day !== G.day) G.patronTalk = { day: G.day, talked: {} };
   _convoStart(id); // engaging a regular makes him the active conversation partner
   const p = PATRONS[id];
@@ -803,7 +803,15 @@ function _patronTalk(id, topic) {
     break;
   }
   if (!d) {
-    if (topic) { _patronTalk(id, null); return; }
+    if (topic) {
+      // parity with _doTalkBody: a literal miss retries through the synonym map
+      // (_CONVO_TOPIC_RULES) before giving up — "ask nigel about neil" reaches
+      // his darkside node the same way "ask jenny about boyfriend" reaches
+      // sponsor. One retry only, so a rule cycle can't recurse.
+      const norm = !_retried && typeof _convoTopic === "function" ? _convoTopic(topic) : topic;
+      _patronTalk(id, norm !== topic ? norm : null, true);
+      return;
+    }
     _say(`${p.name} has said his piece for now.`);
     return;
   }

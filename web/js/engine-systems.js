@@ -4693,6 +4693,17 @@ const _OWL_LETTERS = [
    "One hairpin is a signed confession, squire, and your condo becomes an active crime scene the instant a second guest crosses the threshold. The old hands play away games only — her room, a short-time, anywhere but the one address a wronged woman can find again at three in the morning. A man who brings them home is not a butterfly. He is a defendant."],
   ["A reader writes: 'Met a Bangkok girl on Second Road — no bar, no agenda, she paid for the lattes. Her family had a \"business.\" I pictured a noodle stall. Dinner turned out to be a private room in Sathorn, her father put a black metal card on the bill without looking at it, and I noticed, six months in, that her bracelet was real Cartier. I have felt about four inches tall since. Was I a fool?'",
    "You were a tourist, chief, which is a fool on a schedule. Two lessons for the price of one dinner. First: the lattes were the tell — a woman who won't let you pay is not auditioning you for savior. Second, and mind this one: nobody in that room was unkind to you. Warm as the Blue Label. That is how you know exactly where you stood."],
+  ["A sports-bar regular writes, with some satisfaction: 'Mate of ours went native over the " +
+    "Darkside years back — took a dancer home, we all told him. Then the money went, so she'll " +
+    "have been gone inside the week. Nobody's seen him since. Another one for your ledger, Owl.'",
+   "The Owl keeps that ledger, squire, and this entry reads differently from the east side of " +
+    "the highway. Your mate's money went, and the lady went out at low tide and dug clams off " +
+    "the Naklua flats, and cooked them, and stayed. There was a tea stand after — lopsided, " +
+    "twenty-five baht a cup, a baby in a sling — and there is a bakery now, and the ledger says " +
+    "so in her handwriting. You are not wrong about the odds; nine times in ten the meter runs " +
+    "dry and the bed is empty, and I have printed those nine without flinching. But a man who " +
+    "only counts the ones who come back to the bar will never count the ones who didn't need " +
+    "to. Fewer than you hope, squire. More than you sneer."],
 ];
 const _OWL_JOKES = [
   "A constable pulls a weaving driver over. 'You drinking?' Driver: 'Depends — you buying?'",
@@ -4751,6 +4762,12 @@ const _OWL_LISTINGS = [
 // exact object. The player is never named; the coincidence is the wink. Letters
 // exist only for these flagship fixtures — the map grows with the canon.
 const _OWL_NOTICED = {
+  "lake_beer.photos": ["A reader out at the lake writes that among the birthdays and the fish on " +
+    "The Sundowner's fridge there is one snapshot that doesn't belong — a crooked tea stand, a " +
+    "baby in a sling — and asks whose it is.",
+    "Ask the quiet man on the end stool, squire, and buy him the one bottle he drinks. Or don't, " +
+    "and leave it where it is. It has been the heaviest thing on that fridge for years, and it " +
+    "weighs what a magnet weighs."],
   "tequila_queen.mirror ball": ["A reader asks after the Tequila Queen's mirror ball, specifically the dark " +
     "patch where the tiles are gone, and whether management might finally fix it.",
     "Fix it? Squire, that dark patch has seniority over half the dancers. It sweeps the room " +

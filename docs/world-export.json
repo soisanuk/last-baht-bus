@@ -23,9 +23,9 @@
  ],
  "counts": {
   "geolocated": 237,
-  "patrons": 23,
+  "patrons": 24,
   "people": 330,
-  "portraits": 353,
+  "portraits": 354,
   "renders": 352,
   "thumbs": 352,
   "venues": 237
@@ -197,6 +197,14 @@
    "home": "queen_vic",
    "name": "Mort",
    "nat": "American",
+   "pronoun": "he"
+  },
+  "neil": {
+   "desc": "Fifty-four, heavy through the shoulders the way a man gets from lifting things rather than weights, cropped hair going grey, a plain navy polo that has been washed into softness. One bottle of Leo in front of him, nursed rather than drunk. He watches the road and the water with the settled, unperformed quiet of a man who has done the heavy part of something and sees no reason to mention it.",
+   "emoji": "🫖",
+   "home": "lake_beer",
+   "name": "Neil",
+   "nat": "British",
    "pronoun": "he"
   },
   "nigel": {
@@ -3667,6 +3675,7 @@
   "naree",
   "near",
   "nee",
+  "neil",
   "neon_palm_bee",
   "neon_palm_nittaya",
   "neon_palm_noey",
