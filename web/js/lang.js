@@ -494,8 +494,8 @@ const _CATALOGS = {
       "„Chon kaew!“ {n} stößt mit ihrem ฿{p}-Lady-Drink auf dich an und meint es für genau einen Schluck.",
     "You buy {n} a drink; she rewards it with a smile calibrated to the exact value of ฿{p}.":
       "Du kaufst {n} einen Drink; sie belohnt es mit einem Lächeln, geeicht auf den exakten Wert von ฿{p}.",
-    "Another ฿{p} lady drink for {n} — the house's real product, sold by the glass.":
-      "Noch ein ฿{p}-Lady-Drink für {n} — das eigentliche Produkt des Hauses, glasweise verkauft.",
+    "A ฿{p} lady drink for {n} — the house's real product, sold by the glass.":
+      "Ein ฿{p}-Lady-Drink für {n} — das eigentliche Produkt des Hauses, glasweise verkauft.",
     "{n}'s glass runs dry the way a meter does; ฿{p} restarts it.":
       "{n}s Glas läuft leer wie ein Taxameter; ฿{p} startet es neu.",
     "The waitress doesn't even ask — {n}'s drink, ฿{p}, straight onto your tab.":

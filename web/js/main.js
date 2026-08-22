@@ -171,14 +171,27 @@ function _startGame(daily) { // START / TODAY'S SOI on the Soi 6 intro panel
 
 function _dispatch(cmd) {
   const v = cmd.trim().toLowerCase();
+  // the start menu is up: typed commands must not drive the skeleton game behind
+  // it (replayer playtest 2026-08-22: "e" walked the hidden player to the beach road)
+  const _ov = document.getElementById("start-overlay");
+  if (_ov && !_ov.hidden && !_awaitingContinue && !/^toggle/.test(v)) {
+    _term.print("(Pick a mode above to start.)", "dim");
+    return;
+  }
 
   if (_awaitingContinue) {
     if (["yes", "y", "continue"].includes(v)) {
       _awaitingContinue = false;
-      try { deserializeGame(localStorage.getItem(SAVE_KEY)); } catch (e) {}
+      let blob = null;
+      try { blob = localStorage.getItem(SAVE_KEY); deserializeGame(blob); } catch (e) {}
       _term.print("Welcome back. Where were we…", "dim");
-      _describeRoom(true, true); // restore / rewind: re-orient with the full desc
+      // The redraw is presentation, but _describeRoom's pooled lines draw from
+      // G.rng — so a reload mid-night silently moved the daily off its dice
+      // (replayer playtest 2026-08-22). Redraw, then reload the blob: the game
+      // state is exactly what was saved, whatever the redraw consumed.
+      if (G.pendingChoice !== "intro") _describeRoom(true, true); // (still in Tan's sedan: no room to describe)
       _renderResume(); // redraw whatever modal prompt was gating input (game/encounter/checkout/fare/airline)
+      try { if (blob) deserializeGame(blob); } catch (e) {}
     } else if (["no", "n", "new", "restart"].includes(v)) {
       _awaitingContinue = false;
       _showStartMenu();
@@ -193,11 +206,13 @@ function _dispatch(cmd) {
 
   if (v === "undo") {
     if (_prevSnap) {
-      deserializeGame(_prevSnap);
+      const snap = _prevSnap;
+      deserializeGame(snap);
       _prevSnap = null;
       _term.print("⌫ Rewound one command.", "dim");
       _describeRoom(true, true); // restore / rewind: re-orient with the full desc
       _renderResume(); // rewound into a modal state — redraw its prompt (see engine _renderResume)
+      deserializeGame(snap); // the redraw consumed dice; UNDO must not reroll (replayer playtest 2026-08-22)
       _autosave();
     } else {
       _term.print("Nothing to rewind — UNDO reaches back one command only.", "dim");
@@ -277,7 +292,7 @@ function _dispatch(cmd) {
   if (v === "reset") {
     _awaitingReset = true;
     _term.print("⚠️  RESET erases your saved game from this device — permanently, no UNDO. " +
-      "(RESTART just begins a fresh night; RESET wipes everything, records and all.)", "alert");
+      "(RESTART begins a fresh week from the taxi — the daily stays the daily; RESET wipes everything, records and all.)", "alert");
     _term.print("Type RESET again (or YES) to confirm — anything else cancels.", "alert");
     return;
   }
@@ -432,7 +447,15 @@ document.addEventListener("DOMContentLoaded", () => {
     _term.print("THE LAST BAHT BUS", "win");
     _term.print("a Pattaya misadventure · Soi Sanuk universe", "dim");
     _term.print("═══════════════════════════════════", "dim");
-    _term.print("A night in progress was found on this device.");
+    // say WHAT was found — a returning player re-orients faster (replayer playtest 2026-08-22)
+    let where = "";
+    try {
+      const sv = JSON.parse(localStorage.getItem(SAVE_KEY) || "{}");
+      const room = sv.room && typeof ROOMS !== "undefined" && ROOMS[sv.room] ? (ROOMS[sv.room].bar || ROOMS[sv.room].name) : null;
+      const mode = sv.mode === "soi6" ? (sv.dailyId ? `the ${sv.dailyId} daily` : "a Soi 6 week") : sv.stage === "expat" ? "Pattaya, home" : "a vacation";
+      if (sv.day) where = ` — ${mode}, day ${sv.day}${room ? ", at " + room : ""}`;
+    } catch (e) {}
+    _term.print("A night in progress was found on this device" + where + ".");
     _term.print("Continue your night? (YES / NO)", "alert");
     _term.renderChips([{ cmd: "yes", label: "YES — continue" }, { cmd: "no", label: "NO — start fresh" }]);
   } else {

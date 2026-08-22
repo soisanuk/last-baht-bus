@@ -1414,6 +1414,11 @@ const ROOMS = {
     desc: "The paved walk between road and sand. Couples, joggers who've made bad choices, " +
       "and ladies standing in the lamplight with nowhere in particular to be. The " +
       "bins are full of collectable glass, if a man were desperate.",
+    reads: {
+      bins: "Council bins at every lamp post, and every one of them a Chang bottle bank. You " +
+        "could fish the cleanest one out without anyone thinking less of you — nobody here " +
+        "thinks about you at all. (TAKE BOTTLE; Auntie Nok on Jomtien Soi 7 pays five baht.)",
+    },
     exits: { e: "beach_rd_c" },
   },
   beach_rd_n: {
@@ -1607,7 +1612,7 @@ const ROOMS = {
       "unhurried patience of a man who has seen every possible farang. A wall of " +
       "confiscated selfie sticks. Sitting between the mall and the Beach Road bars, " +
       "it catches whatever the tide washes up. Best visited voluntarily.",
-    exits: { w: "beach_rd_soi9" },
+    exits: { w: "beach_rd_soi9", out: "beach_rd_soi9" },
   },
 
   // ─── Second Road ───
@@ -4045,6 +4050,11 @@ const ITEMS = {
     portable: true, location: "jomtien_beach_rd_s",
     desc: "An empty Singha bottle, rinsed by somebody more organised than its drinker. ฿5 of glass.", bottle: true,
   },
+  bottle4: {
+    name: "empty Singha bottle", aliases: ["bottle", "singha bottle", "glass"],
+    portable: true, location: "promenade",
+    desc: "A Chang bottle off the top of a promenade bin — rinsed by the last rain, worth five baht to the right auntie.", bottle: true,
+  },
   charger: {
     name: "phone charger", aliases: ["charger", "cable"],
     portable: true, location: null, // bought at 7-Eleven
@@ -4252,7 +4262,7 @@ const NPCS = {
           "You want water, mango? Mango very sweet today — I not say that every day.\"",
         short: "\"You back! Mango very sweet today.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
-        text: "\"Oh, you awake! You sleep on beach like soi dog, hahaha. You want water? No money? Aiyee.\" She taps the sign on her cart. \"Bring bottle, I give five baht. Beach full of bottle. Farang leave everything.\"",
+        text: "\"Oh, you awake! You sleep on beach like soi dog, hahaha. You want water? No money? Ui!\" She taps the sign on her cart. \"Bring bottle, I give five baht. Beach full of bottle. Farang leave everything.\"",
         short: "\"Bring bottle, I give five baht.\"" },
       { topic: "wallet", text: "\"Wallet gone? Beach at night, tilac. You lucky they leave your shoes. Go town, ask the bar ladies — nothing happen in Pattaya they don't know.\"" },
       { topic: "bus", text: "\"Baht bus fifteen baht now. Used to be ten! Iran war, petrol crazy. Everybody complain, everybody still ride. Stop just north, na — up the beach road, blue trucks, cannot miss.\"",
@@ -4334,6 +4344,11 @@ const NPCS = {
       "second you walked in.",
     dialogue: [
       // Bert's "quiet piece of this place": asked, she says exactly as much as she means to
+      { topic: "lek",
+        text: "\"Lek? Lucky Tiger, the pool table — she sees everything that walks up this soi and " +
+          "remembers half of it.\" A flick of the eyes down Buakhao. \"If it happened on this " +
+          "road, ask Lek. Be nice. She likes nice.\"",
+        short: "\"Lek — Lucky Tiger, the pool table. If it happened on this road, ask her.\"" },
       { topic: "bert",
         text: "\"Bert?\" The smallest pause. \"We go back. I keep an eye on his place, he keeps an eye " +
           "on who comes near my girls. A bar is not the building, na — it is who is watching it.\" " +
@@ -4461,6 +4476,11 @@ const NPCS = {
         short: "\"Hello handsome! You play pool, or you just hiding from your night?\"" },
       // the re-readable gist once the story has moved past her greeting (playtest
       // 2026-08-22: ASK LEK ABOUT MOT / WALLET fell to "Hello handsome")
+      { topic: "office",
+        text: "\"Oy's office? Behind her bar, up the stair. Locks itself when the music is on — I " +
+          "don't know the trick, I only hear about it.\" She chalks her cue. \"The girls in the " +
+          "cage at Rainbow know that door better than Oy does. The cashier sees everything.\"",
+        short: "\"Oy's office locks itself. The cashier in the cage at Rainbow knows that door better than Oy.\"" },
       { topic: "wallet", req: ["knowMot"], sets: ["knowOyHasIt"],
         text: "\"Mot? He sell your wallet to Madam Oy — Rainbow Girls, top of Tree Town. In her " +
           "safe by now, guarantee.\" She flicks a nail at the door. \"Go. Be polite to her. " +
@@ -8103,6 +8123,17 @@ const NPCS = {
           "school fee, the fertiliser, the funeral. We charge…\" she taps the bar twice \"…ยี่สิบ, " +
           "twenty percent, pay back in a few days. Everybody happy.\" A beat. \"You think the bar owns " +
           "me. The bar RENTS me. Different thing, na.\"" },
+      { topic: "loan", when: (st, G) => !!(G.loan && G.day > G.loan.dueDay),
+        text: "\"Late.\" Nira says it before you do, and does not stop counting. \"You know the number — " +
+          "it went up last night and it goes up tonight. I don't shout. I don't need to.\" She looks at " +
+          "you once, level. \"REPAY what you can. The cousins are patient men, and patience is the " +
+          "expensive kind.\"",
+        short: "\"Late. You know the number. REPAY what you can — the cousins are patient, and patience is expensive.\"" },
+      { topic: "loan", when: (st, G) => !!(G.loan && G.day <= G.loan.dueDay),
+        text: "\"Your loan?\" A glance at the calculator that is also a glance at a calendar. \"Day \" + " +
+          "String(G.loan.dueDay) + \" it is due. REPAY early and I think well of you. REPAY late and I think " +
+          "about you — which is worse.\"",
+        short: "\"Due day \" + String(G.loan.dueDay) + \". Early is good. Late is… memorable.\"" },
       { topic: "loan", text: "\"You want to borrow?\" The smile sharpens by exactly one degree. \"From " +
           "ME — not the family; family rate is for family. For you: twenty percent, pay back in three " +
           "days. But understand one thing: I always, always get paid back. Ask anybody in my village. " +

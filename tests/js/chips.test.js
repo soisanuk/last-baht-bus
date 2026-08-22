@@ -73,10 +73,11 @@ test("a live Connect 4 game shows only its moves + quit", () => {
   assert.ok(!cmds().includes("look"), "the room's own verbs are suppressed mid-game");
 });
 
-test("a pending checkout shows the hotel menu", () => {
-  G.pendingChoice = "checkout";
+test("a pending checkout shows the hotel menu — minus the hotel you're leaving", () => {
+  G.pendingChoice = "checkout"; G.hotel = "queenvic";
   const c = cmds();
   assert.ok(c.includes("sabai") && c.includes("metropole") && c.includes("stay"));
+  assert.ok(!c.includes("queen vic"), "the one you're in isn't offered (broke playtest 2026-08-22)");
 });
 
 test("the vacation-end prompt shows its two answers", () => {

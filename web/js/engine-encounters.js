@@ -1308,7 +1308,7 @@ const _JOGGER_WAVE = [
   "You raise a hand back. “LOVELY EVENING FOR IT,” he bellows, up a road of " +
     "sleeping condo blocks, and is gone round the bend still climbing.",
   "You wave. He gives you a thumbs-up of enormous sincerity and shouts “KEEP " +
-    "GOING” at a man standing entirely still on a hill at two in the morning, " +
+    "GOING” at a man standing entirely still on a hill at this hour, " +
     "then takes the gradient like it owes him.",
   "You wave back. He returns it with both hands, briefly running like a man " +
     "surrendering, shouts something about the view from the top, and pounds on up " +

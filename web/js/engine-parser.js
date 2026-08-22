@@ -23,7 +23,7 @@ const _LADY_DRINK_LINES = [
   n => _fmt("A thimble of something mostly ice lands in front of {n} — ฿{p}, gone in three sips.", { n, p: LADY_DRINK }),
   n => _fmt("“Chon kaew!” {n} toasts you with her ฿{p} lady drink and means it for exactly one sip.", { n, p: LADY_DRINK }),
   n => _fmt("You buy {n} a drink; she rewards it with a smile calibrated to the exact value of ฿{p}.", { n, p: LADY_DRINK }),
-  n => _fmt("Another ฿{p} lady drink for {n} — the house's real product, sold by the glass.", { n, p: LADY_DRINK }),
+  n => _fmt("A ฿{p} lady drink for {n} — the house's real product, sold by the glass.", { n, p: LADY_DRINK }),
   n => _fmt("{n}'s glass runs dry the way a meter does; ฿{p} restarts it.", { n, p: LADY_DRINK }),
   n => _fmt("The waitress doesn't even ask — {n}'s drink, ฿{p}, straight onto your tab.", { n, p: LADY_DRINK }),
 ];
@@ -85,7 +85,7 @@ function _poachAnger(id) {
 }
 const _NO_EXIT = [
   "You can't go that way.",
-  "That's a wall, tilac — the soi doesn't run that way.",
+  "That's a wall, boss — the soi doesn't run that way.",
   "No road there: shuttered shophouses and somebody's parked Click.",
   "Nope. The night isn't laid out like that.",
   "Dead end. Pattaya keeps its exits where it keeps them.",
@@ -625,6 +625,10 @@ function _doEnter(arg) {
     const target = ROOMS[to];
     if (target.bar && _pnm(target.bar).includes(_pnm(w))) return _doGo(dir);
     if (_pnm(target.name).includes(_pnm(w))) return _doGo(dir);
+  }
+  if (/7.?eleven|seven.?eleven|\b7-11\b/.test(w) && _room().seven) {
+    _say("You step into the 7-Eleven — the doorbell, the aircon, the glow. (BUY TOASTIE · BUY WATER · BUY CHARGER · BUY CONDOM · CHARGE PHONE)", "dim");
+    return;
   }
   _doTravel(w); // not adjacent — maybe it's somewhere you know the way to
 }
@@ -1598,9 +1602,11 @@ const _SCENERY = [
     return null;
   } },
 
-  { key: "menu", m: /\bmenus?\b|\bprice ?lists?\b/, fn: (ctx) => {
+  { key: "menu", m: /\bmenus?\b|\bprice ?lists?\b|\btariff\b/, fn: (ctx) => {
     if (/soapy/.test(G.room)) return "Laminated, tiered, and mercifully numeric — the " +
       "menu does the talking so nobody in the lobby has to. The prices climb by floor.";
+    if (_room().massage) return "The laminated tariff by the door, sun-faded to pastel: foot, Thai, oil, " +
+      `aloe for the sunburned — a Thai massage is ฿${MASSAGE_LEGIT}, the oil ฿${MASSAGE_OIL}. (MASSAGE)`;
     if (ctx === "bar" || ctx === "pub") return _pickVary([
       "Laminated, sun-faded, sauce-spotted. The prices are best read as opening positions.",
       "One page, two columns, and the lady-drink line doing the heavy lifting for the " +
@@ -2644,6 +2650,12 @@ function _convoPrompt(id) {
 }
 
 function _doWai(arg) {
+  if (arg && /^(the )?(piwin|motosai|driver|bike ?boy|taxi)$/i.test(arg.trim())) {
+    if (!_piwinHere()) { _say("No stand here — the bikes are on the corners."); return; }
+    _say("You wai the piwin. He returns it one-handed, the other on the throttle, and grins — a " +
+      "farang who wais the bike boys is a farang who gets the honest price.");
+    return;
+  }
   const npcs = _npcsHere();
   const target = arg ? _findNpc(arg) : (npcs.length === 1 ? npcs[0] : null);
   if (!target) {
@@ -2674,8 +2686,15 @@ function _waiEffect(id) {
   }
 }
 
+// Strip the polite particles a Thai speaker naturally appends (ค่ะ/คะ/ครับ/นะ…)
+// so สวัสดีค่ะ matches the greeting — it was "gibberish" to a Thai woman NPC
+// (Thai-speaker playtest 2026-08-22).
+function _stripPolite(s) {
+  return String(s || "").replace(/\s*(นะคะ|นะครับ|ค่ะ|คะ|ครับ|นะ)\s*$/g, "")
+    .replace(/\s+(na )?(kha|ka|khrap|krub|krap|krab|na)\s*$/i, "").trim();
+}
 function _doSay(arg, targetWord) {
-  const key = matchThaiPhrase(arg);
+  const key = matchThaiPhrase(arg) || matchThaiPhrase(_stripPolite(arg));
   const target = (targetWord || "").trim();
 
   // SAY <phrase> TO <person>: aim it at one person, get their reaction — the
@@ -2684,9 +2703,21 @@ function _doSay(arg, targetWord) {
   if (target) {
     let id = _findNpc(target);
     const patronHere = _inBar() && /patron|regular|expat|customer|guy|bloke|farang/.test(target);
+    if (!id && /^(the )?(piwin|motosai|driver|bike ?boy|taxi)$/i.test(target) && _piwinHere()) {
+      if (key === "how_much") { _say(`The piwin grins: “${thaiBaht(MOTOSAI_TOWN)} in town, ${thaiBaht(MOTOSAI_FAR)} to Darkside.”`, "thai"); return; }
+      if (key === "hello" || key === "thanks") { _say("The piwin dips his chin — the stand's whole vocabulary of warmth — and goes back to his phone."); return; }
+      _say("The piwin nods, unreadable behind the vest, and files you under 'tries'."); return;
+    }
     if (!id && !patronHere) { _say("They're not here to hear it."); return; }
     const name = id ? NPCS[id].name : "the regular";
     if (!key) {
+      // a Thai listener caught every word — it's the GAME that didn't
+      if (id && typeof _thaiVoice === "function" && _thaiVoice(id) && /[\u0E00-\u0E7F]/.test(arg)) {
+        _say(`${name} catches it — every word — and answers in kind, warm and far too fast for you to ` +
+          "follow, then laughs at your face and slows down to English. (The game only knows a few " +
+          "phrases of Thai: SAY offers them.)");
+        return;
+      }
       _say(`You try a phrase on ${name}, who receives it with the fond, baffled ` +
         "smile of someone who did not catch a word but liked the effort.");
       return;
@@ -2712,6 +2743,9 @@ function _doSay(arg, targetWord) {
     if (r.busStop) _say(`A driver leans out: “${thaiBaht(BUS_FARE)}” (${thaiNumRoman(BUS_FARE)} baht).`, "thai");
     else if (r.motosai) _say(`A piwin grins: “${thaiBaht(MOTOSAI_TOWN)} in town, ${thaiBaht(MOTOSAI_FAR)} to Darkside.”`, "thai");
     else _say("Nobody here is selling anything. Officially.");
+  } else if (key === "no") {
+    _say("“ไม่เอา” — mai ao. You wave it off, whatever it was. The nearest vendor shrugs it back into the bag; " +
+      "the nearest girl laughs: “Ooh, he know this one.”");
   } else {
     _say("Laughter and approval. สนุก!");
   }
@@ -2738,7 +2772,7 @@ function _sayDirectedReact(key, id, name) {
     } else if (id === "bank" || (id && NPCS[id].emoji === "🏍️")) {
       _say(`${name} grins: “${thaiBaht(MOTOSAI_TOWN)} in town, ${thaiBaht(MOTOSAI_FAR)} to Darkside.”`, "thai");
     } else {
-      _say(`${name} spreads their hands. “Depends what you buying, boss.”`);
+      _say(`${name} spreads ${id && NPCS[id] && NPCS[id].pronoun === "he" ? "his" : id ? "her" : "their"} hands. “Depends what you buying, boss.”`);
     }
     return;
   }
@@ -2980,8 +3014,14 @@ function _doGive(itemWord, npcWord) {
   _say(`${NPCS[npc].name} waves it away with a smile.`);
 }
 
-function _doSellBottles() {
-  if (G.room !== NPCS.nok.room) { _say("No bottle buyer here. Auntie Nok's cart is down at the Soi 7 beach end."); return; }
+function _doSellBottles(arg) {
+  // she buys glass, nothing else — SELL PHONE got the bottle pointer (broke playtest 2026-08-22)
+  if (arg && !/bottle|glass|empties|empty/.test(arg)) {
+    _say("The only thing anyone on this coast buys off a farang is glass — Auntie Nok, Jomtien Soi 7 " +
+      "at the beach end, five baht a bottle. The rest of your pockets are your own problem.");
+    return;
+  }
+  if (G.room !== NPCS.nok.room) { _say("No bottle buyer here. Auntie Nok's cart is on JOMTIEN Soi 7, down at the beach end — the Jomtien one, not Pattaya's."); return; }
   const bottles = _inv().filter(id => ITEMS[id].bottle);
   if (!bottles.length) { _say("\"No bottle, no baht, tilac.\" Fair."); return; }
   for (const b of bottles) G.itemLoc[b] = null;
@@ -3079,6 +3119,10 @@ function _doBuy(arg) {
   // BUY PIWIN A BEER. First, because a stand is not a bar and every branch
   // below assumes one — the beer path was answering "this calls for a bar stool".
   if (/\bcoffee\b/.test(arg) && /\btan\b/.test(arg) && _npcsHere().includes("tan")) { _doTalk("tan", "coffee"); return; }
+  if (/7.?eleven|seven.?eleven|\b7-11\b/.test(arg) && _room().seven) { // "enter 7-eleven": the shop is in the room, not a room
+    _say("You step into the 7-Eleven — the doorbell, the aircon, the glow. (BUY TOASTIE · BUY WATER · BUY CHARGER · BUY CONDOM · CHARGE PHONE)", "dim");
+    return;
+  }
   if (/\b(piwin|motosai|driver)\b/.test(arg)) {
     if (!_piwinHere()) { _say("No stand here — the bikes are on the corners."); return; }
     _piwinBeer();
@@ -3267,9 +3311,11 @@ function _doBuy(arg) {
     _addHappy(1);
     if (Object.keys(G.soc.drinks).length >= 4 && !G.soc.butterflyTeased) {
       G.soc.butterflyTeased = true;
-      _say(`${NPCS[id].name} counts something on her fingers, eyes narrowing in ` +
-        "delight: “Ohhh, I hear about you. BUTTERFLY!” She makes the wing motion. " +
-        "The whole bar makes the wing motion. This is your reputation now.", "dim");
+      _say(_pickVary([
+        `${NPCS[id].name} counts something on her fingers, eyes narrowing in delight: “Ohhh, I hear about you. BUTTERFLY!” She makes the wing motion. The whole bar makes the wing motion. This is your reputation now.`,
+        `“You buy drink for how many girl tonight?” ${NPCS[id].name} holds up four fingers, then flaps them. “Butterfly, na. Pattaya small. Everybody know the butterfly.” She does not seem to mind. She seems to be keeping score.`,
+        `${NPCS[id].name} leans to the girl beside her, a whisper, a giggle, and two hands go up making wings. “He fly bar to bar,” she tells you, delighted. “Flap flap. We all know you already.”`,
+      ], "butterfly"), "dim");
     }
     // the mamasan's blessing: her bar warms to you, and the house may pour one back
     if (NPC_ROLES[id] === "mamasan" && _npcRoom(id) === G.room && !G.soc.mamaTreat[G.room]) {
@@ -3600,9 +3646,9 @@ function _doMotosai(arg) {
   }
   if (!r.motosai) { _say("No motosai stand here."); return; }
   let w = (arg || "").toLowerCase();
-  // "hotel" / "home" / "my room": the piwin knows where you sleep — the nearest
-  // stand to your hotel's street (playtest 2026-08-22: "motosai to hotel" shrugged)
-  if (/\b(hotel|home|my room|the room)\b/.test(w) && _flag("act1Done")) {
+  // "hotel" / "home" / "my room" / your hotel's own name: the piwin knows where you
+  // sleep — the nearest stand to your hotel's street (playtests 2026-08-22)
+  if ((/\b(hotel|home|my room|the room)\b/.test(w) || /sabai|queen vic|metropole/.test(w)) && _flag("act1Done")) {
     w = { sabai: "naklua", queenvic: "soi 6", metropole: "soi buakhao" }[G.hotel] || w;
   }
   const destKey = Object.keys(MOTOSAI_DESTS).find(k => w.includes(k) || k.includes(w));
@@ -3636,6 +3682,14 @@ function _doMotosai(arg) {
   // a dog needs his own bike — flat, not gouged with the late-hour fare
   const dogFare = G.dog ? DOG_MOTOSAI_FARE : 0;
   const total = price + dogFare;
+  if (G.money < total && !_flag("act1Done") && !(ROOMS[G.room].region === "Darkside")) {
+    // Act One: the walk IS the opening — a free ride anywhere would make the bus
+    // fare pointless (broke playtest 2026-08-22). The Darkside stranding still gets mercy.
+    _say(`The piwin looks at your empty hands, then down the road, then back. “No money, no ride, boss. ` +
+      `Bus is ${thaiBaht(BUS_FARE)}.” He is not unkind about it. He is just not a charity before you've ` +
+      "earned one.", "dim");
+    return;
+  }
   if (G.money < total) {
     // Broke and stranded. Most of town is a free walk home, but the Darkside is
     // on the wrong side of the highway — a dawn-broke farang out here would be
@@ -4373,10 +4427,12 @@ function _doWait(arg) {
   }
   if (target === null) { _say("WAIT <turns>, or WAIT UNTIL <hour> (say, MIDNIGHT)."); return; }
   if (target <= G.nightTurn) { _say(`It's already ${_clockStr()}. Time only runs one way, even here.`); return; }
-  const startDay = G.day, inbox0 = G.phone.inbox.length, g0 = G;
+  const startDay = G.day, inbox0 = G.phone.inbox.length, g0 = G, room0 = G.room;
   // leave one turn for the tick every command pays at the bottom of doCommand
   while (G.nightTurn < target - 1) {
     _tick();
+    if (G !== g0) return;
+    if (G.room !== room0) { _say(`(${_clockStr()} — you're somewhere else now; the waiting stops.)`, "dim"); return; } // Tan's sedan, a kick-out
     // The world was rebuilt out from under us: an Act One dawn mid-wait hard-fails
     // (_act1Fail → newGame() reassigns G) and resets to the SAME day number, so the
     // day guard below can't see it — without this check the loop ticks the fresh
@@ -4402,6 +4458,7 @@ const _CABARET_PERFORMERS = ["mala", "petch"];
 function _doTip(arg) {
   const amtM = arg.match(/(\d+)/);
   const amount = amtM ? parseInt(amtM[1], 10) : 20;
+  if (amtM && amount === 0) { _say("Zero isn't a tip, it's a gesture — and not a kind one. Keep your hand in your pocket or put something in it."); return; }
   const nameW = arg.replace(/\d+|฿|baht/g, " ").trim();
   if (/\bband\b|\bmusicians?\b|tip.?box/.test(arg)) {
     if (!_bandHere()) { _say("No band playing here tonight."); return; }
@@ -4460,9 +4517,12 @@ function _doTip(arg) {
   if (amount >= 100) {
     const bump = amount >= 300 ? 2 : 1;
     _addBond(id, bump);
-    _say(`฿${amount}, folded small and passed with a wai. ${name} makes it vanish ` +
-      `with a conjurer's economy, and the news crosses the bar by whole-room ` +
-      `telepathy before your hand is back in your pocket. (฿${G.money} left.)`);
+    _say(_pickVary([
+      `฿${amount}, folded small and passed with a wai. ${name} makes it vanish with a conjurer's economy, and the news crosses the bar by whole-room telepathy before your hand is back in your pocket.`,
+      `฿${amount}, and ${name} doesn't look at it — she looks at you, which is the receipt. Somewhere behind the bar a biro makes a note that isn't about money.`,
+      `You press ฿${amount} into ${name}'s hand under the rail. It's gone before it arrived; what stays is the half-second her face forgets to work.`,
+      `฿${amount} — ${name} takes it with both hands and the small bow, and the mamasan, who sees everything, decides you exist.`,
+    ], "bigtip") + ` (฿${G.money} left.)`);
     _addHappy(1); _repGain();
   } else {
     _say(`฿${amount} into ${name}'s tip jar. A warm smile, a small wai — noted, ` +
@@ -4727,6 +4787,18 @@ function _doCheckout() {
       "while the desk is still awake and the day sheet is still open. " +
       "Tomorrow, na.");
     return;
+  }
+  if (G.hotelDebt > 0) {
+    // nobody takes a bag down the stairs past an unpaid folio (broke playtest 2026-08-22)
+    if (G.money >= G.hotelDebt) {
+      _say(`The clerk slides the folio across first: ฿${G.hotelDebt} on the book. You settle it — ` +
+        `(฿${G.money - G.hotelDebt} left) — and only then does the bag come down.`, "dim");
+      G.money -= G.hotelDebt; G.hotelDebt = 0;
+    } else {
+      _say(`The clerk slides the folio across and keeps a hand on your bag: ฿${G.hotelDebt} on the book, ` +
+        `฿${G.money} in your pocket. "Settle first, khun. Then anywhere you like." Nobody checks out of a debt.`, "alert");
+      return;
+    }
   }
   const others = Object.keys(_HOTELS).filter(k => k !== G.hotel);
   G.pendingChoice = "checkout";
@@ -5147,8 +5219,11 @@ function _chipSet() {
     add("yes"); add("no"); add("ask", j ? j.whoLabel : "ask about it"); return chips;
   }
   if (G.pendingChoice === "checkout") {
-    add("sabai", "Sabai ฿400"); add("queen vic", "Queen Vic ฿700");
-    add("areca", "Areca ฿900"); add("metropole", "Metropole ฿1300"); add("stay", "stay put");
+    if (G.hotel !== "sabai") add("sabai", "Sabai ฿400");
+    if (G.hotel !== "queenvic") add("queen vic", "Queen Vic ฿700");
+    if (G.hotel !== "areca") add("areca", "Areca ฿900");
+    if (G.hotel !== "metropole") add("metropole", "Metropole ฿1300");
+    add("stay", "stay put");
     return chips;
   }
   // 2) A live mini-game answers to its own moves only
@@ -5440,8 +5515,35 @@ function engineComplete(input) {
 
 // ── Parser ─────────────────────────────────────────────────────────────────
 
+// The little Thai the parser reads (Thai-speaker playtest 2026-08-22): verbs and
+// nouns a Thai player types first. Greedy longest-match over a string with no
+// spaces; a line that maps entirely becomes the English command, anything else
+// Thai gets a voiced "the soi reads a little" instead of "didn't understand".
+const _THAI_CMD = [
+  ["ขอบคุณ", "thank you"], ["สวัสดี", "hello"], ["เท่าไหร่", "how much"], ["ไม่เอา", "no"], ["ขอโทษ", "sorry"],
+  ["ซื้อ", "buy"], ["เบียร์", "beer"], ["น้ำเปล่า", "water"], ["น้ำ", "water"], ["ข้าว", "food"], ["กิน", "eat"],
+  ["ไปไหน", "exits"], ["ไป", "go"], ["เหนือ", "north"], ["ใต้", "south"], ["ตะวันออก", "east"], ["ตะวันตก", "west"],
+  ["ออก", "out"], ["เข้า", "in"], ["ขึ้น", "up"], ["ดูสิ", "look"], ["ดู", "look"],
+  ["พูด", "talk"], ["กับ", "to"], ["นอน", "sleep"], ["ช่วยด้วย", "help"], ["ช่วย", "help"],
+  ["เงิน", "money"], ["โทร", "call"], ["เวลา", "time"], ["กระเป๋า", "inventory"],
+  ["รถ", "bus"], ["บาท", "baht"], ["ชื่ออะไร", "who"],
+];
+function _thaiToCmd(s) {
+  if (!/[\u0E00-\u0E7F]/.test(s)) return null;
+  let rest = s, out = [], i = 0;
+  while (rest.length) {
+    if (/^\s/.test(rest)) { rest = rest.slice(1); continue; }
+    if (!/^[\u0E00-\u0E7F]/.test(rest)) { const m = rest.match(/^[^\u0E00-\u0E7F\s]+/); out.push(m[0]); rest = rest.slice(m[0].length); continue; }
+    const hit = _THAI_CMD.find(([th]) => rest.startsWith(th));
+    if (!hit) return false; // some Thai the game doesn't read
+    out.push(hit[1]); rest = rest.slice(hit[0].length);
+    if (++i > 12) return false;
+  }
+  return out.join(" ");
+}
 function _norm(s) {
   return s.trim().replace(/\s+/g, " ")
+    .replace(/[๐-๙]+/g, m => String(typeof parseThaiDigits === "function" ? parseThaiDigits(m) : m)) // Thai numerals read as numbers
     .replace(/[“”"']/g, "")
     .replace(/^(please |can you |go )/i, m => m.toLowerCase() === "go " ? "go " : "");
 }
@@ -5504,6 +5606,10 @@ function _renderResume() {
   if (G.pendingChoice === "bkkbill") { _say("The bill sits in its black folder, his card on top. (GRAB · LET)", "dim"); return; }
   if (G.pendingChoice === "cham") { _chamPrompt(); return; }
   if (G.pendingChoice === "chamgift") { _chamGiftPrompt(); return; }
+  // a partner's question still on the table: the cue, so a keyboard player knows "1" is an answer
+  if (G.convoQ && typeof _convoActive === "function" && _convoActive() === G.convoQ.id) {
+    G.convoQ.shown = false; _convoPrompt(G.convoQ.id);
+  }
   if (G.pendingChoice === "synjob") { _synPrompt(); return; }
   if (G.game) { _renderGame(); return; }
   if (G.pendingEnc) { _renderEncounter(); return; }
@@ -5842,7 +5948,7 @@ function doCommand(input) {
       // the noun ("for bottles" used to reach the scenery matcher verbatim and
       // draw the between-drinks joke — desktop playtest 2026-08-17)
       if (arg) _doExamine(arg.replace(/^(?:for|at)\s+(?:the\s+)?/, ""));
-      else _describeRoom(true);
+      else _describeRoom(true, true); // bare LOOK re-orients: the full desc, never the revisit line (replayer playtest 2026-08-22)
       break;
     // A bare POSTER, because the room prints a tappable (POSTER) hint and a hint
     // that doesn't parse is exactly the undelivered promise the lint hunts for.
@@ -5947,7 +6053,7 @@ function doCommand(input) {
       _doGive(gw.slice(0, split).join(" ").trim(), gw.slice(split).join(" ").trim());
       break;
     }
-    case "sell": _doSellBottles(); break;
+    case "sell": _doSellBottles(arg); break;
     case "buy": case "order": _doBuy(arg); break;
     case "pay": _doPay(arg); break;
     case "wai": _doWai(arg); break;
@@ -6008,6 +6114,19 @@ function doCommand(input) {
     // the gambler's vocabulary (2026-08-22): REMATCH / DOUBLE replay the last game
     // here; BET / WAGER <n> [ON <game>] is PLAY with a stake; stray shot-words
     // with no game on the table get a pointer instead of the conversation layer
+    case "beg": case "panhandle": case "cadge": {
+      // the broke man's most-typed verb (broke playtest 2026-08-22): voiced, and
+      // pointed at the real ways back — never a handout
+      _say(_pickVary([
+        "You try it — the hand half out, the face arranged. The soi looks straight through you: a farang " +
+          "begging is a thing it has decided not to see. A piwin says, not unkindly, “Sell bottle, boss. Auntie at Jomtien Soi 7, five baht.”",
+        "Nobody gives. This town runs on the other direction of money, and a farang with his hand out " +
+          "breaks a rule too deep to name. A hostess pats your arm: “You have ATM, na. You have bank. We don't.”",
+        "You ask, and get the look Pattaya keeps for that: pity with no purchase in it. The ways back are the ones you know — " +
+          "the ATM, glass to Auntie Nok, or the lady at Neon Paradise who lends at a price.",
+      ], "beg"), "dim");
+      break;
+    }
     case "rematch": case "double": {
       const lg = G.lastGame;
       if (!lg) { _say("Nothing to rematch yet — PLAY something first. (PLAY CONNECT 4 · PLAY JACKPOT · PLAY POOL)", "dim"); break; }
@@ -6244,12 +6363,23 @@ function doCommand(input) {
       // beach-only (newGame resets mode to null), which wrongly dropped a Soi 6
       // challenge player onto the beach/Act One. Clearing identity re-runs the taxi
       // intro; keep the Act One record + hint unlock on the full-game path.
-      if (G.mode === "soi6") { G.player = null; startSoi6Mode(); return; } // re-pick + fresh Soi 6 week
+      if (G.mode === "soi6") { // re-pick + fresh Soi 6 week — the DAILY stays the daily (replayer playtest 2026-08-22)
+        const daily = G.dailySeed ? { seed: G.dailySeed, dailyId: G.dailyId } : undefined;
+        G.player = null; startSoi6Mode(daily); return;
+      }
       const b = G.act1Best || 0, t = G.act1Tries || 0; newGame(); G.act1Best = b; G.act1Tries = t; engineIntro(); return;
     }
     default:
-      // bare Thai phrase typed directly
-      if (matchThaiPhrase(lower)) { _doSay(lower); break; }
+      // bare Thai phrase typed directly (polite particles allowed)
+      if (matchThaiPhrase(lower) || matchThaiPhrase(_stripPolite(lower))) { _doSay(_stripPolite(lower) || lower); break; }
+      // a Thai line the parser can read becomes the English command; other Thai is voiced, not "didn't understand"
+      if (/[\u0E00-\u0E7F]/.test(lower)) {
+        const en = _thaiToCmd(lower);
+        if (en) { _say(`(เข้าใจ — ${en})`, "dim"); doCommand(en); return; }
+        _say("(The soi reads a little Thai — ซื้อ, ไป, ดู, น้ำ, เบียร์, เท่าไหร่, สวัสดี, ขอบคุณ — but not that one yet. " +
+          "Try it in English, or tap a Thai word for the card.)", "dim");
+        return;
+      }
       // conversation layer: a bare name opens a chat; while one's live, a bare
       // topic or "bye" resolves against the partner. Reached only after every
       // real verb/direction missed, so it never shadows them (see _convoResolve).
@@ -6414,7 +6544,7 @@ function startSoi6Mode(opts) {
   // PLAY AGAIN keeps identity AND the best-week high-water mark; a RESTART (which
   // clears G.player first) falls through here with no identity and resets both.
   if (identity && identity.origin) { G.player = identity; G.bestHappy = bestHappy; }
-  if (opts && opts.seed) { G.rng = opts.seed; G.dailyId = opts.dailyId || null; }
+  if (opts && opts.seed) { G.rng = opts.seed; G.dailySeed = opts.seed; G.dailyId = opts.dailyId || null; }
   _soi6Setup();
   // Same character creation as the full game: on a first-ever start (no identity
   // yet) Tan drives you in and you say who you are; a later week keeps your

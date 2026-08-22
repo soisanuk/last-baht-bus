@@ -140,6 +140,11 @@ function _parseBaht(arg) {
 }
 
 function _doBorrow(arg) {
+  if (G.loanSkipped && G.room === _npcRoom("nira")) {
+    _say("Nira doesn't look up from the calculator. “You.” One word, and the whole last trip is in it. " +
+      "“You fly home with my money. Now you want more?” She laughs, once, not warmly. “No. Not you. Not ever.”", "alert");
+    return;
+  }
   if (!_withNira()) {
     _say("Nobody here is lending. Nira reads the room from the stage at Neon Paradise, on " +
       "Walking Street — ASK her ABOUT LOAN first.", "dim");
@@ -1885,8 +1890,10 @@ function _leads() {
 
   // 3. somewhere you have never set foot. The map is most of the game and a
   //    player who found one soi on night one will happily die on it all week.
+  //    (Soi 6 mode: the pocket is the map — never point at Second Road.)
   const seen = {}, all = {};
   for (const [id, r] of Object.entries(ROOMS)) {
+    if (G.mode === "soi6" && typeof SOI6_ROOMS !== "undefined" && !SOI6_ROOMS.has(id)) continue;
     all[r.region] = true;
     if (G.visited && G.visited[id]) seen[r.region] = true;
   }
@@ -5429,6 +5436,7 @@ const FOOD_STALLS = {
   jomtien_7eleven: { name: "a toastie, pressed while you wait", price: 35, hunger: 40, thirst: 0 },
   mikes_mall: { name: "the fifty-baht plate from the top-floor food court, honestly enough food", price: 50, hunger: 55, thirst: 0 },
   cheap_charlies: { name: "fried rice off the wok, the board the same board it has always been", price: 60, hunger: 55, thirst: 0 },
+  jomtien_soi_7_m: { name: "som tam off the lone cart doing quiet business, extra lime", price: 50, hunger: 50, thirst: -5 },
   cheap_charlies_jt: { name: "fried rice off the wok, the board the same board it has always been", price: 60, hunger: 55, thirst: 0 },
   jomtien_beach_rd: { name: "a cold mango from Auntie Nok, salt and chilli on the side", price: 30, hunger: 25, thirst: 15 },
   buakhao_market: { name: "som tam from the cart, extra everything", price: 50, hunger: 55, thirst: -10 },

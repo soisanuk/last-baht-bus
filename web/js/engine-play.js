@@ -2091,7 +2091,7 @@ const _BELL_GOGO = [
     "working tonight — and everyone working tonight now knows your name.",
   "The bell goes and the place ignites — a round for the stage and the floor both. Cheers over " +
     "the bass, a drum-roll from the cashier's cage, hands on your shoulders you didn't invite and " +
-    "don't mind. For one whole song you are the most popular man on Soi 6.",
+    "don't mind. For one whole song you are the most popular man on the soi.",
   "One pull and the room goes off: drinks down the whole rail, the girls whooping, the DJ " +
     "shouting something with your description in it. The mamasan lets you have this one.",
   "You haul the rope and the bar erupts — a round for the ladies on stage and off, every eye and " +
@@ -2937,6 +2937,7 @@ function _morningLedger() {
   if (dh) bits.push((dh > 0 ? "+" : "") + dh + " \u0e2a\u0e19\u0e38\u0e01");
   const spent = b.money - G.money;
   if (spent > 0) bits.push("spent \u0e3f" + spent.toLocaleString());
+  else if (spent < 0) bits.push("up \u0e3f" + (-spent).toLocaleString() + " on the night");
   const dk = Object.keys(G.known || {}).length - b.known;
   if (dk > 0) bits.push("met " + dk);
   const dn = Object.keys(G.phone.contacts || {}).filter(id => G.phone.contacts[id] && NPC_ROLES[id]).length - b.nums;
@@ -3321,6 +3322,12 @@ function _endVacation() {
     _say("(PLAY AGAIN — one more week on Soi 6. Fresh ฿100,000, fresh liver. " +
       "SHARE copies your week card.)", "dim");
     return;
+  }
+  if (G.loan && G.loan.owed > 0) {
+    // the loan doesn't fly home with you — but the face does (broke playtest 2026-08-22)
+    _say(`(You owe Nira ฿${G.loan.owed}. The airport is the one place her cousins don't come, and she ` +
+      "knows it, and she will remember the face. Pattaya keeps its books.)", "alert");
+    G.loanSkipped = true;
   }
   _say(`VACATION ${G.vacation}: happiness ${G.happy} — ${_happyLevel(G.happy)}` +
     (G.bestHappy > G.happy ? ` (best trip so far: ${G.bestHappy})` : " (your best trip yet)"), "win");

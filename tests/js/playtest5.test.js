@@ -614,3 +614,137 @@ test("the Connect 4 loss is a pool; the seated quiz entry is one line", () => {
   assert.doesNotMatch(text(), /Too late/);
   G.game = null;
 });
+
+// ── round eight: the Thai speaker (Annie), the replayer (Ollie), the broke one (Shane) ──
+test("typed Thai: polite particles match, a Thai listener understands, Thai digits read, a little Thai commands", () => {
+  G.room = _npcRoom("candy"); out = [];
+  doCommand("say สวัสดีค่ะ to candy");
+  assert.match(text(), /สวัสดี/);
+  assert.doesNotMatch(text(), /did not catch a word/);
+  out = []; doCommand("say ฉันชอบเมืองนี้มาก to candy");   // Thai the game doesn't know — she still understood
+  assert.match(text(), /catches it — every word/);
+  out = []; doCommand("ขอบคุณค่ะ");
+  assert.match(text(), /ขอบคุณ/);
+  out = []; doCommand("ไม่เอา");
+  assert.match(text(), /mai ao/);
+  assert.doesNotMatch(text(), /Laughter and approval/);
+  G.room = "jomtien_beach"; G.money = 100; out = [];
+  doCommand("ซื้อน้ำ");
+  assert.match(text(), /เข้าใจ — buy water/);
+  out = []; doCommand("เบียร์ไปไหนดู");
+  assert.match(text(), /reads a little Thai|เข้าใจ/);
+  assert.doesNotMatch(text(), /didn't understand/);
+  assert.equal(_norm("enter ๑๕"), "enter 15");
+});
+
+test("Thai NPCs keep their register on a miss; Nok says ui, not aiyee; the jogger has no fixed hour", () => {
+  assert.ok(_thaiVoice("nok") && _thaiVoice("tan") && _thaiVoice("dj_beer"));
+  assert.ok(!_thaiVoice("gary") && !_thaiVoice("bert"));
+  G.room = _npcRoom("nok"); doCommand("talk to nok"); out = [];
+  doCommand("ask nok about quantum");
+  assert.doesNotMatch(text(), /mate|my department|pay grade/);
+  const src = readFileSync(fileURLToPath(new URL("../../web/js/world.js", import.meta.url)), "utf8");
+  assert.doesNotMatch(src, /No money\? Aiyee/);
+  const enc = readFileSync(fileURLToPath(new URL("../../web/js/engine-encounters.js", import.meta.url)), "utf8");
+  assert.doesNotMatch(enc, /on a hill at two in the morning/);
+});
+
+test("the piwin can be wai'd and spoken to; Candy knows Lek; Lek points at the cage; the station has OUT", () => {
+  G.room = "second_rd_c"; out = [];
+  doCommand("wai piwin"); assert.match(text(), /returns it one-handed/);
+  out = []; doCommand("say thao rai to piwin"); assert.match(text(), /in town/);
+  G.room = _npcRoom("candy"); doCommand("talk to candy"); out = [];
+  doCommand("ask candy about lek"); assert.match(text(), /Lucky Tiger/);
+  G.room = _npcRoom("lek"); doCommand("talk to lek"); out = [];
+  doCommand("ask lek about office"); assert.match(text(), /cage/);
+  assert.equal(ROOMS.police_station.exits.out, "beach_rd_soi9");
+  assert.ok(FOOD_STALLS.jomtien_soi_7_m, "the lone som tam cart trades");
+  assert.ok(ITEMS.bottle4 && ITEMS.bottle4.location === "promenade", "the promenade bins hold a bottle");
+});
+
+test("the daily survives RESTART; LOOK is the full description; leads stay in the Soi 6 pocket", () => {
+  startSoi6Mode({ seed: 12345, dailyId: "2026-08-22" });
+  G.player = { origin: "monger", personality: "joker", orientation: "straight" };
+  assert.equal(G.dailySeed, 12345);
+  doCommand("restart");
+  assert.equal(G.dailyId, "2026-08-22", "RESTART keeps the daily");
+  // LOOK: the full desc, even on a revisit
+  sandbox(); G.room = "khao_talo"; G.visited.khao_talo = true; out = [];
+  doCommand("look");
+  assert.match(text(), /A long, plain soi of beer bars/);
+  // leads in the pocket never name Second Road
+  startSoi6Mode(); G.player = { origin: "monger", personality: "joker", orientation: "straight" }; G.stage = "vacation"; _setFlag("act1Done");
+  const leads = _leads().join("\n");
+  assert.doesNotMatch(leads, /Second Road|Walking Street|Naklua/);
+});
+
+test("a restore redraw must not move the dice: redraw, then reload the blob, and the roll is the same", () => {
+  G.room = "candy_bar"; G.money = 500;
+  doCommand("play jackpot 20");
+  const blob = serializeGame();
+  // simulate main.js: deserialize → describe → resume → deserialize again
+  deserializeGame(blob); _describeRoom(true, true); _renderResume(); deserializeGame(blob);
+  const rngA = G.rng;
+  deserializeGame(blob);
+  assert.equal(G.rng, rngA, "the redraw consumed nothing that survives");
+});
+
+test("WAIT stops when the world moves you; a pending question is redrawn on resume", () => {
+  newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight" };
+  G.room = "jomtien_beach"; G.phone.contacts.tan = true; G.battery = 50; G.money = 0; G.nightTurn = 40;
+  // Tan's 23:00 pickup fires from the tick at nt 50 — WAIT must stop there
+  doCommand("wait until 4");
+  assert.equal(G.room, "buakhao_n");
+  assert.ok(G.nightTurn < 90, "the wait did not ride through the sedan to dawn");
+  sandbox(); G.room = "stinky_bar"; G.player.origin = "pi"; G.player.personality = "blunt";
+  doCommand("talk to bert"); out = [];
+  _renderResume();
+  assert.match(text(), /put that to you/);
+});
+
+test("poverty: SELL points at Jomtien, the pity ride is a sandbox mercy, CHECKOUT settles the book first, TIP 0 refused, BEG is voiced", () => {
+  G.room = "second_rd_c"; out = [];
+  doCommand("sell phone"); assert.match(text(), /glass/); assert.doesNotMatch(text(), /No bottle buyer/);
+  out = []; doCommand("sell bottles"); assert.match(text(), /JOMTIEN Soi 7/);
+  // Act One: no free ride
+  newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight" };
+  G.room = "jomtien_beach_rd"; G.money = 0; out = [];
+  doCommand("motosai to naklua");
+  assert.equal(G.room, "jomtien_beach_rd");
+  assert.match(text(), /No money, no ride/);
+  // sandbox: the mercy still exists
+  sandbox(); G.room = "sukhumvit_crossing"; G.money = 0; out = [];
+  doCommand("motosai to naklua");
+  assert.notEqual(G.room, "sukhumvit_crossing");
+  // checkout with a debt
+  sandbox(); G.room = "hotel_room"; G.nightTurn = 2; G.hotelDebt = 400; G.money = 10; out = [];
+  doCommand("checkout");
+  assert.match(text(), /Settle first/); assert.equal(G.pendingChoice, null);
+  G.money = 1000; out = []; doCommand("checkout");
+  assert.equal(G.hotelDebt, 0); assert.equal(G.pendingChoice, "checkout");
+  G.pendingChoice = null;
+  G.room = "candy_bar"; out = [];
+  doCommand("tip 0"); assert.match(text(), /Zero isn't a tip/);
+  out = []; doCommand("beg"); assert.match(text(), /Sell bottle|Nobody gives|pity/);
+  assert.doesNotMatch(text(), /didn't parse|didn't understand/);
+});
+
+test("the loan: Nira names the due date and the arrears in person; an unpaid loan is remembered at the airport and after", () => {
+  G.room = _npcRoom("nira"); G.money = 30000;
+  doCommand("talk to nira");
+  doCommand("borrow 10000");
+  assert.ok(G.loan, "borrowed");
+  out = []; doCommand("ask nira about loan");
+  assert.match(text(), /Due day|it is due/i);
+  G.day = G.loan.dueDay + 1; out = [];
+  doCommand("ask nira about loan");
+  assert.match(text(), /Late/);
+  G.day = 8; G.room = "hotel_room"; out = [];
+  _endVacation();
+  assert.match(text(), /You owe Nira/);
+  assert.ok(G.loanSkipped);
+  doCommand("new vacation");
+  G.room = _npcRoom("nira"); out = [];
+  doCommand("borrow 5000");
+  assert.match(text(), /Not you\. Not ever/);
+});

@@ -1049,12 +1049,18 @@ const _ASK_AGAIN_EN = [
   n => `${n} gives you a look. “We've done that one. Ask me something I haven't answered.”`,
   n => `“Already told you,” ${n} says, not unkindly. “Buy a round and I'll pretend it's new.”`,
 ];
+// The farang cast: everyone else hand-authored is Thai (Nok, Tan, DJ Beer, the
+// piwins…) and was getting "No idea, mate — not my department" (Thai-speaker
+// playtest 2026-08-22). A farang set is shorter and safer than guessing from `th`.
+const _FARANG_NPCS = new Set(["gavin", "powers", "doyle", "wayne", "roy", "macca", "pete", "rob", "barry",
+  "doug", "terry", "bill", "bob", "fast_eddy", "thomas", "bert", "phil", "gary"]);
 function _thaiVoice(id) {
   const n = NPCS[id];
   if (!n) return true;
   if (NPC_ROLES[id] || n.filler || n.masseuse || n.ladyboy) return true;
   if (typeof _HOSTS !== "undefined" && _HOSTS.includes(id)) return true;
-  return false;
+  if (_FARANG_NPCS.has(id) || n.manager || n.origin) return false;
+  return true;
 }
 function _askAgain(npcId) {
   const pool = _thaiVoice(npcId) ? _ASK_AGAIN : _ASK_AGAIN_EN;
