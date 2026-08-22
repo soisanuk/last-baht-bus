@@ -526,6 +526,20 @@ function _doTravel(arg) {
   }
   const hops = _hops(G.room, dest);
   if (hops === null) { _say("You can't get there from here."); return; }
+  // Don't spend the whole walk to arrive at shutters, or walk into the dawn
+  // (expat playtest 2026-08-22: eleven turns to a bolted Orchid; 22 turns to a
+  // hotel with 22 left in the night).
+  if (typeof _closesMidnight === "function" && _closesMidnight(dest) && !(typeof _lockedIn === "function" && _lockedIn(dest)) &&
+      G.nightTurn + hops >= 60 && G.nightTurn < NIGHT_TURNS) {
+    _say(_fmt("{v} shuts at midnight — {n} turns of soi from here puts you at its shutters. " +
+      "Somewhere that's still open, or a MOTOSAI.", { v: _barName(dest), n: hops }), "dim");
+    return;
+  }
+  if (G.nightTurn + hops >= NIGHT_TURNS) {
+    _say(_fmt("That's {n} turns of soi and the night hasn't got {n} left — you'd be walking into " +
+      "the dawn. A MOTOSAI, or make your peace with where you are.", { n: hops }), "alert");
+    return;
+  }
   _say(hops === 1
     ? _fmt("You point yourself at {v} and let your feet do the remembering — " +
         "one turn of soi, neon, and shortcuts.", { v: _barName(dest) })
@@ -1070,6 +1084,32 @@ const _NO_SUCH_THING = [
 ];
 
 const _SCENERY = [
+  // the animals the prose names (dog-person playtest 2026-08-22): the tide-line dog
+  // before you have one, the rats with routines, the Dolphin Bar's dolphin, Tree
+  // Town's fish tank, the phakhama round his neck
+  { key: "rats", m: /\brats?\b|\bvermin\b/, fn: () => "Rats with routines: the same one crosses the same " +
+    "gap at the same minute every night, unhurried, with the air of a man who has a bar to get to. " +
+    "Nobody looks. The rat doesn't either." },
+  { key: "dolphin", m: /\bdolphins?\b/, fn: () => G.room === "dolphin_bar"
+    ? "The Dolphin Bar's dolphin: painted over the bar in three colours of house paint, grinning " +
+      "with a confidence the artist did not share. Repainted once a decade, badly, on purpose."
+    : "No dolphins here — the roundabout up the road has the statues, and the bar up in Naklua has the painting." },
+  { key: "fishtank", m: /\bfish ?tank\b|\baquarium\b/, fn: () => /^tt_/.test(G.room)
+    ? "Somewhere in this maze a bar has a big fish tank out the front. Everybody who is lost in " +
+      "here is looking for it, and it is always one lane over from wherever you are."
+    : "No fish tank here. Tree Town has one, famously, in front of a bar nobody can find twice." },
+  { key: "phakhama", m: /\bphakhama\b|\bscarf\b|\bpakama\b/, fn: () => G.dog && G.dogPhakhama
+    ? _dogN("The checked phakhama knotted round Sai Krok's neck — a bar girl's gift, 'for handsome'. " +
+      "He wears it like rank, and it has started to smell of him, which he considers an improvement.")
+    : "A phakhama — the checked Isan cloth that is a towel, a belt, a sling and a scarf depending on " +
+      "the hour. Half the soi owns one. None of them are yours." },
+  { key: "straydog", m: /\b(soi |stray |tide.?line )?dogs?\b|\bstray\b|\bpuppy\b/, fn: () => {
+    if (G.dog) return null; // your own is answered by name above
+    if (/beach/.test(G.room)) return "A soi dog working the tide line — nose down, one ear up, entirely " +
+      "self-employed. He checks you for food from a distance and decides not yet. (FEED DOG, if you've any.)";
+    return "The soi's freelancers: on duty, unbothered, and every one of them knows the bars' " +
+      "kitchens better than the health inspector. Affection is not the currency. (FEED DOG.)";
+  } },
   { key: "bargame", m: /\bconnect ?4\b|\bconnect four\b|\bjackpot\b|\bdice box\b|\bshut the box\b|\bgame ?frame\b/, fn: () => {
     // the room prose advertises "a Connect 4 frame and a Jackpot dice box" — give
     // them a look rather than a dead-end (fiddler playtest 2026-08-22)
@@ -2157,6 +2197,17 @@ function _doTalkBody(arg, topic) {
     const a = _resolveActor(arg, _addressable());
     if (a) { if (PATRONS[a]) { _patronTalk(a, topic); return; } arg = a; }
   }
+  if (G.dog && arg && _isDogWord(arg)) {
+    _say(_dogN(_pickVary([
+      "Sai Krok gets the whole story of your night. He listens like a professional — head on one side, " +
+        "the full attention — and offers no opinion, which is the kindest thing anyone's done today.",
+      "Sai Krok hears you out, yawns hugely at the important part, and leans against your leg. " +
+        "That's the whole review.",
+      "He looks up at the sound of his name, holds your eye for a long second, and goes back to " +
+        "reading the street. Conversation over; nothing was needed.",
+    ], "dogtalk")));
+    return;
+  }
   if (!arg) {
     // bare TALK with nobody in play: name the room, don't shrug "nobody by that name"
     const here = [..._npcsHere().map(n => _npcLabel(n)), ..._patronsHere().map(p => PATRONS[p].name)];
@@ -2223,8 +2274,14 @@ function _doTalkBody(arg, topic) {
   }
   // A topic that found no node: say so in her voice. Falling through to the
   // greeting spent its repeat path on a question never asked (playtests 2026-08-22).
+  if (topic && !d.topic && G.dog && (/\bdogs?\b|sai ?krok|\bpuppy\b|\bpaddy\b/.test(topic) || _isDogWord(topic))) {
+    _say(_dogTalk(npc)); // the dog at your heel is a subject everyone has
+    return;
+  }
   if (topic && !d.topic && (G.talked[npc] || []).includes(NPCS[npc].dialogue.indexOf(d))) {
-    _say(_topicMiss(npc));
+    // she HAS that story but its gate hasn't opened: a "not yet", not a "not mine"
+    const gated = NPCS[npc].dialogue.some(e => e.topic && (e.topic === topic || topic.includes(e.topic)));
+    _say(gated ? _topicLocked(npc) : _topicMiss(npc));
     _questOffer(npc);
     return;
   }
@@ -2313,6 +2370,10 @@ const _CONVO_TOPIC_RULES = [
   [/\bdark ?side\b|east pattaya|over the highway|across (the )?(highway|sukhumvit)|the lake\b|\bneil\b/, "darkside"],
   [/the lads\b|town lads|the chorus|old boys|the veterans|sports bar|your mates/,  "mates"],
   [/\bdaughter\b|your girl\b|the kid\b|your kid\b/,                             "daughter"],
+  [/^bars?$/,                                                                     "bars"],
+  [/\b(my|your|this|the) bar\b/,                                                  "bar"],
+  // Act One: the thief by name, or by description, is the wallet story
+  [/\bmot\b|the thief|pickpocket|who (took|lifted|stole)/,                        "wallet"],
   // Cream (the chameleon economy) — the inevitable question, however it's dressed
   [/how much|take you|come with me|go with me|your price|my hotel|my room|short ?time|long ?time|\bbarfine\b|pay you/, "price"],
   [/your job|what.*you do|\bbarista\b|coffee shop|the shop|the apron|\bwork\b/,      "job"],
@@ -2496,9 +2557,20 @@ function _convoResolve(lower) {
     _say("(That numbered question has drifted past — the moment moved on. Ask again if it matters.)", "dim");
     return true;
   }
-  // 3) While a conversation is live, take the whole line as a topic aimed at the
-  //    partner — the same route as ASK <them> ABOUT <topic>.
-  if (id) { _doTalk(_convoName(id), _convoTopic(lower)); return true; }
+  // 3) While a conversation is live, take the line as a topic aimed at the
+  //    partner — the same route as ASK <them> ABOUT <topic> — but only when it
+  //    COULD be one: a short guess (≤2 words), or something the partner has a
+  //    node for (literal or via the synonym map). A whole sentence in another
+  //    language, or a mistyped command, used to be swallowed as "You asked Terry
+  //    about untersuche notizbuch" (German playtest 2026-08-22) — that falls
+  //    through to the parser's own voiced "didn't understand" now.
+  if (id) {
+    const t = _convoTopic(lower);
+    const words = bare.split(/\s+/).filter(Boolean).length;
+    if (words <= 2 || _partnerHasTopic(id, t) || _partnerHasTopic(id, bare)) {
+      _doTalk(_convoName(id), t); return true;
+    }
+  }
   return false;
 }
 
@@ -2680,7 +2752,16 @@ function _doGive(itemWord, npcWord) {
   // "give noodles to dog" — the dog isn't an NPC; feeding is its own path
   // (answers to the defaults and to whatever he's been renamed)
   if (/^(dog|sai|krok)$/.test(npcWord) ||
-      (G.dog && G.dog.name && npcWord === G.dog.name.toLowerCase())) return _doFeedDog("dog");
+      (G.dog && G.dog.name && npcWord === G.dog.name.toLowerCase())) {
+    // a drink, a rose, a phone: he sniffs it and sits. Food feeds.
+    const it = _findItem(itemWord, "inventory");
+    if (G.dog && it && !["noodles", "moo_ping"].includes(it) && !(ITEMS[it].kind === "food")) {
+      _say(_dogN(`Sai Krok sniffs the ${ITEMS[it].name}, looks at you with enormous patience, and ` +
+        "sits. Not food. He can wait."));
+      return;
+    }
+    return _doFeedDog("dog");
+  }
   // "give 500 to jenny" — a money amount isn't an item; hand it over the right way:
   // TIP if she's in front of you, else a pointer at TIP/SEND (don't hit not-carrying).
   if (/^\d+$/.test(itemWord)) {
@@ -2969,6 +3050,7 @@ function _doBuy(arg) {
   const r = _room();
   // BUY PIWIN A BEER. First, because a stand is not a bar and every branch
   // below assumes one — the beer path was answering "this calls for a bar stool".
+  if (/\bcoffee\b/.test(arg) && /\btan\b/.test(arg) && _npcsHere().includes("tan")) { _doTalk("tan", "coffee"); return; }
   if (/\b(piwin|motosai|driver)\b/.test(arg)) {
     if (!_piwinHere()) { _say("No stand here — the bikes are on the corners."); return; }
     _piwinBeer();
@@ -4500,6 +4582,19 @@ function _photoChar(id) {
 }
 
 function _doPhoto(arg) {
+  if (G.dog && arg && _isDogWord(arg.trim().toLowerCase())) {
+    if (G.battery <= 0) { _say("Dead phone. He'll still be here when it isn't."); return; }
+    G.battery = Math.max(0, G.battery - 1);
+    _say(_dogN(_pickVary([
+      "Three frames of blur and one of his nose, enormous, investigating the lens. He has no " +
+        "interest in being photographed and every interest in the phone.",
+      "You get him mid-yawn, which is the most honest portrait anybody has taken in this town " +
+        "tonight. The soi, behind him, is out of focus and looks better for it.",
+      "He holds still for exactly as long as it takes you to frame it, then steps out of frame " +
+        "to check a smell. One good one. It'll do.",
+    ], "dogphoto")), "dim");
+    return;
+  }
   if (G.battery <= 0) {
     _say("Your phone is dead. The moment goes unrecorded, like the best ones always do.");
     return;
@@ -4566,6 +4661,11 @@ function _doCall(arg) {
   // different person entirely (the Gold Rush hostess).
   if (arg.trim().toLowerCase() === "tan" && G.phone.contacts && G.phone.contacts.tan) {
     _tanCall(); return;
+  }
+  if (G.dog && _isDogWord(arg.trim().toLowerCase())) {
+    _say(_dogN("You call him and he comes — not fast, never fast, but without any doubt about " +
+      "where he's going. He arrives, sits, and looks up: well?"));
+    return;
   }
   const id = _findNpc(arg);
   if (!id) { _say("Call who? Nobody by that name in your phone or your eyeline."); return; }
@@ -5821,6 +5921,7 @@ function doCommand(input) {
       const phraseText = (m ? m[1] : said).trim();
       const targetW = m ? m[2].replace(/^(the|a|an)\s+/, "").trim() : "";
       if (/^(sorry|khor ?thot|kho ?thot|ขอโทษ)/.test(phraseText)) _doApologize();
+      else if (/^(goodbye|bye|cheerio|see you|later|good ?night)\b/.test(phraseText) && _convoActive()) _convoEnd(); // the "say goodbye" chip
       else _doSay(phraseText, targetW);
       break;
     }
@@ -6043,6 +6144,19 @@ function doCommand(input) {
     case "repay": case "payback": _doRepay(arg); break;
     case "hire": case "off": _doHire(arg); break;
     case "pet": case "stroke": _doPet(arg); break;
+    case "hug": case "cuddle": case "scratch": case "ruffle": case "fuss":
+      if (G.dog && (!arg || _isDogWord(arg) || /\bdog\b|\bhim\b/.test(arg))) { _doPet("dog"); break; }
+      if (!arg) { _say("Hug who? The soi is affectionate but not that affectionate."); break; }
+      _doSocial("kiss", arg); break;
+    case "good": // GOOD BOY / GOOD DOG — else "good evening" and friends go to the courtesy layer
+      if (G.dog && /\b(boy|dog|lad|girl)\b/.test(arg)) { _dogPraise(v); break; }
+      if (_politePhrase(lower) || _convoResolve(lower)) break;
+      _say(_pickVary(_HUH, "huh"), "dim"); return;
+    case "stay": case "heel": case "whistle": case "come":
+      if (G.dog) { _dogPraise(v); break; }
+      _say(v === "whistle" ? "You whistle. A soi dog on the far kerb looks up, files you under 'no', and lies back down."
+        : "There's nobody here who takes that kind of instruction from you.", "dim");
+      break;
     case "feed": _doFeedDog(arg); break;
     // NAME is the dog verb, but it is also a live TOPIC on a man whose whole
     // secret is his name — and a playtester following Pete's own "(ASK PETE

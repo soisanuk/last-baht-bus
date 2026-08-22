@@ -192,9 +192,12 @@ function _lastCall(id) {
   G.soc.lastCall = G.soc.lastCall || {};
   if (G.soc.lastCall[id]) return;
   G.soc.lastCall[id] = true;
-  _say("Last call — the mamasan taps her watch: about half an hour to closing. " +
+  const mins = Math.max(0, (60 - G.nightTurn) * 6);
+  if (mins <= 6) return; // at the shutters there is no last call, only the shutters
+  _say(_fmt("Last call — the mamasan taps her watch: {when} to closing. " +
     "This place shuts at midnight, so if you mean to take a lady home tonight, now " +
-    "is the moment to BARFINE. After the shutters come down it's the street.", "alert");
+    "is the moment to BARFINE. After the shutters come down it's the street.",
+    { when: mins >= 25 ? _L("about half an hour") : _fmt(_L("about {n} minutes"), { n: mins }) }), "alert");
 }
 
 // The climax the game is named for: the ฿15 ride home has a curfew. One town-wide
@@ -2850,7 +2853,8 @@ const _DEBRIEF = {
   dawn: () => (_flag("act1Done") && G.room === _hotelRoomId()) ? null : ({
     what: "The night ran out with you still on the street.",
     why: "A night is " + NIGHT_TURNS + " turns and ends at 04:00 wherever you " +
-      "are. Not making it home costs you the cash in your pocket.",
+      "are. Not making it home costs you the cash in your pocket" +
+      (G.dog ? " — unless a soi dog happens to be sitting on it." : "."),
     next: "SLEEP in your own room ends the night on your terms and keeps it. " +
       "The last baht bus goes at 02:00 (TIME says); after that it is a motosai " +
       "at a premium or a long dark walk.",

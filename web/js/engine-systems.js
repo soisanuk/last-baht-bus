@@ -1542,9 +1542,15 @@ function _act1Fail(reason) {
   _say("Dawn wipes the slate. Same beach, same day two, same empty pockets — go again.", "room");
   _say("");
   const identity = G.player;  // who you are was decided in the taxi — not re-picked each attempt
+  const dog = G.dog;          // and so was he: a companion is not part of the slate (dog-person playtest 2026-08-22)
   newGame();
   G.act1Best = best;      // the record…
   G.act1Tries = tries;    // …and the attempt count survive the reset (unlocking HINT)
+  if (dog) {
+    G.dog = dog; _setFlag("hasDog");
+    _say(_dogN("(Sai Krok is still at your heel. Whatever the night wiped, it didn't wipe him — " +
+      "he was there for all of it, and he's here for the next one.)"), "dim");
+  }
   if (identity && identity.origin) {
     G.player = identity;
     // The card is canonically still in your pocket — the intro PROMISED "CALL
@@ -1636,13 +1642,15 @@ function _doHint() {
     if (active.length) {
       const q = QUESTS[active[0]];
       _say(_fmt("On the books: {name} — {desc}{where}",
-        { name: _L(q.name), desc: _L(q.desc), where: _questWhere(q.at) }), "win");
+        { name: _L(q.name), desc: _L(_qDesc(q)), where: _questWhere(q.at === q.giver ? _qGiver(q) : q.at) }), "win");
       return;
     }
-    const offered = Object.keys(QUESTS).filter(q => G.quests[q] === "offered");
+    // the nudge never points at an alignment errand — "never push" is the doctrine,
+    // and HINT was recommending Gavin's WDG job three nights running (expat playtest)
+    const offered = Object.keys(QUESTS).filter(q => G.quests[q] === "offered" && !QUESTS[q].noNudge);
     if (offered.length) {
       const q = QUESTS[offered[0]];
-      const giver = NPCS[q.giver] ? NPCS[q.giver].name : "Someone";
+      const giver = NPCS[_qGiver(q)] ? NPCS[_qGiver(q)].name : "Someone";
       _say(_fmt("{giver} has a job going — “{name}”. Take it on with ACCEPT {id}.",
       { giver, name: _L(q.name), id: offered[0].toUpperCase() }), "win");
       return;
@@ -1665,6 +1673,18 @@ function _doHint() {
       "Everything's in hand. Now just get to room 412 in Naklua before dawn takes the night."), "win");
 }
 
+// The giver of a quest, allowing for the player BEING him: the seven origin
+// archetypes are NPCs, and picking one deactivates that NPC — which silently
+// deleted the only giver of `bar_licence` for the one origin built to want a bar
+// (the investor IS Wayne; expat playtest 2026-08-22). A quest may name a
+// `giverIfSelf` who steps in, and a dep whose giver is you is treated as lived.
+function _qGiver(q) {
+  if (q && q.giverIfSelf && q.giver && NPCS[q.giver] && !_npcActive(q.giver)) return q.giverIfSelf;
+  return q ? q.giver : null;
+}
+function _qDesc(q) {
+  return (q.descIfSelf && _qGiver(q) !== q.giver) ? q.descIfSelf : q.desc;
+}
 function _questAvailable(qid) {
   const q = QUESTS[qid];
   const st = G.quests[qid];
@@ -1674,7 +1694,7 @@ function _questAvailable(qid) {
   if (q.reqFlags && !q.reqFlags.every(f => _flag(f))) return false;
   // trust: a giver won't hand you a personal/serious job until they know you
   // (see _npcState). Gates the offer AND accept, so you can't shortcut it.
-  if (q.trust && q.giver && _npcState(q.giver).trust < q.trust) return false;
+  if (q.trust && _qGiver(q) && _npcState(_qGiver(q)).trust < q.trust) return false;
   // Soi 6 mode confines you to the pocket, so don't offer a job whose target
   // (a room, or an NPC's bar) lies outside it — e.g. the Shamrock Dog, out on
   // the Darkside. You'd accept it and have no way to finish it this trip.
@@ -1683,8 +1703,9 @@ function _questAvailable(qid) {
     // in-fiction, yet ACCEPT-autocomplete (which lists _questAvailable) would still
     // surface it and let you accept a quest you can't finish (e.g. Candy's 'recce',
     // giver off-map at Candy Bar, and with no q.at to catch it below).
-    const giverRoom = q.giver && (NPCS[q.giver] ? _npcRoom(q.giver) :
-      PATRONS[q.giver] ? _patronRoom(q.giver) : null);
+    const gv = _qGiver(q);
+    const giverRoom = gv && (NPCS[gv] ? _npcRoom(gv) :
+      PATRONS[gv] ? _patronRoom(gv) : null);
     if (giverRoom && !SOI6_ROOMS.has(giverRoom)) return false;
     // and the target (a room, or an NPC/patron's bar) must be in-pocket too
     if (q.at) {
@@ -1694,7 +1715,10 @@ function _questAvailable(qid) {
       if (targetRoom && !SOI6_ROOMS.has(targetRoom)) return false;
     }
   }
-  return q.deps.every(d => G.quests[d] === "done");
+  // a dep you couldn't have done because you ARE its giver (an origin vignette
+  // about the man you picked) counts as lived
+  return q.deps.every(d => G.quests[d] === "done" ||
+    (QUESTS[d] && QUESTS[d].giver && NPCS[QUESTS[d].giver] && !_npcActive(QUESTS[d].giver)));
 }
 
 // Called after a giver's dialogue lands: surface any offer they have.
@@ -1738,11 +1762,11 @@ function _questHail() {
   if (G.questHailed) return;                       // once ever, not once a night
   if (Object.keys(G.quests || {}).length) return;  // you've had a job — you know the drill
   for (const [qid, q] of Object.entries(QUESTS)) {
-    if (q.vignette || !q.giver || !_questAvailable(qid)) continue;
-    if (_npcRoom(q.giver) !== G.room || !NPCS[q.giver]) continue;
+    if (q.vignette || !_qGiver(q) || !_questAvailable(qid)) continue;
+    if (!NPCS[_qGiver(q)] || _npcRoom(_qGiver(q)) !== G.room) continue;
     G.questHailed = true;
-    _say(_fmt(_pickVary(_QUEST_HAIL, "qhail"), { who: NPCS[q.giver].name }), "win");
-    _questOffer(q.giver);
+    _say(_fmt(_pickVary(_QUEST_HAIL, "qhail"), { who: NPCS[_qGiver(q)].name }), "win");
+    _questOffer(_qGiver(q));
     return;
   }
 }
@@ -1753,7 +1777,7 @@ function _questOffer(npcId) {
   // unclear which thing to respond to). The offer surfaces next time you talk.
   if (G.convoQ) return;
   for (const [qid, q] of Object.entries(QUESTS)) {
-    if (q.giver !== npcId || !_questAvailable(qid)) continue;
+    if (_qGiver(q) !== npcId || !_questAvailable(qid)) continue;
     // A VIGNETTE is not a job. The seven origin scenes — the man whose life you
     // didn't pick, telling you the thing he tells nobody — were wearing the full
     // quest chrome: a ✦ job offer, an ACCEPT, a journal row and a QUEST
@@ -1772,7 +1796,7 @@ function _questOffer(npcId) {
     // brushed off. So strip the hint here; ACCEPT is the only live command at
     // this point, and QUESTS/HINT print the desc in full once it is.
     _say(_fmt("✦ {who} has a job for you: “{name}” — {desc}",
-      { who: NPCS[npcId].name, name: _L(q.name), desc: _questPitch(_L(q.desc)) }), "win");
+      { who: NPCS[npcId].name, name: _L(q.name), desc: _questPitch(_L(_qDesc(q))) }), "win");
     _say(`(ACCEPT ${qid.toUpperCase()} to take it on.)`, "dim");
     return; // one offer at a time keeps the bar chatter sane
   }
@@ -1797,7 +1821,7 @@ function _doAccept(arg) {
   }
   G.quests[qid] = "active";
   _say(_fmt("✦ Quest accepted: {name}", { name: _L(q.name) }), "win");
-  _say(q.desc, "dim");
+  _say(_qDesc(q), "dim");
   if (q.item && G.itemLoc[q.item] === null) {
     G.itemLoc[q.item] = "inventory";
     _say(`(You now have the ${ITEMS[q.item].name}.)`, "dim");
@@ -1908,7 +1932,7 @@ function _doQuests() {
   for (const [qid, q] of rows) {
     const st = G.quests[qid];
     if (st === "active") { _say(_fmt("▶ {name} — {desc}{where}",
-      { name: _L(q.name), desc: _L(q.desc), where: _questWhere(q.at) }), "win"); shown++; }
+      { name: _L(q.name), desc: _L(_qDesc(q)), where: _questWhere(q.at === q.giver ? _qGiver(q) : q.at) }), "win"); shown++; }
     else if (st === "offered") { _say(_fmt("✦ On offer: {name} (ACCEPT {id})",
       { name: _L(q.name), id: qid.toUpperCase() }), "dim"); shown++; }
     else if (st === "done") { _say(`✓ ${q.name}`, "dim"); shown++; }
@@ -1965,15 +1989,21 @@ const _TAN_READ = {
   rob:    "the married one, who is not married any more and has not told his mother",
   barry:  "the golfer who has never once found the course",
 };
+// {bar} is filled from _npcRoom at speaking time — the table once hard-coded
+// "Sandy Toes" (a room id; the sign says The Verandah) and put Doyle "up in
+// Naklua" when he drinks at the Queen Vic (expat playtest 2026-08-22)
 const _TAN_WHERE = {
-  doyle:  "an Englishman who sits where he can watch a door — the pub up in Naklua",
-  wayne:  "a loud Australian with a folder of paperwork, down the Golden Dragon",
-  roy:    "an old fellow on the same stool every night, Cherry Pop, since before you were coming here",
-  macca:  "a man buying rounds he cannot afford, Sunset Dreams way",
-  pete:   "a very quiet one at the Sandy Toes, corner stool, back to the wall",
-  rob:    "a fellow at the Kitten Corner who looks like he is waiting for a phone call",
-  barry:  "a man in golf clothes at the Ruby Kiss who has not played golf",
+  doyle:  "an Englishman who sits where he can watch a door — {bar}",
+  wayne:  "a loud Australian with a folder of paperwork, down {bar}",
+  roy:    "an old fellow on the same stool every night, {bar}, since before you were coming here",
+  macca:  "a man buying rounds he cannot afford, {bar} way",
+  pete:   "a very quiet one at {bar}, corner stool, back to the wall",
+  rob:    "a fellow at {bar} who looks like he is waiting for a phone call",
+  barry:  "a man in golf clothes at {bar} who has not played golf",
 };
+function _tanWhere(id) {
+  return (_TAN_WHERE[id] || "someone, somewhere on the soi").replace("{bar}", _barName(_npcRoom(id)) || "a bar on the soi");
+}
 
 function _tanOthers() {
   const cast = ["doyle", "wayne", "roy", "macca", "pete", "rob", "barry"]
@@ -1996,7 +2026,7 @@ function _tanOthers() {
     met.map(id => NPCS[id].name + ", " + _TAN_READ[id]).join("; ") + ".", "win");
 
   if (rest.length) {
-    const pick = rest.slice(0, 2).map(id => _TAN_WHERE[id]);
+    const pick = rest.slice(0, 2).map(id => _tanWhere(id));
     _say("“And you have not met all of them yet.” He taps the wheel, unhurried. “There is " +
       pick.join(", and ") + ". They are not hiding. They are only sitting still.”");
   } else {
@@ -2261,6 +2291,8 @@ function _tanRescue() {
     "opens on aircon and quiet, and he does not make a single joke about the state of you.", "win");
   G.room = "buakhao_n";
   G.darkStreak = 0;
+  if (G.dog) _say(_dogN("Sai Krok goes in the back like a dog who has been in sedans before, and " +
+    "Tan looks at him once in the mirror and says nothing at all, which from Tan is a welcome."), "dim");
   _say("He puts you down on Soi Buakhao at the Diana end, leans across to the open window, " +
     "and says it like a man giving directions to a bus stop: \u201cGo find Candy.\u201d " +
     "Then he is gone, and you are standing in the middle of the loudest soi in Pattaya with " +
@@ -2316,6 +2348,8 @@ function _tanCall() {
       "the game. The game starts when you get out.\"");
     G.room = "buakhao_n";
     G.darkStreak = 0;
+    if (G.dog) _say(_dogN("Sai Krok rides the back seat with his nose to the aircon vent. Tan " +
+      "takes in the dog the way he took in the sand, and says nothing about that either."), "dim");
     _say("He puts you down on Soi Buakhao at the Diana end, points once DOWN the soi \u2014 " +
       "toward a rose-pink sign a few doors along the quiet side \u2014 and is gone before you " +
       "have finished thanking him. No money changes hands. He would not have taken it and " +
@@ -3739,15 +3773,36 @@ function _doWatchPubSoi() {
 // sisters on the lounger. Petting them is a small daily blessing — one happy
 // point a night, same house rules as the sunsets and the free shows. Big One
 // vets every hand before it gets anywhere near her sister; that's the deal.
+const _PET_LINES = [
+  "Sai Krok accepts the ear-scratch with his eyes half-shut and his attention " +
+    "fully open — somewhere behind you a motorbike slows, and the rumble starts low " +
+    "in his chest before you've even registered it. The bike moves on. So does the " +
+    "rumble. You get the last of the scratch in undisturbed.",
+  "Sai Krok leans the whole of his weight into your shin while you scratch the spot " +
+    "behind his ear, and lets out a sigh that has the whole street in it.",
+  "You crouch; Sai Krok closes the distance and puts his chin on your knee. Thirty seconds of " +
+    "that, and the night is a measurably better night.",
+  "A two-handed rub down Sai Krok's ribs. His back leg goes on its own — the old circuit — and " +
+    "he looks mildly betrayed by it, then forgives you both.",
+  "Sai Krok tolerates the fuss the way a professional tolerates praise: he was going to " +
+    "do the job anyway. The tail, unprofessionally, thumps twice.",
+];
+const _PET_OUTSIDE = [
+  "You step out to the door for him. He is exactly where you left him, chin on paws, and he " +
+    "accepts the scratch without getting up — on duty, after all. Back inside the room carries on.",
+  "He's outside, where the house rules put him. You go to the door; one ear turns, the tail " +
+    "thumps the step, and he leans into your hand for as long as you'll stand there.",
+];
 function _doPet(arg) {
   // his by name, or bare PET when he's the animal at hand (the beach cats keep
   // priority on their own sand)
   if (G.dog && (_isDogWord(arg || "") ||
       (!arg && G.itemLoc.soi_cats !== G.room))) {
-    _say(_dogN("Sai Krok accepts the ear-scratch with his eyes half-shut and his attention " +
-      "fully open — somewhere behind you a motorbike slows, and the rumble starts low " +
-      "in his chest before you've even registered it. The bike moves on. So does the " +
-      "rumble. You get the last of the scratch in undisturbed."));
+    const r = _room();
+    const outside = (r.bar || r.barType || r.massage || r.soapy || r.hostBar) && r.barType !== "beer";
+    _say(_dogN(outside
+      ? _pickVary(_PET_OUTSIDE, "petout")
+      : _pickVary(_PET_LINES, "pet")));
     return;
   }
   if (G.itemLoc.soi_cats !== G.room) {
@@ -4460,7 +4515,41 @@ function _doNameDog(arg) {
         "to all of the above, and to the chicken voice."), "win");
 }
 
+// GOOD BOY / STAY / HEEL / WHISTLE / COME — the things a dog person says out loud.
+// Voiced, pooled, no happy farm (PET already pays the once-a-day point).
+const _DOG_PRAISE = {
+  good: [
+    "“Good boy.” The tail goes — once, twice — and he looks up with the dignified pleasure of a " +
+      "dog who knew that already and is glad you've caught up.",
+    "You tell him he's a good boy. He accepts it the way the soi accepts weather: without " +
+      "comment, and entirely.",
+    "“Good dog.” The ears come forward, the whole back end wags, and for one second he is a puppy " +
+      "and not a four-year veteran of the strip.",
+  ],
+  stay: [
+    "“Stay.” He stays — he was going to anyway — and watches you go with the look of a dog who " +
+      "thinks this is a test and intends to pass it.",
+    "He sits, on the word, as if he has been waiting years for somebody to say it properly.",
+  ],
+  heel: ["“Heel.” He is already there. He glances up as if to ask what you thought the arrangement was."],
+  whistle: [
+    "You whistle. Sai Krok arrives at your knee with the weary promptness of a man answering a bell.",
+    "One whistle and he's up and at your side, and a bar girl across the soi laughs: “Ooh, he know!”",
+  ],
+  come: ["“Come.” He comes — no hurry, no doubt — and sits, and looks up: well?"],
+};
+function _dogPraise(v) {
+  const pool = _DOG_PRAISE[v] || _DOG_PRAISE.good;
+  _say(_dogN(_pickVary(pool, "dogpraise:" + (v || "good"))));
+}
 function _doFeedDog(arg) {
+  if (arg && /\bcats?\b|kitten|big one|little one/.test(arg)) {
+    _say(G.itemLoc.soi_cats === G.room
+      ? "Big One takes the offering off your fingers with the gravity of a customs official, " +
+        "then lets Little One have the rest. Nobody says thank you; that isn't the arrangement."
+      : "No cats here to feed — the beach pair work the Jomtien sand, and the bar cats work strictly for the kitchen.");
+    return;
+  }
   if (arg && !/him|it/.test(arg) && !_isDogWord(arg)) { _say("Feed who, exactly? The whole soi is hungry."); return; }
   if (G.dog) {
     if (_dogEgg() === "snack") {
@@ -4476,6 +4565,15 @@ function _doFeedDog(arg) {
         "would astonish everyone who has ever seen him clear a doorway, eats it in one " +
         "efficient movement, and leans his whole weight against your leg. Resource " +
         "management, done correctly."));
+    } else if (_isHotelRoom(G.room)) {
+      _say(_dogN("Nothing up here a dog would thank you for — room service doesn't do " +
+        "skewers. Sai Krok reads your empty hands, forgives you on the spot, and goes " +
+        "back to guarding the door from the inside."));
+    } else if (G.money >= 20 && _inBar()) {
+      G.money -= 20;
+      _say(_dogN(`฿20 to the kitchen for a skewer, passed down under the rail. Sai Krok takes it ` +
+        `off the plate with great delicacy and eats it under your stool, and the bar ` +
+        `pretends not to notice, warmly. (฿${G.money} left.)`));
     } else if (G.money >= 20) {
       G.money -= 20;
       _say(_dogN(`฿20 to a grill cart for a chicken skewer, which Sai Krok receives like a ` +
@@ -4695,7 +4793,12 @@ function _dogBarFavor() {
   if (!staff.length) return;
   const id = staff[Math.floor(_rand() * staff.length)];
   const name = NPCS[id].name;
-  _say(_dogN(_DOG_FAVOR_SCENES[Math.floor(_rand() * _DOG_FAVOR_SCENES.length)](name)), "win");
+  let si = Math.floor(_rand() * _DOG_FAVOR_SCENES.length);
+  // the phakhama scene gives him a scarf — once, ever (he was handed two, playtest 2026-08-22)
+  const scarf = _DOG_FAVOR_SCENES.findIndex(f => /phakhama/.test(String(f)));
+  if (si === scarf && G.dogPhakhama) si = (si + 1) % _DOG_FAVOR_SCENES.length;
+  if (si === scarf) G.dogPhakhama = true;
+  _say(_dogN(_DOG_FAVOR_SCENES[si](name)), "win");
   _addBond(id, 1);
   _say(`(Everyone likes a dog lover in Thailand — ${name} warms to you.)`, "dim");
 }
@@ -5315,6 +5418,8 @@ function _whiteRabbitAnswer(input) {
 const FOOD_STALLS = {
   jomtien_7eleven: { name: "a toastie, pressed while you wait", price: 35, hunger: 40, thirst: 0 },
   mikes_mall: { name: "the fifty-baht plate from the top-floor food court, honestly enough food", price: 50, hunger: 55, thirst: 0 },
+  cheap_charlies: { name: "fried rice off the wok, the board the same board it has always been", price: 60, hunger: 55, thirst: 0 },
+  cheap_charlies_jt: { name: "fried rice off the wok, the board the same board it has always been", price: 60, hunger: 55, thirst: 0 },
   jomtien_beach_rd: { name: "a cold mango from Auntie Nok, salt and chilli on the side", price: 30, hunger: 25, thirst: 15 },
   buakhao_market: { name: "som tam from the cart, extra everything", price: 50, hunger: 55, thirst: -10 },
   lake_bar: { name: "a whole grilled lake fish, salt-crusted, som tam on the side", price: 180, hunger: 65, thirst: 5 },
@@ -5383,6 +5488,7 @@ function _doEat(arg) {
 // bed; now the screen fires wherever you are standing when the wallet turns up,
 // so the money waits for you like the safe always did.
 function _roomSafeBeat() {
+  if (G.mode === "soi6") return; // no wallet was ever lost on the Soi 6 week — no "emergency stash" either (playtest 2026-08-22)
   if (!_flag("act1Done") || _flag("roomSafeOpened")) return;
   if (G.room !== _hotelRoomId()) return;
   _setFlag("roomSafeOpened");

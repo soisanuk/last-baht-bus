@@ -635,6 +635,9 @@ function _convoStart(id) {
   // 2026-08-17, Bpom's question haunting Roger's conversation).
   if (G.convoQ && G.convoQ.id !== id) {
     const who = _convoName(G.convoQ.id);
+    // the question isn't spent — next time that node lands it can be asked again
+    const ost = _npcState(G.convoQ.id);
+    if (ost && ost.know) delete ost.know["asked_" + G.convoQ.key];
     G.convoQ = null;
     _say(`(${who}'s question goes unanswered — you've turned to ${_convoName(id)}.)`, "dim");
   }
@@ -797,6 +800,12 @@ function _patronTalk(id, topic, _retried) {
   // some regulars have a sore subject that turns them belligerent (Fergie: Bert,
   // Candy, their bars). On his nasty nights it turns into a swing.
   if (topic && p.rage && p.rage.some(k => topic.includes(k))) { _patronRage(id); return; }
+  // the dog at your heel is a subject everyone at the rail has (dog-person playtest 2026-08-22)
+  if (topic && G.dog && (/\bdogs?\b|sai ?krok|\bpuppy\b/.test(topic) || _isDogWord(topic)) &&
+      !p.dialogue.some(e => e.topic === "dog")) {
+    _say(_dogN(_DOG_TALK_EN[Math.floor(_rand() * _DOG_TALK_EN.length)](p.name)));
+    return;
+  }
   let d = null;
   for (const e of p.dialogue) {
     if (topic ? e.topic !== topic && !(e.topic && topic.includes(e.topic)) : e.topic) continue;
@@ -821,7 +830,7 @@ function _patronTalk(id, topic, _retried) {
       // says so — re-delivering the greeting's short ("You again.") read as a
       // man refusing to talk (playtests 2026-08-22)
       if (!(G.patronMet && G.patronMet[id])) { _patronTalk(id, null, true); return; }
-      _say(_PATRON_MISS[Math.floor(_rand() * _PATRON_MISS.length)](p.name));
+      _say(_PATRON_MISS[Math.floor(_rand() * _PATRON_MISS.length)](p.name, _patronHis(id)));
       return;
     }
     _say(`${p.name} has said his piece for now.`);
@@ -876,18 +885,21 @@ function _patronRage(id) {
 
 // The rail regular's version of "you asked me that" — a male-expat grumble to
 // the NPCs' fond soi brush-off (_askAgain).
+// (n, his) — `his` is the patron's possessive, "his"/"her": Sandra and Angela
+// were going back to "his glass" (German-mode playtest 2026-08-22)
 const _PATRON_MISS = [
-  n => `${n} shrugs. “Not one I know anything about, mate. Try the bloke who was there.”`,
-  n => `“Search me,” ${n} says, and goes back to his glass. “Ask me something I've actually got an opinion on.”`,
-  n => `${n} turns a hand over on the bar: nothing in it. “Couldn't tell you. Not my story.”`,
+  (n, his) => `${n} shrugs. “Not one I know anything about, mate. Try whoever was there.”`,
+  (n, his) => `“Search me,” ${n} says, and goes back to ${his} glass. “Ask me something I've actually got an opinion on.”`,
+  (n, his) => `${n} turns a hand over on the bar: nothing in it. “Couldn't tell you. Not my story.”`,
 ];
 const _PATRON_AGAIN = [
-  n => `${n} gives you a flat look over the Chang. “Already told you that one, mate.”`,
-  n => `“You asked me that,” ${n} says. “Memory like a goldfish. Get a round in and I might go again.”`,
-  n => `${n} waves a hand. “Same story, same ending. Ask me something I haven't done to death.”`,
+  (n, his) => `${n} gives you a flat look over ${his} Chang. “Already told you that one, mate.”`,
+  (n, his) => `“You asked me that,” ${n} says. “Memory like a goldfish. Get a round in and I might go again.”`,
+  (n, his) => `${n} waves a hand. “Same story, same ending. Ask me something I haven't done to death.”`,
 ];
+function _patronHis(id) { return PATRONS[id] && PATRONS[id].pronoun === "she" ? "her" : "his"; }
 function _patronAgain(id) {
-  return _PATRON_AGAIN[Math.floor(_rand() * _PATRON_AGAIN.length)](PATRONS[id].name);
+  return _PATRON_AGAIN[Math.floor(_rand() * _PATRON_AGAIN.length)](PATRONS[id].name, _patronHis(id));
 }
 
 // where: "room", "inventory", or undefined (both, room first — so TAKE grabs
@@ -1060,6 +1072,40 @@ const _TOPIC_MISS_EN = [
   n => `“That one's above my pay grade,” ${n} says. “Ask me something I'd actually know.”`,
   n => `${n} turns a hand over: nothing in it. “No idea, mate. Try somebody who was there.”`,
 ];
+const _TOPIC_LOCKED_TH = [
+  n => `${n} looks at you a moment, then lets it go. “Not yet, na. Maybe later.”`,
+  n => `Something crosses ${n}'s face and is put away again. “Ask me another time.”`,
+];
+const _TOPIC_LOCKED_EN = [
+  n => `${n} considers you, and the glass, and decides against it. “Another time.”`,
+  n => `“Not tonight,” ${n} says, in the tone of a door being left on the latch.`,
+];
+function _topicLocked(npcId) {
+  const pool = _thaiVoice(npcId) ? _TOPIC_LOCKED_TH : _TOPIC_LOCKED_EN;
+  return pool[Math.floor(_rand() * pool.length)](NPCS[npcId].name);
+}
+// "ask <her> about dog": the dog-favor scenes promise a topic (an invitation is a
+// promise), and the generic miss line said "not my story" (dog-person playtest
+// 2026-08-22). Voiced by register; Daeng has her own once the Shamrock has spoken.
+const _DOG_TALK_TH = [
+  n => `${n} looks down at Sai Krok and then at you, pleased. “He good dog. Where you find him? Soi dog the best — already he know everything, na. You lucky he choose you.”`,
+  n => `“Him?” ${n} laughs. “He come every night now, I think. I save him the chicken bone.” She crouches to Sai Krok's level. “Na, handsome? You like me more than him.”`,
+  n => `${n} says something to Sai Krok in Thai, soft, the way you talk to a child or a grandfather. “I tell him be good boy for you,” she says. “He say ok.”`,
+];
+const _DOG_TALK_EN = [
+  n => `“Good-looking dog, that,” ${n} says. “Soi dogs make the best ones. They've already survived the worst of it before you turn up — anything after that is a bonus to them.”`,
+  n => `${n} glances down at Sai Krok. “He picked you, didn't he. They do that. You don't get a say, and you wouldn't want one.”`,
+];
+function _dogTalk(npcId) {
+  if (npcId === "daeng" && _flag("shamrockVisited")) {
+    return _dogN("Daeng wipes her hands and looks down at Sai Krok with the softness she " +
+      "showed at the Shamrock's door. “Paddy dog. Four year he walk that strip, every night, " +
+      "waiting for the shutter go up. Now he walk with you.” She nods, once, as if a ledger " +
+      "had balanced. “Good. He need somebody to walk with.”");
+  }
+  const pool = _thaiVoice(npcId) ? _DOG_TALK_TH : _DOG_TALK_EN;
+  return _dogN(pool[Math.floor(_rand() * pool.length)](NPCS[npcId].name));
+}
 function _topicMiss(npcId) {
   const n = NPCS[npcId];
   const she = n.pronoun === "she" || NPC_ROLES[npcId] || n.filler;
@@ -1252,13 +1298,23 @@ function _describeRoom(full, forceFull) {
   // open-air beer bars (no door to stop him, and nobody would dream of it); by
   // the door everywhere else (dogs know the one rule and keep it better than
   // most customers)
-  if (G.dog) {
+  if (G.dog && G.dogRoomSeen === G.room) {
+    // already announced here — a LOOK doesn't walk him in again (playtest 2026-08-22);
+    // he's simply where he is
+    if (r.barType === "beer") _say(_dogN("(Sai Krok is under your stool, one ear up.)"), "dim");
+    else if (r.bar || r.barType || r.massage || r.soapy || r.hostBar) _say(_dogN("(Sai Krok, outside the door, chin on paws.)"), "dim");
+    else if (_isHotelRoom(G.room) || r.shop || r.food) _say(_dogN("(Sai Krok is on the mat by the door.)"), "dim");
+    else _say(_dogN("Sai Krok pads at your heel, nose reading the street."), "dim");
+  } else if (G.dog) {
+    G.dogRoomSeen = G.room;
     if (r.barType === "beer") {
       _say(_dogN("(Sai Krok trots in under the rail — no door to stop him — and folds up " +
         "beneath your stool.)"), "dim");
       _dogBarFavor();
     } else if (r.bar || r.barType || r.massage || r.soapy || r.hostBar) {
       _say(_dogN("(Sai Krok folds up outside the door, chin on paws, one ear on the room.)"), "dim");
+    } else if (_isHotelRoom(G.room) || r.shop || r.food) {
+      _say(_dogN("(Sai Krok turns three circles on the mat inside the door and drops, chin on paws.)"), "dim");
     } else {
       _say(_dogN("Sai Krok pads at your heel, nose reading the street."), "dim");
     }
@@ -1542,8 +1598,16 @@ function _tick() {
     // your own soi dog outranks the local franchise: the dark sois go quiet
     if (G.dog) {
       if (G.darkStreak === 0) {
-        _say(_dogN("A growl starts somewhere in the dark ahead — and Sai Krok answers it, " +
-          "once, low, without breaking stride. Silence. The dark has done the maths."), "dim");
+        _say(_dogN(_pickVary([
+          "A growl starts somewhere in the dark ahead — and Sai Krok answers it, " +
+            "once, low, without breaking stride. Silence. The dark has done the maths.",
+          "Something moves at the edge of the light. Sai Krok doesn't growl; he simply stops, " +
+            "and looks at it, and whatever it was decides it has business elsewhere.",
+          "Eyes in the dark, three pairs. Sai Krok walks on past them at your heel with the " +
+            "flat indifference of a dog who knows all three by name and rates none of them.",
+          "A bark from an unlit gateway; Sai Krok's head turns a quarter-inch and the bark " +
+            "finishes mid-syllable. The soi's franchise knows the franchise-holder.",
+        ], "doggrowl")), "dim");
         _engineSfx("growl");   // the prose says he answers it; let him
       }
       G.darkStreak = 1; // held, never escalates

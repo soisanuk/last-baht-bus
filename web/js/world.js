@@ -2393,7 +2393,7 @@ const ROOMS = {
       "The pavement is a single file of people going the other way.",
     revisit: [
       "The arch has swallowed another four, and returned three of somebody else’s.",
-      "A baht bus has given up entirely. Its driver is having a cigarette on the step.",
+      "A motosai has given up entirely. Its rider is having a cigarette on the step.",
       "Bikes, bikes, a gap, then more bikes. You could wait all night for a real one.",
       "Somebody comes out of Tree Town walking carefully and smiling at nothing.",
     ],
@@ -2779,6 +2779,7 @@ const ROOMS = {
       "Back into the churn and the neon. The girls out front read foot traffic for a living, and you are foot traffic; the pitch starts before you've fully arrived.",
       "Soi 6 West again — a river of hands and offers, the quieter middle stretch glowing ahead east like a promise, the whole street daring you to reach it sober and solvent.",
     ],
+    lateDesc: "Soi 6 after midnight: the frontages rolled down, the stools stacked behind the grilles, the girls gone home or gone on somewhere in twos on one motorbike. The neon is mostly off and what's left buzzes for nobody. A cat owns the middle of the road.",
     exits: { w: "beach_rd_n", e: "soi6_mid" },
     venues: ["pink_lotus", "golden_dragon", "sunset_dreams"],
   },
@@ -2923,6 +2924,7 @@ const ROOMS = {
       "Back into the calm centre of the storm. West and east the soi does its shouting; here it just streams past your stool while you drink and watch.",
       "The quiet stretch again, the Queen Vic's aircon leaking cold onto the pavement, three easy beer bars and nobody on the soi trying to climb you. Rare. Enjoy it.",
     ],
+    lateDesc: "The middle of Soi 6 with the shutters down — every bar but one. The Queen Vic's light is still on, because it was always a pub, and a pub keeps pub hours. Everything else on the soi is a grille and a padlock and a sleeping dog.",
     exits: { w: "soi6_street", e: "soi6_deep" },
     venues: ["queen_vic", "sunset_rail", "bay_watch", "sandy_toes"],
   },
@@ -2947,6 +2949,7 @@ const ROOMS = {
       "The deep soi again. Kitten, Cherry, Ruby — three fronts, three staircases, three sets of hands already reaching. You are, once more, the entire economy walking past.",
       "Back to where the soi runs out toward Second Road, neon stacked to the roofline, a girl on your sleeve saying the quiet part first and loud: \"Come upstairs, tilac. Why we pretend?\"",
     ],
+    lateDesc: "The far end of Soi 6 after the shutters: dark frontages, a mop bucket left out, the last of the ice melting in a bin. Whoever was reaching for your arm an hour ago is asleep, or working somewhere that isn't here.",
     exits: { w: "soi6_mid", e: "second_rd_soi6" },
     venues: ["kitten_corner", "cherry_pop", "ruby_kiss"],
   },
@@ -3326,6 +3329,7 @@ const ROOMS = {
       "door with no sign worth reading — THE NIGHT HERON, if you know to ask — and " +
       "beside it a dead Irish pub, THE SHAMROCK on its sun-bleached sign, shutters " +
       "down for good.",
+    lateDesc: "The strip after the shutters: the tin roof dark, bamboo rails bare, the pool table under its cover. Every bar on the Darkside shut at midnight, same as the night before, and the only light is the padded door at the dark end — if it's lit at all, that's not for you. The Shamrock is as dead as ever.",
     exits: { w: "sukhumvit_crossing", e: "khao_talo", in: "water_buffalo",
       n: "water_buffalo", s: "firefly_bar", dark: "night_heron",
       shamrock: "shamrock" },
@@ -4242,6 +4246,11 @@ const NPCS = {
     dialogue: [
       { req: ["gotBusFare"], text: "\"Bus stop that way, na. Tell driver where you go, pay when you get off. FIFTEEN baht now — everything expensive since the war, jing jing.\"",
         short: "\"Bus stop that way. Tell driver, pay when you get off. Fifteen baht.\"" },
+      // once the week is on, she greets the regular — not the man who slept on her sand (playtest 2026-08-22)
+      { req: ["act1Done"], th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        text: "\"Ahh, you back!\" Auntie Nok waves a mango knife in welcome. \"Not sleep on beach tonight, na? Good. " +
+          "You want water, mango? Mango very sweet today — I not say that every day.\"",
+        short: "\"You back! Mango very sweet today.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Oh, you awake! You sleep on beach like soi dog, hahaha. You want water? No money? Aiyee.\" She taps the sign on her cart. \"Bring bottle, I give five baht. Beach full of bottle. Farang leave everything.\"",
         short: "\"Bring bottle, I give five baht.\"" },
@@ -4324,6 +4333,12 @@ const NPCS = {
       "and on the soi longer than most expats have had passports. She clocked you the " +
       "second you walked in.",
     dialogue: [
+      // Bert's "quiet piece of this place": asked, she says exactly as much as she means to
+      { topic: "bert",
+        text: "\"Bert?\" The smallest pause. \"We go back. I keep an eye on his place, he keeps an eye " +
+          "on who comes near my girls. A bar is not the building, na — it is who is watching it.\" " +
+          "She doesn't say more, and the not-saying is the answer.",
+        short: "\"Bert and I go back. I watch his place, he watches mine. A bar is who is watching it.\"" },
       // An Introduction quest (docs/map-coverage.md): Candy vouches you into Rose's
       // discreet Orchid Club out in Naklua. chip:false — the quest drives it.
       { topic: "rose", notFlags: ["orchidVouched"], chip: false,
@@ -4444,6 +4459,13 @@ const NPCS = {
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Hello handsome! You play pool? No? Good — you look like you lose enough already tonight.\" The earrings flash as she laughs.",
         short: "\"Hello handsome! You play pool, or you just hiding from your night?\"" },
+      // the re-readable gist once the story has moved past her greeting (playtest
+      // 2026-08-22: ASK LEK ABOUT MOT / WALLET fell to "Hello handsome")
+      { topic: "wallet", req: ["knowMot"],
+        text: "\"Mot? Same-same I tell you — he sell your wallet to Madam Oy, Rainbow Girls, " +
+          "top of Tree Town. In her safe by now, guarantee.\" She flicks a nail at the " +
+          "door. \"Go. Be polite to her. Polite works better than clever, with Oy.\"",
+        short: "\"Mot sold your wallet to Madam Oy at Rainbow Girls, Tree Town. Go — and be polite to her.\"" },
       { topic: "oy", text: "\"Madam Oy? Big boss. Her place is Rainbow Girls — deep in Tree Town, the maze up the top of this road. Undefeated at Connect 4 since two thousand nine. Do NOT play her.\"" },
     ],
   },
@@ -6234,6 +6256,10 @@ const NPCS = {
       // Kesinee vets you before she'll talk White Dish — canon: "she'll talk
       // straight if you are." A stranger gets the careful brush-off + a breadcrumb;
       // the real intel (and the quest flag) opens once you've earned a little trust.
+      { topic: "bar", text: "\"My bar?\" The bracelet turns. \"The Kitten Corner. Small, clean, the girls " +
+          "are mine and the roof is new.\" A glance along the rail. \"You want the real story of it, ask " +
+          "me about the KITTENS. (ASK KESINEE ABOUT KITTENS)\"",
+        short: "\"My bar is the Kitten Corner. Ask me about the KITTENS for the real story.\"" },
       { topic: "white dish", when: (st) => st.trust < 2, deflect: true,
         text: "The smile holds; the eyes go flat and careful. \"White Dish. Hm. Who send you to ask " +
           "Kesinee that?\" She lets the question sit. \"Bert, maybe. Or maybe you are White Dish own boy, " +
@@ -6987,6 +7013,24 @@ const NPCS = {
         short: "\"Ohio, film school — frame a shot, who's in it, who's standing just outside where the camera don't look. That part paid.\"" },
 
       // The hub reveal — unlocks once you've met a couple of the archetypes he drove.
+      // The investor's licence answer — the bar chain when you ARE Wayne (see
+      // QUESTS.bar_licence.giverIfSelf). Same facts as Wayne's node, Tan's register.
+      { topic: "licence", when: (st, G) => G.quests.bar_licence === "active", sets: ["barLicence"],
+        text: "\"The licence.\" Tan almost smiles. \"You nearly signed the other version once, I think — " +
+          "the one where a stranger's name holds your life. So you know the rule already. Fifty-one " +
+          "percent is Thai. Not a loophole — the law.\" He counts it on the wheel. \"A nominee is a " +
+          "stranger. A company is real, and audited, and costs. Or your name is on nothing — you are " +
+          "the manager, you take a wage and a cut, and somebody you trust holds the paper.\" The " +
+          "glance in the mirror. \"The question is never the percent, my friend. It is who the person is.\"",
+        short: "\"Fifty-one percent is Thai — the law. Nominee, company, or your name on nothing. The question is who the person is.\"" },
+      // the promise in the taxi ("buy me a coffee — I'll tell you which farang really owns his 'own' bar")
+      { topic: "coffee",
+        text: "\"The coffee.\" He takes it, which from Tan is a speech. \"Who really owns his own bar. " +
+          "Bert does not — an American in Ohio does, a sick man, and Bert runs it better than an owner " +
+          "would. Gavin owns nothing; White Dish owns Gavin. Candy owns hers, both of them, and that is " +
+          "rarer than you think.\" He sips. \"The ones who say 'my bar' loudest are the ones whose " +
+          "name is furthest from the paper. Remember that when somebody offers you one.\"",
+        short: "\"Bert doesn't own the Stinky, Gavin owns nothing, Candy owns hers. The loudest 'my bar' is the furthest from the paper.\"" },
       { topic: "others", when: (st, G) => ["doyle", "wayne", "roy", "macca", "pete", "rob", "barry"]
           .filter(id => G.known && G.known[id]).length >= 2,
         text: "\"The others?\" A knowing tilt. \"The detective. The Australian with the bar he should not " +
@@ -9058,6 +9102,18 @@ const NPCS = {
       "quietly, works at being his own man out from under her shadow. Twenty-two years " +
       "on Beach Road, most of them within nine feet of that pool table.",
     dialogue: [
+      // after the Shamrock has spoken: the man who sent you there can talk about it
+      { topic: "shamrock", req: ["shamrockVisited"],
+        text: "\"Found it, then. Found HIM.\" Bert doesn't look up from the glass he's drying. \"Sean's " +
+          "place. Good man, bad luck, no partner — you go home for an operation and nobody's holding " +
+          "the door.\" He sets the glass down. \"The dog sat that step four years. Don't reckon he " +
+          "was waiting for Sean, bud. Reckon he was waiting for whoever came next.\"",
+        short: "\"Sean's place. Good man, no partner, nobody holding the door. The dog was waiting for whoever came next.\"" },
+      { topic: "key", req: ["hatchPried"],
+        text: "\"Off the hatch? That'll be the landlord's, the one he leaves for the next tenant there's " +
+          "never going to be.\" Bert weighs it without touching it. \"Hang onto it. Nobody else out " +
+          "there wants that room — and one day somebody with the right partner might.\"",
+        short: "\"The landlord's key. Hang onto it — one day somebody with the right partner might want that room.\"" },
       { when: (st, G) => _faction("wdg") > 0,
         text: "Bert clocks you and the welcome doesn't arrive — no beer opened, no stool offered. \"You. " +
           "Gavin's errand boy.\" He doesn't look up from the felt. \"Table's still true, beer's still cold. " +
@@ -9114,9 +9170,9 @@ const NPCS = {
       { when: (st, G) => st.dstate === "stranger" && _isOrigin("business"),
         text: "\"Here to make a deal, huh.\" Bert sets the beer down a hair harder than he needs to. \"Do " +
           "yourself one favor, bud — 'fore you sign your name to a damn thing in this town, you sit at this bar " +
-          "and let me tell you which farang really owns his 'own' place. Costs you a beer. Saves you your " +
-          "shirt.\"",
-        short: "\"Here to make a deal. 'Fore you sign a damn thing, let me tell you which farang really owns his 'own' bar. Costs a beer, saves your shirt.\"",
+          "and let me tell you who's really holding the keys round here. Your driver'll have started on " +
+          "that already, I'd bet. He's right. Costs you a beer. Saves you your shirt.\"",
+        short: "\"Here to make a deal. 'Fore you sign a damn thing, let me tell you who's really holding the keys. Costs a beer, saves your shirt.\"",
         asks: { key: "why", q: "He racks the balls without hurry. \"So — running to something, or from something? Which one's you, bud?\"" } },
       { when: (st, G) => st.dstate === "stranger" && _isOrigin("pi"),
         text: "\"You clocked my exits before you clocked my beer.\" A slow, knowing look, one old hand to " +
@@ -10065,6 +10121,7 @@ const QUESTS = {
   wdg_flip: {
     name: "Gavin's Errand",
     giver: "gavin",
+    noNudge: true, // an alignment errand: HINT never recommends it (never push)
     // Gavin's counter to Bert's job: the WDG side of the same fork. Purely opt-in —
     // decline it and nothing happens; even accept it and you can still walk away.
     // Alignment only lands if you actually carry the pitch to Bert (ASK BERT ABOUT
@@ -10329,6 +10386,12 @@ const QUESTS = {
   bar_licence: {
     name: "Whose Name Is On It",
     giver: "wayne",
+    // If you ARE Wayne (the investor origin), the man who'd give you the straight
+    // answer is you — so Tan gives it, and the nominee vignette counts as lived.
+    giverIfSelf: "tan",
+    descIfSelf: "A farang can't hold the majority — that's the law, not a loophole. You nearly " +
+      "signed the crooked version yourself once; Tan will tell you how it's actually done " +
+      "(ASK TAN ABOUT THE LICENCE).",
     reqFlags: ["expatLife"],
     // nominee_deal is a real prerequisite: Wayne gives the straight answer to the
     // one person who stopped him signing the crooked one.

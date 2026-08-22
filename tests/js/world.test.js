@@ -109,6 +109,8 @@ test("gossip chain flags connect: every required flag is set somewhere", () => {
     "act1Done",  // engine-set by _checkAct1 — gates sandbox-only quests (The Safe-Cracker)
     "tiffinDelivered", // engine-set by _doGive (tiffin → nont) — "Look in on my boy"
     "keysDelivered",   // engine-set by _doGive (foreman_keys → diamond) — Wimon's letterbox reads it
+    "shamrockVisited", // engine-set by _dogShamrock (arriving on the strip with the dog) — Bert's afterword reads it
+    "hatchPried",      // set by the Shamrock's reads: hatch node (sets/reveal) — Bert's key node reads it
     "glamTruth", // set by PATRON dialogue (Glam's lucid flash), which this scan doesn't cover
     "knowMikkel", // set by PATRON dialogue (Mikkel's intro), same blind spot as glamTruth
     "hasDog",    // set by the adoption action (FEED DOG), not dialogue

@@ -4086,7 +4086,7 @@ test("NAME DOG: rename him and every line of his re-letters, no strays", () => {
   out = []; run("give moo ping to biscuit");
   assert.match(lastOut(), /gentleness/, "GIVE routes to the renamed dog");
   out = []; run("pet"); // bare PET away from the cats' beach = the dog at hand
-  assert.match(lastOut(), /ear-scratch/, "bare PET reaches your own dog");
+  assert.match(lastOut(), /Biscuit/, "bare PET reaches your own dog");
   run("name dog bo$$");
   out = []; run("look");
   assert.match(out.join("\n"), /Bo\$\$ pads at your heel/, "replacement-magic $ names render literally");

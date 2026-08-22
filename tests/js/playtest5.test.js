@@ -267,3 +267,182 @@ test("PLAY CONNECT 4 100 puts ฿100 on the table; the Anchor's barometer reads"
   assert.match(text(), /CHANGE since/);
   assert.doesNotMatch(text(), /ship's wheel is real/);
 });
+
+// ── the second pair (Jürgen / Bex / Keith) ──
+test("no emergency stash on the Soi 6 week — the room safe beat is a full-game thing", () => {
+  startSoi6Mode();
+  const m = G.money;
+  G.room = "qv_room"; out = [];
+  _roomSafeBeat();
+  assert.equal(G.money, m);
+  assert.doesNotMatch(text(), /emergency stash/);
+});
+
+test("the conversation layer only swallows a line as an ASK when it could be one", () => {
+  G.room = "queen_vic";
+  doCommand("talk to terry"); out = [];
+  doCommand("untersuche notizbuch bitte");          // a whole sentence in another language
+  assert.doesNotMatch(text(), /You asked Terry about untersuche/);
+  assert.match(text(), /didn't understand|didn't parse|soi blinks|no idea/i);
+  out = [];
+  doCommand("navy");                                 // a short topic guess still asks
+  assert.match(text(), /Terry|Navy|navy/);
+});
+
+test("a female patron goes back to HER glass", () => {
+  G.room = "coconut";
+  doCommand("talk to sandra");
+  for (let i = 0; i < 8; i++) { out = []; doCommand("ask sandra about quantum physics"); assert.doesNotMatch(text(), /his glass|his Chang/); }
+});
+
+test("SAY GOODBYE is leave-taking; last call counts its minutes and says nothing at the shutters", () => {
+  G.room = "queen_vic";
+  doCommand("talk to mort"); out = [];
+  doCommand("say goodbye");
+  assert.match(text(), /take your leave/);
+  G.room = "pink_lotus"; G.nightTurn = 57; G.soc.lastCall = {}; out = [];
+  _lastCall("pink_lotus");
+  assert.match(text(), /about 18 minutes/);
+  G.nightTurn = 59; G.soc.lastCall = {}; out = [];
+  _lastCall("pink_lotus");
+  assert.equal(text(), "");
+});
+
+test("Lek keeps the Mot gist; Oy's gated wallet topic is a 'not yet', not a 'not mine'", () => {
+  newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight" };
+  _setFlag("knowMot"); _setFlag("knowOyHasIt");
+  G.room = _npcRoom("lek"); doCommand("talk to lek"); out = [];
+  doCommand("ask lek about mot");
+  assert.match(text(), /Madam Oy|Rainbow Girls/);
+  G.flags.knowOyHasIt = false;
+  G.room = _npcRoom("oy"); doCommand("talk to oy"); out = [];
+  doCommand("ask oy about wallet");
+  assert.match(text(), /Not yet|another time|Another time|Not tonight/);
+});
+
+test("the dog survives the Act One reset, rides Tan's sedan out loud, and is a topic everyone has", () => {
+  newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight" };
+  G.dog = { since: 2, name: "Biscuit" }; _setFlag("hasDog");
+  G.room = "jomtien_beach"; out = [];
+  _endNight("dawn");
+  assert.ok(G.dog && G.dog.name === "Biscuit", "the companion is not part of the slate");
+  assert.match(text(), /Biscuit is still at your heel/);
+  // Tan's pickup
+  G.phone.contacts.tan = true; G.battery = 50; G.money = 0; out = [];
+  _tanCall();
+  assert.match(text(), /Biscuit/);
+  // the topic
+  sandbox(); G.dog = { since: 1, name: "Biscuit" };
+  G.room = _npcRoom("lek"); doCommand("talk to lek"); out = [];
+  doCommand("ask lek about dog");
+  assert.doesNotMatch(text(), /wrong girl|Not my story/);
+  assert.match(text(), /Biscuit/);
+  G.room = "khao_talo_bar"; _setFlag("shamrockVisited"); doCommand("talk to daeng"); out = [];
+  doCommand("ask daeng about paddy");
+  assert.match(text(), /Paddy dog/);
+  G.room = "queen_vic"; out = [];
+  doCommand("ask mort about the dog");
+  assert.match(text(), /dog|picked you/i);
+  assert.doesNotMatch(text(), /Not one I know|Search me|Couldn't tell you/);
+});
+
+test("dog verbs a dog person types are voiced, and the dog reads the room", () => {
+  G.dog = { since: 1, name: "Biscuit" };
+  G.room = "beach_rd_c"; G.itemLoc.rose = "inventory";
+  for (const [cmd, re] of [["good boy", /Good boy|good boy|Good dog/], ["stay", /stays|sits/], ["whistle", /whistle/i],
+    ["hug biscuit", /knee|shin|chin|fuss|scratch|rub|tail|Biscuit/], ["call biscuit", /he comes/], ["talk to biscuit", /Biscuit|his name|Conversation over/], ["photo biscuit", /blur|yawn|frame/],
+    ["feed cats", /No cats here/]]) {
+    out = []; doCommand(cmd);
+    assert.match(text(), re, cmd);
+    assert.doesNotMatch(text(), /didn't understand|didn't parse/, cmd);
+  }
+  out = []; doCommand("give rose to biscuit");
+  assert.match(text(), /sniffs|Not food/);
+  G.room = "hotel_room"; G.itemLoc.noodles = null; G.itemLoc.moo_ping = null; out = [];
+  doCommand("feed biscuit");
+  assert.match(text(), /room service|Nothing up here/);
+  // a LOOK doesn't walk him in again
+  G.room = "candy_bar"; out = [];
+  _describeRoom(true); _describeRoom(true);
+  assert.equal((text().match(/trots in under the rail/g) || []).length, 1);
+  // a pet is a pool
+  const seen = new Set();
+  for (let i = 0; i < 12; i++) { out = []; doCommand("pet biscuit"); seen.add(text()); }
+  assert.ok(seen.size >= 3);
+});
+
+test("animals the prose names can be examined; Nok greets the regular; Cheap Charlie's cooks; no phantom baht bus", () => {
+  G.room = "tt_lane_1"; out = [];
+  doCommand("examine fish tank"); assert.match(text(), /fish tank/);
+  G.room = "dolphin_bar"; out = [];
+  doCommand("examine dolphin"); assert.match(text(), /house paint/);
+  G.room = "beach_rd_c"; out = [];
+  doCommand("examine rats"); assert.match(text(), /routines/);
+  G.room = "jomtien_beach"; out = [];
+  doCommand("examine dog"); assert.match(text(), /tide line/);
+  G.room = _npcRoom("nok"); out = [];
+  doCommand("talk to nok"); assert.match(text(), /you back|You back/i); assert.doesNotMatch(text(), /sleep on beach like soi dog/);
+  assert.ok(FOOD_STALLS.cheap_charlies && FOOD_STALLS.cheap_charlies_jt);
+  assert.ok(ROOMS.buakhao_tt.revisit.every(l => !/baht bus/.test(l)));
+});
+
+test("the investor can still own a bar: Tan gives the licence answer when you ARE Wayne", () => {
+  G.player.origin = "business"; G.stage = "expat"; _setFlag("expatLife");
+  G.quests.bar_premises = "done";
+  assert.equal(_qGiver(QUESTS.bar_licence), "tan");
+  assert.ok(_questAvailable("bar_licence"), "the nominee vignette counts as lived when it's about you");
+  G.room = NPCS.tan.room || G.room;
+  _questOffer("tan");
+  assert.equal(G.quests.bar_licence, "offered");
+  assert.match(text(), /Whose Name Is On It/);
+  doCommand("accept bar_licence");
+  out = []; doCommand("quests"); assert.match(text(), /ASK TAN ABOUT THE LICENCE/);
+  G.room = _npcRoom("tan"); out = [];
+  doCommand("ask tan about licence");
+  assert.match(text(), /Fifty-one percent/);
+  assert.ok(_flag("barLicence"));
+});
+
+test("HINT never nudges the WDG errand; Tan's manifest names venues by their signs", () => {
+  G.quests.wdg_flip = "offered"; out = [];
+  _doHint();
+  assert.doesNotMatch(text(), /WDG_FLIP/);
+  assert.match(_tanWhere("pete"), /Verandah/);
+  assert.doesNotMatch(_tanWhere("pete"), /Sandy Toes/);
+  assert.match(_tanWhere("doyle"), /Queen Vic/);
+});
+
+test("TRAVEL won't walk you to shutters or into the dawn", () => {
+  G.room = "naklua_rd"; G.visited.orchid_club = true; G.nightTurn = 59; out = [];
+  doCommand("travel orchid club");
+  assert.match(text(), /shuts at midnight/);
+  assert.equal(G.room, "naklua_rd");
+  G.room = "ws_gate"; G.nightTurn = 95; out = [];
+  doCommand("travel hotel");
+  assert.match(text(), /walking into the dawn/);
+  assert.equal(G.room, "ws_gate");
+});
+
+test("own-prose instructions parse: Kesinee's bar, Nigel's bar(s), Tan's coffee; Bert and Candy answer the Shamrock and each other", () => {
+  G.room = "kitten_corner"; doCommand("talk to kesinee"); out = [];
+  doCommand("ask kesinee about my bar"); assert.match(text(), /Kitten Corner/);
+  G.room = "lucky_tiger"; doCommand("talk to nigel"); out = [];
+  doCommand("ask nigel about bar"); assert.match(text(), /Lucky Tiger/);
+  G.room = _npcRoom("tan"); out = [];
+  doCommand("buy tan coffee"); assert.match(text(), /Ohio|owns nothing/);
+  _setFlag("shamrockVisited"); _setFlag("hatchPried");
+  G.room = "stinky_bar"; doCommand("talk to bert"); out = [];
+  doCommand("ask bert about shamrock"); assert.match(text(), /Sean/);
+  out = []; doCommand("ask bert about key"); assert.match(text(), /landlord/);
+  G.room = "candy_bar"; doCommand("talk to candy"); out = [];
+  doCommand("ask candy about bert"); assert.match(text(), /We go back/);
+});
+
+test("a lapsed question can be asked again next time the node lands", () => {
+  G.room = "stinky_bar"; G.player.origin = "pi"; G.player.personality = "blunt";
+  doCommand("talk to bert");
+  assert.equal(G.convoQ && G.convoQ.key, "why");
+  doCommand("talk to dave");
+  assert.equal(G.convoQ, null);
+  assert.ok(!_npcState("bert").know["asked_why"], "the ask is un-spent — the next node that carries it asks again");
+});

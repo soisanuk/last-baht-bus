@@ -1445,7 +1445,9 @@ const _CATALOGS = {
 
     // dawn, and the food you live on
 
-    "Last call — the mamasan taps her watch: about half an hour to closing. This place shuts at midnight, so if you mean to take a lady home tonight, now is the moment to BARFINE. After the shutters come down it's the street.":
-      "Letzte Runde — die Mamasan tippt auf ihre Uhr: noch etwa eine halbe Stunde bis Feierabend. Der Laden macht um Mitternacht zu, wenn du also heute Nacht eine Lady mitnehmen willst, ist jetzt der Moment für BARFINE. Wenn die Rollläden unten sind, bleibt nur noch die Straße.",
+    "about half an hour": "noch etwa eine halbe Stunde",
+    "about {n} minutes": "noch etwa {n} Minuten",
+    "Last call — the mamasan taps her watch: {when} to closing. This place shuts at midnight, so if you mean to take a lady home tonight, now is the moment to BARFINE. After the shutters come down it's the street.":
+      "Letzte Runde — die Mamasan tippt auf ihre Uhr: {when} bis Feierabend. Der Laden macht um Mitternacht zu, wenn du also heute Nacht eine Lady mitnehmen willst, ist jetzt der Moment für BARFINE. Wenn die Rollläden unten sind, bleibt nur noch die Straße.",
   },
 };
