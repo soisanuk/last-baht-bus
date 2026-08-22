@@ -43,8 +43,8 @@ var NEWS_FEED = [
     "d": "19 Aug 2026"
   },
   {
-    "t": "Thailand will avoid Rafaelson focus in ASEAN Championship final vs. 'favourites' Vietnam",
-    "s": "ESPN",
+    "t": "Defending champions Thailand start Asian title defense on the right foot",
+    "s": "Volleyball World",
     "d": "21 Aug 2026"
   },
   {
@@ -53,8 +53,8 @@ var NEWS_FEED = [
     "d": "06 Aug 2026"
   },
   {
-    "t": "Defending champions Thailand start Asian title defense on the right foot",
-    "s": "Volleyball World",
+    "t": "Thailand will avoid Rafaelson focus in ASEAN Championship final vs. 'favourites' Vietnam",
+    "s": "ESPN",
     "d": "21 Aug 2026"
   },
   {
@@ -65,23 +65,23 @@ var NEWS_FEED = [
   {
     "t": "Just for Fun: These Miss Universe Thailand Costumes Are a Feast for the Eyes—And You Won’t Be Able to Stop Looking at Them",
     "s": "Reader's Digest",
-    "d": "21 Aug 2026"
+    "d": "22 Aug 2026"
   },
   {
-    "t": "Thailand issues arrest warrants for 20 Israelis in sweeping Koh Samui business crackdown",
-    "s": "The Jerusalem Post",
-    "d": "19 Aug 2026"
+    "t": "Thailand homeowner captures 13-foot python blamed for missing cats — then she planned a lottery bet",
+    "s": "Yahoo",
+    "d": "20 Aug 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-08-21","USD":32.68,"AUD":23.42,"GBP":44.62,"EUR":38.23};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-22","temp":30,"humid":70,"code":51,"hi":31,"rain":93};
+var WX_NOW = {"date":"2026-08-22","temp":28,"humid":81,"code":3,"hi":31,"rain":98};
 // the bar TV's one true channel
-var FOOTY = {"league":"Premier League","games":[{"d":"2026-08-21","done":true,"h":"Arsenal","hs":3,"a":"Coventry","as":0},{"d":"2026-08-22","done":false,"h":"Hull","hs":0,"a":"Man United","as":0},{"d":"2026-08-22","done":false,"h":"Everton","hs":0,"a":"C Palace","as":0},{"d":"2026-08-22","done":false,"h":"Ipswich","hs":0,"a":"Sunderland","as":0},{"d":"2026-08-22","done":false,"h":"Nottm Forest","hs":0,"a":"Leeds","as":0},{"d":"2026-08-22","done":false,"h":"Brentford","hs":0,"a":"Spurs","as":0},{"d":"2026-08-23","done":false,"h":"Brighton","hs":0,"a":"Aston Villa","as":0},{"d":"2026-08-23","done":false,"h":"Man City","hs":0,"a":"Bournemouth","as":0},{"d":"2026-08-23","done":false,"h":"Newcastle","hs":0,"a":"Liverpool","as":0},{"d":"2026-08-24","done":false,"h":"Fulham","hs":0,"a":"Chelsea","as":0}]};
+var FOOTY = {"league":"Premier League","games":[{"d":"2026-08-21","done":true,"h":"Arsenal","hs":3,"a":"Coventry","as":0},{"d":"2026-08-22","done":false,"h":"Hull","hs":2,"a":"Man United","as":0},{"d":"2026-08-22","done":false,"h":"Everton","hs":0,"a":"C Palace","as":0},{"d":"2026-08-22","done":false,"h":"Ipswich","hs":0,"a":"Sunderland","as":0},{"d":"2026-08-22","done":false,"h":"Nottm Forest","hs":0,"a":"Leeds","as":0},{"d":"2026-08-22","done":false,"h":"Brentford","hs":0,"a":"Spurs","as":0},{"d":"2026-08-23","done":false,"h":"Brighton","hs":0,"a":"Aston Villa","as":0},{"d":"2026-08-23","done":false,"h":"Man City","hs":0,"a":"Bournemouth","as":0},{"d":"2026-08-23","done":false,"h":"Newcastle","hs":0,"a":"Liverpool","as":0},{"d":"2026-08-24","done":false,"h":"Fulham","hs":0,"a":"Chelsea","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-08-16","first":"004615","last2":"53","front3":["429","731"],"back3":["094","937"]};
 // XAU, plus Thai baht-weight gold (96.5%)
 var GOLD = {"usd":4604,"date":"2026-08-22","baht":71150};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":77440,"thb":2526890};
+var BTC = {"usd":77308,"thb":2522581};
