@@ -1455,10 +1455,18 @@ const _SOCIAL_TEXT = {
     [
       n => _fmt("{n} laughs for real this time, touches your arm, and tells you something genuinely rude about the man at the end of the bar. Progress.", { n }),
       n => _fmt("{n} actually snorts, covers it, and leans an inch closer than the job requires. For a second the meter isn't running. Then it is again — but you saw it.", { n }),
+      n => _fmt("{n} pretends to fan herself with a coaster, deadpan — “Hoo. Too much, tilac” — but she's still standing here, and the coaster's still going.", { n }),
+      n => _fmt("{n} relays your line down the rail in rapid Thai; a delighted jury of two returns a verdict in your favour. She translates none of it and looks pleased.", { n }),
+      n => _fmt("{n} narrows her eyes like she's checking your line for hidden fees, finds none, and awards you a real smile — the unprofessional kind.", { n }),
+      n => _fmt("“You practise this?” {n} asks, genuinely curious, which is somehow better than a yes.", { n }),
     ],
     [
       n => _fmt("{n} slides onto the stool beside you, steals a sip of your drink, and starts flirting back with alarming professionalism. The other girls exchange looks.", { n }),
       n => _fmt("{n} decides you'll do for the night and turns the full wattage on — knee against yours, laughing before you finish the joke. The other girls give you up for lost.", { n }),
+      n => _fmt("{n} takes your hand and studies the palm with mock gravity. “Long life. Big trouble. I am the trouble.” She keeps the hand.", { n }),
+      n => _fmt("Something shifts — {n} stops working the room and starts spending the evening, which is a different thing entirely, and everyone at the rail can tell.", { n }),
+      n => _fmt("{n} calls something to the cashier without looking away from you; a drink appears that you didn't buy. “From me,” she says, enjoying your face. “Can happen.”", { n }),
+      n => _fmt("{n} leans in close enough that the next thing is said AT your ear rather than to it, in Thai, untranslated — and she declines, grinning, to repeat it.", { n }),
     ],
   ],
   kiss: [
@@ -1797,8 +1805,20 @@ function _doSocial(kind, targetWord) {
   if (braBump && tier >= 3) _say("(The bra you bought her is, as advertised, doing work.)", "dim");
   if (tier === 0) { _addHeat(SEV[kind] >= 4 ? 2 : 1); _addHappy(-1); }
   else if (tier === 1 && SEV[kind] >= 4) _addHeat(1);
-  else if (tier === 3) _addHappy(1);
-  else if (tier === 4) _addHappy(3);
+  else if (tier >= 3) {
+    // The flirt fountain, closed (optimizer playtest 2026-08-22): a warm girl's
+    // reciprocation paid +1/+3 สนุก per TURN, free and unthrottled — a ฿0 line
+    // that outpriced every paid activity 10-40x and bypassed the treadmill
+    // (which only polices conquests). Same doctrine as the treadmill, applied
+    // here: the FIRST spark with a girl each night pays; after that the charm
+    // is real but the novelty isn't — favor still accrues, prose still plays,
+    // สนุก doesn't restack. Per girl per night (G.soc.charmed, nightly reset).
+    const charmed = (G.soc.charmed = G.soc.charmed || {});
+    if (!charmed[id]) {
+      charmed[id] = true;
+      _addHappy(tier === 4 ? 3 : 1);
+    }
+  }
   if (tier >= 3) _maybeSelfBarfine(id);
   if (kind === "fondle" && tier === 4 && G.money >= LADY_DRINK) {
     G.money -= LADY_DRINK;
@@ -3115,6 +3135,8 @@ function _endNight(reason) {
   G.lastBusWarned = false; // and the last-baht-bus heads-up fires once each night
   G.soc.greeted = {};  // a fresh night — she greets you anew
   G.soc.fed = {};      // fed-a-girl fondness is once per girl per night
+  G.soc.charmed = {};  // the first spark of the night pays สนุก; repeats charm, not restack
+  G.soc.contested = {}; // a forced drink's standoff doesn't outlive the shift
   G.soc.gaveCondom = {}; // as is the (amusing) condom fondness
   G.lastBfId = null;   // clear the LT-ending bond hook
   G.lastBfBase = 10;   // and its สนุก base (reality-LT drops it to 4 for one night)

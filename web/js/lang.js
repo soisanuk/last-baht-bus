@@ -511,9 +511,9 @@ const _CATALOGS = {
     "Wednesday": "Mittwoch", "Thursday": "Donnerstag", "Friday": "Freitag",
     "Saturday": "Samstag",
     // quiz-night status
-    "(Quiz night tonight: 20:00–22:00, three bars, teachers in from Rayong.)":
-      "(Heute Quiznight: 20:00–22:00, drei Bars, Lehrer aus Rayong angereist.)",
-    "(Quiz night is ON somewhere right now.)": "(Quiznight läuft gerade irgendwo.)",
+    "(Quiz night tonight: 20:00–22:00 — {venues} — teachers in from Rayong.)":
+      "(Quiznight heute: 20:00–22:00 — {venues} — die Lehrer aus Rayong sind da.)",
+    "(Quiz night is ON right now: {venues}.)": "(Quiznight läuft JETZT: {venues}.)",
     "(Quiz night has been and gone.)": "(Quiznight war und ist vorbei.)",
     // barfine-rate status
     "(Early doors: barfines run ×1.5 until 21:00.)":

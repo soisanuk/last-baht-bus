@@ -3045,6 +3045,22 @@ function _doBuy(arg) {
     if (G.money < LADY_DRINK) { _say(_fmt("Lady drinks are ฿{p}. You have ฿{m}. The math is not on your side.", { p: LADY_DRINK, m: G.money })); return; }
     // she's already sitting with someone: a polite decline first, then — if you insist —
     // she takes it and her customer starts to turn.
+    // A girl you FORCED a drink past her decline stays CONTESTED all night: her
+    // customer doesn't evaporate because you spent ฿150. Before this, the insist
+    // itself made her "your acquaintance" (drinks>0 flips _girlBusy off), so the
+    // warning's "push it again and it stops being a look" could never come true —
+    // the third drink was cheerfully accepted with the fuming man still seated
+    // (optimizer playtest, 2026-08-22). Now every further drink re-rolls the
+    // boil-over the warning promised.
+    if (G.soc.contested && G.soc.contested[id]) {
+      G.money -= LADY_DRINK;
+      _addBond(id, 1);
+      _say(`${NPCS[id].name} takes it — quicker this time, not looking at the man beside her, ` +
+        `which is its own kind of looking. (฿${G.money} left.)`);
+      _addHappy(-1, "the whole rail is watching this now");
+      _poachAnger(id);
+      return;
+    }
     if (_girlBusy(id)) {
       G.soc.declined = G.soc.declined || {};
       const insisting = (id in G.soc.declined) && G.turns - G.soc.declined[id] <= 30;
@@ -3052,6 +3068,7 @@ function _doBuy(arg) {
       delete G.soc.declined[id];
       G.money -= LADY_DRINK;
       _addBond(id, 1);
+      (G.soc.contested = G.soc.contested || {})[id] = true; // the man remembers
       _say(`${_pickVary(_BUSY_INSIST, "busyi")(NPCS[id].name)} (฿${G.money} left.)`);
       _addHappy(-1);
       _poachAnger(id);
@@ -4051,8 +4068,13 @@ function _doTime() {
         { clock: _clockStr(), weekday: _L(_weekday()), day: G.day }));
   const t = G.nightTurn;
   if (_quizDay()) {
-    _say(t < 20 ? "(Quiz night tonight: 20:00–22:00, three bars, teachers in from Rayong.)" :
-      _isQuizWindow() ? "(Quiz night is ON somewhere right now.)" :
+    // name the venues: _quizBars() is a pure hash (no dice), and an unfindable
+    // quiz is an unplayed one — the optimizer walked 6 bars in-window and hit
+    // none (2026-08-22)
+    const qv = (typeof _quizBars === "function" ? _quizBars() : [])
+      .map(r => _barName(r)).filter(Boolean).join(" · ");
+    _say(t < 20 ? _fmt(_L("(Quiz night tonight: 20:00–22:00 — {venues} — teachers in from Rayong.)"), { venues: qv || _L("three bars") }) :
+      _isQuizWindow() ? _fmt(_L("(Quiz night is ON right now: {venues}.)"), { venues: qv || _L("three bars, somewhere") }) :
       "(Quiz night has been and gone.)", "dim");
   }
   _say(t < 30 ? "(Early doors: barfines run ×1.5 until 21:00.)" :
@@ -4533,8 +4555,12 @@ function _doWithdraw(arg) {
     return;
   }
   const n = _atmParse(arg);
-  if (!ATM_DENOMS.includes(n)) {
-    _say("The machine pays out in ฿1,000 · ฿5,000 · ฿10,000 notes. (WITHDRAW <amount>)");
+  // Any amount the note tray can compose is legal (฿1k multiples), up to the
+  // daily cap — "WITHDRAW 20000" used to be refused though 2x฿10k is exactly
+  // what the machine holds, forcing two pulls and a double fee (optimizer
+  // playtest, 2026-08-22). Non-multiples still get the notes line.
+  if (!n || n < 1000 || n % 1000 !== 0) {
+    _say("The machine pays out in ฿1,000 · ฿5,000 · ฿10,000 notes — thousands only. (WITHDRAW <amount>)");
     return;
   }
   const drawn = _atmDrawnToday(), left = ATM_DAILY_CAP - drawn;

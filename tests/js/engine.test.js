@@ -4805,15 +4805,19 @@ test("the ATM: withdraw pulls from the account, minus a fee, capped at ฿20k/da
   run("withdraw 5000");
   assert.equal(state().money, 5000, "฿5k to pocket");
   assert.equal(state().bank, 100000 - 5000 - 300, "principal + ฿300 fee off the account");
-  // denomination guard — only 1k/5k/10k
+  // note guard: any ฿1k multiple is composable from the tray (2026-08-22 —
+  // "withdraw 20000" used to force two pulls and a double fee); non-multiples refuse
   out = []; run("withdraw 2000");
-  assert.match(lastOut(), /1,000.*5,000.*10,000/);
-  assert.equal(state().money, 5000, "no change on a bad denomination");
-  // daily cap: 5k + 10k = 15k ok; the next 10k would be 25k → refused
+  assert.doesNotMatch(lastOut(), /1,000.*5,000.*10,000/, "฿2k is two ฿1k notes — legal now");
+  assert.equal(state().money, 7000, "the composable ฿2k paid out");
+  out = []; run("withdraw 2500");
+  assert.match(lastOut(), /1,000.*5,000.*10,000/, "a non-multiple still gets the notes line");
+  assert.equal(state().money, 7000, "no change on a bad denomination");
+  // daily cap: 5k + 2k + 10k = 17k drawn; the next 10k would be 27k → refused
   run("withdraw 10000");
   out = []; run("withdraw 10000");
   assert.match(lastOut(), /daily limit|left until tomorrow/i);
-  assert.equal(state().money, 15000, "capped at ฿20k principal per day");
+  assert.equal(state().money, 17000, "capped at ฿20k principal per day");
   // balance reads the account, pocket, and the day's allowance
   out = []; run("check balance");
   assert.match(lastOut(), /Account:.*in pocket:.*withdrawn today/i);
