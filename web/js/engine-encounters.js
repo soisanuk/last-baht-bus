@@ -452,7 +452,7 @@ const _ENC = {
   },
   selfbf(input) {
     const name = NPCS[G.selfBfId] ? NPCS[G.selfBfId].name : "She";
-    if (!/yes|yeah|sure|ok|of course|why not|please|no|not tonight|sorry|pass|later|maybe/.test(input)) {
+    if (!/\b(yes|yeah|sure|ok|okay|of course|why not|please|no|nope|not tonight|sorry|pass|later|maybe)\b/.test(input)) { // word-bounded: "Manow" is not a no
       // a tip, a drink, a walk: the offer lapses without a verdict and the command runs
       _say(`${name} reads the moment going past — a small smile, no harm done — and lets it. The offer's still in the room if you want it.`, "dim");
       return "passthrough";
