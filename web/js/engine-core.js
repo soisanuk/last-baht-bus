@@ -1254,7 +1254,11 @@ function _describeRoom(full, forceFull) {
   }
   if (r.barType) {
     if (G.soc.patronBusy[G.room]) {
-      const girl = _npcsHere().find(id => NPC_ROLES[id] === "hostess");
+      // name the SAME girl the snipe-jealousy keys on (parser); legacy `true`
+      // falls back to the first hostess present
+      const busyId = G.soc.patronBusy[G.room];
+      const girl = (typeof busyId === "string" && _npcsHere().includes(busyId))
+        ? busyId : _npcsHere().find(id => NPC_ROLES[id] === "hostess");
       const g = girl ? `, ${NPCS[girl].name} laughing on cue beside him` : "";
       _say(_pickVary(_BAR_REGULAR_BUSY, "barReg")(g), "dim");
     } else {

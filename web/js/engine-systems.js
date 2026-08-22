@@ -633,8 +633,17 @@ function _bfRefusalSay(id, r) {
 // The negotiation prompt — single source, so the live line, the invalid-answer
 // reprompt, and the restore redraw all read identically (see _renderResume).
 function _bfPrompt() {
-  const { st, lt } = G.pendingBf;
+  const { st, lt, id } = G.pendingBf;
   const p = n => n ? "฿" + n : _L("waived — past midnight");
+  // At her-farang tier she waives the fine herself — foreshadow it in the quote
+  // so a price-shy player doesn't back out at a number that won't be charged
+  // (Alan playtest, 2026-08-17: the lovely reveal only fired AFTER committing).
+  if (id && typeof _bondTier === "function" && _bondTier(id) >= 3) {
+    _say(`(The mamasan starts to name a number; ${NPCS[id].name} waves her quiet — ` +
+      "for YOU there's no fine tonight, she'll square it herself. SHORT TIME · LONG " +
+      "TIME — overnight · or NO.)", "dim");
+    return;
+  }
   _say(_fmt("(SHORT TIME {st} — one round, the night carries on · LONG TIME {lt} — overnight · NO backs out.)",
     { st: p(st), lt: p(lt) }), "dim");
 }

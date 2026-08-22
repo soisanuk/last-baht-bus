@@ -333,7 +333,16 @@ function _arriveAt(to) {
       delete G.soc.banned[to]; // shift change; you're merely on notice now
       G.soc.heat[to] = 1;
     }
-    if (G.soc.patronBusy[to] === undefined) G.soc.patronBusy[to] = _rand() < 0.4;
+    if (G.soc.patronBusy[to] === undefined) {
+      // Store WHICH girl the regular is attending, not a room-wide boolean — the
+      // ambient "laughing beside him" line and the drink-snipe jealousy both read
+      // this, and a bare boolean let them name/blame different girls (Gaz
+      // playtest, 2026-08-17: the room said Noi, buying Sara triggered "her").
+      const hos = Object.keys(NPC_ROLES).filter(x =>
+        NPC_ROLES[x] === "hostess" && _npcRoom(x) === to);
+      G.soc.patronBusy[to] = (hos.length && _rand() < 0.4)
+        ? hos[Math.floor(_rand() * hos.length)] : false;
+    }
   }
   G.room = to;
   if (typeof _fonPour === "function") _fonPour();   // Wednesday, first hour, her bar only
@@ -2412,9 +2421,16 @@ function _convoResolve(lower) {
   if (bare && bare.split(" ").length <= 3 && (_findNpc(bare) || _findPatron(bare))) {
     _doTalk(bare, null); return true;
   }
+  // A lone digit with no pending question is an ORPHANED answer — the numbered
+  // prompt it belonged to lapsed when you switched partners. Routing it as a
+  // topic produced "You asked Terry about 1" (veteran playtest, 2026-08-17).
+  const id = _convoActive();
+  if (id && /^[1-9]$/.test(bare)) {
+    _say(`(That question's drifted past — ${_convoName(id)} has moved on. Ask again if it matters.)`, "dim");
+    return true;
+  }
   // 3) While a conversation is live, take the whole line as a topic aimed at the
   //    partner — the same route as ASK <them> ABOUT <topic>.
-  const id = _convoActive();
   if (id) { _doTalk(_convoName(id), _convoTopic(lower)); return true; }
   return false;
 }
@@ -2753,17 +2769,26 @@ function _regularHere(nameW) {
   const id = _findNpc(nameW);
   if (id && _npcsHere().includes(id) && !NPC_ROLES[id] && !NPCS[id].manager && !NPCS[id].filler)
     return id;
+  // a named rail patron (Chuck, Terry, Danny…) is stood a beer the same way
+  if (typeof _findPatron === "function") {
+    const pid = _findPatron(nameW);
+    if (pid && typeof _patronsHere === "function" && _patronsHere().includes(pid)) return pid;
+  }
   return null;
+}
+// display name for a stand-a-beer target, NPC or patron
+function _regularName(id) {
+  return (NPCS[id] && NPCS[id].name) || (typeof PATRONS !== "undefined" && PATRONS[id] && PATRONS[id].name) || "the regular";
 }
 // Pronoun-free on purpose: the role-less rail crowd is male today, but nothing
 // enforces that — keep the prose safe for whoever takes the stool next.
 function _standRegular(id) {
   if (G.money < BEER_PRICE) {
-    _say(`A bottle for ${id ? NPCS[id].name : "the regular"} runs ฿${BEER_PRICE}; you have ฿${G.money}.`);
+    _say(`A bottle for ${id ? _regularName(id) : "the regular"} runs ฿${BEER_PRICE}; you have ฿${G.money}.`);
     return;
   }
   G.money -= BEER_PRICE;
-  const who = id ? NPCS[id].name : "the regular";
+  const who = id ? _regularName(id) : "the regular";
   if (G.soc.patronMiffed[G.room]) {
     delete G.soc.patronMiffed[G.room];
     G.soc.heat[G.room] = Math.max(0, (G.soc.heat[G.room] || 0) - 1);
@@ -2969,11 +2994,14 @@ function _doBuy(arg) {
         _checkDrunk();
       }
     }
-    // drink-sniping a girl who had the regular's attention: bad form
-    if (G.soc.patronBusy[G.room] && !G.soc.patronMiffed[G.room] && NPC_ROLES[id] === "hostess") {
+    // drink-sniping the specific girl the regular was attending: bad form. Legacy
+    // saves stored `true` — treat that as "any hostess" so old games don't crash.
+    const busyId = G.soc.patronBusy[G.room];
+    const sniped = busyId === true ? NPC_ROLES[id] === "hostess" : id === busyId;
+    if (sniped && !G.soc.patronMiffed[G.room]) {
       G.soc.patronMiffed[G.room] = true;
-      _say("Down the bar, the regular who has been buying her drinks all evening " +
-        "goes very still over his Chang. Bad form, and every lady in the room " +
+      _say(`Down the bar, the regular who has been buying ${NPCS[id].name} drinks all ` +
+        "evening goes very still over his Chang. Bad form, and every lady in the room " +
         "clocked it.", "alert");
       _addHeat(1);
     }

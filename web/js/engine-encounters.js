@@ -519,6 +519,15 @@ const _ENC = {
   },
 
   powerbank(input) {
+    if (/tao ?rai|how much|what.*cost|price|เท่าไหร่/.test(input)) {
+      // TAO RAI is the taught ask-the-price verb; the lend is a favour, not a
+      // sale — say so and re-arm so a YES still lands (veteran playtest 2026-08-17)
+      _say("He laughs. “Tao rai? Nothing, boss. I not sell electric — I sell " +
+        "motosai. You charge, we talk, next time you ride with me, na? THAT is the " +
+        "price.” The cable's already in his hand. (YES to plug in · or wave him off.)");
+      G.pendingEnc = "powerbank";
+      return;
+    }
     if (/yes|yeah|sure|ok|thank|khop|krub|krap|please|borrow|charge|why not/.test(input)) {
       G.battery = Math.min(100, G.battery + 30);
       _say("He plugs you in and you shoot the breeze — football, petrol prices, " +

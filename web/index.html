@@ -103,6 +103,10 @@
     position: absolute;
     left: .7rem;
     top: .55rem;
+    /* above the start overlay (z 100) so a reader who needs big text can hit Aa
+       BEFORE reading the splash — the overlay used to eat the tap (Alan, the
+       widower who needs large text, 2026-08-17) */
+    z-index: 101;
     background: none;
     border: 1px solid #ff149340;
     border-radius: 8px;
