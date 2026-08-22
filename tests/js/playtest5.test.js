@@ -861,3 +861,31 @@ test("texts: no identical line twice running from one sender, the inbox is cappe
   assert.ok(seen.size >= 2, "the refusal varies");
   out = []; doCommand("swear"); assert.doesNotMatch(text(), /didn't understand|No idea|didn't parse/);
 });
+
+// ── the 2026-08-22 code review (HANDOFF-CODE-REVIEW.md, since deleted) ──
+test("review: a command that merely CONTAINS an answer word passes through a soft encounter", () => {
+  G.room = "stinky_bar"; G.money = 2000; G.pendingEnc = "peddler"; out = [];
+  const girl = _npcsHere().find(id => NPC_ROLES[id] === "hostess");
+  doCommand(`buy drink for ${NPCS[girl].name.toLowerCase()}`);
+  assert.equal(G.pendingEnc, null);
+  assert.ok(G.money < 2000, "the lady drink was bought — not eaten as the peddler's answer");
+  G.room = "buakhao_n"; G.pendingEnc = "noodle"; out = [];
+  doCommand("go north");
+  assert.equal(G.pendingEnc, null);
+  assert.notEqual(G.room, "buakhao_n", "GO NORTH walked — 'go' is not the noodle girl's yes");
+  // a bare answer is still an answer
+  G.room = "stinky_bar"; G.pendingEnc = "peddler"; out = [];
+  doCommand("no");
+  assert.equal(G.pendingEnc, null);
+  assert.doesNotMatch(text(), /moment passed without an answer/);
+});
+
+test("review: the Darkside league draws its own roster; the inbox is hard-capped read or unread", () => {
+  sandbox(); G.stage = "expat"; G.room = "khao_talo_bar"; G.day = 3; G.money = 2000;
+  _startKiller();
+  const names = G.game && G.game.kp && G.game.kp.players ? G.game.kp.players.map(p => p.name) : [];
+  G.game = null;
+  assert.ok(names.some(n => /dredger|Mama Yai|Tuesday man|lake boats|Daeng/.test(n)), names.join(","));
+  for (let i = 0; i < 200; i++) _pushMsg("lek", "unread " + i); // never read
+  assert.ok(G.phone.inbox.length <= 80);
+});

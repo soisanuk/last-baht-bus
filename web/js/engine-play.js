@@ -1018,9 +1018,10 @@ function _startKiller() {
   G.money -= KP_ENTRY;
   const field = [];
   const used = new Set();
+  const roster = _room().region === "Darkside" ? KP_FIELD_DARK : KP_FIELD; // one pool for both the draw and the pick (code review 2026-08-22)
   while (field.length < 4) {
-    const i = Math.floor(_rand() * (_room().region === "Darkside" ? KP_FIELD_DARK : KP_FIELD).length);
-    if (!used.has(i)) { used.add(i); field.push(KP_FIELD[i]); }
+    const i = Math.floor(_rand() * roster.length);
+    if (!used.has(i)) { used.add(i); field.push(roster[i]); }
   }
   const names = ["You", ...field.map(f => f[0])];
   const skills = [0, ...field.map(f => f[1])];

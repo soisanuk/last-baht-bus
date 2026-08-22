@@ -5587,18 +5587,23 @@ function _norm(s) {
 
 // The answer words of the SOFT encounters (see the pendingEnc gate): anything
 // else that is a real command passes through with the pitch declined.
+// Anchored, and SPECIFIC: an answer is the bare word (or the encounter's own
+// noun — "buy the watch"), never a command that merely contains one. "buy drink
+// for manow" under the peddler used to match /buy/ and be eaten (code review
+// 2026-08-22); "go north" matched the noodle girl's "go". The observation verbs
+// (look/help/…) are exempted earlier in the gate, so they never reach this.
 const _ENC_SOFT = {
-  peddler:    /haggle|bargain|cheap|discount|too much|lower|tao ?rai|how much|watch|rolex|glass|shade|sun|vit|pill|buy|yes|\bno\b|not interested|wave|pass/,
-  noodle:     /yes|yeah|ok|okay|sure|come|fine|why not|\bgo\b|her|deal|\bno\b|pass|wave|walk/,
-  freelancer: /both|two|friend|ning|threesome|them|yes|ok|sure|company|come|deal|her|why not|\bno\b|pass|wave|walk|thanks/,
-  coconutbar: /both|two|friend|muk|threesome|them|yes|yeah|ok|sure|company|come|deal|her|why not|how much|price|\bno\b|pass|walk/,
-  booking:    /yes|ok|sure|book|come|deal|why not|send her|yeah|\bno\b|sleep|turn in|pass|not tonight|stay|send/,
-  maze:       /help|look|find|yes|sure|come|together|follow|show|point|search|money|baht|pay|\bno\b|walk|leave|on/,
-  jogger:     /join|run|yes|sure|\bno\b|pass|wave|keep|walk|listen/,
-  influencer: /pose|photo|yes|sure|\bno\b|pass|wave|walk|help|hold/,
-  djslip:     /sign|yes|sure|decline|\bno\b|pass|refuse|ok/,
-  freegift:   /take|yes|accept|thanks|refuse|\bno\b|pass|wave|keep/,
-  katoey:     /flirt|kiss|snog|fondle|grope|spank|charm|wink|lean|\bno\b|push|hand|back off|wave|step/,
+  peddler:    /^(?:haggle|bargain|cheap(?:er)?|discount|too much|lower|tao ?rai|how much|(?:buy (?:the |a )?)?(?:watch|rolex|glass(?:es)?|shades|sunglasses|vit(?:amin)?s?|pills?)|yes|no|nah|not interested|wave|pass)\b/,
+  noodle:     /^(?:yes|yeah|ok|okay|sure|come(?: on)?|fine|why not|her|deal|no|nah|pass|wave|walk(?: on)?)\b/,
+  freelancer: /^(?:both|two|friend|ning|threesome|them|yes|ok|okay|sure|company|come|deal|her|why not|no|nah|pass|wave|walk(?: on)?|thanks)\b/,
+  coconutbar: /^(?:both|two|friend|muk|threesome|them|yes|yeah|ok|okay|sure|company|come|deal|her|why not|how much|price|no|nah|pass|walk(?: on)?)\b/,
+  booking:    /^(?:yes|ok|okay|sure|book|come|deal|why not|send her|yeah|no|nah|sleep|turn in|pass|not tonight|stay|send)\b/,
+  maze:       /^(?:help(?: him)?|find|yes|sure|come|together|follow|show|point|search|money|baht|pay|no|nah|walk(?: on)?|leave(?: him)?)\b/,
+  jogger:     /^(?:join|run|yes|sure|no|nah|pass|wave|keep|walk(?: on)?|listen)\b/,
+  influencer: /^(?:pose|photo|yes|sure|no|nah|pass|wave|walk(?: on)?|help|hold)\b/,
+  djslip:     /^(?:sign|yes|sure|decline|no|nah|pass|refuse|ok|okay)\b/,
+  freegift:   /^(?:take|yes|accept|thanks|refuse|no|nah|pass|wave|keep)\b/,
+  katoey:     /^(?:flirt|kiss|snog|fondle|grope|spank|charm|wink|lean(?: in)?|no|nah|push|hands?|back off|wave|step)\b/,
 };
 // A real top-level command word (not a bare answer): used only to decide whether
 // a soft encounter should let the line through.

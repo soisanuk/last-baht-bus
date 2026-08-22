@@ -2073,13 +2073,16 @@ function _pushMsg(from, text, gives, fromName, photo) {
   // the same line twice running from the same sender reads as a bug (27-night playtest)
   const last = [...G.phone.inbox].reverse().find(m => m.from === from);
   if (text && last && last.text === text && !gives && !photo) text = _CHATTER[(G.turns + G.day) % _CHATTER.length];
-  if (G.phone.inbox.length > 80) G.phone.inbox = G.phone.inbox.filter(m => !m.read).concat(G.phone.inbox.filter(m => m.read).slice(-40)); // the phone forgets old read texts
   // fromName carries a display name for senders that aren't NPCs (e.g. the Soi
   // Dog Foundation broadcast); NPC texts leave it null and render by NPCS name.
   // photo (a caption string) marks a texted selfie — rendered with her portrait
   // and filed in the gallery when read.
   G.phone.inbox.push({ from, text, turn: G.turns, read: false, gives: gives || 0,
     fromName: fromName || null, photo: photo || null });
+  // a hard cap, read or unread: the phone keeps the newest 80 (code review 2026-08-22 —
+  // the old trim ran before insertion and kept every unread, so a player who never
+  // read could grow it without bound)
+  if (G.phone.inbox.length > 80) G.phone.inbox = G.phone.inbox.slice(-80);
   G.phone.lastText = G.turns;
 }
 
