@@ -12,7 +12,7 @@ depends on it.
 
 ```sh
 D=<your scratchpad session dir>
-node tools/playtest-driver.mjs start --dir $D [--mobile]   # prints the boot screen
+node tools/playtest-driver.mjs start --dir $D [--mobile] [--fresh]   # prints the boot screen
 node tools/playtest-driver.mjs tap  --dir $D "SOI 6 CHALLENGE"
 node tools/playtest-driver.mjs tap  --dir $D "START"
 node tools/playtest-driver.mjs cmd  --dir $D 1 2 1          # answer the taxi intro
@@ -23,6 +23,13 @@ Every `cmd`/`tap`/`wheel`/`fab` prints **only the new transcript lines** since
 your last call, under a one-line status header
 (`── [room · day · nightTurn · ฿ · สนุก · ENC/CHOICE/GAME flags] ──`). Batch
 5–15 commands per call, read the delta, decide in persona, repeat.
+
+**`--fresh` for a clean boot.** The daemon reuses one browser, so `start` can
+inherit a stale autosave from an earlier session (both round-three testers hit
+this — the game resumed mid-Act-One instead of the splash). Pass `--fresh` on
+`start` to wipe localStorage before the game boots, guaranteeing the splash →
+intro → opening flow. Omit it to deliberately exercise the continue-prompt /
+autosave path, which is itself worth testing.
 
 Verbs: `cmd <inputs...>` (typed through the real input) · `tap <text>` (chip /
 decorated keyword / any button) · `wheel <word> [n]` (right-click flyout: list
