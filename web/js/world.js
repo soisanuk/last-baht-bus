@@ -3252,7 +3252,7 @@ const ROOMS = {
       "somebody swept it once, after the end, turned the taps off properly and " +
       "squared the tables, and then locked the door and did not come back.",
     reads: {
-      board: [
+      fixtures: [
         { req: ["seanStory"],
           text: "The fixtures list again — and now it has a name on it. Sean ticked " +
             "those legs off, bought the next round, flew home for an operation and " +
@@ -4295,7 +4295,7 @@ const NPCS = {
     dialogue: [
       // An Introduction quest (docs/map-coverage.md): Candy vouches you into Rose's
       // discreet Orchid Club out in Naklua. chip:false — the quest drives it.
-      { topic: "rose", chip: false,
+      { topic: "rose", notFlags: ["orchidVouched"], chip: false,
         text: "“You want to know a place most people never find?” Candy weighs you a moment, then " +
           "decides. “Rose. The Orchid Club, out in Naklua — behind a wall, no sign, aircon like a " +
           "morgue and about as quiet. Old friend of mine, from before either of us ran anything.” " +
@@ -4303,6 +4303,12 @@ const NPCS = {
           "You get sent. So I am sending you — go and tell Rose that Candy vouches. And mind your " +
           "manners, na: Rose forgets nothing and forgives less.”",
         short: "“Rose's Orchid Club, Naklua — behind a wall, no sign. Old friend of mine. You don't find it, you get sent. Tell her Candy vouches.”" },
+      { topic: "lunch", req: ["orchidVouched"],
+        text: "\"Rose say I owe her LUNCH?\" Candy's laugh turns every head at the rail. \"Twenty " +
+          "years she keep that account. Okay, okay — you tell Rose: som tam at Rompho, she pay " +
+          "for the crab.\" She wags a finger at you, delighted. \"And YOU stay out of old-lady " +
+          "debts, tilac. They have interest you cannot imagine.\"",
+        short: "\"Tell Rose: som tam at Rompho, she pay for the crab.\"" },
       { req: ["somTamAccepted"], notFlags: ["somTamDelivered"],
         text: "\"Som tam not deliver itself, tilac. Rainbow Girls Bar, deep in the Tree Town maze — give it to PLOY at the cashier cage. Wai first. She melt.\"" },
       { req: ["knowWasHere"], notFlags: ["knowMot"], th: "จำได้สิ", rom: "jam dai si",
@@ -7642,6 +7648,15 @@ const NPCS = {
       "{{phone}} in each hand and an eye on every tab. She works a different bar each night and somehow " +
       "knows exactly what happened at the other two.",
     dialogue: [
+      { topic: "keys", req: ["keysDelivered"], notFlags: ["wimonThanked"], sets: ["wimonThanked"],
+        text: "You pass it on the way Diamond said it: the keys hang where they belong, and — " +
+          "she said to say — thank you. Wimon goes very still over the till. Both phones stay " +
+          "down. \"She kept them,\" she says at last, half to herself. \"All this time, that " +
+          "one kept them.\" She looks at you the way people look at a messenger who doesn't " +
+          "know the weight of the letter. \"You tell her — no. Mai pen rai. Some things I tell " +
+          "her myself, after twenty years.\" She pours you one from the good bottle, on the " +
+          "house, and doesn't explain it.",
+        short: "\"She kept them. All this time.\" The good bottle comes down. \"Some things I tell her myself.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Welcome, sit anywhere.\" Wimon's smile is warm and her arithmetic is instant. \"Three " +
           "bar I look after for the boss — Arrow, Cheeky Monkey, the Office. Beer cold, girls nice, no " +
@@ -8298,7 +8313,7 @@ const NPCS = {
       "towel over one shoulder. The dancer in the Walking Street photos behind her, " +
       "unmistakably. She was number 72.",
     dialogue: [
-      { req: ["knowOyHasIt"], th: "โอ้โห นานแล้ว", rom: "oho, naan laeo",
+      { req: ["knowOyHasIt"], th: "โอ้โห นานแล้ว", rom: "oho, naan laeo", notFlags: ["hasWallet"],
         text: "\"Oy has your wallet? HA!\" She slaps the bar. \"I danced next to that woman for six years — she was 71, I was 72, Crystal Palace, best legs on the street, both of us.\" She leans in, delighted. \"Listen, jing jing: her number is everything to her. Seventy-one. And she put lucky nine on the end of every code she ever made since the farm. You didn't hear it from Daeng.\"",
         sets: ["pinPart71", "pinPart9"],
         short: "\"Oy's number is seventy-one, with a lucky nine on the end of every code. You didn't hear it from Daeng.\"" },

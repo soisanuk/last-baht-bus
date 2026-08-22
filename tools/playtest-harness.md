@@ -38,9 +38,12 @@ actions, or pick the nth) · `fab bell|msg|font|mute|n|s|e|w|in|light` ·
 widths) · `shot <name>` · `errors` (accumulated console/page errors — check at
 the end, every entry is a finding) · `raw "<js>"` (escape hatch) · `stop`.
 
-The daemon holds one persistent headless browser. If it dies, `start` again —
-the game's autosave restores through the continue prompt, which is itself part
-of the game and worth exercising.
+The daemon holds one persistent headless browser. **State lives and dies with
+the daemon**: the browser context is in-memory, so localStorage (the autosave,
+`lbb_full_on`, font prefs) does NOT survive a `stop`/`start` cycle — a restart
+boots fresh. Within one daemon's lifetime the autosave persists across
+`navigate` reloads, which is how to flip a localStorage gate: set it via `raw`,
+then reload with `raw "location.reload()"` — do NOT stop/start for that.
 
 ## Token discipline (why this file exists)
 

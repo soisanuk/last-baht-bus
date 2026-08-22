@@ -762,6 +762,10 @@ const _READ_NOUNS = {
   poster: ["flyer"],
   photos: ["photo", "photograph", "photographs", "picture", "pictures", "wall of photos", "portrait"],
   sign: ["notice", "placard", "arrows", "arrow", "signage"],
+  // the Shamrock's darts-and-fixtures wall (renamed from `board`, whose aliases
+  // were all DJ-sheet words — the authored elegy was unreachable by any noun a
+  // player would type; critic playtest 2026-08-22)
+  fixtures: ["fixtures list", "list of fixtures", "darts", "dartboard", "dart board", "season"],
   jukebox: ["juke"],
   crane: ["cranes", "origami", "napkin", "napkins"],
   cherries: ["cherry"],
@@ -2452,7 +2456,7 @@ function _convoResolve(lower) {
   // topic produced "You asked Terry about 1" (veteran playtest, 2026-08-17).
   const id = _convoActive();
   if (id && /^[1-9]$/.test(bare)) {
-    _say(`(That question's drifted past — ${_convoName(id)} has moved on. Ask again if it matters.)`, "dim");
+    _say("(That numbered question has drifted past — the moment moved on. Ask again if it matters.)", "dim");
     return true;
   }
   // 3) While a conversation is live, take the whole line as a topic aimed at the
@@ -3345,8 +3349,11 @@ function _doRideBus(arg) {
     _rideLoop();
     return;
   }
+  // strip parens/punct both sides: the drop-list PRINTS "Second Road (Soi Myth
+  // Night)" and typing it back verbatim must match (critic playtest 2026-08-22)
+  const _bn = x => x.toLowerCase().replace(/[()]/g, " ").replace(/\s+/g, " ").trim();
   const dest = reachable.find(s =>
-    ROOMS[s].name.toLowerCase().includes(w) || ROOMS[s].region.toLowerCase().includes(w));
+    _bn(ROOMS[s].name).includes(_bn(w)) || ROOMS[s].region.toLowerCase().includes(_bn(w)));
   if (!w || !dest) {
     _say((_BUS_WAITING.has(G.room)
       ? "The truck at the head of the rank waits, benches filling. He'll drop you: "
@@ -5409,7 +5416,7 @@ function doCommand(input) {
     // reaction: LOOK once accepted a tout's offer, which read as the game
     // deciding for you (desktop playtest, 2026-08-17 — 4 hits). Navigation and
     // everything else still counts as your snap answer (walking off IS one).
-    if (/^(look|l|examine|x|inventory|i|inv|time|diagnose|score|help)$/.test(v) && !arg) {
+    if (/^(look|l|examine|x|inventory|i|inv|time|diagnose|score|help|quests|journal)$/.test(v) && !arg) {
       if (typeof _renderEncounter === "function") _renderEncounter();
       else _say("(The moment is still waiting on you.)", "dim");
       return;
@@ -5788,9 +5795,15 @@ function doCommand(input) {
       _say(_MISC_VERBS[v === "yell" ? "shout" : v]); break;
     case "touch": case "feel": case "taste": case "lick": case "tell":
     case "verbose": case "brief": case "restore": case "load": case "move":
-    case "close": case "shut":
+    case "close": case "shut": {
+      // a live conversation CHOICE wins over the museum-verb refusal — Kesinee's
+      // own "(TELL HER BERT SENT YOU)" chip was being answered by the TELL
+      // lecture, wedging the White Dish chain (critic playtest, 2026-08-22)
+      const _cb = lower.replace(/[,.!?]+$/, "").trim();
+      if (typeof _convoPickChoice === "function" && _convoActive() && _convoPickChoice(_cb)) break;
       _say(_MISC_VERBS[{ feel: "touch", lick: "taste", brief: "verbose", load: "restore", shut: "close" }[v] || v]);
       break;
+    }
     case "balcony": case "rail":
       if (G.room === "qv_room") _doWatchSoi();
       else _say("No balcony here. Yours is the one over the Queen Vic — head UP to your room and WATCH SOI from the rail.");
