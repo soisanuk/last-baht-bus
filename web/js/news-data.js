@@ -3,54 +3,64 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
-    "t": "The Whitehouse Condotel, Pattaya 13, Pattaya Klang, Pattaya, Chon Buri, 20150 Thailand, Pattaya, Changwat Chon Buri Apartment for Sale - Rea",
-    "s": "Realtor.com",
-    "d": "18 Aug 2026"
-  },
-  {
-    "t": "Bangkok Hotel Rates Have Already Doubled for IMF Week; Tomorrowland Pushes Pattaya Up 105%",
-    "s": "Tech Times",
+    "t": "Thai teen found in suitcase died from suffocation, police reveal",
+    "s": "BBC",
     "d": "19 Aug 2026"
   },
   {
-    "t": "Australian tourist disputes 32,540-baht bar bill after 13-hour Pattaya bender",
-    "s": "The Drinks Business",
-    "d": "18 Aug 2026"
+    "t": "Raids in Pattaya on Friday led by two ministers targeting Israeli business networks and legal advisors",
+    "s": "Thai Examiner",
+    "d": "21 Aug 2026"
   },
   {
-    "t": "How a Thai teen's night at a Pattaya beach ended in death",
-    "s": "Reuters",
-    "d": "29 Jun 2026"
+    "t": "Is buying a condo in Pattaya still worth it in 2026?",
+    "s": "Thaiger",
+    "d": "21 Aug 2026"
   },
   {
-    "t": "A New Side of Pattaya: How Events Are Transforming Thailand’s Seaside City",
-    "s": "Breaking Travel News",
-    "d": "19 Aug 2026"
+    "t": "Pattaya homeowner issues warning after CCTV catches clothes thief",
+    "s": "Thaiger",
+    "d": "21 Aug 2026"
   },
   {
-    "t": "The Standard Pattaya Na Jomtien brings beachside luxury to the party town",
-    "s": "South China Morning Post",
-    "d": "30 Jul 2026"
+    "t": "Pattaya rescuers save German man from capsized sailboat",
+    "s": "Thaiger",
+    "d": "21 Aug 2026"
   },
   {
-    "t": "Pattaya Marathon transforms Pattaya into vibrant tourist hub",
-    "s": "Travel Daily Media",
-    "d": "19 Aug 2026"
-  },
-  {
-    "t": "Ko Phai Soi 1, Pattaya Tai, Pattaya, Chon Buri, 20150 Thailand, Pattaya, Changwat Chon Buri House for Sale",
-    "s": "Realtor.com",
-    "d": "17 Aug 2026"
-  },
-  {
-    "t": "After I graduated from college in the US, I moved abroad to Thailand. It's nothing like I expected.",
-    "s": "Business Insider",
+    "t": "Giant honey bee attack leaves 17 injured in Pattaya",
+    "s": "Thaiger",
     "d": "20 Aug 2026"
+  },
+  {
+    "t": "Thailand video news | Giant bee swarm injures 17 near Pattaya government complex, Bangkok places eighth among world’s most attractive touris",
+    "s": "Thaiger",
+    "d": "21 Aug 2026"
+  },
+  {
+    "t": "Aussie accused in Pattaya teen suitcase murder case nears trial",
+    "s": "Thaiger",
+    "d": "19 Aug 2026"
+  },
+  {
+    "t": "Thailand will avoid Rafaelson focus in ASEAN Championship final vs. 'favourites' Vietnam",
+    "s": "ESPN",
+    "d": "21 Aug 2026"
   },
   {
     "t": "Thailand shooting: Teen kills at least seven and injures more than 30, PM says",
     "s": "BBC",
     "d": "06 Aug 2026"
+  },
+  {
+    "t": "Defending champions Thailand start Asian title defense on the right foot",
+    "s": "Volleyball World",
+    "d": "21 Aug 2026"
+  },
+  {
+    "t": "After I graduated from college in the US, I moved abroad to Thailand. It's nothing like I expected.",
+    "s": "Business Insider",
+    "d": "20 Aug 2026"
   },
   {
     "t": "Just for Fun: These Miss Universe Thailand Costumes Are a Feast for the Eyes—And You Won’t Be Able to Stop Looking at Them",
@@ -61,22 +71,12 @@ var NEWS_FEED = [
     "t": "Thailand issues arrest warrants for 20 Israelis in sweeping Koh Samui business crackdown",
     "s": "The Jerusalem Post",
     "d": "19 Aug 2026"
-  },
-  {
-    "t": "Defending champions Thailand start Asian title defense on the right foot",
-    "s": "Volleyball World",
-    "d": "21 Aug 2026"
-  },
-  {
-    "t": "PLA Air Force trains with Belarus, Thailand, Egypt in three regions, displaying strategic reach beyond homeland defense: expert - Global Tim",
-    "s": "Global Times",
-    "d": "20 Aug 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-08-21","USD":32.68,"AUD":23.42,"GBP":44.62,"EUR":38.23};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-22","temp":29,"humid":74,"code":3,"hi":31,"rain":86};
+var WX_NOW = {"date":"2026-08-22","temp":30,"humid":70,"code":51,"hi":31,"rain":93};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-08-21","done":true,"h":"Arsenal","hs":3,"a":"Coventry","as":0},{"d":"2026-08-22","done":false,"h":"Hull","hs":0,"a":"Man United","as":0},{"d":"2026-08-22","done":false,"h":"Everton","hs":0,"a":"C Palace","as":0},{"d":"2026-08-22","done":false,"h":"Ipswich","hs":0,"a":"Sunderland","as":0},{"d":"2026-08-22","done":false,"h":"Nottm Forest","hs":0,"a":"Leeds","as":0},{"d":"2026-08-22","done":false,"h":"Brentford","hs":0,"a":"Spurs","as":0},{"d":"2026-08-23","done":false,"h":"Brighton","hs":0,"a":"Aston Villa","as":0},{"d":"2026-08-23","done":false,"h":"Man City","hs":0,"a":"Bournemouth","as":0},{"d":"2026-08-23","done":false,"h":"Newcastle","hs":0,"a":"Liverpool","as":0},{"d":"2026-08-24","done":false,"h":"Fulham","hs":0,"a":"Chelsea","as":0}]};
 // GLO draw — the girls' retirement plan
@@ -84,4 +84,4 @@ var LOTTO = {"date":"2026-08-16","first":"004615","last2":"53","front3":["429","
 // XAU, plus Thai baht-weight gold (96.5%)
 var GOLD = {"usd":4604,"date":"2026-08-22","baht":71150};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":77931,"thb":2542927};
+var BTC = {"usd":77440,"thb":2526890};
