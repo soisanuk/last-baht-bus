@@ -12,7 +12,7 @@ depends on it.
 
 ```sh
 D=<your scratchpad session dir>
-node tools/playtest-driver.mjs start --dir $D [--mobile] [--fresh]   # prints the boot screen
+node tools/playtest-driver.mjs start --dir $D [--mobile] [--fresh]   # prints the start menu's buttons + the boot screen
 node tools/playtest-driver.mjs tap  --dir $D "SOI 6 CHALLENGE"
 node tools/playtest-driver.mjs tap  --dir $D "START"
 node tools/playtest-driver.mjs cmd  --dir $D 1 2 1          # answer the taxi intro
@@ -45,6 +45,13 @@ toggle survives the reload that applies it.
 TO <name> opens the conversation and the topic list appears on the **chip bar** —
 read it with `state` (the `chips` array). Typed `ask <name> about <topic>` works
 for any topic, listed or not; a miss now gets a voiced "not my story" line.
+
+**The start screen is a menu, not transcript.** `start` prints its buttons
+(`start menu: [THE FULL GAME — disabled] [SOI 6 CHALLENGE] [TODAY'S SOI]…`) and
+`menu` re-reads them any time; tap one by its text. The device mode is fixed
+when the daemon is created — `start --mobile` against a running desktop daemon
+(or vice versa) recreates it, and `state` reports `mobile: true|false` so a
+persona can confirm what it's playing on.
 
 Verbs: `cmd <inputs...>` (typed through the real input) · `tap <text>` (chip /
 decorated keyword / any button) · `wheel <word> [n]` (right-click flyout: list

@@ -9,7 +9,8 @@
 //   node tools/playtest-driver.mjs tap   --dir <sessionDir> "Pinky"        # chip/keyword/button by visible text
 //   node tools/playtest-driver.mjs wheel --dir <sessionDir> "Lek" [n]     # open flyout on a keyword; list or pick action n
 //   node tools/playtest-driver.mjs fab   --dir <sessionDir> bell|msg|font|mute|n|s|e|w|in|light
-//   node tools/playtest-driver.mjs state --dir <sessionDir>               # G snapshot + chips + exits (JSON)
+//   node tools/playtest-driver.mjs state --dir <sessionDir>               # G snapshot + chips + exits + start menu + device mode (JSON)
+//   node tools/playtest-driver.mjs menu  --dir <sessionDir>               # the start screen's buttons (it lives outside the transcript)
 //   node tools/playtest-driver.mjs overflow --dir <sessionDir>            # doc + chips scroll widths
 //   node tools/playtest-driver.mjs shot  --dir <sessionDir> <name>        # screenshot -> <dir>/<name>.png
 //   node tools/playtest-driver.mjs errors --dir <sessionDir>              # console/page errors so far
@@ -65,6 +66,7 @@ if (verb === "serve") {
     : { viewport: { width: 1280, height: 900 } };
   const context = await browser.newContext(ctxOpts);
   const page = await context.newPage();
+  await page.addInitScript(m => { window.MOBILE = m; }, mobile); // the page can report its device mode
   const errors = [];
   page.on("pageerror", e => errors.push({ t: "pageerror", m: String(e && e.message || e) }));
   page.on("console", m => { if (m.type() === "error") errors.push({ t: "console", m: m.text() }); });
@@ -145,6 +147,24 @@ if (verb === "serve") {
       await page.waitForTimeout(250);
       return { hit: sel };
     },
+    // the splash lives OUTSIDE the transcript ledger, so `start` printed only the
+    // status header (harness re-review 2026-08-22): report the start screen's
+    // visible buttons (and which are disabled) so a blind agent can see the menu
+    async menu() {
+      return await page.evaluate(() => {
+        const ov = document.getElementById("start-overlay");
+        if (!ov || ov.hidden) return { splash: false, buttons: [] };
+        const lab = b => { // the button's label without its description span
+          const t = b.textContent.trim().replace(/\s+/g, " ");
+          const d = b.querySelector(".start-mode-desc");
+          return d ? t.replace(d.textContent.trim().replace(/\s+/g, " "), "").trim() : t;
+        };
+        const buttons = [...ov.querySelectorAll("button")]
+          .filter(b => b.offsetParent !== null)
+          .map(b => ({ label: lab(b), disabled: !!b.disabled }));
+        return { splash: true, buttons };
+      });
+    },
     async state() {
       return await page.evaluate(() => {
         const g = (typeof G !== "undefined" && G) ? {
@@ -155,7 +175,11 @@ if (verb === "serve") {
         } : null;
         const chips = [...document.querySelectorAll("#chips button")].map(b => b.textContent.trim());
         const exits = [...document.querySelectorAll('#term-out b.kw[data-k="exit"]')].slice(-8).map(b => b.textContent);
-        return { g, chips, exits };
+        const ov = document.getElementById("start-overlay");
+        const menu = (ov && !ov.hidden) ? [...ov.querySelectorAll("button")].filter(b => b.offsetParent !== null)
+          .map(b => { const t = b.textContent.trim().replace(/\s+/g, " "); const d = b.querySelector(".start-mode-desc");
+            return (d ? t.replace(d.textContent.trim().replace(/\s+/g, " "), "").trim() : t) + (b.disabled ? " (disabled)" : ""); }) : null;
+        return { g, chips, exits, menu, mobile: MOBILE };
       });
     },
     async overflow() {
@@ -213,17 +237,28 @@ if (verb === "serve") {
   });
 } else if (verb === "start") {
   if (existsSync(portFile)) {
-    let live = false;
-    try { await call("state"); live = true; } catch { rmSync(portFile); }
+    let live = null;
+    try { live = await call("state"); } catch { rmSync(portFile); }
+    if (live && !!live.mobile !== args.includes("--mobile")) {
+      // the device mode is fixed at context creation — a live desktop daemon can't
+      // become a phone by reload (harness re-review 2026-08-22): recreate it
+      console.log(`daemon already running in ${live.mobile ? "mobile" : "desktop"} mode — recreating for ${args.includes("--mobile") ? "mobile" : "desktop"}`);
+      try { await call("stop"); } catch {}
+      rmSync(portFile, { force: true });
+      await new Promise(r => setTimeout(r, 500));
+      live = null;
+    }
     if (live) {
       if (args.includes("--fresh")) {
         // a live daemon + --fresh = reset it in place (storage wiped, page reloaded)
         await call("fresh");
         writeFileSync(path.join(dir, "cursor"), "0");
         console.log("daemon already running — reset to a clean boot (--fresh)");
+        console.log(await menuLine());
         console.log(await delta());
       } else {
         console.log("daemon already running (state kept; use `start --fresh` to reset it, or `stop` first)");
+        console.log(await menuLine());
       }
       process.exit(0);
     }
@@ -242,6 +277,7 @@ if (verb === "serve") {
   if (!existsSync(portFile)) { console.error("daemon failed to start"); process.exit(1); }
   writeFileSync(path.join(dir, "cursor"), "0");
   await new Promise(r => setTimeout(r, 800));
+  console.log(await menuLine()); // the start screen's buttons (it lives outside the transcript)
   console.log(await delta()); // the boot screen
 } else {
   // ── thin client verbs ──────────────────────────────────────────────────────
@@ -264,6 +300,7 @@ if (verb === "serve") {
       console.log(await delta());
     },
     state: async () => console.log(JSON.stringify(await call("state"), null, 1)),
+    menu: async () => console.log(await menuLine()),
     overflow: async () => console.log(JSON.stringify(await call("overflow"))),
     shot: async () => console.log(JSON.stringify(await call("shot", { name: rest[0] }))),
     errors: async () => console.log(JSON.stringify(await call("errors"), null, 1)),
@@ -285,6 +322,16 @@ async function call(op, params) {
 }
 
 // new transcript lines since the stored cursor, with a compact status header
+// The start screen is outside the transcript ledger; describe its buttons.
+async function menuLine() {
+  try {
+    const m = await call("menu");
+    if (!m.splash) return "";
+    return "start menu: " + m.buttons.map(b => `[${b.label}${b.disabled ? " — disabled" : ""}]`).join(" ") +
+      "  (tap one by its text; the full game needs `toggle full` first — see the doc)";
+  } catch { return ""; }
+}
+
 async function delta() {
   const cursorFile = path.join(dir, "cursor");
   const from = existsSync(cursorFile) ? +readFileSync(cursorFile, "utf8") : 0;
