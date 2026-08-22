@@ -4,7 +4,7 @@
 // plumbing — every agent in the 2026-08-17 rounds hand-built (and mis-built)
 // exactly this at ~50-80k tokens a time. Not part of any test suite.
 //
-//   node tools/playtest-driver.mjs start --dir <sessionDir> [--mobile] [--url <url>]
+//   node tools/playtest-driver.mjs start --dir <sessionDir> [--mobile] [--fresh] [--url <url>]
 //   node tools/playtest-driver.mjs cmd   --dir <sessionDir> "beer" "talk to lek" ...
 //   node tools/playtest-driver.mjs tap   --dir <sessionDir> "Pinky"        # chip/keyword/button by visible text
 //   node tools/playtest-driver.mjs wheel --dir <sessionDir> "Lek" [n]     # open flyout on a keyword; list or pick action n
@@ -68,6 +68,13 @@ if (verb === "serve") {
   const errors = [];
   page.on("pageerror", e => errors.push({ t: "pageerror", m: String(e && e.message || e) }));
   page.on("console", m => { if (m.type() === "error") errors.push({ t: "console", m: m.text() }); });
+  // --fresh: wipe localStorage before any page script runs, so the game boots to
+  // a clean splash instead of inheriting a stale autosave from an earlier session
+  // sharing this daemon's browser (both round-three testers hit this). Opt-in, so
+  // the default still exercises the real continue-prompt/autosave path.
+  if (args.includes("--fresh")) {
+    await page.addInitScript(() => { try { localStorage.clear(); } catch (e) {} });
+  }
   // the prune-proof transcript ledger, reinstalled on every navigation
   await page.addInitScript(() => {
     window.__ptLines = [];
@@ -192,6 +199,7 @@ if (verb === "serve") {
   const child = spawn(process.execPath,
     [fileURLToPath(import.meta.url), "serve", "--dir", dir,
      ...(args.includes("--mobile") ? ["--mobile"] : []),
+     ...(args.includes("--fresh") ? ["--fresh"] : []),
      ...(opt("url") ? ["--url", opt("url")] : [])],
     { detached: true, stdio: "ignore" });
   child.unref();
