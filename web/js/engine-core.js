@@ -1019,7 +1019,15 @@ function _elsewhereLine(word) {
       if (typeof _closedNow === "function" && _closedNow(cur)) {
         return `${NPCS[nid].name} ${notHere} — ${_barName(cur)} has shut for the night. Tomorrow.`;
       }
-      return `${NPCS[nid].name} ${notHere} tonight — try ${_barName(cur)}.`;
+      // Name the REGION too when it's somewhere you haven't been: "try Candy Bar 2"
+      // is useless if Candy Bar 2 is in Myth Night, a region you've never walked,
+      // because it isn't in the TRAVEL list and GO won't find it. That cost an
+      // insider playtest a full in-game night on the one quest the endgame hangs
+      // on (2026-08-23).
+      const reg = (ROOMS[cur] || {}).region;
+      const unseen = reg && !Object.keys(G.visited || {}).some(r => (ROOMS[r] || {}).region === reg);
+      return `${NPCS[nid].name} ${notHere} tonight — try ${_barName(cur)}` +
+        (unseen ? `, over in ${reg}.` : ".");
     }
     return `${NPCS[nid].name} isn't here right now.`;
   }
@@ -1633,6 +1641,7 @@ function _tick() {
     if (typeof _tanFavourDue === "function" && _tanFavourDue()) { _tanFavour(); return; }
     if (typeof _synDue === "function" && _synDue()) { _synAsk(); return; }
   }
+  if (typeof _workPresenceTick === "function") _workPresenceTick(); // a declared shift has to be stood
   _lastBusWarn();  // ~01:30: heads-up that the last ฿15 ride home is about to leave
   _maybeIncomingText();
   if (typeof _wrongNumberTick === "function") _wrongNumberTick(); // CTF stage 2 (docs/ctf.md), only if a probe armed it

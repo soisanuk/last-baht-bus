@@ -3122,8 +3122,16 @@ function _endNight(reason) {
     _act1Fail(reason);
     return;
   }
+  // Anything still in flight ends WITH THE NIGHT, and says so. These three were
+  // dropped silently: a live Connect 4's escrowed stake vanished with no
+  // concession line and no refund, and G.encPrompt was left holding a dead
+  // shakedown's prompt lines into the next day, where a restore would redraw
+  // them (stress-test playtest 2026-08-23). _abandonGame keeps the stake — the
+  // house rule for a frame you walked out on — but announces it.
+  if (G.game && typeof _abandonGame === "function") _abandonGame("The night ran out mid-frame");
   G.game = null;
   G.pendingEnc = null;
+  G.encPrompt = null;
   G.pendingFare = null;
   // the week's spine, one entry per night — what the share card renders.
   // Capped so an endless expat run can't grow the save without bound.
@@ -3265,7 +3273,25 @@ function _endNight(reason) {
   _nightDebrief(reason);
   G.day++;
   G.jaded = Math.max(0, G.jaded - 1); // a day cools the treadmill one notch
-  if (G.stage !== "expat" && G.day > 7) { _endVacation(); return; }
+  if (G.stage !== "expat" && G.day > 7) {
+    // The last night of the week used to be strictly free: this return sits
+    // ABOVE the rough-wake block, so the debrief printed "not making it home
+    // costs you the cash in your pocket" and then the vacation ended with every
+    // baht intact — making it optimal to blow the bankroll and pass out in the
+    // road on night seven (stress-test playtest 2026-08-23). The town doesn't
+    // check your flight date. Rent, the respawn and the loan roll are correctly
+    // skipped — you are not waking up here tomorrow — but the pockets go.
+    const _lastRough = (reason === "dawn" || reason === "collapse" || reason === "blackout") &&
+      !(_flag("act1Done") && G.room === _hotelRoomId()) && _dogEgg() !== "rescue" && !G.dog;
+    if (_lastRough && G.money > 0) {
+      G.roughLost = Math.min(G.money, ROUGH_WAKE_CAP);
+      G.money -= G.roughLost;
+      _say(`(Pockets turned out on the last night of the week — ฿${G.roughLost.toLocaleString("en-US")} ` +
+        "gone. The town has no idea you had a flight, and would not have cared.)", "dim");
+    }
+    _endVacation();
+    return;
+  }
   let hangover = G.soc.drunk;
   G.soc.drunk = 0;
   // the Sabai Palms perk: Naklua quiet takes one size off the morning after

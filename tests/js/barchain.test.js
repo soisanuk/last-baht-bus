@@ -640,6 +640,29 @@ test("the shift survives the night ending — the presence dilemma runs through 
     `working the rail beats Bert on an identical seed (${workedTake} vs ${G.bar.cash - cash1})`);
 });
 
+test("a declared shift has to be STOOD — you can't clock on and go out", () => {
+  // insider playtest (2026-08-23): WORK set the flag, fired the night's whole
+  // event roll on the spot and returned control, so the trade the expat stage is
+  // built on cost exactly one turn — declare, walk to the Queen Vic, drink
+  // through the night, and it still settled as worked at the full multiplier.
+  // Landed straight on top of the previous day's settle-time fix: the flag
+  // worked, nothing checked you were still there.
+  running();
+  G.stage = "expat"; G.room = "stinky_bar"; G.nightTurn = 20;
+  _doWork();
+  assert.ok(G.bar.workedLast, "clocked on");
+  G.room = "queen_vic";
+  for (let i = 0; i < WORK_AWAY_BUDGET + 1; i++) _tick();
+  assert.equal(G.bar.workedLast, false, "the shift lapses once you've spent the evening elsewhere");
+
+  // …and staying put keeps it
+  running();
+  G.stage = "expat"; G.room = "stinky_bar"; G.nightTurn = 20;
+  _doWork();
+  for (let i = 0; i < WORK_AWAY_BUDGET + 10; i++) _tick();
+  assert.ok(G.bar.workedLast, "a night actually spent behind your own rail still counts");
+});
+
 test("a year of unbroken shifts is rich and joyless — the grind is the cost", () => {
   running();
   let grind = 0;

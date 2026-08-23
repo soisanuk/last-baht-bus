@@ -3807,7 +3807,14 @@ function _doMotosai(arg) {
     // stuck. A piwin who's seen it a hundred times fronts the ride back to town
     // (town-ward only; he won't run you deeper into the dark for free) — and if
     // you're riding on his mercy, the dog rides on it too. No ฿10.
-    if (G.money === 0 && d.price === MOTOSAI_TOWN) {
+    // "Can't pay", not "has exactly zero". Gated on === 0, ฿1 was strictly worse
+    // than ฿0: stranded at the Sukhumvit crossing past the last bus with the ATM
+    // cap spent, one coin in the pocket bought a refusal where an empty pocket
+    // bought the ride, and the only escape was to let dawn take the coin
+    // (stress-test playtest 2026-08-23). The mercy exists so the night can't
+    // dead-end; a player who cannot afford the fare is in exactly that spot
+    // whether he holds nothing or holds change.
+    if (G.money < d.price && d.price === MOTOSAI_TOWN) {
       G.room = d.room;
       G.darkStreak = 0;
       _say("The piwin takes in the empty pockets, the hour, and the state of you, " +
@@ -6663,6 +6670,17 @@ function doCommand(input) {
       break;
     case "score": _doScore(); break;
     case "rep": case "reputation": case "standing": _doRep(); break;
+    // The natural guess for a player who has just been told he is inside
+    // somebody's web of favours — and it dead-ended in "that didn't parse",
+    // against the house rule that a plausible verb always gets a voiced answer
+    // (insider playtest 2026-08-23). Faction standing has no readout by design
+    // (it is felt, not scored); say so, and point at the two that do.
+    case "factions": case "faction": case "alignment": case "syndicate":
+      _say("Nobody keeps a scoreboard on that, and the people who would never " +
+        "tell you the number. What you can read is your STANDING on the soi, and " +
+        "— if you have a bar of your own — what the arrangement is costing you " +
+        "on the supply line, which is in the BOOKS.");
+      break;
     case "hint": case "hints": _doHint(); break;
     case "help": case "?": _say(G.mode === "soi6" ? _HELP_SOI6 : _HELP, "dim"); break;
     case "quit": case "end": case "logout": _doQuit(); break;

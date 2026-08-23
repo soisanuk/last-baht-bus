@@ -684,6 +684,51 @@ test("SAY <phrase> TO <person> aims the greeting at one target", () => {
   assert.match(lastOut(), /not here to hear it/i);
 });
 
+test("the last night of the week is not free — the town doesn't check your flight date", () => {
+  // stress-test playtest (2026-08-23): the vacation-end return sits ABOVE the
+  // rough-wake block, so the debrief printed "not making it home costs you the
+  // cash in your pocket" and then the week ended with every baht intact —
+  // making it strictly optimal to blow the bankroll and pass out in the road on
+  // night seven. The debrief promised a penalty the code then skipped.
+  state().flags.act1Done = true; state().flags.hasWallet = true; state().stage = "vacation";
+  state().day = 7; state().money = 1750; state().room = "naklua_rd"; state().nightTurn = 99;
+  state().dog = null;
+  _endNight("dawn");
+  assert.equal(state().pendingChoice, "vacation_end", "the week still ends");
+  assert.equal(state().money, 0, "and the pockets still go");
+});
+
+test("a night that ends mid-frame says so, and leaves no dead prompt behind", () => {
+  // stress-test playtest: _endNight cleared G.game / G.pendingEnc silently at the
+  // top, so a live Connect 4's escrowed stake vanished with no concession line,
+  // and G.encPrompt kept a dead shakedown's lines into the next day where a
+  // restore would redraw them.
+  state().flags.act1Done = true; state().flags.hasWallet = true; state().stage = "vacation";
+  state().room = "lucky_tiger"; state().money = 5000; state().nightTurn = 96; state().day = 3;
+  run("play connect 4");
+  assert.ok(state().game, "a frame is live");
+  out = [];
+  _endNight("dawn");
+  assert.match(lastOut(), /dies with the stool you left/i, "the night says what happened to it");
+  assert.equal(state().game, null);
+  assert.equal(state().encPrompt, null, "no dead prompt survives the night");
+});
+
+test("the pity ride is for anyone who can't pay, not only for exactly ฿0", () => {
+  // stress-test playtest: gated on `money === 0`, ฿1 was strictly worse than ฿0
+  // — stranded past the last bus with the ATM cap spent, one coin bought a
+  // refusal where an empty pocket bought the ride, and the only way out was to
+  // let dawn take the coin.
+  state().flags.act1Done = true; state().flags.hasWallet = true; state().stage = "vacation";
+  state().room = "sukhumvit_crossing"; state().nightTurn = 91;
+  for (const purse of [0, 1, MOTOSAI_TOWN - 1]) {
+    state().room = "sukhumvit_crossing"; state().money = purse; out = [];
+    run("motosai to naklua");
+    assert.notEqual(state().room, "sukhumvit_crossing",
+      `฿${purse}: a player who cannot pay the fare still gets the ride out`);
+  }
+});
+
 test("a night of buying can lift one girl a tier, not the whole ladder", () => {
   // churner playtest (2026-08-23): fourteen lady drinks took a total stranger
   // from 0 to top tier in fourteen in-game minutes — the possessive close-up,

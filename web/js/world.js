@@ -10700,8 +10700,15 @@ const SYNDICATE_JOBS = [
       "with the replacement under his arm, and you understand exactly what you bought.",
     perk: "You are one of the four.",
     no: "\"Mm.\" He considers the street for a moment. \"Then I hope it does not " +
+      // No sneer at the outside option: the whole discipline of this passage is
+      // that neither answer is graded, and "a very smart website" was the one
+      // phrase that put a thumb on the scale (insider playtest 2026-08-23, whose
+      // only tonal note it was — flagged precisely because the surrounding
+      // restraint is so consistent). The system really is better and cheaper;
+      // what you don't buy with it is the phone number.
       "die on a Saturday.\"\n\nThe system you buy instead is genuinely good and " +
-      "genuinely cheaper, from a company in Bangkok with a very smart website.",
+      "genuinely cheaper, and comes with a support line in Bangkok that answers " +
+      "on weekdays.",
   },
 ];
 

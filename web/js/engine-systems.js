@@ -4209,6 +4209,7 @@ function _doWork() {
   // settled as "Bert ran it", including nights spent wholly behind the bar).
   // _barNight consumes and clears it, so it cannot leak into a later night.
   G.bar.workedLast = true;
+  G.bar.awayTurns = 0;               // the presence clock starts now (_workPresenceTick)
   G.bar.worked = (G.bar.worked || 0) + 1;
   G.bar.away = 0;
   _say(_pickVary(_WORK_SHIFT, "workshift"), "win");
@@ -4225,6 +4226,36 @@ function _doWork() {
   if (streak >= 10) {
     _say(_pickVary(_WORK_GRIND, "workgrind"), "alert");
     _addHappy(-1);
+  }
+}
+
+// A declared shift has to be STOOD. WORK set the flag, fired the night's whole
+// event roll on the spot and returned control, so the trade the entire expat
+// stage is built on cost one turn: declare, then walk to the Queen Vic and drink
+// through the night, and it still settled as worked at the full multiplier
+// (insider playtest 2026-08-23 — landing straight on top of the settle-time fix
+// from the day before: the flag works, nothing checked you were still there).
+// A landlord can nip out; he cannot spend the evening somewhere else. Cumulative,
+// because three trips out is not minding a bar either.
+const WORK_AWAY_BUDGET = 15;   // turns off your own floor before the shift lapses
+function _workPresenceTick() {
+  const b = G.bar;
+  if (!_barOwned() || !b || b.workedDay !== G.day || !b.workedLast) return;
+  if (G.room === "stinky_bar") return;
+  b.awayTurns = (b.awayTurns || 0) + 1;
+  if (b.awayTurns === Math.floor(WORK_AWAY_BUDGET / 2)) {
+    _say("(Your bar is open, your name is on the shift, and you are not in it. " +
+      "Bert can hold a room for an hour. He has been holding it for one.)", "dim");
+    return;
+  }
+  if (b.awayTurns >= WORK_AWAY_BUDGET) {
+    b.workedLast = false;                 // the takings will read as Bert's, because they were
+    b.workedDay = -1;                     // …and the night can't be re-declared
+    _say(_pickVary([
+      "Somewhere behind you the evening stopped being a shift and became a night out. Bert has the rail, Bert has had it for hours, and the takings will say so.",
+      "You meant to look in. You did not look in. Whatever the Stinky Pinky did tonight, it did without you — and the books only ever record which of those it was.",
+      "The shift is over in the only way a shift can be over when nobody was standing it: quietly, and in Bert's favour.",
+    ], "worklapse"), "alert");
   }
 }
 
