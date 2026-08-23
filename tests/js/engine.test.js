@@ -5467,6 +5467,23 @@ test("Bangkok tourist: money insults her, manners are rewarded", () => {
   assert.ok(state().happy > h1, "reading it right pays");
 });
 
+test("a genuine unrelated command declines the tourist encounter and still runs (soft-encounter passthrough)", () => {
+  // NPC-completionist playtest (2026-08-23): bkktourist/jptourist/britles/
+  // punterwife are non-transactional soft pitches, but were missing from
+  // _ENC_SOFT — a real top-level command (MEET her, chasing a masseuse's
+  // number) was silently eaten as this encounter's implicit "no" instead of
+  // declining it and then actually running.
+  state().room = "buakhao_market";
+  state().nightTurn = 50;
+  state().offShift = { id: "masseuse1", name: "Nok", home: "jomtien_soi_7_w", day: state().day, ghost: false };
+  state().itemLoc.masseuse_note = "inventory";
+  _startEnc("bkktourist");
+  run("meet her");
+  assert.match(lastOut(), /moment passed without an answer/i);
+  assert.match(lastOut(), /Nok texts back/i, "the real command ran after the pitch lapsed");
+  assert.equal(state().offShift, null, "the off-shift thread actually resolved");
+});
+
 test("Japanese lady: read her right and it's a threesome; money is the wrong move", () => {
   state().room = "ws_north";
   _startEnc("jptourist");

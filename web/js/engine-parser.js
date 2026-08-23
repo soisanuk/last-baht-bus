@@ -5688,6 +5688,16 @@ const _ENC_SOFT = {
   djslip:     /^(?:sign|yes|sure|decline|no|nah|pass|refuse|ok|okay)\b/,
   freegift:   /^(?:take|yes|accept|thanks|refuse|no|nah|pass|wave|keep)\b/,
   katoey:     /^(?:flirt|kiss|snog|fondle|grope|spank|charm|wink|lean(?: in)?|no|nah|push|hands?|back off|wave|step)\b/,
+  // The non-transactional set (bkk/jp weekenders, britles, punterwife): read
+  // her right and you get a genuine free moment, but the pitch was never a
+  // sale, so an unrelated genuine command (e.g. MEET her, chasing an entirely
+  // different woman's number) must not be silently eaten as a "no" to this
+  // one (NPC-completionist playtest, 2026-08-23 — MEET the masseuse misfired
+  // onto a bkktourist encounter that had appeared in the meantime).
+  bkktourist: /^(?:hi|hello|hey|sawat|wai|chat|talk|nice|friend|wait|who|from|smile|drink|coffee|money|baht|barfine|how much|price|pay|upstairs|hotel|short time|long time|come with|yes|no|nah|pass|wave|walk(?: on)?)\b/,
+  jptourist:  /^(?:flirt|drink|buy|hi|hello|konnichiwa|konbanwa|cheers|join|both|girl|dancer|open|game|cool|yes|sure|nice|money|baht|barfine|how much|price|pay|deal|please|hai|why not|her|let|no|nah|pass)\b/,
+  britles:    /^(?:grope|grab|touch|fondle|kiss|snog|cop a feel|hand on|money|baht|barfine|how much|price|pay|short time|long time|come with|shag|hotel|hi|hello|cheers|drink|buy|nice|respect|cool|wingman|help|which|recommend|good|game|sound|no|nah|pass|wave)\b/,
+  punterwife: /^(?:grope|grab|touch|fondle|kiss|snog|cop a feel|hand on|spank|money|baht|barfine|how much|price|pay|short time|long time|come with|hi|hello|nice|respect|cheers|congrat|married|wife|husband|talk|chat|cool|lovely|good|no|nah|pass|wave)\b/,
 };
 // A real top-level command word (not a bare answer): used only to decide whether
 // a soft encounter should let the line through.
