@@ -225,7 +225,8 @@ function _doGo(dirWord) {
         Object.keys(r.exits).map(d => d.toUpperCase()).join(" · ")})`);
       return;
     }
-    _say(_pickVary(_NO_EXIT, "noexit")); return;
+    _say(_NO_EXIT[_hh(G.room + ":" + dir, 17) % _NO_EXIT.length]); // the same wall answers the same way
+    return;
   }
   // OUT of a multi-door venue returns you to the road you entered by; any other
   // move invalidates that memory. (Single-door venues: enteredVia === exits.out.)
@@ -3325,7 +3326,7 @@ function _doBuy(arg) {
     const _pool = _lazy ? _LAZY_DRINK_LINES : _warm ? _LADY_DRINK_WARM : _LADY_DRINK_LINES;
     const _pk = _lazy ? "lazydrink" : _warm ? "warmdrink" : "ladydrink";
     _say(_fmt("{line} (฿{m} left.)", { line: _pickVary(_pool, _pk)(NPCS[id].name), m: G.money }));
-    _addHappy(1);
+    _boughtHappy(1); // bought สนุก tapers over an evening (see _boughtHappy)
     if (Object.keys(G.soc.drinks).length >= 4 && !G.soc.butterflyTeased) {
       G.soc.butterflyTeased = true;
       _say(_pickVary([
@@ -3766,6 +3767,15 @@ function _doPay(arg) {
   if (!G.pendingFare) { _say("Nobody's waiting to be paid."); return; }
   const amount = /^\d+$/.test(arg) ? parseInt(arg, 10) : parseThaiDigits(arg);
   const { price, dest } = G.pendingFare;
+  // you stalled at the window until the curfew passed, and the ride still completed
+  // (min-maxer playtest 2026-08-22): the last bus is the last bus.
+  if (G.pendingFare.kind === "bus" && G.nightTurn >= LAST_BUS_TURN) {
+    G.pendingFare = null;
+    _say("The driver has run out of night. He waves your money away, swings the truck " +
+      "around and heads for the depot — the last run went while you were counting. " +
+      "(MOTOSAI, or your own two feet.)", "alert");
+    return;
+  }
   if (amount === null || Number.isNaN(amount)) {
     _say(`He repeats, slower, the universal way: “${thaiBaht(price)}”. A number would help.`, "thai");
     return;
@@ -4492,7 +4502,7 @@ function _doTip(arg) {
       _say(`฿${amount} into the tip box. The guitarist catches your eye mid-riff and ` +
         "nods — you've been seen, which out here counts as a whole conversation. " +
         `(฿${G.money} left.)`, "win");
-      _addHappy(1); _repGain();
+      _boughtHappy(1); _repGain();
     } else {
       _say(`฿${amount} drops into the tip box on the monitor wedge. The band plays on, ` +
         `professionally. (฿${G.money} left.)`);
@@ -4547,7 +4557,7 @@ function _doTip(arg) {
       `You press ฿${amount} into ${name}'s hand under the rail. It's gone before it arrived; what stays is the half-second her face forgets to work.`,
       `฿${amount} — ${name} takes it with both hands and the small bow, and the mamasan, who sees everything, decides you exist.`,
     ], "bigtip") + ` (฿${G.money} left.)`);
-    _addHappy(1); _repGain();
+    _boughtHappy(1); _repGain();
   } else {
     _say(`฿${amount} into ${name}'s tip jar. A warm smile, a small wai — noted, ` +
       `filed, appreciated. The big ledger, though, runs on lady drinks. (฿${G.money} left.)`);

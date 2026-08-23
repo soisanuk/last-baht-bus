@@ -4262,7 +4262,7 @@ const NPCS = {
           "You want water, mango? Mango very sweet today — I not say that every day.\"",
         short: "\"You back! Mango very sweet today.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
-        text: "\"Oh, you awake! You sleep on beach like soi dog, hahaha. You want water? No money? Ui!\" She taps the sign on her cart. \"Bring bottle, I give five baht. Beach full of bottle. Farang leave everything.\"",
+        text: "\"Oh, you awake! You sleep on beach like soi dog, hahaha. You want water? No money? Ui!\" She taps the sign on her cart. \"Bring bottle, I give five baht. Three, four along the sand most nights — farang leave everything.\"",
         short: "\"Bring bottle, I give five baht.\"" },
       { topic: "wallet", text: "\"Wallet gone? Beach at night, tilac. You lucky they leave your shoes. Go town, ask the bar ladies — nothing happen in Pattaya they don't know.\"" },
       { topic: "bus", text: "\"Baht bus fifteen baht now. Used to be ten! Iran war, petrol crazy. Everybody complain, everybody still ride. Stop just north, na — up the beach road, blue trucks, cannot miss.\"",

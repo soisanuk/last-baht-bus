@@ -2434,6 +2434,23 @@ function _conquestHappy(base, id) {
   if (!bonded) G.jaded++;
 }
 
+// Money-for-happiness (a lady drink, a big tip, the band's box) is the cheapest
+// สนุก in the game and had no brake at all: ฿100 = +1, uncapped, so a ฿100k bank
+// bought a thousand points against a goal of a hundred, and forty drinks at one
+// rail hit สบายสบาย on day three (min-maxer playtest 2026-08-22). The conquest
+// treadmill (_conquestHappy) never covered this line.
+//
+// The fix keeps a real night generous and kills the grind: the first few
+// purchases of an evening pay in full, then the room stops being impressed.
+// Presence, conversation, quests and the night ride are untouched — the slow
+// road to สบายสบาย stays fully rewarding, which is the whole design.
+function _boughtHappy(n) {
+  if (!n) return;
+  const c = (G.soc.bought = (G.soc.bought || 0) + 1);
+  if (c <= 6) return _addHappy(n);                        // an ordinary generous night: full value
+  if (c <= 14) { if (c % 2 === 0) _addHappy(n); return; } // half rate
+  if (c % 3 === 0) _addHappy(n);                          // a grind: a third, and it stays a third
+}
 function _addHappy(n, why) {
   if (!n) return;
   const before = _happyLevel(G.happy);
@@ -2889,12 +2906,22 @@ const _DEBRIEF = {
       "COMPLAIN to the mamasan actually works. The Metropole safe keeps your " +
       "valuables out of it either way.",
   }),
-  bfscam: () => ({
+  // Two different lessons, and the newbie one used to go to a man who had named
+  // his terms out loud (min-maxer playtest 2026-08-22). G.bfOpen records whether
+  // money moved before a tier was said.
+  bfscam: () => (G.bfOpen ? {
     what: "The barfine was a game, and you were the mark.",
     why: "Agreeing to terms you have not heard is the newbie mistake the soi is " +
       "built around — PAY or YES with no number said out loud is an open contract.",
     next: "Settle it before money moves: SHORT TIME or LONG TIME names the deal, " +
       "and TAO RAI asks the price. Afterwards, COMPLAIN at her bar is real recourse.",
+  } : {
+    what: "The barfine was a game, and you were the mark.",
+    why: "You did it properly — terms named, price agreed, money after — and she ran " +
+      "it anyway. Nothing you could have said would have stopped that one; correctness " +
+      "on your side was never the whole of it.",
+    next: "That is what the mamasan is FOR. COMPLAIN at her bar: a house that takes " +
+      "the fine owns the problem, and bad girls are bad business.",
   }),
   // Dawn in your OWN ROOM is not a bad night — same reason code, opposite
   // outcome (see the `wouldRough` test below: being home exempts you). Saying
@@ -3224,6 +3251,7 @@ function _endNight(reason) {
   G.soc.apologized = {}; // a new shift will hear you out afresh
   G.soc.selfBf = false;
   G.soc.butterflyTeased = false;
+  G.soc.bought = 0;          // the room's patience with a chequebook resets each night (_boughtHappy)
   G.offstage = false; // never carry an "off with her" flag into a new night
   G.pendingBf = null; // a barfine still mid-negotiation at the bell dies with the night
   G.selfBfId = null;

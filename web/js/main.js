@@ -205,6 +205,15 @@ function _dispatch(cmd) {
   }
 
   if (v === "undo") {
+    // Not inside a live game or a modal answer: rewinding a quiz question or a
+    // dice roll hands you the answer, because the RNG stream is move-independent
+    // — one wrong tap, UNDO, and the quiz is a guaranteed 5/5 (min-maxer
+    // playtest 2026-08-22). QUIT concedes; that is the honest exit.
+    if (typeof G !== "undefined" && G && (G.game || G.pendingBf || G.pendingEnc)) {
+      _term.print("⌫ Not mid-hand. Play it out, or QUIT and take the loss — the soi doesn't " +
+        "rewind, and neither does the box.", "dim");
+      return;
+    }
     if (_prevSnap) {
       const snap = _prevSnap;
       deserializeGame(snap);

@@ -663,8 +663,10 @@ function _bfResolve(kind) {
   const name = NPCS[id].name;
   const bt = _room().barType;
   let price = kind === "st" ? st : lt;
+  G.bfOpen = false;
   let marked = false; // she read you as a newbie who'll swallow it
   if (kind === "open") {
+    G.bfOpen = true; // the post-mortem's lesson depends on how the deal was struck
     if (_bfExploitable(id)) {
       marked = true;
       price = _round50(lt * 1.3);

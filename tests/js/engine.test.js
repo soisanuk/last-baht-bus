@@ -521,13 +521,13 @@ test("re-talking gives the terse gist, not the full spiel again", () => {
   state().room = "jomtien_soi_7_beach_end";
   run("talk to nok");
   const first = lastOut();
-  assert.match(first, /Beach full of bottle/); // full first-meeting spiel
+  assert.match(first, /Three, four along the sand/); // full first-meeting spiel
   assert.match(first, /สวัสดี/);                // Thai greeting rendered
   out = [];
   run("talk to nok");
   const again = lastOut();
   assert.match(again, /Bring bottle, I give five baht/); // the point
-  assert.doesNotMatch(again, /Beach full of bottle/);    // spiel dropped
+  assert.doesNotMatch(again, /Three, four along the sand/);    // spiel dropped
   assert.doesNotMatch(again, /สวัสดี/);                   // greeting dropped on repeat
   assert.ok(state().talked.nok.length); // the seen ledger persisted
 });

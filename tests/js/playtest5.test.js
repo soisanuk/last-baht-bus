@@ -978,3 +978,60 @@ test("Wayne and Bert answer 'bar'; the Orchid isn't on Naklua's door list until 
   _describeRoom(true, true);
   assert.match(text(), /Step inside:.*Orchid/);
 });
+
+// ── round eleven: the min-maxer (Sandeep) ──
+test("UNDO is refused inside a live game or a pending answer — it was an oracle", () => {
+  // the engine half: the game state must still be there for main.js's guard to see
+  G.room = "candy_bar"; G.money = 500;
+  doCommand("play connect 4");
+  assert.ok(G.game, "a live game is the flag main.js refuses on");
+  doCommand("quit");
+  G.pendingBf = { st: 600, lt: 1050, id: null };
+  assert.ok(G.pendingBf);
+  G.pendingBf = null;
+});
+
+test("bought สนุก tapers over an evening: a generous night pays in full, a grind does not", () => {
+  G.room = "candy_bar"; G.money = 99999; G.soc.bought = 0;
+  const girl = _npcsHere().find(id => NPC_ROLES[id] === "hostess");
+  const h0 = G.happy;
+  for (let i = 0; i < 6; i++) doCommand("buy drink for " + NPCS[girl].name.toLowerCase());
+  assert.equal(G.happy - h0, 6, "the first six of a night pay in full");
+  const h1 = G.happy;
+  for (let i = 0; i < 34; i++) doCommand("buy drink for " + NPCS[girl].name.toLowerCase());
+  const grind = G.happy - h1;
+  assert.ok(grind < 20, "34 more drinks buy far less than 34 สนุก (" + grind + ")");
+  assert.ok(grind > 5, "…but they aren't worthless either (" + grind + ")");
+  // a fresh night resets the room's patience
+  G.room = "hotel_room"; G.nightTurn = 70; _endNight("sleep");
+  assert.ok(!G.soc.bought, "the counter resets with the night");
+});
+
+test("the scam post-mortem reads how the deal was struck", () => {
+  G.bfOpen = true;
+  assert.match(_DEBRIEF.bfscam().why, /newbie mistake/);
+  G.bfOpen = false;
+  assert.match(_DEBRIEF.bfscam().why, /did it properly/);
+  assert.match(_DEBRIEF.bfscam().next, /COMPLAIN/);
+});
+
+test("the last bus doesn't wait for a slow payer; the same wall gives the same refusal", () => {
+  G.room = "beach_rd_c"; G.nightTurn = 78; G.money = 500;
+  doCommand("ride bus to naklua road");
+  assert.ok(G.pendingFare);
+  G.nightTurn = LAST_BUS_TURN + 1; out = [];
+  doCommand("pay 15");
+  assert.equal(G.pendingFare, null);
+  assert.match(text(), /run out of night|heads for the depot/);
+  assert.notEqual(G.room, "naklua_rd", "the ride did not complete after the curfew");
+  // a wall is a wall
+  G.room = "khao_talo"; const a = []; for (let i = 0; i < 4; i++) { out = []; doCommand("s"); a.push(text()); }
+  assert.equal(new Set(a).size, 1, "the same blocked direction answers the same way");
+});
+
+test("Auntie Nok's bottles promise what the beach actually holds", () => {
+  const bottles = Object.keys(ITEMS).filter(i => ITEMS[i].bottle && ITEMS[i].location);
+  assert.ok(bottles.length >= 3, "at least the three she names");
+  const src = readFileSync(fileURLToPath(new URL("../../web/js/world.js", import.meta.url)), "utf8");
+  assert.doesNotMatch(src, /Beach full of bottle/);
+});
