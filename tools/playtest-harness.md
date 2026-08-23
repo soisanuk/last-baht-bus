@@ -53,6 +53,15 @@ when the daemon is created — `start --mobile` against a running desktop daemon
 (or vice versa) recreates it, and `state` reports `mobile: true|false` so a
 persona can confirm what it's playing on.
 
+**Coverage is recorded for you.** Every `cmd` writes `<sessionDir>/coverage.json` —
+a running ledger of rooms stood in, verbs typed, people spoken to and authored
+dialogue delivered. It lives OUTSIDE the game, so it survives the things that
+wipe `G`: the Act One hard fail (which calls `newGame()`), a new vacation, and
+RESTART. Score a finished session with
+`node tools/coverage.mjs --ledger <sessionDir>/coverage.json`, and keep it with
+`--record <label>`. You don't have to do anything for this to work; just mention
+the ledger path in your report.
+
 Verbs: `cmd <inputs...>` (typed through the real input) · `tap <text>` (chip /
 decorated keyword / any button) · `wheel <word> [n]` (right-click flyout: list
 actions, or pick the nth) · `fab bell|msg|font|mute|n|s|e|w|in|light` ·

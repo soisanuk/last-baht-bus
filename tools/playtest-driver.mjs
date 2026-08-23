@@ -102,6 +102,41 @@ if (verb === "serve") {
   await page.goto(url);
 
   const handlers = {
+    // ── coverage ledger ──────────────────────────────────────────────────
+    // Accumulated OUTSIDE the game, after every action, because G is not
+    // durable: an Act One hard fail calls newGame() and wipes visited/talked,
+    // and a final-save extract therefore undercounts any session that reset
+    // (measured: 3 rooms and 1 NPC → 1 and 0 across one dawn). The engine
+    // cannot fix this itself — it is deliberately storage-free, and carrying
+    // those fields through the reset would change the do-or-die opening, which
+    // is supposed to forget. So the measuring tool measures, and the game stays
+    // the game. Survives resets, vacations, RESTART and daemon restarts alike.
+    async harvestCov() {
+      const x = await page.evaluate(() => {
+        if (typeof G === "undefined" || !G) return null;
+        const dlg = [];
+        for (const [id, seen] of Object.entries(G.talked || {}))
+          for (const i of (seen || [])) dlg.push(id + "#" + i);
+        const pt = (G.patronTalk && G.patronTalk.talked) || {};
+        const patDlg = [];
+        for (const [id, seen] of Object.entries(pt))
+          for (const i of (seen || [])) patDlg.push(id + "#" + i);
+        return {
+          rooms: Object.keys(G.visited || {}),
+          npcs: Object.keys(G.talked || {}),
+          patrons: Object.keys(pt),
+          enc: Object.keys(G.encDone || {}),
+          questsDone: Object.entries(G.quests || {}).filter(([, v]) => v === "done").map(([k]) => k),
+          dlg, patDlg,
+        };
+      }).catch(() => null);
+      if (!x) return;
+      const f = path.join(dir, "coverage.json");
+      let acc = { rooms: [], npcs: [], patrons: [], enc: [], questsDone: [], dlg: [], patDlg: [], verbs: [] };
+      try { acc = { ...acc, ...JSON.parse(readFileSync(f, "utf8")) }; } catch {}
+      for (const k of Object.keys(x)) acc[k] = [...new Set([...(acc[k] || []), ...x[k]])].sort();
+      writeFileSync(f, JSON.stringify(acc, null, 1));
+    },
     async cmd({ inputs }) {
       for (const c of inputs) {
         await page.fill("#term-in", String(c)).catch(() => {});
@@ -109,6 +144,16 @@ if (verb === "serve") {
         await page.waitForTimeout(120);
       }
       await page.waitForTimeout(180);
+      try {
+        const f = path.join(dir, "coverage.json");
+        let acc = {};
+        try { acc = JSON.parse(readFileSync(f, "utf8")); } catch {}
+        const v = new Set(acc.verbs || []);
+        for (const c of inputs) { const m = /^\s*([a-z0-9]+)/i.exec(String(c)); if (m) v.add(m[1].toLowerCase()); }
+        acc.verbs = [...v].sort();
+        writeFileSync(f, JSON.stringify(acc, null, 1));
+      } catch {}
+      await handlers.harvestCov();
       return {};
     },
     async tap({ text }) {

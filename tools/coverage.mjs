@@ -5,6 +5,7 @@
 //   node tools/coverage.mjs --seeds 1,2,3 --nights 8
 //   node tools/coverage.mjs --gaps               # …and list what was never touched
 //   node tools/coverage.mjs --save <file.json>   # score ONE serialized save
+//   node tools/coverage.mjs --ledger <dir>/coverage.json   # a played session, reset-proof
 //   node tools/coverage.mjs --save x.json --record persona-sofia-a   # …and keep it
 //   node tools/coverage.mjs --union              # every recorded session, combined
 //   node tools/coverage.mjs --union --gaps       # …and where NOBODY has been
@@ -54,6 +55,7 @@ const flag = (n, d) => { const i = args.indexOf("--" + n); return i >= 0 ? (args
 const asJson = args.includes("--json");
 const showGaps = args.includes("--gaps");
 const savePath = flag("save", null);
+const ledgerPath = flag("ledger", null);   // a driver session's coverage.json
 const recordAs = flag("record", null);
 const doUnion = args.includes("--union");
 const COV_DIR = new URL("../docs/coverage/", import.meta.url);
@@ -118,6 +120,16 @@ if (doUnion) {
   }
   notes.push(`union of ${files.length} recorded session(s): ${files.map(f => f.replace(/\.json$/, "")).join(", ")}`);
   notes.push("this is the closest thing to 'how much of the game has ANYONE seen'");
+} else if (ledgerPath) {
+  // A driver session's running ledger — accumulated after every action, so
+  // unlike a final save it survives the Act One hard fail (newGame() wipes
+  // visited/talked), a new vacation, and RESTART. This is the honest way to
+  // score a played session.
+  const x = JSON.parse(fs.readFileSync(ledgerPath, "utf8"));
+  for (const k of ["rooms", "npcs", "patrons", "enc", "questsDone", "verbs", "dlg", "patDlg"])
+    for (const v of (x[k] || [])) U[k].add(v);
+  runs = 1;
+  notes.push("scored a driver session LEDGER — survives resets, unlike a final save");
 } else if (savePath) {
   const G = JSON.parse(fs.readFileSync(savePath, "utf8"));
   absorb(G);
