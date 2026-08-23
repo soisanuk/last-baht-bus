@@ -3466,10 +3466,14 @@ function _endVacation() {
     return;
   }
   if (G.loan && G.loan.owed > 0) {
-    // the loan doesn't fly home with you — but the face does (broke playtest 2026-08-22)
+    // the loan doesn't fly home with you — but the face does (broke playtest 2026-08-22).
+    // NB the FLAG is deliberately not set here: this runs before the player has
+    // chosen, and setting it now blacklisted a man who chose MOVE TO PATTAYA,
+    // never boarded, and was still being garnished nightly — told to his face
+    // that he "flew home with her money" (debt playtest 2026-08-24). _newVacation
+    // sets it, because that is the branch on which he actually leaves.
     _say(`(You owe Nira ฿${G.loan.owed}. The airport is the one place her cousins don't come, and she ` +
       "knows it, and she will remember the face. Pattaya keeps its books.)", "alert");
-    G.loanSkipped = true;
   }
   _say(`VACATION ${G.vacation}: happiness ${G.happy} — ${_happyLevel(G.happy)}` +
     (G.bestHappy > G.happy ? ` (best trip so far: ${G.bestHappy})` : " (your best trip yet)"), "win");
@@ -3615,6 +3619,11 @@ function _newVacation() {
   G.atmDay = 0; G.atmToday = 0; // day resets to 1, so clear the daily-cap tracking or a day-1 withdrawal carries over
   G.tonicOwed = 0; // a month away forfeits any pending tonic-shop claim
   G.curseOwed = 0; // …and any pending fortune-teller claim
+  // The balance is written off by the month away (for now) — but the FACE is
+  // remembered, and this is the branch where the player actually flew home with
+  // her money, so this is where the flag belongs (it used to be set at the gate,
+  // before the choice, and so fired on the MOVE TO PATTAYA path too).
+  if (G.loan && G.loan.owed > 0) G.loanSkipped = true;
   G.loan = null;   // …but Nira's cousins do not forget; a month away writes it off all the same (for now)
   G.jaded = 0;     // a fresh trip, fresh enthusiasm — the treadmill resets
   G.rep = 0; G.repDay = null; // a month away and the soi's memory of your antics is a clean slate (expat keeps its rep — you live there)

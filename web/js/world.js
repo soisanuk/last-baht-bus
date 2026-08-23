@@ -8191,10 +8191,17 @@ const NPCS = {
           "expensive kind.\"",
         short: "\"Late. You know the number. REPAY what you can — the cousins are patient, and patience is expensive.\"" },
       { topic: "loan", when: (st, G) => !!(G.loan && G.day <= G.loan.dueDay),
-        text: "\"Your loan?\" A glance at the calculator that is also a glance at a calendar. \"Day \" + " +
-          "String(G.loan.dueDay) + \" it is due. REPAY early and I think well of you. REPAY late and I think " +
-          "about you — which is worse.\"",
-        short: "\"Due day \" + String(G.loan.dueDay) + \". Early is good. Late is… memorable.\"" },
+        // The concatenation used to be written INSIDE the string literal, so this
+        // node printed `"Day " + String(G.loan.dueDay) + " it is due.` verbatim to
+        // any player who borrowed and then asked before the due date (debt playtest
+        // 2026-08-24). world.js is declarative and must not compute — so she names
+        // the day the way a lender does, without arithmetic. The figures live in
+        // the DEBT readout, which is where a player should be able to find them.
+        text: "\"Your loan?\" A glance at the calculator that is also a glance at a calendar. " +
+          "\"You know the day. I know the day. Nobody in this needs a reminder, and the ones who " +
+          "ask for one are telling me something.\" The smile stays put. \"REPAY early and I think " +
+          "well of you. REPAY late and I think about you — which is worse.\"",
+        short: "\"You know the day. I know the day.\" A shrug. \"Early is good. Late is… memorable.\"" },
       { topic: "loan", text: "\"You want to borrow?\" The smile sharpens by exactly one degree. \"From " +
           "ME — not the family; family rate is for family. For you: twenty percent, pay back in three " +
           "days. But understand one thing: I always, always get paid back. Ask anybody in my village. " +

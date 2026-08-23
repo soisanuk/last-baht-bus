@@ -139,6 +139,37 @@ function _parseBaht(arg) {
   return t == null || Number.isNaN(t) ? null : t;
 }
 
+// What you owe, on demand — the readout that didn't exist. Covers Nira's loan,
+// the hotel book and the old man's note, because a player carrying all three had
+// no single place to see any of them (debt playtest 2026-08-24).
+function _doDebt() {
+  const lines = [];
+  if (G.loan) {
+    const late = G.day > G.loan.dueDay;
+    lines.push(_fmt(late
+      ? "Nira: ฿{o}, and it was due on day {d}. It goes up every night you leave it, and her cousins have your dawns."
+      : "Nira: ฿{o}, due on day {d}. Early is cheaper than late, and late is not the expensive part.",
+      { o: G.loan.owed.toLocaleString("en-US"), d: G.loan.dueDay }));
+  }
+  if (G.hotelDebt > 0) {
+    lines.push(_fmt("The hotel: ฿{h} on the book. Nobody checks out of a debt.",
+      { h: G.hotelDebt.toLocaleString("en-US") }));
+  }
+  if (_barOwned() && G.bar && (G.bar.owed > 0 || G.bar.arrears > 0)) {
+    lines.push(_fmt("The old man: ฿{o} left on the bar" +
+      (G.bar.arrears > 0 ? ", and ฿{a} of it already late. He has not mentioned it." : "."),
+      { o: G.bar.owed.toLocaleString("en-US"), a: (G.bar.arrears || 0).toLocaleString("en-US") }));
+  }
+  if (!lines.length) {
+    _say("You don't owe anybody anything, which in this town is a kind of achievement " +
+      "and not a permanent one.");
+    return;
+  }
+  _say("── WHAT YOU OWE ──", "alert");
+  for (const l of lines) _say(l);
+  if (G.loan) _say("(REPAY <amount>, or REPAY to clear it.)", "dim");
+}
+
 function _doBorrow(arg) {
   if (G.money > 100000 && G.room === _npcRoom("nira")) {
     // she counts money for a living (millionaire playtest 2026-08-22)
@@ -235,14 +266,29 @@ function _loanNightRoll() {
     G.money -= take;
     G.loan.owed -= take;
     _addHappy(-6);
+    // A man with nothing, being carefully robbed of nothing, every dawn, was the
+    // whole of the late-loan endgame: nine consecutive mornings printed the full
+    // robbery scene over ฿0 (debt playtest 2026-08-24). They still come — that is
+    // the point of them — but finding empty pockets is a different beat.
+    if (take <= 0) {
+      _say("(They are waiting at dawn again, and again there is nothing to take. One of them " +
+        "looks at your empty hands for slightly too long. \"She knows you are still here,\" he " +
+        "says, not unkindly, and they go. The arithmetic has not moved. It never moves in your " +
+        `favour: ฿${G.loan.owed.toLocaleString("en-US")}.)`, "alert");
+      return;
+    }
     if (G.loan.owed <= 0) {
       G.loan = null;
       _say(`(Nira's cousins catch you outside the 7-Eleven. No drama, no marks — they just wait ` +
         `while you empty your pockets: ฿${take}. "Nira says thank you. She says don't do this ` +
         `again." Square. The lesson was never going to be cheap.)`, "alert");
     } else {
-      _say(`(Nira's cousins find you and lift the ฿${take} you're carrying off the ฿${G.loan.owed} ` +
-        `you owe. "The rest soon, na." They are very calm about it. That's the frightening part.)`, "alert");
+      // NB ฿{owed} here is what is LEFT after the sweep — the old wording read
+      // "lift the ฿X off the ฿Y you owe", which invited the player to subtract
+      // and land on a number that was never true.
+      _say(`(Nira's cousins find you and lift the ฿${take.toLocaleString("en-US")} you're carrying. ` +
+        `"The rest soon, na." They are very calm about it, and that is the frightening part. ` +
+        `Still owing: ฿${G.loan.owed.toLocaleString("en-US")}.)`, "alert");
     }
   }
 }

@@ -736,21 +736,38 @@ test("poverty: SELL points at Jomtien, the pity ride is a sandbox mercy, CHECKOU
   assert.doesNotMatch(text(), /didn't parse|didn't understand/);
 });
 
-test("the loan: Nira names the due date and the arrears in person; an unpaid loan is remembered at the airport and after", () => {
+test("the loan: Nira speaks it, DEBT states it, and flying home is what she remembers", () => {
   G.room = _npcRoom("nira"); G.money = 30000;
   doCommand("talk to nira");
   doCommand("borrow 10000");
   assert.ok(G.loan, "borrowed");
   out = []; doCommand("ask nira about loan");
-  assert.match(text(), /Due day|it is due/i);
+  // She used to "name the date" via a concatenation written INSIDE the string
+  // literal, so this node printed `"Day " + String(G.loan.dueDay) + …` verbatim
+  // to the player (debt playtest 2026-08-24). world.js is declarative and does
+  // not compute; the figures belong in the readout below.
+  assert.doesNotMatch(text(), /String\(|\bG\.loan\b/, "no raw JavaScript reaches the player");
+  assert.match(text(), /know the day/i);
   G.day = G.loan.dueDay + 1; out = [];
   doCommand("ask nira about loan");
   assert.match(text(), /Late/);
+
+  // …and the player can always find out what he owes. Typing LOAN with a live
+  // balance used to answer "Nobody here is lending".
+  out = []; doCommand("debt");
+  assert.match(text(), /WHAT YOU OWE/);
+  assert.match(text(), new RegExp(String(G.loan.owed).replace(/\B(?=(\d{3})+(?!\d))/g, ",")));
+  out = []; doCommand("loan");
+  assert.match(text(), /WHAT YOU OWE/, "LOAN reads the standing loan rather than offering a new one");
+
+  // Staying does NOT count as skipping — that fired on the expat path and told a
+  // man being garnished nightly that he'd flown home with her money.
   G.day = 8; G.room = "hotel_room"; out = [];
   _endVacation();
   assert.match(text(), /You owe Nira/);
-  assert.ok(G.loanSkipped);
+  assert.ok(!G.loanSkipped, "the gate has not decided for the player yet");
   doCommand("new vacation");
+  assert.ok(G.loanSkipped, "flying home is what she remembers");
   G.room = _npcRoom("nira"); out = [];
   doCommand("borrow 5000");
   assert.match(text(), /Not you\. Not ever/);

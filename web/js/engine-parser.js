@@ -6721,7 +6721,17 @@ function doCommand(input) {
     case "complain": _doComplain(); break;
     case "cheers": case "toast": case "chon": _doCheers(); break;
     case "tao": case "taorai": _doTaoRai(); break;
-    case "borrow": case "loan": _doBorrow(arg); break;
+    // A standing loan has to be readable. With ฿402,500 outstanding and the
+    // cousins collecting every dawn, typing LOAN answered "Nobody here is
+    // lending" — the borrow path never consulted G.loan, SCORE carries no debt
+    // line, and there was no DEBT verb, so a player who missed one dawn message
+    // had no way to learn what he owed (debt playtest 2026-08-24).
+    case "debt": case "debts": case "owe": case "owed": case "balance owed":
+      _doDebt(); return;
+    case "loan":
+      if (G.loan) { _doDebt(); return; }
+      _doBorrow(arg); break;
+    case "borrow": _doBorrow(arg); break;
     case "repay": case "payback": _doRepay(arg); break;
     case "hire": case "off": _doHire(arg); break;
     case "pet": case "stroke": _doPet(arg); break;
