@@ -684,6 +684,43 @@ test("SAY <phrase> TO <person> aims the greeting at one target", () => {
   assert.match(lastOut(), /not here to hear it/i);
 });
 
+test("who you said you were is a thing the world reads back correctly", () => {
+  // comparative playtest (2026-08-24), nine runs across seven identities. The
+  // interview turned out to be structural, not cosmetic — but three lines were
+  // written for a player other than the one reading them.
+  // (a) Tan greeted an Act One player, whose entire quest is the missing wallet,
+  //     with "Still got your wallet? ...Mostly. Good."
+  state().stage = "act1"; state().flags.act1Done = false; state().flags.hasWallet = false;
+  state().room = _npcRoom("tan"); state().known = { tan: true };
+  run("talk to tan");
+  assert.doesNotMatch(lastOut(), /Still got your wallet/, "he can see it's gone");
+  assert.match(lastOut(), /No wallet/i);
+
+  // (b) Bert offers the ex-married origin a beer on the house, and the till
+  //     charged ฿80 for it in the very next command.
+  newGame();
+  state().player = { origin: "married", personality: "joker", orientation: "straight" };
+  state().flags.act1Done = true; state().flags.hasWallet = true; state().stage = "vacation";
+  state().money = 1000; state().room = "stinky_bar";
+  run("talk to bert");
+  out = []; run("buy beer");
+  assert.equal(state().money, 1000, "the house means the house");
+  out = []; run("buy beer");
+  assert.equal(state().money, 1000 - BEER_PRICE, "…once, then the till resumes");
+
+  // (c) Barry called a twenty-year veteran a first-timer, in the same game hour
+  //     Tan and Bert had both clocked them as a lifer.
+  for (const [origin, want] of [["pension", /you've been/i], ["business", /NEW fella/]]) {
+    newGame();
+    state().player = { origin, personality: "joker", orientation: "straight" };
+    state().flags.act1Done = true; state().flags.hasWallet = true; state().stage = "vacation";
+    state().room = NPCS.barry.room; state().known = { barry: true };
+    if (!_npcsHere().includes("barry")) continue;
+    out = []; run("talk to barry");
+    assert.match(lastOut(), want, `Barry reads the ${origin} origin`);
+  }
+});
+
 test("a refused move costs no turn — a wall is not an action", () => {
   // thorough-player playtest (2026-08-23): "You can't go that way" and "No
   // motosai stand here" are parser refusals, but they ticked the clock AND

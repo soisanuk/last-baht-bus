@@ -6960,6 +6960,18 @@ const NPCS = {
       "this soi by name and all of them by drink order. The most honest dishonest man in Pattaya — lies only " +
       "to his wife, and even then only about the golf.",
     dialogue: [
+      // Barry's opener called a twenty-year veteran a beginner: Tan and Bert had
+      // both just clocked the same character as a lifer, and his "NEW fella!"
+      // fired unchanged (comparative playtest 2026-08-24 — the inconsistency is
+      // what makes it read as a bug, since Bert carries seven origin variants in
+      // the same game hour). Same man, same delight, one look taken first.
+      { when: (st, G) => _isOrigin("pension") || _isOrigin("married") || _isOrigin("returner"),
+        text: "\"Oh, you've been.\" Barry doesn't so much greet you as recognise you, and pumps your " +
+          "hand like a fruit machine paying out anyway. \"Barry. Here with the APAC golf society—\" a " +
+          "wink so enormous it's practically audible \"—the golf society. Eleven trips. You'll have " +
+          "your own number, I expect, and I'll not ask it.\" He is already pulling out the next stool. " +
+          "\"Siddown. You know what the girls here are. I'll introduce ya anyway, it's the ceremony.\"",
+        short: "\"Oh, you've been.\" Barry recognises you rather than greets you. \"Eleven trips me. Siddown — I'll introduce ya anyway, it's the ceremony.\"" },
       { text: "\"NEW fella! Marvellous.\" Barry pumps your hand like a fruit machine paying out. \"Barry. " +
           "Here with the APAC golf society—\" he says it with a wink so enormous it's practically audible " +
           "\"—the golf society. Brought the CLUBS an' everything. Haven't found the course yet. Eleven trips, " +
@@ -7042,6 +7054,22 @@ const NPCS = {
           "around the sentence: the driver, the fixer, the quiet man — all of them leaning on one ordinary " +
           "grey car, offering you a ride.",
         short: "\"My friend.\" The same as always — and not the same at all. You say nothing; he files that away. \"Good evening for a drive.\"" },
+      // Act One: the wallet is GONE and it is the only thing the player is doing,
+      // so the sandbox greeting's "Still got your wallet? ...Mostly. Good." reads
+      // as the game not knowing its own premise — it fired for every identity in
+      // nine runs (comparative playtest 2026-08-24). He does not fix it for you;
+      // that is the whole of his character in the opening ("This part is not the
+      // game. The game starts when you get out.").
+      { when: (st, G) => !_flag("act1Done") && !_flag("hasWallet"),
+        text: "\"Ha — my airport friend.\" Tan comes off the car, and then reads your face and " +
+          "stops being pleased about it. \"Ahh. No wallet.\" Not a question. He does not ask how, " +
+          "which is its own kind of manners. \"Is not the worst thing that happen on this road " +
+          "tonight, my friend, and it will not be the worst thing that happen to you here.\" A tip " +
+          "of the chin down the soi, where the neon is doing its work. \"Somebody saw. Somebody " +
+          "always see. You go and ask, and be polite when you ask — that part matters more here " +
+          "than being clever.\" He settles back against the car. \"I do not find it for you. You " +
+          "would not thank me. But you have my number.\"",
+        short: "\"No wallet.\" Not a question. \"Somebody saw — somebody always see. Go and ask, and be polite. I do not find it for you.\"" },
       { text: "\"Ha — my airport friend.\" Tan comes off the car, genuinely pleased, or doing pleased so well " +
           "it makes no difference. \"Still got your wallet? ...Mostly. Good. Most of you I drop once and never " +
           "see again. The ones I see twice—\" a warm shrug \"—those are the interesting ones.\" He tips his " +
@@ -9236,6 +9264,10 @@ const NPCS = {
           "him gentles. \"Married one, rode the whole thing out, came through still standing and still smiling. " +
           "That's a beer on the house, bud. Not many walk that road and keep their sense of humor.\"",
         short: "\"You've done the real version — married one, rode it out, still smiling. That's a beer on the house, bud.\"",
+        // he says it, so the till has to honour it (see _doBuy's beer branch) —
+        // it was said and then charged for in the same breath (comparative
+        // playtest 2026-08-24). An invitation is a promise.
+        sets: ["bertFreeBeer"],
         asks: { key: "why", q: "He racks the balls without hurry. \"So — running to something, or from something? Which one's you, bud?\"" } },
       { when: (st, G) => st.dstate === "stranger" && _isOrigin("business"),
         text: "\"Here to make a deal, huh.\" Bert sets the beer down a hair harder than he needs to. \"Do " +

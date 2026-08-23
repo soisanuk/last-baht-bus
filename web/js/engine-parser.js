@@ -3382,6 +3382,20 @@ function _doBuy(arg) {
     if (!_inBar() && !_room().food && !FOOD_STALLS[G.room]) {
       _say("The 7-Eleven fridge hums somewhere, but this calls for a bar stool."); return;
     }
+    // Bert said "that's a beer on the house, bud" to the ex-married origin and
+    // then the till charged ฿80 in the very next command (comparative playtest
+    // 2026-08-24). He meant it; this is him meaning it. Once, at his own bar.
+    if (_flag("bertFreeBeer") && G.room === "stinky_bar" && _npcsHere().includes("bert")) {
+      G.flags.bertFreeBeer = false;
+      G.soc.drunk++;
+      G.thirst = Math.max(0, G.thirst - 20);
+      _say("Bert has it open before you've finished asking, and waves your hand off your " +
+        "pocket without looking up. \"On the house. I said.\" The cap goes in the tray with " +
+        "everybody else's.", "win");
+      _addHappy(1);
+      _checkDrunk();
+      return;
+    }
     if (G.money < BEER_PRICE) { _say(_fmt("A big bottle is ฿{p} here. You have ฿{m}. The cashier's calculator stays in the drawer.", { p: BEER_PRICE, m: G.money })); return; }
     // standing a beer to the rail regular — the generic word, or a named male
     // regular present ("buy terry a beer" → Terry gets it, not you).
