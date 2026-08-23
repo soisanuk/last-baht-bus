@@ -2846,7 +2846,14 @@ function _doGive(itemWord, npcWord) {
     return;
   }
   const npc = _findNpc(npcWord);
-  if (!npc) { _say(_pickVary(_NOT_HERE, "nothere")); return; }
+  if (!npc) {
+    // a known person who has just moved on gets placed, same as ASK/TALK
+    // (verb-auditor playtest 2026-08-22: GIVE fell to the flat not-here pool
+    // where ASK/TALK already point at where she actually is)
+    const away = _elsewhereLine(npcWord);
+    if (away) { _say(away); return; }
+    _say(_pickVary(_NOT_HERE, "nothere")); return;
+  }
   // Condoms are a pocket counter (G.condoms), not an ITEMS record — catch the
   // give here. To a working girl it's practical AND funny (they're work kit);
   // she takes a couple and warms a notch. Once per girl per night.
@@ -6479,7 +6486,19 @@ function doCommand(input) {
       else if (G.room === "buddha_hill" && (!arg || /bay|view|sunset|sea|sun|buddha|city|coast|below|hill|water/.test(arg)))
         _doWatchBuddha();
       else if (!arg || /tv|news|television/.test(arg)) _doTv();
-      else _say("You watch. It watches back. Pattaya.");
+      else if (/police|checkpoint|shakedown/.test(arg))
+        _say("No checkpoint from here — that's the junction outside the Blue Dog or the Stinky Pinky, on Beach Road. (WATCH POLICE, once you're there.)");
+      else if (/sunset|bay|sea|view|sun\b/.test(arg))
+        _say("No sea view from here. The bay opens up at the Blue Dog/Stinky Pinky junction, or from Buddha Hill. (WATCH SUNSET.)");
+      else if (/drag|cabaret|revue|queen|petch|mala/.test(arg))
+        _say("No stage here — the drag revue is at the Peacock Cabaret. (WATCH DRAG, once you're there.)");
+      else if (/soi|street|parade|chaos|girls\b/.test(arg))
+        _say("No street show to watch from here — try your balcony at the Queen Vic, the pub below it, or one of Soi 6's rails. (WATCH SOI.)");
+      // an unrecognized target got the same flat joke everywhere in the game
+      // (verb-auditor playtest 2026-08-22: HELP advertises four room-specific
+      // WATCH modes, and every wrong-room attempt fell to one placeholder line
+      // instead of pointing at the right venue, the way BALCONY does).
+      else _say("You watch. It watches back. Pattaya. (Specific views need the right spot — WATCH POLICE, WATCH SUNSET, WATCH SOI, WATCH DRAG, or bare WATCH TV.)");
       break;
     case "wait": case "z": _doWait(arg); break;
     case "time": case "clock": _doTime(); break;

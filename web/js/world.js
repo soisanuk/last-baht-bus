@@ -210,10 +210,11 @@ const ROOMS = {
   jomtien_soi_7_w: {
     name: "Jomtien Soi 7 (West)",
     region: "Jomtien",
-    desc: "The beach end of Soi 7, off the south end of the beach road: a mellow strip of " +
+    desc: "The near end of Soi 7, off the south end of the beach road: a mellow strip of " +
       "open-front beer bars strung with fairy lights, a couple of massage shops, and the easy " +
       "Jomtien pace — older expats, cold beer, nobody in a hurry. The soi runs east, deeper inland " +
-      "toward Second Road; the sea breeze follows you a little way in.",
+      "toward Second Road; the sea breeze follows you a little way in. The sand itself is west, " +
+      "past the beach road.",
     exits: { w: "jomtien_beach_rd_s", e: "jomtien_soi_7_m" },
     venues: ["lucky7", "seabreeze", "jomtien_soi_7_oil"],
   },
