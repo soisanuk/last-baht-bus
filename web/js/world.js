@@ -451,7 +451,7 @@ const ROOMS = {
     desc: "The elbow of the L, where the alley turns and the drag bars cluster — the stage end. One " +
       "venue is alive tonight: THE PEACOCK CABARET, its mirrored sign lit and pulsing, a queue of " +
       "boys and a scatter of curious farang filing in under a poster of a sequinned goddess mid-lip-sync. " +
-      "The bass thumps through the wall. The alley carries on east and out onto the foot of the Thappraya " +
+      "The bass thumps through the wall. The alley carries on north and out onto the foot of the Thappraya " +
       "hill road, where the strip's neon finally gives out.",
     exits: { w: "supertown_alley", n: "thappraya_ext_s" },
     venues: ["peacock_cabaret"],
