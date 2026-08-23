@@ -3094,7 +3094,16 @@ function _doSellBottles(arg) {
       "at the beach end, five baht a bottle. The rest of your pockets are your own problem.");
     return;
   }
-  if (G.room !== NPCS.nok.room) { _say("No bottle buyer here. Auntie Nok's cart is on JOMTIEN Soi 7, down at the beach end — the Jomtien one, not Pattaya's."); return; }
+  // Name the ROOM she is in, not the soi it is near. "Down at the beach end" of
+  // Jomtien Soi 7 describes the soi's west end, and she is not there — her pitch
+  // is a separate room off the sand. A broke player following this line walked
+  // the whole soi and found nobody (churner playtest 2026-08-23; third sighting
+  // in this corner of the map, after rounds 8 and 12).
+  if (G.room !== NPCS.nok.room) {
+    _say("No bottle buyer here. Auntie Nok's cart is at " + ROOMS[NPCS.nok.room].name +
+      " — out on the sand itself at the foot of Jomtien Soi 7, not on the soi. (The Jomtien one, not Pattaya's.)");
+    return;
+  }
   const bottles = _inv().filter(id => ITEMS[id].bottle);
   if (!bottles.length) { _say("\"No bottle, no baht, tilac.\" Fair."); return; }
   for (const b of bottles) G.itemLoc[b] = null;
@@ -3401,13 +3410,17 @@ function _doBuy(arg) {
     // a lazy girl banks the drink but rarely the warmth — favor sticks only ~40%.
     // (only lazy girls consume the extra die, so nothing else's determinism moves.)
     const _lazy = NPCS[id].type === "lazy";
-    if (!_lazy || _rand() < 0.4) _addBond(id, 1);
+    if (!_lazy || _rand() < 0.4) _boughtBond(id, 1);   // capped per girl per night
     const _warm = !_lazy && _bondTier(id) >= 2;
     const _pool = _lazy ? _LAZY_DRINK_LINES : _warm ? _LADY_DRINK_WARM : _LADY_DRINK_LINES;
     const _pk = _lazy ? "lazydrink" : _warm ? "warmdrink" : "ladydrink";
     _say(_fmt("{line} (฿{m} left.)", { line: _pickVary(_pool, _pk)(NPCS[id].name), m: G.money }));
     _boughtHappy(1); // bought สนุก tapers over an evening (see _boughtHappy)
-    if (Object.keys(G.soc.drinks).length >= 4 && !G.soc.butterflyTeased) {
+    // TONIGHT means tonight: this counted soc.drinks, which accumulates across the
+    // whole vacation, so the tease fired on the first drink of an evening and
+    // announced four fingers' worth of news that hadn't happened yet (churner
+    // playtest 2026-08-23). bondNight is the per-night book.
+    if (Object.keys(G.soc.bondNight || {}).length >= 4 && !G.soc.butterflyTeased) {
       G.soc.butterflyTeased = true;
       _say(_pickVary([
         `${NPCS[id].name} counts something on her fingers, eyes narrowing in delight: “Ohhh, I hear about you. BUTTERFLY!” She makes the wing motion. The whole bar makes the wing motion. This is your reputation now.`,
@@ -4649,7 +4662,7 @@ function _doTip(arg) {
     const paid = (G.soc.tipBond = (G.soc.tipBond || 0));
     const bump = paid >= 3 ? 0 : (amount >= 300 ? 2 : 1);
     if (bump) G.soc.tipBond = paid + bump;
-    if (bump) _addBond(id, bump);
+    if (bump) _boughtBond(id, bump);   // and the same per-girl nightly ceiling
     _say(_pickVary([
       `฿${amount}, folded small and passed with a wai. ${name} makes it vanish with a conjurer's economy, and the news crosses the bar by whole-room telepathy before your hand is back in your pocket.`,
       `฿${amount}, and ${name} doesn't look at it — she looks at you, which is the receipt. Somewhere behind the bar a biro makes a note that isn't about money.`,
@@ -5274,6 +5287,8 @@ const _HELP = `Common commands:
   STANDING (the soi's read on you) · PHOTO <someone> (a portrait for your phone) · GALLERY (the faces you've collected)
   SEND <amount> TO <lady> (banking app)
   BORROW <amount> · REPAY [amount] (Nira's loan at Neon Paradise — 20%, three days, don't be late)
+  Your own bar (once you own one): WORK / MIND (stand behind your own rail tonight) · BOOKS / TAKINGS
+    DRAW [amount] (take your own money out of your own till — nobody else will do it for you)
   PET CATS (Jomtien beach) · FEED DOG (a friendship you cannot undo) · PET DOG · NAME DOG <name>
   LIGHT ON / LIGHT OFF · CHARGE PHONE
   SCORE (happiness & progress) · UNDO · RESTART   (the night autosaves itself)
@@ -5346,7 +5361,7 @@ const _COMPLETE_VERBS = [
   "photo", "gallery", "photos", "info", "call", "share", "follow", "shower", "withdraw", "cheers", "tao rai", "borrow", "repay", "hire", "pet", "feed", "rename", "dance", "sing", "swim",
   "smell", "listen", "diagnose", "get tested", "clinic", "apologize", "quests", "accept", "abandon", "contact",
   "contacts", "who", "who am i", "identity", "blackbook", "message", "check messages", "send", "score", "standing", "wait", "again",
-  "request", "hint", "books", "work", "help", "save", "load", "undo", "restart", "quit", "reset", "end", "logout",
+  "request", "hint", "books", "draw", "work", "help", "save", "load", "undo", "restart", "quit", "reset", "end", "logout",
 ];
 
 // ── Context chips: the fourth surface ────────────────────────────────────────
@@ -5776,7 +5791,7 @@ const _ENC_SOFT = {
 // A real top-level command word (not a bare answer): used only to decide whether
 // a soft encounter should let the line through.
 function _isRealCommand(v) {
-  return /^(go|n|s|e|w|ne|nw|se|sw|in|out|up|down|enter|travel|goto|ride|motosai|bus|buy|drink|eat|talk|ask|tell|tip|give|quests|journal|watch|light|check|message|send|look|l|examine|x|wait|sleep|map|time|hint|who|blackbook|contacts|phone|photo|play|rematch|sell|feed|pet|wai|dance|sing|order|read|inventory|i|inv|diagnose|score|call|follow|shower|withdraw|atm|balance|borrow|repay|work|books|complain|report|column|owl|paper|tv|scores|lottery|weather|standing|rep|gallery|share|charge|barfine|flirt|kiss|spank|fondle|contact|number|meet|name|rename|accept|abandon|drop|take|get|open|close|use|search|smell|listen|pray|swim|throw|stand|ring|bell|help|checkout|toggle|undo|restart|reset|again|g|hug|good|stay|heel|whistle|come|bet|wager|beg)$/.test(v);
+  return /^(go|n|s|e|w|ne|nw|se|sw|in|out|up|down|enter|travel|goto|ride|motosai|bus|buy|drink|eat|talk|ask|tell|tip|give|quests|journal|watch|light|check|message|send|look|l|examine|x|wait|sleep|map|time|hint|who|blackbook|contacts|phone|photo|play|rematch|sell|feed|pet|wai|dance|sing|order|read|inventory|i|inv|diagnose|score|call|follow|shower|withdraw|atm|balance|borrow|repay|work|books|draw|complain|report|column|owl|paper|tv|scores|lottery|weather|standing|rep|gallery|share|charge|barfine|flirt|kiss|spank|fondle|contact|number|meet|name|rename|accept|abandon|drop|take|get|open|close|use|search|smell|listen|pray|swim|throw|stand|ring|bell|help|checkout|toggle|undo|restart|reset|again|g|hug|good|stay|heel|whistle|come|bet|wager|beg)$/.test(v);
 }
 let _lastCmd = ""; // for AGAIN/G — deliberately not serialized; repeats die with the session
 let _prevCmd = ""; // the one before it (the SLEEP-on-waking guard: two SLEEPs in a row means it)
@@ -6226,6 +6241,7 @@ function doCommand(input) {
     case "send": case "transfer": case "wire": _doSendMoney(arg); break;
     case "work": case "mind": case "shift": _doWork(); break;
     case "books": case "takings": case "accounts": _doBooks(); break;
+    case "draw": case "cashup": _doDraw(arg); break;
     case "quests": case "quest": case "adventures": case "journal": _doQuests(); break;
     case "accept": _doAccept(arg); break;
     case "abandon": _doAbandon(arg); break;

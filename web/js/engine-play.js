@@ -1431,11 +1431,28 @@ function _favor(id) {
   return f;
 }
 
+// The first point of heat used to land in silence — and heat > 0 shuts the whole
+// bar's barfine book (see _bfRefusal), so a player could earn a bar-wide refusal
+// citing "tonight's behaviour" without ever being told anything had happened.
+// TWO independent playtests hit exactly this on the same day (2026-08-23, the
+// churner at Lucky Tiger and the publican at Candy Bar), which by the house rule
+// makes it structural rather than a phrasing quirk. The caller narrates the ACT;
+// this narrates the room deciding to remember it.
+const _HEAT_FIRST = [
+  "The mamasan doesn't say anything. She just looks over, once, and goes back to her ledger — and the room's temperature has changed by about a degree.",
+  "Somewhere behind you a stool creaks as somebody turns to watch. Nothing is said. Something is noted.",
+  "The cashier's eyes come up off the till, rest on you for exactly as long as it takes, and go back down. You are, from this moment, being kept an eye on.",
+  "A look passes between two of the girls — quick, unhurried, entirely legible. The room has filed that one.",
+];
 function _addHeat(n) {
   if (_bellLevel() >= 3) return;         // three bells deep — the room forgives everything
   const r = G.room;
-  G.soc.heat[r] = (G.soc.heat[r] || 0) + n;
+  const before = G.soc.heat[r] || 0;
+  G.soc.heat[r] = before + n;
   if (G.soc.heat[r] >= 3) { _kickOut(); return; }
+  if (before === 0 && G.soc.heat[r] === 1) {
+    _say(_pickVary(_HEAT_FIRST, "heat1"), "dim");
+  }
   if (G.soc.heat[r] === 2) {
     _say("(The mamasan is watching you now with the expression of a woman " +
       "pricing a problem. One more and you're somebody else's story.)", "alert");
@@ -2452,6 +2469,35 @@ function _conquestHappy(base, id) {
 // purchases of an evening pay in full, then the room stops being impressed.
 // Presence, conversation, quests and the night ride are untouched — the slow
 // road to สบายสบาย stays fully rewarding, which is the whole design.
+// The bond ladder's matched brake, and the sibling of _boughtHappy below.
+// Bond tiers are 3 / 7 / 13 (a face / a regular / her farang) and the ladder is
+// meant to be climbed by TURNING UP: recognition, the kept seat, the waived
+// fine and the night ride are what a woman gives someone who came back. Lady
+// drinks were uncapped, so fourteen of them bought a total stranger the top of
+// the ladder in fourteen in-game minutes — the tier-4 close-up, the deep-talk
+// beat, the off-book barfine and the ride, from a woman met that turn (churner
+// playtest 2026-08-23). The TIP site already carried this rule in its own
+// comment ("money buys attention, not intimacy… the rest of the ladder is
+// drinks, talk and turning up") and capped itself; drinks are the call site
+// that rule never reached — the third time a class fix has landed on some of
+// its sites and not all (see docs/playtest-findings-analysis.md §2.4).
+//
+// So: a night of buying can lift one woman a tier, not three. Purchased bond
+// only — a short-time, an honest long-time, a rose she watched you buy and the
+// ride's own stops all stay direct _addBond, because those are things that
+// happened, not things you paid for.
+const BOND_NIGHT_CAP = 6;
+function _boughtBond(id, n) {
+  if (!id || !n || n < 0) return 0;
+  const book = (G.soc.bondNight = G.soc.bondNight || {});
+  const had = book[id] || 0;
+  const grant = Math.max(0, Math.min(n, BOND_NIGHT_CAP - had));
+  if (!grant) return 0;
+  book[id] = had + grant;
+  _addBond(id, grant);
+  return grant;
+}
+
 function _boughtHappy(n) {
   if (!n) return;
   const c = (G.soc.bought = (G.soc.bought || 0) + 1);
@@ -3260,6 +3306,7 @@ function _endNight(reason) {
   G.soc.selfBf = false;
   G.soc.butterflyTeased = false;
   G.soc.bought = 0;          // the room's patience with a chequebook resets each night (_boughtHappy)
+  G.soc.bondNight = {};      // …and so does how far a night of buying can carry one girl (_boughtBond)
   G.offstage = false; // never carry an "off with her" flag into a new night
   G.pendingBf = null; // a barfine still mid-negotiation at the bell dies with the night
   G.selfBfId = null;

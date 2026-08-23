@@ -466,6 +466,63 @@ test("refusing procurement is what makes the month hard — it's on the supply l
     "and every job you turned down is on the supply bill, every night, forever");
 });
 
+test("the note falls by what you actually paid — a partial payment isn't collected twice", () => {
+  // publican playtest (2026-08-23), the worst finding in that report: a partial
+  // month was taken IN FULL from the till and credited to nothing (`owed` only
+  // ever fell by a flat BAR_MONTHLY, and only on months settled outright), then
+  // the shortfall was billed again next month as arrears. ฿50,000 handed over
+  // reduced the debt by ฿25,000.
+  running();
+  G.bar.owed = 1680000; G.bar.cash = 22100; G.bar.lastMonthDay = 0;
+  G.bar.arrears = 0; G.bar.months = 1; G.money = 0; G.day = 31;
+  const owed0 = G.bar.owed;
+  const a = _barMonthly();
+  assert.equal(a.paid, 22100, "the whole till went");
+  assert.equal(G.bar.arrears, 2900, "and the shortfall is remembered");
+  assert.equal(owed0 - G.bar.owed, 22100, "the principal falls by exactly what was handed over");
+
+  G.bar.cash = 27900; G.bar.lastMonthDay = 0; G.day = 62;
+  const b = _barMonthly();
+  assert.equal(b.paid, 27900, "next month collects the arrears on top");
+  assert.equal(G.bar.arrears, 0);
+  assert.equal(owed0 - G.bar.owed, 50000, "฿50,000 paid must clear ฿50,000 of debt, not ฿25,000");
+});
+
+test("the nightly line reconciles: what it says moved is what the till did", () => {
+  // Work-event money landed straight in G.bar.cash and never entered the `take`
+  // the settle line prints, so three nights in twelve the books did not add up.
+  running();
+  G.stage = "expat"; G.bar.lastMonthDay = G.day; G.money = 5000; G.rng = 991;
+  for (let i = 0; i < 8; i++) {
+    const before = G.bar.cash;
+    G.room = "stinky_bar"; out = []; _doWork(); _endNight("dawn");
+    const line = (out.join("\n").match(/\(The bar: .*?\)/) || [""])[0];
+    const m = line.match(/฿(-?\d+) in, ฿(\d+) out/);
+    if (!m) continue;
+    assert.equal(Number(m[1]) - Number(m[2]), G.bar.cash - before,
+      `night ${i + 1}: the line says ${m[1]} in / ${m[2]} out, the till moved ${G.bar.cash - before}`);
+  }
+});
+
+test("an owner can take his own money out of his own till", () => {
+  // publican playtest: money flowed INTO the till and never out, so 65 nights of
+  // ownership ended with ฿3,637 in the drawer, ฿0 in pocket and hotel debt
+  // accruing. Not a hard economy — an incoherent one.
+  running();
+  G.room = "stinky_bar"; G.bar.cash = 36000; G.money = 0;
+  out = []; _doDraw("5000");
+  assert.equal(G.money, 5000, "it reaches your pocket");
+  assert.equal(G.bar.cash, 31000, "and leaves the till");
+  out = []; _doDraw("");
+  assert.equal(G.bar.cash, 0, "a bare DRAW empties the drawer");
+  assert.equal(G.money, 36000);
+  out = []; _doDraw("100");
+  assert.match(out.join("\n"), /empty/i, "…and an empty drawer says so");
+  // not from the pavement
+  G.room = "beach_rd_n"; out = []; _doDraw("100");
+  assert.match(out.join("\n"), /at the Stinky Pinky/i);
+});
+
 test("BOOKS reads as a state, never as two numbers that contradict each other", () => {
   // actuary playtest 2026-08-23: an underwater bar printed "Till: ฿-12822",
   // which reads as an accounting error rather than a bar in trouble; and a

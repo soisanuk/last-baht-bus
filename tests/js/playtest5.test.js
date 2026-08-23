@@ -705,7 +705,14 @@ test("WAIT stops when the world moves you; a pending question is redrawn on resu
 test("poverty: SELL points at Jomtien, the pity ride is a sandbox mercy, CHECKOUT settles the book first, TIP 0 refused, BEG is voiced", () => {
   G.room = "second_rd_c"; out = [];
   doCommand("sell phone"); assert.match(text(), /glass/); assert.doesNotMatch(text(), /No bottle buyer/);
-  out = []; doCommand("sell bottles"); assert.match(text(), /JOMTIEN Soi 7/);
+  // The pointer must name the ROOM she is in, not the soi it is near: "the beach
+  // end of Jomtien Soi 7" describes the soi's west end and she is not there, so
+  // a broke player walked the whole soi and found nobody (churner playtest
+  // 2026-08-23 — third sighting in this corner after rounds 8 and 12).
+  out = []; doCommand("sell bottles");
+  assert.match(text(), new RegExp(ROOMS[NPCS.nok.room].name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")),
+    "names the room Auntie Nok is actually standing in");
+  assert.match(text(), /Jomtien/, "…and still disambiguates from Pattaya's own Soi 7");
   // Act One: no free ride
   newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight" };
   G.room = "jomtien_beach_rd"; G.money = 0; out = [];

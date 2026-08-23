@@ -684,6 +684,32 @@ test("SAY <phrase> TO <person> aims the greeting at one target", () => {
   assert.match(lastOut(), /not here to hear it/i);
 });
 
+test("a night of buying can lift one girl a tier, not the whole ladder", () => {
+  // churner playtest (2026-08-23): fourteen lady drinks took a total stranger
+  // from 0 to top tier in fourteen in-game minutes — the possessive close-up,
+  // the deep-talk beat, the waived barfine and the night ride, from a woman met
+  // that turn. The tier fiction is "she gives this to someone who came back";
+  // money short-circuited it entirely. The TIP site already carried this rule
+  // and capped itself; drinks were the call site it never reached.
+  // past Act One: in act1 a dawn is the hard fail, which rebuilds the world and
+  // wipes soc.drinks — correct, and not what this test is about.
+  state().flags.act1Done = true; state().flags.hasWallet = true; state().stage = "vacation";
+  state().room = "starlight_bar";
+  state().money = 200000;
+  for (let i = 0; i < 14; i++) run("buy drink for pim");
+  assert.ok(state().soc.drinks.pim <= BOND_NIGHT_CAP,
+    `one night of buying is capped at ${BOND_NIGHT_CAP} (got ${state().soc.drinks.pim})`);
+  assert.ok(_bondTier("pim") < 3, "and cannot reach her-farang in a single sitting");
+  // …but turning up does climb it
+  const n1 = state().soc.drinks.pim;
+  state().day = 3;                       // mid-week: the night-end must not open the airline modal
+  _endNight("dawn");
+  state().pendingChoice = null; state().pendingEnc = null;
+  state().room = "starlight_bar"; state().money = 200000;
+  for (let i = 0; i < 14; i++) run("buy drink for pim");
+  assert.ok(state().soc.drinks.pim > n1, "a second night carries her further");
+});
+
 test("bare 'sawatdee fon' (no SAY verb, no TO) still aims at Fon, not the last-talked-to NPC", () => {
   // NPC-completionist playtest (2026-08-22): a player who's just talked to
   // Randy elsewhere, then walks into Jasmine Garden and types the greeting

@@ -845,7 +845,11 @@ function _bfResolve(kind) {
     G.rideSeq = { id, fine: price, spent: 0, stops: 0, sanuk: 0, seen: [] };
     G.offstage = true; // off the tourist map on her bike — the origin bar's saleng/ambient isn't your scene
     G.pendingEnc = "nightride";
-    const ridden = !!G.rideEverTaken;
+    // Per GIRL, not per player: a global flag had the second woman ever to offer
+    // you a ride open with "you want the same night again" — to someone you met
+    // half an hour ago and had never been on a bike with (churner playtest
+    // 2026-08-23). The reframe is hers to make, and only if it was hers before.
+    const ridden = !!(G.rodeWith && G.rodeWith[id]);
     const offer = ridden
       ? `${name} takes your hand — and there's the scuffed Click again, already off its stand. ` +
         `"Not hotel yet," she says, mock-stern, reading the hope on your face. "I know, I know ` +
@@ -1035,7 +1039,8 @@ function _nightRide(input) {
   const go = /\b(ride|yes|on|more|another|sure|ok|okay|go|keep|again|deeper|why not|lets?|come|drive)\b/.test(input) &&
     !/\bno\b|hotel|home|enough|call|done|bed|sleep|stop|tired|late|finish/.test(input);
   if (!go) return _endRide(seq, "choice");
-  G.rideEverTaken = true; // you actually rode — a future offer reframes, never repeats verbatim
+  G.rideEverTaken = true; // you actually rode — kept for anything reading the global
+  if (G.rideSeq && G.rideSeq.id) (G.rodeWith = G.rodeWith || {})[G.rideSeq.id] = true; // …and whose bike it was
   if (G.money < RIDE_MIN_CASH && seq.stops > 0) return _endRide(seq, "broke");
   // a random stop
   const venue = _pickRideVenue(seq.seen);
@@ -4137,6 +4142,12 @@ function _workNight() {
   _say(pick.text, (pick.happy || 0) < 0 ? "alert" : "win");
   if (pick.money) {
     G.bar.cash += pick.money;
+    // …and remember it, so the night's own summary can account for it. Work
+    // events landed straight in the till and never entered the `take` the settle
+    // line prints, so three nights in twelve the books did not add up — the
+    // event announces itself in the moment, but the settle line is the only
+    // summary a player reads the next afternoon (publican playtest 2026-08-23).
+    G.bar.eventCash = (G.bar.eventCash || 0) + pick.money;
     _say(_fmt(pick.money > 0 ? "(฿{amt} on the night, over the ordinary take.)"
       : "(฿{amt} out of the till.)", { amt: Math.abs(pick.money) }), "dim");
   }
@@ -4147,15 +4158,18 @@ function _workNight() {
   return pick;
 }
 
-// Your own bar never said it was yours. WORK and BOOKS lived in HELP and the
-// parser but on no surface in the room where they apply — a three-surfaces
+// Your own bar never said it was yours. WORK and BOOKS lived in the parser and
+// nowhere else — not in HELP either, as a publican playtest found the next day
+// (2026-08-23) by grepping the whole HELP output as an owner and finding none of
+// WORK / MIND / BOOKS / TAKINGS. HELP carries them now; this is the surface in
+// the room where they apply — a three-surfaces
 // violation that hid the expat stage's central decision from anyone who hadn't
 // read HELP, and hid it from every automated instrument too: the soak's hint
 // channel replays the CAPS commands a room prints, so a room that printed none
 // could never be worked (docs/testing-gap-analysis.md). Once a night, on
 // arrival at your own bar, before the shift is declared.
 const _BAR_OWNER_NUDGE = [
-  "The stools are yours, the till is yours, and so is the decision: stand behind it tonight, or go out and have the night you moved here for. (WORK · BOOKS)",
+  "The stools are yours, the till is yours, and so is the decision: stand behind it tonight, or go out and have the night you moved here for. (WORK · BOOKS · DRAW <amount>)",
   "Bert has it in hand, which is exactly the problem — he always has it in hand, and the takings say so. (WORK the rail tonight · BOOKS for the damage.)",
   "Your name isn't over the door — the old man's still is — but the float in that drawer is yours to grow or not. (WORK · BOOKS)",
   "Nobody needs you here. That is the whole trouble with owning it: turning up has to be a choice you make. (WORK · BOOKS)",
@@ -4320,7 +4334,11 @@ function _barNight() {
   }
   const underwater = b.cash < 0;
   b.workedLast = false;   // consumed: tomorrow starts unworked
-  return { take, costs, net, low, friction, fromPocket, underwater, worked, away: b.away };
+  // The till already moved by the event money during the night; report it in the
+  // take so that (take - costs) is exactly what the drawer did, and zero it.
+  const evt = b.eventCash || 0;
+  b.eventCash = 0;
+  return { take: take + evt, costs, net: net + evt, low, friction, fromPocket, underwater, worked, away: b.away };
 }
 
 // the old man's money, every thirty days. Comes out of the till first, your
@@ -4331,7 +4349,8 @@ function _barMonthly() {
   if (G.day - b.lastMonthDay < 30) return null;
   b.lastMonthDay = G.day;
   b.months++;
-  let due = BAR_MONTHLY + b.arrears, paidFrom = [];
+  const owedNow = BAR_MONTHLY + b.arrears;
+  let due = owedNow, paidFrom = [];
   const fromTill = Math.min(b.cash, due);
   if (fromTill > 0) { b.cash -= fromTill; due -= fromTill; paidFrom.push("the till"); }
   if (due > 0) {
@@ -4339,12 +4358,69 @@ function _barMonthly() {
     if (fromPocket > 0) { G.money -= fromPocket; due -= fromPocket; paidFrom.push("your own pocket"); }
   }
   b.arrears = due;
-  if (due <= 0) b.owed = Math.max(0, b.owed - BAR_MONTHLY);
-  return { paidFrom, short: due, month: b.months };
+  // The principal falls by what you ACTUALLY handed over, not by a flat
+  // BAR_MONTHLY on settled months only. The old rule collected a partial
+  // payment in full and credited it to nothing, then billed the shortfall again
+  // the next month as arrears — so ฿22,100 paid moved `owed` by zero, and two
+  // months costing ฿50,000 reduced the debt by ฿25,000 (publican playtest
+  // 2026-08-23, and the worst single finding in that report: the whole expat
+  // stage hangs on this note).
+  const paid = owedNow - due;
+  if (paid > 0) b.owed = Math.max(0, b.owed - paid);
+  return { paidFrom, short: due, month: b.months, paid, cleared: Math.max(0, owedNow - BAR_MONTHLY - due) };
 }
 
 // BOOKS / TAKINGS — the player has to be able to look at it. Deliberately terse
 // and slightly unhelpful, like a real set of bar books.
+// The owner's draw. Money flowed INTO the till (a losing night comes out of your
+// pocket) and never came out of it — so a publican playtest finished 65 nights
+// of ownership with ฿3,637 in his own drawer, ฿0 in his pocket and ฿2,000 of
+// hotel debt accruing −1 สนุก a morning, with no legal way to buy a beer
+// (2026-08-23). That is not a hard economy, it is an incoherent one: the two
+// arms of the stage's central choice weren't connected by any pipe.
+//
+// Deliberately plain — no ceremony, no limit but what's in the drawer, and it
+// costs a turn like everything else. The tension the design wants is between
+// what you take out and what the old man is owed, and that tension only exists
+// once taking out is possible at all.
+const _DRAW_LINES = [
+  "You count it out of the drawer yourself, which is the only part of owning a bar nobody warns you about: it is your money and it still feels like stealing.",
+  "Out of the till, into your pocket, and the note goes in the book — Bert doesn't look up, because Bert has watched owners do this for thirty years.",
+  "You take it out the way a landlord takes it out: quickly, without counting twice in front of the staff, and with a note of the figure.",
+];
+function _doDraw(arg) {
+  if (!_barOwned()) {
+    _say("You'd need a till of your own to take anything out of. (Yours is the Stinky Pinky's, once it's yours.)");
+    return;
+  }
+  if (G.room !== "stinky_bar") {
+    _say("Your till is at the Stinky Pinky, and so, therefore, is your money.");
+    return;
+  }
+  const b = G.bar;
+  if (b.cash <= 0) {
+    _say(b.cash < 0
+      ? _fmt("The drawer is ฿{short} behind, not ahead. There is nothing in it to take, and you know exactly whose problem that is.", { short: -b.cash })
+      : "The drawer is empty. A bar that has taken nothing tonight has nothing for you either.");
+    return;
+  }
+  let amount = /all|everything|lot/.test(arg) ? b.cash : parseInt(String(arg).replace(/[^\d]/g, ""), 10);
+  if (!amount || amount <= 0) amount = b.cash;
+  if (amount > b.cash) {
+    _say(_fmt("There's ฿{cash} in the drawer. You can't take out what the night didn't put in.", { cash: b.cash }));
+    return;
+  }
+  b.cash -= amount;
+  G.money += amount;
+  b.drawn = (b.drawn || 0) + amount;
+  _say(_fmt("{line} (฿{amt} out of the till. ฿{cash} left in it; ฿{money} on you.)",
+    { line: _pickVary(_DRAW_LINES, "bardraw"), amt: amount, cash: b.cash, money: G.money }), "win");
+  if (b.arrears > 0) {
+    _say(_fmt("(You are ฿{a} behind with the old man. He will not mention it. That is the arrangement.)",
+      { a: b.arrears }), "dim");
+  }
+}
+
 function _doBooks() {
   if (!_barOwned()) {
     _say(_flag("barPartner")
@@ -4367,6 +4443,7 @@ function _doBooks() {
     ? "Months elapsed: {m} of {term}   ·   Nights open: {n}"
     : "Months paid: {m} of {term}   ·   Nights open: {n}",
     { m: b.months, term: BAR_TERM, n: b.nights }));
+  if (b.drawn) _say(_fmt("Taken out by you, all told: ฿{d}.", { d: b.drawn }), "dim");
   if (b.arrears > 0) _say(_fmt("In arrears: ฿{a}. He hasn't asked.", { a: b.arrears }), "alert");
   const friction = (G.syn && G.syn.friction) || 0;
   if (friction) {
@@ -4382,8 +4459,13 @@ function _barSettle() {
   const n = _barNight();
   const m = _barMonthly();
   // the nightly line is quiet; the monthly one is not
-  _say(_fmt("(The bar: ฿{take} in, ฿{costs} out{low}{who}. Till: ฿{cash}.)",
-    { take: n.take, costs: n.costs, cash: G.bar.cash,
+  // BOOKS states an underwater till as a state ("empty, and ฿N behind it"); this
+  // line printed a raw "Till: ฿-760", which reads as an accounting error rather
+  // than a bar in trouble. Same wording in both places now.
+  _say(_fmt(G.bar.cash < 0
+    ? "(The bar: ฿{take} in, ฿{costs} out{low}{who}. Till: empty, and ฿{short} behind it.)"
+    : "(The bar: ฿{take} in, ฿{costs} out{low}{who}. Till: ฿{cash}.)",
+    { take: n.take, costs: n.costs, cash: G.bar.cash, short: -G.bar.cash,
       low: n.low ? _L(" — low season") : "",
       who: n.worked ? _L(" — you worked it") : _L(" — Bert ran it") }), "dim");
   if (n.away === WORK_DRIFT) {

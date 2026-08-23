@@ -10478,8 +10478,15 @@ const QUESTS = {
     name: "Fifty-One Percent",
     giver: "candy",
     reqFlags: ["expatLife"],
+    // BOTH names, because both routes are built and gated identically — and a
+    // publican playtest (2026-08-23) walked the whole chain, read "one obvious
+    // name", asked Candy, and never learned Tan's route existed. That branch
+    // carries the entire syndicate/procurement endgame, so naming one candidate
+    // hid a whole authored system behind a door the game never mentions. The
+    // line still refuses to say which is wiser; that part is the player's.
     desc: "Fifty-one percent has to be a person, not a structure — someone you'd hand " +
-      "your passport to. There is one obvious name (ASK CANDY ABOUT THE PARTNERSHIP).",
+      "your passport to. Two names come to mind, and they are not the same kind of " +
+      "name (ASK CANDY ABOUT THE PARTNERSHIP · ASK TAN ABOUT THE PARTNERSHIP).",
     deps: ["bar_licence"],
     at: "candy",
     doneFlag: "barPartner",
