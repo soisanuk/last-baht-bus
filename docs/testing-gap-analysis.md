@@ -226,3 +226,61 @@ by construction; the personas are what find the defects outside every bound, and
 they are what produced this list in the first place. What the four items above
 buy is that the *same* classes stop coming back — so each round of personas
 spends its budget on new ground.
+
+---
+
+## 5. Coverage, defined — and the baseline (2026-08-23)
+
+Added after §4 shipped, because "the personas keep finding things" needed a
+number behind it. `node tools/coverage.mjs`.
+
+**Why not line coverage.** Every severe defect this project has found by playing
+lived in one of two places: a mechanic that never fired, or a room/verb/character
+nobody had reached. Line coverage sees neither — a line is "covered" the moment a
+test touches it, and *every one of those bugs sat in lines the suite already
+executed*. WORK was covered by 38 green tests while doing nothing.
+
+**So coverage here means OBSERVED SURFACE**: places stood in, words typed, people
+spoken to, authored lines actually delivered, mechanics actually fired. The
+headline is the **union across runs**, because one run's number describes the run
+rather than the game.
+
+### Baseline — soak union, 5 modes × 6 seeds × 6 nights, 14,584 commands
+
+| dimension | observed | exists | |
+|---|---|---|---|
+| rooms stood in | 123 | 237 | 51.9% |
+| parser verbs typed | 198 | 327 | 60.6% |
+| NPCs spoken to | 45 | 331 | 13.6% |
+| patrons spoken to | 8 | 24 | 33.3% |
+| **authored NPC dialogue delivered** | **109** | **1,695** | **6.4%** |
+| authored patron dialogue delivered | 25 | 137 | 18.2% |
+| street encounters seen | 9 | 22 | 40.9% |
+| quests completed | 1 | 32 | 3.1% |
+| mechanics fired (liveness) | 17 | 19 | 89.5% |
+
+**The number that matters is 6.4%.** Ninety-four percent of the authored dialogue
+in this game has never been shown to anything, human or automated. That single
+figure explains the pattern in §2: the personas are not finding a defect-ridden
+codebase, they are walking surface nothing had ever walked. It also predicts the
+finding rate will fall as that surface shrinks — which is testable, and is the
+control experiment worth running before deciding this method is done.
+
+Contrast **verbs at 60.6%** — up from 5.6% before §4.1 derived the walker's
+vocabulary from the engine. That is the same instrument, measured before and
+after one change, and it is the clearest evidence that these dimensions move when
+you fix the thing they measure.
+
+### Reading the numbers honestly
+
+- **Denominators are what EXISTS, not what one playthrough can reach.** Several
+  rooms and characters are stage-gated by design. 100% is not the target and
+  never will be; the metric is for tracking movement, not for scoring.
+- **Some dimensions are instrument-limited, and the tool says so.** Quests at
+  3.1% is a fact about the random walker (it cannot climb a dep chain), not about
+  the quests.
+- **`--save <file>` scores a real session on the same scale** — the only way to
+  compare a persona's or a human's coverage against the automated baseline. Verb
+  coverage is unavailable there, since a save doesn't record what was typed.
+- `--gaps` lists what was never touched: which rooms, which verbs, which people.
+  That list is the natural work queue for the next persona.
