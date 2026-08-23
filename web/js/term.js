@@ -925,6 +925,12 @@ const _term = (() => {
   }
 
   return { init, print, decorate, kwActions: _kwActions, renderChips: _renderChips, picFor: _picFor,
+    // RESUME (main.js) imports a character outside the normal submit path, so it
+    // has to refresh the bell/message glyphs itself — it called _updateFabs()
+    // bare and threw ReferenceError every time, leaving the PREVIOUS character's
+    // chips and FABs on screen (persistence playtest 2026-08-23: a discarded
+    // life's "pay ฿15" fare chip sat over a character who owed nothing).
+    updateFabs: _updateFabs,
     // v0 scene panel (scene.js): reuse the bust builder + character wheel, and
     // submit a typed command exactly as a chip tap would (tap-echo invariant).
     avatar: _avatar, openFly: _openFly,

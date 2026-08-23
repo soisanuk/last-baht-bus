@@ -1698,6 +1698,30 @@ function _doHint() {
     return;
   }
   const reached = _act1Progress(), total = _ACT1_MILESTONES.length;
+  // Diagnose the BLOCKER before reciting the chain. _ACT1_HINTS is keyed only on
+  // quest progress, so a player stranded on the wrong side of the bay with no
+  // fare and a dead phone was told to go and talk to a woman eight kilometres
+  // away — "the one thing you already knew, at the moment you most needed
+  // something else" (opening auditor 2026-08-23, and her top recommendation).
+  // The chain hint is right when knowing the next name is the problem; when
+  // getting there is the problem, say that instead.
+  const _stuckSouth = /^(jomtien|dongtan|thappraya|pratumnak|buddha)/.test(G.room) &&
+    G.money < BUS_FARE && !_flag("act1Done");
+  if (_stuckSouth) {
+    const _phoneDead = G.battery <= 0;
+    _say("The soi whispers, and for once it isn't about the wallet: you are on the " +
+      "wrong side of the bay with " + (G.money ? `฿${G.money}` : "nothing") +
+      ` in your pocket, and the fare is ฿${BUS_FARE}. ` +
+      (_phoneDead
+        ? "Your phone is dead, so the easy way out is shut. Empty bottles are ฿5 " +
+          "each to Auntie Nok at the Soi 7 end of the sand — the beach leaves them " +
+          "everywhere, and a lit stretch will do it. (SELL BOTTLES once you've got a few.)"
+        : "Before anything else: you have a number and he said any hour. (CALL TAN.)"), "win");
+    // …and then the chain, because the blocker is HOW to get there and the chain
+    // is what to do when you arrive. A player on the opening beach is technically
+    // "stranded" from turn one, so suppressing the chain here would replace the
+    // hint system rather than complete it.
+  }
   const next = _ACT1_HINTS.find(([f]) => !_flag(f));
   _say(_fmt("The soi whispers — you're {r}/{t} of the way home. ", { r: reached, t: total }) +
     (next ? next[1] :

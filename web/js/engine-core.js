@@ -386,6 +386,15 @@ function importBaton(b) {
   if (b.soc) for (const k of BATON_SOC_FIELDS) if (b.soc[k] !== undefined) G.soc[k] = b.soc[k];
   // a body arrives fresh: the macro game ran weeks, not a night
   G.nightTurn = 0;
+  // …and it arrives WHERE IT LIVES. newGame()'s default room is the Act One
+  // rough-wake spot on the sand, so a resident with a hotel, a bar and 33 names
+  // in his phone was handed back waking on Jomtien beach every time
+  // (persistence playtest 2026-08-23). "A body arrives fresh" covers the meters,
+  // not the address.
+  if (_flag("act1Done") && typeof _hotelRoomId === "function") {
+    const home = _hotelRoomId();
+    if (home && ROOMS[home]) { G.room = home; G.visited[home] = true; }
+  }
   G.pendingChoice = null; G.pendingEnc = null; G.game = null;
   return { ok: true };
 }
@@ -706,7 +715,11 @@ function _convoAsk(id, d, st) {
   if (st.know["asked_" + key]) return;
   st.know["asked_" + key] = true;
   if (d.asks.q) _say(d.asks.q);
-  G.convoQ = { id, key };
+  // Keep the question itself. _renderResume redraws the answer cue after a
+  // reload, but the QUESTION lived only in the scrollback — so a restored
+  // player came back to "Answer in your own words — or: 1) …" with no way to
+  // read what had been put to them (persistence playtest 2026-08-23).
+  G.convoQ = { id, key, q: d.asks.q || "" };
 }
 
 // The callback half of the ask loop: a delivered line can quote back what the
@@ -1694,13 +1707,27 @@ function _tick() {
         G.darkStreak = 0;
         const exit = Object.values(_room().exits).find(to => !ROOMS[to].dark) ||
           Object.values(_room().exits)[0];
+        const _toDark = !!(ROOMS[exit] || {}).dark;
         G.room = exit;
         _engineSfx("snarl");   // it has stopped warning you
+        // "…and fetch up somewhere lit" was unconditional, but the light-seeking
+        // exit is a preference with a fallback: where EVERY exit is dark (five
+        // rooms — the Thappraya climb, Dongtan middle, Buddha Hill, two Jomtien
+        // beach nodes) you land in the dark and the line says otherwise. Reported
+        // independently by TWO playtests (churner 2026-08-23, opening auditor the
+        // same day), which is what makes it structural rather than a nitpick —
+        // and it matters, because you can be bounced dark-to-dark and take
+        // consecutive bites toward the three-strike reset.
         _say("A soi dog bites you! You flee blindly, shedding " +
           (bitten ? `฿${bitten} in dropped coins` : "what remains of your dignity") +
-          ", and fetch up somewhere lit.", "alert");
+          (_toDark
+            ? ", and fetch up somewhere no better lit than the last one."
+            : ", and fetch up somewhere lit."), "alert");
         _addHappy(-2);
         G.hurt++;
+        // The three-strike counter lived only in DIAGNOSE, so a player who never
+        // typed it met a hidden third strike (opening auditor 2026-08-23).
+        if (G.hurt < 3) _say(`(Bitten — that's ${G.hurt} of 3. A third ends the night in the ward.)`, "alert");
         if (G.hurt >= 3) { _endNight("hurt"); return; }
         _describeRoom(true);
       }

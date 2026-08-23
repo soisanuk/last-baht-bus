@@ -3971,7 +3971,12 @@ const ITEMS = {
     name: "7-Eleven receipt", aliases: ["receipt", "paper"],
     portable: true, location: "inventory",
     keepsafe: true, // quest/clue — DROP warns, and a dropped one shows in QUESTS
-    desc: "A crumpled 7-Eleven receipt from your pocket. The print is in Thai.",
+    // The very first gate in the game, and the tutorial line tells you to EXAMINE
+    // — which stopped here, while the milestone needed READ. A blind player has
+    // to guess a second verb at the one moment the game is holding their hand
+    // (opening auditor 2026-08-23). Point at the verb that finishes the job.
+    desc: "A crumpled 7-Eleven receipt from your pocket. The print is in Thai, and small, " +
+      "and it is going to take a moment to work out. (READ RECEIPT.)",
     readTh: "เซเว่นอีเลฟเว่น สาขาซอยบัวขาว 03:12\nมาม่า ×2 ... ๑๒ บาท\nชาเขียว ... ๒๐ บาท",
     readEn: "7-Eleven, SOI BUAKHAO branch, 03:12 — Mama noodles ×2, green tea. " +
       "So that's where you were at three in the morning.",

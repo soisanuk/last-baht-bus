@@ -373,15 +373,23 @@ function _dispatch(cmd) {
         let parsed;
         try { parsed = JSON.parse(rd.result); }
         catch { _term.print("(That isn't a baton — it isn't even JSON.)", "alert"); return; }
+        // RESET asks twice before destroying a save; RESUME destroyed one in
+        // silence (persistence playtest 2026-08-23). Say what is about to be
+        // overwritten, in the same breath as doing it — UNDO is the way back,
+        // and the player has to know it exists BEFORE they type anything else.
         _prevSnap = serializeGame();      // so UNDO can walk back out of it
+        const _hadGame = !!(G && G.day);
         const r = importBaton(parsed);
         if (!r.ok) { _term.print(`(Not a baton this game can take: ${r.why}.)`, "alert"); return; }
         _term.print("── CHARACTER TAKEN BACK ──", "win");
+        if (_hadGame) _term.print("(This replaces the character that was in this browser. " +
+          "UNDO puts them back — but only before you do anything else.)", "alert");
         _describeRoom(true);
         if (typeof _renderResume === "function") _renderResume();
         _autosave();
         _audioForRoom(G.room, G.flags);
-        _updateFabs();
+        _term.updateFabs();   // not a bare global — it lives in term.js's closure
+        _term.renderChips();  // …and the chip bar is the previous character's until we say so
       };
       rd.readAsText(f);
     };

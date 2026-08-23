@@ -684,6 +684,27 @@ test("SAY <phrase> TO <person> aims the greeting at one target", () => {
   assert.match(lastOut(), /not here to hear it/i);
 });
 
+test("Auntie Nok closes the ฿5 gap when the phone is dead — the opening's one dead end", () => {
+  // opening auditor (2026-08-23): only TWO of the four bottles are in lit rooms,
+  // and the light that reaches the third is the same battery as the phone that
+  // calls Tan. Spend the torch and you bank ฿10 against a ฿15 fare, stranded
+  // south of the bay with nothing telling you the night is already lost.
+  state().flags.act1Done = false; state().stage = "act1";
+  state().room = NPCS.nok.room; state().money = 0; state().battery = 0;
+  state().itemLoc.bottle1 = "inventory"; state().itemLoc.bottle3 = "inventory";
+  run("sell bottles");            // two lit bottles = ฿10, and the fare is ฿15
+  assert.ok(state().money >= BUS_FARE, "she makes up the difference — once");
+  assert.match(lastOut(), /tin under the cart|Bus fifteen/i);
+  // …and she does not do it for a player who still has a phone to call Tan with
+  newGame();
+  state().player.origin = "monger"; state().player.personality = "joker";
+  state().flags.act1Done = false; state().stage = "act1";
+  state().room = NPCS.nok.room; state().money = 0; state().battery = 13;
+  state().itemLoc.bottle1 = "inventory";
+  run("sell bottles");
+  assert.equal(state().money, 5, "a live phone is not stranded — the bottle economy stands");
+});
+
 test("the last night of the week is not free — the town doesn't check your flight date", () => {
   // stress-test playtest (2026-08-23): the vacation-end return sits ABOVE the
   // rough-wake block, so the debrief printed "not making it home costs you the

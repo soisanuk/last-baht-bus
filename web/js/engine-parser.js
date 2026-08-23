@@ -90,6 +90,15 @@ const _NO_EXIT = [
   "Nope. The night isn't laid out like that.",
   "Dead end. Pattaya keeps its exits where it keeps them.",
 ];
+// Indoors, every one of those is about a street you are not standing on. A blind
+// player lost in the Tree Town maze stepped into a bar and was told "the soi
+// doesn't run that way" — handed the wrong mental model at the exact moment they
+// were trying to build one (opening auditor 2026-08-23).
+const _NO_EXIT_IN = [
+  "You're indoors. The only way out of here is OUT.",
+  "That's a wall with a beer fridge against it. OUT is the way you came.",
+  "Not from in here — this room has one door, and you came through it. (OUT)",
+];
 // Soi 6 challenge mode: the rest of the city is off-limits this trip.
 const _SOI6_BOUND = [
   "Not this trip. You made yourself a rule — Soi 6, top to bottom, and nothing else — and the rest of Pattaya keeps for next time.",
@@ -225,7 +234,11 @@ function _doGo(dirWord) {
         Object.keys(r.exits).map(d => d.toUpperCase()).join(" · ")})`);
       return;
     }
-    _say(_NO_EXIT[_hh(G.room + ":" + dir, 17) % _NO_EXIT.length]); // the same wall answers the same way
+    // indoors gets its own set — see _NO_EXIT_IN
+    const _r = _room(), _inside = !!(_r.bar || _r.barType || _r.massage || _r.shop || _isHotelRoom(G.room)) &&
+      !(_r.exits && (_r.exits.n || _r.exits.s || _r.exits.e || _r.exits.w));
+    const _pool = _inside ? _NO_EXIT_IN : _NO_EXIT;
+    _say(_pool[_hh(G.room + ":" + dir, 17) % _pool.length]); // the same wall answers the same way
     return;
   }
   // OUT of a multi-door venue returns you to the road you entered by; any other
@@ -3116,6 +3129,27 @@ function _doSellBottles(arg) {
   if (G.money >= BUS_FARE && !_flag("gotBusFare")) {
     _setFlag("gotBusFare");
     _say("\"Enough for bus now! Go, go — town that way.\" She shoos you fondly.", "dim");
+  } else if (!_flag("act1Done") && G.money < BUS_FARE && G.battery <= 0 && !_flag("nokFare")) {
+    // Gated on a DEAD PHONE, which is the actual trap: with a live phone you
+    // still have CALL TAN and are not stranded, and firing on the first sale
+    // would undercut the bottle economy for everyone who isn't stuck.
+    // The ฿5 gap, closed by the one person in the game who would close it.
+    // Only TWO of the four bottles are in lit rooms (the third is in a dark one,
+    // and the light that reaches it is the same battery as the phone that calls
+    // Tan), so a player who spends the torch can bank ฿10 against a ฿15 fare and
+    // is stranded south of the bay with no way back and nothing telling him so
+    // — the opening's one genuine point of no return (opening auditor
+    // 2026-08-23). She already shoos you at the bus when you make it; a woman
+    // who calls you tilac and hands out mango does not watch you come up ฿5
+    // short. Once ever, and she does not make a thing of it.
+    const gap = BUS_FARE - G.money;
+    G.money += gap;
+    _setFlag("nokFare"); _setFlag("gotBusFare");
+    _say(`Auntie Nok looks at the coins in your hand, and at you, and does the ` +
+      `arithmetic faster than you did. Another ฿${gap} appears from the tin under ` +
+      `the cart without comment. "Bus fifteen. Now is fifteen. Go home, tilac — ` +
+      `you bring bottle again sometime." She is already turning back to the mangoes. ` +
+      `(฿${G.money}.)`, "win");
   }
 }
 
@@ -3646,8 +3680,13 @@ function _doRideBus(arg) {
     return;
   }
   if (!_busLinesFor(G.room).length) {
-    _say("No blue trucks come down here — they keep to the main roads. The seafront, " +
-      "Second Road, Thappraya, or one of the big junctions.");
+    // Naming "Second Road" while the player stands on JOMTIEN Second Road reads as
+    // a bug — the routes are Pattaya's, but the sign doesn't say so (opening
+    // auditor 2026-08-23, three turns and a walk lost to it).
+    _say("No blue trucks come down here — they keep to the main roads. " +
+      (/^(jomtien|dongtan)/.test(G.room)
+        ? "Down this end that means the seafront road or Thappraya, up on the hill."
+        : "The seafront, Pattaya's Second Road, Thappraya, or one of the big junctions."));
     return;
   }
   if (G.rain > 0) {
@@ -5860,6 +5899,8 @@ function _renderResume() {
   if (G.pendingChoice === "chamgift") { _chamGiftPrompt(); return; }
   // a partner's question still on the table: the cue, so a keyboard player knows "1" is an answer
   if (G.convoQ && typeof _convoActive === "function" && _convoActive() === G.convoQ.id) {
+    // re-ask it: the cue alone is useless if the question is up the scrollback
+    if (G.convoQ.q) _say(G.convoQ.q);
     G.convoQ.shown = false; _convoPrompt(G.convoQ.id);
   }
   if (G.pendingChoice === "synjob") { _synPrompt(); return; }
@@ -6268,8 +6309,12 @@ function doCommand(input) {
       // polite-phrase / conversation layers have it (Alan playtest 2026-08-17)
       if (_politePhrase(lower) || _convoResolve(lower)) break;
       _say(_pickVary(_HUH, "huh"), "dim"); return;
-    case "handover": case "baton": _doHandover(); break;
-    case "resume": _doResume(); break;
+    // Meta, not play: handing the character to the other game and taking one
+    // back are outside the fiction, and charging a turn of the night for them
+    // is charging the player for using the door between two games (persistence
+    // playtest 2026-08-23).
+    case "handover": case "baton": _doHandover(); return;
+    case "resume": _doResume(); return;
     case "wear": case "put on": _doWear(arg); break;
     case "read": _doRead(arg); break;
     case "talk": case "chat": {

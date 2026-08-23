@@ -117,6 +117,35 @@ test("it round-trips: hand it over, get it back, and the character is intact", (
   assert.ok(_flag("barOpen"), "and you still own a bar");
 });
 
+test("a resident comes back to his own room, not the Act One beach", () => {
+  // persistence playtest (2026-08-23): importBaton left newGame()'s default
+  // room standing, which is the rough-wake spot on the sand — so a character
+  // with a hotel, a bar and 33 names in his phone woke on Jomtien beach every
+  // time he was handed back. "A body arrives fresh" covers the meters, not the
+  // address.
+  newGame();
+  G.player = { origin: "monger", personality: "joker", orientation: "straight" };
+  _setFlag("act1Done"); _setFlag("hasWallet");
+  G.hotel = "sabai"; G.day = 4; G.nightTurn = 1;
+  const b = exportBaton();
+  assert.ok(b, "the baton exports at dawn");
+  newGame();
+  assert.ok(importBaton(b).ok);
+  assert.equal(G.room, _hotelRoomId(), "he wakes where he lives");
+  assert.ok(G.visited[G.room], "…and knows the way there");
+});
+
+test("a question survives the handoff of a page reload — the cue is useless without it", () => {
+  // persistence playtest: _renderResume redrew the answer cue but the question
+  // itself lived only in the scrollback, so a restored player was asked to
+  // answer something they could no longer read.
+  newGame();
+  G.convoQ = { id: "candy", key: "home", q: "So where are you from, then?" };
+  assert.ok(G.convoQ.q, "the question text is part of the state, not just the transcript");
+  const round = JSON.parse(serializeGame());
+  assert.equal(round.convoQ.q, "So where are you from, then?", "…and it serializes");
+});
+
 test("coming back, you arrive at dawn with a clean body", () => {
   livedIn();
   const b = exportBaton();

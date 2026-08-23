@@ -759,8 +759,8 @@ const _CATALOGS = {
       "Dein Handy. Akku-Angst, gegenständlich geworden. Die Taschenlampe funktioniert – vorerst.",
     "7-Eleven receipt":
       "7-Eleven-Kassenbon",
-    "A crumpled 7-Eleven receipt from your pocket. The print is in Thai.":
-      "Ein zerknüllter 7-Eleven-Kassenbon aus deiner Tasche. Der Aufdruck ist auf Thai.",
+    "A crumpled 7-Eleven receipt from your pocket. The print is in Thai, and small, and it is going to take a moment to work out. (READ RECEIPT.)":
+      "Ein zerknüllter 7-Eleven-Kassenbon aus deiner Tasche. Der Aufdruck ist auf Thai, und klein, und es wird einen Moment dauern, ihn zu entziffern. (READ RECEIPT.)",
     "packet of Mama noodles":
       "Packung Mama-Nudeln",
     "Half a packet of Mama noodles, chicken flavour. Dry. Technically food. A soi dog would commit crimes for this.":
