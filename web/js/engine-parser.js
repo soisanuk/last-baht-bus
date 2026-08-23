@@ -19,7 +19,7 @@ const _DIRS = {
 // catalog reorder them. EN output is byte-identical to the old strings.
 const _LADY_DRINK_LINES = [
   n => _fmt("One lady drink for {n} — ฿{p} on the tab that is your life.", { n, p: LADY_DRINK }),
-  n => _fmt("{n} gets her cola-with-benefits; the mamasan's biro logs ฿{p} without looking up.", { n, p: LADY_DRINK }),
+  n => _fmt("{n} gets her cola-with-benefits; {m}'s biro logs ฿{p} without looking up.", { n, p: LADY_DRINK, m: _mamaRef() }),
   n => _fmt("A thimble of something mostly ice lands in front of {n} — ฿{p}, gone in three sips.", { n, p: LADY_DRINK }),
   n => _fmt("“Chon kaew!” {n} toasts you with her ฿{p} lady drink and means it for exactly one sip.", { n, p: LADY_DRINK }),
   n => _fmt("You buy {n} a drink; she rewards it with a smile calibrated to the exact value of ฿{p}.", { n, p: LADY_DRINK }),
@@ -232,14 +232,20 @@ function _doGo(dirWord) {
     if (typeof _HOTELS !== "undefined" && Object.values(_HOTELS).some(h => h.room === G.room)) {
       _say(`No door that way — the only way out of the room is the stairs. (${
         Object.keys(r.exits).map(d => d.toUpperCase()).join(" · ")})`);
-      return;
+      return false;
     }
     // indoors gets its own set — see _NO_EXIT_IN
     const _r = _room(), _inside = !!(_r.bar || _r.barType || _r.massage || _r.shop || _isHotelRoom(G.room)) &&
       !(_r.exits && (_r.exits.n || _r.exits.s || _r.exits.e || _r.exits.w));
     const _pool = _inside ? _NO_EXIT_IN : _NO_EXIT;
     _say(_pool[_hh(G.room + ":" + dir, 17) % _pool.length]); // the same wall answers the same way
-    return;
+    // A wall is not an action. Returning false lets the caller skip the tick —
+    // the same contract _gameInput uses for "not a move". This mattered: walking
+    // into a refusal still advanced the clock AND rolled the dark-room soi dog,
+    // so a player probing for the exit out of an unlit soi was bitten for
+    // commands the parser had already rejected (thorough-player playtest
+    // 2026-08-23: two of three bites, and the night lost at nightTurn 2).
+    return false;
   }
   // OUT of a multi-door venue returns you to the road you entered by; any other
   // move invalidates that memory. (Single-door venues: enteredVia === exits.out.)
@@ -3794,7 +3800,8 @@ function _doMotosai(arg) {
       "money, boss. Not in this.");
     return;
   }
-  if (!r.motosai) { _say("No motosai stand here."); return; }
+  // likewise a stand that isn't there: nothing happened, so nothing is spent
+  if (!r.motosai) { _say("No motosai stand here."); return false; }
   let w = (arg || "").toLowerCase();
   // "hotel" / "home" / "my room" / your hotel's own name: the piwin knows where you
   // sleep — the nearest stand to your hotel's street (playtests 2026-08-22)
@@ -6230,7 +6237,8 @@ function doCommand(input) {
   if ((_DIRS[v] !== undefined || (_room().exits && _room().exits[v])) &&
       words.length === 1) {
     // bare direction — including this room's own exit keys (pub, hotel, …)
-    _doGo(v); _flushTrace(_room0); _tick(); _checkAct1(); return;
+    if (_doGo(v) === false) return;            // a refused direction costs no turn
+    _flushTrace(_room0); _tick(); _checkAct1(); return;
   }
 
   switch (v) {
@@ -6395,7 +6403,9 @@ function doCommand(input) {
       else _say("Ride what — the bus or a motosai?");
       break;
     case "bus": _doRideBus(arg); break;
-    case "motosai": case "moto": case "taxi": _doMotosai(arg); break;
+    case "motosai": case "moto": case "taxi":
+      if (_doMotosai(arg) === false) return;   // no stand here — nothing happened
+      break;
     case "light": case "flashlight": case "torch":
       if (/off/.test(arg)) _doLight(false);
       else if (/on/.test(arg)) _doLight(true);

@@ -2060,7 +2060,7 @@ function _doThrowCover(targetWord) {
     const onName = others.length ? NPCS[others[Math.floor(_rand() * others.length)]].name
       : "the next dancer along";
     _say(`…then drops on ${onName}, who shrieks, laughs, and rockets it straight ` +
-      "back at your head. Now it's a war, and the mamasan is pretending very hard " +
+      "back at your head. Now it's a war, and " + _mamaRef() + " is pretending very hard " +
       "not to enjoy it.");
     _addHappy(1);
   } else if (roll < 0.85) {

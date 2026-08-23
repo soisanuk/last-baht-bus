@@ -684,6 +684,41 @@ test("SAY <phrase> TO <person> aims the greeting at one target", () => {
   assert.match(lastOut(), /not here to hear it/i);
 });
 
+test("a refused move costs no turn — a wall is not an action", () => {
+  // thorough-player playtest (2026-08-23): "You can't go that way" and "No
+  // motosai stand here" are parser refusals, but they ticked the clock AND
+  // rolled the dark-room soi dog — so probing for the exit out of an unlit soi
+  // was punished for commands the game had already rejected. Two of that
+  // session's three bites came from refusals, and the night ended at nt 2.
+  state().room = "hotel_soi";
+  let t = state().nightTurn;
+  run("e");                                   // no such exit
+  assert.equal(state().nightTurn, t, "a refused direction is free");
+  t = state().nightTurn;
+  run("motosai to jomtien");                  // no stand in this room
+  assert.equal(state().nightTurn, t, "a stand that isn't there is free");
+  t = state().nightTurn;
+  run("s");                                   // a real move still costs
+  assert.equal(state().nightTurn, t + 1, "…but walking somewhere does cost a turn");
+});
+
+test("the bar prose doesn't invoke a mamasan who is working the other bar tonight", () => {
+  // Reported independently by two playtests on 2026-08-23, which is what makes
+  // it structural: a CHAIN shares one mamasan (Candy covers both Candy Bars), so
+  // on her nights at the other one this bar has none — while the prose went on
+  // logging drinks in her biro and refereeing the ceiling game.
+  state().room = "candy_bar";
+  state().day = 2;
+  assert.ok(_mamaHere(), "on her night she is here");
+  assert.match(_mamaRef(), /mamasan/);
+  state().day = 3;
+  assert.equal(_mamaHere(), null, "…and on the other night she is not");
+  assert.match(_mamaRef(), /cashier/, "the till keeps the book instead");
+  // a go-go always has one
+  state().room = "rainbow_girls";
+  assert.ok(_mamaHere());
+});
+
 test("a short noun inside an item's name doesn't hijack it — EXAMINE WALL is not the wallet", () => {
   // thorough-player playtest (2026-08-23): _findItem matched on raw substring, so
   // "wall" resolved to "your wallet" ANYWHERE in the game — worst in Act One,

@@ -486,8 +486,10 @@ const _CATALOGS = {
     // suffix is appended by the caller and handled as its own fragment below.
     "One lady drink for {n} — ฿{p} on the tab that is your life.":
       "Ein Lady Drink für {n} — ฿{p} auf der Rechnung, die dein Leben ist.",
-    "{n} gets her cola-with-benefits; the mamasan's biro logs ฿{p} without looking up.":
-      "{n} bekommt ihre Cola-mit-Vorteilen; der Kuli der Mamasan verbucht ฿{p}, ohne aufzublicken.",
+    "the mamasan": "die Mamasan",
+    "the cashier": "die Kassiererin",
+    "{n} gets her cola-with-benefits; {m}'s biro logs ฿{p} without looking up.":
+      "{n} bekommt ihre Cola-mit-Vorteilen; der Kuli von {m} verbucht ฿{p}, ohne aufzublicken.",
     "A thimble of something mostly ice lands in front of {n} — ฿{p}, gone in three sips.":
       "Ein Fingerhut von irgendwas, überwiegend Eis, landet vor {n} — ฿{p}, in drei Schlucken weg.",
     "“Chon kaew!” {n} toasts you with her ฿{p} lady drink and means it for exactly one sip.":

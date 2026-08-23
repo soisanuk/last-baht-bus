@@ -501,6 +501,25 @@ function _npcActive(id) {
   return !(n && n.origin && G.player && n.origin === G.player.origin);
 }
 
+// "the mamasan" is asserted all over the bar prose, but she is not always in the
+// room: a CHAIN shares one mamasan (Candy covers both Candy Bars), so on the
+// nights she works the other one her first bar has none at all — and the prose
+// went on logging drinks in her biro and refereeing the ceiling game regardless.
+// Reported independently by two playtests on the same day (2026-08-23), which is
+// what makes it structural. Every bar has a cashier, so the till is the fallback:
+// somebody is always keeping the book, it just isn't always her.
+// NB callable only at RUNTIME — it reads G, so it must not be used in a
+// top-level const initializer (the drizzle pool learned this the hard way).
+function _mamaHere() {
+  return _npcsHere().find(x => NPC_ROLES[x] === "mamasan") || null;
+}
+function _mamaRef(cap) {
+  // through _L: this is interpolated INTO an already-translated sentence, so an
+  // untranslated word here would leave "der Kuli von the mamasan" in a de run.
+  const s = _L(_mamaHere() ? "the mamasan" : "the cashier");
+  return cap ? s[0].toUpperCase() + s.slice(1) : s;
+}
+
 function _npcsHere() {
   return Object.keys(NPCS).filter(id => _npcActive(id) && _npcRoom(id) === G.room);
 }
