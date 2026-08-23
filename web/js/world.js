@@ -23,6 +23,7 @@ const BAND_ROUND = 400;  // buying the band a round (≈ bell to the mama; girls
 const WINGMAN_TURNS = 15;// how long a friendly wing-woman's good word lasts
 const CHARGER_PRICE = 59;
 const SAFE_CASH = 3000;  // the emergency stash in the hotel room safe
+const ROUGH_WAKE_CAP = 20000; // most a rough wake can take off you — a pocket, not an estate
 const CHAM_GIFT = 3000;  // the "gift" a man gives a girl who never does this (the chameleon economy)
 const WALLET_CASH = 500; // what's left in the recovered wallet — TWO recovery paths
                          // (Oy hands it back in _deliver; you crack the safe in _doSafe),
@@ -9863,11 +9864,11 @@ const ENCOUNTERS = {
   britles: {
     rooms: ["ws_gate", "ws_north", "ws_south", "beach_rd_c"],
     interactive: true, nightly: true,
-    intro: "At the go-go rail, pint in hand and entirely at home, a British woman is " +
-      "watching the dancers with more expertise than you will ever have. One of the " +
-      "girls blows her a kiss; she winks back like she owns the place. She catches " +
-      "your eye and grins. “Alright? Best seat in the house, this — and I don't even " +
-      "have to pretend, do I.”",
+    intro: "Outside a go-go, pint in hand and entirely at home, a British woman is " +
+      "leaning on the rail by the open door, watching the stage through it with more " +
+      "expertise than you will ever have. One of the girls spots her and blows a kiss; " +
+      "she winks back like she owns the place. She catches your eye and grins. " +
+      "“Alright? Best seat on the street, this — and I don't even have to pretend, do I.”",
     hint: "(Not on the menu — for you. Play it decent and she might be the best wingman you get all night.)",
   },
   punterwife: {

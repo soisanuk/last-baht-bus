@@ -4533,7 +4533,19 @@ function _doTip(arg) {
     return;
   }
   if (!_inBar()) {
-    if (_room().motosai) {
+    // a named person on the street answered in the piwins' voice — the doorman,
+    // the security man, and Tan himself (millionaire playtest 2026-08-22)
+    const who = nameW && (_findNpc(nameW) || _findPatron(nameW));
+    if (who === "tan") {
+      _say("Tan looks at the money the way another man would look at a wasp. \"No.\" Then, " +
+        "gentler, because he likes you: \"When I want something from you I will ask for it, " +
+        "and it will not be this.\" The hand stays down until you put it away.");
+    } else if (who) {
+      const n = (NPCS[who] || PATRONS[who]).name;
+      _say(`${n} looks at the note, then at you, and doesn't take it. Out here a tip is for a ` +
+        "service already done — hand it to a man who's done nothing and you've said something " +
+        "about him you didn't mean to.");
+    } else if (_room().motosai) {
       _say("The piwins wave it away, grinning — you haven't ridden anywhere. Tips " +
         "settle debts here; they don't open accounts.");
     } else {
@@ -4549,14 +4561,38 @@ function _doTip(arg) {
   (G.soc.given = G.soc.given || {})[id] = (G.soc.given[id] || 0) + amount; // toward a sponsor flip
   const name = NPCS[id].name;
   if (amount >= 100) {
-    const bump = amount >= 300 ? 2 : 1;
-    _addBond(id, bump);
+    // Money buys attention, not intimacy: ฿20,000 of tips used to buy her-farang
+    // tier in ten turns with no conversation at all (millionaire playtest
+    // 2026-08-22). A night's tipping can lift her a couple of notches; the rest
+    // of the ladder is drinks, talk and turning up.
+    const paid = (G.soc.tipBond = (G.soc.tipBond || 0));
+    const bump = paid >= 3 ? 0 : (amount >= 300 ? 2 : 1);
+    if (bump) G.soc.tipBond = paid + bump;
+    if (bump) _addBond(id, bump);
     _say(_pickVary([
       `฿${amount}, folded small and passed with a wai. ${name} makes it vanish with a conjurer's economy, and the news crosses the bar by whole-room telepathy before your hand is back in your pocket.`,
       `฿${amount}, and ${name} doesn't look at it — she looks at you, which is the receipt. Somewhere behind the bar a biro makes a note that isn't about money.`,
       `You press ฿${amount} into ${name}'s hand under the rail. It's gone before it arrived; what stays is the half-second her face forgets to work.`,
-      `฿${amount} — ${name} takes it with both hands and the small bow, and the mamasan, who sees everything, decides you exist.`,
+      NPC_ROLES[id] === "mamasan"
+        ? `฿${amount} — ${name} takes it with both hands and the small bow, and files you, permanently, under the short list of farang who understand how a bar works.`
+        : `฿${amount} — ${name} takes it with both hands and the small bow, and the mamasan, who sees everything, decides you exist.`,
     ], "bigtip") + ` (฿${G.money} left.)`);
+    if (!bump) _say("(She takes it, and thanks you, and it changes nothing between you — " +
+      "the ledger she keeps isn't the one in the till.)", "dim");
+    // A number past absurd stops reading as generosity and starts reading as a problem.
+    if (amount >= 20000) {
+      _say(_pickVary([
+        `${name} counts it once, and the smile goes somewhere else — not offended, ` +
+          "calculating. Money like that in a bar this size is not a tip, it's a story, " +
+          "and by tomorrow it will be somebody's.",
+        `The mamasan is across the room before the notes are folded. She doesn't take ` +
+          `them off ${name}; she just stands there, pleasantly, until you understand ` +
+          "that a sum like that is now the house's business too.",
+        `${name} looks at the money, then at you, and asks the only sensible question: ` +
+          "\"What you want?\" Not coy. The kind of asking a woman does when a number " +
+          "has stopped making sense.",
+      ], "hugetip"), "alert");
+    }
     _boughtHappy(1); _repGain();
   } else {
     _say(`฿${amount} into ${name}'s tip jar. A warm smile, a small wai — noted, ` +
@@ -6248,6 +6284,24 @@ function doCommand(input) {
       _say("  (DIAGNOSE) the body · (SCORE) สนุก · (MAP) the lay of the land · (INVENTORY) your pockets" +
         (G.stage === "expat" ? " · (BOOKS) the bar's night" : "") +
         (G.mode === "soi6" ? " · (SHARE) your week card" : ""), "dim");
+      break;
+    }
+    case "money": case "cash": case "wallet": case "pocket":
+      _say(_fmt("฿{m} in your pocket" + (_flag("act1Done") ? ", ฿{b} in the account" : "") + ".",
+        { m: G.money.toLocaleString("en-US"), b: (G.bank || 0).toLocaleString("en-US") }), "dim");
+      if (_flag("act1Done")) _say("(WITHDRAW at any ATM · CHECK BALANCE · the daily cap is real.)", "dim");
+      break;
+    case "bribe": case "backhander": case "grease": {
+      // the one verb a rich man certainly types, and it didn't parse
+      const t = arg ? (_findNpc(arg) || _findPatron(arg)) : null;
+      _say(t
+        ? `You start to make the offer, and ${(NPCS[t] || PATRONS[t]).name} lets you get about half of it out. ` +
+          "Money moves in this town constantly and never like that — it goes through a mamasan, a fine, a " +
+          "round for the house, a favour returned later. Handed over naked as a bribe, it insults everyone " +
+          "in earshot, including you."
+        : "Not like that. Money does move things here — through a fine, a round, a mamasan, a favour owed " +
+          "later — but a farang holding out cash and saying the quiet part is a farang with a story about " +
+          "him already circulating. (TIP · BUY DRINK · RING BELL are how it's actually done.)", "alert");
       break;
     }
     case "beg": case "panhandle": case "cadge": {

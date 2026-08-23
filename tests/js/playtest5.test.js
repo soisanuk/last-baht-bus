@@ -1035,3 +1035,68 @@ test("Auntie Nok's bottles promise what the beach actually holds", () => {
   const src = readFileSync(fileURLToPath(new URL("../../web/js/world.js", import.meta.url)), "utf8");
   assert.doesNotMatch(src, /Beach full of bottle/);
 });
+
+// ── round eleven: the two-week millionaire (Bernard) ──
+test("the bell goes through the spend-brake like every other bought สนุก", () => {
+  G.room = "candy_bar"; G.money = 99999; G.soc.bought = 0;
+  const h0 = G.happy;
+  for (let i = 0; i < 20; i++) doCommand("ring bell");
+  const gained = G.happy - h0;
+  assert.ok(gained < 30, "20 rings do not pay 40 สนุก (" + gained + ")");
+  assert.ok(gained >= 12, "…and the first few still pay in full (" + gained + ")");
+});
+
+test("a rough wake takes a pocket, not an estate", () => {
+  newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight" };
+  _setFlag("act1Done"); _setFlag("hasWallet"); G.stage = "vacation";
+  G.money = 1400000; G.room = "beach_rd_c"; G.dog = null; out = [];
+  _endNight("dawn");
+  assert.ok(G.money >= 1400000 - ROUGH_WAKE_CAP - 2000, "the pocket, plus the folio — not the estate");
+  assert.equal(G.roughLost, ROUGH_WAKE_CAP);
+  assert.match(text(), /still in the room/);
+  assert.match(text(), /20,000 gone/);
+});
+
+test("money buys attention, not intimacy: a night's tips lift her a couple of notches and stop", () => {
+  G.room = "candy_bar"; G.money = 999999; G.soc.tipBond = 0;
+  const girl = _npcsHere().find(id => NPC_ROLES[id] === "hostess");
+  const n = NPCS[girl].name.toLowerCase();
+  const b0 = G.soc.drinks[girl] || 0;
+  for (let i = 0; i < 6; i++) doCommand(`tip ${n} 5000`);
+  const gained = (G.soc.drinks[girl] || 0) - b0;
+  assert.ok(gained <= 4, "the chequebook can't reach her-farang tier (" + gained + ")");
+  out = []; doCommand(`tip ${n} 500`);
+  assert.match(text(), /changes nothing between you/);
+  // and an absurd number reads as a problem, not as generosity
+  out = []; doCommand(`tip ${n} 50000`);
+  assert.match(text(), /not a tip, it's a story|the house's business too|What you want/);
+});
+
+test("TIP and BRIBE answer in the right voice; MONEY is a verb", () => {
+  G.room = "beach_rd_c"; G.money = 99999;
+  out = []; doCommand("tip tan 50000");
+  assert.doesNotMatch(text(), /piwins wave it away/);
+  out = []; doCommand("bribe doorman");
+  assert.doesNotMatch(text(), /didn't parse|didn't understand/);
+  assert.match(text(), /Not like that|insults everyone/);
+  out = []; doCommand("money");
+  assert.match(text(), /in your pocket/);
+});
+
+test("Connect 4 says why the big money won't ride; charity and credit read the wallet", () => {
+  G.room = "candy_bar"; G.money = 999999; out = [];
+  doCommand("play connect 4 1000000");
+  assert.match(text(), /My table is ฿/);
+  assert.ok(G.game.stake <= 500);
+  doCommand("quit");
+  // the drunk bargirl doesn't press ฿20 on a rich man
+  G.room = "buakhao_n"; G.money = 99999; out = [];
+  const m = G.money; _ENC.bargirl();
+  assert.equal(G.money, m, "she keeps her twenty");
+  assert.match(text(), /YOU okay, na/);
+  // Nira doesn't lend to him either
+  G.room = _npcRoom("nira"); G.money = 200000; out = [];
+  doCommand("borrow 20000");
+  assert.match(text(), /I only do money/);
+  assert.ok(!G.loan);
+});

@@ -140,6 +140,14 @@ function _parseBaht(arg) {
 }
 
 function _doBorrow(arg) {
+  if (G.money > 100000 && G.room === _npcRoom("nira")) {
+    // she counts money for a living (millionaire playtest 2026-08-22)
+    _say("Nira's eyes go to your pocket before they go to your face, and the calculator " +
+      "stops. \"You want to borrow.\" A pause exactly long enough to be rude. \"From me. " +
+      "Tonight.\" She goes back to counting. \"No. Whatever this is, it is not money, and " +
+      "I only do money.\"");
+    return;
+  }
   if (G.loanSkipped && G.room === _npcRoom("nira")) {
     _say("Nira doesn't look up from the calculator. “You.” One word, and the whole last trip is in it. " +
       "“You fly home with my money. Now you want more?” She laughs, once, not warmly. “No. Not you. Not ever.”", "alert");

@@ -110,7 +110,7 @@ function _doPlay(arg) {
   if (w.includes("killer") || w.includes("league")) return _startKiller();
   if (w.includes("dart")) return _startDarts();
   if (w.includes("connect") || w.includes("four") || /\b4\b/.test(w)) {
-    const m = w.match(/\b(\d{2,5})\b/); // a trailing stake: PLAY CONNECT 4 100
+    const m = w.match(/\b(\d{2,9})\b/); // a trailing stake: PLAY CONNECT 4 100 (7 figures fell through the old 2–5)
     const vs = (w.match(/\b(?:with|vs|against)\s+([a-z]+)/) || [])[1];
     return _startC4(m ? +m[1] : undefined, vs);
   }
@@ -127,7 +127,15 @@ function _startC4(want, vs) {
   if (!_barGamesHere()) { _say("No Connect 4 board here — every beer bar keeps one within arm's reach."); return; }
   const { id, name } = _gameHostess(vs);
   const depth = _c4Depth(id);
-  const stake = _takeStake(want || C4_STAKE);
+  // her table, her limit — the ladder that makes the weak opponent unfarmable
+  // (min-maxer playtest 2026-08-22 called it the best-designed number in the
+  // build). It just never said so out loud (millionaire playtest, same day).
+  const cap = depth >= 8 ? 500 : depth >= 6 ? 200 : 20;
+  if (want && want > cap) {
+    _say(`${_ucfirst(name)} looks at the money and laughs, not unkindly. "Too much, tilac. ` +
+      `My table is ฿${cap}." She is not negotiating; a bigger board is a bigger opponent.`, "dim");
+  }
+  const stake = _takeStake(Math.min(want || C4_STAKE, cap));
   G.game = { type: "c4", board: c4New(), opp: name, oppId: id, depth, stake };
   // the intro telegraphs the tier — read your opponent before you bet
   if (depth >= 8) {
@@ -2084,7 +2092,7 @@ function _doBell() {
   }
   _engineSfx("bell");
   _engineSpeak("ชนแก้ว");
-  _addHappy(2);
+  _boughtHappy(2);
 }
 
 // RING BELL means different things by venue. A go-go bell is a round for the
@@ -3279,7 +3287,14 @@ function _endNight(reason) {
   const crash = rough ? _crashSpotFor(G.room) : null;
   if (crash) {
     G.battery = _CRASH_BATTERY;
-    if (!G.dog) G.money = 0;         // the town turns out the sleeping farang's pockets…
+    // The town turns out the sleeping farang's pockets — but a man doesn't carry
+    // his whole life in a shirt pocket, and ฿1.4M vanishing to one line read as
+    // broken rather than cruel (millionaire playtest 2026-08-22). What's lost is
+    // what a pocket holds; the rest was never on you.
+    if (!G.dog) {
+      G.roughLost = Math.min(G.money, ROUGH_WAKE_CAP);
+      G.money -= G.roughLost;
+    }
     // …unless a soi dog is sitting on them. Nobody negotiates with Sai Krok.
   } else if (_flag("act1Done")) {
     G.room = _hotelRoomId(); G.battery = 100;
@@ -3295,7 +3310,10 @@ function _endNight(reason) {
         "night sitting on your chest like a paperweight with teeth, and the town let " +
         "you both be. Nobody works a farang whose dog is watching.)")
       : `(Phone on ${_CRASH_BATTERY}%. ${_flag("hasWallet") ? "Wallet" : "Pockets"} ` +
-        "turned out, empty — the town works the farang who don't make it home.)", "dim");
+        `turned out — ฿${(G.roughLost || 0).toLocaleString("en-US")} gone; the town works the farang who ` +
+        "don't make it home." + (G.money > 0
+          ? ` What you'd had the sense to leave in the room is still in the room: ฿${G.money.toLocaleString("en-US")}.)`
+          : ")"), "dim");
   }
   _chargeRent();                     // the folio bills you even if you slept rough…
   if (crash) G.room = crash.room;    // …but you wake where the night left you, not at the desk
@@ -3572,8 +3590,14 @@ function _goExpat() {
   _say("You don't board. It's remarkably little paperwork, in the end: a visa " +
     "run, a long-stay rate on room 412 negotiated over exactly one bottle of " +
     "Sang Som with the night clerk, and your savings wired over — " +
-    `฿${EXPAT_SAVINGS}, in your pocket by the time the clerk finishes his cigarette. The soi absorbs ` +
-    "the news without comment. Candy just sets out your glass.", "win");
+    `฿${EXPAT_SAVINGS.toLocaleString("en-US")}, in your pocket by the time the clerk finishes his ` +
+    "cigarette. The soi absorbs the news without comment. Candy just sets out your glass.", "win");
+  if (G.money > EXPAT_SAVINGS * 4) {
+    // a man who arrives carrying a fortune shouldn't be told he has ฿20,000
+    // (millionaire playtest 2026-08-22)
+    _say(`(On top of what you were already carrying — ฿${G.money.toLocaleString("en-US")} — which nobody ` +
+      "here asks about and everybody here notices.)", "dim");
+  }
   _say("★ EXPAT MODE — no flights, no clock on the week. The city is yours to " +
     "figure out. (They say the smart ones end up owning a bar…) ★", "win");
   _say(`── DAY ${G.day} · PATTAYA, HOME ──`, "win");

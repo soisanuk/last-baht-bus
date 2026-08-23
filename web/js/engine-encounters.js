@@ -556,6 +556,18 @@ const _ENC = {
   },
 
   bargirl() {
+    // she is giving a skint-looking farang her own money; a man in a good shirt
+    // with a fat wallet gets the other version (millionaire playtest 2026-08-22)
+    if (G.money > 50000) {
+      _say("Before you can say a word she has your hand in both of hers, patting it, " +
+        "telling you that you look EXACTLY like her mom's ex-boyfriend, who was a good " +
+        "man, jing jing. Then she takes in the shirt, and the watch, and the way you're " +
+        "standing, and the sympathy turns into a grin she doesn't bother hiding: " +
+        "\"Ohhh. YOU okay, na.\" She kisses your cheek and lets her friends drag her " +
+        "back inside, delighted with herself.");
+      _addHappy(2);
+      return;
+    }
     G.money += 20;
     if (G.itemLoc.moo_ping === null) G.itemLoc.moo_ping = "inventory";
     _say("Before you can say a word she presses a ฿20 note and a moo ping skewer " +
