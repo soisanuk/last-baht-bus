@@ -2414,6 +2414,12 @@ function _doTalkBody(arg, topic) {
 // chosen from the topics that actually recur across the roster. Ordered: first
 // regex to match wins, so specific sits above general.
 const _CONVO_TOPIC_RULES = [
+  // A quest tells you to let Glam "tell you about the tour" and the hint beside
+  // it says ASK GLAM ABOUT MUSIC — both honest, but "tour" is the word in the
+  // sentence and therefore the word a player types (persona report 2026-08-23,
+  // now caught by tools/asktopic-audit.mjs). One alias row serves typed ASK, the
+  // wheel and the conversation layer alike, which is what this table is for.
+  [/\btours?\b|\bon the road\b|\bgigs?\b|\btouring\b/,                        "music"],
   [/where.*(from|grew up|born)|whereabout|your country|back home|where.*\blive/, "home"],
   [/smartphone|\bphones\b|the phones|\bline app\b|social media/,                   "1998"],
   [/for a living|line of work|what.*you do\b|what.*you did/,                     "job"],
