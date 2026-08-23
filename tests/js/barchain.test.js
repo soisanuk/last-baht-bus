@@ -209,6 +209,26 @@ function ownsBarWith(partner) {
   return out.join("\n");
 }
 
+test("the owner who opens up early and stays put still gets his partner's visit", () => {
+  // actuary playtest 2026-08-23: _tanFavourDue/_synDue were checked ONLY from
+  // _arriveAt and both need nightTurn >= 30 — so an owner who walked in before
+  // the beat and never left (which is exactly what WORK encourages) never met
+  // his own partner. 65 nights of ownership, zero visits. Same bug class as the
+  // quiz's arrival-only capture, and the same fix: the tick finds you in situ.
+  for (const f of ["barPremises", "barLicence", "barPartner", "barPaid", "partnerTan", "barOpen"]) _setFlag(f);
+  G.stage = "expat";
+  G.room = "stinky_bar";
+  G.nightTurn = 26;                 // in the bar BEFORE the beat is due
+  out = []; _arriveAt("stinky_bar");
+  assert.notEqual(G.pendingChoice, "tanfavour", "too early — nothing yet");
+  // A bar vendor (the watch peddler) can arm pendingEnc from _tick on any turn,
+  // independent of the ENCOUNTERS table — and the beat correctly defers while
+  // any modal is live, so clear it: we're testing Tan's arrival, not the peddler.
+  for (let i = 0; i < 8 && G.pendingChoice !== "tanfavour"; i++) { G.pendingEnc = null; _tick(); }
+  assert.ok(G.nightTurn >= 30, "the hour came round while standing still");
+  assert.equal(G.pendingChoice, "tanfavour", "and it found him at his own bar");
+});
+
 test("Tan comes to the bar and asks — but only if he's the one who signed", () => {
   const tan = ownsBarWith("partnerTan");
   assert.match(tan, /Tan comes into your bar/, "the partnerTan route comes due");
@@ -367,6 +387,23 @@ function readyToBuy() {
   G.room = "stinky_bar";
 }
 
+test("the deposit prose doesn't claim it's your last baht when it plainly isn't", () => {
+  // actuary playtest 2026-08-23: "It is every baht you have" was unconditional,
+  // and printed verbatim to a player holding ฿2m. True for the intended player,
+  // who scrapes it together over several ATM days; a plain falsehood otherwise.
+  readyToBuy();
+  G.money = BAR_DEPOSIT;              // the intended case: it really is everything
+  out = []; _barDeposit();
+  assert.match(out.join("\n"), /every baht you have/);
+
+  readyToBuy();
+  G.money = BAR_DEPOSIT + 500000;     // a rich buyer
+  out = []; _barDeposit();
+  const rich = out.join("\n");
+  assert.doesNotMatch(rich, /every baht you have/, "…and it doesn't lie to a rich one");
+  assert.match(rich, /bar towel/, "same beat, honest wording");
+});
+
 test("you cannot buy a bar with what you have — the deposit is your ceiling", () => {
   readyToBuy();
   assert.ok(G.money < BAR_DEPOSIT, "expat savings alone must not cover it");
@@ -427,6 +464,25 @@ test("refusing procurement is what makes the month hard — it's on the supply l
   assert.ok(inside > 0, "a bar run inside the arrangement clears its monthly");
   assert.ok(outside < inside,
     "and every job you turned down is on the supply bill, every night, forever");
+});
+
+test("BOOKS reads as a state, never as two numbers that contradict each other", () => {
+  // actuary playtest 2026-08-23: an underwater bar printed "Till: ฿-12822",
+  // which reads as an accounting error rather than a bar in trouble; and a
+  // month that rolled into arrears left `owed` untouched while the same screen
+  // called it "Months paid", so the two lines disagreed by ฿50,000.
+  running();
+  G.bar.cash = -12822; G.bar.owed = 1680000; G.bar.months = 2;
+  G.bar.nights = 65; G.bar.arrears = 33611;
+  out = []; _doBooks();
+  const books = out.join("\n");
+  assert.doesNotMatch(books, /฿-/, "no raw negative in the drawer");
+  assert.match(books, /empty, and ฿12822 behind it/, "underwater is stated as a state");
+  assert.match(books, /Months elapsed/, "an unpaid month is elapsed, not paid");
+  assert.doesNotMatch(books, /Months paid/, "…and doesn't claim otherwise");
+  // …and a bar that IS square still says "paid"
+  G.bar.arrears = 0; out = []; _doBooks();
+  assert.match(out.join("\n"), /Months paid/, "a settled month reads as paid");
 });
 
 test("BOOKS is honest about all of it", () => {
@@ -494,12 +550,51 @@ test("working roughly doubles the night — that's what makes going out a decisi
   assert.ok(worked > away * 1.5, `and by enough to matter (${worked} vs ${away})`);
 });
 
+test("the shift survives the night ending — the presence dilemma runs through the REAL path", () => {
+  // The regression that matters. Every other test here calls _doWork() then
+  // _barSettle() directly, same day — but the real game settles from _endNight,
+  // AFTER G.day++, and the old `workedDay === G.day` test was therefore always
+  // false at settle. The dilemma was inert for the entire expat stage and no
+  // test could see it, because no test crossed the day boundary the bug lived on
+  // (actuary playtest 2026-08-23: 65 owned nights, all settled as "Bert ran it").
+  running();
+  G.stage = "expat";
+  G.room = "stinky_bar";
+  G.rng = 4242;
+  _doWork();
+  assert.ok(G.bar.workedLast, "the shift is flagged when it's declared");
+  const cash0 = G.bar.cash, day0 = G.day;
+  _endNight("dawn");
+  assert.equal(G.day, day0 + 1, "the night really did end");
+  assert.equal(G.bar.away, 0, "a worked night doesn't count as an absence");
+  assert.ok(G.bar.streak >= 1, "and it builds the grind streak");
+  assert.ok(!G.bar.workedLast, "the flag is consumed, so tomorrow starts unworked");
+  const workedTake = G.bar.cash - cash0;
+
+  // the same night, not worked, on the same seed
+  running();
+  G.stage = "expat";
+  G.room = "hotel_room";
+  G.rng = 4242;
+  const cash1 = G.bar.cash;
+  _endNight("dawn");
+  assert.equal(G.bar.away, 1, "an absent owner is counted absent");
+  assert.ok(workedTake > G.bar.cash - cash1,
+    `working the rail beats Bert on an identical seed (${workedTake} vs ${G.bar.cash - cash1})`);
+});
+
 test("a year of unbroken shifts is rich and joyless — the grind is the cost", () => {
   running();
   let grind = 0;
   for (let i = 0; i < 40; i++) {
+    // settle EVERY night — the real game always does (_endNight → _barSettle),
+    // and a loop that works forty nights without one of them ever ending let
+    // the presence-dilemma bug hide for as long as it did (actuary playtest
+    // 2026-08-23): the shift flag is set on WORK and consumed at settle, so a
+    // night that never settles leaves it standing.
     G.day++; G.room = "stinky_bar"; out = []; _doWork();
     if (/ten of them in a row|ten nights|look tired|forty seconds from this door/.test(out.join("\n"))) grind++;
+    _barSettle();
   }
   assert.ok(G.bar.streak >= 10, "consecutive shifts accumulate");
   assert.ok(grind > 0, "a man who works every night has stopped living here, and the game says so");

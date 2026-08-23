@@ -4165,6 +4165,15 @@ function _doWork() {
     return;
   }
   G.bar.workedDay = G.day;
+  // Set the settle-time flag HERE, when the shift is actually declared, rather
+  // than deriving it at settle from `workedDay === G.day`: _barSettle runs from
+  // _endNight AFTER G.day++, so that comparison was always false and the entire
+  // presence dilemma was silently inert — takings never used WORK_TAKINGS,
+  // BAR_PRESENT never landed, `away` never reset and the grind streak could
+  // never build (actuary playtest 2026-08-23: 65 nights of ownership, every one
+  // settled as "Bert ran it", including nights spent wholly behind the bar).
+  // _barNight consumes and clears it, so it cannot leak into a later night.
+  G.bar.workedLast = true;
   G.bar.worked = (G.bar.worked || 0) + 1;
   G.bar.away = 0;
   _say(_pickVary(_WORK_SHIFT, "workshift"), "win");
@@ -4184,7 +4193,9 @@ function _doWork() {
   }
 }
 
-// did you work tonight? read at settle
+// Are you working the rail TONIGHT? True only during the night itself — by the
+// time the books settle the day has already rolled, so settle reads the
+// `workedLast` snapshot instead (see _endNight and _barNight).
 function _workedTonight() { return _barOwned() && G.bar.workedDay === G.day; }
 
 // ── The bar's books ──────────────────────────────────────────────────────────
@@ -4232,8 +4243,14 @@ function _barDeposit() {
   G.bar.owed = BAR_PRICE - BAR_DEPOSIT;
   G.bar.lastMonthDay = G.day;
   _say("");
-  _say(_fmt("You count out ฿{dep}. It is every baht you have, and it does not " +
-    "look like very much on a bar towel.", { dep: BAR_DEPOSIT }), "alert");
+  // "every baht you have" was unconditional — true for the intended player, who
+  // scrapes the deposit together over several ATM days, and a plain falsehood for
+  // a rich one (actuary playtest 2026-08-23: printed while holding ฿2m).
+  _say(_fmt(G.money > 0
+    ? "You count out ฿{dep}. It does not look like very much on a bar towel, " +
+      "and it does not leave much behind it either."
+    : "You count out ฿{dep}. It is every baht you have, and it does not " +
+      "look like very much on a bar towel.", { dep: BAR_DEPOSIT }), "alert");
   _say(_fmt("\"Right.\" Bert doesn't make a thing of it. \"Rest is ฿{monthly} " +
     "a month for six years, direct to him, and he'll not chase you for it " +
     "because he's not the sort and he's not well enough — which if you've any " +
@@ -4253,7 +4270,11 @@ function _barNight() {
   // the presence dilemma, in one line. Working your own rail is worth roughly
   // double an evening spent elsewhere — which is exactly what makes going out
   // a decision instead of a default.
-  const worked = _workedTonight();
+  // The shift flag set by _doWork, consumed below — see the note there. The day
+  // guard is belt-and-braces: settle runs either on the same day (a direct call)
+  // or the morning after (via _endNight, which has already done G.day++), so a
+  // flag older than that is stale and must not count.
+  const worked = !!b.workedLast && (b.workedDay === G.day || b.workedDay === G.day - 1);
   take = Math.round(take * (worked ? WORK_TAKINGS : AWAY_TAKINGS));
   if (worked) take += BAR_PRESENT;
   if (low) take = Math.round(take * LOW_SEASON);
@@ -4277,6 +4298,7 @@ function _barNight() {
     b.cash += fromPocket;
   }
   const underwater = b.cash < 0;
+  b.workedLast = false;   // consumed: tomorrow starts unworked
   return { take, costs, net, low, friction, fromPocket, underwater, worked, away: b.away };
 }
 
@@ -4311,8 +4333,18 @@ function _doBooks() {
   }
   const b = G.bar;
   _say("── THE STINKY PINKY ──", "win");
-  _say(_fmt("Till: ฿{cash}   ·   Owed to the old man: ฿{owed}", { cash: b.cash, owed: b.owed }));
-  _say(_fmt("Months paid: {m} of {term}   ·   Nights open: {n}",
+  // The till reads as a state, not a raw negative: a bar whose drawer shows
+  // "฿-12822" looks like an accounting error rather than a bar in trouble.
+  _say(_fmt(b.cash < 0
+    ? "Till: empty, and ฿{short} behind it   ·   Owed to the old man: ฿{owed}"
+    : "Till: ฿{cash}   ·   Owed to the old man: ฿{owed}",
+    { cash: b.cash, short: -b.cash, owed: b.owed }));
+  // `months` counts months ELAPSED, not months settled — a month you couldn't
+  // cover rolls into arrears and leaves `owed` untouched, so labelling it "paid"
+  // put two contradictory numbers on one screen (actuary playtest 2026-08-23).
+  _say(_fmt(b.arrears > 0
+    ? "Months elapsed: {m} of {term}   ·   Nights open: {n}"
+    : "Months paid: {m} of {term}   ·   Nights open: {n}",
     { m: b.months, term: BAR_TERM, n: b.nights }));
   if (b.arrears > 0) _say(_fmt("In arrears: ฿{a}. He hasn't asked.", { a: b.arrears }), "alert");
   const friction = (G.syn && G.syn.friction) || 0;

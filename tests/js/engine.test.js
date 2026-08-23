@@ -207,6 +207,28 @@ test("fast travel: ENTER and GO route through it; rain blocks; bare TRAVEL lists
   assert.match(lastOut(), /Candy Bar — \d+ turns/);
 });
 
+test("an interrupted TRAVEL leaves you where you got to, not where you set off from", () => {
+  // actuary playtest 2026-08-23: a 6-hop walk stopped by an encounter charged
+  // all six turns, narrated the journey, and left the player in the room they
+  // started in — the walk had both happened and not happened. At the end of a
+  // night that's the difference between your own bed and a rough wake.
+  state().flags.act1Done = true;
+  state().flags.hasWallet = true;
+  state().room = "stinky_bar";
+  state().nightTurn = 40;
+  state().visited.hotel_room = true;
+  const route = _path("stinky_bar", "hotel_room");
+  assert.equal(route.length, _hops("stinky_bar", "hotel_room"), "the route is as long as the hop count");
+  // fire an encounter partway along the walk
+  const realTick = globalThis._tick;
+  let n = 0;
+  globalThis._tick = function () { realTick.apply(null, arguments); if (++n === 2) state().pendingEnc = "peddler"; };
+  try { run("travel to hotel"); } finally { globalThis._tick = realTick; }
+  assert.notEqual(state().room, "stinky_bar", "you are not back at the door you left");
+  assert.equal(state().room, route[1], "you are exactly as far along as you walked");
+  assert.match(lastOut(), /got as far as/i, "and the prose says so");
+});
+
 test("_playOptions: what's on offer here — typed PLAY and autocomplete agree", () => {
   state().room = "jomtien_beach";
   assert.deepEqual(_playOptions(), [], "no games on the sand");

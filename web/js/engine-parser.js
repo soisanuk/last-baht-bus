@@ -448,6 +448,33 @@ function _arriveAt(to) {
 // owns the street, and the night can end (or a bar encounter corner you)
 // mid-walk, same as walking by hand.
 
+// The route itself, not just its length — TRAVEL walks it room by room so that
+// an interruption (an encounter, a game, the dawn) leaves you WHERE YOU GOT TO
+// rather than back where you started. Before this, a stopped 6-hop walk charged
+// six turns and put you back in the bar you left, which read as the journey
+// having both happened and not happened (actuary playtest 2026-08-23).
+// Same BFS as _hops; returns the list of rooms after `from`, ending at `to`.
+function _path(from, to) {
+  if (from === to) return [];
+  const prev = { [from]: null };
+  const q = [from];
+  while (q.length) {
+    const cur = q.shift();
+    const nbrs = Object.values(ROOMS[cur].exits || {}).concat(ROOMS[cur].venues || []);
+    for (const nxt of nbrs) {
+      if (prev[nxt] !== undefined) continue;
+      prev[nxt] = cur;
+      if (nxt === to) {
+        const out = [];
+        for (let n = to; n && n !== from; n = prev[n]) out.unshift(n);
+        return out;
+      }
+      q.push(nxt);
+    }
+  }
+  return null;
+}
+
 function _hops(from, to) {
   if (from === to) return 0;
   const seen = { [from]: 0 };
@@ -566,14 +593,19 @@ function _doTravel(arg) {
         "one turn of soi, neon, and shortcuts.", { v: _barName(dest) })
     : _fmt("You point yourself at {v} and let your feet do the remembering — " +
         "{n} turns of soi, neon, and shortcuts.", { v: _barName(dest), n: hops }), "dim");
-  // walking pace: hops turns in total; doCommand pays the last at the bottom
+  // walking pace: hops turns in total; doCommand pays the last at the bottom.
+  // Move along the real route as you go, so being stopped partway leaves you
+  // partway — not back at the door you set out from.
   const startDay = G.day, g0 = G;
+  const route = _path(G.room, dest) || [];
   for (let i = 0; i < hops - 1; i++) {
+    if (route[i]) G.room = route[i];   // a step of actual soi, quietly walked
     _tick();
     if (G !== g0) return; // an Act One dawn mid-walk rebuilt the world (same-day reset — see _doWait)
     if (G.day !== startDay || G.over) return; // the night ended mid-walk
     if (G.pendingEnc || G.game) {
-      _say(`(${_clockStr()} — the street has other plans.)`, "dim");
+      _say(`(${_clockStr()} — you've got as far as ${_barName(G.room) || _room().name} ` +
+        "and the street has other plans.)", "dim");
       return;
     }
   }

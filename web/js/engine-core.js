@@ -274,7 +274,8 @@ function newGame() {
     // due to the old man; `arrears` is what you failed to pay him and haven't
     // made up. Nightly trade lands in `cash` — the bar's own till, kept separate
     // from your pocket so a good week at the bar isn't the same as a good week.
-    bar: { cash: 0, owed: 0, arrears: 0, months: 0, lastMonthDay: 0, nights: 0, best: 0 },
+    bar: { cash: 0, owed: 0, arrears: 0, months: 0, lastMonthDay: 0, nights: 0, best: 0,
+      workedLast: false },
     atmToday: 0,         // principal withdrawn today (resets when atmDay rolls over)
     lastPolice: -99,     // turn of the last boy-in-brown shakedown
     questHailed: false,  // the one time a giver calls you over (see _questHail)
@@ -1621,6 +1622,16 @@ function _tick() {
     _say("The chalkboard goes up, the microphone crackles, and the room turns as one " +
       "— you were here first, so you're playing.", "win");
     _startQuiz(true);
+  }
+  // Same bug class as the quiz above, and the same fix: Tan's favour and the
+  // procurement beats were checked ONLY on arrival at your own bar, and both
+  // need nightTurn >= 30 — so the owner who opens up early and stays put (which
+  // is exactly what WORK encourages) never met his own partner. 65 nights of
+  // ownership without a single one (actuary playtest 2026-08-23). If the hour
+  // comes round while you're already stood behind your own bar, it finds you.
+  if (!G.game && !G.pendingEnc && !G.pendingChoice && !G.pendingBf && !G.pendingFare) {
+    if (typeof _tanFavourDue === "function" && _tanFavourDue()) { _tanFavour(); return; }
+    if (typeof _synDue === "function" && _synDue()) { _synAsk(); return; }
   }
   _lastBusWarn();  // ~01:30: heads-up that the last ฿15 ride home is about to leave
   _maybeIncomingText();
