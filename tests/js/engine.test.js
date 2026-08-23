@@ -3466,6 +3466,47 @@ test("legit massage heals hurt and drunk, and refuses to sell the other thing", 
   assert.match(lastOut(), /Wrong shop/i, "Pensri doesn't do extras");
 });
 
+test("Moonshine Bar's house infusion dare is actually buyable", () => {
+  // price auditor playtest (2026-08-23): the room's own prose ("Prik and Mek
+  // ...dare you to try the house infusion") had no purchase path — BUY YA
+  // DONG and DRINK YA DONG both refused.
+  state().room = "moonshine_bar";
+  state().money = 1000;
+  run("buy ya dong");
+  assert.equal(state().money, 900, `฿${YA_DONG_SHOT} a shot`);
+  assert.match(lastOut(), /Prik pours/i);
+  run("drink ya dong");
+  assert.equal(state().money, 800, "DRINK routes to the same purchase");
+});
+
+test("Mama Yai's som tam arrives unasked, free, once a night — as promised", () => {
+  // price auditor playtest (2026-08-23): the room's defining claim ("the som
+  // tam arrives unasked and correct") was unreachable — BUY SOM TAM and BUY
+  // FOOD both refused.
+  state().room = "mama_yai";
+  state().hunger = 80;
+  run("eat");
+  assert.equal(state().hunger, 50, "a real plate, free");
+  assert.match(lastOut(), /arrives/i);
+  run("eat");
+  assert.match(lastOut(), /one plate a night/i, "capped once per night");
+  assert.equal(state().hunger, 50, "the cap actually holds");
+});
+
+test("legit massage room prose promises the one flat price it actually charges", () => {
+  // price auditor playtest (2026-08-23): Naklua Traditional and Ruean Sabai
+  // both advertised a three-tier laminated list ("foot 250, Thai 300, herbal
+  // compress 400" / "foot 250, Thai 300, oil 350") when the mechanic has
+  // always been one flat ฿300 regardless of tier word — two of three
+  // advertised prices were unreachable by any command. Fixed by rewording the
+  // prose to match the mechanic rather than building unreachable tiers.
+  for (const room of ["naklua_thai", "thai_massage"]) {
+    const desc = ROOMS[room].desc;
+    assert.doesNotMatch(desc, /\b250\b|\b350\b|\b400\b/, `${room} no longer promises a price it can't charge`);
+    assert.match(desc, /300/, `${room} states the real flat price`);
+  }
+});
+
 test("oil shop: base rub, then the warmth-gated special, capped once a night", () => {
   state().flags.act1Done = true;
   state().flags.hasWallet = true;

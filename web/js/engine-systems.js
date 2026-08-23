@@ -5536,6 +5536,25 @@ function _doEat(arg) {
       "faintly of the last decade — but it's something, and the hunger notices, barely.");
     return;
   }
+  // Mama Yai's whole pitch is that the som tam "arrives unasked" — so it has
+  // to actually arrive on EAT (bare, or naming it), not refuse like every
+  // other unbuyable BUY SOM TAM in town (price auditor playtest, 2026-08-23:
+  // the room's own defining claim was unreachable by any command).
+  if (G.room === "mama_yai" && (!arg || /som ?tam/.test(arg))) {
+    if (G.mamaYaiDay === G.day) {
+      _say("Mama Yai clocks you eyeing the kitchen again. \"One plate a night, tilac — " +
+        "I'm not running a buffet.\" She's not wrong.");
+      return;
+    }
+    G.mamaYaiDay = G.day;
+    G.hunger = Math.max(0, G.hunger - 30);
+    _say("Nobody took your order. A plate of som tam just arrives, pounded to order, " +
+      "correct in every way — fish sauce, lime, the chilli count of someone who trusts " +
+      "you can take it. \"Kin, kin,\" Mama Yai says, already walking off. On the house, " +
+      "same as it is for everyone.", "win");
+    _addHappy(1);
+    return;
+  }
   const inv = _inv().filter(i => _EDIBLE[i] !== undefined);
   const id = arg ? inv.find(i => ITEMS[i].name.toLowerCase().includes(arg) ||
     ITEMS[i].aliases.some(a => a.includes(arg))) : inv[0];

@@ -20,6 +20,7 @@ const ROSE_PRICE = 100;  // the flower-seller's daughter's single rose (a gift f
 const CORD_PRICE = 20;   // black nylon off a 7-Eleven counter; what an amulet hangs on
 const TAXI_DEBT = 12000; // what Nira is owed in the cousin's name — see QUESTS.taxi_debt
 const BAND_ROUND = 400;  // buying the band a round (≈ bell to the mama; girls prefer the real bell)
+const YA_DONG_SHOT = 100; // Moonshine Bar's unlabelled-bottle dare — a shot, not a bottle
 const WINGMAN_TURNS = 15;// how long a friendly wing-woman's good word lasts
 const CHARGER_PRICE = 59;
 const SAFE_CASH = 3000;  // the emergency stash in the hotel room safe
@@ -2670,7 +2671,7 @@ const ROOMS = {
     bar: "Moonshine Bar", barType: "beer",
     desc: "A jars-on-the-shelf hillbilly theme done on a Pattaya budget — fairy lights in " +
       "mason jars, a banjo nobody plays, ya dong in an unlabelled bottle for the brave. Prik " +
-      "and Mek run the rail and dare you to try the house infusion.",
+      "and Mek run the rail and dare you to try the house infusion. (BUY YA DONG)",
     reads: {
       jar: "The mason jars hold the house infusions: ya dong in half a dozen ambers and " +
         "browns, roots and bark and one jar with something coiled in it that Prik will only " +
@@ -3581,8 +3582,8 @@ const ROOMS = {
     region: "Naklua",
     massage: "legit",
     desc: "A calm white shopfront among the seafood restaurants, ceiling fans turning over rows " +
-      "of proper mats. A laminated list — foot 250, Thai 300, herbal compress 400 — and ladies " +
-      "in tidy uniforms who wai and mean it. The honest kind, for the long-stay aches.",
+      "of proper mats. A laminated list — foot, Thai, herbal compress, all ฿300 flat — and " +
+      "ladies in tidy uniforms who wai and mean it. The honest kind, for the long-stay aches.",
     exits: { out: "naklua_massage" },
   },
   lotus_oil: {
@@ -3643,8 +3644,8 @@ const ROOMS = {
     region: "Walking Street",
     massage: "legit",
     desc: "A clean, bright shopfront a step off the Walking Street gate: a row of reclining " +
-      "chairs facing the street, a laminated price list on the wall — foot 250, Thai 300, " +
-      "oil 350, aloe for the sunburned — and the good sharp smell of tiger balm. The ladies " +
+      "chairs facing the street, a laminated price list on the wall — foot, Thai, oil, all " +
+      "฿300 flat, aloe for the sunburned — and the good sharp smell of tiger balm. The ladies " +
       "wear matching polo shirts and wais, are mostly old enough to be your aunt, and mean " +
       "every knuckle of it. Pensri runs the front. No short shorts, no barker, no nonsense — " +
       "the one honest kind of massage in a town that sells nine.",

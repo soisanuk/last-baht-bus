@@ -3238,6 +3238,20 @@ function _doBuy(arg) {
     _addHappy(1);
     return;
   }
+  // Moonshine Bar's whole pitch is "try the house infusion" — Prik and Mek's
+  // dare has to actually be answerable (price auditor playtest, 2026-08-23:
+  // BUY YA DONG and DRINK YA DONG both refused at the one bar built around it).
+  if (/ya ?dong|infusion|unlabelled bottle|moonshine|house shot/.test(arg) && G.room === "moonshine_bar") {
+    if (G.money < YA_DONG_SHOT) { _say(_fmt("The unlabelled bottle is ฿{p} a shot. You have ฿{m}. Prik shrugs — more for the brave.", { p: YA_DONG_SHOT, m: G.money })); return; }
+    G.money -= YA_DONG_SHOT;
+    G.soc.drunk += 2;
+    _say(`Prik pours from the unlabelled bottle without measuring. It tastes like bark, ` +
+      `chilli, and a decision — Mek bangs the bar once the shot's down, and the whole ` +
+      `rail cheers like you've done something. (฿${G.money} left.)`, "win");
+    _addHappy(G.soc.drunk <= 4 ? 2 : -1);
+    _checkDrunk();
+    return;
+  }
   if (/beer|chang|leo|singha/.test(arg) && !arg.includes("drink")) {
     // a restaurant serves beer too — KISS's Item 47 IS 'BIG BEER'
     if (!_inBar() && !_room().food && !FOOD_STALLS[G.room]) {
@@ -3971,6 +3985,7 @@ const _FACTION_LABELS = [
 
 function _doDrink(arg) {
   if (/water|nam/.test(arg)) { _doBuy("water"); return; }
+  if (/ya ?dong|infusion|unlabelled bottle|moonshine|house shot/.test(arg) && G.room === "moonshine_bar") { _doBuy(arg); return; }
   const w = arg.match(/^with (.+)$/);
   if (w) { _doBuy("lady drink " + w[1]); return; }
   if (!arg || /beer|chang|leo|singha|bottle|drink/.test(arg)) {
