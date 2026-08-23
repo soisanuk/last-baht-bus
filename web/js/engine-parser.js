@@ -687,7 +687,18 @@ function _doTake(arg) {
         return new RegExp("\\b" + esc + "s?\\b", "i").test(stripMarkup(_room().desc || ""));
       } catch (e) { return false; }
     })();
-    if ((typeof _roomRead === "function" && _roomRead(arg, true)) || _advertised) {
+    // A generic _SCENERY noun (poster, sticker, ceiling…) answers EXAMINE
+    // anywhere it plausibly fits, without needing the room's own prose to say
+    // the word — but TAKE's "advertised" check only scanned that prose, so
+    // EXAMINE POSTER could describe one and TAKE POSTER call it a bare
+    // contradiction in the same room (verb-auditor playtest, 2026-08-23).
+    const _sceneryHere = (() => {
+      const s = _SCENERY.find(x => x.m.test(arg));
+      if (!s) return false;
+      const ctx = _sceneryCtx();
+      return s.fn ? !!s.fn(ctx) : !!(s.lines[ctx] || (ctx === "pub" && s.lines.bar) || s.lines.any);
+    })();
+    if ((typeof _roomRead === "function" && _roomRead(arg, true)) || _advertised || _sceneryHere) {
       _say("That's fixtures, not luggage. It stays; the bar would notice.");
       return;
     }
@@ -933,6 +944,13 @@ function _doExamine(arg) {
   if (_roomRead(arg, true)) return _doRead(arg);
   const npc = _findNpc(arg);
   if (npc) {
+    // _findNpc's fuzzy prefix/substring match can pick up a same-prefixed NPC
+    // name for a fixture word that was never meant to name her ("bell" →
+    // Belle at Pink Lotus, where the bell is a live mechanic) — an exact
+    // id/full-name match still wins outright (verb-auditor playtest,
+    // 2026-08-23: EXAMINE BELL resolved to Belle instead of the bell fixture).
+    const exactNpc = npc === arg.toLowerCase() || NPCS[npc].name.toLowerCase() === arg.toLowerCase();
+    if (!exactNpc && _SCENERY.some(s => s.m.test(arg)) && _doScenery(arg)) return;
     _say(NPCS[npc].desc);
     // The Regular, visible: a bonded lady's close-up warms by tier. Only the
     // drinks ledger feeds _bondTier, so this can only ever fire for the girls

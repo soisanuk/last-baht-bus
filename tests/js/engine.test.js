@@ -4937,6 +4937,33 @@ test("inventory surfaces the three condoms you start with, and drops them when s
   assert.doesNotMatch(lastOut(), /condom/, "gone from the list when spent");
 });
 
+test("TAKE agrees with EXAMINE on a generic _SCENERY fixture (no room-desc contradiction)", () => {
+  // verb-auditor playtest (2026-08-23): EXAMINE POSTER answers via the
+  // generic _SCENERY fallback in any room that plausibly has one, but TAKE's
+  // "advertised fixture" check only scanned the room's own desc text — so a
+  // room whose poster is purely generic-fallback flavor (not named in its
+  // own desc) let EXAMINE POSTER succeed and TAKE POSTER call it "not here",
+  // a same-room, same-turn contradiction.
+  state().room = "moonshine_bar"; // a plain beer bar with no authored poster reads: entry
+  run("examine poster");
+  assert.doesNotMatch(lastOut(), /don't see that here/i);
+  out = [];
+  run("take poster");
+  assert.match(lastOut(), /fixtures, not luggage/i);
+});
+
+test("EXAMINE BELL resolves the bell fixture, not a same-prefixed NPC named Belle", () => {
+  // verb-auditor playtest (2026-08-23): _findNpc's fuzzy prefix match let
+  // "bell" resolve to Belle (Pink Lotus) ahead of the room's own bell
+  // mechanic. An exact name still wins outright.
+  state().room = "pink_lotus";
+  run("examine bell");
+  assert.match(lastOut(), /RING BELL/i);
+  out = [];
+  run("examine belle");
+  assert.doesNotMatch(lastOut(), /RING BELL/i, "the exact name still resolves to her");
+});
+
 test("EXAMINE PHONE is a home screen: battery, flashlight, and messages awaiting", () => {
   startSoi6Mode();
   state().battery = 64;
