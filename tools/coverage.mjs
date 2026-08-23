@@ -5,7 +5,18 @@
 //   node tools/coverage.mjs --seeds 1,2,3 --nights 8
 //   node tools/coverage.mjs --gaps               # …and list what was never touched
 //   node tools/coverage.mjs --save <file.json>   # score ONE serialized save
+//   node tools/coverage.mjs --save x.json --record persona-sofia-a   # …and keep it
+//   node tools/coverage.mjs --union              # every recorded session, combined
+//   node tools/coverage.mjs --union --gaps       # …and where NOBODY has been
 //   node tools/coverage.mjs --json
+//
+// RECORDING. A session's coverage is kept as a small EXTRACT under
+// docs/coverage/<label>.json — just the ids observed, never the save itself
+// (saves are bulky and are somebody's game). Extracts union trivially and diff
+// cleanly in review, so `--union` answers the only question that finally
+// matters: how much of this game has ANYONE seen, by any means. Until personas
+// started recording, the soak baseline was the only measured coverage in the
+// project and it is not the same quantity.
 //
 // WHY THIS METRIC AND NOT LINE COVERAGE. Every severe defect this project has
 // found by playing (docs/playtest-findings-analysis.md) lived in one of two
@@ -43,6 +54,9 @@ const flag = (n, d) => { const i = args.indexOf("--" + n); return i >= 0 ? (args
 const asJson = args.includes("--json");
 const showGaps = args.includes("--gaps");
 const savePath = flag("save", null);
+const recordAs = flag("record", null);
+const doUnion = args.includes("--union");
+const COV_DIR = new URL("../docs/coverage/", import.meta.url);
 
 // ── denominators: what exists ────────────────────────────────────────────────
 const ALL_ROOMS = Object.keys(ROOMS);
@@ -86,7 +100,25 @@ function absorb(G) {
 let runs = 0, commands = 0, effectsTotal = 0;
 const notes = [];
 
-if (savePath) {
+if (doUnion) {
+  let files = [];
+  try { files = fs.readdirSync(COV_DIR).filter(f => f.endsWith(".json")); } catch (e) {}
+  if (!files.length) {
+    console.log("No recorded sessions yet. Score one with:\n" +
+      "  node tools/coverage.mjs --save <save.json> --record <label>");
+    process.exit(0);
+  }
+  for (const f of files) {
+    const x = JSON.parse(fs.readFileSync(new URL(f, COV_DIR), "utf8"));
+    for (const k of ["rooms", "npcs", "patrons", "enc", "questsDone", "verbs", "effects", "dlg", "patDlg"])
+      for (const v of (x[k] || [])) U[k].add(v);
+    runs++;
+    commands += x.commands || 0;
+    effectsTotal = Math.max(effectsTotal, x.effectsTotal || 0);
+  }
+  notes.push(`union of ${files.length} recorded session(s): ${files.map(f => f.replace(/\.json$/, "")).join(", ")}`);
+  notes.push("this is the closest thing to 'how much of the game has ANYONE seen'");
+} else if (savePath) {
   const G = JSON.parse(fs.readFileSync(savePath, "utf8"));
   absorb(G);
   runs = 1;
@@ -113,6 +145,27 @@ if (savePath) {
   notes.push(`soak union: ${modes.length} modes × ${seeds.length} seeds × ${nights} nights`);
 }
 
+// ── record the extract, if asked ─────────────────────────────────────────────
+if (recordAs) {
+  if (!/^[a-z0-9][a-z0-9._-]*$/i.test(recordAs)) {
+    console.error("--record needs a simple label (letters, digits, . _ -)"); process.exit(1);
+  }
+  fs.mkdirSync(COV_DIR, { recursive: true });
+  const extract = {
+    label: recordAs,
+    recorded: null,           // stamped by the caller/commit, not by the tool (no clock in-engine)
+    runs, commands, effectsTotal,
+    rooms: [...U.rooms].sort(), npcs: [...U.npcs].sort(), patrons: [...U.patrons].sort(),
+    enc: [...U.enc].sort(), questsDone: [...U.questsDone].sort(),
+    verbs: [...U.verbs].sort(), effects: [...U.effects].sort(),
+    dlg: [...U.dlg].sort(), patDlg: [...U.patDlg].sort(),
+  };
+  const out = new URL(recordAs + ".json", COV_DIR);
+  fs.writeFileSync(out, JSON.stringify(extract, null, 1));
+  console.log(`recorded → docs/coverage/${recordAs}.json ` +
+    `(${U.rooms.size} rooms, ${U.npcs.size} NPCs, ${U.dlg.size} dialogue nodes)`);
+}
+
 // ── report ───────────────────────────────────────────────────────────────────
 const pct = (a, b) => b ? Math.round(1000 * a / b) / 10 : 0;
 const rows = [
@@ -123,12 +176,10 @@ const rows = [
   ["authored patron dialogue delivered", U.patDlg.size, PAT_NODES, ""],
   ["street encounters seen", U.enc.size, ALL_ENC.length, ""],
   ["quests completed", U.questsDone.size, ALL_QUESTS.length,
-    savePath ? "" : "INSTRUMENT-LIMITED: a random walker cannot climb a dep chain"],
+    (savePath || doUnion) ? "" : "INSTRUMENT-LIMITED: a random walker cannot climb a dep chain"],
 ];
-if (!savePath) {
-  rows.splice(3, 0, ["parser verbs typed", U.verbs.size, PARSER_VERBS.length, ""]);
-  rows.push(["mechanics fired (liveness)", U.effects.size, effectsTotal, "see EFFECTS in tools/soak.mjs"]);
-}
+if (U.verbs.size) rows.splice(3, 0, ["parser verbs typed", U.verbs.size, PARSER_VERBS.length, ""]);
+if (effectsTotal) rows.push(["mechanics fired (liveness)", U.effects.size, effectsTotal, "see EFFECTS in tools/soak.mjs"]);
 
 if (asJson) {
   console.log(JSON.stringify({
