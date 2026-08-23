@@ -684,6 +684,25 @@ test("SAY <phrase> TO <person> aims the greeting at one target", () => {
   assert.match(lastOut(), /not here to hear it/i);
 });
 
+test("a short noun inside an item's name doesn't hijack it — EXAMINE WALL is not the wallet", () => {
+  // thorough-player playtest (2026-08-23): _findItem matched on raw substring, so
+  // "wall" resolved to "your wallet" ANYWHERE in the game — worst in Act One,
+  // where a player who had NOT found the wallet could be told they had it. Whole
+  // words now, with plural tolerance, which is what the loose test was for.
+  state().itemLoc.wallet = "inventory";
+  state().itemLoc.bottle1 = "inventory";
+  state().itemLoc.charger = "inventory";
+  state().room = "beach_rd_top";
+  run("examine wall");
+  assert.doesNotMatch(lastOut(), /Your wallet/, "a wall is not a wallet");
+  // …and the partial matching that was actually wanted still works
+  for (const [q, want] of [["wallet", /Your wallet/], ["bottle", /bottle/i],
+                           ["bottles", /bottle/i], ["charger", /charger/i]]) {
+    out = []; run("examine " + q);
+    assert.match(lastOut(), want, `EXAMINE ${q} still resolves`);
+  }
+});
+
 test("Auntie Nok closes the ฿5 gap when the phone is dead — the opening's one dead end", () => {
   // opening auditor (2026-08-23): only TWO of the four bottles are in lit rooms,
   // and the light that reaches the third is the same battery as the phone that

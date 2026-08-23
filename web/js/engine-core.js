@@ -936,8 +936,20 @@ function _findItem(word, where) {
     where === "room" ? G.itemLoc[id] === G.room :
     where === "inventory" ? G.itemLoc[id] === "inventory" :
     (G.itemLoc[id] === G.room || G.itemLoc[id] === "inventory");
+  // WORD boundaries, not raw substring. `includes` meant any short noun that
+  // happens to sit inside an item's name hijacked it — EXAMINE WALL handed back
+  // "your wallet", anywhere in the game, and worst of all in Act One, where a
+  // player who has NOT found the wallet could be told they had (thorough-player
+  // playtest 2026-08-23). A query still matches a whole word of a multi-word
+  // name ("bottle" → "empty Leo bottle", "charger" → "USB charger") and still
+  // matches a name that merely starts with it ("sunglass" → "sunglasses"),
+  // which is what the loose test was actually there for.
+  const esc = t => t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const alts = [...new Set([w, w.replace(/s$/, "")])].filter(Boolean).map(esc);
+  const wordRe = new RegExp("\\b(?:" + alts.join("|") + ")s?\\b", "i");
+  const hit = str => wordRe.test(String(str));
   const matches = (id, it) => inScope(id) &&
-    (it.name.toLowerCase().includes(w) || it.aliases.some(a => a === w || a.includes(w)));
+    (hit(it.name) || it.aliases.some(a => a === w || hit(a)));
   const pool = Object.entries(ITEMS).filter(([id, it]) => matches(id, it));
   if (!where && pool.length > 1) {
     const inRoom = pool.find(([id]) => G.itemLoc[id] === G.room);
