@@ -43,40 +43,40 @@ var NEWS_FEED = [
     "d": "23 Aug 2026"
   },
   {
-    "t": "Multiple attacks hit Thailand's southern border provinces",
-    "s": "Khaosod English",
-    "d": "22 Aug 2026"
+    "t": "Dozens of co-ordinated arson attacks hit southern Thailand",
+    "s": "BBC",
+    "d": "23 Aug 2026"
   },
   {
-    "t": "'I had to climb over school fence to escape': Thai students recount shooting after teen kills seven",
-    "s": "BBC",
-    "d": "06 Aug 2026"
+    "t": "Scores of attacks rock Thailand’s southernmost provinces, Yala hardest hit",
+    "s": "Thai PBS World",
+    "d": "23 Aug 2026"
+  },
+  {
+    "t": "Dozens of attacks in Thailand’s restive south leave 3 wounded",
+    "s": "Inquirer.net",
+    "d": "23 Aug 2026"
+  },
+  {
+    "t": "Rookie pro golfer dies at 18 while preparing for tournament in Thailand",
+    "s": "AL.com",
+    "d": "23 Aug 2026"
+  },
+  {
+    "t": "World’s 2nd most powerful military draws Africa’s strongest closer as it stages drills with Thailand and Belarus",
+    "s": "Business Insider Africa",
+    "d": "22 Aug 2026"
   },
   {
     "t": "Couple Sells Everything, Moves to Thailand to Homeschool Kids for ‘Simple’ Life",
     "s": "People.com",
     "d": "23 Aug 2026"
-  },
-  {
-    "t": "Vietnam substitutes deliver first-leg win over Thailand in ASEAN Championship final",
-    "s": "ESPN",
-    "d": "22 Aug 2026"
-  },
-  {
-    "t": "ASEAN HYUNDAI CUP™ 2026 FINAL 1ST LEG: THAILAND 0-2 VIETNAM",
-    "s": "ASEAN United FC",
-    "d": "22 Aug 2026"
-  },
-  {
-    "t": "Thailand face Vietnam tonight in the first of a two-match ASEAN Hyundai Cup final",
-    "s": "Time Out Worldwide",
-    "d": "21 Aug 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-08-21","USD":32.68,"AUD":23.42,"GBP":44.62,"EUR":38.23};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-23","temp":30,"humid":70,"code":3,"hi":30,"rain":65};
+var WX_NOW = {"date":"2026-08-23","temp":28,"humid":80,"code":3,"hi":32,"rain":96};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-08-21","done":true,"h":"Arsenal","hs":3,"a":"Coventry","as":0},{"d":"2026-08-22","done":true,"h":"Hull","hs":2,"a":"Man United","as":0},{"d":"2026-08-22","done":true,"h":"Everton","hs":2,"a":"C Palace","as":0},{"d":"2026-08-22","done":true,"h":"Ipswich","hs":2,"a":"Sunderland","as":1},{"d":"2026-08-22","done":true,"h":"Nottm Forest","hs":0,"a":"Leeds","as":1},{"d":"2026-08-22","done":true,"h":"Brentford","hs":3,"a":"Spurs","as":0},{"d":"2026-08-23","done":false,"h":"Brighton","hs":0,"a":"Aston Villa","as":0},{"d":"2026-08-23","done":false,"h":"Man City","hs":0,"a":"Bournemouth","as":0},{"d":"2026-08-23","done":false,"h":"Newcastle","hs":0,"a":"Liverpool","as":0},{"d":"2026-08-24","done":false,"h":"Fulham","hs":0,"a":"Chelsea","as":0}]};
 // GLO draw — the girls' retirement plan
@@ -84,4 +84,4 @@ var LOTTO = {"date":"2026-08-16","first":"004615","last2":"53","front3":["429","
 // XAU, plus Thai baht-weight gold (96.5%)
 var GOLD = {"usd":4604,"date":"2026-08-23","baht":71150};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":76038,"thb":2481162};
+var BTC = {"usd":77202,"thb":2519125};
