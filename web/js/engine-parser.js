@@ -6581,6 +6581,25 @@ function doCommand(input) {
     default:
       // bare Thai phrase typed directly (polite particles allowed)
       if (matchThaiPhrase(lower) || matchThaiPhrase(_stripPolite(lower))) { _doSay(_stripPolite(lower) || lower); break; }
+      // "sawatdee fon" — a greeting with a trailing NAME, typed without the SAY
+      // verb or "TO": the whole string never matches a phrase, so this fell
+      // through to the conversation layer and misfired on whoever was last
+      // talked to, not the person actually named — Fon's own Thai-greeting
+      // gate was unreachable this way (NPC-completionist playtest 2026-08-22).
+      {
+        const _w = lower.trim().split(/\s+/);
+        if (_w.length >= 2) {
+          const _last = _w[_w.length - 1].replace(/[.,!?]+$/, "");
+          const _who = _findNpc(_last) || _findPatron(_last);
+          if (_who) {
+            const _phrase = _w.slice(0, -1).join(" ");
+            if (matchThaiPhrase(_phrase) || matchThaiPhrase(_stripPolite(_phrase))) {
+              _doSay(_stripPolite(_phrase) || _phrase, _last);
+              break;
+            }
+          }
+        }
+      }
       // a Thai line the parser can read becomes the English command; other Thai is voiced, not "didn't understand"
       if (/[\u0E00-\u0E7F]/.test(lower)) {
         const en = _thaiToCmd(lower);

@@ -662,6 +662,18 @@ test("SAY <phrase> TO <person> aims the greeting at one target", () => {
   assert.match(lastOut(), /not here to hear it/i);
 });
 
+test("bare 'sawatdee fon' (no SAY verb, no TO) still aims at Fon, not the last-talked-to NPC", () => {
+  // NPC-completionist playtest (2026-08-22): a player who's just talked to
+  // Randy elsewhere, then walks into Jasmine Garden and types the greeting
+  // with the name tacked on naturally, expects it to land on Fon — not
+  // misfire onto whoever the conversation layer last remembered.
+  state().room = "jasmine_garden";
+  run("talk to randy");
+  out = [];
+  run("sawatdee fon");
+  assert.ok(state().flags.greetedFon, "greeted Fon by her trailing name, not the stale convo partner");
+});
+
 test("office door: blocked, then opened by the song", () => {
   state().room = "rainbow_girls";
   run("go office");
