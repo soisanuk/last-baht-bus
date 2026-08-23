@@ -3279,7 +3279,14 @@ function _doBuy(arg) {
     _addHappy(1);
     return;
   }
-  if (FOOD_STALLS[G.room] && /food|eat|toastie|mango|som tam|somtam|chicken|kebab|rice|snack|crocodile|croc|skewer/.test(arg)) {
+  // The generic words, plus ANY substantial word from this stall's own name —
+  // so a stall that advertises grilled squid answers BUY SQUID without the noun
+  // being added to a list here. The hand-written list below could only ever
+  // name the foods somebody remembered to add (afford-audit, 2026-08-23: the
+  // squid cart at pattaya_tai had prose, and nothing behind it).
+  if (FOOD_STALLS[G.room] && (/food|eat|toastie|mango|som tam|somtam|chicken|kebab|rice|snack|crocodile|croc|skewer/.test(arg) ||
+      (arg && FOOD_STALLS[G.room].name.toLowerCase().split(/[^a-z]+/)
+        .some(w => w.length > 3 && arg.includes(w))))) {
     const f = FOOD_STALLS[G.room];
     if (G.money < f.price) { _say(`฿${f.price}, and you're short. The smell alone is worth half that, and free.`); return; }
     G.money -= f.price;

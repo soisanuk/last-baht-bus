@@ -64,6 +64,22 @@ test("a reckless ride can crash → routes to the ward (forced roll)", () => {
   assert.equal(G.day, day0 + 1, "the night ended");
 });
 
+// Through the real entry point once: the tests above call _doMotosai() directly,
+// which never exercises the parser's fare/destination routing or the modal gates
+// a typed ride actually crosses (CLAUDE.md: reach the subsystem the way the game
+// does at least once).
+test("a TYPED reckless ride crashes and ends the night", () => {
+  _setFlag("act1Done"); _setFlag("hasWallet");
+  const motoRoom = Object.keys(ROOMS).find(id => ROOMS[id].motosai);
+  G.room = motoRoom; G.money = 2000; G.soc.drunk = 8; G.nightTurn = 90;
+  const day0 = G.day;
+  globalThis._rand = () => 0;                     // force the crash roll
+  out = [];
+  doCommand("motosai to darkside");
+  assert.equal(G.day, day0 + 1, "the typed ride ended the night");
+  assert.match(out.join("\n"), /insurance/i, "and landed in the free ward");
+});
+
 test("a risky ride that survives telegraphs the danger (a near-miss)", () => {
   _setFlag("act1Done");
   const motoRoom = Object.keys(ROOMS).find(id => ROOMS[id].motosai);

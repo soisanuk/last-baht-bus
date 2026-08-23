@@ -5564,6 +5564,12 @@ const FOOD_STALLS = {
   kiss: { name: "a proper plate off the mile-long menu at KISS — pad kaprao, or a burger if the soul needs it", price: 120, hunger: 70, thirst: 10 },
   kiss_jomtien: { name: "the same mile-long KISS menu, Jomtien branch — pad kaprao, or a burger if the soul needs it", price: 120, hunger: 70, thirst: 10 },
   soi_rompho: { name: "grilled chicken, sticky rice and som tam from a Rompho Market stall", price: 60, hunger: 60, thirst: -5 },
+  // The squid cart at the bottom-of-everything junction. Its own prose has
+  // advertised it ("Somebody is selling grilled squid to a queue") since the
+  // room was written, with nothing behind it — found by tools/afford-audit.mjs,
+  // 2026-08-23. A 2am songthaew stop with a queue at a cart is exactly where a
+  // hungry player waiting for a truck should be able to eat.
+  pattaya_tai: { name: "grilled squid off the cart at the junction, chilli sauce in a twist of bag", price: 70, hunger: 50, thirst: -10 },
   // the crocodile outside Central. Priced as the novelty it is — the stall makes
   // its living off people who photograph it, and charges the ones who don't.
   second_rd_mall: { name: "a crocodile skewer off the spit outside Central, charred and startlingly good", price: 120, hunger: 55, thirst: -10 },

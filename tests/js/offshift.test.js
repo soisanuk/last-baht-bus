@@ -52,6 +52,34 @@ function armNote(ghost) {
   S().itemLoc.masseuse_note = "inventory";
 }
 
+// ── through the real entry point ────────────────────────────────────────────
+// Every other test in this file calls _massageSpecial()/_doMeetOffShift()
+// directly, which is fine for the mechanic and blind to everything between
+// doCommand and the handler. That gap is not hypothetical here: round 12's
+// playtest found MEET being eaten whole by a soft street encounter that had
+// armed itself in the meantime, so the thread never resolved and the handler
+// under test was never reached. One test that types the words (CLAUDE.md:
+// reach the subsystem through its REAL entry point at least once).
+test("the whole thread works when TYPED, encounters and all", () => {
+  S().flags.act1Done = true; S().flags.hasWallet = true;
+  S().room = "smile_massage"; S().money = 5000; S().nightTurn = 20;
+  doCommand("massage special");
+  assert.equal(S().itemLoc.masseuse_note, "inventory", "typing SPECIAL writes the number");
+  assert.ok(S().offShift, "…and arms the thread");
+  const her = S().offShift.name.toLowerCase();
+  S().offShift.ghost = false;                 // test the answered branch deterministically
+
+  // now stand in a street room and let a soft encounter arm itself first: a real
+  // command must decline the pitch and STILL run (the _ENC_SOFT contract)
+  S().room = "buakhao_market"; S().nightTurn = 60;
+  _startEnc("bkktourist");
+  out = [];
+  doCommand("meet " + her);
+  assert.equal(S().itemLoc.masseuse_note, null, "the note was actually spent");
+  assert.equal(S().offShift, null, "the thread resolved through the encounter, not into it");
+  assert.match(last(), /real one|off the floor/i);
+});
+
 test("MEET too early keeps the thread; MEET with no note does nothing", () => {
   S().offShift = null;
   _doMeetOffShift("");
