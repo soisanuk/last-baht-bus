@@ -245,7 +245,15 @@ spoken to, authored lines actually delivered, mechanics actually fired. The
 headline is the **union across runs**, because one run's number describes the run
 rather than the game.
 
-### Baseline — soak union, 5 modes × 6 seeds × 6 nights, 14,584 commands
+### Baseline — THE AUTOMATED INSTRUMENT ONLY (soak union, 5 modes × 6 seeds × 6 nights, 14,584 commands)
+
+**This is the soak's map, not the personas'.** It measures what the random walker
+reaches. Persona coverage is a different — and currently unmeasured — quantity:
+those sessions ended without their state being captured, and a persona who
+deliberately talks to people covers dialogue at a rate a random walker never
+will. The first two persona saves are being collected now (`--save`), and until
+they are scored, **no claim about total observed surface is supported by
+anything here.**
 
 | dimension | observed | exists | |
 |---|---|---|---|
@@ -259,12 +267,19 @@ rather than the game.
 | quests completed | 1 | 32 | 3.1% |
 | mechanics fired (liveness) | 17 | 19 | 89.5% |
 
-**The number that matters is 6.4%.** Ninety-four percent of the authored dialogue
-in this game has never been shown to anything, human or automated. That single
-figure explains the pattern in §2: the personas are not finding a defect-ridden
-codebase, they are walking surface nothing had ever walked. It also predicts the
-finding rate will fall as that surface shrinks — which is testable, and is the
-control experiment worth running before deciding this method is done.
+**The number that matters is 6.4%** — and it must be stated precisely, because
+the loose version of it is wrong. Ninety-four percent of the authored dialogue in
+this game has never been delivered **to the automated instrument**. It is NOT
+true that nobody has ever seen it: personas and the author have, and neither was
+measured. The defensible claim is narrower and still useful — **the thing that
+runs on every commit sees 6.4% of what is written**, so the suite cannot be
+protecting the rest of it, and prose that has never been delivered to anything
+that checks is prose whose defects nothing can catch.
+
+That is consistent with the pattern in §2 without proving it: personas may be
+finding things because they walk surface the automated instrument never reaches.
+It predicts the finding rate should fall as that surface shrinks — testable, and
+the reason for the control experiment.
 
 Contrast **verbs at 60.6%** — up from 5.6% before §4.1 derived the walker's
 vocabulary from the engine. That is the same instrument, measured before and
