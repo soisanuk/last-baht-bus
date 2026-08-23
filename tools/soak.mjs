@@ -236,34 +236,53 @@ function liveSnap() {
 
 const ALL_MODES = ["act1", "vacation", "soi6", "expat"];
 const SANDBOX = ["vacation", "soi6", "expat"];
+// `why`, where present, is the reason this effect may legitimately read zero:
+// either the random walker cannot produce the play that causes it, or the run is
+// too short. Those are reported SEPARATELY from the ones with no excuse — a
+// ledger whose zero-list is mostly known-benign trains the reader to skip it,
+// which is the same rot the afford-audit's AFFORD_OK exists to prevent. An
+// effect with no `why` that reads zero is a question somebody must answer.
 const EFFECTS = [
-  // the night, the body, the money — reachable everywhere
-  { id: "night.ended",        modes: ALL_MODES, hit: (a, b) => b.nights > a.nights },
+  // the night, the body, the money
+  // NB act1 is excluded: a night-end there is _act1Fail, which rebuilds the
+  // world (nightLog wiped, day back to 2), so the effect is unobservable by
+  // design rather than absent.
+  { id: "night.ended",        modes: SANDBOX,   hit: (a, b) => b.nights > a.nights },
   { id: "money.spent",        modes: ALL_MODES, hit: (a, b) => b.money < a.money },
   { id: "happy.gained",       modes: ALL_MODES, hit: (a, b) => b.happy > a.happy },
   { id: "moved.room",         modes: ALL_MODES, hit: (a, b) => b.room !== a.room },
   // the social machine
   { id: "bell.rung",          modes: SANDBOX,   hit: (a, b) => b.bells > a.bells },
   { id: "bond.built",         modes: SANDBOX,   hit: (a, b) => b.bondMax > a.bondMax },
-  { id: "bond.regular.tier",  modes: SANDBOX,   hit: (a, b) => a.bondMax < 7 && b.bondMax >= 7 },
+  { id: "bond.regular.tier",  modes: SANDBOX,   hit: (a, b) => a.bondMax < 7 && b.bondMax >= 7,
+    why: "needs ~7 drinks concentrated on ONE girl; a random walk spreads them" },
   { id: "contact.swapped",    modes: SANDBOX,   hit: (a, b) => b.contacts > a.contacts },
   { id: "photo.taken",        modes: SANDBOX,   hit: (a, b) => b.photos > a.photos },
   { id: "reputation.moved",   modes: SANDBOX,   hit: (a, b) => b.rep !== a.rep },
-  { id: "treadmill.jaded",    modes: SANDBOX,   hit: (a, b) => b.jaded > a.jaded },
+  { id: "treadmill.jaded",    modes: SANDBOX,   hit: (a, b) => b.jaded > a.jaded,
+    why: "needs a conquest, which needs a barfine the walker rarely completes" },
   // quests
   { id: "quest.accepted",     modes: SANDBOX,   hit: (a, b) => b.questsActive > a.questsActive },
-  { id: "quest.completed",    modes: SANDBOX,   hit: (a, b) => b.questsDone > a.questsDone },
-  // Act One's own payoff
-  { id: "act1.completed",     modes: ["act1", "vacation"], hit: (a, b) => !a.act1Done && b.act1Done },
-  { id: "roomsafe.paid",      modes: ["vacation"], hit: (a, b) => !a.safeOpened && b.safeOpened },
-  // the expat stage — every one of these was a real class-B defect
-  { id: "bar.night.settled",  modes: ["expat"],  hit: (a, b) => b.barNights > a.barNights },
-  { id: "bar.night.worked",   modes: ["expat"],  hit: (a, b) => b.barNights > a.barNights && b.barAway === 0 },
-  { id: "bar.shift.declared", modes: ["expat"],  hit: (a, b) => b.barWorked > a.barWorked },
-  { id: "bar.month.paid",     modes: ["expat"],  hit: (a, b) => b.barMonths > a.barMonths },
-  { id: "tan.favour.asked",   modes: ["expat"],  hit: (a, b) => !a.tanAsked && b.tanAsked },
-  { id: "procurement.asked",  modes: ["expat"],  hit: (a, b) => b.synAsked > a.synAsked },
+  { id: "quest.completed",    modes: SANDBOX,   hit: (a, b) => b.questsDone > a.questsDone,
+    why: "a dep chain needs talk-until-offered → ACCEPT → travel → a specific ASK (CLAUDE.md)" },
+  // Act One's own payoff. act1 only — every other mode pre-sets the flag, so
+  // there the effect cannot fire and its absence would mean nothing.
+  { id: "act1.completed",     modes: ["act1"],  hit: (a, b) => !a.act1Done && b.act1Done,
+    why: "the wallet quest is a specific chain of ASKs a random walk will not produce" },
+  { id: "roomsafe.paid",      modes: ["act1"],  hit: (a, b) => !a.safeOpened && b.safeOpened,
+    why: "gated behind completing Act One in-run" },
+  // The expat endgame. barowner ONLY: the four dep-gated quests to owning a bar
+  // are unclimbable by a random walk, so in plain expat these would read zero
+  // for a reason that has nothing to do with whether they work.
+  { id: "bar.night.settled",  modes: ["barowner"], hit: (a, b) => b.barNights > a.barNights },
+  { id: "bar.night.worked",   modes: ["barowner"], hit: (a, b) => b.barNights > a.barNights && b.barAway === 0 },
+  { id: "bar.shift.declared", modes: ["barowner"], hit: (a, b) => b.barWorked > a.barWorked },
+  { id: "bar.month.paid",     modes: ["barowner"], hit: (a, b) => b.barMonths > a.barMonths,
+    why: "the old man is paid every 30 days; a short run never reaches one" },
+  { id: "tan.favour.asked",   modes: ["barowner"], hit: (a, b) => !a.tanAsked && b.tanAsked },
+  { id: "procurement.asked",  modes: ["barowner"], hit: (a, b) => b.synAsked > a.synAsked },
 ];
+const EFFECT_WHY = new Map(EFFECTS.filter(e => e.why).map(e => [e.id, e.why]));
 
 const modalActive = () =>
   !!(G.pendingChoice || G.pendingEnc || G.game || G.pendingBf || G.pendingSoapy || G.pendingFare);
@@ -377,9 +396,11 @@ export function runSoak(opts = {}) {
   const t0 = Date.now();
   const failures = [], warns = [], transcript = [];
   const liveness = {};                       // effect id → times observed
-  // barowner is expat with the bar bought, so it inherits expat's reachability
-  const _modeKey = mode === "barowner" ? "expat" : mode;
-  for (const e of EFFECTS) if (e.modes.includes(_modeKey)) liveness[e.id] = 0;
+  // barowner is expat plus the bar, so it can reach everything expat can AND the
+  // bar-only effects; the bar ones are tagged barowner-only because plain expat
+  // cannot climb the chain to them.
+  const _reach = mode === "barowner" ? ["expat", "barowner"] : [mode];
+  for (const e of EFFECTS) if (e.modes.some(m => _reach.includes(m))) liveness[e.id] = 0;
   const seen = new Set();          // rooms this run actually stood in
   const stats = { commands: 0, nights: 0, vacations: 0, understoodMisses: 0, truncated: false };
   let hintQueue = [], hintRoom = null, lastDay = G.day, lastTurns = G.turns,
@@ -591,9 +612,17 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     console.log("\n── liveness ledger (effects observed across all seeds) ──");
     const rows = [...liveTally].sort((a, b) => a[1] - b[1]);
     for (const [id, n] of rows)
-      console.log((n === 0 ? "  ✗ NEVER  " : "  ·        ") + id.padEnd(24) + String(n).padStart(5));
-    const zeroes = rows.filter(r => r[1] === 0);
-    if (zeroes.length) console.log(`  ${zeroes.length} effect(s) never fired — dead content, or a bug.`);
+      if (n > 0) console.log("  ·        " + id.padEnd(24) + String(n).padStart(5));
+    const zeroes = rows.filter(r => r[1] === 0).map(r => r[0]);
+    const excused = zeroes.filter(id => EFFECT_WHY.has(id));
+    const bare = zeroes.filter(id => !EFFECT_WHY.has(id));
+    for (const id of excused)
+      console.log("  ○ zero   " + id.padEnd(24) + "  expected: " + EFFECT_WHY.get(id));
+    for (const id of bare)
+      console.log("  ✗ NEVER  " + id.padEnd(24) + "  ← no reason on file; dead content, or a bug");
+    if (!bare.length) console.log("  Every effect with no excuse on file fired at least once.");
+    else if (seeds.length < 5) console.log(`  (only ${seeds.length} seed(s) — a bare zero here may just be ` +
+      "unreached rather than dead; re-run with --seed 1,2,3,4,5,6 before believing it.)");
   }
   process.exit(anyFail ? 1 : 0);
 }
