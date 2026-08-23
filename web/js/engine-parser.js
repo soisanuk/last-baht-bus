@@ -403,6 +403,8 @@ function _arriveAt(to) {
   if (typeof _synDue === "function" && _synDue()) { _synAsk(); return; }
   // and if you've stayed outside it, the weather at your own bar changes
   if (typeof _synFrictionTick === "function") _synFrictionTick();
+  // your own bar tells you it's yours, and what the two owner verbs are
+  if (typeof _barOwnerNudge === "function") _barOwnerNudge();
   // the anti-Simon machine: when the book gets heavy, the town catches you.
   // Candy settles it at whichever of her bars she's working tonight.
   if (G.hotelDebt >= 800 && !_flag("tabSettled") &&

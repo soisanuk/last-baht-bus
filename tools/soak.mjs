@@ -103,6 +103,57 @@ const WILD_STATIC = ["look", "wait 3", "time", "inventory", "diagnose", "smell",
   "buy beer", "buy water", "dance", "sing", "eat", "drink", "hint", "quests", "score",
   "check messages", "map", "cheers"];
 
+// The walker's vocabulary must come from the ENGINE, not from the list above.
+// Measured 2026-08-23 (docs/testing-gap-analysis.md §2.3): WILD_STATIC is 19
+// hand-written strings against a parser that switches on 322 verbs, so 94% of
+// the verb surface was never typed. WORK was one of them — across four seeds
+// and 2,592 expat commands the walker stood in the player's own bar constantly
+// and never once typed it, which is how a mechanic that did nothing for 65
+// nights survived every soak ever run. A hand-written pool encodes the same
+// mental model as the code it is meant to test.
+//
+// The source is engineComplete — the engine's OWN autocomplete, the same
+// surface the keyboard offers a player, so it grows with the game for free.
+// It caps at 8 candidates per prefix, so a capped letter is expanded a second
+// level ("w" is full, so "wa".."wz" are asked too) or verbs past the cap stay
+// invisible — which is exactly how `work` hid behind `watch`/`weather`/`wave`.
+const _AZ = "abcdefghijklmnopqrstuvwxyz".split("");
+function engineVocab() {
+  const set = new Set();
+  try {
+    for (const ch of _AZ) {
+      const c = engineComplete(ch) || [];
+      for (const x of c) set.add(x);
+      if (c.length >= 8) for (const ch2 of _AZ)
+        for (const x of (engineComplete(ch + ch2) || [])) set.add(x);
+    }
+  } catch (e) { /* vocabulary must never kill the run */ }
+  // destructive/meta verbs would end or reset the run rather than exercise it
+  for (const v of [...set])
+    if (/^(restart|reset|quit|end|logout|undo|handover|resume|unsubscribe|toggle|load)\b/.test(v)) set.delete(v);
+  return [...set];
+}
+
+// Coverage-guided, for the same reason coverage-guided fuzzing beats the dumb
+// kind: uniform sampling over ~113 verbs needs thousands of commands to reach
+// any particular one, which is no better than the hand list for a short run.
+// Preferring verbs this run hasn't issued yet turns "eventually" into "this run".
+let _triedVerbs = new Set();
+const ENGINE_VERB_RATE = 0.18;
+function engineVerbPick() {
+  const vocab = engineVocab();
+  if (!vocab.length) return null;
+  // Recycle once most of the vocabulary has been seen: a verb only exercises its
+  // mechanic in the right ROOM (WORK on the beach is a voiced refusal, not a
+  // shift), so one pass over the verb list is not one pass over the game. Each
+  // recycle re-explores from wherever the walk has since wandered.
+  if (_triedVerbs.size >= vocab.length * 0.7) _triedVerbs.clear();
+  const fresh = vocab.filter(v => !_triedVerbs.has(v));
+  const v = pick(fresh.length ? fresh : vocab);
+  _triedVerbs.add(v);
+  return v;
+}
+
 function wildPool() {
   const pool = [...WILD_STATIC];
   try {
@@ -139,6 +190,80 @@ function wildPool() {
   } catch (e) { /* pool building must never kill the run */ }
   return pool;
 }
+
+// ── The liveness ledger ──────────────────────────────────────────────────────
+// Every invariant this harness had was a SAFETY property — "nothing bad
+// happens": no throw, no NaN, no negative money, no soft-lock, no wedged modal.
+// Not one was a LIVENESS property — "something good happens" (Lamport, 1977).
+// Class-B defects (docs/playtest-findings-analysis.md) are liveness failures by
+// definition: WORK computing nothing for 65 nights, the room safe never paying,
+// the procurement beat never firing. A suite of safety assertions cannot express
+// the sentence that would have caught any of them.
+//
+// So: name the effects that ought to occur, count how often each actually does,
+// and report the ZEROES. A zero is either dead content or a bug, and the harness
+// deliberately does not try to tell you which — a human reads the list in
+// seconds, which is the whole point. `modes` says where an effect is REACHABLE;
+// outside those it is not expected and not reported as missing.
+//
+// Predicates read a flat snapshot of G taken before and after each command, so
+// they observe the world rather than the implementation — `bar.night.worked`
+// reads `away`, which reset to 0 only on a worked night both before and after
+// the fix, and so would have gone to zero while the bug was live.
+function liveSnap() {
+  const b = G.bar || {}, soc = G.soc || {}, ph = G.phone || {};
+  const drinks = soc.drinks || {};
+  return {
+    day: G.day, money: G.money, happy: G.happy, room: G.room,
+    barNights: b.nights || 0, barAway: b.away || 0, barWorked: b.worked || 0,
+    barMonths: b.months || 0, barCash: b.cash || 0,
+    synAsked: Object.keys((G.syn && G.syn.asked) || {}).length,
+    synDone: Object.keys((G.syn && G.syn.done) || {}).length,
+    questsDone: Object.values(G.quests || {}).filter(q => q === "done").length,
+    questsActive: Object.values(G.quests || {}).filter(q => q === "active").length,
+    bondMax: Math.max(0, ...Object.values(drinks)),
+    contacts: Object.keys(ph.contacts || {}).length,
+    photos: (ph.photos || []).length,
+    bells: Object.values(soc.bells || {}).reduce((a, n) => a + n, 0),
+    nights: (G.nightLog || []).length,
+    dog: G.dog ? 1 : 0, hurt: G.hurt || 0, rep: G.rep || 0, jaded: G.jaded || 0,
+    tanAsked: !!(G.flags || {}).tanAsked,
+    safeOpened: !!(G.flags || {}).roomSafeOpened,
+    act1Done: !!(G.flags || {}).act1Done,
+    barOpen: !!(G.flags || {}).barOpen,
+  };
+}
+
+const ALL_MODES = ["act1", "vacation", "soi6", "expat"];
+const SANDBOX = ["vacation", "soi6", "expat"];
+const EFFECTS = [
+  // the night, the body, the money — reachable everywhere
+  { id: "night.ended",        modes: ALL_MODES, hit: (a, b) => b.nights > a.nights },
+  { id: "money.spent",        modes: ALL_MODES, hit: (a, b) => b.money < a.money },
+  { id: "happy.gained",       modes: ALL_MODES, hit: (a, b) => b.happy > a.happy },
+  { id: "moved.room",         modes: ALL_MODES, hit: (a, b) => b.room !== a.room },
+  // the social machine
+  { id: "bell.rung",          modes: SANDBOX,   hit: (a, b) => b.bells > a.bells },
+  { id: "bond.built",         modes: SANDBOX,   hit: (a, b) => b.bondMax > a.bondMax },
+  { id: "bond.regular.tier",  modes: SANDBOX,   hit: (a, b) => a.bondMax < 7 && b.bondMax >= 7 },
+  { id: "contact.swapped",    modes: SANDBOX,   hit: (a, b) => b.contacts > a.contacts },
+  { id: "photo.taken",        modes: SANDBOX,   hit: (a, b) => b.photos > a.photos },
+  { id: "reputation.moved",   modes: SANDBOX,   hit: (a, b) => b.rep !== a.rep },
+  { id: "treadmill.jaded",    modes: SANDBOX,   hit: (a, b) => b.jaded > a.jaded },
+  // quests
+  { id: "quest.accepted",     modes: SANDBOX,   hit: (a, b) => b.questsActive > a.questsActive },
+  { id: "quest.completed",    modes: SANDBOX,   hit: (a, b) => b.questsDone > a.questsDone },
+  // Act One's own payoff
+  { id: "act1.completed",     modes: ["act1", "vacation"], hit: (a, b) => !a.act1Done && b.act1Done },
+  { id: "roomsafe.paid",      modes: ["vacation"], hit: (a, b) => !a.safeOpened && b.safeOpened },
+  // the expat stage — every one of these was a real class-B defect
+  { id: "bar.night.settled",  modes: ["expat"],  hit: (a, b) => b.barNights > a.barNights },
+  { id: "bar.night.worked",   modes: ["expat"],  hit: (a, b) => b.barNights > a.barNights && b.barAway === 0 },
+  { id: "bar.shift.declared", modes: ["expat"],  hit: (a, b) => b.barWorked > a.barWorked },
+  { id: "bar.month.paid",     modes: ["expat"],  hit: (a, b) => b.barMonths > a.barMonths },
+  { id: "tan.favour.asked",   modes: ["expat"],  hit: (a, b) => !a.tanAsked && b.tanAsked },
+  { id: "procurement.asked",  modes: ["expat"],  hit: (a, b) => b.synAsked > a.synAsked },
+];
 
 const modalActive = () =>
   !!(G.pendingChoice || G.pendingEnc || G.game || G.pendingBf || G.pendingSoapy || G.pendingFare);
@@ -198,6 +323,7 @@ export function runSoak(opts = {}) {
   const maxCommands = opts.maxCommands ?? nights * 300 + 500;
   const lang = opts.lang || null;  // e.g. "de": force G.player.lang each turn (survives intro/resets)
   _pseed = (seed * 2654435761 % 2147483646) + 1;
+  _triedVerbs = new Set();          // coverage-guided verb picking is per-run
 
   const buf = [];
   // stripMarkup, like any non-decorate() consumer: {{…}} is render-only
@@ -217,6 +343,21 @@ export function runSoak(opts = {}) {
     G.day = 8; _goExpat();
   } else if (mode === "soi6") {
     G.player = null; startSoi6Mode();
+  } else if (mode === "barowner") {
+    // The expat stage WITH the bar already bought. Needed because the chain to
+    // owning one is four dep-gated quests (talk-until-offered → ACCEPT → travel
+    // → a specific ASK), which a random walker cannot climb — CLAUDE.md says as
+    // much, and the liveness ledger proved it: every bar effect read 0 in expat
+    // mode not because the mechanics were broken but because the walker never
+    // owned a bar. Without this start state the whole expat endgame — the
+    // presence dilemma, the books, the monthly, procurement — is unreachable by
+    // any automated instrument the project has.
+    G.flags.act1Done = true; G.flags.hasWallet = true; G.stage = "vacation";
+    G.day = 8; _goExpat();
+    for (const f of ["barPremises", "barLicence", "barPartner", "partnerTan"]) _setFlag(f);
+    G.room = "stinky_bar";
+    G.money = BAR_DEPOSIT; _barDeposit(); _setFlag("barOpen");
+    G.money = 8000;                       // a working float, not the deposit's aftermath
   } // act1: raw opening, resets expected
   // Seed the GAME dice AFTER mode setup — startSoi6Mode() runs its own newGame(),
   // which re-seeds G.rng from Math.random and silently broke soi6 determinism.
@@ -235,6 +376,10 @@ export function runSoak(opts = {}) {
   const maxMs = opts.maxMs ?? 90_000;
   const t0 = Date.now();
   const failures = [], warns = [], transcript = [];
+  const liveness = {};                       // effect id → times observed
+  // barowner is expat with the bar bought, so it inherits expat's reachability
+  const _modeKey = mode === "barowner" ? "expat" : mode;
+  for (const e of EFFECTS) if (e.modes.includes(_modeKey)) liveness[e.id] = 0;
   const seen = new Set();          // rooms this run actually stood in
   const stats = { commands: 0, nights: 0, vacations: 0, understoodMisses: 0, truncated: false };
   let hintQueue = [], hintRoom = null, lastDay = G.day, lastTurns = G.turns,
@@ -275,6 +420,13 @@ export function runSoak(opts = {}) {
       if (chips.length) { cmd = pick(chips); source = "chip"; }
       if (cmd && cmd.endsWith(" ")) { cmd = resolvePrefill(cmd); }
     }
+    // the engine-vocabulary channel: its own branch, not an entry diluted into
+    // the wild pool (as one draw among ~35 it fired ~0.05% of turns and `work`
+    // still never came up across 2,592 commands)
+    if (!cmd && !modalActive() && prand() < ENGINE_VERB_RATE) {
+      const v = engineVerbPick();
+      if (v) { cmd = prand() < 0.25 ? v + " " : v; source = "vocab"; }
+    }
     if (!cmd) { cmd = pick(wildPool()); source = "wild"; }
     if (cmd.endsWith(" ")) { cmd = resolvePrefill(cmd); if (!cmd) continue; }
 
@@ -283,6 +435,7 @@ export function runSoak(opts = {}) {
       JSON.stringify({ phase: "exec", cmd, save: serializeGame() }));
     if (process.env.SOAK_TRACE) fs.writeSync(1, "→ " + cmd + " [" + source + "] d" + G.day + " nt" + G.nightTurn + " " + G.room + "\n");
     const mark = buf.length;
+    const liveBefore = liveSnap();     // the liveness ledger's "before"
     const modalBefore = modalActive(); // a game-move's output must never be banked as room hints
     const tCmd = Date.now();
     try { doCommand(cmd); } catch (e) {
@@ -290,6 +443,12 @@ export function runSoak(opts = {}) {
       break;
     }
     if (process.env.SOAK_TRACE) fs.writeSync(1, "  ✓ done\n");
+    // liveness: what did this command actually cause? (see EFFECTS)
+    try {
+      const liveAfter = liveSnap();
+      for (const e of EFFECTS)
+        if (liveness[e.id] !== undefined && e.hit(liveBefore, liveAfter)) liveness[e.id]++;
+    } catch (err) { /* the ledger must never kill a run */ }
     const dtCmd = Date.now() - tCmd;
     if (dtCmd > 250) (stats.slow = stats.slow || []).push({ cmd, ms: dtCmd, day: G.day, room: G.room });
     stats.commands++; cmdsThisNight++;
@@ -376,7 +535,7 @@ export function runSoak(opts = {}) {
 
   stats.roomsSeen = seen.size;
   stats.roomsTotal = Object.keys(ROOMS).length;
-  return { seed, mode, stats, failures, warns, transcript, seen };
+  return { seed, mode, stats, failures, warns, transcript, seen, liveness };
 }
 
 // ── CLI ──────────────────────────────────────────────────────────────────────
@@ -390,6 +549,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const mode = arg("mode", "vacation");
   const lang = arg("lang", null);
   const leakTally = new Map();  // normalised line → count, across all seeds
+  const liveTally = new Map();  // effect id → times observed, across all seeds
   const tPath = arg("transcript", null);
   let anyFail = false;
 
@@ -401,6 +561,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     }
     const w = {};
     for (const x of r.warns) w[x.kind] = (w[x.kind] || 0) + 1;
+    for (const [k, v] of Object.entries(r.liveness || {})) liveTally.set(k, (liveTally.get(k) || 0) + v);
     const cov = Math.round(100 * r.stats.roomsSeen / r.stats.roomsTotal);
     console.log(`seed ${seed} [${mode}]: ${r.stats.commands} cmds, ${r.stats.nights} nights, ` +
       `${r.stats.vacations} vacation-ends, warns ${JSON.stringify(w)}, failures ${r.failures.length}, ` +
@@ -422,6 +583,17 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     console.log("\n── language-leak report (unique lines × occurrences across seeds) ──");
     for (const [line, n] of [...leakTally].sort((a, b) => b[1] - a[1]))
       console.log(String(n).padStart(4) + "×  " + line);
+  }
+  if (liveTally.size) {
+    // The liveness ledger. A ZERO is the interesting line: either the content is
+    // dead or the mechanic is broken, and this harness deliberately does not
+    // guess which — a human reads the list in seconds. (See EFFECTS.)
+    console.log("\n── liveness ledger (effects observed across all seeds) ──");
+    const rows = [...liveTally].sort((a, b) => a[1] - b[1]);
+    for (const [id, n] of rows)
+      console.log((n === 0 ? "  ✗ NEVER  " : "  ·        ") + id.padEnd(24) + String(n).padStart(5));
+    const zeroes = rows.filter(r => r[1] === 0);
+    if (zeroes.length) console.log(`  ${zeroes.length} effect(s) never fired — dead content, or a bug.`);
   }
   process.exit(anyFail ? 1 : 0);
 }

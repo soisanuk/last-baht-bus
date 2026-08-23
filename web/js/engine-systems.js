@@ -4147,6 +4147,27 @@ function _workNight() {
   return pick;
 }
 
+// Your own bar never said it was yours. WORK and BOOKS lived in HELP and the
+// parser but on no surface in the room where they apply — a three-surfaces
+// violation that hid the expat stage's central decision from anyone who hadn't
+// read HELP, and hid it from every automated instrument too: the soak's hint
+// channel replays the CAPS commands a room prints, so a room that printed none
+// could never be worked (docs/testing-gap-analysis.md). Once a night, on
+// arrival at your own bar, before the shift is declared.
+const _BAR_OWNER_NUDGE = [
+  "The stools are yours, the till is yours, and so is the decision: stand behind it tonight, or go out and have the night you moved here for. (WORK · BOOKS)",
+  "Bert has it in hand, which is exactly the problem — he always has it in hand, and the takings say so. (WORK the rail tonight · BOOKS for the damage.)",
+  "Your name isn't over the door — the old man's still is — but the float in that drawer is yours to grow or not. (WORK · BOOKS)",
+  "Nobody needs you here. That is the whole trouble with owning it: turning up has to be a choice you make. (WORK · BOOKS)",
+];
+function _barOwnerNudge() {
+  if (!_barOwned() || G.room !== "stinky_bar") return;
+  if (G.bar.workedDay === G.day) return;          // already on tonight
+  if (G.bar.nudgeDay === G.day) return;           // once a night
+  G.bar.nudgeDay = G.day;
+  _say(_pickVary(_BAR_OWNER_NUDGE, "barowner"), "dim");
+}
+
 function _doWork() {
   if (!_barOwned()) {
     _say(_flag("barPartner")

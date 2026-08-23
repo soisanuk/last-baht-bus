@@ -13,6 +13,50 @@ import { fileURLToPath } from "node:url";
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "..");
 
+// ── The liveness ledger ─────────────────────────────────────────────────────
+// Every other assertion in this file is a SAFETY property — nothing bad happens.
+// These two are LIVENESS — something good does. Class-B defects
+// (docs/playtest-findings-analysis.md) are liveness failures by definition, and
+// the reason none of them was ever caught is that the project had no way to say
+// "this ought to happen sometimes". See EFFECTS in tools/soak.mjs.
+function tally(seeds, opts) {
+  const tot = {};
+  for (const seed of seeds) {
+    const r = runSoak({ seed, ...opts });
+    assert.deepEqual(r.failures, [], JSON.stringify(r.failures[0] || {}));
+    for (const [k, v] of Object.entries(r.liveness || {})) tot[k] = (tot[k] || 0) + v;
+  }
+  return tot;
+}
+
+test("liveness: a declared shift always reaches the books", () => {
+  // THE round-13 regression, expressed as an invariant rather than a fixture.
+  // _barSettle runs from _endNight after G.day++, so a settle-time test of
+  // `workedDay === G.day` is always false and the whole presence dilemma goes
+  // silent. Verified by reintroducing the bug: declared stayed at 4 and worked
+  // dropped to 0, which is precisely this assertion.
+  //
+  // Stated as an equality because it holds vacuously when the walker never
+  // reaches WORK, and so is not flaky; the reachability half is the second
+  // assertion, which is what fails if the instrument itself stops working.
+  const t = tally([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], { nights: 6, mode: "barowner" });
+  assert.ok(t["bar.night.settled"] > 0, "the bar's books settle at all");
+  assert.equal(t["bar.night.worked"], t["bar.shift.declared"],
+    `every declared shift must settle as worked (declared ${t["bar.shift.declared"]}, ` +
+    `worked ${t["bar.night.worked"]}) — a gap here is the presence dilemma going silent`);
+  assert.ok(t["bar.shift.declared"] > 0,
+    "the soak can still REACH work at all — if this fails the instrument has gone blind, " +
+    "not the game (check the engine-vocabulary channel and the owner's WORK/BOOKS nudge)");
+});
+
+test("liveness: the expat stage's own beats fire without being led there", () => {
+  // Both were arrival-only until round 13 and never fired for an owner who
+  // opened up early and stayed — 61 nights with G.syn untouched.
+  const t = tally([1, 2, 3, 4, 5, 6], { nights: 6, mode: "barowner" });
+  assert.ok(t["tan.favour.asked"] > 0, "Tan comes and asks");
+  assert.ok(t["procurement.asked"] > 0, "procurement is offered");
+});
+
 test("soak: vacation mode, 3 nights — invariants hold", () => {
   const r = runSoak({ seed: 1, nights: 3, maxMs: 20_000 });
   assert.deepEqual(r.failures, [], JSON.stringify(r.failures[0] || {}));
