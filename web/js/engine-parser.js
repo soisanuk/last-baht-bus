@@ -2110,6 +2110,17 @@ const _SCENERY = [
 ];
 
 // ── HANDOVER ─────────────────────────────────────────────────────────────────
+// UNADVERTISED as of 2026-08-24: the macro game these hand a character to
+// (Second Road) is being set aside for the Bangkok follow-on, so the verbs no
+// longer appear in HELP or autocomplete — a game that no longer exists should
+// not be promised on a surface a player reads. The MACHINERY IS DELIBERATELY
+// KEPT and still works if typed: it is ~190 lines, tested (tests/js/baton.test.js),
+// depended on by nothing else, and it is a working implementation of "export a
+// character subset across games at a clean seam" — which is exactly what a
+// Pattaya-raised protagonist arriving in Bangkok would want. Cheaper to leave
+// dormant than to rebuild. NB Second Road still syncs this repo as read-only
+// upstream and another agent maintains it, so removing the baton outright is a
+// cross-repo decision, not a refactor (see CLAUDE.md, repo ownership).
 // The baton: hand this character to the macro game (Second Road) and take it
 // back later. exportBaton/importBaton have existed in engine-core since the
 // contract was agreed, with NOTHING calling them — no verb, no button, no
@@ -5352,7 +5363,6 @@ const _HELP = `Common commands:
   LIGHT ON / LIGHT OFF · CHARGE PHONE
   SCORE (happiness & progress) · UNDO · RESTART   (the night autosaves itself)
   BUY PIWIN A BEER · ASK PIWIN ABOUT <person>   (the men at the stands see everything)
-  HANDOVER (send this character to the macro game, at dawn) · RESUME (take one back)
   On a phone: the (INFO) chip opens QUESTS, HINT, TIME, WHO and the rest, and every
     "…" chip fans out into a menu — this list needs no typing to use
   Highlighted words in the story are tappable: tap for the quick menu, RIGHT-CLICK (or
@@ -5410,7 +5420,6 @@ const _HELP_SOI6 = `Common commands:
 const _COMPLETE_VERBS = [
   "reply", "unsubscribe",
   "buy piwin a beer",
-  "handover", "resume",
   "wear",
   "look", "examine", "take", "drop", "inventory", "go", "enter", "talk to",
   "ask", "give", "buy", "sell bottles", "pay", "wai", "say", "ride bus to", "ride the loop",
