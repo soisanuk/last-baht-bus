@@ -5371,6 +5371,7 @@ const _HELP = `Common commands:
   STANDING (the soi's read on you) · PHOTO <someone> (a portrait for your phone) · GALLERY (the faces you've collected)
   SEND <amount> TO <lady> (banking app)
   BORROW <amount> · REPAY [amount] (Nira's loan at Neon Paradise — 20%, three days, don't be late)
+  DEBT (every ledger with your name on it: Nira, the hotel book, the old man's note)
   Your own bar (once you own one): WORK / MIND (stand behind your own rail tonight) · BOOKS / TAKINGS
     DRAW [amount] (take your own money out of your own till — nobody else will do it for you)
   PET CATS (Jomtien beach) · FEED DOG (a friendship you cannot undo) · PET DOG · NAME DOG <name>
@@ -5553,7 +5554,18 @@ function _chipSet() {
     // "player's side" of the exchange); they crowd out most of the topic list.
     const acts = _convoChoices();
     for (const c of acts.slice(0, 3)) add(c.label.toLowerCase(), c.label);
-    for (const t of _convoTopics(partner).slice(0, acts.length ? 2 : 4)) add(t, _topicLabel(t));
+    // A BARE TOPIC AS THE CHIP'S COMMAND IS AMBIGUOUS. doCommand's verb switch
+    // runs long before the conversation layer gets to resolve a bare word, so any
+    // topic that is also a global verb fired the verb instead: tapping Auntie
+    // Nok's "wallet" in Act One printed your pocket balance instead of asking the
+    // woman in front of you about the missing wallet — the entire quest — and
+    // "bus" answered with the generic no-blue-trucks line (round 17). Silent, and
+    // the topic chips are a thumb player's ONLY way to ask about anything (the
+    // wheel carries verbs). So the chip types what a player would have to type;
+    // the LABEL still reads as the bare topic, so the bar looks unchanged.
+    const _who = _convoName(partner).toLowerCase();
+    for (const t of _convoTopics(partner).slice(0, acts.length ? 2 : 4))
+      add(`ask ${_who} about ${t}`, _topicLabel(t));
     add("compliment", "compliment");
     add("joke", "joke");
     if (_npcState(partner).trust >= 3) add("tease", "tease"); // banter unlocks once you're close
@@ -5778,6 +5790,17 @@ function engineComplete(input) {
     pool = ["quests", "hint", "time", "who", "contacts", "gallery", "standing", "diagnose", "score", "map", "help"];
     if (G.mode === "soi6") pool.push("share");
     if (G.stage === "expat") pool.push("books");
+    // DEBT and DRAW are readouts about YOUR money, and they were the two verbs a
+    // thumb could not reach by any route at all — no chip, no menu entry, no CAPS
+    // hint in prose, and DEBT isn't even in HELP. A thumbs-only owner sat at his
+    // own bar with ฿0 in pocket and ฿5,291 in his own till, unable to pay a ฿15
+    // fare (round 17). Both are offered only where they say something: DEBT when
+    // you owe somebody, DRAW when there is money in your own drawer to take.
+    if (G.loan || G.hotelDebt > 0 ||
+      (typeof _barOwned === "function" && _barOwned() && G.bar && (G.bar.owed > 0 || G.bar.arrears > 0)))
+      pool.push("debt");
+    if (typeof _barOwned === "function" && _barOwned() && G.room === "stinky_bar" && G.bar && G.bar.cash > 0)
+      pool.push("draw");
     return pool; // a menu, not a completion: no prefix filtering
   }
   else if (G.game && !ctx.length) pool = _gameVerbs();
@@ -5887,12 +5910,21 @@ let _prevCmd = ""; // the one before it (the SLEEP-on-waking guard: two SLEEPs i
 // read identically. See _renderResume.
 function _vacationEndPrompt() {
   if (G.mode === "soi6") { _say("(PLAY AGAIN — another week on Soi 6 · SHARE — your week card.)", "dim"); return; }
-  _say("(NEW VACATION · MOVE TO PATTAYA — the airline needs an answer.)", "dim");
+  // Both options in full, every time. A man coming back to his phone ten minutes
+  // later has to be able to see what he is choosing between — MOVE TO PATTAYA is
+  // permanent, and the terse redraw never said so.
+  _say(`VACATION ${G.vacation}: happiness ${G.happy} — ${_happyLevel(G.happy)}` +
+    (G.bestHappy > G.happy ? ` (best trip so far: ${G.bestHappy})` : " (your best trip yet)"), "win");
+  _say("(NEW VACATION — fly back next month. No lost wallet this time. Probably.)", "dim");
+  _say("(MOVE TO PATTAYA — stop pretending you're going home. Make the move; live the sandbox.)", "dim");
 }
 function _checkoutPrompt() {
   const others = Object.keys(_HOTELS).filter(k => k !== G.hotel);
+  // With their nightly rates: the live list is priced, and a resume that drops
+  // the prices leaves three hotel names and no way to tell them apart (round 17).
   _say("The clerk waits. (" +
-    others.map(k => _HOTELS[k].name.toUpperCase()).join(" · ") + " · or STAY.)", "dim");
+    others.map(k => `${_HOTELS[k].name.toUpperCase()} — ฿${_HOTELS[k].rate}/night`).join(" · ") +
+    " · or STAY.)", "dim");
 }
 // The driver's patience, in escalating flavors. A module-local counter (like
 // _lastCmd: presentation nicety, not game state) rotates them per nag; every

@@ -1352,6 +1352,17 @@ function _renderGame() {
   if (!g) return;
   _say("(A bar game is still in progress — here's where it stands:)", "dim");
   _gameBoard();
+  // WHAT'S RIDING ON IT. The stake is escrowed when the game starts and named in
+  // the opening line; a resume redrew a perfect board and never mentioned the
+  // money, so a player coming back to his phone knew what he was allowed to do
+  // but not what it would cost him to quit (round 17). Playing "for sanuk" (the
+  // broke player's stake-free game) is worth saying out loud too — that it costs
+  // nothing is exactly the thing he can't tell from the board.
+  if (g.stake > 0) {
+    _say(_fmt("(฿{s} of yours is on the table. QUIT concedes it.)", { s: g.stake }), "dim");
+  } else if (g.opp) {
+    _say("(Nothing is riding on this one — you're playing for สนุก.)", "dim");
+  }
   switch (g.type) {
     case "c4":   _say("(You're ●. Tap a column 1-7 to drop · Q quits.)", "dim"); break;
     case "jp":
@@ -3475,11 +3486,13 @@ function _endVacation() {
     _say(`(You owe Nira ฿${G.loan.owed}. The airport is the one place her cousins don't come, and she ` +
       "knows it, and she will remember the face. Pattaya keeps its books.)", "alert");
   }
-  _say(`VACATION ${G.vacation}: happiness ${G.happy} — ${_happyLevel(G.happy)}` +
-    (G.bestHappy > G.happy ? ` (best trip so far: ${G.bestHappy})` : " (your best trip yet)"), "win");
   _say("So. What now?", "room");
-  _say("(NEW VACATION — fly back next month. No lost wallet this time. Probably.)", "dim");
-  _say("(MOVE TO PATTAYA — stop pretending you're going home. Make the move; live the sandbox.)", "dim");
+  // The two options come from _vacationEndPrompt, NOT from here: this is the one
+  // screen in the game where a choice is permanent and one-way, and on a resume
+  // it used to redraw as "(NEW VACATION · MOVE TO PATTAYA — the airline needs an
+  // answer.)" — two unexplained CAPS phrases, no week's score, nothing saying one
+  // of them ends the holiday for good (interrupted-player persona, round 17).
+  _vacationEndPrompt();
 }
 
 // ── The departure ritual: killing the man the city made ──────────────────────

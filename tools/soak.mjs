@@ -216,6 +216,7 @@ function liveSnap() {
   return {
     day: G.day, money: G.money, happy: G.happy, room: G.room,
     barNights: b.nights || 0, barAway: b.away || 0, barWorked: b.worked || 0,
+    barLapses: b.lapses || 0,
     barMonths: b.months || 0, barCash: b.cash || 0,
     synAsked: Object.keys((G.syn && G.syn.asked) || {}).length,
     synDone: Object.keys((G.syn && G.syn.done) || {}).length,
@@ -277,6 +278,9 @@ const EFFECTS = [
   { id: "bar.night.settled",  modes: ["barowner"], hit: (a, b) => b.barNights > a.barNights },
   { id: "bar.night.worked",   modes: ["barowner"], hit: (a, b) => b.barNights > a.barNights && b.barAway === 0 },
   { id: "bar.shift.declared", modes: ["barowner"], hit: (a, b) => b.barWorked > a.barWorked },
+  { id: "bar.shift.lapsed",   modes: ["barowner"], hit: (a, b) => b.barLapses > a.barLapses,
+    why: "a shift declared and then not stood — correct behaviour, and the reason " +
+      "declared and worked are allowed to differ" },
   { id: "bar.month.paid",     modes: ["barowner"], hit: (a, b) => b.barMonths > a.barMonths,
     why: "the old man is paid every 30 days; a short run never reaches one" },
   { id: "tan.favour.asked",   modes: ["barowner"], hit: (a, b) => !a.tanAsked && b.tanAsked },

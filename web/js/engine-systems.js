@@ -4321,6 +4321,12 @@ function _workPresenceTick() {
   if (b.awayTurns >= WORK_AWAY_BUDGET) {
     b.workedLast = false;                 // the takings will read as Bert's, because they were
     b.workedDay = -1;                     // …and the night can't be re-declared
+    // Counted, because "declared but never settled as worked" is BOTH the correct
+    // outcome here and the exact shape of the round-13 bug (where the settle
+    // silently never saw the shift at all). Without this the liveness ledger
+    // cannot tell an abandoned shift from a broken one — it asserted equality and
+    // went green only while no walk happened to wander off. See soak.test.js.
+    b.lapses = (b.lapses || 0) + 1;
     _say(_pickVary([
       "Somewhere behind you the evening stopped being a shift and became a night out. Bert has the rail, Bert has had it for hours, and the takings will say so.",
       "You meant to look in. You did not look in. Whatever the Stinky Pinky did tonight, it did without you — and the books only ever record which of those it was.",

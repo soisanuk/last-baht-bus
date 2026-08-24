@@ -202,16 +202,21 @@ test("in a conversation the chips become topics + LEAVE", () => {
   run("angela");
   const cmds = chipCmds();
   assert.ok(cmds.includes("bye"), "a way out is offered");
-  assert.ok(cmds.includes("90s"), "her open thematic topics are offered as chips");
+  // The chip carries the FULL ask, not the bare topic: a bare word is resolved by
+  // doCommand's verb switch first, so any topic that is also a global verb fired
+  // the verb instead (tapping Auntie Nok's "wallet" in Act One printed your
+  // pocket balance — round 17). The label is still the bare topic.
+  assert.ok(cmds.includes("ask angela about 90s"), "her open thematic topics are offered as chips");
   assert.ok(!cmds.some(c => /^withdraw|^enter |^ride bus/.test(c)),
     "the room/navigation chips are replaced by the talk palette");
 });
 
-test("topic chips are Title-cased labels over the bare-topic cmd", () => {
+test("topic chips are Title-cased labels over an unambiguous ask", () => {
   run("angela");
   const chips = _chipSet();
-  const qv = chips.find(c => c.cmd === "queen vic");
-  assert.equal(qv.label, "Queen Vic");
+  const qv = chips.find(c => c.cmd === "ask angela about queen vic");
+  assert.ok(qv, "the topic chip addresses the partner by name");
+  assert.equal(qv.label, "Queen Vic", "…and still READS as the bare topic");
 });
 
 test("person/gossip topics (another character's name) aren't offered as chips", () => {
@@ -265,10 +270,25 @@ test("social chips (flirt / buy drink) show for a hostess partner, not a patron"
 
 test("tapping a topic chip resolves through the conversation layer", () => {
   run("angela");
-  const chip = _chipSet().find(c => c.cmd === "90s");
+  const chip = _chipSet().find(c => c.label === "90s");
   out = [];
   doCommand(chip.cmd); // simulate the tap
   assert.match(lastOut(), /1997|Tower Records/);
+});
+
+// The defect the ask-form fixes, pinned on the character it was found on: a
+// topic that is ALSO a global readout verb must reach the person you're talking
+// to, not the readout. "wallet" during Act One is the whole quest.
+test("a topic chip whose word is also a global verb still asks the person", () => {
+  state().room = _npcRoom("nok");
+  run("nok");
+  const chip = _chipSet().find(c => c.label.toLowerCase() === "wallet");
+  assert.ok(chip, "Auntie Nok offers the wallet topic");
+  out = [];
+  doCommand(chip.cmd);
+  assert.match(lastOut(), /ask.*Nok about wallet|Beach at night|bar ladies/i,
+    "the tap must reach Nok, not print your pocket balance");
+  assert.doesNotMatch(lastOut(), /in your pocket\./);
 });
 
 // ── Verbal social actions (slice 4) ──────────────────────────────────────────

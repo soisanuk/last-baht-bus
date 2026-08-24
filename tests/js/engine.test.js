@@ -1458,9 +1458,15 @@ test("_renderResume redraws every modal state that gates input", () => {
   G.pendingChoice = "checkout"; G.hotel = "sabai";
   assert.match(draw(), /The clerk waits/, "checkout options");
 
-  // 4. the airline choice at week's end
+  // 4. the airline choice at week's end. BOTH options in full, not the old terse
+  //    "(NEW VACATION · MOVE TO PATTAYA — the airline needs an answer.)": one of
+  //    them is permanent and one-way, and a resumed player has forgotten which
+  //    (round 17).
   G.pendingChoice = "vacation_end";
-  assert.match(draw(), /airline needs an answer/, "vacation-end options");
+  const air = draw();
+  assert.match(air, /NEW VACATION — fly back next month/, "vacation-end: what going home means");
+  assert.match(air, /MOVE TO PATTAYA — stop pretending/, "vacation-end: what staying means");
+  assert.match(air, /happiness \d+/, "vacation-end: the week you're being asked to price");
   G.pendingChoice = null;
 
   // 5. an unpaid fare (the nag line rotates; price + PAY hint is the contract)
@@ -5914,8 +5920,9 @@ test("sleep ends the night on your terms; day seven ends the vacation", () => {
   state().tonicOwed = 4500; // fleeced this trip, never reported
   run("sleep");
   assert.equal(state().pendingChoice, "vacation_end");
-  run("look"); // everything is gated on the answer
-  assert.match(lastOut(), /airline needs an answer/i);
+  run("look"); // everything is gated on the answer — and the re-prompt states both options in full
+  assert.match(lastOut(), /NEW VACATION — fly back next month/);
+  assert.match(lastOut(), /MOVE TO PATTAYA — stop pretending/);
   run("new vacation");
   assert.equal(state().vacation, 2);
   assert.equal(state().day, 1);

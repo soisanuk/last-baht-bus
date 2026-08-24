@@ -121,6 +121,70 @@ test("no armed encounter is left with a prompt a reload cannot redraw", () => {
   }
 });
 
+// ── Dave: the two verbs about YOUR money that no thumb could reach ──
+
+test("DEBT joins the info menu when you owe somebody, and only then", () => {
+  assert.ok(!engineComplete("__info ").includes("debt"), "nothing owed, nothing to read");
+  G.loan = { owed: 4000, dueDay: 5 };
+  assert.ok(engineComplete("__info ").includes("debt"), "Nira's loan puts it on the menu");
+  out = [];
+  doCommand("__info debt");
+  assert.match(text(), /Nira/, "and the menu item actually reports the ledger");
+});
+
+test("DRAW is offered where the till is, since that is the only place it works", () => {
+  G.stage = "expat";
+  for (const f of ["barPremises", "barLicence", "barPartner", "partnerTan"]) _setFlag(f);
+  G.money = BAR_DEPOSIT; _barDeposit(); _setFlag("barOpen");
+  G.bar.cash = 5291;
+  G.room = "stinky_bar";
+  assert.ok(engineComplete("__info ").includes("draw"), "at your own till it's on the menu");
+  G.room = "soi6_mid";
+  assert.ok(!engineComplete("__info ").includes("draw"),
+    "elsewhere it would only answer 'your till is at the Stinky Pinky'");
+});
+
+// ── Sam: a resumed decision has to still BE a decision ──
+
+test("the vacation-end redraw carries both options and the week's score, not two bare CAPS", () => {
+  G.day = 8;
+  _endVacation();
+  out = [];
+  _renderResume();
+  assert.match(text(), /NEW VACATION — fly back next month/);
+  assert.match(text(), /MOVE TO PATTAYA — stop pretending/, "the permanent, one-way option says so");
+  assert.match(text(), /happiness \d+/, "…and what the week was worth");
+});
+
+test("the live vacation-end prompt and its redraw are the same text (one source, no drift)", () => {
+  G.day = 8;
+  _endVacation();
+  const live = text();
+  out = [];
+  _renderResume();
+  for (const line of text().split("\n").filter(l => l.trim()))
+    assert.ok(live.includes(line), `the redraw invented a line the live prompt never printed: ${line}`);
+  assert.equal((live.match(/happiness \d+/g) || []).length, 1,
+    "…and the live path must not print the score twice");
+});
+
+test("the checkout list keeps its prices on a redraw — three hotel names alone can't be chosen between", () => {
+  G.hotel = "sabai";
+  G.pendingChoice = "checkout";
+  out = [];
+  _renderResume();
+  assert.match(text(), /฿\d+\/night/, "the rates survive the reload");
+});
+
+test("a resumed bar game names the pot, so QUIT has a visible price", () => {
+  G.room = "stinky_bar"; G.money = 500;
+  doCommand("play connect 4 20");
+  out = [];
+  _renderGame();
+  assert.match(text(), /฿20/, "the stake is on screen");
+  assert.match(text(), /QUIT concedes/i);
+});
+
 // ── Bee, refuted: pinned so the next persona's mis-sighting isn't "fixed" ──
 
 // Reported as "the Thai word card always shows สนุก whatever you tap". It does

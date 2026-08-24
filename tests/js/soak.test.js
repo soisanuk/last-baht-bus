@@ -36,14 +36,23 @@ test("liveness: a declared shift always reaches the books", () => {
   // silent. Verified by reintroducing the bug: declared stayed at 4 and worked
   // dropped to 0, which is precisely this assertion.
   //
-  // Stated as an equality because it holds vacuously when the walker never
-  // reaches WORK, and so is not flaky; the reachability half is the second
-  // assertion, which is what fails if the instrument itself stops working.
+  // Stated as a BALANCE, not an equality. A declared shift has two honest ends:
+  // it is stood and settles as worked, or it is abandoned and lapses (round 15 —
+  // walk away from your own rail for long enough and the takings become Bert's).
+  // The equality this used to assert was true only by accident: it went green
+  // while no seeded walk happened to wander off, and the first trajectory that
+  // did wander read as the round-13 regression. Every declared shift must still
+  // ACCOUNT for itself — what must never happen is a shift that neither settles
+  // nor lapses, which is exactly what going silent looks like.
   const t = tally([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], { nights: 6, mode: "barowner" });
   assert.ok(t["bar.night.settled"] > 0, "the bar's books settle at all");
-  assert.equal(t["bar.night.worked"], t["bar.shift.declared"],
-    `every declared shift must settle as worked (declared ${t["bar.shift.declared"]}, ` +
-    `worked ${t["bar.night.worked"]}) — a gap here is the presence dilemma going silent`);
+  assert.equal(t["bar.night.worked"] + t["bar.shift.lapsed"], t["bar.shift.declared"],
+    `every declared shift must either settle as worked or lapse (declared ${t["bar.shift.declared"]}, ` +
+    `worked ${t["bar.night.worked"]}, lapsed ${t["bar.shift.lapsed"]}) — an unaccounted shift ` +
+    `is the presence dilemma going silent`);
+  assert.ok(t["bar.night.worked"] > 0,
+    "at least one shift across twelve seeds is actually STOOD to the end of the night — " +
+    "zero worked against a positive declared count is the round-13 bug itself");
   assert.ok(t["bar.shift.declared"] > 0,
     "the soak can still REACH work at all — if this fails the instrument has gone blind, " +
     "not the game (check the engine-vocabulary channel and the owner's WORK/BOOKS nudge)");
