@@ -414,6 +414,15 @@ const _NOODLE_BOP = [
     "annoyingly, are you.",
 ];
 
+// The street peddler's two price rows. One table, read by both the pitch and the
+// haggled re-pitch, so the discount can never be described in one place and
+// charged in another (the numbers used to be a ternary in one line and typed
+// literals in the next).
+const _PEDDLER_PX = {
+  full: { watch: 300, shades: 150, vits: 200 },
+  deal: { watch: 200, shades: 100, vits: 120 },
+};
+
 const _ENC = {
   flower(input) {
     const id = G.flowerFor; G.flowerFor = null;
@@ -509,8 +518,8 @@ const _ENC = {
       // a direction, a LOOK, a stray verb: he doesn't take it as an argument — he waits
       // (the liability playtest's "s" cost ฿1000 and −4 สนุก he never chose)
       G.pendingEnc = "police";
-      _say("You try to step round him. He steps too — not fast, not rough, just there. " +
-        "“Fine first, my friend.” (PAY · WAI · or ARGUE.)", "alert");
+      _encPrompt(["You try to step round him. He steps too — not fast, not rough, just there. " +
+        "“Fine first, my friend.” (PAY · WAI · or ARGUE.)", "alert"]);
       return;
     } else {
       const f = Math.min(1000, G.money);
@@ -611,10 +620,10 @@ const _ENC = {
     if (/tao ?rai|how much|what.*cost|price|เท่าไหร่/.test(input)) {
       // TAO RAI is the taught ask-the-price verb; the lend is a favour, not a
       // sale — say so and re-arm so a YES still lands (veteran playtest 2026-08-17)
-      _say("He laughs. “Tao rai? Nothing, boss. I not sell electric — I sell " +
-        "motosai. You charge, we talk, next time you ride with me, na? THAT is the " +
-        "price.” The cable's already in his hand. (YES to plug in · or wave him off.)");
       G.pendingEnc = "powerbank";
+      _encPrompt(["He laughs. “Tao rai? Nothing, boss. I not sell electric — I sell " +
+        "motosai. You charge, we talk, next time you ride with me, na? THAT is the " +
+        "price.” The cable's already in his hand. (YES to plug in · or wave him off.)"]);
       return;
     }
     if (/yes|yeah|sure|ok|thank|khop|krub|krap|please|borrow|charge|why not/.test(input)) {
@@ -924,20 +933,28 @@ const _ENC = {
 
   peddler(input) {
     const deal = _flag("peddlerDeal");
-    const px = { watch: deal ? 200 : 300, shades: deal ? 100 : 150, vits: deal ? 120 : 200 };
+    const px = deal ? _PEDDLER_PX.deal : _PEDDLER_PX.full;
     if (/haggle|bargain|cheap|discount|too much|lower|tao ?rai|how much/.test(input)) {
       G.pendingEnc = "peddler"; // still at your elbow — next command is still the reaction
+      // _encPrompt, NOT _say: this branch leaves pendingEnc armed, so its lines are
+      // what a restore/UNDO has to redraw. With a bare _say the stash still held the
+      // ORIGINAL pitch, and a resumed haggle quoted the price you had just talked him
+      // out of — ฿300 on screen, ฿200 at the till (interrupted-player persona,
+      // round 17). Any branch that re-arms pendingEnc owes its prompt to the stash.
       if (deal) {
-        _say("He clutches his chest — the international sign for “you are killing " +
+        _encPrompt(["He clutches his chest — the international sign for “you are killing " +
           "me and my family”. The floor has been reached. " +
-          `(WATCH ฿${px.watch} · SUNGLASSES ฿${px.shades} · VITAMINS ฿${px.vits} · or NO.)`);
+          `(WATCH ฿${px.watch} · SUNGLASSES ฿${px.shades} · VITAMINS ฿${px.vits} · or NO.)`]);
         return;
       }
       G.flags.peddlerDeal = true;
-      _say("You name a lower number in the local fashion — pained, apologetic, as " +
+      // px was priced BEFORE the flag flipped, so read the haggled row directly
+      // rather than typing its numbers into the sentence.
+      const dx = _PEDDLER_PX.deal;
+      _encPrompt(["You name a lower number in the local fashion — pained, apologetic, as " +
         "though the price wounded you both. A beat. Then the smile of a man " +
         "meeting a worthy opponent: “Okayyy. For you, special.” " +
-        "(WATCH ฿200 · SUNGLASSES ฿100 · VITAMINS ฿120 · or NO.)");
+        `(WATCH ฿${dx.watch} · SUNGLASSES ฿${dx.shades} · VITAMINS ฿${dx.vits} · or NO.)`]);
       _addHappy(1);
       return;
     }

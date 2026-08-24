@@ -1,0 +1,58 @@
+{
+ "label": "persona-bee-taps",
+ "recorded": null,
+ "runs": 1,
+ "commands": 0,
+ "effectsTotal": 0,
+ "rooms": [
+  "pink_lotus",
+  "queen_vic",
+  "qv_room",
+  "soi6_mid",
+  "soi6_street",
+  "sunset_rail"
+ ],
+ "npcs": [
+  "gaew",
+  "nuch",
+  "tan"
+ ],
+ "patrons": [
+  "angela",
+  "mort"
+ ],
+ "enc": [
+  "brit"
+ ],
+ "questsDone": [],
+ "verbs": [
+  "1",
+  "2",
+  "3",
+  "bye",
+  "check",
+  "column",
+  "down",
+  "examine",
+  "flirt",
+  "goto",
+  "i",
+  "light",
+  "look",
+  "out",
+  "sawatdee",
+  "sorry",
+  "tip"
+ ],
+ "effects": [],
+ "dlg": [
+  "gaew#0",
+  "gaew#1",
+  "nuch#0",
+  "tan#3"
+ ],
+ "patDlg": [
+  "angela#3",
+  "mort#5"
+ ]
+}

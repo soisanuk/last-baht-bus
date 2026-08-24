@@ -128,13 +128,32 @@ if (verb === "serve") {
           enc: Object.keys(G.encDone || {}),
           questsDone: Object.entries(G.quests || {}).filter(([, v]) => v === "done").map(([k]) => k),
           dlg, patDlg,
+          // Verbs off the ECHOED line, not off what was typed: a tap, a wheel pick
+          // and a FAB all submit through the same path and echo the same way, and
+          // until 2026-08-24 only `cmd` recorded anything — so a thumbs-only
+          // session scored 6 verbs and 2 NPCs after a full evening of real play
+          // (round 17), which made every touch persona's coverage meaningless.
+          // Scrollback is pruned, but this accumulates into a set after every
+          // action, so nothing is lost.
+          echoed: Array.from(document.querySelectorAll(".t-echo"))
+            .map(e => (e.textContent || "").replace(/^❯\s*/, "")),
         };
       }).catch(() => null);
       if (!x) return;
+      const echoed = x.echoed || [];
+      delete x.echoed;
       const f = path.join(dir, "coverage.json");
       let acc = { rooms: [], npcs: [], patrons: [], enc: [], questsDone: [], dlg: [], patDlg: [], verbs: [] };
       try { acc = { ...acc, ...JSON.parse(readFileSync(f, "utf8")) }; } catch {}
       for (const k of Object.keys(x)) acc[k] = [...new Set([...(acc[k] || []), ...x[k]])].sort();
+      const v = new Set(acc.verbs || []);
+      // a bare digit is a modal answer, not a parser verb — counting it inflates
+      // the verb metric against a denominator that only holds real verbs
+      for (const c of echoed) {
+        const m = /^\s*([a-z0-9]+)/i.exec(String(c));
+        if (m && !/^\d+$/.test(m[1])) v.add(m[1].toLowerCase());
+      }
+      acc.verbs = [...v].sort();
       writeFileSync(f, JSON.stringify(acc, null, 1));
     },
     async cmd({ inputs }) {
@@ -165,7 +184,12 @@ if (verb === "serve") {
       ];
       for (const s of sels) {
         const el = page.locator(s).last();
-        if (await el.count()) { await el.click().catch(() => {}); await page.waitForTimeout(250); return { hit: s }; }
+        if (await el.count()) {
+          await el.click().catch(() => {});
+          await page.waitForTimeout(250);
+          await handlers.harvestCov();   // a tap is play too — see harvestCov
+          return { hit: s };
+        }
       }
       return { hit: null };
     },
@@ -178,6 +202,7 @@ if (verb === "serve") {
       if (pick != null && actions[pick]) {
         await page.locator("#flyout button").nth(pick).click().catch(() => {});
         await page.waitForTimeout(250);
+        await handlers.harvestCov();
       } else {
         await page.keyboard.press("Escape").catch(() => {});
       }
@@ -188,8 +213,19 @@ if (verb === "serve") {
       const sel = map[which] || `#nav-fab [data-nav="${which}"]`;
       const el = page.locator(sel);
       if (!await el.count()) return { hit: null };
+      // VISIBILITY, not existence. The compass buttons stay in the DOM when the
+      // wheel is hidden (and keep the previous room's disabled/title attributes,
+      // since _updateNavFab returns early when it isn't shown) — so an existence
+      // check let a persona "tap" a control no thumb can reach, read the stale
+      // attributes off it, and report three dead buttons in a hotel room that a
+      // player is never offered at all (round 17). A click on a hidden element
+      // times out and was swallowed by the catch, so it looked dead rather than
+      // absent. Report what the player can actually see.
+      if (!await el.first().isVisible().catch(() => false)) return { hit: null, hidden: true };
+      if (await el.first().isDisabled().catch(() => false)) return { hit: null, disabled: true };
       await el.click().catch(() => {});
       await page.waitForTimeout(250);
+      await handlers.harvestCov();
       return { hit: sel };
     },
     // the splash lives OUTSIDE the transcript ledger, so `start` printed only the
@@ -341,7 +377,8 @@ if (verb === "serve") {
     },
     fab: async () => {
       const r = await call("fab", { which: rest[0] });
-      if (!r.hit) console.log("(fab not visible: " + rest[0] + ")");
+      if (!r.hit) console.log("(fab " + (r.hidden ? "hidden here" : r.disabled ? "disabled here" :
+        "not on the page") + ": " + rest[0] + " — a thumb cannot reach it, this is not a finding)");
       console.log(await delta());
     },
     state: async () => console.log(JSON.stringify(await call("state"), null, 1)),

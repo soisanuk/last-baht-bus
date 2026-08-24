@@ -6007,7 +6007,17 @@ function doCommand(input) {
   // — arms the wrong-number text and then falls through to the ordinary
   // brush-off. The cover IS the answer.
   if (typeof _isProbe === "function" && typeof input === "string" && _isProbe(input)) _probeSeen();
-  const raw = _norm(input);
+  let raw = _norm(input);
+  // The chip bar's `info…` fanout prefills a SENTINEL ("__info ") so engineComplete
+  // can answer with a menu of the readout verbs instead of a prefix completion —
+  // one chip slot for eleven verbs. term.js then submits "__info score", and until
+  // 2026-08-24 nothing stripped the sentinel, so every item in that menu answered
+  // "I didn't understand that". It had never worked (one commit in `git log -S`),
+  // which left QUESTS/SCORE/STANDING/TIME/WHO/CONTACTS/GALLERY/DIAGNOSE/HINT/BOOKS
+  // with no tappable route at all on a phone — the surface HELP calls the phone
+  // surface (thumbs-only persona, round 17). Submitted bare, it means "I want the
+  // readouts", so answer with HELP rather than nothing.
+  if (/^__info\b/i.test(raw)) raw = raw.replace(/^__info\b\s*/i, "") || "help";
   if (!raw) return;
   const lower = raw.toLowerCase();
   const words = lower.split(" ");

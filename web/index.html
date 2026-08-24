@@ -493,6 +493,20 @@
     60%  { opacity: .85; }
     100% { opacity: 1;  filter: none; }
   }
+  /* The neon strike is a six-step flicker with a chromatic fringe. On a desktop
+     monitor at arm's length it reads as a tube striking; on a phone held a foot
+     from your face it reads as a strobe — the whole card is the bright thing in
+     a dark room, and the flicker takes the entire screen with it (reported on
+     mobile Chrome, 2026-08-24). Touch devices get the same beat as a soft
+     cross-fade instead: the poster still changes, it just doesn't hit you. */
+  @media (hover: none) and (pointer: coarse) {
+    #start-art-wrap img.lit { animation: neon-fade 1.1s ease-out; }
+    @keyframes neon-fade {
+      0%   { opacity: 0; }
+      45%  { opacity: .75; }
+      100% { opacity: 1; }
+    }
+  }
   @media (prefers-reduced-motion: reduce) {
     #start-art-wrap img.lit { animation: none; transition: opacity .6s; }
   }

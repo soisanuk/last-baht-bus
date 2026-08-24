@@ -1,0 +1,50 @@
+{
+ "label": "persona-dave-thumbs",
+ "recorded": null,
+ "runs": 1,
+ "commands": 0,
+ "effectsTotal": 0,
+ "rooms": [
+  "arrow_bar",
+  "beach_rd_c",
+  "beach_rd_klang",
+  "beach_rd_n",
+  "beach_rd_soi7",
+  "beach_rd_soi8",
+  "beach_rd_soi9",
+  "dongtan_beach",
+  "hotel_room",
+  "jomtien_beach",
+  "jomtien_beach_m",
+  "jomtien_beach_rd_n",
+  "jomtien_soi_7_beach_end",
+  "stinky_bar",
+  "thappraya_w"
+ ],
+ "npcs": [
+  "bert",
+  "nok"
+ ],
+ "patrons": [],
+ "enc": [
+  "tonic"
+ ],
+ "questsDone": [],
+ "verbs": [
+  "debt",
+  "draw",
+  "look",
+  "takings",
+  "toggle",
+  "twoweekmillionaire"
+ ],
+ "effects": [],
+ "dlg": [
+  "bert#0",
+  "bert#10",
+  "bert#15",
+  "nok#2",
+  "nok#6"
+ ],
+ "patDlg": []
+}

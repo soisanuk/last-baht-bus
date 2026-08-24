@@ -11,13 +11,18 @@ depends on it.
 ## The loop an agent should run
 
 ```sh
-D=<your scratchpad session dir>
-node tools/playtest-driver.mjs start --dir $D [--mobile] [--fresh]   # prints the start menu's buttons + the boot screen
-node tools/playtest-driver.mjs tap  --dir $D "SOI 6 CHALLENGE"
-node tools/playtest-driver.mjs tap  --dir $D "START"
-node tools/playtest-driver.mjs cmd  --dir $D 1 2 1          # answer the taxi intro
-node tools/playtest-driver.mjs cmd  --dir $D "look" "talk to lek" "beer"
+node tools/playtest-driver.mjs start --dir /tmp/lbb-pt-me [--mobile] [--fresh]   # prints the start menu's buttons + the boot screen
+node tools/playtest-driver.mjs tap  --dir /tmp/lbb-pt-me "SOI 6 CHALLENGE"
+node tools/playtest-driver.mjs tap  --dir /tmp/lbb-pt-me "START"
+node tools/playtest-driver.mjs cmd  --dir /tmp/lbb-pt-me 1 2 1          # answer the taxi intro
+node tools/playtest-driver.mjs cmd  --dir /tmp/lbb-pt-me "look" "talk to lek" "beer"
 ```
+
+**Write the session dir out in full, one invocation per shell call.** Do NOT set
+a `D=…` shell variable, and do not chain calls with `;` or `&&`: a leading
+variable assignment matches no permission rule, so the whole command falls
+through to a manual approval prompt — which lands on a human, one per command,
+possibly on a phone. Piping to `tail`/`head` is fine.
 
 Every `cmd`/`tap`/`wheel`/`fab` prints **only the new transcript lines** since
 your last call, under a one-line status header
