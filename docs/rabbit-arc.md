@@ -415,6 +415,55 @@ and canon continuity are independent axes (see `docs/settings-reuse.md`).
 - **Rabbit's staff and the sad-grace-note hostess** — authored or filler? Lean one
   authored (the day-counter), the rest filler.
 
+### If the iPhone build happens — two constraints that are cheap NOW and dear later
+
+Raised 2026-08-24, when the possibility of an iOS port came up. The arc is in far
+better shape for it than the CTF is (see below), but two things want deciding
+before the CLI is built rather than after.
+
+**1. TAP-REACHABILITY IS A HARD SCENARIO CONSTRAINT — every legal move must be
+reachable without the keyboard.** A CLI mini-game is a typing game, and glass is
+where typing goes to die: iOS gives you autocapitalisation (`Ls`), autocorrect on
+filenames, and smart punctuation. `cat ~/.bash_history` is genuinely miserable to
+thumb. The game already solved this shape once — the thumbs-only playtest
+completed a full seven-night week with zero typed commands, because prefill chips
+fan out from the engine's own completion pool. A CLI whose verb set is small
+(`help` lists them, by design) and whose filesystem is small (also by design) can
+surface both as chips: tap `ls`, tap a filename. That turns the worst mobile
+surface into one of the better ones — but only if the scenario config can enumerate
+its own legal moves, which is a design decision about the DATA SHAPE, not a
+rendering detail bolted on afterwards. Concretely: the scenario should be able to
+answer "what can be typed here right now", the same way `_playOptions()`/
+`_gameVerbs()` already do for the bar games. On a WKWebView build also set
+`autocorrect="off" autocapitalize="off" spellcheck="false"` on the input.
+
+**2. A `sanuk{…}` flag is DECORATION on mobile, and should be written as such.**
+The firewall already holds — "CTF flavour, never CTF dependency" — so the arc does
+not inherit the CTF's iOS problems, which is the single best decision in this
+document from a portability standpoint. But note that on iOS a flag string has
+nowhere to go: no URL bar, no submission surface, nothing to do with it. Fine as a
+wink taped to a monitor; just don't write a beat that expects the player to *act*
+on it.
+
+**Adjacent, and worth knowing rather than solving here: App Store review risk is
+higher for the heist than for anything else in the game.** The defence in "Real-world
+sensitivity" above is honest and I would not weaken it — a navigation puzzle over a
+fictional filesystem, whose whole method is "unlocked machine, copied file", is a
+deflation of hacking mystique rather than a how-to. But a reviewer sees a terminal,
+a wallet file and a copy-it-out goal, stacked on top of a 17+ adult rating. Cheap
+mitigations that improve the fiction anyway: keep the filesystem visibly fictional
+(no real tool names, no commands that map onto real exploitation), and make the
+first screen read as a story beat rather than a shell prompt. The CCIB thread
+already supplies the in-world framing for that.
+
+**The CTF, by contrast, should stay web-only.** Its affordances *are* the puzzle:
+`/.well-known/security.txt` has no app analogue; `EXAMINE QR` prints a code meant to
+be scanned BY a phone, which inverts into a dead end when the player IS the phone;
+and stage 2 turns on `dig TXT`, which iOS does not have. The content is documented
+as inert to the game — no quest gates on it — so an iOS build can drop the solving
+chain and keep the artefacts as flavour at zero mechanical cost. That is another
+argument for the firewall this arc already has.
+
 ## Decision log
 
 | Date | Decision |
@@ -432,3 +481,4 @@ and canon continuity are independent axes (see `docs/settings-reuse.md`).
 | open | CCIB heat: scripted landing vs. computed from play. |
 | open | Betrayal fork in v1 (tentative yes). |
 | open | Operator-path reward (flavour-only vs. nothing extra). |
+| 2026-08-24 | If iOS happens: tap-reachability is a HARD constraint on the CLI scenario format (every legal move enumerable and tappable, per the thumbs-only precedent), and a `sanuk{…}` flag is decoration only on mobile. The CTF stays web-only — its affordances (`/.well-known/`, a scannable QR, `dig TXT`) have no app analogue, and the existing CTF-independence firewall is what makes that free. |

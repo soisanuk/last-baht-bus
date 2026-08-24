@@ -142,6 +142,41 @@ unsolvable for whoever copied it.
   domain will not. The fix, when wanted, is a copy at the root of the personal
   web server.
 
+## Platform note: this puzzle is WEB-ONLY, and that is structural
+
+Raised 2026-08-24 against the possibility of an iPhone build. The chain does not
+port, for reasons that are not fixable by effort:
+
+- **Stage 1's front door is a URL.** `/.well-known/security.txt` is RFC 9116 — a
+  file essentially only security people look for. An app has no domain and no
+  well-known path, so the thread does not exist to pull.
+- **The QR inverts.** `EXAMINE QR` prints a code designed to be scanned BY a
+  phone pointed at a screen. On an iPhone the player IS the phone; you cannot
+  scan your own display. The pointer that exists to catch players who don't check
+  `/.well-known/` becomes a dead end precisely where it is most needed. (Rendering
+  risk too: the half-block glyphs and `line-height: 1` are verified in headless
+  Chromium, not WKWebView, which does its own font substitution — a substituted
+  mono face could open the white stripe that stops it scanning, and no current
+  test would see it.)
+- **Stage 2 turns on `dig TXT`.** iOS does not have it. A security pro can find a
+  lookup tool, so it is a barrier rather than a wall — but it is a barrier at the
+  exact step meant to feel like *"this is what a security person checks."*
+- **The probe gate would silently stop arming.** `_PROBE_RE` reads the TRUE raw
+  input specifically to catch the quotes and braces that make a probe a probe;
+  iOS smart punctuation turns `' OR 1=1--` into `’ OR 1=1--`. A WKWebView build
+  needs `autocorrect="off" autocapitalize="off"` on the input regardless.
+- **The founding constraint inverts.** "Visible ciphertext, earned key" exists
+  because the whole game is public unminified source, so hiding a string would be
+  a `grep`. In an `.ipa` the JS is less public but still trivially extractable —
+  the elegance's reason is gone while the exposure isn't.
+
+**The fix is free, and the design already paid for it.** This content is inert to
+the game — nothing calls it, no quest gates on it, no playthrough touches it — so
+an iOS build can drop the solving chain and keep the artefacts (the poster, Box
+15, Eddy at the White Rabbit) as pure flavour at zero mechanical cost. The
+CTF-independence firewall in `docs/rabbit-arc.md` is what makes that painless, and
+is the best argument for having drawn it.
+
 ## Stage 2 — the wrong number (SHIPPED 2026-08-15)
 
 **The chain:**
