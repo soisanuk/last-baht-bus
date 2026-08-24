@@ -33,14 +33,14 @@ var NEWS_FEED = [
     "d": "21 Aug 2026"
   },
   {
-    "t": "Giant honey bee attack leaves 17 injured in Pattaya",
-    "s": "Thaiger",
-    "d": "20 Aug 2026"
-  },
-  {
     "t": "DSI raids three Pattaya sites in nominee probe",
     "s": "Thaiger",
     "d": "23 Aug 2026"
+  },
+  {
+    "t": "Thai teen found in suitcase died from suffocation, police reveal",
+    "s": "BBC",
+    "d": "19 Aug 2026"
   },
   {
     "t": "Dozens of co-ordinated arson attacks hit southern Thailand",
@@ -48,40 +48,40 @@ var NEWS_FEED = [
     "d": "23 Aug 2026"
   },
   {
-    "t": "Dozens of attacks in southern Thailand wound three people",
-    "s": "Al Jazeera",
-    "d": "23 Aug 2026"
+    "t": "Coordinated attacks rock Thailand’s southernmost provinces",
+    "s": "AP News",
+    "d": "24 Aug 2026"
   },
   {
-    "t": "Scores of attacks rock Thailand’s southernmost provinces, Yala hardest hit",
-    "s": "Thai PBS World",
-    "d": "23 Aug 2026"
+    "t": "Dozens of attacks in Thailand’s restive south leave three wounded",
+    "s": "The Japan Times",
+    "d": "24 Aug 2026"
   },
   {
-    "t": "Rookie pro golfer dies at 18 while preparing for tournament in Thailand",
-    "s": "AL.com",
-    "d": "23 Aug 2026"
+    "t": "The End of Thailand’s Long Stalemate?",
+    "s": "Foreign Affairs",
+    "d": "24 Aug 2026"
   },
   {
-    "t": "Couple Sells Everything, Moves to Thailand to Homeschool Kids for ‘Simple’ Life",
-    "s": "People.com",
-    "d": "23 Aug 2026"
+    "t": "Thai prime minister meets security chiefs after coordinated attacks in 3 southern provinces",
+    "s": "104.5 WOKV",
+    "d": "24 Aug 2026"
   },
   {
-    "t": "Vietnam substitutes deliver first-leg win over Thailand in ASEAN Championship final",
-    "s": "ESPN",
-    "d": "22 Aug 2026"
+    "t": "Thailand Southern Violence",
+    "s": "Dayton Daily News",
+    "d": "24 Aug 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-08-21","USD":32.68,"AUD":23.42,"GBP":44.62,"EUR":38.23};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-24","temp":28,"humid":81,"code":3,"hi":31,"rain":71};
+var WX_NOW = {"date":"2026-08-24","temp":31,"humid":66,"code":3,"hi":31,"rain":56};
 // the bar TV's one true channel
-var FOOTY = {"league":"Premier League","games":[{"d":"2026-08-21","done":true,"h":"Arsenal","hs":3,"a":"Coventry","as":0},{"d":"2026-08-22","done":true,"h":"Hull","hs":2,"a":"Man United","as":0},{"d":"2026-08-22","done":true,"h":"Everton","hs":2,"a":"C Palace","as":0},{"d":"2026-08-22","done":true,"h":"Ipswich","hs":2,"a":"Sunderland","as":1},{"d":"2026-08-22","done":true,"h":"Nottm Forest","hs":0,"a":"Leeds","as":1},{"d":"2026-08-22","done":true,"h":"Brentford","hs":3,"a":"Spurs","as":0},{"d":"2026-08-23","done":true,"h":"Brighton","hs":4,"a":"Aston Villa","as":0},{"d":"2026-08-23","done":true,"h":"Man City","hs":2,"a":"Bournemouth","as":1},{"d":"2026-08-23","done":true,"h":"Newcastle","hs":2,"a":"Liverpool","as":2},{"d":"2026-08-24","done":false,"h":"Fulham","hs":0,"a":"Chelsea","as":0}]};
+var FOOTY = {"league":"Premier League","games":[{"d":"2026-08-21","done":true,"h":"Arsenal","hs":3,"a":"Coventry","as":0},{"d":"2026-08-22","done":true,"h":"Hull","hs":2,"a":"Man United","as":0},{"d":"2026-08-22","done":true,"h":"Everton","hs":2,"a":"C Palace","as":0},{"d":"2026-08-22","done":true,"h":"Ipswich","hs":2,"a":"Sunderland","as":1},{"d":"2026-08-22","done":true,"h":"Nottm Forest","hs":0,"a":"Leeds","as":1},{"d":"2026-08-22","done":true,"h":"Brentford","hs":3,"a":"Spurs","as":0},{"d":"2026-08-23","done":true,"h":"Brighton","hs":4,"a":"Aston Villa","as":0},{"d":"2026-08-23","done":true,"h":"Man City","hs":2,"a":"Bournemouth","as":1},{"d":"2026-08-23","done":true,"h":"Newcastle","hs":2,"a":"Liverpool","as":2},{"d":"2026-08-24","done":false,"h":"Fulham","hs":0,"a":"Chelsea","as":0},{"d":"2026-08-28","done":false,"h":"C Palace","hs":0,"a":"Man City","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-08-16","first":"004615","last2":"53","front3":["429","731"],"back3":["094","937"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4604,"date":"2026-08-23","baht":71150};
+var GOLD = {"usd":4645,"date":"2026-08-24","baht":71800};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":77322,"thb":2523056};
+var BTC = {"usd":77622,"thb":2534540};
