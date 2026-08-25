@@ -275,7 +275,7 @@ function newGame() {
     // made up. Nightly trade lands in `cash` — the bar's own till, kept separate
     // from your pocket so a good week at the bar isn't the same as a good week.
     bar: { cash: 0, owed: 0, arrears: 0, months: 0, lastMonthDay: 0, nights: 0, best: 0,
-      workedLast: false },
+      workedLast: false, rentOwed: 0, rentShort: 0 },
     atmToday: 0,         // principal withdrawn today (resets when atmDay rolls over)
     lastPolice: -99,     // turn of the last boy-in-brown shakedown
     questHailed: false,  // the one time a giver calls you over (see _questHail)

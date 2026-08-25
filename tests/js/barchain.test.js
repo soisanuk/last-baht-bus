@@ -473,15 +473,20 @@ test("the note falls by what you actually paid — a partial payment isn't colle
   // the shortfall was billed again next month as arrears. ฿50,000 handed over
   // reduced the debt by ฿25,000.
   running();
-  G.bar.owed = 1680000; G.bar.cash = 22100; G.bar.lastMonthDay = 0;
+  // Rent comes out first now (the landlord can re-let the room; the old man
+  // cannot do anything at all), so the till is stocked with the rent on top of
+  // the figure under test — what this asserts is the NOTE's arithmetic.
+  const rent = _barRent();
+  G.bar.owed = 1680000; G.bar.cash = rent + 22100; G.bar.lastMonthDay = 0;
   G.bar.arrears = 0; G.bar.months = 1; G.money = 0; G.day = 31;
+  G.bar.rentOwed = 0; G.bar.rentShort = 0;
   const owed0 = G.bar.owed;
   const a = _barMonthly();
   assert.equal(a.paid, 22100, "the whole till went");
   assert.equal(G.bar.arrears, 2900, "and the shortfall is remembered");
   assert.equal(owed0 - G.bar.owed, 22100, "the principal falls by exactly what was handed over");
 
-  G.bar.cash = 27900; G.bar.lastMonthDay = 0; G.day = 62;
+  G.bar.cash = rent + 27900; G.bar.lastMonthDay = 0; G.day = 62;
   const b = _barMonthly();
   assert.equal(b.paid, 27900, "next month collects the arrears on top");
   assert.equal(G.bar.arrears, 0);
@@ -704,4 +709,119 @@ test("faction standing is what keeps the police away — and nothing else does",
   assert.equal(policeNights(0, 0), 0, "and with nothing refused there's no friction to notice");
   assert.ok(policeNights(6, 0) > 0,
     "outside it, with jobs refused, the licence and the staff list get looked at");
+});
+
+// ── Rent: the second creditor, and the one with teeth ────────────────────────
+// Publican note (2026-08-25): the model had one monthly obligation, the old
+// man's note, and he is written so as never to chase — so there was no monthly
+// bill anybody could actually enforce. Real bars rent the shophouse. That is
+// both the missing cost line and the missing failure state.
+
+test("rent scales with what the room is, so a go-go prices itself", () => {
+  running();
+  assert.equal(_barRent(), BAR_RENT * RENT_MULT.beer, "the Stinky is a beer bar");
+  const seen = new Set();
+  for (const [type, mult] of Object.entries(RENT_MULT)) {
+    assert.ok(mult >= 1, type + " must not be cheaper than a beer bar");
+    seen.add(mult);
+  }
+  assert.ok(RENT_MULT.gogo > RENT_MULT.soi6 && RENT_MULT.soi6 > RENT_MULT.beer,
+    "Walking Street costs more than Soi 6 costs more than a beer bar");
+});
+
+test("the landlord is paid before the old man, because only one of them can act", () => {
+  running();
+  const rent = _barRent();
+  // enough for the rent and not a baht more
+  G.bar.cash = rent; G.money = 0; G.bar.arrears = 0; G.bar.owed = 1680000;
+  G.bar.rentOwed = 0; G.bar.rentShort = 0; G.bar.lastMonthDay = 0; G.day = 31;
+  const m = _barMonthly();
+  assert.equal(m.rentShort, 0, "the rent went");
+  assert.equal(G.bar.rentOwed, 0);
+  assert.equal(m.short, BAR_MONTHLY, "and the old man got nothing, which is survivable");
+  assert.equal(G.bar.arrears, BAR_MONTHLY);
+});
+
+test("rent unpaid is remembered, and two months of it ends the lease", () => {
+  running();
+  G.bar.cash = 0; G.money = 0; G.bar.lastMonthDay = 0; G.day = 31;
+  G.bar.rentOwed = 0; G.bar.rentShort = 0; G.bar.arrears = 0;
+  const rent = _barRent();
+
+  out = []; let m = _barMonthly(); _barArrearsTick(m);
+  assert.equal(G.bar.rentOwed, rent, "month one is owed");
+  assert.equal(G.bar.rentShort, 1);
+  assert.ok(!_flag("barLost"), "one month is a conversation, not an eviction");
+  assert.match(out.join("\n"), /teeth|rent/i, "and you are told which bill this is");
+
+  G.bar.lastMonthDay = 0; G.day = 62;
+  out = []; m = _barMonthly();
+  assert.equal(m.rentMonths, 2, "two months short");
+  _barArrearsTick(m);
+  assert.ok(_flag("barLost"), "two months and the room is somebody else's");
+  assert.equal(_flag("barOpen"), false);
+  assert.match(out.join("\n"), /frontage|queue for the room/i, "the landlord's ending, not the partner's");
+});
+
+test("the partner's ending and the landlord's are different endings", () => {
+  // Both routes exist and read differently — the fork has to pay off at the bad
+  // end as well as the good one.
+  running();                       // running() sets partnerTan
+  G.bar.arrears = BAR_ARREARS_END; G.bar.rentOwed = 0; G.bar.rentShort = 0;
+  out = []; _barArrearsTick({});
+  const tan = out.join("\n");
+  assert.ok(_flag("barLost"));
+  assert.match(tan, /staff list|squared it with the old man/i, "Tan's version");
+  assert.doesNotMatch(tan, /frontage/, "and not the landlord's");
+
+  running(); G.flags.partnerTan = false; _setFlag("partnerCandy");
+  G.bar.arrears = BAR_ARREARS_END; G.bar.rentOwed = 0; G.bar.rentShort = 0;
+  out = []; _barArrearsTick({});
+  assert.match(out.join("\n"), /lawyer|fourteen days/i, "Candy's version");
+});
+
+test("the nightly cost splits into nut, stock and wages — and a dead night is cheap", () => {
+  running();
+  G.rng = 4242;
+  const nights = [];
+  for (let i = 0; i < 40; i++) { G.day = 100 + i; G.bar.lastMonthDay = G.day; nights.push(_barNight()); }
+  for (const n of nights) {
+    assert.equal(n.nut + n.cogs + n.wages, n.costs, "the three lines are the whole bill");
+    assert.ok(n.cogs > 0 && n.cogs < n.take, "stock is a share of what you sold");
+  }
+  // the point of a variable line: a thin night costs less than a fat one
+  const lean = nights.slice().sort((a, b) => a.take - b.take)[0];
+  const fat  = nights.slice().sort((a, b) => b.take - a.take)[0];
+  assert.ok(lean.costs < fat.costs, "an empty bar is cheaper to run than a busy one");
+});
+
+test("a night away costs you money, which is what makes standing the rail a choice", () => {
+  running();
+  G.rng = 77; let W = 0, A = 0;
+  for (let i = 0; i < 300; i++) {
+    G.day = 200 + i; G.bar.lastMonthDay = G.day;
+    const worked = i % 2 === 0;
+    if (worked) { G.bar.workedLast = true; G.bar.workedDay = G.day; }
+    const n = _barNight();
+    if (worked) W += n.net; else A += n.net;
+  }
+  assert.ok(W / 150 > 2000, "your own rail clears real money");
+  assert.ok(A / 150 < 0, "and Bert's shift does not cover itself — the away night is a cost");
+});
+
+test("the whole thing runs through the real path: nights end, months land, bars are lost", () => {
+  // The repo rule: reach the subsystem the way the game does. _endNight is the
+  // orchestrator that does G.day++ between the shifts, which is exactly the seam
+  // that hid WORK doing nothing for 65 in-game nights.
+  running();
+  G.money = 0; G.bank = 0; G.bar.cash = 0; G.bar.lastMonthDay = G.day;
+  G.bar.rentOwed = 0; G.bar.rentShort = 0;
+  let months = 0;
+  for (let i = 0; i < 100 && !_flag("barLost"); i++) {
+    G.room = "hotel_room"; out = [];
+    _endNight("dawn");
+    if (out.join("\n").match(/Rent to the landlord/)) months++;
+  }
+  assert.ok(months >= 2, "months actually landed on the real path (saw " + months + ")");
+  assert.ok(_flag("barLost"), "and a bar nobody stands in is eventually not yours");
 });

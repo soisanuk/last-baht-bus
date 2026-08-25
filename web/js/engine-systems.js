@@ -4254,7 +4254,10 @@ function _barOwnerNudge() {
 
 function _doWork() {
   if (!_barOwned()) {
-    _say(_flag("barPartner")
+    _say(_flag("barLost")
+      ? "Not any more. You can stand at that rail as long as you like; you " +
+        "just have to buy the drinks like everybody else."
+      : _flag("barPartner")
       ? "Not yet. Until the deposit's paid it's still somebody else's rail."
       : "You don't own a bar. Standing behind somebody else's is a different job, " +
         "and they have people for it.");
@@ -4305,7 +4308,7 @@ function _doWork() {
 // through the night, and it still settled as worked at the full multiplier
 // (insider playtest 2026-08-23 — landing straight on top of the settle-time fix
 // from the day before: the flag works, nothing checked you were still there).
-// A landlord can nip out; he cannot spend the evening somewhere else. Cumulative,
+// A publican can nip out; he cannot spend the evening somewhere else. Cumulative,
 // because three trips out is not minding a bar either.
 const WORK_AWAY_BUDGET = 15;   // turns off your own floor before the shift lapses
 function _workPresenceTick() {
@@ -4375,9 +4378,11 @@ function _barDeposit() {
     G.soc.depositNagDay = G.day;
     _say(_fmt("Bert has the figure written on the back of a docket. \"Deposit's " +
       "฿{dep}, and the old man carries the rest — ฿{monthly} a month, six " +
-      "years.\" He slides it over. \"You're ฿{short} short, bud. Bank won't give " +
-      "you it all in one day either.\"",
-      { dep: BAR_DEPOSIT, monthly: BAR_MONTHLY, short: BAR_DEPOSIT - G.money }), "alert");
+      "years. Rent's ฿{rent}, separate, to the fella that owns the building.\" " +
+      "He slides it over. \"You're ฿{short} short, bud. Bank won't give you it " +
+      "all in one day either.\"",
+      { dep: BAR_DEPOSIT, monthly: BAR_MONTHLY, rent: _barRent(),
+        short: BAR_DEPOSIT - G.money }), "alert");
     return;
   }
   _setFlag("barPaid");
@@ -4399,8 +4404,20 @@ function _barDeposit() {
     "sense you'll find worse than if he was.\" He writes the date on the docket " +
     "and pins it behind the till, next to nothing else.",
     { monthly: BAR_MONTHLY }));
-  _say(_fmt("(You owe ฿{owed}. The bar is yours the day it opens — ASK BERT " +
-    "ABOUT OPENING.)", { owed: G.bar.owed }), "win");
+  // Rent has to be said OUT LOUD before the player commits, and by the one man
+  // positioned to say it. The deposit-and-note line enumerated the money and
+  // quietly omitted the bill that can actually end you, which is exactly the
+  // defect class the repo lints for everywhere else (publican note 2026-08-25).
+  _say(_fmt("\"One more and then I'll leave you to it.\" Bert taps the docket " +
+    "twice. \"You've bought the BAR. You've not bought the BUILDING — nobody " +
+    "ever does. Rent's ฿{rent} a month to the fella that owns the shophouse, " +
+    "first of the month, and he's nothing like the old man.\" He lets that sit. " +
+    "\"Miss the old man and you'll feel bad. Miss the rent twice and there's a " +
+    "lad with a tape measuring your frontage. I've seen it done to better bars " +
+    "than this one.\"", { rent: _barRent() }), "alert");
+  _say(_fmt("(You owe ฿{owed}, and ฿{rent} a month to the landlord on top. The " +
+    "bar is yours the day it opens — ASK BERT ABOUT OPENING.)",
+    { owed: G.bar.owed, rent: _barRent() }), "win");
 }
 
 // what tonight's trade did. Called once from _endNight when you own the place.
@@ -4420,12 +4437,29 @@ function _barNight() {
   take = Math.round(take * (worked ? WORK_TAKINGS : AWAY_TAKINGS));
   if (worked) take += BAR_PRESENT;
   if (low) take = Math.round(take * LOW_SEASON);
+  // two months behind and the floor is thin — you can watch it happen in the till
+  if (b.shortStaff) take = Math.round(take * BAR_SHORT_STAFF);
   // nights away pile up; the staff notice before the books do
   b.away = worked ? 0 : (b.away || 0) + 1;
   if (!worked) b.streak = 0;   // one night out and the grind resets
-  // every procurement job you turned down is on the supply bill, permanently
+  // ── what the night cost ────────────────────────────────────────────────
+  // Fixed nut + what you actually sold + the people who sold it, instead of one
+  // flat figure that did not care how the night went. A dead night is now
+  // genuinely cheap, which is the thing a landlord recognises and the thing the
+  // old model made impossible (publican playtest 2026-08-23).
+  //
+  // The wages line is what finally puts the presence dilemma on the P&L rather
+  // than only on the takings multiplier: when you are not behind the rail you
+  // are PAYING somebody to be. That is the trade in one number.
+  //
+  // Friction is a SUPPLY problem, so it loads the nut and the stock — never the
+  // wages. Each refused procurement job is +8% on what you buy, forever.
   const friction = (G.syn && G.syn.friction) || 0;
-  const costs = Math.round(BAR_COSTS * (1 + friction * BAR_FRICTION));
+  const supplyMult = 1 + friction * BAR_FRICTION;
+  const nut = Math.round(BAR_NUT * supplyMult);
+  const cogs = Math.round(take * BAR_COGS * supplyMult);
+  const wages = BAR_WAGES + (worked ? 0 : BAR_MGR_NIGHT);
+  const costs = nut + cogs + wages;
   const net = take - costs;
   b.cash += net;
   if (net > b.best) b.best = net;
@@ -4445,20 +4479,46 @@ function _barNight() {
   // take so that (take - costs) is exactly what the drawer did, and zero it.
   const evt = b.eventCash || 0;
   b.eventCash = 0;
-  return { take: take + evt, costs, net: net + evt, low, friction, fromPocket, underwater, worked, away: b.away };
+  return { take: take + evt, costs, net: net + evt, low, friction, fromPocket, underwater,
+    worked, away: b.away, nut, cogs, wages };
 }
 
-// the old man's money, every thirty days. Comes out of the till first, your
-// pocket second, and becomes arrears third — he is never chased, never rings,
-// and that is worse.
+// What the room costs, by what the room is. Reads the owned bar's own barType so
+// that a second bar (the Shamrock hook) prices itself with no new code.
+function _barRent() {
+  const r = ROOMS[G.bar && G.bar.room ? G.bar.room : "stinky_bar"];
+  const mult = (r && RENT_MULT[r.barType]) || 1;
+  return BAR_RENT * mult;
+}
+
+// The month, in the order a publican actually pays it: the landlord first,
+// because he can re-let the room by Friday, and the old man second, because he
+// cannot do anything at all. Till first, pocket second, arrears third — for
+// both, but only one of them is dangerous to be behind on.
 function _barMonthly() {
   const b = G.bar;
   if (G.day - b.lastMonthDay < 30) return null;
   b.lastMonthDay = G.day;
   b.months++;
+  // ── the landlord, first ──────────────────────────────────────────────
+  const rent = _barRent();
+  const rentOwedNow = rent + (b.rentOwed || 0);
+  let rentDue = rentOwedNow, rentFrom = [];
+  let take = Math.min(Math.max(b.cash, 0), rentDue);
+  if (take > 0) { b.cash -= take; rentDue -= take; rentFrom.push("the till"); }
+  if (rentDue > 0) {
+    const pk = Math.min(G.money, rentDue);
+    if (pk > 0) { G.money -= pk; rentDue -= pk; rentFrom.push("your own pocket"); }
+  }
+  // capture what was handed over BEFORE the owed figure is overwritten
+  const rentPaid = rentOwedNow - rentDue;
+  b.rentOwed = rentDue;
+  b.rentShort = rentDue > 0 ? (b.rentShort || 0) + 1 : 0;
+
+  // ── the old man, with whatever is left ───────────────────────────────
   const owedNow = BAR_MONTHLY + b.arrears;
   let due = owedNow, paidFrom = [];
-  const fromTill = Math.min(b.cash, due);
+  const fromTill = Math.min(Math.max(b.cash, 0), due);
   if (fromTill > 0) { b.cash -= fromTill; due -= fromTill; paidFrom.push("the till"); }
   if (due > 0) {
     const fromPocket = Math.min(G.money, due);
@@ -4474,7 +4534,114 @@ function _barMonthly() {
   // stage hangs on this note).
   const paid = owedNow - due;
   if (paid > 0) b.owed = Math.max(0, b.owed - paid);
-  return { paidFrom, short: due, month: b.months, paid, cleared: Math.max(0, owedNow - BAR_MONTHLY - due) };
+  return { paidFrom, short: due, month: b.months, paid,
+    cleared: Math.max(0, owedNow - BAR_MONTHLY - due),
+    rent, rentFrom, rentShort: rentDue, rentMonths: b.rentShort, rentPaid };
+}
+
+// ── the note's teeth ────────────────────────────────────────────────────────
+// The old man never chases. That is true, it is the best-written thing in the
+// arc, and it stays. But the bar is 51% somebody else's, and THAT person can
+// act — which is the whole point of the fork, finally paying off at the bad end
+// as well as the good one. Candy's route is written down and gives you notice;
+// Tan's is a phone call you are told about afterwards. Neither is a game over:
+// you are an expat without a bar, and the sandbox carries on.
+const _RENT_LATE = [
+  "The landlord's daughter comes for the rent, as she does on the first, and this time there is a conversation instead of a receipt. She is perfectly pleasant about it. She writes the date on the back of her own hand where you can see her do it.",
+  "The rent is not there and everybody knows it before you say it — Bert, the girls, the man who brings the ice. Nobody is unkind. That is somehow the worst available option.",
+  "The landlord himself comes, which he has not done once, and he stays for a soda he does not drink. He tells you about the last farang who had the room. It is not a threat and it is not a story about a threat. It is just the last farang who had the room.",
+];
+const _ARREARS_WARN = [
+  "Bert mentions the arrears the way he mentions the weather \u2014 once, without looking up, and then not again. \"He'll not ask, bud. That's the trouble with him.\"",
+  "The docket behind the till has a second date pencilled under the first. Nobody drew attention to it. Somebody wrote it.",
+];
+const _ARREARS_BITE = [
+  "One of the girls doesn't come in, and the reason given is a cousin's wedding. Bert doesn't offer an opinion on the wedding. The floor runs one short, and it shows in the till before it shows anywhere else.",
+  "A second girl is suddenly working a bar two doors down. Nobody was sacked and nobody resigned; the floor is simply thinner than it was, and thin floors take less money.",
+];
+function _barArrearsTick(m) {
+  const b = G.bar;
+  if (!b) return;
+  // The landlord's fuse is short and it burns first. He does not escalate in
+  // stages the way the note does, because he does not have to: there is a queue
+  // for the room and everyone in it pays on the first.
+  if ((b.rentShort || 0) >= RENT_GRACE) { _barLost("landlord"); return; }
+  if ((b.rentOwed || 0) > 0 && !b.rentWarned) {
+    b.rentWarned = true;
+    _say(_pickVary(_RENT_LATE, "rentlate"), "alert");
+    _say("(Rent is the one that has teeth. Miss it again and the room is " +
+      "somebody else's. BOOKS.)", "dim");
+  }
+  if (b.rentOwed === 0) b.rentWarned = false;
+  if (b.arrears <= 0) { b.shortStaff = false; return; }
+  if (b.arrears >= BAR_ARREARS_END) { _barLost("partner"); return; }
+  if (b.arrears >= BAR_ARREARS_BITE) {
+    if (!b.shortStaff) {
+      b.shortStaff = true;
+      _say(_pickVary(_ARREARS_BITE, "arrbite"), "alert");
+      _say("(Two months behind. The floor is thin, and a thin floor takes less. " +
+        "BOOKS.)", "dim");
+    }
+    return;
+  }
+  // if the rent was the story this month, the note's polite cough can wait: two
+  // near-identical beats about a date written down read as one beat, badly.
+  if (b.arrears >= BAR_ARREARS_WARN && !b.arrearsWarned && !(b.rentOwed > 0)) {
+    b.arrearsWarned = true;
+    _say(_pickVary(_ARREARS_WARN, "arrwarn"), "dim");
+  }
+}
+
+function _barLost(cause) {
+  const tan = _flag("partnerTan");
+  _say("");
+  if (cause === "landlord") {
+    // The plainest ending in the game, and deliberately so: nobody wrongs you,
+    // nobody makes a speech, and the room is simply worth more to somebody who
+    // pays on the first. Two months is all the room ever owed you.
+    _say("There is no letter and no meeting. There is a man measuring the " +
+      "frontage at four in the afternoon with a tape and a phone, and a second " +
+      "man behind him with an opinion about where a fridge would go. They are " +
+      "not rude to you. They assume you work there.", "alert");
+    _say("The landlord is apologetic in the specific way of a man who is not " +
+      "sorry: two months is two months, and there is a queue for the room. The " +
+      "fit-out you paid for stays with the shophouse, because that was always " +
+      "the deal and you read it, or you were told you had.", "alert");
+    _say(tan
+      ? "Tan hears before you tell him and rings once, briefly, to say that this " +
+        "one was not something he could have moved. You believe him. It is the " +
+        "first time all year he has told you a thing he could not do."
+      : "Candy takes it better than you do, which is its own small humiliation. " +
+        "\"Fifty-one of nothing,\" she says, and orders a drink like a customer, " +
+        "and pays for it.", "alert");
+  } else _say(tan
+    ? "Tan does not come to the bar to tell you. You find out because the staff " +
+      "list has a name on it that is not yours, and because Bert — who has known " +
+      "for two days and has been deciding how to say it — finally says it. \"He " +
+      "squared it with the old man. Whole thing, one payment.\" There is no " +
+      "paperwork to look at. There was never any paperwork. \"He said to tell you " +
+      "there's no hard feeling in it, and bud, I believe him, and that's the part " +
+      "I'd think about.\""
+    : "Candy's lawyer sends a letter, because Candy's arrangements are the kind " +
+      "that involve letters. It gives you fourteen days and it is scrupulously " +
+      "polite. She comes herself on the last of them, sits at the good table like " +
+      "any other customer, and does not once say I told you. \"Fifty-one is my " +
+      "name on this, tilac. My name cannot be on a thing that does not pay.\" She " +
+      "settles the old man in full the same week, which is the part that stings.",
+    "alert");
+  _say(cause === "landlord"
+    ? "The Stinky Pinky does not reopen. The sign comes down in a morning and " +
+      "the room is a phone shop by the end of the month, and the regulars go two " +
+      "doors along and are perfectly happy there, which you find you mind more " +
+      "than the money."
+    : "You keep the stools you were sitting on and nothing else. The Stinky " +
+      "Pinky opens tomorrow, the way it opened before you, and the regulars will " +
+      "be in it.", "alert");
+  _setFlag("barLost");
+  G.flags.barOpen = false;
+  G.bar = { cash: 0, owed: 0, arrears: 0, months: 0, lastMonthDay: 0, nights: 0,
+    best: 0, workedLast: false, rentOwed: 0, rentShort: 0 };
+  _addHappy(-8);
 }
 
 // BOOKS / TAKINGS — the player has to be able to look at it. Deliberately terse
@@ -4530,7 +4697,13 @@ function _doDraw(arg) {
 
 function _doBooks() {
   if (!_barOwned()) {
-    _say(_flag("barPartner")
+    // A bar you HAD is not a bar you never bought. Reading "the deposit isn't
+    // paid" at a man who paid it and lost the place is the state-blind-prose
+    // defect exactly.
+    _say(_flag("barLost")
+      ? "There are no books. There is a docket somewhere with a date on it, and " +
+        "a phone shop where the docket used to be pinned."
+      : _flag("barPartner")
       ? "Not yet. The deposit isn't paid, so there is nothing to keep books on."
       : "You don't own a bar. Your books are your pocket, and you know what's in it.");
     return;
@@ -4550,7 +4723,16 @@ function _doBooks() {
     ? "Months elapsed: {m} of {term}   ·   Nights open: {n}"
     : "Months paid: {m} of {term}   ·   Nights open: {n}",
     { m: b.months, term: BAR_TERM, n: b.nights }));
+  _say(_fmt("Rent: ฿{r} a month to the landlord, due on the first.", { r: _barRent() }), "dim");
   if (b.drawn) _say(_fmt("Taken out by you, all told: ฿{d}.", { d: b.drawn }), "dim");
+  if (b.rentOwed > 0) {
+    // With RENT_GRACE at 2 the only figure this ever shows is one month, because
+    // the second month is an eviction rather than a line in the books.
+    _say(_fmt(b.rentShort >= 2
+      ? "Rent owing: ฿{r} \u2014 {n} months behind, which is all the room ever owed you."
+      : "Rent owing: ฿{r} \u2014 {n} month{s} behind. He asked once, pleasantly. There is not a third time.",
+      { r: b.rentOwed, n: b.rentShort, s: b.rentShort === 1 ? "" : "s" }), "alert");
+  }
   if (b.arrears > 0) _say(_fmt("In arrears: ฿{a}. He hasn't asked.", { a: b.arrears }), "alert");
   const friction = (G.syn && G.syn.friction) || 0;
   if (friction) {
@@ -4607,6 +4789,18 @@ function _barSettle() {
       "finds out whether you have a cushion.)", "dim");
   }
   if (!m) return;
+  // Rent reads first because it was paid first, and because a player who is
+  // short needs to see which of the two shortfalls is the one that matters.
+  if (m.rentShort <= 0) {
+    _say(_fmt("Rent to the landlord: ฿{amt}, from {src}. He counts it in " +
+      "front of you, every month, and it has never once been wrong.",
+      { amt: m.rentPaid, src: _L(m.rentFrom.join(" and ")) }), "dim");
+  } else {
+    _say(_fmt("Rent to the landlord: ฿{short} of it isn't there.", { short: m.rentShort }), "alert");
+    _addHappy(-1);
+  }
+  _barArrearsTick(m);
+  if (_flag("barLost")) return;
   if (m.short <= 0) {
     _say(_fmt("Month {n} to the old man: ฿{amt}, paid from {src}. He does not " +
       "acknowledge it. He never does; the money simply goes, and somewhere in " +

@@ -49,14 +49,52 @@ const EXPAT_SAVINGS = 20000; // wired over when you make the move
 const BAR_PRICE    = 1800000;  // the headline, mostly for the prose
 const BAR_DEPOSIT  = 120000;   // everything you have
 const BAR_MONTHLY  = 25000;    // to the old man, every 30 days, for six years
+// Rent, and why a bar bought with a handshake can still go under. The sale price
+// buys the BUSINESS — the fit-out, the stock, the licence, the fact that people
+// already come here — and never the shophouse, which is the landlord's and always
+// was. So there are two monthly creditors with opposite tempers: the old man in
+// Ohio, who cannot chase and never will, and a landlord who does not need to,
+// because he holds the lease and there is a queue for it. Miss the note and you
+// carry it around with you; miss the rent twice and somebody else is behind your
+// rail. The correct instinct — pay the rent, let the note slide — is therefore
+// the one the settlement order rewards.
+const BAR_RENT     = 15000;    // a simple beer bar, a month. Multiples above.
+const RENT_GRACE   = 2;        // months carried before the lease is re-let
+// What a room costs, by what it is. A Soi 6 shophouse is three of a beer bar and
+// a Walking Street go-go is six, which is the answer to "why not buy a better
+// bar" without anyone having to say it.
+const RENT_MULT    = { beer: 1, soi6: 3, gogo: 6, gents: 4, host: 2 };
 const BAR_TERM     = 72;       // months
+// The note had NO teeth: you could not lose the bar. Driven deliberately
+// underwater it answered "He hasn't asked" forever, at −1 สนุก a night, and that
+// was the whole failure state (publican playtest 2026-08-23). The old man still
+// never chases — that is his character and it stays — but the 51% DOES, because
+// fifty-one percent is a person and a person can act. Three missed months is the
+// line; the ladder before it is visible, so nobody loses a bar by surprise.
+const BAR_ARREARS_WARN = 25000;  // one month behind: it gets mentioned, once
+const BAR_ARREARS_BITE = 50000;  // two: a girl doesn't come back, and the take feels it
+const BAR_ARREARS_END  = 75000;  // three: your partner ends it, in their own register
+const BAR_SHORT_STAFF  = 0.85;   // takings while the floor is thin — the visible spiral
 
 // Nightly trade. Tuned so a well-run bar clears the monthly and a badly-run one
 // doesn't — the margin is thin ON PURPOSE, because that's the whole point of
 // the procurement decision.
 const BAR_TAKINGS  = 3200;     // base take on an ordinary night
 const BAR_SWING    = 2800;     // …plus up to this, on the night's luck
-const BAR_COSTS    = 3000;     // wages, supply, rent, the lot
+// Costs were a flat ฿3,000 a night, forever — the single biggest falsehood in
+// the model, and the central critique of the one persona who had actually run
+// two pubs (2026-08-23). Real bar costs are ~60-70% VARIABLE: a dead Tuesday is
+// cheap. A bar that costs the same whether twelve people came through the door
+// or two means you can never trade your way out of a bad month, which is why
+// away-nights sat at exactly break-even instead of losing slowly.
+//
+// So: a fixed nut that does not care how the night went, plus what you actually
+// sold, plus the people who turned up to sell it.
+const BAR_NUT      = 250;      // ice, power, the fan that must run anyway
+const BAR_COGS     = 0.20;     // share of the take that was stock — beer is cheap, lady drinks cheaper
+const BAR_WAGES    = 1800;     // the floor: the girls are there whether the punters are
+const BAR_MGR_NIGHT = 700;     // …and Bert's shift on top, on the nights you don't stand it
+const BAR_COSTS    = 3000;     // legacy flat figure — kept only for saves written before the split
 const BAR_PRESENT  = 800;      // you behind your own rail sells drinks
 const BAR_FRICTION = 0.08;     // each refused procurement job adds this to costs
 const LOW_SEASON   = 0.55;     // takings multiplier when the town empties

@@ -218,6 +218,7 @@ function liveSnap() {
     barNights: b.nights || 0, barAway: b.away || 0, barWorked: b.worked || 0,
     barLapses: b.lapses || 0,
     barMonths: b.months || 0, barCash: b.cash || 0,
+    barRentOwed: b.rentOwed || 0, barLost: !!(G.flags && G.flags.barLost),
     synAsked: Object.keys((G.syn && G.syn.asked) || {}).length,
     synDone: Object.keys((G.syn && G.syn.done) || {}).length,
     questsDone: Object.values(G.quests || {}).filter(q => q === "done").length,
@@ -283,6 +284,10 @@ const EFFECTS = [
       "declared and worked are allowed to differ" },
   { id: "bar.month.paid",     modes: ["barowner"], hit: (a, b) => b.barMonths > a.barMonths,
     why: "the old man is paid every 30 days; a short run never reaches one" },
+  { id: "bar.rent.missed",    modes: ["barowner"], hit: (a, b) => b.barRentOwed > a.barRentOwed,
+    why: "the rent lands on the same 30-day cycle, and only bites a bar nobody stands in" },
+  { id: "bar.lost",           modes: ["barowner"], hit: (a, b) => !a.barLost && b.barLost,
+    why: "two missed rents or three missed notes — many months of neglect, not a short run" },
   { id: "tan.favour.asked",   modes: ["barowner"], hit: (a, b) => !a.tanAsked && b.tanAsked },
   { id: "procurement.asked",  modes: ["barowner"], hit: (a, b) => b.synAsked > a.synAsked },
 ];
