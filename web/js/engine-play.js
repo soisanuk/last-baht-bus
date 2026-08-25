@@ -500,6 +500,7 @@ function _closingTick() {
   // the last-call courtesy in the final half hour
   if (G.nightTurn >= 55 && G.nightTurn < 60) { _lastCall(G.room); return; }
   if (G.nightTurn < 60) return;
+  if (G.offstage) return;
   // midnight. A Darkside bar with a spender bolts the door instead of shutting it.
   if (r.region === "Darkside" && r.lockIn && _barSpendTonight(G.room)) {
     (G.soc.lockIn = G.soc.lockIn || {})[G.room] = true;
@@ -534,6 +535,12 @@ function _closingTick() {
   // a barfine still mid-negotiation dies with the shutters — else its answer would
   // resolve against the street you've just been walked out onto (wrong barType/price).
   if (G.pendingBf) { G.pendingBf = null; _say("The half-finished barfine closes with the ledger — no deal, no harm, and the mamasan is already counting the till.", "dim"); }
+  if (G.game) _abandonGame("Midnight calls it");
+  if (G.pendingEnc) {
+    G.pendingEnc = null; G.encPrompt = null;
+    _say("(Whatever was being offered, the shutters settle it — the moment goes " +
+      "home with everybody else.)", "dim");
+  }
   // Walk out. If the room we'd land in is ITSELF shut for the night (a back room
   // like the Orchid Room ejecting into its closed parent bar), keep following the
   // way out until we reach somewhere actually open — otherwise the player lands in
@@ -3061,6 +3068,7 @@ function _nightSnapshot() {
     money: G.money,
     atm: G.atmTotal || 0,
     known: Object.keys(G.known || {}).length,
+    talked: Object.keys(G.talked || {}).length,
     nums: Object.keys(G.phone.contacts || {}).filter(id => G.phone.contacts[id] && NPC_ROLES[id]).length,
     faces: new Set((_photoList() || []).map(p => p.id)).size,
   };
@@ -3077,7 +3085,7 @@ function _morningLedger() {
   const spent = b.money + drawn - G.money;
   if (spent > 0) bits.push("spent \u0e3f" + spent.toLocaleString());
   else if (spent < 0) bits.push("up \u0e3f" + (-spent).toLocaleString() + " on the night");
-  const dk = Object.keys(G.known || {}).length - b.known;
+  const dk = Object.keys(G.talked || {}).length - (b.talked != null ? b.talked : Object.keys(G.talked || {}).length);
   if (dk > 0) bits.push("met " + dk);
   const dn = Object.keys(G.phone.contacts || {}).filter(id => G.phone.contacts[id] && NPC_ROLES[id]).length - b.nums;
   if (dn > 0) bits.push(dn + " new number" + (dn > 1 ? "s" : ""));

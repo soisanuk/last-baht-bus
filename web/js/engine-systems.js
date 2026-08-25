@@ -678,7 +678,10 @@ function _bfRefusalSay(id, r) {
       "no, na.” She signals the mamasan off with one flick of the eyes, and " +
       "the ledger never even opens. No is a complete sentence here.",
     cheap: `${name} does a quick, visible arithmetic on your evening's tab — ` +
-      "the one lady drink, nursed — and pats your knee: “Maybe you buy me " +
+      ((G.soc.drinks[id] || 0) === 0 ? "not one lady drink on it" :
+       (G.soc.drinks[id] || 0) === 1 ? "the one lady drink, nursed" :
+       `${G.soc.drinks[id]} lady drinks, none of them hers`) +
+      " — and pats your knee: “Maybe you buy me " +
       "drink first, na? Talk more.” The words CHEAP CHARLIE hang politely " +
       "unspoken. (Warm her up properly and ask again.)",
     mess: `${name} leans back an honest inch. “Ooh. You smell like whole bar, ` +
@@ -795,6 +798,7 @@ function _bfResolve(kind) {
     if (other !== id && NPC_ROLES[other] === "hostess" && _bondTier(other) >= 2) {
       _addBond(other, -3);
       _repHit(2); // jilting a regular in front of the bar is a bad look, and it travels
+      (G.soc.miffed = G.soc.miffed || {})[other] = G.day; // …and her next hello is cooler for it
       _say(`(${NPCS[other].name} watches you leave with ${name} and turns very ` +
         "deliberately back to her phone. That will cost you — and not in baht.)", "dim");
     }

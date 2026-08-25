@@ -696,7 +696,7 @@ function _convoStart(id) {
   if (lapsed && !G.convoQ) {
     delete G.convoLapsed[id];
     if (lapsed.q) {
-      _say(`${_convoName(id)} comes back to it, because they were actually asking.`, "dim");
+      _say(`${_convoName(id)} comes back to it, because ${_sheHe(id).s} was actually asking.`, "dim");
       _say(lapsed.q);
       G.convoQ = { id, key: lapsed.key, q: lapsed.q };
       // re-mark it asked, or the node's own _convoAsk prints the question a
@@ -722,8 +722,24 @@ function _convoActive() {
   }
   return id;
 }
+// she/he/they for a character the engine is ABOUT to pronoun — same logic the
+// repeat-brush-off already uses (a working role or a filler girl reads she).
+function _sheHe(id) {
+  const n = NPCS[id] || PATRONS[id];
+  if (!n) return { s: "they", o: "them", p: "their" };
+  const she = n.pronoun === "she" || !!NPC_ROLES[id] || !!n.filler;
+  const he = n.pronoun === "he";
+  return she ? { s: "she", o: "her", p: "her" } :
+    he ? { s: "he", o: "him", p: "his" } : { s: "they", o: "them", p: "their" };
+}
+
 function _convoEnd(quiet) {
   const id = G.convo;
+  // an unanswered question survives the interruption: she comes back to it
+  // next time, same as when you turn to somebody else mid-ask
+  if (G.convoQ && G.convoQ.q) {
+    (G.convoLapsed = G.convoLapsed || {})[G.convoQ.id] = { key: G.convoQ.key, q: G.convoQ.q };
+  }
   G.convo = null;
   G.convoQ = null;
   G.convoIdx = null;
@@ -1571,10 +1587,14 @@ function _describeRoom(full, forceFull) {
       // name the SAME girl the snipe-jealousy keys on (parser); legacy `true`
       // falls back to the first hostess present
       const busyId = G.soc.patronBusy[G.room];
+      const _descHas = id2 => new RegExp("\\b" + NPCS[id2].name + "\\b").test(String(r.desc || ""));
       const girl = (typeof busyId === "string" && _npcsHere().includes(busyId))
-        ? busyId : _npcsHere().find(id => NPC_ROLES[id] === "hostess");
+        ? busyId
+        : _npcsHere().find(id => NPC_ROLES[id] === "hostess" &&
+            id !== (typeof _convoActive === "function" && _convoActive()) && !_descHas(id));
       const g = girl ? `, ${NPCS[girl].name} laughing on cue beside him` : "";
-      _say(_pickVary(_BAR_REGULAR_BUSY, "barReg")(g), "dim");
+      if (girl) _say(_pickVary(_BAR_REGULAR_BUSY, "barReg")(g), "dim");
+      else _say(_pickVary(_BAR_REGULAR, "barReg"), "dim");
     } else {
       _say(_pickVary(_BAR_REGULAR, "barReg"), "dim");
     }

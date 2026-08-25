@@ -1528,3 +1528,100 @@ test("a quest completes in the same breath as the move that wins it", () => {
     assert.equal(G.quests[q[0]], "done", "the tick sees it immediately");
   }
 });
+
+// ── The fabulist round: midnight keeps its manners (2026-08-25) ──────────────
+
+test("midnight abandons a live game instead of continuing it on the pavement", () => {
+  // Roy finished a Connect 4 match standing alone in a shuttered street, eleven
+  // moves after the frontage rolled down on his opponent (fabulist F1).
+  newGame(); G.stage = "expat"; _setFlag("act1Done");
+  for (const k of Object.keys(ENCOUNTERS)) G.encDone[k] = true;
+  const bar = Object.keys(ROOMS).find(id => ROOMS[id].barType === "soi6");
+  G.room = bar; G.money = 500;
+  G.game = { type: "c4", stake: 100, board: [], oppId: null, depth: 2 };
+  G.nightTurn = 60;
+  out = []; _closingTick();
+  assert.equal(G.game, null, "the game dies with the stool you left");
+  assert.match(out.join("\n"), /Midnight calls it/, "…with a line, not silently");
+  assert.notEqual(G.room, bar, "and you are walked out as before");
+});
+
+test("midnight clears a pending street-offer instead of carrying it to the kerb", () => {
+  newGame(); G.stage = "expat"; _setFlag("act1Done");
+  const bar = Object.keys(ROOMS).find(id => ROOMS[id].barType === "soi6");
+  G.room = bar; G.pendingEnc = "peddler"; G.encPrompt = [["x", ""]];
+  G.nightTurn = 60;
+  out = []; _closingTick();
+  assert.equal(G.pendingEnc, null);
+  assert.equal(G.encPrompt, null);
+  assert.match(out.join("\n"), /shutters settle it/);
+});
+
+test("the shutters cannot walk out a man who already left on the back of her bike", () => {
+  newGame(); G.stage = "expat"; _setFlag("act1Done");
+  const bar = Object.keys(ROOMS).find(id => ROOMS[id].barType === "soi6");
+  G.room = bar; G.offstage = true; G.pendingEnc = "nightride";
+  G.nightTurn = 60;
+  out = []; _closingTick();
+  assert.equal(G.room, bar, "no ejection mid-ride");
+  assert.equal(G.pendingEnc, "nightride", "the ride carries on");
+  assert.equal(out.length, 0, "and no shutters narration over the ride scene");
+});
+
+test("the cheap-charlie refusal reads the ledger it cites", () => {
+  // "the one lady drink, nursed" — at a ledger reading three (fabulist F7)
+  newGame(); G.mode = "soi6"; _setFlag("act1Done");
+  for (const k of Object.keys(ENCOUNTERS)) G.encDone[k] = true;
+  G.room = "ruby_kiss"; G.money = 99999;
+  G.soc.drinks.wilai = 3;
+  out = []; _bfRefusalSay("wilai", { kind: "cheap" });
+  assert.match(out.join("\n"), /3 lady drinks, none of them hers/);
+  G.soc.drinks.wilai = 1;
+  out = []; _bfRefusalSay("wilai", { kind: "cheap" });
+  assert.match(out.join("\n"), /the one lady drink, nursed/);
+  G.soc.drinks.wilai = 0;
+  out = []; _bfRefusalSay("wilai", { kind: "cheap" });
+  assert.match(out.join("\n"), /not one lady drink/);
+});
+
+test("the jilted regular's next hello is cooler, once", () => {
+  newGame(); G.stage = "expat"; _setFlag("act1Done");
+  for (const k of Object.keys(ENCOUNTERS)) G.encDone[k] = true;
+  const girl = Object.keys(NPCS).find(id => NPC_ROLES[id] === "hostess" && NPCS[id].filler);
+  G.room = _npcRoom(girl);
+  (G.soc.miffed = {})[girl] = G.day;
+  out = []; doCommand("talk to " + NPCS[girl].name);
+  assert.ok(_MIFFED_HELLO.some(l => out.join("\n").includes(l.replace("{n}", NPCS[girl].name))),
+    "one cooled hello");
+  out = []; doCommand("talk to " + NPCS[girl].name);
+  assert.ok(!_MIFFED_HELLO.some(l => out.join("\n").includes(l.replace("{n}", NPCS[girl].name))),
+    "…and only once — the cost was paid, not a grudge loop");
+});
+
+test("the busy-regular line never seats a girl the room's own prose just featured", () => {
+  // Kitten Corner: "Praewa in your lap" and "Praewa laughing on cue beside him"
+  // in the same paint (fabulist F5). Setter and fallback both prefer a girl the
+  // desc doesn't name; nobody qualifying, the nameless pool tells the truth.
+  const featured = ["praewa", "nangfah"];
+  for (const id of featured) {
+    assert.match(String(ROOMS.kitten_corner.desc), new RegExp(NPCS[id].name),
+      "the fixture girls are still in the desc (or this test is stale)");
+  }
+  newGame(); G.stage = "expat"; _setFlag("act1Done");
+  for (const k of Object.keys(ENCOUNTERS)) G.encDone[k] = true;
+  let seeded = 0;
+  for (let seed = 1; seed <= 24; seed++) {
+    G.rng = seed * 7919;
+    G.soc.patronBusy = {};
+    G.pendingEnc = null; G.pendingChoice = null; G.game = null;
+    G.room = "soi6_deep"; G.nightTurn = 20;
+    doCommand("enter kitten corner");     // the arrival is what seeds patronBusy
+    const pick = G.soc.patronBusy.kitten_corner;
+    if (typeof pick === "string") {
+      seeded++;
+      assert.ok(!featured.includes(pick),
+        "the busy pick avoids the girls the desc features (picked " + pick + ")");
+    }
+  }
+  assert.ok(seeded > 0, "the 40% roll landed at least once in 24 seeds — the test actually tested");
+});

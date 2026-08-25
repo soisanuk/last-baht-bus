@@ -427,8 +427,14 @@ function _arriveAt(to) {
       // playtest, 2026-08-17: the room said Noi, buying Sara triggered "her").
       const hos = Object.keys(NPC_ROLES).filter(x =>
         NPC_ROLES[x] === "hostess" && _npcRoom(x) === to);
+      // prefer a girl the room's own prose doesn't feature: the desc may have
+      // just put her "in your lap", and this line would seat her with a regular
+      // four lines later (fabulist playtest F5, 2026-08-25 — Praewa, both at once)
+      const _unfeat = hos.filter(x =>
+        !new RegExp("\\b" + NPCS[x].name + "\\b").test(String((ROOMS[to] || {}).desc || "")));
+      const _busyPool = _unfeat.length ? _unfeat : hos;
       G.soc.patronBusy[to] = (hos.length && _rand() < 0.4)
-        ? hos[Math.floor(_rand() * hos.length)] : false;
+        ? _busyPool[Math.floor(_rand() * _busyPool.length)] : false;
     }
   }
   G.room = to;
@@ -2699,6 +2705,14 @@ function _doTalkBody(arg, topic) {
     const norm = _convoTopic(topic);
     if (norm !== topic) { const d2 = _pickDialogue(npc, norm); if (d2 && d2.topic) d = d2; }
   }
+  // The girl you jilted tonight — walked out with somebody else in front of
+  // her — gives one cooled hello before normal service resumes. The bond and
+  // rep costs were already paid; this is the cost being VISIBLE.
+  if (!topic && NPC_ROLES[npc] && G.soc.miffed && G.soc.miffed[npc] === G.day) {
+    delete G.soc.miffed[npc];
+    _say(_fmt(_pickVary(_MIFFED_HELLO, "miffedhello"), { n: NPCS[npc].name }));
+    return;
+  }
   // a regular you TALK to warms up: generic Tinglish register for the filler
   // girls, unless she has a more specific line (a topic, or a bond-gated entry
   // that just fired). Hand-authored NPCs speak their own bond: lines instead.
@@ -2894,21 +2908,27 @@ function _topicLabel(t) { return _TOPIC_LABELS[t] || t.replace(/\b\w/g, c => c.t
 // here: it's remembered (globally in G.player.said, and per-partner in st.heard
 // so they can catch a change), and they react. First time you open up warms them
 // a touch; a different answer than before gets caught.
+// the jilted regular's one cooled hello — hurt worn lightly, professionally
+const _MIFFED_HELLO = [
+  "{n} looks up, and the smile arrives half a second late and one degree cooler. \u201cOh. You come back.\u201d She wipes a glass that is already clean. \u201cHave fun last night, na?\u201d It is not a question that wants an answer.",
+  "\u201cWelcome back, tilac.\u201d {n}'s voice does everything right and none of it warm. She serves you like a customer, which from her is the whole message.",
+  "{n} greets you with perfect politeness, which is how you know. \u201cYou want beer?\u201d No nickname tonight. The nickname is on probation.",
+];
 const _ANSWER_ACK = [
-  n => `${n} takes it in and files it somewhere. You've handed over a true thing; it counts for a little.`,
+  n => `${n} takes it in and files it somewhere. You've handed something over, and it counts for a little.`,
   n => `A small nod from ${n}, the question put away satisfied — the talk feels a degree warmer for it.`,
 ];
 const _ANSWER_CAUGHT = [
-  n => `${n} tilts their head a fraction. "Hm. That's not what you told me before." The change lands, and not only on you.`,
-  n => `A flicker behind ${n}'s eyes. "Funny — I had you down differently." They let it sit. People misremember. Or they don't.`,
+  (n, pr = { s: "they", o: "them", p: "their" }) => `${n} tilts ${pr.p} head a fraction. "Hm. That's not what you told me before." The change lands, and not only on you.`,
+  (n, pr = { s: "they", o: "them", p: "their" }) => `A flicker behind ${n}'s eyes. "Funny — I had you down differently." ${_ucfirst(pr.s)} lets it sit. People misremember. Or they don't.`,
 ];
 // The soi grapevine: you never told THIS person, but you told someone else
 // something different, and word got around. A soft catch — a shrug, not an
 // accusation — but the discrepancy is noted, and it earns no warm "opening up".
 const _ANSWER_GOSSIP = [
-  (n, p) => `${n} pauses half a beat. "Funny — somebody in here had you from ${_wrapSaid(p)}." A small shrug, filed away. The soi talks, out here.`,
-  (n, p) => `"${_wrapSaid(p)}?" ${n} says it before you can stop them. "That's what I heard. Now you tell it different." Nothing's really private on this street.`,
-  (n, p) => `${n}'s eyes do a slow, amused inventory. "Word travels, na. I heard ${_wrapSaid(p)} — from you, they say." They let the gap hang, then move on. But it's noted.`,
+  (n, p, pr = { s: "they", o: "them", p: "their" }) => `${n} pauses half a beat. "Funny — somebody, some bar, had you from ${_wrapSaid(p)}." A small shrug, filed away. The soi talks, out here.`,
+  (n, p, pr = { s: "they", o: "them", p: "their" }) => `"${_wrapSaid(p)}?" ${n} says it before you can stop ${pr.o}. "That's what I heard. Now you tell it different." Nothing's really private on this street.`,
+  (n, p, pr = { s: "they", o: "them", p: "their" }) => `${n}'s eyes do a slow, amused inventory. "Word travels, na. I heard ${_wrapSaid(p)} — from you, they say." ${_ucfirst(pr.s)} lets the gap hang, then moves on. But it's noted.`,
 ];
 // Quote the player's own past words back — verbatim, but suppress any decorate()
 // tap-decoration inside (it's remembered free text, not a live entity).
@@ -2946,7 +2966,9 @@ const _SAID_STOP = new Set(["the", "a", "an", "i", "you", "me", "my", "im", "in"
   "but", "so", "just", "very", "really", "well", "then", "than", "one", "bit",
   "lot", "some", "any", "all", "too", "still", "here", "there", "now", "dont",
   "cant", "wont", "ill", "ive", "id", "youre", "hes", "shes", "they", "them",
-  "dunno", "maybe", "perhaps", "whatever", "nothing", "depends", "sometimes"]);
+  "dunno", "maybe", "perhaps", "whatever", "nothing", "depends", "sometimes",
+  "year", "years", "month", "months", "week", "weeks", "day", "days", "night", "nights",
+  "sweetheart", "darling", "honey", "tilac", "dear", "babe", "boss", "pal"]);
 function _saidTokens(v) {
   return String(v).toLowerCase().replace(/[^a-z0-9\s]/g, " ").split(/\s+/)
     .filter(w => w && !_SAID_STOP.has(w) && (w.length >= 4 || /^\d+$/.test(w)));
@@ -2966,7 +2988,10 @@ function _convoAnswer(text) {
   G.convoQ = null;
   const st = _npcState(id);
   const heard = (st.heard = st.heard || {});
-  const val = text.replace(/[.!?,]+$/, "").trim();
+  // prefer the raw-cased line the player actually typed: the grapevine quoting
+  // "manchester" back in flattened lowercase read as a bug, not dialect
+  const raw = (typeof _rawAnswer === "string" && _rawAnswer.toLowerCase().includes(text.slice(0, 24))) ? _rawAnswer : text;
+  const val = raw.replace(/[.!?,]+$/, "").trim();
   const player = (G.player = G.player || {});
   const said = (player.said = player.said || {}); // harden: a hand-built/very-old state may lack .said
   const globalPrior = said[key]; // what you last told ANYONE (before this answer)
@@ -2974,11 +2999,12 @@ function _convoAnswer(text) {
   const prior = heard[key];
   heard[key] = val;
   const name = _convoName(id);
+  const pr = _sheHe(id);
   if (prior && !_saidAgrees(prior, val)) {
-    _say(_pickVary(_ANSWER_CAUGHT, "ansCaught")(name));           // she caught you herself
+    _say(_pickVary(_ANSWER_CAUGHT, "ansCaught")(name, pr));       // she caught you herself
     _repHit(2);                                                   // caught lying to her face
   } else if (!prior && globalPrior && !_saidAgrees(globalPrior, val)) {
-    _say(_pickVary(_ANSWER_GOSSIP, "ansGossip")(name, globalPrior)); // the soi grapevine caught you
+    _say(_pickVary(_ANSWER_GOSSIP, "ansGossip")(name, globalPrior, pr)); // the soi grapevine caught you
     _repHit(1);                                                   // a softer catch — but the town noticed
     // no +1 — you didn't open up, you got caught telling it two ways
   } else {
@@ -6623,7 +6649,9 @@ const _GERMAN_QUIP = {
   ],
 };
 
+let _rawAnswer = null; // the raw-cased line, for _convoAnswer's quote-back memory
 function doCommand(input) {
+  _rawAnswer = String(input == null ? "" : input);
   if (!G) newGame();
   // CTF stage 2 gate (docs/ctf.md): an obvious security probe — read off the
   // TRUE raw input, before _norm strips the quotes and braces that make it one

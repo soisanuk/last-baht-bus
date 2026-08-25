@@ -749,3 +749,72 @@ test("money sent to her phone is remembered at her rail", () => {
   assert.match(out.join("\n"), /You help me that time|no forget/i,
     "the phone and the bar share a memory");
 });
+
+// ── The fabulist round: the lie-detector's other tail (2026-08-25) ───────────
+// Roy planted four genuine same-key contradictions; two escaped through a
+// single shared token — "years" agreed widowhood with a 22-year marriage, and
+// an endearment tic ("sweetheart") made him structurally uncatchable.
+test("time-units and endearments no longer alibi a contradiction", () => {
+  assert.ok(!_saidAgrees(
+    "Widowed, love. Five years ago",
+    "A wife, sweetheart. Twenty-two years married, back in Manchester with the dogs"),
+    "the classic lie — marital status told two ways — is caught");
+  assert.ok(!_saidAgrees(
+    "Dentist, sweetheart. Perth molars",
+    "The Marriott, sweetheart. Presidential floor"),
+    "a verbal tic is not an alibi");
+  // …and the leniency that matters survives
+  assert.ok(_saidAgrees(
+    "fifteen years on the street, mind",
+    "fifteen years, love. the street itself is the somebody"),
+    "a consistent story in different words still agrees");
+  assert.ok(_saidAgrees("Sheffield, born and bred", "Sheffield. It'll keep"), "same place, same story");
+});
+
+test("the job question and the hotel question no longer share a memory slot", () => {
+  const src = readFileSync(fileURLToPath(new URL("../../web/js/world.js", import.meta.url)), "utf8");
+  assert.equal([...src.matchAll(/key: "hotel"/g)].length, 1,
+    "exactly one question still lives on the hotel key");
+  assert.ok(ASK_REPLIES.job && ASK_REPLIES.job.length >= 3, "and the job key has replies");
+});
+
+test("an interrupted question survives the interruption", () => {
+  // Nina bolted to a saleng cart mid-ask and her question died forever —
+  // _convoEnd cleared it without the lapse store (fabulist F4).
+  newGame(); G.stage = "expat"; _setFlag("act1Done");
+  const girl = Object.keys(NPCS).find(id => NPC_ROLES[id] === "hostess" && NPCS[id].filler);
+  G.room = _npcRoom(girl);
+  _convoStart(girl);
+  G.convoQ = { id: girl, key: "girlfriend", q: "You have somebody, na?" };
+  _convoInterrupt();                       // the cart / the kickout / the bell
+  assert.equal(G.convoQ, null, "the moment is gone");
+  assert.ok(G.convoLapsed && G.convoLapsed[girl], "…but the question is not");
+  out = [];
+  _convoStart(girl);                       // next TALK
+  assert.ok(G.convoQ && G.convoQ.key === "girlfriend", "she comes back to it");
+});
+
+test("the catch quotes your words in your own case, with her own pronouns", () => {
+  newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight" };
+  G.stage = "expat"; _setFlag("act1Done");
+  for (const k of Object.keys(ENCOUNTERS)) G.encDone[k] = true;
+  // tell one girl Manchester — through the real pipe, so the raw case is kept
+  G.room = "cherry_pop"; G.pendingEnc = null;
+  const g1 = _npcsHere().find(id => NPC_ROLES[id] === "hostess");
+  _convoStart(g1);
+  G.convoQ = { id: g1, key: "home", q: "?" };
+  doCommand("Manchester, love. Rain with a cathedral in it");
+  assert.equal(G.player.said.home, "Manchester, love. Rain with a cathedral in it",
+    "stored with the capital M the player typed");
+  // tell another girl Perth — the grapevine catch must quote the raw words
+  const g2 = _npcsHere().find(id => NPC_ROLES[id] === "hostess" && id !== g1);
+  if (g2) {
+    _convoStart(g2);
+    G.convoQ = { id: g2, key: "home", q: "?" };
+    out = [];
+    doCommand("Perth, mate. Western Australia");
+    const said = out.join("\n");
+    assert.match(said, /Manchester/, "the catch quotes the actual lie, capital and all");
+    assert.doesNotMatch(said, /stop them|They let/, "and she is she, not they");
+  }
+});

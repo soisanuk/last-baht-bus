@@ -426,3 +426,56 @@ the failures were almost all at the seams.
 - Mort's new soi-6 column line names the streets he's written from, which the
   soi6 soak flags as an off-pocket mention — accepted as color, not a pointer
   (same class as the mode's own "the whole rest of the city" wall lines).
+
+---
+
+# Round 19 — the fabulist (Fable, soi 6 mode, 2026-08-25)
+
+The deliberate mirror of round 18: Mick audited the street's claims, Roy audits
+yours. One persona — Roy, 55, a charming compulsive liar, a different man in
+every bar, keeping his stories straight in a notebook so the game doesn't have
+to. The round existed to adversarially verify the same-day `_saidAgrees` rework
+from the OTHER direction: the leniency was tuned against false accusations, and
+the open risk was leniency so generous the street never catches anyone.
+
+**The liar's ledger, headline numbers: 15 questions answered, 4 genuine same-key
+contradictions planted, 2 caught, 2 escaped — both through a single shared
+token ("years" agreed widowhood with a 22-year marriage; an endearment tic,
+"sweetheart", made him structurally uncatchable). His consistent-different-words
+control was correctly not accused, and there were zero false accusations.** So
+the honest end held and the adversarial end leaked, exactly the shape the round
+was built to find.
+
+## Fixed
+
+| # | Finding | Fix |
+|---|---|---|
+| F1 (HIGH) | Midnight closing ejected the player but left the live modal running — a Connect 4 finished on the pavement eleven moves after the shutters; a night ride's prompt survived the ejection | `_closingTick` abandons a live game and clears a pending encounter with lines (the barfine already had this — the author saw the class and missed the siblings); `G.offstage` skips the ejection entirely, because the shutters cannot walk out a man who already left on the back of her bike |
+| F2 (HIGH) | Single-token alibis: "years"/"sweetheart" defeated the lie-detector | time-units and endearments joined the stopword list; the widowed-vs-married and verbal-tic pairs are both caught now, and the consistent-different-words controls still agree |
+| F3 (HIGH) | Belle's "Good job at home?" and Kai's "You stay nice hotel?" shared the `hotel` key — the repo's own forbidden class, armed against honest players | Belle re-keyed to `job` with its own ASK_REPLIES |
+| F4 | A question interrupted (the saleng bolt, a kickout, a goodbye) died forever — `_convoEnd` cleared it without the lapse store | unanswered questions survive any interruption; she comes back to it next time |
+| F5 | Room prose contradicted itself in one paint: "Praewa in your lap" and "Praewa laughing on cue beside him" four lines apart | both the busy-girl seeder and the legacy fallback prefer a girl the room's own desc doesn't feature; nobody qualifying, the nameless pool tells the same truth |
+| F6 | The catch quoted your lie in flattened lowercase and claimed the wrong room ("somebody in here" for a pub two bars away) | answers are stored in the case the player typed; "somebody, some bar, had you from…" |
+| F7 | "the one lady drink, nursed" at a ledger reading three | the cheap-charlie refusal reads the ledger it cites |
+| F8 | "You've handed over a true thing" said of nine flat lies; singular-they for named girls in the round's best moment | the ack no longer asserts truth; `_sheHe` threads her pronouns through the catch, gossip, and re-ask lines |
+| F9 | Night summary "met 25" on night one, "met 1" on a night of five first conversations — it counted names learned from prose | "met" counts conversations now |
+| F10 | The jilt's cost was announced and then invisible — her next TALK gave the unchanged cheery greeting | one cooled hello, once (`_MIFFED_HELLO`), then normal service: the cost made visible, not a grudge loop |
+
+## Design-accepted, recorded
+
+- **The chip reading `SWEAR YOURE NO WHITE DISH MAN`** — the apostrophe strip is
+  load-bearing: an apostrophe splits a CAPS-in-parens run into two dead keywords,
+  and the matcher normalizes apostrophes away so the tap still fires. The code
+  comment already documents the trade.
+- **Leniency stays doctrine.** The token-quality fix narrows the alibi space; it
+  does not change the rule that a missed lie is cheaper than a false accusation.
+
+## What Roy's ledger says held
+
+The catch, when it fires, quotes the right lie under the right key across bars
+and days. The spend-side grapevine ("Butterfly, na. Pattaya small") is airtight
+and faster than the word-side one. Personality/origin readbacks landed three
+bars in a row. The night ride remains "the best sequence in the game" for a
+second consecutive blind reporter, and the street kept setting up the persona's
+dramatic irony unprompted — Somo, to Roy of all people: "you look like you got
+enough people lying to you already."

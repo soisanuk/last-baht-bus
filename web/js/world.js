@@ -4762,7 +4762,7 @@ const NPCS = {
           "sit, I don't want to put my problem on you, is not your job.\" She puts her problem on you, gently, " +
           "expertly, inside ninety seconds, holding your hand the whole time.",
         short: "\"Bad day. No no, sit — I don't want to put my problem on you...\" (she will).",
-        asks: { key: "hotel", q: "\"You okay for money, you? Good job at home?\" Warm, worried-for-you. \"I ask only because— no. Never mind. Is my problem, not yours.\" It becomes yours within the hour." } },
+        asks: { key: "job", q: "\"You okay for money, you? Good job at home?\" Warm, worried-for-you. \"I ask only because— no. Never mind. Is my problem, not yours.\" It becomes yours within the hour." } },
       { topic: "family", text: "\"My family—\" she stops, breathes, brave \"—is a lot. Mama sick, papa gamble, " +
         "sister have baby no husband. I am the only one send money. Every month more.\" It is a real weight, " +
         "and she carries it, and she has also learned exactly how to set it down in front of you. \"Sorry — you " +
@@ -12616,6 +12616,14 @@ const ASK_REPLIES = {
     { origin: "married", text: "Buriram, half the year" },
     { origin: "monger", text: "Reading" },
     { text: "Back home. It'll keep." },
+  ],
+  // what you do for a living — Belle's money-worry question, its own answer
+  job: [
+    { origin: "redundancy", text: "Had a good job. Note the tense" },
+    { origin: "business", text: "I own a couple of things that own me back" },
+    { origin: "pension", text: "Done working. The pension does the working now" },
+    { pers: "joker", text: "As little as I can get away with" },
+    { text: "Getting by. Nobody home is worried" },
   ],
   // first time in THIS bar — per-bar, and the honest answer moves with time
   thisbar: [

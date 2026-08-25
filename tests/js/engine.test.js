@@ -3198,8 +3198,10 @@ test("canned replies keep your story straight — or hand the grapevine the catc
   out = []; run("talk to pia"); run("1");
   assert.equal(state().player.said.why, mine, "your voice is stable across the soi");
   // assert against the POOLS, never one string — _pickVary rotates variants
-  const caught = t => _ANSWER_GOSSIP.some(f => t.includes(f("Pia", mine))) ||
-                      _ANSWER_CAUGHT.some(f => t.includes(f("Pia")));
+  // the pools take her pronouns now (fabulist round) — build with hers
+  const _prPia = _sheHe("pia");
+  const caught = t => _ANSWER_GOSSIP.some(f => t.includes(f("Pia", mine, _prPia))) ||
+                      _ANSWER_CAUGHT.some(f => t.includes(f("Pia", _prPia)));
   assert.ok(!caught(out.join("\n")), "nothing to catch");
   // …but a different answer to the same question travels. Fresh week, same
   // two askers, second one answered in a different voice.
@@ -3212,7 +3214,7 @@ test("canned replies keep your story straight — or hand the grapevine the catc
   state().room = _npcRoom("pia");
   out = []; run("talk to pia"); run("2");
   const text = out.join("\n");
-  assert.ok(_ANSWER_GOSSIP.some(f => text.includes(f("Pia", told))), "told two ways — the grapevine has it");
+  assert.ok(_ANSWER_GOSSIP.some(f => text.includes(f("Pia", told, _sheHe("pia")))), "told two ways — the grapevine has it");
   assert.ok(state().rep < rep0, "and the soi marks you down for it");
 });
 
@@ -7797,11 +7799,13 @@ test("the morning says what last night was, as deltas", () => {
   state().stage = "vacation"; state().flags.act1Done = true; state().day = 3;
   state().happy = 12; state().money = 5000;
   state().known = { lek: true }; state().phone.contacts = {};
+  state().talked = { lek: [0] };   // "met" counts conversations now, not names in prose
   _nightSnapshot();
 
   // …a night happens…
   state().happy = 18; state().money = 3200;
   state().known.candy = true; state().known.bee = true;
+  state().talked.candy = [0]; state().talked.bee = [0];
   state().phone.contacts = { lek: true };
   state().day = 4;
 
