@@ -2995,7 +2995,8 @@ const _DEBRIEF = {
   dawn: () => (_flag("act1Done") && G.room === _hotelRoomId()) ? null : ({
     what: "The night ran out with you still on the street.",
     why: "A night is " + NIGHT_TURNS + " turns and ends at 04:00 wherever you " +
-      "are. Not making it home costs you the cash in your pocket" +
+      "are. Not making it home costs you up to ฿" + ROUGH_WAKE_CAP.toLocaleString("en-US") +
+      " of what you are carrying" +
       (G.dog ? " — unless a soi dog happens to be sitting on it." : "."),
     next: "SLEEP in your own room ends the night on your terms and keeps it. " +
       "The last baht bus goes at 02:00 (TIME says); after that it is a motosai " +
@@ -3396,10 +3397,10 @@ function _endNight(reason) {
       : `(Phone on ${_CRASH_BATTERY}%. ${_flag("hasWallet") ? "Wallet" : "Pockets"} ` +
         `turned out — ฿${(G.roughLost || 0).toLocaleString("en-US")} gone; the town works the farang who ` +
         "don't make it home." + (G.money > 0
-          ? ` What you'd had the sense to leave in the room is still in the room: ฿${G.money.toLocaleString("en-US")}.)`
+          ? ` They left you ฿${G.money.toLocaleString("en-US")}, which is either mercy or arithmetic.)`
           : ")"), "dim");
   }
-  _chargeRent();                     // the folio bills you even if you slept rough…
+  _chargeRent(!!crash);              // the folio bills you even if you slept rough…
   if (crash) G.room = crash.room;    // …but you wake where the night left you, not at the desk
   if (_quietHelped) _say("(Naklua quiet: the hangover wakes one size smaller.)", "dim");
   // Templated so one catalog entry covers every day of the week (the day number

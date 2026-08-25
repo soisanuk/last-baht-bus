@@ -1077,7 +1077,11 @@ test("a rough wake takes a pocket, not an estate", () => {
   _endNight("dawn");
   assert.ok(G.money >= 1400000 - ROUGH_WAKE_CAP - 2000, "the pocket, plus the folio — not the estate");
   assert.equal(G.roughLost, ROUGH_WAKE_CAP);
-  assert.match(text(), /still in the room/);
+  // NOT "still in the room" — that figure is the POCKET balance, and billing it
+  // as what you had the sense to leave behind was a plain falsehood about the
+  // player's own money (persona report A#12, 2026-08-23).
+  assert.match(text(), /They left you/);
+  assert.doesNotMatch(text(), /still in the room/);
   assert.match(text(), /20,000 gone/);
 });
 
@@ -1123,4 +1127,75 @@ test("Connect 4 says why the big money won't ride; charity and credit read the w
   doCommand("borrow 20000");
   assert.match(text(), /I only do money/);
   assert.ok(!G.loan);
+});
+
+// ── Round 15/16 personas: prose that contradicts the state it prints beside ──
+
+test("the folio cannot slide under a door you didn't wake behind", () => {
+  newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight" };
+  _setFlag("act1Done"); G.stage = "vacation"; G.money = 50000; G.dog = null;
+  G.room = "buakhao_market";              // out on the street at dawn
+  out = []; _endNight("dawn");
+  const said = text();
+  assert.match(said, /waiting at the desk/i, "you collect it, it does not arrive");
+  assert.doesNotMatch(said, /slides under the door/i);
+
+  // …and a night that ended in your own bed still gets the door
+  newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight" };
+  _setFlag("act1Done"); G.stage = "vacation"; G.money = 50000;
+  G.room = _hotelRoomId(); out = []; _endNight("dawn");
+  assert.match(text(), /slides under the door/i);
+});
+
+test("DIAGNOSE's dawn warning states the cap, not your whole pocket", () => {
+  newGame(); _setFlag("act1Done"); G.stage = "vacation"; G.room = "beach_rd_c"; G.dog = null;
+  out = []; doCommand("diagnose");
+  const said = text();
+  if (/Not making it home/.test(said)) {
+    assert.match(said, /20,000/, "the loss is capped and the warning must say so");
+    assert.doesNotMatch(said, /costs you the cash in your pocket/);
+  }
+});
+
+test("a bar that keeps a cat lets you pet the cat", () => {
+  newGame(); G.dog = null;
+  G.room = "sandbar"; out = []; doCommand("examine cat");
+  assert.doesNotMatch(text(), /isn't here|declines to elaborate/i, "she is described");
+  out = []; doCommand("pet cat");
+  assert.doesNotMatch(text(), /Nothing here wants petting/,
+    "denying the cat one command after describing her is the contradiction");
+  // …and a room with no cat still says so
+  G.room = "beach_rd_c"; out = []; doCommand("pet cat");
+  assert.match(text(), /Nothing here wants petting/);
+});
+
+test("TAKE something you already carry says so", () => {
+  newGame(); G.itemLoc.phone = "inventory"; G.room = "jomtien_beach";
+  out = []; doCommand("take phone");
+  assert.ok(_ALREADY_HAVE.some(l => text().includes(l.replace("{it}", ITEMS.phone.name))),
+    "answered from the already-have pool");
+  assert.doesNotMatch(text(), /fixtures, not luggage|don't see that here/);
+  out = []; doCommand("take xyzzything");
+  assert.match(text(), /don't see that here|no such|not here/i, "and a real miss still misses");
+});
+
+test("a bus destination that isn't on this loop is refused, not silently swallowed", () => {
+  newGame(); _setFlag("act1Done"); G.stage = "vacation"; G.money = 500;
+  G.room = "jomtien_beach_rd"; G.rain = 0; G.nightTurn = 10;
+  out = []; doCommand("ride bus to naklua");
+  assert.match(text(), /shakes his head|not this route/i,
+    "the ask must be answered before the list is re-printed");
+  // a bare ask is still just the list, with no phantom refusal
+  out = []; doCommand("ride bus");
+  assert.doesNotMatch(text(), /shakes his head/);
+  assert.match(text(), /drop you/);
+});
+
+test("nobody narrates half an hour and then advances the clock by six minutes", () => {
+  // The player rang Tan, was told it took "the best part of half an hour", and
+  // TIME said six minutes on the next command (persona report B#11, 2026-08-23).
+  const src = readFileSync(fileURLToPath(new URL("../../web/js/engine-systems.js", import.meta.url)), "utf8");
+  const prose = src.split("\n").filter(l => !/^\s*\/\//.test(l)).join("\n");
+  assert.doesNotMatch(prose, /best part of half an hour/,
+    "prose must not name a duration the turn counter contradicts");
 });

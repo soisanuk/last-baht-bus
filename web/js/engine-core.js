@@ -546,7 +546,11 @@ function _hotelRate(k) {
 // The folio slides under the door each morning. Can't cover it? The desk
 // steps you down toward the Sabai Palms; broke even there, the night clerk
 // adds it to the book — capped, never a spiral. The town catches people.
-function _chargeRent() {
+// `rough` = you did not wake behind your own door, so nothing slid under it.
+// The bill is the same; the delivery cannot be (persona reports A#12 / B#19,
+// 2026-08-23 — a folio sliding under a door while the player wakes among the
+// crates in the Buakhao market forecourt).
+function _chargeRent(rough) {
   if (!_flag("act1Done") || G.stage === "act1") return;
   if (G.hotelDebt && G.money >= G.hotelDebt + _hotelRate(G.hotel)) {
     G.money -= G.hotelDebt;
@@ -556,7 +560,8 @@ function _chargeRent() {
   }
   if (G.money >= _hotelRate(G.hotel)) {
     G.money -= _hotelRate(G.hotel);
-    _say(`(The folio slides under the door: ฿${_hotelRate(G.hotel)}` +
+    _say(`(${rough ? "The folio is waiting at the desk when you finally get back" :
+      "The folio slides under the door"}: ฿${_hotelRate(G.hotel)}` +
       (G.stage === "expat" ? " — the long-stay rate" : "") +
       `, the ${_HOTELS[G.hotel].name}. ฿${G.money} left.)`, "dim");
     return;

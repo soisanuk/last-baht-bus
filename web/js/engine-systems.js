@@ -2483,8 +2483,8 @@ function _tanCall() {
     G.phone.tanAct1 = true;
     _say("You tell him where you are. There is a silence exactly long enough to be a man " +
       "deciding something. \"Do not move.\"", "win");
-    _say("It takes him the best part of half an hour \u2014 he is coming from the other end of " +
-      "town and the traffic on Thappraya does not care who you are \u2014 and then the grey " +
+    _say("He is coming from the other end of town and the traffic on Thappraya does not " +
+      "care who you are, so you get the sand off one arm and most of the other, and then the grey " +
       "sedan comes down the beach road without hurrying. He does not ask what happened. He " +
       "takes in the sand on your shirt and the sand in your hair and says nothing at all " +
       "about either, which is somehow worse than the joke you were braced for.", "win");
@@ -3949,6 +3949,13 @@ const _PET_OUTSIDE = [
   "He's outside, where the house rules put him. You go to the door; one ear turns, the tail " +
     "thumps the step, and he leans into your hand for as long as you'll stand there.",
 ];
+// A bar cat is not the Jomtien beach pair and is not yours; she is staff, and
+// she is the one deciding how this goes.
+const _PET_BAR_CAT = [
+  "She permits it, in the way of a creature doing you a favour it may revoke. Two seconds of a flat warm skull under your palm, and then she is a foot further along the rail with her back to you, having made her point.",
+  "One eye opens. It considers your hand, your face, and your standing in this establishment, in that order, and closes again without any part of her moving. You take that as a yes and are, on balance, correct.",
+  "A brief hard head-butt into your knuckles \u2014 all business, no sentiment \u2014 and then she is off down the bar to a man who has been feeding her longer than you have been in the country.",
+];
 function _doPet(arg) {
   // his by name, or bare PET when he's the animal at hand (the beach cats keep
   // priority on their own sand)
@@ -3962,6 +3969,13 @@ function _doPet(arg) {
     return;
   }
   if (G.itemLoc.soi_cats !== G.room) {
+    // A room whose OWN prose keeps a cat ("a cat that outranks everyone" at The
+    // Sandbar) must not answer "nothing here wants petting" — EXAMINE CAT
+    // described her one command earlier (persona report A#16, 2026-08-23).
+    if (/\bcats?\b/.test(arg || "") && /\bcats?\b/i.test(String(_room().desc || ""))) {
+      _say(_pickVary(_PET_BAR_CAT, "petbarcat"));
+      return;
+    }
     _say(/dog/.test(arg || "")
       ? "You haven't got a dog. The soi's freelancers accept food, not affection — " +
         "though the one with the clipped ear has been known to reconsider for dinner. (FEED DOG.)"

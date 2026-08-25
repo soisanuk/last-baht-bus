@@ -776,6 +776,11 @@ function _doSafe(num) {
   }
 }
 
+const _ALREADY_HAVE = [
+  "You already have {it}. Taking it twice would be greedy and, more to the point, impossible.",
+  "You have {it} on you already. You pat the pocket to check, which is how everybody checks.",
+  "Got it already \u2014 {it}, right where you put it.",
+];
 function _doTake(arg) {
   if (!arg) { _say("Take what?"); return; }
   // TAKE WATER in your room pulls a free bottle from the minibar (not an item —
@@ -784,6 +789,15 @@ function _doTake(arg) {
   if (_isDarkHere()) { _say("You grope around in the dark and find nothing but regret. (LIGHT ON)"); return; }
   const id = _findItem(arg, "room");
   if (!id) {
+    // Already in your pocket. Checked BEFORE the advertised-fixture branch, which
+    // owns words like "bottle" and was answering "that's fixtures, not luggage;
+    // the bar would notice" about a Leo bottle the player was carrying on an
+    // empty beach (persona report A#14, 2026-08-23).
+    const held = _findItem(arg, "inventory");
+    if (held) {
+      _say(_fmt(_pickVary(_ALREADY_HAVE, "alreadyhave"), { it: ITEMS[held].name }));
+      return;
+    }
     // a fixture the room ADVERTISES (a reads: noun, e.g. the Queen Vic dartboard)
     // exists — it just isn't luggage. Denying it's here reads as a bug.
     const _advertised = (() => {
@@ -4072,6 +4086,15 @@ function _doRideBus(arg) {
     (toks.length && toks.every(t => _bn(ROOMS[s].name).includes(t))) ||
     (w && ROOMS[s].region.toLowerCase().includes(_bn(w))));
   if (!w || !dest) {
+    // A destination that ISN'T on this loop was silently discarded: the player
+    // typed RIDE BUS TO NAKLUA, got the same wall of drop-off options as a bare
+    // RIDE BUS, and reasonably concluded it had worked (persona report B#13,
+    // 2026-08-23). Say the ask missed before re-printing the list.
+    if (w && !/\bloop\b/.test(w)) {
+      _say(_fmt("\"{where}?\" The driver shakes his head once \u2014 not this truck, not " +
+        "this route. He is already looking past you for the next fare.",
+        { where: _ucfirst((arg || "").trim()) }), "alert");
+    }
     G.busAskTurn = G.turns; // a bare stop name on the next line answers this list
     _say((_BUS_WAITING.has(G.room)
       ? "The truck at the head of the rank waits, benches filling. He'll drop you: "
