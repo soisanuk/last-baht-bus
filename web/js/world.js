@@ -177,7 +177,8 @@ const ROOMS = {
     region: "Jomtien",
     desc: "Where Soi 7 finally gives out onto the sand: a scrap of hard-packed beach, a couple of " +
       "upturned boats, and Auntie Nok's drinks cart parked in the lee of a sea almond tree, cooler " +
-      "humming. The beach opens north; Soi 7 runs back inland to the east.",
+      "humming. The beach opens north; Soi 7 runs back inland to the east, up toward the middle " +
+      "of the soi.",
     revisit: [
       "Auntie Nok's cooler hums. The upturned boats have not moved in years.",
       "Hard-packed sand underfoot, and the sea almond dropping something onto the cart roof.",
@@ -324,8 +325,8 @@ const ROOMS = {
   jomtien_2nd_n: {
     name: "Jomtien Second Road (North)",
     region: "Jomtien",
-    desc: "The top of Jomtien's Second Road, where it meets the Thappraya Main Strip climbing up " +
-      "to the east. Shuttered day-shops, a late khanom cart, the traffic thinning. TAKE CARE ME " +
+    desc: "The top of Jomtien's Second Road, where it meets the Thappraya Main Strip climbing away " +
+      "to the north. Shuttered day-shops, a late khanom cart, the traffic thinning. TAKE CARE ME " +
       "throws a guitar solo down the pavement from the junction; Second Road runs back south down " +
       "the strip.",
     exits: { s: "jomtien_2nd_m", n: "thappraya_e" },
@@ -669,9 +670,11 @@ const ROOMS = {
     dark: true,
     desc: "The main hill road between Jomtien and Pattaya proper — condos behind walls, " +
       "sleeping soi dogs, and long stretches where the streetlights have given up. " +
-      "The Buddha Hill viewpoint is up a path to the west; Walking Street is on north.",
+      "The Buddha Hill viewpoint is up a path to the west; Walking Street is on north. " +
+      "The HILL road climbs away over the crest toward the Pratumnak clubs and Soi 5 " +
+      "beyond it; a turning drops to the PIER at Bali Hai.",
     exits: { n: "second_rd_india", w: "buddha_hill",
-             soi5: "pratumnak_hill_rd", pier: "bali_hai" },
+             hill: "pratumnak_hill_rd", soi5: "pratumnak_hill_rd", pier: "bali_hai" },
   },
 
   // ── Pratumnak north extension: the loop over the hill ────────────────────────
@@ -684,8 +687,8 @@ const ROOMS = {
     name: "Thappraya Road — Hill (lower)",
     region: "Pratumnak",
     desc: "Where the Main Strip's neon finally gives out and the road tips upward: the last few " +
-      "late-night noodle carts, then condo walls and the hill proper. The strip is back down to " +
-      "the south; the mouth of the Supertown drag alley opens to the west; the road climbs on north.",
+      "late-night noodle carts, then condo walls and the hill proper. The strip is back DOWN " +
+      "the hill; the mouth of the Supertown drag alley opens south; the road climbs on north.",
     exits: { down: "thappraya_e", n: "thappraya_ext_m", s: "supertown_elbow" },
   },
   thappraya_ext_m: {
@@ -2675,8 +2678,9 @@ const ROOMS = {
     region: "Tree Town",
     desc: "The cheap seats of the maze, behind the kitchens where the rent drops and the " +
       "neon budget with it: three little bars under one sagging string of bulbs. THE RABBIT " +
-      "HOLE, LUCKY CHARM BAR, and MOONSHINE BAR trade the regulars who ran out of maze. " +
-      "Friendlier than it has any right to be down here.",
+      "HOLE is straight in off the lane, LUCKY CHARM BAR is the door west and MOONSHINE BAR " +
+      "the door east; between them they trade the regulars who ran out of maze. The only way " +
+      "on is back north. Friendlier than it has any right to be down here.",
     exits: { n: "tt_back", in: "rabbit_hole", w: "lucky_charm", e: "moonshine_bar" },
   },
   rabbit_hole: {
@@ -3172,8 +3176,8 @@ const ROOMS = {
       "they're indistinguishable. Good energy — dense, close, the kind of loud that's a " +
       "decision rather than an accident. A motorbike idles past carrying a girl in full " +
       "sequins at a speed that's technically legal. THE OFFSIDE SPORTS BAR breaks the neon " +
-      "with the cold blue wash of a dozen screens. Ahead the neon runs out and the alley spills " +
-      "onto Soi Buakhao; the corner is behind you.",
+      "with the cold blue wash of a dozen screens. East the neon runs out and the alley spills " +
+      "onto Soi Buakhao; west it bends at the corner toward the entrance.",
     exits: { w: "lk_bend", e: "buakhao_lk", n: "kinky", s: "slutty", in: "kinky", pub: "lk_sports" },
   },
   lk_sports: {

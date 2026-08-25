@@ -382,3 +382,59 @@ test("a room named for massage carries the flag that makes MASSAGE work", () => 
     .map(([id, r]) => `${id}: massage=${JSON.stringify(r.massage)}`);
   assert.deepEqual(bad, [], "unknown massage kind (_doMassage handles legit and oil):\n  " + bad.join("\n  "));
 });
+
+// world.test.js loads only thai.js + world.js, so the engine's stripMarkup
+// isn't in scope — the braces are render-only markup and a local strip is enough.
+const _strip = t => String(t).replace(/\{\{|\}\}/g, "");
+
+// ── Room prose must name the directions the room actually has ────────────────
+// Persona reports A#4/A#5/A#15/B#12/B#17 (2026-08-23): four rooms pointed the
+// player at a compass direction the exits table did not have, and one was
+// written for a single approach so half the arrivals read it backwards.
+test("no room's prose sends you a direction it doesn't have", () => {
+  // Only checks the explicit "X is to the <dir>" shapes — a full NLP pass would
+  // be noise. These are the phrasings that actually misled somebody.
+  const DIRS = { north: "n", south: "s", east: "e", west: "w" };
+  const bad = [];
+  for (const [id, r] of Object.entries(ROOMS)) {
+    const desc = _strip(String(r.desc || ""));
+    for (const m of desc.matchAll(/\b(?:opens?|runs?|lies?|is|climbs?|drops?)\s+(?:back\s+|on\s+|away\s+)?(?:to the\s+|up to the\s+)?(north|south|east|west)\b/gi)) {
+      const dir = DIRS[m[1].toLowerCase()];
+      if (!r.exits || !r.exits[dir]) bad.push(`${id}: prose says ${m[1]}, no ${dir} exit`);
+    }
+  }
+  // A clause may legitimately describe geography beyond this room's own exits
+  // ("Walking Street is on north" from a road that reaches it by another key),
+  // so this is an allow-list, not a zero — each entry is a deliberate one.
+  // Same discipline as the reference lint's OK list and afford-audit's AFFORD_OK:
+  // a named exception with a reason, never a silent loosening of the matcher.
+  const OK = new Set([
+    // "the bars… with their fronts open to the west" — a description of which way
+    // the buildings face, not a route out of the room. The sea IS west; there is
+    // just no road across it.
+    "beach_rd_soi8: prose says west, no w exit",
+  ]);
+  const real = bad.filter(b => !OK.has(b));
+  assert.deepEqual(real, [], "prose direction with no matching exit");
+});
+
+test("Pratumnak Road's hill turning and pier are discoverable from the prose", () => {
+  const r = ROOMS.pratumnak_rd;
+  const desc = _strip(r.desc).toLowerCase();
+  assert.ok(desc.includes("hill"), "the hill road is named");
+  assert.ok(desc.includes("pier"), "so is the pier — both were exits-line-only");
+  assert.equal(r.exits.hill, "pratumnak_hill_rd", "and HILL is the honest key for the crest");
+});
+
+test("Tree Town's Far Lane says which bar is which door", () => {
+  // its w/e exits ARE bar doors, so mapping the maze by compass walks you indoors
+  const desc = _strip(ROOMS.tt_lane_3.desc);
+  assert.match(desc, /LUCKY CHARM BAR is the door west/);
+  assert.match(desc, /MOONSHINE BAR the door east/);
+});
+
+test("LK Metro's main alley reads the same from both ends", () => {
+  const desc = _strip(ROOMS.lk_main.desc);
+  assert.doesNotMatch(desc, /behind you|Ahead the/,
+    "arriving from Buakhao put the corner ahead and Buakhao behind — the prose said the opposite");
+});
