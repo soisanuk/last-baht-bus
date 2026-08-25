@@ -12,6 +12,22 @@ const SAVE_KEY = "lbb_save";
 // copy in that window, which buys the safety without taxing every deliberate
 // fresh start with a confirmation dialog.
 const SHELF_KEY = "lbb_shelved";
+// The rewind buffer, kept across a reload — and DROPPED at a night's end.
+//
+// Before this, finality was an accident of app lifecycle rather than a design
+// choice: the buffer was a module-local, so a desktop player who never reloads
+// could undo anything forever (a night ending, an ending, the Act One hard
+// fail), while a phone player who reloads constantly could undo nothing. Same
+// game, opposite rules, decided by whether the page happened to be torn down
+// (persistence + mobile playtests, 2026-08-23/24).
+//
+// So: the buffer persists, and a NIGHT ENDING takes it. That makes the game's
+// consequences final BY DECISION — which matters most for the Act One hard
+// fail, since act1Best, act1Tries and the HINT unlock all exist because failure
+// is real. Everything an undo is actually for (a mistyped tip, the wrong bar, a
+// fumbled chip) survives a reload as it should. Same principle the mid-modal
+// refusal already states in words: the soi doesn't rewind.
+const UNDO_KEY = "lbb_undo";
 let _prevSnap = null;         // one-level undo snapshot
 let _undoSpent = false;       // …and whether it was USED, vs never having survived a reload
 let _awaitingContinue = false;
@@ -23,6 +39,29 @@ function _autosave() {
 // Starting a night lets the shelved one go — the offer is honest about this
 // ("Starting a new one lets it go"), so the shelf must not outlive it and
 // resurface days later attached to a game the player has moved on from.
+function _saveUndo() {
+  try {
+    if (_prevSnap) localStorage.setItem(UNDO_KEY, JSON.stringify({ snap: _prevSnap, spent: _undoSpent }));
+    else localStorage.setItem(UNDO_KEY, JSON.stringify({ snap: null, spent: _undoSpent }));
+  } catch (e) {}
+}
+// A night ended (or the world was rebuilt): there is nothing behind you to
+// return to. Cheap to call — this is the boundary, so it is stated once.
+function _dropUndo() {
+  _prevSnap = null;
+  _undoSpent = false;
+  try { localStorage.removeItem(UNDO_KEY); } catch (e) {}
+}
+function _loadUndo() {
+  try {
+    const raw = localStorage.getItem(UNDO_KEY);
+    if (!raw) return;
+    const o = JSON.parse(raw);
+    _prevSnap = o && o.snap ? o.snap : null;
+    _undoSpent = !!(o && o.spent);
+  } catch (e) {}
+}
+
 function _dropShelf() {
   try { localStorage.removeItem(SHELF_KEY); } catch (e) {}
 }
@@ -185,6 +224,7 @@ function _startFull() {
   const ov = document.getElementById("start-overlay");
   if (ov) ov.hidden = true;
   _dropShelf();          // starting a night lets the shelved one go, as offered
+  _dropUndo();           // …and a new night has nothing behind it to rewind to
   newGame();
   engineIntro();
   _autosave();
@@ -196,6 +236,7 @@ function _startGame(daily) { // START / TODAY'S SOI on the Soi 6 intro panel
   const ov = document.getElementById("start-overlay");
   if (ov) ov.hidden = true;
   _dropShelf();          // starting a night lets the shelved one go, as offered
+  _dropUndo();           // …and a new night has nothing behind it to rewind to
   if (daily) {
     // Seed-of-the-day: the engine never reads a clock (shared-world rule 1),
     // so the DATE is computed here and handed in as a string — everyone who
@@ -267,7 +308,7 @@ function _dispatch(cmd) {
     const ov = document.getElementById("start-overlay");
     if (ov) ov.hidden = true;
     _awaitingContinue = false;
-    _prevSnap = null; _undoSpent = false;
+    _dropUndo();
     _term.print("── PICKED BACK UP ──", "win");
     _describeRoom(true);
     if (typeof _renderResume === "function") _renderResume();
@@ -297,18 +338,17 @@ function _dispatch(cmd) {
       _describeRoom(true, true); // restore / rewind: re-orient with the full desc
       _renderResume(); // rewound into a modal state — redraw its prompt (see engine _renderResume)
       deserializeGame(snap); // the redraw consumed dice; UNDO must not reroll (replayer playtest 2026-08-22)
+      _saveUndo();           // spent — and a reload must not resurrect it
       _autosave();
     } else {
-      // Two different states wore one sentence. "Nothing to rewind" implied the
-      // player had already spent his undo, when what usually happened is the page
-      // reloaded and took the buffer with it — a burst player reaches for UNDO
-      // precisely on coming back, and was told he had used something he never had
-      // (mobile playtest, round 17). The buffer is frontend-only by design; say
-      // which of the two actually happened.
+      // Three different states used to wear one sentence, and two of them were
+      // lies. The buffer now outlives a reload, so the honest answers are: you
+      // already used it, or a night ended behind you and there is nothing back
+      // there to return to (mobile playtest, round 17).
       _term.print(_undoSpent
         ? "Already rewound — UNDO reaches back one command only."
-        : "Nothing to rewind: the page reloaded, and the rewind buffer doesn't survive that. " +
-          "Your night did — it is exactly where you left it.", "dim");
+        : "Nothing to rewind. A night ends where it ends: the soi doesn't rewind, " +
+          "and neither does the morning.", "dim");
     }
     _audioForRoom(G.room, G.flags);
     return;
@@ -372,7 +412,7 @@ function _dispatch(cmd) {
     _awaitingReset = false;
     if (["reset", "yes", "y", "confirm", "wipe"].includes(v)) {
       try { localStorage.removeItem(SAVE_KEY); } catch (e) {}
-      _prevSnap = null; // the wipe isn't undoable — the confirm was the safety net
+      _dropUndo();      // the wipe isn't undoable — the confirm was the safety net
       _term.print("⌫ Slate wiped — the debts, the dog, the girls' patience, all of it.", "alert");
       _showStartMenu();
       return;
@@ -496,7 +536,16 @@ function _dispatch(cmd) {
 
   _prevSnap = serializeGame();
   _undoSpent = false;
+  // A night ending is the boundary the buffer does not cross. The engine can't
+  // tell the frontend (it is storage-free and callback-only), so read it off the
+  // world: _endNight advances the day, _act1Fail rebuilds it back to day 2, and
+  // _newVacation resets it to 1 — every one of those is "the night you were in
+  // is over", and every one shows up as the day not being the day it was.
+  const _dayBefore = (typeof G !== "undefined" && G) ? G.day : null;
   doCommand(cmd);
+  const _dayAfter = (typeof G !== "undefined" && G) ? G.day : null;
+  if (_dayBefore !== null && _dayAfter !== null && _dayAfter !== _dayBefore) _dropUndo();
+  _saveUndo();
   _autosave();
   _audioForRoom(G.room, G.flags);
 }
@@ -539,6 +588,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (dailyBtn) dailyBtn.addEventListener("click", () => _startGame(true));
 
   newGame();
+  _loadUndo();          // the rewind buffer outlives the page now (see UNDO_KEY)
   let savedLive = false;
   try {
     const s = localStorage.getItem(SAVE_KEY);

@@ -111,3 +111,53 @@ test("a mis-tapped NO can be taken back, and starting a night lets it go", async
   await expect(page.locator("#term-out")).toContainText(/no night set aside/i);
   expect(errs).toEqual([]);
 });
+
+// UNDO across a reload, and the boundary it does not cross. Before this,
+// finality was an accident of app lifecycle: the buffer was a module-local, so a
+// desktop player who never reloads could undo a night ending forever while a
+// phone player who reloads constantly could undo nothing at all. The buffer now
+// persists — and a NIGHT ENDING takes it, so the game's consequences are final
+// by decision. Act One's hard fail depends on that: act1Best, act1Tries and the
+// HINT unlock all exist because failure is real.
+test("the rewind buffer outlives a reload, but never outlives the night", async ({ page }) => {
+  const errs = [];
+  page.on("pageerror", e => errs.push(e.message));
+  await bootIntoGame(page, INDEX_URL);
+  await page.evaluate(() => {
+    G.flags.act1Done = true; G.flags.hasWallet = true; G.stage = "vacation";
+    G.money = 5000; G.room = "candy_bar"; G.day = 3;
+  });
+
+  // an ordinary mistake, then a reload, then take it back. (Deliberately not a
+  // tip: on day 3 Candy works the other Candy Bar, so a person-target would be
+  // testing NPC movement rather than the buffer.)
+  await send(page, "buy beer");
+  expect(await page.evaluate(() => G.money), "the beer was bought").toBe(5000 - 80);
+  await page.reload();
+  await page.waitForSelector("#term-in");
+  await send(page, "yes");                       // continue the night
+  await send(page, "undo");
+  await expect(page.locator("#term-out")).toContainText(/Rewound one command/);
+  expect(await page.evaluate(() => G.money), "the beer is un-bought after a reload").toBe(5000);
+
+  // …and once used, a reload must not resurrect it
+  await page.reload();
+  await page.waitForSelector("#term-in");
+  await send(page, "yes");
+  await send(page, "undo");
+  await expect(page.locator("#term-out")).toContainText(/Already rewound/);
+
+  // A night ending takes the buffer with it. Ended through a real COMMAND, not
+  // by poking _endNight from evaluate: the frontend spots a night ending by the
+  // day changing across a dispatch, so calling the engine directly bypasses the
+  // very thing under test (which is exactly what the first draft of this test
+  // did, and it passed the wrong way).
+  await page.evaluate(() => { G.room = _hotelRoomId(); G.nightTurn = 50; });
+  const dayBefore = await page.evaluate(() => G.day);
+  await send(page, "sleep");
+  expect(await page.evaluate(() => G.day), "the night really ended").toBe(dayBefore + 1);
+  await send(page, "undo");
+  await expect(page.locator("#term-out")).toContainText(/A night ends where it ends/);
+  expect(await page.evaluate(() => G.day), "and it stayed ended").toBe(dayBefore + 1);
+  expect(errs).toEqual([]);
+});
