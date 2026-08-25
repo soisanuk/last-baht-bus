@@ -151,3 +151,79 @@ test("a quest OFFER prints no command but ACCEPT", () => {
   // and the full desc is still what an ACTIVE quest shows, hint and all
   assert.match(q.desc, /ASK PETE/);
 });
+
+// ── The door you can walk through must look back ─────────────────────────────
+// Every street room names its bars in CAPS, lists them under "Step inside", and
+// renders each as a tappable keyword — and EXAMINE answered "Whatever that is,
+// it isn't here, and it isn't interesting anyway." It was true of EVERY venue on
+// the map (thorough-player playtest B#2, 2026-08-23), which is why the fix is one
+// engine answer derived from the exits graph rather than ~90 authored entries.
+
+test("every venue you can step into from here gets an exterior look", () => {
+  let tested = 0;
+  const missed = [];
+  for (const [rid, r] of Object.entries(ROOMS)) {
+    if (!r.exits || r.dark) continue;
+    for (const to of Object.values(r.exits)) {
+      const v = ROOMS[to];
+      if (!v || !v.bar) continue;
+      G.room = rid; out = [];
+      doCommand("examine " + v.bar.toLowerCase().replace(/'/g, ""));
+      tested++;
+      if (!/You are outside it/.test(out.join("\n"))) missed.push(rid + " -> " + v.bar);
+    }
+  }
+  assert.ok(tested > 50, "the sweep actually ran (" + tested + " venues)");
+  assert.deepEqual(missed, [], "a venue named in prose must not answer \"it isn't here\"");
+});
+
+test("the exterior look never invents a beer bar out of a massage shop", () => {
+  // A third of the map's venues carry no barType, so defaulting them to "beer"
+  // would assert a horseshoe rail under woven palm about an oil shop — the
+  // false-claim defect this whole answer exists to fix.
+  const kinds = {};
+  for (const r of Object.values(ROOMS)) {
+    if (!r.bar) continue;
+    kinds[_venueKind(r)] = (kinds[_venueKind(r)] || 0) + 1;
+    assert.ok(_VENUE_LOOK[_venueKind(r)], r.bar + " resolves to a kind with prose");
+  }
+  assert.ok(kinds.massage > 0 && kinds.beer > 0, "the kinds are actually distinguished");
+  G.room = "beach_rd_s"; out = []; doCommand("examine beach road thai massage");
+  assert.match(out.join("\n"), /price list|plastic chairs|polo/i);
+  assert.doesNotMatch(out.join("\n"), /horseshoe rail|woven palm/i);
+});
+
+test("an exact venue name beats a generic noun inside it", () => {
+  // "Daeng's Place" must not resolve through the scenery entry for "place",
+  // nor "The Water Buffalo" through the one for a tree.
+  G.room = "khao_talo"; out = []; doCommand("examine daengs place");
+  assert.match(out.join("\n"), /Daeng's Place/);
+  assert.match(out.join("\n"), /You are outside it/);
+});
+
+test("a venue you cannot step into from here is still a miss", () => {
+  G.room = "hotel_room"; out = []; doCommand("examine candy bar");
+  assert.doesNotMatch(out.join("\n"), /You are outside it/,
+    "you are not looking at a bar three districts away");
+});
+
+// ── People the room itself describes ─────────────────────────────────────────
+test("somebody the room's own prose put there gets a voiced refusal, not \"nobody by that name\"", () => {
+  const flat = /Nobody by that name|No one here answers|doesn't land on anyone|Nobody here goes by/;
+
+  G.room = "jomtien_beach_rd"; out = []; doCommand("talk to motosai driver");
+  assert.doesNotMatch(out.join("\n"), flat);
+  assert.match(out.join("\n"), /MOTOSAI TO/, "and a real verb is pointed at");
+
+  G.room = "tt_entrance"; out = []; doCommand("talk to security");
+  assert.doesNotMatch(out.join("\n"), flat, "the room describes security on plastic stools");
+
+  G.room = "jomtien_soi_7_oil"; out = []; doCommand("talk to girls");
+  assert.doesNotMatch(out.join("\n"), flat, "the room says 'girls on the step'");
+});
+
+test("…but a name the room never mentioned still misses", () => {
+  G.room = "tt_entrance"; out = []; doCommand("talk to quantum surveyor");
+  assert.doesNotMatch(out.join("\n"), /flat, un-hostile attention|professional smile/,
+    "the folk answer is derived from the room's prose, not handed out to everyone");
+});

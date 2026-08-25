@@ -124,6 +124,57 @@ const _NOT_HERE = [
   "Not here right now — the regulars drift around.",
   "Empty stool where you were looking.",
 ];
+// Voiced refusals for people the room's OWN prose describes. Derived from the
+// room text rather than a hand-kept list, so a new room is covered the day it is
+// written: if the player is asking about a word the description just used, the
+// person is real and the answer must not be "nobody by that name".
+const _FOLK_MOTO = [
+  "The piwin surfaces about halfway, establishes that you are not a fare yet, and goes back under his cap. (MOTOSAI TO <place> when you want him.)",
+  "He tips the cap up with one finger, waits to hear a destination, doesn't hear one, and puts it back. (MOTOSAI TO <place>.)",
+];
+const _FOLK_SECURITY = [
+  "He looks at you with the flat, entirely un-hostile attention of a man whose whole job is knowing which of tonight's problems you are. He has decided you are not one. That is the conversation.",
+  "A nod, and nothing after it. Security here talks to two kinds of people and you are neither, which is the best outcome available.",
+];
+const _FOLK_TOUT = [
+  "She has the professional smile up before you finish crossing the pavement and drops it the moment you turn out to be talking rather than coming in. Business, not rudeness.",
+];
+const _FOLK_GENERIC = [
+  "They are there, and they are not looking for a conversation with you \u2014 which on this soi is most people, most of the time.",
+  "You get about half a second of eye contact and a face that says the night is already spoken for.",
+  "Not everybody in a room is somebody to talk to. They go back to whatever they were doing, which was not this.",
+];
+
+// The words the room actually printed, lower-cased \u2014 the same text the player
+// just read, so anything they can quote back at us came from here.
+function _roomProse(r) {
+  return String((r && r.desc) || "").toLowerCase();
+}
+
+function _promptedFolk(arg) {
+  const r = _room();
+  if (!r) return false;
+  const a = String(arg).toLowerCase().trim();
+  if (!a) return false;
+  if (/\b(motosai|piwin|driver|rider|bike ?boy)\b/.test(a) && r.motosai) {
+    _say(_pickVary(_FOLK_MOTO, "folkmoto")); return true;
+  }
+  const prose = _roomProse(r);
+  if (!prose) return false;
+  // every word of the ask has to be in the room's own description, so "security"
+  // answers where the room mentions security and misses where it doesn't
+  const words = a.split(/\s+/).filter(w => w.length > 2 && !/^(the|and|a|an|to|of)$/.test(w));
+  if (!words.length || !words.every(w => prose.includes(w))) return false;
+  if (/\b(security|guard|bouncer|doorman)\b/.test(a)) {
+    _say(_pickVary(_FOLK_SECURITY, "folksec")); return true;
+  }
+  if (/\b(tout|greeter|hostess|girls?|women|ladies|masseuse)\b/.test(a) && (r.massage || r.soapy)) {
+    _say(_pickVary(_FOLK_TOUT, "folktout")); return true;
+  }
+  _say(_pickVary(_FOLK_GENERIC, "folkgen"));
+  return true;
+}
+
 const _NOBODY_NAME = [
   "Nobody by that name here.",
   "No one here answers to that.",
@@ -996,6 +1047,11 @@ function _doExamine(arg) {
   // notebook, not resolve to the owlish old-timer scribbling in it. Peek only;
   // the effects fire in _doRead below.
   if (_roomRead(arg, true)) return _doRead(arg);
+  // An exact venue name beats a generic noun contained inside it: "Daeng's
+  // Place" must not resolve through the scenery entry for "place", nor "The
+  // Water Buffalo" through the one for a tree. Authored room detail still wins,
+  // because a room may describe its own neighbour better than this can.
+  if (_venueLook(arg)) return;
   const npc = _findNpc(arg);
   if (npc) {
     // _findNpc's fuzzy prefix/substring match can pick up a same-prefixed NPC
@@ -1034,6 +1090,105 @@ function _doExamine(arg) {
   if (_roomRead(arg, true) || /\bsign|signage|arrows?\b/.test(arg)) return _doRead(arg);
   if (_doScenery(arg)) return;
   _say(_pickVary(_NO_SUCH_THING, "xnothing"));
+}
+
+// ââ EXAMINE <venue>: the door you can walk through must look back ââââ
+// Every street room names its bars in CAPS, offers them under "Step inside", and
+// (in the browser) renders each as a tappable keyword â and then EXAMINE answered
+// "Whatever that is, it isn't here, and it isn't interesting anyway" about a door
+// two steps away. That is the promise defect in its purest form, and it was true
+// of EVERY venue on the map, so it wants one engine answer rather than ~90
+// authored entries (thorough-player playtest B#2, 2026-08-23).
+//
+// Derived from the exits graph, so a new bar is covered the day it is added.
+// Deliberately an EXTERIOR look: what you can see from the pavement, keyed on
+// what kind of place it is, plus the venue's own name â never the roster, which
+// belongs to the room you have not walked into yet.
+const _VENUE_LOOK = {
+  gogo: [
+    "Blacked-out glass, a door curtain, and a cold breath of aircon every time somebody works it. The board outside promises a great deal in two languages and commits to nothing in either.",
+    "Chrome, dark glass, and a doorway you cannot see into from out here, which is the entire architectural intention. The bass arrives through the pavement rather than the air.",
+  ],
+  soi6: [
+    "Open frontage, a row of stools, and a line of girls on them who clock you at forty metres and are already saying so. There is no door to speak of; the whole front IS the door.",
+    "Stools out to the kerb, a beer fridge you can see from here, and a staircase at the back that the frontage is entirely honest about.",
+  ],
+  beer: [
+    "Open-fronted, a roof of woven palm over a horseshoe rail, a fan turning at half speed. You can see straight through it to the back wall, which is rather the point of a beer bar.",
+    "A rail, a fridge, a fan, and enough light spilling onto the pavement to read by. Nothing about the outside is trying to be anything.",
+  ],
+  gents: [
+    "A wall, a discreet sign, and a door with no glass in it. It gives away nothing at all from the pavement, and the cars parked outside are better than the ones on the street.",
+  ],
+  pub: [
+    "Frosted glass, a hanging board, and a menu in a case by the door with the fixtures taped up beside it. Somebody's roast is in there somewhere.",
+  ],
+  host: [
+    "A lit board of photographs by the door, every face on it male and beautifully turned out. The lettering is Thai first and English second, which tells you who it is actually for.",
+  ],
+  shop: [
+    "Strip lights, glass frontage, and the specific white glow that means cold drinks and an aircon that works.",
+  ],
+  massage: [
+    "A lit sign with a price list under it, a rank of plastic chairs on the pavement, and the women in matching polo shirts who go with them. One of them wais at you on the off-chance.",
+  ],
+  soapy: [
+    "A porte-cochere, a car park with an attendant in it, and a frontage that has been expensively persuaded to look like a hotel. Nothing about it is subtle and none of it is accidental.",
+  ],
+  market: [
+    "Strip lighting on wires, tarpaulin roofs, and the noise of a hundred small businesses all closing at slightly different times.",
+  ],
+  cabaret: [
+    "Poster boards of sequins and cheekbones under coloured bulbs, a showtime printed larger than anything else on the frontage, and a rope for a queue that has not formed yet.",
+  ],
+  food: [
+    "Steel tables, a laminated menu on a board, and the specific smell that makes the decision for you before you have finished reading it.",
+  ],
+  other: [
+    "Lit frontage, an open door, and the ordinary business of the evening going on behind it.",
+  ],
+};
+
+// A third of the map's venues carry no barType at all \u2014 massage shops, markets,
+// a cabaret, a host club \u2014 so defaulting them to a beer bar would assert a
+// horseshoe rail under woven palm about a massage shop, which is the false-claim
+// defect this whole exterior look exists to fix. Read their own flags instead,
+// and fall through to something that commits to nothing.
+function _venueKind(r) {
+  if (r.barType && _VENUE_LOOK[r.barType]) return r.barType;
+  if (r.soapy) return "soapy";
+  if (r.massage) return "massage";
+  if (r.hostBar) return "host";
+  if (r.seven) return "shop";
+  if (/market|bazaar|mall/i.test(r.name || "")) return "market";
+  if (/cabaret/i.test(r.name || "")) return "cabaret";
+  if (r.food) return "food";
+  if (r.barType) return "other";
+  return r.bar ? "other" : "other";
+}
+
+function _venueLook(arg) {
+  const here = _room();
+  if (!here || !here.exits) return false;
+  const norm = t => String(t).toLowerCase().replace(/['\u2019\u02bc]/g, "").replace(/\s+/g, " ").trim();
+  const a = norm(arg);
+  if (!a) return false;
+  // Only somewhere you could step into from where you stand â a venue three rooms
+  // away is not a thing you are looking at.
+  for (const to of Object.values(here.exits)) {
+    const r = ROOMS[to];
+    if (!r) continue;
+    const label = norm(r.bar || r.name || "");
+    if (!label) continue;
+    const bare = label.replace(/^the /, "");
+    if (a !== label && a !== bare && a !== "the " + bare) continue;
+    const name = r.bar || r.name;
+    _say(_fmt("{name}. {look}",
+      { name, look: _pickVary(_VENUE_LOOK[_venueKind(r)], "vlook" + _venueKind(r)) }));
+    _say(_fmt("(You are outside it. ENTER {name} to go in.)", { name }), "dim");
+    return true;
+  }
+  return false;
 }
 
 // ── Scenery: EXAMINE as a reward, not a dead end ─────────────────────────────
@@ -2344,6 +2499,12 @@ function _doTalkBody(arg, topic) {
     // flat "nobody here", which reads as a bug mid-conversation. See _elsewhereLine.
     const away = _elsewhereLine(arg);
     if (away) { _say(away); return; }
+    // Somebody the ROOM ITSELF just put in front of you \u2014 the dozing motosai
+    // driver, the security on the plastic stools, the women on a massage step.
+    // "Nobody by that name here" about a man described two lines up reads as a
+    // bug rather than as flavour, and the house rule is that a plausible verb
+    // gets a voiced refusal (thorough-player playtest B#3, 2026-08-23).
+    if (_promptedFolk(arg)) return;
     _say(_pickVary(_NOBODY_NAME, "noname"));
     return;
   }
