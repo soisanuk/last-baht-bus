@@ -2514,7 +2514,7 @@ const ROOMS = {
       "the corner here, its go-go neon running away west. A few doors down the quiet " +
       "side, CANDY BAR's rose-pink sign keeps its own hours — far enough off the main " +
       "drag that the soi forgets about it until about three in the morning, which is " +
-      "roughly when it fills up. If you're after the mamasan, that's her door (ENTER CANDY BAR).",
+      "roughly when it fills up — on the good nights, anyway. If you're after the mamasan, that's her door (ENTER CANDY BAR).",
     reads: {
       sign: "The LK METRO arrow: black marker on a scrap of board wired to the wall, pointing " +
         "down an alley that promises nothing. LK Metro — three lanes of go-go and short-time " +

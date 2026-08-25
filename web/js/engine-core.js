@@ -488,6 +488,13 @@ function _isDarkHere() {
 // pointed to stays true until dawn). This is the single source of NPC presence;
 // read it, never `NPCS[id].room`, anywhere presence matters.
 function _npcRoom(id) {
+  // A companion you took OUT is wherever YOU are — one override here and every
+  // presence consumer (TALK, BUY DRINK, kiss, PHOTO, the Here: line, the
+  // elsewhere-router) sees her at your side instead of insisting she's back at
+  // her bar while the arrival prose narrates her on your arm (closer playtest
+  // F1, 2026-08-26: the paid whole-night companion was invisible to every
+  // targeted verb).
+  if (G.party && G.party.ids && G.party.ids.includes(id)) return G.room;
   const n = NPCS[id];
   if (n.bars && n.bars.length) return n.bars[G.day % n.bars.length];
   return n.room;

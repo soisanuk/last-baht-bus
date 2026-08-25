@@ -478,6 +478,16 @@ const _PEACOCK_NO_BF = [
     "it. That currency we take.\"",
 ];
 function _doBarfine(arg) {
+  // BARFINE at the girl on your own arm: the ledger has nothing to sell you
+  if (G.party && G.party.ids && G.party.ids.length && arg) {
+    const _pid = G.party.ids.find(i => arg.toLowerCase().includes(NPCS[i].name.toLowerCase()));
+    if (_pid) {
+      _say(_fmt("{n} laughs and squeezes your arm. \u201cTilac. You already pay for " +
+        "tonight \u2014 I am HERE.\u201d Which, on reflection, is hard to argue with.",
+        { n: NPCS[_pid].name }));
+      return;
+    }
+  }
   const rm = _room();
   // the Orchid Room's women are the power players' — you're here for a meeting, not to shop
   if (G.room === "orchid_room") { _say(_pickVary(_ORCHID_NOTOUCH, "orchidno"), "alert"); return; }
@@ -538,8 +548,14 @@ function _doBarfine(arg) {
     return;
   }
   if ((G.soc.heat[G.room] || 0) > 0) {
+    // The book shuts on heat — but a refusal citing "behaviour" the player was
+    // never told about held all night with no path to comprehension (closer
+    // playtest F5, 2026-08-26). Heat carries its cause now, and the finger
+    // points at it.
+    const _why = G.soc.heatWhy && G.soc.heatWhy[G.room];
     _say("The mamasan intercepts the negotiation with one raised finger. After " +
-      "tonight's behaviour? “Not tonight, tilac.” The finger does not negotiate.");
+      "tonight's behaviour? “Not tonight, tilac.” The finger does not negotiate." +
+      (_why ? ` (${_why} — the book closes for the shift. A new night forgets.)` : ""));
     return;
   }
   const bt = _room().barType;
@@ -836,7 +852,7 @@ function _bfPrompt() {
   // At her-farang tier she waives the fine herself — foreshadow it in the quote
   // so a price-shy player doesn't back out at a number that won't be charged
   // (Alan playtest, 2026-08-17: the lovely reveal only fired AFTER committing).
-  if (id && typeof _bondTier === "function" && _bondTier(id) >= 3) {
+  if (id && typeof _bondTier === "function" && _bondTier(id) >= 3 && (st > 0 || lt > 0)) {
     _say(`(The mamasan starts to name a number; ${NPCS[id].name} waves her quiet — ` +
       "for YOU there's no fine tonight, she'll square it herself. SHORT TIME · LONG " +
       "TIME — overnight · TAKE HER OUT — she parties with you · or NO.)", "dim");
@@ -949,7 +965,10 @@ function _bfResolve(kind) {
     }
   }
   if (price === 0 && !offBook) {
-    _say("The mamasan glances at the clock — past midnight — closes the ledger, and " +
+    _say((typeof _bondTier === "function" && _bondTier(id) >= 3)
+      ? `Past midnight the book is shut anyway — but ${name} makes a small show of ` +
+        "checking, because the point was never the fee. Nobody was going to charge YOU."
+      : "The mamasan glances at the clock — past midnight — closes the ledger, and " +
       "waves the fee away with two fingers. The barfine walks out with the girl " +
       "soon anyway; only the famous ones stay on the book all night.", "dim");
   } else if (G.nightTurn >= 60 && POPULAR_GIRLS.includes(id)) {
@@ -1486,6 +1505,7 @@ function _bfScamRoll(id, marked) {
 // so the ask is business as much as affection. Once per girl per night.
 function _maybeGoWithYou(id) {
   if (!_flag("act1Done") || G.pendingEnc || G.game || G.pendingBf) return;
+  if (G.party && G.party.ids && G.party.ids.includes(id)) return; // she's already yours tonight
   if (NPC_ROLES[id] !== "hostess") return;
   if ((G.soc.heat[G.room] || 0) > 0) return;
   if (G.soc.goWith && G.soc.goWith[id]) return;
@@ -1505,6 +1525,7 @@ function _maybeGoWithYou(id) {
 function _maybeSelfBarfine(id) {
   _maybeGoWithYou(id); // the softer nudge shares every call site; it gates itself
   if (!_flag("act1Done") || G.pendingEnc || G.game) return;
+  if (G.party && G.party.ids && G.party.ids.includes(id)) return; // she is out with you, not on shift
   if (G.nightTurn < 60) return;                 // the thought arrives after midnight
   if (NPC_ROLES[id] !== "hostess") return;
   if (_queerVenue()) return;                    // the cabaret has no barfine to self-pay
@@ -6552,7 +6573,7 @@ function _doEat(arg) {
   const inv = _inv().filter(i => _EDIBLE[i] !== undefined);
   const id = arg ? inv.find(i => ITEMS[i].name.toLowerCase().includes(arg) ||
     ITEMS[i].aliases.some(a => a.includes(arg))) : inv[0];
-  if (!id && (FOOD_STALLS[G.room] || _room().food)) { _doBuy("food"); return; } // a kitchen: EAT means order
+  if (!id && (FOOD_STALLS[G.room] || _room().food)) { _doBuy(arg || "food"); return; } // a kitchen: EAT means order — the named dish, if you named one
   if (!id) { _say(arg ? "You're not carrying that, or it isn't food." : "Nothing edible on you. The street sells everything."); return; }
   if (id === "som_tam" && _flag("somTamAccepted") && !_flag("somTamDelivered")) {
     _say("It's Ploy's som tam. You eat Ploy's som tam. It is magnificent, and you " +

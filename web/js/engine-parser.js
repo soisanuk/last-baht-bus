@@ -3719,6 +3719,15 @@ const _NOT_TONIGHT = [
   "Not at this hour. That one keeps office hours in a place that famously doesn't.",
 ];
 
+// Sniping the girl a regular was attending: pooled, because the moment repeats
+// across nights and printed verbatim three times in one blind week (closer
+// playtest F10, 2026-08-26)
+const _SNIPE_LINES = [
+  n => `Down the bar, the regular who has been buying ${n} drinks all evening goes very still over his Chang. Bad form, and every lady in the room clocked it.`,
+  n => `The man who has been keeping ${n} in colas all night sets his bottle down with exaggerated care and looks at a spot just past your head. The room's temperature moves one degree, all in your direction.`,
+  n => `${n} takes it with a professional smile, and the regular she was sitting with becomes very interested in the football. Nobody says anything. Everybody noticed.`,
+];
+
 function _doBuy(arg) {
   const r = _room();
   // The Vic's kitchen: Aoy advertises it with an order pad in her hand, and it
@@ -4015,10 +4024,8 @@ function _doBuy(arg) {
     const sniped = busyId === true ? NPC_ROLES[id] === "hostess" : id === busyId;
     if (sniped && !G.soc.patronMiffed[G.room]) {
       G.soc.patronMiffed[G.room] = true;
-      _say(`Down the bar, the regular who has been buying ${NPCS[id].name} drinks all ` +
-        "evening goes very still over his Chang. Bad form, and every lady in the room " +
-        "clocked it.", "alert");
-      _addHeat(1);
+      _say(_pickVary(_SNIPE_LINES, "snipe")(NPCS[id].name), "alert");
+      _addHeat(1, _fmt("the man who was buying {n}'s drinks all evening", { n: NPCS[id].name }));
     }
     if (id === "candy" && !_flag("knowMot")) {
       _setFlag("knowWasHere"); _setFlag("knowMot");
@@ -4254,6 +4261,11 @@ function _doRideBus(arg) {
       "Tai and flag one there. (Or MOTOSAI.)");
     return;
   }
+  if (_isHotelRoom(G.room)) {
+    _say("From in here the fleet is somewhat theoretical. The street is where " +
+      "the trucks are \u2014 OUT first.", "dim");
+    return;
+  }
   if (!_busLinesFor(G.room).length) {
     // Naming "Second Road" while the player stands on JOMTIEN Second Road reads as
     // a bug — the routes are Pattaya's, but the sign doesn't say so (opening
@@ -4279,7 +4291,7 @@ function _doRideBus(arg) {
   // WAIT, at the kerb, in whatever state you're in, and the wait is where the
   // vulnerability lives. The only curfew is on you (design call 2026-08-25:
   // too drunk, too tired, too sick — the timetable was never the wall).
-  if (G.nightTurn >= LAST_BUS_TURN) {
+  if (G.nightTurn >= LAST_BUS_TURN && G.turns - (G.busCameTurn || -99) > 6) {
     _say(_pickVary(_BUS_SMALL_HOURS, "bussparse"), "alert");
     const wait = 3 + Math.floor(_rand() * 6);   // 18–48 minutes of kerb
     const startDay = G.day;
@@ -4293,6 +4305,10 @@ function _doRideBus(arg) {
       }
     }
     _say(_pickVary(_BUS_SMALL_HOURS_COMES, "buscomes"), "win");
+    // the truck that just arrived STAYS a few minutes: answering its drop-off
+    // menu must not conjure a second wait while it stands at the kerb (closer
+    // playtest F4, 2026-08-26 — two arrivals, one ride)
+    G.busCameTurn = G.turns;
   }
   const lines = _busLinesFor(G.room);
   const reachable = [...new Set(lines.flatMap(l => BUS_LINES[l]))].filter(s => s !== G.room);
@@ -4685,7 +4701,7 @@ function _doScore() {
     const nums = Object.keys(G.phone.contacts || {}).filter(id => G.phone.contacts[id] && NPC_ROLES[id]).length;
     const thai = (G.thaiSeen || []).length;
     if (met || faces || nums || thai) {
-      _say(_fmt("met {m} · {f} face{fs} in the gallery · {n} number{ns} · {t} Thai word{ts} picked up",
+      _say(_fmt("{m} names known · {f} face{fs} in the gallery · {n} number{ns} · {t} Thai word{ts} picked up",
         { m: met, f: faces, fs: faces === 1 ? "" : "s", n: nums, ns: nums === 1 ? "" : "s",
           t: thai, ts: thai === 1 ? "" : "s" }), "dim");
     }
@@ -6762,6 +6778,7 @@ function doCommand(input) {
       _vacationEndPrompt(); return;
     }
     if (/^restart/.test(lower)) { newGame(); engineIntro(); return; }
+    if (/^share/.test(lower)) { _doShare(); _vacationEndPrompt(); return; }
     if (/vacation|holiday|again|fly back|new/.test(lower)) { _newVacation(); return; }
     if (/move|expat|stay|pattaya|remain/.test(lower)) { _goExpat(); return; }
     _vacationEndPrompt();
@@ -6911,6 +6928,13 @@ function doCommand(input) {
   // and waving money through without terms (PAY/YES/OK) is the newbie's open
   // contract, resolved by whoever's holding the ledger (see _bfResolve).
   if (G.pendingBf && v !== "restart") {
+    if (/\b(robbery|expensive|too much|cheaper|discount|steep|joking|no way)\b/.test(lower)) {
+      _say("The mamasan hears the tone without needing the words, and smiles like " +
+        "a woman who has heard it in forty languages. \u201cMama number is mama " +
+        "number, tilac.\u201d", "dim");
+      _bfPrompt();
+      return;
+    }
     // the party barfine — bfparty's honest mirror: take her (or them) OUT
     if (/^(take|party)/.test(lower) || /\b(her|them) out\b/.test(lower)) { _bfResolve("party"); _tick(); return; }
     if (/^(st\b|short)/.test(lower)) { _bfResolve("st"); _tick(); return; }
@@ -7691,13 +7715,16 @@ function _shareCard() {
 }
 
 function _doShare() {
-  if (G.mode !== "soi6") {
-    _say("The share card is a Soi 6 challenge thing — the vacation is nobody's " +
-      "business but the soi's.");
+  // The full game logs every night the same way the challenge does — refusing
+  // to show it left the week with no record surface at all outside soi6 mode
+  // (closer playtest F6, 2026-08-26).
+  if (G.mode !== "soi6" && !(_flag("act1Done") && (G.nightLog || []).length)) {
+    _say("Nothing on the card yet — the week hasn't had a night worth a glyph.");
     return;
   }
   for (const l of _shareCard()) _say(l, "win");
-  _say("(Post it wherever the lads compare weeks.)", "dim");
+  _say(G.mode === "soi6" ? "(Post it wherever the lads compare weeks.)"
+    : "(The week so far, one glyph a night.)", "dim");
 }
 
 // ── Boot text ──────────────────────────────────────────────────────────────

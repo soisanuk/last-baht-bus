@@ -3265,7 +3265,9 @@ test("seed-of-the-day: _dailySeed is stable, startSoi6Mode takes it, and same se
 test("the week card: nightLog records each night's ending and SHARE renders it, gate and all", () => {
   // the full game politely declines — the card is challenge furniture
   out = []; run("share");
-  assert.match(lastOut(), /Soi 6 challenge thing/i);
+  // curfew-rework follow-on (closer playtest F6, 2026-08-26): the full game logs
+  // nights the same way, so SHARE renders the week instead of refusing it
+  assert.match(lastOut(), /THE LAST BAHT BUS|glyph|·/, "the full game shows its week");
   // a soi6 week logs its nights
   state().player = { origin: "monger", personality: "joker", orientation: "straight" };
   startSoi6Mode();
@@ -7805,8 +7807,9 @@ test("the collections show what's left, measured against people you've MET", () 
     "the black book counts against ladies you know");
 
   out = []; run("score");
-  assert.match(out.join("\n"), /met 5 · 2 faces in the gallery · 1 number/,
-    "and SCORE carries all three on the one screen a player checks");
+  assert.match(out.join("\n"), /5 names known · 2 faces in the gallery · 1 number/,
+    "and SCORE carries all three on the one screen a player checks — 'names known', " +
+    "because the morning card's 'met' counts conversations and one word can't mean both");
 
   // everyone photographed reads as done, not as a shortfall
   state().phone.photos = ["lek", "candy", "bert", "nong", "fon"].map((id, i) => ({ id, turn: i }));
@@ -7835,7 +7838,7 @@ test("the morning says what last night was, as deltas", () => {
   out = []; _morningLedger();
   const said = out.join("\n");
   assert.match(said, /\+6 สนุก/, "happiness delta");
-  assert.match(said, /spent ฿1,800/, "money delta, formatted");
+  assert.match(said, /down ฿1,800 on the night/, "money delta, formatted — a net is a net");
   assert.match(said, /met 2/, "people met");
   assert.match(said, /1 new number/);
   assert.match(said, /4 nights left/, "and the shape of the week");

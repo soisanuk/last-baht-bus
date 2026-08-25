@@ -485,3 +485,52 @@ bars in a row. The night ride remains "the best sequence in the game" for a
 second consecutive blind reporter, and the street kept setting up the persona's
 dramatic irony unprompted — Somo, to Roy of all people: "you look like you got
 enough people lying to you already."
+
+---
+
+# Round 20 — the closer (Fable, full game, 2026-08-26)
+
+Tommo, 48, Newcastle — creed instead of checklist: *a night is measured by how
+it ends; going home before dawn is a defeat.* Aimed blind at the previous two
+days' work (the curfew rework, the all-nighter, TAKE HER OUT) without being told
+it existed. Six nights + Act One (100/100), vacation closed at สนุก 165, zero
+console errors. **The feature held where it counts: "every quoted number matched
+every charged number all week" — the only ledger lies were the game's own
+morning cards.** The price thesis audited from play: cold stranger ฿6,900
+self-quoted with the honest reason; courted regular ฿700 and "money is not her
+department"; her-farang waived.
+
+## Fixed
+
+| # | Finding | Fix |
+|---|---|---|
+| F1 (HIGH) | The paid whole-night companion was invisible to every targeted verb — arrival prose at his side while TALK said "try Cherry Pop" | one override in `_npcRoom` (a party girl is wherever YOU are) fixes every presence consumer at once — TALK, BUY DRINK, kiss, PHOTO, the Here: line |
+| F2 (HIGH) | She texted "when you come see me??" mid-date | free with F1: `_maybeIncomingText`'s away-filter now sees her beside you; plus guards so she neither pitches a barfine mid-party nor gets re-fined ("Tilac. You already pay for tonight — I am HERE.") |
+| F3 | "spent ฿17,726" about a mugging; income hid real spend | the card says "down/up ฿X on the night" — a net is a net — and names the part "lifted while you were out" |
+| F4 | Choosing a destination conjured a second kerb wait while the truck stood at the rank | the arrived truck stays six turns (`G.busCameTurn`) |
+| F5 | "After tonight's behaviour?" with no path to comprehension | heat carries its cause (`_addHeat(n, why)`); the shut book points at the act and says "A new night forgets" |
+| F6 | SHARE swallowed at the gate; the full game had no week-record surface at all | SHARE renders the glyph week in the full game, and the vacation-end gate answers it |
+| F9 | RIDE BUS inside room 412: "no blue trucks come down HERE" | the fleet is theoretical indoors — OUT first |
+| F10 | The drink-snipe moment printed verbatim three times in a week | pooled |
+| F11 | "eat toastie" beside the 7-Eleven bought the stall's grilled chicken | EAT passes the named dish through |
+| F12 | Two waivers, two reasons, one free fine | her-farang past midnight gets HER line; the mamasan's shrug belongs to strangers |
+| F13 | An in-character haggle got a silent menu reprint | "Mama number is mama number, tilac." |
+| F14 | SCORE's "met" (names known) vs the card's "met" (conversations) | SCORE says "names known" |
+
+## By design / refuted — recorded
+
+- **F7 — solo dawn on the street was a triumph, not a rough wake**: exactly the
+  curfew rework's intent (the all-nighter is for anyone still standing, companion
+  or not). Confirmed as design, not drift.
+- **F14b — "1 new face in the gallery" on a photo-less night**: a texted selfie
+  files itself to the gallery; the count was right.
+- **F8 — Candy Bar's unconditional 3 a.m. promise**: softened to "on the good
+  nights, anyway" rather than wiring a crowd mechanic to a sentence.
+
+## What his ledger proved held
+
+The escalating night reads as an arc (nine venue arrivals, no repeated companion
+line); her voice holds to the ends ("you party like Thai person. Almost."); the
+refusal taxonomy stayed honest under a week of pressure; the balk → "Your
+funeral, boss" → the kerb that collects — the titular thesis, quoted back by a
+blind reporter who was never told it was the thesis.

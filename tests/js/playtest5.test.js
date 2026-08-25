@@ -879,7 +879,8 @@ test("texts: no identical line twice running from one sender, the inbox is cappe
   G.money = 20000; G.atmTotal = 20000; out = [];
   _morningLedger();
   assert.doesNotMatch(text(), /up ฿/);
-  assert.match(text(), /spent ฿1,000|spent ฿1000/);
+  assert.match(text(), /down ฿1,000 on the night|down ฿1000 on the night/,
+    "a net is a net — the card stopped calling every delta 'spent'");
   G.room = "buakhao_s"; const seen = new Set();
   for (let i = 0; i < 12; i++) { out = []; doCommand("punch tout"); seen.add(text()); }
   assert.ok(seen.size >= 2, "the refusal varies");
@@ -1888,4 +1889,116 @@ test("the real negotiation carries the party price to every surface, and she say
   assert.equal(G.money, m0 - want, "…and the ledger charges it");
   assert.match(out.join("\n"), /full night is different thing|switch off the phone/i,
     "she states the economics in her own voice");
+});
+
+// ── Round 20, the closer: the companion is REAL everywhere (2026-08-26) ──────
+
+test("the girl on your arm exists to every verb, in every room", () => {
+  // She narrated at his side while TALK said she was at Cherry Pop and her
+  // texting arm sent "when you come see me??" mid-date (closer F1/F2). One
+  // override in _npcRoom fixes every presence consumer at once.
+  _bigNight(); G.room = "candy_bar";
+  G.party = { ids: ["lek"], stops: 1, spent: 0, seen: {} };
+  assert.equal(_npcRoom("lek"), "candy_bar", "she is wherever YOU are");
+  assert.ok(_npcsHere().includes("lek"), "the room lists her");
+  out = []; G.pendingEnc = null; doCommand("talk to lek");
+  assert.doesNotMatch(out.join("\n"), /isn't at this bar|Nobody by that name/);
+  // …and her texting arm knows she's with you: the away-filter sees her HERE
+  G.phone.contacts.lek = true;
+  const away = Object.keys(G.phone.contacts).filter(c => NPC_ROLES[c] && _npcRoom(c) !== G.room);
+  assert.ok(!away.includes("lek"), "a girl on your arm never texts that she misses you");
+  G.party = null;
+  assert.equal(_npcRoom("lek"), NPCS.lek.room, "…and she goes back to her bar when the night ends");
+});
+
+test("BARFINE at the girl already on your arm has nothing to sell", () => {
+  _bigNight(); G.room = "candy_bar"; G.pendingEnc = null; G.flowerDay = G.day;
+  G.party = { ids: ["lek"], stops: 1, spent: 0, seen: {} };
+  const m0 = G.money;
+  out = []; doCommand("barfine lek");
+  assert.match(out.join("\n"), /I am HERE/, "she says the obvious thing");
+  assert.equal(G.money, m0);
+  assert.ok(!G.pendingBf, "no ledger opens");
+});
+
+test("one truck, one wait: answering the drop-off menu doesn't conjure a second kerb", () => {
+  // Two full waits fired for one ride — the truck the menu said was filling
+  // evaporated when the destination was named (closer F4).
+  _bigNight(); G.room = "beach_rd_c"; G.nightTurn = 82; G.rain = 0;
+  out = []; doCommand("ride bus");                 // the wait, then the menu
+  const said1 = out.join("\n");
+  if (_BUS_SMALL_HOURS_COMES.some(l => said1.includes(l))) {
+    out = []; doCommand("ride bus to naklua road"); // the truck is standing right there
+    const said2 = out.join("\n");
+    assert.ok(!_BUS_SMALL_HOURS.some(l => said2.includes(l)),
+      "no second empty-kerb wait while the truck stands at the rank");
+    assert.ok(G.pendingFare, "just the fare");
+  }
+});
+
+test("the full game shows its week: SHARE renders, including at the vacation-end gate", () => {
+  _bigNight(); G.nightLog = ["sleep", "allnighter", "barfine"];
+  out = []; doCommand("share");
+  assert.doesNotMatch(out.join("\n"), /Soi 6 challenge thing/);
+  assert.match(out.join("\n"), /🛏|🌇|💋/, "the glyphs render");
+  G.pendingChoice = "vacation_end";
+  out = []; doCommand("share");
+  assert.match(out.join("\n"), /🛏|🌇|💋/, "…and the gate answers SHARE instead of swallowing it");
+  assert.match(out.join("\n"), /NEW VACATION|MOVE TO PATTAYA/, "then re-prompts");
+  G.pendingChoice = null;
+});
+
+test("a shut barfine book names the act that shut it", () => {
+  // "After tonight's behaviour?" held all night with no path to comprehension —
+  // heat carries its cause now (closer F5).
+  _bigNight(); G.room = "candy_bar"; G.pendingEnc = null;
+  _addHeat(1, "the man whose girl you kept buying past");
+  out = []; _doBarfine("nan");
+  assert.match(out.join("\n"), /the man whose girl you kept buying past/,
+    "the finger points at something");
+  assert.match(out.join("\n"), /A new night forgets/, "…and names the way out");
+});
+
+test("EAT <named dish> orders the named dish, not the stall's special", () => {
+  // "eat toastie" beside the 7-Eleven bought grilled chicken (closer F11)
+  _bigNight(); G.room = "naklua_rd"; G.hunger = 80; G.pendingEnc = null;
+  out = []; doCommand("eat toastie");
+  assert.doesNotMatch(out.join("\n"), /grilled chicken and sticky rice/);
+  assert.ok(_TOASTIE_LINES.some(l => out.join("\n").includes(l)), "the toastie is the toastie");
+});
+
+test("one waiver, one reason: her-farang past midnight doesn't get the mamasan's second blessing", () => {
+  _bigNight(); G.room = "candy_bar"; G.pendingEnc = null;
+  const girl = _npcsHere().find(id => NPC_ROLES[id] === "hostess");
+  G.soc.drinks[girl] = 14;               // her-farang
+  G.nightTurn = 65;                      // past midnight: the fine is 0 anyway
+  G.pendingBf = { id: girl, st: 0, lt: 0, party: 0, room: G.room };
+  out = []; _bfResolve("st");
+  const said = out.join("\n");
+  assert.doesNotMatch(said, /waves the fee away with two fingers/,
+    "the midnight shrug belongs to strangers");
+  if (/book is shut anyway/.test(said)) assert.match(said, /the point was never the fee/);
+});
+
+test("an in-character haggle at the ledger gets a voice, not a silent reprint", () => {
+  _bigNight(); G.room = "candy_bar"; G.pendingEnc = null;
+  G.pendingBf = { id: "nan", st: 400, lt: 700, party: 1400, room: G.room };
+  out = []; doCommand("6900 is robbery, pet");
+  assert.match(out.join("\n"), /Mama number is mama number/);
+  assert.ok(G.pendingBf, "the negotiation survives the cheek");
+  G.pendingBf = null;
+});
+
+test("RIDE BUS in your own room knows there is no street in here", () => {
+  _bigNight(); G.room = _hotelRoomId();
+  out = []; doCommand("ride bus");
+  assert.match(out.join("\n"), /theoretical|OUT first/);
+  assert.doesNotMatch(out.join("\n"), /No blue trucks come down here/);
+});
+
+test("the drink-snipe line is a pool, not a stamp", () => {
+  assert.ok(_SNIPE_LINES.length >= 3);
+  const seen = new Set();
+  for (let i = 0; i < 9; i++) seen.add(_pickVary(_SNIPE_LINES, "snipetest")("Nan"));
+  assert.ok(seen.size >= 2, "the moment varies across nights");
 });

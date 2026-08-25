@@ -1499,11 +1499,14 @@ const _HEAT_FIRST = [
   "The cashier's eyes come up off the till, rest on you for exactly as long as it takes, and go back down. You are, from this moment, being kept an eye on.",
   "A look passes between two of the girls — quick, unhurried, entirely legible. The room has filed that one.",
 ];
-function _addHeat(n) {
+function _addHeat(n, why) {
   if (_bellLevel() >= 3) return;         // three bells deep — the room forgives everything
   const r = G.room;
   const before = G.soc.heat[r] || 0;
   G.soc.heat[r] = before + n;
+  // heat remembers its cause, so the shut barfine book can point at the act
+  // instead of citing "behaviour" nobody named (closer playtest F5, 2026-08-26)
+  if (why) (G.soc.heatWhy = G.soc.heatWhy || {})[r] = why;
   if (G.soc.heat[r] >= 3) { _kickOut(); return; }
   if (before === 0 && G.soc.heat[r] === 1) {
     _say(_pickVary(_HEAT_FIRST, "heat1"), "dim");
@@ -3088,8 +3091,9 @@ function _morningLedger() {
   if (dh) bits.push((dh > 0 ? "+" : "") + dh + " \u0e2a\u0e19\u0e38\u0e01");
   const drawn = (G.atmTotal || 0) - (b.atm || 0); // ATM cash isn't "income" (27-night playtest: "up ฿18,880")
   const spent = b.money + drawn - G.money;
-  if (spent > 0) bits.push("spent \u0e3f" + spent.toLocaleString());
+  if (spent > 0) bits.push("down \u0e3f" + spent.toLocaleString() + " on the night");
   else if (spent < 0) bits.push("up \u0e3f" + (-spent).toLocaleString() + " on the night");
+  if (G.roughLost > 0) bits.push("\u0e3f" + G.roughLost.toLocaleString() + " of it lifted while you were out");
   const dk = Object.keys(G.talked || {}).length - (b.talked != null ? b.talked : Object.keys(G.talked || {}).length);
   if (dk > 0) bits.push("met " + dk);
   const dn = Object.keys(G.phone.contacts || {}).filter(id => G.phone.contacts[id] && NPC_ROLES[id]).length - b.nums;
@@ -3186,6 +3190,7 @@ function _endNight(reason) {
   // night ends — run to dawn, or drop from thirst/drink — and it's a HARD FAIL
   // that RESETS the game, not the sandbox's soft rough-wake. Only a progress
   // high-water mark survives (see _act1Fail).
+  G.roughLost = 0;   // per-night: last night's mugging doesn't haunt tonight's ledger
   // The all-nighter (design call 2026-08-25): the classic arc — pub, go-go,
   // a WS club, dawn — is the town's most ordinary big night, and the game
   // filed it as a mugging. A man still STANDING when the sky goes grey didn't
@@ -3414,6 +3419,7 @@ function _endNight(reason) {
                        // else one week's three bells makes any later ฿300 ring an instant
                        // level-3 room (full heat amnesty, hands-on cap lifted) for free
   G.soc.heat = {};
+  G.soc.heatWhy = {};
   G.soc.banned = {};
   G.soc.bfBar = {};    // "a colleague already left with you" is a tonight thing — else one
                        // barfine locks every other girl at that bar for the whole vacation
