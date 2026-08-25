@@ -9,6 +9,11 @@
 const BUS_FARE   = 15;   // baht bus, any hop on a line
 const MOTOSAI_TOWN = 50; // motosai hop inside town
 const MOTOSAI_FAR  = 100;// motosai to/from the Darkside
+// The party barfine (TAKE HER OUT): the honest mirror of the bfparty scam —
+// she comes WITH you, and the night continues instead of ending at the ledger.
+const PARTY_MAX_GIRLS = 2;   // "or two" is the classic flex; three needs a minivan
+const PARTY_STOP_CAP  = 6;   // stops that pay สนุก/bond — a crawl, not a treadmill
+const PARTY_TAXI      = 200; // what she takes from your pocket to pour you home
 const LAST_BUS_TURN = 80;   // 02:00 — the songthaews go SPARSE (they never stop): flagging one after this is a wait at the kerb, and the kerb keeps whoever stands on it
 const LATE_MOTO_MULT = 1.6; // small-hours night rate: piwins price the thin hours, while they'll still have you
 const DOG_MOTOSAI_FARE = 10; // a dog needs his own bike — a buddy's saleng, waved over and paid on top (waived on the free pity-ride)

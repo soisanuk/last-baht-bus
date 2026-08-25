@@ -91,8 +91,9 @@ test("the barfine negotiation owns the chip bar: ST / LT / NO, priced", () => {
   // seed-12 wedge: a whole night spent tapping inside the modal).
   G.room = "lucky_tiger";
   G.pendingBf = { id: "lek", st: 400, lt: 700, room: "lucky_tiger" };
-  assert.deepEqual(cmds(), ["short time", "long time", "no"]);
+  assert.deepEqual(cmds(), ["short time", "long time", "take her out", "no"]);
   assert.ok(labels()[0].includes("฿400") && labels()[1].includes("฿700"), "terms carry their prices");
+  assert.ok(labels()[2].includes("฿700"), "the party line is priced at the long-time fine");
 });
 
 test("the soapy menu and a pending fare own the chip bar too", () => {

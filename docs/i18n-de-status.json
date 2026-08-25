@@ -1,10 +1,10 @@
 {
   "measuredDay": "frozen-poc",
   "modes": {
-    "soi6": 74,
-    "vacation": 345,
+    "soi6": 65,
+    "vacation": 366,
     "act1": 174,
-    "expat": 452
+    "expat": 364
   },
-  "total": 1045
+  "total": 969
 }

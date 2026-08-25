@@ -851,9 +851,17 @@ test("the last night of the week is not free — the town doesn't check your fli
   state().flags.act1Done = true; state().flags.hasWallet = true; state().stage = "vacation";
   state().day = 7; state().money = 1750; state().room = "naklua_rd"; state().nightTurn = 99;
   state().dog = null;
-  _endNight("dawn");
+  _endNight("collapse");
   assert.equal(state().pendingChoice, "vacation_end", "the week still ends");
   assert.equal(state().money, 0, "and the pockets still go");
+  // …but since the curfew rework (2026-08-25), STANDING at dawn on night seven
+  // is the all-nighter into the flight home — pockets intact, by design
+  newGame(); state().lastSaleng = 99999;
+  state().flags.act1Done = true; state().flags.hasWallet = true; state().stage = "vacation";
+  state().day = 7; state().money = 1750; state().room = "naklua_rd"; state().dog = null;
+  _endNight("dawn");
+  assert.equal(state().pendingChoice, "vacation_end");
+  assert.equal(state().money, 1750, "the man still upright keeps every baht");
 });
 
 test("a night that ends mid-frame says so, and leaves no dead prompt behind", () => {
@@ -2519,13 +2527,17 @@ test("street kisses end badly — except for the katoey", () => {
 
 // ── The clock, the body, the week ──────────────────────────────────────────
 
-test("a resident who runs the clock to dawn away from home wakes rough, broke, phone dying", () => {
+test("a resident who passes out on the street wakes rough, broke, phone dying", () => {
+  // curfew rework (2026-08-25): running the CLOCK out while upright is the
+  // all-nighter now — the rough wake belongs to the states that mean
+  // unconsciousness, so this test collapses on the real path instead
   state().flags.act1Done = true;
   state().flags.hasWallet = true;
   state().room = "beach_rd_c";      // Beach Road → the promenade crash spot
   state().money = 900;
   state().battery = 80;
-  state().nightTurn = 99;
+  state().nightTurn = 50;
+  state().hunger = 99; state().thirst = 60;
   run("wait");
   assert.equal(state().day, 3);
   assert.equal(state().room, "beach_rd_c", "wakes where the night left him, not the hotel");
@@ -2551,14 +2563,14 @@ test("a resident who SLEEPs at his hotel wakes home with his money and a full ch
 test("the crash spot follows the region you passed out in", () => {
   state().flags.act1Done = true;     // rough wakes are a resident mechanic now (pre-act1 hard-fails)
   state().room = "ws_south";         // Walking Street → the arch
-  state().nightTurn = 99;
+  state().nightTurn = 50; state().hunger = 99; state().thirst = 60;
   run("wait");
   assert.equal(state().room, "ws_gate");
 
   newGame(); state().lastSaleng = 99999;
   state().flags.act1Done = true;
   state().room = "water_buffalo";    // Darkside → stranded at the Sukhumvit crossing
-  state().nightTurn = 99;
+  state().nightTurn = 50; state().hunger = 99; state().thirst = 60;
   run("wait");
   assert.equal(state().room, "sukhumvit_crossing");
 });
@@ -7549,15 +7561,20 @@ test("a bad night ends with a debrief; a good one doesn't", () => {
     return out.join("\n");
   };
 
-  for (const r of ["collapse", "blackout", "hurt", "accident", "robbed", "bfscam", "dawn"]) {
+  for (const r of ["collapse", "blackout", "hurt", "accident", "robbed", "bfscam"]) {
     const said = ended(r);
     assert.match(said, /WHAT HAPPENED/, `${r}: no debrief`);
     assert.match(said, /Next time:/, `${r}: no prevention line`);
   }
-  // the endings that are not failures stay quiet
+  // the endings that are not failures stay quiet — and since the curfew rework
+  // (2026-08-25) a resident STANDING at dawn is one of them: the all-nighter is
+  // the town's most ordinary big night, taxied home and billed to the morning
   for (const r of ["sleep", "barfine"]) {
     assert.doesNotMatch(ended(r), /WHAT HAPPENED/, `${r}: shouldn't be debriefed`);
   }
+  const dawnOut = ended("dawn");   // away from home → the all-nighter
+  assert.doesNotMatch(dawnOut, /WHAT HAPPENED/, "standing at dawn is not a failure");
+  assert.ok(_ALLNIGHTER_LINES.some(l => dawnOut.includes(l)), "…it's the whole arc, completed");
 
   // dawn is the same reason code with two opposite outcomes: on the street it's
   // a rough wake, in your own bed it's just morning. Telling a man who went to

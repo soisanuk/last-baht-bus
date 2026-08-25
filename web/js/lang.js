@@ -423,8 +423,8 @@ const _CATALOGS = {
       "Ein langsames, wissendes Lächeln. \"Du wusstest nicht? Jetzt weißt du.\" {n} lässt dir den Moment zum Entscheiden und liest die Antwort aus deinem Gesicht, bevor du sie selbst findest. \"Ist okay, tilac — du bist nicht der Erste, und ich bin nicht beleidigt. Die Damen sind da drüben.\" Eine anmutige Neigung des Kopfes, und sie wendet sich einem Kunden zu, der genau sie sucht.",
 
     // ── Barfine negotiation modal (SHORT TIME/LONG TIME/NO stay as commands) ──
-    "(SHORT TIME {st} — one round, the night carries on · LONG TIME {lt} — overnight · NO backs out.)":
-      "(SHORT TIME {st} — eine Runde, der Abend geht weiter · LONG TIME {lt} — über Nacht · NO steigt aus.)",
+    "(SHORT TIME {st} — one round, the night carries on · LONG TIME {lt} — overnight · TAKE HER OUT {lt2} — she comes with you, and the night keeps going · NO backs out.)":
+      "(SHORT TIME {st} — eine Runde, der Abend geht weiter · LONG TIME {lt} — über Nacht · TAKE HER OUT {lt2} — sie kommt mit, und die Nacht geht weiter · NO steigt aus.)",
     "waived — past midnight": "entfällt — nach Mitternacht",
 
     // ── INVENTORY scaffolds (item names localised per-name at the call site) ──

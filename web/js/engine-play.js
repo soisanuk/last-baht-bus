@@ -3037,9 +3037,11 @@ const _DEBRIEF = {
   // "you were still on the street" to a man who went to bed would be the exact
   // defect this file keeps catching elsewhere, so it returns nothing.
   dawn: () => (_flag("act1Done") && G.room === _hotelRoomId()) ? null : ({
-    what: "The night ran out with you still on the street.",
-    why: "A night is " + NIGHT_TURNS + " turns and ends at 04:00 wherever you " +
-      "are. Not making it home costs you up to ฿" + ROUGH_WAKE_CAP.toLocaleString("en-US") +
+    what: "The night will run out at dawn, wherever you are.",
+    why: "A night is " + NIGHT_TURNS + " turns and ends at 04:00. STANDING at " +
+      "dawn is legal — the all-nighter taxis you home in the light and bills " +
+      "the morning instead (a heavier hangover, a slower start). PASSING OUT " +
+      "first — blackout, collapse — is what costs you up to ฿" + ROUGH_WAKE_CAP.toLocaleString("en-US") +
       " of what you are carrying" +
       (G.dog ? " — unless a soi dog happens to be sitting on it." : "."),
     next: "SLEEP in your own room ends the night on your terms and keeps it. " +
@@ -3168,6 +3170,13 @@ const _SCAM_LEAVE = [
     "long time. You got the short one. Nobody lied; nobody quite told the truth either.",
 ];
 
+// Dawn on your feet: the whole arc — and then the taxi home in the light.
+const _ALLNIGHTER_LINES = [
+  "The sky goes grey and you are, somehow, still upright to see it do it. The club empties into the soft light, the street sweepers work around the wreckage, and a taxi with its windows down carries you home through a town changing shifts — night people going to bed, monks already walking. You did the whole night. All of it.",
+  "04:00 arrives and finds you still standing, which at this point feels like a citation for valour. You share a taxi with two strangers and a man asleep in a party hat, watch the neon give up section by section, and let yourself in as the breakfast carts light their first burners. The bed takes you like an old friend.",
+  "Dawn. The music stops being music and becomes memory; the lights come up on faces that have all earned the morning. You walk out into pink light and pressure-washed pavement, flag the first songthaew of the DAY shift, and ride home with the wind doing what it can for you. The night is over because it ran out of night.",
+  "You close the place. Not a figure of speech — a woman in rubber gloves is stacking stools around you when you finally surface, and outside the sky is the colour of the inside of a shell. The ride home smells of jasmine from somewhere and last night from you. Worth it. Ask again at noon.",
+];
 function _endNight(reason) {
   // Idempotency: a mid-command multi-tick (WAIT through dawn) or a collapse on the
   // last night could re-enter here after the week's already ended — don't run the
@@ -3177,6 +3186,31 @@ function _endNight(reason) {
   // night ends — run to dawn, or drop from thirst/drink — and it's a HARD FAIL
   // that RESETS the game, not the sandbox's soft rough-wake. Only a progress
   // high-water mark survives (see _act1Fail).
+  // The all-nighter (design call 2026-08-25): the classic arc — pub, go-go,
+  // a WS club, dawn — is the town's most ordinary big night, and the game
+  // filed it as a mugging. A man still STANDING when the sky goes grey didn't
+  // pass out; he stayed out. He shares a taxi home in the morning light and
+  // pays in BODY, not baht. The rough wake still belongs to blackout and
+  // collapse — the states that actually mean unconsciousness — and Act One's
+  // dawn stays a hard fail below (that night IS a race). One rename here makes
+  // every downstream rough-wake site correct without touching them.
+  if (reason === "dawn" && _flag("act1Done") && G.room !== _hotelRoomId()) reason = "allnighter";
+  // SLEEP with company IS the long-time ending — taking her home was the whole
+  // point of taking her out, and the close pays for the evening she spent on
+  // your arm (stops feed the base, the pair adds its premium).
+  if (reason === "sleep" && G.party && G.party.ids && G.party.ids.length) {
+    const _pids = G.party.ids;
+    G.lastBfId = _pids[0];
+    G.lastBfHonest = false;   // the fun close: khao man gai at 3 a.m., fondly
+    G.lastBfBase = Math.min(14, 10 + Math.floor(G.party.stops / 2) + (_pids.length > 1 ? 2 : 0));
+    for (const _pid of _pids) _addBond(_pid, 3);
+    _say(_fmt(_pids.length > 1
+      ? "The three of you fall through your door somewhere past the point of counting, still laughing at a thing none of you can remember. {who} claim the shower in shifts and the bed by consensus, and the night finishes the way the best ones do — off the clock, off the books, unhurried."
+      : "You bring {who} home the long way, through a town that has watched the two of you all evening and approves. The door closes on the last of the night, and what's left of it is nobody's business and unhurried about being so.",
+      { who: _partyLabel() }), "win");
+    G.party = null;
+    reason = "barfine";
+  }
   if (!_flag("act1Done") && ["dawn", "collapse", "blackout", "hurt", "accident"].includes(reason)) {
     _act1Fail(reason);
     return;
@@ -3195,12 +3229,20 @@ function _endNight(reason) {
   // the week's spine, one entry per night — what the share card renders.
   // Capped so an endless expat run can't grow the save without bound.
   if ((G.nightLog = G.nightLog || []).length < 30) G.nightLog.push(reason);
+  if (reason === "allnighter" && typeof _partyNightEnd === "function" &&
+      G.party && G.party.ids && G.party.ids.length) {
+    _partyNightEnd(reason);   // she finds you the taxi BEFORE the morning takes it
+  }
   switch (reason) {
     case "dawn":
       _say("The sky over the gulf goes grey, then pink, and even Pattaya blinks. " +
         "04:00. The last bars stack their stools; the baht buses carry home the " +
         "wreckage; somewhere a rooster who fears nothing starts up. You drift " +
         "back and let the day take you.", "room");
+      break;
+    case "allnighter":
+      _say(_pickVary(_ALLNIGHTER_LINES, "allnighter"), "win");
+      _addHappy(2); // the big night out is a WIN — the invoice is the morning
       break;
     case "collapse":
       _say((_flag("act1Done") && G.room === _hotelRoomId()) ?
@@ -3341,7 +3383,8 @@ function _endNight(reason) {
     // check your flight date. Rent, the respawn and the loan roll are correctly
     // skipped — you are not waking up here tomorrow — but the pockets go.
     const _lastRough = (reason === "dawn" || reason === "collapse" || reason === "blackout") &&
-      !(_flag("act1Done") && G.room === _hotelRoomId()) && _dogEgg() !== "rescue" && !G.dog;
+      !(_flag("act1Done") && G.room === _hotelRoomId()) && _dogEgg() !== "rescue" && !G.dog &&
+      !(G.party && G.party.ids && G.party.ids.length);
     if (_lastRough && G.money > 0) {
       G.roughLost = Math.min(G.money, ROUGH_WAKE_CAP);
       G.money -= G.roughLost;
@@ -3351,11 +3394,21 @@ function _endNight(reason) {
     _endVacation();
     return;
   }
+  // capture BEFORE the goodbye clears it: the rescue decision below reads this.
+  // (The dawn goodbye printed ABOVE the switch already — see the pre-switch
+  // hook — so at first light she pours you into the taxi before the wake
+  // narration takes it home; the rescue reads the other way round, after the
+  // film stops.)
+  const _hadParty = !!(G.party && G.party.ids && G.party.ids.length);
+  if (typeof _partyNightEnd === "function" && G.party && G.party.ids && G.party.ids.length) {
+    _partyNightEnd(reason);
+  }
   let hangover = G.soc.drunk;
   G.soc.drunk = 0;
   // the Sabai Palms perk: Naklua quiet takes one size off the morning after
   const _quietHelped = _flag("act1Done") && G.hotel === "sabai" && hangover > 0;
   if (_quietHelped) hangover--;
+  if (reason === "allnighter") hangover += 2; // the all-nighter's invoice arrives in the evening meters
   G.soc.bellAt = {};
   G.soc.bells = {};    // the bell COUNT resets too, not just the glow timer (bellAt) —
                        // else one week's three bells makes any later ฿300 ring an instant
@@ -3416,7 +3469,9 @@ function _endNight(reason) {
   const wouldRough = (reason === "dawn" || reason === "collapse" || reason === "blackout")
                 && !(_flag("act1Done") && G.room === _hotelRoomId());
   // a rescue dog (Lassie) never leaves you in the gutter — he brings you home
-  const rough = wouldRough && _dogEgg() !== "rescue";
+  // …and a barfined companion never leaves you in the gutter either: she has
+  // poured worse than you into worse taxis (see _partyNightEnd for the scene)
+  const rough = wouldRough && _dogEgg() !== "rescue" && !_hadParty;
   const crash = rough ? _crashSpotFor(G.room) : null;
   if (crash) {
     G.battery = _CRASH_BATTERY;

@@ -218,6 +218,7 @@ function newGame() {
     dropped: {},         // keepsafe item ids the player DROPPED (vs spawned) — QUESTS surfaces these
     flowerDay: 0,        // day the flower-seller last worked you (once/night)
     flowerSeen: 0,       // …and how many times you've met her — the rerun reads as recognition
+    party: null,         // TAKE HER OUT: { ids, stops, spent, seen: {roomId: true} } — the night continues with her
     flowerFor: null,     // who the offered rose is for
     safeTries: 0,
     pendingFare: null,   // { kind:"bus"|"moto", price, dest } awaiting `pay`

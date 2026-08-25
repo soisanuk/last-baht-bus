@@ -438,6 +438,7 @@ function _arriveAt(to) {
     }
   }
   G.room = to;
+  if (typeof _partyArrive === "function") _partyArrive(to); // company makes an entrance of every new door
   if (typeof _fonPour === "function") _fonPour();   // Wednesday, first hour, her bar only
   if (typeof _newbieNudge === "function") _newbieNudge();   // once ever: a number, then the bell
   if (typeof _questHail === "function") _questHail();       // once ever: the first job finds you
@@ -4803,7 +4804,7 @@ function _priewMeet() {
     "comes out for LINE before you've finished the sentence. \"But only lunch. I " +
     "work evening shift at a restaurant — every day, until late.\" The nurse calls " +
     "her number. She hops, once, entirely gracefully, and is gone.", "win");
-  _say("(PRIEW is in your phone now. A normal girl, with a normal job. All you had to " +
+  _say("(Priew is in your phone now. A normal girl, with a normal job. All you had to " +
     "do was go to the clinic.)", "dim");
 }
 
@@ -6117,6 +6118,7 @@ function _chipSet() {
     const waived = G.pendingBf.id && typeof _bondTier === "function" && _bondTier(G.pendingBf.id) >= 3;
     add("short time", waived ? "short time (no fine)" : `short time ฿${G.pendingBf.st}`);
     add("long time", waived ? "long time (no fine)" : `long time ฿${G.pendingBf.lt}`);
+    add("take her out", waived ? "take her out (no fine)" : `take her out ฿${G.pendingBf.lt}`);
     add("no", "no, thanks");
     return chips;
   }
@@ -6445,7 +6447,7 @@ function engineComplete(input) {
   else if (G.pendingChoice === "checkout") {
     pool = [...Object.keys(_HOTELS).filter(k => k !== G.hotel)
       .map(k => _HOTELS[k].name.toLowerCase()), "stay"];
-  } else if (G.pendingBf) pool = ["short time", "long time", "no"];
+  } else if (G.pendingBf) pool = ["short time", "long time", "take her out", "no"];
   else if (G.pendingSoapy) pool = [..._SOAPY_TIERS.map(t => String(t.num)), "star", "super star", "model", "no"];
   else if (raw === "__info " || raw === "__info") {
     pool = ["quests", "hint", "time", "who", "contacts", "gallery", "standing", "diagnose", "score", "map", "help"];
@@ -6908,6 +6910,8 @@ function doCommand(input) {
   // and waving money through without terms (PAY/YES/OK) is the newbie's open
   // contract, resolved by whoever's holding the ledger (see _bfResolve).
   if (G.pendingBf && v !== "restart") {
+    // the party barfine — bfparty's honest mirror: take her (or them) OUT
+    if (/^(take|party)/.test(lower) || /\b(her|them) out\b/.test(lower)) { _bfResolve("party"); _tick(); return; }
     if (/^(st\b|short)/.test(lower)) { _bfResolve("st"); _tick(); return; }
     if (/^(lt\b|long|overnight|all night)/.test(lower)) { _bfResolve("lt"); _tick(); return; }
     if (/^(no\b|cancel|never|forget|back out|walk)/.test(lower)) {
@@ -7663,7 +7667,7 @@ function _dailySeed(str) {
 // One emoji per night's ending — outcome class only, never content (no girl,
 // no quest, no venue), so a posted card teases without spoiling.
 const _NIGHT_EMOJI = {
-  sleep: "🛏", barfine: "💋", dawn: "🌅", blackout: "🍺", collapse: "😵",
+  sleep: "🛏", barfine: "💋", dawn: "🌅", allnighter: "🌇", blackout: "🍺", collapse: "😵",
   hurt: "🚑", accident: "🛵", robbed: "💸", bfscam: "🐍",
 };
 

@@ -706,6 +706,118 @@ function _bfRefusalSay(id, r) {
 
 // The negotiation prompt — single source, so the live line, the invalid-answer
 // reprompt, and the restore redraw all read identically (see _renderResume).
+// ── TAKE HER OUT: the party barfine (design call 2026-08-25) ─────────────────
+// "A lot of punters will barfine a lady (or two) to go party on WS, sometimes
+// staying out until dawn." The companion state lives on G.party = { ids, stops,
+// spent, seen }; _partyArrive pays each NEW venue, _partyNightEnd settles the
+// goodbye by how the night actually ended, and SLEEP with company converts to
+// the long-time close (engine-play, top of _endNight).
+function _partyLabel() {
+  const ids = (G.party && G.party.ids) || [];
+  const names = ids.map(i => NPCS[i].name);
+  return names.length === 2 ? names[0] + " and " + names[1] : (names[0] || "");
+}
+const _PARTY_JOIN = [
+  "{n} is off her stool before the ink dries, one arm through yours like it has always lived there. The bar sends you off with a chorus of advice in two languages, none of it repeatable and all of it warm.",
+  "{n} takes exactly ninety seconds — a word to the mamasan, a swipe of something at the mirror, shoes that mean business — and reappears at the door already laughing at where the night might go.",
+  "The fine is barely in the book before {n} has your hand. \u201cOkay. Tonight I show you how Thai people party, na \u2014 you keep up or you go home.\u201d The whole rail cheers you out the door.",
+  "{n} slips off the clock the way a professional does — completely, instantly — and something in her face changes into her OWN night out. \u201cCome. First we walk, then we dance, then we see.\u201d",
+];
+const _PARTY_JOIN2 = [
+  "{n} looks at {other}, {other} looks at {n}, and something is agreed at a frequency you will never be cleared for. Two arms now, one on each of yours, and the street ahead visibly adjusts its expectations.",
+  "\u201cShe come too?\u201d {n} grins at {other} like a co-conspirator. \u201cOhh, tilac. Now is PARTY.\u201d They flank you out the door, already talking across you in Thai, already deciding where you're all going.",
+];
+const _PARTY_ARRIVE = [
+  "{who} makes an entrance of your arrival — a wave here, a shriek of recognition there; she knows somebody at every rail in this town, and tonight you're the one she brought.",
+  "In the new light {who} looks around like a landlady inspecting a property, delivers a verdict in Thai you don't need translated, and steers you to the exact right spot at the bar. There is always an exact right spot. She always knows it.",
+  "{who} orders before you've sat down — hers, and the right thing for you, in that order — and clinks your glass like the night has just now properly started. Every bar, it has just now properly started.",
+  "Walking in with {who} changes what the room does with you: the staff read her, recalibrate, and upgrade you from tourist to somebody's guest. It is a better class of welcome and you did nothing to earn it.",
+  "{who} clocks the room in one sweep — who's working, who's pretending to, which table is trouble — and parks you with your back to the wall like a professional. \u201cOkay. Here is good.\u201d It is.",
+];
+const _PARTY_ARRIVE_CLUB = [
+  "The bass hits like weather and {who} comes ALIVE — this is her music, her floor, her hour. She hauls you into the lights and for a while nobody in the building is having a better night than the two of you, and everybody can tell.",
+  "Inside the club {who} stops being your companion and becomes the event: hands up, eyes shut, word-perfect on a song you've never heard. You hold the drinks. It is somehow the best job you've ever had.",
+  "{who} surveys the club floor like a general given favourable terrain, picks the spot the speakers aim past rather than at, and dances you into the small hours one song at a time.",
+];
+const _PARTY_DRINKS = [
+  "(Hers arrives without anyone asking — she's with you, and every bar in town understands the arrangement instantly. \u0e3f{c} on the night.)",
+  "(A drink lands in front of {who} before you've found the menu. The tab knows. The tab always knows. \u0e3f{c}.)",
+  "(The staff take one look and bring {who} the usual she's never ordered here before. \u0e3f{c} joins the evening's arithmetic.)",
+];
+const _PARTY_BROKE = [
+  "({who} clocks the state of the wallet in one glance and waves the drink off before it lands — \u201cwater, ka\u201d — smooth enough that only you saw the arithmetic happen.)",
+  "(No drink this stop \u2014 {who} reads the pocket situation and toasts you with somebody's abandoned glass of ice instead, entirely unbothered.)",
+];
+const _PARTY_DAWN = [
+  "Dawn catches the party still standing. {who} finds you a taxi with the effortless authority of a woman who has closed more clubs than you've visited, folds you into it, and takes the second one herself — \u201cSleep, tilac. Tonight was GOOD one.\u201d It was. It really was.",
+  "The sky goes shell-pink over the last of the bass. {who} — barefoot now, shoes in hand, entirely unwrecked — walks you to the taxi rank through the morning shift, orders your driver home in Thai, and waves till you turn the corner.",
+  "You do the whole night, all of it, and at first light {who} pronounces the verdict — \u201cyou party like Thai person. Almost.\u201d — and pours you homeward with a promise to sleep till two that you will both honour completely.",
+];
+const _PARTY_RESCUE = [
+  "The night wins. Somewhere between one bar and the next your legs file for divorce — and {who} catches you, swears once in Thai, and takes over the way a professional takes over: taxi, address out of your own phone, \u0e3f{c} from your shirt pocket counted out in front of you so you'd know it was correct. You wake in your own bed because she put you there.",
+  "It goes dark somewhere loud. What you get back are fragments: {who}'s voice negotiating a taxi, your own weight moving without your help, a door that turns out to be yours. \u0e3f{c} gone from your pocket for the fare — counted, correct, and cheap at five times the price.",
+  "You fall off the night mid-sentence. {who} has seen it a hundred times and wastes none of it on drama: home, bed, shoes off, a bottle of water on the nightstand you will weep with gratitude for at noon. The taxi took \u0e3f{c} of your money. She took nothing but her leave.",
+];
+const _PARTY_SOFT_BYE = [
+  "(In the mess of the night's ending, {who} squeezes your arm once — \u201cyou okay? okay\u201d — and is gone into the town she knows better than trouble does.)",
+  "({who} melts away somewhere in the confusion, professionally unentangled, with a backward glance that says the night was fun while it was fun.)",
+];
+const _PARTY_HOME_NUDGE = [
+  "({who} looks at the room, then at you, and starts unhooking an earring with an air of complete arrival. SLEEP when you're ready \u2014 or the night is still out there if you've got legs left.)",
+  "({who} kicks her shoes into the corner like she lives here and falls backward onto the bed, arms out. \u201cYour hotel is BORING, tilac. But the bed is good.\u201d SLEEP to call it \u2014 or drag her out for one more.)",
+];
+
+// each NEW venue with company on your arm pays the night — company สนุก is
+// presence, never conquest, so it goes nowhere near the jading treadmill
+function _partyArrive(to) {
+  const p = G.party;
+  if (!p || !p.ids || !p.ids.length) return;
+  if (to === _hotelRoomId()) {
+    _say(_fmt(_pickVary(_PARTY_HOME_NUDGE, "partynudge"), { who: _partyLabel() }), "dim");
+    return;
+  }
+  const r = ROOMS[to];
+  if (!r || !(r.bar || r.barType)) return;
+  if (p.seen[to]) return;
+  p.seen[to] = true;
+  const who = _partyLabel();
+  const club = r.barType === "club" || r.barType === "gogo";
+  _say(_fmt(_pickVary(club ? _PARTY_ARRIVE_CLUB : _PARTY_ARRIVE, "partyarr"), { who }));
+  const dcost = LADY_DRINK * p.ids.length;
+  if (G.money >= dcost) {
+    G.money -= dcost;
+    p.spent += dcost;
+    for (const id of p.ids) _boughtBond(id, 1);
+    _say(_fmt(_pickVary(_PARTY_DRINKS, "partydrink"), { who, c: dcost }), "dim");
+  } else {
+    _say(_fmt(_pickVary(_PARTY_BROKE, "partybroke"), { who }), "dim");
+  }
+  if (p.stops < PARTY_STOP_CAP) {
+    p.stops++;
+    _addHappy(1);
+  }
+}
+
+// how the party ends is how the NIGHT ended — the goodbye reads the reason
+function _partyNightEnd(reason) {
+  const p = G.party;
+  if (!p || !p.ids || !p.ids.length) return;
+  const who = _partyLabel();
+  if (reason === "allnighter") {
+    _say(_fmt(_pickVary(_PARTY_DAWN, "partydawn"), { who }), "win");
+    for (const id of p.ids) _addBond(id, 2);
+    _addHappy(Math.min(3, 1 + Math.floor(p.stops / 2)));
+  } else if (reason === "blackout" || reason === "collapse") {
+    const fare = Math.min(G.money, PARTY_TAXI);
+    G.money -= fare;
+    _say(_fmt(_pickVary(_PARTY_RESCUE, "partyrescue"), { who, c: fare }), "win");
+    for (const id of p.ids) _addBond(id, 2);
+  } else {
+    _say(_fmt(_pickVary(_PARTY_SOFT_BYE, "partybye"), { who }), "dim");
+  }
+  G.party = null;
+}
+
 function _bfPrompt() {
   const { st, lt, id } = G.pendingBf;
   const p = n => n ? "฿" + n : _L("waived — past midnight");
@@ -715,11 +827,12 @@ function _bfPrompt() {
   if (id && typeof _bondTier === "function" && _bondTier(id) >= 3) {
     _say(`(The mamasan starts to name a number; ${NPCS[id].name} waves her quiet — ` +
       "for YOU there's no fine tonight, she'll square it herself. SHORT TIME · LONG " +
-      "TIME — overnight · or NO.)", "dim");
+      "TIME — overnight · TAKE HER OUT — she parties with you · or NO.)", "dim");
     return;
   }
-  _say(_fmt("(SHORT TIME {st} — one round, the night carries on · LONG TIME {lt} — overnight · NO backs out.)",
-    { st: p(st), lt: p(lt) }), "dim");
+  _say(_fmt("(SHORT TIME {st} — one round, the night carries on · LONG TIME {lt} — overnight · " +
+    "TAKE HER OUT {lt2} — she comes with you, and the night keeps going · NO backs out.)",
+    { st: p(st), lt: p(lt), lt2: p(lt) }), "dim");
 }
 
 // The player answered the negotiation. kind: "st" | "lt" | "open" — open is
@@ -739,6 +852,22 @@ const _ST_SOI6_LINES = [
 
 function _bfResolve(kind) {
   const { id, st, lt } = G.pendingBf;
+  // With company already on your arm, the ledger only sells one thing: another
+  // companion. An ST/LT mid-party would strand the girls you're out with.
+  if (G.party && G.party.ids && G.party.ids.length && kind !== "party") {
+    _say(_fmt("{who} glances past you — at {her} — and smiles without writing " +
+      "anything. \u201cYou have company tonight already, tilac. She come TOO, or " +
+      "she don't come.\u201d", { who: NPCS[id].name, her: _partyLabel() }), "dim");
+    _say("(TAKE HER OUT \u00b7 or NO.)", "dim");
+    return;
+  }
+  if (kind === "party" && G.party && G.party.ids && G.party.ids.length >= PARTY_MAX_GIRLS) {
+    _say("The mamasan counts the company already hanging off you and laughs from " +
+      "the belly. \u201cTwo is party, tilac. Three is TOUR GROUP \u2014 you need " +
+      "minivan, guide flag, insurance.\u201d The ledger stays shut, kindly.", "dim");
+    G.pendingBf = null;
+    return;
+  }
   G.pendingBf = null;
   const name = NPCS[id].name;
   const bt = _room().barType;
@@ -776,7 +905,7 @@ function _bfResolve(kind) {
       "a while ago.", "win");
   }
   if (G.money < price) {
-    if (kind === "lt" && st <= G.money && st < price) {
+    if ((kind === "lt" || kind === "party") && st <= G.money && st < price) {
       // the menu she quoted had a line you CAN afford — the ledger stays open
       G.pendingBf = { id, st, lt, room: G.room };
       _say(`The number is ฿${price}, and your pocket says ฿${G.money}. The mamasan ` +
@@ -810,6 +939,25 @@ function _bfResolve(kind) {
   } else if (G.nightTurn >= 60 && POPULAR_GIRLS.includes(id)) {
     _say(`Past midnight the book usually closes — but not for ${name}. The mamasan ` +
       `taps the fee, unbudging: for HER, any hour is peak. ฿${price}.`, "dim");
+  }
+  // ── TAKE HER OUT: the night CONTINUES, with her in it ──────────────────────
+  // The honest mirror of the bfparty scam, the same way the night ride mirrors
+  // bfhop: the real version of the thing the con imitates. No games, no fleece —
+  // real modest costs (her drinks arrive wherever you land), real payoffs
+  // (company สนุก, bond, and a companion who gets you home if the night wins).
+  if (kind === "party") {
+    const p2 = (G.party && G.party.ids) ? G.party
+      : (G.party = { ids: [], stops: 0, spent: 0, seen: {} });
+    const second = p2.ids.length === 1;
+    p2.ids.push(id);
+    p2.seen[G.room] = true;   // her own bar is the start line, not a stop
+    _say(_fmt(_pickVary(second ? _PARTY_JOIN2 : _PARTY_JOIN, "partyjoin"),
+      { n: name, other: second ? NPCS[p2.ids[0]].name : "" }), "win");
+    _say(second
+      ? "(Two of them now. The town is going to remember this one. Lead on \u2014 her drinks land wherever you do.)"
+      : "(She's WITH you now \u2014 the night keeps going. Lead on: her drinks land wherever you do, and the fun stacks with every new door. Home together ends it her way; dawn ends it the town's.)", "dim");
+    _addHappy(1);
+    return;
   }
   // ── SHORT TIME: one round, off she goes, the night carries on ──
   if (kind === "st") {

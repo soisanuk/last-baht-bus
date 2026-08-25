@@ -1078,7 +1078,7 @@ test("a rough wake takes a pocket, not an estate", () => {
   newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight" };
   _setFlag("act1Done"); _setFlag("hasWallet"); G.stage = "vacation";
   G.money = 1400000; G.room = "beach_rd_c"; G.dog = null; out = [];
-  _endNight("dawn");
+  _endNight("blackout");   // curfew rework: dawn-standing is legal; passing out is what robs you
   assert.ok(G.money >= 1400000 - ROUGH_WAKE_CAP - 2000, "the pocket, plus the folio — not the estate");
   assert.equal(G.roughLost, ROUGH_WAKE_CAP);
   // NOT "still in the room" — that figure is the POCKET balance, and billing it
@@ -1138,8 +1138,8 @@ test("Connect 4 says why the big money won't ride; charity and credit read the w
 test("the folio cannot slide under a door you didn't wake behind", () => {
   newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight" };
   _setFlag("act1Done"); G.stage = "vacation"; G.money = 50000; G.dog = null;
-  G.room = "buakhao_market";              // out on the street at dawn
-  out = []; _endNight("dawn");
+  G.room = "buakhao_market";              // passed out on the street
+  out = []; _endNight("blackout");
   const said = text();
   assert.match(said, /waiting at the desk/i, "you collect it, it does not arrive");
   assert.doesNotMatch(said, /slides under the door/i);
@@ -1728,4 +1728,125 @@ test("the balk is a balk, not a wall: insistence buys the ride the crash arc nee
   out = []; doCommand("motosai to naklua");
   assert.match(out.join("\n"), /Your funeral, boss/, "second ask: he takes the fare");
   assert.doesNotMatch(out.join("\n"), /Bench no fall off/, "no second balk");
+});
+
+// ── The all-nighter + TAKE HER OUT (design call 2026-08-25) ──────────────────
+// "A lot of punters will barfine a lady (or two) to go party on WS, sometimes
+// staying out until dawn." The big night out is now a legal move, and the
+// barfine can continue the night instead of ending it.
+
+function _bigNight() {
+  newGame(); G.stage = "vacation"; _setFlag("act1Done"); _setFlag("hasWallet");
+  for (const k of Object.keys(ENCOUNTERS)) G.encDone[k] = true;
+  G.money = 20000; G.lastSaleng = 99999;
+}
+
+test("standing at dawn is an all-nighter: home, solvent, billed to the morning", () => {
+  _bigNight(); G.room = "ws_south"; G.soc.drunk = 4;
+  out = []; _endNight("dawn");
+  assert.equal(G.room, _hotelRoomId(), "the taxi home in the light");
+  assert.equal(G.money, 20000 - _hotelRate(G.hotel),
+    "every baht intact bar the folio — the town robs the unconscious, not the upright");
+  assert.equal(G.nightLog[G.nightLog.length - 1], "allnighter", "the week's spine records it");
+  assert.ok(_NIGHT_EMOJI.allnighter, "…and the share card can render it");
+  assert.ok(G.hunger >= 55 && G.thirst >= 65,
+    "the invoice arrives in the evening meters (" + G.hunger + "/" + G.thirst + ")");
+  // …while a night slept at home wakes gentler
+  _bigNight(); G.room = _hotelRoomId(); G.soc.drunk = 4;
+  const h1 = (() => { _endNight("dawn"); return G.hunger; })();
+  assert.ok(h1 < 60, "same drunk, softer morning when you slept in a bed");
+});
+
+test("Act One's dawn is still do-or-die — the all-nighter is a resident's privilege", () => {
+  newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight" };
+  G.room = "beach_rd_c"; G.day = 2;
+  _endNight("dawn");
+  assert.equal(G.day, 2, "the hard fail reset the world to day two");
+  assert.ok(!_flag("act1Done"));
+});
+
+test("TAKE HER OUT: she joins, every new door pays, and the club is her hour", () => {
+  _bigNight(); G.room = "lucky_tiger"; G.nightTurn = 30;
+  G.soc.drinks.lek = 6;
+  G.pendingBf = { id: "lek", st: 400, lt: 700, room: "lucky_tiger" };
+  const m0 = G.money;
+  out = []; doCommand("take her out");
+  assert.ok(G.party && G.party.ids.includes("lek"), "she's with you");
+  assert.equal(G.money, m0 - 700, "the fine is the long-time fine");
+  assert.ok(_PARTY_JOIN.some(l => out.join("\n").includes(l.replace("{n}", "Lek"))), "the join, from its pool");
+  // a NEW venue pays: arrival line + her drink + สนุก
+  const h0 = G.happy, m1 = G.money;
+  out = []; _arriveAt("rock_factory");
+  assert.ok(G.party.seen.rock_factory, "the stop is counted");
+  assert.equal(G.money, m1 - LADY_DRINK, "her drink lands wherever you do");
+  assert.ok(G.happy > h0, "company at a new door pays the night");
+  // …once per venue
+  const m2 = G.money; out = []; _arriveAt("rock_factory");
+  assert.equal(G.money, m2, "the same door doesn't bill twice");
+});
+
+test("two is a party, three is a tour group", () => {
+  _bigNight(); G.room = "lucky_tiger"; G.nightTurn = 30;
+  G.party = { ids: ["lek"], stops: 0, spent: 0, seen: {} };
+  G.pendingBf = { id: "nong", st: 400, lt: 700, room: "lucky_tiger" };
+  out = []; doCommand("take her out");
+  assert.equal(G.party.ids.length, 2, "the classic flex");
+  assert.ok(_PARTY_JOIN2.some(l => out.join("\n").includes(
+    l.replace(/\{n\}/g, NPCS.nong.name).replace(/\{other\}/g, "Lek"))), "the pair's own join");
+  G.pendingBf = { id: "wan", st: 400, lt: 700, room: "lucky_tiger" };
+  out = []; doCommand("take her out");
+  assert.equal(G.party.ids.length, 2, "capped");
+  assert.match(out.join("\n"), /TOUR GROUP|minivan/, "…with the mamasan's blessing");
+});
+
+test("with company on your arm, the ledger only sells another companion", () => {
+  _bigNight(); G.room = "lucky_tiger"; G.nightTurn = 30;
+  G.party = { ids: ["lek"], stops: 2, spent: 0, seen: {} };
+  G.pendingBf = { id: "nong", st: 400, lt: 700, room: "lucky_tiger" };
+  const m0 = G.money;
+  out = []; doCommand("long time");
+  assert.equal(G.money, m0, "no money moved");
+  assert.ok(G.pendingBf, "the negotiation stays open");
+  assert.match(out.join("\n"), /company tonight already|She come TOO/i);
+});
+
+test("SLEEP with company is the long-time close, paid up by the evening she spent on your arm", () => {
+  _bigNight(); G.room = "lucky_tiger"; G.nightTurn = 40;
+  G.party = { ids: ["lek"], stops: 4, spent: 600, seen: {} };
+  G.room = _hotelRoomId();
+  out = []; _endNight("sleep");
+  const said = out.join("\n");
+  assert.equal(G.party, null, "the party ends where the best ones do");
+  assert.match(said, /nobody's business|khao man gai|forgotten your name/i, "the barfine close fires");
+  assert.equal(G.nightLog[G.nightLog.length - 1], "barfine", "logged as the night it was");
+  assert.ok((G.soc.drinks.lek || 0) >= 2, "the close pays bond (less the night's usual cooling)");
+});
+
+test("dawn with company: she pours you homeward and the week remembers a great night", () => {
+  _bigNight(); G.room = "ws_south"; G.nightTurn = 99;
+  G.party = { ids: ["lek"], stops: 5, spent: 750, seen: {} };
+  out = []; _endNight("dawn");
+  const said = out.join("\n");
+  assert.ok(_PARTY_DAWN.some(l => said.includes(l.replace(/\{who\}/g, "Lek"))), "her goodbye, from its pool");
+  assert.equal(G.party, null);
+  assert.equal(G.room, _hotelRoomId(), "home, upright");
+  assert.equal(G.money, 20000 - _hotelRate(G.hotel), "and unrobbed — the folio is the only bill");
+  assert.ok((G.soc.drinks.lek || 0) >= 1, "the night together counts (net of the nightly cooling)");
+});
+
+test("the companion rescue: a blackout with her on your arm ends in your own bed", () => {
+  _bigNight(); G.room = "ws_south"; G.soc.drunk = 9;
+  G.party = { ids: ["lek"], stops: 3, spent: 450, seen: {} };
+  out = []; _endNight("blackout");
+  const said = out.join("\n");
+  assert.equal(G.room, _hotelRoomId(), "she got you home");
+  assert.equal(G.money, 20000 - PARTY_TAXI - _hotelRate(G.hotel),
+    "the taxi from your shirt pocket plus the folio — counted, correct");
+  assert.ok(_PARTY_RESCUE.some(l => said.includes(
+    l.replace(/\{who\}/g, "Lek").replace(/\{c\}/g, String(PARTY_TAXI)))), "the scene says so");
+  assert.equal(G.party, null);
+  // …the same blackout alone is the rough wake it always was
+  _bigNight(); G.room = "ws_south"; G.soc.drunk = 9; G.dog = null;
+  _endNight("blackout");
+  assert.ok(G.money < 20000 - PARTY_TAXI, "alone, the town works you properly");
 });
