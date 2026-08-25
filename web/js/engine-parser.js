@@ -94,6 +94,15 @@ const _NO_EXIT = [
 // player lost in the Tree Town maze stepped into a bar and was told "the soi
 // doesn't run that way" — handed the wrong mental model at the exact moment they
 // were trying to build one (opening auditor 2026-08-23).
+// …and an open-air market is not indoors. Rompho has one door on the map and a
+// `bar` display name, which made it read as an interior — so walking north out of
+// a sprawl of plastic stools under tarpaulins answered "you're indoors"
+// (persona report A#6, 2026-08-23).
+const _NO_EXIT_OPEN = [
+  "Not that way — the sprawl only opens back onto the road you came in from. (OUT)",
+  "Stalls, stalls, and then a wall of somebody's kitchen. The way you came in is the way there is. (OUT)",
+  "You get three stalls further and find the whole thing backs onto a building. (OUT)",
+];
 const _NO_EXIT_IN = [
   "You're indoors. The only way out of here is OUT.",
   "That's a wall with a beer fridge against it. OUT is the way you came.",
@@ -232,6 +241,12 @@ const _WATER_LINES = [
   "A litre of cold water vanishes and the heat loosens its grip a notch.",
   "Frosted, capped, cracked, drained. The worst of the thirst just... stops.",
 ];
+const _NOODLE_LINES = [
+  "A pot of Mama noodles off the shelf, hot water from the urn by the till, three minutes standing at the counter with the lid held down by a wooden chopstick. It is exactly as good as it needs to be.",
+  "Tom yum flavour, because the others are for people with a plan. You eat it standing up under the aircon vent, which is the correct way, and the girl behind the till does not comment.",
+  "The lid, the water, the wait, the fork from the box by the door. Fifteen baht and the ancient dignity of the man who knows this is the right decision at this hour.",
+  "You get the pork one. It is salty enough to be medicinal and hot enough to hurt, and it puts a floor under the evening that was not there a minute ago.",
+];
 const _TOASTIE_LINES = [
   "The iconic 7-Eleven cheese toastie, pressed twice while you wait, eaten molten on the kerb " +
     "like every farang before you back to the dawn of time. There are worse religions.",
@@ -288,7 +303,8 @@ function _doGo(dirWord) {
     // indoors gets its own set — see _NO_EXIT_IN
     const _r = _room(), _inside = !!(_r.bar || _r.barType || _r.massage || _r.shop || _isHotelRoom(G.room)) &&
       !(_r.exits && (_r.exits.n || _r.exits.s || _r.exits.e || _r.exits.w));
-    const _pool = _inside ? _NO_EXIT_IN : _NO_EXIT;
+    const _openAir = _inside && /market|bazaar|food court/i.test(_r.name || "");
+    const _pool = _openAir ? _NO_EXIT_OPEN : _inside ? _NO_EXIT_IN : _NO_EXIT;
     _say(_pool[_hh(G.room + ":" + dir, 17) % _pool.length]); // the same wall answers the same way
     // A wall is not an action. Returning false lets the caller skip the tick —
     // the same contract _gameInput uses for "not a move". This mattered: walking
@@ -1184,18 +1200,25 @@ function _venueKind(r) {
 function _venueLook(arg) {
   const here = _room();
   if (!here || !here.exits) return false;
-  const norm = t => String(t).toLowerCase().replace(/['\u2019\u02bc]/g, "").replace(/\s+/g, " ").trim();
+  const norm = t => String(t).toLowerCase()
+    .replace(/['\u2019\u02bc]/g, "")
+    .replace(/\b(?:a|an|the)\b/g, " ")
+    .replace(/\s+/g, " ").trim();
   const a = norm(arg);
   if (!a) return false;
   // Only somewhere you could step into from where you stand â a venue three rooms
-  // away is not a thing you are looking at.
-  for (const to of Object.values(here.exits)) {
+  // away is not a thing you are looking at. BOTH tables: most bars hang off a
+  // block's `venues` list rather than its compass exits, and walking only the
+  // exits missed every one of them — caught by my own sweep being exits-only,
+  // which is the instrument sharing the code's blind spot exactly as CLAUDE.md
+  // warns.
+  for (const to of [...Object.values(here.exits), ...(here.venues || [])]) {
     const r = ROOMS[to];
     if (!r) continue;
     const label = norm(r.bar || r.name || "");
     if (!label) continue;
-    const bare = label.replace(/^the /, "");
-    if (a !== label && a !== bare && a !== "the " + bare) continue;
+    const isName = a === label || (a.includes(" ") && label.startsWith(a + " "));
+    if (!isName) continue;
     const name = r.bar || r.name;
     _say(_fmt("{name}. {look}",
       { name, look: _pickVary(_VENUE_LOOK[_venueKind(r)], "vlook" + _venueKind(r)) }));
@@ -3564,6 +3587,28 @@ function _standRegular(id) {
   }
 }
 
+// What the room you are standing in will actually sell you, as the tap-hint line
+// the street version already prints. Null where nothing is for sale, so bare BUY
+// keeps its honest refusal everywhere else.
+// The street rooms carry `seven`; the two walk-in branches are their own rooms
+// and carry only `shop`. Both are a 7-Eleven to the player.
+function _is7Eleven() {
+  const r = _room();
+  return !!(r.seven || /7.?eleven/i.test(r.name || ""));
+}
+
+function _shopStock() {
+  const r = _room();
+  if (_isHotelRoom(G.room)) return null;
+  if (/7.?eleven/i.test(r.name || "")) {
+    return "(BUY TOASTIE \u00b7 BUY NOODLES \u00b7 BUY WATER \u00b7 BUY CHARGER \u00b7 BUY CONDOM \u00b7 CHARGE PHONE)";
+  }
+  if (FOOD_STALLS[G.room] || r.food) return "(BUY FOOD \u00b7 or EAT, which is the same thing done faster.)";
+  if (r.seven) return "(The 7-Eleven is right there: BUY TOASTIE \u00b7 BUY WATER \u00b7 BUY CHARGER \u00b7 BUY CONDOM)";
+  if (_inBar()) return "(BUY BEER \u00b7 BUY WATER \u00b7 BUY DRINK FOR <name>)";
+  return null;
+}
+
 function _doBuy(arg) {
   const r = _room();
   // BUY PIWIN A BEER. First, because a stand is not a bar and every branch
@@ -3645,6 +3690,22 @@ function _doBuy(arg) {
     _say(_fmt("฿{p} for a black nylon cord off the counter display — the girl rings it up " +
       "without a flicker, because half the men in this country are wearing one. (฿{m} left.)",
       { p: CORD_PRICE, m: G.money }));
+    return;
+  }
+  // Mama noodles are on the shelf in the prose and were the second thing a
+  // methodical player tried; BUY NOODLES quietly resolved to a toastie instead
+  // (persona report B#9, 2026-08-23). They are their own thing, and cheaper.
+  if (_is7Eleven() && /\bnoodles?\b|\bmama\b|\bcup noodle/.test(arg)) {
+    if (G.money < NOODLE_PRICE) {
+      _say(_fmt("The noodles are \u0e3f{p}. You have \u0e3f{m}.", { p: NOODLE_PRICE, m: G.money }));
+      return;
+    }
+    G.money -= NOODLE_PRICE;
+    G.hunger = Math.max(0, G.hunger - 30);
+    G.thirst = Math.max(0, G.thirst - 5);
+    _sevenIn();
+    _say(_fmt("{line} (\u0e3f{m} left.)", { line: _L(_pickVary(_NOODLE_LINES, "noodles")), m: G.money }));
+    _addHappy(1);
     return;
   }
   if (r.seven && (/toastie|cheese|sandwich/.test(arg) || (/food|snack/.test(arg) && !FOOD_STALLS[G.room]))) {
@@ -3910,9 +3971,13 @@ function _doBuy(arg) {
   // no bar stocks — checked after the bar goods so shared words (bra/drink) still
   // resolve to the bar. The cart lingers; buying doesn't send it away.
   if (_salengHere() && _salengMatchItem(arg)) { _salengBuy(arg); return; }
+  // Bare BUY inside a shop listed nothing, while the STREET outside a 7-Eleven
+  // prints the whole stock list — so standing in the shop gave you strictly less
+  // information than standing outside it (persona report B#9, 2026-08-23).
+  if (!arg.trim() && _shopStock()) { _say(_shopStock(), "dim"); return; }
   // a dish named off the menu card, where there's a kitchen: BUY PAD THAI is BUY FOOD
   if ((FOOD_STALLS[G.room] || r.food) &&
-      /\b(pad|rice|khao|noodle|tam|soup|curry|fish|chicken|pork|beef|prawn|plate|dish|meal|dinner|lunch|supper|breakfast|fry|burger|pie|toastie|special)\b/.test(arg)) {
+      /\b(pad|rice|khao|noodle|tam|soup|curry|fish|chicken|pork|beef|prawn|plate|dish|meal|dinner|lunch|supper|breakfast|fry|burger|pie|toastie|special)s?\b/.test(arg)) {
     _doBuy("food");
     return;
   }
@@ -4752,11 +4817,20 @@ function _doListen() {
     return;
   }
   if (_inBar()) {
-    _say("{{Ice}} settling in buckets, Connect Four counters clacking, and the " +
-      "chorus of “HELLO WELCOME” as somebody richer walks past outside.");
+    _say(_playOptions().length
+      ? "{{Ice}} settling in buckets, Connect Four counters clacking, and the " +
+        "chorus of “HELLO WELCOME” as somebody richer walks past outside."
+      : "{{Ice}} settling in buckets, a fan turning over an empty table, and the " +
+        "chorus of “HELLO WELCOME” as somebody richer walks past outside.");
     return;
   }
   _say(_SOUNDS[_room().region] || "Pattaya, idling.");
+}
+
+// Is there anybody on this floor to dance with? Take Care Me's prose says no
+// house girls work it, and the Queen Vic has none by design.
+function _hostessHere() {
+  return _npcsHere().some(id => NPC_ROLES[id] === "hostess");
 }
 
 function _doSwim() {
@@ -4782,14 +4856,23 @@ function _doDance() {
       "clinical interest of surgeons watching a man remove his own appendix. " +
       "One of them, kindly, copies you.");
   } else if (_inBar() && _bandHere()) {
+    // The partner clause is conditional: Take Care Me's own prose says no house
+    // girls work it, and a hostess materialising at your elbow there contradicted
+    // the room two lines after it printed (persona report A#9, 2026-08-23).
     _say("You dance. The band — who have seen everything and played for all of it — " +
-      "lock in harder, the drummer hitting the groove where it helps. A hostess " +
-      "materialises at your elbow and either leads or follows, both equally convincing.");
+      "lock in harder, the drummer hitting the groove where it helps." +
+      (_hostessHere()
+        ? " A hostess materialises at your elbow and either leads or follows, both equally convincing."
+        : " Somebody near the rail whoops. A freelancer two tables over decides you are worth watching, which is a different thing from being worth joining, and watches."));
     _addHappy(2);
   } else if (_inBar()) {
-    _say("You dance between the stools. A hostess joins you instantly and " +
-      "without inquiry — enthusiasm is the house style — and for eight bars " +
-      "of luk thung you are the floor show.");
+    _say(_hostessHere()
+      ? "You dance between the stools. A hostess joins you instantly and " +
+        "without inquiry — enthusiasm is the house style — and for eight bars " +
+        "of luk thung you are the floor show."
+      : "You dance between the stools, unaccompanied, for as long as your nerve " +
+        "holds. Nobody stops you. Nobody joins you either, and the difference " +
+        "becomes apparent at about bar six.");
   } else if (_bandHere()) {
     _say("You dance in front of the stage. The guitarist points his headstock at you " +
       "approvingly. On the outside this looks ridiculous; on the inside you are having " +

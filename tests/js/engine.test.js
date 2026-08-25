@@ -3957,7 +3957,11 @@ test("Thappraya Main Strip: reached east off the beach road, the mix of venues, 
   // the venue mix
   assert.equal(ROOMS.hyper.barType, "gogo");
   assert.equal(ROOMS.take_care_me.barType, "pub");
-  assert.ok(ROOMS.take_care_me.band, "the rock pub has live music");
+  // Was `band: true`, which NOTHING in the engine read — so _bandHere() was false
+  // in the one room the band system exists for. Asserted on the flag the engine
+  // actually consults (persona report A#9, 2026-08-23).
+  assert.ok(ROOMS.take_care_me.liveMusic, "the rock pub has live music");
+  assert.ok(ROOMS.take_care_me.musicEveryNight, "…and a resident band plays every night");
   assert.deepEqual(["arrow_bar", "cheeky_monkey", "the_office"].map(b => ROOMS[b].barType), ["beer", "beer", "beer"]);
   assert.deepEqual(["the_boardroom", "velvet_club"].map(b => ROOMS[b].barType), ["gents", "gents"]);
   // Diamond runs Hyper (fixed), Wimon the beer bars and Ampai the gents (rotating)

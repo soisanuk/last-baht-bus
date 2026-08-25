@@ -162,18 +162,23 @@ test("a quest OFFER prints no command but ACCEPT", () => {
 test("every venue you can step into from here gets an exterior look", () => {
   let tested = 0;
   const missed = [];
+  // The bar is alive: an ambient encounter arms pendingEnc on a tick and the NEXT
+  // typed command is legitimately eaten by it. Drain the pool first, and the gates
+  // before each probe — same discipline as barchain's cmd() helper.
+  for (const k of Object.keys(ENCOUNTERS)) G.encDone[k] = true;
   for (const [rid, r] of Object.entries(ROOMS)) {
-    if (!r.exits || r.dark) continue;
-    for (const to of Object.values(r.exits)) {
+    if (r.dark) continue;
+    for (const to of [...Object.values(r.exits || {}), ...(r.venues || [])]) {
       const v = ROOMS[to];
       if (!v || !v.bar) continue;
       G.room = rid; out = [];
+      G.pendingEnc = null; G.pendingChoice = null; G.game = null;
       doCommand("examine " + v.bar.toLowerCase().replace(/'/g, ""));
       tested++;
       if (!/You are outside it/.test(out.join("\n"))) missed.push(rid + " -> " + v.bar);
     }
   }
-  assert.ok(tested > 50, "the sweep actually ran (" + tested + " venues)");
+  assert.ok(tested > 120, "the sweep covers exits AND venues (" + tested + " doors)");
   assert.deepEqual(missed, [], "a venue named in prose must not answer \"it isn't here\"");
 });
 
@@ -280,4 +285,60 @@ test("your own room's safe and window are lookable", () => {
     out = []; doCommand("examine window");
     assert.doesNotMatch(out.join("\n"), /isn't here|declines to elaborate/i, room + " window");
   }
+});
+
+// ── Shops, markets and the rooms that were less use inside than outside ──────
+test("bare BUY inside a shop lists what it sells", () => {
+  // The STREET outside a 7-Eleven prints the whole stock list; standing IN the
+  // shop answered "Not for sale here" (persona report B#9, 2026-08-23).
+  G.money = 5000;
+  for (const [room, want] of [["jomtien_7eleven", /BUY TOASTIE/], ["cheap_charlies", /BUY FOOD/],
+                              ["candy_bar", /BUY BEER/], ["beach_rd_c", /7-Eleven/]]) {
+    G.room = room; out = []; G.pendingEnc = null; doCommand("buy");
+    assert.match(out.join("\n"), want, room);
+    assert.doesNotMatch(out.join("\n"), /Not for sale here/, room);
+  }
+  G.room = "hotel_room"; out = []; doCommand("buy");
+  assert.match(out.join("\n"), /Not for sale here/, "and a room that sells nothing still says so");
+});
+
+test("the 7-Eleven sells the noodles its own shelves advertise", () => {
+  G.money = 5000; G.hunger = 80;
+  G.room = "jomtien_7eleven"; out = []; G.pendingEnc = null;
+  const before = G.hunger;
+  doCommand("buy noodles");
+  assert.ok(_NOODLE_LINES.some(l => out.join("\n").includes(l)), "answered from the noodle pool");
+  assert.ok(G.hunger < before, "and it actually fed you");
+  assert.equal(G.money, 5000 - NOODLE_PRICE);
+});
+
+test("plural food nouns reach the kitchen", () => {
+  // The stall regex closed each word with \b, so EVERY plural missed: noodles,
+  // prawns, pies. One character, a whole column of refusals.
+  G.money = 5000;
+  for (const word of ["prawns", "pies", "noodles", "plates"]) {
+    G.room = "cheap_charlies"; G.hunger = 80; out = []; G.pendingEnc = null;
+    doCommand("buy " + word);
+    assert.doesNotMatch(out.join("\n"), /Not for sale here/, "buy " + word);
+  }
+});
+
+test("an open-air market is not indoors", () => {
+  G.room = "soi_rompho"; out = []; doCommand("n");
+  assert.doesNotMatch(out.join("\n"), /You're indoors/,
+    "a sprawl of plastic stools under tarpaulins has no inside to be in");
+  G.room = "candy_bar"; out = []; doCommand("n");
+  assert.ok(_NO_EXIT_IN.some(l => out.join("\n").includes(l)), "…and a bar still is");
+});
+
+test("a live-music pub carries the flag the band system reads", () => {
+  // `band: true` was read by nothing, so _bandHere() was false in the one room
+  // the band system exists for (persona report A#9, 2026-08-23).
+  G.room = "take_care_me";
+  assert.ok(_bandHere(), "the band is here every night");
+  out = []; doCommand("listen");
+  assert.doesNotMatch(out.join("\n"), /Connect Four/, "a rock pub is not a beer bar's soundscape");
+  out = []; doCommand("dance");
+  assert.doesNotMatch(out.join("\n"), /hostess/,
+    "its own prose says no house girls work it");
 });

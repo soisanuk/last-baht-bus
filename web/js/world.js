@@ -13,6 +13,7 @@ const LAST_BUS_TURN = 80;   // 02:00 — the last songthaew makes its final run;
 const LATE_MOTO_MULT = 1.6; // small-hours "stranded tax": piwins gouge once the buses have stopped
 const DOG_MOTOSAI_FARE = 10; // a dog needs his own bike — a buddy's saleng, waved over and paid on top (waived on the free pity-ride)
 const LADY_DRINK = 150;  // canon
+const NOODLE_PRICE = 15;      // a pot of Mama noodles off the 7-Eleven shelf
 const BEER_PRICE = 80;   // your own big Chang, bar price
 const BELL_PRICE = 300;  // ring it and the round is on you
 const BRA_PRICE = 200;   // the mamasan's drawer novelty; makes fondling "interesting"
@@ -242,7 +243,8 @@ const ROOMS = {
     desc: "Directly across Second Road from the mouth of Soi 7: the sprawl of Rompho Market — " +
       "grilled everything, fruit pyramids, plastic stools, and a haze of chilli smoke. Locals, " +
       "long-stay farang, and a few bar girls off shift graze the stalls. The Jomtien branch of " +
-      "KISS glows just to the north. (BUY FOOD / EAT.)",
+      "KISS glows over the roofs to the north; its door is up on Second Road, not in here. " +
+      "(BUY FOOD / EAT.)",
     exits: { out: "jomtien_2nd" },
   },
 
@@ -582,7 +584,7 @@ const ROOMS = {
   },
   take_care_me: {
     name: "Take Care Me",
-    bar: "Take Care Me", barType: "pub", band: true,
+    bar: "Take Care Me", barType: "pub", liveMusic: true, musicEveryNight: true,
     region: "Thappraya",
     desc: "A live-music rock pub at the top of Second Road end of the strip — a proper stage, a tight " +
       "Filipino band murdering and resurrecting the classics, and a crowd three deep at the rail. No " +
