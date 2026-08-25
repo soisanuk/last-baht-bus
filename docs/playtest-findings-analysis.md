@@ -330,8 +330,9 @@ whether or not they are fixed.
 - **B1 (SEVERE) — `TRAVEL` is a free, risk-free teleport that nullifies the title
   mechanic.** The last bus, the ฿15 fare and the small-hours motosai premium are
   the run's central tension, and the game narrates that tension one command
-  before TRAVEL bypasses all three at zero cost from anywhere on the map. Options:
-  price it, curfew it, or keep it free and accept that the deadline is optional.
+  before TRAVEL bypasses all three at zero cost from anywhere on the map.
+  **Deferred deliberately (2026-08-25): the nightly curfew is being reworked, and
+  this belongs in that pass rather than ahead of it.**
 - **B6 — Act One completes without returning to room 412**, though the quest text
   and the game's own title say otherwise. Either the goal text drops the clause or
   the scoring waits for the room.
@@ -340,38 +341,34 @@ whether or not they are fixed.
 - **B27 — the protagonist is assumed male** with no alternative at any of the three
   character-creation axes. Already an open call in the persona memory note.
 
-## Open — bugs, roughly by cluster
+## Fixed in the 2026-08-25 sweep
 
-**Geography (A4, A5, A15, B12, B17).** Pratumnak Hill Road's `soi5` exit goes to
-the crest, not Soi 5, and plain `s` is refused; room prose names directions the
-room doesn't have (Thappraya Hill "west", Jomtien Second Road "east"); the Soi 7
-block links `s` one way and `e` the other; Tree Town compass exits double as bar
-doors so mapping walks you indoors; LK Metro's prose is written for one approach.
+Everything else in both reports. Geography (A4, A5, A15, B12, B17): five rooms
+pointed you at a direction they didn't have, plus a mislabelled `soi5` exit and
+two undiscoverable turnings; guarded by a matcher over the "X runs/opens/climbs
+<direction>" shapes with a named-exception list, which found a sixth case on its
+own. Promise/state (A6, A9, A20, A23, B9, B14, B21, B22): shops that sold less
+inside than outside, a live-music pub carrying a `band` flag nothing read, a
+market that called itself indoors, a beach that woke a jet-ski scam it says it
+doesn't have, a cart that shut at six, and the empty-bar rain vignette firing in
+a room you were mid-conversation in. Interaction (A13, A22, A24, A25, B15, B16,
+B18, B23, B25): HIRE narrating a departure it didn't perform, LOOK re-printing
+the stop you'd left, darts refusing a standard two-dart checkout and swallowing
+commands silently, killer pool going quiet when one opponent was left, a lapsed
+NPC question never re-offered, bare BUY DRINK spending ฿150 on a guess, and game
+moves routing to a conversation partner as topics. Plus A2i (a warning at your
+own door before the unlit soi), A3 (a quest pointer that went stale on the walk),
+A10 (the wrong-bar pointer, now the safe fallback), A21 (the dog inside a mall
+and outside a market), B5 (the safe code nobody could ask about — on the Act One
+critical path), and B20 (a grill cart that wasn't in the room).
 
-**Promise/state (A3, A6, A9, A20, A23, B5, B14, B21, B22, B24).** The quest HINT
-names a bar the hopper has already left; Rompho Market advertises KISS with no
-door and calls itself indoors; Take Care Me offers a hostess dance and Connect 4
-counters in a live-band room with no house girls; `swim` wakes a jet-ski scam in
-the room that says there are no jet-skis; the darts refusal omits two venues that
-have darts; HINT names four code-holders but no topic reaches them; room prose
-asserts things the state-aware verbs then correctly deny; the empty-bar rain
-vignette fires in a visibly busy bar; Cheap Charlie's has three people in its
-prose and nobody on the roster; Candy sells a shortcut to information she has
-already given.
+**Not defects, recorded as refutations:**
 
-**Interaction (A13, A22, A24, A25, B9, B15, B16, B18, B23, B25).** `HIRE <host>`
-narrates leaving and costs one turn; two different parser-miss messages for the
-same input on consecutive turns; a live darts game swallows every command with a
-bare score re-print; `ride bus` + `look` re-prints the origin room; bare `BUY`
-inside a shop lists nothing while the street outside lists everything; a pending
-NPC question is lost after one intervening command and never re-offered; darts
-refuses `FINISH` at 80; killer pool stops narrating the last opponent; bare `buy
-drink` buys a lady drink while you are flagged thirsty; leftover game verbs
-become ask-topics after a game ends.
-
-**Other.** A2i (the only exit from your own hotel is an unlit soi-dog room, with
-no warning at the door); A10 (reused filler names make the absent-NPC pointer
-name the wrong bar); A21 (the dog pads *inside* Central Mall and waits *outside*
-an open-air market); B20 (`feed dog` invents a grill cart that isn't in the room);
-B26 (Starlight printed its revisit line on first entry — observed once, not
-reproducible, source-checked by the reporter).
+- **A22 — "two different parser-miss messages on consecutive turns"** is
+  `_pickVary` doing its job. Pooled prose is the house rule; the reporter saw
+  variety and read it as inconsistency.
+- **B26 — Starlight's revisit line on first entry** was observed once and the
+  reporter could not reproduce it with `tools/probe.mjs`; neither could I.
+- **B14's rainbow_girls half** — "somewhere behind that door is an office, and in
+  that office is a safe" stays true after you take your wallet out of it. It is
+  scene-setting, not an objective marker.
