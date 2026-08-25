@@ -8,17 +8,22 @@ var NEWS_FEED = [
     "d": "24 Aug 2026"
   },
   {
+    "t": "50,000 baht bill claim at Pattaya bar divides Thai netizens",
+    "s": "Thaiger",
+    "d": "25 Aug 2026"
+  },
+  {
     "t": "Storm Narra may disrupt Pattaya beachgoers with rough seas",
     "s": "Pattaya Mail",
     "d": "24 Aug 2026"
   },
   {
-    "t": "Russian man intervenes after Indian national threatens Pattaya vendor",
+    "t": "Fake motorbike taxi driver robs elderly Norwegian tourist in Pattaya",
     "s": "Thaiger",
-    "d": "24 Aug 2026"
+    "d": "25 Aug 2026"
   },
   {
-    "t": "Pattaya vows to keep beachfront parking in check until major changes are seen",
+    "t": "Coordinated arson and bomb attacks hit 68 sites in southern Thailand",
     "s": "Pattaya Mail",
     "d": "24 Aug 2026"
   },
@@ -28,24 +33,19 @@ var NEWS_FEED = [
     "d": "23 Aug 2026"
   },
   {
+    "t": "Pattaya vows to keep beachfront parking in check until major changes are seen",
+    "s": "Pattaya Mail",
+    "d": "24 Aug 2026"
+  },
+  {
     "t": "Giant python found hiding under concrete at Jomtien condo",
     "s": "Pattaya Mail",
     "d": "24 Aug 2026"
   },
   {
-    "t": "Chonburi warehouse fire damages two buildings, 23 fire trucks mobilized",
-    "s": "Pattaya Mail",
-    "d": "22 Aug 2026"
-  },
-  {
-    "t": "Thai Massage and Wellness Expo generates 75.4 million baht",
-    "s": "Pattaya Mail",
+    "t": "Thai prime minister meets security chiefs after coordinated attacks in 3 southern provinces",
+    "s": "AP News",
     "d": "24 Aug 2026"
-  },
-  {
-    "t": "Dozens of co-ordinated arson attacks hit southern Thailand",
-    "s": "BBC",
-    "d": "23 Aug 2026"
   },
   {
     "t": "The End of Thailand’s Long Stalemate?",
@@ -58,30 +58,30 @@ var NEWS_FEED = [
     "d": "24 Aug 2026"
   },
   {
-    "t": "Dozens of attacks reported across southern Thailand",
-    "s": "NBC News",
-    "d": "24 Aug 2026"
-  },
-  {
-    "t": "Thai Teen’s Viral Guitar Solos Fuel Hopes for Tourism Boost",
-    "s": "Bloomberg",
-    "d": "25 Aug 2026"
+    "t": "Dozens of co-ordinated arson attacks hit southern Thailand",
+    "s": "BBC",
+    "d": "23 Aug 2026"
   },
   {
     "t": "Anthony Hudson insists Thailand 'are not done yet' in ASEAN Championship final",
     "s": "ESPN",
     "d": "23 Aug 2026"
+  },
+  {
+    "t": "Thailand’s population may have already peaked",
+    "s": "Our World in Data",
+    "d": "22 Aug 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-08-24","USD":32.69,"AUD":23.41,"GBP":44.56,"EUR":38.12};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-25","temp":30,"humid":67,"code":3,"hi":32,"rain":55};
+var WX_NOW = {"date":"2026-08-25","temp":32,"humid":59,"code":3,"hi":32,"rain":59};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-08-22","done":true,"h":"Hull","hs":2,"a":"Man United","as":0},{"d":"2026-08-22","done":true,"h":"Everton","hs":2,"a":"C Palace","as":0},{"d":"2026-08-22","done":true,"h":"Ipswich","hs":2,"a":"Sunderland","as":1},{"d":"2026-08-22","done":true,"h":"Nottm Forest","hs":0,"a":"Leeds","as":1},{"d":"2026-08-22","done":true,"h":"Brentford","hs":3,"a":"Spurs","as":0},{"d":"2026-08-23","done":true,"h":"Brighton","hs":4,"a":"Aston Villa","as":0},{"d":"2026-08-23","done":true,"h":"Man City","hs":2,"a":"Bournemouth","as":1},{"d":"2026-08-23","done":true,"h":"Newcastle","hs":2,"a":"Liverpool","as":2},{"d":"2026-08-24","done":true,"h":"Fulham","hs":2,"a":"Chelsea","as":3},{"d":"2026-08-28","done":false,"h":"C Palace","hs":0,"a":"Man City","as":0},{"d":"2026-08-29","done":false,"h":"Liverpool","hs":0,"a":"Nottm Forest","as":0},{"d":"2026-08-29","done":false,"h":"Bournemouth","hs":0,"a":"Everton","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-08-16","first":"004615","last2":"53","front3":["429","731"],"back3":["094","937"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4669,"date":"2026-08-25","baht":72200};
+var GOLD = {"usd":4642,"date":"2026-08-25","baht":71800};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":79672,"thb":2606234};
+var BTC = {"usd":80725,"thb":2644815};
