@@ -46,10 +46,19 @@ test("_dartsVisit: a wrecked aim scatters — misses drag the score down", () =>
   assert.ok(drunk <= clear, "lower aim never scores more on the same roll");
 });
 
-test("_dartsFinish: only checkoutable (<=50) numbers, easier when small", () => {
-  assert.equal(_dartsFinish(120, 1, () => 0.01), false, "too much left");
+test("_dartsFinish: a three-dart visit checks out to 170, and bogeys never go", () => {
+  // Was capped at 50, which is a ONE-dart finish and refused 80 — D20-D20, or
+  // T20-D10 — a standard two-dart out (persona report B#16, 2026-08-23).
+  assert.equal(_dartsFinish(171, 1, () => 0.01), false, "nothing checks out above 170");
+  assert.equal(_dartsFinish(80, 1, () => 0.01), true, "80 is a real checkout");
+  assert.equal(_dartsFinish(170, 1, () => 0.01), true, "…and so is the big fish");
+  assert.equal(_dartsFinish(169, 1, () => 0.01), false, "169 is a bogey number");
+  assert.equal(_dartsFinish(159, 1, () => 0.01), false, "so is 159");
   assert.equal(_dartsFinish(20, 1, () => 0.01), true, "tidy finish lands on a good roll");
   assert.equal(_dartsFinish(20, 1, () => 0.99), false, "…and misses on a bad one");
+  // …and the odds fall away with the number, which is the whole point
+  const odds = n => { let hit = 0; for (let i = 0; i < 400; i++) if (_dartsFinish(n, 1, () => i / 400)) hit++; return hit; };
+  assert.ok(odds(20) > odds(80) && odds(80) > odds(150), "shorter checkouts are likelier");
 });
 
 test("PLAY DARTS only where there's a board", () => {
@@ -77,7 +86,7 @@ test("FINISH is refused while too much is left", () => {
   G.room = Object.keys(ROOMS).find(id => ROOMS[id].darts); G.money = 200;
   run("play darts"); G.game.you = 180;
   out = []; run("finish");
-  assert.match(out.join("\n"), /Too much left to check out/);
+  assert.match(out.join("\n"), /No checkout on 180/);
   assert.ok(G.game, "still playing");
 });
 

@@ -437,6 +437,12 @@ function _doHire(arg) {
       `(฿${G.money} left.)`, "win");
   }
   _addHappy(bonded ? 8 : 5);
+  // The prose says you left the building; the game left you standing in it for a
+  // single turn, with the host still on the roster (persona report A#13,
+  // 2026-08-23). Compare the short-time barfine, which costs ~6 ticks. Same here.
+  G.soc.hostOut = G.soc.hostOut || {};
+  G.soc.hostOut[id] = true;                 // he is off the floor for tonight
+  _passTime(Math.min(6, Math.max(0, NIGHT_TURNS - 1 - G.nightTurn)));
 }
 
 // Bert's girls, closing ranks after you threw in with White Dish. {name} is the

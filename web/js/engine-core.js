@@ -208,6 +208,7 @@ function newGame() {
     convo: null,         // active conversation partner id — bare topics/actions aim here (see _convoActive)
     itNpc: null,         // last person addressed — the antecedent for "her/him/them" (see _resolveActor)
     convoQ: null,        // a question the partner has put to YOU, awaiting a reply: {id,key} (see _convoAsk/_convoAnswer)
+    convoLapsed: {},     // …and questions you walked away from, re-asked next time you talk to them
     convoIdx: null,      // index of the partner's last-delivered node — its `choices` are the live action-choices (see _convoChoices)
     player: { said: {}, lang: "en", origin: null, personality: null, orientation: null },// what you've told NPCs + WHO YOU ARE (lang + origin/personality/orientation, picked in the taxi intro; persists across Act One resets)
     faction: { wdg: 0, samson: 0, indie: 0, syndicate: 0 }, // standing with the powers (see _align) — only moves when you ACT, never for declining
@@ -500,6 +501,9 @@ function _npcActive(id) {
   // a late-window civilian (Cream at her friend's bar from ten): `from` is a nightTurn
   if (n && n.from != null && G.nightTurn < n.from) return false;
   if (n && n.sandbox && !_flag("act1Done")) return false; // not part of the opening quest's street
+  // a host you took off the floor tonight is off the floor (HIRE narrated
+  // leaving the building while leaving him standing there — persona A#13)
+  if (G.soc && G.soc.hostOut && G.soc.hostOut[id]) return false;
   return !(n && n.origin && G.player && n.origin === G.player.origin);
 }
 
@@ -674,10 +678,27 @@ function _convoStart(id) {
     // the question isn't spent — next time that node lands it can be asked again
     const ost = _npcState(G.convoQ.id);
     if (ost && ost.know) delete ost.know["asked_" + G.convoQ.key];
+    // …but clearing `asked_` was NOT enough on its own: the dialogue ENTRY that
+    // carried the ask is already in G.talked, so re-talking gave the brush-off
+    // and the question was never put again — while the whole consistency system
+    // hangs on answering it (persona report B#15, 2026-08-23). Remember it, and
+    // re-ask on the next conversation with that person.
+    (G.convoLapsed = G.convoLapsed || {})[G.convoQ.id] = { key: G.convoQ.key, q: G.convoQ.q || "" };
     G.convoQ = null;
     _say(`(${who}'s question goes unanswered — you've turned to ${_convoName(id)}.)`, "dim");
   }
   G.convo = id; G.itNpc = id;
+  // coming back to somebody whose question you walked away from: they ask again,
+  // once, because a question that can never be re-offered is a dead end
+  const lapsed = G.convoLapsed && G.convoLapsed[id];
+  if (lapsed && !G.convoQ) {
+    delete G.convoLapsed[id];
+    if (lapsed.q) {
+      _say(`${_convoName(id)} comes back to it, because they were actually asking.`, "dim");
+      _say(lapsed.q);
+      G.convoQ = { id, key: lapsed.key, q: lapsed.q };
+    }
+  }
   if (G.known) G.known[id] = true; // talking to someone IS meeting them → you learn the name
 }
 function _convoName(id) {

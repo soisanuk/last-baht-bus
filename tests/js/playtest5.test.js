@@ -1199,3 +1199,71 @@ test("nobody narrates half an hour and then advances the clock by six minutes", 
   assert.doesNotMatch(prose, /best part of half an hour/,
     "prose must not name a duration the turn counter contradicts");
 });
+
+// ── Round 15/16: the interaction cluster ─────────────────────────────────────
+
+test("HIRE takes the host off the floor and costs the evening it narrates", () => {
+  // It said "the moment you're out the door" and left you standing in the club
+  // with him still on the roster, for one turn (persona report A#13, 2026-08-23).
+  newGame(); G.stage = "expat"; _setFlag("act1Done"); _setFlag("expatLife");
+  for (const k of Object.keys(ENCOUNTERS)) G.encDone[k] = true;
+  G.money = 99999; G.room = "adonis_club"; G.nightTurn = 20;
+  assert.ok(_npcsHere().includes("arm"), "he is on the floor first");
+  const t0 = G.nightTurn;
+  out = []; doCommand("hire arm");
+  assert.ok(G.nightTurn - t0 >= 5, "an evening passed (" + (G.nightTurn - t0) + " turns)");
+  assert.ok(!_npcsHere().includes("arm"), "…and he is not still standing there");
+  _endNight("dawn");
+  assert.ok(_npcRoom("arm") === "adonis_club" && !(G.soc.hostOut || {}).arm,
+    "back on the floor tomorrow");
+});
+
+test("bare BUY DRINK asks who it's for instead of spending ฿150 on a guess", () => {
+  // Typed with the thirst nudge live, it bought the first girl on the rail a
+  // lady drink (persona report B#23, 2026-08-23).
+  newGame(); G.stage = "expat"; _setFlag("act1Done");
+  for (const k of Object.keys(ENCOUNTERS)) G.encDone[k] = true;
+  G.money = 9999; G.room = "candy_bar"; G.thirst = 95;
+  const before = G.money;
+  out = []; doCommand("buy drink");
+  assert.equal(G.money, before, "no money moved on an ambiguous ask");
+  assert.match(out.join("\n"), /BUY BEER/, "and both readings are offered");
+  // naming her still works exactly as before
+  const girl = _npcsHere().find(id => NPC_ROLES[id] === "hostess");
+  out = []; doCommand("buy drink for " + NPCS[girl].name);
+  assert.ok(G.money < before, "a named lady drink is still a lady drink");
+});
+
+test("a question you walked away from is put to you again", () => {
+  // Clearing `asked_` wasn't enough: the dialogue ENTRY carrying the ask was
+  // already spent, so re-talking gave the brush-off and the question was never
+  // re-offered — while the whole consistency system hangs on answering it
+  // (persona report B#15, 2026-08-23).
+  newGame(); G.stage = "expat"; _setFlag("act1Done"); _setFlag("expatLife");
+  for (const k of Object.keys(ENCOUNTERS)) G.encDone[k] = true;
+  G.room = "queen_vic";
+  for (let i = 0; i < 8 && !G.convoQ; i++) { out = []; doCommand("talk to angela"); }
+  assert.ok(G.convoQ, "she asked something");
+  const key = G.convoQ.key;
+  out = []; doCommand("ask mort about column");
+  assert.equal(G.convoQ, null, "turning away lapses it");
+  assert.ok(G.convoLapsed && G.convoLapsed.angela, "…and it is remembered");
+  out = []; doCommand("talk to angela");
+  assert.ok(G.convoQ && G.convoQ.key === key, "she comes back to it");
+  assert.match(out.join("\n"), /comes back to it/);
+});
+
+test("darts checks out from a real three-dart range and says when a command didn't land", () => {
+  newGame(); G.money = 500;
+  G.room = Object.keys(ROOMS).find(id => ROOMS[id].darts);
+  doCommand("play darts");
+  G.game.you = 80;
+  out = []; doCommand("finish");
+  assert.doesNotMatch(out.join("\n"), /No checkout on 80/, "80 is D20-D20");
+  // …and a 20% checkout sometimes LANDS, which ends the game — so re-rack before
+  // asserting on the in-game swallow, rather than depending on missing.
+  if (!G.game) doCommand("play darts");
+  out = []; doCommand("examine cat");
+  assert.match(out.join("\n"), /at the oche/, "a swallowed command says why it was swallowed");
+  assert.ok(G.game, "and the game is still on");
+});

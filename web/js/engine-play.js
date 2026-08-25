@@ -1189,9 +1189,16 @@ function _dartsVisit(mode, aim, rnd) {
 
 // A checkout attempt at `remaining` (must be ≤ 50). Pure. True on the exact finish —
 // easier the smaller and tidier the number, and scaled by aim.
+// A visit is THREE darts, so the real checkout range runs to 170 — 80 is D20-D20
+// or T20-D10 and every arrows player in the building knows it. The old cap of 50
+// modelled a ONE-dart finish and refused a standard two-dart out (persona report
+// B#16, 2026-08-23). Above 50 you have to score before you double, so the odds
+// fall away with the number; the classic bogeys stay genuinely impossible.
+const _DARTS_BOGEY = [169, 168, 166, 165, 163, 162, 159];
 function _dartsFinish(remaining, aim, rnd) {
-  if (remaining > 50 || remaining < 2) return false;
-  const base = remaining <= 20 ? 0.6 : remaining <= 40 ? 0.42 : 0.3;
+  if (remaining > 170 || remaining < 2 || _DARTS_BOGEY.includes(remaining)) return false;
+  const base = remaining <= 20 ? 0.6 : remaining <= 40 ? 0.42 : remaining <= 50 ? 0.3 :
+    remaining <= 80 ? 0.2 : remaining <= 110 ? 0.12 : 0.05;
   return rnd() < base * aim;
 }
 
@@ -1243,11 +1250,17 @@ function _dartsInput(input) {
   const mode = /\b(big|treble|ton|max|go)\b/.test(input) ? "big" :
     /\b(steady|safe|single|twenty|20)\b/.test(input) ? "steady" :
     /\b(finish|check|checkout|double|out|close)\b/.test(input) ? "finish" : null;
-  if (!mode) { _dartsStatus(g); _say("(GO BIG · STEADY · FINISH (when low) · QUIT.)", "dim"); return; }
+  if (!mode) {
+    _say("Not while you're at the oche — the arrows have your attention.", "dim");
+    _dartsStatus(g);
+    _say("(GO BIG · STEADY · FINISH · QUIT.)", "dim");
+    return;
+  }
   const aim = _dartsAim();
 
   if (mode === "finish") {
-    if (g.you > 50) { _say(`Too much left to check out (${g.you}) — score first: GO BIG or STEADY.`, "dim"); return; }
+    if (g.you > 170 || _DARTS_BOGEY.includes(g.you)) {
+      _say(`No checkout on ${g.you} — score first: GO BIG or STEADY.`, "dim"); return; }
     if (_dartsFinish(g.you, aim, _rand)) {
       _endGame(true, g.stake * 2, "You call the double, take your time in a suddenly quiet bar, and post it " +
         `dead centre. ${g.stake ? `฿${g.stake * 2} off the shelf, and a nod from the old boy.` : "The bar erupts. Priceless."}`);
@@ -1266,7 +1279,10 @@ function _dartsInput(input) {
     g.you -= score;
     const pre = score >= 100 ? "The bar goes quiet for a beat. " : score === 0 ? "Three darts, nothing — grim. " : "";
     _say(`${pre}${darts.join(", ")} — ${score}. (${g.you} left.)`);
-    if (g.you <= 50) _say("(Finishing range — FINISH to go for the double.)", "dim");
+    if (g.you <= 170 && !_DARTS_BOGEY.includes(g.you)) {
+      _say(g.you <= 50 ? "(Finishing range — FINISH to go for the double.)"
+        : "(Checkout is on from here — FINISH, if you fancy it.)", "dim");
+    }
   }
   _dartsOppTurn(g);
 }
@@ -3324,6 +3340,7 @@ function _endNight(reason) {
   G.soc.lastCall = {}; // last-call warnings reset with the night
   G.soc.mgrShot = {};  // the manager pours a fresh welcome shot each night
   G.soc.dogFavor = {}; // and the beer-bar staff get to fuss over Sai Krok anew
+  G.soc.hostOut = {};  // …and a host you took off the floor is back on it tomorrow
   G.soc.mgrChat = {};  // and forgets last night's bar-leaning (manDrinks goodwill persists)
   G.lastBusWarned = false; // and the last-baht-bus heads-up fires once each night
   G.soc.greeted = {};  // a fresh night — she greets you anew

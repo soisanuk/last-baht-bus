@@ -3805,6 +3805,12 @@ function _doBuy(arg) {
     // and _findNpc missed her (Gaz playtest, 2026-08-17)
     const nameW = arg.replace(/\blady\b|\bdrinks?\b|\bfor\b|\banother\b|\bmore\b|\bagain\b|\bsame\b/g, " ").replace(/\s+/g, " ").trim();
     const girlsHere = _npcsHere().filter(id => NPC_ROLES[id]);
+    if (!nameW && girlsHere.length) {
+      _say(_fmt("A drink for who? Yours is a BEER (\u0e3f{b}); hers is \u0e3f{l} and goes on " +
+        "her tally. (BUY BEER \u00b7 BUY WATER \u00b7 BUY DRINK FOR {who})",
+        { b: BEER_PRICE, l: LADY_DRINK, who: _npcLabel(girlsHere[0]) }), "dim");
+      return;
+    }
     const id = nameW ? _findNpc(nameW) : girlsHere[0];
     if (!id || !NPC_ROLES[id]) {
       // A resolvable MALE / manager / patron isn't "she" — point at the right verb
