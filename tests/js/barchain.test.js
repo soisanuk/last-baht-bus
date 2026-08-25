@@ -231,6 +231,35 @@ test("the owner who opens up early and stays put still gets his partner's visit"
   assert.equal(G.pendingChoice, "tanfavour", "and it found him at his own bar");
 });
 
+test("an honest working owner — WORK, then stand the rail — meets his shift call AND his procurement job", () => {
+  // Cost-accountant playtest 2026-08-26 reported "40+ owned nights, zero
+  // procurement jobs" and concluded the partnerTan endgame was invisible. It was
+  // a MEASUREMENT artifact: her P&L-optimal play declared WORK and left for home
+  // to save the wage, which the presence tick (_workPresenceTick) LAPSES — so the
+  // "worked" nets she measured came from setting flags directly, never actually
+  // standing at the bar at nightTurn>=30 where both beats are due. The honest
+  // path — declare the shift and stay in it — meets both, because standing the
+  // rail IS being at the bar past 21:00. This pins that so no future shortcut
+  // measurement can misread a working feature as a dead one.
+  becomeExpat();
+  for (const f of ["barPremises", "barLicence", "barPartner", "barPaid", "partnerTan", "barOpen", "tanAsked"]) _setFlag(f);
+  G.room = "stinky_bar";
+  G.money = 20000;
+  G.syn = { done: {}, asked: {}, friction: 0, lastAskDay: null };
+  say("work");
+  assert.equal(G.bar.workedDay, G.day, "the shift is declared");
+  let shiftSeen = false, synSeen = false, guard = 0;
+  while (G.nightTurn < 58 && guard++ < 90) {
+    if (G.pendingChoice === "shift") { shiftSeen = true; say("no"); }
+    else if (G.pendingChoice === "synjob") { synSeen = true; say("no"); }
+    else { say("wait 1"); }                   // stand still — never leave the rail
+  }
+  assert.equal(G.room, "stinky_bar", "he never left his own floor");
+  assert.ok(G.bar.workedLast, "the shift never lapsed — he stood it");
+  assert.ok(shiftSeen, "a publican's decision reached him while he worked");
+  assert.ok(synSeen, "and so did the procurement beat — the endgame is not invisible to a working owner");
+});
+
 test("Tan comes to the bar and asks — but only if he's the one who signed", () => {
   const tan = ownsBarWith("partnerTan");
   assert.match(tan, /Tan comes into your bar/, "the partnerTan route comes due");

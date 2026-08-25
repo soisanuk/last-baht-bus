@@ -678,3 +678,55 @@ first runs (2026-08-22) found the systems young and rougher — the drop in
 severity IS the signal that the mapped systems matured. The dog in particular
 went from "new system, several findings" to "near-clean, three absences in newer
 content that hadn't existed yet."
+
+---
+
+# Round 26 — the cost accountant (Opus, bar-owner economy, 2026-08-26)
+
+**Deirdre**, forensic cost accountant, 34 owned nights measured, thesis-shaped
+Opus brief: *"Owning the bar is a trap dressed as a choice — to stay solvent you
+must work almost every night, so the soi is locked away from any owner who keeps
+his bar. There is no viable middle."* Method: cheat only to reach ownership,
+then every baht comes from the bar; controlled blocks under fixed policies,
+reading `serializeGame()` for exact figures. **The strongest kind of economy
+round — it audits my own tuning, not the feel.**
+
+## Verdict: thesis PARTIALLY DISPROVEN — the treadmill is seasonal, not structural
+
+Normal season breaks even at **~10–12 worked nights in 30** (away night ≈ −฿0);
+alternating (15/30) clears **+฿21k/month with half your nights free**. Low season
+(×0.55, one month in four) inverts it — break-even **~28/30**, alternating swings
+to **−฿37k**. So the design is eight relaxed months funding one white-knuckle one,
+and the books reconciled to the penny with no P&L errors. Working does NOT lock
+away สนุก (she hit 96/สบายสบาย purely from working — floor + shift-calls feed
+non-jading happy). The failure state is real and reachable (two missed rent
+months → bar lost), neutrality is genuinely coercion-free (refusing moved
+standing by exactly zero).
+
+## Fixed
+
+| # | Finding | Root cause | Fix |
+|---|---|---|---|
+| F1 (moderate → **refuted**) | "40+ owned nights, zero procurement jobs" | MEASUREMENT ARTIFACT: her P&L-optimal play declared WORK and left for home, which `_workPresenceTick` LAPSES — so her "worked" nets came from setting flags directly, never actually standing at the bar at nightTurn≥30 where the beat is due. An honest working owner IS there. | New barchain integration test runs the real WORK→stand-the-rail→tick loop and asserts BOTH the shift call and the synjob arrive. Pins the working feature so no future shortcut misreads it. |
+| F2/F3 (doc accuracy) | CLAUDE.md claimed "away ≈ −฿400, break-even 16, every other night on a knife edge" | Stale base-model numbers that ignored the `eventCash` right tail and the seasonal split; the knife-edge is a LOW-season phenomenon, not year-round | Rewrote the "Measured" sentence to Deirdre's live seasonal figures |
+
+## Recorded, not a bug
+
+- **F4 (note ladder mostly ornamental)**: rent's 2-month fuse ends the bar before
+  the 25k/50k/75k note ladder can climb — but "protect the lease, let the note
+  slide" is the *rewarded* instinct by design, and the ladder is still reachable
+  by the pay-rent-skip-note play. Working as intended.
+- **F5 (floor bond gated on staying)**: intended tension — the relationship payoff
+  of working requires presence, which is the whole point of the dilemma.
+
+**Method note: an economy audit is the one round that checks the AUTHOR'S numbers.**
+Every prose/voice persona measures whether the game says true things; Deirdre
+measured whether *I* did. My documented break-even (16/30) and away penalty (−฿400)
+were both wrong against the live economy — not a code bug, a stale doc that
+overstated the dilemma's year-round bite and hid the seasonal shape that is
+actually the design's best idea. The refutation (F1) is also instructive: a
+careful auditor reached ownership by flags and measured worked takings by a
+shortcut that bypassed the presence tick, which made a working feature read as
+dead — the mirror image of the round-13 bug where a hand-built sequence passed
+without the real path. Reaching the subsystem through its real entry point cuts
+both ways.
