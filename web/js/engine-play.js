@@ -1213,7 +1213,15 @@ function _dartsWobble() {
 }
 
 function _startDarts() {
-  if (!_room().darts) { _say("No dartboard here. The Office, the Cricketers, the sports bars — they keep one on the wall."); return; }
+  if (!_room().darts) {
+    const boards = Object.keys(ROOMS)
+      .filter(id => ROOMS[id].darts && G.visited && G.visited[id])
+      .map(id => _barName(id)).filter(Boolean);
+    _say("No dartboard here. " + (boards.length
+      ? boards.join(", ") + " — they keep one on the wall."
+      : "The sports bars and the British pubs keep one on the wall; you haven't been in one yet."));
+    return;
+  }
   // darts opponents are drinkers, not bar girls — only put a hostess on the oche
   // if one is actually working this room (never the "hostess on shift" fallback,
   // which would conjure one in a pub like the Queen Vic).

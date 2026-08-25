@@ -2967,8 +2967,17 @@ function _convoPickChoice(bare, exactOnly) {
 
 // Last-resort interpretation of an otherwise-unrecognized line. Returns true if
 // the conversation layer consumed it (the caller then ticks, like any real turn).
+const _GAME_MOVE_WORDS = new Set([
+  "finish", "steady", "go big", "big", "flip", "drop", "shot", "power", "safety",
+  "quit", "concede", "hold", "roll",
+]);
+
 function _convoResolve(lower) {
   const bare = lower.replace(/[,.!?]+$/, "").trim();
+  if (_GAME_MOVE_WORDS.has(bare) && !G.game) {
+    _say("That was a move in a game that's over. (PLAY, if you want another.)", "dim");
+    return true;
+  }
   // 0a) An explicit action-choice the partner just offered wins over everything —
   //     if the line matches one, it IS the player's move (a chip tap or typed).
   //     Only consumes the line on a real match, so free-text answers still fall
@@ -6749,6 +6758,15 @@ function doCommand(input) {
   }
 
   // pending fare gates everything except paying, looking, help
+  if (G.pendingFare && (v === "look" || v === "l") && !arg) {
+    const _to = ROOMS[G.pendingFare.dest];
+    _say(_fmt("You are on the kerb at {where}, and the {who} is still leaning out of " +
+      "the window waiting to be paid. Nothing about the evening continues until that " +
+      "does.", { where: (_to && _to.name) || "your stop",
+        who: G.pendingFare.kind === "bus" ? "driver" : "piwin" }));
+    _farePrompt();
+    return;
+  }
   if (G.pendingFare && !["pay", "look", "l", "help", "i", "inventory", "say"].includes(v)) {
     _farePrompt();
     return;

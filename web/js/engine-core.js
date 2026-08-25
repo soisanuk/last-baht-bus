@@ -1313,6 +1313,21 @@ const _BAR_REGULAR_BUSY = [
   g => _fmt("At the far end a regular reigns{g} — the sort of scene you watch from across the bar, not one you walk into.", { g }),
 ];
 
+// Where the dog actually settles. Keyed on what the room IS rather than on
+// whether it happens to carry a `bar` display name, which put him at your heel
+// inside an air-conditioned mall with security guards who wai, and folded him up
+// "outside the door" of an open-air market that has no door and is, of all the
+// places in this town, the one most full of dogs (persona report A#21,
+// 2026-08-23).
+function _dogSpot(r) {
+  if (r.barType === "beer") return "under";                 // open front, no door to stop him
+  if (/market|bazaar/i.test(r.name || "")) return "heel";   // tarpaulins and scraps: his country
+  if (/\bmall\b|central festival/i.test(r.name || "")) return "outside";  // glass, aircon, guards
+  if (r.bar || r.barType || r.massage || r.soapy || r.hostBar) return "outside";
+  if (_isHotelRoom(G.room) || r.shop || r.food) return "mat";
+  return "heel";
+}
+
 function _describeRoom(full, forceFull) {
   const r = _room();
   const firstTime = !G.visited[G.room]; // full desc on first arrival + LOOK; brief ambient on revisit
@@ -1417,20 +1432,25 @@ function _describeRoom(full, forceFull) {
   if (G.dog && G.dogRoomSeen === G.room) {
     // already announced here — a LOOK doesn't walk him in again (playtest 2026-08-22);
     // he's simply where he is
-    if (r.barType === "beer") _say(_dogN("(Sai Krok is under your stool, one ear up.)"), "dim");
-    else if (r.bar || r.barType || r.massage || r.soapy || r.hostBar) _say(_dogN("(Sai Krok, outside the door, chin on paws.)"), "dim");
-    else if (_isHotelRoom(G.room) || r.shop || r.food) _say(_dogN("(Sai Krok is on the mat by the door.)"), "dim");
+    const _spot = _dogSpot(r);
+    if (_spot === "under") _say(_dogN("(Sai Krok is under your stool, one ear up.)"), "dim");
+    else if (_spot === "outside") _say(_dogN("(Sai Krok, outside the door, chin on paws.)"), "dim");
+    else if (_spot === "mat") _say(_dogN("(Sai Krok is on the mat by the door.)"), "dim");
     else _say(_dogN("Sai Krok pads at your heel, nose reading the street."), "dim");
   } else if (G.dog) {
     G.dogRoomSeen = G.room;
-    if (r.barType === "beer") {
+    const _spot = _dogSpot(r);
+    if (_spot === "under") {
       _say(_dogN("(Sai Krok trots in under the rail — no door to stop him — and folds up " +
         "beneath your stool.)"), "dim");
       _dogBarFavor();
-    } else if (r.bar || r.barType || r.massage || r.soapy || r.hostBar) {
+    } else if (_spot === "outside") {
       _say(_dogN("(Sai Krok folds up outside the door, chin on paws, one ear on the room.)"), "dim");
-    } else if (_isHotelRoom(G.room) || r.shop || r.food) {
+    } else if (_spot === "mat") {
       _say(_dogN("(Sai Krok turns three circles on the mat inside the door and drops, chin on paws.)"), "dim");
+    } else if (/market|bazaar/i.test(r.name || "")) {
+      _say(_dogN("(Sai Krok is three stalls ahead before you have finished arriving. This is " +
+        "his industry, and he has contacts in it.)"), "dim");
     } else {
       _say(_dogN("Sai Krok pads at your heel, nose reading the street."), "dim");
     }

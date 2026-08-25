@@ -5403,9 +5403,10 @@ function _doFeedDog(arg) {
       "you about — looks at you. Properly. Files something away.", "win");
   } else {
     G.money -= 20;
-    _say(`${approach}. ฿20 at a grill cart buys a chicken skewer; he takes it with shocking ` +
-      "gentleness, eats it in one movement, and then — this is the part nobody warns you " +
-      `about — looks at you. Properly. Files something away. (฿${G.money} left.)`, "win");
+    _say(`${approach}. There is always somebody grilling something within twenty ` +
+      "metres in this town, and ฿20 is a chicken skewer wherever it is. He takes it " +
+      "with shocking gentleness, eats it in one movement, and then — this is the part " +
+      `nobody warns you about — looks at you. Properly. Files something away. (฿${G.money} left.)`, "win");
   }
   G.dog = { since: G.day };
   _setFlag("hasDog"); // quest gate — see QUESTS reqFlags

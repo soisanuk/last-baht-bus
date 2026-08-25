@@ -1267,3 +1267,60 @@ test("darts checks out from a real three-dart range and says when a command didn
   assert.match(out.join("\n"), /at the oche/, "a swallowed command says why it was swallowed");
   assert.ok(G.game, "and the game is still on");
 });
+
+test("the dog settles where the room actually is, not where its flags suggest", () => {
+  // He padded at your heel INSIDE an air-conditioned mall with security guards
+  // who wai, and folded up "outside the door" of an open-air market that has no
+  // door (persona report A#21, 2026-08-23).
+  newGame(); _setFlag("act1Done"); G.dog = { since: 2 };
+  const spot = room => { G.room = room; G.dogRoomSeen = null; out = []; doCommand("look"); return out.join("\n"); };
+  assert.match(spot("central_mall"), /outside the door/, "a mall is not a street");
+  assert.doesNotMatch(spot("soi_rompho"), /outside the door/, "a market has no door");
+  assert.match(spot("candy_bar"), /under the rail|beneath your stool/, "a beer bar still lets him in");
+  assert.match(spot("hyper"), /outside the door/, "a go-go still doesn't");
+});
+
+test("feeding the dog doesn't invent a grill cart that isn't in the room", () => {
+  newGame(); _setFlag("act1Done"); G.money = 500; G.dog = null;
+  for (const id of ["noodles", "moo_ping"]) if (G.itemLoc[id] !== undefined) G.itemLoc[id] = null;
+  G.room = "naklua_rd"; out = []; doCommand("feed dog");
+  assert.doesNotMatch(out.join("\n"), /at a grill cart/, "the room has no cart in it");
+  assert.ok(G.dog, "and he is yours either way");
+});
+
+test("LOOK while a fare is pending says where you are, not where you boarded", () => {
+  newGame(); _setFlag("act1Done"); G.stage = "vacation";
+  for (const k of Object.keys(ENCOUNTERS)) G.encDone[k] = true;
+  G.money = 500; G.room = "beach_rd_c"; G.nightTurn = 10; G.rain = 0;
+  doCommand("ride bus to naklua road");
+  assert.ok(G.pendingFare, "the driver wants paying");
+  out = []; doCommand("look");
+  assert.match(out.join("\n"), /Naklua Road/, "the prose already said you hopped off");
+  assert.doesNotMatch(out.join("\n"), /Mid-Beach-Road/, "…so don't re-print the stop you left");
+});
+
+test("the no-dartboard line names boards that exist, and only ones you've found", () => {
+  newGame(); G.room = "arrow_bar"; G.visited = {};
+  out = []; doCommand("play darts");
+  assert.doesNotMatch(out.join("\n"), /The Office, the Cricketers/, "no hand-written list");
+  for (const id of Object.keys(ROOMS)) if (ROOMS[id].darts) G.visited[id] = true;
+  out = []; doCommand("play darts");
+  const said = out.join("\n");
+  for (const id of Object.keys(ROOMS)) {
+    if (ROOMS[id].darts) assert.ok(said.includes(_barName(id)), _barName(id) + " has a board and is named");
+  }
+});
+
+test("a game move typed after the game is over isn't offered as a topic", () => {
+  newGame(); G.stage = "expat"; _setFlag("act1Done");
+  for (const k of Object.keys(ENCOUNTERS)) G.encDone[k] = true;
+  G.room = "queen_vic"; doCommand("talk to mort");
+  for (const word of ["finish", "steady"]) {
+    out = []; doCommand(word);
+    assert.match(out.join("\n"), /a game that's over/, word);
+    assert.doesNotMatch(out.join("\n"), /Not my story|Search me|Couldn't tell you/, word);
+  }
+  // …and a real topic still reaches the partner
+  out = []; doCommand("column");
+  assert.doesNotMatch(out.join("\n"), /a game that's over/);
+});
