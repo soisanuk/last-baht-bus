@@ -8,8 +8,18 @@ var NEWS_FEED = [
     "d": "24 Aug 2026"
   },
   {
+    "t": "Storm Narra may disrupt Pattaya beachgoers with rough seas",
+    "s": "Pattaya Mail",
+    "d": "24 Aug 2026"
+  },
+  {
     "t": "Russian man intervenes after Indian national threatens Pattaya vendor",
     "s": "Thaiger",
+    "d": "24 Aug 2026"
+  },
+  {
+    "t": "Pattaya vows to keep beachfront parking in check until major changes are seen",
+    "s": "Pattaya Mail",
     "d": "24 Aug 2026"
   },
   {
@@ -18,43 +28,18 @@ var NEWS_FEED = [
     "d": "23 Aug 2026"
   },
   {
-    "t": "Raids in Pattaya on Friday led by two ministers targeting Israeli business networks and legal advisors",
-    "s": "Thai Examiner",
-    "d": "21 Aug 2026"
-  },
-  {
-    "t": "Weekend fun returns to Naklua’s charming old streets",
+    "t": "Giant python found hiding under concrete at Jomtien condo",
     "s": "Pattaya Mail",
-    "d": "23 Aug 2026"
-  },
-  {
-    "t": "From operating rooms to massage parlors Thailand seeks tourism with purpose",
-    "s": "Pattaya Mail",
-    "d": "23 Aug 2026"
-  },
-  {
-    "t": "Pattaya police honoured for solving Australian murder case",
-    "s": "Thaiger",
-    "d": "23 Aug 2026"
-  },
-  {
-    "t": "Defense chief leads flood recovery efforts and relief distribution in Nan",
-    "s": "Pattaya Mail",
-    "d": "23 Aug 2026"
-  },
-  {
-    "t": "The End of Thailand’s Long Stalemate?",
-    "s": "Foreign Affairs",
     "d": "24 Aug 2026"
   },
   {
-    "t": "Thai prime minister meets security chiefs after coordinated attacks in 3 southern provinces",
-    "s": "AP News",
-    "d": "24 Aug 2026"
+    "t": "Chonburi warehouse fire damages two buildings, 23 fire trucks mobilized",
+    "s": "Pattaya Mail",
+    "d": "22 Aug 2026"
   },
   {
-    "t": "USS Abraham Lincoln headed for port in Thailand after 250 days at sea",
-    "s": "USA Today",
+    "t": "Thai Massage and Wellness Expo generates 75.4 million baht",
+    "s": "Pattaya Mail",
     "d": "24 Aug 2026"
   },
   {
@@ -63,25 +48,40 @@ var NEWS_FEED = [
     "d": "23 Aug 2026"
   },
   {
-    "t": "'Wanted' Swedish suspect arrested in Bangkok, and his friend",
-    "s": "Bangkok Post",
+    "t": "The End of Thailand’s Long Stalemate?",
+    "s": "Foreign Affairs",
     "d": "24 Aug 2026"
   },
   {
-    "t": "Clear your diary: Thailand Coffee Fest is back",
-    "s": "Time Out Worldwide",
+    "t": "USS Abraham Lincoln headed for port in Thailand after 250 days at sea",
+    "s": "USA Today",
     "d": "24 Aug 2026"
+  },
+  {
+    "t": "Dozens of attacks reported across southern Thailand",
+    "s": "NBC News",
+    "d": "24 Aug 2026"
+  },
+  {
+    "t": "Thai Teen’s Viral Guitar Solos Fuel Hopes for Tourism Boost",
+    "s": "Bloomberg",
+    "d": "25 Aug 2026"
+  },
+  {
+    "t": "Anthony Hudson insists Thailand 'are not done yet' in ASEAN Championship final",
+    "s": "ESPN",
+    "d": "23 Aug 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-08-24","USD":32.69,"AUD":23.41,"GBP":44.56,"EUR":38.12};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-25","temp":28,"humid":81,"code":3,"hi":31,"rain":41};
+var WX_NOW = {"date":"2026-08-25","temp":30,"humid":67,"code":3,"hi":32,"rain":55};
 // the bar TV's one true channel
-var FOOTY = {"league":"Premier League","games":[{"d":"2026-08-21","done":true,"h":"Arsenal","hs":3,"a":"Coventry","as":0},{"d":"2026-08-22","done":true,"h":"Hull","hs":2,"a":"Man United","as":0},{"d":"2026-08-22","done":true,"h":"Everton","hs":2,"a":"C Palace","as":0},{"d":"2026-08-22","done":true,"h":"Ipswich","hs":2,"a":"Sunderland","as":1},{"d":"2026-08-22","done":true,"h":"Nottm Forest","hs":0,"a":"Leeds","as":1},{"d":"2026-08-22","done":true,"h":"Brentford","hs":3,"a":"Spurs","as":0},{"d":"2026-08-23","done":true,"h":"Brighton","hs":4,"a":"Aston Villa","as":0},{"d":"2026-08-23","done":true,"h":"Man City","hs":2,"a":"Bournemouth","as":1},{"d":"2026-08-23","done":true,"h":"Newcastle","hs":2,"a":"Liverpool","as":2},{"d":"2026-08-24","done":false,"h":"Fulham","hs":0,"a":"Chelsea","as":0},{"d":"2026-08-28","done":false,"h":"C Palace","hs":0,"a":"Man City","as":0}]};
+var FOOTY = {"league":"Premier League","games":[{"d":"2026-08-22","done":true,"h":"Hull","hs":2,"a":"Man United","as":0},{"d":"2026-08-22","done":true,"h":"Everton","hs":2,"a":"C Palace","as":0},{"d":"2026-08-22","done":true,"h":"Ipswich","hs":2,"a":"Sunderland","as":1},{"d":"2026-08-22","done":true,"h":"Nottm Forest","hs":0,"a":"Leeds","as":1},{"d":"2026-08-22","done":true,"h":"Brentford","hs":3,"a":"Spurs","as":0},{"d":"2026-08-23","done":true,"h":"Brighton","hs":4,"a":"Aston Villa","as":0},{"d":"2026-08-23","done":true,"h":"Man City","hs":2,"a":"Bournemouth","as":1},{"d":"2026-08-23","done":true,"h":"Newcastle","hs":2,"a":"Liverpool","as":2},{"d":"2026-08-24","done":true,"h":"Fulham","hs":2,"a":"Chelsea","as":3},{"d":"2026-08-28","done":false,"h":"C Palace","hs":0,"a":"Man City","as":0},{"d":"2026-08-29","done":false,"h":"Liverpool","hs":0,"a":"Nottm Forest","as":0},{"d":"2026-08-29","done":false,"h":"Bournemouth","hs":0,"a":"Everton","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-08-16","first":"004615","last2":"53","front3":["429","731"],"back3":["094","937"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4676,"date":"2026-08-24","baht":72250};
+var GOLD = {"usd":4669,"date":"2026-08-25","baht":72200};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":78887,"thb":2580888};
+var BTC = {"usd":79672,"thb":2606234};
