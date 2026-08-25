@@ -629,3 +629,52 @@ the Cream arc "respects the hope by never once breaking the performance, and
 hands the knife only to the reader", Neil "prices hope, not sells it", and the
 Owl-as-chorus reads the romantic's fantasy back to him correctly. The game
 largely knows a romantic from a monger.
+
+---
+
+# Rounds 24 & 25 — Graham & Bex, rerun (Fable, full game, 2026-08-26)
+
+The two personas from the FOUNDING batch (2026-08-22), re-run against a build
+changed enormously since — a re-measurement of how much the systems they map
+have hardened. Both: the mapped system holds remarkably well.
+
+## Fixed — Graham the Settler (chases connections)
+
+The web "largely holds, impressively so"; the Drew↔Angela double-portrait agrees
+from both sides (direction, backstory, live whereabouts) — "the strongest
+evidence the graph is one world." Findings were one class: **a templated line
+filling in a fact it doesn't know.**
+
+| # | Finding | Fix |
+|---|---|---|
+| Sett #1 (MED) | Tan's person-template called Candy & Oy (mamasans/owners) "she works the rail there" | role-accurate: mamasan runs the floor, cashier keeps the till, manager runs it for the owner |
+| Sett #2 (MED-LO) | Mort, the town's observer, dead-ended on every person-ask | a Mort person-handler in `_patronTalk` — he knows them, doesn't gossip across a bar, points at the COLUMN |
+| Sett #3 (LOW) | Fast Eddy owns the White Rabbit but `manager:true` → buy-man-drink called the owner a manager | his (dry) branch says "the man whose name is over the door" |
+| Sett #4 (LOW) | `ask candy about orchid` missed (node keyed `rose`) | `orchid`→rose synonym; `orchid room` still →Doyle's `table` (first-match) |
+
+## Fixed — Bex the vet nurse (the dog)
+
+"The most coherent, best-written system I touched" — rough-wake protection
+money-verified, the Shamrock scene "the best thing in the whole game," zero bugs
+of consequence. Three small absences, all in content shipped AFTER the dog's
+systems were written:
+
+| # | Finding | Fix |
+|---|---|---|
+| Dog F1 (LOW) | The dark-room warning threatened soi dogs at the man who has one | dog-aware: "soi-dog problems are Sai Krok's department" |
+| Dog F2 (LOW) | The dog's whole rain repertoire was double-gated behind a storm bake — an ordinary week never showed it | a lighter `_DOG_DRIZZLE` beat in `_sayDrizzle` |
+| Dog F4 (LOW) | The small-hours kerb wait never mentioned him standing it | he sits the kerb beside you now |
+
+## Recorded, not a bug
+
+- **Dog F3 (charger)**: works via `CHARGE PHONE` at any outlet/7-Eleven, and the
+  "No outlet here" pointer is clear — a discoverability observation, not a defect.
+- **Graham's long tail** (eddy/eddy, drew/bert, mort/owl): the known un-linted
+  volunteered-subject class.
+
+**Method note: rerunning a FOUNDING persona is a hardening measurement.** Graham
+and Bex each found ONE real class-defect and a handful of LOW polish where their
+first runs (2026-08-22) found the systems young and rougher — the drop in
+severity IS the signal that the mapped systems matured. The dog in particular
+went from "new system, several findings" to "near-clean, three absences in newer
+content that hadn't existed yet."
