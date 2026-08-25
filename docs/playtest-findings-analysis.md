@@ -578,3 +578,54 @@ observe via raw, classify REAL vs OWN-BOX vs DEFENDED" scoping is what made a
 security persona produce signal instead of noise — an unscoped "root the box"
 brief on a client-side game reports the player cheating their own browser as if
 it were a breach.**
+
+---
+
+# Rounds 22 & 23 — the publican & the romantic (Fable, full game, 2026-08-26)
+
+Two Fable personas at the two least-walked bodies of content. **Gordon** (ran
+real bars thirty years; creed: the staff ARE the business) lived the expat
+bar-owning stage for a dozen-plus nights — the floor moments, the shift calls,
+the P&L. **Douglas** (lonely-hearts romantic, certain the real one is outside
+the bars) chased the civilian arcs. Both: the register HOLDS — floor moments
+read as competence not courtship, the Cream chameleon turn is "the best-designed
+trap I've walked into in a text game" — findings clustered at the seams.
+
+## Fixed
+
+| # | Finding | Fix |
+|---|---|---|
+| Gordon SEVERE | The 51% partnership fork resolved on the FIRST ask, no confirm — Candy gated behind the licence said "not yet" and funnelled the diligent player into partnering Tan by accident | ASK now PITCHES (the node arms `pendingChoice="partner"`); a separate YES commits via `_partnerYes`, wired five ways — hear both, choose on purpose |
+| Gordon HIGH | The shift-call prompt read `(YES · NO — have a word yourself)` — the YES action after NO, so answering NO fired the YES outcome | `(YES — {label} · NO)`, matching the chip |
+| Gordon MED | A girl let go on the `early` call stayed on the floor passing mango | `G.soc.leftEarly`, read by `_barStaff`/`_npcActive` — off the rail for the night |
+| Gordon MED | Floor moments retold — the good-ice trust beat on night 2 AND night 11 | `G.bar.floorSaid[id]` tracks each girl's lines; reveals progress in order, no repeat until the pool is dry |
+| Douglas MED-HI | The Owl still preached the depot bus-curfew the 2026-08-25 rework removed | the columnist caught up: the curfew is on you |
+| Douglas HIGH | WATCH SUNSET (an advertised room verb) bought a ฿300 fake Rolex — and a fake RayBans — with a peddler armed | the peddler short-circuits a spectacle target before any purchase branch eats the word |
+| Douglas HIGH | SCORE listed a vignette quest as active ▶ while QUESTS (which hides vignettes) said "nothing on the books" | SCORE filters vignettes too — all three surfaces agree now |
+| both | The quiz chalkboard named a bar twice ("X and X") — two exit keys, one bar | dedup the exits before naming |
+| Douglas MED | Cream re-introduced herself, by name and alibi, to the man she went home with | a `chamDone`-gated post-arc greeting: the performance is over and you both know it |
+| both | Volunteered-subject misses (Daeng's dancer, Kwang's son, Cream's coffee) | Daeng dancer node + Duangjai family node + son→family / coffee-shop→job / dancer synonyms + Doyle recon-recovery synonyms |
+
+## Recorded, not fixed (design / long tail)
+
+- **Bar-chain quests act as receipts** (instant-complete on ASK), so opening night
+  narrates weeks in one sitting — the `doneFlag` design; a pacing question, not a bug.
+- **Owner treated as a punter** at his own bar (barfine on own staff, jilt chill) —
+  partly realism, partly a missing owner-aware surface.
+- **Month-end pocket hit lands in the next night's P&L** (off-by-one on the prose
+  ledger; the books themselves reconcile).
+- **Blackbook excludes civilians** (deliberate "punter's book of GIRLS" stance) —
+  the empty-state copy mis-describes the rule.
+- **Priew's hospital arc froze on one canned reply**; the volunteered-subject long
+  tail (Boonsri/photo, Near/cream, Cream/sisaket) — the known un-linted class.
+
+## What both confirmed held
+
+Gordon: "My staff read as staff, not as courtship" — the competence prose (Manow
+watching your hands on the optic and deciding they're wrong; Cake fixing the
+change before the customer notices) held across ten shifts, the shift calls "feel
+like MY decisions, not dice", and every number in the BOOKS reconciled. Douglas:
+the Cream arc "respects the hope by never once breaking the performance, and
+hands the knife only to the reader", Neil "prices hope, not sells it", and the
+Owl-as-chorus reads the romantic's fantasy back to him correctly. The game
+largely knows a romantic from a monger.
