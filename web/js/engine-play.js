@@ -233,10 +233,11 @@ function _lastBusWarn() {
   if (G.room === _hotelRoomId()) return; // already home — no race left to run
   G.lastBusWarned = true;
   const mins = Math.max(5, (LAST_BUS_TURN - G.nightTurn) * 6);
-  _say(_fmt("Somewhere a songthaew driver checks his watch and turns the truck toward the " +
-    "depot. The last baht bus makes its final run at two — call it {mins} off. " +
-    "Get to a main road for the ฿{fare} ride home, or the small hours belong to the piwins " +
-    "and their prices. This is the hour the whole night has been counting down to.",
+  _say(_fmt("Somewhere out there the songthaew loops are thinning — the last baht bus of " +
+    "the easy hour is making its rounds, and after two the ฿{fare} ride home becomes a " +
+    "wait at a kerb that keeps whoever stands on it. Call it {mins}. Get to a main road " +
+    "while they're still frequent, or spend the small hours in whatever state you're in, " +
+    "in public, waiting. This is the hour the night starts counting you instead.",
     { fare: BUS_FARE, mins: mins >= 25 ? _L("half an hour") : _fmt(_L("{n} minutes"), { n: mins }) }), "alert");
 }
 
@@ -3042,8 +3043,10 @@ const _DEBRIEF = {
       " of what you are carrying" +
       (G.dog ? " — unless a soi dog happens to be sitting on it." : "."),
     next: "SLEEP in your own room ends the night on your terms and keeps it. " +
-      "The last baht bus goes at 02:00 (TIME says); after that it is a motosai " +
-      "at a premium or a long dark walk.",
+      "The buses run all night but go sparse after two (TIME says) — flag one " +
+      "and wait the kerb out, pay the piwin's night rate while he'll still have " +
+      "you, or walk. The real cutoff is you: too drunk and the bikes refuse a " +
+      "falling-off risk; too far gone and the night ends where you stand.",
   }),
 };
 _DEBRIEF.bfscam2 = _DEBRIEF.bfscam;

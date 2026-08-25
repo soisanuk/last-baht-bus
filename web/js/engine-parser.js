@@ -4216,6 +4216,30 @@ function _rideLoop() {
   _say(`(${thaiNumRoman(BUS_FARE)} … the ride's over, the fare isn't. PAY <amount>.)`, "dim");
 }
 
+// The small-hours kerb: the buses still run, sparse — the wait is the mechanic
+const _BUS_SMALL_HOURS = [
+  "You put an arm out over an empty road. Nothing. The town at this hour runs on a different clock — the songthaews still circle, but sparse, on the long loop, and the kerb is yours until one of them remembers this street exists.",
+  "The road gives you back your own arm. Somewhere out there a songthaew is doing the small-hours loop with three sleeping passengers and no hurry at all; all you can do is stand where it will pass, and wait, and be whatever you are at this hour in public.",
+  "Arm out. Minutes. A motorbike, a dog, a man carrying ice for no reason you will ever learn. The buses run all night — everyone knows it — but between two and dawn they run on rumour, and the kerb collects whoever is waiting on one.",
+  "Nothing comes. Then more nothing. The night bus exists the way luck exists — genuinely, but not on demand — and the street settles in to keep you company while you find out which kind of night this is.",
+];
+const _BUS_SMALL_HOURS_COMES = [
+  "Headlights, finally — the real ones, high and slow, a blue songthaew with its cab light on and one man asleep against the tailgate. It swings in like it was always coming. It was. That was never the question.",
+  "And then it simply arrives, the way they always do when you have stopped believing in it: a blue truck, half-lit, patient, the driver's cigarette a small red planet in the cab. He'll drop you.",
+  "A songthaew comes out of the dark end of the road at walking pace, in no hurry because nothing at this hour is. The bench is empty and cold and it is the most beautiful furniture in Thailand.",
+];
+// …and past a certain state, the bikes won't have you — but the bench will.
+const _MOTO_DRUNK_NO = [
+  "The piwin looks at you the way a man looks at cargo. A slow head-shake. \u201cYou fall off, boss \u2014 my problem, my bike, my licence.\u201d He nods up the road, not unkindly. \u201cBus take you. Bus take anybody.\u201d",
+  "You get one boot toward the bike and the piwin puts a flat hand up, friendly and final. \u201cNo, boss. Tonight you are luggage.\u201d He points at the road with his chin. \u201cSongthaew. Bench no fall off.\u201d",
+  "The whole stand has a quiet laugh, and none of them moves. A pillion seat needs a passenger who can hold on, and the vote on whether that is you tonight is unanimous. Somebody mimes a bench with two flat hands: the bus will have you.",
+];
+const _BUS_DRUNK_BENCH = [
+  "(You board the way a sack of rice boards. The bench takes you; the driver has seen worse, tonight, already.)",
+  "(Getting aboard takes three tries and the tailgate rail takes most of your weight. Nobody comments. The songthaew is the last vehicle in Thailand that will always have you.)",
+  "(You fold onto the bench with enormous care, like a man handling somebody else's shopping. The truck pulls out. The night, mercifully, does the rest.)",
+];
+
 function _doRideBus(arg) {
   const r = _room();
   // Order matters: "no route here" (indoors/off-road) and the curfew both
@@ -4244,22 +4268,30 @@ function _doRideBus(arg) {
       "stopping — the drivers can't tell a fare from a lamppost in this.");
     return;
   }
-  if (G.nightTurn >= LAST_BUS_TURN) {
-    // Only advertise MOTOSAI where there's actually a stand (beach_rd_c/_n, naklua_rd
-    // and the soi6 pocket have none — it's the two feet from here).
-    _say("You stand at the roadside with your arm half-raised, and nothing comes. Nothing " +
-      "is coming. The last songthaew of the night made its run and rattled off to the " +
-      "depot a while back — this is the last-baht-bus hour, and you're on the wrong " +
-      "side of it. " + (r.motosai
-        ? "It's a motorbike taxi now, or your own two feet through the dark. (MOTOSAI, or walk it home.)"
-        : "No motorbike stand at this stop either — it's your own two feet through the dark from here."),
-      "alert");
-    return;
-  }
   if (G.mode === "soi6") {
     _say("A blue songthaew slows, hopeful, and you wave it on. The routes out of here " +
       "aren't yours this week — one day the whole city, but not this trip.");
     return;
+  }
+  // The real Pattaya has no bus curfew: the songthaews run all night, just
+  // SPARSE after two. So the small hours don't refuse you — they make you
+  // WAIT, at the kerb, in whatever state you're in, and the wait is where the
+  // vulnerability lives. The only curfew is on you (design call 2026-08-25:
+  // too drunk, too tired, too sick — the timetable was never the wall).
+  if (G.nightTurn >= LAST_BUS_TURN) {
+    _say(_pickVary(_BUS_SMALL_HOURS, "bussparse"), "alert");
+    const wait = 3 + Math.floor(_rand() * 6);   // 18–48 minutes of kerb
+    const startDay = G.day;
+    for (let i = 0; i < wait; i++) {
+      _tick();
+      if (G.day !== startDay || G.pendingChoice === "vacation_end") return; // the night ended where you stood
+      if (G.pendingEnc) {
+        _say("(Headlights, twice — neither of them a songthaew. The street found " +
+          "you before the bus did; flag another when this is done.)", "dim");
+        return;
+      }
+    }
+    _say(_pickVary(_BUS_SMALL_HOURS_COMES, "buscomes"), "win");
   }
   const lines = _busLinesFor(G.room);
   const reachable = [...new Set(lines.flatMap(l => BUS_LINES[l]))].filter(s => s !== G.room);
@@ -4312,6 +4344,7 @@ function _doRideBus(arg) {
     return;
   }
   G.pendingFare = { kind: "bus", price: BUS_FARE, dest };
+  if (G.soc.drunk >= 7) _say(_pickVary(_BUS_DRUNK_BENCH, "busbench"), "dim");
   // Boarding: at a waiting area the queue is the system; mid-route he swerves in.
   if (_BUS_WAITING.has(G.room)) {
     _say("You climb onto the truck at the head of the rank and take a bench. It does " +
@@ -4355,6 +4388,25 @@ function _doMotosai(arg) {
   }
   // likewise a stand that isn't there: nothing happened, so nothing is spent
   if (!r.motosai) { _say("No motosai stand here."); return false; }
+  // Past a certain state the bikes won't have you — a pillion needs a passenger
+  // who can hold on. The songthaew bench is the vehicle that always will, which
+  // is the whole thesis of the title (design call 2026-08-25). But the balk is
+  // a BALK, not a wall: ask again straight away and he shrugs and takes your
+  // money, because the authored crash arc is exactly the ride he shouldn't have
+  // given you — refused once, chosen twice, paid for in the ward. Uniform: the
+  // pity ride and the mates' rate balk at the same wobble.
+  if (G.soc.drunk >= 7) {
+    const insisting = G.motoBalkTurn != null && G.turns - G.motoBalkTurn <= 5;
+    if (!insisting) {
+      G.motoBalkTurn = G.turns;
+      _say(_pickVary(_MOTO_DRUNK_NO, "motodrunk"), "alert");
+      return false;
+    }
+    G.motoBalkTurn = null;
+    _say("You ask again, and the piwin looks at you for a long moment, then at the " +
+      "empty road, then kicks the stand up. \u201cYour funeral, boss.\u201d He means " +
+      "the fare. Probably the fare.", "alert");
+  }
   let w = (arg || "").toLowerCase();
   // "hotel" / "home" / "my room" / your hotel's own name: the piwin knows where you
   // sleep — the nearest stand to your hotel's street (playtests 2026-08-22)
@@ -4470,15 +4522,7 @@ function _doPay(arg) {
   if (!G.pendingFare) { _say("Nobody's waiting to be paid."); return; }
   const amount = /^\d+$/.test(arg) ? parseInt(arg, 10) : parseThaiDigits(arg);
   const { price, dest } = G.pendingFare;
-  // you stalled at the window until the curfew passed, and the ride still completed
-  // (min-maxer playtest 2026-08-22): the last bus is the last bus.
-  if (G.pendingFare.kind === "bus" && G.nightTurn >= LAST_BUS_TURN) {
-    G.pendingFare = null;
-    _say("The driver has run out of night. He waves your money away, swings the truck " +
-      "around and heads for the depot — the last run went while you were counting. " +
-      "(MOTOSAI, or your own two feet.)", "alert");
-    return;
-  }
+
   if (amount === null || Number.isNaN(amount)) {
     _say(`He repeats, slower, the universal way: “${thaiBaht(price)}”. A number would help.`, "thai");
     return;
@@ -5154,11 +5198,12 @@ function _doTime() {
   // Soi 6 mode never leaves the street (the bus is refused), so the last-bus
   // status — the titular tension of the full game — simply doesn't apply here.
   if (_flag("act1Done") && G.mode !== "soi6") {
-    _say(t >= LAST_BUS_TURN ? "(The last baht bus has gone — it's the piwin's small-hours " +
-      "tax or shoe leather home now.)" :
+    _say(t >= LAST_BUS_TURN ? _fmt("(Small hours: the songthaews run sparse — flag one " +
+      "and wait the kerb out, ฿{f} when it comes. Or the piwin's night rate, if he'll " +
+      "have you.)", { f: BUS_FARE }) :
       t >= LAST_BUS_TURN - 10
-        ? _fmt("(Last baht bus around 2 a.m. — the ฿{f} ride home is nearly up.)", { f: BUS_FARE })
-        : _fmt("(Baht buses running: ฿{f} the ride home until the last one, ~2 a.m.)", { f: BUS_FARE }), "dim");
+        ? _fmt("(The easy hour is nearly up — after two the buses go sparse and the ฿{f} ride home becomes a wait at the kerb.)", { f: BUS_FARE })
+        : _fmt("(Baht buses circulating: ฿{f} the ride home, no waiting to speak of until ~2 a.m.)", { f: BUS_FARE }), "dim");
   }
 }
 

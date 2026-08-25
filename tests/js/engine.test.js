@@ -1008,10 +1008,16 @@ test("last baht bus: the ฿15 ride runs until 2 a.m., then the stop goes dead",
   state().money = 500;
   state().rain = 0;
   state().room = "jomtien_beach_rd";
-  state().nightTurn = 80;              // 02:00 — the last one's gone
+  state().nightTurn = 80;              // 02:00 — the buses go SPARSE, not away
+  const t0 = state().nightTurn;
   run("ride bus to beach road");
-  assert.ok(!state().pendingFare, "no fare opens — the bus won't come");
-  assert.match(lastOut(), /last songthaew|last-baht-bus/i);
+  // curfew rework (2026-08-25): the small hours are a WAIT, not a refusal —
+  // the kerb costs real ticks and then the bus comes, because it always ran
+  assert.ok(state().pendingFare || state().pendingEnc || state().day !== 2,
+    "the wait resolves into a bus, an interruption, or the night ending — never a dead stop");
+  if (state().pendingFare) {
+    assert.ok(state().nightTurn - t0 >= 3, "…and the kerb charged at least three turns");
+  }
 });
 
 test("small-hours motosai gouge kicks in once the buses stop (Bank's rate exempt)", () => {

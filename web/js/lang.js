@@ -524,12 +524,12 @@ const _CATALOGS = {
       "(Nach Mitternacht: die meisten Bierbars haben die Barfine still fallen lassen.)",
     "(Prime time. Standard rates apply.)": "(Hauptzeit. Es gelten die Standardpreise.)",
     // last-baht-bus status (the titular tension)
-    "(The last baht bus has gone — it's the piwin's small-hours tax or shoe leather home now.)":
-      "(Der letzte Baht-Bus ist weg — jetzt heißt es Piwin-Nachttarif oder zu Fuß nach Haus.)",
-    "(Last baht bus around 2 a.m. — the ฿{f} ride home is nearly up.)":
-      "(Letzter Baht-Bus gegen 2 Uhr — die ฿{f}-Fahrt nach Haus ist fast vorbei.)",
-    "(Baht buses running: ฿{f} the ride home until the last one, ~2 a.m.)":
-      "(Baht-Busse fahren: ฿{f} nach Haus bis zum letzten, ~2 Uhr.)",
+    "(Small hours: the songthaews run sparse — flag one and wait the kerb out, ฿{f} when it comes. Or the piwin's night rate, if he'll have you.)":
+      "(Kleine Stunden: die Songthaews fahren nur noch vereinzelt — winke einen heran und sitz das Warten am Bordstein aus, ฿{f}, wenn er kommt. Oder der Nachttarif des Piwin, falls er dich noch mitnimmt.)",
+    "(The easy hour is nearly up — after two the buses go sparse and the ฿{f} ride home becomes a wait at the kerb.)":
+      "(Die bequeme Stunde ist fast um — nach zwei fahren die Busse nur noch vereinzelt, und die ฿{f}-Fahrt nach Haus wird zum Warten am Bordstein.)",
+    "(Baht buses circulating: ฿{f} the ride home, no waiting to speak of until ~2 a.m.)":
+      "(Baht-Busse im Umlauf: ฿{f} die Fahrt nach Haus, nennenswertes Warten gibt es erst ab ca. 2 Uhr.)",
     // ── Soi 6 revisit pools + item names/descs (workflow-translated, Opus-reviewed) ──
     "Back to the Shady Lady, set back under its awning, the rail facing the soi so you can watch the circus without joining it.":
       "Zurück zur Shady Lady, zurückgesetzt unter ihre Markise, die Theke zur Soi hin ausgerichtet, sodass du den Zirkus beobachten kannst, ohne mitzumachen.",
@@ -1295,8 +1295,8 @@ const _CATALOGS = {
     // templated first (the fare is BUS_FARE) — otherwise de needs one entry per price
     "half an hour": "einer halben Stunde",
     "{n} minutes": "{n} Minuten",
-    "Somewhere a songthaew driver checks his watch and turns the truck toward the depot. The last baht bus makes its final run at two — call it {mins} off. Get to a main road for the ฿{fare} ride home, or the small hours belong to the piwins and their prices. This is the hour the whole night has been counting down to.":
-      "Irgendwo schaut ein Songthaew-Fahrer auf die Uhr und lenkt den Pick-up Richtung Depot. Der letzte Baht-Bus fährt um zwei — sagen wir, in {mins}. Ab auf eine Hauptstraße, wenn du die ฿{fare}-Fahrt heim willst, sonst gehören die frühen Morgenstunden den Piwins und ihren Preisen. Das ist die Stunde, auf die die ganze Nacht heruntergezählt hat.",
+    "Somewhere out there the songthaew loops are thinning — the last baht bus of the easy hour is making its rounds, and after two the ฿{fare} ride home becomes a wait at a kerb that keeps whoever stands on it. Call it {mins}. Get to a main road while they're still frequent, or spend the small hours in whatever state you're in, in public, waiting. This is the hour the night starts counting you instead.":
+      "Irgendwo da draußen dünnen die Songthaew-Runden aus — der letzte Baht-Bus der bequemen Stunde dreht seine Runden, und nach zwei wird die ฿{fare}-Fahrt nach Haus zu einem Warten an einem Bordstein, der jeden behält, der auf ihm steht. Sagen wir: {mins}. Erreich eine Hauptstraße, solange sie noch oft fahren, oder verbring die kleinen Stunden in dem Zustand, in dem du gerade bist, in aller Öffentlichkeit, wartend. Das ist die Stunde, in der die Nacht anfängt, dich zu zählen.",
     // the RAW message body — _readMessages composes the "📱 Sender: “…”" wrapper
     // and calls _L on msg.text. (Same trap as batch 3; the dead-key test caught
     // it both times.) The donation URL is the game's one fourth-wall line — it
@@ -1428,8 +1428,8 @@ const _CATALOGS = {
       "Eine luftige offene Front an der Strandstraße, Deckenventilatoren drehen sich, ein Ständer mit Aloe-Gel an der Kasse für die verbrannten Farang des Tages. Die Fußpflegestühle zeigen aufs Meer, die Damen tragen eine ordentliche Uniform, und das einzige Öl, das es hier gibt, kommt auf deine Schultern. Nach einem Tag Braten am Dongtan sind das die freundlichsten ฿300 in Jomtien.",
     "The cold blast of air-con and the doorbell jingle of civilisation. Shelves of toasties, Mama noodles, and {{phone}} accessories. There's a power outlet by the window.":
       "Der kalte Schwall Klimaanlage und das Türglöckchen der Zivilisation. Regale mit Toasties, Mama-Nudeln und {{phone}}-Zubehör. Am Fenster gibt es eine Steckdose.",
-    "The bus-stop bench sits empty — the last songthaew of the night is long gone.":
-      "Die Bank an der Haltestelle ist leer — der letzte Songthaew der Nacht ist längst weg.",
+    "The bus-stop bench sits empty at this hour — a songthaew will come, eventually, to whoever waits. (RIDE BUS TO <place>, and settle in.)":
+      "Die Bank an der Haltestelle ist leer um diese Stunde — ein Songthaew kommt schon noch, irgendwann, für den, der wartet. (RIDE BUS TO <place>, und richte dich ein.)",
 
     // the sand, walked up and down all night for bottles
     "The last of the light has gone out of the sea. The loungers stay folded.":

@@ -55,10 +55,13 @@ test("the accident ending wakes you in the free ward and dings you next night", 
 test("a reckless ride can crash → routes to the ward (forced roll)", () => {
   _setFlag("act1Done");
   const motoRoom = Object.keys(ROOMS).find(id => ROOMS[id].motosai);
-  G.room = motoRoom; G.money = 2000; G.soc.drunk = 8; G.nightTurn = 90; // drunk + past last bus
+  G.room = motoRoom; G.money = 2000; G.soc.drunk = 8; G.nightTurn = 90; // drunk + the thin hours
   const day0 = G.day;
   globalThis._rand = () => 0; // 0 < risk → crash fires
-  _doMotosai("darkside");
+  _doMotosai("darkside");    // the balk: he refuses the wobble once
+  assert.ok(_MOTO_DRUNK_NO.some(l => out.join("\n").includes(l)), "refused once");
+  out = [];
+  _doMotosai("darkside");    // …and chosen twice: "your funeral, boss"
   assert.match(out.join("\n"), /sideways|swerve|pothole|tarmac|Lights out|sandal/i, "the road-moment beat");
   assert.match(out.join("\n"), /insurance/i, "then the ward morning");
   assert.equal(G.day, day0 + 1, "the night ended");
@@ -75,7 +78,8 @@ test("a TYPED reckless ride crashes and ends the night", () => {
   const day0 = G.day;
   globalThis._rand = () => 0;                     // force the crash roll
   out = [];
-  doCommand("motosai to darkside");
+  doCommand("motosai to darkside");               // the balk
+  doCommand("motosai to darkside");               // the insistence
   assert.equal(G.day, day0 + 1, "the typed ride ended the night");
   assert.match(out.join("\n"), /insurance/i, "and landed in the free ward");
 });
@@ -85,8 +89,10 @@ test("a risky ride that survives telegraphs the danger (a near-miss)", () => {
   const motoRoom = Object.keys(ROOMS).find(id => ROOMS[id].motosai);
   G.room = motoRoom; G.money = 2000; G.soc.drunk = 8; G.nightTurn = 90; // elevated risk
   const day0 = G.day;
+  _doMotosai("darkside");    // the balk (consumes only the refusal, no dice)
   let n = 0;
   globalThis._rand = () => (n++ === 0 ? 0.99 : 0); // 1st roll: no crash; 2nd: force near-miss
+  out = [];
   _doMotosai("darkside");
   assert.equal(G.day, day0, "no crash — the night goes on");
   assert.match(out.join("\n"), /knuckles white|threads the needle|tarmac is very close|could have gone/i,

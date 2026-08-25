@@ -327,12 +327,18 @@ whether or not they are fixed.
 
 ## Open — design calls (need a decision, not a patch)
 
-- **B1 (SEVERE) — `TRAVEL` is a free, risk-free teleport that nullifies the title
-  mechanic.** The last bus, the ฿15 fare and the small-hours motosai premium are
-  the run's central tension, and the game narrates that tension one command
-  before TRAVEL bypasses all three at zero cost from anywhere on the map.
-  **Deferred deliberately (2026-08-25): the nightly curfew is being reworked, and
-  this belongs in that pass rather than ahead of it.**
+- ~~**B1 (SEVERE) — `TRAVEL` is a free, risk-free teleport that nullifies the
+  title mechanic.**~~ **CLOSED by the curfew rework (2026-08-25).** The premise
+  moved: the real town has no transport curfew (songthaews 24h, sparse from two;
+  bikes/taxis all night; worst case you walk), so the title now means the last
+  bus *you're still capable of catching* — the only curfew is on you. The small
+  hours make the bus a 3–8-tick WAIT at the kerb that encounters and collapse
+  can interrupt; the piwin balks at drunk ≥7 (insistence overrides — the crash
+  arc is refused once, chosen twice); the bench takes anybody, which is the
+  thesis in one mechanic. TRAVEL was already the walk (`_path` steps `G.room`
+  per hop with full tick exposure since r13), so nothing needed pricing.
+  The related open items — "missing the last bus costs ฿30" and the depot
+  PAY-window gate — closed with it.
 - **B6 — Act One completes without returning to room 412**, though the quest text
   and the game's own title say otherwise. Either the goal text drops the clause or
   the scoring waits for the room.

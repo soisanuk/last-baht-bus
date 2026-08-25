@@ -1519,13 +1519,15 @@ function _describeRoom(full, forceFull) {
   }
   // CAPS so the hints tap: the open kw prefills "ride bus to " and the
   // destination list rides the suggest bar — the whole fare is keyboard-free.
-  // Only promise a bus when one will actually stop: after the 02:00 curfew the
-  // stop is dead, in the rain none stops, and in the Soi 6 week the routes out
-  // aren't yours — so don't paint the "can be caught here" hint over any of those.
+  // Only promise an EASY bus when one will come quickly: in the rain none
+  // stops, and in the Soi 6 week the routes out aren't yours. The small hours
+  // don't kill the stop any more — they make it a wait (design call 2026-08-25:
+  // the buses run all night, sparse after two; the only curfew is on you).
   if (r.busStop) {
     if (G.mode === "soi6" || G.rain > 0) { /* the RIDE BUS refusal / rain block covers it */ }
     else if (G.nightTurn >= LAST_BUS_TURN)
-      _say("The bus-stop bench sits empty — the last songthaew of the night is long gone.", "dim");
+      _say("The bus-stop bench sits empty at this hour — a songthaew will come, " +
+        "eventually, to whoever waits. (RIDE BUS TO <place>, and settle in.)", "dim");
     else _say("A baht bus can be caught here. (RIDE BUS TO <place>)", "dim");
   }
   if (r.motosai) _say("A motosai stand is here. (MOTOSAI TO <place>)", "dim");

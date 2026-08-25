@@ -9,8 +9,8 @@
 const BUS_FARE   = 15;   // baht bus, any hop on a line
 const MOTOSAI_TOWN = 50; // motosai hop inside town
 const MOTOSAI_FAR  = 100;// motosai to/from the Darkside
-const LAST_BUS_TURN = 80;   // 02:00 — the last songthaew makes its final run; after this no ฿15 ride home (the title's climax)
-const LATE_MOTO_MULT = 1.6; // small-hours "stranded tax": piwins gouge once the buses have stopped
+const LAST_BUS_TURN = 80;   // 02:00 — the songthaews go SPARSE (they never stop): flagging one after this is a wait at the kerb, and the kerb keeps whoever stands on it
+const LATE_MOTO_MULT = 1.6; // small-hours night rate: piwins price the thin hours, while they'll still have you
 const DOG_MOTOSAI_FARE = 10; // a dog needs his own bike — a buddy's saleng, waved over and paid on top (waived on the free pity-ride)
 const LADY_DRINK = 150;  // canon
 const NOODLE_PRICE = 15;      // a pot of Mama noodles off the 7-Eleven shelf

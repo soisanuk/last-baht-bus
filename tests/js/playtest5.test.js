@@ -1039,15 +1039,19 @@ test("the scam post-mortem reads how the deal was struck", () => {
   assert.match(_DEBRIEF.bfscam().next, /COMPLAIN/);
 });
 
-test("the last bus doesn't wait for a slow payer; the same wall gives the same refusal", () => {
+test("a slow payer still gets his ride — the depot no longer exists", () => {
+  // curfew rework (2026-08-25): the old gate voided a boarded ride if you
+  // stalled past 02:00, closing an exploit against a curfew that has since
+  // been removed. The buses run all night; a slow payer is just a slow payer.
   G.room = "beach_rd_c"; G.nightTurn = 78; G.money = 500;
+  for (const k of Object.keys(ENCOUNTERS)) G.encDone[k] = true;
   doCommand("ride bus to naklua road");
   assert.ok(G.pendingFare);
   G.nightTurn = LAST_BUS_TURN + 1; out = [];
   doCommand("pay 15");
   assert.equal(G.pendingFare, null);
-  assert.match(text(), /run out of night|heads for the depot/);
-  assert.notEqual(G.room, "naklua_rd", "the ride did not complete after the curfew");
+  assert.doesNotMatch(text(), /run out of night|heads for the depot/);
+  assert.equal(G.room, "naklua_rd", "the ride completes — he took your fifteen baht");
   // a wall is a wall
   G.room = "khao_talo"; const a = []; for (let i = 0; i < 4; i++) { out = []; doCommand("s"); a.push(text()); }
   assert.equal(new Set(a).size, 1, "the same blocked direction answers the same way");
@@ -1624,4 +1628,104 @@ test("the busy-regular line never seats a girl the room's own prose just feature
     }
   }
   assert.ok(seeded > 0, "the 40% roll landed at least once in 24 seeds — the test actually tested");
+});
+
+// ── The curfew rework: the only curfew is on you (design call 2026-08-25) ────
+// In the real town the songthaews run 24 hours (sparse from two), the bikes and
+// taxis are all-night, and worst case you walk — even from the Darkside. The
+// timetable was never the wall; the body is.
+
+test("the small hours make you WAIT for the bus, and the kerb charges real turns", () => {
+  newGame(); G.stage = "vacation"; _setFlag("act1Done"); _setFlag("hasWallet");
+  for (const k of Object.keys(ENCOUNTERS)) G.encDone[k] = true;
+  G.room = "beach_rd_c"; G.money = 500; G.nightTurn = 82; G.rain = 0; G.soc.drunk = 0;
+  const t0 = G.nightTurn;
+  out = []; doCommand("ride bus to naklua road");
+  const said = out.join("\n");
+  assert.ok(_BUS_SMALL_HOURS.some(l => said.includes(l)), "the empty-hour kerb, from the pool");
+  if (G.pendingFare) {
+    assert.ok(_BUS_SMALL_HOURS_COMES.some(l => said.includes(l)), "…and the arrival, from its pool");
+    assert.ok(G.nightTurn - t0 >= 3, "at least three turns paid at the kerb (" + (G.nightTurn - t0) + ")");
+    out = []; doCommand("pay 15");
+    assert.equal(G.room, "naklua_rd", "and the ride completes — the bus always ran");
+  } else {
+    assert.ok(G.pendingEnc || G.day !== 2, "no fare only because the street or the night interrupted");
+  }
+});
+
+test("the kerb can end the night — the physiological curfew enforcing itself", () => {
+  newGame(); G.stage = "vacation"; _setFlag("act1Done"); _setFlag("hasWallet");
+  for (const k of Object.keys(ENCOUNTERS)) G.encDone[k] = true;
+  G.room = "beach_rd_c"; G.money = 500; G.nightTurn = 82; G.hunger = 99; G.thirst = 99;
+  out = []; doCommand("ride bus to naklua road");
+  assert.equal(G.pendingFare, null, "no bus saved him");
+  assert.notEqual(G.day, 2, "the night ended where he stood");
+});
+
+test("past drunk seven the bikes refuse you — and the bench still has you", () => {
+  newGame(); G.stage = "vacation"; _setFlag("act1Done"); _setFlag("hasWallet");
+  for (const k of Object.keys(ENCOUNTERS)) G.encDone[k] = true;
+  G.room = "beach_rd_s"; G.money = 500; G.nightTurn = 40; G.soc.drunk = 7;
+  assert.ok(ROOMS.beach_rd_s.motosai, "a stand is here (or move this test)");
+  const m0 = G.money;
+  out = []; doCommand("motosai to naklua");
+  assert.ok(_MOTO_DRUNK_NO.some(l => out.join("\n").includes(l)), "the piwin sizes you up and says no");
+  assert.equal(G.money, m0, "nothing spent, nothing moved");
+  // but the songthaew is the vehicle that always has you — the title's thesis
+  G.money = 500; out = []; doCommand("ride bus to naklua road");
+  assert.ok(G.pendingFare, "the bus takes anybody");
+  assert.ok(_BUS_DRUNK_BENCH.some(l => out.join("\n").includes(l)), "…and says so");
+  // …and a second motosai ask inside the window is INSISTENCE, broke or not —
+  // the balk was the warning, the override is the player's, the dice judge it
+  newGame(); G.stage = "vacation"; _setFlag("act1Done"); _setFlag("hasWallet");
+  for (const k of Object.keys(ENCOUNTERS)) G.encDone[k] = true;
+  G.room = "beach_rd_s"; G.money = 0; G.nightTurn = 40; G.soc.drunk = 7;
+  doCommand("motosai to naklua");
+  out = []; doCommand("motosai to naklua");
+  assert.match(out.join("\n"), /Your funeral, boss/, "insisting past the balk is allowed, even broke");
+  // sober, no bench line
+  newGame(); G.stage = "vacation"; _setFlag("act1Done"); _setFlag("hasWallet");
+  for (const k of Object.keys(ENCOUNTERS)) G.encDone[k] = true;
+  G.room = "beach_rd_s"; G.money = 500; G.nightTurn = 40; G.soc.drunk = 0;
+  out = []; doCommand("ride bus to naklua road");
+  assert.ok(!_BUS_DRUNK_BENCH.some(l => out.join("\n").includes(l)), "a sober man just boards");
+});
+
+test("TIME tells the truth about the small hours in all three windows", () => {
+  newGame(); G.stage = "vacation"; _setFlag("act1Done"); _setFlag("hasWallet");
+  for (const k of Object.keys(ENCOUNTERS)) G.encDone[k] = true;
+  G.room = "beach_rd_c";
+  G.nightTurn = 30; out = []; doCommand("time");
+  assert.match(out.join("\n"), /circulating/, "early: no waiting to speak of");
+  G.nightTurn = 72; out = []; doCommand("time");
+  assert.match(out.join("\n"), /easy hour is nearly up/, "the warning window");
+  G.nightTurn = 82; out = []; doCommand("time");
+  assert.match(out.join("\n"), /run sparse/, "small hours: sparse, never gone");
+  assert.doesNotMatch(out.join("\n"), /has gone/, "no more depot claim");
+});
+
+test("the street hint at a dead-hour bus stop stays a live promise", () => {
+  newGame(); G.stage = "vacation"; _setFlag("act1Done"); _setFlag("hasWallet");
+  for (const k of Object.keys(ENCOUNTERS)) G.encDone[k] = true;
+  G.room = "beach_rd_c"; G.nightTurn = 85; G.rain = 0;
+  out = []; _describeRoom(true, true);
+  const said = out.join("\n");
+  if (/bus-stop bench/.test(said)) {
+    assert.match(said, /will come|settle in/, "the stop is slow, not dead");
+    assert.doesNotMatch(said, /long gone/);
+  }
+});
+
+test("the balk is a balk, not a wall: insistence buys the ride the crash arc needs", () => {
+  // The refusal must not delete the authored crash ending — that arc IS the
+  // body-curfew thesis, refused once and chosen twice.
+  newGame(); G.stage = "vacation"; _setFlag("act1Done"); _setFlag("hasWallet");
+  for (const k of Object.keys(ENCOUNTERS)) G.encDone[k] = true;
+  G.room = Object.keys(ROOMS).find(id => ROOMS[id].motosai);
+  G.money = 2000; G.soc.drunk = 8; G.nightTurn = 40;
+  out = []; doCommand("motosai to naklua");
+  assert.ok(_MOTO_DRUNK_NO.some(l => out.join("\n").includes(l)), "first ask: the balk");
+  out = []; doCommand("motosai to naklua");
+  assert.match(out.join("\n"), /Your funeral, boss/, "second ask: he takes the fare");
+  assert.doesNotMatch(out.join("\n"), /Bench no fall off/, "no second balk");
 });

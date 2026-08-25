@@ -83,9 +83,12 @@ test("RIDE BUS refusals describe the real situation, in the right order", () => 
   doCommand("ride bus");
   assert.match(last(), /No blue trucks come down here/); // hail-anywhere: off-route, not "no stop"
   assert.doesNotMatch(last(), /songthaew slows/);
-  out = []; S().room = "beach_rd_n"; S().nightTurn = 82;  // curfew beats the soi6 line
+  out = []; S().room = "beach_rd_n"; S().nightTurn = 82;  // the frame beats the hour
   doCommand("ride bus");
-  assert.match(last(), /rattled off to the depot/);
+  // curfew rework (2026-08-25): there is no depot any more — in soi6 mode the
+  // frame refusal answers at ANY hour, before the small-hours wait can charge
+  // a challenge player ticks for a ride the mode won't allow
+  assert.match(last(), /wave it on|aren't yours this week/);
   assert.doesNotMatch(last(), /\(MOTOSAI/, "no MOTOSAI ad at a stop with no stand");
   out = []; S().nightTurn = 30;                     // pre-curfew at a pocket stop
   doCommand("ride bus");
