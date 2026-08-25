@@ -1042,6 +1042,12 @@ function _startKiller() {
     "grief). QUIT forfeits your lives.)", "dim");
 }
 
+const _KP_POT = [
+  "{who} pots, unhurried, and chalks up without looking at you.",
+  "{who} takes his shot, drops it, and steps back to let you have the table like a man doing you a favour.",
+  "{who} pots. Nobody says anything. That is somehow worse than if they had.",
+];
+
 function _kpInput(input) {
   const g = G.game;
   const kind = /power|smash/.test(input) ? "power" :
@@ -1061,6 +1067,7 @@ function _kpInput(input) {
     const r = kpShot(g.kp, _rand);
     if (r.out) _say(`${_ucfirst(r.player.name)} misses and is OUT. A moment of silence; the moment ends.`, "dim");
     else if (!r.potted) _say(`${_ucfirst(r.player.name)} rattles it — a life gone.`, "dim");
+    else if (kpAlive(g.kp).length <= 2) _say(_fmt(_pickVary(_KP_POT, "kppot"), { who: _ucfirst(r.player.name) }), "dim");
   }
   if (kpOver(g.kp)) {
     const winner = kpAlive(g.kp)[0];

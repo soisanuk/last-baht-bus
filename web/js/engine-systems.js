@@ -1656,7 +1656,7 @@ const _ACT1_HINTS = [
     "properly, then ask about the wallet — a polite man, she may just hand it back. (The hard way " +
     "in: slip into her office when DJ Beer plays 'Sabai Sabai', and crack the safe — her old " +
     "dancer's number was 71, and she puts a lucky 9 on the end of every code. Candy, Ploy, Pim and " +
-    "Daeng each hold a piece.)"],
+    "Daeng each hold a piece \u2014 ASK ANY OF THEM ABOUT OY.)"],
 ];
 // Resolve a quest's `at` (an NPC id or a room id) to a live location clause for
 // a hint — where the person actually is TODAY (NPCs can move), which venue, and
@@ -1677,9 +1677,23 @@ function _questWhere(at) {
     // his LIVE room via _patronRoom so the clue never points at a stale bar.
     const room = _patronRoom(at);
     if (!room || room === G.room || _patronsHere().includes(at)) return "";
+    // A rail regular's location is true when it prints and can be false by the
+    // time you walk there — the player was sent to the Cheeky Monkey and found
+    // the Hyper (persona report A#3, 2026-08-23). Withholding it wastes the most
+    // useful thing we know; promising it goes stale. So say BOTH: where he is,
+    // and that he is a man who moves. Detected by asking _patronRoom where he
+    // will be an hour from now — a pure hash, so it costs no dice.
+    const _t0 = G.nightTurn;
+    G.nightTurn = Math.min(NIGHT_TURNS - 1, _t0 + 10);
+    const _moves = _patronRoom(at) !== room;
+    G.nightTurn = _t0;
     const r = ROOMS[room];
-    return r ? _fmt(" {who} is at {v}, over in {r}.",
-      { who: PATRONS[at].name, v: _barName(room), r: r.region }) : "";
+    if (!r) return "";
+    return _moves
+      ? _fmt(" {who} is at {v} in {r} right now — though he drifts, so ask after him when you get there.",
+          { who: PATRONS[at].name, v: _barName(room), r: r.region })
+      : _fmt(" {who} is at {v}, over in {r}.",
+          { who: PATRONS[at].name, v: _barName(room), r: r.region });
   }
   if (ROOMS[at]) {
     if (at === G.room) return "";
@@ -3427,7 +3441,8 @@ function _sayDrizzle() {
     // LOW SEASON'S OTHER REGISTER (monsoon-purgatory canon, 2026-08-22): when the
     // rain has the room to itself — no patrons at the rail — the drill prose is
     // wrong; the event is the emptiness. Atmosphere only, no drama by rule.
-    const dead = typeof _patronsHere === "function" && !_patronsHere().length &&
+    const _talking = typeof _convoActive === "function" && !!_convoActive();
+    const dead = typeof _patronsHere === "function" && !_patronsHere().length && !_talking &&
       !(typeof _barSpendTonight === "function" && _barSpendTonight(G.room)); // you just bought a round: not dead
     if (dead && _room().barType === "beer") {
       const staff = _npcsHere().filter(n => NPC_ROLES[n] === "hostess").length;

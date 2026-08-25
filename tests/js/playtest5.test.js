@@ -1324,3 +1324,62 @@ test("a game move typed after the game is over isn't offered as a topic", () => 
   out = []; doCommand("column");
   assert.doesNotMatch(out.join("\n"), /a game that's over/);
 });
+
+test("the Act One hint names the topic that actually holds the code", () => {
+  // It named four people who "each hold a piece" and no topic — and every one of
+  // them holds theirs under `oy`, so ASK PLOY ABOUT CODE (the first thing anybody
+  // types) missed on the critical path (persona report B#5, 2026-08-23).
+  newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight" };
+  G.act1Tries = 1;
+  for (const f of ["knowWasHere", "knowMot", "knowOyHasIt"]) _setFlag(f);
+  out = []; doCommand("hint");
+  assert.match(out.join("\n"), /ABOUT OY/, "the hint names the topic, not just the people");
+
+  for (const who of ["ploy", "pim", "daeng", "candy"]) {
+    for (const word of ["code", "safe"]) {
+      newGame(); G.stage = "expat"; _setFlag("act1Done");
+      for (const k of Object.keys(ENCOUNTERS)) G.encDone[k] = true;
+      G.room = _npcRoom(who);
+      out = []; doCommand("talk to " + who);
+      out = []; G.pendingEnc = null; doCommand(`ask ${who} about ${word}`);
+      assert.doesNotMatch(out.join("\n"),
+        /I don't know about that|Not my story|That one I don't know|No idea|Search me|wrong girl/i,
+        `ask ${who} about ${word}`);
+    }
+  }
+});
+
+test("a quest pointer at a man who drifts says that he drifts", () => {
+  // Printed truthfully and false on arrival: sent to the Cheeky Monkey, found
+  // the Hyper (persona report A#3, 2026-08-23).
+  newGame(); _setFlag("act1Done"); G.room = "hotel_room";
+  let sawWarning = false, sawPlain = false;
+  for (const t of [10, 20, 30, 40, 50, 60, 70]) {
+    G.nightTurn = t;
+    const line = _questWhere("glam");
+    if (!line) continue;
+    if (/he drifts/.test(line)) sawWarning = true; else sawPlain = true;
+    assert.match(line, /Glam is at/, "it still names where he is — that's the useful part");
+  }
+  assert.ok(sawWarning, "the hour before he moves warns you");
+  assert.ok(sawPlain, "…and a settled hour doesn't");
+});
+
+test("the rain doesn't call a bar empty while you're talking to somebody in it", () => {
+  // Fired at Moonshine Bar in the same beat as a hostess posing and joking with
+  // the player: patrons are the RAIL REGULARS, and staff were never counted
+  // (persona report B#21, 2026-08-23).
+  newGame(); G.stage = "expat"; _setFlag("act1Done");
+  for (const k of Object.keys(ENCOUNTERS)) G.encDone[k] = true;
+  const bar = Object.keys(ROOMS).find(id => ROOMS[id].barType === "beer" && !_patronsHere.call(null).length);
+  G.room = "moonshine_bar";
+  const girl = _npcsHere().find(id => NPC_ROLES[id]);
+  if (girl) {
+    doCommand("talk to " + NPCS[girl].name);
+    assert.ok(_convoActive(), "you are mid-conversation");
+    G.rain = 0; G.lastDrizzle = -99;
+    out = []; _sayDrizzle && _sayDrizzle();
+    assert.doesNotMatch(out.join("\n"), /belongs to nobody|nobody has said anything/i,
+      "a room you are talking in is not a room the rain has to itself");
+  }
+});

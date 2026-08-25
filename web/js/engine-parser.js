@@ -2765,6 +2765,11 @@ const _CONVO_TOPIC_RULES = [
   [/\bhosts?\b|\bhost bar\b|the boys\b/,                                      "scene"],
   [/\bsims?\b|\bunlock(ing|ed)?\b|screen fix|cracked screen/,                  "job"],
   [/house rules?|the rules\b|your rules/,                                       "rules"],
+  // The Act One safe: four people hold a piece of the code and every one of them
+  // holds it under `oy`, so the words a player actually types missed on the
+  // critical path (persona report B#5, 2026-08-23). Literal keys still win, so an
+  // NPC with a real `code`/`safe` node keeps it.
+  [/\bcode\b|\bsafe\b|\bkeypad\b|\bcombination\b|\bthe pin\b/,             "oy"],
   [/where.*(from|grew up|born)|whereabout|your country|back home|where.*\blive/, "home"],
   [/smartphone|\bphones\b|the phones|\bline app\b|social media/,                   "1998"],
   [/for a living|line of work|what.*you do\b|what.*you did/,                     "job"],
