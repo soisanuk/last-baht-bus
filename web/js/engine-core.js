@@ -991,6 +991,27 @@ function _patronTalk(id, topic, _retried) {
       // says so — re-delivering the greeting's short ("You again.") read as a
       // man refusing to talk (playtests 2026-08-22)
       if (!(G.patronMet && G.patronMet[id])) { _patronTalk(id, null, true); return; }
+      // Mort is the town's designated observer — "I watch, I write it down" —
+      // so ASK MORT ABOUT <a person he'd know> must pay off, not dead-end
+      // (Settler playtest, 2026-08-26). He knows exactly who; he just does not
+      // hand it across a bar, and he points at where the gossip actually lives.
+      if (id === "mort") {
+        const who = String(topic).trim();
+        const known = Object.keys(NPCS).find(i => NPCS[i].name.toLowerCase() === who ||
+            NPCS[i].name.toLowerCase().split(" ").pop() === who) ||
+          Object.keys(PATRONS).find(i => i !== "mort" && (PATRONS[i].name.toLowerCase() === who ||
+            PATRONS[i].name.toLowerCase().split(" ").pop() === who));
+        if (known) {
+          const nm = NPCS[known] ? NPCS[known].name : PATRONS[known].name;
+          _say(`Mort's biro stops. He looks at you over the horn-rims, and for a second ` +
+            `you see forty years of watching behind them. “${nm}.” He does not write ` +
+            `it down; he already has, somewhere. “I know exactly who that is. But I do not ` +
+            `put people in the column by their names, to their faces, across a bar. That is ` +
+            `not the job.” The biro starts again. “Read the COLUMN. If they are in it, ` +
+            `they are in it as everybody — the only fair way to do it.”`, "dim");
+          return;
+        }
+      }
       _say(_PATRON_MISS[Math.floor(_rand() * _PATRON_MISS.length)](p.name, _patronHis(id)));
       return;
     }
@@ -1436,6 +1457,10 @@ function _describeRoom(full, forceFull) {
     _say(raining
       ? "Pitch dark, and rain sheeting down through it — at least the weather keeps " +
         "the soi dogs kennelled. Your phone's flashlight would still help."
+      : G.dog
+      ? _dogN("It is pitch dark. Your phone's flashlight would help — though the " +
+        "growl waiting somewhere in it is a soi-dog problem, and soi-dog problems " +
+        "are, these days, Sai Krok's department.")
       : "It is pitch dark. If your phone has any battery left, its flashlight " +
         "would help. Sois this dark tend to have soi dogs in them.", "alert");
     return;

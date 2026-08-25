@@ -818,3 +818,45 @@ test("the catch quotes your words in your own case, with her own pronouns", () =
     assert.doesNotMatch(said, /stop them|They let/, "and she is she, not they");
   }
 });
+
+// ── Settler + dog-lover reruns (2026-08-26) ──────────────────────────────────
+test("Tan reads a mamasan as a mamasan, not a rail girl", () => {
+  // Settler #1: the hub who "drives everybody" called Candy and Oy (owners)
+  // "she works the rail there. Sends money home, same as all of them."
+  newGame(); G.stage = "expat"; _setFlag("act1Done"); _setFlag("expatLife");
+  for (const k of Object.keys(ENCOUNTERS)) G.encDone[k] = true;
+  NPCS.tan.room = "stinky_bar"; G.room = "stinky_bar";
+  for (const [who, want] of [["candy", /runs the floor/], ["oy", /runs the floor/], ["bee", /works the rail/]]) {
+    G.known[who] = true;
+    out = []; doCommand("ask tan about " + who);
+    assert.match(out.join("\n"), want, `Tan on ${who} (${NPC_ROLES[who]})`);
+    if (NPC_ROLES[who] === "mamasan") assert.doesNotMatch(out.join("\n"), /works the rail/, who + " is not a rail girl");
+  }
+});
+
+test("Mort, the town's observer, answers about people in his own voice", () => {
+  // Settler #2: ASK MORT ABOUT <person> dead-ended on every name
+  newGame(); _setFlag("act1Done"); G.room = "queen_vic";
+  for (const k of Object.keys(ENCOUNTERS)) G.encDone[k] = true;
+  doCommand("talk to mort");
+  out = []; doCommand("ask mort about angela");
+  const said = out.join("\n");
+  assert.match(said, /I know exactly who that is|Read the COLUMN|not the job/,
+    "he knows them, and points at the column");
+  assert.doesNotMatch(said, /Not one I know|Not my story|Search me/i, "no dead-end for a person he'd know");
+  // …and a nonsense word still misses normally
+  out = []; doCommand("ask mort about quantumfrog");
+  assert.doesNotMatch(out.join("\n"), /I know exactly who that is/);
+});
+
+test("Candy's Orchid brief answers to 'orchid', not only to 'rose'", () => {
+  // Settler #4: the volunteered word (orchid) missed; the node is keyed on rose
+  newGame(); G.stage = "expat"; _setFlag("act1Done"); _setFlag("expatLife");
+  for (const k of Object.keys(ENCOUNTERS)) G.encDone[k] = true;
+  G.room = _npcRoom("candy"); doCommand("talk to candy");
+  out = []; G.pendingEnc = null; doCommand("ask candy about orchid");
+  assert.doesNotMatch(out.join("\n"), /I don't know|Not my story|wrong girl/i);
+  // …and "orchid room" still routes to Doyle's recon topic, not Candy's rose
+  assert.equal(_convoTopic("orchid room"), "table", "the room reference stays Doyle's");
+  assert.equal(_convoTopic("orchid"), "rose", "the place reference is Candy's");
+});

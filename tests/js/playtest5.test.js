@@ -2088,3 +2088,37 @@ test("Cream doesn't re-introduce herself to the man she went home with", () => {
     "the alibi was for a stranger, not for you");
   assert.match(said, /here you are again|performance is over|like people/i);
 });
+
+test("the dog is present in the newest content: dark warning, small-hours kerb, light rain", () => {
+  // dog-lover rerun (2026-08-26): three beats where the dog was missing from
+  // content shipped after his systems were written
+  newGame(); _setFlag("act1Done"); G.dog = { since: 2 };
+  // 1. the dark-room warning no longer threatens soi dogs at the man who has one
+  G.room = "hotel_soi"; G.lightOn = false; G.battery = 50;
+  out = []; _describeRoom(true, true);
+  assert.match(out.join("\n"), /Sai Krok|department/i, "his dog handles the dark");
+  assert.doesNotMatch(out.join("\n"), /Sois this dark tend to have soi dogs in them/, "not the dogless warning");
+  // 2. the small-hours kerb wait mentions him standing it with you
+  newGame(); _setFlag("act1Done"); _setFlag("hasWallet"); G.stage = "vacation";
+  for (const k of Object.keys(ENCOUNTERS)) G.encDone[k] = true;
+  G.dog = { since: 2 }; G.room = "beach_rd_c"; G.nightTurn = 82; G.rain = 0;
+  out = []; doCommand("ride bus");
+  assert.match(out.join("\n"), /Sai Krok sits at the kerb/, "he waits it with you");
+  // 3. the light-rain drizzle carries a dog beat (reachable on a non-storm week)
+  newGame(); _setFlag("act1Done"); G.dog = { since: 2 };
+  G.room = "beach_rd_c";
+  let sawDog = false;
+  for (let t = 0; t < 8 && !sawDog; t++) { G.turns = 100 + t * 30; out = []; _sayDrizzle(); if (/Sai Krok/.test(out.join("\n"))) sawDog = true; }
+  assert.ok(sawDog, "his rain repertoire is reachable in ordinary light rain");
+});
+
+test("Fast Eddy owns his bar — the man-drink line doesn't call the owner a manager", () => {
+  newGame(); _setFlag("act1Done"); G.money = 5000;
+  G.room = _npcRoom("fast_eddy");
+  out = []; doCommand("buy man drink");
+  const said = out.join("\n");
+  if (/soda/i.test(said)) {  // Eddy's dry branch fired
+    assert.doesNotMatch(said, /a manager who likes you/, "he's the guv'nor, not a manager");
+    assert.match(said, /name is over the door/);
+  }
+});

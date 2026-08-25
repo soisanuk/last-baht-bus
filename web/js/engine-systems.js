@@ -2377,7 +2377,18 @@ function _tanAbout(topic) {
   const room = NPCS[id] ? _npcRoom(id) : _patronRoom(id);
   const where = room && _barName(room) ? _barName(room) : null;
   const she = n.pronoun === "she" || (NPCS[id] && NPC_ROLES[id]);
-  _say(`“${n.name}?” Tan considers the mirror. “${where ? where + ". " : ""}${she ? "She" : "He"} ${PATRONS[id] ? "drinks there most nights — " + (PATRONS[id].nat || "") + ", " + (PATRONS[id].age || "") + ", you know the type" : NPCS[id] && NPC_ROLES[id] ? "works the rail there. Sends money home, same as all of them" : "is somebody the soi knows"}.” A shrug at the road. “I drive everybody, my friend. I do not drive their secrets.”`);
+  // role-accurate: Tan is the hub who reads the real structure of the soi — so
+  // he must not call a mamasan a rail girl (Settler playtest, 2026-08-26: "ask
+  // tan about candy/oy" said "she works the rail there" of two owners).
+  const _role = NPCS[id] && NPC_ROLES[id];
+  const clause = PATRONS[id]
+    ? "drinks there most nights — " + (PATRONS[id].nat || "") + ", " + (PATRONS[id].age || "") + ", you know the type"
+    : _role === "mamasan" ? "runs the floor there. Owns the room in everything but the paperwork — and sometimes that too. You do not get past her by accident"
+    : _role === "cashier" ? "keeps the till there. Nothing crosses that bar she has not already counted twice"
+    : _role === "manager" ? "runs the place for the owner. Different job — the man who is there so the owner does not have to be"
+    : _role ? "works the rail there. Sends money home, same as all of them"
+    : "is somebody the soi knows";
+  _say(`“${n.name}?” Tan considers the mirror. “${where ? where + ". " : ""}${she ? "She" : "He"} ${clause}.” A shrug at the road. “I drive everybody, my friend. I do not drive their secrets.”`);
   return true;
 }
 function _tanOthers() {
@@ -3724,7 +3735,21 @@ function _sayDrizzle() {
     const pool = dark ? _DRIZZLE_DARK : _DRIZZLE_STREET;
     _say(pool[(G.day * 7 + Math.floor(G.turns / 15)) % pool.length], "dim");
   }
+  // The dog's rain repertoire lived only in _startRain (a full downpour, which
+  // needs a stormy weather-bake) — so a dog-lover on an ordinary week never saw
+  // it (dog-person playtest, 2026-08-26). A lighter drizzle line, deterministic
+  // (no dice — same rule as the rest of _sayDrizzle) and occasional (parity), so
+  // he's present in the light rain too.
+  if (G.dog && alt && !_inBar()) {
+    _say(_dogN(_DOG_DRIZZLE[(G.day + Math.floor(G.turns / 15)) % _DOG_DRIZZLE.length]), "dim");
+  }
 }
+// Light-rain (not downpour) dog beats — the everyday version of _DOG_RAIN_STREET.
+const _DOG_DRIZZLE = [
+  "Sai Krok gives the drizzle exactly the attention it deserves, which is none, and keeps reading the street through it.",
+  "A few drops darken Sai Krok's coat and he does not dignify them with a shake — this is not, in his professional judgement, weather.",
+  "Sai Krok trots half a pace closer under the eaves with you, unbothered, a dog who has out-sat a thousand of these and expects to out-sit a thousand more.",
+];
 const _DRIZZLE_STREET = [
   "A soft rain drifts in off the Gulf. Up the road a baht bus pulls over " +
     "mid-route and the driver hops out, unhurried, to roll the canvas rain " +

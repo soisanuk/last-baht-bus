@@ -2881,6 +2881,7 @@ const _CONVO_TOPIC_RULES = [
   [/second (cup|coffee|one)|the other (cup|coffee)|that cup|both coffee/,        "coffee"],
   [/barista|coffee shop|the shop|day job|apron/,                                "job"],
   [/\bdancer\b|number 72|number seventy|your dancing|walking street|\bphoto\b/,   "dancer"],
+  [/\borchid\b/,                                                                "rose"],
   [/khanom|the cart|sticky rice|coconut vendor|snack cart|the vendor/,          "vendor"],
   // Nok — the Jomtien regular who stopped coming (The Quiet Side, docs/map-coverage.md)
   [/\bgordon\b|the regular|who stopped/,                                         "regular"],
@@ -3636,8 +3637,8 @@ function _buyManDrink(id) {
     // a sober manager (Fast Eddy): the gesture lands, the glass is soda water
     _say(`“Now you're speaking the language.” ${name} rings it up, pours himself a soda ` +
       `water with a wedge of lime, and chinks it against yours without a flicker — the ` +
-      `gesture is the thing, the glass is nobody's business. ฿${BEER_PRICE} well spent: a ` +
-      `manager who likes you is the best friend a farang has out here. (฿${G.money} left.)`, "win");
+      `gesture is the thing, the glass is nobody's business. ฿${BEER_PRICE} well spent: the ` +
+      `man whose name is over the door, on your side, is the best friend a farang has out here. (฿${G.money} left.)`, "win");
     return;
   }
   _say(`“Now you're speaking the language.” ${name} pours himself a proper one and ` +
@@ -4301,6 +4302,9 @@ function _doRideBus(arg) {
   // too drunk, too tired, too sick — the timetable was never the wall).
   if (G.nightTurn >= LAST_BUS_TURN && G.turns - (G.busCameTurn || -99) > 6) {
     _say(_pickVary(_BUS_SMALL_HOURS, "bussparse"), "alert");
+    if (G.dog) _say(_dogN("(Sai Krok sits at the kerb beside you, in no hurry at all. " +
+      "For him the small hours are just the hours, and the wait is only a wait if " +
+      "you are alone in it. You are not.)"), "dim");
     const wait = 3 + Math.floor(_rand() * 6);   // 18–48 minutes of kerb
     const startDay = G.day;
     for (let i = 0; i < wait; i++) {
