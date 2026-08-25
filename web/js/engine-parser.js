@@ -1220,7 +1220,15 @@ function _doScenery(arg) {
   const ctx = _sceneryCtx();
   // a pub is still a bar for everything the two genuinely share (the stool, the
   // mirror, the floor) — it only needs its own line where the trade differs
-  if (e.fn) { const line = e.fn(ctx); if (!line) return false; _say(line); return true; }
+  // An entry may carry BOTH: fn is an override that gets first refusal (a room
+  // that named its own teak, a stage with a band on it), and returning null
+  // falls through to the pooled lines rather than abandoning the noun. An entry
+  // with fn and no lines behaves exactly as before.
+  if (e.fn) {
+    const line = e.fn(ctx);
+    if (line) { _say(line); return true; }
+    if (!e.lines) return false;
+  }
   const pool = e.lines[ctx] || (ctx === "pub" && e.lines.bar) || e.lines.any;
   if (!pool) return false;
   _say(_pickVary(pool, "scn_" + e.key + "_" + ctx));
@@ -1480,10 +1488,25 @@ const _SCENERY = [
     "A fold of notes gone soft at the edges from being counted in the dark.",
   ] } },
 
-  { key: "stool", m: /\b(stools?|chairs?|seats?|rail)\b/, lines: {
+  // Generic scenery must not assert specifics the room's OWN prose contradicts:
+  // this answered "chrome legs, vinyl top" at The Terrace, whose description says
+  // "a long teak rail" (persona report A#8, 2026-08-23). Where the room names a
+  // material, echo the room; otherwise stay off the subject.
+  { key: "stool", m: /\b(stools?|chairs?|seats?|rail)\b/,
+    fn: ctx => {
+      const desc = String((_room() && _room().desc) || "");
+      const mat = (desc.match(/\b(teak|brass|zinc|marble|bamboo|mahogany|copper|oak|concrete|stainless)\b/i) || [])[1];
+      if (mat && ctx !== "sand" && ctx !== "street") {
+        return "The " + mat.toLowerCase() + " has the particular shine that only comes " +
+          "from forearms \u2014 thousands of them, over years, all resting in very " +
+          "nearly the same place.";
+      }
+      return null;   // fall through to the pooled lines below
+    },
+    lines: {
     bar: [
-      "Chrome legs, vinyl top, one leg shimmed with a folded beer mat. It is the correct " +
-        "height for this bar and no other.",
+      "Worn smooth where the forearms go and shimmed at one foot with a folded beer mat. " +
+        "It is the correct height for this bar and no other.",
       "Worn shiny in the middle by ten thousand identical evenings. Yours now, until it isn't.",
       "There is a stool with your name on it in the sense that nobody else wants it either.",
     ],
@@ -1492,6 +1515,102 @@ const _SCENERY = [
     ],
   } },
 
+  // Breadth rows off tools/examine-audit.mjs — one entry each closes a whole
+  // column of rooms whose prose foregrounds the noun (round 15/16 personas).
+  { key: "list", m: /\b(drinks? list|price list|menu board|tariff|lists?)\b/, lines: {
+    bar: [
+      "Laminated, sun-faded at one corner, and written in the confident hand of somebody " +
+        "who has never once been challenged on it. Beer, spirits, lady drink, and a line " +
+        "at the bottom that is deliberately not itemised.",
+      "Prices in two columns and a third column that is just a smile. Nothing on it has " +
+        "changed since the last time petrol did.",
+    ],
+    any: [
+      "A price board, angled at the pavement, doing the only advertising this place has " +
+        "ever paid for.",
+    ],
+  } },
+  { key: "box", m: /\b(box|boxes|crate|crates)\b/, lines: {
+    bar: [
+      "Beer crates, stacked four high behind the ice, holding up a corner of the operation " +
+        "in a way the architect never drew.",
+    ],
+    any: [
+      "Stacked, taped, and re-used past the point where anyone remembers what came in it " +
+        "originally. This town runs on them.",
+    ],
+  } },
+  { key: "bench", m: /\b(benches?|loungers?|sun ?beds?)\b/, lines: {
+    sand: [
+      "Stacked in threes under the folded umbrellas, chained through the frames, waiting " +
+        "for a morning that pays better than the night does.",
+    ],
+    any: [
+      "Concrete, warm from the day, and occupied at either end by two people determined " +
+        "not to acknowledge one another.",
+    ],
+  } },
+  { key: "tank", m: /\b(fish ?tank|aquarium|tanks?)\b/, lines: {
+    bar: [
+      "Green at the edges, one pump louder than it should be, and three survivors who have " +
+        "outlasted several members of staff.",
+    ],
+    any: [
+      "Somebody's pride, somebody else's chore, and the light in it is on whether anybody " +
+        "is watching or not.",
+    ],
+  } },
+  { key: "shelf", m: /\b(shelves|shelf|racks?|stalls?)\b/, lines: {
+    any: [
+      "Stacked to the ceiling and organised by a logic that is completely opaque until you " +
+        "have needed something from it twice.",
+    ],
+  } },
+  { key: "couch", m: /\b(couches?|sofas?|banquettes?)\b/, lines: {
+    bar: [
+      "Low, deep, and upholstered in something wipeable. The lighting over them has been " +
+        "chosen with the same care as everything else in here, which is to say enormous.",
+    ],
+    any: [
+      "It has been rained on at least once and has entirely forgiven the world for it.",
+    ],
+  } },
+  { key: "plant", m: /\b(plants?|pot plants?|greenery|palms?)\b/, lines: {
+    any: [
+      "Doing better than it has any right to in this heat, and watered by whoever happens " +
+        "to remember, which turns out to be enough.",
+    ],
+  } },
+  // NOT folded in with the plants: bunting is fabric, and "watered by whoever
+  // remembers" is exactly the kind of false claim this pass exists to remove.
+  { key: "bunting", m: /\b(bunting|flags|pennants|streamers|garlands?)\b/, lines: {
+    any: [
+      "Triangles of plastic on a string, sun-bleached on the side that faces the road and " +
+        "still vivid on the side that doesn't. Nobody remembers what they went up for.",
+    ],
+  } },
+  { key: "safe", m: /\b(safes?|room safe|strongbox)\b/,
+    fn: () => _isHotelRoom(G.room)
+      ? "A grey steel box bolted through the back of the wardrobe, four buttons worn " +
+        "paler than the others by a decade of guests choosing their birthdays. " +
+        "Whatever you leave in here survives a bad night out; whatever you carry " +
+        "does not."
+      : null },
+  { key: "window", m: /\b(windows?|balcony door|shutters?)\b/,
+    fn: () => _isHotelRoom(G.room)
+      ? "Aluminium frame, a gap at one corner that lets the soi in whether you want " +
+        "it or not, and the same view every hotel in this town sells: somebody " +
+        "else's air-conditioning, and a slice of something better past it."
+      : null,
+    lines: {
+      bar: [
+        "Propped open on a length of dowel, because the aircon lost this argument years ago.",
+      ],
+      any: [
+        "Glass, grille, and a strip of sun-curled film that was supposed to keep the heat " +
+          "out and has settled for keeping the view interesting.",
+      ],
+    } },
   { key: "mirror", m: /\b(mirrors?)\b/, lines: {
     bar: [
       "Behind the bottles, and doing the room a favour with the lighting. You look better in " +
@@ -1768,7 +1887,15 @@ const _SCENERY = [
     ],
   } },
 
-  { key: "stage", m: /\bstages?\b|\bpodium\b|\bcatwalk\b/, lines: {
+  // A room with a band on it is not a go-go, and the go-go furniture read as a
+  // flat contradiction at Take Care Me (persona report A#8).
+  { key: "stage", m: /\bstages?\b|\bpodium\b|\bcatwalk\b/,
+    fn: () => _room() && (_room().band || _room().liveMusic) && _room().barType !== "gogo"
+      ? "Knee-high, carpeted in something that was once red, and colonised by more " +
+        "cables than instruments. Two monitor wedges, a drum riser that is really a " +
+        "pallet, and a strip of tape on the floor where the singer stands."
+      : null,
+    lines: {
     bar: [
       "Raised, mirrored, lit from angles that flatter. Empty, it looks like furniture. " +
         "Occupied, it is the entire reason the room is shaped the way it is.",

@@ -227,3 +227,57 @@ test("…but a name the room never mentioned still misses", () => {
   assert.doesNotMatch(out.join("\n"), /flat, un-hostile attention|professional smile/,
     "the folk answer is derived from the room's prose, not handed out to everyone");
 });
+
+// ── Generic scenery must not contradict the room it is standing in ───────────
+// The inverse of a dead-end and worse than one: EXAMINE RAIL at The Terrace
+// ("a long teak rail") answered "chrome legs, vinyl top", and EXAMINE STAGE at
+// a live-music pub returned the go-go furniture (persona report A#8, 2026-08-23).
+test("a room that names its own material gets its own material back", () => {
+  G.room = "the_terrace"; out = []; doCommand("examine rail");
+  assert.match(out.join("\n"), /teak/i, "The Terrace's rail is teak and says so");
+  assert.doesNotMatch(out.join("\n"), /chrome|vinyl/i);
+  // …and a bar that names no material still gets a full answer, not a dead end
+  G.room = "candy_bar"; out = []; doCommand("examine stool");
+  assert.doesNotMatch(out.join("\n"), /isn't here|declines to elaborate|Nothing special/i);
+});
+
+test("a stage with a band on it is not a go-go stage", () => {
+  G.room = "take_care_me"; out = []; doCommand("examine stage");
+  assert.match(out.join("\n"), /monitor|cables|drum/i);
+  assert.doesNotMatch(out.join("\n"), /mirrored/i);
+  // …and a go-go's still is one. Asserted against the POOL, not one of its
+  // strings — the house rule, and it flaked twice before I honoured it.
+  const gogoPool = _SCENERY.find(e => e.key === "stage").lines.bar;
+  G.room = "hyper"; out = []; doCommand("examine stage");
+  assert.ok(gogoPool.some(line => out.join("\n").includes(line)),
+    "a go-go stage answers from the go-go pool");
+});
+
+test("a scenery fn that declines falls through to its own pool", () => {
+  // fn is an OVERRIDE, not a replacement: returning null must not abandon the
+  // noun, or adding a room-aware special case silently deletes the general answer.
+  const withBoth = _SCENERY.filter(e => e.fn && e.lines);
+  assert.ok(withBoth.length >= 2, "the pattern is actually in use");
+  for (const e of withBoth) {
+    G.room = "beach_rd_c"; out = [];
+    assert.ok(_doScenery(e.key === "window" ? "window" : e.key),
+      e.key + " still answers where its fn declines");
+  }
+});
+
+test("bunting is not watered", () => {
+  // it is fabric; folding it in with the plants asserted somebody waters it,
+  // which is the same false-claim defect this pass exists to remove
+  G.room = "supertown_alley"; out = []; doCommand("examine bunting");
+  assert.doesNotMatch(out.join("\n"), /water/i);
+  assert.match(out.join("\n"), /plastic|sun-bleached|string/i);
+});
+
+test("your own room's safe and window are lookable", () => {
+  for (const room of ["hotel_room", "qv_room", "metropole_room"]) {
+    G.room = room; out = []; doCommand("examine safe");
+    assert.match(out.join("\n"), /steel|wardrobe|buttons/i, room + " safe");
+    out = []; doCommand("examine window");
+    assert.doesNotMatch(out.join("\n"), /isn't here|declines to elaborate/i, room + " window");
+  }
+});
