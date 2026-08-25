@@ -581,7 +581,7 @@ function _doBarfine(arg) {
   // mystery. Everywhere else the girl won't name the number (she gets a cut):
   // the mamasan or the cashier drifts over to do the arithmetic.
   const { st, lt } = _barfinePrices(bt, id);
-  G.pendingBf = { id, st, lt, room: G.room };
+  G.pendingBf = { id, st, lt, party: _partyPrice(id, lt), room: G.room };
   // The Operator's edge made visible: on a girl who's actually running an angle,
   // his instinct flags it before the money moves (and _scamLean already halves his
   // odds of being taken). Fires once, on opening — the reprompt/redraw is _bfPrompt.
@@ -712,6 +712,18 @@ function _bfRefusalSay(id, r) {
 // spent, seen }; _partyArrive pays each NEW venue, _partyNightEnd settles the
 // goodbye by how the night actually ended, and SLEEP with company converts to
 // the long-time close (engine-play, top of _endNight).
+// What the FULL night costs, by how much she'd rather spend it with you. A
+// regular or better goes for the plain LT fine (she wants the night); below
+// that, the price is the payout that makes her whole for the earning night
+// she's giving up — steeper when the rail is full, softer when it's empty.
+function _partyPrice(id, lt) {
+  if (!lt) return lt;   // past-midnight waiver: her earning night is over anyway
+  const tier = (typeof _bondTier === "function") ? _bondTier(id) : 0;
+  if (tier >= 2) return lt;
+  let mult = tier === 1 ? PARTY_MULT_FACE : PARTY_MULT_STRANGER;
+  mult += _lowSeason() ? -PARTY_LOW_CUT : PARTY_HIGH_BUMP;
+  return Math.max(lt, Math.round(lt * mult / 50) * 50);
+}
 function _partyLabel() {
   const ids = (G.party && G.party.ids) || [];
   const names = ids.map(i => NPCS[i].name);
@@ -830,9 +842,13 @@ function _bfPrompt() {
       "TIME — overnight · TAKE HER OUT — she parties with you · or NO.)", "dim");
     return;
   }
-  _say(_fmt("(SHORT TIME {st} — one round, the night carries on · LONG TIME {lt} — overnight · " +
-    "TAKE HER OUT {lt2} — she comes with you, and the night keeps going · NO backs out.)",
-    { st: p(st), lt: p(lt), lt2: p(lt) }), "dim");
+  const pt = G.pendingBf.party != null ? G.pendingBf.party : lt;
+  _say(_fmt(pt > lt
+    ? "(SHORT TIME {st} — one round, the night carries on · LONG TIME {lt} — overnight · " +
+      "TAKE HER OUT {pt} — her WHOLE night, priced like one · NO backs out.)"
+    : "(SHORT TIME {st} — one round, the night carries on · LONG TIME {lt} — overnight · " +
+      "TAKE HER OUT {pt} — she comes with you, and the night keeps going · NO backs out.)",
+    { st: p(st), lt: p(lt), pt: p(pt) }), "dim");
 }
 
 // The player answered the negotiation. kind: "st" | "lt" | "open" — open is
@@ -851,7 +867,7 @@ const _ST_SOI6_LINES = [
 ];
 
 function _bfResolve(kind) {
-  const { id, st, lt } = G.pendingBf;
+  const { id, st, lt, party } = G.pendingBf;
   // With company already on your arm, the ledger only sells one thing: another
   // companion. An ST/LT mid-party would strand the girls you're out with.
   if (G.party && G.party.ids && G.party.ids.length && kind !== "party") {
@@ -871,7 +887,7 @@ function _bfResolve(kind) {
   G.pendingBf = null;
   const name = NPCS[id].name;
   const bt = _room().barType;
-  let price = kind === "st" ? st : lt;
+  let price = kind === "st" ? st : kind === "party" ? (party != null ? party : lt) : lt;
   G.bfOpen = false;
   let marked = false; // she read you as a newbie who'll swallow it
   if (kind === "open") {
@@ -946,6 +962,20 @@ function _bfResolve(kind) {
   // real modest costs (her drinks arrive wherever you land), real payoffs
   // (company สนุก, bond, and a companion who gets you home if the night wins).
   if (kind === "party") {
+    // Below regular she says the math out loud before she says yes — the full
+    // night is her whole earning shift, and nobody here pretends otherwise.
+    const _ptier = (typeof _bondTier === "function") ? _bondTier(id) : 0;
+    if (price > lt && _ptier < 2) {
+      _say(_fmt(_ptier === 1
+        ? "{n} tips her head at the number, not embarrassed by it. \u201cWhole night " +
+          "with you, I no work no more tonight, na. Long time, the girl go back bar " +
+          "after you sleep \u2014 full night is different thing.\u201d A grin. " +
+          "\u201cBut okay. For you, I switch off the phone.\u201d"
+        : "{n} looks at the room \u2014 " + (_lowSeason()
+          ? "half empty, and both of you know it \u2014 and names the number without ceremony. \u201cSlow night anyway, tilac. You pay, I party. Good deal for both.\u201d"
+          : "FULL, and both of you know it \u2014 and names the number plainly. \u201cHigh season, tilac. Tonight this stool make money all night. You want my whole night, the number is the whole night.\u201d No apology in it. It is just the price of her time, told straight."),
+        { n: name }), "dim");
+    }
     const p2 = (G.party && G.party.ids) ? G.party
       : (G.party = { ids: [], stops: 0, spent: 0, seen: {} });
     const second = p2.ids.length === 1;

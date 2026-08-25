@@ -6118,7 +6118,8 @@ function _chipSet() {
     const waived = G.pendingBf.id && typeof _bondTier === "function" && _bondTier(G.pendingBf.id) >= 3;
     add("short time", waived ? "short time (no fine)" : `short time ฿${G.pendingBf.st}`);
     add("long time", waived ? "long time (no fine)" : `long time ฿${G.pendingBf.lt}`);
-    add("take her out", waived ? "take her out (no fine)" : `take her out ฿${G.pendingBf.lt}`);
+    add("take her out", waived ? "take her out (no fine)"
+      : `take her out ฿${G.pendingBf.party != null ? G.pendingBf.party : G.pendingBf.lt}`);
     add("no", "no, thanks");
     return chips;
   }

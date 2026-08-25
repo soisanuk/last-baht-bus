@@ -11,6 +11,18 @@ const MOTOSAI_TOWN = 50; // motosai hop inside town
 const MOTOSAI_FAR  = 100;// motosai to/from the Darkside
 // The party barfine (TAKE HER OUT): the honest mirror of the bfparty scam —
 // she comes WITH you, and the night continues instead of ending at the ledger.
+// TAKE HER OUT is a hard sell (design call 2026-08-25): the full night eats her
+// whole earning potential — even a long time often gets cut short so she can go
+// back to the bar or freelance a club. So she gives you the night for one of
+// exactly two reasons: she genuinely likes you (bond tier ≥ regular → no
+// premium; her-farang → waived like everything else), or the payout makes her
+// whole (stranger/face pay a multiple of the LT fine, steeper in high season
+// when the rail is full, softer in low season when a guaranteed payer beats an
+// empty stool).
+const PARTY_MULT_STRANGER = 2;    // tier 0: the full buyout, plainly priced
+const PARTY_MULT_FACE     = 1.5;  // tier 1: she knows you; the math still exists
+const PARTY_HIGH_BUMP     = 0.5;  // high season: the rail is full, her time is dear
+const PARTY_LOW_CUT       = 0.5;  // low season: a sure night beats an empty one
 const PARTY_MAX_GIRLS = 2;   // "or two" is the classic flex; three needs a minivan
 const PARTY_STOP_CAP  = 6;   // stops that pay สนุก/bond — a crawl, not a treadmill
 const PARTY_TAXI      = 200; // what she takes from your pocket to pour you home

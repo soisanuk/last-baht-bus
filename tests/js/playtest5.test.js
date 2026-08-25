@@ -1850,3 +1850,42 @@ test("the companion rescue: a blackout with her on your arm ends in your own bed
   _endNight("blackout");
   assert.ok(G.money < 20000 - PARTY_TAXI, "alone, the town works you properly");
 });
+
+test("her whole night is priced like one: bond decides willingness, season decides the premium", () => {
+  // TAKE HER OUT eats her entire earning potential — even an LT often gets cut
+  // short so she can go back to work. She gives you the full night because she
+  // likes you (regular+: plain LT; her-farang: waived) or because the payout
+  // makes her whole (design call 2026-08-25).
+  _bigNight();
+  const lowDay = 65, highDay = 5;   // _lowSeason: day/30 % 4 === 2
+  G.day = highDay;
+  assert.ok(!_lowSeason(), "day 5 is high season (or retune this test)");
+  G.soc.drinks.lek = 0;
+  assert.equal(_partyPrice("lek", 700), Math.round(700 * 2.5 / 50) * 50, "stranger, full rail: the full buyout");
+  G.soc.drinks.lek = 5;
+  assert.equal(_partyPrice("lek", 700), 700 * 2, "a face pays less, but the math still exists");
+  G.soc.drinks.lek = 8;
+  assert.equal(_partyPrice("lek", 700), 700, "a regular gets the night because she wants the night");
+  G.day = lowDay;
+  assert.ok(_lowSeason());
+  G.soc.drinks.lek = 0;
+  assert.equal(_partyPrice("lek", 700), Math.round(700 * 1.5 / 50) * 50, "empty rail: a sure night beats a bare stool");
+  G.soc.drinks.lek = 5;
+  assert.equal(_partyPrice("lek", 700), 700, "low-season face: no premium left");
+  assert.equal(_partyPrice("lek", 0), 0, "the past-midnight waiver stands — her earning night is over anyway");
+});
+
+test("the real negotiation carries the party price to every surface, and she says the math out loud", () => {
+  _bigNight(); G.day = 5;             // high season
+  G.room = "lucky_tiger"; G.nightTurn = 30;
+  G.soc.drinks.lek = 6;               // a face — premium, softened
+  out = []; doCommand("barfine lek");
+  assert.ok(G.pendingBf && G.pendingBf.party > G.pendingBf.lt, "the negotiation computed her night's worth");
+  const want = G.pendingBf.party;
+  assert.match(out.join("\n"), new RegExp("TAKE HER OUT ฿" + want), "the menu quotes the real number");
+  const m0 = G.money;
+  out = []; doCommand("take her out");
+  assert.equal(G.money, m0 - want, "…and the ledger charges it");
+  assert.match(out.join("\n"), /full night is different thing|switch off the phone/i,
+    "she states the economics in her own voice");
+});
