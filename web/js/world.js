@@ -4317,6 +4317,21 @@ const NPCS = {
         short: "\"Bus stop north, up the beach road. Fifteen baht.\"" },
       { topic: "direction", text: "\"You lost already? Hahaha. Bus stop north, up the beach road. Bar ladies east, down Soi Seven. Town you get by the bus. Everything start from the bus, na.\"",
         short: "\"Bus north up the beach road; bar ladies east on Soi Seven.\"" },
+      // Her greeting is entirely about bottles and there is a live SELL BOTTLES
+      // mechanic — so BOTTLES is the first word a player tries (persona B#4).
+      {
+        topic: "bottles",
+        text: "\"Bottle?\" She brightens as if you had asked after a relative. \"Glass " +
+          "one, I take. Beer, whisky, soda — all same. Plastic, no. Plastic they pay " +
+          "nothing now, not worth carry.\" She taps the sack with her foot. \"Full " +
+          "sack, I push to the man behind Rompho, he weigh, he pay. Some night " +
+          "sixty baht. Some night two hundred, if the farang been happy.\"\n\nA " +
+          "shrug, entirely without complaint. \"Is not big money. But is money " +
+          "every night, and every night is the good part.\" (SELL BOTTLES, if you " +
+          "have any.)",
+        short: "\"Glass I take, plastic no. Sixty baht some night, two hundred if the " +
+          "farang been happy. Every night is the good part.\" (SELL BOTTLES.)",
+      },
       { topic: "cat", text: "\"The gray sisters, by the loungers? Mine — well, nobody's, but I feed them, morning and night, ten year now. Big One and Little One. You watch the big one: she never eat before the little one eat. Not one time in ten year.\" Auntie Nok's whole face goes soft. \"They my security, na. Nobody sleep rough on MY beach the cats don't tell me first. Better than police. Cheaper than police, hahaha.\"",
         short: "\"The gray sisters — I feed them ten year. Big One never eats before Little One. My security.\"" },
       // The Quiet Side quest (docs/map-coverage.md): Nok is the beach grapevine Sumalee
@@ -7789,6 +7804,16 @@ const NPCS = {
       { topic: "soi", text: "\"Soi 7 — beach one end, Second Road and Rompho Market the other, the " +
           "7-Eleven on the corner, the immigration office down the dark end nobody like.\" A dry " +
           "little laugh. \"Come for the beer, not the go-go. The go-go is other people's headache.\"" },
+      {
+        topic: "bar",
+        text: "\"This one?\" Sumalee looks down her own room the way you would look " +
+          "at a car you have owned a long time. \"Fourteen stools, one fridge that " +
+          "works and one that we tell people is the ice. Not go-go, not disco. " +
+          "People come, they sit, they stay four hour.\" She shrugs. \"Beach bar " +
+          "money is quiet money, na. Nobody get rich. Nobody get in trouble either.\"",
+        short: "\"Fourteen stools and one fridge that works. Quiet money — nobody " +
+          "get rich, nobody get in trouble.\"",
+      },
       { topic: "jomtien", text: "\"Jomtien is for the ones who already know the game — long-stay, " +
           "retire, married before, married again.\" She shrugs. \"Slower money than Pattaya, but it " +
           "come every month, and nobody fall off a balcony on my soi.\"" },
@@ -8009,11 +8034,30 @@ const NPCS = {
           "your hand, which nobody in this town does. \"Bob. This is mine and hers, mostly " +
           "hers. Sit up here if you want company or over there if you don't — both are " +
           "fine and neither one offends me.\" He is already reaching for a glass." },
-      { topic: "kinnaree", text: "\"That's my wife.\" He says it the way other men say " +
+      // Keyed on `wife`, not on her name: "his wife runs the floor" is in the room
+      // prose, his greeting is "this is mine and hers, mostly hers", and Kinnaree's
+      // own line is "my husband will talk your ear off" — so WIFE is the word the
+      // player types. Her name still reaches it through _CONVO_TOPIC_RULES.
+      { topic: "wife", text: "\"That's my wife.\" He says it the way other men say " +
           "their own name. \"Thirty-one years in March. She runs the floor, she runs the " +
           "money, and she runs me — in that order and on merit.\" He glances across the " +
           "room and doesn't hurry the glance. \"Bar's named for her. She thinks that's " +
           "vulgar. She's probably right.\"" },
+      // The room says he has "never once had to explain the house rules twice",
+      // which is an invitation to ask what they are (persona report A#18).
+      {
+        topic: "rules",
+        text: "\"House rules.\" Bob holds up three fingers and does not appear to enjoy " +
+          "having to. \"You keep your hands to yourself unless she puts them " +
+          "somewhere. You settle your bill the night you run it. And you do not " +
+          "raise your voice at a woman who works here, ever, for any reason, " +
+          "including a good one.\"\n\nHe puts the hand down. \"That's it. That's the " +
+          "whole list, it's been the whole list since nineteen ninety-eight, and " +
+          "I've never had to say it twice to the same guy.\" A beat. \"Because the " +
+          "guys I've said it to once don't come back, mostly. Works out.\"",
+        short: "\"Hands to yourself, settle your bill, never raise your voice at a " +
+          "woman who works here. Never had to say it twice to the same guy.\"",
+      },
       { topic: "vietnam", text: "A small nod, unsurprised — he has the look of a man who " +
           "gets asked. \"Seventy-one and seventy-two. I was a mechanic; I fixed things " +
           "that other people broke, and I was luckier than a lot of better men.\" That is " +
@@ -9246,6 +9290,25 @@ const NPCS = {
           "sign for you.\"",
         short: "\"Twelve stools and a humming fridge. The old man carries you; the name on it is the hard part.\"" },
       // after the Shamrock has spoken: the man who sent you there can talk about it
+      // "Somebody who's watched this soi twenty-two years", and his bar sits at the
+      // foot of it — so SOI 6 is the first thing a methodical player asks him, and
+      // it missed (persona report B#4, 2026-08-23).
+      {
+        topic: "soi 6",
+        text: "\"Soi Six.\" He sets the Singha down, which he does not do for most " +
+          "questions. \"When I come out it was guest houses, bud. Actual guest " +
+          "houses, with actual guests in them — Germans, mostly, down for the " +
+          "fishing.\" A short laugh at his own sentence. \"Then one place put a few " +
+          "girls out front to shift the beer, and the place next door watched that " +
+          "work, and that's the whole history of the street in one go.\"\n\nHe nods " +
+          "at the mouth of it. \"Now it's short-time upstairs and volume downstairs " +
+          "and everybody knows the price before they sit down, which — say what you " +
+          "like — is more honest than half of Walking Street.\" He picks the bottle " +
+          "back up. \"It's the only soi in town that isn't pretending. That's why " +
+          "the ones that hate it hate it so much.\"",
+        short: "\"Guest houses, then one place put girls out front to shift the beer, " +
+          "and the place next door copied it. Only soi in town that isn't pretending.\"",
+      },
       { topic: "shamrock", req: ["shamrockVisited"],
         text: "\"Found it, then. Found HIM.\" Bert doesn't look up from the glass he's drying. \"Sean's " +
           "place. Good man, bad luck, no partner — you go home for an operation and nobody's holding " +
@@ -11051,6 +11114,22 @@ const PATRONS = {
         "town glittering below. \"Best seat in the province for watching people make the " +
         "mistakes you already made. Sit. The beer's actually cold; that's the Samsons.\"",
         short: "\"Colin. Nine years up here. Best seat in the province for watching people make your mistakes.\"" },
+      // Nine years on Pratumnak and the room says so — but PRATUMNAK missed
+      // (persona report A#18, 2026-08-23).
+      {
+        topic: "pratumnak",
+        text: "\"The hill.\" Colin says it with the mild proprietorial warmth of a man " +
+          "who did not choose it so much as stop leaving. \"Nine years. Came for six " +
+          "months between contracts.\" He tips the glass at the window. \"It's the " +
+          "quiet bit. Thai families, a couple of hotels, the monkeys, one viewpoint " +
+          "everyone photographs and nobody sits at. You can walk to two beaches and " +
+          "you can't walk to a single go-go, which sorts your evenings out for you.\"" +
+          "\n\nA small dry pause. \"Everybody tells you they're moving up the hill " +
+          "eventually. Almost nobody does. It's ten minutes from all of it and it " +
+          "may as well be a different country, and you have to actually want that.\"",
+        short: "\"Nine years. Came for six months. Quiet bit — two beaches, no go-gos. " +
+          "Everybody says they're moving up the hill. Almost nobody does.\"",
+      },
       { topic: "lattes",
         text: "\"The lattes.\" He turns the cold cup a quarter-turn on the rail. \"There was " +
           "a girl. Not from the bars — that was the whole point of her, I thought. Good " +

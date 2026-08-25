@@ -573,3 +573,41 @@ test("the tease chip is gated on trust; compliment/joke always offered", () => {
   cmds = _chipSet().map(c => c.cmd);
   assert.ok(cmds.includes("tease"), "tease chip unlocks at trust 3");
 });
+
+// ── An NPC's own advertised subject must be an ask-topic ─────────────────────
+// The class the personas keep reporting and no lint can find: a character
+// volunteers a noun in their own greeting (or their room prose does), and the
+// word they used misses. It resists automation because the findings are words
+// that are topics NOWHERE in the game yet, so no vocabulary harvest can propose
+// them (see tools/asktopic-audit.mjs's header). So they get pinned by hand as
+// each one is found — persona reports A#18 / B#4, 2026-08-23.
+test("subjects a character volunteers about themselves resolve", () => {
+  const miss = /above my pay grade|Not my story|I don't know about that|That one I don't know|No idea, mate|Search me|Not one I know|wrong girl|Couldn't tell you/i;
+  const cases = [
+    ["bob",     "succubus",                 "wife",        /Thirty-one years|runs the floor/],
+    ["bob",     "succubus",                 "kinnaree",    /Thirty-one years|runs the floor/],
+    ["bob",     "succubus",                 "house rules", /hands to yourself|whole list/i],
+    ["nott",    "adonis_club",              "hosts",       /Host bars are small|gold walls/],
+    ["nont",    "buakhao_market",           "sim",         /chip in it|This is the college/],
+    ["sumalee", "coconut",                  "bar",         /Fourteen stools|quiet money/i],
+    ["nok",     "jomtien_soi_7_beach_end",  "bottles",     /Glass one|every night is the good part/i],
+    ["bert",    "stinky_bar",               "soi 6",       /Guest houses|Soi Six/],
+  ];
+  for (const [who, room, topic, want] of cases) {
+    newGame(); G.stage = "expat"; _setFlag("act1Done"); _setFlag("expatLife");
+    G.room = room; G.pendingEnc = null;
+    out = []; doCommand("talk to " + who);
+    out = []; G.pendingEnc = null; doCommand("ask " + who + " about " + topic);
+    const said = out.join("\n");
+    assert.doesNotMatch(said, miss, `ask ${who} about ${topic} must not deflect`);
+    assert.match(said, want, `ask ${who} about ${topic} must reach the real answer`);
+  }
+});
+
+test("Colin answers for the hill he has lived on for nine years", () => {
+  newGame(); G.stage = "expat"; _setFlag("act1Done");
+  G.room = "the_terrace"; G.pendingEnc = null;
+  out = []; doCommand("talk to colin");
+  out = []; G.pendingEnc = null; doCommand("ask colin about pratumnak");
+  assert.match(out.join("\n"), /Nine years|the hill/i);
+});

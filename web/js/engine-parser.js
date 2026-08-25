@@ -2593,6 +2593,14 @@ const _CONVO_TOPIC_RULES = [
   // now caught by tools/asktopic-audit.mjs). One alias row serves typed ASK, the
   // wheel and the conversation layer alike, which is what this table is for.
   [/\btours?\b|\bon the road\b|\bgigs?\b|\btouring\b/,                        "music"],
+  // The same class, from the next blind session: an NPC volunteers a subject in
+  // their own greeting and then misses on the word they used (persona reports
+  // A#18 / B#4, 2026-08-23). Where a node already exists under a different key,
+  // one alias row serves typed ASK, the wheel and the conversation layer alike.
+  [/\bkinnaree\b|\bthe missus\b|his wife|your wife/,                          "wife"],
+  [/\bhosts?\b|\bhost bar\b|the boys\b/,                                      "scene"],
+  [/\bsims?\b|\bunlock(ing|ed)?\b|screen fix|cracked screen/,                  "job"],
+  [/house rules?|the rules\b|your rules/,                                       "rules"],
   [/where.*(from|grew up|born)|whereabout|your country|back home|where.*\blive/, "home"],
   [/smartphone|\bphones\b|the phones|\bline app\b|social media/,                   "1998"],
   [/for a living|line of work|what.*you do\b|what.*you did/,                     "job"],
