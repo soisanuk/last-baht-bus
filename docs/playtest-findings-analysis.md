@@ -295,3 +295,83 @@ Recorded here because they are decisions, not defects, and should be made delibe
   clock it is pressuring him with.
 - **Reputation is money-proof** (correct) but little else moves it either, so it reads
   inert rather than incorruptible.
+
+---
+
+# Round 15/16 triage ledger (2026-08-25)
+
+The two control-experiment reports (thorough player A: 26 findings; thorough
+player B: 27) sat untriaged for two days and were only recoverable from the
+session transcript. **That is the failure this section exists to prevent** — the
+same lesson as `docs/settings-reuse.md`: a backlog that lives only in a
+conversation is a backlog that gets lost. Findings go here as they are triaged,
+whether or not they are fixed.
+
+## Fixed
+
+| # | Finding | Fix |
+|---|---|---|
+| A1 | `EXAMINE WALL` returned your wallet anywhere in the game | `_findItem` matches on word boundaries |
+| A2ii | Rejected commands ticked the clock and rolled the dark-room dog | `_doGo`/`_doMotosai` return false on refusal |
+| A7·B10 | Generic bar prose invoked "the mamasan" in a bar whose mamasan works elsewhere tonight | `_mamaHere`/`_mamaRef` |
+| A8 | Generic scenery **contradicted** authored room detail (teak rail → "chrome legs"; band stage → go-go furniture) | `_SCENERY` `fn` became an override with fall-through; the rail reads the room's own material |
+| A11·B11 | Prose named durations the turn counter contradicted | Tan's call no longer names half an hour |
+| A12·B19 | Rough-wake copy misdescribed the loss, and a folio slid under a door you weren't behind | `_chargeRent(rough)`; the remainder is "what they left you", not "still in the room"; DIAGNOSE states the ฿20,000 cap |
+| A14 | `TAKE` a carried item hit the bar-fixture refusal | `_ALREADY_HAVE`, checked before the advertised-fixture branch |
+| A16 | `PET CAT` denied a cat `EXAMINE CAT` had just described | `_PET_BAR_CAT`, gated on the room's own prose |
+| A17·B7 | EXAMINE dead-ends on foregrounded nouns | breadth rows off `examine-audit`: lists, crates, benches/loungers, tanks, shelves/stalls, couches, plants, bunting, hotel safe/window. 1076 → 1045 |
+| A18·B4 | An NPC's own advertised subject wasn't an ask-topic (10 instances) | 3 alias rows + 5 authored nodes; `asktopic-audit` 32 played / 0 unanswered |
+| A26·B3 | People the room's prose describes weren't addressable | `_promptedFolk`, derived from the room description |
+| B2 | **No enterable venue could be EXAMINEd** — every one answered "it isn't here" | `_venueLook`, derived from the exits graph; `_venueKind` reads each room's own flags |
+| B13 | `ride bus to <not-a-stop>` silently discarded the destination | the driver shakes his head before the list re-prints |
+
+## Open — design calls (need a decision, not a patch)
+
+- **B1 (SEVERE) — `TRAVEL` is a free, risk-free teleport that nullifies the title
+  mechanic.** The last bus, the ฿15 fare and the small-hours motosai premium are
+  the run's central tension, and the game narrates that tension one command
+  before TRAVEL bypasses all three at zero cost from anywhere on the map. Options:
+  price it, curfew it, or keep it free and accept that the deadline is optional.
+- **B6 — Act One completes without returning to room 412**, though the quest text
+  and the game's own title say otherwise. Either the goal text drops the clause or
+  the scoring waits for the room.
+- **A19 — the night summary's "spent" is a net cash delta**, so a robbery reads as
+  spending and collecting the room safe reads as thrift.
+- **B27 — the protagonist is assumed male** with no alternative at any of the three
+  character-creation axes. Already an open call in the persona memory note.
+
+## Open — bugs, roughly by cluster
+
+**Geography (A4, A5, A15, B12, B17).** Pratumnak Hill Road's `soi5` exit goes to
+the crest, not Soi 5, and plain `s` is refused; room prose names directions the
+room doesn't have (Thappraya Hill "west", Jomtien Second Road "east"); the Soi 7
+block links `s` one way and `e` the other; Tree Town compass exits double as bar
+doors so mapping walks you indoors; LK Metro's prose is written for one approach.
+
+**Promise/state (A3, A6, A9, A20, A23, B5, B14, B21, B22, B24).** The quest HINT
+names a bar the hopper has already left; Rompho Market advertises KISS with no
+door and calls itself indoors; Take Care Me offers a hostess dance and Connect 4
+counters in a live-band room with no house girls; `swim` wakes a jet-ski scam in
+the room that says there are no jet-skis; the darts refusal omits two venues that
+have darts; HINT names four code-holders but no topic reaches them; room prose
+asserts things the state-aware verbs then correctly deny; the empty-bar rain
+vignette fires in a visibly busy bar; Cheap Charlie's has three people in its
+prose and nobody on the roster; Candy sells a shortcut to information she has
+already given.
+
+**Interaction (A13, A22, A24, A25, B9, B15, B16, B18, B23, B25).** `HIRE <host>`
+narrates leaving and costs one turn; two different parser-miss messages for the
+same input on consecutive turns; a live darts game swallows every command with a
+bare score re-print; `ride bus` + `look` re-prints the origin room; bare `BUY`
+inside a shop lists nothing while the street outside lists everything; a pending
+NPC question is lost after one intervening command and never re-offered; darts
+refuses `FINISH` at 80; killer pool stops narrating the last opponent; bare `buy
+drink` buys a lady drink while you are flagged thirsty; leftover game verbs
+become ask-topics after a game ends.
+
+**Other.** A2i (the only exit from your own hotel is an unlit soi-dog room, with
+no warning at the door); A10 (reused filler names make the absent-NPC pointer
+name the wrong bar); A21 (the dog pads *inside* Central Mall and waits *outside*
+an open-air market); B20 (`feed dog` invents a grill cart that isn't in the room);
+B26 (Starlight printed its revisit line on first entry — observed once, not
+reproducible, source-checked by the reporter).
