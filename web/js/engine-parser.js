@@ -2804,6 +2804,10 @@ const _CONVO_TOPIC_RULES = [
   [/\bmunich\b|\bm\u00fcnchen\b|\bbavaria\b/,                                  "german"],
   [/\bwhite dish\b|\bwdg\b/,                                                  "ryan powers"],
   [/\bcipher\b|four letters|\bsign.?off\b/,                                    "signoff"],
+  // Doyle's President's-Table recon: the desc says ASK ABOUT THE TABLE, but a
+  // player who forgot that types the natural words — and vignette quests don't
+  // show in the journal to remind them (civilian playtest F1, 2026-08-26)
+  [/\bpresident\b|back room|good table|patched vest|blue label|the president|orchid room/, "table"],
   // The same class, from the next blind session: an NPC volunteers a subject in
   // their own greeting and then misses on the word they used (persona reports
   // A#18 / B#4, 2026-08-23). Where a node already exists under a different key,
@@ -2868,11 +2872,15 @@ const _CONVO_TOPIC_RULES = [
   [/\bmom\b|\bmum\b|mother|\bschool\b|dropped? out/,                             "family"],
   [/\bhustle\b|computers?|\btech\b|hacking|unlock/,                              "job"],
   [/\bnont\b|\balex\b|two names|half thai|luk ?khrueng|mixed|farang or thai/,    "name"],
-  // Duangjai (The Boathouse) — Nont's mother. "nont" literal-matches her son node.
-  [/\bson\b|your boy|your kid/,                                                  "nont"],
+  // a girl's own child → her family node (the common case). Duangjai (Nont's
+  // mother) keeps her son-story: it is keyed on his NAME, so "ask her about
+  // nont" reaches it, and she has a family node too (civilian playtest F6).
+  [/\bson\b|your boy|your kid|your child/,                                        "family"],
   [/\bfather\b|\bhusband\b|his dad|the dad/,                                     "father"],
   // Thomas, the ghost of Jomtien (jomtien_beach_s3) — the second coffee, the vendor
   [/second (cup|coffee|one)|the other (cup|coffee)|that cup|both coffee/,        "coffee"],
+  [/barista|coffee shop|the shop|day job|apron/,                                "job"],
+  [/\bdancer\b|number 72|number seventy|your dancing|walking street|\bphoto\b/,   "dancer"],
   [/khanom|the cart|sticky rice|coconut vendor|snack cart|the vendor/,          "vendor"],
   // Nok — the Jomtien regular who stopped coming (The Quiet Side, docs/map-coverage.md)
   [/\bgordon\b|the regular|who stopped/,                                         "regular"],
@@ -4706,7 +4714,10 @@ function _doScore() {
           t: thai, ts: thai === 1 ? "" : "s" }), "dim");
     }
   }
-  const active = Object.entries(QUESTS).filter(([qid]) => G.quests[qid] === "active");
+  // vignettes are hidden from the journal AND hint (they're quiet origin scenes,
+  // not jobs) — SCORE was the one surface that leaked them, so it said "active"
+  // while QUESTS said "nothing on the books" (civilian playtest F1, 2026-08-26)
+  const active = Object.entries(QUESTS).filter(([qid, q]) => G.quests[qid] === "active" && !q.vignette);
   for (const [, q] of active) _say(_fmt("▶ {name}", { name: _L(q.name) }), "dim");
   // Faction standing — only surfaces once you've actually taken a side; a player
   // who stays out of the politics never sees this line, and pays nothing for it.
@@ -6105,6 +6116,9 @@ function _chipSet() {
     const c = typeof _shiftCallById === "function" ? _shiftCallById(G.shiftCall) : null;
     add("yes", c ? c.yesLabel : "yes"); add("no"); return chips;
   }
+  if (G.pendingChoice === "partner") {
+    add("yes", G.partnerWho === "tan" ? "yes — Tan's 51%" : "yes — Candy's 51%"); add("no"); return chips;
+  }
   if (G.pendingChoice === "checkout") {
     if (G.hotel !== "sabai") add("sabai", "Sabai ฿400");
     if (G.hotel !== "queenvic") add("queen vic", "Queen Vic ฿700");
@@ -6461,6 +6475,7 @@ function engineComplete(input) {
   else if (G.pendingChoice === "chamgift") pool = ["gift ", "nothing"];
   else if (G.pendingChoice === "synjob") pool = ["yes", "no", "ask"];
   else if (G.pendingChoice === "shift") pool = ["yes", "no"];
+  else if (G.pendingChoice === "partner") pool = ["yes", "no"];
   else if (G.pendingChoice === "checkout") {
     pool = [...Object.keys(_HOTELS).filter(k => k !== G.hotel)
       .map(k => _HOTELS[k].name.toLowerCase()), "stay"];
@@ -6653,6 +6668,7 @@ function _renderResume() {
   }
   if (G.pendingChoice === "synjob") { _synPrompt(); return; }
   if (G.pendingChoice === "shift") { _shiftPrompt(); return; }
+  if (G.pendingChoice === "partner") { _partnerPrompt(); return; }
   if (G.game) { _renderGame(); return; }
   if (G.pendingEnc) { _renderEncounter(); return; }
   if (G.pendingBf) { _bfPrompt(); return; }
@@ -6785,6 +6801,15 @@ function doCommand(input) {
     return;
   }
 
+  // the 51% fork: hear the pitch, then commit on purpose
+  if (G.pendingChoice === "partner") {
+    if (/^(y|yes|ok|okay|sure|do it|agree|deal|him|her|candy|tan)/.test(lower)) { _partnerYes(); return; }
+    if (/^(n|no|not|think|wait|later|hold|both)/.test(lower)) { _partnerNo(); return; }
+    _say("It's the biggest yes-or-no of the whole stage; the town will wait while " +
+      "you decide. (YES \u00b7 NO)", "dim");
+    _partnerPrompt();
+    return;
+  }
   // the shift call: one a night, while you are standing your own rail
   if (G.pendingChoice === "shift") {
     if (/^(y|yes|ok|okay|sure|go on|aye|do it|let|have|get|put|write)/.test(lower)) { _shiftYes(); return; }

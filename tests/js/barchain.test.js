@@ -116,6 +116,8 @@ test("the partnership is a real choice: either partner completes the step", () =
     becomeExpat(); upToTheFork();
     G.room = room;
     say(`ask ${who} about partnership`);
+    assert.equal(G.pendingChoice, "partner", `${who} pitches, doesn't commit`);
+    say("yes");
     assert.ok(_flag("barPartner"), `${who} should close the partnership step`);
     assert.ok(_flag(marker), `${who} should record which route was taken (${marker})`);
     say("look");
@@ -125,11 +127,11 @@ test("the partnership is a real choice: either partner completes the step", () =
 
 test("the two routes leave you standing in different places", () => {
   becomeExpat(); upToTheFork();
-  G.room = "candy_bar"; say("ask candy about partnership");
+  G.room = "candy_bar"; say("ask candy about partnership"); say("yes");
   const candyF = { ...G.faction };
 
   becomeExpat(); upToTheFork();
-  G.room = "soi6_street"; say("ask tan about partnership");
+  G.room = "soi6_street"; say("ask tan about partnership"); say("yes");
   const tanF = { ...G.faction };
 
   // Candy is the public, legible route: a hard shove away from the rollup.
@@ -142,7 +144,7 @@ test("the two routes leave you standing in different places", () => {
 
 test("opening night is told differently depending on who signed", () => {
   becomeExpat(); upToTheFork();
-  G.room = "candy_bar"; say("ask candy about partnership");
+  G.room = "candy_bar"; say("ask candy about partnership"); say("yes");
   _setFlag("barPaid");                 // deposit settled — see _barDeposit
   G.quests.bar_opening = "active"; G.room = "stinky_bar";
   const candyNight = say("ask bert about opening");
@@ -151,7 +153,7 @@ test("opening night is told differently depending on who signed", () => {
     "Candy's night is legible: her name, first, where anyone can read it");
 
   becomeExpat(); upToTheFork();
-  G.room = "soi6_street"; say("ask tan about partnership");
+  G.room = "soi6_street"; say("ask tan about partnership"); say("yes");
   _setFlag("barPaid");                 // deposit settled — see _barDeposit
   G.quests.bar_opening = "active"; G.room = "stinky_bar";
   const tanNight = say("ask bert about opening");
@@ -164,7 +166,7 @@ test("opening night is told differently depending on who signed", () => {
 test("Gavin turns up either way — he loses the bar to a regular", () => {
   for (const [who, room] of [["candy", "candy_bar"], ["tan", "soi6_street"]]) {
     becomeExpat(); upToTheFork();
-    G.room = room; say(`ask ${who} about partnership`);
+    G.room = room; say(`ask ${who} about partnership`); say("yes");
     _setFlag("barPaid");                 // deposit settled — see _barDeposit
   G.quests.bar_opening = "active"; G.room = "stinky_bar";
     assert.match(say("ask bert about opening"), /Gavin/,
@@ -878,7 +880,7 @@ test("a shift deals one call a night, day-stable, and reading it can't reroll it
   const rng = G.rng;
   // the redraw a reload does must be identical and must not touch the dice
   out = []; _renderResume();
-  assert.match(out.join("\n"), /YES . NO/, "a reload redraws the prompt, not a blank screen");
+  assert.match(out.join("\n"), /YES.*NO/, "a reload redraws the prompt, not a blank screen");
   assert.equal(G.rng, rng, "…and reading it consumes no dice");
   assert.equal(G.shiftCall, first);
 
@@ -916,7 +918,7 @@ test("a gibberish answer re-prompts instead of wedging the night", () => {
   G.bar.shiftAsked = true; G.shiftCall = "round"; G.pendingChoice = "shift";
   say("xyzzy plugh");
   assert.equal(G.pendingChoice, "shift", "it waits");
-  assert.match(out.join("\n"), /YES . NO/, "and it re-asks rather than going silent");
+  assert.match(out.join("\n"), /YES.*NO/, "and it re-asks rather than going silent");
 });
 
 test("the calls trade money against people in both directions", () => {
@@ -937,4 +939,88 @@ test("the calls trade money against people in both directions", () => {
   G.bar.shiftAsked = true; G.shiftCall = "early"; G.shiftWho = her2; G.pendingChoice = "shift";
   say("no");
   assert.ok(G.soc.drinks[her2] < 5, "and holding her costs the other side of the trade");
+});
+
+// ── The 51% fork is a decision, not an ask-ordering accident (2026-08-26) ────
+// Publican playtest: the stage's flagship choice resolved on the first ASK with
+// no confirmation, so a diligent player who asked Candy first (gated) then Tan
+// stumbled into partnering Tan. Now each ASK PITCHES; a separate YES commits.
+test("hearing a partner's pitch does not commit — you can sound out both first", () => {
+  running(); G.flags.partnerTan = false; G.flags.barPartner = false;
+  becomeExpat(); upToTheFork();
+  // hear Candy — no commit
+  G.room = "candy_bar"; say("ask candy about partnership");
+  assert.equal(G.pendingChoice, "partner", "she pitches");
+  assert.ok(!_flag("barPartner"), "…and nothing is signed yet");
+  say("no");
+  assert.ok(!_flag("barPartner") && !_flag("partnerCandy"), "declining commits to nobody");
+  // now hear Tan — still free to choose
+  G.room = "soi6_street"; say("ask tan about partnership");
+  assert.equal(G.pendingChoice, "partner");
+  say("yes");
+  assert.ok(_flag("barPartner") && _flag("partnerTan"), "the YES commits to the one you chose");
+  assert.ok(!_flag("partnerCandy"), "and not the one you passed on");
+});
+
+test("the partner pitch redraws on reload and re-asks on gibberish (modal invariant)", () => {
+  running(); G.flags.partnerTan = false; G.flags.barPartner = false;
+  becomeExpat(); upToTheFork();
+  G.room = "candy_bar"; say("ask candy about partnership");
+  const rng = G.rng;
+  out = []; _renderResume();
+  assert.match(out.join("\n"), /YES.*NO/, "a reload redraws the prompt");
+  assert.equal(G.rng, rng, "…and consumes no dice");
+  out = []; say("mushrooms");
+  assert.equal(G.pendingChoice, "partner", "gibberish waits");
+  assert.match(out.join("\n"), /YES.*NO/, "and re-asks");
+});
+
+test("once the fork is settled it cannot be re-opened", () => {
+  running(); G.flags.partnerTan = false; G.flags.barPartner = false;
+  becomeExpat(); upToTheFork();
+  G.room = "soi6_street"; say("ask tan about partnership"); say("yes");
+  assert.ok(_flag("partnerTan"));
+  out = []; G.room = "candy_bar"; say("ask candy about partnership");
+  assert.notEqual(G.pendingChoice, "partner", "the door is closed — barPartner excludes both nodes");
+});
+
+// ── The shift/floor content, blind-tested for the first time (2026-08-26) ────
+test("a girl you let catch the eleven o'clock bus is off the floor for the night", () => {
+  // publican F3: she was let go early, then passed mango down the bar twice
+  running(); G.room = "stinky_bar"; G.nightTurn = 20; cmd("work");
+  const her = _barStaff().filter(id => NPC_ROLES[id] === "hostess")[0];
+  assert.ok(_npcsHere().includes(her), "on the floor first");
+  G.bar.shiftAsked = true; G.shiftCall = "early"; G.shiftWho = her; G.pendingChoice = "shift";
+  say("yes");
+  assert.ok(!_npcsHere().includes(her), "gone — the floor really is one short");
+  assert.ok(!_barStaff().includes(her) || _npcRoom(her) !== G.room, "and off the floor list");
+  // …back tomorrow
+  G.room = "hotel_room"; _endNight("dawn");
+  assert.ok(!(G.soc.leftEarly && G.soc.leftEarly[her] === G.day), "the early-leave clears overnight");
+});
+
+test("floor moments deepen instead of retelling — a reveal is once, then the next", () => {
+  // publican F4: Manow's "good ice" trust beat printed on night 2 AND night 11
+  running(); G.room = "stinky_bar"; G.bar.room = "stinky_bar";
+  const lines = [];
+  for (let night = 0; night < 4; night++) {
+    G.day = 100 + night;
+    G.bar.workedLast = true; G.bar.workedDay = G.day;
+    G.bar.floorN = 0; G.bar.floorTurn = -99;
+    for (let t = 0; t < 50 && G.bar.floorN < WORK_FLOOR_MAX; t++) {
+      G.turns += WORK_FLOOR_GAP; out = []; _workFloor();
+      if (out.length) lines.push(out.join(" "));
+    }
+  }
+  assert.ok(lines.length >= 8, "several floor moments landed");
+  // within each girl's own lines, no verbatim repeat until her pool is spent
+  const byGirl = {};
+  for (const l of lines) {
+    const who = ["Manow", "Lamai", "Cake"].find(n => l.includes(n)) || "?";
+    (byGirl[who] = byGirl[who] || []).push(l);
+  }
+  for (const [who, ls] of Object.entries(byGirl)) {
+    if (who === "?") continue;
+    assert.equal(new Set(ls).size, ls.length, who + "'s reveals don't retell within the pool");
+  }
 });

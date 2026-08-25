@@ -4656,7 +4656,7 @@ const WORK_FLOOR_MAX = 3;    // …and how many a night can hold
 function _barStaff() {
   const room = (G.bar && G.bar.room) || "stinky_bar";
   return Object.keys(NPCS)
-    .filter(id => _npcRoom(id) === room && NPC_ROLES[id] && !NPCS[id].manager)
+    .filter(id => _npcRoom(id) === room && NPC_ROLES[id] && !NPCS[id].manager && _npcActive(id))
     .sort();
 }
 
@@ -4709,7 +4709,14 @@ function _workFloor() {
   seen.push(id);
   b.floorTurn = G.turns;
   b.floorN = (b.floorN || 0) + 1;
-  _say(_fmt(_pickVary(_floorPool(id), "floor" + NPC_ROLES[id]), { who: _npcLabel(id) }));
+  const linePool = _floorPool(id);
+  const said = (b.floorSaid = b.floorSaid || {});
+  const heard = said[id] = said[id] || [];
+  let idxPool = linePool.map((_, i) => i).filter(i => !heard.includes(i));
+  if (!idxPool.length) { heard.length = 0; idxPool = linePool.map((_, i) => i); } // exhausted: start over
+  const pick = idxPool[0];   // her reveals in order — each shift a new one, no repeat until the pool's dry
+  heard.push(pick);
+  _say(_fmt(linePool[pick], { who: _npcLabel(id) }));
   _addBond(id, 1);
 }
 
@@ -4765,9 +4772,57 @@ function _shiftAsk() {
   G.pendingChoice = "shift";
 }
 
+// ── The 51% fork: sound them out, then COMMIT on purpose ─────────────────────
+// The stage's flagship decision. Asking Candy/Tan about the partnership PITCHES
+// them (their dialogue node, which arms this) — the commit is a separate YES, so
+// you can hear both before you choose, and can't stumble into a partner by
+// ask-ordering (publican playtest 2026-08-26).
+function _partnerPrompt() {
+  const who = G.partnerWho;
+  _say(_fmt(who === "tan"
+    ? "(Hand Tan 51% of your bar? He asks nothing, takes nothing \u2014 which is its own kind of price. YES \u00b7 NO \u2014 think on it.)"
+    : "(Make Candy your 51%? Slow, lawyered, everything on paper. YES \u00b7 NO \u2014 think on it.)", {}), "dim");
+}
+function _partnerYes() {
+  const who = G.partnerWho;
+  G.pendingChoice = null; G.partnerWho = null;
+  if (_flag("barPartner")) return;   // already settled (belt-and-braces)
+  _setFlag("barPartner");
+  if (who === "tan") {
+    _setFlag("partnerTan");
+    _align("indie", 1); _align("wdg", -1); _align("syndicate", 1);
+    _say("\"Good.\" It is done by Tuesday, the way he said. It costs you nothing at " +
+      "all \u2014 no lawyer, no signature you kept a copy of, no figure anywhere. " +
+      "Just a land office that turned out to be his wife's cousin, and a lunch " +
+      "afterward that he paid for. You own a bar now. You also, somewhere with no " +
+      "paper on it, owe a man a thing he has not yet named.", "win");
+  } else {
+    _setFlag("partnerCandy");
+    _align("indie", 2); _align("wdg", -2);
+    _say("\"Then we do it right.\" The Bangkok lawyer takes three weeks and a stack " +
+      "of paper you actually read, and at the end of it Candy's name is on 51% of " +
+      "your bar and yours is on the rest, and every way it could go wrong is " +
+      "written down and signed. It is not romantic. It is the safest thing you " +
+      "have done since you got off the plane, and you both know it.", "win");
+  }
+  if (typeof _questTick === "function") _questTick();  // the fork completes the barPartner quest now
+}
+function _partnerNo() {
+  const who = G.partnerWho;
+  G.pendingChoice = null; G.partnerWho = null;
+  _say(who === "tan"
+    ? "\"Of course.\" Tan is already reaching for the sedan door, entirely unbothered. " +
+      "\"It is a big thing. You think. The offer does not go anywhere \u2014 I do not " +
+      "change my mind, and neither, I think, do you.\" The offer stands; so does the " +
+      "other one."
+    : "Candy nods, unsurprised and unhurt. \"Good. You should think. A man who says " +
+      "yes to fifty-one percent in one night is not a man I want holding forty-nine.\" " +
+      "The offer stands \u2014 hers, and the other one too, whenever you know your own mind.");
+}
+
 function _shiftPrompt() {
   const call = _shiftCallById(G.shiftCall);
-  _say(_fmt("(YES \u00b7 NO \u2014 {label})",
+  _say(_fmt("(YES \u2014 {label} \u00b7 NO)",
     { label: call ? call.yesLabel : "your call" }), "dim");
 }
 
@@ -4801,7 +4856,7 @@ function _shiftYes() {
     }
   } else if (call.id === "early") {
     _shiftTake(-SHIFT_EARLY_COST);
-    if (who) _addBond(who, 2);
+    if (who) { _addBond(who, 2); (G.soc.leftEarly = G.soc.leftEarly || {})[who] = G.day; }
   } else if (call.id === "round") {
     _shiftTake(SHIFT_ROUND_TAKE - SHIFT_ROUND_COST);
     _addHappy(2);                       // your room, your night — never jading
@@ -6129,7 +6184,7 @@ const _OWL_LISTINGS = [
   "THE ORCHID CLUB (Naklua) is NOT holding an event, has never held one, and would thank the press not to notice it exists. Discretion, gentlemen. Mai pen rai.",
   "CANDY BAR (Soi Buakhao), the mamasan's own — sharp as a razor, warm as a Chang on a hot night. She'll price your wallet before you sit and your story before you tell it. Buy her a drink; it's cheaper than the alternative.",
   "QUEEN VIC (Soi 6): the one air-conditioned pub on the wildest soi in the world, where the residents watch the circus from across the street and mourn the days before the paper changed hands. Cold beer, warm company, no illusions.",
-  "THE LAST BAHT BUS rattles off to the depot around two, and the ฿" + BUS_FARE + " ride home goes with it. After that it's the piwin's small-hours rate — quoted in a Thai you suddenly can't follow — or shank's pony past the soi dogs. Break for a main road before the wheels stop turning. The Owl has walked it. The Owl does not recommend it.",
+  "THE LAST BAHT BUS is a lie the tourists tell each other. The songthaews run all night — sparse after two, on the long loop, but they run — and the bikes and the meter-cheats never stop. The only bus you can truly miss is the one you're too far gone to catch: too drunk for the pillion, too tired to stand the kerb, too sick to care. The curfew, gentlemen, was always on YOU. The Owl has closed more nights than he'll admit and never once failed to get home. He does not recommend the method.",
   "DONGTAN & SOI 7 (Jomtien) — the coast for men who've stopped auditioning. The Sandbar, the Lucky 7, a warm beer and a cool argument about the football, and not one soul will grab your sleeve. A third cheaper and a mile quieter. Come when the loud end has worn you thin; you'll wonder why you fought it.",
   "BUDDHA HILL (Pratumnak) at dusk — climb past the treadmill of the soi to the big gold Buddha, the whole bay laid out and cooling below. No cover, no bar bill, no bell; the one view on this coast that asks nothing back. The Owl files his best columns up there. Or claims to.",
   "THE HAIR-TONIC MAN and the curse-remover two pitches down both work Beach Road on a commission drawn from your own gullibility. Ask the price BEFORE you follow anyone down a side soi; if the number swells at the shop door, the police station takes reports — and a cut. Mai pen rai is not a payment plan.",

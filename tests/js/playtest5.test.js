@@ -2002,3 +2002,89 @@ test("the drink-snipe line is a pool, not a stamp", () => {
   for (let i = 0; i < 9; i++) seen.add(_pickVary(_SNIPE_LINES, "snipetest")("Nan"));
   assert.ok(seen.size >= 2, "the moment varies across nights");
 });
+
+// ── Rounds 22/23: the civilian + publican batch (2026-08-26) ─────────────────
+
+test("the shift-call prompt reads the YES action as YES, not as an annotation of NO", () => {
+  // publican F2: "(YES · NO — have a word yourself)" fired the YES outcome when
+  // the player answered NO meaning "I'll do it myself". The label belongs on YES.
+  newGame(); _setFlag("act1Done"); G.shiftCall = "turning";
+  out = []; _shiftPrompt();
+  assert.match(out.join("\n"), /YES\s*—\s*have a word yourself\s*·\s*NO/,
+    "the action sits on YES, where it fires");
+});
+
+test("SCORE and QUESTS agree: a vignette quest shows on neither", () => {
+  // civilian F1: SCORE listed the President's Table as active ▶ while QUESTS
+  // said "nothing on the books" (it's a vignette — hidden from journal AND hint)
+  newGame(); _setFlag("act1Done"); G.stage = "vacation";
+  const vig = Object.entries(QUESTS).find(([, q]) => q.vignette);
+  if (vig) {
+    G.quests[vig[0]] = "active";
+    out = []; doCommand("score");
+    assert.doesNotMatch(out.join("\n"), new RegExp("▶ " + vig[1].name),
+      "SCORE no longer leaks the vignette the journal hides");
+  }
+});
+
+test("WATCH SUNSET is a room verb, not a wristwatch — even with a peddler at your elbow", () => {
+  // civilian F2: WATCH SUNSET bought a ฿300 fake Rolex
+  newGame(); _setFlag("act1Done"); G.money = 5000; G.room = "blue_dog";
+  G.pendingEnc = "peddler";
+  out = []; doCommand("watch sunset");
+  assert.doesNotMatch(out.join("\n"), /Rolex|fitted on your wrist/, "no watch was bought");
+  assert.equal(G.money, 5000, "…and no money moved to the peddler");
+  // buying it deliberately still works
+  G.pendingEnc = "peddler"; out = []; doCommand("buy watch");
+  assert.match(out.join("\n"), /Rolex/, "asking for the watch still buys the watch");
+});
+
+test("the quiz chalkboard names each bar once", () => {
+  // both reporters hit "X and X have a chalkboard out" — two exit keys, one bar
+  newGame(); _setFlag("act1Done");
+  // find a Thursday and a room whose exits double up on a quiz bar; assert the
+  // dedup at the source rather than hunting the exact geometry
+  const src = readFileSync(fileURLToPath(new URL("../../web/js/engine-core.js", import.meta.url)), "utf8");
+  assert.match(src, /\[\.\.\.new Set\(Object\.values\(r\.exits\)\)\]/,
+    "the near-quiz-bar scan dedups exits before naming them");
+});
+
+test("the Owl no longer preaches the dead bus curfew", () => {
+  const src = readFileSync(fileURLToPath(new URL("../../web/js/engine-systems.js", import.meta.url)), "utf8");
+  assert.doesNotMatch(src, /THE LAST BAHT BUS rattles off to the depot/,
+    "the columnist caught up with the 2026-08-25 curfew rework");
+  assert.match(src, /The only bus you can truly miss is the one you're too far gone to catch/);
+});
+
+test("volunteered subjects answer: Daeng's dancer past, Kwang's son, Cream's coffee", () => {
+  const miss = /I don't know about that|Not my story|That one I don't know|No idea|wrong girl|Search me/i;
+  for (const [who, topic, want] of [
+    ["daeng", "the dancer", /seventy-two|Crystal Palace/],
+    ["daeng", "walking street", /seventy-two|Crystal Palace|show/],
+    ["kwang", "son", /sister|send|month|home|school/i],
+    ["cream", "coffee shop", /Barista|apron|twelve thousand/i],
+  ]) {
+    newGame(); G.stage = "expat"; _setFlag("act1Done"); _setFlag("expatLife");
+    for (const k of Object.keys(ENCOUNTERS)) G.encDone[k] = true;
+    G.nightTurn = 45;                     // Cream is a late-window civilian
+    G.room = _npcRoom(who); G.pendingEnc = null;
+    out = []; doCommand("talk to " + who);
+    out = []; G.pendingEnc = null; doCommand(`ask ${who} about ${topic}`);
+    const said = out.join("\n");
+    assert.doesNotMatch(said, miss, `ask ${who} about ${topic}`);
+    assert.match(said, want, `ask ${who} about ${topic} reaches the real answer`);
+  }
+});
+
+test("Cream doesn't re-introduce herself to the man she went home with", () => {
+  // civilian F5: post-arc, talk to cream still gave the stranger's alibi
+  newGame(); G.stage = "vacation"; _setFlag("act1Done"); _setFlag("chamDone");
+  G.nightTurn = 45;                       // she's a late-window civilian (from 22:00)
+  G.room = _npcRoom("cream"); G.pendingEnc = null;
+  assert.ok(_npcsHere().includes("cream"), "she's here at this hour");
+  out = []; doCommand("talk to cream");
+  const said = out.join("\n");
+  assert.doesNotMatch(said, /I not work here na|just visit my friend/,
+    "the alibi was for a stranger, not for you");
+  assert.match(said, /here you are again|performance is over|like people/i);
+});

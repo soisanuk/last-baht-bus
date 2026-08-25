@@ -4514,21 +4514,23 @@ const NPCS = {
       {
         topic: "partnership", chip: false,
         req: ["expatLife", "barLicence"], notFlags: ["barPartner"],
-        sets: ["barPartner", "partnerCandy"],
-        fx: (st, G) => { _align("indie", 2); _align("wdg", -2); },
+        // sound her out — no commit here. Reading a pitch must not be a decision
+        // (publican playtest, 2026-08-26: the flagship 51% fork resolved on the
+        // first ASK, no confirm). fx arms the choice; _partnerYes commits.
+        fx: (st, G) => { G.pendingChoice = "partner"; G.partnerWho = "candy"; },
         text: "Candy does not answer for a long moment, and when she does it is not " +
           "the voice she uses on the floor.\n\n\"You know what you are asking me.\" " +
           "Not a question. \"Fifty-one is not a favour, tilac. Fifty-one is my name " +
           "on your bar. If you drink it away, is my name. If you hit a girl, is my " +
           "name. If you go home to England and never come back—\" a small shrug " +
           "\"—then I have a bar, and everybody on this soi know how I got it.\"\n\n" +
-          "She lets that sit.\n\n\"So. We go to a lawyer, a real one, in Bangkok, " +
-          "not the man Gavin use. Everything written. What I take, what you take, " +
-          "what happen if one of us die.\" She almost smiles. \"Is not romantic. Is " +
-          "why it work.\" Then she does smile, and it is the real one, the one that " +
-          "is worth more than the bar. \"And yes. I say yes. You did not sell Bert's " +
-          "bar to that man when you could have. I watch that. Everybody watch that.\"",
-        short: "\"Fifty-one is my name on your bar. Lawyer in Bangkok, everything written. And yes.\"",
+          "She lets that sit.\n\n\"So. If we do this: a lawyer, a real one, in " +
+          "Bangkok, not the man Gavin use. Everything written. What I take, what " +
+          "you take, what happen if one of us die.\" She almost smiles. \"Is not " +
+          "romantic. Is why it work.\" Then the real smile, the one worth more than " +
+          "the bar. \"You did not sell Bert's bar to that man when you could have. " +
+          "So the answer from me is yes \u2014 if the answer from you is yes.\"",
+        short: "\"Fifty-one is my name on your bar. Lawyer in Bangkok, everything written. Yes from me, if yes from you.\"",
       },
     ],
   },
@@ -7297,10 +7299,9 @@ const NPCS = {
       {
         topic: "partnership", chip: false,
         req: ["expatLife", "barLicence"], notFlags: ["barPartner"],
-        sets: ["barPartner", "partnerTan"],
-        // indie: it stays out of the rollups. syndicate: you are now inside
-        // somebody's web of favours, whether or not you can see the web.
-        fx: (st, G) => { _align("indie", 1); _align("wdg", -1); _align("syndicate", 1); },
+        // his yes is instant and free — which is exactly why the DECISION must be
+        // yours to make on purpose, not to trip over (publican playtest 2026-08-26)
+        fx: (st, G) => { G.pendingChoice = "partner"; G.partnerWho = "tan"; },
         text: "You have barely finished the sentence before he is nodding.\n\n" +
           "\"Yes. Of course.\" Tan says it the way you would agree to hold a door. " +
           "\"My name, your bar. Is no problem, my friend.\"\n\nYou start on the " +
@@ -7315,9 +7316,9 @@ const NPCS = {
           "sedan door, because there is always somewhere he has to be. \"Today I do " +
           "not want anything. Today is a good day — you are staying, and now you " +
           "have a reason to stay. Come, we go to the land office tomorrow, ten " +
-          "o'clock, and after I know a place for lunch.\"\n\nIt is done by " +
-          "Tuesday. It costs you nothing at all.",
-        short: "\"My name, your bar. Land office is my wife cousin. And I take nothing — do not insult us both.\"",
+          "o'clock, and after I know a place for lunch \u2014 if you say the " +
+          "word.\"",
+        short: "\"My name, your bar. Land office is my wife cousin. And I take nothing \u2014 do not insult us both. Say the word.\"",
       },
     ],
   },
@@ -8660,6 +8661,15 @@ const NPCS = {
         short: "\"Sit, farang. Cold beer, old stories. Best combination.\"" },
       { topic: "oy", text: "\"Oy and me come up together, Walking Street, when you still count the year in one-nine.\" She taps the photo behind her. \"She got the empire. I got the quiet life and the better knees. We both won.\"" },
       { topic: "darkside", text: "\"The Darkside good to us old girls. Rent cheap, customers loyal, nobody in a hurry. The lake is for the married ones — go see, it's like Pattaya with the volume off.\"" },
+      { topic: "dancer", text: "\"Ha. You saw the photo.\" She doesn't take it down, doesn't " +
+        "get shy about it. \"Number seventy-two, Crystal Palace, ten year. I was GOOD — not " +
+        "pretty-good, good-good. The pole, the show, the girls who could not follow, they " +
+        "hate me a little.\" She pours, unhurried. \"Then the knee, then forty, then the " +
+        "Darkside \u2014 and you know what? Better. Up there you are the show. Down here you " +
+        "are the boss. I like boss.\" A grin with all the old certainty still in it. \"The " +
+        "girl in the photo would not believe she get to be the one who OWNS the bar. But she " +
+        "would be happy. I check.\"",
+        short: "\"Number seventy-two, Crystal Palace, ten year. Up there you are the show; down here you are the boss. I like boss.\"" },
       { topic: "covid", text: "She doesn't go quiet the way you expect. She goes very practical instead. \"Six of us, one room — tiny. No work, no money, nothing.\" She counts on her fingers. \"Morning: we walk to the beach, fill a bucket with clam. Afternoon: sell the clam to local people. Take that money, buy rice, buy pork.\" She pauses. \"Next morning — we cook extra and give away free food. To people more poor than us. Then go back for more clam.\" A short laugh. \"On the way home: we pick herb, pick fruit from the tree by the road — nobody plant it, it's just there. And that night?\" She taps the bar. \"Feast. Real feast. Better than high season.\" She fills your glass. \"The farang sit and wait to be rescued. We just find the next thing.\"" },
       { topic: "money", text: "She laughs, but it is a different kind of laugh from the ones aimed at customers — older, shorter. \"Money I understand. Not like the farang understand. Farang save the water in a big pot, very careful. Thai girl — the water goes through. I have it today, is good. Gone tomorrow — mai bpen rai, I find more water.\" She taps the bar. \"The pot people worry all the time. The river people never worry. Which one you think sleep better?\"" },
     
@@ -9042,6 +9052,16 @@ const NPCS = {
       "boss not here today 😏 i make myself a free one ☕", "coffee shop full of farang this morning 😳 all want talk talk talk",
     ],
     dialogue: [
+      // post-arc greeting: she does not re-introduce herself to a man she went
+      // home with — the alibi was for a stranger (civilian playtest F5, 2026-08-26)
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", req: ["chamDone"],
+        text: "\"Oh \u2014 hi.\" The surprised-barista face flickers on for half a second, " +
+          "then she lets it drop, because with you the performance is over and you both " +
+          "know it. \"So. Here you are again.\" Not a question. The {{phone}} goes face-down anyway, " +
+          "old habit. \"Sit. You want I do the whole coffee-shop-girl thing again, or we " +
+          "just have a drink like people.\" The smile that follows is the realest thing " +
+          "she owns and she spends it carefully.",
+        short: "\"Here you are again. You want the coffee-shop thing again, or we just have a drink like people?\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Oh — hi.\" She puts the {{phone}} face-down and gives you a small, surprised " +
           "smile, as if being spoken to was not on tonight's list. \"I not work here na! " +
@@ -9100,6 +9120,11 @@ const NPCS = {
           "good.” Her English is easy and precise, worn smooth somewhere she doesn't mention. " +
           "“Sit anywhere you like — the front tables have the view. I'll send someone over.”",
         short: "“Good evening. A table with the view? Sit anywhere — I'll send someone over.”" },
+      { topic: "family", text: "\"My family is one son.\" She says it plainly, no self-pity in " +
+        "it at all. \"Nont. Grown now, clever with the machines, out on his own path \u2014 not " +
+        "one I chose for him, but his.\" A small, contained pride. \"Ask me about HIM if you " +
+        "want the long version. The short version is: he is fine, and I did that.\"",
+        short: "\"One son. Nont. Grown, clever, on his own path. Ask about him for the long version.\"" },
       { topic: "nont", sets: ["duangjaiNont"], text: "Something in her composure shifts — warmer and more guarded at " +
           "once. “You know my Nont?” A glance at the framed photo by the register, quickly " +
           "checked. “He is a good boy. Too clever for his own good, always — took every machine " +

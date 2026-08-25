@@ -3431,6 +3431,7 @@ function _endNight(reason) {
   G.soc.mgrShot = {};  // the manager pours a fresh welcome shot each night
   G.soc.dogFavor = {}; // and the beer-bar staff get to fuss over Sai Krok anew
   G.soc.hostOut = {};  // …and a host you took off the floor is back on it tomorrow
+  G.soc.leftEarly = {}; // …and a girl you let catch the eleven o'clock bus is back tomorrow
   G.soc.mgrChat = {};  // and forgets last night's bar-leaning (manDrinks goodwill persists)
   G.lastBusWarned = false; // and the last-baht-bus heads-up fires once each night
   G.soc.greeted = {};  // a fresh night — she greets you anew

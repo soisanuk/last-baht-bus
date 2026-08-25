@@ -965,7 +965,16 @@ const _ENC = {
       return;
     }
     delete G.flags.peddlerDeal;
-    if (/watch|rolex/.test(input)) {
+    // "watch/sun/…" collide with room verbs (WATCH SUNSET, WATCH POLICE): a
+    // spectacle target means the player looked AWAY, not that they bought the
+    // 'Rolex' or the RayBens (civilian playtest F2, 2026-08-26). Short-circuit
+    // before any purchase branch can eat the word — he's patient, he waits.
+    if (/\b(sunset|police|\btv\b|the soi|drag ?(show|revue)|the rain|the band|footy|the match|the game|the sea|the bay|boxing)\b/.test(input)) {
+      G.pendingEnc = "peddler";
+      _encPrompt([`He follows your gaze to whatever caught it, entirely unbothered, and does not move an inch. (WATCH \u0e3f${px.watch} \u00b7 SUNGLASSES \u0e3f${px.shades} \u00b7 VITAMINS \u0e3f${px.vits} \u00b7 or NO.)`]);
+      return;
+    }
+    if (/\brolex\b/.test(input) || /\bwatch\b/.test(input)) {
       if (G.money < px.watch) { _say(`฿${px.watch} for the 'Rolex'. He inspects your ฿` + G.money + " and moves along, unoffended."); return; }
       G.money -= px.watch;
       G.itemLoc.fake_rolex = "inventory";

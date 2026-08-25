@@ -273,6 +273,7 @@ function newGame() {
     act1Tries: 0,        // opening-quest attempts so far; ≥1 unlocks the round-2 HINT system (also survives the reset)
     pendingChoice: null, // "vacation_end" gates input at week's end
     shiftCall: null,     // …and "shift" gates it on the call your own rail just put to you
+    partnerWho: null,    // …and "partner" gates it on the 51% pitch you just heard
     shiftWho: null,      // the staff member a call is about, when it is about one
     bank: 100000,        // your account balance — the ATM draws pocket cash from this
     atmDay: 0,           // last day the ATM was used (pairs with atmToday for the daily cap)
@@ -560,6 +561,8 @@ function _npcActive(id) {
   // a late-window civilian (Cream at her friend's bar from ten): `from` is a nightTurn
   if (n && n.from != null && G.nightTurn < n.from) return false;
   if (n && n.sandbox && !_flag("act1Done")) return false; // not part of the opening quest's street
+  // sent home early on a shift call — off the rail for the rest of the night
+  if (G.soc && G.soc.leftEarly && G.soc.leftEarly[id] === G.day) return false;
   // a host you took off the floor tonight is off the floor (HIRE narrated
   // leaving the building while leaving him standing there — persona A#13)
   if (G.soc && G.soc.hostOut && G.soc.hostOut[id]) return false;
@@ -1619,7 +1622,7 @@ function _describeRoom(full, forceFull) {
   }
   if (r.seven) _say("A 7-Eleven glows across the way (BUY TOASTIE · BUY WATER · BUY CHARGER · BUY CONDOM).", "dim");
   if (_quizDay() && !r.barType) {
-    const near = Object.values(r.exits).filter(to => _quizBars().includes(to));
+    const near = [...new Set(Object.values(r.exits))].filter(to => _quizBars().includes(to));
     if (near.length && G.nightTurn < 40) {
       _say(near.map(_barName).join(" and ") +
         (near.length > 1 ? " have" : " has") + " a chalkboard out: QUIZ NIGHT " +
