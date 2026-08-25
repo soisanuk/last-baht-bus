@@ -611,3 +611,141 @@ test("Colin answers for the hill he has lived on for nine years", () => {
   out = []; G.pendingEnc = null; doCommand("ask colin about pratumnak");
   assert.match(out.join("\n"), /Nine years|the hill/i);
 });
+
+// ── The consistency system judges substance, not spelling ────────────────────
+// The grapevine playtest (F1, 2026-08-25) was told "fifteen years on the
+// street, mind" by one girl and "fifteen years, love" by another and got
+// caught "lying" — four instances, while a liar repeating his lie verbatim
+// sailed through. The compare is now substance; a question once answered is
+// never re-asked; and the four questions sharing one memory key got their own.
+test("a consistent story told in different words is not a lie", () => {
+  assert.ok(_saidAgrees(
+    "first time in this one - fifteen years on the street, mind",
+    "fifteen years, love. the street itself is the somebody"), "same fifteen years");
+  assert.ok(_saidAgrees("third time in, love", "third time in, love"), "verbatim always agrees");
+  assert.ok(_saidAgrees("dunno", "maybe"), "nothing substantive on either side is not a lie");
+  assert.ok(!_saidAgrees("Chicago", "London"), "an actual lie is still a lie");
+  assert.ok(!_saidAgrees("a wife back in Leeds", "single, never married"), "and so is this one");
+});
+
+test("answering consistently to two different people earns trust, not a rep hit", () => {
+  newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight",
+    said: { home: "Sheffield, fifteen years coming here" } };
+  const st = _npcState("pukky"); st.heard = {}; st.know = {};
+  G.convoQ = { id: "pukky", key: "home", q: "?" };
+  const rep0 = G.rep || 0;
+  out = []; _convoAnswer("fifteen years, love — Sheffield born");
+  assert.ok((G.rep || 0) >= rep0, "no rep hit for a consistent story");
+  assert.doesNotMatch(out.join("\n"), /That's what I heard|tell it different|had you from/);
+});
+
+test("a question you already answered is never asked again", () => {
+  newGame();
+  const st = _npcState("pukky");
+  st.heard = { thisbar: "first time in this one" }; st.know = {};
+  out = []; G.convoQ = null;
+  _convoAsk("pukky", { asks: { key: "thisbar", q: "First time this bar?" } }, st);
+  assert.equal(out.length, 0, "she has your answer; asking again invites the evolved-truth trap");
+  assert.equal(G.convoQ, null);
+});
+
+test("the four first-time questions no longer share one memory slot", () => {
+  // Pukky's "First time this bar?" (per-bar, time-varying), the filler girls'
+  // "First time Pattaya?" (= the trips question), and "You come back tomorrow?"
+  // must each remember their own answer.
+  const src = readFileSync(fileURLToPath(new URL("../../web/js/world.js", import.meta.url)), "utf8");
+  const returnAsks = [...src.matchAll(/key: "return"/g)].length;
+  assert.equal(returnAsks, 1, "exactly one question still lives on the return key");
+  assert.ok(ASK_REPLIES.thisbar && ASK_REPLIES.thisbar.length >= 3, "and the new key has replies");
+});
+
+test("a lapsed question re-asked on return prints its paragraph once, not twice", () => {
+  newGame(); G.stage = "expat"; _setFlag("act1Done"); _setFlag("expatLife");
+  for (const k of Object.keys(ENCOUNTERS)) G.encDone[k] = true;
+  G.room = "queen_vic";
+  for (let i = 0; i < 8 && !G.convoQ; i++) { out = []; doCommand("talk to angela"); }
+  assert.ok(G.convoQ, "she asked");
+  const q = G.convoQ.q;
+  doCommand("ask mort about column");         // lapse it
+  out = []; doCommand("talk to angela");      // she comes back to it
+  const text = out.join("\n");
+  const firstIdx = text.indexOf(q.slice(0, 40));
+  assert.ok(firstIdx >= 0, "the question is re-put");
+  assert.equal(text.indexOf(q.slice(0, 40), firstIdx + 1), -1,
+    "…and only once — the node's own ask must not double it");
+});
+
+// ── Subjects the street volunteered and then missed on (grapevine round) ─────
+test("grapevine round: every volunteered subject now answers", () => {
+  const miss = /above my pay grade|Not my story|I don't know about that|That one I don't know|No idea|Search me|wrong girl|Couldn't tell you/i;
+  const cases = [
+    ["somo",  "bay_watch",  "ninety-five squad", /Fowler|McManaman/],
+    ["somo",  "bay_watch",  "squad",             /Fowler|McManaman/],
+    ["barry", "ruby_kiss",  "golf",              /travel bag|clubs ARE the golf/i],
+    ["mort",  "queen_vic",  "cipher",            /back issues|cares to count/],
+    ["mort",  "queen_vic",  "soi 6",             /opens the shutters|tells you the price/],
+    ["toi",   "cherry_pop", "mercedes",          /real thing|Best English/],
+    ["preaw", "ruby_kiss",  "saeng",             /Thirty year|my aunt/i],
+    ["wilai", "ruby_kiss",  "plan",              /my own bar|cover charge/],
+    ["mercedes", "cherry_pop", "munich",         /Munich|Germany/],
+  ];
+  for (const [who, room, topic, want] of cases) {
+    newGame(); G.stage = "expat"; _setFlag("act1Done"); _setFlag("expatLife");
+    for (const k of Object.keys(ENCOUNTERS)) G.encDone[k] = true;
+    G.room = room; G.pendingEnc = null;
+    out = []; doCommand("talk to " + who);
+    out = []; G.pendingEnc = null; doCommand(`ask ${who} about ${topic}`);
+    const said = out.join("\n");
+    assert.doesNotMatch(said, miss, `ask ${who} about ${topic}`);
+    assert.match(said, want, `ask ${who} about ${topic} reaches the real answer`);
+  }
+});
+
+test("Mort's four-letter dare deflects in character and never spoils the puzzle", () => {
+  // The dare is the CTF's own breadcrumb (docs/ctf.md) — he must answer AS
+  // HIMSELF without naming the key or the counting phrase.
+  newGame(); _setFlag("act1Done"); G.room = "queen_vic";
+  for (const k of Object.keys(ENCOUNTERS)) G.encDone[k] = true;
+  doCommand("talk to mort");
+  out = []; doCommand("ask mort about four letters");
+  const said = out.join("\n");
+  assert.match(said, /back issues|cares to count/);
+  assert.doesNotMatch(said, /HOOT|hoot/, "the key stays a secret");
+  assert.doesNotMatch(said, /counted the hoots/i, "and so does the answer phrase");
+});
+
+test("an aliased ask to a GATED node gets 'not yet', never 'not my story'", () => {
+  // "ask bert about white dish" normalizes to his gated ryan-powers node; the
+  // gate probe used to test only the raw words, so his own story was disowned.
+  newGame(); G.stage = "expat"; _setFlag("act1Done"); _setFlag("expatLife");
+  for (const k of Object.keys(ENCOUNTERS)) G.encDone[k] = true;
+  G.room = "stinky_bar"; doCommand("talk to bert");
+  out = []; G.pendingEnc = null; doCommand("ask bert about white dish");
+  assert.doesNotMatch(out.join("\n"), /above my pay grade|Not my story|No idea/i);
+});
+
+test("a kept girl answers for the sponsor she herself cited", () => {
+  newGame(); G.stage = "expat"; _setFlag("act1Done"); _setFlag("expatLife");
+  for (const k of Object.keys(ENCOUNTERS)) G.encDone[k] = true;
+  const kept = Object.keys(NPCS).find(id => NPC_ROLES[id] === "hostess" && _hasSponsor(id));
+  assert.ok(kept, "the hash always keeps somebody");
+  G.room = _npcRoom(kept);
+  doCommand("talk to " + NPCS[kept].name);
+  for (const word of ["sponsor", "friend"]) {
+    out = []; G.pendingEnc = null; doCommand(`ask ${NPCS[kept].name} about ${word}`);
+    assert.match(out.join("\n"), /arrangement, not love story|working girl again|He send every month|He fly home/i,
+      `${word} answers in her own voice`);
+  }
+});
+
+test("money sent to her phone is remembered at her rail", () => {
+  newGame(); G.stage = "expat"; _setFlag("act1Done");
+  for (const k of Object.keys(ENCOUNTERS)) G.encDone[k] = true;
+  const girl = Object.keys(NPCS).find(id => NPC_ROLES[id] === "hostess" && NPCS[id].filler && !_hasSponsor(id));
+  G.soc.given = {}; G.soc.given[girl] = 300;
+  G.room = _npcRoom(girl);
+  doCommand("talk to " + NPCS[girl].name);
+  out = []; G.pendingEnc = null; doCommand(`ask ${NPCS[girl].name} about medicine`);
+  assert.match(out.join("\n"), /You help me that time|no forget/i,
+    "the phone and the bar share a memory");
+});

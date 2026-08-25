@@ -105,6 +105,7 @@ test("room signs reference real sign entries", () => {
 
 test("gossip chain flags connect: every required flag is set somewhere", () => {
   const settable = new Set(["knowWasHere", "waiedOy", "waiedPloy", "greetedFon",
+    "wonLeague",   // set by _endGame on a killer-pool league win (Bert's champion node)
     "hasWallet", "gotBusFare", "somTamDelivered", "officeOpen",
     "act1Done",  // engine-set by _checkAct1 — gates sandbox-only quests (The Safe-Cracker)
     "tiffinDelivered", // engine-set by _doGive (tiffin → nont) — "Look in on my boy"

@@ -14,6 +14,8 @@ const LATE_MOTO_MULT = 1.6; // small-hours "stranded tax": piwins gouge once the
 const DOG_MOTOSAI_FARE = 10; // a dog needs his own bike — a buddy's saleng, waved over and paid on top (waived on the free pity-ride)
 const LADY_DRINK = 150;  // canon
 const NOODLE_PRICE = 15;      // a pot of Mama noodles off the 7-Eleven shelf
+const QV_BASKET  = 160;  // the Queen Vic kitchen's basket-and-chips, till eleven
+const QV_CRISPS  = 40;   // …and after eleven, only crisp
 const BEER_PRICE = 80;   // your own big Chang, bar price
 const BELL_PRICE = 300;  // ring it and the round is on you
 const BRA_PRICE = 200;   // the mamasan's drawer novelty; makes fondling "interesting"
@@ -4877,7 +4879,7 @@ const NPCS = {
           "different from the go-go, na. Nobody rush you here. You want to talk, we talk. You want to just sit " +
           "and watch the football, also fine. Up to you.\"",
         short: "\"Cold beer? No rush here — talk, or just watch the football. Up to you.\"",
-        asks: { key: "return", q: "\"First time this bar? You look around like first time.\" Warm, curious, not selling. \"Is a good one. The go-go take your money fast; here we take it slow. Friendlier — and honestly, cheaper for you.\"" } },
+        asks: { key: "thisbar", q: "\"First time this bar? You look around like first time.\" Warm, curious, not selling. \"Is a good one. The go-go take your money fast; here we take it slow. Friendlier — and honestly, cheaper for you.\"" } },
       { topic: "beer bar", text: "\"Go-go is a show. Here is a bar.\" No judgement either way. \"Some man want " +
         "the lights and the loud. Some man just want a cold one and somebody nice to drink it with, no games. " +
         "Those men, they come here. They come back, too.\"" },
@@ -4929,6 +4931,12 @@ const NPCS = {
         "drive taxi Bangkok, always the match on the radio. I learn English from the football commentary " +
         "before the schoolbook.\" A grin. \"Ask me the ninety-five squad. Go on. I know it better than my own " +
         "cousin name.\"" },
+      { topic: "squad", text: "\"HA. Okay.\" She sets the glass down like a gauntlet. \"James. Babb. " +
+        "Ruddock. Wright. Bjornebye. Jones — Rob, not the other one. McManaman. Redknapp. Barnes, getting " +
+        "old but still Barnes. Thomas. And God himself — Fowler.\" She counts the last one off on her " +
+        "thumb and looks at you, entirely satisfied. \"My cousin name? Not a clue. First eleven? Ask me " +
+        "again any time.\"",
+        short: "\"James, Babb, Ruddock, McManaman, Redknapp, Barnes — and God himself, Fowler. Any time.\"" },
       { topic: "work", bond: 2, text: "\"Why here? Money same as anywhere — and here I don't have to pretend I " +
         "fancy anybody.\" Blunt, comfortable. \"I pour beer, I talk football, the men leave happy and nobody " +
         "feel stupid after. The go-go girls, some look at me like I'm mad.\" A shrug. \"Maybe. But I'm the one " +
@@ -5190,6 +5198,12 @@ const NPCS = {
           "fast flick of the eyes that counts your table, your watch, your capacity. \"Chaba, look after this " +
           "one! Bottle service, my friend? More fun in a bottle than a glass, everybody know.\"",
         short: "\"Cherry Pop! Bottle service? More fun in a bottle than a glass.\"" },
+      { topic: "mercedes", text: "\"Mercedes.\" The volume drops one honest notch. \"Best English on " +
+        "the street and the worst luck — Germany, the husband, all of it. She tell you or she don't, " +
+        "not mine to sell.\" A look across the room, half boss, half mother. \"I tell you what IS " +
+        "mine: she work here two year, never once late, never once take the games to a customer. You " +
+        "sit with her, you sit with the real thing. Treat it that way, na.\"",
+        short: "\"Best English on the street, worst luck. You sit with her, you sit with the real thing.\"" },
       { topic: "girls", text: "\"Chaba is my engine — she make the party, the party make the bottle sell.\" A " +
         "businesslike nod. \"I know she drink too much. Is a cost. But a party bar need a party girl, and she " +
         "is the best I have. I keep her on water when I can. Cannot always.\" A shrug: the math wins." },
@@ -5521,6 +5535,12 @@ const NPCS = {
           "aunt is the mamasan — Saeng. I run the money, Wilai run the front. You want to be worked, see Wilai; " +
           "she is the best there is. You want to pay, that is me.\"",
         short: "\"Drink, girl, or bill? Wilai works the front; I run the money.\"" },
+      { topic: "saeng", text: "\"My aunt.\" The pen doesn't stop moving. \"Thirty year on this soi — " +
+        "girl, then mamasan, now owner in everything but paper. She don't shout, she don't need to. She " +
+        "hire Wilai for the front and me for the money, and she watch both of us the same.\" A small, " +
+        "genuine flicker of pride, immediately filed. \"You want something from Saeng, buy something " +
+        "first. That is also her rule.\"",
+        short: "\"Thirty year on this soi. She don't shout, she don't need to. Buy something first — her rule.\"" },
       { topic: "wilai", text: "\"She is going to leave and open her own place — everybody know.\" A shrug, no " +
         "drama. \"My aunt let her. Good business: a hungry girl earn double. When Wilai go, I stay. Family " +
         "always keep the till. That is why my aunt hire blood — blood don't skim.\"" },
@@ -6054,7 +6074,7 @@ const NPCS = {
         short: "\"Jukebox die in 2019. We keep playlist. Nobody complain.\"",
         asks: { key: "why", q: "She sets your change down in a neat stack, not looking up. \"You come for girls, or you hiding? Everybody one or the other.\" Now she looks up, unhurried. \"Second drink, usually I know. You — I still not sure.\"" } },
       // jukebox — the WDG thread: they bought the soi and made it all the same
-      { topic: "jukebox", text: "\"Broke, five year now. Boss say fix it — then White Dish buy bar, put app, put " +
+      { topic: "jukebox", text: "\"Broke since twenty-nineteen. Boss say fix it — then White Dish buy bar, put app, put " +
         "QR code.\" Her nose wrinkles a millimetre. \"Now {{phone}} pick song. Dead jukebox have better taste. " +
         "They buy everything this soi, make all same. Cleaner. Emptier.\"",
         short: "\"White Dish put QR app in. Now {{phone}} pick song. Cleaner, emptier.\"" },
@@ -6220,6 +6240,12 @@ const NPCS = {
           "Is only polite.\" She is laughing at you and it is somehow flattering.",
         short: "\"You have my kiss already — now buy the drink to go with it, na?\"",
         asks: { key: "stay", q: "\"How long you here — one week? Two?\" She's already refilling, doing sums she won't show you. \"Okay. Then we don't waste time being shy, na. The clock, it run for both of us.\"" } },
+      { topic: "plan", text: "\"Who tell you?\" The showgirl drops half a notch — just half. \"Preaw, " +
+        "na. Or my mamasan. Aiyah, this street.\" She turns the lipstick glass slowly. \"Okay, yes: my " +
+        "own bar. Two year, maybe three. I already know the name, the paint, which corner.\" The grin " +
+        "comes back up like a light. \"You laugh? Good — laugh now, pay cover charge later. Everybody " +
+        "who laugh get remember.\"",
+        short: "\"Yes — my own bar, two year, maybe three. Laugh now, pay cover charge later.\"" },
       { topic: "lipstick", text: "\"Every glass, every night — is the brand.\" She marks a fresh one and " +
         "holds it to the mirror wall, so there are two of everything. \"The farang lose the girl but keep " +
         "the glass. Then they remember Ruby. Smart, na? Not my idea. But smart.\"" },
@@ -6577,6 +6603,12 @@ const NPCS = {
       "carries three pints in one hand and has never once been asked to sit down with anybody, " +
       "which is the whole difference between this room and the rest of the soi.",
     dialogue: [
+      { topic: "kitchen", text: "\u201cKitchen?\u201d The pad comes out at the word. \u201cBasket and " +
+        "chips — scampi, sausage, the pie if he made pie. ฿" + QV_BASKET + ", proper portion, " +
+        "cook is Thai but the fryer is very English.\u201d A glance at the clock. \u201cTill eleven. " +
+        "After eleven, only crisp — ฿" + QV_CRISPS + ", salt and vinegar or the green one " +
+        "nobody choose. (BUY FOOD.)\u201d",
+        short: "\u201cBasket and chips ฿" + QV_BASKET + " till eleven; after, crisps ฿" + QV_CRISPS + ". (BUY FOOD.)\u201d" },
       { text: "\u201cYou eat?\u201d She has the order pad out before you answer. \u201cKitchen open " +
         "till eleven. After that only crisp.\u201d" },
       { topic: "work",
@@ -7039,6 +7071,14 @@ const NPCS = {
         short: "\"Barry! APAC golf society—\" enormous wink \"—brought the clubs, never found the course. Eleven trips. Siddown, the girls are diamond.\"",
         asks: { key: "shame", q: "\"Go on, be honest with old Barry — first big trip, are you still doin' the GUILT thing? The 'ooh I shouldn't'?\" A warm, conspiratorial grin. \"'Cause I can save you a lot of wasted energy there, son.\"" } },
 
+      { topic: "golf", text: "\"The GOLF.\" Barry looks left, looks right, and leans in like a man " +
+        "sharing state secrets. \"Son, I have owned them clubs eleven years. Beautiful clubs. Never had " +
+        "'em out the travel bag.\" He wheezes. \"First trip I honestly meant to play. Second trip I " +
+        "meant to mean to. By the fifth I'd worked out the clubs ARE the golf — they get me through the " +
+        "airport, they get me past the wife, and they stand in the corner of the room all week like a " +
+        "little monument to good intentions.\" He raises his glass to them, wherever they are. \"Finest " +
+        "eleven hundred quid I ever spent.\"",
+        short: "\"Owned the clubs eleven years, never had 'em out the bag. The clubs ARE the golf.\"" },
       // THE WRONG PHOTO — completion. He proudly shows off his trophy album; one shot
       // caught the good table by accident. Gated on you knowing why that matters
       // (been in the Orchid, or done Doyle's recon). doneFlag → _questTick pays.
@@ -9446,6 +9486,12 @@ const NPCS = {
         text: "\"The White Dish thing? Told the old man to hold, and he did. Gavin came back once, all " +
           "smiles, took the no like it was a delivery running late.\" A crooked grin. \"They'll be back — " +
           "they always are. But not tonight, and not while I'm behind this bar. Your beer's poured, bud.\"" },
+      { topic: "league", req: ["wonLeague"],
+        text: "\"Here he is.\" Bert reaches under the till and sets your name-chalk on the bar like " +
+        "evidence. \"King of the killer table. I've had that up a week — half the rail's sick of hearing " +
+        "about it, other half wants a rematch with money on.\" He slides a Singha across, on the house, " +
+        "which from Bert is a civic honour. \"Defend it Thursday, or don't. Champions get to be busy.\"",
+        short: "\"King of the killer table. Defend it Thursday, or don't — champions get to be busy.\"" },
       { topic: "league", text: "\"Killer pool. Everybody's got three lives, pot or " +
         "you lose one, last man standing takes the pot. Every third night, right " +
         "here. Half the piwins in North Pattaya play. Bring your hundred baht and " +
@@ -11504,6 +11550,20 @@ const PATRONS = {
           "out. \u201cFour years I\u2019ve tried to get his story and four years he\u2019s given " +
           "me the same nine anecdotes about a tour in \u201978. Charming. Useless.\u201d",
         short: "\u201cThe German at the Cheeky Monkey, on the Jomtien strip. Glam. Four years and nine anecdotes.\u201d" },
+      { topic: "signoff", text: "\u201cYou noticed.\u201d The biro stops mid-click, and for one whole " +
+        "second Mort looks genuinely pleased. \u201cThirty years of print and you are the first person to " +
+        "say it out loud to my face.\u201d He recaps the pen, which is a door closing. \u201cAnd no. A " +
+        "columnist keeps one secret or he has nothing. It is all there in the back issues — every " +
+        "issue, same four letters — for anyone who cares to count.\u201d The Hawaiian shirt shrugs. " +
+        "\u201cNobody has ever cared to count.\u201d",
+        short: "\u201cFirst to ask in thirty years. And no — it is in the back issues, for anyone who cares to count.\u201d" },
+      { topic: "soi 6", text: "\u201cThe street?\u201d He turns the biro toward the window without looking " +
+        "away from you. \u201cI have written the column from four bars on three streets, and this one is " +
+        "the only one that never once tried to be anything else. Walking Street performs. Buakhao " +
+        "apologises. Soi Six just opens the shutters and tells you the price.\u201d A click of the pen. " +
+        "\u201cAn honest street and a dishonest trade — or the other way round. Forty years and I " +
+        "still file it under both.\u201d",
+        short: "\u201cWalking Street performs. Buakhao apologises. Soi Six opens the shutters and tells you the price.\u201d" },
       { topic: "jokes", when: (st, G) => _flag("jokeWho"),
         text: "\u201cThe texts? Forty years of writing to people who never write back, and it " +
           "turns out I could not stop.\u201d He taps the notebook. \u201cThe column takes one " +
@@ -12557,6 +12617,14 @@ const ASK_REPLIES = {
     { origin: "monger", text: "Reading" },
     { text: "Back home. It'll keep." },
   ],
+  // first time in THIS bar — per-bar, and the honest answer moves with time
+  thisbar: [
+    { pers: "charmer", text: "First time in this one. Won't be the last" },
+    { pers: "joker", text: "The street I know. The stool is new" },
+    { pers: "blunt", text: "First time here, fifteen years out there" },
+    { text: "First time in this one" },
+    { text: "Been in before, you were off that night" },
+  ],
   // why you're out here — the big one, nine NPCs ask it
   why: [
     { pers: "charmer", text: "Running to something, I'd like to think" },
@@ -12871,7 +12939,7 @@ function _buildHostess(name, th, room, id = name.toLowerCase()) {
     { key: "home", q: '"You from where? England? America? Australia?" Bright, practised, already guessing.' },
     { key: "stay", q: '"How long you stay Pattaya? Short time or looong time?" She giggles at her own joke.' },
     { key: "girlfriend", q: '"You have girlfriend? Wife? Nooo, really?" A delighted, skeptical squint.' },
-    { key: "return", q: '"First time Pattaya, or you come back? Come back for somebody, maybe na?"' },
+    { key: "trips", q: '"First time Pattaya, or you come back? Come back for somebody, maybe na?"' },
   ];
 
   // a girl whose desc says she's new plays Connect 4 like she's new — the

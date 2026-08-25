@@ -372,3 +372,57 @@ critical path), and B20 (a grill cart that wasn't in the room).
 - **B14's rainbow_girls half** — "somewhere behind that door is an office, and in
   that office is a safe" stays true after you take your wallet out of it. It is
   scene-setting, not an objective marker.
+
+---
+
+# Round 18 — the grapevine (Fable, soi 6 mode, 2026-08-25)
+
+One persona: Mick, 61, Sheffield — fifteen years of the street, drive = the
+grapevine audit (cross-reference every claim against another surface). Played a
+full 7-night week to สบายสบาย; zero console errors. His ledger's headline: the
+money layer reconciled to the baht across five night summaries, the share card
+was "a true sentence about your week", and White Dish held across four voices —
+the failures were almost all at the seams.
+
+## Fixed
+
+| # | Finding | Fix |
+|---|---|---|
+| F1 (HIGH) | The consistency system punished perfectly consistent stories: literal string compare, one memory key shared by four different questions, honest evolved answers ("first time" → "third time") caught as lies | `_saidAgrees` (substance, not spelling — deliberately lenient); a question once ANSWERED is never re-asked; the colliding `return` key split into `thisbar`/`trips`/`return` with their own ASK_REPLIES |
+| F2 (HIGH) | Thursday quiz promised at three bars, none of them in the mode | `_quizBars()` returns the Queen Vic in soi6 mode; `_quizTalk` and the Owl listing went count-honest |
+| F3 (HIGH) | Mercedes's sponsor refusal said "this week" (lasted one day) and "my friend here" (nobody there); her own stated reason was unaskable | refusal reworded to the calendar it is; a generic sponsor answer for every kept girl (in-town and gone registers); "friend" added to the sponsor synonym row |
+| F4 | The motosai's menu offered the whole city his mouth then refused | bare MOTOSAI gets the frame refusal in soi6 mode |
+| F5 | Street-bar rain furniture (mamasan, stools, awning) inside the aircon pub | a pub branch in `_sayDrizzle`: rain on the far side of the glass |
+| F6 | The Vic advertised a kitchen and sold no food | `_qvKitchen` on Aoy's stated hours: basket ฿160 till eleven, crisps ฿40 after; BUY/EAT both routed; an Aoy `kitchen` node |
+| F7 | Somo's own dare ("ask me the ninety-five squad") dead-ended | she delivers the squad, God himself included |
+| F9 | An unaffordable LT killed the whole negotiation with ST affordable on the same menu, and ate the next typed word | the ledger stays open on the line you can afford |
+| F10 | 12+ volunteered subjects missing; aliased asks at GATED nodes got "not my story" instead of "not yet" | nodes for barry/golf, preaw/saeng, toi/mercedes, wilai/plan (confirming Preaw's gossip), mort/soi 6; munich→german and white dish→ryan powers aliases; the gate probe now sees through the synonym map |
+| F11 | Money sent to her phone forgotten at her rail | a send is remembered (`G.soc.given`) and answered in person |
+| F12 | Benz's "one or three" tariff didn't count | she names the real remaining count |
+| F13 | First-time asks hit "you already ask me this" for things she TOLD you | brush-offs reworded to "I tell you this already" — true in both cases |
+| F14 | Verbatim repeats: the soi6 ST scene (the game's most intimate repeatable beat had ONE string), the CONTACT swap, the rose-child scene, the invite texts | pooled (ST deep at 5); the rose family's second visit is a RECOGNITION, not a rerun |
+| F15 | Quest banner one command late in modal branches; lapsed questions printing their paragraph twice; Bert blind to the league title he commissioned; Pia's jukebox date off by two years; patron miss-line register ("try whoever was there" for objects) | `_questTick` moved into `_tick`; the lapse re-ask marks itself asked; a `wonLeague`-gated Bert node; "since twenty-nineteen"; the line neutralized |
+
+## Refuted — pinned as such
+
+- **The dog was fed "Mama noodles" the player didn't have** — he did: the packet
+  starts in inventory from boot ("A soi dog would commit crimes for this").
+- **Mort's unanswerable four-letter dare** — it is the CTF's own breadcrumb
+  (docs/ctf.md; the sign-off is the Vigenère key). Not a bug — but the generic
+  "Search me" on his own planted dare WAS a register misfire, so he now deflects
+  in character, pointing at the back issues without naming the key or the phrase.
+
+## Open
+
+- The volunteered-subject tail: Angela's Discman, Somsak's own hotel, Chompoo's
+  KitKat, the QV regulars having no opinions on each other. Same authoring class,
+  lower heat.
+- The phone screen can print "No new messages" and "Your phone buzzes" in one
+  printout (a text landing on the same tick) — cosmetic ordering.
+- The "red-faced fixture" ambient rail line invites a TALK its own text
+  pre-declines; the folk-refusal layer reads room prose, not ambient pools.
+- A pending question dissolved by the midnight shutters drops your prepared
+  answer into the parser — the lapse store only covers partner switches.
+- Mort's new soi-6 column line names the streets he's written from, which the
+  soi6 soak flags as an off-pocket mention — accepted as color, not a pointer
+  (same class as the mode's own "the whole rest of the city" wall lines).

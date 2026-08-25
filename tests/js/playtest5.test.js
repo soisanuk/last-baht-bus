@@ -1418,3 +1418,113 @@ test("something the room describes but doesn't sell gets a reason, not a shrug",
   G.room = "candy_bar"; out = []; doCommand("buy helicopter");
   assert.match(out.join("\n"), /Not for sale here/, "…and a thing that isn't there still isn't");
 });
+
+// ── The Soi 6 challenge keeps its own frame (grapevine playtest, 2026-08-25) ──
+
+test("quiz night exists inside the mode it is promised in", () => {
+  // TIME and two NPCs promised a Thursday quiz at three bars — none of them on
+  // Soi 6, in a mode whose wall is "one week, one street" (grapevine F2).
+  newGame(); G.mode = "soi6";
+  assert.deepEqual(_quizBars(), ["queen_vic"], "in-mode, the pub runs it");
+  assert.match(_quizTalk(), /Queen Vic/, "and whoever you ask says so");
+  assert.doesNotMatch(_quizTalk(), /three bars/);
+  G.day = 4; G.nightTurn = 25; G.room = "queen_vic";
+  assert.ok(_quizHere(), "walking in mid-window starts it, same as the full game");
+  G.mode = null;
+  assert.equal(_quizBars().length, 3, "the full game still draws three");
+  for (const b of _quizBars()) assert.ok(QUIZ_BARS.includes(b));
+});
+
+test("the piwin's menu and his mouth agree about the challenge", () => {
+  // He refused a NAMED destination in voice, then offered the whole city as a
+  // menu one command earlier (grapevine F4).
+  newGame(); G.mode = "soi6"; G.room = "soi6_street"; G.money = 500;
+  out = []; doCommand("motosai");
+  assert.ok(_SOI6_BOUND.some(l => out.join("\n").includes(l)),
+    "bare MOTOSAI gets the frame refusal, not the city list");
+  assert.doesNotMatch(out.join("\n"), /where to\?/);
+});
+
+// ── Grapevine round, the rest (2026-08-25) ───────────────────────────────────
+
+test("the Vic's kitchen keeps Aoy's stated hours", () => {
+  newGame(); _setFlag("act1Done"); G.money = 999; G.room = "queen_vic";
+  for (const k of Object.keys(ENCOUNTERS)) G.encDone[k] = true;
+  G.nightTurn = 20; G.hunger = 80;
+  out = []; doCommand("buy food");
+  assert.ok(_QV_BASKET_LINES.some(l => out.join("\n").includes(l)), "the basket lands before eleven");
+  assert.equal(G.money, 999 - QV_BASKET);
+  assert.ok(G.hunger < 80, "and it fed you");
+  G.nightTurn = 55; G.hunger = 80; const m0 = G.money;
+  out = []; doCommand("buy food");
+  assert.match(out.join("\n"), /only crisp|Crisp/i, "after eleven, Aoy's rule holds");
+  assert.equal(G.money, m0 - QV_CRISPS);
+  out = []; doCommand("buy");
+  assert.match(out.join("\n"), /BUY FOOD/, "bare BUY advertises the kitchen");
+});
+
+test("an unaffordable long time leaves the ledger open on the line you can afford", () => {
+  newGame(); G.mode = "soi6"; _setFlag("act1Done");
+  for (const k of Object.keys(ENCOUNTERS)) G.encDone[k] = true;
+  G.room = "cherry_pop"; G.money = 3320;
+  G.pendingBf = { id: "mercedes", st: 1150, lt: 3450, room: G.room };
+  out = []; _bfResolve("lt");
+  assert.match(out.join("\n"), /short time, ฿1150|SHORT TIME/, "she taps the other line");
+  assert.ok(G.pendingBf, "the negotiation is NOT over");
+  out = []; doCommand("short time");
+  assert.equal(G.pendingBf, null, "…and the follow-up answers the ledger, not the topic parser");
+  assert.ok(G.money < 3320, "the short time actually happened");
+});
+
+test("her tariff is the tariff: the drink count she names is the count that opens the door", () => {
+  newGame(); G.mode = "soi6"; _setFlag("act1Done");
+  for (const k of Object.keys(ENCOUNTERS)) G.encDone[k] = true;
+  const girl = Object.keys(NPCS).find(id => NPC_ROLES[id] === "hostess" &&
+    ROOMS[_npcRoom(id)] && ROOMS[_npcRoom(id)].barType === "soi6" && !_hasSponsor(id) && !_isDraw(id));
+  G.room = _npcRoom(girl); G.money = 99999;
+  G.soc.drinks[girl] = 1;                          // one drink in: one short of the gate
+  out = []; _doBarfine(NPCS[girl].name.toLowerCase());
+  if (/lady drink/i.test(out.join("\n"))) {
+    assert.match(out.join("\n"), /One more lady drink/,
+      "she names the real remaining count, not 'one or three'");
+  }
+});
+
+test("the soi6 short-time scene answers from a pool, not one string", () => {
+  assert.ok(_ST_SOI6_LINES.length >= 5, "deep pool for the hottest beat");
+  const seen = new Set();
+  for (let i = 0; i < 12; i++) seen.add(_pickVary(_ST_SOI6_LINES, "stsoi6test"));
+  assert.ok(seen.size >= 3, "and it actually varies");
+});
+
+test("the rose family's second visit reads as recognition, not a rerun", () => {
+  newGame(); _setFlag("act1Done");
+  G.flowerSeen = 1;                              // they've worked you once already
+  G.room = "candy_bar"; G.flowerDay = -1;
+  const girl = _npcsHere().find(id => NPC_ROLES[id] === "hostess");
+  G.soc.drinks[girl] = 2; _convoStart(girl);
+  // force the encounter deterministically through its own entry point
+  let fired = false;
+  for (let tries = 0; tries < 400 && !fired; tries++) {
+    G.flowerDay = -1; G.pendingEnc = null; out = [];
+    _flowerTick();
+    if (G.pendingEnc === "flower") fired = true;
+  }
+  assert.ok(fired, "the seller reaches a courted rail within 400 rolls");
+  assert.doesNotMatch(out.join("\n"), /rehearsed a thousand times/,
+    "the emotionally loaded one-off must not print twice verbatim");
+  assert.match(out.join("\n"), /again|remembers|their round|the same/i);
+});
+
+test("a quest completes in the same breath as the move that wins it", () => {
+  // _questTick lived at doCommand's tail, and every modal branch returns before
+  // the tail — so a quest won at the oche completed one command late.
+  newGame(); G.stage = "expat"; _setFlag("act1Done");
+  const q = Object.entries(QUESTS).find(([, spec]) => spec.doneFlag === "wonLeague");
+  if (q) {
+    G.quests[q[0]] = "active";
+    _setFlag("wonLeague");         // the win, as _endGame sets it mid-modal
+    out = []; _tick();             // the one call every branch makes
+    assert.equal(G.quests[q[0]], "done", "the tick sees it immediately");
+  }
+});

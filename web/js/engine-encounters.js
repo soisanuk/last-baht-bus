@@ -157,14 +157,20 @@ function _flowerTick() {
   G.flowerDay = G.day;
   G.flowerFor = partner;
   G.pendingEnc = "flower";
+  G.flowerSeen = (G.flowerSeen || 0) + 1;
   const her = NPCS[partner].name;
+  const price = (typeof thaiBaht === "function" ? thaiBaht(ROSE_PRICE) : "฿" + ROSE_PRICE);
   _encPrompt(
-    ["A woman drifts up to the rail with a plastic bucket of roses and, half-hidden " +
-      "in her skirt, a girl of maybe seven, sleepy-eyed, clutching a single wrapped " +
-      `bloom in both hands. The mother says nothing; she doesn't have to. The child ` +
-      `holds the rose up toward you, then tips her head at ${her}, then back at you — ` +
-      `the whole pitch, no words, rehearsed a thousand times. ` +
-      (typeof thaiBaht === "function" ? thaiBaht(ROSE_PRICE) : "฿" + ROSE_PRICE) + `.`, "alert"],
+    [G.flowerSeen <= 1
+      ? "A woman drifts up to the rail with a plastic bucket of roses and, half-hidden " +
+        "in her skirt, a girl of maybe seven, sleepy-eyed, clutching a single wrapped " +
+        `bloom in both hands. The mother says nothing; she doesn't have to. The child ` +
+        `holds the rose up toward you, then tips her head at ${her}, then back at you — ` +
+        `the whole pitch, no words, rehearsed a thousand times. ` + price + `.`
+      : _pickVary([
+        `The rose bucket again — the same mother, the same sleepy-eyed girl, working the other end of the street tonight. The child clocks you, and something in the tiny professional face says she remembers which kind of answer you were. The rose comes up toward ${her}. ` + price + `.`,
+        `The rose family reaches your rail on their round. No pitch this time — the girl simply stands the wrapped bloom on the bar next to your beer and looks from it to ${her} and back, a saleswoman who has learned that silence closes. ` + price + `.`,
+      ], "flowerAgain"), "alert"],
     [`(BUY the rose for ${her}) · or (WAVE) them gently on.`, "dim"]);
 }
 

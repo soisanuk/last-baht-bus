@@ -554,9 +554,14 @@ function _doBarfine(arg) {
   // 2026-08-17). Truth before tariff.
   if (!bertAlly && _isDraw(id) && G.nightTurn < 60) { _bfRefusalSay(id, { kind: "draw" }); return; }
   if (!bertAlly && _sponsorInTown(id) && !_sponsorFamilyDay(id)) { _bfRefusalSay(id, { kind: "sponsor" }); return; }
-  if (_favor(id) < (bertAlly ? 1 : bt === "soi6" ? 2 : 4)) {
+  const _bfGate = bertAlly ? 1 : bt === "soi6" ? 2 : 4;
+  if (_favor(id) < _bfGate) {
+    // she names the REAL remaining count — a stated tariff that doesn't count
+    // is a lie with a smile on it (grapevine playtest F12, 2026-08-25)
+    const _need = Math.max(1, _bfGate - _favor(id));
     _say(bt === "soi6" ?
-      `${name} laughs, not unkindly: “Lady drink first, na. One or three.” Even ` +
+      `${name} laughs, not unkindly: “${_need === 1 ? "One more lady drink" :
+        "Lady drink first, na. Two"}, then we talk.” Even ` +
       "Soi 6 has liturgy." :
       `${name} pats your hand: “You sweet. But buy me drink, talk to me a little — ` +
       "this is Pattaya, not a vending machine.”");
@@ -666,8 +671,8 @@ function _bfRefusalSay(id, r) {
       "customer. You want? Twenty-five lady drink, five thousand bar fine.” It is " +
       "not a price. It is a NO with a number on it. (Come back after midnight, when " +
       "the floor is thin — she'll be cheaper, but never cheap.)",
-    sponsor: `${name} touches your arm, honestly sorry: “Cannot this week, tilac. My ` +
-      "friend here — he take care me, so I no working while he in town. You " +
+    sponsor: `${name} touches your arm, honestly sorry: “Cannot now, tilac. My ` +
+      "friend — he take care me, I no working while he in town. You " +
       "understand, na?” Everyone understands. It's a calendar, not a heartbreak.",
     dislike: `${name} looks at you kindly, which is worse: “You nice man. But ` +
       "no, na.” She signals the mamasan off with one flick of the eyes, and " +
@@ -717,6 +722,18 @@ function _bfPrompt() {
 // The player answered the negotiation. kind: "st" | "lt" | "open" — open is
 // the classic newbie mistake, money waved at an unnegotiated contract; an
 // operator prices it accordingly and has already read you as a mark.
+// The most intimate repeatable beat in the game gets a deep pool, not one
+// string — it printed verbatim for two different women in one week (grapevine
+// playtest F14, 2026-08-25). PG-13 by house rule; the variation is in the
+// coming back down, never the going up.
+const _ST_SOI6_LINES = [
+  "with the confidence of home advantage. “Upstairs” turns out to be exactly as advertised. Some time later you are back on your stool, thinking about nothing at all, while she fixes her hair in the till mirror.",
+  "and leads, unhurried, like a woman showing you her own house. Afterwards she reappears behind the rail mid-conversation with the cashier, as if the last half hour were a rumour you both heard somewhere.",
+  "and takes the stairs first. When you come back down the bar has not moved an inch and neither has your beer; she pats your knee once in passing, all business, and the night simply resumes.",
+  "— up the back stair, past the towel shelf, a door with a number painted on it in nail varnish. Later, on your stool, you find she has already ordered you a fresh one, on your tab, which seems fair.",
+  "and the room upstairs is small, clean, and dealt with the efficiency of a woman who has a shift to get back to. She is downstairs before you are, laughing at something the mamasan said an hour ago.",
+];
+
 function _bfResolve(kind) {
   const { id, st, lt } = G.pendingBf;
   G.pendingBf = null;
@@ -756,6 +773,15 @@ function _bfResolve(kind) {
       "a while ago.", "win");
   }
   if (G.money < price) {
+    if (kind === "lt" && st <= G.money && st < price) {
+      // the menu she quoted had a line you CAN afford — the ledger stays open
+      G.pendingBf = { id, st, lt, room: G.room };
+      _say(`The number is ฿${price}, and your pocket says ฿${G.money}. The mamasan ` +
+        `reads the arithmetic off your face without embarrassment — hers or yours — ` +
+        `and taps the other line of the ledger: short time, ฿${st}. That one you can do.`);
+      _say("(SHORT TIME · NO.)", "dim");
+      return;
+    }
     _say(`The number is ฿${price}. Your pocket says ฿${G.money}. The ledger ` +
       "closes with a soft, final flap, and the negotiation is over without " +
       "anyone saying so.");
@@ -786,10 +812,8 @@ function _bfResolve(kind) {
     if (bt === "soi6") {
       _say((price ? `฿${price} to the till and ${name} takes` :
         `No fee crosses the till — she squared it with the mama herself — and ${name} takes`) +
-        " your hand with the confidence of " +
-        "home advantage. “Upstairs” turns out to be exactly as advertised. Some " +
-        "time later you are back on your stool, thinking about nothing at all, " +
-        `while she fixes her hair in the till mirror. (฿${G.money} left.)`, "win");
+        " your hand " + _pickVary(_ST_SOI6_LINES, "stsoi6") +
+        ` (฿${G.money} left.)`, "win");
       _conquestHappy(6, id);
     } else if (bt === "gents") {
       _say((price ? `฿${price} to Rose, discreetly, and ${name} takes` :
@@ -2298,9 +2322,7 @@ function _doContact(arg) {
     return;
   }
   G.phone.contacts[id] = true;
-  _say(`Phones come out, LINE QR codes are scanned, and ${NPCS[id].name} types your ` +
-    "name into her contacts with three emoji you don't get to see. You have her " +
-    "number now — and she, forever, has yours.", "win");
+  _say(_fmt(_pickVary(_CONTACT_SWAP_LINES, "contactswap"), { n: NPCS[id].name }), "win");
   _addHappy(1);
   if (id === "bee" && G.quests.bee_number === "active") {
     _say("Bee taps her banking app pointedly. “Investor send money NOW, na. Hundred " +
@@ -2563,6 +2585,13 @@ function _tanText() {
   _pushMsg("tan", _pickVary(_TAN_TEXT_REPLIES, "tantext"));
   _say("(📱 The reply is instant. Of course it is. CHECK MESSAGES.)", "dim");
 }
+
+const _CONTACT_SWAP_LINES = [
+  "Phones come out, LINE QR codes are scanned, and {n} types your name into her contacts with three emoji you don't get to see. You have her number now — and she, forever, has yours.",
+  "{n} holds her phone up for the scan, then corrects your spelling of your own name without asking. A sticker arrives before the phones are down: a bear, waving. It has begun.",
+  "The QR dance, both phones at once, and {n} photographs you on the spot for the contact card — “so I remember which farang,” she says, kindly, as if that needed saying.",
+  "{n} takes your phone off you, adds herself, and rings her own number from it to be sure. Somewhere in her bag her phone lights up with your name already in it. Efficient. Slightly chilling. Wonderful.",
+];
 
 function _doSendMoney(arg) {
   if (_phoneDead()) return;
@@ -3259,12 +3288,20 @@ function _maybeIncomingText() {
   const name = NPCS[id].name, t = _bondTier(id), roll = _rand();
   if (t >= 3) { // her farang: longing, jealousy, the real ones — no scam game on you
     if (roll < 0.45) { G.phone.invite = { id, day: G.day };
-      _pushMsg(id, `when you come see me?? 🥺 i keep you seat every night, you no come i sad 💔`); }
+      _pushMsg(id, _pickVary([
+        `when you come see me?? 🥺 i keep you seat every night, you no come i sad 💔`,
+        `i tell mamasan tonight my farang come. dont make me liar na 😤❤️`,
+        `bar so boring without you 😩 come, i already tell the girls you funny one`,
+      ], "invite3")); }
     else _pushMsg(id, ["i dream about you last night na 💭❤️", "you go other bar?? 😤 i see you i KNOW 👀",
       "miss you so much cannot sleep 😢", "my farang 🥰 you still in pattaya na? no go home yet, i not finish with you 555"][Math.floor(_rand() * 4)]);
   } else if (t >= 2) { // regular: invites and warmth, a little needy
     if (roll < 0.45) { G.phone.invite = { id, day: G.day };
-      _pushMsg(id, `bar quiet tonight 😴 you come see ${name}?? i keep you seat 💺💕`); }
+      _pushMsg(id, _pickVary([
+        `bar quiet tonight 😴 you come see ${name}?? i keep you seat 💺💕`,
+        `you where na? 👀 come sit with ${name}, i save you the good stool`,
+        `tonight have music! you come? ${name} wait you 🎶🍺`,
+      ], "invite2")); }
     else if (roll < 0.6) _pushMsg(id, `family of me sick need medicine 300 🥺 you help little bit na? (SEND 300 TO ${NPCS[id].name.toUpperCase()})`);
     else _pushMsg(id, _CHATTER[Math.floor(_rand() * _CHATTER.length)]);
   } else { // a name and a number: the classic mix, scam-ask heavy
@@ -3453,6 +3490,19 @@ function _sayDrizzle() {
     // Enclosed venues (the gents villas, anywhere aircon-shut) have no street-side
     // stools to rescue — the open-front drill read wrong inside the Orchid
     // (mobile playtest 2026-08-17). They get the rain as sound, not chore.
+    // …and a pub is not a street bar: no girls, no mamasan, no awning to
+    // rescue stools from under. The Vic's rain is on the far side of the
+    // glass, which is much of what a pub is for (grapevine F5, 2026-08-25).
+    if (_room().barType === "pub") {
+      _say(alt
+        ? "Rain arrives on the front glass in a long diagonal sweep. Inside " +
+          "nothing changes at all — the commentary, the fridge hum, somebody's " +
+          "crisps — and that nothing is the whole point of the place."
+        : "The soi outside blurs and empties; a girl from the bar opposite " +
+          "sprints past the window holding a stool over her head. In here the " +
+          "rain is weather on a screen. Somebody turns the football up.", "dim");
+      return;
+    }
     const enclosed = _room().barType === "gents";
     if (enclosed) {
       _say(alt ?
@@ -5872,7 +5922,7 @@ const _OWL_LISTINGS = [
   "STINKY BAR (Beach Road North), the American's shop, runs killer pool every third night — ฿100 in the ashtray, last cue standing takes the pot. His felt, his rules, his Singha.",
   "BLUE DOG (Beach Road North) keeps the best sunset seats on the strip and, six-to-seven nightly, the finest free show in town: the checkpoint across the road, farang and their paperwork, no cover charge.",
   "MAMA YAI'S (the Darkside) — som tam that arrives unasked and correct, beer ten baht under town, and a wall of photographs that knows everyone's second wife. Eat first, cry after.",
-  "QUIZ NIGHT lands Thursday at three bars the chalkboards will name — walk in during and you're a contestant, no appeal. Five right buys ฿500 and your name in chalk. The teachers from Rayong will beat you regardless.",
+  "QUIZ NIGHT lands Thursday at the bars the chalkboards will name — walk in during and you're a contestant, no appeal. Five right buys ฿500 and your name in chalk. The teachers from Rayong will beat you regardless.",
   "THE ORCHID CLUB (Naklua) is NOT holding an event, has never held one, and would thank the press not to notice it exists. Discretion, gentlemen. Mai pen rai.",
   "CANDY BAR (Soi Buakhao), the mamasan's own — sharp as a razor, warm as a Chang on a hot night. She'll price your wallet before you sit and your story before you tell it. Buy her a drink; it's cheaper than the alternative.",
   "QUEEN VIC (Soi 6): the one air-conditioned pub on the wildest soi in the world, where the residents watch the circus from across the street and mourn the days before the paper changed hands. Cold beer, warm company, no illusions.",
@@ -6238,6 +6288,45 @@ const FOOD_STALLS = {
 
 const _EDIBLE = { moo_ping: 35, som_tam: 50, noodles: 20 };
 
+// The Queen Vic's kitchen, on Aoy's stated hours: basket and chips till
+// eleven, after that only crisp (grapevine playtest F6, 2026-08-25 — she had
+// the order pad out and the room sold nothing).
+function _qvKitchen(arg) {
+  const late = G.nightTurn >= 50;   // 23:00 on the ten-turns-an-hour clock
+  if (late && !/crisp/.test(arg || "")) {
+    _say("Aoy doesn't even reach for the pad. \u201cKitchen close, tilac \u2014 cook go " +
+      "home eleven o'clock, same as England.\u201d A bag of crisps lands on the bar " +
+      "instead, unbidden. \u201cCrisp. \u0e3f" + QV_CRISPS + ". Salt and vinegar. Is this or nothing.\u201d");
+    if (G.money < QV_CRISPS) { _say(_fmt("You have \u0e3f{m}. It is, in fact, nothing.", { m: G.money }), "dim"); return; }
+    G.money -= QV_CRISPS;
+    G.hunger = Math.max(0, G.hunger - 10);
+    _say(_fmt("\u0e3f{p} for the crisps. They are exactly what they are. (\u0e3f{m} left.)",
+      { p: QV_CRISPS, m: G.money }));
+    return;
+  }
+  const price = /crisp/.test(arg || "") ? QV_CRISPS : QV_BASKET;
+  if (G.money < price) {
+    _say(_fmt("The kitchen wants \u0e3f{p} and your pocket holds \u0e3f{m}. Aoy files the " +
+      "order pad away without comment, which is its own comment.", { p: price, m: G.money }));
+    return;
+  }
+  G.money -= price;
+  if (price === QV_CRISPS) {
+    G.hunger = Math.max(0, G.hunger - 10);
+    _say(_fmt("\u0e3f{p} for a bag of crisps ahead of the deadline, on principle. (\u0e3f{m} left.)",
+      { p: price, m: G.money }));
+    return;
+  }
+  G.hunger = Math.max(0, G.hunger - 55);
+  _say(_fmt("{line} (\u0e3f{m} left.)", { line: _pickVary(_QV_BASKET_LINES, "qvbasket"), m: G.money }), "win");
+  _addHappy(1);
+}
+const _QV_BASKET_LINES = [
+  "Aoy writes it without asking what you want, because there is one right answer. The basket arrives molten: chips, scampi, a sausage riding shotgun, vinegar in a bottle sticky enough to be structural. It is England with the heating on.",
+  "The basket-and-chips lands with a bottle of vinegar and a roll of kitchen paper, which is the whole of the Vic's table service and the whole of what the dish requires. Somebody's fryer knows exactly what it is doing.",
+  "Ten minutes and the kitchen hatch bangs: basket, chips, the pie because he made pie. Aoy delivers it with the quiet pride of a woman whose fryer has never once been beaten on this street.",
+]
+
 function _doEat(arg) {
   // "EAT WITH TAN" is the other natural phrasing of his standing food invite —
   // route it to the same scene rather than the you're-not-carrying-that shrug.
@@ -6274,6 +6363,9 @@ function _doEat(arg) {
       "same as it is for everyone.", "win");
     _addHappy(1);
     return;
+  }
+  if (G.room === "queen_vic" && (!arg || /food|basket|chip|crisp|pie|scampi/.test(arg))) {
+    _qvKitchen(arg); return;
   }
   const inv = _inv().filter(i => _EDIBLE[i] !== undefined);
   const id = arg ? inv.find(i => ITEMS[i].name.toLowerCase().includes(arg) ||

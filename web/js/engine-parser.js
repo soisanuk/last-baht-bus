@@ -2721,9 +2721,38 @@ function _doTalkBody(arg, topic) {
     _say(_dogTalk(npc)); // the dog at your heel is a subject everyone has
     return;
   }
+  // Her own stated reason must be askable: she just told you her friend takes
+  // care of her, and "ask about sponsor/friend" answered "not my story" one
+  // line later (grapevine playtest F3, 2026-08-25). Generic, so every kept
+  // girl on the roster answers — in town he is a subject she closes gently;
+  // gone, a fact of the ledger she is entirely unembarrassed about.
+  if (topic && !d.topic && NPC_ROLES[npc] === "hostess" &&
+      typeof _hasSponsor === "function" && _hasSponsor(npc) &&
+      /\bsponsor\b|\bfriend\b|take care|\bboyfriend\b|your man\b/.test(topic)) {
+    _say(_sponsorInTown(npc)
+      ? `${NPCS[npc].name} glances at her phone, then away. “He is good man. Older. ` +
+        "He fly home soon, na — then I am working girl again.” A small, closing " +
+        "smile. “We no talk about him in here. Is better for everybody.”"
+      : `${NPCS[npc].name} shrugs, entirely matter-of-fact. “He send every month, he ` +
+        "come two time a year. I no ask his business, he no ask mine.” She taps the " +
+        "bar twice. “Is arrangement, not love story. Love story is extra.”");
+    return;
+  }
+  // …and the phone and the bar share a memory: money you sent her is a thing
+  // she remembers in person (grapevine playtest F11 — Pukky texted the medicine
+  // ask, took the ฿300, then answered "that one I don't know" at her own rail).
+  if (topic && !d.topic && G.soc.given && G.soc.given[npc] > 0 &&
+      /medicine|\bmama\b|\bsick\b|hospital|\bmoney\b|\bsend\b/.test(topic)) {
+    _say(`${NPCS[npc].name} puts a hand flat on her heart, no performance in it. ` +
+      "“You help me that time. I no forget, na. My family also no forget — they " +
+      "ask, who is this farang?” A quick grin. “I say: good one. Rare model.”");
+    return;
+  }
   if (topic && !d.topic && (G.talked[npc] || []).length) {
     // she HAS that story but its gate hasn't opened: a "not yet", not a "not mine"
-    const gated = NPCS[npc].dialogue.some(e => e.topic && (e.topic === topic || topic.includes(e.topic)));
+    const _n2 = _convoTopic(topic);
+    const gated = NPCS[npc].dialogue.some(e => e.topic && (e.topic === topic || topic.includes(e.topic) ||
+      (_n2 !== topic && (e.topic === _n2 || _n2.includes(e.topic)))));
     _say(gated ? _topicLocked(npc) : _topicMiss(npc));
     _questOffer(npc);
     return;
@@ -2757,6 +2786,9 @@ const _CONVO_TOPIC_RULES = [
   // now caught by tools/asktopic-audit.mjs). One alias row serves typed ASK, the
   // wheel and the conversation layer alike, which is what this table is for.
   [/\btours?\b|\bon the road\b|\bgigs?\b|\btouring\b/,                        "music"],
+  [/\bmunich\b|\bm\u00fcnchen\b|\bbavaria\b/,                                  "german"],
+  [/\bwhite dish\b|\bwdg\b/,                                                  "ryan powers"],
+  [/\bcipher\b|four letters|\bsign.?off\b/,                                    "signoff"],
   // The same class, from the next blind session: an NPC volunteers a subject in
   // their own greeting and then misses on the word they used (persona reports
   // A#18 / B#4, 2026-08-23). Where a node already exists under a different key,
@@ -2794,7 +2826,7 @@ const _CONVO_TOPIC_RULES = [
   [/danc(e|ing|er)\b|why.*stage|on stage/,                                             "dance"],
   [/warn (her|them)|tell her the truth|should.*tell her|help nong|save nong/,           "warn"],
   [/changed? her|save (her|them)|\brescue\b|good girl now|left the bar|out of the bar/,  "change"],
-  [/\bsponsor\b|your man|who take care|klaus|\bdave\b|\bboyfriend\b/,             "sponsor"],
+  [/\bsponsor\b|your man|who take care|klaus|\bdave\b|\bboyfriend\b|my friend|your friend|the friend/, "sponsor"],
   [/the ring|promise ring/,                                                      "ring"],
   [/ladyboy|kath?oey|were you born|are you.*(girl|woman|real)/,                  "ladyboy"],
   [/\bcigarette|ยาดม|inhaler|\byadom\b|\bciggy\b/,                                "smoke"],
@@ -2899,6 +2931,36 @@ function _askReplies(key) {
   return out.slice(0, 3);
 }
 
+// Does a new answer AGREE with what the player said before? The old check was
+// a literal string compare, which punished perfectly consistent stories: told
+// one girl "fifteen years on the street, mind" and another "fifteen years,
+// love", the player was caught "lying" — while an actual liar who repeated his
+// lie verbatim sailed through (grapevine playtest F1, 2026-08-25, four
+// instances). Substance, not spelling: two answers agree when they share any
+// meaningful content word. Deliberately LENIENT — a missed lie costs nothing,
+// but a false accusation calls an honest player a liar to his face and docks
+// rep for it, which is the worse defect by a street mile.
+const _SAID_STOP = new Set(["the", "a", "an", "i", "you", "me", "my", "im", "in",
+  "on", "of", "to", "and", "it", "its", "is", "was", "are", "be", "not", "no",
+  "yes", "na", "la", "love", "mate", "mind", "this", "that", "for", "with",
+  "but", "so", "just", "very", "really", "well", "then", "than", "one", "bit",
+  "lot", "some", "any", "all", "too", "still", "here", "there", "now", "dont",
+  "cant", "wont", "ill", "ive", "id", "youre", "hes", "shes", "they", "them",
+  "dunno", "maybe", "perhaps", "whatever", "nothing", "depends", "sometimes"]);
+function _saidTokens(v) {
+  return String(v).toLowerCase().replace(/[^a-z0-9\s]/g, " ").split(/\s+/)
+    .filter(w => w && !_SAID_STOP.has(w) && (w.length >= 4 || /^\d+$/.test(w)));
+}
+function _saidAgrees(a, b) {
+  if (a == null || b == null) return true;
+  const na = String(a).toLowerCase().trim(), nb = String(b).toLowerCase().trim();
+  if (na === nb || na.includes(nb) || nb.includes(na)) return true;
+  const ta = _saidTokens(a), tb = new Set(_saidTokens(b));
+  // nothing substantive on either side ("dunno" vs "maybe") is not a lie
+  if (!ta.length || !tb.size) return true;
+  return ta.some(w => tb.has(w));
+}
+
 function _convoAnswer(text) {
   const { id, key } = G.convoQ;
   G.convoQ = null;
@@ -2912,10 +2974,10 @@ function _convoAnswer(text) {
   const prior = heard[key];
   heard[key] = val;
   const name = _convoName(id);
-  if (prior && prior !== val) {
+  if (prior && !_saidAgrees(prior, val)) {
     _say(_pickVary(_ANSWER_CAUGHT, "ansCaught")(name));           // she caught you herself
     _repHit(2);                                                   // caught lying to her face
-  } else if (!prior && globalPrior && globalPrior !== val) {
+  } else if (!prior && globalPrior && !_saidAgrees(globalPrior, val)) {
     _say(_pickVary(_ANSWER_GOSSIP, "ansGossip")(name, globalPrior)); // the soi grapevine caught you
     _repHit(1);                                                   // a softer catch — but the town noticed
     // no +1 — you didn't open up, you got caught telling it two ways
@@ -3619,6 +3681,7 @@ function _shopStock() {
   }
   if (FOOD_STALLS[G.room] || r.food) return "(BUY FOOD \u00b7 or EAT, which is the same thing done faster.)";
   if (r.seven) return "(The 7-Eleven is right there: BUY TOASTIE \u00b7 BUY WATER \u00b7 BUY CHARGER \u00b7 BUY CONDOM)";
+  if (G.room === "queen_vic") return "(BUY BEER \u00b7 BUY FOOD \u00b7 BUY WATER)";
   if (_inBar()) return "(BUY BEER \u00b7 BUY WATER \u00b7 BUY DRINK FOR <name>)";
   return null;
 }
@@ -3631,6 +3694,13 @@ const _NOT_TONIGHT = [
 
 function _doBuy(arg) {
   const r = _room();
+  // The Vic's kitchen: Aoy advertises it with an order pad in her hand, and it
+  // sold nothing (grapevine playtest F6, 2026-08-25). Hours are hers: basket
+  // till eleven, after that only crisp.
+  if (G.room === "queen_vic" && /food|crisp|basket|chip|pie|scampi|kitchen|dinner|snack/.test(arg)) {
+    _qvKitchen(arg);
+    return;
+  }
   // BUY PIWIN A BEER. First, because a stand is not a bar and every branch
   // below assumes one — the beer path was answering "this calls for a bar stool".
   if (/\bcoffee\b/.test(arg) && /\btan\b/.test(arg) && _npcsHere().includes("tan")) { _doTalk("tan", "coffee"); return; }
@@ -4267,6 +4337,10 @@ function _doMotosai(arg) {
   }
   const destKey = Object.keys(MOTOSAI_DESTS).find(k => w.includes(k) || k.includes(w));
   if (!w || !destKey) {
+    // The challenge frame: the same piwin who refuses a NAMED destination in
+    // voice was offering the whole city as a menu one command earlier
+    // (grapevine playtest F4, 2026-08-25). His menu and his mouth agree now.
+    if (G.mode === "soi6") { _say(_pickVary(_SOI6_BOUND, "soi6bound")); return; }
     _say("The piwin raises an eyebrow: where to? (" +
       Object.keys(MOTOSAI_DESTS).join(" · ") + " · hotel)", "dim");
     return;

@@ -217,6 +217,7 @@ function newGame() {
       Object.entries(ITEMS).map(([id, it]) => [id, it.location])),
     dropped: {},         // keepsafe item ids the player DROPPED (vs spawned) — QUESTS surfaces these
     flowerDay: 0,        // day the flower-seller last worked you (once/night)
+    flowerSeen: 0,       // …and how many times you've met her — the rerun reads as recognition
     flowerFor: null,     // who the offered rose is for
     safeTries: 0,
     pendingFare: null,   // { kind:"bus"|"moto", price, dest } awaiting `pay`
@@ -698,6 +699,11 @@ function _convoStart(id) {
       _say(`${_convoName(id)} comes back to it, because they were actually asking.`, "dim");
       _say(lapsed.q);
       G.convoQ = { id, key: lapsed.key, q: lapsed.q };
+      // re-mark it asked, or the node's own _convoAsk prints the question a
+      // second time in the same reply (grapevine playtest F15, 2026-08-25)
+      const lst = _npcState(id);
+      lst.know = lst.know || {};
+      lst.know["asked_" + lapsed.key] = true;
     }
   }
   if (G.known) G.known[id] = true; // talking to someone IS meeting them → you learn the name
@@ -761,6 +767,11 @@ function _convoAsk(id, d, st) {
   const key = d.asks.key;
   st.know = st.know || {};
   if (st.know["asked_" + key]) return;
+  // …and a question you already ANSWERED is never asked again, whatever cleared
+  // the asked_ marker (a midnight kick-out, a lapse, a teardown). Re-asking is
+  // how an honest answer that evolved with time ("first time in" → "third time
+  // in", both true) got punished as a lie (grapevine playtest F1, 2026-08-25).
+  if (st.heard && st.heard[key] != null) return;
   st.know["asked_" + key] = true;
   if (d.asks.q) _say(d.asks.q);
   // Keep the question itself. _renderResume redraws the answer cue after a
@@ -962,7 +973,7 @@ function _patronRage(id) {
 // (n, his) — `his` is the patron's possessive, "his"/"her": Sandra and Angela
 // were going back to "his glass" (German-mode playtest 2026-08-22)
 const _PATRON_MISS = [
-  (n, his) => `${n} shrugs. “Not one I know anything about, mate. Try whoever was there.”`,
+  (n, his) => `${n} shrugs. “Not one I know anything about, mate.”`,
   (n, his) => `“Search me,” ${n} says, and goes back to ${his} glass. “Ask me something I've actually got an opinion on.”`,
   (n, his) => `${n} turns a hand over on the bar: nothing in it. “Couldn't tell you. Not my story.”`,
 ];
@@ -1128,9 +1139,9 @@ function _pickDialogue(npcId, topic) {
 // exasperation — the terse repeat for a pure-flavour line the writer never gave
 // a `short`. Gender-neutral (no she/he), so any NPC can deliver one.
 const _ASK_AGAIN = [
-  n => `“Aiyah, you ask me that already,” ${n} says, half a laugh. “Same answer, na. Farang memory.”`,
+  n => `“Aiyah, I tell you this already,” ${n} says, half a laugh. “Same answer, na. Farang memory.”`,
   n => `${n} waves you off, fond. “You forget so fast? Buy a drink — maybe it come back.”`,
-  n => `“Same-same,” ${n} says. “You already ask me this. We talk something new, or you talk to the wall.”`,
+  n => `“Same-same,” ${n} says. “I tell you this one already. We talk something new, or you talk to the wall.”`,
   n => `${n} gives you the look reserved for farang who repeat themselves. “Told you already, tilac.”`,
 ];
 // The English-register twin: a farang regular (Lake Gary, Bert, Eddy, the
@@ -1213,7 +1224,11 @@ function _quizTalk() {
   if (typeof _quizDay === "function" && _quizDay()) {
     return `“Quiz? Tonight, na — eight till ten.” A thumb over the shoulder at the soi. “${bars.join(", ")}. Five questions, prize on the board. You clever? Go.”`;
   }
-  return "“Quiz night is Thursday — eight o'clock, three bars, prize money. Which bars, you ask on the day. Check the TIME, everybody know.”";
+  // count- and mode-honest: the challenge runs it at one bar (the Vic), the
+  // full game at three the day's hash picks (grapevine playtest F2, 2026-08-25)
+  return G.mode === "soi6"
+    ? "“Quiz night is Thursday — eight o'clock, at the Queen Vic. The pub does it. Prize money, teachers from Rayong, no appeal. Check the TIME.”"
+    : "“Quiz night is Thursday — eight o'clock, prize money. Which bars, you ask on the day. Check the TIME, everybody know.”";
 }
 function _dartsTalk() {
   if (_room().darts) return "“Darts? Board's on the wall. Chalk's on the string. PLAY DARTS, if you think you can.”";
@@ -1672,6 +1687,7 @@ const _REP_LABELS = {
 };
 
 function _tick() {
+  if (typeof _questTick === "function") _questTick();
   G.turns++;
   G.nightTurn++;
   // a torch still burning in a go-go escalates; `mark` spends this command's

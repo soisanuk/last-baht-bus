@@ -895,6 +895,11 @@ function _doPoster() {
 }
 
 function _quizBars() {
+  // The Soi 6 challenge cannot leave the street, and none of QUIZ_BARS is on
+  // it — so TIME and two NPCs promised an event the mode could not deliver
+  // (grapevine playtest F2, 2026-08-25). In-mode, quiz night is the pub's:
+  // the Queen Vic running a Thursday quiz is the most natural thing it does.
+  if (G.mode === "soi6") return ["queen_vic"];
   let h = G.vacation * 7919 + G.day * 104729 + 12345;
   const pool = [...QUIZ_BARS];
   const picked = [];
