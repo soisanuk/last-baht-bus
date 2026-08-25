@@ -4669,7 +4669,13 @@ const _CABARET_PERFORMERS = ["mala", "petch"];
 
 function _doTip(arg) {
   const amtM = arg.match(/(\d+)/);
+  // A bare TIP <name> used to spend ฿20 silently — a figure the player never
+  // chose and was never shown, the same class as the Connect 4 stake that was
+  // clamped without a word. It still defaults (the small note is the honest
+  // default on this soi), but it SAYS so, and the tappable amounts are right
+  // there (see _cAmounts).
   const amount = amtM ? parseInt(amtM[1], 10) : 20;
+  const _defaulted = !amtM;
   if (amtM && amount === 0) { _say("Zero isn't a tip, it's a gesture — and not a kind one. Keep your hand in your pocket or put something in it."); return; }
   const nameW = arg.replace(/\d+|฿|baht/g, " ").trim();
   if (/\bband\b|\bmusicians?\b|tip.?box/.test(arg)) {
@@ -4774,7 +4780,9 @@ function _doTip(arg) {
     _boughtHappy(1); _repGain();
   } else {
     _say(`฿${amount} into ${name}'s tip jar. A warm smile, a small wai — noted, ` +
-      `filed, appreciated. The big ledger, though, runs on lady drinks. (฿${G.money} left.)`);
+      `filed, appreciated. The big ledger, though, runs on lady drinks. (฿${G.money} left.)` +
+      (_defaulted ? " (A bare TIP is the small note; TIP " + name.toUpperCase() +
+        " <amount> if you meant more.)" : ""));
   }
   // a kept cashier you've tipped enough will text a selfie later, if she has your number
   if (typeof _sponsorDrip === "function") _sponsorDrip(id);
@@ -5376,7 +5384,8 @@ const _HELP = `Common commands:
     DRAW [amount] (take your own money out of your own till — nobody else will do it for you)
   PET CATS (Jomtien beach) · FEED DOG (a friendship you cannot undo) · PET DOG · NAME DOG <name>
   LIGHT ON / LIGHT OFF · CHARGE PHONE
-  SCORE (happiness & progress) · UNDO · RESTART   (the night autosaves itself)
+  SCORE (happiness & progress) · DEBT (what you owe, and to whom)
+  UNDO · RESTART   (the night autosaves itself; UNSHELVE takes back a night you stepped away from)
   BUY PIWIN A BEER · ASK PIWIN ABOUT <person>   (the men at the stands see everything)
   On a phone: the (INFO) chip opens QUESTS, HINT, TIME, WHO and the rest, and every
     "…" chip fans out into a menu — this list needs no typing to use
@@ -5646,6 +5655,52 @@ function _cNpcsHere() {
     ..._patronsHere().map(id => _patronLabel(id).toLowerCase())];
 }
 
+// ── amounts, from the engine ────────────────────────────────────────────────
+// A thumb could commit to a shift and accept a partner's arrangement but could
+// not move a baht that wasn't a fixed price on a chip: TIP/SEND/BORROW/REPAY/
+// DRAW all prefilled a bare verb and offered nothing for the amount, and TIP was
+// worse than nothing — it sat in the flirt/kiss/barfine group, which returns
+// names WITHOUT checking ctx, so after picking a person the menu offered the
+// same people again and a tap-through submitted "tip candy candy" (mobile
+// playtest, round 17; measured again 2026-08-25). The ATM worked only because
+// term.js hard-codes _ATM_CMDS — a hand-written list in the frontend, which is
+// the bounded-by-a-list pattern this project has been removing everywhere else.
+//
+// So the amounts live HERE, where the rules are, and every surface inherits them:
+// typed autocomplete, the chip fan-out, and the wheel. Never offer what the
+// player cannot afford, and put the meaningful figure first — the balance for a
+// repay, the till for a draw, the thresholds that actually change behaviour for
+// a tip (฿100 bumps her, ฿300 doubles it: see _doTip).
+function _cAmounts(verb) {
+  const have = G.money || 0;
+  const pick = xs => [...new Set(xs)]
+    .filter(n => Number.isFinite(n) && n > 0 && n <= have)
+    .sort((a, b) => a - b).map(String);
+  switch (verb) {
+    case "tip":      return pick([100, 300, 500, 1000]);
+    case "send": case "transfer": case "wire": return pick([500, 1000, 5000, 10000]);
+    case "draw": case "cashup": {
+      const till = (_barOwned() && G.bar && G.bar.cash > 0) ? G.bar.cash : 0;
+      if (!till) return [];
+      return [...new Set([till, Math.round(till / 2), 5000, 1000])]
+        .filter(n => n > 0 && n <= till).sort((a, b) => b - a).map(String);
+    }
+    case "repay": {
+      if (!G.loan) return [];
+      const owed = G.loan.owed;
+      return [...new Set([Math.min(owed, have), Math.round(owed / 2), 1000])]
+        .filter(n => n > 0 && n <= have).sort((a, b) => b - a).map(String);
+    }
+    case "borrow": {
+      if (G.loan) return [];                       // one loan at a time
+      return ["5000", "10000", "20000"];           // her ceiling; affordability doesn't apply
+    }
+    case "withdraw": case "withdrawal": case "withdrawl":
+      return ["1000", "5000", "10000", "20000"];   // her cap is the bank's, not your pocket's
+    default: return [];
+  }
+}
+
 function _completePool(verb, ctx) {
   const girls = () => _npcsHere().filter(id => NPC_ROLES[id])
     .map(id => NPCS[id].name.toLowerCase());
@@ -5655,9 +5710,15 @@ function _completePool(verb, ctx) {
     case "talk": case "chat": case "wai": return _cNpcsHere();
     case "photo": case "selfie": case "photograph": case "snap":
       return ctx.length >= 2 ? [] : _cNpcsHere();
-    case "flirt": case "kiss": case "spank": case "fondle": case "tip":
+    case "flirt": case "kiss": case "spank": case "fondle":
     case "barfine": case "bf": return girls();
+    // TIP is not one of those: it takes a person AND THEN an amount
+    case "tip": return ctx.length >= 2 ? _cAmounts("tip") : girls();
     case "follow": return ctx.length >= 2 ? [] : _cNpcsHere();
+    // the amount verbs that take no target — offer the figures straight away
+    case "borrow": case "repay": case "draw": case "cashup":
+    case "withdraw": case "withdrawal": case "withdrawl":
+      return ctx.length >= 2 ? [] : _cAmounts(verb);
     case "ask": {
       // Topic suggestions are gone: conversations run on TALK + the in-conversation
       // chip bar now, not ASK-about autocomplete. Typed ASK still works; we just
@@ -5739,7 +5800,8 @@ function _completePool(verb, ctx) {
     case "abandon":
       return Object.keys(QUESTS).filter(q => G.quests[q] === "active");
     case "message": case "text": case "msg": case "call": case "dial":
-    case "send": case "transfer": case "wire": return contacts();
+    case "send": case "transfer": case "wire":
+      return ctx.length >= 2 ? _cAmounts("send") : contacts();
     case "contact": return girls();
     case "play": case "challenge": return _playOptions();
     case "light": case "turn": return ["on", "off"];

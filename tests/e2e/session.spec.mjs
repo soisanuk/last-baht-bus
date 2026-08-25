@@ -74,3 +74,40 @@ test("QUIT concedes a live mini-game instead of signing off", async ({ page }) =
   expect(await page.evaluate(() => G.game)).toBeNull();
   await expect(page.locator("#term-out")).not.toContainText(/roars on without you/i);
 });
+
+// The night you stepped away from. "NO — start fresh" on the continue prompt is
+// the highest-consequence tap in the product and the only unguarded one — on a
+// 390px bar it sits beside the button the player wants, and for a burst player
+// that screen IS the main menu (mobile playtest, round 17). It never deleted
+// anything immediately (the old blob only dies when the next game autosaves), so
+// this uses the window that already existed rather than taxing every deliberate
+// fresh start with a confirmation.
+test("a mis-tapped NO can be taken back, and starting a night lets it go", async ({ page }) => {
+  const errs = [];
+  page.on("pageerror", e => errs.push(e.message));
+  await bootIntoGame(page, INDEX_URL);
+  await send(page, "look");
+  const before = await page.evaluate(k => localStorage.getItem(k), SAVE_KEY);
+  expect(before).toBeTruthy();
+
+  // come back to the continue prompt and mis-tap NO
+  await page.reload();
+  await page.waitForSelector("#term-in");
+  await send(page, "no");
+  const shelved = await page.evaluate(() => localStorage.getItem("lbb_shelved"));
+  expect(shelved, "NO shelves the night rather than dropping it").toBe(before);
+  await expect(page.locator("#term-out")).toContainText(/is still here/i);
+
+  // take it back
+  await send(page, "unshelve");
+  await expect(page.locator("#term-out")).toContainText(/PICKED BACK UP/);
+  const after = await page.evaluate(k => localStorage.getItem(k), SAVE_KEY);
+  expect(JSON.parse(after).day, "the same night, restored").toBe(JSON.parse(before).day);
+  expect(await page.evaluate(() => localStorage.getItem("lbb_shelved")),
+    "the shelf is consumed once taken back").toBeNull();
+
+  // …and a second UNSHELVE has nothing to reach
+  await send(page, "unshelve");
+  await expect(page.locator("#term-out")).toContainText(/no night set aside/i);
+  expect(errs).toEqual([]);
+});

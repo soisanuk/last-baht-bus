@@ -2,16 +2,50 @@
 // The engine stays storage-free — all persistence lives here.
 
 const SAVE_KEY = "lbb_save";
+// The night you set aside. Tapping "NO — start fresh" on the continue prompt is
+// the highest-consequence tap in the product and the only unguarded one: on a
+// 390px bar it sits directly beside the button the player actually wants, and
+// for someone who reloads constantly that screen IS the main menu (mobile
+// playtest, round 17). It never deleted anything immediately — _showStartMenu
+// only calls newGame(), and the old blob dies when the next game autosaves over
+// it — so there was already a recovery window and nothing used it. This keeps a
+// copy in that window, which buys the safety without taxing every deliberate
+// fresh start with a confirmation dialog.
+const SHELF_KEY = "lbb_shelved";
 let _prevSnap = null;         // one-level undo snapshot
+let _undoSpent = false;       // …and whether it was USED, vs never having survived a reload
 let _awaitingContinue = false;
 let _awaitingReset = false;   // RESET arms a one-shot confirm before wiping the save
 
 function _autosave() {
   try { localStorage.setItem(SAVE_KEY, serializeGame()); } catch (e) {}
 }
+// Starting a night lets the shelved one go — the offer is honest about this
+// ("Starting a new one lets it go"), so the shelf must not outlive it and
+// resurface days later attached to a game the player has moved on from.
+function _dropShelf() {
+  try { localStorage.removeItem(SHELF_KEY); } catch (e) {}
+}
 
 // The mode-select / intro overlay shown on a fresh start (see index.html
 // #start-overlay). Continuing a saved night bypasses it.
+// Offer the shelved night back, once, on the menu the mis-tap lands on. Reads
+// the same way the continue prompt does — mode, day, where — so the player
+// recognises the night rather than being asked to trust a label.
+function _shelvedLine() {
+  let blob = null;
+  try { blob = localStorage.getItem(SHELF_KEY); } catch (e) {}
+  if (!blob) return null;
+  try {
+    const sv = JSON.parse(blob);
+    const room = sv.room && typeof ROOMS !== "undefined" && ROOMS[sv.room]
+      ? (ROOMS[sv.room].bar || ROOMS[sv.room].name) : null;
+    const mode = sv.mode === "soi6" ? (sv.dailyId ? `the ${sv.dailyId} daily` : "a Soi 6 week")
+      : sv.stage === "expat" ? "Pattaya, home" : "a vacation";
+    return sv.day ? `${mode}, day ${sv.day}${room ? ", at " + room : ""}` : "a night";
+  } catch (e) { return "a night"; }
+}
+
 function _showStartMenu() {
   // Fresh-start gateway (boot with no save, RESET, or continue→NO): clear any
   // in-memory state so a full RESET actually re-runs character creation (the taxi
@@ -26,6 +60,11 @@ function _showStartMenu() {
   document.getElementById("start-intro").hidden = true;
   _applyFullGate();
   ov.hidden = false;
+  const shelved = _shelvedLine();
+  if (shelved) {
+    _term.print(`(The night you just stepped away from — ${shelved} — is still here. ` +
+      "UNSHELVE brings it back. Starting a new one lets it go.)", "dim");
+  }
 }
 
 // Reflect the TOGGLE FULL pref onto the splash button. Called at boot and
@@ -145,6 +184,7 @@ function _applyFullGate() {
 function _startFull() {
   const ov = document.getElementById("start-overlay");
   if (ov) ov.hidden = true;
+  _dropShelf();          // starting a night lets the shelved one go, as offered
   newGame();
   engineIntro();
   _autosave();
@@ -155,6 +195,7 @@ function _startFull() {
 function _startGame(daily) { // START / TODAY'S SOI on the Soi 6 intro panel
   const ov = document.getElementById("start-overlay");
   if (ov) ov.hidden = true;
+  _dropShelf();          // starting a night lets the shelved one go, as offered
   if (daily) {
     // Seed-of-the-day: the engine never reads a clock (shared-world rule 1),
     // so the DATE is computed here and handed in as a string — everyone who
@@ -174,7 +215,10 @@ function _dispatch(cmd) {
   // the start menu is up: typed commands must not drive the skeleton game behind
   // it (replayer playtest 2026-08-22: "e" walked the hidden player to the beach road)
   const _ov = document.getElementById("start-overlay");
-  if (_ov && !_ov.hidden && !_awaitingContinue && !/^toggle/.test(v)) {
+  // …but UNSHELVE is offered ON that menu, so it has to survive the gate — the
+  // whole point is to take back the night from the screen the mis-tap landed on.
+  if (_ov && !_ov.hidden && !_awaitingContinue && !/^toggle/.test(v) &&
+      !/^(unshelve|unshelf|restore)$/.test(v)) {
     _term.print("(Pick a mode above to start.)", "dim");
     return;
   }
@@ -194,6 +238,10 @@ function _dispatch(cmd) {
       try { if (blob) deserializeGame(blob); } catch (e) {}
     } else if (["no", "n", "new", "restart"].includes(v)) {
       _awaitingContinue = false;
+      try {
+        const blob = localStorage.getItem(SAVE_KEY);
+        if (blob) localStorage.setItem(SHELF_KEY, blob);
+      } catch (e) {}
       _showStartMenu();
       return;
     } else {
@@ -201,6 +249,32 @@ function _dispatch(cmd) {
       return;
     }
     _audioForRoom(G.room, G.flags);
+    return;
+  }
+
+  // Take back the night you stepped away from. Only reachable while the shelf
+  // holds one — it is cleared the moment a new game autosaves over the save.
+  if (v === "unshelve" || v === "unshelf" || v === "restore") {
+    let blob = null;
+    try { blob = localStorage.getItem(SHELF_KEY); } catch (e) {}
+    if (!blob) {
+      _term.print("There's no night set aside. (UNSHELVE only reaches the one you " +
+        "stepped away from, and only before you've started another.)", "dim");
+      return;
+    }
+    try { deserializeGame(blob); } catch (e) { _term.print("That night didn't survive. Sorry.", "alert"); return; }
+    try { localStorage.removeItem(SHELF_KEY); } catch (e) {}
+    const ov = document.getElementById("start-overlay");
+    if (ov) ov.hidden = true;
+    _awaitingContinue = false;
+    _prevSnap = null; _undoSpent = false;
+    _term.print("── PICKED BACK UP ──", "win");
+    _describeRoom(true);
+    if (typeof _renderResume === "function") _renderResume();
+    _autosave();
+    _audioForRoom(G.room, G.flags);
+    _term.renderChips();
+    if (typeof _term.updateFabs === "function") _term.updateFabs();
     return;
   }
 
@@ -216,6 +290,7 @@ function _dispatch(cmd) {
     }
     if (_prevSnap) {
       const snap = _prevSnap;
+      _undoSpent = true;
       deserializeGame(snap);
       _prevSnap = null;
       _term.print("⌫ Rewound one command.", "dim");
@@ -224,7 +299,16 @@ function _dispatch(cmd) {
       deserializeGame(snap); // the redraw consumed dice; UNDO must not reroll (replayer playtest 2026-08-22)
       _autosave();
     } else {
-      _term.print("Nothing to rewind — UNDO reaches back one command only.", "dim");
+      // Two different states wore one sentence. "Nothing to rewind" implied the
+      // player had already spent his undo, when what usually happened is the page
+      // reloaded and took the buffer with it — a burst player reaches for UNDO
+      // precisely on coming back, and was told he had used something he never had
+      // (mobile playtest, round 17). The buffer is frontend-only by design; say
+      // which of the two actually happened.
+      _term.print(_undoSpent
+        ? "Already rewound — UNDO reaches back one command only."
+        : "Nothing to rewind: the page reloaded, and the rewind buffer doesn't survive that. " +
+          "Your night did — it is exactly where you left it.", "dim");
     }
     _audioForRoom(G.room, G.flags);
     return;
@@ -336,6 +420,7 @@ function _dispatch(cmd) {
   // SHARE below.
   if (v === "handover" || v === "baton") {
     _prevSnap = serializeGame();
+    _undoSpent = false;
     // Grab the baton BEFORE dispatch. doCommand ticks, and a tick can arm an
     // encounter — which makes batonReady() refuse, so exporting afterwards
     // returned null and the file silently never wrote while the engine had
@@ -377,7 +462,7 @@ function _dispatch(cmd) {
         // silence (persistence playtest 2026-08-23). Say what is about to be
         // overwritten, in the same breath as doing it — UNDO is the way back,
         // and the player has to know it exists BEFORE they type anything else.
-        _prevSnap = serializeGame();      // so UNDO can walk back out of it
+        _prevSnap = serializeGame(); _undoSpent = false;   // so UNDO can walk back out of it
         const _hadGame = !!(G && G.day);
         const r = importBaton(parsed);
         if (!r.ok) { _term.print(`(Not a baton this game can take: ${r.why}.)`, "alert"); return; }
@@ -410,6 +495,7 @@ function _dispatch(cmd) {
   }
 
   _prevSnap = serializeGame();
+  _undoSpent = false;
   doCommand(cmd);
   _autosave();
   _audioForRoom(G.room, G.flags);

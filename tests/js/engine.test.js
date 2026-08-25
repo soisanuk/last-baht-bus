@@ -721,6 +721,52 @@ test("who you said you were is a thing the world reads back correctly", () => {
   }
 });
 
+test("a thumb can move money: the amount verbs offer amounts, from the engine", () => {
+  // mobile playtest, round 17: TIP/SEND/BORROW/REPAY/DRAW all prefilled a bare
+  // verb and offered nothing for the amount, so a thumb could commit to a shift
+  // and accept a partner's arrangement but could not move a baht that wasn't a
+  // fixed price on a chip. TIP was worse than nothing — it sat in the
+  // flirt/kiss/barfine group, which returns names WITHOUT checking ctx, so a
+  // tap-through submitted "tip candy candy".
+  state().flags.act1Done = true; state().flags.hasWallet = true; state().stage = "vacation";
+  state().money = 50000; state().room = "candy_bar";
+  assert.ok(engineComplete("tip ").length, "first a person");
+  const amts = engineComplete("tip candy ");
+  assert.ok(amts.length && amts.every(a => /^\d+$/.test(a)),
+    `then AMOUNTS, not the same people again (got ${JSON.stringify(amts)})`);
+
+  // never offer what the player can't afford
+  state().money = 150;
+  assert.deepEqual(engineComplete("tip candy ").filter(a => Number(a) > 150), [],
+    "nothing you cannot pay for");
+
+  // repay knows the balance; borrow is closed while one is live
+  state().money = 50000;
+  state().loan = { owed: 24000, dueDay: 9, strikes: 0 };
+  assert.ok(engineComplete("repay ").includes("24000"), "the balance is the first figure offered");
+  assert.deepEqual(engineComplete("borrow "), [], "one loan at a time");
+  state().loan = null;
+  assert.ok(engineComplete("borrow ").length, "…and the ceiling once it's clear");
+
+  // draw reads the till, and offers nothing when it's empty
+  for (const f of ["expatLife", "barOpen", "barPaid"]) state().flags[f] = true;
+  state().stage = "expat"; state().room = "stinky_bar"; state().bar.cash = 36000;
+  assert.ok(engineComplete("draw ").includes("36000"), "the whole till is the headline figure");
+  state().bar.cash = 0;
+  assert.deepEqual(engineComplete("draw "), [], "an empty drawer offers nothing");
+});
+
+test("a bare TIP says what it just spent", () => {
+  // ฿20 left the pocket silently — a figure the player never chose and was never
+  // shown, the same class as the Connect 4 stake clamped without a word.
+  state().flags.act1Done = true; state().flags.hasWallet = true; state().stage = "vacation";
+  state().room = "candy_bar"; state().money = 5000;
+  run("tip candy");
+  assert.match(lastOut(), /bare TIP is the small note/i, "the default announces itself");
+  out = []; run("tip candy 300");
+  assert.doesNotMatch(lastOut(), /bare TIP is the small note/i, "…and a chosen amount doesn't");
+});
+
 test("a refused move costs no turn — a wall is not an action", () => {
   // thorough-player playtest (2026-08-23): "You can't go that way" and "No
   // motosai stand here" are parser refusals, but they ticked the clock AND
