@@ -268,6 +268,8 @@ function newGame() {
     act1Best: 0,         // furthest point down the opening critical path ever reached; survives the do-or-die Act One reset
     act1Tries: 0,        // opening-quest attempts so far; ≥1 unlocks the round-2 HINT system (also survives the reset)
     pendingChoice: null, // "vacation_end" gates input at week's end
+    shiftCall: null,     // …and "shift" gates it on the call your own rail just put to you
+    shiftWho: null,      // the staff member a call is about, when it is about one
     bank: 100000,        // your account balance — the ATM draws pocket cash from this
     atmDay: 0,           // last day the ATM was used (pairs with atmToday for the daily cap)
     // the bar you own, once you own one (see _barSettle). `owed` is what's still
@@ -1683,9 +1685,11 @@ function _tick() {
   // comes round while you're already stood behind your own bar, it finds you.
   if (!G.game && !G.pendingEnc && !G.pendingChoice && !G.pendingBf && !G.pendingFare) {
     if (typeof _tanFavourDue === "function" && _tanFavourDue()) { _tanFavour(); return; }
-    if (typeof _synDue === "function" && _synDue()) { _synAsk(); return; }
+    if (typeof _shiftDue === "function" && _shiftDue()) { _shiftAsk(); return; }
+  if (typeof _synDue === "function" && _synDue()) { _synAsk(); return; }
   }
   if (typeof _workPresenceTick === "function") _workPresenceTick(); // a declared shift has to be stood
+  if (typeof _workFloor === "function") _workFloor();          // …and a stood shift is where your own staff live
   _lastBusWarn();  // ~01:30: heads-up that the last ฿15 ride home is about to leave
   _maybeIncomingText();
   if (typeof _wrongNumberTick === "function") _wrongNumberTick(); // CTF stage 2 (docs/ctf.md), only if a probe armed it

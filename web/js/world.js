@@ -10698,6 +10698,82 @@ const WORK_NIGHTS = [
 //
 // Refusing is allowed and nothing is DONE to you. You simply stop being helped,
 // which for a business arrives as weather rather than as an event.
+// ── The shift calls ─────────────────────────────────────────────────────────
+// What makes a night behind your own rail worth playing rather than watching.
+// The old shift fired one vignette on declaration and then resolved itself at
+// dawn: a wager, not a night. These are the four decisions a publican actually
+// makes, dealt one a night on the tick while you are standing there, each a
+// real trade with nothing obviously correct about either side.
+//
+// Effects live in engine-systems (_shiftYes/_shiftNo); the text lives here, the
+// same split as SYNDICATE_JOBS, because content out of the engine is the shared
+// down-payment on reuse, online and 2D.
+const SHIFT_CALLS = [
+  {
+    id: "tab",
+    yesLabel: "let him run one",
+    lead: "A rail regular gets to the bottom of a glass, looks at it, and does not " +
+      "get his wallet out.",
+    ask: "\"Bud.\" He is not embarrassed, quite. \"Bank's done something clever with " +
+      "my card and the machine in the 7 doesn't like me. Can you put tonight on a " +
+      "bit of paper?\" Bert, further down, is very carefully polishing something " +
+      "that does not need it.",
+    yes: "You write his name on a docket and put it under the till, and he stays " +
+      "another three hours and drinks like a man who has stopped counting, which " +
+      "is exactly what a tab is for.",
+    no: "\"No, aye, fair enough.\" He is perfectly decent about it, finishes what " +
+      "he has, and goes two doors along to a bar that will. He is back on Thursday. " +
+      "He is always back on Thursday. But not tonight, and tonight is the till.",
+  },
+  {
+    id: "early",
+    yesLabel: "let her go",
+    lead: "{who} comes to the end of the bar and stands there a moment before she " +
+      "says anything, which is how you know it is a real ask.",
+    ask: "Her boy is at her sister's, and her sister works mornings, and there is a " +
+      "bus at eleven that means she sees him before he sleeps or she does not see " +
+      "him. She does not say any of this as a hardship. She says it as a timetable, " +
+      "and waits.",
+    yes: "\"Kop khun ka.\" She is gone in four minutes, having first squared her own " +
+      "section away so completely that nobody else has to touch it. The floor runs " +
+      "one short and the room can tell.",
+    no: "She says \"ka\" and goes back to her section and works the rest of the " +
+      "night without a flicker, which is worse than if she had sulked. The bus goes " +
+      "at eleven. You both hear it not happening.",
+  },
+  {
+    id: "round",
+    yesLabel: "get them in",
+    lead: "It goes flat. Not bad — flat: five people at a rail with drinks in front " +
+      "of them, all of them nearly finished, none of them leaving yet and none of " +
+      "them staying either.",
+    ask: "This is the hinge of the whole evening and everybody in the trade knows " +
+      "it. You can spend some of your own takings on the room and see what it does, " +
+      "or you can let the night decide for itself.",
+    yes: "You put your hand up and say the words and the room changes temperature. " +
+      "Bert pours without being asked. Somebody who was standing up sits back down; " +
+      "somebody who was quiet says something to the man beside him. It is not " +
+      "generosity, it is stock control, and it is also generosity.",
+    no: "You let it ride. Two of them finish and go, in the unhurried way people go " +
+      "when nothing has told them to stay, and the rail is a rail with three people " +
+      "at it.",
+  },
+  {
+    id: "turning",
+    yesLabel: "have a word yourself",
+    lead: "There is one turning at the far end. Not loud yet. Loud is twenty minutes " +
+      "away and everyone can see it coming.",
+    ask: "Bert has clocked him and is waiting — not for permission, exactly, but he " +
+      "has looked at you, and looking at you is the question. It is your name over " +
+      "the door now, which cuts both ways.",
+    yes: "You go down the bar yourself.",
+    no: "You leave it to Bert, which is what Bert is for, and Bert does it the way " +
+      "he has done it for eleven years: no volume, one hand on the man's shoulder, " +
+      "out through the front and pointed at a taxi before he has finished deciding " +
+      "to argue.",
+  },
+];
+
 const SYNDICATE_JOBS = [
   {
     id: "cleaning",

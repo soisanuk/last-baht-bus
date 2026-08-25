@@ -4283,6 +4283,8 @@ function _doWork() {
   // _barNight consumes and clears it, so it cannot leak into a later night.
   G.bar.workedLast = true;
   G.bar.awayTurns = 0;               // the presence clock starts now (_workPresenceTick)
+  G.bar.floorN = 0; G.bar.floorTurn = -99;   // …and the floor's moments start with it
+  G.bar.workedTurn = G.turns;        // the call needs the room to settle first
   G.bar.worked = (G.bar.worked || 0) + 1;
   G.bar.away = 0;
   _say(_pickVary(_WORK_SHIFT, "workshift"), "win");
@@ -4336,6 +4338,230 @@ function _workPresenceTick() {
       "The shift is over in the only way a shift can be over when nobody was standing it: quietly, and in Bert's favour.",
     ], "worklapse"), "alert");
   }
+}
+
+// ── The floor, and what a night behind it is actually for ────────────────────
+// The presence dilemma was built as takings-versus-everything-good, which made
+// WORK the dutiful option by construction: money is instrumental (it services a
+// debt so you can keep the bar so you can work more), and สนุก, encounters and
+// the girls were all on the other side of the trade. Loss-aversion carried it,
+// and loss-aversion works exactly once — a second-run player just executes the
+// drill.
+//
+// The fix is not more vignettes, it is the framing. You EMPLOY these women. A
+// publican knows his own staff better than anyone else on the soi knows them,
+// because he is there every night and so are they. So a stood shift is now the
+// most reliable place in the game to build bond — earned by presence, never
+// bought, which is why it goes through _addBond and not _boughtBond and why the
+// lady-drink taper has nothing to say about it.
+//
+// The trade the stage is about therefore becomes FOUR PEOPLE DEEPLY versus the
+// whole soi shallowly, which is a real choice, matches the depth-beats-breadth
+// doctrine already in _conquestHappy, and gives a repeat player a reason to buy
+// the bar that a particular girl works at.
+const WORK_FLOOR_GAP = 12;   // turns between floor moments
+const WORK_FLOOR_MAX = 3;    // …and how many a night can hold
+
+// Whoever is on YOUR floor tonight — role-carrying staff at the owned bar, in a
+// stable order. Derived from _npcRoom so it survives NPC movement, and from
+// NPC_ROLES so a manager (hired help, not staff-you-court) is correctly absent.
+function _barStaff() {
+  const room = (G.bar && G.bar.room) || "stinky_bar";
+  return Object.keys(NPCS)
+    .filter(id => _npcRoom(id) === room && NPC_ROLES[id] && !NPCS[id].manager)
+    .sort();
+}
+
+// Working alongside somebody is not flirting with them, and the prose has to
+// know the difference: these are competence moments, not courtship. The bond
+// they build is the kind you cannot buy a round of drinks to get.
+const _FLOOR_HOSTESS = [
+  "{who} shows you where the good ice is kept, which is not where the ice is kept. It is a small thing to be trusted with and she does not make a speech about it.",
+  "A punter asks {who} something in the doorway and she answers him without turning round, because she is watching your hands on the optic and has decided they are wrong. When he has gone she fixes them, once, and does not mention it again.",
+  "Between customers {who} teaches you the two words for the ice bucket and laughs at your first attempt in a way that is entirely kind and entirely unrestrained.",
+  "{who} has done this for six years and you have done it for a fortnight, and somewhere in the middle of a busy hour that stops being embarrassing and starts being useful.",
+  "You catch {who} watching the door the way you have started watching it. She catches you catching her, and something passes between you that is nothing at all to do with drinks.",
+  "{who} eats her rice standing up, out of the way of the till, the way people do when the room is theirs. She holds the box out. You take some. It is very good and much too spicy and she enjoys that enormously.",
+];
+const _FLOOR_MAMA = [
+  "{who} tells you which of tonight's punters not to serve a fourth to, and is right, and does not say so afterwards.",
+  "\"That one.\" {who} does not point. \"He has been three times this week and he has not spent one baht more than the beer. He is lonely, not cheap. Different price.\" It is the most useful sentence anyone has said to you about your own trade.",
+  "{who} rearranges two stools by about a foot each and the whole rail sits differently for the rest of the night. You ask her how she knew. She looks at you as if you had asked how she knew it was dark.",
+  "A tour group put their heads in, decide against it, and move on. {who} watches them go without regret. \"Good,\" she says. \"They drink one, they take photograph, they make the girls tired.\"",
+];
+const _FLOOR_CASHIER = [
+  "{who} counts the float in front of you, twice, slowly, in a way that is unmistakably a lesson and unmistakably not an accusation.",
+  "{who} finds ฿40 you had already written off, three hours after you wrote it off, and puts it in front of you without comment.",
+  "You get the change wrong and {who} corrects it before the customer notices, and the customer never does notice, and that is the whole of her job described.",
+  "{who} keeps the book in a hand so small and so exact that you can read a whole night off one page. She turns it round so you can.",
+];
+
+function _floorPool(id) {
+  const role = NPC_ROLES[id];
+  return role === "mamasan" ? _FLOOR_MAMA
+    : role === "cashier" ? _FLOOR_CASHIER
+    : _FLOOR_HOSTESS;
+}
+
+// One moment at a time, spaced out, and always to the person you know LEAST —
+// so a long run of shifts spreads across the floor instead of pouring into
+// whoever the sort happened to put first.
+function _workFloor() {
+  if (!_workedTonight() || G.room !== ((G.bar && G.bar.room) || "stinky_bar")) return;
+  const b = G.bar;
+  if ((b.floorN || 0) >= WORK_FLOOR_MAX) return;
+  if (G.turns - (b.floorTurn || -99) < WORK_FLOOR_GAP) return;
+  const staff = _barStaff();
+  if (!staff.length) return;
+  const seen = (b.floorSeen = b.floorSeen || []);
+  let pool = staff.filter(id => !seen.includes(id));
+  if (!pool.length) { seen.length = 0; pool = staff; }
+  pool.sort((a, c) => ((G.soc.drinks[a] || 0) - (G.soc.drinks[c] || 0)));
+  const id = pool[0];
+  seen.push(id);
+  b.floorTurn = G.turns;
+  b.floorN = (b.floorN || 0) + 1;
+  _say(_fmt(_pickVary(_floorPool(id), "floor" + NPC_ROLES[id]), { who: _npcLabel(id) }));
+  _addBond(id, 1);
+}
+
+// ── The shift calls: a night you play, not a wager you watch ────────────────
+// One a night, dealt on the tick while you are actually standing your own rail,
+// resolved through the standard pendingChoice modal (doCommand intercept +
+// _renderResume + _chipSet + engineComplete + a shared prompt helper). Nothing
+// here is obviously correct, which is the point: each one trades money against
+// people, and the stage is about which of those you are actually here for.
+const SHIFT_TAB_TAKE   = 1200;   // what a tab is worth to a night
+const SHIFT_TAB_STIFF  = 0.35;   // …and how often it never comes back
+const SHIFT_EARLY_COST = 600;    // a floor one short
+const SHIFT_ROUND_COST = 500;    // what getting them in costs the till
+const SHIFT_ROUND_TAKE = 900;    // …and what the room does about it
+const SHIFT_FLAT_LOSS  = 400;    // a night nobody lifted
+
+function _shiftCallById(id) { return SHIFT_CALLS.find(c => c.id === id) || null; }
+
+// The one call that needs a person attached picks her at ask time, so the prose
+// and the bond land on the same woman.
+function _shiftEligible() {
+  return SHIFT_CALLS.filter(c => c.id !== "early" || _barStaff().length > 0);
+}
+
+function _shiftDue() {
+  const b = G.bar;
+  return _workedTonight() && G.room === ((b && b.room) || "stinky_bar") &&
+    !b.shiftAsked && G.nightTurn >= 18 &&
+    G.turns - (b.workedTurn || 0) >= 6 &&   // let the room settle before it asks you something
+    !G.pendingChoice && !G.pendingEnc && !G.game;
+}
+
+function _shiftAsk() {
+  const b = G.bar;
+  const pool = _shiftEligible();
+  if (!pool.length) return;
+  // Day-stable, and a pure hash rather than _rand() — reading a reload must not
+  // reroll which call the night dealt you (same rule as _quizBars).
+  const h = (G.vacation * 7919 + G.day * 104729 + 4177) >>> 0;
+  const call = pool[h % pool.length];
+  b.shiftAsked = true;
+  G.shiftCall = call.id;
+  G.shiftWho = null;
+  if (call.id === "early") {
+    const staff = _barStaff().filter(id => NPC_ROLES[id] === "hostess");
+    G.shiftWho = (staff.length ? staff : _barStaff())[0];
+  }
+  const who = G.shiftWho ? _npcLabel(G.shiftWho) : "";
+  _say("");
+  _say(_fmt(call.lead, { who }), "alert");
+  _say(_fmt(call.ask, { who }));
+  _shiftPrompt();
+  G.pendingChoice = "shift";
+}
+
+function _shiftPrompt() {
+  const call = _shiftCallById(G.shiftCall);
+  _say(_fmt("(YES \u00b7 NO \u2014 {label})",
+    { label: call ? call.yesLabel : "your call" }), "dim");
+}
+
+// takings the shift itself moved, added to the night at settle
+function _shiftTake(n) {
+  const b = G.bar;
+  b.eventCash = (b.eventCash || 0) + n;
+  if (n) b.cash += n;
+}
+
+function _shiftClear() { G.pendingChoice = null; G.shiftCall = null; G.shiftWho = null; }
+
+function _shiftYes() {
+  const call = _shiftCallById(G.shiftCall);
+  const who = G.shiftWho;
+  if (!call) { _shiftClear(); return; }
+  _say(_fmt(call.yes, { who: who ? _npcLabel(who) : "" }), "win");
+  if (call.id === "tab") {
+    _shiftTake(SHIFT_TAB_TAKE);
+    _repGain();
+    if (_rand() < SHIFT_TAB_STIFF) {
+      // the docket outlives the man. Not malice — he simply stops coming in,
+      // which is how bar debts actually end.
+      _shiftTake(-SHIFT_TAB_TAKE);
+      G.bar.stiffed = (G.bar.stiffed || 0) + 1;
+      _say(_fmt("(The docket is still under the till a week later. He is not " +
+        "barred and nobody has said a word about it; he has simply started " +
+        "drinking somewhere he doesn't owe \u0e3f{amt}.)", { amt: SHIFT_TAB_TAKE }), "alert");
+    } else {
+      _say("(He settles on Thursday, in full, and stands you one out of it.)", "dim");
+    }
+  } else if (call.id === "early") {
+    _shiftTake(-SHIFT_EARLY_COST);
+    if (who) _addBond(who, 2);
+  } else if (call.id === "round") {
+    _shiftTake(SHIFT_ROUND_TAKE - SHIFT_ROUND_COST);
+    _addHappy(2);                       // your room, your night — never jading
+    _repGain();
+    for (const id of _barStaff()) _addBond(id, 1);
+  } else if (call.id === "turning") {
+    // The one with an actual downside. Most nights a publican's word is enough;
+    // occasionally it is not, and you own the bar either way.
+    if (_rand() < 0.72) {
+      _say("He looks at you, works out in about a second and a half that you are " +
+        "the one whose name is over the door, and lets himself be walked to the " +
+        "front like it was his idea. Bert says nothing at all, which from Bert is " +
+        "a standing ovation.", "win");
+      _repGain();
+      for (const id of _barStaff()) _addBond(id, 1);
+    } else {
+      _say("It goes the other way. There is a shove, and a stool, and a very " +
+        "short piece of shouting, and then it is over and he is outside and you " +
+        "have a forearm you are going to notice tomorrow. The room settles. " +
+        "Somebody sweeps up.", "alert");
+      G.hurt = (G.hurt || 0) + 1;
+      _shiftTake(-SHIFT_FLAT_LOSS);
+    }
+  }
+  _shiftClear();
+}
+
+function _shiftNo() {
+  const call = _shiftCallById(G.shiftCall);
+  const who = G.shiftWho;
+  if (!call) { _shiftClear(); return; }
+  _say(_fmt(call.no, { who: who ? _npcLabel(who) : "" }));
+  if (call.id === "tab") {
+    _shiftTake(-SHIFT_FLAT_LOSS);
+  } else if (call.id === "early") {
+    if (who) _addBond(who, -1);
+    // and the rest of the floor watched her ask
+    const rest = _barStaff().filter(id => id !== who);
+    if (rest.length) _addBond(rest[0], -1);
+  } else if (call.id === "round") {
+    _shiftTake(-SHIFT_FLAT_LOSS);
+  } else if (call.id === "turning") {
+    const rest = _barStaff();
+    if (rest.length) _addBond(rest[0], -1);
+    _say("(Nobody says anything. Bert least of all. It is not a thing you did " +
+      "wrong \u2014 it is only a thing they saw.)", "dim");
+  }
+  _shiftClear();
 }
 
 // Are you working the rail TONIGHT? True only during the night itself — by the
@@ -4441,6 +4667,7 @@ function _barNight() {
   if (b.shortStaff) take = Math.round(take * BAR_SHORT_STAFF);
   // nights away pile up; the staff notice before the books do
   b.away = worked ? 0 : (b.away || 0) + 1;
+  b.floorN = 0; b.shiftAsked = false;    // tomorrow's floor and tomorrow's call
   if (!worked) b.streak = 0;   // one night out and the grind resets
   // ── what the night cost ────────────────────────────────────────────────
   // Fixed nut + what you actually sold + the people who sold it, instead of one

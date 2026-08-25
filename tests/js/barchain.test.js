@@ -825,3 +825,116 @@ test("the whole thing runs through the real path: nights end, months land, bars 
   assert.ok(months >= 2, "months actually landed on the real path (saw " + months + ")");
   assert.ok(_flag("barLost"), "and a bar nobody stands in is eventually not yours");
 });
+
+// ── The floor, and the shift calls ───────────────────────────────────────────
+// The presence dilemma was framed as takings-versus-everything-good, which made
+// WORK the dutiful option by construction and left a repeat player executing a
+// drill. These are the two fixes: a stood shift is where your own staff live,
+// and the shift deals decisions rather than resolving itself.
+
+test("your own staff are the role-carriers at your own bar, and never the manager", () => {
+  running();
+  const staff = _barStaff();
+  assert.ok(staff.length >= 2, "a bar you own has a floor");
+  for (const id of staff) {
+    assert.ok(NPC_ROLES[id], id + " must carry a role");
+    assert.ok(!NPCS[id].manager, "Bert is hired help, not somebody you court");
+    assert.equal(_npcRoom(id), "stinky_bar");
+  }
+  assert.ok(!staff.includes("bert"));
+});
+
+test("standing your own rail builds bond with your own staff — earned, not bought", () => {
+  running();
+  G.room = "stinky_bar"; G.nightTurn = 20;
+  cmd("work");
+  const before = _barStaff().map(id => G.soc.drinks[id] || 0);
+  for (let i = 0; i < 45; i++) cmd("time");
+  const after = _barStaff().map(id => G.soc.drinks[id] || 0);
+  assert.ok(after.some((n, i) => n > before[i]), "a night behind the bar is worth something");
+  assert.equal(G.bar.floorN, WORK_FLOOR_MAX, "and it is capped, so it can't be farmed");
+  // it SPREADS: the point is to know your floor, not to grind one of them
+  assert.ok(after.filter((n, i) => n > before[i]).length >= 2,
+    "the floor moments go to whoever you know least");
+});
+
+test("the floor only happens when you're actually standing it", () => {
+  running();
+  G.room = "stinky_bar"; G.nightTurn = 20;
+  const before = _barStaff().map(id => G.soc.drinks[id] || 0);
+  for (let i = 0; i < 45; i++) cmd("time");        // present, but no shift declared
+  assert.deepEqual(_barStaff().map(id => G.soc.drinks[id] || 0), before,
+    "standing about was always possible; declaring is what makes it a shift");
+});
+
+test("a shift deals one call a night, day-stable, and reading it can't reroll it", () => {
+  running();
+  G.room = "stinky_bar"; G.nightTurn = 20; G.day = 40;
+  for (const k of Object.keys(ENCOUNTERS)) G.encDone[k] = true;
+  cmd("work");
+  for (let i = 0; i < 20 && G.pendingChoice !== "shift"; i++) cmd("time");
+  assert.equal(G.pendingChoice, "shift", "the call arrived on the real path");
+  const first = G.shiftCall;
+  const rng = G.rng;
+  // the redraw a reload does must be identical and must not touch the dice
+  out = []; _renderResume();
+  assert.match(out.join("\n"), /YES . NO/, "a reload redraws the prompt, not a blank screen");
+  assert.equal(G.rng, rng, "…and reading it consumes no dice");
+  assert.equal(G.shiftCall, first);
+
+  // NB: the file's cmd() helper deliberately DRAINS modals first (it exists to
+  // stop ambient bar life eating an assertion), so answering one needs say().
+  say("no");
+  assert.equal(G.pendingChoice, null, "answering clears the gate");
+  for (let i = 0; i < 20; i++) cmd("time");
+  assert.notEqual(G.pendingChoice, "shift", "one call a night, not a stream");
+});
+
+test("every shift call is answerable both ways and settles the gate", () => {
+  for (const call of SHIFT_CALLS) {
+    for (const answer of ["yes", "no"]) {
+      running();
+      G.room = "stinky_bar"; G.nightTurn = 20; G.money = 50000;
+      cmd("work");
+      G.bar.shiftAsked = true; G.shiftCall = call.id; G.pendingChoice = "shift";
+      if (call.id === "early") G.shiftWho = _barStaff()[0];
+      say(answer);
+      assert.ok(out.join("\n").trim().length > 40,
+        call.id + "/" + answer + " must actually say something");
+      assert.equal(G.pendingChoice, null, call.id + "/" + answer + " must clear the gate");
+      assert.ok(Number.isFinite(G.bar.cash), call.id + "/" + answer + " kept the till a number");
+      assert.ok(Number.isFinite(G.money));
+    }
+  }
+});
+
+test("a gibberish answer re-prompts instead of wedging the night", () => {
+  // the modal-wedge invariant: every input-gating state must answer SOMETHING
+  running();
+  G.room = "stinky_bar"; G.nightTurn = 20;
+  cmd("work");
+  G.bar.shiftAsked = true; G.shiftCall = "round"; G.pendingChoice = "shift";
+  say("xyzzy plugh");
+  assert.equal(G.pendingChoice, "shift", "it waits");
+  assert.match(out.join("\n"), /YES . NO/, "and it re-asks rather than going silent");
+});
+
+test("the calls trade money against people in both directions", () => {
+  // Not "nothing bad happens" — say what OUGHT to happen. Letting her go costs
+  // the till and pays the person; holding her does the reverse.
+  running(); G.room = "stinky_bar"; G.nightTurn = 20; cmd("work");
+  const her = _barStaff().filter(id => NPC_ROLES[id] === "hostess")[0];
+  G.soc.drinks[her] = 5;
+  G.bar.shiftAsked = true; G.shiftCall = "early"; G.shiftWho = her; G.pendingChoice = "shift";
+  const till0 = G.bar.cash, bond0 = G.soc.drinks[her];
+  say("yes");
+  assert.ok(G.bar.cash < till0, "a floor one short takes less money");
+  assert.ok(G.soc.drinks[her] > bond0, "and she remembers it");
+
+  running(); G.room = "stinky_bar"; G.nightTurn = 20; cmd("work");
+  const her2 = _barStaff().filter(id => NPC_ROLES[id] === "hostess")[0];
+  G.soc.drinks[her2] = 5;
+  G.bar.shiftAsked = true; G.shiftCall = "early"; G.shiftWho = her2; G.pendingChoice = "shift";
+  say("no");
+  assert.ok(G.soc.drinks[her2] < 5, "and holding her costs the other side of the trade");
+});

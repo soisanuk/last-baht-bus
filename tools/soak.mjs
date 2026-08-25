@@ -219,6 +219,7 @@ function liveSnap() {
     barLapses: b.lapses || 0,
     barMonths: b.months || 0, barCash: b.cash || 0,
     barRentOwed: b.rentOwed || 0, barLost: !!(G.flags && G.flags.barLost),
+    barFloor: b.floorN || 0, barShiftAsked: !!b.shiftAsked,
     synAsked: Object.keys((G.syn && G.syn.asked) || {}).length,
     synDone: Object.keys((G.syn && G.syn.done) || {}).length,
     questsDone: Object.values(G.quests || {}).filter(q => q === "done").length,
@@ -279,6 +280,8 @@ const EFFECTS = [
   { id: "bar.night.settled",  modes: ["barowner"], hit: (a, b) => b.barNights > a.barNights },
   { id: "bar.night.worked",   modes: ["barowner"], hit: (a, b) => b.barNights > a.barNights && b.barAway === 0 },
   { id: "bar.shift.declared", modes: ["barowner"], hit: (a, b) => b.barWorked > a.barWorked },
+  { id: "bar.floor.moment",   modes: ["barowner"], hit: (a, b) => b.barFloor > a.barFloor },
+  { id: "bar.shift.called",   modes: ["barowner"], hit: (a, b) => !a.barShiftAsked && b.barShiftAsked },
   { id: "bar.shift.lapsed",   modes: ["barowner"], hit: (a, b) => b.barLapses > a.barLapses,
     why: "a shift declared and then not stood — correct behaviour, and the reason " +
       "declared and worked are allowed to differ" },

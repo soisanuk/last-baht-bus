@@ -419,6 +419,7 @@ function _arriveAt(to) {
   if (typeof _barDepositDue === "function" && _barDepositDue()) { _barDeposit(); }
   if (typeof _tanFavourDue === "function" && _tanFavourDue()) { _tanFavour(); return; }
   // procurement: a name on a list was free, the cleaning contract is not
+  if (typeof _shiftDue === "function" && _shiftDue()) { _shiftAsk(); return; }
   if (typeof _synDue === "function" && _synDue()) { _synAsk(); return; }
   // and if you've stayed outside it, the weather at your own bar changes
   if (typeof _synFrictionTick === "function") _synFrictionTick();
@@ -5490,6 +5491,10 @@ function _chipSet() {
     const j = typeof _synJobById === "function" ? _synJobById(G.synJob) : null;
     add("yes"); add("no"); add("ask", j ? j.whoLabel : "ask about it"); return chips;
   }
+  if (G.pendingChoice === "shift") {
+    const c = typeof _shiftCallById === "function" ? _shiftCallById(G.shiftCall) : null;
+    add("yes", c ? c.yesLabel : "yes"); add("no"); return chips;
+  }
   if (G.pendingChoice === "checkout") {
     if (G.hotel !== "sabai") add("sabai", "Sabai ฿400");
     if (G.hotel !== "queenvic") add("queen vic", "Queen Vic ฿700");
@@ -5843,6 +5848,7 @@ function engineComplete(input) {
   else if (G.pendingChoice === "cham") pool = ["go", "not tonight"];
   else if (G.pendingChoice === "chamgift") pool = ["gift ", "nothing"];
   else if (G.pendingChoice === "synjob") pool = ["yes", "no", "ask"];
+  else if (G.pendingChoice === "shift") pool = ["yes", "no"];
   else if (G.pendingChoice === "checkout") {
     pool = [...Object.keys(_HOTELS).filter(k => k !== G.hotel)
       .map(k => _HOTELS[k].name.toLowerCase()), "stay"];
@@ -6034,6 +6040,7 @@ function _renderResume() {
     G.convoQ.shown = false; _convoPrompt(G.convoQ.id);
   }
   if (G.pendingChoice === "synjob") { _synPrompt(); return; }
+  if (G.pendingChoice === "shift") { _shiftPrompt(); return; }
   if (G.game) { _renderGame(); return; }
   if (G.pendingEnc) { _renderEncounter(); return; }
   if (G.pendingBf) { _bfPrompt(); return; }
@@ -6160,6 +6167,16 @@ function doCommand(input) {
     if (/vacation|holiday|again|fly back|new/.test(lower)) { _newVacation(); return; }
     if (/move|expat|stay|pattaya|remain/.test(lower)) { _goExpat(); return; }
     _vacationEndPrompt();
+    return;
+  }
+
+  // the shift call: one a night, while you are standing your own rail
+  if (G.pendingChoice === "shift") {
+    if (/^(y|yes|ok|okay|sure|go on|aye|do it|let|have|get|put|write)/.test(lower)) { _shiftYes(); return; }
+    if (/^(n|no|nope|leave|not|refuse|decline|bert)/.test(lower)) { _shiftNo(); return; }
+    _say("It is still standing there waiting on you, which is most of what " +
+      "owning a bar turns out to be.", "dim");
+    _shiftPrompt();
     return;
   }
 
