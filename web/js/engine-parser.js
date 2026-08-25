@@ -3623,6 +3623,12 @@ function _shopStock() {
   return null;
 }
 
+const _NOT_TONIGHT = [
+  "It's there, and it isn't open, and those are both permanent conditions as far as tonight is concerned.",
+  "Whoever runs that packed up hours ago. Daytime trade — a different town wearing the same streets.",
+  "Not at this hour. That one keeps office hours in a place that famously doesn't.",
+];
+
 function _doBuy(arg) {
   const r = _room();
   // BUY PIWIN A BEER. First, because a stand is not a bar and every branch
@@ -3999,6 +4005,21 @@ function _doBuy(arg) {
   if ((FOOD_STALLS[G.room] || r.food) &&
       /\b(pad|rice|khao|noodle|tam|soup|curry|fish|chicken|pork|beef|prawn|plate|dish|meal|dinner|lunch|supper|breakfast|fry|burger|pie|toastie|special)s?\b/.test(arg)) {
     _doBuy("food");
+    return;
+  }
+  // Something the ROOM's own prose put in front of you but the mechanics don't
+  // sell — an ice-cream cart that, in that same sentence, "shuts before anything
+  // interesting happens". The flat refusal was true and read as a missing feature
+  // (persona report A#23, 2026-08-23).
+  const _named = arg.trim() && (() => {
+    try {
+      const esc = arg.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      return new RegExp("\\b" + esc.replace(/\s+/g, "[ -]?") + "s?\\b", "i")
+        .test(stripMarkup(r.desc || ""));
+    } catch (e) { return false; }
+  })();
+  if (_named) {
+    _say(_pickVary(_NOT_TONIGHT, "nottonight"));
     return;
   }
   _say("Not for sale here.");
@@ -4865,9 +4886,14 @@ function _doSwim() {
       "You stay on the sand.");
     return;
   }
+  // Not on a beach whose own prose says "no deckchair men, no jet-skis, no flyer
+  // girls" — the end nobody works (persona report A#20, 2026-08-23).
+  const _worked = !/no jet.?skis?/i.test(stripMarkup(String(_room().desc || "")));
   _say("You wade in to your knees. The Gulf is bathwater with ambitions. " +
-    "Somewhere off to your left a jet ski scam lies sleeping. It's actually " +
-    "rather lovely, which nobody tells you about this town.");
+    (_worked
+      ? "Somewhere off to your left a jet ski scam lies sleeping. "
+      : "Nobody is selling you anything, because nobody works this end. ") +
+    "It's actually rather lovely, which nobody tells you about this town.");
 }
 
 function _doDance() {

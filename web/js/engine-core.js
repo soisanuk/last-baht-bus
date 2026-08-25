@@ -209,6 +209,7 @@ function newGame() {
     itNpc: null,         // last person addressed — the antecedent for "her/him/them" (see _resolveActor)
     convoQ: null,        // a question the partner has put to YOU, awaiting a reply: {id,key} (see _convoAsk/_convoAnswer)
     convoLapsed: {},     // …and questions you walked away from, re-asked next time you talk to them
+    darkDoorDay: -1,     // the once-a-night "there's no lights out there" nudge at your own door
     convoIdx: null,      // index of the partner's last-delivered node — its `choices` are the live action-choices (see _convoChoices)
     player: { said: {}, lang: "en", origin: null, personality: null, orientation: null },// what you've told NPCs + WHO YOU ARE (lang + origin/personality/orientation, picked in the taxi intro; persists across Act One resets)
     faction: { wdg: 0, samson: 0, indie: 0, syndicate: 0 }, // standing with the powers (see _align) — only moves when you ACT, never for declining
@@ -1412,6 +1413,20 @@ function _describeRoom(full, forceFull) {
   if (G.room === "orchid_room") _tanOrchidReveal();
   const exits = Object.keys(r.exits);
   if (exits.length) _say(_L("Exits: ") + exits.join(", ") + ".", "dim");
+  // A warning at the DOOR, not after you have walked through it. The only way
+  // out of your own hotel room is an unlit soi with a dog in it, and a player on
+  // day four lost the entire night at nightTurn 2 without a single successful
+  // action (persona report A#2, 2026-08-23). Once a night, in your own room,
+  // while the torch is off and the exit is dark.
+  if (full && _isHotelRoom(G.room) && !G.lightOn && G.battery > 0 &&
+      G.darkDoorDay !== G.day && r.exits) {
+    const darkOut = Object.values(r.exits).some(to => ROOMS[to] && ROOMS[to].dark);
+    if (darkOut) {
+      G.darkDoorDay = G.day;
+      _say("(The soi outside has no working lights, and it has dogs. LIGHT ON " +
+        "before you step out — the phone does it, and it costs almost nothing.)", "dim");
+    }
+  }
   // Buildings fronting this block: entered by name or a tap, not by a compass
   // point (a busy soi can front 4–6 of them, and a door isn't a block away —
   // it's right here). "Exits" is roads only now; the venues list is the doors.

@@ -1383,3 +1383,38 @@ test("the rain doesn't call a bar empty while you're talking to somebody in it",
       "a room you are talking in is not a room the rain has to itself");
   }
 });
+
+test("your own door warns you about the unlit soi before you walk into it", () => {
+  // The only way out of your hotel room is an unlit soi with a dog in it. A
+  // player on day four lost the whole night at nightTurn 2 without one
+  // successful action (persona report A#2, 2026-08-23).
+  newGame(); _setFlag("act1Done"); G.room = "hotel_room";
+  G.lightOn = false; G.battery = 50; G.darkDoorDay = -1;
+  out = []; _describeRoom(true, true);
+  assert.match(out.join("\n"), /LIGHT ON/, "warned at the door");
+  assert.match(out[out.length - 1], /LIGHT ON/, "and last, as a parting note");
+  out = []; _describeRoom(true, true);
+  assert.doesNotMatch(out.join("\n"), /working lights/, "once a night, not every LOOK");
+  G.lightOn = true; G.darkDoorDay = -1;
+  out = []; _describeRoom(true, true);
+  assert.doesNotMatch(out.join("\n"), /working lights/, "…and not when the torch is already on");
+});
+
+test("the beach nobody works has nobody working it", () => {
+  newGame(); _setFlag("act1Done");
+  G.room = "beach_north_end"; out = []; doCommand("swim");
+  assert.doesNotMatch(out.join("\n"), /jet ski scam/,
+    "its own prose says no jet-skis, no deckchair men, no flyer girls");
+  G.room = "central_beach"; out = []; doCommand("swim");
+  assert.match(out.join("\n"), /jet ski scam/, "…and a worked beach still has one");
+});
+
+test("something the room describes but doesn't sell gets a reason, not a shrug", () => {
+  newGame(); _setFlag("act1Done"); G.money = 999;
+  for (const k of Object.keys(ENCOUNTERS)) G.encDone[k] = true;
+  G.room = "beach_rd_top"; out = []; doCommand("buy ice cream");
+  assert.ok(_NOT_TONIGHT.some(l => out.join("\n").includes(l)),
+    "the cart is in the prose and shuts before anything interesting happens");
+  G.room = "candy_bar"; out = []; doCommand("buy helicopter");
+  assert.match(out.join("\n"), /Not for sale here/, "…and a thing that isn't there still isn't");
+});
