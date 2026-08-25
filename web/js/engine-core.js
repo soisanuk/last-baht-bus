@@ -385,7 +385,7 @@ function importBaton(b) {
   if (!b || typeof b !== "object") return { ok: false, why: "not a baton" };
   if (b.v !== BATON_VERSION) return { ok: false, why: "baton version " + b.v + ", expected " + BATON_VERSION };
   newGame();
-  for (const k of BATON_FIELDS) if (b[k] !== undefined) {
+  for (const k of BATON_FIELDS) if (b[k] !== undefined && _safeMergeKey(k)) {
     const isObj = v => v && typeof v === "object" && !Array.isArray(v);
     G[k] = (isObj(b[k]) && isObj(G[k])) ? { ...G[k], ...b[k] } : b[k];
   }
@@ -401,7 +401,9 @@ function importBaton(b) {
     const home = _hotelRoomId();
     if (home && ROOMS[home]) { G.room = home; G.visited[home] = true; }
   }
+  if (!ROOMS[G.room]) G.room = "jomtien_beach";
   G.pendingChoice = null; G.pendingEnc = null; G.game = null;
+  _sanitizeState();   // a baton is data on the wire too — same finite/in-range guard as a save
   return { ok: true };
 }
 
@@ -413,11 +415,56 @@ function serializeGame() { return JSON.stringify(G); }
 // field merges key-by-key (new items appear in itemLoc, soc gains bra, phone
 // gains msgCd), everything else the save wins wholesale. Below the merge, only
 // SEMANTIC migrations remain — repairs that need the save's own contents.
+
+// A key a hostile save/baton must never be allowed to merge THROUGH: assigning
+// to G["__proto__"] walks the prototype rather than setting an own field. The
+// merge below is also shallow, which happens to block global pollution — but a
+// security invariant must be DELIBERATE, not a side effect of an implementation
+// choice a future deep-merge would quietly undo (griefer playtest D2, 2026-08-26).
+function _safeMergeKey(k) { return k !== "__proto__" && k !== "constructor" && k !== "prototype"; }
+
+// Load-bearing scalars a save must not be able to poison with NaN/Infinity/
+// negative/oversized values — the render path and the tick math both assume
+// finite, in-range numbers, and a corrupt save otherwise leaks "฿null · สนุก
+// NaN" into the status header and throws from ordinary commands (griefer
+// playtest R1, 2026-08-26). Belt for the single-player own-box case; load-
+// bearing the day a server ingests or replays these blobs.
+// [path, min, max] — a one-level "soc.x" path reaches the nested meters.
+const _SANE_SCALARS = [
+  ["money", 0, 1e9], ["bank", 0, 1e9], ["hotelDebt", 0, 1e6],
+  ["happy", 0, 100], ["bestHappy", 0, 100], ["jaded", 0, 100],
+  ["hunger", 0, 100], ["thirst", 0, 100], ["hurt", 0, 3], ["battery", 0, 100],
+  ["day", 1, 1e7], ["vacation", 1, 1e6], ["turns", 0, 1e9], ["score", 0, 1e6],
+  ["nightTurn", 0, (typeof NIGHT_TURNS !== "undefined" ? NIGHT_TURNS : 100)],
+  ["soc.drunk", 0, 20], ["rep", -20, 20],
+];
+const _SANE_ARRAYS = [["thaiSeen", 60], ["nightLog", 30]];
+function _sanitizeState() {
+  for (const [path, min, max] of _SANE_SCALARS) {
+    const [a, b] = path.split(".");
+    const obj = b ? G[a] : G;
+    if (!obj) continue;
+    const key = b || a;
+    const v = obj[key];
+    obj[key] = Number.isFinite(v) ? Math.max(min, Math.min(max, Math.trunc(v))) : min;
+  }
+  // rng: an integer seed in the LCG's live range, or reseed (the old guard
+  // caught 0/NaN but not Infinity or a huge value that garbles the stream)
+  if (!Number.isInteger(G.rng) || G.rng < 1 || G.rng > 2147483646) {
+    G.rng = 1 + Math.floor(Math.random() * 2147483645);
+  }
+  for (const [key, cap] of _SANE_ARRAYS) {
+    if (!Array.isArray(G[key])) G[key] = [];
+    else if (G[key].length > cap) G[key] = G[key].slice(-cap);
+  }
+}
+
 function deserializeGame(s) {
   const saved = JSON.parse(s);
   newGame(); // the skeleton: every current field at its current default
   const isObj = v => v && typeof v === "object" && !Array.isArray(v);
   for (const [k, v] of Object.entries(saved)) {
+    if (!_safeMergeKey(k)) continue;
     G[k] = (isObj(v) && isObj(G[k])) ? { ...G[k], ...v } : v;
   }
   // pre-stage saves (before the vacation sandbox): infer the stage and give the
@@ -433,9 +480,11 @@ function deserializeGame(s) {
     G.bestHappy = G.happy;
     G.pendingChoice = null;
   }
+  // a room that isn't a real room would strand the player in an undefined world
+  if (!ROOMS[G.room]) G.room = "jomtien_beach";
   G.visited[G.room] = true;  // wherever the save stands, you've at least been HERE
   G.over = false;            // pre-sandbox saves could be "over"; the night reopens
-  if (!G.rng) G.rng = 1 + Math.floor(Math.random() * 2147483645); // a 0 seed sticks the LCG at 0
+  _sanitizeState();          // finite, in-range scalars; capped arrays; a live rng seed
   return G;
 }
 

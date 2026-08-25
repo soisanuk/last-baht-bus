@@ -534,3 +534,47 @@ line); her voice holds to the ends ("you party like Thai person. Almost."); the
 refusal taxonomy stayed honest under a week of pressure; the balk → "Your
 funeral, boss" → the kerb that collects — the titular thesis, quoted back by a
 blind reporter who was never told it was the thesis.
+
+---
+
+# Round 21 — the griefer (Fable, adversarial security, 2026-08-26)
+
+Vince, a save-editor who treats every trust boundary as a dare — pointed at the
+CLIENT-SIDE game's boundaries ahead of the shared-world/baton future, scoped so
+that only content crossing a boundary (a string reaching another player, a save
+poisoning shared state) counts, and `raw` was a microscope never a hammer. The
+headline is a good one: **no way, today, for one player's input or save to
+execute code or corrupt state in front of another.**
+
+## Fixed
+
+| # | Finding | Fix |
+|---|---|---|
+| R1 (LOW→wire) | The save loader trusted any scalar — `money:1e309`→null, `happy:"NaN"`, `hurt:-999`, `day:-5`, `nightTurn:1e6`, a 100k-element `thaiSeen` — leaking "฿null · สนุก NaN · {weekday}" into the status header and throwing 5 pageerrors from ordinary commands | `_sanitizeState` after the merge: `_SANE_SCALARS` clamps every load-bearing meter to a finite in-range integer, `_SANE_ARRAYS` caps the unbounded ones, rng is validated to a live LCG seed, an unreal `room` repairs to a real one. Own-box today; load-bearing the day a server ingests/replays these blobs |
+| D2 (hardening) | Prototype-pollution safety was ACCIDENTAL — safety-by-shallow-merge, which a future deep-merge would silently undo | `_safeMergeKey` skips `__proto__`/`constructor`/`prototype` at both merge sites (save + baton) — the invariant is now deliberate |
+
+## Confirmed held (the valuable half)
+
+- **XSS is universally defended.** Every player-text channel Vince threw markup
+  at — command echo, NAME DOG (stored, re-rendered), the `{{…}}` smuggle, an ASK
+  topic, the grapevine-quoted question answer (a stored-injection vector) —
+  rendered as inert escaped text, 0 injected nodes. The load-bearing boundary is
+  term.js's **escape-first-then-decorate** invariant: `_escapeHtml` covers the
+  double-quote (closing the attribute-breakout), and `decorate` only ever wraps
+  recognized CANON entity names as keywords, so player free-text never reaches an
+  attribute. `innerHTML = decorate(text)` is the sole prose render path, so this
+  holds for every future render site by construction.
+- **Determinism holds.** The LCG serializes with the save and rewinds with UNDO —
+  no reroll, no shared-daily forge.
+
+## Own-box, correctly not defects
+
+Forging one's own flags/money in one's own single-player save; the pageerrors
+(contained to the tampered session — they fed R1's case); any `raw`-driven change.
+
+Pinned in `tests/js/security.test.js` (7 invariants) alongside the existing
+`tests/e2e/xss.spec.mjs`. **Method note: the "attack only through player channels,
+observe via raw, classify REAL vs OWN-BOX vs DEFENDED" scoping is what made a
+security persona produce signal instead of noise — an unscoped "root the box"
+brief on a client-side game reports the player cheating their own browser as if
+it were a breach.**
