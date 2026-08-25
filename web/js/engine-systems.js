@@ -4607,6 +4607,10 @@ function _barLost(cause) {
       "sorry: two months is two months, and there is a queue for the room. The " +
       "fit-out you paid for stays with the shophouse, because that was always " +
       "the deal and you read it, or you were told you had.", "alert");
+    _say("There is a queue for the room because there has been a company in it " +
+      "for two years, waiting, and a company pays on the first. White Dish take " +
+      "the lease and the old man's paper in the same week, for less than either " +
+      "was worth, which is what patience buys.", "alert");
     _say(tan
       ? "Tan hears before you tell him and rings once, briefly, to say that this " +
         "one was not something he could have moved. You believe him. It is the " +
@@ -4621,22 +4625,33 @@ function _barLost(cause) {
       "squared it with the old man. Whole thing, one payment.\" There is no " +
       "paperwork to look at. There was never any paperwork. \"He said to tell you " +
       "there's no hard feeling in it, and bud, I believe him, and that's the part " +
-      "I'd think about.\""
+      "I'd think about.\"\n\nBert turns the bottle a quarter turn. \"White Dish had " +
+      "a number in with the old man by the Tuesday. Your man moved on the Monday.\" " +
+      "He lets that sit exactly as long as it needs. \"He didn't do it for you.\""
     : "Candy's lawyer sends a letter, because Candy's arrangements are the kind " +
       "that involve letters. It gives you fourteen days and it is scrupulously " +
       "polite. She comes herself on the last of them, sits at the good table like " +
       "any other customer, and does not once say I told you. \"Fifty-one is my " +
       "name on this, tilac. My name cannot be on a thing that does not pay.\" She " +
-      "settles the old man in full the same week, which is the part that stings.",
+      "settles the old man in full the same week, which is the part that stings, " +
+      "and sells the lease on the week after that, because there is exactly one " +
+      "buyer for a Soi 6 bar and everybody has always known who. \"I am sorry,\" " +
+      "she says, and means it. \"You did a good thing, before. It was only ever " +
+      "going to hold as long as you could pay.\"",
     "alert");
-  _say(cause === "landlord"
-    ? "The Stinky Pinky does not reopen. The sign comes down in a morning and " +
-      "the room is a phone shop by the end of the month, and the regulars go two " +
-      "doors along and are perfectly happy there, which you find you mind more " +
-      "than the money."
-    : "You keep the stools you were sitting on and nothing else. The Stinky " +
-      "Pinky opens tomorrow, the way it opened before you, and the regulars will " +
-      "be in it.", "alert");
+  // Not a phone shop. The Stinky Pinky is a going concern on the foot of Soi 6
+  // and the only buyer for one of those has been waiting two years — so the bar
+  // reopens as itself, refitted, with the name kept because the name has value.
+  // Your one uncomplicated good deed, undone, and trading well.
+  _say(_flag("partnerTan") && cause !== "landlord"
+    ? "The Stinky Pinky opens tomorrow, the way it opened before you, and the " +
+      "regulars will be in it. The girls keep their jobs. Nothing about the room " +
+      "changes at all, which is how you know whose it is now."
+    : "It shuts for six weeks. It reopens as the Stinky Pinky — they keep the " +
+      "name, because the name is the only thing they were ever short of — with a " +
+      "menu, a card machine, and a girl on the door in a company polo. Bert " +
+      "doesn't stay. The regulars go anyway, most of them, and are perfectly " +
+      "happy there, which you find you mind more than the money.", "alert");
   _setFlag("barLost");
   G.flags.barOpen = false;
   G.bar = { cash: 0, owed: 0, arrears: 0, months: 0, lastMonthDay: 0, nights: 0,
