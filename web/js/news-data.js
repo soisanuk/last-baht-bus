@@ -8,17 +8,17 @@ var NEWS_FEED = [
     "d": "23 Aug 2026"
   },
   {
-    "t": "Pattaya United 26-27 Home, Away, Third & GK Kits Released",
-    "s": "Footy Headlines",
-    "d": "24 Aug 2026"
-  },
-  {
     "t": "50,000 baht bill claim at Pattaya bar divides Thai netizens",
     "s": "Thaiger",
     "d": "25 Aug 2026"
   },
   {
     "t": "Southern Thailand braces for rising PM2.5 levels amid regional haze",
+    "s": "Pattaya Mail",
+    "d": "24 Aug 2026"
+  },
+  {
+    "t": "Storm Narra may disrupt Pattaya beachgoers with rough seas",
     "s": "Pattaya Mail",
     "d": "24 Aug 2026"
   },
@@ -33,23 +33,18 @@ var NEWS_FEED = [
     "d": "23 Aug 2026"
   },
   {
-    "t": "Storm Narra may disrupt Pattaya beachgoers with rough seas",
-    "s": "Pattaya Mail",
-    "d": "24 Aug 2026"
-  },
-  {
     "t": "Pattaya tightens beachfront parking rules to protect public spaces",
     "s": "Pattaya Mail",
     "d": "24 Aug 2026"
   },
   {
-    "t": "USS Abraham Lincoln headed for port in Thailand after 250 days at sea",
-    "s": "The Hill",
+    "t": "Norwegian loses 5,000 baht after offering to help man in Pattaya",
+    "s": "Thaiger",
     "d": "25 Aug 2026"
   },
   {
-    "t": "USS Abraham Lincoln to dock in Thailand next week, Thai official says",
-    "s": "Reuters",
+    "t": "USS Abraham Lincoln headed for port in Thailand after 250 days at sea",
+    "s": "The Hill",
     "d": "25 Aug 2026"
   },
   {
@@ -63,25 +58,30 @@ var NEWS_FEED = [
     "d": "24 Aug 2026"
   },
   {
-    "t": "Thailand Plans Overhaul of Market Laws to Speed Up Fraud Probes",
-    "s": "Bloomberg",
+    "t": "A political amnesty law takes effect in Thailand but excludes lese majeste",
+    "s": "AP News",
     "d": "25 Aug 2026"
   },
   {
-    "t": "Thailand and China make it to the elimination rounds of the Asian Championship in Tianjin",
-    "s": "Volleyball World",
-    "d": "24 Aug 2026"
+    "t": "Thailand Plans Overhaul of Market Laws to Speed Up Fraud Probes",
+    "s": "Bloomberg.com",
+    "d": "25 Aug 2026"
+  },
+  {
+    "t": "Thailand is changing rules as it wants foreign investment",
+    "s": "bangkokpost.com",
+    "d": "23 Aug 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-08-24","USD":32.69,"AUD":23.41,"GBP":44.56,"EUR":38.12};
+var FX_RATES = {"date":"2026-08-25","USD":32.73,"AUD":23.42,"GBP":44.62,"EUR":38.18};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-25","temp":30,"humid":68,"code":3,"hi":33,"rain":57};
+var WX_NOW = {"date":"2026-08-26","temp":28,"humid":76,"code":3,"hi":31,"rain":63};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-08-22","done":true,"h":"Hull","hs":2,"a":"Man United","as":0},{"d":"2026-08-22","done":true,"h":"Everton","hs":2,"a":"C Palace","as":0},{"d":"2026-08-22","done":true,"h":"Ipswich","hs":2,"a":"Sunderland","as":1},{"d":"2026-08-22","done":true,"h":"Nottm Forest","hs":0,"a":"Leeds","as":1},{"d":"2026-08-22","done":true,"h":"Brentford","hs":3,"a":"Spurs","as":0},{"d":"2026-08-23","done":true,"h":"Brighton","hs":4,"a":"Aston Villa","as":0},{"d":"2026-08-23","done":true,"h":"Man City","hs":2,"a":"Bournemouth","as":1},{"d":"2026-08-23","done":true,"h":"Newcastle","hs":2,"a":"Liverpool","as":2},{"d":"2026-08-24","done":true,"h":"Fulham","hs":2,"a":"Chelsea","as":3},{"d":"2026-08-28","done":false,"h":"C Palace","hs":0,"a":"Man City","as":0},{"d":"2026-08-29","done":false,"h":"Liverpool","hs":0,"a":"Nottm Forest","as":0},{"d":"2026-08-29","done":false,"h":"Bournemouth","hs":0,"a":"Everton","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-08-16","first":"004615","last2":"53","front3":["429","731"],"back3":["094","937"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4632,"date":"2026-08-25","baht":71600};
+var GOLD = {"usd":4652,"date":"2026-08-25","baht":72000};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":78857,"thb":2580185};
+var BTC = {"usd":79063,"thb":2586473};
