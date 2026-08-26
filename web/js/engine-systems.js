@@ -1505,6 +1505,7 @@ function _bfScamRoll(id, marked) {
 // so the ask is business as much as affection. Once per girl per night.
 function _maybeGoWithYou(id) {
   if (!_flag("act1Done") || G.pendingEnc || G.game || G.pendingBf) return;
+  if (_atOwnBar()) return;                        // your own staff don't proposition you out of your own till
   if (G.party && G.party.ids && G.party.ids.includes(id)) return; // she's already yours tonight
   if (NPC_ROLES[id] !== "hostess") return;
   if ((G.soc.heat[G.room] || 0) > 0) return;
@@ -1525,6 +1526,7 @@ function _maybeGoWithYou(id) {
 function _maybeSelfBarfine(id) {
   _maybeGoWithYou(id); // the softer nudge shares every call site; it gates itself
   if (!_flag("act1Done") || G.pendingEnc || G.game) return;
+  if (_atOwnBar()) return;                        // not at the bar you own — she works for you here
   if (G.party && G.party.ids && G.party.ids.includes(id)) return; // she is out with you, not on shift
   if (G.nightTurn < 60) return;                 // the thought arrives after midnight
   if (NPC_ROLES[id] !== "hostess") return;
@@ -3907,12 +3909,16 @@ function _doWeather() {
   _say(`Your phone's weather app: ${wx.temp}° and feeling like more, ` +
     `${wx.humid}% humidity, ${_wxDesc(wx.code)}. High of ${wx.hi}°, ` +
     `${wx.rain}% chance of rain. Tomorrow's forecast is also Pattaya.`);
-  _saySeasonNote();
+  _saySeasonNote(wx);
 }
 
 // The calendar season, for anyone (not just an owner) — the wet/dry half of the
 // year an experienced punter plans a trip around. Deterministic, no dice, no bake.
-function _saySeasonNote() {
+// The real-weather bake (today's sky) and the game calendar (the time of year)
+// drift apart on a long expat save, so the two lines can read as a contradiction
+// — "73% chance of rain" over "cool, dry months" (Gordon, 2026-08-26). When the
+// sky and the season pull opposite ways, a one-clause bridge names which is which.
+function _saySeasonNote(wx) {
   const tier = _seasonTier(), month = _SEASON_MONTHS[_seasonMonth()];
   const note =
     tier === "peak" ? `And it's ${month}: peak season. The soi is full, the rooms are dear, and every bar is two-deep.` :
@@ -3921,6 +3927,13 @@ function _saySeasonNote() {
     tier === "low" ? `And it's ${month}: low season. The monsoon's in, the bars are quiet, and the girls are keen.` :
     `And it's ${month}: the deep low — wettest and emptiest of all. For a certain kind of punter, the finest month there is.`;
   _say(note, "dim");
+  wx = wx || _wxNow();
+  if (wx) {
+    const skyWet = wx.rain >= 50 || (wx.code >= 51 && wx.code <= 82) || wx.code >= 95;
+    const dry = tier === "peak" || tier === "high";
+    if (dry && skyWet) _say(`(Whatever the app's caught today, ${month} is the dry half of the year — a shower now is the exception, not the season.)`, "dim");
+    else if (_wetSeason() && !skyWet) _say(`(A dry evening, but don't be fooled — it's ${month}, and the monsoon collects its debts.)`, "dim");
+  }
 }
 
 // Real baked headlines occasionally include genuinely grim news (a dead teenager
@@ -4518,6 +4531,11 @@ const _WORK_MISSED = [
 ];
 
 function _canWork() { return _barOwned() && G.room === "stinky_bar"; }
+// Standing in the bar you OWN. The punter-flattery channels (a girl offering to
+// barfine herself out of your OWN till, the newbie "buy a lady a drink for her
+// number" nudge, the manager's welcome shot) have no business firing here — your
+// staff don't work you like a walk-in (Keith, 2026-08-26).
+function _atOwnBar() { return _barOwned() && G.bar && G.room === G.bar.room; }
 
 // One roll per shift over WORK_NIGHTS (world.js). Most nights return nothing,
 // which is deliberate: the great night and the bad night only mean something
@@ -4533,11 +4551,16 @@ function _workNight() {
   const weights = pool.map(e => e.weightFn ? e.weightFn(G) : e.weight);
   const total = weights.reduce((a, b) => a + b, 0);
   if (total <= 0) return null;
-  let roll = _rand() * total, pick = pool[0];
-  for (let i = 0; i < pool.length; i++) {
-    roll -= weights[i];
-    if (roll <= 0) { pick = pool[i]; break; }
-  }
+  const draw = () => {
+    let roll = _rand() * total, p = pool[0];
+    for (let i = 0; i < pool.length; i++) { roll -= weights[i]; if (roll <= 0) { p = pool[i]; break; } }
+    return p;
+  };
+  let pick = draw();
+  // not the same event two nights running (Keith, 2026-08-26: the two-week
+  // millionaires rang the bell verbatim on consecutive nights). One reroll.
+  if (pick.id === (G.bar && G.bar.lastWorkEvt) && pool.length > 1) pick = draw();
+  if (G.bar) G.bar.lastWorkEvt = pick.id;
   _say(pick.text, (pick.happy || 0) < 0 ? "alert" : "win");
   if (pick.money) {
     G.bar.cash += pick.money;
@@ -4708,21 +4731,29 @@ const _FLOOR_HOSTESS = [
   "{who} shows you where the good ice is kept, which is not where the ice is kept. It is a small thing to be trusted with and she does not make a speech about it.",
   "A punter asks {who} something in the doorway and she answers him without turning round, because she is watching your hands on the optic and has decided they are wrong. When he has gone she fixes them, once, and does not mention it again.",
   "Between customers {who} teaches you the two words for the ice bucket and laughs at your first attempt in a way that is entirely kind and entirely unrestrained.",
-  "{who} has done this for six years and you have done it for a fortnight, and somewhere in the middle of a busy hour that stops being embarrassing and starts being useful.",
+  "{who} has done this for six years and you have done it about five minutes by comparison, and somewhere in the middle of a busy hour that stops being embarrassing and starts being useful.",
   "You catch {who} watching the door the way you have started watching it. She catches you catching her, and something passes between you that is nothing at all to do with drinks.",
   "{who} eats her rice standing up, out of the way of the till, the way people do when the room is theirs. She holds the box out. You take some. It is very good and much too spicy and she enjoys that enormously.",
+  "{who} has a whole language of glances with the girl at the far end that you are only now learning to read — a lift of the chin that empties an ashtray, a look that fetches a fresh bucket before you knew you were low. She is running half the room without a word and letting you think you noticed.",
+  "The optic sticks. {who} hits it in one exact place with the heel of her hand and it pours clean, then shows you the place, then makes you do it, and does not let you off until you can do it without looking.",
 ];
 const _FLOOR_MAMA = [
   "{who} tells you which of tonight's punters not to serve a fourth to, and is right, and does not say so afterwards.",
   "\"That one.\" {who} does not point. \"He has been three times this week and he has not spent one baht more than the beer. He is lonely, not cheap. Different price.\" It is the most useful sentence anyone has said to you about your own trade.",
   "{who} rearranges two stools by about a foot each and the whole rail sits differently for the rest of the night. You ask her how she knew. She looks at you as if you had asked how she knew it was dark.",
   "A tour group put their heads in, decide against it, and move on. {who} watches them go without regret. \"Good,\" she says. \"They drink one, they take photograph, they make the girls tired.\"",
+  "One of the girls has come in with a face on her, quiet, wrong. {who} moves her off the front and onto the till section without a word to anyone, and by the second hour the girl is laughing again. You never learn what it was. That is also the job.",
+  "A man three drinks in starts to get loud with a girl who does not want it. {who} is between them before you have set your glass down — not fast, not a scene, just suddenly there with a smile like a closed door — and he is outside and pointed at the taxis and does not quite know how.",
+  "\"Tonight, slow. Tomorrow, football — you order more Chang, more ice, put two more girl on.\" {who} says the week the way you would read a tide table. She has never been wrong about a Tuesday in her life.",
 ];
 const _FLOOR_CASHIER = [
   "{who} counts the float in front of you, twice, slowly, in a way that is unmistakably a lesson and unmistakably not an accusation.",
   "{who} finds ฿40 you had already written off, three hours after you wrote it off, and puts it in front of you without comment.",
   "You get the change wrong and {who} corrects it before the customer notices, and the customer never does notice, and that is the whole of her job described.",
   "{who} keeps the book in a hand so small and so exact that you can read a whole night off one page. She turns it round so you can.",
+  "A note comes over the bar and {who} holds it up to the light for half a second before it goes in the drawer, the way you hold up every note now, because she does, because there are two floating on the soi this week and she has already seen one.",
+  "A big farang tries to pay a ฿180 tab with a fistful of ten-baht coins, half a joke and half a test. {who} counts it in front of him faster than he can follow, gets to the number, and thanks him so sincerely that the joke dies of embarrassment.",
+  "At close {who} squares the drawer to the baht, writes the figure, and turns the book to you — and the night you were down, she does not soften it or explain it. She just shows you. A till that lies to the owner is no use to anybody, and she has decided you are the kind who can read a bad night straight.",
 ];
 
 function _floorPool(id) {
@@ -4806,9 +4837,12 @@ function _shiftAsk() {
     G.shiftWho = (staff.length ? staff : _barStaff())[0];
   }
   const who = G.shiftWho ? _npcLabel(G.shiftWho) : "";
+  // lead/ask may be a POOL (array) — the flagship publican beats retold verbatim
+  // same girl, same speech, across nights (Keith, 2026-08-26). Pick per call id.
+  const pick = (f, k) => _fmt(Array.isArray(f) ? _pickVary(f, "shift:" + call.id + ":" + k) : f, { who });
   _say("");
-  _say(_fmt(call.lead, { who }), "alert");
-  _say(_fmt(call.ask, { who }));
+  _say(pick(call.lead, "lead"), "alert");
+  _say(pick(call.ask, "ask"));
   _shiftPrompt();
   G.pendingChoice = "shift";
 }
@@ -4974,18 +5008,21 @@ function _season0() {
   const m = G.season0;
   return (typeof m === "number" && m >= 0 && m <= 11) ? m : SEASON_DEFAULT_M0;
 }
-function _seasonMonth() {   // 0 = Jan … 11 = Dec
-  return (_season0() + Math.floor((Math.max(1, G.day) - 1) / SEASON_MONTH_DAYS)) % 12;
+function _seasonMonthOn(day) {   // 0 = Jan … 11 = Dec, for a given G.day value
+  return (_season0() + Math.floor((Math.max(1, day) - 1) / SEASON_MONTH_DAYS)) % 12;
 }
-function _seasonTakings() { return SEASON_MULT[_seasonMonth()]; }
-function _seasonTier() {
-  const m = _seasonMonth();
+function _seasonMonth() { return _seasonMonthOn(G.day); }
+function _seasonTakingsOn(day) { return SEASON_MULT[_seasonMonthOn(day)]; }
+function _seasonTakings() { return _seasonTakingsOn(G.day); }
+function _seasonTierOn(day) {
+  const m = _seasonMonthOn(day);
   if (m === 11 || m === 0) return "peak";       // Dec–Jan, the winter-holiday boom
   if (m === 10 || m === 1) return "high";       // Nov, Feb — the cool-season shoulders
   if (m >= 2 && m <= 4) return "shoulder";      // Mar–May, hot and thinning (Songkran aside)
   if (m >= 5 && m <= 7) return "low";           // Jun–Aug, the monsoon settles in
   return "deeplow";                             // Sep–Oct, wettest and emptiest
 }
+function _seasonTier() { return _seasonTierOn(G.day); }
 // The lean months — what the old binary _lowSeason() meant, kept for the prose
 // and the events that gate on "is the town empty". Now the wet half of the year.
 function _lowSeason() { const t = _seasonTier(); return t === "low" || t === "deeplow"; }
@@ -5062,10 +5099,17 @@ function _barDeposit() {
 }
 
 // what tonight's trade did. Called once from _endNight when you own the place.
-function _barNight() {
+// settleDay is the day the night was PLAYED — _endNight runs this after G.day++,
+// so it passes G.day-1, and the graded takings read the month you actually
+// traded in rather than the morning-after one (the last night of a month was
+// settling at the next month's rate — Gordon, 2026-08-26). Defaults to G.day for
+// a direct call (a test settling "tonight").
+function _barNight(settleDay) {
   const b = G.bar;
+  const day = (settleDay != null) ? settleDay : G.day;
   b.nights++;
-  const low = _lowSeason();
+  const tier = _seasonTierOn(day);
+  const low = tier === "low" || tier === "deeplow";
   let take = BAR_TAKINGS + Math.floor(_rand() * BAR_SWING);
   // the presence dilemma, in one line. Working your own rail is worth roughly
   // double an evening spent elsewhere — which is exactly what makes going out
@@ -5077,7 +5121,7 @@ function _barNight() {
   const worked = !!b.workedLast && (b.workedDay === G.day || b.workedDay === G.day - 1);
   take = Math.round(take * (worked ? WORK_TAKINGS : AWAY_TAKINGS));
   if (worked) take += BAR_PRESENT;
-  take = Math.round(take * _seasonTakings());   // graded by the month, peak → trough
+  take = Math.round(take * _seasonTakingsOn(day));   // graded by the month you traded in, peak → trough
   // two months behind and the floor is thin — you can watch it happen in the till
   if (b.shortStaff) take = Math.round(take * BAR_SHORT_STAFF);
   // nights away pile up; the staff notice before the books do
@@ -5101,7 +5145,13 @@ function _barNight() {
   const nut = Math.round(BAR_NUT * supplyMult);
   const cogs = Math.round(take * BAR_COGS * supplyMult);
   const wages = BAR_WAGES + (worked ? 0 : BAR_MGR_NIGHT);
-  const costs = nut + cogs + wages;
+  // Procurement you ACCEPTED is a standing cost — the invoice you pay for the
+  // frictionlessness. Refusing is cheaper on paper (this line is ฿0) and buys the
+  // weather instead; accepting is the same trade the other way (Keith, 2026-08-26:
+  // accepted jobs never billed, so the fork was "free upgrade vs permanent tax").
+  const synJobs = (G.syn && G.syn.done) ? Object.keys(G.syn.done).filter(k => G.syn.done[k]).length : 0;
+  const proc = synJobs * SYN_JOB_NIGHT;
+  const costs = nut + cogs + wages + proc;
   const net = take - costs;
   b.cash += net;
   if (net > b.best) b.best = net;
@@ -5113,16 +5163,21 @@ function _barNight() {
   if (b.cash < 0) {
     fromPocket = Math.min(G.money, -b.cash);
     G.money -= fromPocket;
+    b.pocketDrawn = (b.pocketDrawn || 0) + fromPocket;   // the bar's own ledger, not the night's spending
     b.cash += fromPocket;
   }
   const underwater = b.cash < 0;
   b.workedLast = false;   // consumed: tomorrow starts unworked
-  // The till already moved by the event money during the night; report it in the
-  // take so that (take - costs) is exactly what the drawer did, and zero it.
+  // The till already moved by the event money during the night. Categorise it by
+  // SIGN, not lump it into the take: a bell-millionaire (+) is income and rides
+  // the "in" line; a staff birthday (−) is a spend and belongs on the "out"
+  // line — folding it into the take printed "฿-4 in" on a trough night when the
+  // graded take was smaller than the cake (cost-accountant/publican playtests).
   const evt = b.eventCash || 0;
   b.eventCash = 0;
-  return { take: take + evt, costs, net: net + evt, low, friction, fromPocket, underwater,
-    worked, away: b.away, nut, cogs, wages };
+  const evtIn = Math.max(0, evt), evtCost = Math.max(0, -evt);
+  return { take: take + evtIn, costs, evtCost, net: net + evt, low, friction, fromPocket, underwater,
+    worked, away: b.away, nut, cogs, wages, proc };
 }
 
 // What the room costs, by what the room is. Reads the owned bar's own barType so
@@ -5150,7 +5205,7 @@ function _barMonthly() {
   if (take > 0) { b.cash -= take; rentDue -= take; rentFrom.push("the till"); }
   if (rentDue > 0) {
     const pk = Math.min(G.money, rentDue);
-    if (pk > 0) { G.money -= pk; rentDue -= pk; rentFrom.push("your own pocket"); }
+    if (pk > 0) { G.money -= pk; b.pocketDrawn = (b.pocketDrawn || 0) + pk; rentDue -= pk; rentFrom.push("your own pocket"); }
   }
   // capture what was handed over BEFORE the owed figure is overwritten
   const rentPaid = rentOwedNow - rentDue;
@@ -5164,7 +5219,7 @@ function _barMonthly() {
   if (fromTill > 0) { b.cash -= fromTill; due -= fromTill; paidFrom.push("the till"); }
   if (due > 0) {
     const fromPocket = Math.min(G.money, due);
-    if (fromPocket > 0) { G.money -= fromPocket; due -= fromPocket; paidFrom.push("your own pocket"); }
+    if (fromPocket > 0) { G.money -= fromPocket; b.pocketDrawn = (b.pocketDrawn || 0) + fromPocket; due -= fromPocket; paidFrom.push("your own pocket"); }
   }
   b.arrears = due;
   // The principal falls by what you ACTUALLY handed over, not by a flat
@@ -5415,9 +5470,9 @@ function _sayBarSeason() {
   _say(line, "dim");
 }
 
-function _barSettle() {
+function _barSettle(settleDay) {
   if (!_barOwned()) return;
-  const n = _barNight();
+  const n = _barNight(settleDay);   // the night played (G.day-1 from _endNight); the monthly cycle stays on G.day
   const m = _barMonthly();
   // the nightly line is quiet; the monthly one is not
   // BOOKS states an underwater till as a state ("empty, and ฿N behind it"); this
@@ -5426,7 +5481,7 @@ function _barSettle() {
   _say(_fmt(G.bar.cash < 0
     ? "(The bar: ฿{take} in, ฿{costs} out{low}{who}. Till: empty, and ฿{short} behind it.)"
     : "(The bar: ฿{take} in, ฿{costs} out{low}{who}. Till: ฿{cash}.)",
-    { take: n.take, costs: n.costs, cash: G.bar.cash, short: -G.bar.cash,
+    { take: n.take, costs: n.costs + (n.evtCost || 0), cash: G.bar.cash, short: -G.bar.cash,
       low: n.low ? _L(" — low season") : "",
       who: n.worked ? _L(" — you worked it") : _L(" — Bert ran it") }), "dim");
   if (n.away === WORK_DRIFT) {

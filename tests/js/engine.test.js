@@ -6822,6 +6822,24 @@ test("WEATHER names the season, and it tracks the month", () => {
   assert.match(lastOut(), /deep low|monsoon/i, "September reads as the deep low");
 });
 
+test("WEATHER bridges the two clocks when the real sky and the game season disagree", () => {
+  // Gordon, 2026-08-26: "73% chance of rain" printed directly over "peak season,
+  // cool dry months" reads as a contradiction on a long expat save whose calendar
+  // has drifted from the real bake. A one-clause bridge names which is which.
+  globalThis.WX_NOW = { temp: 30, humid: 90, code: 61, hi: 31, rain: 80 };
+  try {
+    state().season0 = 11; state().day = 1;   // December, dry season — but a rainy bake
+    out = []; run("weather");
+    assert.match(lastOut(), /dry half of the year|Whatever the app/i, "the dry-season-under-rain bridge fires");
+  } finally { delete globalThis.WX_NOW; }
+  globalThis.WX_NOW = { temp: 31, humid: 70, code: 1, hi: 33, rain: 10 };
+  try {
+    state().season0 = 8; state().day = 1;    // September, monsoon — but a dry bake
+    out = []; run("weather");
+    assert.match(lastOut(), /monsoon collects|don't be fooled/i, "the wet-season-under-clear-sky bridge fires");
+  } finally { delete globalThis.WX_NOW; }
+});
+
 test("the calendar wet season amplifies the rain: a monsoon month opens a downpour a dry one wouldn't", () => {
   // The season link. A rainy-but-not-stormy sky (code 61) is drizzle-only in the
   // cool dry months, but in the SW-monsoon months it becomes a real downpour —
@@ -7889,6 +7907,59 @@ test("the morning says what last night was, as deltas", () => {
   // and it only fires once per morning
   out = []; _morningLedger();
   assert.equal(out.join("\n"), "", "the snapshot is consumed");
+});
+
+test("the bar's own bills stay on the bar's ledger, not the night's spending", () => {
+  // Gordon, 2026-08-26: the monthly rent+note (฿40k) debits the pocket AFTER the
+  // wake-to-wake snapshot, so it used to land on the NEXT morning's "down ฿X on
+  // the night" — the morning you handed over ฿40k read "down ฿290", and the
+  // morning you handed over nothing read "down ฿34,392". The bar draws are the
+  // BAR's ledger; the personal line must exclude them.
+  newGame();
+  state().stage = "expat"; state().flags.act1Done = true; state().day = 5;
+  state().happy = 20; state().money = 50000;
+  _nightSnapshot();                       // baseline captured
+  // …a night: you personally spend ฿1,000, and the bar draws ฿40,000 from pocket…
+  state().money = 50000 - 1000 - 40000;
+  state().bar.pocketDrawn = 40000;        // what _barMonthly/_barNight recorded
+  out = []; _morningLedger();
+  const said = out.join("\n");
+  assert.match(said, /down ฿1,000 on the night/, "the ฿40k bar bill is NOT in the night's spending");
+  assert.doesNotMatch(said, /41,000|40,000/, "and the conflated figure never appears");
+});
+
+test("a cost event (the staff birthday) is a spend, not negative income", () => {
+  // Gordon, 2026-08-26: a birthday (฿2,500 out of the till) folded into the
+  // take printed "฿-4 in" on a trough night. Categorise by sign: a bell-
+  // millionaire (+) is income, a birthday (−) is a cost on the "out" line.
+  newGame();
+  state().stage = "expat"; state().flags.act1Done = true; state().flags.barOpen = true;
+  state().bar.room = "stinky_bar"; state().bar.cash = 0; state().bar.lastMonthDay = 999;
+  state().season0 = 8; state().day = 1; state().rng = 42;   // deep-low September, the smallest takes
+  state().bar.workedLast = true; state().bar.workedDay = 1; state().bar.eventCash = -2500;
+  const n = _barNight(1);
+  assert.ok(n.take >= 0, `the "in" line is never negative (was ${n.take})`);
+  assert.equal(n.evtCost, 2500, "the birthday is a cost");
+  assert.equal(n.take - (n.costs + n.evtCost), n.net, "in − out reconciles to the net");
+});
+
+test("the last night of a month is graded at the month it was TRADED in, not the morning after", () => {
+  // Gordon, 2026-08-26: _barNight runs from _endNight after G.day++, so the night
+  // of Oct 30 was settling at November's rate. It grades on the played day now.
+  newGame();
+  state().stage = "expat"; state().flags.act1Done = true; state().flags.barOpen = true;
+  state().bar.room = "stinky_bar"; state().bar.lastMonthDay = 999; state().rng = 7;
+  state().season0 = 9;                     // so day 30 = October (deep-low), day 31 = November (high)
+  assert.equal(_seasonTierOn(30), "deeplow", "day 30 traded in the deep low");
+  assert.equal(_seasonTierOn(31), "high", "day 31 is a new month, the season turned");
+  // settling the night of day 30 (called as _endNight would: G.day already 31)
+  state().day = 31;
+  state().bar.cash = 0; state().bar.workedLast = true; state().bar.workedDay = 30;
+  const played = _barNight(30).take;       // graded on the played night (deep low)
+  state().bar.cash = 0; state().bar.workedLast = true; state().bar.workedDay = 31;
+  state().rng = 7;
+  const morningAfter = _barNight(31).take;  // what the old off-by-one did (October rate)
+  assert.ok(played < morningAfter, "the deep-low night is graded lower than the next month would have");
 });
 
 // The unknown number. One joke a day; let them run, STOP them, or REPLY — and

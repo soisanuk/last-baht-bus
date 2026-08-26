@@ -1922,6 +1922,22 @@ test("the girl on your arm exists to every verb, in every room", () => {
   assert.equal(_npcRoom("lek"), NPCS.lek.room, "…and she goes back to her bar when the night ends");
 });
 
+test("the companion on your arm doesn't greet you across the room she's standing in", () => {
+  // Gordon/Keith, 2026-08-26: walking into a bar WITH a bonded girl fired the
+  // regular-recognition greeting for HER — "she spots you and the practiced hello
+  // softens" — for the woman holding your arm. The arrival greeting excludes party
+  // companions now.
+  _bigNight();
+  G.soc.drinks.lek = 8;                          // tier 2 — would trigger the recognition line
+  G.party = { ids: ["lek"], stops: 1, spent: 0, seen: {} };
+  G.soc.greeted = {};                            // clear so the greeting COULD fire
+  G.room = "beach_rd_c";                          // arrive from off the bar
+  out = []; _arriveAt("candy_bar");              // lek is here — she's on your arm (party override)
+  assert.ok(_npcsHere().includes("lek"), "she's in the room, on your arm");
+  assert.doesNotMatch(out.join("\n"), /spots you|clocks you|remembers you/i,
+    "the recognition greeting does not fire for the girl you walked in with");
+});
+
 test("BARFINE at the girl already on your arm has nothing to sell", () => {
   _bigNight(); G.room = "candy_bar"; G.pendingEnc = null; G.flowerDay = G.day;
   G.party = { ids: ["lek"], stops: 1, spent: 0, seen: {} };

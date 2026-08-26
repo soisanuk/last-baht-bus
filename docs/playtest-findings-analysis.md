@@ -730,3 +730,56 @@ shortcut that bypassed the presence tick, which made a working feature read as
 dead — the mirror image of the round-13 bug where a hand-built sequence passed
 without the real path. Reaching the subsystem through its real entry point cuts
 both ways.
+
+---
+
+# Round 27 — the publicans rerun (Gordon + Keith, Fable, bar-owner season, 2026-08-26)
+
+Two Fable publicans rerun against the just-shipped season, complementary lenses:
+**Gordon** (28-year Leeds landlord) reads the books and the year; **Keith** (ran
+two go-gos) reads the staff and the arrangement. They **corroborated hard** — the
+same spine from two angles: *the season is real on the invoice and in the sky, but
+it doesn't reach the room* — plus Gordon found two ledger-integrity defects.
+
+## Verdict (both): "half a bar" / "not paint, but read-and-paid, not seen"
+
+The year turns in the till, the sky and her price — all agreeing with the
+constants — but the rail, the street and the floor played December in September.
+Both named the same cause: patrons are season-blind, so the rail never thins and
+the `_RAIN_EMPTY_BAR` monsoon register (the best prose the season shipped) could
+never fire. Fixed.
+
+## Fixed
+
+| # | Finding | Fix |
+|---|---|---|
+| Gordon F1 (**HIGH**, ledger) | Worked trough night + staff birthday printed "฿-4 in" — a cost event folded into the income line | `_barNight` categorises event cash by sign: `evtIn` income, `evtCost` a spend on the "out" line; reconciles, never negative |
+| Gordon F2 (MED, ledger) | The ฿40k monthly bill landed on the NEXT morning's "down ฿X on the night" (debits pocket after the wake snapshot) | `G.bar.pocketDrawn` tracks the bar's own pocket draws; `_morningLedger` excludes them — bar bills live on the bar's ledger |
+| Gordon F3 (LOW, ledger) | Last night of a month graded at the next month's rate (settle runs post-`G.day++`) | `_barSettle(G.day-1)` → `_seasonTakingsOn(day)` grades the night **played** |
+| A (both, **HIGH** design) | The season never reached the room — rail identical Sept/Dec, empty-bar register unreachable | `_patronOut(id)`: season-scaled, day-stable patron thinning (peak 140 vs deep-low 51 patron-nights; 14/20 benches empty in the trough) |
+| Keith F1 (MOD) | Saleng vignettes repeated verbatim back-to-back — `_salengPick` bypassed `_pickVary` | routed through `_pickVary`, keyed per cart type |
+| Keith F3 (MOD) | Two-week millionaires rang the bell in dead September; verbatim two nights running | `when: !_lowSeason()` gate + one-reroll no-repeat memory (`G.bar.lastWorkEvt`) |
+| Keith F6 (MOD-HIGH) | Owner-blind: staff barfined themselves out of the owner's own till, the newbie nudge + manager shot ran at his own bar | `_atOwnBar()` gates `_maybeSelfBarfine`/`_maybeGoWithYou`/`_newbieNudge`/`_managerWelcome`/`_managerChatTick` |
+| Keith F7 (MINOR) | "Name over the door" contradicted itself (arrival vs turning call) | turning call now "the old man's name is still over the door, but the floor is yours" |
+| Keith F8 (TUNING) | Floor pools too shallow (6/4/4) for a year-long stage; "fortnight" line on day 31 | deepened to 8/7/7 with in-register beats; "fortnight" → "about five minutes by comparison" |
+| Keith F9 (MOD) | Accepted procurement never billed → free-upgrade-vs-permanent-tax, no dilemma | `SYN_JOB_NIGHT` ฿120/job/night `proc` cost line — accepting is a real money trade |
+| Gordon/Keith (MINOR) | The party companion greeted you across the room she was on your arm in | `_relGreeting` candidate list excludes party ids |
+| Gordon (STRUCTURAL) | Two clocks: real-weather bake vs game season read as a contradiction in WEATHER | a one-clause bridge fires when the sky and the season disagree |
+| Keith F10a (MINOR) | The FEED DOG nudge printed mid-downpour ("even the soi dogs have vanished") | gated on `!G.rain` |
+| Gordon (cheap add) | TIME carried no month for a resident living across the year | a `(Month — season)` line in expat |
+
+## Recorded, not a bug / follow-up
+
+- The dialogue-register half of Keith F6 (a filler mamasan's "I introduce you
+  proper" pitch, a hostess's "First time Pattaya?" to her employer) is deeper —
+  owner-awareness in the filler dialogue builders, not a mechanic gate. Left as
+  follow-up; the egregious mechanical channels are gated.
+- The `_WORK_SHIFT`/`_WORK_SEEN`/`_WORK_MISSED` ambience is already `_pickVary`-
+  pooled; Keith's repeat there is pool DEPTH over a year-long stage, same class as
+  the floor pools — an ongoing content lift, not a missing-memory bug.
+
+**Method note: two complementary publicans corroborating IS the signal.** Neither
+was told the other's lens; both independently reached "the season doesn't reach
+the room" and both flagged the owner-treated-as-walk-in. When two drives with
+different search strategies land on the same structural claim, it's structural,
+not taste — and the fix (patron thinning) served both at once.

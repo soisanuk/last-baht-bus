@@ -817,7 +817,7 @@ test("the nightly cost splits into nut, stock and wages — and a dead night is 
   const nights = [];
   for (let i = 0; i < 40; i++) { G.day = 100 + i; G.bar.lastMonthDay = G.day; nights.push(_barNight()); }
   for (const n of nights) {
-    assert.equal(n.nut + n.cogs + n.wages, n.costs, "the three lines are the whole bill");
+    assert.equal(n.nut + n.cogs + n.wages + n.proc, n.costs, "the cost lines are the whole bill");
     assert.ok(n.cogs > 0 && n.cogs < n.take, "stock is a share of what you sold");
   }
   // the point of a variable line: a thin night costs less than a fat one
@@ -859,6 +859,68 @@ test("the season grades the takings: peak boom, deep-low trough, the same rail b
   // the endpoints track the multipliers, not just the ordering
   assert.ok(deep / high < 0.62 && deep / high > 0.48, `deep-low is roughly the 0.55 trough (${(deep / high).toFixed(2)})`);
   assert.ok(peak / high > 1.05 && peak / high < 1.15, `peak is the modest boom (${(peak / high).toFixed(2)})`);
+});
+
+test("accepting procurement is a standing cost — the fork is a real trade, not a free upgrade", () => {
+  // Keith, 2026-08-26: accepted jobs never billed, so YES was "free upgrade" and
+  // NO was "permanent tax" — no dilemma. An accepted job is a nightly cost now;
+  // a refused one is friction. Neither is free.
+  running();
+  G.syn = { done: {}, asked: {}, friction: 0 };
+  const clean = _barNight().proc;
+  assert.equal(clean, 0, "no jobs accepted: the procurement line is zero");
+  G.syn.done = { cleaning: true, screen: true };
+  const two = _barNight().proc;
+  assert.equal(two, 2 * SYN_JOB_NIGHT, "two accepted jobs bill two nightly shares");
+  assert.ok(two > 0, "accepting is not free");
+});
+
+test("the two-week millionaires are a high-season crowd, not a monsoon one", () => {
+  running();
+  // low season: the holiday-bonus lads simply aren't in town
+  G.season0 = 8; G.day = 1;                 // September, deep low
+  assert.ok(!WORK_NIGHTS.find(e => e.id === "millionaires").when(G),
+    "millionaires gated out of the deep low");
+  G.season0 = 11; G.day = 1;                 // December, peak
+  assert.ok(WORK_NIGHTS.find(e => e.id === "millionaires").when(G),
+    "…and back in the peak");
+});
+
+test("low season empties the rail, which unlocks the monsoon empty-bar register", () => {
+  // Both publican playtests, 2026-08-26: the rail read identical in Sept and Dec
+  // because patrons were season-blind. They thin now — day-stable, deterministic.
+  becomeExpat(); _setFlag("act1Done"); G.vacation = 1;
+  const railNights = () => {
+    let n = 0;
+    for (G.day = 1; G.day <= 6; G.day++) for (const id of Object.keys(PATRONS)) if (_patronRoom(id)) n++;
+    return n;
+  };
+  G.season0 = 11; const peak = railNights();   // December
+  G.season0 = 8;  const deep = railNights();   // September, deep low
+  assert.ok(deep < peak * 0.6, `the trough rail is markedly thinner (${deep} vs ${peak})`);
+  // and at least one patron-bench bar can now be empty on a deep-low night
+  G.season0 = 8; G.day = 3;
+  const benchBars = [...new Set(Object.keys(PATRONS).map(id => PATRONS[id].home))];
+  const empty = benchBars.filter(r => !Object.keys(PATRONS).some(id => _patronRoom(id) === r));
+  assert.ok(empty.length > 0, "a regulars' bar stands empty in the deep low — the register can fire");
+});
+
+test("at your own bar, your staff don't work you like a walk-in", () => {
+  // Keith, 2026-08-26: a hostess offered to barfine herself out of the owner's
+  // OWN till; the newbie 'buy her a drink for a number' tutorial ran at his bar.
+  running();
+  G.bar.room = "stinky_bar"; G.room = "stinky_bar";
+  assert.ok(_atOwnBar(), "standing in the bar you own");
+  // a hostess of your own, maxed favor, after midnight — every self-barfine gate open
+  const her = _npcsHere().find(id => NPC_ROLES[id] === "hostess") ||
+    Object.keys(NPCS).find(id => NPCS[id].room === "stinky_bar" && NPC_ROLES[id] === "hostess");
+  if (her) {
+    G.soc.drinks[her] = 20; G.nightTurn = 70; G.soc.selfBf = false; G.rng = 3;
+    out = [];
+    for (let i = 0; i < 20; i++) _maybeSelfBarfine(her);
+    assert.equal(G.pendingEnc, null, "no self-barfine out of your own till");
+    assert.doesNotMatch(out.join("\n"), /I go with you|barfine/i, "and no come-on from your own staff");
+  }
 });
 
 test("a night away costs you money, which is what makes standing the rail a choice", () => {

@@ -479,7 +479,8 @@ function _arriveAt(to) {
         `stop keep. Now I keep again, na."`,
     ], "returnGreet"), "win");
   } else if (ROOMS[to].barType && !(G.soc.greeted && G.soc.greeted[to]) && !_invHere) {
-    const her = _npcsHere().filter(n => NPC_ROLES[n] === "hostess")
+    const party = (G.party && G.party.ids) || [];   // she's on your arm — she doesn't "spot you across the room"
+    const her = _npcsHere().filter(n => NPC_ROLES[n] === "hostess" && !party.includes(n))
       .sort((a, b) => _bondTier(b) - _bondTier(a))[0];
     if (her && _bondTier(her) >= 1) { (G.soc.greeted = G.soc.greeted || {})[to] = true; _relGreeting(her); }
   }
@@ -3649,6 +3650,7 @@ function _buyManDrink(id) {
 
 // Lean on a manager's time and he'll (genially) angle for a man drink back.
 function _managerChatTick(id) {
+  if (typeof _atOwnBar === "function" && _atOwnBar()) return; // he works for you here; he doesn't angle you for a drink
   G.soc.mgrChat = G.soc.mgrChat || {};
   G.soc.mgrChat[id] = (G.soc.mgrChat[id] || 0) + 1;
   if (G.soc.mgrChat[id] === 3) {
@@ -5213,6 +5215,10 @@ function _doTime() {
         { clock: _clockStr(), weekday: _L(_weekday()), day: G.day })
     : _fmt("{clock}, {weekday} — day {day} of 7.",
         { clock: _clockStr(), weekday: _L(_weekday()), day: G.day }));
+  // the month, for a resident who lives across the year (WEATHER carries the full note)
+  if (G.stage === "expat" && typeof _seasonTier === "function") {
+    _say(`(${_SEASON_MONTHS[_seasonMonth()]} — ${_SEASON_LABEL[_seasonTier()]}.)`, "dim");
+  }
   const t = G.nightTurn;
   if (_quizDay()) {
     // name the venues: _quizBars() is a pure hash (no dice), and an unfindable

@@ -479,6 +479,7 @@ const _MGR_SHOT = [
 ];
 function _managerWelcome() {
   if (!_flag("act1Done") || G.over) return;
+  if (typeof _atOwnBar === "function" && _atOwnBar()) return; // your own manager doesn't stand you the house's shot
   const id = _managerHere();
   if (!id) return;
   G.soc.mgrShot = G.soc.mgrShot || {};
@@ -791,6 +792,7 @@ function _quizDay() { return G.day % 7 === 4; }
 //     has, and nothing has ever told a new player it is there.
 function _newbieNudge() {
   if (!_inBar() || G.soc.drunk >= 6) return;
+  if (typeof _atOwnBar === "function" && _atOwnBar()) return; // the owner isn't a newbie in his own bar
   // …and only where the advice is TRUE. The Queen Vic is a pub with no
   // hostesses at all, so "buy a lady a drink, then CONTACT her" is a promise
   // its own room cannot keep — which is the defect this repo keeps catching.
@@ -3071,6 +3073,12 @@ _DEBRIEF.bfscam2 = _DEBRIEF.bfscam;
 // Everything here is a DELTA against a snapshot taken as the night ends, so it
 // costs no new state beyond one small object.
 function _nightSnapshot() {
+  // The bar's own pocket draws (a losing night covered, the monthly bill) settle
+  // AFTER this snapshot, so they'd otherwise land on the NEXT morning's "down ฿X
+  // on the night" — a publican reading "down ฿290" the morning he handed over
+  // ฿40k rent+note called the book a liar (Gordon, 2026-08-26). They belong to
+  // the BAR ledger, not the night's personal spending, so track and exclude them.
+  if (G.bar) G.bar.pocketDrawn = 0;
   G.lastNight = {
     happy: G.happy,
     money: G.money,
@@ -3090,7 +3098,8 @@ function _morningLedger() {
   const dh = G.happy - b.happy;
   if (dh) bits.push((dh > 0 ? "+" : "") + dh + " \u0e2a\u0e19\u0e38\u0e01");
   const drawn = (G.atmTotal || 0) - (b.atm || 0); // ATM cash isn't "income" (27-night playtest: "up ฿18,880")
-  const spent = b.money + drawn - G.money;
+  const barDraw = (G.bar && G.bar.pocketDrawn) || 0; // the bar's own bills report on the bar's line, not here
+  const spent = b.money + drawn - G.money - barDraw;
   if (spent > 0) bits.push("down \u0e3f" + spent.toLocaleString() + " on the night");
   else if (spent < 0) bits.push("up \u0e3f" + (-spent).toLocaleString() + " on the night");
   if (G.roughLost > 0) bits.push("\u0e3f" + G.roughLost.toLocaleString() + " of it lifted while you were out");
@@ -3556,7 +3565,7 @@ function _endNight(reason) {
   }
   if (G.dog) _setFlag("hasDog");      // backfill for saves that adopted before the flag existed
   _loanNightRoll();                   // Nira's loan compounds and her cousins escalate if you're late
-  if (typeof _barSettle === "function") _barSettle();  // your own bar's night, and the old man's month
+  if (typeof _barSettle === "function") _barSettle(G.day - 1);  // grade the night just played, not the morning-after month
   _stdMorningTick();                  // an untreated infection makes itself known each morning
   G.wakeTurn = G.turns;               // the SLEEP-on-waking guard reads this (engine-parser "sleep")
   G.enteredVia = null;

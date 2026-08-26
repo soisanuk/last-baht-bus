@@ -282,7 +282,7 @@ function newGame() {
     // made up. Nightly trade lands in `cash` — the bar's own till, kept separate
     // from your pocket so a good week at the bar isn't the same as a good week.
     bar: { cash: 0, owed: 0, arrears: 0, months: 0, lastMonthDay: 0, nights: 0, best: 0,
-      workedLast: false, rentOwed: 0, rentShort: 0 },
+      workedLast: false, rentOwed: 0, rentShort: 0, pocketDrawn: 0 },
     atmToday: 0,         // principal withdrawn today (resets when atmDay rolls over)
     lastPolice: -99,     // turn of the last boy-in-brown shakedown
     questHailed: false,  // the one time a giver calls you over (see _questHail)
@@ -677,9 +677,24 @@ const _PATRON_HOP_ROOMS = Object.keys(ROOMS).filter(id => ROOMS[id].barType);
 
 function _patronHour() { return Math.floor(G.nightTurn / 10); } // 0 = 18:00
 
+// Low season empties the RAIL, not just the till. A share of the regulars stay
+// in on any given night in the lean months — day-stable pure hash of (id,
+// vacation, day), so it doesn't flicker as you re-enter and every player agrees
+// (rule #6). This is what finally lets the season reach the ROOM (both publican
+// playtests, 2026-08-26: the rail read identical in Sept and Dec) and unlocks the
+// empty-bar monsoon register, which was unreachable while the bench never thinned.
+function _patronOut(id) {
+  if (!_flag("act1Done")) return false;              // the opening night's cast is fixed
+  const stay = { peak: 0, high: 0.05, shoulder: 0.22, low: 0.45, deeplow: 0.6 };
+  const p = (typeof _seasonTier === "function") ? (stay[_seasonTier()] || 0) : 0;
+  if (p <= 0) return false;
+  return _hh(id + ":" + G.vacation + ":" + G.day + ":pout", 71) % 100 < Math.round(p * 100);
+}
 function _patronRoom(id) {
   const p = PATRONS[id];
   if (p.days && !p.days.includes(G.day % 7)) return null; // not his night out
+  if (_patronOut(id)) return null;                        // low season: some regulars stay in
+
   // a shuttled regular: home bar early, escorted across to another later (Glam)
   if (p.shuttle) return _patronHour() >= p.shuttle.after ? p.shuttle.to : p.home;
   // De-hopped: regulars anchor their local, so TALK TO PATRON reliably finds a
@@ -1589,7 +1604,7 @@ function _describeRoom(full, forceFull) {
     }
     if (G.room === "khao_talo_strip") _dogShamrock(); // the dead pub knows him
   } else if (_flag("act1Done") && !r.bar && !r.barType && !r.massage && !r.soapy &&
-      !r.hostBar && !_isHotelRoom(G.room) && !_isDarkHere() && G.dogNudgeDay !== G.day && _rand() < 0.35) {
+      !r.hostBar && !_isHotelRoom(G.room) && !_isDarkHere() && !G.rain && G.dogNudgeDay !== G.day && _rand() < 0.35) {
     // the un-adopted dog makes himself known: at most once a night, lit streets
     // only (never a hotel room — he can't climb to your balcony), and never
     // during Act One's tight opening

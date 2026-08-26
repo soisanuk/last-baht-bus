@@ -99,7 +99,10 @@ const _SALENG_LINGERIE_SCENE = [
   "A bra is held up, then held up against you for scale, to shrieks of laughter; the girls model the better pieces down the bar with the straight-faced confidence of women who know exactly what the room is worth.",
 ];
 
-function _salengPick(arr) { return arr[Math.floor(_rand() * arr.length)]; }
+// Pooled with a one-deep no-repeat memory, keyed per cart type — the repo prose
+// doctrine. A bare random pick fired the same bra-sizing line three times running
+// while one cart sat parked (Keith, 2026-08-26); _pickVary stops the back-to-back.
+function _salengPick(arr, key) { return _pickVary(arr, "saleng:" + (key || G.salengCart || "x")); }
 
 // Is a cart currently parked and un-expired? (alive anywhere) / here in this room?
 function _salengAlive() { return !!(G && G.salengCart && G.turns < G.salengUntil); }
@@ -226,7 +229,7 @@ function _salengAnnounce(cart, firstEver) {
 function _salengVignette() {
   const girls = _npcsHere().filter(id => NPC_ROLES[id] === "hostess" || NPC_ROLES[id] === "mamasan");
   if (!girls.length) return; // nobody to play with it — stay quiet
-  if (G.salengCart === "lingerie") { _say(_salengPick(_SALENG_LINGERIE_SCENE), "dim"); return; }
+  if (G.salengCart === "lingerie") { _say(_salengPick(_SALENG_LINGERIE_SCENE, "lingerie-scene"), "dim"); return; }
   const gid = girls[Math.floor(_rand() * girls.length)];
   const gName = NPCS[gid].name;
   const pool = _SALENG_VIGNETTES[G.salengCart] || _SALENG_VIGNETTES._default;
