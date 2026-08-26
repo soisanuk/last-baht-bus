@@ -54,7 +54,12 @@ const KIND_OVERRIDE = {
   amp_room: "livemusic",       // "the only stage in the complex"
   soi_7_w: "street",              // "Soi 7 (West / beach end)" — a soi AT the beach,
                                   // not sand; the name heuristic reads it wrong
-  jomtien_soi_7_w: "street",      // same misfire, Jomtien's twin: "Soi 7 Beach End"
+  jomtien_soi_7_w: "street",
+  // The inverse misfire: renamed "Soi 7 Sands (Auntie Nok's pitch)", the name
+  // lost the word "beach" and the heuristic fell through to street — but the
+  // prose is sand, upturned boats and a drinks cart under a sea almond tree.
+  // Without this pin, a future reroll paints a neon soi over Auntie Nok.
+  jomtien_soi_7_beach_end: "beach",      // same misfire, Jomtien's twin: "Soi 7 Beach End"
                                   // is "a mellow strip of open-front beer bars"
 };
 

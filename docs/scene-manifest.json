@@ -5,8 +5,8 @@
     "rooms": 237,
     "regions": 15,
     "byKind": {
-      "beach": 13,
-      "street": 94,
+      "beach": 14,
+      "street": 93,
       "massage": 19,
       "beer": 57,
       "mall": 1,
@@ -1283,7 +1283,7 @@
       "barType": null,
       "region": "Jomtien",
       "regionSlug": "jomtien",
-      "kind": "street",
+      "kind": "beach",
       "dark": false,
       "people": [
         "Auntie",
