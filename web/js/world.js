@@ -3851,19 +3851,21 @@ const ROOMS = {
     name: "Soi Honey (west end)",
     region: "Soi Honey",
     desc: "A short, narrow soi threading between Second Road and Soi Buakhao — the map calls it " +
-      "Soi 11, everyone else calls it Soi Honey, after the soapland whose blue glow owns the " +
-      "west end. Beer bars string fairy lights and Filipino covers across the lane; a soapy " +
-      "massage hums to the south, and the loudest of the beer bars is just north.",
-    exits: { w: "second_rd_honey", e: "soi_honey_e", n: "honey_trap", s: "honey_soapy" },
+      "Soi 11, everyone else calls it Soi Honey, after HONEYCOMB MASSAGE, the soapland whose " +
+      "blue glow owns this end. HONEY TRAP BAR, the loudest of the beer bars, strings its fairy " +
+      "lights and Filipino covers right alongside.",
+    venues: ["honey_trap", "honey_soapy"],
+    exits: { w: "second_rd_honey", e: "soi_honey_e" },
   },
   soi_honey_e: { motosai: true,
     name: "Soi Honey (east end)",
     region: "Soi Honey",
     desc: "The Buakhao end of Soi Honey, where the lane spits you back out among the pharmacies " +
-      "and laundries. Two more beer bars face each other across the narrow strip, close enough " +
-      "that the girls of one heckle the customers of the other. It smells of grilled chicken, " +
-      "spilled Chang, and somebody's jasmine.",
-    exits: { w: "soi_honey_w", e: "buakhao_honey", n: "queen_bee", in: "buzz_inn" },
+      "and laundries. THE HIVE and BUZZ INN face each other across the narrow strip, close " +
+      "enough that the girls of one heckle the customers of the other. It smells of grilled " +
+      "chicken, spilled Chang, and somebody's jasmine.",
+    venues: ["queen_bee", "buzz_inn"],
+    exits: { w: "soi_honey_w", e: "buakhao_honey" },
   },
   honey_soapy: {
     name: "Honeycomb Massage",

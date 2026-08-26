@@ -473,12 +473,7 @@ test("a venue door on a compass point is named in the room's prose", () => {
   }
   // Allow-list, each with a reason — same discipline as the direction lint and
   // the reference lint's OK set: a named exception, never a looser matcher.
-  const OK = new Set([
-    // Soi Honey's two massage houses ARE the street's description ("shophouse
-    // after shophouse of them"); naming two of the dozen would mislead worse.
-    "soi_honey_w: s → Honeycomb Massage",
-    "soi_honey_e: n → The Hive",
-  ]);
+  const OK = new Set([]);
   const real = bad.filter(b => !OK.has(b));
   assert.deepEqual(real, [], "unannounced venue door(s) on a compass point — name it in the " +
     "room's desc, or add it to OK with the reason:\n" + real.join("\n"));
