@@ -5934,14 +5934,16 @@ test("quiz schedule: Thursdays only, three deterministic bars, 20:00-22:00", () 
   assert.ok(!_isQuizWindow());
 });
 
+function _enterBar(bar) {
+  state().room = ROOMS[bar].exits.out;
+  run("enter " + (ROOMS[bar].bar || ROOMS[bar].name));
+}
+
 test("walking into a quiz bar mid-window forces the quiz; answers score prizes", () => {
   state().day = 4;
   state().nightTurn = 25;
   const bar = _quizBars()[0];
-  const outside = ROOMS[bar].exits.out;
-  state().room = outside;
-  const dir = Object.entries(ROOMS[outside].exits).find(([, to]) => to === bar)[0];
-  run(dir);
+  _enterBar(bar);
   assert.ok(state().game && state().game.type === "quiz", "contestant, like it or not");
   assert.match(lastOut(), /Question 1 of 5/);
   const cash = state().money;
@@ -5959,11 +5961,10 @@ test("quiz: QUIT slinks out to the street; one quiz per bar per night", () => {
   state().nightTurn = 25;
   const bar = _quizBars()[0];
   const outside = ROOMS[bar].exits.out;
-  state().room = outside;
-  const dir = Object.entries(ROOMS[outside].exits).find(([, to]) => to === bar)[0];
-  run(dir, "quit");
+  _enterBar(bar);
+  run("quit");
   assert.equal(state().room, outside, "walked yourself out");
-  run(dir);
+  _enterBar(bar);
   assert.equal(state().game, null, "the host doesn't re-draft quitters");
   assert.equal(state().room, bar, "but the bar still serves you");
 });
@@ -5972,10 +5973,7 @@ test("off-window visits to quiz bars are just visits", () => {
   state().day = 4;
   state().nightTurn = 10; // 19:00, an hour early
   const bar = _quizBars()[0];
-  const outside = ROOMS[bar].exits.out;
-  state().room = outside;
-  const dir = Object.entries(ROOMS[outside].exits).find(([, to]) => to === bar)[0];
-  run(dir);
+  _enterBar(bar);
   assert.equal(state().game, null);
 });
 
@@ -6112,11 +6110,13 @@ test("scripted happy-ending playthrough", () => {
     // (Soi Buakhao has separate junctions for Soi Diana, LK Metro and Soi Honey
     //  now, so the arch is three blocks north of Candy Bar rather than one)
     "out", "n", "n", "n", "w",                       // the arch
-    "w", "w", "in",                                  // Starlight Bar
+    // Tree Town's bar doors moved off compass points into venues[] (2026-08-27,
+    // Marguerite's mis-entry finding) — the lanes stay compass, the bars are ENTER
+    "w", "w", "enter",                               // Starlight Bar (one venue there, bare ENTER resolves it)
     "give helmet to pim", "ask pim about oy",        // pin part: lucky 9
-    "out", "e", "in", "ask nong about oy",           // pin part: number 71
+    "out", "e", "enter", "ask nong about oy",        // pin part: number 71 (Gold Rush Lounge)
     "out", "w",
-    "light on", "w", "w", "light off",               // dark corner → Rainbow Girls
+    "light on", "w", "enter", "light off",           // dark corner → Rainbow Girls (was a second "w")
     "give som tam to ploy",                          // door trick
     "ask dj about sabai sabai",                      // security sings
     "go office", "enter ๗๑๙",                        // the safe

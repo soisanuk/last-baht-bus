@@ -429,11 +429,16 @@ test("Pratumnak Road's hill turning and pier are discoverable from the prose", (
   assert.equal(r.exits.hill, "pratumnak_hill_rd", "and HILL is the honest key for the crest");
 });
 
-test("Tree Town's Far Lane says which bar is which door", () => {
-  // its w/e exits ARE bar doors, so mapping the maze by compass walks you indoors
+test("Tree Town's Far Lane names its bars, off compass points now (2026-08-27)", () => {
+  // 1101d063 (2026-08-26) hand-labelled these as compass doors — the half-fix
+  // this same file's sibling lint exists to close. They're venues[] now: no
+  // direction word, entered by name, and the lane keeps only its road exit.
   const desc = _strip(ROOMS.tt_lane_3.desc);
-  assert.match(desc, /LUCKY CHARM BAR is the door west/);
-  assert.match(desc, /MOONSHINE BAR the door east/);
+  assert.match(desc, /LUCKY CHARM BAR/);
+  assert.match(desc, /MOONSHINE BAR/);
+  assert.doesNotMatch(desc, /door west|door east/, "no compass claim to keep true any more");
+  assert.deepEqual(ROOMS.tt_lane_3.venues, ["rabbit_hole", "lucky_charm", "moonshine_bar"]);
+  assert.deepEqual(Object.keys(ROOMS.tt_lane_3.exits), ["n"], "only the road exit remains");
 });
 
 test("LK Metro's main alley reads the same from both ends", () => {

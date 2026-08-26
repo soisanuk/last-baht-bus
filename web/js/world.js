@@ -2127,11 +2127,11 @@ const ROOMS = {
     desc: "Neon canyon, but the neon mix has changed. Bollywood bass competes with Thai pop " +
       "from somewhere inside Little India's encroachment from the east — restaurant signs in " +
       "Hindi above what used to be go-go bars, the smell of curry drifting across the touts. " +
-      "NEON PARADISE A-GO-GO still strobes on the west side. CLUB MIRAGE shimmers opposite. " +
+      "NEON PARADISE A-GO-GO still strobes; CLUB MIRAGE shimmers a few doors along. " +
       "The touts with the laminated menus are still here. A dark side-alley slinks off " +
       "between them.",
-    exits: { n: "ws_gate", s: "ws_south", w: "neon_paradise", e: "club_mirage", in: "neon_paradise", out: "ws_gate", alley: "ws_alley",
-             diamond: "soi_diamond" },
+    venues: ["neon_paradise", "club_mirage"],
+    exits: { n: "ws_gate", s: "ws_south", out: "ws_gate", alley: "ws_alley", diamond: "soi_diamond" },
   },
   ws_alley: {
     name: "Walking Street Side-Alley",
@@ -2145,13 +2145,12 @@ const ROOMS = {
     name: "Walking Street (South)",
     region: "Walking Street",
     desc: "The deep end of the strip, where the go-gos that survived COVID hold their ground " +
-      "through stubbornness and reputation. CRYSTAL PALACE A-GO-GO at the west, PARADISE " +
-      "NIGHTS CLUB beside it. MIDNIGHT SUN BAR glows a quieter yellow at the south end — " +
-      "beer bar, conversation levels, the kind of place you end up after you've stopped " +
-      "trying. Late enough, the whole strip fills with barfined ladies and their friends " +
-      "en route to the clubs.",
-    exits: { n: "ws_north", w: "crystal_palace", e: "paradise_nights", s: "midnight_sun",
-             pier: "bali_hai" },
+      "through stubbornness and reputation. CRYSTAL PALACE A-GO-GO and PARADISE NIGHTS CLUB " +
+      "front the strip here. MIDNIGHT SUN BAR glows a quieter yellow just along — beer bar, " +
+      "conversation levels, the kind of place you end up after you've stopped trying. Late " +
+      "enough, the whole strip fills with barfined ladies and their friends en route to the clubs.",
+    venues: ["crystal_palace", "paradise_nights", "midnight_sun"],
+    exits: { n: "ws_north", pier: "bali_hai" },
   },
   neon_paradise: {
     name: "Neon Paradise A-Go-Go",
@@ -2232,7 +2231,10 @@ const ROOMS = {
       "Somebody comes out of one door, thinks about it, and goes in the other.",
       "The bass from both sides meets in the middle of the soi and cancels into mush.",
     ],
-    exits: { w: "ws_north", s: "second_rd_diamond", in: "windmill", out: "ws_north" },
+    // "in" used to shadow venues[] (bare ENTER silently always picked Windmill,
+    // never offering the "which one?" prompt for Katoey's) — same landmine class
+    // as the 2026-08-27 rollout, fixed in passing since Walking Street led here.
+    exits: { w: "ws_north", s: "second_rd_diamond", out: "ws_north" },
     venues: ["windmill", "katoeys"],
   },
   windmill: {
@@ -2701,19 +2703,21 @@ const ROOMS = {
     name: "Tree Town (Inner Lane)",
     region: "Tree Town",
     desc: "Bars stacked shoulder to shoulder, neon bleeding into neon. GOLD RUSH LOUNGE " +
-      "glitters to the north. Painted Thai arrows on the wall offer guidance to those " +
+      "glitters just off the lane. Painted Thai arrows on the wall offer guidance to those " +
       "who can read them.",
     sign: "maze_1",
-    exits: { e: "tt_entrance", n: "gold_rush", w: "tt_lane_2", s: "tt_back", in: "gold_rush" },
+    venues: ["gold_rush"],
+    exits: { e: "tt_entrance", w: "tt_lane_2", s: "tt_back" },
   },
   tt_lane_2: {
     name: "Tree Town (Cross Lane)",
     region: "Tree Town",
     desc: "A junction where the lanes cross and the signage starts to feel personal — like " +
-      "it was designed to confuse. STARLIGHT BAR's blue sign fizzes at the north corner. " +
+      "it was designed to confuse. STARLIGHT BAR's blue sign fizzes just off the corner. " +
       "Thai arrows point in three directions, contradicting each other with quiet confidence.",
     sign: "maze_2",
-    exits: { e: "tt_lane_1", n: "starlight_bar", w: "tt_deep", s: "tt_back", in: "starlight_bar" },
+    venues: ["starlight_bar"],
+    exits: { e: "tt_lane_1", w: "tt_deep", s: "tt_back" },
   },
   tt_back: {
     name: "Tree Town (Back Lane)",
@@ -2730,10 +2734,11 @@ const ROOMS = {
     region: "Tree Town",
     desc: "The cheap seats of the maze, behind the kitchens where the rent drops and the " +
       "neon budget with it: three little bars under one sagging string of bulbs. THE RABBIT " +
-      "HOLE is straight in off the lane, LUCKY CHARM BAR is the door west and MOONSHINE BAR " +
-      "the door east; between them they trade the regulars who ran out of maze. The only way " +
-      "on is back north. Friendlier than it has any right to be down here.",
-    exits: { n: "tt_back", in: "rabbit_hole", w: "lucky_charm", e: "moonshine_bar" },
+      "HOLE, LUCKY CHARM BAR and MOONSHINE BAR all front this last stretch; between them " +
+      "they trade the regulars who ran out of maze. The only way on is back north. " +
+      "Friendlier than it has any right to be down here.",
+    venues: ["rabbit_hole", "lucky_charm", "moonshine_bar"],
+    exits: { n: "tt_back" },
   },
   rabbit_hole: {
     name: "The Rabbit Hole",
@@ -2781,7 +2786,8 @@ const ROOMS = {
     desc: "The deepest corner of the maze, where the neon gives out entirely. One big " +
       "sign burns at the end of the lane: RAINBOW GIRLS BAR, every letter a different colour.",
     sign: "maze_4",
-    exits: { e: "tt_lane_2", n: "tt_back", w: "rainbow_girls", in: "rainbow_girls" },
+    venues: ["rainbow_girls"],
+    exits: { e: "tt_lane_2", n: "tt_back" },
   },
   gold_rush: {
     name: "Gold Rush Lounge",
