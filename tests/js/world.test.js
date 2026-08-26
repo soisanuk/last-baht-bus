@@ -478,13 +478,6 @@ test("a venue door on a compass point is named in the room's prose", () => {
     // after shophouse of them"); naming two of the dozen would mislead worse.
     "soi_honey_w: s → Honeycomb Massage",
     "soi_honey_e: n → The Hive",
-    // Soi Diana is written as a continuous wall of bars for the same reason —
-    // the room prose names the strip, and singling out four frontages would
-    // imply the rest aren't there.
-    "diana_w: n → The Dollhouse",
-    "diana_mid: n → Sapphire Bar",
-    "diana_mid: s → Sundowner Bar",
-    "diana_e: n → The Cricketers",
   ]);
   const real = bad.filter(b => !OK.has(b));
   assert.deepEqual(real, [], "unannounced venue door(s) on a compass point — name it in the " +

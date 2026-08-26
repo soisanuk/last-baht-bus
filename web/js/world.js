@@ -3916,28 +3916,34 @@ const ROOMS = {
     name: "Soi Diana (Second Road end)",
     region: "Soi Diana",
     desc: "The Second Road mouth of Soi Diana, a long strip of open-fronted beer bars one block " +
-      "south of Soi Honey. On the south corner, the open-air KISS restaurant does brisk trade under " +
-      "its fairy lights — everyone in Pattaya gives directions off it. East, the soi runs away into " +
-      "warm light and eighty different sound systems; the first beer bar's girls are already waving.",
-    exits: { w: "second_rd_diana", e: "diana_mid", in: "kiss", n: "dollhouse" },
+      "south of Soi Honey. The open-air KISS restaurant does brisk trade on the corner under its " +
+      "fairy lights — everyone in Pattaya gives directions off it — with THE DOLLHOUSE's horseshoe " +
+      "counter glowing right alongside. Ahead, the soi runs into warm light and eighty different " +
+      "sound systems; the first beer bar's girls are already waving.",
+    venues: ["kiss", "dollhouse"],
+    exits: { w: "second_rd_diana", e: "diana_mid" },
   },
   diana_mid: {
     name: "Soi Diana (middle)",
     region: "Soi Diana",
     desc: "The thick of Soi Diana: open beer bars shoulder to shoulder down both sides, barkers " +
-      "working the narrow strip between, a hundred fairy-lit stools and a lady on every one. A side " +
-      "door of the LK Metro complex breathes cold air and go-go bass from further east — but that's " +
-      "the complex; the soi itself keeps it simple. Somewhere a bell rings and a whole bar cheers.",
-    exits: { w: "diana_w", e: "diana_e", n: "sapphire", s: "sundowner", hotel: "areca_room" },
+      "working the narrow strip between, a hundred fairy-lit stools and a lady on every one. SAPPHIRE " +
+      "BAR's blue neon and SUNDOWNER BAR's horseshoe counter face off across the soi. A side door of " +
+      "the LK Metro complex breathes cold air and go-go bass from further along — but that's the " +
+      "complex; the soi itself keeps it simple. Somewhere a bell rings and a whole bar cheers.",
+    venues: ["sapphire", "sundowner"],
+    exits: { w: "diana_w", e: "diana_e", hotel: "areca_room" },
   },
   diana_e: {
     name: "Soi Diana (Buakhao end)",
     region: "Soi Diana",
-    desc: "The Buakhao end of Soi Diana. The LK Metro alley opens off to one side (its other " +
-      "mouth is up on Buakhao proper); the Areca Lodge's lit driveway is on the other. Ahead, the " +
-      "soi spills onto Soi Buakhao by the 7-Eleven on the corner — Candy Bar's rose-pink sign " +
-      "glows just two doors south of it.",
-    exits: { w: "diana_mid", e: "buakhao_n", n: "cricketers", lk: "lk_entrance" },
+    desc: "The Buakhao end of Soi Diana. THE CRICKETERS holds the corner here — dartboard, three " +
+      "screens, pies — and the LK Metro alley opens off to one side (its other mouth is up on " +
+      "Buakhao proper); the Areca Lodge's lit driveway is on the other. Ahead, the soi spills onto " +
+      "Soi Buakhao by the 7-Eleven on the corner — Candy Bar's rose-pink sign glows just two doors " +
+      "south of it.",
+    venues: ["cricketers"],
+    exits: { w: "diana_mid", e: "buakhao_n", lk: "lk_entrance" },
   },
   kiss: {
     name: "KISS Restaurant",
@@ -4006,7 +4012,7 @@ const ROOMS = {
         "house creed. Down the margin, the week's fixtures and the sacred words: 'ALL GAMES, ALL " +
         "DAY, PROPER GRAVY.'",
     },
-    exits: { out: "diana_mid" },
+    exits: { out: "diana_e" },
   },
   papaya_massage: {
     name: "Papaya Massage",
