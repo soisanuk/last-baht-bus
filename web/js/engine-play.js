@@ -2478,6 +2478,61 @@ const _BOND_TALK = {
       `when you come back. I say soon. You make me liar, na?" Only half a joke.`,
   ],
 };
+// Your own staff, at the bar you own, talk to you as the guv'nor — not as a
+// walk-in to be greeted and pitched (Keith, 2026-08-26: a filler mamasan offered
+// to introduce the OWNER to his own girls; a hostess asked her employer "first
+// time Pattaya?"). Register steps up by role, same as everywhere: the mamasan is
+// fluent and runs the floor at you, the cashier is businesslike, the hostess is
+// Tinglish and just glad the boss is in.
+const _OWNER_GREET = {
+  mamasan: [
+    n => `"Boss." ${n} gives you the nod she keeps for you and nobody else. "Quiet start, but Friday crowd not come yet. Two girl late — I already call them. You want I put more ice on, or we see how it go?"`,
+    n => `${n} is at your elbow before you've got your jacket off, low and quick: "The Nong Khai girl, her papers — I fix, don't worry. Everything else clean. Good you come in tonight, boss."`,
+    n => `"Ah, the owner arrives." ${n} says it dry, fond. "Sit, sit — is your bar, but you still sit. I run the floor, you watch the door. Twenty year, I know my half. You learning yours."`,
+  ],
+  cashier: [
+    n => `${n} glances up from the drawer. "Evening, boss. Till started clean, I show you the book at close." Back to the count. With you, she is all business, which is the compliment.`,
+    n => `"You're in." ${n} turns the book a quarter so you can see the running figure without asking. "Slow hour. It'll pick up. It always picks up." She does not look worried, so you decide not to be.`,
+  ],
+  hostess: [
+    n => `"Boss! You here!" ${n} lights up — not the customer smile, the real one. "I like when you work. More fun. You want I bring you water? Boss cannot be drunk one, haha."`,
+    n => `${n} bumps your arm on her way past with a tray. "Busy soon, na. You stay behind bar tonight? Good. When you here, the mama not shout so much." A wink, and she's gone to her section.`,
+  ],
+};
+const _OWNER_PITCH = {
+  mamasan: [
+    n => `${n} looks at you like you've made a joke, then decides you have. "Introduce you? Boss — every girl in here already work for YOU." She laughs, low. "You want to know one, you TALK to her. Is your bar. Cannot barfine your own bar, tilac."`,
+    n => `"Aiyah." ${n} waves it off, amused. "I sell the girls to the customer, not to the man who pay their wage. You like one of them, that is a different thing, and it is your own business — but there is no fine to pay yourself, na."`,
+  ],
+  cashier: [
+    n => `${n} raises an eyebrow at the drawer. "Barfine? Boss, the fine come to this till — your till. You want to move money from your pocket to your own bar?" A small, dry smile. "Just go talk to her."`,
+  ],
+  hostess: [
+    n => `${n} giggles. "You want girl? Boss, you the boss! I cannot charge you, mama kill me." She leans in, conspiratorial. "You like someone here, you just be nice. Free for you. Owner privilege, na."`,
+  ],
+};
+function _ownBarStaff(id) {
+  return typeof _atOwnBar === "function" && _atOwnBar() && G.bar &&
+    NPCS[id] && NPCS[id].filler && NPC_ROLES[id] && _npcRoom(id) === G.bar.room;
+}
+// topic null → the greeting; a customer-pitch topic → the redirect. Personal
+// topics (family, plan, home) return false and fall through to normal dialogue —
+// an owner can ask his mamasan after her grandchildren.
+const _OWNER_PITCH_TOPICS = /^(girls?|lady|ladies|barfine|price|introduce|women)$/i;
+function _ownBarTalk(id, topic) {
+  if (!_ownBarStaff(id)) return false;
+  const role = NPC_ROLES[id];
+  if (topic && _OWNER_PITCH_TOPICS.test(topic)) {
+    const pool = _OWNER_PITCH[role]; if (!pool) return false;
+    _say(_pickVary(pool, "ownerpitch:" + role)(NPCS[id].name)); return true;
+  }
+  if (!topic && _bondTier(id) < 2) {   // a bonded staffer keeps her warmer personal hello
+    const pool = _OWNER_GREET[role]; if (!pool) return false;
+    _say(_pickVary(pool, "ownergreet:" + role)(NPCS[id].name)); return true;
+  }
+  return false;
+}
+
 function _bondTalk(id) {
   const t = _bondTier(id) >= 3 ? 3 : 2;
   let pool = _BOND_TALK[t];

@@ -4496,6 +4496,18 @@ const _WORK_SHIFT = [
     "you mind.",
   "Nothing goes wrong. That is what a good night is: a long list of things that " +
     "did not go wrong, and nobody but you will ever know the list existed.",
+  "There is an hour, somewhere around ten, where the room finds its own tempo and " +
+    "you stop steering it and just keep it topped up. You have read about this in " +
+    "other men's words about other trades. It is better than they made it sound.",
+  "You get the round-timing right for once — in before the lull instead of after " +
+    "it — and you feel it land like a snooker player feels a long pot drop, a small " +
+    "private competence nobody at the rail will ever notice you having.",
+  "Your feet go first, then your lower back, then a kind of second wind that Bert " +
+    "clearly recognises, because he sets a water in front of you without a word and " +
+    "does not smirk, quite.",
+  "At close you cash out with Bert, and the two of you stand in the quiet afterward " +
+    "not saying much, the way people do who have got a room through a night together. " +
+    "It is the most companionable silence you have had in a long time.",
 ];
 const _WORK_SEEN = [
   "A regular you have never spoken to asks whether you're the new owner, is told " +
@@ -4506,6 +4518,18 @@ const _WORK_SEEN = [
     "complaining about it for two years to somebody who could never fix it.",
   "Two of the girls have a system for the ice that nobody explained to you, and " +
     "it is better than yours would have been.",
+  "A punter tries a story on you that Bert has clearly heard forty times, and you " +
+    "watch Bert not react from the other end of the bar, and you learn more about " +
+    "running a bar in that one held silence than in a week of standing behind it.",
+  "The cashier flags a note to the light, decides against it, and slides it back " +
+    "with an apology so gracious the man never once feels accused. You could not " +
+    "have done that. You make a point of learning how she did.",
+  "One of the older girls sits a lonely regular somewhere he can see the football " +
+    "without having to talk, and checks on him twice, and it is not on any rota. " +
+    "That is your bar being good at the thing your bar is for, with no help from you.",
+  "A group comes in loud and wrong and somehow leaves an hour later as regulars, " +
+    "and when you trace back how, it was three small things the mamasan did and one " +
+    "she stopped you doing.",
 ];
 // what you gave up
 // ten nights straight behind your own rail. The bar is doing well.
@@ -4528,6 +4552,17 @@ const _WORK_MISSED = [
     "late to matter.",
   "A song you associate with a particular night comes on, and you are behind a " +
     "bar for it, which is not the same as being in front of one.",
+  "A crowd goes past the front on their way somewhere louder, mid-laugh, mid-plan, " +
+    "and for a second you are one of them and then you are the man wiping the bar " +
+    "they walked past.",
+  "You catch the far-off thump of a bass line that isn't your bar's, and your feet " +
+    "know the walk to it, and your feet are staying exactly where they are.",
+  "Somebody you'd have liked to run into is in town — you know because she posts a " +
+    "photo from a bar you know, three sois away — and you double-tap it from behind " +
+    "your own till and get back to the round.",
+  "The last bus goes past empty at gone two, the one you used to sweat catching, " +
+    "and you watch it go with the mild detachment of a man who now has somewhere he " +
+    "has to be until dawn regardless.",
 ];
 
 function _canWork() { return _barOwned() && G.room === "stinky_bar"; }

@@ -905,6 +905,41 @@ test("low season empties the rail, which unlocks the monsoon empty-bar register"
   assert.ok(empty.length > 0, "a regulars' bar stands empty in the deep low — the register can fire");
 });
 
+test("at your own bar, your staff talk to you as the guv'nor, not a customer", () => {
+  // Keith F6 (dialogue half), 2026-08-26: a filler mamasan of the bar you OWN
+  // greeted you as a walk-in and offered to "introduce you proper" to your own
+  // girls; a hostess asked her employer "first time Pattaya?". Owner register now.
+  running();
+  G.bar.room = "stinky_bar"; G.room = "stinky_bar";
+  const mama = _npcsHere().find(id => NPCS[id].filler && NPC_ROLES[id] === "mamasan");
+  assert.ok(mama, "your bar has a filler mamasan");
+  G.soc.drinks[mama] = 0;                         // non-bonded — the customer-register case
+  // the greeting is owner-register, not "new face / first time"
+  out = []; doCommand("talk to " + mama);
+  assert.doesNotMatch(out.join("\n"), /new face|first time|welcome, welcome|sit anywhere/i,
+    "she doesn't greet the owner like a walk-in");
+  assert.match(out.join("\n"), /boss|owner|your bar/i, "she greets you as the guv'nor");
+  // asking her to line you up with a girl is a category error at your own bar
+  out = []; doCommand("ask " + mama + " about girls");
+  assert.doesNotMatch(out.join("\n"), /introduce you proper/i, "no pitching the owner his own girls");
+  assert.match(out.join("\n"), /your (own )?bar|work for YOU|owner|your till|cannot barfine your own/i,
+    "she names the absurdity instead");
+  // …but a personal topic still lands normally — an owner asks after her family
+  out = []; doCommand("ask " + mama + " about family");
+  assert.match(out.join("\n"), /\S/, "personal topics fall through to her real dialogue");
+  assert.doesNotMatch(out.join("\n"), /boss|your own bar/i, "and are NOT hijacked by the owner register");
+});
+
+test("the owner register is scoped: at a bar you DON'T own, staff sell as ever", () => {
+  running();
+  G.bar.room = "stinky_bar";
+  const other = Object.keys(NPCS).find(id => NPCS[id].filler && NPC_ROLES[id] === "mamasan" && NPCS[id].room !== "stinky_bar");
+  assert.ok(other, "a filler mamasan at another bar");
+  G.room = NPCS[other].room; G.soc.drinks[other] = 0;
+  out = []; doCommand("ask " + other + " about girls");
+  assert.doesNotMatch(out.join("\n"), /work for YOU|cannot barfine your own/i, "she pitches you normally — it isn't your bar");
+});
+
 test("at your own bar, your staff don't work you like a walk-in", () => {
   // Keith, 2026-08-26: a hostess offered to barfine herself out of the owner's
   // OWN till; the newbie 'buy her a drink for a number' tutorial ran at his bar.

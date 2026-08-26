@@ -2702,6 +2702,10 @@ function _doTalkBody(arg, topic) {
   // scene (chameleon economy) — no dialogue node, so the wheel never advertises it
   if (npc === "cream" && topic && (topic === "price" || _convoTopic(topic) === "price") &&
       typeof _chamAsk === "function") { _chamAsk(); return; }
+  // Your own staff, at the bar you own, greet you as the guv'nor and won't sell
+  // you your own girls — the customer register is wrong once you sign the lease.
+  // Personal topics fall through to normal dialogue (an owner asks after her kids).
+  if (typeof _ownBarTalk === "function" && _ownBarTalk(npc, topic || null)) return;
   let d = _pickDialogue(npc, topic || null);
   if (topic && (!d || !d.topic)) {
     const norm = _convoTopic(topic);
