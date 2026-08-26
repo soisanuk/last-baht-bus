@@ -3743,6 +3743,13 @@ const _SNIPE_LINES = [
   n => `${n} takes it with a professional smile, and the regular she was sitting with becomes very interested in the football. Nobody says anything. Everybody noticed.`,
 ];
 
+// A lady drink leaves your pocket; at the bar you OWN it also rings INTO your own
+// till, instead of vanishing from the economy (Ronnie, 2026-08-26).
+function _ladyDrinkCharge() {
+  G.money -= LADY_DRINK;
+  if (typeof _atOwnBar === "function" && _atOwnBar() && G.bar) G.bar.cash += LADY_DRINK;
+}
+
 function _doBuy(arg) {
   const r = _room();
   // The Vic's kitchen: Aoy advertises it with an order pad in her hand, and it
@@ -3965,6 +3972,9 @@ function _doBuy(arg) {
       return;
     }
     if (G.money < LADY_DRINK) { _say(_fmt("Lady drinks are ฿{p}. You have ฿{m}. The math is not on your side.", { p: LADY_DRINK, m: G.money })); return; }
+    // At the bar you OWN, the drink rings through your OWN till instead of
+    // vanishing (Ronnie, 2026-08-26: ฿150 left the pocket, credited ฿0, gone from
+    // the ecosystem). _ladyDrinkCharge does both sides.
     // she's already sitting with someone: a polite decline first, then — if you insist —
     // she takes it and her customer starts to turn.
     // A girl you FORCED a drink past her decline stays CONTESTED all night: her
@@ -3975,7 +3985,7 @@ function _doBuy(arg) {
     // (optimizer playtest, 2026-08-22). Now every further drink re-rolls the
     // boil-over the warning promised.
     if (G.soc.contested && G.soc.contested[id]) {
-      G.money -= LADY_DRINK;
+      _ladyDrinkCharge();
       _addBond(id, 1);
       _say(`${NPCS[id].name} takes it — quicker this time, not looking at the man beside her, ` +
         `which is its own kind of looking. (฿${G.money} left.)`);
@@ -3988,7 +3998,7 @@ function _doBuy(arg) {
       const insisting = (id in G.soc.declined) && G.turns - G.soc.declined[id] <= 30;
       if (!insisting) { G.soc.declined[id] = G.turns; _say(_pickVary(_BUSY_DECLINE, "busyd")(NPCS[id].name)); return; }
       delete G.soc.declined[id];
-      G.money -= LADY_DRINK;
+      _ladyDrinkCharge();
       _addBond(id, 1);
       (G.soc.contested = G.soc.contested || {})[id] = true; // the man remembers
       _say(`${_pickVary(_BUSY_INSIST, "busyi")(NPCS[id].name)} (฿${G.money} left.)`);
@@ -3996,7 +4006,7 @@ function _doBuy(arg) {
       _poachAnger(id);
       return;
     }
-    G.money -= LADY_DRINK;
+    _ladyDrinkCharge();
     // a lazy girl banks the drink but rarely the warmth — favor sticks only ~40%.
     // (only lazy girls consume the extra die, so nothing else's determinism moves.)
     const _lazy = NPCS[id].type === "lazy";

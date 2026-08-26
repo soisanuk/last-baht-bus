@@ -783,3 +783,52 @@ was told the other's lens; both independently reached "the season doesn't reach
 the room" and both flagged the owner-treated-as-walk-in. When two drives with
 different search strategies land on the same structural claim, it's structural,
 not taste — and the fix (patron thinning) served both at once.
+
+---
+
+# Round 28 — the verification run (Ronnie, Fable, patched bar-owner build, 2026-08-26)
+
+A fresh publican (Cornish, ran bars on three continents) on the build patched by
+rounds 27 + the guv'nor/depth pass, briefed as a VERIFICATION run: confirm each
+prior fix HONESTLY from real play, and catch anything the fixes broke or missed.
+
+## Confirmed FIXED (disproofs — the point of the run)
+- **The season reaches the room:** patron thinning verified live (23/24 out in
+  peak vs 7/24 deep-low); the empty-bar monsoon register FIRED at a dead Blue Dog.
+- **The books read true:** reconciled to the baht over 30+ nights — no "฿-4 in",
+  the ฿40k monthly on the RIGHT morning, "down ฿X on the night" clean of it, a
+  visibly-negative till instead of a lie.
+- **Procurement is a real trade both ways** (accept bills `proc`, refuse adds
+  friction that fired as weather); **owner greetings + pitch redirect + gated
+  flattery** all hold; **floor beats never retold in 6 nights**; **WEATHER bridges
+  the two clocks** both directions.
+
+## Fixed this round
+| # | Finding | Fix |
+|---|---|---|
+| R1 (**worst**) | `_doBarfine` had no own-bar guard — you could barfine your own employee (contradicting the mamasan's line); a lady drink for your own girl left your pocket and credited ฿0 (money gone from the economy) | own-bar guard on `_doBarfine` (`_OWN_BARFINE_NO`); `_ladyDrinkCharge` rings the drink into your own till |
+| R2 (prose contradiction) | `_BAR_REGULAR` anonymous crowd printed every barType describe, all seasons — a crowd two lines above "the room belonged to nobody" | `_BAR_THIN` fires when `_lowSeason() && !_patronsHere()`; the furniture thins with the bench |
+| R3a (retell) | The peddler arrival pitch was ONE fixed string, up to 3×/night | pooled `_PEDDLER_PITCH` (4) |
+| R3b (retell) | Saleng vignettes shallow (`_default` was a pool of ONE — always verbatim) | deepened food/shoes/snacks 3→6, `_default` 1→4, lingerie 3→5 |
+| R3c (retell) | Drizzle pool (4) cycled fast now that rain is season-linked | `_DRIZZLE_BAR` 4→8 |
+| R (register) | The empty-bar "dead" register fired while a saleng cart was being swarmed | dead-check now excludes `_salengHere()` |
+
+## Recorded, not fixed (a nit, Ronnie's own words)
+- The hotel folio prints "฿X left" before the settle/monthly deducts, so on a
+  heavy morning the on-screen pocket figure is stale by up to ~฿19k two lines
+  later. Ronnie: "the header and subsequent math are correct; nothing double-
+  charged." A display-ordering cosmetic; reordering the wake sequence carries more
+  risk than the nit warrants. Left as a known nit.
+
+**Overall (Ronnie's verdict):** "Owning this bar now holds up through a turning
+year… the books never once lied to me in 30 nights, which is more than I can say
+for two real bars I've owned." The verification round found the endgame solid and
+its remaining issues cosmetic/depth — exactly what a fourth-run-on-a-patched-build
+is supposed to establish. 1172 vm + 45 e2e green.
+
+**Method note: a VERIFICATION persona is a distinct instrument from a discovery
+one.** Ronnie was briefed to confirm specific prior fixes, not roam — and that
+structure is what surfaced R1 (he typed BARFINE at his own girl *because he was
+checking the owner-blindness claim*, and found the one channel the gate missed).
+A discovery persona wanders; a verification persona pressure-tests the patch along
+the exact seams the last round moved.

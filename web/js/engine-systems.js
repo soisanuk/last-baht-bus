@@ -489,6 +489,14 @@ function _doBarfine(arg) {
     }
   }
   const rm = _room();
+  // The bar you OWN: these are your staff, and a barfine is a fee paid to the
+  // bar — you'd be paying yourself. The verb quoted a fine for the owner's own
+  // employee, flatly contradicting his mamasan's "cannot barfine your own bar"
+  // (Ronnie, 2026-08-26). It's not a transaction here; it's the relationship layer.
+  if (typeof _atOwnBar === "function" && _atOwnBar()) {
+    _say(_pickVary(_OWN_BARFINE_NO, "ownbf"), "alert");
+    return;
+  }
   // the Orchid Room's women are the power players' — you're here for a meeting, not to shop
   if (G.room === "orchid_room") { _say(_pickVary(_ORCHID_NOTOUCH, "orchidno"), "alert"); return; }
   if (rm.hostBar) { _doHire(arg); return; }
@@ -3687,6 +3695,18 @@ const _DRIZZLE_BAR = [
   "The awning starts to drum. A girl reaches out without looking and drags the " +
     "sandwich board in by one corner, mid-sentence, mid-laugh — the soi's reflexes " +
     "are older than she is.",
+  "The gutter out front starts to run. One of the girls swaps her heels for the " +
+    "flip-flops she keeps behind the bar for exactly this, without breaking off her " +
+    "story, and carries on barefoot-adjacent and entirely unbothered.",
+  "A warm drizzle beads on the neon and makes the whole front of the bar glow " +
+    "softer. The mama sends a boy for the good umbrella — not for the customers, " +
+    "for the sound system — and the night carries on underneath it.",
+  "Rain feathers down, just enough to send the smokers back under the awning. For " +
+    "a few minutes the bar is fuller than it was, everyone driven in off the kerb, " +
+    "and the takings tick up for reasons the weather app would never predict.",
+  "It starts to spit, and a hostess tips her face up into it for one second before " +
+    "she remembers her make-up and ducks back under, laughing at herself. The stools " +
+    "come in around her while she does.",
 ];
 function _sayDrizzle() {
   const alt = G.turns % 2 === 0; // variant by parity — no dice for flavor
@@ -3696,6 +3716,7 @@ function _sayDrizzle() {
     // wrong; the event is the emptiness. Atmosphere only, no drama by rule.
     const _talking = typeof _convoActive === "function" && !!_convoActive();
     const dead = typeof _patronsHere === "function" && !_patronsHere().length && !_talking &&
+      !(typeof _salengHere === "function" && _salengHere()) &&  // a cart the girls are swarming: not a dead room (Ronnie, 2026-08-26)
       !(typeof _barSpendTonight === "function" && _barSpendTonight(G.room)); // you just bought a round: not dead
     if (dead && _room().barType === "beer") {
       const staff = _npcsHere().filter(n => NPC_ROLES[n] === "hostess").length;

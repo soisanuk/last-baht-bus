@@ -79,24 +79,40 @@ const _SALENG_VIGNETTES = {
     "{g} leans out the window and haggles the driver down two baht on principle, then buys skewers for half the rail.",
     "{g} feeds a strip of moo ping to the girl beside her, who delivers the verdict — more chilli — with her mouth full.",
     "The driver hands {g} a bag of noodles she didn't quite pay for; she promises to settle 'next time', and everyone knows what that means.",
+    "{g} lines up four bags of grilled squid on the bar and appoints herself quartermaster, rationing tentacles by seniority.",
+    "The cart's fish-ball skewers go round the rail; {g} eats two, declares the second one better, and buys a third to be sure.",
+    "{g} douses a bag of sticky rice in so much nam jim the new girl gasps, which is exactly the reaction {g} was buying.",
   ],
   shoes: [
     "{g} kicks off her heels right there and tries the gold platforms, walking a catwalk length of sticky floor to a chorus of opinions.",
     "Two of the girls are arguing sizes over the sandals; {g} settles it by buying both pairs and sorting it out later.",
     "{g} holds a pair of sequinned flats up to the neon, unconvinced, then buys them anyway.",
+    "{g} finds a pair of heels a full size too small and buys them on faith, on the theory that feet are negotiable and the colour isn't.",
+    "The driver has a knock-off of a shoe {g} has wanted for a year; she photographs it, sends it to somebody, and buys it before the reply comes.",
+    "{g} makes a rival hostess try on the ugly wedges 'just to see', films the result, and is still laughing about it an hour later.",
   ],
   snacks: [
     "{g} orders her som tam 'phet phet phet' and dares the new girl to match her, the pestle thudding in agreement.",
     "{g} passes a bag of cut mango down the bar, keeping the sweetest slice for herself as commission.",
     "The whole rail is suddenly eating som tam out of one shared bag, and {g} is somehow in charge of it.",
+    "{g} buys a bag of tamarind sweets and pays for it entirely in coins she counts out with theatrical suffering.",
+    "The cart has the good sticky-rice-and-mango tonight; {g} knows it, buys three, and hides one behind the till for later.",
+    "{g} splits a durian with the mama over the punters' faint horror, the two of them eating it with the serene cruelty of women who like the smell.",
   ],
-  _default: ["{g} drifts over to the saleng, buys something small, and drifts back richer in gossip."],
+  _default: [
+    "{g} drifts over to the saleng, buys something small, and drifts back richer in gossip.",
+    "{g} circles the cart twice, buys nothing, learns everything, and reports it all to the rail.",
+    "{g} haggles the driver on principle over something she was always going to buy, and both of them enjoy it.",
+    "Whatever the cart's selling tonight, {g} has an opinion about it, and by the time she's back at the bar so does everyone else.",
+  ],
 };
 // Lingerie is its own scene — the whole bar turns it into a show for the punters.
 const _SALENG_LINGERIE_SCENE = [
   "The girls swarm the lingerie line in a giggling scrum, holding lace up against each other and turning to pose at the rail — the customers are the mirror they're using. One drapes a slip across your shoulder, delighted, before her friend snatches it back.",
   "Two of them have turned the saleng into a fashion show, striking increasingly theatrical poses at the punters with each new slip. Nobody at the bar is pretending to watch the football any more.",
   "A bra is held up, then held up against you for scale, to shrieks of laughter; the girls model the better pieces down the bar with the straight-faced confidence of women who know exactly what the room is worth.",
+  "A negligee comes off the rail and goes straight over a hostess's work dress, and she works the length of the bar in it collecting reviews like tips, which — for the next ten minutes — they basically are.",
+  "The mamasan prices the whole cart at a glance, talks the driver down in front of an admiring audience, and buys the best two pieces for the girls she likes best, which everyone notes and nobody says.",
 ];
 
 // Pooled with a one-deep no-repeat memory, keyed per cart type — the repo prose
@@ -431,6 +447,26 @@ const _PEDDLER_PX = {
   full: { watch: 300, shades: 150, vits: 200 },
   deal: { watch: 200, shades: 100, vits: 120 },
 };
+// The arrival pitch is pooled — a Beach Road bar draws a peddler up to a few
+// times a night, and the identical sentence each time read like a stuck record
+// (Ronnie, 2026-08-26). Picked once at arm-time so the _encPrompt stash redraws
+// the same one.
+const _PEDDLER_PITCH = [
+  "A peddler drifts in off the street with a display board of watches, a fan of " +
+    "sunglasses, and — produced from an inner pocket with a meaningful eyebrow — " +
+    "certain 'vitamins'. He stations himself at your elbow, patient as weather.",
+  "A board of watches materialises at your shoulder, then the man behind it. He " +
+    "tilts the 'Rolexes' to catch the neon, flicks open a fan of shades, and pats " +
+    "the pocket that holds the 'vitamins' — the whole catalogue in three gestures, " +
+    "no words wasted.",
+  "\"Boss. Boss.\" The peddler is already beside you before the second boss, board " +
+    "angled, watches gleaming, sunglasses fanned in his other hand and the little " +
+    "blue-diamond strip of 'vitamins' waiting in the wings. He has all night. He " +
+    "wants you to know he has all night.",
+  "One of the Beach Road regulars works down the stools with his board — watches, " +
+    "shades, and the pharmaceutical sideline he saves for the eye contact. He gives " +
+    "you a nod that says he's sold to men like you before and settles in at your elbow.",
+];
 
 const _ENC = {
   flower(input) {

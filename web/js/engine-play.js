@@ -1813,6 +1813,14 @@ const _ORCHID_NOTOUCH = [
     "to — and a walk-up putting a hand out in HERE is a category error the whole room notes " +
     "at once. You came for a meeting. Act like it.",
 ];
+// BARFINE at the bar you OWN: a fine paid to the bar is a fine paid to yourself.
+// The girls are staff, not stock; if there's a courtship it goes through the
+// relationship layer, not the till.
+const _OWN_BARFINE_NO = [
+  "Barfine one of your own girls? The fine goes to the bar. You own the bar. You would be handing money from one pocket to the other and Lamai would watch you do it with an expression you'd never live down. If you like one of them, you're the boss — you talk to her, same as anyone, and see where it goes. There is no docket for that.",
+  "There's no barfine to pay here, squire — it's your bar, they're your staff, and the fee is a fee to yourself. That's not how it works from this side of the rail. A girl who works for you isn't shopped for; if there's something there, it's the long way round, the same as it would be for any regular. Off the clock, not off a docket.",
+  "You catch yourself and stop. These are your employees, and \"barfining\" one is just moving your own money in a circle while the whole floor pretends not to notice. Whatever this is, it isn't a transaction — not at your own bar. Talk to her like a person; the rest is between the two of you.",
+];
 
 function _doSocial(kind, targetWord) {
   // not a pickup room — the girls are the power players', and you're here on business

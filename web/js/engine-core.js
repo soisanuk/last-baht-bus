@@ -1442,6 +1442,15 @@ const _BAR_REGULAR_BUSY = [
   g => _fmt("A red-faced fixture works the far stools{g}, mid-story, mid-myth; whatever that is, it isn't yours to join.", { g }),
   g => _fmt("At the far end a regular reigns{g} — the sort of scene you watch from across the bar, not one you walk into.", { g }),
 ];
+// Low season, the rail thinned (no named regulars in): the anonymous crowd would
+// contradict the empty room the season just emptied (Ronnie, 2026-08-26 — "a
+// red-faced fixture works the far stools" printed two lines above "the room
+// belonged to nobody"). The far end is where nobody is.
+const _BAR_THIN = [
+  "The far stools are empty tonight — the regulars who'd usually be welded to them are home, or wherever the low season sends them. The bar feels bigger and quieter than it should.",
+  "Nobody's holding down the corner stool. In season there'd be a lifer there holding forth; tonight it's just the stool, and the fan turning over it.",
+  "The rail runs mostly to bare wood down the far end. A hostess or two, the mama, and a lot of stools nobody's paying to sit on. Low season does this.",
+];
 
 // Where the dog actually settles. Keyed on what the room IS rather than on
 // whether it happens to carry a `bar` display name, which put him at your heel
@@ -1687,7 +1696,14 @@ function _describeRoom(full, forceFull) {
     _say(c.here + " " + c.hint, "dim");
   }
   if (r.barType) {
-    if (G.soc.patronBusy[G.room]) {
+    // The season reaches the FURNITURE too: an emptied low-season rail (no named
+    // regulars in) gets the thinned line, not the anonymous crowd — which would
+    // otherwise disagree with the empty-bar register on the same screen.
+    const _thin = typeof _lowSeason === "function" && _lowSeason() &&
+      typeof _patronsHere === "function" && !_patronsHere().length;
+    if (_thin) {
+      _say(_pickVary(_BAR_THIN, "barThin"), "dim");
+    } else if (G.soc.patronBusy[G.room]) {
       // name the SAME girl the snipe-jealousy keys on (parser); legacy `true`
       // falls back to the first hostess present
       const busyId = G.soc.patronBusy[G.room];
@@ -1864,9 +1880,7 @@ function _tick() {
     G.lastPeddler = G.turns;
     G.pendingEnc = "peddler";
     _encPrompt(
-      ["A peddler drifts in off the street with a display board of watches, a fan " +
-        "of sunglasses, and — produced from an inner pocket with a meaningful eyebrow " +
-        "— certain 'vitamins'. He stations himself at your elbow, patient as weather.", "alert"],
+      [_pickVary(_PEDDLER_PITCH, "peddlerPitch"), "alert"],
       ["(WATCH ฿300 · SUNGLASSES ฿150 · VITAMINS ฿200 · or NO.)", "dim"]);
   }
   // the ซาเล้ง (mobile bar cart) — a fixture for the girls, not a modal gate:

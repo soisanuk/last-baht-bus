@@ -911,6 +911,8 @@ test("at your own bar, your staff talk to you as the guv'nor, not a customer", (
   // girls; a hostess asked her employer "first time Pattaya?". Owner register now.
   running();
   G.bar.room = "stinky_bar"; G.room = "stinky_bar";
+  G.lastSaleng = 99999; G.lastPeddler = 99999;   // keep ambient tick prose out of the assertions
+  Object.keys(ENCOUNTERS).forEach(k => { G.encDone[k] = true; });
   const mama = _npcsHere().find(id => NPCS[id].filler && NPC_ROLES[id] === "mamasan");
   assert.ok(mama, "your bar has a filler mamasan");
   G.soc.drinks[mama] = 0;                         // non-bonded — the customer-register case
@@ -922,12 +924,34 @@ test("at your own bar, your staff talk to you as the guv'nor, not a customer", (
   // asking her to line you up with a girl is a category error at your own bar
   out = []; doCommand("ask " + mama + " about girls");
   assert.doesNotMatch(out.join("\n"), /introduce you proper/i, "no pitching the owner his own girls");
-  assert.match(out.join("\n"), /your (own )?bar|work for YOU|owner|your till|cannot barfine your own/i,
-    "she names the absurdity instead");
+  assert.match(out.join("\n"), /work for YOU|cannot barfine your own|pay their wage|no fine to pay yourself|your own business/i,
+    "she names the absurdity instead (any _OWNER_PITCH variant)");
   // …but a personal topic still lands normally — an owner asks after her family
   out = []; doCommand("ask " + mama + " about family");
   assert.match(out.join("\n"), /\S/, "personal topics fall through to her real dialogue");
   assert.doesNotMatch(out.join("\n"), /boss|your own bar/i, "and are NOT hijacked by the owner register");
+});
+
+test("you cannot barfine your own staff, and a lady drink rings through your own till", () => {
+  // Ronnie, 2026-08-26: BARFINE MANOW at the bar you own quoted a fine for your
+  // own employee (contradicting the mamasan's own line), and a ฿150 lady drink
+  // left your pocket and credited ฿0 — money gone from the economy.
+  running();
+  G.bar.room = "stinky_bar"; G.room = "stinky_bar"; G.bar.cash = 0; G.money = 5000;
+  G.lastSaleng = 99999; G.lastPeddler = 99999;   // no cart/peddler prices bleeding into the assertion
+  Object.keys(ENCOUNTERS).forEach(k => { G.encDone[k] = true; });
+  const her = _npcsHere().find(id => NPC_ROLES[id] === "hostess");
+  assert.ok(her, "your bar has a hostess");
+  out = []; doCommand("barfine " + her);
+  assert.doesNotMatch(out.join("\n"), /฿\s*\d{3,}|short time|long time|lady drink.*bar ?fine/i,
+    "no fine is quoted for your own employee");
+  assert.match(out.join("\n"), /your (own )?bar|your staff|no barfine|no docket/i, "she names why not");
+  // the lady drink stays inside the ecosystem: pocket -N, till +N
+  G.soc.patronBusy = {}; G.soc.contested = {}; G.soc.declined = {};  // she isn't sitting with a customer for this check
+  const p0 = G.money, t0 = G.bar.cash;
+  out = []; doCommand("buy " + her + " drink");
+  assert.equal(p0 - G.money, LADY_DRINK, "it leaves your pocket");
+  assert.equal(G.bar.cash - t0, LADY_DRINK, "…and rings into your own till, not the void");
 });
 
 test("the owner register is scoped: at a bar you DON'T own, staff sell as ever", () => {

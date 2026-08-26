@@ -6811,6 +6811,31 @@ test("light rain is atmosphere only: vignettes, dialogue, zero mechanics", () =>
   }
 });
 
+test("low season thins the FURNITURE too: an emptied rail gets the thin line, not a crowd", () => {
+  // Ronnie, 2026-08-26: the anonymous _BAR_REGULAR crowd printed on every bar
+  // describe in all seasons, contradicting the empty-bar register two lines above
+  // it in a dead September room. The season reaches the furniture now.
+  state().flags.act1Done = true;
+  // a beer bar with no patrons out on this deep-low night
+  state().season0 = 8; state().day = 3;   // September, deep low
+  let bar = null;
+  for (const rid of Object.keys(ROOMS)) {
+    if (ROOMS[rid].barType === "beer" && !Object.keys(PATRONS).some(id => _patronRoom(id) === rid)) { bar = rid; break; }
+  }
+  assert.ok(bar, "found a beer bar the low season emptied");
+  state().room = bar;
+  out = []; _describeRoom(true);
+  const low = out.join("\n");
+  assert.doesNotMatch(low, /welded to the bar|holds court|red-faced fixture|holds forth|weathered faces/i,
+    "no anonymous crowd in the emptied trough bar");
+  assert.match(low, /far stools are empty|corner stool|bare wood|Low season does this/i, "the thinned line instead");
+  // high season: the crowd is back
+  state().season0 = 11; state().day = 1;   // December, peak
+  out = []; _describeRoom(true);
+  assert.match(out.join("\n"), /welded|holds court|fixture|holds forth|weathered faces|drones on/i,
+    "the crowd returns in season");
+});
+
 test("WEATHER names the season, and it tracks the month", () => {
   state().season0 = 11; state().day = 1;   // December
   out = []; run("weather");
