@@ -115,6 +115,17 @@ const _SOI6_BOUND = [
   "One week, one street: those were the terms. Pattaya can wait. Back into Soi 6.",
   "You could. You don't. For seven days Soi 6 is the entire world by your own decree — and there's plenty of world left in it.",
 ];
+// The Orchid CLUB (Naklua, an ordinary if exclusive gents villa) is a different
+// room from the Orchid ROOM below (White Dish's back table) — same name-root,
+// unrelated canon. "Tourists never find it. That is the entire point" is the
+// venue's own desc, so a bare compass exit that walked anyone straight in
+// undercut its one piece of characterisation. Reachable only once vouched or
+// told (orchidVouched/orchidReported — same flags the "Step inside:" listing
+// already filters on; this closes the other half, actual entry).
+const _ORCHID_CLUB_UNKNOWN = [
+  "You don't know a door like that exists along here, and neither does anyone you'd think to ask. High walls the whole way down; this is just one more of them.",
+  "There's nothing on this road by that name, not that you've heard — and you've asked around enough by now to know when you haven't heard something.",
+];
 const _ORCHID_BOUNCER = [
   "A man the size of a doorway fills the doorway. He doesn't ask a question; he just looks at you until you understand the answer. \"Members,\" he says, once. You are not, yet, a member.",
   "The velvet rope stays hooked. The doorman glances at a phone, glances at you, and finds no match. \"Not tonight, boss.\" The 'boss' is doing a lot of work, and none of it is for you.",
@@ -431,6 +442,9 @@ function _arriveAt(to) {
   // lifts for a friend of the group (Gavin's "doors open for our friends"). Do the
   // errand, earn the standing, get in. It's also the one place Ryan Powers ever is.
   if (to === "orchid_room" && _faction("wdg") < 2) { _say(_pickVary(_ORCHID_BOUNCER, "orchidrope")); return; }
+  if (to === "orchid_club" && !_flag("orchidVouched") && !_flag("orchidReported")) {
+    _say(_pickVary(_ORCHID_CLUB_UNKNOWN, "orchidclubunknown")); return;
+  }
   // closed for the night? (also covers fast-travel, which skips the doGo gate)
   if (_closedNow(to)) { _say(_closedMsg(to)); return; }
   // barred from a queer venue (no barType, so the bar-ban block below misses it):

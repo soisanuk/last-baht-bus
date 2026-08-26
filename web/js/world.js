@@ -3583,7 +3583,9 @@ const ROOMS = {
       "soi — half the letters out, so it reads 'SA AI PA MS', which the long-stay " +
       "guests consider part of the charm. The soi itself is dark as a power cut. " +
       "East, a quiet BAR CORNER of expat beer bars glows low; a SPA ROW of massage " +
-      "and soapland fronts runs off the other way.",
+      "and soapland fronts runs off the other way. A high wall a little further on " +
+      "gives nothing away — no sign, just a brass bell.",
+    venues: ["orchid_club"],
     busStop: "beachrd",
     reads: {
       sign: "The SABAI PALMS sign, up close: half its letters dark, so the soi announces " +
@@ -3591,7 +3593,7 @@ const ROOMS = {
         "long-stay guests petitioned AGAINST it, and management — reading the room " +
         "correctly for once — left the dead letters dead. It's not broken. It's an address.",
     },
-    exits: { s: "dolphin", n: "hotel_soi", w: "orchid_club", e: "naklua_bars", spa: "naklua_massage" },
+    exits: { s: "dolphin", n: "hotel_soi", e: "naklua_bars", spa: "naklua_massage" },
   },
   naklua_bars: {
     name: "Naklua (Bar Corner)",
@@ -3600,10 +3602,11 @@ const ROOMS = {
       "and know every customer's pour by five. No neon war up here — just fairy lights, a " +
       "sea breeze off the old fishing harbour, and the clack of a single pool table. THE " +
       "ANCHOR BAR, DOLPHIN BAR, and THE MOORING share the corner and most of the regulars. " +
-      "Further east — the map calls this lane Naklua Soi 31, nobody who drinks here does — " +
+      "Further along — the map calls this lane Naklua Soi 31, nobody who drinks here does — " +
       "where the fairy lights give out and the lane goes dark, one more sign buzzes on its " +
       "own current: THE WHITE RABBIT, which shares neither.",
-    exits: { w: "naklua_rd", in: "anchor_bar", n: "dolphin_bar", s: "mooring_bar", e: "white_rabbit" },
+    venues: ["anchor_bar", "dolphin_bar", "mooring_bar", "white_rabbit"],
+    exits: { w: "naklua_rd" },
   },
   anchor_bar: {
     name: "The Anchor Bar",
@@ -3681,7 +3684,8 @@ const ROOMS = {
       "soapland towers and clean traditional shopfronts side by side. NAKLUA TRADITIONAL " +
       "MASSAGE glows honest white; LOTUS OIL MASSAGE leaks pink and cold air; and the " +
       "EMPEROR looms four floors over the lot, a fish tank behind one-way glass.",
-    exits: { s: "naklua_rd", in: "naklua_thai", n: "lotus_oil", up: "emperor_soapy" },
+    venues: ["naklua_thai", "lotus_oil", "emperor_soapy"],
+    exits: { s: "naklua_rd" },
   },
   naklua_thai: {
     name: "Naklua Traditional Massage",

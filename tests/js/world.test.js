@@ -474,9 +474,6 @@ test("a venue door on a compass point is named in the room's prose", () => {
   // Allow-list, each with a reason — same discipline as the direction lint and
   // the reference lint's OK set: a named exception, never a looser matcher.
   const OK = new Set([
-    // Deliberately unfindable: "you don't find the Orchid, you get sent" is the
-    // whole point of the venue (see the factions doc). HINT names the district.
-    "naklua_rd: w → The Orchid Club",
     // Soi Honey's two massage houses ARE the street's description ("shophouse
     // after shophouse of them"); naming two of the dozen would mislead worse.
     "soi_honey_w: s → Honeycomb Massage",

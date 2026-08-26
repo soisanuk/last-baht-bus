@@ -4721,7 +4721,8 @@ test("midnight closing: gents clubs and Soi 6 shut, the town runs on", () => {
   assert.equal(state().room, "naklua_rd", "shuttered and walked out to the street");
   assert.match(lastOut(), /gentleman's hours|draws its shutters/i);
   // and you can't get back in
-  out = []; run("go w");
+  state().flags.orchidVouched = true;    // the closed-hours gate is this test's subject, not the vouch
+  out = []; run("enter orchid club");    // venues[], 2026-08-27 — no more "go w"
   assert.equal(state().room, "naklua_rd");
   assert.match(lastOut(), /dark and bolted|gentleman's hours/i);
 
@@ -4739,8 +4740,9 @@ test("midnight closing: gents clubs and Soi 6 shut, the town runs on", () => {
 
 test("midnight closing: walking in during last call gets the warning + barfine nudge", () => {
   state().flags.act1Done = true; state().flags.hasWallet = true;
+  state().flags.orchidVouched = true;    // the club itself isn't this test's subject
   state().room = "naklua_rd"; state().nightTurn = 57; // 23:42 — last half hour
-  out = []; run("go w");                 // into the Orchid Club
+  out = []; run("enter orchid club");    // venues[], 2026-08-27 — no more "go w"
   assert.equal(state().room, "orchid_club", "you get in — it's not midnight yet");
   assert.match(lastOut(), /Last call|half an hour|BARFINE/i, "warned on arrival");
 });
