@@ -826,6 +826,41 @@ test("the nightly cost splits into nut, stock and wages — and a dead night is 
   assert.ok(lean.costs < fat.costs, "an empty bar is cheaper to run than a busy one");
 });
 
+test("the season is the real month at arrival, advancing forward from G.day", () => {
+  // The frontend seeds G.season0 off the wall clock (rule #1 kept: the engine
+  // never reads a clock, it reads season0); the month then advances one per
+  // SEASON_MONTH_DAYS of G.day, so you live forward through the year you arrived in.
+  becomeExpat();
+  G.season0 = 10;                 // arrived in November
+  G.day = 1;  assert.equal(_seasonMonth(), 10, "day 1 is the arrival month");
+  G.day = 30; assert.equal(_seasonMonth(), 10, "still November at the end of the first month");
+  G.day = 31; assert.equal(_seasonMonth(), 11, "into December a month on");
+  G.day = 61; assert.equal(_seasonMonth(), 0, "January, and the year rolls over cleanly");
+  // an old save with no season0 falls back to the clockless default, never NaN
+  delete G.season0;
+  assert.equal(_season0(), SEASON_DEFAULT_M0, "a save without the field uses the default month");
+  assert.ok(Number.isFinite(_seasonTakings()), "and the multiplier is always a real number");
+});
+
+test("the season grades the takings: peak boom, deep-low trough, the same rail between", () => {
+  // The year's shape (SEASON_MULT) applied to the till. Pin the month via
+  // season0 + day and average out the swing so the tiers compare cleanly.
+  running();
+  const meanTake = (m0, day) => {
+    G.season0 = m0; let sum = 0;
+    for (let i = 0; i < 200; i++) { G.rng = 1000 + i; G.day = day; G.bar.workedLast = true; G.bar.workedDay = day; sum += _barNight().take; }
+    return sum / 200;
+  };
+  const peak = meanTake(11, 5);      // December, ×1.10
+  const high = meanTake(10, 5);      // November, ×1.00 (the audited baseline)
+  const low  = meanTake(6, 5);       // July, ×0.72
+  const deep = meanTake(8, 5);       // September, ×0.55
+  assert.ok(peak > high && high > low && low > deep, "a monotonic year: peak > high > low > deep-low");
+  // the endpoints track the multipliers, not just the ordering
+  assert.ok(deep / high < 0.62 && deep / high > 0.48, `deep-low is roughly the 0.55 trough (${(deep / high).toFixed(2)})`);
+  assert.ok(peak / high > 1.05 && peak / high < 1.15, `peak is the modest boom (${(peak / high).toFixed(2)})`);
+});
+
 test("a night away costs you money, which is what makes standing the rail a choice", () => {
   running();
   G.rng = 77; let W = 0, A = 0;

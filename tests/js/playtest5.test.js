@@ -1857,22 +1857,33 @@ test("her whole night is priced like one: bond decides willingness, season decid
   // short so she can go back to work. She gives you the full night because she
   // likes you (regular+: plain LT; her-farang: waived) or because the payout
   // makes her whole (design call 2026-08-25).
+  // The season premium is now GRADED (SEASON_PARTY_BUMP): the fuller the rail,
+  // the dearer her whole night. Pin the month via G.season0 (day 5 → month ===
+  // season0), and read the tier straight off the same helper the engine uses.
   _bigNight();
-  const lowDay = 65, highDay = 5;   // _lowSeason: day/30 % 4 === 2
-  G.day = highDay;
-  assert.ok(!_lowSeason(), "day 5 is high season (or retune this test)");
-  G.soc.drinks.lek = 0;
-  assert.equal(_partyPrice("lek", 700), Math.round(700 * 2.5 / 50) * 50, "stranger, full rail: the full buyout");
-  G.soc.drinks.lek = 5;
-  assert.equal(_partyPrice("lek", 700), 700 * 2, "a face pays less, but the math still exists");
-  G.soc.drinks.lek = 8;
-  assert.equal(_partyPrice("lek", 700), 700, "a regular gets the night because she wants the night");
-  G.day = lowDay;
-  assert.ok(_lowSeason());
-  G.soc.drinks.lek = 0;
-  assert.equal(_partyPrice("lek", 700), Math.round(700 * 1.5 / 50) * 50, "empty rail: a sure night beats a bare stool");
-  G.soc.drinks.lek = 5;
-  assert.equal(_partyPrice("lek", 700), 700, "low-season face: no premium left");
+  G.day = 5;
+  const price = mult => Math.max(700, Math.round(700 * mult / 50) * 50);
+  const at = (m0, tier) => { G.season0 = m0; assert.equal(_seasonTier(), tier, `month ${m0} is ${tier}`); };
+
+  at(11, "peak");   // December — the winter-holiday boom, the rail two-deep
+  G.soc.drinks.lek = 0; assert.equal(_partyPrice("lek", 700), price(2 + 0.75), "peak stranger: the steepest buyout");
+  G.soc.drinks.lek = 5; assert.equal(_partyPrice("lek", 700), price(1.5 + 0.75), "peak face: still a premium");
+  G.soc.drinks.lek = 8; assert.equal(_partyPrice("lek", 700), 700, "a regular gets the night because she wants the night — season no object");
+
+  at(10, "high");   // November — cool season proper (the 1.0 baseline)
+  G.soc.drinks.lek = 0; assert.equal(_partyPrice("lek", 700), price(2 + 0.5), "high stranger: the classic full buyout");
+  G.soc.drinks.lek = 5; assert.equal(_partyPrice("lek", 700), price(1.5 + 0.5), "high face");
+
+  at(3, "shoulder"); // April — hot season, no premium either way
+  G.soc.drinks.lek = 0; assert.equal(_partyPrice("lek", 700), price(2 + 0), "shoulder stranger: the flat buyout, no season loading");
+
+  at(6, "low");     // July — monsoon in, a sure night beats a bare stool
+  G.soc.drinks.lek = 0; assert.equal(_partyPrice("lek", 700), price(2 - 0.5), "low stranger: the discount begins");
+  G.soc.drinks.lek = 5; assert.equal(_partyPrice("lek", 700), 700, "low face: no premium left");
+
+  at(8, "deeplow"); // September — the deep trough, the keenest discount
+  G.soc.drinks.lek = 0; assert.equal(_partyPrice("lek", 700), price(2 - 0.75), "deep-low stranger: the floor of the premium");
+
   assert.equal(_partyPrice("lek", 0), 0, "the past-midnight waiver stands — her earning night is over anyway");
 });
 

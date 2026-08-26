@@ -58,6 +58,17 @@ test("boots from file:// and round-trips a typed command", async ({ page }) => {
   await expect(out).toContainText("❯ look");
   expect(await out.locator("div").count()).toBeGreaterThan(before);
 
+  // The wall-clock season seed is the one bit of season wiring the node:vm suite
+  // can't reach — it lives in main.js's boot path (_seedSeason reads new Date()).
+  // Confirm it fired: G.season0 is the real current month, and WEATHER names it.
+  const season = await page.evaluate(() => ({
+    season0: G.season0,
+    realMonth: new Date().getMonth(),
+    tier: _seasonTier(),
+  }));
+  expect(season.season0).toBe(season.realMonth);
+  expect(["peak", "high", "shoulder", "low", "deeplow"]).toContain(season.tier);
+
   // No uncaught exceptions during boot or the command.
   expect(pageErrors).toEqual([]);
 });

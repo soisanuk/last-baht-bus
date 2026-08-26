@@ -85,6 +85,15 @@ function _shelvedLine() {
   } catch (e) { return "a night"; }
 }
 
+// Wall-clock season anchor: the engine never reads a clock (shared-world rule 1),
+// so the real calendar month is captured HERE at game creation and handed to the
+// engine as G.season0. You arrive in the real current season — book a December
+// trip, land in the peak; a September one, land in the monsoon — and the engine
+// advances the months forward from G.day. It's a plain G field, so it persists
+// in the save and a restore keeps the season you started; only a fresh game
+// re-reads the calendar.
+function _seedSeason() { if (typeof G !== "undefined" && G) G.season0 = new Date().getMonth(); }
+
 function _showStartMenu() {
   // Fresh-start gateway (boot with no save, RESET, or continue→NO): clear any
   // in-memory state so a full RESET actually re-runs character creation (the taxi
@@ -93,6 +102,7 @@ function _showStartMenu() {
   // Queen Vic. (The automatic in-game resets — _act1Fail, new week — still keep
   // identity on purpose; this only affects the explicit fresh-start paths.)
   newGame();
+  _seedSeason();
   const ov = document.getElementById("start-overlay");
   if (!ov) { engineIntro(); _autosave(); _term.renderChips(); return; } // safety net
   document.getElementById("start-menu").hidden = false;
@@ -226,6 +236,7 @@ function _startFull() {
   _dropShelf();          // starting a night lets the shelved one go, as offered
   _dropUndo();           // …and a new night has nothing behind it to rewind to
   newGame();
+  _seedSeason();         // you arrive in the real current season
   engineIntro();
   _autosave();
   _term.renderChips();
@@ -246,6 +257,7 @@ function _startGame(daily) { // START / TODAY'S SOI on the Soi 6 intro panel
   } else {
     startSoi6Mode();
   }
+  _seedSeason();         // startSoi6Mode runs its own newGame; anchor the season after
   _autosave();
   _term.renderChips();
   _audioForRoom(G.room, G.flags);

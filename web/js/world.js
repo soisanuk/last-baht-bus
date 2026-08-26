@@ -21,8 +21,8 @@ const MOTOSAI_FAR  = 100;// motosai to/from the Darkside
 // empty stool).
 const PARTY_MULT_STRANGER = 2;    // tier 0: the full buyout, plainly priced
 const PARTY_MULT_FACE     = 1.5;  // tier 1: she knows you; the math still exists
-const PARTY_HIGH_BUMP     = 0.5;  // high season: the rail is full, her time is dear
-const PARTY_LOW_CUT       = 0.5;  // low season: a sure night beats an empty one
+// the season premium/discount on her whole night lives in SEASON_PARTY_BUMP above,
+// graded peak → deep-low rather than a single high/low step
 const PARTY_MAX_GIRLS = 2;   // "or two" is the classic flex; three needs a minivan
 const PARTY_STOP_CAP  = 6;   // stops that pay สนุก/bond — a crawl, not a treadmill
 const PARTY_TAXI      = 200; // what she takes from your pocket to pour you home
@@ -117,7 +117,26 @@ const BAR_MGR_NIGHT = 700;     // …and Bert's shift on top, on the nights you 
 const BAR_COSTS    = 3000;     // legacy flat figure — kept only for saves written before the split
 const BAR_PRESENT  = 800;      // you behind your own rail sells drinks
 const BAR_FRICTION = 0.08;     // each refused procurement job adds this to costs
-const LOW_SEASON   = 0.55;     // takings multiplier when the town empties
+const LOW_SEASON   = 0.55;     // takings multiplier at the trough (Sep–Oct); see SEASON_MULT
+
+// ── The year's shape (season) ────────────────────────────────────────────────
+// Pattaya's tourist year is a boom over the Western winter holidays that tapers
+// to a dead, wet trough in Sep–Oct — what any experienced punter already knows.
+// A game month advances every SEASON_MONTH_DAYS in-game days from a start month
+// the FRONTEND seeds off the real calendar (the engine never reads a clock,
+// rule #1), so you arrive in the real current season and live forward through
+// it. Graded, not binary. The multiplier is the nightly-takings scalar; 1.0 is
+// the high-season baseline the bar economy was tuned and audited against (the
+// cost-accountant round, 2026-08-26), so Nov/Feb sit at exactly 1.0 and the
+// curve only adds a modest peak above it and a long, deep low below.
+const SEASON_MONTH_DAYS = 30;
+const SEASON_DEFAULT_M0 = 10;  // no-frontend default: November, the cool-season opening (1.0)
+//                        Jan   Feb   Mar   Apr   May   Jun   Jul   Aug   Sep   Oct   Nov   Dec
+const SEASON_MULT     = [1.10, 1.00, 0.82, 0.90, 0.75, 0.70, 0.72, 0.66, 0.55, 0.58, 1.00, 1.10];
+//  Apr sits a touch above its neighbours: Songkran drags a domestic crowd in.
+// Party-barfine premium by tier (the rail's fullness priced into her whole night):
+// peak +0.75 · high +0.5 · shoulder 0 · low −0.5 · deep-low −0.75.
+const SEASON_PARTY_BUMP = { peak: 0.75, high: 0.5, shoulder: 0, low: -0.5, deeplow: -0.75 };
 
 // ── The presence dilemma ────────────────────────────────────────────────────
 // The bar's real job is not to be a business game next to the night game. It's

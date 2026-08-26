@@ -737,7 +737,7 @@ function _partyPrice(id, lt) {
   const tier = (typeof _bondTier === "function") ? _bondTier(id) : 0;
   if (tier >= 2) return lt;
   let mult = tier === 1 ? PARTY_MULT_FACE : PARTY_MULT_STRANGER;
-  mult += _lowSeason() ? -PARTY_LOW_CUT : PARTY_HIGH_BUMP;
+  mult += SEASON_PARTY_BUMP[_seasonTier()];   // the rail's fullness, priced into her night
   return Math.max(lt, Math.round(lt * mult / 50) * 50);
 }
 function _partyLabel() {
@@ -3894,17 +3894,33 @@ function _doWeather() {
   if (G.rain > 0) {
     _say("Current conditions: a wall of water, personally experienced. Your " +
       "phone's weather app agrees, redundantly, from inside its dry pocket.");
+    _saySeasonNote();
     return;
   }
   const wx = _wxNow();
   if (!wx) {
     _say("Your phone's weather app spins, gives up, and shows you yesterday. " +
       "Hot, it says. It was.");
+    _saySeasonNote();
     return;
   }
   _say(`Your phone's weather app: ${wx.temp}° and feeling like more, ` +
     `${wx.humid}% humidity, ${_wxDesc(wx.code)}. High of ${wx.hi}°, ` +
     `${wx.rain}% chance of rain. Tomorrow's forecast is also Pattaya.`);
+  _saySeasonNote();
+}
+
+// The calendar season, for anyone (not just an owner) — the wet/dry half of the
+// year an experienced punter plans a trip around. Deterministic, no dice, no bake.
+function _saySeasonNote() {
+  const tier = _seasonTier(), month = _SEASON_MONTHS[_seasonMonth()];
+  const note =
+    tier === "peak" ? `And it's ${month}: peak season. The soi is full, the rooms are dear, and every bar is two-deep.` :
+    tier === "high" ? `And it's ${month}: high season proper — the cool, dry months the whole calendar bends around.` :
+    tier === "shoulder" ? `And it's ${month}: the hot season now, the crowd thinning between the winter rush and the rains.` :
+    tier === "low" ? `And it's ${month}: low season. The monsoon's in, the bars are quiet, and the girls are keen.` :
+    `And it's ${month}: the deep low — wettest and emptiest of all. For a certain kind of punter, the finest month there is.`;
+  _say(note, "dim");
 }
 
 // Real baked headlines occasionally include genuinely grim news (a dead teenager
@@ -4949,10 +4965,41 @@ function _workedTonight() { return _barOwned() && G.bar.workedDay === G.day; }
 // is separate from your pocket so that a good week at the bar and a good week
 // for you are different things.
 
-// one month in four, the town empties and the beer bars find out who has a
-// cushion. Derived from the day count so it's deterministic and reads the same
-// for every player.
-function _lowSeason() { return Math.floor(G.day / 30) % 4 === 2; }
+// ── Season (the year's shape) ────────────────────────────────────────────────
+// One game month per SEASON_MONTH_DAYS of G.day, anchored on G.season0 — the
+// start month the frontend seeds from the real calendar (default November for a
+// clockless boot). Everything derives from the day count, so it's deterministic
+// and every player reads the same year. See SEASON_MULT in world.js.
+function _season0() {
+  const m = G.season0;
+  return (typeof m === "number" && m >= 0 && m <= 11) ? m : SEASON_DEFAULT_M0;
+}
+function _seasonMonth() {   // 0 = Jan … 11 = Dec
+  return (_season0() + Math.floor((Math.max(1, G.day) - 1) / SEASON_MONTH_DAYS)) % 12;
+}
+function _seasonTakings() { return SEASON_MULT[_seasonMonth()]; }
+function _seasonTier() {
+  const m = _seasonMonth();
+  if (m === 11 || m === 0) return "peak";       // Dec–Jan, the winter-holiday boom
+  if (m === 10 || m === 1) return "high";       // Nov, Feb — the cool-season shoulders
+  if (m >= 2 && m <= 4) return "shoulder";      // Mar–May, hot and thinning (Songkran aside)
+  if (m >= 5 && m <= 7) return "low";           // Jun–Aug, the monsoon settles in
+  return "deeplow";                             // Sep–Oct, wettest and emptiest
+}
+// The lean months — what the old binary _lowSeason() meant, kept for the prose
+// and the events that gate on "is the town empty". Now the wet half of the year.
+function _lowSeason() { const t = _seasonTier(); return t === "low" || t === "deeplow"; }
+// The wet half of the year (SW monsoon). Deterministic — the rain SYSTEM leans on
+// this so low season actually feels like low season; the bake still supplies the
+// sky (no bake, no rain — the byte-identical rule holds because _wxRainy/_wxStormy
+// are both false without a bake, so no dice roll in a bakeless game).
+function _wetSeason() { return _lowSeason(); }
+const _SEASON_LABEL = {
+  peak: "peak season", high: "high season", shoulder: "hot season",
+  low: "low season", deeplow: "the deep low season",
+};
+const _SEASON_MONTHS = ["January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"];
 
 function _barOwned() { return _flag("barOpen") && !!G.bar; }
 
@@ -5030,7 +5077,7 @@ function _barNight() {
   const worked = !!b.workedLast && (b.workedDay === G.day || b.workedDay === G.day - 1);
   take = Math.round(take * (worked ? WORK_TAKINGS : AWAY_TAKINGS));
   if (worked) take += BAR_PRESENT;
-  if (low) take = Math.round(take * LOW_SEASON);
+  take = Math.round(take * _seasonTakings());   // graded by the month, peak → trough
   // two months behind and the floor is thin — you can watch it happen in the till
   if (b.shortStaff) take = Math.round(take * BAR_SHORT_STAFF);
   // nights away pile up; the staff notice before the books do
@@ -5350,7 +5397,22 @@ function _doBooks() {
       "you didn't give out are on this line, every night, forever.",
       { pct: Math.round(friction * BAR_FRICTION * 100) }), "dim");
   }
-  if (_lowSeason()) _say("It's low season. It will pass. It always passes.", "dim");
+  _sayBarSeason();
+}
+
+// The year read off the till, in a publican's terms. Names the month and what
+// the trade does in it — the graded curve made legible, and the thing an
+// experienced hand watches the calendar for.
+function _sayBarSeason() {
+  const tier = _seasonTier(), month = _SEASON_MONTHS[_seasonMonth()];
+  const pct = Math.round((_seasonTakings() - 1) * 100);
+  const line =
+    tier === "peak" ? `It's ${month} — peak season. Everyone you know is in town and the till knows it (about +${pct}% on the trade). Make hay.` :
+    tier === "high" ? `It's ${month} — high season, the cool months. The trade sits about where it should.` :
+    tier === "shoulder" ? `It's ${month} — the hot season. The crowd thins (about ${pct}% on the trade); Songkran aside, it's a quiet stretch.` :
+    tier === "low" ? `It's ${month} — low season. The rains have set in and the trade with them (about ${pct}%). It will pass. It always passes.` :
+    `It's ${month} — the deep low. Wettest, emptiest, cheapest (about ${pct}% on the trade). This is the month a cushion is for.`;
+  _say(line, "dim");
 }
 
 function _barSettle() {

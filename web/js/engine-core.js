@@ -298,6 +298,8 @@ function newGame() {
     rain: 0,             // downpour turns remaining (0 = dry)
     lastRain: -99,       // turn the last downpour began
     lastDrizzle: -99,    // turn of the last light-rain vignette
+    season0: SEASON_DEFAULT_M0,  // start month (0=Jan); the frontend re-seeds off the real calendar
+
     quests: {},          // questId → "offered" | "active" | "done" | "abandoned"
     quizPlayed: {},      // roomId → true (one quiz per bar per Thursday)
     phone: {             // the other half of your most important possession
@@ -1820,8 +1822,11 @@ function _tick() {
   if (typeof _tanRescue === "function") _tanRescue();   // the fixer finds a lost first-timer
   if (G.hunger >= 100 || G.thirst >= 100) { _endNight("collapse"); return; }
   if (G.nightTurn >= NIGHT_TURNS) { _endNight("dawn"); return; }
-  // rainy season: when the bake says storm, the sky sometimes proves it.
-  // The stormy check comes first so a bake-less game never touches the dice.
+  // rainy season: when the bake says storm, the sky sometimes proves it — and
+  // in the SW-monsoon months (the calendar wet season) even an ordinary rainy
+  // sky opens up, because that is what those months ARE. The bake still gates
+  // every path, so a bake-less game never touches the dice (both _wx* return
+  // false without WX_NOW) and stays byte-identical.
   if (G.rain > 0) {
     G.rain--;
     if (G.rain === 0) {
@@ -1831,7 +1836,10 @@ function _tick() {
     }
   } else if (_wxStormy() && G.turns - G.lastRain >= 30 && _rand() < 0.08) {
     _startRain(3 + Math.floor(_rand() * 6));
-  } else if (_wxRainy() && G.turns - G.lastDrizzle >= 15 && _rand() < 0.06) {
+  } else if (_wetSeason() && _wxRainy() && G.turns - G.lastRain >= 30 && _rand() < 0.11) {
+    // the monsoon-months amplifier: a rainy (not stormy) sky becomes a downpour
+    _startRain(3 + Math.floor(_rand() * 6));
+  } else if (_wxRainy() && G.turns - G.lastDrizzle >= 15 && _rand() < (_wetSeason() ? 0.10 : 0.05)) {
     G.lastDrizzle = G.turns; // light rain: atmosphere only, never mechanics
     _sayDrizzle();
   }

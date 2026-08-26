@@ -6811,6 +6811,44 @@ test("light rain is atmosphere only: vignettes, dialogue, zero mechanics", () =>
   }
 });
 
+test("WEATHER names the season, and it tracks the month", () => {
+  state().season0 = 11; state().day = 1;   // December
+  out = []; run("weather");
+  assert.match(lastOut(), /December/, "the note names the month");
+  assert.match(lastOut(), /peak season/, "and December reads as peak");
+  state().season0 = 8; state().day = 1;    // September
+  out = []; run("weather");
+  assert.match(lastOut(), /September/);
+  assert.match(lastOut(), /deep low|monsoon/i, "September reads as the deep low");
+});
+
+test("the calendar wet season amplifies the rain: a monsoon month opens a downpour a dry one wouldn't", () => {
+  // The season link. A rainy-but-not-stormy sky (code 61) is drizzle-only in the
+  // cool dry months, but in the SW-monsoon months it becomes a real downpour —
+  // which is what makes low season FEEL like low season. Still bake-gated, so a
+  // bakeless game never rolls (proven by the "no bake, no rain" test above).
+  globalThis.WX_NOW = { temp: 30, humid: 90, code: 61, hi: 31, rain: 75 }; // rainy, NOT stormy
+  try {
+    state().encDone = Object.fromEntries(Object.keys(ENCOUNTERS).map(k => [k, true]));
+    state().room = "second_rd_c";
+    // DRY season (November, the default): code 61 must never open a downpour
+    state().season0 = 10; state().day = 1;
+    state().rain = 0; state().lastRain = -99;
+    for (let i = 0; i < 400; i++) { state().hunger = 0; state().thirst = 0; state().nightTurn = 5; _tick(); }
+    assert.equal(state().rain, 0, "cool-season code-61 stays a rumour of rain, never a downpour");
+    // WET season (September, the deep low): the same sky DOES open up
+    state().season0 = 8; state().day = 1;   // September
+    assert.ok(_wetSeason(), "September is the monsoon");
+    state().rain = 0; state().lastRain = -99;
+    let n = 0;
+    while (!state().rain && n++ < 2000) { state().hunger = 0; state().thirst = 0; state().nightTurn = 5; _tick(); }
+    assert.ok(state().rain >= 3 && state().rain <= 8, `the monsoon month opened up (rain ${state().rain})`);
+  } finally {
+    delete globalThis.WX_NOW;
+    state().rain = 0;
+  }
+});
+
 // ── The sports desk ────────────────────────────────────────────────────────
 
 test("the bar's regular has a fixed allegiance, and a win buys the rail a round", () => {
