@@ -147,6 +147,24 @@ function _cycleFontSize() {
   try { localStorage.setItem("lbb_font_px", String(next.px)); } catch (e) {}
   _applyFontSize();
   _term.print("▦ Text size: " + next.name + ".", "dim");
+  // On the splash the terminal (and that print) is hidden behind the overlay,
+  // so the tap looked like it did nothing (Mario, 2026-08-26) — even with the
+  // splash prose now scaling, "standard" back to itself is invisible. A small
+  // toast under the button names the step, always.
+  let t = document.getElementById("font-toast");
+  if (!t) {
+    t = document.createElement("div");
+    t.id = "font-toast";
+    t.style.cssText = "position:absolute;left:.7rem;top:3.4rem;z-index:101;" +
+      "background:#14001f;border:1px solid #ff149355;border-radius:8px;" +
+      "color:#ffcce8;font-size:.8rem;padding:.25rem .6rem;pointer-events:none;" +
+      "transition:opacity .4s;box-shadow:0 0 12px #ff149333;";
+    document.getElementById("shell").appendChild(t);
+  }
+  t.textContent = "Aa " + next.name;
+  t.style.opacity = "1";
+  clearTimeout(t._hide);
+  t._hide = setTimeout(() => { t.style.opacity = "0"; }, 1400);
 }
 
 // ── The splash marquee: the poster deck on a 10-second neon rotation ─────────
