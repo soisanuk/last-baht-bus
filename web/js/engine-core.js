@@ -439,7 +439,13 @@ function _safeMergeKey(k) { return k !== "__proto__" && k !== "constructor" && k
 // [path, min, max] — a one-level "soc.x" path reaches the nested meters.
 const _SANE_SCALARS = [
   ["money", 0, 1e9], ["bank", 0, 1e9], ["hotelDebt", 0, 1e6],
-  ["happy", 0, 100], ["bestHappy", 0, 100], ["jaded", 0, 100],
+  // NOT capped at 100: สบายสบาย is a MILESTONE, not a ceiling — the game says so
+  // out loud ("non-terminal"), and a strong week runs well past it (439 measured,
+  // Vikram 2026-08-27). Capping here silently deleted every point above 100 on
+  // each deserialize, which meant UNDO *and every autosave-continue* handed a
+  // 117-สนุก player back a 100 (Marguerite, 2026-08-27). Still bounded, because
+  // the point of this table is to reject corruption, not to score the game.
+  ["happy", 0, 1e6], ["bestHappy", 0, 1e6], ["jaded", 0, 100],
   ["hunger", 0, 100], ["thirst", 0, 100], ["hurt", 0, 3], ["battery", 0, 100],
   ["day", 1, 1e7], ["vacation", 1, 1e6], ["turns", 0, 1e9], ["score", 0, 1e6],
   ["nightTurn", 0, (typeof NIGHT_TURNS !== "undefined" ? NIGHT_TURNS : 100)],
@@ -1480,7 +1486,10 @@ function _describeRoom(full, forceFull) {
   G.visited[G.room] = true; // standing in it is how places join the fast-travel list
   // Candy's recce quest: eyes on all three new drinking strips completes it
   // (flag is cheap and idempotent; _questTick only pays while the quest is active)
-  if (G.visited.myth_rows && G.visited.tt_lane_3 && G.visited.soi6_mid) _setFlag("recceDone");
+  // Tree Town's far end is TWO rooms a player could reasonably read as "the far
+  // lane" (Far Lane / Deep Corner) — accept either, or a correct walk reads as a
+  // broken quest (Marguerite, 2026-08-27). Legs + labels live on the QUESTS entry.
+  if (G.visited.myth_rows && (G.visited.tt_lane_3 || G.visited.tt_deep) && G.visited.soi6_mid) _setFlag("recceDone");
   // A downpour re-announces itself every time the room is described (LOOK, an
   // arrival, and crucially a restored save) — otherwise a reload mid-rain paints
   // a dry, walkable street and the movement block that follows reads as a bug.

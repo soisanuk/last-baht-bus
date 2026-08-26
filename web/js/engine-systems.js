@@ -2320,7 +2320,14 @@ function _doQuests() {
   for (const [qid, q] of rows) {
     const st = G.quests[qid];
     if (st === "active") { _say(_fmt("▶ {name} — {desc}{where}",
-      { name: _L(q.name), desc: _L(_qDesc(q)), where: _questWhere(_qAt(q) === q.giver ? _qGiver(q) : _qAt(q)) }), "win"); shown++; }
+      { name: _L(q.name), desc: _L(_qDesc(q)), where: _questWhere(_qAt(q) === q.giver ? _qGiver(q) : _qAt(q)) }), "win");
+      // multi-leg quests get the Act One checklist treatment: without per-leg
+      // progress a missed leg is indistinguishable from a bug (Marguerite)
+      for (const leg of (q.legs || [])) {
+        const done = (leg.rooms || []).some(r => G.visited[r]);
+        _say(_fmt("  {mark} {label}", { mark: done ? "✓" : "·", label: _L(leg.label) }), "dim");
+      }
+      shown++; }
     else if (st === "offered") { _say(_fmt("✦ On offer: {name} (ACCEPT {id})",
       { name: _L(q.name), id: qid.toUpperCase() }), "dim"); shown++; }
     else if (st === "done") { _say(`✓ ${q.name}`, "dim"); shown++; }

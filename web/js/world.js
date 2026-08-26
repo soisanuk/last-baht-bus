@@ -43,6 +43,12 @@ const BAND_ROUND = 400;  // buying the band a round (≈ bell to the mama; girls
 const YA_DONG_SHOT = 100; // Moonshine Bar's unlabelled-bottle dare — a shot, not a bottle
 const WINGMAN_TURNS = 15;// how long a friendly wing-woman's good word lasts
 const CHARGER_PRICE = 59;
+// The rain used to be a pure movement tax: 3–8 turns of a 100-turn night taken
+// away with nothing to do about it, ~8 times a wet week (Marguerite, 2026-08-27
+// — her #1 friction and her single recommended change). The fix was already in
+// the game's own prose, where vendors sell umbrellas mid-shower: buy one and the
+// street is yours. Cheap, losable, and very much the local economy.
+const UMBRELLA_PRICE = 120;
 const SAFE_CASH = 3000;  // the emergency stash in the hotel room safe
 const ROUGH_WAKE_CAP = 20000; // most a rough wake can take off you — a pocket, not an estate
 const CHAM_GIFT = 3000;  // the "gift" a man gives a girl who never does this (the chameleon economy)
@@ -690,7 +696,7 @@ const ROOMS = {
     desc: "The cold blast of air-con and the doorbell jingle of civilisation. Shelves " +
       "of toasties, Mama noodles, and {{phone}} accessories. There's a power outlet by the window.",
     outlet: true,
-    shop: { charger: CHARGER_PRICE },
+    shop: { charger: CHARGER_PRICE, umbrella: UMBRELLA_PRICE },
     exits: { out: "jomtien_beach_rd_s" },
   },
   jomtien_beach_rd_n: {
@@ -4145,6 +4151,14 @@ const ITEMS = {
     name: "empty Singha bottle", aliases: ["bottle", "singha bottle", "glass"],
     portable: true, location: "promenade",
     desc: "A Chang bottle off the top of a promenade bin — rinsed by the last rain, worth five baht to the right auntie.", bottle: true,
+  },
+  umbrella: {
+    name: "umbrella",
+    aliases: ["brolly", "rain umbrella"],
+    portable: true,
+    location: null,
+    desc: "A ฿" + UMBRELLA_PRICE + " street umbrella, transparent, one rib already opinionated. " +
+      "It will not survive the season and it does not have to — it has to survive tonight.",
   },
   charger: {
     name: "phone charger", aliases: ["charger", "cable"],
@@ -10758,6 +10772,17 @@ const QUESTS = {
     desc: "Walk the new drinking strips with your eyes open — Myth Night's container " +
       "rows, Tree Town's far lane, and the quiet middle stretch of Soi 6.",
     deps: [],
+    // Per-leg progress, rendered as a checklist by QUESTS/HINT. Multi-leg
+    // quests without one are indistinguishable from broken: a player walked all
+    // three strips, stood in Tree Town's DEEP CORNER rather than its FAR LANE
+    // (both plausible readings of "the far lane"), and spent three in-game days
+    // unable to tell a missed leg from a bug (Marguerite, 2026-08-27). Each leg
+    // accepts any of its rooms, so the reasonable reading counts.
+    legs: [
+      { rooms: ["myth_rows"], label: "Myth Night — the third row" },
+      { rooms: ["tt_lane_3", "tt_deep"], label: "Tree Town — the far end" },
+      { rooms: ["soi6_mid"], label: "Soi 6 — the quiet middle" },
+    ],
     doneFlag: "recceDone",
     reward: { money: 300, happy: 2 },
   },

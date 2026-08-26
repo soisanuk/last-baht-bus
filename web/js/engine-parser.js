@@ -320,7 +320,19 @@ function _doGo(dirWord) {
   G.enteredVia = null;
   // a downpour owns the street: nothing moves except into shelter
   if (G.rain > 0) {
-    if (!_sheltered(to)) {
+    // …unless you had the sense to buy an umbrella. The rain still owns the
+    // buses, the motosais and the mood; it no longer owns your itinerary.
+    if (!_sheltered(to) && (G.itemLoc.umbrella === "inventory")) {
+      _say(_pickVary([
+        "You put the umbrella up. It is instantly the most competent object you own — " +
+          "the rain hammers a foot above your head and the street, which belonged to nobody a " +
+          "second ago, belongs to you.",
+        "Umbrella up, trousers soaked to the knee inside ten steps, and entirely worth it. " +
+          "Two girls under one awning watch you go past with open respect.",
+        "Under the umbrella the downpour becomes a sound rather than a wall. You walk. " +
+          "Everyone still sheltering watches you the way people watch a man who brought the right coat.",
+      ], "umbrellaGo"), "dim");
+    } else if (!_sheltered(to)) {
       if (_sheltered(G.room)) {
         // room-aware: "the mamasan doesn't look up" printed inside a hotel room
         // (Frank, 2026-08-26 — state-blind flavour)
@@ -403,6 +415,18 @@ function _arriveAt(to) {
   // refused in _doRideBus. Three exits, three gates — if you add a fourth way to
   // move, gate it too.
   if (G.mode === "soi6" && !SOI6_ROOMS.has(to)) { _say(_pickVary(_SOI6_BOUND, "soi6bound")); return; }
+  // A question somebody has put to YOU does not follow you out of the room. It
+  // used to: a midnight ejection stranded Barry's ask on the street, where the
+  // numbered answer the game had just PRINTED came back "I didn't understand
+  // that" — the last-resort line, fired by the game's own affordance
+  // (Marguerite, 2026-08-27). Lapse it with a beat; _convoLapsed already brings
+  // it back next time you sit with them, so nothing is lost but the dead end.
+  if (G.convoQ && to !== G.room && _npcRoom(G.convoQ.id) !== to) {
+    const _who = _convoName(G.convoQ.id);
+    if (G.convoQ.q) (G.convoLapsed = G.convoLapsed || {})[G.convoQ.id] = { key: G.convoQ.key, q: G.convoQ.q };
+    G.convoQ = null; G.convo = null; G.convoIdx = null;
+    _say(_fmt("({who}'s question goes unanswered behind you — it will keep.)", { who: _who }), "dim");
+  }
   // The Orchid Room is White Dish's members-only back room — the velvet rope only
   // lifts for a friend of the group (Gavin's "doors open for our friends"). Do the
   // errand, earn the standing, get in. It's also the one place Ryan Powers ever is.
@@ -3860,6 +3884,32 @@ function _doBuy(arg) {
       `(You're carrying ${G.condoms}. ฿${G.money} left.)`);
     return;
   }
+  if (/umbrella|brolly/.test(arg)) {
+    if ((G.itemLoc.umbrella === "inventory")) { _say("You already have one, and one is the correct number."); return; }
+    const vendor = G.rain > 0 && !_inBar() && !_isHotelRoom(G.room);
+    if (!(r.shop || r.seven || vendor)) {
+      _say("Nowhere here sells them. Any 7-Eleven does — and the street sellers " +
+        "find you the moment it starts, which is the whole of their business model.");
+      return;
+    }
+    if (G.money < UMBRELLA_PRICE) {
+      _say(_fmt("฿{p} for an umbrella, and you have ฿{m}. You are getting wet tonight.",
+        { p: UMBRELLA_PRICE, m: G.money }));
+      return;
+    }
+    G.money -= UMBRELLA_PRICE;
+    G.itemLoc.umbrella = "inventory";
+    if (!vendor) _sevenIn();
+    _say(vendor
+      ? _fmt("Out of nowhere — and it is always out of nowhere — a woman with an armful of " +
+          "umbrellas is at your elbow, because the rain IS the advertisement. ฿{p}, no haggling " +
+          "worth the name, and she is three doors down before you have it open. (฿{m} left.)",
+          { p: UMBRELLA_PRICE, m: G.money })
+      : _fmt("฿{p} for a clear plastic umbrella from the rack by the door — the one purchase " +
+          "in this town that pays for itself the first time. (฿{m} left.)",
+          { p: UMBRELLA_PRICE, m: G.money }));
+    return;
+  }
   if (/water|nam plao/.test(arg)) {
     // Your own hotel room has the two complimentary bottles every Thai hotel
     // leaves by the kettle — free, two a day, restocked by housekeeping. This is
@@ -5163,9 +5213,28 @@ function _doSwim() {
 
 function _doDance() {
   if (_room().barType === "gogo") {
-    _say("You dance. The professionals up on the chrome observe with the mild " +
-      "clinical interest of surgeons watching a man remove his own appendix. " +
-      "One of them, kindly, copies you.");
+    // pooled + companion-aware: the surgeons line fired verbatim three times in
+    // four turns, with the girl on his arm unacknowledged, in a CLUB
+    // (Marguerite, 2026-08-27 — the one unpooled repeatable she found)
+    const _with = (G.party && G.party.ids || []).filter(i => NPCS[i]).map(i => NPCS[i].name)[0];
+    _say(_with
+      ? _pickVary([
+          "You dance, and {who} dances with you — properly, not the professional version, " +
+            "laughing at you and joining in at the same time. The girls on the chrome award it " +
+            "the small nod they keep for a punter who came with somebody.",
+          "{who} takes both your hands and makes the whole thing her idea, which saves your " +
+            "dignity and costs her nothing. Somebody up on the podium applauds with two fingers.",
+        ], "dancewith").replace(/\{who\}/g, _with)
+      : _pickVary([
+          "You dance. The professionals up on the chrome observe with the mild clinical " +
+            "interest of surgeons watching a man remove his own appendix. One of them, " +
+            "kindly, copies you.",
+          "You dance. Nobody stops you, which in a go-go is the review.",
+          "You dance, briefly and with commitment. A dancer catches your eye in the mirror " +
+            "and does the same move back, better, without once making it a competition.",
+          "You dance. The bass is doing most of it. A girl at the rail films three seconds " +
+            "for somebody who is not you, and everyone is happy with the arrangement.",
+        ], "dancegogo"));
   } else if (_inBar() && _bandHere()) {
     // The partner clause is conditional: Take Care Me's own prose says no house
     // girls work it, and a hostess materialising at your elbow there contradicted
@@ -5566,6 +5635,26 @@ const _MAP_SOI6 = `    THE BEACH ~~~ BEACH RD ─── WEST ──────�
     surf          Pinky        Sunset Dreams  The Shady Lady  Ruby Kiss
                                ATM · 7-Eleven Front Row Bar
                                               The Verandah`;
+
+// EXITS — IF-genre furniture, and load-bearing here: a bar's door and a street's
+// continuation share bare compass letters, so `n` off a lively lane is a coin
+// flip between walking on and walking INTO the Coco Bar (Marguerite, 2026-08-27:
+// six mis-entries, two turns each). Naming the destinations costs the player
+// nothing and removes the lottery.
+function _doExits() {
+  const r = _room();
+  const rows = Object.keys(r.exits || {}).map(d => {
+    const to = r.exits[d];
+    const room = ROOMS[to];
+    if (!room) return null;
+    const venue = _barName(to);
+    const kind = room.barType || room.shop || room.massage || room.soapy || room.hostBar;
+    return "  " + d.toUpperCase() + " — " + (venue || room.name) + (kind && venue ? " (inside)" : "");
+  }).filter(Boolean);
+  if (!rows.length) { _say("No way out of here but the way you came, and that one's behind you."); return; }
+  _say("Ways out:", "win");
+  for (const row of rows) _say(row, "dim");
+}
 
 function _doMap() {
   if (G.mode === "soi6") {
@@ -6174,7 +6263,7 @@ const _COMPLETE_VERBS = [
   "photo", "gallery", "photos", "info", "call", "share", "follow", "shower", "withdraw", "cheers", "tao rai", "borrow", "repay", "hire", "pet", "feed", "rename", "dance", "sing", "swim",
   "smell", "listen", "diagnose", "get tested", "clinic", "apologize", "quests", "accept", "abandon", "contact",
   "contacts", "who", "who am i", "identity", "blackbook", "message", "check messages", "send", "score", "standing", "wait", "again",
-  "request", "hint", "books", "draw", "work", "help", "save", "load", "undo", "restart", "quit", "reset", "end", "logout",
+  "request", "hint", "books", "draw", "work", "help", "save", "load", "undo", "restart", "quit", "reset", "end", "logout", "exits",
 ];
 
 // ── Context chips: the fourth surface ────────────────────────────────────────
@@ -7629,6 +7718,7 @@ function doCommand(input) {
     case "tip": _doTip(arg); break;
     case "wave": _doWave(arg); break;
     case "map": _doMap(); break;
+    case "exits": case "out?": _doExits(); break;
     case "photo": case "selfie": case "photograph": case "snap": _doPhoto(arg); break;
     case "gallery": case "photos": case "album": _doGallery(); break;
     case "menu": _doRead("menu"); break; // the laminated card, by its own name

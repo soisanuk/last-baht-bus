@@ -1089,3 +1089,56 @@ round tested the game against players disposed to like it. The optimizer is the
 adversary the design has to survive, and he found in one week what five
 sympathetic personas missed — because he was the only one looking for the
 dominant strategy rather than the story. Zero engine errors across ~450 commands.
+
+---
+
+# Round 32 — Marguerite the technical writer (Fable, mobile, QoL, 2026-08-27)
+
+An IF veteran since Trinity (1988) who has been playing for a week, **loves the
+game**, has told two friends, and keeps a list of the small things she loves it
+too much to forgive. ~225 commands, full game, phone, one seven-day vacation into
+expat. Briefed to rank by **frequency × irritation rather than severity** — the
+ranking that improves an hour of play, and the opposite of how a bug report
+sorts. QoL friction only surfaces with mileage, which is why no first-contact
+persona could have found this list.
+
+## Fixed
+
+| # | Finding | Fix |
+|---|---|---|
+| M-undo (**worst, and mine**) | UNDO handed a 117-สนุก week back at **100** — so she never used UNDO again. Root cause: the `_SANE_SCALARS` clamp I added in the security round caps `happy` at 100, and it runs on **every deserialize** — so autosave→continue silently deleted every point above the milestone too. สบายสบาย is explicitly *non-terminal*; 439 has been measured | ceiling raised to 1e6 (still bounded — the table rejects corruption, it doesn't score the game) |
+| M-recce | Candy's Recce "never completes" — three in-game days, HINT just re-reading the desc. The quest WORKS: Tree Town has both a **Far Lane** and a **Deep Corner**, she stood in the Deep Corner, and with no per-leg progress a missed leg is indistinguishable from a bug | either far-end room now counts, **and** quests gained an optional `legs:` field rendering the Act One checklist treatment (`✓ Myth Night — the third row · Tree Town — the far end`). Generalises to any multi-leg quest |
+| M-rain (**her #1, and her single recommended change**) | The rain is a pure movement tax: 3–8 turns of a 100-turn night, ~8 times a wet week, with no verb to answer it — and the fix was already in the game's own prose, where vendors sell umbrellas mid-downpour | `BUY UMBRELLA` (฿120) at any shop/7-Eleven, and from the seller who materialises on any street the moment it rains ("the rain IS the advertisement"). Carrying one makes the street walkable; without one it still owns your itinerary, and it still owns the buses and motosais regardless |
+| M-exits | Bar doors hide on bare compass points — `n` off a lively lane is a coin flip between walking on and walking INTO the Coco Bar. Six mis-entries, two turns each | `EXITS` verb (IF-genre furniture she reached for by reflex), naming each destination and marking venue doors `(inside)` |
+| M-strand | A pending NPC question survived a midnight ejection, so the game's own printed `1)` answered *"I didn't understand that"* — the last-resort line, fired by the game's own affordance | leaving the room retires it with a beat ("Barry's question goes unanswered behind you — it will keep"); `convoLapsed` already brings it back next sitting |
+| M-dance | DANCE printed the identical surgeons line 3× in 4 turns, with her party companion unacknowledged — in a CLUB. The one unpooled repeatable she found | pooled 4 deep + a companion-aware branch; the pinning test now asserts against the pool, per doctrine |
+
+## Recorded, not fixed
+
+- Barfine refusal is a flat wall with no warmth gauge (wants a progress cue).
+- Night Bazaar advertises singlets/trousers BUY can't deliver (afford-audit class;
+  that room looks unaudited).
+- The vacation-end gate swallows CHECK MESSAGES with an unread goodbye sitting there.
+- Travel/bus arrivals print the FULL room paragraph rather than the revisit line
+  — her clearest signal-to-length complaint, and the reason the Orchid's `w` exit
+  hid in a clause she'd started skimming.
+- Morning P&L booked a previous-morning windfall as "up ฿1,230 on the night".
+- Assorted state-blind singles: PRAY at the offering-less spirit house, Tan's
+  street-cart dinner wearing the indoor rain register, Wilai texting "it 9pm
+  only" at 03:50, duplicate mobile exit chips, `ride bus to naklua` dropping one
+  node short, the maze encounter repeating verbatim.
+
+## The delights she asked us not to touch
+
+The dog ("the best companion NPC I've met in years of IF"), the night ride
+("this is the part nobody sells you, and it's free" → reaching สบายสบาย on the
+back of Bee's Honda), **the other ledger** ("flat, factual, devastating — the
+doctrine is felt"), and the answer-memory grapevine catching her picking a
+*different canned chip* for the same question: *"Word travels, na"* made her sit
+up in bed.
+
+**Method note: rank QoL by frequency × irritation, not severity.** Every item
+above except the UNDO bug would have been triaged as trivial by a severity sort,
+and collectively they are the difference between "one more night" and putting the
+phone down. The instrument that finds them is a player on their fifth session who
+already loves the game — affection is what makes the complaints specific.

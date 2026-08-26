@@ -6245,7 +6245,9 @@ test("dance and sing read the room", () => {
   state().lastPeddler = 99999; // Tequila Queen is a Beach Road bar — no salesmen mid-test
   state().room = "tequila_queen";
   run("dance");
-  assert.match(lastOut(), /surgeons watching a man remove his own appendix/);
+  // pooled 2026-08-27 (it fired verbatim 3x in 4 turns) — assert against the
+  // POOL, never one line, per the repo's prose-pool doctrine
+  assert.match(lastOut(), /surgeons watching a man remove his own appendix|in a go-go is the review|does the same move back|The bass is doing most of it/);
   // day 2 = Tuesday: _isBandNight() is false, candy_bar uses normal paths
   state().room = "candy_bar";
   run("dance", "sing");

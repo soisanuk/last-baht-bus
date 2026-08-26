@@ -2557,3 +2557,84 @@ test("the share card always shows the ledger count — a conspicuous zero is the
   G.ledgerSeen = 3;
   assert.match(_shareCard().join("\n"), /📖 3 told true/, "…and a lived week shows what it earned");
 });
+
+// ── Marguerite the technical writer (2026-08-27): quality-of-life ──
+
+test("สนุก survives a save/restore — สบายสบาย is a milestone, not a ceiling", () => {
+  // Marguerite: UNDO handed a 117-สนุก week back at 100 and she never touched
+  // UNDO again. The clamp was mine (security round) and it hit EVERY
+  // deserialize — so any autosave-continue above 100 silently lost the excess.
+  sandbox();
+  G.happy = 117; G.bestHappy = 140;
+  deserializeGame(serializeGame());
+  assert.equal(G.happy, 117, "the week's happiness round-trips");
+  assert.equal(G.bestHappy, 140, "…and so does the high-water mark");
+  // still bounded — the table rejects corruption, it just doesn't score the game
+  G.happy = 1e12;
+  deserializeGame(serializeGame());
+  assert.ok(G.happy <= 1e6, "absurd values are still clamped");
+});
+
+test("a multi-leg quest shows its legs, and Tree Town's far end is either room", () => {
+  // Three in-game days lost to a quest that worked: she stood in the DEEP CORNER
+  // rather than the FAR LANE — both fair readings of "the far lane" — with no
+  // per-leg progress to tell a missed leg from a bug.
+  sandbox();
+  G.quests.recce = "active";
+  G.room = "myth_rows"; _describeRoom(true);
+  out = []; doCommand("quests");
+  const said = out.join("\n");
+  assert.match(said, /✓ Myth Night/, "the leg you walked is ticked");
+  assert.match(said, /· Tree Town/, "…and the ones you haven't are visibly waiting");
+  // the reasonable reading counts
+  G.room = "tt_deep"; _describeRoom(true);
+  G.room = "soi6_mid"; _describeRoom(true);
+  _questTick();
+  assert.equal(G.quests.recce, "done", "the Deep Corner completes it, not only the Far Lane");
+});
+
+test("an umbrella makes the rain negotiable — and only an umbrella", () => {
+  // Her #1 friction and her single recommended change: the rain took 3-8 turns
+  // of a 100-turn night, ~8 times a wet week, with no verb to answer it. The fix
+  // was already in the prose — vendors sell umbrellas mid-downpour.
+  sandbox();
+  G.money = 2000; G.room = "beach_rd_c"; G.rain = 6;
+  out = []; doCommand("buy umbrella");
+  assert.match(out.join("\n"), /armful|out of nowhere/i, "the rain IS the advertisement");
+  assert.equal(G.itemLoc.umbrella, "inventory");
+  const from = G.room;
+  out = []; doCommand("n");
+  assert.notEqual(G.room, from, "you can walk now");
+  // …and without one the street still belongs to the weather
+  G.itemLoc.umbrella = null;
+  const stuck = G.room;
+  out = []; doCommand("s");
+  assert.equal(G.room, stuck, "no umbrella, no itinerary — the rain still means something");
+});
+
+test("EXITS names the doors, because bar doors hide on bare compass points", () => {
+  sandbox();
+  G.room = "myth_rows";
+  out = []; doCommand("exits");
+  const said = out.join("\n");
+  assert.match(said, /Ways out/);
+  assert.match(said, /\(inside\)/, "a venue door is labelled as one");
+  assert.match(said, /N — Myth Night Market/, "…and the street continuation is named");
+});
+
+test("a question you were asked doesn't strand itself on the street", () => {
+  // Marguerite: midnight ejected her mid-question and the game's own printed
+  // "1)" answered "I didn't understand that" — the last-resort line, fired by
+  // the game's own affordance.
+  sandbox();
+  G.room = "ruby_kiss";
+  G.convo = "barry"; G.convoQ = { id: "barry", key: "here", q: "So what brings you out?" };
+  const exits = ROOMS[G.room].exits || {};
+  const dest = Object.keys(exits).map(d => exits[d]).find(r => ROOMS[r]);
+  out = []; _arriveAt(dest);
+  assert.match(out.join("\n"), /question goes unanswered|it will keep/, "it retires with a beat");
+  assert.equal(G.convoQ, null, "…and is not left live off-site, where its numbered answers are dead");
+  assert.ok(G.convoLapsed && G.convoLapsed.barry, "and she brings it back next time you sit with her");
+  // NB the beat is the fix: a bare "1" with no list to pick from is correctly
+  // unparseable — what was wrong was the game printing options it then refused.
+});
