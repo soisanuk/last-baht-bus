@@ -1096,11 +1096,13 @@ const ROOMS = {
     name: "Beach Road South",
     region: "Beach Road",
     desc: "The south end of Beach Road, where the palms wear fairy lights and the baht " +
-      "buses bunch up like beads. The Walking Street arch blazes to the south. A motosai " +
-      "stand idles on the corner, drivers watching the street like sleepy hawks.",
+      "buses bunch up like beads. PAPAYA MASSAGE and BEACH ROAD THAI MASSAGE keep " +
+      "pink-lit shopfronts along here. The Walking Street arch blazes to the south. A " +
+      "motosai stand idles on the corner, drivers watching the street like sleepy hawks.",
     busStop: "beachrd",
     motosai: true,
-    exits: { s: "ws_gate", n: "beach_rd_c", e: "second_rd_s", spa: "papaya_massage", spa2: "beachthai_massage" },
+    venues: ["papaya_massage", "beachthai_massage"],
+    exits: { s: "ws_gate", n: "beach_rd_c", e: "second_rd_s" },
   },
 
   short_time_motel: {
@@ -1129,9 +1131,11 @@ const ROOMS = {
     desc: "Mid-Beach-Road: tour groups, tailor touts, and the sea breathing in the dark " +
       "beyond the promenade. The glass cliff of CENTRAL mall rises a block inland, and " +
       "just south of it TEQUILA QUEEN's ancient neon señorita kicks her leg, as she " +
-      "has since before you were born.",
+      "has since before you were born — CHERRY OIL MASSAGE keeps a quieter door right " +
+      "alongside.",
     busStop: "beachrd",
-    exits: { s: "beach_rd_s", n: "beach_rd_soi9", w: "promenade", e: "central_mall", in: "tequila_queen", spa: "beachrd_oil" },
+    venues: ["tequila_queen", "beachrd_oil"],
+    exits: { s: "beach_rd_s", n: "beach_rd_soi9", w: "promenade", e: "central_mall" },
   },
   tequila_queen: {
     name: "Tequila Queen A-Go-Go",
@@ -1712,10 +1716,12 @@ const ROOMS = {
     name: "Second Road (South)",
     region: "Second Road",
     desc: "The working road running parallel between Beach Road and Soi Buakhao — less " +
-      "neon, more motorbikes, the town with its makeup half off. South it runs down to " +
-      "the Pattaya Tai crossroads and the hill beyond; Buakhao is a block east, but " +
-      "not from here — the sois between are somebody's back wall.",
-    exits: { w: "beach_rd_s", n: "second_rd_diana", s: "pattaya_tai", spa: "second_thai" },
+      "neon, more motorbikes, the town with its makeup half off. SECOND ROAD TRADITIONAL " +
+      "MASSAGE keeps a plain shopfront along here. South it runs down to the Pattaya Tai " +
+      "crossroads and the hill beyond; Buakhao is a block east, but not from here — the " +
+      "sois between are somebody's back wall.",
+    venues: ["second_thai"],
+    exits: { w: "beach_rd_s", n: "second_rd_diana", s: "pattaya_tai" },
   },
   second_rd_c: { motosai: true,
     busStop: "secondrd",
@@ -1742,10 +1748,11 @@ const ROOMS = {
     desc: "The mouth of Soi Diana, and Second Road doing what Second Road does: four " +
       "lanes of baht buses running nose to tail, a permanent shoal of motorbikes in " +
       "the gutter lane, and pavement so narrow that walking it is a negotiation. " +
-      "The go-go neon starts about twenty metres up the soi and doesn't stop until " +
-      "Buakhao. On this corner: a 7-Eleven with a cash machine, a knot of piwins " +
-      "who have claimed the shade of its sign, and a girl on the back of a bike " +
-      "checking her lipstick in a wing mirror at a red light.",
+      "BAMBOO OIL MASSAGE and MIKE'S MALL front the corner here. The go-go neon starts " +
+      "about twenty metres up the soi and doesn't stop until Buakhao. On this corner: " +
+      "a 7-Eleven with a cash machine, a knot of piwins who have claimed the shade of " +
+      "its sign, and a girl on the back of a bike checking her lipstick in a wing " +
+      "mirror at a red light.",
     revisit: [
       "The lights change. Nothing much happens, then everything does at once.",
       "A baht bus pulls in, three people get off, eleven decide not to get on.",
@@ -1753,8 +1760,8 @@ const ROOMS = {
         "window, watching the soi like it's television.",
       "Two piwins argue amiably about a fare neither of them is being offered.",
     ],
-    exits: { n: "second_rd_honey", s: "second_rd_s", e: "diana_w", spa: "diana_oil",
-             mall: "mikes_mall" },
+    venues: ["diana_oil", "mikes_mall"],
+    exits: { n: "second_rd_honey", s: "second_rd_s", e: "diana_w" },
   },
   diana_oil: {
     name: "Bamboo Oil Massage",
@@ -1776,8 +1783,8 @@ const ROOMS = {
       "end of it is quiet, whatever the other end is doing. This block is a massage row: SMILE MASSAGE winks pink " +
       "from the west side, and opposite, four floors of blue neon spell POSEIDON MASSAGE " +
       "over a doorman and a fish tank.",
-    exits: { s: "second_rd_soi8", n: "pattaya_klang", w: "pattaya_soi_7", e: "poseidon_soapy",
-             spa: "smile_massage" },
+    venues: ["poseidon_soapy", "smile_massage"],
+    exits: { s: "second_rd_soi8", n: "pattaya_klang", w: "pattaya_soi_7" },
   },
   pattaya_klang: { motosai: true, busStop: "secondrd",
     name: "Central Pattaya Road (Pattaya Klang)",
@@ -1959,10 +1966,10 @@ const ROOMS = {
       "tonight. One DJ plays for the whole complex and every bar in it hears him. North, two " +
       "covered rows face each other across a walking path; south, across the road, a third row " +
       "runs the same trade with less roof. CANDY BAR 2's rose-pink sign is unmistakably the same " +
-      "pink as the original.",
-
-    exits: { w: "second_rd_myth", e: "buakhao_myth", in: "candy_bar_2", n: "myth_stage", s: "myth_rows",
-             bazaar: "night_bazaar" },
+      "pink as the original, and the PATTAYA NIGHT BAZAAR keeps its stalls lit late right " +
+      "alongside.",
+    venues: ["candy_bar_2", "night_bazaar"],
+    exits: { w: "second_rd_myth", e: "buakhao_myth", n: "myth_stage", s: "myth_rows" },
   },
   myth_stage: {
     name: "Myth Night — The Covered Rows",
@@ -2116,9 +2123,10 @@ const ROOMS = {
       "enough that people photograph it before they've seen what's behind it. The strip runs " +
       "south. It used to be louder. The gap between what this street was and what it is now " +
       "is not visible from the gate, but you'll feel it by the time you reach the other end. " +
-      "Just east, RUEAN SABAI THAI MASSAGE has a row of foot chairs out for the walking " +
-      "wounded.",
-    exits: { s: "ws_north", n: "beach_rd_s", e: "pattaya_tai", spa: "thai_massage" },
+      "RUEAN SABAI THAI MASSAGE has a row of foot chairs out for the walking wounded, right " +
+      "at the gate.",
+    venues: ["thai_massage"],
+    exits: { s: "ws_north", n: "beach_rd_s", e: "pattaya_tai" },
   },
   ws_north: {
     atm: true,
@@ -2421,15 +2429,16 @@ const ROOMS = {
     atm: true,
     name: "Soi Buakhao (Klang End)",
     region: "Soi Buakhao",
-    desc: "Where the soi gives up and hands you to Central Pattaya Road. The traffic " +
-      "arrives here to die: two baht buses nose to tail with nowhere to go, a third " +
-      "wedged across the mouth of the junction while its driver leans out and " +
-      "negotiates with nobody in particular. The motorbikes don't wait. They come " +
-      "through the gaps in a steady braided stream — a girl side-saddle in six-inch " +
-      "heels holding her hair down with one hand, a punter on the back of another " +
-      "with his knees out like a man being carried to somewhere he didn't choose. " +
-      "A 7-Eleven throws cold white light across the whole slow mess, and the piwins " +
-      "at the corner watch it the way farmers watch weather.",
+    desc: "Where the soi gives up and hands you to Central Pattaya Road. KLANG CORNER " +
+      "MASSAGE keeps a shopfront right at the junction. The traffic arrives here to " +
+      "die: two baht buses nose to tail with nowhere to go, a third wedged across the " +
+      "mouth of the junction while its driver leans out and negotiates with nobody in " +
+      "particular. The motorbikes don't wait. They come through the gaps in a steady " +
+      "braided stream — a girl side-saddle in six-inch heels holding her hair down " +
+      "with one hand, a punter on the back of another with his knees out like a man " +
+      "being carried to somewhere he didn't choose. A 7-Eleven throws cold white " +
+      "light across the whole slow mess, and the piwins at the corner watch it the " +
+      "way farmers watch weather.",
     revisit: [
       "The junction has rearranged itself and changed nothing. Different buses, " +
         "same standstill; the bikes still find the holes.",
@@ -2439,20 +2448,22 @@ const ROOMS = {
       "Two piwins are eating noodles off the seat of a parked bike, unhurried, " +
         "watching the traffic fail to move.",
     ],
-    exits: { w: "pattaya_klang", s: "buakhao_myth", spa: "klang_massage" },
+    venues: ["klang_massage"],
+    exits: { w: "pattaya_klang", s: "buakhao_myth" },
   },
   buakhao_myth: {
     motosai: true,
     name: "Soi Buakhao (Made in Thailand)",
     region: "Soi Buakhao",
-    desc: "The middle of the artery, and the busiest crossing on it. Soi Made In " +
-      "Thailand opens west — the night plaza, and past it the lane becomes Soi Myth " +
-      "Night and runs on to Second Road. The TREE TOWN arch is a block south, doing " +
-      "fairy-lit best to look like an entrance to somewhere. Between the two, the " +
-      "soi itself is barely moving: a baht bus at walking pace with four people " +
-      "hanging off the back step, motorbikes threading the gap between it and the " +
-      "parked cars, and everyone on the pavement stepping around a plastic table " +
-      "that has been there long enough to count as architecture.",
+    desc: "The middle of the artery, and the busiest crossing on it. PLAZA THAI " +
+      "MASSAGE fronts the crossing itself. Soi Made In Thailand opens west — the " +
+      "night plaza, and past it the lane becomes Soi Myth Night and runs on to Second " +
+      "Road. The TREE TOWN arch is a block south, doing fairy-lit best to look like " +
+      "an entrance to somewhere. Between the two, the soi itself is barely moving: a " +
+      "baht bus at walking pace with four people hanging off the back step, " +
+      "motorbikes threading the gap between it and the parked cars, and everyone on " +
+      "the pavement stepping around a plastic table that has been there long enough " +
+      "to count as architecture.",
     revisit: [
       "A bike goes through the gap between the baht bus and the kerb with maybe a " +
         "hand's width to spare, and nobody watching thinks anything of it.",
@@ -2460,7 +2471,8 @@ const ROOMS = {
       "Somebody's shopping bag splits at the arch. The soi flows round it.",
       "A baht bus stops dead to let a girl off, and forty people behind it wait.",
     ],
-    exits: { n: "buakhao_klang", s: "buakhao_tt", w: "myth_night", spa: "myth_massage" },
+    venues: ["myth_massage"],
+    exits: { n: "buakhao_klang", s: "buakhao_tt", w: "myth_night" },
   },
   klang_massage: {
     name: "Klang Corner Massage",
@@ -2581,10 +2593,11 @@ const ROOMS = {
   buakhao_s: {
     name: "Soi Buakhao (South)",
     region: "Soi Buakhao",
-    desc: "The bottom of the soi, where Buakhao runs out of bars and hands you down to " +
-      "South Pattaya Road. The neon thins, the pavement widens, and the noise arrives " +
-      "from behind you rather than around you. A motosai stand waits by the corner with " +
-      "its engines ticking, because this is where people finally admit they are going home.",
+    desc: "The bottom of the soi, where Buakhao runs out of bars — JASMINE GARDEN BAR is " +
+      "the last of them, real plants out front — and hands you down to South Pattaya " +
+      "Road. The neon thins, the pavement widens, and the noise arrives from behind " +
+      "you rather than around you. A motosai stand waits by the corner with its " +
+      "engines ticking, because this is where people finally admit they are going home.",
     revisit: [
       "Quieter down here. You can hear individual motorbikes again.",
       "A piwin looks up hopefully, then goes back to his phone.",
@@ -2592,7 +2605,8 @@ const ROOMS = {
       "The last of the bar noise, arriving from behind and thinning as it comes.",
     ],
     motosai: true,
-    exits: { n: "buakhao_market", s: "buakhao_pt", in: "jasmine_garden" },
+    venues: ["jasmine_garden"],
+    exits: { n: "buakhao_market", s: "buakhao_pt" },
   },
   candy_bar: {
     name: "Candy Bar",

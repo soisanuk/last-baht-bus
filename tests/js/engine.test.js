@@ -5704,7 +5704,7 @@ test("a texted invite pays off when you show up that night", () => {
   state().phone.invite = { id: "fon", day: state().day };
   state().room = "buakhao_s";
   const h = state().happy;
-  run("in"); // jasmine_garden, Fon's bar
+  run("enter jasmine garden"); // venues[], 2026-08-27 — Fon's bar
   assert.equal(state().room, "jasmine_garden");
   assert.ok(state().happy >= h + 2);
   assert.equal(state().phone.invite, null);
@@ -6715,13 +6715,16 @@ test("a downpour traps you: streets blocked, shelter allowed, transit refused", 
   state().encDone = Object.fromEntries(Object.keys(ENCOUNTERS).map(k => [k, true]));
   state().room = "buakhao_s";
   state().rain = 20;
+  // venues[], 2026-08-27: jasmine_garden is entered by name now, not a compass
+  // door, so the street/bar split comes from exits vs. venues rather than
+  // scanning one shared exits object.
   const exits = Object.entries(ROOMS.buakhao_s.exits);
   const [streetDir] = exits.find(([, to]) => !_sheltered(to));
-  const [barDir, barId] = exits.find(([, to]) => ROOMS[to].barType);
+  const barId = ROOMS.buakhao_s.venues.find(id => ROOMS[id].barType);
   run(streetDir);
   assert.equal(state().room, "buakhao_s", "street move blocked");
   assert.match(lastOut(), /awning above you is the entire habitable world/);
-  run(barDir);
+  run("enter " + (ROOMS[barId].bar || ROOMS[barId].name));
   assert.equal(state().room, barId, "diving into a bar is allowed");
   assert.match(lastOut(), /shedding water like a soi dog/);
   const [outDir] = Object.entries(ROOMS[barId].exits).find(([, to]) => !_sheltered(to));

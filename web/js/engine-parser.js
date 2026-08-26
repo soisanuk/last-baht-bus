@@ -770,6 +770,18 @@ function _pnm(s) {
     .replace(/\b(?:a|an|the)\b/g, " ").replace(/\s+/g, " ").trim();
 }
 
+// A venues[] door skips _doGo entirely (it calls _arriveAt directly), so it
+// also skipped _doGo's rain arrival flavor ("shedding water like a soi dog")
+// — a venue is always shelter (_sheltered checks .bar), so there's nothing to
+// BLOCK, but the dash-through-the-downpour beat was silently missing for
+// every migrated door. Mirrors _doGo's unsheltered→sheltered print.
+function _rainDiveIn() {
+  if (G.rain > 0 && !_sheltered(G.room)) {
+    _say("You pick your moment and dive through the doorway, shedding water " +
+      "like a soi dog.", "dim");
+  }
+}
+
 function _doEnter(arg) {
   const r = _room();
   // digits → the safe
@@ -778,7 +790,7 @@ function _doEnter(arg) {
   if (asNum !== null && !Number.isNaN(asNum) && arg) return _doSafe(asNum);
   if (!arg) {
     // bare ENTER: the obvious single door, else the old `in`, else ask which
-    if (r.venues && r.venues.length === 1) { G.enteredVia = G.room; return _arriveAt(r.venues[0]); }
+    if (r.venues && r.venues.length === 1) { G.enteredVia = G.room; _rainDiveIn(); return _arriveAt(r.venues[0]); }
     if (r.exits && r.exits.in) return _doGo("in");
     if (r.venues && r.venues.length) {
       _say("Which one? " + r.venues.map(id => ROOMS[id].bar || ROOMS[id].name).join(", ") + ".");
@@ -794,6 +806,7 @@ function _doEnter(arg) {
       const v = ROOMS[id];
       if ([v.bar, v.name].filter(Boolean).some(s => _pnm(s).includes(_pnm(w)))) {
         G.enteredVia = G.room;
+        _rainDiveIn();
         return _arriveAt(id);
       }
     }
