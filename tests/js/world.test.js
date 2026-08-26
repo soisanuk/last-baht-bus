@@ -472,11 +472,6 @@ test("a venue door on a compass point is named in the room's prose", () => {
     // Deliberately unfindable: "you don't find the Orchid, you get sent" is the
     // whole point of the venue (see the factions doc). HINT names the district.
     "naklua_rd: w → The Orchid Club",
-    // Lake-side and Darkside frontages the prose describes as scenery on the
-    // shore/strip rather than as doors — they read as places, not turnings.
-    "lake_mabprachan: w → The Sundowner",
-    "lake_bar: w → The Sundowner",
-    "khao_talo: e → Daeng's Place",
     // Soi Honey's two massage houses ARE the street's description ("shophouse
     // after shophouse of them"); naming two of the dozen would mislead worse.
     "soi_honey_w: s → Honeycomb Massage",

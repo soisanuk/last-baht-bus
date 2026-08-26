@@ -4685,9 +4685,10 @@ test("lock-in: a spender at a lockIn bar gets the bolt, not the shutters", () =>
   assert.equal(state().room, "khao_talo_strip");
   assert.match(lastOut(), /bolt goes back across behind you/i);
   assert.ok(!state().soc.lockIn.night_heron, "the party goes on without you");
-  // and there is no getting back in
+  // and there is no getting back in — ENTER by name now, not the old "dark" key
+  // (Darkside migrated to the venues[] door model, 2026-08-27)
   out = [];
-  run("go dark");
+  run("enter night heron");
   assert.equal(state().room, "khao_talo_strip");
   assert.match(lastOut(), /Shutters down|definitely, legally, closed/i);
 });

@@ -1974,10 +1974,12 @@ const ROOMS = {
       "girls work the aisle rather than the street, leaning out as you pass and calling you back " +
       "when you don't stop. A couple of them are katoey bars and make no particular announcement " +
       "of it. THE AMP ROOM holds the far end, where the complex keeps its live music, and the " +
-      "bathrooms everybody shares are behind it. Of the doors off the aisle, BUTTERFLY is north, " +
-      "CHOK DEE east and SAWASDEE west; the market is back south.",
-
-    exits: { s: "myth_night", in: "amp_room", e: "feedback_bar", w: "encore_bar", n: "soundcheck_bar" },
+      "bathrooms everybody shares are behind it. BUTTERFLY, CHOK DEE and SAWASDEE front the rest " +
+      "of the aisle; the market is back the way you came.",
+    // Doors off the aisle, entered by name — see khao_talo's comment for the
+    // 2026-08-27 rollout this belongs to.
+    venues: ["feedback_bar", "encore_bar", "soundcheck_bar", "amp_room"],
+    exits: { s: "myth_night" },
   },
   amp_room: {
     name: "The Amp Room",
@@ -2037,10 +2039,11 @@ const ROOMS = {
       "less roof over it: open fronts, plastic stools out to the kerb, a strip of tarmac doing " +
       "duty as a terrace. The DJ arrives a half-beat late from the other side and nobody minds. " +
       "A few baht cheaper and a degree quieter, and the staff know exactly which of those two " +
-      "facts brought you across. COCO BAR holds the east side, VENUS the west, SUNFLOWER the " +
-      "south end, and NUMBER ONE is the one you step straight into; the market is back north.",
+      "facts brought you across. COCO BAR, VENUS and SUNFLOWER front the row, and NUMBER ONE is " +
+      "the one you step straight into; the market is back the way you came.",
 
-    exits: { n: "myth_night", in: "craft_cargo", e: "the_growler", w: "container_8", s: "reload_bar" },
+    venues: ["the_growler", "container_8", "reload_bar", "craft_cargo"],
+    exits: { n: "myth_night" },
   },
   craft_cargo: {
     name: "Number One Bar",
@@ -3322,14 +3325,20 @@ const ROOMS = {
     seven: true,
     desc: "A long, plain soi of beer bars with no neon budget and no need for one. The " +
       "ladies here are older, the customers older still, and every bar knows every " +
-      "customer's pour. It's seedier than town and more honest about it. One bar's " +
-      "doorway glows warmer than the rest, and from the south side MAMA YAI'S " +
-      "sends out charcoal smoke and the smell of som tam being argued about.",
+      "customer's pour. It's seedier than town and more honest about it. DAENG'S PLACE " +
+      "holds the near end, and from the far side MAMA YAI'S sends out charcoal smoke " +
+      "and the smell of som tam being argued about.",
     lateDesc: "Soi Khao Talo after the shutters: the fairy lights off, the bamboo rails " +
       "bare, chairs up on tables behind the grilles. MAMA YAI'S charcoal is banked to " +
       "grey and the soi smells of wet ash and dog. A last motosai idles at the corner " +
       "for whoever's still out here, which is you.",
-    exits: { w: "khao_talo_strip", n: "lake_mabprachan", in: "khao_talo_bar", e: "khao_talo_bar", s: "mama_yai" },
+    // Buildings entered by name, not compass — a beer bar is not a road (see
+    // docs/settings-reuse.md's geography note). Daeng's and Mama Yai's both sat on
+    // cardinal points (Daeng's on TWO, "in" duplicating "e") until the 2026-08-27
+    // rollout: 41 spurs like these across ten districts were the un-migrated half
+    // of the venues[] model Soi 6/Jomtien/Beach Road already used.
+    venues: ["khao_talo_bar", "mama_yai"],
+    exits: { w: "khao_talo_strip", n: "lake_mabprachan" },
   },
   // The dead Shamrock. Daeng points at it — "come ask me again when your bar
   // stands by itself" — and until now it existed only as something people said,
@@ -3429,9 +3438,8 @@ const ROOMS = {
       "beside it a dead Irish pub, THE SHAMROCK on its sun-bleached sign, shutters " +
       "down for good.",
     lateDesc: "The strip after the shutters: the tin roof dark, bamboo rails bare, the pool table under its cover. Every bar on the Darkside shut at midnight, same as the night before, and the only light is the padded door at the dark end — if it's lit at all, that's not for you. The Shamrock is as dead as ever.",
-    exits: { w: "sukhumvit_crossing", e: "khao_talo", in: "water_buffalo",
-      n: "water_buffalo", s: "firefly_bar", dark: "night_heron",
-      shamrock: "shamrock" },
+    venues: ["water_buffalo", "firefly_bar", "night_heron", "shamrock"],
+    exits: { w: "sukhumvit_crossing", e: "khao_talo" },
   },
   water_buffalo: {
     name: "The Water Buffalo",
@@ -3495,8 +3503,10 @@ const ROOMS = {
     desc: "Still water, lakeside restaurants, retired expats walking retired soi dogs. " +
       "Families eat grilled fish under string lights. It's so peaceful your ears ring. " +
       "Nobody here has been pickpocketed since the nineties. THE BOATHOUSE, the quiet " +
-      "restaurant across the road, is open for the fish.",
-    exits: { s: "khao_talo", in: "lake_bar", w: "lake_beer" },
+      "restaurant across the road, is open for the fish, and next door THE SUNDOWNER " +
+      "keeps the lake view a notch louder.",
+    venues: ["lake_bar", "lake_beer"],
+    exits: { s: "khao_talo" },
   },
   lake_bar: {
     name: "The Boathouse",
@@ -3516,7 +3526,7 @@ const ROOMS = {
         "Duangjai doesn't explain it and the room's manners are that nobody asks. Whatever " +
         "it is, it is tended daily, and it is why the Boathouse closes early.",
     },
-    exits: { out: "lake_mabprachan", w: "lake_beer" },
+    exits: { out: "lake_mabprachan" },
   },
   lake_beer: {
     name: "The Sundowner",
@@ -3553,7 +3563,7 @@ const ROOMS = {
           "fading." },
       ],
     },
-    exits: { out: "lake_mabprachan", e: "lake_bar" },
+    exits: { out: "lake_mabprachan" },
   },
 
   // ─── Naklua ───

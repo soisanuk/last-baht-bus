@@ -2613,10 +2613,20 @@ test("an umbrella makes the rain negotiable — and only an umbrella", () => {
 });
 
 test("EXITS names the doors, because bar doors hide on bare compass points", () => {
+  // A synthetic room, not a real one: by 2026-08-27 every district migrated its
+  // venue doors off cardinal points into venues[] (see the khao_talo comment),
+  // so no real room still has a bar sitting on a bare compass letter to exercise
+  // this against — the class EXITS exists for is now (correctly) extinct in the
+  // world data. Fabricate one so the verb itself stays covered.
   sandbox();
-  G.room = "myth_rows";
+  ROOMS.__exits_test_room = {
+    name: "Test Lane", region: "Test",
+    exits: { n: "myth_night", e: "the_growler" },   // a road + a venue, old-style
+  };
+  G.room = "__exits_test_room";
   out = []; doCommand("exits");
   const said = out.join("\n");
+  delete ROOMS.__exits_test_room;
   assert.match(said, /Ways out/);
   assert.match(said, /\(inside\)/, "a venue door is labelled as one");
   assert.match(said, /N — Myth Night Market/, "…and the street continuation is named");
