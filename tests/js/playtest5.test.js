@@ -2367,3 +2367,24 @@ test("Tan's manifest carries the eighth passenger", () => {
   out = []; _tanOthers();
   assert.match(out.join("\n"), /tripod.*means it|wants to run a bar/, "Tan drove him in too");
 });
+
+test("the third answer to Tan's last question: the deflection he sees straight through", () => {
+  // Tyler, 2026-08-26: "what are you in the market for?" had no out, even a
+  // joke one — the likeliest early bounce for an uneasy cold player. The game
+  // stays honest by CALLING the bluff, not believing it.
+  newGame(); G.introAfter = "beach"; G.pendingChoice = "intro"; G.introStep = 2;
+  out = []; _introPrompt();
+  assert.match(out.join("\n"), /3\) Honestly\? The beaches, the food… the culture\./, "the out is on the card");
+  out = []; _introAnswer("3");
+  assert.match(out.join("\n"), /cultural district of Soi 6/, "Tan calls the bluff, warmly");
+  assert.equal(G.player.orientation, "straight", "…and files the deflector under the factory setting: every routing unchanged");
+  // the punchline survives to the record
+  G.pendingChoice = null; G.introStep = null;
+  G.player.origin = "monger"; G.player.personality = "joker";
+  out = []; doCommand("who am i");
+  assert.match(out.join("\n"), /The ladies/, "WHO AM I quietly agrees with Tan, not with what you said");
+  // the older two answers keep their numbers
+  newGame(); G.introAfter = "beach"; G.pendingChoice = "intro"; G.introStep = 2;
+  out = []; _introAnswer("2");
+  assert.equal(G.player.orientation, "bi", "option 2 is still open-minded");
+});

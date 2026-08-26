@@ -12872,6 +12872,15 @@ const ORIENTATIONS = [
   { id: "bi", label: "Open-minded",
     pick: "The ladies — and I keep an open mind.",
     tan: "\"An open mind.\" A knowing tilt of the head. \"Good. This town rewards it — and it is very, very good at surprising the men who swear they are closed. Some of the most beautiful girls on this soi, my friend, weren't born girls. I'll point you right.\"" },
+  // The out (Tyler playtest, 2026-08-26: a cold player uneasy at the question
+  // had no third answer, even a joke one — the likeliest early bounce). The
+  // game stays honest by CALLING the bluff rather than believing it: same id,
+  // so every routing treats the deflector as the factory setting he is —
+  // denial being, per Barry, the most Pattaya answer of all. Appended THIRD so
+  // the older two keep their intro numbers.
+  { id: "straight", label: "The culture (allegedly)",
+    pick: "Honestly? The beaches, the food… the culture.",
+    tan: "\"The culture.\" He carries the word the way you'd carry a very full glass. \"555. My friend, I drive four hundred men a year to the cultural district of Soi 6. Some of them keep saying 'culture' the whole first week.\" The mirror gets a glance — warm, entirely unfooled. \"Mai pen rai. This town never makes a man say it out loud. It only makes him tip.\" The indicator ticks. \"The beaches are that way. Nobody will check.\"" },
 ];
 
 // ── Answering back: the player's side of the ask loop ───────────────────────
