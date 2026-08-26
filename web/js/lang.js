@@ -124,8 +124,8 @@ const _CATALOGS = {
       "Eine Woche in Pattaya, und du hast deine Straße gewählt und deine Flagge gepflanzt: SOI 6 — die lautesten hundert Meter Thailands — mit dem Queen Vic Inn mittendrin. Diese Reise verlässt du die Soi nicht; der Rest der Stadt hält sich bis zum nächsten Mal.",
     "฿{bank} for the week sits in the bank. ฿{pocket} is in your pocket — the rest comes out of the ATM on the street (฿{fee} a pull, ฿{cap} a day) when you need it.":
       "฿{bank} für die Woche liegen auf der Bank. ฿{pocket} hast du in der Tasche — der Rest kommt aus dem Geldautomaten auf der Straße (฿{fee} pro Abhebung, ฿{cap} am Tag), wenn du ihn brauchst.",
-    "Goal: สบายสบาย. Get happy. Max out the week. ★":
-      "Ziel: สบายสบาย. Werd glücklich. Hol das Maximum aus der Woche. ★",
+    "Goal: สบายสบาย — say it “sabai sabai”: easy-easy, the good life. Get happy. Max out the week. ★":
+      "Ziel: สบายสบาย — sprich es „sabai sabai“: immer mit der Ruhe, das gute Leben. Werd glücklich. Hol das Maximum aus der Woche. ★",
     "(HELP lists commands. Your night is DOWN the stairs — the pub first, then out into the soi.)":
       "(HELP zeigt die Befehle. Dein Abend geht die Treppe DOWN — erst der Pub, dann raus auf die Soi.)",
 

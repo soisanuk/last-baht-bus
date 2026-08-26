@@ -916,3 +916,65 @@ console errors across 60 lived nights, is the design's acceptance test passing.
 The nine defects were all in the RING around the arc — the phone, the shift-call
 biography, the hydration loop — which is exactly where a 60-night resident run
 looks and nothing shorter does.
+
+---
+
+# Round 30 — Tyler the cold casual (Fable, mobile, the cold-audience test, 2026-08-26)
+
+**Tyler**, 29, Columbus OH, Balatro/NYT-puzzles, never played a text adventure,
+NEVER HEARD OF PATTAYA — clicked a Discord share-grid link at lunch, on his
+phone. A new instrument class: not a defect hunt, an ENGAGEMENT measurement on
+the coldest possible audience, briefed that he owes the game nothing and an
+honest bounce at minute 9 beats a dutiful slog.
+
+## Headline: CAPTURED
+
+45 minutes, came back the next lunch unprompted, would post his grid. "It's the
+best-written game I've touched all year. A dog chose me. A Connect-4 shark
+hustled me while shopping for shoes. A woman kept my seat because I answered her
+text." Anchors, in order: **Kevin the dog** (quit-proofing), the rain/shoe-cart/
+Connect-4 stretch ("the best cold-open argument the game has"), the
+contact→text→kept-seat loop clicking inside 20 minutes, the party barfine
+("upgraded from tourist to somebody's guest"), and the share card closing the
+loop ("the emojis gossip"). **The return loop is real, not aspirational** — but
+it's the WEEK-RUN loop (an unfinished week, a person expecting him, an uncracked
+cipher), with the daily seed as the excuse. The teach-through-play belief
+**mostly vindicated** (sanuk/baht taught in one Tan line; barfine's two-day tease
+"actually worked as a discovery arc"); the humane-comedy tone **legible with
+zero context** ("half of them meaning it, all of them counting" = "the writers
+know").
+
+## Fixed
+
+| # | Finding | Fix |
+|---|---|---|
+| T1 (**the tab-closer**) | The cheap-charlie refusal counted HER drinks and claimed "none of them hers"; the hint said "ask again", one more drink hit "the answer hasn't changed" — "the only time I felt played by the interface instead of by the town" | the ≥2 branch owns the drinks are hers; the held re-ask is a legible METER — favor moved → "Warmer, tilac. Not warm ENOUGH, na" in her voice; hint says "a couple more" |
+| T2 | Box 15 taunts "not one of you has asked me why"; asking Mort about personals/box 15 got the generic shrug — the plotted mystery rebuffing the ask it solicits | `_CONVO_TOPIC_RULES`: personals/box 15/owl → Mort's existing `signoff` node |
+| T-goal | สบายสบาย — "my win condition is written in a script I can't read" | pronunciation + meaning glossed at the goal line and atop both HELP screens |
+| T-rose | A price quoted purely in Thai numerals during a money decision | the pitch keeps the theatre, adds "(฿100)" |
+| T-saleng | First cart pitch carried raw Thai script only | all four cart intros gloss "(saleng)" |
+| T-seven | BUY TOASTIE inside an adjacent bar → "Not for sale here", no route | the refusal points at the door when an exit street has the 7-Eleven |
+
+## Recorded, not fixed (design decisions & non-bugs)
+
+- **T4 (retroactive condoms): NOT a bug** — the week starts with three
+  (INVENTORY lists them plainly); he skimmed. Working as intended.
+- **All 7 origins read 45–65** — a 29-year-old found no self-insert and picked
+  "detective" as a character, not as himself. Adding a younger origin is a real
+  content decision (Phase-B NPC + portrait + arc per origin) — the user's call.
+- **"What are you in the market for?" offers no third option** — the biggest
+  early bounce-risk for a player who wants an out, even a joke one. Also the
+  user's call: it's the intro's honest thesis statement.
+- T3 (Shady Lady OUT to two streets) — the multi-door `enteredVia` design
+  working as built; whether sunset_rail should be multi-door is a map question.
+- T5 (start-screen dead tap) — likely harness-only rendering; the e2e taps the
+  same buttons fine. Verify on a real device sometime.
+- Mort's text invite on a night he's out; the HELP wall (casual retained 6 of
+  40+ lines — but the skim itself was a discovery beat, so leaving it).
+
+**Method note: the cold-audience persona is the only instrument that can price
+the ONBOARDING.** Every prior persona knew Pattaya intimately; none could see
+that the goal word was unreadable, that a Thai-numeral price gated a purchase,
+or that the interface's one broken promise (T1) lands twice as hard on someone
+with no sunk affection. And the engagement answer itself — captured, returning,
+sharing — is the market datum no defect hunt produces.

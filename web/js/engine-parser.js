@@ -2818,7 +2818,11 @@ const _CONVO_TOPIC_RULES = [
   [/\btours?\b|\bon the road\b|\bgigs?\b|\btouring\b/,                        "music"],
   [/\bmunich\b|\bm\u00fcnchen\b|\bbavaria\b/,                                  "german"],
   [/\bwhite dish\b|\bwdg\b/,                                                  "ryan powers"],
-  [/\bcipher\b|four letters|\bsign.?off\b/,                                    "signoff"],
+  // …and the words the column itself puts in a reader's mouth: Box 15's
+  // personal taunts "not one of you has asked me why", and the reader typed
+  // exactly "personals"/"box 15" at its author and got the generic shrug
+  // (Tyler, 2026-08-26 — the plotted mystery rebuffing the ask it solicits)
+  [/\bcipher\b|four letters|\bsign.?off\b|box ?15\b|\bpersonals?\b|\bowl\b/, "signoff"],
   // Doyle's President's-Table recon: the desc says ASK ABOUT THE TABLE, but a
   // player who forgot that types the natural words — and vignette quests don't
   // show in the journal to remind them (civilian playtest F1, 2026-08-26)
@@ -3907,6 +3911,14 @@ function _doBuy(arg) {
     _sevenIn();
     _say(_fmt("{line} (\u0e3f{m} left.)", { line: _L(_pickVary(_NOODLE_LINES, "noodles")), m: G.money }));
     _addHappy(1);
+    return;
+  }
+  // asked for a 7-Eleven item from INSIDE a bar whose street has one: point at
+  // the door instead of a flat "not for sale" (Tyler, 2026-08-26 — the street
+  // prose advertised the toastie, the bar refusal gave no way to reach it)
+  if (!r.seven && /toastie|cheese|sandwich/.test(arg) &&
+      Object.values(r.exits || {}).some(x => ROOMS[x] && ROOMS[x].seven)) {
+    _say("The bar doesn't do toasties — but the 7-Eleven's right out on the street. Step OUT and the grill's yours.");
     return;
   }
   if (r.seven && (/toastie|cheese|sandwich/.test(arg) || (/food|snack/.test(arg) && !FOOD_STALLS[G.room]))) {
@@ -6042,7 +6054,8 @@ const _MISC_VERBS = {
   shout: "You shout at the night. “HELLO WELCOME!” answers a bar, instantly, out of pure muscle memory.",
 };
 
-const _HELP = `Common commands:
+const _HELP = `The point of it all: สนุก (“sanuk” — fun) is the score; สบายสบาย (“sabai sabai” — easy-easy, the good life) is the summit.
+Common commands:
   LOOK · EXAMINE <thing> · TAKE <thing> · DROP <thing> · INVENTORY (I)
   N/S/E/W · IN/OUT · ENTER <place>
   TALK TO <person> · ASK <person> ABOUT <topic> · GIVE <thing> TO <person>
@@ -6099,7 +6112,8 @@ const _HELP = `Common commands:
 // gets its own list — only what's reachable inside SOI6_ROOMS, or a new player's
 // first HELP walks them straight into a wall. Keep in sync with the full HELP
 // above for verbs the two share.
-const _HELP_SOI6 = `Common commands:
+const _HELP_SOI6 = `The point of it all: สนุก (“sanuk” — fun) is the score; สบายสบาย (“sabai sabai” — easy-easy, the good life) is the summit.
+Common commands:
   LOOK · EXAMINE <thing> · TAKE <thing> · DROP <thing> · INVENTORY (I)
   N/S/E/W · IN/OUT · ENTER <place> · TRAVEL <bar> (fast-hop to any bar you've seen)
   TALK TO <person> · ASK <person> ABOUT <topic> · GIVE <thing> TO <person>
@@ -7933,7 +7947,9 @@ function _soi6Opening() {
     "comes out of the ATM on the street (฿{fee} a pull, ฿{cap} a day) when you need it.",
     { bank: SOI6_BANK.toLocaleString("en-US"), pocket: SOI6_POCKET.toLocaleString("en-US"),
       fee: ATM_FEE, cap: ATM_DAILY_CAP.toLocaleString("en-US") }));
-  _say("Goal: สบายสบาย. Get happy. Max out the week. ★", "win");
+  // the goal word carries its own pronunciation the first time — a cold player's
+  // win condition was "written in a script I can't read" (Tyler, 2026-08-26)
+  _say("Goal: สบายสบาย — say it “sabai sabai”: easy-easy, the good life. Get happy. Max out the week. ★", "win");
   if (G.dailyId) {
     _say(`Today's soi — the ${G.dailyId} daily: same week, same dice, everyone ` +
       "who plays it today. (SHARE prints your week card, any time.)", "dim");

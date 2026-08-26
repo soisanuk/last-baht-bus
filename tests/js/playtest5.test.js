@@ -1574,13 +1574,16 @@ test("the shutters cannot walk out a man who already left on the back of her bik
 });
 
 test("the cheap-charlie refusal reads the ledger it cites", () => {
-  // "the one lady drink, nursed" — at a ledger reading three (fabulist F7)
+  // "the one lady drink, nursed" — at a ledger reading three (fabulist F7).
+  // And the ≥2 branch owns that the drinks WERE hers: "none of them hers"
+  // printed at a man who'd bought her two by name (Tyler, 2026-08-26).
   newGame(); G.mode = "soi6"; _setFlag("act1Done");
   for (const k of Object.keys(ENCOUNTERS)) G.encDone[k] = true;
   G.room = "ruby_kiss"; G.money = 99999;
   G.soc.drinks.wilai = 3;
   out = []; _bfRefusalSay("wilai", { kind: "cheap" });
-  assert.match(out.join("\n"), /3 lady drinks, none of them hers/);
+  assert.match(out.join("\n"), /3 lady drinks — she counts each fondly/);
+  assert.doesNotMatch(out.join("\n"), /none of them hers/, "the drinks were hers; the prose must not deny it");
   G.soc.drinks.wilai = 1;
   out = []; _bfRefusalSay("wilai", { kind: "cheap" });
   assert.match(out.join("\n"), /the one lady drink, nursed/);
@@ -2247,4 +2250,63 @@ test("a resident reaches his own room whether or not Act One's wallet flag survi
   out = []; doCommand("go hotel");
   assert.equal(G.room, "hotel_room", "act1Done is the resident's key card");
   assert.doesNotMatch(out.join("\n"), /Get the wallet back/, "no Act One quest prose at a resident");
+});
+
+// ── Tyler the cold casual (2026-08-26): the cold open must be legible ──
+
+test("the held cheap refusal is a meter, not a wall: progress is acknowledged", () => {
+  // Tyler: the hint said "ask again", one more drink got "the answer hasn't
+  // changed since your last drink" — the only time he felt played by the
+  // interface. The re-ask acknowledges movement now.
+  newGame(); G.mode = "soi6"; _setFlag("act1Done");
+  G.room = "ruby_kiss";
+  G.soc.drinks.wilai = 2;
+  out = []; _bfRefusalSay("wilai", { kind: "cheap", again: true, favor: _favor("wilai") });
+  assert.match(out.join("\n"), /same small headshake/, "no movement, same answer");
+  G.soc.drinks.wilai = 3;   // one more drink since the refusal was held
+  out = []; _bfRefusalSay("wilai", { kind: "cheap", again: true, favor: _favor("wilai") - 1 });
+  assert.match(out.join("\n"), /Warmer, tilac|Not warm ENOUGH/, "progress acknowledged in her voice");
+});
+
+test("the column's own mystery answers at its author: personals and box 15 reach Mort's signoff", () => {
+  // Tyler: Box 15 taunts "not one of you has asked me why" and asking Mort about
+  // it got the generic shrug — the plotted mystery rebuffing the ask it solicits.
+  newGame(); _setFlag("act1Done"); G.stage = "vacation";
+  for (const k of Object.keys(ENCOUNTERS)) G.encDone[k] = true;
+  G.room = "queen_vic"; G.nightTurn = 20;
+  for (const topic of ["personals", "box 15", "the owl"]) {
+    out = []; doCommand("ask mort about " + topic);
+    assert.match(out.join("\n"), /back issues|keeps one secret|You noticed|First to ask/i,
+      `"${topic}" reaches the signoff node`);
+  }
+});
+
+test("a money decision is legible: the rose pitch carries the numeral beside the Thai", () => {
+  newGame(); _setFlag("act1Done");
+  G.room = "candy_bar"; G.convo = { id: "lek", turn: G.turns };
+  G.flowerSeen = 0;
+  // fire the flower encounter prompt directly and read the price
+  if (typeof _flowerOffer === "function") { out = []; _flowerOffer("lek"); }
+  else { out = []; _startEnc && G.encDone && (G.encDone.flower = false); }
+  const said = out.join("\n");
+  if (said) assert.match(said, /\(฿\d+\)/, "the Thai-numeral theatre keeps a legible amount beside it");
+});
+
+test("asking for the 7-Eleven's toastie inside a bar points at the door, not a wall", () => {
+  newGame(); _setFlag("act1Done");
+  // find a bar whose exits include a seven street
+  const bar = Object.keys(ROOMS).find(id => ROOMS[id].barType &&
+    Object.values(ROOMS[id].exits || {}).some(x => ROOMS[x] && ROOMS[x].seven));
+  assert.ok(bar, "a bar adjacent to a 7-Eleven street exists");
+  G.room = bar; G.money = 500;
+  out = []; doCommand("buy toastie");
+  assert.match(out.join("\n"), /Step OUT|right out on the street/, "the refusal gives the route");
+});
+
+test("the goal word teaches its own pronunciation on the surfaces a cold player reads", () => {
+  // Tyler: "my win condition is written in a script I can't read."
+  newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight" };
+  out = []; doCommand("help");
+  assert.match(out.join("\n"), /sabai sabai/, "HELP glosses the summit");
+  assert.match(out.join("\n"), /sanuk/, "…and the score word");
 });

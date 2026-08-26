@@ -51,7 +51,7 @@ const _SALENG_CARTS = {
   shoes: {
     items: ["sandals", "heels"],
     hint: "(BUY SANDALS ฿150 · BUY HEELS ฿250 · BUY <item> FOR <lady>)",
-    intro: "A ซาเล้ง rolls up outside — its frame hung with ladies' footwear: sequinned " +
+    intro: "A ซาเล้ง (saleng) rolls up outside — its frame hung with ladies' footwear: sequinned " +
       'sandals, platform heels, one pair of flip-flops that are clearly lost. "Shoes, shoes! Very cheap!"',
     notice: "A ซาเล้ง hung with sequinned sandals and platform heels rolls up outside; the girls are on it before it stops.",
     here: "The shoe saleng waits outside, its frame a-glitter with sandals and heels.",
@@ -59,7 +59,7 @@ const _SALENG_CARTS = {
   lingerie: {
     items: ["lingerie"],
     hint: "(BUY LINGERIE ฿150 · BUY LINGERIE FOR <lady>)",
-    intro: "A ซาเล้ง idles outside with a washing-line of lingerie across its frame — " +
+    intro: "A ซาเล้ง (saleng) idles outside with a washing-line of lingerie across its frame — " +
       'bras, slips, colours the sun doesn\'t see. "For girlfriend! Beautiful!"',
     notice: "A ซาเล้ง strung with lingerie idles up outside, and every girl in the place turns her head at once.",
     here: "The lingerie saleng idles outside, its washing-line of lace swaying in the fan-wash.",
@@ -67,7 +67,7 @@ const _SALENG_CARTS = {
   snacks: {
     items: ["som tam", "fruit"],
     hint: "(BUY SOM TAM ฿50 · BUY FRUIT ฿30 · BUY <item> FOR <lady>)",
-    intro: "A ซาเล้ง drifts to a stop — a som tam station and drinks cooler bolted to the " +
+    intro: "A ซาเล้ง (saleng) drifts to a stop — a som tam station and drinks cooler bolted to the " +
       'back. Lime, dried shrimp, and fish sauce arrive ahead of the pitch: "Som tam! Very fresh!"',
     notice: "A som-tam ซาเล้ง drifts to a stop outside, pestle already going, and the girls call their orders over your head.",
     here: "The som-tam saleng is parked outside, pestle thudding in its stone mortar.",
@@ -178,7 +178,10 @@ function _flowerTick() {
   G.pendingEnc = "flower";
   G.flowerSeen = (G.flowerSeen || 0) + 1;
   const her = NPCS[partner].name;
-  const price = (typeof thaiBaht === "function" ? thaiBaht(ROSE_PRICE) : "฿" + ROSE_PRICE);
+  // the Thai-numerals pitch is the theatre, but a money decision must be legible
+  // — a cold player committed baht without knowing the amount (Tyler, 2026-08-26)
+  const price = (typeof thaiBaht === "function"
+    ? thaiBaht(ROSE_PRICE) + " (฿" + ROSE_PRICE + ")" : "฿" + ROSE_PRICE);
   _encPrompt(
     [G.flowerSeen <= 1
       ? "A woman drifts up to the rail with a plastic bucket of roses and, half-hidden " +

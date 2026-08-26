@@ -679,8 +679,20 @@ function _bfRefusal(id, bt) {
 function _bfRefusalSay(id, r) {
   const name = NPCS[id].name;
   if (r.again) {
+    // The held cheap refusal lifts at +2 favor, and the first hint said "ask
+    // again" without saying how much — so a player who bought ONE more drink hit
+    // a wall that mocked him for following instructions (Tyler, 2026-08-26: "the
+    // only time I felt played by the interface instead of by the town"). The
+    // re-ask is a legible meter now: progress is acknowledged, in her voice.
+    if (r.kind === "cheap" && _favor(id) > r.favor) {
+      _say(`${name} tilts her head — the arithmetic has moved, and she lets you ` +
+        "see her notice. “Mmm. Warmer, tilac.” A beat, a smile with actual " +
+        "warmth in it. “Not warm ENOUGH, na. One more, talk little bit more.”");
+      return;
+    }
     _say(`${name} just gives you the same small headshake as before. She told ` +
-      "you already; the answer hasn't changed since your last drink.");
+      "you already" + (r.kind === "cheap" ? " — and the tab hasn't changed her mind for her."
+        : "; the answer hasn't changed since your last drink."));
     return;
   }
   const lines = {
@@ -702,12 +714,14 @@ function _bfRefusalSay(id, r) {
       "no, na.” She signals the mamasan off with one flick of the eyes, and " +
       "the ledger never even opens. No is a complete sentence here.",
     cheap: `${name} does a quick, visible arithmetic on your evening's tab — ` +
+      // the count is HER drinks, so the prose must own that: "none of them hers"
+      // printed at a man who'd bought her two by name (Tyler, 2026-08-26)
       ((G.soc.drinks[id] || 0) === 0 ? "not one lady drink on it" :
        (G.soc.drinks[id] || 0) === 1 ? "the one lady drink, nursed" :
-       `${G.soc.drinks[id]} lady drinks, none of them hers`) +
+       `${G.soc.drinks[id]} lady drinks — she counts each fondly, counts the hours too, and the maths still comes up short`) +
       " — and pats your knee: “Maybe you buy me " +
       "drink first, na? Talk more.” The words CHEAP CHARLIE hang politely " +
-      "unspoken. (Warm her up properly and ask again.)",
+      "unspoken. (A couple more drinks' warmth, and ask again.)",
     mess: `${name} leans back an honest inch. “Ooh. You smell like whole bar, ` +
       "tilac. Maybe shower first, sleep little bit.” Hard to argue from " +
       `${G.soc.drunk} bottles deep. (Sober up and try again.)`,
