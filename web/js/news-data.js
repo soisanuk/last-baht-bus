@@ -13,24 +13,24 @@ var NEWS_FEED = [
     "d": "25 Aug 2026"
   },
   {
+    "t": "Pattaya gets ahead of floods with real-time warning system",
+    "s": "Pattaya Mail",
+    "d": "25 Aug 2026"
+  },
+  {
     "t": "Southern Thailand braces for rising PM2.5 levels amid regional haze",
     "s": "Pattaya Mail",
     "d": "24 Aug 2026"
   },
   {
-    "t": "Storm Narra may disrupt Pattaya beachgoers with rough seas",
+    "t": "Nan Industry Office resumes operations after floods damage 29 businesses",
     "s": "Pattaya Mail",
-    "d": "24 Aug 2026"
+    "d": "25 Aug 2026"
   },
   {
-    "t": "Coordinated arson and bomb attacks hit 68 sites in southern Thailand",
+    "t": "Major move puts U-Tapao Airport project on fast track",
     "s": "Pattaya Mail",
-    "d": "24 Aug 2026"
-  },
-  {
-    "t": "Suvarnabhumi releases CCTV after Thai Vietjet passenger reports bag damage",
-    "s": "Pattaya Mail",
-    "d": "23 Aug 2026"
+    "d": "25 Aug 2026"
   },
   {
     "t": "Pattaya tightens beachfront parking rules to protect public spaces",
@@ -48,14 +48,19 @@ var NEWS_FEED = [
     "d": "25 Aug 2026"
   },
   {
+    "t": "The End of Thailand’s Long Stalemate?",
+    "s": "Foreign Affairs",
+    "d": "24 Aug 2026"
+  },
+  {
     "t": "Dozens of co-ordinated arson attacks hit southern Thailand",
     "s": "BBC",
     "d": "23 Aug 2026"
   },
   {
-    "t": "The End of Thailand’s Long Stalemate?",
-    "s": "Foreign Affairs",
-    "d": "24 Aug 2026"
+    "t": "Thailand Seen Holding Rate at 1% After Slump in Quarterly Growth",
+    "s": "Bloomberg.com",
+    "d": "26 Aug 2026"
   },
   {
     "t": "A political amnesty law takes effect in Thailand but excludes lese majeste",
@@ -63,25 +68,20 @@ var NEWS_FEED = [
     "d": "25 Aug 2026"
   },
   {
-    "t": "Thailand Plans Overhaul of Market Laws to Speed Up Fraud Probes",
-    "s": "Bloomberg.com",
-    "d": "25 Aug 2026"
-  },
-  {
-    "t": "Thailand is changing rules as it wants foreign investment",
-    "s": "bangkokpost.com",
+    "t": "Couple Sells Everything, Moves to Thailand to Homeschool Kids for ‘Simple’ Life",
+    "s": "People.com",
     "d": "23 Aug 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-08-25","USD":32.73,"AUD":23.42,"GBP":44.62,"EUR":38.18};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-26","temp":28,"humid":76,"code":3,"hi":31,"rain":63};
+var WX_NOW = {"date":"2026-08-26","temp":30,"humid":69,"code":3,"hi":31,"rain":58};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-08-22","done":true,"h":"Hull","hs":2,"a":"Man United","as":0},{"d":"2026-08-22","done":true,"h":"Everton","hs":2,"a":"C Palace","as":0},{"d":"2026-08-22","done":true,"h":"Ipswich","hs":2,"a":"Sunderland","as":1},{"d":"2026-08-22","done":true,"h":"Nottm Forest","hs":0,"a":"Leeds","as":1},{"d":"2026-08-22","done":true,"h":"Brentford","hs":3,"a":"Spurs","as":0},{"d":"2026-08-23","done":true,"h":"Brighton","hs":4,"a":"Aston Villa","as":0},{"d":"2026-08-23","done":true,"h":"Man City","hs":2,"a":"Bournemouth","as":1},{"d":"2026-08-23","done":true,"h":"Newcastle","hs":2,"a":"Liverpool","as":2},{"d":"2026-08-24","done":true,"h":"Fulham","hs":2,"a":"Chelsea","as":3},{"d":"2026-08-28","done":false,"h":"C Palace","hs":0,"a":"Man City","as":0},{"d":"2026-08-29","done":false,"h":"Liverpool","hs":0,"a":"Nottm Forest","as":0},{"d":"2026-08-29","done":false,"h":"Bournemouth","hs":0,"a":"Everton","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-08-16","first":"004615","last2":"53","front3":["429","731"],"back3":["094","937"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4652,"date":"2026-08-25","baht":72000};
+var GOLD = {"usd":4656,"date":"2026-08-26","baht":72100};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":79063,"thb":2586473};
+var BTC = {"usd":78765,"thb":2576642};
