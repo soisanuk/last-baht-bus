@@ -2685,12 +2685,31 @@ function _conquestHappy(base, id) {
   const tier = (id && id === G.lastBfId && G.lastBfPreTier != null)
     ? G.lastBfPreTier : (id ? _bondTier(id) : 0);
   G.lastBfPreTier = null;
-  const bonded = id && tier >= 2;
+  // THE BYPASS IS A NIGHT-TO-NIGHT REWARD, NOT A WITHIN-NIGHT ONE. "One
+  // deepening girl stays rewarding while churn jades" means coming back to her
+  // TOMORROW doesn't cheapen — it never meant the eleventh time this evening.
+  // Un-scoped, it made the anti-churn design its own exploit: bonded ⇒ no
+  // treadmill, her-farang ⇒ the fine waived, so BARFINE → SHORT TIME → repeat
+  // paid +7 for ฿0 on a 9-turn loop, forever (Vikram, 2026-08-27: 439 สนุก vs a
+  // stated summit of 100, one NPC spoken to). So the bypass — and the earned
+  // bond that funded it — applies to the FIRST conquest with her each night;
+  // after that the evening is repetition and the treadmill prices it as such.
+  const first = !(id && G.soc.bfNight && G.soc.bfNight[id]);
+  if (id) (G.soc.bfNight = G.soc.bfNight || {})[id] = (G.soc.bfNight[id] || 0) + 1;
+  const bonded = id && tier >= 2 && first;
   const net = Math.max(base + (bonded ? 2 : 0) - 2 * G.jaded, -4);
   _addHappy(net); // _addHappy no-ops on 0, so a wash prints nothing
   if (bonded) {
     _say("(No treadmill with her — a night with someone who knows you doesn't cheapen. " +
       "It's the one that keeps giving.)", "dim");
+  } else if (id && !first && tier >= 2) {
+    // she is still your regular; this is just the same evening going round again
+    _say(_pickVary([
+      "(Again, and she is fond about it, and something in the room has still gone flat. " +
+        "It is the same night now, not a new one — that is what tomorrow is for.)",
+      "(She goes along with it, easy as ever. But the evening has spent what it had; " +
+        "you are repeating a thing rather than doing it.)",
+    ], "bfrepeat"), "dim");
   } else if (net <= 0) {
     _say("(The thrill just… doesn't arrive. Another one, and you barely felt it — " +
       "you mostly want to be alone now. Too many, too fast.)", "alert");
@@ -2733,7 +2752,23 @@ function _boughtBond(id, n) {
   const book = (G.soc.bondNight = G.soc.bondNight || {});
   const had = book[id] || 0;
   const grant = Math.max(0, Math.min(n, BOND_NIGHT_CAP - had));
-  if (!grant) return 0;
+  if (!grant) {
+    // Say the wall out loud, once a night per girl. The cap is the load-bearing
+    // "money can't rush this" rule — and it was invisible: fifty more drinks and
+    // ฿7,500 went into a silent stop, every one printing its cheerful little
+    // confirmation (Vikram, 2026-08-27). One line closes it, in her voice.
+    const said = (G.soc.bondCapSaid = G.soc.bondCapSaid || {});
+    if (!said[id] && NPCS[id]) {
+      said[id] = true;
+      _say(_pickVary([
+        "(She takes it and she means the thank-you — but she is as warm as money gets tonight. " +
+          "The rest of the way is time, not baht.)",
+        "(Another one lands the same as the last. Whatever else she is going to think of you, " +
+          "she is not going to think it tonight, and not because of a drink.)",
+      ], "bondcap"), "dim");
+    }
+    return 0;
+  }
   book[id] = had + grant;
   _addBond(id, grant);
   return grant;
@@ -3626,6 +3661,7 @@ function _endNight(reason) {
   G.roomWater = 0;     // housekeeping restocks the two complimentary bottles
   G.peddlerNight = 0;  // …and the peddler's per-bar-night visit count resets
   G.lastBusWarned = false; // and the last-baht-bus heads-up fires once each night
+  G.soc.bfNight = {};  // …and tomorrow IS a new night: the bonded bypass re-arms per girl
   G.soc.greeted = {};  // a fresh night — she greets you anew
   G.soc.fed = {};      // fed-a-girl fondness is once per girl per night
   G.soc.charmed = {};  // the first spark of the night pays สนุก; repeats charm, not restack
@@ -3645,6 +3681,7 @@ function _endNight(reason) {
   G.soc.butterflyTeased = false;
   G.soc.bought = 0;          // the room's patience with a chequebook resets each night (_boughtHappy)
   G.soc.bondNight = {};      // …and so does how far a night of buying can carry one girl (_boughtBond)
+  G.soc.bondCapSaid = {};    // …so the "as warm as money gets tonight" line can land again tomorrow
   G.offstage = false; // never carry an "off with her" flag into a new night
   G.pendingBf = null; // a barfine still mid-negotiation at the bell dies with the night
   G.selfBfId = null;

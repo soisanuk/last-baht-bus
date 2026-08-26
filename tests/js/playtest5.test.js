@@ -2448,3 +2448,112 @@ test("the share card gained the social line: names, regulars, and the ledger", (
   assert.match(line, /♥ 1 regular/, "regulars counted");
   assert.match(line, /📖 2 told true/, "the other ledger counted — outcome-class only, never content");
 });
+
+// ── Vikram the optimizer (2026-08-27): the anti-churn design was its own exploit ──
+
+function bfSetup(bond) {
+  sandbox();
+  Object.keys(ENCOUNTERS).forEach(k => { G.encDone[k] = true; });
+  G.lastSaleng = 99999; G.lastPeddler = 99999;
+  G.room = "stinky_bar"; G.money = 20000; G.nightTurn = 62;  // past midnight: the draw refusal lifts
+  G.soc.drinks.manow = bond;
+}
+function oneST() {
+  if (G.room !== "stinky_bar") G.room = "stinky_bar";
+  out = []; doCommand("barfine manow");
+  if (!G.pendingBf) return null;
+  const h = G.happy;
+  out = []; doCommand("short time");
+  return G.happy - h;
+}
+
+test("the bonded treadmill bypass is a NIGHT-TO-NIGHT reward, not an all-night faucet", () => {
+  // Vikram: bonded ⇒ no jaded, her-farang ⇒ ฿0 fine, so BARFINE → SHORT TIME →
+  // repeat paid +7 for nothing on a 9-turn loop, forever. 439 สนุก against a
+  // stated summit of 100, one NPC spoken to. The anti-churn reward WAS the churn.
+  bfSetup(13);
+  const first = oneST();
+  assert.equal(first, 7, "the first of the night with your regular still pays the full bonded rate");
+  const rest = [oneST(), oneST(), oneST(), oneST()].filter(v => v != null);
+  assert.ok(rest.length >= 3, "the loop is still playable — it just stops paying");
+  for (let i = 1; i < rest.length; i++) {
+    assert.ok(rest[i] <= rest[i - 1], `repeat ${i} never pays more than the one before it`);
+  }
+  assert.ok(rest[rest.length - 1] < first, "…and the evening's last is worth less than its first");
+  assert.ok(G.jaded > 0, "the treadmill engages on the repeats, which is the whole point of it");
+  const total = first + rest.reduce((a, b) => a + b, 0);
+  assert.ok(total < 25, `a night of looping is worth ~20, not ~80 (got ${total})`);
+});
+
+test("…and tomorrow she is new again: depth across nights still pays full", () => {
+  bfSetup(13);
+  assert.equal(oneST(), 7, "night one");
+  oneST();                                   // spend the evening
+  // a real night boundary, and the per-night book re-arms
+  G.room = _hotelRoomId(); _endNight("sleep");
+  assert.deepEqual(G.soc.bfNight, {}, "the per-girl night count resets with the night");
+  G.jaded = 0;                               // (it also cools on its own, 1/day)
+  for (let d = 0; d < 6; d++) {              // roll past any per-day life refusal
+    bfSetupNext();
+    const v = oneST();
+    if (v != null) { assert.equal(v, 7, "a later night with her pays the full bonded rate again"); return; }
+    G.room = _hotelRoomId(); _endNight("sleep"); G.jaded = 0;
+  }
+  assert.fail("never got a clean night with her");
+  function bfSetupNext() {
+    G.room = "stinky_bar"; G.money = 20000; G.nightTurn = 62; G.soc.drinks.manow = 13;
+  }
+});
+
+test("a short time uses a condom, because HELP says it does", () => {
+  // Vikram: ~50 short-times consumed 0 of 3 condoms and G.std stayed null —
+  // the one repeatable action carried none of the risk the game promises. A
+  // stated rule the mechanics don't keep is the defect this repo lints for.
+  bfSetup(13);
+  G.condoms = 3; G.std = null;
+  oneST();
+  assert.equal(G.condoms, 2, "the short time used one");
+  G.condoms = 0;
+  const before = G.std;
+  for (let i = 0; i < 3; i++) oneST();
+  assert.equal(G.condoms, 0, "…and going without spends nothing");
+  assert.ok(before === null, "sanity: started clean");   // the roll itself is chance, not asserted
+});
+
+test("the black book is the DEPTH dashboard HELP claims: bonded girls appear, number or not", () => {
+  // Vikram: four girls at bond 5–22 and BLACKBOOK said "the black book's empty."
+  sandbox();
+  G.soc.drinks.manow = 13; G.soc.drinks.lek = 5;   // bonded, never asked for a number
+  G.phone.contacts = {};
+  out = []; doCommand("blackbook");
+  const said = out.join("\n");
+  assert.doesNotMatch(said, /black book's empty/, "it is not empty — you have two regulars");
+  assert.match(said, /Manow/, "your her-farang girl is in the book");
+  assert.match(said, /Lek/, "…and the one who knows your face");
+  assert.match(said, /\(2 in the book \(0 numbers\)/, "and the footer counts entries vs numbers honestly");
+});
+
+test("the bought-bond ceiling says itself out loud, once a night", () => {
+  // Vikram burned 50 drinks / ฿7,500 into a silent hard stop, each printing a
+  // cheerful confirmation.
+  sandbox();
+  const her = "manow";
+  for (let i = 0; i < BOND_NIGHT_CAP; i++) _boughtBond(her, 1);
+  out = []; _boughtBond(her, 1);
+  assert.match(out.join("\n"), /as warm as money gets tonight|not because of a drink/,
+    "the wall names itself");
+  out = []; _boughtBond(her, 1);
+  assert.equal(out.join("\n"), "", "…once, not on every further drink");
+});
+
+test("the share card always shows the ledger count — a conspicuous zero is the point", () => {
+  // Vikram's own fix: the ledger pays no สนุก by doctrine, so the SCORE never
+  // points at it and an optimizer never finds it. Put it on the grid instead.
+  startSoi6Mode();
+  G.pendingChoice = null;
+  (G.known = G.known || {}).lek = true;
+  const card = _shareCard().join("\n");
+  assert.match(card, /📖 0 told true/, "an exploit week's card shows the gap it left");
+  G.ledgerSeen = 3;
+  assert.match(_shareCard().join("\n"), /📖 3 told true/, "…and a lived week shows what it earned");
+});

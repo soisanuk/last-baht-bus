@@ -33,7 +33,15 @@ test("TODAY'S SOI seeds the daily; SHARE prints the week card and copies it", as
     seeded: G.rng > 0,
     advertised: document.getElementById("term-out").textContent.includes("Today's soi"),
   }));
-  const today = new Date().toISOString().slice(0, 10);
+  // The player's LOCAL calendar day, not UTC — this assertion used to read
+  // toISOString(), which is precisely the bug it was guarding: east of Greenwich
+  // an evening player pressed "TODAY'S SOI" and got yesterday's date on the card
+  // (Vikram, 2026-08-27, from UTC+8; this machine is UTC+7 and reproduces it).
+  // Every daily puzzle keys on your own calendar day; so does this one now.
+  const n = new Date();
+  const today = n.getFullYear() + "-" +
+    String(n.getMonth() + 1).padStart(2, "0") + "-" +
+    String(n.getDate()).padStart(2, "0");
   expect(daily.id).toBe(today);
   expect(daily.seeded).toBe(true);
   expect(daily.advertised).toBe(true);

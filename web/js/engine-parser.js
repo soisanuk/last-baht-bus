@@ -7889,11 +7889,19 @@ function _shareCard() {
   // score-chaser"). Names, bonds and stories are the game's actual depth axis
   // (the treadmill doctrine), so the record surface says so. Counts only —
   // outcome-class, never content, same rule as the night glyphs.
+  // The ledger count is ALWAYS rendered, including at zero. It pays no สนุก by
+  // doctrine (being told the truth is not a prize) — which means the score never
+  // points at the best-written thing in the game, and an optimizer will never
+  // find it: a 439-point exploit week finished with one NPC spoken to and no
+  // reveals. His own fix, and it's the right one — don't pay for it, PUT IT ON
+  // THE GRID: "we'll chase anything you put on the card" (Vikram, 2026-08-27).
+  // A conspicuous 📖 0 beside a big score is a gap a competitive player wants to
+  // close, and closing it means sitting still long enough to be told something.
   const names = Object.keys(G.known || {}).filter(id => NPCS[id]).length;
   const bonds = Object.keys((G.soc && G.soc.drinks) || {}).filter(id => _bondTier(id) >= 2).length;
   const social = names ? `👥 ${names} name${names === 1 ? "" : "s"}` +
     (bonds ? ` · ♥ ${bonds} regular${bonds === 1 ? "" : "s"}` : "") +
-    (G.ledgerSeen ? ` · 📖 ${G.ledgerSeen} told true` : "") : null;
+    ` · 📖 ${G.ledgerSeen || 0} told true` : null;
   return [
     `🚌 THE LAST BAHT BUS — Soi 6 (${label})`,
     `🌙 ${nights}`,
@@ -7973,10 +7981,15 @@ function _soi6Opening() {
   // sim: the treadmill jades the churn while people never stop paying (the
   // depth-beats-breadth doctrine, stated to the player for once — design note
   // 2026-08-26)
-  _say("(A word from the old hands: the meter loves PEOPLE. The same girl every " +
-    "night beats a different girl every hour, a name learned beats a round " +
-    "bought, and the man who leaves with stories out-scores the man who leaves " +
-    "with receipts. The town punishes churn. It always has.)", "dim");
+  // Every clause here has to be TRUE OF THE METER, not just of the fiction —
+  // this mode ships a score to a share card, and an optimizer audits strategy
+  // advice (Vikram, 2026-08-27: "a name learned" is worth exactly 0 points, so
+  // the old wording was the game lying to its own player in an old hand's voice).
+  // What survives is what measures: the bonded girl doesn't jade, and churn does.
+  _say("(A word from the old hands: the meter loves PEOPLE. Going back to the " +
+    "same girl tomorrow keeps paying, while a different girl every hour stops " +
+    "paying by midnight — the town charges you for churn, and it never charges " +
+    "her for knowing you. Buy fewer rounds. Come back more.)", "dim");
   if (G.dailyId) {
     _say(`Today's soi — the ${G.dailyId} daily: same week, same dice, everyone ` +
       "who plays it today. (SHARE prints your week card, any time.)", "dim");

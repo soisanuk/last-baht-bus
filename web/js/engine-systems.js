@@ -1069,7 +1069,18 @@ function _bfResolve(kind) {
       _passTime(Math.min(6, Math.max(0, NIGHT_TURNS - 1 - G.nightTurn)));
       G.offstage = false;
     }
-    _addBond(id, 2); // a short-time deepens the bond a little
+    // A short-time deepens the bond a little — but only the FIRST of the night
+    // with her. The +2 is EARNED bond, so it ignored the bought-bond nightly
+    // cap, which meant the free her-farang loop funded its own precondition
+    // (bond 13 → 109 on one girl in a week — Vikram, 2026-08-27). Going round
+    // again the same evening is the same evening; it doesn't deepen anything.
+    if (!(G.soc.bfNight && G.soc.bfNight[id] > 1)) _addBond(id, 2);
+    // HELP says "a barfine uses one; go without at your peril" — and it was only
+    // true of the OVERNIGHT path, so the one action a player can repeat all night
+    // carried none of the risk the game promised (~50 short-times consumed 0 of 3
+    // condoms, Vikram 2026-08-27). A stated rule the mechanics don't keep is the
+    // defect this repo lints for everywhere else.
+    _stdBarfineRoll();
     return;
   }
   // ── LONG TIME: overnight — unless she's running a game on you ──
@@ -2515,8 +2526,16 @@ function _doContacts() {
 // asked you over. A relationship dashboard; reads state, changes nothing.
 function _doBlackbook() {
   if (_phoneDead()) return;
-  // the punter's book of GIRLS — the fixer doesn't rank on a bond ladder
+  // the punter's book of GIRLS — the fixer doesn't rank on a bond ladder.
+  // Bonded girls appear whether or not you have her NUMBER: HELP calls this
+  // "your ladies, ranked by how they feel about you", and it answered "the black
+  // book's empty" at a man with four girls at bond 5–22 (Vikram, 2026-08-27) —
+  // the depth dashboard has to read the depth stat, or the mode whose whole
+  // thesis is depth-over-breadth can't show you your own depth.
   const ids = Object.keys(G.phone.contacts).filter(id => G.phone.contacts[id] && NPC_ROLES[id]);
+  for (const id of Object.keys(G.soc.drinks || {})) {
+    if (NPC_ROLES[id] && NPCS[id] && _bondTier(id) >= 1 && !ids.includes(id)) ids.push(id);
+  }
   if (!ids.length) {
     _say("The black book's empty. You earn names the honest way out here — CONTACT a " +
       "lady in her own bar once she likes you, and she goes in the book.");
@@ -2546,8 +2565,11 @@ function _doBlackbook() {
   // reason to walk somewhere rather than a scolding.
   const knownLadies = Object.keys(G.known || {}).filter(id => NPC_ROLES[id] && NPCS[id]).length;
   if (knownLadies > ids.length) {
-    _say(_fmt("({n} number{s} \u2014 out of {k} ladies you have actually met.)",
-      { n: ids.length, s: ids.length === 1 ? "" : "s", k: knownLadies }), "dim");
+    // "numbers" was accurate while the book was contacts-only; it now carries
+    // bonded girls whose number you never asked for, so it counts entries
+    const nums = ids.filter(id => G.phone.contacts[id]).length;
+    _say(_fmt("({n} in the book ({p} number{s}) \u2014 out of {k} ladies you have actually met.)",
+      { n: ids.length, p: nums, s: nums === 1 ? "" : "s", k: knownLadies }), "dim");
   }
   _say("(A bond cools a notch a night — tend the ones you mean to keep. MESSAGE / SEND / CONTACT.)", "dim");
 }

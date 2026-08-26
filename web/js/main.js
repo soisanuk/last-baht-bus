@@ -270,7 +270,14 @@ function _startGame(daily) { // START / TODAY'S SOI on the Soi 6 intro panel
     // Seed-of-the-day: the engine never reads a clock (shared-world rule 1),
     // so the DATE is computed here and handed in as a string — everyone who
     // presses TODAY'S SOI on the same calendar day gets the same week.
-    const d = new Date().toISOString().slice(0, 10);
+    // LOCAL date, not toISOString(): UTC put an Asian evening's player on
+    // "yesterday's" soi, so the button said TODAY and the card said otherwise
+    // (Vikram, 2026-08-27, from UTC+8 — and it's the shared-leaderboard key).
+    // Same convention as every daily puzzle: your calendar day is the puzzle.
+    const _n = new Date();
+    const d = _n.getFullYear() + "-" +
+      String(_n.getMonth() + 1).padStart(2, "0") + "-" +
+      String(_n.getDate()).padStart(2, "0");
     startSoi6Mode({ seed: _dailySeed(d), dailyId: d });
   } else {
     startSoi6Mode();

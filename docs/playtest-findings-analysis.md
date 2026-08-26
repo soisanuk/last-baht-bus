@@ -1018,3 +1018,74 @@ The asymmetry, by contrast, was a real hole: it existed as exactly ONE node
 4 new tests; 1203 vm + 45 e2e green. Deferred: deeper quest-surfacing in the
 challenge frame (the trust gate is the real bottleneck — a design pass on how a
 7-night guest earns story access is bigger than a framing fix).
+
+---
+
+# Round 31 — Vikram the optimizer (Opus, Soi 6 challenge, 2026-08-27)
+
+A quant dev who saw the emoji grid, decided it was a leaderboard, and set out to
+beat it. Sent deliberately as the CONTROL GROUP for the other-ledger work: the
+least likely player alive to care about a girl's side of the arithmetic, aimed at
+the mode built to make him care. Dual mandate: audit the game's own strategy
+claim with numbers, and report honestly whether any of the social layer landed.
+
+## The thesis verdict: "the town punishes churn" is TRUE — **and that is the bug**
+
+The anti-churn system is real and well-shaped (busy-girl escalation −1 then −5
+plus a ban, the BUTTERFLY reputation at −9, bond decay, the per-day honest
+refusal, the bought-bond ceiling). Measured: 28 drinks across 8 girls = −1 สนุก
+and an ejection; 40 drinks on one girl = +17 and no incidents. Depth wins.
+
+**But the REWARD for depth was unbounded.** Bonded ⇒ `_conquestHappy` bypasses
+the treadmill; her-farang ⇒ the barfine is waived to ฿0. So:
+
+    BARFINE <her-farang girl> → SHORT TIME → repeat
+
+paid **+7 สนุก for ฿0 on a 9-turn loop, with `jaded` frozen at 0, forever** — and
+each ST's earned +2 bond (which ignores the bought-bond nightly cap) *funded its
+own precondition*, taking one girl from bond 13 to **109**. Measured nights:
++72, +78, +80, +79. Final score **439 against a stated summit of 100**, with
+**1 NPC spoken to, 0 quests, 0 ledger reveals**, ฿59,400 of the bankroll unspent.
+The anti-churn design was its own faucet.
+
+## Fixed
+
+| # | Finding | Fix |
+|---|---|---|
+| V1 (**critical**) | The free her-farang ST loop: +7/฿0/9 turns, unbounded | The bonded bypass is a NIGHT-TO-NIGHT reward, not a within-night one: full rate on the first conquest with her each night, the treadmill prices every repeat that evening (`G.soc.bfNight`, nightly reset). Measured: a looping night now pays ~+17, tapering, instead of +80 unbounded — and a later night with her still pays the full +7, so the doctrine is intact |
+| V1b | The loop self-funded: ST's earned +2 bond ignored the nightly cap (13→109) | the +2 lands only on the first ST of the night with her |
+| V2 | HELP promises "a barfine uses one; go without at your peril" — `_stdBarfineRoll` fired only on the OVERNIGHT path, so ~50 short-times consumed 0 of 3 condoms | ST calls it too; the repeatable action now carries the risk the game states |
+| V3 | BLACKBOOK — "your ladies, ranked by how they feel about you" — answered "the black book's empty" at a man with four girls at bond 5–22 (it listed phone contacts, not bonds) | bonded girls appear whether or not you took her number; the footer counts entries vs numbers honestly |
+| V8 (**self-inflicted**) | The opening's new strategy line claimed "a name learned beats a round bought" — a name learned is worth exactly **0** | rewritten so every clause is true OF THE METER, not just of the fiction. This mode ships a score to a share card; strategy advice in an old hand's voice has to measure |
+| V5 | The bought-bond nightly ceiling was invisible — 50 drinks and ฿7,500 into a silent wall, each printing a cheerful confirmation | one line, once a night per girl, in her voice ("as warm as money gets tonight") |
+| V7 | The daily-seed key used `toISOString()` — east of Greenwich, "TODAY'S SOI" served yesterday's date on the shared card | the player's LOCAL calendar day, the universal daily-puzzle convention. The e2e assertion encoded the bug and was corrected with it |
+| V9 (his fix) | The ledger pays no สนุก by doctrine, so the score never points at it and an optimizer never finds it | **put it on the grid, not in the score**: the share card now always renders `📖 N told true`, including a conspicuous `📖 0`. "We'll chase anything you put on the card" |
+
+## Recorded, not fixed
+
+- **V4: Soi 6 bars are strictly dominated in the Soi 6 mode** — beer-bar ST ฿400
+  → +7 vs soi6 ฿700–1,050 → +6, so the optimal line never enters the mode's
+  namesake venues. A real balance inversion; the on-site +1 doesn't cover a 1.75×
+  price. Wants a pricing pass, not a patch.
+- **V2b: the photo faucet** (+1 สนุก/turn, ฿0, ~35–40 one-time stock) is the best
+  *rate* in the game; patrons at go-go/Soi 6 venues aren't camera-gated the way
+  staff are. Bounded, so not urgent.
+- **V6**: mamasan/cashier bond ceilings differ from hostesses with no signal.
+
+## The honest answer to the second question
+
+It landed exactly once, and then he optimised past it — which is the finding
+worth having. He selected a CASHIER as the perfect sink precisely because she
+never refuses, never gets "busy", never triggers heat: 130 drinks, ฿19,500, no
+incidents. Then at bond 22 he talked to her and got tier 1 (the chit tally, ฿60
+of the ฿150) and tier 2 ("She sit with four man tonight. I sit with one"), and
+wrote: *"my optimiser had selected her precisely for the property that was
+costing her money."* Then he opened a fresh week and scored 439 without speaking
+to anyone. **The card knows the difference; the score doesn't** — which is
+exactly why V9 is the right fix and paying สนุก for it would be the wrong one.
+
+**Method note: send the persona the content was NOT written for.** Every prior
+round tested the game against players disposed to like it. The optimizer is the
+adversary the design has to survive, and he found in one week what five
+sympathetic personas missed — because he was the only one looking for the
+dominant strategy rather than the story. Zero engine errors across ~450 commands.
