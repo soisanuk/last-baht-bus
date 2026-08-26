@@ -2365,6 +2365,7 @@ const _TAN_READ = {
   pete:   "the quiet one, who booked under a name that is not his",
   rob:    "the married one, who is not married any more and has not told his mother",
   barry:  "the golfer who has never once found the course",
+  kyle:   "the young one with the tripod, who wants to run a bar — and, Buddha help him, means it",
 };
 // {bar} is filled from _npcRoom at speaking time — the table once hard-coded
 // "Sandy Toes" (a room id; the sign says The Verandah) and put Doyle "up in
@@ -2377,6 +2378,7 @@ const _TAN_WHERE = {
   pete:   "a very quiet one at {bar}, corner stool, back to the wall",
   rob:    "a fellow at {bar} who looks like he is waiting for a phone call",
   barry:  "a man in golf clothes at {bar} who has not played golf",
+  kyle:   "a young fellow at {bar} with a computer beside his soda water, pitching the mamasan a loyalty programme",
 };
 function _tanWhere(id) {
   return (_TAN_WHERE[id] || "someone, somewhere on the soi").replace("{bar}", _barName(_npcRoom(id)) || "a bar on the soi");
@@ -2416,7 +2418,7 @@ function _tanAbout(topic) {
   return true;
 }
 function _tanOthers() {
-  const cast = ["doyle", "wayne", "roy", "macca", "pete", "rob", "barry"]
+  const cast = ["doyle", "wayne", "roy", "macca", "pete", "rob", "barry", "kyle"]
     .filter(id => NPCS[id] && _npcActive(id));            // the one you ARE is not out there
   const met = cast.filter(id => G.known && G.known[id] && (G.talked && G.talked[id]));
   const rest = cast.filter(id => met.indexOf(id) < 0);

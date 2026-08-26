@@ -7152,6 +7152,80 @@ const NPCS = {
     ],
   },
 
+  // The eighth origin NPC (added 2026-08-26 after the cold-casual playtest found
+  // no self-insert under 45): the digital nomad. Ex content-creation — found the
+  // field overcrowded and quietly scorned — now angling for bar management, and
+  // nobody takes him seriously. Deliberately NOT a con artist: the hustle-talk
+  // is sincere; his quest is one honest shift, and Bert's price for it is the
+  // floor doctrine the whole expat stage teaches ("start where the glass starts").
+  kyle: {
+    name: "Kyle", th: "ไคล์", emoji: "🧑‍💻",
+    pronoun: "he",
+    room: "pink_lotus",
+    origin: "nomad",
+    title: "a young farang at the end of the rail with a laptop and a soda water",
+    look: "Farang man of twenty-nine, neat short fade, trimmed beard, athletic build, grey performance t-shirt, smartwatch, laptop glow.",
+    desc: "American, twenty-nine, three years out of a cubicle via Chiang Mai, Bali and a visa " +
+      "run he describes as 'a pivot'. Ran faceless YouTube channels until the algorithm ate " +
+      "them; now nursing one soda water a night over a spreadsheet titled BAR_PIVOT_v7. Wants " +
+      "to manage a bar. Nobody takes it seriously — not the mamasans he's pitched, not the " +
+      "girls who pose for his channel and keep the tips, possibly not the spreadsheet. Earnest " +
+      "as a labrador, twice as tiring, and — this is the part nobody expects — not actually wrong.",
+    dialogue: [
+      { req: ["kyleShift"],
+        text: "\"Dude. DUDE.\" Kyle is off the stool before you're through the beads, and his " +
+          "handshake has changed — two days of ice-barrel work in it. \"Tuesday happened. Four " +
+          "hours of ice and close-down, and Bert let me count the float WITH him — watching, not " +
+          "touching, but still.\" He glows like his own ring light. \"He called me 'bud'. I think " +
+          "it's a rank. I learned more in one shift than in three years of content about " +
+          "hospitality.\" A beat, and quieter, the truest thing he's said: \"Nobody ever gave me " +
+          "homework before. They just stopped replying.\"",
+        short: "\"Tuesday happened. Ice, close-down, and Bert called me 'bud' — I think it's a rank.\"" },
+      { text: "The young guy at the end of the rail has a laptop open next to a soda water and a " +
+          "{{phone}} on a little tripod, filming nothing in particular. \"Hey — sorry, one sec, just " +
+          "posting.\" He isn't posting; he closes it, plainly glad of the company. \"Kyle. You out " +
+          "here long-term, or holiday? I'm asking for research. Legitimately — I'm getting into " +
+          "hospitality out here.\" Somewhere behind the rail a hostess repeats the word " +
+          "'hospitality' to the cashier, not quite quietly enough.",
+        short: "\"Kyle. Research — hospitality.\" Behind the rail, a hostess repeats 'hospitality' to the cashier.",
+        asks: { key: "job", q: "\"So what's your thing? Everybody out here's got a thing — a pension, a divorce, a scheme.\" He flips the laptop half-shut, actually listening, which out here is rarer than it should be. \"What do you do, back in the world?\"" } },
+      { topic: "content", text: "\"Four channels at peak. Faceless stuff — top-tens, AI voiceover, " +
+          "one about watches I know nothing about.\" He says it the way other men here say a " +
+          "marriage ended. \"Then the algorithm turned, and also — everyone's a creator now. The " +
+          "word stopped meaning anything around the time my mom started using it.\" A dry look at " +
+          "his own tripod. \"And out here? Tell a girl you 'make content' and watch her put her " +
+          "drink DOWN. Fair, honestly. The guys with cameras in this town are not the good guys.\"",
+        short: "\"Four channels, then the algorithm turned. And here, 'content' makes a girl put her drink down. Fair.\"" },
+      { topic: "bar", text: "\"I've pitched four bars. I have a deck — occupancy, socials, a " +
+          "loyalty thing.\" He turns the laptop: BAR_PIVOT_v7, forty tabs of sincerity. \"The " +
+          "mamasan here lets me sit because I tip up front. The one at the Tiger laughed in Thai " +
+          "for a full minute — I timed it. But the manager at the Stinky Pinky, Bert? He didn't " +
+          "laugh.\" Kyle goes still, quoting scripture: \"'Everything in this trade starts as a " +
+          "dirty glass, bud. Nobody hands you a floor.'\" A pause, which for Kyle is a monologue. " +
+          "\"I think that was a yes with homework.\"",
+        short: "\"Four bars pitched, one didn't laugh. Bert: 'everything in this trade starts as a dirty glass.' A yes with homework, I think.\"" },
+      { topic: "crypto", text: "\"I'm down sixty percent and no, I'm not selling, because the " +
+          "cycle— actually, you know what, new rule.\" He visibly closes his own mouth, sets a " +
+          "timer on the smartwatch. \"Ninety seconds.\" He uses all ninety — layer-twos, a friend's " +
+          "protocol, the phrase 'generational entry point' — and stops mid-word when it buzzes. " +
+          "\"...anyway. The tech is real, the people are exhausting, and I'm the people.\" He " +
+          "slides his glass an inch toward you like a settlement. \"Do NOT buy anything I own. " +
+          "That's not humility, that's my track record.\"",
+        short: "\"Down sixty percent, not selling. Ninety seconds on the timer. Don't buy anything I own — that's my track record.\"" },
+      { topic: "drink", text: "\"Oh — I don't really drink. Alcohol's a subscription fee your " +
+          "tomorrow pays.\" He hears himself say it and winces. \"Sorry. Podcast damage. Also, " +
+          "honestly? Beer's eighty baht and my runway is what my runway is — both things are " +
+          "true.\" He rotates the soda water, unembarrassed. \"The girls think it's hilarious. " +
+          "They call me 'health baby' — in Thai. I looked it up. I'm keeping it.\"",
+        short: "\"I don't really drink — podcast damage, plus runway. The girls call me 'health baby'. I'm keeping it.\"" },
+      { topic: "driver", text: "\"The airport guy? Tan?\" Kyle brightens. \"He's the only person " +
+          "out here who gave me actual advice instead of a laugh. 'Start by carrying something.' " +
+          "I wrote it on a sticky note on the laptop.\" He angles the lid: there it is, under the " +
+          "webcam. \"I thought it was, like, a metaphor. I'm starting to think he meant ice.\"",
+        short: "\"Tan told me 'start by carrying something.' It's on a sticky note. I think he meant ice.\"" },
+    ],
+  },
+
   // ── TAN — the driver, the fixer, the hub (the payoff of the whole web) ──────
   // Your airport driver from the intro, now a findable NPC at the mouth of Soi 6.
   // Every origin's quest dropped a fragment pointing here without naming him; nobody
@@ -9391,6 +9465,25 @@ const NPCS = {
       "quietly, works at being his own man out from under her shadow. Twenty-two years " +
       "on Beach Road, most of them within nine feet of that pool table.",
     dialogue: [
+      // the nomad's vignette payoff: the first person in town to take the boy
+      // seriously — by giving him the least serious job in the building
+      { topic: "kyle", when: (st, G) => G.quests.glass_start === "active" && !_flag("kyleShift"),
+        sets: ["kyleShift"],
+        text: "\"The content lad.\" Bert doesn't look up from the glass he's polishing. \"Been in " +
+          "three times. Tips like a man apologising for existing. Asked could he 'shadow' me — I " +
+          "told him this isn't a documentary, bud.\" The glass goes down, squared to the mat. " +
+          "\"But you're vouching, are you. A paying customer with sense in his head.\" A long look, " +
+          "the kind he gives a cue before a money shot. \"Tuesday. Four o'clock, before doors. He " +
+          "carries ice, he touches no till, and if he films one second of it he goes out the door " +
+          "in the bin barrel. Tell him what I told you when you were new: everything in this " +
+          "trade starts as a dirty glass.\"",
+        short: "\"Tuesday, four o'clock, before doors. Ice, no till, no filming. Tell him: everything in this trade starts as a dirty glass.\"" },
+      { topic: "kyle", req: ["kyleShift"],
+        text: "\"The lad?\" Something that is nearly a smile. \"Carried ice for four hours and " +
+          "never once checked his phone. That's rarer than you'd think, bud — in anybody.\" The " +
+          "cloth keeps moving. \"He'll not manage a bar this year. Might next. Wouldn't have said " +
+          "that a week ago.\"",
+        short: "\"Four hours of ice, never checked his phone. Might manage a bar next year. Wouldn't have said that a week ago.\"" },
       { topic: "bar", req: ["barPremises"],
         text: "\"This bar?\" Bert looks round it like a man checking his pockets. \"Twelve stools, a " +
           "fridge that hums, the old man's name on the lease and mine on the till. He'll carry you — " +
@@ -10568,6 +10661,22 @@ const QUESTS = {
     at: "barry",
     doneFlag: "wrongShot",
     reward: { money: 500, happy: 3 },
+  },
+  // The nomad's origin scene (the eighth): no mamasan will hand him a floor, but
+  // a paying customer with standing can put in a word. The payoff is Bert's
+  // floor doctrine given to somebody ELSE — the same lesson the expat stage
+  // teaches the player, arriving a stage early, in a barman's voice.
+  glass_start: {
+    vignette: true,
+    name: "Where the Glass Starts",
+    giver: "kyle",
+    trust: 1,
+    desc: "Kyle wants one honest shift behind a rail and nobody will give him one. You're a " +
+      "paying customer with standing — put a word in at the Stinky Pinky (ASK BERT ABOUT KYLE).",
+    deps: [],
+    at: "bert",
+    doneFlag: "kyleShift",
+    reward: { happy: 2 },
   },
   sangsom: {
     name: "The Sister-Bar Run",
@@ -12716,6 +12825,12 @@ const ORIGINS = [
   { id: "monger", label: "The monger",
     pick: "Golf. With the APAC team. (you did actually pack the clubs)",
     tan: "\"555 — the APAC team.\" Delighted, not unkind. \"I drive a hundred golfers who never find a course. You brought the clubs, which is somehow worse.\" A cheerful shrug. \"No shame, my man. This whole town is built on exactly you. Play your eighteen holes. All of them.\"" },
+  // The under-35 self-insert (Tyler playtest, 2026-08-26: all seven above read
+  // 45–65). Earnest, exhausting, and — the design note — NOT a con artist: the
+  // hustle-talk is sincere, the field he came from just stopped paying.
+  { id: "nomad", label: "The nomad",
+    pick: "I'm location-independent — content, some crypto, a few projects. Honestly? Long-term I want to get into bar management. Seriously.",
+    tan: "\"Bar management.\" He checks the mirror, not unkindly — filing you somewhere. \"Five years ago you all said 'content'. Before that, 'crypto'. The word changes, my friend; the seat of my taxi does not.\" At the lights, the one free piece of advice: \"A bar is not content. A bar is ice, and a blocked toilet at ten o'clock, and knowing which customer gets no more drink. Nobody in this town cares who follows you.\" The lights change. \"But you came to the right dirty town to learn it, na. Start by carrying something.\"" },
 ];
 
 // The same five ids also apply to NPCs: a hand-authored NPC may opt in with a
@@ -12787,6 +12902,7 @@ const ASK_REPLIES = {
     { origin: "business", text: "Gold Coast" },
     { origin: "married", text: "Buriram, half the year" },
     { origin: "monger", text: "Reading" },
+    { origin: "nomad", text: "Austin, technically" },
     { text: "Back home. It'll keep." },
   ],
   // what you do for a living — Belle's money-worry question, its own answer
@@ -12794,6 +12910,7 @@ const ASK_REPLIES = {
     { origin: "redundancy", text: "Had a good job. Note the tense" },
     { origin: "business", text: "I own a couple of things that own me back" },
     { origin: "pension", text: "Done working. The pension does the working now" },
+    { origin: "nomad", text: "Content. Don't laugh" },
     { pers: "joker", text: "As little as I can get away with" },
     { text: "Getting by. Nobody home is worried" },
   ],

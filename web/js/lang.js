@@ -71,6 +71,12 @@ const _CATALOGS = {
     "\"555 — the APAC team.\" Delighted, not unkind. \"I drive a hundred golfers who never find a course. You brought the clubs, which is somehow worse.\" A cheerful shrug. \"No shame, my man. This whole town is built on exactly you. Play your eighteen holes. All of them.\"":
       "\"555 — das APAC-Team.\" Erfreut, nicht gemein. \"Ich fahre hundert Golfer, die nie einen Platz finden. Du hast die Schläger mitgebracht, was irgendwie schlimmer ist.\" Ein fröhliches Achselzucken. \"Keine Schande, mein Freund. Diese ganze Stadt ist auf genau dich gebaut. Spiel deine achtzehn Löcher. Alle.\"",
 
+    "The nomad": "Der Nomade",
+    "I'm location-independent — content, some crypto, a few projects. Honestly? Long-term I want to get into bar management. Seriously.":
+      "Ich bin ortsunabhängig — Content, etwas Krypto, ein paar Projekte. Ehrlich? Langfristig will ich ins Bar-Management. Im Ernst.",
+    "\"Bar management.\" He checks the mirror, not unkindly — filing you somewhere. \"Five years ago you all said 'content'. Before that, 'crypto'. The word changes, my friend; the seat of my taxi does not.\" At the lights, the one free piece of advice: \"A bar is not content. A bar is ice, and a blocked toilet at ten o'clock, and knowing which customer gets no more drink. Nobody in this town cares who follows you.\" The lights change. \"But you came to the right dirty town to learn it, na. Start by carrying something.\"":
+      "\"Bar-Management.\" Er prüft den Spiegel, nicht unfreundlich — er sortiert dich irgendwo ein. \"Vor fünf Jahren habt ihr alle 'Content' gesagt. Davor 'Krypto'. Das Wort ändert sich, mein Freund; der Sitz in meinem Taxi nicht.\" An der Ampel der eine kostenlose Rat: \"Eine Bar ist kein Content. Eine Bar ist Eis, und eine verstopfte Toilette um zehn Uhr, und zu wissen, welcher Gast nichts mehr bekommt. Niemanden in dieser Stadt interessiert, wer dir folgt.\" Die Ampel springt um. \"Aber du bist in die richtige dreckige Stadt gekommen, um es zu lernen, na. Fang an, indem du etwas trägst.\"",
+
     // ── PERSONALITIES: label / pick / tan ────────────────────────────────────
     "Charmer": "Der Charmeur",
     "Someone easy to like.": "Jemand, den man leicht mag.",

@@ -24,8 +24,8 @@
  "counts": {
   "geolocated": 237,
   "patrons": 24,
-  "people": 331,
-  "portraits": 355,
+  "people": 332,
+  "portraits": 356,
   "renders": 352,
   "thumbs": 352,
   "venues": 237
@@ -1624,6 +1624,14 @@
    "role": "hostess",
    "room": "lake_beer",
    "th": "ขวัญใจ"
+  },
+  "kyle": {
+   "desc": "American, twenty-nine, three years out of a cubicle via Chiang Mai, Bali and a visa run he describes as 'a pivot'. Ran faceless YouTube channels until the algorithm ate them; now nursing one soda water a night over a spreadsheet titled BAR_PIVOT_v7. Wants to manage a bar. Nobody takes it seriously — not the mamasans he's pitched, not the girls who pose for his channel and keep the tips, possibly not the spreadsheet. Earnest as a labrador, twice as tiring, and — this is the part nobody expects — not actually wrong.",
+   "emoji": "🧑‍💻",
+   "name": "Kyle",
+   "pronoun": "he",
+   "room": "pink_lotus",
+   "th": "ไคล์"
   },
   "lamai": {
    "desc": "Elegant, weathered, and plainly the last word on everything in the room — the mamasan of The Stinky Pinky, from Sakon Nakhon. She came up from the rice fields and never once looked back.",
@@ -3637,6 +3645,7 @@
   "kwan",
   "kwang",
   "kwanjai",
+  "kyle",
   "lamai",
   "lawan",
   "lek",

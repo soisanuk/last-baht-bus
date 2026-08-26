@@ -2310,3 +2310,60 @@ test("the goal word teaches its own pronunciation on the surfaces a cold player 
   assert.match(out.join("\n"), /sabai sabai/, "HELP glosses the summit");
   assert.match(out.join("\n"), /sanuk/, "…and the score word");
 });
+
+// ── The eighth origin: the nomad (Tyler follow-up, 2026-08-26) ──
+
+test("the nomad is a pickable origin: listed eighth, Tan reads him, WHO AM I knows", () => {
+  newGame();
+  G.introAfter = "beach"; G.pendingChoice = "intro"; G.introStep = 0;
+  out = []; _introPrompt();
+  assert.match(out.join("\n"), /8\) /, "eight origins on the card");
+  assert.match(out.join("\n"), /location-independent/, "the nomad's pick is one of them");
+  out = []; _introAnswer("8");
+  assert.match(out.join("\n"), /Start by carrying something/, "Tan's read — the floor doctrine, seeded from minute one");
+  assert.equal(G.player.origin, "nomad");
+  G.pendingChoice = null; G.introStep = null;
+  out = []; doCommand("who am i");
+  assert.match(out.join("\n"), /The nomad/);
+});
+
+test("Kyle is the you-ARE-him NPC: deactivated for the nomad, present for everyone else", () => {
+  newGame(); G.player = { origin: "nomad", personality: "joker", orientation: "straight" };
+  assert.ok(!_npcActive("kyle"), "you can't meet the life you picked");
+  G.player.origin = "monger";
+  assert.ok(_npcActive("kyle") && _npcRoom("kyle") === "pink_lotus", "…but everyone else finds him at the Pink Lotus");
+});
+
+test("the glass-start vignette runs the real path: talk, answer, vouch at Bert, done", () => {
+  newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight" };
+  G.stage = "vacation"; _setFlag("act1Done"); _setFlag("hasWallet");
+  Object.keys(ENCOUNTERS).forEach(k => { G.encDone[k] = true; });
+  G.lastSaleng = 99999; G.lastPeddler = 99999; G.money = 5000;
+  G.room = "pink_lotus";
+  doCommand("talk to kyle");                       // greeting arms his job question
+  out = []; doCommand("IT support, back in Ohio"); // answering it clears the offer gate
+  out = []; doCommand("ask kyle about hospitality");
+  assert.match(out.join("\n"), /yes with homework|BAR_PIVOT/, "the ambition answers on the word he volunteers");
+  assert.equal(G.quests.glass_start, "active", "the vignette opened silently, like the other seven");
+  out = []; doCommand("ask kyle about crypto");
+  assert.match(out.join("\n"), /Do NOT buy anything I own/, "talks too much about crypto — and is not a con artist");
+  G.room = "stinky_bar";
+  out = []; doCommand("ask bert about kyle");
+  assert.match(out.join("\n"), /dirty glass/, "Bert's price is the floor doctrine");
+  assert.ok(_flag("kyleShift"));
+  _questTick();
+  assert.equal(G.quests.glass_start, "done");
+  // the payoff propagates both ways
+  out = []; doCommand("ask bert about kyle");
+  assert.match(out.join("\n"), /never once checked his phone/, "Bert's verdict, after");
+  G.room = "pink_lotus";
+  out = []; doCommand("talk to kyle");
+  assert.match(out.join("\n"), /Tuesday happened/, "and Kyle's best day out here");
+});
+
+test("Tan's manifest carries the eighth passenger", () => {
+  newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight" };
+  (G.known = G.known || {}).kyle = true; (G.talked = G.talked || {}).kyle = [0];
+  out = []; _tanOthers();
+  assert.match(out.join("\n"), /tripod.*means it|wants to run a bar/, "Tan drove him in too");
+});

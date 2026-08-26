@@ -1,14 +1,14 @@
 {
-  "generated": "2026-08-22",
+  "generated": "2026-08-26",
   "note": "Distinct, hand-authored characters with a portrait (excludes the 181 generic `filler` NPCs). Derived from web/js/world.js — regenerate with scripts/gen-portrait-manifest.mjs, do not hand-edit. `sex`/`venueKind` are generator heuristics for portrait archetype selection, not game canon.",
   "counts": {
-    "total": 144,
+    "total": 147,
     "byRole": {
-      "story": 39,
+      "story": 41,
       "mamasan": 25,
       "hostess": 44,
       "cashier": 13,
-      "patron": 23
+      "patron": 24
     },
     "filler": 209
   },
@@ -114,6 +114,20 @@
         "manager"
       ],
       "desc": "Seventy-six, American, behind his own bar on a stool worn to the shape of him. Reading glasses pushed up, a coffee going cold next to a beer he is not drinking, and forearms that were clearly once something. He first saw this coast in 1971, on seven days' leave, when it was a fishing village with a few huts rented to servicemen. He has been back more or less ever since."
+    },
+    {
+      "id": "cream",
+      "name": "Cream",
+      "source": "NPCS",
+      "role": "story",
+      "sex": "f",
+      "look": "Thai woman, twenty-four, hair down for once, a stylish casual dress, a cocktail, no number — a customer, not staff.",
+      "venueKind": "beer",
+      "emoji": "☕",
+      "th": null,
+      "room": "metro_garden",
+      "tags": [],
+      "desc": "At a table, not a stool: twenty-four or so, hair down, a simple dress that is stylish without trying, a cocktail she's making last. No number, no uniform, no hustle — she's scrolling her phone between glances at the bar like someone waiting for a friend to finish a shift. She smells faintly, improbably, of coffee."
     },
     {
       "id": "dj_beer",
@@ -224,6 +238,20 @@
       "room": "golden_dragon",
       "tags": [],
       "desc": "Fifties, a golf shirt with a discreet logo, a lager he barely touches and a way of looking at a bar like a spreadsheet. He calls himself an 'area consultant.' Everyone else calls him the White Dish man. He is unfailingly pleasant, which is the unsettling part."
+    },
+    {
+      "id": "kyle",
+      "name": "Kyle",
+      "source": "NPCS",
+      "role": "story",
+      "sex": "m",
+      "look": "Farang man of twenty-nine, neat short fade, trimmed beard, athletic build, grey performance t-shirt, smartwatch, laptop glow.",
+      "venueKind": "soi6",
+      "emoji": "🧑‍💻",
+      "th": "ไคล์",
+      "room": "pink_lotus",
+      "tags": [],
+      "desc": "American, twenty-nine, three years out of a cubicle via Chiang Mai, Bali and a visa run he describes as 'a pivot'. Ran faceless YouTube channels until the algorithm ate them; now nursing one soda water a night over a spreadsheet titled BAR_PIVOT_v7. Wants to manage a bar. Nobody takes it seriously — not the mamasans he's pitched, not the girls who pose for his channel and keep the tips, possibly not the spreadsheet. Earnest as a labrador, twice as tiring, and — this is the part nobody expects — not actually wrong."
     },
     {
       "id": "macca",
@@ -1922,6 +1950,22 @@
       "nat": "American",
       "tags": [],
       "desc": "Seventy-four, horn-rimmed glasses and a Hawaiian shirt at war with itself, a spiral notebook and a biro he clicks while he watches the soi. He has been on this coast longer than most of the bars, and he is writing all of it down whether it likes it or not."
+    },
+    {
+      "id": "neil",
+      "name": "Neil",
+      "source": "PATRONS",
+      "role": "patron",
+      "look": "British man of fifty-four, heavy-shouldered, cropped greying hair, plain navy polo, one bottle of Leo, unhurried.",
+      "sex": "m",
+      "venueKind": "beer",
+      "emoji": "🫖",
+      "th": null,
+      "room": "lake_beer",
+      "age": 54,
+      "nat": "British",
+      "tags": [],
+      "desc": "Fifty-four, heavy through the shoulders the way a man gets from lifting things rather than weights, cropped hair going grey, a plain navy polo that has been washed into softness. One bottle of Leo in front of him, nursed rather than drunk. He watches the road and the water with the settled, unperformed quiet of a man who has done the heavy part of something and sees no reason to mention it."
     },
     {
       "id": "nigel",

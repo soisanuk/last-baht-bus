@@ -459,6 +459,8 @@ CHARS = {
     "pete":     dict(skin=PALE, hair="short", hc=GREY, shirt=C(0x3a3a44), collar=True, mouth="stern", bg=BG_BAR),
     "rob":      dict(skin=TAN, hair="short", hc=C(0x6a5a48), shirt=C(0x4a6a8a), collar=True, mouth="neutral", bg=BG_GOGO),
     "barry":    dict(skin=RED, hair="combover", hc=C(0x8a7a58), shirt=C(0xe8d84a), collar=True, mouth="grin", bg=BG_GOGO),
+    # Kyle — the eighth origin (digital nomad): young, neat, grey tech tee, no collar
+    "kyle":     dict(skin=PALE, hair="short", hc=C(0x6a4a2a), shirt=C(0x8a8f96), mouth="grin", bg=BG_GOGO),
     # Tan — the driver/fixer/hub. Deliberately unremarkable: plain, calm, forgettable.
     "tan":      dict(skin=THAI2, hair="short", hc=BLACK, shirt=C(0x6a7078), collar=True, mouth="neutral", bg=BG_STREET),
     "powers":   dict(skin=TAN, hair="slick", hc=BLACK, shirt=C(0xe8e0d0), collar=True, mouth="grin", acc=["sunglasses"], bg=BG_GOGO),

@@ -2842,6 +2842,8 @@ const _CONVO_TOPIC_RULES = [
   [/\bhosts?\b|\bhost bar\b|the boys\b/,                                      "scene"],
   [/\bsims?\b|\bunlock(ing|ed)?\b|screen fix|cracked screen/,                  "job"],
   [/house rules?|the rules\b|your rules/,                                       "rules"],
+  // the nomad's pitch words — a player types back the ambition Kyle volunteers
+  [/\bhospitality\b|bar ?manage(?:r|ment)?\b|\bthe pivot\b|\bpitch(?:ing|ed)?\b/, "bar"],
   // The Act One safe: four people hold a piece of the code and every one of them
   // holds it under `oy`, so the words a player actually types missed on the
   // critical path (persona report B#5, 2026-08-23). Literal keys still win, so an
