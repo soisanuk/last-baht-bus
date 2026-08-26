@@ -5,12 +5,22 @@ on:
     branches: [main]
   workflow_dispatch:
 
+# Action pins: v5 is the first major of checkout/setup-node to run on node24.
+# v4 targeted node20 and the runners were force-upgrading it with a deprecation
+# annotation on every job — a warning today, a hard failure on GitHub's
+# timeline, which for this repo means no deploys (deploy needs [test, e2e]).
+# Deliberately NOT the newest major: v5/v6/v7 are all node24, so the runway is
+# identical, and checkout v6 reworked how credentials are persisted — which is
+# the mechanism news.yml's `git push` rides on. Same benefit, smaller delta.
+# (setup-node v5+ can auto-cache npm, but only when package.json declares a
+# `packageManager`/`devEngines.packageManager` field. Ours declares neither, so
+# nothing changes here — worth knowing if that field is ever added.)
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
       - run: node --test
@@ -20,8 +30,8 @@ jobs:
   e2e:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
       - run: npm ci
@@ -34,7 +44,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Deploy web/ to gh-pages
         uses: peaceiris/actions-gh-pages@v4
         with:
