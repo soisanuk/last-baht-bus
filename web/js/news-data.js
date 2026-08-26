@@ -18,33 +18,33 @@ var NEWS_FEED = [
     "d": "25 Aug 2026"
   },
   {
+    "t": "Major move puts U-tapao Rayong-Pattaya International Airport project on fast track",
+    "s": "Pattaya Mail",
+    "d": "25 Aug 2026"
+  },
+  {
+    "t": "Australian suspect says he killed Thai girl in self-defence",
+    "s": "Thaiger",
+    "d": "26 Aug 2026"
+  },
+  {
+    "t": "Thai network demands 65,000 baht to smuggle Chinese from Cambodia to Malaysia",
+    "s": "Pattaya Mail",
+    "d": "25 Aug 2026"
+  },
+  {
+    "t": "Coordinated arson and bomb attacks hit 68 sites in southern Thailand",
+    "s": "Pattaya Mail",
+    "d": "24 Aug 2026"
+  },
+  {
     "t": "Southern Thailand braces for rising PM2.5 levels amid regional haze",
     "s": "Pattaya Mail",
     "d": "24 Aug 2026"
   },
   {
-    "t": "Nan Industry Office resumes operations after floods damage 29 businesses",
-    "s": "Pattaya Mail",
-    "d": "25 Aug 2026"
-  },
-  {
-    "t": "Major move puts U-Tapao Airport project on fast track",
-    "s": "Pattaya Mail",
-    "d": "25 Aug 2026"
-  },
-  {
-    "t": "Pattaya tightens beachfront parking rules to protect public spaces",
-    "s": "Pattaya Mail",
-    "d": "24 Aug 2026"
-  },
-  {
-    "t": "Norwegian loses 5,000 baht after offering to help man in Pattaya",
-    "s": "Thaiger",
-    "d": "25 Aug 2026"
-  },
-  {
-    "t": "USS Abraham Lincoln headed for port in Thailand after 250 days at sea",
-    "s": "The Hill",
+    "t": "USS Abraham Lincoln to dock in Thailand next week, Thai official says",
+    "s": "Navy Times",
     "d": "25 Aug 2026"
   },
   {
@@ -58,30 +58,30 @@ var NEWS_FEED = [
     "d": "23 Aug 2026"
   },
   {
-    "t": "Thailand Seen Holding Rate at 1% After Slump in Quarterly Growth",
-    "s": "Bloomberg.com",
-    "d": "26 Aug 2026"
-  },
-  {
-    "t": "A political amnesty law takes effect in Thailand but excludes lese majeste",
-    "s": "AP News",
+    "t": "Foreigners given a say on tourism fee",
+    "s": "Bangkok Post",
     "d": "25 Aug 2026"
   },
   {
-    "t": "Couple Sells Everything, Moves to Thailand to Homeschool Kids for ‘Simple’ Life",
-    "s": "People.com",
-    "d": "23 Aug 2026"
+    "t": "Thailand’s Expanding Section 112",
+    "s": "Tablet Magazine",
+    "d": "26 Aug 2026"
+  },
+  {
+    "t": "Thailand Seen Holding Rate at 1% After Slump in Quarterly Growth",
+    "s": "Bloomberg.com",
+    "d": "26 Aug 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-08-25","USD":32.73,"AUD":23.42,"GBP":44.62,"EUR":38.18};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-26","temp":30,"humid":69,"code":3,"hi":31,"rain":58};
+var WX_NOW = {"date":"2026-08-26","temp":31,"humid":63,"code":3,"hi":31,"rain":73};
 // the bar TV's one true channel
-var FOOTY = {"league":"Premier League","games":[{"d":"2026-08-22","done":true,"h":"Hull","hs":2,"a":"Man United","as":0},{"d":"2026-08-22","done":true,"h":"Everton","hs":2,"a":"C Palace","as":0},{"d":"2026-08-22","done":true,"h":"Ipswich","hs":2,"a":"Sunderland","as":1},{"d":"2026-08-22","done":true,"h":"Nottm Forest","hs":0,"a":"Leeds","as":1},{"d":"2026-08-22","done":true,"h":"Brentford","hs":3,"a":"Spurs","as":0},{"d":"2026-08-23","done":true,"h":"Brighton","hs":4,"a":"Aston Villa","as":0},{"d":"2026-08-23","done":true,"h":"Man City","hs":2,"a":"Bournemouth","as":1},{"d":"2026-08-23","done":true,"h":"Newcastle","hs":2,"a":"Liverpool","as":2},{"d":"2026-08-24","done":true,"h":"Fulham","hs":2,"a":"Chelsea","as":3},{"d":"2026-08-28","done":false,"h":"C Palace","hs":0,"a":"Man City","as":0},{"d":"2026-08-29","done":false,"h":"Liverpool","hs":0,"a":"Nottm Forest","as":0},{"d":"2026-08-29","done":false,"h":"Bournemouth","hs":0,"a":"Everton","as":0}]};
+var FOOTY = {"league":"Premier League","games":[{"d":"2026-08-23","done":true,"h":"Brighton","hs":4,"a":"Aston Villa","as":0},{"d":"2026-08-23","done":true,"h":"Man City","hs":2,"a":"Bournemouth","as":1},{"d":"2026-08-23","done":true,"h":"Newcastle","hs":2,"a":"Liverpool","as":2},{"d":"2026-08-24","done":true,"h":"Fulham","hs":2,"a":"Chelsea","as":3},{"d":"2026-08-28","done":false,"h":"C Palace","hs":0,"a":"Man City","as":0},{"d":"2026-08-29","done":false,"h":"Liverpool","hs":0,"a":"Nottm Forest","as":0},{"d":"2026-08-29","done":false,"h":"Bournemouth","hs":0,"a":"Everton","as":0},{"d":"2026-08-29","done":false,"h":"Coventry","hs":0,"a":"Hull","as":0},{"d":"2026-08-29","done":false,"h":"Spurs","hs":0,"a":"Newcastle","as":0},{"d":"2026-08-30","done":false,"h":"Chelsea","hs":0,"a":"Brighton","as":0},{"d":"2026-08-30","done":false,"h":"Leeds","hs":0,"a":"Brentford","as":0},{"d":"2026-08-30","done":false,"h":"Sunderland","hs":0,"a":"Fulham","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-08-16","first":"004615","last2":"53","front3":["429","731"],"back3":["094","937"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4656,"date":"2026-08-26","baht":72100};
+var GOLD = {"usd":4639,"date":"2026-08-26","baht":71800};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":78765,"thb":2576642};
+var BTC = {"usd":79029,"thb":2585586};
