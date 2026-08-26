@@ -7082,7 +7082,7 @@ test("flashlight in a go-go draws the no-photo warning; girls tease elsewhere", 
   state().battery = 50;
   state().lightOn = true;
   state().pendingEnc = null;
-  run("in"); // → KINKY
+  run("enter kinky"); // venues[], 2026-08-27 — no more bare "in"
   assert.equal(state().room, "kinky");
   assert.match(lastOut(), /No photo. No video/i, "go-go photo warning");
 
@@ -7115,7 +7115,7 @@ test("go-go flashlight escalation: two warnings, then security walks you out", (
   state().battery = 50;
   state().lightOn = true;
   state().pendingEnc = null;
-  run("in"); // → KINKY, warning 1 on entry
+  run("enter kinky"); // venues[], 2026-08-27 — warning 1 on entry
   assert.equal(state().room, "kinky");
   assert.match(lastOut(), /No photo. No video/, "warning 1");
   out = [];

@@ -3230,13 +3230,14 @@ const ROOMS = {
     name: "LK Metro (Main Alley)",
     region: "LK Metro",
     desc: "The long leg of the L, and the one everybody means by LK Metro: bars packed shoulder to shoulder, neon on both sides, " +
-      "sound bleeding from KINKY Go-Go to the north and SLUTTY Go-Go to the south until " +
-      "they're indistinguishable. Good energy — dense, close, the kind of loud that's a " +
-      "decision rather than an accident. A motorbike idles past carrying a girl in full " +
-      "sequins at a speed that's technically legal. THE OFFSIDE SPORTS BAR breaks the neon " +
-      "with the cold blue wash of a dozen screens. East the neon runs out and the alley spills " +
-      "onto Soi Buakhao; west it bends at the corner toward the entrance.",
-    exits: { w: "lk_bend", e: "buakhao_lk", n: "kinky", s: "slutty", in: "kinky", pub: "lk_sports" },
+      "sound bleeding from KINKY Go-Go and SLUTTY Go-Go until they're indistinguishable. Good " +
+      "energy — dense, close, the kind of loud that's a decision rather than an accident. A " +
+      "motorbike idles past carrying a girl in full sequins at a speed that's technically legal. " +
+      "THE OFFSIDE SPORTS BAR breaks the neon with the cold blue wash of a dozen screens. East " +
+      "the neon runs out and the alley spills onto Soi Buakhao; west it bends at the corner " +
+      "toward the entrance.",
+    venues: ["kinky", "slutty", "lk_sports"],
+    exits: { w: "lk_bend", e: "buakhao_lk" },
   },
   lk_sports: {
     name: "The Offside Sports Bar",
@@ -3258,8 +3259,8 @@ const ROOMS = {
       "Two open-front beer bars, THE METRO BEER GARDEN and THE PIT STOP, catch the ones " +
       "who've had enough go-go for one night. Less overwhelming than Walking Street; more " +
       "like something you discovered.",
-    exits: { s: "lk_entrance", e: "lk_main", in: "las_vegas",
-             n: "metro_garden", pit: "pit_stop", vegas: "las_vegas" },
+    venues: ["las_vegas", "metro_garden", "pit_stop"],
+    exits: { s: "lk_entrance", e: "lk_main" },
   },
   metro_garden: {
     name: "The Metro Beer Garden",
