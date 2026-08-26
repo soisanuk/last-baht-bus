@@ -1974,7 +1974,8 @@ const ROOMS = {
       "girls work the aisle rather than the street, leaning out as you pass and calling you back " +
       "when you don't stop. A couple of them are katoey bars and make no particular announcement " +
       "of it. THE AMP ROOM holds the far end, where the complex keeps its live music, and the " +
-      "bathrooms everybody shares are behind it.",
+      "bathrooms everybody shares are behind it. Of the doors off the aisle, BUTTERFLY is north, " +
+      "CHOK DEE east and SAWASDEE west; the market is back south.",
 
     exits: { s: "myth_night", in: "amp_room", e: "feedback_bar", w: "encore_bar", n: "soundcheck_bar" },
   },
@@ -2036,7 +2037,8 @@ const ROOMS = {
       "less roof over it: open fronts, plastic stools out to the kerb, a strip of tarmac doing " +
       "duty as a terrace. The DJ arrives a half-beat late from the other side and nobody minds. " +
       "A few baht cheaper and a degree quieter, and the staff know exactly which of those two " +
-      "facts brought you across.",
+      "facts brought you across. COCO BAR holds the east side, VENUS the west, SUNFLOWER the " +
+      "south end, and NUMBER ONE is the one you step straight into; the market is back north.",
 
     exits: { n: "myth_night", in: "craft_cargo", e: "the_growler", w: "container_8", s: "reload_bar" },
   },

@@ -441,3 +441,55 @@ test("LK Metro's main alley reads the same from both ends", () => {
   assert.doesNotMatch(desc, /behind you|Ahead the/,
     "arriving from Buakhao put the corner ahead and Buakhao behind — the prose said the opposite");
 });
+
+// ── …and the mirror image: a door the prose never mentions ───────────────────
+// The sibling test above catches prose that names a direction the room lacks.
+// This catches the opposite, which is what players actually trip over: an exit
+// that EXISTS on a bare compass point and leads into a venue, with nothing in
+// the description to say so — so mapping a lane by compass yanks you indoors,
+// two turns a time (Marguerite, 2026-08-27, six mis-entries in one session; the
+// 2026-08-26 pass fixed Tree Town by hand and never guarded the class, leaving
+// 16 live cases including the Orchid Club she lost fifteen turns hunting).
+// EXITS now labels these at runtime, but a room that reads right needs no verb.
+test("a venue door on a compass point is named in the room's prose", () => {
+  const strip = t => String(t || "").replace(/\{\{|\}\}/g, "");
+  const bad = [];
+  for (const [id, r] of Object.entries(ROOMS)) {
+    for (const d of ["n", "s", "e", "w"]) {
+      const to = r.exits && r.exits[d];
+      const t = to && ROOMS[to];
+      if (!t || !(t.barType || t.shop || t.massage || t.soapy || t.hostBar)) continue;
+      const nm = _barName(to) || t.name;
+      const key = String(nm).replace(/^(The|A) /, "").split(/[ (—]/)[0];
+      if (!key || key.length <= 2) continue;
+      const re = new RegExp(key.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i");
+      if (!re.test(strip(r.desc))) bad.push(`${id}: ${d} → ${nm}`);
+    }
+  }
+  // Allow-list, each with a reason — same discipline as the direction lint and
+  // the reference lint's OK set: a named exception, never a looser matcher.
+  const OK = new Set([
+    // Deliberately unfindable: "you don't find the Orchid, you get sent" is the
+    // whole point of the venue (see the factions doc). HINT names the district.
+    "naklua_rd: w → The Orchid Club",
+    // Lake-side and Darkside frontages the prose describes as scenery on the
+    // shore/strip rather than as doors — they read as places, not turnings.
+    "lake_mabprachan: w → The Sundowner",
+    "lake_bar: w → The Sundowner",
+    "khao_talo: e → Daeng's Place",
+    // Soi Honey's two massage houses ARE the street's description ("shophouse
+    // after shophouse of them"); naming two of the dozen would mislead worse.
+    "soi_honey_w: s → Honeycomb Massage",
+    "soi_honey_e: n → The Hive",
+    // Soi Diana is written as a continuous wall of bars for the same reason —
+    // the room prose names the strip, and singling out four frontages would
+    // imply the rest aren't there.
+    "diana_w: n → The Dollhouse",
+    "diana_mid: n → Sapphire Bar",
+    "diana_mid: s → Sundowner Bar",
+    "diana_e: n → The Cricketers",
+  ]);
+  const real = bad.filter(b => !OK.has(b));
+  assert.deepEqual(real, [], "unannounced venue door(s) on a compass point — name it in the " +
+    "room's desc, or add it to OK with the reason:\n" + real.join("\n"));
+});
