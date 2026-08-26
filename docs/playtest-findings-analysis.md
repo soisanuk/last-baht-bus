@@ -978,3 +978,43 @@ that the goal word was unreadable, that a Thai-numeral price gated a purchase,
 or that the interface's one broken promise (T1) lands twice as hard on someone
 with no sunk affection. And the engagement answer itself — captured, returning,
 sharing — is the market datum no defect hunt produces.
+
+---
+
+# Design response — "a survival score-chaser, not a social sim" (2026-08-26)
+
+External feedback: a pure max-สนุก / survive-the-week Soi 6 challenge risks
+reading as a resource-management or temptation simulator; the character-driven
+interconnected quests and the Thai-vs-farang perspective asymmetry are what make
+it the social simulation / narrative RPG intended.
+
+**Measured before building.** The quest layer largely SURVIVES the challenge
+pocket (10 of 19 offerable quests reachable, including every origin vignette) —
+the first probe's "1 quest" was the trust gate, which applies in full mode too.
+So the narrative content exists; the FRAME never points at it, and a
+score-optimizing player never talks long enough to unlock it (authored-dialogue
+delivery: 6.4%). Tyler's cold run is the confirming datum: every hook he named
+was relational, and his return reason was "a person expecting him" — players
+already respond to the social sim; the scoreboard just doesn't.
+
+The asymmetry, by contrast, was a real hole: it existed as exactly ONE node
+(Lek's rainy-night price story — one girl, one weather condition, bond-gated).
+
+**Built (user's call: both, ledger first, as earned interstitials):**
+
+1. **The other ledger** — the asymmetry generalised into a system. Three
+   reveals per girl, at bond tiers, lowest-unseen first, once each ever: the
+   cut (LADY_CUT vs LADY_DRINK), the cost of you (the quota, the kept seat
+   priced in unfilled seats), the arithmetic of a life (BAR_SALARY, HOME_SEND,
+   the years). Doctrine pinned by test: **no สนุก, no bond, no reward — only
+   what you know changes.** Register: Lek reading a receipt, never a narrated
+   interior, never victim, never schemer.
+2. **The frame points at the people** — the share card gained the social line
+   (👥 names · ♥ regulars · 📖 told true; counts only, never content) and the
+   soi6 opening now states the depth-beats-breadth doctrine out loud ("the
+   town punishes churn. It always has.") — which was already the scoring
+   truth (_conquestHappy's treadmill) but had never been said to the player.
+
+4 new tests; 1203 vm + 45 e2e green. Deferred: deeper quest-surfacing in the
+challenge frame (the trust gate is the real bottleneck — a design pass on how a
+7-night guest earns story access is bigger than a framing fix).

@@ -2388,3 +2388,63 @@ test("the third answer to Tan's last question: the deflection he sees straight t
   out = []; _introAnswer("2");
   assert.equal(G.player.orientation, "bi", "option 2 is still open-minded");
 });
+
+// ── The other ledger (design note 2026-08-26): the asymmetry, made mechanical ──
+
+test("the other ledger: earned at bond tiers, told in order, once each, never again", () => {
+  sandbox();
+  Object.keys(ENCOUNTERS).forEach(k => { G.encDone[k] = true; });
+  G.lastSaleng = 99999; G.lastPeddler = 99999;
+  const her = Object.keys(NPCS).find(id => NPCS[id].filler && NPC_ROLES[id] === "hostess");
+  G.room = _npcRoom(her);
+  G.soc.drinks[her] = 14;                      // warmed fast, straight to her-farang
+  out = []; doCommand("talk to " + NPCS[her].name);
+  assert.match(out.join("\n"), /chit|tally|฿60/, "the FIRST reveal is still the cut — the sequence, not a menu");
+  assert.deepEqual(G.soc.ledger[her], [1]);
+  out = []; doCommand("talk to " + NPCS[her].name);
+  assert.deepEqual(G.soc.ledger[her], [1, 2], "second sitting: the cost of you");
+  out = []; doCommand("talk to " + NPCS[her].name);
+  assert.deepEqual(G.soc.ledger[her], [1, 2, 3], "third: the arithmetic of a life");
+  out = []; doCommand("talk to " + NPCS[her].name);
+  assert.deepEqual(G.soc.ledger[her], [1, 2, 3], "and never a fourth — a reveal, not a loop");
+  assert.equal(G.ledgerSeen, 3);
+});
+
+test("being told the truth is not a prize: the ledger pays no สนุก and no bond", () => {
+  sandbox();
+  Object.keys(ENCOUNTERS).forEach(k => { G.encDone[k] = true; });
+  G.lastSaleng = 99999; G.lastPeddler = 99999;
+  const her = Object.keys(NPCS).find(id => NPCS[id].filler && NPC_ROLES[id] === "hostess");
+  G.room = _npcRoom(her);
+  G.soc.drinks[her] = 3;
+  const h0 = G.happy, b0 = G.soc.drinks[her];
+  out = []; doCommand("talk to " + NPCS[her].name);
+  assert.ok(G.soc.ledger[her].includes(1), "the reveal fired");
+  assert.equal(G.happy, h0, "no สนุก for hearing it");
+  assert.equal(G.soc.drinks[her], b0, "no bond for hearing it — only what you know changed");
+});
+
+test("her numbers come from the constants, and they are HER numbers", () => {
+  // the cut names LADY_CUT against LADY_DRINK; the month names BAR_SALARY and
+  // HOME_SEND — concatenated, never typed (the references-lint doctrine)
+  assert.ok(LADY_CUT < LADY_DRINK, "the share is less than the price — that IS the reveal");
+  const t1 = _OTHER_LEDGER[1].map(f => f("X")).join(" ");
+  assert.ok(t1.includes("฿" + LADY_CUT) && t1.includes("฿" + LADY_DRINK), "tier 1 states both sides of the drink");
+  const t3 = _OTHER_LEDGER[3].map(f => f("X")).join(" ");
+  assert.ok(t3.includes("฿" + HOME_SEND) && t3.includes("฿" + BAR_SALARY), "tier 3 states the month");
+});
+
+test("the share card gained the social line: names, regulars, and the ledger", () => {
+  startSoi6Mode();
+  G.pendingChoice = null; G.player = { origin: "monger", personality: "joker", orientation: "straight" };
+  // an empty week has no social line — the card doesn't scold
+  assert.ok(!_shareCard().some(l => /👥/.test(l)), "no names, no line");
+  (G.known = G.known || {}).lek = true;
+  G.soc.drinks.lek = 8; G.ledgerSeen = 2;
+  const card = _shareCard();
+  const line = card.find(l => /👥/.test(l));
+  assert.ok(line, "…and a lived week has one");
+  assert.match(line, /1 name/, "names counted");
+  assert.match(line, /♥ 1 regular/, "regulars counted");
+  assert.match(line, /📖 2 told true/, "the other ledger counted — outcome-class only, never content");
+});

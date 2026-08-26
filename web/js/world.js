@@ -10994,6 +10994,18 @@ const WORK_NIGHTS = [
 // Effects live in engine-systems (_shiftYes/_shiftNo); the text lives here, the
 // same split as SYNDICATE_JOBS, because content out of the engine is the shared
 // down-payment on reuse, online and 2D.
+// ── The other ledger ─────────────────────────────────────────────────────────
+// The same night has two sets of books. You see a price; she sees a share, a
+// quota and a month. These are HER figures — the ones the transaction never
+// shows the man paying — and they exist so the asymmetry can be stated in
+// numbers instead of implied in atmosphere (design note 2026-08-26: the
+// challenge frame reads as a resource sim precisely because only one ledger is
+// ever visible). Canon-plausible, deliberately unglamorous.
+const LADY_CUT     = 60;   // her share of a LADY_DRINK — the bar keeps the rest
+const BAR_QUOTA    = 30;   // lady drinks a month before the bonus starts
+const BAR_SALARY   = 9000; // the monthly base a Soi 6 bar pays; everything else is commission
+const HOME_SEND    = 7000; // what a month typically sends north — before she has eaten
+
 // ── The staff affair ─────────────────────────────────────────────────────────
 // You can fall for a girl on your own floor — the classic bar-owner story, and
 // the game lets you live it instead of refusing at the door. The design rule is

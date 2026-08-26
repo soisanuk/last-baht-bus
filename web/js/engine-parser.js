@@ -2734,7 +2734,9 @@ function _doTalkBody(arg, topic) {
   // that just fired). Hand-authored NPCs speak their own bond: lines instead.
   if (!topic && NPCS[npc].filler && NPC_ROLES[npc] === "hostess" &&
       _bondTier(npc) >= 2 && !(d && d.bond)) {
-    _bondTalk(npc); _questOffer(npc);
+    _bondTalk(npc);
+    if (typeof _otherLedger === "function") _otherLedger(npc);
+    _questOffer(npc);
     (G.seenDay = G.seenDay || {})[npc] = G.day;
     return;
   }
@@ -2789,6 +2791,10 @@ function _doTalkBody(arg, topic) {
   }
   _deliver(npc, d);
   if (NPCS[npc].manager) _managerChatTick(npc);
+  // the other ledger: sitting with a girl you've earned a tier with, she shows
+  // you the books the transaction hides (engine-play _otherLedger). After the
+  // talk, never instead of it — it's a follow-on beat, like a quest offer.
+  if (!topic && typeof _otherLedger === "function") _otherLedger(npc);
   _questOffer(npc);
   if (_seenAfter) (G.seenDay = G.seenDay || {})[_seenAfter] = G.day;
 }
@@ -7878,9 +7884,20 @@ function _shareCard() {
     "·".repeat(Math.max(0, 7 - log.length));
   const label = G.dailyId ? `daily ${G.dailyId}` : "free week";
   const done = G.pendingChoice === "vacation_end" || log.length >= 7;
+  // The social line: the card scored a week in meters only, which framed the
+  // whole mode as a resource sim (design note 2026-08-26 — "a survival
+  // score-chaser"). Names, bonds and stories are the game's actual depth axis
+  // (the treadmill doctrine), so the record surface says so. Counts only —
+  // outcome-class, never content, same rule as the night glyphs.
+  const names = Object.keys(G.known || {}).filter(id => NPCS[id]).length;
+  const bonds = Object.keys((G.soc && G.soc.drinks) || {}).filter(id => _bondTier(id) >= 2).length;
+  const social = names ? `👥 ${names} name${names === 1 ? "" : "s"}` +
+    (bonds ? ` · ♥ ${bonds} regular${bonds === 1 ? "" : "s"}` : "") +
+    (G.ledgerSeen ? ` · 📖 ${G.ledgerSeen} told true` : "") : null;
   return [
     `🚌 THE LAST BAHT BUS — Soi 6 (${label})`,
     `🌙 ${nights}`,
+    ...(social ? [social] : []),
     `สนุก ${G.happy}${G.happy >= 100 ? " ★ สบายสบาย" : ""} · ฿${G.money.toLocaleString("en-US")} in pocket` +
       (done ? " · week complete" : ` · night ${Math.min(G.day, 7)}/7`),
     "soisanuk.github.io/last-baht-bus",
@@ -7952,6 +7969,14 @@ function _soi6Opening() {
   // the goal word carries its own pronunciation the first time — a cold player's
   // win condition was "written in a script I can't read" (Tyler, 2026-08-26)
   _say("Goal: สบายสบาย — say it “sabai sabai”: easy-easy, the good life. Get happy. Max out the week. ★", "win");
+  // …and say what actually pays it, or the mode reads as a meter-management
+  // sim: the treadmill jades the churn while people never stop paying (the
+  // depth-beats-breadth doctrine, stated to the player for once — design note
+  // 2026-08-26)
+  _say("(A word from the old hands: the meter loves PEOPLE. The same girl every " +
+    "night beats a different girl every hour, a name learned beats a round " +
+    "bought, and the man who leaves with stories out-scores the man who leaves " +
+    "with receipts. The town punishes churn. It always has.)", "dim");
   if (G.dailyId) {
     _say(`Today's soi — the ${G.dailyId} daily: same week, same dice, everyone ` +
       "who plays it today. (SHARE prints your week card, any time.)", "dim");

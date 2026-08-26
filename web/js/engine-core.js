@@ -286,6 +286,7 @@ function newGame() {
     affair: null,        // the staff affair (engine-systems) — null until she stays after close
     affairCool: 0,       // day a STEP BACK was given; the door re-opens after a fortnight
     roomWater: 0,        // complimentary hotel bottles drunk today (2/day, housekeeping restocks)
+    ledgerSeen: 0,       // how many of the other ledger's reveals you've been shown (engine-play)
     atmToday: 0,         // principal withdrawn today (resets when atmDay rolls over)
     lastPolice: -99,     // turn of the last boy-in-brown shakedown
     questHailed: false,  // the one time a giver calls you over (see _questHail)

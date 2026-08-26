@@ -2552,6 +2552,104 @@ function _ownBarTalk(id, topic) {
   return false;
 }
 
+// ── The other ledger ─────────────────────────────────────────────────────────
+// The asymmetry, made mechanical. A farang sees prices; she sees a share, a
+// quota, a month. Same numbers, other books — and the transaction never shows
+// the paying man the second set. Generalised from Lek's rainy-night price story
+// (the one node in the game that did this, gated on one girl and one weather),
+// because a game about being a regular somewhere should let you find out what
+// being a regular COSTS the other party (design note 2026-08-26).
+//
+// Rules this content lives by, all inherited from canon:
+//  · She TELLS you, or you SEE a thing (a tally, a screen). The game never
+//    narrates her interior — no "she feels", no "secretly she". Register is
+//    flat and factual: Lek reading a receipt, not a confession.
+//  · Never a victim, never a schemer. She is a working woman describing work.
+//  · NO สนุก, no bond, no reward. Being told the truth is not a prize you win —
+//    and paying happiness for it would be the crassest possible reading. The
+//    only thing that changes is what YOU know.
+//  · Numbers come from constants (world.js), never typed into prose.
+const _OTHER_LEDGER = {
+  // tier 1 — the cut. The first thing the arithmetic hides: what you hand over
+  // is not what she receives.
+  1: [
+    (n) => `The waitress rings your lady drink and ${n} does a thing you have seen her do twenty ` +
+      `times without once reading it: she takes the chit, folds it, and tucks it into the band of ` +
+      `her phone case with the others. Not a keepsake — a tally. "For counting, end of month." ` +
+      `She fans them like a small hand of cards, unembarrassed. "This one, I get ฿${LADY_CUT}." ` +
+      `The drink was ฿${LADY_DRINK}. She says the difference the way you'd say the weather, and ` +
+      `goes back to the story she was telling.`,
+    (n) => `"You want to know something funny?" ${n} turns the chit over so you can see the bar's ` +
+      `stamp. "Farang always say — I buy you drink, expensive one, good for you." She taps the ` +
+      `stamp, once. "Bar take most. I take ฿${LADY_CUT}." No complaint in it at all; she is ` +
+      `explaining a system she has worked inside for years, to a man who has been inside it for a ` +
+      `week. "Is okay. Still better if you buy. Just — is not what you think it is, na."`,
+  ],
+  // tier 2 — the cost of you. Being liked is expensive: the seat she keeps is
+  // the seats she doesn't fill, and the month is counted in drinks, not affection.
+  2: [
+    (n) => `Two men come in, look along the rail, and settle at the far end with somebody else. ` +
+      `${n} watches them go with an expression that is not jealousy and not regret — it is ` +
+      `arithmetic. "Thirty drink a month," she says, when she catches you noticing. "After that, ` +
+      `bonus." Tonight she has sat with you, only you, for three hours, and you have bought her ` +
+      `two. "You are good company." A shrug, entirely without accusation. "Good company is not ` +
+      `thirty drink."`,
+    (n) => `The mamasan's book is open on the till and, for once, angled where you can see it: a ` +
+      `column of names, a column of marks. ${n}'s row is shorter than the girl's beside her. ` +
+      `"She sit with four man tonight," ${n} says, following your eyes, matter-of-fact. "I sit ` +
+      `with one." She does not add anything to that, and does not move away either, and both of ` +
+      `those facts are the whole of what she is telling you.`,
+    (n) => `"You know why I keep your seat?" ${n} asks it lightly, and answers it lightly, which ` +
+      `does not make it less of an answer. "Because you come back. Man who come back is worth ` +
+      `more than man who spend big one time — for me, not for bar. Bar want big one time." A beat. ` +
+      `"So when mama say why you no work the door tonight, I say: he come back. And she look at ` +
+      `the book." The book, you now understand, does not have a column for that.`,
+  ],
+  // tier 3 — the arithmetic of a life. The month, the household, the years —
+  // the figures the man across the table is one line item inside.
+  3: [
+    (n) => `${n} shows you her phone: a bank app, an amount, a date. "Every month, same day." ` +
+      `฿${HOME_SEND} goes north — her mother, the boy's school, a roof somebody keeps meaning ` +
+      `to finish. The bar's salary is ฿${BAR_SALARY}; the rest is drinks, and drinks are you and ` +
+      `men like you. "So." She locks the phone and puts it face-down, the way she does. "Now you ` +
+      `know all my number. Nobody know all my number." It is not said as a burden. It is said as ` +
+      `an accounting, handed over.`,
+    (n) => `The talk goes somewhere it has not been before, and ${n} does the sum out loud without ` +
+      `being asked: what a good month clears, what is left after the room and the sending, how ` +
+      `many months of that make the thing she is saving toward. The number of months is large ` +
+      `enough that she laughs at it herself. "Long time, na." She turns the glass. "Everybody ` +
+      `think we make money fast here. Fast money is one night. Slow money is the one you keep."`,
+    (n) => `"How old you think I am?" You are wise enough not to answer. ${n} tells you anyway, ` +
+      `and then tells you how long she has done this, and the second number is most of the first ` +
+      `one's adult life. "Girl come nineteen, twenty. Go home when?" She lifts a shoulder. ` +
+      `"Depend." Down the bar somebody rings the bell and the room cheers, and she cheers too, on ` +
+      `time, professionally, and then turns back to you and picks the sentence up exactly where ` +
+      `she left it.`,
+  ],
+};
+// Fires when you sit down with a girl whose bond has crossed into a tier whose
+// ledger you have not been shown. Once per girl per tier, ever — it is a reveal,
+// not a repeatable line. Deliberately on TALK (you sat with her) rather than on
+// the bond crossing itself: an earned interstitial, in her mouth, in the room.
+function _otherLedger(id) {
+  if (!NPC_ROLES[id] || !G.soc.drinks) return false;
+  const t = _bondTier(id);
+  if (t < 1) return false;
+  const book = (G.soc.ledger = G.soc.ledger || {});
+  const seen = book[id] = book[id] || [];
+  // the LOWEST unseen tier fires first: a girl who warmed to you fast still
+  // starts the telling at the cut — the reveals are a sequence, not a menu
+  const due = [1, 2, 3].find(x => x <= t && !seen.includes(x));
+  if (!due) return false;
+  const pool = _OTHER_LEDGER[due];
+  if (!pool) return false;
+  seen.push(due);
+  G.ledgerSeen = (G.ledgerSeen || 0) + 1;   // how much of the other side you've been shown
+  _say("");
+  _say(_pickVary(pool, "ledger" + due)(NPCS[id].name), "thai");
+  return true;
+}
+
 function _bondTalk(id) {
   const t = _bondTier(id) >= 3 ? 3 : 2;
   let pool = _BOND_TALK[t];
