@@ -4662,7 +4662,10 @@ function _barOwnerNudge() {
 
 function _doWork() {
   if (!_barOwned()) {
-    _say(_flag("barLost")
+    _say(_flag("barSold")
+      ? "You're retired, in the specific and enviable sense. If your hands miss the " +
+        "rail, there's a noodle counter in Prachuap that could use them mornings."
+      : _flag("barLost")
       ? "Not any more. You can stand at that rail as long as you like; you " +
         "just have to buy the drinks like everybody else."
       : _flag("barPartner")
@@ -4822,12 +4825,35 @@ function _floorPool(id) {
 // One moment at a time, spaced out, and always to the person you know LEAST —
 // so a long run of shifts spreads across the floor instead of pouring into
 // whoever the sort happened to put first.
+// Her beats, once it's real: not competence moments any more and not courtship
+// either — two people running one room. Dealt first each worked night while the
+// affair lives; the ordinary floor rotation continues around her (minus her).
+const _AFFAIR_FLOOR = [
+  "{who} calls a drinks order down the bar in Thai, then repeats the one word of it you didn't catch, quietly, just for you — the town's whole language problem solved one glass at a time.",
+  "A punter gets long-winded with {who} and she flags you with the corner of one eyebrow — not a rescue, a review — and handles him herself before you're halfway down the rail, and grins at you for coming anyway.",
+  "In the dead half-hour {who} does the stock count with you, her calling, you chalking, a two-person rhythm the bar never taught either of you. The mamasan watches from the till and permits it.",
+  "{who} banks her tips in the shared tin behind the optics now — never asked, never announced. You noticed the first night. She knows you noticed. Neither of you has said a word about it, because some ledgers are better unspoken.",
+  "Close of night, {who} perches on the customer side while you wipe down, telling you which punters are decent and which merely spend — an intelligence briefing no owner ever buys at any price, given free, nightly, to exactly one man in town.",
+  "You watch {who} rescue a shy first-timer from his own silence, set him up with a game of Connect 4 and a girl who'll be kind, and realise she is better at your job than you are, and find you don't mind at all.",
+];
 function _workFloor() {
   if (!_workedTonight() || G.room !== ((G.bar && G.bar.room) || "stinky_bar")) return;
   const b = G.bar;
   if ((b.floorN || 0) >= WORK_FLOOR_MAX) return;
   if (G.turns - (b.floorTurn || -99) < WORK_FLOOR_GAP) return;
-  const staff = _barStaff();
+  // the affair rewires the floor: her beat leads each worked night, and once the
+  // room has turned (floorSour ≥ 3) the OTHERS' moments stop — the depth you
+  // chose, priced in the breadth you lost. The one-time line is in _affairWarn.
+  const afId = (typeof _affairLive === "function" && _affairLive()) ? G.affair.id : null;
+  if (afId && b.floorDay !== G.day && _npcActive(afId)) {
+    b.floorDay = G.day;
+    b.floorTurn = G.turns; b.floorN = (b.floorN || 0) + 1;
+    _say(_fmt(_pickVary(_AFFAIR_FLOOR, "affloor"), { who: _npcLabel(afId) }));
+    return;
+  }
+  if (afId && (G.affair.floorSour || 0) >= 3) return;   // the floor has closed to you
+  let staff = _barStaff();
+  if (afId) staff = staff.filter(id => id !== afId);
   if (!staff.length) return;
   const seen = (b.floorSeen = b.floorSeen || []);
   let pool = staff.filter(id => !seen.includes(id));
@@ -5043,6 +5069,289 @@ function _shiftNo() {
 // `workedLast` snapshot instead (see _endNight and _barNight).
 function _workedTonight() { return _barOwned() && G.bar.workedDay === G.day; }
 
+// ── The staff affair ─────────────────────────────────────────────────────────
+// Constants + the crisis table in world.js (see the block comment there for the
+// design law: structural failure, never a morality tale; two meters, no free
+// answers; the good ending is a summit most attempts die on).
+// State: G.affair = null | { id, since, strain, floorSour, crisSeen, slipDay,
+//   discovered, soured, warned, offeredDay, ended, gone, scarUntil, won }.
+function _affairLive() { return !!(G.affair && !G.affair.ended); }
+function _affairGirl() { return _affairLive() ? G.affair.id : null; }
+function _affairHer() { return G.affair ? _npcLabel(G.affair.id) : ""; }
+
+// The door only appears deep in the relationship layer: her-farang tier with a
+// girl who works YOUR floor, during a stood shift, late — she stays after close.
+function _affairDue() {
+  if (G.affair || (G.affairCool && G.day - G.affairCool < 14)) return null;
+  if (!_workedTonight() || G.room !== ((G.bar && G.bar.room) || "stinky_bar")) return null;
+  if (G.nightTurn < 55) return null;   // last-call hour — the room thinning out
+  const her = _barStaff().filter(id => NPC_ROLES[id] === "hostess" && _bondTier(id) >= AFFAIR_BOND_GATE)
+    .sort((a, b) => (G.soc.drinks[b] || 0) - (G.soc.drinks[a] || 0))[0];
+  return her || null;
+}
+
+function _affairAsk(her) {
+  G.affairWho = her;
+  G.pendingChoice = "affair";
+  _say("");
+  _say(_fmt("Last call comes and goes, and {her} doesn't. She squares her section away " +
+    "the way she always does, and then — instead of the wai and the wave and the walk to " +
+    "the bike — she sits down on the customer side of your own bar, in front of you, and " +
+    "puts her chin in her hand.", { her: _npcLabel(her) }), "alert");
+  _say("\"Everybody already think it,\" she says, in the voice she doesn't use on the " +
+    "floor. \"Mama think it. The girls think it. My mother — \" a small laugh — \"my " +
+    "mother PLAN it.\" She turns a beer mat over, once. \"So. I am asking you the thing " +
+    "nobody ask out loud. What am I? I work for you, or I am your lady? Because I cannot " +
+    "be both good. Nobody can be both.\"");
+  _affairPrompt();
+}
+function _affairPrompt() {
+  _say("(STAY — make it real · STEP BACK.)", "dim");
+}
+function _affairYes() {
+  const her = G.affairWho;
+  G.pendingChoice = null; G.affairWho = null;
+  G.affair = { id: her, since: G.day, strain: 0, floorSour: 0, crisSeen: [], warned: {} };
+  _setFlag("affairBegun");
+  _say(_fmt("You come round the bar — the wrong side, the customer side, HER side — and " +
+    "sit down next to her, and that is the whole of the answer. She looks at you for a " +
+    "long moment, checking it, and then the smile arrives: not the rail smile, not the " +
+    "lady-drink smile. One you haven't seen before. \"Okay,\" {her} says, like a deal " +
+    "closing. \"Okay. But boss —\" the old word, retired in the same breath — \"this town " +
+    "eats couples. You know this, na? We do it anyway.\"", { her: _npcLabel(her) }), "win");
+  _say("(She's yours now, and the bar knows it by morning. What the bar does with the " +
+    "knowing — that's the next two months.)", "dim");
+  _addHappy(3);   // the beginning is real — and never through the treadmill
+}
+function _affairNo() {
+  const her = G.affairWho;
+  G.pendingChoice = null; G.affairWho = null;
+  G.affairCool = G.day;
+  _say(_fmt("You say it kindly, and honestly, and it doesn't matter how: the answer is " +
+    "the answer. {her} nods — once, businesslike, taking the knock the way she'd take it " +
+    "from any customer, which is exactly the wall the two of you just agreed to keep. " +
+    "\"Okay. Good night, boss.\" She's gone in two minutes. The floor runs perfectly the " +
+    "next night, and the night after, and nothing whatsoever is wrong, in the specific " +
+    "way of a thing that has been decided.", { her: _npcLabel(her) }));
+}
+
+// ── the crises: one per ~6 days, dealt in authored order, each once ──────────
+function _affairCrisisDue() {
+  if (!_affairLive() || G.pendingChoice || G.pendingEnc || G.game) return null;
+  const a = G.affair;
+  if (G.day - a.since <= AFFAIR_HONEYMOON) return null;      // the honeymoon is honest
+  if (G.room !== ((G.bar && G.bar.room) || "stinky_bar")) return null;
+  if (G.nightTurn < 25) return null;
+  if (a.crisDay === G.day) return null;
+  if ((G.day - a.since) % 6 !== 3) return null;              // the cadence, day-stable
+  const next = AFFAIR_CRISES.find(c => !a.crisSeen.includes(c.id));
+  return next || null;
+}
+function _affairCrisisAsk(c) {
+  const a = G.affair;
+  a.crisDay = G.day; a.crisSeen.push(c.id);
+  G.affairCrisis = c.id;
+  G.pendingChoice = "affaircrisis";
+  const mama = _barStaff().find(id => NPC_ROLES[id] === "mamasan");
+  const ctx = { her: _affairHer(), mama: mama ? _npcLabel(mama) : "The mamasan" };
+  _say("");
+  _say(_fmt(c.lead, ctx), "alert");
+  _say(_fmt(c.ask, ctx));
+  _affairCrisisPrompt();
+}
+function _affairCrisisPrompt() {
+  const c = AFFAIR_CRISES.find(x => x.id === G.affairCrisis);
+  if (!c) return;
+  const opts = [c.a, c.b, c.c].filter(Boolean)
+    .map((o, i) => (i + 1) + " — " + o.label.toUpperCase());
+  _say("(" + opts.join(" · ") + ".)", "dim");
+}
+function _affairCrisisAnswer(k) {
+  const c = AFFAIR_CRISES.find(x => x.id === G.affairCrisis);
+  const a = G.affair;
+  if (!c || !a) { G.pendingChoice = null; return; }
+  const o = k === "a" ? c.a : k === "b" ? c.b : c.c;
+  if (!o) { _affairCrisisPrompt(); return; }
+  if (o.money && G.money < o.money) {
+    _say(_fmt("(That answer is ฿{n}, and you're carrying ฿{m}. The maths answers before you do — pick again.)",
+      { n: o.money, m: G.money }), "dim");
+    _affairCrisisPrompt();
+    return;
+  }
+  G.pendingChoice = null; G.affairCrisis = null;
+  if (o.money) G.money -= o.money;
+  const mama = _barStaff().find(id => NPC_ROLES[id] === "mamasan");
+  _say(_fmt(o.text, { her: _affairHer(), mama: mama ? _npcLabel(mama) : "The mamasan" }));
+  if (o.strain) a.strain += o.strain;
+  if (o.floor) a.floorSour += o.floor;
+  _affairWarn();
+}
+
+// threshold-crossing lines, once each — the meters made audible without a HUD
+function _affairWarn() {
+  const a = G.affair; if (!a || a.ended) return;
+  if (a.strain >= 9 && !a.warned.s9) { a.warned.s9 = true;
+    _say(_fmt("({her} has started sleeping at her cousin's two nights a week. Nobody has said the word for what is happening, which is how it happens.)", { her: _affairHer() }), "alert");
+  } else if (a.strain >= 6 && !a.warned.s6) { a.warned.s6 = true;
+    _say(_fmt("(Something in the way {her} says goodnight has gone formal. You could fix it tonight. You could also tell yourself it's nothing, which is what most men in this town do at exactly this point.)", { her: _affairHer() }), "alert");
+  }
+  if (a.floorSour >= 3 && !a.warned.f3) { a.warned.f3 = true;
+    _say("(The floor has closed to you. Not rudely — professionally. The girls work, the drinks land, and not one of them tells you anything true any more. You chose her over the room, and the room heard.)", "alert");
+  }
+  if (a.strain >= AFFAIR_BREAK) _affairEnd("break");
+}
+
+// ── the nightly account, from _barSettle ─────────────────────────────────────
+function _affairNight(n) {
+  const a = G.affair;
+  if (!a || a.ended) return;
+  const honeymoon = G.day - a.since <= AFFAIR_HONEYMOON;
+  if (n.worked) {
+    if (honeymoon) {
+      _addHappy(1);   // it is simply good, and it never touches the treadmill
+      if (!a.warned.h1) { a.warned.h1 = true;
+        _say(_fmt("(The best nights the bar has ever had are, not coincidentally, these: {her} on the floor, you behind the rail, and the two of you running one room on shared glances.)", { her: _affairHer() }), "win");
+      }
+    } else {
+      a.strain = Math.max(0, a.strain - AFFAIR_STRAIN_WORK);
+    }
+  } else if (!honeymoon) {
+    a.strain += AFFAIR_STRAIN_AWAY;
+    if (_lowSeason()) a.strain += 1;    // the money worry is in the room with you
+  }
+  // the soi always talks: a conquest since it began WILL reach her
+  if (a.slipDay != null && !a.discovered) {
+    const forced = G.day - a.slipDay >= 3;
+    if (forced || _hh("affdisc:" + G.vacation + ":" + G.day, 89) % 100 < 45) {
+      a.discovered = true; a.soured = true; a.strain += 8;
+      _say("");
+      _say(_fmt("{her} knows. Of course she knows — she works in the industry the news is made of; the girl you were with has a friend who has a cousin on this very soi. She doesn't shout. She takes off the apron, folds it on the rail, and asks you one question in the flat voice: \"Why I stop working, if you don't?\" There is no good answer, and both of you stand there while you don't give it.", { her: _affairHer() }), "alert");
+      _say("(Whatever the two of you salvage from here, one thing is gone for good: the version where you leave this town together. She will never again believe the machine doesn't own you too.)", "dim");
+    }
+  }
+  _affairWarn();
+  if (!G.affair || G.affair.ended) return;   // the warn may have broken it
+  // the door: two months carried lightly, never soured, and a healthy bar to sell
+  if (!a.soured && G.day - a.since >= AFFAIR_GOOD_DAYS && a.strain <= AFFAIR_GOOD_STRAIN &&
+      G.bar.arrears === 0 && (G.bar.rentShort || 0) === 0 && G.bar.cash >= 0 && n.worked &&
+      (!a.offeredDay || G.day - a.offeredDay >= 7)) {
+    a.offeredDay = G.day;
+    _setFlag("affairOffered");
+    _say("");
+    _say(_fmt("After close, {her} counts the till with you — she's earned the right and " +
+      "the floor knows better than to mind — and somewhere in the counting she says it, " +
+      "casually, the way the biggest things get said: \"My auntie shop, in Prachuap. By " +
+      "the sea. She old now. Two room on top.\" She squares the notes. \"A bar eats " +
+      "nights. A noodle shop eats mornings. I only say.\" She has never once asked you " +
+      "for anything, which is how you know what this is.", { her: _affairHer() }), "win");
+    _say("(There is exactly one buyer for a going Soi 6 bar and everybody has always " +
+      "known who. The note would clear. There would be something left. (SELL UP), if " +
+      "you ever mean to — the door doesn't stay open in this town.)", "dim");
+  }
+}
+
+// ── endings ──────────────────────────────────────────────────────────────────
+function _affairEnd(cause) {
+  const a = G.affair; if (!a || a.ended) return;
+  const her = _affairHer();
+  a.ended = true; a.gone = true; a.scarUntil = G.day + AFFAIR_SCAR_DAYS;
+  G.pendingChoice = null; G.affairCrisis = null;
+  _say("");
+  if (cause === "bleed") {
+    _say(_fmt("{her} stays for the last week of it — through the tape measure and the " +
+      "man with the fridge opinions — because leaving a sinking man is not a thing she " +
+      "does. She goes home to Nong Khai the day after the shutters, with her wages paid " +
+      "to the baht because you made sure of that one thing. At the bus station she holds " +
+      "your face in both hands. \"Not your fault. Not my fault.\" A small, terrible " +
+      "shrug. \"Town's fault, na.\" It is the kindest possible version of losing " +
+      "everything at once.", { her }), "alert");
+  } else {
+    _say(_fmt("{her} doesn't make a scene, because she has spent eight years learning " +
+      "exactly how not to. There is a bag by the door of the room you half-share, packed " +
+      "the calm way, and she waits until you've seen it before she says anything. \"I " +
+      "love you same-same,\" she says, and you believe her, which is the worst part. " +
+      "\"But in this bar I am not your lady and I am not a hostess. I am a problem " +
+      "wearing a nice dress. The girls know it. Mama know it. YOU know it.\" She picks " +
+      "up the bag. \"Nobody did bad. The job did bad.\" The door is very quiet behind " +
+      "her, and the bar opens on time the next night, and it is never quite your room " +
+      "again.", { her }), "alert");
+    _addHappy(-6);
+  }
+  _say("(The floor takes a while to forgive the whole chapter — not her, and not quite " +
+    "you either. Takings will say so for a while.)", "dim");
+}
+
+// SELL UP — only ever meaningful through the door she opened. Without it, the
+// voiced truth: there is one buyer, and walking to them cold means walking away
+// with nothing (the seller-financed note owns most of the bar's value).
+function _doSellBar() {
+  if (!_barOwned()) {
+    _say(_flag("barSold")
+      ? "Sold, signed, and spent on a life. The Stinky trades on without you, which was the whole idea."
+      : "Nothing to sell. Your worldly goods fit in a hotel safe.");
+    return;
+  }
+  if (!_flag("affairOffered")) {
+    _say("Sell the Stinky? There's exactly one buyer on this soi and everybody knows " +
+      "who — and a man who walks in NEEDING to sell gets the needing-to-sell price: " +
+      "the note cleared and a handshake. Bert would say you'd want a reason worth " +
+      "more than the bar. You haven't got one. Yet.");
+    return;
+  }
+  G.pendingChoice = "sellbar";
+  _sellBarPrompt();
+}
+function _sellBarPrompt() {
+  _say(_fmt("Sell up — the note cleared, ~฿{n} banked, and the rest of it hers and yours? " +
+    "This is the door, and it shuts behind you. (YES — sell up · NO — not yet.)",
+    { n: AFFAIR_SALE }), "alert");
+}
+function _sellBarYes() {
+  G.pendingChoice = null;
+  const her = _affairHer();
+  const tan = _flag("partnerTan");
+  _setFlag("barSold"); _setFlag("affairWon");
+  G.flags.barOpen = false;
+  G.bank = (G.bank || 0) + AFFAIR_SALE;
+  if (G.affair) { G.affair.ended = true; G.affair.won = true; }
+  const id = G.affair && G.affair.id;
+  if (id) { G.phone.contacts[id] = true; G.soc.drinks[id] = 20; }
+  G.bar = { cash: 0, owed: 0, arrears: 0, months: 0, lastMonthDay: 0, nights: 0,
+    best: 0, workedLast: false, rentOwed: 0, rentShort: 0, pocketDrawn: 0 };
+  _say("");
+  _say(tan
+    ? "Tan handles the sale the way he handles everything: one phone call you never " +
+      "hear, one meeting you attend but do not speak at, and a number that is exactly " +
+      "fair — not a baht of friendship in it either direction, which from him is a kind " +
+      "of respect. \"The fifty-one per cent,\" he says at the end, and slides his copy " +
+      "across the table to you, torn once, cleanly. \"A man leaving does not owe. This " +
+      "is the whole of the rule.\" It is the only gift he has ever given you, and it is " +
+      "enormous."
+    : "Candy runs the sale like the professional she has spent twenty years becoming: " +
+      "the lawyer, the letters, the note settled to the satang, White Dish paying the " +
+      "going-concern price because with Candy across the table there is no other price " +
+      "available. At the signing she looks at the pair of you over her glasses. \"You " +
+      "know how many times I see a man LEAVE this town rich in the right way?\" She " +
+      "stamps the page. \"Now is one.\"", "win");
+  _say(_fmt("The last morning, the two of you walk down to the water — because it all " +
+    "started at a beach, though neither of you says so — and {her} stands with her feet " +
+    "in the shallows doing arithmetic out loud: the auntie's shophouse, two rooms on " +
+    "top, a noodle pot her mother is already arguing about. Behind you the town is " +
+    "sleeping off its own night, the way it always is, the way it will be tonight and " +
+    "every night, with somebody else behind the rail and somebody else counting the " +
+    "till and somebody else certain he is different.\n\nYou got out with the girl and " +
+    "the money and the morning. Nobody does. You did.", { her }), "win");
+  _addHappy(12);   // the biggest single happiness in the game, and it never touches the treadmill
+  _say("(สบายสบาย has a postcode now. The sandbox is still yours — Pattaya is an hour " +
+    "away and old habits keep a room ready — but the machine's claim on you is settled " +
+    "in full.)", "dim");
+}
+function _sellBarNo() {
+  G.pendingChoice = null;
+  _say("Not yet. The bar opens at six, the way it does. She doesn't mention Prachuap " +
+    "again that week — she said it once, which for her was the whole of the asking.");
+}
+
 // ── The bar's books ──────────────────────────────────────────────────────────
 // The purchase is seller-financed (see the constants in world.js): a deposit
 // that empties you, then BAR_MONTHLY to the old man every thirty days for six
@@ -5178,6 +5487,13 @@ function _barNight(settleDay) {
   take = Math.round(take * (worked ? WORK_TAKINGS : AWAY_TAKINGS));
   if (worked) take += BAR_PRESENT;
   take = Math.round(take * _seasonTakingsOn(day));   // graded by the month you traded in, peak → trough
+  // the affair: the floor knows, and the till says so — worse once the room has
+  // turned, and a scar for a while after a break (the chapter, not the girl)
+  if (typeof _affairLive === "function") {
+    if (_affairLive()) take = Math.round(take * ((G.affair.floorSour || 0) >= 3 ? AFFAIR_DRAG_SOUR : AFFAIR_DRAG));
+    else if (G.affair && G.affair.gone && G.affair.scarUntil && day < G.affair.scarUntil)
+      take = Math.round(take * AFFAIR_DRAG);
+  }
   // two months behind and the floor is thin — you can watch it happen in the till
   if (b.shortStaff) take = Math.round(take * BAR_SHORT_STAFF);
   // nights away pile up; the staff notice before the books do
@@ -5405,6 +5721,9 @@ function _barLost(cause) {
       "menu, a card machine, and a girl on the door in a company polo. Bert " +
       "doesn't stay. The regulars go anyway, most of them, and are perfectly " +
       "happy there, which you find you mind more than the money.", "alert");
+  // if the affair was still running, this is the slow bleed's true ending —
+  // losing the bar and the reason you kept it in the same week
+  if (typeof _affairLive === "function" && _affairLive()) _affairEnd("bleed");
   _setFlag("barLost");
   G.flags.barOpen = false;
   G.bar = { cash: 0, owed: 0, arrears: 0, months: 0, lastMonthDay: 0, nights: 0,
@@ -5468,7 +5787,11 @@ function _doBooks() {
     // A bar you HAD is not a bar you never bought. Reading "the deposit isn't
     // paid" at a man who paid it and lost the place is the state-blind-prose
     // defect exactly.
-    _say(_flag("barLost")
+    _say(_flag("barSold")
+      ? "The books are somebody else's problem now, at the fair price, with the " +
+        "note cleared. The only ledger you keep these days fits on the back of a " +
+        "noodle-shop receipt, and it balances."
+      : _flag("barLost")
       ? "There are no books. There is a docket somewhere with a date on it, and " +
         "a phone shop where the docket used to be pinned."
       : _flag("barPartner")
@@ -5571,6 +5894,7 @@ function _barSettle(settleDay) {
     _say("(Low season, and you buy everything at list. This is the month that " +
       "finds out whether you have a cushion.)", "dim");
   }
+  if (typeof _affairNight === "function") _affairNight(n);   // the affair's nightly account
   if (!m) return;
   // Rent reads first because it was paid first, and because a player who is
   // short needs to see which of the two shortfalls is the one that matters.

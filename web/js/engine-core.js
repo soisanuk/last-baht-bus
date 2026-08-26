@@ -283,6 +283,8 @@ function newGame() {
     // from your pocket so a good week at the bar isn't the same as a good week.
     bar: { cash: 0, owed: 0, arrears: 0, months: 0, lastMonthDay: 0, nights: 0, best: 0,
       workedLast: false, rentOwed: 0, rentShort: 0, pocketDrawn: 0 },
+    affair: null,        // the staff affair (engine-systems) — null until she stays after close
+    affairCool: 0,       // day a STEP BACK was given; the door re-opens after a fortnight
     atmToday: 0,         // principal withdrawn today (resets when atmDay rolls over)
     lastPolice: -99,     // turn of the last boy-in-brown shakedown
     questHailed: false,  // the one time a giver calls you over (see _questHail)
@@ -565,6 +567,9 @@ function _npcActive(id) {
   if (n && n.sandbox && !_flag("act1Done")) return false; // not part of the opening quest's street
   // sent home early on a shift call — off the rail for the rest of the night
   if (G.soc && G.soc.leftEarly && G.soc.leftEarly[id] === G.day) return false;
+  // the affair's endings take her off the floor for good: gone home to Isaan
+  // after a break, or by the sea in Prachuap after the earned ending
+  if (G.affair && G.affair.ended && (G.affair.gone || G.affair.won) && id === G.affair.id) return false;
   // a host you took off the floor tonight is off the floor (HIRE narrated
   // leaving the building while leaving him standing there — persona A#13)
   if (G.soc && G.soc.hostOut && G.soc.hostOut[id]) return false;
@@ -1907,7 +1912,14 @@ function _tick() {
   if (!G.game && !G.pendingEnc && !G.pendingChoice && !G.pendingBf && !G.pendingFare) {
     if (typeof _tanFavourDue === "function" && _tanFavourDue()) { _tanFavour(); return; }
     if (typeof _shiftDue === "function" && _shiftDue()) { _shiftAsk(); return; }
-  if (typeof _synDue === "function" && _synDue()) { _synAsk(); return; }
+    if (typeof _synDue === "function" && _synDue()) { _synAsk(); return; }
+    // the staff affair: the she-stays-after-close beat, then its crises
+    if (typeof _affairDue === "function") {
+      const _aw = _affairDue();
+      if (_aw) { _affairAsk(_aw); return; }
+      const _ac = _affairCrisisDue();
+      if (_ac) { _affairCrisisAsk(_ac); return; }
+    }
   }
   if (typeof _workPresenceTick === "function") _workPresenceTick(); // a declared shift has to be stood
   if (typeof _workFloor === "function") _workFloor();          // …and a stood shift is where your own staff live

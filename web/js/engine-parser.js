@@ -6140,6 +6140,13 @@ function _chipSet() {
     const c = typeof _shiftCallById === "function" ? _shiftCallById(G.shiftCall) : null;
     add("yes", c ? c.yesLabel : "yes"); add("no"); return chips;
   }
+  if (G.pendingChoice === "affair") { add("stay", "stay — make it real"); add("step back"); return chips; }
+  if (G.pendingChoice === "affaircrisis") {
+    const c = AFFAIR_CRISES.find(x => x.id === G.affairCrisis);
+    if (c) [["1", c.a], ["2", c.b], ["3", c.c]].forEach(([n, o]) => { if (o) add(n, o.label); });
+    return chips;
+  }
+  if (G.pendingChoice === "sellbar") { add("yes", "yes — sell up"); add("no", "not yet"); return chips; }
   if (G.pendingChoice === "partner") {
     add("yes", G.partnerWho === "tan" ? "yes — Tan's 51%" : "yes — Candy's 51%"); add("no"); return chips;
   }
@@ -6475,7 +6482,7 @@ function _completePool(verb, ctx) {
         ? _cNpcsHere() : ["sawatdee", "khop khun", "thao rai", "mai ao", "aroi", "sanuk", "sorry"];
     case "ring": return ["bell"];
     case "charge": return ["phone"];
-    case "sell": return ["bottles"];
+    case "sell": return _flag("affairOffered") && !_flag("barSold") ? ["up", "bottles"] : ["bottles"];
     case "wait": return ["until midnight", "until 9pm", "10"];
     default: return [];
   }
@@ -6500,6 +6507,12 @@ function engineComplete(input) {
   else if (G.pendingChoice === "synjob") pool = ["yes", "no", "ask"];
   else if (G.pendingChoice === "shift") pool = ["yes", "no"];
   else if (G.pendingChoice === "partner") pool = ["yes", "no"];
+  else if (G.pendingChoice === "affair") pool = ["stay", "step back"];
+  else if (G.pendingChoice === "affaircrisis") {
+    const c = AFFAIR_CRISES.find(x => x.id === G.affairCrisis);
+    pool = c ? [["1", c.a], ["2", c.b], ["3", c.c]].filter(([, o]) => o).map(([n]) => n) : ["1", "2"];
+  }
+  else if (G.pendingChoice === "sellbar") pool = ["yes", "no"];
   else if (G.pendingChoice === "checkout") {
     pool = [...Object.keys(_HOTELS).filter(k => k !== G.hotel)
       .map(k => _HOTELS[k].name.toLowerCase()), "stay"];
@@ -6693,6 +6706,9 @@ function _renderResume() {
   if (G.pendingChoice === "synjob") { _synPrompt(); return; }
   if (G.pendingChoice === "shift") { _shiftPrompt(); return; }
   if (G.pendingChoice === "partner") { _partnerPrompt(); return; }
+  if (G.pendingChoice === "affair") { _affairPrompt(); return; }
+  if (G.pendingChoice === "affaircrisis") { _affairCrisisPrompt(); return; }
+  if (G.pendingChoice === "sellbar") { _sellBarPrompt(); return; }
   if (G.game) { _renderGame(); return; }
   if (G.pendingEnc) { _renderEncounter(); return; }
   if (G.pendingBf) { _bfPrompt(); return; }
@@ -6841,6 +6857,40 @@ function doCommand(input) {
     _say("It is still standing there waiting on you, which is most of what " +
       "owning a bar turns out to be.", "dim");
     _shiftPrompt();
+    return;
+  }
+  // the staff affair: she asked the question nobody asks out loud
+  if (G.pendingChoice === "affair") {
+    if (/^(stay|yes|make|real|begin|her|okay|ok)/.test(lower)) { _affairYes(); return; }
+    if (/^(step|back|no|not|nope|can't|cannot|don)/.test(lower)) { _affairNo(); return; }
+    _say("She is still sitting on the customer side of your own bar, waiting on the " +
+      "only answer that counts.", "dim");
+    _affairPrompt();
+    return;
+  }
+  // …and its crises, numbered because none of the answers is a plain yes
+  if (G.pendingChoice === "affaircrisis") {
+    const _cc = AFFAIR_CRISES.find(x => x.id === G.affairCrisis);
+    if (_cc) {
+      const _keys = [["1", "a"], ["2", "b"], ["3", "c"]].filter(([, k]) => _cc[k]);
+      for (const [num, k] of _keys) {
+        const o = _cc[k];
+        const words = o.label.toLowerCase().replace(/[^a-z ]/g, "").split(" ").filter(Boolean);
+        if (lower === num || lower.startsWith(words[0]) ||
+            words.some(w => w.length > 3 && lower.includes(w))) {
+          _affairCrisisAnswer(k); return;
+        }
+      }
+    }
+    _say("It isn't the kind of question that goes away for being ignored.", "dim");
+    _affairCrisisPrompt();
+    return;
+  }
+  // selling up — the door she opened, shutting behind you on a yes
+  if (G.pendingChoice === "sellbar") {
+    if (/^(y|yes|sell|do it|sign)/.test(lower)) { _sellBarYes(); return; }
+    if (/^(n|no|not|nope|stay|keep)/.test(lower)) { _sellBarNo(); return; }
+    _sellBarPrompt();
     return;
   }
 
@@ -7202,7 +7252,12 @@ function doCommand(input) {
       _doGive(gw.slice(0, split).join(" ").trim(), gw.slice(split).join(" ").trim());
       break;
     }
-    case "sell": _doSellBottles(arg); break;
+    case "sell":
+      // SELL UP / SELL BAR = the affair's door (engine-systems); everything else
+      // stays Nok's bottle trade, including bare SELL on the beach
+      if (/^(up|bar|the bar|the stinky|stinky)$/.test((arg || "").trim())) _doSellBar();
+      else _doSellBottles(arg);
+      break;
     case "buy": case "order": _doBuy(arg); break;
     case "pay": _doPay(arg); break;
     case "wai": _doWai(arg); break;

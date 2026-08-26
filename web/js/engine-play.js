@@ -2529,6 +2529,9 @@ function _ownBarStaff(id) {
 const _OWNER_PITCH_TOPICS = /^(girls?|lady|ladies|barfine|price|introduce|women)$/i;
 function _ownBarTalk(id, topic) {
   if (!_ownBarStaff(id)) return false;
+  // the affair girl is past the staff registers entirely — her tier-3 bond
+  // dialogue (the phone-translator deep talk) is the true voice now
+  if (typeof _affairLive === "function" && _affairLive() && id === G.affair.id) return false;
   const role = NPC_ROLES[id];
   if (topic && _OWNER_PITCH_TOPICS.test(topic)) {
     const pool = _OWNER_PITCH[role]; if (!pool) return false;
@@ -2560,6 +2563,15 @@ function _bondTalk(id) {
 // you've built a bond with (regular+, `id` passed) gives a +2 bonus and does NOT
 // advance jaded — depth is the correct road, breadth is the treadmill.
 function _conquestHappy(base, id) {
+  // The affair's fidelity line: every conquest in the game funnels through here,
+  // so ONE slip anywhere — a barfine, a freelancer, the booking app — while the
+  // affair runs marks it. The soi always talks; she learns within days
+  // (_affairNight), and the good ending is gone for good. Absolute by design:
+  // this is the gate most players die on, and it should be.
+  if (typeof _affairLive === "function" && _affairLive() && id !== G.affair.id &&
+      G.affair.slipDay == null) {
+    G.affair.slipDay = G.day;
+  }
   // The tier is read PRE-accrual when the barfine path stashed it: the honest-LT
   // bond pay (+3/+6) lands before _endNight runs this, so a standard 4-drink
   // courtship hit 4+3=7 = tier 2 and the treadmill NEVER engaged for the

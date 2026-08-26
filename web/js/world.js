@@ -10885,6 +10885,75 @@ const WORK_NIGHTS = [
 // Effects live in engine-systems (_shiftYes/_shiftNo); the text lives here, the
 // same split as SYNDICATE_JOBS, because content out of the engine is the shared
 // down-payment on reuse, online and 2D.
+// ── The staff affair ─────────────────────────────────────────────────────────
+// You can fall for a girl on your own floor — the classic bar-owner story, and
+// the game lets you live it instead of refusing at the door. The design rule is
+// STRUCTURAL failure, never a morality tale: nobody schemes, nobody is graded.
+// You cannot be her boss and her man at once; the position itself is the
+// antagonist. Two meters, and every crisis charges one or the other — there is
+// no free answer, only which account you debit:
+//   strain    — the two of you (the break comes at AFFAIR_BREAK)
+//   floorSour — the room (drag on takings; at 3+ the floor closes to you)
+// The earned good ending (leave the machine together — the Darkside-defiance
+// canon) is DELIBERATELY a summit most attempts die on: two months survived,
+// never soured (one conquest anywhere = soured forever; the soi always talks),
+// strain carried low (≈⅔ of nights worked, into the grind), and the bar HEALTHY
+// at the end — you sell a going concern, not flee a wreck.
+const AFFAIR_BOND_GATE   = 3;      // her-farang tier with your own staff, before anything can begin
+const AFFAIR_HONEYMOON   = 14;     // days it is simply, honestly good
+const AFFAIR_BREAK       = 12;     // strain at which she goes
+const AFFAIR_STRAIN_AWAY = 2;      // a night out on the soi without her
+const AFFAIR_STRAIN_WORK = 1;      // a night worked together claws this back
+const AFFAIR_DRAG        = 0.92;   // the floor knows — takings drag while it runs
+const AFFAIR_DRAG_SOUR   = 0.85;   // …and worse once the floor has turned (floorSour ≥ 3)
+const AFFAIR_GOOD_DAYS   = 60;     // two months before the door can even appear
+const AFFAIR_GOOD_STRAIN = 4;      // and only if you are carrying it lightly by then
+const AFFAIR_SALE        = 150000; // what walking away with the note cleared leaves you
+const AFFAIR_SCAR_DAYS   = 10;     // how long the floor stays wrong after a break
+const AFFAIR_FAMILY_ASK  = 15000;  // the roof in Nong Khai — the ask that always comes
+
+// Dealt one per ~6 days while the affair runs (day-stable hash, like the shift
+// calls), each once per affair. `a`/`b`(/`c`) are the answers; strain/floor are
+// what each debits. Every crisis sums positive — the bind is the point.
+const AFFAIR_CRISES = [
+  {
+    id: "rota",
+    lead: "{her} waits until the girls are on the floor and asks it quietly, which is how you know she has been carrying it all day.",
+    ask: "She wants off the Friday late shift — the loud one, the grabbed-wrist one, the shift she was hired for. She does not say 'because of us'. She doesn't have to. Either she works your busiest night being handled by drunks while you watch, or she doesn't, and every girl on the floor does the arithmetic of why.",
+    a: { label: "take her off it", text: "You change the rota. Nobody says anything, which is how you know everybody noticed. The mamasan re-pins the sheet without comment, one degree straighter than it needs to be.", floor: 2 },
+    b: { label: "the rota stands", text: "\"The rota's the rota.\" She nods like a member of staff, which is exactly what you have just told her she is, and works the Friday, and is perfectly professional about the wrist-grabbers, and does not text you after close.", strain: 3 },
+  },
+  {
+    id: "mamasan",
+    lead: "{mama} closes out the till drawer, puts the key on the bar between you, and does not take her hand off it.",
+    ask: "\"Twenty year I run floors.\" It is not a complaint; it is a briefing. \"A floor has one voice. When you change what I tell her — the section, the customer, the shift — the girls hear TWO voices, and a floor with two voices is no floor.\" She slides the key an inch toward you. \"So. On my floor she is a hostess and I run her like one. Or she is your lady and she is not on my floor. You choose which. I am not angry. I am asking.\"",
+    a: { label: "back the mamasan", text: "\"Your floor.\" She takes the key back and the relief in the room is almost audible. Your girl hears about it before close — of course she does — and says nothing, and pours herself the staff drink she is entitled to, and drinks it alone at the far end.", strain: 3 },
+    b: { label: "back your girl", text: "You say, carefully, that you'll be the one who decides about her. The mamasan looks at you for a long moment — not hurt, older than hurt — and takes her hand off the key. \"Okay, boss.\" From that night the floor runs exactly as well as it must and not one degree better.", floor: 2 },
+  },
+  {
+    id: "colleague",
+    lead: "One of the girls doesn't come in. Then her locker is empty, and it becomes clear she is not sick.",
+    ask: "She has moved to a bar up the soi — no scene, no note, just gone. Bert relays the exit interview in one sentence: \"Said there's no ladder here any more, bud. Top job's taken.\" She was the best worker you had after your own girl, which is, of course, the whole problem.",
+    a: { label: "go and talk to her", text: "You find her at the new bar and she is kind about it, which is worse. \"Not angry, boss. Just — at your bar, everybody know who win already.\" Your girl hears you went. She understands exactly why you went. Understanding it and liking it are different things.", strain: 2 },
+    b: { label: "let her go", text: "You let it lie. The floor covers the gap the way floors do, and adds it to a ledger you are never shown.", floor: 2 },
+  },
+  {
+    id: "family",
+    lead: "{her} sits with her phone for a long time after the call, then puts it face down, which is the loudest thing she has done all week.",
+    ask: "Her mother knows now — of course she knows; the village has known for a month — that her daughter's farang OWNS a bar. The ask, when she finally shows it to you, is the roof: ฿" + AFFAIR_FAMILY_ASK.toLocaleString() + ", before the rains. \"I not ask you,\" she says, holding the phone like it's hot. \"SHE ask you. Is different. I want it to be different.\"",
+    a: { label: "pay for the roof", text: "You send it that night. Her mother's blessing arrives by return like a receipt, and somewhere in it you feel the shape of every sponsor who ever sat where you're sitting. The floor hears about the roof by Thursday. Floors always do.", floor: 1, money: AFFAIR_FAMILY_ASK },
+    b: { label: "refuse", text: "You say the word no more carefully than you have ever said anything, and she takes it well — takes it, in fact, like a hostess absorbing a knock-back, professionally, which is the worst possible way she could take it. The roof does not come up again. It sits in every silence instead.", strain: 4 },
+    c: { label: "half, and the truth", text: "You offer half — a real number, honestly reasoned: a roof, yes; a standing pipe, no. She translates the distinction for her mother with the phone pressed close. It costs you both something to have said out loud, and it is the only answer in the room that treats her like a partner.", strain: 1, money: 7500 },
+  },
+  {
+    id: "regular",
+    lead: "An old customer of hers is in — a decent enough sort who has been buying her lady drinks for two years and has just now noticed the weather change.",
+    ask: "He is not being a pig about it. He bought her a drink the way he always has, and she worked it the way she always has — the laugh, the clink, the professional inch of distance — because that is the job you pay her to do. He catches your eye down the bar and raises the glass a friendly quarter-inch. The question isn't him. The question is that you are watching your own girl work, and she knows you are watching, and the drink is ฿" + LADY_DRINK + " in your own till.",
+    a: { label: "step in", text: "You drift down and join it, genial as a landlord, and the temperature drops half a degree anyway. He settles up politely and drinks somewhere else after that — not offended, just clear — and the rail notes that the owner's girl comes with the owner attached.", floor: 2 },
+    b: { label: "let it ride", text: "You let the job be the job. She finishes the drink, files the smile, moves on — flawless — and finds you afterwards with a look you have no answer to: 'You watched. You counted. Is that what this is going to be?' Nobody did anything wrong, which is what makes it hard to put down.", strain: 2 },
+  },
+];
+
 const SHIFT_CALLS = [
   {
     id: "tab",

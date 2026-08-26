@@ -982,6 +982,216 @@ test("at your own bar, your staff don't work you like a walk-in", () => {
   }
 });
 
+// ── The staff affair ─────────────────────────────────────────────────────────
+// Design contract (2026-08-26): allowed, structural, and the good ending is a
+// summit MOST attempts die on. These tests pin the difficulty as properties.
+function inAffair(extra = {}) {
+  running();
+  G.bar.room = "stinky_bar"; G.room = "stinky_bar";
+  G.lastSaleng = 99999; G.lastPeddler = 99999;
+  Object.keys(ENCOUNTERS).forEach(k => { G.encDone[k] = true; });
+  G.season0 = 10;   // November — high-season baseline unless a test moves it
+  G.affair = Object.assign({ id: "manow", since: G.day, strain: 0, floorSour: 0, crisSeen: [], warned: {} }, extra);
+}
+
+test("the affair's door only opens deep in the relationship layer, late, on a stood shift", () => {
+  running();
+  G.bar.room = "stinky_bar"; G.room = "stinky_bar";
+  G.bar.workedDay = G.day; G.bar.workedLast = true; G.nightTurn = 56;
+  G.soc.drinks.manow = 5;                    // face tier — nowhere near enough
+  assert.equal(_affairDue(), null, "a face-tier girl doesn't stay after close");
+  G.soc.drinks.manow = 15;                   // her-farang tier
+  G.nightTurn = 30;
+  assert.equal(_affairDue(), null, "not in the middle of service");
+  G.nightTurn = 56;
+  assert.equal(_affairDue(), "manow", "her-farang tier, last call, stood shift: she stays");
+  G.bar.workedDay = -1;                      // not working tonight
+  assert.equal(_affairDue(), null, "no shift, no moment — it grows out of working together");
+});
+
+test("stepping back is free, and the door re-opens after a fortnight", () => {
+  running();
+  G.bar.room = "stinky_bar"; G.room = "stinky_bar";
+  G.affairWho = "manow"; G.pendingChoice = "affair";
+  const h0 = G.happy;
+  out = []; doCommand("step back");
+  assert.equal(G.affair, null, "nothing begins");
+  assert.equal(G.happy, h0, "and nothing is charged for honesty");
+  assert.equal(G.affairCool, G.day, "but the moment is spent");
+  G.bar.workedDay = G.day; G.bar.workedLast = true; G.nightTurn = 56; G.soc.drinks.manow = 15;
+  assert.equal(_affairDue(), null, "she doesn't ask twice that week");
+  G.day += 14; G.bar.workedDay = G.day; G.bar.workedLast = true;
+  assert.equal(_affairDue(), "manow", "…but a fortnight later the door can open again");
+});
+
+test("the strain arithmetic demands the treadmill: away +2, worked −1, low season worse", () => {
+  inAffair({ since: 1 }); G.day = 30;        // past the honeymoon
+  _affairNight({ worked: false });
+  assert.equal(G.affair.strain, AFFAIR_STRAIN_AWAY, "a night on the soi costs two");
+  _affairNight({ worked: true });
+  assert.equal(G.affair.strain, AFFAIR_STRAIN_AWAY - AFFAIR_STRAIN_WORK, "a worked night claws back only one");
+  G.season0 = 8; G.day = 30;                 // deep-low September
+  const s0 = G.affair.strain;
+  _affairNight({ worked: false });
+  assert.equal(G.affair.strain, s0 + AFFAIR_STRAIN_AWAY + 1, "the lean months make absence dearer still");
+});
+
+test("the ECONOMICALLY optimal schedule loses her: alternating nights breaks the affair", () => {
+  // The whole point of the difficulty: the bar's comfortable policy (every other
+  // night, +฿21k/month) is NOT enough presence for the affair. Most players who
+  // try to have both fail — pinned as a property, not a hope.
+  inAffair({ since: 1 }); G.day = AFFAIR_HONEYMOON + 2;
+  let nights = 0;
+  while (_affairLive() && nights < 60) {
+    out = [];
+    _affairNight({ worked: nights % 2 === 0 });
+    G.day++; nights++;
+  }
+  assert.ok(!_affairLive(), "alternating presence is not presence enough — she goes");
+  assert.ok(G.affair.gone, "the break, not a limbo");
+  assert.ok(nights < 50, `and well inside the two months the good ending needs (broke at ${nights})`);
+});
+
+test("one conquest anywhere sours it forever — the soi always talks", () => {
+  inAffair({ since: 1 }); G.day = 30;
+  _conquestHappy(5, "someothergirl");
+  assert.equal(G.affair.slipDay, G.day, "the slip is marked the moment it happens");
+  let d = 0;
+  out = [];
+  while (!G.affair.discovered && d++ < 4) { G.day++; out = []; _affairNight({ worked: true }); }
+  assert.ok(G.affair.discovered && d <= 3, "she learns within days, guaranteed");
+  assert.ok(G.affair.soured, "and the good ending dies right there");
+  assert.match(out.join("\n"), /Why I stop working, if you don't/, "her one question, unanswerable");
+  // even a subsequently perfect run can never reach the door
+  G.affair.strain = 0; G.affair.since = G.day - AFFAIR_GOOD_DAYS - 5;
+  G.bar.arrears = 0; G.bar.rentShort = 0; G.bar.cash = 5000;
+  out = []; _affairNight({ worked: true });
+  assert.ok(!_flag("affairOffered"), "soured is soured: Prachuap never comes up");
+});
+
+test("every crisis answer debits an account — there is no free answer", () => {
+  for (const c of AFFAIR_CRISES) {
+    for (const k of ["a", "b", "c"]) {
+      const o = c[k];
+      if (!o) continue;
+      const cost = (o.strain || 0) + (o.floor || 0) + (o.money ? 1 : 0);
+      assert.ok(cost > 0, `${c.id}.${k} ("${o.label}") must cost something — the bind is the design`);
+    }
+  }
+});
+
+test("the crises deal in authored order, day-stably, and both meters move", () => {
+  inAffair({ since: 1 }); G.day = AFFAIR_HONEYMOON + 1 + 3;   // (day-since)%6===3, past honeymoon
+  while ((G.day - G.affair.since) % 6 !== 3) G.day++;
+  G.nightTurn = 30;
+  const c = _affairCrisisDue();
+  assert.ok(c && c.id === AFFAIR_CRISES[0].id, "the first crisis is the rota");
+  out = []; _affairCrisisAsk(c);
+  assert.equal(G.pendingChoice, "affaircrisis");
+  out = []; doCommand("zzz nonsense");
+  assert.equal(G.pendingChoice, "affaircrisis", "gibberish doesn't resolve a crisis");
+  assert.match(out.join("\n"), /1 — |2 — /, "…it re-prompts the options");
+  out = []; doCommand("1");
+  assert.equal(G.pendingChoice, null, "a numbered answer lands");
+  assert.ok(G.affair.floorSour > 0 || G.affair.strain > 0, "and a meter moved");
+});
+
+test("the door needs EVERYTHING at once: flip any one condition and Prachuap stays unsaid", () => {
+  const base = { since: 1, strain: 2, floorSour: 1, crisSeen: [], warned: {} };
+  const cases = [
+    ["too soon", a => { a.since = G.day - AFFAIR_GOOD_DAYS + 5; }],
+    ["carrying too much strain", a => { a.strain = AFFAIR_GOOD_STRAIN + 2; }], // +2: the worked night claws one back first
+    ["soured", a => { a.soured = true; }],
+    ["note in arrears", () => { G.bar.arrears = 1000; }],
+    ["rent behind", () => { G.bar.rentShort = 1; }],
+    ["till underwater", () => { G.bar.cash = -1; }],
+  ];
+  for (const [why, sabotage] of cases) {
+    inAffair(Object.assign({}, base));
+    G.day = 100; G.affair.since = G.day - AFFAIR_GOOD_DAYS - 1;
+    G.bar.arrears = 0; G.bar.rentShort = 0; G.bar.cash = 5000;
+    delete G.flags.affairOffered;
+    sabotage(G.affair);
+    out = []; _affairNight({ worked: true });
+    assert.ok(!_flag("affairOffered"), `no offer when ${why}`);
+  }
+  // …and the intact run DOES open the door, with the promise-hint attached
+  inAffair(Object.assign({}, base));
+  G.day = 100; G.affair.since = G.day - AFFAIR_GOOD_DAYS - 1;
+  G.bar.arrears = 0; G.bar.rentShort = 0; G.bar.cash = 5000;
+  delete G.flags.affairOffered;
+  out = []; _affairNight({ worked: true });
+  assert.ok(_flag("affairOffered"), "the clean two-month run is offered the door");
+  assert.match(out.join("\n"), /Prachuap/, "…and it's Prachuap");
+  assert.match(out.join("\n"), /\(SELL UP\)/, "an invitation is a promise: the hint is a door");
+});
+
+test("SELL UP through the door wins the game's biggest single happiness, and the world knows", () => {
+  inAffair({ since: 1 });
+  _setFlag("affairOffered");
+  const h0 = G.happy, bank0 = G.bank || 0;
+  out = []; doCommand("sell up");
+  assert.equal(G.pendingChoice, "sellbar", "it confirms before it commits");
+  out = []; doCommand("blather");
+  assert.equal(G.pendingChoice, "sellbar", "gibberish re-prompts the confirm");
+  out = []; doCommand("yes");
+  assert.ok(_flag("barSold") && _flag("affairWon"), "sold, and won");
+  assert.ok(!_flag("barLost"), "sold is NOT lost — different flag, different life");
+  assert.equal((G.bank || 0) - bank0, AFFAIR_SALE, "the note cleared and this much banked");
+  assert.ok(G.happy - h0 >= 12, "the biggest single happiness in the game");
+  assert.ok(!_barOwned(), "the bar is somebody else's problem");
+  assert.ok(G.phone.contacts.manow && _bondTier("manow") >= 3, "she is yours, not staff");
+  assert.ok(!_npcActive("manow"), "and off the Stinky's floor for good");
+  out = []; doCommand("books");
+  assert.match(out.join("\n"), /noodle-shop receipt/, "BOOKS knows he sold (state-blind-prose guard)");
+  out = []; doCommand("work");
+  assert.match(out.join("\n"), /retired|Prachuak|Prachuap/, "WORK knows he sold");
+});
+
+test("selling cold — without her door — is refused in Bert's voice, not a wall", () => {
+  running();
+  out = []; doCommand("sell up");
+  assert.equal(G.pendingChoice, null, "no confirm without the reason");
+  assert.match(out.join("\n"), /needing-to-sell price|reason worth/, "the voiced truth about the one buyer");
+  assert.ok(_barOwned(), "and the bar is still yours");
+});
+
+test("the break scars the till for a while, and losing the bar mid-affair is the bleed", () => {
+  inAffair({ since: 1 }); G.day = 30;
+  // the drag while live
+  G.bar.lastMonthDay = 999; G.bar.workedLast = true; G.bar.workedDay = G.day; G.rng = 11;
+  const live = _barNight(G.day).take;
+  // …and after a break, the scar
+  G.affair.strain = AFFAIR_BREAK; out = []; _affairWarn();
+  assert.ok(G.affair.ended && G.affair.gone, "she goes at the threshold");
+  G.bar.workedLast = true; G.bar.workedDay = G.day; G.rng = 11;
+  const scarred = _barNight(G.day).take;
+  assert.ok(scarred <= live, "the floor doesn't snap back the next night");
+  G.day = G.affair.scarUntil + 1;
+  G.bar.workedLast = true; G.bar.workedDay = G.day; G.rng = 11;
+  const healed = _barNight(G.day).take;
+  assert.ok(healed > scarred, "…but it does heal");
+  // the bleed: the bar going under while it's live ends it in the same breath
+  inAffair({ since: 1 });
+  out = []; _barLost("landlord");
+  assert.ok(G.affair.ended && G.affair.gone, "losing the bar mid-affair is the bleed");
+  assert.match(out.join("\n"), /Town's fault, na/, "and nobody is graded for it");
+});
+
+test("the affair modals redraw on resume (the reload-blindness invariant)", () => {
+  inAffair({ since: 1 });
+  G.pendingChoice = "affair"; G.affairWho = "manow";
+  out = []; _renderResume();
+  assert.match(out.join("\n"), /STAY — make it real/, "the begin prompt redraws");
+  G.pendingChoice = "affaircrisis"; G.affairCrisis = "rota"; G.affairWho = null;
+  out = []; _renderResume();
+  assert.match(out.join("\n"), /1 — |2 — /, "a crisis redraws its options");
+  G.pendingChoice = "sellbar"; G.affairCrisis = null;
+  out = []; _renderResume();
+  assert.match(out.join("\n"), /YES — sell up/, "the sale confirm redraws");
+  G.pendingChoice = null;
+});
+
 test("a night away costs you money, which is what makes standing the rail a choice", () => {
   running();
   G.rng = 77; let W = 0, A = 0;

@@ -832,3 +832,31 @@ structure is what surfaced R1 (he typed BARFINE at his own girl *because he was
 checking the owner-blindness claim*, and found the one channel the gate missed).
 A discovery persona wanders; a verification persona pressure-tests the patch along
 the exact seams the last round moved.
+
+---
+
+# The staff affair ships (2026-08-26, follows round 28)
+
+Not a playtest round — the design answer to one. Ronnie's R1 closed the barfine
+loophole with a refusal whose own prose said "talk to her; the rest is between
+the two of you" — a promise. The user's call: allow the romance, with the
+appropriate unhappy endings, and make the ONE good ending truly hard — "most
+players who attempt this should fail."
+
+Built as **the staff affair** (constants + AFFAIR_CRISES in world.js, machinery
+in engine-systems.js). The full contract is in CLAUDE.md; the difficulty is
+pinned as executable properties in barchain.test.js rather than hoped for:
+
+- *"the ECONOMICALLY optimal schedule loses her"* — alternating nights (the
+  bar's comfortable +฿21k policy) breaks the affair inside two months.
+- *"one conquest anywhere sours it forever"* — the _conquestHappy funnel marks
+  the slip; discovery is certain within 3 days; the good ending dies there.
+- *"every crisis answer debits an account"* — table-driven: no free answers.
+- *"the door needs EVERYTHING at once"* — six conditions each individually
+  necessary (too soon / strain / soured / arrears / rent / till), flipped one at
+  a time.
+
+The good ending is the Darkside-defiance canon paid off in mechanics: sell the
+going concern (partner-flavoured — Tan tears his 51%, Candy's lawyer does it in
+letters), bank AFFAIR_SALE, the beach at dawn, +12 non-jading — and the sandbox
+carries on, because G.over is never set. 12 new tests; 1184 vm + 45 e2e green.

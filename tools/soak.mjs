@@ -222,6 +222,8 @@ function liveSnap() {
     barFloor: b.floorN || 0, barShiftAsked: !!b.shiftAsked,
     synAsked: Object.keys((G.syn && G.syn.asked) || {}).length,
     synDone: Object.keys((G.syn && G.syn.done) || {}).length,
+    affairLive: !!(G.affair && !G.affair.ended),
+    affairEnded: !!(G.affair && G.affair.ended),
     questsDone: Object.values(G.quests || {}).filter(q => q === "done").length,
     questsActive: Object.values(G.quests || {}).filter(q => q === "active").length,
     bondMax: Math.max(0, ...Object.values(drinks)),
@@ -292,6 +294,11 @@ const EFFECTS = [
   { id: "bar.lost",           modes: ["barowner"], hit: (a, b) => !a.barLost && b.barLost,
     why: "two missed rents or three missed notes — many months of neglect, not a short run" },
   { id: "tan.favour.asked",   modes: ["barowner"], hit: (a, b) => !a.tanAsked && b.tanAsked },
+  { id: "affair.begun",       modes: ["barowner"], hit: (a, b) => !a.affairLive && b.affairLive,
+    why: "the door needs her-farang tier (13+ drinks) with your OWN staff plus a stood " +
+      "shift to last call — courtship a random walk cannot produce (tested in barchain)" },
+  { id: "affair.ended",       modes: ["barowner"], hit: (a, b) => !a.affairEnded && b.affairEnded,
+    why: "an ending needs a beginning; see affair.begun" },
   { id: "procurement.asked",  modes: ["barowner"], hit: (a, b) => b.synAsked > a.synAsked },
 ];
 const EFFECT_WHY = new Map(EFFECTS.filter(e => e.why).map(e => [e.id, e.why]));
