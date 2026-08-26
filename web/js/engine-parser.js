@@ -322,10 +322,17 @@ function _doGo(dirWord) {
   if (G.rain > 0) {
     if (!_sheltered(to)) {
       if (_sheltered(G.room)) {
-        _say("You get one step toward the door before the doorway itself talks " +
-          "you out of it — a solid moving wall of water where the street used " +
-          "to be. The mamasan doesn't even look up. Nobody leaves in this; " +
-          "that's what the rain is FOR.");
+        // room-aware: "the mamasan doesn't look up" printed inside a hotel room
+        // (Frank, 2026-08-26 — state-blind flavour)
+        _say(_isHotelRoom(G.room)
+          ? "You get as far as the window. The soi below has become a shallow " +
+            "brown river with motorbikes fording it; the rain is hitting the " +
+            "glass sideways. The room, the kettle, and the bed all make the " +
+            "same argument, and the argument wins."
+          : "You get one step toward the door before the doorway itself talks " +
+            "you out of it — a solid moving wall of water where the street used " +
+            "to be. The mamasan doesn't even look up. Nobody leaves in this; " +
+            "that's what the rain is FOR.");
       } else {
         _say("Not in this. The street is a river, the rain is horizontal, and " +
           "the awning above you is the entire habitable world. It can't last " +
@@ -358,8 +365,11 @@ function _doGo(dirWord) {
       "tilac.” The bolt goes back across behind you. Whatever the party becomes " +
       "now, it becomes without you.", "dim");
   }
-  // room 412's key card is in the wallet: no wallet, no room
-  if (to === "hotel_room" && !_flag("hasWallet")) {
+  // room 412's key card is in the wallet: no wallet, no room. Act One ONLY —
+  // this is the opening quest's gate, and it leaked into the expat stage when a
+  // harness shortcut skipped the flag (Gordon F6, then Frank got 60 straight
+  // all-nighters off it). A resident is past the wallet story by definition.
+  if (to === "hotel_room" && !_flag("hasWallet") && !_flag("act1Done")) {
     _say("The night clerk looks up, takes in the sand, the sunburn, the eyes. " +
       "“Key card, sir?” The key card is in your wallet. The wallet is out there " +
       "somewhere in the neon. He spreads his hands, genuinely sorry: no card, " +
@@ -665,7 +675,7 @@ function _doTravel(arg) {
       "so are you.");
     return;
   }
-  if (dest === "hotel_room" && !_flag("hasWallet")) {
+  if (dest === "hotel_room" && !_flag("hasWallet") && !_flag("act1Done")) {
     _say("No key card, no room — the clerk was politely immovable about it. The wallet first.");
     return;
   }
@@ -2818,6 +2828,13 @@ const _CONVO_TOPIC_RULES = [
   // A#18 / B#4, 2026-08-23). Where a node already exists under a different key,
   // one alias row serves typed ASK, the wheel and the conversation layer alike.
   [/\bkinnaree\b|\bthe missus\b|his wife|your wife/,                          "wife"],
+  // The filler girls' hash-picked bios volunteer sisters, a son, school fees and
+  // a dream — words a courting player types straight back and missed on (Frank,
+  // 2026-08-26: "ask manow about sisters/son" brushed off while her own
+  // family/plan nodes held the answers). NOTE the table is global first-match:
+  // "coffee shop" stays with Cream's "job" rule below, so keep this one narrow.
+  [/\bsisters?\b|\bbrothers?\b|\bson\b|\bher boy\b|\bkids?\b|\bchildren\b|school fees?|\bmama\b|her mother/, "family"],
+  [/\bdream\b|\bfuture\b|\bsavings?\b/, "plan"],
   [/\bhosts?\b|\bhost bar\b|the boys\b/,                                      "scene"],
   [/\bsims?\b|\bunlock(ing|ed)?\b|screen fix|cracked screen/,                  "job"],
   [/house rules?|the rules\b|your rules/,                                       "rules"],
@@ -3488,10 +3505,25 @@ function _doGive(itemWord, npcWord) {
     const name = NPCS[npc].name;
     const GIFT_TEXT = {
       rose: {
-        hostess: `${name} takes the rose and does the math on it instantly — cheap flower, ` +
-          `kid's bucket, bought on the spot — and it lands anyway, because you thought to. ` +
-          `She tucks it behind her ear and leaves it there the rest of the night. "Farang ` +
-          `romantic," she says, like it's a diagnosis she doesn't mind.`,
+        // pooled: a courting player gives roses REPEATEDLY and the single string
+        // read verbatim four times (Frank, 2026-08-26). A THUNK, resolved only
+        // when the rose branch actually prints — _pickVary in the object literal
+        // would burn dice and pool memory on every unrelated gift.
+        hostess: () => _pickVary([
+          `${name} takes the rose and does the math on it instantly — cheap flower, ` +
+            `kid's bucket, bought on the spot — and it lands anyway, because you thought to. ` +
+            `She tucks it behind her ear and leaves it there the rest of the night. "Farang ` +
+            `romantic," she says, like it's a diagnosis she doesn't mind.`,
+          `${name} takes the rose, sniffs it — pure theatre, the soi roses smell of soi — ` +
+            `and stands it in her lady-drink glass where the whole rail can see it. That's ` +
+            `the point of it, and both of you know it, and it works anyway.`,
+          `Another rose. ${name} accepts it the way royalty accepts tribute — as her due, ` +
+            `graciously — then ruins the effect completely by grinning. "You again with ` +
+            `flower. I start a garden soon, na."`,
+          `${name} twirls the rose once between two fingers, looking at you over it. ` +
+            `"You know what girl do with flower from customer?" A beat. "Throw away when ` +
+            `he go home." She tucks it into her bag, carefully, stem wrapped in a napkin.`,
+        ], "roseHostess"),
         mamasan: `${name} accepts the rose with a raised eyebrow and a slow smile — she has ` +
           `been given every gesture this soi has, twice, and still gives you points for the ` +
           `flower. It goes in the little vase by the till, where the good ones go.`,
@@ -3529,7 +3561,9 @@ function _doGive(itemWord, npcWord) {
       },
     };
     const role = NPC_ROLES[npc] === "mamasan" ? "mamasan" : "hostess";
-    _say((GIFT_TEXT[id] && GIFT_TEXT[id][role]) ||
+    let giftLine = GIFT_TEXT[id] && GIFT_TEXT[id][role];
+    if (typeof giftLine === "function") giftLine = giftLine();   // pooled entries are thunks
+    _say(giftLine ||
       _pickVary(_GIVE_GIFT_LINES, "givegift")(NPCS[npc].name, ITEMS[id].name), "win");
     _addHappy(1);
     _maybeSelfBarfine(npc);
@@ -3815,6 +3849,25 @@ function _doBuy(arg) {
     return;
   }
   if (/water|nam plao/.test(arg)) {
+    // Your own hotel room has the two complimentary bottles every Thai hotel
+    // leaves by the kettle — free, two a day, restocked by housekeeping. This is
+    // both true to the country and the fix for the rain-lock dehydration loop: a
+    // resident pinned home by a downpour died of thirst seven nights in sixty
+    // beside a working shower (Frank, 2026-08-26).
+    if (_isHotelRoom(G.room) && G.room === _hotelRoomId()) {
+      if ((G.roomWater || 0) >= 2) {
+        _say("Both complimentary bottles are dead soldiers on the tray. Housekeeping " +
+          "restocks them tomorrow; tonight it's the 7-Eleven or the tap you know better than to trust.");
+        return;
+      }
+      G.roomWater = (G.roomWater || 0) + 1;
+      G.thirst = Math.max(0, G.thirst - 45);
+      _say(_pickVary([
+        "One of the two complimentary bottles by the kettle — warm as soup, free as air, and exactly what the body wanted. Housekeeping will replace it tomorrow, the quiet daily kindness of every hotel in the kingdom.",
+        "You crack the seal on a house bottle from the tray. Not cold, not glamorous, entirely sufficient. The second one stands sentry for later.",
+      ], "roomwater"));
+      return;
+    }
     const canBuy = r.shop || r.seven || r.water || _inBar() || FOOD_STALLS[G.room]; // r.water: a drinks cart in the desc
     if (!canBuy) { _say("No water for sale here. 7-Elevens, bars, and the street carts all have it."); return; }
     const price = _inBar() ? 20 : 10;

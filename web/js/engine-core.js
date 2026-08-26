@@ -285,6 +285,7 @@ function newGame() {
       workedLast: false, rentOwed: 0, rentShort: 0, pocketDrawn: 0 },
     affair: null,        // the staff affair (engine-systems) — null until she stays after close
     affairCool: 0,       // day a STEP BACK was given; the door re-opens after a fortnight
+    roomWater: 0,        // complimentary hotel bottles drunk today (2/day, housekeeping restocks)
     atmToday: 0,         // principal withdrawn today (resets when atmDay rolls over)
     lastPolice: -99,     // turn of the last boy-in-brown shakedown
     questHailed: false,  // the one time a giver calls you over (see _questHail)
@@ -1849,9 +1850,16 @@ function _tick() {
   G.warned = G.warned || {};
   const _warn = (k, on, m) => { if (on) { if (!G.warned[k]) { _say(m, "alert"); G.warned[k] = true; } } else G.warned[k] = false; };
   _warn("h70", G.hunger >= 70 && G.hunger < 90, "(Your stomach growls loudly enough to turn heads. Eat something.)");
-  _warn("t70", G.thirst >= 70 && G.thirst < 90, "(Your throat is sandpaper. Drink something — ideally water.)");
+  // in your own hotel room the fix is on the tray — say so, or a rain-pinned
+  // resident dies of thirst beside the kettle (Frank, 2026-08-26)
+  const _inOwnRoom = typeof _hotelRoomId === "function" && G.room === _hotelRoomId() && (G.roomWater || 0) < 2;
+  _warn("t70", G.thirst >= 70 && G.thirst < 90, _inOwnRoom
+    ? "(Your throat is sandpaper — and the two complimentary bottles are right there by the kettle. DRINK WATER.)"
+    : "(Your throat is sandpaper. Drink something — ideally water.)");
   _warn("h90", G.hunger >= 90, "(You are running on fumes. Food. Now.)");
-  _warn("t90", G.thirst >= 90, "(Dizzy. The neon is doing things it shouldn't. WATER.)");
+  _warn("t90", G.thirst >= 90, _inOwnRoom
+    ? "(Dizzy. The neon is doing things it shouldn't. The house bottles are on the tray — DRINK WATER.)"
+    : "(Dizzy. The neon is doing things it shouldn't. WATER.)");
   if ((G.hunger >= 80 || G.thirst >= 80) && G.nightTurn % 10 === 0) {
     _addHappy(-1, G.thirst >= G.hunger ? "you're parched" : "you're starving");
   }
@@ -1879,10 +1887,13 @@ function _tick() {
     G.lastDrizzle = G.turns; // light rain: atmosphere only, never mechanics
     _sayDrizzle();
   }
-  // the peddlers work the Beach Road bars, stool to stool
+  // the peddlers work the Beach Road bars, stool to stool — but a bar gets a
+  // couple of passes a night, not six (Frank, 2026-08-26: 4–6 identical visits
+  // in one long evening on one stool)
   if (!G.game && !G.pendingEnc && _inBar() && _room().region === "Beach Road" &&
-      G.turns - G.lastPeddler >= 20 && _rand() < 0.12) {
+      G.turns - G.lastPeddler >= 20 && (G.peddlerNight || 0) < 2 && _rand() < 0.12) {
     G.lastPeddler = G.turns;
+    G.peddlerNight = (G.peddlerNight || 0) + 1;
     G.pendingEnc = "peddler";
     _encPrompt(
       [_pickVary(_PEDDLER_PITCH, "peddlerPitch"), "alert"],

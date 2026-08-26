@@ -798,7 +798,11 @@ function _newbieNudge() {
   // its own room cannot keep — which is the defect this repo keeps catching.
   const ladies = _npcsHere().filter(id => NPC_ROLES[id] === "hostess");
   if (!ladies.length) return;
-  if (!_flag("tipNumber")) {
+  // …and only while it's TRUE: "nobody's number is in your phone" printed at a
+  // man carrying his girl's number (Frank, 2026-08-26 — a false claim, the class
+  // the repo lints for)
+  const _hasLadyNum = Object.keys(G.phone.contacts || {}).some(id => G.phone.contacts[id] && NPC_ROLES[id]);
+  if (!_flag("tipNumber") && !_hasLadyNum) {
     _setFlag("tipNumber");
     _say("(A thought, since you're here: nobody's number is in your phone yet. Buy a lady a " +
       "drink or two until she's warm to you, then CONTACT her — that's how the rest of this " +
@@ -2501,10 +2505,14 @@ const _OWNER_GREET = {
   cashier: [
     n => `${n} glances up from the drawer. "Evening, boss. Till started clean, I show you the book at close." Back to the count. With you, she is all business, which is the compliment.`,
     n => `"You're in." ${n} turns the book a quarter so you can see the running figure without asking. "Slow hour. It'll pick up. It always picks up." She does not look worried, so you decide not to be.`,
+    n => `${n} slides last night's docket across without being asked and taps one line — a comp she wants you to initial. Everything above board, everything witnessed. She runs your money like it's her reputation, because it is.`,
+    n => `"Boss." ${n} doesn't look up from the count, but two fingers rise from the notes in greeting — the exact amount of ceremony a till in progress can spare, and from her, warmth.`,
   ],
   hostess: [
     n => `"Boss! You here!" ${n} lights up — not the customer smile, the real one. "I like when you work. More fun. You want I bring you water? Boss cannot be drunk one, haha."`,
     n => `${n} bumps your arm on her way past with a tray. "Busy soon, na. You stay behind bar tonight? Good. When you here, the mama not shout so much." A wink, and she's gone to her section.`,
+    n => `"Boss, boss —" ${n} reports the night's gossip in one breath: which regular is in a mood, which girl has new shoes, what the bar next door is charging now. Staff intelligence, delivered like a weather bulletin.`,
+    n => `${n} points you at the ice bin with her chin as she passes — running low, her way of saying the boss may as well be useful. You fetch the ice. The floor approves of an owner who fetches the ice.`,
   ],
 };
 const _OWNER_PITCH = {
@@ -3517,6 +3525,8 @@ function _endNight(reason) {
   G.soc.hostOut = {};  // …and a host you took off the floor is back on it tomorrow
   G.soc.leftEarly = {}; // …and a girl you let catch the eleven o'clock bus is back tomorrow
   G.soc.mgrChat = {};  // and forgets last night's bar-leaning (manDrinks goodwill persists)
+  G.roomWater = 0;     // housekeeping restocks the two complimentary bottles
+  G.peddlerNight = 0;  // …and the peddler's per-bar-night visit count resets
   G.lastBusWarned = false; // and the last-baht-bus heads-up fires once each night
   G.soc.greeted = {};  // a fresh night — she greets you anew
   G.soc.fed = {};      // fed-a-girl fondness is once per girl per night

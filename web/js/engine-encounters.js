@@ -243,7 +243,10 @@ function _salengAnnounce(cart, firstEver) {
 }
 
 function _salengVignette() {
-  const girls = _npcsHere().filter(id => NPC_ROLES[id] === "hostess" || NPC_ROLES[id] === "mamasan");
+  // hostess actors only: several lines reference "the mama" in third person, and
+  // a mamasan actor made them self-referential ("Lamai splits a durian with the
+  // mama") — same prose-claim class as the shift-call boy (Frank, 2026-08-26)
+  const girls = _npcsHere().filter(id => NPC_ROLES[id] === "hostess");
   if (!girls.length) return; // nobody to play with it — stay quiet
   if (G.salengCart === "lingerie") { _say(_salengPick(_SALENG_LINGERIE_SCENE, "lingerie-scene"), "dim"); return; }
   const gid = girls[Math.floor(_rand() * girls.length)];

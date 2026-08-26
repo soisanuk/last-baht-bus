@@ -2451,6 +2451,12 @@ function _pushMsg(from, text, gives, fromName, photo) {
   // the same line twice running from the same sender reads as a bug (27-night playtest)
   const last = [...G.phone.inbox].reverse().find(m => m.from === from);
   if (text && last && last.text === text && !gives && !photo) text = _CHATTER[(G.turns + G.day) % _CHATTER.length];
+  // a girl texting into a void stops at a few: an ignored phone accumulated ~70
+  // unread — the same five strings ×8 — and dumped them wholesale at the arc's
+  // emotional climax (Frank, 2026-08-26). Plain chatter caps at 3 unread per
+  // sender; money and photos still land.
+  if (text && !gives && !photo &&
+      G.phone.inbox.filter(m => m.from === from && !m.read).length >= 3) return;
   // fromName carries a display name for senders that aren't NPCs (e.g. the Soi
   // Dog Foundation broadcast); NPC texts leave it null and render by NPCS name.
   // photo (a caption string) marks a texted selfie — rendered with her portrait
@@ -2506,6 +2512,14 @@ function _doBlackbook() {
   const mark = ["·", "♡", "♥", "★"];
   for (const id of ids) {
     const n = NPCS[id], t = _bondTier(id);
+    // the affair's endings reach the book (Frank, 2026-08-26: "★ your girl · The
+    // Stinky Pinky" the morning after she'd gone home)
+    if (G.affair && G.affair.ended && id === G.affair.id) {
+      _say(G.affair.won
+        ? `★ ${n.emoji || ""} ${n.name} — Prachuap, by the sea · the one you left with`
+        : `· ${n.emoji || ""} ${n.name} — gone home · the one that ended`, G.affair.won ? "" : "dim");
+      continue;
+    }
     const bar = _barName(_npcRoom(id)) || "around";
     const invited = G.phone.invite && G.phone.invite.id === id && G.phone.invite.day === G.day
       ? " — asked you over tonight" : "";
@@ -2605,6 +2619,20 @@ function _doMessage(arg) {
     c === w || NPCS[c].name.toLowerCase().includes(w.split(" ")[0]));
   if (!id) { _say(w ? "No such number in your phone. (CONTACT a girl in her bar first.)" : "Message whom?"); return; }
   G.battery = Math.max(0, G.battery - 1);
+  // after the affair's endings she doesn't text like a hostess (Frank, 2026-08-26:
+  // "come see me tonight!!" the morning after the bag by the door)
+  if (G.affair && G.affair.ended && id === G.affair.id) {
+    _say(G.affair.won
+      ? _pickVary([
+          `The reply comes with a photo of a steaming bowl: "you taste better one when you home 😏 auntie say hello. HURRY UP." That last in English, all caps, learned specially.`,
+          `"555 you miss me already?? good. i miss you too but i no tell you. oh — i just tell you. ok come home na ❤️"`,
+        ], "wonmsg")
+      : _pickVary([
+          `Two grey ticks. Then, a long minute later, one word: "kha." Which from her means received, understood, and closed — the politest door in Thailand, shutting gently.`,
+          `The ticks go blue and no reply comes. Somewhere in Sakon Nakhon she read it twice — you know she read it twice — and put the phone face down, the loudest thing she does.`,
+        ], "gonemsg"));
+    return;
+  }
   if (G.phone.msgCd[id] === G.day) {
     _say(`You've already charmed ${NPCS[id].name} by text tonight. Twice is a pattern; ` +
       "three times is a case file.");
@@ -2900,7 +2928,20 @@ function _readMessages() {
   if (_phoneDead()) return;
   if (!G.phone.inbox.length) { _say("No messages. The phone judges you gently."); return; }
   const unread = G.phone.inbox.filter(m => !m.read);
-  const show = unread.length ? unread : G.phone.inbox.slice(-3);
+  // a long-ignored phone doesn't reprint its whole backlog — the newest dozen,
+  // the rest skimmed and let go (Frank, 2026-08-26: a ~70-text dump at the
+  // worst possible moment). Money still lands: mark the skipped read and bank.
+  let show = unread.length ? unread : G.phone.inbox.slice(-3);
+  if (show.length > 12) {
+    const dropped = show.slice(0, show.length - 12);
+    for (const m of dropped) {
+      m.read = true;
+      if (m.gives) { G.money += m.gives; _say(`(An older transfer surfaces in the scroll: +฿${m.gives}.)`, "win"); }
+      if (m.photo && typeof _addPhoto === "function") _addPhoto(m.from, m.photo);
+    }
+    _say(_fmt("(You thumb past {n} older messages — the phone's way of telling you how long you've been gone.)", { n: dropped.length }), "dim");
+    show = show.slice(-12);
+  }
   for (const msg of show) {
     const sender = msg.fromName || (NPCS[msg.from] ? NPCS[msg.from].name : msg.from);
     if (msg.photo) {
@@ -3482,7 +3523,26 @@ function _maybeIncomingText() {
   // ladies only: the unprompted-text machinery (invites, scam-asks, selfies) is
   // girl-voiced through and through — Tan (no NPC_ROLES entry) texts back when
   // texted, never into the mama-sick patter
-  const contacts = Object.keys(G.phone.contacts).filter(id => NPC_ROLES[id]);
+  let contacts = Object.keys(G.phone.contacts).filter(id => NPC_ROLES[id]);
+  // the affair's endings reach the phone too (Frank, 2026-08-26: the in-love
+  // text pool kept sending the morning after she left). Gone is gone — silence
+  // is her whole statement. Won gets its own register: Prachuap, not a barstool.
+  if (G.affair && G.affair.ended) {
+    const her = G.affair.id;
+    contacts = contacts.filter(id => id !== her);
+    if (G.affair.won && G.phone.contacts[her] && G.turns - G.phone.lastText >= 60 &&
+        _hh("wontext:" + G.day, 17) % 100 < 20 && !(G.phone.wonTextDay === G.day)) {
+      G.phone.wonTextDay = G.day;
+      G.phone.lastText = G.turns;
+      _pushMsg(her, _pickVary([
+        "auntie teach me the broth today. secret is TIME, same like everything 555 you come home when you finish there na ❤️",
+        "two customer today say same thing: best noodle in soi!! i no tell them my farang wash the bowls 😏",
+        "sea very quiet tonight. i sit outside the shop and think how we get here. lucky, na. both of us. come home soon 🌙",
+      ], "wontext"));
+      _say("(📱 Your phone buzzes — CHECK MESSAGES.)", "dim");
+      return;
+    }
+  }
   if (!contacts.length) return;
   if (G.turns - G.phone.lastText < 25) return;
   const maxT = Math.max(0, ...contacts.map(_bondTier));
@@ -4848,10 +4908,34 @@ function _workFloor() {
   if (afId && b.floorDay !== G.day && _npcActive(afId)) {
     b.floorDay = G.day;
     b.floorTurn = G.turns; b.floorN = (b.floorN || 0) + 1;
-    _say(_fmt(_pickVary(_AFFAIR_FLOOR, "affloor"), { who: _npcLabel(afId) }));
+    // her beats are REVEALS like everyone's — in order, no retell until the pool
+    // is dry (the shared-tin moment retold identically on three nights under a
+    // bare _pickVary; Frank, 2026-08-26 — the exact class floorSaid exists for)
+    const asaid = (b.floorSaid = b.floorSaid || {});
+    const aheard = asaid[afId + ":us"] = asaid[afId + ":us"] || [];
+    let apool = _AFFAIR_FLOOR.map((_, i) => i).filter(i => !aheard.includes(i));
+    if (!apool.length) { aheard.length = 0; apool = _AFFAIR_FLOOR.map((_, i) => i); }
+    aheard.push(apool[0]);
+    _say(_fmt(_AFFAIR_FLOOR[apool[0]], { who: _npcLabel(afId) }));
     return;
   }
-  if (afId && (G.affair.floorSour || 0) >= 3) return;   // the floor has closed to you
+  if (afId && (G.affair.floorSour || 0) >= 3) {
+    // The closed floor was a silent ABSENCE of moments, and absence is invisible
+    // — the arc's biggest announced cost read as words only (Frank, 2026-08-26).
+    // One visible closed-register beat a night: the same women, working
+    // perfectly, telling you nothing.
+    if (b.closedDay !== G.day) {
+      b.closedDay = G.day;
+      b.floorTurn = G.turns;
+      _say(_pickVary([
+        "The cashier squares the float with her back half-turned, finishes, and files the book without turning it round for you. She used to turn it round.",
+        "Two of the girls are laughing at something down the far end and it stops — not guiltily, just efficiently — when you drift within earshot. The service tonight is perfect. That's how you can tell.",
+        "The mamasan tells you the night is 'fine, boss', which is true, and complete, and the end of the sentence. There was a time she'd have told you which punter to watch. You chose who you chose.",
+        "A drink order goes wrong and gets fixed before you see it — you only catch the after-ripple, the glance that checks whether you noticed. The floor covers for itself now. You are somebody it covers FROM.",
+      ], "floorclosed"), "dim");
+    }
+    return;
+  }
   let staff = _barStaff();
   if (afId) staff = staff.filter(id => id !== afId);
   if (!staff.length) return;
@@ -4890,9 +4974,22 @@ const SHIFT_FLAT_LOSS  = 400;    // a night nobody lifted
 function _shiftCallById(id) { return SHIFT_CALLS.find(c => c.id === id) || null; }
 
 // The one call that needs a person attached picks her at ask time, so the prose
-// and the bond land on the same woman.
+// and the bond land on the same woman — and the SAME woman every time, because
+// the ask carries a biography (a boy at her sister's). The son is a canon claim,
+// not reusable filler: it fired for Manow for weeks and then verbatim for the
+// CASHIER the night after Manow left (Frank, 2026-08-26 — the exact prose-claim
+// defect class this repo lints for). One stable hash-picked hostess per bar owns
+// the boy; if she's off the floor, the call simply isn't dealt tonight.
+function _earlyGirl() {
+  const room = (G.bar && G.bar.room) || "stinky_bar";
+  const hers = Object.keys(NPCS)
+    .filter(id => _npcRoom(id) === room && NPC_ROLES[id] === "hostess")
+    .sort((a, b) => _hh(a + ":boy", 13) - _hh(b + ":boy", 13));
+  const her = hers[0];
+  return her && _npcActive(her) && _barStaff().includes(her) ? her : null;
+}
 function _shiftEligible() {
-  return SHIFT_CALLS.filter(c => c.id !== "early" || _barStaff().length > 0);
+  return SHIFT_CALLS.filter(c => c.id !== "early" || !!_earlyGirl());
 }
 
 function _shiftDue() {
@@ -4915,8 +5012,8 @@ function _shiftAsk() {
   G.shiftCall = call.id;
   G.shiftWho = null;
   if (call.id === "early") {
-    const staff = _barStaff().filter(id => NPC_ROLES[id] === "hostess");
-    G.shiftWho = (staff.length ? staff : _barStaff())[0];
+    G.shiftWho = _earlyGirl();   // the boy has ONE mother — see _earlyGirl
+    if (!G.shiftWho) { G.pendingChoice = null; return; }
   }
   const who = G.shiftWho ? _npcLabel(G.shiftWho) : "";
   // lead/ask may be a POOL (array) — the flagship publican beats retold verbatim

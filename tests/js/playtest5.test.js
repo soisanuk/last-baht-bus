@@ -2149,3 +2149,102 @@ test("Fast Eddy owns his bar — the man-drink line doesn't call the owner a man
     assert.match(said, /name is over the door/);
   }
 });
+
+// ── Frank the romantic (2026-08-26): the systems around the affair know it ended ──
+
+function frankOwner() {
+  sandbox();
+  G.stage = "expat";
+  ["expatLife", "barPremises", "barLicence", "barPartner", "partnerTan", "barOpen", "barPaid", "tanAsked"]
+    .forEach(f => _setFlag(f));
+  G.bar.room = "stinky_bar"; G.room = "stinky_bar"; G.money = 40000;
+}
+
+test("an ignored phone doesn't hoard: chatter caps at 3 unread per sender, and the read shows a dozen", () => {
+  // Frank: ~70 accumulated texts, the same five strings ×8, dumped wholesale at
+  // the arc's emotional climax.
+  frankOwner();
+  G.phone.contacts.manow = true;
+  for (let i = 0; i < 30; i++) _pushMsg("manow", ["a", "b", "c"][i % 3]);
+  assert.ok(G.phone.inbox.filter(m => !m.read && m.from === "manow").length <= 3,
+    "plain chatter stops accumulating at three unread");
+  // money and photos still land past the cap
+  _pushMsg("manow", "here", 300);
+  assert.ok(G.phone.inbox.some(m => m.gives === 300 && !m.read), "a transfer is never dropped");
+  // and a giant backlog reads as a dozen + a skim, with the money still banked
+  G.phone.inbox = [];
+  for (let i = 0; i < 20; i++) G.phone.inbox.push({ from: "manow", text: "t" + i, turn: i, read: false, gives: i === 0 ? 500 : 0 });
+  const m0 = G.money;
+  out = []; _readMessages();
+  assert.ok(out.join("\n").split("\n").filter(l => /📱/.test(l)).length <= 12, "at most a dozen shown");
+  assert.match(out.join("\n"), /thumb past \d+ older/, "the rest skimmed, named");
+  assert.equal(G.money - m0, 500, "…and the skipped transfer still banked");
+});
+
+test("the ended affair reaches the phone, the book, and the texting arm", () => {
+  // Frank: "★ your girl · The Stinky Pinky", instant loving replies, and the
+  // in-love text pool — all the morning after the bag by the door.
+  frankOwner();
+  G.phone.contacts.manow = true; G.soc.drinks.manow = 20;
+  G.affair = { id: "manow", since: 1, ended: true, gone: true, scarUntil: 99 };
+  out = []; _doBlackbook();
+  assert.match(out.join("\n"), /gone home · the one that ended/, "the book knows");
+  assert.doesNotMatch(out.join("\n"), /your girl/, "she is not ★ your girl any more");
+  out = []; _doMessage("manow");
+  assert.match(out.join("\n"), /kha|face down/, "a message gets her silence, in her voice");
+  for (let i = 0; i < 300; i++) {
+    G.turns += 30; G.phone.lastText = 0; G.rng = 500 + i;
+    const n0 = G.phone.inbox.length;
+    _maybeIncomingText();
+    const last = G.phone.inbox[G.phone.inbox.length - 1];
+    assert.ok(G.phone.inbox.length === n0 || last.from !== "manow", "the gone girl never texts");
+  }
+  // the won state has its own register: Prachuap, not a barstool
+  G.affair = { id: "manow", since: 1, ended: true, won: true };
+  out = []; _doBlackbook();
+  assert.match(out.join("\n"), /Prachuap, by the sea/, "the book knows the good ending too");
+  out = []; _doMessage("manow");
+  assert.match(out.join("\n"), /come home|auntie|HURRY UP|miss you too/, "…and she texts like a partner, not a hostess");
+});
+
+test("the early call's boy has ONE mother: a stable hostess, never the cashier", () => {
+  // Frank: "her boy is at her sister's" taught him Manow had a son over weeks —
+  // then CAKE (the cashier) recited the identical script the night after Manow
+  // left. A child is a canon claim, not reusable filler.
+  frankOwner();
+  const a = _earlyGirl(), b = _earlyGirl();
+  assert.ok(a && a === b, "the same girl every time");
+  assert.equal(NPC_ROLES[a], "hostess", "and she is a hostess — the cashier fallback is gone");
+  G.affair = { id: a, since: 1, ended: true, gone: true };
+  assert.equal(_earlyGirl(), null, "with her gone, there is no understudy for a biography");
+  assert.ok(!_shiftEligible().some(c => c.id === "early"), "…so the call simply isn't dealt");
+});
+
+test("your own hotel room has the two complimentary bottles — the rain-lock can't dehydrate you", () => {
+  // Frank: seven nights of sixty ended "Thirst put you down" while a downpour
+  // pinned him at home beside a working shower. Every Thai hotel leaves two
+  // bottles by the kettle; now so does this one.
+  frankOwner();
+  G.room = _hotelRoomId(); G.thirst = 90; G.roomWater = 0;
+  out = []; doCommand("drink water");
+  assert.ok(G.thirst <= 50, "bottle one quenches");
+  out = []; doCommand("drink water");
+  assert.ok(G.thirst <= 10, "bottle two finishes the job");
+  out = []; doCommand("drink water");
+  assert.match(out.join("\n"), /dead soldiers|Housekeeping restocks/, "the tray runs to two, voiced");
+  assert.ok(G.thirst <= 15, "…and no phantom third bottle");
+  // housekeeping restocks at wake
+  _endNight("sleep");
+  assert.equal(G.roomWater, 0, "restocked with the morning");
+});
+
+test("a resident reaches his own room whether or not Act One's wallet flag survived", () => {
+  // Gordon F6 then Frank S6: the room-412 gate checked hasWallet, not stage, so
+  // a flag-shortcut expat was refused his own bed for 60 nights with Act One prose.
+  frankOwner();
+  delete G.flags.hasWallet;
+  G.room = "hotel_soi";
+  out = []; doCommand("go hotel");
+  assert.equal(G.room, "hotel_room", "act1Done is the resident's key card");
+  assert.doesNotMatch(out.join("\n"), /Get the wallet back/, "no Act One quest prose at a resident");
+});

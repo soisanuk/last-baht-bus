@@ -860,3 +860,59 @@ The good ending is the Darkside-defiance canon paid off in mechanics: sell the
 going concern (partner-flavoured — Tan tears his 51%, Candy's lawyer does it in
 letters), bank AFFAIR_SALE, the beach at dawn, +12 non-jading — and the sandbox
 carries on, because G.over is never set. 12 new tests; 1184 vm + 45 e2e green.
+
+---
+
+# Round 29 — Frank the romantic (Fable, the affair's first blind summit attempt, 2026-08-26)
+
+**Frank**, 55, Bristol, a romantic who bought a bar — briefed to WIN the staff
+affair honestly and blind: no source, no docs, 60 nights LIVED through the real
+clock (no calendar jumps — the endurance is the summit). He courted Manow the
+long way, chose STAY, met all five crises in character, and **lost her on day
+61** — the break, at the exact terminus the design intends.
+
+## The design verdict (what the run was for)
+
+- **Tragic-but-fair, exactly on target.** "I can name every choice in the chain…
+  She told me the ending on the first night — *nobody can be both* — and the game
+  spent eight weeks proving her right." The slow-burn warnings (formal
+  goodnights, the cousin's two nights) were readable and the first explicitly
+  actionable.
+- **The bind held: no exploit found.** "Money couldn't buy the arc… presence was
+  the only currency, and presence was exactly what the bar, the floor, the grind,
+  the rain, and her son's bus timetable all competed for."
+- **Legibility: exceptional, one gap** (S5, fixed below — the closed floor was a
+  silent absence).
+- His one open design ask, recorded not built: an alternate resolution of the
+  both-ness (take her off the floor / buy the coffee shop instead of the stool)
+  — "a man who lost her this fairly has earned the right to lose her a different
+  way." Filed to the long-term-play bucket.
+
+## Fixed
+
+| # | Finding | Fix |
+|---|---|---|
+| S1 (**worst**) | ~70 unread texts, the same five strings ×8, dumped at the arc's climax | `_pushMsg` caps plain chatter at 3 unread/sender (money/photos exempt); `_readMessages` shows the newest 12 + a voiced skim, banking skipped transfers |
+| S2 (severe) | The morning after she left: blackbook "★ your girl", MESSAGE replied "come see me tonight!!", the in-love pool kept texting | ended-affair propagation: the gone girl never texts and answers with her silence ("kha" — the politest door in Thailand); the won girl gets a Prachuap register; blackbook rows for both states |
+| S3 (severe, prose-claim class) | "Her boy is at her sister's" fired for Manow for weeks, then verbatim for CAKE THE CASHIER — a child as reusable filler | `_earlyGirl()`: one stable hash-picked hostess per bar owns the boy; no cashier fallback; her gone → the call isn't dealt. Same class: saleng actors restricted to hostesses ("Lamai splits a durian with the mama") |
+| S4 (severe, soft-lock) | 7 of 60 nights ended "Thirst put you down" while rain-pinned at home beside a working shower | the two complimentary bottles every Thai hotel leaves — DRINK WATER in your own room, 2/day, housekeeping restocks; thirst warnings point at the tray when you're in the room |
+| S5 | "The floor has closed to you" never visibly manifested — the cost was silent absence | a once-a-night closed-register beat (the book not turned round, the laugh that stops efficiently); her couple beats moved to the in-order `floorSaid` reveal pattern (the shared-tin retell) |
+| S6 | The room-412 wallet gate leaked into expat (bit two runs now) | gate is `!hasWallet && !act1Done` — a resident's key card is his residency |
+| S7 | "The mamasan doesn't even look up" printed inside a hotel room | room-aware rain-refusal branch |
+| S8 | Manow's sisters/son/dream missed as ask-topics; "nobody's number is in your phone" printed at a man carrying hers | `_CONVO_TOPIC_RULES` family/plan aliases (kept narrow — the table is global first-match and "coffee shop" belongs to Cream's job rule); the number-nudge now checks the phone |
+| S9 | Retells: rose acceptance ×4, peddler 4–6 visits/night, owner-gregreetings cycling | rose pooled (as a thunk — no dice burned on other gifts), peddler capped 2/bar-night, owner-greet pools deepened |
+
+## Recorded, not fixed
+
+- Bert's first-TALK origin greeting reading odd on day 11 (correct seen-index
+  behaviour; a "first talk after long acquaintance" register is a deeper change).
+- Journal echo printing 1–2 commands late; killer-pool elimination cue.
+- The money cheat means Frank measured her-vs-floor-vs-body, not her-vs-solvency
+  — the financial leg of the bind still awaits an un-cheated attempt.
+
+**Method note: the summit run validates the SUMMIT, not just the systems.** Frank
+failing on schedule, able to name every fatal choice, with zero exploits and zero
+console errors across 60 lived nights, is the design's acceptance test passing.
+The nine defects were all in the RING around the arc — the phone, the shift-call
+biography, the hydration loop — which is exactly where a 60-night resident run
+looks and nothing shorter does.
