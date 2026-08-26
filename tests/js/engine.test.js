@@ -6098,9 +6098,11 @@ test("scripted happy-ending playthrough", () => {
     // Candy Bar now that Buakhao's phantom cross-street to Second Road is gone.
     // This is also just where the bar is: Candy sits on the Buakhao ⟷ Soi Diana
     // junction, so arriving out of Soi Diana is the front door, not a detour.
-    "e", "n", "e", "e", "e", "e", "candy", "talk to candy",   // Candy: Mot did it
-    "out", "e", "talk to lek",                       // Lek at Lucky Tiger, east off the junction
-    "out", "candy", "ask candy about wallet",        // Candy: som tam errand
+    // buakhao_n's bar doors moved off compass/custom keys into venues[]
+    // (2026-08-27) — ENTER by name now, same as Tree Town below.
+    "e", "n", "e", "e", "e", "e", "enter candy bar", "talk to candy",   // Candy: Mot did it
+    "out", "enter lucky tiger", "talk to lek",       // Lek at Lucky Tiger
+    "out", "enter candy bar", "ask candy about wallet",  // Candy: som tam errand
     // There used to be a "Bank: helmet favour" leg here — south down Buakhao,
     // "w" onto the old cross-street, "talk to bank", "e" straight back. It was
     // dead the whole time: Bank works beach_rd_s and that leg never left Soi
@@ -7098,7 +7100,7 @@ test("flashlight in a go-go draws the no-photo warning; girls tease elsewhere", 
   _rand = () => 0; // pin the tease variant
   state().room = "buakhao_n";
   state().lightOn = true;
-  run("e"); // → Lucky Tiger (Lek, hostess)
+  run("enter lucky tiger"); // venues[], 2026-08-27 — Lek, hostess
   assert.match(lastOut(), /Lek/, "the hostess is the one who notices");
   assert.doesNotMatch(lastOut(), /No photo/, "no camera panic in a beer bar");
 

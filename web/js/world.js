@@ -2540,9 +2540,10 @@ const ROOMS = {
     seven: true,
     desc: "The expat artery: pharmacies, laundry, bars, repeat. ROCK FACTORY's two-storey " +
       "stage looms on the corner — currently doing what every band in Thailand does to " +
-      "'Hotel California' and somehow getting away with it. LUCKY TIGER BAR is just east. " +
-      "South is the old market block, which has not been a market since Tree Town took " +
-      "the trade. A small handwritten LK METRO arrow on a wall points " +
+      "'Hotel California' and somehow getting away with it — with LUCKY TIGER BAR right " +
+      "alongside and CHEAP CHARLIE'S wedged between them, six stools and a chest freezer " +
+      "feeding the whole soi. South is the old market block, which has not been a market " +
+      "since Tree Town took the trade. A small handwritten LK METRO arrow on a wall points " +
       "down an alley — easy to miss, worth finding. Soi Diana opens off the 7-Eleven on " +
       "the corner here, its go-go neon running away west. A few doors down the quiet " +
       "side, CANDY BAR's rose-pink sign keeps its own hours — far enough off the main " +
@@ -2554,9 +2555,9 @@ const ROOMS = {
         "rooms named, like half of Pattaya, after the hotel it grew up around. The arrow knows " +
         "exactly what it's selling. It just won't say so out loud.",
     },
-    exits: { n: "buakhao_lk", s: "buakhao_market", e: "lucky_tiger",
-             in: "rock_factory", alley: "lk_entrance", hotel: "metropole_room", diana: "diana_e",
-             candy: "candy_bar", charlie: "cheap_charlies" },
+    venues: ["rock_factory", "lucky_tiger", "cheap_charlies", "candy_bar"],
+    exits: { n: "buakhao_lk", s: "buakhao_market", alley: "lk_entrance",
+             hotel: "metropole_room", diana: "diana_e" },
   },
   buakhao_market: {
     atm: true,
@@ -2574,7 +2575,8 @@ const ROOMS = {
         "tarp ropes tied off, a gutter worn smooth by decades of morning wash-downs. The " +
         "som tam cart on the corner is the last stall standing, and it isn't leaving.",
     },
-    exits: { n: "buakhao_n", s: "buakhao_s", e: "silk_rose", spa: "buakhao_oil" },
+    venues: ["silk_rose", "buakhao_oil"],
+    exits: { n: "buakhao_n", s: "buakhao_s" },
   },
   buakhao_s: {
     name: "Soi Buakhao (South)",

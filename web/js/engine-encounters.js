@@ -533,8 +533,7 @@ const _ENC = {
   },
 
   police(input) {
-    const exits = Object.values(_room().exits);
-    const barRoom = exits.find(to => ROOMS[to].barType && G.soc.mamaTreat[to]);
+    const barRoom = _venuesHere(_room()).find(to => ROOMS[to].barType && G.soc.mamaTreat[to]);
     if (barRoom && _rand() < 0.7) {
       const mama = Object.keys(NPCS).find(nid =>
         NPC_ROLES[nid] === "mamasan" && _npcRoom(nid) === barRoom);

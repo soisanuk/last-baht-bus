@@ -2075,8 +2075,11 @@ test("the quiz chalkboard names each bar once", () => {
   // find a Thursday and a room whose exits double up on a quiz bar; assert the
   // dedup at the source rather than hunting the exact geometry
   const src = readFileSync(fileURLToPath(new URL("../../web/js/engine-core.js", import.meta.url)), "utf8");
-  assert.match(src, /\[\.\.\.new Set\(Object\.values\(r\.exits\)\)\]/,
-    "the near-quiz-bar scan dedups exits before naming them");
+  // 2026-08-27: the scan also folds in r.venues (a migrated road node's bars
+  // no longer sit on exits at all), so the old exits-only regex widened —
+  // the dedup itself (the new Set(...)) is still the thing under test.
+  assert.match(src, /new Set\(\[\.\.\.Object\.values\(r\.exits\), \.\.\.\(r\.venues \|\| \[\]\)\]\)/,
+    "the near-quiz-bar scan dedups exits+venues before naming them");
 });
 
 test("the Owl no longer preaches the dead bus curfew", () => {

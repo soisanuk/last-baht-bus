@@ -1027,7 +1027,8 @@ function _bandHere() {
 }
 function _bandNearby() {
   if (_bandHere()) return true;
-  return Object.values(_room().exits).some(to => {
+  const here = _room();
+  return [...Object.values(here.exits), ...(here.venues || [])].some(to => {
     const r = ROOMS[to];
     return r && r.liveMusic && (r.musicEveryNight || _isBandNight());
   });

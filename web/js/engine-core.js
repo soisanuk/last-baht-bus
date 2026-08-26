@@ -1689,7 +1689,7 @@ function _describeRoom(full, forceFull) {
   }
   if (r.seven) _say("A 7-Eleven glows across the way (BUY TOASTIE · BUY WATER · BUY CHARGER · BUY CONDOM).", "dim");
   if (_quizDay() && !r.barType) {
-    const near = [...new Set(Object.values(r.exits))].filter(to => _quizBars().includes(to));
+    const near = [...new Set([...Object.values(r.exits), ...(r.venues || [])])].filter(to => _quizBars().includes(to));
     if (near.length && G.nightTurn < 40) {
       _say(near.map(_barName).join(" and ") +
         (near.length > 1 ? " have" : " has") + " a chalkboard out: QUIZ NIGHT " +
