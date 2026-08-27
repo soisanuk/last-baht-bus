@@ -291,7 +291,7 @@ function _sceneHud() {
   const drunkPct = Math.min(100, Math.round((G.soc.drunk || 0) / 9 * 100)); // blackout at 9
   const battColor = G.battery >= 50 ? "var(--green)" : G.battery >= 20 ? "#ffb84d" : "#ff5a5a";
   hud.innerHTML =
-    `<b>฿${(G.money || 0).toLocaleString()}</b><span class="sep">·</span>${esc(_clockStr())}` +
+    `<b>฿${_num(G.money || 0)}</b><span class="sep">·</span>${esc(_clockStr())}` +
     `<span class="sep">·</span>${esc(day)} ${G.day}<span class="grow"></span>` +
     meter("🍺", drunkPct, lowGood(drunkPct)) +
     meter("🍜", G.hunger || 0, lowGood(G.hunger || 0)) +

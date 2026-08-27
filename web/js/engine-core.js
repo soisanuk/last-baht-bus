@@ -56,6 +56,29 @@ function _fmt(en, params) {
   return _L(en).replace(/\{(\w+)\}/g, (m, k) => (params && params[k] != null) ? params[k] : m);
 }
 
+// Locale-aware thousands formatting for a money/count figure — every call site
+// that priced something used to hardcode .toLocaleString("en-US") (or the bare
+// form, which defaults to the runtime's locale, not the player's), so ฿150,000
+// printed with English comma separators even in German mode, contradicting
+// lang.js's own header claim that German gets ฿100.000-style separators (the
+// Collector — German round, 2026-08-27). de-DE gives the period-thousands,
+// comma-decimal grouping that convention actually promises.
+function _num(n) {
+  const lang = G && G.player && G.player.lang;
+  return Number(n).toLocaleString(lang === "de" ? "de-DE" : "en-US");
+}
+
+// English and German pluralize differently (stem+"s" vs. usually stem+"e"),
+// so a single {s} template placeholder can't carry a suffix that's correct in
+// both languages at once — a call site that computed only the English "s"
+// baked it into the German catalog line too ("3 Kondoms" instead of the
+// correct "3 Kondome"; the German round, 2026-08-27). Call with the German
+// plural suffix for this particular noun (defaults to "e", the common case).
+function _plural(n, deSuffix) {
+  if (n === 1) return "";
+  return (G && G.player && G.player.lang === "de") ? (deSuffix != null ? deSuffix : "e") : "s";
+}
+
 function _say(text, cls) {
   _learnNames(text); // name/Thai harvest run on the ENGLISH source (language-independent)
   // collect the Thai the night shows you (capped, deduped) — the trainer

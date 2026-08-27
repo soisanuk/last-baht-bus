@@ -175,6 +175,50 @@ test("_fmt fills a translated template word-order-safely, English fallback when 
     "22:00, Thursday — day 4 of 7.", "en is a passthrough");
 });
 
+test("_num: German gets period-thousands, English keeps commas", () => {
+  // Every money display used to hardcode .toLocaleString("en-US") (or the bare
+  // form, defaulting to the runtime locale — also not the player's), so ฿150,000
+  // printed with English separators even in German mode, contradicting lang.js's
+  // own header claim that German gets ฿100.000-style grouping (the Collector —
+  // German round, 2026-08-27).
+  state().player.lang = "de";
+  assert.equal(_num(150000), "150.000");
+  assert.equal(_num(2000), "2.000");
+  state().player.lang = "en";
+  assert.equal(_num(150000), "150,000");
+});
+
+test("CHECK BALANCE renders German thousands separators", () => {
+  state().flags.hasWallet = true; state().flags.act1Done = true;
+  state().bank = 150000; state().money = 2000; state().atmToday = 0;
+  state().player.lang = "de";
+  out = []; run("check balance");
+  assert.match(lastOut(), /฿150\.000/, "the account balance uses German grouping");
+  assert.match(lastOut(), /฿2\.000/, "…and pocket cash too");
+});
+
+test("_plural: German condoms take -e, not the English -s baked into the template", () => {
+  // "3 Kondoms" (stem + English "s") is not a word; "3 Kondome" is. The {s}
+  // placeholder used to be computed once in English at the call site and reused
+  // for both languages' templates (the Collector, 2026-08-27).
+  state().player.lang = "de";
+  assert.equal(_plural(1), "", "singular takes no suffix in either language");
+  assert.equal(_plural(3), "e", "German plural defaults to -e");
+  assert.equal(_plural(3, "n"), "n", "…or a caller-supplied suffix for nouns that don't take -e");
+  state().player.lang = "en";
+  assert.equal(_plural(3), "s", "English plural is unaffected");
+});
+
+test("INVENTORY pluralizes condoms correctly in German", () => {
+  state().condoms = 3;
+  state().player.lang = "de";
+  out = []; run("i");
+  assert.match(lastOut(), /3 Kondome\b/, "plural is Kondome, not Kondoms");
+  state().condoms = 1;
+  out = []; run("i");
+  assert.match(lastOut(), /1 Kondom\b(?!e)/, "singular takes no suffix");
+});
+
 test("TIME reads out in German: the _fmt clock line + fixed status lines + weekday", () => {
   state().stage = "vacation"; state().flags.act1Done = true; state().mode = "soi6";
   state().player.lang = "de"; state().day = 4; state().nightTurn = 45;
@@ -436,4 +480,51 @@ test("compass directions survive translation — a flipped direction is a naviga
   assert.deepEqual(bad, [],
     "a compass direction changed count in translation; the player would be sent the " +
     "wrong way:\n" + bad.join("\n"));
+});
+
+// ── loanwords stay nouns in German ────────────────────────────────────────────
+// German capitalizes every noun, including an English loanword functioning as
+// one ("der Drink", not "der drink") — a single-model pass mishandled this
+// inconsistently within the same repeated dialogue template: eight instances
+// of a lowercase "drink" or "soi" sat right next to a sibling line that had it
+// right ("Kauf mir Drink — dann ist zuletzt am besten."), which is how it slid
+// past the batch's own review (fixed 2026-08-27). "Lady drink" is a separate,
+// deliberate exception: established in-game bar jargon kept as a loanword
+// PHRASE on purpose (matches "man drink" elsewhere), not a slip.
+//
+// Chasing the fixed eight down turned up a DIFFERENT, unfixed defect this same
+// regex catches: eight Soi 6 revisit-pool entries (the Kitten Corner / Cherry
+// Pop / Ruby Kiss late variants) translate their narration into real German
+// but leave the girl's quoted dialogue in English verbatim — not a lowercase
+// slip, a genuinely incomplete translation. Rather than author replacement
+// dialogue myself (this is voice-calibrated content, not a mechanical fix),
+// these are named here as a tracked, reasoned exception — same discipline as
+// every other OK-list in this codebase — so the corpus check stays green
+// without pretending the gap is closed.
+const _DE_LOANWORD_KNOWN_INCOMPLETE = new Set([
+  "Back into Kitten Corner and the grab-and-giggle is instant — Praewa in your lap, Nangfah at your ear, both purring the offer. \"You want kitten tonight? Two kitten? Buy us drink, we go up, we play.\"",
+  "Cat posters and quick hands. A girl hooks her claws gently into your collar and puts it plainly: \"Why you play hard to get? Nobody play hard to get on Soi 6. Buy me drink, take me up.\"",
+  "Back into the cat glow. \"Same handsome! You come back for me — say you come back for me.\" She is already arranging herself across your knees. \"Buy me drink first. Then upstairs. Then you never leave Soi 6.\"",
+  "Back to the paw and the purr, and a girl who has decided you are hers for the night. \"No shy, handsome. This Soi 6. We say what we want, you buy the drink, we go up. Easy, na?\"",
+  "Back into Cherry Pop, red on red, and a girl pops a cherry between her teeth and the offer in the same grin. \"Handsome! You taste cherry with me upstairs? Buy me drink, we find out.\"",
+  "Red floor to ceiling and a girl already on you before you have sat. \"Why you wait? On Soi 6 nobody wait. One drink, then up, then you go home smiling like a idiot. Good idiot.\"",
+  "Back into the red. \"Same handsome, same Cherry, same idea!\" She laughs, climbs half into your lap, gets to the point. \"Buy me drink. Take me up. The playlist is bad but I am not.\"",
+  "Back to the bowl of untouched cherries and a girl who has claimed your stool and your evening. \"You buy me one drink, I make you forget the flight, the wife, your own name. Upstairs. Yes? Yes.\"",
+]);
+test("a German line never carries a bare lowercase 'drink' or 'soi' — German capitalizes nouns", () => {
+  const OK = /Lady drink/; // an established in-fiction loanword phrase, not a slip
+  const bad = [];
+  const cat = (_CATALOGS || {}).de || {};
+  for (const [en, de] of Object.entries(cat)) {
+    if (typeof de !== "string") continue;
+    if (_DE_LOANWORD_KNOWN_INCOMPLETE.has(en)) continue;
+    for (const m of de.matchAll(/\b(drink|soi)\b/g)) {
+      const around = de.slice(Math.max(0, m.index - 10), m.index + 20);
+      if (OK.test(around)) continue;
+      bad.push(`"${m[0]}" in — ${en.slice(0, 60)}…`);
+    }
+  }
+  assert.deepEqual(bad, [],
+    "a lowercase loanword noun slipped through as English, uncapitalized German, or both:\n" +
+    bad.join("\n"));
 });

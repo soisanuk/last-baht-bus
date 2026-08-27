@@ -149,16 +149,16 @@ function _doDebt() {
     lines.push(_fmt(late
       ? "Nira: ฿{o}, and it was due on day {d}. It goes up every night you leave it, and her cousins have your dawns."
       : "Nira: ฿{o}, due on day {d}. Early is cheaper than late, and late is not the expensive part.",
-      { o: G.loan.owed.toLocaleString("en-US"), d: G.loan.dueDay }));
+      { o: _num(G.loan.owed), d: G.loan.dueDay }));
   }
   if (G.hotelDebt > 0) {
     lines.push(_fmt("The hotel: ฿{h} on the book. Nobody checks out of a debt.",
-      { h: G.hotelDebt.toLocaleString("en-US") }));
+      { h: _num(G.hotelDebt) }));
   }
   if (_barOwned() && G.bar && (G.bar.owed > 0 || G.bar.arrears > 0)) {
     lines.push(_fmt("The old man: ฿{o} left on the bar" +
       (G.bar.arrears > 0 ? ", and ฿{a} of it already late. He has not mentioned it." : "."),
-      { o: G.bar.owed.toLocaleString("en-US"), a: (G.bar.arrears || 0).toLocaleString("en-US") }));
+      { o: _num(G.bar.owed), a: _num(G.bar.arrears || 0) }));
   }
   if (!lines.length) {
     _say("You don't owe anybody anything, which in this town is a kind of achievement " +
@@ -274,21 +274,21 @@ function _loanNightRoll() {
       _say("(They are waiting at dawn again, and again there is nothing to take. One of them " +
         "looks at your empty hands for slightly too long. \"She knows you are still here,\" he " +
         "says, not unkindly, and they go. The arithmetic has not moved. It never moves in your " +
-        `favour: ฿${G.loan.owed.toLocaleString("en-US")}.)`, "alert");
+        `favour: ฿${_num(G.loan.owed)}.)`, "alert");
       return;
     }
     if (G.loan.owed <= 0) {
       G.loan = null;
       _say(`(Nira's cousins catch you outside the 7-Eleven. No drama, no marks — they just wait ` +
-        `while you empty your pockets: ฿${take}. "Nira says thank you. She says don't do this ` +
+        `while you empty your pockets: ฿${_num(take)}. "Nira says thank you. She says don't do this ` +
         `again." Square. The lesson was never going to be cheap.)`, "alert");
     } else {
       // NB ฿{owed} here is what is LEFT after the sweep — the old wording read
       // "lift the ฿X off the ฿Y you owe", which invited the player to subtract
       // and land on a number that was never true.
-      _say(`(Nira's cousins find you and lift the ฿${take.toLocaleString("en-US")} you're carrying. ` +
+      _say(`(Nira's cousins find you and lift the ฿${_num(take)} you're carrying. ` +
         `"The rest soon, na." They are very calm about it, and that is the frightening part. ` +
-        `Still owing: ฿${G.loan.owed.toLocaleString("en-US")}.)`, "alert");
+        `Still owing: ฿${_num(G.loan.owed)}.)`, "alert");
     }
   }
 }
@@ -6691,7 +6691,7 @@ function _doPaper() {
   const fx = _fxLine();
   if (fx) _say(`Corner of the business page, the numbers every expat reads first: ${fx}`, "thai");
   const au = _gold();
-  if (au && au.baht) _say(`Below them, gold at ฿${au.baht.toLocaleString("en-US")} ` +
+  if (au && au.baht) _say(`Below them, gold at ฿${_num(au.baht)} ` +
     "the baht-weight — the number every mamasan reads first.", "dim");
   const wx = _wxLine();
   if (wx) _say(`The weather box promises ${wx} — which the sky will ignore ` +

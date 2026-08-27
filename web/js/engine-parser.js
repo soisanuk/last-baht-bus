@@ -1013,7 +1013,7 @@ function _doInventory() {
   const carried = inv.map(id => _L(ITEMS[id].name));
   // Protection is carried, not a placed item — surface it here so a player can
   // see the three they start the week with (and when they've run out).
-  if (G.condoms > 0) carried.push(_fmt("{c} condom{s}", { c: G.condoms, s: G.condoms === 1 ? "" : "s" }));
+  if (G.condoms > 0) carried.push(_fmt("{c} condom{s}", { c: G.condoms, s: _plural(G.condoms) }));
   _say(carried.length ? _L("You are carrying: ") + carried.join(", ") + "." :
     _L("You are carrying nothing but experience."));
 }
@@ -6029,24 +6029,24 @@ function _doWithdrawInner(arg) {
   const drawn = _atmDrawnToday(), left = ATM_DAILY_CAP - drawn;
   if (n > left) {
     _say(left <= 0
-      ? `Daily limit reached — ฿${ATM_DAILY_CAP.toLocaleString()} is the max, and you've hit it. ` +
+      ? `Daily limit reached — ฿${_num(ATM_DAILY_CAP)} is the max, and you've hit it. ` +
         "The machine keeps your card just long enough to make the point, then spits it back."
-      : `Over the daily limit. You've drawn ฿${drawn.toLocaleString()} of ฿${ATM_DAILY_CAP.toLocaleString()} ` +
-        `today — only ฿${left.toLocaleString()} left until tomorrow.`);
+      : `Over the daily limit. You've drawn ฿${_num(drawn)} of ฿${_num(ATM_DAILY_CAP)} ` +
+        `today — only ฿${_num(left)} left until tomorrow.`);
     return;
   }
   const cost = n + ATM_FEE;
   if ((G.bank || 0) < cost) {
-    _say(`Insufficient funds. ฿${(G.bank || 0).toLocaleString()} in the account, and the machine ` +
-      `wants ฿${cost.toLocaleString()} (฿${n.toLocaleString()} + ฿${ATM_FEE} fee).`);
+    _say(`Insufficient funds. ฿${_num(G.bank || 0)} in the account, and the machine ` +
+      `wants ฿${_num(cost)} (฿${_num(n)} + ฿${ATM_FEE} fee).`);
     return;
   }
   G.bank -= cost;
   G.money += n;
   G.atmDay = G.day;
   G.atmToday = drawn + n;
-  _say(`The machine whirrs, thinks, and counts out ฿${n.toLocaleString()} — lighter a ฿${ATM_FEE} ` +
-    `foreign-card fee. (฿${G.money.toLocaleString()} in pocket · ฿${G.bank.toLocaleString()} in the account.)`, "win");
+  _say(`The machine whirrs, thinks, and counts out ฿${_num(n)} — lighter a ฿${ATM_FEE} ` +
+    `foreign-card fee. (฿${_num(G.money)} in pocket · ฿${_num(G.bank)} in the account.)`, "win");
 }
 
 function _doBalance() {
@@ -6055,8 +6055,8 @@ function _doBalance() {
     return;
   }
   const drawn = _atmDrawnToday();
-  _say(`Account: ฿${(G.bank || 0).toLocaleString()} · in pocket: ฿${G.money.toLocaleString()} · ` +
-    `withdrawn today: ฿${drawn.toLocaleString()} of ฿${ATM_DAILY_CAP.toLocaleString()}.`, "dim");
+  _say(`Account: ฿${_num(G.bank || 0)} · in pocket: ฿${_num(G.money)} · ` +
+    `withdrawn today: ฿${_num(drawn)} of ฿${_num(ATM_DAILY_CAP)}.`, "dim");
 }
 
 function _doAtmVerb() {
@@ -6068,7 +6068,7 @@ function _doAtmVerb() {
   }
   _doBalance();
   _say(`(WITHDRAW 1000) · (WITHDRAW 5000) · (WITHDRAW 10000) — ฿${ATM_FEE} fee, ` +
-    `฿${ATM_DAILY_CAP.toLocaleString("en-US")}/day.`, "dim");
+    `฿${_num(ATM_DAILY_CAP)}/day.`, "dim");
 }
 
 // Filing a police report — right now only the hair-tonic shop shakedown has a
@@ -7554,7 +7554,7 @@ function doCommand(input) {
     }
     case "money": case "cash": case "wallet": case "pocket":
       _say(_fmt("฿{m} in your pocket" + (_flag("act1Done") ? ", ฿{b} in the account" : "") + ".",
-        { m: G.money.toLocaleString("en-US"), b: (G.bank || 0).toLocaleString("en-US") }), "dim");
+        { m: _num(G.money), b: _num(G.bank || 0) }), "dim");
       if (_flag("act1Done")) _say("(WITHDRAW at any ATM · CHECK BALANCE · the daily cap is real.)", "dim");
       break;
     case "bribe": case "backhander": case "grease": {
@@ -8042,7 +8042,7 @@ function _shareCard() {
     `🚌 THE LAST BAHT BUS — Soi 6 (${label})`,
     `🌙 ${nights}`,
     ...(social ? [social] : []),
-    `สนุก ${G.happy}${G.happy >= 100 ? " ★ สบายสบาย" : ""} · ฿${G.money.toLocaleString("en-US")} in pocket` +
+    `สนุก ${G.happy}${G.happy >= 100 ? " ★ สบายสบาย" : ""} · ฿${_num(G.money)} in pocket` +
       (done ? " · week complete" : ` · night ${Math.min(G.day, 7)}/7`),
     "soisanuk.github.io/last-baht-bus",
   ];
@@ -8108,8 +8108,8 @@ function _soi6Opening() {
     "not leaving the soi this trip; the rest of the city keeps for next time.");
   _say(_fmt("฿{bank} for the week sits in the bank. ฿{pocket} is in your pocket — the rest " +
     "comes out of the ATM on the street (฿{fee} a pull, ฿{cap} a day) when you need it.",
-    { bank: SOI6_BANK.toLocaleString("en-US"), pocket: SOI6_POCKET.toLocaleString("en-US"),
-      fee: ATM_FEE, cap: ATM_DAILY_CAP.toLocaleString("en-US") }));
+    { bank: _num(SOI6_BANK), pocket: _num(SOI6_POCKET),
+      fee: ATM_FEE, cap: _num(ATM_DAILY_CAP) }));
   // the goal word carries its own pronunciation the first time — a cold player's
   // win condition was "written in a script I can't read" (Tyler, 2026-08-26)
   _say("Goal: สบายสบาย — say it “sabai sabai”: easy-easy, the good life. Get happy. Max out the week. ★", "win");

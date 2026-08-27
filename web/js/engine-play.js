@@ -2329,7 +2329,7 @@ function _doPatron() {
   if (_btc() && _rand() < 0.1) {
     const b = _btc();
     _say(`From the end of the rail, the other regular — laser eyes still on ` +
-      `his profile picture — announces to nobody: “฿${b.thb.toLocaleString("en-US")} ` +
+      `his profile picture — announces to nobody: “฿${_num(b.thb)} ` +
       `a coin. I told everyone in 2019. Did they listen?” They didn't listen. ` +
       `They are not listening now, either, which he takes as further proof.`);
     return;
@@ -3263,7 +3263,7 @@ const _DEBRIEF = {
     why: "A night is " + NIGHT_TURNS + " turns and ends at 04:00. STANDING at " +
       "dawn is legal — the all-nighter taxis you home in the light and bills " +
       "the morning instead (a heavier hangover, a slower start). PASSING OUT " +
-      "first — blackout, collapse — is what costs you up to ฿" + ROUGH_WAKE_CAP.toLocaleString("en-US") +
+      "first — blackout, collapse — is what costs you up to ฿" + _num(ROUGH_WAKE_CAP) +
       " of what you are carrying" +
       (G.dog ? " — unless a soi dog happens to be sitting on it." : "."),
     next: "SLEEP in your own room ends the night on your terms and keeps it. " +
@@ -3317,9 +3317,9 @@ function _morningLedger() {
   const drawn = (G.atmTotal || 0) - (b.atm || 0); // ATM cash isn't "income" (27-night playtest: "up ฿18,880")
   const barDraw = (G.bar && G.bar.pocketDrawn) || 0; // the bar's own bills report on the bar's line, not here
   const spent = b.money + drawn - G.money - barDraw;
-  if (spent > 0) bits.push("down \u0e3f" + spent.toLocaleString() + " on the night");
-  else if (spent < 0) bits.push("up \u0e3f" + (-spent).toLocaleString() + " on the night");
-  if (G.roughLost > 0) bits.push("\u0e3f" + G.roughLost.toLocaleString() + " of it lifted while you were out");
+  if (spent > 0) bits.push("down \u0e3f" + _num(spent) + " on the night");
+  else if (spent < 0) bits.push("up \u0e3f" + _num(-spent) + " on the night");
+  if (G.roughLost > 0) bits.push("\u0e3f" + _num(G.roughLost) + " of it lifted while you were out");
   const dk = Object.keys(G.talked || {}).length - (b.talked != null ? b.talked : Object.keys(G.talked || {}).length);
   if (dk > 0) bits.push("met " + dk);
   const dn = Object.keys(G.phone.contacts || {}).filter(id => G.phone.contacts[id] && NPC_ROLES[id]).length - b.nums;
@@ -3619,7 +3619,7 @@ function _endNight(reason) {
     if (_lastRough && G.money > 0) {
       G.roughLost = Math.min(G.money, ROUGH_WAKE_CAP);
       G.money -= G.roughLost;
-      _say(`(Pockets turned out on the last night of the week — ฿${G.roughLost.toLocaleString("en-US")} ` +
+      _say(`(Pockets turned out on the last night of the week — ฿${_num(G.roughLost)} ` +
         "gone. The town has no idea you had a flight, and would not have cared.)", "dim");
     }
     _endVacation();
@@ -3735,9 +3735,9 @@ function _endNight(reason) {
         "night sitting on your chest like a paperweight with teeth, and the town let " +
         "you both be. Nobody works a farang whose dog is watching.)")
       : `(Phone on ${_CRASH_BATTERY}%. ${_flag("hasWallet") ? "Wallet" : "Pockets"} ` +
-        `turned out — ฿${(G.roughLost || 0).toLocaleString("en-US")} gone; the town works the farang who ` +
+        `turned out — ฿${_num(G.roughLost || 0)} gone; the town works the farang who ` +
         "don't make it home." + (G.money > 0
-          ? ` They left you ฿${G.money.toLocaleString("en-US")}, which is either mercy or arithmetic.)`
+          ? ` They left you ฿${_num(G.money)}, which is either mercy or arithmetic.)`
           : ")"), "dim");
   }
   _chargeRent(!!crash);              // the folio bills you even if you slept rough…
@@ -4035,12 +4035,12 @@ function _goExpat() {
   _say("You don't board. It's remarkably little paperwork, in the end: a visa " +
     "run, a long-stay rate on room 412 negotiated over exactly one bottle of " +
     "Sang Som with the night clerk, and your savings wired over — " +
-    `฿${EXPAT_SAVINGS.toLocaleString("en-US")}, in your pocket by the time the clerk finishes his ` +
+    `฿${_num(EXPAT_SAVINGS)}, in your pocket by the time the clerk finishes his ` +
     "cigarette. The soi absorbs the news without comment. Candy just sets out your glass.", "win");
   if (G.money > EXPAT_SAVINGS * 4) {
     // a man who arrives carrying a fortune shouldn't be told he has ฿20,000
     // (millionaire playtest 2026-08-22)
-    _say(`(On top of what you were already carrying — ฿${G.money.toLocaleString("en-US")} — which nobody ` +
+    _say(`(On top of what you were already carrying — ฿${_num(G.money)} — which nobody ` +
       "here asks about and everybody here notices.)", "dim");
   }
   _say("★ EXPAT MODE — no flights, no clock on the week. The city is yours to " +
