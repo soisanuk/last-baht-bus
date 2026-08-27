@@ -4437,6 +4437,31 @@ test("NAME DOG: rename him and every line of his re-letters, no strays", () => {
   assert.match(out.join("\n"), /Bo\$\$ pads at your heel/, "replacement-magic $ names render literally");
 });
 
+test("PHOTO DOG is a voiced refusal, not a phantom collectible", () => {
+  // Built round six (c01c54ae, 2026-08-22) but never got a pinned test — the
+  // Collector persona (2026-08-27) rediscovered the same territory blind and
+  // initially misreported it as broken (a fallthrough to the generic
+  // scene-shot line) before direct probing showed the dedicated pool firing
+  // correctly every time. He won't hold still; that's the joke, and no
+  // gallery entry is meant to result — pin it so the next round doesn't have
+  // to re-litigate it from scratch.
+  state().flags.act1Done = true; state().stage = "expat";
+  state().dog = { since: 1, name: null };
+  state().battery = 50;
+  state().phone.photos = [];
+  for (const arg of ["dog", "my dog", "sai krok"]) {
+    out = []; run("photo " + arg);
+    assert.match(lastOut(), /no interest in being photographed|mid-yawn|steps out of frame/,
+      `PHOTO ${arg.toUpperCase()} hits the dedicated dog scene, not a generic fallback`);
+  }
+  assert.equal(state().phone.photos.length, 0, "he never actually holds still for one");
+  // renamed dog answers to his own name too
+  state().dog.name = "Biscuit";
+  out = []; run("photo biscuit");
+  assert.match(lastOut(), /no interest in being photographed|mid-yawn|steps out of frame/);
+  assert.equal(state().battery, 46, "each attempt still costs 1% battery — a real photo, just a bad one");
+});
+
 test("the host bar serves your own beer, at host-bar prices", () => {
   state().flags.act1Done = true; state().money = 1000; state().room = "adonis_club";
   out = []; run("buy beer");
