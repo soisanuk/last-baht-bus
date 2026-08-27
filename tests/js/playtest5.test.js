@@ -2620,7 +2620,7 @@ test("EXITS names the doors, because bar doors hide on bare compass points", () 
   // venue doors off cardinal points into venues[] (see the khao_talo comment),
   // so no real room still has a bar sitting on a bare compass letter to exercise
   // this against — the class EXITS exists for is now (correctly) extinct in the
-  // world data. Fabricate one so the verb itself stays covered.
+  // world data. Fabricate one so the legacy branch stays covered.
   sandbox();
   ROOMS.__exits_test_room = {
     name: "Test Lane", region: "Test",
@@ -2633,6 +2633,44 @@ test("EXITS names the doors, because bar doors hide on bare compass points", () 
   assert.match(said, /Ways out/);
   assert.match(said, /\(inside\)/, "a venue door is labelled as one");
   assert.match(said, /N — Myth Night Market/, "…and the street continuation is named");
+});
+
+test("EXITS also names venues[] doors — the verb had gone blind to the very migration it exists for", () => {
+  // The Cartographer, 2026-08-27: EXITS was built to stop bar doors hiding on
+  // bare compass points, but only ever read r.exits — once every district
+  // moved its bars into r.venues[], the verb silently stopped mentioning any
+  // of them, at every migrated road in the game.
+  sandbox();
+  G.room = "buakhao_n"; // 5 road exits + 4 venues
+  out = []; doCommand("exits");
+  const said = out.join("\n");
+  assert.match(said, /Ways out/);
+  assert.match(said, /N — Soi Buakhao \(Metro Alley\)/, "road exits still print");
+  assert.match(said, /ENTER ROCK FACTORY \(inside\)/, "…and every venues\[\] door now prints too");
+  assert.match(said, /ENTER LUCKY TIGER BAR \(inside\)/);
+  assert.match(said, /ENTER CHEAP CHARLIE'S \(inside\)/);
+  assert.match(said, /ENTER CANDY BAR \(inside\)/);
+});
+
+test("TRAVEL into a venue remembers the door, same as ENTER does", () => {
+  // The Cartographer, 2026-08-27: Take Care Me fronts TWO adjacent roads
+  // (jomtien_2nd_n and thappraya_e both list it in venues[]) — real, deliberate
+  // flavor, a corner pub visible from both streets. ENTER already sets
+  // G.enteredVia so OUT returns you to whichever road you actually walked in
+  // from; TRAVEL's final hop called _arriveAt directly and never set it, so
+  // OUT after a TRAVEL silently used the venue's static exits.out instead —
+  // one specific road, regardless of which one the player actually set out
+  // from. Same bug class as the Cricketers' wrong OUT on Soi Diana, just
+  // reached through TRAVEL instead of a stale field.
+  sandbox();
+  G.visited = G.visited || {};
+  G.visited.take_care_me = true;
+  G.room = "jomtien_2nd_n";
+  out = []; doCommand("travel take care me");
+  assert.equal(G.room, "take_care_me");
+  assert.equal(G.enteredVia, "jomtien_2nd_n", "TRAVEL's last hop is the door you walked in by");
+  out = []; doCommand("out");
+  assert.equal(G.room, "jomtien_2nd_n", "OUT returns to the road you actually came from");
 });
 
 test("a question you were asked doesn't strand itself on the street", () => {

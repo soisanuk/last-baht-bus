@@ -754,6 +754,11 @@ function _doTravel(arg) {
       return;
     }
   }
+  // same contract as ENTER: remember which road you actually walked in from,
+  // so OUT of a venue fronting more than one road (Take Care Me, on the
+  // Jomtien/Thappraya corner) returns you to where you really were, not
+  // wherever its static exits.out happens to point (Cartographer, 2026-08-27).
+  G.enteredVia = G.room;
   _arriveAt(dest);
 }
 
@@ -5678,6 +5683,18 @@ function _doExits() {
     const kind = room.barType || room.shop || room.massage || room.soapy || room.hostBar;
     return "  " + d.toUpperCase() + " — " + (venue || room.name) + (kind && venue ? " (inside)" : "");
   }).filter(Boolean);
+  // Buildings fronting this block (venues[]): no compass letter to hang a row
+  // on, so the row shows the command instead — same "(inside)" label as a
+  // legacy in-exits venue above, so EXITS reads the same regardless of which
+  // model the room uses. This verb existed BECAUSE bar doors used to hide on
+  // bare compass points; it had gone blind to every migrated venue since the
+  // day venues[] shipped, which is the same class of bug (Cartographer, 2026-08-27).
+  for (const id of (r.venues || [])) {
+    const room = ROOMS[id];
+    if (!room) continue;
+    const venue = _barName(id) || room.name;
+    rows.push("  ENTER " + venue.toUpperCase() + " (inside)");
+  }
   if (!rows.length) { _say("No way out of here but the way you came, and that one's behind you."); return; }
   _say("Ways out:", "win");
   for (const row of rows) _say(row, "dim");

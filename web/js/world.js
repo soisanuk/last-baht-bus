@@ -257,9 +257,9 @@ const ROOMS = {
     motosai: true,
     desc: "The middle of the beach road and the heart of it: a knot of people waiting where the " +
       "blue songthaews swing around, a sun-bleached sign listing the loop into Pattaya, a lone " +
-      "motosai driver dozing on his bike. Streetlights, seafood smoke, the sea just west across " +
-      "the sand. The beach road runs north toward the Thappraya climb and south past the 7-Eleven " +
-      "toward the mouth of Soi 7.",
+      "motosai driver dozing on his bike. JOMTIEN SABAI MASSAGE keeps a breezy open front nearby. " +
+      "Streetlights, seafood smoke, the sea just west across the sand. The beach road runs north " +
+      "toward the Thappraya climb and south past the 7-Eleven toward the mouth of Soi 7.",
     exits: { w: "jomtien_beach_m", n: "jomtien_beach_rd_n", s: "jomtien_beach_rd_s" },
     venues: ["jomtien_thai"],
     reads: {
@@ -298,10 +298,10 @@ const ROOMS = {
     name: "Jomtien Soi 7 (West)",
     region: "Jomtien",
     desc: "The near end of Soi 7, off the south end of the beach road: a mellow strip of " +
-      "open-front beer bars strung with fairy lights, a couple of massage shops, and the easy " +
-      "Jomtien pace — older expats, cold beer, nobody in a hurry. The soi runs east, deeper inland " +
-      "toward Second Road; the sea breeze follows you a little way in. The sand itself is west, " +
-      "past the beach road.",
+      "open-front beer bars strung with fairy lights — LUCKY 7 BAR and SEA BREEZE BAR — with " +
+      "SUNSET OIL MASSAGE keeping a quieter door between them, and the easy Jomtien pace — older " +
+      "expats, cold beer, nobody in a hurry. The soi runs east, deeper inland toward Second Road; " +
+      "the sea breeze follows you a little way in. The sand itself is west, past the beach road.",
     exits: { w: "jomtien_beach_rd_s", e: "jomtien_soi_7_m" },
     venues: ["lucky7", "seabreeze", "jomtien_soi_7_oil"],
   },
@@ -334,10 +334,11 @@ const ROOMS = {
   jomtien_soi_7_e: {
     name: "Jomtien Soi 7 (East / Second Road end)",
     region: "Jomtien",
-    desc: "The far end of Soi 7, where it spills onto Second Road by a 7-Eleven. A couple more " +
-      "beer bars and a massage shop see out the strip. On the south side, set back behind a fence " +
-      "and a flagpole, squats the grey bulk of the Chonburi Immigration Office — dark and locked " +
-      "at this hour, a place farang only ever visit in daylight and never fondly.",
+    desc: "The far end of Soi 7, where it spills onto Second Road by a 7-Eleven. COCONUT BAR " +
+      "and THE SANDBAR see out the strip, SOI 7 THAI MASSAGE alongside them. On the south side, " +
+      "set back behind a fence and a flagpole, squats the grey bulk of the Chonburi Immigration " +
+      "Office — dark and locked at this hour, a place farang only ever visit in daylight and " +
+      "never fondly.",
     exits: { w: "jomtien_soi_7_m", e: "jomtien_2nd" },
     venues: ["coconut", "sandbar", "jomtien_soi_7_thai"],
   },
@@ -475,7 +476,9 @@ const ROOMS = {
     desc: "Where the beach road turns inland and becomes the Main Strip of Jomtien: neon, barkers, " +
       "and the warm churn of the night starting up. A 7-Eleven holds the north corner where the road " +
       "bends east. A couple of doors down, ARROW BAR's sign buzzes; across the way a discreet " +
-      "gentleman's club keeps its door shut and its aircon cold. The strip runs east.",
+      "gentleman's club keeps its door shut and its aircon cold — no sign worth reading, just THE " +
+      "BOARDROOM, if you know to ask. BEACH TURN OIL MASSAGE fronts the corner past it. The strip " +
+      "runs east.",
     exits: { e: "thappraya_mid", w: "jomtien_beach_rd_n" },
     venues: ["arrow_bar", "the_boardroom", "beach_turn_massage"],
   },
@@ -483,11 +486,12 @@ const ROOMS = {
     busStop: "jomtien", // on the route — hail-anywhere, no formal stop (2026-08-15 canon)
     name: "Thappraya Rd — Main Strip (middle)",
     region: "Thappraya",
-    desc: "The thick of the strip: beer bars and their fairy lights, and on the south side HYPER " +
-      "A-GO-GO throwing chrome light across the road — run-down for years until the Samson brothers " +
-      "gutted and remade it. On the north side a narrow L-shaped alley cuts away toward Second Road: " +
-      "the SUPERTOWN complex, Jomtien's gay quarter, its drag-show lights flickering somewhere " +
-      "around the elbow.",
+    desc: "The thick of the strip: beer bars and their fairy lights — CHEEKY MONKEY BAR keeps its " +
+      "stools out to the kerb like the rest — and on the south side HYPER A-GO-GO throwing chrome " +
+      "light across the road — run-down for years until the Samson brothers gutted and remade it. " +
+      "Next to it, THE VELVET CLUB keeps a discreet door of its own. On the north side a narrow " +
+      "L-shaped alley cuts away toward Second Road: the SUPERTOWN complex, Jomtien's gay quarter, " +
+      "its drag-show lights flickering somewhere around the elbow.",
     exits: { w: "thappraya_w", e: "thappraya_e", n: "supertown_alley" },
     venues: ["hyper", "cheeky_monkey", "velvet_club"],
   },
@@ -498,8 +502,8 @@ const ROOMS = {
     seven: true,
     desc: "The far end of the strip, spilling onto Second Road. TAKE CARE ME, a live-music rock pub, " +
       "throws a guitar solo out its open front — the freelancers' favourite, and loud about it. " +
-      "Another 7-Eleven glows across the intersection. One last beer bar and a massage shop see out " +
-      "the strip before the traffic of Second Road takes over.",
+      "Another 7-Eleven glows across the intersection. THE OFFICE BAR and THAPPRAYA THAI MASSAGE " +
+      "see out the strip before the traffic of Second Road takes over.",
     exits: { w: "thappraya_mid", e: "jomtien_2nd_n", n: "thappraya_ext_s",
              up: "thappraya_ext_s" },
     venues: ["take_care_me", "the_office", "thappraya_massage"],
@@ -1185,11 +1189,11 @@ const ROOMS = {
     name: "Soi 8",
     region: "Beach Road",
     desc: "One soi south of Soi 7 and a different proposition entirely. The beach end is " +
-      "solid bars — open fronts shoulder to shoulder, stools out to the kerb, four " +
-      "sound systems inside thirty metres and every one of them winning something. " +
-      "It thins as you go inland: the bars give way to guesthouses and a tailor about " +
-      "halfway along, and by the Second Road end it could be any street in Thailand. " +
-      "Everyone stands at the wrong end at least once.",
+      "solid bars — NEON PALM and THE BUCKET open-fronted shoulder to shoulder, stools " +
+      "out to the kerb, four sound systems inside thirty metres and every one of them " +
+      "winning something. It thins as you go inland: the bars give way to guesthouses " +
+      "and a tailor about halfway along, and by the Second Road end it could be any " +
+      "street in Thailand. Everyone stands at the wrong end at least once.",
     revisit: [
       "Four sound systems, thirty metres, no winner. The beach end is doing its thing.",
       "A girl leans off her stool to say something to the girl on the next stool's stool.",
@@ -1279,12 +1283,13 @@ const ROOMS = {
     name: "Beach Road (Soi 8)",
     region: "Beach Road",
     desc: "The Soi 8 corner, and you hear it before you reach it. The soi comes out here " +
-      "with its bar end first — open fronts, four sound systems, the noise rolling " +
-      "down the last thirty metres and out over the railing to a sea that has no " +
-      "opinion. North along the front toward Soi 7 the bars are all on this side of the " +
-      "road with their fronts open to the west, so you drink facing the gulf and the " +
-      "gulf is on the far side of four lanes. Different kind of evening: same beer, " +
-      "quieter, and a view you have to look through the traffic to get.",
+      "with its bar end first — THE SEA WALL and THE BREAKWATER, open fronts, four " +
+      "sound systems, the noise rolling down the last thirty metres and out over the " +
+      "railing to a sea that has no opinion. North along the front toward Soi 7 the " +
+      "bars are all on this side of the road with their fronts open to the west, so " +
+      "you drink facing the gulf and the gulf is on the far side of four lanes. " +
+      "Different kind of evening: same beer, quieter, and a view you have to look " +
+      "through the traffic to get.",
     revisit: [
       "The noise comes down the soi in a wave, hits the railing, and gives up.",
       "Somebody stops dead at the corner, deciding between the sea and the sound.",
@@ -3601,7 +3606,8 @@ const ROOMS = {
       "guests consider part of the charm. The soi itself is dark as a power cut. " +
       "East, a quiet BAR CORNER of expat beer bars glows low; a SPA ROW of massage " +
       "and soapland fronts runs off the other way. A high wall a little further on " +
-      "gives nothing away — no sign, just a brass bell.",
+      "gives nothing away — no sign, just a brass bell, and THE ORCHID CLUB, if " +
+      "you know to ask.",
     venues: ["orchid_club"],
     busStop: "beachrd",
     reads: {

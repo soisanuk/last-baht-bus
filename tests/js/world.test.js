@@ -449,15 +449,28 @@ test("LK Metro's main alley reads the same from both ends", () => {
 
 // ── …and the mirror image: a door the prose never mentions ───────────────────
 // The sibling test above catches prose that names a direction the room lacks.
-// This catches the opposite, which is what players actually trip over: an exit
-// that EXISTS on a bare compass point and leads into a venue, with nothing in
-// the description to say so — so mapping a lane by compass yanks you indoors,
-// two turns a time (Marguerite, 2026-08-27, six mis-entries in one session; the
+// This catches the opposite, which is what players actually trip over: a door
+// that EXISTS — compass point or venues[] — and leads into a venue, with
+// nothing in the description to say so, so a player either walks in blind off
+// a bare letter (Marguerite, 2026-08-27, six mis-entries in one session; the
 // 2026-08-26 pass fixed Tree Town by hand and never guarded the class, leaving
-// 16 live cases including the Orchid Club she lost fifteen turns hunting).
-// EXITS now labels these at runtime, but a room that reads right needs no verb.
-test("a venue door on a compass point is named in the room's prose", () => {
+// 16 live cases including the Orchid Club she lost fifteen turns hunting) or
+// has no way to know a venues[] door exists at all short of the auto-generated
+// "(ENTER <name>)" hint (the Cartographer, 2026-08-27 — this half of the check
+// never existed: the lint only ever scanned exits.n/s/e/w, so a room whose
+// venues arrived by a custom key like `spa`/`in` — never on a compass point in
+// the first place — was never checked, and 19 such listings across 9 roads
+// went unnamed the whole time). EXITS now labels every door at runtime either
+// way, but a room that reads right needs no verb.
+test("a venue door — compass point or venues[] — is named in the room's prose", () => {
   const strip = t => String(t || "").replace(/\{\{|\}\}/g, "");
+  const named = (id, to, nm) => {
+    const r = ROOMS[id];
+    const key = String(nm).replace(/^(The|A) /, "").split(/[ (—]/)[0];
+    if (!key || key.length <= 2) return true; // too short to check reliably
+    const re = new RegExp(key.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i");
+    return re.test(strip(r.desc));
+  };
   const bad = [];
   for (const [id, r] of Object.entries(ROOMS)) {
     for (const d of ["n", "s", "e", "w"]) {
@@ -465,16 +478,29 @@ test("a venue door on a compass point is named in the room's prose", () => {
       const t = to && ROOMS[to];
       if (!t || !(t.barType || t.shop || t.massage || t.soapy || t.hostBar)) continue;
       const nm = _barName(to) || t.name;
-      const key = String(nm).replace(/^(The|A) /, "").split(/[ (—]/)[0];
-      if (!key || key.length <= 2) continue;
-      const re = new RegExp(key.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i");
-      if (!re.test(strip(r.desc))) bad.push(`${id}: ${d} → ${nm}`);
+      if (!named(id, to, nm)) bad.push(`${id}: ${d} → ${nm}`);
+    }
+    for (const to of (r.venues || [])) {
+      const t = ROOMS[to];
+      if (!t) continue;
+      const nm = _barName(to) || t.name;
+      if (!named(id, to, nm)) bad.push(`${id}: venues[] → ${nm}`);
     }
   }
   // Allow-list, each with a reason — same discipline as the direction lint and
   // the reference lint's OK set: a named exception, never a looser matcher.
-  const OK = new Set([]);
+  const OK = new Set([
+    // Deliberately anonymous, matching its own desc's framing: "one of a
+    // hundred pink-lit shopfronts... indistinguishable from its neighbours
+    // except that this one caught your eye" — buakhao_market's prose already
+    // nods at it obliquely ("the oil is warm", echoing Golden Touch's own
+    // desc) rather than naming a marquee sign that the room says doesn't
+    // stand out. Naming it outright would undercut the one characterisation
+    // it has, the same call made for Soi Honey's massage houses before that
+    // district got its own real names (2026-08-27).
+    "buakhao_market: venues[] → Golden Touch Massage",
+  ]);
   const real = bad.filter(b => !OK.has(b));
-  assert.deepEqual(real, [], "unannounced venue door(s) on a compass point — name it in the " +
+  assert.deepEqual(real, [], "unannounced venue door(s): name it in the " +
     "room's desc, or add it to OK with the reason:\n" + real.join("\n"));
 });
