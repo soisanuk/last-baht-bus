@@ -3991,6 +3991,15 @@ function _newVacation() {
   G.returned = {};
   G.soc = { drinks: {}, mamaTreat: {}, bellAt: {}, bells: {}, heat: {},
     banned: {}, patronBusy: {}, patronMiffed: {}, bra: {}, drunk: 0 };
+  // The share card's spine and its "told true" count are THIS week's, not a
+  // lifetime tally — nightLog untouched here meant a fresh vacation's SHARE
+  // showed the previous vacation's 7 nights and falsely declared "week
+  // complete" on day 1; ledgerSeen kept counting reveals that G.soc.ledger
+  // (just wiped above, same as the bonds) had already forgotten, so replaying
+  // a tier-1 reveal with a rebuilt regular double-counted it (the Collector,
+  // 2026-08-27).
+  G.nightLog = [];
+  G.ledgerSeen = 0;
   G.itemLoc.phone = "inventory";
   G.itemLoc.charger = "inventory";
   G.itemLoc.wallet = "inventory";

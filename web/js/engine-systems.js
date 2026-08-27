@@ -2499,8 +2499,19 @@ function _pushMsg(from, text, gives, fromName, photo) {
     fromName: fromName || null, photo: photo || null });
   // a hard cap, read or unread: the phone keeps the newest 80 (code review 2026-08-22 —
   // the old trim ran before insertion and kept every unread, so a player who never
-  // read could grow it without bound)
-  if (G.phone.inbox.length > 80) G.phone.inbox = G.phone.inbox.slice(-80);
+  // read could grow it without bound). An UNREAD message carrying money or a photo
+  // must still pay out here, same as the >12-backlog skim in _readMessages does for
+  // exactly this reason — otherwise a flooded inbox (85 texts is one bad night of
+  // chatter) silently deletes a transfer nobody ever saw arrive (the Collector,
+  // 2026-08-27).
+  if (G.phone.inbox.length > 80) {
+    for (const m of G.phone.inbox.slice(0, G.phone.inbox.length - 80)) {
+      if (m.read) continue;
+      if (m.gives) G.money += m.gives;
+      if (m.photo && typeof _addPhoto === "function") _addPhoto(m.from, m.photo);
+    }
+    G.phone.inbox = G.phone.inbox.slice(-80);
+  }
   G.phone.lastText = G.turns;
 }
 
@@ -2940,9 +2951,9 @@ function _doSendMoney(arg) {
     return;
   }
   // paying into an active pics-drip: enough unlocks the next shot, short of it teases
-  const deal = G.phone.picDeal;
-  if (deal && !deal.done && deal.id === id && deal.idx != null) {
-    if (amt >= deal.ask) _advancePicDeal();
+  const deal = G.phone.picDeals && G.phone.picDeals[id];
+  if (deal && !deal.done && deal.idx != null) {
+    if (amt >= deal.ask) _advancePicDeal(id);
     else {
       _pushMsg(id, `😏 not quite na... ฿${deal.ask} then i send. this one i keep for tips 555`);
       _say("(📱 A reply lands before you've pocketed the phone.)", "dim");
@@ -3129,9 +3140,9 @@ function _maybePhotoText(id) {
 // outweigh his and she flips (_sponsorFlipped, SPONSOR_FLIP). On the way there she
 // cracks: each gift-threshold she crosses texts back the next, less-guarded selfie —
 // the wordless "it's working" signal that makes the ฿15k arc discoverable. Needs your
-// number (she texts). A lump sum jumps straight to the highest frame unlocked. Returns
-// true iff a frame went out (the caller then skips its own generic reply). sponsorPix
-// counts frames sent; it rides G.soc, so it resets each vacation with `given`.
+// number (she texts). Returns true iff at least one frame went out (the caller then
+// skips its own generic reply). sponsorPix counts frames sent; it rides G.soc, so it
+// resets each vacation with `given`.
 function _sponsorDrip(id) {
   const n = NPCS[id];
   if (!n || n.type !== "sponsor") return false;   // NOT gated on flipped: the send that
@@ -3144,8 +3155,16 @@ function _sponsorDrip(id) {
   let target = sent;
   while (target < frames.length && given >= frames[target].at) target++;
   if (target <= sent) return false;
-  const f = frames[target - 1];                          // the highest newly-unlocked frame
-  _pushMsg(id, f.words || "😘", 0, null, f.cap);
+  // send EVERY newly-crossed frame, not just the highest — a lump sum that crosses
+  // two thresholds at once used to jump straight to the top frame and mark the
+  // skipped ones as already-sent, so the exact play the game's own arc teaches
+  // ("outbid Klaus") permanently forfeited the earlier frames for the vacation
+  // (the Collector, 2026-08-27). Three texts landing together reads fine — "she's
+  // been saving these."
+  for (let i = sent; i < target; i++) {
+    const f = frames[i];
+    _pushMsg(id, f.words || "😘", 0, null, f.cap);
+  }
   (G.soc.sponsorPix = G.soc.sponsorPix || {})[id] = target;
   _say("(📱 She's sent you something. CHECK MESSAGES.)", "dim");
   return true;
@@ -3153,29 +3172,33 @@ function _sponsorDrip(id) {
 
 // The pay-per-photo drip (Gift's hustle). paidPics is an ordered set; the first is
 // a free teaser, each later one costs its `ask`. Opening it sends the teaser + the
-// pitch and arms G.phone.picDeal; SEND >= ask advances it (see _doSendMoney).
+// pitch and arms G.phone.picDeals[id]; SEND >= ask advances it (see _doSendMoney).
+// Keyed per NPC (not a single shared slot) — Wilai is the only paidPics girl today,
+// but a shared slot would let her finished drip permanently block a second one
+// (the Collector, 2026-08-27 — caught by code review before it could go live).
 function _startPicDeal(id) {
   const pics = NPCS[id] && NPCS[id].paidPics;
   if (!pics || !pics.length) return;
+  G.phone.picDeals = G.phone.picDeals || {};
   _pushMsg(id, pics[0].words || "hi handsome 😘 i take picture just for you...", 0, null, pics[0].cap);
   if (pics.length > 1) {
-    G.phone.picDeal = { id, idx: 1, ask: pics[1].ask };
+    G.phone.picDeals[id] = { idx: 1, ask: pics[1].ask };
     _pushMsg(id, `😏 you like?? more sexy waiting... only ฿${pics[1].ask} i send next one 💸`);
   } else {
-    G.phone.picDeal = { id, done: true };
+    G.phone.picDeals[id] = { done: true };
   }
 }
 
-function _advancePicDeal() {
-  const deal = G.phone.picDeal, id = deal.id, pics = NPCS[id].paidPics;
+function _advancePicDeal(id) {
+  const deal = G.phone.picDeals[id], pics = NPCS[id].paidPics;
   const shot = pics[deal.idx];
   _pushMsg(id, shot.words || "😘💕", 0, null, shot.cap);
   const next = deal.idx + 1;
   if (next < pics.length) {
-    G.phone.picDeal = { id, idx: next, ask: pics[next].ask };
+    G.phone.picDeals[id] = { idx: next, ask: pics[next].ask };
     _pushMsg(id, `like?? 😏 next one better... ฿${pics[next].ask} 💸`);
   } else {
-    G.phone.picDeal = { id, done: true };
+    G.phone.picDeals[id] = { done: true };
     _pushMsg(id, `that ALL i got here na 🙈 rest you come ${_barName(_npcRoom(id)) || "see me"} see LIVE 😘`);
   }
   _say("(📱 She's sent something. CHECK MESSAGES.)", "dim");
@@ -3604,10 +3627,13 @@ function _maybeIncomingText() {
   const buzz = () => _say("(📱 Your phone buzzes — CHECK MESSAGES.)", "dim");
   // the pics-hustle girl opens her drip the first time she texts, then nudges
   // until you pay through it
-  if (NPCS[id].paidPics && !G.phone.picDeal) { _startPicDeal(id); buzz(); return; }
-  if (G.phone.picDeal && !G.phone.picDeal.done && G.phone.picDeal.id === id) {
-    _pushMsg(id, `you see my photo?? 😏 more waiting for you... ฿${G.phone.picDeal.ask} 💸`);
-    buzz(); return;
+  if (NPCS[id].paidPics && !(G.phone.picDeals && G.phone.picDeals[id])) { _startPicDeal(id); buzz(); return; }
+  {
+    const deal = G.phone.picDeals && G.phone.picDeals[id];
+    if (deal && !deal.done) {
+      _pushMsg(id, `you see my photo?? 😏 more waiting for you... ฿${deal.ask} 💸`);
+      buzz(); return;
+    }
   }
   // a lady who keeps photos sometimes just sends one, out of the blue
   if (_selfiesFor(id).length && _rand() < 0.25) { _maybePhotoText(id); buzz(); return; }

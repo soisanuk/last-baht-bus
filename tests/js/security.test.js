@@ -41,7 +41,7 @@ test("a save cannot poison a scalar with NaN / Infinity / negative / oversized",
   assert.ok(G.battery >= 0 && G.battery <= 100, "battery in range");
   assert.ok(G.soc.drunk >= 0 && G.soc.drunk <= 20, "drunk in range");
   assert.ok(Number.isInteger(G.rng) && G.rng >= 1 && G.rng <= 2147483646, "rng a live seed");
-  assert.ok(G.thaiSeen.length <= 60, "unbounded array capped");
+  assert.ok(G.thaiSeen.length <= 300, "unbounded array capped");
 });
 
 test("the corrupt-save render defect is gone: ordinary commands don't throw or leak", () => {

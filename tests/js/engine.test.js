@@ -2061,15 +2061,24 @@ test("sponsor-flip photo drip: gifts to a kept cashier text back escalating self
   assert.equal(caps.filter(c => /Baimon/.test(c)).length, 3, "all three frames filed to the gallery");
 });
 
-test("sponsor drip: a single lump sum jumps straight to the climax frame", () => {
+test("sponsor drip: a single lump sum still delivers every newly-crossed frame, not just the climax", () => {
+  // Used to jump straight to the highest unlocked frame and mark the earlier
+  // ones as already-sent — forfeiting pic1/pic2 for the whole vacation on
+  // exactly the play the game's own arc teaches you to make (the Collector,
+  // 2026-08-27).
   state().stage = "vacation"; state().flags.act1Done = true;
   state().phone.contacts = { jenny: true };
   state().money = 60000; state().soc.given = {};
   out = []; run("send 15000 to jenny");        // crosses all thresholds + the flip at once
   out = []; run("check messages");
-  assert.match(lastOut(), /beach/i, "one big send delivers the highest unlocked frame");
+  const said = out.join("\n");
+  assert.match(said, /cozy, the ring/i, "pic1 still arrives");
+  assert.match(said, /dressed up/i, "pic2 still arrives");
+  assert.match(said, /beach/i, "…and the climax frame lands on the same send");
   assert.ok(_sponsorFlipped("jenny"), "and she's flipped");
   assert.equal(state().soc.sponsorPix.jenny, 3, "all frames marked sent — no re-drip on later gifts");
+  const caps = _photoList().map(p => p.cap || "");
+  assert.equal(caps.filter(c => /Jenny/.test(c)).length, 3, "all three frames filed to the gallery");
 });
 
 test("bar etiquette: a girl with another customer declines your lady drink; insist and he turns", () => {
@@ -6661,7 +6670,7 @@ test("Wilai runs a pay-per-photo drip: teaser free, each next shot behind an esc
   state().phone.contacts.wilai = true;
   _startPicDeal("wilai");
   run("check messages");
-  assert.equal(state().phone.picDeal.ask, 300, "the teaser lands and she pitches the first paid shot");
+  assert.equal(state().phone.picDeals.wilai.ask, 300, "the teaser lands and she pitches the first paid shot");
   assert.equal(state().phone.photos.filter(p => p.id === "wilai").length, 1, "teaser is free");
   // underpaying teases, doesn't deliver
   out = []; run("send 100 to wilai"); run("check messages");
@@ -6670,13 +6679,35 @@ test("Wilai runs a pay-per-photo drip: teaser free, each next shot behind an esc
   // paying the ask (or more) unlocks the next and raises the price
   out = []; run("send 500 to wilai"); run("check messages");
   assert.equal(state().phone.photos.filter(p => p.id === "wilai").length, 2, "paid shot delivered");
-  assert.equal(state().phone.picDeal.ask, 500, "the ask escalates");
+  assert.equal(state().phone.picDeals.wilai.ask, 500, "the ask escalates");
   // pay through to the end
   run("send 500 to wilai"); run("send 800 to wilai"); run("check messages");
-  assert.ok(state().phone.picDeal.done, "the set runs out");
+  assert.ok(state().phone.picDeals.wilai.done, "the set runs out");
   assert.equal(state().phone.photos.filter(p => p.id === "wilai").length, 4, "four frames collected");
   out = []; run("gallery");
   assert.match(lastOut(), /Gallery — 4 photos/);
+});
+
+test("a second paidPics girl isn't locked out by a finished drip (picDeals is per-NPC, not one shared slot)", () => {
+  // The Collector, 2026-08-27: G.phone.picDeal used to be a single object, so
+  // _startPicDeal's `!G.phone.picDeal` gate meant Wilai's finished deal would
+  // permanently block any second paidPics NPC — latent today (she's the only
+  // one), live the moment a second girl gets the treatment. Synthesize one to
+  // prove the per-NPC fix rather than waiting for real content to catch it.
+  state().stage = "vacation"; state().battery = 90; state().money = 9000; state().turns = 10;
+  state().phone.contacts.wilai = true;
+  NPCS.__test_pics_girl = { name: "Test Girl", th: "เทสต์", room: "candy_bar",
+    paidPics: [{ cap: "teaser", words: "hi" }] };
+  state().phone.contacts.__test_pics_girl = true;
+  // simulate Wilai's drip already finished this vacation — the old shared
+  // G.phone.picDeal would still be sitting truthy right here, blocking the gate
+  state().phone.picDeals.wilai = { done: true };
+  _startPicDeal("__test_pics_girl");
+  run("check messages");
+  delete NPCS.__test_pics_girl;
+  assert.ok(state().phone.picDeals.__test_pics_girl, "a second girl's drip still starts");
+  assert.equal(state().phone.photos.filter(p => p.id === "__test_pics_girl").length, 1,
+    "…and delivers her teaser, unblocked by Wilai's finished deal");
 });
 
 test("every character is named on sight — one consistent rule, no name-hiding", () => {
@@ -7594,8 +7625,8 @@ test("the transcript collects Thai runs for the trainer bridge, capped and dedup
   assert.ok(state().thaiSeen.includes("ซาเล้ง"));
   assert.ok(state().thaiSeen.includes("สวัสดี"));
   assert.equal(state().thaiSeen.filter(t => t === "ซาเล้ง").length, 1, "deduped");
-  for (let i = 0; i < 70; i++) _say("คำ" + "ๆ".repeat(i % 3) + i);
-  assert.ok(state().thaiSeen.length <= 60, "capped");
+  for (let i = 0; i < 350; i++) _say("คำ" + "ๆ".repeat(i % 3) + i);
+  assert.ok(state().thaiSeen.length <= 300, "capped");
 });
 
 test("action breadcrumb (_traceLine) formats each verb shape", () => {

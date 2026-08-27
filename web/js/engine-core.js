@@ -64,7 +64,13 @@ function _say(text, cls) {
     for (const run of text.match(/[\u0E00-\u0E7F]{2,}/g) || []) {
       if (!G.thaiSeen.includes(run)) {
         G.thaiSeen.push(run);
-        if (G.thaiSeen.length > 60) G.thaiSeen.shift();
+        // 300, not 60: SCORE reports thaiSeen.length as a running total ("N Thai
+        // words picked up"), so a cap a real playthrough could actually reach
+        // made the counter silently freeze while the FIFO quietly drained words
+        // out the back — words a real player earned, and words the trainer app
+        // reads out of this same save for its own practice deck (the Collector,
+        // 2026-08-27). 300 short strings is a couple KB; the save can afford it.
+        if (G.thaiSeen.length > 300) G.thaiSeen.shift();
       }
     }
   }
@@ -313,7 +319,9 @@ function newGame() {
       msgCd: {},         //   npcId → day you last sweet-talked her by text
       invite: null,      //   {id, day} — she asked you to drop by tonight
       photos: [],        //   [{id, cap?, turn}] — the gallery (portraits you took + selfies she sent)
-      picDeal: null,     //   {id, idx, ask} | {id, done} — the pay-per-photo drip
+      picDeals: {},      //   npcId → {idx, ask} | {done} — the pay-per-photo drip, one slot per girl
+                         //   (a single shared slot would let one finished drip permanently block
+                         //   every other paidPics NPC — see engine-systems.js's _startPicDeal)
     },
     over: false,         // legacy field; the sandbox never ends the night
   };
@@ -451,7 +459,7 @@ const _SANE_SCALARS = [
   ["nightTurn", 0, (typeof NIGHT_TURNS !== "undefined" ? NIGHT_TURNS : 100)],
   ["soc.drunk", 0, 20], ["rep", -20, 20],
 ];
-const _SANE_ARRAYS = [["thaiSeen", 60], ["nightLog", 30]];
+const _SANE_ARRAYS = [["thaiSeen", 300], ["nightLog", 30]];
 function _sanitizeState() {
   for (const [path, min, max] of _SANE_SCALARS) {
     const [a, b] = path.split(".");
