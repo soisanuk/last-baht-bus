@@ -6904,9 +6904,17 @@ test("low season thins the FURNITURE too: an emptied rail gets the thin line, no
   state().flags.act1Done = true;
   // a beer bar with no patrons out on this deep-low night
   state().season0 = 8; state().day = 3;   // September, deep low
+  // Must be a bar that is NOBODY'S local, in either season — since round 22 the
+  // anonymous bar-bore is suppressed wherever a named regular is standing (he
+  // was printing "part of the furniture, not the cast" in a Queen Vic holding
+  // four named, talkable people), so a bar whose regulars merely go home in
+  // September would flip to a real name in December and prove nothing about
+  // the furniture.
+  const homes = new Set(Object.keys(NPCS).filter(id => NPCS[id].patron).map(id => NPCS[id].room));
   let bar = null;
   for (const rid of Object.keys(ROOMS)) {
-    if (ROOMS[rid].barType === "beer" && !Object.keys(NPCS).filter(id => NPCS[id].patron).some(id => _npcWhere(id) === rid)) { bar = rid; break; }
+    if (ROOMS[rid].barType === "beer" && !homes.has(rid) &&
+        !Object.keys(NPCS).filter(id => NPCS[id].patron).some(id => _npcWhere(id) === rid)) { bar = rid; break; }
   }
   assert.ok(bar, "found a beer bar the low season emptied");
   state().room = bar;

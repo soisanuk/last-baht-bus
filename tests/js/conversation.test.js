@@ -845,11 +845,23 @@ test("Mort, the town's observer, answers about people in his own voice", () => {
   newGame(); _setFlag("act1Done"); G.room = "queen_vic";
   for (const k of Object.keys(ENCOUNTERS)) G.encDone[k] = true;
   doCommand("talk to mort");
-  out = []; doCommand("ask mort about angela");
+  // Someone he has no AUTHORED node for still gets the columnist's generic
+  // answer rather than a dead end — that is what this test was written for.
+  out = []; doCommand("ask mort about candy");
   const said = out.join("\n");
   assert.match(said, /I know exactly who that is|Read the COLUMN|not the job/,
     "he knows them, and points at the column");
   assert.doesNotMatch(said, /Not one I know|Not my story|Search me/i, "no dead-end for a person he'd know");
+  // …and the four people he shares a rail with now get REAL answers, which is
+  // strictly better than the fallback and must not regress to it (round 22:
+  // "the regulars do not know each other").
+  for (const who of ["doyle", "terry", "angela", "pete"]) {
+    out = []; doCommand("ask mort about " + who);
+    const a = out.join("\n");
+    assert.doesNotMatch(a, /I know exactly who that is|Not one I know|Not my story/i,
+      `Mort has an authored line about ${who}, not a fallback`);
+    assert.ok(a.length > 120, `…and it is a real answer about ${who}`);
+  }
   // …and a nonsense word still misses normally
   out = []; doCommand("ask mort about quantumfrog");
   assert.doesNotMatch(out.join("\n"), /I know exactly who that is/);

@@ -7380,36 +7380,142 @@ const _EDIBLE = { moo_ping: 35, som_tam: 50, noodles: 20 };
 // The Queen Vic's kitchen, on Aoy's stated hours: basket and chips till
 // eleven, after that only crisp (grapevine playtest F6, 2026-08-25 — she had
 // the order pad out and the room sold nothing).
+// ── The Queen Vic's kitchen ────────────────────────────────────────────────
+// _qvMenu() is THE card: one helper, consumed by READ MENU, by _doBuy's routing,
+// by autocomplete and by the flyout, so the card and the till cannot disagree.
+// Same idiom as _salengItems/_playOptions (the three-surfaces rule).
+//
+// Hours are the whole character of the place: full menu until eleven, then the
+// cook goes home and it is crisps or nothing — that gate already existed and is
+// kept. The roast is Sunday only, until nine, and finite.
+function _qvClosed() { return G.nightTurn >= 50; }        // 23:00, cook goes home
+
+// How many roasts are left. PURE — no dice, so a reload cannot reroll it and the
+// number on the card is the number at the till. The ROOM eats them too, at a
+// cover every ROAST_PACE turns, which is what makes the HOUR matter and not just
+// the day: turn up at six and there are sixteen, turn up at twenty to nine and
+// you are choosing between the last two.
+function _roastLeft() {
+  if (!_roastDay()) return 0;
+  const mine = (G.qvRoast && G.qvRoast.day === G.day) ? G.qvRoast.mine : 0;
+  return Math.max(0, ROAST_COVERS - Math.floor(G.nightTurn / ROAST_PACE) - mine);
+}
+function _roastOn() { return _roastHour(_nightHour()) && _roastLeft() > 0; }
+
+function _qvMenu() {
+  if (_qvClosed()) return QV_MENU.filter(d => d.id === "crisps");
+  return QV_MENU.filter(d => d.id !== "roast" || _roastOn());
+}
+function _qvMatchDish(input) {
+  const t = String(input || "").toLowerCase();
+  return _qvMenu().find(d => d.aliases.some(a => t.includes(a))) || null;
+}
+// Does this name ANYTHING the kitchen has ever done — on the card tonight or
+// not? Routing and availability are different questions: asking for a pie at
+// midnight is a kitchen question, and the kitchen's answer is "cook went home",
+// not the generic "Not for sale here" the bar gives a man asking for a helicopter.
+function _qvNamesDish(input) {
+  const t = String(input || "").toLowerCase();
+  return QV_MENU.some(d => d.aliases.some(a => t.includes(a)));
+}
+// What the card says about the roast when you cannot have it — the REASON, in
+// Aoy's voice, because "not available" is the answer that teaches a player
+// nothing about when to come back.
+function _roastNote() {
+  if (!_roastDay()) return "Roast — Sundays only, till nine. \u201cCome Sunday, tilac. Early.\u201d";
+  if (!_roastHour(_nightHour())) return "Roast — off. \u201cNine o'clock, finish. You come early next week, na.\u201d";
+  if (_roastLeft() <= 0) return "Roast — gone. \u201cAll finish! You see the time? Next Sunday you come SIX o'clock.\u201d";
+  const n = _roastLeft();
+  return "\u0e3f" + QV_ROAST + " \u2014 the Sunday roast, and Aoy holds up fingers: \u201c" + n +
+    " left" + (n <= 3 ? " only" : "") + ", tilac.\u201d";
+}
+
 function _qvKitchen(arg) {
-  const late = G.nightTurn >= 50;   // 23:00 on the ten-turns-an-hour clock
-  if (late && !/crisp/.test(arg || "")) {
+  const wantsRoast = /roast|beef|yorkshire|sunday/.test(arg || "");
+  // Asked for the roast when there isn't one: answer with the REASON and the
+  // hour to come back at, never a flat refusal. This is the line that teaches a
+  // player the pub has a week in it.
+  if (wantsRoast && !_roastOn()) { _say(_roastNote()); return; }
+  if (_qvClosed() && !/crisp/.test(arg || "")) {
     _say("Aoy doesn't even reach for the pad. \u201cKitchen close, tilac \u2014 cook go " +
       "home eleven o'clock, same as England.\u201d A bag of crisps lands on the bar " +
       "instead, unbidden. \u201cCrisp. \u0e3f" + QV_CRISPS + ". Salt and vinegar. Is this or nothing.\u201d");
-    if (G.money < QV_CRISPS) { _say(_fmt("You have \u0e3f{m}. It is, in fact, nothing.", { m: G.money }), "dim"); return; }
-    G.money -= QV_CRISPS;
-    G.hunger = Math.max(0, G.hunger - 10);
-    _say(_fmt("\u0e3f{p} for the crisps. They are exactly what they are. (\u0e3f{m} left.)",
-      { p: QV_CRISPS, m: G.money }));
-    return;
   }
-  const price = /crisp/.test(arg || "") ? QV_CRISPS : QV_BASKET;
-  if (G.money < price) {
+  const dish = _qvMatchDish(arg) ||
+    // A bare BUY FOOD / BUY DINNER with no dish named: she picks, because there
+    // is one right answer before eleven and only one option after.
+    (_qvClosed() ? QV_MENU.find(d => d.id === "crisps") : QV_MENU.find(d => d.id === "basket"));
+  if (!dish) { _say("Not on tonight's card. (READ MENU.)"); return; }
+  if (G.money < dish.price) {
     _say(_fmt("The kitchen wants \u0e3f{p} and your pocket holds \u0e3f{m}. Aoy files the " +
-      "order pad away without comment, which is its own comment.", { p: price, m: G.money }));
+      "order pad away without comment, which is its own comment.", { p: dish.price, m: G.money }));
     return;
   }
-  G.money -= price;
-  if (price === QV_CRISPS) {
-    G.hunger = Math.max(0, G.hunger - 10);
-    _say(_fmt("\u0e3f{p} for a bag of crisps ahead of the deadline, on principle. (\u0e3f{m} left.)",
-      { p: price, m: G.money }));
+  G.money -= dish.price;
+  G.hunger = Math.max(0, G.hunger - dish.hunger);
+  if (dish.thirst) G.thirst = Math.max(0, G.thirst + dish.thirst);
+  if (dish.id === "roast") {
+    G.qvRoast = (G.qvRoast && G.qvRoast.day === G.day) ? G.qvRoast : { day: G.day, mine: 0 };
+    G.qvRoast.mine++;
+    _say(_fmt("{line} (\u0e3f{m} left.)", { line: _pickVary(_QV_ROAST_LINES, "qvroast"), m: G.money }), "win");
+    _addHappy(2);                    // a proper sit-down Sunday dinner, 8,000 miles from it
+    const left = _roastLeft();
+    if (left > 0 && left <= 3)
+      _say(_fmt("(Aoy chalks the number down: {n} left.)", { n: left }), "dim");
+    else if (left <= 0)
+      _say("(Aoy wipes the board. That was the last one.)", "dim");
     return;
   }
-  G.hunger = Math.max(0, G.hunger - 55);
-  _say(_fmt("{line} (\u0e3f{m} left.)", { line: _pickVary(_QV_BASKET_LINES, "qvbasket"), m: G.money }), "win");
+  if (dish.id === "crisps") {
+    _say(_fmt("\u0e3f{p} for a bag of crisps. They are exactly what they are. (\u0e3f{m} left.)",
+      { p: dish.price, m: G.money }));
+    return;
+  }
+  const pool = dish.id === "basket" ? _QV_BASKET_LINES : _QV_DISH_LINES[dish.id];
+  _say(_fmt("{line} (\u0e3f{m} left.)", { line: _pickVary(pool, "qvdish:" + dish.id), m: G.money }), "win");
   _addHappy(1);
 }
+
+// The card itself, rendered from _qvMenu() so the prices come from the constants
+// and the list cannot drift from what the till will take.
+function _qvCard() {
+  _say("The Queen Vic \u2014 KITCHEN", "win");
+  for (const d of _qvMenu())
+    if (d.id !== "roast") _say("  \u0e3f" + d.price + " \u2014 " + d.name, "dim");
+  _say("  " + _roastNote(), "dim");
+  _say(_qvClosed()
+    ? "(Cook went home at eleven. BUY CRISPS.)"
+    : "(Kitchen till eleven. BUY " + (_roastOn() ? "ROAST" : "PIE") + ", or name anything on it.)", "dim");
+}
+
+// A roast in Thailand is a specific act of homesickness performed in public, and
+// the pub knows exactly what it is doing. Pooled deep because Sunday comes round
+// every week and the expat stage runs for a year.
+const _QV_ROAST_LINES = [
+  "It arrives on a plate too hot to hold: beef, three roast potatoes with the corners gone dark, a Yorkshire like a small collapsed hat, and gravy in its own jug because the cook has opinions. Somebody two tables down says \u201cbloody hell\u201d with real feeling.",
+  "Aoy sets it down and stands there half a second longer than she needs to, watching your face. The carrots are done properly. The gravy is not from a packet and she wants you to notice, and you do, and something passes between you that neither of you says.",
+  "Beef, potatoes, a Yorkshire, and the greens that in England you would have left. You do not leave them. Eight thousand miles will do that to a man and a plate of cabbage.",
+  "The plate comes out under a cloud of its own steam and the whole rail turns to look, the way men do, and one of them says what they always say, which is that you'd pay triple for this at home and it wouldn't be as good.",
+  "It is enormous and it is Sunday and outside the door it is thirty-one degrees. The cook, whom you have never seen, has put a whole roast dinner into the tropics for the twelfth year running, and nobody has ever asked him to stop.",
+];
+const _QV_DISH_LINES = {
+  pie: [
+    "The pie comes with the pastry lid slightly off-centre, which is how you know a person made it. Steak, ale, a chip mountain, and Aoy's small nod of approval at a man who orders properly.",
+    "It arrives volcanic. You go in too early and pay for it, and Aoy, passing, says \u201cSlowly, tilac\u201d without breaking stride or looking at you.",
+    "Steak and ale, and the gravy inside is doing the work of a much more expensive dish. The cook made four this morning. This is the third.",
+  ],
+  curry: [
+    "Friday's curry, which has been Friday's curry since Tuesday and is all the better for it. It comes with rice, a poppadum nobody promised, and a heat that arrives about ten seconds late.",
+    "The curry lands with a small dish of something green that Aoy declines to explain. It is superb and it is not, by any measure, an English curry, and neither of those facts is a complaint.",
+    "He makes too much every Friday and it improves all week, which is either good kitchen management or the reason the pub still has a kitchen. Either way it is very good and there is far too much of it.",
+  ],
+  plough: [
+    "Cheese, pickle, a bread roll, half a tomato and two things off the pickle jar. It is exactly what it says and it is the correct order in this heat, which is the sort of thing you only work out in your second week.",
+    "The cold option, and the only plate in Pattaya that comes with a knife you're expected to use on cheese. Aoy brings extra pickle without being asked, having formed a view.",
+    "A ploughman's, assembled by a woman from Ubon who has never been to England and has the details exactly right because Nuch showed her once, eleven years ago.",
+  ],
+};
+
 const _QV_BASKET_LINES = [
   "Aoy writes it without asking what you want, because there is one right answer. The basket arrives molten: chips, scampi, a sausage riding shotgun, vinegar in a bottle sticky enough to be structural. It is England with the heating on.",
   "The basket-and-chips lands with a bottle of vinegar and a roll of kitchen paper, which is the whole of the Vic's table service and the whole of what the dish requires. Somebody's fryer knows exactly what it is doing.",

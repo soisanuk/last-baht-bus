@@ -775,6 +775,14 @@ function _weekday() { return WEEKDAYS[G.day % 7]; }
 // All calendar checks go through these helpers — in a future shared world the
 // clock becomes the server's, and these are the only seams to re-plumb.
 function _quizDay() { return G.day % 7 === 4; }
+// Sunday, and the roast is on until nine. Authored here beside the other calendar
+// checks because rule 5 forbids scattering `G.day % …` arithmetic: in a shared
+// world the clock becomes the server's and these helpers are the only seams to
+// re-plumb. _roastHour TAKES the hour for the same reason _isQuizHour does — the
+// rail's drift probes hours that are not now, and reading G.nightTurn inside that
+// probe answers about the wrong hour.
+function _roastDay() { return G.day % 7 === 0; }
+function _roastHour(hour) { return _roastDay() && hour < 3; }   // last orders at 21:00
 // The night's hour, 0 = 18:00. The only turn→hour conversion in the game, so
 // the regulars' drift, Glam's shuttle and anything else that asks "what time is
 // it" share one seam. (_clockStr renders a display string and is not a

@@ -33,6 +33,14 @@ const LADY_DRINK = 150;  // canon
 const NOODLE_PRICE = 15;      // a pot of Mama noodles off the 7-Eleven shelf
 const QV_BASKET  = 160;  // the Queen Vic kitchen's basket-and-chips, till eleven
 const QV_CRISPS  = 40;   // …and after eleven, only crisp
+const QV_PIE     = 180;  // steak and ale, made that morning by a cook nobody sees
+const QV_CURRY   = 200;  // Friday's curry, on all week because he makes too much
+const QV_PLOUGH  = 140;  // cheese, pickle, a bread roll: the cold option
+const QV_ROAST   = 320;  // Sunday only, till nine, and when it's gone it's gone
+const ROAST_COVERS = 14; // how many the kitchen does. The room eats them too — at
+                         // ROAST_PACE that is gone by about twenty to nine, so a man
+                         // who strolls in at nine has genuinely missed it.
+const ROAST_PACE = 2;    // a cover goes every two turns — arrive late, take your chances
 const BEER_PRICE = 80;   // your own big Chang, bar price
 const BELL_PRICE = 300;  // ring it and the round is on you
 const BRA_PRICE = 200;   // the mamasan's drawer novelty; makes fondling "interesting"
@@ -3156,6 +3164,17 @@ const ROOMS = {
       "air of a man who has watched it all twice. At the far end, most nights, Mort's " +
       "spiral notebook lies open beside his beer — as much a fixture as the dartboard. " +
       "A staircase behind the bar leads UP to the guest rooms.",
+    // Past midnight the pub's own line about the soi performing outside is a
+    // parade the game has already sent home — the street rooms either side of it
+    // both carry a lateDesc saying exactly that, and the Vic contradicted them
+    // through its own window (round 22). What makes this room itself is that
+    // nothing inside it changes; only the view does.
+    lateDesc: "The Queen Vic in the small hours: same aircon, same panelling, same " +
+      "dartboard, and through the window a soi with its shutters down and its neon off. " +
+      "The show has gone home. The pub has not — it keeps its own hours and always has, " +
+      "and the handful still in here have the settled look of men with nowhere they'd " +
+      "rather be and no intention of proving it. A staircase behind the bar leads UP " +
+      "to the guest rooms.",
     reads: {
       notebook: [
         // He isn't in tonight, so neither is his forearm. The desc hedges with
@@ -6769,6 +6788,13 @@ const NPCS = {
   doyle: {
     name: "Doyle", th: "ดอยล์", emoji: "🕵️", drink: "soda water",
     pronoun: "he",
+    // Twenty-six years reading rooms for a living does not stop because a man
+    // retires, and a soda-water drinker has no reason to sit still. He walks the
+    // Soi 6 manor early doors — the pub, the Sunset Rail, Bay Watch, Sandy Toes —
+    // and is back on his own stool from ten. Before this the pub had four
+    // regulars welded in place and a persona sat in it for eleven nights without
+    // one arrival or departure (round 22).
+    hops: true, haunts: ["Soi 6"],
     room: "queen_vic",
     origin: "pi",
     title: "a watchful older farang nursing a soda water",
@@ -6777,6 +6803,23 @@ const NPCS = {
       "try to kill you; I like boring now.\" Drinks soda water and watches the door, out of a habit " +
       "he's given up pretending is retired. Came to price Thailand for good; found a job following him.",
     dialogue: [
+      // THE RAIL KNOWS EACH OTHER. Round 22, Eric: "Doug and Phil have shared a rail
+      // every night for years and neither has a word to say about the other." Doyle
+      // is the right man to start with — reading people is the job he retired from
+      // and didn't stop doing, so every one of these is in character by construction.
+      { topic: "terry",
+        text: "\u201cTerry.\u201d Doyle almost smiles. \u201cFifteen years, one stool, and he tells the White Dish story like it happened to him last Tuesday.\u201d He turns the soda water a quarter. \u201cIt didn't. He was here, he saw it, and every detail he gives you is true \u2014 I've checked two of them. But he's told it so many times the telling has its own shape now. Wears grooves.\u201d A shrug. \u201cThat's not lying. That's what a story does to a man who loves it.\u201d",
+        short: "\u201cEvery detail's true. He's just told it so often the telling wears grooves.\u201d" },
+      { topic: "mort",
+        text: "\u201cThe notebook.\u201d Doyle's eyes go to the far end without his head following, which is a whole career in one movement. \u201cSeventy-four and the best-informed man on this coast. Knows it, too.\u201d A pause. \u201cI've sat in rooms with men who'd have paid serious money for what's in that book. He writes it down in a pub on Soi 6 with the cap off his biro and nobody has ever laid a finger on him.\u201d He looks genuinely pleased about it. \u201cSays something about the place, doesn't it.\u201d",
+        short: "\u201cBest-informed man on the coast, writes it all down in public, and nobody's ever touched him.\u201d" },
+      { topic: "angela",
+        text: "\u201cAngela.\u201d He says the name carefully, the way you handle something. \u201cDiscman. An actual Discman, this year. Headphones taped.\u201d He lets that sit. \u201cThat's not nostalgia. That's somebody who found one thing that works and won't risk changing it. I've seen that before. Usually after.\u201d He drinks. \u201cShe's all right. She's more all right than she was. You want the rest, she'll tell you herself \u2014 and she'd far rather you asked than got told.\u201d",
+        short: "\u201cShe found one thing that works and won't risk changing it. She'd rather you asked her than got told.\u201d" },
+      { topic: "pete",
+        text: "Doyle takes a long drink of soda water and does not look down the bar. \u201cSits where he can see the door. Drinks slow, gives nothing, calls himself Pete.\u201d A beat. \u201cI did twenty-six years of men who sit like that. Nine in ten it's a marriage or a debt, and they've done nothing worse than run.\u201d He sets the glass down square. \u201cIt isn't my business, I'm retired, and I'd take it as a courtesy if you didn't go asking him what I'm not asking him.\u201d",
+        short: "\u201cI did twenty-six years of men who sit like that. It isn't my business and I'm retired.\u201d" },
+
       { text: "The older man clocks you before you've picked a stool — top to bottom, hands and shoes, " +
           "done in the time it takes to nod. \"Relax, force of habit. Doyle.\" Soda water, no ice melting; " +
           "he's been nursing it. \"Twenty-six years I read rooms for a living. Can't switch it off. You " +
@@ -7066,6 +7109,9 @@ const NPCS = {
   pete: {
     name: "Pete", th: "พีท", emoji: "🚬",
     pronoun: "he",
+    // "Sits where he can see who comes in" — so he goes where there is something
+    // to see. He is the man who walks INTO the Queen Vic, which had no such man.
+    hops: true, haunts: ["Soi 6"],
     room: "sandy_toes",
     origin: "running",
     title: "a careful man at the dark end of the bar who sits facing the door",
@@ -7074,6 +7120,13 @@ const NPCS = {
       "Whatever he left behind, he left it fast and he left it whole — Pattaya never asks for references, " +
       "which is the entire reason he's on this stool and not another.",
     dialogue: [
+      { topic: "doyle",
+        text: "Pete's glass stops about an inch off the bar, and then continues, and if you had blinked you would have missed it. \u201cThe American in the pub.\u201d He drinks. \u201cYeah. I know what he is.\u201d A long moment. \u201cHe knows I know. Neither of us has ever said a word about it, and I'd call that the most civilised arrangement I've got going.\u201d He looks at the door, then back. \u201cGood pub, the Vic. I don't drink in it much.\u201d",
+        short: "\u201cI know what he is. He knows I know. Neither of us has ever said it. I don't drink in the Vic much.\u201d" },
+      { topic: "terry",
+        text: "\u201cTerry.\u201d Something that is nearly warmth crosses him and doesn't stay. \u201cTalks for England. Never asked me a single thing.\u201d He turns the glass. \u201cYou'd think a man like that would be the worst sort to sit near. He's the best. He fills the whole room up on his own, and you can sit in it and not have to be anybody.\u201d",
+        short: "\u201cHe fills the whole room on his own, and you can sit in it and not have to be anybody.\u201d" },
+
       { text: "He clocks you the second you approach and you can see him decide you're nobody. Only then does " +
           "he ease a quarter-inch. \"...Alright.\" A pause that's doing work. \"Pete.\" He leaves it there, the " +
           "way you'd leave a door open just wide enough to shut fast. \"Don't mind me. I'm just having a quiet " +
@@ -7559,13 +7612,34 @@ const NPCS = {
   terry: {
     name: "Terry", emoji: "🍺",
     pronoun: "he",
+    // He rents the stool. Anchored explicitly rather than by an absent field, so
+    // nobody later mistakes "never authored" for "decided" — which is exactly what
+    // happened to Doyle and Pete.
+    hops: false,
     room: "queen_vic",
     desc: "Bald, red-faced, Chang vest, fifteen years of Pattaya compressed into a permanent " +
       "corner-stool residency. He rents the same balcony room every high season. He was here " +
       "before White Dish. He will tell you about it. He tells it well.",
     dialogue: [
+      { topic: "doyle",
+        text: "\u201cThe American?\u201d Terry considers the ceiling. \u201cCopper. Was, anyway.\u201d He says it without dropping his voice, which tells you it isn't a secret. \u201cYou can tell because he sits facing the door and he has never once asked me a question he didn't already know the answer to.\u201d A pull on the Chang. \u201cGood company, mind. Drinks soda water and doesn't make a thing of it, which round here is practically a personality.\u201d",
+        short: "\u201cCopper. Was, anyway. Sits facing the door, never asks a question he doesn't know the answer to.\u201d" },
+      { topic: "mort",
+        text: "\u201cMort's had me in the column. Twice.\u201d Terry is transparently delighted and entirely unwilling to say so. \u201cNo name, mind. 'A long-serving resident of the quiet end.' That's me, that is.\u201d He drinks. \u201cHe's been here longer than this bar. Longer than half the soi. And he has never once printed a thing that got a bloke in trouble at home \u2014\u201d he points the bottle at you \u2014 \u201cwhich is harder than it sounds, in a town like this.\u201d",
+        short: "\u201cHad me in the column twice. Never printed a thing that got a bloke in trouble at home.\u201d" },
+      { topic: "pete",
+        text: "\u201cPete drinks up the soi.\u201d Terry shrugs with one shoulder. \u201cIn here now and again. Nice enough. Four years about, and I couldn't tell you one solid thing about him \u2014 and I know everyone.\u201d He appears to hear himself say it. \u201cWhich is his business, obviously. Some blokes come here for the beer and some come because it's a long way from something. You don't ask which.\u201d",
+        short: "\u201cFour years and I couldn't tell you one thing about him \u2014 and I know everyone. That's his business.\u201d" },
+
       { topic: "wallet", notFlags: ["hasWallet"],
         text: "\"Wallet gone? On Soi 6?\" He exhales through his nose. \"Right. Soi Buakhao — Candy Bar, ask for Candy herself. Sharp as they come. She'll know who moved it or she'll know who does.\" He returns to his beer with the authority of a man who has solved this problem before." },
+      // She is sitting right there. The old node said "currently empty" whichever
+      // way it was, and a persona checked it on both nights (round 22, Eric #6).
+      { topic: "angela", when: (st, G) => typeof _npcsHere === "function" && _npcsHere().includes("angela"),
+        text: "Terry does not turn his head. \u201cAsk her yourself, she's two along.\u201d A pull on the " +
+          "Chang. \u201cShe won't mind. She'll take one headphone off, which from Angela is a standing " +
+          "ovation.\u201d He goes back to the window. \u201cGood woman. Doesn't need managing.\u201d",
+        short: "\u201cAsk her yourself, she's two along. She'll take one headphone off \u2014 that's an ovation, from her.\u201d" },
       { topic: "angela", text: "Terry looks at the stool two along, currently empty, and then does not " +
           "look at it again. “She'll be in.” A pull on the Chang. “Headphones. Doesn't want a " +
           "conversation, which is restful, frankly.” That is the entire briefing, and he returns to " +
@@ -11446,7 +11520,34 @@ const SYNDICATE_JOBS = [
 // Thursday, 20:00–22:00, at three bars drawn fresh each week. Walk in during
 // the window and you're a contestant — the host does not take no.
 
-const QUIZ_BARS = [
+// THE QUEEN VIC'S KITCHEN. Declarative, because the card and the till must be
+// the same object — a menu that advertises a dish the till won't sell is the
+// exact defect afford-audit.mjs exists to catch. Field vocabulary is FOOD_STALLS'
+// (price/hunger/thirst) so nothing new is invented.
+//
+// Aoy's own description has said "orders, plates, THE ROAST ON A SUNDAY" for the
+// whole life of this game, and there has never been a roast. A pub's social life
+// is food, the calendar, and the rail knowing each other; this table is the first
+// of the three.
+const QV_MENU = [
+  { id: "basket", name: "basket and chips", price: QV_BASKET, hunger: 55, thirst: 0,
+    aliases: ["basket", "scampi", "sausage", "chips", "chip"] },
+  { id: "pie", name: "steak and ale pie", price: QV_PIE, hunger: 55, thirst: 0,
+    aliases: ["pie", "steak", "ale pie"] },
+  { id: "curry", name: "the Friday curry", price: QV_CURRY, hunger: 60, thirst: -10,
+    aliases: ["curry", "friday curry", "madras"] },
+  { id: "plough", name: "a ploughman's", price: QV_PLOUGH, hunger: 40, thirst: 0,
+    aliases: ["ploughman", "ploughmans", "ploughman's", "cheese", "pickle", "cold"] },
+  { id: "roast", name: "the Sunday roast", price: QV_ROAST, hunger: 75, thirst: 0,
+    aliases: ["roast", "sunday roast", "beef", "dinner", "yorkshire"] },
+  { id: "crisps", name: "a bag of crisps", price: QV_CRISPS, hunger: 10, thirst: 0,
+    aliases: ["crisp", "crisps", "packet"] },
+];
+
+// queen_vic was the one bar missing from this list — a British pub is the most
+// natural quiz venue in the game, and in soi6 mode _quizBars() already returns
+// it, so the content existed and the full game could not see it (round 22).
+const QUIZ_BARS = ["queen_vic", 
   "candy_bar", "candy_bar_2", "lucky_tiger", "silk_rose", "jasmine_garden",
   "gold_rush", "starlight_bar", "midnight_sun", "stinky_bar", "khao_talo_bar",
   "rock_factory",
@@ -11965,6 +12066,19 @@ const _REGULARS = {
       "coast longer than most of the bars, and he is writing all of it down whether it " +
       "likes it or not.",
     dialogue: [
+      { topic: "doyle",
+        text: "The biro stops. \u201cAh. Doyle.\u201d Mort looks pleased and slightly thwarted at once. \u201cI have been trying to get that man into the column for two years. Two YEARS. A homicide detective retires to Soi 6 \u2014 that writes itself, it's a gift.\u201d He clicks the biro twice. \u201cAnd every time I raise it he buys me a soda water and asks after my HEALTH.\u201d A dry look over the horn-rims. \u201cHe is very good. I have been deflected by professionals, and he is the politest of them.\u201d",
+        short: "\u201cTwo years I've tried to get him in the column. Every time he buys me a soda water and asks after my health.\u201d" },
+      { topic: "terry",
+        text: "\u201cTerry is the best primary source on this street and has no idea that is what he is.\u201d The biro taps the page. \u201cFifteen years, one vantage point, total recall and no agenda whatsoever \u2014 you cannot buy that. Historians would weep.\u201d He turns a page. \u201cThe trick is you must never take notes while he talks. The moment the book comes out he starts performing, and a performance is worth nothing. So I listen, and I write it down afterwards, in the gents.\u201d",
+        short: "\u201cBest primary source on the street. Never take notes while he talks \u2014 write it up after, in the gents.\u201d" },
+      { topic: "angela",
+        text: "The biro goes down entirely, which you will come to learn is significant. \u201cShe corrected me. In print \u2014 wrote in about a ship's name I had wrong by one word, and she was right, and she had known she was right for six weeks before she said anything.\u201d He adjusts the horn-rims. \u201cI printed the correction and bought her a drink, and she looked at me as though I'd handed her a live animal.\u201d A small shrug. \u201cWe get on. From a distance, mostly, which suits us both.\u201d",
+        short: "\u201cShe corrected me in print, and she was right. We get on \u2014 from a distance, which suits us both.\u201d" },
+      { topic: "pete",
+        text: "Mort caps the biro. It is the first time you have seen him do that mid-sentence. \u201cNo,\u201d he says, pleasantly. \u201cNot Pete.\u201d He lets a beat go by. \u201cForty-one years writing about this coast, and the whole job is knowing which men are a story and which are just a bloke who got out. Print the second sort and somebody's ex-wife's cousin reads it on the internet in Doncaster.\u201d He uncaps the biro. \u201cAsk me about anyone else and I'll talk till they close.\u201d",
+        short: "\u201cNot Pete. Some men are a story and some are a bloke who got out. You don't print the second sort.\u201d" },
+
       { topic: "glam", when: (st, G) => !_flag("diamondTruth"),
         text: "\u201cHere\u2019s what bothers me.\u201d The biro stops. \u201cA man with that much " +
           "money does not spend his last years on a plastic stool on the Jomtien strip. He has a " +
@@ -12615,6 +12729,16 @@ const _REGULARS = {
       "electrical tape. She has the corner seat with the window view of Soi 6 — " +
       "the chaos observed from the calm side of the glass.",
     dialogue: [
+      { topic: "doyle",
+        text: "She lifts one headphone. \u201cDoyle's fine.\u201d Which, from Angela, is a character reference with a seal on it. \u201cHe clocked the Discman the first night and didn't say anything clever about it. Do you know how rare that is? Every bloke in here has a bit about the Discman. They've all got a bit.\u201d The headphone goes back. \u201cHe noted it and left it alone. That's a man trained not to touch the evidence.\u201d",
+        short: "\u201cHe clocked the Discman and didn't say anything clever about it. Nobody else manages that.\u201d" },
+      { topic: "terry",
+        text: "\u201cTerry talks.\u201d A pause you could park a bus in. \u201cNot a complaint. I don't, and it turns out a room needs one of each.\u201d She turns the Singha a quarter. \u201cHe has never once asked me why I'm here. Fifteen years of asking everybody everything, and never that.\u201d She almost smiles. \u201cI don't think it's tact. I think he's decided he already knows, and he's wrong, and I'm going to let him have it.\u201d",
+        short: "\u201cHe's never asked me why I'm here. He thinks he knows. He's wrong. He can have it.\u201d" },
+      { topic: "mort",
+        text: "\u201cThe old man writes it down properly.\u201d She says it like a verdict. \u201cI wrote in once and corrected him, and he printed it. Didn't hedge, didn't make a joke of it, printed the correction like it mattered.\u201d The Discman gets a look. \u201cI'd assumed he'd be a prick about it. Most of them are, about being wrong.\u201d A beat. \u201cSo now I read the whole thing every week, which I imagine was the plan.\u201d",
+        short: "\u201cI corrected him and he printed it straight. So now I read the whole thing every week.\u201d" },
+
       // Greeting is a little state machine: a stranger gets the full introduction;
       // a returning face gets a shorter one; once she's opened up (mood "open") it
       // warms. dstate/trust/mood are set by the nodes below — see _npcState.

@@ -698,6 +698,14 @@ function _hopRoom(id, hourArg) {
     const quiz = _quizBars().filter(r => pool.indexOf(r) >= 0);
     if (quiz.length) return quiz[0];
   }
+  // AND THE ROAST PULLS THE SAME WAY. Sunday before nine, and a man whose manor
+  // holds the Queen Vic is having his dinner there — which is what a roast is FOR
+  // in a town eight thousand miles from the country that invented it. Same pure
+  // hash, same shape, and it is the second reason in the game to be somewhere at
+  // a particular hour on a particular day.
+  if (typeof _roastHour === "function" && _roastHour(hour) &&
+      pool.indexOf("queen_vic") >= 0 &&
+      _hh(id + ":" + G.vacation + ":" + G.day + ":roast", 89) % 4 !== 0) return "queen_vic";
   // The walk starts at hour ONE: at opening time every man is at his own local,
   // which is both the truer picture (you arrive at your bar, then you drift) and
   // a deliberate removal of a whole class of flake — the suite's default hour is
@@ -2029,7 +2037,14 @@ function _describeRoom(full, forceFull) {
       const g = girl ? `, ${NPCS[girl].name} laughing on cue beside him` : "";
       if (girl) _say(_pickVary(_BAR_REGULAR_BUSY, "barReg")(g), "dim");
       else _say(_pickVary(_BAR_REGULAR, "barReg"), "dim");
-    } else {
+    } else if (!_railCrowd.length) {
+      // THE ANONYMOUS BAR-BORE IS FOR A ROOM WITH NOBODY IN IT. Printed at the
+      // Queen Vic — "a knot of regulars welded to the bar… part of the furniture,
+      // not the cast" — while Doyle, Terry, Mort and Angela sat named on the
+      // Here: line and every one of them talks. A persona who had come to this
+      // town specifically for the company read it as the game telling him the
+      // blokes he came for weren't worth crossing the floor to meet (round 22).
+      // Real people outrank furniture; if the rail has names, say nothing.
       _say(_pickVary(_BAR_REGULAR, "barReg"), "dim");
     }
   }

@@ -2608,6 +2608,9 @@ const _WEAR_NO = [
 function _doRead(arg) {
   if (/news|paper/.test(arg)) return _doPaper();
   if (/column|owl/.test(arg)) return _doColumn(); // READ (THE) COLUMN / NITE OWL
+  // READ MENU and the bare MENU verb are separate paths and both have to reach
+  // the Vic's generated card, or one of the two natural phrasings dead-ends.
+  if (G.room === "queen_vic" && /menu|card|price|board/.test(arg || "")) { _qvCard(); return; }
 
   const flavor = _roomRead(arg);
   if (flavor) { _say(flavor); return; }
@@ -3953,7 +3956,11 @@ function _doBuy(arg) {
   // The Vic's kitchen: Aoy advertises it with an order pad in her hand, and it
   // sold nothing (grapevine playtest F6, 2026-08-25). Hours are hers: basket
   // till eleven, after that only crisp.
-  if (G.room === "queen_vic" && /food|crisp|basket|chip|pie|scampi|kitchen|dinner|snack/.test(arg)) {
+  // The kitchen. Routed off QV_MENU's own aliases plus the generic words, so a
+  // dish added to the card is buyable the same day it is written — the card and
+  // the till are one object (_qvMenu) by construction.
+  if (G.room === "queen_vic" &&
+      (/food|kitchen|dinner|snack|meal|eat/.test(arg) || _qvNamesDish(arg))) {
     _qvKitchen(arg);
     return;
   }
@@ -6760,6 +6767,12 @@ function _completePool(verb, ctx) {
       // will refuse — while two characters have told the player to buy exactly one
       // thing. Only while it's undone.
       if (_npcsHere().includes("mot") && !_flag("motFed")) barItems.unshift("mot dinner");
+      // At the Vic, the card IS the chip list — and the roast leads it on a
+      // Sunday, because that is the thing worth knowing before nine.
+      if (G.room === "queen_vic") {
+        const card = _qvMenu().map(d => d.aliases[0]);
+        return [...card, ...barItems.filter(i => !/food|toastie/.test(i))];
+      }
       const sItems = _salengItems();
       if (sItems.length) {
         // a parked cart leads with its items; once one's named, offer a lady to
@@ -7910,7 +7923,12 @@ function doCommand(input) {
     case "exits": case "out?": _doExits(); break;
     case "photo": case "selfie": case "photograph": case "snap": _doPhoto(arg); break;
     case "gallery": case "photos": case "album": _doGallery(); break;
-    case "menu": _doRead("menu"); break; // the laminated card, by its own name
+    case "menu":
+      // At the Vic the card is generated, not authored: prices come from the
+      // constants and the list is _qvMenu() itself, so READ MENU can never
+      // advertise a dish the till refuses (the afford-audit defect class).
+      if (G.room === "queen_vic") { _qvCard(); break; }
+      _doRead("menu"); break; // the laminated card, by its own name
     case "stop": case "unsubscribe": _doJokeStop(); break;
     case "reply": _doJokeReply(); break;
     case "call": case "dial": _doCall(arg); break;
