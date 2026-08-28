@@ -1204,7 +1204,13 @@ const _ENC = {
     }
     // Let him read — the ฿199 hook. He ties on the string, scrawls a "lucky
     // number", then the grave face returns and the real number appears.
-    if (/read|yes|ok|sure|palm|fine|199|sit|deal|hand/.test(input) &&
+    // ANCHORED, like the soft encounters' answer table (_ENC_SOFT) — and for
+    // the same reason. Unanchored, "palm" matched TRAVEL TO SABAI PALMS: a
+    // command whose entire intent is "leave, I am going home to my hotel" paid
+    // the ฿199 hook and opened the ฿1,900 upsell, with two more men at the
+    // lamplight. An answer is the word you say to him, never a command that
+    // merely contains one (rail persona, round 19).
+    if (/^(?:read|yes|yeah|ok|okay|sure|palm|fine|199|sit|deal|hand|go on|why not)\b/.test(input) &&
         !/\bno\b|walk|leave|away|off|thanks|thank you/.test(input)) {
       if (G.money < FORTUNE_READ) {
         _say(`He turns your empty palm over, reads the ฿${G.money} future written ` +

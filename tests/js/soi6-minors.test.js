@@ -49,7 +49,11 @@ test("a named male regular gets the beer you buy him — you don't drink it for 
   S().room = "queen_vic"; S().money = 1000;
   const drunk0 = S().soc.drunk;
   doCommand("buy terry a beer");
-  assert.match(last(), /stand Terry a Chang/, "the bottle goes down the bar");
+  // against the POOL, not one string — the line was a fixed sentence until
+  // round 19, which is how every man in the bar came to repay a drink with
+  // Terry's own anecdote
+  assert.ok(_STAND_BEER.some(t => last().includes(_fmt(t, { who: "Terry", drink: "a cold one" }))),
+    "the bottle goes down the bar, in one of the pooled ways");
   assert.equal(S().soc.drunk, drunk0, "your own drunk counter doesn't move");
   out = [];
   doCommand("buy drink for terry");

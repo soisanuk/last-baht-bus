@@ -442,7 +442,9 @@ function _arriveAt(to) {
   // lifts for a friend of the group (Gavin's "doors open for our friends"). Do the
   // errand, earn the standing, get in. It's also the one place Ryan Powers ever is.
   if (to === "orchid_room" && _faction("wdg") < 2) { _say(_pickVary(_ORCHID_BOUNCER, "orchidrope")); return; }
-  if (to === "orchid_club" && !_flag("orchidVouched") && !_flag("orchidReported")) {
+  // sent by Candy, introduced to Rose, or arrived via Doyle's recon — any of the
+  // three is a reason the wall has a door in it tonight
+  if (to === "orchid_club" && !_flag("orchidSent") && !_flag("orchidVouched") && !_flag("orchidReported")) {
     _say(_pickVary(_ORCHID_CLUB_UNKNOWN, "orchidclubunknown")); return;
   }
   // closed for the night? (also covers fast-travel, which skips the doGo gate)
@@ -2871,6 +2873,11 @@ function _doTalkBody(arg, topic) {
         return;
       }
     }
+    // Before the brush-off: can he talk about it because HE said it? A node of
+    // his own that names the thing as a proper noun is a better answer than
+    // "not my story" about a word out of his own mouth (see _selfNamedNode).
+    const own = _selfNamedNode(npc, topic);
+    if (own) { _deliver(npc, own, false); _questOffer(npc); return; }
     // she HAS that story but its gate hasn't opened: a "not yet", not a "not mine"
     const _n2 = _convoTopic(topic);
     const gated = NPCS[npc].dialogue.some(e => e.topic && (e.topic === topic || topic.includes(e.topic) ||
@@ -3811,7 +3818,11 @@ function _regularHere(nameW) {
   if (!_inBar() || !nameW) return null;  // a bar-rail gesture only — the street/massage/
   // cabaret crowd has its own verbs, and the Adonis hosts run their own drink path
   const id = _findNpc(nameW);
-  if (id && _npcsHere().includes(id) && !NPC_ROLES[id] && !NPCS[id].manager && !NPCS[id].filler)
+  // `house` is the staff marker for somebody the roles don't cover — the Queen
+  // Vic has no mamasan or cashier, so its landlady carried no role and read as
+  // a punter (round 19: BUY DRINK FOR NUCH filed her as a rail regular).
+  if (id && _npcsHere().includes(id) && !NPC_ROLES[id] &&
+      !NPCS[id].manager && !NPCS[id].filler && !NPCS[id].house)
     return id;
   // A named rail regular (Chuck, Terry, Danny…) is stood a beer the same way.
   // One cast, so _findNpc above already resolved him — he just fails the
@@ -3819,6 +3830,19 @@ function _regularHere(nameW) {
   if (id && NPCS[id].patron && _npcsHere().includes(id)) return id;
   return null;
 }
+// Standing a man a drink is the commonest social gesture available to a punter
+// who isn't buying lady drinks, so it gets a real pool. {drink} is his own —
+// the men whose prose names what they nurse carry a `drink`; everyone else gets
+// "a cold one", which is true of anybody. Nobody's thanks is another man's
+// anecdote: the old fixed line repaid every drink with Terry's.
+const _STAND_BEER = [
+  "You stand {who} {drink}. It's received like a sacrament, and repaid inside a minute with an opinion you did not ask for and will not forget.",
+  "{drink} goes down the bar to {who}, who lifts it an inch in your direction — the full ceremony, out here.",
+  "You get {who} {drink} in. Nothing is made of it, which is how you know it landed.",
+  "{drink} for {who}. “Ah — you're all right, you are.” The next stool becomes, by some silent arrangement, yours.",
+  "You put {drink} in front of {who}. It buys you the next twenty minutes of somebody's life, whether you wanted them or not.",
+];
+
 // display name for a stand-a-beer target, NPC or patron
 function _regularName(id) {
   return (NPCS[id] && NPCS[id].name) || "the regular";
@@ -3839,8 +3863,13 @@ function _standRegular(id) {
     _say(`A cold one slides down the bar to ${who}, who studies it, studies ` +
       `you — and the shoulder unturns. “No harm done, lad.” Form restored. (฿${G.money} left.)`);
   } else {
-    _say(`You stand ${who} a Chang. It's received like a sacrament and repaid, ` +
-      `immediately, with a story about Walking Street in 2004. (฿${G.money} left.)`);
+    // What he actually drinks, where the man's own prose says so — Doyle nurses
+    // a soda water and the game stood him a Chang, twice a night, for a year.
+    // And the fixed line repaid EVERY drink with Terry's Walking Street
+    // anecdote, in everyone's mouth including Terry's (round 19). Pooled, per
+    // the house rule that a repeatable line is never a fixed string.
+    const drink = (id && NPCS[id] && NPCS[id].drink) || "a cold one";
+    _say(_fmt(_pickVary(_STAND_BEER, "standbeer"), { who, drink }) + ` (฿${G.money} left.)`);
   }
 }
 
@@ -4158,6 +4187,8 @@ function _doBuy(arg) {
       const who = nameW && (_findNpc(nameW));
       if (who && who !== id) {
         _say(`${_npcLabel(who)} doesn't do lady drinks — that's the ladies' racket. For a bloke, it's BUY MAN DRINK (the fella behind the bar).`);
+      } else if (who && NPCS[who].house) {
+        _standRegular(who); // the landlady takes one like anybody else
       } else if (nameW) {
         _say("She's not working this bar — nobody here by that name. (Buy a drink for one of the girls on the rail, or BUY MAN DRINK.)");
       } else _say("Nobody here to buy one for.");

@@ -1236,6 +1236,50 @@ function _pickDialogue(npcId, topic) {
   return topic ? _pickDialogue(npcId, null) : null;
 }
 
+// A MAN CAN TALK ABOUT WHAT HE HIMSELF SAID. The commonest complaint across two
+// persona rounds was a character volunteering a name and then disowning it one
+// command later: Nira resolves the whole Pim/Bank arc with "then you say the
+// name Pim" and doesn't recognise "Pim" the very next line; Roger's own
+// description has him married to Lek and asking you the football score, and
+// misses on both; Doug pitches "the portfolio" and hasn't heard of it. Eight
+// instances found by two testers independently, and they are the tip: every
+// proper noun in every node is a word the player may reasonably type next.
+//
+// So a miss gets one more chance before the brush-off: if any node this
+// character can currently reach NAMES the thing — as a proper noun, capitalised
+// in his own text — that node is the answer. Capitalisation is the whole trick.
+// It is what distinguishes "Lek", "Surin", "PattayaChain" and "Discman" from
+// "money" or "bar", so a passing mention of a common word can't hijack a topic,
+// and it needs no synonym table to maintain: the writing IS the index.
+//
+// Gates are honoured exactly as _pickDialogue honours them — a locked node stays
+// locked, or this would leak content ahead of its trigger.
+function _selfNamedNode(npcId, topic) {
+  const n = NPCS[npcId];
+  if (!n || !topic) return null;
+  const st = _npcState(npcId);
+  const words = String(topic).toLowerCase().split(/[^a-z0-9']+/).filter(w => w.length >= 4);
+  if (!words.length) return null;
+  for (const d of n.dialogue) {
+    if (d.topic && (d.topic === topic || topic.includes(d.topic))) continue; // the topic path already had its go
+    if ((d.req || []).some(f => !_flag(f))) continue;
+    if ((d.notFlags || []).some(f => _flag(f))) continue;
+    if (d.bond && _bondTier(npcId) < d.bond) continue;
+    if (d.when && !d.when(st, G)) continue;
+    const body = String(d.text || "");
+    for (const w of words) {
+      // Case-SENSITIVE, whole word: "Lek" in his own sentence is a person, "lek"
+      // would also match the middle of nothing useful. Deliberately no lookbehind
+      // to exclude sentence-start capitals — the regex has to parse on every
+      // browser this ships to, and a node opening with the very word you asked
+      // about is the right answer anyway.
+      const cap = w[0].toUpperCase() + w.slice(1);
+      if (new RegExp("\\b" + cap.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\b").test(body)) return d;
+    }
+  }
+  return null;
+}
+
 // Generic "you asked that already" brush-offs, voiced as the soi's fond
 // exasperation — the terse repeat for a pure-flavour line the writer never gave
 // a `short`. Gender-neutral (no she/he), so any NPC can deliver one.
@@ -1587,7 +1631,8 @@ function _describeRoom(full, forceFull) {
   // it's right here). "Exits" is roads only now; the venues list is the doors.
   let venues = _venuesHere(r);
   // the Orchid is somewhere you get SENT, not somewhere you find — keep it off the door list until you have been
-  if (!_flag("orchidVouched") && !_flag("orchidReported")) venues = venues.filter(id => id !== "orchid_club");
+  if (!_flag("orchidSent") && !_flag("orchidVouched") && !_flag("orchidReported"))
+    venues = venues.filter(id => id !== "orchid_club"); // you get SENT to the Orchid — see Candy's `rose` node
   // …but not in your own hotel room, whose single DOWN/OUT is the venue the
   // exit-scan fallback would otherwise re-list as "Step inside: <the bar below>".
   if (venues.length && G.room !== _hotelRoomId()) {

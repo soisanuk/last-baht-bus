@@ -57,8 +57,17 @@ test("patrons: the intro is met-once (not nightly), and a topic miss is a shrug,
   doCommand("talk to angela");
   assert.match(text(), /Angela/);
   const first = text();
+  // The Discman is HERS — her own line is "Yes, that's a Discman. No, it's not
+  // ironic." This test used to assert she shrugged at it, which pinned the
+  // defect two personas independently reported: a character disowning a proper
+  // noun out of her own mouth. She answers now (see _selfNamedNode).
   out = [];
   doCommand("ask angela about discman");
+  assert.doesNotMatch(text(), /Not one I know|Search me|Couldn't tell you/,
+    "she does not disown her own Discman");
+  // …and something she genuinely has nothing on is still a shrug, not "You again"
+  out = [];
+  doCommand("ask angela about cryptocurrency");
   assert.doesNotMatch(text(), /You again/);
   assert.match(text(), /Not one I know|Search me|Couldn't tell you/);
   // a new day: the daily seen-book resets, but she doesn't re-introduce herself in full

@@ -4540,7 +4540,14 @@ const NPCS = {
         short: "\"Bert and I go back. I watch his place, he watches mine. A bar is who is watching it.\"" },
       // An Introduction quest (docs/map-coverage.md): Candy vouches you into Rose's
       // discreet Orchid Club out in Naklua. chip:false — the quest drives it.
-      { topic: "rose", notFlags: ["orchidVouched"], chip: false,
+      // SHE SENDS YOU, and until now that was only prose: orchidVouched — the
+      // door's gate AND the quest's doneFlag — was set exclusively by Rose's own
+      // node, and Rose is inside the door. So Candy's "I am sending you" opened
+      // nothing, and the only way into the Orchid Club was finishing Doyle's
+      // unrelated recon quest (whose orchidReported also lifts the rope). Two
+      // personas failed this quest from opposite sides before anyone noticed the
+      // loop. Being SENT is its own flag now; being introduced is still hers.
+      { topic: "rose", notFlags: ["orchidVouched"], sets: ["orchidSent"],
         text: "“You want to know a place most people never find?” Candy weighs you a moment, then " +
           "decides. “Rose. The Orchid Club, out in Naklua — behind a wall, no sign, aircon like a " +
           "morgue and about as quiet. Old friend of mine, from before either of us ran anything.” " +
@@ -6681,6 +6688,13 @@ const NPCS = {
     name: "Nuch", th: "\u0e19\u0e38\u0e0a", emoji: "\ud83e\uddfe",
     pronoun: "she",
     room: "queen_vic",
+    // She is the HOUSE. The pub has no mamasan/cashier/hostess (CLAUDE.md), so
+    // she carried no role at all — which made her indistinguishable from a
+    // role-less punter and let BUY DRINK FOR NUCH file the landlady as a rail
+    // regular, repaying you with another man's anecdote (rail persona, round
+    // 19). `manager: true` would have fixed it and misgendered her: that path
+    // pours "himself" a soda water. This says staff, and nothing else.
+    house: true,
     look: "Thai woman of forty-five, reading glasses pushed up, neat blouse, ledger and room keys.",
     desc: "Behind the till and the room keys both \u2014 the Vic is a pub downstairs and an inn " +
       "upstairs, and Nuch runs the paperwork of both. Fifteen years of it. She knows which " +
@@ -6745,7 +6759,7 @@ const NPCS = {
   },
 
   doyle: {
-    name: "Doyle", th: "ดอยล์", emoji: "🕵️",
+    name: "Doyle", th: "ดอยล์", emoji: "🕵️", drink: "soda water",
     pronoun: "he",
     room: "queen_vic",
     origin: "pi",
@@ -6760,7 +6774,7 @@ const NPCS = {
           "he's been nursing it. \"Twenty-six years I read rooms for a living. Can't switch it off. You " +
           "learn more about a man from where he sits than anything he tells you.\" He tips the glass at the " +
           "stool beside him — the one with a sightline to the door. \"Sit. I don't bite. Not for boring people.\"",
-        short: "\"Doyle.\" He reads you head to foot out of habit. \"Sit — I don't bite. Not for boring people.\"",
+        short: "He reads you head to foot out of habit, and tips the soda water an inch at the stool with the sightline. \"Sit.\"",
         asks: { key: "here", q: "\"So.\" He turns the glass a slow quarter-turn. \"Everybody out here's answering a question they won't say out loud. What brought YOU — the girls, the money, or the getting-away?\"" } },
 
       { topic: "doyle", text: "\"Homicide, mostly. Big-city, the kind that makes the papers and then makes " +
@@ -7331,7 +7345,8 @@ const NPCS = {
           "You say nothing. Something behind his eyes files that away with what might, in a different man, " +
           "be respect. \"Good evening for a drive,\" he says pleasantly, and the town rearranges itself " +
           "around the sentence: the driver, the fixer, the quiet man — all of them leaning on one ordinary " +
-          "grey car, offering you a ride.",
+          "grey car, offering you a ride. \"And if you are looking for somebody in this town, my friend — " +
+          "ask me. I drive everybody, and I remember where I put them.\" (ASK TAN ABOUT <person>)",
         short: "\"My friend.\" The same as always — and not the same at all. You say nothing; he files that away. \"Good evening for a drive.\"" },
       // Act One: the wallet is GONE and it is the only thing the player is doing,
       // so the sandbox greeting's "Still got your wallet? ...Mostly. Good." reads
@@ -7498,6 +7513,12 @@ const NPCS = {
           "at it. Apart from the one thing.\" A rueful tilt of the glass.",
         short: "\"Doug, Calgary. Retired here to do nothing — very good at it. Apart from the one thing.\"",
         asks: { key: "invested", q: "He eyes you over the rum, not unkindly. \"You got money in anything out here, friend? Property, a bar, one of them 'opportunities'? Humour an old man — tell me you said no.\"" } },
+      { topic: "portfolio", text: "“The portfolio.” He says it like a man saying the name of a woman " +
+          "he is not supposed to be seeing. “Diversified. Structured. I'm not going to bore you with " +
+          "the mechanics — the mechanics are the boring part, and the mechanics were always going to " +
+          "be somebody else's department, which was rather the appeal.” The smile holds a beat too long. “I'll say this: it's doing exactly what it " +
+          "was always going to do.”",
+        short: "“The portfolio. Diversified, structured, doing exactly what it was always going to do.”" },
       { topic: "white dish", text: "\"White Dish? Ho. Pour yourself something first.\" He turns the glass " +
           "slowly. \"Two years back a fella buys me a drink right at this bar — smooth, golf shirt, calls " +
           "himself an area consultant. Says the group's opening the portfolio to a few private investors. " +
@@ -7537,6 +7558,11 @@ const NPCS = {
     dialogue: [
       { topic: "wallet", notFlags: ["hasWallet"],
         text: "\"Wallet gone? On Soi 6?\" He exhales through his nose. \"Right. Soi Buakhao — Candy Bar, ask for Candy herself. Sharp as they come. She'll know who moved it or she'll know who does.\" He returns to his beer with the authority of a man who has solved this problem before." },
+      { topic: "angela", text: "Terry looks at the stool two along, currently empty, and then does not " +
+          "look at it again. “She'll be in.” A pull on the Chang. “Headphones. Doesn't want a " +
+          "conversation, which is restful, frankly.” That is the entire briefing, and he returns to " +
+          "the soi with the air of a man who has said more than the arrangement strictly allows.",
+        short: "“She'll be in. Headphones. Doesn't want a conversation — restful, frankly.”" },
       { topic: "white dish", sets: ["heardWdgHistory"],
         text: "\"White Dish Group.\" He says it the way you say a diagnosis. \"Ryan Powers. Never here in the flesh, always in your feed — that's the joke. Before his lot got involved, this soi ran itself. Loud, chaotic, but honest chaos. Now?\" He gestures at the street through the window. \"QR codes. Branded menus. They've got six bars already. Word is they're after another one.\" He takes a long pull of Chang. \"Someone should do something about that.\"",
         short: "\"White Dish. Ryan Powers. Six bars already, after another. Someone should do something.\"" },
@@ -10522,8 +10548,8 @@ const QUESTS = {
   orchid_intro: {
     name: "An Introduction",
     giver: "candy",
-    desc: "Candy is vouching you into a discreet club — the kind of place you don't find, you " +
-      "get sent. Go and tell Rose that Candy sent you (ASK ROSE ABOUT CANDY).",
+    desc: "Candy is vouching you into a discreet club — the kind of place you don't find, you get " +
+      "sent. Get the sending first (ASK CANDY ABOUT ROSE), then go and tell Rose who sent you.",
     deps: [],
     reqFlags: ["act1Done"],
     at: "rose",
@@ -11423,6 +11449,16 @@ const _REGULARS = {
           "and if I drop dead the ambulance can actually get down the soi. You don't want the go-go at " +
           "my age, son. You want a fan, a fixture, and somewhere nobody's trying to sell you anything.”",
         short: "“Pattaya's for the young and daft. Here it's quiet, cheap, nobody's selling you anything. That'll be you one day.”" },
+      { topic: "lek", text: "“Lek?” The grin goes sideways, fond and slightly furtive. “Fruit stall on " +
+          "the corner, eighteen years, and she still weighs my mangoes like I'm trying it on.” He " +
+          "lowers his voice to a register the whole bar can hear. “She knows I'm here. She does " +
+          "NOT know about the third one. That's not lying, son, that's marriage.”",
+        short: "“Lek. Fruit stall, eighteen years. She knows I'm here; she doesn't know about the third one.”" },
+      { topic: "football", text: "“Everton.” He says it the way other men name a chronic condition. “Forty " +
+          "years, and I've had about nine good afternoons out of it.” He tips the Chang at the telly, " +
+          "where something Spanish is on with the sound down. “Out here you take what the satellite " +
+          "gives you and you're grateful. Ask me the score, mind. Always ask me the score.”",
+        short: "“Everton. Forty years, nine good afternoons. Ask me the score, mind — always ask.”" },
       { topic: "gordon", when: (st, G) => _flag("quietSideDone"), text: "“Gordon.” The smile goes gentle. “So now " +
           "we know. Went in his sleep, lucky sod, more than most of us'll get.” He nods along the bar. " +
           "“Sumalee put his picture up — small, by the King, you'd not know to look. Fifteen year he sat " +
@@ -12509,7 +12545,7 @@ const _REGULARS = {
   },
 
   angela: {
-    name: "Angela", emoji: "🎧", age: 47, nat: "American",
+    name: "Angela", emoji: "🎧", age: 47, nat: "American", drink: "Singha",
     pronoun: "she",
     patron: true, room: "queen_vic", hops: false,
     look: "American woman of forty-seven, greying shoulder-length hair, faded flannel shirt tied at the waist.",
