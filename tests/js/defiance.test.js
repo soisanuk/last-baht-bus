@@ -39,7 +39,7 @@ test("Neil sits at The Sundowner, Nigel in town — the two bars never share a r
 
 test("Nigel's Darkside version is the wrong one, and it sets the grapevine flag", () => {
   G.room = PATRONS.nigel.room;
-  _patronTalk("nigel", "darkside");
+  _doTalkBody("nigel", "darkside");
   assert.match(text(), /Neil/);
   assert.match(text(), /where the story ends/);
   assert.ok(_flag("heardNeilWrong"));
@@ -49,39 +49,39 @@ test("Nigel's Darkside version is the wrong one, and it sets the grapevine flag"
 
 test("Neil's own telling needs no flag — the clams, the sentence, the tea stand, the beach", () => {
   G.room = "lake_beer";
-  _patronTalk("neil", "wife");
+  _doTalkBody("neil", "wife");
   assert.match(text(), /clams/);
   assert.match(text(), /She stayed/);
   out = [];
-  _patronTalk("neil", "family");
+  _doTalkBody("neil", "family");
   assert.match(text(), /we fight together/i);
   assert.ok(_flag("neilStory"));
   // Isan stays offscreen: what was said in that house is never narrated
   assert.match(text(), /never asked/);
   out = [];
-  _patronTalk("neil", "darkside");
+  _doTalkBody("neil", "darkside");
   assert.match(text(), /twenty-five baht/);
   assert.match(text(), /bakery/);
   out = [];
-  _patronTalk("neil", "daughter");
+  _doTalkBody("neil", "daughter");
   assert.match(text(), /started at the beach/);
 });
 
 test("the triangulation payoff fires only for a player who heard both versions", () => {
   G.room = "lake_beer";
   out = [];
-  _patronTalk("neil", "nigel");           // without the grapevine flag: falls back, no payoff
+  _doTalkBody("neil", "nigel");           // without the grapevine flag: falls back, no payoff
   assert.doesNotMatch(text(), /Still telling it/);
   _setFlag("heardNeilWrong");
   out = [];
-  _patronTalk("neil", "nigel");
+  _doTalkBody("neil", "nigel");
   assert.match(text(), /Still telling it/);
   assert.match(text(), /nine in ten|nine times in ten/i);
   // and back in town, Nigel cracks but does not convert
   _setFlag("neilStory");
   G.room = PATRONS.nigel.room;
   out = [];
-  _patronTalk("nigel", "darkside");
+  _doTalkBody("nigel", "darkside");
   assert.match(text(), /Good luck to him/);
   assert.match(text(), /Nine in ten/);
   assert.doesNotMatch(text(), /Graveyard/);

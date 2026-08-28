@@ -628,10 +628,15 @@ test("rail regulars brush off repeats too (their own grizzled voice)", () => {
     if (e) { pid = id; topic = e.topic; break; }
   }
   assert.ok(pid, "found a patron with a no-short topic");
-  _patronTalk(pid, topic);
+  // one talk path since the patron fold, so presence is required the way it is
+  // for anyone else — stand where he drinks (and at an hour he's on that stool)
+  G.nightTurn = 20;
+  G.room = _npcRoom(pid);
+  assert.ok(_npcsHere().includes(pid), `${pid} is on his stool`);
+  _doTalkBody(pid, topic);
   const first = lastOut();
   out = [];
-  _patronTalk(pid, topic);
+  _doTalkBody(pid, topic);
   assert.notEqual(lastOut(), first);
   assert.match(lastOut(), /told you|goldfish|same story/i, "a regular's brush-off");
 });
@@ -4069,14 +4074,14 @@ test("Fergie: haunts Buakhao & Tree Town, shifting tall tales, and the Bert/Cand
   for (const r of seen) assert.ok(["Soi Buakhao", "Tree Town"].includes(ROOMS[r].region), `${r} out of his manor`);
   // the stories never agree with each other
   state().room = "gold_rush";
-  state().patronTalk = { day: 1, talked: {} }; out = []; _patronTalk("fergie", "army"); const army = lastOut();
-  state().patronTalk = { day: 1, talked: {} }; out = []; _patronTalk("fergie", "china"); const china = lastOut();
+  state().patronTalk = { day: 1, talked: {} }; out = []; _doTalkBody("fergie", "army"); const army = lastOut();
+  state().patronTalk = { day: 1, talked: {} }; out = []; _doTalkBody("fergie", "china"); const china = lastOut();
   assert.notEqual(army, china, "a different lie every time you probe");
   // Bert/Candy is a landmine: a cold warning most nights, an actual swing on his nasty ones
   let sawWarn = false, sawSwing = false;
   for (let d = 1; d <= 30 && !(sawWarn && sawSwing); d++) {
     state().day = d; state().hurt = 0; state().soc.heat = {}; out = [];
-    _patronTalk("fergie", "bert");
+    _doTalkBody("fergie", "bert");
     if (/swinging|HELL did you say/i.test(lastOut())) { sawSwing = true; assert.equal(state().hurt, 1, "a swing costs you a knock"); }
     else { sawWarn = true; assert.equal(state().hurt, 0, "a warning leaves you whole"); }
   }
@@ -4313,7 +4318,11 @@ test("the scout flyer and the collection run complete on their flags", () => {
   // debtrun: Nira's ฿500 for jogging Fergie's memory
   state().room = "neon_paradise"; run("talk nira"); run("accept debtrun");
   const before = state().money;
-  out = []; _patronTalk("fergie", "debt");
+  // find him where he actually drinks — one talk path since the patron fold, so
+  // the collection run needs you in the room, which is the point of the errand
+  state().nightTurn = 20;
+  state().room = _npcRoom("fergie");
+  out = []; _doTalkBody("fergie", "debt");
   assert.match(lastOut(), /next week/i);
   run("look");
   assert.equal(state().quests.debtrun, "done");

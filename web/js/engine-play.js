@@ -2271,7 +2271,7 @@ function _doPatron() {
   // not "the regular." The anonymous bar-bore below only surfaces where no named
   // regular is holding court — which is also where his bar-girl asides fit.
   const here = _patronsHere();
-  if (here.length) { _patronTalk(here[Math.floor(_rand() * here.length)], null); return; }
+  if (here.length) { _doTalk(NPCS[here[Math.floor(_rand() * here.length)]].name); return; }
   const d = s.drunk;
   // the football comes first; the football always comes first
   if (_footy() && _rand() < 0.25) {

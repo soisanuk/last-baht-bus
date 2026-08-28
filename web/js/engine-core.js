@@ -1029,95 +1029,13 @@ function _align(name, delta) {
   G.faction[name] = Math.max(-5, Math.min(5, (G.faction[name] || 0) + delta));
 }
 
-function _patronTalk(id, topic, _retried) {
-  if (G.patronTalk.day !== G.day) G.patronTalk = { day: G.day, talked: {} };
-  _convoStart(id); // engaging a regular makes him the active conversation partner
-  const p = PATRONS[id];
-  const st = _npcState(id);
-  // some regulars have a sore subject that turns them belligerent (Fergie: Bert,
-  // Candy, their bars). On his nasty nights it turns into a swing.
-  if (topic && p.rage && p.rage.some(k => topic.includes(k))) { _patronRage(id); return; }
-  if (topic && /\bquiz\b|trivia/.test(topic) && !p.dialogue.some(e => e.topic === "quiz")) { _say(_quizTalk()); return; }
-  if (topic && /\bdarts?\b/.test(topic) && !p.dialogue.some(e => e.topic === "darts")) { _say(_dartsTalk()); return; }
-  // the dog at your heel is a subject everyone at the rail has (dog-person playtest 2026-08-22)
-  if (topic && G.dog && (/\bdogs?\b|sai ?krok|\bpuppy\b/.test(topic) || _isDogWord(topic)) &&
-      !p.dialogue.some(e => e.topic === "dog")) {
-    _say(_dogN(_DOG_TALK_EN[Math.floor(_rand() * _DOG_TALK_EN.length)](p.name)));
-    return;
-  }
-  let d = null;
-  for (const e of p.dialogue) {
-    if (topic ? e.topic !== topic && !(e.topic && topic.includes(e.topic)) : e.topic) continue;
-    // full parity with _pickDialogue: the documented contract is that patron
-    // entries share the NPC schema, but req/notFlags were silently ignored here
-    // — a bkkArcDone-gated node fired for everyone (caught 2026-08-22)
-    if ((e.req || []).some(f => !_flag(f))) continue;
-    if ((e.notFlags || []).some(f => _flag(f))) continue;
-    if (e.when && !e.when(st, G)) continue; // state-machine condition: skip nodes whose state gate fails
-    d = e;
-    break;
-  }
-  if (!d) {
-    if (topic) {
-      // parity with _doTalkBody: a literal miss retries through the synonym map
-      // (_CONVO_TOPIC_RULES) before giving up — "ask nigel about neil" reaches
-      // his darkside node the same way "ask jenny about boyfriend" reaches
-      // sponsor. One retry only, so a rule cycle can't recurse.
-      const norm = !_retried && typeof _convoTopic === "function" ? _convoTopic(topic) : topic;
-      if (norm !== topic) { _patronTalk(id, norm, true); return; }
-      // first contact still gets his greeting in full; after that a real miss
-      // says so — re-delivering the greeting's short ("You again.") read as a
-      // man refusing to talk (playtests 2026-08-22)
-      if (!(G.patronMet && G.patronMet[id])) { _patronTalk(id, null, true); return; }
-      // Mort is the town's designated observer — "I watch, I write it down" —
-      // so ASK MORT ABOUT <a person he'd know> must pay off, not dead-end
-      // (Settler playtest, 2026-08-26). He knows exactly who; he just does not
-      // hand it across a bar, and he points at where the gossip actually lives.
-      if (id === "mort") {
-        const who = String(topic).trim();
-        // one roster now — and the self-exclusion must come along: Mort is an
-        // NPC since the patron fold, and without `i !== "mort"` he'd match his
-        // own name and gravely decline to gossip about himself
-        const known = Object.keys(NPCS).find(i => i !== "mort" &&
-          (NPCS[i].name.toLowerCase() === who ||
-            NPCS[i].name.toLowerCase().split(" ").pop() === who));
-        if (known) {
-          const nm = NPCS[known].name;
-          _say(`Mort's biro stops. He looks at you over the horn-rims, and for a second ` +
-            `you see forty years of watching behind them. “${nm}.” He does not write ` +
-            `it down; he already has, somewhere. “I know exactly who that is. But I do not ` +
-            `put people in the column by their names, to their faces, across a bar. That is ` +
-            `not the job.” The biro starts again. “Read the COLUMN. If they are in it, ` +
-            `they are in it as everybody — the only fair way to do it.”`, "dim");
-          return;
-        }
-      }
-      _say(_PATRON_MISS[Math.floor(_rand() * _PATRON_MISS.length)](p.name, _patronHis(id)));
-      return;
-    }
-    _say(`${p.name} has said his piece for now.`);
-    return;
-  }
-  const idx = p.dialogue.indexOf(d);
-  const seen = G.patronTalk.talked[id] || (G.patronTalk.talked[id] = []);
-  // the intro is met-once, not met-nightly: a resident who drinks with Mort every
-  // evening shouldn't get the full "I write the Nite Owl…" each day (playtest
-  // 2026-08-22). G.patronMet persists where the daily seen-book resets.
-  G.patronMet = G.patronMet || {};
-  const repeat = seen.includes(idx) || (!d.topic && !!G.patronMet[id]);
-  if (!repeat) seen.push(idx);
-  if (!d.topic) G.patronMet[id] = true;
-  // Same consistency as the NPCs: a repeat is the `short` gist, or a grizzled-
-  // regular brush-off, so you never get the whole war story twice. Patron
-  // dialogue is mostly pure flavour, but entries may carry `sets` (quest wiring
-  // — Glam's lucid flashes) exactly like NPC dialogue; no `gives`, though.
-  _say(_fillSaid(repeat ? (d.short || _patronAgain(id)) : d.text));
-  if (d.sets) d.sets.forEach(f => _setFlag(f));
-  if (!repeat && d.fx) d.fx(st, G); // state-machine effects, first delivery only (no farming trust by re-asking)
-  // first contact IS the meeting — advance state + grant baseline trust here
-  if (st.dstate === "stranger") { st.dstate = "met"; st.trust = Math.min(5, st.trust + 1); }
-  _convoAsk(id, d, st); // …and the regular may put a question back to you
-}
+// _patronTalk is GONE (patron fold, stage 2): the rail regulars deliver through
+// _doTalkBody/_deliver like everyone else. What was distinct about it survives
+// inside those: the nightly seen-book and met-once greeting (_deliver), the
+// always-terse repeat in the _patronAgain voice (_deliver), the _PATRON_MISS
+// pool (_topicMiss), the rage pre-empt and Mort's knows-everyone beat (both in
+// _doTalkBody). Its quiz/darts/dog pre-empts were duplicates of the ones the
+// NPC path already had. tests/js/patronfold.test.js pins the lot.
 
 // A belligerent regular's sore subject. Whether it turns into a swing depends on
 // his nightly state — the nights he's on the weed, the drunk turns nasty (a
@@ -1159,9 +1077,22 @@ const _PATRON_AGAIN = [
   (n, his) => `“You asked me that,” ${n} says. “Memory like a goldfish. Get a round in and I might go again.”`,
   (n, his) => `${n} waves a hand. “Same story, same ending. Ask me something I haven't done to death.”`,
 ];
-function _patronHis(id) { return PATRONS[id] && PATRONS[id].pronoun === "she" ? "her" : "his"; }
+// THE RAIL'S NIGHTLY BOOK, with its day-reset in exactly one place. A regular's
+// stories are new every night, so this resets on the day — and everything that
+// reads it must come through here, dialogue `when` gates included: those are
+// evaluated during node selection, BEFORE the first delivery of the evening, so
+// a gate reading G.patronTalk.talked directly saw YESTERDAY's entries and fired
+// a "you've talked to him tonight" node on a night you hadn't (caught folding
+// the talk paths together, 2026-08-28).
+function _patronBook() {
+  if (!G.patronTalk || G.patronTalk.day !== G.day) G.patronTalk = { day: G.day, talked: {} };
+  return G.patronTalk.talked;
+}
+// have you spoken to this regular TONIGHT? (the form dialogue gates want)
+function _patronSeen(id) { return (_patronBook()[id] || []).length > 0; }
+function _patronHis(id) { return NPCS[id] && NPCS[id].pronoun === "she" ? "her" : "his"; }
 function _patronAgain(id) {
-  return _PATRON_AGAIN[Math.floor(_rand() * _PATRON_AGAIN.length)](PATRONS[id].name, _patronHis(id));
+  return _PATRON_AGAIN[Math.floor(_rand() * _PATRON_AGAIN.length)](NPCS[id].name, _patronHis(id));
 }
 
 // where: "room", "inventory", or undefined (both, room first — so TAKE grabs
@@ -1424,6 +1355,11 @@ function _dartsTalk() {
 }
 function _topicMiss(npcId) {
   const n = NPCS[npcId];
+  // The rail keeps its own voice. A regular's "not my story" is a man turning a
+  // hand over on the bar — near the staff's English miss pool in register, but
+  // authored separately and worth keeping distinct now that one function serves
+  // both casts.
+  if (n.patron) return _PATRON_MISS[Math.floor(_rand() * _PATRON_MISS.length)](n.name, _patronHis(npcId));
   const she = n.pronoun === "she" || NPC_ROLES[npcId] || n.filler;
   const pool = _thaiVoice(npcId) ? _TOPIC_MISS_TH : _TOPIC_MISS_EN;
   let line = pool[Math.floor(_rand() * pool.length)](n.name);
@@ -1441,14 +1377,28 @@ function _deliver(npcId, d) {
   // repeat is terse — but a quest/clue entry that carries something re-readable
   // still repeats in full, so a player who forgot an instruction can re-read it.
   const idx = n.dialogue.indexOf(d);
-  const seen = G.talked[npcId] || (G.talked[npcId] = []);
-  const repeat = seen.includes(idx);
+  // THE RAIL REGULARS KEEP THEIR OWN BOOK, and it is the reason they had a
+  // separate talk path for so long. A regular's stories are new every night —
+  // G.patronTalk resets on the day, where an NPC's G.talked remembers forever —
+  // but his GREETING is met-once (G.patronMet, which persists), so a resident
+  // who drinks with Mort every evening doesn't get the full "I write the Nite
+  // Owl…" each time. Two books, one delivery function.
+  const patron = !!n.patron;
+  const book = patron ? _patronBook() : G.talked;
+  const seen = book[npcId] || (book[npcId] = []);
+  if (patron) G.patronMet = G.patronMet || {};
+  const repeat = seen.includes(idx) || (patron && !d.topic && !!G.patronMet[npcId]);
   const flavor = !d.gives && !(d.sets && d.sets.length);
-  const terse = repeat && (!!d.short || flavor);
+  // A regular's repeat is ALWAYS the gist: he'll tell you the war story again
+  // tomorrow, not twice tonight. An NPC's quest/clue node (gives/sets) still
+  // re-reads in full so a forgotten instruction can be re-read — but a patron
+  // `sets` node (Glam's lucid flashes) goes terse like the rest of his talk.
+  const terse = repeat && (patron || !!d.short || flavor);
   const firstEver = !repeat && seen.length === 0;
   if (!repeat) seen.push(idx);
+  if (patron && !d.topic) G.patronMet[npcId] = true;
   if (d.th && !terse) { _say(`${n.emoji} ${n.name}: “${d.th}” (${d.rom})`, "thai"); _engineSpeak(d.th); }
-  _say(_fillSaid(terse ? (d.short || _askAgain(npcId)) : d.text));
+  _say(_fillSaid(terse ? (d.short || (patron ? _patronAgain(npcId) : _askAgain(npcId))) : d.text));
   // Courted before you ever talked (drinks first, introductions after — a
   // legitimate Pattaya order of operations): the authored greeting reads
   // tone-deaf if it pretends the ledger is blank, so acknowledge it under the

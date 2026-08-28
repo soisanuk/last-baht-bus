@@ -11914,9 +11914,10 @@ const PATRONS = {
       // promise (playtest flag #5, 2026-08-15).
       { when: (st, G) => G.mode !== "soi6" &&
           !G.quests.oldrocker && !_flag("glamHeard") && !_flag("mortGlam") &&
-          // patrons keep their own book (G.patronTalk.talked), NOT G.talked —
-          // and it resets daily, which is fine: the lead is once-ever anyway
-          !!(G.patronTalk && G.patronTalk.talked && G.patronTalk.talked.mort),
+          // he offers the lead once you're actually talking, not on hello. The
+          // rail's book resets nightly and _patronSeen owns that reset — reading
+          // G.patronTalk directly here saw yesterday's entries (patron fold).
+          _patronSeen("mort"),
         sets: ["mortGlam"],
         text: "He taps the biro twice and looks at you properly for the first time. \u201cSince " +
           "you\u2019re here \u2014 do something for an old man. There\u2019s a German drinks at " +

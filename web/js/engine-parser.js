@@ -2695,13 +2695,13 @@ function _doTalkBody(arg, topic) {
     if (!_piwinHere()) { _say("No stand here — the bikes are on the corners."); return; }
     return topic ? _piwinAbout(topic) : _piwinTalk();
   }
-  // Pronoun / bare target → the person already in play (scope resolution). A
-  // patron antecedent routes straight to _patronTalk; an NPC id flows on as the
-  // "name" (findNpc matches an exact id). Ambiguous/none falls through to the
-  // usual not-here / nobody handling below.
+  // Pronoun / bare target → the person already in play (scope resolution). The
+  // resolved id flows on as the "name" (_findNpc matches an exact id), regulars
+  // included: one cast, one talk path. Ambiguous/none falls through to the usual
+  // not-here / nobody handling below.
   if (!arg || _PRONOUN.test(arg.toLowerCase())) {
     const a = _resolveActor(arg, _addressable());
-    if (a) { if (PATRONS[a]) { _patronTalk(a, topic); return; } arg = a; }
+    if (a) arg = a;
   }
   if (G.dog && arg && _isDogWord(arg)) {
     _say(_dogN(_pickVary([
@@ -2722,11 +2722,6 @@ function _doTalkBody(arg, topic) {
     return;
   }
   const npc = _findNpc(arg);
-  // A present regular resolves through _findNpc now (one cast), but his talk
-  // still runs the patron pipeline — the daily seen-book, the met-once
-  // greeting, the grizzled repeat voice (stage 1 of the patron fold; stage 2
-  // folds that pipeline into _deliver and this guard goes with it).
-  if (npc && NPCS[npc].patron) { _patronTalk(npc, topic); return; }
   if (!npc) {
     // The Orchid Room's corner-table untouchables: described, never approachable.
     if (G.room === "orchid_room" &&
@@ -2734,8 +2729,7 @@ function _doTalkBody(arg, topic) {
       _say(_pickVary(_ORCHID_DEFLECT, "orchiddef"));
       return;
     }
-    const pat = _findPatron(arg);
-    if (pat) { _patronTalk(pat, topic); return; }
+    // (a NAMED regular already resolved through _findNpc above — one cast)
     if (_inBar() && /patron|regular|expat|customer|guy|bloke|farang/.test(arg)) {
       _doPatron();
       return;
@@ -2780,6 +2774,11 @@ function _doTalkBody(arg, topic) {
   // you your own girls — the customer register is wrong once you sign the lease.
   // Personal topics fall through to normal dialogue (an owner asks after her kids).
   if (typeof _ownBarTalk === "function" && _ownBarTalk(npc, topic || null)) return;
+  // Some regulars have a sore subject that turns them belligerent (Fergie: Bert,
+  // Candy, their bars). It PRE-EMPTS the node lookup — you don't get a story
+  // out of a man you've just set off — so it sits above _pickDialogue, where
+  // the patron path always had it.
+  if (topic && NPCS[npc].rage && NPCS[npc].rage.some(k => topic.includes(k))) { _patronRage(npc); return; }
   let d = _pickDialogue(npc, topic || null);
   if (topic && (!d || !d.topic)) {
     const norm = _convoTopic(topic);
@@ -2844,7 +2843,33 @@ function _doTalkBody(arg, topic) {
       "ask, who is this farang?” A quick grin. “I say: good one. Rare model.”");
     return;
   }
-  if (topic && !d.topic && (G.talked[npc] || []).length) {
+  // Have you met? For staff that's "anything in the permanent book"; for a rail
+  // regular it has to be G.patronMet, because his book RESETS NIGHTLY — reading
+  // the daily one would make him re-introduce himself in full every evening a
+  // topic missed, which is the "You again" bug that pre-dates the fold.
+  const _met = NPCS[npc].patron
+    ? !!(G.patronMet && G.patronMet[npc])
+    : (G.talked[npc] || []).length > 0;
+  if (topic && !d.topic && _met) {
+    // Mort is the town's designated observer — "I watch, I write it down" — so
+    // ASK MORT ABOUT <somebody he'd know> must pay off rather than dead-end. He
+    // knows exactly who; he just won't hand it across a bar, and he points at
+    // where the gossip actually lives. Self-excluded, or he'd decline to gossip
+    // about himself.
+    if (npc === "mort") {
+      const who = String(topic).trim();
+      const known = Object.keys(NPCS).find(i => i !== "mort" &&
+        (NPCS[i].name.toLowerCase() === who || NPCS[i].name.toLowerCase().split(" ").pop() === who));
+      if (known) {
+        _say(`Mort's biro stops. He looks at you over the horn-rims, and for a second ` +
+          `you see forty years of watching behind them. “${NPCS[known].name}.” He does not write ` +
+          `it down; he already has, somewhere. “I know exactly who that is. But I do not ` +
+          `put people in the column by their names, to their faces, across a bar. That is ` +
+          `not the job.” The biro starts again. “Read the COLUMN. If they are in it, ` +
+          `they are in it as everybody — the only fair way to do it.”`, "dim");
+        return;
+      }
+    }
     // she HAS that story but its gate hasn't opened: a "not yet", not a "not mine"
     const _n2 = _convoTopic(topic);
     const gated = NPCS[npc].dialogue.some(e => e.topic && (e.topic === topic || topic.includes(e.topic) ||
@@ -2873,7 +2898,7 @@ function _doTalkBody(arg, topic) {
 // engine-core.js for the sticky partner pointer and its self-teardown.
 
 // Natural phrasings → the canonical topic word the dialogue nodes are keyed on.
-// Topic matching (see _pickDialogue / _patronTalk) is "player-topic CONTAINS
+// Topic matching (see _pickDialogue) is "player-topic CONTAINS
 // node-key", so a phrasing that already contains the key ("your wife" → wife,
 // "the darkside" → darkside) resolves with no help — this list is ONLY for
 // phrasings that share no word with the key ("where you from" → home). Keys
