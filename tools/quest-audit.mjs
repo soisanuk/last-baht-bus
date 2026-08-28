@@ -89,14 +89,13 @@ function stateFor(id) {
 }
 
 // ── where the quest points, resolved the way HINT resolves it ────────────────
-// PATRONS COUNT. The first version of this resolver checked NPCS and ROOMS only,
-// so every quest whose `at` names a bar regular (Glam, Fergie) reported as "no
-// `at` to route to" — and those are the targets that MOVE, hash-picked to a new
-// bar every in-game hour until they settle at 22:00. That is the highest-risk
-// reachability case in the game, and the audit was blind to exactly it: a
-// narrative persona spent a session unable to find Fergie and was told only that
-// "the regulars drift between bars" (round 18). An instrument that skips its
-// hardest cases and prints the rest as clean is worse than no instrument.
+// THE REGULARS COUNT. The first version of this resolver checked NPCS and ROOMS
+// only, so every quest whose `at` names a bar regular (Glam, Fergie) reported as
+// "no `at` to route to" — and those are the targets with the most ways to be
+// somewhere else: a 22:00 shuttle, a teaching night, a low-season evening in. A
+// narrative persona spent a session unable to find Fergie (round 18). An
+// instrument that skips its hardest cases and prints the rest as clean is worse
+// than no instrument.
 function targetRoom(q) {
   let at = q.at;
   if (typeof at === "function") { try { at = at(G); } catch (e) { return null; } }
@@ -106,14 +105,14 @@ function targetRoom(q) {
   // which is what the alias reads. Resolving him through bare _npcRoom would
   // name the stool he isn't on tonight.
   if (NPCS[at]) {
-    try { return NPCS[at].patron ? _patronRoom(at) : _npcRoom(at); } catch (e) { return null; }
+    try { return NPCS[at].patron ? _npcWhere(at) : _npcRoom(at); } catch (e) { return null; }
   }
   return ROOMS[at] ? at : null;
 }
 
 // A shuttled/scheduled regular is somewhere different by hour. KEYED ON THE
 // FLAG, not on table membership: when the fold made every patron an NPCS entry,
-// a `PATRONS[at]` test here would have gone permanently false and this sweep
+// a table-membership test here would have gone permanently false and this sweep
 // would have died silently — the audit failing by PASSING, the exact regression
 // its own header warns about.
 function patronHours(at) {

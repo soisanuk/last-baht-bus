@@ -892,7 +892,7 @@ test("low season empties the rail, which unlocks the monsoon empty-bar register"
   becomeExpat(); _setFlag("act1Done"); G.vacation = 1;
   const railNights = () => {
     let n = 0;
-    for (G.day = 1; G.day <= 6; G.day++) for (const id of Object.keys(PATRONS)) if (_patronRoom(id)) n++;
+    for (G.day = 1; G.day <= 6; G.day++) for (const id of Object.keys(NPCS).filter(id => NPCS[id].patron)) if (_npcWhere(id)) n++;
     return n;
   };
   G.season0 = 11; const peak = railNights();   // December
@@ -900,8 +900,8 @@ test("low season empties the rail, which unlocks the monsoon empty-bar register"
   assert.ok(deep < peak * 0.6, `the trough rail is markedly thinner (${deep} vs ${peak})`);
   // and at least one patron-bench bar can now be empty on a deep-low night
   G.season0 = 8; G.day = 3;
-  const benchBars = [...new Set(Object.keys(PATRONS).map(id => PATRONS[id].room))];
-  const empty = benchBars.filter(r => !Object.keys(PATRONS).some(id => _patronRoom(id) === r));
+  const benchBars = [...new Set(Object.keys(NPCS).filter(id => NPCS[id].patron).map(id => NPCS[id].room))];
+  const empty = benchBars.filter(r => !Object.keys(NPCS).filter(id => NPCS[id].patron).some(id => _npcWhere(id) === r));
   assert.ok(empty.length > 0, "a regulars' bar stands empty in the deep low — the register can fire");
 });
 

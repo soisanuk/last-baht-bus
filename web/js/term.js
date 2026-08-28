@@ -40,10 +40,10 @@ const _term = (() => {
         // (_npcRoom, not n.room, so a multi-bar schedule can't strand the gate.)
         if ((/^[a-z]/.test(n.name) || _WORD_NAME_NPCS.has(n.name)) &&
             (!G || _npcRoom(nid) !== G.room)) continue;
-        kind.set(n.name, "npc");
-      }
-      if (typeof PATRONS !== "undefined") {
-        for (const p of Object.values(PATRONS)) kind.set(p.name, "patron");
+        // The rail regulars decorate everywhere and keep the "patron" kind —
+        // one cast in the engine since the fold, but data-k is a published DOM
+        // contract (docs/2d-roadmap.md) and the wheel routes on it.
+        kind.set(n.name, n.patron ? "patron" : "npc");
       }
       for (const r of Object.values(ROOMS)) if (r.bar) kind.set(r.bar, "bar");
       if (typeof G !== "undefined" && G && G.itemLoc) {
@@ -184,18 +184,15 @@ const _term = (() => {
           const arr = _portIdx.get(key) || [];
           arr.push(id); _portIdx.set(key, arr);
         };
-        for (const [id, n] of Object.entries(NPCS)) put("npc:" + n.name, id);
-        if (typeof PATRONS !== "undefined") {
-          for (const [id, p] of Object.entries(PATRONS)) put("patron:" + p.name, id);
-        }
+        // both kinds indexed off the one table, so an emitter writing either
+        // data-k resolves to the same portrait
+        for (const [id, n] of Object.entries(NPCS)) put((n.patron ? "patron:" : "npc:") + n.name, id);
       }
       const cands = _portIdx.get(k + ":" + v);
       if (!cands || !cands.length) return null;
       if (cands.length > 1 && typeof G !== "undefined" && G) {
         const here = cands.find(id =>
-          (NPCS[id] && typeof _npcRoom === "function" && _npcRoom(id) === G.room) ||
-          (typeof PATRONS !== "undefined" && PATRONS[id] &&
-           typeof _patronRoom === "function" && _patronRoom(id) === G.room));
+          NPCS[id] && typeof _npcRoom === "function" && _npcRoom(id) === G.room);
         if (here) return here;
       }
       return cands[0];
@@ -393,8 +390,8 @@ const _term = (() => {
       }
       // npc | patron
       const npc = typeof _findNpc === "function" ? _findNpc(lo) : null;
-      const pat = !npc && typeof _findPatron === "function" ? _findPatron(lo) : null;
-      if (!npc && !pat) {
+      const pat = null; // one cast since the patron fold — _findNpc resolves regulars
+      if (!npc) {
         // Nobody here by that name — a patron who hopped off, or a story NPC named
         // only in passing. Offer to TALK, which reports plainly where they are or
         // that they've moved on. No ASK-about gossip routing: conversations start

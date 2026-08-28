@@ -105,7 +105,7 @@ test("no NPC/patron/room prose taps 'phone' through to your inventory item", () 
     check(`NPC ${id} desc`, n.desc);
     (n.dialogue || []).forEach((d, i) => { check(`NPC ${id} #${i}`, d.text); check(`NPC ${id} short#${i}`, d.short); });
   }
-  for (const [id, p] of Object.entries(PATRONS)) {
+  for (const [id, p] of Object.entries(NPCS).filter(([, n]) => n.patron)) {
     check(`PAT ${id} desc`, p.desc);
     (p.dialogue || []).forEach((d, i) => { check(`PAT ${id} #${i}`, d.text); check(`PAT ${id} short#${i}`, d.short); });
   }

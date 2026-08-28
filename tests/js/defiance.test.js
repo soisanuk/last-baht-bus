@@ -30,15 +30,15 @@ beforeEach(() => {
 });
 
 test("Neil sits at The Sundowner, Nigel in town — the two bars never share a room", () => {
-  assert.equal(PATRONS.neil.room, "lake_beer");
-  assert.equal(ROOMS[PATRONS.neil.room].region, "Darkside");
-  assert.notEqual(ROOMS[PATRONS.nigel.room].region, "Darkside");
+  assert.equal(NPCS.neil.room, "lake_beer");
+  assert.equal(ROOMS[NPCS.neil.room].region, "Darkside");
+  assert.notEqual(ROOMS[NPCS.nigel.room].region, "Darkside");
   G.room = "lake_beer";
-  assert.ok(_patronsHere().includes("neil"));
+  assert.ok(_regularsHere().includes("neil"));
 });
 
 test("Nigel's Darkside version is the wrong one, and it sets the grapevine flag", () => {
-  G.room = PATRONS.nigel.room;
+  G.room = NPCS.nigel.room;
   _doTalkBody("nigel", "darkside");
   assert.match(text(), /Neil/);
   assert.match(text(), /where the story ends/);
@@ -79,7 +79,7 @@ test("the triangulation payoff fires only for a player who heard both versions",
   assert.match(text(), /nine in ten|nine times in ten/i);
   // and back in town, Nigel cracks but does not convert
   _setFlag("neilStory");
-  G.room = PATRONS.nigel.room;
+  G.room = NPCS.nigel.room;
   out = [];
   _doTalkBody("nigel", "darkside");
   assert.match(text(), /Good luck to him/);
@@ -108,7 +108,7 @@ test("the conversation layer routes the phrasings onto the canonical topics", ()
 });
 
 test("patrons get the synonym retry too — ASK NIGEL ABOUT NEIL reaches his darkside node", () => {
-  G.room = PATRONS.nigel.room;
+  G.room = NPCS.nigel.room;
   out = [];
   doCommand("ask nigel about neil");
   assert.match(text(), /Graveyard/);
@@ -124,7 +124,7 @@ test("the Owl's ledger entry exists and keeps the odds honest", () => {
 });
 
 test("register: no fairy tale, no grading — the cost stays in every telling", () => {
-  const all = PATRONS.neil.dialogue.map(d => d.text + " " + (d.short || "")).join(" ");
+  const all = NPCS.neil.dialogue.map(d => d.text + " " + (d.short || "")).join(" ");
   assert.doesNotMatch(all, /happy ending|fairy ?tale|true love|soul ?mate/i);
   assert.match(all, /plain-rice|Grind/);
 });

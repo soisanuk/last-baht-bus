@@ -44,7 +44,7 @@ function subjects() {
     out.set(name, { id, re: new RegExp(`\\b(${[name, ...(extra || [])].filter(Boolean).map(esc).join("|")})\\b`) });
   };
   for (const [id, n] of Object.entries(NPCS)) if (!n.filler) put(n.name, id, [n.th]);
-  for (const [id, p] of Object.entries(PATRONS)) put(p.name, id);
+  for (const [id, p] of Object.entries(NPCS).filter(([, n]) => n.patron)) put(p.name, id);
   return out;
 }
 

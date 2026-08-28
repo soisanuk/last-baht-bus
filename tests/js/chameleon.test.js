@@ -122,10 +122,17 @@ test("the gift can't exceed what you carry; an unparsed answer re-prompts", () =
 });
 
 test("her texts: apron selfies, and once the slip meant for another papa", () => {
+  // Seeded: the scene that swaps numbers is dice-driven, and _chamTick's first
+  // gate is `contacts.cream`. Left to whatever the preceding tests rolled, this
+  // failed about one run in six with no clue why — the loop below looked like
+  // the flake, but 200 tries at 12% is a one-in-ten-billion miss.
+  G.rng = 12345;
   G.room = "metro_garden"; G.nightTurn = 45;
   doCommand("barfine cream"); doCommand("not tonight");
   G.room = "beach_rd_c";
   // force the slip: a day later, dice willing
+  assert.ok(G.phone.contacts && G.phone.contacts.cream,
+    "premise: the not-tonight scene swapped numbers (nothing below can fire without it)");
   G.chamContactDay = G.day; G.day += 1; G.phone.lastText = -100;
   let tries = 0;
   while (!_flag("chamSlip") && tries++ < 200) { G.phone.lastText = -100; _chamTick(); }
@@ -140,7 +147,7 @@ test("her texts: apron selfies, and once the slip meant for another papa", () =>
 });
 
 test("the sponsor side sits with Helmut, unlinked and unnamed", () => {
-  G.room = PATRONS.helmut.room;
+  G.room = NPCS.helmut.room;
   doCommand("ask helmut about his love life");
   assert.match(text(), /barista, in Naklua/);
   assert.match(text(), /green apron/);

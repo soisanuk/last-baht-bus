@@ -86,7 +86,7 @@ function kindOf(id, r) {
 // who they are — we do: everyone stationed here, plus any character the prose
 // names in passing ("Candy's old bar", "Terry holds down the corner stool").
 const ALL_NAMES = [];
-for (const src of [NPCS, PATRONS]) {
+for (const src of [NPCS]) { // one cast
   for (const id of Object.keys(src)) {
     for (const w of String(src[id].name || "").split(/\s+/)) {
       if (/^[A-Z][a-zA-Z'-]{2,}$/.test(w)) ALL_NAMES.push(w);
@@ -101,9 +101,7 @@ function peopleIn(id, r) {
     const n = NPCS[nid];
     if (n.room === id || (Array.isArray(n.bars) && n.bars.includes(id))) here.add(n.name);
   }
-  for (const pid of Object.keys(PATRONS)) {
-    if (PATRONS[pid].room === id) here.add(PATRONS[pid].name); // home→room, patron fold
-  }
+
   // named in the prose — word-boundary, case-sensitive (same doctrine as decorate())
   for (const w of NAMES) if (new RegExp("\\b" + w + "\\b").test(r.desc)) here.add(w);
   return [...here].sort();

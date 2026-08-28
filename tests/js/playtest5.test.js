@@ -1376,7 +1376,7 @@ test("the rain doesn't call a bar empty while you're talking to somebody in it",
   // (persona report B#21, 2026-08-23).
   newGame(); G.stage = "expat"; _setFlag("act1Done");
   for (const k of Object.keys(ENCOUNTERS)) G.encDone[k] = true;
-  const bar = Object.keys(ROOMS).find(id => ROOMS[id].barType === "beer" && !_patronsHere.call(null).length);
+  const bar = Object.keys(ROOMS).find(id => ROOMS[id].barType === "beer" && !_regularsHere.call(null).length);
   G.room = "moonshine_bar";
   const girl = _npcsHere().find(id => NPC_ROLES[id]);
   if (girl) {

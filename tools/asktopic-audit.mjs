@@ -109,12 +109,16 @@ function askIn(setup, id, who, topic) {
   G.lastSaleng = G.lastPeddler = G.lastPolice = G.lastEnc = 99999;
   for (const k in ENCOUNTERS) G.encDone[k] = true;
   G.rain = 0; G.pendingEnc = null; G.pendingChoice = null;
-  const isPat = !NPCS[id];
-  const room = isPat ? (typeof _patronRoom === "function" ? _patronRoom(id) : PATRONS[id].home)
+  // One cast since the patron fold. `isPat` used to be `!NPCS[id]` — that test
+  // would now be permanently FALSE, so it keys on the flag: a rail regular has
+  // absences the staff don't (his teaching night, a low-season evening in), and
+  // _npcWhere is the presence-aware lookup that reports them as null.
+  const isPat = !!(NPCS[id] && NPCS[id].patron);
+  const room = isPat ? _npcWhere(id)
     : ((typeof _npcRoom === "function" ? _npcRoom(id) : NPCS[id].room) || NPCS[id].room || (NPCS[id].bars || [])[0]);
   if (!room || !ROOMS[room]) return { skip: "no room" };
   G.room = room;
-  const here = isPat ? (typeof _patronsHere === "function" ? _patronsHere() : []) : _npcsHere();
+  const here = _npcsHere();
   if (!here.includes(id)) return { skip: "not in tonight" };
   (G.known = G.known || {})[id] = true;
   out.length = 0; doCommand("talk to " + who);
@@ -128,9 +132,9 @@ let tested = 0, unresolved = [];
 for (const { who, topic } of promises.values()) {
   const find = src => Object.keys(src).find(k => src[k].name.toLowerCase() === who) ||
                       Object.keys(src).find(k => src[k].name.toLowerCase().split(" ").pop() === who);
-  const id = find(NPCS) || find(PATRONS);
+  const id = find(NPCS); // one cast
   if (!id) { unresolved.push(who + " / " + topic + " (no such character)"); continue; }
-  const name = (NPCS[id] || PATRONS[id]).name;
+  const name = NPCS[id].name;
   let played = false, allMissed = true, lastReply = "", lastRoom = "";
   for (const [, setup] of STAGES) {
     const r = askIn(setup, id, who, topic);

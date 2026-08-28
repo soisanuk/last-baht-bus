@@ -314,16 +314,16 @@ function _piwinBeer() {
 // and never a marker: a hopper's answer is where he DROPPED her and when.
 function _piwinAbout(who) {
   const g = _grease();
-  // _findNpc/_findPatron are ROOM-scoped, which is right for "talk to X" and
+  // _findNpc is ROOM-scoped, which is right for "talk to X" and
   // exactly wrong here: you ask a piwin about people who are not in front of
   // you. That is the entire service.
   const w = String(who || "").trim().toLowerCase();
   const byName = src => Object.keys(src).find(k =>
     k === w || String(src[k].name || "").toLowerCase() === w ||
     String(src[k].name || "").toLowerCase().split(" ").pop() === w);
-  const id = byName(NPCS) || byName(PATRONS);
+  const id = byName(NPCS);
   if (!id) { _say("\"Who?\" He shrugs, entirely unbothered. \"Don't know this one.\""); return; }
-  const label = (NPCS[id] || PATRONS[id]).name;
+  const label = NPCS[id].name;
   if (!(G.known && G.known[id])) {
     _say("\"Mm.\" He does not know the name either, or does not care to. \"Lot of people.\"");
     return;
@@ -336,9 +336,9 @@ function _piwinAbout(who) {
     return;
   }
   // One cast now — but a regular's absence must still read: on David's work
-  // night or a low-season stay-in, _patronRoom answers null (inactive) where a
+  // night or a low-season stay-in, _npcWhere answers null (inactive) where a
   // bare _npcRoom would happily name the stool he isn't on.
-  const room = NPCS[id].patron ? _patronRoom(id) : _npcRoom(id);
+  const room = NPCS[id].patron ? _npcWhere(id) : _npcRoom(id);
   const where = room ? (_barName(room) || (ROOMS[room] && ROOMS[room].name)) : null;
   if (!where) { _say(_fmt("\"{n}. Not tonight, I think. Not seen.\"", { n: label })); return; }
   const hopper = !!(NPCS[id].patron && NPCS[id].hops);
@@ -1852,9 +1852,9 @@ function _doSocial(kind, targetWord) {
   // used to live in the failure branch, back when table membership did this
   // guard's job.
   const here = _npcsHere().filter(x => !NPCS[x].patron);
-  const pat = w && !_PRONOUN.test(w.toLowerCase()) ? _findPatron(w) : null;
-  if (pat) {
-    _say(`${_patronLabel(pat)} is a regular at the rail, not one of the girls — ` +
+  const pat = w && !_PRONOUN.test(w.toLowerCase()) ? _findNpc(w) : null;
+  if (pat && NPCS[pat].patron) {
+    _say(`${_npcLabel(pat)} is a regular at the rail, not one of the girls — ` +
       "the look you get back ends the idea before it finishes forming.");
     return;
   }
@@ -2270,7 +2270,7 @@ function _doPatron() {
   // anchor their bars, so TALK TO THE REGULAR at the Queen Vic gets you Angela,
   // not "the regular." The anonymous bar-bore below only surfaces where no named
   // regular is holding court — which is also where his bar-girl asides fit.
-  const here = _patronsHere();
+  const here = _regularsHere();
   if (here.length) { _doTalk(NPCS[here[Math.floor(_rand() * here.length)]].name); return; }
   const d = s.drunk;
   // the football comes first; the football always comes first

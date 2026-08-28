@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 // Generate docs/portrait-manifest.json: the distinct, hand-authored characters
-// (the 50 non-`filler` NPCS + the 18 PATRONS) that each warrant a portrait.
+// (the non-`filler` NPCS, rail regulars included) that each warrant a portrait.
 // The 181 generic `filler` bar-population NPCs are deliberately excluded.
 //
 // This is the single source of truth's *export* — regenerate it, never hand-edit
-// the JSON (it's derived from web/js/world.js NPCS / PATRONS + NPC_ROLES).
+// the JSON (it's derived from web/js/world.js NPCS + NPC_ROLES).
 //
 //   node scripts/gen-portrait-manifest.mjs          # write docs/portrait-manifest.json
 //   node scripts/gen-portrait-manifest.mjs --check  # verify it's up to date (exit 1 on drift)
@@ -89,6 +89,10 @@ const lookFields = c => {
 
 for (const id of Object.keys(NPCS)) {
   const n = NPCS[id];
+  // The rail regulars are NPCS entries since the patron fold, but they keep
+  // their own block below (age/nat/shuttle/protected are theirs alone) — skip
+  // them here or every one is emitted twice.
+  if (n.patron) continue;
   if (n.filler) {
     const role = NPC_ROLES[id] || "hostess";
     filler.push({
@@ -110,13 +114,13 @@ for (const id of Object.keys(NPCS)) {
     emoji: n.emoji, th: n.th || null, room: n.room, tags, desc: n.desc,
   });
 }
-for (const id of Object.keys(PATRONS)) {
-  const p = PATRONS[id];
+for (const id of Object.keys(NPCS).filter(i => NPCS[i].patron)) {
+  const p = NPCS[id];
   const tags = [];
   if (p.protected) tags.push("protected");
   if (p.shuttle) tags.push("shuttle");
   chars.push({
-    id, name: p.name, source: "PATRONS", role: "patron",
+    id, name: p.name, source: "NPCS", role: "patron",
     ...lookFields(p),
     sex: deriveSex(id, p.desc), venueKind: venueKind(p.room),
     emoji: p.emoji, th: null, room: p.room, age: p.age, nat: p.nat, tags, desc: p.desc,

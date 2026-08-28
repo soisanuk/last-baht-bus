@@ -234,7 +234,7 @@ a generated `docs/scene-manifest.json` and never reads the source.
 export. In order:
 
 1. ~~`tools/gen-world-export.mjs` → `docs/world-export.json`~~ **DONE 2026-08-08.**
-   176 venues (all geolocated), 259 people, 18 patrons, 20 canon bars — **120 KB
+   237 venues (all geolocated), 332 people, 24 patrons, 20 canon bars — **120 KB
    against world.js's 658 KB**, and zero dialogue. Versioned, stable-sorted, no
    timestamp. `--check` mode for CI.
 2. ~~A sync test~~ **DONE** — `tests/js/world-export.test.js` (5 tests). Proven by

@@ -117,6 +117,11 @@ if (verb === "serve") {
         const dlg = [];
         for (const [id, seen] of Object.entries(G.talked || {}))
           for (const i of (seen || [])) dlg.push(id + "#" + i);
+        // Two books, one cast: since the patron fold the rail regulars are
+        // NPCS entries, but they keep a NIGHTLY seen-book (G.patronTalk) where
+        // the staff's is permanent — so the harvest still reads both. The
+        // legacy `patrons`/`patDlg` keys are folded into npcs/dlg by
+        // coverage.mjs at read time, which also keeps pre-fold extracts honest.
         const pt = (G.patronTalk && G.patronTalk.talked) || {};
         const patDlg = [];
         for (const [id, seen] of Object.entries(pt))

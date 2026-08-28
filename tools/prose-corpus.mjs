@@ -81,7 +81,10 @@ for (const [id, n] of Object.entries(NPCS)) {
   if (n.filler) continue; // generated from parts; review the parts (pool group)
   walk("npc", `npc.${id}`, n.name, n);
 }
-for (const [id, p] of Object.entries(PATRONS)) walk("patron", `patron.${id}`, p.name, p);
+// The `patron.<id>` ref prefix is PERSISTED in docs/prose-review-ledger.json
+// (277 entries), so it survives the one-cast fold: the group is derived from
+// the flag now, and renaming it would orphan every one of those reviews.
+for (const [id, p] of Object.entries(NPCS).filter(([, n]) => n.patron)) walk("patron", `patron.${id}`, p.name, p);
 for (const [id, r] of Object.entries(ROOMS)) {
   add("room", `room.${id}.desc`, r.bar || r.name, r.desc);
   (r.revisit || []).forEach((s, i) => add("room", `room.${id}.revisit[${i}]`, r.bar || r.name, s));
@@ -219,7 +222,7 @@ function _subjects() {
     subs.set(name, { re: new RegExp(`\\b(${alts.join("|")})\\b`) });
   };
   for (const n of Object.values(NPCS)) if (!n.filler) put(n.name, [n.th]);
-  for (const p of Object.values(PATRONS)) put(p.name);
+  for (const [, p] of Object.entries(NPCS).filter(([, n]) => n.patron)) put(p.name);
   for (const r of Object.values(ROOMS)) if (r.bar) put(r.bar);
   for (const it of Object.values(ITEMS)) put(it.name);
   return subs;

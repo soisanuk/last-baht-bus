@@ -1937,29 +1937,29 @@ function _questWhere(at) {
     return r ? _fmt(" {who} is at {v}, over in {r}.",
       { who: NPCS[at].name, v: _barName(room), r: r.region }) : "";
   }
-  if (PATRONS[at]) {
+  if (NPCS[at] && NPCS[at].patron) {
     // A patron giver moves too — a shuttled regular (Glam: home bar early, walked
     // across after 22:00) or, if hopping is ever re-enabled, an hourly drift. Read
-    // his LIVE room via _patronRoom so the clue never points at a stale bar.
-    const room = _patronRoom(at);
-    if (!room || room === G.room || _patronsHere().includes(at)) return "";
+    // his LIVE room via _npcWhere so the clue never points at a stale bar.
+    const room = _npcWhere(at);
+    if (!room || room === G.room || _regularsHere().includes(at)) return "";
     // A rail regular's location is true when it prints and can be false by the
     // time you walk there — the player was sent to the Cheeky Monkey and found
     // the Hyper (persona report A#3, 2026-08-23). Withholding it wastes the most
     // useful thing we know; promising it goes stale. So say BOTH: where he is,
-    // and that he is a man who moves. Detected by asking _patronRoom where he
+    // and that he is a man who moves. Detected by asking _npcWhere where he
     // will be an hour from now — a pure hash, so it costs no dice.
     const _t0 = G.nightTurn;
     G.nightTurn = Math.min(NIGHT_TURNS - 1, _t0 + 10);
-    const _moves = _patronRoom(at) !== room;
+    const _moves = _npcWhere(at) !== room;
     G.nightTurn = _t0;
     const r = ROOMS[room];
     if (!r) return "";
     return _moves
       ? _fmt(" {who} is at {v} in {r} right now — though he drifts, so ask after him when you get there.",
-          { who: PATRONS[at].name, v: _barName(room), r: r.region })
+          { who: NPCS[at].name, v: _barName(room), r: r.region })
       : _fmt(" {who} is at {v}, over in {r}.",
-          { who: PATRONS[at].name, v: _barName(room), r: r.region });
+          { who: NPCS[at].name, v: _barName(room), r: r.region });
   }
   if (ROOMS[at]) {
     if (at === G.room) return "";
@@ -2093,13 +2093,13 @@ function _questAvailable(qid) {
     // giver off-map at Candy Bar, and with no q.at to catch it below).
     const gv = _qGiver(q);
     const giverRoom = gv && (NPCS[gv] ? _npcRoom(gv) :
-      PATRONS[gv] ? _patronRoom(gv) : null);
+      NPCS[gv] && NPCS[gv].patron ? _npcWhere(gv) : null);
     if (giverRoom && !SOI6_ROOMS.has(giverRoom)) return false;
     // and the target (a room, or an NPC/patron's bar) must be in-pocket too
     if (q.at) {
       const targetRoom = ROOMS[q.at] ? q.at :
         NPCS[q.at] ? _npcRoom(q.at) :
-        PATRONS[q.at] ? _patronRoom(q.at) : null;
+        NPCS[q.at] && NPCS[q.at].patron ? _npcWhere(q.at) : null;
       if (targetRoom && !SOI6_ROOMS.has(targetRoom)) return false;
     }
   }
@@ -2414,25 +2414,25 @@ function _tanAbout(topic) {
   const t = String(topic || "").toLowerCase().trim();
   const id = Object.keys(NPCS).find(i => NPCS[i].name.toLowerCase() === t || i === t ||
       NPCS[i].name.toLowerCase().split(" ").pop() === t) ||
-    Object.keys(PATRONS).find(i => PATRONS[i].name.toLowerCase() === t || i === t);
+    null;
   if (!id || id === "tan") return false;
   if (_TAN_READ[id]) {
     if (!(G.known && G.known[id])) { _say("“Meet him first, my friend. Then I tell you who he is — and I will already know.”"); return true; }
     _say(`“${NPCS[id].name}.” The grin. “${_TAN_READ[id]}.”`);
     return true;
   }
-  const n = NPCS[id] || PATRONS[id];
-  // a regular's absence must read (days / season): _patronRoom is the
+  const n = NPCS[id];
+  // a regular's absence must read (days / season): _npcWhere is the
   // activity-aware alias, where bare _npcRoom names the stool he isn't on
-  const room = n.patron ? _patronRoom(id) : NPCS[id] ? _npcRoom(id) : _patronRoom(id);
+  const room = n.patron ? _npcWhere(id) : NPCS[id] ? _npcRoom(id) : _npcWhere(id);
   const where = room && _barName(room) ? _barName(room) : null;
   const she = n.pronoun === "she" || (NPCS[id] && NPC_ROLES[id]);
   // role-accurate: Tan is the hub who reads the real structure of the soi — so
   // he must not call a mamasan a rail girl (Settler playtest, 2026-08-26: "ask
   // tan about candy/oy" said "she works the rail there" of two owners).
   const _role = NPCS[id] && NPC_ROLES[id];
-  const clause = PATRONS[id]
-    ? "drinks there most nights — " + (PATRONS[id].nat || "") + ", " + (PATRONS[id].age || "") + ", you know the type"
+  const clause = n.patron
+    ? "drinks there most nights — " + (n.nat || "") + ", " + (n.age || "") + ", you know the type"
     : _role === "mamasan" ? "runs the floor there. Owns the room in everything but the paperwork — and sometimes that too. You do not get past her by accident"
     : _role === "cashier" ? "keeps the till there. Nothing crosses that bar she has not already counted twice"
     : _role === "manager" ? "runs the place for the owner. Different job — the man who is there so the owner does not have to be"
@@ -3055,7 +3055,7 @@ function _doPhoneScreen() {
   if (G.phone.invite && G.phone.invite.day === G.day && NPCS[G.phone.invite.id]) {
     _say(`📌 ${NPCS[G.phone.invite.id].name} asked you to come by her bar tonight.`, "dim");
   }
-  const nPhotos = (Array.isArray(G.phone.photos) ? G.phone.photos : []).filter(p => NPCS[p.id] || PATRONS[p.id]).length;
+  const nPhotos = (Array.isArray(G.phone.photos) ? G.phone.photos : []).filter(p => NPCS[p.id]).length;
   if (nPhotos) _say(`📸 ${nPhotos} photo${nPhotos > 1 ? "s" : ""} in your gallery — GALLERY.`, "dim");
   const wx = _wxLine();
   if (wx) _say(`🌤️  Pattaya — ${wx}`, "dim");
@@ -3852,7 +3852,7 @@ function _sayDrizzle() {
     // rain has the room to itself — no patrons at the rail — the drill prose is
     // wrong; the event is the emptiness. Atmosphere only, no drama by rule.
     const _talking = typeof _convoActive === "function" && !!_convoActive();
-    const dead = typeof _patronsHere === "function" && !_patronsHere().length && !_talking &&
+    const dead = typeof _regularsHere === "function" && !_regularsHere().length && !_talking &&
       !(typeof _salengHere === "function" && _salengHere()) &&  // a cart the girls are swarming: not a dead room (Ronnie, 2026-08-26)
       !(typeof _barSpendTonight === "function" && _barSpendTonight(G.room)); // you just bought a round: not dead
     if (dead && _room().barType === "beer") {
@@ -6712,7 +6712,7 @@ function _doPaper() {
 }
 
 // ── The Nite Owl column ──────────────────────────────────────────────────────
-// The old back-page institution: Mort's weekly hoot (see PATRONS.mort — he
+// The old back-page institution: Mort's weekly hoot (see NPCS.mort — he
 // writes it "to stay sane"). It's the canon dispenser — the scene's own hard-won
 // wisdom rendered as a columnist's dry copy: a lead opinion, a bar listing, a
 // reader letter with his reply, a joke, and the signoff. Day+vacation-stable
@@ -7075,7 +7075,7 @@ function _doQrSticker() {
 function _owlBox15Answer() {
   const first = !_flag("owlBox15");
   if (first) _setFlag("owlBox15");
-  if (typeof _patronRoom === "function" && _patronRoom("mort") === G.room) {
+  if (typeof _npcWhere === "function" && _npcWhere("mort") === G.room) {
     // answered to his face, which is the version he'd want. Lands on his own
     // established line — forty years of writing to people who never write back
     // — because that loneliness is what Box 15 has been for all along.

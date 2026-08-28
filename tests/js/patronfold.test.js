@@ -40,7 +40,7 @@ beforeEach(() => sandbox());
 test("one entry per regular, reachable under either name, and no duplicates anywhere", () => {
   const bench = Object.entries(NPCS).filter(([, n]) => n.patron);
   assert.equal(bench.length, 24, "the whole bench came across");
-  for (const [id] of bench) assert.equal(NPCS[id], PATRONS[id], `${id}: the view must share the reference`);
+  for (const [id] of bench) assert.ok(NPCS[id].room && ROOMS[NPCS[id].room], `${id}: homed in a real room`);
   G.room = "queen_vic";
   const here = _npcsHere();
   assert.equal(new Set(here).size, here.length, "_npcsHere lists nobody twice");
@@ -60,7 +60,7 @@ test("David teaches Mon/Fri: on the stool his nights out, inactive (not homeless
   assert.equal(_npcActive("david"), false, "absence lives in _npcActive");
   assert.equal(_npcRoom("david"), "stinky_bar",
     "_npcRoom stays TOTAL — an inactive man still has a local, he just isn't on its stool");
-  assert.equal(_patronRoom("david"), null, "the compat alias reads absence as null, as it always did");
+  assert.equal(_npcWhere("david"), null, "the compat alias reads absence as null, as it always did");
 });
 
 test("Glam is at the Cheeky Monkey early and walked across to Hyper after 22:00", () => {

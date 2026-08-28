@@ -8,8 +8,7 @@
 // over painted objects in bespoke room art, data in the sidecar web/js/scene-
 // hotspots.js (SCENE_HOTSPOTS), gated on localStorage.lbb_v1_on. Also DOM-free
 // at load, also presentation-only, also taps-as-typed-commands.
-/* global G, ROOMS, NPCS, PATRONS, _room, _npcsHere, _patronsHere, _npcLabel,
-   _patronLabel, _clockStr, _isDarkHere, _bellActive, _barName, _L, _term,
+/* global G, ROOMS, NPCS, _room, _npcsHere, _npcLabel, _clockStr, _isDarkHere, _bellActive, _barName, _L, _term,
    SCENE_HOTSPOTS */
 
 function _updateScene() {
@@ -252,7 +251,7 @@ function _sceneCast() {
   row.id = "scene-cast";
   const cast = [];
   // one cast table: _npcsHere includes the flagged regulars (a second
-  // _patronsHere loop would draw every bust twice). The "patron" kind survives
+  // _regularsHere loop would draw every bust twice). The "patron" kind survives
   // as presentation — it is a published DOM contract (docs/2d-roadmap.md).
   try { for (const id of _npcsHere()) cast.push([id, NPCS[id].patron ? "patron" : "npc", NPCS[id]]); } catch (e) {}
   for (const [id, kind, who] of cast) {
@@ -270,7 +269,7 @@ function _sceneCast() {
     b.dataset.v = who.name;               // _kwActions/_portraitId key on the display name
     b.appendChild(_term.avatar(id, ""));
     const lab = document.createElement("span");
-    const label = kind === "npc" ? _npcLabel(id) : _patronLabel(id);
+    const label = _npcLabel(id); // one cast, one label
     lab.textContent = (who.emoji ? who.emoji + " " : "") + label;
     b.appendChild(lab);
     b.addEventListener("click", () => _term.openFly(b, false));

@@ -98,8 +98,8 @@ export function buildExport() {
   }
 
   const patrons = {};
-  if (typeof PATRONS !== "undefined") {
-    for (const [id, p] of Object.entries(PATRONS)) {
+  {
+    for (const [id, p] of Object.entries(NPCS).filter(([, n]) => n.patron)) {
       // the EXPORTED key stays `home` — the shape is Second Road's contract
       // (CLAUDE.md repo-ownership); only the source field moved in the fold
       const q = { name: p.name, home: p.room, pronoun: _pronoun(id) };

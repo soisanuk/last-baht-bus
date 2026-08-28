@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-26",
+  "generated": "2026-08-28",
   "note": "Distinct, hand-authored characters with a portrait (excludes the 181 generic `filler` NPCs). Derived from web/js/world.js — regenerate with scripts/gen-portrait-manifest.mjs, do not hand-edit. `sex`/`venueKind` are generator heuristics for portrait archetype selection, not game canon.",
   "counts": {
     "total": 147,
@@ -1716,7 +1716,7 @@
     {
       "id": "angela",
       "name": "Angela",
-      "source": "PATRONS",
+      "source": "NPCS",
       "role": "patron",
       "look": "American woman of forty-seven, greying shoulder-length hair, faded flannel shirt tied at the waist.",
       "sex": "f",
@@ -1732,7 +1732,7 @@
     {
       "id": "chuck",
       "name": "Chuck",
-      "source": "PATRONS",
+      "source": "NPCS",
       "role": "patron",
       "look": "American man of fifty-eight, sunburnt scalp and arms, plumbing-company polo, grinning.",
       "sex": "m",
@@ -1748,7 +1748,7 @@
     {
       "id": "colin",
       "name": "Colin",
-      "source": "PATRONS",
+      "source": "NPCS",
       "role": "patron",
       "look": "British man of fifty-eight, tanned, close-cropped grey, good linen shirt, a flat white going cold at his elbow.",
       "sex": "m",
@@ -1764,7 +1764,7 @@
     {
       "id": "danny",
       "name": "Danny",
-      "source": "PATRONS",
+      "source": "NPCS",
       "role": "patron",
       "look": "Canadian man of fifty, gym-built, black tank top, full tattoo sleeve, shaved head.",
       "sex": "m",
@@ -1780,7 +1780,7 @@
     {
       "id": "dave",
       "name": "Dave",
-      "source": "PATRONS",
+      "source": "NPCS",
       "role": "patron",
       "sex": "m",
       "venueKind": "beer",
@@ -1795,7 +1795,7 @@
     {
       "id": "david",
       "name": "David",
-      "source": "PATRONS",
+      "source": "NPCS",
       "role": "patron",
       "sex": "m",
       "venueKind": "beer",
@@ -1810,7 +1810,7 @@
     {
       "id": "dieter",
       "name": "Dieter",
-      "source": "PATRONS",
+      "source": "NPCS",
       "role": "patron",
       "look": "German man of seventy-one, silver hair, very clean glasses, pressed pale short-sleeve shirt, precise.",
       "sex": "m",
@@ -1826,7 +1826,7 @@
     {
       "id": "drew",
       "name": "Drew",
-      "source": "PATRONS",
+      "source": "NPCS",
       "role": "patron",
       "sex": "m",
       "venueKind": "beer",
@@ -1841,7 +1841,7 @@
     {
       "id": "fergie",
       "name": "Fergie",
-      "source": "PATRONS",
+      "source": "NPCS",
       "role": "patron",
       "look": "Northern Irish man of fifty-eight, short, bald, sunburnt red, boxer's nose, cauliflower ears.",
       "sex": "m",
@@ -1857,7 +1857,7 @@
     {
       "id": "gerald",
       "name": "Gerald",
-      "source": "PATRONS",
+      "source": "NPCS",
       "role": "patron",
       "look": "British man of sixty-four, silver hair, good tan, cream linen shirt, gin in hand, dapper.",
       "sex": "m",
@@ -1873,7 +1873,7 @@
     {
       "id": "glam",
       "name": "Glam",
-      "source": "PATRONS",
+      "source": "NPCS",
       "role": "patron",
       "look": "German man of seventy-seven, wild sparse blonde hair, silk shirt open at the chest, tanned.",
       "sex": "m",
@@ -1892,7 +1892,7 @@
     {
       "id": "helmut",
       "name": "Helmut",
-      "source": "PATRONS",
+      "source": "NPCS",
       "role": "patron",
       "sex": "m",
       "venueKind": "beer",
@@ -1907,7 +1907,7 @@
     {
       "id": "josey",
       "name": "Josey",
-      "source": "PATRONS",
+      "source": "NPCS",
       "role": "patron",
       "sex": "f",
       "venueKind": "beer",
@@ -1922,7 +1922,7 @@
     {
       "id": "mikkel",
       "name": "Mikkel",
-      "source": "PATRONS",
+      "source": "NPCS",
       "role": "patron",
       "look": "Danish man of twenty-four, backpacker tan, shaggy fair hair, friendship bracelets to the elbow.",
       "sex": "m",
@@ -1938,7 +1938,7 @@
     {
       "id": "mort",
       "name": "Mort",
-      "source": "PATRONS",
+      "source": "NPCS",
       "role": "patron",
       "look": "American man of seventy-four, horn-rimmed glasses, clashing Hawaiian shirt, spiral notebook.",
       "sex": "m",
@@ -1954,7 +1954,7 @@
     {
       "id": "neil",
       "name": "Neil",
-      "source": "PATRONS",
+      "source": "NPCS",
       "role": "patron",
       "look": "British man of fifty-four, heavy-shouldered, cropped greying hair, plain navy polo, one bottle of Leo, unhurried.",
       "sex": "m",
@@ -1970,7 +1970,7 @@
     {
       "id": "nigel",
       "name": "Nigel",
-      "source": "PATRONS",
+      "source": "NPCS",
       "role": "patron",
       "sex": "m",
       "venueKind": "beer",
@@ -1985,7 +1985,7 @@
     {
       "id": "randy",
       "name": "Randy",
-      "source": "PATRONS",
+      "source": "NPCS",
       "role": "patron",
       "look": "American man of fifty-four, six-foot-four, huge hands, grey buzz cut, mild expression.",
       "sex": "m",
@@ -2001,7 +2001,7 @@
     {
       "id": "reginald",
       "name": "Reginald",
-      "source": "PATRONS",
+      "source": "NPCS",
       "role": "patron",
       "look": "British man of sixty, silver hair sharply parted, deep tan, crisp open-necked linen shirt.",
       "sex": "m",
@@ -2017,7 +2017,7 @@
     {
       "id": "roger",
       "name": "Roger",
-      "source": "PATRONS",
+      "source": "NPCS",
       "role": "patron",
       "look": "British man of sixty-seven, balding, reading glasses on a string, soft blue football shirt, contented.",
       "sex": "m",
@@ -2033,7 +2033,7 @@
     {
       "id": "ron",
       "name": "Ron",
-      "source": "PATRONS",
+      "source": "NPCS",
       "role": "patron",
       "sex": "m",
       "venueKind": "beer",
@@ -2048,7 +2048,7 @@
     {
       "id": "sandra",
       "name": "Sandra",
-      "source": "PATRONS",
+      "source": "NPCS",
       "role": "patron",
       "look": "British woman of fifty-nine, sensible grey bob, glass of white wine, watchful, unhurried.",
       "sex": "f",
@@ -2064,7 +2064,7 @@
     {
       "id": "somsak",
       "name": "Somsak",
-      "source": "PATRONS",
+      "source": "NPCS",
       "role": "patron",
       "look": "Thai man of forty-seven, lean, hotel-maintenance polo, weathered face, bottle of Leo.",
       "sex": "m",
@@ -2080,7 +2080,7 @@
     {
       "id": "superman",
       "name": "Superman",
-      "source": "PATRONS",
+      "source": "NPCS",
       "role": "patron",
       "look": "American man of sixty-two, faded Superman t-shirt over a heavy chest, grey stubble.",
       "sex": "m",

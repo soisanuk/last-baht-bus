@@ -623,7 +623,7 @@ test("rail regulars brush off repeats too (their own grizzled voice)", () => {
   const G = state();
   // pick any patron with a no-short topic entry
   let pid, topic;
-  for (const [id, p] of Object.entries(PATRONS)) {
+  for (const [id, p] of Object.entries(NPCS).filter(([, n]) => n.patron)) {
     const e = (p.dialogue || []).find(x => x.topic && !x.short && x.text);
     if (e) { pid = id; topic = e.topic; break; }
   }
@@ -1299,7 +1299,7 @@ test("Darkside: Mama Yai's is hand-authored — a mama, a hostess with a story, 
   assert.equal(NPCS.yai.room, "mama_yai");
   assert.equal(NPC_ROLES.kratae, "hostess");
   assert.equal(NPCS.kratae.room, "mama_yai");
-  assert.equal(PATRONS.ron.room, "mama_yai", "Ron drinks at Mama Yai's");
+  assert.equal(NPCS.ron.room, "mama_yai", "Ron drinks at Mama Yai's");
   // hand-authored, not filler: Kratae's Night Heron tip is gated behind Mama Yai
   // naming the photo wall (sets knowYaiWall)
   const wall = NPCS.yai.dialogue.find(d => d.topic === "photos");
@@ -1417,10 +1417,10 @@ test("the Nite Owl column dispenses canon: masthead, a reader reply, the signoff
 });
 
 test("Mort writes the column to stay sane, from his stool at the Queen Vic", () => {
-  assert.equal(PATRONS.mort.room, "queen_vic");
-  assert.ok(PATRONS.mort.dialogue.some(d => d.topic === "column"));
-  assert.ok(PATRONS.mort.dialogue.some(d => d.topic === "sane"));
-  assert.ok(PATRONS.mort.dialogue.some(d => !d.topic && !d.req), "an unconditional intro line");
+  assert.equal(NPCS.mort.room, "queen_vic");
+  assert.ok(NPCS.mort.dialogue.some(d => d.topic === "column"));
+  assert.ok(NPCS.mort.dialogue.some(d => d.topic === "sane"));
+  assert.ok(NPCS.mort.dialogue.some(d => !d.topic && !d.req), "an unconditional intro line");
 });
 
 test("REPORT surfaces in autocomplete only at the station or while still owed", () => {
@@ -4033,12 +4033,12 @@ test("venues: buildings are entered by name off a block, not a compass point; OU
 });
 
 test("Glam: the Cheeky Monkey regular, shuttled to Hyper, and protected", () => {
-  const g = PATRONS.glam;
+  const g = NPCS.glam;
   assert.equal(g.room, "cheeky_monkey");
   assert.ok(g.protected, "age, money and standing put him off-limits");
   // early evening at Cheeky Monkey; escorted across to Hyper after 22:00
-  state().nightTurn = 20; assert.equal(_patronRoom("glam"), "cheeky_monkey");
-  state().nightTurn = 55; assert.equal(_patronRoom("glam"), "hyper");
+  state().nightTurn = 20; assert.equal(_npcWhere("glam"), "cheeky_monkey");
+  state().nightTurn = 55; assert.equal(_npcWhere("glam"), "hyper");
   // harming a protected regular gets the swift repercussion, not the usual shrug
   state().flags.act1Done = true; state().flags.hasWallet = true;
   state().nightTurn = 20; state().room = "cheeky_monkey";
@@ -4064,12 +4064,12 @@ test("_questWhere tracks a shuttled patron giver's live bar, not a stale room", 
 });
 
 test("Fergie: haunts Buakhao & Tree Town, shifting tall tales, and the Bert/Candy landmine", () => {
-  const f = PATRONS.fergie;
+  const f = NPCS.fergie;
   assert.equal(f.room, "gold_rush");
   assert.ok(f.hops && f.haunts.includes("Soi Buakhao") && f.haunts.includes("Tree Town"));
   // region-limited hopping — never Candy's bar, never out of his two districts
   const seen = new Set();
-  for (let d = 1; d <= 8; d++) { state().day = d; for (let t = 0; t < 40; t += 10) { state().nightTurn = t; seen.add(_patronRoom("fergie")); } }
+  for (let d = 1; d <= 8; d++) { state().day = d; for (let t = 0; t < 40; t += 10) { state().nightTurn = t; seen.add(_npcWhere("fergie")); } }
   assert.ok(!seen.has("candy_bar"), "banned from Candy's, so he skips it");
   for (const r of seen) assert.ok(["Soi Buakhao", "Tree Town"].includes(ROOMS[r].region), `${r} out of his manor`);
   // the stories never agree with each other
@@ -5161,12 +5161,12 @@ test("the indirect ask: “I go with you, na” — once, at warming favor, numb
 
 test("the veterans warn about all of it at the rail", () => {
   for (const id of ["nigel", "randy"]) {
-    const t = PATRONS[id].dialogue.find(d => d.topic === "barfine");
+    const t = NPCS[id].dialogue.find(d => d.topic === "barfine");
     assert.ok(t, id + " has the barfine sermon");
   }
-  assert.match(PATRONS.nigel.dialogue.find(d => d.topic === "barfine").text,
+  assert.match(NPCS.nigel.dialogue.find(d => d.topic === "barfine").text,
     /BEFORE a single baht moves|ask EARLY/);
-  assert.match(PATRONS.randy.dialogue.find(d => d.topic === "barfine").text,
+  assert.match(NPCS.randy.dialogue.find(d => d.topic === "barfine").text,
     /mao mak mak|mama pays you back|every baht back/i);
 });
 
@@ -5526,9 +5526,9 @@ test("TALK TO PATRON resolves to a named regular present, not the faceless arche
   out = []; run("talk to patron");
   assert.match(lastOut(), /Mort|Angela/, "a real named regular holds court at the Queen Vic");
   // de-hopped: a hopper stays anchored at its local all night
-  state().nightTurn = 5; const early = _patronRoom("nigel");
+  state().nightTurn = 5; const early = _npcWhere("nigel");
   state().nightTurn = 45;
-  assert.equal(_patronRoom("nigel"), early, "no hourly drift — reliably found");
+  assert.equal(_npcWhere("nigel"), early, "no hourly drift — reliably found");
 });
 
 test("adopting the soi dog gets you a Soi Dog Foundation donation text the next day", () => {
@@ -6755,9 +6755,9 @@ test("every character is named on sight — one consistent rule, no name-hiding"
   assert.match(lastOut(), /Mort/, "the rail names Mort on sight (no 'owlish old-timer' screen)");
   assert.match(lastOut(), /Doyle/, "and the origin NPC is named too, not shown as a look");
   assert.doesNotMatch(lastOut(), /owlish old-timer|watchful older farang/, "no look substitutes for a name");
-  // the label helpers always return the name now
-  assert.equal(_npcLabel("doyle"), "Doyle", "NPC label is the name");
-  assert.equal(_patronLabel("mort"), "Mort", "patron label is the name");
+  // one label helper for one cast — the twin _patronLabel went with the fold
+  assert.equal(_npcLabel("doyle"), "Doyle", "the label is the name");
+  assert.equal(_npcLabel("mort"), "Mort", "…for a rail regular too");
 });
 
 test("the ATM verb gates on your card and where you're standing", () => {
@@ -6898,7 +6898,7 @@ test("low season thins the FURNITURE too: an emptied rail gets the thin line, no
   state().season0 = 8; state().day = 3;   // September, deep low
   let bar = null;
   for (const rid of Object.keys(ROOMS)) {
-    if (ROOMS[rid].barType === "beer" && !Object.keys(PATRONS).some(id => _patronRoom(id) === rid)) { bar = rid; break; }
+    if (ROOMS[rid].barType === "beer" && !Object.keys(NPCS).filter(id => NPCS[id].patron).some(id => _npcWhere(id) === rid)) { bar = rid; break; }
   }
   assert.ok(bar, "found a beer bar the low season emptied");
   state().room = bar;
@@ -7295,17 +7295,17 @@ test("noodle patrol: decline the pull and take a foam bop (worth a laugh and a p
 test("patrons: hoppers drift by the hour, settle at home by 22:00, chat resets daily", () => {
   // deterministic placement: same night + hour = same stool
   state().nightTurn = 5; // 18:00 hour
-  const early = _patronRoom("nigel");
-  assert.equal(_patronRoom("nigel"), early, "no drift between looks");
+  const early = _npcWhere("nigel");
+  assert.equal(_npcWhere("nigel"), early, "no drift between looks");
   assert.ok(ROOMS[early].barType, "hopper is in a bar");
   // non-hopper never moves
-  assert.equal(_patronRoom("helmut"), "silk_rose");
-  assert.equal(_patronRoom("somsak"), "blue_dog");
+  assert.equal(_npcWhere("helmut"), "silk_rose");
+  assert.equal(_npcWhere("somsak"), "blue_dog");
   // by 22:00 everyone is at their home bar
   state().nightTurn = 45;
-  assert.equal(_patronRoom("nigel"), "lucky_tiger");
-  assert.equal(_patronRoom("chuck"), "tequila_queen");
-  assert.equal(_patronRoom("dave"), "stinky_bar");
+  assert.equal(_npcWhere("nigel"), "lucky_tiger");
+  assert.equal(_npcWhere("chuck"), "tequila_queen");
+  assert.equal(_npcWhere("dave"), "stinky_bar");
 
   // room description lists the patron in the "Here:" line; talk and topics work
   state().room = "silk_rose";
@@ -7367,15 +7367,20 @@ test("David only drinks on his days off: Mondays and Fridays", () => {
   state().nightTurn = 45;
   state().pendingEnc = null; state().lastPeddler = 99999;
   state().day = 1; // Monday
-  assert.equal(_patronRoom("david"), "stinky_bar", "Monday is a beer day");
+  assert.equal(_npcWhere("david"), "stinky_bar", "Monday is a beer day");
   state().day = 5; // Friday
-  assert.equal(_patronRoom("david"), "stinky_bar", "Friday is a beer day");
+  assert.equal(_npcWhere("david"), "stinky_bar", "Friday is a beer day");
   state().day = 2; // Tuesday — school night
-  assert.equal(_patronRoom("david"), null, "Tuesday he's marking homework");
+  assert.equal(_npcWhere("david"), null, "Tuesday he's marking homework");
   state().room = "stinky_bar";
   out = [];
   run("talk to david");
-  assert.match(lastOut(), /David isn't at this bar right now/, "he's a known regular, just not out — say so, don't deny he exists");
+  // He's a known regular who simply isn't out — say so, don't deny he exists.
+  // (Since the patron fold the wording comes from _npcActive's absence branch:
+  // the old "the regulars drift between bars" line went with the hop that
+  // stopped happening. He isn't drifting; he's marking homework.)
+  assert.match(lastOut(), /David isn't around right now/,
+    "absent, not nonexistent — and not 'drifting' either");
 });
 
 // NPCs keep a fixed bar today, but will gain schedules (Candy alternating her two
@@ -7436,7 +7441,7 @@ test("ask <who> <topic> works without the 'about' connective (the tapped shape)"
   // no "about" between — that must reach the same dialogue as the typed form.
   state().nightTurn = 0; state().day = 1;
   const room = Object.keys(ROOMS).find(r => {
-    state().room = r; return _patronsHere().includes("chuck");
+    state().room = r; return _regularsHere().includes("chuck");
   });
   assert.ok(room, "found a bar where Chuck is drinking");
   state().room = room;
@@ -7496,7 +7501,7 @@ test("Danny never hops into his creditors' bars — the debts are drawn on the m
     state().day = day;
     for (let h = 0; h < 4; h++) {
       state().nightTurn = h * 10;
-      const room = _patronRoom("danny");
+      const room = _npcWhere("danny");
       assert.notEqual(room, "stinky_bar",
         `day ${day} hour ${h}: Danny walked into Bert's bar`);
       assert.notEqual(room, "las_vegas",

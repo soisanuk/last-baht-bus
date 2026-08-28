@@ -33,7 +33,7 @@ beforeEach(() => {
 });
 
 test("precondition: Angela (a patron) is present in the Queen Vic", () => {
-  assert.ok(_patronsHere().includes("angela"), "Angela should be at queen_vic");
+  assert.ok(_regularsHere().includes("angela"), "Angela should be at queen_vic");
 });
 
 test("a bare NPC name opens a conversation and sets the partner", () => {

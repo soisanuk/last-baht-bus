@@ -351,7 +351,7 @@ function dataStrings() {
     else if (Array.isArray(v)) v.forEach(walk);
     else if (v && typeof v === "object") Object.values(v).forEach(walk);
   };
-  for (const t of [ROOMS, NPCS, PATRONS, ITEMS, ENCOUNTERS, QUESTS]) walk(t);
+  for (const t of [ROOMS, NPCS, ITEMS, ENCOUNTERS, QUESTS]) walk(t); // one cast: NPCS carries the regulars
   return seen.join("\n");
 }
 const flat = s => s.replace(/\s+/g, " ").trim();

@@ -62,12 +62,14 @@ const COV_DIR = new URL("../docs/coverage/", import.meta.url);
 
 // ── denominators: what exists ────────────────────────────────────────────────
 const ALL_ROOMS = Object.keys(ROOMS);
+// One cast since the patron fold: the rail regulars are flagged NPCS entries,
+// so the NPC denominators already include them and there is no second roster.
 const ALL_NPCS = Object.keys(NPCS);
-const ALL_PATRONS = Object.keys(PATRONS);
+const ALL_REGULARS = ALL_NPCS.filter(id => NPCS[id].patron);
 const ALL_ENC = Object.keys(ENCOUNTERS);
 const ALL_QUESTS = Object.keys(QUESTS);
 const DLG_NODES = ALL_NPCS.reduce((n, id) => n + (Array.isArray(NPCS[id].dialogue) ? NPCS[id].dialogue.length : 0), 0);
-const PAT_NODES = ALL_PATRONS.reduce((n, id) => n + (Array.isArray(PATRONS[id].dialogue) ? PATRONS[id].dialogue.length : 0), 0);
+const REG_NODES = ALL_REGULARS.reduce((n, id) => n + (Array.isArray(NPCS[id].dialogue) ? NPCS[id].dialogue.length : 0), 0);
 // the parser's real verb surface — the switch arms, same count the gap analysis used
 const PARSER_VERBS = (() => {
   const src = fs.readFileSync(new URL("engine-parser.js", JS), "utf8");
@@ -102,6 +104,19 @@ function absorb(G) {
 let runs = 0, commands = 0, effectsTotal = 0;
 const notes = [];
 
+// LEGACY KEYS ARE FOLDED, NOT DROPPED. Every extract recorded before the patron
+// fold carries `patrons`/`patDlg` — 22 observed regulars and 47 delivered lines
+// across the committed set. Ids never collided and both key spaces use the same
+// "<id>#<index>" form, so pouring them into npcs/dlg preserves the one number
+// this file exists to report: how much of the game has ANYONE ever seen.
+function absorbExtract(x, target) {
+  for (const k of ["rooms", "npcs", "enc", "questsDone", "verbs", "effects", "dlg", "patDlg", "patrons"])
+    for (const v of (x[k] || [])) {
+      const into = k === "patrons" ? "npcs" : k === "patDlg" ? "dlg" : k;
+      target[into].add(v);
+    }
+}
+
 if (doUnion) {
   let files = [];
   try { files = fs.readdirSync(COV_DIR).filter(f => f.endsWith(".json")); } catch (e) {}
@@ -112,8 +127,7 @@ if (doUnion) {
   }
   for (const f of files) {
     const x = JSON.parse(fs.readFileSync(new URL(f, COV_DIR), "utf8"));
-    for (const k of ["rooms", "npcs", "patrons", "enc", "questsDone", "verbs", "effects", "dlg", "patDlg"])
-      for (const v of (x[k] || [])) U[k].add(v);
+    absorbExtract(x, U);
     runs++;
     commands += x.commands || 0;
     effectsTotal = Math.max(effectsTotal, x.effectsTotal || 0);
@@ -126,8 +140,7 @@ if (doUnion) {
   // visited/talked), a new vacation, and RESTART. This is the honest way to
   // score a played session.
   const x = JSON.parse(fs.readFileSync(ledgerPath, "utf8"));
-  for (const k of ["rooms", "npcs", "patrons", "enc", "questsDone", "verbs", "dlg", "patDlg"])
-    for (const v of (x[k] || [])) U[k].add(v);
+  absorbExtract(x, U);
   runs = 1;
   notes.push("scored a driver session LEDGER — survives resets, unlike a final save");
 } else if (savePath) {
@@ -182,10 +195,10 @@ if (recordAs) {
 const pct = (a, b) => b ? Math.round(1000 * a / b) / 10 : 0;
 const rows = [
   ["rooms stood in", U.rooms.size, ALL_ROOMS.length, ""],
-  ["NPCs spoken to", U.npcs.size, ALL_NPCS.length, ""],
-  ["patrons spoken to", U.patrons.size, ALL_PATRONS.length, ""],
-  ["authored NPC dialogue delivered", U.dlg.size, DLG_NODES, "the sharpest one: lines a player has actually been shown"],
-  ["authored patron dialogue delivered", U.patDlg.size, PAT_NODES, ""],
+  ["characters spoken to", U.npcs.size, ALL_NPCS.length,
+    `one cast: ${ALL_REGULARS.length} of them are rail regulars`],
+  ["authored dialogue delivered", U.dlg.size, DLG_NODES,
+    "the sharpest one: lines a player has actually been shown"],
   ["street encounters seen", U.enc.size, ALL_ENC.length, ""],
   ["quests completed", U.questsDone.size, ALL_QUESTS.length,
     (savePath || doUnion) ? "" : "INSTRUMENT-LIMITED: a random walker cannot climb a dep chain"],

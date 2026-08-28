@@ -143,7 +143,7 @@ bearing):
   luck too far and security walks you out; in Tree Town and LK Metro the
   whole complex remembers. Try the same moves on the street at your own risk
   — though the Beach Road ladyboy famously appreciates a man who flirts back.
-- **The regulars**: fourteen named patrons with ages, passports, home bars,
+- **The regulars**: two dozen named rail regulars with ages, passports, home bars,
   and the backstories to match — Nigel and his curated 1998, Chuck and his
   "free" drinks, Dave doing his welfare rounds, Helmut on the stool he
   evaluated in 2013, Superman watching every sunset like it's a showing,
@@ -182,8 +182,9 @@ bearing):
   `FLIP` the legal Jackpot moves. Every tap echoes as a typed command,
   so the transcript stays honest. A ➤ send button finishes prefilled
   commands without summoning the keyboard.
-- **Faces on the soi**: every character — all 31 NPCs and 14 bar
-  patrons — has a pixel-art portrait, shown on presence lines and atop
+- **Faces on the soi**: every character — all 356 of them, from the
+  hand-authored cast to the rail regulars to the generated bar staff —
+  has a portrait, shown on presence lines and atop
   their action wheel. Generated from one parametric part library
   (`scripts/gen-portraits.py`), so Terry's sunburn, Mem's reading
   glasses, and Bank's orange vest are all canon-true and one style.
@@ -458,7 +459,7 @@ node --test
 word the game prints resolves in the shared dictionary), the terminal's
 decoration/flyout contract, world/map integrity (every exit
 resolves, all 20 canon bars present, the gossip chain's flags all connect,
-the patron bench is placed and scheduled), the soundtrack contract (music
+the regulars' bench is placed and scheduled), the soundtrack contract (music
 only where music plays), hotel economics (the folio, the ladder, the
 book), online-readiness (session isolation, cloud-save round-trips,
 deterministic transcripts), the news-bake contract, parser, systems,
@@ -476,7 +477,7 @@ web/
     news-data.js   real headlines, auto-baked by scripts/fetch-news.mjs (cron)
     world.js       rooms, items, NPCs, dialogue, bus/motosai lines (pure data)
     games.js       bar mini-games: Connect 4, Jackpot dice, pool (pure logic)
-    engine-core.js        state (G), hotels, patrons, describe, turn loop ┐ one engine,
+    engine-core.js        state (G), hotels, cast, describe, turn loop   ┐ one engine,
     engine-encounters.js  random street encounters                        │ five classic
     engine-play.js        bar games, social life, happiness, the clock     │ scripts loaded
     engine-systems.js     barfine, quests, phone, news, rain, food, Act 1  │ in order;

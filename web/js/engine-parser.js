@@ -1179,13 +1179,6 @@ function _doExamine(arg) {
     }
     return;
   }
-  const pat = _findPatron(arg);
-  if (pat) {
-    const p = PATRONS[pat];
-    _say(p.desc);
-    _say(`(${p.age}, ${p.nat}.)`, "dim"); // age/nat live here now, off the presence line
-    return;
-  }
   const id = _findItem(arg);
   if (id === "masseuse_note") { _readNote(); return; }
   if (id) { _say(ITEMS[id].desc); return; }
@@ -3067,7 +3060,7 @@ const _ANSWER_GOSSIP = [
 // tap-decoration inside (it's remembered free text, not a live entity).
 function _wrapSaid(v) { return "{{“" + v + "”}}"; }
 function _partnerHasTopic(id, t) {
-  const nodes = ((NPCS[id] || PATRONS[id] || {}).dialogue) || [];
+  const nodes = ((NPCS[id] || {}).dialogue) || [];
   return nodes.some(d => d.topic && (d.topic === t || t.includes(d.topic)));
 }
 // Canned replies for the question currently on the table — your own voice,
@@ -3234,7 +3227,7 @@ function _convoResolve(lower) {
       /^(do|does|did|are|is|was|were|can|could|will|would|have|has)\s+(you|u|she|they)\b/.test(bare);
     const changingSubject = isQuestion ||
       /^(goodbye|bye|cheerio|laters?|later|see ?ya|ciao)$/.test(bare) ||
-      _findNpc(bare) || _findPatron(bare) ||
+      _findNpc(bare) ||
       _partnerHasTopic(G.convoQ.id, _convoTopic(lower));
     if (!changingSubject) return _convoAnswer(lower);
     G.convoQ = null; // dodged (or a question back) — fall through to normal handling
@@ -3247,7 +3240,7 @@ function _convoResolve(lower) {
   // 2) A bare name for someone present starts (or switches) the conversation —
   //    this is the `> angela` opener. Routes through the normal TALK path, which
   //    delivers their greeting and sets the partner via _convoStart.
-  if (bare && bare.split(" ").length <= 3 && (_findNpc(bare) || _findPatron(bare))) {
+  if (bare && bare.split(" ").length <= 3 && (_findNpc(bare))) {
     _doTalk(bare, null); return true;
   }
   // A lone digit with no pending question is an ORPHANED answer — the numbered
@@ -3812,16 +3805,15 @@ function _regularHere(nameW) {
   const id = _findNpc(nameW);
   if (id && _npcsHere().includes(id) && !NPC_ROLES[id] && !NPCS[id].manager && !NPCS[id].filler)
     return id;
-  // a named rail patron (Chuck, Terry, Danny…) is stood a beer the same way
-  if (typeof _findPatron === "function") {
-    const pid = _findPatron(nameW);
-    if (pid && typeof _patronsHere === "function" && _patronsHere().includes(pid)) return pid;
-  }
+  // A named rail regular (Chuck, Terry, Danny…) is stood a beer the same way.
+  // One cast, so _findNpc above already resolved him — he just fails the
+  // role-less test by carrying the patron flag rather than carrying nothing.
+  if (id && NPCS[id].patron && _npcsHere().includes(id)) return id;
   return null;
 }
 // display name for a stand-a-beer target, NPC or patron
 function _regularName(id) {
-  return (NPCS[id] && NPCS[id].name) || (typeof PATRONS !== "undefined" && PATRONS[id] && PATRONS[id].name) || "the regular";
+  return (NPCS[id] && NPCS[id].name) || "the regular";
 }
 // Pronoun-free on purpose: the role-less rail crowd is male today, but nothing
 // enforces that — keep the prose safe for whoever takes the stool next.
@@ -4155,9 +4147,9 @@ function _doBuy(arg) {
     if (!id || !NPC_ROLES[id]) {
       // A resolvable MALE / manager / patron isn't "she" — point at the right verb
       // instead of "She's not working this bar" (skimmer + Gaz: "buy drink for tan")
-      const who = nameW && (_findNpc(nameW) || _findPatron(nameW));
+      const who = nameW && (_findNpc(nameW));
       if (who && who !== id) {
-        _say(`${_npcLabel ? (NPCS[who] ? _npcLabel(who) : _patronLabel(who)) : "He"} doesn't do lady drinks — that's the ladies' racket. For a bloke, it's BUY MAN DRINK (the fella behind the bar).`);
+        _say(`${_npcLabel(who)} doesn't do lady drinks — that's the ladies' racket. For a bloke, it's BUY MAN DRINK (the fella behind the bar).`);
       } else if (nameW) {
         _say("She's not working this bar — nobody here by that name. (Buy a drink for one of the girls on the rail, or BUY MAN DRINK.)");
       } else _say("Nobody here to buy one for.");
@@ -4916,7 +4908,7 @@ function _doScore() {
   // only ever visible in the trainer. A number with a denominator is a goal; a
   // number on its own is trivia.
   if (_flag("act1Done")) {
-    const met = Object.keys(G.known || {}).filter(id => NPCS[id] || PATRONS[id]).length;
+    const met = Object.keys(G.known || {}).filter(id => NPCS[id]).length;
     const faces = new Set(_photoList().map(p => p.id)).size;
     const nums = Object.keys(G.phone.contacts || {}).filter(id => G.phone.contacts[id] && NPC_ROLES[id]).length;
     const thai = (G.thaiSeen || []).length;
@@ -5078,9 +5070,9 @@ function _doViolence(arg) {
   // some regulars are protected by age, money, and long standing — the one
   // kind of violence the street answers back in kind, and fast.
   if (arg) {
-    const pid = _findPatron(arg.replace(/^(on |at |the |old )/, "").trim());
-    if (pid && PATRONS[pid].protected) {
-      const n = PATRONS[pid].name;
+    const pid = _findNpc(arg.replace(/^(on |at |the |old )/, "").trim());
+    if (pid && NPCS[pid].protected) {
+      const n = NPCS[pid].name;
       _say(`You so much as square up toward ${n} and the room changes temperature. The ` +
         "mamasan is between you before you've finished the thought; the security are already " +
         "moving; a piwin fills the doorway, cracking his knuckles like a man glad of the " +
@@ -5576,13 +5568,13 @@ function _doTip(arg) {
   if (!_inBar()) {
     // a named person on the street answered in the piwins' voice — the doorman,
     // the security man, and Tan himself (millionaire playtest 2026-08-22)
-    const who = nameW && (_findNpc(nameW) || _findPatron(nameW));
+    const who = nameW && (_findNpc(nameW));
     if (who === "tan") {
       _say("Tan looks at the money the way another man would look at a wasp. \"No.\" Then, " +
         "gentler, because he likes you: \"When I want something from you I will ask for it, " +
         "and it will not be this.\" The hand stays down until you put it away.");
     } else if (who) {
-      const n = (NPCS[who] || PATRONS[who]).name;
+      const n = NPCS[who].name;
       _say(`${n} looks at the note, then at you, and doesn't take it. Out here a tip is for a ` +
         "service already done — hand it to a man who's done nothing and you've said something " +
         "about him you didn't mean to.");
@@ -5772,7 +5764,7 @@ const _PHOTO_GOGO_YES = [
 
 function _photoWhere(id) {
   if (NPCS[id]) return _barName(_npcRoom(id)) || "";
-  if (PATRONS[id]) return _barName(PATRONS[id].room) || "the rail"; // home→room, patron fold
+  if (NPCS[id] && NPCS[id].patron) return _barName(NPCS[id].room) || "the rail";
   return "";
 }
 
@@ -5787,7 +5779,7 @@ function _hasPortrait(id) { return _photoList().some(p => p.id === id && !p.cap)
 // Add a photo to the gallery. No cap = a portrait (deduped per character); a cap =
 // a texted selfie (always a distinct new frame). Learns her name either way.
 function _addPhoto(id, cap) {
-  if (!(NPCS[id] || PATRONS[id])) return false;
+  if (!NPCS[id]) return false;
   if (!cap && _hasPortrait(id)) return false;
   if (G.known) G.known[id] = true;
   _photoList().push(cap ? { id, cap, turn: G.turns } : { id, turn: G.turns });
@@ -5795,7 +5787,7 @@ function _addPhoto(id, cap) {
 }
 
 function _photoChar(id) {
-  const n = NPCS[id] || PATRONS[id];
+  const n = NPCS[id];
   if (!n) return;
   // the go-go / Soi 6 house rule: the girls are never a photo op — for a stranger.
   // Your own regular (a contact, or bonded regular+) will sneak one, cheek-to-cheek.
@@ -5834,7 +5826,7 @@ function _doPhoto(arg) {
   }
   arg = (arg || "").replace(/^(of|the|a|an|with|at)\s+/i, "").trim();
   if (arg) {
-    const id = _findNpc(arg) || _findPatron(arg);
+    const id = _findNpc(arg);
     if (id) {
       if (_npcsHere().includes(id)) { _photoChar(id); return; } // one cast
       _say("You raise the phone, but they've drifted off — nobody by that description in front of you now.");
@@ -5866,14 +5858,14 @@ function _doGallery() {
     _say("Dead phone, dark gallery. The faces are in there somewhere. Find a charger.");
     return;
   }
-  const photos = _photoList().filter(p => NPCS[p.id] || PATRONS[p.id]);
+  const photos = _photoList().filter(p => NPCS[p.id]);
   if (!photos.length) {
     _say("Your gallery is one blurry thumb and a lot of smeared neon. PHOTO someone — " +
       "a face at the rail, a lady who's caught your eye — to start a collection.");
     return;
   }
   const rows = photos.slice().sort((a, b) => (a.turn || 0) - (b.turn || 0)).map(p => {
-    const n = NPCS[p.id] || PATRONS[p.id];
+    const n = NPCS[p.id];
     // a texted selfie shows its caption; a snapped portrait, where she works
     const detail = p.cap ? `«${p.cap}»` : _photoWhere(p.id);
     return `${n.emoji} ${n.name}${detail ? " — " + detail : ""}`;
@@ -5882,7 +5874,7 @@ function _doGallery() {
   // "3 of 334" reads as hopeless and most of them you will never meet. The
   // honest number is people you HAVE met, which is also the one that grows as
   // you explore, so the ratio pushes outward instead of down.
-  const met = Object.keys(G.known || {}).filter(id => NPCS[id] || PATRONS[id]).length;
+  const met = Object.keys(G.known || {}).filter(id => NPCS[id]).length;
   const have = new Set(photos.map(p => p.id)).size;
   const tail = met > have
     ? `  (${have} of the ${met} faces you've met — the rest haven't been asked.)`
@@ -6512,8 +6504,8 @@ function _chipSet() {
     else if (girls.length) { add("flirt ", "flirt…"); add("buy drink for ", "buy drink…"); add("barfine ", "barfine…"); }
     add("buy beer");
     if (_playOptions().length) add("play");
-    for (const pid of _patronsHere().slice(0, 2)) {
-      const lbl = _patronLabel(pid);
+    for (const pid of _regularsHere().slice(0, 2)) {
+      const lbl = _npcLabel(pid);
       add("talk to " + lbl.toLowerCase(), lbl.length > 24 ? lbl.slice(0, 22) + "…" : lbl);
     }
   } else if (_npcsHere().length) { // one cast — the regulars are in _npcsHere
@@ -7471,7 +7463,7 @@ function doCommand(input) {
       // someone here; otherwise treat the whole thing as a name (talk / not-here).
       const sp = arg.indexOf(" ");
       const who = sp > 0 ? arg.slice(0, sp) : "";
-      if (who && (_findNpc(who) || _findPatron(who))) _doTalk(who, arg.slice(sp + 1));
+      if (who && (_findNpc(who))) _doTalk(who, arg.slice(sp + 1));
       else _doTalk(arg, null);
       break;
     }
@@ -7493,7 +7485,7 @@ function doCommand(input) {
       let split = gw.length - 1; // fallback: last word is the recipient
       for (let k = Math.min(3, gw.length - 1); k >= 1; k--) {
         const cand = gw.slice(gw.length - k).join(" ");
-        if (_findNpc(cand) || (typeof _findPatron === "function" && _findPatron(cand)) ||
+        if (_findNpc(cand) ||
             /^(dog|sai|krok)$/.test(cand)) { split = gw.length - k; break; }
       }
       _doGive(gw.slice(0, split).join(" ").trim(), gw.slice(split).join(" ").trim());
@@ -7596,9 +7588,9 @@ function doCommand(input) {
       break;
     case "bribe": case "backhander": case "grease": {
       // the one verb a rich man certainly types, and it didn't parse
-      const t = arg ? (_findNpc(arg) || _findPatron(arg)) : null;
+      const t = arg ? (_findNpc(arg)) : null;
       _say(t
-        ? `You start to make the offer, and ${(NPCS[t] || PATRONS[t]).name} lets you get about half of it out. ` +
+        ? `You start to make the offer, and ${NPCS[t].name} lets you get about half of it out. ` +
           "Money moves in this town constantly and never like that — it goes through a mamasan, a fine, a " +
           "round for the house, a favour returned later. Handed over naked as a bribe, it insults everyone " +
           "in earshot, including you."
@@ -7908,7 +7900,7 @@ function doCommand(input) {
         const _w = lower.trim().split(/\s+/);
         if (_w.length >= 2) {
           const _last = _w[_w.length - 1].replace(/[.,!?]+$/, "");
-          const _who = _findNpc(_last) || _findPatron(_last);
+          const _who = _findNpc(_last);
           if (_who) {
             const _phrase = _w.slice(0, -1).join(" ");
             if (matchThaiPhrase(_phrase) || matchThaiPhrase(_stripPolite(_phrase))) {

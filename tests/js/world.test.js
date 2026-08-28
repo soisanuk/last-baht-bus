@@ -193,7 +193,7 @@ test("every quest is well-formed: giver, deps, item, and at all resolve", () => 
     assert.ok(NPCS[q.giver], `${qid}: giver ${q.giver} is not an NPC`);
     for (const d of q.deps) assert.ok(QUESTS[d], `${qid}: dep ${d} is not a quest`);
     if (q.item) assert.ok(ITEMS[q.item], `${qid}: item ${q.item} missing`);
-    if (q.at) assert.ok(typeof q.at === "function" || NPCS[q.at] || PATRONS[q.at] || ROOMS[q.at], `${qid}: at ${q.at} resolves to nothing`); // a function `at` follows the step (resolved live by _qAt)
+    if (q.at) assert.ok(typeof q.at === "function" || NPCS[q.at] || ROOMS[q.at], `${qid}: at ${q.at} resolves to nothing`); // a function `at` follows the step (resolved live by _qAt)
     if (q.reqFlags) assert.ok(Array.isArray(q.reqFlags) && q.reqFlags.every(f => typeof f === "string"),
       `${qid}: reqFlags must be an array of flag names`);
     assert.ok(q.doneFlag && q.reward, `${qid}: needs doneFlag and reward`);
@@ -232,7 +232,7 @@ test("patrons: real home bars, complete profiles, unconditional fallback", () =>
 });
 
 test("patron day schedules are valid weekday indices", () => {
-  for (const [id, p] of Object.entries(PATRONS)) {
+  for (const [id, p] of Object.entries(NPCS).filter(([, n]) => n.patron)) {
     if (!p.days) continue;
     assert.ok(Array.isArray(p.days) && p.days.length > 0, `${id} days empty`);
     for (const d of p.days) {
@@ -350,7 +350,7 @@ test("every filler row produces its own NPC at its own bar — none is overwritt
 // always used "she" for them, and the field reports the prose rather than
 // imposing a rule about who may be what.
 test("every NPC and patron resolves a pronoun, and it matches their own desc", () => {
-  const all = [...Object.entries(NPCS), ...Object.entries(PATRONS)];
+  const all = Object.entries(NPCS); // one cast — the regulars are flagged NPCS entries
   const unresolved = all.filter(([id]) => !_pronoun(id)).map(([id]) => id);
   assert.deepEqual(unresolved, [],
     "no pronoun and no lady-role default — add an explicit `pronoun` to:\n  " +

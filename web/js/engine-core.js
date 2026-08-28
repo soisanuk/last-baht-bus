@@ -166,7 +166,7 @@ function _learnNames(text) {
   if (!G || !G.known) return;
   if (!_nameRx) {
     _nameRx = [];
-    const rosters = [NPCS, typeof PATRONS === "undefined" ? {} : PATRONS];
+    const rosters = [NPCS];
     for (const roster of rosters) {
       for (const [id, n] of Object.entries(roster)) {
         const last = n.name.split(" ").pop(); // "Madam Oy" → "Oy"
@@ -185,7 +185,7 @@ function _learnNames(text) {
 // known. Topics that aren't names always pass.
 function _topicKnown(t) {
   if (!G || !G.known) return true; // save predates the gate: hide nothing
-  const rosters = [NPCS, typeof PATRONS === "undefined" ? {} : PATRONS];
+  const rosters = [NPCS];
   for (const roster of rosters) {
     for (const [id, n] of Object.entries(roster)) {
       if (n.name.split(" ").pop().toLowerCase() === t) return !!G.known[id];
@@ -618,15 +618,15 @@ function _npcActive(id) {
   // leaving the building while leaving him standing there — persona A#13)
   if (G.soc && G.soc.hostOut && G.soc.hostOut[id]) return false;
   // The regulars' bench (patron: true) keeps its two absences from the old
-  // PATRONS table, keyed on the flag so the STAFF never thin (barchain.test
+  // separate table, keyed on the flag so the STAFF never thin (barchain.test
   // pins that): `days` holds a working man to his nights out (David's Mon/Fri),
-  // and _patronOut sits a season-scaled share of the bench at home in the lean
+  // and _benchOut sits a season-scaled share of the bench at home in the lean
   // months. Absence lives HERE and not in _npcRoom so _npcRoom stays total —
   // an inactive man still HAS a local, he just isn't on its stool tonight,
   // which is exactly what _elsewhereLine's "isn't around right now" reads.
   if (n && n.patron) {
     if (n.days && !n.days.includes(G.day % 7)) return false;
-    if (_patronOut(id)) return false;
+    if (_benchOut(id)) return false;
   }
   return !(n && n.origin && G.player && n.origin === G.player.origin);
 }
@@ -735,52 +735,35 @@ function _isHotelRoom(id) { return Object.values(_HOTELS).some(h => h.room === i
 // no drift between LOOKs, shared-world-safe like _quizBars.
 const _PATRON_HOP_ROOMS = Object.keys(ROOMS).filter(id => ROOMS[id].barType);
 
-function _patronHour() { return Math.floor(G.nightTurn / 10); } // 0 = 18:00
-
 // Low season empties the RAIL, not just the till. A share of the regulars stay
 // in on any given night in the lean months — day-stable pure hash of (id,
 // vacation, day), so it doesn't flicker as you re-enter and every player agrees
 // (rule #6). This is what finally lets the season reach the ROOM (both publican
 // playtests, 2026-08-26: the rail read identical in Sept and Dec) and unlocks the
 // empty-bar monsoon register, which was unreachable while the bench never thinned.
-function _patronOut(id) {
+function _benchOut(id) {
   if (!_flag("act1Done")) return false;              // the opening night's cast is fixed
   const stay = { peak: 0, high: 0.05, shoulder: 0.22, low: 0.45, deeplow: 0.6 };
   const p = (typeof _seasonTier === "function") ? (stay[_seasonTier()] || 0) : 0;
   if (p <= 0) return false;
   return _hh(id + ":" + G.vacation + ":" + G.day + ":pout", 71) % 100 < Math.round(p * 100);
 }
-// PATRON-FOLD COMPAT ALIASES (stage 1 → deleted in stage 3). The patrons are
-// NPCS entries now (patron: true, shared refs — world.js's one-cast loop), so
-// position and presence are _npcRoom/_npcActive like everyone else; these keep
-// the ~100 not-yet-repointed call sites and the tools working unchanged. The
-// old machinery they replace: days + season-thinning live in _npcActive (so
-// _npcRoom stays total and its callers never see null), the shuttle lives in
-// _npcRoom, and the hourly hop is retired (hops/haunts/avoids inert in data).
-function _patronRoom(id) {
-  return _npcActive(id) ? _npcRoom(id) : null; // null = not out tonight (days / season)
+// Where a character actually IS tonight, or null if they are not out at all.
+// _npcRoom answers "which room is theirs" and is deliberately total; this is
+// the presence-aware form, and the two differ for anyone _npcActive can hide:
+// a regular on his teaching night or sat at home in low season, a girl sent
+// home early, an origin archetype you ARE. Use this wherever you would print
+// or promise a location — a stool he isn't on is worse than saying nothing.
+function _npcWhere(id) {
+  return _npcActive(id) ? _npcRoom(id) : null;
 }
 
-function _patronsHere() {
+// The rail crowd in this room: the named regulars (patron: true), as opposed to
+// the staff working it. Still a meaningful question after the fold — the bar's
+// ambient prose thins when nobody is at the rail, and TALK TO THE REGULAR wants
+// a real name before it falls back to the anonymous bar-bore.
+function _regularsHere() {
   return _npcsHere().filter(id => NPCS[id].patron);
-}
-
-function _findPatron(word) {
-  const w = word.toLowerCase();
-  const here = _patronsHere();
-  for (const id of here) {
-    if (id === w || NPCS[id].name.toLowerCase() === w) return id;
-  }
-  for (const id of here) {
-    if (NPCS[id].name.toLowerCase().startsWith(w)) return id;
-  }
-  for (const id of here) {
-    const t = NPCS[id].title;
-    if (!t || (G.known && G.known[id])) continue;
-    const tt = _titleNorm(t), ww = _titleNorm(w);
-    if (tt === ww || (ww.length >= 4 && tt.includes(ww))) return id;
-  }
-  return null;
 }
 
 // Same delivery contract as _deliver, but the seen-index book resets daily —
@@ -843,13 +826,12 @@ function _convoStart(id) {
   if (G.known) G.known[id] = true; // talking to someone IS meeting them → you learn the name
 }
 function _convoName(id) {
-  return (NPCS[id] && NPCS[id].name) || (PATRONS[id] && PATRONS[id].name) || id;
+  return (NPCS[id] && NPCS[id].name) || id;
 }
 function _convoActive() {
   const id = G.convo;
   if (!id) return null;
-  const here = (NPCS[id] && _npcRoom(id) === G.room) ||
-               (PATRONS[id] && _patronsHere().includes(id));
+  const here = NPCS[id] && _npcsHere().includes(id);
   if (!here) { // partner gone → conversation over; the question isn't spent, she can ask again
     if (G.convoQ) { const ost = _npcState(G.convoQ.id); if (ost && ost.know) delete ost.know["asked_" + G.convoQ.key]; }
     G.convo = null; G.convoQ = null; return null;
@@ -859,7 +841,7 @@ function _convoActive() {
 // she/he/they for a character the engine is ABOUT to pronoun — same logic the
 // repeat-brush-off already uses (a working role or a filler girl reads she).
 function _sheHe(id) {
-  const n = NPCS[id] || PATRONS[id];
+  const n = NPCS[id];
   if (!n) return { s: "they", o: "them", p: "their" };
   const she = n.pronoun === "she" || !!NPC_ROLES[id] || !!n.filler;
   const he = n.pronoun === "he";
@@ -893,7 +875,7 @@ function _convoInterrupt() { if (G.convo) _convoEnd(true); }
 function _convoChoices(remembered) {
   const id = _convoActive();
   if (id == null) return [];
-  const arr = ((NPCS[id] || PATRONS[id] || {}).dialogue) || [];
+  const arr = ((NPCS[id] || {}).dialogue) || [];
   let idx = G.convoIdx;
   let d = idx != null ? arr[idx] : null;
   // the live node carries no choices (an intervening ask): fall back to the last
@@ -954,7 +936,7 @@ function _fillSaid(s) {
 // asks "who do you mean?"). `pool` restricts the domain (social → girls only).
 const _PRONOUN = /^(her|him|them|they|she|he|it|this|that|the (girl|lady|guy|man|bloke|woman|one))$/;
 // One cast: _npcsHere already includes the flagged regulars, so spreading
-// _patronsHere in as well would list every patron twice — and break
+// _regularsHere in as well would list every patron twice — and break
 // _resolveActor's sole-candidate rule (a room with one patron would read as two
 // people and refuse the pronoun).
 function _addressable() { return _npcsHere(); }
@@ -969,7 +951,7 @@ function _resolveActor(word, pool) {
   pool = pool || _addressable();
   const w = String(word || "").replace(/^with /, "").trim().toLowerCase();
   if (w && !_PRONOUN.test(w)) {                 // an actual name/word
-    const id = _findNpc(w) || _findPatron(w);
+    const id = _findNpc(w); // one cast — _findNpc resolves the regulars too
     return pool.includes(id) ? id : null;
   }
   const ante = _lastActor();                    // pronoun or omitted → antecedent
@@ -991,13 +973,13 @@ function _topicNamesCharacter(topic, partnerId) {
   const t = topic.toLowerCase();
   const hit = (map) => Object.keys(map).some(cid =>
     cid !== partnerId && (cid === t || (map[cid].name && map[cid].name.toLowerCase() === t)));
-  return hit(NPCS) || hit(PATRONS);
+  return hit(NPCS);
 }
 function _convoTopics(id) {
   const st = _npcState(id);
-  const p = PATRONS[id], n = NPCS[id];
-  const nodes = (n && n.dialogue) || (p && p.dialogue) || [];
-  const rage = (p && p.rage) || [];
+  const n = NPCS[id];
+  const nodes = (n && n.dialogue) || [];
+  const rage = (n && n.rage) || [];
   const out = [];
   for (const d of nodes) {
     if (!d.topic) continue;
@@ -1041,7 +1023,7 @@ function _align(name, delta) {
 // his nightly state — the nights he's on the weed, the drunk turns nasty (a
 // stable per-night hash, so it's the same all evening).
 function _patronRage(id) {
-  const name = PATRONS[id].name;
+  const name = NPCS[id].name;
   // is he on the weed tonight? (~40% of nights). Mix the day through a big prime —
   // a bare _hh of consecutive day strings correlates in its low bits.
   let h = (G.vacation * 7919 + G.day * 104729 + 149) % 2147483647;
@@ -1170,20 +1152,24 @@ function _findNpc(word) {
 // Everyone is named on sight — one consistent rule across the whole cast (the
 // "descriptive title until met" reveal was dropped: gating a few characters while
 // the ~230 staff were named on sight read as inconsistent, per playtest). The
-// `title` fields + _findNpc/_findPatron look-resolution stay in the data (harmless,
+// `title` fields + _findNpc look-resolution stay in the data (harmless,
 // still let "talk to the owlish old-timer" resolve), but they never replace a name
 // in the UI. To restore reveal-on-met, gate these on `!(G.known && G.known[id])`.
 function _npcLabel(id) {
   const n = NPCS[id]; return n ? n.name : id;
 }
-function _patronLabel(id) {
-  const p = PATRONS[id]; return p ? p.name : id;
-}
 
 // A named character the player addressed who isn't in THIS room — used to turn a
 // flat "Nobody by that name here" (reads as a bug mid-conversation) into a placed
 // answer. Patrons hop bars every hour, so promising a location would go stale by
-// the time you got there — they get the generic "regulars drift about" line.
+// the time you got there — that was TRUE while the hop existed and is not any
+// more: the regulars were de-hopped (they anchor their local), and the vague
+// line survived the change, so the game was telling players a man "drifts
+// between bars" while he sat on the same stool all night. A narrative persona
+// gave up looking for Fergie on the strength of it (round 18). They are placed
+// like anyone else now; what they keep is an ABSENCE the staff don't have — a
+// teaching night, or a low-season evening in — and _npcActive already answers
+// that with "isn't around right now", which is both true and useful.
 // Named NPCs keep a day-stable bar (Candy at Candy Bar today; when NPCs gain
 // schedules — alternate-day bars, invited visits — NPCS[id].room still resolves
 // to tonight's room), so point the player there. Anonymous staff (lowercase
@@ -1196,13 +1182,13 @@ function _elsewhereLine(word) {
   // NPC from the beach or the street too.
   const here = _room();
   const notHere = here.bar || here.barType ? "isn't at this bar" : "isn't around here";
-  const pid = Object.keys(PATRONS).find(id =>
-    id === w || PATRONS[id].name.toLowerCase() === w);
-  if (pid) return `${PATRONS[pid].name} ${notHere} right now — the regulars ` +
-    "drift between bars through the night, and not every one of them comes out every evening.";
   const nid = Object.keys(NPCS).find(id => {
     const nm = NPCS[id].name;
-    if (!/^[A-Z]/.test(nm) || !(G.known && G.known[id])) return false;
+    // A regular is placed whether or not you've been introduced: his name is
+    // painted on the room he drinks in, and the staff will tell you. The
+    // met-gate is for the STORY cast, where naming an unmet character's bar
+    // spoils a place you were never shown.
+    if (!/^[A-Z]/.test(nm) || !(NPCS[id].patron || (G.known && G.known[id]))) return false;
     return id === w || nm.toLowerCase() === w || nm.toLowerCase().split(" ").pop() === w;
   });
   if (nid) {
@@ -1725,7 +1711,7 @@ function _describeRoom(full, forceFull) {
     // regulars in) gets the thinned line, not the anonymous crowd — which would
     // otherwise disagree with the empty-bar register on the same screen.
     const _thin = typeof _lowSeason === "function" && _lowSeason() &&
-      typeof _patronsHere === "function" && !_patronsHere().length;
+      typeof _regularsHere === "function" && !_regularsHere().length;
     if (_thin) {
       _say(_pickVary(_BAR_THIN, "barThin"), "dim");
     } else if (G.soc.patronBusy[G.room]) {

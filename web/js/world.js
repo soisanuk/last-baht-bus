@@ -10856,7 +10856,7 @@ const QUESTS = {
     desc: "฿500 to jog a deadbeat's memory — no rough stuff, just find Fergie in his " +
       "maze and ASK him ABOUT THE DEBT.",
     deps: [],
-    at: "fergie",           // patron giver — live location via _patronRoom (his maze today)
+    at: "fergie",           // patron giver — live location via _npcWhere (his maze today)
     doneFlag: "fergieReminded",
     reward: { money: 500, happy: 2 },
   },
@@ -11398,7 +11398,7 @@ const QUIZ_POOL = [
 // are the RETIRED hourly-hop machinery, kept as inert data because the Second
 // Road export carries them (shape change = a cross-repo request, CLAUDE.md).
 // Schema matches NPC dialogue: fallback + topics, `short` for terse repeats.
-const PATRONS = {
+const _REGULARS = {
 
   // ── Jomtien's quiet-side regulars (docs/map-coverage.md) ─────────────────────
   // Populating the biggest dead zone with the crowd it always implied — the
@@ -12849,7 +12849,7 @@ const PATRONS = {
 // What a patron looks like before you've learned their name — shown on the "At
 // the rail" line and typeable/tappable to TALK ("talk to the owlish old-timer"),
 // until you meet them (talk / photo / someone names them) and the name takes over.
-// Assigned as a batch so the PATRONS entries stay lean. See _patronLabel.
+// Assigned as a batch so the regulars' entries stay lean. See _npcLabel.
 const _PATRON_TITLES = {
   roger:    "a contented, henpecked English long-stayer",
   dieter:   "a precise German pensioner of two decades",
@@ -12876,14 +12876,14 @@ const _PATRON_TITLES = {
   mikkel:   "a young Danish backpacker in friendship bracelets",
   neil:     "a heavy-shouldered Englishman nursing one bottle of Leo",
 };
-for (const [id, t] of Object.entries(_PATRON_TITLES)) if (PATRONS[id]) PATRONS[id].title = t;
+for (const [id, t] of Object.entries(_PATRON_TITLES)) if (_REGULARS[id]) _REGULARS[id].title = t;
 
-// ONE CAST TABLE: the patrons are NPCs (patron: true). Same object references,
-// so NPCS[id] === PATRONS[id] — the PATRONS name survives only as a transition
-// view for the not-yet-repointed pipeline and the Second Road exporter, and is
-// scheduled for deletion (patron-fold stage 3). Nothing may diverge the two:
-// there is exactly one entry per character, reachable under either name.
-for (const [id, p] of Object.entries(PATRONS)) NPCS[id] = p;
+// ONE CAST TABLE. `_REGULARS` above is an AUTHORING block, not a second roster:
+// two dozen bar regulars written together because they are written together,
+// then folded into NPCS. After this line the name is dead and nothing may read
+// it — the flag is the query (`NPCS[id].patron`), so there is exactly one entry
+// per character and no way for two tables to drift apart again.
+for (const [id, p] of Object.entries(_REGULARS)) NPCS[id] = p;
 
 // ── Character creation: who you are ─────────────────────────────────────────
 // Picked in the taxi-ride intro (see _taxiIntro). Dialogue-only for v1: origin/
@@ -13491,7 +13491,7 @@ const _FILLER_HOSTESSES = [
 // cannot slip through and be guessed at.
 const _SHE_ROLES = new Set(["hostess", "mamasan", "cashier"]);
 function _pronoun(id) {
-  const c = NPCS[id] || (typeof PATRONS !== "undefined" && PATRONS[id]);
+  const c = NPCS[id];
   if (!c) return undefined;
   return c.pronoun || (_SHE_ROLES.has(NPC_ROLES[id]) ? "she" : undefined);
 }

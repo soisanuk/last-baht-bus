@@ -17,7 +17,7 @@ for (const f of ["thai", "world"])
   vm.runInThisContext(fs.readFileSync(HERE + "/../web/js/" + f + ".js", "utf8"), { filename: f });
 
 const cond = d => String(d || "").split(/(?<=[.!?])\s/)[0].split(/\s+/).filter(Boolean);
-const all = { ...NPCS, ...PATRONS };
+const all = { ...NPCS }; // one cast — the regulars are flagged NPCS entries
 const arg = process.argv[2];
 
 if (arg === "--needed") {
