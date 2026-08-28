@@ -226,3 +226,111 @@ test("two regulars in one room are both reachable by name", () => {
   assert.equal(_findNpc("dave"), "dave");
   assert.equal(_findNpc("david"), "david");
 });
+
+// ── seen moving, and pulled somewhere on purpose ────────────────────────────
+
+test("a man leaving the bar you are in says so — through the real tick", () => {
+  // Not _railTick() directly: the narration only works if the hour actually
+  // turns underneath a command, and _tick is what turns it.
+  G.day = 2; G.room = "lucky_tiger"; G.nightTurn = 0;
+  out = [];
+  for (let i = 0; i < 32; i++) doCommand("look");
+  assert.match(text(), /Nigel/, "the man who left is named");
+  // Against the POOL, never one string of it: _pickVary picks, so a subset
+  // regex passes alone and fails in the full suite on a different dice state,
+  // which is exactly how this assertion first went red.
+  assert.ok(_RAIL_LEAVES.some(f => text().includes(f("Nigel"))),
+    "the leaving is narrated, not merely implied by an absence");
+});
+
+test("nothing is narrated about a bar you cannot see into", () => {
+  // The honest rule: you learn the rail moves by watching it move.
+  G.day = 2; G.room = "hotel_room"; G.nightTurn = 20;
+  out = [];
+  _railTick();
+  assert.equal(out.length, 0, "no telepathy from your hotel room");
+  G.room = "beach_rd_c"; out = [];   // a street, not a bar
+  _railTick();
+  assert.equal(out.length, 0, "nor from the pavement");
+});
+
+test("a modal is never interrupted by a man changing bars", () => {
+  G.day = 2; G.room = "lucky_tiger"; G.nightTurn = 10;
+  for (const gate of ["pendingEnc", "pendingChoice", "game"]) {
+    out = []; G[gate] = "x"; _railTick(); G[gate] = null;
+    assert.equal(out.length, 0, `${gate} holds the room`);
+  }
+});
+
+test("the man you are talking to is never narrated as leaving", () => {
+  G.day = 2; G.nightTurn = 0;
+  G.room = _npcRoom("nigel");
+  doCommand("talk to nigel");
+  assert.equal(G.convo, "nigel", "premise");
+  G.nightTurn = 10; out = [];
+  _railTick();
+  assert.doesNotMatch(text(), /Nigel/, "his clock is stopped, so there is nothing to report");
+});
+
+test("Glam's shuttle is finally narrated, from both ends", () => {
+  G.day = 3; G.nightTurn = NPCS.glam.shuttle.after * 10;
+  G.room = NPCS.glam.room; out = [];
+  _railTick();
+  assert.match(text(), /Glam/, "the bar he leaves sees him leave");
+  assert.match(text(), /wheel|chair|pushed/i, "and it is his chair, which is the point of the beat");
+  G.room = NPCS.glam.shuttle.to; out = [];
+  _railTick();
+  assert.match(text(), /Glam/, "the bar he arrives at sees him arrive");
+});
+
+test("the rail narration never guesses a pronoun", () => {
+  // Angela and Sandra are on this bench; only `hops: false` keeps them out of
+  // these pools, and an author unanchoring one should not have to remember.
+  for (const pool of [_RAIL_LEAVES, _RAIL_ARRIVES, _RAIL_QUIZ])
+    for (const f of pool)
+      assert.doesNotMatch(f("Somebody"), /\b(he|his|him|she|her|hers)\b/i,
+        "gendered: " + f("Somebody"));
+});
+
+test("on a Thursday the rail goes where the quiz is", () => {
+  // The one place they go on purpose — and the reason the drift reads as a town
+  // rather than as furniture being shuffled.
+  let pulled = 0, thursdays = 0;
+  for (let d = 1; d <= 28; d++) {
+    G.day = d;
+    if (!_quizDay()) continue;
+    thursdays++;
+    G.nightTurn = 25;                    // inside the window
+    const quiz = _quizBars();
+    for (const id of HOPPERS()) if (quiz.includes(_npcRoom(id))) pulled++;
+  }
+  assert.ok(thursdays >= 3, "we sampled several Thursdays");
+  assert.ok(pulled >= thursdays, `the quiz draws a crowd (${pulled} sightings over ${thursdays} Thursdays)`);
+});
+
+test("the pull is not a stampede, and it lets go afterwards", () => {
+  G.day = 4;
+  assert.ok(_quizDay(), "premise: day 4 is a Thursday");
+  const quiz = _quizBars();
+  const eligible = HOPPERS().filter(id => _hopPool(id).some(r => quiz.includes(r)));
+  assert.ok(eligible.length >= 2, "somebody's manor holds tonight's quiz");
+  G.nightTurn = 25;
+  const drawn = eligible.filter(id => quiz.includes(_npcRoom(id)));
+  assert.ok(drawn.length < eligible.length + 1);
+  assert.ok(drawn.length >= 1, "…and at least one of them turned up");
+  G.nightTurn = 45;                      // after the window, settled at his local
+  for (const id of drawn)
+    assert.equal(_npcRoom(id), NPCS[id].room, `${id} is home after the quiz, like everyone else`);
+});
+
+test("the quiz pull is asked about the probed hour, not the clock", () => {
+  // _hopRoom is probed at other hours by the narration and by _questWhere;
+  // reading G.nightTurn inside it would answer about the wrong hour.
+  G.day = 4; G.nightTurn = 0;
+  const quiz = _quizBars();
+  const id = HOPPERS().find(i => _hopPool(i).some(r => quiz.includes(r)) &&
+    quiz.includes(_hopRoom(i, 2)));
+  assert.ok(id, "somebody is drawn at hour 2");
+  assert.equal(G.nightTurn, 0, "and the clock never moved to find that out");
+  assert.notEqual(_hopRoom(id, 0), _hopRoom(id, 2), "the probe distinguishes the hours");
+});

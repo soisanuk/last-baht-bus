@@ -660,7 +660,7 @@ function _hopPool(id) {
 // on one bar for each hour the dice of the world said "one more, then". Pure in
 // (id, vacation, day, hour), so it can be asked about ANY hour — which is what
 // lets a pointer say where he was and where he will have got to.
-function _hopRoom(id) {
+function _hopRoom(id, hourArg) {
   const n = NPCS[id];
   const pool = _hopPool(id);
   if (pool.length < 2) return n.room;
@@ -673,7 +673,20 @@ function _hopRoom(id) {
   // conversation this guard exists to protect, and returning G.room instead
   // would make him follow you around the town forever, because _convoActive
   // clears a stale conversation only by noticing he ISN'T where you are.
-  const hour = (G.convo === id && G.convoHour != null) ? G.convoHour : _nightHour();
+  const hour = hourArg != null ? hourArg
+    : (G.convo === id && G.convoHour != null) ? G.convoHour : _nightHour();
+  // QUIZ NIGHT IS THE ONE PLACE HE GOES ON PURPOSE. Everything else here is
+  // aimless — a man finishing a beer and trying the next bar along — and aimless
+  // movement alone reads as scenery that shuffles. On a Thursday, most of the
+  // rail turns up where the quiz is: _quizBars() is already a pure hash of
+  // (vacation, day), so the pull costs no machinery, holds across a save, and in
+  // a shared world every player would agree on it without a word passing between
+  // them (rule 6). Two men in three, so the other bars are thinner, not empty.
+  if (typeof _isQuizHour === "function" && _isQuizHour(hour) &&
+      _hh(id + ":" + G.vacation + ":" + G.day + ":quiz", 97) % 3 !== 0) {
+    const quiz = _quizBars().filter(r => pool.indexOf(r) >= 0);
+    if (quiz.length) return quiz[0];
+  }
   // The walk starts at hour ONE: at opening time every man is at his own local,
   // which is both the truer picture (you arrive at your bar, then you drift) and
   // a deliberate removal of a whole class of flake — the suite's default hour is
@@ -684,6 +697,101 @@ function _hopRoom(id) {
       i = (i + 1) % pool.length;
   }
   return pool[i];
+}
+
+// ── The rail, seen moving ───────────────────────────────────────────────────
+// The drift is worth nothing to a player who only ever sees its results. Two
+// nights of a different roster reads as sloppy authoring; ONE man draining his
+// glass and saying he's off to the Bucket is the whole mechanic explained in a
+// sentence, and it is the difference between scenery that shuffles and a town
+// with somewhere else in it.
+//
+// The idiom is the saleng's (_salengTick): the TRANSITION prints once, from the
+// tick that made it, and only to a player standing in one of the two rooms —
+// the standing state is _describeRoom's job. Nothing is said about a bar you
+// cannot see into, which is also the honest rule: you learn that the rail moves
+// by watching it move, not by being told.
+//
+// PRONOUN-FREE ON PURPOSE. Every hopper is a man today, but Angela and Sandra
+// sit on the same bench and only their `hops: false` keeps them out of these
+// pools — an author unanchoring one of them should not have to remember to come
+// back here (my own _STAND_BEER said "he" for exactly that reason, round 20).
+const _RAIL_LEAVES = [
+  n => n + " drains the glass, slaps the bar twice, and is gone before the ice has settled.",
+  n => n + " stands, pats the pockets in the usual order — phone, wallet, phone again — and heads off.",
+  n => n + " signs off with a wave that takes in the whole bar and nobody in particular.",
+  n => "“Right,” says " + n + ", to no one in particular, and goes.",
+  n => n + " settles up, says something over the bar that gets a laugh, and wanders out into the soi.",
+  n => n + " looks at the glass, then at the door, and picks the door.",
+];
+const _RAIL_ARRIVES = [
+  n => n + " comes in, scans the rail out of habit, and takes a stool.",
+  n => n + " arrives already talking, and is halfway through the sentence before sitting down.",
+  n => n + " appears at the rail, nods at the room, and settles in.",
+  n => n + " turns up, orders without being asked, and gets comfortable.",
+  n => n + " ducks in out of the heat, sees the stool is free, and takes it.",
+];
+// Thursday, and they came for a reason — worth its own line, because this is
+// the beat that tells the player the movement has a schedule behind it.
+const _RAIL_QUIZ = [
+  n => n + " arrives with the air of someone who has checked what night it is.",
+  n => n + " comes in for the quiz, and makes no secret of wanting the win.",
+  n => n + " turns up early for the quiz, which is how you can tell it matters.",
+];
+// Glam has been wheeled across to the other bar at ten every night of this
+// game's life, and it has never once been said out loud.
+const _GLAM_GOES = [
+  "Somebody takes the brake off Glam's chair, and the pair of them set off for the other bar " +
+    "at the pace of a man who has all night.",
+  "Glam checks his watch, taps the arm of the chair twice, and is wheeled out towards the other bar.",
+  "“Same time,” says Glam, and is pushed off down the pavement towards the other bar.",
+];
+const _GLAM_COMES = [
+  "Glam is wheeled in, parked at his usual angle to the rail, and has a drink in front of him " +
+    "before the brake is back on.",
+  "The chair comes through the doorway backwards, as it has to, and Glam is installed at the rail.",
+  "Glam arrives on wheels and greets the bar like a man opening a meeting.",
+];
+
+// Where somebody stands at a GIVEN hour, settle and shuttle included — the form
+// the narration needs, since it compares this hour against the one before it.
+function _railRoomAt(id, hour) {
+  const n = NPCS[id];
+  if (!n) return null;
+  if (n.shuttle) return hour >= n.shuttle.after ? n.shuttle.to : n.room;
+  if (!_hopsNow(id)) return n.room;
+  return hour >= HOP_SETTLE ? n.room : _hopRoom(id, hour);
+}
+
+function _railTick() {
+  if (!G || G.offstage || G.game || G.pendingEnc || G.pendingChoice) return;
+  if (!_inBar()) return;
+  const hour = _nightHour();
+  // Movement happens on the hour, so this is the only tick that can have one to
+  // report — and hour 0 has no hour before it to compare against.
+  if (hour < 1 || G.nightTurn % 10 !== 0) return;
+  let said = 0;
+  for (const id of Object.keys(NPCS)) {
+    if (said >= 2) break;                 // a rail is not a railway station
+    const n = NPCS[id];
+    if (!n.shuttle && !n.hops) continue;
+    if (G.convo === id) continue;         // his clock is stopped; he has not moved
+    if (typeof _npcActive === "function" && !_npcActive(id)) continue;
+    const from = _railRoomAt(id, hour - 1), to = _railRoomAt(id, hour);
+    if (!from || from === to) continue;
+    const name = _npcLabel(id);
+    if (to === G.room) {
+      said++;
+      if (n.shuttle) _say(_pickVary(_GLAM_COMES, "glamIn"), "dim");
+      else if (typeof _isQuizHour === "function" && _isQuizHour(hour) &&
+               _quizBars().indexOf(to) >= 0) _say(_pickVary(_RAIL_QUIZ, "railQuiz")(name), "dim");
+      else _say(_pickVary(_RAIL_ARRIVES, "railIn")(name), "dim");
+    } else if (from === G.room) {
+      said++;
+      if (n.shuttle) _say(_pickVary(_GLAM_GOES, "glamOut"), "dim");
+      else _say(_pickVary(_RAIL_LEAVES, "railOut")(name), "dim");
+    }
+  }
 }
 
 // Character-creation Phase B: the seven origin archetypes are all NPCs on Soi 6
@@ -2082,6 +2190,7 @@ function _tick() {
   // it parks at the bar for a while, the girls swarm it, and the player may buy
   // any time before it moves on. All of that lives in _salengTick (encounters).
   _salengTick();
+  _railTick();     // the hour turns and somebody drains a glass and moves on
   if (typeof _flowerTick === "function") _flowerTick(); // open-air-bar flower seller (once/night, when courting a girl)
   _closingTick(); // midnight: gents/Soi 6/Darkside give last call, then bolt or shutter
   // Quiz capture was only checked on ARRIVAL, so the obvious punter move —

@@ -848,6 +848,12 @@ function _fonPour() {
   _say("(She has not noticed you watching. You could ASK FON ABOUT THE SHRINE.)", "dim");
 }
 
+// Hour-taking form, because the rail drift needs to ask about an hour that
+// isn't now: _hopRoom is probed at past and future hours by the arrival
+// narration and by _questWhere, and reading G.nightTurn inside that probe would
+// answer about the wrong hour. Same seam rule as _quizDay/_weekday (CLAUDE.md
+// rule 5) — the window arithmetic lives here once.
+function _isQuizHour(hour) { return _quizDay() && hour >= 2 && hour < 4; }
 function _isQuizWindow() {
   return _quizDay() && G.nightTurn >= 20 && G.nightTurn < 40;
 }
