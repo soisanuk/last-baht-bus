@@ -193,3 +193,36 @@ test("Glam's shuttle keeps its own probe — a certain move still reads as one",
   G.nightTurn = 55;
   assert.match(_questWhere("glam"), /Hyper/, "after ten, wheeled across");
 });
+
+// ── invariants the drift newly makes possible ───────────────────────────────
+
+test("no two regulars who can now share a room have one name a prefix of the other", () => {
+  // Drift creates co-location that never happened before: Dave (hopper) and
+  // David (Mondays and Fridays) can both stand in the Stinky. _findNpc's strict
+  // patron pass is exact → name-prefix → title, so a full typed name must
+  // resolve the man you meant. Neither name is a prefix of the other today;
+  // this stops a rename quietly making one.
+  const social = Object.keys(NPCS).filter(id =>
+    NPCS[id].patron || (!NPC_ROLES[id] && !NPCS[id].manager && !NPCS[id].filler && !NPCS[id].house));
+  const where = id => new Set(NPCS[id].hops ? _hopPool(id) : [NPCS[id].room]);
+  for (const a of social) for (const b of social) {
+    if (a >= b) continue;
+    const na = NPCS[a].name.toLowerCase(), nb = NPCS[b].name.toLowerCase();
+    if (!(na.startsWith(nb) || nb.startsWith(na))) continue;
+    const ra = where(a), rb = where(b);
+    const shared = [...ra].filter(r => rb.has(r));
+    assert.deepEqual(shared, [],
+      `${NPCS[a].name} and ${NPCS[b].name} can share ${shared.join(",")} and one name shadows the other`);
+  }
+});
+
+test("two regulars in one room are both reachable by name", () => {
+  // The co-location itself, exercised: put Dave and David in the Stinky on a
+  // Monday and make sure each answers to his own name.
+  G.day = 1; G.nightTurn = 0;            // Monday, opening hour — both at their local
+  G.room = "stinky_bar";
+  const here = _npcsHere();
+  if (!(here.includes("dave") && here.includes("david"))) return; // premise gone
+  assert.equal(_findNpc("dave"), "dave");
+  assert.equal(_findNpc("david"), "david");
+});
