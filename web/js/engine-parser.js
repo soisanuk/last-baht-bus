@@ -4737,7 +4737,15 @@ function _doMotosai(arg) {
     // (stress-test playtest 2026-08-23). The mercy exists so the night can't
     // dead-end; a player who cannot afford the fare is in exactly that spot
     // whether he holds nothing or holds change.
-    if (G.money < d.price && d.price === MOTOSAI_TOWN) {
+    // ONCE A NIGHT. The mercy exists so a night cannot dead-end, and one ride
+    // does that — a second is a free taxi service. With no cap it was strictly
+    // better mobility than solvency: a broke man rode Naklua → Walking Street →
+    // Naklua → Walking Street → Jomtien back to back, one turn each, for nothing,
+    // while a paying man was still negotiating a fare (credit-analyst persona,
+    // round 20). Walking home is always free and dawn always comes, so the
+    // anti-soft-lock purpose survives the cap intact.
+    if (G.money < d.price && d.price === MOTOSAI_TOWN && G.pityRideDay !== G.day) {
+      G.pityRideDay = G.day;
       G.room = d.room;
       G.darkStreak = 0;
       _say("The piwin takes in the empty pockets, the hour, and the state of you, " +

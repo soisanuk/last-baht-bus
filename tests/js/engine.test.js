@@ -892,7 +892,10 @@ test("the pity ride is for anyone who can't pay, not only for exactly ฿0", () 
   // let dawn take the coin.
   state().flags.act1Done = true; state().flags.hasWallet = true; state().stage = "vacation";
   state().room = "sukhumvit_crossing"; state().nightTurn = 91;
+  // one purse per NIGHT: the mercy is capped at once a night since round 20 (it
+  // was an unlimited free taxi), so each case needs its own evening
   for (const purse of [0, 1, MOTOSAI_TOWN - 1]) {
+    state().day++;
     state().room = "sukhumvit_crossing"; state().money = purse; out = [];
     run("motosai to naklua");
     assert.notEqual(state().room, "sukhumvit_crossing",

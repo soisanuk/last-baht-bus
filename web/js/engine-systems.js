@@ -2103,10 +2103,20 @@ function _questAvailable(qid) {
       if (targetRoom && !SOI6_ROOMS.has(targetRoom)) return false;
     }
   }
-  // a dep you couldn't have done because you ARE its giver (an origin vignette
-  // about the man you picked) counts as lived
+  // A dep you couldn't have done because you ARE its giver counts as lived — but
+  // ONLY a VIGNETTE, which is what the waiver was always for: an origin scene
+  // about the man you picked, which cannot happen because he is you. It used to
+  // waive any dep whose giver was inactive, and that is transitive poison: pick
+  // the investor origin and Wayne deactivates, so `bar_licence` (his JOB, not a
+  // vignette) counted as lived, so Candy offered FIFTY-ONE PERCENT — step three
+  // of the bar chain — to a man who had done none of the four steps. Accepting
+  // it put an unfinishable quest permanently on the books, with a tappable hint
+  // that only ever deflected, because the dialogue node behind it is correctly
+  // gated (credit-analyst persona, round 20). A real job is never lived by
+  // proxy; only the scene you embody is.
   return q.deps.every(d => G.quests[d] === "done" ||
-    (QUESTS[d] && QUESTS[d].giver && NPCS[QUESTS[d].giver] && !_npcActive(QUESTS[d].giver)));
+    (QUESTS[d] && QUESTS[d].vignette && QUESTS[d].giver &&
+     NPCS[QUESTS[d].giver] && !_npcActive(QUESTS[d].giver)));
 }
 
 // Called after a giver's dialogue lands: surface any offer they have.

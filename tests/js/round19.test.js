@@ -154,3 +154,44 @@ test("Tan advertises the locator himself, and the quest names the key not the do
   const rose = NPCS.candy.dialogue.find(d => d.topic === "rose");
   assert.ok(rose && rose.chip !== false, "…and the node carrying the key is offerable on the chip bar");
 });
+
+// ── Round 20: the credit man's findings (Vince, 23 in-game days) ─────────────
+
+test("a dep chain is a chain — being an origin doesn't skip other people's jobs", () => {
+  // The waiver exists so an origin VIGNETTE — a scene about the man you picked,
+  // which cannot happen because he is you — counts as lived. It used to waive any
+  // dep whose giver was merely inactive, and that is transitive: pick the
+  // investor and Wayne deactivates, so `bar_licence` (his job, not a vignette)
+  // counted as done, so Candy offered step THREE of the bar chain to a man who
+  // had done none of it — an unfinishable quest, permanently on the books.
+  newGame();
+  G.player = { origin: "business", personality: "joker", orientation: "straight" };
+  G.stage = "expat";
+  _setFlag("act1Done"); _setFlag("hasWallet"); _setFlag("expatLife");
+  assert.equal(_npcActive("wayne"), false, "premise: you ARE the investor, so Wayne isn't out there");
+  assert.equal(_questAvailable("bar_partner"), false, "step three is not available with none of the chain done");
+  // …and the genuine waiver still works: nominee_deal IS his own scene
+  G.quests.bar_premises = "done"; _setFlag(QUESTS.bar_premises.doneFlag);
+  assert.equal(_questAvailable("bar_licence"), true, "a vignette he embodies still counts as lived");
+});
+
+test("the hotel book stops when it stops — no charge is announced that isn't made", () => {
+  G.stage = "expat"; _setFlag("expatLife");
+  G.hotelDebt = 0; G.money = 0; G.room = _hotelRoomId();
+  let last = "";
+  for (let i = 0; i < 11; i++) { out = []; _chargeRent(); last = text(); }
+  assert.equal(G.hotelDebt, _DEBT_CAP, "the book caps");
+  assert.doesNotMatch(last, /adds ฿\d+ to the book/,
+    "and the clerk stops narrating a charge he is no longer making");
+});
+
+test("the piwin's mercy is a way out, not a taxi service", () => {
+  G.money = 0; G.room = "naklua_rd";
+  doCommand("motosai to walking street");
+  assert.equal(G.room, "ws_gate", "a broke man gets out of trouble once");
+  doCommand("motosai to naklua");
+  assert.equal(G.room, "ws_gate", "…and not twice in a night");
+  G.day++;
+  doCommand("motosai to naklua");
+  assert.equal(G.room, "naklua_rd", "the kindness renews at dawn");
+});

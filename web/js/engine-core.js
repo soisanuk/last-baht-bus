@@ -299,6 +299,7 @@ function newGame() {
     // nudge — see _noteMiss/_tanUnstick. Resets the moment the world moves.
     stuck: { n: 0, parse: 0, noname: 0, terse: false, spots: [] },
     stuckDay: 0,         // Tan's unstick text fires at most once a night
+    pityRideDay: 0,      // the piwin's free ride for a broke man — once a night, not a taxi service
     lastBusWarned: false, // the nightly last-baht-bus heads-up fires once per night
     bestHappy: 0,
     act1Best: 0,         // furthest point down the opening critical path ever reached; survives the do-or-die Act One reset
@@ -718,11 +719,21 @@ function _chargeRent(rough) {
     G.money -= rate;
     _say(`(฿${rate} for the night. ฿${G.money} left — thin, but paid.)`, "dim");
   } else {
+    const owedBefore = G.hotelDebt;
     G.hotelDebt = Math.min(_DEBT_CAP, G.hotelDebt + rate);
     _addHappy(-1);
-    _say(_fmt("The night clerk takes in the situation and adds ฿{r} to the book " +
-      "without a word — ฿{d} on it now. His kindness is the heaviest " +
-      "thing you'll carry today.", { r: rate, d: G.hotelDebt }), "alert");
+    // At the cap the book STOPS — and it used to go on announcing a charge it
+    // wasn't making, six nights running against a total that hadn't moved since
+    // day 18 (credit-analyst persona, round 20). The generosity is the point of
+    // this beat, so say what it actually is once you're past the arithmetic:
+    // he is no longer writing you down, which is worse to owe than money.
+    _say(G.hotelDebt > owedBefore
+      ? _fmt("The night clerk takes in the situation and adds ฿{r} to the book " +
+        "without a word — ฿{d} on it now. His kindness is the heaviest " +
+        "thing you'll carry today.", { r: rate, d: G.hotelDebt })
+      : _fmt("The night clerk doesn't reach for the book. He stopped writing you " +
+        "down somewhere around ฿{d} and has not mentioned it since, which is a " +
+        "different kind of debt and a heavier one.", { d: G.hotelDebt }), "alert");
   }
 }
 
