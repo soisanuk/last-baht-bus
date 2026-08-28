@@ -628,13 +628,24 @@ const HOP_SETTLE = 4;    // 22:00 — from here he is at his local
 // does not wander off mid-sentence: _convoActive clears a live conversation the
 // instant its partner leaves the room, silently, and destroys the question he
 // had put to you along with it.
-function _hopsNow(id) {
+// SPLIT IN TWO, and the split is the whole of a bug. _canHop is about the MAN —
+// is he the sort who drifts at all — and consults no clock. _hopsNow adds "and
+// it is still early", which is about the HOUR. Folding the two together meant
+// _railRoomAt(id, 3), asked at 22:00, answered "he was home at nine" for every
+// hopper in the game: from === to, and the ten-o'clock homecoming was never
+// narrated once. Two personas caught it independently in one round — one watched
+// a man leave with a proper line and reappear in silence, the other had a man
+// vanish from under her while she stood in the room. The rail thinned and never
+// filled. Anything asking about an hour that is not now must use _canHop.
+function _canHop(id) {
   const n = NPCS[id];
   if (!n || !n.hops) return false;
   if (NPC_ROLES[id] || n.manager || n.filler || n.house) return false;
   if (G.mode === "soi6") return false;   // the challenge fences the map; drifting leaves it
-  if (_nightHour() >= HOP_SETTLE) return false;
   return true;
+}
+function _hopsNow(id) {
+  return _canHop(id) && _nightHour() < HOP_SETTLE;
 }
 
 // His manor: the bars of the districts he actually drinks in — `haunts` when
@@ -759,7 +770,7 @@ function _railRoomAt(id, hour) {
   const n = NPCS[id];
   if (!n) return null;
   if (n.shuttle) return hour >= n.shuttle.after ? n.shuttle.to : n.room;
-  if (!_hopsNow(id)) return n.room;
+  if (!_canHop(id)) return n.room;       // the MAN, not the hour — see _canHop
   return hour >= HOP_SETTLE ? n.room : _hopRoom(id, hour);
 }
 
@@ -949,6 +960,16 @@ const _PATRON_HOP_ROOMS = Object.keys(ROOMS).filter(id => ROOMS[id].barType);
 // empty-bar monsoon register, which was unreachable while the bench never thinned.
 function _benchOut(id) {
   if (!_flag("act1Done")) return false;              // the opening night's cast is fixed
+  // A MAN WHO NAMED HIS NIGHTS KEEPS THEM. David is the only character in this
+  // game who hands the player a hard schedule — "Mondays and Fridays are my days
+  // off so those are my beer days" — and a persona wrote it down, planned an
+  // evening on it, walked to the Stinky on a Monday and found an empty stool.
+  // Measured before the fix: absent on 19 of 32 of his own stated nights in the
+  // deep-low months. The season may quietly thin a bench nobody was promised;
+  // it may not falsify the one thing a character told you to rely on. This is
+  // the promise doctrine applied to a rota — an invitation is a promise, and so
+  // is a timetable.
+  if (NPCS[id] && NPCS[id].days && NPCS[id].days.includes(G.day % 7)) return false;
   const stay = { peak: 0, high: 0.05, shoulder: 0.22, low: 0.45, deeplow: 0.6 };
   const p = (typeof _seasonTier === "function") ? (stay[_seasonTier()] || 0) : 0;
   if (p <= 0) return false;

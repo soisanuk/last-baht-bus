@@ -3157,6 +3157,13 @@ const ROOMS = {
       "A staircase behind the bar leads UP to the guest rooms.",
     reads: {
       notebook: [
+        // He isn't in tonight, so neither is his forearm. The desc hedges with
+        // "most nights"; the close look did not, and a persona who came looking
+        // for Mort read the biro clicking under an arm that wasn't in the room.
+        { when: () => typeof _npcWhere === "function" && _npcWhere("mort") !== "queen_vic",
+          text: "No notebook at the far end tonight — just the ring its owner's glass " +
+            "leaves on the wood, and the stool at the angle he leaves it at. The pub has " +
+            "the shape of him in it without him." },
         { req: ["jokeWho"],
           text: "Mort's spiral notebook, half an arm's length away and utterly private. " +
             "Somewhere in there, you now know, is a page of phone numbers with a tally " +
@@ -6714,7 +6721,7 @@ const NPCS = {
         short: "\u201cI do it every morning. It is not decoration \u2014 it is the building.\u201d" },
     ],
   },
-  aoy: {
+  aoy: { house: true,
     name: "Aoy", th: "\u0e2d\u0e49\u0e2d\u0e22", emoji: "\ud83c\udf7d\ufe0f",
     pronoun: "she",
     room: "queen_vic",
@@ -6739,7 +6746,7 @@ const NPCS = {
         short: "\u201cSame hours, same money, nobody asks me anything. My sister makes more.\u201d" },
     ],
   },
-  gaew: {
+  gaew: { house: true,
     name: "Gaew", th: "\u0e41\u0e01\u0e49\u0e27", emoji: "\ud83c\udf7b",
     pronoun: "she",
     room: "queen_vic",
@@ -9715,8 +9722,9 @@ const NPCS = {
         text: "You lay it all out — Terry's history, Kesinee's straight talk, Gavin's smiling pitch. Bert " +
           "listens without touching the Singha, which is how you know it lands. When you're done he's " +
           "quiet a while. \"Right,\" he says finally. \"So the money's real and the machine's real, and both " +
-          "of 'em would fix this year and cost every one after.\" He looks down the bar — the trophies, Dave " +
-          "on his rounds, Phil on his stool, the dog by the door. \"Kesinee's girls last a season now. Mine's " +
+          "of 'em would fix this year and cost every one after.\" He looks down the bar — the trophies, the " +
+          "dents in the rail, the stools that have names on them nobody ever wrote down. \"Kesinee's " +
+          "girls last a season now. Mine's " +
           "been here since Candy owned the place. That's the whole difference, bud, and it's the only one that " +
           "matters.\" He finally lifts the Singha. \"I'll tell the old man to hold. He trusts me to keep the " +
           "lights on — not to sell his soul to a spreadsheet while he's too sick to say no. Ryan Powers wants " +

@@ -2219,9 +2219,21 @@ function _findQuest(word) {
 }
 
 function _doAccept(arg) {
-  const qid = _findQuest(arg) ||
-    Object.keys(QUESTS).find(q => G.quests[q] === "offered");
-  if (!qid) { _say("Accept what? (QUESTS lists what's on offer.)"); return; }
+  // A NAMED QUEST THAT MATCHES NOTHING IS A MISS, NOT A DEFAULT. ACCEPT RECON
+  // (for "Candy's Competition Recce") used to fall through to "the first thing
+  // on offer" and silently accept The Sister-Bar Run instead — different quest,
+  // no confirmation, and an item pushed into the player's hands (round 22). A
+  // wrong quest accepted quietly is worse than a clean miss, every time.
+  const offered = Object.keys(QUESTS).filter(q => G.quests[q] === "offered");
+  const qid = arg ? _findQuest(arg) : (offered.length === 1 ? offered[0] : null);
+  if (!qid) {
+    if (arg) _say(`Nothing on offer by that name. (QUESTS lists what's on the table.)`);
+    else if (offered.length > 1)
+      _say("Accept which? " + offered.map(q => _L(QUESTS[q].name)).join(" · ") +
+        " — name one. (QUESTS lists them.)");
+    else _say("Accept what? (QUESTS lists what's on offer.)");
+    return;
+  }
   const q = QUESTS[qid];
   if (G.quests[qid] === "active") { _say("Already on it."); return; }
   if (G.quests[qid] === "done") { _say("That one's finished. Bask."); return; }
@@ -2649,6 +2661,15 @@ function _doContact(arg) {
     return;
   }
   if (id === "cream") { _chamContact(); return; } // the civilian at the table (chameleon economy)
+  // A pub barmaid is not a bar girl, and the "better customers" line implied a
+  // door that spending more would open — a persona stood the Queen Vic's floor
+  // ~15 drinks over nine nights chasing it (round 22). House staff get an honest
+  // refusal instead: there is no number here, at any price.
+  if (NPCS[id] && NPCS[id].house) {
+    _say(`${NPCS[id].name} laughs, not unkindly. "You know where I am, love. I'm here every night — ` +
+      `that's rather the point of me."`);
+    return;
+  }
   if (!NPC_ROLES[id]) { _say(`${NPCS[id].name} keeps that number for family and better customers.`); return; }
   if (G.phone.contacts[id]) { _say(`You already have ${NPCS[id].name}'s number. She knows you know.`); return; }
   if (_phoneDead()) return;

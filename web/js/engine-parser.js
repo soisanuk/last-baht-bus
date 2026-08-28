@@ -1097,6 +1097,13 @@ function _resolveRead(val) {
   for (const e of val) {
     if (e.req && !e.req.every(f => _flag(f))) continue;
     if (e.notFlags && e.notFlags.some(f => _flag(f))) continue;
+    // `when(G)` for the state a flag cannot express — chiefly PRESENCE. A close
+    // look at a man's notebook asserted his forearm was on it on the nights he
+    // was not in the pub (round 22, found independently by two personas), and
+    // no flag can say "he is on his stool tonight" because that answer changes
+    // with the rota, the season and the hour. Same shape as a dialogue node's
+    // when(st, G); the last node must still be ungated, which reads.test pins.
+    if (e.when && !e.when(G)) continue;
     return e;
   }
   return null;
@@ -5647,9 +5654,16 @@ function _doTip(arg) {
     }
     return;
   }
-  const girls = _npcsHere().filter(id => NPC_ROLES[id]);
+  // `house` is staff the ROLES table doesn't cover — the Queen Vic has no
+  // mamasan and no cashier, so its landlady and barmaids carry the house marker
+  // instead. BUY DRINK FOR GAEW worked and TIP GAEW said "Tip who?" about a
+  // woman standing on the Here: line who had just served him (round 22): two
+  // verbs disagreeing about whether the person in front of you exists. Anyone
+  // working the bar can be tipped.
+  const tippable = id => !!(NPC_ROLES[id] || (NPCS[id] && NPCS[id].house));
+  const girls = _npcsHere().filter(tippable);
   const id = nameW ? _findNpc(nameW) : girls[0];
-  if (!id || !NPC_ROLES[id]) { _say("Tip who? Name one of the ladies."); return; }
+  if (!id || !tippable(id)) { _say("Tip who? Name one of the ladies."); return; }
   if (G.money < amount) { _say(`Generosity of spirit, poverty of pocket: you have ฿${G.money}.`); return; }
   G.money -= amount;
   (G.soc.given = G.soc.given || {})[id] = (G.soc.given[id] || 0) + amount; // toward a sponsor flip
