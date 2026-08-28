@@ -192,3 +192,116 @@ test("bare ACCEPT with two on the table asks which, and with one just takes it",
   doCommand("accept");
   assert.equal(G.quests.sangsom, "active", "one offer needs no name");
 });
+
+// ── PRIYA #1: an optional errand that silently deleted the next act ─────────
+
+test("running Gavin's errand does not end Bert, or the expat chain with him", () => {
+  // The state Priya reached and could not get out of. Two blocks, one behind the
+  // other: the freeze greeting had no `asks`, so trust could never reach the 2
+  // that `white_dish` needs; and the resolution node carried notFlags
+  // ["wdgFlipTried"], so a man who had pitched for White Dish could never
+  // afterwards tell Bert the truth. `bar_premises` deps on `white_dish`, so the
+  // whole expat bar stage died — off an errand the game says you may refuse.
+  G.money = 9000; G.room = "stinky_bar";
+  _setFlag("heardWdgPitch"); G.quests.wdg_flip = "active";
+  doCommand("talk to bert");
+  doCommand("running from an office and a mortgage");     // his question, answered
+  doCommand("ask bert about selling");                    // the errand, run
+  assert.ok(_faction("wdg") > 0 && _flag("wdgFlipTried"), "premise: you carried his water");
+
+  out = []; doCommand("talk to bert");
+  assert.match(text(), /errand boy/, "he ices you, which is correct and stays");
+
+  assert.equal(_questAvailable("white_dish"), true,
+    "…but the door is not bolted: his question still builds the trust it needs");
+  doCommand("accept white dish");
+  _setFlag("heardWdgHistory"); _setFlag("heardWdgInside");
+  out = []; doCommand("ask bert about the offer");
+  assert.match(text(), /middle part|came back/i, "and there is a scene for the man who came back");
+  assert.equal(_flag("wdgResolved"), true);
+  assert.equal(G.quests.white_dish, "done");
+
+  out = []; doCommand("talk to bert");
+  assert.match(text(), /two seconds/, "thawed — and he does not pretend it never happened");
+
+  G.stage = "expat"; _setFlag("expatLife");
+  assert.equal(_questAvailable("bar_premises"), true, "the expat bar chain lives");
+});
+
+test("the thaw is gated on the deeds, not on the standing it cancels", () => {
+  // Putting it right by Bert is itself what drops wdg back to zero, so gating
+  // the thawed greeting on `wdg > 0` made it unreachable in the only path that
+  // earns it — the player would get the ordinary warm hello as though he had
+  // never run the errand at all.
+  const thaw = NPCS.bert.dialogue.find(d => d.short && d.short.includes("We're square"));
+  assert.ok(thaw, "the node exists");
+  _setFlag("wdgFlipTried"); _setFlag("wdgResolved");
+  assert.equal(_faction("wdg"), 0, "premise: the standing is gone");
+  assert.equal(thaw.when({}, G), true, "and he still knows what you did");
+});
+
+test("a manager who won't open you a beer doesn't drink your health either", () => {
+  G.money = 9000; G.room = "stinky_bar";
+  _align("wdg", 1);
+  const happy = G.happy;
+  out = []; doCommand("buy man drink");
+  assert.doesNotMatch(text(), /likes you|best friend/, "no line about a manager who likes you");
+  assert.equal(G.happy, happy, "and no happiness from a gesture that wasn't accepted");
+  assert.equal(G.money, 9000 - BEER_PRICE, "he takes the money — it is a bar");
+  _setFlag("wdgResolved");
+  out = []; doCommand("buy man drink");
+  assert.match(text(), /speaking the language/, "square again, and the warmth comes back");
+});
+
+// ── PRIYA #3: a dinner two characters promise, by dish and by price ─────────
+
+test("every honest phrasing of Mot's dinner buys Mot dinner", () => {
+  // Madam Oy: "Buy Mot's dinner." Mot: "Khao man gai, forty baht. I know a cart."
+  // Priya tried seven phrasings; all seven dead-ended, most on "Not for sale here"
+  // because Mot stands in an alley that sells nothing.
+  for (const cmd of ["buy mot dinner", "buy khao man gai", "eat with mot",
+                     "feed mot", "follow mot", "buy food for mot"]) {
+    sandbox();
+    G.money = 500; G.room = NPCS.mot.room;
+    out = [];
+    doCommand(cmd);
+    assert.ok(_flag("motFed"), `"${cmd}" should buy the boy his dinner`);
+    assert.doesNotMatch(text(), /Not for sale|didn't understand|not carrying/i,
+      `"${cmd}" fell through to a parse error`);
+    assert.equal(G.money, 500 - MOT_DINNER, `"${cmd}" charges the price he named`);
+  }
+});
+
+test("the dinner is once, is his price, and is not a hunger farm", () => {
+  G.money = 500; G.room = NPCS.mot.room; G.hunger = 90;
+  doCommand("buy mot dinner");
+  assert.ok(G.hunger < 90, "you ate too — you were at the cart");
+  const after = G.money;
+  out = []; doCommand("buy mot dinner");
+  assert.match(text(), /One time only/, "he refuses a second, in his own voice");
+  assert.equal(G.money, after, "and it costs nothing to be refused");
+});
+
+test("the dinner doesn't leave you being mugged in the dark you just left", () => {
+  // Mot works a pitch-dark alley, and the meal's ticks used to feed the
+  // dark-streak counter — so the scene ended with a soi dog lunging out of the
+  // black at a man who had just sat down to chicken and rice.
+  G.money = 500; G.room = NPCS.mot.room;
+  out = [];
+  doCommand("buy mot dinner");
+  assert.doesNotMatch(text(), /lunges out of the dark/,
+    "no dog takes your dinner during the dinner — you were at a lit cart with company");
+  // The one warning that DOES follow is honest: the scene ends and you are back
+  // in the alley, which is dark, and the game says so. What the meal must not do
+  // is hand three ticks of escalation to a street you were not standing in.
+  assert.ok(G.darkStreak <= 1, "the streak did not run through the meal");
+});
+
+test("Mot's dinner is on all three surfaces, and disappears once it's done", () => {
+  G.money = 500; G.room = NPCS.mot.room;
+  assert.ok(engineComplete("buy ").includes("mot dinner"), "autocomplete offers it");
+  assert.ok(_npcActions("mot", true).includes("motdinner"), "the wheel offers it");
+  doCommand("buy mot dinner");
+  assert.ok(!engineComplete("buy ").includes("mot dinner"), "…and stops offering once it's done");
+  assert.ok(!_npcActions("mot", true).includes("motdinner"));
+});

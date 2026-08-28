@@ -36,6 +36,7 @@ const QV_CRISPS  = 40;   // …and after eleven, only crisp
 const BEER_PRICE = 80;   // your own big Chang, bar price
 const BELL_PRICE = 300;  // ring it and the round is on you
 const BRA_PRICE = 200;   // the mamasan's drawer novelty; makes fondling "interesting"
+const MOT_DINNER = 40;   // khao man gai off a cart — the price Mot names himself
 const ROSE_PRICE = 100;  // the flower-seller's daughter's single rose (a gift for whoever you're with)
 const CORD_PRICE = 20;   // black nylon off a 7-Eleven counter; what an amulet hangs on
 const TAXI_DEBT = 12000; // what Nira is owed in the cousin's name — see QUESTS.taxi_debt
@@ -9621,11 +9622,37 @@ const NPCS = {
           "never going to be.\" Bert weighs it without touching it. \"Hang onto it. Nobody else out " +
           "there wants that room — and one day somebody with the right partner might.\"",
         short: "\"The landlord's key. Hang onto it — one day somebody with the right partner might want that room.\"" },
+      // YOU CAME BACK AND DID RIGHT BY HIM. Gated above the freeze so the deed
+      // is the way back out of it — the faction doctrine says standing moves on
+      // the deed and declining is free, and a slight you can never work off is
+      // neither. He does not pretend it didn't happen; that's the point of him.
+      // Gated on the DEEDS, not on the standing number: putting it right by Bert
+      // is itself what drops your White Dish standing back to zero, so a `wdg > 0`
+      // test here would make this node unreachable in the one path that earns it
+      // — the player would silently get the ordinary warm hello, as though he
+      // had never run the errand at all.
+      { when: (st, G) => _flag("wdgFlipTried") && _flag("wdgResolved"),
+        text: "The welcome arrives about two seconds later than it used to, and Bert knows you " +
+          "clocked the two seconds. \"Bud.\" A cold one, opened. \"You carried his water once and " +
+          "then you carried mine, and I've been doing this long enough to know which of those a man " +
+          "does on purpose.\" He racks the balls. \"We're square. I'll not bring it up again — but " +
+          "I'd not have been able to say that if you'd only done the one.\"",
+        short: "\"We're square, bud.\" The beer arrives two seconds late, and always will." },
+      // THE FREEZE. It is a cold shoulder, not a wall: he still puts the question
+      // to you, because taking a man's measure is what a publican does and it is
+      // exactly what he'd do to somebody he has stopped trusting. Without an
+      // `asks` here the greeting stack dead-ends at this node, trust can never
+      // reach 2, and `white_dish` — which `bar_premises` deps on — is silently
+      // unreachable forever. That is the whole expat stage, killed by an errand
+      // the game explicitly says you may refuse (round 22, Priya).
       { when: (st, G) => _faction("wdg") > 0,
         text: "Bert clocks you and the welcome doesn't arrive — no beer opened, no stool offered. \"You. " +
           "Gavin's errand boy.\" He doesn't look up from the felt. \"Table's still true, beer's still cold. " +
           "But you drink it standing, and you drink it quiet.\" The silence does the rest.",
-        short: "\"You. Gavin's errand boy.\" No beer, no stool — you drink standing, and quiet." },
+        short: "\"You. Gavin's errand boy.\" No beer, no stool — you drink standing, and quiet.",
+        asks: { key: "why", q: "He racks the balls anyway, and doesn't offer you a cue. \"Go on then. " +
+          "While you're standing there. What'd you come out here for, really?\" It is not friendly. " +
+          "It is, unmistakably, a question." } },
       { when: (st) => st.dstate !== "stranger",
         text: "\"There he is.\" Bert's got a cold one open before you've sat. \"Not moved off this stool " +
           "since you left, funny enough. Table's true, beer's cold.\" A crooked grin. \"What's the good " +
@@ -9717,6 +9744,31 @@ const NPCS = {
         "pool, hundred baht in, winner takes the table money.\"",
         short: "\"Table's true, beer's cold, don't sit on the rail. League night every third night — hundred baht in.\"",
         asks: { key: "why", q: "He racks the balls without hurry. \"So what's your story, bud? Everybody out here's running to something or from something. Which one's you?\"" } },
+      // THE MAN WHO TRIED IT BOTH WAYS. Running Gavin's errand used to be
+      // TERMINAL: the resolution node below carries notFlags: ["wdgFlipTried"],
+      // and it is the only one, so a player who pitched for White Dish could
+      // never afterwards tell Bert the truth — while `white_dish` stayed
+      // offerable and acceptable, so he took a quest that could not be finished,
+      // and `bar_premises` deps on it, so the entire expat bar chain quietly
+      // died. All of that off an errand the game itself says you may refuse
+      // (round 22, Priya). A choice you cannot revisit is fine; a choice that
+      // silently deletes the next act is not. So he gets to come back — and the
+      // scene is better for the first visit having happened, because Bert knows
+      // exactly what it cost the man to walk in twice.
+      { topic: "offer", chip: false,
+        req: ["heardWdgHistory", "heardWdgInside", "heardWdgPitch", "wdgFlipTried"], notFlags: ["wdgResolved"],
+        sets: ["wdgResolved"],
+        text: "\"Back again.\" Bert doesn't stop chalking. \"Last time you stood there you had " +
+          "Gavin's words in your mouth.\" So you give him the rest of it — Terry's history, " +
+          "Kesinee's straight talk, and what the pitch actually looked like once you'd been " +
+          "shown the machine behind it. He lets you finish. He does not help you along.\n\n" +
+          "\"Right,\" he says at last, and sets the chalk down square. \"So you carried it, and " +
+          "then you went and looked, and then you came back and told me what you found.\" A long " +
+          "pull on the Singha. \"Bud, I've had men in this bar twenty years who never did the " +
+          "middle part.\" He racks the balls. \"I'll tell the old man to hold. And I'll not " +
+          "pretend I didn't hear the first version — but I'd sooner have a man who changes his " +
+          "mind out loud than one who never had one.\"",
+        short: "\"You carried it, then you looked, then you came back and told me. Most men never do the middle part.\"" },
       { topic: "offer", chip: false, req: ["heardWdgHistory", "heardWdgInside", "heardWdgPitch"], notFlags: ["wdgResolved", "wdgFlipTried"],
         sets: ["wdgResolved"],
         text: "You lay it all out — Terry's history, Kesinee's straight talk, Gavin's smiling pitch. Bert " +

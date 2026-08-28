@@ -2256,7 +2256,12 @@ function _tick() {
       _say("(Phone battery: 5%. This is fine.)", "alert");
     }
   }
-  if (_isDarkHere() && !G.rain) { // even the soi dogs go to ground in a downpour
+  // ...and they are not your problem at all while you are OFFSTAGE — away from
+  // this room for the duration of a scene (an hour on a short time, four minutes
+  // round the corner at Mot's cart). The saleng and the last-call tick already
+  // honour the flag; the dark street did not, so a boy walking you to chicken and
+  // rice ended with a dog lunging out of the black at you (round 22).
+  if (_isDarkHere() && !G.rain && !G.offstage) { // even the soi dogs go to ground in a downpour
     // your own soi dog outranks the local franchise: the dark sois go quiet
     if (G.dog) {
       if (G.darkStreak === 0) {

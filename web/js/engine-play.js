@@ -4072,3 +4072,11 @@ function _goExpat() {
   _describeRoom(true);
 }
 
+
+// A manager who is currently giving you the cold shoulder. Today that is Bert,
+// frozen while your White Dish standing is above zero and you have not yet put
+// it right by him — the same test his greeting node makes, in one place, so a
+// second surface cannot drift out of agreement with the first (round 22).
+function _mgrIced(id) {
+  return id === "bert" && _faction("wdg") > 0 && !_flag("wdgResolved");
+}

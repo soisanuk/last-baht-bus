@@ -390,6 +390,9 @@ function _npcActions(id, full) {
     // Tan's standing food invite is a real option, so it gets the third surface
     // (parser + autocomplete + here). Hidden during Act One, when he refuses.
     if (id === "tan" && typeof _flag === "function" && _flag("act1Done")) acts.push("follow");
+    // Mot's dinner, same three-surface treatment: the wheel is where a player
+    // who never guesses "buy mot dinner" finds it. Only while it's undone.
+    if (id === "mot" && typeof _flag === "function" && !_flag("motFed")) acts.push("motdinner");
   }
   return acts;
 }
@@ -6477,6 +6480,9 @@ function _doFeedDog(arg) {
       : "No cats here to feed — the beach pair work the Jomtien sand, and the bar cats work strictly for the kitchen.");
     return;
   }
+  // FEED MOT is the fourth honest phrasing of Madam Oy's instruction, and it was
+  // landing on the dog handler's brush-off.
+  if (arg && /\bmot\b/.test(arg) && _npcsHere().includes("mot")) { _motDinner(); return; }
   if (arg && !/him|it/.test(arg) && !_isDogWord(arg)) { _say("Feed who, exactly? The whole soi is hungry."); return; }
   if (G.dog) {
     if (_dogEgg() === "snack") {
@@ -7414,6 +7420,12 @@ function _doEat(arg) {
   // "EAT WITH TAN" is the other natural phrasing of his standing food invite —
   // route it to the same scene rather than the you're-not-carrying-that shrug.
   if (arg && /\btan\b/.test(arg) && _npcsHere().includes("tan")) { _tanFood(); return; }
+  // ...and the same for Mot. Priya tried seven phrasings of the dinner Madam Oy
+  // and Mot both promise — buy mot dinner, buy khao man gai, buy food for mot,
+  // give 40 to mot, follow mot, eat with mot — and every one dead-ended. The
+  // house rule is that a plausible verb never falls through to an item-parse
+  // error; a verb the game's own prose TOLD you to type certainly must not.
+  if (arg && /\bmot\b/.test(arg) && _npcsHere().includes("mot")) { _motDinner(); return; }
   // Cherry Pop's bowl of maraschino cherries: a real nibble, but not a hunger
   // farm — one free cherry a night, the rest is just décor you're pawing at.
   if (arg && /\bcherr/.test(arg) && G.room === "cherry_pop") {

@@ -3793,6 +3793,20 @@ function _buyManDrink(id) {
   if (!_inBar()) { _say("Buy a drink where drinks are sold, tilac."); return; }
   const name = NPCS[id].name;
   if (G.money < BEER_PRICE) { _say(`A man drink runs ฿${BEER_PRICE} and you're short. ${name} waves it off: “Next time, bud.”`); return; }
+  // A MAN WHO WON'T OPEN YOU A BEER WON'T DRINK YOUR HEALTH EITHER. Bert ices a
+  // player who ran White Dish's errand — and the very same visit, BUY MAN DRINK
+  // printed "a manager who likes you is the best friend a farang has out here",
+  // +2 สนุก, one line before the freeze (round 22, Priya). Two surfaces, opposite
+  // states, back to back: the state-blind-prose defect exactly. He takes the
+  // money, because he is a publican and it is a bar; what he does not do is
+  // pretend. No happiness, no standing — you bought a drink, not a friend.
+  if (typeof _mgrIced === "function" && _mgrIced(id)) {
+    G.money -= BEER_PRICE;
+    _say(`You put the ฿${BEER_PRICE} on the wood. ${name} rings it in, pours one, and drinks it ` +
+      `where he's standing, facing the felt. Not a word wasted, not a word given. The gesture is ` +
+      `noted and it is not, tonight, accepted. (฿${G.money} left.)`, "dim");
+    return;
+  }
   G.money -= BEER_PRICE;
   G.soc.manDrinks = G.soc.manDrinks || {};
   G.soc.manDrinks[id] = (G.soc.manDrinks[id] || 0) + 1;
@@ -3943,6 +3957,12 @@ function _doBuy(arg) {
     _qvKitchen(arg);
     return;
   }
+  // BUY MOT DINNER / BUY KHAO MAN GAI. Early, because Mot works an alley with no
+  // stall in it, so every branch below correctly concludes there is nothing for
+  // sale — which is how a dinner two characters promise by name and by price
+  // answered "Not for sale here" for the whole life of the game.
+  if (_npcsHere().includes("mot") &&
+      (/\bmot\b/.test(arg) || /khao ?man ?gai/.test(arg))) { _motDinner(); return; }
   // BUY PIWIN A BEER. First, because a stand is not a bar and every branch
   // below assumes one — the beer path was answering "this calls for a bar stool".
   if (/\bcoffee\b/.test(arg) && /\btan\b/.test(arg) && _npcsHere().includes("tan")) { _doTalk("tan", "coffee"); return; }
@@ -6735,6 +6755,11 @@ function _completePool(verb, ctx) {
       if (_bandHere()) barItems.push("round for band"); // only where a band's actually playing
       if (_room().seven) barItems.push("condom"); // 7-Eleven staple
       if (_managerHere()) barItems.splice(1, 0, "man drink"); // early, so it survives the 8-result cap
+      // "mot dinner", early for the same reason: Mot stands in an alley that sells
+      // nothing, so without this the BUY chips there are a list of things the room
+      // will refuse — while two characters have told the player to buy exactly one
+      // thing. Only while it's undone.
+      if (_npcsHere().includes("mot") && !_flag("motFed")) barItems.unshift("mot dinner");
       const sItems = _salengItems();
       if (sItems.length) {
         // a parked cart leads with its items; once one's named, offer a lady to
@@ -8060,6 +8085,7 @@ function _doFollow(arg) {
   if (!id) { _say(_pickVary(_FOLLOW_NOBODY, "follownob")); return; }
   _noteActor(id);
   if (id === "tan") { _tanFood(); return; }
+  if (id === "mot" && !_flag("motFed")) { _motDinner(); return; }  // "I know a cart."
   _say(_pickVary(_FOLLOW_NO, "followno")(_convoName(id)));
 }
 
@@ -8426,4 +8452,65 @@ function _doRep() {
         ? "The mamas nod you in. Keep standing your rounds and telling it straight and it only grows."
         : "Stand a round, tip a lady, keep your story straight — or don't, and find out how small the soi is.";
   _say(hint, "dim");
+}
+
+// MOT'S DINNER, honoured. Madam Oy hands back the wallet and says "Buy Mot's
+// dinner — he eats because tourists are careless, and that is not entirely his
+// fault." Mot, found, is genuinely moved that she said it and names the dish and
+// the price: "Khao man gai, forty baht. I know a cart." Two characters promising
+// one scene, and until now seven different phrasings all fell through to "Not
+// for sale here" — the most deliberate-feeling dead end in the game (round 22,
+// Priya). An invitation is a promise; a price and a dish and a cart is three.
+//
+// Once ever, because it isn't a mechanic, it's the end of Act One's small print:
+// the kid who sold your wallet gets fed by you, on the word of the woman who
+// bought it. He pays for himself after this — that's the point of him.
+const _MOT_DINNER_LINES = [
+  "The cart is four minutes away and down a soi you would have walked past forever: a griddle, a rice cooker, a woman who has been poaching chickens since before Walking Street had a name. Mot orders for both of you without asking, which is its own kind of manners.",
+  "He takes you at a trot to a corner where a hand-painted chicken is peeling off a steel shutter, and orders in the flat quick Thai of somebody who eats here most days. Two plates. The rice is yellow with fat and the ginger sauce arrives in a jar with no lid.",
+  "The cart has no sign and three stools. Mot puts you on the good one, which you only notice later, and holds up two fingers to a woman who was already reaching for the plates.",
+];
+const _MOT_DINNER_TALK = [
+  "He eats like somebody who has learned not to leave any, and talks with his mouth full about the shoes he is saving for — actual football boots, with the studs, not the flat ones. Eleven hundred baht. He has six hundred and forty. He tells you the exact number without embarrassment, the way you'd tell somebody the time.",
+  "Halfway down the plate he says his mother is in Sa Kaeo and he sends what he can, and then changes the subject so fast and so cheerfully that you understand it is not a subject. He wants to know if you have been to a real football match. A big one. With the singing.",
+  "He asks what a wallet like that costs new, and when you tell him he laughs so hard he has to put the spoon down. \"For LEATHER,\" he says. \"For a bit of a COW.\" He is still going about it when the plates are cleared.",
+];
+function _motDinner() {
+  if (!_npcsHere().includes("mot")) {
+    _say("Mot isn't here to feed. He works Walking Street, mostly the alley behind it.");
+    return;
+  }
+  if (_flag("motFed")) {
+    _say("\"No, no.\" Mot waves both hands. \"One time only. You buy again, then I am your " +
+      "little brother and I must be POLITE to you.\" He pulls a face at the horror of it.");
+    return;
+  }
+  if (G.money < MOT_DINNER) {
+    _say(`Khao man gai is ฿${MOT_DINNER} and you haven't got it. Mot checks your face, checks ` +
+      "his pocket, and you can see him deciding whether to offer — so you get in first and say " +
+      "another time.");
+    return;
+  }
+  G.money -= MOT_DINNER;
+  _setFlag("motFed");
+  _say(_pickVary(_MOT_DINNER_LINES, "motdinner"), "win");
+  _say(_pickVary(_MOT_DINNER_TALK, "motdinnertalk"));
+  if (G.dog) _say(_dogN("Sai Krok gets the chicken skin, which Mot removes from his own plate " +
+    "first, without comment, as though this were simply the order of things."), "dim");
+  G.hunger = Math.max(0, G.hunger - 45);
+  G.thirst = Math.max(0, G.thirst - 15);
+  _addHappy(2);                        // a kindness, never a conquest — no treadmill
+  _repGain();                          // the soi notices who feeds the kid
+  _say(`(฿${MOT_DINNER}. Madam Oy's instruction, carried out.)`, "dim");
+  // Mot works a pitch-dark alley, and the dark-streak counter would otherwise
+  // keep running through a meal the player demonstrably spent at a lit cart with
+  // company — so the scene ended with a soi dog lunging out of the black at a man
+  // who had just sat down to chicken and rice. You were not alone in the dark;
+  // the counter should not say you were.
+  // He works a pitch-dark alley and the meal is four minutes round the corner at
+  // a lit cart, so for its duration you are not standing in the dark — same flag
+  // the short-time hour uses, for the same reason.
+  G.offstage = true;
+  _passTime(3);
+  G.offstage = false;
 }
