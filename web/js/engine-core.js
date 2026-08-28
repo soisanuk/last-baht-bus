@@ -221,7 +221,6 @@ function newGame() {
     repDay: null,        // last day a good deed banked its +1 (the shared daily gain cap)
     dog: null,           // the accidentally-adopted soi dog: { since: day, name? } once you've fed him
     dogNudgeDay: 0,      // last day the un-adopted dog made his half-block approach
-    patronTalk: { day: 0, talked: {} }, // patron dialogue book, reset daily
     turns: 0,
     wingmanUntil: 0,     // G.turns before which a wing-woman is vouching for you
     darkStreak: 0,
@@ -1066,12 +1065,10 @@ const _PATRON_AGAIN = [
 // a gate reading G.patronTalk.talked directly saw YESTERDAY's entries and fired
 // a "you've talked to him tonight" node on a night you hadn't (caught folding
 // the talk paths together, 2026-08-28).
-function _patronBook() {
-  if (!G.patronTalk || G.patronTalk.day !== G.day) G.patronTalk = { day: G.day, talked: {} };
-  return G.patronTalk.talked;
-}
-// have you spoken to this regular TONIGHT? (the form dialogue gates want)
-function _patronSeen(id) { return (_patronBook()[id] || []).length > 0; }
+// Have you got this character talking at all — as opposed to just saying hello?
+// (The form dialogue gates want; Mort's Glam lead is offered mid-conversation,
+// never on the doorstep.) One permanent book since retells were retired.
+function _patronSeen(id) { return ((G.talked && G.talked[id]) || []).length > 0; }
 function _patronHis(id) { return NPCS[id] && NPCS[id].pronoun === "she" ? "her" : "his"; }
 function _patronAgain(id) {
   return _PATRON_AGAIN[Math.floor(_rand() * _PATRON_AGAIN.length)](NPCS[id].name, _patronHis(id));
@@ -1354,7 +1351,7 @@ function _topicMiss(npcId) {
   return line;
 }
 
-function _deliver(npcId, d) {
+function _deliver(npcId, d, full) {
   const n = NPCS[npcId];
   // Second time you hear a line, get the point, not the whole spiel. We track
   // which entries an NPC has delivered (by index) and, on a repeat, swap in the
@@ -1363,28 +1360,27 @@ function _deliver(npcId, d) {
   // repeat is terse — but a quest/clue entry that carries something re-readable
   // still repeats in full, so a player who forgot an instruction can re-read it.
   const idx = n.dialogue.indexOf(d);
-  // THE RAIL REGULARS KEEP THEIR OWN BOOK, and it is the reason they had a
-  // separate talk path for so long. A regular's stories are new every night —
-  // G.patronTalk resets on the day, where an NPC's G.talked remembers forever —
-  // but his GREETING is met-once (G.patronMet, which persists), so a resident
-  // who drinks with Mort every evening doesn't get the full "I write the Nite
-  // Owl…" each time. Two books, one delivery function.
-  const patron = !!n.patron;
-  const book = patron ? _patronBook() : G.talked;
-  const seen = book[npcId] || (book[npcId] = []);
-  if (patron) G.patronMet = G.patronMet || {};
-  const repeat = seen.includes(idx) || (patron && !d.topic && !!G.patronMet[npcId]);
+  // ONE BOOK, PERMANENT, FOR EVERYONE. The regulars used to re-tell in full
+  // every night (their own nightly book) while the staff went terse forever —
+  // and once the fold put both on the same rail, a player drinking with all
+  // four Queen Vic men noticed within three nights that Angela replayed her
+  // whole speech while Terry two stools along gave the gist. The nightly book
+  // encoded which authoring block a character came from, nothing about the
+  // character. NOBODY RETELLS UNLESS ASKED: a repeat is the gist, and `opts.full`
+  // (a player saying "…again") is the only way back to the whole thing.
+  const seen = G.talked[npcId] || (G.talked[npcId] = []);
+  const repeat = seen.includes(idx);
   const flavor = !d.gives && !(d.sets && d.sets.length);
-  // A regular's repeat is ALWAYS the gist: he'll tell you the war story again
-  // tomorrow, not twice tonight. An NPC's quest/clue node (gives/sets) still
-  // re-reads in full so a forgotten instruction can be re-read — but a patron
-  // `sets` node (Glam's lucid flashes) goes terse like the rest of his talk.
-  const terse = repeat && (patron || !!d.short || flavor);
+  // A quest/clue node (gives/sets) still re-reads in full — re-reading an
+  // instruction you were given isn't a retell, it's the journal working. Asking
+  // for the story again (`full`) beats everything.
+  const terse = repeat && !full && (!!d.short || flavor);
   const firstEver = !repeat && seen.length === 0;
   if (!repeat) seen.push(idx);
-  if (patron && !d.topic) G.patronMet[npcId] = true;
   if (d.th && !terse) { _say(`${n.emoji} ${n.name}: “${d.th}” (${d.rom})`, "thai"); _engineSpeak(d.th); }
-  _say(_fillSaid(terse ? (d.short || (patron ? _patronAgain(npcId) : _askAgain(npcId))) : d.text));
+  // the brush-off keeps its speaker's register — the rail's grizzled pool for a
+  // regular, the soi's fond one for everyone else — and says how to get the rest
+  _say(_fillSaid(terse ? (d.short || (n.patron ? _patronAgain(npcId) : _askAgain(npcId))) : d.text));
   // Courted before you ever talked (drinks first, introductions after — a
   // legitimate Pattaya order of operations): the authored greeting reads
   // tone-deaf if it pretends the ledger is blank, so acknowledge it under the

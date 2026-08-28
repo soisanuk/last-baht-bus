@@ -7292,7 +7292,7 @@ test("noodle patrol: decline the pull and take a foam bop (worth a laugh and a p
   assert.match(lastOut(), /tows you|ENTER/i, "she hauls you toward the bar");
 });
 
-test("patrons: hoppers drift by the hour, settle at home by 22:00, chat resets daily", () => {
+test("regulars: anchored at their local, and a told story stays told", () => {
   // deterministic placement: same night + hour = same stool
   state().nightTurn = 5; // 18:00 hour
   const early = _npcWhere("nigel");
@@ -7326,11 +7326,18 @@ test("patrons: hoppers drift by the hour, settle at home by 22:00, chat resets d
   run("ask helmut about stool");
   assert.match(lastOut(), /No update required/, "terse on same-day repeat");
   assert.doesNotMatch(lastOut(), /fan number two/, "the full spiel is not repeated");
-  // a new day resets the book — the stories are new again
+  // NOBODY RETELLS UNPROMPTED (design change, 2026-08-28). A new day used to
+  // reset the regulars' book and hand you the whole spiel again; it doesn't —
+  // he remembers telling you, the way the staff always have.
   state().day++;
   out = [];
   run("ask helmut about stool");
-  assert.match(lastOut(), /fan number two/, "full spiel again next day");
+  assert.match(lastOut(), /No update required/, "a new night is not a fresh audience");
+  assert.doesNotMatch(lastOut(), /fan number two/, "the spiel stays told");
+  // …but ASKING for it gets the whole thing back
+  out = [];
+  run("ask helmut about stool again");
+  assert.match(lastOut(), /fan number two/, "“again” is the way back to the full story");
   // examine works too — and carries the age/nat that left the presence line
   out = [];
   run("x helmut");
@@ -7450,7 +7457,8 @@ test("ask <who> <topic> works without the 'about' connective (the tapped shape)"
   state().encDone = Object.fromEntries(Object.keys(ENCOUNTERS).map(k => [k, true]));
   state().lastPeddler = 99999; state().lastSaleng = 99999;
   const say = cmd => { // fresh seen-state so repeat-terseness doesn't skew it
-    state().patronTalk = { day: state().day, talked: {} };
+    // one permanent book for the whole cast since retells were retired
+    delete state().talked.chuck;
     out = []; run(cmd); return lastOut();
   };
   const noAbout = say("ask chuck money");

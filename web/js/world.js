@@ -11391,8 +11391,7 @@ const QUIZ_POOL = [
 // One cast table: every entry below is folded into NPCS (see the loop after
 // _PATRON_TITLES) and behaves like Terry — a role-less regular the lady-logic
 // ignores. What the flag preserves from the old separate-table era: the daily
-// dialogue reset (a regular's stories are new every night, G.patronTalk), the
-// met-once greeting (G.patronMet), beer-not-lady-drink, the season-thinned
+// beer-not-lady-drink, the season-thinned
 // bench and `days` work-nights (both in _npcActive, keyed on the flag so staff
 // never thin), and Glam's 22:00 shuttle (_npcRoom). `hops`/`haunts`/`avoids`
 // are the RETIRED hourly-hop machinery, kept as inert data because the Second
@@ -11914,9 +11913,7 @@ const _REGULARS = {
       // promise (playtest flag #5, 2026-08-15).
       { when: (st, G) => G.mode !== "soi6" &&
           !G.quests.oldrocker && !_flag("glamHeard") && !_flag("mortGlam") &&
-          // he offers the lead once you're actually talking, not on hello. The
-          // rail's book resets nightly and _patronSeen owns that reset — reading
-          // G.patronTalk directly here saw yesterday's entries (patron fold).
+          // he offers the lead once you're actually talking, not on hello
           _patronSeen("mort"),
         sets: ["mortGlam"],
         text: "He taps the biro twice and looks at you properly for the first time. \u201cSince " +

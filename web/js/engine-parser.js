@@ -2666,8 +2666,18 @@ function _convoTopicHere(topic) {
   return !!(d && d.topic === topic);
 }
 
+// Asking for it AGAIN — the one way back to a story you've already had. Repeats
+// are the gist by design (nobody retells unprompted), so this is how a player
+// who wants the whole thing says so: "ask terry about white dish again", "tell
+// me the whole story". Stripped off the topic here so the node lookup still
+// matches; the flag rides through to _deliver. Deliberately NOT the bare AGAIN
+// verb, which repeats your last command and must keep doing so.
+const _RETELL_RE = /\s*\b(again|once more|one more time|whole story|full story|properly|in full)\b\s*$/i;
+
 function _doTalkBody(arg, topic) {
   arg = (arg || "").trim();
+  let _retell = false;
+  if (topic && _RETELL_RE.test(topic)) { _retell = true; topic = topic.replace(_RETELL_RE, "").trim(); }
   // The coconut bar (north_beach): the freelance ladies are the room's whole
   // point and the prose names them, so TALK must reach them (playtest #16) —
   // approaching deliberately arms the same freelancer encounter that otherwise
@@ -2836,13 +2846,10 @@ function _doTalkBody(arg, topic) {
       "ask, who is this farang?” A quick grin. “I say: good one. Rare model.”");
     return;
   }
-  // Have you met? For staff that's "anything in the permanent book"; for a rail
-  // regular it has to be G.patronMet, because his book RESETS NIGHTLY — reading
-  // the daily one would make him re-introduce himself in full every evening a
-  // topic missed, which is the "You again" bug that pre-dates the fold.
-  const _met = NPCS[npc].patron
-    ? !!(G.patronMet && G.patronMet[npc])
-    : (G.talked[npc] || []).length > 0;
+  // Have you met? One permanent book for the whole cast since retells were
+  // retired — a miss only says "not my story" to somebody you've already got
+  // talking; a stranger still gets the greeting.
+  const _met = (G.talked[npc] || []).length > 0;
   if (topic && !d.topic && _met) {
     // Mort is the town's designated observer — "I watch, I write it down" — so
     // ASK MORT ABOUT <somebody he'd know> must pay off rather than dead-end. He
@@ -2871,7 +2878,7 @@ function _doTalkBody(arg, topic) {
     _questOffer(npc);
     return;
   }
-  _deliver(npc, d);
+  _deliver(npc, d, _retell);
   if (NPCS[npc].manager) _managerChatTick(npc);
   // the other ledger: sitting with a girl you've earned a tier with, she shows
   // you the books the transaction hides (engine-play _otherLedger). After the
@@ -6260,6 +6267,7 @@ Common commands:
   WHO / BLACKBOOK (your ladies, ranked by how they feel about you) · WHO AM I (who you chose to be)
   STANDING (the soi's read on you) · PHOTO <someone> (a portrait for your phone) · GALLERY (the faces you've collected)
   SEND <amount> TO <lady> (banking app)
+  ASK <who> ABOUT <topic> AGAIN (you get the gist on a repeat — “again” asks for the whole story back)
   BORROW <amount> · REPAY [amount] (Nira's loan at Neon Paradise — 20%, three days, don't be late)
   DEBT (every ledger with your name on it: Nira, the hotel book, the old man's note)
   Your own bar (once you own one): WORK / MIND (stand behind your own rail tonight) · BOOKS / TAKINGS

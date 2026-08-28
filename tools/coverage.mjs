@@ -91,7 +91,7 @@ function absorb(G) {
     U.npcs.add(id);
     for (const i of (seen || [])) U.dlg.add(id + "#" + i);
   }
-  const pt = (G.patronTalk && G.patronTalk.talked) || {};
+  const pt = (G.patronTalk && G.patronTalk.talked) || {}; // legacy saves only — the nightly book was retired 2026-08-28
   for (const [id, seen] of Object.entries(pt)) {
     U.patrons.add(id);
     for (const i of (seen || [])) U.patDlg.add(id + "#" + i);

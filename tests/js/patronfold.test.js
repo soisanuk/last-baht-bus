@@ -126,7 +126,15 @@ test("a regular takes a beer, not a lady drink — and the ledger credits him", 
 
 // ── talk: the daily book and the met-once greeting ──
 
-test("a regular's stories are new every night; his greeting is met-once", () => {
+// CHANGED BY DESIGN 2026-08-28, and this file's contract says a stage that alters
+// observable behaviour has to say so out loud. It used to read "a regular's
+// stories are new every night" — the nightly seen-book the fold preserved. Once
+// the two halves of the rail sat in one cast, a player drinking with all four
+// Queen Vic men noticed within three nights that Angela replayed her whole
+// speech while Terry two stools along gave the gist, and there was no reason for
+// the difference except which authoring block each was written in. Mario's call:
+// NOBODY RETELLS UNLESS ASKED.
+test("a told story stays told — and “again” is the way back to it", () => {
   G.room = "queen_vic";
   out = [];
   doCommand("talk to mort");
@@ -138,16 +146,24 @@ test("a regular's stories are new every night; his greeting is met-once", () => 
   assert.ok(col.length > 80, "a topic node in full");
   out = [];
   doCommand("ask mort about column");
-  assert.ok(text().length < col.length, "same night: the gist, not the spiel");
-  // next day: the seen-book has reset — the story comes back in full…
+  const gist = text();
+  assert.ok(gist.length < col.length, "same night: the gist, not the spiel");
+  // a new night is not a fresh audience — he remembers telling you
   G.day += 1;
   out = [];
   doCommand("ask mort about column");
-  assert.ok(text().length >= col.length * 0.8, "new night, full story again");
-  // …but he does NOT re-introduce himself from scratch
+  assert.ok(text().length < col.length, "next night: still the gist");
+  // …unless you ask for it, which is the only way back to the whole thing
+  out = [];
+  doCommand("ask mort about column again");
+  assert.ok(text().length >= col.length * 0.8, "“again” returns the full story");
+  // and he never re-introduces himself from scratch. Assert the GREETING, not
+  // the length: a later hello may legitimately fire a different topicless node
+  // (his Glam lead), which is him offering you something, not an introduction.
   out = [];
   doCommand("talk to mort");
-  assert.ok(text().length < intro.length, "met once is met — the greeting stays terse across nights");
+  assert.doesNotMatch(text(), /Retired twice, un-retired twice/,
+    "met once is met — the full introduction never comes back");
 });
 
 test("Fergie's sore subject still pre-empts: rage-bait is a landmine, not a topic", () => {
