@@ -1306,6 +1306,15 @@ function _elsewhereLine(word) {
       // on (2026-08-23).
       const reg = (ROOMS[cur] || {}).region;
       const unseen = reg && !Object.keys(G.visited || {}).some(r => (ROOMS[r] || {}).region === reg);
+      // A DRIFTING man is not "at X tonight" — that is an hour-true fact dressed
+      // as a night-true one, which is precisely the lie the old "the regulars
+      // drift between bars" line told in reverse. Say where he is, say that he
+      // moves, and name the local he'll be at from ten, which is the useful part.
+      if (_willMove(nid)) {
+        return `${NPCS[nid].name} ${notHere} — he was at ${_barName(cur)} a little while ago, ` +
+          `but he drifts about his end of town before ten. Ask after him when you get there, or ` +
+          `catch him at ${_barName(NPCS[nid].room)} later on; he always ends up there.`;
+      }
       return `${NPCS[nid].name} ${notHere} tonight — try ${_barName(cur)}` +
         (unseen ? `, over in ${reg}.` : ".");
     }
@@ -1560,6 +1569,15 @@ function _deliver(npcId, d, full) {
   G.convoIdx = G.convo === npcId ? idx : G.convoIdx;
   if (d.choices && d.choices.length) (G.convoChoiceMemo = G.convoChoiceMemo || {})[npcId] = idx; // typed labels outlive the next ask (27-night playtest)
   _convoAsk(npcId, d, st);                     // …and the partner may put a question back to you
+}
+
+// Is this a man who will not be where you leave him? Keyed on the FLAG and the
+// hour, deliberately not on a one-hour probe: at 10% an hour the probe answers
+// "no" about nine times in ten, so a clue would read as a firm promise and go
+// stale two hours later. Anyone drifting tonight gets the caveat, every time.
+function _willMove(id) {
+  const n = NPCS[id];
+  return !!(n && n.hops && typeof _hopsNow === "function" && _hopsNow(id));
 }
 
 // ── Look / describe ────────────────────────────────────────────────────────

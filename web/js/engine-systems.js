@@ -1949,10 +1949,19 @@ function _questWhere(at) {
     // useful thing we know; promising it goes stale. So say BOTH: where he is,
     // and that he is a man who moves. Detected by asking _npcWhere where he
     // will be an hour from now — a pure hash, so it costs no dice.
-    const _t0 = G.nightTurn;
-    G.nightTurn = Math.min(NIGHT_TURNS - 1, _t0 + 10);
-    const _moves = _npcWhere(at) !== room;
-    G.nightTurn = _t0;
+    // Keyed on _willMove, not on a one-hour probe. The probe (mutate nightTurn,
+    // re-ask, restore) was built for Glam's certain 22:00 shuttle, where it is
+    // exactly right; against a 10%-an-hour drift it answers "no" nine times in
+    // ten, so the caveat would almost never print and the clue would read as a
+    // firm promise that goes stale two hours later.
+    const _moves = (typeof _willMove === "function" && _willMove(at)) ||
+      (function () {
+        const t0 = G.nightTurn;
+        G.nightTurn = Math.min(NIGHT_TURNS - 1, t0 + 10);
+        const m = _npcWhere(at) !== room;
+        G.nightTurn = t0;
+        return m;                       // still catches Glam's shuttle
+      })();
     const r = ROOMS[room];
     if (!r) return "";
     return _moves
@@ -2441,7 +2450,12 @@ function _tanAbout(topic) {
   // he must not call a mamasan a rail girl (Settler playtest, 2026-08-26: "ask
   // tan about candy/oy" said "she works the rail there" of two owners).
   const _role = NPCS[id] && NPC_ROLES[id];
-  const clause = n.patron
+  // Tan is the LOCATOR, so for a man who drifts the useful answer isn't the bar
+  // he happens to be in — it's the habit. He knows where everybody ends up.
+  const clause = (n.patron && typeof _willMove === "function" && _willMove(id))
+    ? "is round there somewhere before ten — he moves, that one. After ten you " +
+      "will find him at " + (_barName(n.room) || "his own bar") + ". Always"
+    : n.patron
     ? "drinks there most nights — " + (n.nat || "") + ", " + (n.age || "") + ", you know the type"
     : _role === "mamasan" ? "runs the floor there. Owns the room in everything but the paperwork — and sometimes that too. You do not get past her by accident"
     : _role === "cashier" ? "keeps the till there. Nothing crosses that bar she has not already counted twice"
