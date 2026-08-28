@@ -732,8 +732,14 @@ function _doTravel(arg) {
     return;
   }
   if (G.nightTurn + hops >= NIGHT_TURNS) {
-    _say(_fmt("That's {n} turns of soi and the night hasn't got {n} left — you'd be walking into " +
-      "the dawn. A MOTOSAI, or make your peace with where you are.", { n: hops }), "alert");
+    // …but not a motosai in the challenge, where you made yourself a rule and the
+    // piwins are part of what you gave up (Soi 6 completionist, 2026-08-29:
+    // recommended the one vehicle the mode refuses).
+    _say(_fmt(G.mode === "soi6"
+      ? "That's {n} turns of soi and the night hasn't got {n} left — you'd be walking into the " +
+        "dawn. One street, you said. Make your peace with where you are."
+      : "That's {n} turns of soi and the night hasn't got {n} left — you'd be walking into " +
+        "the dawn. A MOTOSAI, or make your peace with where you are.", { n: hops }), "alert");
     return;
   }
   _say(hops === 1
@@ -3868,6 +3874,7 @@ function _standRegular(id) {
     // And the fixed line repaid EVERY drink with Terry's Walking Street
     // anecdote, in everyone's mouth including Terry's (round 19). Pooled, per
     // the house rule that a repeatable line is never a fixed string.
+    if (id) (G.soc.roundFor = G.soc.roundFor || {})[id] = G.turns; // he'll tell it again, in full
     const drink = (id && NPCS[id] && NPCS[id].drink) || "a cold one";
     _say(_fmt(_pickVary(_STAND_BEER, "standbeer"), { who, drink }) + ` (฿${G.money} left.)`);
   }
@@ -3913,8 +3920,10 @@ const _SNIPE_LINES = [
 
 // A lady drink leaves your pocket; at the bar you OWN it also rings INTO your own
 // till, instead of vanishing from the economy (Ronnie, 2026-08-26).
-function _ladyDrinkCharge() {
+function _ladyDrinkCharge(id) {
   G.money -= LADY_DRINK;
+  // a drink buys one telling in full — the brush-off pools promise it (see _deliver)
+  if (id) (G.soc.roundFor = G.soc.roundFor || {})[id] = G.turns;
   if (typeof _atOwnBar === "function" && _atOwnBar() && G.bar) G.bar.cash += LADY_DRINK;
 }
 
@@ -4189,6 +4198,11 @@ function _doBuy(arg) {
         _say(`${_npcLabel(who)} doesn't do lady drinks — that's the ladies' racket. For a bloke, it's BUY MAN DRINK (the fella behind the bar).`);
       } else if (who && NPCS[who].house) {
         _standRegular(who); // the landlady takes one like anybody else
+      } else if (/\bman drink\b/.test(arg)) {
+        // the verb IS "buy man drink", so telling him to type it is no help at all
+        _say("A man drink is for the fella running the bar, and this one hasn't got one — " +
+          "the till here is somebody else's problem. (Stand one of the regulars a beer instead, " +
+          "or BUY DRINK FOR <lady>.)");
       } else if (nameW) {
         _say("She's not working this bar — nobody here by that name. (Buy a drink for one of the girls on the rail, or BUY MAN DRINK.)");
       } else _say("Nobody here to buy one for.");
@@ -4208,7 +4222,7 @@ function _doBuy(arg) {
     // (optimizer playtest, 2026-08-22). Now every further drink re-rolls the
     // boil-over the warning promised.
     if (G.soc.contested && G.soc.contested[id]) {
-      _ladyDrinkCharge();
+      _ladyDrinkCharge(id);
       _addBond(id, 1);
       _say(`${NPCS[id].name} takes it — quicker this time, not looking at the man beside her, ` +
         `which is its own kind of looking. (฿${G.money} left.)`);
@@ -4221,7 +4235,7 @@ function _doBuy(arg) {
       const insisting = (id in G.soc.declined) && G.turns - G.soc.declined[id] <= 30;
       if (!insisting) { G.soc.declined[id] = G.turns; _say(_pickVary(_BUSY_DECLINE, "busyd")(NPCS[id].name)); return; }
       delete G.soc.declined[id];
-      _ladyDrinkCharge();
+      _ladyDrinkCharge(id);
       _addBond(id, 1);
       (G.soc.contested = G.soc.contested || {})[id] = true; // the man remembers
       _say(`${_pickVary(_BUSY_INSIST, "busyi")(NPCS[id].name)} (฿${G.money} left.)`);
@@ -7407,6 +7421,19 @@ function doCommand(input) {
       words.length === 1) {
     // bare direction — including this room's own exit keys (pub, hotel, …)
     if (_doGo(v) === false) return;            // a refused direction costs no turn
+    _flushTrace(_room0); _tick(); _checkAct1(); return;
+  }
+
+  // A CHOICE THE GAME JUST PRINTED OUTRANKS A GLOBAL VERB. Mid-conversation the
+  // options are rendered as tappable CAPS commands — (SWEAR YOURE NO WHITE DISH
+  // MAN · PRESS HER FOR NAMES) — and a player who types one back got the SWEAR
+  // verb (cursing at the street in a mamasan's face) or, for anything unmatched,
+  // TRAVEL. The matcher was fine; it simply sat behind the verb switch and never
+  // ran (completionist playtest, Soi 6, 2026-08-29). EXACT matches only, so a
+  // loose word can still lose to a real verb and fall through to _convoResolve
+  // at the bottom as before — this is the same "a printed option must do what it
+  // says" rule the topic chips got in round 19.
+  if (_convoActive() && _convoPickChoice(lower, true)) {
     _flushTrace(_room0); _tick(); _checkAct1(); return;
   }
 

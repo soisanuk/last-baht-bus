@@ -3053,7 +3053,7 @@ const ROOMS = {
       "Back into the calm centre of the storm. West and east the soi does its shouting; here it just streams past your stool while you drink and watch.",
       "The quiet stretch again, the Queen Vic's aircon leaking cold onto the pavement, three easy beer bars and nobody on the soi trying to climb you. Rare. Enjoy it.",
     ],
-    lateDesc: "The middle of Soi 6 with the shutters down — every bar but one. The Queen Vic's light is still on, because it was always a pub, and a pub keeps pub hours. Everything else on the soi is a grille and a padlock and a sleeping dog.",
+    lateDesc: "The middle of Soi 6 past midnight: the short-time places have pulled their grilles down and the girls who worked the stools have gone, but this stretch was always the drinking end. The Queen Vic keeps pub hours, and either side of it a few beer bars run their last ice to dawn for whoever is still upright.",
     exits: { w: "soi6_street", e: "soi6_deep" },
     venues: ["queen_vic", "sunset_rail", "bay_watch", "sandy_toes"],
   },

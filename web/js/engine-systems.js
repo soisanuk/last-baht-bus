@@ -2370,7 +2370,11 @@ function _doQuests() {
     }
   }
   if (!shown) _sayLeads(false);
-  else if (!rows.some(([qid]) => G.quests[qid] === "active") && G.stage !== "act1") {
+  // …but an OFFER on the books means somebody HAS asked you for something, and
+  // the nudge below says nobody has — printed two lines under the offer itself
+  // (completionist playtest, Soi 6, 2026-08-29).
+  else if (!rows.some(([qid]) => G.quests[qid] === "active" || G.quests[qid] === "offered") &&
+      G.stage !== "act1") {
     _sayLeads(true);
   }
 }
@@ -2462,6 +2466,15 @@ function _tanAbout(topic) {
     : _role === "manager" ? "runs the place for the owner. Different job — the man who is there so the owner does not have to be"
     : _role ? "works the rail there. Sends money home, same as all of them"
     : "is somebody the soi knows";
+  // No venue means he is not out tonight — and the clause says "drinks THERE most
+  // nights", which with nothing in front of it is a pronoun with no antecedent
+  // (Soi 6 completionist, 2026-08-29). Tan knows where a man drinks even when the
+  // man isn't in it, so name his local and say he's not in it.
+  if (!where && n.patron && _barName(n.room)) {
+    _say(`“${n.name}?” Tan tips his head. “${_barName(n.room)} is his place — but not tonight, I think. ` +
+      `Some nights a man stays home. Even here.”`);
+    return true;
+  }
   _say(`“${n.name}?” Tan considers the mirror. “${where ? where + ". " : ""}${she ? "She" : "He"} ${clause}.” A shrug at the road. “I drive everybody, my friend. I do not drive their secrets.”`);
   return true;
 }

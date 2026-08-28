@@ -197,3 +197,97 @@ test("the piwin's mercy is a way out, not a taxi service", () => {
   doCommand("motosai to naklua");
   assert.equal(G.room, "naklua_rd", "the kindness renews at dawn");
 });
+
+// ── Round 21: the Soi 6 completionist (Marek, seven fenced nights) ───────────
+
+test("a choice the game just printed outranks a global verb", () => {
+  // The options render as tappable CAPS commands. Typed back, "SWEAR YOURE NO
+  // WHITE DISH MAN" fired the SWEAR verb — cursing at the street in a mamasan's
+  // face — and anything unmatched fell through to TRAVEL. Doing something ELSE,
+  // silently, is worse than not understanding.
+  G.room = "kitten_corner";
+  doCommand("talk to kesinee");
+  out = [];
+  doCommand("swear youre no white dish man");
+  assert.doesNotMatch(text(), /let fly at the night/, "that is the SWEAR verb, not her answer");
+  assert.match(text(), /nobody's boy|Powers/i, "the printed option does what it says");
+  out = [];
+  doCommand("press her for names");
+  assert.doesNotMatch(text(), /only know the way to bars/, "…and this one is not a TRAVEL command");
+});
+
+test("…but a real verb still wins when no printed option matches it", () => {
+  G.room = "kitten_corner";
+  doCommand("talk to kesinee");
+  out = [];
+  doCommand("map");
+  assert.match(text(), /map|soi|road/i, "MAP still opens the map mid-conversation");
+  out = [];
+  doCommand("swear");
+  assert.match(text(), /let fly at the night/, "and a bare SWEAR still swears");
+});
+
+test("a round buys one telling, in full — the brush-off's own offer", () => {
+  // "Buy a round and I'll pretend it's new" was printed on every repeated topic
+  // in the game and honoured nowhere.
+  G.room = "queen_vic";
+  doCommand("talk to terry");
+  doCommand("ask terry about tiktok");
+  out = [];
+  doCommand("ask terry about tiktok");
+  const gist = text();
+  assert.ok(gist.length < 400, "a repeat is the gist");
+  doCommand("buy drink for terry");
+  out = [];
+  doCommand("ask terry about tiktok");
+  assert.ok(text().length > gist.length, "the round bought the whole thing back");
+  out = [];
+  doCommand("ask terry about tiktok");
+  assert.ok(text().length < 400, "…and it bought exactly one telling");
+});
+
+test("QUESTS does not say nobody has asked you for anything under an offer", () => {
+  G.room = "stinky_bar";
+  for (let i = 0; i < 6; i++) doCommand("talk to bert");
+  out = [];
+  doCommand("quests");
+  if (/On offer/.test(text()))
+    assert.doesNotMatch(text(), /nobody's asked you for anything/,
+      "an offer on the books IS somebody asking");
+});
+
+test("the middle of Soi 6 does not claim shut bars you can walk into", () => {
+  G.room = "soi6_mid"; G.nightTurn = 70;
+  out = [];
+  doCommand("look");
+  const shown = text();
+  for (const v of ROOMS.soi6_mid.venues)
+    assert.equal(_closedNow(v), false, `${v} is open, so the prose must not say it is shuttered`);
+  assert.doesNotMatch(shown, /every bar but one/, "the old line contradicted its own Step inside list");
+});
+
+test("a named regular at the rail means the rail is not empty", () => {
+  // "Nobody's holding down the corner stool" printed while the room's own desc
+  // and its Here: line both named Terry on it. _regularsHere counts the flagged
+  // bench; the rail a player sees is anyone present who isn't working.
+  G.season0 = 8; G.day = 3; G.room = "queen_vic"; G.nightTurn = 30;
+  out = [];
+  doCommand("look");
+  assert.ok(_npcsHere().includes("terry"), "premise: Terry is in");
+  assert.doesNotMatch(text(), /Nobody's holding down the corner stool/);
+});
+
+test("the challenge never recommends the vehicle it forbids", () => {
+  G.mode = "soi6"; G.nightTurn = 99;
+  out = [];
+  doCommand("travel to queen vic");
+  assert.doesNotMatch(text(), /A MOTOSAI/, "the piwins are part of what the rule gave up");
+});
+
+test("BUY MAN DRINK where there is no manager does not recommend BUY MAN DRINK", () => {
+  G.room = "queen_vic";
+  out = [];
+  doCommand("buy man drink");
+  assert.doesNotMatch(text(), /or BUY MAN DRINK/, "the remedy cannot be the command that just failed");
+  assert.doesNotMatch(text(), /She's not working this bar/, "…nor a wrong-gender diagnosis");
+});

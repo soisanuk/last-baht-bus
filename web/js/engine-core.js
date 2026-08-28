@@ -265,6 +265,7 @@ function newGame() {
       bells: {},         //   roomId → rings tonight; while the glow holds, 2 softens the rules, 3 = the room is yours
       heat: {},          //   roomId → how close you are to meeting security
       banned: {},        //   roomId → turn you were thrown out
+      roundFor: {},      //   npcId → you stood them one, so the next story comes in full
       patronBusy: {},    //   roomId → the regular has a girl's attention
       patronMiffed: {},  //   roomId → you drink-sniped his girl (bad form)
       bra: {},           //   npcId → you bought her the bra (fondle bumps a tier)
@@ -1526,7 +1527,13 @@ function _deliver(npcId, d, full) {
   // A quest/clue node (gives/sets) still re-reads in full — re-reading an
   // instruction you were given isn't a retell, it's the journal working. Asking
   // for the story again (`full`) beats everything.
-  const terse = repeat && !full && (!!d.short || flavor);
+  // "Buy a round and I'll pretend it's new" — the brush-off pools have offered
+  // that deal on every repeated topic in the game, and nothing honoured it: a
+  // completionist bought Terry a beer, asked again, and got the identical
+  // brush-off (Soi 6, 2026-08-29). A drink now buys one telling, in full.
+  const bought = !!(G.soc && G.soc.roundFor && G.soc.roundFor[npcId]);
+  const terse = repeat && !full && !bought && (!!d.short || flavor);
+  if (bought && !terse && G.soc.roundFor) delete G.soc.roundFor[npcId]; // spent
   const firstEver = !repeat && seen.length === 0;
   if (!repeat) seen.push(idx);
   if (terse) { if (typeof _noteMiss === "function") _noteMiss("terse"); }
@@ -1870,8 +1877,15 @@ function _describeRoom(full, forceFull) {
     // The season reaches the FURNITURE too: an emptied low-season rail (no named
     // regulars in) gets the thinned line, not the anonymous crowd — which would
     // otherwise disagree with the empty-bar register on the same screen.
-    const _thin = typeof _lowSeason === "function" && _lowSeason() &&
-      typeof _regularsHere === "function" && !_regularsHere().length;
+    // "Nobody's holding down the corner stool" printed in a room whose own desc
+    // says Terry holds it down and whose Here: line lists him (Soi 6, round 21).
+    // _regularsHere counts the flagged BENCH; the rail as a player sees it is
+    // anyone present who isn't working — Terry, Doyle and Doug are role-less
+    // customers who predate the flag and are just as much "a lifer holding
+    // forth" as any of them.
+    const _railCrowd = _npcsHere().filter(id2 =>
+      !NPC_ROLES[id2] && !NPCS[id2].manager && !NPCS[id2].filler && !NPCS[id2].house);
+    const _thin = typeof _lowSeason === "function" && _lowSeason() && !_railCrowd.length;
     if (_thin) {
       _say(_pickVary(_BAR_THIN, "barThin"), "dim");
     } else if (G.soc.patronBusy[G.room]) {
