@@ -961,7 +961,7 @@ function _resolveActor(word, pool) {
 
 // The topics currently OPEN with a partner: their dialogue nodes whose gates
 // (req/notFlags/bond/when) pass right now, in authored order, deduped. Mirrors
-// the gate checks in _pickDialogue / _patronTalk, so the chip palette only ever
+// the gate checks in _pickDialogue, so the chip palette only ever
 // offers what the partner would actually answer — which gives progressive reveal
 // for free (a topic appears the moment its node unlocks on trust/flag). Sore
 // subjects that would set a patron off (rage) are withheld — no rage-bait chips.
