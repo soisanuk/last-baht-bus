@@ -71,6 +71,52 @@ const FRAMES = [
   /\b([a-z][a-z' ]{2,24}?) (?:is|are) on the menu\b/gi,
 ];
 
+// ── vendor frames ───────────────────────────────────────────────────────────
+// ROUND 23 EXPOSED THE SHAPE OF THIS TOOL'S BLIND SPOT, and it is worth stating
+// precisely because it is the general lesson: every FRAME above is DISH-shaped —
+// "sells X", "a plate of X", "the X arrives", "X is on the menu". A persona who
+// planned his whole day around eating found seven rooms in one session that
+// advertise food and sell none, and NOT ONE was dish-shaped. They were all
+// VENDOR-shaped:
+//
+//   Mama Yai's        "half bar, half kitchen… expats eat here nightly"
+//   Central Mall      "fifty-baht plates that shame every tourist menu"
+//   Thappraya hill    "the last few late-night noodle carts"    (+ a (BUY FOOD) hint)
+//   Night Bazaar      "past the food court and its smell of frying garlic"
+//   Second Rd/Soi 6   "buy something from the stall on the corner"
+//   Beach Rd (Soi 7)  "a man selling roasted chestnuts nobody buys"
+//   Walking St North  "the touts with the laminated menus are still here"
+//
+// The tool asked "is this named dish buyable" and never "does this room claim to
+// contain somebody who sells food". It encoded the same mental model as the
+// code, so they were blind together — exactly the failure CLAUDE.md warns about.
+// A vendor frame asserts only that SOME food verb works in the room; it captures
+// no noun, because the promise here is a person, not a dish.
+// WHAT THIS STILL CANNOT SEE, stated so nobody reads a green run as coverage.
+// The vendor frames above raised the checks from 13 to 25 and the report stayed
+// at zero — because this tool plays ONE MOMENT (one day, one hour, a fresh
+// state), and most of round 23's food findings are HOUR-gated. The bazaar's food
+// court sells at the audit's hour and refuses at 23:50; several rooms answer
+// "packed up hours ago — daytime trade" in a game whose clock only ever runs
+// 18:00 to dawn, so the hour they name can never arrive. Catching that class
+// needs the audit to sweep hours, and catching the (BUY FOOD) hint printed by
+// EXAMINE NOODLE CARTS needs it to harvest _SCENERY function output as well as
+// room prose. Both are real work and neither is done. The known work-list, from
+// a persona who planned his day around meals:
+//   night_bazaar · central_mall food court · ws_north curry touts ·
+//   beach_rd_s chestnut man · thappraya noodle carts · khao_talo Mama Yai's
+//   kitchen (BUY SOM TAM refuses while EAT SOM TAM serves)
+const VENDOR_FRAMES = [
+  /\bfood court\b/gi,
+  /\b(?:noodle|food|hawker|som ?tam|satay|kebab|barbecue|bbq) (?:carts?|stalls?|vans?)\b/gi,
+  /\bcarts? (?:feed|feeds|selling)\b/gi,
+  /\ba man selling\b|\bwoman on the wok\b|\bthe wok\b/gi,
+  /\bhalf (?:bar, half )?kitchen\b|\bown kitchen\b/gi,
+  /\b(?:buy|get) something from the stall\b/gi,
+  /\b[a-z-]+-baht plates\b|\bplates that shame\b/gi,
+  /\b(?:eat|eats|eating) here (?:nightly|every night|most nights)\b/gi,
+];
+
 // Words that are never a purchasable noun even inside a frame. The greedy
 // frames that needed this ("try the X", "house X") were dropped instead — a
 // stoplist patching a bad frame is how a lint rots into decoration.
@@ -167,6 +213,27 @@ for (const [roomId, room] of Object.entries(ROOMS)) {
   for (const v of Object.values(room.reads || {})) if (typeof v === "string") texts.push(v);
   const nouns = new Set();
   for (const t of texts) for (const n of nounsFrom(t)) nouns.add(n);
+
+  // A VENDOR frame promises a person, not a dish, so there is no noun to play —
+  // the claim is only that SOME food verb works in this room. Tested with the
+  // generic words a player actually types when prose says there is a cart.
+  const vendor = VENDOR_FRAMES.some(re => { re.lastIndex = 0; return texts.some(t => re.test(String(t))); });
+  if (vendor) {
+    let fed = false;
+    for (const cmd of ["buy food", "eat", "buy noodles", "buy som tam", "order food"]) {
+      freshIn(roomId);
+      const before = snap();
+      out.length = 0;
+      try { doCommand(cmd); } catch (e) { continue; }
+      if (delivered(before, snap())) { fed = true; break; }
+    }
+    tested++;
+    const key = roomId + "|<vendor>";
+    if (!fed && !AFFORD_OK.has(key)) {
+      findings.push({ room: roomId, venue: _barName(roomId) || room.name, noun: "<a vendor the prose puts in this room>",
+        replies: ["no food verb delivers anything here"] });
+    } else if (!fed) suppressed.push(key);
+  }
   if (!nouns.size) continue;
 
   for (const noun of nouns) {

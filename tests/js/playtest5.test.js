@@ -203,6 +203,7 @@ test("EAT / MENU / BUY <dish> at a kitchen all reach the food; water sells where
   doCommand("eat");
   assert.ok(G.money < m, "EAT at a restaurant orders");
   out = []; const m2 = G.money;
+  G.hunger = 80;   // he just ate; a man who isn't hungry now declines a second plate
   doCommand("buy pad thai");
   assert.ok(G.money < m2, "a dish off the card is BUY FOOD");
   G.room = "central_beach"; out = []; const m3 = G.money;

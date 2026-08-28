@@ -44,6 +44,8 @@ const ROAST_PACE = 2;    // a cover goes every two turns — arrive late, take y
 const BEER_PRICE = 80;   // your own big Chang, bar price
 const BELL_PRICE = 300;  // ring it and the round is on you
 const BRA_PRICE = 200;   // the mamasan's drawer novelty; makes fondling "interesting"
+const FULL_AT = 12;      // below this you are simply not hungry, and no amount of
+                         // money makes another plate mean anything
 const MOT_DINNER = 40;   // khao man gai off a cart — the price Mot names himself
 const ROSE_PRICE = 100;  // the flower-seller's daughter's single rose (a gift for whoever you're with)
 const CORD_PRICE = 20;   // black nylon off a 7-Eleven counter; what an amulet hangs on
@@ -6754,10 +6756,21 @@ const NPCS = {
         "chips — scampi, sausage, the pie if he made pie. ฿" + QV_BASKET + ", proper portion, " +
         "cook is Thai but the fryer is very English.\u201d A glance at the clock. \u201cTill eleven. " +
         "After eleven, only crisp — ฿" + QV_CRISPS + ", salt and vinegar or the green one " +
-        "nobody choose. (BUY FOOD.)\u201d",
-        short: "\u201cBasket and chips ฿" + QV_BASKET + " till eleven; after, crisps ฿" + QV_CRISPS + ". (BUY FOOD.)\u201d" },
+        "nobody choose.\u201d Then, because she is proud of it: \u201cAnd SUNDAY \u2014 " +
+        "roast, \u0e3f" + QV_ROAST + ". Beef, potato, the little pudding. Till nine only, and when " +
+        "he finish, he finish. You want, you come early.\u201d (READ MENU \u00b7 BUY FOOD.)",
+        short: "\u201cBasket and chips \u0e3f" + QV_BASKET + " till eleven; after, crisps \u0e3f" + QV_CRISPS +
+          ". Sunday roast \u0e3f" + QV_ROAST + " till nine. (READ MENU.)\u201d" },
+      // On the day, she leads with it — a roast nobody is told about is a roast
+      // nobody eats, which is exactly what happened to the persona who sat in
+      // this pub on a Sunday and found the kitchen on the Monday (round 23).
+      { when: (st, G) => typeof _roastOn === "function" && _roastOn(),
+        text: "\u201cYou eat?\u201d The pad is out before you answer, and she is already " +
+          "pleased with herself. \u201cIS SUNDAY. Roast \u2014 beef, potato, little pudding, " +
+          "\u0e3f" + QV_ROAST + ".\u201d A tip of the head at the clock. \u201cTill nine, and when he " +
+          "finish, he finish. Tonight I think he do not have many left.\u201d (BUY ROAST.)" },
       { text: "\u201cYou eat?\u201d She has the order pad out before you answer. \u201cKitchen open " +
-        "till eleven. After that only crisp.\u201d" },
+        "till eleven. After that only crisp.\u201d (READ MENU.)" },
       { topic: "work",
         text: "\u201cIs a good job.\u201d She says it flatly, the way you would about a job. " +
           "\u201cSame hour every day, same money every month, and nobody ask me anything except " +
@@ -6814,8 +6827,8 @@ const NPCS = {
         text: "\u201cThe notebook.\u201d Doyle's eyes go to the far end without his head following, which is a whole career in one movement. \u201cSeventy-four and the best-informed man on this coast. Knows it, too.\u201d A pause. \u201cI've sat in rooms with men who'd have paid serious money for what's in that book. He writes it down in a pub on Soi 6 with the cap off his biro and nobody has ever laid a finger on him.\u201d He looks genuinely pleased about it. \u201cSays something about the place, doesn't it.\u201d",
         short: "\u201cBest-informed man on the coast, writes it all down in public, and nobody's ever touched him.\u201d" },
       { topic: "angela",
-        text: "\u201cAngela.\u201d He says the name carefully, the way you handle something. \u201cDiscman. An actual Discman, this year. Headphones taped.\u201d He lets that sit. \u201cThat's not nostalgia. That's somebody who found one thing that works and won't risk changing it. I've seen that before. Usually after.\u201d He drinks. \u201cShe's all right. She's more all right than she was. You want the rest, she'll tell you herself \u2014 and she'd far rather you asked than got told.\u201d",
-        short: "\u201cShe found one thing that works and won't risk changing it. She'd rather you asked her than got told.\u201d" },
+        text: "\u201cAngela.\u201d He says the name carefully, the way you handle something. \u201cDiscman. An actual Discman, this year. Headphones taped.\u201d He lets that sit. \u201cThat's not nostalgia. That's somebody who found one thing that works and won't risk changing it. I've seen that before. Usually after.\u201d He drinks. \u201cShe's all right. She's more all right than she was.\u201d He nods once, down the bar. \u201cAsk her about the NAVY \u2014 that's the door, and she'd far rather you asked than got told.\u201d",
+        short: "\u201cShe found one thing that works and won't risk changing it. (ASK ANGELA ABOUT THE NAVY.)\u201d" },
       { topic: "pete",
         text: "Doyle takes a long drink of soda water and does not look down the bar. \u201cSits where he can see the door. Drinks slow, gives nothing, calls himself Pete.\u201d A beat. \u201cI did twenty-six years of men who sit like that. Nine in ten it's a marriage or a debt, and they've done nothing worse than run.\u201d He sets the glass down square. \u201cIt isn't my business, I'm retired, and I'd take it as a courtesy if you didn't go asking him what I'm not asking him.\u201d",
         short: "\u201cI did twenty-six years of men who sit like that. It isn't my business and I'm retired.\u201d" },
@@ -7120,6 +7133,10 @@ const NPCS = {
       "Whatever he left behind, he left it fast and he left it whole — Pattaya never asks for references, " +
       "which is the entire reason he's on this stool and not another.",
     dialogue: [
+      { topic: "pete",
+        text: "\u201cPete,\u201d he agrees, as though confirming a delivery. He drinks. The silence goes on long enough that you understand it is the whole answer, and then, unexpectedly, he adds: \u201cEnglish. Fifties. Four years. Nothing owing to anybody in this country and nothing owed to me.\u201d He sets the glass down. \u201cThat's the lot, and I'll tell you honestly \u2014 it's more than I've said to anyone since I got here, so make it last.\u201d",
+        short: "\u201cEnglish. Fifties. Four years. Nothing owing either way. That's the lot.\u201d" },
+
       { topic: "doyle",
         text: "Pete's glass stops about an inch off the bar, and then continues, and if you had blinked you would have missed it. \u201cThe American in the pub.\u201d He drinks. \u201cYeah. I know what he is.\u201d A long moment. \u201cHe knows I know. Neither of us has ever said a word about it, and I'd call that the most civilised arrangement I've got going.\u201d He looks at the door, then back. \u201cGood pub, the Vic. I don't drink in it much.\u201d",
         short: "\u201cI know what he is. He knows I know. Neither of us has ever said it. I don't drink in the Vic much.\u201d" },
@@ -7621,6 +7638,10 @@ const NPCS = {
       "corner-stool residency. He rents the same balcony room every high season. He was here " +
       "before White Dish. He will tell you about it. He tells it well.",
     dialogue: [
+      { topic: "terry",
+        text: "\u201cMe?\u201d Terry looks briefly delighted and then suspicious of being delighted. \u201cFifteen years. Same stool, near enough, and the same room upstairs every high season \u2014 I pay the whole six months up front so nobody can let it over my head.\u201d He drinks. \u201cCame for a fortnight in \u201910 with a redundancy and a bad attitude. Spent the redundancy. Kept the attitude.\u201d A shrug that isn't quite a shrug. \u201cPeople ask what I do all day like it's a trap. I watch the soi. It's better than anything on the telly and it's never once repeated itself.\u201d",
+        short: "\u201cFifteen years, same stool, same room upstairs. Came for a fortnight in \u201910. Spent the redundancy, kept the attitude.\u201d" },
+
       { topic: "doyle",
         text: "\u201cThe American?\u201d Terry considers the ceiling. \u201cCopper. Was, anyway.\u201d He says it without dropping his voice, which tells you it isn't a secret. \u201cYou can tell because he sits facing the door and he has never once asked me a question he didn't already know the answer to.\u201d A pull on the Chang. \u201cGood company, mind. Drinks soda water and doesn't make a thing of it, which round here is practically a personality.\u201d",
         short: "\u201cCopper. Was, anyway. Sits facing the door, never asks a question he doesn't know the answer to.\u201d" },
@@ -12066,6 +12087,10 @@ const _REGULARS = {
       "coast longer than most of the bars, and he is writing all of it down whether it " +
       "likes it or not.",
     dialogue: [
+      { topic: "mort",
+        text: "The biro pauses. \u201cSeventy-four. Forty-one of them on this coast, thirty-eight writing about it.\u201d He says the numbers the way other men say their own name. \u201cI came out to do six months for a magazine that no longer exists, about a town that no longer exists either, and I have been filing ever since.\u201d He turns a page. \u201cPeople assume it's a sad story. It is not. I have had the best seat in the house for four decades and the only thing I have ever had to do to keep it is turn up and write it down honestly.\u201d",
+        short: "\u201cSeventy-four, forty-one years on this coast, thirty-eight writing about it. Best seat in the house.\u201d" },
+
       { topic: "doyle",
         text: "The biro stops. \u201cAh. Doyle.\u201d Mort looks pleased and slightly thwarted at once. \u201cI have been trying to get that man into the column for two years. Two YEARS. A homicide detective retires to Soi 6 \u2014 that writes itself, it's a gift.\u201d He clicks the biro twice. \u201cAnd every time I raise it he buys me a soda water and asks after my HEALTH.\u201d A dry look over the horn-rims. \u201cHe is very good. I have been deflected by professionals, and he is the politest of them.\u201d",
         short: "\u201cTwo years I've tried to get him in the column. Every time he buys me a soda water and asks after my health.\u201d" },
@@ -12729,6 +12754,10 @@ const _REGULARS = {
       "electrical tape. She has the corner seat with the window view of Soi 6 — " +
       "the chaos observed from the calm side of the glass.",
     dialogue: [
+      { topic: "angela",
+        text: "The headphone comes off, all the way, which has not happened before. \u201cWhat, the CV?\u201d She turns the Singha a quarter. \u201cForty-seven. Twelve years navy, six years not coping with having left the navy, and then this.\u201d A pause exactly long enough to notice. \u201cI'm not going to do the bit where it turns out to be sad. It was sad. It's less sad now. I sit by a window in a warm place and nobody needs anything from me before noon.\u201d The headphone goes back. \u201cAsk me about the navy if you actually want the long one.\u201d",
+        short: "\u201cForty-seven. Twelve years navy, six not coping with having left it, then this. Ask about the NAVY for the long one.\u201d" },
+
       { topic: "doyle",
         text: "She lifts one headphone. \u201cDoyle's fine.\u201d Which, from Angela, is a character reference with a seal on it. \u201cHe clocked the Discman the first night and didn't say anything clever about it. Do you know how rare that is? Every bloke in here has a bit about the Discman. They've all got a bit.\u201d The headphone goes back. \u201cHe noted it and left it alone. That's a man trained not to touch the evidence.\u201d",
         short: "\u201cHe clocked the Discman and didn't say anything clever about it. Nobody else manages that.\u201d" },
@@ -13552,6 +13581,19 @@ function _buildHostess(name, th, room, id = name.toLowerCase()) {
     `"I from ${from}, Isan side. Small village, everybody know everybody. Here nobody know me — sometime good, sometime lonely na." A little shrug.`,
     `"${from}. Long bus, ten hour, aircon too cold." She mimes shivering. "I go home Songkran, Buddha day, when mama call. Rest of time — here, working."`,
   ];
+  // EVERY ONE OF THESE POINTS AT CANDY — which is the whole job of the line, and
+  // was catastrophic for the three girls who WORK for her: a persona asked Nan,
+  // Bua and Gam about the wallet while standing in Candy Bar with Candy three
+  // feet away, and all three sent her across town to Candy (round 23, and she
+  // called it the loudest immersion break she hit — on the Act One critical
+  // path, where a player is following exactly this pointer). A girl points at
+  // her own boss by pointing at her, not at a map. _buildHostess picks the
+  // room-aware line for anyone working one of Candy's bars.
+  const WALLET_HERE = [
+    '"Wallet? Aiyo." She tips her head at the woman at the end of the bar without looking at her. "You ask Khun Candy. She there. She the boss of boss — she fix, or nobody fix."',
+    '"You lose wallet?" She pats your arm, then points with her chin. "Candy. HER. You talk to her nice, na — she know everything happen on this road."',
+    '"Not here, nobody steal here — bad luck for the bar." A glance down the rail. "But Candy is in tonight. You want to know something, is her you ask."',
+  ];
   const WALLET = [
     '"Wallet? Aiyo, not here — nobody steal here, bad luck for the bar. You go Buakhao, ask Candy. Candy know everything, everybody."',
     '"You lose wallet?? Poor you." She pats your arm. "I no see. Go Candy Bar, talk to Candy — she the boss of boss. She fix."',
@@ -13588,6 +13630,10 @@ function _buildHostess(name, th, room, id = name.toLowerCase()) {
       { topic: "family", text: idx(FAMILY, 31) },
       { topic: "home", text: idx(HOME, 43) },
       { topic: "plan", text: idx(PLAN, 37) },
+      // A girl working one of Candy's own bars points AT her boss, not at a map.
+      { topic: "wallet", notFlags: ["hasWallet"],
+        when: (st, G) => typeof _npcWhere === "function" && _npcWhere("candy") === room,
+        text: idx(WALLET_HERE, 41) },
       { topic: "wallet", notFlags: ["hasWallet"], text: idx(WALLET, 41) },
     ],
   };

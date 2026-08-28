@@ -7441,6 +7441,7 @@ function _qvKitchen(arg) {
       "home eleven o'clock, same as England.\u201d A bag of crisps lands on the bar " +
       "instead, unbidden. \u201cCrisp. \u0e3f" + QV_CRISPS + ". Salt and vinegar. Is this or nothing.\u201d");
   }
+  if (_fullNo()) return;                  // the kitchen keeps its food, you keep your money
   const dish = _qvMatchDish(arg) ||
     // A bare BUY FOOD / BUY DINNER with no dish named: she picks, because there
     // is one right answer before eleven and only one option after.

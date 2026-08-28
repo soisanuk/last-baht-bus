@@ -45,6 +45,7 @@ test("everything on the card can be bought, every day, every hour", () => {
       const card = _qvMenu();
       for (const dish of card) {
         G.nightTurn = t;      // each command ticks the clock; re-read the card's hour
+        G.hunger = 90;        // …and you cannot eat six dinners: come to each one hungry
         const before = G.money;
         out = [];
         doCommand("buy " + dish.aliases[0]);

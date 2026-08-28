@@ -4100,6 +4100,7 @@ function _doBuy(arg) {
   // methodical player tried; BUY NOODLES quietly resolved to a toastie instead
   // (persona report B#9, 2026-08-23). They are their own thing, and cheaper.
   if (_is7Eleven() && /\bnoodles?\b|\bmama\b|\bcup noodle/.test(arg)) {
+    if (_fullNo()) return;
     if (G.money < NOODLE_PRICE) {
       _say(_fmt("The noodles are \u0e3f{p}. You have \u0e3f{m}.", { p: NOODLE_PRICE, m: G.money }));
       return;
@@ -4121,6 +4122,7 @@ function _doBuy(arg) {
     return;
   }
   if (r.seven && (/toastie|cheese|sandwich/.test(arg) || (/food|snack/.test(arg) && !FOOD_STALLS[G.room]))) {
+    if (_fullNo()) return;
     if (G.money < 35) { _say(_fmt("The toastie is ฿{p}. You have ฿{m}. The doorbell jingles in sympathy.", { p: 35, m: G.money })); return; }
     G.money -= 35;
     G.hunger = Math.max(0, G.hunger - 40);
@@ -4138,6 +4140,7 @@ function _doBuy(arg) {
       (arg && FOOD_STALLS[G.room].name.toLowerCase().split(/[^a-z]+/)
         .some(w => w.length > 3 && arg.includes(w))))) {
     const f = FOOD_STALLS[G.room];
+    if (_fullNo()) return;
     if (G.money < f.price) { _say(`฿${f.price}, and you're short. The smell alone is worth half that, and free.`); return; }
     G.money -= f.price;
     G.hunger = Math.max(0, G.hunger - f.hunger);

@@ -813,6 +813,34 @@ function _railTick() {
   }
 }
 
+// ── You cannot buy your way to happy on a full stomach ─────────────────────
+// THE WORST FINDING OF ROUND 23, and it had been there all along: every plate in
+// the game paid +1 สนุก with no cap and no check, so a persona stood outside a
+// 7-Eleven and ate THIRTY-THREE cheese toasties on a hunger meter already at
+// zero — ฿35 a happiness point, no diminishing return — and rode it to 100, the
+// สบายสบาย the whole long game is built around, without meeting a soul. It also
+// made the food prose lie to his face: every plate narrated "the hunger backs
+// off" while there was no hunger to back off from.
+//
+// The fix is the honest one rather than a cap: a man who is not hungry does not
+// want another plate. Food still tops you up when you're peckish (above FULL_AT);
+// below it, the vendor keeps his food and you keep your money.
+const _TOO_FULL = [
+  "You look at it and your stomach, which has been paying attention, declines on your behalf.",
+  "Not a chance. You couldn't manage another mouthful and it would be rude to waste it.",
+  "You are, it turns out, entirely full. The thought of another plate is faintly upsetting.",
+  "Your body files an objection. There is nowhere to put it.",
+  "You've eaten. Buying more food you don't want is a farang habit and you're better than that tonight.",
+];
+function _tooFull() { return G.hunger < FULL_AT; }
+// Returns true if it printed a refusal — every food path checks it before taking
+// money, so the guard and the charge can never drift apart.
+function _fullNo() {
+  if (!_tooFull()) return false;
+  _say(_pickVary(_TOO_FULL, "tooFull"), "dim");
+  return true;
+}
+
 // Character-creation Phase B: the seven origin archetypes are all NPCs on Soi 6
 // at once — except the one matching YOUR pick, who is deactivated because you ARE
 // him. An `origin` field on an NPCS entry marks an archetype; _npcActive hides the
@@ -1500,7 +1528,18 @@ function _selfNamedNode(npcId, topic) {
   const n = NPCS[npcId];
   if (!n || !topic) return null;
   const st = _npcState(npcId);
-  const words = String(topic).toLowerCase().split(/[^a-z0-9']+/).filter(w => w.length >= 4);
+  let words = String(topic).toLowerCase().split(/[^a-z0-9']+/).filter(w => w.length >= 4);
+  // A MAN'S OWN NAME IN HIS OWN NODE IS A STAGE DIRECTION, NOT A TOPIC. Prose
+  // narrates the speaker constantly — "Terry considers the ceiling", "Mort caps
+  // the biro" — so without this, asking Terry about himself matched his own narration
+  // and answered with whatever node happened to name him first. Once the pub's
+  // rail gained cross-topics that was his opinion of DOYLE, delivered fluently
+  // and confidently: a persona believed it for two nights and came away thinking
+  // Terry was the ex-copper (round 23). Asking a man about himself must fall
+  // through to a real self-topic if he has one, or to a miss — never to a
+  // sentence that merely mentions him.
+  const own = String(n.name || "").toLowerCase().split(/[^a-z0-9']+/).filter(Boolean);
+  words = words.filter(w => own.indexOf(w) < 0);
   if (!words.length) return null;
   for (const d of n.dialogue) {
     if (d.topic && (d.topic === topic || topic.includes(d.topic))) continue; // the topic path already had its go
