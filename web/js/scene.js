@@ -251,8 +251,10 @@ function _sceneCast() {
   const row = document.createElement("div");
   row.id = "scene-cast";
   const cast = [];
-  try { for (const id of _npcsHere()) cast.push([id, "npc", NPCS[id]]); } catch (e) {}
-  try { for (const id of _patronsHere()) cast.push([id, "patron", PATRONS[id]]); } catch (e) {}
+  // one cast table: _npcsHere includes the flagged regulars (a second
+  // _patronsHere loop would draw every bust twice). The "patron" kind survives
+  // as presentation — it is a published DOM contract (docs/2d-roadmap.md).
+  try { for (const id of _npcsHere()) cast.push([id, NPCS[id].patron ? "patron" : "npc", NPCS[id]]); } catch (e) {}
   for (const [id, kind, who] of cast) {
     const b = document.createElement("button");
     // also tagged "kw": term.js's document-level dismiss-the-flyout listener

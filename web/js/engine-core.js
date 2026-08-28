@@ -590,6 +590,11 @@ function _npcRoom(id) {
   if (G.party && G.party.ids && G.party.ids.includes(id)) return G.room;
   const n = NPCS[id];
   if (n.bars && n.bars.length) return n.bars[G.day % n.bars.length];
+  // Glam's escorted evening — home bar early, walked across after 22:00. The ONE
+  // exception to this function's day-stability contract, inherited from the
+  // patron fold; _questWhere already probes for exactly this movement before
+  // promising his location. Don't add more shuttles without that in mind.
+  if (n.shuttle) return Math.floor(G.nightTurn / 10) >= n.shuttle.after ? n.shuttle.to : n.room;
   return n.room;
 }
 
@@ -612,6 +617,17 @@ function _npcActive(id) {
   // a host you took off the floor tonight is off the floor (HIRE narrated
   // leaving the building while leaving him standing there — persona A#13)
   if (G.soc && G.soc.hostOut && G.soc.hostOut[id]) return false;
+  // The regulars' bench (patron: true) keeps its two absences from the old
+  // PATRONS table, keyed on the flag so the STAFF never thin (barchain.test
+  // pins that): `days` holds a working man to his nights out (David's Mon/Fri),
+  // and _patronOut sits a season-scaled share of the bench at home in the lean
+  // months. Absence lives HERE and not in _npcRoom so _npcRoom stays total —
+  // an inactive man still HAS a local, he just isn't on its stool tonight,
+  // which is exactly what _elsewhereLine's "isn't around right now" reads.
+  if (n && n.patron) {
+    if (n.days && !n.days.includes(G.day % 7)) return false;
+    if (_patronOut(id)) return false;
+  }
   return !(n && n.origin && G.player && n.origin === G.player.origin);
 }
 
@@ -734,35 +750,32 @@ function _patronOut(id) {
   if (p <= 0) return false;
   return _hh(id + ":" + G.vacation + ":" + G.day + ":pout", 71) % 100 < Math.round(p * 100);
 }
+// PATRON-FOLD COMPAT ALIASES (stage 1 → deleted in stage 3). The patrons are
+// NPCS entries now (patron: true, shared refs — world.js's one-cast loop), so
+// position and presence are _npcRoom/_npcActive like everyone else; these keep
+// the ~100 not-yet-repointed call sites and the tools working unchanged. The
+// old machinery they replace: days + season-thinning live in _npcActive (so
+// _npcRoom stays total and its callers never see null), the shuttle lives in
+// _npcRoom, and the hourly hop is retired (hops/haunts/avoids inert in data).
 function _patronRoom(id) {
-  const p = PATRONS[id];
-  if (p.days && !p.days.includes(G.day % 7)) return null; // not his night out
-  if (_patronOut(id)) return null;                        // low season: some regulars stay in
-
-  // a shuttled regular: home bar early, escorted across to another later (Glam)
-  if (p.shuttle) return _patronHour() >= p.shuttle.after ? p.shuttle.to : p.home;
-  // De-hopped: regulars anchor their local, so TALK TO PATRON reliably finds a
-  // real named person instead of an empty rail. (The hourly-drift machinery —
-  // p.hops / p.haunts / p.avoids / _PATRON_HOP_ROOMS — is retired but left in the
-  // data for now; flip this back to re-enable roaming.)
-  return p.home;
+  return _npcActive(id) ? _npcRoom(id) : null; // null = not out tonight (days / season)
 }
 
 function _patronsHere() {
-  return Object.keys(PATRONS).filter(id => _patronRoom(id) === G.room);
+  return _npcsHere().filter(id => NPCS[id].patron);
 }
 
 function _findPatron(word) {
   const w = word.toLowerCase();
   const here = _patronsHere();
   for (const id of here) {
-    if (id === w || PATRONS[id].name.toLowerCase() === w) return id;
+    if (id === w || NPCS[id].name.toLowerCase() === w) return id;
   }
   for (const id of here) {
-    if (PATRONS[id].name.toLowerCase().startsWith(w)) return id;
+    if (NPCS[id].name.toLowerCase().startsWith(w)) return id;
   }
   for (const id of here) {
-    const t = PATRONS[id].title;
+    const t = NPCS[id].title;
     if (!t || (G.known && G.known[id])) continue;
     const tt = _titleNorm(t), ww = _titleNorm(w);
     if (tt === ww || (ww.length >= 4 && tt.includes(ww))) return id;
@@ -940,7 +953,11 @@ function _fillSaid(s) {
 // person in scope. Returns an id, or null when genuinely ambiguous (caller then
 // asks "who do you mean?"). `pool` restricts the domain (social → girls only).
 const _PRONOUN = /^(her|him|them|they|she|he|it|this|that|the (girl|lady|guy|man|bloke|woman|one))$/;
-function _addressable() { return [..._npcsHere(), ..._patronsHere()]; }
+// One cast: _npcsHere already includes the flagged regulars, so spreading
+// _patronsHere in as well would list every patron twice — and break
+// _resolveActor's sole-candidate rule (a room with one patron would read as two
+// people and refuse the pronoun).
+function _addressable() { return _npcsHere(); }
 function _lastActor() {
   const c = _convoActive();
   if (c) return c;
@@ -1058,12 +1075,14 @@ function _patronTalk(id, topic, _retried) {
       // hand it across a bar, and he points at where the gossip actually lives.
       if (id === "mort") {
         const who = String(topic).trim();
-        const known = Object.keys(NPCS).find(i => NPCS[i].name.toLowerCase() === who ||
-            NPCS[i].name.toLowerCase().split(" ").pop() === who) ||
-          Object.keys(PATRONS).find(i => i !== "mort" && (PATRONS[i].name.toLowerCase() === who ||
-            PATRONS[i].name.toLowerCase().split(" ").pop() === who));
+        // one roster now — and the self-exclusion must come along: Mort is an
+        // NPC since the patron fold, and without `i !== "mort"` he'd match his
+        // own name and gravely decline to gossip about himself
+        const known = Object.keys(NPCS).find(i => i !== "mort" &&
+          (NPCS[i].name.toLowerCase() === who ||
+            NPCS[i].name.toLowerCase().split(" ").pop() === who));
         if (known) {
-          const nm = NPCS[known] ? NPCS[known].name : PATRONS[known].name;
+          const nm = NPCS[known].name;
           _say(`Mort's biro stops. He looks at you over the horn-rims, and for a second ` +
             `you see forty years of watching behind them. “${nm}.” He does not write ` +
             `it down; he already has, somewhere. “I know exactly who that is. But I do not ` +
@@ -1193,12 +1212,18 @@ function _findNpc(word) {
   for (const id of here) {
     if (id === w || NPCS[id].name.toLowerCase() === w) return id;
   }
+  // The regulars (patron: true) keep the STRICTER matching the old _findPatron
+  // had: exact, name-prefix, title — never word-prefix or substring. The bench
+  // is two dozen short common names ("ron", "dave", "superman"), and letting
+  // them into the fuzzy passes is the bell→Belle collision class: a stray "s"
+  // in "supermarket" must not resolve to a man at the rail.
   for (const id of here) {
     const name = NPCS[id].name.toLowerCase();
-    if (name.startsWith(w) || name.split(" ").some(p => p.startsWith(w))) return id;
+    if (name.startsWith(w)) return id;
+    if (!NPCS[id].patron && name.split(" ").some(p => p.startsWith(w))) return id;
   }
   for (const id of here) {
-    if (NPCS[id].name.toLowerCase().includes(w)) return id;
+    if (!NPCS[id].patron && NPCS[id].name.toLowerCase().includes(w)) return id;
   }
   // a descriptive title before you know the name ("the manager" → bert). Only
   // while unknown; once known, the name paths above already catch them.
@@ -1321,6 +1346,10 @@ function _thaiVoice(id) {
   if (NPC_ROLES[id] || n.filler || n.masseuse || n.ladyboy) return true;
   if (typeof _HOSTS !== "undefined" && _HOSTS.includes(id)) return true;
   if (_FARANG_NPCS.has(id) || n.manager || n.origin) return false;
+  // the rail regulars (one cast since the patron fold): 23 western expats who
+  // must not get the Tinglish miss pool — but Somsak is Thai, so key on the
+  // profile card he already carries, not on the flag alone
+  if (n.patron && n.nat && n.nat !== "Thai") return false;
   return true;
 }
 function _askAgain(npcId) {
@@ -1573,13 +1602,12 @@ function _describeRoom(full, forceFull) {
         "a low laugh, eyes reading the sand for a walk-up. (TALK TO THE LADIES, if you like.)", "dim");
   }
   const npcs = _npcsHere();
-  const pats = _patronsHere();
-  // One presence line for everyone actually in the room — staff and patrons in the
-  // same "Here:" list (it used to split into "Here:" + "At the rail:", which read
-  // like two separate crowds and confused who you could talk to). NPCs carry just
-  // their name; patrons still carry (age, nat).
-  const here = npcs.map(id => `${NPCS[id].emoji} ${_npcLabel(id)}`)
-    .concat(pats.map(id => `${PATRONS[id].emoji} ${PATRONS[id].name}`)); // just emoji + name — age/nat live in EXAMINE
+  // One presence line for everyone actually in the room — staff and patrons in
+  // the same "Here:" list (it used to split into "Here:" + "At the rail:",
+  // which read like two separate crowds). One cast now: _npcsHere carries the
+  // flagged regulars too, so a second patron map would list every one twice.
+  // Just emoji + name for all — a patron's (age, nat) lives in EXAMINE.
+  const here = npcs.map(id => `${NPCS[id].emoji} ${_npcLabel(id)}`);
   if (here.length) _say(_L("Here: ") + here.join(", ") + ".");
   // Butterfly the dog: the girls dote on him at the door — a warmer welcome, once a night
   if (full && G.dog && G.dog.egg === "butterfly" && _inBar() &&

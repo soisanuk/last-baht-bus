@@ -102,7 +102,7 @@ function peopleIn(id, r) {
     if (n.room === id || (Array.isArray(n.bars) && n.bars.includes(id))) here.add(n.name);
   }
   for (const pid of Object.keys(PATRONS)) {
-    if (PATRONS[pid].home === id) here.add(PATRONS[pid].name);
+    if (PATRONS[pid].room === id) here.add(PATRONS[pid].name); // home→room, patron fold
   }
   // named in the prose — word-boundary, case-sensitive (same doctrine as decorate())
   for (const w of NAMES) if (new RegExp("\\b" + w + "\\b").test(r.desc)) here.add(w);

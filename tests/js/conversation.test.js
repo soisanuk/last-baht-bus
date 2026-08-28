@@ -157,9 +157,15 @@ test("_resolveActor returns null when a pronoun is genuinely ambiguous", () => {
 test("_resolveActor honours a name in scope and rejects one out of the pool", () => {
   state().room = "neon_paradise";
   assert.equal(_resolveActor("noi", _npcsHere()), "noi", "a named girl in the room");
-  // Angela is a patron, not in the NPC social pool — pronoun/name must not bind her
+  // One cast since the patron fold: Angela IS addressable now (talk/examine/
+  // photo all reach her by name). What must NOT happen is a social verb
+  // landing on her — that guard moved from table membership to the caller's
+  // pool, which is exactly what this asserts: the filtered pool _doSocial
+  // resolves against rejects her, the full pool binds her.
   state().room = "queen_vic";
-  assert.equal(_resolveActor("angela", _npcsHere()), null);
+  assert.equal(_resolveActor("angela", _npcsHere()), "angela", "addressable in the one cast");
+  assert.equal(_resolveActor("angela", _npcsHere().filter(id => !NPCS[id].patron)), null,
+    "…but the social pool a flirt resolves against still refuses to bind her");
 });
 
 test("talk/ask accept a pronoun for the current partner", () => {

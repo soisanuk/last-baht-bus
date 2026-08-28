@@ -900,7 +900,7 @@ test("low season empties the rail, which unlocks the monsoon empty-bar register"
   assert.ok(deep < peak * 0.6, `the trough rail is markedly thinner (${deep} vs ${peak})`);
   // and at least one patron-bench bar can now be empty on a deep-low night
   G.season0 = 8; G.day = 3;
-  const benchBars = [...new Set(Object.keys(PATRONS).map(id => PATRONS[id].home))];
+  const benchBars = [...new Set(Object.keys(PATRONS).map(id => PATRONS[id].room))];
   const empty = benchBars.filter(r => !Object.keys(PATRONS).some(id => _patronRoom(id) === r));
   assert.ok(empty.length > 0, "a regulars' bar stands empty in the deep low — the register can fire");
 });

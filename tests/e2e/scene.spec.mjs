@@ -61,8 +61,10 @@ test("scene panel renders, tracks movement, and exit taps submit typed commands"
   await page.press("#term-in", "Enter");
   await expect(page.locator("#term-out")).toContainText("v0 scene panel: ON");
   await expect(page.locator("#scene")).toBeVisible();
-  // cast row mirrors who's actually present
-  const expected = await page.evaluate(() => _npcsHere().length + _patronsHere().length);
+  // cast row mirrors who's actually present — one cast table since the patron
+  // fold, so _npcsHere alone IS everyone (summing the old patron pipeline in
+  // again would double-count the regulars)
+  const expected = await page.evaluate(() => _npcsHere().length);
   await expect(page.locator("#scene-cast .bust")).toHaveCount(expected);
   // HUD shows live money (format the expectation in-page so the locale matches)
   const moneyStr = await page.evaluate(() => "฿" + (G.money || 0).toLocaleString());

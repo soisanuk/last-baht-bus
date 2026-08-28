@@ -1294,7 +1294,7 @@ test("Darkside: Mama Yai's is hand-authored — a mama, a hostess with a story, 
   assert.equal(NPCS.yai.room, "mama_yai");
   assert.equal(NPC_ROLES.kratae, "hostess");
   assert.equal(NPCS.kratae.room, "mama_yai");
-  assert.equal(PATRONS.ron.home, "mama_yai", "Ron drinks at Mama Yai's");
+  assert.equal(PATRONS.ron.room, "mama_yai", "Ron drinks at Mama Yai's");
   // hand-authored, not filler: Kratae's Night Heron tip is gated behind Mama Yai
   // naming the photo wall (sets knowYaiWall)
   const wall = NPCS.yai.dialogue.find(d => d.topic === "photos");
@@ -1412,7 +1412,7 @@ test("the Nite Owl column dispenses canon: masthead, a reader reply, the signoff
 });
 
 test("Mort writes the column to stay sane, from his stool at the Queen Vic", () => {
-  assert.equal(PATRONS.mort.home, "queen_vic");
+  assert.equal(PATRONS.mort.room, "queen_vic");
   assert.ok(PATRONS.mort.dialogue.some(d => d.topic === "column"));
   assert.ok(PATRONS.mort.dialogue.some(d => d.topic === "sane"));
   assert.ok(PATRONS.mort.dialogue.some(d => !d.topic && !d.req), "an unconditional intro line");
@@ -2891,8 +2891,11 @@ test("_npcActions is the single source of a character's tap affordances (by role
   assert.deepEqual(full("petch"), ["talk", "examine", "buyher", "flirt", "tip", "contact"]);
   // a plain NPC (manager, unroled): a polite wai in the full wheel
   assert.deepEqual(full("bert"), ["talk", "examine", "wai"]);
-  // a patron (not an NPC at all) and an unknown id: just the basics, no crash
-  assert.deepEqual(full("glam"), ["talk", "examine"]);
+  // a rail regular: same card as any other unroled NPC — talk, examine, and
+  // the polite wai (one cast since the patron fold; gaining `wai` was the
+  // accepted delta, it's what Terry and Bert already offered)
+  assert.deepEqual(full("glam"), ["talk", "examine", "wai"]);
+  // an unknown id: just the basics, no crash
   assert.deepEqual(full("nobody_here_xyz"), ["talk", "examine"]);
 });
 
@@ -4026,7 +4029,7 @@ test("venues: buildings are entered by name off a block, not a compass point; OU
 
 test("Glam: the Cheeky Monkey regular, shuttled to Hyper, and protected", () => {
   const g = PATRONS.glam;
-  assert.equal(g.home, "cheeky_monkey");
+  assert.equal(g.room, "cheeky_monkey");
   assert.ok(g.protected, "age, money and standing put him off-limits");
   // early evening at Cheeky Monkey; escorted across to Hyper after 22:00
   state().nightTurn = 20; assert.equal(_patronRoom("glam"), "cheeky_monkey");
@@ -4057,7 +4060,7 @@ test("_questWhere tracks a shuttled patron giver's live bar, not a stale room", 
 
 test("Fergie: haunts Buakhao & Tree Town, shifting tall tales, and the Bert/Candy landmine", () => {
   const f = PATRONS.fergie;
-  assert.equal(f.home, "gold_rush");
+  assert.equal(f.room, "gold_rush");
   assert.ok(f.hops && f.haunts.includes("Soi Buakhao") && f.haunts.includes("Tree Town"));
   // region-limited hopping — never Candy's bar, never out of his two districts
   const seen = new Set();

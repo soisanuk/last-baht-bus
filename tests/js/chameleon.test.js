@@ -140,7 +140,7 @@ test("her texts: apron selfies, and once the slip meant for another papa", () =>
 });
 
 test("the sponsor side sits with Helmut, unlinked and unnamed", () => {
-  G.room = PATRONS.helmut.home;
+  G.room = PATRONS.helmut.room;
   doCommand("ask helmut about his love life");
   assert.match(text(), /barista, in Naklua/);
   assert.match(text(), /green apron/);

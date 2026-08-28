@@ -1166,6 +1166,9 @@ function _doExamine(arg) {
     const exactNpc = npc === arg.toLowerCase() || NPCS[npc].name.toLowerCase() === arg.toLowerCase();
     if (!exactNpc && _SCENERY.some(s => s.m.test(arg)) && _doScenery(arg)) return;
     _say(NPCS[npc].desc);
+    // a regular's profile card — his age and nationality moved here off the
+    // presence line long ago, and one cast table must not lose them
+    if (NPCS[npc].age) _say(`(${NPCS[npc].age}, ${NPCS[npc].nat}.)`, "dim");
     // The Regular, visible: a bonded lady's close-up warms by tier. Only the
     // drinks ledger feeds _bondTier, so this can only ever fire for the girls
     // (and mamasans/cashiers) you've actually courted — strangers, managers and
@@ -2713,12 +2716,17 @@ function _doTalkBody(arg, topic) {
   }
   if (!arg) {
     // bare TALK with nobody in play: name the room, don't shrug "nobody by that name"
-    const here = [..._npcsHere().map(n => _npcLabel(n)), ..._patronsHere().map(p => PATRONS[p].name)];
+    const here = _npcsHere().map(n => _npcLabel(n)); // one cast — the regulars are in it
     _say(here.length ? "Talk to whom? Here: " + here.join(", ") + "."
       : "Nobody here to talk to but yourself, and you've heard all that before.");
     return;
   }
   const npc = _findNpc(arg);
+  // A present regular resolves through _findNpc now (one cast), but his talk
+  // still runs the patron pipeline — the daily seen-book, the met-once
+  // greeting, the grizzled repeat voice (stage 1 of the patron fold; stage 2
+  // folds that pipeline into _deliver and this guard goes with it).
+  if (npc && NPCS[npc].patron) { _patronTalk(npc, topic); return; }
   if (!npc) {
     // The Orchid Room's corner-table untouchables: described, never approachable.
     if (G.room === "orchid_room" &&
@@ -3295,7 +3303,11 @@ function _doWai(arg) {
     return;
   }
   const npcs = _npcsHere();
-  const target = arg ? _findNpc(arg) : (npcs.length === 1 ? npcs[0] : null);
+  // bare WAI's sole-target rule considers STAFF only — a room whose one
+  // occupant is a rail regular gets the wai-the-room line, as it did when the
+  // regulars lived in their own table. WAI <name> still reaches him.
+  const staff = npcs.filter(id => !NPCS[id].patron);
+  const target = arg ? _findNpc(arg) : (staff.length === 1 ? staff[0] : null);
   if (!target) {
     if (!npcs.length) { _say(`You wai the empty ${/beach/.test(G.room) && !/_rd|beach_rd/.test(G.room) ? "sand" : "street"}. A passing soi dog looks moved.`); return; }
     _say("You press your palms together and wai the room in general. Approving nods.");
@@ -5735,7 +5747,7 @@ const _PHOTO_GOGO_YES = [
 
 function _photoWhere(id) {
   if (NPCS[id]) return _barName(_npcRoom(id)) || "";
-  if (PATRONS[id]) return _barName(PATRONS[id].home) || "the rail";
+  if (PATRONS[id]) return _barName(PATRONS[id].room) || "the rail"; // home→room, patron fold
   return "";
 }
 
@@ -5799,7 +5811,7 @@ function _doPhoto(arg) {
   if (arg) {
     const id = _findNpc(arg) || _findPatron(arg);
     if (id) {
-      if (_npcsHere().includes(id) || _patronsHere().includes(id)) { _photoChar(id); return; }
+      if (_npcsHere().includes(id)) { _photoChar(id); return; } // one cast
       _say("You raise the phone, but they've drifted off — nobody by that description in front of you now.");
       return;
     }
@@ -6479,7 +6491,7 @@ function _chipSet() {
       const lbl = _patronLabel(pid);
       add("talk to " + lbl.toLowerCase(), lbl.length > 24 ? lbl.slice(0, 22) + "…" : lbl);
     }
-  } else if (_npcsHere().length || _patronsHere().length) {
+  } else if (_npcsHere().length) { // one cast — the regulars are in _npcsHere
     add("talk to ", "talk…");
   }
   if (G.room === "north_beach" && !(G.encDone && G.encDone.freelancer) && !G.pendingEnc)
@@ -6521,8 +6533,8 @@ function _cItemWord(id) { return ITEMS[id].name.split(" ").pop().toLowerCase(); 
 function _cNpcsHere() {
   // suggest by label — a character's look until you've met them, their name after —
   // so autocomplete never leaks an unmet name (typed name still resolves via _findNpc).
-  return [..._npcsHere().map(id => _npcLabel(id).toLowerCase()),
-    ..._patronsHere().map(id => _patronLabel(id).toLowerCase())];
+  // one cast: _npcsHere carries the flagged regulars, a second spread doubled them
+  return _npcsHere().map(id => _npcLabel(id).toLowerCase());
 }
 
 // ── amounts, from the engine ────────────────────────────────────────────────

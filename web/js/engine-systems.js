@@ -1926,7 +1926,11 @@ const _ACT1_HINTS = [
 // already standing there).
 function _questWhere(at) {
   if (!at) return "";
-  if (NPCS[at]) {
+  // One cast: the rail regulars are NPCS entries too, but their clause keeps
+  // its own branch below — a regular can be ABSENT (days/season) and can MOVE
+  // (Glam's shuttle), and this branch would confidently place the stool he
+  // isn't on. Flag check, or the fold silently retires the drift warning.
+  if (NPCS[at] && !NPCS[at].patron) {
     const room = _npcRoom(at);
     if (room === G.room || _npcsHere().includes(at)) return ""; // she's right here
     const r = ROOMS[room];
@@ -2418,7 +2422,9 @@ function _tanAbout(topic) {
     return true;
   }
   const n = NPCS[id] || PATRONS[id];
-  const room = NPCS[id] ? _npcRoom(id) : _patronRoom(id);
+  // a regular's absence must read (days / season): _patronRoom is the
+  // activity-aware alias, where bare _npcRoom names the stool he isn't on
+  const room = n.patron ? _patronRoom(id) : NPCS[id] ? _npcRoom(id) : _patronRoom(id);
   const where = room && _barName(room) ? _barName(room) : null;
   const she = n.pronoun === "she" || (NPCS[id] && NPC_ROLES[id]);
   // role-accurate: Tan is the hub who reads the real structure of the soi — so

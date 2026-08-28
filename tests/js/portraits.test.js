@@ -19,7 +19,7 @@ const PNG_SIG = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
 // generated masters live in ../portrait_gen, not in web/ (see the size guard
 // below), so for a rendered face the thumb IS the shipped art.
 test("every NPC and patron has a face", () => {
-  const ids = [...Object.keys(NPCS), ...Object.keys(PATRONS)];
+  const ids = Object.keys(NPCS); // one cast — the patrons are flagged NPCS entries
   const missing = ids.filter(id =>
     !fs.existsSync(path.join(dir, id + ".png")) &&
     !fs.existsSync(path.join(dir, "thumb", id + ".webp")));
@@ -27,7 +27,7 @@ test("every NPC and patron has a face", () => {
 });
 
 test("portraits are real PNGs, and none are orphaned", () => {
-  const ids = new Set([...Object.keys(NPCS), ...Object.keys(PATRONS)]);
+  const ids = new Set(Object.keys(NPCS)); // one cast
   for (const f of fs.readdirSync(dir)) {
     if (!f.endsWith(".png")) continue;
     const head = fs.readFileSync(path.join(dir, f)).subarray(0, 8);
@@ -128,6 +128,6 @@ test("no full-size masters in web/portraits", () => {
 test("the generator's cast list matches the world", () => {
   const gen = fs.readFileSync(path.join(root, "scripts", "gen-portraits.py"), "utf8");
   const specIds = [...gen.matchAll(/^    "([a-z_0-9]+)":\s/gm)].map(m => m[1]);
-  const world = [...Object.keys(NPCS), ...Object.keys(PATRONS)].sort();
+  const world = Object.keys(NPCS).sort(); // one cast — a spread over both would duplicate the bench
   assert.deepEqual(specIds.slice().sort(), world);
 });

@@ -118,8 +118,8 @@ for (const id of Object.keys(PATRONS)) {
   chars.push({
     id, name: p.name, source: "PATRONS", role: "patron",
     ...lookFields(p),
-    sex: deriveSex(id, p.desc), venueKind: venueKind(p.home),
-    emoji: p.emoji, th: null, room: p.home, age: p.age, nat: p.nat, tags, desc: p.desc,
+    sex: deriveSex(id, p.desc), venueKind: venueKind(p.room),
+    emoji: p.emoji, th: null, room: p.room, age: p.age, nat: p.nat, tags, desc: p.desc,
   });
 }
 chars.sort((a, b) => (roleOrder[a.role] - roleOrder[b.role]) || a.id.localeCompare(b.id));

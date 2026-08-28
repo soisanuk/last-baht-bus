@@ -335,12 +335,13 @@ function _piwinAbout(who) {
     _say("(He isn't being difficult. You just haven't bought him anything.)", "dim");
     return;
   }
-  // _npcRoom assumes an NPCS entry and reads .bars off it — a patron id throws.
-  // Route by which table the id actually came from.
-  const room = NPCS[id] ? _npcRoom(id) : _patronRoom(id);
+  // One cast now — but a regular's absence must still read: on David's work
+  // night or a low-season stay-in, _patronRoom answers null (inactive) where a
+  // bare _npcRoom would happily name the stool he isn't on.
+  const room = NPCS[id].patron ? _patronRoom(id) : _npcRoom(id);
   const where = room ? (_barName(room) || (ROOMS[room] && ROOMS[room].name)) : null;
   if (!where) { _say(_fmt("\"{n}. Not tonight, I think. Not seen.\"", { n: label })); return; }
-  const hopper = !!(PATRONS[id] && PATRONS[id].hops);
+  const hopper = !!(NPCS[id].patron && NPCS[id].hops);
   if (hopper) {
     _say(_fmt("He thinks, and it is a real think — he is going through his own evening. " +
       "\"{n}. I take him {w}, maybe two hour ago.\" A shrug that is not indifference but " +
@@ -1844,7 +1845,19 @@ function _doSocial(kind, targetWord) {
         "fed, and left in peace. That is the whole menu.", "alert");
     return;
   }
-  const here = _npcsHere();
+  // One cast table, so the regulars stand in _npcsHere now — but a social verb
+  // must never LAND on one. Resolve against the non-patron pool (bare FLIRT in a
+  // room whose only company is a punter stays aimed at the ambience, not at
+  // him), and catch a NAMED regular first for the authored brush-off — which
+  // used to live in the failure branch, back when table membership did this
+  // guard's job.
+  const here = _npcsHere().filter(x => !NPCS[x].patron);
+  const pat = w && !_PRONOUN.test(w.toLowerCase()) ? _findPatron(w) : null;
+  if (pat) {
+    _say(`${_patronLabel(pat)} is a regular at the rail, not one of the girls — ` +
+      "the look you get back ends the idea before it finishes forming.");
+    return;
+  }
   // Pronoun/default resolution: "flirt with her" → whoever you're dealing with;
   // bare "flirt" → the conversation partner, or the sole girl in scope.
   const id = _resolveActor(w, here);
@@ -1853,13 +1866,7 @@ function _doSocial(kind, targetWord) {
     // a pronoun the scope couldn't pin down → ask, rather than a flat refusal
     if (_PRONOUN.test(w.toLowerCase()) && here.length > 1)
       _say(`Who do you mean? (${here.map(x => NPCS[x].name).join(", ")})`);
-    else {
-      // a visible rail regular is a punter, not staff — a brush-off, not "not here"
-      const pat = _findPatron(w);
-      if (pat) _say(`${_patronLabel(pat)} is a regular at the rail, not one of the girls — ` +
-        "the look you get back ends the idea before it finishes forming.");
-      else _say("They're not here.");
-    }
+    else _say("They're not here.");
     return;
   }
   _noteActor(id); // this person is now the antecedent for the next "her/him"
@@ -2087,6 +2094,11 @@ function _doThrowCover(targetWord) {
   const girls = here.filter(x => NPC_ROLES[x] === "hostess");
   const w = (targetWord || "").trim();
   let id = w ? _findNpc(w) : (girls.length === 1 ? girls[0] : null);
+  // a rail regular resolves through _findNpc now (one cast) — but he was never
+  // a candidate for the ceiling game: fall through to the same "Whose?" /
+  // "nobody here is wearing any" answers the old table split produced (the
+  // she-voiced staff refusal below must not land on a 67-year-old at the rail)
+  if (id && NPCS[id].patron) id = null;
   if (id && NPC_ROLES[id] !== "hostess") {
     _say(`${NPCS[id].name} is not playing that game — and the look she gives you ` +
       "says the covers stay exactly where they are.");

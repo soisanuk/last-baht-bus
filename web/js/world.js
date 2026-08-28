@@ -11387,12 +11387,17 @@ const QUIZ_POOL = [
 
 // ── Canon checklist (used by tests) ────────────────────────────────────────
 
-// ── Named patrons: bar customers with a home bar and (mostly) wandering feet ──
-// Hoppers drift to a different bar each hour until 22:00, then settle at their
-// home bar for the rest of the night; non-hoppers never leave home. The engine
-// places them by pure hash (same night, same hour, same stool) and their
-// dialogue trees reset daily. Schema matches NPC dialogue: fallback + topics,
-// `short` for terse repeats.
+// ── Named patrons: bar customers, `patron: true` NPCs ────────────────────────
+// One cast table: every entry below is folded into NPCS (see the loop after
+// _PATRON_TITLES) and behaves like Terry — a role-less regular the lady-logic
+// ignores. What the flag preserves from the old separate-table era: the daily
+// dialogue reset (a regular's stories are new every night, G.patronTalk), the
+// met-once greeting (G.patronMet), beer-not-lady-drink, the season-thinned
+// bench and `days` work-nights (both in _npcActive, keyed on the flag so staff
+// never thin), and Glam's 22:00 shuttle (_npcRoom). `hops`/`haunts`/`avoids`
+// are the RETIRED hourly-hop machinery, kept as inert data because the Second
+// Road export carries them (shape change = a cross-repo request, CLAUDE.md).
+// Schema matches NPC dialogue: fallback + topics, `short` for terse repeats.
 const PATRONS = {
 
   // ── Jomtien's quiet-side regulars (docs/map-coverage.md) ─────────────────────
@@ -11403,7 +11408,7 @@ const PATRONS = {
   // is quest-aware. Homed across the four bars so each has a regular nightly.
   roger: {
     name: "Roger", emoji: "⚽", age: 67, nat: "British", pronoun: "he",
-    home: "lucky7", hops: true,
+    patron: true, room: "lucky7", hops: true,
     look: "British man of sixty-seven, balding, reading glasses on a string, soft blue football shirt, contented.",
     desc: "Sixty-seven, an Everton shirt gone soft with washing, reading glasses on a string, and " +
       "the settled contentment of a man who has been told precisely where he may and may not " +
@@ -11434,7 +11439,7 @@ const PATRONS = {
   },
   dieter: {
     name: "Dieter", emoji: "🍺", age: 71, nat: "German", pronoun: "he",
-    home: "seabreeze", hops: false,
+    patron: true, room: "seabreeze", hops: false,
     look: "German man of seventy-one, silver hair, very clean glasses, pressed pale short-sleeve shirt, precise.",
     desc: "Seventy-one, a pressed short-sleeve shirt, a beer mat squared to the table edge, and twenty " +
       "years of Jomtien behind a pair of very clean glasses. He drinks precisely two Chang a night, no " +
@@ -11461,7 +11466,7 @@ const PATRONS = {
   },
   gerald: {
     name: "Gerald", emoji: "🥂", age: 64, nat: "British", pronoun: "he",
-    home: "sandbar", hops: true,
+    patron: true, room: "sandbar", hops: true,
     look: "British man of sixty-four, silver hair, good tan, cream linen shirt, gin in hand, dapper.",
     desc: "Sixty-four, linen and a good tan, a gin-and-slimline in front of him and a paperback face-down " +
       "beside it. He has held the same sunbed on Dongtan for eleven years and knows every piece of gossip " +
@@ -11488,7 +11493,7 @@ const PATRONS = {
   },
   sandra: {
     name: "Sandra", emoji: "🍷", age: 59, nat: "British", pronoun: "she",
-    home: "coconut", hops: false,
+    patron: true, room: "coconut", hops: false,
     look: "British woman of fifty-nine, sensible grey bob, glass of white wine, watchful, unhurried.",
     desc: "Fifty-nine, a sensible bob going gracefully grey, a glass of white going slowly warm, and the " +
       "unhurried gaze of a woman who moved here alone eight years ago and has regretted precisely none of " +
@@ -11523,7 +11528,7 @@ const PATRONS = {
   // company rather than a warning. He is the "she paid for the lattes" line.
   colin: {
     name: "Colin", emoji: "☕", age: 58, nat: "British", pronoun: "he",
-    home: "the_terrace", hops: false,
+    patron: true, room: "the_terrace", hops: false,
     look: "British man of fifty-eight, tanned, close-cropped grey, good linen shirt, a flat white going cold at his elbow.",
     desc: "Fifty-eight, tanned to leather, close-cropped grey, and a linen shirt that cost " +
       "more than it needed to — the uniform of a man who once believed he'd figured the " +
@@ -11611,7 +11616,7 @@ const PATRONS = {
   glam: {
     name: "Glam", emoji: "🎸", age: 77, nat: "German",
     pronoun: "he",
-    home: "cheeky_monkey", hops: false, shuttle: { after: 4, to: "hyper" }, protected: true,
+    patron: true, room: "cheeky_monkey", hops: false, shuttle: { after: 4, to: "hyper" }, protected: true,
     look: "German man of seventy-seven, wild sparse blonde hair, silk shirt open at the chest, tanned.",
     desc: "Somewhere north of seventy-five and dressed like it's 1983 in a Munich discotheque: a silk " +
       "shirt open one button too far, and a wild halo of sparse blonde hair caught somewhere between " +
@@ -11665,7 +11670,7 @@ const PATRONS = {
   fergie: {
     name: "Fergie", emoji: "🥃", age: 58, nat: "Northern Irish",
     pronoun: "he",
-    home: "gold_rush", hops: true, haunts: ["Soi Buakhao", "Tree Town"],
+    patron: true, room: "gold_rush", hops: true, haunts: ["Soi Buakhao", "Tree Town"],
     avoids: ["candy_bar", "candy_bar_2", "stinky_bar"], rage: ["bert", "candy", "stinky"],
     look: "Northern Irish man of fifty-eight, short, bald, sunburnt red, boxer's nose, cauliflower ears.",
     desc: "Short, bald, and boiled red — the nose of a man who has met a great deal of liquor and " +
@@ -11707,7 +11712,7 @@ const PATRONS = {
   ron: {
     name: "Ron", emoji: "🦘", age: 66, nat: "Australian",
     pronoun: "he",
-    home: "mama_yai", hops: false,
+    patron: true, room: "mama_yai", hops: false,
     desc: "Sixty-six, Wollongong, a faded steel-town singlet and thongs that have " +
       "worn a groove in this soi. He has the settled bulk of a man who stopped " +
       "moving fifteen years ago and rates it his finest decision.",
@@ -11747,7 +11752,7 @@ const PATRONS = {
   // knows. Isan stays offscreen: what was said in that house, he never asked.
   neil: {
     name: "Neil", emoji: "🫖", age: 54, nat: "British", pronoun: "he",
-    home: "lake_beer", hops: false,
+    patron: true, room: "lake_beer", hops: false,
     look: "British man of fifty-four, heavy-shouldered, cropped greying hair, plain navy polo, one bottle of Leo, unhurried.",
     desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting things " +
       "rather than weights, cropped hair going grey, a plain navy polo that has been washed " +
@@ -11858,7 +11863,7 @@ const PATRONS = {
   mort: {
     name: "Mort", emoji: "🦉", age: 74, nat: "American",
     pronoun: "he",
-    home: "queen_vic", hops: false,
+    patron: true, room: "queen_vic", hops: false,
     look: "American man of seventy-four, horn-rimmed glasses, clashing Hawaiian shirt, spiral notebook.",
     desc: "Seventy-four, horn-rimmed glasses and a Hawaiian shirt at war with itself, a " +
       "spiral notebook and a biro he clicks while he watches the soi. He has been on this " +
@@ -11991,7 +11996,7 @@ const PATRONS = {
   nigel: {
     name: "Nigel", emoji: "🍻", age: 68, nat: "British",
     pronoun: "he",
-    home: "lucky_tiger", hops: true,
+    patron: true, room: "lucky_tiger", hops: true,
     desc: "Sixty-eight, sun-spotted, a Chang vest gone grey at the seams. He has " +
       "the fixed forward stare of a man permanently addressing an audience of " +
       "1998. Whatever bar he's in, he looks like he's comparing it to a better one.",
@@ -12079,7 +12084,7 @@ const PATRONS = {
   chuck: {
     name: "Chuck", emoji: "🤠", age: 58, nat: "American",
     pronoun: "he",
-    home: "tequila_queen", hops: true,
+    patron: true, room: "tequila_queen", hops: true,
     look: "American man of fifty-eight, sunburnt scalp and arms, plumbing-company polo, grinning.",
     desc: "Sunburn over sunburn, a polo shirt with a plumbing-company logo, and the " +
       "unmistakable glow of a man who believes he is winning. Day four of two weeks. " +
@@ -12114,7 +12119,7 @@ const PATRONS = {
   dave: {
     name: "Dave", emoji: "📋", age: 55, nat: "British",
     pronoun: "he",
-    home: "stinky_bar", hops: true,
+    patron: true, room: "stinky_bar", hops: true,
     desc: "Fifty-five, neat polo, shandy in front of him going flat. He drinks less " +
       "than anyone in whatever bar he's in and looks at the door more. His phone " +
       "sits face-up: a long list of names, a lot of them greyed out.",
@@ -12150,7 +12155,7 @@ const PATRONS = {
   helmut: {
     name: "Helmut", emoji: "🔧", age: 61, nat: "German",
     pronoun: "he",
-    home: "silk_rose", hops: false,
+    patron: true, room: "silk_rose", hops: false,
     desc: "Sixty-one, pressed short-sleeve shirt, glasses polished to optical-lab " +
       "standard. He occupies the third stool from the left as if allocated it by " +
       "the state. One Chang, one glass, one coaster, all aligned.",
@@ -12201,7 +12206,7 @@ const PATRONS = {
   somsak: {
     name: "Somsak", emoji: "🌇", age: 47, nat: "Thai",
     pronoun: "he",
-    home: "blue_dog", hops: false,
+    patron: true, room: "blue_dog", hops: false,
     look: "Thai man of forty-seven, lean, hotel-maintenance polo, weathered face, bottle of Leo.",
     desc: "Forty-seven, hotel-maintenance polo, the end seat at the Blue Dog rail " +
       "with the best line on both the sunset and the checkpoint. He drinks one " +
@@ -12239,7 +12244,7 @@ const PATRONS = {
   randy: {
     name: "Randy", emoji: "🐻", age: 54, nat: "American",
     pronoun: "he",
-    home: "jasmine_garden", hops: true,
+    patron: true, room: "jasmine_garden", hops: true,
     look: "American man of fifty-four, six-foot-four, huge hands, grey buzz cut, mild expression.",
     desc: "Six-foot-four and built like the loads he used to carry, with hands that " +
       "make the Chang bottle look like a miniature. Fifty-four, Alabama drawl, and " +
@@ -12311,7 +12316,7 @@ const PATRONS = {
   drew: {
     name: "Drew", emoji: "🚬", age: 53, nat: "American",
     pronoun: "he",
-    home: "stinky_bar", hops: true,
+    patron: true, room: "stinky_bar", hops: true,
     desc: "Fifty-three, Navy posture that never demobbed, a Marlboro going and its " +
       "successor already tapped out of the pack. In front of him: Jack and Coke, " +
       "no lemon — an arrangement he supervises like a treaty. The eyes do a " +
@@ -12379,7 +12384,7 @@ const PATRONS = {
   david: {
     name: "David", emoji: "🇨🇦", age: 52, nat: "Canadian",
     pronoun: "he",
-    home: "stinky_bar", hops: false, days: [1, 5], // teacher's days off: Mon & Fri
+    patron: true, room: "stinky_bar", hops: false, days: [1, 5], // teacher's days off: Mon & Fri
     desc: "Fifty-two, ball cap gone soft with washing, the delighted open face of a " +
       "golden retriever that learned English. One beer in front of him, nursed " +
       "with the skill of a man who has budgeted exactly four. He is either " +
@@ -12449,7 +12454,7 @@ const PATRONS = {
   superman: {
     name: "Superman", emoji: "🦸", age: 62, nat: "American",
     pronoun: "he",
-    home: "blue_dog", hops: false,
+    patron: true, room: "blue_dog", hops: false,
     look: "American man of sixty-two, faded Superman t-shirt over a heavy chest, grey stubble.",
     desc: "Sixty-two, in tonight's Superman shirt — the S faded from a hundred " +
       "washes, stretched over a chest that carries three stents and a story. He " +
@@ -12508,7 +12513,7 @@ const PATRONS = {
   angela: {
     name: "Angela", emoji: "🎧", age: 47, nat: "American",
     pronoun: "she",
-    home: "queen_vic", hops: false,
+    patron: true, room: "queen_vic", hops: false,
     look: "American woman of forty-seven, greying shoulder-length hair, faded flannel shirt tied at the waist.",
     desc: "Forty-seven, unkempt shoulder-length hair gone grey, a faded flannel shirt " +
       "tied at the waist in a climate that argues against it. On the bar next to " +
@@ -12612,7 +12617,7 @@ const PATRONS = {
   danny: {
     name: "Danny", emoji: "💪", age: 50, nat: "Canadian",
     pronoun: "he",
-    home: "club_mirage", hops: true,
+    patron: true, room: "club_mirage", hops: true,
     avoids: ["stinky_bar", "las_vegas"], // the map of his debts, drawn in bars
     look: "Canadian man of fifty, gym-built, black tank top, full tattoo sleeve, shaved head.",
     desc: "Fifty, but built like a rendering of forty — tank top, veins, a full " +
@@ -12681,7 +12686,7 @@ const PATRONS = {
   josey: {
     name: "Josey", emoji: "🏋️", age: 32, nat: "Australian",
     pronoun: "she",
-    home: "rock_factory", hops: false,
+    patron: true, room: "rock_factory", hops: false,
     desc: "Thirty-two, Australian, shoulders that still remember lane ropes, in " +
       "gym wear that is clearly working clothes rather than costume. She has a " +
       "regular table by the stage with sightlines on the drummer, a {{phone}} on a " +
@@ -12739,7 +12744,7 @@ const PATRONS = {
   reginald: {
     name: "Reginald", emoji: "🥂", age: 60, nat: "British",
     pronoun: "he",
-    home: "las_vegas", hops: true,
+    patron: true, room: "las_vegas", hops: true,
     look: "British man of sixty, silver hair sharply parted, deep tan, crisp open-necked linen shirt.",
     desc: "Sixty and annoyingly aware that he doesn't look it: linen shirt with " +
       "exactly the right number of buttons open, a tan that took discipline, " +
@@ -12801,7 +12806,7 @@ const PATRONS = {
   mikkel: {
     name: "Mikkel", emoji: "🎒", age: 24, nat: "Danish",
     pronoun: "he",
-    home: "neon_paradise", hops: true,
+    patron: true, room: "neon_paradise", hops: true,
     look: "Danish man of twenty-four, backpacker tan, shaggy fair hair, friendship bracelets to the elbow.",
     desc: "Twenty-four, backpacker tan, friendship bracelets to the elbow, and the " +
       "incandescent certainty of a man eleven days into the love of his life. He " +
@@ -12871,6 +12876,13 @@ const _PATRON_TITLES = {
   neil:     "a heavy-shouldered Englishman nursing one bottle of Leo",
 };
 for (const [id, t] of Object.entries(_PATRON_TITLES)) if (PATRONS[id]) PATRONS[id].title = t;
+
+// ONE CAST TABLE: the patrons are NPCs (patron: true). Same object references,
+// so NPCS[id] === PATRONS[id] — the PATRONS name survives only as a transition
+// view for the not-yet-repointed pipeline and the Second Road exporter, and is
+// scheduled for deletion (patron-fold stage 3). Nothing may diverge the two:
+// there is exactly one entry per character, reachable under either name.
+for (const [id, p] of Object.entries(PATRONS)) NPCS[id] = p;
 
 // ── Character creation: who you are ─────────────────────────────────────────
 // Picked in the taxi-ride intro (see _taxiIntro). Dialogue-only for v1: origin/

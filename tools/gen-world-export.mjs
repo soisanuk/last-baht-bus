@@ -80,6 +80,11 @@ export function buildExport() {
   // they are; what they SAY is a night-scale concern and stays in LBB.
   const people = {};
   for (const [id, n] of Object.entries(NPCS)) {
+    // One cast in LBB since the patron fold — but the EXPORT keeps the two
+    // sibling blocks, because the shape is Second Road's contract (CLAUDE.md
+    // repo-ownership: changes are requested through the user, never made
+    // across the boundary). The regulars ship in `patrons` below, not here.
+    if (n.patron) continue;
     const p = { name: n.name, room: n.room, pronoun: _pronoun(id) };
     if (n.th) p.th = n.th;
     if (n.emoji) p.emoji = n.emoji;
@@ -95,7 +100,9 @@ export function buildExport() {
   const patrons = {};
   if (typeof PATRONS !== "undefined") {
     for (const [id, p] of Object.entries(PATRONS)) {
-      const q = { name: p.name, home: p.home, pronoun: _pronoun(id) };
+      // the EXPORTED key stays `home` — the shape is Second Road's contract
+      // (CLAUDE.md repo-ownership); only the source field moved in the fold
+      const q = { name: p.name, home: p.room, pronoun: _pronoun(id) };
       if (p.emoji) q.emoji = p.emoji;
       if (p.nat) q.nat = p.nat;
       if (p.hops) q.hops = p.hops;

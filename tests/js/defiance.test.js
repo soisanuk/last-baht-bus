@@ -30,15 +30,15 @@ beforeEach(() => {
 });
 
 test("Neil sits at The Sundowner, Nigel in town — the two bars never share a room", () => {
-  assert.equal(PATRONS.neil.home, "lake_beer");
-  assert.equal(ROOMS[PATRONS.neil.home].region, "Darkside");
-  assert.notEqual(ROOMS[PATRONS.nigel.home].region, "Darkside");
+  assert.equal(PATRONS.neil.room, "lake_beer");
+  assert.equal(ROOMS[PATRONS.neil.room].region, "Darkside");
+  assert.notEqual(ROOMS[PATRONS.nigel.room].region, "Darkside");
   G.room = "lake_beer";
   assert.ok(_patronsHere().includes("neil"));
 });
 
 test("Nigel's Darkside version is the wrong one, and it sets the grapevine flag", () => {
-  G.room = PATRONS.nigel.home;
+  G.room = PATRONS.nigel.room;
   _patronTalk("nigel", "darkside");
   assert.match(text(), /Neil/);
   assert.match(text(), /where the story ends/);
@@ -79,7 +79,7 @@ test("the triangulation payoff fires only for a player who heard both versions",
   assert.match(text(), /nine in ten|nine times in ten/i);
   // and back in town, Nigel cracks but does not convert
   _setFlag("neilStory");
-  G.room = PATRONS.nigel.home;
+  G.room = PATRONS.nigel.room;
   out = [];
   _patronTalk("nigel", "darkside");
   assert.match(text(), /Good luck to him/);
@@ -108,7 +108,7 @@ test("the conversation layer routes the phrasings onto the canonical topics", ()
 });
 
 test("patrons get the synonym retry too — ASK NIGEL ABOUT NEIL reaches his darkside node", () => {
-  G.room = PATRONS.nigel.home;
+  G.room = PATRONS.nigel.room;
   out = [];
   doCommand("ask nigel about neil");
   assert.match(text(), /Graveyard/);

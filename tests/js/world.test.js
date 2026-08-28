@@ -115,8 +115,11 @@ test("gossip chain flags connect: every required flag is set somewhere", () => {
     "shamrockVisited", // engine-set by _dogShamrock (arriving on the strip with the dog) — Bert's afterword reads it
     "hatchPried",      // set by the Shamrock's reads: hatch node (sets/reveal) — Bert's key node reads it
     "beeBanked",       // engine-set by _doSendMoney (SEND 100 TO BEE) — Bee's investor ack reads it
-    "glamTruth", // set by PATRON dialogue (Glam's lucid flash), which this scan doesn't cover
-    "knowMikkel", // set by PATRON dialogue (Mikkel's intro), same blind spot as glamTruth
+    // glamTruth/knowMikkel were allowlisted while the patrons lived in their own
+    // table and this scan couldn't see their `sets`; one cast now, so the scan
+    // covers them and the entries came off. The fold also brought patron `req`
+    // flags INTO the scan for the first time — bkkArcDone is the one it found:
+    "bkkArcDone", // engine-set by the Sao arc's Sathorn dinner resolution (_bkkArc* in engine-systems) — gates Colin's seen-it node
     "hasDog",    // set by the adoption action (FEED DOG), not dialogue
     "expatLife", // set by _goExpat — gates the bar-owning chain to the endless stage
     "barPaid",   // set by _barDeposit (the money has to actually exist), not dialogue
@@ -205,17 +208,25 @@ test("the safe PIN's clue flags both exist in dialogue", () => {
 });
 
 test("patrons: real home bars, complete profiles, unconditional fallback", () => {
-  assert.ok(Object.keys(PATRONS).length >= 4, "a respectable regulars' bench");
+  // One cast since the patron fold: the bench is every NPC flagged patron:true,
+  // homed via the ordinary `room` field. The schema invariants are unchanged —
+  // a regular still needs a real bar, a full profile card (age/nat feed EXAMINE
+  // and Tan's dossier), and a topicless fallback so TALK never dead-ends.
+  const bench = Object.entries(NPCS).filter(([, n]) => n.patron);
+  assert.ok(bench.length >= 4, "a respectable regulars' bench");
   let hoppers = 0, homebodies = 0;
-  for (const [id, p] of Object.entries(PATRONS)) {
-    assert.ok(ROOMS[p.home], `${id} home ${p.home} missing`);
-    assert.ok(ROOMS[p.home].barType, `${id} home ${p.home} is not a bar`);
+  for (const [id, p] of bench) {
+    assert.ok(ROOMS[p.room], `${id} home ${p.room} missing`);
+    assert.ok(ROOMS[p.room].barType, `${id} home ${p.room} is not a bar`);
     assert.ok(Number.isInteger(p.age) && p.age > 17 && p.age < 100, `${id} age`);
     assert.ok(p.nat && p.name && p.desc && p.emoji, `${id} profile incomplete`);
     assert.ok(p.dialogue.length > 0, `${id} has no dialogue`);
     assert.ok(p.dialogue.some(d => !d.topic), `${id} has no fallback line`);
     p.hops ? hoppers++ : homebodies++;
   }
+  // `hops` is the RETIRED hourly-drift machinery, kept as inert data because
+  // the Second Road export carries it (shape = cross-repo contract). The mix
+  // assertion keeps the data honest until an export v4 deletes it for real.
   assert.ok(hoppers > 0, "somebody barhops");
   assert.ok(homebodies > 0, "somebody never leaves their stool");
 });
