@@ -486,6 +486,7 @@ function _arriveAt(to) {
     }
   }
   G.room = to;
+  if (typeof _stuckReset === "function") _stuckReset(); // you moved: not stuck
   if (typeof _partyArrive === "function") _partyArrive(to); // company makes an entrance of every new door
   if (typeof _fonPour === "function") _fonPour();   // Wednesday, first hour, her bar only
   if (typeof _newbieNudge === "function") _newbieNudge();   // once ever: a number, then the bell
@@ -2748,7 +2749,7 @@ function _doTalkBody(arg, topic) {
     // bug rather than as flavour, and the house rule is that a plausible verb
     // gets a voiced refusal (thorough-player playtest B#3, 2026-08-23).
     if (_promptedFolk(arg)) return;
-    _say(_pickVary(_NOBODY_NAME, "noname"));
+    _say(_pickVary(_NOBODY_NAME, "noname")); _noteMiss("noname", arg);
     return;
   }
   _convoStart(npc); // this NPC is now the active conversation partner (bare topics aim here)
@@ -7445,7 +7446,7 @@ function doCommand(input) {
       // "i love you", "i want a beer" — not an inventory request; let the
       // polite-phrase / conversation layers have it (Alan playtest 2026-08-17)
       if (_politePhrase(lower) || _convoResolve(lower)) break;
-      _say(_pickVary(_HUH, "huh"), "dim"); return;
+      _say(_pickVary(_HUH, "huh"), "dim"); _noteMiss("parse"); return;
     // Meta, not play: handing the character to the other game and taking one
     // back are outside the fiction, and charging a turn of the night for them
     // is charging the player for using the door between two games (persistence
@@ -7848,7 +7849,7 @@ function doCommand(input) {
     case "good": // GOOD BOY / GOOD DOG — else "good evening" and friends go to the courtesy layer
       if (G.dog && /\b(boy|dog|lad|girl)\b/.test(arg)) { _dogPraise(v); break; }
       if (_politePhrase(lower) || _convoResolve(lower)) break;
-      _say(_pickVary(_HUH, "huh"), "dim"); return;
+      _say(_pickVary(_HUH, "huh"), "dim"); _noteMiss("parse"); return;
     case "stay": case "heel": case "whistle": case "come":
       if (G.dog) { _dogPraise(v); break; }
       _say(v === "whistle" ? "You whistle. A soi dog on the far kerb looks up, files you under 'no', and lies back down."
@@ -7948,7 +7949,7 @@ function doCommand(input) {
       }
       if (_politePhrase(lower)) break;
       if (_convoResolve(lower)) break;
-      _say(_pickVary(_HUH, "huh"), "dim");
+      _say(_pickVary(_HUH, "huh"), "dim"); _noteMiss("parse");
       return; // no tick for parse errors
   }
   _flushTrace(_room0);

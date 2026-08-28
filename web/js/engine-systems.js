@@ -2900,6 +2900,77 @@ function _tanText() {
   _say("(📱 The reply is instant. Of course it is. CHECK MESSAGES.)", "dim");
 }
 
+// ── The stuck nudge: Tan notices you going round in circles ──────────────────
+// A player FIGHTING THE PARSER looks nothing like one exploring. A topic that
+// misses is ordinary conversation — a completionist works a man's whole
+// repertoire and most of it lands on "not my story" — so a miss inside a
+// conversation, and a terse repeat, never count here. What counts is the game
+// failing to understand at all, and asking after somebody who isn't there.
+//
+// The threshold is deliberately high (ten, not three) and guarded on FLAILING:
+// the run must span more than one place or target, or carry three outright
+// parse failures. Ten misses aimed at one person is somebody mining a
+// character; ten across four rooms is somebody lost. This is the first system
+// that watches the player for failure, and the failure mode is nagging a
+// competent one — so it errs toward never firing.
+//
+// Tan stays IN FICTION (he is the hub, he has your number, and he is the one
+// character who would notice); the mechanical part goes in the narrator's
+// parenthetical after it, which is the game's existing tap-hint idiom. Tan
+// telling you to press a key would break him — the dog's donation line stays
+// the only fourth wall in this game.
+const STUCK_AT = 10;
+
+function _stuckReset() { if (G && G.stuck) G.stuck = { n: 0, parse: 0, noname: 0, terse: false, spots: [] }; }
+
+// kind: "parse" (the game understood nothing) · "noname" (asked for somebody
+// who isn't here) · "terse" (a repeat gave the gist — never increments, only
+// selects which hint Tan sends)
+function _noteMiss(kind, subject) {
+  if (!G || !G.stuck) return;
+  const s = G.stuck;
+  if (kind === "terse") { s.terse = true; return; }
+  s.n++;
+  if (kind === "parse") s.parse++; else s.noname++;
+  // The "spot" is what you are failing AT, not merely where you stand: eleven
+  // different names called into one bar is a man who has lost the whole cast,
+  // and keying on the room alone read that as one place and stayed quiet.
+  const spot = G.room + ":" + (subject || G.convo || "");
+  if (s.spots.indexOf(spot) < 0 && s.spots.length < 12) s.spots.push(spot);
+  if (s.n >= STUCK_AT && (s.spots.length > 1 || s.parse >= 3)) _tanUnstick();
+}
+
+function _tanUnstick() {
+  // never mid-modal (you are not stuck, you are being asked something), never
+  // twice a night, and never without the phone that is the whole mechanism
+  if (G.pendingEnc || G.game || G.pendingChoice || G.pendingBf || G.pendingFare) return;
+  if (G.stuckDay === G.day) return;
+  if (G.battery <= 0 || !G.phone || !G.phone.contacts || !G.phone.contacts.tan) return;
+  // his Act One rescue is his first contact; don't step on its entrance
+  if (!_flag("act1Done") && !G.phone.tanAct1) return;
+  const s = G.stuck;
+  G.stuckDay = G.day;
+  G.battery = Math.max(0, G.battery - 1);
+  _stuckReset();
+  _say("Your phone buzzes. Tan, who you have not texted, and who has a driver's " +
+    "instinct for a man circling the same block twice.", "alert");
+  if (s.noname > s.parse) {
+    _pushMsg("tan", "you are looking for somebody, na? just ask me. i drive everybody in this town — " +
+      "i know where they drink, what night, all of it 🙂");
+    _say("(📱 CHECK MESSAGES — and then ASK TAN ABOUT <person>, any night, any bar.)", "dim");
+    return;
+  }
+  if (s.terse) {
+    _pushMsg("tan", "555 the old boys give you the short version? they do that. ask them AGAIN, " +
+      "properly — a man likes to tell it twice if you make him.");
+    _say("(📱 CHECK MESSAGES — “ask him about it again” gets the whole story back.)", "dim");
+    return;
+  }
+  _pushMsg("tan", "my friend. you are going round and round. slow down, look, then say what you want — " +
+    "the town is simple when you stop fighting it 🙂");
+  _say("(📱 CHECK MESSAGES — HELP lists what the night understands.)", "dim");
+}
+
 const _CONTACT_SWAP_LINES = [
   "Phones come out, LINE QR codes are scanned, and {n} types your name into her contacts with three emoji you don't get to see. You have her number now — and she, forever, has yours.",
   "{n} holds her phone up for the scan, then corrects your spelling of your own name without asking. A sticker arrives before the phones are down: a bear, waving. It has begun.",

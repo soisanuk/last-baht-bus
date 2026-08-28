@@ -295,6 +295,10 @@ function newGame() {
     fridgeWater: 2,      // free bottles of water left in the room fridge today (housekeeping refills 2/day)
     jaded: 0,            // the hedonic treadmill: conquests this window; each barfine/ST buys less สนุก, cools 1/day
     amuletWorn: false,   // the beach amulet is round your neck (needs a cord first — see _doWear)
+    // consecutive HARD friction (parse failures + not-founds), for the stuck
+    // nudge — see _noteMiss/_tanUnstick. Resets the moment the world moves.
+    stuck: { n: 0, parse: 0, noname: 0, terse: false, spots: [] },
+    stuckDay: 0,         // Tan's unstick text fires at most once a night
     lastBusWarned: false, // the nightly last-baht-bus heads-up fires once per night
     bestHappy: 0,
     act1Best: 0,         // furthest point down the opening critical path ever reached; survives the do-or-die Act One reset
@@ -1377,6 +1381,8 @@ function _deliver(npcId, d, full) {
   const terse = repeat && !full && (!!d.short || flavor);
   const firstEver = !repeat && seen.length === 0;
   if (!repeat) seen.push(idx);
+  if (terse) { if (typeof _noteMiss === "function") _noteMiss("terse"); }
+  else if (typeof _stuckReset === "function") _stuckReset(); // a new line landed: the world moved
   if (d.th && !terse) { _say(`${n.emoji} ${n.name}: “${d.th}” (${d.rom})`, "thai"); _engineSpeak(d.th); }
   // the brush-off keeps its speaker's register — the rail's grizzled pool for a
   // regular, the soi's fond one for everyone else — and says how to get the rest
