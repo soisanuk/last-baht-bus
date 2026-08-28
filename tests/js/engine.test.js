@@ -5528,10 +5528,15 @@ test("TALK TO PATRON resolves to a named regular present, not the faceless arche
   state().room = "queen_vic"; state().lastSaleng = 99999; state().lastPeddler = 99999;
   out = []; run("talk to patron");
   assert.match(lastOut(), /Mort|Angela/, "a real named regular holds court at the Queen Vic");
-  // de-hopped: a hopper stays anchored at its local all night
-  state().nightTurn = 5; const early = _npcWhere("nigel");
-  state().nightTurn = 45;
-  assert.equal(_npcWhere("nigel"), early, "no hourly drift — reliably found");
+  // The rail drifts early doors and settles at ten (round 20). This test used to
+  // assert the opposite — it WAS the de-hop — so it now pins the half that still
+  // matters: from 22:00 a regular is at his local, which is what makes "go and
+  // find him" errands work. Asserted across the whole back half, not one sample.
+  for (let t = 40; t < 100; t += 10) {
+    state().nightTurn = t;
+    assert.equal(_npcWhere("nigel"), NPCS.nigel.room,
+      `nightTurn ${t}: after ten he is at his local, reliably found`);
+  }
 });
 
 test("adopting the soi dog gets you a Soi Dog Foundation donation text the next day", () => {

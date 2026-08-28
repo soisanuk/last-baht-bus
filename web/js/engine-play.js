@@ -775,6 +775,11 @@ function _weekday() { return WEEKDAYS[G.day % 7]; }
 // All calendar checks go through these helpers — in a future shared world the
 // clock becomes the server's, and these are the only seams to re-plumb.
 function _quizDay() { return G.day % 7 === 4; }
+// The night's hour, 0 = 18:00. The only turn→hour conversion in the game, so
+// the regulars' drift, Glam's shuttle and anything else that asks "what time is
+// it" share one seam. (_clockStr renders a display string and is not a
+// comparator.)
+function _nightHour() { return Math.floor(G.nightTurn / 10); }
 
 // ── The first night ─────────────────────────────────────────────────────────
 // A punter knows what to do in Pattaya. What he does not know is what this GAME

@@ -93,8 +93,10 @@ test("a proper noun in a character's own mouth is a topic they answer", () => {
   ];
   for (const [who, room, topic] of cases) {
     sandbox();
-    G.room = room;
-    assert.ok(_npcsHere().includes(who), `${who} is in ${room}`);
+    // Stand where he actually IS: the regulars drift around their manor before
+    // ten (round 20), so a hard-coded bar is only his local, not his whereabouts.
+    G.room = _npcWhere(who) || room;
+    assert.ok(_npcsHere().includes(who), `${who} is findable`);
     doCommand("talk to " + who);
     out = [];
     doCommand(`ask ${who} about ${topic}`);

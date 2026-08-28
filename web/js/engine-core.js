@@ -594,12 +594,95 @@ function _npcRoom(id) {
   if (G.party && G.party.ids && G.party.ids.includes(id)) return G.room;
   const n = NPCS[id];
   if (n.bars && n.bars.length) return n.bars[G.day % n.bars.length];
-  // Glam's escorted evening — home bar early, walked across after 22:00. The ONE
-  // exception to this function's day-stability contract, inherited from the
-  // patron fold; _questWhere already probes for exactly this movement before
-  // promising his location. Don't add more shuttles without that in mind.
-  if (n.shuttle) return Math.floor(G.nightTurn / 10) >= n.shuttle.after ? n.shuttle.to : n.room;
+  // Glam's escorted evening — home bar early, wheeled across after 22:00.
+  if (n.shuttle) return _nightHour() >= n.shuttle.after ? n.shuttle.to : n.room;
+  // …and the rail drifts early doors (see _hopsNow / _hopRoom).
+  if (_hopsNow(id)) return _hopRoom(id);
   return n.room;
+}
+
+// ── The early-doors drift ───────────────────────────────────────────────────
+// A regular has one local but not one stool: before ten he is somewhere in his
+// own manor, and where exactly is a matter of who was buying. From 22:00 he is
+// at his local, which is why "go and find him" errands work at all — the back
+// half of the night is stable on purpose (Mario, 2026-08-29).
+//
+// This RE-ANIMATES the retired hourly-hop system rather than inventing one. That
+// system was ripped out because a location was true when printed and false when
+// you arrived, and a persona gave up hunting Fergie on the strength of it. What
+// is different now: _npcWhere reports absence, _elsewhereLine places people,
+// Tan's locator is advertised, and _questWhere hedges — the game can ask, place
+// and hedge, which it could not in the hop's first life.
+//
+// PURE HASH, NEVER DICE, and that is a hard constraint rather than a preference:
+// _questWhere detects movement by mutating G.nightTurn, re-asking _npcWhere and
+// restoring it. A _rand() anywhere in this path would burn dice on a lookup and
+// desync the seeded daily.
+const HOP_CHANCE = 10;   // per cent, per hour
+const HOP_SETTLE = 4;    // 22:00 — from here he is at his local
+
+// Who is loose tonight. Working staff never drift (they are ON), and the guard
+// reads G.convo DIRECTLY — calling _convoActive() here would recurse forever,
+// since it asks _npcsHere() which asks this. A man mid-conversation with you
+// does not wander off mid-sentence: _convoActive clears a live conversation the
+// instant its partner leaves the room, silently, and destroys the question he
+// had put to you along with it.
+function _hopsNow(id) {
+  const n = NPCS[id];
+  if (!n || !n.hops) return false;
+  if (NPC_ROLES[id] || n.manager || n.filler || n.house) return false;
+  if (G.mode === "soi6") return false;   // the challenge fences the map; drifting leaves it
+  if (_nightHour() >= HOP_SETTLE) return false;
+  return true;
+}
+
+// His manor: the bars of the districts he actually drinks in — `haunts` when
+// authored (Fergie works Buakhao AND Tree Town), else his home district — minus
+// the bars he will not set foot in (`avoids`: creditors, a ban, history). Both
+// fields are original authored intent from the hop's first life.
+// Deliberately CLOCK-INDEPENDENT: filtering on _closesMidnight (a property of
+// the room) rather than _closedNow (a property of the hour) keeps the pool the
+// same all evening, which is what lets the cumulative walk below stay pure.
+function _hopPool(id) {
+  const n = NPCS[id];
+  const home = ROOMS[n.room];
+  if (!home) return [];
+  const regions = (n.haunts && n.haunts.length) ? n.haunts : [home.region];
+  const avoids = n.avoids || [];
+  return Object.keys(ROOMS).filter(r =>
+    ROOMS[r].barType && regions.indexOf(ROOMS[r].region) >= 0 &&
+    avoids.indexOf(r) < 0 &&
+    !(typeof _closesMidnight === "function" && _closesMidnight(r)));
+}
+
+// A CUMULATIVE walk, not a per-hour teleport: he starts at his local and moves
+// on one bar for each hour the dice of the world said "one more, then". Pure in
+// (id, vacation, day, hour), so it can be asked about ANY hour — which is what
+// lets a pointer say where he was and where he will have got to.
+function _hopRoom(id) {
+  const n = NPCS[id];
+  const pool = _hopPool(id);
+  if (pool.length < 2) return n.room;
+  let i = pool.indexOf(n.room);
+  if (i < 0) i = 0;
+  // A man mid-conversation with you does not wander off mid-sentence, so while
+  // you are talking his clock stops: he stays exactly where he was when you sat
+  // down. Freezing the HOUR rather than pinning the room matters — pinning him
+  // home would teleport him out of a drift bar you were standing in, killing the
+  // conversation this guard exists to protect, and returning G.room instead
+  // would make him follow you around the town forever, because _convoActive
+  // clears a stale conversation only by noticing he ISN'T where you are.
+  const hour = (G.convo === id && G.convoHour != null) ? G.convoHour : _nightHour();
+  // The walk starts at hour ONE: at opening time every man is at his own local,
+  // which is both the truer picture (you arrive at your bar, then you drift) and
+  // a deliberate removal of a whole class of flake — the suite's default hour is
+  // 0, so a drift on the opening hour would make any test that stands the player
+  // at a regular's home bar fail one run in ten.
+  for (let h = 1; h <= hour; h++) {
+    if (_hh(id + ":" + G.vacation + ":" + G.day + ":" + h + ":hop", 71) % 100 < HOP_CHANCE)
+      i = (i + 1) % pool.length;
+  }
+  return pool[i];
 }
 
 // Character-creation Phase B: the seven origin archetypes are all NPCs on Soi 6
@@ -801,6 +884,7 @@ function _npcState(id) {
 // parser layer that consumes this lives in engine-parser.js.
 function _convoStart(id) {
   if (!id) return;
+  G.convoHour = _nightHour(); // his drift clock stops while you're talking (see _hopRoom)
   // Switching partners LAPSES a pending question from the old one — the doc'd
   // "changes the subject" rule, enforced at the switch itself. Without this the
   // old asker's numbered answer prompt kept re-printing under the new partner's
