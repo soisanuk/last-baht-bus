@@ -597,6 +597,13 @@ function _npcRoom(id) {
   if (n.bars && n.bars.length) return n.bars[G.day % n.bars.length];
   // Glam's escorted evening — home bar early, wheeled across after 22:00.
   if (n.shuttle) return _nightHour() >= n.shuttle.after ? n.shuttle.to : n.room;
+  // A character the WORLD moved. Declarative, because the alternative is a
+  // special case in _npcRoom per character: {flag, room}, and when the flag is
+  // set that is simply where they are now. Today it is Bert after the bar goes
+  // — the losing ending says in as many words that he doesn't stay, and then he
+  // was still on his stool four days later telling the man who bought it and
+  // lost it that the old man would carry him (round 24, Keith).
+  if (n.movesTo && _flag(n.movesTo.flag)) return n.movesTo.room;
   // …and the rail drifts early doors (see _hopsNow / _hopRoom).
   if (_hopsNow(id)) return _hopRoom(id);
   return n.room;

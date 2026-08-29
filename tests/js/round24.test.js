@@ -226,3 +226,83 @@ test("the torch can be switched off in the room that tells you to", () => {
   assert.equal(_navHere(), true, "…unless the torch is still burning");
   assert.deepEqual(_navDirs(), [], "and it offers no directions, only the light");
 });
+
+// ── KEITH: the two creditors, and the building after it goes ──────────────
+
+function owning(opts) {
+  sandbox();
+  G.stage = "expat"; _setFlag("expatLife"); _setFlag("barOpen"); _setFlag("barPaid");
+  G.bar = Object.assign({ cash: 0, note: 0, arrears: 0, rentShort: 0, rentOwed: 0,
+    month: 0, drawn: 0, floorSaid: {}, pocketDrawn: 0 }, opts || {});
+  G.room = "stinky_bar"; G.nightTurn = 30;
+}
+
+test("you can pay the landlord, and paying stops his clock", () => {
+  // He comes to the bar in person to say "there is not a third time", you have
+  // money in the till, and PAY RENT answered "Nobody's waiting to be paid."
+  // Nineteen years behind a bar: "the most unbelievable thing in the game."
+  owning({ cash: 9000, rentOwed: 15000, rentShort: 1 });
+  G.money = 8000;
+  out = [];
+  doCommand("pay rent");
+  assert.equal(G.bar.rentOwed, 0, "the money reaches him");
+  assert.equal(G.bar.rentShort, 0, "and the eviction clock is stopped — the point of the verb");
+  assert.equal(G.bar.cash + G.money, 2000, "taken from the till first, then your pocket");
+});
+
+test("a part payment is taken, and honestly described", () => {
+  owning({ cash: 3000, rentOwed: 15000, rentShort: 1 });
+  G.money = 0;
+  out = [];
+  doCommand("pay rent");
+  assert.equal(G.bar.rentOwed, 12000);
+  assert.equal(G.bar.rentShort, 1, "still short, so the clock is still running");
+  assert.match(text(), /still short|still counting/i, "and he does not pretend it is all of it");
+});
+
+test("the old man's note can be settled too, and he never chases it", () => {
+  owning({ cash: 20000, arrears: 9000 });
+  out = [];
+  doCommand("pay the note");
+  assert.equal(G.bar.arrears, 0);
+  assert.match(text(), /does not ring/i, "in character: he has never once chased you");
+});
+
+test("PAY RENT is on three surfaces, and only when you owe", () => {
+  owning({ cash: 5000, rentOwed: 15000, arrears: 9000, rentShort: 1 });
+  assert.deepEqual(engineComplete("pay "), ["rent", "the note"], "autocomplete offers what you owe");
+  out = []; doCommand("books");
+  assert.match(text(), /PAY RENT/, "and the books point at the verb");
+  owning({ cash: 5000 });
+  assert.deepEqual(engineComplete("pay "), [], "nothing owed, nothing offered");
+  // …and the fare still keeps first refusal, on the mechanic the game is named for
+  sandbox(); G.pendingFare = { price: 15 };
+  assert.deepEqual(engineComplete("pay "), ["15"]);
+});
+
+test("when the bar goes, the building knows", () => {
+  // Four days after White Dish took the lease, Bert was still on his stool
+  // telling the man who bought it and lost it that the old man would carry him.
+  sandbox();
+  G.stage = "expat"; _setFlag("expatLife"); _setFlag("barLost");
+  assert.notEqual(_npcRoom("bert"), "stinky_bar",
+    "the ending says in as many words that Bert doesn't stay");
+  G.room = _npcRoom("bert"); G.nightTurn = 30;
+  out = []; doCommand("talk to bert");
+  assert.match(text(), /wrong side of a bar|It was the month/,
+    "and he has something to say to you about it");
+  assert.doesNotMatch(text(), /Welcome to the Stinky|carry you/,
+    "not the welcome speech, and never the sales pitch again");
+});
+
+test("BOOKS and the ending agree about what the room became", () => {
+  // The ending: it reopens as the Stinky Pinky with a menu and a card machine.
+  // BOOKS: a phone shop stands where the docket used to be pinned.
+  sandbox();
+  G.stage = "expat"; _setFlag("expatLife"); _setFlag("barLost");
+  out = []; doCommand("books");
+  assert.doesNotMatch(text(), /phone shop/, "one room, one fate");
+  assert.match(text(), /still there/, "it is still a bar; it is just not yours");
+  out = []; doCommand("draw 500");
+  assert.match(text(), /There was\./, "and DRAW speaks to a man who HAD a till");
+});

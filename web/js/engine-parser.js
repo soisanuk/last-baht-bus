@@ -4900,6 +4900,16 @@ function _doMotosai(arg) {
 }
 
 function _doPay(arg) {
+  // A LANDLORD WHO WILL NOT TAKE YOUR MONEY. He comes to the bar in person to
+  // say "there is not a third time", you have five thousand in the till, and
+  // PAY RENT answered "Nobody's waiting to be paid." An ex-publican of nineteen
+  // years called it the most unbelievable thing in the game, and he is right:
+  // the first thing anybody does when they are short is walk the money round.
+  // HELP listed REPAY for the loan shark and DRAW for your own till, and
+  // nothing at all for the two creditors who can actually finish you (round 24,
+  // Keith). Sits above the fare so a bus ride is never ambiguous.
+  if (!G.pendingFare && typeof _payCreditor === "function" &&
+      /rent|landlord|note|arrears|old man|bert|bar/i.test(arg || "")) { _payCreditor(arg); return; }
   if (!G.pendingFare) { _say("Nobody's waiting to be paid."); return; }
   const amount = /^\d+$/.test(arg) ? parseInt(arg, 10) : parseThaiDigits(arg);
   const { price, dest } = G.pendingFare;
@@ -6796,6 +6806,20 @@ function _completePool(verb, ctx) {
     case "tip": return ctx.length >= 2 ? _cAmounts("tip") : girls();
     case "follow": return ctx.length >= 2 ? [] : _cNpcsHere();
     // the amount verbs that take no target — offer the figures straight away
+    case "pay":
+      // The fare keeps first refusal — PAY is one tap on a bus, and that is the
+      // mechanic the game is named after.
+      if (G.pendingFare) return [String(G.pendingFare.price)];
+      // Only an owner who actually owes sees these — the fare's own "pay 15" is
+      // chipped by the fare gate, and offering "pay rent" to a tourist is noise.
+      if (typeof _barOwned === "function" && _barOwned() && G.bar &&
+          ((G.bar.rentOwed || 0) > 0 || (G.bar.arrears || 0) > 0)) {
+        const o = [];
+        if ((G.bar.rentOwed || 0) > 0) o.push("rent");
+        if ((G.bar.arrears || 0) > 0) o.push("the note");
+        return o;
+      }
+      return [];
     case "borrow": case "repay": case "draw": case "cashup":
     case "withdraw": case "withdrawal": case "withdrawl":
       return ctx.length >= 2 ? [] : _cAmounts(verb);

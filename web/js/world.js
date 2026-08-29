@@ -9752,12 +9752,31 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     room: "stinky_bar",
     manager: true, // the bar-manager NPC type (see _managerHere/_buyManDrink); NOT in NPC_ROLES, so girl-logic ignores him
     look: "American man of sixty-five, heavy forearms, grey crew cut, faded polo, bottle of Singha.",
-    desc: "The Stinky's manager — American, sixty-something, forearms like dock rope, a " +
+        // "Bert doesn't stay." — the losing ending, honoured.
+    movesTo: { flag: "barLost", room: "queen_vic" },
+desc: "The Stinky's manager — American, sixty-something, forearms like dock rope, a " +
       "Singha that never empties and never seems to get him drunk. Candy's man, and " +
       "once the manager of her bars; now he runs the Stinky for its ailing owner and, " +
       "quietly, works at being his own man out from under her shadow. Twenty-two years " +
       "on Beach Road, most of them within nine feet of that pool table.",
     dialogue: [
+      // AFTER IT GOES. He is at the Queen Vic now (movesTo, above) — the losing
+      // ending says he doesn't stay — and this is what he has to say to the man
+      // he sold it to. Above everything, because a man who has just watched you
+      // lose the bar he ran for twenty years does not open with the welcome
+      // speech, and he certainly does not pitch you the sale again (round 24:
+      // four days after White Dish took the lease, he was still saying "he'll
+      // carry you — I told you that").
+      { when: (st, G) => _flag("barLost"),
+        text: "He is on a stool, on the wrong side of a bar, and he has a pint rather than a Singha. " +
+          "\u201cBud.\u201d He does not make you say anything. \u201cTwenty years I stood that rail and I " +
+          "never once had my name on it, so I'll tell you the thing nobody told me: it was never the " +
+          "money that got you. It was the month.\u201d He drinks. \u201cThe old man'd have carried you " +
+          "forever. The LANDLORD only wanted the first, every first, and there's no relationship in a " +
+          "date.\u201d A shrug that costs him something. \u201cI'm all right. Somebody'll want a man who " +
+          "knows every pour on this soi. Sit down.\u201d",
+        short: "\u201cIt was never the money that got you, bud. It was the month. Sit down.\u201d" },
+
       // the nomad's vignette payoff: the first person in town to take the boy
       // seriously — by giving him the least serious job in the building
       { topic: "kyle", when: (st, G) => G.quests.glass_start === "active" && !_flag("kyleShift"),

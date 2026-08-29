@@ -6127,7 +6127,9 @@ const _DRAW_LINES = [
 ];
 function _doDraw(arg) {
   if (!_barOwned()) {
-    _say("You'd need a till of your own to take anything out of. (Yours is the Stinky Pinky's, once it's yours.)");
+    _say(`${_flag("barLost")
+      ? "There is no till of yours to take anything out of. There was."
+      : "You'd need a till of your own to take anything out of. (Yours is the Stinky Pinky's, once it's yours.)"}`);
     return;
   }
   if (G.room !== "stinky_bar") {
@@ -6168,8 +6170,14 @@ function _doBooks() {
         "note cleared. The only ledger you keep these days fits on the back of a " +
         "noodle-shop receipt, and it balances."
       : _flag("barLost")
-      ? "There are no books. There is a docket somewhere with a date on it, and " +
-        "a phone shop where the docket used to be pinned."
+      // The ending says it reopens as the Stinky Pinky with a menu, a card
+      // machine and a girl on the door — and BOOKS said a phone shop stood
+      // where the docket used to be pinned. Two endings for one room, four days
+      // apart (round 24, Keith). The room is still there; it is simply not
+      // yours, which is the harder version anyway.
+      ? "There are no books \u2014 not yours, anyway. The bar is still there, with your " +
+        "name off the paper and somebody else's card machine on the counter, and " +
+        "the docket you used to pin your takings to is a laminated drinks menu now."
       : _flag("barPartner")
       ? "Not yet. The deposit isn't paid, so there is nothing to keep books on."
       : "You don't own a bar. Your books are your pocket, and you know what's in it.");
@@ -6201,6 +6209,14 @@ function _doBooks() {
       { r: b.rentOwed, n: b.rentShort, s: b.rentShort === 1 ? "" : "s" }), "alert");
   }
   if (b.arrears > 0) _say(_fmt("In arrears: ฿{a}. He hasn't asked.", { a: b.arrears }), "alert");
+  // The third surface. A publican who is short walks the money round, and the
+  // verb existed nowhere in HELP or the books — REPAY was listed for the loan
+  // shark and DRAW for your own till, and nothing for the two creditors who can
+  // actually finish you (round 24, Keith).
+  if (b.rentOwed > 0 || b.arrears > 0)
+    _say("(You can settle either of them now, out of the till or your own pocket: " +
+      (b.rentOwed > 0 ? "PAY RENT" : "") + (b.rentOwed > 0 && b.arrears > 0 ? " \u00b7 " : "") +
+      (b.arrears > 0 ? "PAY THE NOTE" : "") + ".)", "dim");
   const friction = (G.syn && G.syn.friction) || 0;
   if (friction) {
     _say(_fmt("Supply is costing you about {pct}% over the going rate — the jobs " +
@@ -7759,3 +7775,55 @@ function _checkAct1() {
     "otherwise. RESTART any time for a fresh trip.)", "dim");
 }
 
+
+// ── Settling up early, which is the whole point of having a landlord ────────
+// The monthly sweep takes rent first, then the note (only one of them can act:
+// miss the old man and you carry it, miss the rent two months and somebody is
+// measuring your frontage). This is the same order, done on purpose, mid-month,
+// with the money you have now — and crucially it CLEARS THE EVICTION CLOCK,
+// because a month that gets paid is not a month you were short.
+function _payCreditor(arg) {
+  if (!_barOwned() || !G.bar) {
+    _say("You have no landlord and no note. Whatever you owe in this town, you owe it to somebody else.");
+    return;
+  }
+  const b = G.bar;
+  const wantsNote = /note|old man|bert|arrears/i.test(arg || "") && !/rent|landlord/i.test(arg || "");
+  const rentOwed = Math.max(0, b.rentOwed || 0);
+  const arrears = Math.max(0, b.arrears || 0);
+  const target = wantsNote ? arrears : rentOwed;
+  const who = wantsNote ? "the old man" : "the landlord";
+  if (target <= 0) {
+    _say(rentOwed || arrears
+      ? `Nothing outstanding to ${who}. (You are ฿${_num(rentOwed || arrears)} behind with the other one.)`
+      : "Square with both of them. It is a good feeling and it does not last.");
+    return;
+  }
+  const pot = Math.max(0, b.cash) + G.money;
+  if (pot <= 0) { _say(`You have nothing to give ${who}, from the till or out of your own pocket.`); return; }
+  const pay = Math.min(target, pot);
+  const fromTill = Math.min(Math.max(b.cash, 0), pay);
+  b.cash -= fromTill;
+  const fromPocket = pay - fromTill;
+  if (fromPocket > 0) { G.money -= fromPocket; b.pocketDrawn = (b.pocketDrawn || 0) + fromPocket; }
+  const src = [fromTill > 0 ? "the till" : null, fromPocket > 0 ? "your own pocket" : null].filter(Boolean).join(" and ");
+  if (wantsNote) {
+    b.arrears = arrears - pay;
+    _say(`฿${_num(pay)} out of ${src}, into the old man's account. He does not ring to acknowledge it; ` +
+      `he never has.` + (b.arrears > 0 ? ` ฿${_num(b.arrears)} still on the slate.` : " Straight with him."), "win");
+    return;
+  }
+  b.rentOwed = rentOwed - pay;
+  if (b.rentOwed <= 0) {
+    // THE POINT OF THE VERB. Two short months lose you the bar; paying stops
+    // the clock, which is exactly what a publican walks the money round for.
+    const wasShort = b.rentShort || 0;
+    b.rentShort = 0;
+    _say(`฿${_num(pay)} out of ${src}, counted twice and handed over. He writes it in the book, ` +
+      `puts the book away, and shakes your hand — which he did not do last time.` +
+      (wasShort ? " The clock he started is stopped." : ""), "win");
+  } else {
+    _say(`฿${_num(pay)} out of ${src}. He takes it, counts it, and does not pretend it is all of it. ` +
+      `฿${_num(b.rentOwed)} still short, and he is still counting the months.`, "alert");
+  }
+}
