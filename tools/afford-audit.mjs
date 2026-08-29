@@ -173,6 +173,9 @@ const AFFORD_OK = new Map([
   ["golden_dragon|offer", "METAPHOR: 'the offer arrives before the beer does'"],
   ["shamrock|hatch", "a serving hatch boarded over with ply — the bar is dead"],
   ["thai_massage|nine", "'a town that sells nine' counts kinds of massage, not goods"],
+  ["second_rd_c|<vendor>", "SIGNPOST, not an offer: the prose says the mall's run of food " +
+    "stalls 'is a block south' — it names where food is, which is the opposite of claiming " +
+    "there is any here. The frame cannot tell a direction from a promise; a human can."],
   ["orchid_room|blue label", "THIRD-PARTY: the MC president's bottle, on his table"],
 ]);
 
@@ -192,14 +195,30 @@ function delivered(a, b) {
     b.drunk > a.drunk || b.inv > a.inv;
 }
 
-function freshIn(roomId) {
+// THE HOURS THIS TOOL PLAYS. It used to play one — nightTurn 20 — and round 23
+// showed what that costs: a persona found seven rooms advertising food they will
+// not sell, and this audit reported zero, because several of them DO sell at
+// 20:00 and refuse at midnight. A promise kept only in the first two hours of a
+// nine-hour night is not kept. Dawn included deliberately: that is when "the
+// kitchen closed" is a true and good answer, and the audit must not call it a
+// defect (a room only fails if NO hour delivers).
+const HOURS = [0, 20, 40, 60, 80];
+
+function freshIn(roomId, nightTurn) {
   newGame();
   G.flags.act1Done = true; G.flags.hasWallet = true; G.stage = "vacation";
   G.money = 20000; G.hunger = 60; G.thirst = 60;
-  G.room = roomId; G.battery = 100; G.nightTurn = 20;
+  G.room = roomId; G.battery = 100; G.nightTurn = nightTurn == null ? 20 : nightTurn;
   G.lastSaleng = G.lastPeddler = G.lastPolice = G.lastEnc = 99999;
   for (const k in ENCOUNTERS) G.encDone[k] = true;
   G.rain = 0; G.pendingEnc = null; G.pendingChoice = null;
+  // EMPTY THE POCKETS. newGame() hands the player a packet of Mama noodles, so a
+  // bare EAT ate his own supper, moved the hunger meter, and satisfied
+  // `delivered()` in every room in the game — which is why this audit reported
+  // zero while a persona was finding seven rooms that advertise food and sell
+  // none. The tool was testing the pocket, not the room.
+  for (const i of Object.keys(typeof _EDIBLE !== "undefined" ? _EDIBLE : {}))
+    if (G.itemLoc[i] === "inventory") G.itemLoc[i] = null;
 }
 
 const findings = [];
@@ -220,12 +239,21 @@ for (const [roomId, room] of Object.entries(ROOMS)) {
   const vendor = VENDOR_FRAMES.some(re => { re.lastIndex = 0; return texts.some(t => re.test(String(t))); });
   if (vendor) {
     let fed = false;
-    for (const cmd of ["buy food", "eat", "buy noodles", "buy som tam", "order food"]) {
-      freshIn(roomId);
-      const before = snap();
-      out.length = 0;
-      try { doCommand(cmd); } catch (e) { continue; }
-      if (delivered(before, snap())) { fed = true; break; }
+    for (const hour of HOURS) {
+      // DELIBERATELY THE GENERIC PHRASINGS ONLY. Testing "buy som tam" too made
+      // this check useless: Central Mall has a crocodile spit that sells right
+      // beside a food court that doesn't, so ANY-food-verb-works passed a room
+      // where the persona typed BUY FOOD, was refused, and had to guess the one
+      // noun the room happened to implement. When prose says there is food here,
+      // the word "food" has to reach it.
+      for (const cmd of ["buy food", "eat"]) {
+        freshIn(roomId, hour);
+        const before = snap();
+        out.length = 0;
+        try { doCommand(cmd); } catch (e) { continue; }
+        if (delivered(before, snap())) { fed = true; break; }
+      }
+      if (fed) break;
     }
     tested++;
     const key = roomId + "|<vendor>";
@@ -242,13 +270,16 @@ for (const [roomId, room] of Object.entries(ROOMS)) {
     // Try the head word too, but ONLY as a fallback: "ya dong" delivers while
     // "dong" alone does not, and reporting the fragment as a broken promise
     // when the phrase the prose actually prints works fine is a false positive.
-    for (const verb of VERBS) {
-      freshIn(roomId);
-      const before = snap();
-      out.length = 0;
-      try { doCommand(verb + " " + noun); } catch (e) { replies.push(verb + ": THREW " + e.message); continue; }
-      if (delivered(before, snap())) { any = true; break; }
-      replies.push(verb + ": " + (out[0] || "").slice(0, 90));
+    for (const hour of HOURS) {
+      for (const verb of VERBS) {
+        freshIn(roomId, hour);
+        const before = snap();
+        out.length = 0;
+        try { doCommand(verb + " " + noun); } catch (e) { replies.push(verb + ": THREW " + e.message); continue; }
+        if (delivered(before, snap())) { any = true; break; }
+        if (hour === 20) replies.push(verb + ": " + (out[0] || "").slice(0, 90));
+      }
+      if (any) break;
     }
     tested++;
     if (any) continue;

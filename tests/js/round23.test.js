@@ -170,3 +170,59 @@ test("the roast announces itself on the day, and quotes its price", () => {
   out = []; doCommand("ask aoy about kitchen");
   assert.match(text(), new RegExp("฿" + QV_ROAST), "though the kitchen brief names it any day");
 });
+
+// ── MALCOLM #2/#3/#4: food the town describes and would not sell ───────────
+
+test("a room whose prose puts a food vendor in it can be bought from", () => {
+  // Five rooms advertised a vendor on the pavement and sold nothing: the last
+  // late-night noodle carts on the Thappraya hill, the chestnut man on Beach
+  // Road, Central's food court, the bazaar's food court, and the corner stall
+  // the girls come out of Soi 6 to buy from. Named by a persona who planned his
+  // day around meals, then found independently by afford-audit.
+  for (const room of ["thappraya_ext_s", "beach_rd_soi7", "central_mall",
+                      "night_bazaar", "second_rd_soi6"]) {
+    sandbox();
+    G.room = room; G.hunger = 70; G.nightTurn = 20;
+    for (const i of Object.keys(_EDIBLE)) if (G.itemLoc[i] === "inventory") G.itemLoc[i] = null;
+    const money = G.money, hunger = G.hunger;
+    out = [];
+    doCommand("buy food");
+    assert.ok(G.money < money, `${room}: the generic BUY FOOD reaches the vendor the prose describes`);
+    assert.ok(G.hunger < hunger, `${room}: …and it is actual food`);
+  }
+});
+
+test("Mama Yai's kitchen serves whether you say BUY or EAT", () => {
+  // Her room is "half bar, half kitchen" and the som tam "arrives unasked".
+  // BUY answered "not at this hour" one command before EAT served a plate.
+  for (const cmd of ["buy som tam", "eat som tam", "buy food"]) {
+    sandbox();
+    G.room = "mama_yai"; G.hunger = 70; G.nightTurn = 20;
+    const money = G.money, hunger = G.hunger;
+    out = [];
+    doCommand(cmd);
+    assert.ok(G.hunger < hunger, `"${cmd}" should get the plate`);
+    assert.equal(G.money, money, "…and she never takes the money, which is the point of her");
+  }
+  // and the one-a-night rule holds however you phrase it
+  doCommand("buy som tam");
+  out = []; doCommand("buy food");
+  assert.match(text(), /One plate a night/, "no buffet, by either verb");
+});
+
+test("(BUY FOOD) is only promised where there is a till", () => {
+  // The hint rode in a pool shared by every street in the game, so it printed
+  // in rooms with no stall — and the room that printed it then said "Not for
+  // sale here". A parenthesised CAPS command is a promise.
+  const noStall = Object.keys(ROOMS).find(r => !FOOD_STALLS[r] && !ROOMS[r].barType && !ROOMS[r].seven);
+  assert.ok(noStall, "found a room with no food");
+  sandbox(); G.room = noStall; out = [];
+  doCommand("examine food stall");
+  assert.doesNotMatch(text(), /\(BUY FOOD\)/, "no hint where there is no till");
+  sandbox(); G.room = "thappraya_ext_s"; out = [];
+  doCommand("examine food stall");
+  assert.match(text(), /\(BUY FOOD\)/, "…and the hint where there is one");
+  const money = G.money;
+  doCommand("buy food");
+  assert.ok(G.money < money, "the hint it printed is a promise it keeps");
+});

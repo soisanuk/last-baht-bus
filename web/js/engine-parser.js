@@ -1683,6 +1683,16 @@ const _SCENERY = [
         "is watching or not.",
     ],
   } },
+  // The street-food hint, made only where the till exists. Sits above the shared
+  // `streetfood` pool so a room with a real stall gets the actionable version.
+  { key: "stall", m: /\bfood stalls?\b|\bthe stall\b|\bfood carts?\b|\bfood court\b/, fn: () => {
+    if (typeof FOOD_STALLS !== "undefined" && FOOD_STALLS[G.room])
+      return "It is doing steady, unhurried trade with people who live here, which is the " +
+        "only review that has ever mattered. Nothing is written down and everything has a " +
+        "price. (BUY FOOD)";
+    return null;
+  } },
+
   { key: "shelf", m: /\b(shelves|shelf|racks?|stalls?)\b/, lines: {
     any: [
       "Stacked to the ceiling and organised by a logic that is completely opaque until you " +
@@ -2200,9 +2210,16 @@ const _SCENERY = [
 
   { key: "streetfood", m: /\bsom ?tam\b|\bmoo ?ping\b|\bskewers?\b|\bgrill(ed)?\b|\bnoodle stall\b|\bnoodle carts?\b|\btandoor\b|\bkhanom\b/, lines: {
     street: [
+      // NOTE the missing (BUY FOOD): this pool is shared by every street in the
+      // game, so the hint travelled into rooms with no stall — a persona read it
+      // off the noodle carts on the Thappraya hill and got "Not for sale here"
+      // from the room that had just printed it (round 23). A parenthesised CAPS
+      // command is a promise, and a promise cannot ride in a pool that does not
+      // know where it is being printed. The room-aware version is the `fn` entry
+      // directly below, which IS told where it is standing.
       "Charcoal smoke, fish sauce, lime — the smell that runs this town's actual economy. " +
         "The carts feed the girls, the piwins, and any farang smart enough to point at " +
-        "what the locals are having. (BUY FOOD)",
+        "what the locals are having.",
       "A grill going full tilt, skewers turning, a mortar thumping out som tam somewhere " +
         "behind it. Twenty metres of pavement doing more honest trade than the whole soi.",
     ],
@@ -3964,6 +3981,13 @@ function _doBuy(arg) {
     _qvKitchen(arg);
     return;
   }
+  // MAMA YAI'S KITCHEN. Her room is "half bar, half kitchen" and the som tam
+  // "arrives unasked" — EAT delivers it, and BUY answered "not at this hour" one
+  // command earlier, in a room whose kitchen was demonstrably serving (round 23).
+  // BUY is the verb every other food in this town uses; hers cannot be the one
+  // place where asking to pay reads as the kitchen being shut. She still won't
+  // take the money — that is the whole point of her.
+  if (G.room === "mama_yai" && (/som ?tam|food|plate|dinner|eat/.test(arg) || !arg)) { _doEat(arg); return; }
   // BUY MOT DINNER / BUY KHAO MAN GAI. Early, because Mot works an alley with no
   // stall in it, so every branch below correctly concludes there is nothing for
   // sale — which is how a dinner two characters promise by name and by price

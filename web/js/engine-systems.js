@@ -7370,6 +7370,20 @@ const FOOD_STALLS = {
   // 2026-08-23. A 2am songthaew stop with a queue at a cart is exactly where a
   // hungry player waiting for a truck should be able to eat.
   pattaya_tai: { name: "grilled squid off the cart at the junction, chilli sauce in a twist of bag", price: 70, hunger: 50, thirst: -10 },
+  // ── Round 23: five rooms whose prose put a food vendor on the pavement and
+  // sold nothing. Found by a persona who planned his whole day around meals, and
+  // then found INDEPENDENTLY by afford-audit once it stopped testing the
+  // player's pocket instead of the room. In each, the prose was already specific
+  // about what is being sold and by whom; all that was missing was the till.
+  thappraya_ext_s: { name: "a bowl off the last late-night noodle cart before the hill", price: 50, hunger: 45, thirst: -8 },
+  // "a man selling roasted chestnuts nobody buys" — so buy some. The joke lands
+  // better when you are the one person on Beach Road who does.
+  beach_rd_soi7: { name: "a paper cone of roasted chestnuts from the man nobody buys from", price: 40, hunger: 25, thirst: 0 },
+  central_mall: { name: "a fifty-baht plate from the food court, arctic air included", price: 50, hunger: 55, thirst: 0 },
+  night_bazaar: { name: "a plate of something fried and garlicky from the bazaar food court", price: 50, hunger: 50, thirst: -5 },
+  // The girls come out of the soi in ones and twos to buy from it, which is the
+  // strongest possible statement that a stall is open and serving.
+  second_rd_soi6: { name: "whatever the corner stall is doing tonight, in a bag with a rubber band", price: 40, hunger: 40, thirst: -5 },
   // the crocodile outside Central. Priced as the novelty it is — the stall makes
   // its living off people who photograph it, and charges the ones who don't.
   second_rd_mall: { name: "a crocodile skewer off the spit outside Central, charred and startlingly good", price: 120, hunger: 55, thirst: -10 },
@@ -7551,7 +7565,7 @@ function _doEat(arg) {
   // to actually arrive on EAT (bare, or naming it), not refuse like every
   // other unbuyable BUY SOM TAM in town (price auditor playtest, 2026-08-23:
   // the room's own defining claim was unreachable by any command).
-  if (G.room === "mama_yai" && (!arg || /som ?tam/.test(arg))) {
+  if (G.room === "mama_yai" && (!arg || /som ?tam|food|plate|dinner|kitchen/.test(arg))) {
     if (G.mamaYaiDay === G.day) {
       _say("Mama Yai clocks you eyeing the kitchen again. \"One plate a night, tilac — " +
         "I'm not running a buffet.\" She's not wrong.");
