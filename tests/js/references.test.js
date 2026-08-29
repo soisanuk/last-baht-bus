@@ -78,8 +78,10 @@ test("a venue placed in a district by prose is actually IN that district", () =>
   // the foot/mouth of Soi 6; soi6_deep honestly says the soi runs on TOWARD
   // Second Road; the Adonis Club's "Supertown, Jomtien" is the colloquial name
   // for the complex off Thappraya.
+  // Entries may use [] in place of an array index; the comparison strips indices
+  // so inserting a dialogue node never re-opens a settled question.
   const OK = new Set([
-    'npc.sumalee.dialogue[3].text: "Rompho Market" placed in "Second Road" (is Jomtien)',
+    'npc.sumalee.dialogue[].text: "Rompho Market" placed in "Second Road" (is Jomtien)',
     'room.soi_rompho.desc: "Rompho Market" placed in "Second Road" (is Jomtien)',
     'room.jomtien_2nd.desc: "Rompho Market" placed in "Second Road" (is Jomtien)',
     'room.beach_rd_n.revisit[1]: "Blue Dog" placed in "Soi 6" (is Beach Road)',
@@ -102,7 +104,12 @@ test("a venue placed in a district by prose is actually IN that district", () =>
           // breath ("Soi 6" inside "Soi 6 challenge") still counts — that's the
           // defect. Only the OK list excuses a hit.
           const key = `${rec.ref}: "${venue}" placed in "${other}" (is ${region})`;
-          if (!OK.has(key)) bad.push(key);
+          // Compare with the ARRAY INDEX STRIPPED. Keying an allowlist on
+          // dialogue[3] means the next person to author a node above it trips a
+          // lint about prose they never touched — which is exactly what happened
+          // when Sumalee gained a line about Roger and her Rompho entry slid to
+          // [4]. The claim is about the text, not about where it sits.
+          if (!OK.has(key) && !OK.has(key.replace(/\[\d+\]/g, "[]"))) bad.push(key);
         }
         idx = rec.text.indexOf(venue, idx + 1);
       }

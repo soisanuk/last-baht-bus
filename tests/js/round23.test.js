@@ -226,3 +226,70 @@ test("(BUY FOOD) is only promised where there is a till", () => {
   doCommand("buy food");
   assert.ok(G.money < money, "the hint it printed is a promise it keeps");
 });
+
+// ── SHEILA: "nobody in this town can see the person on the next stool" ─────
+
+test("the links the game already made in one direction now come back", () => {
+  // Every one of these had a rich authored line going OUT and nothing coming
+  // back, which is what made the town read as a lookup table rather than a
+  // place. Daeng→Oy she called the biggest asymmetry in the game.
+  const PAIRS = [["oy", "daeng"], ["nuan", "champa"], ["nuan", "boua"], ["nuan", "ampha"],
+                 ["sumalee", "roger"], ["lek", "candy"]];
+  for (const [who, about] of PAIRS) {
+    sandbox();
+    G.room = _npcWhere(who) || NPCS[who].room; G.nightTurn = 30;
+    if (!_npcsHere().includes(who)) continue;
+    doCommand("talk to " + who);
+    out = [];
+    doCommand(`ask ${who} about ${about}`);
+    const said = text();
+    assert.doesNotMatch(said, /above my pay grade|Not my department|Not my story|Search me|wrong girl/i,
+      `${who} still has nothing to say about ${about}`);
+    assert.ok(said.length > 150, `${who} on ${about} is a real answer`);
+  }
+});
+
+test("Wayne and Gavin can see each other across one rail", () => {
+  // The most obviously missing edge in the cast: Wayne is buying a bar, Gavin
+  // buys bars up this soi for White Dish, and they drink in the same room.
+  assert.equal(NPCS.wayne.room, NPCS.gavin.room, "premise: the same rail");
+  sandbox();
+  G.room = NPCS.wayne.room; G.nightTurn = 30;
+  doCommand("talk to wayne");
+  out = []; doCommand("ask wayne about gavin");
+  assert.ok(text().length > 150);
+  assert.doesNotMatch(text(), /above my pay grade|Not my story/i);
+  doCommand("talk to gavin");
+  out = []; doCommand("ask gavin about wayne");
+  assert.match(text(), /looked at that unit|walked away/i,
+    "and Gavin knows the thing the player most needs to hear");
+});
+
+test("the drummer is not a Soi 6 cashier", () => {
+  // Josey described Jun on the stage in front of her; TALK TO JUN answered
+  // "he isn't at this bar tonight — try Sunset Dreams Lounge", where the real
+  // Jun keeps a till. A prose-only character sharing a name with a real NPC.
+  assert.ok(!Object.keys(NPCS).some(i => /^boyet$/i.test(NPCS[i].name)),
+    "his new name collides with nobody");
+  const node = NPCS.josey.dialogue.find(d => d.topic === "drummer");
+  assert.doesNotMatch(node.text + node.short, /\bJun\b/, "she no longer names him after the cashier");
+  sandbox();
+  G.room = NPCS.josey.room; G.nightTurn = 30;
+  doCommand("talk to josey");
+  out = []; doCommand("ask josey about boyet");
+  assert.match(text(), /behind that kit/, "and he answers to the name she uses");
+});
+
+test("nothing I authored contradicts what the game already said", () => {
+  // Three of my own new lines asserted things that were false about the world —
+  // Daeng on a stage in 1991 (she is mid-forties), Ampha at thirty-one with a
+  // daughter in school (she is mid-twenties and Nuan's young cousin), Roger on
+  // that stool thirty years (he retired to Jomtien eighteen years ago). Caught
+  // by reading the corpus, which is the only thing that catches this class.
+  const oy = NPCS.oy.dialogue.find(d => d.topic === "daeng");
+  assert.doesNotMatch(oy.text, /19\d\d/, "no date that ages Daeng out of her own description");
+  const ampha = NPCS.nuan.dialogue.find(d => d.topic === "ampha");
+  assert.doesNotMatch(ampha.text, /thirty-one|daughter/, "she is the young cousin who did the books");
+  const roger = NPCS.sumalee.dialogue.find(d => d.topic === "roger");
+  assert.match(roger.text, /Eighteen years/, "which is when he actually retired here");
+});

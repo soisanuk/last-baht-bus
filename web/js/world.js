@@ -4675,6 +4675,13 @@ const NPCS = {
       { cap: "bar quiet 😴 you come play?? 💕", pic: "lek_sel4" },
     ],
     dialogue: [
+      // Candy's own line is "if it happened on this road, ask Lek \u2014 be nice, she
+      // likes nice", and Lek had nothing on Candy (round 23). The pointer works
+      // in one direction only, which makes the town feel like a lookup table.
+      { topic: "candy",
+        text: "\u201cKhun Candy send you?\u201d Lek's whole face changes, and she puts the cue down, which she does not do. \u201cShe give me my first job. Nineteen year old, cannot speak, cannot pour, cannot nothing. Everybody say send her home. Candy say: no, give her the pool table, nobody watch the pool table.\u201d She taps the felt. \u201cSix month later I take money off everybody in this bar.\u201d A grin, and then something quieter. \u201cShe never ask me for anything back. Not one time. So when she ask me something \u2014 anything \u2014 I already say yes before she finish.\u201d",
+        short: "\u201cShe gave me the pool table when everybody said send me home. She's never asked for anything back.\u201d" },
+
       { bond: 1, when: (st, G) => (G.rain > 0 || (typeof _wxRainy === "function" && _wxRainy())),
         notFlags: ["heardPriceStory"], sets: ["heardPriceStory"],
         text: "No pool tonight. Lek is on the plastic stool by the door, knees up, watching " +
@@ -6573,6 +6580,12 @@ const NPCS = {
       "at a bar like a spreadsheet. He calls himself an 'area consultant.' Everyone else calls him the " +
       "White Dish man. He is unfailingly pleasant, which is the unsettling part.",
     dialogue: [
+      // The other half of it. He is not scheming and there is nothing to expose —
+      // he is a man who assesses bars for a living, being asked about a bar.
+      { topic: "wayne",
+        text: "Gavin's lager stays where it is. \u201cThe Australian.\u201d A small, not unkind pause. \u201cWe looked at that unit in March. Walked the books, walked the kitchen, walked away \u2014 the lease has four years to run and the landlord's son wants it back for a coffee shop.\u201d He turns the glass a quarter. \u201cI did tell him what we found. He heard the part where a company with our money had looked at it, and stopped listening at that.\u201d A shrug that costs him nothing. \u201cIt happens. Everyone thinks the survey is the OTHER man's problem.\u201d",
+        short: "\u201cWe looked at that unit in March and walked away \u2014 four years on the lease and the landlord's son wants a coffee shop.\u201d" },
+
       // Gavin's Errand paid out at the Stinky the moment Bert refused — a courier's fee at the
       // wrong counter (completionist playtest 2026-08-22). It lands here, from Gavin, once.
       { req: ["wdgFlipTried"], notFlags: ["gavinPaid"], sets: ["gavinPaid"],
@@ -6921,6 +6934,14 @@ const NPCS = {
       "a man who's never been conned, that a Soi 6 bar is 'basically the same game, mate — plant, cashflow, " +
       "location.' The girls have his order memorised. So has the till.",
     dialogue: [
+      // Wayne is buying a turnkey bar up the soi. Gavin buys bars up this soi for
+      // White Dish. They drink at the same rail and neither knew the other
+      // existed (round 23, and the persona called it the most obviously missing
+      // edge in the cast). Wayne cannot know what Gavin is — that is the point.
+      { topic: "gavin",
+        text: "\u201cThe quiet bloke?\u201d Wayne tips his glass down the rail without lowering his voice at all. \u201cGood value, actually. Bought me a beer, asked me a heap of questions about the deal \u2014 proper questions, mate, better than me own lawyer asked.\u201d He is pleased about this. \u201cKnows the soi backwards. Reckons forty stools is about right.\u201d A grin. \u201cSee, THAT'S what I keep telling people. A bloke who actually knows the trade looks at what I'm doing and says: yeah. Sound.\u201d",
+        short: "\u201cThe quiet bloke? Asked better questions about my deal than my own lawyer did. Knows the soi backwards.\u201d" },
+
       { topic: "bar",
         text: "\"The bar? Turnkey, up the soi — forty stools, a licence, a Thai partner already lined " +
           "up, and I sign Friday.\" He says it the way a man says he's marrying. \"Ask me about the DEAL, " +
@@ -8126,6 +8147,12 @@ const NPCS = {
       "fed, watered, and coming back next season. She works a different bar each night, mostly to " +
       "keep the girls honest and the regulars guessing.",
     dialogue: [
+      // Roger frets about her out loud \u2014 "Sumalee's fretting, though she'd walk
+      // into the sea before she'd say so" \u2014 and she had nothing on him (round 23).
+      { topic: "roger",
+        text: "\u201cRoger.\u201d Sumalee does not look up from the ice. \u201cEighteen years he sits on that stool and orders the same drink and asks after my knees, and in eighteen years he has never once asked me for anything else.\u201d She sets the scoop down. \u201cYou know how rare that is, on this beach? He is the only farang here I would leave the till open in front of.\u201d A beat, and then, drier: \u201cHe thinks I do not know he worries about me. He has the face of a man holding a secret and the secret is always the same one.\u201d",
+        short: "\u201cEighteen years, same stool, never once asked me for anything. He thinks I don't know he worries.\u201d" },
+
       // The Quiet Side quest (docs/map-coverage.md): completion node first (req the
       // intel), directions node second — same first-match ordering pattern. chip:false.
       { topic: "offer", req: ["heardGordon"], sets: ["quietSideDone"], chip: false,
@@ -8911,6 +8938,14 @@ const NPCS = {
       "the bar with the stillness of someone who owns the building, two more like it, " +
       "and three condos. You have the sudden feeling your posture is being graded.",
     dialogue: [
+      // Daeng speaks of her with real warmth \u2014 "Oy and me come up together, Walking
+      // Street. She got the empire, I got the quiet life and the better knees. We
+      // both won." \u2014 and Oy had never heard of her (round 23). The outward half
+      // was already the best-written link on the Darkside; this is the return.
+      { topic: "daeng",
+        text: "Something happens to Madam Oy's face that is gone before you can name it. \u201cDaeng.\u201d She lets the name sit. \u201cWe danced the same stage. She was on before me \u2014 I came up behind her, and I was a number on a hip and so was she. Same rent, same shoes, same landlord who was a pig to both of us.\u201d Her eyes go back to her floor. \u201cShe says I got the empire and she got the knees. She has told me that joke for twenty years and I have never once told her the truth about it, which is that she chose and I did not \u2014 I simply never stopped.\u201d A pause. \u201cWhen you go out there, you tell her the pig is dead. She will want to know.\u201d",
+        short: "\u201cSame stage, and I came up behind her. She says she got the knees and I got the empire.\u201d" },
+
       { req: ["waiedOy", "knowOyHasIt"], notFlags: ["oyGaveWallet"], topic: "wallet",
         th: "มารยาทดีนี่", rom: "maayaat dii nii",
         text: "\"Good manners.\" She looks at you a long moment — the farm gate in Isaan, the dancer with the number on her hip, all of it somewhere behind those eyes. \"Mot brought me a wallet. I bought it so it would not go in the sea, and to see what kind of man come looking.\" She produces it from behind the bar like a magician bored of the trick. \"A polite one. Ha. Take it. Buy Mot's dinner — he eats because tourists are careless, and that is not entirely his fault.\"",
@@ -9143,6 +9178,19 @@ const NPCS = {
       "half-beat past business, and she does not trouble to hide that she has decided she " +
       "likes the look of you.",
     dialogue: [
+      // Champa, Boua and Ampha each speak about Nuan at length \u2014 she called them
+      // when White Dish let them go \u2014 and Nuan knew none of the three by name
+      // (round 23). The one who did the calling should know who she called.
+      { topic: "champa",
+        text: "\u201cChampa.\u201d Nuan says it the way you say a name you have written on a rota a thousand times. \u201cShe was on the schedule the week they stopped putting her on the schedule. Nobody told her. She kept turning up for four days and standing at the back, in case it was a mistake.\u201d She wipes the bar that does not need wiping. \u201cIt was not a mistake. I called her on the fifth day.\u201d A look at you, level. \u201cShe still comes in early. Four years, and she is still fifteen minutes early, every night, in case.\u201d",
+        short: "\u201cShe stood at the back for four days in case it was a mistake. She still comes in fifteen minutes early.\u201d" },
+      { topic: "boua",
+        text: "\u201cBoua keeps the names.\u201d A short laugh with no comedy in it. \u201cEvery girl who went through that bar, where she went after, who is still sending money and who stopped. She has it in a book. An actual book, paper.\u201d Nuan shakes her head slowly. \u201cI told her once it was a sad habit for a young woman. She said: when they came for our jobs, the only thing nobody had was a LIST. So now there is a list.\u201d",
+        short: "\u201cShe keeps every name in a paper book. 'When they came for our jobs, nobody had a list.'\u201d" },
+      { topic: "ampha",
+        text: "\u201cMy cousin.\u201d Nuan's voice does something careful. \u201cEverybody in this bar has decided who she is inside ten minutes \u2014 the sweet one, the young one, counts the till and goes red.\u201d The cloth stops moving. \u201cShe is the only one of us who finished school. She does the ordering, the wages and the tax, and she has never once corrected a single customer about any of it.\u201d A glance at you, level and not entirely friendly. \u201cYou will make your own mind up. Everybody does. Just know that she lets you.\u201d",
+        short: "\u201cThe only one of us who finished school. She does the wages and the tax, and lets everyone underestimate her.\u201d" },
+
       { text: "“Welcome to the Rabbit.” She looks you over, unhurried, and whatever she " +
           "concludes she keeps. “Sit where you like. The beer is cold, the girls are kind, and " +
           "the boss” — the smallest smile — “is harmless. I am Nuan. I will remember you now.” " +
@@ -12976,7 +13024,7 @@ const _REGULARS = {
         "Filipina vocalist nailing Zombie once a week. The algorithm copes.\"",
         short: "\"Fitness and live music. I ask first. The algorithm copes.\"" },
       { topic: "drummer", text: "The look she throws the stage answers before " +
-        "she does. \"Jun. Three years behind that kit, holds the whole band " +
+        "she does. \"Boyet. Three years behind that kit, holds the whole band " +
         "together and lets the guitarist take the credit — that tells you " +
         "everything about him, honestly.\" The drummer, aware he is being " +
         "discussed, plays a tiny unnecessary fill. She refuses to smile and " +
@@ -12984,7 +13032,7 @@ const _REGULARS = {
         "before I hit record — drummers notice timing.\" She turns back. " +
         "\"Two years now. His mum in Cebu knits me things for a climate she " +
         "refuses to believe in. I'm keeping all of it. Him included.\"",
-        short: "\"Jun. Drummers notice timing. Two years. I'm keeping him.\"" },
+        short: "\"Boyet. Drummers notice timing. Two years. I'm keeping him.\"" },
     ],
   },
 
