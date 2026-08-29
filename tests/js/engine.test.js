@@ -2887,16 +2887,19 @@ test("_npcActions is the single source of a character's tap affordances (by role
   const lek = Object.keys(NPC_ROLES).find(id => NPC_ROLES[id] === "hostess");
   // BARFINE takes the slot PHOTO left, but in the FULL menu only — it spends four
   // figures and ends the night, so it must never be a single mis-tap away
-  assert.deepEqual(full(lek), ["talk", "examine", "buyher", "barfine", "flirt", "tip", "contact"]);
+  // `wai` is last on everyone since round 24: Act One is solved by waiing Madam
+  // Oy, the game says so in the prose, and her menu offered no wai — so a player
+  // who taps rather than types could not finish the opening quest.
+  assert.deepEqual(full(lek), ["talk", "examine", "buyher", "barfine", "flirt", "tip", "contact", "wai"]);
   assert.ok(!short(lek).includes("barfine"), "and never on the quick card");
   // cashier: buy-drink + tip/contact (the sponsor-cashier arc), no flirt; barfine only once flipped
   const cash = Object.keys(NPC_ROLES).find(id => NPC_ROLES[id] === "cashier" && !_sponsorFlipped(id));
-  assert.deepEqual(full(cash), ["talk", "examine", "buyher", "tip", "contact"]);
+  assert.deepEqual(full(cash), ["talk", "examine", "buyher", "tip", "contact", "wai"]);
   // host bar (gender-flipped): buyhim + hire
-  assert.deepEqual(full("arm"), ["talk", "examine", "buyhim", "hire"]);
+  assert.deepEqual(full("arm"), ["talk", "examine", "buyhim", "hire", "wai"]);
   // cabaret performer: the courtship rails, no barfine — the theatre keeps no ledger
-  assert.deepEqual(full("mala"), ["talk", "examine", "buyher", "flirt", "tip", "contact"]);
-  assert.deepEqual(full("petch"), ["talk", "examine", "buyher", "flirt", "tip", "contact"]);
+  assert.deepEqual(full("mala"), ["talk", "examine", "buyher", "flirt", "tip", "contact", "wai"]);
+  assert.deepEqual(full("petch"), ["talk", "examine", "buyher", "flirt", "tip", "contact", "wai"]);
   // a plain NPC (manager, unroled): a polite wai in the full wheel
   assert.deepEqual(full("bert"), ["talk", "examine", "wai"]);
   // a rail regular: same card as any other unroled NPC — talk, examine, and
@@ -5359,6 +5362,8 @@ test("SLEEP: turn in from the room, or climb up from the pub below, to end the n
   assert.equal(state().room, "qv_room", "and land in your room");
   assert.equal(state().day, 2, "the night is over");
   // and directly from the room
+  state().wakeTurn = null;   // turning in at the end of a day, not the instant
+                             // you woke — the guard is for the double-tap only
   out = []; run("sleep");
   assert.equal(state().day, 3, "SLEEP in the room ends the night too");
   // from a bar with no bed above, a clear pointer instead
@@ -6045,6 +6050,10 @@ test("sleep ends the night on your terms; day seven ends the vacation", () => {
   state().room = "hotel_room";
   state().happy = 60;
   state().tonicOwed = 4500; // fleeced this trip, never reported
+  // Not freshly woken — the bed only asks "do you mean it?" when you sleep in
+  // the first moments after waking, which is how a double-tap used to eat a
+  // whole night (round 24). This test is about turning in at the END of a day.
+  state().wakeTurn = null;
   run("sleep");
   assert.equal(state().pendingChoice, "vacation_end");
   run("look"); // everything is gated on the answer — and the re-prompt states both options in full
@@ -7606,14 +7615,14 @@ test("hotel economics: rent, the downgrade ladder, the book, and the grace note"
   state().hotel = "metropole";
   state().room = "metropole_room";
   state().money = 5000;
-  run("sleep");
+  state().wakeTurn = null; run("sleep");   // advancing to a rent morning
   assert.equal(state().money, 3700, "the folio slides under the door");
   assert.equal(state().hotel, "metropole");
 
   // ฿500 in pocket: can't make the Metropole, can make the Sabai — the ladder
   state().money = 500;
   state().room = "metropole_room";
-  run("sleep");
+  state().wakeTurn = null; run("sleep");   // advancing to a rent morning
   assert.equal(state().hotel, "sabai", "stepped down toward the Sabai Palms");
   assert.equal(state().room, "hotel_room");
   assert.equal(state().money, 100, "and paid the ฿400 there");
@@ -7622,11 +7631,11 @@ test("hotel economics: rent, the downgrade ladder, the book, and the grace note"
   state().money = 0;
   state().happy = 10; // off the floor so the pinch is measurable
   const h0 = state().happy;
-  run("sleep");
+  state().wakeTurn = null; run("sleep");   // advancing to a rent morning
   assert.equal(state().hotelDebt, 400, "on the book");
   assert.equal(state().happy, h0 - 1, "the clerk's kindness weighs");
   state().hotelDebt = 1900;
-  run("sleep");
+  state().wakeTurn = null; run("sleep");   // advancing to a rent morning
   assert.equal(state().hotelDebt, 2000, "the book caps — no spiral");
 
   // the town catches you: Bert settles a heavy book, once
@@ -7645,7 +7654,7 @@ test("hotel economics: rent, the downgrade ladder, the book, and the grace note"
   state().hotelDebt = 600;
   state().money = 5000;
   state().room = "hotel_room";
-  run("sleep");
+  state().wakeTurn = null; run("sleep");   // advancing to a rent morning
   assert.equal(state().hotelDebt, 0, "debt cleared on the way past the desk");
   assert.equal(state().money, 5000 - 600 - 400);
 
@@ -7654,7 +7663,7 @@ test("hotel economics: rent, the downgrade ladder, the book, and the grace note"
   state().money = 5000;
   state().soc.drunk = 3;
   state().room = "hotel_room";
-  run("sleep");
+  state().wakeTurn = null; run("sleep");   // advancing to a rent morning
   assert.equal(state().thirst, 40 + 2 * 6, "one size off the morning after");
 
   // Queen Vic balcony: WATCH SOI pays once a night

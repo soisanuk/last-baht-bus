@@ -4644,6 +4644,11 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // this arrangement destroy people, and wants it written down.
       {
         topic: "partnership", chip: false,
+        // THE OFFER STANDS, and she says so out loud. fx arms the modal, and
+        // effects fire on first delivery only — so declining once made the whole
+        // expat endgame unreachable (round 24). fxAlways re-arms it on the
+        // re-ask, which is exactly what both partners promise.
+        fxAlways: true,
         req: ["expatLife", "barLicence"], notFlags: ["barPartner"],
         // sound her out — no commit here. Reading a pitch must not be a decision
         // (publican playtest, 2026-08-26: the flagship 51% fork resolved on the
@@ -7589,6 +7594,11 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // Deliberately warm and not sinister: he means every word he says here.
       {
         topic: "partnership", chip: false,
+        // THE OFFER STANDS, and she says so out loud. fx arms the modal, and
+        // effects fire on first delivery only — so declining once made the whole
+        // expat endgame unreachable (round 24). fxAlways re-arms it on the
+        // re-ask, which is exactly what both partners promise.
+        fxAlways: true,
         req: ["expatLife", "barLicence"], notFlags: ["barPartner"],
         // his yes is instant and free — which is exactly why the DECISION must be
         // yours to make on purpose, not to trip over (publican playtest 2026-08-26)

@@ -103,6 +103,10 @@ test("the soapy menu and a pending fare own the chip bar too", () => {
   assert.ok(c.includes("no"));
   G.pendingSoapy = null;
   G.pendingFare = { price: 15 };
-  assert.deepEqual(cmds(), ["pay"]);
+  // The command must carry the number the LABEL promises: a chip reading
+  // "pay ฿15" that sent bare "pay" was refused by the driver ("a number would
+  // help"), so the only tappable answer to the fare prompt failed — in the
+  // mechanic the game is named after (round 24, Pauline).
+  assert.deepEqual(cmds(), ["pay 15"]);
   assert.ok(labels()[0].includes("฿15"));
 });

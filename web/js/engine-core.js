@@ -1744,7 +1744,17 @@ function _deliver(npcId, d, full) {
     }
   }
   const st = _npcState(npcId);
-  if (!repeat && d.fx) d.fx(st, G);           // state-machine effects, first delivery only
+  // State-machine effects fire on FIRST delivery only — right for almost
+  // everything, and catastrophic for a node whose effect ARMS AN OFFER. The 51%
+  // partner pitch sets pendingChoice through its fx, so declining once made the
+  // flagship decision of the whole expat stage permanently unreachable: no
+  // re-ask, no "…AGAIN", no other route, and the quest sat active forever. And
+  // Candy PRAISES you for declining — "a man who says yes to fifty-one percent
+  // in one night is not a man I want holding forty-nine" — so the game rewards
+  // caution and then deletes its own endgame for it (round 24, Keith, who could
+  // only finish his session by reaching round the back of the machine).
+  // `fxAlways` is the opt-in for effects that are an OFFER rather than a change.
+  if ((!repeat || d.fxAlways) && d.fx) d.fx(st, G);
   // first contact (any exchange) IS the meeting: advance the state and grant the
   // baseline trust here, so the meeting bonus never depends on which node fired.
   if (st.dstate === "stranger") { st.dstate = "met"; st.trust = Math.min(5, st.trust + 1); }

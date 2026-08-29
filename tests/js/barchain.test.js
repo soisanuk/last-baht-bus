@@ -1246,7 +1246,7 @@ test("standing your own rail builds bond with your own staff — earned, not bou
   G.room = "stinky_bar"; G.nightTurn = 20;
   cmd("work");
   const before = _barStaff().map(id => G.soc.drinks[id] || 0);
-  for (let i = 0; i < 45; i++) cmd("time");
+  for (let i = 0; i < 45; i++) cmd("look");   // TIME is free since round 24 — LOOK is the verb that passes a turn
   const after = _barStaff().map(id => G.soc.drinks[id] || 0);
   assert.ok(after.some((n, i) => n > before[i]), "a night behind the bar is worth something");
   assert.equal(G.bar.floorN, WORK_FLOOR_MAX, "and it is capped, so it can't be farmed");
@@ -1259,7 +1259,7 @@ test("the floor only happens when you're actually standing it", () => {
   running();
   G.room = "stinky_bar"; G.nightTurn = 20;
   const before = _barStaff().map(id => G.soc.drinks[id] || 0);
-  for (let i = 0; i < 45; i++) cmd("time");        // present, but no shift declared
+  for (let i = 0; i < 45; i++) cmd("look");   // present, but no shift declared (LOOK, not TIME: readouts are free now)
   assert.deepEqual(_barStaff().map(id => G.soc.drinks[id] || 0), before,
     "standing about was always possible; declaring is what makes it a shift");
 });
@@ -1269,7 +1269,7 @@ test("a shift deals one call a night, day-stable, and reading it can't reroll it
   G.room = "stinky_bar"; G.nightTurn = 20; G.day = 40;
   for (const k of Object.keys(ENCOUNTERS)) G.encDone[k] = true;
   cmd("work");
-  for (let i = 0; i < 20 && G.pendingChoice !== "shift"; i++) cmd("time");
+  for (let i = 0; i < 20 && G.pendingChoice !== "shift"; i++) cmd("look");
   assert.equal(G.pendingChoice, "shift", "the call arrived on the real path");
   const first = G.shiftCall;
   const rng = G.rng;
@@ -1283,7 +1283,7 @@ test("a shift deals one call a night, day-stable, and reading it can't reroll it
   // stop ambient bar life eating an assertion), so answering one needs say().
   say("no");
   assert.equal(G.pendingChoice, null, "answering clears the gate");
-  for (let i = 0; i < 20; i++) cmd("time");
+  for (let i = 0; i < 20; i++) cmd("look");
   assert.notEqual(G.pendingChoice, "shift", "one call a night, not a stream");
 });
 

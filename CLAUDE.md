@@ -62,7 +62,7 @@ Deploy is automatic: any push to `main` runs `.github/workflows/pages.yml` (test
 
 ## Architecture
 
-Zork-style text adventure in the Soi Sanuk / Pattaya universe. Same conventions as the trainer (`/Users/mario/thaicab`): **classic script tags sharing globals, no ES modules, no build step, works from `file://`**. The root `package.json` `"type": "module"` exists only so `node --test` treats test files as ESM. Load order in `index.html` matters (`thai → world → games → engine-core → engine-encounters → engine-play → engine-systems → engine-parser → …`); `main.js` loads last.
+Zork-style text adventure in the Soi Sanuk / Pattaya universe. Same conventions as the trainer (`/Users/mario/projects/thaicab`): **classic script tags sharing globals, no ES modules, no build step, works from `file://`**. The root `package.json` `"type": "module"` exists only so `node --test` treats test files as ESM. Load order in `index.html` matters (`thai → world → games → engine-core → engine-encounters → engine-play → engine-systems → engine-parser → …`); `main.js` loads last.
 
 **Every player-facing option lives on three surfaces** — the typed parser (and its printed lists), the flyout wheel (`_kwActions`, term.js), and the input autocomplete (`engineComplete`/`_completePool`, engine.js). When adding, gating, or removing an option, change all three: put the rule in one engine-side helper (`_topicKnown`, `_travelDests`, `_playOptions`, `_c4Choices`, `_jpChoices`, `_gameVerbs`, `_salengItems` are the pattern) and have every surface consume it, then check `_kwActions` and `_completePool` for the affected verb before calling it done.
 

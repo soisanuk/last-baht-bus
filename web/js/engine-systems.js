@@ -390,6 +390,12 @@ function _npcActions(id, full) {
     // Tan's standing food invite is a real option, so it gets the third surface
     // (parser + autocomplete + here). Hidden during Act One, when he refuses.
     if (id === "tan" && typeof _flag === "function" && _flag("act1Done")) acts.push("follow");
+    // A WAI IS ALWAYS AVAILABLE TO A PERSON, and Act One is SOLVED with one:
+    // the game says "(Manners might open it. A proper wai.)" and Madam Oy's
+    // menu offered talk / examine / buy her a drink. A player who taps rather
+    // than types could not finish the opening quest of the game (round 24,
+    // Pauline, who plays on a phone because her thumbs hurt). Everyone gets it.
+    if (NPCS[id] && !acts.includes("wai")) acts.push("wai");   // …but not at a name nobody has
     // Mot's dinner, same three-surface treatment: the wheel is where a player
     // who never guesses "buy mot dinner" finds it. Only while it's undone.
     if (id === "mot" && typeof _flag === "function" && !_flag("motFed")) acts.push("motdinner");
@@ -5354,7 +5360,26 @@ function _shiftYes() {
     _shiftTake(-SHIFT_EARLY_COST);
     if (who) { _addBond(who, 2); (G.soc.leftEarly = G.soc.leftEarly || {})[who] = G.day; }
   } else if (call.id === "round") {
-    _shiftTake(SHIFT_ROUND_TAKE - SHIFT_ROUND_COST);
+    // IT IS A GAMBLE, AND IT SAYS SO: "a round on the house here might buy the
+    // whole back half of the night — or it does nothing, and you're down the
+    // cost of it." It used to be a guaranteed +฿400 against a guaranteed −฿400
+    // for declining: an ฿800 swing with one correct answer, which an ex-publican
+    // spotted in three reproductions and called "not a decision, a free button"
+    // (round 24, Keith). The shift calls are meant to be decisions where none is
+    // obviously right.
+    //
+    // The MONEY is the bet; the GOODWILL is not. You bought the room a drink and
+    // the floor watched you do it, so the bond and the สนุก land either way —
+    // what you are gambling is whether it turns the night.
+    if (_rand() < 0.6) {
+      _shiftTake(SHIFT_ROUND_TAKE - SHIFT_ROUND_COST);
+      _say("It lands. The rail thickens, somebody puts money in the jukebox, and the " +
+        "hour that was going to end the night starts it again instead.", "win");
+    } else {
+      _shiftTake(-SHIFT_ROUND_COST);
+      _say("It does not land. They drink it, they thank you, and they go anyway \u2014 " +
+        "some nights are just over and no amount of free Chang argues them out of it.", "dim");
+    }
     _addHappy(2);                       // your room, your night — never jading
     _repGain();
     for (const id of _barStaff()) _addBond(id, 1);
@@ -5393,7 +5418,11 @@ function _shiftNo() {
     const rest = _barStaff().filter(id => id !== who);
     if (rest.length) _addBond(rest[0], -1);
   } else if (call.id === "round") {
-    _shiftTake(-SHIFT_FLAT_LOSS);
+    // …and declining is not a guaranteed loss either. Sometimes the room finds
+    // its own second wind, which is exactly why a publican hesitates.
+    if (_rand() < 0.65) _shiftTake(-SHIFT_FLAT_LOSS);
+    else _say("It picks up on its own, the way it sometimes does, and you saved the " +
+      "money. You will never know whether the round would have done better.", "dim");
   } else if (call.id === "turning") {
     const rest = _barStaff();
     if (rest.length) _addBond(rest[0], -1);

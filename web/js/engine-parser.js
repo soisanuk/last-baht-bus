@@ -6603,7 +6603,12 @@ function _chipSet() {
     add("no", "no, thanks");
     return chips;
   }
-  if (G.pendingFare) { add("pay", `pay ฿${G.pendingFare.price}`); return chips; }
+  // THE FARE CHIP SAID ฿15 AND SENT BARE "PAY", which the driver rejects: "A
+  // number would help." The one tappable answer to the fare prompt was refused
+  // by the game — in the mechanic the game is NAMED after — and a phone player
+  // with arthritis had to reach for the keyboard every ride (round 24, Pauline).
+  // The command has to carry the number the label promises.
+  if (G.pendingFare) { add(`pay ${G.pendingFare.price}`, `pay ฿${G.pendingFare.price}`); return chips; }
 
   // 2.5) A live conversation turns the chip bar into the talk palette: the
   //      partner's currently-open topics, the social moves that fit them, and a
@@ -7178,6 +7183,13 @@ const _GERMAN_QUIP = {
       "not believe in.\" A slow, delighted smile. \"English, Liebling. Leave the German to the professional.\"",
   ],
 };
+
+// Verbs that cost no turn: pure readouts of state you already have. See the
+// comment at the bottom of doCommand for why this matters more than it looks.
+const _FREE_VERBS = new Set(["score", "time", "clock", "diagnose", "health",
+  "inventory", "inv", "i", "map", "help", "quests", "journal", "hint", "share",
+  "who", "blackbook", "standing", "rep", "gallery", "photos", "album", "books",
+  "takings", "identity"]);
 
 let _rawAnswer = null; // the raw-cased line, for _convoAnswer's quote-back memory
 function doCommand(input) {
@@ -7837,7 +7849,15 @@ function doCommand(input) {
       // a SLEEP tapped right after waking burns the whole night with no warning
       // (mobile playtest 2026-08-22) — once per evening, the bed asks if you mean it
       else if (G.room === _hotelRoomId() && G.nightTurn < 10 && G.sleepWarnDay !== G.day &&
-               G.wakeTurn != null && G.turns - G.wakeTurn <= 1 && !/^(sleep|bed|crash)\b/i.test(_prevCmd)) {
+               G.wakeTurn != null && G.turns - G.wakeTurn <= 1) {
+        // The _prevCmd test that used to sit here ("don't warn if he just typed
+        // sleep") was both redundant and harmful: sleepWarnDay already lets a
+        // genuine confirmation through, and the SLEEP THAT ENDED THE PREVIOUS
+        // NIGHT counted as the previous command — so the new night's sleep was
+        // read as confirming a warning nobody had given, and a double-tap ate a
+        // whole night. A persona lost a seventh of a seven-night daily to one
+        // keystroke, and night one TRAINS the double-tap, because the first
+        // SLEEP is swallowed by the app-girl modal (round 24, Jojo).
         G.sleepWarnDay = G.day;
         _say(`It's ${_clockStr()} — the neon's barely warm. Sleep now and the whole night goes with it. ` +
           "(SLEEP again if you mean it, or go OUT.)", "dim");
@@ -8133,7 +8153,19 @@ function doCommand(input) {
       return; // no tick for parse errors
   }
   _flushTrace(_room0);
-  _tick();
+  // READING YOUR OWN SCOREBOARD IS FREE. Every readout used to burn a turn, and
+  // for a DAILY that is a foul rather than a nuisance: the dice are seeded and
+  // shared, but the CLOCK is not, so two people playing "the same daily" who
+  // checked their score a different number of times were not in the same world
+  // — a persona proved it, same seed and same commands, one fewer SCORE, and a
+  // ฿1,050 barfine offer became a refusal (round 24, Jojo). Printing your own
+  // SHARE card cost you a turn of the night it was scoring.
+  //
+  // The line is: readouts of YOUR OWN STATE are free; observing the WORLD is
+  // not. LOOK, EXAMINE, WEATHER and LISTEN still cost a turn — you are doing
+  // something in a room — but the scoreboard, the clock, your pockets, the map
+  // and the help are not things the night can charge you for.
+  if (!_FREE_VERBS.has(v)) _tick();
   _questTick();
   _checkAct1();
 }
