@@ -2444,6 +2444,33 @@ function _tanWhere(id) {
   return (_TAN_WHERE[id] || "someone, somewhere on the soi").replace("{bar}", _barName(_npcRoom(id)) || "a bar on the soi");
 }
 
+// TAN'S READ ON PEOPLE HE DRIVES, where the generic clause would be a lie about
+// them. He is the town's locator and he was flattening the one character whose
+// whole arc refuses the sentence he used: Mercedes, who says in her own voice
+// "people see an old girl back on the stool and they think — poor thing… I send
+// my mother money when I want. I chose it." One reused template contradicted
+// three women who assert otherwise (round 23).
+const _TAN_WHO = {
+  mercedes: "is back on that rail because she decided to be, which is not the same story as the others " +
+    "and she will correct you if you get it wrong. Ask her yourself. She does not mind the question; " +
+    "she minds the assumption",
+};
+// The generic read, pooled so forty women are not described by one sentence.
+const _TAN_ROLE_READ = [
+  "works the rail there. Steady, that one — the bar would notice if she stopped coming",
+  "works there. She is one of the ones who turns up when she says she will, which on this road is a skill",
+  "is on the floor there most nights. Good at the job, and the job is harder than it looks from a stool",
+  "works the rail there. Sends money north, like most of them — and unlike most of them, she has a date in her head for stopping",
+  "works there. Ask her about her own business sometime instead of yours; you will learn more",
+];
+const _TAN_SIGNOFF = [
+  "\u201cI drive everybody, my friend. I do not drive their secrets.\u201d",
+  "\u201cThat is what I have. The rest is theirs to tell you.\u201d",
+  "\u201cI take people places. What they do there is not on the meter.\u201d",
+  "\u201cYou want more than that, you buy the drink, not me.\u201d",
+  "\u201cEverybody gets in my car. Nobody gets read out of it.\u201d",
+];
+
 // ASK TAN ABOUT <someone>: he promised "meet somebody, then ask me who they are"
 // and answered "that one I don't know" for everyone off the manifest (completionist
 // playtest 2026-08-22). The seven get his read (_TAN_READ); anyone else gets a
@@ -2479,7 +2506,13 @@ function _tanAbout(topic) {
     : _role === "mamasan" ? "runs the floor there. Owns the room in everything but the paperwork — and sometimes that too. You do not get past her by accident"
     : _role === "cashier" ? "keeps the till there. Nothing crosses that bar she has not already counted twice"
     : _role === "manager" ? "runs the place for the owner. Different job — the man who is there so the owner does not have to be"
-    : _role ? "works the rail there. Sends money home, same as all of them"
+    : _TAN_WHO[id] ? _TAN_WHO[id]
+    // The generic hostess read. Pooled per-person by a stable hash rather than
+    // one sentence for every woman on the roster — "sends money home, same as
+    // all of them" printed about EVERYBODY was the flattening a persona caught
+    // (round 23), and the fix is not only Mercedes's exemption below: a locator
+    // that says the same thing about forty women is telling you about none.
+    : _role ? _TAN_ROLE_READ[_hh(id + ":tanread", 53) % _TAN_ROLE_READ.length]
     : "is somebody the soi knows";
   // No venue means he is not out tonight — and the clause says "drinks THERE most
   // nights", which with nothing in front of it is a pronoun with no antecedent
@@ -2490,7 +2523,7 @@ function _tanAbout(topic) {
       `Some nights a man stays home. Even here.”`);
     return true;
   }
-  _say(`“${n.name}?” Tan considers the mirror. “${where ? where + ". " : ""}${she ? "She" : "He"} ${clause}.” A shrug at the road. “I drive everybody, my friend. I do not drive their secrets.”`);
+  _say(`“${n.name}?” Tan considers the mirror. “${where ? where + ". " : ""}${she ? "She" : "He"} ${clause}.” A shrug at the road. ${_pickVary(_TAN_SIGNOFF, "tansign")}`);
   return true;
 }
 function _tanOthers() {

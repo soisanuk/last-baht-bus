@@ -2897,12 +2897,34 @@ function _doTalkBody(arg, topic) {
       const known = Object.keys(NPCS).find(i => i !== "mort" &&
         (NPCS[i].name.toLowerCase() === who || NPCS[i].name.toLowerCase().split(" ").pop() === who));
       if (known) {
-        _say(`Mort's biro stops. He looks at you over the horn-rims, and for a second ` +
-          `you see forty years of watching behind them. “${NPCS[known].name}.” He does not write ` +
-          `it down; he already has, somewhere. “I know exactly who that is. But I do not ` +
-          `put people in the column by their names, to their faces, across a bar. That is ` +
-          `not the job.” The biro starts again. “Read the COLUMN. If they are in it, ` +
-          `they are in it as everybody — the only fair way to do it.”`, "dim");
+        // HE SAYS IT ONCE PROPERLY, AND THEN HE STOPS SAYING IT. The full
+        // sixty-word refusal printed identically for every name a persona tried
+        // — "characterful once, a wall by the third" (round 23), and she tried a
+        // dozen. A man who declines the same question all night gets shorter
+        // about it, and Mort of all people would find repeating himself
+        // undignified. Counted per night, so a new evening restores the speech.
+        G.mortDeclined = (G.mortDeclinedDay === G.day) ? G.mortDeclined + 1 : 1;
+        G.mortDeclinedDay = G.day;
+        const nm = NPCS[known].name;
+        if (G.mortDeclined === 1) {
+          _say(`Mort's biro stops. He looks at you over the horn-rims, and for a second ` +
+            `you see forty years of watching behind them. \u201c${nm}.\u201d He does not write ` +
+            `it down; he already has, somewhere. \u201cI know exactly who that is. But I do not ` +
+            `put people in the column by their names, to their faces, across a bar. That is ` +
+            `not the job.\u201d The biro starts again. \u201cRead the COLUMN. If they are in it, ` +
+            `they are in it as everybody \u2014 the only fair way to do it.\u201d`, "dim");
+        } else if (G.mortDeclined === 2) {
+          _say(`\u201c${nm},\u201d Mort agrees, not looking up. \u201cAlso not going in the column ` +
+            `by name. You are working through the room alphabetically and I admire the ` +
+            `method, but the answer does not improve.\u201d`, "dim");
+        } else if (G.mortDeclined === 3) {
+          _say(`The biro does not stop this time. \u201cSame answer, and you knew it before you ` +
+            `asked.\u201d A page turns. \u201cTry me on a THING rather than a person. Things I will ` +
+            `talk about until they close.\u201d`, "dim");
+        } else {
+          _say(`Mort raises the biro an inch without looking up \u2014 the whole reply, ` +
+            `delivered in one gesture.`, "dim");
+        }
         return;
       }
     }

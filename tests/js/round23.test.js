@@ -353,3 +353,73 @@ test("an instruction naming somebody is a promise, and there is a tool for it", 
   assert.match(src, /errand-audit/, "the tool exists");
   assert.match(src, /missOracle/, "and judges against the engine's own dead ends, not a word list");
 });
+
+// ── the town's information brokers ────────────────────────────────────────
+
+test("Tan does not describe forty women with one sentence", () => {
+  // "She works the rail there. Sends money home, same as all of them" printed
+  // about everybody — a locator that says one thing about the whole roster is
+  // telling you about none of them.
+  G.room = _npcWhere("tan") || NPCS.tan.room; G.nightTurn = 30;
+  doCommand("talk to tan");
+  const seen = new Set();
+  for (const who of ["lek", "ping", "noi", "rung", "oat", "dao", "mem", "bee"]) {
+    if (!NPCS[who]) continue;
+    G.known[who] = true;
+    out = []; doCommand("ask tan about " + who);
+    const said = text();
+    for (const r of _TAN_ROLE_READ) if (said.includes(r.slice(0, 30))) seen.add(r);
+  }
+  assert.ok(seen.size >= 2, `the read varies (${seen.size} of ${_TAN_ROLE_READ.length} seen)`);
+  assert.ok(!_TAN_ROLE_READ.some(r => /same as all of them/.test(r)),
+    "and no variant flattens them into each other");
+});
+
+test("Tan's read on Mercedes does not contradict Mercedes", () => {
+  // Her whole arc is a refusal of the generic line: "people see an old girl back
+  // on the stool and they think — poor thing… I send my mother money when I
+  // want. I chose it." Tan was saying the sentence she exists to correct.
+  G.room = _npcWhere("tan") || NPCS.tan.room; G.nightTurn = 30;
+  G.known.mercedes = true;
+  doCommand("talk to tan");
+  out = []; doCommand("ask tan about mercedes");
+  assert.match(text(), /decided to be|chose/i, "he knows it was a choice");
+  assert.ok(!_TAN_ROLE_READ.some(r => text().includes(r.slice(0, 30))),
+    "she does not get the generic read");
+});
+
+test("Tan's signoff is a pool, not a catchphrase", () => {
+  // A persona logged the identical closing line thirteen times in one session,
+  // eight of them consecutive — the only place in the game she said repetition
+  // felt machine-made.
+  G.room = _npcWhere("tan") || NPCS.tan.room; G.nightTurn = 30;
+  doCommand("talk to tan");
+  const seen = new Set();
+  for (const who of ["lek", "ping", "noi", "rung", "oat", "dao", "mem", "bee"]) {
+    if (!NPCS[who]) continue;
+    G.known[who] = true;
+    out = []; doCommand("ask tan about " + who);
+    for (const sg of _TAN_SIGNOFF) if (text().includes(sg.slice(2, 26))) seen.add(sg);
+  }
+  assert.ok(seen.size >= 2, `the signoff varies (${seen.size} of ${_TAN_SIGNOFF.length})`);
+});
+
+test("Mort gets shorter about declining, and starts fresh tomorrow", () => {
+  // The full sixty-word refusal printed identically for every name a persona
+  // tried, and she tried a dozen: "characterful once, a wall by the third."
+  G.room = "queen_vic"; G.day = 4; G.nightTurn = 40;
+  doCommand("talk to mort");
+  const lens = [];
+  for (const who of ["candy", "oy", "bert", "nira"]) {
+    out = []; doCommand("ask mort about " + who);
+    lens.push(text().length);
+  }
+  assert.ok(lens[0] > 250, "the first time he says it properly");
+  assert.ok(lens[3] < lens[0] / 2, "by the fourth it is a gesture");
+  for (let i = 1; i < lens.length; i++)
+    assert.ok(lens[i] <= lens[i - 1], "and it only ever gets shorter");
+  // a new night restores the speech — he is not sulking, he is being efficient
+  G.day = 5;
+  out = []; doCommand("ask mort about candy");
+  assert.ok(text().length > 250, "tomorrow he explains himself again");
+});

@@ -832,11 +832,23 @@ test("Tan reads a mamasan as a mamasan, not a rail girl", () => {
   newGame(); G.stage = "expat"; _setFlag("act1Done"); _setFlag("expatLife");
   for (const k of Object.keys(ENCOUNTERS)) G.encDone[k] = true;
   NPCS.tan.room = "stinky_bar"; G.room = "stinky_bar";
-  for (const [who, want] of [["candy", /runs the floor/], ["oy", /runs the floor/], ["bee", /works the rail/]]) {
+  for (const who of ["candy", "oy", "bee"]) {
     G.known[who] = true;
     out = []; doCommand("ask tan about " + who);
-    assert.match(out.join("\n"), want, `Tan on ${who} (${NPC_ROLES[who]})`);
-    if (NPC_ROLES[who] === "mamasan") assert.doesNotMatch(out.join("\n"), /works the rail/, who + " is not a rail girl");
+    const said = out.join("\n");
+    if (NPC_ROLES[who] === "mamasan") {
+      assert.match(said, /runs the floor/, `Tan on ${who} reads her as the mamasan she is`);
+      assert.ok(!_TAN_ROLE_READ.some(r => said.includes(r.slice(0, 30))),
+        who + " is an owner, not one of the girls on the rail");
+    } else {
+      // Against the POOL, not one string of it. Tan used to say "sends money
+      // home, same as all of them" about every woman on the roster — a locator
+      // that says one sentence about forty people is telling you about none —
+      // so the generic read is pooled now (round 23).
+      assert.ok(_TAN_ROLE_READ.some(r => said.includes(r.slice(0, 30))),
+        `Tan on ${who} uses the generic rail read`);
+      assert.doesNotMatch(said, /runs the floor/, who + " does not run the floor");
+    }
   }
 });
 
