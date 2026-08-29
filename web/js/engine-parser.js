@@ -4005,7 +4005,15 @@ function _doBuy(arg) {
     _say("You step into the 7-Eleven — the doorbell, the aircon, the glow. (BUY TOASTIE · BUY WATER · BUY CHARGER · BUY CONDOM · CHARGE PHONE)", "dim");
     return;
   }
-  if (/\b(piwin|motosai|driver)\b/.test(arg)) {
+  // BUY PIWIN A BEER — and BUY BANK A BEER, which is the same act. The engine
+  // prints "(These men see the whole town and tell nobody. BUY PIWIN A BEER —
+  // then ask him about somebody.)", and a player who has since learned the man
+  // is called Bank uses his NAME, which is what the game taught him to do, and
+  // got "this calls for a bar stool" (round 23). An instruction the game hands
+  // you has to survive you knowing more than you did when it was handed over.
+  const _piwinNamed = _piwinHere() && _npcsHere().some(id =>
+    NPCS[id].piwin && new RegExp("\\b" + NPCS[id].name.toLowerCase() + "\\b").test(arg));
+  if (/\b(piwin|motosai|driver)\b/.test(arg) || _piwinNamed) {
     if (!_piwinHere()) { _say("No stand here — the bikes are on the corners."); return; }
     _piwinBeer();
     return;

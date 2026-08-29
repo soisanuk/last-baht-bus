@@ -293,3 +293,63 @@ test("nothing I authored contradicts what the game already said", () => {
   const roger = NPCS.sumalee.dialogue.find(d => d.topic === "roger");
   assert.match(roger.text, /Eighteen years/, "which is when he actually retired here");
 });
+
+// ── instructions the game hands you, and whether you can obey them ─────────
+
+test("the message Candy tells you to carry can be delivered", () => {
+  // "You tell Rose: som tam at Rompho, she pay for the crab." An instruction, in
+  // the second person, naming the person — and Rose had no node that received
+  // it. A persona tried lunch, rompho, som tam, crab, TELL and GIVE; she called
+  // it the single most disappointing moment of her session, because the outward
+  // half is the best-written link in the game.
+  _setFlag("orchidVouched");
+  G.room = _npcWhere("candy"); G.nightTurn = 30;
+  doCommand("talk to candy");
+  out = []; doCommand("ask candy about lunch");
+  assert.match(text(), /Rompho/, "premise: she gives you the message");
+  assert.ok(_flag("candyLunch"), "…and carrying it is recorded");
+
+  G.room = _npcWhere("rose") || NPCS.rose.room;
+  doCommand("talk to rose");
+  for (const word of ["lunch", "rompho"]) {
+    out = []; doCommand("ask rose about " + word);
+    assert.doesNotMatch(text(), /Not my story|don't know about that|wrong girl|Ask me something/i,
+      `"${word}" is a word the errand put in the player's head`);
+  }
+  out = []; doCommand("ask rose about lunch");
+  assert.match(text(), /Tuesday|photographs/, "and she answers the message, not the weather");
+});
+
+test("Rose says nothing about a lunch nobody has mentioned to her", () => {
+  G.room = _npcWhere("rose") || NPCS.rose.room; G.nightTurn = 30;
+  assert.ok(!_flag("candyLunch"), "premise: the message hasn't been carried");
+  doCommand("talk to rose");
+  out = []; doCommand("ask rose about lunch");
+  assert.doesNotMatch(text(), /Tuesday|photographs/, "the reply is gated on the errand, not free");
+});
+
+test("BUY PIWIN A BEER survives you learning his name", () => {
+  // The engine prints "(These men see the whole town and tell nobody. BUY PIWIN
+  // A BEER — then ask him about somebody.)" — and BUY BANK A BEER, using the
+  // name the game itself taught, answered "this calls for a bar stool".
+  assert.ok(NPCS.bank.piwin, "the one named piwin is marked as one");
+  for (const cmd of ["buy piwin a beer", "buy bank a beer", "buy beer for bank"]) {
+    sandbox();
+    G.room = _npcWhere("bank") || NPCS.bank.room; G.nightTurn = 30;
+    const money = G.money;
+    out = [];
+    doCommand(cmd);
+    assert.ok(G.money < money, `"${cmd}" should buy the man a beer`);
+    assert.doesNotMatch(text(), /calls for a bar stool/, `"${cmd}" was refused`);
+  }
+});
+
+test("an instruction naming somebody is a promise, and there is a tool for it", () => {
+  // tools/errand-audit.mjs. The promise lint asserts a CAPS hint PARSES, and
+  // "buy bank a beer" parsed perfectly before being refused; asktopic-audit only
+  // plays ASK; afford-audit judges by money and hunger, and a delivered message
+  // moves neither. Three instruments, one gap, and this is its shape.
+  const src = readFileSync(fileURLToPath(new URL("../../tools/errand-audit.mjs", import.meta.url)), "utf8");
+  assert.match(src, /errand-audit/, "the tool exists");
+  assert.match(src, /missOracle/, "and judges against the engine's own dead ends, not a word list");
+});

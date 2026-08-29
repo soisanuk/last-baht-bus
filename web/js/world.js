@@ -4441,6 +4441,7 @@ const NPCS = {
     desc: "A drinks-cart vendor with a cooler of everything and opinions to match. " +
       "A hand-lettered sign on the cart offers ฿5 per returned bottle.",
     dialogue: [
+
       { req: ["gotBusFare"], text: "\"Bus stop that way, na. Tell driver where you go, pay when you get off. FIFTEEN baht now — everything expensive since the war, jing jing.\"",
         short: "\"Bus stop that way. Tell driver, pay when you get off. Fifteen baht.\"" },
       // once the week is on, she greets the regular — not the man who slept on her sand (playtest 2026-08-22)
@@ -4494,7 +4495,12 @@ const NPCS = {
     name: "Bank", th: "แบงค์", emoji: "🏍️",
     pronoun: "he",
     room: "beach_rd_s",
-    desc: "A motosai driver in an orange vest, boots up on his handlebars, watching the " +
+        // The one NAMED piwin. The engine prints "BUY PIWIN A BEER — then ask him
+    // about somebody", and a player who has learned this one is called Bank
+    // uses the name, which is what the game taught him to do. Marker field,
+    // same idiom as manager/house/patron, so the beer path can find him.
+    piwin: true,
+desc: "A motosai driver in an orange vest, boots up on his handlebars, watching the " +
       "street with professional calm. The other drivers at the stand defer to him.",
     dialogue: [
       { topic: "debt", chip: false,
@@ -4584,7 +4590,9 @@ const NPCS = {
           "You get sent. So I am sending you — go and tell Rose that Candy vouches. And mind your " +
           "manners, na: Rose forgets nothing and forgives less.”",
         short: "“Rose's Orchid Club, Naklua — behind a wall, no sign. Old friend of mine. You don't find it, you get sent. Tell her Candy vouches.”" },
-      { topic: "lunch", req: ["orchidVouched"],
+      // …and the reply is a message the player is told to carry, so it has to be
+      // carryable: the flag is what lets Rose know it arrived (round 23).
+      { topic: "lunch", req: ["orchidVouched"], sets: ["candyLunch"],
         text: "\"Rose say I owe her LUNCH?\" Candy's laugh turns every head at the rail. \"Twenty " +
           "years she keep that account. Okay, okay — you tell Rose: som tam at Rompho, she pay " +
           "for the crab.\" She wags a finger at you, delighted. \"And YOU stay out of old-lady " +
@@ -8007,6 +8015,29 @@ const NPCS = {
       // An Introduction quest (docs/map-coverage.md): present Candy's vouch → welcomed in.
       // chip:false; ungated (harmless without an active quest — the flag only matters
       // when the quest is watching for it).
+      // THE OTHER HALF OF THE ERRAND. Candy says "you tell Rose: som tam at
+      // Rompho, she pay for the crab" — an instruction, in the second person,
+      // naming the person — and Rose had no node that received it. A persona
+      // tried lunch, rompho, som tam, crab, TELL and GIVE, and called it the
+      // single most disappointing moment of her session, because the outward
+      // half is the best-written link in the game (round 23). Found again by
+      // tools/errand-audit.mjs, which exists because of it.
+      { topic: "lunch", req: ["candyLunch"],
+        text: "\u201cShe said WHAT.\u201d Rose sets the glass down with enormous care, which is how you " +
+          "learn she is not angry. \u201cRompho. She wants me to sit on a plastic stool at Rompho " +
+          "market, in this heat, at my age, and she thinks paying for the crab settles it.\u201d " +
+          "A long pause. Something is happening behind her face that has been happening for " +
+          "twenty years. \u201cTell her yes.\u201d The glass goes back to the light. \u201cTell her " +
+          "Tuesday, and tell her I am bringing the photographs, and let her think about THAT " +
+          "for a week.\u201d",
+        short: "\u201cTell her yes. Tuesday. And tell her I'm bringing the photographs.\u201d" },
+      // …and the words a player who was told about a lunch would actually type.
+      { topic: "rompho", req: ["candyLunch"],
+        text: "\u201cThe market?\u201d Rose almost smiles. \u201cIt is where we always went, when neither " +
+          "of us had anything. Forty baht between us and we ate like generals.\u201d She lets that " +
+          "sit exactly one beat too long. \u201cShe knows what she is doing, picking Rompho. She " +
+          "always knows what she is doing.\u201d",
+        short: "\u201cWhere we always went when neither of us had anything. She knows what she's doing, picking Rompho.\u201d" },
       { topic: "candy", sets: ["orchidVouched"], chip: false,
         text: "You mention Candy, and something recalibrates behind Rose's eyes — not warmth " +
           "exactly, but a latch lifting. “Candy sent you.” She looks at you again, properly this " +
