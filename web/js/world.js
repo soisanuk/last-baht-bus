@@ -6938,6 +6938,14 @@ const NPCS = {
       // White Dish. They drink at the same rail and neither knew the other
       // existed (round 23, and the persona called it the most obviously missing
       // edge in the cast). Wayne cannot know what Gavin is — that is the point.
+      // DO NOT WIRE THE SILENT PARTNER TO TAN. Wayne's description of him — uni in
+      // the States, drives himself, nice motor no flash, doesn't do email,
+      // everything face to face and a handshake — is Tan to the letter, and Tan
+      // is one room away calling him "the Australian with the bar he should not
+      // buy". A playtester found the resemblance blind and could not prove it
+      // (round 23). Asked directly, Mario's call was to LEAVE IT BE: unproven is
+      // the point. Connecting it would rewrite who Tan is, and the ambiguity is
+      // worth more than the reveal. Resist the tidy-up.
       { topic: "gavin",
         text: "\u201cThe quiet bloke?\u201d Wayne tips his glass down the rail without lowering his voice at all. \u201cGood value, actually. Bought me a beer, asked me a heap of questions about the deal \u2014 proper questions, mate, better than me own lawyer asked.\u201d He is pleased about this. \u201cKnows the soi backwards. Reckons forty stools is about right.\u201d A grin. \u201cSee, THAT'S what I keep telling people. A bloke who actually knows the trade looks at what I'm doing and says: yeah. Sound.\u201d",
         short: "\u201cThe quiet bloke? Asked better questions about my deal than my own lawyer did. Knows the soi backwards.\u201d" },
