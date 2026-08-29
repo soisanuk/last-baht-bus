@@ -23,19 +23,19 @@ var NEWS_FEED = [
     "d": "27 Aug 2026"
   },
   {
-    "t": "Transforming passive holding entities into active operating companies in Thailand",
+    "t": "Thai PM warns CP cannot simply walk away from 3-airport rail deal",
     "s": "Pattaya Mail",
     "d": "28 Aug 2026"
   },
   {
-    "t": "Thailand speeds up preparations for Nakhon Ratchasima Horticultural Expo 2029",
+    "t": "Bangkok set for exquisite ultra-luxury travel gathering in June 2027",
     "s": "Pattaya Mail",
-    "d": "27 Aug 2026"
+    "d": "28 Aug 2026"
   },
   {
-    "t": "Thailand Focus 2026 draws 220 global investors to Bangkok",
+    "t": "Transforming passive holding entities into active operating companies in Thailand",
     "s": "Pattaya Mail",
-    "d": "27 Aug 2026"
+    "d": "28 Aug 2026"
   },
   {
     "t": "Pattaya prepares to welcome personnel from USS Abraham Lincoln",
@@ -43,9 +43,9 @@ var NEWS_FEED = [
     "d": "27 Aug 2026"
   },
   {
-    "t": "USS Abraham Lincoln will stop in Thailand on its way home from lengthy deployment in Middle East",
-    "s": "AP News",
-    "d": "26 Aug 2026"
+    "t": "Tourism Ministry to deport misbehaving foreign tourists as new regulation takes effect",
+    "s": "Bangkok Post",
+    "d": "28 Aug 2026"
   },
   {
     "t": "Thailand shooting: Teen kills at least seven and injures more than 30, PM says",
@@ -58,30 +58,30 @@ var NEWS_FEED = [
     "d": "28 Aug 2026"
   },
   {
+    "t": "USS Abraham Lincoln to visit port in Thailand after more than 250 days at sea",
+    "s": "The Guardian",
+    "d": "27 Aug 2026"
+  },
+  {
+    "t": "Thailand's southern insurgency leaves villagers trapped in a cycle of fear",
+    "s": "Reuters",
+    "d": "28 Aug 2026"
+  },
+  {
     "t": "Why Thailand has one of the world’s lowest interest rates",
     "s": "Financial Times",
     "d": "27 Aug 2026"
-  },
-  {
-    "t": "Japan and Thailand to meet at Asian Championship semifinals",
-    "s": "Volleyball World",
-    "d": "27 Aug 2026"
-  },
-  {
-    "t": "China Pullback Leads Drop in Thailand’s Foreign Condo Demand",
-    "s": "Bloomberg.com",
-    "d": "28 Aug 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-08-28","USD":32.96,"AUD":23.71,"GBP":44.76,"EUR":38.37};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-29","temp":26,"humid":94,"code":53,"hi":29,"rain":96};
+var WX_NOW = {"date":"2026-08-29","temp":29,"humid":79,"code":51,"hi":30,"rain":99};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-08-28","done":true,"h":"C Palace","hs":1,"a":"Man City","as":4},{"d":"2026-08-29","done":false,"h":"Liverpool","hs":0,"a":"Nottm Forest","as":0},{"d":"2026-08-29","done":false,"h":"Bournemouth","hs":0,"a":"Everton","as":0},{"d":"2026-08-29","done":false,"h":"Coventry","hs":0,"a":"Hull","as":0},{"d":"2026-08-29","done":false,"h":"Spurs","hs":0,"a":"Newcastle","as":0},{"d":"2026-08-30","done":false,"h":"Chelsea","hs":0,"a":"Brighton","as":0},{"d":"2026-08-30","done":false,"h":"Leeds","hs":0,"a":"Brentford","as":0},{"d":"2026-08-30","done":false,"h":"Sunderland","hs":0,"a":"Fulham","as":0},{"d":"2026-08-30","done":false,"h":"Man United","hs":0,"a":"Ipswich","as":0},{"d":"2026-08-31","done":false,"h":"Aston Villa","hs":0,"a":"Arsenal","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-08-16","first":"004615","last2":"53","front3":["429","731"],"back3":["094","937"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4456,"date":"2026-08-28","baht":69450};
+var GOLD = {"usd":4456,"date":"2026-08-29","baht":69450};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":77418,"thb":2565748};
+var BTC = {"usd":77493,"thb":2568213};
