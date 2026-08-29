@@ -546,7 +546,12 @@ const _term = (() => {
   function echo(cmd) {
     const div = document.createElement("div");
     div.className = "t-line t-echo";
-    div.textContent = "❯ " + cmd;
+    // The `info…` fanout prefills a SENTINEL so engineComplete can offer eleven
+    // readouts from one chip slot. The engine strips it before parsing; the ECHO
+    // did not, so tapping DIAGNOSE printed "❯ __info diagnose" and looked to a
+    // phone player like something had broken (round 24, Pauline). It is
+    // plumbing, and plumbing does not belong in the transcript.
+    div.textContent = "❯ " + String(cmd).replace(/^__info\b\s*/i, "");
     _out.appendChild(div);
     _trimScroll();
     return div;   // submit() anchors the scroll to it — see _scrollToNew
@@ -626,6 +631,35 @@ const _term = (() => {
       msg.classList.toggle("show", unread > 0);
     }
     _updateNavFab();
+    _parkFabs();
+  }
+
+  // Sit the floating buttons just above the chip bar, measured rather than
+  // guessed: the bar's height moves with the font-size control (the Aa button
+  // is the single most-used accessibility affordance in this game), so a fixed
+  // rem offset puts the bell inside the chips at one size and halfway up the
+  // screen at another. See the CSS note on #fab-stack for why they are at the
+  // bottom at all — they used to float over the scrolling transcript and cover
+  // whatever tappable words scrolled underneath them (round 24, Pauline).
+  function _parkFabs() {
+    const stack = document.getElementById("fab-stack");
+    const chips = document.getElementById("chips");
+    if (!stack || !chips) return;
+    // Measure to the chip bar's TOP, not its height: below it sits the input
+    // row too, and offsetting by the bar alone parked the bell inside the chips.
+    const top = chips.getBoundingClientRect().top;
+    stack.style.bottom = Math.round(window.innerHeight - top + 12) + "px";
+    // …and RESERVE the strip rather than float over it. Moving these buttons
+    // was only half the fix: anywhere they sit, they sit on top of a scrolling
+    // transcript, and any tappable word that scrolls underneath is a word the
+    // player cannot tap — which is exactly what happened, intermittently, which
+    // is worse than always. The transcript auto-scrolls to the bottom, so
+    // padding it by the stack's height simply keeps the newest line above them.
+    // Costs nothing when no fab is up.
+    const out = document.getElementById("term-out");
+    if (!out) return;
+    const anyUp = [...stack.children].some(c => getComputedStyle(c).display !== "none");
+    out.style.paddingBottom = anyUp ? (stack.getBoundingClientRect().height + 16) + "px" : "";
   }
 
   // The street compass: N/E/S/W plus a flashlight in the middle, in the same

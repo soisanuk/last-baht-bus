@@ -180,3 +180,49 @@ test("the goodwill is not the gamble — the floor saw you do it either way", ()
   const after = staff.map(id => G.soc.drinks[id] || 0);
   assert.ok(after.some((v, i) => v > before[i]), "you bought the room a drink and they know it");
 });
+
+// ── PAULINE: things the game told her to do and gave her no button for ─────
+
+test("killer pool offers its moves, not just a way to forfeit", () => {
+  // The league game's type is "kp", and the chip bar tested for "pool" and
+  // "killer" — so a tapping player paid ฿100 to enter a quest-relevant game and
+  // could only QUIT. _gameVerbs already knew about "kp", which is exactly how a
+  // three-surfaces rule fails: two agree and the third is silently missing.
+  for (const [type, want] of [["kp", ["shot", "power", "quit"]],
+                              ["pool", ["shot", "power", "safety", "quit"]],
+                              ["darts", ["go big", "steady", "finish", "quit"]],
+                              ["quiz", ["1", "2", "3", "quit"]]]) {
+    sandbox();
+    G.game = { type };
+    assert.deepEqual(_chipSet().map(c => c.cmd), want, `${type} chips its own moves`);
+    // and the two surfaces agree
+    const verbs = _gameVerbs();
+    for (const w of want) if (w !== "go big") assert.ok(verbs.some(v => w.startsWith(v) || v === w),
+      `${type}: "${w}" is on the chip bar and in the completion pool`);
+  }
+});
+
+test("the rain offers a way to wait it out", () => {
+  // "GO <somewhere inside>, or wait it out" — and WAIT was on no chip, in no
+  // menu, nowhere. Her only tappable move was LOOK, eight times, before she
+  // gave up and typed. The rain is frequent; this is the most-needed chip in
+  // the game for somebody who does not type.
+  sandbox();
+  G.room = "soi6_street"; G.rain = 5;
+  assert.ok(_chipSet().some(c => /^wait/.test(c.cmd)), "pinned by rain, WAIT is offered");
+  G.rain = 0;
+  assert.ok(!_chipSet().some(c => /^wait/.test(c.cmd)), "and not when it's dry");
+});
+
+test("the torch can be switched off in the room that tells you to", () => {
+  // The compass is a street tool and hides indoors, which took the torch button
+  // with it — so a player who walked into a go-go with it on was told "best
+  // switch that off", teased by the girls and stood up at by security, with no
+  // tappable way to obey. Three times she had to reach for the keyboard.
+  sandbox();
+  G.room = "stinky_bar"; G.lightOn = false;
+  assert.equal(_navHere(), false, "no compass indoors");
+  G.lightOn = true;
+  assert.equal(_navHere(), true, "…unless the torch is still burning");
+  assert.deepEqual(_navDirs(), [], "and it offers no directions, only the light");
+});

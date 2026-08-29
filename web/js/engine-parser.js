@@ -6561,9 +6561,25 @@ function _chipSet() {
     for (const m of _jpChoices()) add("flip " + m, "flip " + m);
     if (G.game.type === "jp" && !_jpChoices().length) add("flip");
     if (G.game.type === "pool" || G.game.type === "killer") { add("shot"); add("power"); add("safety"); }
+    // The LEAGUE game is type "kp", and this test named every pool type except
+    // that one — so a killer-pool night offered a tapping player nothing but
+    // QUIT. She paid the ฿100 entry for a quest she could then only forfeit
+    // (round 24, Pauline). _gameVerbs already knew about "kp", which is exactly
+    // how a three-surfaces rule fails: two surfaces agree and the third is
+    // silently missing. SHOT/POWER only — no safety in the league game.
+    if (G.game.type === "kp") { add("shot"); add("power"); }
     if (G.game.type === "darts") { add("go big", "go big"); add("steady"); add("finish"); }
     if (G.game.type === "quiz") { add("1"); add("2"); add("3"); }
     add("quit"); return chips;
+  }
+  // 2.15) PINNED BY THE RAIN. The block says "GO <somewhere inside>, or wait it
+  //       out" and WAIT was on no chip, in no menu, nowhere — so a tapping
+  //       player's only move was LOOK, over and over. She tapped it eight times
+  //       the first night before giving up and typing (round 24, Pauline). The
+  //       rain is frequent, so this is the single most-needed chip in the game
+  //       for somebody who does not type.
+  if (G.rain > 0 && !G.game && !G.pendingChoice && !G.pendingEnc) {
+    add("wait 3", "wait for it to pass");
   }
   // 2.2) The negotiation/fare gates own the input the same way (doCommand
   //      swallows everything else and reprompts), so the chip bar must offer

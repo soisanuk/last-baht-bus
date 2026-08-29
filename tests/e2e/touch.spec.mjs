@@ -173,3 +173,55 @@ test.describe("phone scene panel", () => {
     expect(await page.evaluate(() => localStorage.getItem("lbb_scene_off"))).toBe("0");
   });
 });
+
+// ── round 24: Pauline, 64, on a phone, arthritis in both thumbs ─────────────
+
+test.describe("touch device", () => {
+  test.use(IPHONE);
+
+  test("the floating buttons never sit on top of tappable words", async ({ page }) => {
+    // She tapped a bar name repeatedly with nothing happening and concluded the
+    // game was broken. Measured: the compass occupied x 268-376 of a 390px
+    // screen, floating over a SCROLLING transcript — so whichever tappable word
+    // happened to scroll under it was unreachable. Intermittent, which is worse
+    // than always.
+    await bootIntoGame(page, INDEX_URL);
+    await page.evaluate(() => { try { doCommand("out"); } catch (e) {} });
+    await page.waitForTimeout(250);
+    const bad = await page.evaluate(() => {
+      const stack = document.getElementById("fab-stack");
+      if (!stack) return [];
+      const s = stack.getBoundingClientRect();
+      if (!s.height) return [];
+      return [...document.querySelectorAll("#term-out .kw")]
+        .filter(k => { const r = k.getBoundingClientRect();
+          return r.right > s.left && r.left < s.right && r.bottom > s.top && r.top < s.bottom; })
+        .map(k => k.textContent.trim());
+    });
+    expect(bad, "tappable words hidden under the floating buttons").toEqual([]);
+  });
+
+  test("the floating buttons clear the chip bar", async ({ page }) => {
+    await bootIntoGame(page, INDEX_URL);
+    await page.evaluate(() => { try { doCommand("out"); } catch (e) {} });
+    await page.waitForTimeout(250);
+    const r = await page.evaluate(() => {
+      const s = document.getElementById("fab-stack").getBoundingClientRect();
+      const c = document.getElementById("chips").getBoundingClientRect();
+      return { stackBottom: s.bottom, chipsTop: c.top, up: s.height > 0 };
+    });
+    if (r.up) expect(r.stackBottom, "the bell must not sit inside the chips").toBeLessThanOrEqual(r.chipsTop + 1);
+  });
+
+  test("an overflowing chip bar says so", async ({ page }) => {
+    // 957px of chips on a 390px screen at the taxi intro: five of the game's
+    // first eight answers were off the edge with no arrow, fade or hint.
+    await page.goto(INDEX_URL);
+    await page.waitForTimeout(400);
+    const shadows = await page.evaluate(() => {
+      const c = document.getElementById("chips");
+      return getComputedStyle(c).backgroundImage.includes("radial-gradient");
+    });
+    expect(shadows, "the chip bar carries scroll shadows").toBe(true);
+  });
+});

@@ -63,10 +63,20 @@
      column so they stack with no gap and either can appear alone — a text on the
      street shows the message glyph in the top slot, a bar shows the bell, and a
      text at the bar shows both. */
+  /* BOTTOM-right, not top-right, since round 24. Two reasons, and the second is
+     the one that matters. (1) These float over the SCROLLING transcript, so at
+     the top they sat on top of whatever text happened to scroll under them —
+     a phone player reported tapping a bar name repeatedly with nothing
+     happening and concluded the game was broken; measured, the compass occupies
+     x 268-376 of a 390px screen, and any tappable word that scrolls through
+     that band is unreachable. Anchoring above the chip bar puts them below the
+     text instead of on it. (2) The top-right corner is the hardest place on a
+     phone for a thumb to reach one-handed, and this game's audience reads it in
+     bed. The bell is something you tap; it belongs in the thumb zone. */
   #fab-stack {
     position: absolute;
     right: 14px;
-    top: calc(env(safe-area-inset-top) + 5.6rem);
+    bottom: calc(env(safe-area-inset-bottom) + 4.6rem);   /* a floor; term.js's _parkFabs measures the real chip bar */
     z-index: 40;
     display: flex;
     flex-direction: column;
@@ -288,6 +298,22 @@
     scrollbar-width: none;
   }
   #chips::-webkit-scrollbar { display: none; }
+  /* THE BAR OVERFLOWS AND SAID NOTHING. Measured on a 390px phone at the taxi
+     intro: 957px of chips, so five of the game's first eight answers were off
+     the right-hand edge with no arrow, no fade and no hint they existed — a
+     player found "The pension" only by going looking (round 24, Pauline). The
+     scroll shadows are a pure-CSS affordance: a gradient pinned to each edge
+     that only paints when there is something out there to scroll to, because
+     `background-attachment: local` moves the local layers with the content
+     while the fixed ones stay put. No JS, no resize listener, nothing to keep
+     in sync. */
+  #chips {
+    background:
+      linear-gradient(to right, #0a0010 30%, #0a001000) left center / 34px 100% no-repeat local,
+      linear-gradient(to left,  #0a0010 30%, #0a001000) right center / 34px 100% no-repeat local,
+      radial-gradient(farthest-side at 0 50%, #ff149355, #ff149300) left center / 16px 100% no-repeat scroll,
+      radial-gradient(farthest-side at 100% 50%, #ff149355, #ff149300) right center / 16px 100% no-repeat scroll;
+  }
   .chip {
     flex-shrink: 0;
     background: #12001e;

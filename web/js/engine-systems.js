@@ -353,7 +353,15 @@ function _navHere() {
   // hotel_room lists BOTH `out` and `s` to the same soi, so a naive test lit
   // one arrow and greyed three, which reads as a broken compass.
   const r = _room();
-  if (!r || (typeof _sheltered === "function" && _sheltered(G.room))) return false;
+  // …with ONE exception: a torch still burning indoors. The compass is a street
+  // tool and hides inside, which took the torch button with it — so a player
+  // who walked in from a dark lane with it on was told "best switch that off"
+  // by prose, teased by the girls, and stood up at by go-go security, with no
+  // tappable way to obey. Three separate times she had to reach for a keyboard
+  // she does not enjoy using (round 24, Pauline). The compass shows indoors
+  // only while the light is on, and _navDirs greys the directions out.
+  if (!r || (typeof _sheltered === "function" && _sheltered(G.room)))
+    return !!(G && G.lightOn);
   if (/^Your Room/.test(r.name || "")) return false;
   return _navDirs().length > 0;
 }
