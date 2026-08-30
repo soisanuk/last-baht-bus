@@ -850,7 +850,7 @@ function _partyArrive(to) {
   const who = _partyLabel();
   const club = r.barType === "club" || r.barType === "gogo";
   _say(_fmt(_pickVary(club ? _PARTY_ARRIVE_CLUB : _PARTY_ARRIVE, "partyarr"), { who }));
-  const dcost = LADY_DRINK * p.ids.length;
+  const dcost = _ladyPrice() * p.ids.length;
   if (G.money >= dcost) {
     G.money -= dcost;
     p.spent += dcost;
@@ -3464,8 +3464,8 @@ function _chamAsk() {
 // machinery must not answer for her (blind playtest 2026-08-22: BUY DRINK FOR
 // CREAM poured the patron war-story, FLIRT got "not that way, mate").
 function _chamDrink() {
-  if (G.money < BEER_PRICE) { _say(`A drink for Cream runs ฿${BEER_PRICE}, and you're short. She waves it off: "Next time na."`); return; }
-  G.money -= BEER_PRICE;
+  if (G.money < _beerPrice()) { _say(`A drink for Cream runs ฿${_beerPrice()}, and you're short. She waves it off: "Next time na."`); return; }
+  G.money -= _beerPrice();
   G.soc.chamDrinks = (G.soc.chamDrinks || 0) + 1;
   _say(_pickVary([
     `She puts a hand up — "No no, I have—" — looks at her glass, which is mostly ice, and lets you. ` +

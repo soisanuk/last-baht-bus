@@ -101,6 +101,15 @@ const RENT_GRACE   = 2;        // months carried before the lease is re-let
 // a Walking Street go-go is six, which is the answer to "why not buy a better
 // bar" without anyone having to say it.
 const RENT_MULT    = { beer: 1, soi6: 3, gogo: 6, gents: 4, host: 2 };
+// WHAT A DRINK COSTS, BY THE KIND OF ROOM YOU ARE STANDING IN. Barfines already
+// tier properly — Gold Rush ST ฿600 against a Soi 6 ฿1,150 — which made the
+// drinks standing still conspicuous: ฿80 a beer and ฿150 a lady drink in a
+// Naklua expat bar, in a Soi 6 bar, and in a Walking Street go-go with chrome
+// poles and a sound system. An ex-publican spotted it in one night (round 24,
+// Keith): "a go-go's beer is the whole reason a go-go can afford the chrome."
+// Gentler than RENT_MULT, because a punter feels a drink price directly and
+// rent is the landlord's problem. Rounded to ฿10 by the helpers.
+const DRINK_MULT = { beer: 1, pub: 1, soi6: 1.25, gents: 1.5, gogo: 1.75, club: 1.75, host: 1.5 };
 const BAR_TERM     = 72;       // months
 // The note had NO teeth: you could not lose the bar. Driven deliberately
 // underwater it answered "He hasn't asked" forever, at −1 สนุก a night, and that
@@ -6384,6 +6393,16 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { cap: "555 last look 🍑😘 rest you come sit my stool and see LIVE", pic: "wilai_pic4", ask: 800 },
     ],
     dialogue: [
+      // The other half. She is the front-stool showwoman and he is her most
+      // reliable customer, and neither had heard of the other.
+      { topic: "barry",
+        text: "\u201cBarry!\u201d Wilai laughs before she says anything else. \u201cEleven time he come. " +
+          "Every time he say he play golf. Every time the bag is CLEAN, no dirt, nothing.\u201d She " +
+          "mimes wiping a spotless club. \u201cI never say nothing. Is his holiday, na.\u201d Then, quieter " +
+          "and completely without irony: \u201cHe is kind to the new girls. They are frighten, first week, " +
+          "and he talk to them like they are somebody. So \u2014 he can say golf as much as he like.\u201d",
+        short: "\u201cEleven time he come, every time the golf bag is CLEAN. He is kind to the new girls, so he can say golf all he like.\u201d" },
+
       // Personality-gated OPENER: she clocks a white knight from the door and
       // punctures the rescue narrative on sight — warm, not cruel. The anti-victim
       // theme in her mouth. Fires first for a white-knight player; else falls through
@@ -7059,6 +7078,14 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       "last. Knows every bar's real name, every one it used to be, and half the ghosts propping up the other " +
       "half. Not bitter. Just here, the way the tide is here.",
     dialogue: [
+      { topic: "barry",
+        text: "\u201cThe golfer.\u201d Roy says it dryly and not unkindly. \u201cComes twice a year, buys " +
+          "everybody a drink, tells everybody he is going to play on Thursday. He has never played on " +
+          "a Thursday.\u201d He counts something in his head, the way he always is. \u201cHe buys me one " +
+          "and pretends it is an accident, because he has worked out I would say no otherwise. " +
+          "Not many would bother getting that right.\u201d",
+        short: "\u201cHe buys me one and pretends it's an accident, because he worked out I'd say no. Not many bother getting that right.\u201d" },
+
       { text: "The old boy doesn't look up from the door. \"Sit if you're sitting. Roy.\" A nod at the room " +
           "without warmth or coldness. \"Twenty year I've had this stool, more or less. Watched 'em knock this " +
           "bar down and build it twice.\" He sips, unhurried. \"You learn to stop minding. Everything out here's " +
@@ -7239,6 +7266,14 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       "inside, and watches the bar's whole performance with the fond, tired eye of a man who's seen the " +
       "machinery from backstage. Not here to be fooled. Here because where else would he be.",
     dialogue: [
+      { topic: "barry",
+        text: "\u201cBarry from Ruby Kiss.\u201d Rob nods slowly. \u201cWe've had about four conversations in " +
+          "three years and every one of them was worth having, which is a better strike rate than most " +
+          "people I know at home.\u201d He turns the bottle. \u201cHe asked me once, straight out, whether " +
+          "I regretted the nine years. Nobody else has asked me that. He didn't make a thing of the " +
+          "answer either.\u201d",
+        short: "\u201cFour conversations in three years, all worth having. He asked me straight out if I regretted the nine years.\u201d" },
+
       { text: "He watches you get worked by the room and there's no judgement in it, only recognition. " +
           "\"They're good, aren't they. The best of 'em could sell sand to a beach.\" A nod to the stool. " +
           "\"Rob. Nine years married to one, so I get to enjoy the show now without paying admission. Took me " +
@@ -7291,6 +7326,23 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       "this soi by name and all of them by drink order. The most honest dishonest man in Pattaya — lies only " +
       "to his wife, and even then only about the golf.",
     dialogue: [
+      // He offers to introduce you to the girls here and then could not discuss
+      // a single one of them — including the woman who runs the front stools of
+      // his own bar, where he has been a regular for eleven trips (round 23).
+      { topic: "wilai",
+        text: "\u201cWilai!\u201d Barry says it like a man announcing a horse. \u201cRuns them stools like a " +
+          "sergeant major and charges me for the privilege of being insulted. Eleven trips, mate, and " +
+          "she's never once let me get away with anything.\u201d He is delighted about this. \u201cShe " +
+          "knows my drink, she knows my wife's name, and she's never asked me one question I'd have " +
+          "had to lie about. That's a professional, that is.\u201d",
+        short: "\u201cRuns them stools like a sergeant major and charges me for the privilege. Never asked me a question I'd have to lie about.\u201d" },
+      { topic: "roy",
+        text: "\u201cRoy? Cherry Pop, three doors up.\u201d Barry's grin dips half a notch. \u201cLovely old " +
+          "boy. Counts his pension to the baht and never once moaned about it where anybody could hear.\u201d " +
+          "He turns his glass. \u201cI buy him one when I can get away with it. He knows I'm doing it, " +
+          "and he lets me, which between two men our age is basically a friendship.\u201d",
+        short: "\u201cCherry Pop, three doors up. I buy him one when I can get away with it, and he lets me.\u201d" },
+
       // Barry's opener called a twenty-year veteran a beginner: Tan and Bert had
       // both just clocked the same character as a lifer, and his "NEW fella!"
       // fired unchanged (comparative playtest 2026-08-24 — the inconsistency is

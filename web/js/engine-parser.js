@@ -13,37 +13,37 @@ const _DIRS = {
 
 // ── Varied response pools for the hot loop (picked via _pickVary, no repeats) ──
 // The favor grind and the common misfires are the most-printed lines in the game;
-// deep pools keep them from wearing a groove. LADY_DRINK is read lazily at call
+// deep pools keep them from wearing a groove. _ladyPrice() is read lazily at call
 // time, so these can sit above its definition.
 // _fmt templates (not raw interpolation): the {n}/{p} placeholders let the German
 // catalog reorder them. EN output is byte-identical to the old strings.
 const _LADY_DRINK_LINES = [
-  n => _fmt("One lady drink for {n} — ฿{p} on the tab that is your life.", { n, p: LADY_DRINK }),
-  n => _fmt("{n} gets her cola-with-benefits; {m}'s biro logs ฿{p} without looking up.", { n, p: LADY_DRINK, m: _mamaRef() }),
-  n => _fmt("A thimble of something mostly ice lands in front of {n} — ฿{p}, gone in three sips.", { n, p: LADY_DRINK }),
-  n => _fmt("“Chon kaew!” {n} toasts you with her ฿{p} lady drink and means it for exactly one sip.", { n, p: LADY_DRINK }),
-  n => _fmt("You buy {n} a drink; she rewards it with a smile calibrated to the exact value of ฿{p}.", { n, p: LADY_DRINK }),
-  n => _fmt("A ฿{p} lady drink for {n} — the house's real product, sold by the glass.", { n, p: LADY_DRINK }),
-  n => _fmt("{n}'s glass runs dry the way a meter does; ฿{p} restarts it.", { n, p: LADY_DRINK }),
-  n => _fmt("The waitress doesn't even ask — {n}'s drink, ฿{p}, straight onto your tab.", { n, p: LADY_DRINK }),
+  n => _fmt("One lady drink for {n} — ฿{p} on the tab that is your life.", { n, p: _ladyPrice() }),
+  n => _fmt("{n} gets her cola-with-benefits; {m}'s biro logs ฿{p} without looking up.", { n, p: _ladyPrice(), m: _mamaRef() }),
+  n => _fmt("A thimble of something mostly ice lands in front of {n} — ฿{p}, gone in three sips.", { n, p: _ladyPrice() }),
+  n => _fmt("“Chon kaew!” {n} toasts you with her ฿{p} lady drink and means it for exactly one sip.", { n, p: _ladyPrice() }),
+  n => _fmt("You buy {n} a drink; she rewards it with a smile calibrated to the exact value of ฿{p}.", { n, p: _ladyPrice() }),
+  n => _fmt("A ฿{p} lady drink for {n} — the house's real product, sold by the glass.", { n, p: _ladyPrice() }),
+  n => _fmt("{n}'s glass runs dry the way a meter does; ฿{p} restarts it.", { n, p: _ladyPrice() }),
+  n => _fmt("The waitress doesn't even ask — {n}'s drink, ฿{p}, straight onto your tab.", { n, p: _ladyPrice() }),
 ];
 // At regular+ bond the transactional lines ("a smile calibrated to ฿150", "the
 // way a meter does") contradict the courtship the player has built — she's not
 // metering YOU any more (Alan playtest, 2026-08-17). A warm sub-pool for her.
 const _LADY_DRINK_WARM = [
-  n => _fmt("{n}'s usual arrives before you've asked — she caught your eye, the waitress caught hers. ฿{p}, and she holds the toast a beat longer than the tab explains.", { n, p: LADY_DRINK }),
-  n => _fmt("You get {n} a drink; she bumps your glass, says \u201csame-same as always,\u201d and the ฿{p} feels beside the point, which is new.", { n, p: LADY_DRINK }),
-  n => _fmt("Another for {n} \u2014 ฿{p} \u2014 but she drinks half and pushes the rest back to share, which no meter has ever done.", { n, p: LADY_DRINK }),
-  n => _fmt("{n} lets the drink sit. \u201cYou don\u2019t have to keep buy, na,\u201d she says, and means it, which costs her ฿{p} she\u2019d rather have than have you think she\u2019s counting.", { n, p: LADY_DRINK }),
+  n => _fmt("{n}'s usual arrives before you've asked — she caught your eye, the waitress caught hers. ฿{p}, and she holds the toast a beat longer than the tab explains.", { n, p: _ladyPrice() }),
+  n => _fmt("You get {n} a drink; she bumps your glass, says \u201csame-same as always,\u201d and the ฿{p} feels beside the point, which is new.", { n, p: _ladyPrice() }),
+  n => _fmt("Another for {n} \u2014 ฿{p} \u2014 but she drinks half and pushes the rest back to share, which no meter has ever done.", { n, p: _ladyPrice() }),
+  n => _fmt("{n} lets the drink sit. \u201cYou don\u2019t have to keep buy, na,\u201d she says, and means it, which costs her ฿{p} she\u2019d rather have than have you think she\u2019s counting.", { n, p: _ladyPrice() }),
 ];
 // A lazy girl (type:"lazy") takes the drink and gives you the minimum back — the
 // favor rarely sticks (the "you spend, get little" punishment). Not unkind, just
 // not working for it; a savvy player reads it and stops paying.
 const _LAZY_DRINK_LINES = [
-  n => `${n} says thanks without looking up from {{her phone}}, and the ฿${LADY_DRINK} drink sits between you like a receipt.`,
-  n => `${n} clinks your glass on autopilot, already half-turned toward the door and whoever comes through it next. ฿${LADY_DRINK}.`,
-  n => `${n} takes the ฿${LADY_DRINK} drink, gives you a smile with the wattage turned right down, and lets the silence finish her shift.`,
-  n => `"Thank you na." That is, it turns out, the whole of it — ${n} isn't unkind, she's just not going to work for ฿${LADY_DRINK}.`,
+  n => `${n} says thanks without looking up from {{her phone}}, and the ฿${_ladyPrice()} drink sits between you like a receipt.`,
+  n => `${n} clinks your glass on autopilot, already half-turned toward the door and whoever comes through it next. ฿${_ladyPrice()}.`,
+  n => `${n} takes the ฿${_ladyPrice()} drink, gives you a smile with the wattage turned right down, and lets the silence finish her shift.`,
+  n => `"Thank you na." That is, it turns out, the whole of it — ${n} isn't unkind, she's just not going to work for ฿${_ladyPrice()}.`,
 ];
 // Bar etiquette: a girl already sitting with another customer declines a lady drink
 // from you — poaching is a scene nobody asked for. Insist (send it again) and she'll
@@ -3506,7 +3506,7 @@ function _sayDirectedReact(key, id, name) {
   if (key === "how_much") {
     if (role) {
       _say(`${name} laughs. “For talk? Free, tilac.” She taps the lady-drink menu. ` +
-        `“Everything else start at ฿${LADY_DRINK}.”`, "thai");
+        `“Everything else start at ฿${_ladyPrice()}.”`, "thai");
     } else if (id === "bank" || (id && NPCS[id].emoji === "🏍️")) {
       _say(`${name} grins: “${thaiBaht(MOTOSAI_TOWN)} in town, ${thaiBaht(MOTOSAI_FAR)} to Darkside.”`, "thai");
     } else {
@@ -3829,12 +3829,12 @@ function _doSellBottles(arg) {
   }
 }
 
-// Stand the bar manager a "man drink" — a beer's worth (BEER_PRICE). Builds his
+// Stand the bar manager a "man drink" — a beer's worth (_beerPrice()). Builds his
 // goodwill (G.soc.manDrinks) and clears any "you've been monopolising me" debt.
 function _buyManDrink(id) {
   if (!_inBar()) { _say("Buy a drink where drinks are sold, tilac."); return; }
   const name = NPCS[id].name;
-  if (G.money < BEER_PRICE) { _say(`A man drink runs ฿${BEER_PRICE} and you're short. ${name} waves it off: “Next time, bud.”`); return; }
+  if (G.money < _beerPrice()) { _say(`A man drink runs ฿${_beerPrice()} and you're short. ${name} waves it off: “Next time, bud.”`); return; }
   // A MAN WHO WON'T OPEN YOU A BEER WON'T DRINK YOUR HEALTH EITHER. Bert ices a
   // player who ran White Dish's errand — and the very same visit, BUY MAN DRINK
   // printed "a manager who likes you is the best friend a farang has out here",
@@ -3843,13 +3843,13 @@ function _buyManDrink(id) {
   // money, because he is a publican and it is a bar; what he does not do is
   // pretend. No happiness, no standing — you bought a drink, not a friend.
   if (typeof _mgrIced === "function" && _mgrIced(id)) {
-    G.money -= BEER_PRICE;
-    _say(`You put the ฿${BEER_PRICE} on the wood. ${name} rings it in, pours one, and drinks it ` +
+    G.money -= _beerPrice();
+    _say(`You put the ฿${_beerPrice()} on the wood. ${name} rings it in, pours one, and drinks it ` +
       `where he's standing, facing the felt. Not a word wasted, not a word given. The gesture is ` +
       `noted and it is not, tonight, accepted. (฿${G.money} left.)`, "dim");
     return;
   }
-  G.money -= BEER_PRICE;
+  G.money -= _beerPrice();
   G.soc.manDrinks = G.soc.manDrinks || {};
   G.soc.manDrinks[id] = (G.soc.manDrinks[id] || 0) + 1;
   if (G.soc.mgrChat) G.soc.mgrChat[id] = 0; // debt squared
@@ -3858,12 +3858,12 @@ function _buyManDrink(id) {
     // a sober manager (Fast Eddy): the gesture lands, the glass is soda water
     _say(`“Now you're speaking the language.” ${name} rings it up, pours himself a soda ` +
       `water with a wedge of lime, and chinks it against yours without a flicker — the ` +
-      `gesture is the thing, the glass is nobody's business. ฿${BEER_PRICE} well spent: the ` +
+      `gesture is the thing, the glass is nobody's business. ฿${_beerPrice()} well spent: the ` +
       `man whose name is over the door, on your side, is the best friend a farang has out here. (฿${G.money} left.)`, "win");
     return;
   }
   _say(`“Now you're speaking the language.” ${name} pours himself a proper one and ` +
-    `chinks it against yours. ฿${BEER_PRICE} well spent — a manager who likes you is the ` +
+    `chinks it against yours. ฿${_beerPrice()} well spent — a manager who likes you is the ` +
     `best friend a farang has out here. (฿${G.money} left.)`, "win");
   if (_rand() < 0.5) { G.soc.drunk++; _say("He racks up two more “for the road” before you can argue.", "dim"); }
 }
@@ -3920,11 +3920,11 @@ function _regularName(id) {
 // enforces that — keep the prose safe for whoever takes the stool next.
 function _standRegular(id) {
   if (id === "cream" && typeof _chamDrink === "function") { _chamDrink(); return; } // a civilian, not a rail regular
-  if (G.money < BEER_PRICE) {
-    _say(`A bottle for ${id ? _regularName(id) : "the regular"} runs ฿${BEER_PRICE}; you have ฿${G.money}.`);
+  if (G.money < _beerPrice()) {
+    _say(`A bottle for ${id ? _regularName(id) : "the regular"} runs ฿${_beerPrice()}; you have ฿${G.money}.`);
     return;
   }
-  G.money -= BEER_PRICE;
+  G.money -= _beerPrice();
   const who = id ? _regularName(id) : "the regular";
   if (G.soc.patronMiffed[G.room]) {
     delete G.soc.patronMiffed[G.room];
@@ -3984,10 +3984,10 @@ const _SNIPE_LINES = [
 // A lady drink leaves your pocket; at the bar you OWN it also rings INTO your own
 // till, instead of vanishing from the economy (Ronnie, 2026-08-26).
 function _ladyDrinkCharge(id) {
-  G.money -= LADY_DRINK;
+  G.money -= _ladyPrice();
   // a drink buys one telling in full — the brush-off pools promise it (see _deliver)
   if (id) (G.soc.roundFor = G.soc.roundFor || {})[id] = G.turns;
-  if (typeof _atOwnBar === "function" && _atOwnBar() && G.bar) G.bar.cash += LADY_DRINK;
+  if (typeof _atOwnBar === "function" && _atOwnBar() && G.bar) G.bar.cash += _ladyPrice();
 }
 
 function _doBuy(arg) {
@@ -4237,13 +4237,13 @@ function _doBuy(arg) {
       _checkDrunk();
       return;
     }
-    if (G.money < BEER_PRICE) { _say(_fmt("A big bottle is ฿{p} here. You have ฿{m}. The cashier's calculator stays in the drawer.", { p: BEER_PRICE, m: G.money })); return; }
+    if (G.money < _beerPrice()) { _say(_fmt("A big bottle is ฿{p} here. You have ฿{m}. The cashier's calculator stays in the drawer.", { p: _beerPrice(), m: G.money })); return; }
     // standing a beer to the rail regular — the generic word, or a named male
     // regular present ("buy terry a beer" → Terry gets it, not you).
     const beerName = arg.replace(/\b(buy|order|get|a|an|the|beer|chang|leo|singha|bottle|for|him)\b/g, " ").trim();
     const regId = _regularHere(beerName);
     if (/patron|regular|expat|him|guy|bloke/.test(arg) || regId) { _standRegular(regId); return; }
-    G.money -= BEER_PRICE;
+    G.money -= _beerPrice();
     G.soc.drunk++;
     G.thirst = Math.max(0, G.thirst - 20);
     const d = G.soc.drunk;
@@ -4277,7 +4277,7 @@ function _doBuy(arg) {
     if (!nameW && girlsHere.length) {
       _say(_fmt("A drink for who? Yours is a BEER (\u0e3f{b}); hers is \u0e3f{l} and goes on " +
         "her tally. (BUY BEER \u00b7 BUY WATER \u00b7 BUY DRINK FOR {who})",
-        { b: BEER_PRICE, l: LADY_DRINK, who: _npcLabel(girlsHere[0]) }), "dim");
+        { b: _beerPrice(), l: _ladyPrice(), who: _npcLabel(girlsHere[0]) }), "dim");
       return;
     }
     const id = nameW ? _findNpc(nameW) : girlsHere[0];
@@ -4299,7 +4299,7 @@ function _doBuy(arg) {
       } else _say("Nobody here to buy one for.");
       return;
     }
-    if (G.money < LADY_DRINK) { _say(_fmt("Lady drinks are ฿{p}. You have ฿{m}. The math is not on your side.", { p: LADY_DRINK, m: G.money })); return; }
+    if (G.money < _ladyPrice()) { _say(_fmt("Lady drinks are ฿{p}. You have ฿{m}. The math is not on your side.", { p: _ladyPrice(), m: G.money })); return; }
     // At the bar you OWN, the drink rings through your OWN till instead of
     // vanishing (Ronnie, 2026-08-26: ฿150 left the pocket, credited ฿0, gone from
     // the ecosystem). _ladyDrinkCharge does both sides.
@@ -8333,7 +8333,18 @@ function _shareCard() {
     `🚌 THE LAST BAHT BUS — Soi 6 (${label})`,
     `🌙 ${nights}`,
     ...(social ? [social] : []),
-    `สนุก ${G.happy}${G.happy >= 100 ? " ★ สบายสบาย" : ""} · ฿${_num(G.money)} in pocket` +
+    // AN ANCHOR, because a bare number is not a score anyone can read. "Wordle's
+    // 3/6 works because everyone knows the range. สนุก 134 tells you and me
+    // nothing — is that good? I had no idea until the game said so at the very
+    // end" (round 24, Jojo, who does the daily puzzle on the tram). So the card
+    // carries your own previous best, which is the only comparison a daily
+    // player actually competes against, and it is already tracked.
+    //
+    // The pocket figure went with it: "฿9,085 in pocket is not a brag, it's
+    // leftover cash and it clutters the line." She is right — the score is
+    // สนุก; money is what you spent it on.
+    `สนุก ${G.happy}${G.happy >= 100 ? " ★ สบายสบาย" : ""}` +
+      (G.bestHappy > G.happy ? ` (best ${G.bestHappy})` : G.bestHappy && G.happy >= G.bestHappy ? " — new best" : "") +
       (done ? " · week complete" : ` · night ${Math.min(G.day, 7)}/7`),
     "soisanuk.github.io/last-baht-bus",
   ];

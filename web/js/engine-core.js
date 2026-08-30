@@ -2401,3 +2401,15 @@ function _tick() {
   }
 }
 
+
+// The two drink prices, by venue class. The constants stay the BASE (a beer bar
+// is ×1), so every existing quote reads the same in the bars the game was
+// balanced in, and the chrome costs what chrome costs. Both round to ฿10 —
+// nobody on this soi quotes ฿87.
+function _drinkMult(room) {
+  const r = ROOMS[room || G.room];
+  const t = r && r.barType;
+  return (typeof DRINK_MULT !== "undefined" && DRINK_MULT[t]) || 1;
+}
+function _beerPrice(room) { return Math.round(BEER_PRICE * _drinkMult(room) / 10) * 10; }
+function _ladyPrice(room) { return Math.round(LADY_DRINK * _drinkMult(room) / 10) * 10; }

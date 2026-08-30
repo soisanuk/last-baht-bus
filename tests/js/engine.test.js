@@ -682,7 +682,10 @@ test("SAY <phrase> TO <person> aims the greeting at one target", () => {
   assert.ok(!state().flags.waiedOy, "the room-wide unlock did NOT fire");
   // thao rai to a bar girl gets the lady-drink quote, not a bus fare
   run("say thao rai to ploy");
-  assert.match(lastOut(), new RegExp(String(150)));
+  // …at THIS bar's price. Drinks tier by venue class since round 24 (a go-go's
+  // beer is the whole reason a go-go can afford the chrome), so the literal
+  // would pin the beer-bar rate in a go-go.
+  assert.match(lastOut(), new RegExp(String(_ladyPrice("rainbow_girls"))));
   // aiming at nobody present is a graceful miss
   out = [];
   run("say sawatdee to gary");
@@ -2091,6 +2094,10 @@ test("sponsor drip: a single lump sum still delivers every newly-crossed frame, 
 
 test("bar etiquette: a girl with another customer declines your lady drink; insist and he turns", () => {
   state().stage = "vacation"; state().room = "pink_lotus"; state().money = 5000;
+  // Price the drink from the room the test SETS, not from wherever the player
+  // ends up: an encounter or a kick-out between the two offers can move him,
+  // and reading state().room after the fact made this flake one run in three.
+  const price = _ladyPrice("pink_lotus");
   let busy;
   for (let nt = 20; nt <= 55 && !busy; nt += 10) {
     state().nightTurn = nt;
@@ -2103,7 +2110,7 @@ test("bar etiquette: a girl with another customer declines your lady drink; insi
   assert.equal(state().money, 5000, "no money moves");
   // insist: she takes it, and her customer starts to turn
   out = []; run("buy drink for " + NPCS[busy].name);
-  assert.equal(state().money, 4850, "the second one she takes");
+  assert.equal(state().money, 5000 - price, "the second one she takes");
   assert.match(lastOut(), /the man beside/i, "you've bought his whole attention");
 });
 

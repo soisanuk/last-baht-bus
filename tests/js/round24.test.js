@@ -306,3 +306,79 @@ test("BOOKS and the ending agree about what the room became", () => {
   out = []; doCommand("draw 500");
   assert.match(text(), /There was\./, "and DRAW speaks to a man who HAD a till");
 });
+
+// ── the second-order items ────────────────────────────────────────────────
+
+test("a drink costs what the room costs", () => {
+  // Barfines already tiered — Gold Rush ST ฿600 against a Soi 6 ฿1,150 — which
+  // made ฿80 a beer and ฿150 a lady drink in a beer bar, a Soi 6 bar AND a
+  // Walking Street go-go conspicuous. "A go-go's beer is the whole reason a
+  // go-go can afford the chrome" (round 24, Keith).
+  const beer = r => _beerPrice(r), lady = r => _ladyPrice(r);
+  const beerBar = Object.keys(ROOMS).find(r => ROOMS[r].barType === "beer");
+  const gogo = Object.keys(ROOMS).find(r => ROOMS[r].barType === "gogo");
+  const soi6 = Object.keys(ROOMS).find(r => ROOMS[r].barType === "soi6");
+  assert.equal(beer(beerBar), BEER_PRICE, "the beer bar is the baseline the game was balanced in");
+  assert.equal(lady(beerBar), LADY_DRINK);
+  assert.ok(beer(gogo) > beer(soi6), "a go-go charges more than a Soi 6 bar");
+  assert.ok(beer(soi6) > beer(beerBar), "…which charges more than a beer bar");
+  assert.ok(lady(gogo) > lady(beerBar));
+  for (const r of [beerBar, gogo, soi6]) {
+    assert.equal(beer(r) % 10, 0, "nobody on this soi quotes ฿87");
+    assert.equal(lady(r) % 10, 0);
+  }
+});
+
+test("the quote and the charge are the same number", () => {
+  // The prices are interpolated into pooled prose, so a helper that only fixed
+  // the charge would have the girl quote one figure and the till take another.
+  const gogo = Object.keys(ROOMS).find(r => ROOMS[r].barType === "gogo");
+  sandbox();
+  G.room = gogo; G.nightTurn = 30; G.money = 9000;
+  const girl = _npcsHere().find(id => NPC_ROLES[id] === "hostess");
+  if (!girl) return;
+  const before = G.money;
+  out = [];
+  doCommand("buy drink for " + NPCS[girl].name);
+  const spent = before - G.money;
+  if (!spent) return;                       // she declined; not this test's business
+  assert.equal(spent, _ladyPrice(gogo), "the till takes the venue price");
+  assert.match(text(), new RegExp(String(spent)), "and the prose quotes the same one");
+});
+
+test("the share card gives the score something to be measured against", () => {
+  // "Wordle's 3/6 works because everyone knows the range. สนุก 134 tells you
+  // and me nothing — is that good?" (round 24, Jojo). And: "฿9,085 in pocket is
+  // not a brag, it's leftover cash and it clutters the line."
+  sandbox();
+  G.mode = "soi6"; G.day = 8; G.nightLog = ["barfine", "sleep", "dawn"];
+  G.happy = 134; G.bestHappy = 150;
+  let line = _shareCard().find(l => /สนุก/.test(l));
+  assert.match(line, /best 150/, "a previous best is the comparison a daily player has");
+  G.bestHappy = 100;
+  line = _shareCard().find(l => /สนุก/.test(l));
+  assert.match(line, /new best/, "and beating it is the thing worth posting");
+  G.bestHappy = 0;
+  line = _shareCard().find(l => /สนุก/.test(l));
+  assert.doesNotMatch(line, /best/, "a first run has nothing to compare to, and says nothing");
+  assert.ok(!_shareCard().some(l => /in pocket/.test(l)), "leftover cash is not a score");
+});
+
+test("the three Soi 6 men know each other, and the girl who runs his own bar", () => {
+  // "Roy, Rob and Barry drink in three adjacent bars and are total strangers to
+  // one another and to their own bars' mamasans." Barry offers to introduce you
+  // to the girls and could not discuss the one who runs his own front stools.
+  const PAIRS = [["barry", "wilai"], ["wilai", "barry"], ["barry", "roy"],
+                 ["roy", "barry"], ["rob", "barry"]];
+  for (const [who, about] of PAIRS) {
+    sandbox();
+    G.room = _npcWhere(who) || NPCS[who].room; G.nightTurn = 30;
+    if (!_npcsHere().includes(who)) continue;
+    doCommand("talk to " + who);
+    out = [];
+    doCommand(`ask ${who} about ${about}`);
+    assert.doesNotMatch(text(), /pay grade|Not my department|Not my story|Search me|wrong girl/i,
+      `${who} still has nothing to say about ${about}`);
+    assert.ok(text().length > 140, `${who} on ${about} is a real answer`);
+  }
+});
