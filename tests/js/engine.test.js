@@ -137,6 +137,7 @@ test("unknown command doesn't consume a turn", () => {
 });
 
 test("examine NPC and item", () => {
+  state().nightTurn = 20; // past Nok's first-hour evening feed at jomtien_beach
   run("s", "x nok");
   assert.match(lastOut(), /vendor/i);
   run("x receipt");
@@ -457,6 +458,7 @@ test("every exit key walks: pub, up/down/u/d, hotel — GO accepts what Exits li
 test("the bus stop and Nok's glass trade advertise themselves tappably", () => {
   // (RIDE BUS TO <place>) is a CAPS hint now — the last keyboard-only steps
   // of the opening funnel got tap paths.
+  state().nightTurn = 20; // past Nok's first-hour evening feed at jomtien_beach
   run("e", "n"); // up to the Jomtien bus stop (the beach road middle)
   assert.match(lastOut(), /\(RIDE BUS TO <place>\)/);
   // holding a bottle near Auntie Nok surfaces (SELL BOTTLES)
@@ -469,6 +471,7 @@ test("the bus stop and Nok's glass trade advertise themselves tappably", () => {
 
 test("READ SIGN reads Auntie Nok's cart sign — her blurb's promise is cashed", () => {
   // her desc says "a hand-lettered sign… ฿5 per returned bottle"; READ SIGN must honor it
+  state().nightTurn = 20; // past her first-hour evening feed at jomtien_beach — she's at her cart
   state().room = NPCS.nok.room;
   out = []; run("read sign");
   assert.match(out.join("\n"), /five baht|฿5|ขวด/, "the cart sign is readable where she stands");
@@ -479,7 +482,7 @@ test("READ SIGN reads Auntie Nok's cart sign — her blurb's promise is cashed",
 });
 
 test("GIVE bottles to Nok is just selling them — including the natural plural", () => {
-  state().flags.act1Done = true; state().room = NPCS.nok.room;
+  state().flags.act1Done = true; state().nightTurn = 20; state().room = NPCS.nok.room;
   // the strict give-item matcher chokes on "bottles" (items are singular
   // "bottle"), so a bottle-ish give to the buyer routes straight to the sale
   for (const phrase of ["give bottles to nok", "give bottle to nok", "give glass to nok"]) {
@@ -540,6 +543,7 @@ test("charging needs charger and outlet", () => {
 // ── Gossip chain & puzzles ─────────────────────────────────────────────────
 
 test("re-talking gives the terse gist, not the full spiel again", () => {
+  state().nightTurn = 20; // past Nok's first-hour evening feed at jomtien_beach
   state().room = "jomtien_soi_7_beach_end";
   run("talk to nok");
   const first = lastOut();
@@ -552,6 +556,48 @@ test("re-talking gives the terse gist, not the full spiel again", () => {
   assert.doesNotMatch(again, /Three, four along the sand/);    // spiel dropped
   assert.doesNotMatch(again, /สวัสดี/);                   // greeting dropped on repeat
   assert.ok(state().talked.nok.length); // the seen ledger persisted
+});
+
+test("Auntie Nok's evening feed is a recurring, checkable fact of the world — not just the wake-up scene (Mario's catch, round 32)", () => {
+  // Her own dialogue claims "morning AND night, ten year" — that's a promise
+  // about every day, not a one-off excuse for the scripted encounter. Revisit
+  // the beach at 18:00 on a much later day, and she should genuinely be there.
+  state().day = 4; state().nightTurn = 0; // 18:00, three days after the opening
+  state().room = "jomtien_beach";
+  assert.equal(_npcRoom("nok"), "jomtien_beach", "she's really here, not just narratively placed once");
+  assert.ok(_npcsHere().includes("nok"), "and the room's own presence check agrees");
+  out = []; run("talk to nok");
+  assert.doesNotMatch(lastOut(), /isn't around|isn't at this/i, "reachable, not an elsewhere-line");
+  // Past the hour, she's back at her usual pitch — once the conversation that
+  // was freezing her clock has actually ended (bye), not just live-jumped.
+  run("bye"); state().convo = null;
+  state().nightTurn = 15;
+  assert.equal(_npcRoom("nok"), "jomtien_soi_7_beach_end", "and gone again once the feed is done");
+  // A conversation that started IN her window survives the clock ticking
+  // past it — the same freeze _hopRoom already uses for drifting regulars,
+  // so a long first chat doesn't have her vanish mid-sentence.
+  state().day = 5; state().nightTurn = 3; state().room = "jomtien_beach"; state().convo = null;
+  run("talk to nok");
+  assert.equal(state().convo, "nok", "premise: a live conversation");
+  state().nightTurn = 25; // jump well past her window, mid-conversation
+  assert.equal(_npcRoom("nok"), "jomtien_beach", "frozen to the hour the conversation started, not the live clock");
+  assert.equal(_convoActive(), "nok", "the conversation itself survives the jump");
+});
+
+test("SELL BOTTLES honours READ SIGN's promise wherever Nok actually stands (Mario's catch, round 32)", () => {
+  // READ SIGN already said "she buys where she stands" and checked her real
+  // position (_npcsHere) — but _doSellBottles checked her STATIC .room field,
+  // so at the exact moment she's visibly at jomtien_beach for the evening
+  // feed, trying to actually sell to her refused "no bottle buyer here" while
+  // she was standing right there.
+  state().day = 6; state().nightTurn = 2; state().room = "jomtien_beach";
+  state().itemLoc.bottle1 = "inventory";
+  out = []; run("read sign");
+  assert.match(out.join("\n"), /SELL BOTTLES here/i, "the sign promises it works here");
+  const before = state().money;
+  out = []; run("sell bottles");
+  assert.doesNotMatch(out.join("\n"), /No bottle buyer here/i, "and the promise is kept");
+  assert.equal(state().money, before + 5, "the sale actually goes through");
 });
 
 test("a flavour entry with no short brushes off on repeat (terseness consistency)", () => {
@@ -834,7 +880,7 @@ test("Auntie Nok closes the ฿5 gap when the phone is dead — the opening's on
   // and the light that reaches the third is the same battery as the phone that
   // calls Tan. Spend the torch and you bank ฿10 against a ฿15 fare, stranded
   // south of the bay with nothing telling you the night is already lost.
-  state().flags.act1Done = false; state().stage = "act1";
+  state().flags.act1Done = false; state().stage = "act1"; state().nightTurn = 20;
   state().room = NPCS.nok.room; state().money = 0; state().battery = 0;
   state().itemLoc.bottle1 = "inventory"; state().itemLoc.bottle3 = "inventory";
   run("sell bottles");            // two lit bottles = ฿10, and the fare is ฿15
@@ -843,7 +889,7 @@ test("Auntie Nok closes the ฿5 gap when the phone is dead — the opening's on
   // …and she does not do it for a player who still has a phone to call Tan with
   newGame();
   state().player.origin = "monger"; state().player.personality = "joker";
-  state().flags.act1Done = false; state().stage = "act1";
+  state().flags.act1Done = false; state().stage = "act1"; state().nightTurn = 20;
   state().room = NPCS.nok.room; state().money = 0; state().battery = 13;
   state().itemLoc.bottle1 = "inventory";
   run("sell bottles");
@@ -2617,6 +2663,7 @@ test("buying your own beers raises the drunk counter", () => {
 });
 
 test("street kisses end badly — except for the katoey", () => {
+  state().nightTurn = 20; // past Nok's first-hour evening feed at jomtien_beach
   run("s", "kiss nok");
   assert.match(lastOut(), /THWACK|flip-flop/i);
   state().room = "beach_rd_c";
@@ -3654,13 +3701,15 @@ test("the intro orients a brand-new player through Auntie Nok, then hands off to
   assert.equal(state().convo, "nok", "the conversation is genuinely open, not just printed text");
   const chips = _chipSet().map(c => c.cmd);
   assert.ok(chips.some(c => /^ask (auntie )?nok about/.test(c)), "her real topics are on the chip bar");
-  // A real retry goes through _act1Fail's newGame() first, which wipes
-  // G.flags (including nokBeachScene) before act1Tries is restored — mimic
-  // that reset here rather than mutating the live state in place.
+  // A retry at the SAME hour still finds her there — the schedule is a real,
+  // checkable fact of the world, not just this one scripted moment — but the
+  // SCRIPTED arrival (her spoken greeting, the forced conversation) must not
+  // replay every failed attempt.
   state().act1Tries = 1;                      // once beaten, the orientation retires
-  out = []; state().convo = null; delete state().flags.nokBeachScene;
+  out = []; state().convo = null;
   engineIntro();
-  assert.doesNotMatch(lastOut(), /Auntie Nok/, "the beach-scene primer is a one-timer");
+  assert.doesNotMatch(lastOut(), /sleep on beach like soi dog|EXAMINE what's in your pockets/,
+    "the scripted arrival — her spoken greeting — is a one-timer");
   assert.notEqual(state().convo, "nok", "no forced conversation on a retry");
 });
 
@@ -7180,6 +7229,7 @@ test("lottery verb recites the draw when baked", () => {
 });
 
 test("look at <thing> aliases to examine; bare look still describes the room", () => {
+  state().nightTurn = 20; // past Nok's first-hour evening feed at jomtien_beach
   run("s", "look at nok");
   assert.match(lastOut(), /vendor/i);
   out = [];
@@ -7565,9 +7615,10 @@ test("addressing a known NPC who works elsewhere points you to her bar", () => {
 
 test("the 'elsewhere' line says 'around here', not 'this bar', when you're not in a bar", () => {
   // addressing Auntie Nok (a beach-cart vendor) from the open sand must not claim
-  // you're standing in a bar
+  // you're standing in a bar. Past her first-hour evening feed at jomtien_beach
+  // (round 32, 2026-08-31), or she'd genuinely BE here at the default nightTurn 0.
   state().known.nok = true;
-  state().room = "jomtien_beach";
+  state().room = "jomtien_beach"; state().nightTurn = 20;
   out = [];
   run("talk to auntie nok");
   assert.match(lastOut(), /Auntie Nok isn't around here tonight — try Soi 7 Sands/);

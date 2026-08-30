@@ -55,6 +55,7 @@ test("a session round-trips through a save string across contexts (cloud save)",
   assert.equal(later.state().room, "jomtien_beach_rd_s");
   assert.equal(later.state().itemLoc.bottle3, "inventory");
   later.send("w"); later.send("s"); // down to Auntie Nok at the Soi 7 beach end
+  later.state().nightTurn = 20; // past her first-hour evening feed at jomtien_beach
   later.send("sell bottles");
   assert.equal(later.state().money, 5, "play continues seamlessly");
 });

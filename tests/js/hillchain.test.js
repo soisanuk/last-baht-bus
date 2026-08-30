@@ -187,6 +187,10 @@ test("amulet: one piwin notice, once ever, and it explains nothing", () => {
 
 test("amulet: Nok takes it back and explains NOTHING; Mort explains, later", () => {
   onTheHill();
+  // Past 19:00 — her first-hour evening feed at jomtien_beach (round 32,
+  // 2026-08-31) would otherwise put her away from her own cart at the
+  // default nightTurn 0, and this scene is about her cart, not the beach.
+  G.nightTurn = 20;
   G.itemLoc.amulet = "inventory"; G.itemLoc.cord = "inventory"; say("wear amulet");
   out = []; G.room = "jomtien_beach"; _arriveAt("jomtien_soi_7_beach_end");
   assert.ok(_NOK_AMULET.some(l => out.join("\n").includes(l)), "she sees it");

@@ -4453,11 +4453,10 @@ const NPCS = {
     name: "Auntie Nok", th: "น้อยหน่า", emoji: "🥭",
     pronoun: "she",
     room: "jomtien_soi_7_beach_end",
-    // One-time relocation for the Act One wake-up scene — same declarative
-    // pattern _npcRoom already uses for Bert's ending (movesTo), scoped to a
-    // flag `_beachOpening` sets right before the scene and clears right after,
-    // so she's back at her usual pitch for every later interaction.
-    movesTo: { flag: "nokBeachScene", room: "jomtien_beach" },
+    // The first hour of every night (18:00-18:59) she's actually at
+    // jomtien_beach feeding the cats instead — see _npcRoom. Not a one-off:
+    // her own "cat" dialogue claims "morning and night, ten year", so this is
+    // a standing, checkable fact of the world, not just the wake-up scene.
     desc: "A drinks-cart vendor with a cooler of everything and opinions to match. " +
       "A hand-lettered sign on the cart offers ฿5 per returned bottle.",
     dialogue: [
@@ -4484,8 +4483,8 @@ const NPCS = {
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Oh, you awake! You sleep on beach like soi dog, hahaha.\" She sets down a little " +
           "bowl — the cats appear before it even touches the sand, ranking her over you without a " +
-          "flicker of guilt. \"I come feed my two, every morning, ten year — and today, you, " +
-          "instead.\" Not unkind, just filing it away. \"No wallet, no money? Ui. Look what you " +
+          "flicker of guilt. \"I come feed my two, morning AND night, ten year — and tonight, " +
+          "you, instead.\" Not unkind, just filing it away. \"No wallet, no money? Ui. Look what you " +
           "still HAVE, tilac — small things matter more than they look. Ask around, too — this " +
           "town, everybody see everything, somebody always talk.\" She taps the sign on her cart. " +
           "\"Bring bottle, I give five baht. Three, four along the sand most nights — farang leave " +

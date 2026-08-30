@@ -3810,9 +3810,18 @@ function _doSellBottles(arg) {
   // is a separate room off the sand. A broke player following this line walked
   // the whole soi and found nobody (churner playtest 2026-08-23; third sighting
   // in this corner of the map, after rounds 8 and 12).
-  if (G.room !== NPCS.nok.room) {
-    _say("No bottle buyer here. Auntie Nok's cart is at " + ROOMS[NPCS.nok.room].name +
-      " — out on the sand itself at the foot of Jomtien Soi 7, not on the soi. (The Jomtien one, not Pattaya's.)");
+  //
+  // Read _npcRoom, not her static .room — during her first-hour evening feed
+  // (round 32, 2026-08-31) she's genuinely standing at jomtien_beach, visible
+  // and talkable, and this used to refuse "no bottle buyer here" at the exact
+  // moment she was in front of the player (Mario's catch: she buys wherever
+  // SHE actually is, not just her usual pitch).
+  const nokRoom = _npcRoom("nok");
+  if (G.room !== nokRoom) {
+    _say(nokRoom === "jomtien_beach"
+      ? "No bottle buyer here. Auntie Nok's down at the beach herself right now, feeding the cats — try there."
+      : "No bottle buyer here. Auntie Nok's cart is at " + ROOMS[nokRoom].name +
+        " — out on the sand itself at the foot of Jomtien Soi 7, not on the soi. (The Jomtien one, not Pattaya's.)");
     return;
   }
   const bottles = _inv().filter(id => ITEMS[id].bottle);
@@ -8516,19 +8525,19 @@ function _beachOpening(withTitle) {
   // paragraph in an already-unbroken wall (Priya's cold-onboarding playtest,
   // round 32, 2026-08-30: she read the whole opening as one text dump with no
   // interaction until the very last line, and never discovered tap/CAPS words
-  // on her own). First attempt only: Auntie Nok — who feeds the beach cats
-  // right here every morning, and whose own "cat" dialogue already calls them
-  // her early-warning system — finds the player instead of the tip explaining
-  // things. Driven as a REAL conversation (_doTalkBody, not scripted text), so
-  // the chip bar populates with her actual topics and the tap interface
-  // teaches itself. The flag clears itself in _tick once the player leaves
-  // jomtien_beach (see there) — not here, or the conversation _doTalkBody just
-  // opened would read as already over on the player's very first command.
+  // on her own). First attempt only: Auntie Nok — who is actually AT
+  // jomtien_beach for the first hour of every night (18:00-18:59; see
+  // _npcRoom), feeding the cats she calls her early-warning system — finds
+  // the player instead of the tip explaining things. Driven as a REAL
+  // conversation (_doTalkBody, not scripted text), so the chip bar populates
+  // with her actual topics and the tap interface teaches itself. The clock is
+  // deterministic here (a fresh newGame() always resets nightTurn to 0), so
+  // this always lands in her window, matching the room's own "sunset
+  // bleeding into the sea" a few lines below.
   if (!G.act1Tries && !_flag("act1Done")) {
-    _say("Feet in the sand, unhurried, and the rattle of a little bowl. Auntie Nok, out to " +
-      "feed her two before the heat gets up, stops dead at the sight of you — a farang-shaped " +
+    _say("Feet in the sand, unhurried, and the rattle of a little bowl. Auntie Nok, out for the " +
+      "evening feed before the light goes, stops dead at the sight of you — a farang-shaped " +
       "lump exactly where Big One usually sits.", "dim");
-    G.flags.nokBeachScene = true;
     _doTalkBody("nok");
   }
   if (G.act1Best > 0)

@@ -713,7 +713,7 @@ test("WAIT stops when the world moves you; a pending question is redrawn on resu
 });
 
 test("poverty: SELL points at Jomtien, the pity ride is a sandbox mercy, CHECKOUT settles the book first, TIP 0 refused, BEG is voiced", () => {
-  G.room = "second_rd_c"; out = [];
+  G.room = "second_rd_c"; G.nightTurn = 20; out = []; // past Nok's first-hour evening feed at jomtien_beach
   doCommand("sell phone"); assert.match(text(), /glass/); assert.doesNotMatch(text(), /No bottle buyer/);
   // The pointer must name the ROOM she is in, not the soi it is near: "the beach
   // end of Jomtien Soi 7" describes the soi's west end and she is not there, so

@@ -597,6 +597,18 @@ function _npcRoom(id) {
   if (n.bars && n.bars.length) return n.bars[G.day % n.bars.length];
   // Glam's escorted evening — home bar early, wheeled across after 22:00.
   if (n.shuttle) return _nightHour() >= n.shuttle.after ? n.shuttle.to : n.room;
+  // Auntie Nok's evening feed: her own dialogue says "morning AND night, ten
+  // year" — the morning half is outside the simulated clock entirely (the
+  // night runs 18:00-04:00), but the evening half is a recurring, checkable
+  // fact of the world, not just the one scripted wake-up scene. First hour of
+  // every night (18:00-18:59), she's at jomtien_beach with the cats; frozen to
+  // the hour a conversation STARTED at (same idiom as _hopRoom, below) so a
+  // long first chat with her doesn't have her vanish mid-sentence the moment
+  // the clock ticks past 19:00.
+  if (id === "nok") {
+    const hour = (G.convo === id && G.convoHour != null) ? G.convoHour : _nightHour();
+    if (hour === 0) return "jomtien_beach";
+  }
   // A character the WORLD moved. Declarative, because the alternative is a
   // special case in _npcRoom per character: {flag, room}, and when the flag is
   // set that is simply where they are now. Today it is Bert after the bar goes
@@ -2239,15 +2251,6 @@ function _tick() {
   if (typeof _questTick === "function") _questTick();
   G.turns++;
   G.nightTurn++;
-  // Auntie Nok's one-time beach-scene presence (_beachOpening, movesTo above)
-  // clears itself the first tick the player is no longer standing in
-  // jomtien_beach — so the conversation the opening starts can carry on
-  // naturally for as long as the player stays and chats, but she's back at
-  // her usual pitch the moment they walk off (never clearing it immediately
-  // killed the conversation before the player's first command: _convoActive
-  // checks _npcsHere() live, and _npcRoom reverting mid-scene made her read
-  // as already gone).
-  if (G.flags.nokBeachScene && G.room !== "jomtien_beach") delete G.flags.nokBeachScene;
   // a torch still burning in a go-go escalates; `mark` spends this command's
   // entry/toggle warning so one command never counts twice
   if (G.lightWarn.mark) G.lightWarn.mark = false;

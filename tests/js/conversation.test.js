@@ -622,6 +622,10 @@ test("subjects a character volunteers about themselves resolve", () => {
   ];
   for (const [who, room, topic, want] of cases) {
     newGame(); G.stage = "expat"; _setFlag("act1Done"); _setFlag("expatLife");
+    // Past Nok's first-hour evening feed at jomtien_beach (round 32,
+    // 2026-08-31) — at the default nightTurn 0 she'd genuinely be away from
+    // her own cart, which every other row in this matrix doesn't care about.
+    G.nightTurn = 20;
     G.room = room; G.pendingEnc = null;
     out = []; doCommand("talk to " + who);
     out = []; G.pendingEnc = null; doCommand("ask " + who + " about " + topic);
