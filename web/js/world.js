@@ -4453,6 +4453,11 @@ const NPCS = {
     name: "Auntie Nok", th: "น้อยหน่า", emoji: "🥭",
     pronoun: "she",
     room: "jomtien_soi_7_beach_end",
+    // One-time relocation for the Act One wake-up scene — same declarative
+    // pattern _npcRoom already uses for Bert's ending (movesTo), scoped to a
+    // flag `_beachOpening` sets right before the scene and clears right after,
+    // so she's back at her usual pitch for every later interaction.
+    movesTo: { flag: "nokBeachScene", room: "jomtien_beach" },
     desc: "A drinks-cart vendor with a cooler of everything and opinions to match. " +
       "A hand-lettered sign on the cart offers ฿5 per returned bottle.",
     dialogue: [
@@ -4464,9 +4469,30 @@ const NPCS = {
         text: "\"Ahh, you back!\" Auntie Nok waves a mango knife in welcome. \"Not sleep on beach tonight, na? Good. " +
           "You want water, mango? Mango very sweet today — I not say that every day.\"",
         short: "\"You back! Mango very sweet today.\"" },
+      // The discovery beat AND the interface primer, folded into one scene —
+      // she finds him while feeding the cats she already, in her own "cat"
+      // topic below, calls her early-warning system ("nobody sleep rough on
+      // MY beach the cats don't tell me first"). Replaces the old meta-tip
+      // parenthetical "(New here? Turn out your pockets...)", which taught
+      // the same four verbs as narration ABOUT the game instead of dialogue
+      // IN it — a cold first-timer read the whole opening as one uninterrupted
+      // wall with no interaction until the very last line (Priya's cold-
+      // onboarding playtest, round 32, 2026-08-30). `_beachOpening` now drives
+      // this node as a real conversation (not scripted text), so the chip bar
+      // populates with her actual topics right here — the tap interface
+      // teaches itself instead of being explained.
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
-        text: "\"Oh, you awake! You sleep on beach like soi dog, hahaha. You want water? No money? Ui!\" She taps the sign on her cart. \"Bring bottle, I give five baht. Three, four along the sand most nights — farang leave everything.\"",
-        short: "\"Bring bottle, I give five baht.\"" },
+        text: "\"Oh, you awake! You sleep on beach like soi dog, hahaha.\" She sets down a little " +
+          "bowl — the cats appear before it even touches the sand, ranking her over you without a " +
+          "flicker of guilt. \"I come feed my two, every morning, ten year — and today, you, " +
+          "instead.\" Not unkind, just filing it away. \"No wallet, no money? Ui. Look what you " +
+          "still HAVE, tilac — small things matter more than they look. Ask around, too — this " +
+          "town, everybody see everything, somebody always talk.\" She taps the sign on her cart. " +
+          "\"Bring bottle, I give five baht. Three, four along the sand most nights — farang leave " +
+          "everything.\" (EXAMINE what's in your pockets. QUESTS shows what you're up against. TALK " +
+          "to people and ASK them about your wallet — the soi always knows. HELP lists everything, " +
+          "any time.)",
+        short: "\"You sleep on beach like soi dog! I come feed my two, find you instead. Look what you still have, ask around — the soi always knows.\"" },
       { topic: "wallet", text: "\"Wallet gone? Beach at night, tilac. You lucky they leave your shoes. Go town, ask the bar ladies — nothing happen in Pattaya they don't know.\"" },
       { topic: "bus", text: "\"Baht bus fifteen baht now. Used to be ten! Iran war, petrol crazy. Everybody complain, everybody still ride. Stop just north, na — up the beach road, blue trucks, cannot miss.\"",
         short: "\"Baht bus fifteen baht. Stop just north, up the beach road.\"" },

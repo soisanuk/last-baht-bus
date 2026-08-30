@@ -148,11 +148,8 @@ const _CATALOGS = {
       "Deine Brieftasche ist WEG. Dein Handy zeigt 13% Akku. Dein Hotel ist in Naklua — am anderen Ende der Stadt. Der Baht-Bus kostet ฿{f} pro Kopf.",
     "You have ฿0.": "Du hast ฿0.",
     "It's going to be one of those nights.": "Es wird eine von diesen Nächten.",
-    "(New here? Turn out your pockets — INVENTORY, then EXAMINE what you find — and check what you're up against with QUESTS. The rest, the soi teaches: TALK to people and ASK them about your wallet. HELP lists everything.)":
-      "(Neu hier? Leer deine Taschen — INVENTORY, dann EXAMINE, was du findest — und sieh mit QUESTS, was dir bevorsteht. Den Rest bringt dir die Soi bei: TALK mit Leuten und ASK sie nach deiner Brieftasche. HELP zeigt alles.)",
     "The soi remembers your face now. If the night goes quiet, ask it: (HINT)":
       "Die Soi kennt jetzt dein Gesicht. Wenn die Nacht still wird, frag sie: (HINT)",
-    "(Type HELP for commands.)": "(Tippe HELP für die Befehle.)",
 
     // ── room scaffolding labels (the frame around every LOOK) ────────────────
     // Only the label word is translated; the direction/venue/command tokens after

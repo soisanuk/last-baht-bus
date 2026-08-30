@@ -6557,7 +6557,14 @@ const _COMPLETE_VERBS = [
 // returns each turn (the same rule the parser, wheel, and autocomplete consume).
 function _chipSet() {
   const chips = [];
-  const add = (cmd, label) => chips.push({ cmd, label: label || cmd });
+  // `kind` is presentation metadata a chip can carry — term.js styles a
+  // "reply" chip (your own quoted words, answering HER pending question)
+  // distinctly from an ordinary command/topic chip. Without it the two groups
+  // rendered identically and back to back, e.g. "First time in this one" and
+  // "Money"/"Plan" side by side with nothing marking one as an answer and the
+  // other as a new question — a cold first-timer read them as one undivided
+  // list (Priya's cold-onboarding playtest, round 32, 2026-08-30).
+  const add = (cmd, label, kind) => chips.push({ cmd, label: label || cmd, kind });
 
   // 1) A pending modal owns the input — offer only its answers
   if (G.pendingChoice === "intro") {
@@ -6687,12 +6694,12 @@ function _chipSet() {
     // touch player has something to SAY rather than only ways to change the
     // subject (topics still follow — dodging stays a legitimate move).
     if (G.convoQ && G.convoQ.id === partner) {
-      for (const t of _askReplies(G.convoQ.key)) add(t, `“${t}”`);
+      for (const t of _askReplies(G.convoQ.key)) add(t, `“${t}”`, "reply");
     }
     // Beat-specific action-choices the partner just offered come first (the
     // "player's side" of the exchange); they crowd out most of the topic list.
     const acts = _convoChoices();
-    for (const c of acts.slice(0, 3)) add(c.label.toLowerCase(), c.label);
+    for (const c of acts.slice(0, 3)) add(c.label.toLowerCase(), c.label, "reply");
     // A BARE TOPIC AS THE CHIP'S COMMAND IS AMBIGUOUS. doCommand's verb switch
     // runs long before the conversation layer gets to resolve a bare word, so any
     // topic that is also a global verb fired the verb instead: tapping Auntie
@@ -8503,10 +8510,27 @@ function _beachOpening(withTitle) {
     "the whole town away. The baht bus is ฿{f} a head.", { f: BUS_FARE }));
   _say("You have ฿0.");
   _say("It's going to be one of those nights.", "alert");
-  if (!G.act1Tries && !_flag("act1Done"))
-    _say("(New here? Turn out your pockets — INVENTORY, then EXAMINE what you find — " +
-      "and check what you're up against with QUESTS. The rest, the soi teaches: TALK to " +
-      "people and ASK them about your wallet. HELP lists everything.)", "dim");
+  // The interface primer used to be a meta-tip printed AT the player — "(New
+  // here? Turn out your pockets — INVENTORY, then EXAMINE...)" — narration
+  // ABOUT the game rather than anything happening IN it, delivered as one more
+  // paragraph in an already-unbroken wall (Priya's cold-onboarding playtest,
+  // round 32, 2026-08-30: she read the whole opening as one text dump with no
+  // interaction until the very last line, and never discovered tap/CAPS words
+  // on her own). First attempt only: Auntie Nok — who feeds the beach cats
+  // right here every morning, and whose own "cat" dialogue already calls them
+  // her early-warning system — finds the player instead of the tip explaining
+  // things. Driven as a REAL conversation (_doTalkBody, not scripted text), so
+  // the chip bar populates with her actual topics and the tap interface
+  // teaches itself. The flag clears itself in _tick once the player leaves
+  // jomtien_beach (see there) — not here, or the conversation _doTalkBody just
+  // opened would read as already over on the player's very first command.
+  if (!G.act1Tries && !_flag("act1Done")) {
+    _say("Feet in the sand, unhurried, and the rattle of a little bowl. Auntie Nok, out to " +
+      "feed her two before the heat gets up, stops dead at the sight of you — a farang-shaped " +
+      "lump exactly where Big One usually sits.", "dim");
+    G.flags.nokBeachScene = true;
+    _doTalkBody("nok");
+  }
   if (G.act1Best > 0)
     _say(`(Best run home so far: ${G.act1Best}/${_ACT1_MILESTONES.length} of the way ` +
       "back to 412. Do better — dawn is the deadline, and dawn does not wait.)", "dim");
@@ -8514,7 +8538,7 @@ function _beachOpening(withTitle) {
     _say("The soi remembers your face now. If the night goes quiet, ask it: (HINT)", "dim");
   _say("");
   _describeRoom(true);
-  _say("(Type HELP for commands.)", "dim");
+  _say("(HELP lists everything, any time.)", "dim");
 }
 
 // ── The taxi-ride intro ──────────────────────────────────────────────────────

@@ -2355,11 +2355,19 @@ function _leads() {
   }
   const unseen = Object.keys(all).filter(rg => !seen[rg] && rg !== "Myth Night");
   if (unseen.length) {
+    let where = unseen[Math.floor(_hh("leads" + G.day, 7) % unseen.length)];
+    // In soi6 mode, "Beach Road" is the pocket's OWN junction/beach corner
+    // (beach_rd_n, stinky_bar, blue_dog, north_beach — four fenced-IN rooms),
+    // not the wider off-limits district of the same name. Naming it bare
+    // read as the game pointing outside its own fence, right after telling
+    // the player "you're not leaving Soi 6 this trip" (Priya's cold-
+    // onboarding playtest, round 32, 2026-08-30: "But the opening explicitly
+    // said I'm not leaving Soi 6").
+    if (G.mode === "soi6" && where === "Beach Road") where = "the foot of the soi, down by the water";
     // No claim about how you'd get there: some of these are a walk, some a bus,
     // and the lead shouldn't guess. What IS reliably true is that the districts
     // do not look like each other.
-    out.push(_fmt("You have not set foot in {where} yet, and it looks nothing like this stretch.",
-      { where: unseen[Math.floor(_hh("leads" + G.day, 7) % unseen.length)] }));
+    out.push(_fmt("You have not set foot in {where} yet, and it looks nothing like this stretch.", { where }));
   }
   return out;
 }

@@ -2239,6 +2239,15 @@ function _tick() {
   if (typeof _questTick === "function") _questTick();
   G.turns++;
   G.nightTurn++;
+  // Auntie Nok's one-time beach-scene presence (_beachOpening, movesTo above)
+  // clears itself the first tick the player is no longer standing in
+  // jomtien_beach — so the conversation the opening starts can carry on
+  // naturally for as long as the player stays and chats, but she's back at
+  // her usual pitch the moment they walk off (never clearing it immediately
+  // killed the conversation before the player's first command: _convoActive
+  // checks _npcsHere() live, and _npcRoom reverting mid-scene made her read
+  // as already gone).
+  if (G.flags.nokBeachScene && G.room !== "jomtien_beach") delete G.flags.nokBeachScene;
   // a torch still burning in a go-go escalates; `mark` spends this command's
   // entry/toggle warning so one command never counts twice
   if (G.lightWarn.mark) G.lightWarn.mark = false;

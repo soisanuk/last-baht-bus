@@ -66,7 +66,7 @@ test("a German intro flows straight into a German beach opening", () => {
   // frozen, so this asserts the OPENING is localised, not the new bridge prose
   assert.match(o, /Tag zwei deiner Woche|Deine Brieftasche ist WEG/, "the beach opening is German");
   assert.match(o, /Du hast ฿0\./, "the ฿0 line is localised, ฿ kept");
-  assert.match(o, /INVENTORY/, "command tokens stay English (they're the real commands)");
+  assert.match(o, /EXAMINE/, "command tokens stay English (they're the real commands)");
 });
 
 test("the Soi 6 challenge opening renders in German", () => {

@@ -548,7 +548,7 @@ test("re-talking gives the terse gist, not the full spiel again", () => {
   out = [];
   run("talk to nok");
   const again = lastOut();
-  assert.match(again, /Bring bottle, I give five baht/); // the point
+  assert.match(again, /soi always knows/); // the point
   assert.doesNotMatch(again, /Three, four along the sand/);    // spiel dropped
   assert.doesNotMatch(again, /สวัสดี/);                   // greeting dropped on repeat
   assert.ok(state().talked.nok.length); // the seen ledger persisted
@@ -3641,15 +3641,27 @@ test("WHO AM I / IDENTITY report your character; the intro re-asks on nonsense",
   assert.equal(state().pendingChoice, "intro", "still waiting");
 });
 
-test("the intro orients a brand-new player, then hands off to the hint loop", () => {
+test("the intro orients a brand-new player through Auntie Nok, then hands off to the hint loop (Priya's cold-onboarding playtest, round 32)", () => {
+  // The old meta-tip "(New here? Turn out your pockets...)" was narration
+  // ABOUT the game; Auntie Nok finding the player while feeding the beach
+  // cats replaces it with a real conversation — the primer is now IN the
+  // fiction, and the chip bar should carry her actual topics afterward.
   out = [];
   engineIntro();                             // fresh game: act1Tries 0
-  assert.match(lastOut(), /New here\?.*INVENTORY.*QUESTS/s, "run one teaches the interface");
+  assert.match(lastOut(), /Auntie Nok/, "she's the one teaching the interface now");
+  assert.match(lastOut(), /EXAMINE.*QUESTS.*TALK.*ASK/s, "the same four verbs, in her voice");
   assert.doesNotMatch(lastOut(), /soi remembers|Best run home/, "no hint-loop chrome yet");
+  assert.equal(state().convo, "nok", "the conversation is genuinely open, not just printed text");
+  const chips = _chipSet().map(c => c.cmd);
+  assert.ok(chips.some(c => /^ask (auntie )?nok about/.test(c)), "her real topics are on the chip bar");
+  // A real retry goes through _act1Fail's newGame() first, which wipes
+  // G.flags (including nokBeachScene) before act1Tries is restored — mimic
+  // that reset here rather than mutating the live state in place.
   state().act1Tries = 1;                      // once beaten, the orientation retires
-  out = [];
+  out = []; state().convo = null; delete state().flags.nokBeachScene;
   engineIntro();
-  assert.doesNotMatch(lastOut(), /New here\?/, "the interface primer is a one-timer");
+  assert.doesNotMatch(lastOut(), /Auntie Nok/, "the beach-scene primer is a one-timer");
+  assert.notEqual(state().convo, "nok", "no forced conversation on a retry");
 });
 
 test("HINT is coy on the first run, then whispers the next step from round two", () => {
@@ -8098,6 +8110,19 @@ test("with nothing on the books, the game names what's actually open", () => {
   state().known = { bert: true }; state().room = "beach_rd_c";
   out = []; run("hint");
   assert.match(out.join("\n"), /What's open:|Talk to people/);
+});
+
+test("in soi6 mode, the unseen-region lead never names the wider 'Beach Road' bare (Priya's cold-onboarding playtest, round 32)", () => {
+  // The pocket's own junction/beach corner (beach_rd_n/stinky_bar/blue_dog/
+  // north_beach) shares its region label with the much wider, genuinely
+  // off-limits Beach Road district — so the lead used to read as pointing a
+  // player outside a fence the opening had JUST told them not to cross
+  // ("You're not leaving Soi 6 this trip").
+  startSoi6Mode({});
+  for (let d = 1; d <= 14; d++) {
+    state().day = d;
+    for (const line of _leads()) assert.doesNotMatch(line, /\bin Beach Road\b/, `day ${d}: bare district name leaked`);
+  }
 });
 
 // Collections get a denominator. All three existed and all three were

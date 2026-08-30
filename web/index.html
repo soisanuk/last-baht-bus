@@ -326,6 +326,20 @@
     cursor: pointer;
   }
   .chip:active { background: #1e0030; }
+  /* A "reply" chip is YOUR OWN quoted words — answering her pending question,
+     or the beat's own player-side choice — as opposed to an ordinary command/
+     topic chip. Pink like the transcript's own echoed lines (.t-echo), so the
+     two groups read as visually distinct without needing a header or divider:
+     cyan = something you could ASK or DO, pink = something you could SAY.
+     Fixes a cold first-timer reading a mixed reply+topic chip row as one
+     undivided list with no way to tell them apart (Priya's playtest, round 32,
+     2026-08-30). */
+  .chip-reply {
+    color: var(--pink);
+    border-color: #ff149360;
+    background: #1a0012;
+  }
+  .chip-reply:active { background: #2a0020; }
   #term-suggest {
     display: none;
     gap: .4rem;
@@ -946,7 +960,7 @@
       <div id="start-art-wrap" aria-hidden="true"><img alt=""><img alt=""></div>
       <button class="start-mode" data-mode="soi6">
         <span class="start-mode-title">SOI 6 CHALLENGE ★</span>
-        <span class="start-mode-desc">One week, one street. ฿100,000 and a hard head — max out your สนุก.</span>
+        <span class="start-mode-desc">One week, one street. ฿100,000 and a hard head — max out your สนุก (sanuk — fun).</span>
       </button>
       <button class="start-mode" data-mode="full" disabled>
         <span class="start-mode-title">THE FULL GAME</span>
@@ -960,7 +974,7 @@
         <li>You're <b>not leaving Soi 6</b> — the rest of Pattaya keeps for the full game.</li>
         <li><b>฿100,000</b> for the week in the bank; <b>฿1,000</b> in your pocket to start.</li>
         <li>Draw the rest at the <b>street ATM</b> — ฿300 a pull, ฿20,000 a day.</li>
-        <li class="start-goal">Goal: <b>สบายสบาย</b> — get happy, max out the week. ★</li>
+        <li class="start-goal">Goal: <b>สบายสบาย</b> (sabai sabai — total ease) — get happy, max out the week. ★</li>
         <li><b>TODAY'S SOI</b> deals everyone who plays it today the same week —
           finish, <b>SHARE</b> your card, compare. <b>START</b> rolls a week of your own.</li>
       </ul>

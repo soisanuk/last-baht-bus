@@ -793,9 +793,9 @@ const _term = (() => {
     if (!set) { try { set = typeof _chipSet === "function" ? _chipSet() : []; } catch (e) { set = []; } }
     if (!custom) set = _foldAtmChips(_dropCompassChips(set)); // wheel + ATM folding
     box.innerHTML = "";
-    for (const { cmd, label } of set) {
+    for (const { cmd, label, kind } of set) {
       const b = document.createElement("button");
-      b.className = "chip";
+      b.className = kind === "reply" ? "chip chip-reply" : "chip";
       b.dataset.cmd = cmd;
       b.textContent = _L(label || cmd); // German display label; the cmd submitted stays English
       b.addEventListener("click", ev => {

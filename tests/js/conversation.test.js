@@ -282,6 +282,27 @@ test("tapping a topic chip resolves through the conversation layer", () => {
   assert.match(lastOut(), /1997|Tower Records/);
 });
 
+test("a pending question's reply chips carry kind:'reply' — visually distinct from topic chips (Priya's playtest, round 32)", () => {
+  // The two groups used to render identically, back to back, with nothing
+  // marking one as "answer her question" and the other as "ask about
+  // something new" — a cold first-timer read the whole row as one list and
+  // couldn't tell a reply from a topic (or, per her report, thought the
+  // conversation had ended and was reading stale chips). term.js now styles
+  // kind:"reply" chips distinctly (pink, like the transcript's own echoed
+  // lines) — this test pins the DATA half of that fix.
+  state().room = "sunset_rail"; // Pukky's bar — her greeting arms a convoQ
+  run("talk to pukky");
+  assert.ok(state().convoQ && state().convoQ.id === "pukky", "premise: a question is on the table");
+  const set = _chipSet();
+  const replies = set.filter(c => c.kind === "reply");
+  const topics = set.filter(c => c.kind !== "reply");
+  assert.ok(replies.length >= 2, "her question offers real reply options");
+  assert.ok(topics.some(c => c.label === "Money" || c.label === "Beer Bar"),
+    "ordinary topics are still offered alongside — dodging her question is legitimate");
+  for (const c of replies) assert.match(c.label, /^“.*”$/, "a reply chip is quoted — your own words");
+  for (const c of topics) assert.doesNotMatch(c.label, /^“/, "a topic chip is never quoted");
+});
+
 // The defect the ask-form fixes, pinned on the character it was found on: a
 // topic that is ALSO a global readout verb must reach the person you're talking
 // to, not the readout. "wallet" during Act One is the whole quest.
