@@ -858,6 +858,14 @@ function _npcActive(id) {
   if (n && n.offmap) return false; // exists for the phone, never stands in a room (Sao — Bangkok)
   // a late-window civilian (Cream at her friend's bar from ten): `from` is a nightTurn
   if (n && n.from != null && G.nightTurn < n.from) return false;
+  // …and the symmetric one: a man who says he goes home. Neil's own first line
+  // is "one bottle, most nights, then home — ten minutes' walk past the
+  // railway, and she likes me in by nine", and he was on the rail at three in
+  // the morning. A character's stated habit is a claim about the world, and the
+  // prose review exists to catch exactly this (same shape as David's stated
+  // beer nights, which the season used to override). It also earns the arc: the
+  // best story on the lake is only there if you get out to it early.
+  if (n && n.until != null && G.nightTurn >= n.until) return false;
   if (n && n.sandbox && !_flag("act1Done")) return false; // not part of the opening quest's street
   // sent home early on a shift call — off the rail for the rest of the night
   if (G.soc && G.soc.leftEarly && G.soc.leftEarly[id] === G.day) return false;
@@ -1461,6 +1469,15 @@ function _elsewhereLine(word) {
     return id === w || nm.toLowerCase() === w || nm.toLowerCase().split(" ").pop() === w;
   });
   if (nid) {
+    // A MAN WHO GOES HOME IS PLACED, NOT HIDDEN. "Isn't around right now" is for
+    // somebody the world is concealing; Neil's whole character is one bottle and
+    // home past the railway by nine, and telling a player nothing sends him back
+    // at midnight to fail again. Say the hour. (Above the hiding line, which
+    // keeps every genuinely-concealed case — David on a school night, an origin
+    // archetype you ARE.)
+    if (NPCS[nid].until != null && G.nightTurn >= NPCS[nid].until)
+      return `${NPCS[nid].name} ${notHere} — he'll have gone home; one bottle most nights and out ` +
+        `before nine. ${_barName(NPCS[nid].room)}, early doors, is where you'll find him.`;
     if (!_npcActive(nid)) return `${NPCS[nid].name} isn't around right now.`; // not in at this hour / not here at all
     const cur = _npcRoom(nid);
     // Point the player to her only when she's at one of HER OWN bars (a

@@ -87,7 +87,11 @@ test("the landlady is served, not denied — she is the house, not a punter", ()
 
 test("a proper noun in a character's own mouth is a topic they answer", () => {
   const cases = [
-    ["roger", "lucky7", "lek"], ["roger", "lucky7", "football"],
+    // His wife is BPOI since the corpus review — she was called Lek, which
+    // collided with the Lucky Tiger's Lek, who holds an Act One clue, and a
+    // persona chased the wrong one across town. That "lek" passed here for
+    // Roger WAS the collision: two women, one word, and the test could not tell.
+    ["roger", "lucky7", "bpoi"], ["roger", "lucky7", "football"],
     ["phil", "stinky_bar", "surin"], ["doug", "stinky_bar", "portfolio"],
     ["angela", "queen_vic", "discman"], ["terry", "queen_vic", "angela"],
   ];

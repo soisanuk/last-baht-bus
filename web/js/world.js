@@ -110,6 +110,12 @@ const RENT_MULT    = { beer: 1, soi6: 3, gogo: 6, gents: 4, host: 2 };
 // Gentler than RENT_MULT, because a punter feels a drink price directly and
 // rent is the landlord's problem. Rounded to ฿10 by the helpers.
 const DRINK_MULT = { beer: 1, pub: 1, soi6: 1.25, gents: 1.5, gogo: 1.75, club: 1.75, host: 1.5 };
+// Author-time price for a given venue class, so a character who quotes a figure
+// quotes the one his own bar charges. Kyle counts his runway to the baht and
+// said "beer's eighty baht" while standing in a Soi 6 bar that charges a
+// hundred — falsified by the tiering itself, caught by the corpus review, and
+// exactly why a price belongs in a helper rather than in a sentence.
+const _priceIn = (base, type) => Math.round(base * (DRINK_MULT[type] || 1) / 10) * 10;
 const BAR_TERM     = 72;       // months
 // The note had NO teeth: you could not lose the bar. Driven deliberately
 // underwater it answered "He hasn't asked" forever, at −1 สนุก a night, and that
@@ -7079,7 +7085,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       "half. Not bitter. Just here, the way the tide is here.",
     dialogue: [
       { topic: "barry",
-        text: "\u201cThe golfer.\u201d Roy says it dryly and not unkindly. \u201cComes twice a year, buys " +
+        text: "\u201cThe golfer.\u201d Roy says it dryly and not unkindly. \u201cComes over once a year, buys " +
           "everybody a drink, tells everybody he is going to play on Thursday. He has never played on " +
           "a Thursday.\u201d He counts something in his head, the way he always is. \u201cHe buys me one " +
           "and pretends it is an accident, because he has worked out I would say no otherwise. " +
@@ -7467,7 +7473,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         short: "\"Down sixty percent, not selling. Ninety seconds on the timer. Don't buy anything I own — that's my track record.\"" },
       { topic: "drink", text: "\"Oh — I don't really drink. Alcohol's a subscription fee your " +
           "tomorrow pays.\" He hears himself say it and winces. \"Sorry. Podcast damage. Also, " +
-          "honestly? Beer's eighty baht and my runway is what my runway is — both things are " +
+          "honestly? Beer's \u0e3f" + _priceIn(BEER_PRICE, "soi6") + " in here and my runway is what my runway is — both things are " +
           "true.\" He rotates the soda water, unembarrassed. \"The girls think it's hilarious. " +
           "They call me 'health baby' — in Thai. I looked it up. I'm keeping it.\"",
         short: "\"I don't really drink — podcast damage, plus runway. The girls call me 'health baby'. I'm keeping it.\"" },
@@ -9812,6 +9818,26 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
       "quietly, works at being his own man out from under her shadow. Twenty-two years " +
       "on Beach Road, most of them within nine feet of that pool table.",
     dialogue: [
+      // THE WHOLE WHITE DISH ARC IS MOOT ONCE THE BAR IS GONE. Gating his
+      // greeting was only half of it: ASK BERT ABOUT GAVIN still handed the man
+      // who had just lost the place the errand to go and gather the picture "so
+      // I can advise the old man" (round 24, Keith — and found again on the
+      // corpus read, which is the point of reading it). Above the arc's nodes,
+      // so it catches every topic in it.
+      { when: (st, G) => _flag("barLost"),
+        topic: "gavin",
+        text: "\u201cGavin.\u201d Bert says the name like a man reading a receipt he has already paid. " +
+          "\u201cThey got it in the end, bud. Not off me \u2014 off you, and not by doing anything clever; " +
+          "they just had to wait for a month you couldn't cover.\u201d He drinks. \u201cThat's the whole " +
+          "trick and it always was. They don't beat you. They outlast you.\u201d",
+        short: "\u201cThey got it in the end. They don't beat you, bud. They outlast you.\u201d" },
+      { when: (st, G) => _flag("barLost"),
+        topic: "white dish",
+        text: "\u201cNot my fight any more, and not yours either.\u201d Bert turns the pint a quarter. " +
+          "\u201cI'd have told you a week ago that the answer was standing behind the rail more nights " +
+          "than you were. I'd have been half right, which is the most annoying kind of right.\u201d",
+        short: "\u201cNot my fight any more, and not yours. The answer was more nights behind the rail, and I'd only have been half right.\u201d" },
+
       // AFTER IT GOES. He is at the Queen Vic now (movesTo, above) — the losing
       // ending says he doesn't stay — and this is what he has to say to the man
       // he sold it to. Above everything, because a man who has just watched you
@@ -11787,23 +11813,31 @@ const _REGULARS = {
     look: "British man of sixty-seven, balding, reading glasses on a string, soft blue football shirt, contented.",
     desc: "Sixty-seven, an Everton shirt gone soft with washing, reading glasses on a string, and " +
       "the settled contentment of a man who has been told precisely where he may and may not " +
-      "smoke. He retired to Jomtien eighteen years ago, married Lek from the fruit stall, and " +
-      "escapes to Soi 7 for the football and the company of men who also have a Lek at home.",
+      "smoke. He retired to Jomtien eighteen years ago, married Bpoi from the fruit stall, and " +
+      "escapes to Soi 7 for the football and the company of men who also have a wife at home who counts the empties.",
     dialogue: [
       { text: "“Alright.” Roger shifts along a stool he doesn't need to. “Sit down, son, you're " +
           "blocking the telly. Roger. Been here since — oh, before you were shaving. What's the score, " +
-          "what's the news, and don't you dare tell Lek I had the third one.”",
+          "what's the news, and don't you dare let Bpoi hear about the third one.”",
         short: "“Roger. Been here eighteen years. Sit down, son, you're blocking the telly.”" },
       { topic: "jomtien", text: "“Why Jomtien? Because Pattaya's for the young and the daft, and " +
           "I'm neither any more.” He counts it off. “Beach is quiet, beer's cheap, the wife's happy, " +
           "and if I drop dead the ambulance can actually get down the soi. You don't want the go-go at " +
           "my age, son. You want a fan, a fixture, and somewhere nobody's trying to sell you anything.”",
         short: "“Pattaya's for the young and daft. Here it's quiet, cheap, nobody's selling you anything. That'll be you one day.”" },
-      { topic: "lek", text: "“Lek?” The grin goes sideways, fond and slightly furtive. “Fruit stall on " +
+      // HIS WIFE WAS ALSO CALLED LEK, and so is the pool player at the Lucky
+      // Tiger who holds a real clue. A persona chased the wrong one across town
+      // for nothing (round 23) — the same collision class as the drummer who
+      // shared a name with a Soi 6 cashier. She is Bpoi now; nobody else is.
+      // Keyed on "wife" — the word a player types off his own description — and
+      // "Bpoi" answers for free, because _selfNamedNode matches a proper noun in
+      // his own mouth. A global wife→bpoi synonym would have hijacked the topic
+      // for every married man on the roster, which is what it did for one run.
+      { topic: "wife", text: "“Bpoi?” The grin goes sideways, fond and slightly furtive. “Fruit stall on " +
           "the corner, eighteen years, and she still weighs my mangoes like I'm trying it on.” He " +
           "lowers his voice to a register the whole bar can hear. “She knows I'm here. She does " +
           "NOT know about the third one. That's not lying, son, that's marriage.”",
-        short: "“Lek. Fruit stall, eighteen years. She knows I'm here; she doesn't know about the third one.”" },
+        short: "“Bpoi. Fruit stall, eighteen years. She knows I'm here; she doesn't know about the third one.”" },
       { topic: "football", text: "“Everton.” He says it the way other men name a chronic condition. “Forty " +
           "years, and I've had about nine good afternoons out of it.” He tips the Chang at the telly, " +
           "where something Spanish is on with the sound down. “Out here you take what the satellite " +
@@ -12139,7 +12173,9 @@ const _REGULARS = {
     name: "Neil", emoji: "🫖", age: 54, nat: "British", pronoun: "he",
     patron: true, room: "lake_beer", hops: false,
     look: "British man of fifty-four, heavy-shouldered, cropped greying hair, plain navy polo, one bottle of Leo, unhurried.",
-    desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting things " +
+        // "One bottle, most nights, then home… she likes me in by nine." 21:00.
+    until: 30,
+desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting things " +
       "rather than weights, cropped hair going grey, a plain navy polo that has been washed " +
       "into softness. One bottle of Leo in front of him, nursed rather than drunk. He " +
       "watches the road and the water with the settled, unperformed quiet of a man who " +
@@ -13152,7 +13188,7 @@ const _REGULARS = {
         "before I hit record — drummers notice timing.\" She turns back. " +
         "\"Two years now. His mum in Cebu knits me things for a climate she " +
         "refuses to believe in. I'm keeping all of it. Him included.\"",
-        short: "\"Boyet. Drummers notice timing. Two years. I'm keeping him.\"" },
+        short: "\"Boyet. Drummers notice timing. Three years. I'm keeping him.\"" },
     ],
   },
 

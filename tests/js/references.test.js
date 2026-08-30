@@ -187,3 +187,37 @@ test("prose claims agree with the world", () => {
   assert.deepEqual(findings, [],
     "a prose claim contradicts the world (or needs a reason in the tool's OK list)");
 });
+
+test("a character quotes the price their OWN bar charges", () => {
+  // Drinks tier by venue class since round 24, and the moment they did, Kyle —
+  // who counts his runway to the baht — was saying "beer's eighty baht" while
+  // standing in a Soi 6 bar that charges a hundred. The tiering falsified a
+  // line nobody had touched, and the ฿N-in-prose lint above could not see it,
+  // because it guards DISTINCTIVE constants and ฿80 is not distinctive.
+  //
+  // The rule this checks is the one that generalises: a figure in somebody's
+  // mouth is a claim about the room they are standing in.
+  const bad = [];
+  const mult = t => (typeof DRINK_MULT !== "undefined" && DRINK_MULT[t]) || 1;
+  const at = (base, room) => Math.round(base * mult((ROOMS[room] || {}).barType) / 10) * 10;
+  for (const [id, n] of Object.entries(NPCS)) {
+    if (!n.room || !ROOMS[n.room]) continue;
+    const beer = at(BEER_PRICE, n.room), lady = at(LADY_DRINK, n.room);
+    for (const d of n.dialogue || []) {
+      for (const k of ["text", "short"]) {
+        const t = d[k];
+        if (typeof t !== "string") continue;
+        for (const m of t.matchAll(/฿\s?(\d{2,4})\b/g)) {
+          const v = Number(m[1]);
+          // only the two prices this rule is about, and only when the room
+          // actually charges something else for it
+          if (v === BEER_PRICE && beer !== BEER_PRICE)
+            bad.push(`${id} [${d.topic || "greet"}]: says ฿${v} for a beer; ${_barName(n.room) || n.room} charges ฿${beer}`);
+          if (v === LADY_DRINK && lady !== LADY_DRINK)
+            bad.push(`${id} [${d.topic || "greet"}]: says ฿${v} for a lady drink; ${_barName(n.room) || n.room} charges ฿${lady}`);
+        }
+      }
+    }
+  }
+  assert.deepEqual(bad, [], "a price in somebody's mouth is a claim about the room they stand in");
+});

@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-28",
+  "generated": "2026-08-30",
   "note": "Distinct, hand-authored characters with a portrait (excludes the 181 generic `filler` NPCs). Derived from web/js/world.js — regenerate with scripts/gen-portrait-manifest.mjs, do not hand-edit. `sex`/`venueKind` are generator heuristics for portrait archetype selection, not game canon.",
   "counts": {
     "total": 147,
@@ -2028,7 +2028,7 @@
       "age": 67,
       "nat": "British",
       "tags": [],
-      "desc": "Sixty-seven, an Everton shirt gone soft with washing, reading glasses on a string, and the settled contentment of a man who has been told precisely where he may and may not smoke. He retired to Jomtien eighteen years ago, married Lek from the fruit stall, and escapes to Soi 7 for the football and the company of men who also have a Lek at home."
+      "desc": "Sixty-seven, an Everton shirt gone soft with washing, reading glasses on a string, and the settled contentment of a man who has been told precisely where he may and may not smoke. He retired to Jomtien eighteen years ago, married Bpoi from the fruit stall, and escapes to Soi 7 for the football and the company of men who also have a wife at home who counts the empties."
     },
     {
       "id": "ron",
