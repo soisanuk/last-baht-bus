@@ -130,6 +130,22 @@ test("the anchored stay anchored, and working staff never drift", () => {
       assert.equal(_hopsNow(id), false, `${id} is working, not drinking`);
 });
 
+test("Somsak actually goes home by his own stated hour — same doctrine as Neil (round 32)", () => {
+  // "Every evening I sit here one hour before I go home" (and his own "police"
+  // topic confirms the same window, "six to seven") — he used to be on the
+  // rail at 3am regardless, contradicting his own first line the way Neil's
+  // did before `until` existed.
+  G.room = "blue_dog";
+  G.nightTurn = 5; // 18:50 — still within his stated hour
+  assert.ok(_npcActive("somsak"), "still there for the sunset hour");
+  G.nightTurn = 15; // 19:30 — past it
+  assert.ok(!_npcActive("somsak"), "gone home, as he said he would be");
+  // the elsewhere-line is generic now, not Neil's own specific phrasing
+  const line = _elsewhereLine("somsak");
+  assert.match(line, /gone home for the night/i);
+  assert.doesNotMatch(line, /one bottle most nights/i, "not Neil's borrowed voice");
+});
+
 test("the soi6 challenge fences the drift — nobody leaves the pocket", () => {
   // dave and drew are homed at the Stinky, which IS inside the fence; the rest
   // of Beach Road is not, so an unfenced drift would delete them for hours.

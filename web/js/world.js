@@ -12686,6 +12686,13 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
     name: "Somsak", emoji: "🌇", age: 47, nat: "Thai",
     pronoun: "he",
     patron: true, room: "blue_dog", hops: false,
+    // "Every evening I sit here one hour before I go home" — his own first
+    // line, and his "police" topic independently confirms the same window
+    // ("Every evening, six to seven"). Same doctrine as Neil's `until` (see
+    // the comment at _npcActive): a stated habit is a claim about the world,
+    // and he was previously on the rail at 3am regardless (round 32, 2026-08-31).
+    // nightTurn 10 = 19:00, one hour after the 18:00 start.
+    until: 10,
     look: "Thai man of forty-seven, lean, hotel-maintenance polo, weathered face, bottle of Leo.",
     desc: "Forty-seven, hotel-maintenance polo, the end seat at the Blue Dog rail " +
       "with the best line on both the sunset and the checkpoint. He drinks one " +

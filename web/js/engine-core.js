@@ -1488,8 +1488,12 @@ function _elsewhereLine(word) {
     // keeps every genuinely-concealed case — David on a school night, an origin
     // archetype you ARE.)
     if (NPCS[nid].until != null && G.nightTurn >= NPCS[nid].until)
-      return `${NPCS[nid].name} ${notHere} — he'll have gone home; one bottle most nights and out ` +
-        `before nine. ${_barName(NPCS[nid].room)}, early doors, is where you'll find him.`;
+      // Generic on purpose — this line used to be Neil's own phrasing ("one
+      // bottle most nights and out before nine"), which fit him but would
+      // misfire on any OTHER `until`-gated NPC once one existed (Somsak,
+      // round 32: "one hour before I go home", not Neil's habit at all).
+      return `${NPCS[nid].name} ${notHere} — he'll have gone home for the night. ` +
+        `${_barName(NPCS[nid].room)}, early doors, is where you'll find him.`;
     if (!_npcActive(nid)) return `${NPCS[nid].name} isn't around right now.`; // not in at this hour / not here at all
     const cur = _npcRoom(nid);
     // Point the player to her only when she's at one of HER OWN bars (a
