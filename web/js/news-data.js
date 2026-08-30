@@ -13,13 +13,13 @@ var NEWS_FEED = [
     "d": "28 Aug 2026"
   },
   {
-    "t": "Russian man found unconscious at Pattaya Walking Street",
-    "s": "Khaosod English",
-    "d": "28 Aug 2026"
+    "t": "Koh Larn brawl prompts crackdown on speedboat operators",
+    "s": "Thaiger",
+    "d": "30 Aug 2026"
   },
   {
-    "t": "Anonymous donor gives ฿100m to Pattaya hospital for new patient building",
-    "s": "Thaiger",
+    "t": "Pattaya prepares to welcome personnel from USS Abraham Lincoln",
+    "s": "Nation Thailand",
     "d": "27 Aug 2026"
   },
   {
@@ -38,9 +38,9 @@ var NEWS_FEED = [
     "d": "28 Aug 2026"
   },
   {
-    "t": "Pattaya prepares to welcome personnel from USS Abraham Lincoln",
-    "s": "Nation Thailand",
-    "d": "27 Aug 2026"
+    "t": "Pattaya’s empty streets raise questions over tourism’s future",
+    "s": "Pattaya Mail",
+    "d": "29 Aug 2026"
   },
   {
     "t": "Supporting Thailand’s next generation of AI startups",
@@ -48,7 +48,7 @@ var NEWS_FEED = [
     "d": "28 Aug 2026"
   },
   {
-    "t": "Thailand shooting: Teen kills at least seven and injures more than 30, PM says",
+    "t": "'I had to climb over school fence to escape': Thai students recount shooting after teen kills seven",
     "s": "BBC",
     "d": "06 Aug 2026"
   },
@@ -68,20 +68,20 @@ var NEWS_FEED = [
     "d": "27 Aug 2026"
   },
   {
-    "t": "Why Thailand has one of the world’s lowest interest rates",
-    "s": "Financial Times",
+    "t": "USS Abraham Lincoln will stop in Thailand on its way home from lengthy deployment in Middle East",
+    "s": "NBC News",
     "d": "27 Aug 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-08-28","USD":32.96,"AUD":23.71,"GBP":44.76,"EUR":38.37};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-30","temp":27,"humid":85,"code":3,"hi":30,"rain":47};
+var WX_NOW = {"date":"2026-08-30","temp":30,"humid":75,"code":3,"hi":30,"rain":65};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-08-28","done":true,"h":"C Palace","hs":1,"a":"Man City","as":4},{"d":"2026-08-29","done":true,"h":"Liverpool","hs":2,"a":"Nottm Forest","as":2},{"d":"2026-08-29","done":true,"h":"Bournemouth","hs":1,"a":"Everton","as":1},{"d":"2026-08-29","done":true,"h":"Coventry","hs":0,"a":"Hull","as":1},{"d":"2026-08-29","done":true,"h":"Spurs","hs":0,"a":"Newcastle","as":2},{"d":"2026-08-30","done":false,"h":"Chelsea","hs":0,"a":"Brighton","as":0},{"d":"2026-08-30","done":false,"h":"Leeds","hs":0,"a":"Brentford","as":0},{"d":"2026-08-30","done":false,"h":"Sunderland","hs":0,"a":"Fulham","as":0},{"d":"2026-08-30","done":false,"h":"Man United","hs":0,"a":"Ipswich","as":0},{"d":"2026-08-31","done":false,"h":"Aston Villa","hs":0,"a":"Arsenal","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-08-16","first":"004615","last2":"53","front3":["429","731"],"back3":["094","937"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4456,"date":"2026-08-29","baht":69450};
+var GOLD = {"usd":4456,"date":"2026-08-30","baht":69450};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":78140,"thb":2589687};
+var BTC = {"usd":78132,"thb":2587743};
