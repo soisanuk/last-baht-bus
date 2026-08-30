@@ -1,0 +1,29 @@
+{
+  "//": [
+    "Editor metadata ONLY — not a build step, and nothing in the game reads it.",
+    "The app still ships as plain classic <script> tags with no bundler (see",
+    "CLAUDE.md). This exists so an IDE can resolve the globals those scripts",
+    "share (G, ROOMS, NPCS, _say, _tick, …) ACROSS files, which is the one real",
+    "daily cost of the unbundled layout.",
+    "",
+    "checkJs is deliberately OFF. Turning it on over ~40k lines with no",
+    "annotations reports thousands of errors on day one and helps nobody; the",
+    "value here is intellisense and go-to-definition, not a type gate. Flip it",
+    "per-file with // @ts-check when a file is worth the pass.",
+    "",
+    "moduleDetection 'legacy' is load-bearing: package.json sets type:module (so",
+    "node --test reads the ESM tests), which would otherwise make the language",
+    "server treat these script files as modules and hide every shared global",
+    "from every other file — the exact thing this config exists to fix."
+  ],
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": false,
+    "noEmit": true,
+    "target": "ES2020",
+    "lib": ["ES2020", "DOM"],
+    "moduleDetection": "legacy"
+  },
+  "include": ["web/js/**/*.js", "types/**/*.js"],
+  "exclude": ["node_modules", "web/portraits", "web/art"]
+}

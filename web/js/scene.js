@@ -144,10 +144,24 @@ function _ov(cls) { const d = document.createElement("div"); d.className = cls; 
 // localStorage.lbb_v1_on, on top of v0's own lbb_v0_on gate (#scene already
 // requires it to exist at all). Presentation only: taps go through
 // _term.submitCmd (rail 3), exactly like an exit button.
-let _hsResizeListener = null; // replaced (not stacked) per render — #scene-art
-                              // is fully rebuilt every command (v0's accepted
-                              // "full row rebuild" cost), so a stale listener
-                              // from a previous render must not pile up.
+// #scene-art is fully rebuilt every command (v0's accepted "full row rebuild"
+// cost), so the render closure is new each time — but the resize listener that
+// calls it does NOT have to be. It binds once, on first use, and calls whatever
+// render is current. Before, the listener was removed and re-added on every
+// render: correct, but it churned a closure per command, and the early return
+// when hotspots are switched off never reached the removal, so the last
+// listener stayed bound to a detached div for the life of the page.
+let _hsRender = null;        // the CURRENT render closure, or null when off
+let _hsResizeBound = false;  // the one-time bind (lazy: scene.js is DOM-free at load)
+let _hsResizeTimer = null;
+function _bindHotspotResize() {
+  if (_hsResizeBound) return;
+  _hsResizeBound = true;
+  window.addEventListener("resize", () => {
+    clearTimeout(_hsResizeTimer);
+    _hsResizeTimer = setTimeout(() => { if (_hsRender) _hsRender(); }, 150);
+  });
+}
 let _hsPulseRoom = null;     // last room the arrival-pulse fired for — a plain
                               // module-local (like engine-parser's _lastCmd),
                               // never G/localStorage: "once per room-arrival"
@@ -160,7 +174,7 @@ function _hotspotFlag(key) {
 function _attachHotspots(div, img, roomId) {
   const hsOn = _hotspotFlag("lbb_v1_on");
   const authorOn = _hotspotFlag("lbb_v1_author");
-  if (!hsOn && !authorOn) return;
+  if (!hsOn && !authorOn) { _hsRender = null; return; } // drop the stale closure with it
 
   const key = "rooms/" + roomId;
   // Either extension — the room's OWN art, never the region fallback. This was
@@ -214,10 +228,8 @@ function _attachHotspots(div, img, roomId) {
 
   if (img.complete && img.naturalWidth) render();
   img.addEventListener("load", render);
-  if (_hsResizeListener) window.removeEventListener("resize", _hsResizeListener);
-  let t = null;
-  _hsResizeListener = () => { clearTimeout(t); t = setTimeout(render, 150); };
-  window.addEventListener("resize", _hsResizeListener);
+  _hsRender = render;      // the resize listener (bound once, below) calls this
+  _bindHotspotResize();
 
   if (authorOn) _armHotspotAuthor(div, img, key);
 }

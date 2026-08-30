@@ -35,6 +35,8 @@ work that isn't yours before committing.
 
 No build step, no lint, no npm install for the app — plain HTML/CSS/JS served as-is. The only exception is the browser E2E below, which is dev-only tooling; the app itself never needs a build or install.
 
+**`jsconfig.json` + `types/game.js` are editor metadata, not a build step** — nothing at runtime reads either, and the app still ships as classic `<script>` tags. They exist so an IDE resolves the globals those scripts share across files (`G`, `ROOMS`, `NPCS`, `_say`…), and so the five hand-authored content shapes (`Room`, `NPC`, `DialogueNode`, `Quest`, `Item`) catch the silent-typo class — misspell `notFlags` and the gate simply never fires. `checkJs` is deliberately OFF (40k unannotated lines would report thousands of errors and gate nothing); opt a file in with `// @ts-check` when it's worth the pass. **`GameState` is DERIVED (`ReturnType<typeof newGame>`), never hand-listed** — G carries 116 fields and a transcribed typedef would be a second source of truth that drifts the first time anyone adds one; `newGame()` returns G, so the shape can't fall out of date. `moduleDetection: "legacy"` in the config is load-bearing — package.json's `type: module` (there for `node --test`) would otherwise make the language server treat these scripts as modules and hide every shared global. **Declined audit recommendations and why** (splitting world.js, the mobile scrollback cap, the CHEATS_ENABLED release gate): `docs/code-audit-2026-08.md` — read it before re-proposing any of them.
+
 ```sh
 # Run all tests (Node 18+) — the fast vm suite, install-free (gates deploy alongside e2e)
 node --test
