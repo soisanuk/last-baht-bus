@@ -67,6 +67,54 @@ test("right-click on a keyword opens the FULL wheel, not the quick menu", async 
   expect(pageErrors).toEqual([]);
 });
 
+// A single-action keyword used to require go/fn to quick-fire — a placeholder
+// hint ("SEND <amount> TO <name>") only ever has ONE possible action (open a
+// prefill), but that action's `go` is false, so a quick tap opened a
+// one-button flyout ("send <amount> to <name> …") instead of just doing the
+// one thing it could do. Read cold by a thumbs-only player as the hint doing
+// nothing at all (Dave's tap audit, round 32, 2026-08-30). Fixed: a single
+// action on a quick tap always runs directly, go/fn or not; the flyout is
+// reserved for genuine choices and for the full (long-press/right-click) view.
+test("a placeholder command hint prefills on ONE quick tap, with no flyout in the way", async ({ page }) => {
+  const pageErrors = [];
+  page.on("pageerror", e => pageErrors.push(e.message));
+  await bootIntoGame(page, INDEX_URL);
+  await page.evaluate(() => {
+    G.flags.act1Done = true; G.flags.hasWallet = true; G.money = 5000;
+    G.phone.contacts = { joy: true };
+    const bar = Object.keys(ROOMS).find(id => ROOMS[id].barType);
+    G.room = bar;
+    _say("(SEND <amount> TO <name>)");
+  });
+  const kw = page.locator('#term-out .kw[data-k="cmd"]').last();
+  await expect(kw).toHaveText("SEND <amount> TO <name>");
+  await kw.click();
+  await page.waitForTimeout(150);
+  await expect(page.locator("#flyout")).toHaveCount(0);
+  await expect(page.locator("#term-in")).toHaveValue("send ");
+  expect(pageErrors).toEqual([]);
+});
+
+// The SAME hint, long-pressed/right-clicked, still shows its menu (the full
+// view always does, even for one item) — and the button label is now the
+// verb alone ("send …"), not the whole raw hint text.
+test("the same hint, long-pressed, still shows a menu — cleanly labelled", async ({ page }) => {
+  await bootIntoGame(page, INDEX_URL);
+  await page.evaluate(() => {
+    G.flags.act1Done = true; G.flags.hasWallet = true; G.money = 5000;
+    G.phone.contacts = { joy: true };
+    const bar = Object.keys(ROOMS).find(id => ROOMS[id].barType);
+    G.room = bar;
+    _say("(SEND <amount> TO <name>)");
+  });
+  const kw = page.locator('#term-out .kw[data-k="cmd"]').last();
+  await kw.click({ button: "right" });
+  await expect(page.locator("#flyout button")).toHaveCount(1);
+  await expect(page.locator("#flyout button").first()).toHaveText("send …");
+  await page.locator("#flyout button").first().click();
+  await expect(page.locator("#term-in")).toHaveValue("send ");
+});
+
 test("HELP tells a desktop player the gesture exists", async ({ page }) => {
   // Right-click-for-more is a convention the game can't assume; the long-press
   // is at least a learned phone gesture, but nothing on screen hints at either.

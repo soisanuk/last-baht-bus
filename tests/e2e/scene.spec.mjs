@@ -92,6 +92,35 @@ test("scene panel renders, tracks movement, and exit taps submit typed commands"
   expect(pageErrors).toEqual([]);
 });
 
+// The end-of-vacation sequence narrates a whole journey (hotel, joiner fee,
+// the airport highway) but G.room never actually moves — there's nowhere for
+// it to move TO, it's a summary screen. The art panel and cast row used to
+// keep showing the bar the player had already narratively left, frozen under
+// the vacation_end modal (Reg the publican, round 32, 2026-08-30). They now
+// fold like the collapse pref does; the HUD and exits (for the modal's own
+// answers) stay live.
+test("the scene panel folds its art and cast under the vacation_end modal, not the HUD", async ({ page }) => {
+  await bootIntoGame(page, INDEX_URL);
+  await page.evaluate(() => { localStorage.setItem("lbb_v0_on", "1"); localStorage.removeItem("lbb_scene_off"); });
+  await page.evaluate(() => {
+    const bar = Object.keys(ROOMS).find(id => ROOMS[id].bar);
+    G.room = bar; _updateScene();
+  });
+  await expect(page.locator("#scene-art")).toHaveCount(1);
+  await expect(page.locator("#scene-hud")).toBeVisible();
+
+  await page.evaluate(() => { G.pendingChoice = "vacation_end"; _updateScene(); });
+  await expect(page.locator("#scene-art")).toHaveCount(0);
+  await expect(page.locator("#scene-cast")).toHaveCount(0);
+  await expect(page.locator("#scene-hud")).toBeVisible(); // stays — it's the modal's own numbers
+  await expect(page.locator("#scene-exits")).toBeVisible(); // stays — the modal's answers live here
+  await expect(page.locator("#scene-toggle")).toHaveCount(0); // forced, not a preference — nothing to toggle
+
+  // and it un-folds again once the modal clears
+  await page.evaluate(() => { G.pendingChoice = null; _updateScene(); });
+  await expect(page.locator("#scene-art")).toHaveCount(1);
+});
+
 // The backdrop chain (art/rooms/<id>.png → art/regions/<slug>.png → the row
 // removes itself) can only fail in a browser: the vm suite can't load an image,
 // and a slug that drifts from the generator's just 404s quietly into the

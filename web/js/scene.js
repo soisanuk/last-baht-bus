@@ -31,7 +31,17 @@ function _updateScene() {
     // with none, a PHONE boots collapsed — measured on a 390×844 viewport the
     // open panel left the transcript 38% of the screen (~6 lines), and six
     // blind rounds never found the fold (2026-08-22). Desktop stays open.
-    const off = (() => {
+    // The end-of-vacation sequence narrates a whole journey — hotel, joiner
+    // fee, the airport highway — while G.room itself never moves (there's
+    // nowhere for it to move TO; it's a summary screen, not a room). The art
+    // panel and cast row kept showing the bar you'd already narratively left,
+    // frozen under the vacation_end modal (Reg the publican, round 32,
+    // 2026-08-30: "three surfaces disagreeing at the game's biggest beat").
+    // Fold them the same way the collapse pref does — HUD and exits (for the
+    // modal's own answers) stay, the stale art and cast don't. Forced, not a
+    // preference, so the fold toggle is pointless here and left off the rail.
+    const modalFold = G.pendingChoice === "vacation_end";
+    const off = modalFold || (() => {
       try {
         const pref = localStorage.getItem("lbb_scene_off");
         if (pref === "1") return true;
@@ -60,7 +70,7 @@ function _updateScene() {
     }
     box.appendChild(_sceneHud());
     const exits = _sceneExits();
-    if (off) {
+    if (off && !modalFold) {
       // folded: the toggle is the first "button" on the exits rail (which already
       // scrolls sideways) instead of floating over the HUD — the HUD can't widen
       tog.classList.add("inline");

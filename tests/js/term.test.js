@@ -333,8 +333,12 @@ test("saleng: the open BUY-for-lady hint fans out into the cart's items", () => 
     { t: "buy fruit for …", c: "buy fruit for ", go: false },
   ]);
   G.salengCart = null; // no cart: just the ordinary open prefill
+  // label is the bare verb now, not the whole raw hint text (round 32: a
+  // single-action quick tap runs directly, and the long-press label — where
+  // this menu still shows — reads "buy …" instead of the whole placeholder
+  // phrase, "buy <item> for <lady> …")
   assert.deepEqual(_term.kwActions("cmd", "BUY <item> FOR <lady>", false),
-    [{ t: "buy <item> for <lady>", c: "buy ", go: false }]);
+    [{ t: "buy", c: "buy ", go: false }]);
 });
 
 test("anonymous staff decorate only where they stand", () => {

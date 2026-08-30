@@ -1501,9 +1501,16 @@ function _elsewhereLine(word) {
       // drift between bars" line told in reverse. Say where he is, say that he
       // moves, and name the local he'll be at from ten, which is the useful part.
       if (_willMove(nid)) {
-        return `${NPCS[nid].name} ${notHere} — he was at ${_barName(cur)} a little while ago, ` +
-          `but he drifts about his end of town before ten. Ask after him when you get there, or ` +
-          `catch him at ${_barName(NPCS[nid].room)} later on; he always ends up there.`;
+        // PRESENT tense, not past: `cur` is where he IS, right now — "he was at
+        // X a little while ago" described a live fact in the past tense, which
+        // reads as "you've just missed him" the moment before it's checked (Reg
+        // the publican watched Doyle leave the Vic, then got told he "was" at
+        // The Shady Lady while sitting in it — round 32, 2026-08-30). The hedge
+        // belongs on the FUTURE (he may move before you arrive), not the present.
+        return `${NPCS[nid].name} ${notHere} — he's at ${_barName(cur)} right now, ` +
+          `but he drifts about his end of town before ten, so he may not still be ` +
+          `there by the time you are. Ask after him when you get there, or catch ` +
+          `him at ${_barName(NPCS[nid].room)} later on; he always ends up there.`;
       }
       return `${NPCS[nid].name} ${notHere} tonight — try ${_barName(cur)}` +
         (unseen ? `, over in ${reg}.` : ".");
@@ -2430,3 +2437,8 @@ function _drinkMult(room) {
 }
 function _beerPrice(room) { return Math.round(BEER_PRICE * _drinkMult(room) / 10) * 10; }
 function _ladyPrice(room) { return Math.round(LADY_DRINK * _drinkMult(room) / 10) * 10; }
+// The bell was the one round-for-the-house price the venue tier never
+// reached — flat everywhere, so in a go-go (×1.75) it bought a round for the
+// whole floor for less than one single lady drink (Reg the publican, round
+// 32, 2026-08-30). Same helper shape as beer/lady drink, same rounding.
+function _bellPrice(room) { return Math.round(BELL_PRICE * _drinkMult(room) / 10) * 10; }

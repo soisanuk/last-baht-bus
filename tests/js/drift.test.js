@@ -161,6 +161,18 @@ test("a drifting man is not placed as though he were settled", () => {
   assert.match(_elsewhereLine("nigel"), /try Lucky Tiger/, "settled, he is placed flatly and correctly");
 });
 
+test("the drift pointer is present tense — 'cur' is where he IS, not where he WAS (Reg the publican, round 32)", () => {
+  // "he was at X a little while ago" described a LIVE fact (_npcRoom's current
+  // room) in the past tense — read the moment after checking, it says "you've
+  // just missed him" about a place he is sitting in right now.
+  G.day = 3; G.nightTurn = 20; G.known.nigel = true;
+  G.room = "candy_bar";
+  const cur = _npcRoom("nigel");
+  const line = _elsewhereLine("nigel");
+  assert.doesNotMatch(line, /he was at/i, "no past tense describing his current room");
+  assert.ok(line.includes(`he's at ${_barName(cur)} right now`), "present tense, naming where he actually is");
+});
+
 test("Tan gives the habit, not the snapshot", () => {
   G.day = 3; G.known.nigel = true;
   G.room = _npcRoom("tan");

@@ -388,6 +388,10 @@ function _npcActions(id, full) {
     // BARFINE stays on the long-press only, never the quick tap: it spends four
     // figures and ends the night, and term.test guards that deliberately. It
     // takes the slot PHOTO left in the FULL menu, which is where it belongs.
+    // KISS/SPANK/FONDLE are deliberately NOT here — Dave's thumbs-only tap
+    // audit (round 32, 2026-08-30) flagged them as untappable, but Mario's call
+    // is they're slated for removal as separate verbs (extensions of FLIRT),
+    // so exposing them further on the wheel would be wasted work.
     else if (role === "hostess") acts.push("barfine", "flirt", "tip", "contact");
     else if (role === "cashier") {           // the sponsor-cashier arc's verbs (were typed-only)
       acts.push("tip", "contact");
@@ -562,8 +566,13 @@ function _doBarfine(arg) {
       return;
     }
     if (!NPCS[id].type && (G.soc.bells[G.room] || 0) < 2) {
+      // The gate needs TWO rings, and the hint used to say so with no memory of
+      // the one already rung — Reg rang the bell, then hit this same line as if
+      // he hadn't (round 32, 2026-08-30). Say what it actually still wants.
+      const rung = G.soc.bells[G.room] || 0;
       _say(`${name} taps the till: somebody has to count the money. (Cashiers do go, ` +
-        "sometimes — for the right customer, on the right night. The bell defines both.)");
+        `sometimes — for the right customer, on the right night. The bell defines both` +
+        (rung === 1 ? " — and you're halfway there. One more ring." : ".") + ")");
       return;
     }
   }
@@ -595,17 +604,28 @@ function _doBarfine(arg) {
   // 2026-08-17). Truth before tariff.
   if (!bertAlly && _isDraw(id) && G.nightTurn < 60) { _bfRefusalSay(id, { kind: "draw" }); return; }
   if (!bertAlly && _sponsorInTown(id) && !_sponsorFamilyDay(id)) { _bfRefusalSay(id, { kind: "sponsor" }); return; }
+  // The SAME "already with another customer" state that declines a lady drink
+  // (_girlBusy — Soi 6 etiquette, ~1 girl in 4 per hour) said nothing to the
+  // barfine negotiation, so she could turn down a drink for being occupied and
+  // then quote a whole night's fine thirty seconds later (Reg the publican,
+  // round 32, 2026-08-30). One state, both consumers.
+  if (!bertAlly && typeof _girlBusy === "function" && _girlBusy(id)) { _bfRefusalSay(id, { kind: "busy" }); return; }
   const _bfGate = bertAlly ? 1 : bt === "soi6" ? 2 : 4;
   if (_favor(id) < _bfGate) {
     // she names the REAL remaining count — a stated tariff that doesn't count
-    // is a lie with a smile on it (grapevine playtest F12, 2026-08-25)
+    // is a lie with a smile on it (grapevine playtest F12, 2026-08-25). That
+    // fix only landed on the soi6 branch; Reg the publican caught the other
+    // three venue classes still stonewalling with the same vague line no
+    // matter how much he'd spent (round 32, 2026-08-30) — every branch now
+    // names the count.
     const _need = Math.max(1, _bfGate - _favor(id));
     _say(bt === "soi6" ?
       `${name} laughs, not unkindly: “${_need === 1 ? "One more lady drink" :
         "Lady drink first, na. Two"}, then we talk.” Even ` +
       "Soi 6 has liturgy." :
       `${name} pats your hand: “You sweet. But buy me drink, talk to me a little — ` +
-      "this is Pattaya, not a vending machine.”");
+      `${_need === 1 ? "one more" : _need + " more"}, then we talk. This is ` +
+      "Pattaya, not a vending machine.”");
     return;
   }
   if (bertAlly) {
@@ -742,6 +762,9 @@ function _bfRefusalSay(id, r) {
     mess: `${name} leans back an honest inch. “Ooh. You smell like whole bar, ` +
       "tilac. Maybe shower first, sleep little bit.” Hard to argue from " +
       `${G.soc.drunk} bottles deep. (Sober up and try again.)`,
+    busy: `${name} is with somebody else right now — the man beside her, whose ` +
+      "evening this currently is. “Later, tilac,” she says, not unkindly, with a " +
+      "small tip of the head toward him. Etiquette runs both ways here.",
     stealing: `${name} shakes her head before you finish asking, voice dropped ` +
       "low: “Cannot, na. You go with girl from here already — everybody see. " +
       "I don't steal customer.” It doesn't matter that the other girl is " +
@@ -7504,7 +7527,7 @@ function _roastOn() { return _roastHour(_nightHour()) && _roastLeft() > 0; }
 
 function _qvMenu() {
   if (_qvClosed()) return QV_MENU.filter(d => d.id === "crisps");
-  return QV_MENU.filter(d => d.id !== "roast" || _roastOn());
+  return QV_MENU.filter(d => (d.id !== "roast" || _roastOn()) && (d.id !== "curry" || _curryDay()));
 }
 function _qvMatchDish(input) {
   const t = String(input || "").toLowerCase();
@@ -7530,12 +7553,19 @@ function _roastNote() {
     " left" + (n <= 3 ? " only" : "") + ", tilac.\u201d";
 }
 
+// The curry's sibling to _roastNote — no covers to count, just the day.
+function _curryNote() {
+  return "Curry — Fridays only. “Friday curry, tilac. Today is not Friday.”";
+}
+
 function _qvKitchen(arg) {
   const wantsRoast = /roast|beef|yorkshire|sunday/.test(arg || "");
+  const wantsCurry = /curry|madras|friday/.test(arg || "");
   // Asked for the roast when there isn't one: answer with the REASON and the
   // hour to come back at, never a flat refusal. This is the line that teaches a
   // player the pub has a week in it.
   if (wantsRoast && !_roastOn()) { _say(_roastNote()); return; }
+  if (wantsCurry && !_curryDay() && !_qvClosed()) { _say(_curryNote()); return; }
   if (_qvClosed() && !/crisp/.test(arg || "")) {
     _say("Aoy doesn't even reach for the pad. \u201cKitchen close, tilac \u2014 cook go " +
       "home eleven o'clock, same as England.\u201d A bag of crisps lands on the bar " +
@@ -7582,7 +7612,11 @@ function _qvKitchen(arg) {
 function _qvCard() {
   _say("The Queen Vic \u2014 KITCHEN", "win");
   for (const d of _qvMenu())
-    if (d.id !== "roast") _say("  \u0e3f" + d.price + " \u2014 " + d.name, "dim");
+    if (d.id !== "roast" && d.id !== "curry") _say("  \u0e3f" + d.price + " \u2014 " + d.name, "dim");
+  if (_curryDay()) {
+    const curry = QV_MENU.find(d => d.id === "curry");
+    if (!_qvClosed()) _say("  \u0e3f" + curry.price + " \u2014 " + curry.name, "dim");
+  } else _say("  " + _curryNote(), "dim");
   _say("  " + _roastNote(), "dim");
   _say(_qvClosed()
     ? "(Cook went home at eleven. BUY CRISPS.)"

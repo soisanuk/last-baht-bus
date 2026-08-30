@@ -370,7 +370,10 @@ const _term = (() => {
             return items.map(i => ({ t: "buy " + i + " for …", c: "buy " + i + " for ", go: false }));
           }
         }
-        return [{ t: lo, c: cmd + (open ? " " : ""), go: !open }];
+        // The label for an open (placeholder) hint is just the verb, not the
+        // whole raw hint text — "send …" not "send <amount> to <name> …",
+        // which is what a long-press's flyout button used to show.
+        return [{ t: open ? cmd : lo, c: cmd + (open ? " " : ""), go: !open }];
       }
       if (k === "bar") return [{ t: "enter " + v, c: "enter " + lo, go: true }];
       if (k === "item") {
@@ -443,7 +446,16 @@ const _term = (() => {
     _closeFly();
     const acts = _kwActions(kwEl.dataset.k, kwEl.dataset.v, full);
     if (!acts.length) return;
-    if (acts.length === 1 && (acts[0].go || acts[0].fn) && !full) { _runAct(acts[0]); return; }
+    // A single action on a QUICK tap runs directly — whether it fires (go/fn)
+    // or opens for editing (a placeholder prefill like "SEND <amount> TO
+    // <name>"). It used to require go/fn, so a prefill hint's one and only
+    // possible action still forced a one-button flyout in the way, labelled
+    // with the whole hint text ("send <amount> to <name> …") — an unnecessary
+    // second tap, and confusing while it lasted (Dave's thumbs-only audit,
+    // round 32, 2026-08-30: read as the hint doing nothing at all). A
+    // long-press/right-click (`full`) still always shows the menu, even for
+    // one item, since that view exists for discoverability.
+    if (acts.length === 1 && !full) { _runAct(acts[0]); return; }
     _fly = document.createElement("div");
     _fly.id = "flyout";
     // a character wheel gets a portrait header (Thai-name taps included)
@@ -660,6 +672,19 @@ const _term = (() => {
     if (!out) return;
     const anyUp = [...stack.children].some(c => getComputedStyle(c).display !== "none");
     out.style.paddingBottom = anyUp ? (stack.getBoundingClientRect().height + 16) + "px" : "";
+    // …and reserve the strip HORIZONTALLY too, not just vertically. The bottom
+    // padding only protects the tail of the transcript — it assumes the whole
+    // thing overflows and auto-scrolls to bottom, so the reserved gap lands
+    // under the fabs. A single long print (the vacation-end narrative is the
+    // worst of them) can fit inside #term-out without ever needing to scroll,
+    // in which case the fab-stack — fixed at the viewport's right edge — sits
+    // on top of whatever text happens to reach that column, mid-paragraph, at
+    // any height (Reg the publican, round 32, 2026-08-30: the bell clipped
+    // "...the stre[et]" dead in the middle of the closing narration, nowhere
+    // near the transcript's actual bottom). A permanent right margin the width
+    // of the stack means text can never flow under it, regardless of scroll
+    // position — the same "reserve, don't float over" fix as the vertical one.
+    out.style.paddingRight = anyUp ? (stack.getBoundingClientRect().width + 26) + "px" : "";
   }
 
   // The street compass: N/E/S/W plus a flashlight in the middle, in the same

@@ -46,3 +46,34 @@ test("bar bell FAB: hidden outside bars, taps to ring inside, clang fires", asyn
 
   expect(pageErrors).toEqual([]);
 });
+
+// The bell FAB is fixed at the transcript's right edge and used to overlap
+// whatever text happened to reach that column — not just at the very bottom
+// (a vertical reserve already existed) but at ANY height, since a single long
+// print can fit inside #term-out without ever needing to scroll (Reg the
+// publican, round 32, 2026-08-30: the bell clipped a word dead in the middle
+// of a long closing narration). A permanent right-padding reserve, sized to
+// the fab stack, should keep every line of text clear of it geometrically.
+test("the bell FAB never overlaps transcript text, at any scroll height", async ({ page }) => {
+  await bootIntoGame(page, INDEX_URL);
+  await page.evaluate(() => {
+    G.room = "neon_paradise"; G.money = 2000;
+    G.lastSaleng = 9e9; G.lastPeddler = 9e9;
+  });
+  // print a long block that fills the transcript without triggering a real
+  // scroll requirement — the exact shape of Reg's find
+  await page.evaluate(() => {
+    for (let i = 0; i < 15; i++) _say("A long line of prose, long enough to reach the right edge of the transcript column and wrap onto the next one, over and over. Line " + i + ".");
+    _term.updateFabs();
+  });
+  await expect(page.locator("#bell-fab")).toBeVisible();
+
+  const fabBox = await page.locator("#bell-fab").boundingBox();
+  const lineBoxes = await page.locator("#term-out .t-line").evaluateAll(
+    els => els.map(el => { const r = el.getBoundingClientRect(); return { x: r.x, y: r.y, w: r.width, h: r.height }; })
+  );
+  const overlaps = (a, b) =>
+    a.x < b.x + b.width && a.x + a.width > b.x && a.y < b.y + b.height && a.y + a.height > b.y;
+  const collisions = lineBoxes.filter(b => overlaps(fabBox, { x: b.x, y: b.y, width: b.w, height: b.h }));
+  expect(collisions, `fab at ${JSON.stringify(fabBox)} overlaps ${collisions.length} line(s)`).toEqual([]);
+});

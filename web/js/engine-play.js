@@ -783,6 +783,11 @@ function _quizDay() { return G.day % 7 === 4; }
 // probe answers about the wrong hour.
 function _roastDay() { return G.day % 7 === 0; }
 function _roastHour(hour) { return _roastDay() && hour < 3; }   // last orders at 21:00
+// "The Friday curry" was on the card every night of the week — a name that
+// promises a day and a kitchen that didn't check it (Reg the publican, round
+// 32, 2026-08-30). Day-gated like the roast, minus the finite-covers scarcity
+// (it's the card's second dish, not the anchor).
+function _curryDay() { return G.day % 7 === 5; }
 // The night's hour, 0 = 18:00. The only turn→hour conversion in the game, so
 // the regulars' drift, Glam's shuttle and anything else that asks "what time is
 // it" share one seam. (_clockStr renders a display string and is not a
@@ -823,11 +828,12 @@ function _newbieNudge() {
       "week gets interesting.)", "dim");
     return;                                   // one at a time; the bell keeps
   }
-  if (!_flag("tipBell") && G.money >= BELL_PRICE * 2) {
+  const bellPrice = _bellPrice(G.room);
+  if (!_flag("tipBell") && G.money >= bellPrice * 2) {
     _setFlag("tipBell");
     _say(_fmt("(There's a bell over the rail. \u0e3f{p} rings it and buys the whole bar a round " +
       "\u2014 every lady in the room learns your name in about four seconds. It is the most " +
-      "money you can spend here on being liked. RING BELL.)", { p: BELL_PRICE }), "dim");
+      "money you can spend here on being liked. RING BELL.)", { p: bellPrice }), "dim");
   }
 }
 
@@ -1526,6 +1532,19 @@ const _HEAT_FIRST = [
   "The cashier's eyes come up off the till, rest on you for exactly as long as it takes, and go back down. You are, from this moment, being kept an eye on.",
   "A look passes between two of the girls — quick, unhurried, entirely legible. The room has filed that one.",
 ];
+// A flat pool named a mamasan/cashier/"two of the girls" whether or not the
+// room actually staffs one — the Naklua corner bars run one hostess each and
+// no mamasan or cashier, so the room could narrate staff nobody could then
+// TALK TO (Reg the publican, round 32, 2026-08-30). Filter to roles actually
+// present; the stool-creak line names nobody and is always safe.
+function _heatFirstPool() {
+  const here = _npcsHere();
+  const pool = [_HEAT_FIRST[1]];
+  if (here.some(n => NPC_ROLES[n] === "mamasan")) pool.push(_HEAT_FIRST[0]);
+  if (here.some(n => NPC_ROLES[n] === "cashier")) pool.push(_HEAT_FIRST[2]);
+  if (here.filter(n => NPC_ROLES[n] === "hostess").length >= 2) pool.push(_HEAT_FIRST[3]);
+  return pool;
+}
 function _addHeat(n, why) {
   if (_bellLevel() >= 3) return;         // three bells deep — the room forgives everything
   const r = G.room;
@@ -1536,11 +1555,16 @@ function _addHeat(n, why) {
   if (why) (G.soc.heatWhy = G.soc.heatWhy || {})[r] = why;
   if (G.soc.heat[r] >= 3) { _kickOut(); return; }
   if (before === 0 && G.soc.heat[r] === 1) {
-    _say(_pickVary(_HEAT_FIRST, "heat1"), "dim");
+    _say(_pickVary(_heatFirstPool(), "heat1"), "dim");
   }
   if (G.soc.heat[r] === 2) {
-    _say("(The mamasan is watching you now with the expression of a woman " +
-      "pricing a problem. One more and you're somebody else's story.)", "alert");
+    const hasMama = _npcsHere().some(nid => NPC_ROLES[nid] === "mamasan");
+    _say(hasMama
+      ? "(The mamasan is watching you now with the expression of a woman " +
+        "pricing a problem. One more and you're somebody else's story.)"
+      : "(Somebody behind that bar is watching you now, the way you watch a " +
+        "problem you're pricing. One more and you're somebody else's story.)",
+      "alert");
   }
 }
 
@@ -1969,6 +1993,16 @@ function _doSocial(kind, targetWord) {
   // a ladyboy: welcomed courtship for a bi player, a gracious pass for a straight one
   // (she reads you and declines — agency intact). Bi → falls through to the tiers.
   if (_ladyboyGate(id)) return;
+  // FLIRT auto-escalates on repetition: once she's already responded warmly
+  // tonight (G.soc.charmed — the same flag that gates the once-a-night สนุก
+  // spark below), a SECOND flirt reads as an invitation to kiss, not a repeat
+  // of the first. The player never needs to know the word KISS exists to
+  // reach it — SPANK/FONDLE stay out of this ladder entirely, a manual,
+  // undiscovered find for a player who goes looking (Mario's call, round 32).
+  // Placed after every special-case early return above, so it only ever
+  // touches the ordinary tier-resolution path below — the only path that can
+  // set `charmed` in the first place.
+  if (kind === "flirt" && G.soc.charmed && G.soc.charmed[id]) kind = "kiss";
   // the bra you bought her makes fondling "more interesting" — one tier warmer
   const braBump = (kind === "fondle" && G.soc.bra && G.soc.bra[id]) ? 2 : 0;
   const net = _favor(id) - SEV[kind] + braBump + _persSocialMod(kind);
@@ -2185,13 +2219,14 @@ function _doThrowCover(targetWord) {
 
 function _doBell() {
   if (!_inBar()) { _say("No bell out here. The bell is a bar instrument, like the till."); return; }
-  if (G.money < BELL_PRICE) {
+  const price = _bellPrice(G.room);
+  if (G.money < price) {
     _say(_fmt("The bell rope dangles there, daring you. A ring is a round for the " +
       "house — ฿{p} — and you have ฿{m}. Ringing a bell you " +
-      "can't pay for is how farang end up in the khlong.", { p: BELL_PRICE, m: G.money }));
+      "can't pay for is how farang end up in the khlong.", { p: price, m: G.money }));
     return;
   }
-  G.money -= BELL_PRICE;
+  G.money -= price;
   const r = G.room;
   _ringBell(r);
   _say("You reach up and RING THE BELL.", "win");
@@ -2199,7 +2234,7 @@ function _doBell() {
   const pool = bt === "pub" ? _BELL_PUB
     : (bt === "soi6" || bt === "gogo") ? _BELL_GOGO
     : _BELL_BEER; // beer bars, and any other bar-type, buy a round for the staff
-  _say(`${_pickVary(pool, "bell:" + bt)} (-฿${BELL_PRICE}, ฿${G.money} left — reign while it lasts.)`);
+  _say(`${_pickVary(pool, "bell:" + bt)} (-฿${price}, ฿${G.money} left — reign while it lasts.)`);
   const rings = G.soc.bells[r];
   if (rings === 2) {
     _say("That's two bells this visit. The whole room's tilting hard your way now — " +

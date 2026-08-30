@@ -318,6 +318,20 @@ test("the message Candy tells you to carry can be delivered", () => {
   }
   out = []; doCommand("ask rose about lunch");
   assert.match(text(), /Tuesday|photographs/, "and she answers the message, not the weather");
+  assert.ok(_flag("roseReplied"), "…and her reply is recorded, so it can be carried back");
+
+  // THE RETURN LEG (found again by Reg the publican, round 32, 2026-08-30):
+  // Rose's own reply is an instruction naming Candy ("tell her yes... Tuesday
+  // ... the photographs") and had no node to land on — a player who dutifully
+  // carried it back got the OUTBOUND message re-issued at him instead.
+  G.room = _npcWhere("candy"); G.nightTurn = 30;
+  doCommand("talk to candy");
+  for (const word of ["tuesday", "photographs"]) {
+    out = []; doCommand("ask candy about " + word);
+    assert.doesNotMatch(text(), /Rompho|Not my story|don't know about that/i,
+      `"${word}" delivers Rose's reply, not the outbound errand again`);
+    assert.match(text(), /Tuesday|photographs/i, `"${word}" reaches the delivery node`);
+  }
 });
 
 test("Rose says nothing about a lunch nobody has mentioned to her", () => {

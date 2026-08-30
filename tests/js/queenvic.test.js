@@ -67,6 +67,24 @@ test("nothing OFF the card can be bought", () => {
   assert.match(text(), /Sundays only/, "…and the answer says WHEN, which is the useful part");
 });
 
+// "The Friday curry" was on the card every night of the week — a name that
+// promises a day the kitchen never checked (Reg the publican, round 32).
+test("the Friday curry is Friday only", () => {
+  for (let d = 1; d <= 14; d++) {
+    G.day = d; G.nightTurn = 10;
+    const on = _qvMenu().some(x => x.id === "curry");
+    assert.equal(on, d % 7 === 5, `day ${d} (${_weekday()})`);
+  }
+  G.day = 3; // a Wednesday
+  const before = G.money;
+  out = []; doCommand("buy curry");
+  assert.equal(G.money, before, "no curry on a Wednesday, and no charge for asking");
+  assert.match(text(), /Fridays only/, "…and the answer says WHEN");
+  G.day = 5; // Friday
+  out = []; doCommand("buy curry");
+  assert.equal(G.money, before - QV_CURRY, "and it's real on the day it claims to be");
+});
+
 test("after eleven the cook has gone home and it is crisps or nothing", () => {
   G.nightTurn = 55;
   assert.deepEqual(_qvMenu().map(d => d.id), ["crisps"]);

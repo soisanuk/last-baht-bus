@@ -1933,6 +1933,26 @@ test("ladyboy hostesses: a bi player's real option, a straight player's gracious
   assert.doesNotMatch(lastOut(), /not for you|the ladies are that way/i, "open mind → she's a real option");
 });
 
+test("FLIRT auto-escalates to a kiss on repetition — the player never needs to type KISS (Mario's call, round 32)", () => {
+  // SPANK/FONDLE were pulled off every advertised surface (HELP, autocomplete)
+  // for being "extensions of FLIRT" that shouldn't be publicly exposed; KISS
+  // stays reachable, but through repetition rather than the word itself.
+  state().stage = "vacation"; state().room = "lucky_tiger"; state().money = 3000;
+  state().soc.drinks.lek = 6; // high favor: a flirt lands well, a kiss would too
+  out = []; run("flirt lek");
+  assert.ok(state().soc.charmed && state().soc.charmed.lek, "the first flirt charms her");
+  const firstText = out.join("\n");
+  out = []; run("flirt lek");
+  const secondText = out.join("\n");
+  // the SECOND flirt resolves through the kiss tier pool, not the flirt one —
+  // read it back against the actual pool, not a guessed phrase
+  const kissPool = [].concat(..._SOCIAL_TEXT.kiss.filter(Boolean));
+  assert.ok(kissPool.some(f => secondText.includes(f("Lek"))), "the repeat reads as a kiss");
+  const flirtPool = [].concat(..._SOCIAL_TEXT.flirt.filter(Boolean));
+  assert.ok(!flirtPool.some(f => secondText.includes(f("Lek"))), "…not a repeat of the flirt itself");
+  assert.notEqual(firstText, secondText, "it escalated, it didn't just repeat");
+});
+
 test("ladyboy courtship deepens with bond — Poy's third reaction, Bebe's armor", () => {
   state().stage = "vacation";
   state().room = "golden_dragon";        // Poy's bar
@@ -2112,6 +2132,26 @@ test("bar etiquette: a girl with another customer declines your lady drink; insi
   out = []; run("buy drink for " + NPCS[busy].name);
   assert.equal(state().money, 5000 - price, "the second one she takes");
   assert.match(lastOut(), /the man beside/i, "you've bought his whole attention");
+});
+
+test("a girl busy with another customer can't be barfined either (Reg the publican, round 32)", () => {
+  // Wilai declined a lady drink for being with a customer, then quoted him a
+  // full ST/LT barfine thirty seconds later — the same _girlBusy state gated
+  // one action and not the other.
+  state().stage = "vacation"; state().flags.act1Done = true; state().flags.hasWallet = true;
+  state().room = "pink_lotus"; state().money = 5000;
+  let busy;
+  for (let nt = 20; nt <= 55 && !busy; nt += 10) {
+    state().nightTurn = nt;
+    // exclude ladyboys — a straight player gets the orientation pass first,
+    // which is a different (correct) refusal this test isn't about
+    busy = _npcsHere().find(id => NPC_ROLES[id] === "hostess" && !NPCS[id].ladyboy && _girlBusy(id));
+  }
+  assert.ok(busy, "some hour has a Soi 6 girl sitting with another customer");
+  out = []; run("barfine " + NPCS[busy].name);
+  assert.doesNotMatch(lastOut(), /SHORT TIME .* LONG TIME/, "no negotiation opens while she's with someone else");
+  assert.match(lastOut(), /with somebody else|later, tilac/i, "the same reason, in her voice");
+  assert.equal(state().money, 5000, "nothing spent asking");
 });
 
 test("Soi 6 mamas: sharp operators take a quiet house cut; beer-bar mamas run warm", () => {
@@ -2340,8 +2380,8 @@ test("WDG-cast choices move faction, NPC-trust, and bond from the player's respo
 });
 
 test("cashiers cap physical contact until the bell has rung twice", () => {
-  state().room = "rainbow_girls";
-  state().money = 1000;
+  state().room = "rainbow_girls"; // a go-go — the bell is venue-tiered (×1.75), so two rings need headroom
+  state().money = 2000;
   run("spank ploy");
   assert.match(lastOut(), /books, not the customers/i);
   assert.equal(state().soc.heat.rainbow_girls, 2);
@@ -2352,6 +2392,19 @@ test("cashiers cap physical contact until the bell has rung twice", () => {
   run("spank ploy"); // cap lifted; favor 4 + two-bell warmth lands hot
   assert.doesNotMatch(lastOut(), /books, not the customers/i); // no longer capped
   assert.match(lastOut(), /returns fire|out-Pattaya|spanks YOU|retaliates|returns the favour|harder/i); // a real reaction (pooled)
+});
+
+test("the cashier's bell-gate hint remembers a ring already spent (Reg the publican, round 32)", () => {
+  // "The bell defines both" repeated identically after Reg had already rung
+  // it once — the hint pointed at the exact thing he'd just done, with no
+  // acknowledgment. It should count.
+  state().flags.act1Done = true;
+  state().room = "rainbow_girls"; state().money = 3000;
+  out = []; run("barfine ploy");
+  assert.doesNotMatch(lastOut(), /halfway there/i, "no progress claimed before any ring");
+  out = []; run("ring bell");
+  out = []; run("barfine ploy");
+  assert.match(lastOut(), /halfway there.*one more ring/i, "acknowledges the ring that already happened");
 });
 
 test("three bell rings: the room is yours — hostess reciprocates cold", () => {
@@ -2375,6 +2428,31 @@ test("three bells grant amnesty: heat can't accumulate", () => {
   state().soc.bells.neon_paradise = 1; // one bell: heat lands normally again
   _addHeat(2);
   assert.equal(state().soc.heat.neon_paradise, 2);
+});
+
+test("the heat narration never names staff a one-hostess corner bar doesn't have (Reg the publican, round 32)", () => {
+  // anchor_bar runs exactly one hostess (Namfon) and has no mamasan/cashier
+  // NPC at all — the flat _HEAT_FIRST pool used to narrate one anyway, so the
+  // room announced a cashier or "two of the girls" with nobody to TALK TO.
+  state().room = "anchor_bar";
+  state().soc.heat.anchor_bar = 0;
+  for (let i = 0; i < 40; i++) {
+    state().soc.heat.anchor_bar = 0;
+    out = [];
+    _addHeat(1);
+    assert.doesNotMatch(lastOut(), /mamasan|cashier|two of the girls/i,
+      "no role narrated at a bar that has none of them");
+  }
+  // and a fully-staffed go-go still gets the full pool, mamasan included
+  state().room = "neon_paradise";
+  let sawMama = false;
+  for (let i = 0; i < 60 && !sawMama; i++) {
+    state().soc.heat.neon_paradise = 0;
+    out = [];
+    _addHeat(1);
+    if (/mamasan/i.test(lastOut())) sawMama = true;
+  }
+  assert.ok(sawMama, "a staffed go-go still gets the mamasan line eventually");
 });
 
 test("bell flavor: 'Three' isn't shouty (no dead tap), four-plus gets a generic line", () => {
@@ -2683,6 +2761,25 @@ test("a venue's own name, tapped from inside it, doesn't walk you to your room",
   out = []; run("travel queen vic inn");
   assert.match(lastOut(), /standing in it/i, "no navigation");
   assert.equal(state().room, "queen_vic", "you stayed put");
+});
+
+test("a numbered sibling venue doesn't swallow its own twin's name (Reg the publican, round 32)", () => {
+  // Standing in "Candy Bar 2", TRAVEL TO CANDY BAR used to substring-match the
+  // CURRENT room ("candy bar 2".includes("candy bar")) and refuse with "you're
+  // standing in it" — while the very next ASK line pointed the player at Candy
+  // Bar as if it were reachable. An exact match on the real Candy Bar now
+  // outranks a loose match on the room you're standing in.
+  state().room = "candy_bar_2";
+  state().visited = state().visited || {};
+  state().visited.candy_bar_2 = true; state().visited.candy_bar = true;
+  out = []; run("travel to candy bar");
+  assert.doesNotMatch(lastOut(), /standing in it/i, "resolves to the real Candy Bar, not a refusal");
+  assert.equal(state().room, "candy_bar", "actually walked there");
+  // and the reverse direction still refuses correctly
+  state().room = "candy_bar";
+  out = []; run("travel to candy bar");
+  assert.match(lastOut(), /standing in it/i, "exact self-match still refuses");
+  assert.equal(state().room, "candy_bar", "stayed put");
 });
 
 test("_passTime aborts a multi-tick action when the night ends — no phantom ticks past dawn", () => {
@@ -3707,6 +3804,12 @@ test("barfine needs a room, then favor — then ends the night grandly", () => {
   state().flags.hasWallet = true;
   run("barfine fon");
   assert.match(lastOut(), /not a vending machine/i);
+  // Reg the publican (round 32): outside soi6 the refusal used to never state a
+  // real count, however much was spent — now every venue names it, like soi6.
+  assert.match(lastOut(), /\d more, then we talk/i, "names the real remaining count");
+  state().soc.drinks.fon = 3; // one drink short of the gate — count should read "1 more"
+  out = []; run("barfine fon");
+  assert.match(lastOut(), /one more, then we talk/i, "count drops as favor rises");
   state().soc.drinks.fon = 6; // clears both the gate and the she's-not-sold refusal band
   const h = state().happy;
   run("barfine fon");
@@ -4546,6 +4649,12 @@ test("Sai Krok travels: free on the songthaew, ฿10 for his own bike on a motos
   assert.match(out.join("\n"), /Biscuit/, "paid motosai ride, renamed dog");
   assert.ok(!/Sai Krok/.test(out.join("\n")), "no stray default name");
   assert.equal(beforeMoto - state().money, MOTOSAI_TOWN + DOG_MOTOSAI_FARE, "fare + his ฿10");
+  // Reg the publican (round 32): the balance line used to name only the base
+  // fare ("the fastest ฿50 of your life") while the actual deduction included
+  // the dog's ฿10, so the two numbers on screen didn't reconcile.
+  assert.match(out.join("\n"), new RegExp(`fastest ฿${MOTOSAI_TOWN + DOG_MOTOSAI_FARE} of your life`),
+    "the headline number is the REAL total, not just the base fare");
+  assert.match(out.join("\n"), new RegExp(`plus ${thaiBaht(DOG_MOTOSAI_FARE)}`), "the dog surcharge is named on the same line as the price");
   // the broke pity-ride: free for both rider and dog, no ฿10
   state().room = "sukhumvit_crossing"; state().money = 0;
   out = []; run("motosai to town");
@@ -8019,6 +8128,29 @@ test("the collections show what's left, measured against people you've MET", () 
   state().phone.photos = ["lek", "candy", "bert", "nong", "fon"].map((id, i) => ({ id, turn: i }));
   out = []; run("gallery");
   assert.match(out.join("\n"), /everyone you've met is in here/);
+});
+
+test("SCORE headings the Act One checklist, and drops it once it's redundant (Reg the publican, round 32)", () => {
+  // Printed with no heading right after any OTHER active quest's own ▶ line,
+  // the five Act One ticks read as belonging to that quest instead — "The
+  // Safe-Cracker" followed immediately by "Learned who lifted the wallet"
+  // with nothing between them.
+  state().flags.act1Done = false;
+  state().flags.knowWasHere = true; state().flags.knowMot = true;
+  out = []; run("score");
+  assert.match(out.join("\n"), /The Last Baht Bus:\n✓ Worked out where you were last night/,
+    "headed, and immediately followed by its own tick — not a stray quest's");
+
+  // Once Act One is actually complete, the compact summary line already says
+  // so — repeating the full five-tick checklist on every SCORE forever is
+  // just clutter, and clutter that can misattribute to whatever quest is live.
+  state().flags.act1Done = true;
+  state().flags.knowOyHasIt = true; state().flags.hasWallet = true;
+  out = []; run("score");
+  const text = out.join("\n");
+  assert.match(text, /ACT ONE COMPLETE/);
+  assert.doesNotMatch(text, /The Last Baht Bus:/, "no longer repeats the checklist");
+  assert.doesNotMatch(text, /WALLET RECOVERED/, "the granular ticks are gone too");
 });
 
 // The morning ledger. A bad night has been legible since the WHAT HAPPENED

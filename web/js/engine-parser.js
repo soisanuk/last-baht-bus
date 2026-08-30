@@ -675,15 +675,33 @@ function _doTravel(arg) {
   // Already standing in it — a venue's own name, tapped from inside it, must not
   // route anywhere. Check the CURRENT room before any hotel/destination match, or
   // "Queen Vic Inn" (the pub) resolves to "Your Room — Queen Vic Inn" and walks you
-  // upstairs. (The later !dest branch keeps this for the never-found case.)
+  // upstairs. (The later !dest branch keeps this for the never-found case.) EXACT
+  // match only here: a loose/substring match would let a numbered sibling venue
+  // ("Candy Bar 2") swallow a query for its own un-numbered twin ("Candy Bar") —
+  // Reg the publican caught this from inside the "2" (2026-08-30). The substring
+  // fallback still runs below, once no OTHER known venue matches exactly.
   const _here0 = _room();
-  if ((_here0.bar && _pnm(_here0.bar).includes(_pnm(w))) || _pnm(_here0.name).includes(_pnm(w))) {
-    _say("You're standing in it."); return;
-  }
+  const _hereExact = (r) => (r.bar && _pnm(r.bar) === _pnm(w)) || _pnm(r.name) === _pnm(w);
+  const _hereLoose = (r) => (r.bar && _pnm(r.bar).includes(_pnm(w))) || _pnm(r.name).includes(_pnm(w));
+  if (_hereExact(_here0)) { _say("You're standing in it."); return; }
   const home = _hotelRoomId();
   let dest = null;
   // "home"/"my room"/etc. always mean your room.
   if (/^(hotel|my room|your room|home|room)$/.test(w)) dest = home;
+  // An EXACT name match among known destinations outranks the room you're
+  // standing in, so "candy bar" from inside "Candy Bar 2" resolves to the real
+  // Candy Bar rather than being swallowed by its own numbered sibling.
+  if (!dest) {
+    for (const id of dests) {
+      if (id === home) continue;
+      const r = ROOMS[id];
+      if ((r.bar && _pnm(r.bar) === _pnm(w)) || _pnm(r.name) === _pnm(w)) { dest = id; break; }
+    }
+  }
+  // Only now fall back to a loose match on the room you're standing in — the
+  // Queen Vic Inn case ("queen vic" typed inside the pub, loosely matching both
+  // it and "Your Room — Queen Vic Inn") lands here with no exact dest above it.
+  if (!dest && _hereLoose(_here0)) { _say("You're standing in it."); return; }
   // Then a visited venue by name — bars first, and skip the home room here so the
   // Queen Vic *pub* wins over "Your Room — Queen Vic Inn" (both contain "queen vic
   // inn"); the room is reachable via the keywords above and the hotel-name match below.
@@ -3068,6 +3086,10 @@ const _CONVO_TOPIC_RULES = [
   [/barista|coffee shop|the shop|day job|apron/,                                "job"],
   [/\bdancer\b|number 72|number seventy|your dancing|walking street|\bphoto\b/,   "dancer"],
   [/\borchid\b/,                                                                "rose"],
+  // Rose's reply — carried back to Candy — names "the photographs" as the
+  // memorable noun; "tuesday" is the literal topic key, this is its alias
+  // (round 32, the Rose/Candy return-errand fix).
+  [/\bphotographs?\b/,                                                       "tuesday"],
   [/khanom|the cart|sticky rice|coconut vendor|snack cart|the vendor/,          "vendor"],
   // Nok — the Jomtien regular who stopped coming (The Quiet Side, docs/map-coverage.md)
   [/\bgordon\b|the regular|who stopped/,                                         "regular"],
@@ -4889,12 +4911,17 @@ function _doMotosai(arg) {
   if (lateGouge) _say("Gone two in the morning, the buses long tucked up, and the " +
     "piwin reads the empty road and your lack of options and names his small-hours " +
     "number. You both know you'll pay it.", "dim");
-  _say(`“${thaiBaht(price)}.” You pay${price === 20 ? " — Bank's special price" : ""}, ` +
+  // The dog's ฿10 used to surface on its OWN line, printed AFTER the balance —
+  // so "the fastest ฿50 of your life" sat right next to a balance that had
+  // actually dropped by ฿60, with nothing on that line explaining the gap
+  // (Reg the publican, round 32, 2026-08-30). State the real total where the
+  // balance is shown; the dog's line stays flavor, not the number reveal.
+  _say(`“${thaiBaht(price)}${dogFare ? ` (plus ${thaiBaht(dogFare)} for his lordship's ride)` : ""}.” ` +
+    `You pay${price === 20 ? " — Bank's special price" : ""}, ` +
     "swing on the back, and the piwin threads traffic like it owes him money. " +
-    `That was the fastest ฿${price} of your life. (฿${G.money} left.)`, "thai");
+    `That was the fastest ฿${total} of your life. (฿${G.money} left.)`, "thai");
   _engineSpeak(thaiBaht(price));
-  if (G.dog) _say(_dogN(_DOG_MOTOSAI[Math.floor(_rand() * _DOG_MOTOSAI.length)] +
-    ` (+฿${dogFare} for Sai Krok's ride.)`), "dim");
+  if (G.dog) _say(_dogN(_DOG_MOTOSAI[Math.floor(_rand() * _DOG_MOTOSAI.length)]), "dim");
   _describeRoom(true);
   _maybeEncounter();
 }
@@ -5091,8 +5118,16 @@ function _doScore() {
     .filter(([f]) => _faction(f) !== 0)
     .map(([f, label]) => `${label} ${_faction(f) > 0 ? "+" : ""}${_faction(f)}`);
   if (standing.length) _say(_fmt("Standing: {s}", { s: standing.join(" · ") }), "dim");
-  if (G.mode !== "soi6")
+  // Act One's own tick-list — printed with no heading right after any OTHER
+  // active quest's own ▶ line, it read as belonging to that quest instead
+  // (Reg the publican, round 32, 2026-08-30: "The Safe-Cracker" then five
+  // Last-Baht-Bus ticks, no separator). QUESTS already headings this properly;
+  // SCORE now matches, and stops repeating the full checklist forever once
+  // the compact "ACT ONE COMPLETE" line above already covers it.
+  if (G.mode !== "soi6" && !_flag("act1Done")) {
+    _say("The Last Baht Bus:", "dim");
     for (const [f, label] of _ACT1_MILESTONES) if (_flag(f)) _say("✓ " + label, "dim");
+  }
 }
 const _FACTION_LABELS = [
   ["wdg", "White Dish"], ["samson", "the Samsons"], ["indie", "the independents"], ["syndicate", "the syndicate"],
@@ -6408,7 +6443,7 @@ Common commands:
   WATCH DRAG (The Peacock Cabaret, Supertown/Jomtien — tip the queens)
   WEATHER · SCORES (real football) · LOTTERY (the real GLO draw)
   PLAY CONNECT 4 · PLAY JACKPOT [bet] · PLAY POOL   (in the beer bars)
-  FLIRT/KISS/SPANK/FONDLE <lady> · BUY DRINK FOR <lady> · BUY BEER · BUY MAN DRINK (for the bar manager)
+  FLIRT/KISS <lady> — flirt again and it warms on its own · BUY DRINK FOR <lady> · BUY BEER · BUY MAN DRINK (for the bar manager)
   RING BELL (฿300, instant popularity) · TALK TO PATRON · BARFINE <lady>
   BUY CONDOM (฿40 a pack, any 7-Eleven — a barfine uses one; go without at your peril)
   Host bar (The Adonis Club, Supertown): BUY DRINK FOR <host> · HIRE <host> (premium prices; all welcome)
@@ -6462,7 +6497,7 @@ Common commands:
   WATCH SUNSET (Blue Dog & Stinky Pinky, early evening — the junction show)
   WATCH SOI · BALCONY (your balcony above, the Queen Vic window below, or the quiet middle of the soi — watch, don't join)
   PLAY CONNECT 4 · PLAY JACKPOT [bet] · PLAY POOL   (in the beer bars)
-  FLIRT/KISS/SPANK/FONDLE <lady> · BUY DRINK FOR <lady> · BUY BEER · BUY MAN DRINK
+  FLIRT/KISS <lady> — flirt again and it warms on its own · BUY DRINK FOR <lady> · BUY BEER · BUY MAN DRINK
   RING BELL (฿300, instant popularity) · TALK TO PATRON · BARFINE <lady>
   BUY CONDOM (฿40 a pack, the 7-Eleven — a barfine uses one; go without at your peril)
   DIAGNOSE (how bad is it) · GET TESTED (free clinic — clears a barfine souvenir)
@@ -6501,7 +6536,12 @@ const _COMPLETE_VERBS = [
   "look", "examine", "take", "drop", "inventory", "go", "enter", "talk to",
   "ask", "give", "buy", "sell bottles", "pay", "wai", "say", "ride bus to", "ride the loop",
   "motosai to", "travel", "light", "charge phone", "read", "use", "open", "play",
-  "flirt", "kiss", "spank", "fondle", "ring bell", "barfine", "massage", "special", "soapy", "meet", "eat", "drink",
+  // spank/fondle deliberately absent — same "easter-egg verb" treatment as the
+  // Zork easter eggs above: still fully functional if typed, never suggested
+  // or advertised (Mario's call, round 32). FLIRT auto-escalates toward KISS
+  // on repetition on its own now; spank/fondle stay a manual, undocumented
+  // find for a player who goes looking.
+  "flirt", "kiss", "ring bell", "barfine", "massage", "special", "soapy", "meet", "eat", "drink",
   "sleep", "tv", "column", "owl", "watch", "watch soi", "balcony", "weather", "scores", "lottery", "map", "time", "tip", "wave", "phone",
   "photo", "gallery", "photos", "info", "call", "share", "follow", "shower", "withdraw", "cheers", "tao rai", "borrow", "repay", "hire", "pet", "feed", "rename", "dance", "sing", "swim",
   "smell", "listen", "diagnose", "get tested", "clinic", "apologize", "quests", "accept", "abandon", "contact",

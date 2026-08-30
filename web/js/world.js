@@ -4613,6 +4613,17 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "for the crab.\" She wags a finger at you, delighted. \"And YOU stay out of old-lady " +
           "debts, tilac. They have interest you cannot imagine.\"",
         short: "\"Tell Rose: som tam at Rompho, she pay for the crab.\"" },
+      // Rose's reply, carried back — the return half of the errand. "Tell her
+      // yes... Tuesday... the photographs" is an instruction naming Candy, same
+      // as the outbound leg, and needs the same kind of node to land on. ASK
+      // CANDY ABOUT TUESDAY (or PHOTOGRAPHS, aliased in _CONVO_TOPIC_RULES).
+      { topic: "tuesday", req: ["roseReplied"],
+        text: "\"She say WHAT.\" Candy's hand goes flat on the bar, and for a second the whole " +
+          "rail act drops off her face. \"Tuesday. The photographs.\" A long, slow laugh that " +
+          "isn't really about you at all. \"Forty years and she still knows how to make an old " +
+          "woman's heart go like a girl's.\" She flicks her eyes back to you, delighted again. " +
+          "\"Okay, tilac. You did good. Now go, before I start crying in front of my own customers.\"",
+        short: "\"Tuesday. The photographs.\" Candy laughs like it isn't really about you at all." },
       { req: ["somTamAccepted"], notFlags: ["somTamDelivered"],
         text: "\"Som tam not deliver itself, tilac. Rainbow Girls Bar, deep in the Tree Town maze — give it to PLOY at the cashier cage. Wai first. She melt.\"" },
       { req: ["knowWasHere"], notFlags: ["knowMot"], th: "จำได้สิ", rom: "jam dai si",
@@ -8090,7 +8101,13 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // single most disappointing moment of her session, because the outward
       // half is the best-written link in the game (round 23). Found again by
       // tools/errand-audit.mjs, which exists because of it.
-      { topic: "lunch", req: ["candyLunch"],
+      // Rose's reply is a message of its own, carried the same way Candy's was \u2014
+      // and until now the game had no node to receive it. A player who dutifully
+      // came back to Candy with "yes, Tuesday, the photographs" got the OUTBOUND
+      // message re-issued at him instead, as if he'd never gone (Reg the
+      // publican, round 32, 2026-08-30). `roseReplied` closes the loop; Candy's
+      // "tuesday" node below is the delivery.
+      { topic: "lunch", req: ["candyLunch"], sets: ["roseReplied"],
         text: "\u201cShe said WHAT.\u201d Rose sets the glass down with enormous care, which is how you " +
           "learn she is not angry. \u201cRompho. She wants me to sit on a plastic stool at Rompho " +
           "market, in this heat, at my age, and she thinks paying for the crab settles it.\u201d " +

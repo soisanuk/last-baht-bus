@@ -180,9 +180,17 @@ if (verb === "serve") {
       return {};
     },
     async tap({ text }) {
-      // chips, decorated keywords, start-menu buttons, any visible button — in that order
+      // chips, autocomplete suggestions, decorated keywords, start-menu buttons,
+      // any visible button — in that order. The suggestion row (#term-suggest,
+      // e.g. a contact name or an amount after prefilling "send ") is <span>
+      // elements, not <button> — missing it here made a genuinely tap-complete
+      // flow (tap a placeholder hint → tap a name span → tap an amount span →
+      // tap #term-send) read as "no tap path exists" to a persona whose only
+      // tool was this driver (Dave's thumbs-only audit, round 32, 2026-08-30 —
+      // refuted after manual verification; the harness was blind, not the game).
       const sels = [
         `#chips button:has-text("${text}")`,
+        `#term-suggest span:has-text("${text}")`,
         `#term-out b.kw:has-text("${text}")`,
         `button:has-text("${text}")`,
       ];

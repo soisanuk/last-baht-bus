@@ -51,6 +51,16 @@ TO <name> opens the conversation and the topic list appears on the **chip bar** 
 read it with `state` (the `chips` array). Typed `ask <name> about <topic>` works
 for any topic, listed or not; a miss now gets a voiced "not my story" line.
 
+**A placeholder command hint (`SEND <amount> TO <name>`, `MESSAGE <name>`, …)
+prefills on ONE tap**, then the input's own autocomplete row (`#term-suggest`,
+shown right under the input while it's non-empty) offers tappable candidates —
+a contact name, then an amount, in whatever order the command needs. `tap`
+reaches this row too (same verb, no special syntax): tap the hint, then tap
+each suggested word by its text, then `tap "➤"` (or `tap`-match the submit
+button) to send. Before treating an open-prefill hint as a dead end, try the
+suggestion row — a command that "does nothing on tap" is usually one tap short
+of the actual flow, not actually unreachable.
+
 **The start screen is a menu, not transcript.** `start` prints its buttons
 (`start menu: [THE FULL GAME — disabled] [SOI 6 CHALLENGE] [TODAY'S SOI]…`) and
 `menu` re-reads them any time; tap one by its text. The device mode is fixed
