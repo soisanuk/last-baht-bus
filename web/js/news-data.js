@@ -53,8 +53,13 @@ var NEWS_FEED = [
     "d": "27 Aug 2026"
   },
   {
-    "t": "India vs Thailand Women Live Score, Women's Asia Cup 2026: Thailand fight back as India lose Harmanpreet Kaur, Shafali Verma in quick succes",
-    "s": "The Times of India",
+    "t": "Jai's hat-trick of golds helps Thais top Asian track charts",
+    "s": "Bangkok Post",
+    "d": "30 Aug 2026"
+  },
+  {
+    "t": "INDW vs THAIW, Match 3, Group A, Women's Asia Cup 2026 - Live Stream",
+    "s": "Cricbuzz",
     "d": "30 Aug 2026"
   },
   {
@@ -63,25 +68,20 @@ var NEWS_FEED = [
     "d": "30 Aug 2026"
   },
   {
-    "t": "Lamplough four-for in vain as Thailand edge out Hong Kong in Women's Asia Cup opener",
+    "t": "Thailand bowl; India hand T20I debut to Pratika Rawal",
     "s": "Cricinfo",
-    "d": "28 Aug 2026"
-  },
-  {
-    "t": "Thailand and China earn World Cup spots, advance to Asian Championship final",
-    "s": "Volleyball World",
-    "d": "29 Aug 2026"
+    "d": "30 Aug 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-08-28","USD":32.96,"AUD":23.71,"GBP":44.76,"EUR":38.37};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-30","temp":28,"humid":81,"code":3,"hi":31,"rain":90};
+var WX_NOW = {"date":"2026-08-31","temp":28,"humid":82,"code":3,"hi":30,"rain":66};
 // the bar TV's one true channel
-var FOOTY = {"league":"Premier League","games":[{"d":"2026-08-28","done":true,"h":"C Palace","hs":1,"a":"Man City","as":4},{"d":"2026-08-29","done":true,"h":"Liverpool","hs":2,"a":"Nottm Forest","as":2},{"d":"2026-08-29","done":true,"h":"Bournemouth","hs":1,"a":"Everton","as":1},{"d":"2026-08-29","done":true,"h":"Coventry","hs":0,"a":"Hull","as":1},{"d":"2026-08-29","done":true,"h":"Spurs","hs":0,"a":"Newcastle","as":2},{"d":"2026-08-30","done":true,"h":"Chelsea","hs":4,"a":"Brighton","as":3},{"d":"2026-08-30","done":true,"h":"Leeds","hs":1,"a":"Brentford","as":1},{"d":"2026-08-30","done":true,"h":"Sunderland","hs":1,"a":"Fulham","as":0},{"d":"2026-08-30","done":false,"h":"Man United","hs":1,"a":"Ipswich","as":1},{"d":"2026-08-31","done":false,"h":"Aston Villa","hs":0,"a":"Arsenal","as":0}]};
+var FOOTY = {"league":"Premier League","games":[{"d":"2026-08-28","done":true,"h":"C Palace","hs":1,"a":"Man City","as":4},{"d":"2026-08-29","done":true,"h":"Liverpool","hs":2,"a":"Nottm Forest","as":2},{"d":"2026-08-29","done":true,"h":"Bournemouth","hs":1,"a":"Everton","as":1},{"d":"2026-08-29","done":true,"h":"Coventry","hs":0,"a":"Hull","as":1},{"d":"2026-08-29","done":true,"h":"Spurs","hs":0,"a":"Newcastle","as":2},{"d":"2026-08-30","done":true,"h":"Chelsea","hs":4,"a":"Brighton","as":3},{"d":"2026-08-30","done":true,"h":"Leeds","hs":1,"a":"Brentford","as":1},{"d":"2026-08-30","done":true,"h":"Sunderland","hs":1,"a":"Fulham","as":0},{"d":"2026-08-30","done":true,"h":"Man United","hs":5,"a":"Ipswich","as":2},{"d":"2026-08-31","done":false,"h":"Aston Villa","hs":0,"a":"Arsenal","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-08-16","first":"004615","last2":"53","front3":["429","731"],"back3":["094","937"]};
 // XAU, plus Thai baht-weight gold (96.5%)
 var GOLD = {"usd":4456,"date":"2026-08-30","baht":69450};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":79110,"thb":2595611};
+var BTC = {"usd":78401,"thb":2573469};
