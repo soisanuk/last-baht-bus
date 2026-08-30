@@ -3,8 +3,18 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
+    "t": "Pattaya street hookers arrested ahead of US carrier group's visit",
+    "s": "Bangkok Post",
+    "d": "30 Aug 2026"
+  },
+  {
     "t": "Pattaya police, social workers detain 25 in prostitution crackdown ahead of US Navy visit",
     "s": "Khaosod English",
+    "d": "30 Aug 2026"
+  },
+  {
+    "t": "25 cited in Pattaya crackdown on public-area prostitution",
+    "s": "Nation Thailand",
     "d": "30 Aug 2026"
   },
   {
@@ -18,27 +28,17 @@ var NEWS_FEED = [
     "d": "30 Aug 2026"
   },
   {
-    "t": "Pattaya ready to welcome 5,000 US military personnel",
-    "s": "Bangkok Post",
-    "d": "27 Aug 2026"
-  },
-  {
-    "t": "British tourist in whisky-fuelled brawl injures two countrymen in Pattaya",
+    "t": "Pattaya’s empty streets raise questions over tourism’s future",
     "s": "Pattaya Mail",
     "d": "29 Aug 2026"
   },
   {
-    "t": "Break these rules and you could be deported from Thailand",
+    "t": "Pattaya pedestrians set for cooler crossings as roofs go up on 9 footbridges",
     "s": "Pattaya Mail",
-    "d": "28 Aug 2026"
+    "d": "29 Aug 2026"
   },
   {
-    "t": "Pattaya prepares to welcome personnel from USS Abraham Lincoln",
-    "s": "Nation Thailand",
-    "d": "27 Aug 2026"
-  },
-  {
-    "t": "Pattaya’s empty streets raise questions over tourism’s future",
+    "t": "Pattaya chief prosecutor pays homage to the late Princess Pa",
     "s": "Pattaya Mail",
     "d": "29 Aug 2026"
   },
@@ -53,14 +53,14 @@ var NEWS_FEED = [
     "d": "27 Aug 2026"
   },
   {
-    "t": "Where to watch India vs. Thailand live stream, TV channel, start time and lineups for Women's Asia Cup 2026 match",
-    "s": "Yahoo Sports",
+    "t": "India vs Thailand Women Live Score, Women's Asia Cup 2026: Thailand fight back as India lose Harmanpreet Kaur, Shafali Verma in quick succes",
+    "s": "The Times of India",
     "d": "30 Aug 2026"
   },
   {
-    "t": "Thailand and China earn World Cup spots, advance to Asian Championship final",
-    "s": "Volleyball World",
-    "d": "29 Aug 2026"
+    "t": "Where to watch India vs. Thailand live stream, TV channel, start time and lineups for Women's Asia Cup 2026 match",
+    "s": "Yahoo Sports",
+    "d": "30 Aug 2026"
   },
   {
     "t": "Lamplough four-for in vain as Thailand edge out Hong Kong in Women's Asia Cup opener",
@@ -68,20 +68,20 @@ var NEWS_FEED = [
     "d": "28 Aug 2026"
   },
   {
-    "t": "Thailand's southern insurgency leaves villagers trapped in a cycle of fear",
-    "s": "Reuters",
-    "d": "28 Aug 2026"
+    "t": "Thailand and China earn World Cup spots, advance to Asian Championship final",
+    "s": "Volleyball World",
+    "d": "29 Aug 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-08-28","USD":32.96,"AUD":23.71,"GBP":44.76,"EUR":38.37};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-30","temp":29,"humid":76,"code":3,"hi":31,"rain":65};
+var WX_NOW = {"date":"2026-08-30","temp":28,"humid":81,"code":3,"hi":31,"rain":90};
 // the bar TV's one true channel
-var FOOTY = {"league":"Premier League","games":[{"d":"2026-08-28","done":true,"h":"C Palace","hs":1,"a":"Man City","as":4},{"d":"2026-08-29","done":true,"h":"Liverpool","hs":2,"a":"Nottm Forest","as":2},{"d":"2026-08-29","done":true,"h":"Bournemouth","hs":1,"a":"Everton","as":1},{"d":"2026-08-29","done":true,"h":"Coventry","hs":0,"a":"Hull","as":1},{"d":"2026-08-29","done":true,"h":"Spurs","hs":0,"a":"Newcastle","as":2},{"d":"2026-08-30","done":false,"h":"Chelsea","hs":0,"a":"Brighton","as":0},{"d":"2026-08-30","done":false,"h":"Leeds","hs":0,"a":"Brentford","as":0},{"d":"2026-08-30","done":false,"h":"Sunderland","hs":0,"a":"Fulham","as":0},{"d":"2026-08-30","done":false,"h":"Man United","hs":0,"a":"Ipswich","as":0},{"d":"2026-08-31","done":false,"h":"Aston Villa","hs":0,"a":"Arsenal","as":0}]};
+var FOOTY = {"league":"Premier League","games":[{"d":"2026-08-28","done":true,"h":"C Palace","hs":1,"a":"Man City","as":4},{"d":"2026-08-29","done":true,"h":"Liverpool","hs":2,"a":"Nottm Forest","as":2},{"d":"2026-08-29","done":true,"h":"Bournemouth","hs":1,"a":"Everton","as":1},{"d":"2026-08-29","done":true,"h":"Coventry","hs":0,"a":"Hull","as":1},{"d":"2026-08-29","done":true,"h":"Spurs","hs":0,"a":"Newcastle","as":2},{"d":"2026-08-30","done":true,"h":"Chelsea","hs":4,"a":"Brighton","as":3},{"d":"2026-08-30","done":true,"h":"Leeds","hs":1,"a":"Brentford","as":1},{"d":"2026-08-30","done":true,"h":"Sunderland","hs":1,"a":"Fulham","as":0},{"d":"2026-08-30","done":false,"h":"Man United","hs":1,"a":"Ipswich","as":1},{"d":"2026-08-31","done":false,"h":"Aston Villa","hs":0,"a":"Arsenal","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-08-16","first":"004615","last2":"53","front3":["429","731"],"back3":["094","937"]};
 // XAU, plus Thai baht-weight gold (96.5%)
 var GOLD = {"usd":4456,"date":"2026-08-30","baht":69450};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":78122,"thb":2587862};
+var BTC = {"usd":79110,"thb":2595611};
