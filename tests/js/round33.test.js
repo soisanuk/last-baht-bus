@@ -240,3 +240,65 @@ test("a girl worked too hard gets annoyed, and it costs (Mario's call, round 33)
   G.nightTurn = 99; _endNight("dawn");
   assert.deepEqual(G.soc.tries, {}, "tomorrow she has forgotten");
 });
+
+// Act One starts you at ฿0 by premise and keeps you there until the wallet is
+// back, so ANY price on the critical path is a wall, not a choice. Pim's clue
+// carried one (a ฿150 lady drink) while the free route past it — fetch Bank's
+// helmet — existed, worked, and was advertised nowhere. Every recorded session
+// took the polite wai instead, which locks the office for good, so oy_office
+// has never once been entered. The bug was never the price; it was that only
+// one of the two doors was visible from the corridor.
+test("the safe route is walkable stony broke, and Pim says so (round 33)", () => {
+  // Skint, she doesn't even wait to be asked: her usual "what's it worth?" is a
+  // dead end for a man with ฿0, so the greeting itself names the other currency.
+  G.money = 0; G.room = "starlight_bar";
+  out = []; run("talk to pim");
+  assert.ok(/helmet/i.test(text()) && /Bank/.test(text()),
+    "she opens with the favour rather than a price he can't meet");
+  // …but not at a man already walking it back to her.
+  G.talked.pim = []; _setFlag("hasHelmet");
+  out = []; run("talk to pim");
+  assert.ok(/free/i.test(text()), "carrying it, she's paying out, not pitching");
+  // (that hello *is* the handover, so wind both back before the next check)
+  delete G.flags.hasHelmet; delete G.flags.helmetDelivered; G.talked.pim = [];
+
+  // Skint: she doesn't quote a price she can see you can't pay — she names the
+  // errand, and names it precisely enough to walk to.
+  out = []; run("ask pim about oy");
+  assert.ok(/helmet/i.test(text()), "she volunteers the favour");
+  assert.ok(/Bank/.test(text()) && /Beach Road South/i.test(text()),
+    "…and says who has it and where he stands — a pointer you can act on");
+
+  // Flush: the price leads, but the other door is still on the table. Her
+  // choice to offer, not a hint from the narrator.
+  G.money = 5000; G.talked.pim = [];
+  out = []; run("ask pim about oy");
+  assert.ok(text().includes("฿" + LADY_DRINK), "the price is still the fast way");
+  assert.ok(/helmet/i.test(text()), "and the favour is still offered");
+
+  // The chain itself, from zero, through the real entry point.
+  G.money = 0; G.talked = {}; _setFlag("knowMot");
+  G.room = "beach_rd_s"; run("talk to bank");
+  assert.equal(G.itemLoc.helmet, "inventory", "Bank hands it over for the asking");
+  G.room = "starlight_bar"; run("talk to pim");
+  out = []; run("ask pim about oy");
+  assert.ok(_flag("pinPart9"), "and the clue is his girlfriend's to give away");
+  assert.equal(G.money, 0, "nothing was spent to get it");
+});
+
+// The property that quietly decayed, stated once so it can't decay again: no
+// digit of Madam Oy's PIN, and no part of the way through her door, may sit
+// behind money during Act One. Ploy's som tam looks like a purchase and isn't
+// (it's Candy's peace offering, given); Daeng gives both digits outright.
+test("no Act One safe-route clue is behind a paywall (round 33)", () => {
+  G.money = 0; G.talked = {}; G.flags = {};
+  _setFlag("knowMot");                                  // the one prerequisite
+  G.room = "lucky_tiger";      run("talk to lek");       // → knowOyHasIt
+  G.room = "beach_rd_s";       run("talk to bank");      // → the helmet
+  G.room = "starlight_bar";    run("talk to pim", "ask pim about oy");
+  G.room = "gold_rush";        run("ask nong about oy");
+  for (const f of ["knowOyHasIt", "pinPart9", "pinPart71"])
+    assert.ok(_flag(f), f + " is obtainable at ฿0");
+  assert.equal(G.money, 0, "the whole run costs nothing");
+  assert.equal(String(SAFE_PIN), "719", "…and those digits are the code");
+});

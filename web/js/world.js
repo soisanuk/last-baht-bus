@@ -9050,8 +9050,40 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         text: "\"Madam Oy runs everything you can see from this stool. Lucky number? เก้า — nine. Nine candles at her shrine, ninth of the month she pays wages, table nine reserved forever.\" Pim taps the bar. \"Whatever lock she owns, there's a nine in it. That was your free answer, darling.\"",
         sets: ["pinPart9"],
         short: "\"Whatever lock Oy owns has a nine — เก้า — in it. That was your free answer.\"" },
+      // THE OTHER DOOR, AND SHE HAS TO NAME IT. The favour route already
+      // existed and was fully built — Bank hands you Pim's helmet on his
+      // GREETING once you know about Mot, and delivering it buys this clue for
+      // nothing — but neither end advertised the other, so a player who asked
+      // Pim about Oy met a ฿150 price and concluded that was the only door.
+      // In Act One you have ฿0 by design and stay broke until the wallet is
+      // back, so the safe-cracking route read as gated behind money the
+      // premise forbids you having, and everyone was funnelled onto the polite
+      // wai — which then locks the office for good. That is why oy_office has
+      // never been entered in any recorded session (Nadia, round 33).
+      //
+      // Split in two so she reads the room. Skint, she doesn't even bother
+      // quoting a price she can see you can't pay; she just names the errand,
+      // and names it precisely enough to walk to (Mario's call: she should be
+      // forward about offering it). Flush, the price leads and the favour is
+      // the alternative — her choice to offer, not a hint from the narrator.
+      { topic: "oy", notFlags: ["helmetDelivered"], when: (st, G) => G.money < LADY_DRINK,
+        text: "\"Madam Oy? Mmm. Information about the Mamasan is premium shelf, darling.\" " +
+          "She looks at you properly for the first time — the pockets, the sand still in " +
+          "the seams, the whole sorry story of your night — and does not bother reaching " +
+          "for the menu. \"But you are not buying anything tonight, are you.\" No malice in " +
+          "it at all; she has been reading men across this bar for five years. \"So you do " +
+          "something for me instead, na. Bank — my Bank, the piwin down on Beach Road " +
+          "South — he has my helmet again. Again! Bring it to me and I tell you about " +
+          "Madam Oy for free.\"",
+        short: "\"You're not buying tonight. So: Bank, the piwin on Beach Road South, has my helmet. Bring it and I talk for free.\"" },
       { topic: "oy", notFlags: ["helmetDelivered"],
-        text: "\"Madam Oy? Mmm. Information about the Mamasan is premium shelf, darling.\" She taps the lady-drink menu meaningfully: ฿" + LADY_DRINK + "." },
+        text: "\"Madam Oy? Mmm. Information about the Mamasan is premium shelf, darling.\" " +
+          "She taps the lady-drink menu meaningfully: ฿" + LADY_DRINK + ". Then, because " +
+          "she is not actually greedy and the night is long: \"Or — Bank has my helmet " +
+          "again, the useless man. Beach Road South, on the stand. You bring it to me and " +
+          "we call it even, and I talk for free.\" A shrug that costs her nothing at all. " +
+          "\"Up to you which one is cheaper.\"",
+        short: "\"฿" + LADY_DRINK + " — or fetch my helmet off Bank at Beach Road South and I talk for free. Up to you which is cheaper.\"" },
       // The Safe-Cracker quest (docs/map-coverage.md): the whispers Oy sends you for.
       // Ungated + chip:false — it reads as quest-directed (nobody asks about "the
       // whispers" cold), and setting the flag early is harmless (it does nothing
@@ -9059,6 +9091,24 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { topic: "whispers", sets: ["heardWhispers"], chip: false,
         text: "\"The whispers.\" She stops polishing the glass, which from Pim is a full stop. \"For Oy, or for yourself? For Oy.\" A dry look. \"Somebody has been buying up the girls' debts. Quiet, cash, no name on it. And a girl who owes the wrong person does not work for the bar any more — she works for whoever holds the paper, and she just happens to stand behind the bar.\" She sets the glass down. \"Tell Oy it is new money, not an old face. Tell her to watch the ones who pay off a girl's debt like it is a kindness. That is the whisper, darling. Mind how you carry it.\"",
         short: "\"Somebody's quietly buying up the girls' debts — new money, no name. Tell Oy to watch the ones paying debts off like a kindness.\"" },
+      // She opens on price ("what's it worth?"), which is fine for a man with a
+      // wallet and a dead end for the man the premise guarantees — broke, on
+      // day two, wallet gone. So when she can see there is no money in the
+      // room she saves him the asking and names her other currency first,
+      // before he has thought to ask about anything. This is the greeting that
+      // makes the favour discoverable at all: the clue-for-a-helmet trade sits
+      // behind ASK PIM ABOUT OY, and a player who reads "what's it worth?" with
+      // ฿0 in his pocket has no reason to type it.
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha",
+        notFlags: ["helmetDelivered", "hasHelmet"], when: (st, G) => G.money < LADY_DRINK,
+        text: "\"Well well. You have the look of a man on a quest.\" She rests her chin on " +
+          "her hand and prices you in one unhurried sweep — no wallet, no watch, sand still " +
+          "in your collar. \"And the look of a man who cannot pay for one. Okay, darling, I " +
+          "save you the asking: in here information is never free, but it does not have to " +
+          "be money.\" She tips her head towards the road. \"Bank — the piwin down on Beach " +
+          "Road South, the one who calls me his girlfriend — he has my helmet. Again. You " +
+          "bring it back to me, and then you can ask me whatever you like.\"",
+        short: "\"No money, na? Then fetch my helmet off Bank — Beach Road South — and you can ask me whatever you like.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Well well. You have the look of a man on a quest.\" She rests her chin on her hand. \"Starlight Bar: honest pours, dishonest company. What do you want to know and what's it worth?\"",
         short: "\"What do you want to know, darling — and what's it worth?\"" },
