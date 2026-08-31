@@ -929,7 +929,7 @@ function _doTake(arg) {
     // EXAMINE POSTER could describe one and TAKE POSTER call it a bare
     // contradiction in the same room (verb-auditor playtest, 2026-08-23).
     const _sceneryHere = (() => {
-      const s = _SCENERY.find(x => x.m.test(arg));
+      const s = _sceneryMatch(arg);
       if (!s) return false;
       const ctx = _sceneryCtx();
       return s.fn ? !!s.fn(ctx) : !!(s.lines[ctx] || (ctx === "pub" && s.lines.bar) || s.lines.any);
@@ -1155,7 +1155,11 @@ function _doExamine(arg) {
   // headlines), not the flat item blurb — only "phone"/"mobile", so torch/light
   // fall through to the LIGHT machinery. The phone lights its own screen, so it
   // reads in the dark.
-  if (/\b(phone|mobile)\b/.test(arg) && _inv().includes("phone")) { _doPhoneScreen(); return; }
+  // YOUR phone, not any phrase containing the word: EXAMINE PHONE CASES at the
+  // night bazaar — a thing the market visibly sells — silently opened your own
+  // home screen instead (Nadia, round 33). Anchored, so "phone"/"my phone"/
+  // "the mobile" still open it and a stall's stock does not.
+  if (/^(my |your |the )?(phone|mobile)$/.test(arg.trim()) && _inv().includes("phone")) { _doPhoneScreen(); return; }
   // YOUR POCKETS ARE YOUR INVENTORY. The opening's own tutorial line says
   // "EXAMINE what's in your pockets", and a literal-minded first-timer types
   // exactly that — and got "Nothing special about that — or it isn't here."
@@ -1216,7 +1220,7 @@ function _doExamine(arg) {
     // id/full-name match still wins outright (verb-auditor playtest,
     // 2026-08-23: EXAMINE BELL resolved to Belle instead of the bell fixture).
     const exactNpc = npc === arg.toLowerCase() || NPCS[npc].name.toLowerCase() === arg.toLowerCase();
-    if (!exactNpc && _SCENERY.some(s => s.m.test(arg)) && _doScenery(arg)) return;
+    if (!exactNpc && _sceneryMatch(arg) && _doScenery(arg)) return;
     _say(NPCS[npc].desc);
     // a regular's profile card — his age and nationality moved here off the
     // presence line long ago, and one cast table must not lose them
@@ -1373,8 +1377,18 @@ function _sceneryCtx() {
   return "street";
 }
 
+// A scenery key matches a NOUN, and some of those nouns are also modifiers
+// inside longer ones. "glass" and "chang" both live on the `drink` key, so
+// EXAMINE ONE-WAY GLASS in a soapy fishbowl and EXAMINE CHANG SINGLETS at the
+// night bazaar both answered with a half-drunk beer (Nadia, round 33,
+// 2026-09-01, who found the same wrong bottle in three different rooms). An
+// entry may now declare `unless`: a phrase that means the player is plainly
+// asking about something else, tested before the match.
+function _sceneryMatch(arg) {
+  return _SCENERY.find(s => s.m.test(arg) && !(s.unless && s.unless.test(arg)));
+}
 function _doScenery(arg) {
-  const e = _SCENERY.find(s => s.m.test(arg));
+  const e = _sceneryMatch(arg);
   if (!e) return false;
   const ctx = _sceneryCtx();
   // a pub is still a bar for everything the two genuinely share (the stool, the
@@ -1923,7 +1937,39 @@ const _SCENERY = [
     ],
   } },
 
-  { key: "drink", m: /\b(beer|beers|drinks?|bottles?|glass|chang|leo|singha)\b/, lines: {
+  // The signature fixture of a soapy, and the reason `glass` needed the guard
+  // below: three rooms describe a wall of one-way glass with numbered girls
+  // behind it, and every one of them answered with a half-drunk beer. fn-only
+  // and room-aware, so it returns null (and falls through) anywhere the
+  // fixture doesn't exist. naklua_massage sees the Emperor's from the street.
+  // Named in the shared massage-shop line ("Reclining chairs, tiger balm, a
+  // price list on the wall") in four rooms, and examinable in none of them —
+  // the room advertised its own furniture and then denied it existed.
+  { key: "tigerbalm", m: /tiger ?balm|liniment|\bbalm\b/,
+    fn: () => (_room().massage || _room().soapy)
+      ? "The little hexagonal jars, red and white, lined up where you can see them. The " +
+        "smell gets into everything — the towels, the curtain, the back of your throat — " +
+        "and for the rest of your life it will mean this hour, this shop, and a woman " +
+        "who found the knot before you finished saying where it was."
+      : null },
+
+  { key: "fishbowl", m: /one.?way glass|fish ?bowl|tiered bench|numbered girls/,
+    fn: () => _room().soapy
+      ? "The glass is lit from their side and dark from yours, which is the entire " +
+        "technology of the place: they are on display and you are not. Numbers on little " +
+        "discs, tiered benches, a room-temperature hush, and a mamasan somewhere behind " +
+        "you doing sums. (SOAPY, if you want to pick a number.)"
+      : G.room === "naklua_massage"
+        ? "The Emperor's tank, four floors up and lit like an aquarium — you can see the " +
+          "shapes of the tiered benches from the street and nothing else, which is the " +
+          "point. The door is the only way to see more, and the door is right there."
+        : null },
+
+  // `glass` and `chang` are the two that double as modifiers: the fishbowl's
+  // one-way glass is a wall, and a Chang singlet is a garment on a market rail.
+  { key: "drink", m: /\b(beer|beers|drinks?|bottles?|glass|chang|leo|singha)\b/,
+    unless: /one.?way|looking.glass|glass(es)? case|singlet|shirt|vest|tank ?top|shorts/,
+    lines: {
     bar: [
       "Yours is where you left it, sweating its label loose. The rule of the coast: never " +
         "measure the night in empties. The staff already are.",
@@ -2244,7 +2290,17 @@ const _SCENERY = [
     return null;
   } },
 
-  { key: "streetfood", m: /\bsom ?tam\b|\bmoo ?ping\b|\bskewers?\b|\bgrill(ed)?\b|\bnoodle stall\b|\bnoodle carts?\b|\btandoor\b|\bkhanom\b/, lines: {
+  { key: "streetfood", m: /\bsom ?tam\b|\bmoo ?ping\b|\bskewers?\b|\bgrill(ed)?\b|\bnoodle stall\b|\bnoodle carts?\b|\btandoor\b|\bkhanom\b/,
+    // A venue that SELLS food must not say it doesn't. The `bar` pool below
+    // opens "The bar doesn't do food" — printed at KISS Jomtien, a food stall
+    // that had just quoted ฿120 for a plate (Nadia, round 33). Rooms carrying
+    // the `food` flag get told the truth and pointed at the verb.
+    fn: () => _room().food
+      ? "The grill is right there and it is the whole point of the place — charcoal, a " +
+        "battered fan, and somebody who has been turning skewers since before you landed. " +
+        "(BUY FOOD.)"
+      : null,
+    lines: {
     street: [
       // NOTE the missing (BUY FOOD): this pool is shared by every street in the
       // game, so the hint travelled into rooms with no stall — a persona read it

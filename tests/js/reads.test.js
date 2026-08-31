@@ -263,10 +263,17 @@ test("a scenery fn that declines falls through to its own pool", () => {
   // noun, or adding a room-aware special case silently deletes the general answer.
   const withBoth = _SCENERY.filter(e => e.fn && e.lines);
   assert.ok(withBoth.length >= 2, "the pattern is actually in use");
+  // Probe with a noun the entry ACTUALLY matches. The key usually is one, but
+  // it needn't be — "streetfood" is reached by "grill", not by its own name —
+  // and probing with a non-matching string tests nothing while looking like it
+  // tests something (it fails on the match, never reaching the fallthrough).
+  const VOCAB = ["window", "grill", "glass", "poster", "stool", "shrine", "ceiling",
+    "mirror", "floor", "sand", "arch", "till", "bunting"];
   for (const e of withBoth) {
+    const probe = e.m.test(e.key) ? e.key : VOCAB.find(w => e.m.test(w));
+    assert.ok(probe, `no probe noun matches ${e.key} — add one to VOCAB`);
     G.room = "beach_rd_c"; out = [];
-    assert.ok(_doScenery(e.key === "window" ? "window" : e.key),
-      e.key + " still answers where its fn declines");
+    assert.ok(_doScenery(probe), `${e.key} still answers where its fn declines (probed "${probe}")`);
   }
 });
 

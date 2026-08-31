@@ -89,9 +89,13 @@ test("a new question answered by an old line is not an accusation (Wes)", () => 
   out = []; run("ask gary about midnight sun");
   assert.doesNotMatch(text(), /asked me that|Already told you|Same answer/i, "he was asked something new");
   assert.match(text(), /Midnight Sun/, "and the answer contains the thing asked about");
-  // a genuine repeat is still terse — the brush-off isn't gone, just aimed right
+  // a genuine repeat is still terse — the brush-off isn't gone, just aimed
+  // right. Assert against the POOL, not one of its lines: _pickVary rotates
+  // them, so a single-string match is a coin flip (the house rule, and I broke
+  // it writing this test).
   out = []; run("talk to gary"); out = []; run("talk to gary");
-  assert.match(text(), /Already told you|asked me that|Same answer/i, "repeats still get the gist");
+  assert.ok(_ASK_AGAIN_EN.some(f => text().includes(f("Lake Gary"))),
+    "repeats still get the brush-off, whichever line comes up");
 });
 
 test("the Sundowner's fridge is the fridge its own description leads with (Wes)", () => {
