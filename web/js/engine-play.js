@@ -1755,6 +1755,24 @@ const _FLIRT_AWKWARD = [
   n => _fmt("{n} blinks, then snorts. \"Ha — no. Not that way, mate. Buy me a beer if you like, but keep the eyelashes to yourself.\" More baffled than bothered.", { n }),
   n => _fmt("A beat of confusion, then {n} laughs it off and shifts his stool an inch away. \"Steady on, fella. Wrong tree entirely.\" Good-natured, but that's a no.", { n }),
 ];
+// Going round again on a girl who already warmed to you tonight. Cooling
+// first — she is not offended, she is BUSY, and the warmth costs her the stool
+// she could be filling. Then genuine irritation. Register per the house rule:
+// she is a working woman running out of patience, never shrill, never a
+// victim, and never a meter with a face on it. (Round 33 — the brake that
+// belongs to her rather than to the economy.)
+const _FLIRT_AGAIN = [
+  n => _fmt("{n} gives you the same smile a size smaller. She has already said yes to your company tonight; you are asking her to say it twice, and there are stools either side of you she is not working.", { n }),
+  n => _fmt("“You say that one already, tilac.” {n} says it lightly — but she says it, and her eyes go briefly to the door, and to the room between you and it.", { n }),
+  n => _fmt("{n} laughs half a beat later than last time. The warmth is real and it is not new, and you can watch her price how much of the night to spend on a man repeating himself.", { n }),
+  n => _fmt("A pat on the arm from {n}: the kind that means yes, yes, and also means now something else. She has been charming since six o'clock and you are not the only stool.", { n }),
+];
+const _FLIRT_ANNOY = [
+  n => _fmt("{n}'s smile stays exactly where it is and everything behind it leaves. “Okay,” she says. “Okay.” It is not agreement. It is the sound of a woman waiting for a man to finish.", { n }),
+  n => _fmt("“Enough now, na.” {n} says it without heat, which is worse, and turns a shoulder those few degrees that end a conversation without ending a customer.", { n }),
+  n => _fmt("{n} looks at you the way you would look at a phone that will not stop buzzing. “You tell me already. Three time.” She lets it sit. The girl beside her is very carefully not watching.", { n }),
+  n => _fmt("The professional warmth goes out of {n} like a light on a timer. “I work, tilac.” She picks up a cloth that did not need picking up, and is somewhere else for a while.", { n }),
+];
 const _FLIRT_HOSTILE = [
   n => _fmt("{n}'s face shuts like a door. \"No. Do that again and we have a problem.\" The temperature in your corner of the bar drops several degrees.", { n }),
   n => _fmt("\"You WHAT?\" {n} sets the glass down very deliberately. That is not a look you flirt through. Leave it.", { n }),
@@ -2011,6 +2029,29 @@ function _doSocial(kind, targetWord) {
   // a ladyboy: welcomed courtship for a bi player, a gracious pass for a straight one
   // (she reads you and declines — agency intact). Bi → falls through to the tiers.
   if (_ladyboyGate(id)) return;
+  // SHE NOTICES A MAN WHO WON'T TAKE THE HINT. Once she has already warmed to
+  // you tonight, going round again is not more charm — it is the same charm
+  // asked for twice, from a woman with a floor to work and a quota on it. So
+  // the arc is: charm → a kiss (the escalation below) → "you said that one
+  // already" → "enough now, na", the last with a real cost.
+  //
+  // This is the free economy's OTHER brake, and deliberately the diegetic one:
+  // _charmHappy polices working the whole rail, this polices working one girl
+  // to death, and it is about HER patience rather than about a meter (Mario's
+  // call, round 33). Counted per girl per night and kind-agnostic — it sits
+  // ABOVE the flirt→kiss rewrite on purpose, because after the first attempt
+  // every "flirt" IS a kiss, and a counter keyed on the verb would never fire.
+  const tries = (G.soc.tries = G.soc.tries || {});
+  tries[id] = (tries[id] || 0) + 1;
+  if ((G.soc.charmed || {})[id] && tries[id] >= 3) {
+    if (tries[id] < 5) { _say(_pickVary(_FLIRT_AGAIN, "flirtagain")(name)); return; }
+    _say(_pickVary(_FLIRT_ANNOY, "flirtannoy")(name), "alert");
+    _addHappy(-1, "she has had enough of being worked");
+    _addBond(id, -1);
+    // and past a certain point the ROOM notices, which is the bar's own physics
+    if (tries[id] >= 7) _addHeat(1, "working a girl who had already asked you to stop");
+    return;
+  }
   // FLIRT auto-escalates on repetition: once she's already responded warmly
   // tonight (G.soc.charmed — the same flag that gates the once-a-night สนุก
   // spark below), a SECOND flirt reads as an invitation to kiss, not a repeat
@@ -2045,7 +2086,7 @@ function _doSocial(kind, targetWord) {
     const charmed = (G.soc.charmed = G.soc.charmed || {});
     if (!charmed[id]) {
       charmed[id] = true;
-      _addHappy(tier === 4 ? 3 : 1);
+      _charmHappy(tier === 4 ? 3 : 1);
     }
   }
   if (tier >= 3) _maybeSelfBarfine(id);
@@ -2859,6 +2900,26 @@ function _boughtBond(id, n) {
   return grant;
 }
 
+// THE BREADTH TAPER ON CHARM — the free sibling of _boughtHappy, and it exists
+// because the flirt payout became the entire economy. Measured (Yuki, round 33,
+// 2026-09-01): 40 bells at ฿15,200 paid +39 สนุก, and five turns later in the
+// same room five flirts paid +15 for ฿0 — ฿390/สนุก against ฿0/สนุก. The
+// once-per-girl-per-night cap added in 2026-08-22 closed the per-TURN fountain
+// and left the per-GIRL one open; with ~230 staff on the roster that converted
+// an infinite tap into a very large finite one, still worth more than every
+// priced source in the game combined. สบายสบาย on day 4 of 7, no money spent.
+//
+// The brake is on BREADTH specifically, not on charm — the doctrine is that
+// presence and courtship stay rewarding while churn does not (the conquest
+// treadmill exempts them for exactly that reason). So this counts DISTINCT
+// girls charmed tonight: the first two pay in full, and working your way down
+// the rail pays less with each new face. Going deep with one or two is
+// untouched; farming a room of eight is worth about what two are.
+function _charmHappy(n) {
+  if (!n) return;
+  const c = (G.soc.charmedN = (G.soc.charmedN || 0) + 1);
+  _addHappy(Math.max(0, n - Math.max(0, c - 2)));
+}
 function _boughtHappy(n) {
   if (!n) return;
   const c = (G.soc.bought = (G.soc.bought || 0) + 1);
@@ -3750,6 +3811,8 @@ function _endNight(reason) {
   G.soc.greeted = {};  // a fresh night — she greets you anew
   G.soc.fed = {};      // fed-a-girl fondness is once per girl per night
   G.soc.charmed = {};  // the first spark of the night pays สนุก; repeats charm, not restack
+  G.soc.charmedN = 0;  // …and the breadth taper (_charmHappy) starts each night at full rate
+  G.soc.tries = {};    // …and last night's patience is not held against you tonight
   G.soc.contested = {}; // a forced drink's standoff doesn't outlive the shift
   G.soc.gaveCondom = {}; // as is the (amusing) condom fondness
   G.lastBfId = null;   // clear the LT-ending bond hook

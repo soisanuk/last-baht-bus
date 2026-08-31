@@ -310,8 +310,28 @@ if (verb === "serve") {
       await page.waitForTimeout(800);
       return { fresh: true };
     },
-    async stop() { setTimeout(() => process.exit(0), 200); return { bye: true }; },
+    async stop() { setTimeout(() => _shutdown(0), 200); return { bye: true }; },
   };
+
+  // …AND IT TAKES THE BROWSER WITH IT, however it goes. The idle reap below
+  // lives INSIDE the daemon, so it only covers "alive but forgotten" — it can
+  // do nothing about the daemon being killed, throwing, or being exited
+  // abruptly, and in every one of those cases the browser it launched is
+  // orphaned and stays resident. (Diagnosis credit: the agent on the sibling
+  // repo, who checked all 20 tools here — only two ever call browser.close(),
+  // and nothing registered a process handler.) Every exit path now runs one
+  // shutdown that actually closes the browser.
+  let _closing = false;
+  const _shutdown = async (code) => {
+    if (_closing) return;               // a second signal must not race the first
+    _closing = true;
+    try { rmSync(portFile, { force: true }); } catch {}
+    try { await browser.close(); } catch {}
+    process.exit(code);
+  };
+  for (const sig of ["SIGINT", "SIGTERM", "SIGHUP"]) process.on(sig, () => _shutdown(0));
+  process.on("uncaughtException", e => { console.error("daemon crashed:", e); _shutdown(1); });
+  process.on("unhandledRejection", e => { console.error("daemon rejected:", e); _shutdown(1); });
 
   // THE DAEMON REAPS ITSELF. It holds a real browser — ~700 MB once its
   // renderer/GPU/utility children are counted — and used to die only on an
@@ -330,8 +350,7 @@ if (verb === "serve") {
   let lastSeen = Date.now();
   setInterval(() => {
     if (Date.now() - lastSeen < IDLE_EXIT_MS) return;
-    try { rmSync(portFile, { force: true }); } catch {}   // don't leave a port file pointing at a corpse
-    process.exit(0);
+    _shutdown(0);   // one exit path: closes the browser, clears the port file
   }, 5 * 60 * 1000);
 
   const server = http.createServer((req, res) => {

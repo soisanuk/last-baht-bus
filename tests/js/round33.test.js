@@ -191,3 +191,48 @@ test("the Buakhao shuttle is never spliced into the town circuit", () => {
   assert.equal(ROOMS.buakhao_pt.exits.w, "pattaya_tai");
   assert.equal(ROOMS.buakhao_klang.exits.w, "pattaya_klang");
 });
+
+// ── Yuki (Opus, economy): the free-flirt economy, braked two ways ──
+
+test("charm tapers across the RAIL — breadth pays less, depth does not (Yuki)", () => {
+  // Measured: 40 bells at ฿15,200 paid +39 สนุก, then five flirts paid +15 for
+  // ฿0 in the same room five turns later. The once-per-girl cap closed the
+  // per-turn fountain and left the per-girl one open; with ~230 staff that is
+  // still worth more than every priced source combined (สบายสบาย on day 4 of 7,
+  // no money spent). The brake is on BREADTH — working one or two girls is
+  // untouched, working the whole floor is not.
+  _setFlag("act1Done"); G.room = "rainbow_girls"; G.money = 9000;
+  const girls = _npcsHere().filter(i => NPC_ROLES[i] === "hostess");
+  assert.ok(girls.length >= 4, "premise: a floor worth working");
+  girls.forEach(g => { G.soc.drinks[g] = 6; });
+  const paid = [];
+  for (const g of girls) { const h = G.happy; run("flirt " + NPCS[g].name); paid.push(G.happy - h); }
+  assert.ok(paid[0] >= 2, "the first connection of the night pays properly");
+  assert.ok(paid[paid.length - 1] < paid[0], "…and the last one does not");
+  assert.ok(paid.every((v, i) => i === 0 || v <= paid[i - 1]), "monotonically down the rail");
+  // depth is explicitly NOT taxed: a fresh night restores the full rate
+  G.nightTurn = 99; _endNight("dawn");
+  assert.equal(G.soc.charmedN, 0, "the taper resets nightly");
+});
+
+test("a girl worked too hard gets annoyed, and it costs (Mario's call, round 33)", () => {
+  _setFlag("act1Done"); G.room = "lucky_tiger"; G.money = 5000; G.soc.drinks.lek = 6;
+  out = []; run("flirt lek");                       // 1: the spark
+  assert.ok(G.happy > 0, "the first one pays");
+  run("flirt lek");                                  // 2: escalates to a kiss
+  out = []; run("flirt lek");                        // 3: cooling
+  assert.ok(_FLIRT_AGAIN.some(f => text().includes(f("Lek"))), "she clocks the repetition");
+  const beforeHappy = G.happy, beforeBond = G.soc.drinks.lek;
+  run("flirt lek");                                  // 4
+  out = []; run("flirt lek");                        // 5: enough
+  assert.ok(_FLIRT_ANNOY.some(f => text().includes(f("Lek"))), "and then she's had enough");
+  assert.ok(G.happy < beforeHappy, "it costs สนุก");
+  assert.ok(G.soc.drinks.lek < beforeBond, "…and her patience with you");
+  // …and the room eventually notices a man who won't take the hint
+  const heat0 = G.soc.heat.lucky_tiger || 0;
+  run("flirt lek", "flirt lek", "flirt lek");
+  assert.ok((G.soc.heat.lucky_tiger || 0) > heat0, "the bar's own physics take over");
+  // none of it outlives the night
+  G.nightTurn = 99; _endNight("dawn");
+  assert.deepEqual(G.soc.tries, {}, "tomorrow she has forgotten");
+});
