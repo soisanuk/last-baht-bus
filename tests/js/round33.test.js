@@ -302,3 +302,68 @@ test("no Act One safe-route clue is behind a paywall (round 33)", () => {
   assert.equal(G.money, 0, "the whole run costs nothing");
   assert.equal(String(SAFE_PIN), "719", "…and those digits are the code");
 });
+
+// ── the small verified batch (round 33) ───────────────────────────────────────
+
+// A pointer with no upper bound outlives the errand it exists for. Lek kept
+// sending the player across town for a wallet already in his pocket, which
+// doesn't read as flavour — it reads as the game having lost track of him.
+test("Lek stops sending you after a wallet you're already carrying (round 33)", () => {
+  _setFlag("knowMot");
+  G.room = "lucky_tiger";
+  out = []; run("ask lek about wallet");
+  assert.ok(/Rainbow Girls/.test(text()), "before: she gives directions");
+  _setFlag("hasWallet"); _setFlag("act1Done"); G.talked.lek = [];
+  out = []; run("ask lek about wallet");
+  assert.ok(!/Go\. Be polite to her/.test(text()), "after: she stops sending you");
+  assert.ok(/front pocket/i.test(text()), "…and has the last word on it instead");
+});
+
+// Body state was making a claim about the room: the middle hunger rung said
+// "every cart on the street smells personal" wherever you stood, including the
+// stretches of map where BUY FOOD then refuses.
+test("DIAGNOSE only smells carts where there are carts (round 33)", () => {
+  G.hunger = 50;
+  G.room = "klang_massage";                       // nothing to buy for streets around
+  assert.ok(!_foodHere(), "nothing to eat here");
+  out = []; run("diagnose");
+  assert.ok(!/every cart/.test(text()), "no cart is promised");
+  assert.ok(/peckish/.test(text()), "…but hunger is still reported");
+
+  G.hunger = 50; G.room = "beach_rd_c";           // has a 7-Eleven
+  assert.ok(_foodHere(), "food is genuinely at hand");
+  out = []; run("diagnose");
+  assert.ok(/every cart/.test(text()), "and there the good line survives");
+
+  // the two kitchens that advertise through neither FOOD_STALLS nor room.food
+  G.room = "mama_yai";  assert.ok(_foodHere(), "Mama Yai just puts a plate down");
+  G.room = "queen_vic"; G.nightTurn = 0;
+  assert.equal(_foodHere(), _qvMenu().length > 0, "the pub tracks its own card");
+});
+
+// You cannot tell a swallowed keystroke from a refused one, so a bare re-prompt
+// after an out-of-range digit reads as the game ignoring you.
+test("an out-of-range digit says why, and is never stored (round 33)", () => {
+  G.convo = "mint"; G.convoIdx = 0; G.room = _npcRoom("mint");
+  G.convoQ = { id: "mint", key: "stay", q: "How long you stay?", shown: true };
+  const n = _askReplies("stay").length;
+  out = []; run("9");
+  assert.ok(/only/.test(text()), "it tells you the digit was out of range");
+  assert.ok(!/only 1 of those/.test(text()), "and counts in English");
+  assert.equal((G.player.said || {}).stay, undefined, "the stray digit is not your answer");
+  out = []; run("1");
+  assert.equal((G.player.said || {}).stay, _askReplies("stay")[0],
+    "an in-range one still answers");
+  assert.ok(n >= 1, "there was something to pick");
+});
+
+// The room names five kinds of tat and, until these were registered, only the
+// frogs answered a close look — a market you can't examine is wallpaper.
+test("the night bazaar's stalls answer to a close look (round 33)", () => {
+  G.room = "night_bazaar";
+  for (const [noun, want] of [["singlets", /CHANG SINGLETS/], ["football shirts", /four hundred/],
+    ["phone cases", /pegboard/], ["elephant trousers", /drawstring/], ["cloth", /bolts/]]) {
+    out = []; run("examine " + noun);
+    assert.match(text(), want, noun + " reads as a real thing");
+  }
+});

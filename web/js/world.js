@@ -1852,6 +1852,28 @@ const ROOMS = {
         "demonstrates without being asked: a stick down the back and the thing croaks, " +
         "convincingly, every time. Nobody needs one. Thousands go home in luggage every " +
         "high season, croaking through customs the world over.",
+      // The room's own prose names five kinds of tat and only the frogs
+      // answered to a close look — a market you cannot examine is a market
+      // rendered as wallpaper, which is the one thing this room is not.
+      singlet: "CHANG SINGLETS, the unofficial uniform, hung in sizes from optimistic to " +
+        "honest. Up close the logo is a shade off and the cotton is thinner than the " +
+        "one you're picturing, which no one has ever minded: it is not really a vest, " +
+        "it is a photograph you can wear, and it will be a dust cloth by March.",
+      shirt: "Football shirts, four hundred baht, every club and a few that folded. The " +
+        "badges are embroidered and the sponsors are immaculate; the collars will go at " +
+        "the seam after two washes. A rack of last season's, cheaper, and one of a squad " +
+        "number the stallholder swears is this year's and is not.",
+      phonecase: "Phone cases in a hundred variations of a dozen ideas, hung on pegboard " +
+        "in a slab of colour, and among them — always — cases for models nobody has " +
+        "carried in years, waiting with real patience for the one man who still has one.",
+      trousers: "Elephant-print trousers in the drawstring cut that fits everybody, which " +
+        "is the entire commercial proposition. Cool, comfortable, and worn on this street " +
+        "exclusively by people who arrived within the last ten days. You can date a " +
+        "holiday from across the road.",
+      cloth: "Deeper in, past the food court, the aisles go quiet and turn to cloth: bolts " +
+        "stacked to the roof, cut to the centimetre and sold by people who moved their " +
+        "trade here when Tree Town took the market. No haggling here worth the name — " +
+        "this end sells to tailors, and tailors already know the price.",
     },
     revisit: [
       "A vendor holds a Chang singlet against your chest without breaking " +
@@ -4806,6 +4828,18 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "don't know the trick, I only hear about it.\" She chalks her cue. \"The girls in the " +
           "cage at Rainbow know that door better than Oy does. The cashier sees everything.\"",
         short: "\"Oy's office locks itself. The cashier in the cage at Rainbow knows that door better than Oy.\"" },
+      // She was still sending you to Rainbow Girls for a wallet already back in
+      // your pocket — the directions node has no upper bound, so it outlived
+      // the errand it existed for. A pointer that survives its own quest is the
+      // state-blind-prose defect: it doesn't read as flavour, it reads as the
+      // game having lost track of you. She gets the last word on it instead.
+      { topic: "wallet", req: ["hasWallet"],
+        text: "\"You got it!\" Lek looks genuinely pleased, and then immediately less so. " +
+          "\"From Oy? Ui.\" She chalks her cue with more attention than it needs. \"Then she " +
+          "wanted you to have it, na, or you don't have it. That is how she work — nobody " +
+          "take anything from Madam Oy.\" A shrug, and the grin comes back. \"Anyway. You " +
+          "keep it in the front pocket now, handsome. Front pocket, hand on top, always.\"",
+        short: "\"You got it back — so Oy let you have it. Front pocket from now on, handsome.\"" },
       { topic: "wallet", req: ["knowMot"], sets: ["knowOyHasIt"],
         text: "\"Mot? He sell your wallet to Madam Oy — Rainbow Girls, top of Tree Town. In her " +
           "safe by now, guarantee.\" She flicks a nail at the door. \"Go. Be polite to her. " +

@@ -1067,6 +1067,13 @@ const _READ_NOUNS = {
   // player would type; critic playtest 2026-08-22)
   fixtures: ["fixtures list", "list of fixtures", "darts", "dartboard", "dart board", "season"],
   jukebox: ["juke"],
+  // the night bazaar's stalls — the room advertises five kinds of tat by name
+  // and, until these were registered, only the frogs answered to a close look
+  singlet: ["singlets", "chang singlet", "chang singlets", "vest", "vests", "tank top"],
+  shirt: ["shirts", "football shirt", "football shirts", "fake shirts", "fake football shirts", "kit", "kits"],
+  phonecase: ["phone case", "phone cases", "phonecases", "cases"],
+  trousers: ["trouser", "elephant trousers", "elephant-print trousers", "elephant pants", "fisherman pants"],
+  cloth: ["bolts", "bolts of cloth", "fabric", "material", "textiles"],
   crane: ["cranes", "origami", "napkin", "napkins"],
   cherries: ["cherry"],
   card: ["show times", "showtimes", "show-times"],
@@ -3381,6 +3388,14 @@ function _convoResolve(lower) {
     if (reps.length && /^[1-9]$/.test(bare)) {
       if (reps[+bare - 1]) return _convoAnswer(reps[+bare - 1]);
       G.convoQ.shown = false; // a misfire earns the cue again
+      // …but say WHY. Re-printing her question with no comment reads as the
+      // game having ignored you, which is the one thing a pending question
+      // must never look like: you can't tell a swallowed keystroke from a
+      // refused one, so you don't know whether to retype it.
+      _say(reps.length === 1
+        ? _L("(There's only the one on the table — or answer in your own words.)")
+        : _fmt("(There are only {n} on the table — or answer in your own words.)",
+          { n: reps.length }), "dim");
       _convoPrompt(G.convoQ.id);
       return true;
     }
@@ -5271,11 +5286,34 @@ function _doDrink(arg) {
   _say("The bar does beer, lady drinks, and water — in descending order of enthusiasm.");
 }
 
+// Is there anything to eat within arm's reach? The same three sources BUY FOOD
+// and _doEat already answer to: FOOD_STALLS keys the carts and kitchens,
+// room.food the ones written into a room's own prose, room.seven the 7-Eleven
+// toastie. Prose that claims food is near must ask this, or it promises a
+// supper the parser then refuses.
+// Plus the two kitchens that don't advertise through either field: the Queen
+// Vic's card (tonight's _qvMenu, so an out-of-hours pub reads as foodless,
+// which it is — Aoy goes home at eleven) and Mama Yai, who simply puts a plate
+// in front of you without being asked.
+function _foodHere() {
+  const r = _room();
+  if (G.room === "mama_yai") return true;
+  if (G.room === "queen_vic")
+    return typeof _qvMenu === "function" ? _qvMenu().length > 0 : true;
+  return !!((typeof FOOD_STALLS !== "undefined" && FOOD_STALLS[G.room]) || r.food || r.seven);
+}
+
 function _doDiagnose() {
   const d = G.soc.drunk;
   const parts = [
+    // The middle rung used to read "every cart on the street smells personal"
+    // wherever you stood — including the two thirds of the map with nothing to
+    // buy, where BUY FOOD then refuses. A body state was making a claim about
+    // the room. Keep the good line for where it's true and let hunger be
+    // hunger everywhere else.
     _L(G.hunger >= 70 ? "hungry enough to envy the soi dogs" :
-      G.hunger >= 40 ? "peckish, and every cart on the street smells personal" : "fed"),
+      G.hunger >= 40 ? (_foodHere() ? "peckish, and every cart on the street smells personal"
+        : "peckish, and starting to resent it") : "fed"),
     _L(G.thirst >= 70 ? "dry as a temple bell" :
       G.thirst >= 40 ? "thirsty" : "watered"),
     d >= 6 ? _fmt("{d} bottles deep and navigating by neon", { d }) :
