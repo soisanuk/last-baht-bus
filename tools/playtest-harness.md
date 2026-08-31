@@ -110,5 +110,13 @@ stop/start for that.
   suspected root cause, and declared in the report.
 - Repo is read-only; all writes go to the agent's scratchpad dir.
 - Dice-drive choices among in-character candidates; never a fixed script.
+- **`stop` when you are done — always, even if you ran out of budget.** The
+  daemon holds a real browser (~700 MB with its children) and used to die only
+  when told to, so every round that finished and walked away left one running
+  for good: 43 orphans, 297 processes and 29.6 GB of a 48 GB machine by
+  2026-08-31, the oldest nine days old. The daemon now reaps itself after two
+  hours of silence, so forgetting is survivable rather than permanent — but two
+  hours × several personas a round is still most of a machine's memory, and the
+  reap is the backstop, not the plan.
 - The final message is the only thing that survives: numbered findings,
   most-severe-first, with exact quotes, then coverage/totals/clean categories.

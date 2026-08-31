@@ -313,7 +313,29 @@ if (verb === "serve") {
     async stop() { setTimeout(() => process.exit(0), 200); return { bye: true }; },
   };
 
+  // THE DAEMON REAPS ITSELF. It holds a real browser — ~700 MB once its
+  // renderer/GPU/utility children are counted — and used to die only on an
+  // explicit `stop`, which a persona that finishes its report and walks away
+  // never sends. Measured 2026-08-31: 43 orphaned daemons from nine days of
+  // rounds, 297 processes, 29.6 GB of a 48 GB machine, the oldest nine days
+  // old. Nothing was ever going to reap them, because the sessions that
+  // spawned them had long since ended.
+  //
+  // The window is deliberately generous. Killing a LIVE session costs a
+  // persona its entire run (the browser IS the session state — see the header),
+  // while an extra hour of a stale one costs memory nobody was using: the
+  // asymmetry says err long. Two hours of TOTAL silence is far past any real
+  // think-time between commands.
+  const IDLE_EXIT_MS = 2 * 60 * 60 * 1000;
+  let lastSeen = Date.now();
+  setInterval(() => {
+    if (Date.now() - lastSeen < IDLE_EXIT_MS) return;
+    try { rmSync(portFile, { force: true }); } catch {}   // don't leave a port file pointing at a corpse
+    process.exit(0);
+  }, 5 * 60 * 1000);
+
   const server = http.createServer((req, res) => {
+    lastSeen = Date.now();   // any command at all resets the idle clock
     let body = "";
     req.on("data", d => body += d);
     req.on("end", async () => {
