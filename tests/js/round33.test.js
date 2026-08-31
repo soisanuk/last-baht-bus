@@ -367,3 +367,50 @@ test("the night bazaar's stalls answer to a close look (round 33)", () => {
     assert.match(text(), want, noun + " reads as a real thing");
   }
 });
+
+// The recurring object-shaped examine dead-ends: furniture several rooms put in
+// the reader's eye that no noun answered to. One _SCENERY entry each, room-aware.
+test("the architecture the rooms keep naming answers to a look (round 33)", () => {
+  for (const [room, noun, want] of [
+    ["bali_hai", "ramp", /pier ramp/], ["doghouse", "ramp", /concrete ramp/],
+    ["doghouse", "basement", /no windows anywhere/], ["succubus", "hedge", /Discretion here is landscaping/],
+    ["succubus", "porch", /villa porch/], ["orchid_club", "porch", /One orchid/],
+    ["sandy_toes", "deck", /raised wooden deck/], ["two_stools", "fridge", /bar fridge|hardest job|ice box/],
+    ["bay_watch", "seating", /stool|Worn/i],
+  ]) {
+    G.room = room; out = []; run("examine " + noun);
+    assert.match(text(), want, room + "/" + noun);
+  }
+});
+
+// …and the ones that are only figures of speech must NOT answer. Candy Bar is
+// "run like a harbourmaster's deck" and has no deck; both corridors in the game
+// are made of neon and noise. Answering them would invent furniture.
+test("a metaphor is not a fixture (round 33)", () => {
+  for (const [room, noun] of [["candy_bar", "deck"], ["second_rd_soi6", "corridor"], ["soi_diamond", "corridor"]]) {
+    G.room = room; out = []; run("examine " + noun);
+    assert.ok(!_sceneryMatch(noun) || _sceneryMatch(noun).fn === undefined ||
+      _sceneryMatch(noun).fn() === null, room + "/" + noun + " stays a figure of speech");
+  }
+  // the hotel mini-bar keeps its own handler — the new bar-fridge entry defers
+  G.room = "hotel_room"; out = []; run("examine fridge");
+  assert.match(text(), /mini-fridge/, "the room fridge is still the room's");
+});
+
+// A CASH MACHINE is not cash. The money entry sits ~900 lines above the atm one
+// and was eating the phrase, answering a man hunting an ATM with a description
+// of the notes already in his pocket.
+test("greedy matching doesn't answer 'cash machine' with your own cash (round 33)", () => {
+  G.room = "dongtan_rd_n";
+  for (const n of ["cash machine", "machine", "atm", "cashpoint"]) {
+    out = []; run("examine " + n);
+    assert.match(text(), /WITHDRAW|ATM|glowing box/i, n + " reaches the ATM");
+    assert.doesNotMatch(text(), /fold of notes/, n + " is not your pocket");
+  }
+  // bare money words still describe your money
+  out = []; run("examine cash");
+  assert.match(text(), /count it|Purple ones|fold of notes/, "cash is still cash");
+  // and the word doesn't steal the bar games, which have their own handlers
+  G.room = "stinky_bar"; out = []; run("examine slot machine");
+  assert.doesNotMatch(text(), /WITHDRAW/, "a slot machine is not an ATM");
+});

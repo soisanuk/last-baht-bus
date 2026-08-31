@@ -1661,7 +1661,11 @@ const _SCENERY = [
   } },
 
   // \bbaht\b(?!\s*bus) — "baht bus" belongs to the bus entry below, not the wallet
-  { key: "money", m: /\b(money|cash|notes?|change)\b|\bbaht\b(?!\s*bus)/, lines: { any: [
+  // `unless` because a CASH MACHINE is not cash: this entry sits ~900 lines
+  // above the atm one and was eating the phrase, answering a man looking for
+  // an ATM with a fold of notes in his own pocket.
+  { key: "money", m: /\b(money|cash|notes?|change)\b|\bbaht\b(?!\s*bus)/, unless: /machine|point\b/,
+    lines: { any: [
     "You count it without taking it out of your pocket, which is a skill this town teaches " +
       "in about three days. (You know the number. It's on the screen.)",
     "Purple ones are the ones to worry about. You have some. You will have fewer.",
@@ -1672,7 +1676,9 @@ const _SCENERY = [
   // this answered "chrome legs, vinyl top" at The Terrace, whose description says
   // "a long teak rail" (persona report A#8, 2026-08-23). Where the room names a
   // material, echo the room; otherwise stay off the subject.
-  { key: "stool", m: /\b(stools?|chairs?|seats?|rail)\b/,
+  // "seating" too — Bay Watch's own description calls its stools "theatre
+  // seating", so it is the word the room itself put in the player's mouth.
+  { key: "stool", m: /\b(stools?|chairs?|seats?|seating|rail)\b/,
     fn: ctx => {
       const desc = String((_room() && _room().desc) || "");
       const mat = (desc.match(/\b(teak|brass|zinc|marble|bamboo|mahogany|copper|oak|concrete|stainless)\b/i) || [])[1];
@@ -2539,7 +2545,12 @@ const _SCENERY = [
     ],
   } },
 
-  { key: "atm", m: /\bcash machines?\b|\batm\b/, lines: {
+  // Bare "machine" too: the only machines the street prose names are the cash
+  // machines outside the 7-Elevens, and that is the noun a player types when
+  // he wants the one mechanic attached to it. Excluded are the machines the
+  // word would otherwise steal — the bar games have their own handlers.
+  { key: "atm", m: /\bcash ?machines?\b|\bcashpoint\b|\batm\b|\bmachines?\b/,
+    unless: /slot|fruit|washing|sewing|vending|coffee|ice|time/, lines: {
     street: [
       "A glowing box that dispenses regret in ฿1000 notes, plus the fee. It has a queue " +
         "at midnight and a guard's chair nobody sits in. (WITHDRAW, if you must.)",
@@ -2628,6 +2639,66 @@ const _SCENERY = [
       "bench — same system as everywhere else on this coast, aimed the other way. The " +
       "arithmetic doesn't care who's buying.";
     return null;
+  } },
+
+  // ── the architecture the rooms keep naming ──────────────────────────────────
+  // Furniture the prose puts in the reader's eye across several rooms and no
+  // noun answered to: the ramp down into the Doghouse, the villa's hedge and
+  // porch, Sandy Toes' deck. Each is room-aware and returns null where the word
+  // is only a figure of speech — Candy Bar is "run like a harbourmaster's deck"
+  // and has no deck, and both "corridors" in the game are made of noise and
+  // neon, so those deliberately fall through rather than answer about a thing
+  // that isn't there.
+  { key: "ramp", m: /\bramps?\b/, fn: () => {
+    if (G.room === "bali_hai") return "The pier ramp, wide enough for a pickup and worn " +
+      "smooth down the middle by forty years of the same trolleys. The piwins have the " +
+      "corner of it, which is the good corner, because everything coming off a boat has " +
+      "to pass them and everything going onto one is already late.";
+    if (G.room === "doghouse" || G.room === "pratumnak_clubs")
+      return "A short concrete ramp dropping under the villa — no rail, wet in one corner " +
+        "all year, and steep enough that everybody going down it does the same small " +
+        "involuntary hurry. Whatever the building was for originally, it was not this.";
+    return null;
+  } },
+  { key: "basement", m: /\bbasements?\b|\bcellars?\b/, fn: () =>
+    (G.room === "doghouse" || G.room === "pratumnak_clubs")
+      ? "A villa basement with no windows anywhere, which is the entire design: nothing " +
+        "in here tells you the hour, and the aircon is set for people who intend to stay. " +
+        "Somebody's cold store or somebody's garage once. It keeps the temperature it kept then."
+      : null },
+  { key: "hedge", m: /\bhedges?\b/, fn: () => /succubus|orchid|pratumnak/.test(G.room)
+    ? "The hedge is the point: kept high, kept dense, kept trimmed by somebody at an hour " +
+      "when nobody is watching. Discretion here is landscaping. A place that wanted your " +
+      "attention would have put up neon and saved on the gardener."
+    : null },
+  { key: "porch", m: /\bporch(es)?\b|\bveranda(h)?\b/, fn: () => {
+    if (G.room === "orchid_club") return "One orchid in the porch, in a pot, immaculate, " +
+      "replaced the moment it turns — the only thing out here doing the job neon does " +
+      "everywhere else. No sign, no barker. If you needed telling, you are not expected.";
+    if (/succubus|villa|orchid/.test(G.room)) return "A proper villa porch, tiled and swept, " +
+      "with shoes off to one side and the door propped just enough to let the cold air out. " +
+      "The step up onto it is where the street stops, and the room behind it knows it.";
+    return null;
+  } },
+  { key: "deck", m: /\bdecks?\b/, fn: () => G.room === "sandy_toes"
+    ? "A raised wooden deck, one step up off the pavement and a rail along the front — and " +
+      "that step is the whole business model. It is just enough of a threshold that the " +
+      "soi's pullers won't come up it, so the bar gets the men who wanted to sit down " +
+      "rather than the men who were caught."
+    : null },
+  { key: "fridge", m: /\bfridges?\b|\bcool ?box\b|\bchiller\b/, fn: () => {
+    if (_isHotelRoom(G.room)) return null;          // the mini-bar has its own handler
+    if (!_inBar()) return null;
+    return _pickVary([
+      "The bar fridge: sliding glass, condensation on the inside, ranks of the same three " +
+        "lagers and one bottle of something nobody has ordered since it went in. It hums, " +
+        "stops, thinks about it, and starts again.",
+      "A fridge doing the hardest job in the building — held at the temperature this town " +
+        "considers non-negotiable, opened four hundred times a night, and never once " +
+        "cleaned during opening hours.",
+      "Beer, water, a row of mixers, and the ice box beside it that matters more than any " +
+        "of them. Everything in here is cold in the way that is the actual product.",
+    ], "fridgescenery");
   } },
 ];
 
