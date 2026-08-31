@@ -23,14 +23,9 @@ var NEWS_FEED = [
     "d": "31 Aug 2026"
   },
   {
-    "t": "Thailand overhauls car tax strategy to build regional EV hub",
+    "t": "Pattaya officials ask woman and dog to leave makeshift shelter in Naklua",
     "s": "Pattaya Mail",
-    "d": "30 Aug 2026"
-  },
-  {
-    "t": "25 cited in Pattaya crackdown on public-area prostitution",
-    "s": "Nation Thailand",
-    "d": "30 Aug 2026"
+    "d": "31 Aug 2026"
   },
   {
     "t": "Pattaya nightclub dispute ends in gunfire, two hurt",
@@ -38,14 +33,19 @@ var NEWS_FEED = [
     "d": "31 Aug 2026"
   },
   {
-    "t": "Pattaya police, social workers detain 25 in prostitution crackdown ahead of US Navy visit",
-    "s": "Khaosod English",
+    "t": "USS Abraham Lincoln headed to Thailand: Why Pattaya is cracking down on prostitution",
+    "s": "Moneycontrol.com",
+    "d": "31 Aug 2026"
+  },
+  {
+    "t": "25 cited in Pattaya crackdown on public-area prostitution",
+    "s": "Nation Thailand",
     "d": "30 Aug 2026"
   },
   {
-    "t": "Protest in Thailand’s Phuket targets misbehaving Israelis",
-    "s": "The Times of Israel",
-    "d": "30 Aug 2026"
+    "t": "USS Abraham Lincoln’s visit to Thailand lifts hope and sex-tourism risk",
+    "s": "Military Times",
+    "d": "31 Aug 2026"
   },
   {
     "t": "A mobile cinema in Gaza and a golden ritual in Thailand: photos of the day – Monday",
@@ -53,35 +53,35 @@ var NEWS_FEED = [
     "d": "31 Aug 2026"
   },
   {
-    "t": "Where to watch India vs. Thailand live stream, TV channel, start time and lineups for Women's Asia Cup 2026 match",
-    "s": "Yahoo Sports",
-    "d": "30 Aug 2026"
-  },
-  {
-    "t": "Thailand retain AVC Continental title to secure first-ever Olympic berth",
-    "s": "FIVB",
-    "d": "30 Aug 2026"
-  },
-  {
-    "t": "Supporting Thailand’s next generation of AI startups",
-    "s": "OpenAI",
-    "d": "28 Aug 2026"
-  },
-  {
-    "t": "Young activist 'Tawan' sentenced to 2 years' jail for lese majesty",
-    "s": "Bangkok Post",
+    "t": "Get a suit tailored in Thailand right here in the USA",
+    "s": "ksl.com",
     "d": "31 Aug 2026"
+  },
+  {
+    "t": "Tensions Flare In Thailand: Locals Protest Against Tourists From Israel",
+    "s": "i24NEWS",
+    "d": "31 Aug 2026"
+  },
+  {
+    "t": "Thailand's 'Death Railway' emerges after years underwater",
+    "s": "nhk.or.jp",
+    "d": "30 Aug 2026"
+  },
+  {
+    "t": "Thailand make history and qualify for first Olympics after Asian title",
+    "s": "Volleyball World",
+    "d": "30 Aug 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-08-28","USD":32.96,"AUD":23.71,"GBP":44.76,"EUR":38.37};
+var FX_RATES = {"date":"2026-08-31","USD":33.17,"AUD":23.75,"GBP":44.9,"EUR":38.46};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-08-31","temp":27,"humid":87,"code":51,"hi":30,"rain":88};
+var WX_NOW = {"date":"2026-09-01","temp":27,"humid":89,"code":3,"hi":31,"rain":81};
 // the bar TV's one true channel
-var FOOTY = {"league":"Premier League","games":[{"d":"2026-08-28","done":true,"h":"C Palace","hs":1,"a":"Man City","as":4},{"d":"2026-08-29","done":true,"h":"Liverpool","hs":2,"a":"Nottm Forest","as":2},{"d":"2026-08-29","done":true,"h":"Bournemouth","hs":1,"a":"Everton","as":1},{"d":"2026-08-29","done":true,"h":"Coventry","hs":0,"a":"Hull","as":1},{"d":"2026-08-29","done":true,"h":"Spurs","hs":0,"a":"Newcastle","as":2},{"d":"2026-08-30","done":true,"h":"Chelsea","hs":4,"a":"Brighton","as":3},{"d":"2026-08-30","done":true,"h":"Leeds","hs":1,"a":"Brentford","as":1},{"d":"2026-08-30","done":true,"h":"Sunderland","hs":1,"a":"Fulham","as":0},{"d":"2026-08-30","done":true,"h":"Man United","hs":5,"a":"Ipswich","as":2},{"d":"2026-08-31","done":false,"h":"Aston Villa","hs":0,"a":"Arsenal","as":0},{"d":"2026-09-04","done":false,"h":"Ipswich","hs":0,"a":"Liverpool","as":0}]};
+var FOOTY = {"league":"Premier League","games":[{"d":"2026-08-28","done":true,"h":"C Palace","hs":1,"a":"Man City","as":4},{"d":"2026-08-29","done":true,"h":"Liverpool","hs":2,"a":"Nottm Forest","as":2},{"d":"2026-08-29","done":true,"h":"Bournemouth","hs":1,"a":"Everton","as":1},{"d":"2026-08-29","done":true,"h":"Coventry","hs":0,"a":"Hull","as":1},{"d":"2026-08-29","done":true,"h":"Spurs","hs":0,"a":"Newcastle","as":2},{"d":"2026-08-30","done":true,"h":"Chelsea","hs":4,"a":"Brighton","as":3},{"d":"2026-08-30","done":true,"h":"Leeds","hs":1,"a":"Brentford","as":1},{"d":"2026-08-30","done":true,"h":"Sunderland","hs":1,"a":"Fulham","as":0},{"d":"2026-08-30","done":true,"h":"Man United","hs":5,"a":"Ipswich","as":2},{"d":"2026-08-31","done":true,"h":"Aston Villa","hs":0,"a":"Arsenal","as":1},{"d":"2026-09-04","done":false,"h":"Ipswich","hs":0,"a":"Liverpool","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-08-16","first":"004615","last2":"53","front3":["429","731"],"back3":["094","937"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4433,"date":"2026-08-31","baht":69100};
+var GOLD = {"usd":4447,"date":"2026-08-31","baht":69750};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":77880,"thb":2585009};
+var BTC = {"usd":78616,"thb":2607152};
