@@ -13475,14 +13475,24 @@ const ORIENTATIONS = [
     pick: "The ladies — and I keep an open mind.",
     tan: "\"An open mind.\" A knowing tilt of the head. \"Good. This town rewards it — and it is very, very good at surprising the men who swear they are closed. Some of the most beautiful girls on this soi, my friend, weren't born girls. I'll point you right.\"" },
   // The out (Tyler playtest, 2026-08-26: a cold player uneasy at the question
-  // had no third answer, even a joke one — the likeliest early bounce). The
-  // game stays honest by CALLING the bluff rather than believing it: same id,
-  // so every routing treats the deflector as the factory setting he is —
-  // denial being, per Barry, the most Pattaya answer of all. Appended THIRD so
-  // the older two keep their intro numbers.
-  { id: "straight", label: "The culture (allegedly)",
+  // had no third answer, even a joke one — the likeliest early bounce).
+  // Appended THIRD so the older two keep their intro numbers.
+  //
+  // IT USED TO CALL THE BLUFF, AND THAT WAS THE MISTAKE (round 32, 2026-09-01).
+  // The label read "The culture (allegedly)" and Tan then told the player he
+  // wasn't fooled — so the game pre-mocked the answer before it was given, and
+  // mocked it again after. A cold player picked it "out of spite", got
+  // needled, and read the whole thing as the game sneering at her for being in
+  // the room (Priya). The game can be unambiguous about who it is for — the
+  // splash now says so outright — without needling a man who says he came for
+  // the beaches. Note this is also more TAN: the phu kwang khwang's whole
+  // register is not needing to say the thing out loud (docs/factions-thai.md),
+  // and a gotcha is the one move he wouldn't make. He takes the answer, offers
+  // something useful, and leaves the door open. The id stays "straight" — the
+  // routing default, unchanged.
+  { id: "straight", label: "The beaches, the food",
     pick: "Honestly? The beaches, the food… the culture.",
-    tan: "\"The culture.\" He carries the word the way you'd carry a very full glass. \"555. My friend, I drive four hundred men a year to the cultural district of Soi 6. Some of them keep saying 'culture' the whole first week.\" The mirror gets a glance — warm, entirely unfooled. \"Mai pen rai. This town never makes a man say it out loud. It only makes him tip.\" The indicator ticks. \"The beaches are that way. Nobody will check.\"" },
+    tan: "\"The beaches.\" He nods, and means it. \"Good ones, too. Jomtien for the quiet end, Naklua if you want a boat and nobody selling you anything.\" A glance in the mirror with no joke in it at all. \"People come here for all sorts, my friend. The ones who say beaches mostly get beaches.\" The indicator ticks. \"And if the week turns out different from the plan — mai pen rai. The town is good at that too. Tell me what you want to see and I will tell you where it is.\"" },
 ];
 
 // ── Answering back: the player's side of the ask loop ───────────────────────

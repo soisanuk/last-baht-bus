@@ -8614,6 +8614,15 @@ function _introAnswer(input) {
   const pick = _introMatch(input, step.table());
   if (!pick) { _say("\"Hah — a number, my friend. Long drive.\"", "dim"); _introPrompt(); return; }
   G.player[step.field] = pick.id;
+  // …and remember the ANSWER YOU GAVE, not just where it routes. Two
+  // orientation entries share id "straight" (the deflection files under the
+  // factory setting), so a label lookup by id always returned the FIRST
+  // entry's — WHO AM I told a man who said "the beaches" that he was here for
+  // "the ladies", which is the game contradicting the player to his face for
+  // no mechanical reason (round 32, 2026-09-01). Routing is unchanged; only
+  // the readout gets to be honest. A new field needs no backfill: an old save
+  // without it falls back to the by-id lookup exactly as before.
+  (G.player.said = G.player.said || {})["_label_" + step.field] = pick.label;
   _say(pick.tan);
   if (stepIdx < _INTRO_STEPS.length - 1) { G.introStep = stepIdx + 1; _introPrompt(); return; }
   // done — Tan drops you on Soi 6; the chosen scenario opens
@@ -8656,8 +8665,14 @@ function _doWhoAmI() {
     _say("You haven't worked out who you are yet — the night's still young.");
     return;
   }
-  const find = (t, id) => (t.find(e => e.id === id) || {}).label || "?";
-  _say(`You are: ${find(ORIGINS, G.player.origin)} · ${find(PERSONALITIES, G.player.personality)} · ${find(ORIENTATIONS, G.player.orientation)}.`, "win");
+  // prefer the label of the answer actually GIVEN (see _introAnswer); fall back
+  // to the by-id lookup for saves made before that was recorded
+  const said = (G.player.said || {});
+  const find = (t, id, field) => said["_label_" + field] ||
+    (t.find(e => e.id === id) || {}).label || "?";
+  _say(`You are: ${find(ORIGINS, G.player.origin, "origin")} · ` +
+    `${find(PERSONALITIES, G.player.personality, "personality")} · ` +
+    `${find(ORIENTATIONS, G.player.orientation, "orientation")}.`, "win");
   if (_flag("act1Done")) _say(`On the soi, you're ${_REP_LABELS[_repTier()]}. (STANDING for more.)`, "dim");
   // the one line in the game that has to be earned from outside the game
   if (_flag("owlBox15")) _say("You are also the person who answered Box 15.", "win");

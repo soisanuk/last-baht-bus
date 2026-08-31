@@ -2381,21 +2381,29 @@ test("Tan's manifest carries the eighth passenger", () => {
   assert.match(out.join("\n"), /tripod.*means it|wants to run a bar/, "Tan drove him in too");
 });
 
-test("the third answer to Tan's last question: the deflection he sees straight through", () => {
+test("the third answer to Tan's last question is taken at face value, not needled", () => {
   // Tyler, 2026-08-26: "what are you in the market for?" had no out, even a
-  // joke one — the likeliest early bounce for an uneasy cold player. The game
-  // stays honest by CALLING the bluff, not believing it.
+  // joke one — the likeliest early bounce for an uneasy cold player.
+  // It then over-corrected into a sneer (round 32, 2026-09-01): the label read
+  // "The culture (allegedly)" and Tan told the player he wasn't fooled, so the
+  // game mocked the answer before AND after it was given. A cold player picked
+  // it "out of spite" and read the game as sneering at her. The splash now
+  // states who the game is for outright, which is what makes the needling
+  // unnecessary — Tan can simply take the answer.
   newGame(); G.introAfter = "beach"; G.pendingChoice = "intro"; G.introStep = 2;
   out = []; _introPrompt();
   assert.match(out.join("\n"), /3\) Honestly\? The beaches, the food… the culture\./, "the out is on the card");
+  assert.doesNotMatch(out.join("\n"), /allegedly/i, "…and the card does not pre-mock it");
   out = []; _introAnswer("3");
-  assert.match(out.join("\n"), /cultural district of Soi 6/, "Tan calls the bluff, warmly");
-  assert.equal(G.player.orientation, "straight", "…and files the deflector under the factory setting: every routing unchanged");
-  // the punchline survives to the record
+  assert.match(out.join("\n"), /Jomtien for the quiet end|mostly get beaches/, "Tan answers the question he was asked");
+  assert.doesNotMatch(out.join("\n"), /cultural district|unfooled|Nobody will check/i, "no gotcha");
+  assert.equal(G.player.orientation, "straight", "…and still files under the factory setting: every routing unchanged");
+  // the READOUT reports what you actually said, not what it routes as
   G.pendingChoice = null; G.introStep = null;
   G.player.origin = "monger"; G.player.personality = "joker";
   out = []; doCommand("who am i");
-  assert.match(out.join("\n"), /The ladies/, "WHO AM I quietly agrees with Tan, not with what you said");
+  assert.match(out.join("\n"), /The beaches, the food/, "WHO AM I reports the answer you gave");
+  assert.doesNotMatch(out.join("\n"), /The ladies/, "…not the label of the id it shares");
   // the older two answers keep their numbers
   newGame(); G.introAfter = "beach"; G.pendingChoice = "intro"; G.introStep = 2;
   out = []; _introAnswer("2");
