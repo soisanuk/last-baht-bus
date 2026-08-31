@@ -214,10 +214,28 @@ function _lastCall(id) {
   G.soc.lastCall[id] = true;
   const mins = Math.max(0, (60 - G.nightTurn) * 6);
   if (mins <= 6) return; // at the shutters there is no last call, only the shutters
-  _say(_fmt("Last call — the mamasan taps her watch: {when} to closing. " +
+  const when = mins >= 25 ? _L("about half an hour") : _fmt(_L("about {n} minutes"), { n: mins });
+  // WHO IS TELLING YOU, AND WHETHER THERE IS ANYTHING TO BARFINE. This was one
+  // fixed string for every midnight-closing room, so the lake's family fish
+  // restaurant — the room the game's own prose calls "the most respectable for
+  // miles — no neon, no touts, no trouble" — had a mamasan it does not employ
+  // tap her watch and proposition the player on his way out (Wes, round 33,
+  // 2026-09-01: the worst register break of his week). Same doctrine as the
+  // _HEAT_FIRST fix: never narrate staff the room does not have, and never
+  // sell a transaction the room does not offer.
+  const here = _npcsHere();
+  const mama = here.find(n => NPC_ROLES[n] === "mamasan");
+  const sellable = here.some(n => NPC_ROLES[n] === "hostess");
+  if (!sellable) {
+    _say(_fmt("Last call — chairs start going up on the far tables: {when} to closing. " +
+      "This place shuts at midnight.", { when }), "alert");
+    return;
+  }
+  _say(_fmt("Last call — {who}: {when} to closing. " +
     "This place shuts at midnight, so if you mean to take a lady home tonight, now " +
     "is the moment to BARFINE. After the shutters come down it's the street.",
-    { when: mins >= 25 ? _L("about half an hour") : _fmt(_L("about {n} minutes"), { n: mins }) }), "alert");
+    { who: mama ? _fmt(_L("{n} taps her watch"), { n: NPCS[mama].name })
+                : _L("somebody behind the bar taps a watch"), when }), "alert");
 }
 
 // The climax the game is named for: the ฿15 ride home has a curfew. One town-wide

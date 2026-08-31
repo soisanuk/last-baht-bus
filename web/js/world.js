@@ -7,6 +7,11 @@
 // ── Constants ──────────────────────────────────────────────────────────────
 
 const BUS_FARE   = 15;   // baht bus, any hop on a line
+// Taking a songthaew OFF its route: you are buying the whole truck, not a bench,
+// and the driver names the number. Well above a motosai on purpose — the point
+// of the charter is that it is the expensive way to leave a soi whose own
+// shuttle would not have taken you (see BUS_LINES.buakhao).
+const BUS_CHARTER = 200;
 const MOTOSAI_TOWN = 50; // motosai hop inside town
 const MOTOSAI_FAR  = 100;// motosai to/from the Darkside
 // The party barfine (TAKE HER OUT): the honest mirror of the bfparty scam —
@@ -2344,6 +2349,7 @@ const ROOMS = {
     motosai: true,
     name: "Soi Buakhao (Pattaya Tai)",
     region: "Soi Buakhao",
+    busStop: "buakhao",   // the soi's own shuttle — see BUS_LINES.buakhao
     desc: "The foot of Soi Buakhao, where it ends on South Pattaya Road and the bar strip " +
       "stops dead. Four lanes of through-traffic, a piwin stand working the corner, and " +
       "the particular flatness of a junction nobody drinks at. West along Pattaya Tai " +
@@ -2460,6 +2466,7 @@ const ROOMS = {
     atm: true,
     name: "Soi Buakhao (Klang End)",
     region: "Soi Buakhao",
+    busStop: "buakhao",   // the soi's own shuttle — see BUS_LINES.buakhao
     desc: "Where the soi gives up and hands you to Central Pattaya Road. KLANG CORNER " +
       "MASSAGE keeps a shopfront right at the junction. The traffic arrives here to " +
       "die: two baht buses nose to tail with nowhere to go, a third wedged across the " +
@@ -2486,6 +2493,7 @@ const ROOMS = {
     motosai: true,
     name: "Soi Buakhao (Made in Thailand)",
     region: "Soi Buakhao",
+    busStop: "buakhao",   // the soi's own shuttle — see BUS_LINES.buakhao
     desc: "The middle of the artery, and the busiest crossing on it. PLAZA THAI " +
       "MASSAGE fronts the crossing itself. Soi Made In Thailand opens west — the " +
       "night plaza, and past it the lane becomes Soi Myth Night and runs on to Second " +
@@ -2531,6 +2539,7 @@ const ROOMS = {
     motosai: true,
     name: "Soi Buakhao (Tree Town Arch)",
     region: "Soi Buakhao",
+    busStop: "buakhao",   // the soi's own shuttle — see BUS_LINES.buakhao
     desc: "The TREE TOWN arch stands west off the soi, strung with fairy lights and " +
       "swallowing tourists at a steady rate. Out here the traffic has thickened to " +
       "a crawl — a baht bus stopped dead with its back step crowded, another behind " +
@@ -2548,6 +2557,7 @@ const ROOMS = {
   buakhao_honey: {
     name: "Soi Buakhao (Soi Honey)",
     region: "Soi Buakhao",
+    busStop: "buakhao",   // the soi's own shuttle — see BUS_LINES.buakhao
     desc: "Soi Honey comes out here, narrow and pink-lit, and for about ten metres the " +
       "noise of it competes with the soi's own. The Metro mouth is a few doors south, " +
       "which makes this stretch of pavement a permanent bottleneck: two alleys emptying " +
@@ -2564,6 +2574,7 @@ const ROOMS = {
     motosai: true,
     name: "Soi Buakhao (Metro Alley)",
     region: "Soi Buakhao",
+    busStop: "buakhao",   // the soi's own shuttle — see BUS_LINES.buakhao
     desc: "The mouth of LK Metro, and you can hear it before you reach it — three lanes " +
       "of go-go bleeding into the soi through a gap barely wide enough for two people " +
       "and a motorbike, which is what is usually in it. Soi Honey comes out a few doors " +
@@ -2580,6 +2591,7 @@ const ROOMS = {
   buakhao_n: {
     name: "Soi Buakhao (Soi Diana)",
     region: "Soi Buakhao",
+    busStop: "buakhao",   // the soi's own shuttle — see BUS_LINES.buakhao
     seven: true,
     desc: "The expat artery: pharmacies, laundry, bars, repeat. ROCK FACTORY's two-storey " +
       "stage looms on the corner — currently doing what every band in Thailand does to " +
@@ -2606,6 +2618,7 @@ const ROOMS = {
     atm: true,
     name: "Soi Buakhao (Old Market)",
     region: "Soi Buakhao",
+    busStop: "buakhao",   // the soi's own shuttle — see BUS_LINES.buakhao
     desc: "The block everyone still calls the market, though the market went years ago — " +
       "Tree Town took the trade and the tarps came down. What is left is the shape " +
       "of it: shophouse fronts too wide for what they sell now, a som tam cart " +
@@ -2624,6 +2637,7 @@ const ROOMS = {
   buakhao_s: {
     name: "Soi Buakhao (South)",
     region: "Soi Buakhao",
+    busStop: "buakhao",   // the soi's own shuttle — see BUS_LINES.buakhao
     desc: "The bottom of the soi, where Buakhao runs out of bars — JASMINE GARDEN BAR is " +
       "the last of them, real plants out front — and hands you down to South Pattaya " +
       "Road. The neon thins, the pavement widens, and the noise arrives from behind " +
@@ -3577,6 +3591,17 @@ const ROOMS = {
       "Nobody here has been pickpocketed since the nineties. THE BOATHOUSE, the quiet " +
       "restaurant across the road, is open for the fish, and next door THE SUNDOWNER " +
       "keeps the lake view a notch louder.",
+    // The street used to print the daytime face at 00:24 in hammering rain —
+    // families under string lights and the Boathouse "open for the fish",
+    // immediately before ENTER THE BOATHOUSE answered "Shutters down, lights
+    // dead, chairs up." Every other after-hours street on this side carries a
+    // lateDesc; this one didn't, so it lied all night (Wes, round 33,
+    // 2026-09-01). Khao Talo's "wet ash and dog" is the standard it's written to.
+    lateDesc: "The string lights are off and the lake has gone from black water to just " +
+      "black — you hear it rather than see it. The Boathouse's chairs are up on its tables, " +
+      "the grills are cold and wiped, and the only light on the road is the Sundowner's, " +
+      "spilling a short way onto the tarmac and stopping. Somewhere out on the water a fish " +
+      "turns over. Nobody walks a dog at this hour.",
     venues: ["lake_bar", "lake_beer"],
     exits: { s: "khao_talo" },
   },
@@ -3593,10 +3618,17 @@ const ROOMS = {
       "rather than anywhere brighter. The register sits by the door, a small shrine and a " +
       "framed photo of a young man beside it.",
     reads: {
+      // "…and it is why the Boathouse closes early" made a schedule claim the
+      // game has no mechanism for — it shuts at midnight with every other
+      // Darkside room (Wes, round 33, 2026-09-01, who checked). The line is
+      // better without it anyway: the shrine explains the woman, not the
+      // opening hours, and "nobody asks" is undercut by the narrator then
+      // explaining.
       photos: "By the register, a small shrine and a framed photo of a young man — taken " +
         "years ago by the border of the frame's fading, fresh marigolds beside it today. " +
         "Duangjai doesn't explain it and the room's manners are that nobody asks. Whatever " +
-        "it is, it is tended daily, and it is why the Boathouse closes early.",
+        "it is, it is tended daily, and it is tended first — before the till is opened, " +
+        "before a single fish goes on.",
     },
     exits: { out: "lake_mabprachan" },
   },
@@ -10572,7 +10604,32 @@ const BUS_LINES = {
   // for HIRE (point-to-point charter, name a price), not the ฿15 loop. The
   // circulating truck turns left at the WS gate and never reaches the pier.
   beachrd:  ["naklua_rd", "dolphin", "beach_rd_n", "beach_rd_c", "beach_rd_s", "pattaya_tai"],
+  // SOI BUAKHAO RUNS ITS OWN SHUTTLE, and only its own: up and down the soi,
+  // Klang End to the Pattaya Tai end, and no further. The street prose has
+  // always staged songthaews on this road — "a baht bus at walking pace with
+  // four people hanging off the back step", "a baht bus stopped dead with its
+  // back step crowded" — while RIDE BUS answered "No blue trucks come down
+  // here" (Col, round 33, 2026-09-01, who stood and watched described buses he
+  // was not allowed to hail, twice).
+  //
+  // Deliberately NOT joined to the town circuit: this line is a local, and the
+  // rule is Mario's — they only go up and down Buakhao unless you NEGOTIATE
+  // otherwise, which is the charter (BUS_CHARTER, see _doRideBus). Both ends
+  // touch a main road one room west (buakhao_klang → pattaya_klang,
+  // buakhao_pt → pattaya_tai), so the honest cheap route off the soi is still
+  // to ride to an end and walk. _busLinesFor's loop-completion only fires for
+  // beachrd/secondrd, so this line never gets silently spliced into the circuit.
+  // Ordered north→south; buakhao_oil is a shop off the road, not a stop.
+  buakhao:  ["buakhao_klang", "buakhao_myth", "buakhao_tt", "buakhao_honey",
+             "buakhao_lk", "buakhao_n", "buakhao_market", "buakhao_s", "buakhao_pt"],
 };
+
+// Lines whose driver will leave his route for a price (see _doRideBus). NOT
+// simply "every line that isn't the town circuit" — the Jomtien line is also a
+// short local, and its flat refusal is deliberate and pinned by a test
+// (persona B#13, 2026-08-23: an off-route ask must be ANSWERED, not swallowed).
+// The charter is a Soi Buakhao rule, so it is named here rather than inferred.
+const LOCAL_SHUTTLES = new Set(["buakhao"]);
 
 // ── Motosai destinations (from any stand) ──────────────────────────────────
 
@@ -14212,6 +14269,32 @@ for (const [name, th, room] of _FILLER_MAMAS) {
   NPCS[id] = _buildMama(name, th, room, id);
   NPC_ROLES[id] = "mamasan";
 }
+
+// ONE AUTHORED NODE ON A GENERATED CHARACTER — because the game names her.
+// Neil's `photo` node says of the snapshot on the Sundowner's fridge: "That one
+// on Boonsri's fridge? HERS. She stuck it up years back, when we were her only
+// regulars" — so the writing makes a filler mamasan the custodian of the
+// Darkside arc's central object, and she could only answer "that one I don't
+// know, na" when asked (Wes, round 33, 2026-09-01, who went and checked it
+// exactly as the game trains a player to). The generator stays clean: this is a
+// named patch AFTER it, never plot dialogue inside it — the house rule is
+// intact. Her angle is deliberately her own rather than an echo of his: she is
+// unsentimental about the photo, and it is a fact about her bar's lean years,
+// not about their romance. Unshifted so the topic wins first-match; her
+// generated greeting and topics are untouched.
+if (NPCS.boonsri) NPCS.boonsri.dialogue.unshift({
+  topic: "photo",
+  text: "\"The little one, on the fridge?\" She doesn't turn to look; she knows which one. " +
+    "\"Is not their photo. Is mine.\" She says it flatly, the way you'd state a price. " +
+    "\"Nineteen year I have this bar. One year — bad year — I have two customer. Him, her. " +
+    "Some night only them, one bottle, they split it and stay till close so the room is not " +
+    "empty.\" A single pass of the cloth along the bar. \"I put it up for ME, na. To remember " +
+    "the year I nearly lose this place. Not because is sweet.\" Then, dryly, without looking " +
+    "up: \"He tell you about the clam? Of course he tell you. Twenty year, he tell everybody " +
+    "about the clam.\"",
+  short: "\"Is not their photo, is mine — the year I had two customer and nearly lost the bar. " +
+    "I keep it for me, na.\"",
+});
 for (const [name, th, room] of _FILLER_CASHIERS) {
   const id = _fillerId(name, room);
   NPCS[id] = _buildCashier(name, th, room, id);

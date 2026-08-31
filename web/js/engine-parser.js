@@ -1056,7 +1056,11 @@ const _READ_NOUNS = {
   // tap-list aliases went with the craft-beer bars that never existed there
   board: ["chalkboard", "blackboard", "clipboard", "slip", "request", "requests", "request sheet"],
   poster: ["flyer"],
-  photos: ["photo", "photograph", "photographs", "picture", "pictures", "wall of photos", "portrait"],
+  // "fridge" rides the photos key because the one room that authors both has
+  // them on the same object — the Sundowner's fridge IS the photo wall, so a
+  // player who examines either gets the story (Wes, round 33). Harmless in the
+  // other photos rooms: a fridge they don't have is a noun nobody types there.
+  photos: ["photo", "photograph", "photographs", "picture", "pictures", "wall of photos", "portrait", "fridge"],
   sign: ["notice", "placard", "arrows", "arrow", "signage"],
   // the Shamrock's darts-and-fixtures wall (renamed from `board`, whose aliases
   // were all DJ-sheet words — the authored elegy was unreachable by any noun a
@@ -1152,6 +1156,14 @@ function _doExamine(arg) {
   // fall through to the LIGHT machinery. The phone lights its own screen, so it
   // reads in the dark.
   if (/\b(phone|mobile)\b/.test(arg) && _inv().includes("phone")) { _doPhoneScreen(); return; }
+  // YOUR POCKETS ARE YOUR INVENTORY. The opening's own tutorial line says
+  // "EXAMINE what's in your pockets", and a literal-minded first-timer types
+  // exactly that — and got "Nothing special about that — or it isn't here."
+  // The first instruction the game gives, failing, with the working verb
+  // (INVENTORY) buried in an 80-line HELP (Col, round 33, 2026-09-01). Works in
+  // the dark: you can feel your own pockets. Sits above the darkness gate for
+  // that reason.
+  if (/\b(pockets?|my stuff|belongings)\b/.test(arg)) { _doInventory(); return; }
   // Everything past here is a close LOOK, and you can't look closely in the dark —
   // point at the fix rather than describing what you plainly cannot see.
   if (_isDarkHere()) { _say("It's too dark to make anything out. (LIGHT ON, if you want a proper look.)"); return; }
@@ -1165,7 +1177,13 @@ function _doExamine(arg) {
        "at your heel, reading the street.")));
     return;
   }
-  if (/\b(fridge|refrigerator|mini.?bar)\b/.test(arg)) { _doFridge(); return; }
+  // …but only where the mini-bar IS. This fired everywhere, so a bar whose own
+  // description leads with "a fridge of Chang and Leo papered with regulars'
+  // photos" answered "No fridge out here — you'd have to be back in your room"
+  // (Wes, round 33, 2026-09-01: the Sundowner denying the fixture it opens
+  // with). Outside a hotel room it now falls through to the room's own reads —
+  // at the Sundowner, straight onto the photos the fridge is papered with.
+  if (/\b(fridge|refrigerator|mini.?bar)\b/.test(arg) && _isHotelRoom(G.room)) { _doFridge(); return; }
   if (/\bbed\b/.test(arg) && _isHotelRoom(G.room)) {
     _say("A firm double under a thin batik cover, the pillows veterans of a thousand " +
       "previous guests. Right now it is the single most persuasive object in Pattaya. " +
@@ -2950,7 +2968,7 @@ function _doTalkBody(arg, topic) {
     // his own that names the thing as a proper noun is a better answer than
     // "not my story" about a word out of his own mouth (see _selfNamedNode).
     const own = _selfNamedNode(npc, topic);
-    if (own) { _deliver(npc, own, false); _questOffer(npc); return; }
+    if (own) { _deliver(npc, own, false, true); _questOffer(npc); return; } // asNew: a new question, an old node
     // she HAS that story but its gate hasn't opened: a "not yet", not a "not mine"
     const _n2 = _convoTopic(topic);
     const gated = NPCS[npc].dialogue.some(e => e.topic && (e.topic === topic || topic.includes(e.topic) ||
@@ -4724,6 +4742,39 @@ function _doRideBus(arg) {
     (toks.length && toks.every(t => _bn(ROOMS[s].name).includes(t))) ||
     (w && ROOMS[s].region.toLowerCase().includes(_bn(w))));
   if (!w || !dest) {
+    // OFF HIS ROUTE, BUT NOT OFF THE TABLE. A local shuttle (Soi Buakhao) runs
+    // its soi and nothing else — but a songthaew is a truck with a driver, and
+    // the driver will leave his route for a price: you are chartering the whole
+    // thing, and he names the number (the same rule the pier rank states above).
+    // Mario's call, round 33: "they only go up and down Soi Buakhao unless you
+    // negotiate otherwise." Only offered on a line that ISN'T the town circuit —
+    // the loop lines already go where you asked, so a miss there is a miss.
+    const localOnly = lines.some(l => LOCAL_SHUTTLES.has(l));
+    if (w && localOnly && !/\bloop\b/.test(w)) {
+      const network = [...new Set(Object.values(BUS_LINES).flat())];
+      const far = network.find(s => s !== G.room && !reachable.includes(s) &&
+        ((toks.length && toks.every(t => _bn(ROOMS[s].name).includes(t))) ||
+         (w && ROOMS[s].region.toLowerCase().includes(_bn(w)))));
+      if (far) {
+        if (G.money < BUS_CHARTER) {
+          _say(_fmt("\"{where}?\" He tips his head down the soi — that is not where this " +
+            "truck goes. \"I take you special. Two hundred baht.\" He can see your pocket " +
+            "from there, and you have ฿{m}. The bench-seat price was never going to buy a " +
+            "whole truck. (Ride to either end and walk to a main road — the loop is ฿{f}.)",
+            { where: _ucfirst((arg || "").trim()), m: G.money, f: BUS_FARE }), "alert");
+          return;
+        }
+        G.pendingFare = { kind: "bus", price: BUS_CHARTER, dest: far };
+        _say(_fmt("\"{where}?\" The driver looks down the soi, then at you, and does the " +
+          "arithmetic out loud the way they all do. \"Not my route. I take you special — " +
+          "฿{p}.\" It is not a bench-seat fare because it is not a bench seat: for the next " +
+          "twenty minutes you are renting the truck. He waits, entirely relaxed, because he " +
+          "knows the walk to a main road is ten minutes and it is not his ten minutes. " +
+          "(PAY {p}, or walk.)",
+          { where: _ucfirst((arg || "").trim()), p: BUS_CHARTER }), "alert");
+        return;
+      }
+    }
     // A destination that ISN'T on this loop was silently discarded: the player
     // typed RIDE BUS TO NAKLUA, got the same wall of drop-off options as a bare
     // RIDE BUS, and reasonably concluded it had worked (persona report B#13,

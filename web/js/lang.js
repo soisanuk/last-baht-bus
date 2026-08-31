@@ -1457,7 +1457,13 @@ const _CATALOGS = {
 
     "about half an hour": "noch etwa eine halbe Stunde",
     "about {n} minutes": "noch etwa {n} Minuten",
-    "Last call — the mamasan taps her watch: {when} to closing. This place shuts at midnight, so if you mean to take a lady home tonight, now is the moment to BARFINE. After the shutters come down it's the street.":
-      "Letzte Runde — die Mamasan tippt auf ihre Uhr: {when} bis Feierabend. Der Laden macht um Mitternacht zu, wenn du also heute Nacht eine Lady mitnehmen willst, ist jetzt der Moment für BARFINE. Wenn die Rollläden unten sind, bleibt nur noch die Straße.",
+    // the last call splits by venue now — a room with nobody to barfine gets
+    // the plain closing courtesy, and the sell names whoever actually says it
+    "{n} taps her watch": "{n} tippt auf ihre Uhr",
+    "somebody behind the bar taps a watch": "jemand hinter der Theke tippt auf eine Uhr",
+    "Last call — chairs start going up on the far tables: {when} to closing. This place shuts at midnight.":
+      "Letzte Runde — hinten werden schon die Stühle hochgestellt: {when} bis Feierabend. Der Laden macht um Mitternacht zu.",
+    "Last call — {who}: {when} to closing. This place shuts at midnight, so if you mean to take a lady home tonight, now is the moment to BARFINE. After the shutters come down it's the street.":
+      "Letzte Runde — {who}: {when} bis Feierabend. Der Laden macht um Mitternacht zu, wenn du also heute Nacht eine Lady mitnehmen willst, ist jetzt der Moment für BARFINE. Wenn die Rollläden unten sind, bleibt nur noch die Straße.",
   },
 };

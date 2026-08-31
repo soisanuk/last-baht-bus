@@ -1414,6 +1414,21 @@ function _findNpc(word) {
   for (const id of here) {
     if (id === w || NPCS[id].name.toLowerCase() === w) return id;
   }
+  // A WORD THAT IS EXACTLY SOMEBODY'S NAME IS A REQUEST FOR THAT PERSON, and
+  // must never be satisfied by a coincidence inside whoever happens to be
+  // standing here: "tan" is Tan, not Ra-TAN-a, Nam-TAN or TAN-gmo (the last by
+  // the name-prefix pass, the others by the substring pass). Tan is the hub the
+  // game itself teaches you to ask about people — ASK TAN ABOUT <person> is the
+  // stuck nudge's own printed hint — so in any bar holding a girl whose name
+  // contains his, the game's own advice was silently answered by her (Wes,
+  // round 33, 2026-09-01). Same doctrine as the patron strictness below, one
+  // rung wider: the bell→Belle collision class.
+  //
+  // Returning null is the RIGHT answer, not a shrug: the callers route a named
+  // absentee to _elsewhereLine, which says where he actually is — far more
+  // useful than a hostess answering in his place.
+  if (Object.keys(NPCS).some(id =>
+      id === w || String(NPCS[id].name || "").toLowerCase() === w)) return null;
   // The regulars (patron: true) keep the STRICTER matching the old _findPatron
   // had: exact, name-prefix, title — never word-prefix or substring. The bench
   // is two dozen short common names ("ron", "dave", "superman"), and letting
@@ -1727,7 +1742,15 @@ function _topicMiss(npcId) {
   return line;
 }
 
-function _deliver(npcId, d, full) {
+// `asNew`: the player asked a genuinely NEW question that this (already-spoken)
+// node happens to answer — the _selfNamedNode path, where a man's own greeting
+// volunteered a proper noun and the player typed it back. He has not repeated
+// himself, so the "you asked me that already" brush-off is a false accusation
+// AND carries no information: asking Lake Gary about the Midnight Sun, which he
+// himself had just name-dropped, was answered "You asked me that one. Same
+// answer. Memory like a sieve, this town." on the FIRST ever ask (Wes, round
+// 33, 2026-09-01 — "a cross-checker's verb, gaslit on first use").
+function _deliver(npcId, d, full, asNew) {
   const n = NPCS[npcId];
   // Second time you hear a line, get the point, not the whole spiel. We track
   // which entries an NPC has delivered (by index) and, on a repeat, swap in the
@@ -1759,12 +1782,16 @@ function _deliver(npcId, d, full) {
   if (bought && !terse && G.soc.roundFor) delete G.soc.roundFor[npcId]; // spent
   const firstEver = !repeat && seen.length === 0;
   if (!repeat) seen.push(idx);
-  if (terse) { if (typeof _noteMiss === "function") _noteMiss("terse"); }
+  if (terse && !asNew) { if (typeof _noteMiss === "function") _noteMiss("terse"); }
   else if (typeof _stuckReset === "function") _stuckReset(); // a new line landed: the world moved
   if (d.th && !terse) { _say(`${n.emoji} ${n.name}: “${d.th}” (${d.rom})`, "thai"); _engineSpeak(d.th); }
   // the brush-off keeps its speaker's register — the rail's grizzled pool for a
   // regular, the soi's fond one for everyone else — and says how to get the rest
-  _say(_fillSaid(terse ? (d.short || (n.patron ? _patronAgain(npcId) : _askAgain(npcId))) : d.text));
+  // …and on the asNew path a node with no `short` gives its TEXT rather than a
+  // brush-off: the gist is fine (it still answers), the brush-off is not.
+  _say(_fillSaid(terse
+    ? (d.short || (asNew ? d.text : (n.patron ? _patronAgain(npcId) : _askAgain(npcId))))
+    : d.text));
   // Courted before you ever talked (drinks first, introductions after — a
   // legitimate Pattaya order of operations): the authored greeting reads
   // tone-deaf if it pretends the ledger is blank, so acknowledge it under the
