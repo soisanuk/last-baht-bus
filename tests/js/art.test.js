@@ -169,3 +169,46 @@ test("narrow marks outdoor rooms only, and never a bar interior", () => {
   const stray = man.rooms.filter(r => "narrow" in r && r.narrow !== true).map(r => r.id);
   assert.deepEqual(stray, [], "narrow must be true or absent, never false: " + stray.join(", "));
 });
+
+// The people-matcher's word-name collision class (finding passed across the art
+// boundary, 2026-09-01): this cast contains a Beer, a Bank, an Ice, a View and
+// two dozen more names that are ordinary words, and the manifest's matcher was
+// listing them as people wherever the word appeared capitalised — "Best visited
+// voluntarily." put a hostess named Best at the police station, and soi_honey_w
+// carried DJ Beer on the strength of the drink. Same class that forced {{…}}
+// markup on decorate()'s side. The invariant is asserted on the OUTPUT, so a
+// regenerated manifest with a regressed matcher, a hand-edit, or a future
+// word-named character all fail here.
+test("the manifest never lists a person on the strength of an ordinary word", () => {
+  const man = JSON.parse(fs.readFileSync(path.join(root, "docs", "scene-manifest.json"), "utf8"));
+
+  // The game's own prose is the authority on what counts as an ordinary word:
+  // any name-token whose lowercase form appears as a plain word in room prose.
+  const corpus = Object.values(ROOMS)
+    .map(r => [r.desc, r.lateDesc, ...(r.revisit || [])].filter(Boolean).join(" ")).join(" ");
+  const ordinary = w => new RegExp("(?<![A-Za-z])" + w.toLowerCase() + "(?![a-z])").test(corpus);
+
+  const fullNames = new Set(Object.values(NPCS).map(n => String(n.name || "")));
+  const bad = [];
+  for (const r of man.rooms) {
+    const stationed = new Set();
+    for (const id of Object.keys(NPCS)) {
+      const n = NPCS[id];
+      if (n.room === r.id || (Array.isArray(n.bars) && n.bars.includes(r.id))) stationed.add(n.name);
+    }
+    for (const p of r.people || []) {
+      if (stationed.has(p)) continue;              // the roster is always honest
+      if (fullNames.has(p) && /\s/.test(p)) continue;  // a full multi-word name is unambiguous
+      if (ordinary(p)) bad.push(`${r.id}: "${p}"`);
+    }
+  }
+  assert.deepEqual(bad, [],
+    "people entries that are ordinary words of the game's own prose, neither " +
+    "stationed here nor a full multi-word name — the Best/Beer class:\n  " + bad.join("\n  "));
+
+  // …and {{…}} is render-only markup: the art side must never see it.
+  const braced = man.rooms.filter(r => /\{\{/.test(r.desc || "")).map(r => r.id);
+  const bracedRegions = man.regions.filter(g => (g.sampleDescs || []).some(d => /\{\{/.test(d))).map(g => g.slug);
+  assert.deepEqual(braced.concat(bracedRegions), [],
+    "descs shipped to the art pipeline still carry {{…}} markup");
+});

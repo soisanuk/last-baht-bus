@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-31",
+  "generated": "2026-09-01",
   "note": "Every room in the game + its region, for the scene-art pipeline (docs/art-pipeline-spec.md). Derived from web/js/world.js — regenerate with scripts/gen-scene-manifest.mjs, do not hand-edit. `kind` is a generator heuristic for prompt-template selection, not game canon. `regionSlug` is produced by the same regex as web/js/scene.js `_sceneArt()`; art files are web/art/rooms/<id>.png with web/art/regions/<slug>.png as the fallback.",
   "counts": {
     "rooms": 237,
@@ -715,9 +715,7 @@
       "regionSlug": "beach-road",
       "kind": "interior",
       "dark": false,
-      "people": [
-        "Best"
-      ],
+      "people": [],
       "desc": "Brown uniforms, whiteboards of unpaid fines, and a desk sergeant with the unhurried patience of a man who has seen every possible farang. A wall of confiscated selfie sticks. Sitting between the mall and the Beach Road bars, it catches whatever the tide washes up. Best visited voluntarily."
     },
     {
@@ -1175,7 +1173,7 @@
       "people": [
         "Mama"
       ],
-      "desc": "The cold blast of air-con and the doorbell jingle of civilisation. Shelves of toasties, Mama noodles, and {{phone}} accessories. There's a power outlet by the window."
+      "desc": "The cold blast of air-con and the doorbell jingle of civilisation. Shelves of toasties, Mama noodles, and phone accessories. There's a power outlet by the window."
     },
     {
       "id": "jomtien_beach",
@@ -2215,7 +2213,7 @@
       "kind": "street",
       "dark": false,
       "people": [],
-      "desc": "Four floors of strip-lit shopping for people counting it. Luggage, {{phone}} repair, tailors who will do you a suit by Thursday, and a whole floor of swimwear that has been there since before the swimwear was fashionable the first time. The lift works most days. Up on the top floor is the food court: laminated photo menus, a fifty-baht plate that is honestly enough food, and a long table of men in their sixties and seventies who have been coming here since it opened. Pension day is the busy one. They know each other's names, and roughly what everyone's monthly is, and neither is ever mentioned."
+      "desc": "Four floors of strip-lit shopping for people counting it. Luggage, phone repair, tailors who will do you a suit by Thursday, and a whole floor of swimwear that has been there since before the swimwear was fashionable the first time. The lift works most days. Up on the top floor is the food court: laminated photo menus, a fifty-baht plate that is honestly enough food, and a long table of men in their sixties and seventies who have been coming here since it opened. Pension day is the busy one. They know each other's names, and roughly what everyone's monthly is, and neither is ever mentioned."
     },
     {
       "id": "night_bazaar",
@@ -2229,7 +2227,7 @@
       "people": [
         "Nit"
       ],
-      "desc": "Aisle after aisle of the same forty things, and somehow you still slow down. Elephant-print trousers, wooden frogs that croak when you run a stick down their spine, {{phone}} cases, fake football shirts, and CHANG SINGLETS in every size from optimistic to honest — the unofficial uniform of a certain kind of holiday. Nobody quotes a first price they expect to get. Deeper in, past the food court and its smell of frying garlic, the aisles turn quieter and become cloth: bolts of it stacked to the roof, and the traders who moved here from the Buakhao market when Tree Town took the trade."
+      "desc": "Aisle after aisle of the same forty things, and somehow you still slow down. Elephant-print trousers, wooden frogs that croak when you run a stick down their spine, phone cases, fake football shirts, and CHANG SINGLETS in every size from optimistic to honest — the unofficial uniform of a certain kind of holiday. Nobody quotes a first price they expect to get. Deeper in, past the food court and its smell of frying garlic, the aisles turn quieter and become cloth: bolts of it stacked to the roof, and the traders who moved here from the Buakhao market when Tree Town took the trade."
     },
     {
       "id": "pattaya_klang",
@@ -2761,7 +2759,7 @@
       "kind": "street",
       "dark": false,
       "people": [],
-      "desc": "The foot of Soi Buakhao, where it ends on South Pattaya Road and the bar strip stops dead. Four lanes of through-traffic, a piwin stand working the corner, and the particular flatness of a junction nobody drinks at. West along Pattaya Tai takes you past Tukcom — four floors of {{phone}} counters and repair booths, dark and shuttered at this hour — and on to Second Road. North is the soi and everything that happens on it."
+      "desc": "The foot of Soi Buakhao, where it ends on South Pattaya Road and the bar strip stops dead. Four lanes of through-traffic, a piwin stand working the corner, and the particular flatness of a junction nobody drinks at. West along Pattaya Tai takes you past Tukcom — four floors of phone counters and repair booths, dark and shuttered at this hour — and on to Second Road. North is the soi and everything that happens on it."
     },
     {
       "id": "buakhao_s",
@@ -2845,7 +2843,7 @@
       "kind": "massage",
       "dark": false,
       "people": [],
-      "desc": "A narrow shopfront wedged between a laundry and a shuttered {{phone}} repair stall, close enough to the junction that the traffic noise comes through the wall. Four mats, a fan on a stand, and a lady who has been doing this for twenty years and can tell from your walk which shoulder is the problem."
+      "desc": "A narrow shopfront wedged between a laundry and a shuttered phone repair stall, close enough to the junction that the traffic noise comes through the wall. Four mats, a fan on a stand, and a lady who has been doing this for twenty years and can tell from your walk which shoulder is the problem."
     },
     {
       "id": "lucky_tiger",
@@ -3225,7 +3223,6 @@
       "dark": false,
       "people": [
         "Mala",
-        "Miss",
         "Miss Mala",
         "Petch"
       ],

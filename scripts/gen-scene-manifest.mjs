@@ -33,6 +33,13 @@ for (const f of ["thai.js", "world.js"]) {
 // region fallback silently misses. One slug function, copied exactly.
 const slug = s => String(s || "").toLowerCase().replace(/[^a-z0-9]+/g, "-");
 
+// VERBATIM from web/js/engine-core.js `stripMarkup()` — {{…}} is render-only
+// decoration-suppression markup; any consumer printing prose without the
+// decorate() pass must strip it, and the art side is exactly such a consumer
+// (night_bazaar was shipping "{{phone}} cases" into its prompt).
+const stripMarkup = text =>
+  String(text == null ? "" : text).replace(/\{\{([\s\S]*?)\}\}/g, "$1");
+
 // Rooms the flag heuristic below can't read: landmarks, complexes, and the
 // handful of non-bar interiors. Kept small on purpose — everything else derives.
 const KIND_OVERRIDE = {
@@ -85,15 +92,37 @@ function kindOf(id, r) {
 // has to drop any clause of a room's prose that describes one. It can't know
 // who they are — we do: everyone stationed here, plus any character the prose
 // names in passing ("Candy's old bar", "Terry holds down the corner stool").
+//
+// BUT a name that is also an ordinary word can't be trusted as a bare token:
+// this cast contains a Beer, a Bank, an Ice, a View, a Cream and two dozen
+// more — the same collision class that forced case-sensitivity and {{…}}
+// markup on decorate()'s side. Case alone can't save the manifest, because
+// ordinary words lead sentences: "Best visited voluntarily." listed a hostess
+// named Best at the police station, and soi_honey_w carried DJ Beer on the
+// strength of the drink. So the ambiguous set is DERIVED, never hand-listed
+// (the walker's-vocabulary rule): a token whose lowercase form appears as a
+// plain word anywhere in room prose is ambiguous, and a bare capitalised match
+// on it proves nothing. An ambiguous name still enters `people` two honest
+// ways — the roster (stationed here), or the character's FULL multi-word name
+// in the prose ("DJ Beer"), which is also the authoring rule whenever a room's
+// desc genuinely needs one of these characters in passing.
 const ALL_NAMES = [];
+const FULL_NAMES = [];
 for (const src of [NPCS]) { // one cast
   for (const id of Object.keys(src)) {
-    for (const w of String(src[id].name || "").split(/\s+/)) {
+    const name = String(src[id].name || "");
+    if (/\s/.test(name) && /^[A-Z]/.test(name)) FULL_NAMES.push(name);
+    for (const w of name.split(/\s+/)) {
       if (/^[A-Z][a-zA-Z'-]{2,}$/.test(w)) ALL_NAMES.push(w);
     }
   }
 }
-const NAMES = [...new Set(ALL_NAMES)];
+const PROSE_CORPUS = Object.values(ROOMS)
+  .map(r => [r.desc, r.lateDesc, ...(r.revisit || [])].filter(Boolean).join(" "))
+  .join(" ");
+const AMBIGUOUS = new Set([...new Set(ALL_NAMES)].filter(w =>
+  new RegExp("(?<![A-Za-z])" + w.toLowerCase() + "(?![a-z])").test(PROSE_CORPUS)));
+const NAMES = [...new Set(ALL_NAMES)].filter(w => !AMBIGUOUS.has(w));
 
 function peopleIn(id, r) {
   const here = new Set();
@@ -102,8 +131,12 @@ function peopleIn(id, r) {
     if (n.room === id || (Array.isArray(n.bars) && n.bars.includes(id))) here.add(n.name);
   }
 
-  // named in the prose — word-boundary, case-sensitive (same doctrine as decorate())
-  for (const w of NAMES) if (new RegExp("\\b" + w + "\\b").test(r.desc)) here.add(w);
+  // named in the prose — word-boundary, case-sensitive (same doctrine as
+  // decorate()). Text inside {{…}} is authored as NOT a character reference
+  // (the decorate() contract), so its content is excluded before matching.
+  const prose = String(r.desc || "").replace(/\{\{[\s\S]*?\}\}/g, " ");
+  for (const w of NAMES) if (new RegExp("\\b" + w + "\\b").test(prose)) here.add(w);
+  for (const full of FULL_NAMES) if (new RegExp("\\b" + full + "\\b").test(prose)) here.add(full);
   return [...here].sort();
 }
 
@@ -156,7 +189,7 @@ for (const id of Object.keys(ROOMS)) {
     darkLight: r.dark ? (DARK_LIGHT[id] || null) : undefined,
     narrow: NARROW.has(id) || undefined,   // absent = an ordinary open street
     people: peopleIn(id, r),
-    desc: r.desc,
+    desc: stripMarkup(r.desc),   // sampleDescs read from these rooms, so they inherit the strip
   });
 }
 rooms.sort((a, b) => a.regionSlug.localeCompare(b.regionSlug) || a.id.localeCompare(b.id));
