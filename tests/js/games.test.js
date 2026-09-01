@@ -211,7 +211,90 @@ test("killer: last cue standing ends it", () => {
   assert.match(kpRender(g), /✝/);
 });
 
-// ── Pool ─────────────────────────────────────────────────────────────────────
+// ── Pok Deng ─────────────────────────────────────────────────────────────────
+
+// card by rank (1=A … 10, 11=J, 12=Q, 13=K) and suit (0=♠ 1=♥ 2=♦ 3=♣)
+const pc = (rank, suit) => suit * 13 + (rank - 1);
+
+test("pok deng: points are sum mod 10, aces one, faces and tens nothing", () => {
+  assert.equal(pdPoints([pc(4, 0), pc(5, 1)]), 9);
+  assert.equal(pdPoints([pc(1, 0), pc(9, 1)]), 0, "A + 9 wraps to 0");
+  assert.equal(pdPoints([pc(13, 0), pc(10, 1), pc(12, 2)]), 0, "paint counts nothing");
+  assert.equal(pdPoints([pc(7, 0), pc(8, 1), pc(9, 2)]), 4);
+});
+
+test("pok deng: a two-card 8 or 9 is a pok and locks the round", () => {
+  assert.ok(pdIsPok([pc(4, 0), pc(5, 1)]));
+  assert.ok(!pdIsPok([pc(4, 0), pc(3, 1)]));
+  assert.ok(!pdIsPok([pc(2, 0), pc(3, 1), pc(4, 2)]), "three cards is never a pok");
+  const g = { deck: [], you: [pc(4, 0), pc(5, 1)], her: [pc(2, 0), pc(2, 1)], next: 4 };
+  assert.ok(pdLocked(g));
+  assert.equal(pdHit(g), false, "no drawing against a pok");
+  pdDealer(g);
+  assert.equal(g.her.length, 2, "the bank stands on a lock too");
+});
+
+test("pok deng: deng — pairs and suited pay 2, the three-card hands 3 and 5", () => {
+  assert.equal(pdDeng([pc(7, 0), pc(7, 1)]), 2, "pair");
+  assert.equal(pdDeng([pc(7, 0), pc(2, 0)]), 2, "suited");
+  assert.equal(pdDeng([pc(7, 0), pc(2, 1)]), 1, "junk");
+  assert.equal(pdDeng([pc(11, 0), pc(11, 1), pc(11, 2)]), 5, "trips");
+  assert.equal(pdDeng([pc(4, 2), pc(5, 2), pc(6, 2)]), 5, "straight flush");
+  assert.equal(pdDeng([pc(4, 2), pc(9, 2), pc(13, 2)]), 3, "flush");
+  assert.equal(pdDeng([pc(4, 0), pc(5, 1), pc(6, 2)]), 3, "straight");
+  assert.equal(pdDeng([pc(1, 0), pc(2, 1), pc(3, 2)]), 3, "A-2-3 straight");
+  assert.equal(pdDeng([pc(12, 0), pc(13, 1), pc(1, 2)]), 3, "Q-K-A round the corner");
+  assert.equal(pdDeng([pc(4, 0), pc(9, 1), pc(13, 2)]), 1, "three-card junk");
+});
+
+test("pok deng: the bank draws on 4 or less and stands on 5", () => {
+  const draw = { deck: [0, 0, 0, 0, pc(9, 3)], you: [pc(2, 0), pc(3, 1)], her: [pc(2, 1), pc(2, 2)], next: 4 };
+  pdDealer(draw);
+  assert.equal(draw.her.length, 3);
+  assert.equal(draw.next, 5, "drew off the top of the deck");
+  const stand = { deck: [], you: [pc(2, 0), pc(3, 1)], her: [pc(2, 1), pc(3, 2)], next: 4 };
+  pdDealer(stand);
+  assert.equal(stand.her.length, 2);
+});
+
+test("pok deng: settle — higher points win, winner's deng pays, ties push", () => {
+  const r = pdResult({ you: [pc(4, 0), pc(5, 0)], her: [pc(4, 1), pc(4, 2)], deck: [], next: 4 });
+  assert.deepEqual(r, { win: 1, mult: 2, you: 9, her: 8 }, "suited pok 9 beats pok 8 and pays double");
+  const loss = pdResult({ you: [pc(2, 0), pc(3, 1)], her: [pc(3, 2), pc(4, 2)], deck: [], next: 4 });
+  assert.equal(loss.win, -1);
+  assert.equal(loss.mult, 2, "you pay HER deng on a loss");
+  const push = pdResult({ you: [pc(2, 0), pc(5, 1)], her: [pc(3, 2), pc(4, 3)], deck: [], next: 4 });
+  assert.deepEqual([push.win, push.mult], [0, 1]);
+});
+
+test("pok deng: a pok beats a drawn hand of equal points", () => {
+  const g = { deck: [], you: [pc(4, 0), pc(4, 1)], her: [pc(2, 2), pc(3, 3), pc(3, 2)], next: 7 };
+  assert.equal(pdPoints(g.you), pdPoints(g.her));
+  assert.equal(pdResult(g).win, 1);
+});
+
+test("pok deng: same rnd stream, same deal — and the deck is a real permutation", () => {
+  const rs = () => { let s = 12345; return () => (s = (s * 48271) % 2147483647) / 2147483647; };
+  const a = pdNew(rs()), b = pdNew(rs());
+  assert.deepEqual(a, b);
+  assert.deepEqual([...a.deck].sort((x, y) => x - y), Array.from({ length: 52 }, (_, i) => i));
+  assert.deepEqual(a.you, [a.deck[0], a.deck[2]], "dealt alternately, you first");
+  assert.deepEqual(a.her, [a.deck[1], a.deck[3]]);
+});
+
+test("pok deng: a drawn round consumes the deck in strict order", () => {
+  const g = { deck: [0, 0, 0, 0, pc(5, 3), pc(9, 3)], you: [pc(2, 0), pc(3, 1)], her: [pc(2, 1), pc(2, 2)], next: 4 };
+  assert.ok(pdHit(g));
+  assert.equal(pdHit(g), false, "one third card only");
+  pdDealer(g);
+  assert.deepEqual([g.you[2], g.her[2]], [pc(5, 3), pc(9, 3)]);
+  // you 2+3+5 = 10 → 0; her 2+2+9 = 13 → 3. Her junk three-card hand pays ×1.
+  assert.deepEqual(pdResult(g), { win: -1, mult: 1, you: 0, her: 3 });
+});
+
+test("pok deng: render is rank-and-suit text", () => {
+  assert.equal(pdRender([pc(1, 0), pc(10, 1), pc(13, 3)]), "A♠ 10♥ K♣");
+});
 
 test("pool: a made shot decrements, a power shot can pot two", () => {
   const g = { you: 7, opp: 7, oppSkill: 0.6, oppNext: null, oppWon: false };

@@ -288,6 +288,98 @@ function kpRender(g) {
     `${p.name} ${p.lives > 0 ? "●".repeat(p.lives) : "✝"}`).join(" · ");
 }
 
+// ── Pok Deng ─────────────────────────────────────────────────────────────────
+// Pok deng — the card game the staff actually play between customers. Two
+// cards each, closest to 9 (sum mod 10; A=1, faces and tens count 0). A
+// two-card 8 or 9 is a "pok": shown at once, and nobody draws. Otherwise you
+// may take one third card, then the bank plays its fixed rule. Pairs and
+// flushes pay double ("song deng"), the good three-card hands pay more — the
+// winner's deng multiplies the stake, both ways.
+// House rules encoded here: the bank draws on 4 or less and stands on 5;
+// ties push; a pok beats a drawn hand of equal points.
+// Cards are 0..51: rank = c % 13 (0=A … 9=10, 10=J, 11=Q, 12=K), suit = c/13.
+
+const PD_RANKS = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
+const PD_SUITS = ["♠", "♥", "♦", "♣"];
+
+function pdDeck(rnd) {
+  const d = Array.from({ length: 52 }, (_, i) => i);
+  for (let i = 51; i > 0; i--) {
+    const j = Math.floor(rnd() * (i + 1));
+    [d[i], d[j]] = [d[j], d[i]];
+  }
+  return d;
+}
+
+function pdPoints(hand) {
+  let s = 0;
+  for (const c of hand) {
+    const r = c % 13;
+    s += r === 0 ? 1 : r < 9 ? r + 1 : 0;
+  }
+  return s % 10;
+}
+
+function pdIsPok(hand) { return hand.length === 2 && pdPoints(hand) >= 8; }
+
+// The multiplier a hand pays if it wins. Two cards: pair or suited = 2.
+// Three cards: trips or straight flush = 5, flush or straight = 3 (A-2-3 and
+// Q-K-A both count as straights; the ace bends both ways).
+function pdDeng(hand) {
+  const ranks = hand.map(c => c % 13).sort((a, b) => a - b);
+  const suited = hand.every(c => ((c / 13) | 0) === ((hand[0] / 13) | 0));
+  if (hand.length === 2) return suited || ranks[0] === ranks[1] ? 2 : 1;
+  const trips = ranks[0] === ranks[2];
+  const straight =
+    (ranks[1] === ranks[0] + 1 && ranks[2] === ranks[0] + 2) ||
+    (ranks[0] === 0 && ranks[1] === 11 && ranks[2] === 12);
+  if (trips || (straight && suited)) return 5;
+  if (suited || straight) return 3;
+  return 1;
+}
+
+// Deal a round: two cards each, dealt alternately, you first. g.next is the
+// top of the remaining deck — draws come off it in strict order, so a round
+// is fully determined by the shuffle plus the player's one decision.
+function pdNew(rnd) {
+  const deck = pdDeck(rnd);
+  return { deck, you: [deck[0], deck[2]], her: [deck[1], deck[3]], next: 4 };
+}
+
+// A pok on either side locks the round at two cards — nobody draws.
+function pdLocked(g) { return pdIsPok(g.you) || pdIsPok(g.her); }
+
+// Your one decision: take a third card. Refused (returns false) once the
+// round is locked or you already drew.
+function pdHit(g) {
+  if (pdLocked(g) || g.you.length > 2) return false;
+  g.you.push(g.deck[g.next++]);
+  return true;
+}
+
+// The bank's whole turn: draw on 4 or less, stand on 5. Call after the
+// player has decided; a no-op when the round is locked.
+function pdDealer(g) {
+  if (!pdLocked(g) && g.her.length === 2 && pdPoints(g.her) <= 4) {
+    g.her.push(g.deck[g.next++]);
+  }
+}
+
+// Settle from the player's side: win 1 / push 0 / lose -1, and the deng of
+// whichever hand won (1 on a push). The engine that stakes baht on this pays
+// stake × mult either way.
+function pdResult(g) {
+  const yp = pdPoints(g.you), hp = pdPoints(g.her);
+  let win = yp > hp ? 1 : yp < hp ? -1 : 0;
+  if (win === 0 && pdIsPok(g.you) !== pdIsPok(g.her)) win = pdIsPok(g.you) ? 1 : -1;
+  const mult = win === 1 ? pdDeng(g.you) : win === -1 ? pdDeng(g.her) : 1;
+  return { win, mult, you: yp, her: hp };
+}
+
+function pdCard(c) { return PD_RANKS[c % 13] + PD_SUITS[(c / 13) | 0]; }
+
+function pdRender(hand) { return hand.map(pdCard).join(" "); }
+
 // The opponent's whole visit in one go. Returns balls potted this visit;
 // sets g.oppWon if they cleared up and dropped the black.
 function poolOppVisit(g, rnd) {
