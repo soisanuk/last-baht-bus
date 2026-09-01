@@ -3,9 +3,14 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
-    "t": "US carrier visit to Thailand's Pattaya lifts hope and sex-tourism risk",
-    "s": "Reuters",
-    "d": "31 Aug 2026"
+    "t": "Thai resort prepares to host USS Abraham Lincoln sailors after more than 270 days at sea",
+    "s": "The Guardian",
+    "d": "01 Sep 2026"
+  },
+  {
+    "t": "Raids on Pattaya sex workers as US ship with 5,000 soldiers set to dock",
+    "s": "indiatoday.in",
+    "d": "01 Sep 2026"
   },
   {
     "t": "Drunk Indian tourist found unconscious after alleged Pattaya fight",
@@ -13,54 +18,49 @@ var NEWS_FEED = [
     "d": "01 Sep 2026"
   },
   {
-    "t": "Pattaya bar shooting leaves two wounded",
-    "s": "Bangkok Post",
-    "d": "31 Aug 2026"
-  },
-  {
-    "t": "‘Heavily intoxicated’ Chinese driver crashes truck near Pattaya",
-    "s": "Thaiger",
-    "d": "31 Aug 2026"
-  },
-  {
-    "t": "Pattaya pins hopes on arrival of 5,000 US sailors to boost tourism",
-    "s": "Bangkok Post",
-    "d": "01 Sep 2026"
-  },
-  {
-    "t": "25 cited in Pattaya crackdown on public-area prostitution",
-    "s": "nationthailand.com",
-    "d": "30 Aug 2026"
-  },
-  {
-    "t": "Pattaya officials ask woman and dog to leave makeshift shelter in Naklua",
+    "t": "US child-sex fugitive arrested in Phuket after FBI tip-off",
     "s": "Pattaya Mail",
     "d": "31 Aug 2026"
   },
   {
-    "t": "Pattaya police, social workers detain 25 in prostitution crackdown ahead of US Navy visit",
-    "s": "khaosodenglish.com",
-    "d": "30 Aug 2026"
-  },
-  {
-    "t": "USS Abraham Lincoln’s visit to Thailand lifts hope and sex-tourism risk",
-    "s": "militarytimes.com",
-    "d": "31 Aug 2026"
-  },
-  {
-    "t": "Myanmar's Min Aung Hlaing to visit Vietnam this week, continuing push for re-engagement",
-    "s": "Reuters",
+    "t": "Thailand eyes economic boost as massive US fleet nears port call",
+    "s": "South China Morning Post",
     "d": "01 Sep 2026"
   },
   {
-    "t": "Hommali Is a Love Letter to Thailand in the West Village — Resy | Right This Way",
-    "s": "Resy | Right This Way",
+    "t": "Thailand's Pattaya anticipates USS Abraham Lincoln visit following its Middle East deployment",
+    "s": "AP News",
+    "d": "01 Sep 2026"
+  },
+  {
+    "t": "Pattaya to bar US Navy personnel from Soi 6, cannabis shops",
+    "s": "khaosodenglish.com",
+    "d": "01 Sep 2026"
+  },
+  {
+    "t": "Pattaya street hookers arrested ahead of US carrier group's visit",
+    "s": "Bangkok Post",
+    "d": "30 Aug 2026"
+  },
+  {
+    "t": "Thailand shortens visa-free stay for Israelis and other tourists from 60 to 30 days",
+    "s": "The Times of Israel",
+    "d": "01 Sep 2026"
+  },
+  {
+    "t": "A mobile cinema in Gaza and a golden ritual in Thailand: photos of the day – Monday",
+    "s": "The Guardian",
     "d": "31 Aug 2026"
   },
   {
-    "t": "Supporting Thailand’s next generation of AI startups",
-    "s": "OpenAI",
-    "d": "28 Aug 2026"
+    "t": "Get a suit tailored in Thailand right here in the USA",
+    "s": "KSL News",
+    "d": "31 Aug 2026"
+  },
+  {
+    "t": "Thailand Shifts Disaster Risk to Insurers With $467 Million Plan",
+    "s": "Bloomberg.com",
+    "d": "01 Sep 2026"
   },
   {
     "t": "Thailand to officially cut visa-free stay to 30 days on September 15, 2026",
@@ -68,20 +68,20 @@ var NEWS_FEED = [
     "d": "31 Aug 2026"
   },
   {
-    "t": "Protest in Thailand’s Phuket targets misbehaving Israelis",
-    "s": "The Times of Israel",
+    "t": "Thailand make history and qualify for first Olympics after Asian title",
+    "s": "Volleyball World",
     "d": "30 Aug 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-08-31","USD":33.17,"AUD":23.75,"GBP":44.9,"EUR":38.46};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-09-01","temp":30,"humid":73,"code":3,"hi":30,"rain":96};
+var WX_NOW = {"date":"2026-09-01","temp":29,"humid":79,"code":1,"hi":31,"rain":96};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-08-29","done":true,"h":"Liverpool","hs":2,"a":"Nottm Forest","as":2},{"d":"2026-08-29","done":true,"h":"Bournemouth","hs":1,"a":"Everton","as":1},{"d":"2026-08-29","done":true,"h":"Coventry","hs":0,"a":"Hull","as":1},{"d":"2026-08-29","done":true,"h":"Spurs","hs":0,"a":"Newcastle","as":2},{"d":"2026-08-30","done":true,"h":"Chelsea","hs":4,"a":"Brighton","as":3},{"d":"2026-08-30","done":true,"h":"Leeds","hs":1,"a":"Brentford","as":1},{"d":"2026-08-30","done":true,"h":"Sunderland","hs":1,"a":"Fulham","as":0},{"d":"2026-08-30","done":true,"h":"Man United","hs":5,"a":"Ipswich","as":2},{"d":"2026-08-31","done":true,"h":"Aston Villa","hs":0,"a":"Arsenal","as":1},{"d":"2026-09-04","done":false,"h":"Ipswich","hs":0,"a":"Liverpool","as":0},{"d":"2026-09-05","done":false,"h":"Newcastle","hs":0,"a":"Bournemouth","as":0},{"d":"2026-09-05","done":false,"h":"Brentford","hs":0,"a":"Sunderland","as":0}]};
 // GLO draw — the girls' retirement plan
-var LOTTO = {"date":"2026-08-16","first":"004615","last2":"53","front3":["429","731"],"back3":["094","937"]};
+var LOTTO = {"date":"2026-09-01","first":"417212","last2":"04","front3":["257","346"],"back3":["136","740"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4432,"date":"2026-09-01","baht":69550};
+var GOLD = {"usd":4381,"date":"2026-09-01","baht":68750};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":78883,"thb":2619220};
+var BTC = {"usd":78073,"thb":2595655};
