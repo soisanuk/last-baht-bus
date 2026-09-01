@@ -212,3 +212,55 @@ test("the manifest never lists a person on the strength of an ordinary word", ()
   assert.deepEqual(braced.concat(bracedRegions), [],
     "descs shipped to the art pipeline still carry {{…}} markup");
 });
+
+// The other half of the same contract, pinned at the consumer's request
+// (cross-session, 2026-09-01): the people[] arrays are ADDITIVE — full names
+// join the tokens, they never replace them. The clause-stripper on the art
+// side matches people entries literally against the prose, and the prose
+// mostly uses the SHORT form: tequila_queen's desc says only "Mem", so
+// "Mamasan Mem" alone would strip nothing and the render would paint the
+// mamasan into the backdrop. Nothing on our side would have failed — the
+// defect would surface as a wrong picture in another repo, which is the worst
+// kind of regression to trace. So: every person-mention a desc makes must be
+// coverable by at least one people entry, and every unambiguous bare token in
+// the prose must itself be listed.
+test("people[] is additive — the short form the prose actually uses stays listed", () => {
+  const man = JSON.parse(fs.readFileSync(path.join(root, "docs", "scene-manifest.json"), "utf8"));
+  const corpus = Object.values(ROOMS)
+    .map(r => [r.desc, r.lateDesc, ...(r.revisit || [])].filter(Boolean).join(" ")).join(" ");
+  const ordinary = w => new RegExp("(?<![A-Za-z])" + w.toLowerCase() + "(?![a-z])").test(corpus);
+
+  // the sentinel the consumer named, verbatim
+  const tq = man.rooms.find(r => r.id === "tequila_queen");
+  assert.ok(tq.people.includes("Mem"),
+    "tequila_queen must list bare \"Mem\" — its prose never says \"Mamasan Mem\", " +
+    "so the short form is what actually does the stripping");
+
+  // the general property: an unambiguous token of any listed multi-word name
+  // that appears bare in the room's own desc is itself a people entry
+  const bad = [];
+  for (const r of man.rooms) {
+    const desc = String((ROOMS[r.id] || {}).desc || "").replace(/\{\{[\s\S]*?\}\}/g, " ");
+    for (const p of r.people || []) {
+      if (!/\s/.test(p)) continue;
+      for (const tok of p.split(/\s+/)) {
+        if (!/^[A-Z][a-zA-Z'-]{2,}$/.test(tok) || ordinary(tok)) continue;
+        if (new RegExp("\\b" + tok + "\\b").test(desc) && !r.people.includes(tok))
+          bad.push(`${r.id}: prose says bare "${tok}" but people[] only carries "${p}"`);
+      }
+    }
+  }
+  assert.deepEqual(bad, [], "un-strippable short-form mentions:\n  " + bad.join("\n  "));
+
+  // …and every full multi-word NPC name a desc uses is listed whole, so the
+  // ambiguous-token case (the Peacock's "Miss Mala") stays strippable too
+  const fullNames = Object.values(NPCS).map(n => String(n.name || "")).filter(n => /\s/.test(n) && /^[A-Z]/.test(n));
+  const missing = [];
+  for (const r of man.rooms) {
+    const desc = String((ROOMS[r.id] || {}).desc || "").replace(/\{\{[\s\S]*?\}\}/g, " ");
+    for (const full of fullNames)
+      if (new RegExp("\\b" + full + "\\b").test(desc) && !(r.people || []).includes(full))
+        missing.push(`${r.id}: "${full}"`);
+  }
+  assert.deepEqual(missing, [], "full-name mentions absent from people[]:\n  " + missing.join("\n  "));
+});
