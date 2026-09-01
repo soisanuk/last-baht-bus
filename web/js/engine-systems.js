@@ -1409,9 +1409,56 @@ function _nightRide(input) {
     (paid ? ` (฿${paid}. ฿${G.money} left.)` : " (Free. The best things here are.)"), "win");
   _addHappy(venue.sanuk); // does NOT jade — a bonded night is the one that keeps giving
   if (seq.stops >= RIDE_MAX_STOPS) return _endRide(seq, "dawn");
+  _rideQuestion(seq, id, name);
   G.pendingEnc = "nightride";
   _encPrompt([`${name} looks back over her shoulder, engine idling, one eyebrow up.`, "room"],
     [`(RIDE ON — wherever she takes you next · or call it a night with her.)`, "dim"]);
+}
+
+// ── the wrong question (canon layer, 2026-09-01) ─────────────────────────────
+// Once ever, from the pillion seat, at a red light between stops: she asks the
+// question every man on this coast eventually gets asked. The essay it comes
+// from answers it with an authored biography — the cascade of every name that
+// came before. The game can do the one thing the essay can't: open the
+// PLAYER'S actual ledger for the cascade — the drinks book, the gallery, the
+// treadmill's flat arithmetic — so what the question shows depends entirely on
+// how this player has actually played, and the two branches are the same
+// question landing on two different lives. Doctrine holds at both ends: NO
+// meter moves in either branch (being asked the truth is not a prize and not a
+// fine — the other-ledger rule), she is never victim and never schemer, and
+// nobody is graded. She asks because she already knows; the soi always talks.
+// Fixed strings, not pools — a genuinely one-time beat.
+function _rideQuestion(seq, id, name) {
+  if (_flag("rideQuestion") || seq.stops < 2) return;
+  _setFlag("rideQuestion");
+  const names = Object.keys(G.soc.drinks || {})
+    .filter(x => x !== id && (G.soc.drinks[x] || 0) > 0).length;
+  const photos = _photoList().length;
+  const record = names >= 3 || G.jaded >= 2 || photos >= 4;
+  _say(`The light at the big junction goes red — one of the three in this town anyone actually ` +
+    `honours — and ${name} puts a foot down, engine muttering, and asks it over her shoulder, ` +
+    `casual as asking the time. "Tilac. If you never meet me — where you be now, you think?"`);
+  if (record) {
+    const bits = [];
+    if (names) bits.push(`${names} name${names > 1 ? "s" : ""} in the book the lady drinks kept`);
+    if (photos) bits.push(`${photos} photograph${photos > 1 ? "s" : ""} in the phone against your leg`);
+    if (G.jaded > 0) bits.push("under all of it the flat arithmetic this town does, " +
+      "each round buying a little less than the round before");
+    const cascade = bits.length > 1
+      ? bits.slice(0, -1).join(", ") + ", and " + bits[bits.length - 1]
+      : bits[0];
+    _say(`And before you can build an answer, the ledger opens itself and answers first: ` +
+      `${cascade}. "Still looking for you," you say. It is the right answer. She lets ` +
+      `it stand — a small "mm" into the wind, the light going green — and somewhere around third ` +
+      `gear you understand that she didn't ask because she wanted the answer. She asked because ` +
+      `she already had it.`, "dim");
+  } else {
+    _say(`You look for the answer and find the book nearly empty — she is most of what is ` +
+      `written in it. "Home, probably," you say, honestly. "Asleep. Bored." She laughs — the ` +
+      `real one, not the working one — and kicks the bike into gear as the light goes. "Good ` +
+      `answer. Wrong question, na." And whatever she means by that rides with the two of you ` +
+      `to the next place.`, "dim");
+  }
 }
 
 function _endRide(seq, reason) {
@@ -7060,6 +7107,13 @@ const _OWL_LETTERS = [
    "I'm sure he is. Buy him a beer. Then ask her, casually, when exactly the two of them met."],
   ["'Which is the honest soi?'",
    "Soi 6 will rob you to your face; Walking Street prefers to do it behind your back. At least one of them looks you in the eye. Honesty, on this coast, is a matter of angle."],
+  ["A reader wants romance settled by post: 'OWL — met her on my third night and can't shake the thought: if I'd never walked into that bar, where would I be now?'",
+   "The Owl gets this letter every dry season and the answer never changes: son, that is the " +
+    "wrong question. You'd be in the bar next door, is where you'd be, asking it about somebody " +
+    "else. This town has never once changed a man's direction — it just sells him a fresh " +
+    "horizon every night, and the horizon works on commission. The question worth asking is " +
+    "whether your direction has changed SINCE. If you need a bird in a bar rag to tell you, " +
+    "there's your answer as well."],
   ["'The pretty one at the bar bought ME the drink and waved my wallet away. Have I, at last, cracked it?'",
    "You have cracked something. Report back at closing time, and bring the receipt."],
   ["A visitor writes, shaken: 'Took a freelancer home, had the sense to check her ID — twenty, it said. An hour after she left she was back with two constables and a SECOND card putting her at seventeen. Statutory, they said. Five hundred thousand baht or the station. I bargained to forty and flew home the next morning, vowing never again.'",
