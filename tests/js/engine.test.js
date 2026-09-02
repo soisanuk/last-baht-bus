@@ -3406,7 +3406,12 @@ test("canned replies keep your story straight — or hand the grapevine the catc
   const rep0 = state().rep;
   const told = state().player.said.why;
   state().room = _npcRoom("pia");
-  out = []; run("talk to pia"); run("2");
+  // told two ways by TYPING — the chips can no longer offer a contradiction
+  // (round 34: the canned list handed a man on record as Manchester a
+  // "Portsmouth" chip, he tapped the game's own suggestion, and the grapevine
+  // punished him for it; _askReplies now leads with his remembered answer and
+  // drops disagreeing canned ones). Free text stays the liar's own choice.
+  out = []; run("talk to pia"); run("came for the scuba diving, pure and simple");
   const text = out.join("\n");
   assert.ok(_ANSWER_GOSSIP.some(f => text.includes(f("Pia", told, _sheHe("pia")))), "told two ways — the grapevine has it");
   assert.ok(state().rep < rep0, "and the soi marks you down for it");

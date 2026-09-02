@@ -3146,6 +3146,12 @@ const _CONVO_TOPIC_RULES = [
   [/\btours?\b|\bon the road\b|\bgigs?\b|\btouring\b/,                        "music"],
   [/\bmunich\b|\bm\u00fcnchen\b|\bbavaria\b/,                                  "german"],
   [/\bwhite dish\b|\bwdg\b/,                                                  "ryan powers"],
+  // The Owl signposts Neil's story twice ("ask the quiet man on the end
+  // stool"), two other characters put the word "clam" in the player's mouth,
+  // and the working topic was "wife" — unreachable from any word the player
+  // had been given (Gerry, round 34). Daeng's own clam story keeps its
+  // literal "clam" key, which beats this synonym by the literal-first rule.
+  [/\bclams?\b/,                                                              "wife"],
   // …and the words the column itself puts in a reader's mouth: Box 15's
   // personal taunts "not one of you has asked me why", and the reader typed
   // exactly "personals"/"box 15" at its author and got the generic shrug
@@ -3318,6 +3324,18 @@ function _askReplies(key) {
   const anyone = table.filter(r => !r.pers && !r.origin);
   const out = [];
   for (const r of [...mine, ...anyone]) if (!out.includes(r.text)) out.push(r.text);
+  // Once the player HAS a story, the chips are his memory, not a menu. The
+  // canned list kept offering "Portsmouth" to a man on record as Manchester —
+  // he tapped the game's own suggestion, the grapevine caught the change, and
+  // when he went BACK to the truth he was called a liar for it (Gerry, round
+  // 34). The game must never hand you the lie it will then punish: his own
+  // remembered answer leads, and any canned reply that contradicts it is
+  // dropped (_saidAgrees, the same leniency the grapevine itself applies).
+  const said = (G.player && G.player.said || {})[key];
+  if (said && typeof said === "string") {
+    const keep = out.filter(t => t !== said && _saidAgrees(t, said));
+    return [said, ...keep].slice(0, 3);
+  }
   return out.slice(0, 3);
 }
 
@@ -4906,13 +4924,16 @@ function _doRideBus(arg) {
             { where: _ucfirst((arg || "").trim()), m: G.money, f: BUS_FARE }), "alert");
           return;
         }
-        G.pendingFare = { kind: "bus", price: BUS_CHARTER, dest: far };
+        // `charter: true` is what makes this fare DECLINABLE — it's pre-ride,
+        // no service consumed, and the prompt itself says "or WALK". The
+        // ordinary bench fare stays undeclinable: you already rode.
+        G.pendingFare = { kind: "bus", price: BUS_CHARTER, dest: far, charter: true };
         _say(_fmt("\"{where}?\" The driver looks down the soi, then at you, and does the " +
           "arithmetic out loud the way they all do. \"Not my route. I take you special — " +
           "฿{p}.\" It is not a bench-seat fare because it is not a bench seat: for the next " +
           "twenty minutes you are renting the truck. He waits, entirely relaxed, because he " +
           "knows the walk to a main road is ten minutes and it is not his ten minutes. " +
-          "(PAY {p}, or walk.)",
+          "(PAY {p} · or WALK)",
           { where: _ucfirst((arg || "").trim()), p: BUS_CHARTER }), "alert");
         return;
       }
@@ -7799,12 +7820,30 @@ function doCommand(input) {
 
   // pending fare gates everything except paying, looking, help
   if (G.pendingFare && (v === "look" || v === "l") && !arg) {
-    const _to = ROOMS[G.pendingFare.dest];
+    // Two fares, two fictions. The ORDINARY fare is paid as you hop off — the
+    // prose already landed you, so LOOK names the destination kerb (playtest5:
+    // "don't re-print the stop you left"). The CHARTER is pre-ride — quoting
+    // it at Soi Buakhao used to print "You are on the kerb at Beach Road
+    // South" before a single wheel had turned (Frank, round 34) — so it names
+    // the kerb underfoot.
+    const _fareTo = ROOMS[G.pendingFare.dest];
     _say(_fmt("You are on the kerb at {where}, and the {who} is still leaning out of " +
       "the window waiting to be paid. Nothing about the evening continues until that " +
-      "does.", { where: (_to && _to.name) || "your stop",
+      "does.", { where: (G.pendingFare.charter ? _room().name : _fareTo && _fareTo.name) || "your stop",
         who: G.pendingFare.kind === "bus" ? "driver" : "piwin" }));
     _farePrompt();
+    return;
+  }
+  // The charter's own prompt says "or WALK" — and WALK parsed to nothing, so
+  // refusal was impossible and the promise was false (Frank, round 34). Only
+  // the charter declines: pre-ride, nothing consumed. The bench fare below
+  // stays undeclinable — you already rode; nobody has ever not paid.
+  if (G.pendingFare && G.pendingFare.charter &&
+      (["walk", "no", "nah", "decline", "refuse", "cancel"].includes(v) ||
+       ((v === "never" || v === "forget") && /mind|it/.test(arg || "")))) {
+    G.pendingFare = null;
+    _say("A shrug that has seen every farang decision ever made. \"Up to you, boss.\" The " +
+      "truck grumbles off up the road, and the night hands you back your own two feet.", "dim");
     return;
   }
   if (G.pendingFare && !["pay", "look", "l", "help", "i", "inventory", "say"].includes(v)) {

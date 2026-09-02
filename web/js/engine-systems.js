@@ -610,6 +610,16 @@ function _doBarfine(arg) {
   // then quote a whole night's fine thirty seconds later (Reg the publican,
   // round 32, 2026-08-30). One state, both consumers.
   if (!bertAlly && typeof _girlBusy === "function" && _girlBusy(id)) { _bfRefusalSay(id, { kind: "busy" }); return; }
+  // Truth before tariff, part two (Gerry, round 34): the favor gate quoted
+  // "one more lady drink, then we talk", he paid the stated condition twice,
+  // and only then did the day-level life refusal speak — ฿380 for a no that
+  // was always true. The deterministic day facts now pre-empt the tariff the
+  // same way draw/sponsor/busy do; the favor-dependent refusals stay behind
+  // the gate, because those genuinely ARE about the tab.
+  if (!bertAlly) {
+    const dayNo = _bfDayRefusal(id);
+    if (dayNo) { _bfRefusalSay(id, dayNo); return; }
+  }
   const _bfGate = bertAlly ? 1 : bt === "soi6" ? 2 : 4;
   if (_favor(id) < _bfGate) {
     // she names the REAL remaining count — a stated tariff that doesn't count
@@ -678,6 +688,31 @@ function _doBarfine(arg) {
 // colleague will be seen taking another girl's customer — even if she's off
 // shift or already gone. Life reasons (lady time, temple) are a stable hash
 // per girl per day: honest, upfront, and immovable.
+// The refusals that are true regardless of the tab — a colleague already left
+// with you tonight, her day of the month, temple in the morning — checked
+// BEFORE any tariff is quoted, so "one more drink, then we talk" can never
+// front a no that was always coming (Gerry, round 34: ฿380 on a stated
+// condition, then the hard refusal, then coaching to have asked earlier —
+// when his first act in the bar HAD been to ask). The life roll here is the
+// SAME pure hash _bfRefusal rolls, so the two can never disagree; the
+// favor-dependent classes (cheap/dislike/mess) stay in _bfRefusal behind the
+// gate, where a tariff is honest.
+function _bfDayRefusal(id) {
+  const held = G.soc.bfRefused && G.soc.bfRefused[id];
+  if (held) {
+    if (held.kind === "cheap" || held.kind === "mess") return null; // recoverable — the gate's business
+    return { ...held, again: true };
+  }
+  const keep = kind => {
+    (G.soc.bfRefused = G.soc.bfRefused || {})[id] = { kind, favor: _favor(id) };
+    return G.soc.bfRefused[id];
+  };
+  if (G.soc.bfBar && G.soc.bfBar[G.room] && G.soc.bfBar[G.room] !== id) return keep("stealing");
+  const life = _hh(id + ":" + G.day + ":" + G.vacation + ":life", 131) % 100;
+  if (life < 10) return keep(life < 5 ? "period" : "temple");
+  return null;
+}
+
 function _bfRefusal(id, bt) {
   const held = G.soc.bfRefused && G.soc.bfRefused[id];
   if (held) {
@@ -1488,12 +1523,31 @@ function _endRide(seq, reason) {
       `notice it. "Aaah. Morning already. This town, na — always morning too soon." She points ` +
       `the bike toward a bed, hers or yours, and lets the last of the dark carry you there.`;
   } else {
-    close = `"Okay," she says at last, killing the engine one final time. "Enough Pattaya for you ` +
-      `tonight. Now—" and the grin turns private "—now you come see MY room, not some hotel. ` +
-      `Get on. Last ride." And it is.`;
+    // Pooled (Frank, round 34): this close delivered verbatim on consecutive
+    // nights — the game's best beat destroying itself on second delivery. The
+    // old line also promised "you come see MY room" and the morning delivered
+    // the Sabai and a joiner fee; no her-room scene exists, and an invitation
+    // is a promise, so the promise is cut rather than kept badly.
+    close = _pickVary([
+      `"Okay," she says at last, killing the engine one final time. "Enough Pattaya for you ` +
+        `tonight." The grin turns private. "Get on. Last ride." And it is.`,
+      `She reads the hour off your face before you've found the words. "Mm. Home, tilac." ` +
+        `The kick-start takes twice — she swears at it in Isan, fondly — and the last ride ` +
+        `is the slow one, the town pouring past like it's already a memory.`,
+      `"Finish?" No sting in it. She stretches until something in her shoulder clicks, ` +
+        `swings a leg over the saddle, and pats the seat behind her. The engine catches ` +
+        `first time, which she takes full credit for.`,
+      `She doesn't argue. She buys two waters off a cart without being asked, hands you ` +
+        `one, and points the bike home. Somewhere on the dark stretch she sings two lines ` +
+        `of something Thai, quietly, to herself — not for you. That's the part you keep.`,
+    ], "rideclose");
   }
   _say(close, "win");
-  if (great) {
+  // The haunt line names THE one — a superlative that can only be true once,
+  // so it prints once, ever (Frank got it verbatim twice in 24 hours, and the
+  // second delivery unwrote the first).
+  if (great && !_flag("rideHaunt")) {
+    _setFlag("rideHaunt");
     _say(`(This is the one — the night with no plan that becomes the whole reason you keep coming ` +
       `back, the one you'll chase on every trip after and never quite catch again. ${name} won't ` +
       `remember it as anything special. That's the part that'll haunt you.)`, "dim");

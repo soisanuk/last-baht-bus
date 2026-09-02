@@ -9299,6 +9299,14 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         "would be happy. I check.\"",
         short: "\"Number seventy-two, Crystal Palace, ten year. Up there you are the show; down here you are the boss. I like boss.\"" },
       { topic: "covid", text: "She doesn't go quiet the way you expect. She goes very practical instead. \"Six of us, one room — tiny. No work, no money, nothing.\" She counts on her fingers. \"Morning: we walk to the beach, fill a bucket with clam. Afternoon: sell the clam to local people. Take that money, buy rice, buy pork.\" She pauses. \"Next morning — we cook extra and give away free food. To people more poor than us. Then go back for more clam.\" A short laugh. \"On the way home: we pick herb, pick fruit from the tree by the road — nobody plant it, it's just there. And that night?\" She taps the bar. \"Feast. Real feast. Better than high season.\" She fills your glass. \"The farang sit and wait to be rescued. We just find the next thing.\"" },
+      // Literal key, deliberately: "clam" is a global synonym for Neil's
+      // "wife" story now, and literal-first is what keeps HER clam story hers.
+      { topic: "clam",
+        text: "\"The clam?\" She smiles like you've asked about an old friend. \"Covid " +
+          "story. Everybody here has one. Buckets on the beach every morning, sell in the " +
+          "afternoon, feast at night — better than high season, jing jing. Ask me about " +
+          "Covid sometime, I tell you the whole of it.\"",
+        short: "\"The clams are the Covid story — ask me about Covid, I tell you the whole of it.\"" },
       { topic: "money", text: "She laughs, but it is a different kind of laugh from the ones aimed at customers — older, shorter. \"Money I understand. Not like the farang understand. Farang save the water in a big pot, very careful. Thai girl — the water goes through. I have it today, is good. Gone tomorrow — mai bpen rai, I find more water.\" She taps the bar. \"The pot people worry all the time. The river people never worry. Which one you think sleep better?\"" },
     
       // ── bar-owning chain, step 1: premises ──────────────────────────────
@@ -12472,8 +12480,8 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
         short: "\"Fourteen, mall perfume, new {{phone}}. Asked me how her mum and I met. I said: it all started at the beach. Near enough.\"" },
       { topic: "beach",
         text: "\"The beach?\" He very nearly laughs. \"That's the version for the kid. You want " +
-          "the grown-up one, ask me about her.\"",
-        short: "\"The beach is the kid's version. Ask me about her for the grown-up one.\"" },
+          "the grown-up one, ask me about her. About my wife.\"",
+        short: "\"The beach is the kid's version. Ask me about my wife for the grown-up one.\"" },
       { topic: "photo",
         text: "\"That one on Boonsri's fridge? Hers. She stuck it up years back, when we were " +
           "her only regulars and a regular meant one bottle split two ways.\" He doesn't look " +

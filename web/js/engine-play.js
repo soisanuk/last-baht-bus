@@ -3599,6 +3599,16 @@ function _endNight(reason) {
   // house rule for a frame you walked out on — but announces it.
   if (G.game && typeof _abandonGame === "function") _abandonGame("The night ran out mid-frame");
   G.game = null;
+  // An encounter prompt issued on the night's last turn used to print and
+  // then silently cease to exist — a ฿2,500 STAY-or-SEND was shown and the
+  // decision evaporated between two lines of the same command (Gerry, round
+  // 34). The night may take the choice with it, but it says so now. Only the
+  // clock/body endings — the scripted endings (barfine, scams, the ride)
+  // manage their own encounter state and must not collect a stray aside.
+  if (G.pendingEnc && /^(dawn|allnighter|collapse|blackout|hurt)$/.test(reason)) {
+    _say("(Whatever was on offer goes with the night — that door closes unanswered, " +
+      "and owes you nothing.)", "dim");
+  }
   G.pendingEnc = null;
   G.encPrompt = null;
   G.pendingFare = null;
