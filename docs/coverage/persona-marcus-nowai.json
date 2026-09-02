@@ -1,0 +1,52 @@
+{
+ "label": "persona-marcus-nowai",
+ "recorded": null,
+ "runs": 1,
+ "commands": 0,
+ "effectsTotal": 0,
+ "rooms": [
+  "anchor_bar",
+  "buakhao_honey",
+  "buakhao_lk",
+  "buakhao_n",
+  "buakhao_tt",
+  "candy_bar",
+  "hotel_room",
+  "hotel_soi",
+  "jomtien_beach",
+  "lucky_tiger",
+  "naklua_bars",
+  "naklua_rd",
+  "rainbow_girls",
+  "tt_deep",
+  "tt_entrance",
+  "tt_lane_1",
+  "tt_lane_2",
+  "white_rabbit"
+ ],
+ "npcs": [
+  "candy",
+  "fast_eddy",
+  "lek",
+  "namfon",
+  "oy"
+ ],
+ "patrons": [],
+ "enc": [
+  "bargirl",
+  "maze"
+ ],
+ "questsDone": [],
+ "verbs": [],
+ "effects": [],
+ "dlg": [
+  "candy#0",
+  "fast_eddy#0",
+  "lek#6",
+  "namfon#0",
+  "namfon#2",
+  "namfon#3",
+  "oy#1"
+ ],
+ "patDlg": []
+}
