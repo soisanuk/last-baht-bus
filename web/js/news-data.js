@@ -3,24 +3,29 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
+    "t": "USS Abraham Lincoln Pattaya: Why US troops have a history in this raucous Thai city",
+    "s": "BBC",
+    "d": "02 Sep 2026"
+  },
+  {
     "t": "Pattaya, once Thailand's 'Sin City,' beckons weary sailors from the USS Abraham Lincoln",
     "s": "ABC News - Breaking News, Latest News and Videos",
     "d": "02 Sep 2026"
   },
   {
-    "t": "Thai resort prepares to host USS Abraham Lincoln sailors after more than 270 days at sea",
-    "s": "The Guardian",
-    "d": "01 Sep 2026"
+    "t": "U.S.S. Abraham Lincoln Docks in Thailand, Giving Weary Crew a Break",
+    "s": "The New York Times",
+    "d": "02 Sep 2026"
   },
   {
-    "t": "Thai prostitution warning as 5,000 US sailors arrive in town after 200 days at sea",
-    "s": "The Independent",
-    "d": "01 Sep 2026"
-  },
-  {
-    "t": "Thailand's Pattaya anticipates USS Abraham Lincoln visit following its Middle East deployment",
+    "t": "After more than 9 months at sea, the USS Abraham Lincoln arrives in Thailand",
     "s": "AP News",
     "d": "02 Sep 2026"
+  },
+  {
+    "t": "US carrier visit to Thailand's Pattaya lifts hope and sex-tourism risk",
+    "s": "Reuters",
+    "d": "31 Aug 2026"
   },
   {
     "t": "Thai city braces for thousands of U.S. service members after record stint on the troubled USS Lincoln",
@@ -28,23 +33,18 @@ var NEWS_FEED = [
     "d": "01 Sep 2026"
   },
   {
-    "t": "USS Lincoln’s 5,000 Sailors Unwind in Thailand’s Pattaya After Long Deployment",
-    "s": "Bloomberg.com",
-    "d": "02 Sep 2026"
-  },
-  {
-    "t": "USS Abraham Lincoln’s visit to Thailand lifts hope and sex-tourism risk",
-    "s": "Military Times",
-    "d": "31 Aug 2026"
-  },
-  {
-    "t": "Cannabis, watersports ban for US sailors visiting Pattaya",
-    "s": "Bangkok Post",
+    "t": "USS Abraham Lincoln: US sailors arrive in Thailand's Pattaya after record 250 days at sea",
+    "s": "BBC",
     "d": "01 Sep 2026"
   },
   {
-    "t": "U.S.S. Abraham Lincoln Docks in Thailand, Giving Weary Crew a Break",
-    "s": "The New York Times",
+    "t": "USS Lincoln’s 5,000 Sailors Unwind in Thailand’s Pattaya After Long Deployment",
+    "s": "Bloomberg.com",
+    "d": "01 Sep 2026"
+  },
+  {
+    "t": "USS Abraham Lincoln arrives at Thai port after gruelling 270 days at sea",
+    "s": "The Guardian",
     "d": "02 Sep 2026"
   },
   {
@@ -53,35 +53,35 @@ var NEWS_FEED = [
     "d": "01 Sep 2026"
   },
   {
-    "t": "Thailand shortens visa-free stays for dozens of nations, including Singapore, from Sep 15",
-    "s": "CNA",
-    "d": "01 Sep 2026"
+    "t": "USS Abraham Lincoln docks in Thailand after more than 9 months at sea",
+    "s": "CBS News",
+    "d": "02 Sep 2026"
   },
   {
-    "t": "Thailand confirms it will cut visa-free stays for EU travellers",
-    "s": "Euronews",
-    "d": "01 Sep 2026"
+    "t": "Thailand's Pattaya anticipates USS Abraham Lincoln visit following its Middle East deployment",
+    "s": "AP News",
+    "d": "02 Sep 2026"
   },
   {
-    "t": "Thailand shortens visa-free stay for Israelis and other tourists from 60 to 30 days",
-    "s": "timesofisrael.com",
-    "d": "01 Sep 2026"
+    "t": "Thailand: New report details more than a decade of lèse-majesté abuse",
+    "s": "Fédération internationale pour les droits humains",
+    "d": "02 Sep 2026"
   },
   {
-    "t": "After over 200 days at sea, USS Abraham Lincoln arrives in Thailand",
-    "s": "Defense News",
+    "t": "Aircraft carrier USS Abraham Lincoln arrives in Thailand after months of combat in Middle East",
+    "s": "CNN",
     "d": "02 Sep 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-09-01","USD":33.27,"AUD":23.75,"GBP":45,"EUR":38.55};
+var FX_RATES = {"date":"2026-09-02","USD":33.22,"AUD":23.75,"GBP":44.8,"EUR":38.46};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-09-02","temp":29,"humid":75,"code":3,"hi":31,"rain":25};
+var WX_NOW = {"date":"2026-09-02","temp":27,"humid":92,"code":2,"hi":32,"rain":63};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-08-30","done":true,"h":"Chelsea","hs":4,"a":"Brighton","as":3},{"d":"2026-08-30","done":true,"h":"Leeds","hs":1,"a":"Brentford","as":1},{"d":"2026-08-30","done":true,"h":"Sunderland","hs":1,"a":"Fulham","as":0},{"d":"2026-08-30","done":true,"h":"Man United","hs":5,"a":"Ipswich","as":2},{"d":"2026-08-31","done":true,"h":"Aston Villa","hs":0,"a":"Arsenal","as":1},{"d":"2026-09-04","done":false,"h":"Ipswich","hs":0,"a":"Liverpool","as":0},{"d":"2026-09-05","done":false,"h":"Newcastle","hs":0,"a":"Bournemouth","as":0},{"d":"2026-09-05","done":false,"h":"Brentford","hs":0,"a":"Sunderland","as":0},{"d":"2026-09-05","done":false,"h":"Brighton","hs":0,"a":"Leeds","as":0},{"d":"2026-09-05","done":false,"h":"Fulham","hs":0,"a":"C Palace","as":0},{"d":"2026-09-05","done":false,"h":"Man City","hs":0,"a":"Coventry","as":0},{"d":"2026-09-05","done":false,"h":"Nottm Forest","hs":0,"a":"Spurs","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-09-01","first":"417212","last2":"04","front3":["257","346"],"back3":["136","740"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4320,"date":"2026-09-02","baht":67950};
+var GOLD = {"usd":4370,"date":"2026-09-02","baht":68650};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":76670,"thb":2551043};
+var BTC = {"usd":77486,"thb":2571217};
