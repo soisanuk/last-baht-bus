@@ -3,28 +3,23 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
+    "t": "USS Abraham Lincoln to dock at Thailand's Pattaya resort after 250 days at sea",
+    "s": "BBC",
+    "d": "01 Sep 2026"
+  },
+  {
     "t": "U.S.S. Abraham Lincoln to Dock in Thailand on Wednesday, Pattaya Mayor Says",
     "s": "The New York Times",
     "d": "01 Sep 2026"
   },
   {
-    "t": "Raids on Pattaya sex workers as US ship with 5,000 soldiers set to dock",
-    "s": "India Today",
-    "d": "01 Sep 2026"
-  },
-  {
-    "t": "Pattaya bar shooting leaves two wounded",
-    "s": "Bangkok Post",
+    "t": "US carrier visit to Thailand's Pattaya lifts hope and sex-tourism risk",
+    "s": "Reuters",
     "d": "31 Aug 2026"
   },
   {
-    "t": "Drunk Indian tourist found unconscious after alleged Pattaya fight",
-    "s": "Thaiger",
-    "d": "01 Sep 2026"
-  },
-  {
-    "t": "Thai prostitution warning as 5,000 US sailors arrive in town after 200 days at sea",
-    "s": "The Independent",
+    "t": "Thailand's Pattaya anticipates USS Abraham Lincoln visit following its Middle East deployment",
+    "s": "AP News",
     "d": "01 Sep 2026"
   },
   {
@@ -33,17 +28,27 @@ var NEWS_FEED = [
     "d": "01 Sep 2026"
   },
   {
-    "t": "USS Abraham Lincoln’s visit to Thailand lifts hope and sex-tourism risk",
-    "s": "Military Times",
-    "d": "31 Aug 2026"
-  },
-  {
     "t": "Pattaya to bar US Navy personnel from Soi 6, cannabis shops",
     "s": "Khaosod English",
     "d": "01 Sep 2026"
   },
   {
-    "t": "PAK-W vs THA-W live score, Women's Asia Cup 2026: THA-W 84/8 (20 ov, Sunida Chaturongrattana 3*, Sadia Iqbal 3/11, 5th Match, Group A, Dubai",
+    "t": "Thailand issues prostitution warning as 5,000 US sailors arrive in tourist town after 200 days at sea",
+    "s": "the-independent.com",
+    "d": "01 Sep 2026"
+  },
+  {
+    "t": "How Thailand’s notorious Pattaya was transformed from fishing village to sin city",
+    "s": "The Independent",
+    "d": "01 Sep 2026"
+  },
+  {
+    "t": "Aircraft carrier USS Abraham Lincoln arrives in Thailand after months of combat in Middle East",
+    "s": "CNN",
+    "d": "02 Sep 2026"
+  },
+  {
+    "t": "Sunida Chaturongrattana",
     "s": "Cricinfo",
     "d": "01 Sep 2026"
   },
@@ -53,35 +58,30 @@ var NEWS_FEED = [
     "d": "31 Aug 2026"
   },
   {
-    "t": "Get a suit tailored in Thailand right here in the USA",
-    "s": "KSL",
-    "d": "31 Aug 2026"
-  },
-  {
     "t": "Thailand shortens visa-free stay for Israelis and other tourists from 60 to 30 days",
-    "s": "timesofisrael.com",
+    "s": "The Times of Israel",
     "d": "01 Sep 2026"
   },
   {
-    "t": "Thailand to officially cut visa-free stay to 30 days on September 15, 2026",
-    "s": "VisasNews",
-    "d": "31 Aug 2026"
+    "t": "30-day visa-free stays to take effect on Sept 15",
+    "s": "bangkokpost.com",
+    "d": "01 Sep 2026"
   },
   {
-    "t": "Thailand shortens visa-free stays for dozens of nations including Ireland",
-    "s": "RTE.ie",
+    "t": "Thailand cuts visa-free stay for Indians from 60 days to 30: All you need to know",
+    "s": "indianexpress.com",
     "d": "01 Sep 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-09-01","USD":33.27,"AUD":23.75,"GBP":45,"EUR":38.55};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-09-02","temp":27,"humid":86,"code":3,"hi":31,"rain":24};
+var WX_NOW = {"date":"2026-09-02","temp":30,"humid":71,"code":2,"hi":31,"rain":24};
 // the bar TV's one true channel
-var FOOTY = {"league":"Premier League","games":[{"d":"2026-08-29","done":true,"h":"Liverpool","hs":2,"a":"Nottm Forest","as":2},{"d":"2026-08-29","done":true,"h":"Bournemouth","hs":1,"a":"Everton","as":1},{"d":"2026-08-29","done":true,"h":"Coventry","hs":0,"a":"Hull","as":1},{"d":"2026-08-29","done":true,"h":"Spurs","hs":0,"a":"Newcastle","as":2},{"d":"2026-08-30","done":true,"h":"Chelsea","hs":4,"a":"Brighton","as":3},{"d":"2026-08-30","done":true,"h":"Leeds","hs":1,"a":"Brentford","as":1},{"d":"2026-08-30","done":true,"h":"Sunderland","hs":1,"a":"Fulham","as":0},{"d":"2026-08-30","done":true,"h":"Man United","hs":5,"a":"Ipswich","as":2},{"d":"2026-08-31","done":true,"h":"Aston Villa","hs":0,"a":"Arsenal","as":1},{"d":"2026-09-04","done":false,"h":"Ipswich","hs":0,"a":"Liverpool","as":0},{"d":"2026-09-05","done":false,"h":"Newcastle","hs":0,"a":"Bournemouth","as":0},{"d":"2026-09-05","done":false,"h":"Brentford","hs":0,"a":"Sunderland","as":0}]};
+var FOOTY = {"league":"Premier League","games":[{"d":"2026-08-30","done":true,"h":"Chelsea","hs":4,"a":"Brighton","as":3},{"d":"2026-08-30","done":true,"h":"Leeds","hs":1,"a":"Brentford","as":1},{"d":"2026-08-30","done":true,"h":"Sunderland","hs":1,"a":"Fulham","as":0},{"d":"2026-08-30","done":true,"h":"Man United","hs":5,"a":"Ipswich","as":2},{"d":"2026-08-31","done":true,"h":"Aston Villa","hs":0,"a":"Arsenal","as":1},{"d":"2026-09-04","done":false,"h":"Ipswich","hs":0,"a":"Liverpool","as":0},{"d":"2026-09-05","done":false,"h":"Newcastle","hs":0,"a":"Bournemouth","as":0},{"d":"2026-09-05","done":false,"h":"Brentford","hs":0,"a":"Sunderland","as":0},{"d":"2026-09-05","done":false,"h":"Brighton","hs":0,"a":"Leeds","as":0},{"d":"2026-09-05","done":false,"h":"Fulham","hs":0,"a":"C Palace","as":0},{"d":"2026-09-05","done":false,"h":"Man City","hs":0,"a":"Coventry","as":0},{"d":"2026-09-05","done":false,"h":"Nottm Forest","hs":0,"a":"Spurs","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-09-01","first":"417212","last2":"04","front3":["257","346"],"back3":["136","740"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4330,"date":"2026-09-01","baht":68150};
+var GOLD = {"usd":4304,"date":"2026-09-02","baht":67750};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":77411,"thb":2578469};
+var BTC = {"usd":77417,"thb":2581242};
