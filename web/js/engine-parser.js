@@ -4557,7 +4557,12 @@ function _doBuy(arg) {
     // whole vacation, so the tease fired on the first drink of an evening and
     // announced four fingers' worth of news that hadn't happened yet (churner
     // playtest 2026-08-23). bondNight is the per-night book.
-    if (Object.keys(G.soc.bondNight || {}).length >= 4 && !G.soc.butterflyTeased) {
+    // …and DRINKS means drinks. bondNight is written by tips and party arrivals
+    // too, so a man who tipped three girls and took one out got four fingers on
+    // the FIRST drink he actually bought (Gerry, round 34) — the tease's own
+    // words are "you buy drink for how many girl tonight?". Its own book now.
+    (G.soc.drinkNight = G.soc.drinkNight || {})[id] = true;
+    if (Object.keys(G.soc.drinkNight).length >= 4 && !G.soc.butterflyTeased) {
       G.soc.butterflyTeased = true;
       _say(_pickVary([
         `${NPCS[id].name} counts something on her fingers, eyes narrowing in delight: “Ohhh, I hear about you. BUTTERFLY!” She makes the wing motion. The whole bar makes the wing motion. This is your reputation now.`,
@@ -5223,6 +5228,11 @@ function _lightNotice() {
   const r = _room();
   const npcs = _npcsHere();
   if (!r.barType && !npcs.length) return;
+  // Your own room is not an audience. A companion you brought back counted as
+  // "people present", so the torch fired the BAR tease at her — "The other
+  // girls are already laughing", in a locked hotel room with no other girls in
+  // existence (Frank, round 34). A light in your own room is unremarkable.
+  if (_isHotelRoom(G.room)) return;
   if (r.barType === "gogo") {
     G.lightWarn.mark = true; // this command's warning is spent; the tick skips
     _gogoLightWarn();
@@ -8511,6 +8521,13 @@ function doCommand(input) {
       if (_politePhrase(lower)) break;
       if (_convoResolve(lower)) break;
       _say(_pickVary(_HUH, "huh"), "dim"); _noteMiss("parse");
+      // …and drop any breadcrumb still pending. This path returns WITHOUT
+      // _flushTrace, so a trace stranded by an earlier early-return survived
+      // here and printed against some unrelated later command — Frank's
+      // "· You gave Lek a single red rose" appeared on a LIGHT ON in his hotel
+      // room the following night (round 34). A failed command leaves no
+      // breadcrumb, and it must not carry somebody else's either.
+      _traceCancel();
       return; // no tick for parse errors
   }
   _flushTrace(_room0);

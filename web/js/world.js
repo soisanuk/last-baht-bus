@@ -10775,6 +10775,10 @@ const MOTOSAI_DESTS = {
   "naklua":         { room: "naklua_rd", price: MOTOSAI_TOWN },
   "darkside":       { room: "khao_talo", price: MOTOSAI_FAR },
   "khao talo":      { room: "khao_talo", price: MOTOSAI_FAR },
+  // Myth Night Market HAS a stand you can leave from, and Candy's recce quest
+  // names it as a place to go — but it wasn't a destination, so the one verb
+  // that reaches the far side of town couldn't take you to it (Gerry, r34).
+  "myth night":     { room: "myth_night", price: MOTOSAI_TOWN },
   "lake":           { room: "lake_mabprachan", price: MOTOSAI_FAR },
 };
 
@@ -10797,7 +10801,7 @@ const GIFT_TIP = 100;        // paying tao-rai up front closes the account clean
 const TONIC_POLICE_CUT = 0.35; // the police "negotiation fee" kept out of any recovery
 
 const ENCOUNTERS = {
-  katoey: {
+  katoey: { solo: true,
     rooms: ["beach_rd_s", "beach_rd_c", "beach_rd_n", "promenade", "ws_north", "ws_south"],
     interactive: true,
     th: "หล่อจังเลย", rom: "lor jang loei",
@@ -10807,7 +10811,7 @@ const ENCOUNTERS = {
       "near your pocket.",
     hint: "(Quick — do something.)",
   },
-  bargirl: {
+  bargirl: { solo: true,
     rooms: ["buakhao_n", "buakhao_market", "buakhao_s", "tt_entrance", "lk_entrance", "lk_main", "soi6_street", "ws_north"],
     interactive: false,
     th: "โถ น่าสงสาร", rom: "thoh, naa songsaan",
@@ -10832,7 +10836,7 @@ const ENCOUNTERS = {
       "and holds it up, eyebrows raised: want some?",
     hint: "(YES would be the traditional answer.)",
   },
-  freelancer: {
+  freelancer: { solo: true,
     rooms: ["beach_rd_s", "beach_rd_c", "beach_rd_n", "promenade", "buakhao_n", "north_beach"],
     interactive: true, nightly: true, // resets every night — Beach Road and band-night Buakhao restock
     th: "ไปไหนคะ", rom: "pai nai kha?",
@@ -10867,7 +10871,7 @@ const ENCOUNTERS = {
     hint: "(No bar, no barfine — pay her direct, cheaper than the soi. But this is the dark " +
       "sand: no mamasan, no rail, nobody at all if it turns. ฿500, or ฿900 with Muk. YES / NO.)",
   },
-  bkktourist: {
+  bkktourist: { solo: true,
     rooms: ["ws_north", "ws_south", "beach_rd_c", "second_rd_c", "buakhao_market"],
     interactive: true, nightly: true,
     th: "รอเพื่อนอยู่ค่ะ", rom: "ror phuean yu kha",
@@ -10877,7 +10881,7 @@ const ENCOUNTERS = {
       "noticing and returns a small, neutral nod.",
     hint: "(She's a tourist, not a trade. Manners — or a little Thai — go further than a wallet here.)",
   },
-  jptourist: {
+  jptourist: { solo: true,
     rooms: ["ws_gate", "ws_north", "ws_south", "beach_rd_c"],
     interactive: true, nightly: true,
     intro: "At the go-go rail a sharply-dressed Japanese woman is watching the dancers " +
@@ -10886,7 +10890,7 @@ const ENCOUNTERS = {
       "she's looking at — and the smile says: game recognises game. “Konbanwa.”",
     hint: "(She isn't working, and she isn't shy. Read it right — money is the wrong move.)",
   },
-  britles: {
+  britles: { solo: true,
     rooms: ["ws_gate", "ws_north", "ws_south", "beach_rd_c"],
     interactive: true, nightly: true,
     intro: "Outside a go-go, pint in hand and entirely at home, a British woman is " +
@@ -10953,7 +10957,7 @@ const ENCOUNTERS = {
       "palm, write your lucky number — only one-nine-nine baht. Then we fix. Sit, sit.”",
     hint: "(Let him READ your palm for ฿199, or tell him NO and walk on.)",
   },
-  booking: {
+  booking: { solo: true,
     // The app-booked freelancer + the catfish (from a punter report). Fires late,
     // near home, once you're settled (act1Done). YES and she takes her time (the
     // apps run on the 'tomorrow' clock even at 1 a.m.); then a photos-vs-reality
@@ -10968,7 +10972,7 @@ const ENCOUNTERS = {
       "extraordinary.",
     hint: "(YES, book her — she'll be a while — or NO and turn in.)",
   },
-  clubpickup: {
+  clubpickup: { solo: true,
     // The back-loaded transaction (from a canon essay): you pull a girl on a
     // Walking Street club dancefloor — no bar, no lady drinks, no barfine, feels
     // entirely real — and the invoice arrives the next morning as "taxi money".

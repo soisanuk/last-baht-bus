@@ -196,3 +196,96 @@ test("the gone-home pointer never names the bar you're standing in (Gerry)", () 
     assert.doesNotMatch(text(), new RegExp(_barName(NPCS[nid].room) + ", early doors"), "no riddle");
   }
 });
+
+// ── the mechanical batch ────────────────────────────────────────────────────
+
+test("your own room is not an audience for the torch (Frank)", () => {
+  _setFlag("act1Done"); G.room = _hotelRoomId(); G.battery = 80;
+  G.party = { ids: ["lek"], stops: 1, spent: 0, seen: [] };
+  out = []; G.lightOn = true; _lightNotice();
+  assert.equal(text(), "", "no bar tease in a locked hotel room");
+  // …and a bar still gets one
+  G.room = "lucky_tiger"; out = []; _lightNotice();
+  assert.ok(text().length > 0, "the bar still clocks the torch");
+  G.party = null;
+});
+
+// bondNight is written by tips and party arrivals too, so a man who tipped
+// three girls got "four fingers" on the FIRST drink he actually bought.
+test("the butterfly tease counts drinks, because that is what it says (Gerry)", () => {
+  _setFlag("act1Done"); G.room = "lucky_tiger"; G.money = 9000;
+  G.soc.bondNight = { a: 1, b: 1, c: 1, d: 1 };   // tips/party, no drinks
+  G.soc.drinkNight = {};
+  out = []; run("buy drink for lek");
+  assert.doesNotMatch(text(), /BUTTERFLY|Butterfly, na|flap/i, "no tease before four DRINKS");
+  assert.deepEqual(Object.keys(G.soc.drinkNight), ["lek"], "drinks keep their own book");
+});
+
+// The social pools named a role their own target may hold: "Keng calls
+// something to the cashier" — Keng being the cashier.
+test("no social line names a role its target might hold (Gerry)", () => {
+  const flat = JSON.stringify(_SOCIAL_TEXT);
+  assert.ok(!/calls something to the cashier/.test(flat), "she does not call to herself");
+  assert.ok(!/The cashier rings the till/.test(flat), "…nor ring her own till");
+});
+
+// A trace stranded by an early-return printed against an unrelated later
+// command — a rose given in her bar surfaced on a LIGHT ON the next night.
+test("a failed command carries nobody's breadcrumb (Frank)", () => {
+  _setFlag("act1Done"); G.room = "lucky_tiger";
+  _trace("give", "Lek", "a single red rose");     // strand one
+  out = []; run("zzzznotaverb");
+  assert.doesNotMatch(text(), /You gave/, "the parse miss drops it");
+  out = []; run("look");
+  assert.doesNotMatch(text(), /You gave/, "…and it does not resurface later");
+});
+
+// A, B, A slipped past a dedup that only compared the sender's LAST message.
+test("one inbox read never prints the same text twice (Gerry)", () => {
+  _setFlag("act1Done"); G.phone.inbox = [];
+  const ask = "family of me sick need medicine 300 you help little bit na?";
+  _pushMsg("lek", ask);
+  _pushMsg("lek", "sabai dee mai");
+  _pushMsg("lek", ask);
+  const texts = G.phone.inbox.filter(m => !m.read).map(m => m.text);
+  assert.equal(new Set(texts).size, texts.length, "no duplicate unread from one sender");
+});
+
+test("Myth Night is a motosai destination, not just a departure point (Gerry)", () => {
+  assert.ok(MOTOSAI_DESTS["myth night"], "the market you can leave from is one you can reach");
+  assert.equal(MOTOSAI_DESTS["myth night"].room, "myth_night");
+  assert.ok(ROOMS.myth_night.motosai, "…and it does have the stand");
+});
+
+// The parade kept being dealt onto a man visibly holding somebody's hand.
+test("nobody propositions you mid-party (Frank)", () => {
+  const solo = Object.keys(ENCOUNTERS).filter(k => ENCOUNTERS[k].solo);
+  assert.ok(solo.includes("freelancer") && solo.includes("bkktourist"),
+    "the solicitations are marked");
+  _setFlag("act1Done"); G.room = "beach_rd_c"; G.encDone = {}; G.lastEnc = -999;
+  G.party = { ids: ["lek"], stops: 1, spent: 0, seen: [] };
+  for (let i = 0; i < 60; i++) { G.pendingEnc = null; _maybeEncounter();
+    if (G.pendingEnc) assert.ok(!ENCOUNTERS[G.pendingEnc] || !ENCOUNTERS[G.pendingEnc].solo,
+      G.pendingEnc + " should not fire with company"); }
+  G.party = null;
+});
+
+// "The club empties into the soft light" — for a man sealed behind a padded
+// door in a bar with painted-out windows.
+test("a lock-in dawn is a lock-in dawn (Gerry)", () => {
+  _setFlag("act1Done"); G.room = "khao_talo_bar";
+  G.soc.lockIn = { khao_talo_bar: true };
+  out = []; _endNight("allnighter");
+  assert.match(text(), /bolt back|black paint/i, "the bolt goes back first");
+  assert.doesNotMatch(text(), /The club empties/, "not the generic all-nighter");
+});
+
+// The room says the far stools are empty; TALK TO PATRON produced one of them.
+test("the bar-bore isn't on a rail the room called empty (Gerry)", () => {
+  _setFlag("act1Done"); G.room = "starlight_bar"; G.season0 = 8; G.day = 1;
+  assert.ok(_lowSeason(), "premise: the lean months");
+  out = []; run("talk to patron");
+  assert.match(text(), /find stools|lean months/i, "nobody there to talk to");
+  G.season0 = 10; out = []; run("talk to patron");
+  assert.ok(text().length > 0, "…and in season he's back");
+});

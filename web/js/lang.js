@@ -898,8 +898,8 @@ const _CATALOGS = {
       "Ein schnelles Küsschen wird gestattet, so wie man einem Welpen das Sofa gestattet. {n} tätschelt deine Wange: “Okay, okay. Sanuk.”",
     "A brief kiss is granted, then withdrawn like a sample. {n} taps your nose. “Enough. You greedy.”":
       "Ein kurzer Kuss wird gewährt, dann wie eine Kostprobe wieder zurückgezogen. {n} tippt dir auf die Nase. “Genug. Du gierig.”",
-    "{n} allows it — and takes her time about it. The cashier rings the till just to make a noise.":
-      "{n} lässt es zu — und lässt sich dabei Zeit. Die Kassiererin klingelt die Kasse, nur um Lärm zu machen.",
+    "{n} allows it — and takes her time about it. Somebody rings the till just to make a noise.":
+      "{n} lässt es zu — und lässt sich dabei Zeit. Irgendwer klingelt die Kasse, nur um Lärm zu machen.",
     "{n} meets you halfway and holds it a beat past friendly. When she pulls back she's smiling at something she's decided not to tell you.":
       "{n} kommt dir auf halbem Weg entgegen und hält ihn einen Moment länger, als freundlich wäre. Als sie sich zurückzieht, lächelt sie über etwas, das sie beschlossen hat, dir nicht zu verraten.",
     "{n} kisses YOU, decisively, to a smattering of applause from the far end of the bar. You are now, officially, sitting with her.":

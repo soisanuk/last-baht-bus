@@ -287,8 +287,17 @@ function _maybeEncounter() {
     return;
   }
   if (G.turns - G.lastEnc < ENC_COOLDOWN) return;
+  // Nobody propositions a man who is visibly holding somebody's hand. The
+  // parade kept being dealt onto a player mid-party — a freelancer offering
+  // herself and her friend while the companion stood right there in the room
+  // list (Frank, round 34) — which contradicts the game's own depth-beats-
+  // breadth doctrine at the exact moment it's being rewarded. `solo` marks the
+  // encounters that only make sense alone; the rest of the street (peddlers,
+  // touts, the tonic man, the jogger) is indifferent to your company.
+  const withCompany = !!(G.party && G.party.ids && G.party.ids.length);
   const eligible = Object.keys(ENCOUNTERS).filter(id =>
     !G.encDone[id] && ENCOUNTERS[id].rooms.includes(G.room) &&
+    !(withCompany && ENCOUNTERS[id].solo) &&
     (id !== "powerbank" || G.battery <= 30) &&
     // 70 = 01:00, which is when her text claims she finishes ("It is gone 1 a.m.")
     // — the old gate of 40 fired the "gone 1 a.m." prose at half past ten.

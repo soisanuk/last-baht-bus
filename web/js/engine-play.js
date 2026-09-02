@@ -1669,7 +1669,7 @@ const _SOCIAL_TEXT = {
       n => _fmt("{n} decides you'll do for the night and turns the full wattage on — knee against yours, laughing before you finish the joke. The other girls give you up for lost.", { n }),
       n => _fmt("{n} takes your hand and studies the palm with mock gravity. “Long life. Big trouble. I am the trouble.” She keeps the hand.", { n }),
       n => _fmt("Something shifts — {n} stops working the room and starts spending the evening, which is a different thing entirely, and everyone at the rail can tell.", { n }),
-      n => _fmt("{n} calls something to the cashier without looking away from you; a drink appears that you didn't buy. “From me,” she says, enjoying your face. “Can happen.”", { n }),
+      n => _fmt("{n} calls something down the bar without looking away from you; a drink appears that you didn't buy. “From me,” she says, enjoying your face. “Can happen.”", { n }),
       n => _fmt("{n} leans in close enough that the next thing is said AT your ear rather than to it, in Thai, untranslated — and she declines, grinning, to repeat it.", { n }),
     ],
   ],
@@ -1687,7 +1687,7 @@ const _SOCIAL_TEXT = {
       n => _fmt("A brief kiss is granted, then withdrawn like a sample. {n} taps your nose. “Enough. You greedy.”", { n }),
     ],
     [
-      n => _fmt("{n} allows it — and takes her time about it. The cashier rings the till just to make a noise.", { n }),
+      n => _fmt("{n} allows it — and takes her time about it. Somebody rings the till just to make a noise.", { n }),
       n => _fmt("{n} meets you halfway and holds it a beat past friendly. When she pulls back she's smiling at something she's decided not to tell you.", { n }),
     ],
     [
@@ -2363,6 +2363,19 @@ const _BELL_PUB = [
 
 function _doPatron() {
   const s = G.soc;
+  // The anonymous bar-bore cannot be at a rail the room has just described as
+  // empty. In the lean months _describeRoom prints the thinned register — "the
+  // far stools are empty tonight, the regulars who'd usually be welded to them
+  // are home" — and TALK TO PATRON then produced one of them, talking football
+  // (Gerry, round 34). Same condition, same answer: nobody there.
+  const railCrowd = _npcsHere().filter(id =>
+    !NPC_ROLES[id] && !NPCS[id].manager && !NPCS[id].filler && !NPCS[id].house);
+  if (typeof _lowSeason === "function" && _lowSeason() && !railCrowd.length) {
+    _say("You look down the rail for somebody to talk to and find stools. The lean " +
+      "months take the regulars first — they're home, or they're economising, or " +
+      "they're simply not the sort to drink in an empty room.", "dim");
+    return;
+  }
   if (s.patronMiffed[G.room]) {
     _say("The regular gives you the shoulder of a man whose evening you dented " +
       "when you bought his girl that drink. Bad form, and he knows you know. " +
@@ -3627,7 +3640,19 @@ function _endNight(reason) {
         "back and let the day take you.", "room");
       break;
     case "allnighter":
-      _say(_pickVary(_ALLNIGHTER_LINES, "allnighter"), "win");
+      // A bolted lock-in has its own dawn: the generic line had "the club
+      // empties into the soft light" for a man sealed behind a padded door in
+      // a bar with painted-out windows (Gerry, round 34). The bolt goes back
+      // first, and the street is a surprise when it arrives.
+      if (G.soc.lockIn && G.soc.lockIn[G.room]) {
+        _say("Somebody works the bolt back — that same flat sound, running the other " +
+          "way — and the door comes open on a morning nobody in here had budgeted for. " +
+          "The black paint on the windows had been doing its job all night. You step out " +
+          "into a Darkside dawn: dogs, roosters, one motorbike, and a sky already too " +
+          "bright, and behind you the stools go up as if none of it happened.", "win");
+      } else {
+        _say(_pickVary(_ALLNIGHTER_LINES, "allnighter"), "win");
+      }
       _addHappy(2); // the big night out is a WIN — the invoice is the morning
       break;
     case "collapse":
@@ -3839,6 +3864,9 @@ function _endNight(reason) {
   G.soc.butterflyTeased = false;
   G.soc.bought = 0;          // the room's patience with a chequebook resets each night (_boughtHappy)
   G.soc.bondNight = {};      // …and so does how far a night of buying can carry one girl (_boughtBond)
+  G.soc.drinkNight = {};     // …and who you actually bought a DRINK for (the butterfly tease)
+  // A new night never inherits last night's breadcrumb (round 34).
+  if (typeof _traceCancel === "function") _traceCancel();
   G.soc.bondCapSaid = {};    // …so the "as warm as money gets tonight" line can land again tomorrow
   G.offstage = false; // never carry an "off with her" flag into a new night
   G.pendingBf = null; // a barfine still mid-negotiation at the bell dies with the night

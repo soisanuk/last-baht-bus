@@ -2719,9 +2719,17 @@ const _CHATTER = ["thinking of you na 💭", "you eat already?? 🍚", "sabai de
   "bar quiet 😴 boss angry at everybody", "i see a dog look like you today 555 🐕", "my friend ask who is the farang always smiling. i say mine 😏",
   "rain rain rain ☔ nobody come", "you sleep?? it 9pm only, old man 555", "mama call, she say hello to you (she dont know you 555)"];
 function _pushMsg(from, text, gives, fromName, photo) {
-  // the same line twice running from the same sender reads as a bug (27-night playtest)
-  const last = [...G.phone.inbox].reverse().find(m => m.from === from);
-  if (text && last && last.text === text && !gives && !photo) text = _CHATTER[(G.turns + G.day) % _CHATTER.length];
+  // the same line twice running from the same sender reads as a bug (27-night
+  // playtest) — and "running" was too narrow: the check only compared against
+  // that sender's LAST message, so A, B, A slipped straight through and one
+  // inbox read printed her mama-sick ask twice, verbatim, with another text
+  // between them (Gerry, round 34). Any UNREAD copy from the same sender is a
+  // duplicate, wherever it sits in the queue.
+  const dupe = text && !gives && !photo &&
+    G.phone.inbox.some(m => m.from === from && !m.read && m.text === text);
+  if (dupe) text = _CHATTER[(G.turns + G.day) % _CHATTER.length];
+  // …and if the substitute collides too, let the beat go rather than repeat it.
+  if (dupe && G.phone.inbox.some(m => m.from === from && !m.read && m.text === text)) return;
   // a girl texting into a void stops at a few: an ignored phone accumulated ~70
   // unread — the same five strings ×8 — and dumped them wholesale at the arc's
   // emotional climax (Frank, 2026-08-26). Plain chatter caps at 3 unread per
