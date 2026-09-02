@@ -8354,6 +8354,16 @@ function doCommand(input) {
     case "repay": case "payback": _doRepay(arg); break;
     case "hire": case "off": _doHire(arg); break;
     case "pet": case "stroke": _doPet(arg); break;
+    // SHAKE HAND fell through to the bare parse-miss (Marcus, round 34 — a
+    // proud man offering the one respectful gesture he owns). The wai note is
+    // cultural fact, not a lecture: hands are for closing deals, wais for
+    // everything else, and nobody here is offended either way.
+    case "shake": case "handshake":
+      if (/\bhead\b/.test(arg)) { _say("You shake your head. The town, collectively, has seen worse objections."); break; }
+      _say("You offer a hand. It gets taken, warmly enough — though around here a " +
+        "handshake is what you close a deal with; everything else runs on the wai and " +
+        "the nod. Nobody minds. They file you under farang and pour on.", "dim");
+      break;
     case "hug": case "cuddle": case "scratch": case "ruffle": case "fuss":
       if (G.dog && (!arg || _isDogWord(arg) || /\bdog\b|\bhim\b/.test(arg))) { _doPet("dog"); break; }
       if (!arg) { _say("Hug who? The soi is affectionate but not that affectionate."); break; }

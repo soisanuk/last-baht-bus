@@ -1005,7 +1005,9 @@ test("dj plays Sabai Sabai only after Ploy's tip", () => {
   state().room = "rainbow_girls";
   run("ask dj about sabai sabai");
   assert.ok(!state().flags.sabaiPlaying);
-  assert.match(lastOut(), /Wonderwall/);
+  // the refusal names the gate (talk to Ploy) rather than falling through to
+  // the Wonderwall line — round 34: the old fallback read as a timing gate
+  assert.match(lastOut(), /cage|Ploy/);
   state().flags.knowDoorTrick = true;
   run("ask dj about sabai sabai");
   assert.ok(state().flags.sabaiPlaying);

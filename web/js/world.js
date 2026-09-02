@@ -4722,6 +4722,21 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         short: "\"Oy has your wallet. Take her extra-spicy som tam — 'Candy's order' — and give it to Ploy, her cashier.\"" },
       { topic: "wallet", notFlags: ["knowWasHere"],
         text: "\"Lost wallet? Mmm. And what makes you think Candy knows something?\" She polishes a glass, watching you. \"Show me you were even here last night and maybe my memory improve.\" (Perhaps something in your pockets proves it.)" },
+      // The hint's own words are "ASK ANY OF THEM ABOUT OY" — and until this
+      // node, Candy answered OY with reminiscence while the som tam (the one
+      // true key to the safe route) hung on topic WALLET. A blind persona
+      // followed the hint literally for three nights and never found the door
+      // (Marcus, round 34): the game's own hint misdirected its own puzzle.
+      // Both topics now reach the errand; first-match keeps the wallet node
+      // for the wallet asker, this one for the hint-follower.
+      { topic: "oy", req: ["knowOyHasIt"], notFlags: ["somTamAccepted", "somTamDelivered"],
+        text: "\"Oy?\" Candy reads what you're really asking and drops her voice. \"You want a " +
+          "door into that woman's world, there is exactly one, and it is not brave and it is " +
+          "not clever. It is som tam.\" She's already reaching under the bar. \"Extra spicy, " +
+          "from the market cart — 'Candy's order', they know. You give it to Ploy, her " +
+          "cashier, in the cage at Rainbow. Ploy stand there six hours hungry every night. " +
+          "Feed her, and doors open.\"", sets: ["somTamAccepted"], gives: "som_tam",
+        short: "\"The door into Oy's world is som tam. Give it to Ploy, her cashier at Rainbow — feed her and doors open.\"" },
       { topic: "oy", text: "\"Madam Oy. We come up together — Crystal Palace, different lifetime. She hard like teak now but she was farm girl from Isaan same as me. Wai her properly and she remember she has a heart. Somewhere.\"" },
       { topic: "mot", req: ["knowMot"], text: "\"Mot sell everything he lift to one buyer — always the same. Ask around LK Metro who that is.\" She mimes zipping her lip and pointing at the till: lady drink territory." },
       { topic: "philosophy", text: "\"Phi-lo-so-phy.\" She says each syllable the way " +
@@ -9163,6 +9178,16 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { req: ["waiedPloy"], notFlags: ["somTamDelivered"],
         text: "\"So polite! Farang who wai — Mamasan would like you.\" She glances at the ห้ามเข้า door. \"Whatever you're here for, sweetheart, I can't help from inside the cage. Unless...\" she sniffs the air theatrically \"...you happened to know somebody who owes me som tam.\"" },
       { text: "She counts a brick of hundreds without looking up. \"Drinks at the bar, sweetheart. Cage is for money and me.\"" },
+      // The hint says ASK ABOUT OY, and until this node her OY answer was pure
+      // flavor — the som-tam sniff lived only on the waiedPloy path, which a
+      // player who refuses to wai never sees (Marcus, round 34). Same nudge,
+      // no deference required: the way into the cage is through her stomach.
+      { topic: "oy", notFlags: ["somTamDelivered"],
+        text: "\"Mamasan?\" The counting never stops, but her eyes flick once to the ห้ามเข้า " +
+          "door and back. \"Six hours I stand in this cage every night for that woman, " +
+          "sweetheart, and you know what nobody bring me? Dinner.\" A hundred-baht note " +
+          "snaps between her fingers. \"Candy know my order. Ask HER about it.\"",
+        short: "\"Six hours in this cage and nobody brings me dinner. Candy knows my order — ask her.\"" },
       { topic: "oy", text: "\"Mamasan is the best boss on this soi and the scariest, and those are the same fact.\" The counting never stops." },
     ],
   },
@@ -9179,6 +9204,19 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         text: "\"Sabai Sabai? Mamasan's song, bro. She come out for this one, EVERY time — security too, they all sing.\" He grins and cues it up. The opening bars roll out warm as a sunset, and sure enough the room turns toward the floor like plants toward light.",
         sets: ["sabaiPlaying"],
         short: "\"He cues 'Sabai Sabai' — the room turns toward the floor. Go now, be invisible.\"" },
+      // Asked for the song WITHOUT the door trick, this used to fall through
+      // to the generic miss pool — whose line "Not yet, na. Maybe later" reads
+      // on this specific ask as a TIMING gate, so a player retried at
+      // different hours all night (Marcus, round 34). It's a knowledge gate,
+      // and the refusal now points at the knowledge: the song is cage
+      // business, and the cage lady is the one to square.
+      { topic: "sabai sabai", notFlags: ["knowDoorTrick"],
+        text: "\"Sabai Sabai?\" He slides one headphone off, properly awake for the first " +
+          "time tonight. \"That is not a request, bro, that is an EVENT. Mamasan's song. I " +
+          "play that, the whole house stops working.\" The headphone goes back on. \"Man " +
+          "asks for that song, he has business. And business in this bar goes through the " +
+          "cage first. Talk to Ploy.\"",
+        short: "\"Mamasan's song is an event, not a request. Business goes through the cage — talk to Ploy.\"" },
       { text: "He lifts one headphone. \"Request? No Wonderwall. House rule. Wonderwall is a lady drink fine.\"" },
     ],
   },
