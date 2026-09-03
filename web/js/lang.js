@@ -998,7 +998,7 @@ const _CATALOGS = {
     "Soi 6's shutters are down, the frontages black, the sound systems finally and mercifully off. Whatever you were after here shut at midnight — the beer bars and the Queen Vic are what's still awake now.":
       "Die Rollläden der Soi 6 sind unten, die Fronten schwarz, die Anlagen endlich und gnädig aus. Was auch immer du hier wolltest, hat um Mitternacht geschlossen — wach sind jetzt noch die Bierbars und die Queen Vic.",
     "Perfume applied with intent from both kerbs at once, cheap floor cleaner, charcoal from the moo ping man, and hotel soap from rooms rented by the hour — the same overload as Tree Town, in a straight line.":
-      "Absichtsvoll aufgetragenes Parfüm, billiger Bodenreiniger Holzkohle vom Moo-Ping-Mann und Hotelseife aus stundenweise vermieteten Zimmern. — dieselbe Überforderung wie in Tree Town, nur geradeaus.",
+      "Absichtsvoll aufgetragenes Parfüm von beiden Bordsteinen zugleich, billiger Bodenreiniger, Holzkohle vom Moo-Ping-Mann und Hotelseife aus stundenweise vermieteten Zimmern — dieselbe Überforderung wie in Tree Town, nur geradeaus.",
     "No water for sale here. 7-Elevens, bars, and the street carts all have it.":
       "Hier gibt es kein Wasser zu kaufen. 7-Elevens, Bars und Straßenkarren haben alle welches.",
     "At the far end a regular reigns{g} — the sort of scene you watch from across the bar, not one you walk into.":
