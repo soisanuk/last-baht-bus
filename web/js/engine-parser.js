@@ -8254,7 +8254,9 @@ function doCommand(input) {
     // nights of QUESTS / BUY DRINK / TALK eaten as "no"). Hard encounters (police,
     // the tonic shop, the curse ritual, the barfine games) keep the snap rule.
     const softAnswer = _ENC_SOFT[enc];
-    if (softAnswer && !softAnswer.test(lower) && _isRealCommand(v)) {
+    // a named exit ("alley") is walking off, which IS an answer — and the walk
+    // must happen, not just the decline (Hamish, round 38)
+    if (softAnswer && !softAnswer.test(lower) && (_isRealCommand(v) || (_room().exits && _room().exits[v]))) {
       // the note FIRST: with the decline prose printed before it, a man read the
       // peddler's head-shake as the answer to his BARFINE (Lionel, round 36)
       _say("(That wasn't an answer; the pitch lapses and you carry on.)", "dim");

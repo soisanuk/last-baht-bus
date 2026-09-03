@@ -145,3 +145,18 @@ test("Eddy's nudge is a soda; a cashier on the floor is the answer to 'who minds
   assert.match(NPCS.fast_eddy.nudge, /soda with lime/);
   assert.match(readFileSync(join(here, "../../web/js/engine-core.js"), "utf8"), /_tillKeeper\(G\.room\) : _coverGirl\(G\.room\)/);
 });
+
+// ── Hamish ──
+test("a rotating owner's elsewhere line names the district — two bars are called the Sundowner (Hamish)", () => {
+  G.day = 2; G.room = "cricketers"; _describeRoom(true);
+  assert.match(text(), /Lawan is working Sundowner Bar, over on Soi Diana, tonight/);
+});
+
+test("a named exit typed into a soft pitch walks you off — the decline AND the move (Hamish)", () => {
+  const room = Object.keys(ROOMS).find(id => ROOMS[id].exits && ROOMS[id].exits.alley && ENCOUNTERS.freelancer.rooms.includes(id))
+    || Object.keys(ROOMS).find(id => ROOMS[id].exits && ROOMS[id].exits.alley);
+  assert.ok(room, "a room with an alley exit");
+  G.room = room; G.pendingEnc = "freelancer"; run("alley");
+  assert.equal(G.pendingEnc, null, "the pitch lapsed");
+  assert.equal(G.room, ROOMS[room].exits.alley, "…and you walked");
+});

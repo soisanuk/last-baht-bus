@@ -7661,7 +7661,7 @@ test("Candy alternates nights between her two bars", () => {
   state().room = "candy_bar";
   assert.ok(!_npcsHere().includes("candy"), "not at the original bar tonight");
   out = []; _describeRoom(true);
-  assert.match(lastOut(), /Candy is working Candy Bar 2 tonight/, "the empty bar says where she is");
+  assert.match(lastOut(), /Candy is working Candy Bar 2, over on [^,]+, tonight/, "the empty bar says where she is");
   out = []; run("talk to candy");
   assert.match(lastOut(), /try Candy Bar 2/, "and asking points to tonight's bar");
 

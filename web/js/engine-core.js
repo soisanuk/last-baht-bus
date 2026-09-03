@@ -2059,7 +2059,9 @@ function _describeRoom(full, forceFull) {
       // very often a relative (Mario, 2026-09-03). She is a real person on the
       // Here: line, so the room can say which one she is.
       const cover = typeof _tillKeeper === "function" ? _tillKeeper(G.room) : _coverGirl(G.room);   // a cashier on the floor IS the answer (Frank, round 38)
-      _say(`${n.name} is working ${_barName(_npcRoom(id))} tonight` +
+      // …and WHICH one: two bars in this town are called the Sundowner, and a
+      // man sent to "Sundowner Bar" walked to the lake (Hamish, round 38)
+      _say(`${n.name} is working ${_barName(_npcRoom(id))}, over on ${ROOMS[_npcRoom(id)].region}, tonight` +
         (cover ? `, and it is ${NPCS[cover].name} on the till — the one she leaves it with.`
                : `; the floor staff keep this one running.`), "dim");
     }
