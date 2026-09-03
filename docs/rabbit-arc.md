@@ -272,6 +272,54 @@ Two hard constraints:
 - **CTF flavour, never CTF dependency.** A `sanuk{…}` string taped to a monitor is
   fine as an easter egg; requiring the real cipher is not (see the firewall above).
 
+### The kid path — Nont (agreed 2026-09-04)
+
+The interview's third answer. The engine cannot tell whether the player is technical;
+Nont is the player who isn't and *knows a kid who is*. He is the built LBB NPC (the
+Old Market table, the priced fixer — `docs/bangkok-concept.md`), and this is his
+LBB backstory happening again in front of you: Rabbit's runner and tech-kid, taught
+the craft and then the crime, steered off before it took him — by Tan, who placed him
+somewhere safe and never named it. **Bringing him in turns the caper into a family
+argument, which is the point.** Three beats, in order:
+
+1. **Rabbit can't ask.** At the interview the player can say the name. Rabbit goes
+   quiet — he wants the kid on it more than anything and knows exactly why he
+   shouldn't ask — and lets *you* carry the request. The player carries a request
+   Rabbit cannot make himself. (A `pendingChoice` option beside MULE / OPERATOR:
+   `THE KID`. Offered only if the player has met Nont; never gated out.)
+2. **Nont names a price he doesn't want paid.** He does not do favours (that is the
+   whole design of him), so he prices it — and it is the first price he has named
+   that he plainly wishes you wouldn't meet: walking back into the one thing he
+   stepped out of, for the man who pointed him at it, with the man who pulled him out
+   two streets away. Pay it and the **operator path runs offscreen through him** —
+   no CLI, cleaner and faster than the mule path, a scene rather than a mini-game.
+   Decline and nothing moves (doctrine). **No Bangkok in it, no "he's going places":**
+   the no-signpost test applies exactly as it does to the lake errand — the beat must
+   be worth having if the follow-on is never built.
+3. **A fourth landing for the heat, and it's the one nobody can allow.** CCIB pulls
+   the thread and it leads to the kid. The three adults in his life collide:
+   - **Rabbit's guilt line, finally said out loud** (the unbuilt thread the concept doc
+     notes is built here, in the only scene that earns it).
+   - **Tan's unpriced favour gets called in early and in the wrong direction**: Tan
+     moves the heat — the `tanfavour` modal machinery, its second use — and now the
+     *player* owes him for the kid, with no figure on it. The fixer who never takes
+     money has just done the biggest favour in the game.
+   - **Or the player buys the kid clear**, with cash, through Nont's own channel —
+     the priced fixer paying for the priced fixer. `CASH` is already his verb.
+   - **Duangjai never learns which.** The tiffin errand reads differently afterward,
+     and nothing in her dialogue changes — the player carries that one alone.
+
+**Costs, per doctrine.** Aiding Rabbit already lowers `wdg` standing; bringing the kid
+in is a deed with a second bill — if Tan has to clean up, `syndicate` standing moves
+too (he did it; it cost him; you were the reason). Refusing THE KID at the interview
+costs nothing, ever. The mule and operator paths are untouched by this section.
+
+**Why this and not a fourth NPC.** Every piece already exists: the interview fork, the
+Tan-favour modal, Nont's price-not-favour doctrine, the tiffin errand's mother, the
+CCIB landing fork. The kid path is those pieces made to touch, and it is the only
+version of the heist where the *player's* choice is a moral one rather than a
+technical one.
+
 ### The CLI simulator is a PORTABLE MODULE (architectural rule)
 
 Mario sees a follow-on game taking shape — cyberpunk, Bangkok (concept grounded in
@@ -346,6 +394,10 @@ regardless; the arc's climax is **where it lands**, a three-way fork:
   coins; it was *evidence of the laundering*, and CCIB doing its competent job on
   **WDG** is the lever Rabbit could never see. This is the inversion made mechanical:
   you win by handing the competent locals a true thing, not by out-hacking anyone.
+
+- **Nont** takes it — the fourth landing, available only if you brought the kid in,
+  and the one nobody in the arc can allow. See *The kid path* above: Rabbit's guilt,
+  Tan's favour called in the wrong direction, or the player paying the kid clear.
 
 Who it lands on is a function of *how you played* (see the open question below) and
 of the betrayal fork.
@@ -471,6 +523,7 @@ argument for the firewall this arc already has.
 | 2026-08-13 | Arc greenlit: Fast Eddy / Rabbit, the White Rabbit beer bar in Naklua, the heist that misreads the target. Anti-Tan / living-Shamrock reading. |
 | 2026-08-13 | Rabbit is a two-layer character with real depth, not a gag: smart, self-aware, one year sober after a wake-up incident; the vanity is armour he knows is armour. He is the likely franchise bridge to the Bangkok cyberpunk game, so no ending burns him. Look: overweight, bald but for a rat-tail growing from a neural-socket tattoo (jacked-in motif), gold ear-hoop, untrimmed nose hair — deadpan, not sneered. |
 | 2026-08-13 | Heist is fork-not-filter: mule path (reuses the suspicion ratchet) always available; operator path (CLI sim) is opt-in, richer, never required, and winnable by a non-expert. |
+| 2026-09-04 | **The kid path**: Nont (built as the priced fixer) is the interview's third answer — the player who isn't technical and knows a kid who is. Rabbit can't ask; Nont names a price he doesn't want paid; the operator path runs offscreen through him; a fourth CCIB landing (on the kid) collides Rabbit's guilt, Tan's favour called in early, and the player's cash. Deed-gated costs; no Bangkok signposting. Rides with the heist build. |
 | 2026-08-13 | CLI simulator is a portable, data-driven, pure module (`games.js` doctrine) — built for reuse in a future cyberpunk game, no LBB nouns inside. |
 | 2026-08-13 | The inversion: crypto was never the jugular, the *suay* is; Rabbit can't see it. Canon-correct per factions doc. |
 | 2026-08-13 | CCIB named and never portrayed badly ("quietly, unhurriedly competent"); involved no matter what; the variable is who takes the heat — Rabbit (slips it, never jailed), you (sloppy play), or WDG (the elegant win). |
