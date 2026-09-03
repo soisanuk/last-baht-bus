@@ -4629,8 +4629,7 @@ const NPCS = {
           "town, everybody see everything, somebody always talk.\" She taps the sign on her cart. " +
           "\"Bring bottle, I give five baht. Three, four along the sand most nights — farang leave " +
           "everything.\" (EXAMINE what's in your pockets. QUESTS shows what you're up against. TALK " +
-          "to people and ASK them about your wallet — the soi always knows. HELP lists everything, " +
-          "any time.)",
+          "to people and ASK them about your wallet — the soi always knows.)",
         short: "\"You sleep on beach like soi dog! I come feed my two, find you instead. Look what you still have, ask around — the soi always knows.\"" },
       { topic: "wallet", text: "\"Wallet gone? Beach at night, tilac. You lucky they leave your shoes. Go town, ask the bar ladies — nothing happen in Pattaya they don't know.\"" },
       { topic: "bus", text: "\"Baht bus fifteen baht now. Used to be ten! Iran war, petrol crazy. Everybody complain, everybody still ride. Stop just north, na — up the beach road, blue trucks, cannot miss.\"",
