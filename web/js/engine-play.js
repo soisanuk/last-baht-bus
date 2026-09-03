@@ -1673,8 +1673,9 @@ function _dartsOppTurn(g) {
   }
   const { score } = _dartsVisit(g.opp <= 80 ? "steady" : "big", g.oppSkill, _rand);
   const next = g.opp - score;
-  if (next < 2) _say(`${g.oppName} overcooks the visit and has to nurse it. Still ${g.opp}.`);
-  else { g.opp = next; _say(`${g.oppName} rattles in ${score}. (${g.opp} left.)`); }
+  const _oppCap = g.oppName.replace(/^(\w)/, c => c.toUpperCase());
+  if (next < 2) _say(`${_oppCap} overcooks the visit and has to nurse it. Still ${g.opp}.`);
+  else { g.opp = next; _say(`${_oppCap} rattles in ${score}. (${g.opp} left.)`); }
   _dartsStatus(g);
 }
 
@@ -3860,6 +3861,7 @@ function _nightSnapshot() {
   // the BAR ledger, not the night's personal spending, so track and exclude them.
   if (G.bar) G.bar.pocketDrawn = 0;
   G.lastNight = {
+    vacation: G.vacation,   // a snapshot from a previous vacation reported "-108 สนุก" on the best night of the next (Frank, round 38)
     happy: G.happy,
     money: G.money,
     atm: G.atmTotal || 0,
@@ -3872,7 +3874,7 @@ function _nightSnapshot() {
 }
 
 function _morningLedger() {
-  const b = G.lastNight;
+  const b = (G.lastNight && (G.lastNight.vacation == null || G.lastNight.vacation === G.vacation)) ? G.lastNight : null;   // a stamp-less snapshot is a pre-stamp save; deserializeGame drops those
   if (!b) return;
   G.lastNight = null;
   const bits = [];
@@ -3972,6 +3974,11 @@ const _ALLNIGHTER_LINES = [
   "Dawn. The music stops being music and becomes memory; the lights come up on faces that have all earned the morning. You walk out into pink light and pressure-washed pavement, flag the first songthaew of the DAY shift, and ride home with the wind doing what it can for you. The night is over because it ran out of night.",
   "You close the place. Not a figure of speech — a woman in rubber gloves is stacking stools around you when you finally surface, and outside the sky is the colour of the inside of a shell. The ride home smells of jasmine from somewhere and last night from you. Worth it. Ask again at noon.",
 ];
+const _ALLNIGHTER_STREET = [
+  "The sky goes grey over the soi and you are, somehow, still upright on it. The sweepers work round you; a noodle cart is setting up where a bar's tables were an hour ago. A taxi with two strangers in it slows, and the driver names a price for the light.",
+  "04:00 finds you on the pavement, which at this point feels like a citation for valour. The shutters are down the length of the street and the first monks are out. You share a taxi home with a man who says nothing and a woman who says everything.",
+  "Dawn on the kerb. The neon has been off long enough that you'd forgotten the street had a colour. A songthaew with three sleeping girls in the back takes you most of the way for the day rate, and the driver does not ask.",
+];
 function _endNight(reason) {
   // Idempotency: a mid-command multi-tick (WAIT through dawn) or a collapse on the
   // last night could re-enter here after the week's already ended — don't run the
@@ -4058,7 +4065,7 @@ function _endNight(reason) {
           "into a Darkside dawn: dogs, roosters, one motorbike, and a sky already too " +
           "bright, and behind you the stools go up as if none of it happened.", "win");
       } else {
-        _say(_pickVary(_ALLNIGHTER_LINES, "allnighter"), "win");
+        _say(_pickVary(_inBar() ? _ALLNIGHTER_LINES : _ALLNIGHTER_STREET, _inBar() ? "allnighter" : "allnighterst"), "win");
       }
       _addHappy(2); // the big night out is a WIN — the invoice is the morning
       break;
@@ -4378,7 +4385,9 @@ function _endNight(reason) {
   if (G.dog && !crash) {
     _say(_dogN("(Sai Krok is " + (G.hotel === "queenvic"
       ? "curled in the Queen Vic's doorway when you come down"
-      : "asleep against your door when you surface") +
+      : ((G.nightLog || [])[(G.nightLog || []).length - 1] === "allnighter"
+        ? "up the stairs at your heel and asleep on the step before you've found the key"
+        : "asleep against your door when you surface")) +
       ". One eye opens, the tail thumps twice, and the watch resumes.)"), "dim");
     if (_dogEgg() === "loyal" || _dogEgg() === "sanuk") {
       _addHappy(1);

@@ -798,7 +798,7 @@ function _bfRefusalSay(id, r) {
     }
     _say(`${name} just gives you the same small headshake as before. She told ` +
       "you already" + (r.kind === "cheap" ? " — and the tab hasn't changed her mind for her."
-        : "; the answer hasn't changed since your last drink."));
+        : `; you're still ${G.soc.drunk} deep — under four, she looks again.`));
     return;
   }
   const lines = {
@@ -830,7 +830,7 @@ function _bfRefusalSay(id, r) {
       "unspoken. (A couple more drinks' warmth, and ask again.)",
     mess: `${name} leans back an honest inch. “Ooh. You smell like whole bar, ` +
       "tilac. Maybe shower first, sleep little bit.” Hard to argue from " +
-      `${G.soc.drunk} bottles deep. (Sober up and try again.)`,
+      `${G.soc.drunk} bottles deep. (Get under four bottles and she'll look again.)`,
     busy: `${name} is with somebody else right now — the man beside her, whose ` +
       "evening this currently is. “Later, tilac,” she says, not unkindly, with a " +
       "small tip of the head toward him. Etiquette runs both ways here.",
@@ -1560,6 +1560,7 @@ function _nightRide(input) {
   const paid = Math.min(cost, G.money);
   G.money -= paid;
   seq.spent += paid; seq.stops++; seq.sanuk += venue.sanuk;
+  if (!/viewpoint|market|somtam/.test(venue.key)) G.soc.drunk++;   // a whisky set is a drink (Dex woke "stone sober" after six stops)
   _addBond(id, 1); // every stop deepens the bond
   _say(`${hop}\n\n${scene}` +
     (paid ? ` (฿${paid}. ฿${G.money} left.)` : " (Free. The best things here are.)"), "win");
@@ -1640,6 +1641,7 @@ function _endRide(seq, reason) {
       `no sulk, no scene, just her hand squeezing yours on the bar. The empty pockets don't ` +
       `embarrass her, and that tells you more than the whole night did.`;
   } else if (reason === "dawn") {
+    G.lastBfHonest = true;   // the quiet coda: the fun close's "khao man gai at 3 a.m." read backwards after "morning already" (Dex, round 38)
     close = `The sky over the gulf goes the colour of a bruise healing, and ${name} feels you ` +
       `notice it. "Aaah. Morning already. This town, na — always morning too soon." She points ` +
       `the bike toward a bed, hers or yours, and lets the last of the dark carry you there.`;
@@ -7580,7 +7582,7 @@ function _doColumn() {
       "whole way — 'the paper died, squire, not me' — and it lands most nights now, unasked, " +
       "in the mail of anyone who ever stood him a beer:", "dim");
   }
-  _say("── THE NITE OWL ── Mort's weekly hoot, still going, out of spite ──", "win");
+  _say("── THE NITE OWL ── Mort's hoot, still going, out of spite ──", "win");
   _say(_owlPick(_OWL_LEADS, 1));
   _say("• " + _owlPick(_OWL_LISTINGS, 7), "dim");
   // one-shot: if the amulet went back and the Owl has not had his say yet, he

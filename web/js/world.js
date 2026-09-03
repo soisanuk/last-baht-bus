@@ -1148,6 +1148,10 @@ const ROOMS = {
     busStop: "beachrd",
     motosai: true,
     venues: ["papaya_massage", "beachthai_massage"],
+    lateDesc: "Beach Road South in the small hours: the arch still lit, the sea still " +
+      "breathing, the trucks that bunched up like beads all evening now one at a time " +
+      "and a long wait between. A sweeper works the kerb. The touts have gone home; the " +
+      "ladies in the lamplight have not, quite.",
     exits: { s: "ws_gate", n: "beach_rd_c", e: "second_rd_s" },
   },
 
@@ -2390,6 +2394,16 @@ const ROOMS = {
       "The squid man has a queue. The squid man always has a queue.",
       "Two piwins settle an argument about whose fare you are before you have spoken.",
     ],
+    // the fixed desc's "come two in the morning it will be the busiest crossroads"
+    // met the small-hours empty-bench line at 02:18 (Dex, round 38): after two,
+    // the junction is what the trucks make it — sparse
+    lateDesc: "The junction at the bottom of everything, at the hour it belongs to nobody. " +
+      "South Pattaya Road comes down from the east, Second Road goes off north, and the " +
+      "squid man has packed up. The songthaews that circled it all night have gone " +
+      "sparse — one every ten minutes if you're lucky, benches half-empty, drivers " +
+      "leaning out to name a price to anyone still standing. Two piwins on the corner, " +
+      "not three deep. The slow river of people has become a trickle of the very " +
+      "determined and the very lost.",
     exits: { w: "ws_gate", n: "second_rd_s", e: "buakhao_pt", s: "second_rd_diamond" },
   },
   buakhao_pt: {
@@ -2832,7 +2846,7 @@ const ROOMS = {
     region: "Tree Town",
     dark: true,
     desc: "The maze's unlit armpit: kitchen doors, a mop graveyard, and rats with " +
-      "routines. Without light, every exit feels like the same wrong one. South, past " +
+      "routines. Light or no light, every exit feels like the same wrong one. South, past " +
       "the bins, a FAR LANE of cheap bars nobody photographs leaks a little warm light.",
     sign: "maze_3",
     exits: { n: "tt_lane_1", e: "tt_lane_2", w: "tt_deep", s: "tt_lane_3" },
@@ -4790,7 +4804,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // back and simply talked got "Welcome to Candy Bar! First time?" (Declan,
       // round 35). Once she knows Oy has it and hasn't handed the box over,
       // her hello IS the errand — first match, so it outranks the welcomes.
-      { req: ["knowOyHasIt"], notFlags: ["somTamAccepted", "somTamDelivered"],
+      { req: ["knowOyHasIt"], notFlags: ["somTamAccepted", "somTamDelivered", "hasWallet"],   // the errand is Act One's; with the wallet back it is over (Dex, round 38)
         th: "กลับมาแล้ว", rom: "klap ma laeo",
         text: "\"You again — and no wallet in your hand, so Oy said no.\" Candy doesn't wait for " +
           "you to confirm it. \"Of course she said no. Sit.\" She's already reaching under the " +
@@ -4991,6 +5005,20 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "safe by now, guarantee.\" She flicks a nail at the door. \"Go. Be polite to her. " +
           "Polite works better than clever, with Oy.\"",
         short: "\"Mot sold your wallet to Madam Oy at Rainbow Girls, Tree Town. Go — and be polite to her.\"" },
+      { topic: "price", req: ["heardPriceStory"],
+        text: "\"The price?\" Lek doesn't pretend not to know which one. \"Same as I tell you in the rain. " +
+          "The bar's number is the bar's. Mine is mine, and it is not on the board. Everybody remember " +
+          "the first number and forget the second.\" She goes back to the game. \"You remember. Good.\"",
+        short: "\"Same as I tell you in the rain. The bar's number, then mine. You remember.\"" },
+      { topic: "price", notFlags: ["heardPriceStory"],
+        text: "\"Price?\" A look. \"Ask me on a night with nothing to do, when it's raining. I tell you the whole thing then.\"",
+        short: "\"Ask me on a rainy night.\"" },
+      // the after-hours question nobody would answer (Dex, round 38): where the night goes after two
+      { topic: "late",
+        text: "\"After two?\" Lek racks the balls without looking at them. \"Depends who ask. Customer — go home, " +
+          "customer. Friend —\" the smallest shrug \"— maybe friend take you somewhere. On the bike. Thai place. " +
+          "No farang.\" She lines up the break. \"You not friend yet. Keep coming.\"",
+        short: "\"After two? Friend, maybe. On the bike. You not friend yet.\"" },
       { topic: "oy", text: "\"Madam Oy? Big boss. Her place is Rainbow Girls — deep in Tree Town, the maze up the top of this road. Undefeated at Connect 4 since two thousand nine. Do NOT play her.\"" },
       // THE FLAGSHIP GIRL COULD NOT BE ASKED WHERE SHE WAS FROM. Auntie Nok's
       // opening tells you to ask the bar ladies, every filler hostess carries
@@ -9706,6 +9734,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
   fast_eddy: {
     dry: true, // a year and a bit sober — a man drink is a soda water, never "a proper one"
     name: "Fast Eddy", emoji: "🕶️", manager: true, pronoun: "he",
+    nudge: "Eddy lets a beat hang, then taps the bar with two knuckles: “You're good company — but a man gets " +
+      "thirsty holding up his end, and mine's a soda with lime, so it'll cost you about nothing. Stand us one?” (BUY MAN DRINK.)",
     room: "white_rabbit",
     look: "American man, fifties, overweight, bald but for a thin grey rat-tail, gold hoop earring, wraparound shades pushed up, black tee.",
     desc: "The owner, and he will have told you so inside a minute. American, the wrong " +
@@ -11234,7 +11264,7 @@ const ENCOUNTERS = {
   jptourist: { solo: true,
     rooms: ["ws_gate", "ws_north", "ws_south", "beach_rd_c"],
     interactive: true, nightly: true,
-    intro: "At the go-go rail a sharply-dressed Japanese woman is watching the dancers " +
+    intro: "At the rail outside a go-go's open front a sharply-dressed Japanese woman is watching the dancers through the door " +
       "with the frank, appraising interest of someone shopping rather than spectating. " +
       "A cocktail, an amused mouth. She clocks you clocking her — and clocking what " +
       "she's looking at — and the smile says: game recognises game. “Konbanwa.”",
@@ -14536,6 +14566,16 @@ function _buildHostess(name, th, room, id = name.toLowerCase()) {
             `it. "After that, my price is my price. Not the bar's." (BARFINE <name>)`,
         ], 47),
         short: `"Mamasan first, then me. Two prices." (BARFINE <name>)` },
+      { topic: "late",
+        text: idx([
+          `"After bar close?" She laughs. "Go home, sleep, wake up, same same. Sometimes friend of me have " +
+            "party — Thai place, karaoke, you know? Farang cannot come." A pause. "Cannot come ALONE."`,
+          `"Late-late?" She thinks about whether to tell you. "Have place. Thai disco, ran lao. Girl go after " +
+            "work with friend. If girl like you, maybe she take you on motorbike." She does not say which girl.`,
+          `"After two, everybody go eat. Khao tom, som tam, sit on the floor." She pats the stool. "You want " +
+            "see? Be nice to somebody who like you. Then she drive."`,
+        ], 53),
+        short: `"After two? Thai place, on the bike — if somebody like you."` },
       { topic: "quota", bond: 1,
         text: `"Quota, na. Every girl have number for the month — drink, and the other thing. Under ` +
           `the number, Mamasan not happy; over the number, small bonus." She counts something on ` +

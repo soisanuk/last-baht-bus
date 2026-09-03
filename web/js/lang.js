@@ -414,7 +414,8 @@ const _CATALOGS = {
     "thirsty": "durstig",
     "watered": "getränkt",
     "stone sober, which is fixable": "stocknüchtern, was sich beheben lässt",
-    "in no state to be on the back of a motorbike": "nicht in der Verfassung, hinten auf ein Motorrad zu steigen",
+    "a pillion the piwins will still take — hold on": "ein Sozius, den die Piwins noch mitnehmen — festhalten",
+    "past what any piwin will carry": "jenseits dessen, was irgendein Piwin noch mitnimmt",
     "nursing a barfine souvenir that itches and burns — a clinic job (GET TESTED, it's free)":
       "pflegst ein Barfine-Souvenir, das juckt und brennt — ein Fall für die Klinik (GET TESTED, kostenlos)",
     "{d} bottles deep and navigating by neon": "{d} Bier intus und navigierst nach Neon",

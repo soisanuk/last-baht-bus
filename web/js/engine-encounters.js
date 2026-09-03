@@ -562,7 +562,9 @@ const _ENC = {
       _addHappy(2);
       return;
     }
-    if (/wai|sorry|khrap|krub|apolog|sawatdee/.test(input)) {
+    // "wait until 3" resolved as WAI and cost ฿300; "barfine lek" resolved as PAY
+    // (Dex, round 38). Whole words only.
+    if (/\bwai\b|sorry|khrap|krub|apolog|sawatdee/.test(input)) {
       const f = Math.min(300, G.money);
       G.money -= f;
       _say("You wai first and apologise second, in Thai, both hands steady-ish. " +
@@ -570,7 +572,7 @@ const _ENC = {
         (f ? `฿${f} changes hands inside a handshake old as the force itself. ` : "") +
         `“Drink water, my friend. Go home slow.” (฿${G.money} left.)`, "alert");
       _addHappy(-1);
-    } else if (/pay|fine|give|baht|ok|yes|here/.test(input)) {
+    } else if (/\b(?:pay|fine|give|baht|ok|okay|yes|here)\b/.test(input)) {
       const f = Math.min(500, G.money);
       G.money -= f;
       _say((f ? `฿${f} disappears into a shirt pocket with a receipt that will never ` +

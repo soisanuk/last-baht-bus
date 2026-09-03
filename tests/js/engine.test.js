@@ -178,7 +178,7 @@ test("_topicKnown: patron names gate too; non-name topics always pass", () => {
 
 test("fast travel: discovered places only, at exact walking pace", () => {
   run("travel candy bar");
-  assert.match(lastOut(), /already found/i, "Candy Bar not discovered yet");
+  assert.match(lastOut(), /haven't found it yet|already found/i, "Candy Bar not discovered yet");
   assert.equal(state().room, "jomtien_beach");
   state().room = "candy_bar";
   run("look"); // standing in it puts it on the list
@@ -5291,7 +5291,7 @@ test("refusals: customer-stealing, the honest lady-time, temple, and the recover
   assert.match(lastOut(), /ask EARLY/i, "the rail's advice rides along");
   out = [];
   run("barfine nan"); // held for the night
-  assert.match(lastOut(), /answer hasn't changed/i);
+  assert.match(lastOut(), /under four, she looks again/i);
   // the honest upfront lady-time (aom's life-hash, day 1) — BEFORE any money
   newGame(); state().lastSaleng = 99999;
   state().flags.act1Done = true; state().flags.hasWallet = true;
@@ -7977,7 +7977,7 @@ test("a bad night ends with a debrief; a good one doesn't", () => {
   }
   const dawnOut = ended("dawn");   // away from home → the all-nighter
   assert.doesNotMatch(dawnOut, /WHAT HAPPENED/, "standing at dawn is not a failure");
-  assert.ok(_ALLNIGHTER_LINES.some(l => dawnOut.includes(l)), "…it's the whole arc, completed");
+  assert.ok([..._ALLNIGHTER_LINES, ..._ALLNIGHTER_STREET].some(l => dawnOut.includes(l)), "…it's the whole arc, completed");   // on a street it is the street pool (Dex, round 38)
 
   // dawn is the same reason code with two opposite outcomes: on the street it's
   // a rough wake, in your own bed it's just morning. Telling a man who went to

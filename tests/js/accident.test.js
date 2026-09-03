@@ -110,7 +110,7 @@ test("a sober in-town hop is calm — no crash, no near-miss", () => {
 
 test("DIAGNOSE warns when you're too drunk to be riding", () => {
   G.soc.drunk = 6; out = []; _doDiagnose();
-  assert.match(out.join("\n"), /no state to be on the back of a motorbike/i);
+  assert.match(out.join("\n"), /pillion the piwins will still take|past what any piwin will carry/i);   // DIAGNOSE and the piwin agree on the number (Dex, round 38)
   G.soc.drunk = 2; out = []; _doDiagnose();
   assert.doesNotMatch(out.join("\n"), /back of a motorbike/i, "only when actually drunk");
 });

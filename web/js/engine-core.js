@@ -526,6 +526,10 @@ function deserializeGame(s) {
   }
   // pre-stage saves (before the vacation sandbox): infer the stage and give the
   // body plausible mid-night meters — these depend on the save, not on defaults
+  // a morning snapshot with no vacation stamp predates the stamp (2026-09-03) and
+  // may be from a PREVIOUS vacation — it reported "-108 สนุก" on the best night of
+  // the next one (Frank, round 38). Drop it; the first morning is just quiet.
+  if (G.lastNight && G.lastNight.vacation == null) G.lastNight = null;
   if (saved.stage === undefined) {
     G.stage = G.flags && G.flags.act1Done ? "vacation" : "act1";
     G.vacation = 1;
@@ -2054,7 +2058,7 @@ function _describeRoom(full, forceFull) {
       // who cannot be in two places has one girl she trusts with the money,
       // very often a relative (Mario, 2026-09-03). She is a real person on the
       // Here: line, so the room can say which one she is.
-      const cover = _coverGirl(G.room);
+      const cover = typeof _tillKeeper === "function" ? _tillKeeper(G.room) : _coverGirl(G.room);   // a cashier on the floor IS the answer (Frank, round 38)
       _say(`${n.name} is working ${_barName(_npcRoom(id))} tonight` +
         (cover ? `, and it is ${NPCS[cover].name} on the till — the one she leaves it with.`
                : `; the floor staff keep this one running.`), "dim");
@@ -2229,7 +2233,8 @@ function _describeRoom(full, forceFull) {
     // forth" as any of them.
     const _railCrowd = _npcsHere().filter(id2 =>
       !NPC_ROLES[id2] && !NPCS[id2].manager && !NPCS[id2].filler && !NPCS[id2].house);
-    const _thin = typeof _lowSeason === "function" && _lowSeason() && !_railCrowd.length;
+    const _thin = typeof _lowSeason === "function" && _lowSeason() && !_railCrowd.length &&
+      ["beer", "soi6", "gents", "pub"].includes(r.barType);   // a club's floor "heaves" in its own desc — no bare-wood rail there (Dex, round 38)
     if (_thin) {
       _say(_pickVary(_BAR_THIN, "barThin"), "dim");
     } else if (G.soc.patronBusy[G.room]) {

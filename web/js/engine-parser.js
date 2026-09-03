@@ -454,7 +454,7 @@ function _doGo(dirWord) {
   if (_hotelOf && _hotelOf !== G.hotel && _flag("hasWallet")) {
     _say(`The ${_HOTELS[_hotelOf].name} desk takes one practiced look at you: ` +
       "\"Guest, sir?\" Your key card opens a different hotel tonight. The " +
-      "smile that follows is kind and absolutely final.");
+      `smile that follows is kind and absolutely final. (Your room is at the ${_HOTELS[G.hotel].name} — TRAVEL HOME.)`);
     return;
   }
   // gentleman's clubs, most of Soi 6 and the Darkside keep the law's hours and
@@ -849,6 +849,22 @@ function _doTravel(arg) {
     if (/round\s*(the\s*)?back|back\s*door|backdoor|alley|side\s*door/.test(_pnm(w) + " " + w) && _lockInDoorHere()) {
       doCommand("round the back");
       return;
+    }
+    // the journal just NAMED a bar TRAVEL then refused (Frank, round 38), and ENTER
+    // from inside a bar was refused for a bar on the same soi (Dex): say where it is
+    {
+      const _bn2 = x => String(x || "").toLowerCase().replace(/[^a-z0-9 ]/g, " ").replace(/\s+/g, " ").trim();
+      const wq = _bn2(w);
+      const named = wq && Object.keys(ROOMS).find(id => ROOMS[id].bar && (_bn2(ROOMS[id].bar).includes(wq) || wq.includes(_bn2(ROOMS[id].bar))));
+      if (named) {
+        const outside = _room().exits && _room().exits.out;
+        if (outside && (ROOMS[outside].venues || []).includes(named))
+          _say(`${_barName(named)} fronts the same soi as this bar — OUT, then ENTER ${_barName(named).toUpperCase()}.`);
+        else
+          _say(`${_barName(named)} is over in ${ROOMS[named].region} — you haven't found it yet, and TRAVEL only ` +
+            "knows the places you've been. Walk it, or a MOTOSAI to the district.");
+        return;
+      }
     }
     _say("You only know the way to bars and hotels you've already found. (Bare TRAVEL lists them.)");
     return;
@@ -3062,6 +3078,12 @@ function _convoTopicHere(topic) {
 // verb, which repeats your last command and must keep doing so.
 const _RETELL_RE = /\s*\b(again|once more|one more time|whole story|full story|properly|in full)\b\s*$/i;
 
+const _HELLO_AGAIN = [
+  "{n} has said hello. She raises her glass an inch instead and waits for you to bring a subject. (ASK {N} ABOUT <something>.)",
+  "\"Mm?\" {n} is already looking at you. The greeting was earlier; this is the part where you say something. (ASK {N} ABOUT <something>.)",
+  "{n} tilts her head — the look of a woman who has been said hello to and is now waiting for the rest. (ASK {N} ABOUT <something>.)",
+  "A small smile from {n}, and nothing else: you have her attention, and it wants a question. (ASK {N} ABOUT <something>.)",
+];
 function _doTalkBody(arg, topic) {
   arg = (arg || "").trim();
   let _retell = false;
@@ -3293,6 +3315,26 @@ function _doTalkBody(arg, topic) {
     _questOffer(npc);
     return;
   }
+  // A bonded girl with nothing new to say printed her hello's gist three times
+  // in a row — "the same eleven words at me like a doorbell" (Frank, round 38).
+  // The hello lands once a night; after that a bare TALK asks for a subject.
+  // The doctrine stands: the SECOND talk is the terse gist. It is the third and
+  // fourth that turn her into a doorbell.
+  // Scoped to the girls (a regular's gist is his character), and only to a hello
+  // already SEEN — a new when-gated hello still lands; it is the repeat of a
+  // repeat that becomes the doorbell.
+  const _helloSeen = !topic && !d.topic && !d.gives && !d.sets && !d.choices && !d.asks && !_retell &&
+    NPC_ROLES[npc] && (G.talked[npc] || []).includes(NPCS[npc].dialogue.indexOf(d));
+  if (_helloSeen) {
+    G.soc.helloed = G.soc.helloed || {};
+    G.soc.helloed[npc] = (G.soc.helloed[npc] || 0) + 1;
+    if (G.soc.helloed[npc] >= 2) {
+      _say(_fmt(_pickVary(_HELLO_AGAIN, "helloagain"), { n: NPCS[npc].name, N: NPCS[npc].name.toUpperCase() }), "dim");
+      if (typeof _otherLedger === "function") _otherLedger(npc);
+      _questOffer(npc);
+      return;
+    }
+  }
   _deliver(npc, d, _retell);
   if (NPCS[npc].manager) _managerChatTick(npc);
   // the other ledger: sitting with a girl you've earned a tier with, she shows
@@ -3328,6 +3370,8 @@ const _CONVO_TOPIC_RULES = [
   [/\btours?\b|\bon the road\b|\bgigs?\b|\btouring\b/,                        "music"],
   [/\bmunich\b|\bm\u00fcnchen\b|\bbavaria\b/,                                  "german"],
   [/\bwhite dish\b|\bwdg\b/,                                                  "ryan powers"],
+  // the after-hours question (Dex, round 38): "after", "late", "karaoke", "bike" all missed on the girl who then drove him there
+  [/\bafter ?hours?\b|\bafter (?:two|midnight|close|closing|work|the bar)\b|\blate[- ]?night\b|\blate\b|\bkaraoke\b|\bthai disco\b|\bran ?lao\b|\bmotorbike\b|\bwhere.*(?:go|party) after\b/, "late"],
   // …and the words the column itself puts in a reader's mouth: Box 15's
   // personal taunts "not one of you has asked me why", and the reader typed
   // exactly "personals"/"box 15" at its author and got the generic shrug
@@ -4263,8 +4307,8 @@ function _managerChatTick(id) {
   G.soc.mgrChat = G.soc.mgrChat || {};
   G.soc.mgrChat[id] = (G.soc.mgrChat[id] || 0) + 1;
   if (G.soc.mgrChat[id] === 3) {
-    _say(`${NPCS[id].name} lets a beat hang, then taps the bar with two knuckles: “You're ` +
-      "good company, bud — but a man gets thirsty holding up his end. Stand us one?” (BUY MAN DRINK.)", "dim");
+    _say(NPCS[id].nudge || (`${NPCS[id].name} lets a beat hang, then taps the bar with two knuckles: “You're ` +
+      "good company, bud — but a man gets thirsty holding up his end. Stand us one?” (BUY MAN DRINK.)"), "dim");
   }
 }
 
@@ -5403,9 +5447,16 @@ function _doMotosai(arg) {
   } else if (_hh("hands:" + G.vacation + ":" + G.motoRides, 11) % 5 === 0) {
     seat = " " + _pickVary(_MOTO_HANDS_LATER, "motohandslater");
   }
+  const rideLine = _pickVary(extraTurns ? _MOTO_RIDE_LONG : _MOTO_RIDE_SHORT, extraTurns ? "motolong" : "motoshort");
+  // with a seat sentence in between, the ride becomes its own sentence — "swing on
+  // the back, There is the question of your hands… and the piwin" was two fragments
+  // welded without punctuation (Frank, round 38)
+  const rideSentence = seat
+    ? (rideLine.replace(/^and /, "").replace(/^(\w)/, c => c.toUpperCase()))
+    : rideLine;
   _say(`“${thaiBaht(price)}${dogFare ? ` (plus ${thaiBaht(dogFare)} for his lordship's ride)` : ""}.” ` +
-    `You pay${price === 20 ? " — Bank's special price" : ""}, swing on the back,` + seat + " " +
-    _pickVary(extraTurns ? _MOTO_RIDE_LONG : _MOTO_RIDE_SHORT, extraTurns ? "motolong" : "motoshort") + ". " +
+    `You pay${price === 20 ? " — Bank's special price" : ""}, swing on the back` + (seat ? "." + seat + " " : ", ") +
+    rideSentence + ". " +
     `That was the fastest ฿${total} of your life` +
     (extraTurns
       ? ` — ${_minutesWord((extraTurns + 1) * 6).toLowerCase()} of it, ` +
@@ -5710,7 +5761,8 @@ function _doDiagnose() {
       d >= 1 ? _fmt("{d} bottle{s} in", { d, s: d > 1 ? "s" : "" }) : _L("stone sober, which is fixable"),
   ];
   if (G.hurt) parts.push(_fmt("banged up ({h}/3 — a third strike ends the night)", { h: G.hurt }));
-  if (d >= 5) parts.push(_L("in no state to be on the back of a motorbike"));
+  if (d >= 7) parts.push(_L("past what any piwin will carry"));
+  else if (d >= 5) parts.push(_L("a pillion the piwins will still take — hold on"));
   if (_stdSymptomatic()) parts.push(_L("nursing a barfine souvenir that itches and burns — a clinic job (GET TESTED, it's free)"));
   _say(_fmt("Self-diagnosis, {clock}: {parts}.", { clock: _clockStr(), parts: parts.join(" · ") }));
   _say(_fmt("Phone {bat}% · ฿{m} · สนุก {h} ({lvl}). You will live, which in this town is both a prognosis and a lifestyle.",
@@ -6576,6 +6628,7 @@ function _hasPortrait(id) { return _photoList().some(p => p.id === id && !p.cap)
 function _addPhoto(id, cap) {
   if (!NPCS[id]) return false;
   if (!cap && _hasPortrait(id)) return false;
+  if (cap && _photoList().some(p => p.id === id && p.cap === cap)) return false;   // she re-sent the same selfie (Frank, round 38)
   if (G.known) G.known[id] = true;
   _photoList().push(cap ? { id, cap, turn: G.turns } : { id, turn: G.turns, room: G.room });
   return true;
@@ -6836,9 +6889,13 @@ function _doWithdrawInner(arg) {
     if (["soi6_mid", "soi6_deep"].includes(G.room))
       _say("No ATM on this stretch — the only machine on Soi 6 is back at the West End, " +
         "by the beach-road junction. Head WEST.");
-    else
-      _say("No ATM here. There's one on the main drag of every nightlife area — Soi 6 has " +
-        "one at the West End, by the junction.");
+    else {
+      const near = Object.keys(ROOMS).find(id => ROOMS[id].atm && ROOMS[id].region === _room().region);
+      _say(near
+        ? `No ATM here — the nearest machine is at ${ROOMS[near].name}, on this side of town.`
+        : "No ATM here. There's one on the main drag of every nightlife area — Soi 6 has " +
+          "one at the West End, by the junction.");
+    }
     return;
   }
   const n = _atmParse(arg);
@@ -9186,7 +9243,7 @@ function _shareCard() {
     (bonds ? ` · ♥ ${bonds} regular${bonds === 1 ? "" : "s"}` : "") +
     ` · 📖 ${G.ledgerSeen || 0} told true` : null;
   return [
-    `🚌 THE LAST BAHT BUS — Soi 6 (${label})`,
+    G.mode === "soi6" ? `🚌 THE LAST BAHT BUS — Soi 6 (${label})` : `🚌 THE LAST BAHT BUS — the full week`,
     `🌙 ${nights}`,
     ...(social ? [social] : []),
     // AN ANCHOR, because a bare number is not a score anyone can read. "Wordle's

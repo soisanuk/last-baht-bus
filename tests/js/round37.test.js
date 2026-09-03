@@ -261,11 +261,12 @@ test("the ride is a pool: the weaving, the hands on the first ride, three-up wit
     _rand = () => 0.99; try { run("motosai to naklua"); } finally { _rand = saved; } return text(); };
   newGame(); _setFlag("act1Done"); for (const e of Object.keys(ENCOUNTERS)) G.encDone[e] = true; G.peddlerNight = 2;
   let t = go();
-  assert.ok(_MOTO_RIDE_SHORT.some(l => t.includes(l)), "a short hop's ride line");
+  const hasRide = (pool, t) => pool.some(l => t.toLowerCase().includes(l.replace(/^and /, "").toLowerCase()));   // capitalised after a seat sentence
+  assert.ok(hasRide(_MOTO_RIDE_SHORT, t), "a short hop's ride line");
   assert.ok(_MOTO_HANDS.some(l => t.includes(l)), "the first ride: where do the hands go");
   t = go(); assert.ok(!_MOTO_HANDS.some(l => t.includes(l)), "…only the first");
   G.room = "pattaya_klang"; out = []; _rand = () => 0.99; try { run("motosai to darkside"); } finally { _rand = saved; }
-  assert.ok(_MOTO_RIDE_LONG.some(l => text().includes(l)), "a long haul's ride line");
+  assert.ok(hasRide(_MOTO_RIDE_LONG, text()), "a long haul's ride line");
   const girls = Object.keys(NPCS).filter(id => NPC_ROLES[id] === "hostess").slice(0, 2);
   G.party = { ids: [girls[0]], stops: 0, spent: 0, seen: {} }; t = go();
   assert.ok(_MOTO_THREE_UP.some(l => t.includes(_fmt(l, { n: NPCS[girls[0]].name }))), "three-up with her");
