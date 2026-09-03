@@ -677,3 +677,46 @@ test("_tillKeeper finds the money-holder, cashier or doubling mama (Mario)", () 
       "on a small bar the mama is the one holding it");
   }
 });
+
+// The second half of the staffing canon: "unless she has a trusted girl she can
+// depend on while she is away — often a relative" (Mario). An owner who works
+// three bars in rotation IS at one of them; on the other two nobody held the
+// money at all, which is not a data gap — those bars have an owner — but the
+// cover girl the fiction never named.
+test("an away owner leaves the till with somebody, and the room says who (Mario)", () => {
+  _setFlag("act1Done");
+  // pick an owner whose away bar genuinely has no cashier of its own — a bar
+  // that employs one needs no cover, which is also correct and tested below
+  let rotating = null, away = null;
+  for (const n of Object.keys(NPCS)) {
+    if (!Array.isArray(NPCS[n].bars) || NPCS[n].bars.length < 2) continue;
+    if (NPC_ROLES[n] !== "mamasan" && NPC_ROLES[n] !== "cashier") continue;
+    const a = NPCS[n].bars.find(b => _npcRoom(n) !== b && _coverGirl(b));
+    if (a) { rotating = n; away = a; break; }
+  }
+  assert.ok(rotating && away, "an owner is away from a bar with no cashier of its own");
+
+  const keeper = _tillKeeper(away);
+  assert.ok(keeper, "somebody is on the money at the bar she isn't at");
+  assert.equal(NPC_ROLES[keeper], "hostess", "…a girl, not a second mamasan");
+  assert.equal(_tillKeeper(away), _coverGirl(away), "and it is the cover girl");
+
+  // where the owner IS, she keeps her own till
+  const hereBar = _npcRoom(rotating);
+  assert.equal(_tillKeeper(hereBar), rotating, "she holds it herself when she's in");
+  assert.equal(_coverGirl(hereBar), null, "no cover needed");
+
+  // the room names her rather than saying "the floor staff"
+  G.room = away; out = []; run("look");
+  assert.match(text(), new RegExp(NPCS[keeper].name + " on the till"), "the room names her");
+  assert.match(text(), /the one she leaves it with/, "…and says what that means");
+});
+
+// Day-stable, no dice: reading the room twice must not reshuffle who is trusted.
+test("the cover girl is the same woman all night (Mario)", () => {
+  _setFlag("act1Done");
+  const bar = Object.keys(ROOMS).find(id => ROOMS[id].barType && _coverGirl(id));
+  assert.ok(bar, "some bar is being covered tonight");
+  const first = _coverGirl(bar);
+  for (let i = 0; i < 20; i++) assert.equal(_coverGirl(bar), first, "stable across reads");
+});

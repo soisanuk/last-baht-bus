@@ -1993,7 +1993,15 @@ function _describeRoom(full, forceFull) {
   // reads as hers with no sign of her.
   for (const [id, n] of Object.entries(NPCS)) {
     if (n.bars && n.bars.includes(G.room) && _npcRoom(id) !== G.room) {
-      _say(`${n.name} is working ${_barName(_npcRoom(id))} tonight; the floor staff keep this one running.`, "dim");
+      // …and NAME the girl she left the till with. "The floor staff keep this
+      // one running" was true and vague, and the canon is specific: an owner
+      // who cannot be in two places has one girl she trusts with the money,
+      // very often a relative (Mario, 2026-09-03). She is a real person on the
+      // Here: line, so the room can say which one she is.
+      const cover = _coverGirl(G.room);
+      _say(`${n.name} is working ${_barName(_npcRoom(id))} tonight` +
+        (cover ? `, and it is ${NPCS[cover].name} on the till — the one she leaves it with.`
+               : `; the floor staff keep this one running.`), "dim");
     }
   }
   // The Orchid good table: once Tan's near-confirmation has armed it, walking in
@@ -2530,7 +2538,37 @@ function _staffAt(room) {
 function _tillKeeper(room) {
   const here = _staffAt(room);
   return here.find(n => NPC_ROLES[n] === "cashier") ||
-    here.find(n => NPC_ROLES[n] === "mamasan") || null;
+    here.find(n => NPC_ROLES[n] === "mamasan") ||
+    // …and the second half of the same canon: "unless she has a girl she can
+    // depend on while she is away, often a relative". An owner who works three
+    // bars in rotation is AT one of them tonight, so on the other two nobody
+    // held the money at all — which is not a data gap (they have an owner), it
+    // is the cover girl the fiction never named. The longest-serving girl
+    // present is minding it: day-stable, no dice, and nobody new is invented.
+    _coverGirl(room);
+}
+// Who is on the till while the owner is at another of her bars. Null when the
+// owner is here, or when there is nobody to leave it with.
+function _coverGirl(room) {
+  const to = room || G.room;
+  const here = _staffAt(to);
+  if (here.some(n => NPC_ROLES[n] === "cashier" || NPC_ROLES[n] === "mamasan")) return null;
+  const owned = Object.keys(NPCS).some(n =>
+    (NPC_ROLES[n] === "mamasan" || NPC_ROLES[n] === "cashier") &&
+    Array.isArray(NPCS[n].bars) && NPCS[n].bars.includes(to));
+  const girls = here.filter(n => NPC_ROLES[n] === "hostess");
+  if (!girls.length) return null;
+  // an away owner leaves it with somebody; a bar that never had one is small
+  // enough that the woman working it IS the one who takes your money
+  if (!owned && girls.length > 1) return null;
+  return girls[_hh(to + ":till", 29) % girls.length];
+}
+// The owner of a rotating bar, wherever she is tonight — so the cover can name her.
+function _barOwner(room) {
+  const to = room || G.room;
+  return Object.keys(NPCS).find(n =>
+    (NPC_ROLES[n] === "mamasan" || NPC_ROLES[n] === "cashier") &&
+    Array.isArray(NPCS[n].bars) && NPCS[n].bars.includes(to)) || null;
 }
 // …and true when she's doing the double shift, which is what earns the line.
 function _soloMama(room) {
