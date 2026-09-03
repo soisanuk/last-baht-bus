@@ -4023,6 +4023,92 @@ function _endNight(reason) {
   if (typeof _chamMorning === "function") _chamMorning(); // the barista's bus is at ten to eight (chameleon economy)
 }
 
+// ── The goodbye ──────────────────────────────────────────────────────────────
+// You could spend a whole week with one woman — waive her barfine, sit at the
+// top of her ledger, be "your girl" in the black book — and the week ended with
+// nothing from her at all. She didn't text, the narrator didn't mention her,
+// and the airport beat that followed was written for the churn player (Frank,
+// round 34, whose entire run was one girl). For a game whose stated doctrine is
+// depth-beats-breadth, the one ending the depth player earned did not exist.
+//
+// The return side was already built — G.prevBond keeps her peak tier so her bar
+// greets a man who comes back. This is the other half of that.
+//
+// DOCTRINE: no meter moves. The week is being scored on this very screen, and a
+// goodbye that paid สนุก would turn the last real moment of a relationship into
+// a bonus. It costs nothing and pays nothing; only what you know changes — the
+// same rule the other-ledger reveals follow. Never victim, never schemer: she
+// has her own week starting tomorrow and you are not the whole of it.
+// Pool index rides G.vacation like the airport scrub, so repeat trips differ.
+function _farewellGirl() {
+  let best = null, bestT = 0;
+  for (const id of Object.keys(G.soc.drinks || {})) {
+    if (!NPCS[id] || !NPC_ROLES[id]) continue;
+    const t = _bondTier(id);
+    if (t > bestT || (t === bestT && best && (G.soc.drinks[id] > G.soc.drinks[best]))) {
+      if (t >= 2) { best = id; bestT = t; }
+    }
+  }
+  return best;
+}
+
+const _GOODBYE_REGULAR = [
+  n => `You go in on the last night, because not going in would be its own kind of ` +
+    `statement. ${n} is working — of course she is, and the rail is three ` +
+    `deep — and she gets to you between two other tables, wipes her hands on the cloth, ` +
+    `and gives you thirty entirely undivided seconds. "So. Tomorrow you go." Not a ` +
+    `question. "Okay. You come back, you know where I am. I don't move, na." Somebody ` +
+    `calls her name from the far end. She goes.`,
+  n => `${n} finds out you're flying from somebody else, which tells you something about ` +
+    `how the soi carries news and something else about how many people were counting. ` +
+    `"Why you not TELL me," she says, genuinely put out, and then immediately lets you ` +
+    `off. "Mai pen rai. Next time you tell me before, and I take the night off, and we ` +
+    `eat somewhere not here." It is offered like a small business proposal, which is how ` +
+    `she offers everything she means.`,
+  n => `The last night is not a scene. ${n} pours, you drink, the football is on, and ` +
+    `somewhere around eleven she says "you fly tomorrow, na" to the glass she's polishing ` +
+    `rather than to you, and that is the entire acknowledgement either of you makes. At ` +
+    `the door she squeezes your arm once, hard, and is already turning back to the room ` +
+    `before you're through it.`,
+];
+
+const _GOODBYE_FARANG = [
+  n => `${n} knows the date. She has known it since the night you told her, and she has ` +
+    `not mentioned it once, which you did not notice until now. On the last morning she ` +
+    `is there before the taxi, in yesterday's t-shirt with her hair up, holding two ` +
+    `coffees from the place on the corner and looking mildly annoyed about the whole ` +
+    `arrangement.\n\n"I don't do this," she says. "Airport, crying, all that — no. ` +
+    `Stupid." She hands you the coffee. "So I do it here instead, quick, and then I go ` +
+    `sleep." She does it here instead. It is quick. Neither of you is any good at it.`,
+  n => `${n} does not come to see you off, and tells you plainly why, the night before: ` +
+    `"Because then I stand there like idiot, and after you go I still stand there." She ` +
+    `says it flatly, the way she says the price of things. What she does instead is put ` +
+    `you in the taxi herself at the hotel, argue with the driver about the airport fare ` +
+    `on your behalf, win, and walk back up the soi without looking round — which she has ` +
+    `clearly decided in advance and executes exactly.`,
+  n => `The last hour, ${n} is quiet in a way you have not seen in a week of noise. Then, ` +
+    `on the step outside the hotel with the taxi already waiting: "One thing. When you ` +
+    `go home — don't send me money." Your face must do something, because she laughs and ` +
+    `puts a hand flat on your chest. "No, no. Not proud. Is because then it become a ` +
+    `JOB, na, and I have a job." A shrug, and the real thing underneath it. "This one is ` +
+    `not the job. I want to keep it not the job."`,
+];
+
+function _lastGoodbye() {
+  const id = _farewellGirl();
+  if (!id) return;
+  const name = NPCS[id].name;
+  const pool = _bondTier(id) >= 3 ? _GOODBYE_FARANG : _GOODBYE_REGULAR;
+  _say(pool[G.vacation % pool.length](name), "room");
+  // …and she has a week of her own starting tomorrow. Stated once, without
+  // sentiment, because the alternative is a woman who exists only while the
+  // player is looking at her.
+  if (_bondTier(id) >= 3)
+    _say(`(Tonight she works. Tomorrow she works. The soi does not observe your ` +
+      `departure, and neither, particularly, does she — which is not the same as ` +
+      `not minding.)`, "dim");
+}
+
 function _endVacation() {
   G.pendingChoice = "vacation_end";
   G.bestHappy = Math.max(G.bestHappy, G.happy);
@@ -4053,6 +4139,7 @@ function _endVacation() {
     _say(`(You owe Nira ฿${G.loan.owed}. The airport is the one place her cousins don't come, and she ` +
       "knows it, and she will remember the face. Pattaya keeps its books.)", "alert");
   }
+  _lastGoodbye();
   _say("So. What now?", "room");
   // The two options come from _vacationEndPrompt, NOT from here: this is the one
   // screen in the game where a choice is permanent and one-way, and on a resume
@@ -4236,6 +4323,24 @@ function _newVacation() {
     "pings off over the gulf. Same Sabai Palms. Same terrible, perfect bed. Room 412 " +
     `keeps your secrets. ฿${SAFE_CASH} in the safe, seven nights on the clock.`, "win");
   _say(`── VACATION ${G.vacation} · DAY 1 of 7 ──`, "win");
+  // …and the other half of the goodbye: she texted while you were in the air.
+  // G.prevBond was just computed from the week you flew home from, and her
+  // number survives the trip, so the phone is where the relationship keeps
+  // going when the player isn't there — which is what a phone is for, and what
+  // this one was silent about (Frank, round 34: "she doesn't text").
+  // Not a scam-ask, no money, no invite — she is just a person you know now.
+  const _her = Object.keys(G.prevBond || {})
+    .filter(id => G.prevBond[id] >= 3 && NPCS[id] && (G.phone.contacts || {})[id])
+    .sort((a, b) => G.prevBond[b] - G.prevBond[a])[0];
+  if (_her && typeof _pushMsg === "function") {
+    _pushMsg(_her, [
+      "landed ok?? 🛬 tell me when you home. not tomorrow. TODAY 😤",
+      "bar so boring last night. nobody play pool with me 🎱 come back",
+      "my mother ask who is farang always in the photo 555 i say nobody. she not believe me",
+      "you forget your lighter here. i keep it. is mine now, sorry na 🔥",
+    ][G.vacation % 4]);
+    _say("(📱 One unread, sent while you were somewhere over the gulf. CHECK MESSAGES.)", "dim");
+  }
   _describeRoom(true);
 }
 

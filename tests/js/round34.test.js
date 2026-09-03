@@ -492,3 +492,75 @@ test("walking out still doesn't buy you back in tonight (canon)", () => {
   G.lockedInAt = { khao_talo_bar: G.day - 1 }; // …and an earlier one
   assert.ok(_lockInWelcome("khao_talo_bar"), "a previous night: the door knows you");
 });
+
+// ── the goodbye (Frank) ─────────────────────────────────────────────────────
+// A whole week with one woman — barfine waived, top of her ledger, "your girl"
+// in the black book — and the week ended with nothing from her at all. The
+// return side was already built (G.prevBond keeps her peak tier so her bar
+// greets a man who comes back); this is the other half.
+
+test("a bonded girl gets a goodbye, and it scales with the ledger (Frank)", () => {
+  _setFlag("act1Done"); G.day = 8;
+  const say = drinks => { newGame(); _setFlag("act1Done"); G.day = 8;
+    G.soc.drinks = { lek: drinks }; out = []; _lastGoodbye(); return text(); };
+
+  assert.equal(say(1), "", "a stranger gets no goodbye — it is earned");
+  const reg = say(7);
+  assert.equal(_bondTier("lek"), 2);
+  assert.ok(reg.length > 0 && /Lek/.test(reg), "a regular gets one");
+  const far = say(14);
+  assert.equal(_bondTier("lek"), 3);
+  assert.notEqual(far, reg, "her-farang gets a different one");
+  assert.match(far, /she works|not the same as/i, "…and the coda that says she has her own week");
+});
+
+// Doctrine: the week is being SCORED on this very screen, so a goodbye that
+// paid สนุก would turn the last real moment of a relationship into a bonus.
+test("the goodbye costs nothing and pays nothing (Frank)", () => {
+  for (const drinks of [7, 14]) {
+    newGame(); _setFlag("act1Done"); G.day = 8; G.soc.drinks = { lek: drinks };
+    const h = G.happy, j = G.jaded, b = G.soc.drinks.lek, m = G.money;
+    out = []; _lastGoodbye();
+    assert.deepEqual([G.happy, G.jaded, G.soc.drinks.lek, G.money], [h, j, b, m],
+      "no meter moves at drinks=" + drinks);
+  }
+});
+
+test("the goodbye reaches the player through the real vacation end (Frank)", () => {
+  _setFlag("act1Done"); G.soc.drinks = { lek: 14 }; G.day = 8;
+  out = []; _endVacation();
+  assert.match(text(), /Lek/, "she is in the week's-end screen");
+  assert.match(text(), /So\. What now\?/, "…before the airline's question, not instead of it");
+  assert.equal(G.pendingChoice, "vacation_end", "the gate still arms");
+});
+
+// The other half: "she doesn't text". Her number survives the trip home and
+// prevBond remembers her, so the phone is where it keeps going.
+test("she texts while you're in the air — if she's yours (Frank)", () => {
+  _setFlag("act1Done"); G.soc.drinks = { lek: 14 }; G.phone.contacts = { lek: true }; G.day = 8;
+  _endVacation(); G.pendingChoice = null;
+  out = []; _newVacation();
+  assert.match(text(), /sent while you were somewhere over the gulf/, "the nudge");
+  const msg = G.phone.inbox.find(m => m.from === "lek");
+  assert.ok(msg, "…and a real message from her");
+  assert.ok(!msg.gives, "no money — she is not asking for anything");
+  assert.doesNotMatch(msg.text, /sick|hospital|medicine|send/i, "and it is not a scam-ask");
+
+  // a churn player gets neither
+  newGame(); _setFlag("act1Done"); G.soc.drinks = { lek: 2, ping: 2 };
+  G.phone.contacts = { lek: true }; G.day = 8;
+  _endVacation(); G.pendingChoice = null; out = []; _newVacation();
+  // NB: the airport scrub says "the seatbelt sign pings off over the gulf" for
+  // everyone — assert on the nudge's own distinctive phrase, not that fragment.
+  assert.doesNotMatch(text(), /sent while you were somewhere over the gulf/,
+    "breadth earns no letter home");
+  assert.equal(G.phone.inbox.length, 0);
+});
+
+// Soi 6 challenge mode ends on the share card, not a relationship beat.
+test("the daily challenge keeps its own ending (Frank)", () => {
+  _setFlag("act1Done"); G.mode = "soi6"; G.soc.drinks = { lek: 14 }; G.day = 8;
+  out = []; _endVacation();
+  assert.doesNotMatch(text(), /knows the date|thirty entirely undivided/, "no goodbye in the challenge");
+  assert.match(text(), /PLAY AGAIN/, "the card and the rematch, as before");
+});
