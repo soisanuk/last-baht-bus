@@ -148,3 +148,15 @@ test("HELP in the sandbox is the week's page; HELP MORE and VERBS are the whole 
   out = []; run("verbs"); assert.match(text(), /SOAPY/);
   const t = G.turns; run("help"); run("verbs"); assert.equal(G.turns, t, "free, like SCORE");
 });
+
+// ── Tree Town is lit; the disorientation is sameness and sound, not darkness (Mario, 2026-09-04) ──
+test("no bar district has a dark room; Tree Town's lanes say why it feels like a maze", () => {
+  for (const [id, r] of Object.entries(ROOMS)) if (r.dark) assert.ok(!["Tree Town", "Soi 6", "Soi Buakhao", "LK Metro", "Walking Street"].includes(r.region) || id === "ws_alley", id + " is dark in a bar district");
+  assert.ok(!ROOMS.tt_back.dark && !ROOMS.tt_deep.dark && !ROOMS.tt_deep.darkGlow);
+  for (const id of ["tt_back", "tt_deep", "tt_lane_2"]) assert.ok(ROOMS[id].revisit && ROOMS[id].revisit.length >= 2, id + " revisit pool");
+  assert.match(ROOMS.tt_back.desc, /looks exactly like the one you didn't/);
+  G.room = "tt_lane_2"; run("listen"); assert.match(text(), /Three sound systems/);
+  out = []; run("smell"); assert.match(text(), /charcoal.*toilet|toilet.*charcoal/s);
+  // and the opening's last approach no longer bites: a dog streak needs the dark
+  G.room = "tt_deep"; G.lightOn = false; G.battery = 5; assert.equal(_isDarkHere(), false);
+});

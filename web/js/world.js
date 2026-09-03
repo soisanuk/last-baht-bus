@@ -2836,18 +2836,40 @@ const ROOMS = {
     region: "Tree Town",
     desc: "A junction where the lanes cross and the signage starts to feel personal — like " +
       "it was designed to confuse. STARLIGHT BAR's blue sign fizzes just off the corner. " +
-      "Thai arrows point in three directions, contradicting each other with quiet confidence.",
+      "Thai arrows point in three directions, contradicting each other with quiet confidence, " +
+      "three sound systems do the same, and a moo ping cart on the corner smokes the whole " +
+      "junction like a kipper.",
+    revisit: [
+      "The cross lane. Four bars in sight and every one of them the bar you were in last night, until a girl waves and settles it.",
+      "Three songs from three doors meet at the junction and cancel to a throb. The moo ping smoke does not cancel. The arrows still disagree.",
+      "Same stools, same fairy lights, same blue sign fizzing, same grill. Whichever bar you're looking for, it looks and smells like this one.",
+      "A girl from one bar crosses to another with a bucket of ice, and for a second you're sure it's the girl who waved at you last night, and then you're sure it isn't.",
+    ],
     sign: "maze_2",
     venues: ["starlight_bar"],
     exits: { e: "tt_lane_1", w: "tt_deep", s: "tt_back" },
   },
+  // Tree Town's two back lanes were DARK rooms — the only darkness in any bar
+  // district — and the dark's dog-bite streak sat on the opening quest's last
+  // approach. Three personas called it the hardest stretch of the game, and
+  // Mario's call (2026-09-04) was that this is the wrong kind of game for a
+  // maze in a lit tourist warren. Dim, not dark: darkness stays where it is
+  // real — the beaches, the hill road, the highway verge, a service alley.
   tt_back: {
     name: "Tree Town (Back Lane)",
     region: "Tree Town",
-    dark: true,
-    desc: "The maze's unlit armpit: kitchen doors, a mop graveyard, and rats with " +
-      "routines. Light or no light, every exit feels like the same wrong one. South, past " +
-      "the bins, a FAR LANE of cheap bars nobody photographs leaks a little warm light.",
+    desc: "The back of the warren: kitchen doors, a mop graveyard, rats with routines, " +
+      "one bare bulb per bar-back, two sound systems arguing through the same wall, and " +
+      "the smell — pork fat on a charcoal grill, bleach from the toilets, a drain that has " +
+      "given up. You can see every exit from here; it only feels like a maze because the " +
+      "bar you came out of looks exactly like the one you didn't. South, past the bins, a " +
+      "FAR LANE of cheap bars nobody photographs leaks warmer light.",
+    revisit: [
+      "The back lane again. The same bulb, the same bins, the same grill smoke, and a kitchen door you'd swear was the one you passed on the way in.",
+      "Two songs through one wall, neither winning. A girl on a plastic stool eats rice from a bag beside a drain you can smell from the corner, and does not look up.",
+      "Rats with routines, the toilets' bleach fighting the charcoal and losing, and bass from three directions making it impossible to say which bar is closest.",
+      "A cook steps out of a kitchen door, tips a pan of oil into the drain, looks at you the way you'd look at a rat with less of a routine, and goes back in.",
+    ],
     sign: "maze_3",
     exits: { n: "tt_lane_1", e: "tt_lane_2", w: "tt_deep", s: "tt_lane_3" },
   },
@@ -2905,15 +2927,19 @@ const ROOMS = {
     exits: { out: "tt_lane_3" },
   },
   tt_deep: {
-    // the dark-room line says "pitch dark"; the torch reveals a big multicoloured
-    // sign at the end of the lane. Both are true only if the dark line admits the
-    // glow (Malcolm, round 36) — and the manifest's DARK_LIGHT already says so.
-    darkGlow: "One big sign burns at the far end of the lane, every letter a different colour, and lights nothing but itself.",
     name: "Tree Town (Deep Corner)",
     region: "Tree Town",
-    dark: true,
-    desc: "The deepest corner of the maze, where the neon gives out entirely. One big " +
-      "sign burns at the end of the lane: RAINBOW GIRLS BAR, every letter a different colour.",
+    desc: "The deepest corner of Tree Town, where the neon thins to a single sign " +
+      "burning at the end of the lane: RAINBOW GIRLS BAR, every letter a different colour, " +
+      "a string of bulbs under it, and its bass finally loud enough to drown the two bars " +
+      "behind you — the first door tonight you could find by ear. Somebody is grilling " +
+      "squid on the corner, and the perfume from the doorway meets the smoke halfway.",
+    revisit: [
+      "The deep corner: one sign, one bassline, squid smoke, and behind you the rest of the warren still arguing with itself.",
+      "RAINBOW GIRLS in every colour, the string of bulbs, a doorman who has watched you arrive from three different lanes on three different nights and says nothing about it.",
+      "The squid man has moved his grill a metre; the smoke has not. The sign burns on through it, the only thing in Tree Town you could describe to a taxi.",
+      "The corner where the warren finally makes sense: one door, one bassline, one smell. Everything behind you is the same bar four times.",
+    ],
     sign: "maze_4",
     venues: ["rainbow_girls"],
     exits: { e: "tt_lane_2", n: "tt_back" },

@@ -44,7 +44,7 @@ test("the walk to the bar is a gradient: town, then the bass through the wall", 
     "myth_rows", "myth_night"]) {
     assert.equal(_trackForRoom(id).leak, _BAND_SET, `${id} should leak the songbook`);
   }
-  for (const id of ["tt_lane_1", "tt_entrance"]) {
+  for (const id of ["tt_lane_1", "tt_entrance", "tt_back", "tt_deep"]) {   // the back lanes are lit now (2026-09-04) — three sound systems, not insects
     assert.equal(_trackForRoom(id).leak, _GOGO_SET, `${id} should leak the go-go crate`);
   }
   // Oy's office sits behind her own go-go; the bass through that wall is hers
@@ -54,7 +54,7 @@ test("the walk to the bar is a gradient: town, then the bass through the wall", 
   // dongtan_rd_n went lit 2026-08-17 (its 7-Eleven is "the only real light for half a km");
   // pratumnak_hill_rd is the still-dark town-region stretch standing in for it
   // (dongtan_rd_m is dark too but Jomtien-region, where dark yields to surf).
-  for (const id of ["tt_deep", "tt_back", "ws_alley", "hotel_soi", "pratumnak_hill_rd",
+  for (const id of ["ws_alley", "hotel_soi", "pratumnak_hill_rd",
     "buddha_hill", "pratumnak_rd"]) {
     assert.equal(_trackForRoom(id), "night", `${id} should be insects in the dark`);
   }

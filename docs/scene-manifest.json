@@ -401,8 +401,8 @@
       ],
       "sampleDescs": [
         "Bars stacked shoulder to shoulder, neon bleeding into neon. GOLD RUSH LOUNGE glitters just off the lane. Painted Thai arrows on the wall offer guidance to those who can read them.",
-        "A junction where the lanes cross and the signage starts to feel personal — like it was designed to confuse. STARLIGHT BAR's blue sign fizzes just off the corner. Thai arrows point in three directions, contradicting each other with quiet confidence.",
-        "The cheap seats of the maze, behind the kitchens where the rent drops and the neon budget with it: three little bars under one sagging string of bulbs. THE RABBIT HOLE, LUCKY CHARM BAR and MOONSHINE BAR all front this last stretch; between them they trade the regulars who ran out of maze. The only way on is back north. Friendlier than it has any right to be down here."
+        "A junction where the lanes cross and the signage starts to feel personal — like it was designed to confuse. STARLIGHT BAR's blue sign fizzes just off the corner. Thai arrows point in three directions, contradicting each other with quiet confidence, three sound systems do the same, and a moo ping cart on the corner smokes the whole junction like a kipper.",
+        "The deepest corner of Tree Town, where the neon thins to a single sign burning at the end of the lane: RAINBOW GIRLS BAR, every letter a different colour, a string of bulbs under it, and its bass finally loud enough to drown the two bars behind you — the first door tonight you could find by ear. Somebody is grilling squid on the corner, and the perfume from the doorway meets the smoke halfway."
       ]
     },
     {
@@ -3500,11 +3500,10 @@
       "region": "Tree Town",
       "regionSlug": "tree-town",
       "kind": "street",
-      "dark": true,
-      "darkLight": "warm light leaking from a far lane of cheap bars, past the bins",
+      "dark": false,
       "narrow": true,
       "people": [],
-      "desc": "The maze's unlit armpit: kitchen doors, a mop graveyard, and rats with routines. Light or no light, every exit feels like the same wrong one. South, past the bins, a FAR LANE of cheap bars nobody photographs leaks a little warm light."
+      "desc": "The back of the warren: kitchen doors, a mop graveyard, rats with routines, one bare bulb per bar-back, two sound systems arguing through the same wall, and the smell — pork fat on a charcoal grill, bleach from the toilets, a drain that has given up. You can see every exit from here; it only feels like a maze because the bar you came out of looks exactly like the one you didn't. South, past the bins, a FAR LANE of cheap bars nobody photographs leaks warmer light."
     },
     {
       "id": "tt_deep",
@@ -3514,11 +3513,10 @@
       "region": "Tree Town",
       "regionSlug": "tree-town",
       "kind": "street",
-      "dark": true,
-      "darkLight": "one big multicoloured bar sign burning at the end of the lane, the only light there is",
+      "dark": false,
       "narrow": true,
       "people": [],
-      "desc": "The deepest corner of the maze, where the neon gives out entirely. One big sign burns at the end of the lane: RAINBOW GIRLS BAR, every letter a different colour."
+      "desc": "The deepest corner of Tree Town, where the neon thins to a single sign burning at the end of the lane: RAINBOW GIRLS BAR, every letter a different colour, a string of bulbs under it, and its bass finally loud enough to drown the two bars behind you — the first door tonight you could find by ear. Somebody is grilling squid on the corner, and the perfume from the doorway meets the smoke halfway."
     },
     {
       "id": "tt_entrance",
@@ -3556,7 +3554,7 @@
       "dark": false,
       "narrow": true,
       "people": [],
-      "desc": "A junction where the lanes cross and the signage starts to feel personal — like it was designed to confuse. STARLIGHT BAR's blue sign fizzes just off the corner. Thai arrows point in three directions, contradicting each other with quiet confidence."
+      "desc": "A junction where the lanes cross and the signage starts to feel personal — like it was designed to confuse. STARLIGHT BAR's blue sign fizzes just off the corner. Thai arrows point in three directions, contradicting each other with quiet confidence, three sound systems do the same, and a moo ping cart on the corner smokes the whole junction like a kipper."
     },
     {
       "id": "tt_lane_3",

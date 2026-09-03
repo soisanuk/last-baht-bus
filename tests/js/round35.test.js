@@ -558,10 +558,11 @@ test("a chartered truck has no bench of passengers (Malcolm F10)", () => {
   G.pendingFare = null;
 });
 
-test("pitch dark admits the sign burning in it (Malcolm F12)", () => {
+test("the deep corner's sign is the first door you can find by ear (Malcolm F12, then lit 2026-09-04)", () => {
   G.room = "tt_deep"; G.lightOn = false; G.battery = 50;
   out = []; run("look");
-  assert.match(text(), /One big sign burns/, "the glow the manifest already knew about");
+  assert.match(text(), /RAINBOW GIRLS BAR, every letter a different colour/);
+  assert.doesNotMatch(text(), /pitch dark/, "Tree Town is lit now");
 });
 
 test("Mort has a view on the biggest story on his own street (Malcolm F13)", () => {
