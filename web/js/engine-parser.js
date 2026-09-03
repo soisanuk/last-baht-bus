@@ -7211,7 +7211,7 @@ const _MISC_VERBS = {
 };
 
 const _HELP = `The point of it all: สนุก (“sanuk” — fun) is the score; สบายสบาย (“sabai sabai” — easy-easy, the good life) is the summit.
-Common commands:
+THE WHOLE CARD (bare HELP is the short one):
   LOOK · EXAMINE <thing> · TAKE <thing> · DROP <thing> · INVENTORY (I)
   N/S/E/W · IN/OUT · ENTER <place>
   TALK TO <person> · ASK <person> ABOUT <topic> · GIVE <thing> TO <person>
@@ -7262,6 +7262,51 @@ Common commands:
     press and hold) for the full one — a person's ask-topics, and the actions a tap shouldn't fire
   QUIT / END / LOGOUT (sign off; your night is saved) · RESET (wipe the save — asks first)`;
 
+// HELP is layered the way parser IF settled on (ABOUT / HELP / HINT, and the
+// verb list one step down): the bare verb is a FIRST PAGE for the night you are
+// actually in — ten lines, the four verbs that get you home, the taps, HINT —
+// and HELP MORE (or VERBS) is the whole card. It was one flat sixty-line card
+// that listed BARFINE, BUY CONDOM and SOAPY on turn three of the opening
+// (Bronwyn, round 39: "a menu in a language I don't speak").
+const _HELP_HEAD = "The point of it all: สนุก (“sanuk” — fun) is the score; สบายสบาย (“sabai sabai” — easy-easy, the good life) is the summit.";
+const _HELP_TAPS = "Highlighted words in the story are tappable: tap for the quick menu, press and hold (or right-click) for the full one.";
+function _helpFirstPage() {
+  const soi6 = G.mode === "soi6";
+  const opening = !_flag("act1Done");
+  const L = [_HELP_HEAD, ""];
+  if (opening) {
+    L.push("Tonight: get the wallet back, get home. What you need, and nothing you don't:");
+    L.push("  LOOK · EXAMINE <thing> · INVENTORY (I) — what's here, what you still have");
+    L.push("  TALK TO <person> · ASK <person> ABOUT <topic> — this town runs on asking");
+    L.push("  WAI <person> — manners open doors money can't");
+    L.push("  N / S / E / W · IN / OUT · ENTER <place> — moving; MAP for the town");
+    L.push(soi6 ? "  BUY WATER · EAT <food> — the 7-Eleven and the carts"
+                : "  RIDE BUS TO <place> then PAY 15 · MOTOSAI TO <place> · CALL TAN — getting across town");
+    if (!soi6) L.push("  SELL BOTTLES · BUY WATER · EAT <food> — money and meters, the cheap way");
+    L.push(G.act1Tries > 0 ? "  HINT — the soi's nudge toward the next step" : "  HINT — a nudge, once the soi knows your face");
+  } else {
+    L.push("Getting around:  LOOK · EXAMINE <thing> · N / S / E / W · ENTER <place> · TRAVEL <bar> · MAP · TIME");
+    L.push("People:          TALK TO <person> · ASK <person> ABOUT <topic> · WAI · CONTACT <lady> — this town runs on asking");
+    L.push("The bar:         BUY BEER · BUY DRINK FOR <lady> · FLIRT <lady> · RING BELL · BARFINE <lady> · TAO RAI (ask the price)");
+    L.push(soi6 ? "Money & phone:   WITHDRAW <amount> · CHECK BALANCE · PHONE · MESSAGE <lady> · CHECK MESSAGES"
+                : "Money & phone:   WITHDRAW <amount> · CHECK BALANCE · PHONE · MESSAGE <lady> · CHECK MESSAGES · CHARGE PHONE");
+    L.push(soi6 ? "The week:        QUESTS · HINT · SCORE · SHARE · WHO (your ladies) · SLEEP (end the night)"
+                : "The week:        QUESTS · HINT · SCORE · WHO (your ladies) · OWL (the newsletter) · SLEEP (at your hotel)");
+    L.push("Body:            EAT <food> · BUY WATER · DIAGNOSE (how bad is it)");
+  }
+  L.push("");
+  L.push(_HELP_TAPS);
+  L.push("HELP MORE (or VERBS) lists everything the game answers to.");
+  return L.join("\n");
+}
+function _doHelp(arg) {
+  if (/^(more|all|full|verbs?|list|everything)$/.test(String(arg || "").trim().toLowerCase())) {
+    _say(G.mode === "soi6" ? _HELP_SOI6 : _HELP, "dim");
+    return;
+  }
+  _say(_helpFirstPage(), "dim");
+}
+
 // Soi 6 Challenge is a confined mode — one street, one week, no baht bus off it.
 // The full-game HELP advertises a dozen venues and verbs that don't exist here
 // (the Adonis host bar, the Peacock cabaret, Rock Factory, Jomtien's cats, Nira's
@@ -7270,7 +7315,7 @@ Common commands:
 // first HELP walks them straight into a wall. Keep in sync with the full HELP
 // above for verbs the two share.
 const _HELP_SOI6 = `The point of it all: สนุก (“sanuk” — fun) is the score; สบายสบาย (“sabai sabai” — easy-easy, the good life) is the summit.
-Common commands:
+THE WHOLE CARD (bare HELP is the short one):
   LOOK · EXAMINE <thing> · TAKE <thing> · DROP <thing> · INVENTORY (I)
   N/S/E/W · IN/OUT · ENTER <place> · TRAVEL <bar> (fast-hop to any bar you've seen)
   TALK TO <person> · ASK <person> ABOUT <topic> · GIVE <thing> TO <person>
@@ -7328,7 +7373,7 @@ const _COMPLETE_VERBS = [
   "photo", "gallery", "photos", "info", "call", "share", "follow", "shower", "withdraw", "cheers", "tao rai", "borrow", "repay", "hire", "pet", "feed", "rename", "dance", "sing", "swim",
   "smell", "listen", "diagnose", "get tested", "clinic", "apologize", "quests", "accept", "abandon", "contact",
   "contacts", "who", "who am i", "identity", "blackbook", "message", "check messages", "send", "score", "standing", "wait", "again",
-  "request", "hint", "books", "draw", "work", "help", "save", "load", "undo", "restart", "quit", "reset", "end", "logout", "exits",
+  "request", "hint", "books", "draw", "work", "help", "verbs", "save", "load", "undo", "restart", "quit", "reset", "end", "logout", "exits",
 ];
 
 // ── Context chips: the fourth surface ────────────────────────────────────────
@@ -8067,7 +8112,7 @@ const _GERMAN_QUIP = {
 
 // Verbs that cost no turn: pure readouts of state you already have. See the
 // comment at the bottom of doCommand for why this matters more than it looks.
-const _FREE_VERBS = new Set(["score", "time", "clock", "diagnose", "health",
+const _FREE_VERBS = new Set(["score", "time", "clock", "diagnose", "health", "verbs",
   "inventory", "inv", "i", "map", "help", "quests", "journal", "hint", "share",
   "who", "blackbook", "standing", "rep", "gallery", "photos", "album", "books",
   "takings", "identity"]);
@@ -9093,7 +9138,7 @@ function doCommand(input) {
         "on the supply line, which is in the BOOKS.");
       break;
     case "hint": case "hints": _doHint(); break;
-    case "help": case "?": _say(G.mode === "soi6" ? _HELP_SOI6 : _HELP, "dim"); break;
+    case "help": case "?": case "verbs": _doHelp(v === "verbs" ? "more" : arg); break;
     case "quit": case "end": case "logout": _doQuit(); break;
     case "reset":
     case "restart": {

@@ -130,3 +130,21 @@ test("an authored girl without a home line answers from the trade's stock, not a
   out = []; run(`ask ${NPCS[g].name.toLowerCase()} about family`);
   assert.doesNotMatch(text(), /Not my story|wrong girl/);
 });
+
+// ── HELP is a first page for the night you're in; the card is one step down (Mario, 2026-09-04) ──
+test("HELP on the opening night lists the verbs that get you home and none of the sandbox's", () => {
+  newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight" }; G.room = "jomtien_beach";
+  run("help");
+  assert.match(text(), /sanuk/); assert.match(text(), /TALK TO <person> · ASK/); assert.match(text(), /CALL TAN/);
+  assert.doesNotMatch(text(), /BARFINE|SOAPY|CONDOM|HIRE/);
+  assert.match(text(), /HELP MORE/);
+  assert.ok(text().split("\n").length <= 14, "a page, not a card: " + text().split("\n").length);
+});
+
+test("HELP in the sandbox is the week's page; HELP MORE and VERBS are the whole card", () => {
+  G.room = "candy_bar"; run("help");
+  assert.match(text(), /BARFINE <lady>/); assert.doesNotMatch(text(), /SOAPY|HIRE <host>/);
+  out = []; run("help more"); assert.match(text(), /SOAPY/); assert.match(text(), /THE WHOLE CARD/);
+  out = []; run("verbs"); assert.match(text(), /SOAPY/);
+  const t = G.turns; run("help"); run("verbs"); assert.equal(G.turns, t, "free, like SCORE");
+});
