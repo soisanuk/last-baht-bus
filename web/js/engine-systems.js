@@ -407,6 +407,7 @@ function _npcActions(id, full) {
     // Tan's standing food invite is a real option, so it gets the third surface
     // (parser + autocomplete + here). Hidden during Act One, when he refuses.
     if (id === "tan" && typeof _flag === "function" && _flag("act1Done")) acts.push("follow");
+    if (id === "nont" && typeof _flag === "function" && _flag("hasWallet")) acts.push("cash");   // the priced fixer's verb on his own wheel
     // A WAI IS ALWAYS AVAILABLE TO A PERSON, and Act One is SOLVED with one:
     // the game says "(Manners might open it. A proper wai.)" and Madam Oy's
     // menu offered talk / examine / buy her a drink. A player who taps rather
@@ -955,6 +956,63 @@ function _partyArrive(to) {
     p.stops++;
     _addHappy(1);
   }
+}
+
+// ── Nont, the priced fixer ────────────────────────────────────────────────────
+// The second fixer, built to embody the factions doc's sentence: Thais deal in
+// favours, foreigners pay cash. Tan gives the habit, free, for people you've
+// met, and never takes money. Nont sells tonight's coordinates for anybody,
+// moves money at five percent through an account that is a mule account in
+// plain sight (the scam economy's seed, never named), and charges phones.
+// Paying him builds nothing — no bond, no rep, no favour — which is the point
+// of him. Every price is quoted before it is charged.
+function _nontHere() { return _npcsHere().includes("nont"); }
+const _NONT_LOCATE = [
+  "He doesn't look up. “{n}? {where}.” A hand out, palm up, for the two hundred. “Tonight. Don't ask me tomorrow, tomorrow's another two hundred.”",
+  "“{n}.” Two thumbs on the phone, four seconds. “{where}. Two hundred.” The tweezers go back into the phone before your notes have reached his pocket.",
+  "“Easy one.” He names it without checking: “{where}.” Then the price, as if it were part of the sentence. “Two hundred, and I'm right.”",
+];
+function _nontLocate(topic) {
+  const t = String(topic || "").trim().toLowerCase();
+  if (!t) return false;
+  const id = Object.keys(NPCS).find(i => i !== "nont" && (NPCS[i].name.toLowerCase() === t || i === t ||
+    NPCS[i].name.toLowerCase().split(" ").pop() === t));
+  if (!id) return false;
+  if (id === "tan") { _say("“Tan?” The first laugh you've had out of him. “Tan finds YOU. Keep your money.”"); return true; }
+  G.soc.nontTold = G.soc.nontTold || {};
+  const room = typeof _npcWhere === "function" ? _npcWhere(id) : _npcRoom(id);
+  const name = NPCS[id].name;
+  if (!room) { _say(`“${name}? Not out tonight.” He waves the notes away before you've reached for them. “I don't charge for a no.”`); return true; }
+  const where = `${_barName(room) || ROOMS[room].name}, over on ${ROOMS[room].region}`;
+  if (G.soc.nontTold[id] === G.day) { _say(`“Told you already. ${where}. Same answer, same night, no charge.”`); return true; }
+  if (G.money < NONT_LOCATE) {
+    _say(`“Two hundred.” He looks at your hands, not your face. “You haven't got it. Come back when you have, or ask Tan and owe him instead.” (WITHDRAW at a machine, or CASH <amount> here.)`);
+    return true;
+  }
+  G.money -= NONT_LOCATE;
+  G.soc.nontTold[id] = G.day;
+  _say(_fmt(_pickVary(_NONT_LOCATE, "nontlocate"), { n: name, where }) + ` (-฿${NONT_LOCATE}, ฿${G.money} left.)`);
+  return true;
+}
+function _nontCash(arg) {
+  if (!_nontHere()) { _say("No Nont here. His table is at the Old Market on Soi Buakhao, most nights. (CASH is his verb, not the town's.)"); return; }
+  if (!_flag("hasWallet")) { _say("“Cash from what account?” He's not wrong: your card was in the wallet."); return; }
+  const n = parseInt(String(arg || "").replace(/[^0-9]/g, ""), 10);
+  if (!n || n < 500) { _say(`“Five hundred minimum, or it's not worth my thumbs.” (CASH <amount> — five percent, no card fee, no daily limit.)`); return; }
+  if (n > (G.bank || 0)) { _say(`“The app says you haven't got that.” He turns the screen so you can see it: ฿${_num(G.bank || 0)}.`); return; }
+  const cut = Math.round(n * NONT_CUT);
+  G.bank -= n;
+  G.nontCashCount = (G.nontCashCount || 0) + 1;
+  const stuck = _hh("nontstuck:" + G.vacation + ":" + G.day + ":" + G.nontCashCount, 71) % 6 === 0;   // pure hash, no dice
+  if (stuck) {
+    G.nontStuck = (G.nontStuck || 0) + (n - cut);
+    _say(`You send ฿${_num(n)} to a name you don't recognise. The app spins. Nont watches it spin, and something behind his eyes does a small calculation. ` +
+      `“It's fine. The account's having a moment. Tomorrow — I'll have it for you tomorrow.” No notes tonight; the five percent he keeps regardless. (฿${_num(G.bank)} in the bank.)`, "alert");
+    return;
+  }
+  G.money += n - cut;
+  _say(`You send ฿${_num(n)} to a name you don't recognise; he counts ฿${_num(n - cut)} into your hand off a roll from the table drawer before the app has finished spinning. ` +
+    `“Five percent.” No fee, no limit, no question. (฿${G.money} in pocket, ฿${_num(G.bank)} in the bank.)`);
 }
 
 // ── Somchith's rooms ─────────────────────────────────────────────────────────

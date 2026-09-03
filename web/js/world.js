@@ -214,6 +214,12 @@ const BF_BEER = 400, BF_GOGO = 1000, BF_SOI6 = 700, BF_GENTS = 900;
 // what she wants when the bar wants nothing.
 const LADY_ST = 300, LADY_LT = 500;
 const MOTEL_ROOM = 300;      // Somchith's: two hours, fan, towel in — the short-time motel off Soi 7
+// Nont, the second fixer — the priced one. Tan is the favour with no figure on
+// it; Nont is the figure with no favour in it (Mario, 2026-09-04). Thais deal in
+// favours, foreigners pay cash: to a farang he sells, to Tan he owes.
+const NONT_LOCATE = 200;     // where somebody is TONIGHT — anybody, no relationship required
+const NONT_CUT = 0.05;       // his account to your hand: five percent, no card fee, no daily cap (a mule account, in plain sight)
+const NONT_CHARGE = 50;      // a charge off his power bank, no charger of your own needed
 // Male host bars charge a steep premium — a host drink is 2x+ a lady drink and
 // the "off" fee doubles the go-go barfine (canon). Even your own beer is
 // premium-priced (and arrives with ice, whether you wanted ice or not).
@@ -10296,8 +10302,19 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "easy, unaccented English. “Need something? Phone unlocked, screen fixed, a Thai SIM " +
           "that isn't in your name — whatever.” A grin that's friendly and doesn't quite reach " +
           "the eyes. “Alex. Well — Nont, but Alex is easier for you. Everybody down here's got " +
-          "two names. What do you need?”",
-        short: "“Alex — Nont, whatever's easier. Phone unlocked, SIM not in your name, whatever you need.”" },
+          "two names. What do you need?” He doesn't wait for you to work it out. “I find " +
+          "people — two hundred, tonight's answer. I move money — my account to your hand, " +
+          "five percent, no card fee. I charge {{phones}}. Tan does favours. I do prices.” " +
+          "(ASK NONT ABOUT <name> · CASH <amount> · CHARGE PHONE)",
+        short: "“Alex — Nont, whatever's easier. People, money, {{phones}}. Tan does favours; I do prices.” (ASK NONT ABOUT <name> · CASH <amount> · CHARGE PHONE)" },
+      { topic: "fixer|price|prices|services|money|cash",
+        text: "“The menu?” He doesn't look up from the tweezers. “Where anybody is tonight: two " +
+          "hundred, and I'm right. Cash: you send to my account, I hand you notes, I keep five " +
+          "percent — no three-hundred-baht card fee, no daily limit, no questions, sometimes a " +
+          "day's delay when the account's having a moment. {{Phone}}: fifty off the brick.” The grin. " +
+          "“Tan will do any of that for nothing and you'll owe him for ever. Me you pay and " +
+          "we're square. Pick.” (ASK NONT ABOUT <name> · CASH <amount> · CHARGE PHONE)",
+        short: "“Two hundred to find anybody. Five percent on cash. Fifty for the {{phone}}. Pay me and we're square.” (ASK NONT ABOUT <name> · CASH <amount> · CHARGE PHONE)" },
       { topic: "rabbit", text: "“Rabbit.” A small pause, weighing how much to hand you. “Yeah. " +
           "Knew him better than most. Old farang, had a bar on the 6 when I was a kid — I ran his " +
           "till, fixed his wifi, translated when the Thai side of things got complicated. He " +

@@ -420,6 +420,7 @@ const _term = (() => {
         hire:    l => ({ t: "hire",            c: "hire " + l,         go: true }),
         wai:     l => ({ t: "wai",             c: "wai " + l,          go: true }),
         follow:  l => ({ t: "eat with him",    c: "follow " + l,       go: true }),
+        cash:    l => ({ t: "cash, five percent", c: "cash ",           go: false }),
         motdinner: l => ({ t: "buy him dinner", c: "buy " + l + " dinner", go: true }),
       };
       const keys = typeof _npcActions === "function" ? _npcActions(npc || pat, full) : ["talk", "examine"];

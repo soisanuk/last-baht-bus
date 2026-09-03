@@ -4348,6 +4348,11 @@ function _endNight(reason) {
     G.room = "jomtien_beach"; G.battery = Math.max(G.battery, 20);
   }
   G.rain = 0;   // a downpour does not follow you through sleep — one pinned a man in his room at 18:00 (Gordon, round 37)
+  if (G.nontStuck) {   // the account's moment passes overnight: Nont's cash lands
+    G.money += G.nontStuck;
+    _say(`(A text from Nont at some hour you slept through: “sorted.” ฿${_num(G.nontStuck)} of your own money, back in your hand a day late. ฿${G.money} in pocket.)`, "dim");
+    G.nontStuck = 0;
+  }
   _say("");
   if (crash) {
     _say(crash.prose[Math.floor(_rand() * crash.prose.length)], "alert");

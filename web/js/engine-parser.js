@@ -3203,6 +3203,7 @@ function _doTalkBody(arg, topic) {
   // delivery only, so the list would freeze on the night you first asked.
   if (npc === "tan" && _convoTopic(topic || "") === "others" && _tanOthers()) return;
   if (npc === "tan" && topic && typeof _tanAbout === "function" && _tanAbout(topic)) return; // "meet somebody, then ask me who they are" — honoured
+  if (npc === "nont" && topic && typeof _nontLocate === "function" && _nontLocate(topic)) return; // the priced locator: anybody, tonight, ฿200
   // the civilian at the table: "how much" is not a topic she answers, it's the
   // scene (chameleon economy) — no dialogue node, so the wheel never advertises it
   if (npc === "cream" && topic && (topic === "price" || _convoTopic(topic) === "price") &&
@@ -5678,6 +5679,18 @@ function _gogoLightWarn() {
 }
 
 function _doCharge() {
+  if (!_inv().includes("charger") && typeof _nontHere === "function" && _nontHere()) {
+    if (G.battery >= 100) { _say("Already full. Nont doesn't charge for nothing, and there's nothing to charge."); return; }
+    if (G.money < NONT_CHARGE) { _say(`“Fifty.” He doesn't unplug the brick for less, and you haven't got fifty.`); return; }
+    G.money -= NONT_CHARGE;
+    _say(`Nont plugs your phone into a power bank the size of a house brick and goes back to his tweezers. (-฿${NONT_CHARGE}, ฿${G.money} left.)`, "dim");
+    const startDay = G.day;
+    for (let i = 0; i < 3 && G.day === startDay && !G.pendingEnc; i++) _tick();
+    if (G.day !== startDay) return;
+    G.battery = 100; G.lightOn = false;
+    _say("100%. He hands it back without looking up. “Fifty well spent.”");
+    return;
+  }
   if (!_inv().includes("charger")) { _say("You need a charger. 7-Elevens sell them."); return; }
   if (!_room().outlet && !_room().seven) { _say("No outlet here. 7-Eleven has one; so do a couple of friendly bars."); return; }
   if (G.battery >= 100) { _say("Already full. A rare feeling of complete adequacy."); return; }
@@ -6947,6 +6960,7 @@ function _doWithdrawInner(arg) {
       _say("No ATM on this stretch — the only machine on Soi 6 is back at the West End, " +
         "by the beach-road junction. Head WEST.");
     else {
+      if (typeof _nontHere === "function" && _nontHere()) { _say(`No machine here — but the kid at the table does cash, five percent, no card fee. (CASH <amount>)`); return; }
       const near = Object.keys(ROOMS).find(id => ROOMS[id].atm && ROOMS[id].region === _room().region);
       _say(near
         ? `No ATM here — the nearest machine is at ${ROOMS[near].name}, on this side of town.`
@@ -7370,7 +7384,7 @@ const _COMPLETE_VERBS = [
   // find for a player who goes looking.
   "flirt", "kiss", "ring bell", "barfine", "massage", "special", "soapy", "meet", "eat", "drink",
   "sleep", "tv", "column", "owl", "watch", "watch soi", "balcony", "weather", "scores", "lottery", "map", "time", "tip", "wave", "phone",
-  "photo", "gallery", "photos", "info", "call", "share", "follow", "shower", "withdraw", "cheers", "tao rai", "borrow", "repay", "hire", "pet", "feed", "rename", "dance", "sing", "swim",
+  "photo", "gallery", "photos", "info", "call", "share", "follow", "cash", "shower", "withdraw", "cheers", "tao rai", "borrow", "repay", "hire", "pet", "feed", "rename", "dance", "sing", "swim",
   "smell", "listen", "diagnose", "get tested", "clinic", "apologize", "quests", "accept", "abandon", "contact",
   "contacts", "who", "who am i", "identity", "blackbook", "message", "check messages", "send", "score", "standing", "wait", "again",
   "request", "hint", "books", "draw", "work", "help", "verbs", "save", "load", "undo", "restart", "quit", "reset", "end", "logout", "exits",
@@ -7679,6 +7693,7 @@ function _completePool(verb, ctx) {
     // TIP is not one of those: it takes a person AND THEN an amount
     case "tip": return ctx.length >= 2 ? _cAmounts("tip") : girls();
     case "follow": return ctx.length >= 2 ? [] : _cNpcsHere();
+    case "cash": return _nontHere() ? _cAmounts("send") : [];
     // the amount verbs that take no target — offer the figures straight away
     case "pay":
       // The fare keeps first refusal — PAY is one tap on a bus, and that is the
@@ -8745,6 +8760,7 @@ function doCommand(input) {
       break;
     }
     case "money": case "cash": case "wallet": case "pocket":
+      if (v === "cash" && arg) { _nontCash(arg); break; }   // CASH <amount> is Nont's verb; bare CASH stays the pocket readout
       _say(_fmt("฿{m} in your pocket" + (_flag("act1Done") ? ", ฿{b} in the account" : "") + ".",
         { m: _num(G.money), b: _num(G.bank || 0) }), "dim");
       if (_flag("act1Done")) _say("(WITHDRAW at any ATM · CHECK BALANCE · the daily cap is real.)", "dim");
