@@ -33,9 +33,9 @@ test("a short reply settles at the bottom, keeping the previous exchange in view
 
 test("a wall of output starts at the top of the view, not the end", async ({ page }) => {
   await bootIntoGame(page, INDEX_URL);
-  // HELP is the longest single output in the game — comfortably taller than the
+  // HELP MORE — the whole card — is the longest single output in the game, comfortably taller than the
   // viewport, which is the condition that changes the behaviour.
-  await page.fill("#term-in", "help");
+  await page.fill("#term-in", "help more");   // bare HELP is a ten-line page now (2026-09-04); the card is one step down
   await page.press("#term-in", "Enter");
 
   const off = await echoOffset(page);

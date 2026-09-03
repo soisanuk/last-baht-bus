@@ -7291,7 +7291,7 @@ THE WHOLE CARD (bare HELP is the short one):
 // that listed BARFINE, BUY CONDOM and SOAPY on turn three of the opening
 // (Bronwyn, round 39: "a menu in a language I don't speak").
 const _HELP_HEAD = "The point of it all: สนุก (“sanuk” — fun) is the score; สบายสบาย (“sabai sabai” — easy-easy, the good life) is the summit.";
-const _HELP_TAPS = "Highlighted words in the story are tappable: tap for the quick menu, press and hold (or right-click) for the full one.";
+const _HELP_TAPS = "Highlighted words in the story are tappable: tap for the quick menu, RIGHT-CLICK or press and hold for the full one.";
 function _helpFirstPage() {
   const soi6 = G.mode === "soi6";
   const opening = !_flag("act1Done");
