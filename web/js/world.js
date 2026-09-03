@@ -10319,7 +10319,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
   nont: {
     name: "Nont", emoji: "📱", pronoun: "he",
     room: "buakhao_market",
-    look: "Mixed Thai-Western man, early twenties, lean, close-cropped hair, cheap gold chain, phone in hand, faded tee, quick eyes.",
+    look: "Luk khrueng — half Thai, half American: Eurasian face, skin a shade lighter than the Thai men around him, light brown eyes, boyish and clean-shaven, early twenties, lean, close-cropped black hair, a cheap gold chain, a faded band tee, a phone in hand, quick eyes.",
     desc: "A kid — early twenties, maybe less — behind a folding table of {{phone}} cases and " +
       "chargers, though that is plainly not where the money is. Lean, close-cropped, a cheap " +
       "gold chain and a faded band tee, and the specific quick-eyed calm of someone who read " +

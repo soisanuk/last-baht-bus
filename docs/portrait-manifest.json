@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-31",
+  "generated": "2026-09-03",
   "note": "Distinct, hand-authored characters with a portrait (excludes the 181 generic `filler` NPCs). Derived from web/js/world.js — regenerate with scripts/gen-portrait-manifest.mjs, do not hand-edit. `sex`/`venueKind` are generator heuristics for portrait archetype selection, not game canon.",
   "counts": {
     "total": 147,
@@ -313,7 +313,7 @@
       "source": "NPCS",
       "role": "story",
       "sex": "m",
-      "look": "Mixed Thai-Western man, early twenties, lean, close-cropped hair, cheap gold chain, phone in hand, faded tee, quick eyes.",
+      "look": "Luk khrueng — half Thai, half American: Eurasian face, skin a shade lighter than the Thai men around him, light brown eyes, boyish and clean-shaven, early twenties, lean, close-cropped black hair, a cheap gold chain, a faded band tee, a phone in hand, quick eyes.",
       "venueKind": null,
       "emoji": "📱",
       "th": null,
@@ -2401,7 +2401,7 @@
       "th": "เพลิน",
       "room": "rainbow_girls",
       "tags": [],
-      "desc": "Bored until you try a word of Thai, then radiant — one of Rainbow Girls Bar's girls, from Ubon. The {{phone}} never leaves her hand."
+      "desc": "Sleepy-eyed and entirely unbothered — one of Rainbow Girls Bar's girls, from {{Nong Khai}}. She types more than she talks — and laughs at both."
     },
     {
       "id": "sai",
@@ -3129,7 +3129,7 @@
       "th": "วันเพ็ญ",
       "room": "mama_yai",
       "tags": [],
-      "desc": "A gold tooth, a sharper tongue, and drink arithmetic you can watch happening — one of Mama Yai's's girls, from Udon Thani. Google Translate is open before you finish the sentence."
+      "desc": "A gold tooth, a sharper tongue, and drink arithmetic you can watch happening — one of Mama Yai's' girls, from Udon Thani. Google Translate is open before you finish the sentence."
     },
     {
       "id": "pear",
@@ -3479,7 +3479,7 @@
       "th": "ไบรท์",
       "room": "cricketers",
       "tags": [],
-      "desc": "Small and sharp, and misses nothing — one of The Cricketers's girls, from Sakon Nakhon. Google Translate is open before you finish the sentence."
+      "desc": "Small and sharp, and misses nothing — one of The Cricketers' girls, from Sakon Nakhon. Google Translate is open before you finish the sentence."
     },
     {
       "id": "lukkade",
@@ -3493,7 +3493,7 @@
       "th": "ลูกเกด",
       "room": "cricketers",
       "tags": [],
-      "desc": "Round-faced and quick to laugh — one of The Cricketers's girls, from Roi Et. The {{phone}} never leaves her hand."
+      "desc": "Round-faced and quick to laugh — one of The Cricketers' girls, from Roi Et. The {{phone}} never leaves her hand."
     },
     {
       "id": "bpom",
@@ -3545,11 +3545,11 @@
       "filler": true,
       "sex": "f",
       "venueKind": "beer",
-      "emoji": "💐",
+      "emoji": "🌸",
       "th": "สมฤดี",
       "room": "seabreeze",
       "tags": [],
-      "desc": "A crooked, disarming grin — one of Sea Breeze Bar's girls, from Buriram. She types more than she talks — and laughs at both."
+      "desc": "Older than the go-go average, and unhurried about it — one of Sea Breeze Bar's girls, from Surin. The {{phone}} never leaves her hand."
     },
     {
       "id": "ratchada",
@@ -3815,7 +3815,7 @@
       "th": "สร้อย",
       "room": "succubus",
       "tags": [],
-      "desc": "Long hair, longer eyelashes, a practised pout — one of Succubus's girls, from Maha Sarakham. The {{phone}} never leaves her hand."
+      "desc": "Long hair, longer eyelashes, a practised pout — one of Succubus' girls, from Maha Sarakham. The {{phone}} never leaves her hand."
     },
     {
       "id": "chom",
@@ -3829,7 +3829,7 @@
       "th": "ชม",
       "room": "succubus",
       "tags": [],
-      "desc": "Older than the go-go average, and unhurried about it — one of Succubus's girls, from Surin. Google Translate is open before you finish the sentence."
+      "desc": "Older than the go-go average, and unhurried about it — one of Succubus' girls, from Surin. Google Translate is open before you finish the sentence."
     },
     {
       "id": "pranee",
@@ -3843,7 +3843,7 @@
       "th": "ปราณี",
       "room": "succubus",
       "tags": [],
-      "desc": "Round-faced and quick to laugh — one of Succubus's girls, from Mukdahan. She types more than she talks — and laughs at both."
+      "desc": "Round-faced and quick to laugh — one of Succubus' girls, from Mukdahan. She types more than she talks — and laughs at both."
     },
     {
       "id": "milk",

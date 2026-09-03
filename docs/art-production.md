@@ -301,3 +301,15 @@ the old object graph.
 
 This is the cost that is easy to forget when the space saving is the visible
 part, and it is paid by people who were not in the room.
+
+
+## Regeneration requests (from the game side, for the art agent)
+
+The manifest (`docs/portrait-manifest.json`, from `scripts/gen-portrait-manifest.mjs`) is
+the only coupling; a `look` that changes here is a request to re-render there.
+
+- **nont** (2026-09-04): the current thumb reads as a full-Thai man of thirty with a
+  goatee. He is *luk khrueng* — half Thai, half American — and the point of the
+  character (`docs/bangkok-concept.md`) is that he passes as either. The `look` now
+  says so positively (Eurasian face, a shade lighter, light brown eyes, boyish,
+  clean-shaven, early twenties) rather than by the word "mixed", which SDXL ignored.
