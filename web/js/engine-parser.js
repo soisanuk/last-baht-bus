@@ -4538,6 +4538,7 @@ function _doBuy(arg) {
     const regId = _regularHere(beerName);
     if (/patron|regular|expat|him|guy|bloke/.test(arg) || regId) { _standRegular(regId); return; }
     G.money -= _beerPrice();
+    (G.soc.selfDrinks = G.soc.selfDrinks || {})[G.room] = ((G.soc.selfDrinks[G.room] || 0) + 1); // "sit like a customer" — the midnight gate reads it
     G.soc.drunk++;
     G.thirst = Math.max(0, G.thirst - 20);
     const d = G.soc.drunk;

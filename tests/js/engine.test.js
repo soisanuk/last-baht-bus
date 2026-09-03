@@ -4776,17 +4776,24 @@ test("barfine pricing follows the clock: peak early, waived after midnight", () 
   assert.equal(_barfinePrice("gogo", "gift"), 750);
 });
 
-test("after midnight the beer-bar barfine is waived (favor still required)", () => {
+test("after midnight the beer-bar FINE is waived — her money is not (favor still required)", () => {
+  // The barfine is two fees (Mario, 2026-09-03): the bar's fine goes at
+  // midnight, the lady's own money stays. The old test asserted "no fee
+  // changed hands" — that was the bundle zeroing, a stranger's ฿0 short time.
   state().flags.act1Done = true;
   state().flags.hasWallet = true;
   state().room = "lucky_tiger";
-  state().money = 100;
+  state().money = 5000;
   state().nightTurn = 65;
-  state().soc.drinks.lek = 6;
+  state().soc.drinks.lek = 6;                       // face — below regular, so mama wants a drink each
+  state().soc.selfDrinks = { lucky_tiger: 1 }; state().soc.drinkCount = { lek: 1 };
   run("barfine lek");
-  assert.ok(state().pendingBf);
+  assert.ok(state().pendingBf, "the book is closed and she can go");
+  assert.equal(_barfinePrice("beer", "lek"), 0, "the BAR's fee is nothing");
+  assert.equal(state().pendingBf.lt, LADY_LT, "…and the quote is HER money");
+  assert.match(lastOut(), /HER money|No bar fine past midnight/i, "the prompt says which is which");
   run("long time");
-  assert.equal(state().money, 100, "no fee changed hands");
+  assert.equal(state().money, 5000 - LADY_LT, "her money changed hands");
   assert.equal(state().day, 3, "and the night still ends grandly");
 });
 
@@ -5129,7 +5136,8 @@ test("barfine prices: LT costs more, Soi 6 early LT is prohibitive, midnight fla
   state().nightTurn = 65; // after midnight: same either way
   const late = _barfinePrices("gogo", "lek");
   assert.equal(late.st, late.lt, "the collapse flattens ST and LT");
-  assert.deepEqual(_barfinePrices("beer", "lek"), { st: 0, lt: 0 }, "beer waived, both ways");
+  assert.deepEqual(_barfinePrices("beer", "lek"), { st: LADY_ST, lt: LADY_LT, herMoney: true },
+    "the bar's fine waived, both ways — and her money quoted alone");
   assert.equal(_barfinePrices("beer", "fon").st, _barfinePrices("beer", "fon").lt, "popular girls: flat too");
 });
 

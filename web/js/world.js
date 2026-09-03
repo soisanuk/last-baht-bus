@@ -204,6 +204,14 @@ const SOI6_ROOMS = new Set([
 ]);
 // Barfines (canon: go-gos and Soi 6 are the expensive end)
 const BF_BEER = 400, BF_GOGO = 1000, BF_SOI6 = 700, BF_GENTS = 900;
+// THE BARFINE IS TWO FEES (Mario, 2026-09-03). The quoted number bundles the
+// bar's fine and the lady's own money, the way a mamasan bundles it "doing the
+// arithmetic all night". After midnight a beer bar waives ITS fine — the
+// book is closed, the girl can go — but hers is negotiated separately and
+// still paid. The old model zeroed the bundle: a stranger's ฿0 short time at
+// one a.m., no drink bought, +สนุก, nothing moved (Stan, round 35). These are
+// what she wants when the bar wants nothing.
+const LADY_ST = 300, LADY_LT = 500;
 // Male host bars charge a steep premium — a host drink is 2x+ a lady drink and
 // the "off" fee doubles the go-go barfine (canon). Even your own beer is
 // premium-priced (and arrives with ice, whether you wanted ice or not).

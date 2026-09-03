@@ -39,6 +39,11 @@ function _roomMamaOperator() {
 function _barfinePrices(bt, id) {
   let st = _barfinePrice(bt, id);
   let lt;
+  // _barfinePrice is the BAR's fee, and 0 after midnight at a beer bar is the
+  // truth about the bar. It is not the truth about her: the lady's money is
+  // separate and still paid (LADY_ST / LADY_LT), so the quote never reads as
+  // free. No house cut on it either — the operator's cut is on the FINE.
+  if (st === 0) return { st: LADY_ST, lt: LADY_LT, herMoney: true };
   if (G.nightTurn >= 60) lt = st;
   else {
     const mult = bt === "soi6" ? (G.nightTurn < 30 ? 3 : 2) :
@@ -648,11 +653,35 @@ function _doBarfine(arg) {
     const refusal = _bfRefusal(id, bt);
     if (refusal) { _bfRefusalSay(id, refusal); return; }
   }
+  // MAMA LETS HER GO — after midnight at a beer bar, the fine is waived, but
+  // not for a walk-up: she lets a girl leave for nothing to a REGULAR, and to
+  // anybody else once she has seen a drink each go across the bar, one for
+  // you and one for the lady (Mario, 2026-09-03). Measured in the unit she
+  // names — drinks bought tonight, here — never in favor.
+  if (bt === "beer" && G.nightTurn >= 60 && !bertAlly && _barfinePrice(bt, id) === 0 &&
+      _knownTier(id) < 2) {
+    const mine = (G.soc.selfDrinks && G.soc.selfDrinks[G.room]) || 0;
+    const hers = (G.soc.drinkCount && G.soc.drinkCount[id]) || 0;
+    if (mine < 1 || hers < 1) {
+      const mama = _npcsHere().find(n => NPC_ROLES[n] === "mamasan") ||
+        (typeof _tillKeeper === "function" && _tillKeeper());
+      const who = mama ? NPCS[mama].name : "The mamasan";
+      _say(`${who} is already shaking her head, not at the girl — at the bar in front of you. ` +
+        (mine < 1 && hers < 1 ? "\"Book is closed, no fine, she can go — but you sit in my bar and buy " +
+          "nothing? One for you, one for her. Then we talk.\"" :
+         mine < 1 ? "\"You buy for her and not for you? Sit like a customer. One beer. Then we talk.\"" :
+          "\"No fine after midnight, tilac — but you don't take my girl dry. One drink for her. " +
+          "Then we talk.\"") + " The head-shake is friendly. It is also final.", "dim");
+      _say("(A drink each across her bar, and the book being closed is your good luck. " +
+        "A regular she'd have let go already.)", "dim");
+      return;
+    }
+  }
   // The negotiation. On Soi 6 the girl quotes upfront — volume business, no
   // mystery. Everywhere else the girl won't name the number (she gets a cut):
   // the mamasan or the cashier drifts over to do the arithmetic.
-  const { st, lt } = _barfinePrices(bt, id);
-  G.pendingBf = { id, st, lt, party: _partyPrice(id, lt), room: G.room };
+  const { st, lt, herMoney } = _barfinePrices(bt, id);
+  G.pendingBf = { id, st, lt, party: _partyPrice(id, lt), room: G.room, herMoney: !!herMoney };
   // The Operator's edge made visible: on a girl who's actually running an angle,
   // his instinct flags it before the money moves (and _scamLean already halves his
   // odds of being taken). Fires once, on opening — the reprompt/redraw is _bfPrompt.
@@ -961,6 +990,9 @@ function _bfPrompt() {
     return;
   }
   const pt = G.pendingBf.party != null ? G.pendingBf.party : lt;
+  if (G.pendingBf.herMoney)
+    _say("(No bar fine past midnight — the book is closed, and the mama wants nothing. " +
+      "What follows is HER money, and she names it herself.)", "dim");
   _say(_fmt(pt > lt
     ? "(SHORT TIME {st} — one round, the night carries on · LONG TIME {lt} — overnight · " +
       "TAKE HER OUT {pt} — her WHOLE night, priced like one · NO backs out.)"

@@ -442,3 +442,42 @@ test("the register stays PG-13 — the narrator never looks directly", () => {
   for (const l of all) assert.doesNotMatch(l, /\b(naked|nude|fuck|cock|tits|pussy|blowjob|orgasm)\b/i, l.slice(0, 50));
   assert.ok(all.length >= 25, "deep pools — a lock-in is a repeatable night");
 });
+
+
+// ── the two fees (Stan 3 → Mario's canon) ───────────────────────────────────
+// A stranger got a ฿0 short time at one a.m. at a beer bar, no drink bought.
+// The rule that waives the fine at midnight is real; what it waived was the
+// whole bundle. The bar's fine and the lady's money are two fees now, and mama
+// only lets a girl go for nothing to a regular, or to a man who has bought a
+// drink each — one for him, one for her.
+test("a walk-up who has bought nothing is told the price of the closed book (Mario)", () => {
+  G.room = "lucky_tiger"; G.money = 5000; G.nightTurn = 65; G.soc.drinks = { lek: 6 };
+  out = []; run("barfine lek");
+  assert.equal(G.pendingBf, null, "no negotiation opens");
+  assert.match(text(), /One for you, one for her/, "she names the condition in the unit she measures");
+  // half of it isn't it
+  run("buy beer"); out = []; run("barfine lek");
+  assert.equal(G.pendingBf, null); assert.match(text(), /One drink for her/, "…the other half, exactly");
+  run("buy drink for lek"); out = []; run("barfine lek");
+  assert.ok(G.pendingBf, "a drink each, and the book being closed is your luck");
+  assert.equal(G.pendingBf.st, LADY_ST, "the quote is her money, not zero");
+  assert.ok(G.pendingBf.herMoney);
+});
+
+test("a regular is let go without the drink gate, and her money is still hers (Mario)", () => {
+  G.room = "lucky_tiger"; G.money = 5000; G.nightTurn = 65; G.soc.drinks = { lek: 8 };
+  assert.equal(_knownTier("lek"), 2, "premise: a regular");
+  out = []; run("barfine lek");
+  assert.ok(G.pendingBf, "mama lets a regular's girl go on his word");
+  assert.equal(G.pendingBf.st, LADY_ST, "…but her money is not the bar's to waive");
+  run("short time");
+  assert.equal(G.money, 5000 - LADY_ST, "and it changed hands");
+});
+
+test("popular girls, draws, and the pre-midnight bundle are untouched (Mario)", () => {
+  G.room = "lucky_tiger"; G.nightTurn = 65;
+  assert.ok(_barfinePrice("beer", "fon") > 0, "a popular girl's fine never closes");
+  assert.ok(!_barfinePrices("beer", "fon").herMoney, "…so her quote is the bundle, as before");
+  G.nightTurn = 40;
+  assert.deepEqual(_barfinePrices("beer", "lek"), { st: 400, lt: 700 }, "before midnight nothing changed");
+});

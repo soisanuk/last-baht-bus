@@ -4191,6 +4191,7 @@ function _endNight(reason) {
   G.soc.bondNight = {};      // …and so does how far a night of buying can carry one girl (_boughtBond)
   G.soc.drinkNight = {};     // …and who you actually bought a DRINK for (the butterfly tease)
   G.soc.drinkCount = {};     // …and how many each (the Soi 6 drink tariff)
+  G.soc.selfDrinks = {};     // …and the beers you bought yourself, per bar (mama's midnight gate)
   // A new night never inherits last night's breadcrumb (round 34).
   if (typeof _traceCancel === "function") _traceCancel();
   G.soc.bondCapSaid = {};    // …so the "as warm as money gets tonight" line can land again tomorrow
