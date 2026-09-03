@@ -260,8 +260,16 @@ test("the ride is a pool: the weaving, the hands on the first ride, three-up wit
   const girls = Object.keys(NPCS).filter(id => NPC_ROLES[id] === "hostess").slice(0, 2);
   G.party = { ids: [girls[0]], stops: 0, spent: 0, seen: {} }; t = go();
   assert.ok(_MOTO_THREE_UP.some(l => t.includes(_fmt(l, { n: NPCS[girls[0]].name }))), "three-up with her");
-  G.party = { ids: girls, stops: 0, spent: 0, seen: {} }; const m = 5000; t = go();
-  assert.ok(_MOTO_SECOND_BIKE.some(l => t.includes(_fmt(l, { n: NPCS[girls[0]].name + " and " + NPCS[girls[1]].name }))), "two girls: a second bike");
-  assert.equal(G.money, m - 2 * _motoFare(MOTOSAI_DESTS.naklua), "and a second fare");
+  // two girls: half the rides are four-up (canon: it happens), the rest a second bike and fare
+  const names = NPCS[girls[0]].name + " and " + NPCS[girls[1]].name;
+  let four = 0, second = 0;
+  for (let i = 0; i < 12; i++) {
+    G.party = { ids: girls, stops: 0, spent: 0, seen: {} }; t = go();
+    if (_MOTO_FOUR_UP.some(l => t.includes(_fmt(l, { n: names })))) { four++; assert.equal(G.money, 5000 - _motoFare(MOTOSAI_DESTS.naklua), "four-up is one fare"); }
+    else if (_MOTO_SECOND_BIKE.some(l => t.includes(_fmt(l, { n: names })))) { second++; assert.equal(G.money, 5000 - 2 * _motoFare(MOTOSAI_DESTS.naklua), "a second bike is a second fare"); }
+  }
+  assert.ok(four >= 1 && second >= 1, `both happen: four-up ${four}, second bike ${second}`);
+  G.party = { ids: girls, stops: 0, spent: 0, seen: {} }; G.room = "pattaya_klang"; G.money = _motoFare(MOTOSAI_DESTS.naklua); out = []; run("motosai to naklua");
+  assert.ok(_MOTO_FOUR_UP.some(l => text().includes(_fmt(l, { n: names }))), "broke: always four-up");
   assert.doesNotMatch(t, /threads traffic like it owes him money\. That/, "the old fixed sentence is gone as a fixed sentence");
 });

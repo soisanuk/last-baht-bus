@@ -5377,10 +5377,12 @@ function _doMotosai(arg) {
   const pids = (G.party && G.party.ids) || [];
   let seat = "";
   if (pids.length >= 2) {
-    // two girls: a second bike, and a second fare if you can stand it
+    // two girls: four-up (a coin the hash flips, or always when broke), else a
+    // second bike and a second fare
     const names = pids.map(i => NPCS[i].name).join(" and ");
-    if (G.money >= price) { G.money -= price; seat = " " + _fmt(_pickVary(_MOTO_SECOND_BIKE, "motosecond"), { n: names }) + ` (Another ฿${price} for the second bike.)`; }
-    else seat = ` ${names} squeeze on behind you anyway, four on a bike, the piwin shaking his head and going regardless.`;
+    const fourUp = G.money < price || _hh("fourup:" + G.vacation + ":" + G.motoRides, 13) % 2 === 0;
+    if (fourUp) seat = " " + _fmt(_pickVary(_MOTO_FOUR_UP, "motofour"), { n: names });
+    else { G.money -= price; seat = " " + _fmt(_pickVary(_MOTO_SECOND_BIKE, "motosecond"), { n: names }) + ` (Another ฿${price} for the second bike.)`; }
   } else if (pids.length === 1) {
     seat = " " + _fmt(_pickVary(_MOTO_THREE_UP, "motothree"), { n: NPCS[pids[0]].name });
   } else if (G.motoRides === 1) {
@@ -6977,6 +6979,14 @@ const _MOTO_THREE_UP = [
   "You do the gentleman's thing and put {n} on the back, arms round your waist, and hold the piwin's shoulders yourself; he sighs the sigh of a man who now has a farang's hands on him for the whole ride, and goes.",
   "{n} rides side-saddle behind you, knees together, both hands on your ribs, texting with one of them somehow. Three on a bike is nothing here. It is a great deal to you.",
   "{n} goes in the middle and immediately starts a conversation with the piwin over his shoulder in Thai — where you're from, how much you paid her, whether he knows her cousin — and the two of them laugh at something that is very probably you.",
+];
+// Four on a bike — you, two girls, the piwin — is not the broke fallback, it
+// is a thing that happens (Mario, 2026-09-03: "me and two girls on the same
+// motosai"). Half the time a solvent man gets it anyway; broke, always.
+const _MOTO_FOUR_UP = [
+  "Four on a bike: {n} either side of the argument about who sits where, then both of them behind you, the one at the back holding the rail with her fingertips and the whole machine sagging on its springs. The piwin says nothing. He has seen five.",
+  "The piwin looks at the three of you, looks at his bike, and jerks his head: on. {n} fold themselves behind you like a magic trick, four bodies on a hundred and twenty-five cc, and at the first pothole everybody screams and nobody falls off.",
+  "No second bike — {n} are already on, one of them practically in your lap, and the bike moves off with the solemn dignity of something badly overloaded. A policeman at the corner watches the whole arrangement go past and decides he saw nothing.",
 ];
 const _MOTO_SECOND_BIKE = [
   "Two girls and a farang is one bike too many even here: the stand sends a second, and {n} go ahead of you on it, looking back and shrieking at every corner.",
