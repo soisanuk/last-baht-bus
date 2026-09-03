@@ -115,7 +115,7 @@ function _doPlay(arg) {
     return _startC4(m ? +m[1] : undefined, vs);
   }
   // "8" alone used to mean 8-ball — so PLAY CONNECT 4 80 started POOL (gambler playtest 2026-08-22)
-  if (/\bpool\b|\b8[- ]?ball\b|billiard|snooker/.test(w)) return _startPool();
+  if (/\bpool\b|\b8[- ]?ball\b|billiard|snooker/.test(w)) return _startPool(w);
   const opts = _playOptions();
   if (opts.length) _say("Play what? " + opts.map(o => "(PLAY " + o.toUpperCase() + ")").join(" · "), "dim");
   else _say("Nothing to play here — the beer bars keep Connect 4 and Jackpot within reach.", "dim");
@@ -1193,13 +1193,34 @@ function _kpInput(input) {
 
 // ─ Pool ─
 
-function _startPool() {
+function _startPool(w) {
   if (!_room().pool) { _say("No pool table here. The Midnight Sun has one; so does Daeng's place out on Khao Talo."); return; }
-  const daeng = G.room === "khao_talo_bar";
-  const opp = daeng ? "Daeng" : _L("a leathery expat off the rail who hasn't missed since 1997");
+  // PLAY POOL 500 silently racked for ฿50 and said nothing — Jackpot announces
+  // its house max in exactly this situation and pool did not (Gerry, round 34).
+  // The stake is the TABLE's, not yours: a bar table plays for what a bar table
+  // plays for, and a man offering ten times that is offering a hustle nobody
+  // here wants. Say so, rather than quietly pocketing the difference.
+  const askedM = String(w || "").match(/\d+/);
+  if (askedM && parseInt(askedM[0], 10) !== POOL_STAKE)
+    _say(`(The table plays for ฿${POOL_STAKE}, same as it always has. Nobody here is ` +
+      "interested in a bigger number — that's a different kind of evening.)", "dim");
+  // PLAY POOL WITH <her> — Connect 4 has taken a named opponent since the
+  // gambler playtest and pool never did, so Lek's own hello ("You play pool?")
+  // advertised a frame you could not rack against her: the one game she is
+  // canonically unbeatable at, and every attempt silently played the old boy
+  // off the rail instead (Frank, round 34).
+  const vs = (String(w || "").match(/\b(?:with|vs|against)\s+([a-z]+)/) || [])[1];
+  const her = vs ? _gameHostess(vs) : null;
+  const daeng = G.room === "khao_talo_bar" && !(her && her.id);
+  const opp = (her && her.id) ? NPCS[her.id].name
+    : daeng ? "Daeng" : _L("a leathery expat off the rail who hasn't missed since 1997");
   const stake = _takeStake(POOL_STAKE);
-  G.game = { type: "pool", you: 7, opp: 7, oppName: daeng ? "Daeng" : "the old boy",
-    oppSkill: daeng ? 0.65 : 0.6, oppNext: null, oppWon: false, stake };
+  G.game = { type: "pool", you: 7, opp: 7,
+    oppName: (her && her.id) ? NPCS[her.id].name : daeng ? "Daeng" : "the old boy",
+    // she plays her tier: the canon pool girls are sharks and say so
+    oppSkill: (her && her.id) ? (CANON_HOSTESSES.includes(her.id) ? 0.7 : 0.55)
+      : daeng ? 0.65 : 0.6,
+    oppId: (her && her.id) || null, oppNext: null, oppWon: false, stake };
   _say(_fmt("You rack. {n} breaks — dry. Seven balls each, then the black.",
     { n: _ucfirst(opp) }));
   _say(stake ? _fmt("฿{s} under the corner cushion.", { s: stake })
@@ -2318,6 +2339,17 @@ function _doThrowCover(targetWord) {
 // ─ The bell ─
 
 function _doBell() {
+  // …except the one the street itself names. Naklua Road's prose puts a brass
+  // bell on the Orchid's wall, and RING BRASS BELL answered "no bell out here"
+  // (Gerry, round 34). It exists; what you lack is the standing to use it.
+  if (!_inBar() && G.room === "naklua_rd" && !_flag("orchidSent") &&
+      !_flag("orchidVouched") && !_flag("orchidReported")) {
+    _say("The brass bell on the Orchid's wall is the only bell out here, and it is not " +
+      "the ringing kind — not for you. A man who has been sent presses it once and is " +
+      "expected. A man who found it presses it and stands in a lane listening to nothing " +
+      "happen. You leave it alone, which is the correct read.", "dim");
+    return;
+  }
   if (!_inBar()) { _say("No bell out here. The bell is a bar instrument, like the till."); return; }
   const price = _bellPrice(G.room);
   if (G.money < price) {

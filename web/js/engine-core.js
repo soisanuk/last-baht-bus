@@ -2024,10 +2024,21 @@ function _describeRoom(full, forceFull) {
     venues = venues.filter(id => id !== "orchid_club"); // you get SENT to the Orchid — see Candy's `rose` node
   // …but not in your own hotel room, whose single DOWN/OUT is the venue the
   // exit-scan fallback would otherwise re-list as "Step inside: <the bar below>".
-  if (venues.length && G.room !== _hotelRoomId()) {
-    _say(_L("Step inside: ") + venues.map(id =>
+  // A door that will refuse you is not a door you're invited through. After
+  // midnight on the Darkside the room's own prose says every bar shut — and
+  // then listed four of them under "Step inside", all of which answer with the
+  // shutters (Gerry, round 34). Drop the shut ones; if that empties the list,
+  // say nothing rather than inviting nobody anywhere.
+  const _shut = id => typeof _closedNow === "function" && _closedNow(id);
+  const _open = venues.filter(id => !_shut(id));
+  const _lockedDoor = typeof _lockInDoorHere === "function" && _lockInDoorHere();
+  if (_open.length && G.room !== _hotelRoomId()) {
+    _say(_L("Step inside: ") + _open.map(id =>
       (ROOMS[id].bar || ROOMS[id].name).replace(/\s*\(.*\)$/, "")).join(", ") +
       _L(". (ENTER <name>)"), "dim");
+  } else if (venues.length && !_open.length && !_lockedDoor && G.room !== _hotelRoomId()) {
+    // the street still has its doors; they are simply all shut right now
+    _say(_L("Every door on this stretch is shut for the night."), "dim");
   }
   // the dog: at your heel outside; through the rail and under your stool in the
   // open-air beer bars (no door to stop him, and nobody would dream of it); by
@@ -2162,7 +2173,14 @@ function _describeRoom(full, forceFull) {
       // falls back to the first hostess present
       const busyId = G.soc.patronBusy[G.room];
       const _descHas = id2 => new RegExp("\\b" + NPCS[id2].name + "\\b").test(String(r.desc || ""));
-      const girl = (typeof busyId === "string" && _npcsHere().includes(busyId))
+      // The _descHas guard has to apply to the STORED girl too, not just the
+      // fallback search: the Anchor Bar's own description says "Namfon pours a
+      // cold one before you've picked a seat", and the same Namfon was then
+      // "laughing on cue beside" a regular in his own little world with no seam
+      // to get a word through — one staffer, two places, three lines apart
+      // (Gerry, round 34). A woman the room has already placed can't be
+      // simultaneously unavailable somewhere else in it.
+      const girl = (typeof busyId === "string" && _npcsHere().includes(busyId) && !_descHas(busyId))
         ? busyId
         : _npcsHere().find(id => NPC_ROLES[id] === "hostess" &&
             id !== (typeof _convoActive === "function" && _convoActive()) && !_descHas(id));

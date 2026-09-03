@@ -122,9 +122,20 @@ const _SOI6_BOUND = [
 // undercut its one piece of characterisation. Reachable only once vouched or
 // told (orchidVouched/orchidReported — same flags the "Step inside:" listing
 // already filters on; this closes the other half, actual entry).
+// NAMED BY THE ROOM, DENIED BY THE ROOM. Naklua Road's own description says
+// "no sign, just a brass bell, and THE ORCHID CLUB, if you know to ask" — and
+// these lines used to answer that you'd never heard of the place and neither
+// had anyone (Gerry, round 34). The gate is real and stays: you get SENT to the
+// Orchid, you don't find it. But the wall is right there in the prose, so the
+// refusal is about STANDING, not existence — "if you know to ask" means you do
+// not know who to ask, which is the actual thing you're missing.
 const _ORCHID_CLUB_UNKNOWN = [
-  "You don't know a door like that exists along here, and neither does anyone you'd think to ask. High walls the whole way down; this is just one more of them.",
-  "There's nothing on this road by that name, not that you've heard — and you've asked around enough by now to know when you haven't heard something.",
+  "The wall gives you nothing: no sign, no handle, no window, and a brass bell you have " +
+    "precisely no standing to ring. Places like this don't open to a man who walked up. " +
+    "Somebody sends you, or you spend the evening looking at render.",
+  "You stand in front of it long enough to feel conspicuous. Whatever the Orchid is, it is " +
+    "not for people who arrive on their own initiative — and the one thing you'd need is a " +
+    "name to drop, which you haven't got.",
 ];
 const _ORCHID_BOUNCER = [
   "A man the size of a doorway fills the doorway. He doesn't ask a question; he just looks at you until you understand the answer. \"Members,\" he says, once. You are not, yet, a member.",
@@ -772,7 +783,26 @@ function _doTravel(arg) {
     return;
   }
   const hops = _hops(G.room, dest);
-  if (hops === null) { _say("You can't get there from here."); return; }
+  if (hops === null) {
+    // "You can't get there from here" is TRUE and says nothing (Gerry, round
+    // 34). The places TRAVEL can't reach are the ones across the highway — the
+    // Darkside and the lake — and they are motosai-only on purpose: the fare
+    // is the only thing that makes them feel like the different country the
+    // prose keeps calling them. So the refusal keeps the rule and names the
+    // ride, by finding a motosai stop that CAN walk to where you asked for.
+    const ride = typeof MOTOSAI_DESTS !== "undefined" && Object.keys(MOTOSAI_DESTS)
+      .find(k => MOTOSAI_DESTS[k].room === dest || _hops(MOTOSAI_DESTS[k].room, dest) !== null);
+    if (ride) {
+      _say(_fmt("No walking route to {v} — that side is across Sukhumvit, and nobody walks " +
+        "Sukhumvit. The bikes do it in twenty minutes. (MOTOSAI TO {r} — ฿{p}" +
+        "{late})", { v: _barName(dest) || ROOMS[dest].name, r: ride.toUpperCase(),
+          p: MOTOSAI_DESTS[ride].price,
+          late: G.nightTurn >= 80 ? ", more at this hour" : "" }), "dim");
+      return;
+    }
+    _say("You can't get there from here — no route you know, on foot or otherwise.");
+    return;
+  }
   // Don't spend the whole walk to arrive at shutters, or walk into the dawn
   // (expat playtest 2026-08-22: eleven turns to a bolted Orchid; 22 turns to a
   // hotel with 22 left in the night).
@@ -6727,7 +6757,7 @@ Common commands:
   WEATHER · SCORES (real football) · LOTTERY (the real GLO draw)
   PLAY CONNECT 4 · PLAY JACKPOT [bet] · PLAY POOL   (in the beer bars)
   FLIRT/KISS <lady> — flirt again and it warms on its own · BUY DRINK FOR <lady> · BUY BEER · BUY MAN DRINK (for the bar manager)
-  RING BELL (฿300, instant popularity) · TALK TO PATRON · BARFINE <lady>
+  RING BELL (฿300 in a beer bar, dearer in the fancy ones) · TALK TO PATRON · BARFINE <lady>
   BUY CONDOM (฿40 a pack, any 7-Eleven — a barfine uses one; go without at your peril)
   Host bar (The Adonis Club, Supertown): BUY DRINK FOR <host> · HIRE <host> (premium prices; all welcome)
   MASSAGE (foot rub to happy-ending, by the shop) · SPECIAL (the extra) · SOAPY (the fishbowl)
@@ -6781,7 +6811,7 @@ Common commands:
   WATCH SOI · BALCONY (your balcony above, the Queen Vic window below, or the quiet middle of the soi — watch, don't join)
   PLAY CONNECT 4 · PLAY JACKPOT [bet] · PLAY POOL   (in the beer bars)
   FLIRT/KISS <lady> — flirt again and it warms on its own · BUY DRINK FOR <lady> · BUY BEER · BUY MAN DRINK
-  RING BELL (฿300, instant popularity) · TALK TO PATRON · BARFINE <lady>
+  RING BELL (฿300 in a beer bar, dearer in the fancy ones) · TALK TO PATRON · BARFINE <lady>
   BUY CONDOM (฿40 a pack, the 7-Eleven — a barfine uses one; go without at your peril)
   DIAGNOSE (how bad is it) · GET TESTED (free clinic — clears a barfine souvenir)
   QUESTS · ACCEPT <quest> · ABANDON <quest>   (the soi has its own jobs going)

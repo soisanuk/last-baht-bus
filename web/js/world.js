@@ -4815,9 +4815,15 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         text: "\u201cKhun Candy send you?\u201d Lek's whole face changes, and she puts the cue down, which she does not do. \u201cShe give me my first job. Nineteen year old, cannot speak, cannot pour, cannot nothing. Everybody say send her home. Candy say: no, give her the pool table, nobody watch the pool table.\u201d She taps the felt. \u201cSix month later I take money off everybody in this bar.\u201d A grin, and then something quieter. \u201cShe never ask me for anything back. Not one time. So when she ask me something \u2014 anything \u2014 I already say yes before she finish.\u201d",
         short: "\u201cShe gave me the pool table when everybody said send me home. She's never asked for anything back.\u201d" },
 
-      { bond: 1, when: (st, G) => (G.rain > 0 || (typeof _wxRainy === "function" && _wxRainy())),
+      // …and not on a night she has just been fed, or one the player has been
+      // playing pool on: the vignette asserts "no pool tonight" and "she hasn't
+      // eaten since two o'clock", and both were disprovable by the transcript
+      // two commands up (Frank, round 34). The scene is good; it just needs to
+      // fire on a night it is true.
+      { bond: 1, when: (st, G) => (G.rain > 0 || (typeof _wxRainy === "function" && _wxRainy())) &&
+          !_flag("fed26") && !(G.game && G.game.type === "pool") && !_leagueTonight(),
         notFlags: ["heardPriceStory"], sets: ["heardPriceStory"],
-        text: "No pool tonight. Lek is on the plastic stool by the door, knees up, watching " +
+        text: "Nobody is playing pool in this. Lek is on the plastic stool by the door, knees up, watching " +
           "the flood carry a plastic bag past the step, and she starts talking without the " +
           "hello — flat, like reading a receipt. \"Two year my price same-same. Everybody " +
           "know. Fair.\" She turns {{her phone}} so you can see a chat: her message, a reply " +

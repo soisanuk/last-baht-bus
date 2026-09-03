@@ -564,3 +564,96 @@ test("the daily challenge keeps its own ending (Frank)", () => {
   assert.doesNotMatch(text(), /knows the date|thirty entirely undivided/, "no goodbye in the challenge");
   assert.match(text(), /PLAY AGAIN/, "the card and the rematch, as before");
 });
+
+// ── the scatter (Frank + Gerry) ─────────────────────────────────────────────
+
+// "You can't get there from here" is true and says nothing. The places TRAVEL
+// can't reach are across Sukhumvit and motosai-only ON PURPOSE — the fare is
+// what makes them the different country the prose calls them — so the refusal
+// keeps the rule and names the ride.
+test("the TRAVEL refusal explains itself and names the ride (Gerry)", () => {
+  _setFlag("act1Done"); G.room = "buakhao_n"; G.visited.khao_talo_bar = true;
+  out = []; run("travel daengs place");
+  assert.match(text(), /No walking route/, "it says why");
+  assert.match(text(), /MOTOSAI TO DARKSIDE/, "…and how, with the verb");
+  assert.doesNotMatch(text(), /can't get there from here/, "not the bare refusal");
+  // …and the rule itself is unchanged: no free ride across the highway
+  assert.equal(G.room, "buakhao_n");
+  // walking WITHIN the Darkside still works
+  G.room = "khao_talo"; G.visited.night_heron = true;
+  run("travel night heron");
+  assert.equal(G.room, "night_heron", "the far side is walkable once you're on it");
+});
+
+test("a stake you can't have is explained, not pocketed (Gerry)", () => {
+  _setFlag("act1Done"); G.room = "lucky_tiger"; G.money = 9000;
+  out = []; run("play pool 500");
+  assert.match(text(), new RegExp("table plays for ฿" + POOL_STAKE), "the house line, like Jackpot's");
+  assert.equal(G.money, 9000 - POOL_STAKE, "and only the table's stake leaves your pocket");
+});
+
+test("the bell's HELP line doesn't quote a price the till tiers past (Gerry)", () => {
+  assert.notEqual(_bellPrice("las_vegas"), _bellPrice("lucky_tiger"), "premise: it tiers");
+  assert.doesNotMatch(_HELP, /RING BELL \(฿300, instant/, "the flat quote is gone");
+  assert.match(_HELP, /dearer in the fancy ones/, "…replaced by something true everywhere");
+});
+
+// The room's own prose said every bar shut, then listed four of them as doors.
+test("a shut door is not an invitation (Gerry)", () => {
+  _setFlag("act1Done"); G.room = "khao_talo_strip";
+  G.nightTurn = 30; out = []; run("look");
+  assert.match(text(), /Step inside: .*Night Heron/, "open early, listed");
+  G.nightTurn = 70; out = []; run("look");
+  assert.doesNotMatch(text(), /Step inside: .*Night Heron/, "shut at midnight, not listed");
+});
+
+// Naklua Road's prose names the Orchid and its brass bell; the refusals denied
+// both existed.
+test("the Orchid is refused for standing, not for existing (Gerry)", () => {
+  assert.match(ROOMS.naklua_rd.desc, /brass bell.*ORCHID CLUB/, "premise: the room names both");
+  _setFlag("act1Done"); G.room = "naklua_rd";
+  out = []; run("enter the orchid club");
+  assert.doesNotMatch(text(), /nothing on this road by that name|don't know a door like that exists/,
+    "it exists — the player is reading about it");
+  assert.match(text(), /standing|sends you|name to drop/i, "what's missing is standing");
+  out = []; run("ring brass bell");
+  assert.doesNotMatch(text(), /No bell out here/, "the bell the prose put there exists");
+  assert.match(text(), /not the ringing kind|been sent/i, "…and answers in character");
+});
+
+// One staffer, two places, three lines apart.
+test("a woman the room has already placed isn't also busy elsewhere (Gerry)", () => {
+  _setFlag("act1Done"); G.room = "anchor_bar";
+  assert.match(ROOMS.anchor_bar.desc, /Namfon pours/, "premise: the desc places her");
+  G.soc.patronBusy.anchor_bar = "namfon";
+  out = []; run("look");
+  assert.doesNotMatch(text(), /Namfon laughing on cue/, "she cannot be in two places");
+});
+
+// Her own vignette asserted "no pool tonight" on a league night the player had
+// been playing, and "she hasn't eaten" two commands after being fed.
+test("Lek's rain vignette fires on a night it's true (Frank)", () => {
+  _setFlag("act1Done"); G.room = "lucky_tiger"; G.soc.drinks = { lek: 4 }; G.rain = 3;
+  const fires = () => { G.talked = {}; delete G.flags.heardPriceStory;
+    out = []; run("talk to lek"); return /playing pool in this/.test(text()); };
+  G.day = 2; assert.ok(!_leagueTonight(), "premise: not a league night");
+  assert.ok(fires(), "it fires on an ordinary rainy night");
+  G.day = 3; assert.ok(_leagueTonight(), "premise: league night");
+  assert.ok(!fires(), "…but not while the table is running");
+  G.day = 2; _setFlag("fed26");
+  assert.ok(!fires(), "…nor on a night you've already fed her");
+});
+
+// Her hello asks "You play pool?" — and you could never rack against her.
+test("PLAY POOL WITH <her> racks against her (Frank)", () => {
+  _setFlag("act1Done"); G.room = "lucky_tiger"; G.money = 5000;
+  assert.match(NPCS.lek.dialogue.find(d => /Hello handsome/.test(d.text || "")).text,
+    /You play pool/, "premise: her hello advertises it");
+  out = []; run("play pool with lek");
+  assert.equal(G.game.oppId, "lek", "she has the table");
+  assert.match(text(), /Lek breaks/, "…and breaks");
+  assert.ok(G.game.oppSkill >= 0.7, "at the tier the canon gives her");
+  newGame(); _setFlag("act1Done"); G.room = "lucky_tiger"; G.money = 5000;
+  out = []; run("play pool");
+  assert.match(text(), /leathery expat/, "bare PLAY POOL still gets the old boy");
+});
