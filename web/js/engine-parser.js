@@ -311,6 +311,14 @@ function _doGo(dirWord) {
         Object.keys(r.exits).map(d => d.toUpperCase()).join(" · ")})`);
       return false;
     }
+    // ALLEY is a real exit key elsewhere (the Metropole's fire stairs), so it
+    // reaches the wall handler here — but on a Darkside street with a back
+    // door open to you it is the most natural word for the thing you were
+    // just told to do. Route it rather than answering "that's a wall".
+    if (/^(alley|back|back ?door|side ?door)$/.test(dir) && _lockInDoorHere()) {
+      doCommand("round the back");
+      return true;
+    }
     // indoors gets its own set — see _NO_EXIT_IN
     const _r = _room(), _inside = !!(_r.bar || _r.barType || _r.massage || _r.shop || _isHotelRoom(G.room)) &&
       !(_r.exits && (_r.exits.n || _r.exits.s || _r.exits.e || _r.exits.w));
@@ -449,20 +457,23 @@ function _arriveAt(to) {
   }
   // closed for the night? (also covers fast-travel, which skips the doGo gate)
   if (_closedNow(to)) { _say(_closedMsg(to)); return; }
-  // The padded door, from the outside, for the one man it opens for. Placed
-  // after _closedNow (which now defers to _lockInWelcome) and before the ban
-  // checks, because a banned face is still a banned face.
+  // THE FRONT DOOR STAYS SHUT. Even for a face they know — especially for a
+  // face they know, because the whole value of the front is that it looks
+  // closed from the street, and a farang being admitted through it at one in
+  // the morning is the one thing that would spoil it (Mario's call). So they
+  // crack it, place him, and send him round the back, where this trade has
+  // always been done. Placed after _closedNow (which defers to
+  // _lockInWelcome) and before the ban checks — a banned face is still banned.
   if (_lockInWelcome(to)) {
-    (G.soc.lockIn = G.soc.lockIn || {})[to] = true;
     _say("The front is dark and the shutters are down and the door does not move — and " +
       "then it does, four inches, on a face you half recognise from the other side of a " +
-      "bar. A beat while she places you. Then the chain comes off.", "win");
-    _say("\"Aaah. YOU.\" The bolt goes back behind you with the same flat sound it made " +
-      "the night you first heard it from the inside. The music is already going, the " +
-      "aircon is already too cold, and nobody asks you for anything at the door — that " +
-      "was settled the last time. The Darkside is closed. This is the other thing, and " +
-      "tonight you did not have to buy your way into it.", "win");
-    _addHappy(2);
+      "bar. A beat while she places you.", "win");
+    _say("She does not open it any further. \"Ssst. Not the front, tilac.\" A flick of " +
+      "the eyes down the side of the building, and the ghost of a smile. \"Round the " +
+      "back, na. You know.\" The four inches close, quietly, and the street is a shut " +
+      "shopfront again — which is exactly what the street is supposed to see.");
+    _say("(ROUND THE BACK — the alley door, the way it's actually done.)", "dim");
+    return;
   }
   // barred from a queer venue (no barType, so the bar-ban block below misses it):
   // the bigotry ejection radios the whole strip for the rest of the night.
@@ -739,6 +750,13 @@ function _doTravel(arg) {
     if ((here.bar && _pnm(here.bar).includes(_pnm(w))) ||
         _pnm(here.name).includes(_pnm(w))) {
       _say("You're standing in it.");
+      return;
+    }
+    // "go round the back" / "go to the back door" — the natural phrasings for
+    // the thing the lock-in's own hint just told him to do. GO reaches here
+    // before the ROUND/BACK verb case ever sees it, so route it across.
+    if (/round\s*(the\s*)?back|back\s*door|backdoor|alley|side\s*door/.test(_pnm(w) + " " + w) && _lockInDoorHere()) {
+      doCommand("round the back");
       return;
     }
     _say("You only know the way to bars and hotels you've already found. (Bare TRAVEL lists them.)");
@@ -7314,6 +7332,11 @@ function engineComplete(input) {
     // POSTER only where there is one — the same conditional treatment REPORT
     // gets, so the list never offers a verb that would answer "no poster here".
     if (_hasPoster()) pool = ["poster", ...pool];
+    // ROUND THE BACK only on a street with a back door open to you tonight.
+    // Strictly conditional, like REPORT: offering it anywhere else would leak
+    // the existence of a door that is supposed to be knowledge, not signage.
+    if (typeof _lockInDoorHere === "function" && _lockInDoorHere())
+      pool = ["round the back", ...pool];
   }
   const seen = new Set();
   const out = [];
@@ -8321,20 +8344,45 @@ function doCommand(input) {
       // "Nobody knocks in this town" is a good line and stays the rule — but a
       // man standing outside the ONE door that would open for him, knocking on
       // it, is the exception the rule exists to make land. He tried exactly
-      // this at exactly that door (Gerry, round 34). Look for a lock-in that
-      // knows him among the bars off this street and walk him in.
-      if (v === "knock") {
-        const known = Object.values(_room().venues || {})
-          .concat(Object.values(_room().exits || {}))
-          .find(id => typeof id === "string" && _lockInWelcome(id));
-        if (known) {
-          _say("You knock. In this town that is nearly an eccentric act — and on this " +
-            "door, tonight, it is the correct one.", "dim");
-          _arriveAt(known);   // the shared arrival path — it owns the welcome scene
-          break;
-        }
+      // this at exactly that door (Gerry, round 34). It gets him the same
+      // answer the front always gives: not here, round the back.
+      if (v === "knock" && _lockInDoorHere()) {
+        _say("You knock — nearly an eccentric act in this town, and on this door " +
+          "tonight, very nearly the right one. It opens four inches. \"Ssst. Not the " +
+          "front.\" A flick of the eyes down the side of the building, and it shuts.", "dim");
+        _say("(ROUND THE BACK.)", "dim");
+        break;
       }
       _say(_MISC_VERBS[v === "yell" ? "shout" : v]); break;
+    // ROUND THE BACK — the alley door of a Darkside lock-in that knows you.
+    // Deliberately its own small verb rather than an exit: the alley isn't a
+    // place, it's a piece of knowledge, and only a man who has been inside
+    // once has it. Three surfaces: this case, the CAPS hints the front door
+    // and the street print, and _COMPLETE_VERBS.
+    case "round": case "back": case "backdoor": case "alley":
+      if (/\bback\b|\balley\b|\bside\b|\bdoor\b/.test(arg) || v !== "round") {
+        const bar = _lockInDoorHere();
+        if (!bar) {
+          _say("You have a look down the side of the building. Bins, a coil of hose, an " +
+            "aircon unit dripping on the concrete, and a locked steel door that has " +
+            "never once opened for anybody who had to look for it.", "dim");
+          break;
+        }
+        _say("Down the side, past the bins and the dripping aircon, there's a steel door " +
+          "with no handle on the outside and a bare bulb over it. You barely touch it " +
+          "before it goes, which means somebody was already listening for you.", "win");
+        _say("\"Aaah. YOU.\" It shuts behind you on the same flat sound you first heard " +
+          "from the inside, and the music is already going and the aircon is already too " +
+          "cold. Nobody asks you for anything at the door — that was settled the last " +
+          "time. The Darkside is closed. This is the other thing, and tonight you did " +
+          "not have to buy your way into it.", "win");
+        (G.soc.lockIn = G.soc.lockIn || {})[bar] = true;
+        _addHappy(2);
+        _arriveAt(bar);
+        break;
+      }
+      _say(_pickVary(_HUH, "huh"), "dim"); _noteMiss("parse"); _traceCancel();
+      return;
     case "touch": case "feel": case "taste": case "lick": case "tell":
     case "verbose": case "brief": case "restore": case "load": case "move":
     case "close": case "shut": {

@@ -401,10 +401,47 @@ test("the padded door opens for a man it has locked in before (Gerry/Mario)", ()
   assert.ok(!G.soc.lockIn.khao_talo_bar, "the nightly flag is gone");
   assert.ok(G.lockedInAt.khao_talo_bar, "the permanent one is not");
   G.nightTurn = 70; G.room = "khao_talo";
+  // …but NOT through the front. The value of that door is that the street sees
+  // a shut shopfront; a farang admitted through it at 1 a.m. is the one thing
+  // that would spoil it (Mario's call). They place him and send him round.
   out = []; run("enter daengs place");
-  assert.equal(G.room, "khao_talo_bar", "the chain comes off");
-  assert.match(text(), /Aaah\. YOU|chain comes off/, "…on a face she places");
+  assert.equal(G.room, "khao_talo", "the front stays shut, even to a face they know");
+  assert.match(text(), /Not the front/, "…and says why, and where instead");
+  assert.match(text(), /ROUND THE BACK/, "with the tappable hint");
+  out = []; run("round the back");
+  assert.equal(G.room, "khao_talo_bar", "the alley door is the way it's actually done");
+  assert.match(text(), /Aaah\. YOU|no handle on the outside/, "somebody was listening for you");
   assert.ok(G.soc.lockIn.khao_talo_bar, "and you're inside the lock-in proper");
+});
+
+// The hint is a promise, so every natural way of typing it has to work.
+test("ROUND THE BACK answers to the words a player would use (Mario)", () => {
+  _setFlag("act1Done"); G.day = 5; G.nightTurn = 70;
+  for (const cmd of ["round the back", "back door", "backdoor", "alley",
+    "go round the back", "go to the back door", "round back", "enter the alley"]) {
+    newGame(); _setFlag("act1Done"); G.day = 5; G.nightTurn = 70;
+    G.lockedInAt = { khao_talo_bar: 3 }; G.room = "khao_talo";
+    out = []; run(cmd);
+    assert.equal(G.room, "khao_talo_bar", cmd + " gets you in");
+  }
+  // …and ALLEY is still a real exit where a real alley exists
+  newGame(); _setFlag("act1Done"); G.room = "metropole_room";
+  run("alley");
+  assert.equal(G.room, "lk_entrance", "the Metropole fire stairs are untouched");
+});
+
+test("the back door is knowledge, not signage (Mario)", () => {
+  _setFlag("act1Done"); G.day = 5; G.nightTurn = 70; G.room = "khao_talo";
+  assert.ok(!engineComplete("round").includes("round the back"),
+    "a stranger is never offered it");
+  G.lockedInAt = { khao_talo_bar: 3 };
+  assert.ok(engineComplete("round").some(c => /round the back/.test(c)),
+    "…and a known face is");
+  // a cold look down the side finds a locked steel door, not a refusal
+  G.lockedInAt = {};
+  out = []; run("round the back");
+  assert.match(text(), /never once opened for anybody who had to look for it/,
+    "the alley exists; the door is the part you have to be given");
 });
 
 test("…and stays shut to everybody else (Gerry/Mario)", () => {
@@ -421,8 +458,9 @@ test("KNOCK is the one place the no-knocking rule bends (Gerry)", () => {
   assert.match(text(), /Nobody knocks/, "the rule holds for everyone else");
   G.lockedInAt = { khao_talo_bar: G.day - 1 };   // an earlier night
   out = []; run("knock");
-  assert.equal(G.room, "khao_talo_bar", "…and bends for the man it should");
-  assert.match(text(), /eccentric act/, "with the wink");
+  assert.match(text(), /eccentric act/, "…and bends for the man it should");
+  assert.match(text(), /Not the front|ROUND THE BACK/, "pointing him round the back");
+  assert.equal(G.room, "khao_talo", "knocking is not entering — the front never opens");
 });
 
 // The street line was a pure tease — it must stop teasing a man who can answer it.
@@ -432,7 +470,7 @@ test("the street names the door once it is yours (Gerry)", () => {
   assert.doesNotMatch(text(), /not shut to you/, "a stranger gets the rumour only");
   G.lockedInAt = { khao_talo_bar: G.day - 1 };
   out = []; run("enter the water buffalo");
-  assert.match(text(), /you know which one, and they know you/, "the rumour becomes an address");
+  assert.match(text(), /you know which one, and roughly who is behind it/, "the rumour becomes an address");
   assert.match(text(), new RegExp(_barName("khao_talo_bar")), "…a named one");
 });
 

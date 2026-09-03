@@ -207,6 +207,13 @@ function _closedNow(to) {
   return _flag("act1Done") && _closesMidnight(to) && G.nightTurn >= 60 &&
     !(G.soc.lockIn && G.soc.lockIn[to]) && !_lockInWelcome(to);
 }
+// Which bar off the street you're standing in has a back door open to you
+// tonight — the target of ROUND THE BACK, and what the street's own line names.
+function _lockInDoorHere() {
+  const r = _room();
+  const near = [].concat(r.venues || [], Object.values(r.exits || {}));
+  return near.find(id => typeof id === "string" && _lockInWelcome(id)) || null;
+}
 function _closedMsg(to) {
   const r = ROOMS[to];
   if (r.region === "Darkside") {
@@ -219,8 +226,8 @@ function _closedMsg(to) {
     return "Shutters down, lights dead, chairs up. The Darkside keeps the law's " +
       "hours — officially. Somewhere along the strip one padded door still thumps " +
       "with bass from a bar that is definitely, legally, closed." +
-      (mine ? ` And you know which one, and they know you: ${_barName(mine)} is not ` +
-        "shut to you tonight." : "");
+      (mine ? ` And you know which one, and roughly who is behind it: ${_barName(mine)}, ` +
+        "and not through the front. (ROUND THE BACK)" : "");
   }
   if (r.barType === "gents")
     return "The gentleman's club is dark and bolted. They keep gentleman's hours — " +
