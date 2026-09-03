@@ -210,6 +210,54 @@ the no-signpost test above.
 - **Do not name or fold in the memorial patrons here** — that is a separate, private, machine-
   local matter and stays out of this and every repo file.
 
+## Accessibility (agreed 2026-09-03)
+
+The worry, stated plainly: LBB's outsider wall was never the venues — it was meeting the
+vocabulary before the teaching, and typing LOOK where a soi wants ASK (the 2026-09-03
+accessibility pass: Nok's opening conversation, Tan's one line on the ride, the Owl's slot for
+the newly arrived). Bangkok is **easier** for an outsider on four counts and could become the
+**least** accessible thing on this engine on four others. Both lists are design constraints.
+
+**Why it is easier than Pattaya.** (1) The genre is the on-ramp — "near-future Bangkok, scam
+economy, grey-market husk" is a mainstream register; "Pattaya bar district" is not. (2) The
+subject is globally legible — everyone's aunt has had the pig-butchering text; nobody has to
+be taught what a scam compound is the way they had to be taught what a barfine is. (3) **The
+protagonist is a built-in translator**: a bilingual narrator renders both sides of every room,
+and the code-switch mechanic is literally "you hear what each side says when they think you
+aren't listening" — an accessibility device dressed as a mechanic, which LBB's farang narrator
+structurally cannot be. (4) The map is bounded — one vertical husk, not 238 rooms across
+fifteen districts.
+
+**Where it could fail.** (1) **The LBB canon load** — Eddy, Tan, WDG, *suay*, *sen*, the
+Rabbit arc, the Orchid's tribute desk — is a payoff for an LBB player and four proper nouns
+and two Thai words for everyone else. (2) **The code-switch as an opaque binary**: it is a
+great mechanic only if the player can predict roughly what changes; opaque, it is a coin flip
+with prices attached. (3) **The CLI sim as a skill gate**: the CTF doctrine (navigation puzzle
+over fictional systems, never a how-to) must also mean a player who has never opened a
+terminal can finish it — no literacy test in the middle of the game. (4) **Vocabulary one
+layer deeper**: *suay* and *sen* are harder than *barfine*, because nobody outside Thailand
+has heard them and they name something invisible.
+
+**The reverse test (a hard rule, the mirror of the lake errand's no-signpost test).** For
+every scene, ask: *does this work for a player who never played LBB?* If it only works because
+you know Tan, it is signposting the other way. **LBB payoffs are bonuses, never keys** — a door
+that only opens for someone who remembers the Orchid is a door most players never see. Let
+them see it; let the LBB player *recognise* it.
+
+**What carries over from the LBB accessibility pass, as requirements:**
+- **The onboarding pair** — a Tan-figure who states the one habit, and a Nok-figure who finds
+  you and opens a *real* conversation (the chip bar as the tap tutorial). Candidates: Nont's
+  mother (built, already worries), Eddy. Whoever it is, the teaching must be in character.
+- **The five words, in fiction, first week only** — whatever the Bangkok equivalent of the
+  Owl's column is carries a standing slot for the newly arrived (*suay*, *sen*, mule account,
+  the face you wear, whatever the five turn out to be), prices as constants.
+- **The code-switch must telegraph** — before the first real choice, one scene where the
+  player sees both faces produce different results with nothing at stake.
+- **The cold-first-timer persona as a standing lens** — run at every milestone, not once, and
+  measured against the previous run's report (the `lbb-persona-round` skill's method).
+- No glossary screen, no tutorial mode, no softened setting: the grounding is the hook for
+  insiders and outsiders alike, exactly as LBB's authenticity turned out to be.
+
 ## Open questions
 
 - Core loop spine: heist-crew (the Rabbit-arc fork scaled up) vs. noir investigation vs.
@@ -228,3 +276,4 @@ the no-signpost test above.
 | 2026-08-13 | Concept committed to the repo (not siloed). Thesis: reveal Bangkok as already-cyberpunk, anti-fantasy per LBB doctrine. |
 | 2026-08-13 | Research killed the "living Pantip" assumption (it died / became a food-wholesale hub); the **husk** is the setting instead, and it's stronger. Scam/laundering economy, CCIB competence, and the liability/surveillance regime verified as real and current. |
 | 2026-08-13 | Protagonist = *luk khrueng*, Pattaya-raised, fluent both, knows Eddy and Tan → the broker between the farang cyber-underground and the Thai patronage web. Central tension (Eddy wants WDG dead / Tan's syndicate profits from WDG alive) is pre-existing LBB canon. Signature mechanic: code-switching. |
+| 2026-09-03 | **Accessibility section added** after the LBB pass (Nok opening / Tan's habit / Owl's five words). The reverse test is a hard rule: every scene must work for a player who never played LBB; LBB payoffs are bonuses, never keys. The code-switch must telegraph; the CLI sim is never a literacy test. |
