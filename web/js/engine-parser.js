@@ -3440,7 +3440,11 @@ function _askReplies(key) {
   // dropped (_saidAgrees, the same leniency the grapevine itself applies).
   const said = (G.player && G.player.said || {})[key];
   if (said && typeof said === "string") {
-    const keep = out.filter(t => t !== said && _saidAgrees(t, said));
+    // the stored answer is normalised (trailing stop dropped), so compare the
+    // same way or the chips show "Back home. It'll keep" AND "Back home. It'll
+    // keep." as two options (Nige, round 36)
+    const norm = t => String(t).trim().replace(/[.!]+$/, "").toLowerCase();
+    const keep = out.filter(t => norm(t) !== norm(said) && _saidAgrees(t, said));
     return [said, ...keep].slice(0, 3);
   }
   return out.slice(0, 3);

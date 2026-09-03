@@ -609,3 +609,42 @@ test("ENTER a namesake bar goes to the one in your own region (Malcolm)", () => 
   G.room = "buakhao_n"; run("enter cheap charlies");
   assert.equal(G.room, "cheap_charlies", "…and the original from Buakhao");
 });
+
+// ── Round 36 — Nige, the quest completionist ────────────────────────────────
+
+test("a CAPS hint teaches the name, so the bar can place Gavin on Soi 6 (Nige)", () => {
+  G.known = {}; _say("(ASK GAVIN at the Golden Dragon, Soi 6, ABOUT THE OFFER)");
+  assert.ok(G.known.gavin, "the hint printed his name — that counts as the transcript mentioning him");
+  G.room = "stinky_bar"; out = []; run("talk to gavin");
+  assert.match(text(), /Golden Dragon Bar.*Soi 6/, "placed, with the district");
+  assert.match(NPCS.bert.dialogue.map(d => d.text).join(" "), /Golden Dragon, down on Soi 6/, "Bert's lead names the soi");
+  assert.match(QUESTS.white_dish.desc, /Golden Dragon, Soi 6/, "and so does the journal");
+});
+
+test("your own remembered answer doesn't show twice for a trailing full stop (Nige)", () => {
+  G.player.said = { home: "Back home. It'll keep" };
+  const chips = _askReplies("home");
+  assert.equal(chips[0], "Back home. It'll keep");
+  const norm = t => t.replace(/[.!]+$/, "").toLowerCase();
+  assert.equal(new Set(chips.map(norm)).size, chips.length, "no near-duplicates");
+});
+
+test("%home% replays a place title-cased and a sentence as said — never It'Ll (Nige)", () => {
+  G.player.said = { home: "Back home. It'll keep" };
+  assert.equal(_fillSaid("%home%. Still there?"), "Back home. It'll keep. Still there?");
+  G.player.said.home = "north of manchester";
+  assert.equal(_fillSaid("%home%. Still there?"), "North Of Manchester. Still there?");
+});
+
+test("Bank's helmet is a tracked quest — offered when he hands it over, done when Pim has it (Nige)", () => {
+  G.stage = "act1"; G.flags = { knowMot: true }; G.room = _npcRoom("bank");
+  out = []; run("talk to bank");
+  assert.match(text(), /Bank has a job for you: “Bank's Helmet”/);
+  run("accept helmet");
+  assert.equal(G.quests.helmet, "active");
+  assert.match(_questWhere(QUESTS.helmet.at) || "", /Pim|Starlight/, "the journal knows where she is");
+  G.room = _npcRoom("pim"); const h0 = G.happy; out = []; run("give helmet to pim");
+  assert.equal(G.quests.helmet, "done");
+  assert.match(text(), /QUEST COMPLETE: Bank's Helmet/);
+  assert.equal(G.happy, h0 + 2);
+});

@@ -171,7 +171,11 @@ function _learnNames(text) {
       for (const [id, n] of Object.entries(roster)) {
         const last = n.name.split(" ").pop(); // "Madam Oy" → "Oy"
         if (!/^[A-Z]/.test(last)) continue;   // "security" is nobody's name
-        _nameRx.push([id, new RegExp("\\b" + last + "\\b")]);
+        // …in prose case OR in the tappable-hint case: "(ASK GAVIN at the
+        // Golden Dragon…)" printed his name and taught nobody it, so the
+        // elsewhere-line that would have placed him never fired and a man
+        // walked the whole map for a bar one ENTER away (Nige, round 36)
+        _nameRx.push([id, new RegExp("\\b(?:" + last + "|" + last.toUpperCase() + ")\\b")]);
       }
     }
   }
@@ -1215,10 +1219,16 @@ function _convoAsk(id, d, st) {
 // never shows raw. Title-cased for display.
 function _fillSaid(s) {
   if (typeof s !== "string" || !(G.player && G.player.said)) return s;
-  return s.replace(/%(\w+)%/g, (m, k) =>
-    G.player.said[k] != null
-      ? String(G.player.said[k]).replace(/\b\w/g, c => c.toUpperCase())
-      : m);
+  // Title-case only what looks like a PLACE (a few words, no sentence
+  // punctuation, no apostrophes) — a canned reply that is a sentence came
+  // back as "Back Home. It'Ll Keep." (Nige, round 36). A sentence is quoted
+  // as said.
+  return s.replace(/%(\w+)%/g, (m, k) => {
+    if (G.player.said[k] == null) return m;
+    const v = String(G.player.said[k]);
+    const placeLike = v.split(/\s+/).length <= 4 && !/[.!?,;:']/.test(v);
+    return placeLike ? v.replace(/\b\w/g, c => c.toUpperCase()) : v;
+  });
 }
 
 // ── Scope & pronoun resolution ───────────────────────────────────────────────

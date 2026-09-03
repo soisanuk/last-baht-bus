@@ -1185,8 +1185,8 @@ const _CATALOGS = {
     //     contain that word.
 
     "The White Dish Offer": "Das Angebot von White Dish",
-    "White Dish want to buy Bert's bar out from under its dying owner. Get him the real picture — the history (ASK TERRY ABOUT WHITE DISH), the inside view (ASK KESINEE at the Kitten Corner ABOUT WHITE DISH), and the pitch (ASK GAVIN at the Golden Dragon ABOUT THE OFFER) — then tell Bert (ASK BERT ABOUT THE OFFER).":
-      "White Dish will Berts Bar dem sterbenden Besitzer unter dem Hintern wegkaufen. Verschaff ihm das ganze Bild — die Vorgeschichte (ASK TERRY ABOUT WHITE DISH), die Sicht von innen (ASK KESINEE at the Kitten Corner ABOUT WHITE DISH) und das Angebot selbst (ASK GAVIN at the Golden Dragon ABOUT THE OFFER) — und dann sag es Bert (ASK BERT ABOUT THE OFFER).",
+    "White Dish want to buy Bert's bar out from under its dying owner. Get him the real picture — the history (ASK TERRY ABOUT WHITE DISH), the inside view (ASK KESINEE at the Kitten Corner ABOUT WHITE DISH), and the pitch (ASK GAVIN at the Golden Dragon, Soi 6, ABOUT THE OFFER) — then tell Bert (ASK BERT ABOUT THE OFFER).":
+      "White Dish will Berts Bar dem sterbenden Besitzer unter dem Hintern wegkaufen. Verschaff ihm das ganze Bild — die Vorgeschichte (ASK TERRY ABOUT WHITE DISH), die Sicht von innen (ASK KESINEE at the Kitten Corner ABOUT WHITE DISH) und das Angebot selbst (ASK GAVIN at the Golden Dragon, Soi 6, ABOUT THE OFFER) — und dann sag es Bert (ASK BERT ABOUT THE OFFER).",
 
     "Gavin's Errand": "Gavins Botengang",
     "Gavin would like a quiet favour: have a word with Bert about selling the Stinky to White Dish. \"Friend to friend. Soften him up. Everyone wins, and White Dish looks after its friends.\" (Take it to Bert — ASK BERT ABOUT SELLING — or don't. No one's forcing you.)":

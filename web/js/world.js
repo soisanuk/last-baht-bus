@@ -10517,7 +10517,7 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
         text: "\"Still chewing on it, bud. Get me the full picture before I advise the old man: Terry's " +
           "watched White Dish work this soi for years, Kesinee runs one of their bars over at the Kitten " +
           "Corner — she'll talk straight if you are — and the White Dish man himself, Gavin, he's usually " +
-          "smiling into a lager at the Golden Dragon. Hear all three, then come tell me what you make of it.\"" },
+          "smiling into a lager at the Golden Dragon, down on Soi 6. Hear all three, then come tell me what you make of it.\"" },
       { topic: "offer", chip: false, req: ["wdgResolved"],
         text: "\"The White Dish thing? Told the old man to hold, and he did. Gavin came back once, all " +
           "smiles, took the no like it was a delivery running late.\" A crooked grin. \"They'll be back — " +
@@ -11484,7 +11484,7 @@ const QUESTS = {
     trust: 2, // he won't ask a near-stranger to weigh in on selling his bar — earn a little rapport first
     desc: "White Dish want to buy Bert's bar out from under its dying owner. Get him the " +
       "real picture — the history (ASK TERRY ABOUT WHITE DISH), the inside view (ASK KESINEE " +
-      "at the Kitten Corner ABOUT WHITE DISH), and the pitch (ASK GAVIN at the Golden Dragon " +
+      "at the Kitten Corner ABOUT WHITE DISH), and the pitch (ASK GAVIN at the Golden Dragon, Soi 6, " +
       "ABOUT THE OFFER) — then tell Bert (ASK BERT ABOUT THE OFFER).",
     deps: [],
     at: "bert",
@@ -11626,6 +11626,18 @@ const QUESTS = {
     deps: [],
     at: "bert",
     doneFlag: "kyleShift",
+    reward: { happy: 2 },
+  },
+  // Pim's helmet errand — Bank hands you the helmet on his greeting and Pim
+  // trades a clue for it — had no presence in QUESTS at all: a completionist
+  // couldn't tell whether it was live, done, or a dead end once the wallet was
+  // back another way (Nige, round 36). Offered the moment you hold the thing.
+  helmet: {
+    name: "Bank's Helmet",
+    giver: "bank",
+    desc: "Take Bank's spare helmet to his girlfriend Pim at the Starlight Bar, Tree Town (GIVE HELMET TO PIM).",
+    deps: [], reqFlags: ["hasHelmet"], item: "helmet", at: "pim",
+    doneFlag: "helmetDelivered",
     reward: { happy: 2 },
   },
   sangsom: {
