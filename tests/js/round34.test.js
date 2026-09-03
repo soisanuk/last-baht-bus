@@ -657,3 +657,23 @@ test("PLAY POOL WITH <her> racks against her (Frank)", () => {
   out = []; run("play pool");
   assert.match(text(), /leathery expat/, "bare PLAY POOL still gets the old boy");
 });
+
+// Staffing is CANON, not an invariant (Mario, correcting round 34): a big go-go
+// splits the jobs; on a small bar the owner is the mamasan is the cashier, one
+// woman there every night unless she has a girl — often a relative — she trusts
+// with the till. So "no cashier" is not a defect, and code must ask who holds
+// the money rather than looking for a role.
+test("_tillKeeper finds the money-holder, cashier or doubling mama (Mario)", () => {
+  _setFlag("act1Done");
+  const split = Object.keys(ROOMS).find(id => ROOMS[id].barType &&
+    _staffAt(id).some(n => NPC_ROLES[n] === "cashier"));
+  assert.ok(split, "some bars split the jobs");
+  assert.equal(NPC_ROLES[_tillKeeper(split)], "cashier", "…and the cashier holds it there");
+  assert.ok(!_soloMama(split), "not a double shift");
+
+  const solo = Object.keys(ROOMS).find(id => ROOMS[id].barType && _soloMama(id));
+  if (solo) {
+    assert.equal(NPC_ROLES[_tillKeeper(solo)], "mamasan",
+      "on a small bar the mama is the one holding it");
+  }
+});

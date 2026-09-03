@@ -2512,3 +2512,29 @@ function _ladyPrice(room) { return Math.round(LADY_DRINK * _drinkMult(room) / 10
 // whole floor for less than one single lady drink (Reg the publican, round
 // 32, 2026-08-30). Same helper shape as beer/lady drink, same rounding.
 function _bellPrice(room) { return Math.round(BELL_PRICE * _drinkMult(room) / 10) * 10; }
+
+// WHO RUNS THE MONEY HERE. Not every bar has a cashier: a big go-go splits the
+// jobs, but on a small bar the owner IS the mamasan IS the cashier — one woman
+// who has to be there every single night, unless she has a girl she trusts
+// enough to leave the till with (very often a relative). That is the real shape
+// of the trade and the doc used to claim the opposite — "every hostess venue
+// gets exactly one mamasan and one cashier" — which made 33 of 87 bars read as
+// broken data when they were simply small (Mario, correcting round 34).
+//
+// So: the cashier if the bar employs one, else the mamasan, who is doing both
+// jobs and should be written as doing both jobs.
+function _staffAt(room) {
+  const to = room || G.room;
+  return Object.keys(NPCS).filter(id => _npcActive(id) && _npcRoom(id) === to);
+}
+function _tillKeeper(room) {
+  const here = _staffAt(room);
+  return here.find(n => NPC_ROLES[n] === "cashier") ||
+    here.find(n => NPC_ROLES[n] === "mamasan") || null;
+}
+// …and true when she's doing the double shift, which is what earns the line.
+function _soloMama(room) {
+  const here = _staffAt(room);
+  return !here.some(n => NPC_ROLES[n] === "cashier") &&
+    here.some(n => NPC_ROLES[n] === "mamasan");
+}
