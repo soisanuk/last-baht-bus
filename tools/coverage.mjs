@@ -57,6 +57,7 @@ const showGaps = args.includes("--gaps");
 const savePath = flag("save", null);
 const ledgerPath = flag("ledger", null);   // a driver session's coverage.json
 const recordAs = flag("record", null);
+const lensLabel = flag("lens", null);      // what the run was LOOKING THROUGH (money, phone, commute…) — the union lists them
 const doUnion = args.includes("--union");
 const COV_DIR = new URL("../docs/coverage/", import.meta.url);
 
@@ -125,14 +126,23 @@ if (doUnion) {
       "  node tools/coverage.mjs --save <save.json> --record <label>");
     process.exit(0);
   }
+  const lenses = new Map(), unlensed = [];
   for (const f of files) {
     const x = JSON.parse(fs.readFileSync(new URL(f, COV_DIR), "utf8"));
     absorbExtract(x, U);
     runs++;
     commands += x.commands || 0;
     effectsTotal = Math.max(effectsTotal, x.effectsTotal || 0);
+    if (x.lens) lenses.set(x.lens, (lenses.get(x.lens) || 0) + 1); else unlensed.push(x.label || f);
   }
   notes.push(`union of ${files.length} recorded session(s): ${files.map(f => f.replace(/\.json$/, "")).join(", ")}`);
+  // A LENS is what a run was looking through — money, the phone, one commute —
+  // and it is the thing the room/verb/NPC numbers cannot see. Colin, Gordon and
+  // Darren (round 37) all scored as ordinary coverage; what made them find what
+  // they found was the lens. Record it (--lens) so "what has nobody looked
+  // through yet" is a question this report can answer.
+  if (lenses.size) notes.push("lenses used: " + [...lenses.entries()].map(([k, n]) => n > 1 ? `${k}×${n}` : k).join(", "));
+  if (unlensed.length) notes.push(`${unlensed.length} extract(s) carry no lens label (older runs): ${unlensed.join(", ")}`);
   notes.push("this is the closest thing to 'how much of the game has ANYONE seen'");
 } else if (ledgerPath) {
   // A driver session's running ledger — accumulated after every action, so
@@ -178,6 +188,7 @@ if (recordAs) {
   fs.mkdirSync(COV_DIR, { recursive: true });
   const extract = {
     label: recordAs,
+    lens: lensLabel,          // --lens: the search strategy (money / phone / commute / …), see the union's "lenses used"
     recorded: null,           // stamped by the caller/commit, not by the tool (no clock in-engine)
     runs, commands, effectsTotal,
     rooms: [...U.rooms].sort(), npcs: [...U.npcs].sort(), patrons: [...U.patrons].sort(),

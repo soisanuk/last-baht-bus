@@ -14,6 +14,10 @@ node tools/coverage.mjs --seeds 1,2,3,4,5,6 --nights 6 --record baseline-soak
 # <sessionDir>/coverage.json, accumulated after every command
 node tools/coverage.mjs --ledger <sessionDir>/coverage.json --record persona-<name>
 
+# ALWAYS pass the LENS — what the run was looking through (money-ledger, phone-object,
+# commute-home…). The union prints the lenses used, which is how the next round is aimed.
+node tools/coverage.mjs --ledger <sessionDir>/coverage.json --record persona-<name> --lens <lens>
+
 # a bare save works too, but UNDERCOUNTS any session that reset
 node tools/coverage.mjs --save save.json --record persona-<name>
 
