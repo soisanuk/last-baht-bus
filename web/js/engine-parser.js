@@ -449,6 +449,21 @@ function _arriveAt(to) {
   }
   // closed for the night? (also covers fast-travel, which skips the doGo gate)
   if (_closedNow(to)) { _say(_closedMsg(to)); return; }
+  // The padded door, from the outside, for the one man it opens for. Placed
+  // after _closedNow (which now defers to _lockInWelcome) and before the ban
+  // checks, because a banned face is still a banned face.
+  if (_lockInWelcome(to)) {
+    (G.soc.lockIn = G.soc.lockIn || {})[to] = true;
+    _say("The front is dark and the shutters are down and the door does not move — and " +
+      "then it does, four inches, on a face you half recognise from the other side of a " +
+      "bar. A beat while she places you. Then the chain comes off.", "win");
+    _say("\"Aaah. YOU.\" The bolt goes back behind you with the same flat sound it made " +
+      "the night you first heard it from the inside. The music is already going, the " +
+      "aircon is already too cold, and nobody asks you for anything at the door — that " +
+      "was settled the last time. The Darkside is closed. This is the other thing, and " +
+      "tonight you did not have to buy your way into it.", "win");
+    _addHappy(2);
+  }
   // barred from a queer venue (no barType, so the bar-ban block below misses it):
   // the bigotry ejection radios the whole strip for the rest of the night.
   if (_QUEER_ROOMS.includes(to) && G.soc.banned[to] !== undefined) {
@@ -8303,6 +8318,22 @@ function doCommand(input) {
       break;
     case "jump": case "climb": case "push": case "pull":
     case "knock": case "shout": case "yell":
+      // "Nobody knocks in this town" is a good line and stays the rule — but a
+      // man standing outside the ONE door that would open for him, knocking on
+      // it, is the exception the rule exists to make land. He tried exactly
+      // this at exactly that door (Gerry, round 34). Look for a lock-in that
+      // knows him among the bars off this street and walk him in.
+      if (v === "knock") {
+        const known = Object.values(_room().venues || {})
+          .concat(Object.values(_room().exits || {}))
+          .find(id => typeof id === "string" && _lockInWelcome(id));
+        if (known) {
+          _say("You knock. In this town that is nearly an eccentric act — and on this " +
+            "door, tonight, it is the correct one.", "dim");
+          _arriveAt(known);   // the shared arrival path — it owns the welcome scene
+          break;
+        }
+      }
       _say(_MISC_VERBS[v === "yell" ? "shout" : v]); break;
     case "touch": case "feel": case "taste": case "lick": case "tell":
     case "verbose": case "brief": case "restore": case "load": case "move":

@@ -184,16 +184,44 @@ function _closesMidnight(id) {
   return !!(r && r.barType) &&
     (r.barType === "gents" || r.barType === "soi6" || r.region === "Darkside");
 }
+// THE DOOR OPENS FOR A FACE IT KNOWS (Mario's call, round 34). Every Darkside
+// street after midnight advertises "one padded door still thumping" and there
+// was no command, price, favour or reputation that got you through it from
+// outside — the biggest tease in the game for the player who came looking for
+// exactly this (Gerry). A man who has been bolted in HERE before is not a
+// walk-up: he is somebody the mamasan let into the back half of her night
+// once, and that is a thing this town remembers. So he can come back — and
+// nobody else can, which keeps the lock-in earned rather than merely open.
+// …but never on the night you walked out of it. OUT is one-way and the
+// lock-in's own closing line promises exactly that ("no coming back in
+// tonight"); a door that reopened the same evening would make a liar of it.
+// A PREVIOUS night's welcome is what carries.
+function _lockInWelcome(to) {
+  const r = ROOMS[to];
+  const when = G.lockedInAt && G.lockedInAt[to];
+  return !!(r && r.region === "Darkside" && r.lockIn && G.nightTurn >= 60 &&
+    _flag("act1Done") && when && when < G.day &&
+    !(G.soc.lockIn && G.soc.lockIn[to]));
+}
 function _closedNow(to) {
   return _flag("act1Done") && _closesMidnight(to) && G.nightTurn >= 60 &&
-    !(G.soc.lockIn && G.soc.lockIn[to]);
+    !(G.soc.lockIn && G.soc.lockIn[to]) && !_lockInWelcome(to);
 }
 function _closedMsg(to) {
   const r = ROOMS[to];
-  if (r.region === "Darkside")
+  if (r.region === "Darkside") {
+    // The tease has to stop being a tease once the player can answer it. For a
+    // man who has been bolted in somewhere on this side, the padded door is no
+    // longer an unreachable rumour — it is a specific address, and the line
+    // says so (Gerry, round 34, who read the old one on three separate nights
+    // and could never find a way through it).
+    const mine = Object.keys(ROOMS).find(id => _lockInWelcome(id));
     return "Shutters down, lights dead, chairs up. The Darkside keeps the law's " +
       "hours — officially. Somewhere along the strip one padded door still thumps " +
-      "with bass from a bar that is definitely, legally, closed.";
+      "with bass from a bar that is definitely, legally, closed." +
+      (mine ? ` And you know which one, and they know you: ${_barName(mine)} is not ` +
+        "shut to you tonight." : "");
+  }
   if (r.barType === "gents")
     return "The gentleman's club is dark and bolted. They keep gentleman's hours — " +
       "the afternoon-and-early trade is long done by midnight, before the go-gos " +
@@ -525,6 +553,12 @@ function _closingTick() {
   // midnight. A Darkside bar with a spender bolts the door instead of shutting it.
   if (r.region === "Darkside" && r.lockIn && _barSpendTonight(G.room)) {
     (G.soc.lockIn = G.soc.lockIn || {})[G.room] = true;
+    // …and the house remembers who was inside, and WHICH NIGHT. G.soc.lockIn
+    // is nightly; this is the permanent one — the difference between a
+    // customer who spent well once and a face the door knows (_lockInWelcome).
+    // The day matters because OUT is one-way and says so: walking out doesn't
+    // buy you back in tonight, it buys you in from tomorrow.
+    (G.lockedInAt = G.lockedInAt || {})[G.room] = G.day;
     const mama = _npcsHere().find(n => NPC_ROLES[n] === "mamasan");
     _say(`Midnight. ${mama ? NPCS[mama].name : "The mamasan"} looks at the till, ` +
       "looks at you, and nods once to the cashier. The bolt goes across the " +

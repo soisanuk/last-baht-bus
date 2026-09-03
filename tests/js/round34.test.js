@@ -380,3 +380,77 @@ test("a new question about an old line gets the gist, not the spiel (Gerry+Wes)"
   assert.doesNotMatch(again, /asked me that|sieve/i, "and not an accusation (Wes)");
   assert.match(again, /Midnight Sun/, "…it still answers what was asked");
 });
+
+// ── batch C: the padded door (Mario's call) ─────────────────────────────────
+// Every Darkside street after midnight advertised "one padded door still
+// thumping", and no command, price, favour or reputation got you through it
+// from outside — the single biggest tease in the game for the player who came
+// looking for exactly this. The door now opens for a face it knows: a man the
+// bar has bolted in BEFORE, and nobody else.
+test("the padded door opens for a man it has locked in before (Gerry/Mario)", () => {
+  _setFlag("act1Done"); G.money = 9000;
+  // earn it: spend freely at a lockIn bar, stand there at midnight
+  G.room = "khao_talo_bar"; G.soc.bells = { khao_talo_bar: 1 };
+  G.soc.mamaTreat = { khao_talo_bar: true }; G.nightTurn = 60;
+  _closingTick();
+  assert.ok(G.soc.lockIn.khao_talo_bar, "the bolt goes across");
+  assert.ok(G.lockedInAt.khao_talo_bar, "…and the house remembers it permanently");
+
+  // a NEW night, nothing spent, arriving off the street after midnight
+  G.nightTurn = 99; _endNight("dawn");
+  assert.ok(!G.soc.lockIn.khao_talo_bar, "the nightly flag is gone");
+  assert.ok(G.lockedInAt.khao_talo_bar, "the permanent one is not");
+  G.nightTurn = 70; G.room = "khao_talo";
+  out = []; run("enter daengs place");
+  assert.equal(G.room, "khao_talo_bar", "the chain comes off");
+  assert.match(text(), /Aaah\. YOU|chain comes off/, "…on a face she places");
+  assert.ok(G.soc.lockIn.khao_talo_bar, "and you're inside the lock-in proper");
+});
+
+test("…and stays shut to everybody else (Gerry/Mario)", () => {
+  _setFlag("act1Done"); G.nightTurn = 70; G.room = "khao_talo";
+  out = []; run("enter daengs place");
+  assert.notEqual(G.room, "khao_talo_bar", "a stranger is still a stranger");
+  assert.match(text(), /Shutters down/, "the ordinary refusal");
+});
+
+// He tried this at exactly that door: "Nobody knocks in this town."
+test("KNOCK is the one place the no-knocking rule bends (Gerry)", () => {
+  _setFlag("act1Done"); G.nightTurn = 70; G.room = "khao_talo";
+  out = []; run("knock");
+  assert.match(text(), /Nobody knocks/, "the rule holds for everyone else");
+  G.lockedInAt = { khao_talo_bar: G.day - 1 };   // an earlier night
+  out = []; run("knock");
+  assert.equal(G.room, "khao_talo_bar", "…and bends for the man it should");
+  assert.match(text(), /eccentric act/, "with the wink");
+});
+
+// The street line was a pure tease — it must stop teasing a man who can answer it.
+test("the street names the door once it is yours (Gerry)", () => {
+  _setFlag("act1Done"); G.nightTurn = 70; G.room = "khao_talo_strip";
+  out = []; run("enter the water buffalo");
+  assert.doesNotMatch(text(), /not shut to you/, "a stranger gets the rumour only");
+  G.lockedInAt = { khao_talo_bar: G.day - 1 };
+  out = []; run("enter the water buffalo");
+  assert.match(text(), /you know which one, and they know you/, "the rumour becomes an address");
+  assert.match(text(), new RegExp(_barName("khao_talo_bar")), "…a named one");
+});
+
+test("the permanent lock-in record survives a save (Gerry/Mario)", () => {
+  G.lockedInAt = { khao_talo_bar: 3 };
+  const snap = serializeGame(); newGame(); deserializeGame(snap);
+  assert.deepEqual(G.lockedInAt, { khao_talo_bar: 3 });
+  newGame();
+  assert.deepEqual(G.lockedInAt, {}, "a fresh game knows nobody");
+});
+
+// The one-way rule is older than the welcome and outranks it: the lock-in's
+// own closing line promises "no coming back in tonight", so the door that
+// opens for a known face opens on a LATER night, never the one he left.
+test("walking out still doesn't buy you back in tonight (canon)", () => {
+  _setFlag("act1Done"); G.nightTurn = 70;
+  G.lockedInAt = { khao_talo_bar: G.day };     // locked in THIS night
+  assert.ok(!_lockInWelcome("khao_talo_bar"), "same night: the bolt stays shut");
+  G.lockedInAt = { khao_talo_bar: G.day - 1 }; // …and an earlier one
+  assert.ok(_lockInWelcome("khao_talo_bar"), "a previous night: the door knows you");
+});

@@ -231,6 +231,10 @@ function newGame() {
     known: {},           // charId → true once their name has printed (ask-topic gate)
     examined: {},        // "room.readKey" → 1 — distinctive fixtures you've looked at (the Owl's noticer slot)
     visited: { jomtien_beach: true }, // roomId → true once stood in (fast-travel gate)
+    // roomId → true once a Darkside bar has bolted the door with you inside.
+    // PERMANENT, unlike the nightly G.soc.lockIn: it is the difference between
+    // a good customer and a face the door opens for (_lockInWelcome).
+    lockedInAt: {},
     talked: {},          // npcId → [dialogue indices already delivered] (terse repeats)
     npc: {},             // per-character conversation state: id → {trust,mood,dstate,know} (see _npcState)
     convo: null,         // active conversation partner id — bare topics/actions aim here (see _convoActive)
