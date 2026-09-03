@@ -1015,6 +1015,9 @@ function _doTake(arg) {
       const ctx = _sceneryCtx();
       return s.fn ? !!s.fn(ctx) : !!(s.lines[ctx] || (ctx === "pub" && s.lines.bar) || s.lines.any);
     })();
+    if (/bottle/.test(arg) && !_inBar()) {
+      _say("No bottle worth the bending here tonight — they come and go with the drinkers and the tide."); return;
+    }
     if ((typeof _roomRead === "function" && _roomRead(arg, true)) || _advertised || _sceneryHere) {
       _say(_inBar() ? "That's fixtures, not luggage. It stays; the bar would notice."
         : "That's part of the place, not something you carry off. It stays.");
@@ -4932,6 +4935,11 @@ const _MOTO_DRUNK_NO = [
   "You get one boot toward the bike and the piwin puts a flat hand up, friendly and final. \u201cNo, boss. Tonight you are luggage.\u201d He points at the road with his chin. \u201cSongthaew. Bench no fall off.\u201d",
   "The whole stand has a quiet laugh, and none of them moves. A pillion seat needs a passenger who can hold on, and the vote on whether that is you tonight is unanimous. Somebody mimes a bench with two flat hands: the bus will have you.",
 ];
+const _MOTO_DRUNK_NO_EAST = [
+  "The piwin looks at you the way a man looks at cargo. A slow head-shake. \u201cYou fall off, boss \u2014 my problem, my bike, my licence.\u201d No bench to point you at out here: he tips his chin toward the sodium glow of the highway. \u201cTrucks on Sukhumvit take anybody. Long walk. Or you sit, drink water, ask me again.\u201d",
+  "One boot toward the bike and the piwin puts a flat hand up, friendly and final. \u201cNo, boss. Tonight you are luggage.\u201d He points west, at the dark between here and the highway. \u201cCrossing. Truck. Or a stool and a water, and we talk again.\u201d",
+  "The whole stand has a quiet laugh, and none of them moves. Out here there is no bench to fall onto \u2014 the nearest truck is on the highway, and the highway is a walk. Somebody hands you a water, which is the stand's whole opinion.",
+];
 const _BUS_DRUNK_BENCH = [
   "(You board the way a sack of rice boards. The bench takes you; the driver has seen worse, tonight, already.)",
   "(Getting aboard takes three tries and the tailgate rail takes most of your weight. Nobody comments. The songthaew is the last vehicle in Thailand that will always have you.)",
@@ -4963,6 +4971,8 @@ function _doRideBus(arg) {
     _say("No blue trucks come down here — they keep to the main roads. " +
       (/^(jomtien|dongtan)/.test(G.room)
         ? "Down this end that means the seafront road or Thappraya, up on the hill."
+        : _room().region === "Darkside"
+        ? "Out here that means the highway: the Pattaya Tai trucks stop at the Sukhumvit crossing."
         : "The seafront, Pattaya's Second Road, Thappraya, or one of the big junctions."));
     return;
   }
@@ -5143,14 +5153,16 @@ function _motoFare(d, base) {
 
 function _doMotosai(arg) {
   const r = _room();
+  // a stand that isn't there: nothing happened, so nothing is spent — and it is
+  // checked BEFORE the rain, which used to describe an awning in your hotel room
+  // (Darren, round 37)
+  if (!r.motosai) { _say(_isHotelRoom(G.room) ? "No piwin in here. The stands are on the street — OUT first." : "No motosai stand here."); return false; }
   if (G.rain > 0) {
     _say("The piwins are packed under the stand's awning, smoking, watching the " +
       "water rise. One meets your eye and laughs, not unkindly. Not for any " +
       "money, boss. Not in this.");
     return;
   }
-  // likewise a stand that isn't there: nothing happened, so nothing is spent
-  if (!r.motosai) { _say("No motosai stand here."); return false; }
   // Past a certain state the bikes won't have you — a pillion needs a passenger
   // who can hold on. The songthaew bench is the vehicle that always will, which
   // is the whole thesis of the title (design call 2026-08-25). But the balk is
@@ -5162,7 +5174,10 @@ function _doMotosai(arg) {
     const insisting = G.motoBalkTurn != null && G.turns - G.motoBalkTurn <= 5;
     if (!insisting) {
       G.motoBalkTurn = G.turns;
-      _say(_pickVary(_MOTO_DRUNK_NO, "motodrunk"), "alert");
+      // the balk points at the bench — only where a bench exists. On a Darkside
+      // soi "the bus will have you" named a bus that never came (Darren, round 37)
+      const bench = typeof _busLinesFor === "function" && _busLinesFor(G.room).length;
+      _say(_pickVary(bench ? _MOTO_DRUNK_NO : _MOTO_DRUNK_NO_EAST, bench ? "motodrunk" : "motodrunkeast"), "alert");
       return false;
     }
     G.motoBalkTurn = null;
@@ -5243,13 +5258,20 @@ function _doMotosai(arg) {
     // anti-soft-lock purpose survives the cap intact.
     if (G.money < d.price && d.price === MOTOSAI_TOWN && G.pityRideDay !== G.day) {
       G.pityRideDay = G.day;
+      G.pityRides = (G.pityRides || 0) + 1;
+      G.pityOwed = (G.pityOwed || 0) + d.price;   // "pay next time" is a promise the game keeps
       G.room = d.room;
       G.darkStreak = 0;
-      _say("The piwin takes in the empty pockets, the hour, and the state of you, " +
-        "and sighs the sigh of a man who has done this before. “Mai pen rai. Get " +
-        "on. Pay next time, boss.” He threads the highway one-handed and sets you " +
-        "back down among the living — no charge, no lecture, just a nod that says " +
-        "don't make a habit of it.", "thai");
+      _say(G.pityRides === 1
+        ? "The piwin takes in the empty pockets, the hour, and the state of you, " +
+          "and sighs the sigh of a man who has done this before. “Mai pen rai. Get " +
+          "on. Pay next time, boss.” He threads the highway one-handed and sets you " +
+          "back down among the living — no charge, no lecture, just a nod that says " +
+          "don't make a habit of it."
+        : "The piwin knows you before you have said a word. “Again, boss?” Not angry. " +
+          "Tired, maybe, the way a man is tired of a thing he is going to do anyway. “Get on. " +
+          `Now you owe the stand ฿${G.pityOwed}. Next time you have money, you remember us.” ` +
+          "He threads the highway one-handed. The nod at the other end is shorter than last time.", "thai");
       if (G.dog) _say(_dogN(_DOG_MOTOSAI[Math.floor(_rand() * _DOG_MOTOSAI.length)] +
         " No charge for Sai Krok either, not tonight."), "dim");
       _describeRoom(true);
@@ -5274,8 +5296,10 @@ function _doMotosai(arg) {
     return;
   }
   // survived — but on an elevated-risk ride, telegraph it with a near-miss ~half the
-  // time, so the danger is felt long before the crash odds ever land (no blind death)
-  if (risk >= 0.05 && _rand() < 0.5) _say(_pickVary(_MOTO_NEARMISS, "motonear"), "alert");
+  // time, so the danger is felt long before the crash odds ever land (no blind death).
+  // Rolled here (the dice order is the save's contract), PRINTED after the fare line
+  // below — it read as "crashed, then got on" (Darren, round 37).
+  const nearMiss = risk >= 0.05 && _rand() < 0.5;
   G.room = d.room;
   G.darkStreak = 0;
   if (lateGouge) _say("Gone two in the morning, the buses gone sparse and slow, and the " +
@@ -5291,6 +5315,16 @@ function _doMotosai(arg) {
     "swing on the back, and the piwin threads traffic like it owes him money. " +
     `That was the fastest ฿${total} of your life. (฿${G.money} left.)`, "thai");
   _engineSpeak(thaiBaht(price));
+  if (nearMiss) _say(_pickVary(_MOTO_NEARMISS, "motonear"), "alert");
+  // the night you had nothing: the piwin who fronted the ride remembers, and the
+  // first paid fare after it settles the debt of honour (Darren, round 37: "never
+  // remembers you"). Only what you can cover; he does not strand you for it.
+  if (G.pityOwed && G.money >= G.pityOwed) {
+    G.money -= G.pityOwed;
+    _say(`The piwin holds his hand out a second longer. \u201cAnd the night you have nothing, boss.\u201d ` +
+      `You pay the ฿${G.pityOwed} you owed the stand, and the nod you get back is worth more than the fare. (฿${G.money} left.)`, "dim");
+    G.pityOwed = 0;
+  }
   if (G.dog) _say(_dogN(_DOG_MOTOSAI[Math.floor(_rand() * _DOG_MOTOSAI.length)]), "dim");
   _describeRoom(true);
   _maybeEncounter();
@@ -5442,10 +5476,23 @@ function _doCharge() {
   if (!_inv().includes("charger")) { _say("You need a charger. 7-Elevens sell them."); return; }
   if (!_room().outlet && !_room().seven) { _say("No outlet here. 7-Eleven has one; so do a couple of friendly bars."); return; }
   if (G.battery >= 100) { _say("Already full. A rare feeling of complete adequacy."); return; }
+  // a bar's outlet is "for customers the boss likes" — buy something first
+  if (_inBar() && _room().outlet && !_isHotelRoom(G.room) &&
+      !((G.soc.selfDrinks && G.soc.selfDrinks[G.room]) || (G.soc.bells && G.soc.bells[G.room]) || _atOwnBar())) {
+    _say("The socket behind the till is for customers. The cashier's eyebrow says so before you've asked. Buy a drink, then ask.", "dim");
+    return;
+  }
+  // 5% → 100% in one command on a 7-Eleven pavement (Gordon, round 37): a charge
+  // takes the minutes it takes, in full ticks, and stops early if the night does
+  const startDay = G.day;
+  _say(_isHotelRoom(G.room) ? "You plug in by the bed and let it drink." :
+    _inBar() ? "You plug in behind the till and nurse a drink while it climbs." :
+    "You plug in at the 7-Eleven's counter and stand there like a man waiting for rice.", "dim");
+  for (let i = 0; i < 3 && G.day === startDay && !G.pendingEnc; i++) _tick();
+  if (G.day !== startDay) return;
   G.battery = 100;
   G.lightOn = false;
-  _say("You plug in and watch the number climb the way ancient man watched sunrise. " +
-    "100%. You are reborn.");
+  _say("You watch the number climb the way ancient man watched sunrise. 100%. You are reborn.");
   _addHappy(1);
 }
 
@@ -6315,7 +6362,8 @@ const _MAP = `                    NAKLUA ─ Sabai Palms Hotel
         ~     BEACH RD N ─ SOI 6 (Queen Vic in the quiet middle)
         ~      │ (Blue Dog · Stinky Pinky)
         ~      │      PATTAYA KLANG ────► THE DARKSIDE
-       ~       │       │      │   (Khao Talo · the lake · motosai out)
+       ~       │       │      │   (Khao Talo · the lake · bike, or the
+       ~       │       │      │    Pattaya Tai truck / the long walk east from Buakhao South)
        ~  BEACH RD C   │   MYTH NIGHT
        ~    │ (Tequila Queen)  │
        ~    │         SECOND  TREE TOWN (the fairy-lit maze)
@@ -6408,9 +6456,12 @@ const _PHOTO_GOGO_YES = [
   (nm) => `“Only you, na. Don't show nobody.” ${nm} angles the phone low, throws a quick pout, and the shutter's done before anyone looks up. (GALLERY)`,
 ];
 
-function _photoWhere(id) {
+function _photoWhere(id, entry) {
+  // where the shutter went, when the entry recorded it — a rotating owner snapped
+  // at the Dollhouse was filed under her other bar (Gordon, round 37); older
+  // entries fall back to where she works
+  if (entry && entry.room && ROOMS[entry.room]) return _barName(entry.room) || ROOMS[entry.room].name || "";
   if (NPCS[id]) return _barName(_npcRoom(id)) || "";
-  if (NPCS[id] && NPCS[id].patron) return _barName(NPCS[id].room) || "the rail";
   return "";
 }
 
@@ -6428,7 +6479,7 @@ function _addPhoto(id, cap) {
   if (!NPCS[id]) return false;
   if (!cap && _hasPortrait(id)) return false;
   if (G.known) G.known[id] = true;
-  _photoList().push(cap ? { id, cap, turn: G.turns } : { id, turn: G.turns });
+  _photoList().push(cap ? { id, cap, turn: G.turns } : { id, turn: G.turns, room: G.room });
   return true;
 }
 
@@ -6489,7 +6540,7 @@ function _doPhoto(arg) {
     _say("The word “photo” assembles every hostess in the bar around you in " +
       "under two seconds, peace signs at maximum deployment. Your phone now " +
       "holds nine near-identical frames and one where everybody is beautiful. " +
-      "That one gets kept.");
+      "Crowd shots don't make the gallery — it keeps faces. (PHOTO <someone>.)");
   } else if (["jomtien_beach", "dongtan_beach"].includes(G.room)) {
     _say("You photograph the Gulf doing its end-of-day routine. The photo will " +
       "not capture it. The photo has never once captured it. You take it anyway.");
@@ -6513,7 +6564,7 @@ function _doGallery() {
   const rows = photos.slice().sort((a, b) => (a.turn || 0) - (b.turn || 0)).map(p => {
     const n = NPCS[p.id];
     // a texted selfie shows its caption; a snapped portrait, where she works
-    const detail = p.cap ? `«${p.cap}»` : _photoWhere(p.id);
+    const detail = p.cap ? `«${p.cap}»` : _photoWhere(p.id, p);
     return `${n.emoji} ${n.name}${detail ? " — " + detail : ""}`;
   });
   // A denominator turns a list into a collection. NOT the 334-strong cast —
@@ -6803,7 +6854,17 @@ function _doCheers() {
 
 // TAO RAI — the veteran's reflex: ask the price before you accept anything. The
 // one word that keeps a "free" favour from becoming a debt you can't see yet.
+const _GRAB_LINE = "No app car worth the wait at this hour and this address — the piwins on the corner ARE the app, and they don't cancel. (MOTOSAI TO <place>.)";
 function _doTaoRai() {
+  // at a motosai stand it is a question with a number in the answer (Darren, round 37)
+  if (_room().motosai && !G.pendingEnc && !_convoActive()) {
+    const late = G.nightTurn >= LAST_BUS_TURN;
+    const fares = Object.entries(MOTOSAI_DESTS).filter(([, d]) => d.room !== G.room)
+      .map(([k, d]) => `${k} ฿${_motoFare(d)}`);   // the charged fare, gouge and all — quoted is charged
+    _say("“เท่าไหร่?” (tao rai — how much?) The piwin rattles it off without looking up" +
+      (late ? ", small-hours rate" : "") + ": " + fares.join(" · ") + ". (MOTOSAI TO <place>.)", "dim");
+    return;
+  }
   _say("“เท่าไหร่?” (tao rai — how much?) The only question that matters on this street. Ask it " +
     "before you take the drink, the gift, the favour, the shortcut — because nothing here is free; " +
     "you just haven't been shown the price yet. Ask it, pay it, close the account, walk on clean.", "dim");
@@ -7975,7 +8036,7 @@ function doCommand(input) {
     if (softAnswer && !softAnswer.test(lower) && _isRealCommand(v)) {
       // the note FIRST: with the decline prose printed before it, a man read the
       // peddler's head-shake as the answer to his BARFINE (Lionel, round 36)
-      _say("(That wasn't an answer to him; the pitch lapses and you carry on.)", "dim");
+      _say("(That wasn't an answer; the pitch lapses and you carry on.)", "dim");
       _ENC[enc]("no");
       doCommand(raw);
       return;
@@ -8195,6 +8256,7 @@ function doCommand(input) {
     case "accept": _doAccept(arg); break;
     case "abandon": _doAbandon(arg); break;
     case "take": case "get": case "grab": case "pick":
+      if (v === "grab" && !arg) { _say(_GRAB_LINE, "dim"); break; }   // bare GRAB is the app, not the verb (Darren, round 37)
       if (/^(photo|selfie|picture|pic)\b/.test(arg)) _doPhoto(arg.replace(/^(photo|selfie|picture|pic)\s*/, ""));
       else if (arg === "bus" || arg.startsWith("bus")) _doRideBus(arg.replace(/^bus\s*/, ""));
       else if (arg.startsWith("motosai") || arg.startsWith("bike")) _doMotosai(arg.replace(/^\S+\s*/, ""));
@@ -8489,6 +8551,9 @@ function doCommand(input) {
     case "hello": case "hi": case "howdy": _doHello(arg); break;
     case "smell": case "sniff": _doSmell(); break;
     case "listen": case "hear": _doListen(); break;
+    case "bolt": case "uber": case "grabcar": case "grabtaxi":
+      _say(_GRAB_LINE, "dim");
+      break;
     case "swim": _doSwim(); break;
     case "dance": _doDance(); break;
     case "sing": _doSing(); break;

@@ -124,7 +124,12 @@ test("TRAVEL disambiguates the Queen Vic pub from your same-named room", () => {
 });
 
 test("bare TRAVEL at a walk-dead-end suppresses the empty header", () => {
-  S().room = "sukhumvit_crossing"; S().visited = { stinky_bar: true };
+  // the crossing walks west now (Darren, round 37), so the empty list comes from
+  // having visited nowhere, not from a fence
+  // the crossing walks west now (Darren, round 37) and the hotel is always on
+  // the list — the one empty case left is standing in that hotel room with
+  // nowhere else discovered
+  S().room = _hotelRoomId(); S().visited = {};
   doCommand("travel");
   assert.doesNotMatch(last(), /You know the way to:/);
 });

@@ -6091,7 +6091,7 @@ test("a genuine unrelated command declines the tourist encounter and still runs 
   state().itemLoc.masseuse_note = "inventory";
   _startEnc("bkktourist");
   run("meet her");
-  assert.match(lastOut(), /wasn't an answer to him/i);
+  assert.match(lastOut(), /wasn't an answer/i);
   assert.match(lastOut(), /Nok texts back/i, "the real command ran after the pitch lapsed");
   assert.equal(state().offShift, null, "the off-shift thread actually resolved");
 });
@@ -7036,6 +7036,7 @@ test("soi dogs won't bite during the downpour", () => {
 });
 
 test("rain falls only out of a stormy bake, in 3–8 turn events", () => {
+  state().flags.act1Done = true; // downpours wait for the opening race to finish (Darren, round 37)
   state().encDone = Object.fromEntries(Object.keys(ENCOUNTERS).map(k => [k, true]));
   state().room = "second_rd_c";
   for (let i = 0; i < 120; i++) {
@@ -7168,6 +7169,7 @@ test("WEATHER bridges the two clocks when the real sky and the game season disag
 });
 
 test("the calendar wet season amplifies the rain: a monsoon month opens a downpour a dry one wouldn't", () => {
+  state().flags.act1Done = true; // downpours wait for the opening race to finish (Darren, round 37)
   // The season link. A rainy-but-not-stormy sky (code 61) is drizzle-only in the
   // cool dry months, but in the SW-monsoon months it becomes a real downpour —
   // which is what makes low season FEEL like low season. Still bake-gated, so a

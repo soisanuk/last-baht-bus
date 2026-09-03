@@ -173,7 +173,7 @@ test("a name with NO in it is not a no to the rose seller — the flirt runs (Li
 test("a soft pitch declined by an unrelated command says so BEFORE the decline prose (Lionel)", () => {
   G.room = "neon_palm"; G.pendingEnc = "peddler"; G.money = 1000;
   run("buy beer");   // a real action, not an observation verb (QUESTS/LOOK re-show the moment)
-  const i = out.findIndex(o => /wasn't an answer to him/.test(o.text));
+  const i = out.findIndex(o => /wasn't an answer/.test(o.text));
   const j = out.findIndex(o => /slow head-shake|re-shoulders/.test(o.text));
   assert.ok(i >= 0 && j > i, "note first, then the peddler moves on: " + i + " " + j);
 });

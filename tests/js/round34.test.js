@@ -572,13 +572,16 @@ test("the daily challenge keeps its own ending (Frank)", () => {
 // what makes them the different country the prose calls them — so the refusal
 // keeps the rule and names the ride.
 test("the TRAVEL refusal explains itself and names the ride (Gerry)", () => {
+  // Round 37 (Darren) opened the walk east — Soi Buakhao's south end → the
+  // Sukhumvit verge → the crossing — so TRAVEL now WALKS it, every hop a full
+  // tick, instead of refusing. The refusal path survives for a genuinely
+  // disconnected pair; the walk is what the transport thesis promised.
   _setFlag("act1Done"); G.room = "buakhao_n"; G.visited.khao_talo_bar = true;
+  G.hunger = 0; G.thirst = 0; G.soc.drunk = 0; const t0 = G.turns;
   out = []; run("travel daengs place");
-  assert.match(text(), /No walking route/, "it says why");
-  assert.match(text(), /MOTOSAI TO DARKSIDE/, "…and how, with the verb");
-  assert.doesNotMatch(text(), /can't get there from here/, "not the bare refusal");
-  // …and the rule itself is unchanged: no free ride across the highway
-  assert.equal(G.room, "buakhao_n");
+  assert.doesNotMatch(text(), /No walking route/, "there is one now");
+  assert.equal(G.room, "khao_talo_bar", "walked all the way out east");
+  assert.ok(G.turns - t0 >= 6, "…and it cost the hops: " + (G.turns - t0));
   // walking WITHIN the Darkside still works
   G.room = "khao_talo"; G.visited.night_heron = true;
   run("travel night heron");

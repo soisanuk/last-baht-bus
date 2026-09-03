@@ -22,13 +22,13 @@
   "Blue Dog"
  ],
  "counts": {
-  "geolocated": 237,
+  "geolocated": 238,
   "patrons": 24,
   "people": 332,
   "portraits": 356,
   "renders": 356,
   "thumbs": 356,
-  "venues": 237
+  "venues": 238
  },
  "frames": [
   "baimon_pic1",
@@ -6381,6 +6381,15 @@
     100.8962
    ],
    "name": "Sukhumvit Crossing",
+   "region": "Darkside"
+  },
+  "sukhumvit_verge": {
+   "estimated": true,
+   "geo": [
+    12.919,
+    100.8965
+   ],
+   "name": "Sukhumvit Road (the verge)",
    "region": "Darkside"
   },
   "sundowner": {

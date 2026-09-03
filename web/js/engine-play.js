@@ -385,6 +385,15 @@ function _piwinAbout(who) {
   const byName = src => Object.keys(src).find(k =>
     k === w || String(src[k].name || "").toLowerCase() === w ||
     String(src[k].name || "").toLowerCase().split(" ").pop() === w);
+  if (/^(?:the )?(?:bus|buses|songthaews?|trucks?|baht bus|blue trucks?)$/.test(w)) {
+    // "ask piwin about bus" got "Who?" (Darren, round 37) — the one thing every
+    // piwin knows is where the trucks run, and out east the answer is the highway
+    const lines = typeof _busLinesFor === "function" ? _busLinesFor(G.room) : [];
+    _say(lines.length
+      ? "\"Bus? Here, yes.\" He tips his chin at the road. \"Stand there, hand up. Late, you wait — but it come. Always come.\""
+      : "\"Bus? Not down here, boss. Highway.\" He points west, toward the sodium glow. \"Sukhumvit — the Pattaya Tai truck stop at the crossing. Or —\" a pat on the seat behind him \"— I take you.\"");
+    return;
+  }
   const id = byName(NPCS);
   if (!id) { _say("\"Who?\" He shrugs, entirely unbothered. \"Don't know this one.\""); return; }
   const label = NPCS[id].name;
@@ -4302,6 +4311,7 @@ function _endNight(reason) {
   } else {
     G.room = "jomtien_beach"; G.battery = Math.max(G.battery, 20);
   }
+  G.rain = 0;   // a downpour does not follow you through sleep — one pinned a man in his room at 18:00 (Gordon, round 37)
   _say("");
   if (crash) {
     _say(crash.prose[Math.floor(_rand() * crash.prose.length)], "alert");

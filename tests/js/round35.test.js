@@ -259,9 +259,9 @@ test("you cannot buy a ride to the kerb you are standing on (Stan 5)", () => {
 // The TRAVEL refusal quoted ฿50 to Walking Street; the bike charged ฿160.
 test("the quoted motosai fare is the charged one (Stan 6)", () => {
   G.room = "khao_talo"; G.visited.neon_paradise = true; G.money = 5000; G.nightTurn = 85;
-  out = []; run("travel neon paradise");   // a Walking Street bar; the refusal names the stop
-  const quoted = +(text().match(/฿(\d+) at this hour/) || text().match(/฿(\d+)\)/) || [0, 0])[1];
-  assert.ok(quoted > 0, "a fare is quoted: " + text().slice(0, 120));
+  out = []; run("tao rai");   // at a stand, the question has a number in the answer (Darren, round 37)
+  const quoted = +(text().match(/walking street ฿(\d+)/) || [0, 0])[1];
+  assert.ok(quoted > 0, "a fare is quoted: " + text().slice(0, 160));
   const before = G.money; G.dog = null;
   run("motosai to walking street");
   assert.equal(before - G.money, quoted, "…and it is what the piwin took");

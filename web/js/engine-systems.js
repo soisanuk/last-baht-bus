@@ -3431,8 +3431,12 @@ function _doSendMoney(arg) {
     if (!dripped) _say("(📱 A reply lands before you've pocketed the phone.)", "dim");
     return;
   }
-  _pushMsg(id, amt >= 500 ? "🙏🙏🙏 you TOO good to me. tonight I take care YOU" :
-    amt >= 100 ? "khop khun kha!! 💕 you number one" : "55555 cheap Charlie... but sweet 💕");
+  _pushMsg(id, amt >= 500 ? _pickVary(["🙏🙏🙏 you TOO good to me. tonight I take care YOU",
+      "😭😭 why you so good?? i no forget this, promise", "OMG 🙏💕 you save me. tonight you no pay for nothing, i talk to mama"], "sendbig:" + id) :
+    amt >= 100 ? _pickVary(["khop khun kha!! 💕 you number one", "thank you thank you 🙏 you sweet man",
+      "💕💕 you good heart. i think of you tonight na", "khop khun mak mak 😘 i buy you beer when you come"], "sendmid:" + id) :
+    _pickVary(["55555 cheap Charlie... but sweet 💕", "5555 what i can buy with this?? 😜 but thank you na",
+      "small small 😆 but you think of me. ok 💕"], "sendsmall:" + id));
   _say("(📱 A reply lands before you've pocketed the phone.)", "dim");
   if (id === "bee" && amt >= 100 && G.quests.bee_number === "active") {
     _setFlag("beeBanked");
@@ -3503,10 +3507,13 @@ function _doPhoneScreen() {
   } else if (G.phone.inbox.length) {
     _say("📭 No new messages.", "dim");
   } else {
-    _say("📭 No messages — nobody has your number yet. (CONTACT a lady and she'll start texting.)", "dim");
+    _say(Object.keys(G.phone.contacts || {}).length
+      ? "📭 No messages yet. (CONTACT a lady and she'll start texting.)"
+      : "📭 No messages — nobody has your number yet. (CONTACT a lady and she'll start texting.)", "dim");
   }
   if (G.phone.invite && G.phone.invite.day === G.day && NPCS[G.phone.invite.id]) {
-    _say(`📌 ${NPCS[G.phone.invite.id].name} asked you to come by her bar tonight.`, "dim");
+    _say(`📌 ${NPCS[G.phone.invite.id].name} asked you to come by her bar tonight.` +
+      ((typeof _closedNow === "function" && _closedNow(_npcRoom(G.phone.invite.id))) ? " (Her bar has shut for the night — she'll keep the seat tomorrow.)" : ""), "dim");
   }
   const nPhotos = (Array.isArray(G.phone.photos) ? G.phone.photos : []).filter(p => NPCS[p.id]).length;
   if (nPhotos) _say(`📸 ${nPhotos} photo${nPhotos > 1 ? "s" : ""} in your gallery — GALLERY.`, "dim");
@@ -3521,7 +3528,8 @@ function _doPhoneScreen() {
     }
     _say("(READ PAPER for the rest, or WATCH TV.)", "dim");
   }
-  _say("🦉 The Nite Owl's weekly newsletter sits unread in your inbox — OWL.", "dim");
+  _say(G.owlRead ? "🦉 This week's Nite Owl is in your inbox — OWL." :
+    "🦉 The Nite Owl's weekly newsletter sits unread in your inbox — OWL.", "dim");
 }
 
 // Adopt a soi dog and the Soi Dog Foundation somehow has your number by the next
@@ -4006,7 +4014,9 @@ function _dailyJoke() {
   const body = _JOKE_TEXTS[_hh("joke" + G.vacation + "_" + n, 41) % _JOKE_TEXTS.length]
     .replace(/^Unknown: /, "");
   G.phone.inbox.push({
-    from: "unknown", fromName: "+66 8" + (_hh("num" + G.vacation, 17) % 9) + " ••• ••••",
+    // the phone learns what it has been told: after he introduces himself the
+    // number has a name (Gordon, round 37 — still "+66 8• ••• ••••" three nights on)
+    from: "unknown", fromName: _flag("jokeWho") ? "Mort" : "+66 8" + (_hh("num" + G.vacation, 17) % 9) + " ••• ••••",
     text: body + (n === 1 ? "  (You have no idea who this is. REPLY, or STOP them.)" : ""),
     read: false,
   });
@@ -4028,8 +4038,10 @@ function _doJokeReply() {
   if (!G.phone.jokeN) { _say("Reply to what? Nobody's sent you anything."); return; }
   if (_flag("jokeStop")) { _say("You told him to stop. He stopped. That's the sort of man he is."); return; }
   if (_flag("jokeWho")) {
-    _say("“Ha! Still reading them. Good man. Come and find me — Queen Vic, most nights, " +
-      "the end stool with the notebook.”", "thai");
+    const inTonight = typeof _npcWhere === "function" && _npcWhere("mort") === "queen_vic";
+    _say(inTonight
+      ? "“Ha! Still reading them. Good man. Come and find me — Queen Vic, the end stool with the notebook. I'm on it now.”"
+      : "“Ha! Still reading them. Good man. Not in tonight, mind — the knees. Queen Vic tomorrow, the end stool with the notebook.”", "thai");
     return;
   }
   _setFlag("jokeWho");
@@ -4041,7 +4053,9 @@ function _doJokeReply() {
     "longer than most of these bars. I test the jokes on the numbers I collect. Most people " +
     "never reply, some tell me to stop, and about one in forty writes back.” Another pause. " +
     "“You’re one in forty. Come and have a beer, Queen Vic. I’ll buy — I’ve a use for a man " +
-    "who answers his phone.”", "thai");
+    "who answers his phone.”" +
+    ((typeof _npcWhere === "function" && _npcWhere("mort") === "queen_vic") ? "" :
+      " A second text, a beat later: “Not tonight, mind — I’m in my slippers. Tomorrow.”"), "thai");
   _say("(Mort. Queen Vic, most nights, end stool. OWL pulls up this week's issue.)", "dim");
 }
 
@@ -4116,14 +4130,22 @@ function _maybeIncomingText() {
         `you where na? 👀 come sit with ${name}, i save you the good stool`,
         `tonight have music! you come? ${name} wait you 🎶🍺`,
       ], "invite2")); }
-    else if (roll < 0.6) _pushMsg(id, `family of me sick need medicine 300 🥺 you help little bit na? (SEND 300 TO ${NPCS[id].name.toUpperCase()})`);
+    else if (roll < 0.6) _pushMsg(id, _pickVary([
+      `family of me sick need medicine 300 🥺 you help little bit na? (SEND 300 TO ${NPCS[id].name.toUpperCase()})`,
+      `mama go hospital today 😢 i short 300 for medicine... you can? (SEND 300 TO ${NPCS[id].name.toUpperCase()})`,
+      `sorry ask you na 🙏 room rent tomorrow, i short 300. next month i pay you back (SEND 300 TO ${NPCS[id].name.toUpperCase()})`,
+      `little brother school fee 300 😔 i no like ask but you good heart (SEND 300 TO ${NPCS[id].name.toUpperCase()})`,
+    ], "ask2:" + id));
     else _pushMsg(id, _CHATTER[Math.floor(_rand() * _CHATTER.length)]);
   } else { // a name and a number: the classic mix, scam-ask heavy
     if (roll < 0.3) { G.phone.invite = { id, day: G.day };
       _pushMsg(id, `bar quiet tonight 😴 you come see ${name}?? i keep you seat 💺💕`); }
     else if (roll < 0.65) _pushMsg(id, ["somebody in family sick, need buy medicine 300 baht 🥺 you help?",
       "phone of me break!! need 500 for fix... you good heart na 🙏",
-      "buffalo of family very sick 😭😭 200 baht help little bit?"][Math.floor(_rand() * 3)]);
+      "buffalo of family very sick 😭😭 200 baht help little bit?",
+      "motorbike of me broken 😩 mechanic say 400. you help little? i pay back",
+      "no customer 3 day already 😢 mama angry. 300 for room na, please",
+      "papa need medicine, pharmacy 250 baht. sorry i ask you 🙏🙏"][Math.floor(_rand() * 6)]);
     else if (roll < 0.9) _pushMsg(id, _CHATTER[Math.floor(_rand() * _CHATTER.length)]);
     else _pushMsg(id, "lucky day!! I win lottery small small 🎉 send you luck money", 50);
   }
@@ -4386,7 +4408,7 @@ const _DRIZZLE_DARK = [
     "fairy lights smear. A dog relocates one metre to the left and considers " +
     "the matter closed.",
   "Drizzle over the soi, and the smell of wet earth under the charcoal — out here " +
-    "the rain still lands on ground, not pavement. Somebody turns the TV up one notch.",
+    "the rain still lands on ground, not pavement. Somewhere off the road a TV goes up a notch.",
 ];
 
 function _sheltered(id) {
@@ -7526,6 +7548,7 @@ function _owlPick(arr, salt) {
 // needs no battery. Box 15 — the CTF anchor — rides in the body either way, so it
 // survives whichever form the issue takes.
 function _doColumn() {
+  G.owlRead = true;   // the banner stops calling it unread (Gordon, round 37)
   if (G.room === "queen_vic") {
     _say("The Queen Vic still runs off a few hard copies for the regulars — the last bar in " +
       "town that bothers, and the Owl's home patch. A thin stack by the till, going soft, " +

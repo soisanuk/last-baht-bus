@@ -2185,7 +2185,7 @@ const ROOMS = {
     bar: "Candy Bar 2", barType: "beer",
     outlet: true, liveMusic: true,
     desc: "Candy's second front: the same rose-pink, the same spotless glasses, the " +
-      "same bell over a newer till — the empire expands. Bee runs the floor with a " +
+      "same bell over a newer till — the empire expands. Bee works the floor with a " +
       "trainee's energy and the boss's exact smile. A framed photo of the original " +
       "bar hangs behind the bottles, signed 'สู้ๆ — Candy'.",
     exits: { out: "myth_night" },
@@ -2403,7 +2403,7 @@ const ROOMS = {
       "Tukcom's frontage sits dark down the road, all shutters and dead signage.",
       "Nobody lingers on this corner. It isn't a corner for lingering on.",
     ],
-    exits: { n: "buakhao_s", w: "pattaya_tai" },
+    exits: { n: "buakhao_s", w: "pattaya_tai", e: "sukhumvit_verge" },
   },
   second_rd_diamond: {
     busStop: "secondrd", // on the route — hail-anywhere, no formal stop (2026-08-15 canon)
@@ -3441,14 +3441,43 @@ const ROOMS = {
   },
 
   // ─── The Darkside ───
+  // The Darkside was a walking island (Darren, round 37): the crossing had one
+  // exit, east, and TRAVEL could not find town from anywhere past the highway —
+  // while the transport rework's own thesis says "worst case you walk, even
+  // from the Darkside". This is the walk: South Pattaya Road running out east
+  // of Soi Buakhao into the highway, then the verge south to the Khao Talo
+  // crossing. Long, dark (the streak counts), free — and the Pattaya Tai trucks
+  // run it (BUS_LINES.sukhumvit), because Sukhumvit IS the main road.
+  sukhumvit_verge: {
+    name: "Sukhumvit Road (the verge)",
+    region: "Darkside",
+    dark: true,
+    busStop: "sukhumvit",   // the Pattaya Tai trucks — see BUS_LINES.sukhumvit
+    desc: "South Pattaya Road runs out past Soi Buakhao into shuttered shophouses, a " +
+      "closed tyre shop, a temple wall — and then Sukhumvit itself, eight lanes of trucks " +
+      "doing ninety under sodium lamps. The verge south toward the Khao Talo crossing is " +
+      "a footpath in theory: gravel, a drainage ditch, the wind off every lorry. A " +
+      "songthaew with SUKHUMVIT on the board slows for anyone who looks like a fare. " +
+      "Two kilometres of this, on foot. Nobody walks it twice.",
+    revisit: [
+      "The verge again: gravel, ditch, lorry-wind. The temple wall has not moved.",
+      "A truck's slipstream shoves you a step sideways. The footpath is a rumour here.",
+      "Headlights, headlights, a gap, headlights. The crossing is somewhere in the sodium haze ahead.",
+      "A songthaew slows, reads you, and moves on when you don't raise a hand.",
+    ],
+    exits: { w: "buakhao_pt", e: "sukhumvit_crossing" },
+  },
   sukhumvit_crossing: {
     name: "Sukhumvit Crossing",
     region: "Darkside",
     desc: "Eight lanes of Sukhumvit Road roaring between you and the Darkside — the east " +
       "side, where expats go when they stop being tourists. On foot this is a coin flip " +
-      "with a truck. The motosai drivers do it forty times a night.",
+      "with a truck. The motosai drivers do it forty times a night. West, the verge runs " +
+      "back up the highway toward South Pattaya Road — the long way home, and the " +
+      "Pattaya Tai trucks stop here for anyone who'd rather ride it.",
     motosai: true,
-    exits: { e: "khao_talo_strip" },
+    busStop: "sukhumvit",   // the Pattaya Tai trucks — see BUS_LINES.sukhumvit
+    exits: { w: "sukhumvit_verge", e: "khao_talo_strip" },
   },
   khao_talo: { motosai: true,
     name: "Soi Khao Talo",
@@ -3650,7 +3679,7 @@ const ROOMS = {
       "black — you hear it rather than see it. The Boathouse's chairs are up on its tables, " +
       "the grills are cold and wiped, and the only light on the road is the Sundowner's, " +
       "spilling a short way onto the tarmac and stopping. Somewhere out on the water a fish " +
-      "turns over. Nobody walks a dog at this hour.",
+      "turns over.",
     venues: ["lake_bar", "lake_beer"],
     exits: { s: "khao_talo" },
   },
@@ -11054,6 +11083,10 @@ const BUS_LINES = {
   // Ordered north→south; buakhao_oil is a shop off the road, not a stop.
   buakhao:  ["buakhao_klang", "buakhao_myth", "buakhao_tt", "buakhao_honey",
              "buakhao_lk", "buakhao_n", "buakhao_market", "buakhao_s", "buakhao_pt"],
+  // Sukhumvit is the main road: the South Pattaya Road trucks run the junction
+  // out to the highway and down to the Khao Talo crossing. Local (not the town
+  // circuit), so a miss offers the charter like the Buakhao shuttle does.
+  sukhumvit: ["pattaya_tai", "buakhao_pt", "sukhumvit_verge", "sukhumvit_crossing"],
 };
 
 // Lines whose driver will leave his route for a price (see _doRideBus). NOT
@@ -11061,7 +11094,7 @@ const BUS_LINES = {
 // short local, and its flat refusal is deliberate and pinned by a test
 // (persona B#13, 2026-08-23: an off-route ask must be ANSWERED, not swallowed).
 // The charter is a Soi Buakhao rule, so it is named here rather than inferred.
-const LOCAL_SHUTTLES = new Set(["buakhao"]);
+const LOCAL_SHUTTLES = new Set(["buakhao", "sukhumvit"]);
 
 // ── Motosai destinations (from any stand) ──────────────────────────────────
 
@@ -11267,11 +11300,21 @@ const ENCOUNTERS = {
     // The two-step catfish + the hit live in _ENC.booking / _catfishDoor.
     rooms: ["hotel_room", "qv_room", "areca_room", "metropole_room", "naklua_rd"],
     interactive: true, nightly: true,
-    intro: "Your phone buzzes — one of the girls you'd been messaging off the apps, " +
-      "the stunner from the photos who kept leaving you on read, is suddenly awake " +
-      "and suddenly free. “Hi baby, I finish work. I come you now? 2500, no bar, no " +
-      "barfine, only you.” It is gone 1 a.m. The photos are, it must be said, " +
-      "extraordinary.",
+    intro: [
+      "Your phone buzzes — one of the girls you'd been messaging off the apps, " +
+        "the stunner from the photos who kept leaving you on read, is suddenly awake " +
+        "and suddenly free. “Hi baby, I finish work. I come you now? 2500, no bar, no " +
+        "barfine, only you.” It is gone 1 a.m. The photos are, it must be said, " +
+        "extraordinary.",
+      "The phone lights the ceiling. An app girl you'd written off three days ago — six " +
+        "photos, two words, then silence — is suddenly all words. “Baby you sleep?? I free " +
+        "now. Come you 2500, no bar. Only you, na.” Small hours, and the photos have not " +
+        "got any less extraordinary.",
+      "A buzz, a name you'd half forgotten from the app, and a message that reads like it " +
+        "was typed in a taxi: “finish work now!! i come hotel? 2500 all night no bar no " +
+        "barfine 💋”. It is late enough that this is either the best idea of the week or " +
+        "the worst, and the photos argue hard for the first.",
+    ],
     hint: "(YES, book her — she'll be a while — or NO and turn in.)",
   },
   clubpickup: { solo: true,
@@ -11433,7 +11476,7 @@ const QUESTS = {
     name: "An Introduction",
     giver: "candy",
     desc: "Candy is vouching you into a discreet club — the kind of place you don't find, you get " +
-      "sent. Get the sending first (ASK CANDY ABOUT ROSE), then go and tell Rose who sent you.",
+      "sent. Get sent first — Candy will do it when the club comes up (ASK CANDY ABOUT ROSE) — then go and tell Rose who sent you.",
     deps: [],
     reqFlags: ["act1Done"],
     at: "rose",
@@ -15451,6 +15494,7 @@ const ROOM_GEO = {
   metro_garden:     [12.9297, 100.88448],
   pit_stop:         [12.92966, 100.88434],
   // The Darkside
+  sukhumvit_verge:  [12.9190, 100.8965],  // sketched: the verge between Pattaya Tai's east end and the Khao Talo crossing
   sukhumvit_crossing: [12.91004, 100.89620],
   khao_talo_strip:  [12.90782, 100.90693],
   shamrock:         [12.90802, 100.90665],  // the dark end of the strip

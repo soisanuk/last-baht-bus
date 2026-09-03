@@ -2421,9 +2421,12 @@ function _tick() {
         "street steams, the music comes back up to volume, and the town picks " +
         "up exactly where it left off.", "alert");
     }
-  } else if (_wxStormy() && G.turns - G.lastRain >= 30 && _rand() < 0.08) {
+  // No downpours during the opening race: a September start ate eighteen of
+  // the hundred turns in four blocked-move downpours and the do-or-die night was
+  // lost to weather nobody chose (Darren, round 37). Drizzle still prints.
+  } else if (_flag("act1Done") && _wxStormy() && G.turns - G.lastRain >= 30 && _rand() < 0.08) {
     _startRain(3 + Math.floor(_rand() * 6));
-  } else if (_wetSeason() && _wxRainy() && G.turns - G.lastRain >= 30 && _rand() < 0.11) {
+  } else if (_flag("act1Done") && _wetSeason() && _wxRainy() && G.turns - G.lastRain >= 30 && _rand() < 0.11) {
     // the monsoon-months amplifier: a rainy (not stormy) sky becomes a downpour
     _startRain(3 + Math.floor(_rand() * 6));
   } else if (_wxRainy() && G.turns - G.lastDrizzle >= 15 && _rand() < (_wetSeason() ? 0.10 : 0.05)) {

@@ -209,7 +209,7 @@ function _salengTick() {
     if (here) _say("The saleng packs up its trestles and putters on down the soi, the girls waving after it.", "dim");
     return; // never spawn a replacement the same tick it leaves
   }
-  if (_salengHere()) { if (_rand() < 0.20) _salengVignette(); return; }
+  if (_salengHere()) { if (!_lockedIn() && _rand() < 0.20) _salengVignette(); return; }   // windows black, door bolted: no cart vignette (Darren, round 37)
   if (!G.game && !G.pendingEnc && !G.salengCart && _inBar() && _room().barType !== "pub" &&
       _room().barType !== "gents" && // enclosed villa behind a wall — no cart wheels in
       !(G.soc.lockIn && G.soc.lockIn[G.room]) && // the cart can't get past the bolt
@@ -315,15 +315,16 @@ function _startEnc(id) {
   const e = ENCOUNTERS[id];
   G.encDone[id] = true;
   G.lastEnc = G.turns;
+  const intro = Array.isArray(e.intro) ? _pickVary(e.intro, "encintro:" + id) : e.intro;
   if (e.interactive) {
     G.pendingEnc = id;
-    const lines = [[e.intro, "alert"]];
+    const lines = [[intro, "alert"]];
     if (e.th) lines.push([`“${e.th}” (${e.rom})`, "thai"]);
     if (e.hint) lines.push([e.hint, "dim"]);
     _encPrompt(...lines);
     if (e.th) _engineSpeak(e.th);
   } else {
-    _say(e.intro, "alert");
+    _say(intro, "alert");
     if (e.th) { _say(`“${e.th}” (${e.rom})`, "thai"); _engineSpeak(e.th); }
     _ENC[id]("");
   }
@@ -767,7 +768,13 @@ const _ENC = {
 
   noodle(input) {
     if (/yes|yeah|ok|okay|sure|come|fine|why not|\bgo\b|her|deal/.test(input)) {
-      _say(_pickVary(_NOODLE_YES, "noodleyes"));
+      // her bar is one of this street's fronts — name it, or the hint's ENTER
+      // lands on "Which one?" (Gordon, round 37). Pure hash, no dice.
+      const fronts = (_room().venues || []).filter(v => ROOMS[v] && ROOMS[v].barType && !(typeof _closedNow === "function" && _closedNow(v)));
+      const bar = fronts.length ? fronts[_hh(G.room + ":" + G.day, 5) % fronts.length] : null;
+      let line = _pickVary(_NOODLE_YES, "noodleyes");
+      if (bar) line = line.replace(/\(ENTER[^)]*\)/, `(ENTER ${_barName(bar).toUpperCase()} to follow it through — or drift off; the soi forgives fast.)`);
+      _say(line);
       return;
     }
     // walk on — THWACK. The bop itself is the payoff: pure, stupid, capped sanuk.
