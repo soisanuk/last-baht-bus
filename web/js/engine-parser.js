@@ -9492,6 +9492,13 @@ function _introAnswer(input) {
   // the same place in the two modes. This line used to say Soi 6 for both, so
   // the full game was set down on the wrong side of town, told its hotel was in
   // Naklua, and then woke up on a beach in Jomtien — three locations, no thread.
+  // The one habit an outsider needs before anything else (accessibility pass,
+  // 2026-09-03): a soi runs on asking, and a first-timer types LOOK. Tan says
+  // it once, on the ride, before Nok says it again on the sand.
+  _say("\"One thing, my friend, before you get out.\" Tan finds your eyes in the mirror. " +
+    "\"This town — you ASK. Nobody here reads a sign. A bar, a girl's name, where the bus " +
+    "goes, who has what — you ask the man on the corner, the girl on the stool, me. Look " +
+    "all you like. Asking is how it moves.\"");
   if (G.introAfter === "soi6") {
     _say("\"Okay. I got you.\" Tan swings off Second Road and the neon of Soi 6 " +
       "swallows the windscreen. He drops you at the mouth of the soi, presses a cold " +

@@ -7430,6 +7430,38 @@ const _OWL_JOKES = [
   "New spectator sport on the Beach Road promenade: two ladies who discovered over the same seafood platter that they share a boyfriend, and the boyfriend discovering that a man cannot outrun a flip-flop thrown sidearm. Admission, one phone. Streaming now.",
   "Q: What does a Bangkok father call your online business? A: A hobby. Q: What does he call the bill? A: Nothing — he doesn't look at it.",
 ];
+// FOR THE NEWLY ARRIVED — the five words, in the Owl's voice, a standing slot
+// for a player's first week (accessibility pass, 2026-09-03: every one of these
+// is taught somewhere in the game, but an outsider met the word before the
+// teaching). Prices are the constants, never digits.
+const _OWL_ARRIVED = [
+  () => "FOR THE NEWLY ARRIVED, since the Owl gets the same five questions every high season. " +
+    "A BARFINE is two fees, squire, and the second is the one you'll forget: the bar's, to let " +
+    "her leave her stool, and then hers, agreed between the two of you and never written on any " +
+    "board. SHORT TIME is one round and she's back on the stool; LONG TIME is the night. A LADY " +
+    `DRINK is ฿${LADY_DRINK} for a glass of something coloured, of which she keeps a cut — it is ` +
+    "the rent on her attention and the only honest price in the room. The MAMASAN runs the floor " +
+    "and the CASHIER runs the money; in a small bar they are one woman who has not had a night " +
+    `off since the war. The blue trucks are SONGTHAEWS — ฿${BUS_FARE}, sit, hop off, pay at the ` +
+    "back — and the lads on the corner in the vests are PIWINS, motorbike taxis, who will take " +
+    "you anywhere for a price that goes up after two. That's the vocabulary. The grammar you " +
+    "learn on a stool.",
+  () => "A NOTE FOR FIRST-TIMERS, because a reader wrote in asking what the difference is. A " +
+    "BEER BAR is a stool with the street on one side and a girl on the other; a SOI 6 BAR is " +
+    "the same stool with a staircase behind it; a GO-GO is a stage, chrome, and a bell that " +
+    "buys the room a round; a GENTLEMAN'S CLUB is a sofa behind a curtain in a villa with " +
+    `the air-con set to Norway. A beer there is ฿${BEER_PRICE} at the cheapest and climbs by ` +
+    "the class of the room, and nobody will tell you the number until it's in your hand — ask " +
+    "(tao rai, squire: how much) before the glass lands. And one more: everybody in every one " +
+    "of these rooms would rather you ASKED than looked. This is a town that talks. Use it.",
+  () => "THE OWL'S PHRASEBOOK, abridged, for the man who arrived Tuesday. SAWATDEE (hello) and " +
+    "KHOP KHUN (thanks) will get you further than the whole Lonely Planet. TILAC is what she " +
+    "calls you; it means darling and it means nothing. FARANG is you. A WAI — hands together, " +
+    "small bow — is worth more at the right moment than a five-hundred note at the wrong one, " +
+    "and the Owl has watched a wallet come back on the strength of one. MAO is drunk; you will " +
+    "be told you are. And CHEAP CHARLIE is what they call the man who read this column and " +
+    "still didn't buy her the drink. Don't be him. Don't be the other one either.",
+];
 const _OWL_LISTINGS = [
   "STINKY BAR (Beach Road North), the American's shop, runs killer pool every third night — ฿100 in the ashtray, last cue standing takes the pot. His felt, his rules, his Singha.",
   "BLUE DOG (Beach Road North) keeps the best sunset seats on the strip and, six-to-seven nightly, the finest free show in town: the checkpoint across the road, farang and their paperwork, no cover charge.",
@@ -7584,6 +7616,8 @@ function _doColumn() {
   }
   _say("── THE NITE OWL ── Mort's hoot, still going, out of spite ──", "win");
   _say(_owlPick(_OWL_LEADS, 1));
+  // the standing first-week slot: gone once you've been here a week (a resident reads past it)
+  if ((G.vacation || 1) <= 1 && G.day <= 7) _say("• " + _owlPick(_OWL_ARRIVED, 53)(), "dim");
   _say("• " + _owlPick(_OWL_LISTINGS, 7), "dim");
   // one-shot: if the amulet went back and the Owl has not had his say yet, he
   // gets it this issue instead of a pooled letter

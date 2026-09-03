@@ -160,3 +160,21 @@ test("a named exit typed into a soft pitch walks you off — the decline AND the
   assert.equal(G.pendingEnc, null, "the pitch lapsed");
   assert.equal(G.room, ROOMS[room].exits.alley, "…and you walked");
 });
+
+// ── The accessibility pass (2026-09-03): one habit and five words ──
+test("Tan says the one habit on the ride: this town, you ASK", () => {
+  newGame(); G.player = {}; out = [];
+  engineIntro();                      // the taxi intro
+  run("1", "1", "1");                 // three picks in character
+  assert.match(text(), /This town — you ASK\. Nobody here reads a sign/);
+  assert.match(text(), /Auntie Nok/, "…and then Nok says it again on the sand");
+});
+
+test("the Owl keeps a standing slot for the newly arrived, for the first week only", () => {
+  G.vacation = 1; G.day = 3; G.battery = 50; G.room = "beach_rd_c";
+  run("owl");
+  assert.ok(_OWL_ARRIVED.some(f => text().includes(f().slice(0, 60))), "the five words, in his voice");
+  assert.match(text(), new RegExp(`฿${LADY_DRINK}|฿${BUS_FARE}|฿${BEER_PRICE}`), "prices are the constants");
+  G.day = 12; out = []; run("owl");
+  assert.ok(!_OWL_ARRIVED.some(f => text().includes(f().slice(0, 60))), "a resident reads past it");
+});
