@@ -172,3 +172,51 @@ test("the money-ask texts and the thank-yous are pools, not one template with th
   assert.match(src, /mama go hospital today/); assert.match(src, /motorbike of me broken/);
   assert.match(src, /"sendmid:" \+ id/);
 });
+
+// ── Crossing Sukhumvit on foot (Mario, 2026-09-03) ──
+test("both rooms say what the highway does to people on foot", () => {
+  assert.match(ROOMS.sukhumvit_crossing.desc, /kills a handful of people/);
+  assert.match(ROOMS.sukhumvit_crossing.desc, /\(MOTOSAI TO DARKSIDE\)/, "and name the sane answer as a verb");
+  assert.match(ROOMS.sukhumvit_verge.desc, /people die on this road every year/);
+});
+
+test("the crossing on foot is a roll: clean, a clip, or the ward — bus and bike never roll (Mario)", () => {
+  const saved = _rand;
+  try {
+    _rand = () => 0.99;                       // the dice are kind
+    G.room = "sukhumvit_crossing"; out = []; run("e");
+    assert.equal(G.room, "khao_talo_strip");
+    assert.ok(_CROSS_CLEAN.some(l => text().includes(l)), "the act is felt even when it goes fine");
+    _rand = () => 0.0;                        // the dice are cruel: first roll hits, second picks the truck
+    G.room = "sukhumvit_crossing"; G.soc.drunk = 0; const day = G.day; out = []; run("e");
+    assert.ok(_CROSS_HIT.some(l => text().includes(l)));
+    assert.equal(G.day, day + 1, "the night ended in the ward");
+    assert.equal(G.nightLog[G.nightLog.length - 1], "roadhit");
+    assert.ok(_HOSP_WHY.roadhit.some(l => text().includes(l)), "a pedestrian's morning, not a pillion's");
+    let seq = [0.0, 0.9];                     // hit, but not the truck: the clip
+    _rand = () => seq.shift() ?? 0.99;
+    G.room = "sukhumvit_crossing"; G.soc.drunk = 0; G.hurt = 0; out = []; run("e");
+    assert.equal(G.hurt, 1); assert.equal(G.room, "khao_talo_strip");
+    assert.ok(_CROSS_CLIP.some(l => text().includes(l)));
+    // the bus doesn't roll: same cruel dice, no crossing prose
+    _rand = () => 0.0; G.room = "sukhumvit_crossing"; G.money = 500; G.nightTurn = 30; out = [];
+    run("ride bus to pattaya tai", "pay 15");
+    assert.equal(G.room, "pattaya_tai"); assert.ok(!_CROSS_HIT.some(l => text().includes(l)));
+  } finally { _rand = saved; }
+});
+
+test("drink and the small hours raise the crossing's risk; TRAVEL through it pays the same roll", () => {
+  const saved = _rand;
+  try {
+    // the risk is what the roll is compared against: at 8 drinks, late, a 0.3 roll is a hit; sober early it is not
+    _rand = () => 0.3;
+    G.room = "sukhumvit_crossing"; G.soc.drunk = 0; G.nightTurn = 30; out = []; run("e");
+    assert.equal(G.room, "khao_talo_strip", "sober, early: 0.3 clears a 4% risk");
+    _rand = () => 0.3; G.room = "sukhumvit_crossing"; G.soc.drunk = 8; G.nightTurn = 85; G.hurt = 0; out = []; run("e");
+    assert.ok(G.hurt >= 1 || G.nightLog[G.nightLog.length - 1] === "roadhit", "eight deep at three a.m., the same roll is a hit");
+    newGame(); _setFlag("act1Done"); G.money = 5000; for (const e of Object.keys(ENCOUNTERS)) G.encDone[e] = true;
+    _rand = () => 0.99; G.room = "khao_talo"; G.visited.stinky_bar = true; G.hunger = 0; G.thirst = 0; out = [];
+    run("travel stinky pinky");
+    assert.ok(_CROSS_CLEAN.some(l => text().includes(l)), "TRAVEL walked the crossing and it was narrated");
+  } finally { _rand = saved; }
+});

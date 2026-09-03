@@ -300,6 +300,61 @@ const _GOGO_UPSTAIRS = [
   "The staircase is right there and entirely off-limits: the mamasan plants herself on the bottom step. \"You want to go up? Buy a lady, pay her fine, she takes you. Only way the stairs work here.\"",
 ];
 
+// ── Crossing Sukhumvit on foot ───────────────────────────────────────────────
+// Eight lanes, at night, with drunk drivers and unlit bikes: the highway kills a
+// handful of pedestrians every year doing exactly this (Mario, 2026-09-03 —
+// "should be reflected in the prose", and it is, in both rooms; this is the
+// other way to reflect it). The roll runs on the one foot move that IS the
+// crossing — sukhumvit_crossing ↔ khao_talo_strip — whether you walk it or
+// TRAVEL through it. Bus and bike never roll here (the piwin's own risk lives
+// in _motoCrashRisk). Drink and the small hours raise it, as they do on the
+// road. Player-initiated, so the dice are fine. Outcomes: a clean crossing
+// (voiced — the act is felt), a near-miss telegraph, a clip (G.hurt +1, the
+// ward at three), or the truck: _endNight("roadhit"), the public ward,
+// insurance, no bill. Returns true when the night ended, so callers stop.
+const _CROSS_CLEAN = [
+  "You wait for a gap that is never quite a gap, then go — four lanes, the central reservation's knee-high kerb, four more, a horn from somewhere that may or may not be for you. Your heart is doing something you can hear.",
+  "Eight lanes, taken in two runs with a wait on the concrete in the middle while a convoy of pickups goes past close enough to feel. You arrive on the far side walking too fast.",
+  "You cross the way the locals do — a hand held up flat at the traffic as if it were a spell, eyes on the far kerb, never on the lights. It works. You are not sure why it works.",
+  "A bus's slipstream, a bike's horn, the sodium lights making every distance a guess. You run the last two lanes and stand on the far verge breathing like a man who has been told something.",
+];
+const _CROSS_NEAR = [
+  "A pickup you never saw comes out of the dark lane with no lights on it at all. The wing mirror passes your elbow close enough to feel the paint. He does not slow down. He may not have seen you either.",
+  "Halfway across, the gap you read closes — a bike overtaking a truck on the inside, dark, fast, drunk or just Thai. You stop dead on the line between lanes and it goes past both sides of you. Then you finish crossing, badly.",
+  "The horn comes after the car, not before. You are on the far kerb by then and only realise how close it was when your hands won't hold the lighter still.",
+];
+const _CROSS_CLIP = [
+  "The last lane, the one you stopped watching: a bike with no headlight takes your hip with its handlebar and you spin onto the verge. The bike wobbles, recovers, and is gone. You get up. Everything works, more or less. Something in the hip disagrees.",
+  "A wing mirror — a pickup's, at speed — catches your shoulder and turns you round. You end up sitting on the central reservation with gravel in both palms and the traffic going past a metre from your knees, and you wait there a long time before finishing the crossing.",
+];
+const _CROSS_HIT = [
+  "The gap closes. You have time to see it close — a Vigo, high beams, a driver looking at his phone — and then the road takes the rest of the night.",
+  "You never see it. Something big and dark and fast, and the highway does what the highway does to people on foot at this hour.",
+];
+function _footCrossing(from, to) {
+  const pair = (from === "sukhumvit_crossing" && to === "khao_talo_strip") ||
+    (from === "khao_talo_strip" && to === "sukhumvit_crossing");
+  if (!pair || G.mode === "soi6") return false;
+  const late = G.nightTurn >= LAST_BUS_TURN;
+  const risk = Math.min(0.45, 0.04 + 0.03 * (G.soc.drunk || 0) + (late ? 0.04 : 0));
+  const roll = _rand();
+  if (roll < risk) {
+    // a hit: the truck, when you're deep in drink or the dice are cruel; else the clip
+    if (G.soc.drunk >= 6 || _rand() < 0.4) {
+      _say(_pickVary(_CROSS_HIT, "crosshit"), "alert");
+      _endNight("roadhit");
+      return true;
+    }
+    G.hurt = (G.hurt || 0) + 1;
+    _say(_pickVary(_CROSS_CLIP, "crossclip"), "alert");
+    if (G.hurt >= 3) { _endNight("hurt"); return true; }
+    return false;
+  }
+  if (risk >= 0.1 && _rand() < 0.4) _say(_pickVary(_CROSS_NEAR, "crossnear"), "alert");
+  else _say(_pickVary(_CROSS_CLEAN, "crossclean"), "dim");
+  return false;
+}
+
 function _doGo(dirWord) {
   // aliases first; then ANY literal exit key of this room (pub, hotel, …) —
   // the Exits line decorates every key as a tap target, so every key must walk
@@ -348,6 +403,7 @@ function _doGo(dirWord) {
   // move invalidates that memory. (Single-door venues: enteredVia === exits.out.)
   const to = (dir === "out" && G.enteredVia) ? G.enteredVia : r.exits[dir];
   G.enteredVia = null;
+  if (_footCrossing(G.room, to)) return;   // eight lanes of Sukhumvit, on foot — the night may end here
   // a downpour owns the street: nothing moves except into shelter
   if (G.rain > 0) {
     // …unless you had the sense to buy an umbrella. The rain still owns the
@@ -852,6 +908,7 @@ function _doTravel(arg) {
   const startDay = G.day, g0 = G;
   const route = _path(G.room, dest) || [];
   for (let i = 0; i < hops - 1; i++) {
+    if (route[i] && _footCrossing(G.room, route[i])) return;   // TRAVEL walks the real route, highway included
     if (route[i]) G.room = route[i];   // a step of actual soi, quietly walked
     _tick();
     if (G !== g0) return; // an Act One dawn mid-walk rebuilt the world (same-day reset — see _doWait)
@@ -8991,7 +9048,7 @@ function _dailySeed(str) {
 // no quest, no venue), so a posted card teases without spoiling.
 const _NIGHT_EMOJI = {
   sleep: "🛏", barfine: "💋", dawn: "🌅", allnighter: "🌇", blackout: "🍺", collapse: "😵",
-  hurt: "🚑", accident: "🛵", robbed: "💸", bfscam: "🐍",
+  hurt: "🚑", accident: "🛵", roadhit: "🚛", robbed: "💸", bfscam: "🐍",
 };
 
 // The Wordle-shaped result card. Returns lines (the SHARE verb prints them;

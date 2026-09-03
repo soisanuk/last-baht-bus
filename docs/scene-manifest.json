@@ -90,7 +90,7 @@
       "sampleDescs": [
         "A long, plain soi of beer bars with no neon budget and no need for one. The ladies here are older, the customers older still, and every bar knows every customer's pour. It's seedier than town and more honest about it. DAENG'S PLACE holds the near end, and from the far side MAMA YAI'S sends out charcoal smoke and the smell of som tam being argued about.",
         "The working stretch of the soi: a dozen open-front bars shoulder to shoulder under one long tin roof, fairy lights doing the job neon does in town at a tenth of the wattage. Ladies call the odds from bamboo rails, a pool table clacks somewhere, and every third stool holds an expat who has been on it since the flood. THE WATER BUFFALO and FIREFLY BAR glow closest; the soi runs on east toward Daeng's end. At the dark end, a padded door with no sign worth reading — THE NIGHT HERON, if you know to ask — and beside it a dead Irish pub, THE SHAMROCK on its sun-bleached sign, shutters down for good.",
-        "Eight lanes of Sukhumvit Road roaring between you and the Darkside — the east side, where expats go when they stop being tourists. On foot this is a coin flip with a truck. The motosai drivers do it forty times a night. West, the verge runs back up the highway toward South Pattaya Road — the long way home, and the Pattaya Tai trucks stop here for anyone who'd rather ride it."
+        "Eight lanes of Sukhumvit Road roaring between you and the Darkside — the east side, where expats go when they stop being tourists. On foot this is a coin flip with a truck. Every year this road kills a handful of people trying exactly that — at night, when the drivers are drunk and half the bikes run dark, a gap closes faster than a man on foot can read it. The motosai drivers do it forty times a night for a hundred baht, and that is the sane answer (MOTOSAI TO DARKSIDE). West, the verge runs back up the highway toward South Pattaya Road — the long way home, and the Pattaya Tai trucks stop here for anyone who'd rather ride it."
       ]
     },
     {
@@ -999,7 +999,7 @@
       "kind": "street",
       "dark": false,
       "people": [],
-      "desc": "Eight lanes of Sukhumvit Road roaring between you and the Darkside — the east side, where expats go when they stop being tourists. On foot this is a coin flip with a truck. The motosai drivers do it forty times a night. West, the verge runs back up the highway toward South Pattaya Road — the long way home, and the Pattaya Tai trucks stop here for anyone who'd rather ride it."
+      "desc": "Eight lanes of Sukhumvit Road roaring between you and the Darkside — the east side, where expats go when they stop being tourists. On foot this is a coin flip with a truck. Every year this road kills a handful of people trying exactly that — at night, when the drivers are drunk and half the bikes run dark, a gap closes faster than a man on foot can read it. The motosai drivers do it forty times a night for a hundred baht, and that is the sane answer (MOTOSAI TO DARKSIDE). West, the verge runs back up the highway toward South Pattaya Road — the long way home, and the Pattaya Tai trucks stop here for anyone who'd rather ride it."
     },
     {
       "id": "sukhumvit_verge",
@@ -1012,7 +1012,7 @@
       "dark": true,
       "darkLight": null,
       "people": [],
-      "desc": "South Pattaya Road runs out past Soi Buakhao into shuttered shophouses, a closed tyre shop, a temple wall — and then Sukhumvit itself, eight lanes of trucks doing ninety under sodium lamps. The verge south toward the Khao Talo crossing is a footpath in theory: gravel, a drainage ditch, the wind off every lorry. A songthaew with SUKHUMVIT on the board slows for anyone who looks like a fare. Two kilometres of this, on foot. Nobody walks it twice."
+      "desc": "South Pattaya Road runs out past Soi Buakhao into shuttered shophouses, a closed tyre shop, a temple wall — and then Sukhumvit itself, eight lanes of trucks doing ninety under sodium lamps. The verge south toward the Khao Talo crossing is a footpath in theory: gravel, a drainage ditch, the wind off every lorry. A songthaew with SUKHUMVIT on the board slows for anyone who looks like a fare. Two kilometres of this, on foot, a metre from traffic that does not expect you: people die on this road every year doing exactly this, mostly at night, mostly somebody else's fault. Nobody walks it twice."
     },
     {
       "id": "water_buffalo",

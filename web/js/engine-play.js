@@ -3542,6 +3542,18 @@ const _HOSP_WHY = {
       "wasn't there at midnight and the taste of the pavement still in it somewhere. The district " +
       "hospital on Soi Buakhao. The city won last night; this is where it leaves the ones who argued.",
   ],
+  roadhit: [
+    "You surface under water-stained ceiling tiles with a leg in a cage of steel pins and the " +
+      "taste of the road still in your mouth. Sukhumvit. On foot. The nurse who changes the " +
+      "dressing says the word farang to a colleague in a tone you don't need translating: the " +
+      "highway gets a few of you every year, and this year it got you and let you keep the leg.",
+    "White light, a collarbone strapped, a headache with the shape of a pickup in it. The last " +
+      "clear frame is eight lanes of sodium and a gap that wasn't. A policeman came, they tell " +
+      "you, took no statement, and left; nobody is looking for the driver, because nobody ever is.",
+    "You come to with gravel still being tweezered out of your back and a plaster cast drying on " +
+      "an arm you don't remember putting out. The ward has seen this before. It has seen this " +
+      "before THIS MONTH — the bed opposite is a Russian who tried the same crossing on Tuesday.",
+  ],
   accident: [
     "You surface to water-stained ceiling tiles and a leg wrapped ankle to knee, the road rash " +
       "down one forearm dressed in gauze that's already weeping through. Somewhere between one bar " +
@@ -3995,7 +4007,7 @@ function _endNight(reason) {
     G.party = null;
     reason = "barfine";
   }
-  if (!_flag("act1Done") && ["dawn", "collapse", "blackout", "hurt", "accident"].includes(reason)) {
+  if (!_flag("act1Done") && ["dawn", "collapse", "blackout", "hurt", "accident", "roadhit"].includes(reason)) {
     _act1Fail(reason);
     return;
   }
@@ -4077,6 +4089,9 @@ function _endNight(reason) {
     case "hurt":
       _hospitalMorning("hurt"); // insurance covers the public ward — no bill
       _addHappy(-8);
+      break;
+    case "roadhit":
+      _hospitalMorning("roadhit");  // the highway, on foot — the ward, insurance, no bill
       break;
     case "accident":
       _hospitalMorning("accident"); // a road accident — the ward, insurance, no bill

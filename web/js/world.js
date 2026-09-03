@@ -3458,7 +3458,9 @@ const ROOMS = {
       "doing ninety under sodium lamps. The verge south toward the Khao Talo crossing is " +
       "a footpath in theory: gravel, a drainage ditch, the wind off every lorry. A " +
       "songthaew with SUKHUMVIT on the board slows for anyone who looks like a fare. " +
-      "Two kilometres of this, on foot. Nobody walks it twice.",
+      "Two kilometres of this, on foot, a metre from traffic that does not expect you: " +
+      "people die on this road every year doing exactly this, mostly at night, mostly " +
+      "somebody else's fault. Nobody walks it twice.",
     revisit: [
       "The verge again: gravel, ditch, lorry-wind. The temple wall has not moved.",
       "A truck's slipstream shoves you a step sideways. The footpath is a rumour here.",
@@ -3472,7 +3474,10 @@ const ROOMS = {
     region: "Darkside",
     desc: "Eight lanes of Sukhumvit Road roaring between you and the Darkside — the east " +
       "side, where expats go when they stop being tourists. On foot this is a coin flip " +
-      "with a truck. The motosai drivers do it forty times a night. West, the verge runs " +
+      "with a truck. Every year this road kills a handful of people trying exactly that — " +
+      "at night, when the drivers are drunk and half the bikes run dark, a gap closes faster " +
+      "than a man on foot can read it. The motosai drivers do it forty times a night for a " +
+      "hundred baht, and that is the sane answer (MOTOSAI TO DARKSIDE). West, the verge runs " +
       "back up the highway toward South Pattaya Road — the long way home, and the " +
       "Pattaya Tai trucks stop here for anyone who'd rather ride it.",
     motosai: true,

@@ -7252,6 +7252,13 @@ function _doPaper() {
 // (shared-world-safe like _quizBars), so it rotates daily and reads the same for
 // everyone that day. Pure flavor — gates nothing.
 const _OWL_LEADS = [
+  "Another one this month, squire, on Sukhumvit, on foot, at three in the morning — a man of " +
+    "our vintage who had drunk exactly enough to read a gap in eight lanes of traffic that " +
+    "wasn't there. The Owl has written this paragraph before and will write it again, because " +
+    "the highway takes a handful every year and the arithmetic never changes: the drivers are " +
+    "drunk, the bikes run dark, the pickups do ninety, and you are a soft thing in a dark shirt " +
+    "who has misjudged one distance. The piwins cross it forty times a night for a hundred baht. " +
+    "Pay the hundred baht. The Owl is not being funny.",
   "A reader of the dignified sort writes that he would never, ever date a bar girl — " +
     "he has found a BARISTA, squire, green apron and all, met quite by chance at a table " +
     "in LK Metro where she was visiting a friend, and she has never done anything like " +
