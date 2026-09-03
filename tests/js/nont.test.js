@@ -93,3 +93,33 @@ test("three surfaces, and the menu in his own mouth", () => {
   out = []; run("ask nont about prices"); assert.match(text(), /Pay me and we're square|Me you pay and/);
   out = []; run("withdraw 1000"); assert.match(text(), /foreign-card fee/, "the machine beside him still charges the fee — that is the contrast");
 });
+
+// ── A Crane for Her Brother: the girl he ghosted, and the two words on the back ──
+test("Kwan's crane: offered to a man who answered her, carried unopened, and it upsets him", () => {
+  G.room = "sunset_dreams"; _npcState("kwan").trust = 1; G.known.kwan = true;
+  run("talk to kwan"); run("1");            // she asks first; answer her, as a player would
+  out = []; run("ask kwan about brother");
+  assert.match(text(), /Take him something for me/);
+  if (!/A Crane for Her Brother/.test(text())) { out = []; run("talk to kwan"); }
+  assert.match(text(), /A Crane for Her Brother/, "offered");
+  run("accept crane"); assert.equal(G.itemLoc.crane_photo, "inventory");
+  assert.match(_questWhere(QUESTS.kwan_crane.at) || "", /Nont|Old Market|Buakhao/i, "the journal points at him");
+  G.room = "buakhao_market";   // in her own bar EXAMINE CRANE reads the squadron on the rail — a fixture outranks the pocket, by design
+  out = []; run("examine crane"); assert.match(text(), /Not yours to unfold/);
+  out = []; run("unfold crane"); assert.match(text(), /isn't yours to unfold/); assert.equal(G.itemLoc.crane_photo, "inventory");
+  out = []; run("open crane"); assert.match(text(), /isn't yours to unfold/);
+  const h = G.happy; out = [];
+  run("give crane to nont");
+  assert.ok(_flag("craneDelivered")); assert.equal(G.itemLoc.crane_photo, null);
+  assert.match(text(), /ไม่เป็นไร/); assert.match(text(), /Brother\. She said brother\?/); assert.match(text(), /Don't tell her anything/);
+  run("look");
+  assert.equal(G.quests.kwan_crane, "done"); assert.equal(G.happy, h + 3);
+  G.room = "sunset_dreams"; out = []; run("ask kwan about brother");
+  assert.match(text(), /Phi Nont never say anything/);
+});
+
+test("a stranger on a stool is not asked; the crane is a real item and the quest is well-formed", () => {
+  G.room = "sunset_dreams"; _npcState("kwan").trust = 0; G.known.kwan = true;
+  run("talk to kwan"); assert.doesNotMatch(text(), /A Crane for Her Brother/);
+  assert.ok(ITEMS.crane_photo && NPCS[QUESTS.kwan_crane.giver] && NPCS[QUESTS.kwan_crane.at]);
+});

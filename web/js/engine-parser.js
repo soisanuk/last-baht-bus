@@ -4092,6 +4092,14 @@ function _doGive(itemWord, npcWord) {
     _setFlag("helmetDelivered");
     return;
   }
+  if (id === "crane_photo" && npc === "nont") {
+    // "A Crane for Her Brother": the hand-off is the beat (world.js, nont.crane)
+    G.itemLoc.crane_photo = null;
+    _setFlag("craneDelivered");
+    const d = _pickDialogue("nont", "crane");
+    if (d) _deliver("nont", d);
+    return;
+  }
   if (id === "tiffin" && npc === "nont") {
     // "Look in on my boy": the hand-off is the witness beat (world.js, nont.tiffin)
     G.itemLoc.tiffin = null;
@@ -8726,7 +8734,12 @@ function doCommand(input) {
       else if (arg.includes("charger")) _doCharge();
       else _say("Be more specific.");
       break;
+    case "unfold": case "unwrap":
+      if (/crane|bird|photo/.test(arg) && G.itemLoc.crane_photo === "inventory") _say("It's folded tight, with intent, and it isn't yours to unfold. A slice of neon in one wing, half a face in the other — that is all you're getting, and all you should.");
+      else _say("Nothing to unfold.");
+      break;
     case "open":
+      if (/crane|bird/.test(arg) && G.itemLoc.crane_photo === "inventory") { _say("It's folded tight, with intent, and it isn't yours to unfold. A slice of neon in one wing, half a face in the other — that is all you're getting, and all you should."); break; }
       if (arg.includes("safe") && _isHotelRoom(G.room)) _doSafe();   // your own room safe (it answers in _doSafe)
       else if (arg.includes("safe")) _say("The keypad wants three digits: ENTER <digits> — Thai numerals work too.");
       else if (/fridge|refrigerator|mini.?bar/.test(arg)) _doFridge();

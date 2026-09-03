@@ -4365,6 +4365,20 @@ const ITEMS = {
     desc: "Twenty baht of black nylon cord off a 7-Eleven counter display, sold for exactly " +
       "this and nothing else. Half the men in this country are wearing one.",
   },
+  // Kwan's crane — the second errand with Nont as the target (Mario, 2026-09-04:
+  // "a former bar girl gf on Soi 6 who he ghosted; she wants you to take something
+  // to her 'brother'; whatever it is upsets him"). Folded from the one photograph
+  // she has of the two of them, with two Thai words on the back.
+  crane_photo: {
+    name: "Kwan's paper crane",
+    aliases: ["crane", "paper crane", "kwan's crane", "the crane", "bird", "paper bird"],
+    portable: true,
+    keepsafe: true,
+    location: null, // handed over by Kwan on ACCEPT (quest kwan_crane)
+    desc: "A crane folded from a glossy photograph, folded tight and with intent — in one " +
+      "wing a slice of a bar's neon, in the other half a face you can't make out. There is " +
+      "writing on the inside somewhere; you can see the edge of a letter. Not yours to unfold.",
+  },
   tiffin: {
     name: "a tiffin of Duangjai's fish",
     aliases: ["tiffin", "fish", "lunchbox", "food", "duangjai's fish", "the fish"],
@@ -6540,6 +6554,21 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         text: "\"You look tired,\" she says, and somehow it's the kindest thing anyone's said to you all night. She sets a paper crane by your hand. \"For luck. The soi makes everyone lucky once.\"",
         short: "She sets another paper crane by your hand. \"For luck.\"",
         asks: { key: "girlfriend", q: "She folds, not looking up, in no hurry. \"You have somebody? Home, waiting?\" It is not the sale question — she seems to want to know. \"Kwan think everybody here miss somebody. Even the loud one.\"" } },
+      // "my brother" — phi, the word she can use for him without losing face.
+      // The quest offer prints after this (QUESTS.kwan_crane); the node is the lead-in.
+      { topic: "brother|nont|phi", notFlags: ["craneDelivered"],
+        text: "\"My brother?\" The crane in her hands stops. \"Nont. Fix {{phone}} — Buakhao, the old " +
+          "market. Everybody know him.\" A fold, another fold. \"He don't know anybody. Not any " +
+          "more.\" She doesn't look up. \"You go there? Take him something for me. Small thing. " +
+          "Paper.\" The crane goes on the row with the others, and she starts the next one.",
+        short: "\"My brother. Buakhao, the old market. Take him something for me — small thing, paper.\"" },
+      { topic: "brother|nont|phi", req: ["craneDelivered"],
+        text: "\"You give?\" She doesn't ask what he said. She asks anyway, with her hands — the " +
+          "crane she is folding stops. \"He open it?\" Yes. \"He say something?\" Whatever you " +
+          "answer, she nods like it was the answer she expected. \"Phi Nont never say anything. " +
+          "That is how Kwan know he read it.\" The crane joins the row. \"Mai pen rai.\" She " +
+          "says it to the crane, not to you.",
+        short: "\"He open it? He say something? No. Phi Nont never say anything. Mai pen rai.\"" },
       { topic: "wallet", notFlags: ["hasWallet"],
         text: "She considers this, folding without looking down. \"Soi Buakhao,\" she says finally. \"The mamasans there know everything that moves through this town. Candy Bar — the mamasan there, she's the one.\" She adds the finished crane to the row." },
       { topic: "pajama", text: "She does not look up from the crane she is folding. " +
@@ -10363,6 +10392,20 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // glimpse, never explained), drift (he isn't staying at this table).
       // Nothing about where he's going. The test: it has to be worth reading
       // if the sequel is never made.
+      { topic: "crane", chip: false, req: ["craneDelivered"],
+        text: "He takes it the way you'd take a bill, and then he sees what it's folded from and " +
+          "the tweezers go down. He unfolds it with the care of a man who fixes things for a " +
+          "living: a photograph, creased white along every fold — a bar's neon, a younger him " +
+          "with more hair and less chain, and a girl with a row of paper birds on the rail in " +
+          "front of her, both of them laughing at whoever held the camera. On the back, two " +
+          "words in blue biro: ไม่เป็นไร. He reads them twice. \"'Mai pen rai.' Never mind.\" A " +
+          "long breath out through the nose. \"That is the worst thing anybody has ever said to " +
+          "me, and she knows it, and she's right.\" Then, quieter, to the photo and not to you: " +
+          "\"Brother. She said brother?\" You tell him she did. He folds it back along her creases, " +
+          "badly, and puts it in the drawer with the ฿500 notes he can't send back. \"Tell her —\" " +
+          "The hand goes up, stops. \"Don't tell her anything.\" The tweezers come back up. The " +
+          "customer who has been waiting gets served in three languages, none of them steady.",
+        short: "\"'Mai pen rai.' The worst thing anybody has ever said to me.\" The photo is in the drawer with the money he can't send back. \"Don't tell her anything.\"" },
       { topic: "tiffin", chip: false, req: ["tiffinDelivered"],
         text: "He knows what it is before you've set it down — the clasp, the smell — and " +
           "for one unguarded second he's about twelve. Then the grin. “She sent FOOD. " +
@@ -11527,6 +11570,19 @@ const QUESTS = {
   // (foreshadow through capability and trajectory, never exposition — nothing in
   // this quest may gesture at where Nont is headed). No money reward: a mother's
   // thanks is not a wage; the fish is on the house instead.
+  kwan_crane: {
+    name: "A Crane for Her Brother",
+    giver: "kwan",
+    trust: 1,   // she asks a man who has answered her, not a stranger on a stool
+    desc: "Kwan wants her paper crane carried to her brother — the phone kid at the Old Market " +
+      "on Soi Buakhao (GIVE CRANE TO NONT). Don't unfold it.",
+    deps: [],
+    reqFlags: ["act1Done"],
+    item: "crane_photo",
+    at: "nont",
+    doneFlag: "craneDelivered",
+    reward: { happy: 3 },   // a delivered message is not a wage; what changes is what you know
+  },
   lake_errand: {
     name: "Look In on My Boy",
     giver: "duangjai",

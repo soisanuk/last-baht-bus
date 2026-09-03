@@ -110,7 +110,7 @@ test("gossip chain flags connect: every required flag is set somewhere", () => {
     "chamDone",    // set by _chamGo (chameleon economy) — gates Cream's post-arc greeting
     "hasWallet", "gotBusFare", "somTamDelivered", "officeOpen",
     "act1Done",  // engine-set by _checkAct1 — gates sandbox-only quests (The Safe-Cracker)
-    "tiffinDelivered", // engine-set by _doGive (tiffin → nont) — "Look in on my boy"
+    "craneDelivered", "tiffinDelivered", // engine-set by _doGive (tiffin → nont) — "Look in on my boy"
     "keysDelivered",   // engine-set by _doGive (foreman_keys → diamond) — Wimon's letterbox reads it
     "shamrockVisited", // engine-set by _dogShamrock (arriving on the strip with the dog) — Bert's afterword reads it
     "hatchPried",      // set by the Shamrock's reads: hatch node (sets/reveal) — Bert's key node reads it
