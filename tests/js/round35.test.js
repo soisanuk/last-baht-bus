@@ -481,3 +481,18 @@ test("popular girls, draws, and the pre-midnight bundle are untouched (Mario)", 
   G.nightTurn = 40;
   assert.deepEqual(_barfinePrices("beer", "lek"), { st: 400, lt: 700 }, "before midnight nothing changed");
 });
+
+// ── Ray: the third man who won't bow — and the first to get in ──────────────
+// The route is verified blind at last: Ploy's hunger → back to Candy → the
+// som tam → the trick → the DJ → the office → 719, never a wai. The one thing
+// he flagged that's real: bare WAIT in a downpour gave no read on the rain.
+test("bare WAIT in the rain reads the sky (Ray)", () => {
+  G.room = "beach_rd_c"; G.rain = 6;
+  out = []; run("wait");
+  assert.match(text(), /set in|minutes/, "how long it's got");
+  assert.match(text(), /WAIT 5/, "…and the verb that spends it");
+  G.rain = 2; out = []; run("wait");
+  assert.match(text(), /easing/, "and when it's nearly done");
+  G.rain = 0; out = []; run("wait");
+  assert.equal(text(), "You wait. Pattaya doesn't.", "dry, the joke stands alone");
+});

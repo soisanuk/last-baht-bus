@@ -6026,7 +6026,21 @@ function _hourToTurn(h) { // 24h clock → nightTurn; the game lives 18:00–04:
 }
 
 function _doWait(arg) {
-  if (!arg) { _say("You wait. Pattaya doesn't."); return; }
+  if (!arg) {
+    // Bare WAIT is free — the joke is the point. But in a downpour a man
+    // waiting for the rain fired it five times blind with no way to tell
+    // whether to keep waiting or dive for a doorway (Ray, round 36). The
+    // rain is a counter; read it to him, and name the verb that spends it.
+    if (G.rain > 0) {
+      _say(G.rain > 3
+        ? `You wait. Pattaya doesn't, and neither does the rain — it's set in, ${G.rain * 6} minutes ` +
+          "of it at a guess. (WAIT 5 sits some of it out; a bar door sits all of it.)"
+        : "You wait. Pattaya doesn't. The rain, though, is easing — the gutters are still " +
+          "running but the roof has gone quiet. A few more minutes. (WAIT 2)", "dim");
+      return;
+    }
+    _say("You wait. Pattaya doesn't."); return;
+  }
   let target = null;
   // accept 20:00 too — the game prints times that way (mobile playtest 2026-08-17)
   const until = arg.match(/^(?:until |till |for )?(?:(\d+)(?::\d\d)?|midnight)\s*(am|pm)?$/);
