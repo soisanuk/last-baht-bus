@@ -76,7 +76,9 @@ test("TAO RAI at a stand quotes the fares — and the quote is the charge (Darre
   run("tao rai");
   const q = +(text().match(/naklua ฿(\d+)/) || [0, 0])[1];
   assert.ok(q > 0, text().slice(0, 200));
-  out = []; run("motosai to naklua");
+  const saved = _rand;
+  try { _rand = () => 0.99; out = []; run("motosai to naklua"); }   // the small-hours crash roll is not what this pins
+  finally { _rand = saved; }
   assert.equal(5000 - G.money, q);
 });
 
