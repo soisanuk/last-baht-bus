@@ -2535,7 +2535,14 @@ function _drinkMult(room) {
   const t = r && r.barType;
   return (typeof DRINK_MULT !== "undefined" && DRINK_MULT[t]) || 1;
 }
-function _beerPrice(room) { return Math.round(BEER_PRICE * _drinkMult(room) / 10) * 10; }
+// `beerOff` is a room's authored discount — "the beer is ten baht cheaper than
+// town" was a claim two rooms made in their own prose while the till charged
+// town money (Gerry r34, Stan r35). Honored here rather than reworded: the
+// claim is the character of the place.
+function _beerPrice(room) {
+  const r = (typeof ROOMS !== "undefined" && ROOMS[room || G.room]) || {};
+  return Math.max(10, Math.round(BEER_PRICE * _drinkMult(room) / 10) * 10 - (r.beerOff || 0));
+}
 function _ladyPrice(room) { return Math.round(LADY_DRINK * _drinkMult(room) / 10) * 10; }
 // The bell was the one round-for-the-house price the venue tier never
 // reached — flat everywhere, so in a go-go (×1.75) it bought a round for the

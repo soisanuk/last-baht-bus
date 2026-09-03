@@ -402,6 +402,12 @@ function _doGo(dirWord) {
   // leaving a lock-in is a one-way door
   if (dir === "out" && G.soc.lockIn && G.soc.lockIn[G.room]) {
     delete G.soc.lockIn[G.room];
+    // "no coming back in tonight" is the printed promise. The back-door
+    // welcome for a returning face checked which NIGHT you were locked in,
+    // not whether you had just walked out of it — so OUT / ROUND THE BACK
+    // cycled the door for +2 สนุก a time, uncapped, a free farm to the
+    // summit in fifty keystrokes (Stan, round 35). Walking out ends it.
+    (G.soc.leftLockIn = G.soc.leftLockIn || {})[G.room] = true;
     _say("The mamasan walks you to the door herself, slides the bolt, and lets " +
       "the night air in for exactly as long as you take to leave. “Goodnight, " +
       "tilac.” The bolt goes back across behind you. Whatever the party becomes " +
@@ -794,11 +800,11 @@ function _doTravel(arg) {
     const ride = typeof MOTOSAI_DESTS !== "undefined" && Object.keys(MOTOSAI_DESTS)
       .find(k => MOTOSAI_DESTS[k].room === dest || _hops(MOTOSAI_DESTS[k].room, dest) !== null);
     if (ride) {
+      const _q = _motoFare(MOTOSAI_DESTS[ride], true), _qNow = _motoFare(MOTOSAI_DESTS[ride]);
       _say(_fmt("No walking route to {v} — that side is across Sukhumvit, and nobody walks " +
         "Sukhumvit. The bikes do it in twenty minutes. (MOTOSAI TO {r} — ฿{p}" +
         "{late})", { v: _barName(dest) || ROOMS[dest].name, r: ride.toUpperCase(),
-          p: MOTOSAI_DESTS[ride].price,
-          late: G.nightTurn >= 80 ? ", more at this hour" : "" }), "dim");
+          p: _q, late: _qNow > _q ? `, ฿${_qNow} at this hour` : "" }), "dim");
       return;
     }
     _say("You can't get there from here — no route you know, on foot or otherwise.");
@@ -1222,6 +1228,7 @@ function _roomRead(arg, peek) {
 
 function _doExamine(arg) {
   if (!arg) return _describeRoom(true, true); // LOOK always gives the full desc
+
   // EXAMINE PHONE opens the home screen (battery, flashlight, messages, weather,
   // headlines), not the flat item blurb — only "phone"/"mobile", so torch/light
   // fall through to the LIGHT machinery. The phone lights its own screen, so it
@@ -1316,6 +1323,19 @@ function _doExamine(arg) {
   }
   if (_roomRead(arg, true) || /\bsign|signage|arrows?\b/.test(arg)) return _doRead(arg);
   if (_doScenery(arg)) return;
+  // Last resort: EXAMINE <the bar you are standing in>. "examine shamrock",
+  // inside the Shamrock, got "Whatever that is, it isn't here" (Stan, round
+  // 35). Last because a bar named after a thing — the Dolphin Bar's painted
+  // dolphin — must let the thing answer first; exact after normalisation
+  // because "second road traditional massage" contains "second road" and is
+  // a different building.
+  {
+    const norm = x => String(x || "").toLowerCase().replace(/\s*\(.*\)$/, "")
+      .replace(/^the\s+/, "").replace(/\s+(bar|inn|pub|lounge|club)$/, "").trim();
+    const r = _room(), a = norm(arg);
+    if (a.length >= 4 && [r.bar, r.name].some(nm => nm && norm(nm) === a))
+      return _describeRoom(true, true);
+  }
   _say(_pickVary(_NO_SUCH_THING, "xnothing"));
 }
 
@@ -4504,7 +4524,14 @@ function _doBuy(arg) {
       _checkDrunk();
       return;
     }
-    if (G.money < _beerPrice()) { _say(_fmt("A big bottle is ฿{p} here. You have ฿{m}. The cashier's calculator stays in the drawer.", { p: _beerPrice(), m: G.money })); return; }
+    if (G.money < _beerPrice()) {
+      // "the cashier's calculator" in a room with no cashier — Cheap Charlie's
+      // has no cast at all (Stan, round 35). Name the money-holder the bar has.
+      const _tk = typeof _tillKeeper === "function" && _tillKeeper();
+      _say(_fmt("A big bottle is ฿{p} here. You have ฿{m}. {who}", { p: _beerPrice(), m: G.money,
+        who: _tk ? `${NPCS[_tk].name}'s calculator stays in the drawer.` : "The till stays shut." }));
+      return;
+    }
     // standing a beer to the rail regular — the generic word, or a named male
     // regular present ("buy terry a beer" → Terry gets it, not you).
     const beerName = arg.replace(/\b(buy|order|get|a|an|the|beer|chang|leo|singha|bottle|for|him)\b/g, " ").trim();
@@ -4620,6 +4647,7 @@ function _doBuy(arg) {
     // the FIRST drink he actually bought (Gerry, round 34) — the tease's own
     // words are "you buy drink for how many girl tonight?". Its own book now.
     (G.soc.drinkNight = G.soc.drinkNight || {})[id] = true;
+    (G.soc.drinkCount = G.soc.drinkCount || {})[id] = (G.soc.drinkCount[id] || 0) + 1;
     if (Object.keys(G.soc.drinkNight).length >= 4 && !G.soc.butterflyTeased) {
       G.soc.butterflyTeased = true;
       _say(_pickVary([
@@ -5059,6 +5087,23 @@ function _doRideBus(arg) {
   _say(`(${thaiNumRoman(BUS_FARE)} … he wants paying. PAY <amount>.)`, "dim");
 }
 
+// ONE fare arithmetic, quoted and charged. The TRAVEL refusal quoted the
+// destination's table price (฿50 to Walking Street) while the bike charged the
+// far-side fare with the night rate on top (฿160) — the quote was three times
+// under the bill (Stan, round 35). Every surface that names a motosai price
+// reads this; `base` skips the night rate so a caller can say "more at this hour".
+function _motoFare(d, base) {
+  let price = d.price;
+  // the Darkside fare is the Darkside fare in BOTH directions — the table keys on
+  // the destination, so the long leg back across the highway was the town rate
+  if (_room().region === "Darkside" && ROOMS[d.room] && ROOMS[d.room].region !== "Darkside") price = MOTOSAI_FAR;
+  if (_flag("helmetDelivered") && price === MOTOSAI_TOWN) price = 20;   // Bank's mates' rate
+  // once the last baht bus has gone, the piwins know they're the only ride in town
+  // and price the small hours accordingly (Bank's ฿20 mates' rate stays exempt)
+  if (!base && G.nightTurn >= LAST_BUS_TURN && price !== 20) price = Math.round(price * LATE_MOTO_MULT / 10) * 10;
+  return price;
+}
+
 function _doMotosai(arg) {
   const r = _room();
   if (G.rain > 0) {
@@ -5105,6 +5150,15 @@ function _doMotosai(arg) {
     return;
   }
   const d = MOTOSAI_DESTS[destKey];
+  // You cannot buy a ride to the kerb you are standing on. MOTOSAI TO KHAO TALO
+  // from Khao Talo took ฿170 and re-described the room — "the fastest ฿170 of
+  // your life" (Stan, round 35). TRAVEL already refuses this; so does the bike.
+  if (d.room === G.room) {
+    _say("The piwin looks at you, looks at the road you are both standing on, and " +
+      "declines to charge you for it — the one free thing a piwin has ever done. " +
+      "\"Boss. Is here.\"", "dim");
+    return;
+  }
   // Soi 6 mode is fenced to the pocket, and _arriveAt is where that is enforced —
   // but the two arrival paths below set G.room DIRECTLY, so a motosai walked
   // straight through the fence. It never showed until a stand landed inside the
@@ -5115,17 +5169,8 @@ function _doMotosai(arg) {
     _say(_pickVary(_SOI6_BOUND, "soi6bound"));
     return;
   }
-  let price = d.price;
-  // the Darkside fare is the Darkside fare in BOTH directions — the table keys on
-  // the destination, so the long leg back across the highway was the town rate
-  if (_room().region === "Darkside" && ROOMS[d.room] && ROOMS[d.room].region !== "Darkside") price = MOTOSAI_FAR;
-  if (_flag("helmetDelivered") && price === MOTOSAI_TOWN) {
-    price = 20;
-  }
-  // once the last baht bus has gone, the piwins know they're the only ride in town
-  // and price the small hours accordingly (Bank's ฿20 mates' rate stays exempt)
-  const lateGouge = G.nightTurn >= LAST_BUS_TURN && price !== 20;
-  if (lateGouge) price = Math.round(price * LATE_MOTO_MULT / 10) * 10;
+  const price = _motoFare(d);
+  const lateGouge = G.nightTurn >= LAST_BUS_TURN && price !== 20 && price !== _motoFare(d, true);
   // a dog needs his own bike — flat, not gouged with the late-hour fare
   const dogFare = G.dog ? DOG_MOTOSAI_FARE : 0;
   const total = price + dogFare;
@@ -5194,7 +5239,7 @@ function _doMotosai(arg) {
   if (risk >= 0.05 && _rand() < 0.5) _say(_pickVary(_MOTO_NEARMISS, "motonear"), "alert");
   G.room = d.room;
   G.darkStreak = 0;
-  if (lateGouge) _say("Gone two in the morning, the buses long tucked up, and the " +
+  if (lateGouge) _say("Gone two in the morning, the buses gone sparse and slow, and the " +
     "piwin reads the empty road and your lack of options and names his small-hours " +
     "number. You both know you'll pay it.", "dim");
   // The dog's ฿10 used to surface on its OWN line, printed AFTER the balance —
@@ -6592,6 +6637,7 @@ function _doWithdrawInner(arg) {
   G.money += n;
   G.atmDay = G.day;
   G.atmToday = drawn + n;
+  G.atmFees = (G.atmFees || 0) + ATM_FEE;   // the morning ledger counts the fee, which never touches the pocket (Stan, r35)
   _say(`The machine whirrs, thinks, and counts out ฿${_num(n)} — lighter a ฿${ATM_FEE} ` +
     `foreign-card fee. (฿${_num(G.money)} in pocket · ฿${_num(G.bank)} in the account.)`, "win");
 }
@@ -6767,7 +6813,7 @@ Common commands:
   DANCE · SING · REQUEST <song> · TIP BAND <amount> · BUY ROUND FOR BAND · TALK TO BAND
   EAT <food> · DRINK <thing> · BUY WATER / FOOD (street carts & 7-Elevens) · SLEEP (at the hotel)
   OPEN FRIDGE · TAKE WATER (your hotel room — two free bottles a day)
-  CHECKOUT (your room, before 19:00) — move hotels: Sabai Palms ฿400 · Queen Vic ฿700 · Metropole ฿1300
+  CHECKOUT (your room, before 19:00) — move hotels: Sabai Palms ฿400 · Queen Vic ฿700 · Areca Lodge ฿900 · Metropole ฿1300
   DIAGNOSE (how bad is it) · GET TESTED (free clinic — clears a barfine souvenir)
   AGAIN or G (repeat last command)
   TRAVEL <bar|hotel> (fast travel anywhere you've been — walking pace, bare TRAVEL lists)
@@ -8429,7 +8475,10 @@ function doCommand(input) {
           "time. The Darkside is closed. This is the other thing, and tonight you did " +
           "not have to buy your way into it.", "win");
         (G.soc.lockIn = G.soc.lockIn || {})[bar] = true;
-        _addHappy(2);
+        // the welcome pays once per bar per night — the beat is arriving, not
+        // the door (see the OUT handler for what this closes)
+        const _welcomed = (G.soc.backDoorTonight = G.soc.backDoorTonight || {});
+        if (!_welcomed[bar]) { _welcomed[bar] = true; _addHappy(2); }
         _arriveAt(bar);
         break;
       }

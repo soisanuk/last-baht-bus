@@ -3545,11 +3545,15 @@ const ROOMS = {
       "door with no sign worth reading — THE NIGHT HERON, if you know to ask — and " +
       "beside it a dead Irish pub, THE SHAMROCK on its sun-bleached sign, shutters " +
       "down for good.",
-    lateDesc: "The strip after the shutters: the tin roof dark, bamboo rails bare, the pool table under its cover. Every bar on the Darkside shut at midnight, same as the night before, and the only light is the padded door at the dark end — if it's lit at all, that's not for you. The Shamrock is as dead as ever.",
+    // "same as the night before" was a claim the player could have disproved
+    // from the inside — he'd been bolted into one of them the night before
+    // (Stan, round 35). Dropped; the sentence loses nothing.
+    lateDesc: "The strip after the shutters: the tin roof dark, bamboo rails bare, the pool table under its cover. Every bar on the Darkside shut at midnight, officially, and the only light is the padded door at the dark end — if it's lit at all, that's not for you. The Shamrock is as dead as ever.",
     venues: ["water_buffalo", "firefly_bar", "night_heron", "shamrock"],
     exits: { w: "sukhumvit_crossing", e: "khao_talo" },
   },
   water_buffalo: {
+    beerOff: 10, // its own prose: "ten baht cheaper than town" / "a note cheaper" — the till now agrees
     name: "The Water Buffalo",
     bar: "The Water Buffalo",
     region: "Darkside",
@@ -3766,6 +3770,7 @@ const ROOMS = {
     exits: { out: "naklua_bars" },
   },
   white_rabbit: {
+    beerOff: 10, // its own prose: "ten baht cheaper than town" / "a note cheaper" — the till now agrees
     name: "The White Rabbit",
     region: "Naklua",
     bar: "The White Rabbit", barType: "beer", outlet: true,
@@ -9512,6 +9517,13 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       //
       // Register per docs/factions-thai.md: land and patronage, told flat, no
       // scandal and no menace — the whole point is that nothing needs saying.
+      { topic: "bar",
+        text: "\"My bar.\" She says it the way other people say my knee. \"Twelve year. I " +
+          "dance, I save, I buy the lease from a Dutch man who cry when he sign. Tin roof, " +
+          "eight stool, a pool table with a lean — is not much, na, and is mine.\" She " +
+          "wipes the same clean patch. \"Town bar make more money and more problem. Out " +
+          "here I know every face by ten o'clock, and if I don't, I lock the door.\"",
+        short: "\"Twelve year, bought the lease off a Dutchman who cried when he signed. Not much, and mine.\"" },
       { topic: "rattana",
         text: "\"Khun Rattana.\" Daeng says the name the way you'd say the weather. \"Not " +
           "a bar person. LAND person. Three shophouse on this soi, the empty lot behind, " +
@@ -10914,6 +10926,14 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
         "was the whole courtship.\" He nods at the water. \"The lake was her idea. " +
         "Everything decent out here was.\"",
         short: "\"Midnight Sun, 2004 — on the till, not the floor. She corrected my Thai and kept my change.\"" },
+      // Ron: "Gary out at the lake'll tell you the same" — about the Darkside —
+      // and Gary couldn't (Stan, round 35).
+      { topic: "darkside", text: "\"Ron sent you, did he. 'Pattaya for blokes who did the sums.'\" A " +
+        "small nod — he's heard it, he likes it, he'd put it differently. \"Sums are half of " +
+        "it. The other half is the noise stops. Town's a performance that never ends and out " +
+        "here nobody's performing — not the bars, not the girls, not you.\" The retriever " +
+        "sighs. \"Cheaper's the excuse men give their mates. Quieter's the reason.\"",
+        short: "\"Ron's right about the sums. The other half is that the noise stops — nobody out here is performing.\"" },
       { topic: "fishing", text: "\"Snakehead, mostly. Tilapia if the water's warm.\" He " +
         "indicates the rod without enthusiasm. \"I'll tell you the truth about the " +
         "fishing: it is the excuse, not the point. Man needs a reason to sit still for " +
@@ -14336,7 +14356,7 @@ function _buildHostess(name, th, room, id = name.toLowerCase()) {
     name, th, emoji, room, filler: true,
     ...(green ? { c4: 2 } : {}),
     ...(selfies ? { selfies } : {}),
-    desc: `${look} — one of ${bar}'s girls, from ${from}. ${phone}`,
+    desc: `${look} — one of ${/s$/.test(bar) ? bar + "'" : bar + "'s"} girls, from ${from}. ${phone}`,   // "Mama Yai's' girls", not "Mama Yai's's" (Stan, r35)
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", text: idx(GREET, 23), short: idx(GREET_SHORT, 29),
         asks: idx(ASK, 47) },
@@ -14348,6 +14368,20 @@ function _buildHostess(name, th, room, id = name.toLowerCase()) {
         when: (st, G) => typeof _npcWhere === "function" && _npcWhere("candy") === room,
         text: idx(WALLET_HERE, 41) },
       { topic: "wallet", notFlags: ["hasWallet"], text: idx(WALLET, 41) },
+      // the ledger reveals put "salary" and "quota" in the player's mouth, and
+      // the girl who said them couldn't be asked (Stan, round 35). Generic on
+      // purpose — the numbers are the trade's, not hers; her SHARE is the reveal.
+      { topic: "salary", bond: 1,
+        text: `"Salary?" A laugh with no bottom in it. "Salary is small-small, tilac — is for sit here. ` +
+          `The money is the drink. No drink, no money. So." She lifts her empty glass an inch, not ` +
+          `quite asking.`,
+        short: `"Salary is small-small — for sit here. The money is the drink."` },
+      { topic: "quota", bond: 1,
+        text: `"Quota, na. Every girl have number for the month — drink, and the other thing. Under ` +
+          `the number, Mamasan not happy; over the number, small bonus." She counts something on ` +
+          `her fingers and stops before she gets to the end. "I am under. Is early in the month." ` +
+          `It is not early in the month.`,
+        short: `"Every girl have a number for the month. I am under. Is early in the month." It isn't.` },
     ],
   };
 }

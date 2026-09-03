@@ -205,3 +205,156 @@ test("DEMAND is a voiced refusal, not an ASK in disguise (Declan)", () => {
   run("order a beer");
   assert.equal(G.money, 500 - _beerPrice("lucky_tiger"), "ORDER <drink> buys");
 });
+
+// ── Stan: the lock-in regular, economy judge ────────────────────────────────
+
+// BLOCKER. OUT / ROUND THE BACK paid +2 สนุก a cycle, uncapped — a free farm to
+// the summit in fifty keystrokes — and re-admitted the same night against the
+// printed "no coming back in tonight".
+test("the alley door is not a สนุก farm and honours the one-way rule (Stan 1/11)", () => {
+  G.day = 5; G.nightTurn = 70; G.lockedInAt = { khao_talo_bar: 3 }; G.room = "khao_talo";
+  const h0 = G.happy;
+  run("round the back"); const h1 = G.happy;
+  assert.equal(G.room, "khao_talo_bar"); assert.equal(h1 - h0, 2, "the welcome pays once");
+  run("out"); run("round the back");
+  assert.equal(G.room, "khao_talo", "walked out tonight: the bolt stays");
+  assert.equal(G.happy, h1, "…and nothing more is paid");
+  // …and the next night the door knows him again
+  G.nightTurn = 99; _endNight("dawn"); G.nightTurn = 70; G.room = "khao_talo";
+  run("round the back");
+  assert.equal(G.room, "khao_talo_bar", "tomorrow the welcome is back");
+});
+
+// ฿17,141 in the pocket at the airport became ฿3,000 a month later, unmentioned.
+test("the pocket flies home with you (Stan 2)", () => {
+  G.money = 17141; G.bank = 76400; G.day = 8;
+  _endVacation(); G.pendingChoice = null; out = []; _newVacation();
+  assert.equal(G.bank, 76400 + 17141, "into the account");
+  assert.equal(G.money, SAFE_CASH, "the float in the safe, as before");
+  assert.match(text(), /went into the account/, "…and it says so");
+});
+
+// "5 lady drink first" stood after the eighth drink and ฿1,520: the tariff is
+// named in drinks and was measured in favor, which a lazy-drink girl credits
+// at ~40%.
+test("the Soi 6 drink tariff is measured in the unit it is quoted in (Stan 4)", () => {
+  G.room = "sunset_dreams"; G.money = 5000; G.nightTurn = 40;
+  assert.equal(_soi6DrinkMin("kwan"), 5, "premise: Kwan runs the policy");
+  NPCS.kwan.type = "lazy";                 // the worst case: 40% credited
+  G.soc.drinks.kwan = 3;
+  for (let i = 0; i < 5; i++) run("buy drink for kwan");
+  assert.equal(G.soc.drinkCount.kwan, 5, "five drinks bought, five counted");
+  out = []; run("barfine kwan");
+  assert.doesNotMatch(text(), /5 lady drink first/, "a met tariff is a met tariff");
+  delete NPCS.kwan.type;
+});
+
+test("you cannot buy a ride to the kerb you are standing on (Stan 5)", () => {
+  G.room = "khao_talo"; G.money = 2000;
+  out = []; run("motosai to khao talo");
+  assert.equal(G.money, 2000, "no fare taken");
+  assert.match(text(), /Is here/, "the one free thing a piwin has ever done");
+});
+
+// The TRAVEL refusal quoted ฿50 to Walking Street; the bike charged ฿160.
+test("the quoted motosai fare is the charged one (Stan 6)", () => {
+  G.room = "khao_talo"; G.visited.neon_paradise = true; G.money = 5000; G.nightTurn = 85;
+  out = []; run("travel neon paradise");   // a Walking Street bar; the refusal names the stop
+  const quoted = +(text().match(/฿(\d+) at this hour/) || text().match(/฿(\d+)\)/) || [0, 0])[1];
+  assert.ok(quoted > 0, "a fare is quoted: " + text().slice(0, 120));
+  const before = G.money; G.dog = null;
+  run("motosai to walking street");
+  assert.equal(before - G.money, quoted, "…and it is what the piwin took");
+});
+
+test("the piwin doesn't claim the buses are gone (Stan 7)", () => {
+  G.room = "khao_talo"; G.money = 5000; G.nightTurn = 85;
+  out = []; run("motosai to walking street");
+  assert.doesNotMatch(text(), /long tucked up/, "the buses run all night, sparse — that's the 2026-08-25 rework");
+});
+
+test("a room that claims cheaper beer charges cheaper beer (Stan 8)", () => {
+  assert.match(ROOMS.water_buffalo.desc, /ten baht cheaper/, "premise: its own claim");
+  assert.equal(_beerPrice("water_buffalo"), _beerPrice("khao_talo_bar") - 10, "the till agrees");
+  assert.equal(_beerPrice("white_rabbit"), _beerPrice("naklua_bars") - 10);
+});
+
+// A mother and a seven-year-old with roses walked into a bolted after-hours bar.
+test("the street does not reach inside a bolted door (Stan 10)", () => {
+  G.room = "khao_talo_bar"; G.soc.lockIn = { khao_talo_bar: true }; G.encDone = {}; G.lastEnc = -999;
+  for (let i = 0; i < 40; i++) { G.pendingEnc = null; _maybeEncounter(); assert.equal(G.pendingEnc, null, "nobody comes in"); }
+});
+
+test("the after-hours pointer names the door on this street (Stan 12)", () => {
+  G.day = 5; G.nightTurn = 70; G.lockedInAt = { khao_talo_bar: 3, night_heron: 3 };
+  G.room = "khao_talo_strip"; out = []; run("enter the water buffalo");
+  assert.match(text(), new RegExp(_barName("night_heron")), "the Heron is on this stretch");
+  assert.doesNotMatch(text(), new RegExp(_barName("khao_talo_bar")), "not the first bar you were ever locked in");
+});
+
+test("the night ledger counts the ATM fee (Stan 14)", () => {
+  _setFlag("hasWallet"); G.money = 1000; G.bank = 20000;
+  G.room = Object.keys(ROOMS).find(r => ROOMS[r].atm); _nightSnapshot();
+  run("withdraw 3000"); assert.ok(G.atmFees > 0, "premise: a withdrawal happened");
+  G.money -= 50;
+  out = []; _morningLedger();
+  assert.match(text(), new RegExp("down ฿" + _num(50 + ATM_FEE)), "the fee left the account, but it was spent");
+});
+
+test("TIME keeps minutes (Stan 15)", () => {
+  assert.equal(_clockStr(55), "23:30"); assert.equal(_clockStr(61), "00:06"); assert.equal(_clockStr(0), "18:00");
+});
+
+// STANDING's coaching says "stand a round", and a week of bells moved nothing.
+test("a bell is a round, and rounds are deeds (Stan 16)", () => {
+  G.room = "lucky_tiger"; G.money = 5000; G.rep = 0; G.repDay = 0; G.day = 3;
+  run("ring bell");
+  assert.ok(G.rep > 0, "the readout's own advice now counts");
+});
+
+test("Gary and Daeng answer for what Ron and the key put in your mouth (Stan 17)", () => {
+  G.nightTurn = 20; G.room = _npcRoom("gary"); G.known.gary = true;
+  out = []; run("ask gary about darkside"); assert.match(text(), /sums|noise stops/i);
+  G.room = "khao_talo_bar"; G.known.daeng = true;
+  out = []; run("ask daeng about bar"); assert.match(text(), /Twelve year|mine/);
+  // a filler girl can be asked about the salary and quota the ledger reveals name
+  G.room = "khao_talo_bar"; G.soc.drinks = { ying: 4 };
+  out = []; run("ask ying about salary"); assert.match(text(), /small-small|the drink/i);
+  out = []; run("ask ying about quota"); assert.match(text(), /number for the month/i);
+});
+
+test("no double possessive on a bar whose name ends in s (Stan 18)", () => {
+  const bad = Object.keys(NPCS).filter(id => /'s's/.test(NPCS[id].desc || ""));
+  assert.deepEqual(bad, [], "Mama Yai's' girls, not Mama Yai's's");
+});
+
+// "you have bought her two" — after eight.
+test("the ledger beat counts her real drinks (Stan 19)", () => {
+  G.room = "khao_talo_bar"; G.soc.drinks = { ying: 8 }; G.soc.drinkCount = { ying: 8 }; G.soc.ledger = { ying: [1] };
+  assert.equal(_bondTier("ying"), 2);
+  out = []; _otherLedger("ying");
+  if (/Thirty drink a month/.test(text())) assert.match(text(), /bought her 8\b/, "her arithmetic is her arithmetic");
+});
+
+test("EXAMINE the bar you're standing in is the bar (Stan 20)", () => {
+  G.room = "shamrock"; out = []; run("examine shamrock");
+  assert.match(text(), /dead pub/i, "the room's own close look");
+  G.room = "dolphin_bar"; out = []; run("examine dolphin");
+  assert.match(text(), /house paint/, "…but a thing the bar is named after answers first");
+});
+
+test("HELP's hotel list is the checkout's (Stan 22)", () => {
+  for (const k of Object.keys(_HOTELS)) assert.ok(_HELP.includes("฿" + _HOTELS[k].rate), _HOTELS[k].name + " is listed");
+});
+
+test("SEND to a woman standing next to you says so (Stan 24)", () => {
+  G.room = "lucky_tiger"; G.money = 2000; G.phone.contacts = { lek: true }; G.soc.drinks = { lek: 4 };
+  out = []; run("send 200 to lek");
+  assert.doesNotMatch(text(), /crosses town/, "she is across the bar, not across town");
+});
+
+test("no cashier is named where the bar has none (Stan 25)", () => {
+  G.room = "cheap_charlies_jt"; G.money = 10;
+  out = []; run("buy beer");
+  assert.doesNotMatch(text(), /cashier's calculator/, "the room has no cast");
+});

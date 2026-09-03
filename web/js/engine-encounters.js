@@ -267,6 +267,9 @@ function _salengVignette() {
 
 function _maybeEncounter() {
   if (!G || G.over || G.pendingFare || G.pendingEnc) return;
+  // nothing off the street walks into a bolted lock-in — a mother and a
+  // seven-year-old with roses did (Stan, round 35)
+  if (typeof _lockedIn === "function" && _lockedIn()) return;
   if (_isDarkHere() || _room().bar) return; // the dark belongs to the soi dogs
   // public drunkenness attracts the boys in brown (repeatable, unlike the rest)
   if (G.soc.drunk >= 5 && G.turns - G.lastPolice >= 30 && _rand() < 0.2) {
@@ -1264,7 +1267,7 @@ const _ENC = {
     if (!yes) {
       _say(_isHotelRoom(G.room)
         ? "You put the phone face-down. Tomorrow's problem, or nobody's. The " +
-          "ceiling fan turns; you're asleep before you've finished deciding."
+          "ceiling fan turns; you put the phone face down and let the night decide the rest."
         : "You put the phone face-down in your pocket and keep walking. Tomorrow's " +
           "problem, or nobody's — the night has other things in it.");
       return;

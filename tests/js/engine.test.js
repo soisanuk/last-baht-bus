@@ -3920,8 +3920,11 @@ test("soi 6 drink-minimum: some girls want a few lady drinks before upstairs", (
   run("barfine kwan");
   assert.ok(!state().pendingBf, "the ask is turned away, not opened");
   assert.match(lastOut(), /bar rule: 5 lady drink/i);
-  // patience clears it — the tariff is a tab thing, re-checked each ask
-  state().soc.drinks.kwan = 5;
+  // patience clears it — the tariff is a tab thing, re-checked each ask. It is
+  // counted in DRINKS BOUGHT tonight (round 35: it compared favor, which a
+  // lazy-drink girl credits at ~40%, so "5 lady drink first" outlived the
+  // eighth drink), so meet it in that unit.
+  state().soc.drinks.kwan = 5; state().soc.drinkCount = { kwan: 5 };
   run("barfine kwan");
   assert.ok(state().pendingBf, "tariff met, upstairs is on the table");
   assert.match(lastOut(), /upfront as a menu/i);

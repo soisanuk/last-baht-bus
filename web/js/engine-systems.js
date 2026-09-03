@@ -733,7 +733,12 @@ function _bfRefusal(id, bt) {
   // the upstairs drink-minimum: not a mood, a tariff — re-checked each ask so a
   // couple more lady drinks lifts it (not held; it's about your tab, not the day).
   const dmin = _soi6DrinkMin(id);
-  if (dmin && _favor(id) < dmin) return { kind: "drinkmin", need: dmin };
+  // Measured in DRINKS, because that is the word she uses. It compared favor,
+  // and a lazy-drink girl credits only ~40% of what she's bought (_boughtBond
+  // rolls it), so "5 lady drink first" stood after the eighth drink and ฿1,520
+  // — a named condition met, exceeded, and never honoured (Stan, round 35).
+  const _bought = (G.soc.drinkCount && G.soc.drinkCount[id]) || 0;
+  if (dmin && _bought < dmin) return { kind: "drinkmin", need: dmin, have: _bought };
   if (G.soc.bfBar && G.soc.bfBar[G.room] && G.soc.bfBar[G.room] !== id) return keep("stealing");
   if (G.soc.drunk >= 6 && _rand() < 0.5) return keep("mess");
   const gate = bt === "soi6" ? 2 : 4;
@@ -3266,7 +3271,12 @@ function _doSendMoney(arg) {
   G.battery = Math.max(0, G.battery - 1);
   const bump = amt >= 500 ? 3 : amt >= 100 ? 2 : 1;
   _addBond(id, bump);
-  _say(_fmt("฿{a} crosses town in one green blink. (฿{m} left.)", { a: amt, m: G.money }));
+  if (_npcsHere().includes(id))
+    _say(_fmt("฿{a}, phone to phone across the width of a bar — her handset buzzes in her hand " +
+      "and she looks at it, then at you, and doesn't quite manage not to smile. (฿{m} left.)",
+      { a: amt, m: G.money }));
+  else
+    _say(_fmt("฿{a} crosses town in one green blink. (฿{m} left.)", { a: amt, m: G.money }));
   // the girls who aren't in the bar economy answer in their own voices, not the
   // hostess patter (mobile playtest 2026-08-22: Priew got "tonight I take care YOU")
   if (id === "priew") {

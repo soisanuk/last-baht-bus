@@ -201,7 +201,8 @@ function _lockInWelcome(to) {
   const when = G.lockedInAt && G.lockedInAt[to];
   return !!(r && r.region === "Darkside" && r.lockIn && G.nightTurn >= 60 &&
     _flag("act1Done") && when && when < G.day &&
-    !(G.soc.lockIn && G.soc.lockIn[to]));
+    !(G.soc.lockIn && G.soc.lockIn[to]) &&
+    !(G.soc.leftLockIn && G.soc.leftLockIn[to]));   // walked out tonight: the bolt stays (Stan, r35)
 }
 function _closedNow(to) {
   return _flag("act1Done") && _closesMidnight(to) && G.nightTurn >= 60 &&
@@ -222,7 +223,12 @@ function _closedMsg(to) {
     // longer an unreachable rumour — it is a specific address, and the line
     // says so (Gerry, round 34, who read the old one on three separate nights
     // and could never find a way through it).
-    const mine = Object.keys(ROOMS).find(id => _lockInWelcome(id));
+    // …the door on THIS street first: standing outside the Night Heron, just
+    // walked out of its own lock-in, the line named Daeng's Place — the first
+    // bar you were ever bolted into, not the one whose bolt you just heard
+    // (Stan, round 35).
+    const mine = (typeof _lockInDoorHere === "function" && _lockInDoorHere()) ||
+      Object.keys(ROOMS).find(id => _lockInWelcome(id));
     return "Shutters down, lights dead, chairs up. The Darkside keeps the law's " +
       "hours — officially. Somewhere along the strip one padded door still thumps " +
       "with bass from a bar that is definitely, legally, closed." +
@@ -1581,6 +1587,11 @@ function _bellLevel() {
 function _ringBell(r) {
   const active = G.soc.bellAt[r] !== undefined && G.turns - G.soc.bellAt[r] < BELL_GLOW;
   G.soc.bells[r] = (active ? (G.soc.bells[r] || 0) : 0) + 1;
+  // Standing a round for the house is the archetypal good deed on this soi, and
+  // STANDING's own coaching line tells the player to "stand a round" — while a
+  // week of bells moved the readout not at all (Gerry r34, Stan r35). The
+  // +1/day throttle still applies; this just lets the bell be a source.
+  if (typeof _repGain === "function") _repGain("a round for the house");
   G.soc.bellAt[r] = G.turns;
   G.soc.heat[r] = 0;
   delete G.soc.patronMiffed[r];
@@ -2818,8 +2829,9 @@ const _OTHER_LEDGER = {
     (n) => `Two men come in, look along the rail, and settle at the far end with somebody else. ` +
       `${n} watches them go with an expression that is not jealousy and not regret — it is ` +
       `arithmetic. "Thirty drink a month," she says, when she catches you noticing. "After that, ` +
-      `bonus." Tonight she has sat with you, only you, for three hours, and you have bought her ` +
-      `two. "You are good company." A shrug, entirely without accusation. "Good company is not ` +
+      `bonus." Tonight she has sat with you, only you, most of the evening, and you have bought her ` +
+      `${(() => { const c = (G.soc.drinkCount && G.soc.drinkCount[_ledgerFor]) || 0; return c === 0 ? "nothing" : c === 1 ? "one" : c === 2 ? "two" : String(c); })()}. ` +
+      `"You are good company." A shrug, entirely without accusation. "Good company is not ` +
       `thirty drink."`,
     (n) => `The mamasan's book is open on the till and, for once, angled where you can see it: a ` +
       `column of names, a column of marks. ${n}'s row is shorter than the girl's beside her. ` +
@@ -2868,6 +2880,7 @@ function _otherLedger(id) {
   // starts the telling at the cut — the reveals are a sequence, not a menu
   const due = [1, 2, 3].find(x => x <= t && !seen.includes(x));
   if (!due) return false;
+  _ledgerFor = id;                       // the tier-2 beat reads tonight's real drink count (Stan, r35: "two" after eight)
   const pool = _OTHER_LEDGER[due];
   if (!pool) return false;
   seen.push(due);
@@ -2974,6 +2987,7 @@ function _conquestHappy(base, id) {
 // ride's own stops all stay direct _addBond, because those are things that
 // happened, not things you paid for.
 const BOND_NIGHT_CAP = 6;
+let _ledgerFor = null;   // whose ledger beat is rendering (a beat's arithmetic must be HER arithmetic)
 function _boughtBond(id, n) {
   if (!id || !n || n < 0) return 0;
   const book = (G.soc.bondNight = G.soc.bondNight || {});
@@ -3065,7 +3079,11 @@ const NIGHT_TURNS = 100;
 function _clockStr(turn) {
   const t = turn == null ? G.nightTurn : turn;
   const h = (18 + Math.floor(t / 10)) % 24;
-  return `${String(h).padStart(2, "0")}:00`;
+  // six minutes a turn: "about half an hour to closing" and TIME saying 23:00
+  // in the same breath was a man watching the clock being told the wrong one
+  // (Stan, round 35)
+  const m = (t % 10) * 6;
+  return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
 }
 
 function _checkDrunk() {
@@ -3550,6 +3568,7 @@ function _nightSnapshot() {
     happy: G.happy,
     money: G.money,
     atm: G.atmTotal || 0,
+    atmFees: G.atmFees || 0,
     known: Object.keys(G.known || {}).length,
     talked: Object.keys(G.talked || {}).length,
     nums: Object.keys(G.phone.contacts || {}).filter(id => G.phone.contacts[id] && NPC_ROLES[id]).length,
@@ -3566,7 +3585,8 @@ function _morningLedger() {
   if (dh) bits.push((dh > 0 ? "+" : "") + dh + " \u0e2a\u0e19\u0e38\u0e01");
   const drawn = (G.atmTotal || 0) - (b.atm || 0); // ATM cash isn't "income" (27-night playtest: "up ฿18,880")
   const barDraw = (G.bar && G.bar.pocketDrawn) || 0; // the bar's own bills report on the bar's line, not here
-  const spent = b.money + drawn - G.money - barDraw;
+  const fees = (G.atmFees || 0) - (b.atmFees || 0);   // ATM fees leave the account, not the pocket
+  const spent = b.money + drawn - G.money - barDraw + fees;
   if (spent > 0) bits.push("down \u0e3f" + _num(spent) + " on the night");
   else if (spent < 0) bits.push("up \u0e3f" + _num(-spent) + " on the night");
   if (G.roughLost > 0) bits.push("\u0e3f" + _num(G.roughLost) + " of it lifted while you were out");
@@ -3924,6 +3944,8 @@ function _endNight(reason) {
   G.soc.bfRefused = {}; // life-refusals ("temple in the morning") are night-scoped
   G.soc.goWith = {};   // the "I go with you, na" opener re-arms each night
   G.soc.lockIn = {};   // Darkside lock-ins are per-night (their own comment says so)
+  G.soc.leftLockIn = {};        // …as is having walked out of one
+  G.soc.backDoorTonight = {};   // …and the once-a-night welcome at the alley door
   G.soc.bra = {};      // the fondle bump is a one-night thing (as CLAUDE.md documents)
   G.soc.lastCall = {}; // last-call warnings reset with the night
   G.soc.mgrShot = {};  // the manager pours a fresh welcome shot each night
@@ -3957,6 +3979,7 @@ function _endNight(reason) {
   G.soc.bought = 0;          // the room's patience with a chequebook resets each night (_boughtHappy)
   G.soc.bondNight = {};      // …and so does how far a night of buying can carry one girl (_boughtBond)
   G.soc.drinkNight = {};     // …and who you actually bought a DRINK for (the butterfly tease)
+  G.soc.drinkCount = {};     // …and how many each (the Soi 6 drink tariff)
   // A new night never inherits last night's breadcrumb (round 34).
   if (typeof _traceCancel === "function") _traceCancel();
   G.soc.bondCapSaid = {};    // …so the "as warm as money gets tonight" line can land again tomorrow
@@ -4337,6 +4360,16 @@ function _newVacation() {
   delete G.flags.sabaiSabai;
   _setFlag("act1Done");
   _setFlag("hasWallet");
+  // The pocket flies home with you. ฿17,141 in hand at the airport became
+  // ฿3,000 in the safe a month later with no line of prose acknowledging the
+  // other fourteen grand — for a player whose whole strategy was underspending,
+  // that deleted the reward for playing well (Stan, round 35). It goes into
+  // the account; the safe's ฿3,000 is the fresh float, as before.
+  if (G.money > 0) {
+    G.bank = (G.bank || 0) + G.money;
+    _say(`(The ฿${_num(G.money)} you flew home with went into the account at the airport — ` +
+      `฿${_num(G.bank)} there now. The safe holds the float.)`, "dim");
+  }
   G.money = SAFE_CASH;
   G.battery = 100;
   G.hunger = 20;
