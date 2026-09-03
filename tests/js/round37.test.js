@@ -229,10 +229,13 @@ test("a bike is one turn within the district or the next one over, and a turn mo
   assert.equal(_districtHops("Beach Road", "Naklua"), 1);
   assert.equal(_districtHops("Beach Road", "Darkside"), 3);
   assert.equal(_districtHops("Jomtien", "Darkside"), 4);
+  const saved = _rand;   // the far ride carries a crash roll — not what this pins (it crashed on CI's seed)
   const ride = (from, to) => {
     newGame(); _setFlag("act1Done"); G.money = 5000; G.soc.drunk = 0; G.dog = null; G.nightTurn = 30;
     for (const e of Object.keys(ENCOUNTERS)) G.encDone[e] = true; G.peddlerNight = 2;
-    G.hunger = 0; G.thirst = 0; G.room = from; const t = G.turns; out = []; run("motosai to " + to);
+    G.hunger = 0; G.thirst = 0; G.room = from; const t = G.turns; out = [];
+    _rand = () => 0.99;
+    try { run("motosai to " + to); } finally { _rand = saved; }
     assert.equal(G.room, MOTOSAI_DESTS[to].room, from + " → " + to + " arrived");
     return G.turns - t;
   };
@@ -243,7 +246,8 @@ test("a bike is one turn within the district or the next one over, and a turn mo
   }
   assert.ok(expect("khao_talo", "jomtien") >= 3, "the far corner to the far corner is a long ride");
   assert.match(text(), /minutes of it/, "and the pay line says how long it was");
-  G.money = 0; G.room = "khao_talo"; const t = G.turns; out = []; run("motosai to naklua");
+  G.money = 0; G.room = "khao_talo"; const t = G.turns; out = [];
+  _rand = () => 0.99; try { run("motosai to naklua"); } finally { _rand = saved; }
   assert.equal(G.turns - t, expect("khao_talo", "naklua"), "the mercy ride takes the same road");
 });
 
