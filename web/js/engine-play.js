@@ -550,7 +550,6 @@ function _managerWelcome() {
   G.soc.mgrShot = G.soc.mgrShot || {};
   if (G.soc.mgrShot[G.room]) return;
   G.soc.mgrShot[G.room] = true;
-  G.soc.drunk++;
   _addHappy(1);
   let pool = (NPCS[id].shot && NPCS[id].shot.length) ? NPCS[id].shot : _MGR_SHOT;
   // "New face" on a fifth visit read as amnesia (27-night playtest 2026-08-22)
@@ -558,6 +557,68 @@ function _managerWelcome() {
   if (!pool.length) pool = _MGR_SHOT.filter(s => !/New face/.test(s));
   _say(_fmt(_pickVary(pool, "mgrshot:" + id), { n: NPCS[id].name }) +
     " (Stand him a BUY MAN DRINK when you've been bending his ear.)", "win");
+  _compDrink(1);
+}
+
+// ── Comped drinks ────────────────────────────────────────────────────────────
+// A free drink is still a drink. The bell's comped bottle and the lock-in's
+// party never touched the meter, so a man could be handed six and walk out
+// sober (round 36) — every free pour now goes through _compDrink. And the
+// Owl's letter has carried the canon for a year: "that drink was an
+// interview". _pushyBar marks the rails where it is — a stable quarter of the
+// town's bars, by pure hash, never your own — and there a comp is poured
+// HEAVY (one extra on the meter), and if it tips you past the line where a
+// sober man would notice, a girl is on the next stool with a lady drink
+// already chalked to you (Mario, 2026-09-03: comped drinks are a way for an
+// unscrupulous mama to get you spending). Once a bar a night; the chit is
+// real money, the bar's book says you bought her one (mama's midnight gate
+// reads it), and the girl is genuinely grateful — the angle is the house's,
+// not hers. A player who stays under three drinks is never padded: the
+// defence is sobriety, which is the thesis of the whole game.
+function _pushyBar(room) {
+  const r = ROOMS[room];
+  if (!r || !["beer", "soi6", "gogo", "gents"].includes(r.barType)) return false;
+  if (typeof _barOwned === "function" && _barOwned() && G.bar && G.bar.room === room) return false;
+  return _hh(room, 131) % 100 < 25;
+}
+const _COMP_HEAVY = [
+  "It's poured without a measure — a proper glass, not a shot — and whoever poured it watches you drink it.",
+  "Heavy pour. The kind of free drink that is mostly the drink.",
+  "Free, and about a double, and put down in front of you with a little too much attention paid to it going down.",
+  "She fills it to the brim and waits. Not for thanks.",
+  "It arrives large. In this town a free drink is an interview, and the size of it is the first question.",
+];
+const _COMP_PADDED = [
+  "{n} is on the stool beside you with a lady drink you don't remember buying, and the cashier has already chalked it. (-฿{p}, ฿{m} left.) She is very grateful. She is not the one who ordered it.",
+  "Somewhere between the free one and the next, {n} sat down, a drink came for her, and the chit went on your tab without anybody asking. (-฿{p}, ฿{m} left.) You notice it a beat late, which was the idea.",
+  "The bar's arithmetic: one free drink for you, one lady drink for {n} at ฿{p}, and nobody said the second part out loud. (฿{m} left.) She clinks your glass. Her smile is real; the drink was the mamasan's.",
+  "{n} arrives with her drink already in her hand and your name already on the chit. (-฿{p}, ฿{m} left.) You could argue it. Three drinks in, you don't.",
+  "A hand on your shoulder, {n} on the next stool, the cashier writing. Lady drink, ฿{p}, yours. (฿{m} left.) That is what the free one was for.",
+];
+function _compDrink(n) {
+  n = n || 1;
+  const heavy = _pushyBar(G.room) && !_lockedIn();   // a bolted door is a bar that loves you, not one working you
+  G.soc.drunk += n + (heavy ? 1 : 0);
+  G.thirst = Math.max(0, G.thirst - 20 * n);
+  (G.soc.comped = G.soc.comped || {})[G.room] = (G.soc.comped[G.room] || 0) + 1;
+  if (heavy) _say(_pickVary(_COMP_HEAVY, "compheavy"), "dim");
+  const day = G.day;
+  _checkDrunk();
+  if (heavy && G.day === day) _pushyUpsell();
+}
+function _pushyUpsell() {
+  G.soc.padded = G.soc.padded || {};
+  if (G.soc.padded[G.room]) return;
+  if (G.soc.drunk < 3) return;                 // sober, you'd notice — and she knows it
+  if (G.money < _ladyPrice()) return;
+  const girls = _npcsHere().filter(id => NPC_ROLES[id] === "hostess");
+  if (!girls.length) return;
+  const id = girls[_hh(G.room + ":" + G.day, 7) % girls.length];   // pure hash, no dice
+  G.soc.padded[G.room] = id;
+  _ladyDrinkCharge(id);
+  (G.soc.drinkCount = G.soc.drinkCount || {})[id] = (G.soc.drinkCount[id] || 0) + 1;
+  _boughtBond(id, 1);
+  _say(_fmt(_pickVary(_COMP_PADDED, "comppadded"), { n: NPCS[id].name, p: _ladyPrice(), m: G.money }), "dim");
 }
 
 function _closingTick() {
@@ -832,6 +893,7 @@ function _lockInDare(input) {
   _lockInBusy = true;
   try { for (let i = 0; i < 5 && !G.over; i++) _tick(); } finally { _lockInBusy = false; }
   _say(_pickVary(_LOCKIN_JOIN, "lockinjoin"), "win");
+  _compDrink(2);                               // the paint keeps what it keeps; the meter keeps the drinks
   (G.soc.lockInLast = G.soc.lockInLast || {})[G.room] = G.nightTurn;   // the elision IS the beat; no vignette on its heels
   for (const id of _npcsHere()) if (NPC_ROLES[id] === "hostess") _addBond(id, 1);
   _addHappy(3, "the party, and being in it");
@@ -2593,6 +2655,7 @@ function _doBell() {
     : (bt === "soi6" || bt === "gogo") ? _BELL_GOGO
     : _BELL_BEER; // beer bars, and any other bar-type, buy a round for the staff
   _say(`${_pickVary(pool, "bell:" + bt)} (-฿${price}, ฿${G.money} left — reign while it lasts.)`);
+  if (pool === _BELL_BEER) _compDrink(1);      // every line in that pool hands one back across the rail
   const rings = G.soc.bells[r];
   if (rings === 2) {
     _say("That's two bells this visit. The whole room's tilting hard your way now — " +
@@ -2632,11 +2695,11 @@ const _BELL_BEER = [
     "the rail cheer, the cashier bangs the counter, and a cold one lands in front of you before " +
     "you've even lowered your arm.",
   "The bell means the staff drink on you, and they do, gladly — whoops from behind the rail, a " +
-    "bottle-opener drum-roll, the whole open front a few degrees warmer. Small bar, big welcome.",
+    "bottle-opener drum-roll, the whole open front a few degrees warmer, and a bottle back across the rail for you. Small bar, big welcome.",
   "You ring it: a round for everyone working the bar. The girls toast you, the cashier grins, and " +
     "a comped bottle finds its way back to your hand. Beer-bar economics — everybody wins.",
   "A round for the house, which here is a handful of staff and whoever wandered in off the soi. " +
-    "Cheers, clinks, and your name suddenly known the length of a very short bar.",
+    "Cheers, clinks, a cold one pushed back at you, and your name suddenly known the length of a very short bar.",
   "The bell brings the staff's whole attention and their whole thanks: a cheer, a toast, a cold " +
     "one on the house right back at you. Cheap at the price for a bar this glad to see you.",
 ];

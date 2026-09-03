@@ -3822,7 +3822,11 @@ test("the bar manager: welcome shot, man drink, monopolise nudge — and NOT a l
   run("talk to bert", "ask bert about candy", "ask bert about owner");
   assert.match(lastOut(), /Stand us one|BUY MAN DRINK/i, "monopolise → nudge");
   // stand him one: costs a beer, builds goodwill, clears the debt
-  out = [];
+  // (the Doghouse above is a pushy bar by hash — Bill's heavy pour plus Bert's
+  // shot tipped the meter to three and its girl chalked a lady drink, which is
+  // the comped-drink mechanic doing its job; the money assertion here is about
+  // the man drink alone)
+  out = []; state().money = 1000;
   run("buy man drink");
   assert.match(lastOut(), /speaking the language/i);
   assert.equal(state().money, 920, "a man drink is a beer's worth (฿80)");

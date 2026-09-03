@@ -1084,7 +1084,7 @@ test("Auntie Nok's bottles promise what the beach actually holds", () => {
 test("the bell goes through the spend-brake like every other bought สนุก", () => {
   G.room = "candy_bar"; G.money = 99999; G.soc.bought = 0;
   const h0 = G.happy;
-  for (let i = 0; i < 20; i++) doCommand("ring bell");
+  for (let i = 0; i < 20; i++) { G.soc.drunk = 0; doCommand("ring bell"); }   // the comped bottle would black you out by the ninth
   const gained = G.happy - h0;
   assert.ok(gained < 30, "20 rings do not pay 40 สนุก (" + gained + ")");
   assert.ok(gained >= 12, "…and the first few still pay in full (" + gained + ")");
