@@ -212,6 +212,7 @@ const BF_BEER = 400, BF_GOGO = 1000, BF_SOI6 = 700, BF_GENTS = 900;
 // one a.m., no drink bought, +สนุก, nothing moved (Stan, round 35). These are
 // what she wants when the bar wants nothing.
 const LADY_ST = 300, LADY_LT = 500;
+const MOTEL_ROOM = 300;      // Somchith's: two hours, fan, towel in — the short-time motel off Soi 7
 // Male host bars charge a steep premium — a host drink is 2x+ a lady drink and
 // the "off" fee doubles the go-go barfine (canon). Even your own beer is
 // premium-priced (and arrives with ice, whether you wanted ice or not).
@@ -1407,7 +1408,7 @@ const ROOMS = {
       "People sitting on the sand in ones and twos, facing out. Nobody talks.",
       "The jet-skis are pulled up and padlocked. In the morning they will be a menace again.",
     ],
-    exits: { e: "beach_rd_klang", n: "north_beach" },
+    exits: { e: "beach_rd_klang", n: "north_beach", s: "promenade" },
   },
   jomtien_beach_s1: {
     name: "Jomtien Beach (past the works)",
@@ -1552,13 +1553,16 @@ const ROOMS = {
     region: "Beach Road",
     desc: "The paved walk between road and sand. Couples, joggers who've made bad choices, " +
       "and ladies standing in the lamplight with nowhere in particular to be. The " +
-      "bins are full of collectable glass, if a man were desperate.",
+      "bins are full of collectable glass, if a man were desperate. One step down off " +
+      "the paving is the sand, and the working beach proper runs north (N).",
     reads: {
+      beach: "The sand starts where the paving stops, a step down, and beyond it the bay " +
+        "does its slow black breathing under the lamps. Not a view — you are in it. (SWIM · SIT)",
       bins: "Council bins at every lamp post, and every one of them a Chang bottle bank. You " +
         "could fish the cleanest one out without anyone thinking less of you — nobody here " +
         "thinks about you at all. (TAKE BOTTLE; Auntie Nok on Jomtien Soi 7 pays five baht.)",
     },
-    exits: { e: "beach_rd_c" },
+    exits: { e: "beach_rd_c", n: "central_beach" },
   },
   beach_rd_n: {
     name: "Beach Road (foot of Soi 6)",
@@ -1947,7 +1951,13 @@ const ROOMS = {
       "attrition, and a few small bars that shut when their last customer leaves " +
       "rather than when the clock says. It runs Beach Road to Second Road like the " +
       "rest of them, but nobody calls out as you pass, and the noise from Soi 8 " +
-      "arrives one block late and secondhand.",
+      "arrives one block late and secondhand. Halfway along, an unlit alley (IN) that " +
+      "the high heels know and the guidebooks don't.",
+    reads: {
+      alley: "No sign, no light, a smell of lemongrass floor cleaner from somewhere up it. " +
+        "Two women in heels come out not quite together and separate at the kerb. The soi " +
+        "knows what it is. So do you. (IN)",
+    },
     revisit: [
       "Somebody is hosing the pavement outside a guesthouse, unhurried.",
       "The two minimarts continue their war. Neither is winning.",
@@ -9592,6 +9602,22 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         "they sit here and just... rest. Talk a little. Sometimes nothing. They need " +
         "somewhere that is quiet and not judging them.\" He refills his own cup. " +
         "\"I can be that place.\"" },
+      // The set had no play (Lionel, round 36): a man walked a barfined girl in
+      // and the old boy poured his coffee. Room / price / key / "short time" all
+      // land here (the global price rule covers the trade's own phrasing), and
+      // the hint is the verb that rents it.
+      { topic: "room", text: "\"Room?\" He does not look at the stairs. \"" + MOTEL_ROOM + " baht, two hours. " +
+        "Fan, towel, water in the fridge. Air-con room is more, but the fan is honest.\" He " +
+        "lifts the ring of keys an inch off the nail. \"You bring your company. I don't keep any.\" " +
+        "(GET ROOM, once you have somebody on your arm.)",
+        short: "\"" + MOTEL_ROOM + " baht, two hours, fan. You bring the company.\" (GET ROOM)" },
+      { topic: "price", text: "\"Same price for everybody: " + MOTEL_ROOM + " baht, two hours.\" He says it " +
+        "the way a man reads a bus timetable. \"What you pay HER is between you and her. I only " +
+        "rent the room.\" (GET ROOM)",
+        short: "\"" + MOTEL_ROOM + " baht the room. Her price is hers.\" (GET ROOM)" },
+      { topic: "key", text: "\"Key is for a room, room is for two.\" He taps the nail. \"" + MOTEL_ROOM + " baht. " +
+        "Come back with somebody.\" (GET ROOM)",
+        short: "\"Room is for two. Come back with somebody.\" (GET ROOM)" },
       { topic: "girls", text: "\"They call me Lung Somchith. Uncle Somchith. They bring me " +
         "krating daeng, kanom — snacks, you know. They complain about the shoes.\" " +
         "A small fond laugh. \"Same complaints every night. Too tight. Too high. " +
@@ -14437,6 +14463,20 @@ function _buildHostess(name, th, room, id = name.toLowerCase()) {
           `The money is the drink. No drink, no money. So." She lifts her empty glass an inch, not ` +
           `quite asking.`,
         short: `"Salary is small-small — for sit here. The money is the drink."` },
+      // "Short time?" is the most on-topic question in the trade and it missed at
+      // every bar on Beach Road (Lionel, round 36). The global rule folds how
+      // much / take you / my hotel / short time / long time into "price"; the two-
+      // fee canon in her own mouth: mama's fine, then hers.
+      { topic: "price",
+        text: idx([
+          `"Take me?" She does not pretend to be surprised. "Ask Mamasan for the bar — the barfine, na. ` +
+            `My part we talk after, you and me." A wink that is mostly business. (BARFINE <name>)`,
+          `"Short time, long time — first you pay the bar, tilac. Then me." She holds up two fingers, ` +
+            `then folds one down. "Two prices. Everybody forget the second one." (BARFINE <name>)`,
+          `"You want go with me? Okay, but Mamasan first." She nods at the till without looking at ` +
+            `it. "After that, my price is my price. Not the bar's." (BARFINE <name>)`,
+        ], 47),
+        short: `"Mamasan first, then me. Two prices." (BARFINE <name>)` },
       { topic: "quota", bond: 1,
         text: `"Quota, na. Every girl have number for the month — drink, and the other thing. Under ` +
           `the number, Mamasan not happy; over the number, small bonus." She counts something on ` +

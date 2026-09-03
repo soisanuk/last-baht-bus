@@ -182,6 +182,7 @@ test("a dep chain is a chain — being an origin doesn't skip other people's job
 });
 
 test("the hotel book stops when it stops — no charge is announced that isn't made", () => {
+  G.bank = 0; // the desk would run the card first now (Lionel, round 36) — this test is the ladder
   G.stage = "expat"; _setFlag("expatLife");
   G.hotelDebt = 0; G.money = 0; G.room = _hotelRoomId();
   let last = "";

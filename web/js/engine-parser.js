@@ -1016,7 +1016,8 @@ function _doTake(arg) {
       return s.fn ? !!s.fn(ctx) : !!(s.lines[ctx] || (ctx === "pub" && s.lines.bar) || s.lines.any);
     })();
     if ((typeof _roomRead === "function" && _roomRead(arg, true)) || _advertised || _sceneryHere) {
-      _say("That's fixtures, not luggage. It stays; the bar would notice.");
+      _say(_inBar() ? "That's fixtures, not luggage. It stays; the bar would notice."
+        : "That's part of the place, not something you carry off. It stays.");
       return;
     }
     _say("You don't see that here."); return;
@@ -1133,6 +1134,8 @@ function _doInventory() {
 // separate `sign`/SIGNS path (a room with a real Thai sign won't set reads.sign).
 const _READ_NOUNS = {
   menu: ["card", "menus", "price list", "prices", "price board"],
+  alley: ["lane", "side alley", "the alley"],
+  beach: ["sea", "bay", "water", "gulf", "the beach", "the sea"],
   // the one `reads.board` in the game is Myth Night's DJ request sheet — the
   // tap-list aliases went with the craft-beer bars that never existed there
   board: ["chalkboard", "blackboard", "clipboard", "slip", "request", "requests", "request sheet"],
@@ -5170,8 +5173,10 @@ function _doMotosai(arg) {
   let w = (arg || "").toLowerCase();
   // "hotel" / "home" / "my room" / your hotel's own name: the piwin knows where you
   // sleep — the nearest stand to your hotel's street (playtests 2026-08-22)
-  if ((/\b(hotel|home|my room|the room)\b/.test(w) || /sabai|queen vic|metropole/.test(w)) && _flag("act1Done")) {
-    w = { sabai: "naklua", queenvic: "soi 6", metropole: "soi buakhao" }[G.hotel] || w;
+  if ((/\b(hotel|home|my room|the room)\b/.test(w) || /sabai|queen vic|metropole|areca/.test(w)) && _flag("act1Done")) {
+    // the Areca was missing from both lists — "motosai to hotel" re-prompted a
+    // guest with a menu that contained the word hotel (Lionel, round 36)
+    w = { sabai: "naklua", queenvic: "soi 6", areca: "soi buakhao", metropole: "soi buakhao" }[G.hotel] || w;
   }
   const destKey = Object.keys(MOTOSAI_DESTS).find(k => w.includes(k) || k.includes(w));
   if (!w || !destKey) {
@@ -5840,9 +5845,39 @@ function _hostessHere() {
   return _npcsHere().some(id => NPC_ROLES[id] === "hostess");
 }
 
+const _POOL_SWIM = [
+  "Down to the garden pool in the hotel towel. Two long-stay couples are doing their slow lengths and make room without comment; the water is the temperature of the night and the soi's racket does not reach it. Ten lengths, and the day washes off.",
+  "The pool is lit from underneath and empty at this hour. You swim until the count stops mattering, float, and watch the aircon units on the wall above breathe out into the dark.",
+  "A few lengths of the hotel pool, the tiles cool, the water warmer than the air. A woman on a lounger nods without looking up from her book — the nod of one guest to another, nothing else in it.",
+  "You swim. The garden pool is small enough that you turn more than you stroke, and it doesn't matter; it's wet and it's quiet and nobody wants anything from you in it.",
+];
+const _WATCH_SEA = [
+  "The bay, doing what it does: a slow black breathing under the lamps, the lights of the fishing boats strung out toward Koh Larn, a jet-ski somebody forgot to bring in rocking on its mooring. You watch until the watching is the point.",
+  "No sun to go down at this hour — but the sea is still there, and so is the line of lights across the water, and a couple further along the sand who have run out of things to say and are happy about it.",
+  "Waves the size of a sigh. Beyond them the whole dark bay, and on it the boats' lights, and above it more stars than the town ever lets you see. You stand there longer than you meant to.",
+  "The Gulf at night is a sound more than a sight. You listen to it come and go, and something in your shoulders comes down a notch that you didn't know was up.",
+];
+function _dirName(d) {
+  return { n: "north", s: "south", e: "east", w: "west", in: "in", out: "out", up: "up", down: "down" }[d] || d;
+}
 function _doSwim() {
-  const onSand = /beach/.test(G.room) && !/_rd\b|beach_rd|_road/.test(G.room) && !ROOMS[G.room].bar;
+  // The one line "a hotel pool you are not a guest of" answered a guest of the
+  // hotel with the pool, and a man stood on the promenade a step from the sand
+  // (Lionel, round 36). Three honest answers now: your own hotel's pool, the
+  // sand you can reach from here, and the old line only where it's true.
+  if (G.room === _hotelRoomId() && _HOTELS[G.hotel].pool) {
+    if (G.soc.drunk >= 4) { _say("The pool, this many bottles in, at this hour. The couples doing slow lengths would have to fish you out. You watch them instead."); return; }
+    G.poolDay = G.poolDay || 0;
+    _say(_pickVary(_POOL_SWIM, "poolswim"));
+    if (G.poolDay !== G.day) { G.poolDay = G.day; _addHappy(1); }
+    return;
+  }
+  const onSand = (/beach/.test(G.room) && !/_rd\b|beach_rd|_road/.test(G.room) && !ROOMS[G.room].bar) ||
+    G.room === "promenade";
   if (!onSand) {
+    const ex = _room().exits || {};
+    const dir = Object.keys(ex).find(d => (/beach/.test(ex[d]) && !/beach_rd|_rd\b/.test(ex[d])) || ex[d] === "promenade");
+    if (dir) { _say(`The sand is one step ${_dirName(dir)} of here (${dir.toUpperCase()}). Swim from there, not from the kerb.`); return; }
     _say("The nearest swimmable water is a hotel pool you are not a guest of.");
     return;
   }
@@ -8038,6 +8073,20 @@ function doCommand(input) {
   // at a safe. Every modal gate (intro picks, quiz answers, game moves, canned
   // replies) has already run and returned by here, so a bare digit reaching
   // this point can only mean the room's one numeric affordance.
+  // Somchith's counter: GET/BOOK/RENT/TAKE/BUY (A) ROOM, KEY, SHORT TIME, PAY
+  // SOMCHITH — every phrasing a man with a girl on his arm tried (Lionel, round 36)
+  if (G.room === "short_time_motel" &&
+      /^(?:(?:get|book|rent|take|buy|pay for|hire)\s+(?:a |the |an )?(?:room|key|air-?con room|fan room)|(?:a |the )?room|short ?time|pay\s+(?:somchith|the (?:man|counter|old man))(?:\s+\d+)?)$/.test(lower.trim())) {
+    _motelRoom(); _tick(); return;
+  }
+  // Parting with a TAKE-HER-OUT companion before the night decides it for you:
+  // GOODBYE / GOODNIGHT [name], SEND <her> HOME (the banking app answered that
+  // one). Voiced when there is nobody to part with.
+  if (/^(?:goodbye|good ?night|bye|see you)(?:\s+(?:to\s+)?[a-z' ]+)?$/.test(lower.trim()) ||
+      /^send\s+(?:her|them|[a-z']+)\s+home$/.test(lower.trim())) {
+    if (G.party && G.party.ids && G.party.ids.length) { _partyGoodbye(); _tick(); return; }
+    if (/^send/.test(lower.trim())) { _say("Nobody on your arm to send anywhere. (SEND <amount> TO <name> is the banking app.)", "dim"); return; }
+  }
   if (G.room === "oy_office" && !_flag("hasWallet") && /^[\d๐-๙]{1,4}$/.test(lower.trim())) {
     const n = /^\d+$/.test(lower.trim()) ? parseInt(lower.trim(), 10) : parseThaiDigits(lower.trim());
     if (n !== null && !Number.isNaN(n)) { _doSafe(n); _tick(); return; }
@@ -8571,6 +8620,11 @@ function doCommand(input) {
         _doWatchDrag();
       else if (G.room === "buddha_hill" && (!arg || /bay|view|sunset|sea|sun|buddha|city|coast|below|hill|water/.test(arg)))
         _doWatchBuddha();
+      // the promenade said "no sea view from here" to a man stood between the
+      // road and the sand (Lionel, round 36) — any beach or the walk beside it
+      else if ((ROOMS[G.room].water || G.room === "promenade" || (/beach/.test(G.room) && !/beach_rd|_rd\b/.test(G.room) && !ROOMS[G.room].bar)) &&
+          (!arg || /sunset|bay|sea|view|sun\b|water|waves?|horizon|boats?/.test(arg)))
+        _say(_pickVary(_WATCH_SEA, "watchsea"));
       else if (!arg || /tv|news|television/.test(arg)) _doTv();
       else if (/police|checkpoint|shakedown/.test(arg))
         _say("No checkpoint from here — that's the junction outside the Blue Dog or the Stinky Pinky, on Beach Road. (WATCH POLICE, once you're there.)");

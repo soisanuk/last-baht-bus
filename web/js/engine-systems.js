@@ -957,6 +957,71 @@ function _partyArrive(to) {
   }
 }
 
+// ── Somchith's rooms ─────────────────────────────────────────────────────────
+// The short-time motel was a set with no play: authored counter, keys on a nail,
+// a placed NPC, an ST barfine narrating "a short walk to a short-time hotel" —
+// and a man who walked a taken-out girl in got coffee (Lionel, round 36). GET
+// ROOM with a TAKE-HER-OUT companion is the short-time round in the room built
+// for it: MOTEL_ROOM to the old man, the ST happy through the treadmill, the
+// earned +2 bond, the condom roll, and the party carries on afterwards — she's
+// still on your arm. Once per companion per night; alone is voiced, not blocked.
+const _MOTEL_ALONE = [
+  "Somchith looks past you, politely, for the second person. \"Room is for two, boss.\" He pours you a coffee instead, which is kinder than it sounds.",
+  "\"You alone?\" No judgment in it. \"Then you don't need a room. Sit, drink coffee. Come back with somebody.\"",
+  "He doesn't reach for the keys. \"Company first, room second. That is the order, in here.\" The thermos comes out instead.",
+];
+const _MOTEL_AGAIN = [
+  "{n} laughs into your shoulder. \"Again? Once is romance, tilac. Two times is WORK.\" Somchith studies the alley with great interest.",
+  "\"No, na.\" {n} pats your cheek. \"Same night, same room, same me? You save it.\" She takes your arm and steers you back toward the street.",
+];
+const _MOTEL_ROOM_LINES = [
+  "฿{p} across the counter and Somchith unhooks a key without looking at which. {n} takes your hand up the stairs, kicks the shoes off inside the door, and the fan takes up its slow count. Later — a shower that runs cold, then colder, {n} fixing her hair in a mirror the size of a paperback, and the old man's nod as you pass the counter. (฿{m} left.)",
+  "The key is warm from somebody else's pocket. Upstairs: a fan, a towel, a bottle of water sweating on the sill, and {n} being businesslike and fond in the same breath. Some time later you come down together, not quite together, and Somchith pours his coffee and does not look up. (-฿{p}, ฿{m} left.)",
+  "฿{p} to the old man. {n} goes up the stairs ahead of you as if she has done these particular stairs before, which she has. The room is a bed and a fan and a window painted shut. Afterward she sits on the edge of the mattress doing up a strap and tells you, kindly, that you are not as bad as most. (฿{m} left.)",
+  "Up the stairs behind {n}, past a door with a shoe outside it, into a room that smells of lemongrass and the last hour. The fan counts the minutes. When you come down the alley has its lights on and Somchith has a fresh cup poured. \"Okay?\" Okay. (-฿{p}, ฿{m} left.)",
+];
+function _motelRoom() {
+  const ids = (G.party && G.party.ids) || [];
+  if (!ids.length) { _say(_pickVary(_MOTEL_ALONE, "motelalone"), "dim"); return; }
+  const id = ids[0], n = _partyLabel();
+  G.soc.motelWith = G.soc.motelWith || {};
+  if (G.soc.motelWith[id]) { _say(_fmt(_pickVary(_MOTEL_AGAIN, "motelagain"), { n }), "dim"); return; }
+  if (G.money < MOTEL_ROOM) {
+    _say(_fmt("\"{p} baht, the room.\" You have ฿{m}. Somchith does not run a tab, and {n} does not look surprised.", { p: MOTEL_ROOM, m: G.money, n }));
+    return;
+  }
+  G.money -= MOTEL_ROOM;
+  for (const i of ids) G.soc.motelWith[i] = true;
+  _say(_fmt(_pickVary(_MOTEL_ROOM_LINES, "motelroom"), { n, p: MOTEL_ROOM, m: G.money }), "win");
+  G.offstage = true;
+  _passTime(Math.min(6, Math.max(0, NIGHT_TURNS - 1 - G.nightTurn)));
+  G.offstage = false;
+  _conquestHappy(ids.length > 1 ? 7 : 5, id);
+  for (const i of ids) _addBond(i, 2);
+  if (typeof _stdBarfineRoll === "function") _stdBarfineRoll();
+  if (G.party) _say(_fmt("({n} takes your arm at the mouth of the alley. The night is still going.)", { n }), "dim");
+}
+
+// Parting with a companion on your own terms — a taxi home for her, a kiss at
+// the kerb, the bond kept. The night used to have only two ways to end a party:
+// dawn, or your bed (Lionel, round 36).
+const _PARTY_GOODBYE = [
+  "{who} reads it before you say it, and is fine — a kiss on the cheek, a hand on your chest, ฿{c} for the taxi accepted without ceremony. \"Tomorrow, na? You know where.\" The bike pulls off and the night is yours again, quieter.",
+  "You put {who} in a taxi with ฿{c} and a promise you both know the weight of. She waves through the back window until the corner takes her.",
+  "\"Okay, tilac.\" {who} is not offended; she has a phone full of tomorrow. ฿{c} for the ride, a squeeze of the arm, and she is a tail-light going the other way.",
+  "Goodnight said properly, at the kerb, the way it should be: {who} on the back of a bike with ฿{c} folded into her hand, looking back once. The soi closes over the space she leaves.",
+];
+function _partyGoodbye() {
+  const p = G.party;
+  if (!p || !p.ids || !p.ids.length) return;
+  const who = _partyLabel();
+  const c = Math.min(G.money, Math.round(PARTY_TAXI / 2));
+  G.money -= c;
+  _say(_fmt(_pickVary(_PARTY_GOODBYE, "partygoodbye"), { who, c }), "dim");
+  for (const id of p.ids) _addBond(id, 1);
+  G.party = null;
+}
+
 // how the party ends is how the NIGHT ended — the goodbye reads the reason
 function _partyNightEnd(reason) {
   const p = G.party;
@@ -990,6 +1055,11 @@ function _bfPrompt() {
     return;
   }
   const pt = G.pendingBf.party != null ? G.pendingBf.party : lt;
+  // ST ฿600 · LT ฿600 · TAKE HER OUT ฿600 with no explanation read as a bug
+  // (Lionel, round 36) — it is the draw's midnight pricing; say so
+  if (id && typeof _isDraw === "function" && _isDraw(id) && G.nightTurn >= 60)
+    _say(`(${NPCS[id].name} is this bar's draw — the mama gives no midnight discount on her, and after ` +
+      "twelve the fine is the same whichever way you take her.)", "dim");
   if (G.pendingBf.herMoney)
     _say("(No bar fine past midnight — the book is closed, and the mama wants nothing. " +
       "What follows is HER money, and she names it herself.)", "dim");
@@ -1169,8 +1239,13 @@ function _bfResolve(kind) {
       _conquestHappy(6, id);
     } else {
       const bar = _barName(G.room) || "the bar";
+      // the town's one built short-time motel is the alley off Soi 7 — from a
+      // Beach Road bar that IS the short walk (Lionel, round 36)
+      const motel = _room().region === "Beach Road"
+        ? "short walk up the unlit alley off Soi 7 to Somchith's, the motel with no sign, where a ceiling fan is"
+        : "short walk to a short-time hotel with a ceiling fan";
       _say((price ? `฿${price} to the ledger, and a` : "A") +
-        ` short walk to a short-time hotel with a ceiling fan doing its slow count over the ` +
+        ` ${motel} doing its slow count over the ` +
         `proceedings. ${name} is businesslike and cheerful and gone within the hour — a kiss at ` +
         `the door, and she's back on her stool at ${bar} before your ice has melted. You amble ` +
         `back a few minutes behind her, and the night picks you up where it left off. (฿${G.money} left.)`, "win");

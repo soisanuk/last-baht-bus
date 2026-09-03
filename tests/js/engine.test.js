@@ -7807,6 +7807,7 @@ test("CHECKOUT: swap hotels at the start of an evening; the old key stops workin
 });
 
 test("hotel economics: rent, the downgrade ladder, the book, and the grace note", () => {
+  state().bank = 0; // the desk would run the card first now (Lionel, round 36) — this test is the ladder
   state().flags.act1Done = true;
   state().flags.hasWallet = true;
   state().stage = "vacation";

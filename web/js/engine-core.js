@@ -939,8 +939,8 @@ const _HOTELS = {
   // rate = vacation nightly; expatRate = the negotiated long-stay daily
   sabai:     { room: "hotel_room",     name: "Sabai Palms Hotel", rate: 400,  expatRate: 270 },
   queenvic:  { room: "qv_room",        name: "Queen Vic Inn",     rate: 700,  expatRate: 400 },
-  areca:     { room: "areca_room",     name: "Areca Lodge",       rate: 900,  expatRate: 520 },
-  metropole: { room: "metropole_room", name: "LK Metropole",      rate: 1300, expatRate: 730 },
+  areca:     { room: "areca_room",     name: "Areca Lodge",       rate: 900,  expatRate: 520, pool: true }, // "a window over the garden pool"
+  metropole: { room: "metropole_room", name: "LK Metropole",      rate: 1300, expatRate: 730, pool: true },
 };
 const _HOTEL_DOWNGRADE = ["metropole", "areca", "queenvic", "sabai"];
 const _DEBT_CAP = 2000;
@@ -970,6 +970,14 @@ function _chargeRent(rough) {
       "The folio slides under the door"}: ฿${_hotelRate(G.hotel)}` +
       (G.stage === "expat" ? " — the long-stay rate" : "") +
       `, the ${_HOTELS[G.hotel].name}. ฿${G.money} left.)`, "dim");
+    return;
+  }
+  // A guest with ฿94,700 in the account and ฿450 in his pocket had his bag posted
+  // to Naklua (Lionel, round 36). The desk runs the card before it runs you out.
+  if ((G.bank || 0) >= _hotelRate(G.hotel)) {
+    G.bank -= _hotelRate(G.hotel);
+    _say(`(Light pockets; the desk runs your card instead. ฿${_hotelRate(G.hotel)}, the ` +
+      `${_HOTELS[G.hotel].name}, off the account — ฿${G.bank} in the bank.)`, "dim");
     return;
   }
   // step down toward the Sabai Palms — but NOT in the Soi 6 challenge, whose whole
@@ -1629,8 +1637,12 @@ function _selfNamedNode(npcId, topic) {
   // Bee node because "night" appears in it (Malcolm, round 36). The same
   // stop-list the grapevine uses, plus the soi's furniture nouns.
   const _STOP = typeof _SAID_STOP !== "undefined" ? _SAID_STOP : new Set();
+  // …and the town's own furniture: "Beach" in "Beach Road" is not a topic, or
+  // asking Tan about the beach landed on his once-a-vacation favour node because it
+  // names Bank's stand (Lionel, round 36 — a favour fired by a question about sand)
   const _FURNITURE = new Set(["night", "last", "tonight", "girl", "girls", "drink", "drinks", "money",
-    "time", "here", "there", "come", "back", "good", "little", "thing", "things", "about", "some", "more"]);
+    "time", "here", "there", "come", "back", "good", "little", "thing", "things", "about", "some", "more",
+    "beach", "road", "street", "town", "city", "hotel", "market", "pattaya", "jomtien", "naklua", "bangkok"]);
   let words = String(topic).toLowerCase().split(/[^a-z0-9']+/)
     .filter(w => w.length >= 4 && !_STOP.has(w) && !_FURNITURE.has(w));
   // A MAN'S OWN NAME IN HIS OWN NODE IS A STAGE DIRECTION, NOT A TOPIC. Prose
@@ -2013,6 +2025,17 @@ function _describeRoom(full, forceFull) {
   // Just emoji + name for all — a patron's (age, nat) lives in EXAMINE.
   const here = npcs.map(id => `${NPCS[id].emoji} ${_npcLabel(id)}`);
   if (here.length) _say(_L("Here: ") + here.join(", ") + ".");
+  // A punter knows the mama and the cashier the moment he sits down — the game
+  // didn't say, and a man bought eight lady drinks for two cashiers and a
+  // mamasan before EXAMINE told him (Lionel, round 36). One dim line, roles only.
+  if (full && r.barType && npcs.length) {
+    const mama = npcs.find(id => NPC_ROLES[id] === "mamasan");
+    const till = npcs.find(id => NPC_ROLES[id] === "cashier");
+    const roles = mama && till ? `${NPCS[mama].name} runs the floor; ${NPCS[till].name} keeps the till.`
+      : mama ? `${NPCS[mama].name} runs the floor and the till both.`
+      : till ? `${NPCS[till].name} keeps the till.` : "";
+    if (roles) _say("(" + roles + ")", "dim");
+  }
   // Butterfly the dog: the girls dote on him at the door — a warmer welcome, once a night
   if (full && G.dog && G.dog.egg === "butterfly" && _inBar() &&
       npcs.some(id => NPC_ROLES[id]) && G.dog.btfDay !== G.day) {
