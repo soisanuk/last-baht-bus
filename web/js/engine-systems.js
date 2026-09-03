@@ -1412,9 +1412,18 @@ function _pickRideVenue(seen) {
   // she rides you up to, never a walkable pocket room.
   let venues = _RIDE_VENUES;
   if (G.mode === "soi6") venues = venues.filter(v => v.key !== "wsclub");
-  const pool = venues.filter(v => !seen.includes(v.key));
+  // Prefer a stop this player has never been taken to on ANY ride, then one
+  // not seen this ride, then anything: the same three stops came round
+  // verbatim two nights apart, directly after she said "cannot step in same
+  // river" — and after the game had called the first ride the one you'd never
+  // catch again (Howard, round 35). The pool is small; the memory is cheap.
+  const ever = G.rodeVenues || {};
+  const fresh = venues.filter(v => !ever[v.key] && !seen.includes(v.key));
+  const pool = fresh.length ? fresh : venues.filter(v => !seen.includes(v.key));
   const src = pool.length ? pool : venues;
-  return src[Math.floor(_rand() * src.length)];
+  const pick = src[Math.floor(_rand() * src.length)];
+  (G.rodeVenues = G.rodeVenues || {})[pick.key] = true;
+  return pick;
 }
 
 function _nightRide(input) {

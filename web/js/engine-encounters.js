@@ -702,9 +702,20 @@ const _ENC = {
     const both = /both|two|friend|ning|threesome|them/.test(input);
     const yes = both || /yes|ok|sure|company|come|deal|her|why not/.test(input);
     if (!yes) {
-      _say("You smile, wai lightly, and keep walking. “Mai pen rai~” — no offence " +
-        "taken, none given. Behind you, she and Ning resume their professional " +
-        "appraisal of the passing trade.");
+      // No wai here. This is the PASSTHROUGH — the player typed something
+      // unrelated and the engine declines on his behalf — and it used to
+      // narrate a wai for him. For a man whose whole arc is refusing exactly
+      // that gesture, the game was performing the thing he'd never do and then
+      // scoring him on manners (Declan, round 35). A shrug fits everybody.
+      _say(_pickVary([
+        "You give her a small shake of the head and keep walking. \u201cMai pen rai~\u201d \u2014 no " +
+          "offence taken, none given. Behind you, she and Ning resume their professional " +
+          "appraisal of the passing trade.",
+        "\u201cNot tonight,\u201d you say, not slowing, and she lets you go with a lazy wave that " +
+          "has already forgotten you. Behind you the two of them go back to pricing the street.",
+        "You keep your eyes on the road and your feet moving, and she reads it in two steps " +
+          "and turns to the next pair of shoes. Nobody\u2019s feelings are anywhere near this.",
+      ], "flnope"));
       return;
     }
     if (!_flag("act1Done")) {

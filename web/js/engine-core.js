@@ -1284,7 +1284,7 @@ function _convoTopics(id) {
     if (rage.some(k => d.topic.includes(k))) continue;
     if (d.req && d.req.some(f => !_flag(f))) continue;
     if (d.notFlags && d.notFlags.some(f => _flag(f))) continue;
-    if (d.bond && n && _bondTier(id) < d.bond) continue;
+    if (d.bond && n && _knownTier(id) < d.bond) continue;
     if (d.when && !d.when(st, G)) continue;
     if (!out.includes(d.topic)) out.push(d.topic);
   }
@@ -1563,14 +1563,30 @@ function _elsewhereLine(word) {
 // First dialogue entry whose req/notFlags fit; topic filters "ask about".
 // An unknown/locked topic falls back to the NPC's default (topicless) line —
 // classic adventure behaviour: they answer with whatever they always say.
+// A topic key matches the asked topic whole-word, never as a substring:
+// "boyfriend".includes("oy") was true, so ASK LEK ABOUT BOYFRIEND answered with
+// Madam Oy — and every short key (oy, dj, ice, bank) could be found inside an
+// unrelated word (annoying, adjust, notice, embankment). Howard, round 35.
+// Multi-word keys ("sabai sabai", "walking street") still match inside a
+// longer ask, and a key may carry a short inflection — "clams" reaches
+// "clam", "selling" reaches "sell", "sons" reaches "son" (the first cut of
+// this rule was whole-word both ends and broke all three). What it must never
+// do is start mid-word: the boundary BEFORE the key is the whole fix.
+function _topicHits(key, asked) {
+  if (!key || !asked) return false;
+  if (key === asked) return true;
+  const esc = String(key).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return new RegExp("(^|[^a-z0-9])" + esc + "[a-z]{0,3}([^a-z0-9]|$)", "i").test(String(asked));
+}
+
 function _pickDialogue(npcId, topic) {
   const n = NPCS[npcId];
   const st = _npcState(npcId); // conversation state machine — see _npcState
   for (const d of n.dialogue) {
-    if (topic ? d.topic !== topic && !(d.topic && topic.includes(d.topic)) : d.topic) continue;
+    if (topic ? !(d.topic && _topicHits(d.topic, topic)) : d.topic) continue;
     if ((d.req || []).some(f => !_flag(f))) continue;
     if ((d.notFlags || []).some(f => _flag(f))) continue;
-    if (d.bond && _bondTier(npcId) < d.bond) continue; // a warmer line only a regular unlocks (The Regular)
+    if (d.bond && _knownTier(npcId) < d.bond) continue; // a warmer line only a regular unlocks (The Regular)
     if (d.when && !d.when(st, G)) continue;            // state-machine condition (trust/mood/dstate/know)
     return d;
   }
@@ -1613,10 +1629,10 @@ function _selfNamedNode(npcId, topic) {
   words = words.filter(w => own.indexOf(w) < 0);
   if (!words.length) return null;
   for (const d of n.dialogue) {
-    if (d.topic && (d.topic === topic || topic.includes(d.topic))) continue; // the topic path already had its go
+    if (d.topic && _topicHits(d.topic, topic)) continue; // the topic path already had its go
     if ((d.req || []).some(f => !_flag(f))) continue;
     if ((d.notFlags || []).some(f => _flag(f))) continue;
-    if (d.bond && _bondTier(npcId) < d.bond) continue;
+    if (d.bond && _knownTier(npcId) < d.bond) continue;
     if (d.when && !d.when(st, G)) continue;
     const body = String(d.text || "");
     for (const w of words) {
@@ -2188,10 +2204,16 @@ function _describeRoom(full, forceFull) {
       // to get a word through — one staffer, two places, three lines apart
       // (Gerry, round 34). A woman the room has already placed can't be
       // simultaneously unavailable somewhere else in it.
-      const girl = (typeof busyId === "string" && _npcsHere().includes(busyId) && !_descHas(busyId))
+      // …nor a girl who is YOURS. "Lek laughing on cue beside him — the sort of
+      // scene you watch from across the bar, not one you walk into" printed
+      // directly above "her whole evening visibly reorganises itself around
+      // your arrival — the kept seat" (Howard, round 35). A regular-or-better
+      // is not furniture for the anonymous lifer to be draped with.
+      const _mine = id => typeof _knownTier === "function" && _knownTier(id) >= 2;
+      const girl = (typeof busyId === "string" && _npcsHere().includes(busyId) && !_descHas(busyId) && !_mine(busyId))
         ? busyId
         : _npcsHere().find(id => NPC_ROLES[id] === "hostess" &&
-            id !== (typeof _convoActive === "function" && _convoActive()) && !_descHas(id));
+            id !== (typeof _convoActive === "function" && _convoActive()) && !_descHas(id) && !_mine(id));
       const g = girl ? `, ${NPCS[girl].name} laughing on cue beside him` : "";
       if (girl) _say(_pickVary(_BAR_REGULAR_BUSY, "barReg")(g), "dim");
       else _say(_pickVary(_BAR_REGULAR, "barReg"), "dim");

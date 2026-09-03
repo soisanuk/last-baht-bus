@@ -798,7 +798,12 @@ test("OUT of your room after a respawn is your soi, and the stash pays on a resp
   assert.ok(G.act1SafeDue);
   G.room = "candy_bar"; G.nightTurn = 70; out = [];
   _endNight("barfine");
-  assert.equal(G.money, SAFE_CASH, "the safe paid on the respawn into the room");
+  // The safe now pays BEFORE the folio bills (round 35): it used to book ฿400
+  // of debt out of an empty pocket a line before opening a safe with ฿3,000
+  // in it. So the morning's rent comes out of the stash, honestly, and no
+  // debt is carried — ฿3,000 in hand plus a ฿400 IOU was the artifact.
+  assert.equal(G.money, SAFE_CASH - _HOTELS[G.hotel].rate, "the safe paid on the respawn, and the room was paid from it");
+  assert.equal(G.hotelDebt || 0, 0, "no IOU against money you had");
   assert.match(text(), /emergency stash/);
 });
 

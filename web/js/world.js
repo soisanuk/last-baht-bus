@@ -4712,6 +4712,21 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { topic: "wallet", req: ["knowMot"], notFlags: ["knowOyHasIt"],
         text: "\"Wallet? Candy told you everything Candy knows, tilac \u2014 Mot follow you out, Lek at Lucky Tiger see him this morning. Go squeeze HER. My part is done.\"",
         short: "\"Mot. Lucky Tiger. Ask Lek \u2014 my part is done.\"" },
+      // …and on a plain TALK, too. Two personas walked Candy → Lek → Oy and
+      // never came BACK to Candy, because nothing in the world says the way in
+      // runs through a woman you've already left behind; the one who did come
+      // back and simply talked got "Welcome to Candy Bar! First time?" (Declan,
+      // round 35). Once she knows Oy has it and hasn't handed the box over,
+      // her hello IS the errand — first match, so it outranks the welcomes.
+      { req: ["knowOyHasIt"], notFlags: ["somTamAccepted", "somTamDelivered"],
+        th: "กลับมาแล้ว", rom: "klap ma laeo",
+        text: "\"You again — and no wallet in your hand, so Oy said no.\" Candy doesn't wait for " +
+          "you to confirm it. \"Of course she said no. Sit.\" She's already reaching under the " +
+          "bar for a takeaway box. \"There is one door into that woman's world and it is not " +
+          "brave and it is not clever, it is som tam. Extra spicy, her order. You give it to " +
+          "Ploy — her cashier, the cage at Rainbow. Ploy stand there six hours hungry every " +
+          "night. Feed her, and doors open.\"", sets: ["somTamAccepted"], gives: "som_tam",
+        short: "\"Oy said no, of course. The door into her world is som tam — give it to Ploy in the cage, and doors open.\"" },
       { notFlags: ["knowWasHere"], th: "สวัสดีค่ะที่รัก", rom: "sawatdee kha tilac",
         text: "\"Welcome to Candy Bar! First time? No — wait.\" She studies you. \"You look like a man with a story and no wallet to put it in. Sit. Talk to Candy.\"",
         short: "\"Sit down, tilac. Talk to Candy — everybody's problems come to Candy.\"" },
@@ -4844,12 +4859,27 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // wasn't working, a month apart — the single worst line in the game by
       // the time a one-woman player had heard it (Frank, round 34). Bond-tiered
       // hellos, first match wins, so the room warms as the ledger does.
+      // Two hellos per tier, alternating by day: a single line at "your girl"
+      // tier was delivered identically nights five, six and seven, and became
+      // the vending machine it existed to replace (Howard, round 35).
+      { bond: 3, th: "มาแล้ว", rom: "ma laeo", when: (st, G) => G.day % 2 === 1,
+        text: "\"There he is.\" To the whole bar, not to you, as if reporting weather. She " +
+          "doesn't get up — she's mid-frame — but the next shot goes in with a little " +
+          "extra, and when she straightens she's already holding out the drink she " +
+          "poured when she heard the door.",
+        short: "\"There he is,\" to the whole bar. The drink was poured when she heard the door." },
       { bond: 3, th: "มาแล้วเหรอ", rom: "ma laeo ro",
         text: "She sees you before the door finishes opening, and whatever she was doing " +
           "stops being important. No hello handsome, no pool joke — she just says your " +
           "arrival like a fact she's pleased about, and the stool beside her has been " +
           "nobody else's all evening on the off chance.",
         short: "She clocks you from the far end and the stool beside her turns out to have been yours all evening." },
+      { bond: 2, th: "มาเหรอ", rom: "ma ro", when: (st, G) => G.day % 2 === 1,
+        text: "A cue lifted an inch off the table in greeting — the most a woman mid-game " +
+          "will give anybody — and then, over her shoulder while she lines it up: \"Same " +
+          "stool. I chase a man off it already tonight, so you sit, or I chase him for " +
+          "nothing.\"",
+        short: "A cue lifted an inch in greeting. \"Same stool — I chased a man off it already.\"" },
       { bond: 2, th: "อ้าว มาอีกแล้ว", rom: "aow, ma iik laeo",
         text: "\"Ohhh, again! You have no other bar?\" Lek doesn't look up from the shot " +
           "she's lining up, but she's grinning at the felt. \"Sit, sit. Two minutes, I " +
@@ -4936,6 +4966,61 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "win, everybody happy.\" She chalks the cue. \"Long plan is for people with " +
           "long money, tilac.\"",
         short: "\"Tonight the plan is you buy, I win, everybody happy.\"" },
+      // What she volunteers, she can be asked about (Howard, round 35 — the
+      // volunteer-then-miss class, which no lint finds). Her own desc has her
+      // beating two men at pool; her selfies crow about it; she guesses your
+      // age and tells you hers; the plan names a shop and a cousin; the other
+      // ledger names a salary and a bonus. All of them missed.
+      { topic: "pool",
+        text: "\"Pool?\" The grin is instant and unprofessional. \"Two year I play every " +
+          "night, tilac. First month I lose every game — the old men here, they let me " +
+          "lose, they think is cute. Second month I stop being cute.\" She taps the cue " +
+          "on the floor. \"Now nobody let me anything. Mamasan give me the table because " +
+          "the table is where I make money for the bar — men lose, men buy drink, men " +
+          "stay to lose again.\" A shrug. \"Is a good job. Better than the sofa.\"",
+        short: "\"Two year, every night. First month they let me lose because is cute. Then I stop being cute.\"" },
+      { topic: "age",
+        text: "\"Twenty-six.\" She says it before you can guess, which is the point. \"On " +
+          "the soi everybody is twenty-two until they are thirty-five, na. I don't bother. " +
+          "You look at my hands, you know.\" She holds one up — chalk in the creases, a " +
+          "ring line with no ring. \"Twenty-six is good. Old enough to count, young enough " +
+          "the counting still help.\"",
+        short: "\"Twenty-six. On the soi everybody is twenty-two until thirty-five. I don't bother.\"" },
+      { topic: "shop", bond: 3,
+        text: "\"The shop.\" She likes being asked, and doesn't hide it. \"Front room of my " +
+          "mother's house, on the road — everybody pass with a motorbike, everybody need " +
+          "oil, a tube, the chain thing. Cold drink in the ice box for the ones who wait.\" " +
+          "She draws it on the bar with a wet finger: a counter, a rack, a bench outside. " +
+          "\"Boring. Boring is the whole idea. Nobody buy you a drink at a parts shop, and " +
+          "nobody try to take you home either.\"",
+        short: "\"Front room of my mother's house — oil, tubes, cold drinks. Boring is the whole idea.\"" },
+      { topic: "cousin", bond: 3,
+        text: "\"My cousin Noi, in Chum Phae — she did it. Same shop, same road idea.\" " +
+          "Something careful comes into her voice. \"She work here two year before me. " +
+          "Now she is fat and bored and shout at her husband, and I go see her at Songkran " +
+          "and I am so jealous I could cry.\" She laughs at herself. \"That is the dream, " +
+          "tilac. Fat and bored. Don't tell the men.\"",
+        short: "\"Noi in Chum Phae did it — fat and bored now, shouting at her husband. I'm so jealous I could cry.\"" },
+      { topic: "salary", bond: 2,
+        text: "\"Salary is nine thousand. That is the number on the paper.\" She says it like " +
+          "reading a receipt, the way she said the price of things once. \"Nine thousand " +
+          "for thirty night — is the seat, not the work. The work is the drink. Thirty " +
+          "drink a month is the quota; after that, a little bonus, and the drinks are " +
+          "where the money is, if the money is anywhere.\" A glance at your glass. \"So.\"",
+        short: "\"Nine thousand on the paper, for the seat. The work is the drinks — thirty a month, then bonus.\"" },
+      { topic: "bonus", bond: 2,
+        text: "\"Bonus.\" A short laugh. \"Thirty drink is the quota. Thirty-one, thirty-two, " +
+          "Mamasan write a little star. At the end of the month the stars are — \" she " +
+          "rubs two fingers together, and then opens the hand to show how little is in it. " +
+          "\"Enough for the bus home at Songkran. Not enough for the shop. Nothing is " +
+          "enough for the shop, that is why it is a plan and not a shop.\"",
+        short: "\"Past thirty drinks Mamasan writes a star. The stars are enough for the bus home, not for the shop.\"" },
+      { topic: "sandals", bond: 1,
+        text: "She looks down at them, then at you, and for a second forgets to be funny " +
+          "about it. \"Nobody buy me shoes before. Drinks, yes. Flower, yes. A shoe is — \" " +
+          "she hunts for it \"— a shoe is for walking somewhere.\" Then the grin comes " +
+          "back. \"They are half a size small. I will wear them anyway. Don't say anything.\"",
+        short: "\"Nobody buy me shoes before. A shoe is for walking somewhere.\"" },
     ],
   },
 
@@ -9305,6 +9390,17 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       "backed by every piwin within three sois.",
     dialogue: [
       { req: ["sabaiPlaying"], text: "They're on the dance floor. All three. Arms around each other's shoulders, singing 'Sabai Sabai' with their eyes closed. The office door stands unwatched." },
+      // The stubborn man ends up HERE, at the door, refused — and got a wall
+      // (Declan, round 35, two nights, every other soul in the bar asked). A
+      // bored guard on a second try is the most natural leak in the building:
+      // he isn't helping, he's boasting about the one time the door isn't his.
+      { when: (st, G) => (G.officeTries || 0) >= 1,
+        text: "The same smile, a degree wider. \"Boss. Still that way.\" He taps the door " +
+          "with a knuckle. \"This one, nobody. Not you, not me — only when Mamasan's song " +
+          "come on, then we ALL go, everybody sing, nobody watch nothing.\" He laughs at " +
+          "his own joke and does not seem to hear what he has said. \"Ask DJ, he tell you " +
+          "the song. He tell everybody.\"",
+        short: "\"Only when Mamasan's song comes on — then we all go and sing. Ask DJ.\"" },
       { text: "The nearest one smiles like a bank vault. \"Sawatdee khrap. Bar is that way, boss.\" The ห้ามเข้า door might as well be on the moon." },
     ],
   },

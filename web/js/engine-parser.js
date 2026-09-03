@@ -428,6 +428,7 @@ function _doGo(dirWord) {
         "You slide behind the bar; the ห้ามเข้า door is unlocked, exactly as Ploy promised.");
     } else {
       _deliver("security", _pickDialogue("security"));
+      G.officeTries = (G.officeTries || 0) + 1;   // the guard talks on the second try
       return;
     }
   }
@@ -8309,6 +8310,27 @@ function doCommand(input) {
       if (/beer|chang|leo|singha/.test(arg)) { _doBuy("beer"); break; }
       _say("Big what? The night is full of options."); break;
     case "diagnose": case "health": _doDiagnose(); break;
+    // DEMAND WALLET at Madam Oy fell through to the conversation layer, which
+    // treated the whole line as an ASK and echoed "· You asked Madam Oy about
+    // demand wallet" — a parser leak where a voiced refusal belongs (Declan,
+    // round 35, whose whole persona was refusing to ask nicely). Nobody in
+    // this town answers to a demand; the line says so instead of pretending
+    // the verb was a question.
+    case "demand": case "insist": case "order":
+      if (v === "order" && !/\b(wallet|money|him|her|them|answer)\b/.test(arg)) {
+        _doBuy(arg); break;                      // ORDER A BEER is a purchase
+      }
+      _say(_pickVary([
+        "You put it as a demand. The room takes a small, collective step back from the " +
+          "idea, and whoever you aimed it at simply waits for you to try a different verb. " +
+          "This town has never once answered to one.",
+        "Demanding, in this town, is a thing that happens to farang — it is not a thing " +
+          "they do. The silence that follows is polite, and total, and lasts until you " +
+          "find another way to ask.",
+        "You make it an order. Nobody here takes orders from a man with no wallet, and " +
+          "very few from a man with one. The moment passes; the night resumes without you.",
+      ], "demand"), "dim");
+      break;
     case "kill": case "attack": case "hit": case "punch": case "fight": case "strangle":
       _doViolence(arg); break;
     case "xyzzy": case "plugh": case "pray": _doMagic(v); break;

@@ -284,6 +284,10 @@ function _lastBusWarn() {
   if (!_flag("act1Done") || G.over || G.lastBusWarned) return;
   if (G.nightTurn < LAST_BUS_TURN - 5 || G.nightTurn >= LAST_BUS_TURN) return;
   if (G.room === _hotelRoomId()) return; // already home — no race left to run
+  // …and not from the pillion seat of a night ride, whose whole design is that
+  // she's your ride and the dread lifts (Howard, round 35: it printed between
+  // stops on the back of her bike).
+  if (G.rideSeq) return;
   G.lastBusWarned = true;
   const mins = Math.max(5, (LAST_BUS_TURN - G.nightTurn) * 6);
   _say(_fmt("Somewhere out there the songthaew loops are thinning — the last baht bus of " +
@@ -2619,6 +2623,17 @@ function _bondTier(id) {
   const d = (G.soc.drinks && G.soc.drinks[id]) || 0;
   return d >= 13 ? 3 : d >= 7 ? 2 : d >= 3 ? 1 : 0; // stranger / face / regular / her farang
 }
+// WHAT SHE HAS TOLD YOU does not reset with the drinks book. _bondTier is THIS
+// week's warmth and it legitimately cools between trips — the barfine waiver,
+// the favor bias, the kept seat all read it. But the bond-gated DIALOGUE was
+// reading it too, so a man who came back after a month to a woman who had
+// shown him her son's photo and named her village was told "we're not at the
+// village-name part yet" until four drinks refilled the meter (Howard, round
+// 35). Her memory is not a meter. This is the tier she has ever reached with
+// you, and it is what her dialogue gates on.
+function _knownTier(id) {
+  return Math.max(_bondTier(id), (G.prevBond && G.prevBond[id]) || 0);
+}
 // Recognition on arrival — authorial narration (register-free; any quoted speech
 // obeys her English). Varied by tier so a regular's welcome doesn't loop.
 const _REL_GREET = {
@@ -3391,8 +3406,12 @@ const _CODA_HOME = [
     "into the back of an empty baht bus — no leather, no laser, just a hard metal bench — and " +
     "folds her knees up against the chilly morning.",
   "In a small purse, past a broken lighter and a stub of lip gloss, she finds the notes and folds " +
-    "them small into the hidden zip. That money isn't hers to spend: it's a hospital bill up-country " +
-    "and a school uniform for a kid she sees four times a year. For the fare she digs out coins and " +
+    // No biography here: this coda lands on ANY girl, and it used to give a
+    // woman with her own authored canon a hospital bill and a kid "she sees
+    // four times a year" that contradicted what she'd told him all week
+    // (Howard, round 35). The image stays; the facts are hers to tell.
+    "them small into the hidden zip. That money isn't hers to spend — it is already spoken for, " +
+    "somewhere north, by people who have never seen this room. For the fare she digs out coins and " +
     "holds them in her fist.",
   "The baht bus screeches up to a dark, narrow soi in North Pattaya. She presses the buzzer, hands " +
     "the driver a few coins, and walks the last of the way to a windowless room at four thousand a " +
@@ -3998,6 +4017,14 @@ function _endNight(reason) {
           ? ` They left you ฿${_num(G.money)}, which is either mercy or arithmetic.)`
           : ")"), "dim");
   }
+  // A man who got the wallet back last night and made it home wakes in his
+  // own room with the safe's ฿3,000 still DUE (paid on the first time in the
+  // room); the folio used to bill him ฿400 of debt out of an empty pocket,
+  // and the very next line opened that safe — "his kindness is the heaviest
+  // thing you'll carry today", followed by the money that made the kindness
+  // unnecessary (Howard, round 35). The safe pays first; the later call no-ops.
+  if (!crash && G.act1SafeDue && G.room === _hotelRoomId() && typeof _roomSafeBeat === "function")
+    _roomSafeBeat();
   _chargeRent(!!crash);              // the folio bills you even if you slept rough…
   if (crash) G.room = crash.room;    // …but you wake where the night left you, not at the desk
   if (_quietHelped) _say("(Naklua quiet: the hangover wakes one size smaller.)", "dim");
@@ -4334,8 +4361,15 @@ function _newVacation() {
     if (t >= 2) G.prevBond[id] = t;
   }
   G.returned = {};
+  // What she has TOLD you survives the trip home. The other-ledger reveals
+  // are once-per-girl-per-tier EVER by doctrine, and wiping the book with the
+  // bonds replayed the ฿60 cut as news to "a man who has been inside it for a
+  // week" — her own words — a month after she showed him the chit in her
+  // phone case (Howard, round 35). The share card's per-week COUNT still
+  // resets below (ledgerSeen); only the memory of the telling is kept.
+  const _told = G.soc.ledger || {};
   G.soc = { drinks: {}, mamaTreat: {}, bellAt: {}, bells: {}, heat: {},
-    banned: {}, patronBusy: {}, patronMiffed: {}, bra: {}, drunk: 0 };
+    banned: {}, patronBusy: {}, patronMiffed: {}, bra: {}, drunk: 0, ledger: _told };
   // The share card's spine and its "told true" count are THIS week's, not a
   // lifetime tally — nightLog untouched here meant a fresh vacation's SHARE
   // showed the previous vacation's 7 nights and falsely declared "week
@@ -4345,6 +4379,10 @@ function _newVacation() {
   // 2026-08-27).
   G.nightLog = [];
   G.ledgerSeen = 0;
+  // The morning-after ledger is a delta against a night-end snapshot; taken
+  // across the vacation reset it reported the reset itself — "−119 สนุก · down
+  // ฿5,740 on the night" for a month spent at home (Howard, round 35).
+  G.lastNight = null;
   G.itemLoc.phone = "inventory";
   G.itemLoc.charger = "inventory";
   G.itemLoc.wallet = "inventory";
