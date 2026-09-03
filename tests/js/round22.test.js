@@ -188,7 +188,7 @@ test("bare ACCEPT with two on the table asks which, and with one just takes it",
   doCommand("accept");
   assert.match(text(), /Accept which/, "two offers is a question, not a coin toss");
   assert.equal(G.quests.sangsom, "offered");
-  G.quests.recce = "done"; out = [];
+  G.quests.recce = "done"; out = []; G.room = _npcRoom("candy");   // the bottle is handed over where she is (Bronwyn, round 39)
   doCommand("accept");
   assert.equal(G.quests.sangsom, "active", "one offer needs no name");
 });

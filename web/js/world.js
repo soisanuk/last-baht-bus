@@ -3196,7 +3196,8 @@ const ROOMS = {
     bar: "Kitten Corner", barType: "soi6",
     desc: "Open to the pavement, walled in cat posters and a neon paw print. Praewa and " +
       "Nangfah work the front, and the grab-and-giggle starts before you've fully stopped " +
-      "walking; Kesinee watches it all from the till, pricing you before you sit. A " +
+      "walking; Kesinee watches it all from the end of the rail, pricing you before you sit, " +
+      "and Baimon has the till. A " +
       "staircase at the back goes up to the short-time rooms.",
     revisit: [
       "Back into Kitten Corner and the grab-and-giggle is instant — Praewa in your lap, Nangfah at your ear, both purring the offer. \"You want kitten tonight? Two kitten? Buy us drink, we go up, we play.\"",
@@ -13130,7 +13131,7 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
         "the girls loved you for who you were.\" He takes a long, wounded pull of " +
         "his lager. \"It's all gone corporate now. QR codes. No soul.\"",
         short: "\"Trees on Beach Road, fifty-baht lady drinks. No soul now, son. No soul.\"" },
-      { topic: "1998", text: "\"Best year of my life, 1998. Pound went twice as far — " +
+      { topic: "1998|pattaya|beach road|good old days", text: "\"Best year of my life, 1998. Pound went twice as far — " +
         "I lived like a lord on a printer salesman's redundancy.\" He counts the " +
         "losses on his fingers: \"The Marine Bar. Gone. The old pier. Gone. My " +
         "hair.\" He does not include the exchange rate, his knees, or the fact " +
@@ -14451,9 +14452,15 @@ function _c4Depth(id) {
   return 6;                                  // everyone else on the floor
 }
 
-function _buildHostess(name, th, room, id = name.toLowerCase()) {
+// Rung and Oat at the Lucky Tiger were the same woman with two names — look,
+// greeting, family, plan, every line identical back to back (Trevor, round 39):
+// the short ids collided across every pool. A girl whose signature matches a
+// colleague already built at her bar is re-rolled off a bumped seed. Pure and
+// stable (same roster, same result), so saves are unaffected.
+const _hostessSigs = {};
+function _buildHostess(name, th, room, id = name.toLowerCase(), seed = id) {
   const bar = _barName(room) || "the bar";
-  const idx = (arr, salt) => arr[_hh(id, salt) % arr.length];
+  const idx = (arr, salt) => arr[_hh(seed, salt) % arr.length];
   const from = idx(_H_FROM, 3);
   const darkside = ROOMS[room] && ROOMS[room].region === "Darkside";
   const look = idx(darkside ? _H_LOOK_DARK : _H_LOOK, 5);
@@ -14527,6 +14534,10 @@ function _buildHostess(name, th, room, id = name.toLowerCase()) {
   const selfies = hasPics
     ? [0, 1, 2].map(k => _H_SELFIES[_hh(id, 51 + k * 17) % _H_SELFIES.length])
     : null;
+  const _sig = [look, family, idx(GREET, 23)].join("|");
+  if (!_hostessSigs[room]) _hostessSigs[room] = new Set();
+  if (_hostessSigs[room].has(_sig) && seed.length < id.length + 3) return _buildHostess(name, th, room, id, seed + "~");
+  _hostessSigs[room].add(_sig);
   return {
     name, th, emoji, room, filler: true,
     ...(green ? { c4: 2 } : {}),

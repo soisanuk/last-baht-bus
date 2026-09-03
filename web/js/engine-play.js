@@ -1471,7 +1471,8 @@ function _kpInput(input) {
     if (winner && winner.name === "You") {
       _setFlag("wonLeague");
       _endGame(true, g.stake, `Last cue standing. The pot — ฿${g.stake} — is pushed ` +
-        "across the felt with due ceremony, and the man behind the bar rings the bell himself. " +
+        "across the felt with due ceremony, and " +
+        ((typeof _tillKeeper === "function" && _tillKeeper(G.room)) ? `${NPCS[_tillKeeper(G.room)].name} rings the bell herself. ` : "the man behind the bar rings the bell himself. ") +
         "League night belongs to you.");
     } else {
       _endGame(false, 0, `${winner ? winner.name : "The table"} takes the pot. You take ` +
@@ -3095,7 +3096,7 @@ const _OTHER_LEDGER = {
   // tier 1 — the cut. The first thing the arithmetic hides: what you hand over
   // is not what she receives.
   1: [
-    (n) => `The waitress rings your lady drink and ${n} does a thing you have seen her do twenty ` +
+    (n) => `The next lady drink that goes on your chit, ${n} does a thing you have seen her do twenty ` +
       `times without once reading it: she takes the chit, folds it, and tucks it into the band of ` +
       `her phone case with the others. Not a keepsake — a tally. "For counting, end of month." ` +
       `She fans them like a small hand of cards, unembarrassed. "This one, I get ฿${LADY_CUT}." ` +
@@ -4276,6 +4277,19 @@ function _endNight(reason) {
   // playtest 2026-08-22: both contacts strangers by day 35) — expat bonds cool a
   // notch every third night, vacation bonds nightly as before
   if (_dogEgg() !== "loyal" && (G.stage !== "expat" || G.day % 3 === 0)) for (const id in G.soc.drinks) _addBond(id, -1);
+  // THE REGULAR, BY PRESENCE: six nights on the same stool, ฿2,400 on one girl,
+  // and by Saturday she "knows your face" — the nightly cool-off ate a modest
+  // man's whole evening (Trevor, round 39). The bar you sat longest in tonight
+  // (≥30 turns — three hours) earns its girls a notch that isn't bought, through
+  // _addBond like the floor: the drinks taper has nothing to say about it.
+  if (_flag("act1Done") && G.soc.barTurns) {
+    const [top, n] = Object.entries(G.soc.barTurns).sort((a, b) => b[1] - a[1])[0] || [];
+    if (top && n >= 30 && ROOMS[top] && ROOMS[top].barType) {
+      const girls = _staffAt(top).filter(id => NPC_ROLES[id] === "hostess");
+      for (const id of girls) _addBond(id, 1);
+      if (girls.length) _say(`(Three hours on the same stool at ${_barName(top)} is its own kind of drink. The girls there will know the face.)`, "dim");
+    }
+  }
   G.soc.patronBusy = {};
   G.soc.patronMiffed = {};
   G.soc.apologized = {}; // a new shift will hear you out afresh

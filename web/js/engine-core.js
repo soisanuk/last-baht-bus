@@ -1308,7 +1308,7 @@ function _convoTopics(id) {
     if (d.notFlags && d.notFlags.some(f => _flag(f))) continue;
     if (d.bond && n && _knownTier(id) < d.bond) continue;
     if (d.when && !d.when(st, G)) continue;
-    if (!out.includes(d.topic)) out.push(d.topic);
+    { const _t = String(d.topic).split("|")[0]; if (!out.includes(_t)) out.push(_t); }   // the chip shows the first alias
   }
   return out;
 }
@@ -1596,6 +1596,7 @@ function _elsewhereLine(word) {
 // do is start mid-word: the boundary BEFORE the key is the whole fix.
 function _topicHits(key, asked) {
   if (!key || !asked) return false;
+  if (String(key).includes("|")) return String(key).split("|").some(k => _topicHits(k, asked));   // aliases: "1998|pattaya|beach road" (Hamish/Trevor, rounds 38–39)
   if (key === asked) return true;
   const esc = String(key).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   return new RegExp("(^|[^a-z0-9])" + esc + "[a-z]{0,3}([^a-z0-9]|$)", "i").test(String(asked));
@@ -2487,6 +2488,7 @@ function _tick() {
   // it parks at the bar for a while, the girls swarm it, and the player may buy
   // any time before it moves on. All of that lives in _salengTick (encounters).
   _salengTick();
+  if (_inBar()) (G.soc.barTurns = G.soc.barTurns || {})[G.room] = ((G.soc.barTurns || {})[G.room] || 0) + 1;   // presence, for the regular's bond (Trevor, round 39)
   _railTick();     // the hour turns and somebody drains a glass and moves on
   if (typeof _flowerTick === "function") _flowerTick(); // open-air-bar flower seller (once/night, when courting a girl)
   _closingTick(); // midnight: gents/Soi 6/Darkside give last call, then bolt or shutter

@@ -4456,7 +4456,7 @@ test("the Glam saga: four rungs from the tour story to 'He is my father'", () =>
   assert.ok(state().flags.glamHeard, "the patron sets support fires");
   assert.equal(state().quests.oldrocker, "done");
   // 2 — the keys reach Diamond's shrine (generic GIVE, no whitelist)
-  state().room = NPCS.wimon.room; run("talk wimon"); run("accept keys");
+  state().room = _npcRoom("wimon"); run("talk wimon"); run("accept keys");   // a quest with a thing to hand over is accepted where she is (Bronwyn, round 39)
   assert.equal(state().itemLoc.foreman_keys, "inventory");
   state().room = "hyper";
   out = []; run("give keys to diamond");
@@ -6776,7 +6776,7 @@ test("saleng moves on only when its timer runs out", () => {
   out = [];
   run("look"); // tick 2 — timer up, it departs
   assert.equal(state().salengCart, null, "the cart has moved on");
-  assert.match(lastOut(), /putters on|moves on|packs up/i, "with a farewell line");
+  assert.ok(_SALENG_LEAVE.some(l => lastOut().includes(l)), "with a farewell line");
 });
 
 test("saleng first-ever vs later: full pitch, then a low-key notice", () => {

@@ -182,6 +182,11 @@ function _roomProse(r) {
   return String((r && r.desc) || "").toLowerCase();
 }
 
+const _FOLK_SEVEN = [
+  "The 7-Eleven lad looks up from his phone. “Sawatdee khrap.” Then back down. That is the whole conversation available, and it is not unfriendly.",
+  "The girl on the till gives you the smile the uniform requires and the eyes it doesn't. “Toastie?” No? The smile stays; the attention goes.",
+  "The clerk is restocking the fridge and does not stop. “Khrap?” Whatever you were going to ask, the answer is on a shelf, and he points at the shelves.",
+];
 function _promptedFolk(arg) {
   const r = _room();
   if (!r) return false;
@@ -189,6 +194,9 @@ function _promptedFolk(arg) {
   if (!a) return false;
   if (/\b(motosai|piwin|driver|rider|bike ?boy)\b/.test(a) && r.motosai) {
     _say(_pickVary(_FOLK_MOTO, "folkmoto")); return true;
+  }
+  if (/\b(clerk|cashier|staff|lad|counter|shop ?(girl|boy|assistant))\b/.test(a) && r.seven) {
+    _say(_pickVary(_FOLK_SEVEN, "folkseven")); return true;   // three refusals for a lad the receipt named (Bronwyn, round 39)
   }
   const prose = _roomProse(r);
   if (!prose) return false;
@@ -212,6 +220,18 @@ const _NOBODY_NAME = [
   "That name doesn't land on anyone in the room.",
   "Nobody here goes by that — not tonight.",
 ];
+// A first-timer types sentences: "what should I do", "where am I", "look
+// around", "I'm lost". The opening night answered "I didn't understand that"
+// (Bronwyn, round 39). Voiced, and pointed at the four verbs that get you home.
+function _naturalHelp(lower) {
+  const l = lower.trim();
+  if (/^(where am i|where is this|where are we|look around|look about|have a look)\b/.test(l)) { _describeRoom(true); return true; }
+  if (/^(what (should|do|can) i do|what now|what next|help me|i'?m (lost|stuck|confused)|i don'?t know what to do)\b/.test(l)) {
+    _say("(LOOK shows where you are. TALK to whoever is here and ASK them about your wallet — this town runs on asking. HINT when you're stuck; HELP for everything.)", "dim");
+    return true;
+  }
+  return false;
+}
 const _HUH = [
   "I didn't understand that. (HELP lists commands.)",
   "That one didn't parse. (HELP lists commands.)",
@@ -589,7 +609,11 @@ function _arriveAt(to) {
       const _unfeat = hos.filter(x =>
         !new RegExp("\\b" + NPCS[x].name + "\\b").test(String((ROOMS[to] || {}).desc || "")));
       const _busyPool = _unfeat.length ? _unfeat : hos;
-      G.soc.patronBusy[to] = (hos.length && _rand() < 0.4)
+      // …and only where there IS a regular to be jealous: the line printed one
+      // command after "the far stools are empty tonight" (Trevor, round 39)
+      const _railAt = Object.keys(NPCS).some(rid => NPCS[rid].patron && _npcWhere(rid) === to) ||
+        !(typeof _lowSeason === "function" && _lowSeason());
+      G.soc.patronBusy[to] = (hos.length && _rand() < 0.4 && _railAt)
         ? _busyPool[Math.floor(_rand() * _busyPool.length)] : false;
     }
   }
@@ -3067,7 +3091,7 @@ function _convoTopicHere(topic) {
   if (!id || !NPCS[id]) return false;
   if (!_npcsHere().includes(id)) return false;
   const d = _pickDialogue(id, topic);
-  return !!(d && d.topic === topic);
+  return !!(d && _topicHits(d.topic, topic));
 }
 
 // Asking for it AGAIN — the one way back to a story you've already had. Repeats
@@ -3229,6 +3253,20 @@ function _doTalkBody(arg, topic) {
     _say(_dogTalk(npc)); // the dog at your heel is a subject everyone has
     return;
   }
+    // An authored girl asked the three questions every girl gets — home, family,
+  // plan — and stonewalled where a filler girl would have answered (Eamonn,
+  // round 39: a dozen Soi 6 girls "went dead flat"). The filler pools are the
+  // trade's stock answers; a story girl without her own line draws from them.
+  if (topic && !d.topic && NPC_ROLES[npc] === "hostess" && !NPCS[npc].filler && /^(home|hometown|village|family|plan|future|dream)$/.test(_convoTopic(topic) || topic)) {
+    const t = _convoTopic(topic) || topic;
+    const from = _H_FROM[_hh(npc, 3) % _H_FROM.length];
+    const line = /home|village/.test(t) ? `"${from}, Isan side. Small village, big family." She says it like a postcode, and then, softer: "Very far."`
+      : /family/.test(t) ? _H_FAMILY[_hh(npc, 7) % _H_FAMILY.length].replace(/\{from\}/g, from)
+      : _H_PLAN[_hh(npc, 11) % _H_PLAN.length];
+    _say(`${NPCS[npc].name}: ${line}`);
+    _questOffer(npc);
+    return;
+  }
   // Her own stated reason must be askable: she just told you her friend takes
   // care of her, and "ask about sponsor/friend" answered "not my story" one
   // line later (grapevine playtest F3, 2026-08-25). Generic, so every kept
@@ -3309,8 +3347,8 @@ function _doTalkBody(arg, topic) {
     if (own) { _deliver(npc, own, false, true); _questOffer(npc); return; } // asNew: a new question, an old node
     // she HAS that story but its gate hasn't opened: a "not yet", not a "not mine"
     const _n2 = _convoTopic(topic);
-    const gated = NPCS[npc].dialogue.some(e => e.topic && (e.topic === topic || topic.includes(e.topic) ||
-      (_n2 !== topic && (e.topic === _n2 || _n2.includes(e.topic)))));
+    const gated = NPCS[npc].dialogue.some(e => e.topic && String(e.topic).split("|").some(k => k === topic || topic.includes(k) ||
+      (_n2 !== topic && (k === _n2 || _n2.includes(k)))));
     _say(gated ? _topicLocked(npc) : _topicMiss(npc));
     _questOffer(npc);
     return;
@@ -3370,6 +3408,7 @@ const _CONVO_TOPIC_RULES = [
   [/\btours?\b|\bon the road\b|\bgigs?\b|\btouring\b/,                        "music"],
   [/\bmunich\b|\bm\u00fcnchen\b|\bbavaria\b/,                                  "german"],
   [/\bwhite dish\b|\bwdg\b/,                                                  "ryan powers"],
+  [/\bvillage\b|\bhometown\b|\bsad story\b|\byour story\b/,                   "home"],
   // the after-hours question (Dex, round 38): "after", "late", "karaoke", "bike" all missed on the girl who then drove him there
   [/\bafter ?hours?\b|\bafter (?:two|midnight|close|closing|work|the bar)\b|\blate[- ]?night\b|\blate\b|\bkaraoke\b|\bthai disco\b|\bran ?lao\b|\bmotorbike\b|\bwhere.*(?:go|party) after\b/, "late"],
   // …and the words the column itself puts in a reader's mouth: Box 15's
@@ -3531,7 +3570,7 @@ const _ANSWER_GOSSIP = [
 function _wrapSaid(v) { return "{{“" + v + "”}}"; }
 function _partnerHasTopic(id, t) {
   const nodes = ((NPCS[id] || {}).dialogue) || [];
-  return nodes.some(d => d.topic && (d.topic === t || t.includes(d.topic)));
+  return nodes.some(d => d.topic && String(d.topic).split("|").some(k => k === t || t.includes(k)));
 }
 // Canned replies for the question currently on the table — your own voice,
 // tappable. Identity-matched first (personality, then origin — the axis the
@@ -3725,6 +3764,22 @@ function _convoResolve(lower) {
       _partnerHasTopic(G.convoQ.id, _convoTopic(lower));
     if (!changingSubject) return _convoAnswer(lower);
     G.convoQ = null; // dodged (or a question back) — fall through to normal handling
+  }
+  // 0) A canned reply typed a beat late — the chip was still on screen after you
+  //    turned to somebody else, and the game printed the phrase then rejected it
+  //    (Bronwyn, round 39). If it matches a reply to a question that LAPSED
+  //    tonight, it answers that question, late.
+  if (!G.convoQ && G.convoLapsed && typeof ASK_REPLIES !== "undefined") {
+    const norm = t => String(t).trim().replace(/[.!?"“”]+$/, "").toLowerCase();
+    for (const [lid, l] of Object.entries(G.convoLapsed)) {
+      const canned = (ASK_REPLIES[l.key] || []).map(r => typeof r === "string" ? r : r.text);
+      if (canned.some(t => norm(t) === norm(lower))) {
+        delete G.convoLapsed[lid];
+        _say(`(You answer ${NPCS[lid] ? NPCS[lid].name : "the earlier"} question, a beat late.)`, "dim");
+        G.convoQ = { id: lid, key: l.key, q: l.q };
+        return _convoAnswer(lower);
+      }
+    }
   }
   // 1) Leave-taking ends an active conversation.
   if (_convoActive() &&
@@ -5164,9 +5219,9 @@ function _doRideBus(arg) {
     const localOnly = lines.some(l => LOCAL_SHUTTLES.has(l));
     if (w && localOnly && !/\bloop\b/.test(w)) {
       const network = [...new Set(Object.values(BUS_LINES).flat())];
-      const far = network.find(s => s !== G.room && !reachable.includes(s) &&
-        ((toks.length && toks.every(t => _bn(ROOMS[s].name).includes(t))) ||
-         (w && ROOMS[s].region.toLowerCase().includes(_bn(w)))));
+      const _farBy = pred => network.find(s => s !== G.room && !reachable.includes(s) && pred(s));
+      const far = _farBy(s => toks.length && toks.every(t => _bn(ROOMS[s].name).includes(t))) ||
+        _farBy(s => w && ROOMS[s].region.toLowerCase().includes(_bn(w)));   // "naklua" is Naklua Road before it is the Dolphin (Trevor, round 39)
       if (far) {
         if (G.money < BUS_CHARTER) {
           _say(_fmt("\"{where}?\" He tips his head down the soi — that is not where this " +
@@ -5210,7 +5265,9 @@ function _doRideBus(arg) {
   }
   if (G.money < BUS_FARE) {
     _say(`You flag a bus and climb on… then remember. ฿${G.money} in your pocket, ` +
-      `and the fare is ฿${BUS_FARE}. You climb off to the driver's eternal, silent judgement.`);
+      `and the fare is ฿${BUS_FARE}. You climb off to the driver's eternal, silent judgement.` +
+      ((!_flag("act1Done") && G.phone && G.phone.contacts && G.phone.contacts.tan)
+        ? " (Your phone still has one number in it — CALL TAN.)" : ""));
     return;
   }
   G.pendingFare = { kind: "bus", price: BUS_FARE, dest };
@@ -8436,8 +8493,8 @@ function doCommand(input) {
       // strip the preposition: "look for bottles" / "look at candy" both examine
       // the noun ("for bottles" used to reach the scenery matcher verbatim and
       // draw the between-drinks joke — desktop playtest 2026-08-17)
-      if (arg) _doExamine(arg.replace(/^(?:for|at)\s+(?:the\s+)?/, ""));
-      else _describeRoom(true, true); // bare LOOK re-orients: the full desc, never the revisit line (replayer playtest 2026-08-22)
+      if (arg && !/^(around|about|round|here)$/.test(arg)) _doExamine(arg.replace(/^(?:for|at)\s+(?:the\s+)?/, ""));
+      else _describeRoom(true, true); // bare LOOK (and "look around") re-orients: the full desc, never the revisit line
       break;
     // A bare POSTER, because the room prints a tappable (POSTER) hint and a hint
     // that doesn't parse is exactly the undelivered promise the lint hunts for.
@@ -8489,6 +8546,10 @@ function doCommand(input) {
     case "clinic": case "tested": case "screening": _doClinic(); break;
     case "drop": _doDrop(arg); break;
     case "inv": case "inventory": _doInventory(); break;
+    case "what": case "im": case "i'm": case "have":
+      if (_naturalHelp(lower)) break;
+      if (_politePhrase(lower) || _convoResolve(lower)) break;
+      _say(_pickVary(_HUH, "huh"), "dim"); _noteMiss("parse"); return;
     case "i":
       if (!arg) { _doInventory(); break; }
       // "i love you", "i want a beer" — not an inventory request; let the
@@ -8798,6 +8859,7 @@ function doCommand(input) {
     }
     case "where": {
       // "where is rainbow girls", typed mid-hunt, deserves better than didn't-parse.
+      if (/^(am i|is this|are we)\b/.test(arg || "")) { _describeRoom(true, true); break; }   // "where am I" is LOOK (Bronwyn, round 39)
       const q = (arg || "").replace(/^(?:is|are)\s+(?:the\s+)?/, "").trim();
       if (!q) { _say("Wherever you are, that's where you are. (MAP for the town, TRAVEL for the places you know.)"); break; }
       const known = _travelDests().find(id => {

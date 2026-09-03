@@ -2516,6 +2516,16 @@ function _doAccept(arg) {
   const q = QUESTS[qid];
   if (G.quests[qid] === "active") { _say("Already on it."); return; }
   if (G.quests[qid] === "done") { _say("That one's finished. Bask."); return; }
+  // "(You now have the bottle of Sang Som.)" from a giver who was working her
+  // other bar (Bronwyn, round 39): a quest with a THING to hand over is accepted
+  // where she is; a flag-only errand can be taken on from the journal
+  if (QUESTS[qid].item && NPCS[QUESTS[qid].giver] && NPCS[QUESTS[qid].giver].bars &&
+      _npcRoom(QUESTS[qid].giver) !== G.room && !_npcsHere().includes(QUESTS[qid].giver)) {
+    const gv = NPCS[QUESTS[qid].giver];
+    const where = typeof _npcWhere === "function" && _npcWhere(QUESTS[qid].giver);
+    _say(`${gv.name} isn't here to hand it over` + (where && _barName(where) ? ` — ${gv.pronoun === "he" ? "he's" : "she's"} at ${_barName(where)} tonight.` : "."));
+    return;
+  }
   if (G.quests[qid] !== "offered" && !_questAvailable(qid)) {
     _say("You've heard of it, but nobody's actually offered it to you yet."); return;
   }
@@ -4428,12 +4438,19 @@ function _sheltered(id) {
     id === "police_station" || id === "oy_office";
 }
 
+// two to three downpours a night for six nights, the same two sentences each
+// time (Trevor, round 39): the start and the stop are pools now
+const _RAIN_START = [
+  "The sky lets go all at once — rainy-season rain, hammering the roof like applause, sheeting off the awning in a solid curtain.",
+  "No warning, no first drops: the rain arrives as a wall, and the noise of it on tin is the only sound left in the world.",
+  "A single fat drop on the back of your hand, then the whole sky follows it down. The awning bows. The gutters give up inside a minute.",
+  "The air goes green, the neon doubles in the wet, and then the rain comes down like something spilled — all of it, at once, the way it only rains here.",
+];
 function _startRain(len) {
   G.rain = len;
   G.lastRain = G.turns;
   if (_inBar()) {
-    _say("The sky lets go all at once — rainy-season rain, hammering the roof " +
-      "like applause, sheeting off the awning in a solid curtain. The street " +
+    _say(_pickVary(_RAIN_START, "rainstart") + " The street " +
       "empties in five seconds flat. Nobody is going anywhere for a while.", "alert");
     _say("(Nowhere to be. Nothing to be done about it. สบาย.)", "dim");
     _addHappy(1);

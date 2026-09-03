@@ -206,14 +206,17 @@ function _salengTick() {
   if (G.salengCart && G.turns >= G.salengUntil) { // its time is up — it moves on
     const here = G.salengRoom === G.room;
     G.salengCart = null; G.salengRoom = null; G.salengUntil = 0;
-    if (here) _say("The saleng packs up its trestles and putters on down the soi, the girls waving after it.", "dim");
+    if (here) _say(_pickVary(_SALENG_LEAVE, "salengleave"), "dim");
     return; // never spawn a replacement the same tick it leaves
   }
   if (_salengHere()) { if (!_lockedIn() && _rand() < 0.20) _salengVignette(); return; }   // windows black, door bolted: no cart vignette (Darren, round 37)
   if (!G.game && !G.pendingEnc && !G.salengCart && _inBar() && _room().barType !== "pub" &&
       _room().barType !== "gents" && // enclosed villa behind a wall — no cart wheels in
       !(G.soc.lockIn && G.soc.lockIn[G.room]) && // the cart can't get past the bolt
-      _SALENG_REGIONS.has(_room().region) && G.turns - G.lastSaleng >= 15 && _rand() < 0.10) {
+      _SALENG_REGIONS.has(_room().region) && G.turns - G.lastSaleng >= 15 &&
+      !((G.soc.salengBar || {})[G.room]) &&   // one cart per bar per night — three som-tam carts in one evening (Trevor, round 39)
+      _rand() < 0.10) {
+    (G.soc.salengBar = G.soc.salengBar || {})[G.room] = true;
     _salengSpawn();
   }
 }
@@ -487,6 +490,12 @@ const _PEDDLER_PITCH = [
     "you a nod that says he's sold to men like you before and settles in at your elbow.",
 ];
 
+const _SALENG_LEAVE = [
+  "The saleng packs up its trestles and putters on down the soi, the girls waving after it.",
+  "The cart's engine coughs twice and catches; it wobbles off toward the next bar with a girl still shouting an order after it.",
+  "Trestles folded, cooler lid banged shut, and the saleng is gone into the neon with nobody having quite finished with it.",
+  "The driver counts his notes, nods to the mamasan, and the cart rolls on — the soi gets quieter by one small engine.",
+];
 const _ENC = {
   flower(input) {
     const id = G.flowerFor; G.flowerFor = null;
