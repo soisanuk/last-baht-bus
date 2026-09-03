@@ -5373,9 +5373,24 @@ function _doMotosai(arg) {
   // actually dropped by ฿60, with nothing on that line explaining the gap
   // (Reg the publican, round 32, 2026-08-30). State the real total where the
   // balance is shown; the dog's line stays flavor, not the number reveal.
+  G.motoRides = (G.motoRides || 0) + 1;
+  const pids = (G.party && G.party.ids) || [];
+  let seat = "";
+  if (pids.length >= 2) {
+    // two girls: a second bike, and a second fare if you can stand it
+    const names = pids.map(i => NPCS[i].name).join(" and ");
+    if (G.money >= price) { G.money -= price; seat = " " + _fmt(_pickVary(_MOTO_SECOND_BIKE, "motosecond"), { n: names }) + ` (Another ฿${price} for the second bike.)`; }
+    else seat = ` ${names} squeeze on behind you anyway, four on a bike, the piwin shaking his head and going regardless.`;
+  } else if (pids.length === 1) {
+    seat = " " + _fmt(_pickVary(_MOTO_THREE_UP, "motothree"), { n: NPCS[pids[0]].name });
+  } else if (G.motoRides === 1) {
+    seat = " " + _pickVary(_MOTO_HANDS, "motohands");
+  } else if (_hh("hands:" + G.vacation + ":" + G.motoRides, 11) % 5 === 0) {
+    seat = " " + _pickVary(_MOTO_HANDS_LATER, "motohandslater");
+  }
   _say(`“${thaiBaht(price)}${dogFare ? ` (plus ${thaiBaht(dogFare)} for his lordship's ride)` : ""}.” ` +
-    `You pay${price === 20 ? " — Bank's special price" : ""}, ` +
-    "swing on the back, and the piwin threads traffic like it owes him money. " +
+    `You pay${price === 20 ? " — Bank's special price" : ""}, swing on the back,` + seat + " " +
+    _pickVary(extraTurns ? _MOTO_RIDE_LONG : _MOTO_RIDE_SHORT, extraTurns ? "motolong" : "motoshort") + ". " +
     `That was the fastest ฿${total} of your life` +
     (extraTurns
       ? ` — ${_minutesWord((extraTurns + 1) * 6).toLowerCase()} of it, ` +
@@ -6922,6 +6937,51 @@ function _doCheers() {
 // TAO RAI — the veteran's reflex: ask the price before you accept anything. The
 // one word that keeps a "free" favour from becoming a debt you can't see yet.
 const _GRAB_LINE = "No app car worth the wait at this hour and this address — the piwins on the corner ARE the app, and they don't cancel. (MOTOSAI TO <place>.)";
+// ── The ride itself ──────────────────────────────────────────────────────────
+// "The piwin threads traffic like it owes him money" printed on every ride of
+// every night (Mario, 2026-09-03: the prose should capture the moment — the
+// weaving, the shortcuts, the pavement, where the hands go, and what happens
+// when there's a girl with you). Three pools: the ride (short hop / long
+// haul), the hands (the first ride of the game, then now and then), and the
+// three-up (a companion — in the middle Thai-style, side-saddle, or on the
+// back with her arms round you because you were a gentleman; two girls get
+// a second bike, and a second fare). Hash-picked where it must not spend
+// dice after the crash roll.
+const _MOTO_RIDE_SHORT = [
+  "the piwin threads traffic like it owes him money — between a songthaew and a wall, up the wrong side of a bollard, done",
+  "and you're off before you've settled: a gap that isn't a gap, the mirror of a Fortuner an inch from your knee, the hot breath of a bus",
+  "and the bike drops off the kerb, up the next one, along fifteen metres of pavement past a noodle cart whose owner doesn't look up, and back into the road",
+  "and he takes a soi you didn't know existed, one lane wide, a dog asleep in the middle of it that he goes round without slowing",
+  "and it is thirty seconds of horns, neon smearing, a U-turn through oncoming traffic executed with total serenity",
+  "and the piwin rides the white line between two lanes of stopped traffic at a speed that makes the wing mirrors clap",
+];
+const _MOTO_RIDE_LONG = [
+  "and the town unrolls: the soi, the big road, a shortcut through a temple car park, a stretch of highway shoulder where the lorries pass close enough to lean on, the bike singing flat out between them",
+  "and it's a proper ride — traffic lights taken as suggestions, a wrong-way run up a one-way soi, a hundred metres of pavement outside a closed bank, then the long dark road with the wind pulling your shirt open",
+  "and the piwin settles into the long haul: a hand off the bar to answer his phone, a swerve round a pothole he knows by name, the sodium lights going by like a metronome",
+  "and the districts change under you — bar lights, then shophouses, then dark, then the highway with the trucks, then bar lights again — and at every red light he rolls through the gap between the stopped cars to the front",
+  "and somewhere in the middle of it he stops for petrol, forty baht from a bottle at a stall, and you sit on the back holding your own elbows while the girl pours",
+];
+const _MOTO_HANDS = [
+  "There is the immediate question of your hands. His shoulders? Too intimate. His waist? Worse. You settle for the chrome bar behind the seat, white-knuckled, and every brake throws your chest into his back anyway.",
+  "Where do the hands go. You try the grab-rail behind you, which means every acceleration tries to leave you on the road; you try his waist and he flinches; you end up with one on the rail and one on your own knee, which fools nobody.",
+  "Your hands find the piwin's shoulders before you've thought about it and he shrugs them off, not unkindly — the rail, boss, behind you. The rail is warm from the last farang.",
+  "You hold the back of the seat, then the rail, then, on the first real corner, his hips, and he laughs and speeds up.",
+];
+const _MOTO_HANDS_LATER = [
+  "You take the rail without thinking now. That is how long you have been here.",
+  "Hands on the rail, knees in, chin down. You ride pillion like a man who has stopped being surprised by it.",
+];
+const _MOTO_THREE_UP = [
+  "{n} settles between you and the piwin without discussion — that is how three ride here, the girl in the middle with a hand on his shoulder and your arms round her — and the bike takes the weight the way it takes everything, with a slight complaint and no change of speed.",
+  "You do the gentleman's thing and put {n} on the back, arms round your waist, and hold the piwin's shoulders yourself; he sighs the sigh of a man who now has a farang's hands on him for the whole ride, and goes.",
+  "{n} rides side-saddle behind you, knees together, both hands on your ribs, texting with one of them somehow. Three on a bike is nothing here. It is a great deal to you.",
+  "{n} goes in the middle and immediately starts a conversation with the piwin over his shoulder in Thai — where you're from, how much you paid her, whether he knows her cousin — and the two of them laugh at something that is very probably you.",
+];
+const _MOTO_SECOND_BIKE = [
+  "Two girls and a farang is one bike too many even here: the stand sends a second, and {n} go ahead of you on it, looking back and shrieking at every corner.",
+  "The piwin counts heads and waves a mate over — three is Thai, four is a taxi. {n} take the second bike and race you, and win.",
+];
 function _minutesWord(n) {
   const w = { 6: "Six minutes", 12: "Twelve minutes", 18: "Eighteen minutes", 24: "Twenty-four minutes", 30: "Half an hour" };
   return w[n] || (n + " minutes");

@@ -87,7 +87,7 @@ test("the piwin knows where the trucks run (Darren)", () => {
 
 test("the near-miss prints after you got on, never before (Darren)", () => {
   const src = readFileSync(join(here, "../../web/js/engine-parser.js"), "utf8");
-  const pay = src.indexOf("swing on the back, and the piwin threads traffic");
+  const pay = src.indexOf("That was the fastest ฿");
   const near = src.indexOf("if (nearMiss) _say(_pickVary(_MOTO_NEARMISS");
   assert.ok(pay > 0 && near > pay, "near-miss line after the fare line");
 });
@@ -243,4 +243,23 @@ test("a bike is one turn within the district or the next one over, and a turn mo
   assert.match(text(), /minutes of it/, "and the pay line says how long it was");
   G.money = 0; G.room = "khao_talo"; const t = G.turns; out = []; run("motosai to naklua");
   assert.equal(G.turns - t, expect("khao_talo", "naklua"), "the mercy ride takes the same road");
+});
+
+// ── The ride itself (Mario, 2026-09-03) ──
+test("the ride is a pool: the weaving, the hands on the first ride, three-up with a girl, a second bike for two", () => {
+  const go = () => { G.hunger = 0; G.thirst = 0; G.soc.drunk = 0; G.dog = null; G.room = "pattaya_klang"; G.money = 5000; out = []; run("motosai to naklua"); return text(); };
+  newGame(); _setFlag("act1Done"); for (const e of Object.keys(ENCOUNTERS)) G.encDone[e] = true; G.peddlerNight = 2;
+  let t = go();
+  assert.ok(_MOTO_RIDE_SHORT.some(l => t.includes(l)), "a short hop's ride line");
+  assert.ok(_MOTO_HANDS.some(l => t.includes(l)), "the first ride: where do the hands go");
+  t = go(); assert.ok(!_MOTO_HANDS.some(l => t.includes(l)), "…only the first");
+  G.room = "pattaya_klang"; out = []; run("motosai to darkside");
+  assert.ok(_MOTO_RIDE_LONG.some(l => text().includes(l)), "a long haul's ride line");
+  const girls = Object.keys(NPCS).filter(id => NPC_ROLES[id] === "hostess").slice(0, 2);
+  G.party = { ids: [girls[0]], stops: 0, spent: 0, seen: {} }; t = go();
+  assert.ok(_MOTO_THREE_UP.some(l => t.includes(_fmt(l, { n: NPCS[girls[0]].name }))), "three-up with her");
+  G.party = { ids: girls, stops: 0, spent: 0, seen: {} }; const m = 5000; t = go();
+  assert.ok(_MOTO_SECOND_BIKE.some(l => t.includes(_fmt(l, { n: NPCS[girls[0]].name + " and " + NPCS[girls[1]].name }))), "two girls: a second bike");
+  assert.equal(G.money, m - 2 * _motoFare(MOTOSAI_DESTS.naklua), "and a second fare");
+  assert.doesNotMatch(t, /threads traffic like it owes him money\. That/, "the old fixed sentence is gone as a fixed sentence");
 });
