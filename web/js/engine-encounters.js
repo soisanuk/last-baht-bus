@@ -492,11 +492,13 @@ const _ENC = {
     const her = (id && NPCS[id] && NPCS[id].name) || "her";
     // not an answer to the child at all (a tip, a talk, a walk): the pitch lapses
     // quietly and the command runs — see the pendingEnc gate's passthrough
-    if (!/buy|yes|rose|flower|sure|ok|please|one|for|no|wave|leave|later|pass|shake|sorry/.test(input)) {
+    // Anchored: the old unanchored /no|.../ read FLIRT NOEY as a "no" and ate the
+    // flirt as a wave at the child (Lionel, round 36). An answer starts the line.
+    if (!/^(?:buy|yes|rose|flower|sure|ok|okay|please|one|no|nah|wave|leave|later|pass|shake|sorry)\b/.test(input)) {
       _say("The mother reads your attention elsewhere, nods, and steers the child on to the next stool.", "dim");
       return "passthrough";
     }
-    if (/buy|yes|rose|flower|sure|ok|please|one|for/.test(input) && !/no|wave|leave|later|pass/.test(input)) {
+    if (/^(?:buy|yes|rose|flower|sure|ok|okay|please|one)\b/.test(input) && !/\b(?:no|nah|wave|leave|later|pass)\b/.test(input)) {
       if (G.money < ROSE_PRICE) {
         _say(`You pat your pockets and come up short of even ${ROSE_PRICE} baht. The mother ` +
           "reads it in a glance — no judgement, she's seen every wallet — gathers the child " +

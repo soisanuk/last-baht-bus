@@ -1173,8 +1173,9 @@ const ROOMS = {
     region: "Beach Road",
     seven: true,
     desc: "Mid-Beach-Road: tour groups, tailor touts, and the sea breathing in the dark " +
-      "beyond the promenade. The glass cliff of CENTRAL mall rises a block inland, and " +
-      "just south of it TEQUILA QUEEN's ancient neon señorita kicks her leg, as she " +
+      "beyond the promenade. The glass cliff of CENTRAL mall rises straight off the " +
+      "pavement on the inland side, its front steps on Beach Road itself between Soi 9 and " +
+      "Soi 10, and just south of it TEQUILA QUEEN's ancient neon señorita kicks her leg, as she " +
       "has since before you were born — CHERRY OIL MASSAGE keeps a quieter door right " +
       "alongside.",
     busStop: "beachrd",

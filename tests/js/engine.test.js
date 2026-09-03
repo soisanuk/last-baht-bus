@@ -6091,7 +6091,7 @@ test("a genuine unrelated command declines the tourist encounter and still runs 
   state().itemLoc.masseuse_note = "inventory";
   _startEnc("bkktourist");
   run("meet her");
-  assert.match(lastOut(), /moment passed without an answer/i);
+  assert.match(lastOut(), /wasn't an answer to him/i);
   assert.match(lastOut(), /Nok texts back/i, "the real command ran after the pitch lapsed");
   assert.equal(state().offShift, null, "the off-shift thread actually resolved");
 });

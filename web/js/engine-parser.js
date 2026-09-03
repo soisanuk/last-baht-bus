@@ -7973,8 +7973,10 @@ function doCommand(input) {
     // the tonic shop, the curse ritual, the barfine games) keep the snap rule.
     const softAnswer = _ENC_SOFT[enc];
     if (softAnswer && !softAnswer.test(lower) && _isRealCommand(v)) {
+      // the note FIRST: with the decline prose printed before it, a man read the
+      // peddler's head-shake as the answer to his BARFINE (Lionel, round 36)
+      _say("(That wasn't an answer to him; the pitch lapses and you carry on.)", "dim");
       _ENC[enc]("no");
-      _say("(The moment passed without an answer; you carried on.)", "dim");
       doCommand(raw);
       return;
     }

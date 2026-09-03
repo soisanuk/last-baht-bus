@@ -825,7 +825,7 @@ test("encounter chips come from the prompt's CAPS; the police wait on a non-answ
   G.room = "stinky_bar"; G.pendingEnc = "peddler"; out = [];
   doCommand("talk to bert");
   assert.equal(G.pendingEnc, null);
-  assert.match(text(), /moment passed without an answer/);
+  assert.match(text(), /wasn't an answer to him/);
   assert.match(text(), /Bert/, "TALK ran");
   // the self-barfine offer doesn't eat a tip
   const girl = _npcsHere().find(id => NPC_ROLES[id] === "hostess");
@@ -917,7 +917,7 @@ test("review: a command that merely CONTAINS an answer word passes through a sof
   G.room = "stinky_bar"; G.pendingEnc = "peddler"; out = [];
   doCommand("no");
   assert.equal(G.pendingEnc, null);
-  assert.doesNotMatch(text(), /moment passed without an answer/);
+  assert.doesNotMatch(text(), /wasn't an answer to him/);
 });
 
 test("review: the Darkside league draws its own roster; the inbox is hard-capped read or unread", () => {

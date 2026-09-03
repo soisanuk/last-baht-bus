@@ -21,6 +21,7 @@ beforeEach(() => {
   G.player = { origin: "monger", personality: "joker", orientation: "straight" };
   _setFlag("act1Done"); G.stage = "vacation"; G.money = 5000; G.nightTurn = 30;
   for (const e of Object.keys(ENCOUNTERS)) G.encDone[e] = true;
+  G.peddlerNight = 2;   // the Beach Road peddler (12%/tick in a bar) would otherwise interrupt a LOOK
 });
 const girlAt = room => Object.keys(NPCS).find(id => NPC_ROLES[id] === "hostess" && _npcRoom(id) === room);
 
@@ -156,4 +157,23 @@ test("TAKE on a fixture outside a bar doesn't blame the bar (Lionel)", () => {
   G.room = "short_time_motel"; run("take keys");
   assert.match(text(), /part of the place, not something you carry off/);
   assert.doesNotMatch(text(), /the bar would notice/);
+});
+
+test("a name with NO in it is not a no to the rose seller — the flirt runs (Lionel)", () => {
+  G.room = "neon_palm";
+  const noey = _npcsHere().find(id => NPC_ROLES[id] && /no/.test(NPCS[id].name.toLowerCase()));   // Noey keeps the till — a FLIRT still parses
+  assert.ok(noey, "a girl whose name contains 'no'");
+  G.pendingEnc = "flower"; G.flowerFor = noey; G.money = 1000;
+  run("flirt " + NPCS[noey].name.toLowerCase());
+  assert.match(text(), /steers the child on/, "the pitch lapses");
+  assert.match(text(), /You flirted with/, "…and the flirt ran");
+  assert.equal(G.pendingEnc, null); assert.equal(G.money, 1000, "no rose bought, no wave charged");
+});
+
+test("a soft pitch declined by an unrelated command says so BEFORE the decline prose (Lionel)", () => {
+  G.room = "neon_palm"; G.pendingEnc = "peddler"; G.money = 1000;
+  run("buy beer");   // a real action, not an observation verb (QUESTS/LOOK re-show the moment)
+  const i = out.findIndex(o => /wasn't an answer to him/.test(o.text));
+  const j = out.findIndex(o => /slow head-shake|re-shoulders/.test(o.text));
+  assert.ok(i >= 0 && j > i, "note first, then the peddler moves on: " + i + " " + j);
 });
