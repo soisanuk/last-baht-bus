@@ -53,6 +53,8 @@ test("the drunk balk out east doesn't promise a bench that isn't there (Darren)"
 });
 
 test("the pity ride is remembered, and the next paid fare settles it (Darren)", () => {
+  const saved = _rand; _rand = () => 0.99;   // the far ride's crash roll is not what this pins
+  try {
   G.room = "khao_talo"; G.money = 0; G.soc.drunk = 0;
   run("motosai to naklua");
   assert.equal(G.room, "naklua_rd"); assert.equal(G.pityOwed, MOTOSAI_TOWN); assert.equal(G.pityRides, 1);
@@ -62,6 +64,7 @@ test("the pity ride is remembered, and the next paid fare settles it (Darren)", 
   G.money = 1000; G.room = "naklua_rd"; out = []; run("motosai to soi buakhao");
   assert.match(text(), /the night you have nothing/); assert.equal(G.pityOwed, 0);
   assert.equal(G.money, 1000 - MOTOSAI_TOWN * 2 - _motoFare(MOTOSAI_DESTS["soi buakhao"]) , "fare plus the debt of honour");
+  } finally { _rand = saved; }
 });
 
 test("no stand means no stand — even in the rain, even in your room; bare GRAB is the app (Darren)", () => {
@@ -253,13 +256,15 @@ test("a bike is one turn within the district or the next one over, and a turn mo
 
 // ── The ride itself (Mario, 2026-09-03) ──
 test("the ride is a pool: the weaving, the hands on the first ride, three-up with a girl, a second bike for two", () => {
-  const go = () => { G.hunger = 0; G.thirst = 0; G.soc.drunk = 0; G.dog = null; G.room = "pattaya_klang"; G.money = 5000; out = []; run("motosai to naklua"); return text(); };
+  const saved = _rand;
+  const go = () => { G.hunger = 0; G.thirst = 0; G.soc.drunk = 0; G.dog = null; G.room = "pattaya_klang"; G.money = 5000; out = [];
+    _rand = () => 0.99; try { run("motosai to naklua"); } finally { _rand = saved; } return text(); };
   newGame(); _setFlag("act1Done"); for (const e of Object.keys(ENCOUNTERS)) G.encDone[e] = true; G.peddlerNight = 2;
   let t = go();
   assert.ok(_MOTO_RIDE_SHORT.some(l => t.includes(l)), "a short hop's ride line");
   assert.ok(_MOTO_HANDS.some(l => t.includes(l)), "the first ride: where do the hands go");
   t = go(); assert.ok(!_MOTO_HANDS.some(l => t.includes(l)), "…only the first");
-  G.room = "pattaya_klang"; out = []; run("motosai to darkside");
+  G.room = "pattaya_klang"; out = []; _rand = () => 0.99; try { run("motosai to darkside"); } finally { _rand = saved; }
   assert.ok(_MOTO_RIDE_LONG.some(l => text().includes(l)), "a long haul's ride line");
   const girls = Object.keys(NPCS).filter(id => NPC_ROLES[id] === "hostess").slice(0, 2);
   G.party = { ids: [girls[0]], stops: 0, spent: 0, seen: {} }; t = go();
