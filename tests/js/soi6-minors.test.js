@@ -85,7 +85,7 @@ test("RIDE BUS refusals describe the real situation, in the right order", () => 
   S().mode = "soi6";
   S().room = "pink_lotus";                          // indoors: no songthaew narration
   doCommand("ride bus");
-  assert.match(last(), /No blue trucks come down here/); // hail-anywhere: off-route, not "no stop"
+  assert.match(last(), /trucks are a rumour.*OUT to the street/); // indoors: the street is where the trucks are (Colin, round 37)
   assert.doesNotMatch(last(), /songthaew slows/);
   out = []; S().room = "beach_rd_n"; S().nightTurn = 82;  // the frame beats the hour
   doCommand("ride bus");

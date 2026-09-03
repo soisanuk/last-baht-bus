@@ -273,3 +273,64 @@ test("the ride is a pool: the weaving, the hands on the first ride, three-up wit
   assert.ok(_MOTO_FOUR_UP.some(l => text().includes(_fmt(l, { n: names }))), "broke: always four-up");
   assert.doesNotMatch(t, /threads traffic like it owes him money\. That/, "the old fixed sentence is gone as a fixed sentence");
 });
+
+// ── Colin, the Cheap Charlie: every baht accounted for ──
+test("the beer names its price on the line that charges it, and the fifth one says why it cost สนุก (Colin)", () => {
+  G.room = "candy_bar"; G.soc.drunk = 0; run("buy beer");
+  assert.match(text(), new RegExp(`\\(-฿${_beerPrice()}, ฿${G.money} left\\.\\)`));
+  G.room = "tequila_queen"; out = []; run("buy beer");
+  assert.match(text(), new RegExp(`-฿${_beerPrice("tequila_queen")}`), "a go-go's Chang says what it is");
+  G.soc.drunk = 5; out = []; run("buy beer"); assert.match(text(), /One past the sweet spot/);
+  G.room = "beach_rd_c"; out = []; run("buy water"); assert.match(text(), /\(-฿10, ฿/);
+});
+
+test("TAO RAI in a bar is the price list nobody hands you (Colin)", () => {
+  G.room = "candy_bar"; run("tao rai");
+  assert.match(text(), new RegExp(`beer ฿${_beerPrice()} · lady drink ฿${_ladyPrice()} · water ฿20 · the bell ฿${_bellPrice("candy_bar")}`));
+});
+
+test("the ATM says the fee before you commit, the piwin's rumour is a street thing, and a street with a 7-Eleven has no mamasan (Colin)", () => {
+  _setFlag("hasWallet"); G.room = "beach_rd_c"; run("check balance"); assert.match(text(), /foreign-card fee ฿300 a pull/);
+  G.room = "candy_bar"; out = []; run("ride bus"); assert.match(text(), /trucks are a rumour/);
+  G.room = "buddha_hill"; out = []; run("drink fanta"); assert.match(text(), /No bar out here/);
+  G.room = "soi6_deep"; G.rain = 3; G.itemLoc.umbrella = null; out = []; run("w");
+  assert.match(text(), /edge of the awning/); assert.doesNotMatch(text(), /mamasan/);
+});
+
+test("bars whose own prose says cheap are cheaper at the till; ya dong is paint-stripper money (Colin)", () => {
+  for (const id of ["the_growler", "container_8", "reload_bar", "craft_cargo", "rabbit_hole", "lucky_charm", "moonshine_bar", "dolphin_bar"])
+    assert.equal(_beerPrice(id), BEER_PRICE - 10, id);
+  assert.ok(YA_DONG_SHOT < BEER_PRICE);
+  assert.match(NPCS.aek.dialogue.map(d => d.text).join(" "), new RegExp(`pool's ฿${POOL_STAKE} a rack`), "Aek quotes the stake the table takes");
+});
+
+test("a patron giver who isn't out: the journal names his local and the man who knows his habits (Colin)", () => {
+  const saved = _npcWhere;
+  try {
+    _npcWhere = id => id === "fergie" ? null : saved(id);
+    const w = _questWhere("fergie");
+    assert.match(w, /isn't out tonight/); assert.match(w, /ASK TAN ABOUT FERGIE/);
+  } finally { _npcWhere = saved; }
+});
+
+test("the British woman's hint carries a verb, and TALK is decent (Colin)", () => {
+  assert.match(ENCOUNTERS.britles.hint, /TALK to her, or CHEERS/);
+  G.room = "ws_gate"; G.pendingEnc = "britles"; run("talk to her");
+  assert.ok(G.wingmanUntil > G.turns, "the wingman buff");
+});
+
+test("SCORES reads the same bake as the telly: results, then fixtures (Colin)", () => {
+  globalThis.FOOTY = { league: "Test League", teams: ["A", "B", "C", "D"], games: [
+    { d: "Sat", h: "A", a: "B", hs: 0, as: 1, done: true }, { d: "Sun", h: "C", a: "D" }, { d: "Sun", h: "A", a: "D" }] };
+  try { out = []; run("scores"); assert.match(text(), /A 0.*1 B|A 0–1 B|0-1/); assert.match(text(), /C v D/); }
+  finally { delete globalThis.FOOTY; }
+});
+
+test("drinks that are poured are on your tab — the prose stopped promising free ones (Colin)", () => {
+  const src = readFileSync(join(here, "../../web/js/world.js"), "utf8");
+  assert.match(src, /signals the barman for his own/); assert.match(src, /on your tab, obviously/);
+  assert.match(src, /and the chit lands with it/); assert.match(src, /in your hand and on your chit/);
+  assert.doesNotMatch(src, /Forty baht gets " \+\n\s*"you a plate/);
+  assert.match(ROOMS.cheap_charlies_jt.desc, /\(BUY FOOD\.\)/);
+  assert.match(ROOMS.pratumnak_hill_rd.desc, /clubs are down the west side \(W\)/);
+});

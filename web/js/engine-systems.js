@@ -2212,7 +2212,14 @@ function _questWhere(at) {
     // across after 22:00) or, if hopping is ever re-enabled, an hourly drift. Read
     // his LIVE room via _npcWhere so the clue never points at a stale bar.
     const room = _npcWhere(at);
-    if (!room || room === G.room || _regularsHere().includes(at)) return "";
+    // not out tonight: the journal said "find Fergie in his maze" and nothing else
+    // for two nights (Colin, round 37) — name the local, and the man who knows
+    if (!room) {
+      const local = _barName(NPCS[at].room);
+      return _fmt(" {who} isn't out tonight — {v} is his local. (ASK TAN ABOUT {WHO} knows his habits.)",
+        { who: NPCS[at].name, v: local || "his bar", WHO: NPCS[at].name.toUpperCase() });
+    }
+    if (room === G.room || _regularsHere().includes(at)) return "";
     // A rail regular's location is true when it prints and can be false by the
     // time you walk there — the player was sent to the Cheeky Monkey and found
     // the Hyper (persona report A#3, 2026-08-23). Withholding it wastes the most
@@ -4236,9 +4243,11 @@ function _doScores() {
     return;
   }
   _say(`${f.league}:`);
-  for (const g of f.games.slice(-8)) {
-    _say("  " + (g.done ? _fmtGame(g) : `${g.d} — ${g.h} v ${g.a}`), "dim");
-  }
+  // the telly reported a result SCORES never listed (Colin, round 37): results
+  // first, then the fixtures — the same bake, read the same way as _footyLine
+  const done = f.games.filter(g => g.done).slice(-3), next = f.games.filter(g => !g.done).slice(0, 5);
+  for (const g of done) _say("  " + _fmtGame(g), "dim");
+  for (const g of next) _say(`  ${g.d} — ${g.h} v ${g.a}`, "dim");
   const team = _inBar() && _barTeam();
   if (team) {
     _say(`(The regular here supports ${team}. You didn't ask. You never have to.)`, "dim");

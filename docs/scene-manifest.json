@@ -334,7 +334,7 @@
       ],
       "sampleDescs": [
         "The Buakhao end of Soi Diana. THE CRICKETERS holds the corner here — dartboard, three screens, pies — and the LK Metro alley opens off to one side (its other mouth is up on Buakhao proper); the Areca Lodge's lit driveway is on the other. Ahead, the soi spills onto Soi Buakhao by the 7-Eleven on the corner — Candy Bar's rose-pink sign glows just two doors south of it.",
-        "The thick of Soi Diana: open beer bars shoulder to shoulder down both sides, barkers working the narrow strip between, a hundred fairy-lit stools and a lady on every one. SAPPHIRE BAR's blue neon and SUNDOWNER BAR's horseshoe counter face off across the soi. A side door of the LK Metro complex breathes cold air and go-go bass from further along — but that's the complex; the soi itself keeps it simple. Somewhere a bell rings and a whole bar cheers.",
+        "The thick of Soi Diana: open beer bars shoulder to shoulder down both sides, barkers working the narrow strip between, a hundred fairy-lit stools and a lady on every one. SAPPHIRE BAR's blue neon and SUNDOWNER BAR's horseshoe counter face off across the soi. A side door of the LK Metro complex breathes cold air and go-go bass from further along — but that's the complex; the soi itself keeps it simple. Somewhere down the soi a bell rings and a whole bar cheers — somebody else's round, in a bar you can't see from here.",
         "The Second Road mouth of Soi Diana, a long strip of open-fronted beer bars one block south of Soi Honey. The open-air KISS restaurant does brisk trade on the corner under its fairy lights — everyone in Pattaya gives directions off it — with THE DOLLHOUSE's horseshoe counter glowing right alongside. Ahead, the soi runs into warm light and eighty different sound systems; the first beer bar's girls are already waving."
       ]
     },
@@ -1041,7 +1041,7 @@
       "kind": "food",
       "dark": false,
       "people": [],
-      "desc": "The second one, and the newer regulars swear it is better — more room, a fan that works, and a woman on the wok who does not stop from six until the rice runs out. The board is the same board. The prices are the same prices. The Buakhao lot will tell you it is not the same, and mean it."
+      "desc": "The second one, and the newer regulars swear it is better — more room, a fan that works, and a woman on the wok who does not stop from six until the rice runs out. The board is the same board. The prices are the same prices. The Buakhao lot will tell you it is not the same, and mean it. (BUY FOOD.)"
     },
     {
       "id": "coconut",
@@ -1762,7 +1762,7 @@
       "people": [
         "Namfon"
       ],
-      "desc": "A nautical-junk beer bar — a real ship's wheel on the wall, glass floats in a net, a barometer nobody trusts. The long-stay crowd holds the stools like moorings. Namfon pours a cold one before you've picked a seat."
+      "desc": "A nautical-junk beer bar — a real ship's wheel on the wall, glass floats in a net, a barometer nobody trusts. The long-stay crowd holds the stools like moorings. Namfon pours a cold one before you've picked a seat — and the chit lands with it."
     },
     {
       "id": "dolphin",
@@ -2045,7 +2045,7 @@
       "dark": true,
       "darkLight": null,
       "people": [],
-      "desc": "The saddle over the top of Pratumnak Hill, linking the two roads that climb it — the Thappraya side to the east, the Dongtan Beach side to the west. Walls, viewpoints you can't make out in the dark, and the sea breathing somewhere below on both sides."
+      "desc": "The saddle over the top of Pratumnak Hill, linking the two roads that climb it — the Thappraya side to the east, the Dongtan Beach side to the west. Walls, viewpoints you can't make out in the dark, and the sea breathing somewhere below on both sides. The Pratumnak clubs are down the west side (W), and Soi 5 runs on beyond them."
     },
     {
       "id": "pratumnak_rd",
@@ -2826,7 +2826,7 @@
       "kind": "food",
       "dark": false,
       "people": [],
-      "desc": "Six stools, a chest freezer, a laminated board of numbered dishes and a chalked one underneath it that says WHATEVER SHE MADE TODAY. Forty baht gets you a plate — sixty, and properly fed for it. Half the men in here have been eating at this counter since before the branch in Jomtien existed, and they will tell you so. The original, they say, with the particular pride of people who found something cheap before it was famous for being cheap."
+      "desc": "Six stools, a chest freezer, a laminated board of numbered dishes and a chalked one underneath it that says WHATEVER SHE MADE TODAY. Sixty baht gets you a plate and properly fed for it. Half the men in here have been eating at this counter since before the branch in Jomtien existed, and they will tell you so. The original, they say, with the particular pride of people who found something cheap before it was famous for being cheap."
     },
     {
       "id": "jasmine_garden",
@@ -2991,7 +2991,7 @@
       "kind": "street",
       "dark": false,
       "people": [],
-      "desc": "The thick of Soi Diana: open beer bars shoulder to shoulder down both sides, barkers working the narrow strip between, a hundred fairy-lit stools and a lady on every one. SAPPHIRE BAR's blue neon and SUNDOWNER BAR's horseshoe counter face off across the soi. A side door of the LK Metro complex breathes cold air and go-go bass from further along — but that's the complex; the soi itself keeps it simple. Somewhere a bell rings and a whole bar cheers."
+      "desc": "The thick of Soi Diana: open beer bars shoulder to shoulder down both sides, barkers working the narrow strip between, a hundred fairy-lit stools and a lady on every one. SAPPHIRE BAR's blue neon and SUNDOWNER BAR's horseshoe counter face off across the soi. A side door of the LK Metro complex breathes cold air and go-go bass from further along — but that's the complex; the soi itself keeps it simple. Somewhere down the soi a bell rings and a whole bar cheers — somebody else's round, in a bar you can't see from here."
     },
     {
       "id": "diana_w",

@@ -385,6 +385,7 @@ const _CATALOGS = {
     // Reusable composite templates: {line}=an already-localised pool pick, {m}=cash,
     // {p}=price, {name}=item. ONE entry each localises the money suffix everywhere.
     "{line} (฿{m} left.)": "{line} (฿{m} übrig.)",
+    "{line} (-฿{p}, ฿{m} left.)": "{line} (-฿{p}, ฿{m} übrig.)",
     "฿{p} buys {name}. {line} (฿{m} left.)": "฿{p} für {name}. {line} (฿{m} übrig.)",
     "The room has developed a gentle rotation.": "Der Raum hat eine sanfte Drehung entwickelt.",
     "The neon is starting to smear pleasantly.": "Das Neon fängt an, angenehm zu verschmieren.",
@@ -719,8 +720,8 @@ const _CATALOGS = {
       "Hinein ins Cherry Pop, wo die Anmache so laut, süß und unerbittlich ist wie der eine Bubblegum-Song, und genauso unmöglich zu widerlegen.",
     "Back to the bowl of untouched cherries and a girl who has claimed your stool and your evening. \"You buy me one drink, I make you forget the flight, the wife, your own name. Upstairs. Yes? Yes.\"":
       "Zurück zur Schale unberührter Kirschen und einem Mädchen, das sich deinen Hocker und deinen Abend geschnappt hat. \"You buy me one drink, I make you forget the flight, the wife, your own name. Upstairs. Yes? Yes.\"",
-    "Back into Ruby Kiss and a lipstick-marked glass is in your hand before a girl is in your lap — but only just. \"You have my kiss. Now you want the rest?\" Wilai grins at the mirror, at the two of you the glass makes four. \"Buy me drink, we go up.\"":
-      "Zurück in die Ruby Kiss, und ein lippenstiftbeschmiertes Glas ist in deiner Hand, noch bevor ein Mädchen auf deinem Schoß sitzt — aber nur knapp. \"Du hast meinen Kuss. Jetzt willst du den Rest?\" Wilai grinst in den Spiegel, aus euch beiden macht das Glas vier. \"Kauf mir Drink, wir gehen hoch.\"",
+    "Back into Ruby Kiss and a lipstick-marked glass is in your hand and on your chit before a girl is in your lap — but only just. \"You have my kiss. Now you want the rest?\" Wilai grins at the mirror, at the two of you the glass makes four. \"Buy me drink, we go up.\"":
+      "Zurück in die Ruby Kiss, und ein lippenstiftbeschmiertes Glas ist in deiner Hand und auf deinem Deckel, noch bevor ein Mädchen auf deinem Schoß sitzt — aber nur knapp. \"Du hast meinen Kuss. Jetzt willst du den Rest?\" Wilai grinst in den Spiegel, aus euch beiden macht das Glas vier. \"Kauf mir Drink, wir gehen hoch.\"",
     "Lipstick lighting, mirror wall, and Kluay already arranging herself across you. \"Last bar on the soi, best girls on the soi — you save the best, na?\" A hand, a price, a nod at the stairs.":
       "Lippenstift-Beleuchtung, Spiegelwand, und Kluay drapiert sich schon über dich. \"Letzte Bar auf der Soi, beste Mädchen auf der Soi — du hebst dir das Beste auf, na?\" Eine Hand, ein Preis, ein Nicken zur Treppe.",
     "The red mirror-glare takes you back and doubles the come-on: two Benzes leaning in, two hands on your thigh, one very direct question about upstairs asked twice at once.":

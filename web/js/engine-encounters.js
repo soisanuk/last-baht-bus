@@ -938,7 +938,7 @@ const _ENC = {
       _addHappy(-1);
       return;
     }
-    if (/hi|hello|cheers|drink|buy|nice|respect|cool|wingman|help|which|recommend|good|game|sound/.test(input)) {
+    if (/hi|hello|cheers|drink|buy|nice|respect|cool|wingman|help|which|recommend|good|game|sound|talk|chat|alright|evening/.test(input)) {
       G.wingmanUntil = G.turns + WINGMAN_TURNS;
       _say("“Tell you what — you seem alright.” She clinks her glass to nothing. “See " +
         "one you fancy? I'll put a word in. These girls trust me a damn sight more than " +

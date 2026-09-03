@@ -427,10 +427,16 @@ function _doGo(dirWord) {
             "brown river with motorbikes fording it; the rain is hitting the " +
             "glass sideways. The room, the kettle, and the bed all make the " +
             "same argument, and the argument wins."
-          : "You get one step toward the door before the doorway itself talks " +
+          : _inBar()
+          ? "You get one step toward the door before the doorway itself talks " +
             "you out of it — a solid moving wall of water where the street used " +
             "to be. The mamasan doesn't even look up. Nobody leaves in this; " +
-            "that's what the rain is FOR.");
+            "that's what the rain is FOR."
+          // a street with a 7-Eleven counts as shelter, but it has no doorway and
+          // no mamasan (Colin, round 37: the bar line on the Soi 6 pavement)
+          : "You get to the edge of the awning and no further — the street beyond it " +
+            "is a moving brown river with a motorbike fording it. Everyone under the " +
+            "7-Eleven's lights has made the same decision you're about to make.");
       } else {
         _say("Not in this. The street is a river, the rain is horizontal, and " +
           "the awning above you is the entire habitable world. It can't last " +
@@ -4515,7 +4521,7 @@ function _doBuy(arg) {
     G.money -= price;
     G.thirst = Math.max(0, G.thirst - 45);
     _sevenIn();
-    _say(_fmt("{line} (฿{m} left.)", { line: _L(_pickVary(_WATER_LINES, "water")), m: G.money }));
+    _say(_fmt("{line} (-฿{p}, ฿{m} left.)", { line: _L(_pickVary(_WATER_LINES, "water")), p: price, m: G.money }));
     return;
   }
   // seven:true marks a street with a 7-Eleven on it; the walk-in branches are
@@ -4641,8 +4647,11 @@ function _doBuy(arg) {
     const _beerTail = d >= 6 ? "The room has developed a gentle rotation." :
       d >= 4 ? "The neon is starting to smear pleasantly." :
       d >= 2 ? "The night improves by one bottle's worth." : "";
-    _say(_fmt("{line} (฿{m} left.)", { line: _L(_pickVary(_BEER_LINES, "beer")), m: G.money }) +
-      (_beerTail ? " " + _L(_beerTail) : ""));
+    // the price on the line that charges it: no bar quoted a beer before it was
+    // in his hand, and a go-go's ฿140 Chang was only detectable by subtraction
+    // (Colin, round 37) — and the −1 สนุก past four bottles gets its reason
+    _say(_fmt("{line} (-฿{p}, ฿{m} left.)", { line: _L(_pickVary(_BEER_LINES, "beer")), p: _beerPrice(), m: G.money }) +
+      (_beerTail ? " " + _L(_beerTail) : "") + (d > 4 ? " One past the sweet spot." : ""));
     _addHappy(d <= 4 ? 1 : -1);
     _checkDrunk();
     return;
@@ -5019,6 +5028,10 @@ function _doRideBus(arg) {
   if (_isHotelRoom(G.room)) {
     _say("From in here the fleet is somewhat theoretical. The street is where " +
       "the trucks are \u2014 OUT first.", "dim");
+    return;
+  }
+  if (_inBar()) {
+    _say("From in here the trucks are a rumour on the far side of the rail — OUT to the street first.", "dim");
     return;
   }
   if (!_busLinesFor(G.room).length) {
@@ -5658,6 +5671,7 @@ function _doDrink(arg) {
     _doBuy("beer");
     return;
   }
+  if (!_inBar()) { _say("No bar out here to pour it. A 7-Eleven fridge does water (BUY WATER); anything with a head on it wants a bar."); return; }
   _say("The bar does beer, lady drinks, and water — in descending order of enthusiasm.");
 }
 
@@ -6867,7 +6881,7 @@ function _doBalance() {
   }
   const drawn = _atmDrawnToday();
   _say(`Account: ฿${_num(G.bank || 0)} · in pocket: ฿${_num(G.money)} · ` +
-    `withdrawn today: ฿${_num(drawn)} of ฿${_num(ATM_DAILY_CAP)}.`, "dim");
+    `withdrawn today: ฿${_num(drawn)} of ฿${_num(ATM_DAILY_CAP)} · foreign-card fee ฿${ATM_FEE} a pull, so pull big.`, "dim");
 }
 
 function _doAtmVerb() {
@@ -6997,6 +7011,15 @@ function _minutesWord(n) {
   return w[n] || (n + " minutes");
 }
 function _doTaoRai() {
+  // in a bar it is the price list nobody hands you (Colin, round 37)
+  if (_inBar() && !G.pendingEnc) {
+    const r = _room();
+    const bits = [`beer ฿${_beerPrice()}`, `lady drink ฿${_ladyPrice()}`, "water ฿20"];
+    if (r.barType && r.barType !== "pub") bits.push(`the bell ฿${_bellPrice(G.room)}`);
+    _say("“เท่าไหร่?” (tao rai — how much?) " + (_tillKeeper(G.room) ? NPCS[_tillKeeper(G.room)].name + " answers without looking up: " : "The answer comes from behind the till: ") +
+      bits.join(" · ") + ". Ask before the glass lands; the price never changes, only whether you knew it.", "dim");
+    return;
+  }
   // at a motosai stand it is a question with a number in the answer (Darren, round 37)
   if (_room().motosai && !G.pendingEnc && !_convoActive()) {
     const late = G.nightTurn >= LAST_BUS_TURN;
@@ -7774,7 +7797,7 @@ const _ENC_SOFT = {
   // onto a bkktourist encounter that had appeared in the meantime).
   bkktourist: /^(?:hi|hello|hey|sawat|wai|chat|talk|nice|friend|wait|who|from|smile|drink|coffee|money|baht|barfine|how much|price|pay|upstairs|hotel|short time|long time|come with|yes|no|nah|pass|wave|walk(?: on)?)\b/,
   jptourist:  /^(?:flirt|drink|buy|hi|hello|konnichiwa|konbanwa|cheers|join|both|girl|dancer|open|game|cool|yes|sure|nice|money|baht|barfine|how much|price|pay|deal|please|hai|why not|her|let|no|nah|pass)\b/,
-  britles:    /^(?:grope|grab|touch|fondle|kiss|snog|cop a feel|hand on|money|baht|barfine|how much|price|pay|short time|long time|come with|shag|hotel|hi|hello|cheers|drink|buy|nice|respect|cool|wingman|help|which|recommend|good|game|sound|no|nah|pass|wave)\b/,
+  britles:    /^(?:talk(?: to)?(?: her)?|chat|alright|evening|grope|grab|touch|fondle|kiss|snog|cop a feel|hand on|money|baht|barfine|how much|price|pay|short time|long time|come with|shag|hotel|hi|hello|cheers|drink|buy|nice|respect|cool|wingman|help|which|recommend|good|game|sound|no|nah|pass|wave)\b/,
   punterwife: /^(?:grope|grab|touch|fondle|kiss|snog|cop a feel|hand on|spank|money|baht|barfine|how much|price|pay|short time|long time|come with|hi|hello|nice|respect|cheers|congrat|married|wife|husband|talk|chat|cool|lovely|good|no|nah|pass|wave)\b/,
 };
 // A real top-level command word (not a bare answer): used only to decide whether

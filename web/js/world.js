@@ -48,6 +48,7 @@ const ROAST_COVERS = 14; // how many the kitchen does. The room eats them too �
 const ROAST_PACE = 2;    // a cover goes every two turns — arrive late, take your chances
 const BEER_PRICE = 80;   // your own big Chang, bar price
 const BELL_PRICE = 300;  // ring it and the round is on you
+const C4_STAKE = 20, POOL_STAKE = 50, JP_MIN = 10, JP_MAX = 100, JP_DEFAULT = 20; // the tables' stakes (moved from engine-play so dialogue can quote them)
 const BRA_PRICE = 200;   // the mamasan's drawer novelty; makes fondling "interesting"
 const FULL_AT = 12;      // below this you are simply not hungry, and no amount of
                          // money makes another plate mean anything
@@ -56,7 +57,7 @@ const ROSE_PRICE = 100;  // the flower-seller's daughter's single rose (a gift f
 const CORD_PRICE = 20;   // black nylon off a 7-Eleven counter; what an amulet hangs on
 const TAXI_DEBT = 12000; // what Nira is owed in the cousin's name — see QUESTS.taxi_debt
 const BAND_ROUND = 400;  // buying the band a round (≈ bell to the mama; girls prefer the real bell)
-const YA_DONG_SHOT = 100; // Moonshine Bar's unlabelled-bottle dare — a shot, not a bottle
+const YA_DONG_SHOT = 40;  // Moonshine Bar's unlabelled-bottle dare — a shot, not a bottle; paint-stripper money, not more than a beer (Colin, round 37)
 const WINGMAN_TURNS = 15;// how long a friendly wing-woman's good word lasts
 const CHARGER_PRICE = 59;
 // The rain used to be a pure movement tax: 3–8 turns of a 100-turn night taken
@@ -363,7 +364,7 @@ const ROOMS = {
     desc: "The second one, and the newer regulars swear it is better — more room, a " +
       "fan that works, and a woman on the wok who does not stop from six until the " +
       "rice runs out. The board is the same board. The prices are the same prices. " +
-      "The Buakhao lot will tell you it is not the same, and mean it.",
+      "The Buakhao lot will tell you it is not the same, and mean it. (BUY FOOD.)",
     reads: {
       board: "The board is the same board — same fourteen dishes, same decade-old photos, " +
         "same chalk line underneath. They photocopied the menu when they opened this " +
@@ -1042,7 +1043,8 @@ const ROOMS = {
     dark: true,
     desc: "The saddle over the top of Pratumnak Hill, linking the two roads that climb it — the " +
       "Thappraya side to the east, the Dongtan Beach side to the west. Walls, viewpoints you can't " +
-      "make out in the dark, and the sea breathing somewhere below on both sides.",
+      "make out in the dark, and the sea breathing somewhere below on both sides. The Pratumnak " +
+      "clubs are down the west side (W), and Soi 5 runs on beyond them.",
     exits: { e: "thappraya_ext_n", w: "pratumnak_clubs", n: "pratumnak_rd" },
   },
   dongtan_rd_n: {
@@ -2130,6 +2132,7 @@ const ROOMS = {
     exits: { n: "myth_night" },
   },
   craft_cargo: {
+    beerOff: 10, // its own row's prose says cheaper (Colin, round 37: four bars said cheap and charged the standard) — the till agrees
     name: "Number One Bar",
     region: "Myth Night",
     bar: "Number One Bar", barType: "beer", outlet: true,
@@ -2140,6 +2143,7 @@ const ROOMS = {
     exits: { out: "myth_rows" },
   },
   the_growler: {
+    beerOff: 10, // its own row's prose says cheaper (Colin, round 37: four bars said cheap and charged the standard) — the till agrees
     name: "Coco Bar",
     region: "Myth Night",
     bar: "Coco Bar", barType: "beer",
@@ -2156,6 +2160,7 @@ const ROOMS = {
     exits: { out: "myth_rows" },
   },
   container_8: {
+    beerOff: 10, // its own row's prose says cheaper (Colin, round 37: four bars said cheap and charged the standard) — the till agrees
     name: "Venus Bar",
     region: "Myth Night",
     bar: "Venus Bar", barType: "beer",
@@ -2171,6 +2176,7 @@ const ROOMS = {
     exits: { out: "myth_rows" },
   },
   reload_bar: {
+    beerOff: 10, // its own row's prose says cheaper (Colin, round 37: four bars said cheap and charged the standard) — the till agrees
     name: "Sunflower Bar",
     region: "Myth Night",
     bar: "Sunflower Bar", barType: "beer",
@@ -2728,8 +2734,8 @@ const ROOMS = {
     region: "Soi Buakhao",
     food: true,
     desc: "Six stools, a chest freezer, a laminated board of numbered dishes and a " +
-      "chalked one underneath it that says WHATEVER SHE MADE TODAY. Forty baht gets " +
-      "you a plate — sixty, and properly fed for it. Half the men in here have been eating " +
+      "chalked one underneath it that says WHATEVER SHE MADE TODAY. Sixty baht gets " +
+      "you a plate and properly fed for it. Half the men in here have been eating " +
       "at this counter since before the branch in Jomtien existed, and they will " +
       "tell you so. The original, they say, with the particular pride of people who " +
       "found something cheap before it was famous for being cheap.",
@@ -2843,6 +2849,7 @@ const ROOMS = {
     exits: { n: "tt_back" },
   },
   rabbit_hole: {
+    beerOff: 10, // its own row's prose says cheaper (Colin, round 37: four bars said cheap and charged the standard) — the till agrees
     name: "The Rabbit Hole",
     region: "Tree Town",
     bar: "The Rabbit Hole", barType: "beer", outlet: true,
@@ -2852,6 +2859,7 @@ const ROOMS = {
     exits: { out: "tt_lane_3" },
   },
   lucky_charm: {
+    beerOff: 10, // its own row's prose says cheaper (Colin, round 37: four bars said cheap and charged the standard) — the till agrees
     name: "Lucky Charm Bar",
     region: "Tree Town",
     bar: "Lucky Charm Bar", barType: "beer", pool: true,
@@ -2867,6 +2875,7 @@ const ROOMS = {
     exits: { out: "tt_lane_3" },
   },
   moonshine_bar: {
+    beerOff: 10, // its own row's prose says cheaper (Colin, round 37: four bars said cheap and charged the standard) — the till agrees
     name: "Moonshine Bar",
     region: "Tree Town",
     bar: "Moonshine Bar", barType: "beer",
@@ -3218,7 +3227,7 @@ const ROOMS = {
       "a mirror wall, and a lipstick-mark motif on everything including the glasses. Wilai runs " +
       "the front stools, and Kluay and Benz have already claimed the two nearest for you.",
     revisit: [
-      "Back into Ruby Kiss and a lipstick-marked glass is in your hand before a girl is in your lap — but only just. \"You have my kiss. Now you want the rest?\" Wilai grins at the mirror, at the two of you the glass makes four. \"Buy me drink, we go up.\"",
+      "Back into Ruby Kiss and a lipstick-marked glass is in your hand and on your chit before a girl is in your lap — but only just. \"You have my kiss. Now you want the rest?\" Wilai grins at the mirror, at the two of you the glass makes four. \"Buy me drink, we go up.\"",
       "Lipstick lighting, mirror wall, and Kluay already arranging herself across you. \"Last bar on the soi, best girls on the soi — you save the best, na?\" A hand, a price, a nod at the stairs.",
       "The red mirror-glare takes you back and doubles the come-on: two Benzes leaning in, two hands on your thigh, one very direct question about upstairs asked twice at once.",
       "Back to the lipstick and the last-loud-front energy. A girl marks your cheek with a kiss and the deal in the same motion. \"Short time, long time — you choose, handsome. But you choose me.\"",
@@ -3796,7 +3805,7 @@ const ROOMS = {
     bar: "The Anchor Bar", barType: "beer", pool: true, outlet: true,
     desc: "A nautical-junk beer bar — a real ship's wheel on the wall, glass floats in a net, " +
       "a barometer nobody trusts. The long-stay crowd holds the stools like moorings. Namfon " +
-      "pours a cold one before you've picked a seat.",
+      "pours a cold one before you've picked a seat — and the chit lands with it.",
     reads: {
       barometer: "The barometer nobody trusts: brass, salt-pitted, its needle parked on " +
         "CHANGE since roughly the nineties. Tap the glass and it doesn't move. Namfon says " +
@@ -3809,6 +3818,7 @@ const ROOMS = {
     exits: { out: "naklua_bars" },
   },
   dolphin_bar: {
+    beerOff: 10, // its own row's prose says cheaper (Colin, round 37: four bars said cheap and charged the standard) — the till agrees
     name: "Dolphin Bar",
     region: "Naklua",
     bar: "Dolphin Bar", barType: "beer",
@@ -4115,7 +4125,7 @@ const ROOMS = {
       "working the narrow strip between, a hundred fairy-lit stools and a lady on every one. SAPPHIRE " +
       "BAR's blue neon and SUNDOWNER BAR's horseshoe counter face off across the soi. A side door of " +
       "the LK Metro complex breathes cold air and go-go bass from further along — but that's the " +
-      "complex; the soi itself keeps it simple. Somewhere a bell rings and a whole bar cheers.",
+      "complex; the soi itself keeps it simple. Somewhere down the soi a bell rings and a whole bar cheers — somebody else's round, in a bar you can't see from here.",
     venues: ["sapphire", "sundowner"],
     exits: { w: "diana_w", e: "diana_e", hotel: "areca_room" },
   },
@@ -5165,7 +5175,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { th: "ว่าไง", rom: "wa ngai",
         text: "\"New face.\" She totals a tab without looking down, the nose ring catching " +
           "the neon. \"Aek. I hold the money and the gossip — same drawer. Boards are free, " +
-          "pool's a hundred a rack, and if you upset one of my girls I hear about it before " +
+          "pool's ฿" + POOL_STAKE + " a rack, and if you upset one of my girls I hear about it before " +
           "you finish the sentence.\" A flat, friendly warning.",
         short: "\"Aek. I hold the money and the gossip — same drawer. Don't upset my girls.\"" },
       { topic: "girls", text: "\"Best-run floor on Walking Street, and I keep it that way from " +
@@ -6768,7 +6778,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         short: "\"I don't need saving, tilac. I need customer. Be the farang who know that.\"" },
       // Normal SURFACE — the showwoman patter; the kiss-glass close before you sit.
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
-        text: "\"Ohh, handsome come to Ruby!\" A lipstick-marked glass is in your hand before you've " +
+        text: "\"Ohh, handsome come to Ruby!\" A lipstick-marked glass is in your hand and on your chit before you've " +
           "agreed to anything. \"See? Now you have my kiss already. You buy the drink to go with it, na? " +
           "Is only polite.\" She is laughing at you and it is somehow flattering.",
         short: "\"You have my kiss already — now buy the drink to go with it, na?\"",
@@ -8141,7 +8151,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         "tell 'em they're beautiful on camera, walk away without buying a drink. " +
         "Thousands of views. Zero baht.\" He finishes his Chang. \"Bar owner down the " +
         "road told me ninety-six percent of his foot traffic is that now. Content. " +
-        "Just content.\" He signals the barman again. \"The girls stand out front in " +
+        "Just content.\" He signals the barman again, for himself. \"The girls stand out front in " +
         "nothing all night for some kid's YouTube channel. And they can't even say no " +
         "because then they look bad on camera.\"" },
       // After one o'clock the soi is NOT still performing — the room's own
@@ -8157,7 +8167,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "wide. \"Soi's still performing — it always is. Sit, watch a minute. You're learning the rhythm of " +
           "the place; I can tell.\"",
         short: "\"Back again. Good.\" (An inch of shifted Chang — for Terry, arms wide open.)" },
-      { text: "He nods at the empty stool beside him and signals the barman. \"Sit down. Watch the soi a minute. Best show in Pattaya and you don't have to tip the girls.\"",
+      { text: "He nods at the empty stool beside him and signals the barman for his own. \"Sit down. Watch the soi a minute. Best show in Pattaya and you don't have to tip the girls.\"",
         short: "He signals the barman. \"Sit. Best show in Pattaya, no tipping required.\"" },
     ],
   },
@@ -10446,7 +10456,7 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
         text: "\"There he is.\" Bert's got a cold one open before you've sat. \"Not moved off this stool " +
           "since you left, funny enough. Table's true, beer's cold.\" A crooked grin. \"What's the good " +
           "word, bud?\"",
-        short: "\"There he is.\" A cold one's open before you sit. \"What's the good word, bud?\"",
+        short: "\"There he is.\" A cold one's open before you sit — on your tab, obviously. \"What's the good word, bud?\"",
         // The WDG-flip fork, offered as pick-a-side action-choices during the live
         // decision window (was ASK BERT ABOUT SELLING / THE OFFER). Each jumps to
         // the existing resolution node, reusing its text/effects. The `when` gates
@@ -11238,7 +11248,7 @@ const ENCOUNTERS = {
       "expertise than you will ever have. One of the girls spots her and blows a kiss; " +
       "she winks back like she owns the place. She catches your eye and grins. " +
       "“Alright? Best seat on the street, this — and I don't even have to pretend, do I.”",
-    hint: "(Not on the menu — for you. Play it decent and she might be the best wingman you get all night.)",
+    hint: "(Not on the menu — for you. Play it decent — TALK to her, or CHEERS — and she might be the best wingman you get all night. Hands and money are the wrong verbs.)",
   },
   punterwife: {
     rooms: ["ws_north", "ws_south", "beach_rd_c", "second_rd_c", "buakhao_market"],

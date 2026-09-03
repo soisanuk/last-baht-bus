@@ -8,7 +8,7 @@
 // games.js; this section owns stakes, narration, and the modal G.game state —
 // while a game is live, doCommand routes every input to _gameInput.
 
-const C4_STAKE = 20, POOL_STAKE = 50, JP_MIN = 10, JP_MAX = 100, JP_DEFAULT = 20;
+// C4_STAKE / POOL_STAKE / JP_* live in world.js now — Aek quotes POOL_STAKE in her dialogue, and world.js loads first
 
 function _barGamesHere() {
   const bt = _room().barType;

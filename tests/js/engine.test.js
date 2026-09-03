@@ -3960,10 +3960,10 @@ test("Moonshine Bar's house infusion dare is actually buyable", () => {
   state().room = "moonshine_bar";
   state().money = 1000;
   run("buy ya dong");
-  assert.equal(state().money, 900, `฿${YA_DONG_SHOT} a shot`);
+  assert.equal(state().money, 1000 - YA_DONG_SHOT, `฿${YA_DONG_SHOT} a shot`);
   assert.match(lastOut(), /Prik pours/i);
   run("drink ya dong");
-  assert.equal(state().money, 800, "DRINK routes to the same purchase");
+  assert.equal(state().money, 1000 - 2 * YA_DONG_SHOT, "DRINK routes to the same purchase");
 });
 
 test("Mama Yai's som tam arrives unasked, free, once a night — as promised", () => {
